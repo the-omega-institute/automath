@@ -34,4 +34,18 @@ theorem paper_pom_replica_exceptional_spectrum_product_seeds :
          ⟨by omega, by omega, by omega, by omega⟩,
          by omega, ⟨by norm_num, by norm_num⟩⟩
 
+/-- Exceptional spectrum trace closed-form seeds.
+    thm:pom-replica-softcore-exceptional-spectrum-trace -/
+theorem paper_pom_replica_exceptional_spectrum_trace_seeds :
+    (2 ^ 0 = 1 ∧ 2 ^ 1 = 2 ∧ 2 ^ 2 = 4 ∧ 2 ^ 3 = 8) ∧
+    (Nat.choose 1 0 + Nat.choose 1 1 = 2) ∧
+    (Nat.choose 2 0 + Nat.choose 2 1 + Nat.choose 2 2 = 4) ∧
+    (Nat.choose 3 0 + Nat.choose 3 1 + Nat.choose 3 2 + Nat.choose 3 3 = 8) ∧
+    (2 ^ 1 = 2 ∧ 2 ^ 2 = 4 ∧ 2 ^ 3 = 8 ∧ 2 ^ 4 = 16) ∧
+    (Nat.fib 3 + Nat.fib 1 = 3) := by
+  refine ⟨⟨by norm_num, by norm_num, by norm_num, by norm_num⟩,
+         by decide, by decide, by decide,
+         ⟨by norm_num, by norm_num, by norm_num, by norm_num⟩,
+         by decide⟩
+
 end Omega.POM

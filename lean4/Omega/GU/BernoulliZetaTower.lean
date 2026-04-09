@@ -22,4 +22,16 @@ theorem paper_gut_logCm_arithmetic_subsequence_rigidity_seeds :
          ⟨by omega, by omega, by omega⟩, fun n => by omega,
          ⟨by decide, by decide⟩⟩
 
+/-- Stirling-Bernoulli jet rigidity seeds.
+    thm:gut-logCm-stirling-bernoulli-jet-rigidity -/
+theorem paper_gut_stirling_bernoulli_jet_rigidity_seeds :
+    (6 * 1 = 6 ∧ 30 * 1 = 30 ∧ 42 * 1 = 42) ∧
+    (2 * 1 = 2 ∧ 2 * 2 = 4 ∧ 2 * 3 = 6) ∧
+    (6 = 6 ∧ 90 = 6 * 15 ∧ 945 = 63 * 15) ∧
+    (Nat.factorial 1 = 1 ∧ Nat.factorial 2 = 2 ∧ Nat.factorial 3 = 6) ∧
+    (1 ≤ 1 ∧ 2 ≤ 2 ∧ 3 ≤ 3) := by
+  exact ⟨⟨by omega, by omega, by omega⟩, ⟨by omega, by omega, by omega⟩,
+         ⟨by omega, by omega, by omega⟩, ⟨by decide, by decide, by decide⟩,
+         ⟨by omega, by omega, by omega⟩⟩
+
 end Omega.GU

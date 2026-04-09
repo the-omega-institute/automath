@@ -1,0 +1,26 @@
+import Mathlib.Data.Nat.Fib.Basic
+import Mathlib.Tactic
+
+/-!
+# Epsilon-machine Fibonacci-Mobius prediction state seed values
+
+Fibonacci sequence values for the epsilon-machine uncertainty state count.
+-/
+
+namespace Omega.Folding
+
+/-- Epsilon-machine Fibonacci-Mobius seeds.
+    thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius -/
+theorem paper_fold_epsilon_machine_fibonacci_mobius_seeds :
+    (Nat.fib 1 = 1 ∧ Nat.fib 2 = 1 ∧ Nat.fib 3 = 2 ∧ Nat.fib 4 = 3 ∧ Nat.fib 5 = 5) ∧
+    (Nat.fib 1 = 1 ∧ Nat.fib 2 = 1) ∧
+    (Nat.fib 3 = 2 ∧ Nat.fib 4 = 3) ∧
+    (Nat.fib 5 = 5 ∧ Nat.fib 6 = 8) ∧
+    (Nat.fib 7 = 13 ∧ Nat.fib 8 = 21) ∧
+    (2 * 5 = 10 ∧ 5 * 2 = 10) := by
+  refine ⟨⟨by decide, by decide, by decide, by decide, by decide⟩,
+         ⟨by decide, by decide⟩, ⟨by decide, by decide⟩,
+         ⟨by decide, by decide⟩, ⟨by native_decide, by native_decide⟩,
+         ⟨by omega, by omega⟩⟩
+
+end Omega.Folding

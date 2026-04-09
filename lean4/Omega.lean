@@ -74,6 +74,7 @@ import Omega.Folding.BernoulliPBitpairLaw
 import Omega.Folding.BernoulliPJordanResonance
 import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPPressureQuartic
+import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
