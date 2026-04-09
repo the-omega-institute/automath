@@ -269,6 +269,7 @@ def main():
     # Output
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     out_path = Path(args.out) if args.out else OUTPUT_DIR / "discovery_report.json"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     indent = 2 if args.pretty else None
     out_path.write_text(
         json.dumps(report, indent=indent, ensure_ascii=False),
