@@ -71,6 +71,7 @@ import Omega.Folding.OverflowGapRate
 import Omega.Folding.BernoulliHalfEndpoints
 import Omega.Folding.BernoulliPGammaMax
 import Omega.Folding.BernoulliPBitpairLaw
+import Omega.Folding.BernoulliPJordanResonance
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -103,6 +104,7 @@ import Omega.SPG.GodelDoublelog
 import Omega.SPG.WalshStokes
 import Omega.SPG.CheegerStokes
 import Omega.SPG.MomentHolographyGap
+import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
@@ -207,6 +209,7 @@ import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.ToggleOrder
 import Omega.POM.ReplicaSoftcoreDet
 import Omega.POM.KCollisionRootFilter
+import Omega.POM.ReplicaBernoulliSubgraph
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap
