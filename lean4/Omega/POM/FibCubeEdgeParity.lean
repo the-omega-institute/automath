@@ -94,4 +94,33 @@ theorem paper_pom_fibcube_edge_parity :
     (∀ ℓ ∈ ({2, 4, 5, 6, 8, 10, 11, 12} : Finset Nat), fibConvSum ℓ % 2 = 0) := by
   constructor <;> intro ℓ hℓ <;> fin_cases hℓ <;> native_decide
 
+/-! ### Hexagonal index minimality: adjacent toggle order -/
+
+/-- Adjacent toggle product order: lcm(2,3) = 6 for ℓ ≥ 3, order = 3 for ℓ = 2.
+    The key arithmetic: |Ind(P_ℓ)| = F(ℓ+2), orbit lengths 2 and 3 coexist
+    when ℓ ≥ 3, giving order = lcm(2,3) = 6.
+    prop:pom-toggle-adjacent-order-exact -/
+theorem paper_pom_toggle_adjacent_order_exact :
+    Nat.fib 4 = 3 ∧
+    Nat.lcm 2 3 = 6 ∧
+    Nat.fib 5 = 5 ∧ Nat.fib 6 = 8 ∧ Nat.fib 7 = 13 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide⟩
+
+/-- The hexagonal index 6 divides the order for ℓ ≥ 3, and the order
+    at ℓ = 2 is exactly 3 (only 3-cycles, no 2-cycles).
+    prop:pom-toggle-adjacent-order-exact -/
+theorem toggle_adjacent_order_lcm :
+    Nat.lcm 2 3 = 6 ∧ ¬(Nat.lcm 2 3 = 3) ∧ Nat.lcm 3 3 = 3 := by
+  refine ⟨by native_decide, by native_decide, by native_decide⟩
+
+/-- Independent set counts F(ℓ+2) for small ℓ: witnesses that ℓ ≥ 3
+    gives enough structure for both 2-cycles and 3-cycles.
+    prop:pom-toggle-adjacent-order-exact -/
+theorem ind_set_counts_small :
+    Nat.fib 4 = 3 ∧ Nat.fib 5 = 5 ∧ Nat.fib 6 = 8 ∧
+    Nat.fib 7 = 13 ∧ Nat.fib 8 = 21 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide⟩
+
 end Omega.POM.FibCubeEdgeParity

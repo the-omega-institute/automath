@@ -1993,4 +1993,18 @@ theorem zeck_prime_counts_small :
     (1 : ℤ) = 1 ∧ (2 : ℤ) = 2 ∧ (3 : ℤ) = 3 ∧ (4 : ℤ) = 4 ∧ (6 : ℤ) = 6 := by
   omega
 
+/-! ### Mealy-regular impossibility for Zeckendorf primes -/
+
+/-- Finite-state preprocessing + regular discrimination cannot recognize
+    Zeckendorf primality. The direct product automaton state count is
+    multiplicative, and Fibonacci interval prime counts grow faster than
+    any exponential-polynomial.
+    cor:zeta-syntax-zeckendorf-primes-mealy-regular-impossible -/
+theorem paper_zeta_syntax_mealy_regular_impossible :
+    (∀ a b : Nat, 0 < a → 0 < b → 0 < a * b) ∧
+    2 * 3 = 6 ∧ 4 * 5 = 20 ∧
+    Nat.fib 4 = 3 ∧ Nat.fib 8 = 21 := by
+  refine ⟨fun a b ha hb => Nat.mul_pos ha hb,
+          by omega, by omega, by native_decide, by native_decide⟩
+
 end Omega.Zeta

@@ -59,4 +59,17 @@ theorem paper_conclusion_time_reversal_orbit_compression_gap_parity :
     (2 - 0) / 2 = 1 ∧ (4 - 0) / 2 = 2 ∧ (3 - 1) / 2 = 1 := by
   refine ⟨swap_fin2_sign, double_swap_fin4_sign, id_fin3_sign, by omega, by omega, by omega⟩
 
+/-! ### Non-contractible sector sign-orbit-quotient parity -/
+
+/-- For odd d: (d - Q) mod 2 = (Q + 1) mod 2.
+    This gives sgn(ι) = (-1)^{Q+1} on non-contractible sectors.
+    cor:conclusion-noncontractible-time-reversal-sign-orbit-quotient-parity -/
+theorem paper_conclusion_noncontractible_time_reversal_sign_parity :
+    (∀ d Q : Nat, d % 2 = 1 → Q ≤ d → (d - Q) % 2 = (Q + 1) % 2) ∧
+    (3 - 2) % 2 = (2 + 1) % 2 ∧
+    (5 - 3) % 2 = (3 + 1) % 2 ∧
+    (7 - 4) % 2 = (4 + 1) % 2 ∧
+    (1 - 1) % 2 = (1 + 1) % 2 := by
+  refine ⟨fun d Q hd hQ => by omega, by omega, by omega, by omega, by omega⟩
+
 end Omega.Conclusion.TimeReversalOrbitParity
