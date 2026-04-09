@@ -13,10 +13,11 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2282 |
+| \leanverified 标注数 | 2285 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2311 |
-| 轮次 | R554（round_count=555）|
+| 总标注数 | 2314 |
+| 文件数 | 117 |
+| 轮次 | R555（round_count=556）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +52,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Folding 失配标记非 coboundary 性（Round R555，新标签，\leanverified 完整，streak #105）**：`paper_mismatch_label_non_coboundary`（对应 `prop:fold-gauge-anomaly-mismatch-language-non-coboundary`，Folding；三角形边标记之和非零证明综合论文接口）——**新标签首次注册**（prop:fold-gauge-anomaly-mismatch-language-non-coboundary，\leanverified 完整，streak #105）
+**GU 已审计偶窗总预算 16 最小退化包唯一性（Round R555，新标签，\leanverified 完整，streak #104）**：`paper_gut_budget16_unique_m6`（对应 `thm:gut-audited-even-windows-unique-budget16-min-sector`，GU；B_m=16 当且仅当 m=6 综合论文接口，MinSectorBudget.lean）——**新标签首次注册**（thm:gut-audited-even-windows-unique-budget16-min-sector，\leanverified 完整，新建文件 MinSectorBudget.lean，streak #104）
+**GU Fib-tail 三重性素数阶 3 迹同余判别（Round R555，新标签，\leanverified 完整，streak #103）**：`paper_fib_tail_order3_trace`（对应 `prop:fib-tail-order3-trace`，GU；m=4,6,8 时 2F_{m+3}+1 的具体值 27/69/179 综合论文接口）——**新标签首次注册**（prop:fib-tail-order3-trace，\leanverified 完整，streak #103）
 **Conclusion 二次数域分歧素数最小素数账本（Round R554，新标签，\leanverified 完整，streak #102）**：`paper_quadratic_field_min_prime_ledger`（对应 `thm:conclusion-quadratic-field-min-prime-ledger-discriminant`，Conclusion；二次数域判别式支撑 = 分歧素数集综合论文接口）——**新标签首次注册**（thm:conclusion-quadratic-field-min-prime-ledger-discriminant，\leanverified 完整，streak #102）
 **GU SM 三层签名共同循环识别阶整除 6（Round R554，新标签，\leanverified 完整，streak #101）**：`paper_sm_signature_common_cyclic`（对应 `thm:sm-signature-common-cyclic-identification-divides-6`，GU；SM 签名循环群嵌入阶必整除 6 综合论文接口）——**新标签首次注册**（thm:sm-signature-common-cyclic-identification-divides-6，\leanverified 完整，streak #101）
 **POM 商余横截面投影（Round R554，deepening，\leanverified 标注补录）**：`paper_division_section`（对应 `thm:pom-division-section`，POM；整数除法唯一性封装，FiberArithmeticProperties.lean:527，代码已存在）——**deepening 标注补录**（thm:pom-division-section，\leanverified 标注已添加至 subsec\_\_pom-division-groupoid.tex，论文覆盖率数字不变）
