@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R545（round_count=546）|
+| 轮次 | R546（round_count=547）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -31,10 +31,10 @@
 | Group Unification | 469 | 176 | 37.5% |
 | SPG | 129 | 114 | 88.4% |
 | Circle Dimension | 393 | 158 | 40.2% |
-| Zeta Finite Part | 4,524 | 211 | 4.7% |
+| Zeta Finite Part | 4,524 | 212 | 4.7% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1611** | **15.3%** |
+| **合计（body）** | **10,508** | **1612** | **15.3%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Zeta 局部逆元 δ 分层恒等式（Round R546，新标签，\leanverified 完整，streak #93）**：`filter_ge_card_mono`（对应 `prop:xi-cdim-local-inversion-delta`，Zeta；过滤基数单调性引理）；`filter_ge_card_sub_succ`（对应同标签，Zeta；过滤基数差减一引理）；`paper_xi_cdim_local_inversion_delta`（对应同标签，Zeta；局部逆元 δ 分层恒等式综合论文接口）——**新标签首次注册**（prop:xi-cdim-local-inversion-delta，\leanverified 完整，streak #93）
 **GU spread 双侧界等价（Round R545，新标签，\leanverified 完整，streak #92）**：`avg_deviation_le_spread`（对应 `cor:gut-A-spread-equivalence`，GU；平均偏差 ≤ spread 引理）；`max_deviation_ge_half_spread`（对应同标签，GU；最大偏差 ≥ 半 spread 引理）；`paper_gut_A_spread_equivalence`（对应同标签，GU；spread 双侧界综合论文接口）——**新标签首次注册**（cor:gut-A-spread-equivalence，\leanverified 完整，streak #92）
 **CD 相干时间下界抽屉原理（Round R544，新标签，\leanverified 完整，streak #91）**：`paper_cdim_coherence_time_lower_bound`（对应 `thm:cdim-coherence-time-lower-bound-M-1overd`，CD；相干时间下界抽屉原理主定理）；`not_injective_of_card_lt`（对应同标签，CD；基数小于域则非单射推论）——**新标签首次注册**（thm:cdim-coherence-time-lower-bound-M-1overd，\leanverified 完整，streak #91）
 **Conclusion 原始阶乘加性 vs Gödel 乘性双射 T=0,1 降级（Round R543，新标签，\leanpartial，streak #90 里程碑）**：`mixedRadixVal`（对应 `cor:conclusion-primorial-additive-vs-godel-multiplicative`，Conclusion；混合进制值 def）；`godelMul`（对应同标签，Conclusion；Gödel 乘积 def）；`godelMul_injective_zero`（对应同标签，Conclusion；T=0 Gödel 单射）；`mixedRadixVal_injective_zero`（对应同标签，Conclusion；T=0 混合进制单射）；`godelMul_injective_one`（对应同标签，Conclusion；T=1 Gödel 单射）；`mixedRadixVal_injective_one`（对应同标签，Conclusion；T=1 混合进制单射）；`paper_conclusion_primorial_additive_vs_godel_multiplicative_small`（对应同标签，Conclusion；T=0,1 综合论文接口）——**新标签首次注册**（cor:conclusion-primorial-additive-vs-godel-multiplicative，\leanpartial T=0,1 具体情形完整，通用 T 归纳双射待后续，streak #90 里程碑）
