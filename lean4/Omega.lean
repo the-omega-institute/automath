@@ -169,6 +169,7 @@ import Omega.GU.LeyangHolographicN2
 import Omega.GU.Window6SingleGoodPrimeRecovery
 import Omega.GU.Window6B3SupportCount
 import Omega.GU.FiberNonConstantNoFreeAction
+import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.ResidualCircleDim
