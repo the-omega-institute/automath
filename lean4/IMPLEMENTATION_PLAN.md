@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R514（round_count=515）|
+| 轮次 | R515（round_count=516）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -29,12 +29,12 @@
 | Folding | 337 | 131 | 38.9% |
 | Conclusion | 2,550 | 265 | 10.4% |
 | Group Unification | 469 | 171 | 36.5% |
-| SPG | 129 | 111 | 86.0% |
+| SPG | 129 | 112 | 86.8% |
 | Circle Dimension | 393 | 154 | 39.2% |
 | Zeta Finite Part | 4,524 | 208 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1580** | **15.0%** |
+| **合计（body）** | **10,508** | **1581** | **15.0%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**SPG 内坐标束屏幕计数闭式（Round R515，新标签，\leanpartial，streak #62）**：`screenComponentCount`（对应 `thm:spg-internal-coordinate-bundle-screen-cost-closed-form`，SPG；屏幕分量计数 def = 2^(m(n-s))+1）；`auditCost`（对应同标签，SPG；审计代价 def = 2^(m(n-s))）；`two_pow_m_pow_eq`（对应同标签，SPG；2^m^(n-s) 等式）；`complement_coord_count`（对应同标签，SPG；补坐标计数等式）；`screenComponentCount_eq`（对应同标签，SPG；screenComponentCount 等式）；`screenComponentCount_eq_complement_plus_one`（对应同标签，SPG；complement+1 形式）；`auditCost_eq_count_sub_one`（对应同标签，SPG；auditCost=count-1）；`paper_spg_internal_coordinate_bundle_screen_cost_closed_form`（对应同标签，SPG；综合论文接口）——**新标签首次注册**（thm:spg-internal-coordinate-bundle-screen-cost-closed-form，\leanpartial 闭式 2^(m(n-s))+1 完整，屏幕图分量论证待后续，streak #62）
 **EA Fib-进塔整除链（Round R514，新标签，\leanpartial，streak #61）**：`n_k`（对应 `def:fib-adic-ring`，EA；n\_k=2^k def）；`M_k`（对应同标签，EA；M\_k=Fib(2^k) def）；`two_pow_dvd_succ`（对应同标签，EA；2^k∣2^(k+1)）；`n_k_dvd_succ`（对应同标签，EA；n\_k(k)∣n\_k(k+1)）；`M_k_dvd_succ`（对应同标签，EA；M\_k(k)∣M\_k(k+1) 主定理）；`M_k_dvd_of_le`（对应同标签，EA；k≤ℓ→M\_k(k)∣M\_k(ℓ) 传递性）；`paper_def_fib_adic_ring_divisibility`（对应同标签，EA；综合论文接口）——**新标签首次注册**（def:fib-adic-ring，\leanpartial 二幂子塔整除链完整，逆极限环 profinite 结构待后续，streak #61）
 **CD 有界高度有理数分离弱下界（Round R513，新标签，\leanpartial，streak #60 里程碑）**：`coprimePairs`（对应 `prop:cdim-bounded-height-rationals-separation`，CD；互素对集 def）；`firstColumn`（对应同标签，CD；第一列子集 def）；`firstColumn_subset_coprimePairs`（对应同标签，CD；子集包含性）；`firstColumn_card`（对应同标签，CD；|firstColumn B|=B）；`coprimePairs_card_ge_B`（对应同标签，CD；|coprimePairs B|≥B 弱下界）；`paper_cdim_bounded_height_rationals_separation_lower_B`（对应同标签，CD；综合论文接口）——**新标签首次注册**（prop:cdim-bounded-height-rationals-separation，\leanpartial B 形式弱下界完整，B²/4 完整版与 ℚ 双射待后续，streak #60 里程碑）
 **Conclusion 截面账本 KL 恒等式主定理深化（Round R512，深化轮次，标签已注册于 R353/R356，streak 中断，\leanverified 完整）**：`pushforward`（对应 `thm:conclusion-section-ledger-kl-identity`，Conclusion；pushforward 分布 noncomputable def）；`uniform`（对应同标签，Conclusion；均匀分布 noncomputable def）；`klDivergence`（对应同标签，Conclusion；KL 散度 noncomputable def）；`uniform_eq`（对应同标签，Conclusion；均匀分布等式）；`log_uniform_div_pushforward`（对应同标签，Conclusion；log(均匀/pushforward) 展开）；`section_ledger_kl_identity`（对应同标签，Conclusion；KL 恒等式主定理）；`log_section_count_eq`（对应同标签，Conclusion；截面计数对数等式）；`paper_conclusion_section_ledger_kl_identity`（对应同标签，Conclusion；综合论文接口）——**深化轮次**（标签已于 R353/R356 注册，本轮完成真正 KL 主定理，论文覆盖率数字不变）
