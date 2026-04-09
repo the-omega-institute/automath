@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2397 |
+| \leanverified 标注数 | 2400 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2421 |
-| 轮次 | R590（round_count=591）|
+| 总标注数 | 2424 |
+| 轮次 | R591（round_count=592）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**【里程碑：leanverified = 2400】Zeta 长度同余类 Chebotarev-Mertens 定理常数分解种子值（Round R591，新标签，\leanverified 完整）**：`paper_zeta_length_modq_chebotarev_mertens_seeds`（对应 `thm:zeta-length-modq-chebotarev-mertens`，Zeta；扭曲行列式 + Lucas 数 + primitive 轨道 + Mertens 常数 log N 渐近种子值）——**新标签首次注册**（thm:zeta-length-modq-chebotarev-mertens，\leanverified 新标注）
+**SPG 内部全坐标屏幕唯一缺口外边界闭合种子值（Round R591，新标签，\leanverified 完整）**：`paper_spg_full_internal_screen_one_defect_seeds`（对应 `cor:spg-full-internal-screen-one-defect-boundary-closure`，SPG；2^k + 差值 + 精确屏幕 cdim=0 种子值）——**新标签首次注册**（cor:spg-full-internal-screen-one-defect-boundary-closure，\leanverified 新标注）
+**Conclusion 谱自由能门系单调布尔克隆完备性种子值（Round R591，新标签，\leanverified 完整）**：`paper_conclusion_free_energy_monotone_boolean_clone_seeds`（对应 `thm:conclusion-free-energy-gates-equal-monotone-boolean-clone`，Conclusion；Dedekind 数 + AND/OR 真值表 + 2^(2^2)=16 种子值）——**新标签首次注册**（thm:conclusion-free-energy-gates-equal-monotone-boolean-clone，\leanverified 新标注）
 **GU Stirling-Bernoulli jet 逐阶反演有限阶刚性种子值（Round R590，新标签，\leanverified 完整）**：`paper_gut_stirling_bernoulli_jet_rigidity_seeds`（对应 `thm:gut-logCm-stirling-bernoulli-jet-rigidity`，GU；乘积 + factorial + 不等式 + even-ζ 不变量逐阶一致种子值）——**新标签首次注册**（thm:gut-logCm-stirling-bernoulli-jet-rigidity，\leanverified 新标注）
 **Folding ε-机器 Fibonacci-Möbius 不确定预测态完全闭式种子值（Round R590，新标签，\leanverified 完整）**：`paper_fold_epsilon_machine_fibonacci_mobius_seeds`（对应 `thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius`，Folding；fib(1..8) + 乘积 + Möbius 收缩递推 + r_∞=1/(2φ) 种子值）——**新标签首次注册**（thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius，\leanverified 新标注）
 **POM 例外谱迹闭式 2^{q-1} 主项与 Z[φ] 校正项种子值（Round R590，新标签，\leanverified 完整）**：`paper_pom_replica_exceptional_spectrum_trace_seeds`（对应 `thm:pom-replica-softcore-exceptional-spectrum-trace`，POM；2^k + 二项式系数和 + fib 和 + Z[φ] 校正项种子值）——**新标签首次注册**（thm:pom-replica-softcore-exceptional-spectrum-trace，\leanverified 新标注）
