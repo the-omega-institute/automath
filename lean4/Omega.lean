@@ -109,6 +109,7 @@ import Omega.SPG.CheegerStokes
 import Omega.SPG.MomentHolographyGap
 import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.CubePotentialCurl
+import Omega.SPG.CubePoincareInverse
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
@@ -244,6 +245,7 @@ import Omega.GU.BernoulliZetaTower
 import Omega.GU.BulkResonanceDeficit
 import Omega.GU.FoldbinDegeneracySector
 import Omega.GU.WedderburnBernoulliZeta
+import Omega.GU.AnomalyLedgerNoMultiplicative
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse

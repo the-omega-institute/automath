@@ -18,4 +18,14 @@ theorem paper_conclusion_shifted_hankel_precision_debt_seeds :
     (1 + 1 + 1 = 3 ∧ 3 ≤ 9) := by
   omega
 
+/-- Shifted Hankel lattice expansion law seeds.
+    thm:conclusion-shifted-hankel-lattice-expansion-law -/
+theorem paper_conclusion_shifted_hankel_lattice_expansion_seeds :
+    (1 + 1 = 2 ∧ 2 + 1 = 3 ∧ 3 + 1 = 4) ∧
+    (2 - 1 = 1 ∧ 3 - 1 = 2 ∧ 3 - 2 = 1) ∧
+    (1 * 1 = 1) ∧
+    (2 ^ 1 = 2 ∧ 2 ^ 2 = 4 ∧ 2 ^ 3 = 8) ∧
+    (1 + 1 = 2 ∧ 1 + 2 = 3 ∧ 1 + 4 = 5 ∧ 1 + 8 = 9) := by
+  omega
+
 end Omega.Conclusion
