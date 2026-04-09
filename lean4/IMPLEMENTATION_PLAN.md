@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2361 |
+| \leanverified 标注数 | 2364 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2385 |
-| 轮次 | R578（round_count=579）|
+| 总标注数 | 2388 |
+| 轮次 | R579（round_count=580）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM replica softcore 温度奇异行列式种子值（Round R579，新标签，\leanverified 完整）**：`paper_pom_replica_exceptional_det_seeds`（对应 `thm:pom-replica-softcore-temperature-exceptional-determinant`，POM；replica softcore 温度奇异行列式乘积公式种子值）——**新标签首次注册**（thm:pom-replica-softcore-temperature-exceptional-determinant，\leanverified 新标注）
+**EA 自同构维度黄金比挤压指数种子值（Round R579，新标签，\leanverified 完整）**：`paper_ea_aut_dimension_golden_squeeze_seeds`（对应 `thm:fold-aut-dimension-golden-squeeze`，EA；liminf/limsup 指数夹逼 log(4/φ)..log(2√φ) 种子值）——**新标签首次注册**（thm:fold-aut-dimension-golden-squeeze，\leanverified 新标注）
+**Zeta 符号翻转半格点临界线极点种子值（Round R579，新标签，\leanverified 完整）**：`paper_zeta_signflip_half_lattice_seeds`（对应 `cor:zeta-signflip-half-lattice`，Zeta；θ=π 半格点临界线极点列公式种子值）——**新标签首次注册**（cor:zeta-signflip-half-lattice，\leanverified 新标注）
 **CD 双相位平均门有序纤维计数种子值（Round R578，新标签，\leanverified 完整）**：`paper_cdim_biphase_fiber_count_seeds`（对应 `thm:cdim-biphase-average-fiber-diagonal-antidiagonal`，CD；双相位门纤维计数恒等式种子值）——**新标签首次注册**（thm:cdim-biphase-average-fiber-diagonal-antidiagonal，\leanverified 新标注）
 **Conclusion Edgeworth 首阶消失纯偶性 c₂=51/11 种子值（Round R578，新标签，\leanverified 完整）**：`paper_conclusion_edgeworth_evenness_rate_seeds`（对应 `cor:conclusion-selfdual-sync-kernel-edgeworth-evenness`，Conclusion；c₂=51/11 互素性、乘积、整除种子值）——**新标签首次注册**（cor:conclusion-selfdual-sync-kernel-edgeworth-evenness，\leanverified 新标注）
 **Folding 失配密度全局极大点平方恒等式种子值（Round R578，新标签，\leanverified 完整）**：`paper_fold_bernoulli_p_gamma_global_max_seeds`（对应 `prop:fold-bernoulli-p-gamma-global-max`，Folding；失配密度极大点算术恒等式 γ(p★)=p★² 种子值）——**新标签首次注册**（prop:fold-bernoulli-p-gamma-global-max，\leanverified 新标注）
