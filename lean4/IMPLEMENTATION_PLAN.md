@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R521（round_count=522）|
+| 轮次 | R522（round_count=523）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -30,11 +30,11 @@
 | Conclusion | 2,550 | 266 | 10.4% |
 | Group Unification | 469 | 172 | 36.7% |
 | SPG | 129 | 112 | 86.8% |
-| Circle Dimension | 393 | 154 | 39.2% |
+| Circle Dimension | 393 | 155 | 39.4% |
 | Zeta Finite Part | 4,524 | 209 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1587** | **15.1%** |
+| **合计（body）** | **10,508** | **1588** | **15.1%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD 平方自由中值 Gödel 距离代数核（Round R522，新标签，\leanpartial，streak #69）**：`omegaPrime`（对应 `thm:cdim-median-godel-distance-median-closed-form`，CD；不同素因子计数 def）；`primeFactors_quotient_product`（对应同标签，CD；(a/gcd)·(b/gcd) 素因子分解核心引理）；`paper_cdim_median_godel_distance_squarefree`（对应同标签，CD；综合论文接口）——**新标签首次注册**（thm:cdim-median-godel-distance-median-closed-form，\leanpartial 平方自由代数核完整，partial cube/中值图论文(1)(3)待后续，streak #69）
 **EA/Folding 有理生成元间隙 g_rat(m)+|X_m|=2^m（Round R521，新标签，\leanverified 完整，streak #68）**：`g_rat`（对应 `thm:fold-groupoid-aut0-rational-generator-gap`，EA；有理生成元间隙 noncomputable def）；`g_rat_add_card`（对应同标签，EA；g\_rat(m)+|X\_m|=2^m 主定理）；`g_rat_eq`（对应同标签，EA；g\_rat 等式形式）；`paper_fold_groupoid_aut0_rational_generator_gap`（对应同标签，EA；综合论文接口）——**新标签首次注册**（thm:fold-groupoid-aut0-rational-generator-gap，\leanverified 完整，代码在 Folding 目录、.tex 归 EA 章节，streak #68）
 **Conclusion 仿射正规形半直积律（Round R520，新标签，\leanverified 完整，streak #67）**：`A_N_k`（对应 `thm:conclusion-affine-normal-form-semidirect`，Conclusion；仿射矩阵 A_{N,k} noncomputable def）；`semidirectMul`（对应同标签，Conclusion；半直积乘法 def）；`sqrt_pos_of_pos`（对应同标签，Conclusion；√N > 0）；`sqrt_mul_sqrt`（对应同标签，Conclusion；√N·√M=√(NM)）；`A_N_k_mul`（对应同标签，Conclusion；矩阵乘法半直积律）；`semidirectMul_def`（对应同标签，Conclusion；半直积乘法定义等式）；`paper_conclusion_affine_normal_form_semidirect`（对应同标签，Conclusion；综合论文接口）——**新标签首次注册**（thm:conclusion-affine-normal-form-semidirect，\leanverified 完整，streak #67）
 **POM Lee-Yang 单调耦合素数寄存器整除链（Round R519，新标签，\leanverified 完整，streak #66）**：`q`（对应 `cor:pom-fiber-leyang-monotone-coupling-prime-register`，POM；q(t,α)=t/(t+α) noncomputable def）；`q_monotone`（对应同标签，POM；q 关于 t 单调性）；`indicator_monotone`（对应同标签，POM；indicator 单调性）；`primeRegister`（对应同标签，POM；素数寄存器乘积 def）；`primeRegister_dvd_of_subset`（对应同标签，POM；子集整除性）；`subset_of_t_le`（对应同标签，POM；t₁≤t₂ 蕴含子集关系）；`paper_pom_fiber_leyang_monotone_coupling_prime_register`（对应同标签，POM；综合论文接口）——**新标签首次注册**（cor:pom-fiber-leyang-monotone-coupling-prime-register，\leanverified 完整，streak #66）
