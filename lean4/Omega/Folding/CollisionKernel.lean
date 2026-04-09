@@ -419,4 +419,14 @@ theorem paper_pom_a4t_jones_ade_intersections :
   refine ⟨fun x => by ring, a4CharPoly_at_zero, a4CharPoly_at_one,
           by unfold a4CharPoly; ring, by unfold a4CharPoly; ring⟩
 
+/-- A₄ trace power seed package: tr=2, tr²=18, tr³=50, det=-2.
+    prop:pom-collision-det -/
+theorem paper_collisionKernel4_trace_power_seeds :
+    collisionKernel4.trace = 2 ∧
+    (collisionKernel4 ^ 2).trace = 18 ∧
+    (collisionKernel4 ^ 3).trace = 50 ∧
+    collisionKernel4.det = -2 :=
+  ⟨collisionKernel4_trace, collisionKernel4_trace_sq,
+   collisionKernel4_trace_cube, collisionKernel4_det⟩
+
 end Omega

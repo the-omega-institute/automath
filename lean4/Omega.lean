@@ -130,6 +130,7 @@ import Omega.Zeta.FiniteQuotientCardinality
 import Omega.Zeta.LocalInversionDelta
 import Omega.Zeta.PhaseImplementationRankLimit
 import Omega.Zeta.SyncKernelMixingRate
+import Omega.Zeta.FredholmDetSeeds
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -147,6 +148,7 @@ import Omega.EA.PrimeRegisterLocalMoves
 import Omega.EA.MulNoNewPrimitive
 import Omega.EA.StableAddComputable
 import Omega.EA.InternalProductAddsValues
+import Omega.EA.PisanoPeriodSeeds
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
