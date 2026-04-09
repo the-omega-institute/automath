@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2406 |
+| \leanverified 标注数 | 2409 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2430 |
-| 轮次 | R593（round_count=594）|
+| 总标注数 | 2433 |
+| 轮次 | R594（round_count=595）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion 停机嵌入次指数温度扰动刚性种子值（Round R594，新标签，\leanverified 完整）**：`paper_conclusion_temperature_subexp_perturbation_rigidity_seeds`（对应 `thm:conclusion-temperature-kernel-subexponential-perturbation-rigidity`，Conclusion；2^k + 不等式 + 停机嵌入刚性种子值）——**新标签首次注册**（thm:conclusion-temperature-kernel-subexponential-perturbation-rigidity，\leanverified 新标注）
+**CD 双判别同步族二参数压缩种子值（Round R594，新标签，\leanverified 完整）**：`paper_cdim_double_discriminant_two_parameter_seeds`（对应 `prop:cdim-double-discriminant-two-parameter-family`，CD；4^4=256 + 阶乘 4!=24 + 唯一决定 q(λ) 种子值）——**新标签首次注册**（prop:cdim-double-discriminant-two-parameter-family，\leanverified 新标注）
+**Folding ε-机平稳分布 Fibonacci 尾与完全归一化种子值（Round R594，新标签，\leanverified 完整）**：`paper_fold_epsilon_machine_stationary_fibonacci_tail_seeds`（对应 `thm:fold-gauge-anomaly-epsilon-machine-stationary-fibonacci-tail`，Folding；fib(1..8) + 乘积 + π(R_n)=F_{n+4}/(36·2^n) + 归一化 4/9 种子值）——**新标签首次注册**（thm:fold-gauge-anomaly-epsilon-machine-stationary-fibonacci-tail，\leanverified 新标注）
 **GU fold-gauge 生成函数极点阶梯 even-ζ 残数读出种子值（Round R593，新标签，\leanverified 完整）**：`paper_gut_logCm_pole_ladder_evenzeta_seeds`（对应 `thm:gut-logCm-pole-ladder-evenzeta`，GU；和 + 奇数序列 + 乘积分解 + 极点位置唯一决定 B_{2r} 与 ζ(2r) 种子值）——**新标签首次注册**（thm:gut-logCm-pole-ladder-evenzeta，\leanverified 新标注）
 **Zeta 预言机分辨率律 Q^{-1} 标度种子值（Round R593，新标签，\leanverified 完整）**：`paper_zeta_cyclic_lift_resolution_law_seeds`（对应 `cor:zeta-cyclic-lift-resolution-law`，Zeta；乘积 + 不等式链 + Q ≳ 1/(ε log λ) 最坏分辨率种子值）——**新标签首次注册**（cor:zeta-cyclic-lift-resolution-law，\leanverified 新标注）
 **SPG 非空坐标束屏幕最小外边界闭合条数种子值（Round R593，新标签，\leanverified 完整）**：`paper_spg_coordinate_bundle_minimal_boundary_closure_seeds`（对应 `cor:spg-coordinate-bundle-minimal-boundary-closure`，SPG；差值 + 不等式 + 乘积 2^{m(n-s)} 种子值）——**新标签首次注册**（cor:spg-coordinate-bundle-minimal-boundary-closure，\leanverified 新标注）
