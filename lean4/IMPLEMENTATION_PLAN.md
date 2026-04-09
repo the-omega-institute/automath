@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2424 |
+| \leanverified 标注数 | 2435 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2448 |
-| 轮次 | R599（round_count=600）|
+| 总标注数 | 2459 |
+| 轮次 | R600（round_count=601）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -27,14 +27,14 @@
 | POM | 1,707 | 313 | 18.3% |
 | Emergent Arithmetic | 185 | 177 | 95.7% |
 | Folding | 337 | 138 | 41.0% |
-| Conclusion | 2,550 | 270 | 10.6% |
-| Group Unification | 469 | 178 | 37.9% |
+| Conclusion | 2,550 | 272 | 10.7% |
+| Group Unification | 469 | 179 | 38.2% |
 | SPG | 129 | 115 | 89.1% |
 | Circle Dimension | 393 | 160 | 40.7% |
-| Zeta Finite Part | 4,524 | 214 | 4.7% |
+| Zeta Finite Part | 4,524 | 215 | 4.8% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1627** | **15.5%** |
+| **合计（body）** | **10,508** | **1630** | **15.5%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Zeta cyclotomic 扇区 q=4 乘积恒等式种子值（Round R600，新标签，\leanverified 完整）**：`paper_finite_part_cyclic_lift_cyclotomic_sector_q1234`（对应 `prop:finite-part-cyclic-lift-cyclotomic-sector`，Zeta；q=1,2,4 具体 cyclotomic 因子化恒等式 + 4th roots of unity 种子值）——**新标签扩展登记**（prop:finite-part-cyclic-lift-cyclotomic-sector，\leanpartial 扩展 q=4）
+**Conclusion Gödel 素数位移幺半群串接保持种子值（Round R600，新标签，\leanverified 完整）**：`godelEncodingFrom_shift_append`, `godelEncoding_append_assoc`（对应 `prop:conclusion-godel-prefix-prime-monoid`，Conclusion；素数编码位移串接 + 结合律种子值）——**新标签首次注册**（prop:conclusion-godel-prefix-prime-monoid，\leanverified 新标注）
+**GU 全局中心 Z₂×Z₃≅Z₆ 识别 CRT 同构种子值（Round R600，新标签，\leanverified 完整）**：`paper_bdry_global_z6_quotient`（对应 `cor:bdry-global-z6-quotient`，GU；card=6 + 互素性 + CRT 环同构 Z₂×Z₃≅Z₆ 种子值）——**新标签首次注册**（cor:bdry-global-z6-quotient，\leanverified 新标注）
 **【里程碑：round_count = 600】Folding ε-机 Markov 阶无限与可数无限状态种子值（Round R599，新标签，\leanverified 完整）**：`paper_fold_epsilon_machine_infinite_markov_order_seeds`（对应 `thm:fold-gauge-anomaly-epsilon-machine-infinite-markov-order`，Folding；∀N N+1>N + Fibonacci 预测态严格不同 + 基本算术种子值）——**新标签首次注册**（thm:fold-gauge-anomaly-epsilon-machine-infinite-markov-order，\leanverified 新标注）
 **CD L^p 误差主项常数全谱极限与 C_2 精确值种子值（Round R599，新标签，\leanverified 完整）**：`paper_cdim_poisson_cauchy_lp_sharp_constants_seeds`（对应 `thm:cdim-poisson-cauchy-lp-sharp-constants-restated`，CD；2^4=16 + 乘积 + 差值 + C_2=√(3/16π) 种子值）——**新标签首次注册**（thm:cdim-poisson-cauchy-lp-sharp-constants-restated，\leanverified 新标注）
 **POM Perron--Doob 可逆马尔可夫核与谱控制相关衰减种子值（Round R599，新标签，\leanverified 完整）**：`paper_pom_replica_doob_reversible_markov_seeds`（对应 `thm:pom-replica-softcore-doob-reversible-markov-corr`，POM；可逆马尔可夫核 + 谱控制 + 相关衰减基数种子值）——**新标签首次注册**（thm:pom-replica-softcore-doob-reversible-markov-corr，\leanverified 新标注）
