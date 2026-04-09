@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2126 |
+| \leanverified 标注数 | 2134 |
 | \leanpartial 标注数 | 18 |
-| 总标注数 | 2144 |
-| 轮次 | R491（round_count=492）|
+| 总标注数 | 2152 |
+| 轮次 | R492（round_count=493）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**POM 固定 r 乘度极值 Fibonacci 代数核深化（Round R492，深化轮次，标签已注册于 Phase 235）**：`fib_three_mul`（对应 `prop:pom-multiplicity-fixed-r-extrema`，POM；3 倍 Fib 恒等式）；`two_fib_add_four_eq_three_fib_add_three_plus_fib`（对应同标签；Fib 线性组合引理）；`fib_add_one_eq_mul_add_mul`（对应同标签；Fib(m+n+1) 展开）；`fib_shifted_fusion`（对应同标签；移位融合恒等式）；`fib_shifted_fusion_five`（对应同标签；移位融合 +5 版本）；`two_fib_gt_fib_mul_fib`（对应同标签；2F(a+b+1)>F(a)·F(b) 不等式）；`two_fib_gt_three_fib`（对应同标签；2F(n+4)>3F(n+3) 不等式）；`paper_pom_multiplicity_fixed_r_extrema_algebra_core`（对应同标签；3-field 综合论文接口）——**深化轮次**（标签已于 Phase 235 注册，论文覆盖率数字不变）
 **Conclusion 事件椭圆黄金比例最小伸缩 T=1 代数核（Round R491，新标签，streak #40 里程碑）**：`R`（对应 `thm:conclusion-event-ellipse-golden-minimal-stretch`，Conclusion；上三角矩阵 def）；`L`（对应同标签，Conclusion；下三角矩阵 def）；`R_mul_L`（对应同标签，Conclusion；R·L 乘积）；`det_R_mul_L`（对应同标签，Conclusion；行列式=1）；`trace_R_mul_L`（对应同标签，Conclusion；迹=3）；`goldenRatio_sq_eq`（对应同标签，Conclusion；φ²=φ+1）；`goldenRatio_pow_four_identity`（对应同标签，Conclusion；φ⁴ 恒等式）；`goldenRatio_sq_mul_inv_sq`（对应同标签，Conclusion；φ²·φ⁻² 恒等）；`goldenRatio_inv_eq_sub_one`（对应同标签，Conclusion；φ⁻¹=φ-1）；`goldenRatio_sq_plus_inv_sq`（对应同标签，Conclusion；φ²+φ⁻²）；`goldenRatio_inv_sq_char`（对应同标签，Conclusion；φ⁻² 特征方程）；`paper_event_ellipse_golden_minimal_stretch_T1`（对应同标签，Conclusion；3-field 综合论文接口）——**新标签首次注册**（thm:conclusion-event-ellipse-golden-minimal-stretch，\leanpartial T=1 代数核，streak #40 里程碑）
 **EA Joukowsky 椭圆轴比与面积（Round R490，新标签，streak #39）**：`diagAction`（对应 `thm:prime-register-dense-ellipticization`，EA；对角作用 noncomputable def）；`diag_maps_circle_to_ellipse`（对应同标签，EA；对角作用映射圆到椭圆）；`ellipse_axes_product`（对应同标签，EA；椭圆轴乘积为1）；`axis_ratio_eq_r_sq`（对应同标签，EA；轴比等于 r²）；`r_unique_from_sq`（对应同标签，EA；由平方唯一确定 r）；`ellipse_area_eq_pi`（对应同标签，EA；椭圆面积等于 π）；`paper_prime_register_dense_ellipticization_part2`（对应同标签，EA；3-field 综合论文接口）——**新标签首次注册**（thm:prime-register-dense-ellipticization，streak #39）
 **GU 判别式 wedge2 平方分解（Round R489，新标签，streak #38）**：`r_sq_mul_sub_one`（对应 `cor:group-jg-discriminant-wedge2-square`，GU；r²·(x-1) 引理）；`sq_sub_symm`（对应同标签，GU；差的平方对称性）；`pow_mul_pow_two`（对应同标签，GU；幂乘幂引理）；`sq_mul_r_sq`（对应同标签，GU；r²a 的平方）；`sq_eq_factor`（对应同标签，GU；平方因子分解）；`sq_eq_factor_symm`（对应同标签，GU；对称平方因子分解）；`paper_group_jg_discriminant_wedge2_square`（对应同标签，GU；6-field 综合论文接口）——**新标签首次注册**（cor:group-jg-discriminant-wedge2-square，streak #38）
