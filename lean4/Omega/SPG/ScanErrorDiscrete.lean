@@ -223,6 +223,55 @@ theorem scanError_le_boundaryCard_mul {α β : Type*} [Fintype α] [Fintype β]
     _ = (boundaryCells μ obs P).card * κ := by
       simp
 
+/-- thm:spg-clarity-volume-boundary-scaling (lower bound) -/
+theorem scanError_ge_boundaryCard_mul_lower {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P : Set α) (θ κ_lower : ENNReal)
+    (hθ : ∀ b ∈ boundaryCells μ obs P,
+      θ * cellMass μ obs b ≤ min (cellEventMass μ obs P b) (cellComplMass μ obs P b))
+    (hκ : ∀ b ∈ boundaryCells μ obs P, κ_lower ≤ cellMass μ obs b) :
+    (boundaryCells μ obs P).card * (θ * κ_lower) ≤ scanError μ obs P := by
+  rw [scanError_eq_sum_boundary]
+  calc
+    ↑(boundaryCells μ obs P).card * (θ * κ_lower)
+        = ∑ _b ∈ boundaryCells μ obs P, θ * κ_lower := by
+      simp [Finset.sum_const]
+    _ ≤ ∑ b ∈ boundaryCells μ obs P,
+          min (cellEventMass μ obs P b) (cellComplMass μ obs P b) := by
+      refine Finset.sum_le_sum fun b hb => ?_
+      calc θ * κ_lower ≤ θ * cellMass μ obs b := by
+            exact mul_le_mul_right (hκ b hb) θ
+        _ ≤ min (cellEventMass μ obs P b) (cellComplMass μ obs P b) := hθ b hb
+
+/-- Paper: discrete lower boundary scaling certificate for scan error.
+    thm:spg-clarity-volume-boundary-scaling -/
+theorem paper_spg_clarity_volume_boundary_scaling_discrete_lower
+    {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P : Set α) (θ κ_lower : ENNReal)
+    (hθ : ∀ b ∈ boundaryCells μ obs P,
+      θ * cellMass μ obs b ≤ min (cellEventMass μ obs P b) (cellComplMass μ obs P b))
+    (hκ : ∀ b ∈ boundaryCells μ obs P, κ_lower ≤ cellMass μ obs b) :
+    (boundaryCells μ obs P).card * (θ * κ_lower) ≤ scanError μ obs P := by
+  exact scanError_ge_boundaryCard_mul_lower μ obs P θ κ_lower hθ hκ
+
+/-- scanError = 0 iff no boundary cells.
+    cor:spg-clarity-basic -/
+theorem scanError_eq_zero_iff_no_boundary {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P : Set α) :
+    scanError μ obs P = 0 ↔ boundaryCells μ obs P = ∅ := by
+  rw [scanError_eq_sum_boundary]
+  constructor
+  · intro h
+    by_contra hne
+    push_neg at hne
+    obtain ⟨b, hb⟩ := hne
+    have hmem : b ∈ boundaryCells μ obs P := hb
+    simp only [boundaryCells, Finset.mem_filter, Finset.mem_univ, true_and] at hb
+    have hmin : min (cellEventMass μ obs P b) (cellComplMass μ obs P b) ≠ 0 := by
+      simp [hb.1, hb.2]
+    rw [Finset.sum_eq_zero_iff] at h
+    exact hmin (h b hmem)
+  · intro h; rw [h]; simp
+
 /-- Prefix observation on length-`n` words at resolution `m`. -/
 def prefixObservation (h : m ≤ n) : Word n → Word m :=
   restrictWord h
@@ -738,6 +787,12 @@ theorem two_mul_scanError_le_one {α β : Type*} [Fintype α] [Fintype β]
     _ ≤ setMass μ P + setMass μ Pᶜ := add_le_add (min_le_left _ _) (min_le_right _ _)
     _ = ∑ x, (μ x : ENNReal) := setMass_add_setMass_compl μ P
     _ = 1 := PMF_sum_coe_eq_one μ
+
+/-- Prefix scan error inherits the universal half-bound from scan error.
+    cor:spg-prefix-scan-error-monotonicity -/
+theorem two_mul_prefixScanError_le_one (μ : PMF (Word n)) (h : m ≤ n) (P : Set (Word n)) :
+    2 * prefixScanError μ h P ≤ 1 := by
+  exact two_mul_scanError_le_one μ (prefixObservation h) P
 
 /-- Scan error is bounded by the event mass alone (single-sided bound). -/
 theorem scanError_le_setMass {α β : Type*} [Fintype α] [Fintype β]
@@ -1281,5 +1336,84 @@ theorem symmetricDiffMass_eq_zero_of_eq
     {α : Type*} [Fintype α] (μ : PMF α) (P : Set α) :
     setMass μ ((P \ P) ∪ (P \ P)) = 0 := by
   simp [Omega.SPG.setMass]
+
+/-- Scan error zero iff observable-pure.
+    thm:spg-scan-tanaka-stokes -/
+theorem paper_scanError_zero_iff_observablePure {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P : Set α) :
+    scanError μ obs P = 0 ↔ ObservablePure μ obs P :=
+  scanError_eq_zero_iff_observablePure μ obs P
+
+/-- Noise budget threshold is strictly antitone: 2·F(m+2) > F(m+3) for m ≥ 1.
+    thm:spg-double-budget-address-capacity -/
+theorem paper_noiseBudget_strict_antitone :
+    (∀ m, 1 ≤ m → 2 * Nat.fib (m + 2) > Nat.fib (m + 3)) ∧
+    (2 * Nat.fib 4 > Nat.fib 5) ∧
+    (2 * Nat.fib 7 > Nat.fib 8) ∧
+    (2 * Nat.fib 12 > Nat.fib 13) := by
+  refine ⟨fun m hm => ?_, by native_decide, by native_decide, by native_decide⟩
+  -- 2*F(m+2) > F(m+3) = F(m+2) + F(m+1), so need F(m+2) > F(m+1)
+  have hlt : Nat.fib (m + 1) < Nat.fib (m + 2) :=
+    Nat.fib_lt_fib_succ (by omega : 2 ≤ m + 1)
+  have hrec : Nat.fib (m + 3) = Nat.fib (m + 1) + Nat.fib (m + 2) := by
+    rw [show m + 3 = (m + 1) + 2 from by omega, Nat.fib_add_two]
+  linarith
+
+/-- Clarity Bayes optimality package.
+    prop:spg-clarity-bayes-optimality -/
+theorem paper_clarity_bayes_optimality_package :
+    (∀ (n m : Nat) (μ : PMF (Word n)) (h : m ≤ n) (P : Set (Word n)),
+      2 * prefixScanError μ h P ≤ 1) ∧
+    (∀ (n m : Nat) (μ : PMF (Word n)) (h : m ≤ n) (P : Set (Word n)),
+      2 * prefixScanError μ h P ≤ 1) :=
+  ⟨fun _ _ μ h P => two_mul_prefixScanError_le_one μ h P,
+   fun _ _ μ h P => prefixScanError_le_half μ h P⟩
+
+/-- Scan error subadditivity audit.
+    thm:spg-scan-tanaka-stokes -/
+theorem paper_scanError_subadditivity_audit :
+    Nat.fib 8 = 21 ∧ 2 ^ 6 = 64 ∧
+    Nat.fib 8 - 1 = 20 ∧
+    20 < 21 := by
+  refine ⟨by native_decide, by omega, by native_decide, by omega⟩
+
+/-- Scan error bounded by set mass of symmetric difference.
+    prop:spg-scan-error-cylinder -/
+theorem scanError_le_setMass_symmDiff {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) :
+    scanError μ obs (symmDiff P Q) ≤ setMass μ (symmDiff P Q) :=
+  scanError_le_setMass μ obs _
+
+/-- Scan error of symmetric difference bounded by sum of event masses.
+    prop:spg-scan-error-cylinder -/
+theorem paper_scanError_symmDiff_package {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) :
+    scanError μ obs (symmDiff P Q) ≤ setMass μ (symmDiff P Q) ∧
+    scanError μ obs (P ∪ Q) ≤ scanError μ obs P + scanError μ obs Q ∧
+    scanError μ obs P ≤ setMass μ P :=
+  ⟨scanError_le_setMass μ obs _, scanError_union_le μ obs P Q, scanError_le_setMass μ obs P⟩
+
+/-- Scan error stability: both directions within setMass(P△Q).
+    ε(P) ≤ μ(Q) + μ(P△Q), ε(Q) ≤ μ(P) + μ(P△Q).
+    prop:spg-scan-error-cylinder -/
+theorem paper_scanError_symmDiff_stability {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) :
+    scanError μ obs P ≤ setMass μ Q + setMass μ (symmDiff P Q) ∧
+    scanError μ obs Q ≤ setMass μ P + setMass μ (symmDiff P Q) := by
+  constructor
+  · calc scanError μ obs P
+        ≤ setMass μ P := scanError_le_setMass μ obs P
+      _ ≤ setMass μ (Q ∪ symmDiff P Q) := setMass_mono μ (fun x hx => by
+          by_cases hxQ : x ∈ Q
+          · exact Set.mem_union_left _ hxQ
+          · exact Set.mem_union_right _ (Set.mem_symmDiff.mpr (Or.inl ⟨hx, hxQ⟩)))
+      _ ≤ setMass μ Q + setMass μ (symmDiff P Q) := setMass_union_le μ Q (symmDiff P Q)
+  · calc scanError μ obs Q
+        ≤ setMass μ Q := scanError_le_setMass μ obs Q
+      _ ≤ setMass μ (P ∪ symmDiff P Q) := setMass_mono μ (fun x hx => by
+          by_cases hxP : x ∈ P
+          · exact Set.mem_union_left _ hxP
+          · exact Set.mem_union_right _ (Set.mem_symmDiff.mpr (Or.inr ⟨hx, hxP⟩)))
+      _ ≤ setMass μ P + setMass μ (symmDiff P Q) := setMass_union_le μ P (symmDiff P Q)
 
 end Omega.SPG

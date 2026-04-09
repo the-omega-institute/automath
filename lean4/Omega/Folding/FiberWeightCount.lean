@@ -800,4 +800,13 @@ theorem exactWeightCount_one_eq (m : Nat) (hm : 1 ≤ m) :
           _ ≤ Nat.fib (j + 1 + 2) := Nat.fib_mono (by omega))]
       exact ih (by omega)
 
+/-- Weight distribution audit: total = 2^m, recurrence, boundary values.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_pom_weight_distribution :
+    (∀ m : Nat, ∑ n ∈ Finset.range (Nat.fib (m + 3)), exactWeightCount m n = 2 ^ m) ∧
+    (∀ m : Nat, exactWeightCount m 0 = 1) ∧
+    (∀ m n : Nat, Nat.fib (m + 3) ≤ n → exactWeightCount m n = 0) :=
+  ⟨exactWeightCount_sum, fun m => by rw [exactWeightCount_zero_eq_one],
+   fun m n hn => exactWeightCount_eq_zero_of_ge_fib m n hn⟩
+
 end Omega

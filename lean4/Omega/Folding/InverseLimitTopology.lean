@@ -47,4 +47,37 @@ instance : Infinite XInfinity := by
 theorem ne_of_bit_ne (a b : XInfinity) (n : Nat) (h : a.1 n ≠ b.1 n) : a ≠ b :=
   fun hab => h (congrArg (fun x => x.1 n) hab)
 
+/-- XInfinity is nonempty.
+    thm:fold-suite -/
+theorem XInfinity_nonempty : Nonempty XInfinity := ⟨default⟩
+
+/-- The universe of XInfinity is compact.
+    thm:fold-suite -/
+theorem XInfinity_univ_isCompact : IsCompact (Set.univ : Set XInfinity) :=
+  CompactSpace.isCompact_univ
+
+/-- Extensionality of XInfinity via bitwise equality.
+    thm:fold-suite / lem:ne-of-bit-ne -/
+theorem XInfinity_ext_iff (a b : XInfinity) :
+    a = b ↔ ∀ n, a.1 n = b.1 n := by
+  constructor
+  · intro hab n
+    exact congrArg (fun x : XInfinity => x.1 n) hab
+  · intro h
+    apply Subtype.ext
+    funext n
+    exact h n
+
+/-- Paper-facing XInfinity topology package.
+    thm:fold-suite / lem:ne-of-bit-ne -/
+theorem paper_XInfinity_topology_package :
+    Nonempty XInfinity ∧
+    IsCompact (Set.univ : Set XInfinity) ∧
+    (∀ a b : XInfinity, a = b ↔ ∀ n, a.1 n = b.1 n) ∧
+    (∀ a b : XInfinity, ∀ n, a.1 n ≠ b.1 n → a ≠ b) :=
+  ⟨XInfinity_nonempty,
+   XInfinity_univ_isCompact,
+   XInfinity_ext_iff,
+   ne_of_bit_ne⟩
+
 end Omega.X

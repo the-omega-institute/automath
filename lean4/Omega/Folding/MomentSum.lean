@@ -183,6 +183,9 @@ theorem momentSum_six_three : momentSum 6 3 = 194 := by rw [← cMomentSum_eq]; 
 /-- prop:pom-s6-base-four -/
 theorem momentSum_six_four : momentSum 6 4 = 1716 := by rw [← cMomentSum_eq]; simp
 
+/-- prop:pom-coarsegraining-collision-moment-strict-monotonicity -/
+theorem momentSum_six_six : momentSum 6 6 = 57820 := by rw [← cMomentSum_eq]; native_decide
+
 -- S_7 base values
 /-- prop:pom-s7-base-zero -/
 theorem momentSum_seven_zero : momentSum 7 0 = 1 := by rw [← cMomentSum_eq]; simp
@@ -353,5 +356,18 @@ theorem mixed_collision_kernel_computable (q m : Nat) :
     prop:pom-fiberMultiplicity-sum-sq-eq-momentSum-two -/
 theorem fiberMultiplicity_sum_sq_eq_momentSum_two (m : Nat) :
     ∑ x : X m, X.fiberMultiplicity x ^ 2 = momentSum 2 m := rfl
+
+/-- Bridge between S_0 (= Fibonacci) and S_1 (= 2^m) with concrete values.
+    def:pom-collision-inflation -/
+theorem paper_momentSum_zero_one_bridge :
+    (∀ m, momentSum 0 m = Nat.fib (m + 2)) ∧
+    (∀ m, momentSum 1 m = 2 ^ m) ∧
+    momentSum 0 6 = 21 ∧ momentSum 1 6 = 64 ∧
+    momentSum 0 7 = 34 ∧ momentSum 1 7 = 128 := by
+  refine ⟨momentSum_zero, momentSum_one, ?_, ?_, ?_, ?_⟩
+  · rw [momentSum_zero]; native_decide
+  · rw [momentSum_one]; norm_num
+  · rw [momentSum_zero]; native_decide
+  · rw [momentSum_one]; norm_num
 
 end Omega

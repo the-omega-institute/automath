@@ -223,6 +223,13 @@ theorem prefixWord_surjective (m : Nat) :
     · exact x.2 i (by simp [Omega.get, h]; exact hi) (by simp [Omega.get, h1]; exact hi1)
   exact ⟨⟨a, hno11⟩, Subtype.ext (funext fun i => by simp [prefixWord, a])⟩
 
+/-- Paper package for the golden inverse-limit equivalence and prefix surjectivity.
+    thm:inverse-limit-golden -/
+theorem paper_inverseLimit_golden (m : Nat) :
+    Nonempty (CompatibleFamily ≃ XInfinity) ∧
+    Function.Surjective (fun a : XInfinity => prefixWord a m) := by
+  exact ⟨⟨inverseLimitEquiv⟩, prefixWord_surjective m⟩
+
 end X
 
 end Omega

@@ -423,7 +423,7 @@ theorem momentSum_two_sq_le_card_mul_four (m : Nat) :
       Finset.univ.card * ∑ x : X m, (X.fiberMultiplicity x ^ 2) ^ 2 :=
     sq_sum_le_card_mul_sum_sq
   convert this using 2 with x
-  ring
+  ring_nf
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase 123
@@ -1256,5 +1256,57 @@ theorem exactWeightCount_fib_sub_twelve (m : Nat) (hm : 5 ≤ m) :
   have hsub : Nat.fib (m + 3) - 2 - (Nat.fib (m + 3) - 12) = 10 := by omega
   rw [exactWeightCount_symmetric m (Nat.fib (m + 3) - 12) (by omega), hsub]
   exact exactWeightCount_ten m hm
+
+/-- S_2(m) is sandwiched by Fibonacci-scaled bounds.
+    thm:fold-collision2-aut-lie-dimension-rank -/
+theorem paper_momentSum_two_fibonacci_sandwich (m : Nat) :
+    Nat.fib (m + 2) ≤ momentSum 2 m ∧
+    momentSum 2 m ≤ X.maxFiberMultiplicity m * 2 ^ m := by
+  refine ⟨momentSum_ge_card' 2 m, ?_⟩
+  have h := momentSum_upper_bound' 2 m (by omega)
+  simpa using h
+
+/-- Moment sum audit package for Discussion chapter.
+    prop:discussion-fold-occupancy-tq-moment,
+    prop:discussion-fold-representation-qcollision-lower-bound -/
+theorem paper_discussion_moment_audit_package :
+    (∀ q m : Nat, momentSum q m ^ 2 ≤ Nat.fib (m + 2) * momentSum (2 * q) m) ∧
+    (∀ q m : Nat, 1 ≤ q → 2 ^ m ≤ momentSum q m) ∧
+    (∀ q m : Nat, Nat.fib (m + 2) ≤ momentSum q m) :=
+  ⟨momentSum_cauchy_schwarz_general, momentSum_ge_pow', momentSum_ge_card'⟩
+
+/-- S_2 difference values for small m.
+    thm:fold-collision2-aut-lie-dimension-rank -/
+theorem paper_momentSum_two_diff_values :
+    momentSum 2 1 - momentSum 2 0 = 1 ∧
+    momentSum 2 2 - momentSum 2 1 = 4 ∧
+    momentSum 2 3 - momentSum 2 2 = 8 ∧
+    momentSum 2 4 - momentSum 2 3 = 22 ∧
+    momentSum 2 5 - momentSum 2 4 = 52 ∧
+    momentSum 2 6 - momentSum 2 5 = 132 := by
+  rw [momentSum_two_zero, momentSum_two_one, momentSum_two_two, momentSum_two_three,
+    momentSum_two_four, momentSum_two_five, momentSum_two_six]
+  omega
+
+/-- S_3 concrete values at m=6,7.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_momentSum_three_values :
+    momentSum 3 6 = 820 ∧
+    momentSum 3 7 = 2504 := by
+  exact ⟨momentSum_three_six, momentSum_three_seven⟩
+
+/-- S_4 concrete value at m=6.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_momentSum_four_values :
+    momentSum 4 6 = 3244 :=
+  momentSum_four_six
+
+/-- Weight count palindrome symmetry + strict monotonicity.
+    prop:fold-fiber-count-reciprocity -/
+theorem paper_folding_weight_count_palindrome :
+    (∀ m n : Nat, n ≤ Nat.fib (m + 3) - 2 →
+      exactWeightCount m n = exactWeightCount m (Nat.fib (m + 3) - 2 - n)) ∧
+    (∀ m : Nat, 1 ≤ m → momentSum 2 m < momentSum 2 (m + 1)) :=
+  ⟨exactWeightCount_symmetric, momentSum_two_strict_mono'⟩
 
 end Omega

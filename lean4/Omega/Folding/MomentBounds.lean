@@ -975,6 +975,13 @@ theorem momentSum_ge_pow_general (q m : Nat) (hq : 1 ≤ q) :
     2 ^ m ≤ momentSum q m := by
   rw [← momentSum_one m]; exact momentSum_mono_q_of_le hq (by omega)
 
+/-- Jensen lower bound: S_q(m) · F_{m+2}^{q-1} ≥ (2^m)^q.
+    prop:pom-rq-universal-bounds (lower bound) -/
+theorem momentSum_mul_fib_pow_ge (q m : Nat) (hq : 1 ≤ q) :
+    (2 ^ m) ^ q ≤ momentSum q m * Nat.fib (m + 2) ^ (q - 1) := by
+  have := momentSum_power_mean_lower q m hq
+  linarith [Nat.mul_comm (Nat.fib (m + 2) ^ (q - 1)) (momentSum q m)]
+
 /-- Count of collision-free stable words (fiber multiplicity = 1).
     def:pom-collision-free -/
 noncomputable def collisionFreeCount (m : Nat) : Nat :=
