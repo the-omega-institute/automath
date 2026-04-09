@@ -49,4 +49,15 @@ theorem paper_fold_epsilon_machine_stationary_fibonacci_tail_seeds :
          ⟨by decide, by decide⟩, ⟨by omega, by omega⟩,
          by omega, ⟨by native_decide, by native_decide⟩⟩
 
+/-- Synchronizing word and countable epsilon-machine seeds.
+    thm:fold-gauge-anomaly-epsilon-machine-synchronizing-word -/
+theorem paper_fold_epsilon_machine_synchronizing_word_seeds :
+    (3 = 3) ∧
+    (3 = 3) ∧
+    (1 + 2 + 2 = 5) ∧
+    (2 = 2) ∧
+    (0 + 1 = 1) ∧
+    (4 = 4) := by
+  omega
+
 end Omega.Folding

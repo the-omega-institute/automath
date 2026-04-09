@@ -108,6 +108,7 @@ import Omega.SPG.WalshStokes
 import Omega.SPG.CheegerStokes
 import Omega.SPG.MomentHolographyGap
 import Omega.SPG.GaugeGroupoidCircleLaw
+import Omega.SPG.CubePotentialCurl
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
@@ -197,6 +198,7 @@ import Omega.Conclusion.SyncKernelPalindrome
 import Omega.Conclusion.GodelLeyangIFS
 import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.MonotoneBooleanClone
+import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
