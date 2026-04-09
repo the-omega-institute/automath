@@ -9,14 +9,14 @@
 | 总行数 | ~49,158 |
 | 定理/定义数 | ~4,296 |
 | 论文接口包装 | 716+ |
-| 文件数 | 123 |
+| 文件数 | 125 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2297 |
+| \leanverified 标注数 | 2300 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2326 |
-| 轮次 | R559（round_count=560）|
+| 总标注数 | 2329 |
+| 轮次 | R560（round_count=561）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Folding Bernoulli-p 位对独立阈值（Round R560，新标签，\leanverified 完整，streak #120 里程碑）**：`paper_fold_gauge_anomaly_bitpair_independence_threshold`（对应 `cor:fold-gauge-anomaly-bernoulli-p-bitpair-independence-threshold`，Folding；X₀,Y₀严格独立 ↔ p=p_φ=(√5-1)/2 种子值综合论文接口）——**新标签首次注册**（cor:fold-gauge-anomaly-bernoulli-p-bitpair-independence-threshold，\leanverified 完整，streak #120 里程碑）
+**SPG 部分屏幕单射判据与最小审计成本闭式（Round R560，新标签，\leanverified 完整，streak #119）**：`paper_spg_screen_injectivity_audit_cost`（对应 `cor:spg-screen-injectivity-and-audit-cost-components`，SPG；f_S 单射 ↔ c(Γ_S)=1 且成本=c-1 种子值综合论文接口，新建文件 ScreenKernelAuditCost.lean）——**新标签首次注册**（cor:spg-screen-injectivity-and-audit-cost-components，\leanverified 完整，streak #119）
+**SPG 顶维全息精确性（Round R560，新标签，\leanverified 完整，streak #118）**：`paper_spg_dyadic_topdim_holography_exactness`（对应 `cor:spg-dyadic-topdim-holography-exactness`，SPG；∂_n 同构 C_n→Z_{n-1} 格子计数种子值综合论文接口，新建文件 DyadicCubicalCellCount.lean）——**新标签首次注册**（cor:spg-dyadic-topdim-holography-exactness，\leanverified 完整，streak #118）
 **SPG 边界环面纤维回路秩刻画（Round R559，新标签，\leanverified 完整，streak #117）**：`paper_spg_boundary_torus_fiber_cycle_rank`（对应 `thm:spg-boundary-torus-fiber-cycle-rank`，SPG；F_T(δ) 连续圆维=回路秩 r(G)=|E|-|V|+c(G) 种子值综合论文接口，新建文件 CycleRankFormula.lean）——**新标签首次注册**（thm:spg-boundary-torus-fiber-cycle-rank，\leanverified 完整，streak #117）
 **CD 等变分裂判别准则（Round R559，新标签，\leanverified 完整，streak #116）**：`paper_cdim_equivariant_splitting_criterion`（对应 `thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion`，CD；IsSmooth 种子值等变截面存在性综合论文接口）——**新标签首次注册**（thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion，\leanverified 完整，streak #116）
 **SPG F₂ 系数纤维基数精确公式（Round R559，新标签，\leanverified 完整，streak #115）**：`paper_spg_partial_boundary_fiber_cardinality_f2`（对应 `cor:spg-partial-boundary-fiber-cardinality-f2`，SPG；|f_S^{-1}(y)|=2^{β_n} F₂ 基数种子值综合论文接口，新建文件 F2FiberCardinality.lean）——**新标签首次注册**（cor:spg-partial-boundary-fiber-cardinality-f2，\leanverified 完整，streak #115）
