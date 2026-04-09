@@ -75,6 +75,7 @@ import Omega.Folding.BernoulliPJordanResonance
 import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPPressureQuartic
 import Omega.Folding.EpsilonMachineFibMobius
+import Omega.Folding.EndpointUnique
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -220,6 +221,7 @@ import Omega.POM.ToggleOrder
 import Omega.POM.ReplicaSoftcoreDet
 import Omega.POM.KCollisionRootFilter
 import Omega.POM.ReplicaBernoulliSubgraph
+import Omega.POM.FibPellQuadratic
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap

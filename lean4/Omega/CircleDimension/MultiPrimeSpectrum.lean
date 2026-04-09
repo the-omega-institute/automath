@@ -650,4 +650,55 @@ theorem multiPrimeSpectrum_le_card (supports : Finset PrimeSupport) (J : PrimeSu
       ≤ multiPrimeSpectrum supports ∅ := multiPrimeSpectrum_anti_mono (Finset.empty_subset _)
     _ = supports.card := multiPrimeSpectrum_empty supports
 
+-- Phase R601: Möbius inversion seeds
+-- ══════════════════════════════════════════════════════════════
+
+/-- Type count for any J is at most 1 (Finset elements are distinct).
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem typeCount_le_one (supports : Finset PrimeSupport) (J : PrimeSupport) :
+    typeCount supports J ≤ 1 := by
+  unfold typeCount
+  rw [Finset.card_le_one]
+  intro a ha b hb
+  simp only [Finset.mem_filter] at ha hb
+  rw [ha.2, hb.2]
+
+/-- Type count is bounded by multi-prime spectrum for any support J.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem typeCount_le_multiPrimeSpectrum (supports : Finset PrimeSupport) (J : PrimeSupport) :
+    typeCount supports J ≤ multiPrimeSpectrum supports J := by
+  exact typeCount_le_multiPrimeSpectrum_of_subset (Finset.Subset.refl J)
+
+/-- Singleton spectrum bound: typeCount + multiPrimeSpectrum ≤ card + 1.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem typeCount_from_spectrum_singleton {supports : Finset PrimeSupport} {p : ℕ}
+    (_hp : {p} ∈ supports) :
+    typeCount supports {p} + multiPrimeSpectrum supports {p} ≤ supports.card + 1 := by
+  calc typeCount supports {p} + multiPrimeSpectrum supports {p}
+      ≤ 1 + supports.card :=
+        Nat.add_le_add (typeCount_le_one supports {p}) (multiPrimeSpectrum_le_card supports {p})
+    _ = supports.card + 1 := by omega
+
+/-- Paper seeds: Möbius inversion at small support sets.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem paper_cdim_mobius_inversion_seeds :
+    (let S : Finset PrimeSupport := {{2}}
+     multiPrimeSpectrum S ∅ = 1 ∧ multiPrimeSpectrum S {2} = 1 ∧ typeCount S {2} = 1) ∧
+    (let S : Finset PrimeSupport := {{2}, {3}}
+     multiPrimeSpectrum S ∅ = 2 ∧ multiPrimeSpectrum S {2} = 1 ∧
+     multiPrimeSpectrum S {3} = 1 ∧ multiPrimeSpectrum S {2, 3} = 0) := by
+  constructor
+  · constructor
+    · native_decide
+    constructor
+    · native_decide
+    · native_decide
+  · constructor
+    · native_decide
+    constructor
+    · native_decide
+    constructor
+    · native_decide
+    · native_decide
+
 end Omega.CircleDimension
