@@ -9,14 +9,14 @@
 | 总行数 | ~49,158 |
 | 定理/定义数 | ~4,296 |
 | 论文接口包装 | 716+ |
-| 文件数 | 129 |
+| 文件数 | 130 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2315 |
+| \leanverified 标注数 | 2318 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2344 |
-| 轮次 | R565（round_count=566）|
+| 总标注数 | 2347 |
+| 轮次 | R566（round_count=567）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion window-6 Markov 平稳数据对隐藏多重度谱的完全刚性（Round R566，新标签，\leanverified 完整，streak #138，新建文件 MarkovStationaryRecovery.lean）**：`paper_conclusion_window6_markov_stationary_recovery`（对应 `thm:conclusion-window6-markov-stationary-data-rigidly-recovers-multiplicity`，Conclusion；(P_6,π_6) 唯一确定多重度多重集，Π=id 刚性综合论文接口，新建文件 MarkovStationaryRecovery.lean）——**新标签首次注册**（thm:conclusion-window6-markov-stationary-data-rigidly-recovers-multiplicity，\leanverified 完整，streak #138）
+**Zeta 常数内存指数遗忘与互信息塌缩（Round R566，新标签，\leanverified 完整，streak #137）**：`paper_zeta_syntax_constant_memory_exponential_forgetting`（对应 `prop:zeta-syntax-constant-memory-exponential-forgetting`，Zeta；TV 指数收敛 + 每比特互信息→0 综合论文接口）——**新标签首次注册**（prop:zeta-syntax-constant-memory-exponential-forgetting，\leanverified 完整，streak #137）
+**POM 四阶核族 Perron 指数曲线与 E6/E7/E8 Jones 指数交点（Round R566，新标签，\leanverified 完整，streak #136）**：`paper_pom_a4t_jones_ade_intersections`（对应 `prop:pom-a4t-jones-ade-intersections`，POM；r_4(t(I))=I 闭式，ADE 三处精确相交综合论文接口）——**新标签首次注册**（prop:pom-a4t-jones-ade-intersections，\leanverified 完整，streak #136）
 **Conclusion window-6 推送包络充满全矩阵代数（Round R565，新标签，\leanverified 完整，streak #135，新建文件 PushforwardFullMatrix.lean）**：`paper_conclusion_window6_pushforward_full_matrix`（对应 `cor:conclusion-window6-local-pushforward-envelope-full-matrix`，Conclusion；A_6=End(V)≅M_{21}(ℝ) 综合论文接口，新建文件 PushforwardFullMatrix.lean）——**新标签首次注册**（cor:conclusion-window6-local-pushforward-envelope-full-matrix，\leanverified 完整，streak #135）
 **Zeta Ω 正则不可能性（Round R565，新标签，\leanverified 完整，streak #134）**：`paper_zeta_syntax_omega_regular_impossible`（对应 `thm:zeta-syntax-omega-regular-impossible`，Zeta；HALT_U 不是正则语言，常数内存不可达综合论文接口）——**新标签首次注册**（thm:zeta-syntax-omega-regular-impossible，\leanverified 完整，streak #134）
 **POM 时间反演对合符号 mod 12 周期律（Round R565，新标签，\leanverified 完整，streak #133，新建文件 ToggleOrder.lean）**：`paper_pom_toggle_time_reversal_sign_mod12`（对应 `thm:pom-toggle-time-reversal-sign-mod12`，POM；sgn(ι_ℓ) 仅依赖 ℓ mod 12 综合论文接口，新建文件 ToggleOrder.lean）——**新标签首次注册**（thm:pom-toggle-time-reversal-sign-mod12，\leanverified 完整，streak #133）
