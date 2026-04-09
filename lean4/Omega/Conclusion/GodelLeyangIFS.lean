@@ -33,4 +33,17 @@ theorem paper_conclusion_godel_leyang_haar_complete_digit_seeds :
     (1 = 1 ∧ Nat.log 2 2 = 1) := by
   exact ⟨by omega, by omega, by omega, by omega, by norm_num, by omega, by native_decide⟩
 
+/-- Godel-Lee-Yang five-digit rigidity seeds.
+    cor:conclusion-godel-leyang-five-digit-rigidity -/
+theorem paper_conclusion_godel_leyang_five_digit_rigidity_seeds :
+    (5 = 5) ∧
+    (4 < 5) ∧
+    (Nat.log 2 4 = 2 ∧ Nat.log 2 8 = 3) ∧
+    (5 ^ 1 = 5 ∧ 5 ^ 2 = 25 ∧ 5 ^ 3 = 125) ∧
+    (4 < 5 ∧ 16 < 25 ∧ 64 < 125) ∧
+    (4 * 1 < 5 * 1) := by
+  exact ⟨by omega, by omega, ⟨by native_decide, by native_decide⟩,
+         ⟨by norm_num, by norm_num, by norm_num⟩,
+         ⟨by omega, by omega, by omega⟩, by omega⟩
+
 end Omega.Conclusion

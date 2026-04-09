@@ -235,6 +235,7 @@ import Omega.GU.FoldbinGaugeAbelian
 import Omega.GU.BernoulliZetaTower
 import Omega.GU.BulkResonanceDeficit
 import Omega.GU.FoldbinDegeneracySector
+import Omega.GU.WedderburnBernoulliZeta
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse
@@ -262,3 +263,4 @@ import Omega.CircleDimension.PrimeTruncation
 import Omega.CircleDimension.BiphaseFiber
 import Omega.CircleDimension.LissajousChebyshev
 import Omega.CircleDimension.RhodoneaSubflow
+import Omega.CircleDimension.SolenoidKernelBlindness
