@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2358 |
+| \leanverified 标注数 | 2361 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2382 |
-| 轮次 | R577（round_count=578）|
+| 总标注数 | 2385 |
+| 轮次 | R578（round_count=579）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD 双相位平均门有序纤维计数种子值（Round R578，新标签，\leanverified 完整）**：`paper_cdim_biphase_fiber_count_seeds`（对应 `thm:cdim-biphase-average-fiber-diagonal-antidiagonal`，CD；双相位门纤维计数恒等式种子值）——**新标签首次注册**（thm:cdim-biphase-average-fiber-diagonal-antidiagonal，\leanverified 新标注）
+**Conclusion Edgeworth 首阶消失纯偶性 c₂=51/11 种子值（Round R578，新标签，\leanverified 完整）**：`paper_conclusion_edgeworth_evenness_rate_seeds`（对应 `cor:conclusion-selfdual-sync-kernel-edgeworth-evenness`，Conclusion；c₂=51/11 互素性、乘积、整除种子值）——**新标签首次注册**（cor:conclusion-selfdual-sync-kernel-edgeworth-evenness，\leanverified 新标注）
+**Folding 失配密度全局极大点平方恒等式种子值（Round R578，新标签，\leanverified 完整）**：`paper_fold_bernoulli_p_gamma_global_max_seeds`（对应 `prop:fold-bernoulli-p-gamma-global-max`，Folding；失配密度极大点算术恒等式 γ(p★)=p★² 种子值）——**新标签首次注册**（prop:fold-bernoulli-p-gamma-global-max，\leanverified 新标注）
 **GU bin-fold gauge 群阿贝尔可见量压缩种子值（Round R577，新标签，\leanverified 完整）**：`paper_gut_foldbin_gauge_abelian_compression_seeds`（对应 `thm:gut-foldbin-gauge-abelian-visible-compression-even-audited`，GU；fib(8)=21, 2^21=2097152, fib(10)=55, fib(12)=144, factorial, log 种子值）——**新标签首次注册**（thm:gut-foldbin-gauge-abelian-visible-compression-even-audited，\leanverified 新标注）
 **Zeta cyclotomic lift 分裂种子值（Round R577，新标签，\leanverified 完整）**：`paper_zeta_cyclic_lift_cyclotomic_splitting_seeds`（对应 `prop:finite-part-cyclic-lift-cyclotomic-sector`，Zeta；Phi_n(1) 求值种子）——**新标签首次注册**（prop:finite-part-cyclic-lift-cyclotomic-sector，\leanverified 新标注）
 **SPG Cheeger-Stokes 对偶超立方体常数种子值（Round R577，新标签，\leanverified 完整）**：`paper_spg_cheeger_stokes_duality_seeds`（对应 `prop:spg-cheeger-stokes-duality`，SPG；超立方体 Cheeger 常数种子值）——**新标签首次注册**（prop:spg-cheeger-stokes-duality，\leanverified 新标注）
