@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2184 |
-| \leanpartial 标注数 | 21 |
-| 总标注数 | 2205 |
-| 轮次 | R499（round_count=500）|
+| \leanverified 标注数 | 2198 |
+| \leanpartial 标注数 | 22 |
+| 总标注数 | 2220 |
+| 轮次 | R500（round_count=501）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -29,12 +29,12 @@
 | Folding | 337 | 129 | 38.3% |
 | Conclusion | 2,550 | 264 | 10.4% |
 | Group Unification | 469 | 169 | 36.0% |
-| SPG | 129 | 109 | 84.5% |
+| SPG | 129 | 110 | 85.3% |
 | Circle Dimension | 393 | 152 | 38.7% |
 | Zeta Finite Part | 4,524 | 206 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1566** | **14.9%** |
+| **合计（body）** | **10,508** | **1567** | **14.9%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**SPG 随机 bulk 边界饱和期望恒等式（Round R500，500 轮里程碑，新标签，\leanpartial，streak #48）**：`Sample`（对应 `thm:spg-random-bulk-boundary-saturation`，SPG；Sample 类型 def）；`sampleFintype`（对应同标签，SPG；Fintype 实例）；`sampleDecEq`（对应同标签，SPG；DecidableEq 实例）；`expectation`（对应同标签，SPG；期望 noncomputable def）；`indicator`（对应同标签，SPG；indicator def）；`flipAt`（对应同标签，SPG；bit-flip Equiv）；`flipAt_apply_self`（对应同标签，SPG；flipAt 自位翻转）；`flipAt_apply_other`（对应同标签，SPG；flipAt 他位不变）；`indicator_add_not`（对应同标签，SPG；indicator 互补和为 1）；`sample_card_pos`（对应同标签，SPG；样本空间基数正性）；`expectation_single_bit`（对应同标签，SPG；单 bit 期望）；`expectation_xor_two`（对应同标签，SPG；XOR 核心引理）；`expectation_sum`（对应同标签，SPG；期望线性性）；`paper_spg_random_bulk_boundary_saturation_expectation`（对应同标签，SPG；综合论文接口）——**新标签首次注册**（thm:spg-random-bulk-boundary-saturation，\leanpartial 期望完整，Lipschitz 集中不等式第(2)部分待后续轮次，streak #48，500 轮里程碑）
 **SPG 二进 polycube 离散等周上界（Round R499，新标签，\leanpartial，streak #47）**：`sum_card_le_mul_card`（对应 `thm:spg-dyadic-polyclube-discrete-isoperimetry`，SPG；基数求和上界）；`biUnion_card_le_sum_card`（对应同标签，SPG；并集基数上界）；`polycube_boundary_upper_bound`（对应同标签，SPG；polycube 边界上界）；`external_faces_upper_bound`（对应同标签，SPG；外部面上界）；`paper_spg_dyadic_polyclube_discrete_isoperimetry_upper`（对应同标签，SPG；综合论文接口）——**新标签首次注册**（thm:spg-dyadic-polyclube-discrete-isoperimetry，\leanpartial 上界完整，Loomis-Whitney 下界待后续轮次，streak #47）
 **Conclusion 异常调和刚性 Pythagoras 结构（Round R498，新标签，\leanverified 完整，streak #46）**：`norm_add_sq_of_inner_zero`（对应 `thm:conclusion-anomaly-harmonic-rigidity`，Conclusion；内积为零时 ‖h+r‖² 展开）；`norm_sub_sq_of_inner_zero`（对应同标签，Conclusion；内积为零时 ‖h-r‖² 展开）；`anomaly_pythagoras`（对应同标签，Conclusion；异常 Pythagoras 恒等式）；`min_residual_eq_h_norm_sq`（对应同标签，Conclusion；最小残差等于 ‖h‖²）；`strictify_iff_h_zero`（对应同标签，Conclusion；严格化 iff h=0）；`min_residual_anomaly`（对应同标签，Conclusion；最小残差异常引理）；`paper_conclusion_anomaly_harmonic_rigidity`（对应同标签，Conclusion；综合论文接口）——**新标签首次注册**（thm:conclusion-anomaly-harmonic-rigidity，streak #46）
 **POM 质量分裂矩根变换（Round R497，新标签，\leanverified 完整，streak #45）**：`split_power_contribution`（对应 `prop:pom-mass-splitting-moment-root-transform`，POM；幂次分裂贡献）；`split_sqrt_contribution`（对应同标签，POM；平方根分裂贡献）；`power_sum_diff`（对应同标签，POM；幂次求和差）；`sqrt_diff`（对应同标签，POM；平方根差）；`mass_splitting_power_sum_identity`（对应同标签，POM；质量分裂幂次求和恒等式）；`mass_splitting_sqrt_identity`（对应同标签，POM；质量分裂平方根恒等式）；`paper_pom_mass_splitting_moment_root_transform`（对应同标签，POM；2-field 综合论文接口）——**新标签首次注册**（prop:pom-mass-splitting-moment-root-transform，streak #45）
