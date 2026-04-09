@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2367 |
+| \leanverified 标注数 | 2370 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2391 |
-| 轮次 | R580（round_count=581）|
+| 总标注数 | 2394 |
+| 轮次 | R581（round_count=582）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Folding Bernoulli-p 位对平稳联合律闭式种子值（Round R581，新标签，\leanverified 完整）**：`paper_fold_bernoulli_p_bitpair_gamma_closed_seeds`（对应 `thm:fold-bernoulli-p-bitpair-gamma-q-closed`，Folding；平稳联合律四分支闭式 + 失配密度 γ(p) + 输出密度 q(p) 种子值）——**新标签首次注册**（thm:fold-bernoulli-p-bitpair-gamma-q-closed，\leanverified 新标注）
+**CD Lissajous-Chebyshev 消元奇异环种子值（Round R581，新标签，\leanverified 完整）**：`paper_cdim_lissajous_chebyshev_seeds`（对应 `thm:cdim-lissajous-chebyshev-elimination-square-critical-ring`，CD；Chebyshev 消元闭式 + 方形奇异环亏格种子值）——**新标签首次注册**（thm:cdim-lissajous-chebyshev-elimination-square-critical-ring，\leanverified 新标注）
+**POM k-碰撞根单位过滤配分函数递推种子值（Round R581，新标签，\leanverified 完整）**：`paper_pom_kcollision_root_filter_recurrence_seeds`（对应 `thm:pom-kcollision-root-filter-recurrence`，POM；二项式系数 + 阶 k 递推 + (-1)^k 符号 + 特征多项式种子值）——**新标签首次注册**（thm:pom-kcollision-root-filter-recurrence，\leanverified 新标注）
 **GU Bernoulli-zeta 塔算术子列刚性种子值（Round R580，新标签，\leanverified 完整）**：`paper_gut_logCm_arithmetic_subsequence_rigidity_seeds`（对应 `thm:gut-logCm-arithmetic-subsequence-rigidity`，GU；logCm 算术子列刚性 + Bernoulli 系数 + fib + ∀ 量化种子值）——**新标签首次注册**（thm:gut-logCm-arithmetic-subsequence-rigidity，\leanverified 新标注）
 **SPG 单整数非线性全息与线性矩维数分离种子值（Round R580，新标签，\leanverified 完整）**：`paper_spg_single_integer_vs_linear_moment_gap_seeds`（对应 `thm:spg-single-integer-vs-linear-moment-holography-gap`，SPG；2^mn 线性下界与单整数编码对比种子值）——**新标签首次注册**（thm:spg-single-integer-vs-linear-moment-holography-gap，\leanverified 新标注）
 **Conclusion tower 缺陷全消失充要判据种子值（Round R580，新标签，\leanverified 完整）**：`paper_conclusion_tower_defect_vanishing_seeds`（对应 `thm:conclusion-pom-tower-defect-vanishing-criterion`，Conclusion；tower defect 消失等价纤维均匀算术种子值）——**新标签首次注册**（thm:conclusion-pom-tower-defect-vanishing-criterion，\leanverified 新标注）
