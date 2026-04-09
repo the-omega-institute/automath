@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2114 |
-| \leanpartial 标注数 | 17 |
-| 总标注数 | 2131 |
-| 轮次 | R490（round_count=491）|
+| \leanverified 标注数 | 2126 |
+| \leanpartial 标注数 | 18 |
+| 总标注数 | 2144 |
+| 轮次 | R491（round_count=492）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -27,14 +27,14 @@
 | POM | 1,707 | 303 | 17.7% |
 | Emergent Arithmetic | 185 | 171 | 92.4% |
 | Folding | 337 | 128 | 38.0% |
-| Conclusion | 2,550 | 262 | 10.3% |
+| Conclusion | 2,550 | 263 | 10.3% |
 | Group Unification | 469 | 168 | 35.8% |
 | SPG | 129 | 108 | 83.7% |
 | Circle Dimension | 393 | 151 | 38.4% |
 | Zeta Finite Part | 4,524 | 204 | 4.5% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1557** | **14.8%** |
+| **合计（body）** | **10,508** | **1558** | **14.8%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**Conclusion 事件椭圆黄金比例最小伸缩 T=1 代数核（Round R491，新标签，streak #40 里程碑）**：`R`（对应 `thm:conclusion-event-ellipse-golden-minimal-stretch`，Conclusion；上三角矩阵 def）；`L`（对应同标签，Conclusion；下三角矩阵 def）；`R_mul_L`（对应同标签，Conclusion；R·L 乘积）；`det_R_mul_L`（对应同标签，Conclusion；行列式=1）；`trace_R_mul_L`（对应同标签，Conclusion；迹=3）；`goldenRatio_sq_eq`（对应同标签，Conclusion；φ²=φ+1）；`goldenRatio_pow_four_identity`（对应同标签，Conclusion；φ⁴ 恒等式）；`goldenRatio_sq_mul_inv_sq`（对应同标签，Conclusion；φ²·φ⁻² 恒等）；`goldenRatio_inv_eq_sub_one`（对应同标签，Conclusion；φ⁻¹=φ-1）；`goldenRatio_sq_plus_inv_sq`（对应同标签，Conclusion；φ²+φ⁻²）；`goldenRatio_inv_sq_char`（对应同标签，Conclusion；φ⁻² 特征方程）；`paper_event_ellipse_golden_minimal_stretch_T1`（对应同标签，Conclusion；3-field 综合论文接口）——**新标签首次注册**（thm:conclusion-event-ellipse-golden-minimal-stretch，\leanpartial T=1 代数核，streak #40 里程碑）
 **EA Joukowsky 椭圆轴比与面积（Round R490，新标签，streak #39）**：`diagAction`（对应 `thm:prime-register-dense-ellipticization`，EA；对角作用 noncomputable def）；`diag_maps_circle_to_ellipse`（对应同标签，EA；对角作用映射圆到椭圆）；`ellipse_axes_product`（对应同标签，EA；椭圆轴乘积为1）；`axis_ratio_eq_r_sq`（对应同标签，EA；轴比等于 r²）；`r_unique_from_sq`（对应同标签，EA；由平方唯一确定 r）；`ellipse_area_eq_pi`（对应同标签，EA；椭圆面积等于 π）；`paper_prime_register_dense_ellipticization_part2`（对应同标签，EA；3-field 综合论文接口）——**新标签首次注册**（thm:prime-register-dense-ellipticization，streak #39）
 **GU 判别式 wedge2 平方分解（Round R489，新标签，streak #38）**：`r_sq_mul_sub_one`（对应 `cor:group-jg-discriminant-wedge2-square`，GU；r²·(x-1) 引理）；`sq_sub_symm`（对应同标签，GU；差的平方对称性）；`pow_mul_pow_two`（对应同标签，GU；幂乘幂引理）；`sq_mul_r_sq`（对应同标签，GU；r²a 的平方）；`sq_eq_factor`（对应同标签，GU；平方因子分解）；`sq_eq_factor_symm`（对应同标签，GU；对称平方因子分解）；`paper_group_jg_discriminant_wedge2_square`（对应同标签，GU；6-field 综合论文接口）——**新标签首次注册**（cor:group-jg-discriminant-wedge2-square，streak #38）
 **CD 全局相位穷尽阿贝尔分解（Round R488，新标签，streak #37）**：`comm_in_kernel`（对应 `prop:cdim-global-phase-exhaustion`，CD；交换子在核中）；`hom_comm_swap`（对应同标签，CD；同态交换置换）；`factor_unique_of_surjective`（对应同标签，CD；满射唯一分解）；`hom_abelian_commutator_trivial`（对应同标签，CD；阿贝尔群同态交换子平凡）；`paper_cdim_global_phase_exhaustion`（对应同标签，CD；3-field 综合论文接口）——**新标签首次注册**（prop:cdim-global-phase-exhaustion，streak #37）
