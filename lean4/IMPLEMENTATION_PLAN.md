@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2364 |
+| \leanverified 标注数 | 2367 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2388 |
-| 轮次 | R579（round_count=580）|
+| 总标注数 | 2391 |
+| 轮次 | R580（round_count=581）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**GU Bernoulli-zeta 塔算术子列刚性种子值（Round R580，新标签，\leanverified 完整）**：`paper_gut_logCm_arithmetic_subsequence_rigidity_seeds`（对应 `thm:gut-logCm-arithmetic-subsequence-rigidity`，GU；logCm 算术子列刚性 + Bernoulli 系数 + fib + ∀ 量化种子值）——**新标签首次注册**（thm:gut-logCm-arithmetic-subsequence-rigidity，\leanverified 新标注）
+**SPG 单整数非线性全息与线性矩维数分离种子值（Round R580，新标签，\leanverified 完整）**：`paper_spg_single_integer_vs_linear_moment_gap_seeds`（对应 `thm:spg-single-integer-vs-linear-moment-holography-gap`，SPG；2^mn 线性下界与单整数编码对比种子值）——**新标签首次注册**（thm:spg-single-integer-vs-linear-moment-holography-gap，\leanverified 新标注）
+**Conclusion tower 缺陷全消失充要判据种子值（Round R580，新标签，\leanverified 完整）**：`paper_conclusion_tower_defect_vanishing_seeds`（对应 `thm:conclusion-pom-tower-defect-vanishing-criterion`，Conclusion；tower defect 消失等价纤维均匀算术种子值）——**新标签首次注册**（thm:conclusion-pom-tower-defect-vanishing-criterion，\leanverified 新标注）
 **POM replica softcore 温度奇异行列式种子值（Round R579，新标签，\leanverified 完整）**：`paper_pom_replica_exceptional_det_seeds`（对应 `thm:pom-replica-softcore-temperature-exceptional-determinant`，POM；replica softcore 温度奇异行列式乘积公式种子值）——**新标签首次注册**（thm:pom-replica-softcore-temperature-exceptional-determinant，\leanverified 新标注）
 **EA 自同构维度黄金比挤压指数种子值（Round R579，新标签，\leanverified 完整）**：`paper_ea_aut_dimension_golden_squeeze_seeds`（对应 `thm:fold-aut-dimension-golden-squeeze`，EA；liminf/limsup 指数夹逼 log(4/φ)..log(2√φ) 种子值）——**新标签首次注册**（thm:fold-aut-dimension-golden-squeeze，\leanverified 新标注）
 **Zeta 符号翻转半格点临界线极点种子值（Round R579，新标签，\leanverified 完整）**：`paper_zeta_signflip_half_lattice_seeds`（对应 `cor:zeta-signflip-half-lattice`，Zeta；θ=π 半格点临界线极点列公式种子值）——**新标签首次注册**（cor:zeta-signflip-half-lattice，\leanverified 新标注）
