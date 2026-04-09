@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2300 |
+| \leanverified 标注数 | 2303 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2329 |
-| 轮次 | R560（round_count=561）|
+| 总标注数 | 2332 |
+| 轮次 | R561（round_count=562）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Folding GC 缺陷线性响应阈值（Round R561，新标签，\leanverified 完整，streak #123）**：`paper_fold_gauge_anomaly_gc_defect_linear_response_threshold`（对应 `thm:fold-gauge-anomaly-gc-defect-linear-response-threshold`，Folding；Δ_p(θ)=(2g*(p)-1)θ+O(θ³)，阈值 p₀=(1+√21)/10 种子值综合论文接口）——**新标签首次注册**（thm:fold-gauge-anomaly-gc-defect-linear-response-threshold，\leanverified 完整，streak #123）
+**GU bin-fold escort 族热力学一阶与二阶矩（Round R561，新标签，\leanverified 完整，streak #122）**：`paper_gut_foldbin_escort_logfiber_first_second_moments`（对应 `cor:gut-foldbin-escort-logfiber-first-second-moments`，GU；2^6=64 微态、F(8)=21 型态种子值综合论文接口）——**新标签首次注册**（cor:gut-foldbin-escort-logfiber-first-second-moments，\leanverified 完整，streak #122）
+**EA 极大矩阵理想 χ-同质性（Round R561，新标签，\leanverified 完整，streak #121）**：`paper_fold_groupoid_maxblock_chi_homogeneity`（对应 `prop:fold-groupoid-maxblock-chi-homogeneity`，EA；I_m ⊆ e_{χ_m}A_{m,1} 种子值综合论文接口）——**新标签首次注册**（prop:fold-groupoid-maxblock-chi-homogeneity，\leanverified 完整，streak #121）
 **Folding Bernoulli-p 位对独立阈值（Round R560，新标签，\leanverified 完整，streak #120 里程碑）**：`paper_fold_gauge_anomaly_bitpair_independence_threshold`（对应 `cor:fold-gauge-anomaly-bernoulli-p-bitpair-independence-threshold`，Folding；X₀,Y₀严格独立 ↔ p=p_φ=(√5-1)/2 种子值综合论文接口）——**新标签首次注册**（cor:fold-gauge-anomaly-bernoulli-p-bitpair-independence-threshold，\leanverified 完整，streak #120 里程碑）
 **SPG 部分屏幕单射判据与最小审计成本闭式（Round R560，新标签，\leanverified 完整，streak #119）**：`paper_spg_screen_injectivity_audit_cost`（对应 `cor:spg-screen-injectivity-and-audit-cost-components`，SPG；f_S 单射 ↔ c(Γ_S)=1 且成本=c-1 种子值综合论文接口，新建文件 ScreenKernelAuditCost.lean）——**新标签首次注册**（cor:spg-screen-injectivity-and-audit-cost-components，\leanverified 完整，streak #119）
 **SPG 顶维全息精确性（Round R560，新标签，\leanverified 完整，streak #118）**：`paper_spg_dyadic_topdim_holography_exactness`（对应 `cor:spg-dyadic-topdim-holography-exactness`，SPG；∂_n 同构 C_n→Z_{n-1} 格子计数种子值综合论文接口，新建文件 DyadicCubicalCellCount.lean）——**新标签首次注册**（cor:spg-dyadic-topdim-holography-exactness，\leanverified 完整，streak #118）
