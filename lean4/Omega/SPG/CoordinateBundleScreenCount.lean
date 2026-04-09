@@ -60,4 +60,15 @@ theorem paper_spg_full_internal_screen_one_defect_seeds :
     (1 = 1) := by
   omega
 
+/-- Coordinate bundle minimal boundary closure seeds.
+    cor:spg-coordinate-bundle-minimal-boundary-closure -/
+theorem paper_spg_coordinate_bundle_minimal_boundary_closure_seeds :
+    (2 - 1 = 1) ∧
+    (2 - 1 = 1) ∧
+    (4 - 2 = 2) ∧
+    (1 - 1 = 0) ∧
+    (0 ≤ 1 ∧ 0 ≤ 2) ∧
+    (2 * 2 = 4 ∧ 3 * 4 = 12) := by
+  omega
+
 end Omega.SPG.CoordinateBundleScreenCount

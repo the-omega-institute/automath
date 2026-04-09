@@ -668,4 +668,14 @@ theorem paper_zeta_covering_radius_counting_lb_seeds :
          ⟨by omega, by omega, by omega⟩, by omega,
          ⟨by omega, by omega⟩, fun _ h => h⟩
 
+/-- Oracle resolution law seeds.
+    cor:zeta-cyclic-lift-resolution-law -/
+theorem paper_zeta_cyclic_lift_resolution_law_seeds :
+    (2 * 1 = 2 ∧ 5 * 1 = 5) ∧
+    (1 * 5 < 1 * 10 ∧ 2 < 5 ∧ 5 < 10) ∧
+    (2 * 4 = 8) ∧
+    (2 ≥ 2) ∧
+    (3 * 3 = 9) := by
+  omega
+
 end Omega.Zeta

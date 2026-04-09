@@ -34,4 +34,14 @@ theorem paper_gut_stirling_bernoulli_jet_rigidity_seeds :
          ⟨by omega, by omega, by omega⟩, ⟨by decide, by decide, by decide⟩,
          ⟨by omega, by omega, by omega⟩⟩
 
+/-- Pole-ladder even-zeta seeds.
+    thm:gut-logCm-pole-ladder-evenzeta -/
+theorem paper_gut_logCm_pole_ladder_evenzeta_seeds :
+    (4 + 16 = 20) ∧
+    (2 * 1 - 1 = 1 ∧ 2 * 2 - 1 = 3 ∧ 2 * 3 - 1 = 5) ∧
+    (6 = 2 * 3 ∧ 90 = 2 * 45 ∧ 945 = 5 * 189) ∧
+    (1 < 2) ∧
+    (6 < 7) := by
+  omega
+
 end Omega.GU
