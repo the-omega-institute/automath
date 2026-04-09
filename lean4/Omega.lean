@@ -116,6 +116,7 @@ import Omega.Zeta.JensenSoftThresholdLowerBound
 import Omega.Zeta.CayleyDepthIdentity
 import Omega.Zeta.CyclotomicSectorIdentity
 import Omega.Zeta.WalshParseval
+import Omega.Zeta.FiniteQuotientCardinality
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
