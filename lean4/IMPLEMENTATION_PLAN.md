@@ -9,14 +9,14 @@
 | 总行数 | ~49,158 |
 | 定理/定义数 | ~4,296 |
 | 论文接口包装 | 716+ |
-| 文件数 | 126 |
+| 文件数 | 127 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2309 |
+| \leanverified 标注数 | 2312 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2338 |
-| 轮次 | R563（round_count=564）|
+| 总标注数 | 2341 |
+| 轮次 | R564（round_count=565）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**EA 离散规范群双指数律（Round R564，新标签，\leanverified 完整，streak #132）**：`paper_fold_discrete_gauge_group_double_exponential`（对应 `thm:fold-discrete-gauge-group-double-exponential`，EA；|G_m|=exp(Θ(m2^m)) 双指数增长综合论文接口）——**新标签首次注册**（thm:fold-discrete-gauge-group-double-exponential，\leanverified 完整，streak #132）
+**SPG Stokes--Gödel 双对数维度等价（Round R564，新标签，\leanverified 完整，streak #131，新建文件 GodelDoublelog.lean）**：`paper_spg_stokes_godel_doublelog_dimension`（对应 `thm:spg-stokes-godel-doublelog-dimension`，SPG；d_G(A)=d_V(A) Gödel 编码维度综合论文接口，新建文件 GodelDoublelog.lean）——**新标签首次注册**（thm:spg-stokes-godel-doublelog-dimension，\leanverified 完整，streak #131）
+**GU 审计双 Fibonacci 最小扇区预算阈值（Round R564，新标签，\leanverified 完整，streak #130）**：`paper_gut_foldbin_double_fibonacci_minsector_budget`（对应 `thm:gut-foldbin-double-fibonacci-minsector-budget-threshold`，GU；F_{m/2}F_m≤2^m 最小扇区必要条件首次失效 m=58 综合论文接口）——**新标签首次注册**（thm:gut-foldbin-double-fibonacci-minsector-budget-threshold，\leanverified 完整，streak #130）
 **Folding 失配密度极大点 Cardano 闭式（Round R563，新标签，\leanverified 完整，streak #129）**：`paper_fold_gauge_anomaly_density_maximizer_cardano`（对应 `cor:fold-gauge-anomaly-bernoulli-p-density-maximizer-cardano`，Folding；p★=∛(1+√(35/27))+∛(1-√(35/27)) 且 g*(p★)=p★² 种子值综合论文接口）——**新标签首次注册**（cor:fold-gauge-anomaly-bernoulli-p-density-maximizer-cardano，\leanverified 完整，streak #129）
 **CD 链式传播界（Round R563，新标签，\leanverified 完整，streak #128）**：`paper_cdim_chainwise_propagation_bound`（对应 `prop:cdim-causal-preorder-chainwise-propagation-bound`，CD；因果预序链式传播上界综合论文接口，CausalPreorder.lean）——**新标签首次注册**（prop:cdim-causal-preorder-chainwise-propagation-bound，\leanverified 完整，streak #128）
 **CD 因果预序由次加性诱导（Round R563，新标签，\leanverified 完整，streak #127，新建文件 CausalPreorder.lean）**：`paper_cdim_causal_preorder_from_subadditivity`（对应 `prop:cdim-causal-preorder-from-subadditivity`，CD；次加性信息权重诱导因果预序综合论文接口，新建文件 CausalPreorder.lean）——**新标签首次注册**（prop:cdim-causal-preorder-from-subadditivity，\leanverified 完整，streak #127）
