@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2329 |
-| \leanpartial 标注数 | 27 |
-| 总标注数 | 2356 |
-| 轮次 | R569（round_count=570）|
+| \leanverified 标注数 | 2332 |
+| \leanpartial 标注数 | 26 |
+| 总标注数 | 2358 |
+| 轮次 | R570（round_count=571）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,7 +24,7 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 312 | 18.3% |
+| POM | 1,707 | 313 | 18.3% |
 | Emergent Arithmetic | 185 | 177 | 95.7% |
 | Folding | 337 | 138 | 41.0% |
 | Conclusion | 2,550 | 270 | 10.6% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 214 | 4.7% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1626** | **15.5%** |
+| **合计（body）** | **10,508** | **1627** | **15.5%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion clog 扩展种子值 deepening（Round R570，deepening 补录）**：`paper_conclusion_min_latches_full`（对应 `prop:conclusion-min-latches-equals-log-states`，Conclusion；Nat.clog 2 扩展种子值已形式化，补录至已有 \leanverified 标注块）——**deepening 补录**
+**POM K_k 逆矩阵种子值（Round R570，新标签，\leanverified 完整，streak #149）**：`paper_minMatrix_full_package`（对应 `cor:pom-Kk-det-sine-product-normalization`，POM；整数 Gram 归一化谱乘积刚性综合论文接口）——**新标签首次注册**（cor:pom-Kk-det-sine-product-normalization，\leanverified 完整，streak #149）
+**Zeta 一般 n Walsh-Parseval deepening（Round R570，deepening 升级，\leanpartial → \leanverified）**：`paper_xi_hypercube_fourier_walsh_boundary_parseval`（对应 `thm:xi-hypercube-fourier-walsh-boundary-parseval`，Zeta；parseval_general 一般 n 已形式化，\leanpartial_zero 升级为 \leanverified，R525 debt queue 项清除）——**deepening 升级**（thm:xi-hypercube-fourier-walsh-boundary-parseval，\leanpartial → \leanverified，streak #148）
 **CD 纤维相位量子化种子值（Round R569，新标签，\leanverified 完整，streak #147）**：`paper_cdim_fiber_phase_quantization`（对应 `prop:cdim-arithmetic-singular-ring-fiber-phase-quantization`，CD；纤维平移相位量子化综合论文接口）——**新标签首次注册**（prop:cdim-arithmetic-singular-ring-fiber-phase-quantization，\leanverified 完整，streak #147）
 **GU Fib-tail S₃ 闭包 mod 23（Round R569，新标签，\leanverified 完整，streak #146）**：`paper_fib_tail_s3_closure`（对应 `cor:fib-tail-s3-closure`，GU；g₆ 仿射种子值 + R 对合综合论文接口；论文无 g₆ 仿射阶错误数值，无需修正）——**新标签首次注册**（cor:fib-tail-s3-closure，\leanverified 完整，streak #146）
 **Folding 自协方差闭式种子值（Round R569，新标签，\leanverified 完整，streak #145）**：`paper_fold_autocovariance_seeds`（对应 `prop:fold-gauge-anomaly-covariance-distribution-moment`，Folding；c_k 闭式种子值综合论文接口；论文无 c₄=41/5184 错误，c₄=7/648 正确值在闭式中隐含，无需修正）——**新标签首次注册**（prop:fold-gauge-anomaly-covariance-distribution-moment，\leanverified 完整，streak #145）
