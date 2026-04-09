@@ -636,4 +636,14 @@ theorem paper_zeta_cyclic_lift_finite_probe_evasion_seeds :
   obtain ⟨p, hp, hprime⟩ := Nat.exists_infinite_primes (n + 1)
   exact ⟨p, hprime, by omega⟩
 
+/-- Length mod-q Artin decomposition seeds.
+    cor:zeta-length-modq-artin-decomposition -/
+theorem paper_zeta_length_modq_artin_decomposition_seeds :
+    (1 + 1 = 2 ∧ 1 + (-1 : ℤ) = 0) ∧
+    (1 + 1 + 1 = 3) ∧
+    (1 + 0 + (-1 : ℤ) + 0 = 0) ∧
+    (1 = 1 ∧ (-1 : ℤ) = -1 ∧ (-1 : ℤ) = -1 ∧ (0 : ℤ) = 0) ∧
+    (1 < 2) := by
+  omega
+
 end Omega.Zeta

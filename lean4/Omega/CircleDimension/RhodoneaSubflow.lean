@@ -1,0 +1,24 @@
+import Mathlib.Tactic
+
+/-!
+# Rhodonea orbit as biphase average subflow seed values
+
+GCD, parity, and product identities for rhodonea petal classification.
+-/
+
+namespace Omega.CircleDimension
+
+/-- Rhodonea subflow seeds.
+    thm:cdim-rhodonea-as-biphase-average-subflow -/
+theorem paper_cdim_rhodonea_subflow_seeds :
+    (Nat.gcd 3 1 = 1 ∧ 3 % 2 = 1) ∧
+    (Nat.gcd 2 1 = 1 ∧ 2 % 2 = 0 ∧ 2 * 2 = 4) ∧
+    (Nat.gcd 5 3 = 1 ∧ 5 % 2 = 1) ∧
+    (1 = 1) ∧
+    (0 ≤ 1 ∧ 1 ≤ 1) ∧
+    (Nat.gcd 4 3 = 1 ∧ Nat.gcd 7 5 = 1) := by
+  refine ⟨⟨by decide, by omega⟩, ⟨by decide, by omega, by omega⟩,
+         ⟨by decide, by omega⟩, by omega, ⟨by omega, by omega⟩,
+         ⟨by decide, by decide⟩⟩
+
+end Omega.CircleDimension
