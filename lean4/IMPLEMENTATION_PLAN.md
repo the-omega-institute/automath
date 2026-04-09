@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2243 |
-| \leanpartial 标注数 | 24 |
-| 总标注数 | 2267 |
-| 轮次 | R506（round_count=507）|
+| \leanverified 标注数 | 2248 |
+| \leanpartial 标注数 | 25 |
+| 总标注数 | 2273 |
+| 轮次 | R507（round_count=508）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -29,12 +29,12 @@
 | Folding | 337 | 130 | 38.6% |
 | Conclusion | 2,550 | 265 | 10.4% |
 | Group Unification | 469 | 170 | 36.2% |
-| SPG | 129 | 110 | 85.3% |
+| SPG | 129 | 111 | 86.0% |
 | Circle Dimension | 393 | 153 | 38.9% |
 | Zeta Finite Part | 4,524 | 207 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1573** | **15.0%** |
+| **合计（body）** | **10,508** | **1574** | **15.0%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**SPG 割函数次模性 min-cut SSA 代数核心（Round R507，新标签，\leanpartial，streak #55）**：`cutIndicator`（对应 `thm:spg-godel-rt-mincut-uniqueness-ssa`，SPG；割指示函数 def）；`cutIndicator_submodular`（对应同标签，SPG；割指示次模性）；`cutWeight`（对应同标签，SPG；割权重 def）；`cutWeight_submodular`（对应同标签，SPG；割权重次模性）；`paper_spg_godel_rt_mincut_ssa_submodular`（对应同标签，SPG；综合论文接口）——**新标签首次注册**（thm:spg-godel-rt-mincut-uniqueness-ssa，\leanpartial SSA 第(3)条代数核心，论文完整定理待后续，streak #55）
 **CD 分母倍数并集上界正密度稀疏禁忌集（Round R506，新标签，\leanverified 完整，streak #54）**：`multiplesUpTo`（对应 `prop:cdim-denominator-positive-density-thin-forbidden`，CD；q 的倍数集 def）；`card_multiplesUpTo`（对应同标签，CD；倍数集基数 = B/q）；`forbiddenMultiples`（对应同标签，CD；禁忌倍数集 def）；`forbiddenMultiples_eq_filter`（对应同标签，CD；禁忌集等于 filter）；`card_forbiddenMultiples_le_sum`（对应同标签，CD；禁忌集基数 ≤ 求和上界）；`card_non_multiples_ge`（对应同标签，CD；非倍数集基数下界）；`paper_cdim_denominator_positive_density_forbidden_upper`（对应同标签，CD；综合论文接口）——**新标签首次注册**（prop:cdim-denominator-positive-density-thin-forbidden，streak #54）
 **Conclusion 连通空间到离散空间映射常值性（Round R505，新标签，\leanverified 完整，streak #53）**：`subsingleton_of_preconnected_discrete`（对应 `thm:conclusion-screenphase-universal-solenoid-no-finite-torsion`，Conclusion；预连通到离散蕴含单元素）；`continuous_to_discrete_image_subsingleton`（对应同标签，Conclusion；连续映像为单元素集）；`continuous_to_discrete_constant`（对应同标签，Conclusion；连续映射为常值）；`continuous_to_discrete_eq_const`（对应同标签，Conclusion；常值等式形式）；`continuous_hom_connected_to_discrete_zero`（对应同标签，Conclusion；连通到离散群同态为零）；`paper_screenphase_universal_solenoid_no_finite_torsion`（对应同标签，Conclusion；综合论文接口）——**新标签首次注册**（thm:conclusion-screenphase-universal-solenoid-no-finite-torsion，streak #53）
 **POM A4/U4 轨道乘积范数恒等式（Round R504，新标签，\leanverified 完整，streak #52）**：`offDiagonalPairs`（对应 `rem:pom-a4-u4-orbit-product-norm`，POM；非对角对集 def）；`card_erase_univ`（对应同标签，POM；删除单点后基数）；`prod_offDiag_by_fst`（对应同标签，POM；按首坐标分组乘积）；`prod_offDiag_by_snd`（对应同标签，POM；按次坐标分组乘积）；`prod_numerator`（对应同标签，POM；分子乘积）；`prod_denominator`（对应同标签，POM；分母乘积）；`orbit_product_identity`（对应同标签，POM；轨道乘积恒等式）；`orbit_product_n5`（对应同标签，POM；n=5 特例）；`paper_pom_a4_u4_orbit_product_norm`（对应同标签，POM；综合论文接口）——**新标签首次注册**（rem:pom-a4-u4-orbit-product-norm，\leanverified 完整，streak #52）
