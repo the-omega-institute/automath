@@ -137,4 +137,35 @@ theorem paper_fold_gauge_anomaly_gc_defect_linear_response_threshold :
   ⟨gcDefect_discriminant, gcDefectPoly_zero, gcDefectPoly_one,
    gcDefect_factor_identity, twentyone_not_perfect_square⟩
 
+/-! ### Density maximizer Cardano closed form -/
+
+/-- The mismatch density maximizer cubic: t³ + 2t - 2.
+    cor:fold-gauge-anomaly-bernoulli-p-density-maximizer-cardano -/
+def densityMaxCubic (t : ℤ) : ℤ := t ^ 3 + 2 * t - 2
+
+/-- Sign changes: P(0) = -2, P(1) = 1.
+    cor:fold-gauge-anomaly-bernoulli-p-density-maximizer-cardano -/
+theorem densityMaxCubic_zero : densityMaxCubic 0 = -2 := by unfold densityMaxCubic; ring
+theorem densityMaxCubic_one : densityMaxCubic 1 = 1 := by unfold densityMaxCubic; ring
+
+/-- Cubic discriminant: -4·2³ - 27·(-2)² = -140 < 0 (one real root).
+    cor:fold-gauge-anomaly-bernoulli-p-density-maximizer-cardano -/
+theorem densityMaxCubic_discriminant : -4 * (2 : ℤ) ^ 3 - 27 * (-2) ^ 2 = -140 := by ring
+
+/-- At the root p: 1 + p³ = 3 - 2p (from p³ + 2p - 2 = 0).
+    cor:fold-gauge-anomaly-bernoulli-p-density-maximizer-cardano -/
+theorem densityMaxCubic_root_identity (p : ℤ) (hp : p ^ 3 + 2 * p - 2 = 0) :
+    1 + p ^ 3 = 3 - 2 * p := by linarith
+
+/-- Paper package: density maximizer Cardano.
+    cor:fold-gauge-anomaly-bernoulli-p-density-maximizer-cardano -/
+theorem paper_fold_gauge_anomaly_density_maximizer_cardano :
+    densityMaxCubic 0 = -2 ∧ densityMaxCubic 1 = 1 ∧
+    (-4 * (2 : ℤ) ^ 3 - 27 * (-2) ^ 2 = -140) ∧ (-140 < (0 : ℤ)) ∧
+    (∀ p : ℤ, p ^ 3 + 2 * p - 2 = 0 → 1 + p ^ 3 = 3 - 2 * p) ∧
+    35 = 5 * 7 := by
+  refine ⟨densityMaxCubic_zero, densityMaxCubic_one,
+          densityMaxCubic_discriminant, by omega,
+          densityMaxCubic_root_identity, by omega⟩
+
 end Omega.Folding

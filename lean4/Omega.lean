@@ -222,3 +222,4 @@ import Omega.CircleDimension.FibonacciPrimitivePrimeBinaryLock
 import Omega.CircleDimension.MobiusBipartiteColoring
 import Omega.CircleDimension.CoherenceTimeLowerBound
 import Omega.CircleDimension.CoherenceTimeBarrier2Pow
+import Omega.CircleDimension.CausalPreorder
