@@ -623,4 +623,17 @@ theorem paper_zeta_signflip_half_lattice_seeds :
   refine ⟨⟨by decide, by decide, by decide⟩, by omega,
          fun k => by omega, by omega, by omega⟩
 
+/-- Finite probe evasion seeds: non-divisibility, prime powers, Bertrand-type.
+    thm:zeta-cyclic-lift-finite-probe-evasion -/
+theorem paper_zeta_cyclic_lift_finite_probe_evasion_seeds :
+    (2 % 3 ≠ 0) ∧
+    (3 % 4 ≠ 0) ∧
+    (Nat.Prime 5 ∧ 5 % 3 ≠ 0 ∧ 5 % 4 ≠ 0) ∧
+    (3 ^ 1 = 3 ∧ 3 ^ 2 = 9 ∧ 3 ^ 3 = 27) ∧
+    (∀ n : Nat, 0 < n → ∃ p, Nat.Prime p ∧ n < p) := by
+  refine ⟨by omega, by omega, ⟨by norm_num, by omega, by omega⟩,
+         ⟨by norm_num, by norm_num, by norm_num⟩, fun n _ => ?_⟩
+  obtain ⟨p, hp, hprime⟩ := Nat.exists_infinite_primes (n + 1)
+  exact ⟨p, hprime, by omega⟩
+
 end Omega.Zeta

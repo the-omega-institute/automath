@@ -1,0 +1,25 @@
+import Mathlib.Tactic
+
+/-!
+# Godel-Lee-Yang IFS exact dimension seed values
+
+Power progressions, logarithm values, and base-5 digit identities.
+-/
+
+namespace Omega.Conclusion
+
+/-- Godel-Lee-Yang IFS dimension seeds.
+    thm:conclusion-godel-leyang-2adic-ifs-exact-dimension -/
+theorem paper_conclusion_godel_leyang_ifs_dimension_seeds :
+    (2 < 5) ∧
+    (Nat.log 2 2 = 1 ∧ Nat.log 2 4 = 2) ∧
+    (5 ^ 1 = 5 ∧ 5 ^ 2 = 25 ∧ 5 ^ 3 = 125) ∧
+    (2 ^ 1 = 2 ∧ 2 ^ 2 = 4 ∧ 2 ^ 3 = 8) ∧
+    (2 < 5 ∧ 1 < 2) ∧
+    (0 * 5 + 1 = 1 ∧ 1 * 5 + 0 = 5 ∧ 1 ≠ 5) := by
+  refine ⟨by omega, ⟨by native_decide, by native_decide⟩,
+         ⟨by norm_num, by norm_num, by norm_num⟩,
+         ⟨by norm_num, by norm_num, by norm_num⟩,
+         ⟨by omega, by omega⟩, ⟨by omega, by omega, by omega⟩⟩
+
+end Omega.Conclusion

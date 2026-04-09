@@ -188,6 +188,7 @@ import Omega.Conclusion.ReversibleAuxBitsBudget
 import Omega.Conclusion.PushforwardFullMatrix
 import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.SyncKernelPalindrome
+import Omega.Conclusion.GodelLeyangIFS
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
@@ -228,6 +229,7 @@ import Omega.GU.BoundaryTowerFibCount
 import Omega.GU.FiberDefectCollinearity
 import Omega.GU.FoldbinGaugeAbelian
 import Omega.GU.BernoulliZetaTower
+import Omega.GU.BulkResonanceDeficit
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse
