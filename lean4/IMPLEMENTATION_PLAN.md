@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2165 |
+| \leanverified 标注数 | 2172 |
 | \leanpartial 标注数 | 20 |
-| 总标注数 | 2185 |
-| 轮次 | R496（round_count=497）|
+| 总标注数 | 2192 |
+| 轮次 | R497（round_count=498）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,7 +24,7 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 303 | 17.7% |
+| POM | 1,707 | 304 | 17.8% |
 | Emergent Arithmetic | 185 | 171 | 92.4% |
 | Folding | 337 | 129 | 38.3% |
 | Conclusion | 2,550 | 263 | 10.3% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 206 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1563** | **14.9%** |
+| **合计（body）** | **10,508** | **1564** | **14.9%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**POM 质量分裂矩根变换（Round R497，新标签，\leanverified 完整，streak #45）**：`split_power_contribution`（对应 `prop:pom-mass-splitting-moment-root-transform`，POM；幂次分裂贡献）；`split_sqrt_contribution`（对应同标签，POM；平方根分裂贡献）；`power_sum_diff`（对应同标签，POM；幂次求和差）；`sqrt_diff`（对应同标签，POM；平方根差）；`mass_splitting_power_sum_identity`（对应同标签，POM；质量分裂幂次求和恒等式）；`mass_splitting_sqrt_identity`（对应同标签，POM；质量分裂平方根恒等式）；`paper_pom_mass_splitting_moment_root_transform`（对应同标签，POM；2-field 综合论文接口）——**新标签首次注册**（prop:pom-mass-splitting-moment-root-transform，streak #45）
 **GU Lee-Yang 全息恒等式 n=2 特例（Round R496，新标签，\leanverified 完整，streak #44）**：`J_r`（对应 `cor:group-jg-leyang-holographic-identity`，GU；J_r(z)=rz+r⁻¹z⁻¹ noncomputable def）；`P`（对应同标签，GU；二次多项式 P def）；`Q_r_eval_at_J`（对应同标签，GU；Q_r 在 J_r 处取值 noncomputable def）；`J_r_eq`（对应同标签，GU；J_r 展开式）；`P_at_reciprocal`（对应同标签，GU；P 在倒数处的值）；`r_sq_P_P_reciprocal`（对应同标签，GU；r²·P(z)·P(z⁻¹) 恒等式）；`Q_r_eval_at_J_eq`（对应同标签，GU；Q_r(J_r(z)) 等式）；`leyang_holographic_n2`（对应同标签，GU；Lee-Yang 全息 n=2 主定理）；`paper_group_jg_leyang_holographic_identity_n2`（对应同标签，GU；综合论文接口）——**新标签首次注册**（cor:group-jg-leyang-holographic-identity，\leanverified n=2 完整特例，streak #44）
 **CD 有限 S 分母增长弱线性界（Round R495，新标签，\leanpartial，streak #43）**：`N_S`（对应 `prop:cdim-denominator-growth-finite-S`，CD；N_S 分母集 noncomputable def）；`exponent_le_log`（对应同标签，CD；指数不超过对数）；`N_S_le_B`（对应同标签，CD；弱线性界 N_S≤B）；`N_S_zero`（对应同标签，CD；B=0 时为零）；`N_S_mono`（对应同标签，CD；单调性）；`N_S_le_two_pow_log`（对应同标签，CD；对数界）；`paper_cdim_denominator_growth_finite_S`（对应同标签，CD；4-field 综合论文接口）——**新标签首次注册**（prop:cdim-denominator-growth-finite-S，\leanpartial 严格乘积界未证，streak #43）
 **Folding 全息速率守恒聚合最小值（Round R494，新标签，streak #42）**：`mAgg`（对应 `prop:fold-subexp-multiplicity-holographic-rate-conservation`，Folding；聚合速率 noncomputable def）；`mMin`（对应同标签，Folding；最小速率 noncomputable def）；`sum_ge_two_pow_neg_min`（对应同标签，Folding；求和下界）；`sum_le_card_mul_two_pow_neg_min`（对应同标签，Folding；求和上界）；`mAgg_le_mMin`（对应同标签，Folding；mAgg ≤ mMin）；`mAgg_ge_mMin_sub_logb`（对应同标签，Folding；mAgg ≥ mMin - log|S|）；`abs_mAgg_sub_mMin_le`（对应同标签，Folding；绝对差上界）；`paper_fold_subexp_multiplicity_holographic_rate_conservation`（对应同标签，Folding；综合论文接口）——**新标签首次注册**（prop:fold-subexp-multiplicity-holographic-rate-conservation，streak #42）
