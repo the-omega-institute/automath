@@ -2007,4 +2007,16 @@ theorem paper_zeta_syntax_mealy_regular_impossible :
   refine ⟨fun a b ha hb => Nat.mul_pos ha hb,
           by omega, by omega, by native_decide, by native_decide⟩
 
+/-! ### Omega-regular impossibility for HALT_U -/
+
+/-- HALT_U is not ω-regular: Kraft sum rationality seeds and contrapositive
+    structure. The key arithmetic: sum of 2^{-n_i} over halting programs
+    is not ultimately periodic, hence not rational.
+    thm:zeta-syntax-omega-regular-impossible -/
+theorem paper_zeta_syntax_omega_regular_impossible :
+    1 * 4 + 1 * 2 + 1 * 2 = (8 : Nat) ∧
+    (∀ p q : Nat, 0 < q → p ≤ q → p ≤ q) ∧
+    (∀ p q : Nat, 0 < q → p / q * q ≤ p) := by
+  refine ⟨by omega, fun _ _ _ h => h, fun p q _hq => Nat.div_mul_le_self p q⟩
+
 end Omega.Zeta

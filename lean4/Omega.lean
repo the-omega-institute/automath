@@ -172,6 +172,7 @@ import Omega.Conclusion.QuadraticFieldRamification
 import Omega.Conclusion.MinLatchesLogStates
 import Omega.Conclusion.TimeReversalOrbitParity
 import Omega.Conclusion.ReversibleAuxBitsBudget
+import Omega.Conclusion.PushforwardFullMatrix
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
@@ -186,6 +187,7 @@ import Omega.POM.DoubleTransversalNormalForm
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.FibCubeEdgeParity
+import Omega.POM.ToggleOrder
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap
