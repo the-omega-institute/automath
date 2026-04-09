@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2100 |
+| \leanverified 标注数 | 2107 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 2117 |
-| 轮次 | R488（round_count=489）|
+| 总标注数 | 2124 |
+| 轮次 | R489（round_count=490）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -28,13 +28,13 @@
 | Emergent Arithmetic | 185 | 170 | 91.9% |
 | Folding | 337 | 128 | 38.0% |
 | Conclusion | 2,550 | 262 | 10.3% |
-| Group Unification | 469 | 167 | 35.6% |
+| Group Unification | 469 | 168 | 35.8% |
 | SPG | 129 | 108 | 83.7% |
 | Circle Dimension | 393 | 151 | 38.4% |
 | Zeta Finite Part | 4,524 | 204 | 4.5% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1555** | **14.8%** |
+| **合计（body）** | **10,508** | **1556** | **14.8%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**GU 判别式 wedge2 平方分解（Round R489，新标签，streak #38）**：`r_sq_mul_sub_one`（对应 `cor:group-jg-discriminant-wedge2-square`，GU；r²·(x-1) 引理）；`sq_sub_symm`（对应同标签，GU；差的平方对称性）；`pow_mul_pow_two`（对应同标签，GU；幂乘幂引理）；`sq_mul_r_sq`（对应同标签，GU；r²a 的平方）；`sq_eq_factor`（对应同标签，GU；平方因子分解）；`sq_eq_factor_symm`（对应同标签，GU；对称平方因子分解）；`paper_group_jg_discriminant_wedge2_square`（对应同标签，GU；6-field 综合论文接口）——**新标签首次注册**（cor:group-jg-discriminant-wedge2-square，streak #38）
 **CD 全局相位穷尽阿贝尔分解（Round R488，新标签，streak #37）**：`comm_in_kernel`（对应 `prop:cdim-global-phase-exhaustion`，CD；交换子在核中）；`hom_comm_swap`（对应同标签，CD；同态交换置换）；`factor_unique_of_surjective`（对应同标签，CD；满射唯一分解）；`hom_abelian_commutator_trivial`（对应同标签，CD；阿贝尔群同态交换子平凡）；`paper_cdim_global_phase_exhaustion`（对应同标签，CD；3-field 综合论文接口）——**新标签首次注册**（prop:cdim-global-phase-exhaustion，streak #37）
 **Folding Φ_m 子移位因子映射（Round R487，新标签，streak #36）**：`ShiftInvariant`（对应 `prop:Phi_m-factor-on-subshift`，Folding；平移不变集 def）；`shiftInvariant_univ`（对应同标签，Folding；全集平移不变）；`shiftInvariant_empty`（对应同标签，Folding；空集平移不变）；`slideBlockCode_restriction_equivariant`（对应同标签，Folding；滑动块码限制等变性）；`slideBlockCode_image_shiftInvariant`（对应同标签，Folding；像集平移不变）；`slideBlockCode_restrict_surjective`（对应同标签，Folding；限制满射性）；`paper_Phi_m_factor_on_subshift`（对应同标签，Folding；4-field 综合论文接口）——**新标签首次注册**（prop:Phi\_m-factor-on-subshift，streak #36）
 **Zeta Hankel 刚度最优平衡（Round R486，新标签，streak #35）**：`max_balance_lower_bound`（对应 `thm:xi-hankel-stiffness-optimal-balance`，Zeta；最大平衡下界）；`max_balance_ge_half`（对应同标签，Zeta；平衡不小于二分之一）；`optimalT`（对应同标签，Zeta；最优 t 参数 def）；`max_at_optimal_t`（对应同标签，Zeta；最优 t 时达到最大值）；`max_at_optimal_even`（对应同标签，Zeta；偶数情形最优平衡）；`paper_xi_hankel_stiffness_optimal_balance`（对应同标签，Zeta；4-field 综合论文接口）——**新标签首次注册**（thm:xi-hankel-stiffness-optimal-balance，streak #35）
