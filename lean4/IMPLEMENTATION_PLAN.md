@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R538（round_count=539）|
+| 轮次 | R539（round_count=540）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -31,10 +31,10 @@
 | Group Unification | 469 | 175 | 37.3% |
 | SPG | 129 | 114 | 88.4% |
 | Circle Dimension | 393 | 157 | 39.9% |
-| Zeta Finite Part | 4,524 | 210 | 4.6% |
+| Zeta Finite Part | 4,524 | 211 | 4.7% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1604** | **15.3%** |
+| **合计（body）** | **10,508** | **1605** | **15.3%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Zeta 有限商基数 |(ZMod n)^r|=n^r（Round R539，新标签，\leanverified 完整，streak #86）**：`card_zmod`（对应 `prop:xi-cdim-finite-data-suffices`，Zeta；|(ZMod n)|=n 引理）；`card_zmod_pi`（对应同标签，Zeta；|(ZMod n)^r|=n^r 主引理）；`paper_xi_cdim_finite_quotient_free_part`（对应同标签，Zeta；有限商基数综合论文接口）——**新标签首次注册**（prop:xi-cdim-finite-data-suffices，\leanverified 完整，streak #86）
 **GU 两通道坍缩闭式恒等式（Round R538，新标签，\leanverified 完整，streak #85）**：`avg_deviation_two`（对应 `cor:gut-A-two-channel`，GU；两通道平均偏差引理 1）；`avg_deviation_two'`（对应同标签，GU；两通道平均偏差引理 2）；`max_avg_deviation_two`（对应同标签，GU；最大平均偏差两通道引理）；`paper_gut_A_two_channel`（对应同标签，GU；两通道闭式综合论文接口）——**新标签首次注册**（cor:gut-A-two-channel，\leanverified 完整，streak #85）
 **CD Möbius 二部图着色素数翻转（Round R537，新标签，\leanverified 完整，streak #84）**：`omega`（对应 `cor:cdim-mobius-bipartite-coloring`，CD；不同素因子计数 def）；`mobiusSign`（对应同标签，CD；Möbius 符号 def = (-1)^ω(n)）；`neg_one_pow_succ`（对应同标签，CD；(-1)^(n+1)=-(-1)^n 引理）；`omega_mul_prime_of_not_dvd`（对应同标签，CD；不整除素数乘积的 ω 计数引理）；`paper_cdim_mobius_bipartite_coloring`（对应同标签，CD；Möbius 符号翻转综合论文接口）——**新标签首次注册**（cor:cdim-mobius-bipartite-coloring，\leanverified 完整，streak #84）
 **Conclusion 边界环秩饱和夹逼（Round R536，新标签，\leanverified 完整，streak #83）**：`squeeze_to_one`（对应 `cor:conclusion-boundary-cycle-rank-saturation`，Conclusion；三明治夹逼引理）；`paper_conclusion_boundary_cycle_rank_saturation`（对应同标签，Conclusion；边界环秩饱和综合论文接口）——**新标签首次注册**（cor:conclusion-boundary-cycle-rank-saturation，\leanverified 完整，三明治夹逼，streak #83）
