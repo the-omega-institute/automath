@@ -48,4 +48,16 @@ theorem window6_sector_identities :
     Nat.fib 8 - Nat.fib 6 = 13 := by
   refine ⟨by native_decide, by native_decide, by native_decide⟩
 
+/-! ### Double Fibonacci minsector budget threshold -/
+
+/-- F(m/2) * F(m) ≤ 2^m for even m ∈ {6,8,10,12,14,16,18,20}.
+    thm:gut-foldbin-double-fibonacci-minsector-budget-threshold -/
+theorem paper_gut_foldbin_double_fibonacci_minsector_budget :
+    (∀ m ∈ ({6, 8, 10, 12, 14, 16, 18, 20} : Finset Nat),
+      Nat.fib (m / 2) * Nat.fib m ≤ 2 ^ m) ∧
+    Nat.fib 3 * Nat.fib 6 = 16 ∧
+    Nat.fib 10 * Nat.fib 20 = 372075 := by
+  refine ⟨by intro m hm; fin_cases hm <;> native_decide,
+          by native_decide, by native_decide⟩
+
 end Omega.GU.MinSectorBudget

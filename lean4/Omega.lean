@@ -94,6 +94,7 @@ import Omega.SPG.F2FiberCardinality
 import Omega.SPG.CycleRankFormula
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.ScreenKernelAuditCost
+import Omega.SPG.GodelDoublelog
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG

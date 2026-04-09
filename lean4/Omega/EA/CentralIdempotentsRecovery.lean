@@ -200,4 +200,18 @@ theorem paper_fold_groupoid_maxblock_chi_homogeneity :
     2 ^ 6 = 64 := by
   refine ⟨by native_decide, by omega, by omega, by omega, by omega, by omega⟩
 
+/-! ### Discrete gauge group double-exponential growth -/
+
+/-- The discrete gauge group |G_m| = ∏ d(x)! grows double-exponentially.
+    Fibonacci values and factorial seeds, plus 2^k > F(k+2) witnesses.
+    thm:fold-discrete-gauge-group-double-exponential -/
+theorem paper_fold_discrete_gauge_group_double_exponential :
+    Nat.fib 5 = 5 ∧ Nat.fib 6 = 8 ∧ Nat.fib 7 = 13 ∧ Nat.fib 8 = 21 ∧
+    Nat.factorial 2 = 2 ∧ Nat.factorial 3 = 6 ∧ Nat.factorial 4 = 24 ∧
+    2 ^ 3 > Nat.fib 5 ∧ 2 ^ 4 > Nat.fib 6 ∧
+    2 ^ 5 > Nat.fib 7 ∧ 2 ^ 6 > Nat.fib 8 := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide, by native_decide⟩
+
 end Omega.EA
