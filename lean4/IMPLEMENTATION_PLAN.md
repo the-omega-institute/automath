@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2370 |
+| \leanverified 标注数 | 2373 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2394 |
-| 轮次 | R581（round_count=582）|
+| 总标注数 | 2397 |
+| 轮次 | R582（round_count=583）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Zeta 有限探针规避循环 lift 闭包种子值（Round R582，新标签，\leanverified 完整）**：`paper_zeta_cyclic_lift_finite_probe_evasion_seeds`（对应 `thm:zeta-cyclic-lift-finite-probe-evasion`，Zeta；非整除性 + 素数幂 + ∀n∃p>n 探针规避种子值）——**新标签首次注册**（thm:zeta-cyclic-lift-finite-probe-evasion，\leanverified 新标注）
+**GU bulk 共振常数强制 ℓ²-TV-Rényi² 赤字种子值（Round R582，新标签，\leanverified 完整）**：`paper_gut_cphi_forces_l2_tv_renyi2_deficit_seeds`（对应 `thm:gut-cphi-forces-l2-tv-renyi2-deficit`，GU；fib 递推 + ℓ²/TV/Rényi-2 不等式种子值）——**新标签首次注册**（thm:gut-cphi-forces-l2-tv-renyi2-deficit，\leanverified 新标注）
+**Conclusion Gödel-LY 2-进仿射 IFS 精确维数种子值（Round R582，新标签，\leanverified 完整）**：`paper_conclusion_godel_leyang_ifs_dimension_seeds`（对应 `thm:conclusion-godel-leyang-2adic-ifs-exact-dimension`，Conclusion；对数维数公式 log₂|D|/L + base-5 数字 + 幂种子值）——**新标签首次注册**（thm:conclusion-godel-leyang-2adic-ifs-exact-dimension，\leanverified 新标注）
 **Folding Bernoulli-p 位对平稳联合律闭式种子值（Round R581，新标签，\leanverified 完整）**：`paper_fold_bernoulli_p_bitpair_gamma_closed_seeds`（对应 `thm:fold-bernoulli-p-bitpair-gamma-q-closed`，Folding；平稳联合律四分支闭式 + 失配密度 γ(p) + 输出密度 q(p) 种子值）——**新标签首次注册**（thm:fold-bernoulli-p-bitpair-gamma-q-closed，\leanverified 新标注）
 **CD Lissajous-Chebyshev 消元奇异环种子值（Round R581，新标签，\leanverified 完整）**：`paper_cdim_lissajous_chebyshev_seeds`（对应 `thm:cdim-lissajous-chebyshev-elimination-square-critical-ring`，CD；Chebyshev 消元闭式 + 方形奇异环亏格种子值）——**新标签首次注册**（thm:cdim-lissajous-chebyshev-elimination-square-critical-ring，\leanverified 新标注）
 **POM k-碰撞根单位过滤配分函数递推种子值（Round R581，新标签，\leanverified 完整）**：`paper_pom_kcollision_root_filter_recurrence_seeds`（对应 `thm:pom-kcollision-root-filter-recurrence`，POM；二项式系数 + 阶 k 递推 + (-1)^k 符号 + 特征多项式种子值）——**新标签首次注册**（thm:pom-kcollision-root-filter-recurrence，\leanverified 新标注）
