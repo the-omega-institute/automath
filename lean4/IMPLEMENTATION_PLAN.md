@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2279 |
+| \leanverified 标注数 | 2280 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2308 |
-| 轮次 | R553（round_count=554）|
+| 总标注数 | 2309 |
+| 轮次 | R554（round_count=555）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM 商余横截面投影（Round R554，deepening，\leanverified 标注补录）**：`paper_division_section`（对应 `thm:pom-division-section`，POM；整数除法唯一性封装，FiberArithmeticProperties.lean:527，代码已存在）——**deepening 标注补录**（thm:pom-division-section，\leanverified 标注已添加至 subsec\_\_pom-division-groupoid.tex，论文覆盖率数字不变）
 **Zeta cdim 对数商极限相位实现秩三重刻画（Round R553，新标签，\leanverified 完整，streak #100 里程碑）**：`bounded_div_tendsto_infty_zero`（对应 `thm:xi-phase-implementation-rank-triple-characterization`，Zeta；有界/趋无穷序列趋零引理）；`paper_xi_phase_implementation_rank_limit`（对应同标签，Zeta；cdim 对数商极限综合论文接口，无降级完整证明）——**新标签首次注册**（thm:xi-phase-implementation-rank-triple-characterization，\leanverified 完整，历史性 streak #100 里程碑）
 **EA 内积 valPr 加法性（Round R552，新标签，\leanverified 完整，streak #99）**：`paper_prime_register_internal_product_adds_values`（对应 `prop:prime-register-internal-product-adds-values`，EA；valPr 加法性封装综合论文接口）——**新标签首次注册**（prop:prime-register-internal-product-adds-values，\leanverified 完整，streak #99）
 **CD 相干时间屏障 2^k 特化（Round R551，新标签，\leanverified 完整，streak #98）**：`paper_cdim_coherence_time_barrier_2power`（对应 `cor:cdim-coherence-time-barrier-2power-k-over-d`，CD；2^k 特化 one-liner 封装，调用 CoherenceTimeLowerBound）——**新标签首次注册**（cor:cdim-coherence-time-barrier-2power-k-over-d，\leanverified 完整，streak #98）
