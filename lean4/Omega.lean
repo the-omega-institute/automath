@@ -89,6 +89,7 @@ import Omega.SPG.CutFunctionSubmodular
 import Omega.SPG.CoordinateBundleScreenCount
 import Omega.SPG.ProuhetThueMorsePowerSum
 import Omega.SPG.SingleParamLogReadoutPigeonhole
+import Omega.SPG.BoundaryCycleAuditQueryLowerBound
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
