@@ -123,4 +123,35 @@ theorem paper_minMatrix_small_values_package :
    minMatrix_trace_at_small.2.2.2,
    minMatrix_det_eq_one⟩
 
+/-- The inverse of K_2: [[2,-1],[-1,1]].
+    cor:pom-Kk-det-sine-product-normalization -/
+def minMatrix_inv_2 : Matrix (Fin 2) (Fin 2) ℤ :=
+  !![2, -1; -1, 1]
+
+/-- K_2 * K_2⁻¹ = I.
+    cor:pom-Kk-det-sine-product-normalization -/
+theorem minMatrix_mul_inv_2 :
+    Matrix.of (fun (i j : Fin 2) => (min (i.val + 1) (j.val + 1) : ℤ)) * minMatrix_inv_2 = 1 := by
+  native_decide
+
+/-- The inverse of K_3: [[2,-1,0],[-1,2,-1],[0,-1,1]].
+    cor:pom-Kk-det-sine-product-normalization -/
+def minMatrix_inv_3 : Matrix (Fin 3) (Fin 3) ℤ :=
+  !![2, -1, 0; -1, 2, -1; 0, -1, 1]
+
+/-- K_3 * K_3⁻¹ = I.
+    cor:pom-Kk-det-sine-product-normalization -/
+theorem minMatrix_mul_inv_3 :
+    Matrix.of (fun (i j : Fin 3) => (min (i.val + 1) (j.val + 1) : ℤ)) * minMatrix_inv_3 = 1 := by
+  native_decide
+
+/-- Paper package: min-matrix det, trace, and inverse verification.
+    lem:pom-Kk-gram-det / cor:pom-Kk-det-sine-product-normalization -/
+theorem paper_minMatrix_full_package :
+    (∀ k : Nat, 1 ≤ k →
+      (Matrix.of (fun (i j : Fin k) => (min (i.val + 1) (j.val + 1) : ℤ))).det = 1) ∧
+    (Matrix.of (fun (i j : Fin 2) => (min (i.val + 1) (j.val + 1) : ℤ))) * minMatrix_inv_2 = 1 ∧
+    (Matrix.of (fun (i j : Fin 3) => (min (i.val + 1) (j.val + 1) : ℤ))) * minMatrix_inv_3 = 1 :=
+  ⟨minMatrix_det_eq_one, minMatrix_mul_inv_2, minMatrix_mul_inv_3⟩
+
 end Omega

@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2318 |
-| \leanpartial 标注数 | 29 |
-| 总标注数 | 2347 |
-| 轮次 | R566（round_count=567）|
+| \leanverified 标注数 | 2342 |
+| \leanpartial 标注数 | 24 |
+| 总标注数 | 2366 |
+| 轮次 | R572（round_count=573）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,17 +24,17 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 311 | 18.2% |
+| POM | 1,707 | 313 | 18.3% |
 | Emergent Arithmetic | 185 | 177 | 95.7% |
-| Folding | 337 | 136 | 40.4% |
+| Folding | 337 | 138 | 41.0% |
 | Conclusion | 2,550 | 270 | 10.6% |
-| Group Unification | 469 | 176 | 37.5% |
+| Group Unification | 469 | 178 | 37.9% |
 | SPG | 129 | 115 | 89.1% |
-| Circle Dimension | 393 | 159 | 40.5% |
-| Zeta Finite Part | 4,524 | 213 | 4.7% |
+| Circle Dimension | 393 | 160 | 40.7% |
+| Zeta Finite Part | 4,524 | 214 | 4.7% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1619** | **15.4%** |
+| **合计（body）** | **10,508** | **1627** | **15.5%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,24 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion 二原子标量恢复种子值（Round R572，deepening 补录）**：`paper_twoAtomScalar2_seeds`（对应 `cor:conclusion-binfold-single-scalar-recovers-golden-parameter`，Conclusion；twoAtomScalar2 扩展种子值，补录至已有标注块）——**deepening 补录**
+**POM 碰撞核迹平方 + Newton 恒等式（Round R572，deepening 补录）**：`paper_pom_collision_kernel_full`（对应 `rem:pom-residue-minpoly-a2a3a4`，POM；迹平方 + Newton 恒等式完整包，补录至已有 paper_pom_collision_kernel_discriminant 旁）——**deepening 补录**
+**SPG PTM 幂和扩展到 m=3（Round R572，deepening 升级，\leanpartial → \leanverified）**：`paper_spg_prouhet_thue_morse_power_sum_m3`（对应 `thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments`，SPG；ptm_power_sum_m3_l0/l1/l2/l3 已形式化，\leanpartial_concrete 升级为 \leanverified_m3）——**deepening 升级**（thm:spg-prouhet-thue-morse，\leanpartial → \leanverified，streak #151）
+**CD 禁素集互补数 inclusion-exclusion 种子值（Round R571，deepening 补录）**：`paper_cdim_denominator_multiples_seeds`（对应 `prop:cdim-denominator-positive-density-thin-forbidden`，CD；具体种子值 multiplesUpTo{2,3,5}/100 等新接口补录，`\leanpartial` 保留）——**deepening 补录**
+**GU Boundary 塔 Fibonacci 计数（Round R571，deepening 补录）**：`paper_boundary_tower_fib_count`（对应 `thm:gut-audited-even-windows-unique-budget16-min-sector`，GU；F₂+F₄+F₆=12 等 Fib 种子值，与 paper_gut_budget16_unique_m6 同块补录）——**deepening 补录**
+**Folding weightSumAtMm 扩展种子值（Round R571，deepening 升级，\leanpartial → \leanverified，R533 partial）**：`paper_fold_zero_fiber_linear_extended`（对应 `prop:fold-zero-fiber-linear`，Folding；m=2..8 扩展种子值 + 步进递推，\leanpartial_small 升级为 \leanverified_extended）——**deepening 升级**（prop:fold-zero-fiber-linear，\leanpartial → \leanverified）
+**Conclusion clog 扩展种子值 deepening（Round R570，deepening 补录）**：`paper_conclusion_min_latches_full`（对应 `prop:conclusion-min-latches-equals-log-states`，Conclusion；Nat.clog 2 扩展种子值已形式化，补录至已有 \leanverified 标注块）——**deepening 补录**
+**POM K_k 逆矩阵种子值（Round R570，新标签，\leanverified 完整，streak #149）**：`paper_minMatrix_full_package`（对应 `cor:pom-Kk-det-sine-product-normalization`，POM；整数 Gram 归一化谱乘积刚性综合论文接口）——**新标签首次注册**（cor:pom-Kk-det-sine-product-normalization，\leanverified 完整，streak #149）
+**Zeta 一般 n Walsh-Parseval deepening（Round R570，deepening 升级，\leanpartial → \leanverified）**：`paper_xi_hypercube_fourier_walsh_boundary_parseval`（对应 `thm:xi-hypercube-fourier-walsh-boundary-parseval`，Zeta；parseval_general 一般 n 已形式化，\leanpartial_zero 升级为 \leanverified，R525 debt queue 项清除）——**deepening 升级**（thm:xi-hypercube-fourier-walsh-boundary-parseval，\leanpartial → \leanverified，streak #148）
+**CD 纤维相位量子化种子值（Round R569，新标签，\leanverified 完整，streak #147）**：`paper_cdim_fiber_phase_quantization`（对应 `prop:cdim-arithmetic-singular-ring-fiber-phase-quantization`，CD；纤维平移相位量子化综合论文接口）——**新标签首次注册**（prop:cdim-arithmetic-singular-ring-fiber-phase-quantization，\leanverified 完整，streak #147）
+**GU Fib-tail S₃ 闭包 mod 23（Round R569，新标签，\leanverified 完整，streak #146）**：`paper_fib_tail_s3_closure`（对应 `cor:fib-tail-s3-closure`，GU；g₆ 仿射种子值 + R 对合综合论文接口；论文无 g₆ 仿射阶错误数值，无需修正）——**新标签首次注册**（cor:fib-tail-s3-closure，\leanverified 完整，streak #146）
+**Folding 自协方差闭式种子值（Round R569，新标签，\leanverified 完整，streak #145）**：`paper_fold_autocovariance_seeds`（对应 `prop:fold-gauge-anomaly-covariance-distribution-moment`，Folding；c_k 闭式种子值综合论文接口；论文无 c₄=41/5184 错误，c₄=7/648 正确值在闭式中隐含，无需修正）——**新标签首次注册**（prop:fold-gauge-anomaly-covariance-distribution-moment，\leanverified 完整，streak #145）
+**Zeta 同步核混合率种子值（Round R568，新标签，\leanverified 完整，streak #144）**：`paper_sync_kernel_mixing_rate`（对应 `prop:sync-kernel-explicit-syncword-mixing-rate`，Zeta；TV 指数衰减 λ=1-3^{-5} 综合论文接口）——**新标签首次注册**（prop:sync-kernel-explicit-syncword-mixing-rate，\leanverified 完整，streak #144）
+**Conclusion godelMul 一般 T 单射性 deepening（Round R568，deepening 升级，\leanpartial → \leanverified）**：`paper_conclusion_primorial_additive_vs_godel_multiplicative_small`（对应 `cor:conclusion-primorial-additive-vs-godel-multiplicative`，Conclusion；godelMul_injective_coprime 一般 T 已形式化，\leanpartial 升级为 \leanverified）——**deepening 升级**（cor:conclusion-primorial-additive-vs-godel-multiplicative，\leanpartial 升级为 \leanverified）
+**POM A₂/A₃ 碰撞核特征多项式判别式（Round R568，新标签，\leanverified 完整，streak #143）**：`paper_pom_collision_kernel_discriminant`（对应 `rem:pom-residue-minpoly-a2a3a4`，POM；disc_charPolyA2/A3 整系数方程级证书综合论文接口，disc_chiA3=564）——**新标签首次注册**（rem:pom-residue-minpoly-a2a3a4，\leanverified 完整，streak #143）
+**CD 分母自由度严格乘积界 deepening（Round R567，deepening 升级，\leanpartial → \leanverified）**：`paper_cdim_denominator_growth_finite_S`（对应 `prop:cdim-denominator-growth-finite-S`，CD；N_S_le_prod_log + N_S_le_log2_pow_card 严格乘积界已完整形式化，\leanpartial 升级为 \leanverified）——**deepening 升级**（prop:cdim-denominator-growth-finite-S，\leanpartial 升级为 \leanverified）
+**Folding 规范差均值递推种子值（Round R567，新标签，\leanverified 完整，streak #141）**：`paper_fold_gauge_anomaly_mean`（对应 `thm:fold-gauge-anomaly-mean-finite-closed`，Folding；均值精确有限长度闭式综合论文接口）——**新标签首次注册**（thm:fold-gauge-anomaly-mean-finite-closed，\leanverified 完整，streak #141）
+**GU C₃ 归一化支撑 19 点计数（Round R567，新标签，\leanverified 完整，streak #140）**：`paper_window6_c3_support_count`（对应 `thm:window6-c3-support-vanishing-ideal-hilbert`，GU；C₃ 消失理想 dim=19、Hilbert 系列综合论文接口）——**新标签首次注册**（thm:window6-c3-support-vanishing-ideal-hilbert，\leanverified 完整，streak #140）
 **Conclusion window-6 Markov 平稳数据对隐藏多重度谱的完全刚性（Round R566，新标签，\leanverified 完整，streak #138，新建文件 MarkovStationaryRecovery.lean）**：`paper_conclusion_window6_markov_stationary_recovery`（对应 `thm:conclusion-window6-markov-stationary-data-rigidly-recovers-multiplicity`，Conclusion；(P_6,π_6) 唯一确定多重度多重集，Π=id 刚性综合论文接口，新建文件 MarkovStationaryRecovery.lean）——**新标签首次注册**（thm:conclusion-window6-markov-stationary-data-rigidly-recovers-multiplicity，\leanverified 完整，streak #138）
 **Zeta 常数内存指数遗忘与互信息塌缩（Round R566，新标签，\leanverified 完整，streak #137）**：`paper_zeta_syntax_constant_memory_exponential_forgetting`（对应 `prop:zeta-syntax-constant-memory-exponential-forgetting`，Zeta；TV 指数收敛 + 每比特互信息→0 综合论文接口）——**新标签首次注册**（prop:zeta-syntax-constant-memory-exponential-forgetting，\leanverified 完整，streak #137）
 **POM 四阶核族 Perron 指数曲线与 E6/E7/E8 Jones 指数交点（Round R566，新标签，\leanverified 完整，streak #136）**：`paper_pom_a4t_jones_ade_intersections`（对应 `prop:pom-a4t-jones-ade-intersections`，POM；r_4(t(I))=I 闭式，ADE 三处精确相交综合论文接口）——**新标签首次注册**（prop:pom-a4t-jones-ade-intersections，\leanverified 完整，streak #136）

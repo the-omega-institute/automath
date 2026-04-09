@@ -75,4 +75,70 @@ theorem paper_spg_prouhet_thue_morse_power_sum_concrete :
     (∑ j ∈ Finset.range 4, tau j * (j : ℤ)^1 = 0) :=
   ⟨ptm_power_sum_m1_l0, ptm_power_sum_m2_l0, ptm_power_sum_m2_l1⟩
 
+/-- `τ(4) = -1`.
+    thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments -/
+theorem tau_four : tau 4 = -1 := by unfold tau s₂; decide
+
+/-- `τ(5) = 1`.
+    thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments -/
+theorem tau_five : tau 5 = 1 := by unfold tau s₂; decide
+
+/-- `τ(6) = 1`.
+    thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments -/
+theorem tau_six : tau 6 = 1 := by unfold tau s₂; decide
+
+/-- `τ(7) = -1`.
+    thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments -/
+theorem tau_seven : tau 7 = -1 := by unfold tau s₂; decide
+
+private theorem expand_range_8 {f : ℕ → ℤ} :
+    ∑ j ∈ Finset.range 8, f j =
+      f 0 + f 1 + f 2 + f 3 + f 4 + f 5 + f 6 + f 7 := by
+  simp [Finset.sum_range_succ]
+
+/-- PTM m=3, ℓ=0: ∑_{j=0}^{7} τ(j) = 0.
+    thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments -/
+theorem ptm_power_sum_m3_l0 :
+    ∑ j ∈ Finset.range 8, tau j * (j : ℤ) ^ 0 = 0 := by
+  rw [expand_range_8]
+  rw [tau_zero, tau_one, tau_two, tau_three,
+      tau_four, tau_five, tau_six, tau_seven]
+  ring
+
+/-- PTM m=3, ℓ=1: ∑_{j=0}^{7} τ(j)·j = 0.
+    thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments -/
+theorem ptm_power_sum_m3_l1 :
+    ∑ j ∈ Finset.range 8, tau j * (j : ℤ) ^ 1 = 0 := by
+  rw [expand_range_8]
+  rw [tau_zero, tau_one, tau_two, tau_three,
+      tau_four, tau_five, tau_six, tau_seven]
+  ring
+
+/-- PTM m=3, ℓ=2: ∑_{j=0}^{7} τ(j)·j² = 0.
+    thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments -/
+theorem ptm_power_sum_m3_l2 :
+    ∑ j ∈ Finset.range 8, tau j * (j : ℤ) ^ 2 = 0 := by
+  rw [expand_range_8]
+  rw [tau_zero, tau_one, tau_two, tau_three,
+      tau_four, tau_five, tau_six, tau_seven]
+  ring
+
+/-- PTM m=3, ℓ=3: ∑_{j=0}^{7} τ(j)·j³ = -48 (first non-vanishing moment).
+    thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments -/
+theorem ptm_power_sum_m3_l3 :
+    ∑ j ∈ Finset.range 8, tau j * (j : ℤ) ^ 3 = -48 := by
+  rw [expand_range_8]
+  rw [tau_zero, tau_one, tau_two, tau_three,
+      tau_four, tau_five, tau_six, tau_seven]
+  ring
+
+/-- Paper package (m ≤ 3 instances): PTM vanishing and non-vanishing moments.
+    thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments -/
+theorem paper_spg_prouhet_thue_morse_power_sum_m3 :
+    (∑ j ∈ Finset.range 8, tau j * (j : ℤ) ^ 0 = 0) ∧
+    (∑ j ∈ Finset.range 8, tau j * (j : ℤ) ^ 1 = 0) ∧
+    (∑ j ∈ Finset.range 8, tau j * (j : ℤ) ^ 2 = 0) ∧
+    (∑ j ∈ Finset.range 8, tau j * (j : ℤ) ^ 3 = -48) :=
+  ⟨ptm_power_sum_m3_l0, ptm_power_sum_m3_l1, ptm_power_sum_m3_l2, ptm_power_sum_m3_l3⟩
+
 end Omega.SPG.ProuhetThueMorsePowerSum

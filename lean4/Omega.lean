@@ -55,6 +55,8 @@ import Omega.Folding.MismatchLanguage
 import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.SpectralQuarticAutTrivial
 import Omega.Folding.BayesKinkGeometry
+import Omega.Folding.GaugeAnomalyMean
+import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.PhiSlidingBlockCode
 import Omega.Folding.PhiSubshiftFactor
 import Omega.Folding.HolographicRateConservation
@@ -127,6 +129,7 @@ import Omega.Zeta.WalshParseval
 import Omega.Zeta.FiniteQuotientCardinality
 import Omega.Zeta.LocalInversionDelta
 import Omega.Zeta.PhaseImplementationRankLimit
+import Omega.Zeta.SyncKernelMixingRate
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -188,6 +191,7 @@ import Omega.POM.DoubleTransversalNormalForm
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.FibCubeEdgeParity
+import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.ToggleOrder
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
@@ -204,7 +208,10 @@ import Omega.GU.DiscriminantWedge2Square
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.Window6SingleGoodPrimeRecovery
 import Omega.GU.Window6B3SupportCount
+import Omega.GU.Window6C3SupportCount
 import Omega.GU.FiberNonConstantNoFreeAction
+import Omega.GU.FibTailS3Closure
+import Omega.GU.BoundaryTowerFibCount
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse
@@ -226,4 +233,5 @@ import Omega.CircleDimension.FibonacciPrimitivePrimeBinaryLock
 import Omega.CircleDimension.MobiusBipartiteColoring
 import Omega.CircleDimension.CoherenceTimeLowerBound
 import Omega.CircleDimension.CoherenceTimeBarrier2Pow
+import Omega.CircleDimension.FiberPhaseQuantization
 import Omega.CircleDimension.CausalPreorder

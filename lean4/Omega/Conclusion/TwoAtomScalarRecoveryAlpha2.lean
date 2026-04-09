@@ -141,4 +141,35 @@ theorem paper_twoAtom_threshold_numerical :
   ⟨twoAtomScalar2_goldenRatio, twoAtomScalar2_injective_on_pos,
    fun _ _ hx hxy => twoAtomScalar2_strictMono hx hxy⟩
 
+/-- Seed: twoAtomScalar2(1) = -3/5.
+    thm:conclusion-binfold-tail-order-statistics-single-jump-collapse -/
+theorem twoAtomScalar2_at_one : twoAtomScalar2 1 = -3 / 5 := by
+  unfold twoAtomScalar2; norm_num
+
+/-- Seed: twoAtomScalar2(2) = 4/5.
+    thm:conclusion-binfold-tail-order-statistics-single-jump-collapse -/
+theorem twoAtomScalar2_at_two : twoAtomScalar2 2 = 4 / 5 := by
+  unfold twoAtomScalar2; norm_num
+
+/-- Seed: twoAtomScalar2(3) = 23/5.
+    thm:conclusion-binfold-tail-order-statistics-single-jump-collapse -/
+theorem twoAtomScalar2_at_three : twoAtomScalar2 3 = 23 / 5 := by
+  unfold twoAtomScalar2; norm_num
+
+/-- twoAtomScalar2 changes sign between φ=1 and φ=2 (intermediate value witness).
+    thm:conclusion-binfold-tail-order-statistics-single-jump-collapse -/
+theorem twoAtomScalar2_sign_change :
+    twoAtomScalar2 1 < 0 ∧ 0 < twoAtomScalar2 2 := by
+  rw [twoAtomScalar2_at_one, twoAtomScalar2_at_two]; norm_num
+
+/-- Paper package: two-atom scalar seed values and sign change.
+    thm:conclusion-binfold-tail-order-statistics-single-jump-collapse -/
+theorem paper_twoAtomScalar2_seeds :
+    twoAtomScalar2 1 = -3 / 5 ∧
+    twoAtomScalar2 2 = 4 / 5 ∧
+    twoAtomScalar2 3 = 23 / 5 ∧
+    (twoAtomScalar2 1 < 0 ∧ 0 < twoAtomScalar2 2) :=
+  ⟨twoAtomScalar2_at_one, twoAtomScalar2_at_two, twoAtomScalar2_at_three,
+   twoAtomScalar2_sign_change⟩
+
 end Omega.Conclusion
