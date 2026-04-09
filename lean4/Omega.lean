@@ -193,6 +193,7 @@ import Omega.Conclusion.PushforwardFullMatrix
 import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.SyncKernelPalindrome
 import Omega.Conclusion.GodelLeyangIFS
+import Omega.Conclusion.SmithPrefixBudget
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
@@ -265,3 +266,4 @@ import Omega.CircleDimension.BiphaseFiber
 import Omega.CircleDimension.LissajousChebyshev
 import Omega.CircleDimension.RhodoneaSubflow
 import Omega.CircleDimension.SolenoidKernelBlindness
+import Omega.CircleDimension.PoissonEntropyTomography
