@@ -9,14 +9,14 @@
 | 总行数 | ~49,158 |
 | 定理/定义数 | ~4,296 |
 | 论文接口包装 | 716+ |
-| 文件数 | 127 |
+| 文件数 | 129 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2312 |
+| \leanverified 标注数 | 2315 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2341 |
-| 轮次 | R564（round_count=565）|
+| 总标注数 | 2344 |
+| 轮次 | R565（round_count=566）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion window-6 推送包络充满全矩阵代数（Round R565，新标签，\leanverified 完整，streak #135，新建文件 PushforwardFullMatrix.lean）**：`paper_conclusion_window6_pushforward_full_matrix`（对应 `cor:conclusion-window6-local-pushforward-envelope-full-matrix`，Conclusion；A_6=End(V)≅M_{21}(ℝ) 综合论文接口，新建文件 PushforwardFullMatrix.lean）——**新标签首次注册**（cor:conclusion-window6-local-pushforward-envelope-full-matrix，\leanverified 完整，streak #135）
+**Zeta Ω 正则不可能性（Round R565，新标签，\leanverified 完整，streak #134）**：`paper_zeta_syntax_omega_regular_impossible`（对应 `thm:zeta-syntax-omega-regular-impossible`，Zeta；HALT_U 不是正则语言，常数内存不可达综合论文接口）——**新标签首次注册**（thm:zeta-syntax-omega-regular-impossible，\leanverified 完整，streak #134）
+**POM 时间反演对合符号 mod 12 周期律（Round R565，新标签，\leanverified 完整，streak #133，新建文件 ToggleOrder.lean）**：`paper_pom_toggle_time_reversal_sign_mod12`（对应 `thm:pom-toggle-time-reversal-sign-mod12`，POM；sgn(ι_ℓ) 仅依赖 ℓ mod 12 综合论文接口，新建文件 ToggleOrder.lean）——**新标签首次注册**（thm:pom-toggle-time-reversal-sign-mod12，\leanverified 完整，streak #133）
 **EA 离散规范群双指数律（Round R564，新标签，\leanverified 完整，streak #132）**：`paper_fold_discrete_gauge_group_double_exponential`（对应 `thm:fold-discrete-gauge-group-double-exponential`，EA；|G_m|=exp(Θ(m2^m)) 双指数增长综合论文接口）——**新标签首次注册**（thm:fold-discrete-gauge-group-double-exponential，\leanverified 完整，streak #132）
 **SPG Stokes--Gödel 双对数维度等价（Round R564，新标签，\leanverified 完整，streak #131，新建文件 GodelDoublelog.lean）**：`paper_spg_stokes_godel_doublelog_dimension`（对应 `thm:spg-stokes-godel-doublelog-dimension`，SPG；d_G(A)=d_V(A) Gödel 编码维度综合论文接口，新建文件 GodelDoublelog.lean）——**新标签首次注册**（thm:spg-stokes-godel-doublelog-dimension，\leanverified 完整，streak #131）
 **GU 审计双 Fibonacci 最小扇区预算阈值（Round R564，新标签，\leanverified 完整，streak #130）**：`paper_gut_foldbin_double_fibonacci_minsector_budget`（对应 `thm:gut-foldbin-double-fibonacci-minsector-budget-threshold`，GU；F_{m/2}F_m≤2^m 最小扇区必要条件首次失效 m=58 综合论文接口）——**新标签首次注册**（thm:gut-foldbin-double-fibonacci-minsector-budget-threshold，\leanverified 完整，streak #130）
