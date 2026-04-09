@@ -187,3 +187,4 @@ import Omega.CircleDimension.DenominatorGrowthFiniteS
 import Omega.CircleDimension.DenominatorMultiplesUnionBound
 import Omega.CircleDimension.CoprimeFractionLowerBound
 import Omega.CircleDimension.SquarefreeMedianDistance
+import Omega.CircleDimension.FibonacciPrimitivePrimeBinaryLock
