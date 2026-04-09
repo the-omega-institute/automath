@@ -9,15 +9,14 @@
 | 总行数 | ~49,158 |
 | 定理/定义数 | ~4,296 |
 | 论文接口包装 | 716+ |
-| 文件数 | 116 |
+| 文件数 | 118 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2285 |
+| \leanverified 标注数 | 2288 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2314 |
-| 文件数 | 117 |
-| 轮次 | R555（round_count=556）|
+| 总标注数 | 2317 |
+| 轮次 | R556（round_count=557）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -52,6 +51,8 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM 扫描元奇偶律 mod-6 + Fibonacci 立方边数奇偶性（Round R556，新标签，\leanverified 完整，streak #108/#106）**：`paper_pom_toggle_scan_sign_mod6`（对应 `thm:pom-toggle-scan-sign-mod6`，POM；sgn(c_ℓ)=-1 ↔ ℓ≡1,3 mod 6 综合论文接口，streak #108）；`paper_pom_fibcube_edge_parity`（对应 `cor:pom-toggle-fibcube-edge-parity`，POM；|E(Γ_ℓ)| 奇偶性综合论文接口，新建文件 FibCubeEdgeParity.lean，streak #106）——**新标签首次注册**（两标签同属新建文件）
+**Zeta Zeckendorf 素数非正则语言（Round R556，新标签，\leanverified 完整，streak #107）**：`paper_zeck_prime_not_order2_recurrence`（对应 `cor:zeta-syntax-zeckendorf-primes-not-regular`，Zeta；Zeckendorf 素数无阶 2 线性递推综合论文接口）——**新标签首次注册**（cor:zeta-syntax-zeckendorf-primes-not-regular，\leanverified 完整，streak #107）
 **Folding 失配标记非 coboundary 性（Round R555，新标签，\leanverified 完整，streak #105）**：`paper_mismatch_label_non_coboundary`（对应 `prop:fold-gauge-anomaly-mismatch-language-non-coboundary`，Folding；三角形边标记之和非零证明综合论文接口）——**新标签首次注册**（prop:fold-gauge-anomaly-mismatch-language-non-coboundary，\leanverified 完整，streak #105）
 **GU 已审计偶窗总预算 16 最小退化包唯一性（Round R555，新标签，\leanverified 完整，streak #104）**：`paper_gut_budget16_unique_m6`（对应 `thm:gut-audited-even-windows-unique-budget16-min-sector`，GU；B_m=16 当且仅当 m=6 综合论文接口，MinSectorBudget.lean）——**新标签首次注册**（thm:gut-audited-even-windows-unique-budget16-min-sector，\leanverified 完整，新建文件 MinSectorBudget.lean，streak #104）
 **GU Fib-tail 三重性素数阶 3 迹同余判别（Round R555，新标签，\leanverified 完整，streak #103）**：`paper_fib_tail_order3_trace`（对应 `prop:fib-tail-order3-trace`，GU；m=4,6,8 时 2F_{m+3}+1 的具体值 27/69/179 综合论文接口）——**新标签首次注册**（prop:fib-tail-order3-trace，\leanverified 完整，streak #103）
