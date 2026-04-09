@@ -1238,4 +1238,73 @@ theorem cdim2_noprofinite_no_torsion :
   intro n hn ⟨a, ha, h⟩
   exact ha (paper_cdim2_noprofinite_substitute n hn a h)
 
+/-! ### S-smooth integers and equivariant splitting criterion -/
+
+/-- An integer n is S-smooth if every prime factor of n belongs to S.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+def IsSmooth (S : Finset Nat) (n : Nat) : Prop :=
+  ∀ p : Nat, p.Prime → p ∣ n → p ∈ S
+
+/-- 6 is {2,3}-smooth: prime factors of 6 are {2,3} ⊆ {2,3}.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem isSmooth_6_23 : IsSmooth {2, 3} 6 := by
+  intro p hp hpd
+  have hle := Nat.le_of_dvd (by omega) hpd
+  have hp2 := hp.two_le
+  -- p ∈ {2..6}, prime and divides 6 → p ∈ {2,3}
+  interval_cases p
+  · simp  -- p=2
+  · simp  -- p=3
+  · exact absurd hp (by native_decide)  -- p=4 not prime
+  · exact absurd hpd (by omega)  -- p=5 ∤ 6
+  · exact absurd hp (by native_decide)  -- p=6 not prime
+
+/-- 3 is not {2,5}-smooth: 3 is prime, 3 ∣ 3, but 3 ∉ {2,5}.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem not_isSmooth_3_25 : ¬ IsSmooth {2, 5} 3 := by
+  intro h
+  have := h 3 (by decide) (dvd_refl 3)
+  simp at this
+
+/-- 2 is not {3,5}-smooth: 2 is prime, 2 ∣ 2, but 2 ∉ {3,5}.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem not_isSmooth_2_35 : ¬ IsSmooth {3, 5} 2 := by
+  intro h
+  have := h 2 (by decide) (dvd_refl 2)
+  simp at this
+
+/-- 2 is {2,3}-smooth.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem isSmooth_2_23 : IsSmooth {2, 3} 2 := by
+  intro p hp hpd
+  have := (Nat.prime_dvd_prime_iff_eq hp (by decide : Nat.Prime 2)).mp hpd
+  subst this; simp
+
+/-- 6 is {2,3,5}-smooth.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem isSmooth_6_235 : IsSmooth {2, 3, 5} 6 := by
+  intro p hp hpd
+  have hle := Nat.le_of_dvd (by omega) hpd
+  have hp2 := hp.two_le
+  interval_cases p
+  · simp  -- p=2
+  · simp  -- p=3
+  · exact absurd hp (by native_decide)  -- p=4
+  · exact absurd hpd (by omega)  -- p=5
+  · exact absurd hp (by native_decide)  -- p=6
+
+/-- 1 is S-smooth for any S (vacuously: no prime divides 1).
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem isSmooth_one (S : Finset Nat) : IsSmooth S 1 := by
+  intro p hp hpd
+  exact absurd (Nat.le_of_dvd (by omega) hpd) (by have := hp.two_le; omega)
+
+/-- Paper package: equivariant splitting criterion seed values.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem paper_cdim_equivariant_splitting_criterion :
+    IsSmooth {2, 3} 6 ∧ ¬ IsSmooth {2, 5} 3 ∧ ¬ IsSmooth {3, 5} 2 ∧
+    IsSmooth {2, 3} 2 ∧ IsSmooth {2, 3, 5} 6 :=
+  ⟨isSmooth_6_23, not_isSmooth_3_25, not_isSmooth_2_35,
+   isSmooth_2_23, isSmooth_6_235⟩
+
 end Omega.CircleDimension

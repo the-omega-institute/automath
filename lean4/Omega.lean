@@ -90,6 +90,8 @@ import Omega.SPG.CoordinateBundleScreenCount
 import Omega.SPG.ProuhetThueMorsePowerSum
 import Omega.SPG.SingleParamLogReadoutPigeonhole
 import Omega.SPG.BoundaryCycleAuditQueryLowerBound
+import Omega.SPG.F2FiberCardinality
+import Omega.SPG.CycleRankFormula
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
