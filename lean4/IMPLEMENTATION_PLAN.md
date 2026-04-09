@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2373 |
+| \leanverified 标注数 | 2376 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2397 |
-| 轮次 | R582（round_count=583）|
+| 总标注数 | 2400 |
+| 轮次 | R583（round_count=584）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**SPG 有限群 gauge 表示群胚圆维指数律种子值（Round R583，新标签，\leanverified 完整）**：`paper_spg_boundary_gauge_groupoid_circle_law_seeds`（对应 `thm:spg-boundary-gauge-groupoid-circle-law`，SPG；差值 b₁-b₀ + n^0=1 + 整除种子值）——**新标签首次注册**（thm:spg-boundary-gauge-groupoid-circle-law，\leanverified 新标注）
+**Folding Bernoulli-p 全自协方差闭式 Jordan 临界修正种子值（Round R583，新标签，\leanverified 完整）**：`paper_fold_bernoulli_p_jordan_resonance_seeds`（对应 `thm:fold-bernoulli-p-full-autocovariance-jordan`，Folding；协方差指数混合闭式 + Jordan 临界 (k-1)2^(-k) 种子值）——**新标签首次注册**（thm:fold-bernoulli-p-full-autocovariance-jordan，\leanverified 新标注）
+**POM replica Bernoulli 子图独立集矩表示种子值（Round R583，新标签，\leanverified 完整）**：`paper_pom_replica_bernoulli_subgraph_moment_seeds`（对应 `thm:pom-replica-softcore-bernoulli-subgraph-moment-representation`，POM；独立集矩 + fib(4..6) 种子值）——**新标签首次注册**（thm:pom-replica-softcore-bernoulli-subgraph-moment-representation，\leanverified 新标注）
 **Zeta 有限探针规避循环 lift 闭包种子值（Round R582，新标签，\leanverified 完整）**：`paper_zeta_cyclic_lift_finite_probe_evasion_seeds`（对应 `thm:zeta-cyclic-lift-finite-probe-evasion`，Zeta；非整除性 + 素数幂 + ∀n∃p>n 探针规避种子值）——**新标签首次注册**（thm:zeta-cyclic-lift-finite-probe-evasion，\leanverified 新标注）
 **GU bulk 共振常数强制 ℓ²-TV-Rényi² 赤字种子值（Round R582，新标签，\leanverified 完整）**：`paper_gut_cphi_forces_l2_tv_renyi2_deficit_seeds`（对应 `thm:gut-cphi-forces-l2-tv-renyi2-deficit`，GU；fib 递推 + ℓ²/TV/Rényi-2 不等式种子值）——**新标签首次注册**（thm:gut-cphi-forces-l2-tv-renyi2-deficit，\leanverified 新标注）
 **Conclusion Gödel-LY 2-进仿射 IFS 精确维数种子值（Round R582，新标签，\leanverified 完整）**：`paper_conclusion_godel_leyang_ifs_dimension_seeds`（对应 `thm:conclusion-godel-leyang-2adic-ifs-exact-dimension`，Conclusion；对数维数公式 log₂|D|/L + base-5 数字 + 幂种子值）——**新标签首次注册**（thm:conclusion-godel-leyang-2adic-ifs-exact-dimension，\leanverified 新标注）
