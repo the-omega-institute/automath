@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2326 |
+| \leanverified 标注数 | 2329 |
 | \leanpartial 标注数 | 27 |
-| 总标注数 | 2353 |
-| 轮次 | R568（round_count=569）|
+| 总标注数 | 2356 |
+| 轮次 | R569（round_count=570）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,15 +26,15 @@
 |---|---|---|---|
 | POM | 1,707 | 312 | 18.3% |
 | Emergent Arithmetic | 185 | 177 | 95.7% |
-| Folding | 337 | 137 | 40.7% |
+| Folding | 337 | 138 | 41.0% |
 | Conclusion | 2,550 | 270 | 10.6% |
-| Group Unification | 469 | 177 | 37.7% |
+| Group Unification | 469 | 178 | 37.9% |
 | SPG | 129 | 115 | 89.1% |
-| Circle Dimension | 393 | 159 | 40.5% |
+| Circle Dimension | 393 | 160 | 40.7% |
 | Zeta Finite Part | 4,524 | 214 | 4.7% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1623** | **15.4%** |
+| **合计（body）** | **10,508** | **1626** | **15.5%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD 纤维相位量子化种子值（Round R569，新标签，\leanverified 完整，streak #147）**：`paper_cdim_fiber_phase_quantization`（对应 `prop:cdim-arithmetic-singular-ring-fiber-phase-quantization`，CD；纤维平移相位量子化综合论文接口）——**新标签首次注册**（prop:cdim-arithmetic-singular-ring-fiber-phase-quantization，\leanverified 完整，streak #147）
+**GU Fib-tail S₃ 闭包 mod 23（Round R569，新标签，\leanverified 完整，streak #146）**：`paper_fib_tail_s3_closure`（对应 `cor:fib-tail-s3-closure`，GU；g₆ 仿射种子值 + R 对合综合论文接口；论文无 g₆ 仿射阶错误数值，无需修正）——**新标签首次注册**（cor:fib-tail-s3-closure，\leanverified 完整，streak #146）
+**Folding 自协方差闭式种子值（Round R569，新标签，\leanverified 完整，streak #145）**：`paper_fold_autocovariance_seeds`（对应 `prop:fold-gauge-anomaly-covariance-distribution-moment`，Folding；c_k 闭式种子值综合论文接口；论文无 c₄=41/5184 错误，c₄=7/648 正确值在闭式中隐含，无需修正）——**新标签首次注册**（prop:fold-gauge-anomaly-covariance-distribution-moment，\leanverified 完整，streak #145）
 **Zeta 同步核混合率种子值（Round R568，新标签，\leanverified 完整，streak #144）**：`paper_sync_kernel_mixing_rate`（对应 `prop:sync-kernel-explicit-syncword-mixing-rate`，Zeta；TV 指数衰减 λ=1-3^{-5} 综合论文接口）——**新标签首次注册**（prop:sync-kernel-explicit-syncword-mixing-rate，\leanverified 完整，streak #144）
 **Conclusion godelMul 一般 T 单射性 deepening（Round R568，deepening 升级，\leanpartial → \leanverified）**：`paper_conclusion_primorial_additive_vs_godel_multiplicative_small`（对应 `cor:conclusion-primorial-additive-vs-godel-multiplicative`，Conclusion；godelMul_injective_coprime 一般 T 已形式化，\leanpartial 升级为 \leanverified）——**deepening 升级**（cor:conclusion-primorial-additive-vs-godel-multiplicative，\leanpartial 升级为 \leanverified）
 **POM A₂/A₃ 碰撞核特征多项式判别式（Round R568，新标签，\leanverified 完整，streak #143）**：`paper_pom_collision_kernel_discriminant`（对应 `rem:pom-residue-minpoly-a2a3a4`，POM；disc_charPolyA2/A3 整系数方程级证书综合论文接口，disc_chiA3=564）——**新标签首次注册**（rem:pom-residue-minpoly-a2a3a4，\leanverified 完整，streak #143）
