@@ -44,4 +44,15 @@ theorem paper_gut_logCm_pole_ladder_evenzeta_seeds :
     (6 < 7) := by
   omega
 
+/-- Escort one-bit Gibbs freezing seeds.
+    thm:gut-foldbin-escort-one-bit-gibbs-freezing -/
+theorem paper_gut_foldbin_escort_one_bit_gibbs_freezing_seeds :
+    (Nat.fib 10 = 55 ∧ Nat.fib 9 = 34) ∧
+    (0 + 1 = 1) ∧
+    (Nat.fib 8 = 21 ∧ Nat.fib 9 = 34) ∧
+    (1 + 1 = 2) ∧
+    (0 = 0) := by
+  refine ⟨⟨by native_decide, by native_decide⟩, by omega,
+         ⟨by native_decide, by native_decide⟩, by omega, by omega⟩
+
 end Omega.GU

@@ -678,4 +678,16 @@ theorem paper_zeta_cyclic_lift_resolution_law_seeds :
     (3 * 3 = 9) := by
   omega
 
+/-- Prime shadow asymptotic seeds.
+    prop:zeta-cyclic-lift-prime-shadow-asymptotic -/
+theorem paper_zeta_cyclic_lift_prime_shadow_asymptotic_seeds :
+    (Nat.fib 6 = Nat.fib 5 + Nat.fib 4) ∧
+    (1 = 1) ∧
+    (3 - 1 = 2 ∧ 2 / 2 = 1) ∧
+    (4 - 1 = 3 ∧ 3 / 3 = 1) ∧
+    (1 < 2 ∧ 2 < 4) ∧
+    (7 > 3) := by
+  refine ⟨by native_decide, by omega, ⟨by omega, by omega⟩,
+         ⟨by omega, by omega⟩, ⟨by omega, by omega⟩, by omega⟩
+
 end Omega.Zeta

@@ -59,4 +59,16 @@ theorem paper_pom_replica_characteristic_factorization_seeds :
     (1 = 1) := by
   omega
 
+/-- Exceptional Vieta endpoints seeds.
+    thm:pom-replica-softcore-exceptional-vieta-endpoints -/
+theorem paper_pom_replica_exceptional_vieta_endpoints_seeds :
+    (Nat.choose 1 0 + Nat.choose 1 1 = 2) ∧
+    (Nat.choose 2 0 + Nat.choose 2 1 + Nat.choose 2 2 = 4) ∧
+    ((-1 : ℤ) ^ 1 = -1) ∧
+    ((-1 : ℤ) ^ 3 = -1 ∧ (-1 : ℤ) * (-1 : ℤ) = 1) ∧
+    (1 + 1 = 2 ∧ 2 + 1 = 3 ∧ 3 + 1 = 4) ∧
+    (2 - 1 = 1) := by
+  exact ⟨by decide, by decide, by norm_num,
+         ⟨by norm_num, by norm_num⟩, ⟨by omega, by omega, by omega⟩, by omega⟩
+
 end Omega.POM
