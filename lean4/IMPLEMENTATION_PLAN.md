@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R536（round_count=537）|
+| 轮次 | R537（round_count=538）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -30,11 +30,11 @@
 | Conclusion | 2,550 | 268 | 10.5% |
 | Group Unification | 469 | 174 | 37.1% |
 | SPG | 129 | 114 | 88.4% |
-| Circle Dimension | 393 | 156 | 39.7% |
+| Circle Dimension | 393 | 157 | 39.9% |
 | Zeta Finite Part | 4,524 | 210 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1602** | **15.2%** |
+| **合计（body）** | **10,508** | **1603** | **15.3%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD Möbius 二部图着色素数翻转（Round R537，新标签，\leanverified 完整，streak #84）**：`omega`（对应 `cor:cdim-mobius-bipartite-coloring`，CD；不同素因子计数 def）；`mobiusSign`（对应同标签，CD；Möbius 符号 def = (-1)^ω(n)）；`neg_one_pow_succ`（对应同标签，CD；(-1)^(n+1)=-(-1)^n 引理）；`omega_mul_prime_of_not_dvd`（对应同标签，CD；不整除素数乘积的 ω 计数引理）；`paper_cdim_mobius_bipartite_coloring`（对应同标签，CD；Möbius 符号翻转综合论文接口）——**新标签首次注册**（cor:cdim-mobius-bipartite-coloring，\leanverified 完整，streak #84）
 **Conclusion 边界环秩饱和夹逼（Round R536，新标签，\leanverified 完整，streak #83）**：`squeeze_to_one`（对应 `cor:conclusion-boundary-cycle-rank-saturation`，Conclusion；三明治夹逼引理）；`paper_conclusion_boundary_cycle_rank_saturation`（对应同标签，Conclusion；边界环秩饱和综合论文接口）——**新标签首次注册**（cor:conclusion-boundary-cycle-rank-saturation，\leanverified 完整，三明治夹逼，streak #83）
 **EA 乘法无新原始元素（Round R535，新标签，\leanverified 完整，streak #82）**：`paper_mul_no_new_primitive`（对应 `cor:mul-no-new-primitive`，EA；乘法无新原始元素综合论文接口，∀ x y ∈ X_m, mul(x,y) 不产生新原始词）——**新标签首次注册**（cor:mul-no-new-primitive，\leanverified 完整，一行封装，streak #82）
 **POM 双横截正规形存在性（Round R534，新标签，\leanpartial，streak #81）**：`val`（对应 `thm:pom-double-transversal-normal-form`，POM；Config 值 noncomputable def）；`symRem`（对应同标签，POM；对称余数 noncomputable def）；`symQuo`（对应同标签，POM；对称商 noncomputable def）；`symQuoRem_spec`（对应同标签，POM；对称除法规范化定理）；`symRem_le`（对应同标签，POM；对称余数上界）；`symRem_ge`（对应同标签，POM；对称余数下界）；`paper_pom_double_transversal_normal_form`（对应同标签，POM；存在性综合论文接口，∃ 形式完整）——**新标签首次注册**（thm:pom-double-transversal-normal-form，\leanpartial 存在性完整、uniqueness (q,r) 对称除法待后续，streak #81）
