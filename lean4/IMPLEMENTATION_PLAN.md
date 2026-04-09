@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R533（round_count=534）|
+| 轮次 | R534（round_count=535）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,7 +24,7 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 308 | 18.0% |
+| POM | 1,707 | 309 | 18.1% |
 | Emergent Arithmetic | 185 | 174 | 94.1% |
 | Folding | 337 | 134 | 39.8% |
 | Conclusion | 2,550 | 267 | 10.5% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 210 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1599** | **15.2%** |
+| **合计（body）** | **10,508** | **1600** | **15.2%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM 双横截正规形存在性（Round R534，新标签，\leanpartial，streak #81）**：`val`（对应 `thm:pom-double-transversal-normal-form`，POM；Config 值 noncomputable def）；`symRem`（对应同标签，POM；对称余数 noncomputable def）；`symQuo`（对应同标签，POM；对称商 noncomputable def）；`symQuoRem_spec`（对应同标签，POM；对称除法规范化定理）；`symRem_le`（对应同标签，POM；对称余数上界）；`symRem_ge`（对应同标签，POM；对称余数下界）；`paper_pom_double_transversal_normal_form`（对应同标签，POM；存在性综合论文接口，∃ 形式完整）——**新标签首次注册**（thm:pom-double-transversal-normal-form，\leanpartial 存在性完整、uniqueness (q,r) 对称除法待后续，streak #81）
 **Folding 零纤维线性 m=2..5 降级（Round R533，新标签，\leanpartial，streak #80 里程碑）**：`weightSumAtMm`（对应 `prop:fold-zero-fiber-linear`，Folding；权重和 def）；`weightSumAtMm_two`（对应同标签，Folding；m=2 具体值=1）；`weightSumAtMm_three`（对应同标签，Folding；m=3 具体值=1）；`weightSumAtMm_four`（对应同标签，Folding；m=4 具体值=2）；`weightSumAtMm_five`（对应同标签，Folding；m=5 具体值=2）；`weightSumAtMm_eq_div_two_small`（对应同标签，Folding；m=2..5 除以二等式）；`paper_fold_zero_fiber_linear_small`（对应同标签，Folding；m=2..5 综合论文接口）——**新标签首次注册**（prop:fold-zero-fiber-linear，\leanpartial m=2..5 具体情形完整，通用归纳递推证明待后续，streak #80 里程碑）
 **SPG 单参数对数读出鸽巢 k=1 降级（Round R532，新标签，\leanpartial，streak #79）**：`weightedSum`（对应 `thm:spg-single-parameter-log-readout-vs-diagonal-multichannel-bifurcation`，SPG；加权和 def）；`pigeonhole_k_one`（对应同标签，SPG；k=1 鸽巢引理）；`paper_spg_single_parameter_log_readout_pigeonhole_k1`（对应同标签，SPG；k=1 具体情形论文接口）；`godel_log_readout_pigeonhole_k1`（对应同标签，SPG；Gödel 版本 k=1 论文接口）——**新标签首次注册**（thm:spg-single-parameter-log-readout-vs-diagonal-multichannel-bifurcation，\leanpartial k=1 具体情形 + Gödel 版本完整，通用 k 鸽巢 + Bool 向量枚举待后续，streak #79）
 **GU 统一函数 L 中心化抵消恒等式（Round R531，新标签，\leanverified 完整，streak #78）**：`avg`（对应 `prop:gut-A-cancels-lambda1`，GU；平均值 noncomputable def）；`paper_gut_A_cancels_lambda1`（对应同标签，GU；L 中心化抵消综合论文接口）；`centered_g_formula`（对应同标签，GU；中心化 g 公式）；`centered_independent_of_L`（对应同标签，GU；中心化独立于 L）——**新标签首次注册**（prop:gut-A-cancels-lambda1，\leanverified 完整，streak #78）
