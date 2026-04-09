@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2335 |
-| \leanpartial 标注数 | 25 |
-| 总标注数 | 2360 |
-| 轮次 | R571（round_count=572）|
+| \leanverified 标注数 | 2342 |
+| \leanpartial 标注数 | 24 |
+| 总标注数 | 2366 |
+| 轮次 | R572（round_count=573）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion 二原子标量恢复种子值（Round R572，deepening 补录）**：`paper_twoAtomScalar2_seeds`（对应 `cor:conclusion-binfold-single-scalar-recovers-golden-parameter`，Conclusion；twoAtomScalar2 扩展种子值，补录至已有标注块）——**deepening 补录**
+**POM 碰撞核迹平方 + Newton 恒等式（Round R572，deepening 补录）**：`paper_pom_collision_kernel_full`（对应 `rem:pom-residue-minpoly-a2a3a4`，POM；迹平方 + Newton 恒等式完整包，补录至已有 paper_pom_collision_kernel_discriminant 旁）——**deepening 补录**
+**SPG PTM 幂和扩展到 m=3（Round R572，deepening 升级，\leanpartial → \leanverified）**：`paper_spg_prouhet_thue_morse_power_sum_m3`（对应 `thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments`，SPG；ptm_power_sum_m3_l0/l1/l2/l3 已形式化，\leanpartial_concrete 升级为 \leanverified_m3）——**deepening 升级**（thm:spg-prouhet-thue-morse，\leanpartial → \leanverified，streak #151）
 **CD 禁素集互补数 inclusion-exclusion 种子值（Round R571，deepening 补录）**：`paper_cdim_denominator_multiples_seeds`（对应 `prop:cdim-denominator-positive-density-thin-forbidden`，CD；具体种子值 multiplesUpTo{2,3,5}/100 等新接口补录，`\leanpartial` 保留）——**deepening 补录**
 **GU Boundary 塔 Fibonacci 计数（Round R571，deepening 补录）**：`paper_boundary_tower_fib_count`（对应 `thm:gut-audited-even-windows-unique-budget16-min-sector`，GU；F₂+F₄+F₆=12 等 Fib 种子值，与 paper_gut_budget16_unique_m6 同块补录）——**deepening 补录**
 **Folding weightSumAtMm 扩展种子值（Round R571，deepening 升级，\leanpartial → \leanverified，R533 partial）**：`paper_fold_zero_fiber_linear_extended`（对应 `prop:fold-zero-fiber-linear`，Folding；m=2..8 扩展种子值 + 步进递推，\leanpartial_small 升级为 \leanverified_extended）——**deepening 升级**（prop:fold-zero-fiber-linear，\leanpartial → \leanverified）
