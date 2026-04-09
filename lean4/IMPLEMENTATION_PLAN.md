@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2403 |
+| \leanverified 标注数 | 2406 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2427 |
-| 轮次 | R592（round_count=593）|
+| 总标注数 | 2430 |
+| 轮次 | R593（round_count=594）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**GU fold-gauge 生成函数极点阶梯 even-ζ 残数读出种子值（Round R593，新标签，\leanverified 完整）**：`paper_gut_logCm_pole_ladder_evenzeta_seeds`（对应 `thm:gut-logCm-pole-ladder-evenzeta`，GU；和 + 奇数序列 + 乘积分解 + 极点位置唯一决定 B_{2r} 与 ζ(2r) 种子值）——**新标签首次注册**（thm:gut-logCm-pole-ladder-evenzeta，\leanverified 新标注）
+**Zeta 预言机分辨率律 Q^{-1} 标度种子值（Round R593，新标签，\leanverified 完整）**：`paper_zeta_cyclic_lift_resolution_law_seeds`（对应 `cor:zeta-cyclic-lift-resolution-law`，Zeta；乘积 + 不等式链 + Q ≳ 1/(ε log λ) 最坏分辨率种子值）——**新标签首次注册**（cor:zeta-cyclic-lift-resolution-law，\leanverified 新标注）
+**SPG 非空坐标束屏幕最小外边界闭合条数种子值（Round R593，新标签，\leanverified 完整）**：`paper_spg_coordinate_bundle_minimal_boundary_closure_seeds`（对应 `cor:spg-coordinate-bundle-minimal-boundary-closure`，SPG；差值 + 不等式 + 乘积 2^{m(n-s)} 种子值）——**新标签首次注册**（cor:spg-coordinate-bundle-minimal-boundary-closure，\leanverified 新标注）
 **CD 双相位平均门圆盘像与几何奇异环种子值（Round R592，新标签，\leanverified 完整）**：`paper_cdim_biphase_disk_critical_ring_seeds`（对应 `thm:cdim-biphase-average-disk-critical-ring`，CD；∂D 几何奇异环 + 零维像点算术恒等式种子值）——**新标签首次注册**（thm:cdim-biphase-average-disk-critical-ring，\leanverified 新标注）
 **Folding 零段条件律 Fibonacci 闭式与同步收缩种子值（Round R592，新标签，\leanverified 完整）**：`paper_fold_gauge_anomaly_zero_run_fibonacci_seeds`（对应 `thm:fold-gauge-anomaly-zero-run-fibonacci`，Folding；fib(1..10) + 不等式 + (3-√5)/4 收敛 + 1/(2F_{n+5}F_{n+6}) 界种子值）——**新标签首次注册**（thm:fold-gauge-anomaly-zero-run-fibonacci，\leanverified 新标注）
 **POM 特征多项式结构性分解例外因子与固定因子完全分离种子值（Round R592，新标签，\leanverified 完整）**：`paper_pom_replica_characteristic_factorization_seeds`（对应 `thm:pom-replica-softcore-characteristic-factorization`，POM；递增序列 + 2^k + 求和 + C(q,j)-1 指数分解种子值）——**新标签首次注册**（thm:pom-replica-softcore-characteristic-factorization，\leanverified 新标注）
