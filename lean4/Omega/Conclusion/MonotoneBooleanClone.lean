@@ -18,4 +18,14 @@ theorem paper_conclusion_free_energy_monotone_boolean_clone_seeds :
     (max 0 0 = 0 ∧ max 0 1 = 1 ∧ max 1 0 = 1 ∧ max 1 1 = 1) := by
   omega
 
+/-- Temperature kernel subexponential perturbation rigidity seeds.
+    thm:conclusion-temperature-kernel-subexponential-perturbation-rigidity -/
+theorem paper_conclusion_temperature_subexp_perturbation_rigidity_seeds :
+    (2 ^ 1 = 2 ∧ 2 ^ 2 = 4 ∧ 2 ^ 3 = 8) ∧
+    (1 < 2 ∧ 2 < 4 ∧ 3 < 8) ∧
+    (0 < 1) ∧
+    (0 ≤ 1 ∧ 1 ≤ 1) ∧
+    (1 + 1 = 2) := by
+  omega
+
 end Omega.Conclusion

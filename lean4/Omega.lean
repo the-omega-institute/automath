@@ -270,3 +270,4 @@ import Omega.CircleDimension.LissajousChebyshev
 import Omega.CircleDimension.RhodoneaSubflow
 import Omega.CircleDimension.SolenoidKernelBlindness
 import Omega.CircleDimension.PoissonEntropyTomography
+import Omega.CircleDimension.DoubleDiscriminant
