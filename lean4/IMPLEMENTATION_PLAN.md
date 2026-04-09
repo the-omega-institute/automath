@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2352 |
+| \leanverified 标注数 | 2355 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2376 |
-| 轮次 | R575（round_count=576）|
+| 总标注数 | 2379 |
+| 轮次 | R576（round_count=577）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Folding Bernoulli-half 满失配 mod-3 算术种子值（Round R576，新标签，\leanverified 完整）**：`paper_fold_bernoulli_half_full_mismatch_seeds`（对应 `cor:fold-bernoulli-half-endpoints-oscillation`，Folding；满失配概率 mod-3 算术恒等式 r=0,1,2 三分支种子值）——**新标签首次注册**（cor:fold-bernoulli-half-endpoints-oscillation，\leanverified 新标注）
+**Conclusion faithful Gödel 无限素数支撑种子值（Round R576，新标签，\leanverified 完整）**：`paper_conclusion_faithful_godel_infinite_prime_support_seeds`（对应 `cor:conclusion-faithful-time-addressed-godel-needs-infinite-prime-support`，Conclusion；小素数 (2,3,5,7,11)、排序、互异性种子值）——**新标签首次注册**（cor:conclusion-faithful-time-addressed-godel-needs-infinite-prime-support，\leanverified 新标注）
+**POM 轨道长度谱 gcd 种子值（Round R576，新标签，\leanverified 完整）**：`paper_pom_toggle_orbit_length_spectrum_seeds`（对应 `thm:pom-toggle-scan-orbit-length-spectrum`，POM；轨道长度公式 + gcd 种子值）——**新标签首次注册**（thm:pom-toggle-scan-orbit-length-spectrum，\leanverified 新标注）
 **SPG Walsh-Stokes 离散边界消去种子值（Round R575，新标签，\leanverified 完整）**：`paper_spg_walsh_discrete_stokes_seeds`（对应 `thm:spg-walsh-discrete-stokes-holography`，SPG；边界-体积消去恒等式 + 2^k 尺寸进展种子值）——**新标签首次注册**（thm:spg-walsh-discrete-stokes-holography，\leanverified 新标注）
 **CD 有限素数截断精确半圆维种子值（Round R575，新标签，\leanverified 完整）**：`paper_cdim_finite_prime_truncation_seeds`（对应 `cor:cdim-finite-prime-truncation-hom-half-circle`，CD；素数性 (2,3,5)、互素性、乘积、minFac 种子值）——**新标签首次注册**（cor:cdim-finite-prime-truncation-hom-half-circle，\leanverified 新标注）
 **Zeta DFA 素数对称差下界（Round R575，新标签，\leanverified 完整）**：`paper_zeta_syntax_dfa_prime_symmetric_diff`（对应 `cor:zeta-syntax-dfa-prime-symmetric-diff`，Zeta；小素数 + m < 2^m 不等式种子值）——**新标签首次注册**（cor:zeta-syntax-dfa-prime-symmetric-diff，\leanverified 新标注）
