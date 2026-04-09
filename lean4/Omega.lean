@@ -139,6 +139,7 @@ import Omega.Core.AnomGapAmplification
 import Omega.Core.MaxFiberSplitGcdTrichotomy
 import Omega.POM.MultiplicityFixedRExtrema
 import Omega.POM.MassSplittingMomentRoot
+import Omega.POM.OrbitProductNorm
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap
