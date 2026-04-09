@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2394 |
+| \leanverified 标注数 | 2397 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2418 |
-| 轮次 | R589（round_count=590）|
+| 总标注数 | 2421 |
+| 轮次 | R590（round_count=591）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**GU Stirling-Bernoulli jet 逐阶反演有限阶刚性种子值（Round R590，新标签，\leanverified 完整）**：`paper_gut_stirling_bernoulli_jet_rigidity_seeds`（对应 `thm:gut-logCm-stirling-bernoulli-jet-rigidity`，GU；乘积 + factorial + 不等式 + even-ζ 不变量逐阶一致种子值）——**新标签首次注册**（thm:gut-logCm-stirling-bernoulli-jet-rigidity，\leanverified 新标注）
+**Folding ε-机器 Fibonacci-Möbius 不确定预测态完全闭式种子值（Round R590，新标签，\leanverified 完整）**：`paper_fold_epsilon_machine_fibonacci_mobius_seeds`（对应 `thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius`，Folding；fib(1..8) + 乘积 + Möbius 收缩递推 + r_∞=1/(2φ) 种子值）——**新标签首次注册**（thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius，\leanverified 新标注）
+**POM 例外谱迹闭式 2^{q-1} 主项与 Z[φ] 校正项种子值（Round R590，新标签，\leanverified 完整）**：`paper_pom_replica_exceptional_spectrum_trace_seeds`（对应 `thm:pom-replica-softcore-exceptional-spectrum-trace`，POM；2^k + 二项式系数和 + fib 和 + Z[φ] 校正项种子值）——**新标签首次注册**（thm:pom-replica-softcore-exceptional-spectrum-trace，\leanverified 新标注）
 **SPG 线性矩全息最小维数种子值（Round R589，新标签，\leanverified 完整）**：`paper_spg_linear_moment_holography_minimal_dim_seeds`（对应 `thm:spg-linear-moment-holography-minimal-dimension`，SPG；2^(NL) 幂 + ∀ 量化差值 N-L > 0 + dyadic polycube 线性矩全息最小维数种子值）——**新标签首次注册**（thm:spg-linear-moment-holography-minimal-dimension，\leanverified 新标注）
 **CD Poisson 熵矩层析四阶重建种子值（Round R589，新标签，\leanverified 完整）**：`paper_cdim_poisson_entropy_moment_tomography_seeds`（对应 `thm:cdim-poisson-entropy-moment-tomography-up-to-fourth`，CD；2^k 幂 + 整数差值 + 四阶中心矩重建种子值）——**新标签首次注册**（thm:cdim-poisson-entropy-moment-tomography-up-to-fourth，\leanverified 新标注）
 **Conclusion 局部字母表预算与 Smith 前缀预算不可互换性种子值（Round R589，新标签，\leanverified 完整）**：`paper_conclusion_local_alphabet_smith_prefix_nonexchangeability_seeds`（对应 `thm:conclusion-local-alphabet-budget-smith-prefix-budget-nonexchangeability`，Conclusion；2^k vs 10^k 比较 + 2^9=512 < 1000 < 1024=2^10 间隙种子值）——**新标签首次注册**（thm:conclusion-local-alphabet-budget-smith-prefix-budget-nonexchangeability，\leanverified 新标注）
