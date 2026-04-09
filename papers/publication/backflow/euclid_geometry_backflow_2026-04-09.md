@@ -122,6 +122,10 @@ Latest extension on this branch:
   - Added: Nyquist sampling-energy proportion stability, relative truncation/exhaustion error for `\log\mathfrak M`, and an Adams radius-similarity law for fixed-radius certificates.
   - Effect: scale transfer in the zeta block is now stated as ratio/similarity control across finite resolutions, not just as isolated coordinate estimates.
 
+- `pom/`, `folding/`, and `physical_spacetime_skeleton/` now carry an explicit constructibility--rigidity--obstruction split.
+  - Added: a POM proposition forcing object-layer claims to enter through admissible projection words, a folding trichotomy theorem separating stable-object existence from fiber-level obstruction, and a spacetime proposition separating local skeleton construction from global untwisted closure.
+  - Effect: the main theory now states more sharply which claims are mere legal constructions, which require uniqueness certificates, and which are blocked by residual/Čech/holonomy data.
+
 Each family should be integrated as local theorem/definition/corollary additions inside the existing core. The purpose is to enlarge the nucleus, not to freeze it into any single inherited table of contents.
 
 ## Source Baseline
