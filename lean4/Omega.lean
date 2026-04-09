@@ -133,6 +133,7 @@ import Omega.Conclusion.FoldHilbertRecognizable
 import Omega.Conclusion.SecondOrderCdimSignature
 import Omega.Conclusion.EventEllipseGoldenMinimal
 import Omega.Conclusion.AnomalyHarmonicRigidity
+import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
