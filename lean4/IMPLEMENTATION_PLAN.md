@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R543（round_count=544）|
+| 轮次 | R544（round_count=545）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -30,11 +30,11 @@
 | Conclusion | 2,550 | 269 | 10.5% |
 | Group Unification | 469 | 175 | 37.3% |
 | SPG | 129 | 114 | 88.4% |
-| Circle Dimension | 393 | 157 | 39.9% |
+| Circle Dimension | 393 | 158 | 40.2% |
 | Zeta Finite Part | 4,524 | 211 | 4.7% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1609** | **15.3%** |
+| **合计（body）** | **10,508** | **1610** | **15.3%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD 相干时间下界抽屉原理（Round R544，新标签，\leanverified 完整，streak #91）**：`paper_cdim_coherence_time_lower_bound`（对应 `thm:cdim-coherence-time-lower-bound-M-1overd`，CD；相干时间下界抽屉原理主定理）；`not_injective_of_card_lt`（对应同标签，CD；基数小于域则非单射推论）——**新标签首次注册**（thm:cdim-coherence-time-lower-bound-M-1overd，\leanverified 完整，streak #91）
 **Conclusion 原始阶乘加性 vs Gödel 乘性双射 T=0,1 降级（Round R543，新标签，\leanpartial，streak #90 里程碑）**：`mixedRadixVal`（对应 `cor:conclusion-primorial-additive-vs-godel-multiplicative`，Conclusion；混合进制值 def）；`godelMul`（对应同标签，Conclusion；Gödel 乘积 def）；`godelMul_injective_zero`（对应同标签，Conclusion；T=0 Gödel 单射）；`mixedRadixVal_injective_zero`（对应同标签，Conclusion；T=0 混合进制单射）；`godelMul_injective_one`（对应同标签，Conclusion；T=1 Gödel 单射）；`mixedRadixVal_injective_one`（对应同标签，Conclusion；T=1 混合进制单射）；`paper_conclusion_primorial_additive_vs_godel_multiplicative_small`（对应同标签，Conclusion；T=0,1 综合论文接口）——**新标签首次注册**（cor:conclusion-primorial-additive-vs-godel-multiplicative，\leanpartial T=0,1 具体情形完整，通用 T 归纳双射待后续，streak #90 里程碑）
 **EA stableAdd 全函数 + 模值一致性（Round R542，新标签，\leanverified 完整，streak #89）**：`paper_stable_add_computable`（对应 `cor:stable-add-computable`，EA；stableAdd 全函数可计算性论文接口）；`stable_add_value_sum`（对应同标签，EA；stableAdd 值与模加法一致性）——**新标签首次注册**（cor:stable-add-computable，\leanverified 完整，streak #89）
 **POM 素数轴 vs 2D 非交换外化第(1)条（Round R541，新标签，\leanpartial，streak #88）**：`paper_pom_prime_axis_vs_2d_noncommutative_externalization_part1`（对应 `thm:pom-prime-axis-vs-2d-noncommutative-externalization`，POM；第(1)条 one-liner 封装，调用 CommutativePrimeRegisterOrderNonrecoverable）——**新标签首次注册**（thm:pom-prime-axis-vs-2d-noncommutative-externalization，\leanpartial 第(1)条完整、第(2)条矩阵构造待后续，streak #88）
