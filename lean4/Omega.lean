@@ -138,6 +138,7 @@ import Omega.GU.BdryZ2JumpUniqueness
 import Omega.GU.Window6DoubleLock12
 import Omega.GU.StrongLumpabilitySpectralRigidity
 import Omega.GU.SwapInvolutionDiagonal
+import Omega.GU.DiscriminantWedge2Square
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.ResidualCircleDim
