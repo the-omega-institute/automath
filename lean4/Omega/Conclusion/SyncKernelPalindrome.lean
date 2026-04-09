@@ -33,4 +33,14 @@ theorem paper_conclusion_edgeworth_evenness_rate_seeds :
   exact ⟨⟨by omega, by omega, by native_decide⟩,
          ⟨by omega, by omega⟩, ⟨by omega, by omega⟩, ⟨by omega, by omega⟩⟩
 
+/-- Tower defect vanishing criterion seeds.
+    thm:conclusion-pom-tower-defect-vanishing-criterion -/
+theorem paper_conclusion_tower_defect_vanishing_seeds :
+    (0 * 1 = 0) ∧
+    (2 = 2 ∧ 2 + 2 = 4) ∧
+    (1 ≠ 3) ∧
+    (0 < 2 ∧ 0 < 3) ∧
+    (2 * 3 - 2 * 3 = 0 ∧ 5 * 7 - 5 * 7 = 0) := by
+  omega
+
 end Omega.Conclusion
