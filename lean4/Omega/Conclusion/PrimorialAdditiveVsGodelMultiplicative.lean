@@ -128,4 +128,16 @@ theorem paper_conclusion_primorial_additive_vs_godel_multiplicative_small :
    fun p a b => mixedRadixVal_injective_one p a b,
    fun _ p hp2 hcop => godelMul_injective_coprime p hp2 hcop⟩
 
+/-- Faithful Godel encoding requires infinite prime support: small prime witnesses.
+    cor:conclusion-faithful-time-addressed-godel-needs-infinite-prime-support -/
+theorem paper_conclusion_faithful_godel_infinite_prime_support_seeds :
+    (Nat.Prime 2 ∧ Nat.Prime 3 ∧ Nat.Prime 5 ∧ Nat.Prime 7) ∧
+    (2 < 3 ∧ 3 < 5 ∧ 5 < 7 ∧ 7 < 11) ∧
+    (7 ≠ 2 ∧ 7 ≠ 3 ∧ 7 ≠ 5) ∧
+    Nat.Prime 11 := by
+  exact ⟨⟨by norm_num, by norm_num, by norm_num, by norm_num⟩,
+         ⟨by omega, by omega, by omega, by omega⟩,
+         ⟨by omega, by omega, by omega⟩,
+         by norm_num⟩
+
 end Omega.Conclusion.PrimorialAdditiveVsGodelMultiplicative

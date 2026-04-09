@@ -64,4 +64,16 @@ theorem paper_pom_toggle_scan_order_seeds :
     Nat.lcm (Nat.lcm (Nat.lcm 2 3) 14) 10 = 210 := by
   refine ⟨by decide, by decide, by decide, by decide⟩
 
+/-- Scan-element orbit length spectrum seeds.
+    thm:pom-toggle-scan-orbit-length-spectrum -/
+theorem paper_pom_toggle_orbit_length_spectrum_seeds :
+    (3 * 4 - 3 - 4 * 1 = 5 ∧ Nat.gcd 1 1 = 1) ∧
+    (3 * 5 - 3 - 4 * 1 = 8 ∧ Nat.gcd 2 1 = 1) ∧
+    (3 * 6 - 3 - 4 * 1 = 11 ∧ 3 * 6 - 3 - 4 * 2 = 7) ∧
+    (Nat.gcd 3 1 = 1 ∧ Nat.gcd 1 2 = 1) ∧
+    (3 * 4 - 7 = 5 ∧ 3 * 5 - 7 = 8 ∧ 3 * 6 - 7 = 11 ∧ 3 * 7 - 7 = 14) := by
+  refine ⟨⟨by omega, by decide⟩, ⟨by omega, by decide⟩,
+         ⟨by omega, by omega⟩, ⟨by decide, by decide⟩,
+         ⟨by omega, by omega, by omega, by omega⟩⟩
+
 end Omega.POM.ToggleOrder
