@@ -44,4 +44,29 @@ theorem clog_tightness :
     ¬(9 ≤ 2 ^ (Nat.clog 2 9 - 1)) := by
   refine ⟨by native_decide, by native_decide, by native_decide⟩
 
+/-- Extended clog seed: ⌈log₂ 16⌉=4, ⌈log₂ 17⌉=5, ⌈log₂ 21⌉=5 (|X_6|=21),
+    ⌈log₂ 32⌉=5, ⌈log₂ 33⌉=6.
+    prop:conclusion-min-latches-equals-log-states -/
+theorem clog_extended_seeds :
+    Nat.clog 2 16 = 4 ∧ Nat.clog 2 17 = 5 ∧
+    Nat.clog 2 21 = 5 ∧ Nat.clog 2 32 = 5 ∧ Nat.clog 2 33 = 6 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide⟩
+
+/-- Encoding bound for extended seeds.
+    prop:conclusion-min-latches-equals-log-states -/
+theorem clog_encoding_bound_extended :
+    21 ≤ 2 ^ Nat.clog 2 21 ∧ 33 ≤ 2 ^ Nat.clog 2 33 := by
+  refine ⟨by native_decide, by native_decide⟩
+
+/-- Paper package: min-latches-log-states full seeds.
+    prop:conclusion-min-latches-equals-log-states -/
+theorem paper_conclusion_min_latches_full :
+    Nat.clog 2 1 = 0 ∧ Nat.clog 2 2 = 1 ∧ Nat.clog 2 3 = 2 ∧
+    Nat.clog 2 4 = 2 ∧ Nat.clog 2 5 = 3 ∧ Nat.clog 2 8 = 3 ∧
+    Nat.clog 2 9 = 4 ∧ Nat.clog 2 21 = 5 ∧ Nat.clog 2 33 = 6 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide⟩
+
 end Omega.Conclusion.MinLatchesLogStates
