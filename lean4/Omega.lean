@@ -170,3 +170,4 @@ import Omega.CircleDimension.HypercubeDerhamLift
 import Omega.CircleDimension.GlobalPhaseExhaustion
 import Omega.CircleDimension.DenominatorGrowthFiniteS
 import Omega.CircleDimension.DenominatorMultiplesUnionBound
+import Omega.CircleDimension.CoprimeFractionLowerBound
