@@ -211,6 +211,7 @@ import Omega.GU.Window6B3SupportCount
 import Omega.GU.Window6C3SupportCount
 import Omega.GU.FiberNonConstantNoFreeAction
 import Omega.GU.FibTailS3Closure
+import Omega.GU.BoundaryTowerFibCount
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse
