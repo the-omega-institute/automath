@@ -83,6 +83,7 @@ import Omega.SPG.PolycubeIsoperimetryUpper
 import Omega.SPG.RandomBulkBoundarySaturation
 import Omega.SPG.CutFunctionSubmodular
 import Omega.SPG.CoordinateBundleScreenCount
+import Omega.SPG.ProuhetThueMorsePowerSum
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
