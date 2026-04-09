@@ -8,7 +8,7 @@ The point is methodological rather than historical: Euclid provides a cleaner la
 
 ## Direct Backflow Completed
 
-Three write-backs were integrated on this branch.
+Seven write-backs were integrated on this branch.
 
 1. `POM` now carries an explicit Euclid-style primitive-discipline remark.
    - Target: `theory/.../sections/body/pom/parts/subsec__pom-position.tex`
@@ -21,6 +21,22 @@ Three write-backs were integrated on this branch.
 3. `folding` now explicitly separates constructibility from rigidity/obstruction.
    - Target: `theory/.../sections/body/folding/subsec__folding-stable-compression-resolution.tex`
    - Effect: distinguishes the visible canonical object layer from the fiber-residual and non-recoverability layer.
+
+4. `POM` now states arithmetic as a constructible readout rather than a primitive button.
+   - Target: `theory/.../sections/body/pom/parts/subsec__pom-position.tex`
+   - Effect: aligns de-primitive arithmetic with a Euclid Book II style "legal construction first, identity later" discipline.
+
+5. `physical_spacetime_skeleton` now reads its grand chain as a staged dependency chain rather than a flat list.
+   - Target: `theory/.../sections/body/physical_spacetime_skeleton/subsec__physical-spacetime-skeleton-grand-chain.tex`
+   - Effect: separates primitive/interface layer, construction layer, rigidity/obstruction layer, and closure layer.
+
+6. `folding-map` now explicitly presents the fold as an admissible construction followed by canonicalization.
+   - Target: `theory/.../sections/body/folding/subsec__folding-map.tex`
+   - Effect: prevents the fold from being misread as a bare quotient map divorced from local constructive steps.
+
+7. `circle_dimension_phase_gate` now carries a Book V-VI style scale-transfer reading.
+   - Target: `theory/.../sections/body/circle_dimension_phase_gate/subsec__circle-dimension-phase-gate-cauchy-kernel-rkhs-affine-translate.tex`
+   - Effect: reframes normalized norm laws as proportion/similarity statements rather than coordinate-bound estimates.
 
 ## Main Lessons from Euclid
 
@@ -36,17 +52,17 @@ The strongest backflow points are these:
 
 The next places worth editing are:
 
-1. `theory/.../sections/body/pom/parts/subsec__pom-primitive-free.tex`
-   - Goal: tighten the wording so arithmetic readouts are presented as constructible outputs of a legal operation set.
+1. `theory/.../sections/body/circle_dimension_phase_gate/subsec__circle-dimension-phase-gate-sync-causal-holonomy-spacetime.tex`
+   - Goal: tighten the distinction between locally constructible causal edges and globally rigid propagation cones.
 
-2. `theory/.../sections/body/physical_spacetime_skeleton/subsec__physical-spacetime-skeleton-grand-chain.tex`
-   - Goal: sharpen the chain from local admissible update to global geometric closure.
+2. `theory/.../sections/body/physical_spacetime_skeleton/subsec__physical-spacetime-skeleton-admissible-einstein-domain.tex`
+   - Goal: make the transition from admissible local certificates to global Einstein closure read more explicitly as a threshold theorem.
 
-3. `theory/.../sections/body/folding/subsec__folding-map.tex`
-   - Goal: make the fold map read more explicitly as a Euclid-style admissible construction followed by canonicalization.
+3. `theory/.../sections/body/emergent_arithmetic/`
+   - Goal: push the Book II geometric-algebra language deeper into stable addition/multiplication and decomposition identities.
 
-4. `theory/.../sections/body/circle_dimension_phase_gate/`
-   - Goal: present ratio laws and normalized invariants in a more Book V-VI style language of scale transfer and similarity.
+4. `theory/.../sections/body/folding/`
+   - Goal: isolate more clearly which results are constructibility statements, which are rigidity statements, and which are obstruction statements.
 
 ## Source Baseline
 
