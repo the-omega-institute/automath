@@ -121,6 +121,7 @@ import Omega.Zeta.CyclotomicSectorIdentity
 import Omega.Zeta.WalshParseval
 import Omega.Zeta.FiniteQuotientCardinality
 import Omega.Zeta.LocalInversionDelta
+import Omega.Zeta.PhaseImplementationRankLimit
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
