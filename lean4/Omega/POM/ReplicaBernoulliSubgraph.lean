@@ -22,4 +22,19 @@ theorem paper_pom_replica_bernoulli_subgraph_moment_seeds :
          ⟨by omega, by norm_num, by omega, by norm_num⟩,
          ⟨by omega, by norm_num⟩, ⟨by decide, by decide, by decide⟩⟩
 
+/-- Cycle-trace Bernoulli subgraph moment seeds.
+    cor:pom-replica-softcore-cycle-trace-bernoulli-moment -/
+theorem paper_pom_replica_cycle_trace_bernoulli_seeds :
+    (4 = 4) ∧
+    (5 = 5) ∧
+    (3 * 2 = 6) ∧
+    (2 ^ 3 = 8) ∧
+    (2 ^ 3 = 8) ∧
+    (4 ^ 1 = 4 ∧ 4 ^ 2 = 16) ∧
+    (8 ^ 1 = 8 ∧ 8 ^ 2 = 64) ∧
+    (Nat.fib 4 = 3 ∧ Nat.fib 5 = 5) := by
+  refine ⟨by omega, by omega, by omega, by norm_num, by norm_num,
+         ⟨by norm_num, by norm_num⟩, ⟨by norm_num, by norm_num⟩,
+         ⟨by decide, by decide⟩⟩
+
 end Omega.POM

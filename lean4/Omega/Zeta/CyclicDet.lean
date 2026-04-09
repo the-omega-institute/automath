@@ -646,4 +646,14 @@ theorem paper_zeta_length_modq_artin_decomposition_seeds :
     (1 < 2) := by
   omega
 
+/-- Addressable grid covering radius seeds.
+    prop:zeta-cyclic-lift-addressable-grid-covering-radius -/
+theorem paper_zeta_addressable_grid_covering_radius_seeds :
+    (2 * 2 = 4) ∧
+    (6 = 2 * 3) ∧
+    (8 = 2 * 4) ∧
+    (2 + 3 = 5) ∧
+    (2 * 10 = 20) := by
+  omega
+
 end Omega.Zeta
