@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2271 |
-| \leanpartial 标注数 | 28 |
-| 总标注数 | 2299 |
-| 轮次 | R510（round_count=511）|
+| \leanverified 标注数 | 2279 |
+| \leanpartial 标注数 | 29 |
+| 总标注数 | 2308 |
+| 轮次 | R511（round_count=512）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,7 +24,7 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 305 | 17.9% |
+| POM | 1,707 | 306 | 17.9% |
 | Emergent Arithmetic | 185 | 171 | 92.4% |
 | Folding | 337 | 131 | 38.9% |
 | Conclusion | 2,550 | 265 | 10.4% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 208 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1577** | **15.0%** |
+| **合计（body）** | **10,508** | **1578** | **15.0%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM 耦合期望界规范曲率阴影（Round R511，新标签，\leanpartial，streak #59）**：`expectation`（对应 `prop:pom-gauge-curvature-shadow-bound`，POM；期望 noncomputable def）；`probability`（对应同标签，POM；概率 noncomputable def）；`neIndicator`（对应同标签，POM；非等于指示函数 noncomputable def）；`pointwise_diff_le`（对应同标签，POM；逐点差上界）；`abs_expectation_sub_le`（对应同标签，POM；期望差绝对值上界）；`probability_eq_expectation_neIndicator`（对应同标签，POM；概率等于指示期望）；`coupling_expectation_bound`（对应同标签，POM；耦合期望界主定理）；`paper_pom_gauge_curvature_shadow_bound`（对应同标签，POM；综合论文接口）——**新标签首次注册**（prop:pom-gauge-curvature-shadow-bound，\leanpartial 耦合期望代数核完整，μ 任意分布 + Fold\_m/曲率 K 应用待后续，streak #59）
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
