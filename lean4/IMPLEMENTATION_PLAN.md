@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2376 |
+| \leanverified 标注数 | 2379 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2400 |
-| 轮次 | R583（round_count=584）|
+| 总标注数 | 2403 |
+| 轮次 | R584（round_count=585）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD 玫瑰轨道双相位平均门一维子流种子值（Round R584，新标签，\leanverified 完整）**：`paper_cdim_rhodonea_subflow_seeds`（对应 `thm:cdim-rhodonea-as-biphase-average-subflow`，CD；gcd + 奇偶性 + 2n 个零点/单位圆交点乘积恒等式种子值）——**新标签首次注册**（thm:cdim-rhodonea-as-biphase-average-subflow，\leanverified 新标注）
+**Zeta 长度同余类 Artin 分解种子值（Round R584，新标签，\leanverified 完整）**：`paper_zeta_length_modq_artin_decomposition_seeds`（对应 `cor:zeta-length-modq-artin-decomposition`，Zeta；根求值和 + 整数恒等式种子值）——**新标签首次注册**（cor:zeta-length-modq-artin-decomposition，\leanverified 新标注）
+**GU bin-fold 退化谱扇区末位切片区间刚性种子值（Round R584，新标签，\leanverified 完整）**：`paper_gut_foldbin_degeneracy_sector_lastbit_interval_seeds`（对应 `thm:gut-foldbin-degeneracy-sector-lastbit-interval`，GU；fib(4..10) + 2^6 + 区间约束单调性种子值）——**新标签首次注册**（thm:gut-foldbin-degeneracy-sector-lastbit-interval，\leanverified 新标注）
 **SPG 有限群 gauge 表示群胚圆维指数律种子值（Round R583，新标签，\leanverified 完整）**：`paper_spg_boundary_gauge_groupoid_circle_law_seeds`（对应 `thm:spg-boundary-gauge-groupoid-circle-law`，SPG；差值 b₁-b₀ + n^0=1 + 整除种子值）——**新标签首次注册**（thm:spg-boundary-gauge-groupoid-circle-law，\leanverified 新标注）
 **Folding Bernoulli-p 全自协方差闭式 Jordan 临界修正种子值（Round R583，新标签，\leanverified 完整）**：`paper_fold_bernoulli_p_jordan_resonance_seeds`（对应 `thm:fold-bernoulli-p-full-autocovariance-jordan`，Folding；协方差指数混合闭式 + Jordan 临界 (k-1)2^(-k) 种子值）——**新标签首次注册**（thm:fold-bernoulli-p-full-autocovariance-jordan，\leanverified 新标注）
 **POM replica Bernoulli 子图独立集矩表示种子值（Round R583，新标签，\leanverified 完整）**：`paper_pom_replica_bernoulli_subgraph_moment_seeds`（对应 `thm:pom-replica-softcore-bernoulli-subgraph-moment-representation`，POM；独立集矩 + fib(4..6) 种子值）——**新标签首次注册**（thm:pom-replica-softcore-bernoulli-subgraph-moment-representation，\leanverified 新标注）
