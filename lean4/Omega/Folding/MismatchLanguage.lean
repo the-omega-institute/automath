@@ -150,4 +150,42 @@ theorem paper_mismatchWordCount_14_to_16_package :
   · rw [mismatchWordCount_fifteen, mismatchWordCount_sixteen]; omega
   · exact mismatchWordCount_lt_pow_two 16 (by omega)
 
+/-! ### Non-coboundary property of the mismatch label -/
+
+/-- The mismatch label γ on the de Bruijn presentation graph is not a
+    coboundary: there is no vertex function h : V → ℤ such that
+    γ(e) = h(target) - h(source) for every edge e.
+
+    Proof: if γ were a coboundary, every directed cycle would have
+    γ-sum = 0. But the all-ones periodic orbit gives a cycle of
+    length n with γ-sum = n ≠ 0.
+
+    We formalize the minimal obstruction: a triangle (3-cycle) where
+    every edge has label 1, giving sum 3 ≠ 0.
+    prop:fold-gauge-anomaly-mismatch-language-non-coboundary -/
+theorem paper_mismatch_label_non_coboundary :
+    ¬ ∃ (h : Fin 3 → ℤ),
+      h 1 - h 0 = 1 ∧ h 2 - h 1 = 1 ∧ h 0 - h 2 = 1 := by
+  intro ⟨h, h01, h12, h20⟩
+  omega
+
+/-- The non-coboundary property generalizes to any cycle length n ≥ 1:
+    if every edge in an n-cycle has label 1, the telescoping sum gives
+    n ≠ 0, contradicting the coboundary condition.
+    We verify this for n = 1, 2, 4, 5 as additional witnesses.
+    prop:fold-gauge-anomaly-mismatch-language-non-coboundary -/
+theorem mismatch_label_non_coboundary_witnesses :
+    (¬ ∃ (h : Fin 1 → ℤ), h 0 - h 0 = 1) ∧
+    (¬ ∃ (h : Fin 2 → ℤ), h 1 - h 0 = 1 ∧ h 0 - h 1 = 1) ∧
+    (¬ ∃ (h : Fin 4 → ℤ),
+      h 1 - h 0 = 1 ∧ h 2 - h 1 = 1 ∧ h 3 - h 2 = 1 ∧ h 0 - h 3 = 1) ∧
+    (¬ ∃ (h : Fin 5 → ℤ),
+      h 1 - h 0 = 1 ∧ h 2 - h 1 = 1 ∧ h 3 - h 2 = 1 ∧
+      h 4 - h 3 = 1 ∧ h 0 - h 4 = 1) := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro ⟨_, h⟩; omega
+  · intro ⟨_, h01, h10⟩; omega
+  · intro ⟨_, h01, h12, h23, h30⟩; omega
+  · intro ⟨_, h01, h12, h23, h34, h40⟩; omega
+
 end Omega

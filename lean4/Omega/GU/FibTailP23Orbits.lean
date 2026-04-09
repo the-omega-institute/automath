@@ -62,4 +62,32 @@ theorem paper_fib_tail_p23_orbits :
    three_not_dvd_twentytwo, gcd_three_twentytwo, projective_line_f23_card,
    twentyfour_eq_three_times_eight, by decide⟩
 
+/-! ### Order-3 trace criterion: 2·F(m+3)+1 for m ∈ {4,6,8} -/
+
+/-- Trace values: 2·F(m+3)+1 for m = 4, 6, 8.
+    In PSL_2(F_p), ord(G_m) = 3 iff p | (2·F(m+3)+1).
+    prop:fib-tail-order3-trace -/
+theorem paper_fib_tail_order3_trace :
+    2 * Nat.fib 7 + 1 = 27 ∧
+    2 * Nat.fib 9 + 1 = 69 ∧
+    2 * Nat.fib 11 + 1 = 179 := by
+  refine ⟨by native_decide, by native_decide, by native_decide⟩
+
+/-- 23 divides 2·F_9+1 = 69, giving order-3 at m = 6.
+    prop:fib-tail-order3-trace -/
+theorem twentythree_dvd_two_fib9_add1 : (23 : Nat) ∣ (2 * Nat.fib 9 + 1) := by
+  rw [two_fib_nine_add_one]; exact twentythree_dvd_sixtynine
+
+/-- 27 = 3^3: the trace value at m = 4 factors as a pure cube.
+    prop:fib-tail-order3-trace -/
+theorem trace_m4_eq_27 : 2 * Nat.fib 7 + 1 = 27 := by native_decide
+
+/-- 179 is prime: the trace value at m = 8 is itself prime.
+    prop:fib-tail-order3-trace -/
+theorem trace_m8_prime : Nat.Prime 179 := by norm_num
+
+/-- 179 = 2·F_11+1: combined identity.
+    prop:fib-tail-order3-trace -/
+theorem trace_m8_eq_179 : 2 * Nat.fib 11 + 1 = 179 := by native_decide
+
 end Omega.GU

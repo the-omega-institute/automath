@@ -183,6 +183,7 @@ import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
 import Omega.GU.FibTailP23Orbits
+import Omega.GU.MinSectorBudget
 import Omega.GU.BdryZ2JumpUniqueness
 import Omega.GU.Window6DoubleLock12
 import Omega.GU.StrongLumpabilitySpectralRigidity
