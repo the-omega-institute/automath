@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R527（round_count=528）|
+| 轮次 | R528（round_count=529）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -25,7 +25,7 @@
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
 | POM | 1,707 | 308 | 18.0% |
-| Emergent Arithmetic | 185 | 173 | 93.5% |
+| Emergent Arithmetic | 185 | 174 | 94.1% |
 | Folding | 337 | 133 | 39.5% |
 | Conclusion | 2,550 | 266 | 10.4% |
 | Group Unification | 469 | 173 | 36.9% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 210 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1593** | **15.2%** |
+| **合计（body）** | **10,508** | **1594** | **15.2%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**EA 局部变换保素数寄存器估值（Round R528，新标签，\leanverified 完整，streak #75）**：`base_move_preserves_valPr`（对应 `prop:prime-register-local-moves-preserve-valuation`，EA；基础移动保 valuation）；`fib_move_preserves_valPr`（对应同标签，EA；Fibonacci 移动保 valuation）；`paper_prime_register_local_moves_preserve_valuation`（对应同标签，EA；综合论文接口）——**新标签首次注册**（prop:prime-register-local-moves-preserve-valuation，\leanverified 完整，streak #75）
 **POM 交换幺半群素数寄存器顺序不可恢复（Round R527，新标签，\leanverified 完整，streak #74）**：`witness_pair_of_ne`（对应 `thm:pom-commutative-prime-register-order-nonrecoverable`，POM；不等元素给出见证对）；`paper_pom_commutative_prime_register_order_nonrecoverable`（对应同标签，POM；综合论文接口）——**新标签首次注册**（thm:pom-commutative-prime-register-order-nonrecoverable，\leanverified 完整，streak #74）
 **Folding 候选集基数单调性 + singleton 引理（Round R526，新标签，\leanverified 完整，streak #73）**：`succSet`（对应 `prop:det-candidate-set-monotone`，Folding；后继集 noncomputable def）；`option_toFinset_card_le_one`（对应同标签，Folding；Option 转有限集基数 ≤ 1）；`paper_det_candidate_set_monotone`（对应同标签，Folding；候选集单调性综合论文接口）；`succSet_singleton`（对应同标签，Folding；singleton 基数引理）；`succSet_singleton_of_some`（对应同标签，Folding；Some 情形 singleton）；`succSet_singleton_of_none`（对应同标签，Folding；None 情形空集）——**新标签首次注册**（prop:det-candidate-set-monotone，\leanverified 完整，streak #73）
 **Zeta Walsh-Parseval n=0 降级 + indicator helpers（Round R525，新标签，\leanpartial，streak #72）**：`parseval_zero`（对应 `thm:xi-hypercube-fourier-walsh-boundary-parseval`，Zeta；n=0 Parseval 恒等式）；`indicatorInt`（对应同标签，Zeta；整数 indicator 函数 def）；`indicatorInt_sq_eq`（对应同标签，Zeta；indicator 平方等式）；`sum_indicatorInt`（对应同标签，Zeta；indicator 求和等于集合基数）；`paper_xi_hypercube_fourier_walsh_boundary_parseval_zero`（对应同标签，Zeta；n=0 综合论文接口）——**新标签首次注册**（thm:xi-hypercube-fourier-walsh-boundary-parseval，\leanpartial n=0 基础情形完整，通用 n Walsh-Parseval 需 dual orthogonality 待后续，streak #72）
