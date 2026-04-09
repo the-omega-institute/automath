@@ -59,6 +59,7 @@ import Omega.Folding.PhiSlidingBlockCode
 import Omega.Folding.PhiSubshiftFactor
 import Omega.Folding.HolographicRateConservation
 import Omega.Folding.OstrowskiDenominators
+import Omega.Folding.SummableNatEventuallyZero
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
