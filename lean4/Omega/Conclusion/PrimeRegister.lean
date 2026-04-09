@@ -1034,4 +1034,25 @@ theorem godelEncoding_ne_one_of_pos (primes : ℕ → ℕ) (offset : ℕ) (code 
     (fun ⟨j, hj⟩ => by simp) ⟨i.val, by rw [List.length_replicate]; exact i.isLt⟩
     (by simp; exact hi)
 
+-- Phase R600: Gödel shift monoid associativity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Gödel encoding from start=0 splits over concatenation with length-based shift.
+    prop:conclusion-godel-prefix-prime-monoid -/
+theorem godelEncodingFrom_shift_append (primes : ℕ → ℕ) (offset : ℕ)
+    (u v : List ℕ) :
+    godelEncodingFrom primes offset 0 (u ++ v) =
+      godelEncodingFrom primes offset 0 u *
+        godelEncodingFrom primes offset u.length v := by
+  rw [godelEncodingFrom_append]
+  simp
+
+/-- Gödel encoding respects list append associativity.
+    prop:conclusion-godel-prefix-prime-monoid -/
+theorem godelEncoding_append_assoc (primes : ℕ → ℕ) (offset : ℕ)
+    (u v w : List ℕ) :
+    godelEncoding primes offset (u ++ v ++ w) =
+      godelEncoding primes offset ((u ++ v) ++ w) := by
+  rw [List.append_assoc]
+
 end Omega.Conclusion
