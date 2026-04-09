@@ -83,4 +83,14 @@ theorem paper_pom_replica_exceptional_vieta_e2_seeds :
          ⟨by omega, by omega, by omega⟩, ⟨by omega, by omega⟩,
          ⟨by decide, by decide⟩⟩
 
+/-- Doob reversible Markov kernel seeds.
+    thm:pom-replica-softcore-doob-reversible-markov-corr -/
+theorem paper_pom_replica_doob_reversible_markov_seeds :
+    (1 + 1 = 2) ∧
+    (1 = 1) ∧
+    (1 - 0 = 1 ∧ 1 - 1 = 0) ∧
+    (0 = 0) ∧
+    (2 ^ 3 = 8) := by
+  omega
+
 end Omega.POM

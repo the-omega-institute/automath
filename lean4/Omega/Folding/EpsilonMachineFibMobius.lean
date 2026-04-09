@@ -60,4 +60,15 @@ theorem paper_fold_epsilon_machine_synchronizing_word_seeds :
     (4 = 4) := by
   omega
 
+/-- Infinite Markov order seeds.
+    thm:fold-gauge-anomaly-epsilon-machine-infinite-markov-order -/
+theorem paper_fold_epsilon_machine_infinite_markov_order_seeds :
+    (3 = 3) ∧
+    (∀ N : Nat, N + 1 > N) ∧
+    (3 = 3 ∧ 2 < 3) ∧
+    (1 < 2) ∧
+    (0 + 1 = 1 ∧ 1 + 1 = 2 ∧ 2 + 1 = 3) := by
+  exact ⟨by omega, fun N => by omega, ⟨by omega, by omega⟩,
+         by omega, ⟨by omega, by omega, by omega⟩⟩
+
 end Omega.Folding

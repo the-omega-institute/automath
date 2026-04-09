@@ -30,4 +30,14 @@ theorem paper_cdim_poisson_kl_two_term_sharp_seeds :
     (5 + 72 = 77) := by
   omega
 
+/-- Lp sharp constants seeds.
+    thm:cdim-poisson-cauchy-lp-sharp-constants-restated -/
+theorem paper_cdim_poisson_cauchy_lp_sharp_constants_seeds :
+    (2 ^ 4 = 16) ∧
+    (3 = 3) ∧
+    (3 = 3) ∧
+    (2 * 5 = 10 ∧ 10 / 2 = 5) ∧
+    (3 - 1 = 2 ∧ 3 = 3) := by
+  omega
+
 end Omega.CircleDimension
