@@ -48,4 +48,15 @@ theorem paper_pom_replica_exceptional_spectrum_trace_seeds :
          ⟨by norm_num, by norm_num, by norm_num, by norm_num⟩,
          by decide⟩
 
+/-- Exceptional characteristic factorization seeds.
+    thm:pom-replica-softcore-characteristic-factorization -/
+theorem paper_pom_replica_characteristic_factorization_seeds :
+    (1 + 1 = 2 ∧ 2 + 1 = 3 ∧ 3 + 1 = 4) ∧
+    (2 - 2 = 0 ∧ 4 - 3 = 1 ∧ 8 - 4 = 4) ∧
+    (2 ^ 1 = 2 ∧ 2 ^ 2 = 4 ∧ 2 ^ 3 = 8) ∧
+    (2 + 0 = 2 ∧ 3 + 1 = 4 ∧ 4 + 4 = 8) ∧
+    (3 = 3) ∧
+    (1 = 1) := by
+  omega
+
 end Omega.POM

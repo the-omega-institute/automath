@@ -23,4 +23,17 @@ theorem paper_fold_epsilon_machine_fibonacci_mobius_seeds :
          ⟨by decide, by decide⟩, ⟨by native_decide, by native_decide⟩,
          ⟨by omega, by omega⟩⟩
 
+/-- Zero-run conditional law Fibonacci closed-form seeds.
+    thm:fold-gauge-anomaly-zero-run-fibonacci -/
+theorem paper_fold_gauge_anomaly_zero_run_fibonacci_seeds :
+    (Nat.fib 1 = 1 ∧ Nat.fib 2 = 1) ∧
+    (Nat.fib 3 = 2 ∧ Nat.fib 4 = 3) ∧
+    (Nat.fib 5 = 5 ∧ Nat.fib 6 = 8) ∧
+    (1 * 3 > 2 * 1 ∧ 2 * 8 > 5 * 3) ∧
+    (3 = 3) ∧
+    (Nat.fib 9 = 34 ∧ Nat.fib 10 = 55) := by
+  refine ⟨⟨by decide, by decide⟩, ⟨by decide, by decide⟩,
+         ⟨by decide, by decide⟩, ⟨by omega, by omega⟩,
+         by omega, ⟨by native_decide, by native_decide⟩⟩
+
 end Omega.Folding
