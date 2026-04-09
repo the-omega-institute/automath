@@ -103,6 +103,7 @@ import Omega.Zeta.SyncKernelPalindrome
 import Omega.Zeta.UnweightedQuarticIdeal
 import Omega.Zeta.HankelStiffnessBalance
 import Omega.Zeta.PsiTruncationBounds
+import Omega.Zeta.JensenSoftThresholdLowerBound
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
