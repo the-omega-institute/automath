@@ -75,6 +75,7 @@ import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.TanakaIncrement
 import Omega.SPG.CoarsegrainedCutFlux
 import Omega.SPG.DyadicTopInversionBound
+import Omega.SPG.PolycubeIsoperimetryUpper
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
