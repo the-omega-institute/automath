@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2388 |
+| \leanverified 标注数 | 2391 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2412 |
-| 轮次 | R587（round_count=588）|
+| 总标注数 | 2415 |
+| 轮次 | R588（round_count=589）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Folding 代数压力四次方程与 CLT 方差率闭式种子值（Round R588，新标签，\leanverified 完整）**：`paper_fold_bernoulli_p_pressure_quartic_seeds`（对应 `thm:fold-bernoulli-p-pressure-quartic-clt-variance`，Folding；素数性 + 乘积分解 2×3×17=102 + 整除 + CLT 方差率种子值）——**新标签首次注册**（thm:fold-bernoulli-p-pressure-quartic-clt-variance，\leanverified 新标注）
+**POM 例外谱乘积完全闭式与三角数符号律种子值（Round R588，新标签，\leanverified 完整）**：`paper_pom_replica_exceptional_spectrum_product_seeds`（对应 `thm:pom-replica-softcore-exceptional-spectrum-product`，POM；三角数 q(q+1)/2 + (-1)^k 符号 + mod 2 奇偶 + det 纯二进制刚性种子值）——**新标签首次注册**（thm:pom-replica-softcore-exceptional-spectrum-product，\leanverified 新标注）
+**Zeta 点数计数覆盖半径下界种子值（Round R588，新标签，\leanverified 完整）**：`paper_zeta_covering_radius_counting_lb_seeds`（对应 `prop:zeta-cyclic-lift-covering-radius-counting-lb`，Zeta；部分和 + 三角数公式 k(k+1)/2-1 + 1/Q(Q+1) 下界种子值）——**新标签首次注册**（prop:zeta-cyclic-lift-covering-radius-counting-lb，\leanverified 新标注）
 **CD solenoid 提升圆盘输出 prime-register 核失明种子值（Round R587，新标签，\leanverified 完整）**：`paper_cdim_solenoid_kernel_blindness_seeds`（对应 `thm:cdim-biphase-average-solenoid-kernel-blindness`，CD；圆盘可见层无法恢复 S + prime-register 核失明算术恒等式种子值）——**新标签首次注册**（thm:cdim-biphase-average-solenoid-kernel-blindness，\leanverified 新标注）
 **GU Wedderburn 块谱决定 fold-gauge Bernoulli-zeta 塔种子值（Round R587，新标签，\leanverified 完整）**：`paper_gut_wedderburn_spectrum_bernoulli_zeta_tower_seeds`（对应 `thm:gut-wedderburn-spectrum-determines-bernoulli-zeta-tower`，GU；Wedderburn 块谱三列不变量 + Bernoulli 系数 + ζ(2r) 种子值）——**新标签首次注册**（thm:gut-wedderburn-spectrum-determines-bernoulli-zeta-tower，\leanverified 新标注）
 **Conclusion 五余类强分离分辨率下界与 Haar-零测种子值（Round R587，新标签，\leanverified 完整）**：`paper_conclusion_godel_leyang_five_digit_rigidity_seeds`（对应 `cor:conclusion-godel-leyang-five-digit-rigidity`，Conclusion；五余类 5^k 分辨率 + Nat.log + Haar 零测 + dimH = log₂5/L 种子值）——**新标签首次注册**（cor:conclusion-godel-leyang-five-digit-rigidity，\leanverified 新标注）
