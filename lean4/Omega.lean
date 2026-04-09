@@ -173,6 +173,7 @@ import Omega.Conclusion.MinLatchesLogStates
 import Omega.Conclusion.TimeReversalOrbitParity
 import Omega.Conclusion.ReversibleAuxBitsBudget
 import Omega.Conclusion.PushforwardFullMatrix
+import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification

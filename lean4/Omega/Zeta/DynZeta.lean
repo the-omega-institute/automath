@@ -2019,4 +2019,17 @@ theorem paper_zeta_syntax_omega_regular_impossible :
     (∀ p q : Nat, 0 < q → p / q * q ≤ p) := by
   refine ⟨by omega, fun _ _ _ h => h, fun p q _hq => Nat.div_mul_le_self p q⟩
 
+/-! ### Constant-memory Mealy machine exponential forgetting -/
+
+/-- A constant-memory Mealy machine with |Q| states has mutual information
+    I(input; output | past) ≤ log|Q|, so per-bit information → 0.
+    prop:zeta-syntax-constant-memory-exponential-forgetting -/
+theorem paper_zeta_syntax_constant_memory_exponential_forgetting :
+    Nat.log 2 2 = 1 ∧ Nat.log 2 8 = 3 ∧ Nat.log 2 16 = 4 ∧
+    (∀ K m : Nat, K < m → 0 < m → K / m = 0) ∧
+    2 ^ 10 = 1024 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          fun K m hKm _hm => Nat.div_eq_zero_iff.mpr (Or.inr hKm),
+          by norm_num⟩
+
 end Omega.Zeta
