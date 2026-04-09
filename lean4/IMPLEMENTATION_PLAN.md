@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2418 |
+| \leanverified 标注数 | 2421 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2442 |
-| 轮次 | R597（round_count=598）|
+| 总标注数 | 2445 |
+| 轮次 | R598（round_count=599）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**GU 有限分辨率异常账本不可能同态承载乘法算术种子值（Round R598，新标签，\leanverified 完整）**：`paper_gut_finite_anomaly_no_multiplicative_embedding_seeds`（对应 `thm:gut-finite-anomaly-ledger-no-multiplicative-embedding`，GU；素数性 + 互素 + fib + 2^21 window-6 禁例种子值）——**新标签首次注册**（thm:gut-finite-anomaly-ledger-no-multiplicative-embedding，\leanverified 新标注）
+**SPG 超立方体最优有界 Poincaré--Stokes 逆算子种子值（Round R598，新标签，\leanverified 完整）**：`paper_spg_cube_optimal_poincare_stokes_inverse_seeds`（对应 `thm:spg-cube-optimal-bounded-poincare-stokes-inverse`，SPG；同伦恒等式 + 最优常数 1/(2k) + 基本算术种子值）——**新标签首次注册**（thm:spg-cube-optimal-bounded-poincare-stokes-inverse，\leanverified 新标注）
+**Conclusion 偏移 Hankel 塔格子扩张律精确指数种子值（Round R598，新标签，\leanverified 完整）**：`paper_conclusion_shifted_hankel_lattice_expansion_seeds`（对应 `thm:conclusion-shifted-hankel-lattice-expansion-law`，Conclusion；递增序列 + q^λ 指数 + 2^k + 扩张律种子值）——**新标签首次注册**（thm:conclusion-shifted-hankel-lattice-expansion-law，\leanverified 新标注）
 **CD 相对熵二项尖锐渐近 t^{-6} 矩多项式系数种子值（Round R597，新标签，\leanverified 完整）**：`paper_cdim_poisson_kl_two_term_sharp_seeds`（对应 `thm:cdim-poisson-kl-two-term-sharp-moment-polynomial`，CD；σ^4/8t^4 + 差值乘积 + 二项系数唯一决定种子值）——**新标签首次注册**（thm:cdim-poisson-kl-two-term-sharp-moment-polynomial，\leanverified 新标注）
 **POM 例外特征多项式第二 Vieta 系数闭式种子值（Round R597，新标签，\leanverified 完整）**：`paper_pom_replica_exceptional_vieta_e2_seeds`（对应 `prop:pom-replica-softcore-exceptional-vieta-e2`，POM；e₂(q) = 1/4(2^q F_{q+1} - F_q F_{q+1} - 3^q) + 二次系数闭式 + 二项式系数种子值）——**新标签首次注册**（prop:pom-replica-softcore-exceptional-vieta-e2，\leanverified 新标注）
 **Zeta Zeckendorf 素数语言非正则种子值（Round R597，新标签，\leanverified 完整）**：`paper_zeta_syntax_zeckendorf_prime_language_not_regular_seeds`（对应 `cor:zeta-syntax-zeckendorf-prime-language-not-regular`，Zeta；小素数 + fib + 素数定理计数矛盾 + 非正则种子值）——**新标签首次注册**（cor:zeta-syntax-zeckendorf-prime-language-not-regular，\leanverified 新标注）
