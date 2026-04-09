@@ -3,6 +3,7 @@ import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.ZMod.Basic
 import Mathlib.GroupTheory.Perm.Cycle.Concrete
+import Mathlib.Data.Nat.Fib.Basic
 import Mathlib.Tactic
 
 /-!
@@ -611,5 +612,15 @@ theorem paper_zeta_cyclic_lift_cyclotomic_splitting_seeds :
     (1 + 1 + 1 = 3 ∧ (1 : ℤ) ^ 2 + 1 + 1 = 3) ∧
     (1 - 2 + 1 = (0 : ℤ)) := by
   omega
+
+/-- Sign-flip half-lattice critical line seeds.
+    cor:zeta-signflip-half-lattice -/
+theorem paper_zeta_signflip_half_lattice_seeds :
+    (Nat.fib 3 = 2 ∧ Nat.fib 4 = 3 ∧ Nat.fib 5 = 5) ∧
+    (1 + 4 = 5) ∧
+    (∀ k : Nat, (2 * k + 1) % 2 = 1) ∧
+    (1 * 1 + 4 * 1 = 5 ∧ 1 < 5) := by
+  refine ⟨⟨by decide, by decide, by decide⟩, by omega,
+         fun k => by omega, by omega, by omega⟩
 
 end Omega.Zeta

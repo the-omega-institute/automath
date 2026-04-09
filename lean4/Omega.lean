@@ -154,6 +154,7 @@ import Omega.EA.MulNoNewPrimitive
 import Omega.EA.StableAddComputable
 import Omega.EA.InternalProductAddsValues
 import Omega.EA.PisanoPeriodSeeds
+import Omega.EA.AutDimensionSqueeze
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
@@ -201,6 +202,7 @@ import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.FibCubeEdgeParity
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.ToggleOrder
+import Omega.POM.ReplicaSoftcoreDet
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap
