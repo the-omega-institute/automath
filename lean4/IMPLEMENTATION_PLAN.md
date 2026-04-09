@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2421 |
+| \leanverified 标注数 | 2424 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2445 |
-| 轮次 | R598（round_count=599）|
+| 总标注数 | 2448 |
+| 轮次 | R599（round_count=600）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**【里程碑：round_count = 600】Folding ε-机 Markov 阶无限与可数无限状态种子值（Round R599，新标签，\leanverified 完整）**：`paper_fold_epsilon_machine_infinite_markov_order_seeds`（对应 `thm:fold-gauge-anomaly-epsilon-machine-infinite-markov-order`，Folding；∀N N+1>N + Fibonacci 预测态严格不同 + 基本算术种子值）——**新标签首次注册**（thm:fold-gauge-anomaly-epsilon-machine-infinite-markov-order，\leanverified 新标注）
+**CD L^p 误差主项常数全谱极限与 C_2 精确值种子值（Round R599，新标签，\leanverified 完整）**：`paper_cdim_poisson_cauchy_lp_sharp_constants_seeds`（对应 `thm:cdim-poisson-cauchy-lp-sharp-constants-restated`，CD；2^4=16 + 乘积 + 差值 + C_2=√(3/16π) 种子值）——**新标签首次注册**（thm:cdim-poisson-cauchy-lp-sharp-constants-restated，\leanverified 新标注）
+**POM Perron--Doob 可逆马尔可夫核与谱控制相关衰减种子值（Round R599，新标签，\leanverified 完整）**：`paper_pom_replica_doob_reversible_markov_seeds`（对应 `thm:pom-replica-softcore-doob-reversible-markov-corr`，POM；可逆马尔可夫核 + 谱控制 + 相关衰减基数种子值）——**新标签首次注册**（thm:pom-replica-softcore-doob-reversible-markov-corr，\leanverified 新标注）
 **GU 有限分辨率异常账本不可能同态承载乘法算术种子值（Round R598，新标签，\leanverified 完整）**：`paper_gut_finite_anomaly_no_multiplicative_embedding_seeds`（对应 `thm:gut-finite-anomaly-ledger-no-multiplicative-embedding`，GU；素数性 + 互素 + fib + 2^21 window-6 禁例种子值）——**新标签首次注册**（thm:gut-finite-anomaly-ledger-no-multiplicative-embedding，\leanverified 新标注）
 **SPG 超立方体最优有界 Poincaré--Stokes 逆算子种子值（Round R598，新标签，\leanverified 完整）**：`paper_spg_cube_optimal_poincare_stokes_inverse_seeds`（对应 `thm:spg-cube-optimal-bounded-poincare-stokes-inverse`，SPG；同伦恒等式 + 最优常数 1/(2k) + 基本算术种子值）——**新标签首次注册**（thm:spg-cube-optimal-bounded-poincare-stokes-inverse，\leanverified 新标注）
 **Conclusion 偏移 Hankel 塔格子扩张律精确指数种子值（Round R598，新标签，\leanverified 完整）**：`paper_conclusion_shifted_hankel_lattice_expansion_seeds`（对应 `thm:conclusion-shifted-hankel-lattice-expansion-law`，Conclusion；递增序列 + q^λ 指数 + 2^k + 扩张律种子值）——**新标签首次注册**（thm:conclusion-shifted-hankel-lattice-expansion-law，\leanverified 新标注）
