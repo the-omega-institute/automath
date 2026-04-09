@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R550（round_count=551）|
+| 轮次 | R551（round_count=552）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -30,11 +30,11 @@
 | Conclusion | 2,550 | 270 | 10.6% |
 | Group Unification | 469 | 176 | 37.5% |
 | SPG | 129 | 115 | 89.1% |
-| Circle Dimension | 393 | 158 | 40.2% |
+| Circle Dimension | 393 | 159 | 40.5% |
 | Zeta Finite Part | 4,524 | 212 | 4.7% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1616** | **15.4%** |
+| **合计（body）** | **10,508** | **1617** | **15.4%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD 相干时间屏障 2^k 特化（Round R551，新标签，\leanverified 完整，streak #98）**：`paper_cdim_coherence_time_barrier_2power`（对应 `cor:cdim-coherence-time-barrier-2power-k-over-d`，CD；2^k 特化 one-liner 封装，调用 CoherenceTimeLowerBound）——**新标签首次注册**（cor:cdim-coherence-time-barrier-2power-k-over-d，\leanverified 完整，streak #98）
 **Conclusion 典范提升选择器记忆下界单射像基数（Round R550，新标签，\leanverified 完整，streak #97）**：`card_image_of_injOn`（对应 `cor:conclusion-canonical-lift-selector-memory-lb`，Conclusion；单射在集合上的像基数等于原集基数引理）；`paper_conclusion_canonical_lift_selector_memory_lb`（对应同标签，Conclusion；典范提升选择器记忆下界综合论文接口）——**新标签首次注册**（cor:conclusion-canonical-lift-selector-memory-lb，\leanverified 完整，streak #97）
 **SPG 边界环审计查询下界 span≠⊤（Round R549，新标签，\leanpartial，streak #96）**：`ne_top_of_finrank_lt`（对应 `thm:spg-boundary-cycle-audit-query-lower-bound`，SPG；有限秩小则 span≠⊤ 引理）；`paper_spg_boundary_cycle_audit_query_lower_bound`（对应同标签，SPG；边界环审计查询下界综合论文接口，span 严格子空间形式）——**新标签首次注册**（thm:spg-boundary-cycle-audit-query-lower-bound，\leanpartial span≠⊤ 完整、显式 η 构造待后续，streak #96）
 **POM 素数行列式椭圆账本乘法性（Round R548，新标签，\leanverified 完整，streak #95）**：`encodingMatrix`（对应 `cor:pom-prime-determinant-ellipse-ledger`，POM；编码矩阵 def）；`det_encodingMatrix`（对应同标签，POM；编码矩阵行列式 = p）；`det_encodingMatrix_mul`（对应同标签，POM；行列式乘法性）；`paper_pom_prime_determinant_ellipse_ledger`（对应同标签，POM；素数行列式椭圆账本综合论文接口）——**新标签首次注册**（cor:pom-prime-determinant-ellipse-ledger，\leanverified 完整，streak #95）
