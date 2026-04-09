@@ -179,6 +179,7 @@ import Omega.Conclusion.TimeReversalOrbitParity
 import Omega.Conclusion.ReversibleAuxBitsBudget
 import Omega.Conclusion.PushforwardFullMatrix
 import Omega.Conclusion.MarkovStationaryRecovery
+import Omega.Conclusion.SyncKernelPalindrome
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
@@ -214,6 +215,7 @@ import Omega.GU.Window6C3SupportCount
 import Omega.GU.FiberNonConstantNoFreeAction
 import Omega.GU.FibTailS3Closure
 import Omega.GU.BoundaryTowerFibCount
+import Omega.GU.FiberDefectCollinearity
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse

@@ -55,4 +55,13 @@ theorem paper_pom_toggle_time_reversal_sign_mod12 :
   constructor <;> intro ℓ hℓ <;> fin_cases hℓ <;>
     simp only [timeReversalSignExp, timeReversalFix] <;> native_decide
 
+/-- Scan-order intrinsic period lcm closed-form seeds.
+    thm:pom-toggle-scan-order-closed-form -/
+theorem paper_pom_toggle_scan_order_seeds :
+    Nat.lcm 3 5 = 15 ∧
+    Nat.lcm (Nat.lcm 2 3) 8 = 24 ∧
+    Nat.lcm (Nat.lcm 3 11) 7 = 231 ∧
+    Nat.lcm (Nat.lcm (Nat.lcm 2 3) 14) 10 = 210 := by
+  refine ⟨by decide, by decide, by decide, by decide⟩
+
 end Omega.POM.ToggleOrder
