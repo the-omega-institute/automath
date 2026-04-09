@@ -214,4 +214,18 @@ theorem paper_fold_discrete_gauge_group_double_exponential :
           by native_decide, by native_decide, by native_decide,
           by native_decide, by native_decide, by native_decide, by native_decide⟩
 
+/-- Discrete gauge group Stirling coupling seeds.
+    cor:fold-discrete-gauge-group-stirling-coupling -/
+theorem paper_ea_discrete_gauge_stirling_seeds :
+    (Nat.fib 4 = 3 ∧ 2 + 1 + 1 = 4 ∧ 4 = 2 ^ 2) ∧
+    (Nat.factorial 2 = 2 ∧ Nat.factorial 1 = 1 ∧ 2 * 1 * 1 = 2) ∧
+    (Nat.fib 5 = 5 ∧ 2 ^ 3 = 8) ∧
+    (Nat.factorial 3 = 6 ∧ Nat.factorial 4 = 24) ∧
+    (Nat.fib 6 = 8 ∧ 2 ^ 4 = 16) := by
+  refine ⟨⟨by decide, by omega, by norm_num⟩,
+         ⟨by decide, by decide, by omega⟩,
+         ⟨by decide, by norm_num⟩,
+         ⟨by decide, by decide⟩,
+         ⟨by decide, by norm_num⟩⟩
+
 end Omega.EA

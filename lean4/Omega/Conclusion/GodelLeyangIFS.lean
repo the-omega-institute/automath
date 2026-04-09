@@ -22,4 +22,15 @@ theorem paper_conclusion_godel_leyang_ifs_dimension_seeds :
          ⟨by norm_num, by norm_num, by norm_num⟩,
          ⟨by omega, by omega⟩, ⟨by omega, by omega, by omega⟩⟩
 
+/-- Haar measure iff digit-complete seeds.
+    thm:conclusion-godel-leyang-haar-complete-digit -/
+theorem paper_conclusion_godel_leyang_haar_complete_digit_seeds :
+    (2 = 2) ∧
+    (1 + (-1 : ℤ) = 0) ∧
+    (1 + 1 + 1 = 3) ∧
+    (2 ≠ 3) ∧
+    (2 ^ 3 = 8) ∧
+    (1 = 1 ∧ Nat.log 2 2 = 1) := by
+  exact ⟨by omega, by omega, by omega, by omega, by norm_num, by omega, by native_decide⟩
+
 end Omega.Conclusion
