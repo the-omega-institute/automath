@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2318 |
-| \leanpartial 标注数 | 29 |
-| 总标注数 | 2347 |
-| 轮次 | R566（round_count=567）|
+| \leanverified 标注数 | 2321 |
+| \leanpartial 标注数 | 28 |
+| 总标注数 | 2349 |
+| 轮次 | R567（round_count=568）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,15 +26,15 @@
 |---|---|---|---|
 | POM | 1,707 | 311 | 18.2% |
 | Emergent Arithmetic | 185 | 177 | 95.7% |
-| Folding | 337 | 136 | 40.4% |
+| Folding | 337 | 137 | 40.7% |
 | Conclusion | 2,550 | 270 | 10.6% |
-| Group Unification | 469 | 176 | 37.5% |
+| Group Unification | 469 | 177 | 37.7% |
 | SPG | 129 | 115 | 89.1% |
 | Circle Dimension | 393 | 159 | 40.5% |
 | Zeta Finite Part | 4,524 | 213 | 4.7% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1619** | **15.4%** |
+| **合计（body）** | **10,508** | **1621** | **15.4%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD 分母自由度严格乘积界 deepening（Round R567，deepening 升级，\leanpartial → \leanverified）**：`paper_cdim_denominator_growth_finite_S`（对应 `prop:cdim-denominator-growth-finite-S`，CD；N_S_le_prod_log + N_S_le_log2_pow_card 严格乘积界已完整形式化，\leanpartial 升级为 \leanverified）——**deepening 升级**（prop:cdim-denominator-growth-finite-S，\leanpartial 升级为 \leanverified）
+**Folding 规范差均值递推种子值（Round R567，新标签，\leanverified 完整，streak #141）**：`paper_fold_gauge_anomaly_mean`（对应 `thm:fold-gauge-anomaly-mean-finite-closed`，Folding；均值精确有限长度闭式综合论文接口）——**新标签首次注册**（thm:fold-gauge-anomaly-mean-finite-closed，\leanverified 完整，streak #141）
+**GU C₃ 归一化支撑 19 点计数（Round R567，新标签，\leanverified 完整，streak #140）**：`paper_window6_c3_support_count`（对应 `thm:window6-c3-support-vanishing-ideal-hilbert`，GU；C₃ 消失理想 dim=19、Hilbert 系列综合论文接口）——**新标签首次注册**（thm:window6-c3-support-vanishing-ideal-hilbert，\leanverified 完整，streak #140）
 **Conclusion window-6 Markov 平稳数据对隐藏多重度谱的完全刚性（Round R566，新标签，\leanverified 完整，streak #138，新建文件 MarkovStationaryRecovery.lean）**：`paper_conclusion_window6_markov_stationary_recovery`（对应 `thm:conclusion-window6-markov-stationary-data-rigidly-recovers-multiplicity`，Conclusion；(P_6,π_6) 唯一确定多重度多重集，Π=id 刚性综合论文接口，新建文件 MarkovStationaryRecovery.lean）——**新标签首次注册**（thm:conclusion-window6-markov-stationary-data-rigidly-recovers-multiplicity，\leanverified 完整，streak #138）
 **Zeta 常数内存指数遗忘与互信息塌缩（Round R566，新标签，\leanverified 完整，streak #137）**：`paper_zeta_syntax_constant_memory_exponential_forgetting`（对应 `prop:zeta-syntax-constant-memory-exponential-forgetting`，Zeta；TV 指数收敛 + 每比特互信息→0 综合论文接口）——**新标签首次注册**（prop:zeta-syntax-constant-memory-exponential-forgetting，\leanverified 完整，streak #137）
 **POM 四阶核族 Perron 指数曲线与 E6/E7/E8 Jones 指数交点（Round R566，新标签，\leanverified 完整，streak #136）**：`paper_pom_a4t_jones_ade_intersections`（对应 `prop:pom-a4t-jones-ade-intersections`，POM；r_4(t(I))=I 闭式，ADE 三处精确相交综合论文接口）——**新标签首次注册**（prop:pom-a4t-jones-ade-intersections，\leanverified 完整，streak #136）
