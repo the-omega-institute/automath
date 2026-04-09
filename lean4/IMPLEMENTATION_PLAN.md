@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R539（round_count=540）|
+| 轮次 | R540（round_count=541）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,7 +26,7 @@
 |---|---|---|---|
 | POM | 1,707 | 309 | 18.1% |
 | Emergent Arithmetic | 185 | 175 | 94.6% |
-| Folding | 337 | 134 | 39.8% |
+| Folding | 337 | 135 | 40.1% |
 | Conclusion | 2,550 | 268 | 10.5% |
 | Group Unification | 469 | 175 | 37.3% |
 | SPG | 129 | 114 | 88.4% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 211 | 4.7% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1605** | **15.3%** |
+| **合计（body）** | **10,508** | **1606** | **15.3%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Folding mod 刚性周期谓词依赖（Round R540，新标签，\leanverified 完整，streak #87）**：`fold_eq_of_weight_mod_eq`（对应 `cor:fold-mod-rigidity-periodic-predicates`，Folding；weight mod 相等蕴含 Fold 值相等引理）；`paper_fold_mod_rigidity_periodic_predicates`（对应同标签，Folding；Fold 周期性依赖综合论文接口）——**新标签首次注册**（cor:fold-mod-rigidity-periodic-predicates，\leanverified 完整，streak #87）
 **Zeta 有限商基数 |(ZMod n)^r|=n^r（Round R539，新标签，\leanverified 完整，streak #86）**：`card_zmod`（对应 `prop:xi-cdim-finite-data-suffices`，Zeta；|(ZMod n)|=n 引理）；`card_zmod_pi`（对应同标签，Zeta；|(ZMod n)^r|=n^r 主引理）；`paper_xi_cdim_finite_quotient_free_part`（对应同标签，Zeta；有限商基数综合论文接口）——**新标签首次注册**（prop:xi-cdim-finite-data-suffices，\leanverified 完整，streak #86）
 **GU 两通道坍缩闭式恒等式（Round R538，新标签，\leanverified 完整，streak #85）**：`avg_deviation_two`（对应 `cor:gut-A-two-channel`，GU；两通道平均偏差引理 1）；`avg_deviation_two'`（对应同标签，GU；两通道平均偏差引理 2）；`max_avg_deviation_two`（对应同标签，GU；最大平均偏差两通道引理）；`paper_gut_A_two_channel`（对应同标签，GU；两通道闭式综合论文接口）——**新标签首次注册**（cor:gut-A-two-channel，\leanverified 完整，streak #85）
 **CD Möbius 二部图着色素数翻转（Round R537，新标签，\leanverified 完整，streak #84）**：`omega`（对应 `cor:cdim-mobius-bipartite-coloring`，CD；不同素因子计数 def）；`mobiusSign`（对应同标签，CD；Möbius 符号 def = (-1)^ω(n)）；`neg_one_pow_succ`（对应同标签，CD；(-1)^(n+1)=-(-1)^n 引理）；`omega_mul_prime_of_not_dvd`（对应同标签，CD；不整除素数乘积的 ω 计数引理）；`paper_cdim_mobius_bipartite_coloring`（对应同标签，CD；Möbius 符号翻转综合论文接口）——**新标签首次注册**（cor:cdim-mobius-bipartite-coloring，\leanverified 完整，streak #84）
