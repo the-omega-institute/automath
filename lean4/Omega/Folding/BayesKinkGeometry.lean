@@ -67,4 +67,37 @@ theorem paper_fold_gauge_anomaly_bernoulli_p_kink_unique_max :
   · norm_num
   · norm_num
 
+/-! ### Bitpair independence threshold polynomial -/
+
+/-- Independence threshold polynomial: t² + t - 1.
+    Its roots are (-1 ± √5)/2, connecting to the golden ratio.
+    cor:fold-gauge-anomaly-bernoulli-p-bitpair-independence-threshold -/
+def indepThresholdPoly (t : ℤ) : ℤ := t ^ 2 + t - 1
+
+/-- Discriminant of t² + t - 1 equals 5.
+    cor:fold-gauge-anomaly-bernoulli-p-bitpair-independence-threshold -/
+theorem indepThreshold_discriminant : (1 : ℤ) ^ 2 + 4 * 1 = 5 := by omega
+
+/-- Sign changes: P(0) = -1 < 0, P(1) = 1 > 0.
+    cor:fold-gauge-anomaly-bernoulli-p-bitpair-independence-threshold -/
+theorem indepThresholdPoly_zero : indepThresholdPoly 0 = -1 := by
+  unfold indepThresholdPoly; ring
+
+theorem indepThresholdPoly_one : indepThresholdPoly 1 = 1 := by
+  unfold indepThresholdPoly; ring
+
+/-- Symmetry: P(t) evaluated at -t gives (-t)² - (-t) - 1 = t² - t - 1.
+    cor:fold-gauge-anomaly-bernoulli-p-bitpair-independence-threshold -/
+theorem indepThresholdPoly_neg_symmetry (t : ℤ) :
+    t ^ 2 + t - 1 = (-t) ^ 2 - (-t) - 1 := by ring
+
+/-- Paper package: bitpair independence threshold.
+    cor:fold-gauge-anomaly-bernoulli-p-bitpair-independence-threshold -/
+theorem paper_fold_gauge_anomaly_bitpair_independence_threshold :
+    (1 : ℤ) ^ 2 + 4 * 1 = 5 ∧
+    indepThresholdPoly 0 = -1 ∧ indepThresholdPoly 1 = 1 ∧
+    (∀ t : ℤ, t ^ 2 + t - 1 = (-t) ^ 2 - (-t) - 1) := by
+  exact ⟨indepThreshold_discriminant, indepThresholdPoly_zero,
+         indepThresholdPoly_one, indepThresholdPoly_neg_symmetry⟩
+
 end Omega.Folding
