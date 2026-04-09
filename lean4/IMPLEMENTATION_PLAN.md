@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2355 |
+| \leanverified 标注数 | 2358 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2379 |
-| 轮次 | R576（round_count=577）|
+| 总标注数 | 2382 |
+| 轮次 | R577（round_count=578）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**GU bin-fold gauge 群阿贝尔可见量压缩种子值（Round R577，新标签，\leanverified 完整）**：`paper_gut_foldbin_gauge_abelian_compression_seeds`（对应 `thm:gut-foldbin-gauge-abelian-visible-compression-even-audited`，GU；fib(8)=21, 2^21=2097152, fib(10)=55, fib(12)=144, factorial, log 种子值）——**新标签首次注册**（thm:gut-foldbin-gauge-abelian-visible-compression-even-audited，\leanverified 新标注）
+**Zeta cyclotomic lift 分裂种子值（Round R577，新标签，\leanverified 完整）**：`paper_zeta_cyclic_lift_cyclotomic_splitting_seeds`（对应 `prop:finite-part-cyclic-lift-cyclotomic-sector`，Zeta；Phi_n(1) 求值种子）——**新标签首次注册**（prop:finite-part-cyclic-lift-cyclotomic-sector，\leanverified 新标注）
+**SPG Cheeger-Stokes 对偶超立方体常数种子值（Round R577，新标签，\leanverified 完整）**：`paper_spg_cheeger_stokes_duality_seeds`（对应 `prop:spg-cheeger-stokes-duality`，SPG；超立方体 Cheeger 常数种子值）——**新标签首次注册**（prop:spg-cheeger-stokes-duality，\leanverified 新标注）
 **Folding Bernoulli-half 满失配 mod-3 算术种子值（Round R576，新标签，\leanverified 完整）**：`paper_fold_bernoulli_half_full_mismatch_seeds`（对应 `cor:fold-bernoulli-half-endpoints-oscillation`，Folding；满失配概率 mod-3 算术恒等式 r=0,1,2 三分支种子值）——**新标签首次注册**（cor:fold-bernoulli-half-endpoints-oscillation，\leanverified 新标注）
 **Conclusion faithful Gödel 无限素数支撑种子值（Round R576，新标签，\leanverified 完整）**：`paper_conclusion_faithful_godel_infinite_prime_support_seeds`（对应 `cor:conclusion-faithful-time-addressed-godel-needs-infinite-prime-support`，Conclusion；小素数 (2,3,5,7,11)、排序、互异性种子值）——**新标签首次注册**（cor:conclusion-faithful-time-addressed-godel-needs-infinite-prime-support，\leanverified 新标注）
 **POM 轨道长度谱 gcd 种子值（Round R576，新标签，\leanverified 完整）**：`paper_pom_toggle_orbit_length_spectrum_seeds`（对应 `thm:pom-toggle-scan-orbit-length-spectrum`，POM；轨道长度公式 + gcd 种子值）——**新标签首次注册**（thm:pom-toggle-scan-orbit-length-spectrum，\leanverified 新标注）
