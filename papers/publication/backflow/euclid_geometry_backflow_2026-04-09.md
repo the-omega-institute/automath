@@ -118,6 +118,10 @@ Latest extension on this branch:
   - Added: a named closure-threshold definition, a threshold-crossing proposition, and a corollary identifying `\mathsf{Null}^{glue}` with failure to cross the global closure threshold.
   - Effect: local certificates, compatible local families, and global objects are now separated as distinct structural stages rather than being read as a single flattened existence claim.
 
+- `zeta_finite_part/` now carries explicit Book V--VI proportion laws.
+  - Added: Nyquist sampling-energy proportion stability, relative truncation/exhaustion error for `\log\mathfrak M`, and an Adams radius-similarity law for fixed-radius certificates.
+  - Effect: scale transfer in the zeta block is now stated as ratio/similarity control across finite resolutions, not just as isolated coordinate estimates.
+
 Each family should be integrated as local theorem/definition/corollary additions inside the existing core. The purpose is to enlarge the nucleus, not to freeze it into any single inherited table of contents.
 
 ## Source Baseline
