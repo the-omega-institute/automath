@@ -9,14 +9,14 @@
 | 总行数 | ~49,158 |
 | 定理/定义数 | ~4,296 |
 | 论文接口包装 | 716+ |
-| 文件数 | 125 |
+| 文件数 | 126 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2306 |
+| \leanverified 标注数 | 2309 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2335 |
-| 轮次 | R562（round_count=563）|
+| 总标注数 | 2338 |
+| 轮次 | R563（round_count=564）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Folding 失配密度极大点 Cardano 闭式（Round R563，新标签，\leanverified 完整，streak #129）**：`paper_fold_gauge_anomaly_density_maximizer_cardano`（对应 `cor:fold-gauge-anomaly-bernoulli-p-density-maximizer-cardano`，Folding；p★=∛(1+√(35/27))+∛(1-√(35/27)) 且 g*(p★)=p★² 种子值综合论文接口）——**新标签首次注册**（cor:fold-gauge-anomaly-bernoulli-p-density-maximizer-cardano，\leanverified 完整，streak #129）
+**CD 链式传播界（Round R563，新标签，\leanverified 完整，streak #128）**：`paper_cdim_chainwise_propagation_bound`（对应 `prop:cdim-causal-preorder-chainwise-propagation-bound`，CD；因果预序链式传播上界综合论文接口，CausalPreorder.lean）——**新标签首次注册**（prop:cdim-causal-preorder-chainwise-propagation-bound，\leanverified 完整，streak #128）
+**CD 因果预序由次加性诱导（Round R563，新标签，\leanverified 完整，streak #127，新建文件 CausalPreorder.lean）**：`paper_cdim_causal_preorder_from_subadditivity`（对应 `prop:cdim-causal-preorder-from-subadditivity`，CD；次加性信息权重诱导因果预序综合论文接口，新建文件 CausalPreorder.lean）——**新标签首次注册**（prop:cdim-causal-preorder-from-subadditivity，\leanverified 完整，streak #127）
 **Conclusion 非可缩扇区时间反演符号由轨道商奇偶锁定（Round R562，新标签，\leanverified 完整，streak #126）**：`paper_conclusion_noncontractible_time_reversal_sign_parity`（对应 `cor:conclusion-noncontractible-time-reversal-sign-orbit-quotient-parity`，Conclusion；|K_x|≄* → sgn(ι_x)=(-1)^{Q_x+1} 种子值综合论文接口）——**新标签首次注册**（cor:conclusion-noncontractible-time-reversal-sign-orbit-quotient-parity，\leanverified 完整，streak #126）
 **Zeta Mealy 转导正则判别无法识别 Zeckendorf 素性（Round R562，新标签，\leanverified 完整，streak #125）**：`paper_zeta_syntax_mealy_regular_impossible`（对应 `cor:zeta-syntax-zeckendorf-primes-mealy-regular-impossible`，Zeta；有限状态 Mealy+正则不能精确识别 Zeckendorf 素性种子值综合论文接口）——**新标签首次注册**（cor:zeta-syntax-zeckendorf-primes-mealy-regular-impossible，\leanverified 完整，streak #125）
 **POM 相邻开关乘积确切阶为 6（Round R562，新标签，\leanverified 完整，streak #124）**：`paper_pom_toggle_adjacent_order_exact`（对应 `prop:pom-toggle-adjacent-order-exact`，POM；ord(τ_i·τ_{i+1})=6（ℓ≥3），ord=3（ℓ=2）种子值综合论文接口）——**新标签首次注册**（prop:pom-toggle-adjacent-order-exact，\leanverified 完整，streak #124）
