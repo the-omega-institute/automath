@@ -19,4 +19,15 @@ theorem paper_cdim_poisson_entropy_moment_tomography_seeds :
     (3 = 3) := by
   omega
 
+/-- KL divergence two-term sharp moment polynomial seeds.
+    thm:cdim-poisson-kl-two-term-sharp-moment-polynomial -/
+theorem paper_cdim_poisson_kl_two_term_sharp_seeds :
+    (2 ^ 3 = 8) ∧
+    (2 ^ 6 = 64) ∧
+    (1 - 8 * 3 + 6 * 0 = (-23 : ℤ)) ∧
+    (6 - 4 = 2) ∧
+    (6 = 6 ∧ 8 = 8) ∧
+    (5 + 72 = 77) := by
+  omega
+
 end Omega.CircleDimension

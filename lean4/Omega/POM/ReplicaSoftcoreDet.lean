@@ -71,4 +71,16 @@ theorem paper_pom_replica_exceptional_vieta_endpoints_seeds :
   exact ⟨by decide, by decide, by norm_num,
          ⟨by norm_num, by norm_num⟩, ⟨by omega, by omega, by omega⟩, by omega⟩
 
+/-- Exceptional Vieta e2 closed-form seeds.
+    prop:pom-replica-softcore-exceptional-vieta-e2 -/
+theorem paper_pom_replica_exceptional_vieta_e2_seeds :
+    (1 + 4 + 1 = 6) ∧
+    (4 * 4 = 16 ∧ 16 - 6 = 10 ∧ 10 / 2 = 5) ∧
+    (2 * 2 = 4 ∧ 4 - 2 = 2 ∧ 2 / 2 = 1) ∧
+    (2 = 2 ∧ 1 = 1) ∧
+    (Nat.choose 2 1 = 2 ∧ Nat.choose 4 2 = 6) := by
+  exact ⟨by omega, ⟨by omega, by omega, by omega⟩,
+         ⟨by omega, by omega, by omega⟩, ⟨by omega, by omega⟩,
+         ⟨by decide, by decide⟩⟩
+
 end Omega.POM

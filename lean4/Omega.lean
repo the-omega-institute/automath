@@ -145,6 +145,7 @@ import Omega.Zeta.SyncKernelMixingRate
 import Omega.Zeta.FredholmDetSeeds
 import Omega.Zeta.DFAPrimeSymmetricDiff
 import Omega.Zeta.LengthModqChebotarev
+import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
