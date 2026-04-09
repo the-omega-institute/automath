@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R512（round_count=513）|
+| 轮次 | R513（round_count=514）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -30,11 +30,11 @@
 | Conclusion | 2,550 | 265 | 10.4% |
 | Group Unification | 469 | 171 | 36.5% |
 | SPG | 129 | 111 | 86.0% |
-| Circle Dimension | 393 | 153 | 38.9% |
+| Circle Dimension | 393 | 154 | 39.2% |
 | Zeta Finite Part | 4,524 | 208 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1578** | **15.0%** |
+| **合计（body）** | **10,508** | **1579** | **15.0%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD 有界高度有理数分离弱下界（Round R513，新标签，\leanpartial，streak #60 里程碑）**：`coprimePairs`（对应 `prop:cdim-bounded-height-rationals-separation`，CD；互素对集 def）；`firstColumn`（对应同标签，CD；第一列子集 def）；`firstColumn_subset_coprimePairs`（对应同标签，CD；子集包含性）；`firstColumn_card`（对应同标签，CD；|firstColumn B|=B）；`coprimePairs_card_ge_B`（对应同标签，CD；|coprimePairs B|≥B 弱下界）；`paper_cdim_bounded_height_rationals_separation_lower_B`（对应同标签，CD；综合论文接口）——**新标签首次注册**（prop:cdim-bounded-height-rationals-separation，\leanpartial B 形式弱下界完整，B²/4 完整版与 ℚ 双射待后续，streak #60 里程碑）
 **Conclusion 截面账本 KL 恒等式主定理深化（Round R512，深化轮次，标签已注册于 R353/R356，streak 中断，\leanverified 完整）**：`pushforward`（对应 `thm:conclusion-section-ledger-kl-identity`，Conclusion；pushforward 分布 noncomputable def）；`uniform`（对应同标签，Conclusion；均匀分布 noncomputable def）；`klDivergence`（对应同标签，Conclusion；KL 散度 noncomputable def）；`uniform_eq`（对应同标签，Conclusion；均匀分布等式）；`log_uniform_div_pushforward`（对应同标签，Conclusion；log(均匀/pushforward) 展开）；`section_ledger_kl_identity`（对应同标签，Conclusion；KL 恒等式主定理）；`log_section_count_eq`（对应同标签，Conclusion；截面计数对数等式）；`paper_conclusion_section_ledger_kl_identity`（对应同标签，Conclusion；综合论文接口）——**深化轮次**（标签已于 R353/R356 注册，本轮完成真正 KL 主定理，论文覆盖率数字不变）
 **POM 耦合期望界规范曲率阴影（Round R511，新标签，\leanpartial，streak #59）**：`expectation`（对应 `prop:pom-gauge-curvature-shadow-bound`，POM；期望 noncomputable def）；`probability`（对应同标签，POM；概率 noncomputable def）；`neIndicator`（对应同标签，POM；非等于指示函数 noncomputable def）；`pointwise_diff_le`（对应同标签，POM；逐点差上界）；`abs_expectation_sub_le`（对应同标签，POM；期望差绝对值上界）；`probability_eq_expectation_neIndicator`（对应同标签，POM；概率等于指示期望）；`coupling_expectation_bound`（对应同标签，POM；耦合期望界主定理）；`paper_pom_gauge_curvature_shadow_bound`（对应同标签，POM；综合论文接口）——**新标签首次注册**（prop:pom-gauge-curvature-shadow-bound，\leanpartial 耦合期望代数核完整，μ 任意分布 + Fold\_m/曲率 K 应用待后续，streak #59）
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
