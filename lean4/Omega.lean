@@ -137,6 +137,7 @@ import Omega.EA.FibAdicTower
 import Omega.EA.PrimeRegisterLocalMoves
 import Omega.EA.MulNoNewPrimitive
 import Omega.EA.StableAddComputable
+import Omega.EA.InternalProductAddsValues
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
