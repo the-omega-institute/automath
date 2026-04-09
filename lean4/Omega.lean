@@ -163,3 +163,4 @@ import Omega.CircleDimension.OrthogonalAmalgamatedWdim
 import Omega.CircleDimension.HypercubeDerhamLift
 import Omega.CircleDimension.GlobalPhaseExhaustion
 import Omega.CircleDimension.DenominatorGrowthFiniteS
+import Omega.CircleDimension.DenominatorMultiplesUnionBound
