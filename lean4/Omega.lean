@@ -69,6 +69,7 @@ import Omega.Folding.ZeroFiberLinear
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.BernoulliHalfEndpoints
+import Omega.Folding.BernoulliPGammaMax
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -245,3 +246,4 @@ import Omega.CircleDimension.CoherenceTimeBarrier2Pow
 import Omega.CircleDimension.FiberPhaseQuantization
 import Omega.CircleDimension.CausalPreorder
 import Omega.CircleDimension.PrimeTruncation
+import Omega.CircleDimension.BiphaseFiber

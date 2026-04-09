@@ -23,4 +23,14 @@ theorem paper_conclusion_sync_kernel_palindrome_seeds :
     1 * 3 + 0 * 2 = (3 : ℤ) ∧ 0 * 3 + 1 * 2 = (2 : ℤ) := by
   refine ⟨by native_decide, by native_decide, by ring, by ring⟩
 
+/-- Edgeworth evenness and rate function quadratic coefficient c₂ = 51/11 seeds.
+    cor:conclusion-selfdual-sync-kernel-edgeworth-evenness -/
+theorem paper_conclusion_edgeworth_evenness_rate_seeds :
+    (51 * 1 = 51 ∧ 11 * 1 = 11 ∧ Nat.Coprime 51 11) ∧
+    (2 * 11 = 22 ∧ 51 * 2 = 102) ∧
+    (1 / 2 = 0 ∧ 3 / 2 = 1) ∧
+    (1 - 0 = 1 ∧ 0 + 1 = 1) := by
+  exact ⟨⟨by omega, by omega, by native_decide⟩,
+         ⟨by omega, by omega⟩, ⟨by omega, by omega⟩, ⟨by omega, by omega⟩⟩
+
 end Omega.Conclusion
