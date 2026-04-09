@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2412 |
+| \leanverified 标注数 | 2415 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2436 |
-| 轮次 | R595（round_count=596）|
+| 总标注数 | 2439 |
+| 轮次 | R596（round_count=597）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**SPG 旋度控制势函数重构最优常数 1/4 种子值（Round R596，新标签，\leanverified 完整）**：`paper_spg_cube_potential_reconstruction_by_curl_seeds`（对应 `cor:spg-cube-potential-reconstruction-by-curl`，SPG；Euler 特征值 + 2^k + 最优常数 1/4 种子值）——**新标签首次注册**（cor:spg-cube-potential-reconstruction-by-curl，\leanverified 新标注）
+**Conclusion 偏移 Hankel 精度债二次累积律种子值（Round R596，新标签，\leanverified 完整）**：`paper_conclusion_shifted_hankel_precision_debt_seeds`（对应 `cor:conclusion-shifted-hankel-cumulative-precision-debt`，Conclusion；(R+1)s₀ + R(R+1)/2·λ 精确闭式 + 平方 vs 三角数种子值）——**新标签首次注册**（cor:conclusion-shifted-hankel-cumulative-precision-debt，\leanverified 新标注）
+**Folding 长度 3 同步词 ε-机 unifilar 表示种子值（Round R596，新标签，\leanverified 完整）**：`paper_fold_epsilon_machine_synchronizing_word_seeds`（对应 `thm:fold-gauge-anomaly-epsilon-machine-synchronizing-word`，Folding；同步词 001 + 可数 unifilar ε-机状态集 + 基本算术种子值）——**新标签首次注册**（thm:fold-gauge-anomaly-epsilon-machine-synchronizing-word，\leanverified 新标注）
 **POM 例外因子首一降阶系数与常数项 Vieta 端点完全刚性种子值（Round R595，新标签，\leanverified 完整）**：`paper_pom_replica_exceptional_vieta_endpoints_seeds`（对应 `thm:pom-replica-softcore-exceptional-vieta-endpoints`，POM；Vieta 端点 + 首一系数 + 常数项 + 闭式刚性种子值）——**新标签首次注册**（thm:pom-replica-softcore-exceptional-vieta-endpoints，\leanverified 新标注）
 **GU foldbin escort 热力学末位比特 Gibbs 冻结种子值（Round R595，新标签，\leanverified 完整）**：`paper_gut_foldbin_escort_one_bit_gibbs_freezing_seeds`（对应 `thm:gut-foldbin-escort-one-bit-gibbs-freezing`，GU；bin-fold escort + min-entropy 率 log φ 冻结 + 一比特 Gibbs 偏置种子值）——**新标签首次注册**（thm:gut-foldbin-escort-one-bit-gibbs-freezing，\leanverified 新标注）
 **Zeta 循环提升素数影子渐近平方根尺度种子值（Round R595，新标签，\leanverified 完整）**：`paper_zeta_cyclic_lift_prime_shadow_asymptotic_seeds`（对应 `prop:zeta-cyclic-lift-prime-shadow-asymptotic`，Zeta；素数影子渐近 + √λ 尺度 + RH-sharp 振荡与奇偶门控种子值）——**新标签首次注册**（prop:zeta-cyclic-lift-prime-shadow-asymptotic，\leanverified 新标注）
