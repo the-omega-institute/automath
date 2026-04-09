@@ -9,14 +9,14 @@
 | 总行数 | ~49,158 |
 | 定理/定义数 | ~4,296 |
 | 论文接口包装 | 716+ |
-| 文件数 | 119 |
+| 文件数 | 121 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2291 |
+| \leanverified 标注数 | 2294 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2320 |
-| 轮次 | R557（round_count=558）|
+| 总标注数 | 2323 |
+| 轮次 | R558（round_count=559）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion 可逆辅助位指数等于最小外置预算对数（Round R558，新标签，\leanverified 完整，streak #114）**：`paper_conclusion_reversible_aux_bits_log_budget`（对应 `prop:conclusion-reversible-aux-bits-equals-log-budget`，Conclusion；κ(π)=⌈log₂ b(π)⌉ clog 种子值综合论文接口，新建文件 ReversibleAuxBitsBudget.lean）——**新标签首次注册**（prop:conclusion-reversible-aux-bits-equals-log-budget，\leanverified 完整，streak #114）
+**Conclusion 时间反演轨道压缩缺口奇偶律（Round R558，新标签，\leanverified 完整，streak #113）**：`paper_conclusion_time_reversal_orbit_compression_gap_parity`（对应 `thm:conclusion-time-reversal-orbit-compression-gap-parity`，Conclusion；sgn(ι_x)=(-1)^Δ_x 奇偶律综合论文接口，新建文件 TimeReversalOrbitParity.lean）——**新标签首次注册**（thm:conclusion-time-reversal-orbit-compression-gap-parity，\leanverified 完整，streak #113）
+**CD 零圆维寄存器不能消去正维支撑子圆面（Round R558，新标签，\leanverified 完整，streak #112）**：`paper_cdim2_noprofinite_substitute`（对应 `cor:cdim2-noprofinite-substitute`，CD；torsion/profinite 零维不能取代圆因子综合论文接口）——**新标签首次注册**（cor:cdim2-noprofinite-substitute，\leanverified 完整，streak #112）
 **Conclusion 最小锁存器数等于最小状态数对数（Round R557，新标签，\leanverified 完整，streak #111）**：`paper_conclusion_min_latches_log_states`（对应 `prop:conclusion-min-latches-equals-log-states`，Conclusion；m(π)=⌈log₂ s(π)⌉ clog 种子值综合论文接口，新建文件 MinLatchesLogStates.lean）——**新标签首次注册**（prop:conclusion-min-latches-equals-log-states，\leanverified 完整，streak #111）
 **Zeta 同步核 m=2 闭式谱半径（Round R557，新标签，\leanverified 完整，streak #110）**：`paper_sync_rho_m2_closed_form`（对应 `cor:sync-rho-m2-closed-form`，Zeta；ρ₂=√(2+√3) 闭式综合论文接口）——**新标签首次注册**（cor:sync-rho-m2-closed-form，\leanverified 完整，streak #110）
 **Zeta 同步核 s=2 闭式因式分解（Round R557，新标签，\leanverified 完整，streak #109）**：`paper_sync_hatdelta_s2_factorization`（对应 `cor:sync-hatdelta-s2-factorization`，Zeta；ΔHat(w,2) 因式分解与最小模根 w★=1/3 综合论文接口）——**新标签首次注册**（cor:sync-hatdelta-s2-factorization，\leanverified 完整，streak #109）
