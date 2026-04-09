@@ -9,14 +9,14 @@
 | 总行数 | ~49,158 |
 | 定理/定义数 | ~4,296 |
 | 论文接口包装 | 716+ |
-| 文件数 | 118 |
+| 文件数 | 119 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2288 |
+| \leanverified 标注数 | 2291 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2317 |
-| 轮次 | R556（round_count=557）|
+| 总标注数 | 2320 |
+| 轮次 | R557（round_count=558）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion 最小锁存器数等于最小状态数对数（Round R557，新标签，\leanverified 完整，streak #111）**：`paper_conclusion_min_latches_log_states`（对应 `prop:conclusion-min-latches-equals-log-states`，Conclusion；m(π)=⌈log₂ s(π)⌉ clog 种子值综合论文接口，新建文件 MinLatchesLogStates.lean）——**新标签首次注册**（prop:conclusion-min-latches-equals-log-states，\leanverified 完整，streak #111）
+**Zeta 同步核 m=2 闭式谱半径（Round R557，新标签，\leanverified 完整，streak #110）**：`paper_sync_rho_m2_closed_form`（对应 `cor:sync-rho-m2-closed-form`，Zeta；ρ₂=√(2+√3) 闭式综合论文接口）——**新标签首次注册**（cor:sync-rho-m2-closed-form，\leanverified 完整，streak #110）
+**Zeta 同步核 s=2 闭式因式分解（Round R557，新标签，\leanverified 完整，streak #109）**：`paper_sync_hatdelta_s2_factorization`（对应 `cor:sync-hatdelta-s2-factorization`，Zeta；ΔHat(w,2) 因式分解与最小模根 w★=1/3 综合论文接口）——**新标签首次注册**（cor:sync-hatdelta-s2-factorization，\leanverified 完整，streak #109）
 **POM 扫描元奇偶律 mod-6 + Fibonacci 立方边数奇偶性（Round R556，新标签，\leanverified 完整，streak #108/#106）**：`paper_pom_toggle_scan_sign_mod6`（对应 `thm:pom-toggle-scan-sign-mod6`，POM；sgn(c_ℓ)=-1 ↔ ℓ≡1,3 mod 6 综合论文接口，streak #108）；`paper_pom_fibcube_edge_parity`（对应 `cor:pom-toggle-fibcube-edge-parity`，POM；|E(Γ_ℓ)| 奇偶性综合论文接口，新建文件 FibCubeEdgeParity.lean，streak #106）——**新标签首次注册**（两标签同属新建文件）
 **Zeta Zeckendorf 素数非正则语言（Round R556，新标签，\leanverified 完整，streak #107）**：`paper_zeck_prime_not_order2_recurrence`（对应 `cor:zeta-syntax-zeckendorf-primes-not-regular`，Zeta；Zeckendorf 素数无阶 2 线性递推综合论文接口）——**新标签首次注册**（cor:zeta-syntax-zeckendorf-primes-not-regular，\leanverified 完整，streak #107）
 **Folding 失配标记非 coboundary 性（Round R555，新标签，\leanverified 完整，streak #105）**：`paper_mismatch_label_non_coboundary`（对应 `prop:fold-gauge-anomaly-mismatch-language-non-coboundary`，Folding；三角形边标记之和非零证明综合论文接口）——**新标签首次注册**（prop:fold-gauge-anomaly-mismatch-language-non-coboundary，\leanverified 完整，streak #105）
