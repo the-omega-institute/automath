@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2303 |
+| \leanverified 标注数 | 2306 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2332 |
-| 轮次 | R561（round_count=562）|
+| 总标注数 | 2335 |
+| 轮次 | R562（round_count=563）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion 非可缩扇区时间反演符号由轨道商奇偶锁定（Round R562，新标签，\leanverified 完整，streak #126）**：`paper_conclusion_noncontractible_time_reversal_sign_parity`（对应 `cor:conclusion-noncontractible-time-reversal-sign-orbit-quotient-parity`，Conclusion；|K_x|≄* → sgn(ι_x)=(-1)^{Q_x+1} 种子值综合论文接口）——**新标签首次注册**（cor:conclusion-noncontractible-time-reversal-sign-orbit-quotient-parity，\leanverified 完整，streak #126）
+**Zeta Mealy 转导正则判别无法识别 Zeckendorf 素性（Round R562，新标签，\leanverified 完整，streak #125）**：`paper_zeta_syntax_mealy_regular_impossible`（对应 `cor:zeta-syntax-zeckendorf-primes-mealy-regular-impossible`，Zeta；有限状态 Mealy+正则不能精确识别 Zeckendorf 素性种子值综合论文接口）——**新标签首次注册**（cor:zeta-syntax-zeckendorf-primes-mealy-regular-impossible，\leanverified 完整，streak #125）
+**POM 相邻开关乘积确切阶为 6（Round R562，新标签，\leanverified 完整，streak #124）**：`paper_pom_toggle_adjacent_order_exact`（对应 `prop:pom-toggle-adjacent-order-exact`，POM；ord(τ_i·τ_{i+1})=6（ℓ≥3），ord=3（ℓ=2）种子值综合论文接口）——**新标签首次注册**（prop:pom-toggle-adjacent-order-exact，\leanverified 完整，streak #124）
 **Folding GC 缺陷线性响应阈值（Round R561，新标签，\leanverified 完整，streak #123）**：`paper_fold_gauge_anomaly_gc_defect_linear_response_threshold`（对应 `thm:fold-gauge-anomaly-gc-defect-linear-response-threshold`，Folding；Δ_p(θ)=(2g*(p)-1)θ+O(θ³)，阈值 p₀=(1+√21)/10 种子值综合论文接口）——**新标签首次注册**（thm:fold-gauge-anomaly-gc-defect-linear-response-threshold，\leanverified 完整，streak #123）
 **GU bin-fold escort 族热力学一阶与二阶矩（Round R561，新标签，\leanverified 完整，streak #122）**：`paper_gut_foldbin_escort_logfiber_first_second_moments`（对应 `cor:gut-foldbin-escort-logfiber-first-second-moments`，GU；2^6=64 微态、F(8)=21 型态种子值综合论文接口）——**新标签首次注册**（cor:gut-foldbin-escort-logfiber-first-second-moments，\leanverified 完整，streak #122）
 **EA 极大矩阵理想 χ-同质性（Round R561，新标签，\leanverified 完整，streak #121）**：`paper_fold_groupoid_maxblock_chi_homogeneity`（对应 `prop:fold-groupoid-maxblock-chi-homogeneity`，EA；I_m ⊆ e_{χ_m}A_{m,1} 种子值综合论文接口）——**新标签首次注册**（prop:fold-groupoid-maxblock-chi-homogeneity，\leanverified 完整，streak #121）
