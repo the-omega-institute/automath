@@ -76,6 +76,7 @@ import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPPressureQuartic
 import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Folding.EndpointUnique
+import Omega.Folding.ImageSubshiftZeta
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -111,6 +112,7 @@ import Omega.SPG.MomentHolographyGap
 import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CubePoincareInverse
+import Omega.SPG.PolycubeAdhesion
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
@@ -168,6 +170,7 @@ import Omega.EA.StableAddComputable
 import Omega.EA.InternalProductAddsValues
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.AutDimensionSqueeze
+import Omega.EA.PrimeLedger
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
