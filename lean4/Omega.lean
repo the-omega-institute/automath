@@ -330,3 +330,6 @@ import Omega.SPG.GodelDoublelogMinkowski
 import Omega.Conclusion.DisjointnessPowerWordDecomposition
 import Omega.SPG.SquareclassHammingIsometry
 import Omega.Zeta.GroupoidCentralRenyiShannon
+import Omega.Conclusion.RecursiveSolenoidLieShadow
+import Omega.POM.CollisionStrengthened
+import Omega.SPG.HypercubeGradientConsistency
