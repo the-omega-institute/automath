@@ -320,4 +320,7 @@ import Omega.Conclusion.ZeckendorfEulerSeeds
 import Omega.Conclusion.IntermediateQuotientSeeds
 import Omega.Conclusion.SinglepointJetRigidity
 import Omega.Conclusion.SmithRamanujanShadowSeeds
+import Omega.Conclusion.SmithRamanujanShadowInversion
+import Omega.POM.ZeroTemperatureTwoTermExpansion
+import Omega.SPG.DyadicFluxZetaMinkowskiPole
 import Omega.Zeta.EnergyTailMassSeeds
