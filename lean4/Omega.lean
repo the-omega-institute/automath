@@ -129,6 +129,7 @@ import Omega.Frontier.Certificates
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
 import Omega.Combinatorics.GramDet
+import Omega.Combinatorics.FibonacciCubeGraph
 import Omega.Zeta.DynZeta
 import Omega.Zeta.CyclicDet
 import Omega.Zeta.EvenLengthCorrection
@@ -348,3 +349,4 @@ import Omega.SPG.BoundaryDominanceExponent
 import Omega.POM.CentralizerFPdim
 import Omega.POM.PressureConvexity
 import Omega.Folding.GaugeAnomalyQ19
+import Omega.POM.LucasPrimeCongruence
