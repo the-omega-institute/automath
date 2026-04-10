@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2522 |
+| \leanverified 标注数 | 2535 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2546 |
-| 轮次 | R609（round_count=610）|
+| 总标注数 | 2559 |
+| 轮次 | R610（round_count=611）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,17 +24,17 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 318 | 18.6% |
+| POM | 1,707 | 319 | 18.7% |
 | Emergent Arithmetic | 185 | 177 | 95.7% |
 | Folding | 337 | 142 | 42.1% |
-| Conclusion | 2,550 | 276 | 10.8% |
+| Conclusion | 2,550 | 277 | 10.9% |
 | Group Unification | 469 | 183 | 39.0% |
 | SPG | 129 | 115 | 89.1% |
 | Circle Dimension | 393 | 165 | 42.0% |
-| Zeta Finite Part | 4,524 | 219 | 4.8% |
+| Zeta Finite Part | 4,524 | 220 | 4.9% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1659** | **15.8%** |
+| **合计（body）** | **10,508** | **1662** | **15.8%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Zeta 同步核 Perron 根/状态数与 RH 三层分层种子值（Round R610，新标签，\leanverified 完整）**：`paper_rh_stratification_seeds`（对应 `prop:rh-stratification-three-kernels`，Zeta；同步核 Perron=3 + 状态数=10 + 谱间隙 + golden mean RH 严格种子值 + 三层分层包）——**新标签扩展登记**（prop:rh-stratification-three-kernels，\leanverified 新标注追加；注：`prop:sync-kernel-10-residue-constant` 论文中不存在，标注归入此命题）
+**Conclusion 可逆辅助位指数二进制等价 clog2 单调性扩展种子值（Round R610，新标签，\leanverified 完整）**：`paper_reversible_budget_extended`（对应 `prop:conclusion-reversible-aux-bits-equals-log-budget`，Conclusion；clog2 单调 + 2^k≥k + 扩展 clog2 算术种子值）——**新标签扩展登记**（prop:conclusion-reversible-aux-bits-equals-log-budget，\leanverified 新标注追加）
+**POM 例外谱迹二项行和与交错 Fibonacci 二项扩展种子值（Round R610，新标签，\leanverified 完整）**：`paper_pom_replica_trace_extended`（对应 `thm:pom-replica-softcore-exceptional-spectrum-trace`，POM；二项行和 + 交错二项 + 三角二项 + 迹闭式扩展种子值）——**新标签扩展登记**（thm:pom-replica-softcore-exceptional-spectrum-trace，\leanverified 新标注追加）
 **GU S₃ 闭合 g6 轨道二重性与完整分解种子值（Round R609，新标签，\leanverified 完整）**：`paper_fib_tail_s3_orbit_decomposition`（对应 `cor:fib-tail-s3-closure`，GU；g6 轨道二元分解 + m=6,p=23 上 3-循环轨道完整剖分种子值）——**新标签扩展登记**（cor:fib-tail-s3-closure，\leanverified 新标注追加）
 **Folding 局部重写 R4 间隙与完备性种子值（Round R609，新标签，\leanverified 完整）**：`fold_rule_completeness_seeds`（对应 `lem:fold-local-weight-rigidity-fibonacci`，Folding；R4 规则值间隙 + 四条规则完备性种子值）——**新标签扩展登记**（lem:fold-local-weight-rigidity-fibonacci，\leanverified 新标注追加；辅助定理，不计入论文覆盖率）
 **CD 有限相位提取 lcm 链与 Euler totient 周期种子值（Round R609，新标签，\leanverified 完整）**：`paper_cdim_finite_probe_extraction`（对应 `thm:cdim-finite-probe-extraction`，CD；lcm(2,3,5)=30 + lcm(6,10)=30 + Euler φ 种子 + 最小周期第5/第30种子值）——**新标签首次注册**（thm:cdim-finite-probe-extraction，\leanverified 新标注）
