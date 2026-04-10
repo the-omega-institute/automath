@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2511 |
+| \leanverified 标注数 | 2522 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2535 |
-| 轮次 | R608（round_count=609）|
+| 总标注数 | 2546 |
+| 轮次 | R609（round_count=610）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -28,13 +28,13 @@
 | Emergent Arithmetic | 185 | 177 | 95.7% |
 | Folding | 337 | 142 | 42.1% |
 | Conclusion | 2,550 | 276 | 10.8% |
-| Group Unification | 469 | 182 | 38.8% |
+| Group Unification | 469 | 183 | 39.0% |
 | SPG | 129 | 115 | 89.1% |
-| Circle Dimension | 393 | 164 | 41.7% |
+| Circle Dimension | 393 | 165 | 42.0% |
 | Zeta Finite Part | 4,524 | 219 | 4.8% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1657** | **15.8%** |
+| **合计（body）** | **10,508** | **1659** | **15.8%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**GU S₃ 闭合 g6 轨道二重性与完整分解种子值（Round R609，新标签，\leanverified 完整）**：`paper_fib_tail_s3_orbit_decomposition`（对应 `cor:fib-tail-s3-closure`，GU；g6 轨道二元分解 + m=6,p=23 上 3-循环轨道完整剖分种子值）——**新标签扩展登记**（cor:fib-tail-s3-closure，\leanverified 新标注追加）
+**Folding 局部重写 R4 间隙与完备性种子值（Round R609，新标签，\leanverified 完整）**：`fold_rule_completeness_seeds`（对应 `lem:fold-local-weight-rigidity-fibonacci`，Folding；R4 规则值间隙 + 四条规则完备性种子值）——**新标签扩展登记**（lem:fold-local-weight-rigidity-fibonacci，\leanverified 新标注追加；辅助定理，不计入论文覆盖率）
+**CD 有限相位提取 lcm 链与 Euler totient 周期种子值（Round R609，新标签，\leanverified 完整）**：`paper_cdim_finite_probe_extraction`（对应 `thm:cdim-finite-probe-extraction`，CD；lcm(2,3,5)=30 + lcm(6,10)=30 + Euler φ 种子 + 最小周期第5/第30种子值）——**新标签首次注册**（thm:cdim-finite-probe-extraction，\leanverified 新标注）
 **Zeta Fredholm 行列式黄金均值 SFT Vieta 恒等式与有理根不存在种子值（Round R608，新标签，\leanverified 完整）**：`paper_fredholm_vieta_package`（对应 `def:fredholm-determinant`，Zeta；p(0)=1 + Vieta 和 -1 + Vieta 积 -1 + 无有理根（5非ℚ平方）+ 单调递减种子值）——**新标签扩展登记**（def:fredholm-determinant，\leanverified 新标注追加）
 **Conclusion 黄金比 Fibonacci 幂次闭式：φ³、φ⁵、φ⁶ 种子值（Round R608，新标签，\leanverified 完整）**：`paper_golden_ratio_fibonacci_powers`（对应 `thm:conclusion-event-ellipse-golden-minimal-stretch`，Conclusion；φ³=2φ+1 + φ⁵=5φ+3 + φ⁶=8φ+5 Fibonacci 幂次种子值）——**新标签扩展登记**（thm:conclusion-event-ellipse-golden-minimal-stretch，\leanverified 新标注追加）
 **POM Cuntz--Krieger 碰撞核 Fibonacci 坍缩参数单调性种子值（Round R608，新标签，\leanverified 完整）**：`paper_pom_collision_ck_fibonacci`（对应 `prop:pom-collision-ck-fibonacci-collapse`，POM；Cuntz 参数定义 + 小值种子 + F(2k) 严格单调 + K-理论坍缩识别种子值）——**新标签首次注册**（prop:pom-collision-ck-fibonacci-collapse，\leanverified 新标注）
