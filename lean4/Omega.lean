@@ -374,3 +374,6 @@ import Omega.Zeta.IdempotentFixedIndexStratification
 import Omega.POM.ComplementaryGoldenBernoulliDivergence
 import Omega.POM.TopGapLimitConstants
 import Omega.SPG.BoundaryGodelSquareclassIsometry
+import Omega.POM.HankelFingerprintSeeds
+import Omega.Conclusion.PrimorialMixedRadixSeeds
+import Omega.Zeta.QuotientIndexLedgerSeeds
