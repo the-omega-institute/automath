@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2864 |
 | \leanpartial 标注数 | 50 |
 | 总标注数 | 2920 |
-| 轮次 | R645（round_count=646）|
+| 轮次 | R647（round_count=648）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM Hankel 指纹秩截断种子值 + Conclusion primorial 混合进位种子值 + Zeta 局部化商指数账本种子值（Round R647，新标签，\leanverified 完整）**：`paper_pom_kcollision_hankel_fingerprint_seeds`（对应 `prop:pom-kcollision-hankel-fingerprint`，POM；符号指数 e(k)=(k-1)(3k-4)/2 种子 + k^k Vandermonde 范数 + 秩截断维数间隙，**新标签首次注册**）；`paper_conclusion_primorial_mixed_radix_affine_seeds`（对应 `thm:conclusion-primorial-mixed-radix-affine`，Conclusion；P_1=2, P_2=6, P_3=30, P_4=210, P_5=2310 + 素数验证 + 混合进位编码种子值，**新标签首次注册**）；`paper_xi_localized_quotient_index_ledger_seeds`（对应 `thm:xi-localized-quotient-index-ledger`，Zeta；n_{S⊥} 剥离 S={2,3} 种子 + φ(n) 被剥离值 + 循环实现 gcd 判据，**新标签首次注册**）
 **POM 黄金偏置方差=偏置二次刻画 + Conclusion window-6 边界商循环基数 + Zeta 局部化商/挠 zeta Euler 乘积种子值（Round R645，新标签，\leanverified 完整）**：`paper_pom_golden_bias_variance_equals_bias`（对应 `prop:pom-golden-bias-variance-equals-bias`，POM；pq=p-q 化为 p²+p-1=0 判别式 Δ=5 + Fibonacci 比率残差 + Vajda 恒等式种子值，**新标签首次注册**）；`paper_conclusion_window6_boundary_quotient_cyclic_cardinality`（对应 `thm:conclusion-window6-boundary-quotient-cyclic-cardinality`，Conclusion；dim_{F₂}=18=5+4+9=|X₆^cyc| + F₈=21 + rank 分解 3+18=21，**已有标签扩展**）；`paper_xi_localized_quotient_torsion_zeta_euler_product`（对应 `thm:xi-localized-quotient-torsion-zeta-euler-product`，Zeta；n_{S⊥} 剥离种子值 + Euler 因子 + φ(p^e)=p^e-p^{e-1} 恒等式 + 指数有界性，**新标签首次注册**）
 **POM Rényi 维数谱闭式种子值 + Conclusion 周期三纤维精确多重度种子值 + Zeta 素数寄存器幂等分层种子值（Round R644，新标签，\leanverified 完整）**：`paper_pom_renyi_dimension_spectrum_seeds`（对应 `prop:pom-renyi-dimension-spectrum`，POM；D_q=h_q/((q-1)·log φ) 分母因子 + 2^q 值 + 碰撞核特征多项式系数验证，**新标签首次注册**）；`paper_conclusion_period3_fiber_exact_multiplicity_seeds`（对应 `thm:conclusion-period3-fiber-exact-multiplicity`，Conclusion；d_{3n}(x★)=2^n + 3-block 权重等式 F_{3j-1}+F_{3j}=F_{3j+1} + 纤维基数种子值，**新标签首次注册**）；`paper_xi_prime_register_idempotent_stratification_seeds`（对应 `thm:xi-prime-register-idempotent-fixed-index-stratification`，Zeta；|E_{n,k}|=C(n,k)·k^{n-k} + OEIS A000248 序列验证 n=2..5，**新标签首次注册**）
 **POM S₅ two-subset degree-10 resolvent 种子值 + Conclusion nonexposed phase 整数统治种子值 + Zeta degree-11 generic Galois S₁₁ 种子值（Round R643，新标签，\leanverified 完整）**：见 git log
