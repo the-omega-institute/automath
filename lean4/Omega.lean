@@ -333,3 +333,6 @@ import Omega.Zeta.GroupoidCentralRenyiShannon
 import Omega.Conclusion.RecursiveSolenoidLieShadow
 import Omega.POM.CollisionStrengthened
 import Omega.SPG.HypercubeGradientConsistency
+import Omega.POM.BoundedPerturbationInvariance
+import Omega.POM.MaxMassDispersionBound
+import Omega.Conclusion.BoundaryParityAnomalyGap
