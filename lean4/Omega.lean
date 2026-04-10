@@ -78,6 +78,7 @@ import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Folding.EndpointUnique
 import Omega.Folding.ImageSubshiftZeta
 import Omega.Folding.SyncDelay
+import Omega.Folding.TimeLayerDichotomy
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -154,6 +155,7 @@ import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.DFADensityDichotomy
 import Omega.Zeta.LucasBarrier
+import Omega.Zeta.NecklaceCounting
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -236,6 +238,7 @@ import Omega.POM.CentralizerDetMod5
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.KernelSpectrum
 import Omega.POM.CatalanMoments
+import Omega.POM.FoldIndexSeeds
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap
