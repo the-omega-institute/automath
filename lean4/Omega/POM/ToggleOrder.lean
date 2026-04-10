@@ -76,4 +76,48 @@ theorem paper_pom_toggle_orbit_length_spectrum_seeds :
          ⟨by omega, by omega⟩, ⟨by decide, by decide⟩,
          ⟨by omega, by omega, by omega, by omega⟩⟩
 
+-- Phase R604: Time-reversal second period verification
+-- ══════════════════════════════════════════════════════════════
+
+/-- Positive sign positions in second period (ℓ = 13..24).
+    thm:pom-toggle-time-reversal-sign-mod12 -/
+theorem timeReversal_sign_positive_period2 :
+    timeReversalSignExp 13 % 2 = 0 ∧ timeReversalSignExp 17 % 2 = 0 ∧
+    timeReversalSignExp 21 % 2 = 0 ∧ timeReversalSignExp 22 % 2 = 0 ∧
+    timeReversalSignExp 23 % 2 = 0 ∧ timeReversalSignExp 24 % 2 = 0 := by
+  simp only [timeReversalSignExp, timeReversalFix]
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide⟩
+
+/-- Negative sign positions in second period (ℓ = 14..20).
+    thm:pom-toggle-time-reversal-sign-mod12 -/
+theorem timeReversal_sign_negative_period2 :
+    timeReversalSignExp 14 % 2 = 1 ∧ timeReversalSignExp 15 % 2 = 1 ∧
+    timeReversalSignExp 16 % 2 = 1 ∧ timeReversalSignExp 18 % 2 = 1 ∧
+    timeReversalSignExp 19 % 2 = 1 ∧ timeReversalSignExp 20 % 2 = 1 := by
+  simp only [timeReversalSignExp, timeReversalFix]
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide⟩
+
+/-- Fix(ι_ℓ) ≤ F(ℓ+2) for all ℓ ≥ 1.
+    thm:pom-toggle-time-reversal-sign-mod12 -/
+theorem timeReversalFix_le_total (ℓ : Nat) (hℓ : 1 ≤ ℓ) :
+    timeReversalFix ℓ ≤ Nat.fib (ℓ + 2) := by
+  unfold timeReversalFix
+  split
+  · -- even case: Fix = F(ℓ/2 + 1) ≤ F(ℓ + 2)
+    exact Nat.fib_mono (by omega)
+  · -- odd case: Fix = F(ℓ/2 + 3) ≤ F(ℓ + 2)
+    exact Nat.fib_mono (by omega)
+
+/-- Paper package: two complete periods of time-reversal sign mod 12.
+    thm:pom-toggle-time-reversal-sign-mod12 -/
+theorem paper_pom_toggle_time_reversal_two_periods :
+    (∀ ℓ ∈ ({1,5,9,10,11,12,13,17,21,22,23,24} : Finset Nat),
+      timeReversalSignExp ℓ % 2 = 0) ∧
+    (∀ ℓ ∈ ({2,3,4,6,7,8,14,15,16,18,19,20} : Finset Nat),
+      timeReversalSignExp ℓ % 2 = 1) := by
+  constructor <;> intro ℓ hℓ <;> fin_cases hℓ <;>
+    simp only [timeReversalSignExp, timeReversalFix] <;> native_decide
+
 end Omega.POM.ToggleOrder

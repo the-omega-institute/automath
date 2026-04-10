@@ -1115,4 +1115,35 @@ theorem paper_godel_structural_extended :
     exact h
   · rw [godelEncoding_nil, one_mul]
 
+-- Phase R604: Gödel encoding cons decomposition
+-- ══════════════════════════════════════════════════════════════
+
+/-- Double cons decomposition: G(a :: b :: rest) = p₀^a · p₁^b · G_{+2}(rest).
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_double_cons (primes : ℕ → ℕ) (offset a b : ℕ) (rest : List ℕ) :
+    godelEncoding primes offset (a :: b :: rest) =
+      primes offset ^ a * primes (offset + 1) ^ b *
+        godelEncoding primes (offset + 2) rest := by
+  rw [godelEncoding_cons, godelEncoding_cons, Nat.mul_assoc]
+
+/-- Coprimality of split encodings when primes are pairwise coprime.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_append_coprime (primes : ℕ → ℕ) (offset : ℕ)
+    (u v : List ℕ)
+    (hcop : ∀ i j, i ≠ j → Nat.Coprime (primes i) (primes j))
+    (hp : ∀ i, 0 < primes i) :
+    Nat.Coprime (godelEncoding primes offset u)
+      (godelEncoding primes (offset + u.length) v) :=
+  godelEncoding_coprime_of_disjoint primes offset u v hcop hp
+
+/-- Paper seeds: cons decomposition for 2 and 3 elements.
+    thm:conclusion-godel-semidirect-law -/
+theorem paper_godel_cons_decomposition_seeds :
+    (∀ (p : ℕ → ℕ) (k a b : ℕ),
+      godelEncoding p k [a, b] = p k ^ a * p (k + 1) ^ b) ∧
+    (∀ (p : ℕ → ℕ) (k a b c : ℕ),
+      godelEncoding p k [a, b, c] = p k ^ a * p (k + 1) ^ b * p (k + 2) ^ c) := by
+  exact ⟨fun p k a b => by rw [godelEncoding_two],
+         fun p k a b c => by rw [godelEncoding_three, Nat.mul_assoc]⟩
+
 end Omega.Conclusion
