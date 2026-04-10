@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2490 |
+| \leanverified 标注数 | 2500 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2514 |
-| 轮次 | R606（round_count=607）|
+| 总标注数 | 2524 |
+| 轮次 | R607（round_count=608）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,15 +26,15 @@
 |---|---|---|---|
 | POM | 1,707 | 317 | 18.6% |
 | Emergent Arithmetic | 185 | 177 | 95.7% |
-| Folding | 337 | 141 | 41.8% |
+| Folding | 337 | 142 | 42.1% |
 | Conclusion | 2,550 | 275 | 10.8% |
-| Group Unification | 469 | 181 | 38.6% |
+| Group Unification | 469 | 182 | 38.8% |
 | SPG | 129 | 115 | 89.1% |
-| Circle Dimension | 393 | 163 | 41.5% |
+| Circle Dimension | 393 | 164 | 41.7% |
 | Zeta Finite Part | 4,524 | 218 | 4.8% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1651** | **15.7%** |
+| **合计（body）** | **10,508** | **1654** | **15.7%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**GU 独立片翻转寄存器下界信息量种子值（Round R607，新标签，\leanverified 完整）**：`paper_sheetflip_register_seeds`（对应 `prop:bdry-independent-sheetflip-register-lower-bound`，GU；S₃ 非平凡对合 3 个 + 3^n 独立选择数 + 注射寄存器下界 + Fibonacci 与 3^n 比较种子值）——**新标签首次注册**（prop:bdry-independent-sheetflip-register-lower-bound，\leanverified 新标注）
+**Folding allFalse 纤维重数 closed form 小指标种子值（Round R607，新标签，\leanverified 完整）**：`paper_fiberMultiplicity_allFalse_seeds`（对应 `prop:pom-power-sum-hankel-psd`，Folding；fM(allFalse,m)=m/2+1，m=4,5,6 具体值 + paper 包种子值）——**新标签扩展登记**（prop:pom-power-sum-hankel-psd，\leanverified 新标注追加）
+**CD 有限可逆素集合 N_S 单调性与空集值种子值（Round R607，新标签，\leanverified 完整）**：`paper_cdim_denominator_growth_seeds`（对应 `prop:cdim-denominator-growth-finite-S`，CD；N_S 关于 S 单调 + N_S(∅)=1 + N_S(S₁)≤N_S(S₂) + N_S≤B 种子值）——**新标签扩展登记**（prop:cdim-denominator-growth-finite-S，\leanverified 新标注追加）
 **POM 中央化子行列式模 5 平方像 + Galois 双根种子值（Round R606，新标签，\leanverified 完整）**：`paper_pom_centralizer_det_mod5`（对应 `prop:pom-centralizer-det-norm-mod5`，POM；aI+bM 行列式公式 + 模5平方像 + 黄金比例判别式 5 + Fp[τ]/(τ²-τ-1) 双根种子值）——**新标签首次注册**（prop:pom-centralizer-det-norm-mod5，\leanverified 新标注）
 **Zeta Möbius/Witt primitive 分层谱迹与 Lucas 数种子值（Round R606，新标签，\leanverified 完整）**：`paper_goldenMean_trace_lucas_seeds`（对应 `prop:zetaK-mobius-primitive`，Zeta；trace 迹序列 + Lucas 数提取 + golden mean 轨道 primitive 分层种子值）——**新标签扩展登记**（prop:zetaK-mobius-primitive，\leanverified 新标注追加）
 **Conclusion Gödel 编码 dvd chain 除链与素数幂单调种子值（Round R606，新标签，\leanverified 完整）**：`paper_godel_dvd_chain_seeds`（对应 `thm:conclusion-godel-semidirect-law`，Conclusion；prime_pow_mono_of_le + dvd 除链 + 算术种子值）——**新标签扩展登记**（thm:conclusion-godel-semidirect-law，\leanverified 新标注追加）
