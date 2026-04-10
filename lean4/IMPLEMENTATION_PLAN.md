@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2564 |
+| \leanverified 标注数 | 2567 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2588 |
-| 轮次 | R614（round_count=615）|
+| 总标注数 | 2591 |
+| 轮次 | R615（round_count=616）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,15 +26,15 @@
 |---|---|---|---|
 | POM | 1,707 | 325 | 19.0% |
 | Emergent Arithmetic | 185 | 178 | 96.2% |
-| Folding | 337 | 144 | 42.7% |
-| Conclusion | 2,550 | 281 | 11.0% |
+| Folding | 337 | 145 | 43.0% |
+| Conclusion | 2,550 | 282 | 11.1% |
 | Group Unification | 469 | 185 | 39.4% |
 | SPG | 129 | 116 | 89.9% |
 | Circle Dimension | 393 | 167 | 42.5% |
-| Zeta Finite Part | 4,524 | 222 | 4.9% |
+| Zeta Finite Part | 4,524 | 223 | 4.9% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1682** | **16.0%** |
+| **合计（body）** | **10,508** | **1685** | **16.0%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Zeta Fibonacci-Lucas 屏障碰撞间隙 + Conclusion 字母表 M≥5 门槛 + Folding 同步延迟闭式（Round R615，新标签，\leanverified 完整）**：`paper_zeta_lucas_barrier_seeds`（对应 `con:xi-fold-window6-lucas-barrier-collision-gap`，Zeta；Lucas 数种子值 + F(2n)=F(n)·L(n) 恒等式，**新标签首次注册**）；`paper_conclusion_alphabet_threshold_mge5`（对应 `cor:conclusion-alphabet-threshold-mge5`，Conclusion；可逆重写迫使 M≥5 算术种子值，**新标签首次注册**）；`paper_fold_sync_delay`（对应 `cor:Ym-sync-delay`，Folding；D_sync(m)=m-1 尖锐性种子值，**新标签首次注册**）
 **GU 边界层 m=6 平方恒等式数值实例 + CD 压缩圆维异常二次开销 + POM K_m 谱种子值（Round R614，新标签，\leanverified 完整）**：`paper_bdry_m6_square_instance`（对应 `cor:bdry-m6-square-instance`，GU；b(11)=b(6)²+b(7)²=34 种子值，**新标签首次注册**）；`paper_cdim_anomaly_compression_overhead`（对应 `cor:cdim-anomaly-compression-overhead`，CD；二项差异常二次开销公式种子值，**新标签首次注册**）；`paper_pom_Km_spectrum`（对应 `cor:pom-Km-spectrum`，POM；rank=F(m+2) + nullity=2^m-F(m+2) 种子值，**新标签首次注册**）
 **EA 普通素数账本乘法线性化 + SPG dyadic polycube 粘连上界 + Folding 图像子移位 zeta 封口（Round R613，新标签，\leanverified 完整）**：`paper_prime_ledger_linearizes_multiplication`（对应 `prop:ordinary-prime-ledger-linearizes-multiplication`，EA；padicValNat 加法性种子值，**新标签首次注册**）；`paper_spg_polycube_adhesion_sharp_upper_bound`（对应 `thm:spg-polyclube-adhesion-sharp-upper-bound`，SPG；粘连数上界与平均度界种子值，**新标签首次注册**）；`paper_fold_image_subshift_zeta_closed`（对应 `cor:Phi_m-zeta-closed`，Folding；图像子移位不动点计数与 zeta 封口种子值，**新标签首次注册**）
 **Zeta DFA 密度二分种子值 + Conclusion 同步深度 Fibonacci 交叉点 + POM 下降阶乘/Stirling 种子值（Round R612，新标签，\leanverified 完整）**：`paper_dfa_density_dichotomy_seeds`（对应 `thm:zeta-syntax-dfa-density-dichotomy`，Zeta；DFA 密度二分种子值，**新标签首次注册**）；`fib_gt_linear`（对应 `thm:zeta-syntax-zeckendorf-primes-not-sofic`，Zeta；Fibonacci 增长超线性扩展种子值，**扩展登记**）；`paper_sync_depth_fibonacci_crossover`、`dSync_exponential_gap`、`crossover_point`、`fib_vs_pow_dSync_seeds`（对应 `thm:conclusion-image-layer-minimal-inverse-memory`，Conclusion；同步深度 Fibonacci 交叉点种子值，**扩展登记**）；`paper_pom_kcollision_root_filter_extended`、`falling_factorial_seeds`、`descFactorial_eq_factorial_mul_choose`、`stirling_second_kind_seeds`（对应 `thm:pom-kcollision-root-filter-recurrence`，POM；下降阶乘与 Stirling 种子值，**扩展登记**）
