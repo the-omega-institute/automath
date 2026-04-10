@@ -701,4 +701,36 @@ theorem paper_cdim_mobius_inversion_seeds :
     · native_decide
     · native_decide
 
+-- Phase R603: Inclusion-exclusion seeds
+-- ══════════════════════════════════════════════════════════════
+
+/-- Spectrum of union is bounded by min of individual spectra.
+    prop:cdim-multiprime-divisible-spectrum-explicit -/
+theorem multiPrimeSpectrum_union_le (supports : Finset PrimeSupport) (J K : PrimeSupport) :
+    multiPrimeSpectrum supports (J ∪ K) ≤
+      min (multiPrimeSpectrum supports J) (multiPrimeSpectrum supports K) :=
+  Nat.le_min.mpr ⟨multiPrimeSpectrum_anti_mono Finset.subset_union_left,
+                   multiPrimeSpectrum_anti_mono Finset.subset_union_right⟩
+
+/-- Inserting a prime can only decrease the spectrum.
+    prop:cdim-multiprime-divisible-spectrum-explicit -/
+theorem multiPrimeSpectrum_insert_le (supports : Finset PrimeSupport) (J : PrimeSupport)
+    (p : ℕ) :
+    multiPrimeSpectrum supports (insert p J) ≤ multiPrimeSpectrum supports J :=
+  multiPrimeSpectrum_anti_mono (Finset.subset_insert p J)
+
+/-- Paper seeds: inclusion-exclusion at small support sets.
+    prop:cdim-multiprime-divisible-spectrum-explicit -/
+theorem paper_cdim_inclusion_exclusion_seeds :
+    (let S : Finset PrimeSupport := {{2}, {3}, {2,3}}
+     multiPrimeSpectrum S ∅ = 3 ∧
+     multiPrimeSpectrum S {2} = 2 ∧
+     multiPrimeSpectrum S {3} = 2 ∧
+     multiPrimeSpectrum S {2,3} = 1 ∧
+     typeCount S {2} = 1 ∧
+     typeCount S {3} = 1 ∧
+     typeCount S {2,3} = 1) := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide⟩
+
 end Omega.CircleDimension

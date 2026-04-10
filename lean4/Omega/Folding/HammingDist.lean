@@ -379,4 +379,17 @@ theorem paper_cMinStableHammingDist_constant_one_2_to_8 :
    cMinStableHammingDist_five, cMinStableHammingDist_six,
    cMinStableHammingDist_seven, cMinStableHammingDist_eight⟩
 
+-- Phase R603: Hamming metric axioms package
+-- ══════════════════════════════════════════════════════════════
+
+/-- Paper package: Hamming distance satisfies metric axioms.
+    cor:fold-hamming-lipschitz-budget -/
+theorem paper_hamming_metric_axioms :
+    (∀ (a : Word m), hammingDist a a = 0) ∧
+    (∀ (a b : Word m), hammingDist a b = hammingDist b a) ∧
+    (∀ (a b c : Word m), hammingDist a c ≤ hammingDist a b + hammingDist b c) ∧
+    (∀ (a b : Word m), hammingDist a b = 0 ↔ a = b) :=
+  ⟨fun _ => hammingDist_self, hammingDist_comm, hammingDist_triangle,
+   fun _ _ => hammingDist_eq_zero_iff⟩
+
 end Omega
