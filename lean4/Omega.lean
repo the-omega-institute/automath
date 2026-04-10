@@ -117,6 +117,7 @@ import Omega.SPG.CubePoincareInverse
 import Omega.SPG.PolycubeAdhesion
 import Omega.SPG.TotalDegreeMomentThreshold
 import Omega.SPG.MutualInfoBoundaryFlux
+import Omega.SPG.GodelizationEntropy
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
@@ -248,6 +249,8 @@ import Omega.POM.CatalanMoments
 import Omega.POM.FoldIndexSeeds
 import Omega.POM.FenceRiccatiError
 import Omega.POM.StarMomentKernelCompression
+import Omega.POM.FiberTwoPhaseMixing
+import Omega.POM.MaryAuxlengthSeeds
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap
@@ -315,3 +318,6 @@ import Omega.Zeta.VandermondeResultantSeeds
 import Omega.GU.ZeroDefectExpRate
 import Omega.Conclusion.ZeckendorfEulerSeeds
 import Omega.Conclusion.IntermediateQuotientSeeds
+import Omega.Conclusion.SinglepointJetRigidity
+import Omega.Conclusion.SmithRamanujanShadowSeeds
+import Omega.Zeta.EnergyTailMassSeeds
