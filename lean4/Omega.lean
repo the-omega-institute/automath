@@ -114,6 +114,7 @@ import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CubePoincareInverse
 import Omega.SPG.PolycubeAdhesion
+import Omega.SPG.TotalDegreeMomentThreshold
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
@@ -173,6 +174,7 @@ import Omega.EA.InternalProductAddsValues
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.AutDimensionSqueeze
 import Omega.EA.PrimeLedger
+import Omega.EA.FoldAsSection
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
@@ -232,6 +234,7 @@ import Omega.POM.FibPellQuadratic
 import Omega.POM.CentralizerDetMod5
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.KernelSpectrum
+import Omega.POM.CatalanMoments
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap
