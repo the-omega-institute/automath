@@ -353,3 +353,6 @@ import Omega.POM.LucasPrimeCongruence
 import Omega.Conclusion.FibonacciAnomalyBlock
 import Omega.POM.ValMonotoneBooleanNand
 import Omega.SPG.LinearRegisterBitBudget
+import Omega.Conclusion.BoundaryPinningMemoryGap
+import Omega.Conclusion.GeometricUpliftFourFourCollapse
+import Omega.Folding.ZeroBlockMinimaxAbsError
