@@ -116,6 +116,7 @@ import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CubePoincareInverse
 import Omega.SPG.PolycubeAdhesion
 import Omega.SPG.TotalDegreeMomentThreshold
+import Omega.SPG.MutualInfoBoundaryFlux
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
@@ -177,6 +178,7 @@ import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.AutDimensionSqueeze
 import Omega.EA.PrimeLedger
 import Omega.EA.FoldAsSection
+import Omega.EA.CompositionPullback
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
@@ -214,6 +216,7 @@ import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.FibonacciDistortionThreshold
+import Omega.Conclusion.KernelChainRule
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
