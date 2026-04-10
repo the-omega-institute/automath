@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2558 |
+| \leanverified 标注数 | 2561 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2582 |
-| 轮次 | R612（round_count=613）|
+| 总标注数 | 2585 |
+| 轮次 | R613（round_count=614）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -25,16 +25,16 @@
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
 | POM | 1,707 | 324 | 19.0% |
-| Emergent Arithmetic | 185 | 177 | 95.7% |
-| Folding | 337 | 143 | 42.4% |
+| Emergent Arithmetic | 185 | 178 | 96.2% |
+| Folding | 337 | 144 | 42.7% |
 | Conclusion | 2,550 | 281 | 11.0% |
 | Group Unification | 469 | 184 | 39.2% |
-| SPG | 129 | 115 | 89.1% |
+| SPG | 129 | 116 | 89.9% |
 | Circle Dimension | 393 | 166 | 42.2% |
 | Zeta Finite Part | 4,524 | 222 | 4.9% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1676** | **16.0%** |
+| **合计（body）** | **10,508** | **1679** | **16.0%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**EA 普通素数账本乘法线性化 + SPG dyadic polycube 粘连上界 + Folding 图像子移位 zeta 封口（Round R613，新标签，\leanverified 完整）**：`paper_prime_ledger_linearizes_multiplication`（对应 `prop:ordinary-prime-ledger-linearizes-multiplication`，EA；padicValNat 加法性种子值，**新标签首次注册**）；`paper_spg_polycube_adhesion_sharp_upper_bound`（对应 `thm:spg-polyclube-adhesion-sharp-upper-bound`，SPG；粘连数上界与平均度界种子值，**新标签首次注册**）；`paper_fold_image_subshift_zeta_closed`（对应 `cor:Phi_m-zeta-closed`，Folding；图像子移位不动点计数与 zeta 封口种子值，**新标签首次注册**）
 **Zeta DFA 密度二分种子值 + Conclusion 同步深度 Fibonacci 交叉点 + POM 下降阶乘/Stirling 种子值（Round R612，新标签，\leanverified 完整）**：`paper_dfa_density_dichotomy_seeds`（对应 `thm:zeta-syntax-dfa-density-dichotomy`，Zeta；DFA 密度二分种子值，**新标签首次注册**）；`fib_gt_linear`（对应 `thm:zeta-syntax-zeckendorf-primes-not-sofic`，Zeta；Fibonacci 增长超线性扩展种子值，**扩展登记**）；`paper_sync_depth_fibonacci_crossover`、`dSync_exponential_gap`、`crossover_point`、`fib_vs_pow_dSync_seeds`（对应 `thm:conclusion-image-layer-minimal-inverse-memory`，Conclusion；同步深度 Fibonacci 交叉点种子值，**扩展登记**）；`paper_pom_kcollision_root_filter_extended`、`falling_factorial_seeds`、`descFactorial_eq_factorial_mul_choose`、`stirling_second_kind_seeds`（对应 `thm:pom-kcollision-root-filter-recurrence`，POM；下降阶乘与 Stirling 种子值，**扩展登记**）
 **GU foldbin 非平凡纤维数 + Abel 阶增长 + CD Möbius 二染色扩展种子值（Round R611，新标签，\leanverified 完整）**：`paper_gut_gauge_abelian_extended`（对应 `thm:window6-foldbin-gauge-abelianization-even-parity`，GU；foldbin 非平凡纤维数 + Abel 阶增长扩展种子值）；`paper_boundary_layer_extended`（对应 `prop:bdry-fib-square-identity`，Folding；边界层计数递推 + Fibonacci 平方恒等式扩展种子值）；`paper_cdim_mobius_bipartite_extended`（对应 `cor:cdim-median-mobius-bipartite-coloring`，CD；omega_one/prime + Möbius 符号双素积扩展种子值）——**新标签首次注册**
 **Zeta 同步核 Perron 根/状态数与 RH 三层分层种子值（Round R610，新标签，\leanverified 完整）**：`paper_rh_stratification_seeds`（对应 `prop:rh-stratification-three-kernels`，Zeta；同步核 Perron=3 + 状态数=10 + 谱间隙 + golden mean RH 严格种子值 + 三层分层包）——**新标签扩展登记**（prop:rh-stratification-three-kernels，\leanverified 新标注追加；注：`prop:sync-kernel-10-residue-constant` 论文中不存在，标注归入此命题）
