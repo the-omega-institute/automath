@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2453 |
+| \leanverified 标注数 | 2460 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2477 |
-| 轮次 | R602（round_count=603）|
+| 总标注数 | 2484 |
+| 轮次 | R603（round_count=604）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,15 +26,15 @@
 |---|---|---|---|
 | POM | 1,707 | 315 | 18.5% |
 | Emergent Arithmetic | 185 | 177 | 95.7% |
-| Folding | 337 | 139 | 41.2% |
+| Folding | 337 | 140 | 41.5% |
 | Conclusion | 2,550 | 273 | 10.7% |
-| Group Unification | 469 | 179 | 38.2% |
+| Group Unification | 469 | 180 | 38.4% |
 | SPG | 129 | 115 | 89.1% |
-| Circle Dimension | 393 | 161 | 41.0% |
+| Circle Dimension | 393 | 162 | 41.2% |
 | Zeta Finite Part | 4,524 | 216 | 4.8% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1636** | **15.6%** |
+| **合计（body）** | **10,508** | **1639** | **15.6%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**GU 偶窗预算严格单调与 budget=16 唯一性扩展种子值（Round R603，新标签，\leanverified 完整）**：`paper_gut_budget16_strict_mono_extended`（对应 `thm:gut-audited-even-windows-unique-budget16-min-sector`，GU；F(k)·F(2k) 严格单调 + B₆=16 唯一 + 小指标种子值）——**新标签扩展登记**（thm:gut-audited-even-windows-unique-budget16-min-sector，\leanverified 新标注追加）
+**Folding Hamming 度量公理 paper package 种子值（Round R603，新标签，\leanverified 完整）**：`paper_hamming_metric_axioms`（对应 `cor:fold-hamming-lipschitz-budget`，Folding；自身距离 0 + 对称性 + 三角不等式度量公理种子值）——**新标签首次注册**（cor:fold-hamming-lipschitz-budget，\leanverified 新标注）
+**CD 多素谱 union/insert 单调性与容斥种子值（Round R603，新标签，\leanverified 完整）**：`paper_cdim_inclusion_exclusion_seeds`（对应 `prop:cdim-multiprime-divisible-spectrum-explicit`，CD；union ≤ min + insert 单调 + 小支撑集容斥种子值）——**新标签扩展登记**（prop:cdim-multiprime-divisible-spectrum-explicit，\leanverified 新标注追加）
 **Zeta Fredholm A² 行列式与 Lucas 迹恒等式种子值（Round R602，新标签，\leanverified 完整）**：`paper_fredholm_quadratic_seeds`（对应 `thm:cyclic-fredholm-witt`，Zeta；det(I-zA²)=1-3z+z² + Lucas 迹 + 小指标种子值）——**新标签扩展登记**（thm:cyclic-fredholm-witt，\leanverified 新标注追加）
 **Conclusion Gödel 编码 replicate 乘积与 reverse 重编码结构扩展种子值（Round R602，新标签，\leanverified 完整）**：`paper_godel_structural_extended`（对应 `thm:conclusion-godel-semidirect-law`，Conclusion；replicate 等价乘积 + reverse 逆映射种子值）——**新标签扩展登记**（thm:conclusion-godel-semidirect-law，\leanverified 新标注追加）
 **POM fibConvSum Fibonacci 卷积和递推律种子值（Round R602，新标签，\leanverified 完整）**：`paper_fibConvSum_recurrence_seeds`（对应 `thm:pom-toggle-scan-sign-mod6`，POM；fibConvSum(ℓ+2)=fibConvSum(ℓ+1)+fibConvSum(ℓ)+F(ℓ+2) 递推 + 小指标种子值）——**新标签扩展登记**（thm:pom-toggle-scan-sign-mod6，\leanverified 新标注追加）
