@@ -362,3 +362,6 @@ import Omega.Folding.GaugeAnomalyTrigonalGenus
 import Omega.Folding.GaugeAnomalyS4PicardRank
 import Omega.Folding.GaugeAnomalyS4ArtinConductor
 import Omega.Conclusion.CompressionLadderSpin10
+import Omega.POM.S5GaloisArithmetic
+import Omega.Zeta.GaugeGroupTripleDecomp
+import Omega.Conclusion.ParetoColdendCurvaturePole
