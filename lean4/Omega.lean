@@ -249,6 +249,7 @@ import Omega.GU.FoldbinDegeneracySector
 import Omega.GU.WedderburnBernoulliZeta
 import Omega.GU.AnomalyLedgerNoMultiplicative
 import Omega.GU.Z6CenterQuotient
+import Omega.GU.ThreefoldRigidity
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse

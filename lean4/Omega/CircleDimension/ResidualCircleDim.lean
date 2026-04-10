@@ -84,4 +84,48 @@ theorem paper_cdim_residual_extended_package :
   show Nat.log 2 (2 ^ f b * 2 ^ g b) / b = (f b + g b) / b
   rw [← pow_add, Nat.log_pow (by norm_num : 1 < 2)]
 
+-- Phase R605: Abelianization bottleneck
+-- ══════════════════════════════════════════════════════════════
+
+/-- 2^(b·k) < 2^(b·r) when k < r and b > 0.
+    cor:cdim-abelianization-bottleneck -/
+theorem abelianization_bottleneck (r k b : ℕ) (hrk : k < r) (hb : 0 < b) :
+    2 ^ (b * k) < 2 ^ (b * r) := by
+  apply Nat.pow_lt_pow_right (by norm_num : 1 < 2)
+  exact Nat.mul_lt_mul_of_pos_left hrk hb
+
+/-- Special case r=3, k=1: 2^b < 2^(3b).
+    cor:cdim-abelianization-bottleneck -/
+theorem abelianization_bottleneck_r3_k1 (b : ℕ) (hb : 0 < b) :
+    2 ^ b < 2 ^ (3 * b) := by
+  apply Nat.pow_lt_pow_right (by norm_num : 1 < 2)
+  nlinarith
+
+/-- Residual register lower bound from injection constraint.
+    cor:cdim-abelianization-bottleneck -/
+theorem residual_register_lower_bound (r k b R : ℕ)
+    (hinj : 2 ^ (b * r) ≤ 2 ^ (b * k) * R) :
+    2 ^ (b * (r - k)) ≤ R := by
+  by_cases h : k ≤ r
+  · have hexp : b * k + b * (r - k) = b * r := by
+      rw [← Nat.mul_add, Nat.add_sub_cancel' h]
+    have hpow : 2 ^ (b * k) * 2 ^ (b * (r - k)) = 2 ^ (b * r) := by
+      rw [← pow_add, hexp]
+    have hpos : 0 < 2 ^ (b * k) := Nat.pos_of_ne_zero (by positivity)
+    exact Nat.le_of_mul_le_mul_left (hpow ▸ hinj) hpos
+  · simp only [show r - k = 0 from by omega, Nat.mul_zero, pow_zero]
+    by_contra hR
+    push_neg at hR
+    interval_cases R
+    simp at hinj
+
+/-- Paper seeds: abelianization bottleneck concrete values.
+    cor:cdim-abelianization-bottleneck -/
+theorem paper_cdim_abelianization_bottleneck_seeds :
+    (2 ^ 3 < 2 ^ 6) ∧
+    (2 ^ (3 * 1) ≤ 2 ^ (3 * 1) * 8) ∧
+    (2 ^ 2 < 2 ^ 6) ∧
+    (2 ^ (1 * 1) ≤ 2 ^ (1 * 1) * 1) := by
+  refine ⟨by norm_num, by norm_num, by norm_num, by norm_num⟩
+
 end Omega.CircleDimension
