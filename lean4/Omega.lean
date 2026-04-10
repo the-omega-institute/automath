@@ -368,3 +368,6 @@ import Omega.Conclusion.ParetoColdendCurvaturePole
 import Omega.POM.S5TwoSubsetDegree10
 import Omega.Conclusion.NonexposedPhaseIntegerDomination
 import Omega.Zeta.Degree11GenericGaloisS11
+import Omega.POM.RenyiDimensionSpectrum
+import Omega.Conclusion.Period3FiberExactMultiplicity
+import Omega.Zeta.IdempotentFixedIndexStratification
