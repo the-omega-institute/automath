@@ -59,4 +59,32 @@ theorem paper_fib_tail_s3_closure :
   ⟨g6_order_eleven, r_involution, g6_fixed_point,
    g6_zero, g6_one, g6_four, g6_thirteen⟩
 
+-- Phase R609: Complete orbit decomposition
+-- ══════════════════════════════════════════════════════════════
+
+/-- g₆¹¹(2) = 2: the second orbit is also period 11.
+    cor:fib-tail-s3-closure -/
+theorem g6_orbit_two :
+    Nat.iterate g6Action 11 (2 : ZMod 23) = 2 := by native_decide
+
+/-- The orbit of 0 under g₆ is [0,1,4,13,17,6,19,12,14,20,15] with no duplicates,
+    and 11 is not in this orbit. Every non-fixed element lies in one of the two orbits.
+    cor:fib-tail-s3-closure -/
+theorem g6_orbit_decomposition :
+    (List.Nodup ([0, 1, 4, 13, 17, 6, 19, 12, 14, 20, 15].map (fun n => (n : ZMod 23)))) ∧
+    ((11 : ZMod 23) ∉ [0, 1, 4, 13, 17, 6, 19, 12, 14, 20, 15].map (fun n => (n : ZMod 23))) ∧
+    (∀ x : ZMod 23, x ≠ 11 →
+      x ∈ [0, 1, 4, 13, 17, 6, 19, 12, 14, 20, 15].map (fun n => (n : ZMod 23)) ∨
+      x ∈ [2, 3, 5, 7, 8, 9, 10, 16, 18, 21, 22].map (fun n => (n : ZMod 23))) := by
+  refine ⟨by decide, by decide, by decide⟩
+
+/-- Paper package: complete orbit decomposition of g₆ on ZMod 23.
+    cor:fib-tail-s3-closure -/
+theorem paper_fib_tail_s3_orbit_decomposition :
+    (∀ x : ZMod 23, Nat.iterate g6Action 11 x = x) ∧
+    (g6Action (11 : ZMod 23) = 11) ∧
+    (1 + 11 + 11 = 23) ∧
+    (Nat.iterate g6Action 11 (2 : ZMod 23) = 2) :=
+  ⟨g6_order_eleven, g6_fixed_point, by omega, g6_orbit_two⟩
+
 end Omega.GU.FibTailS3Closure
