@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2841 |
+| \leanverified 标注数 | 2844 |
 | \leanpartial 标注数 | 50 |
-| 总标注数 | 2891 |
-| 轮次 | R640（round_count=641）|
+| 总标注数 | 2894 |
+| 轮次 | R641（round_count=642）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
