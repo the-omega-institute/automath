@@ -359,3 +359,6 @@ import Omega.Folding.ZeroBlockMinimaxAbsError
 import Omega.POM.PrimitivePrimeLucas
 import Omega.Folding.GaugeAnomalyP10Degree
 import Omega.Folding.GaugeAnomalyTrigonalGenus
+import Omega.Folding.GaugeAnomalyS4PicardRank
+import Omega.Folding.GaugeAnomalyS4ArtinConductor
+import Omega.Conclusion.CompressionLadderSpin10
