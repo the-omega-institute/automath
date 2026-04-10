@@ -1146,4 +1146,31 @@ theorem paper_godel_cons_decomposition_seeds :
   exact ⟨fun p k a b => by rw [godelEncoding_two],
          fun p k a b c => by rw [godelEncoding_three, Nat.mul_assoc]⟩
 
+-- Phase R606: Gödel encoding divisibility chain
+-- ══════════════════════════════════════════════════════════════
+
+/-- Power monotonicity for p ≥ 1.
+    thm:conclusion-godel-semidirect-law -/
+theorem prime_pow_mono_of_le (p a b : ℕ) (hp : 1 ≤ p) (hab : a ≤ b) :
+    p ^ a ≤ p ^ b := Nat.pow_le_pow_right hp hab
+
+/-- Gödel encoding divisibility chain: prefix ∣ extension.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_dvd_chain (primes : ℕ → ℕ) (offset : ℕ)
+    (u v w : List ℕ) :
+    godelEncoding primes offset u ∣ godelEncoding primes offset (u ++ v) ∧
+    godelEncoding primes offset (u ++ v) ∣ godelEncoding primes offset (u ++ v ++ w) :=
+  ⟨godelEncoding_prefix_dvd primes offset u v,
+   List.append_assoc u v w ▸ godelEncoding_prefix_dvd primes offset (u ++ v) w⟩
+
+/-- Paper seeds: divisibility chain and power monotonicity.
+    thm:conclusion-godel-semidirect-law -/
+theorem paper_godel_dvd_chain_seeds :
+    (∀ (p : ℕ → ℕ), godelEncoding p 0 [1] ∣ godelEncoding p 0 [1, 2]) ∧
+    (∀ (p : ℕ → ℕ), godelEncoding p 0 [1, 2] ∣ godelEncoding p 0 [1, 2, 3]) ∧
+    (2 ^ 3 ≤ 2 ^ 5) := by
+  refine ⟨fun p => ?_, fun p => ?_, by norm_num⟩
+  · exact godelEncoding_prefix_dvd p 0 [1] [2]
+  · exact godelEncoding_prefix_dvd p 0 [1, 2] [3]
+
 end Omega.Conclusion

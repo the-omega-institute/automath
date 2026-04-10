@@ -222,6 +222,7 @@ import Omega.POM.ReplicaSoftcoreDet
 import Omega.POM.KCollisionRootFilter
 import Omega.POM.ReplicaBernoulliSubgraph
 import Omega.POM.FibPellQuadratic
+import Omega.POM.CentralizerDetMod5
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap

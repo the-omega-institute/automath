@@ -2068,4 +2068,31 @@ theorem paper_fredholm_quadratic_seeds :
     rw [this, Graph.goldenMeanAdjacency_sq, Matrix.trace_add, Graph.goldenMeanAdjacency_trace]
     simp [Matrix.trace]
 
+-- Phase R606: Golden-mean trace Lucas seeds
+-- ══════════════════════════════════════════════════════════════
+
+/-- Trace of A^n for n = 0..6.
+    prop:zetaK-mobius-primitive -/
+theorem goldenMean_trace_seeds :
+    Graph.goldenMeanAdjacency.trace = (1 : ℤ) ∧
+    (Graph.goldenMeanAdjacency ^ 2).trace = (3 : ℤ) ∧
+    (Graph.goldenMeanAdjacency ^ 3).trace = (4 : ℤ) ∧
+    (Graph.goldenMeanAdjacency ^ 4).trace = (7 : ℤ) ∧
+    (Graph.goldenMeanAdjacency ^ 5).trace = (11 : ℤ) ∧
+    (Graph.goldenMeanAdjacency ^ 6).trace = (18 : ℤ) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact_mod_cast Graph.goldenMeanAdjacency_trace
+  all_goals (rw [trace_eq_lucasNum]; native_decide)
+
+/-- Paper package: trace-Lucas identity seeds.
+    prop:zetaK-mobius-primitive -/
+theorem paper_goldenMean_trace_lucas_seeds :
+    Graph.goldenMeanAdjacency.trace = (1 : ℤ) ∧
+    (Graph.goldenMeanAdjacency ^ 2).trace = (3 : ℤ) ∧
+    (Nat.fib 4 + Nat.fib 2 = 4) ∧
+    (Nat.fib 5 + Nat.fib 3 = 7) := by
+  refine ⟨?_, ?_, by native_decide, by native_decide⟩
+  · exact_mod_cast Graph.goldenMeanAdjacency_trace
+  · rw [trace_eq_lucasNum]; native_decide
+
 end Omega.Zeta
