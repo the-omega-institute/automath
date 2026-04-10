@@ -228,6 +228,7 @@ import Omega.POM.ReplicaBernoulliSubgraph
 import Omega.POM.FibPellQuadratic
 import Omega.POM.CentralizerDetMod5
 import Omega.POM.CollisionCKFibonacci
+import Omega.POM.KernelSpectrum
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap
@@ -256,12 +257,14 @@ import Omega.GU.WedderburnBernoulliZeta
 import Omega.GU.AnomalyLedgerNoMultiplicative
 import Omega.GU.Z6CenterQuotient
 import Omega.GU.ThreefoldRigidity
+import Omega.GU.BdrySquareIdentity
 import Omega.GU.SheetflipRegisterBound
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse
 import Omega.GroupUnification.SpreadEquivalence
 import Omega.GroupUnification.SMSignatureCyclicDivides6
+import Omega.CD.AnomalyCompressionOverhead
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.ResidualCircleDim
