@@ -2032,4 +2032,40 @@ theorem paper_zeta_syntax_constant_memory_exponential_forgetting :
           fun K m hKm _hm => Nat.div_eq_zero_iff.mpr (Or.inr hKm),
           by norm_num⟩
 
+-- Phase R602: Fredholm determinant for A² and trace-Lucas identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- det(I - z·A²) = 1 - 3z + z² for the golden-mean adjacency matrix.
+    thm:cyclic-fredholm-witt -/
+theorem fredholmGoldenMean_sq_det (z : ℤ) :
+    (1 - z • (Graph.goldenMeanAdjacency * Graph.goldenMeanAdjacency :
+      Matrix (Fin 2) (Fin 2) ℤ)).det = 1 - 3 * z + z ^ 2 := by
+  have hA2 : Graph.goldenMeanAdjacency * Graph.goldenMeanAdjacency =
+      !![2, 1; 1, 1] := by native_decide
+  rw [hA2]; simp [det_fin_two]; ring
+
+/-- Trace of A^n equals Lucas number F_{n+1} + F_{n-1} for n ≥ 1.
+    thm:cyclic-fredholm-witt -/
+theorem goldenMean_trace_lucas (n : ℕ) (hn : 1 ≤ n) :
+    (Graph.goldenMeanAdjacency ^ n).trace = Nat.fib (n + 1) + Nat.fib (n - 1) := by
+  exact Omega.goldenMeanAdjacency_pow_trace n hn
+
+/-- Paper seeds: Fredholm quadratic and trace seeds.
+    thm:cyclic-fredholm-witt -/
+theorem paper_fredholm_quadratic_seeds :
+    (1 - (1 : ℤ) • (Graph.goldenMeanAdjacency * Graph.goldenMeanAdjacency :
+      Matrix (Fin 2) (Fin 2) ℤ)).det = -1 ∧
+    (1 - (2 : ℤ) • (Graph.goldenMeanAdjacency * Graph.goldenMeanAdjacency :
+      Matrix (Fin 2) (Fin 2) ℤ)).det = -1 ∧
+    Graph.goldenMeanAdjacency.trace = (1 : ℤ) ∧
+    (Graph.goldenMeanAdjacency * Graph.goldenMeanAdjacency).trace = (3 : ℤ) := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · rw [fredholmGoldenMean_sq_det]; ring
+  · rw [fredholmGoldenMean_sq_det]; ring
+  · exact_mod_cast Graph.goldenMeanAdjacency_trace
+  · have : Graph.goldenMeanAdjacency * Graph.goldenMeanAdjacency =
+        Graph.goldenMeanAdjacency ^ 2 := (sq Graph.goldenMeanAdjacency).symm
+    rw [this, Graph.goldenMeanAdjacency_sq, Matrix.trace_add, Graph.goldenMeanAdjacency_trace]
+    simp [Matrix.trace]
+
 end Omega.Zeta

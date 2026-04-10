@@ -123,4 +123,45 @@ theorem ind_set_counts_small :
   refine ⟨by native_decide, by native_decide, by native_decide,
           by native_decide, by native_decide⟩
 
+-- Phase R602: Fibonacci convolution sum recurrence
+-- ══════════════════════════════════════════════════════════════
+
+/-- fibConvSum recurrence: fibConvSum(ℓ+2) = fibConvSum(ℓ+1) + fibConvSum(ℓ) + F(ℓ+2).
+    thm:pom-toggle-scan-sign-mod6 -/
+theorem fibConvSum_recurrence (ℓ : Nat) (_hℓ : 1 ≤ ℓ) :
+    fibConvSum (ℓ + 2) = fibConvSum (ℓ + 1) + fibConvSum ℓ + Nat.fib (ℓ + 2) := by
+  unfold fibConvSum
+  -- Peel off top two terms from sum over range(ℓ+2)
+  rw [Finset.sum_range_succ, Finset.sum_range_succ]
+  simp only [show ℓ + 2 - (ℓ + 1) = 1 from by omega,
+             show ℓ + 2 - ℓ = 2 from by omega,
+             Nat.fib_one, Nat.fib_two, mul_one]
+  -- Split each inner term using F(ℓ+2-i) = F(ℓ+1-i) + F(ℓ-i)
+  have key : ∀ i ∈ Finset.range ℓ,
+      Nat.fib (i + 1) * Nat.fib (ℓ + 2 - i) =
+        Nat.fib (i + 1) * Nat.fib (ℓ + 1 - i) + Nat.fib (i + 1) * Nat.fib (ℓ - i) := by
+    intro i hi
+    rw [Finset.mem_range] at hi
+    rw [show ℓ + 2 - i = (ℓ - i) + 2 from by omega,
+        Nat.fib_add_two, Nat.mul_add, Nat.add_comm,
+        show (ℓ - i) + 1 = ℓ + 1 - i from by omega]
+  rw [Finset.sum_congr rfl key, Finset.sum_add_distrib]
+  -- Peel off top term from sum over range(ℓ+1) to match fibConvSum(ℓ+1)
+  rw [Finset.sum_range_succ]
+  simp only [show ℓ + 1 - ℓ = 1 from by omega, Nat.fib_one, mul_one,
+             show ℓ + 1 + 1 = ℓ + 2 from by omega]
+  -- Now both sides are pure ℕ additions
+  omega
+
+/-- Paper seeds: fibConvSum recurrence at small indices.
+    thm:pom-toggle-scan-sign-mod6 -/
+theorem paper_fibConvSum_recurrence_seeds :
+    fibConvSum 3 = fibConvSum 2 + fibConvSum 1 + Nat.fib 3 ∧
+    fibConvSum 4 = fibConvSum 3 + fibConvSum 2 + Nat.fib 4 ∧
+    fibConvSum 5 = fibConvSum 4 + fibConvSum 3 + Nat.fib 5 ∧
+    fibConvSum 6 = fibConvSum 5 + fibConvSum 4 + Nat.fib 6 ∧
+    fibConvSum 7 = fibConvSum 6 + fibConvSum 5 + Nat.fib 7 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide⟩
+
 end Omega.POM.FibCubeEdgeParity
