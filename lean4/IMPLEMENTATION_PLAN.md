@@ -15,8 +15,8 @@
 | 论文定理环境总数（appendix） | ~1,398 |
 | \leanverified 标注数 | 2853 |
 | \leanpartial 标注数 | 50 |
-| 总标注数 | 2906 |
-| 轮次 | R643（round_count=644）|
+| 总标注数 | 2909 |
+| 轮次 | R644（round_count=645）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,8 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM Rényi 维数谱闭式种子值 + Conclusion 周期三纤维精确多重度种子值 + Zeta 素数寄存器幂等分层种子值（Round R644，新标签，\leanverified 完整）**：`paper_pom_renyi_dimension_spectrum_seeds`（对应 `prop:pom-renyi-dimension-spectrum`，POM；D_q=h_q/((q-1)·log φ) 分母因子 + 2^q 值 + 碰撞核特征多项式系数验证，**新标签首次注册**）；`paper_conclusion_period3_fiber_exact_multiplicity_seeds`（对应 `thm:conclusion-period3-fiber-exact-multiplicity`，Conclusion；d_{3n}(x★)=2^n + 3-block 权重等式 F_{3j-1}+F_{3j}=F_{3j+1} + 纤维基数种子值，**新标签首次注册**）；`paper_xi_prime_register_idempotent_stratification_seeds`（对应 `thm:xi-prime-register-idempotent-fixed-index-stratification`，Zeta；|E_{n,k}|=C(n,k)·k^{n-k} + OEIS A000248 序列验证 n=2..5，**新标签首次注册**）
+**POM S₅ two-subset degree-10 resolvent 种子值 + Conclusion nonexposed phase 整数统治种子值 + Zeta degree-11 generic Galois S₁₁ 种子值（Round R643，新标签，\leanverified 完整）**：见 git log
 **POM S₅ Galois 判别式种子值 + Zeta 规范群中心-交换化-导群三重分解种子值 + Conclusion 冷端曲率极点种子值（Round R642，新标签，\leanverified 完整）**：`paper_pom_s5_galois_s5_seeds`（对应 `prop:pom-s5-galois-s5`，POM；Disc(P₅)=-16107783120 素因子分解 + p=17 不可约 + p=29 分裂型 (1+1+3) + S₅ 阶 120 种子值，**新标签首次注册**）；`paper_xi_foldbin_gauge_group_triple_decomp_seeds`（对应 `thm:xi-foldbin-gauge-group-center-abel-derived-triple-decomposition`，Zeta；m=6 直方图 (8,4,9) + 中心 dim=8 + Abel dim=21 + 导群 A₃⁴×A₄⁹ 阶种子值，**新标签首次注册**）；`paper_conclusion_pareto_coldend_curvature_pole_seeds`（对应 `cor:conclusion-pareto-coldend-curvature-pole`，Conclusion；d_min=2, d_max=4 纤维间隙 + S₂(6)=212 + 极点阶数算术种子值，**新标签首次注册**）
 **POM star-moment-kernel 对称压缩维数种子值 + Zeta 有限维相位梳齿极点计数种子值 + Conclusion Pisano-1 正号海指数统治种子值（Round R623，新标签，\leanverified 完整）**：`paper_pom_star_moment_kernel_compression_seeds`（对应 `thm:pom-star-moment-kernel-perron-symmetric-compression`，POM；对称张量子空间维数 C(k+q-2,q-1)，k=3 三角数种子值，**新标签首次注册**）；`paper_zeta_phase_comb_pole_counting_seeds`（对应 `thm:operator-finite-dimensional-zhat-pole-counting`，Zeta；有限维 Fredholm 行列式极点计数上界 d·(1+⌊H·log(λ)/π⌋) 种子值，**新标签首次注册**）；`paper_conclusion_pisano1_positive_sea_seeds`（对应 `cor:conclusion-pisano1-positive-sea-exponential-dominance`，Conclusion；Pisano 周期 mod 3 = 8 + 三相分类 + 正号海指数统治种子值，**新标签首次注册**）
 **POM fence Riccati \(t=1\) 误差闭式 + Conclusion window-6 最小忠实残余预算 18 + Zeta localized quotient 素数恢复（Round R622，新标签，\leanverified 完整）**：`paper_pom_Lk_t1_error_closed_form`（对应 `cor:pom-Lk-t1-error-closed-form`，POM；黄金耦合 \(t=1\) 下边界 Riccati 误差闭式，**新标签首次注册**）；`paper_conclusion_window6_minimal_faithful_residual_budget_18`（对应 `cor:conclusion-window6-minimal-faithful-residual-budget-18`，Conclusion；剥离 boundary sheet parity 零模后的最小忠实残余预算下界 \(r\ge 18\)，**新标签首次注册**）；`paper_xi_localized_quotient_index_prime_recovery`（对应 `cor:xi-localized-quotient-index-prime-recovery`，Zeta；有限商指数函数在素数点上的完全恢复，**新标签首次注册**）
