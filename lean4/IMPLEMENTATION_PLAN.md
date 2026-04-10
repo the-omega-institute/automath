@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2470 |
+| \leanverified 标注数 | 2480 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2494 |
-| 轮次 | R604（round_count=605）|
+| 总标注数 | 2504 |
+| 轮次 | R605（round_count=606）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,15 +26,15 @@
 |---|---|---|---|
 | POM | 1,707 | 316 | 18.5% |
 | Emergent Arithmetic | 185 | 177 | 95.7% |
-| Folding | 337 | 140 | 41.5% |
+| Folding | 337 | 141 | 41.8% |
 | Conclusion | 2,550 | 274 | 10.7% |
-| Group Unification | 469 | 180 | 38.4% |
+| Group Unification | 469 | 181 | 38.6% |
 | SPG | 129 | 115 | 89.1% |
-| Circle Dimension | 393 | 162 | 41.2% |
+| Circle Dimension | 393 | 163 | 41.5% |
 | Zeta Finite Part | 4,524 | 217 | 4.8% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1642** | **15.6%** |
+| **合计（body）** | **10,508** | **1645** | **15.7%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**GU window-6 三重刚性交汇唯一解 (N_f=3,δ=34) 种子值（Round R605，新标签，\leanverified 完整）**：`paper_window6_threefold_rigidity`（对应 `thm:window6-local-geometry-zero-anomaly-family-unique-intersection`，GU；15·3∈[F₉,F₁₀) + 小/大乘数范围 + δ=F₉=34 种子值）——**新标签首次注册**（thm:window6-local-geometry-zero-anomaly-family-unique-intersection，\leanverified 新标注）
+**Folding 标记路径 lift 数有限上界 paper package（Round R605，新标签，\leanverified 完整）**：`paper_labeled_path_lift_bound`（对应 `cor:Phi_m-entropy-no-drop`，Folding；接受 word 的起始态数 ≤ 状态数 + 2^(m-1) 幂次种子值）——**新标签扩展登记**（cor:Phi_m-entropy-no-drop，\leanverified 新标注追加）
+**CD 交换化圆维瓶颈下界与残差寄存器 paper 种子值（Round R605，新标签，\leanverified 完整）**：`paper_cdim_abelianization_bottleneck_seeds`（对应 `cor:cdim-abelianization-bottleneck`，CD；2^(bk)<2^(br) + r=3,k=1 特例 + 残差寄存器下界种子值）——**新标签首次注册**（cor:cdim-abelianization-bottleneck，\leanverified 新标注）
 **Zeta v=2 necklace 校正核种子值与 golden-mean 黄金比例 package（Round R604，新标签，\leanverified 完整）**：`paper_necklace_correction_golden_mean_seeds`（对应 `cor:xi-time-part73c-fixed-parameter-necklace-correction`，Zeta；v=2 偶长 necklace 校正核 + necklace 数 = kernel/2 种子值）——**新标签扩展登记**（cor:xi-time-part73c-fixed-parameter-necklace-correction，\leanverified 新标注追加）
 **Conclusion Gödel 编码 double-cons 分解与 coprime 拼接种子值（Round R604，新标签，\leanverified 完整）**：`paper_godel_cons_decomposition_seeds`（对应 `thm:conclusion-godel-semidirect-law`，Conclusion；double_cons 乘积分解 + append_coprime 互素种子值）——**新标签扩展登记**（thm:conclusion-godel-semidirect-law，\leanverified 新标注追加）
 **POM 时间反演符号律第二周期与不动点上界种子值（Round R604，新标签，\leanverified 完整）**：`paper_pom_toggle_time_reversal_two_periods`（对应 `thm:pom-toggle-time-reversal-sign-mod12`，POM；正/负符号第二周期 + Fix(ι_ℓ)≤F(ℓ+2) + 两完整周期种子值）——**新标签扩展登记**（thm:pom-toggle-time-reversal-sign-mod12，\leanverified 新标注追加）
