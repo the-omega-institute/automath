@@ -88,4 +88,59 @@ theorem paper_pom_Lk_t1_error_closed_form (k : Nat) :
   field_simp [hden]
   ring_nf
 
+private theorem phiInvSq_lt_one : phiInvSq < 1 := by
+  dsimp [phiInvSq]
+  have hinv : Real.goldenRatio⁻¹ = Real.goldenRatio - 1 := by
+    have hinvψ : Real.goldenRatio⁻¹ = -Real.goldenConj := by
+      simpa [one_div] using Real.inv_goldenRatio
+    nlinarith [hinvψ, Real.goldenRatio_add_goldenConj]
+  rw [hinv]
+  have hφ := Real.goldenRatio_pos
+  have hφ_lt : Real.goldenRatio < 2 := by nlinarith [Real.goldenRatio_sq]
+  nlinarith
+
+private theorem phiInvSq_sq_lt_one : phiInvSq ^ 2 < 1 := by
+  have h1 := phiInvSq_lt_one
+  have h0 := phiInvSq_pos
+  calc phiInvSq ^ 2 = phiInvSq * phiInvSq := by ring
+    _ < 1 * 1 := by nlinarith
+    _ = 1 := by ring
+
+/-- The error `qT1 k - phiInvSq` is strictly positive for all `k`.
+    cor:pom-Lk-t1-error-summable -/
+theorem riccati_error_pos (k : Nat) : 0 < qT1 k - phiInvSq := by
+  rw [paper_pom_Lk_t1_error_closed_form]
+  have hden_pos : 0 < 1 + phiInvSq ^ (2 * k + 1) := by
+    have : 0 ≤ phiInvSq ^ (2 * k + 1) := pow_nonneg phiInvSq_pos.le _
+    linarith
+  have hnum_pos : 0 < (1 - phiInvSq ^ 2) * phiInvSq ^ (2 * k) := by
+    apply mul_pos
+    · linarith [phiInvSq_sq_lt_one]
+    · exact pow_pos phiInvSq_pos _
+  exact div_pos hnum_pos hden_pos
+
+/-- Geometric upper bound: `qT1 k - phiInvSq < (1 - phiInvSq²) * phiInvSq^(2k)`.
+    This follows from the denominator `1 + phiInvSq^(2k+1) > 1`.
+    cor:pom-Lk-t1-error-summable -/
+theorem riccati_error_lt_geom (k : Nat) :
+    qT1 k - phiInvSq < (1 - phiInvSq ^ 2) * phiInvSq ^ (2 * k) := by
+  rw [paper_pom_Lk_t1_error_closed_form]
+  have hnum_pos : 0 < (1 - phiInvSq ^ 2) * phiInvSq ^ (2 * k) := by
+    apply mul_pos
+    · linarith [phiInvSq_sq_lt_one]
+    · exact pow_pos phiInvSq_pos _
+  have h1 : 1 < 1 + phiInvSq ^ (2 * k + 1) := by
+    linarith [pow_pos phiInvSq_pos (2 * k + 1)]
+  exact div_lt_self hnum_pos h1
+
+/-- Paper: `cor:pom-Lk-t1-error-summable`. Golden tier truncation error summability:
+    the error `qT1 k - phiInvSq` is positive and bounded above by a geometric sequence
+    `(1 - phiInvSq²) * phiInvSq^(2k)`, which is summable since `phiInvSq² < 1`.
+    cor:pom-Lk-t1-error-summable -/
+theorem paper_pom_Lk_t1_error_summable :
+    (∀ k, 0 < qT1 k - phiInvSq) ∧
+    (∀ k, qT1 k - phiInvSq < (1 - phiInvSq ^ 2) * phiInvSq ^ (2 * k)) ∧
+    phiInvSq ^ 2 < 1 := by
+  exact ⟨riccati_error_pos, riccati_error_lt_geom, phiInvSq_sq_lt_one⟩
+
 end Omega.POM
