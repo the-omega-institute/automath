@@ -350,3 +350,6 @@ import Omega.POM.CentralizerFPdim
 import Omega.POM.PressureConvexity
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
+import Omega.Conclusion.FibonacciAnomalyBlock
+import Omega.POM.ValMonotoneBooleanNand
+import Omega.SPG.LinearRegisterBitBudget
