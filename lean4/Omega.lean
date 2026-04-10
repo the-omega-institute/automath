@@ -211,6 +211,7 @@ import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Conclusion.AlphabetThreshold
+import Omega.Conclusion.FibonacciDistortionThreshold
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
@@ -264,6 +265,7 @@ import Omega.GU.AnomalyLedgerNoMultiplicative
 import Omega.GU.Z6CenterQuotient
 import Omega.GU.ThreefoldRigidity
 import Omega.GU.BdrySquareIdentity
+import Omega.GU.Window6DyadicBudget
 import Omega.GU.SheetflipRegisterBound
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
@@ -271,6 +273,7 @@ import Omega.GroupUnification.TwoChannelCollapse
 import Omega.GroupUnification.SpreadEquivalence
 import Omega.GroupUnification.SMSignatureCyclicDivides6
 import Omega.CD.AnomalyCompressionOverhead
+import Omega.CD.PeriodicPointCount
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.ResidualCircleDim
