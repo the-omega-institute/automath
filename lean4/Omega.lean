@@ -356,3 +356,6 @@ import Omega.SPG.LinearRegisterBitBudget
 import Omega.Conclusion.BoundaryPinningMemoryGap
 import Omega.Conclusion.GeometricUpliftFourFourCollapse
 import Omega.Folding.ZeroBlockMinimaxAbsError
+import Omega.POM.PrimitivePrimeLucas
+import Omega.Folding.GaugeAnomalyP10Degree
+import Omega.Folding.GaugeAnomalyTrigonalGenus
