@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2583 |
+| \leanverified 标注数 | 2589 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2607 |
-| 轮次 | R621（round_count=622）|
+| 总标注数 | 2613 |
+| 轮次 | R623（round_count=624）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,8 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM star-moment-kernel 对称压缩维数种子值 + Zeta 有限维相位梳齿极点计数种子值 + Conclusion Pisano-1 正号海指数统治种子值（Round R623，新标签，\leanverified 完整）**：`paper_pom_star_moment_kernel_compression_seeds`（对应 `thm:pom-star-moment-kernel-perron-symmetric-compression`，POM；对称张量子空间维数 C(k+q-2,q-1)，k=3 三角数种子值，**新标签首次注册**）；`paper_zeta_phase_comb_pole_counting_seeds`（对应 `thm:operator-finite-dimensional-zhat-pole-counting`，Zeta；有限维 Fredholm 行列式极点计数上界 d·(1+⌊H·log(λ)/π⌋) 种子值，**新标签首次注册**）；`paper_conclusion_pisano1_positive_sea_seeds`（对应 `cor:conclusion-pisano1-positive-sea-exponential-dominance`，Conclusion；Pisano 周期 mod 3 = 8 + 三相分类 + 正号海指数统治种子值，**新标签首次注册**）
+**POM fence Riccati \(t=1\) 误差闭式 + Conclusion window-6 最小忠实残余预算 18 + Zeta localized quotient 素数恢复（Round R622，新标签，\leanverified 完整）**：`paper_pom_Lk_t1_error_closed_form`（对应 `cor:pom-Lk-t1-error-closed-form`，POM；黄金耦合 \(t=1\) 下边界 Riccati 误差闭式，**新标签首次注册**）；`paper_conclusion_window6_minimal_faithful_residual_budget_18`（对应 `cor:conclusion-window6-minimal-faithful-residual-budget-18`，Conclusion；剥离 boundary sheet parity 零模后的最小忠实残余预算下界 \(r\ge 18\)，**新标签首次注册**）；`paper_xi_localized_quotient_index_prime_recovery`（对应 `cor:xi-localized-quotient-index-prime-recovery`，Zeta；有限商指数函数在素数点上的完全恢复，**新标签首次注册**）
 **POM toggle scan 循环型种子值 + Zeta 循环块张量 gcd/lcm 种子值 + Conclusion 有限字母表中间商数种子值（Round R621，新标签，\leanverified 完整）**：`paper_pom_toggle_scan_cycle_type_seeds`（对应 `thm:pom-toggle-scan-cycle-type-closed`，POM；toggle scan 循环型 primitive necklace 计数种子值，**新标签首次注册**）；`paper_cyclic_block_tensor_gcd_lcm_seeds`（对应 `prop:cyclic-block-tensor-gcd-lcm`，Zeta；循环块张量积 gcd/lcm 控制的 Witt 乘法实现种子值，**新标签首次注册**）；`paper_conclusion_intermediate_quotient_seeds`（对应 `thm:conclusion-finite-alphabet-intermediate-quotient-count`，Conclusion；有限残差字母表可实现的中间商数精确上界种子值，**新标签首次注册**）
 **Zeta Vandermonde 结果式恒等式 + GU 零缺陷指数衰减率 + Conclusion Zeckendorf-Euler 重标架种子值（Round R620，新标签，\leanverified 完整）**：`paper_zeta_vandermonde_resultant_seeds`（对应 `thm:xi-pick-poisson-vandermonde-resultant-identity`，Zeta；Pick-Poisson 行列式 Vandermonde 结果式分解种子值，**新标签首次注册**）；`paper_gut_zero_defect_exp_rate_seeds`（对应 `cor:fold-gauge-anomaly-zero-defect-exp-rate`，GU；零规范差端点指数衰减率 log(2/φ) 种子值，**新标签首次注册**）；`paper_conclusion_zeckendorf_euler_reindexing_seeds`（对应 `thm:conclusion-zeckendorf-euler-reindexing`，Conclusion；Zeckendorf 规范截面 Euler 重标架精确恒等式种子值，**新标签首次注册**）
 **Zeta necklace 计数 Big-Witt 函子性 + Folding 时间层可逆性二分律 + POM (4sin²) 乘积求和恒等式种子值（Round R618，新标签，\leanverified 完整）**：`paper_zeta_necklace_counting_seeds`（对应 `con:xi-terminal-big-witt-functoriality`，Zeta；二进制 necklace 计数 + Möbius-Witt 函子恒等式种子值，**新标签首次注册**）；`paper_fold_time_layer_dichotomy`（对应 `cor:Ym-time-layer-dichotomy`，Folding；时间层右可逆二分律种子值，**新标签首次注册**）；`paper_pom_fold_index_seeds`（对应 `cor:pom-Kk-sine-product-sum`，POM；(4sin²) 乘积=1 + 求和=k(k+1)/2 种子值，**新标签首次注册**）
