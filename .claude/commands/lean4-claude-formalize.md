@@ -99,7 +99,7 @@ Read lean4/IMPLEMENTATION_PLAN.md 前 20 行 + git log --oneline -3
 - 文件门禁：`timeout 120 lake env lean <path>`（秒级）
 - 项目门禁（commit 前必须）：
 ```bash
-timeout 300 lake build --dir /Users/chronoai/automath/lean4 2>&1 | tail -30
+cd lean4 && timeout 300 lake build 2>&1 | tail -30
 ```
 
 **编译性能硬限制**：
