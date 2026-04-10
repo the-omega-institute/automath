@@ -138,4 +138,45 @@ theorem paper_cdim_denominator_growth_finite_S :
       N_S S B ≤ (Nat.log 2 B + 1) ^ S.card) :=
   ⟨N_S_le_B, N_S_zero, @N_S_mono, N_S_le_two_pow_log, N_S_le_prod_log, N_S_le_log2_pow_card⟩
 
+-- Phase R607: N_S monotonicity in S and seeds
+-- ══════════════════════════════════════════════════════════════
+
+/-- N_S is monotone in the prime set S.
+    prop:cdim-denominator-growth-finite-S -/
+theorem N_S_mono_set {S₁ S₂ : Finset ℕ} (hS : S₁ ⊆ S₂) (B : ℕ) :
+    N_S S₁ B ≤ N_S S₂ B := by
+  unfold N_S
+  apply Finset.card_le_card
+  intro n hn
+  simp only [Finset.mem_filter, Finset.mem_Icc] at hn ⊢
+  exact ⟨hn.1, fun p hp hpn => hS (hn.2 p hp hpn)⟩
+
+/-- N_S of the empty set is 1 for B ≥ 1 (only n=1 has no prime factors).
+    prop:cdim-denominator-growth-finite-S -/
+theorem N_S_empty (B : ℕ) (hB : 1 ≤ B) : N_S ∅ B = 1 := by
+  unfold N_S
+  have : (Finset.Icc 1 B).filter (fun n => ∀ p, p.Prime → p ∣ n → p ∈ (∅ : Finset ℕ)) = {1} := by
+    ext n
+    simp only [Finset.mem_filter, Finset.mem_Icc, Finset.mem_singleton]
+    constructor
+    · intro ⟨⟨h1, _⟩, hprime⟩
+      by_contra hne
+      obtain ⟨p, hp, hpn⟩ := Nat.exists_prime_and_dvd (by omega : n ≠ 1)
+      exact absurd (hprime p hp hpn) (by simp)
+    · intro h; subst h
+      refine ⟨⟨le_refl 1, hB⟩, fun p hp hd => ?_⟩
+      have : p ≤ 1 := Nat.le_of_dvd (by omega) hd
+      exact absurd (hp.one_lt) (by omega)
+  rw [this, Finset.card_singleton]
+
+/-- Paper seeds: N_S structural values.
+    prop:cdim-denominator-growth-finite-S -/
+theorem paper_cdim_denominator_growth_seeds :
+    N_S ∅ 10 = 1 ∧
+    N_S ∅ 1 = 1 ∧
+    (∀ S₁ S₂ : Finset ℕ, S₁ ⊆ S₂ → ∀ B, N_S S₁ B ≤ N_S S₂ B) ∧
+    (∀ S : Finset ℕ, ∀ B, N_S S B ≤ B) :=
+  ⟨N_S_empty 10 (by norm_num), N_S_empty 1 (by norm_num),
+   fun _ _ h B => N_S_mono_set h B, N_S_le_B⟩
+
 end Omega.CircleDimension.DenominatorGrowthFiniteS
