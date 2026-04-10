@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2580 |
+| \leanverified 标注数 | 2583 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2604 |
-| 轮次 | R620（round_count=621）|
+| 总标注数 | 2607 |
+| 轮次 | R621（round_count=622）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM toggle scan 循环型种子值 + Zeta 循环块张量 gcd/lcm 种子值 + Conclusion 有限字母表中间商数种子值（Round R621，新标签，\leanverified 完整）**：`paper_pom_toggle_scan_cycle_type_seeds`（对应 `thm:pom-toggle-scan-cycle-type-closed`，POM；toggle scan 循环型 primitive necklace 计数种子值，**新标签首次注册**）；`paper_cyclic_block_tensor_gcd_lcm_seeds`（对应 `prop:cyclic-block-tensor-gcd-lcm`，Zeta；循环块张量积 gcd/lcm 控制的 Witt 乘法实现种子值，**新标签首次注册**）；`paper_conclusion_intermediate_quotient_seeds`（对应 `thm:conclusion-finite-alphabet-intermediate-quotient-count`，Conclusion；有限残差字母表可实现的中间商数精确上界种子值，**新标签首次注册**）
 **Zeta Vandermonde 结果式恒等式 + GU 零缺陷指数衰减率 + Conclusion Zeckendorf-Euler 重标架种子值（Round R620，新标签，\leanverified 完整）**：`paper_zeta_vandermonde_resultant_seeds`（对应 `thm:xi-pick-poisson-vandermonde-resultant-identity`，Zeta；Pick-Poisson 行列式 Vandermonde 结果式分解种子值，**新标签首次注册**）；`paper_gut_zero_defect_exp_rate_seeds`（对应 `cor:fold-gauge-anomaly-zero-defect-exp-rate`，GU；零规范差端点指数衰减率 log(2/φ) 种子值，**新标签首次注册**）；`paper_conclusion_zeckendorf_euler_reindexing_seeds`（对应 `thm:conclusion-zeckendorf-euler-reindexing`，Conclusion；Zeckendorf 规范截面 Euler 重标架精确恒等式种子值，**新标签首次注册**）
 **Zeta necklace 计数 Big-Witt 函子性 + Folding 时间层可逆性二分律 + POM (4sin²) 乘积求和恒等式种子值（Round R618，新标签，\leanverified 完整）**：`paper_zeta_necklace_counting_seeds`（对应 `con:xi-terminal-big-witt-functoriality`，Zeta；二进制 necklace 计数 + Möbius-Witt 函子恒等式种子值，**新标签首次注册**）；`paper_fold_time_layer_dichotomy`（对应 `cor:Ym-time-layer-dichotomy`，Folding；时间层右可逆二分律种子值，**新标签首次注册**）；`paper_pom_fold_index_seeds`（对应 `cor:pom-Kk-sine-product-sum`，POM；(4sin²) 乘积=1 + 求和=k(k+1)/2 种子值，**新标签首次注册**）
 **GU window-6 dyadic 微观预算三段式 + CD 周期点计数 Artin-Mazur zeta + Conclusion Fibonacci 不可消除失真阈值（Round R617，新标签，\leanverified 完整）**：`paper_gut_window6_dyadic_budget_three_stage`（对应 `prop:window6-dyadic-budget-three-stage`，GU；H_6^bin=34+8+1 三段式分解种子值，**新标签首次注册**）；`paper_cdim_periodic_point_count_artin_mazur_zeta`（对应 `cor:cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta`，CD；Fix([n]^k)=(n^k-1)^{s-1}·(n^k-1)_{S^c} 种子值，**新标签首次注册**）；`paper_conclusion_fibonacci_hard_distortion_threshold`（对应 `thm:conclusion-fibonacci-hard-distortion-threshold`，Conclusion；δ_∞★≈0.0546 失真阈值种子值，**新标签首次注册**）
