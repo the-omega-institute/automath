@@ -690,4 +690,21 @@ theorem paper_zeta_cyclic_lift_prime_shadow_asymptotic_seeds :
   refine ⟨by native_decide, by omega, ⟨by omega, by omega⟩,
          ⟨by omega, by omega⟩, ⟨by omega, by omega⟩, by omega⟩
 
+/-- Small gcd/lcm period-alignment seeds for cyclic block tensor factors.
+    thm:zeta-cyclic-block-tensor-gcd-lcm -/
+  theorem paper_cyclic_block_tensor_gcd_lcm_seeds :
+    cyclicPerm2 ^ Nat.lcm 2 3 = 1 ∧
+    cyclicPerm3 ^ Nat.lcm 2 3 = 1 ∧
+    cyclicPerm4 ^ Nat.lcm 4 6 = 1 ∧
+    cyclicPerm6 ^ Nat.lcm 4 6 = 1 ∧
+    Nat.gcd 2 3 = 1 ∧
+    Nat.lcm 2 3 = 6 ∧
+    Nat.gcd 4 6 = 2 ∧
+    Nat.lcm 4 6 = 12 := by
+  refine ⟨?_, ?_, ?_, ?_, by decide, by decide, by decide, by decide⟩
+  · rw [show Nat.lcm 2 3 = 2 * 3 by decide, pow_mul, cyclicPerm2_sq, one_pow]
+  · rw [show Nat.lcm 2 3 = 3 * 2 by decide, pow_mul, cyclicPerm3_cube, one_pow]
+  · rw [show Nat.lcm 4 6 = 4 * 3 by decide, pow_mul, cyclicPerm4_fourth, one_pow]
+  · rw [show Nat.lcm 4 6 = 6 * 2 by decide, pow_mul, cyclicPerm6_sixth, one_pow]
+
 end Omega.Zeta

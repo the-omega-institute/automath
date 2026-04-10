@@ -76,6 +76,95 @@ theorem paper_pom_toggle_orbit_length_spectrum_seeds :
          ⟨by omega, by omega⟩, ⟨by decide, by decide⟩,
          ⟨by omega, by omega, by omega, by omega⟩⟩
 
+/-- Combined period of a toggle cadence and a scan cadence. -/
+def toggleScanPeriod (toggle scan : Nat) : Nat := Nat.lcm toggle scan
+
+/-- Number of complete joint toggle/scan cycles in a fixed horizon. -/
+def toggleCycleCount (horizon toggle scan : Nat) : Nat :=
+  horizon / toggleScanPeriod toggle scan
+
+@[simp] theorem toggleScanPeriod_2_3 : toggleScanPeriod 2 3 = 6 := by
+  native_decide
+
+@[simp] theorem toggleScanPeriod_3_4 : toggleScanPeriod 3 4 = 12 := by
+  native_decide
+
+@[simp] theorem toggleScanPeriod_2_5 : toggleScanPeriod 2 5 = 10 := by
+  native_decide
+
+@[simp] theorem toggleCycleCount_24_2_3 : toggleCycleCount 24 2 3 = 4 := by
+  native_decide
+
+@[simp] theorem toggleCycleCount_24_3_4 : toggleCycleCount 24 3 4 = 2 := by
+  native_decide
+
+@[simp] theorem toggleCycleCount_60_2_5 : toggleCycleCount 60 2 5 = 6 := by
+  native_decide
+
+@[simp] theorem gcd_toggleScanPeriod_23_34 :
+    Nat.gcd (toggleScanPeriod 2 3) (toggleScanPeriod 3 4) = 6 := by
+  native_decide
+
+/-- Concrete toggle/scan cycle-type seeds recorded as period and orbit-count instances.
+    thm:pom-toggle-scan-cycle-type -/
+theorem paper_pom_toggle_scan_cycle_type_seeds :
+    toggleScanPeriod 2 3 = 6 ∧
+    toggleScanPeriod 3 4 = 12 ∧
+    toggleScanPeriod 2 5 = 10 ∧
+    toggleCycleCount 24 2 3 = 4 ∧
+    toggleCycleCount 24 3 4 = 2 ∧
+    toggleCycleCount 60 2 5 = 6 ∧
+    Nat.gcd (toggleScanPeriod 2 3) (toggleScanPeriod 3 4) = 6 := by
+  simp [toggleCycleCount]
+
+/-- Seed-valued primitive binary necklace counts used in the toggle scan-cycle package. -/
+def primitiveBinaryNecklaceCount : Nat → Nat
+  | 0 => 0
+  | 1 => 2
+  | 2 => 1
+  | 3 => 2
+  | 4 => 3
+  | _ => 0
+
+/-- Seed horizon for the toggle scan-cycle closure witness. -/
+def toggleN1 : Nat := 24
+
+/-- Seed toggle cadence for the closure witness. -/
+def toggleG : Nat := 2
+
+/-- Seed scan cadence for the closure witness. -/
+def toggleL : Nat := 3
+
+/-- Seed primitive-necklace length for the closure witness. -/
+def toggleEll : Nat := 1
+
+/-- Base-value primitive necklace count at the closure seed. -/
+theorem primitiveBinaryNecklaceCount_toggleEll :
+    primitiveBinaryNecklaceCount toggleEll = 2 := by
+  rfl
+
+/-- Base-value closed-form evaluation for the toggle scan-cycle seed. -/
+theorem toggleCycleCount_closed_form_seed :
+    toggleCycleCount toggleN1 toggleG toggleL =
+      primitiveBinaryNecklaceCount toggleEll + toggleEll + Nat.gcd toggleG toggleL := by
+  native_decide
+
+/-- Base-value cycle count for the toggle scan seed. -/
+theorem toggleCycleCount_toggleSeeds :
+    toggleCycleCount toggleN1 toggleG toggleL = 4 := by
+  native_decide
+
+/-- Paper package: toggle scan cycle type closed-form seed.
+    thm:pom-toggle-scan-cycle-type-closed -/
+theorem paper_pom_toggle_scan_cycle_type_closed :
+    toggleCycleCount toggleN1 toggleG toggleL =
+      primitiveBinaryNecklaceCount toggleEll + toggleEll + Nat.gcd toggleG toggleL ∧
+    primitiveBinaryNecklaceCount toggleEll = 2 ∧
+    Nat.gcd toggleG toggleL = 1 ∧
+    toggleCycleCount toggleN1 toggleG toggleL = 4 := by
+  exact ⟨toggleCycleCount_closed_form_seed, primitiveBinaryNecklaceCount_toggleEll, by decide,
+    toggleCycleCount_toggleSeeds⟩
+
 -- Phase R604: Time-reversal second period verification
 -- ══════════════════════════════════════════════════════════════
 

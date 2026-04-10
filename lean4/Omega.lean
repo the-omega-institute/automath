@@ -157,6 +157,7 @@ import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.DFADensityDichotomy
 import Omega.Zeta.LucasBarrier
 import Omega.Zeta.NecklaceCounting
+import Omega.Zeta.CyclicBlockTensor
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -217,6 +218,7 @@ import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.FibonacciDistortionThreshold
 import Omega.Conclusion.KernelChainRule
+import Omega.Conclusion.IntermediateQuotientCount
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
@@ -308,3 +310,4 @@ import Omega.CircleDimension.DoubleDiscriminant
 import Omega.Zeta.VandermondeResultantSeeds
 import Omega.GU.ZeroDefectExpRate
 import Omega.Conclusion.ZeckendorfEulerSeeds
+import Omega.Conclusion.IntermediateQuotientSeeds
