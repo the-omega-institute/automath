@@ -371,3 +371,6 @@ import Omega.Zeta.Degree11GenericGaloisS11
 import Omega.POM.RenyiDimensionSpectrum
 import Omega.Conclusion.Period3FiberExactMultiplicity
 import Omega.Zeta.IdempotentFixedIndexStratification
+import Omega.POM.ComplementaryGoldenBernoulliDivergence
+import Omega.POM.TopGapLimitConstants
+import Omega.SPG.BoundaryGodelSquareclassIsometry
