@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2535 |
+| \leanverified 标注数 | 2547 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2559 |
-| 轮次 | R610（round_count=611）|
+| 总标注数 | 2571 |
+| 轮次 | R611（round_count=612）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,15 +26,15 @@
 |---|---|---|---|
 | POM | 1,707 | 319 | 18.7% |
 | Emergent Arithmetic | 185 | 177 | 95.7% |
-| Folding | 337 | 142 | 42.1% |
+| Folding | 337 | 143 | 42.4% |
 | Conclusion | 2,550 | 277 | 10.9% |
-| Group Unification | 469 | 183 | 39.0% |
+| Group Unification | 469 | 184 | 39.2% |
 | SPG | 129 | 115 | 89.1% |
-| Circle Dimension | 393 | 165 | 42.0% |
+| Circle Dimension | 393 | 166 | 42.2% |
 | Zeta Finite Part | 4,524 | 220 | 4.9% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1662** | **15.8%** |
+| **合计（body）** | **10,508** | **1665** | **15.8%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**GU foldbin 非平凡纤维数 + Abel 阶增长 + CD Möbius 二染色扩展种子值（Round R611，新标签，\leanverified 完整）**：`paper_gut_gauge_abelian_extended`（对应 `thm:window6-foldbin-gauge-abelianization-even-parity`，GU；foldbin 非平凡纤维数 + Abel 阶增长扩展种子值）；`paper_boundary_layer_extended`（对应 `prop:bdry-fib-square-identity`，Folding；边界层计数递推 + Fibonacci 平方恒等式扩展种子值）；`paper_cdim_mobius_bipartite_extended`（对应 `cor:cdim-median-mobius-bipartite-coloring`，CD；omega_one/prime + Möbius 符号双素积扩展种子值）——**新标签首次注册**
 **Zeta 同步核 Perron 根/状态数与 RH 三层分层种子值（Round R610，新标签，\leanverified 完整）**：`paper_rh_stratification_seeds`（对应 `prop:rh-stratification-three-kernels`，Zeta；同步核 Perron=3 + 状态数=10 + 谱间隙 + golden mean RH 严格种子值 + 三层分层包）——**新标签扩展登记**（prop:rh-stratification-three-kernels，\leanverified 新标注追加；注：`prop:sync-kernel-10-residue-constant` 论文中不存在，标注归入此命题）
 **Conclusion 可逆辅助位指数二进制等价 clog2 单调性扩展种子值（Round R610，新标签，\leanverified 完整）**：`paper_reversible_budget_extended`（对应 `prop:conclusion-reversible-aux-bits-equals-log-budget`，Conclusion；clog2 单调 + 2^k≥k + 扩展 clog2 算术种子值）——**新标签扩展登记**（prop:conclusion-reversible-aux-bits-equals-log-budget，\leanverified 新标注追加）
 **POM 例外谱迹二项行和与交错 Fibonacci 二项扩展种子值（Round R610，新标签，\leanverified 完整）**：`paper_pom_replica_trace_extended`（对应 `thm:pom-replica-softcore-exceptional-spectrum-trace`，POM；二项行和 + 交错二项 + 三角二项 + 迹闭式扩展种子值）——**新标签扩展登记**（thm:pom-replica-softcore-exceptional-spectrum-trace，\leanverified 新标注追加）
