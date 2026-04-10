@@ -93,4 +93,41 @@ theorem paper_pom_replica_doob_reversible_markov_seeds :
     (2 ^ 3 = 8) := by
   omega
 
+-- Phase R610: Replica spectrum trace binomial seeds
+-- ══════════════════════════════════════════════════════════════
+
+/-- Binomial row sum: Σ C(n,k) = 2^n.
+    thm:pom-replica-softcore-exceptional-spectrum-trace -/
+theorem binomial_row_sum_seeds :
+    (∑ k ∈ Finset.range 5, Nat.choose 4 k = 2 ^ 4) ∧
+    (∑ k ∈ Finset.range 6, Nat.choose 5 k = 2 ^ 5) ∧
+    (∑ k ∈ Finset.range 7, Nat.choose 6 k = 2 ^ 6) := by
+  refine ⟨by native_decide, by native_decide, by native_decide⟩
+
+/-- Alternating binomial: even-indexed sum = odd-indexed sum.
+    thm:pom-replica-softcore-exceptional-spectrum-trace -/
+theorem alternating_binomial_seeds :
+    (Nat.choose 3 0 + Nat.choose 3 2 = Nat.choose 3 1 + Nat.choose 3 3) ∧
+    (Nat.choose 4 0 + Nat.choose 4 2 + Nat.choose 4 4 =
+      Nat.choose 4 1 + Nat.choose 4 3) := by
+  refine ⟨by native_decide, by native_decide⟩
+
+/-- Triangular numbers as C(n,2).
+    thm:pom-replica-softcore-exceptional-spectrum-trace -/
+theorem triangular_binomial_seeds :
+    Nat.choose 2 2 = 1 ∧ Nat.choose 3 2 = 3 ∧ Nat.choose 4 2 = 6 ∧
+    Nat.choose 5 2 = 10 ∧ Nat.choose 6 2 = 15 ∧ Nat.choose 7 2 = 21 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide⟩
+
+/-- Paper package: replica trace extended seeds.
+    thm:pom-replica-softcore-exceptional-spectrum-trace -/
+theorem paper_pom_replica_trace_extended :
+    (∑ k ∈ Finset.range 5, Nat.choose 4 k = 16) ∧
+    (Nat.choose 5 2 = 10 ∧ Nat.choose 7 2 = 21) ∧
+    (Nat.choose 7 2 = Nat.fib 8) ∧
+    (Nat.choose 4 2 = 6) := by
+  refine ⟨by native_decide, ⟨by native_decide, by native_decide⟩,
+          by native_decide, by native_decide⟩
+
 end Omega.POM

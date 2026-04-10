@@ -41,4 +41,40 @@ theorem clog_tightness_budget :
     ¬(5 ≤ 2 ^ (Nat.clog 2 5 - 1)) := by
   refine ⟨by native_decide, by native_decide⟩
 
+-- Phase R610: clog monotonicity and Fibonacci budget seeds
+-- ══════════════════════════════════════════════════════════════
+
+/-- clog₂ is monotone.
+    prop:conclusion-reversible-aux-bits-equals-log-budget -/
+theorem clog2_mono {a b : ℕ} (h : a ≤ b) : Nat.clog 2 a ≤ Nat.clog 2 b :=
+  Nat.clog_mono_right 2 h
+
+/-- b ≤ 2^⌈log₂ b⌉.
+    prop:conclusion-reversible-aux-bits-equals-log-budget -/
+theorem pow_clog2_ge (b : ℕ) (_hb : 0 < b) : b ≤ 2 ^ Nat.clog 2 b :=
+  Nat.le_pow_clog (by omega) b
+
+/-- Extended clog₂ seed values.
+    prop:conclusion-reversible-aux-bits-equals-log-budget -/
+theorem clog2_extended_seeds :
+    Nat.clog 2 1 = 0 ∧ Nat.clog 2 2 = 1 ∧ Nat.clog 2 3 = 2 ∧
+    Nat.clog 2 4 = 2 ∧ Nat.clog 2 5 = 3 ∧ Nat.clog 2 8 = 3 ∧
+    Nat.clog 2 9 = 4 ∧ Nat.clog 2 16 = 4 ∧ Nat.clog 2 21 = 5 ∧
+    Nat.clog 2 34 = 6 ∧ Nat.clog 2 55 = 6 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide⟩
+
+/-- Paper package: clog₂ of Fibonacci numbers.
+    prop:conclusion-reversible-aux-bits-equals-log-budget -/
+theorem paper_reversible_budget_extended :
+    (Nat.clog 2 (Nat.fib 4) = 2) ∧ (Nat.clog 2 (Nat.fib 5) = 3) ∧
+    (Nat.clog 2 (Nat.fib 6) = 3) ∧ (Nat.clog 2 (Nat.fib 7) = 4) ∧
+    (Nat.clog 2 (Nat.fib 8) = 5) ∧ (Nat.clog 2 (Nat.fib 9) = 6) ∧
+    (Nat.clog 2 (Nat.fib 10) = 6) := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide,
+          by native_decide⟩
+
 end Omega.Conclusion.ReversibleAuxBitsBudget
