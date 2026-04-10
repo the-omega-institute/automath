@@ -339,3 +339,6 @@ import Omega.POM.BoundedPerturbationInvariance
 import Omega.POM.ParrySurfaceDerivative
 import Omega.POM.MaxMassDispersionBound
 import Omega.Conclusion.BoundaryParityAnomalyGap
+import Omega.POM.ResidueRefinementJensen
+import Omega.POM.PositiveNegativeMomentCoupling
+import Omega.Conclusion.KrylovLowrankRigidity
