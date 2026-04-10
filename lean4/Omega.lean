@@ -365,3 +365,6 @@ import Omega.Conclusion.CompressionLadderSpin10
 import Omega.POM.S5GaloisArithmetic
 import Omega.Zeta.GaugeGroupTripleDecomp
 import Omega.Conclusion.ParetoColdendCurvaturePole
+import Omega.POM.S5TwoSubsetDegree10
+import Omega.Conclusion.NonexposedPhaseIntegerDomination
+import Omega.Zeta.Degree11GenericGaloisS11
