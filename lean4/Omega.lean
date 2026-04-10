@@ -107,6 +107,7 @@ import Omega.SPG.F2FiberCardinality
 import Omega.SPG.CycleRankFormula
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.ScreenKernelAuditCost
+import Omega.SPG.ScreenKernelConnectedComponents
 import Omega.SPG.GodelDoublelog
 import Omega.SPG.WalshStokes
 import Omega.SPG.CheegerStokes
@@ -319,6 +320,7 @@ import Omega.GU.ZeroDefectExpRate
 import Omega.Conclusion.ZeckendorfEulerSeeds
 import Omega.Conclusion.IntermediateQuotientSeeds
 import Omega.Conclusion.SinglepointJetRigidity
+import Omega.Conclusion.RealInput40UVAtomCore
 import Omega.Conclusion.SmithRamanujanShadowSeeds
 import Omega.Conclusion.SmithRamanujanShadowInversion
 import Omega.POM.ZeroTemperatureTwoTermExpansion
@@ -334,5 +336,6 @@ import Omega.Conclusion.RecursiveSolenoidLieShadow
 import Omega.POM.CollisionStrengthened
 import Omega.SPG.HypercubeGradientConsistency
 import Omega.POM.BoundedPerturbationInvariance
+import Omega.POM.ParrySurfaceDerivative
 import Omega.POM.MaxMassDispersionBound
 import Omega.Conclusion.BoundaryParityAnomalyGap
