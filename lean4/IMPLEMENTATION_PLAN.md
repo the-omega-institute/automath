@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2567 |
+| \leanverified 标注数 | 2571 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2591 |
-| 轮次 | R615（round_count=616）|
+| 总标注数 | 2595 |
+| 轮次 | R616（round_count=617）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,17 +24,17 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 325 | 19.0% |
-| Emergent Arithmetic | 185 | 178 | 96.2% |
+| POM | 1,707 | 326 | 19.1% |
+| Emergent Arithmetic | 185 | 179 | 96.8% |
 | Folding | 337 | 145 | 43.0% |
 | Conclusion | 2,550 | 282 | 11.1% |
 | Group Unification | 469 | 185 | 39.4% |
-| SPG | 129 | 116 | 89.9% |
+| SPG | 129 | 117 | 90.7% |
 | Circle Dimension | 393 | 167 | 42.5% |
 | Zeta Finite Part | 4,524 | 223 | 4.9% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1685** | **16.0%** |
+| **合计（body）** | **10,508** | **1688** | **16.1%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**EA 折叠截面基数 + SPG 总次数矩完备门槛 2^m 级 + POM Catalan 矩封闭式（Round R616，新标签，\leanverified 完整）**：`paper_ea_fold_as_section`（对应 `cor:fold-as-section`，EA；card(X m)=F(m+2) 种子值，**新标签首次注册**；标注写入两处重复文件）；`paper_spg_total_degree_moment_threshold`（对应 `cor:spg-total-degree-moment-threshold-exponential-scale`，SPG；C(n+r,n)≥2^{mn} 种子值，**新标签首次注册**）；`paper_pom_catalan_moments`（对应 `cor:pom-Lk-boundary-catalan-moments-gf`，POM；Catalan 数种子值 + 矩递推，**新标签首次注册**）
 **Zeta Fibonacci-Lucas 屏障碰撞间隙 + Conclusion 字母表 M≥5 门槛 + Folding 同步延迟闭式（Round R615，新标签，\leanverified 完整）**：`paper_zeta_lucas_barrier_seeds`（对应 `con:xi-fold-window6-lucas-barrier-collision-gap`，Zeta；Lucas 数种子值 + F(2n)=F(n)·L(n) 恒等式，**新标签首次注册**）；`paper_conclusion_alphabet_threshold_mge5`（对应 `cor:conclusion-alphabet-threshold-mge5`，Conclusion；可逆重写迫使 M≥5 算术种子值，**新标签首次注册**）；`paper_fold_sync_delay`（对应 `cor:Ym-sync-delay`，Folding；D_sync(m)=m-1 尖锐性种子值，**新标签首次注册**）
 **GU 边界层 m=6 平方恒等式数值实例 + CD 压缩圆维异常二次开销 + POM K_m 谱种子值（Round R614，新标签，\leanverified 完整）**：`paper_bdry_m6_square_instance`（对应 `cor:bdry-m6-square-instance`，GU；b(11)=b(6)²+b(7)²=34 种子值，**新标签首次注册**）；`paper_cdim_anomaly_compression_overhead`（对应 `cor:cdim-anomaly-compression-overhead`，CD；二项差异常二次开销公式种子值，**新标签首次注册**）；`paper_pom_Km_spectrum`（对应 `cor:pom-Km-spectrum`，POM；rank=F(m+2) + nullity=2^m-F(m+2) 种子值，**新标签首次注册**）
 **EA 普通素数账本乘法线性化 + SPG dyadic polycube 粘连上界 + Folding 图像子移位 zeta 封口（Round R613，新标签，\leanverified 完整）**：`paper_prime_ledger_linearizes_multiplication`（对应 `prop:ordinary-prime-ledger-linearizes-multiplication`，EA；padicValNat 加法性种子值，**新标签首次注册**）；`paper_spg_polycube_adhesion_sharp_upper_bound`（对应 `thm:spg-polyclube-adhesion-sharp-upper-bound`，SPG；粘连数上界与平均度界种子值，**新标签首次注册**）；`paper_fold_image_subshift_zeta_closed`（对应 `cor:Phi_m-zeta-closed`，Folding；图像子移位不动点计数与 zeta 封口种子值，**新标签首次注册**）
