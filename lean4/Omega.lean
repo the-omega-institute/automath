@@ -327,3 +327,6 @@ import Omega.Zeta.EnergyTailMassSeeds
 import Omega.Conclusion.WallisFactorMonoid
 import Omega.POM.CRTSpatializationPrimeBudget
 import Omega.SPG.GodelDoublelogMinkowski
+import Omega.Conclusion.DisjointnessPowerWordDecomposition
+import Omega.SPG.SquareclassHammingIsometry
+import Omega.Zeta.GroupoidCentralRenyiShannon
