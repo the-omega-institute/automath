@@ -324,3 +324,6 @@ import Omega.Conclusion.SmithRamanujanShadowInversion
 import Omega.POM.ZeroTemperatureTwoTermExpansion
 import Omega.SPG.DyadicFluxZetaMinkowskiPole
 import Omega.Zeta.EnergyTailMassSeeds
+import Omega.Conclusion.WallisFactorMonoid
+import Omega.POM.CRTSpatializationPrimeBudget
+import Omega.SPG.GodelDoublelogMinkowski
