@@ -345,3 +345,6 @@ import Omega.Conclusion.KrylovLowrankRigidity
 import Omega.Conclusion.BoundaryParityBlindFiltration
 import Omega.POM.SideinfoExactEntropy
 import Omega.SPG.BoundaryDominanceExponent
+import Omega.POM.CentralizerFPdim
+import Omega.POM.PressureConvexity
+import Omega.Folding.GaugeAnomalyQ19
