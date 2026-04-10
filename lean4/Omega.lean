@@ -77,6 +77,7 @@ import Omega.Folding.BernoulliPPressureQuartic
 import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Folding.EndpointUnique
 import Omega.Folding.ImageSubshiftZeta
+import Omega.Folding.SyncDelay
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -151,6 +152,7 @@ import Omega.Zeta.DFAPrimeSymmetricDiff
 import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.DFADensityDichotomy
+import Omega.Zeta.LucasBarrier
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -206,6 +208,7 @@ import Omega.Conclusion.GodelLeyangIFS
 import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.ShiftedHankelPrecision
+import Omega.Conclusion.AlphabetThreshold
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
