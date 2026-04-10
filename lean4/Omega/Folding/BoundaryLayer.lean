@@ -1067,4 +1067,30 @@ theorem paper_cassini_gap_factorization_extended :
     232 = Nat.fib 6 * (Nat.fib 8 + Nat.fib 6) := by
   refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
 
+-- Phase R611: Boundary count recurrence and square identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Boundary count recurrence for m = 3..8.
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_recurrence (m : Nat) (hm1 : 3 ≤ m) (hm : m ≤ 8) :
+    cBoundaryCount (m + 2) = cBoundaryCount (m + 1) + cBoundaryCount m := by
+  interval_cases m <;> native_decide
+
+/-- Square identity seeds: b(2k+1) = b(k)² + b(k+1)².
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_square_identity_seeds :
+    cBoundaryCount 5 = cBoundaryCount 3 ^ 2 + cBoundaryCount 4 ^ 2 ∧
+    cBoundaryCount 7 = cBoundaryCount 4 ^ 2 + cBoundaryCount 5 ^ 2 ∧
+    cBoundaryCount 9 = cBoundaryCount 5 ^ 2 + cBoundaryCount 6 ^ 2 := by
+  refine ⟨by native_decide, by native_decide, by native_decide⟩
+
+/-- Paper package: boundary layer extended.
+    prop:bdry-fib-square-identity -/
+theorem paper_boundary_layer_extended :
+    cBoundaryCount 9 = 13 ∧ cBoundaryCount 10 = 21 ∧
+    (∀ m, 3 ≤ m → m ≤ 10 → cBoundaryCount m = Nat.fib (m - 2)) ∧
+    cBoundaryCount 9 = cBoundaryCount 5 ^ 2 + cBoundaryCount 6 ^ 2 :=
+  ⟨cBoundaryCount_nine, cBoundaryCount_ten, cBoundaryCount_eq_fib_extended,
+   by native_decide⟩
+
 end Omega
