@@ -6,17 +6,17 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~49,440 |
-| 定理/定义数 | ~4,318 |
-| 论文接口包装 | 719+ |
-| 文件数 | 133 |
+| 总行数 | ~49,590 |
+| 定理/定义数 | ~4,330 |
+| 论文接口包装 | 722+ |
+| 文件数 | 135 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2820 |
-| \leanpartial 标注数 | 49 |
-| 总标注数 | 2869 |
-| 轮次 | R636（round_count=637）|
+| \leanverified 标注数 | 2826 |
+| \leanpartial 标注数 | 50 |
+| 总标注数 | 2876 |
+| 轮次 | R637（round_count=638）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
