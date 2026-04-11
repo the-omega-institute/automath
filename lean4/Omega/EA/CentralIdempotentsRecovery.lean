@@ -100,6 +100,18 @@ theorem projectorVal_eq_one_iff_other_three_zero
     rcases hb with rfl | rfl <;>
     norm_num [projectorVal]
 
+/-- Paper-facing equivalence: one central idempotent equals `1` iff the other three vanish.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem paper_projectorVal_eq_one_iff_other_three_zero
+    {α β a b : Int}
+    (hα : α = 1 ∨ α = -1) (hβ : β = 1 ∨ β = -1)
+    (ha : a = 1 ∨ a = -1) (hb : b = 1 ∨ b = -1) :
+    projectorVal α β a b = 1 ↔
+      projectorVal α (-β) a b = 0 ∧
+      projectorVal (-α) β a b = 0 ∧
+      projectorVal (-α) (-β) a b = 0 := by
+  simpa using projectorVal_eq_one_iff_other_three_zero hα hβ ha hb
+
 /-- On ±1 inputs, if one projector vanishes then one of the other three equals `1`.
     thm:fold-groupoid-z2x2-central-idempotents -/
 theorem projectorVal_zero_iff_other_exists_one
