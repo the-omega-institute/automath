@@ -54,6 +54,13 @@ theorem clog2_mono {a b : ℕ} (h : a ≤ b) : Nat.clog 2 a ≤ Nat.clog 2 b :=
 theorem pow_clog2_ge (b : ℕ) (_hb : 0 < b) : b ≤ 2 ^ Nat.clog 2 b :=
   Nat.le_pow_clog (by omega) b
 
+/-- Paper-facing monotonicity and encoding package for reversible auxiliary budgets.
+    prop:conclusion-reversible-aux-bits-equals-log-budget -/
+theorem paper_conclusion_reversible_budget_monotone_package {a b : ℕ}
+    (h : a ≤ b) (hb : 0 < b) :
+    Nat.clog 2 a ≤ Nat.clog 2 b ∧ b ≤ 2 ^ Nat.clog 2 b := by
+  exact ⟨clog2_mono h, pow_clog2_ge b hb⟩
+
 /-- Extended clog₂ seed values.
     prop:conclusion-reversible-aux-bits-equals-log-budget -/
 theorem clog2_extended_seeds :
