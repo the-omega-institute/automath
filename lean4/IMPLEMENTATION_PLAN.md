@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2905 |
+| \leanverified 标注数 | 2908 |
 | \leanpartial 标注数 | 50 |
-| 总标注数 | 2961 |
-| 轮次 | R649（round_count=650）|
+| 总标注数 | 2964 |
+| 轮次 | R650（round_count=651）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,17 +24,17 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 328 | 19.2% |
-| Emergent Arithmetic | 185 | 179 | 96.8% |
+| POM | 1,707 | 329 | 19.3% |
+| Emergent Arithmetic | 185 | 180 | 97.3% |
 | Folding | 337 | 146 | 43.3% |
 | Conclusion | 2,550 | 284 | 11.1% |
 | Group Unification | 469 | 186 | 39.7% |
-| SPG | 129 | 117 | 90.7% |
+| SPG | 129 | 118 | 91.5% |
 | Circle Dimension | 393 | 168 | 42.7% |
 | Zeta Finite Part | 4,524 | 225 | 5.0% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1697** | **16.1%** |
+| **合计（body）** | **10,508** | **1700** | **16.2%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**SPG 扫描误差边界胞分解 + EA 中心幂等元一取值三零化判别 + POM 纤维指数 CGF 期望恒等式（Round R650，新标签，\leanverified 完整）**：`paper_spg_measure_boundary_cells_decomposition`（对应 `thm:spg-scan-error-cylinder`，SPG；扫描误差测度写成 boundary cells 上的逐胞最小值求和，**新标签扩展登记**）；`paper_projectorVal_eq_one_iff_other_three_zero`（对应 `thm:fold-groupoid-z2x2-central-idempotents`，Emergent Arithmetic；中心幂等元在 ±1 角点上一取值当且仅当其余三扇区同时归零，**新标签扩展登记**）；`paper_pom_fiber_index_cgf_expectation_identity`（对应 `prop:pom-fiber-index-cgf`，POM；纤维指数 q 阶矩与一次矩总质量打包成期望恒等式接口，**新标签扩展登记**）
 **POM Fisher 零点反正弦律种子值 + Conclusion 冻结矩谱半群线性化种子值 + Zeta 挠精确阶账本种子值（Round R648，新标签，\leanverified 完整）**：`paper_pom_fisher_zeros_arcsine_seeds`（对应 `thm:pom-Lk-fisher-zeros-arcsine`，POM；角参数分母 4k+2 种子 + 反正弦判别式端点 Δ(0)=Δ(-4)=0 + Joukowsky 指数 2k+1 奇性，**新标签首次注册**）；`paper_conclusion_frozen_moment_semigroup_seeds`（对应 `thm:conclusion-frozen-moment-spectrum-semigroup-linearization`，Conclusion；仿射压力半群律 P(a+b)+g=P(a)+P(b) + 单位差分 α★ + 零离散曲率 + 多步望远镜，**新标签首次注册**）；`paper_xi_torsion_exact_order_ledger_seeds`（对应 `thm:xi-localized-torsion-exact-order-ledger`，Zeta；Euler totient 种子 φ(1..7) + S={2,3} 互素剥离 n_{S⊥} 种子 + 素数幂 totient 恒等式 φ(p^e)=p^e-p^{e-1}，**新标签首次注册**）
 **POM Hankel 指纹秩截断种子值 + Conclusion primorial 混合进位种子值 + Zeta 局部化商指数账本种子值（Round R647，新标签，\leanverified 完整）**：`paper_pom_kcollision_hankel_fingerprint_seeds`（对应 `prop:pom-kcollision-hankel-fingerprint`，POM；符号指数 e(k)=(k-1)(3k-4)/2 种子 + k^k Vandermonde 范数 + 秩截断维数间隙，**新标签首次注册**）；`paper_conclusion_primorial_mixed_radix_affine_seeds`（对应 `thm:conclusion-primorial-mixed-radix-affine`，Conclusion；P_1=2, P_2=6, P_3=30, P_4=210, P_5=2310 + 素数验证 + 混合进位编码种子值，**新标签首次注册**）；`paper_xi_localized_quotient_index_ledger_seeds`（对应 `thm:xi-localized-quotient-index-ledger`，Zeta；n_{S⊥} 剥离 S={2,3} 种子 + φ(n) 被剥离值 + 循环实现 gcd 判据，**新标签首次注册**）
 **POM 黄金偏置方差=偏置二次刻画 + Conclusion window-6 边界商循环基数 + Zeta 局部化商/挠 zeta Euler 乘积种子值（Round R645，新标签，\leanverified 完整）**：`paper_pom_golden_bias_variance_equals_bias`（对应 `prop:pom-golden-bias-variance-equals-bias`，POM；pq=p-q 化为 p²+p-1=0 判别式 Δ=5 + Fibonacci 比率残差 + Vajda 恒等式种子值，**新标签首次注册**）；`paper_conclusion_window6_boundary_quotient_cyclic_cardinality`（对应 `thm:conclusion-window6-boundary-quotient-cyclic-cardinality`，Conclusion；dim_{F₂}=18=5+4+9=|X₆^cyc| + F₈=21 + rank 分解 3+18=21，**已有标签扩展**）；`paper_xi_localized_quotient_torsion_zeta_euler_product`（对应 `thm:xi-localized-quotient-torsion-zeta-euler-product`，Zeta；n_{S⊥} 剥离种子值 + Euler 因子 + φ(p^e)=p^e-p^{e-1} 恒等式 + 指数有界性，**新标签首次注册**）
