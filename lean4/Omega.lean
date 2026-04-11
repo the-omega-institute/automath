@@ -282,6 +282,7 @@ import Omega.GU.AnomalyLedgerNoMultiplicative
 import Omega.GU.Z6CenterQuotient
 import Omega.GU.ThreefoldRigidity
 import Omega.GU.BdrySquareIdentity
+import Omega.GU.M11Z34CyclotomicRepresentationRigidity
 import Omega.GU.Window6DyadicBudget
 import Omega.GU.SheetflipRegisterBound
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
