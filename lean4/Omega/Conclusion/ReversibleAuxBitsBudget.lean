@@ -84,4 +84,11 @@ theorem paper_reversible_budget_extended :
           by native_decide, by native_decide, by native_decide,
           by native_decide⟩
 
+/-- Paper package: reversible auxiliary-bit budget via finite injective encodings.
+    This packages the finite-state encoding criterion as an iff statement.
+    prop:conclusion-reversible-aux-bits-equals-log-budget -/
+theorem paper_conclusion_reversible_aux_bits_log_budget_package (b k : ℕ) :
+    (∃ f : Fin b → Fin (2 ^ k), Function.Injective f) ↔ b ≤ 2 ^ k :=
+  injection_exists_iff b k
+
 end Omega.Conclusion.ReversibleAuxBitsBudget

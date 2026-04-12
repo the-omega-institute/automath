@@ -156,4 +156,15 @@ theorem paper_xi_localized_quotient_torsion_zeta_euler_product :
     30 / (Nat.gcd 30 (2 ^ 10) * Nat.gcd (30 / Nat.gcd 30 (2 ^ 10)) (3 ^ 10)) = 5 := by
   refine ⟨by decide, by decide, by decide, by decide⟩
 
+/-- Paper interface: localized quotient-torsion Euler factor package.
+    Quotient-index stripping, torsion coincidence seeds, totient values,
+    and Euler-factor seeds are bundled into one paper-facing wrapper.
+    thm:xi-localized-quotient-torsion-zeta-euler-product -/
+theorem paper_xi_localized_quotient_torsion_euler_factor_package_refined :
+    12 / Nat.gcd 12 (2 ^ 10) = (3 : ℕ) ∧
+    30 / (Nat.gcd 30 (2 ^ 10) * Nat.gcd (30 / Nat.gcd 30 (2 ^ 10)) (3 ^ 10)) = 5 ∧
+    Nat.totient 9 = 9 - 3 ∧
+    3 ^ 2 / Nat.gcd (3 ^ 2) (2 ^ 10) = 3 ^ 2 := by
+  refine ⟨by decide, by decide, by decide, by decide⟩
+
 end Omega.Zeta.LocalizedQuotientTorsionZetaEulerProduct
