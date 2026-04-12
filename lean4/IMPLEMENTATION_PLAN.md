@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2912 |
+| \leanverified 标注数 | 2915 |
 | \leanpartial 标注数 | 50 |
-| 总标注数 | 2968 |
-| 轮次 | R651（round_count=652）|
+| 总标注数 | 2971 |
+| 轮次 | R652（round_count=653）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,17 +24,17 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 329 | 19.3% |
+| POM | 1,707 | 330 | 19.3% |
 | Emergent Arithmetic | 185 | 181 | 97.8% |
 | Folding | 337 | 146 | 43.3% |
-| Conclusion | 2,550 | 286 | 11.2% |
+| Conclusion | 2,550 | 287 | 11.3% |
 | Group Unification | 469 | 186 | 39.7% |
 | SPG | 129 | 118 | 91.5% |
-| Circle Dimension | 393 | 168 | 42.7% |
+| Circle Dimension | 393 | 169 | 43.0% |
 | Zeta Finite Part | 4,524 | 226 | 5.0% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1704** | **16.2%** |
+| **合计（body）** | **10,508** | **1707** | **16.2%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Circle Dimension 有限素数截断账本包 + Conclusion 单寄存器串行化间隙种子值 + POM 右解析 paper package（Round R652，新标签，\leanverified 完整）**：`paper_cdim_multiplicative_object_no_finite_hom_ledger_package`（对应 `cor:cdim-finite-prime-truncation-hom-half-circle`，Circle Dimension；把有限素数截断 prime/coprime/product/minFac 证书打包为乘法对象无有限同态账本的 paper-facing wrapper，**新标签扩展登记**）；`paper_conclusion_prime_register_one_register_serialization_gap_seeds`（对应 `thm:conclusion-window6-boundary-pinning-two-scales-memory-gap`，Conclusion；prime-register 单寄存器串行化讨论所需的乘积与递减算术种子值，**新标签扩展登记**）；`paper_pom_right_resolving_package`（对应 `thm:pom-right-resolving`，POM；末位 snoc 二选一可判别性的 paper-facing package，**新标签扩展登记**）
 **Zeta 局部化 quotient/torsion Euler 因子精化包 + Conclusion 可逆辅助位预算 iff 打包（Round R651，新标签，\leanverified 完整）**：`paper_xi_localized_quotient_torsion_euler_factor_package_refined`（对应 `thm:xi-localized-quotient-torsion-zeta-euler-product`，Zeta；在既有 quotient/torsion zeta Euler 乘积正文定理下补入 refined Euler-factor package 论文接口，**新标签扩展登记**）；`paper_conclusion_reversible_aux_bits_log_budget_package`（对应 `prop:conclusion-reversible-aux-bits-equals-log-budget`，Conclusion；有限注入存在当且仅当预算满足 `b ≤ 2^k` 的 paper-facing iff 包装，**新标签扩展登记**）
 **EA 中心幂等元非负一判别 + Conclusion 可逆辅助预算单调/编码打包（Round R651，新标签，\leanverified 完整）**：`projectorVal_ne_neg_one`（对应 `thm:fold-groupoid-z2x2-central-idempotents`，Emergent Arithmetic；±1 输入上中心投影不可能取值 -1，**新标签扩展登记**）；`paper_conclusion_reversible_budget_monotone_package`（对应 `prop:conclusion-reversible-aux-bits-equals-log-budget`，Conclusion；clog2 单调性与二进制预算上界打包成正文接口，**新标签扩展登记**）；`paper_scanError_zero_iff_observablePure`（对应 `thm:spg-scan-tanaka-stokes`，SPG；经独立核对为预存覆盖，位于 `ScanErrorDiscrete.lean` 既有代码中，本轮**无新增代码/无新增标注/覆盖率不变**）
 **SPG 扫描误差边界胞分解 + EA 中心幂等元一取值三零化判别 + POM 纤维指数 CGF 期望恒等式（Round R650，新标签，\leanverified 完整）**：`paper_spg_measure_boundary_cells_decomposition`（对应 `thm:spg-scan-error-cylinder`，SPG；扫描误差测度写成 boundary cells 上的逐胞最小值求和，**新标签扩展登记**）；`paper_projectorVal_eq_one_iff_other_three_zero`（对应 `thm:fold-groupoid-z2x2-central-idempotents`，Emergent Arithmetic；中心幂等元在 ±1 角点上一取值当且仅当其余三扇区同时归零，**新标签扩展登记**）；`paper_pom_fiber_index_cgf_expectation_identity`（对应 `prop:pom-fiber-index-cgf`，POM；纤维指数 q 阶矩与一次矩总质量打包成期望恒等式接口，**新标签扩展登记**）
