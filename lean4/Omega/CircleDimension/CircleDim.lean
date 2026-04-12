@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.Data.Fintype.EquivFin
+import Omega.Folding.CircleDimension
 
 /-! ### Circle dimension for abelian groups
 
@@ -855,8 +856,22 @@ theorem paper_circleDim_tensor_and_sub :
     circleDim 5 0 = 5 :=
   ⟨circleDim_add, circleDim_finite, fun _ _ _ _ _ => by simp [circleDim], rfl⟩
 
--- ══════════════════════════════════════════════════════════════
--- Phase R282: Half circle dimension nonneg + circle dimension certificates
+/-- Refined paper interface for circle-dimension axiomatic completeness.
+    This packages the existing completeness certificate together with the
+    semiring-hom rigidity existence statement from the circle-dimension development.
+    thm:cdim-nr-nd-semiring-hom-rigidity -/
+theorem paper_circleDim_axiomatic_completeness_refined :
+    ((∀ a b c d, circleDim (a + b) (c + d) = circleDim a c + circleDim b d) ∧
+    (∀ n t1 t2, circleDim n t1 = circleDim n t2) ∧
+    circleDim 1 0 = 1 ∧
+    (∀ n t, circleDim n t = 0 ↔ n = 0) ∧
+    (∀ a b t1 t2, a < b → circleDim a t1 < circleDim b t2)) ∧
+    (∀ (r d : Nat) (f : (Fin r → ℕ) →+* (Fin d → ℕ)),
+      ∃ σ : Fin d → Fin r, ∀ x : Fin r → ℕ, ∀ j : Fin d, f x j = x (σ j)) := by
+  constructor
+  · exact paper_circleDim_axiomatic_completeness
+  · intro r d f
+    exact Omega.semiring_hom_rigidity r d f
 -- ══════════════════════════════════════════════════════════════
 
 /-- Half circle dimension is always nonneg. def:circle-dimension -/

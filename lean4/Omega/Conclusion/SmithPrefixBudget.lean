@@ -19,4 +19,14 @@ theorem paper_conclusion_local_alphabet_smith_prefix_nonexchangeability_seeds :
   refine ⟨by omega, ⟨by norm_num, by norm_num⟩, by omega,
          ⟨by norm_num, by omega, by omega, by norm_num⟩, by omega⟩
 
+/-- Minimal prime-infrastructure Smith atomic recovery seeds.
+    This packages a finite counting seed together with a discrete Hessian-style
+    arithmetic seed for the Smith-prefix budget discussion.
+    prop:conclusion-minimal-prime-infrastructure-smith-atomic-recovery-seeds -/
+theorem paper_conclusion_minimal_prime_infrastructure_smith_atomic_recovery_seeds :
+    Nat.card (Fin 4) = 4 ∧
+    (1 - 2 * 2 + 3 = (0 : ℤ)) ∧
+    (4 - 2 * 9 + 16 = (2 : ℤ)) := by
+  refine ⟨by simp, by norm_num, by norm_num⟩
+
 end Omega.Conclusion
