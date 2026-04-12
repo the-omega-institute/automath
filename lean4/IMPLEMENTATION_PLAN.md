@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2912 |
 | \leanpartial 标注数 | 50 |
 | 总标注数 | 2968 |
-| 轮次 | R652（round_count=653）|
+| 轮次 | R651（round_count=652）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,7 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
-**Zeta 局部化 quotient/torsion Euler 因子精化包 + Conclusion 可逆辅助位预算 iff 打包（Round R652，新标签，\leanverified 完整）**：`paper_xi_localized_quotient_torsion_euler_factor_package_refined`（对应 `thm:xi-localized-quotient-torsion-zeta-euler-product`，Zeta；在既有 quotient/torsion zeta Euler 乘积正文定理下补入 refined Euler-factor package 论文接口，**新标签扩展登记**）；`paper_conclusion_reversible_aux_bits_log_budget_package`（对应 `prop:conclusion-reversible-aux-bits-equals-log-budget`，Conclusion；有限注入存在当且仅当预算满足 `b ≤ 2^k` 的 paper-facing iff 包装，**新标签扩展登记**）
+**Zeta 局部化 quotient/torsion Euler 因子精化包 + Conclusion 可逆辅助位预算 iff 打包（Round R651，新标签，\leanverified 完整）**：`paper_xi_localized_quotient_torsion_euler_factor_package_refined`（对应 `thm:xi-localized-quotient-torsion-zeta-euler-product`，Zeta；在既有 quotient/torsion zeta Euler 乘积正文定理下补入 refined Euler-factor package 论文接口，**新标签扩展登记**）；`paper_conclusion_reversible_aux_bits_log_budget_package`（对应 `prop:conclusion-reversible-aux-bits-equals-log-budget`，Conclusion；有限注入存在当且仅当预算满足 `b ≤ 2^k` 的 paper-facing iff 包装，**新标签扩展登记**）
 **EA 中心幂等元非负一判别 + Conclusion 可逆辅助预算单调/编码打包（Round R651，新标签，\leanverified 完整）**：`projectorVal_ne_neg_one`（对应 `thm:fold-groupoid-z2x2-central-idempotents`，Emergent Arithmetic；±1 输入上中心投影不可能取值 -1，**新标签扩展登记**）；`paper_conclusion_reversible_budget_monotone_package`（对应 `prop:conclusion-reversible-aux-bits-equals-log-budget`，Conclusion；clog2 单调性与二进制预算上界打包成正文接口，**新标签扩展登记**）；`paper_scanError_zero_iff_observablePure`（对应 `thm:spg-scan-tanaka-stokes`，SPG；经独立核对为预存覆盖，位于 `ScanErrorDiscrete.lean` 既有代码中，本轮**无新增代码/无新增标注/覆盖率不变**）
 **SPG 扫描误差边界胞分解 + EA 中心幂等元一取值三零化判别 + POM 纤维指数 CGF 期望恒等式（Round R650，新标签，\leanverified 完整）**：`paper_spg_measure_boundary_cells_decomposition`（对应 `thm:spg-scan-error-cylinder`，SPG；扫描误差测度写成 boundary cells 上的逐胞最小值求和，**新标签扩展登记**）；`paper_projectorVal_eq_one_iff_other_three_zero`（对应 `thm:fold-groupoid-z2x2-central-idempotents`，Emergent Arithmetic；中心幂等元在 ±1 角点上一取值当且仅当其余三扇区同时归零，**新标签扩展登记**）；`paper_pom_fiber_index_cgf_expectation_identity`（对应 `prop:pom-fiber-index-cgf`，POM；纤维指数 q 阶矩与一次矩总质量打包成期望恒等式接口，**新标签扩展登记**）
 **POM Fisher 零点反正弦律种子值 + Conclusion 冻结矩谱半群线性化种子值 + Zeta 挠精确阶账本种子值（Round R648，新标签，\leanverified 完整）**：`paper_pom_fisher_zeros_arcsine_seeds`（对应 `thm:pom-Lk-fisher-zeros-arcsine`，POM；角参数分母 4k+2 种子 + 反正弦判别式端点 Δ(0)=Δ(-4)=0 + Joukowsky 指数 2k+1 奇性，**新标签首次注册**）；`paper_conclusion_frozen_moment_semigroup_seeds`（对应 `thm:conclusion-frozen-moment-spectrum-semigroup-linearization`，Conclusion；仿射压力半群律 P(a+b)+g=P(a)+P(b) + 单位差分 α★ + 零离散曲率 + 多步望远镜，**新标签首次注册**）；`paper_xi_torsion_exact_order_ledger_seeds`（对应 `thm:xi-localized-torsion-exact-order-ledger`，Zeta；Euler totient 种子 φ(1..7) + S={2,3} 互素剥离 n_{S⊥} 种子 + 素数幂 totient 恒等式 φ(p^e)=p^e-p^{e-1}，**新标签首次注册**）
