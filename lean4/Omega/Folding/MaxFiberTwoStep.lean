@@ -1102,4 +1102,9 @@ theorem paper_hiddenBit_stable_and_threshold :
   · have := hiddenBitCount_even_closed 3 (by omega); omega
   · have := hiddenBitCount_odd_closed 3; omega
 
-end Omega
+/-- Paper package: right-resolving separation at the final snoc bit.
+    This is the paper-facing wrapper for the final-bit distinguishability lemma.
+    prop:pom-right-resolving-package -/
+theorem paper_pom_right_resolving_package (w : Omega.Word m) :
+    Omega.Fold (Omega.snoc w false) ≠ Omega.Fold (Omega.snoc w true) :=
+  Omega.Fold_snoc_false_ne_snoc_true w

@@ -82,4 +82,12 @@ theorem paper_conclusion_boundary_center_seventeen_bit_barrier :
     (17 - 2 ≥ 15) := by
   exact ⟨⟨by omega, by omega⟩, by omega⟩
 
+/-- Prime-register one-register serialization gap seeds.
+    This records the basic product and decrement arithmetic used in the
+    conclusion-level prime-register serialization discussion.
+    prop:conclusion-prime-register-one-register-serialization-gap-seeds -/
+theorem paper_conclusion_prime_register_one_register_serialization_gap_seeds :
+    (2 * 3 * 5 = 30) ∧ ((3 - 1 : ℕ) = 2) := by
+  exact ⟨by norm_num, by norm_num⟩
+
 end Omega.Conclusion.BoundaryPinningMemoryGap
