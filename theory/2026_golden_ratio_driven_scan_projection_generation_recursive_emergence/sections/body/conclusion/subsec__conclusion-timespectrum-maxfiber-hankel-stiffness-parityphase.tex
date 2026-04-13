@@ -1,0 +1,317 @@
+\subsection{时间谱可编程性接口、最大纤维奇偶补偿与 Hankel--parity 双刚性}\label{subsec:conclusion-timespectrum-maxfiber-hankel-stiffness-parityphase}
+结论区此前已经给出两条时间谱接口：其一，极大扫描轨道长度可被任意有限个满足 \(p\equiv 2\pmod 3\) 的素数乘积精确编程（定理 \ref{thm:conclusion-lmax-prime-programmability}）；其二，极大时间谱不可能被任何固定有限素数集支撑（推论 \ref{cor:conclusion-lmax-not-finite-primeizable}）。在此基础上，还可把此前尚未在结论区单独封装的另外三条链合并起来：最大纤维达到者族的奇偶补偿律、Hankel 算术层析的有限坏素数与确定性补全，以及 parity-defect 相对于 odd-prime 扭曲的硬隔离谱相。
+
+\begin{theorem}[最大纤维达到者族的奇偶补偿律]\label{thm:conclusion-maxfiber-achievers-odd-even-compensation}
+记
+\[
+\mathcal M_m:=\{x\in X_m:\ d_m(x)=D_m\},
+\qquad
+s_m(x):=Z_x(-1).
+\]
+则在稳定阈值区间内成立严格二分：
+\begin{enumerate}
+  \item 若 \(m=2k+1\ge 13\) 为奇数，则对任意 \(x\in \mathcal M_{2k+1}\) 都有
+  \[
+  s_{2k+1}(x)=0.
+  \]
+  因而奇数窗口上的最大纤维达到者族发生完全签名湮灭。
+  \item 若 \(m=2k\ge 10\) 为偶数，则 \(\mathcal M_{2k}=\{x^{(1)},x^{(2)}\}\) 恰有两相位，并且隐藏位分裂满足
+  \[
+  \bigl(d_{2k,0}(x^{(1)}),d_{2k,1}(x^{(1)})\bigr)=(F_{k+1},F_k),
+  \qquad
+  \bigl(d_{2k,0}(x^{(2)}),d_{2k,1}(x^{(2)})\bigr)=(F_k,F_{k+1}).
+  \]
+  从而在两相位的均匀平均下，
+  \[
+  \EE\!\left[\frac{d_{2k,0}(X)}{D_{2k}}\right]
+  =
+  \EE\!\left[\frac{d_{2k,1}(X)}{D_{2k}}\right]
+  =\frac12,
+  \qquad
+  X\sim \mathrm{Unif}\{x^{(1)},x^{(2)}\}.
+  \]
+\end{enumerate}
+换言之，最大纤维达到者族在奇数窗口上表现为签名湮灭，在偶数窗口上表现为 Fibonacci 型精确补偿。
+\end{theorem}
+
+\begin{proof}
+由注 \ref{rem:pom-max-achievers-graph-structure}，当 \(m=2k+1\ge 13\) 时，
+\[
+x\in \mathcal M_{2k+1}
+\iff
+\Gamma_x\cong P_{k-1}\sqcup P_1.
+\]
+其中 \(P_1\) 的长度满足 \(1\equiv 1\pmod 3\)。于是由定理 \ref{thm:pom-fiber-rewrite-parity-exact-split-mod3-obstruction}，
+\[
+s_{2k+1}(x)=0
+\qquad
+(\forall\,x\in \mathcal M_{2k+1}),
+\]
+得到第 \(1\) 条。
+
+当 \(m=2k\ge 10\) 时，由定理 \ref{thm:pom-max-achievers-phase-stabilization}，最大纤维达到者恰有两相位；再由推论 \ref{cor:pom-max-fiber-hidden-bit-unbiased}，
+\[
+\bigl(d_{2k,0}(x^{(1)}),d_{2k,1}(x^{(1)})\bigr)=(F_{k+1},F_k),
+\qquad
+\bigl(d_{2k,0}(x^{(2)}),d_{2k,1}(x^{(2)})\bigr)=(F_k,F_{k+1}).
+\]
+又
+\[
+D_{2k}=F_{k+2}=F_{k+1}+F_k,
+\]
+故
+\[
+\frac{d_{2k,0}(x^{(1)})+d_{2k,0}(x^{(2)})}{2D_{2k}}
+=
+\frac{F_{k+1}+F_k}{2F_{k+2}}
+=\frac12,
+\]
+并对隐藏位 \(1\) 同理。证毕。
+\end{proof}
+
+\begin{theorem}[Hankel 算术层析的有限坏素数与确定性补全]\label{thm:conclusion-hankel-arithmetic-tomography-finite-bad-primes-completion}
+设整数序列 \((a_n)_{n\ge 0}\subset\ZZ\) 的无穷 Hankel 矩阵
+\[
+H:=(a_{i+j})_{i,j\ge 0}
+\]
+在 \(\QQ\) 上的秩为 \(d\ge 1\)。定义第 \(d\) 阶行列式含量
+\[
+\Delta_d:=
+\gcd\Bigl\{\det(M):\ M\text{ 为 }H\text{ 的 }d\times d\text{ 非零子式}\Bigr\}.
+\]
+则成立：
+\begin{enumerate}
+  \item 对任意素数 \(p\)，有严格等价
+  \[
+  \rank_{\FF_p}(H\bmod p)=d
+  \iff
+  p\nmid \Delta_d.
+  \]
+  因而坏素数集合恰为
+  \[
+  \mathcal B_{\mathrm{bad}}=\{p:\ p\mid \Delta_d\},
+  \]
+  特别地它是一个内在确定的有限集。
+  \item 若 \(M\) 是某个 \(d\times d\) 的非奇异 Hankel 见证块，且其条目绝对值上界为 \(B\)，则存在好素数 \(p\) 使
+  \[
+  p\le C\,d\,\log(dB)\,\log\!\bigl(d\log(dB)\bigr),
+  \]
+  其中 \(C>0\) 为绝对常数。
+  \item 对任意好素数 \(p>d\)、任意 \(1\le \delta\le d\) 以及任意长度 \(2d-\delta\) 的前缀截断
+  \[
+  b=(a_0,\dots,a_{2d-\delta-1})\bmod p,
+  \]
+  对应的补全行列式多项式在 \(\FF_p^\delta\) 上非零。因而在网格
+  \[
+  S^\delta,
+  \qquad
+  S:=\{0,1,\dots,d\}\subset \FF_p,
+  \]
+  上至多枚举
+  \[
+  (d+1)^\delta
+  \]
+  次赋值，便可找到一个非退化补全，从而得到唯一的秩 \(d\) Hankel 延拓。
+  \item 若在 \(\FF_p^\delta\) 上均匀随机补全，则失败概率至多为 \(d/p\)；特别地，当 \(p\ge 2d\) 时，Las Vegas 停止时间的期望满足
+  \[
+  \EE[\#\mathrm{trials}]\le 2.
+  \]
+\end{enumerate}
+因此，Hankel 算术层析并不依赖于“偶然选到好模数”的随机幸运，而由一个有限坏素数结构与一个确定性去随机化补全机制共同支配。
+\end{theorem}
+
+\begin{proof}
+第 \(1\) 条正是定理 \ref{thm:xi-hankel-discriminant-unavoidable-bad-primes}。第 \(2\) 条由定理 \ref{thm:xi-hankel-explicit-good-prime-bound} 直接给出。
+
+对第 \(3\) 条，固定好素数 \(p>d\) 与前缀 \(b\)。由于 \(p\nmid \Delta_d\)，模 \(p\) 约化后的序列仍具有 Hankel 秩 \(d\)；因此该前缀至少存在一个使对应 \(d\times d\) 主块非退化的补全，故补全行列式多项式 \(D(X)\) 非零。于是命题 \ref{prop:xi-hankel-finitefield-deterministic-completion} 可用，并保证在
+\(
+S^\delta
+\)
+上至多枚举 \((d+1)^\delta\) 次就能找到 \(\det(H_0)\neq 0\) 的补全。由命题 \ref{prop:xi-hankel-window-fiber-delta}，这类补全给出唯一的秩 \(d\) Hankel 延拓。
+
+第 \(4\) 条由定理 \ref{thm:xi-hankel-finitefield-random-completion-nondegenerate} 与推论 \ref{cor:xi-hankel-finitefield-random-completion-las-vegas-expected} 直接合并：失败概率不超过 \(d/p\)，于是
+\[
+\EE[\#\mathrm{trials}]
+\le
+\frac{1}{1-d/p},
+\]
+并在 \(p\ge 2d\) 时不超过 \(2\)。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$p$}{p}-进刚性指数的双重职责]\label{thm:conclusion-hankel-stiffness-dual-role}
+取最小整数 \(d\ge 1\)，使得 Hankel 主块
+\[
+H_0:=(a_{i+j})_{0\le i,j\le d-1}
+\]
+在 \(\QQ\) 上可逆，并令
+\[
+H_1:=(a_{i+j+1})_{0\le i,j\le d-1},
+\qquad
+A:=H_0^{-1}H_1.
+\]
+对任意素数 \(p\)，定义
+\[
+\mathsf{Stiff}_p:=v_p(\det H_0).
+\]
+则同一整数 \(\mathsf{Stiff}_p\) 同时控制两类彼此独立的算术现象：
+\begin{enumerate}
+  \item 若 \(\mathsf{Stiff}_p=0\)，则
+  \[
+  A\in M_d(\ZZ_p),
+  \qquad
+  \rank_{\FF_p}(H\bmod p)=d.
+  \]
+  换言之，\(\mathsf{Stiff}_p=0\) 给出一个良约化与维数稳定的充分证书。
+  \item 若仅给定 \(H_0,H_1\) 的模 \(p^N\) 截断，则一般情形下
+  \[
+  A
+  \quad\text{至多可确定到}\quad
+  A\bmod p^{N-\mathsf{Stiff}_p},
+  \]
+  且这一精度损失是尖锐的。
+\end{enumerate}
+因此，\(\mathsf{Stiff}_p\) 既是模 \(p\) 良约化的可审计证书，又是从模 \(p^N\) 数据恢复最小 realization 时不可消去的精度税。
+\end{theorem}
+
+\begin{proof}
+第 \(1\) 条正是定理 \ref{thm:pom-stiff0-hankel-good-reduction-dim-stability} 的内容：当
+\(
+\mathsf{Stiff}_p=v_p(\det H_0)=0
+\)
+时，\(H_0\) 在 \(\ZZ_p\) 中可逆，从而
+\[
+A=H_0^{-1}H_1\in M_d(\ZZ_p),
+\]
+并且模 \(p\) 的 Hankel 秩保持为 \(d\)。
+
+第 \(2\) 条由命题 \ref{prop:xi-hankel-padics-precision-loss-detH0} 直接给出。该命题说明：若
+\(
+s=v_p(\det H_0)
+\)，
+则从模 \(p^N\) 的 \(H_0,H_1\) 数据恢复
+\(
+A=H_0^{-1}H_1
+\)
+时，一般最多只能确定到模 \(p^{N-s}\)，且在 \(d=1\) 情形已达到尖锐。取 \(s=\mathsf{Stiff}_p\) 即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[parity-defect 的硬隔离谱相]\label{thm:conclusion-parity-defect-hard-isolated-spectral-phase}
+记
+\[
+\lambda:=\rho(1)=\varphi^2,
+\qquad
+\rho_{\mathrm{par}}:=\rho(-1),
+\qquad
+\rho_p:=\left|\rho\!\left(e^{2\pi i/p}\right)\right|
+\quad
+(p\ge 3\ \text{为奇素数}).
+\]
+则：
+\begin{enumerate}
+  \item parity 扭曲满足
+  \[
+  \rho_{\mathrm{par}}
+  \]
+  是三次方程
+  \[
+  x^3-2x^2-1=0
+  \]
+  的最大实根，并且
+  \[
+  \frac{\rho_{\mathrm{par}}}{\lambda}\approx 0.8424525579<1.
+  \]
+  \item 奇素数扭曲具有四阶展开
+  \[
+  \log\frac{\rho_p}{\lambda}
+  =
+  -\frac{6\sqrt5-5}{250}\left(\frac{2\pi}{p}\right)^2
+  +\frac{7+24\sqrt5}{75000}\left(\frac{2\pi}{p}\right)^4
+  +O(p^{-6}),
+  \]
+  从而
+  \[
+  \frac{\rho_p}{\lambda}\to 1
+  \qquad
+  (p\to\infty,\ p\ \text{奇素数}).
+  \]
+  \item 存在阈值 \(p_0\)，使得对所有奇素数 \(p\ge p_0\) 都有
+  \[
+  \rho_p>\rho_{\mathrm{par}}.
+  \]
+\end{enumerate}
+因此，奇素数扭曲形成一族趋向 Perron 主支的 soft modes，而 parity-defect 则构成一条与之严格分离的 hard mode。
+\end{theorem}
+
+\begin{proof}
+关于 parity 扭曲的代数方程与数值比值，由定理 \ref{thm:conclusion-conductor-two-ramanujan-obstruction-nonrepairable} 已知
+\[
+\rho_{\mathrm{par}}=\rho(-1)
+\]
+是
+\(
+x^3-2x^2-1=0
+\)
+的最大实根。其与 \(\lambda=\varphi^2\) 的比值正如上式所示。
+
+关于奇素数扭曲，由定理 \ref{thm:xi-time-part9zh-oddprime-softening-vs-parity-hard-wall}，
+\[
+\log\frac{\rho_p}{\lambda}
+=
+-\frac{6\sqrt5-5}{250}\left(\frac{2\pi}{p}\right)^2
++\frac{7+24\sqrt5}{75000}\left(\frac{2\pi}{p}\right)^4
++O(p^{-6}),
+\]
+故 \(\rho_p/\lambda\to 1\)。再用同一定理中给出的比较结论，存在 \(p_0\) 使一切 \(p\ge p_0\) 的奇素数都满足
+\(
+\rho_p>\rho_{\mathrm{par}}
+\)。
+这正给出了 parity-defect 与 odd-prime soft modes 的硬隔离。证毕。
+\end{proof}
+
+\begin{corollary}[odd-prime 弛豫时间的 \texorpdfstring{$p^2$}{p2} 律与 parity-defect 的有限寿命]\label{cor:conclusion-oddprime-p2-relaxation-vs-parity-lifetime}
+沿用定理 \ref{thm:conclusion-parity-defect-hard-isolated-spectral-phase} 的记号，定义
+\[
+\tau_p:=\frac{1}{-\log(\rho_p/\lambda)}
+\qquad
+(p\ge 3\ \text{奇素数}),
+\qquad
+\tau_{\mathrm{par}}:=\frac{1}{-\log(\rho_{\mathrm{par}}/\lambda)}.
+\]
+则
+\[
+\tau_p=
+\frac{250}{(6\sqrt5-5)(2\pi)^2}\,p^2\bigl(1+O(p^{-2})\bigr),
+\qquad
+\tau_{\mathrm{par}}<\infty.
+\]
+特别地，
+\[
+\frac{\tau_p}{\tau_{\mathrm{par}}}\to\infty
+\qquad
+(p\to\infty,\ p\ \text{奇素数}).
+\]
+因此，奇素数扭曲与 parity-defect 不属于同一弛豫 universality class：前者具有二次发散寿命，后者只有有限寿命。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-parity-defect-hard-isolated-spectral-phase} 的展开式，
+\[
+-\log\frac{\rho_p}{\lambda}
+=
+\frac{6\sqrt5-5}{250}\left(\frac{2\pi}{p}\right)^2
++O(p^{-4}),
+\]
+反演即得
+\[
+\tau_p=
+\frac{250}{(6\sqrt5-5)(2\pi)^2}\,p^2\bigl(1+O(p^{-2})\bigr).
+\]
+另一方面，
+\(
+0<\rho_{\mathrm{par}}/\lambda<1
+\)
+由定理 \ref{thm:conclusion-parity-defect-hard-isolated-spectral-phase} 已知，故 \(\tau_{\mathrm{par}}\) 为有限正常数。于是 \(\tau_p/\tau_{\mathrm{par}}\to\infty\)。证毕。
+\end{proof}
+
+\noindent
+于是，这一结论簇把三类先前分散的刚性压成了同一条链：时间谱在乘法意义上已经可算术编程，最大纤维达到者在奇偶窗口上分别呈现签名湮灭与 Fibonacci 补偿，Hankel 层析只受有限坏素数控制并可被确定性去随机化，而 parity-defect 则在谱上与 odd-prime 软模形成真正的硬/软二相分裂。

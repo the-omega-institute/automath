@@ -1,0 +1,373 @@
+\subsection{有限路径原子谱、Prony 刚性与连续压力的 secant 强制}
+
+附录 \ref{app:pom-projective-pressure-operator} 与正文的输出 cylinder \(q\)-矩接口，已经分别给出两条看似分离的结构：其一，对固定长度 \(n\) 与基点 \(w\)，路径展开
+\[
+(\mathcal L_q^n\mathbf 1)(w)=\sum_{|\beta|=n}G_\beta(w)^q
+\]
+把 \(q\) 方向组织成一族有限原子指数和；其二，在实参数解析制度下，连续压力曲线
+\[
+\tau(q)=\log\lambda(q)
+\]
+把整数 moment 根 \(\{r_q\}_{q\ge 2}\) 锚定为一条凸解析曲线的整点取值。把这两层再压一步，可得到一条此前未在同一处写出的刚性链：有限路径 Gibbs 累积量公式 \(\Longrightarrow\) 固定长度原子谱的 Hankel/Prony 可逆性 \(\Longrightarrow\) 长度方向矩序列的有限维 C-finite 承载 \(\Longrightarrow\) 连续压力曲线的 secant 刚性与整数锚点几何插值。
+
+\begin{theorem}[有限路径 Gibbs 压力的一、二阶导数公式]\label{thm:derived-projective-path-gibbs-cumulants}
+沿用定义 \ref{def:pom-projective-transfer-operator} 的记号。固定 \(n\ge 1\) 与 \(w\in\Delta\)，并对输出词
+\[
+\beta=(b_1,\dots,b_n)\in A_{\mathrm{out}}^n
+\]
+递归记
+\[
+w_0:=w,
+\qquad
+w_t:=\Phi_{b_t}(w_{t-1})\quad(1\le t\le n),
+\]
+\[
+G_\beta(w):=\prod_{t=1}^{n}g_{b_t}(w_{t-1}),
+\qquad
+I_n(w):=\{\beta\in A_{\mathrm{out}}^n:\ G_\beta(w)>0\}.
+\]
+再定义
+\[
+Z_{n,w}(q):=(\mathcal L_q^n\mathbf 1)(w)=\sum_{\beta\in I_n(w)}G_\beta(w)^q,
+\qquad
+\Psi_{n,w}(q):=\log Z_{n,w}(q),
+\]
+以及路径 Gibbs 测度
+\[
+\mathbb P_{n,w}^{(q)}(\beta):=\frac{G_\beta(w)^q}{Z_{n,w}(q)}
+\qquad(\beta\in I_n(w)).
+\]
+则对每个使 \(Z_{n,w}(q)>0\) 的 \(q\ge 1\)，都有
+\[
+\Psi_{n,w}'(q)
+=
+\mathbb E_{\mathbb P_{n,w}^{(q)}}[\log G_\beta(w)],
+\]
+\[
+\Psi_{n,w}''(q)
+=
+\Var_{\mathbb P_{n,w}^{(q)}}(\log G_\beta(w))
+\ge 0.
+\]
+特别地，\(q\mapsto \Psi_{n,w}(q)\) 在 \([1,\infty)\) 上凸；而附录中定理 \ref{thm:pom-projective-pressure-holder-logconvex} 的路径级 Hölder 控制，正是这条有限路径 cumulant 公式在算子层的全局影像。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:xi-projective-cylinder-qmoment-finite-realization} 的路径展开公式，
+\[
+Z_{n,w}(q)=\sum_{\beta\in I_n(w)}G_\beta(w)^q
+\]
+是有限个正指数项之和，故可逐项求导：
+\[
+\Psi_{n,w}'(q)
+=
+\frac{\sum_{\beta}G_\beta(w)^q\log G_\beta(w)}{\sum_{\beta}G_\beta(w)^q}
+=
+\sum_{\beta}\mathbb P_{n,w}^{(q)}(\beta)\log G_\beta(w).
+\]
+这给出第一式。
+
+再次求导，
+\[
+\Psi_{n,w}''(q)
+=
+\frac{\sum_{\beta}G_\beta(w)^q(\log G_\beta(w))^2}{Z_{n,w}(q)}
+-
+\left(
+\frac{\sum_{\beta}G_\beta(w)^q\log G_\beta(w)}{Z_{n,w}(q)}
+\right)^2,
+\]
+即为 \(\log G_\beta(w)\) 在 \(\mathbb P_{n,w}^{(q)}\) 下的方差，从而非负。证毕。
+\end{proof}
+
+\begin{corollary}[有限路径压力的仿射刚性]\label{cor:derived-projective-path-affine-rigidity}
+在定理 \ref{thm:derived-projective-path-gibbs-cumulants} 的记号下，以下三条等价：
+\begin{enumerate}
+\normalfont
+  \item \(q\mapsto \Psi_{n,w}(q)\) 在某个非退化区间 \(J\subset[1,\infty)\) 上仿射；
+  \item \(\Psi_{n,w}''(q)\equiv 0\) 于 \(J\)；
+  \item 全部正权路径具有完全相同的路径权：存在 \(\Theta_{n,w}>0\) 使
+  \[
+  G_\beta(w)=\Theta_{n,w}
+  \qquad (\forall \beta\in I_n(w)).
+  \]
+\end{enumerate}
+在该情形下，
+\[
+\Psi_{n,w}(q)=q\log\Theta_{n,w}+\log|I_n(w)|.
+\]
+\end{corollary}
+
+\begin{proof}
+\((1)\Leftrightarrow(2)\) 显然。由定理 \ref{thm:derived-projective-path-gibbs-cumulants}，
+\[
+\Psi_{n,w}''(q)=\Var_{\mathbb P_{n,w}^{(q)}}(\log G_\beta(w)).
+\]
+方差恒为零，当且仅当 \(\log G_\beta(w)\) 在支撑 \(I_n(w)\) 上常数；这等价于所有正权路径具有同一权重 \(\Theta_{n,w}\)。反之若该常数条件成立，则
+\[
+Z_{n,w}(q)=|I_n(w)|\,\Theta_{n,w}^q,
+\]
+取对数即得所示仿射公式。证毕。
+\end{proof}
+
+\begin{theorem}[固定长度路径权谱的 Hankel 秩、最小递推与原子数三重等价]\label{thm:derived-projective-path-atomic-prony-rank}
+固定 \(n\ge 1\) 与 \(w\in\Delta\)，设全部不同的正路径权按大小记为
+\[
+\Theta_1>\Theta_2>\cdots>\Theta_r>0,
+\]
+并记其重数为
+\[
+m_j:=\#\{\beta\in I_n(w):\ G_\beta(w)=\Theta_j\}.
+\]
+则整数矩序列
+\[
+Z_{n,w}(q)=\sum_{j=1}^{r}m_j\Theta_j^q
+\qquad (q\in\ZZ_{\ge 0})
+\]
+满足：
+\begin{enumerate}
+\normalfont
+  \item 无限 Hankel 矩阵
+  \[
+  \mathcal H_{n,w}:=(Z_{n,w}(i+j))_{i,j\ge 0}
+  \]
+  的秩恰为 \(r\)；
+  \item 序列 \(q\mapsto Z_{n,w}(q)\) 的最小常系数线性递推阶数恰为 \(r\)；
+  \item 其最小递推首一多项式正是
+  \[
+  P_{n,w}(X)=\prod_{j=1}^{r}(X-\Theta_j).
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+由路径权值的分组，
+\[
+Z_{n,w}(q)=\sum_{j=1}^{r}m_j\Theta_j^q.
+\]
+因此 \(\mathcal H_{n,w}\) 具有 Vandermonde--Gram 分解
+\[
+\mathcal H_{n,w}
+=
+V\,\diag(m_1,\dots,m_r)\,V^{\mathsf T},
+\qquad
+V_{ij}:=\Theta_j^i\quad(i\ge 0,\ 1\le j\le r).
+\]
+由于 \(\Theta_j\) 两两不同，Vandermonde 列向量线性无关；又 \(m_j>0\)，故
+\[
+\rank \mathcal H_{n,w}=r.
+\]
+
+另一方面，对指数多项式序列 \(\sum_jm_j\Theta_j^q\)，标准 Prony/Cayley--Hamilton 理论说明其最小递推首一多项式恰为
+\[
+\prod_{j=1}^{r}(X-\Theta_j),
+\]
+于是最小递推阶数也等于 \(r\)。证毕。
+\end{proof}
+
+\begin{corollary}[前 \(2r\) 个整数矩完全恢复固定长度路径权多重集]\label{cor:derived-projective-path-2r-moments-recover-spectrum}
+沿用定理 \ref{thm:derived-projective-path-atomic-prony-rank} 的记号。有限数据
+\[
+Z_{n,w}(0),Z_{n,w}(1),\dots,Z_{n,w}(2r-1)
+\]
+唯一决定全部正路径权多重集
+\[
+\{(\Theta_j,m_j)\}_{j=1}^{r}.
+\]
+因此，对固定长度 \(n\) 与基点 \(w\) 而言，前 \(2r\) 个整数 \(q\)-矩已构成路径原子谱的完备证书。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:derived-projective-path-atomic-prony-rank}，最小递推阶数为 \(r\)，最小递推首一多项式为
+\(
+P_{n,w}(X)=\prod_j(X-\Theta_j)
+\)。
+因此前 \(2r\) 个矩经 Berlekamp--Massey/Prony 型恢复即可唯一确定 \(P_{n,w}\)，从而恢复全部 \(\Theta_j\)。
+
+随后把 \(\Theta_j\) 代回前 \(r\) 个方程
+\[
+Z_{n,w}(q)=\sum_{j=1}^{r}m_j\Theta_j^q
+\qquad(0\le q\le r-1),
+\]
+得到一组 Vandermonde 线性系统，其解 \(m_j\) 唯一。证毕。
+\end{proof}
+
+\begin{theorem}[有限路径压力的 max-plus 极限与 multiplicity 截距]\label{thm:derived-projective-path-maxplus-intercept}
+沿用定理 \ref{thm:derived-projective-path-atomic-prony-rank} 的记号，并记
+\[
+\Theta_{\max}:=\Theta_1,
+\qquad
+M_{\max}:=m_1.
+\]
+则当 \(q\to+\infty\) 时，
+\[
+Z_{n,w}(q)
+=
+\Theta_{\max}^q
+\Bigl(
+M_{\max}
++
+O\!\bigl((\Theta_2/\Theta_1)^q\bigr)
+\Bigr),
+\]
+从而
+\[
+\frac{1}{q}\Psi_{n,w}(q)\longrightarrow \log\Theta_{\max},
+\]
+并且更精确地，
+\[
+\Psi_{n,w}(q)-q\log\Theta_{\max}\longrightarrow \log M_{\max}.
+\]
+\end{theorem}
+
+\begin{proof}
+由
+\[
+Z_{n,w}(q)=\sum_{j=1}^{r}m_j\Theta_j^q
+=
+\Theta_1^q\sum_{j=1}^{r}m_j(\Theta_j/\Theta_1)^q,
+\]
+可得
+\[
+Z_{n,w}(q)
+=
+\Theta_1^q
+\left(
+m_1+\sum_{j=2}^{r}m_j(\Theta_j/\Theta_1)^q
+\right).
+\]
+因为 \(\Theta_j/\Theta_1<1\) 对 \(j\ge 2\)，故括号中趋于 \(m_1\)，并得到所示误差项。取对数即得
+\[
+\Psi_{n,w}(q)=q\log\Theta_1+\log(m_1+o(1)),
+\]
+遂得两个极限。证毕。
+\end{proof}
+
+\begin{theorem}[固定整数 \(q\) 的输出 cylinder 矩序列是 rational C-finite 且由 moment-kernel 完全承载]\label{thm:derived-projective-length-direction-rational-cfinite}
+对任意整数 \(q\ge 2\) 与任意 \(w\in\Delta\)，定义长度方向矩序列
+\[
+M_n^{(q)}(w):=(\mathcal L_q^n\mathbf 1)(w),
+\qquad n\ge 0.
+\]
+则：
+\begin{enumerate}
+\normalfont
+  \item 存在向量 \(u_q(w),v_q\) 与有限维矩阵 \(\widetilde A_q\) 使
+  \[
+  M_n^{(q)}(w)=u_q(w)^{\mathsf T}\widetilde A_q^n v_q;
+  \]
+  \item 普通生成函数
+  \[
+  \mathcal M_{q,w}(z):=\sum_{n\ge 0}M_n^{(q)}(w)z^n
+  \]
+  是有理函数，且其分母整除
+  \[
+  \det(I-z\widetilde A_q);
+  \]
+  \item 若 \(r_q=\rho(\widetilde A_q)\) 在该矩阵系数上以单重主根方式实际出现，则存在 \(c_q(w)\neq 0\) 与 \(\eta_q<r_q\) 使
+  \[
+  M_n^{(q)}(w)=c_q(w)\,r_q^n+O(\eta_q^n).
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+第一条正是定理 \ref{thm:xi-projective-cylinder-qmoment-finite-realization} 的第三条：对每个固定整数 \(q\ge 2\)，序列 \(M_n^{(q)}(w)\) 是 \(\widetilde A_q^n\) 的一个矩阵系数。
+
+因此 \(M_n^{(q)}(w)\) 满足阶数至多为 \(\dim\mathcal H_q\) 的常系数线性递推，故 \(\mathcal M_{q,w}(z)\) 为有理函数，其分母整除 \(\widetilde A_q\) 特征多项式对应的反转多项式，也即整除 \(\det(I-z\widetilde A_q)\)。这给出第二条。
+
+若主根 \(r_q\) 在该矩阵系数上以单重方式出现，则标准有限维谱分解给出
+\[
+u_q(w)^{\mathsf T}\widetilde A_q^n v_q
+=
+c_q(w)\,r_q^n+\sum_j c_j(w)\lambda_j^n,
+\]
+其中所有其余特征值都满足 \(|\lambda_j|<r_q\)。令 \(\eta_q:=\max_j|\lambda_j|\) 即得第三条。证毕。
+\end{proof}
+
+\begin{theorem}[连续压力的 secant 刚性与整数锚点几何插值律]\label{thm:derived-projective-pressure-secant-rigidity}
+在定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的制度下，记
+\[
+\tau(q):=\log\lambda(q),
+\qquad
+\tau(n)=\log r_n
+\quad (n\in J\cap\ZZ_{\ge 2}).
+\]
+设闭区间 \([q_0,q_1]\subset J\) 上 \(\tau\) 凸。若存在某个内部点
+\[
+q_\ast=(1-\theta)q_0+\theta q_1,
+\qquad
+0<\theta<1,
+\]
+使
+\[
+\tau(q_\ast)=(1-\theta)\tau(q_0)+\theta\tau(q_1),
+\]
+则 \(\tau\) 在整个 \([q_0,q_1]\) 上必为仿射函数。于是对该区间内每个整数 \(n\in J\cap\ZZ_{\ge 2}\)，都有
+\[
+\log r_n
+=
+\frac{q_1-n}{q_1-q_0}\log r_{q_0}
++
+\frac{n-q_0}{q_1-q_0}\log r_{q_1},
+\]
+等价地，
+\[
+r_n
+=
+r_{q_0}^{\frac{q_1-n}{q_1-q_0}}
+r_{q_1}^{\frac{n-q_0}{q_1-q_0}}.
+\]
+\end{theorem}
+
+\begin{proof}
+对凸函数，若在某个内部点取得端点 secant 的等号，则图像必须在整个闭区间上与该 secant 重合；否则若某一点严格低于 secant，则由凸性会强制所有内部点都严格低于该 secant。故 \(\tau\) 在 \([q_0,q_1]\) 上仿射。
+
+再由定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的整数锚点严格插值，
+\[
+\tau(n)=\log r_n
+\qquad(n\in J\cap\ZZ_{\ge 2}),
+\]
+把仿射表达式代入各整数点即得所示几何插值律。证毕。
+\end{proof}
+
+\begin{corollary}[严格凸压力下整数 moment 根的全阶严格 log-凸性证书]\label{cor:derived-projective-pressure-strict-logconvex-certificate}
+在定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的设定下，若势函数 \(\log g_b\) 在射影动力学上不与常数同调，则 \(\tau\) 在 \(J\) 上严格凸。于是对任意整数 \(q\) 满足
+\[
+q-1,\ q,\ q+1\in J\cap\ZZ_{\ge 2},
+\]
+都有严格不等式
+\[
+r_q^2<r_{q-1}r_{q+1}.
+\]
+反之，若对某个这样的 \(q\) 成立等号
+\[
+r_q^2=r_{q-1}r_{q+1},
+\]
+则 \(\tau\) 在 \([q-1,q+1]\) 上不可能严格凸；在定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的完整制度内，这迫使 \(\log g_b\) 与常数同调。
+\end{corollary}
+
+\begin{proof}
+若 \(\log g_b\) 不与常数同调，则由定理 \ref{thm:pom-real-q-pressure-analytic-interpolation}，\(\tau\) 在 \(J\) 上严格凸。于是对满足 \(q-1,q,q+1\in J\cap\ZZ_{\ge 2}\) 的任意整数 \(q\)，严格中点凸性给出
+\[
+2\tau(q)<\tau(q-1)+\tau(q+1).
+\]
+再用整数锚点恒等式 \(\tau(n)=\log r_n\) 得
+\[
+2\log r_q<\log r_{q-1}+\log r_{q+1},
+\]
+指数化后即得
+\[
+r_q^2<r_{q-1}r_{q+1}.
+\]
+
+若反向出现等号 \(r_q^2=r_{q-1}r_{q+1}\)，则
+\[
+2\tau(q)=\tau(q-1)+\tau(q+1),
+\]
+故 \(\tau\) 在 \([q-1,q+1]\) 上失去严格凸性。按定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的严格凸性判据，这只能发生于 \(\log g_b\) 与常数同调的退化情形。证毕。
+\end{proof}
+
+\begin{remark}[连续 \(q\)-插值的真正 rigid content]\label{rem:derived-projective-path-prony-secant-content}
+上述链条表明：附录 F 中“把整数矩阶 \(q\) 提升到实参数”的真正内容，并不止于给出一条凸压力曲线。它先在固定长度路径层上生成了一套完整的 Gibbs--cumulant--Hankel--Prony 结构：每个 \((n,w)\) 的路径权谱都是一组可被前 \(2r\) 个整数矩完全反演的有限原子指数簇，其 \(q\to\infty\) 极限又精确锁定 dominant path weight 及其 multiplicity 截距。再把这一有限层原子谱推进到全局 Perron 压力 \(\tau\)，便得到 secant rigidity：一旦连续压力在某个内点碰到整数锚点的 secant，整个区间的整数 moment 根都被迫满足几何插值；而在非同调退化之外，这种等号完全被严格凸性排除。
+\end{remark}

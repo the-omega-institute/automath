@@ -1,0 +1,453 @@
+\subsection{primorial 仿射前缀整除、黄金尾极小与可回放 Gödel 历史的强逆律}\label{subsec:conclusion-primorial-prefix-golden-tail-replay-strongconverse}
+定理 \ref{thm:conclusion-affine-normal-form-semidirect}、定理 \ref{thm:conclusion-primorial-mixed-radix-affine}、
+推论 \ref{cor:conclusion-event-hyperbolic-translation-golden-minimal}、定理 \ref{thm:conclusion-godel-history-superlinear-highprob}
+与定理 \ref{thm:conclusion-prime-axis-count-scaling} 已分别把 affine 正规形、primorial 混合进位、黄金极小轨与 replayable Gödel 历史的尺度律固定下来。
+把这些接口并读后，还可进一步得到如下闭合链条。
+
+\begin{theorem}[仿射正规形单体的左整除判据]\label{thm:conclusion-affine-left-divisibility-criterion}
+沿用定理 \ref{thm:conclusion-affine-normal-form-semidirect} 的记号。
+对任意 \(A_{N,k},A_{M,\ell}\in \mathcal A^{+}\)，有
+\[
+A_{N,k}\ \text{左整除}\ A_{M,\ell}
+\iff
+N\mid M,\ \ell\equiv k\pmod N,\ \ell\ge k.
+\]
+更精确地，若
+\[
+M=NQ,\qquad \ell=k+Nr
+\qquad(Q\in\NN_{>0},\ r\in\NN),
+\]
+则
+\[
+A_{M,\ell}=A_{N,k}A_{Q,r}.
+\]
+\end{theorem}
+\begin{proof}
+若 \(A_{N,k}\) 左整除 \(A_{M,\ell}\)，则存在 \(A_{Q,r}\in\mathcal A^{+}\) 使
+\[
+A_{M,\ell}=A_{N,k}A_{Q,r}.
+\]
+由定理 \ref{thm:conclusion-affine-normal-form-semidirect} 的乘法律，
+\[
+A_{N,k}A_{Q,r}=A_{NQ,\ k+Nr}.
+\]
+再由同一定理中的坐标唯一性，得到
+\[
+M=NQ,\qquad \ell=k+Nr.
+\]
+因此 \(N\mid M\)、\(\ell\equiv k\pmod N\)，且 \(r\ge 0\) 蕴含 \(\ell\ge k\)。
+
+反向，若 \(M=NQ\) 且 \(\ell=k+Nr\) 对某个 \(Q\in\NN_{>0},r\in\NN\) 成立，则
+\[
+A_{N,k}A_{Q,r}=A_{NQ,\ k+Nr}=A_{M,\ell},
+\]
+故左整除成立。证毕。
+\end{proof}
+
+\begin{theorem}[primorial 前缀的算术判据与矩阵判据]\label{thm:conclusion-primorial-prefix-arithmetic-matrix-criterion}
+令 \(p_1<p_2<\cdots\) 为素数序列，并沿用定理 \ref{thm:conclusion-primorial-mixed-radix-affine} 的记号
+\[
+P_0:=1,\qquad P_t:=\prod_{j=1}^{t}p_j,\qquad
+K(a_1,\dots,a_t):=\sum_{j=1}^{t}a_jP_{j-1}.
+\]
+固定 \(1\le s<T\)。
+设
+\[
+\mathbf a=(a_1,\dots,a_s),\qquad 0\le a_t<p_t,
+\]
+\[
+\mathbf b=(b_{s+1},\dots,b_T),\qquad 0\le b_j<p_j,
+\]
+并令
+\[
+\mathbf c:=(a_1,\dots,a_s,b_{s+1},\dots,b_T).
+\]
+定义 shifted mixed-radix 尾编码
+\[
+K^{(s)}(\mathbf b):=
+\sum_{j=s+1}^{T}b_j\prod_{u=s+1}^{j-1}p_u
+\in \{0,1,\dots,P_T/P_s-1\}.
+\]
+则有精确恒等式
+\[
+K(\mathbf c)=K(\mathbf a)+P_sK^{(s)}(\mathbf b),
+\]
+\[
+A_{P_T,K(\mathbf c)}
+=
+A_{P_s,K(\mathbf a)}A_{P_T/P_s,\ K^{(s)}(\mathbf b)}.
+\]
+因此，对任意长度 \(T\) 的 primorial digit-word \(\mathbf w=(w_1,\dots,w_T)\)，以下三者等价：
+\begin{enumerate}
+  \item \(\mathbf a\) 是 \(\mathbf w\) 的前缀；
+  \item \(K(\mathbf w)\equiv K(\mathbf a)\pmod{P_s}\)；
+  \item \(A_{P_s,K(\mathbf a)}\) 左整除 \(A_{P_T,K(\mathbf w)}\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由混合进位定义，
+\[
+K(\mathbf c)
+=
+\sum_{t=1}^{s}a_tP_{t-1}
++
+\sum_{j=s+1}^{T}b_jP_{j-1}
+=
+K(\mathbf a)+P_s\sum_{j=s+1}^{T}b_j\prod_{u=s+1}^{j-1}p_u,
+\]
+即得第一式。
+再由定理 \ref{thm:conclusion-affine-normal-form-semidirect}，
+\[
+A_{P_s,K(\mathbf a)}A_{P_T/P_s,\ K^{(s)}(\mathbf b)}
+=
+A_{P_T,\ K(\mathbf a)+P_sK^{(s)}(\mathbf b)}
+=
+A_{P_T,K(\mathbf c)},
+\]
+得到第二式。
+
+若 \(\mathbf a\) 是 \(\mathbf w\) 的前缀，则 \(\mathbf w\) 可唯一写成上述 \(\mathbf c\) 的形式，故
+\(
+K(\mathbf w)=K(\mathbf a)+P_sK^{(s)}(\mathbf b)
+\)
+并推出同余条件。
+反向，若
+\(
+K(\mathbf w)\equiv K(\mathbf a)\pmod{P_s}
+\)，
+由于 \(0\le K(\mathbf a)<P_s\) 与 \(0\le K(\mathbf w)<P_T\)，存在唯一
+\[
+j\in\{0,\dots,P_T/P_s-1\}
+\]
+使
+\[
+K(\mathbf w)=K(\mathbf a)+P_sj.
+\]
+而 \(j\) 由 mixed-radix 唯一性唯一对应一条尾字 \(\mathbf b\)，故 \(\mathbf w\) 的前 \(s\) 位必为 \(\mathbf a\)。
+最后，(2) 与 (3) 的等价是定理 \ref{thm:conclusion-affine-left-divisibility-criterion} 在
+\[
+N=P_s,\qquad M=P_T,\qquad k=K(\mathbf a),\qquad \ell=K(\mathbf w)
+\]
+下的直接应用。证毕。
+\end{proof}
+
+\begin{corollary}[固定前缀 completion 的 horocyclic 等差包]\label{cor:conclusion-primorial-completion-horocyclic-packet}
+在定理 \ref{thm:conclusion-primorial-prefix-arithmetic-matrix-criterion} 的设定下，对固定前缀 \(\mathbf a=(a_1,\dots,a_s)\) 与总长度 \(T>s\)，定义其 completion packet
+\[
+\mathscr P_T(\mathbf a):=
+\left\{
+\mathcal E(c_1,\dots,c_T):
+\ c_t=a_t\ (1\le t\le s),\ 0\le c_j<p_j\ (s<j\le T)
+\right\}.
+\]
+则有精确描述
+\[
+\mathscr P_T(\mathbf a)
+=
+\left\{
+\mathcal E_{P_T,\ K(\mathbf a)+P_sj}:\ 0\le j<P_T/P_s
+\right\},
+\]
+因而
+\[
+|\mathscr P_T(\mathbf a)|=\frac{P_T}{P_s}.
+\]
+并且对每个 \(0\le j<P_T/P_s\) 都有
+\[
+\mathcal E_{P_T,\ K(\mathbf a)+P_sj}
+=
+R^{K(\mathbf a)+P_sj}\bigl(\mathcal E_{P_T,0}\bigr).
+\]
+故固定前缀的全部 completion 在 horocyclic 参数 \(k\) 上形成步长恰为 \(P_s\) 的严格等差包。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-primorial-prefix-arithmetic-matrix-criterion}，固定前缀的全部 completion 的混合进位坐标恰为
+\[
+\{K(\mathbf a)+P_sj:\ 0\le j<P_T/P_s\}.
+\]
+再由定理 \ref{thm:conclusion-primorial-ellipse-unique-factorization}，
+\[
+\mathcal E(c_1,\dots,c_T)=\mathcal E_{P_T,K(c_1,\dots,c_T)},
+\]
+即得 packet 的显式描述与基数公式。
+
+最后，由
+\[
+A_{P_T,\ K(\mathbf a)+P_sj}=R^{K(\mathbf a)+P_sj}D_{P_T}
+\]
+和 \(\mathcal E_{N,k}=A_{N,k}(S^1)\) 得
+\[
+\mathcal E_{P_T,\ K(\mathbf a)+P_sj}
+=
+R^{K(\mathbf a)+P_sj}D_{P_T}(S^1)
+=
+R^{K(\mathbf a)+P_sj}\bigl(\mathcal E_{P_T,0}\bigr).
+\]
+不同 \(j\) 给出不同的 \(k\) 坐标，故该包确为严格等差。证毕。
+\end{proof}
+
+\begin{theorem}[固定前缀下的黄金尾唯一极小性]\label{thm:conclusion-prefix-conditioned-golden-tail-minimality}
+沿用定理 \ref{thm:conclusion-elliptic-lossless-lift} 的矩阵编码
+\[
+M(\mathbf a)=R^{a_1}L\,R^{a_2}L\cdots R^{a_T}L.
+\]
+固定一条前缀
+\[
+\mathbf u=(u_1,\dots,u_s)\in(\NN_{\ge 1})^s
+\]
+与尾长 \(t\ge 1\)。
+则在所有正整尾字
+\[
+\mathbf b=(b_1,\dots,b_t)\in(\NN_{\ge 1})^t
+\]
+中，双曲平移长度
+\[
+\ell_{\mathbb H}\!\bigl(M(\mathbf u,b_1,\dots,b_t)\bigr)
+\]
+的唯一极小值由
+\[
+\mathbf b=(1,\dots,1)
+\]
+实现。
+等价地，对任意 \(\mathbf b\in(\NN_{\ge 1})^t\) 都有
+\[
+\ell_{\mathbb H}\!\bigl(M(\mathbf u,b_1,\dots,b_t)\bigr)
+\ge
+\ell_{\mathbb H}\!\bigl(M(\mathbf u)(RL)^t\bigr),
+\]
+且等号成立当且仅当 \(\mathbf b=(1,\dots,1)\)。
+\end{theorem}
+\begin{proof}
+对任意 \(m\ge 1\) 有
+\[
+R^mL=
+\begin{pmatrix}
+m+1&m\\
+1&1
+\end{pmatrix}
+\succeq
+RL=
+\begin{pmatrix}
+2&1\\
+1&1
+\end{pmatrix},
+\]
+且当 \(m>1\) 时严格大于。
+因此对任意 \(\mathbf b=(b_1,\dots,b_t)\) 都有
+\[
+M(\mathbf b)\succeq (RL)^t,
+\]
+并且若 \(\mathbf b\neq (1,\dots,1)\) 则 \(M(\mathbf b)\succ (RL)^t\)。
+
+由于 \(M(\mathbf u)\in \mathrm{SL}_2(\ZZ_{>0})\) 的每个条目都为正，左乘保持严格逐项序：
+\[
+M(\mathbf u,b_1,\dots,b_t)=M(\mathbf u)M(\mathbf b)\succeq M(\mathbf u)(RL)^t,
+\]
+且当 \(\mathbf b\neq (1,\dots,1)\) 时严格大于。
+对正矩阵，Perron--Frobenius 谱半径对逐项序严格单调，故
+\[
+\rho\!\bigl(M(\mathbf u,b_1,\dots,b_t)\bigr)
+\ge
+\rho\!\bigl(M(\mathbf u)(RL)^t\bigr),
+\]
+且等号当且仅当 \(\mathbf b=(1,\dots,1)\)。
+所有这些矩阵都在 \(\mathrm{SL}_2(\ZZ_{>0})\) 中，因而为双曲元，并满足
+\[
+\ell_{\mathbb H}(g)=2\log \rho(g).
+\]
+于是结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[全局最短历史射线的唯一性]\label{cor:conclusion-unique-global-shortest-history-ray}
+无穷正整射线
+\[
+\mathbf 1^\infty:=(1,1,1,\dots)
+\]
+是唯一满足下述局部--全局极小性条件的无限事件射线：
+\begin{enumerate}
+  \item 对每个 \(T\ge 1\)，其长度 \(T\) 前缀 \((1,\dots,1)\) 都是全部长度 \(T\) 正整事件词中双曲平移长度的唯一极小元；
+  \item 对任意 \(1\le s<T\)，在所有以前 \(s\) 位 \((1,\dots,1)\) 为前缀的长度 \(T\) completion 中，\((1,\dots,1)\) 仍是唯一极小元。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+第一条正是推论 \ref{cor:conclusion-event-hyperbolic-translation-golden-minimal}。
+第二条由定理 \ref{thm:conclusion-prefix-conditioned-golden-tail-minimality} 立即推出。
+
+若另一条无穷正整射线 \((a_j)_{j\ge 1}\) 也满足同样性质，取其首次偏离 \(\mathbf 1^\infty\) 的位置 \(j\)。
+则长度 \(j\) 前缀 \((a_1,\dots,a_j)\neq (1,\dots,1)\)，这与第一条在长度 \(j\) 上的唯一极小性矛盾。
+故 \(\mathbf 1^\infty\) 唯一。证毕。
+\end{proof}
+
+\begin{theorem}[可回放 Gödel 历史外置的 sharp 强逆门槛]\label{thm:conclusion-replay-godel-sharp-strong-converse}
+固定满足定义 \ref{def:pom-order-elimination-rewrite} 的确定性归一化策略 \(\mathsf S\)，并令 \(\omega\sim\mathrm{Unif}(\Omega_{m+1})\)。
+设 \((P_m)_{m\ge 1}\) 为任意预算序列。
+若
+\[
+\limsup_{m\to\infty}\frac{\log P_m}{m\log m}<\frac{4}{27},
+\]
+则
+\[
+\PP\!\left(
+G_{\mathsf S}^{\mathrm{hist}}(\omega)\le \frac{P_m}{2}
+\right)\longrightarrow 0.
+\]
+等价地，若希望区间读出成功概率不退化到 \(0\)，则必要条件为
+\[
+\liminf_{m\to\infty}\frac{\log P_m}{m\log m}\ge \frac{4}{27}.
+\]
+\end{theorem}
+\begin{proof}
+设
+\[
+\alpha:=\limsup_{m\to\infty}\frac{\log P_m}{m\log m}<\frac{4}{27}.
+\]
+取 \(\delta>0\) 使
+\[
+\alpha<\frac{4}{27}-2\delta.
+\]
+则对充分大 \(m\) 有
+\[
+\log P_m\le \left(\frac{4}{27}-2\delta\right)m\log m.
+\]
+
+另一方面，把定理 \ref{thm:conclusion-godel-history-superlinear-highprob} 的结论两边同乘 \(\ln 2\) 可知：存在常数 \(C_\delta>0\) 使
+\[
+\PP\!\left(
+\log G_{\mathsf S}^{\mathrm{hist}}(\omega)\ge
+\left(\frac{4}{27}-\delta\right)m\log m-C_\delta m
+\right)\longrightarrow 1.
+\]
+对充分大 \(m\)，有
+\[
+\left(\frac{4}{27}-\delta\right)m\log m-C_\delta m
+>
+\left(\frac{4}{27}-2\delta\right)m\log m-\log 2
+\ge
+\log(P_m/2),
+\]
+故在上述高概率事件上必有
+\[
+G_{\mathsf S}^{\mathrm{hist}}(\omega)>\frac{P_m}{2}.
+\]
+于是
+\[
+\PP\!\left(
+G_{\mathsf S}^{\mathrm{hist}}(\omega)\le \frac{P_m}{2}
+\right)\to 0.
+\]
+逆向表述只是其逆否命题。证毕。
+\end{proof}
+
+\begin{corollary}[可回放历史相对于纤维标签的显式对数鸿沟常数]\label{cor:conclusion-replay-godel-vs-fiber-label-explicit-gap}
+令
+\[
+D_m:=\max_{x\in X_m}d_m(x),
+\]
+并沿用定理 \ref{thm:conclusion-godel-history-superlinear-highprob} 与命题 \ref{prop:conclusion-fiber-label-vs-history-separation} 的记号。
+则对任意 \(\delta\in(0,4/27)\)，存在常数 \(C_\delta'>0\) 使
+\[
+\PP\!\left(
+\frac{\log_2 G_{\mathsf S}^{\mathrm{hist}}(\omega)}{\log_2 D_m}
+\ge
+\frac{2\left(\frac{4}{27}-\delta\right)}{\log_2\varphi}\,\log_2 m-C_\delta'
+\right)\longrightarrow 1.
+\]
+特别地，按概率意义，
+\[
+\liminf_{m\to\infty}
+\frac{1}{\log_2 m}
+\frac{\log_2 G_{\mathsf S}^{\mathrm{hist}}(\omega)}{\log_2 D_m}
+\ge
+\frac{8}{27\log_2\varphi}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-godel-history-superlinear-highprob}，以概率趋于 \(1\) 有
+\[
+\log_2 G_{\mathsf S}^{\mathrm{hist}}(\omega)
+\ge
+\left(\frac{4}{27}-\delta\right)m\log_2 m-C_\delta m.
+\]
+另一方面，由命题 \ref{prop:conclusion-fiber-label-vs-history-separation}，
+\[
+\log_2 D_m=\frac12(\log_2\varphi)m+O(1).
+\]
+把前者除以后者，并把分母中的 \(O(1)\) 吸收到常数项，即存在 \(C_\delta'>0\) 使
+\[
+\frac{\log_2 G_{\mathsf S}^{\mathrm{hist}}(\omega)}{\log_2 D_m}
+\ge
+\frac{2\left(\frac{4}{27}-\delta\right)}{\log_2\varphi}\,\log_2 m-C_\delta'
+\]
+以概率趋于 \(1\) 成立。
+再令 \(\delta\downarrow 0\) 即得第二式。证毕。
+\end{proof}
+
+\begin{theorem}[bounded-prime replay 架构的线性轴数下界]\label{thm:conclusion-bounded-prime-replay-linear-axis-lower-bound}
+固定 \(A\ge 1\)。
+设在第 \(m\) 层仅允许使用两两不同的素数
+\[
+q_1,\dots,q_{k_m}\le m^A,
+\qquad
+P_m:=\prod_{j=1}^{k_m}q_j.
+\]
+若
+\[
+\PP\!\left(
+G_{\mathsf S}^{\mathrm{hist}}(\omega)\le \frac{P_m}{2}
+\right)
+\not\longrightarrow 0,
+\]
+则必有
+\[
+\liminf_{m\to\infty}\frac{k_m}{m}\ge \frac{4}{27A}.
+\]
+更强地，若存在 \(\varepsilon>0\) 与无穷子列 \(m_\nu\to\infty\) 使
+\[
+k_{m_\nu}\le \left(\frac{4}{27A}-\varepsilon\right)m_\nu,
+\]
+则
+\[
+\PP\!\left(
+G_{\mathsf S}^{\mathrm{hist}}(\omega)\le \frac{P_{m_\nu}}{2}
+\right)\longrightarrow 0.
+\]
+\end{theorem}
+\begin{proof}
+由 \(q_j\le m^A\) 得
+\[
+\log P_m=\sum_{j=1}^{k_m}\log q_j\le Ak_m\log m.
+\]
+若沿无穷子列 \(m_\nu\) 有
+\[
+k_{m_\nu}\le \left(\frac{4}{27A}-\varepsilon\right)m_\nu,
+\]
+则
+\[
+\log P_{m_\nu}
+\le
+\left(\frac{4}{27}-A\varepsilon\right)m_\nu\log m_\nu.
+\]
+于是
+\[
+\limsup_{\nu\to\infty}\frac{\log P_{m_\nu}}{m_\nu\log m_\nu}
+\le
+\frac{4}{27}-A\varepsilon
+<
+\frac{4}{27}.
+\]
+由定理 \ref{thm:conclusion-replay-godel-sharp-strong-converse}，立得
+\[
+\PP\!\left(
+G_{\mathsf S}^{\mathrm{hist}}(\omega)\le \frac{P_{m_\nu}}{2}
+\right)\to 0.
+\]
+这证明了加强表述。
+若整体成功概率不趋于 \(0\)，则不可能存在这样的无穷子列，故只能有
+\[
+\liminf_{m\to\infty}\frac{k_m}{m}\ge \frac{4}{27A}.
+\]
+证毕。
+\end{proof}
+
+由此，primorial 仿射正规形中的前缀次序可被同时识别为 mixed-radix 同余、左整除关系与 horocyclic 等差包；
+而一旦把信息可逆提升为轨迹可回放，预算规模便从纤维标签的线性尺度跃迁为 \(m\log m\) 量级，并在 bounded-prime 架构下进一步强制线性轴数增长。

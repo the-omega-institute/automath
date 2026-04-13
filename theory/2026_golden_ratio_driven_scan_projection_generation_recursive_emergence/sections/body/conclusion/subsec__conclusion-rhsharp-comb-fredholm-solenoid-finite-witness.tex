@@ -121,6 +121,219 @@ A_0=
 故该核上的边界饱和通道唯一，且其来源就是单一的符号扭曲黄金因子。再结合定理 \ref{thm:conclusion-critical-comb-cesaro-haar}，便得到所述单通道 Haar 化结论。证毕。
 \end{proof}
 
+\begin{theorem}[循环相位细分的归一化自由能不可见性]\label{thm:conclusion-cyclic-lift-normalized-freeenergy-invisibility}
+设 \(M\) 为有限维矩阵，\(\lambda=\rho(M)>1\)，并记 \(\{\mu_j\}_{j\in J}\) 为其全部非零特征值（按代数重数计）。对每个 \(q\ge 2\)，令
+\[
+M^{\langle q\rangle}:=M\otimes P_q,
+\]
+并定义归一化 Jensen--Mahler 自由能
+\[
+\mathcal G_{M^{\langle q\rangle}}(\sigma)
+:=
+\frac1q\int_0^{2\pi}
+\log\left|\det\!\left(I-\lambda^{-\sigma}e^{i\theta}M^{\langle q\rangle}\right)\right|
+\frac{d\theta}{2\pi}.
+\]
+则对一切 \(\sigma\in\RR\) 都有严格恒等式
+\[
+\mathcal G_{M^{\langle q\rangle}}(\sigma)
+=
+\int_0^{2\pi}
+\log\left|\det\!\left(I-\lambda^{-\sigma}e^{i\theta}M\right)\right|
+\frac{d\theta}{2\pi}
+=
+\sum_{j\in J}\max\!\bigl(0,\log|\mu_j|-\sigma\log\lambda\bigr).
+\]
+特别地，循环 lift 仅在临界线方向加密极点梳齿，而不改变归一化宏观自由能。若 \(M\) 在临界圆 \(|\mu|=\sqrt{\lambda}\) 上恰有一个简单谱点，且其余非零谱满足 \(|\mu|\neq \sqrt{\lambda}\)，则 \(\mathcal G_M\) 仅在 \(\sigma=\frac12\) 处出现唯一折角。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:finite-rh-phase-lift-artin}，对任意 \(z\in\CC\) 有
+\[
+\det(I-zM^{\langle q\rangle})
+=
+\prod_{k=0}^{q-1}\det(I-z\omega_q^k M).
+\]
+取
+\[
+z=\lambda^{-\sigma}e^{i\theta},
+\]
+并对两边取绝对值对数、再在 \(\theta\in[0,2\pi]\) 上积分，可得
+\[
+\mathcal G_{M^{\langle q\rangle}}(\sigma)
+=
+\frac1q\sum_{k=0}^{q-1}
+\int_0^{2\pi}
+\log\left|\det\!\left(I-\lambda^{-\sigma}e^{i(\theta+2\pi k/q)}M\right)\right|
+\frac{d\theta}{2\pi}.
+\]
+由于积分区间是完整圆周，变量平移 \(\theta\mapsto \theta+2\pi k/q\) 不改变平均值，故上式等于
+\[
+\int_0^{2\pi}
+\log\left|\det\!\left(I-\lambda^{-\sigma}e^{i\theta}M\right)\right|
+\frac{d\theta}{2\pi}.
+\]
+这就证明了循环相位细分在归一化后完全不可见。
+
+再把行列式按非零特征值分解为
+\[
+\det\!\left(I-\lambda^{-\sigma}e^{i\theta}M\right)
+=
+\prod_{j\in J}\left(1-\lambda^{-\sigma}e^{i\theta}\mu_j\right),
+\]
+并逐项应用 Jensen 公式
+\[
+\int_0^{2\pi}\log|1-re^{i\theta}|\frac{d\theta}{2\pi}=\log^+ r
+\qquad (r\ge 0),
+\]
+即可得到
+\[
+\int_0^{2\pi}
+\log\left|\det\!\left(I-\lambda^{-\sigma}e^{i\theta}M\right)\right|
+\frac{d\theta}{2\pi}
+=
+\sum_{j\in J}\log^+\!\left(|\mu_j|\lambda^{-\sigma}\right),
+\]
+亦即题述分段线性公式。
+
+最后，每一项
+\[
+\max\!\bigl(0,\log|\mu_j|-\sigma\log\lambda\bigr)
+\]
+的折点位于
+\[
+\sigma=\frac{\log|\mu_j|}{\log\lambda}.
+\]
+若仅有一个简单谱点满足 \(|\mu_j|=\sqrt{\lambda}\)，则唯一落在 \(\sigma=\frac12\) 的折点就是该项，其余项的折点全部远离 \(\frac12\)。故 \(\mathcal G_M\) 在 \(\sigma=\frac12\) 处仅有唯一折角。证毕。
+\end{proof}
+
+\begin{theorem}[有限窗梳齿拟合与全局去晶格化的有理无关障碍]\label{thm:conclusion-cyclic-lift-finitewindow-delattice-obstruction}
+设 \(M_1,\dots,M_A\) 为有限个 RH-sharp 核，Perron 根分别为 \(\lambda_a>1\)。对每个 \(a\)，取一条循环 lift 阶 \(q_a\ge 2\) 与一个达界模态
+\[
+\mu_a=\sqrt{\lambda_a}\,e^{i\theta_a},
+\]
+并记其在临界线 \(\Re(s)=\frac12\) 上诱导的虚部梳齿为
+\[
+\mathcal C_a:=
+\left\{
+\frac{\theta_a+2\pi n}{q_a\log\lambda_a}
+\;:\;
+n\in\ZZ
+\right\},
+\qquad
+\Delta_a:=\frac{2\pi}{q_a\log\lambda_a}.
+\]
+则有：
+\begin{enumerate}
+  \item 对任意单个 RH-sharp 核 \(M\)、任意有限集合 \(\Gamma\subset\RR\) 与任意 \(\varepsilon>0\)，存在某个循环阶 \(q\) 使得对每个 \(\gamma\in\Gamma\)，都存在 \(\tau\in\mathcal C_q\) 满足
+  \[
+  |\gamma-\tau|<\varepsilon.
+  \]
+  换言之，单尺度循环提升已经足以实现任意有限窗内的临界线梳齿逼近。
+  \item 若对所有 \(a,b\) 都有
+  \[
+  \frac{\log\lambda_a}{\log\lambda_b}\in\QQ,
+  \]
+  则存在 \(T>0\) 使得
+  \[
+  \bigcup_{a=1}^{A}\mathcal C_a
+  \subseteq
+  \bigcup_{a=1}^{A}\bigl(\alpha_a+T\ZZ\bigr)
+  \]
+  对某些实数 \(\alpha_a\) 成立。特别地，全部临界线极点仍被压在有限条等差竖列上，故保留一个非零共同虚周期。
+  \item 反之，若存在某对 \(a,b\) 满足
+  \[
+  \frac{\log\lambda_a}{\log\lambda_b}\notin\QQ,
+  \]
+  则不存在任何 \(T>0\) 使 \(\bigcup_{a=1}^{A}\mathcal C_a\) 可写成有限个 \(T\ZZ\) 的平移并。因而有限通道情形下的全局去晶格化至少需要对数 Perron 根的有理无关性。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一条由推论 \ref{cor:zeta-cyclic-lift-dirichlet-comb} 的梳齿公式直接给出。对单个 RH-sharp 核，临界线上的虚部网格间距为
+\[
+\Delta_q=\frac{2\pi}{q\log\lambda}.
+\]
+取 \(q\) 充分大使 \(\Delta_q<2\varepsilon\)。则对任意 \(\gamma\in\Gamma\)，选取最接近 \(\gamma\) 的格点
+\[
+\tau=\frac{\theta+2\pi n}{q\log\lambda}\in\mathcal C_q
+\]
+即可得到
+\[
+|\gamma-\tau|\le \frac{\Delta_q}{2}<\varepsilon.
+\]
+
+对第二条，若 \(\log\lambda_a/\log\lambda_b\in\QQ\) 对所有 \(a,b\) 成立，则
+\[
+\frac{\Delta_a}{\Delta_1}
+=
+\frac{q_1}{q_a}\cdot\frac{\log\lambda_1}{\log\lambda_a}
+\in\QQ
+\qquad (1\le a\le A).
+\]
+把这些有理数写成既约分数 \(m_a/n_a\)，并令
+\[
+L:=\mathrm{lcm}(n_1,\dots,n_A),
+\qquad
+T:=\frac{\Delta_1}{L}.
+\]
+于是对每个 \(a\)，
+\[
+\Delta_a=\frac{m_aL}{n_a}\,T\in T\NN.
+\]
+因此每一条梳齿
+\[
+\mathcal C_a=\alpha_a+\Delta_a\ZZ
+\]
+都包含于某条 \(T\)-晶格平移 \(\alpha_a+T\ZZ\) 中，从而整个并集仍是有限条 \(T\)-等差竖列的并。
+
+对第三条，反设存在 \(T>0\) 与有限多平移 \(\beta_1+T\ZZ,\dots,\beta_r+T\ZZ\)，使
+\[
+\bigcup_{a=1}^{A}\mathcal C_a\subseteq \bigcup_{j=1}^{r}(\beta_j+T\ZZ).
+\]
+固定某个 \(a\)。由于 \(\mathcal C_a\) 是无限集而右端只有有限条 \(T\)-晶格，鸽巢原理保证存在某个 \(j\) 使
+\[
+\mathcal C_a\cap(\beta_j+T\ZZ)
+\]
+为无限集。取其中两点
+\[
+\alpha_a+n\Delta_a,\qquad \alpha_a+n'\Delta_a
+\]
+落在同一平移类内，则其差满足
+\[
+(n-n')\Delta_a\in T\ZZ.
+\]
+故 \(\Delta_a/T\in\QQ\)。同理 \(\Delta_b/T\in\QQ\)，于是
+\[
+\frac{\Delta_a}{\Delta_b}\in\QQ.
+\]
+但
+\[
+\frac{\Delta_a}{\Delta_b}
+=
+\frac{q_b}{q_a}\cdot\frac{\log\lambda_b}{\log\lambda_a},
+\]
+从而推出 \(\log\lambda_a/\log\lambda_b\in\QQ\)，与假设矛盾。故不存在这样的共同晶格周期 \(T\)。证毕。
+\end{proof}
+
+\begin{corollary}[单临界相位类的单梳齿与奇支撑平方根异常]\label{cor:conclusion-realinput40-single-comb-odd-support-chain}
+对真实输入 \(40\) 状态核，隐藏的 \((-A_0)\) 因子所强制的唯一达界模态
+\[
+\mu_\ast=-\sqrt{\lambda}=-\varphi
+\]
+同时诱导以下三种可见现象：
+\begin{enumerate}
+  \item 临界线上的非平凡极点只形成一条半格点梳齿；
+  \item primitive 轨道计数中的 \(\lambda^{n/2}\) 级异常完全支撑在奇长度上；
+  \item 其余全部非 Perron 模态都严格亚临界，因而不再贡献第二条临界梳齿。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-realinput40-single-channel-comb-rigidity}，真实输入 \(40\) 状态核除 Perron 根外恰有唯一达界模态 \(-\sqrt{\lambda}\)，且该模态完全来自隐藏的 \((-A_0)\) 因子。再由推论 \ref{cor:zeta-signflip-half-lattice}，这一符号翻转模态恰对应于临界线上的半格点梳齿。最后，定理 \ref{thm:conclusion-realinput40-primitive-sqrt-anomaly-odd-support} 表明同一模态在 primitive 层恰产生
+\[
+-\mathbf 1_{\{n\ \mathrm{odd}\}}\frac{\lambda^{n/2}}{n}
+\]
+这一奇支撑平方根异常，而偶长度上的同尺度项被 Möbius 反演中的 \(d=2\) 项精确抵消。故三种现象由同一单临界相位类同时锁定。证毕。
+\end{proof}
+
 \begin{theorem}[正性 Fredholm 完成中的边界模态簇不灭性]\label{thm:conclusion-positive-fredholm-boundary-obstruction}
 固定 \(\lambda>1\)。设
 \[
