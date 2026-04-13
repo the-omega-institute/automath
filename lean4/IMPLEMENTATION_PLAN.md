@@ -13,30 +13,30 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2918 |
+| \leanverified 标注数 | 2921 |
 | \leanpartial 标注数 | 50 |
-| 总标注数 | 2974 |
-| 轮次 | R653（round_count=654）|
+| 总标注数 | 2977 |
+| 轮次 | R654（round_count=655）|
 
-**Phase R653（本轮落地）**：`conclusion_window6_su5_obstruction`（对应 `thm:conclusion-window6-su5-obstruction`，Conclusion；由 `cBinFiberMult 6 x ≤ cBinFiberMax 6 = 4` 给出 window-6 纤维最多四点，从而排除 \(\mathfrak{su}(5)\) 连通因子）；`pom_Lk_boundary_riccati_recursion_t1`（对应 `prop:pom-Lk-boundary-riccati-recursion`，POM；把黄金耦合下的边界 Riccati 递推精确化为 `qT1 (k+1)=F_{2k+1}/F_{2k+3}`，并经 `fenceDet`/`detPoly_eval_one` 桥接到 Fibonacci 比值）；`cdim_poisson_kl_sixth_term_negative_and_dissipation`（对应 `prop:cdim-poisson-kl-sixth-term-negative-and-dissipation-restated`，Circle Dimension；由六阶系数上界直接推出主项与耗散二项同时严格为负）
+**Phase R654（本轮落地）**：`paper_conclusion_window6_su5_obstruction_package`（对应 `thm:conclusion-window6-su5-obstruction`，Conclusion；把 window-6 BinFold 纤维重数上界 `d_6^{bin}(w)≤4` 与 `cBinFiberMax 6 = 4` 汇总成正文接口包，补全 SU(5) 禁阻的 paper-facing statement）；`paper_pom_Lk_boundary_riccati_recursion_package`（对应 `prop:pom-Lk-boundary-riccati-recursion`，POM；把 `fenceDet` 比值、奇 Fibonacci 比值、误差闭式与正性统一打包为边界 Riccati 递推的 paper-facing package）；`paper_cdim_poisson_kl_sixth_term_negative_package`（对应 `prop:cdim-poisson-kl-sixth-term-negative-and-dissipation-restated`，Circle Dimension；把六阶 KL 系数严格负性与耗散二项严格负性整理成正文接口）
 
-**Phase R654（queued 设计）**：优先考虑 Conclusion + POM + Circle Dimension 延伸包装；候选锁定 `paper_conclusion_window6_su5_obstruction_package`（Conclusion，低，把 `d_6^{bin}(w)≤4` 与 Lie 因子禁阻整理成正文接口）、`paper_pom_Lk_boundary_riccati_recursion_package`（POM，低，补一层 Riccati/Fibonacci 收敛率 paper-facing package）、`paper_cdim_poisson_kl_sixth_term_negative_package`（Circle Dimension，低，把六阶负性与耗散负性整理成正文接口）
+**Phase R655（queued 设计）**：继续沿 Conclusion + POM + Circle Dimension 做 paper-facing 包装与扩展登记，优先挑选可直接复用现成引理的一步封装型目标，以维持零公理、零 sorry 的低风险增量。
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 330 | 19.3% |
+| POM | 1,707 | 331 | 19.4% |
 | Emergent Arithmetic | 185 | 181 | 97.8% |
 | Folding | 337 | 146 | 43.3% |
-| Conclusion | 2,550 | 287 | 11.3% |
+| Conclusion | 2,550 | 288 | 11.3% |
 | Group Unification | 469 | 186 | 39.7% |
 | SPG | 129 | 118 | 91.5% |
-| Circle Dimension | 393 | 169 | 43.0% |
+| Circle Dimension | 393 | 170 | 43.3% |
 | Zeta Finite Part | 4,524 | 226 | 5.0% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1707** | **16.2%** |
+| **合计（body）** | **10,508** | **1710** | **16.3%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Window-6 SU(5) paper package + POM Riccati/Fibonacci paper package + Circle Dimension KL 六阶负性 paper package（Round R654，新标签，\leanverified 完整）**：`paper_conclusion_window6_su5_obstruction_package`（对应 `thm:conclusion-window6-su5-obstruction`，Conclusion；将 `cBinFiberMult 6 x ≤ 4` 与 `cBinFiberMax 6 = 4` 合并为 paper-facing package，**新标签扩展登记**）；`paper_pom_Lk_boundary_riccati_recursion_package`（对应 `prop:pom-Lk-boundary-riccati-recursion`，POM；统一打包 `qT1 (k+1)` 的 `fenceDet` 比值、奇 Fibonacci 比值、误差闭式与正性，**新标签扩展登记**）；`paper_cdim_poisson_kl_sixth_term_negative_package`（对应 `prop:cdim-poisson-kl-sixth-term-negative-and-dissipation-restated`，Circle Dimension；将六阶 KL 系数负性与耗散负性整理成正文接口，**新标签扩展登记**）
 **Window-6 SU(5) 禁阻 + POM Riccati/Fibonacci 边界递推 + Circle Dimension KL 六阶负性耗散（Round R653，新标签，\leanverified 完整）**：`conclusion_window6_su5_obstruction`（对应 `thm:conclusion-window6-su5-obstruction`，Conclusion；任意 `w ∈ X_6` 的 BinFold 纤维重数至多为 4，故不可能出现 \(\mathfrak{su}(5)\) 简单因子，**新标签首次注册**）；`pom_Lk_boundary_riccati_recursion_t1`（对应 `prop:pom-Lk-boundary-riccati-recursion`，POM；黄金耦合 `t=1` 的边界 Riccati 递推精确闭成奇指标 Fibonacci 比值 `F_{2k+1}/F_{2k+3}`，**新标签首次注册**）；`cdim_poisson_kl_sixth_term_negative_and_dissipation`（对应 `prop:cdim-poisson-kl-sixth-term-negative-and-dissipation-restated`，Circle Dimension；六阶 KL 系数上界直接推出主项与耗散二项同时严格为负，**新标签首次注册**）
 **Circle Dimension 有限素数截断账本包 + Conclusion 单寄存器串行化间隙种子值 + POM 右解析 paper package（Round R652，新标签，\leanverified 完整）**：`paper_cdim_multiplicative_object_no_finite_hom_ledger_package`（对应 `cor:cdim-finite-prime-truncation-hom-half-circle`，Circle Dimension；把有限素数截断 prime/coprime/product/minFac 证书打包为乘法对象无有限同态账本的 paper-facing wrapper，**新标签扩展登记**）；`paper_conclusion_prime_register_one_register_serialization_gap_seeds`（对应 `thm:conclusion-window6-boundary-pinning-two-scales-memory-gap`，Conclusion；prime-register 单寄存器串行化讨论所需的乘积与递减算术种子值，**新标签扩展登记**）；`paper_pom_right_resolving_package`（对应 `thm:pom-right-resolving`，POM；末位 snoc 二选一可判别性的 paper-facing package，**新标签扩展登记**）
 **Zeta 局部化 quotient/torsion Euler 因子精化包 + Conclusion 可逆辅助位预算 iff 打包（Round R651，新标签，\leanverified 完整）**：`paper_xi_localized_quotient_torsion_euler_factor_package_refined`（对应 `thm:xi-localized-quotient-torsion-zeta-euler-product`，Zeta；在既有 quotient/torsion zeta Euler 乘积正文定理下补入 refined Euler-factor package 论文接口，**新标签扩展登记**）；`paper_conclusion_reversible_aux_bits_log_budget_package`（对应 `prop:conclusion-reversible-aux-bits-equals-log-budget`，Conclusion；有限注入存在当且仅当预算满足 `b ≤ 2^k` 的 paper-facing iff 包装，**新标签扩展登记**）
