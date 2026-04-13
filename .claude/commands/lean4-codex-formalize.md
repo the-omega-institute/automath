@@ -44,7 +44,7 @@ worker（常驻自驱，只有 Bash + SendMessage）——每轮循环：
 - 写模式：`codex exec --full-auto -C <repo> "<prompt>"`（= `-a on-request -s workspace-write`）
 - **没有** `--effort` 标志（那是 MCP 模式专用）
 - 长 prompt 必须用 heredoc 避免 shell 转义
-- 前台运行，`timeout 900`（Phase B）/ `timeout 1800`（Phase C），不使用 `--background`
+- 前台运行，`timeout 1800`（Phase B）/ `timeout 3600`（Phase C），不使用 `--background`
 - Codex 具备 lean-lsp MCP（20 个 LSP 工具）+ 完整 shell（git/lake）
 
 ## 启动流程
@@ -71,9 +71,9 @@ Agent(
 
 ## 每轮流程
 
-1. **Phase B（只读分析）**：Bash 调用 `timeout 900 codex exec -s read-only ...` 让 Codex 选 3 个目标
+1. **Phase B（只读分析）**：Bash 调用 `timeout 1800 codex exec -s read-only ...` 让 Codex 选 3 个目标
 2. **门禁**（你判断）：3 目标？≥1 中等？不全同章节？不满足则要求 Codex 重选
-3. **Phase C（写模式全流程）**：Bash 调用 `timeout 1800 codex exec --full-auto ...` 让 Codex 实现+编译+commit+登记+push
+3. **Phase C（写模式全流程）**：Bash 调用 `timeout 3600 codex exec --full-auto ...` 让 Codex 实现+编译+commit+登记+push
 4. **Phase D（验证）**：Bash `git log --oneline -3` 确认新 commit
 5. 续轮
 
