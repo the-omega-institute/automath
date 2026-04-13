@@ -13,9 +13,9 @@ team lead（你）——纯被动，不改代码：
   └── 响应用户指令
 
 worker（常驻自驱，只有 Bash + SendMessage）——每轮循环：
-  ├── Bash: codex exec -s read-only ...（分析选目标）
+  ├── Bash: codex exec --dangerously-bypass-approvals-and-sandbox ...（分析选目标）
   ├── 门禁 3 行判断
-  ├── Bash: codex exec --full-auto ...（实现+编译+commit+登记+push）
+  ├── Bash: codex exec --dangerously-bypass-approvals-and-sandbox ...（实现+编译+commit+登记+push）
   ├── Bash: git log 检查结果
   └── 续轮
 ```
@@ -40,12 +40,13 @@ worker（常驻自驱，只有 Bash + SendMessage）——每轮循环：
 ## Codex CLI 要点
 
 - 路径：`/opt/homebrew/bin/codex`，子命令 `codex exec`（非交互）
-- 只读：`codex exec -s read-only -C <repo> "<prompt>"`
-- 写模式：`codex exec --full-auto -C <repo> "<prompt>"`（= `-a on-request -s workspace-write`）
+- **统一使用免沙箱标志**：`codex exec --dangerously-bypass-approvals-and-sandbox -C <repo> "<prompt>"`
+- 不再使用 `-s read-only` / `--full-auto`（Phase B 与 Phase C 均走 bypass 模式）
 - **没有** `--effort` 标志（那是 MCP 模式专用）
 - 长 prompt 必须用 heredoc 避免 shell 转义
 - 前台运行，`timeout 1800`（Phase B）/ `timeout 3600`（Phase C），不使用 `--background`
 - Codex 具备 lean-lsp MCP（20 个 LSP 工具）+ 完整 shell（git/lake）
+- **⚠️ 每个 `codex exec` 调用必须以 `</dev/null` 结尾**：Agent Bash 工具不关闭 stdin，codex 会挂在 "Reading additional input from stdin..."（实测空转 20+ 分钟零产出）
 
 ## 启动流程
 
@@ -71,9 +72,9 @@ Agent(
 
 ## 每轮流程
 
-1. **Phase B（只读分析）**：Bash 调用 `timeout 1800 codex exec -s read-only ...` 让 Codex 选 3 个目标
+1. **Phase B（分析）**：Bash 调用 `timeout 1800 codex exec --dangerously-bypass-approvals-and-sandbox ...` 让 Codex 选 3 个目标
 2. **门禁**（你判断）：3 目标？≥1 中等？不全同章节？不满足则要求 Codex 重选
-3. **Phase C（写模式全流程）**：Bash 调用 `timeout 3600 codex exec --full-auto ...` 让 Codex 实现+编译+commit+登记+push
+3. **Phase C（全流程）**：Bash 调用 `timeout 3600 codex exec --dangerously-bypass-approvals-and-sandbox ...` 让 Codex 实现+编译+commit+登记+push
 4. **Phase D（验证）**：Bash `git log --oneline -3` 确认新 commit
 5. 续轮
 
@@ -87,7 +88,7 @@ Agent(
 ## Phase B 命令模板
 
 ```
-timeout 900 codex exec -s read-only -C /Users/chronoai/automath \"\\$(cat <<'PROMPT'
+timeout 1800 codex exec --dangerously-bypass-approvals-and-sandbox -C /Users/chronoai/automath \"\\$(cat <<'PROMPT'
 为 Lean4 形式化项目选择 R{N} 的 3 个目标。
 
 项目布局：
@@ -104,13 +105,13 @@ timeout 900 codex exec -s read-only -C /Users/chronoai/automath \"\\$(cat <<'PRO
 每个目标紧凑报告：论文标签、Lean4 签名+sorry、预期策略、文件路径、难度、grep 结果。
 必须 grep 确认不存在。不猜 mathlib API。
 PROMPT
-)\"
+)\" </dev/null
 ```
 
 ## Phase C 命令模板
 
 ```
-timeout 1800 codex exec --full-auto -C /Users/chronoai/automath \"\\$(cat <<'PROMPT'
+timeout 3600 codex exec --dangerously-bypass-approvals-and-sandbox -C /Users/chronoai/automath \"\\$(cat <<'PROMPT'
 实现 Lean4 定理 + 编译 + commit + 登记 + push。一次完成。
 
 ## 步骤 1：实现证明
@@ -138,7 +139,7 @@ git add lean4/IMPLEMENTATION_PLAN.md theory/ && git commit -m 'Register Phase R{
 - 实现只改 lean4/Omega/；登记只改 IMPLEMENTATION_PLAN.md 和 theory/
 - 不重构、不删除
 PROMPT
-)\"
+)\" </dev/null
 ```
 
 ## Phase D 续轮判断

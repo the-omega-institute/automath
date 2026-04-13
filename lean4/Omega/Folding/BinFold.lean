@@ -322,6 +322,18 @@ theorem cBinFiberMin_six : cBinFiberMin 6 = 2 :=
 theorem cBinFiberMax_six : cBinFiberMax 6 = 4 :=
   cached_cBinFiberExtrema_six.2
 
+/-- Window-6 BinFold fibers have size at most 4, obstructing an `SU(5)` factor.
+    thm:conclusion-window6-su5-obstruction -/
+theorem conclusion_window6_su5_obstruction (x : X 6) :
+    cBinFiberMult 6 x ≤ 4 := by
+  calc
+    cBinFiberMult 6 x ≤ cBinFiberMax 6 := by
+      exact Finset.le_sup' (s := (@Finset.univ (X 6) (fintypeX 6)))
+        (f := fun y => cBinFiberMult 6 y) (by
+          show x ∈ (@Finset.univ (X 6) (fintypeX 6))
+          simp)
+    _ = 4 := cBinFiberMax_six
+
 /-- Local index < global compression: min_mult × |X_6| < 2^6.
     thm:conclusion-window6-local-index-lt-global-compression -/
 theorem local_index_lt_global_compression :
