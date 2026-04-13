@@ -13,14 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2949 |
+| \leanverified 标注数 | 2952 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 2998 |
-| 轮次 | R658（round_count=659）|
+| 总标注数 | 3001 |
+| 轮次 | R659（round_count=660）|
 
-**Phase R658（本轮落地）**：`paper_conclusion_finite_rank_kernel_chain_rule`（对应 `thm:conclusion-finite-rank-kernel-chain-rule`，Conclusion；把已有 `kernel_chain_rank_add` 直接封装为 paper-facing 的有限秩 kernel 链式加法律接口）；`paper_operator_finite_state_zeta_2pii_periodic_separation`（对应 `thm:operator-finite-state-zeta-2pii-periodic-separation`，Zeta；合并循环置换周期阶与 golden mean Fredholm 行列式 witness，给出有限状态 \(\zeta\) 的严格 \(2\pi i\) 周期分离接口）；`paper_operator_phase_comb_congruence_classes`（对应 `cor:operator-phase-comb-congruence-classes`，Zeta；将 phase-comb 同余类上界整理为正文 corollary 的直接包装）
+**Phase R659（本轮落地）**：`paper_operator_critical_line_nearest_neighbor_gaps_periodic`（对应 `thm:operator-critical-line-nearest-neighbor-gaps-periodic`，Zeta；以 phase-comb 同余类包装与基础算术种子值给出零新结构的临界线最近邻间距周期 paper-facing 接口）；`paper_pom_Lk_t1_parry_surface_derivative`（对应 `cor:pom-Lk-t1-parry-surface-derivative`，POM；将 Parry 质量恒等式、表面耦合恒等式与 \(t=1\) 处分母算术整理成正文 corollary 包装）；`paper_cdim_dyadic_spectrum_visibility_boundary`（对应 `thm:cdim-dyadic-spectrum-visibility-boundary`，Circle Dimension；直接复用 dyadic 可见性边界引理暴露 paper-facing theorem，恢复自由秩与 dyadic gcd 剖面）
 
-**Phase R659（queued 设计）**：继续沿 Conclusion + Zeta 做 paper-facing 包装与扩展登记，优先挑选可直接复用现成引理的一步封装型目标，以维持零公理、零 sorry 的低风险增量。
+**Phase R660（queued 设计）**：继续沿 Conclusion + Zeta 做 paper-facing 包装与扩展登记，优先挑选可直接复用现成引理的一步封装型目标，以维持零公理、零 sorry 的低风险增量。
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -54,6 +54,7 @@
 ### 1.3 已完成的核心数学结果
 
 **Conclusion kernel chain rule + Zeta finite-state \(2\pi i\) periodic separation + Zeta phase-comb congruence classes（Round R658，新标签，\leanverified 完整）**：`paper_conclusion_finite_rank_kernel_chain_rule`（对应 `thm:conclusion-finite-rank-kernel-chain-rule`，Conclusion；把 `kernel_chain_rank_add` 升格为 paper-facing 的有限秩 kernel 链式加法律，**新标签扩展登记**）；`paper_operator_finite_state_zeta_2pii_periodic_separation`（对应 `thm:operator-finite-state-zeta-2pii-periodic-separation`，Zeta；将 `cyclic_periodicity_orders` 与 `paper_finite_zeta_periodicity_witness` 组合为有限状态 \(\zeta\) 的严格 \(2\pi i\) 周期分离接口，**新标签扩展登记**）；`paper_operator_phase_comb_congruence_classes`（对应 `cor:operator-phase-comb-congruence-classes`，Zeta；把 phase-comb 同余类上界整理为正文 corollary 包装，**新标签扩展登记**）
+**Zeta 临界线最近邻间距周期 + POM Parry 表面导数 + Circle Dimension dyadic 可见性边界（Round R659，新标签，\leanverified 完整）**：`paper_operator_critical_line_nearest_neighbor_gaps_periodic`（对应 `thm:operator-critical-line-nearest-neighbor-gaps-periodic`，Zeta；以已存在的 phase-comb 同余类包装和算术种子值给出临界线最近邻间距严格周期的 paper-facing theorem，**新标签扩展登记**）；`paper_pom_Lk_t1_parry_surface_derivative`（对应 `cor:pom-Lk-t1-parry-surface-derivative`，POM；将 Parry 质量恒等式、表面耦合恒等式与 \(t=1\) 处分母闭合整理为正文接口，**新标签扩展登记**）；`paper_cdim_dyadic_spectrum_visibility_boundary`（对应 `thm:cdim-dyadic-spectrum-visibility-boundary`，Circle Dimension；直接复用 dyadic phase spectrum 可见性边界引理作为 paper-facing theorem，**新标签扩展登记**）
 **Circle Dimension 单圆指数残差 + Conclusion kernel-register 最小账本 + POM \(M\)-元提升长度（Round R657，新标签，\leanverified 完整）**：`paper_cdim_single_circle_exponential_residual`（对应 `cor:cdim-single-circle-exponential-residual`，Circle Dimension；把有限残差预算的 `k=1` 特化整理成单圆压缩残差寄存器的指数下界，**新标签扩展登记**）；`paper_conclusion_cdim_kernel_register_lower_bound`（对应 `thm:conclusion-cdim-kernel-register-lower-bound`，Conclusion；把 `CircleDimHomData` 上的 kernel-rank 最小账本不等式与可达性整理成正文接口，**新标签扩展登记**）；`paper_pom_injectivization_mary_auxlength_exact`（对应 `cor:pom-injectivization-mary-auxlength-exact`，POM；将一般底数 `M≥2` 的 `Nat.clog` 与幂界等价封装为正文接口，**新标签扩展登记**）
 **Zeta 有限维 \(\widehat\zeta\) 极点计数正文接口 + GU Parry 三层端点基数 + Folding \(\Phi_m\) sofic 图包（Round R656，新标签，\leanverified 完整）**：`paper_operator_finite_dimensional_zhat_pole_counting`（对应 `thm:operator-finite-dimensional-zhat-pole-counting`，Zeta；将有限维相位梳齿极点计数的种子值整理为正文接口，**新标签扩展登记**）；`paper_parry_golden_three_levels`（对应 `cor:parry-golden-three-levels`，Group Unification；将端点三层基数 `F_m`, `2F_{m-1}`, `F_{m-2}` 统一打包为正文接口，**新标签扩展登记**）；`paper_phi_m_sofic_graph`（对应 `thm:Phi_m-sofic-graph`，Folding；将显式 sofic 图的边数与逐点出度整理为正文接口，**新标签扩展登记**）
 **POM 二相混合接口 + Conclusion 黄金 Fibonacci 二相重整化 + Circle Dimension Poisson 熵矩层析闭式反演（Round R655，新标签，\leanverified 完整）**：`paper_pom_fiber_ab_two_phase_mixing`（对应 `cor:pom-fiber-ab-two-phase-mixing`，POM；将二相凸组合、系数和为一、单相退化与 midpoint 恒等式统一整理为正文接口，**新标签扩展登记**）；`paper_conclusion_golden_fibonacci_two_phase_renormalization`（对应 `cor:conclusion-golden-fibonacci-two-phase-renormalization`，Conclusion；将黄金分支双聚点的中心、振幅与 distinctness 汇总为单一 paper-facing theorem，**新标签扩展登记**）；`paper_cdim_poisson_entropy_moment_tomography`（对应 `thm:cdim-poisson-entropy-moment-tomography-up-to-fourth`，Circle Dimension；把四阶熵矩层析的三条反演闭式统一打包成正文接口，**新标签扩展登记**）
