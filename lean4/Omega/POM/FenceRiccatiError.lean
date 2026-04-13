@@ -184,6 +184,18 @@ theorem riccati_error_lt_geom (k : Nat) :
     linarith [pow_pos phiInvSq_pos (2 * k + 1)]
   exact div_lt_self hnum_pos h1
 
+/-- Packaged boundary recursion, odd-Fibonacci ratio, and positive Riccati error facts.
+    prop:pom-Lk-boundary-riccati-recursion -/
+theorem paper_pom_Lk_boundary_riccati_recursion_package (k : Nat) :
+    qT1 (k + 1) = (fenceDet k : ℝ) / fenceDet (k + 1) ∧
+    qT1 (k + 1) = (Nat.fib (2 * k + 1) : ℝ) / Nat.fib (2 * k + 3) ∧
+    qT1 k - phiInvSq =
+      (1 - phiInvSq ^ 2) * phiInvSq ^ (2 * k) / (1 + phiInvSq ^ (2 * k + 1)) ∧
+    0 < qT1 k - phiInvSq := by
+  refine ⟨qT1_eq_fenceDet_ratio k, pom_Lk_boundary_riccati_recursion_t1 k, ?_, ?_⟩
+  · exact paper_pom_Lk_t1_error_closed_form k
+  · exact riccati_error_pos k
+
 /-- Paper: `cor:pom-Lk-t1-error-summable`. Golden tier truncation error summability:
     the error `qT1 k - phiInvSq` is positive and bounded above by a geometric sequence
     `(1 - phiInvSq²) * phiInvSq^(2k)`, which is summable since `phiInvSq² < 1`.

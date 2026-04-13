@@ -55,4 +55,13 @@ theorem cdim_poisson_kl_sixth_term_negative_and_dissipation
   · exact hneg
   · nlinarith
 
+/-- Packaged negativity statement for the sixth-order KL coefficient and dissipation term.
+    prop:cdim-poisson-kl-sixth-term-negative-and-dissipation-restated -/
+theorem paper_cdim_poisson_kl_sixth_term_negative_package
+    {σ mu3 mu4 : ℝ} (hσ : 0 < σ)
+    (hcoeff : σ^6 + 6 * mu3^2 - 8 * σ^2 * mu4 ≤ -σ^6) :
+    σ^6 + 6 * mu3^2 - 8 * σ^2 * mu4 < 0 ∧
+    3 * (σ^6 + 6 * mu3^2 - 8 * σ^2 * mu4) / 32 < 0 := by
+  exact cdim_poisson_kl_sixth_term_negative_and_dissipation hσ hcoeff
+
 end Omega.CircleDimension

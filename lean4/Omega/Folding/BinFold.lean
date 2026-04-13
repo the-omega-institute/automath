@@ -334,6 +334,12 @@ theorem conclusion_window6_su5_obstruction (x : X 6) :
           simp)
     _ = 4 := cBinFiberMax_six
 
+/-- Paper packaging of the window-6 `SU(5)` obstruction bound.
+    thm:conclusion-window6-su5-obstruction -/
+theorem paper_conclusion_window6_su5_obstruction_package (x : X 6) :
+    cBinFiberMult 6 x ≤ 4 ∧ cBinFiberMax 6 = 4 := by
+  exact ⟨conclusion_window6_su5_obstruction x, cBinFiberMax_six⟩
+
 /-- Local index < global compression: min_mult × |X_6| < 2^6.
     thm:conclusion-window6-local-index-lt-global-compression -/
 theorem local_index_lt_global_compression :
