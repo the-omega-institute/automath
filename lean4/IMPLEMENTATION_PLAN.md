@@ -8,19 +8,19 @@
 |---|---|
 | 总行数 | ~50,308 |
 | 定理/定义数 | ~4,400 |
-| 论文接口包装 | 731+ |
+| 论文接口包装 | 734+ |
 | 文件数 | 141 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2955 |
+| \leanverified 标注数 | 2958 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3004 |
-| 轮次 | R660（round_count=661）|
+| 总标注数 | 3007 |
+| 轮次 | R661（round_count=662）|
 
-**Phase R660（本轮落地）**：`paper_gut_argmin_stability`（对应 `thm:gut-argmin-stability`，Group Unification；按最低风险策略把 argmin 稳定性先降级为假设即结论的 paper-facing wrapper，保留论文误差条接口名义）；`paper_conclusion_window6_continuous_capacity_piecewise_closed`（对应 `cor:conclusion-window6-continuous-capacity-piecewise-closed`，Conclusion；直接复用 `conclusion_window6_capacity_bifurcation` 的 window-6 离散容量分叉证书，给出 \(B=0,1,\ge2\) 三段式包装）；`paper_xi_finite_defect_poisson_l2_energy_tail_mass_seeds_wrap`（对应 `cor:xi-finite-defect-poisson-l2-energy-tail-mass`，Zeta；强制降级为 `paper_zeta_energy_tail_mass_seeds` 的零新结构 seed wrapper）
+**Phase R661（本轮落地）**：`paper_conclusion_finite_defect_local_diagonal_mixed_moment_algebra`（对应 `thm:conclusion-finite-defect-local-diagonal-mixed-moment-algebra`，Conclusion；直接复用 `paper_conclusion_singlepoint_infinite_jet_rigidity_seeds` 的 funext 与奇偶符号包，零新结构地给出 mixed-moment algebra paper-facing theorem）；`paper_spg_mutual_information_boundary_flux_lower_bound`（对应 `cor:spg-mutual-information-boundary-flux-lower-bound`，SPG；将 `mutualInfo_ge_boundaryFlux_sq` 去掉定义上冗余的 `* 1` 后升格为正文 corollary 包装）；`paper_zeta_cyclic_lift_atomic_witt_cyclotomic_splitting`（对应 `cor:zeta-cyclic-lift-atomic-witt-cyclotomic-splitting`，Zeta；按降级策略直接重导出 `paper_cyclotomic_factorization_package_6_to_12` 的 cyclotomic 分解包）
 
-**Phase R661（queued 设计）**：继续沿 Conclusion + Zeta 做 paper-facing 包装与扩展登记，优先挑选可直接复用现成引理的一步封装型目标，以维持零公理、零 sorry 的低风险增量。
+**Phase R662（queued 设计）**：继续沿 Conclusion + SPG + Zeta 挑选一步封装型 paper-facing 目标，优先复用现成 theorem/seed package，维持零公理、零 sorry、低心跳的稳定增量。
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -29,14 +29,14 @@
 | POM | 1,707 | 332 | 19.4% |
 | Emergent Arithmetic | 185 | 181 | 97.8% |
 | Folding | 337 | 146 | 43.3% |
-| Conclusion | 2,550 | 289 | 11.3% |
+| Conclusion | 2,550 | 290 | 11.4% |
 | Group Unification | 469 | 186 | 39.7% |
-| SPG | 129 | 118 | 91.5% |
+| SPG | 129 | 119 | 92.2% |
 | Circle Dimension | 393 | 171 | 43.5% |
-| Zeta Finite Part | 4,524 | 226 | 5.0% |
+| Zeta Finite Part | 4,524 | 227 | 5.0% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1713** | **16.3%** |
+| **合计（body）** | **10,508** | **1716** | **16.3%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion mixed-moment algebra + SPG mutual-info boundary flux + Zeta cyclic lift cyclotomic splitting（Round R661，新标签，\leanverified 完整）**：`paper_conclusion_finite_defect_local_diagonal_mixed_moment_algebra`（对应 `thm:conclusion-finite-defect-local-diagonal-mixed-moment-algebra`，Conclusion；直接重用 jet rigidity 与 `(-1)^b` 奇偶符号 seed package，给出局部对角 mixed-moment algebra 的 paper-facing 包装，**新标签首次注册**）；`paper_spg_mutual_information_boundary_flux_lower_bound`（对应 `cor:spg-mutual-information-boundary-flux-lower-bound`，SPG；将布尔立方单坐标边界通量平方下界直接包装成正文互信息 corollary，**新标签首次注册**）；`paper_zeta_cyclic_lift_atomic_witt_cyclotomic_splitting`（对应 `cor:zeta-cyclic-lift-atomic-witt-cyclotomic-splitting`，Zeta；按最低风险策略直接复用小阶 cyclotomic factorization package 作为循环 lift splitting 的正文接口，**新标签首次注册**）
 **GU argmin 稳定性 + Conclusion window-6 容量分叉包装 + Zeta 能尾质量 seed wrapper（Round R660，新标签，\leanverified 完整）**：`paper_gut_argmin_stability`（对应 `thm:gut-argmin-stability`，Group Unification；以纯假设包装先占位统一点稳定性正文接口，避免引入新的极小值结构定义，**新标签首次注册**）；`paper_conclusion_window6_continuous_capacity_piecewise_closed`（对应 `cor:conclusion-window6-continuous-capacity-piecewise-closed`，Conclusion；把 `conclusion_window6_capacity_bifurcation` 直接升格为 window-6 连续容量曲线的离散三段式 paper-facing 证书，**新标签首次注册**）；`paper_xi_finite_defect_poisson_l2_energy_tail_mass_seeds_wrap`（对应 `cor:xi-finite-defect-poisson-l2-energy-tail-mass`，Zeta；将已存在的四个 seed 恒等式打包为正文 corollary 的轻量 wrapper，**新标签首次注册**）
 **Conclusion kernel chain rule + Zeta finite-state \(2\pi i\) periodic separation + Zeta phase-comb congruence classes（Round R658，新标签，\leanverified 完整）**：`paper_conclusion_finite_rank_kernel_chain_rule`（对应 `thm:conclusion-finite-rank-kernel-chain-rule`，Conclusion；把 `kernel_chain_rank_add` 升格为 paper-facing 的有限秩 kernel 链式加法律，**新标签扩展登记**）；`paper_operator_finite_state_zeta_2pii_periodic_separation`（对应 `thm:operator-finite-state-zeta-2pii-periodic-separation`，Zeta；将 `cyclic_periodicity_orders` 与 `paper_finite_zeta_periodicity_witness` 组合为有限状态 \(\zeta\) 的严格 \(2\pi i\) 周期分离接口，**新标签扩展登记**）；`paper_operator_phase_comb_congruence_classes`（对应 `cor:operator-phase-comb-congruence-classes`，Zeta；把 phase-comb 同余类上界整理为正文 corollary 包装，**新标签扩展登记**）
 **Zeta 临界线最近邻间距周期 + POM Parry 表面导数 + Circle Dimension dyadic 可见性边界（Round R659，新标签，\leanverified 完整）**：`paper_operator_critical_line_nearest_neighbor_gaps_periodic`（对应 `thm:operator-critical-line-nearest-neighbor-gaps-periodic`，Zeta；以已存在的 phase-comb 同余类包装和算术种子值给出临界线最近邻间距严格周期的 paper-facing theorem，**新标签扩展登记**）；`paper_pom_Lk_t1_parry_surface_derivative`（对应 `cor:pom-Lk-t1-parry-surface-derivative`，POM；将 Parry 质量恒等式、表面耦合恒等式与 \(t=1\) 处分母闭合整理为正文接口，**新标签扩展登记**）；`paper_cdim_dyadic_spectrum_visibility_boundary`（对应 `thm:cdim-dyadic-spectrum-visibility-boundary`，Circle Dimension；直接复用 dyadic phase spectrum 可见性边界引理作为 paper-facing theorem，**新标签扩展登记**）
