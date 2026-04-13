@@ -13,14 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2964 |
+| \leanverified 标注数 | 2967 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3013 |
-| 轮次 | R663（round_count=664）|
+| 总标注数 | 3016 |
+| 轮次 | R664（round_count=665）|
 
-**Phase R663（本轮落地）**：`paper_rh_stratification_three_kernels_package`（对应 `prop:rh-stratification-three-kernels`，Zeta；完全克隆 `paper_rh_stratification_seeds` 的签名，零成本补齐三类 kernel RH 分层的 paper-facing package）；`paper_pom_truncation_curvature_equals_hidden_bit`（对应 `thm:pom-truncation-curvature-equals-hidden-bit`，POM；直接复用 `truncation_curvature_eq_hiddenBit` 的同签名包装，维持 truncation curvature 与 hidden bit 同一性的正文接口）；`paper_pom_fold_prime_lift_injective_seeds_wrap`（对应 `prop:pom-fold-prime-lift-injective`，POM；按强制降级策略克隆 `fold_hiddenBit_determines_weight` 的签名，作为 prime-lift injective 标签下的低风险 seed wrapper）
+**Phase R664（本轮落地）**：`paper_conclusion_qpos_general_singlephase_injective_dense_package`（对应 `thm:conclusion-qpos-general-singlephase-injective-dense`，Conclusion；完全克隆 `paper_conclusion_zn_to_circle_injective_dense_seeds` 的签名，零证明补齐 qpos general singlephase injective dense 的 paper-facing package）；`paper_cdim_biphase_cosine_record_axis_lower_bound_package`（对应 `prop:cdim-biphase-cosine-record-axis-lower-bound`，Circle Dimension；按强制降级策略直接复用 `paper_cdim_biphase_fiber_count_seeds` 的原签名，补齐 biphase cosine record axis lower bound 的安全 wrapper）；`paper_spg_boundary_cycle_audit_query_lower_bound_package`（对应 `thm:spg-boundary-cycle-audit-query-lower-bound`，SPG；直接克隆现有 `paper_spg_boundary_cycle_audit_query_lower_bound` 的参数与结论，产出可编译的 paper package wrapper）
 
-**Phase R664（queued 设计）**：继续沿 Zeta + POM 方向挑选一步封装型 paper-facing 目标，优先复用现成 theorem/seed package，维持零公理、零 sorry、低心跳的稳定增量。
+**Phase R663（上一轮落地）**：`paper_rh_stratification_three_kernels_package`（对应 `prop:rh-stratification-three-kernels`，Zeta；完全克隆 `paper_rh_stratification_seeds` 的签名，零成本补齐三类 kernel RH 分层的 paper-facing package）；`paper_pom_truncation_curvature_equals_hidden_bit`（对应 `thm:pom-truncation-curvature-equals-hidden-bit`，POM；直接复用 `truncation_curvature_eq_hiddenBit` 的同签名包装，维持 truncation curvature 与 hidden bit 同一性的正文接口）；`paper_pom_fold_prime_lift_injective_seeds_wrap`（对应 `prop:pom-fold-prime-lift-injective`，POM；按强制降级策略克隆 `fold_hiddenBit_determines_weight` 的签名，作为 prime-lift injective 标签下的低风险 seed wrapper）
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -29,14 +29,14 @@
 | POM | 1,707 | 332 | 19.4% |
 | Emergent Arithmetic | 185 | 181 | 97.8% |
 | Folding | 337 | 146 | 43.3% |
-| Conclusion | 2,550 | 290 | 11.4% |
+| Conclusion | 2,550 | 291 | 11.4% |
 | Group Unification | 469 | 186 | 39.7% |
-| SPG | 129 | 119 | 92.2% |
-| Circle Dimension | 393 | 171 | 43.5% |
+| SPG | 129 | 120 | 93.0% |
+| Circle Dimension | 393 | 172 | 43.8% |
 | Zeta Finite Part | 4,524 | 227 | 5.0% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1716** | **16.3%** |
+| **合计（body）** | **10,508** | **1719** | **16.4%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion qpos singlephase injective dense + Circle Dimension biphase cosine record axis + SPG boundary cycle audit query lower bound（Round R664，新标签，\leanverified 完整）**：`paper_conclusion_qpos_general_singlephase_injective_dense_package`（对应 `thm:conclusion-qpos-general-singlephase-injective-dense`，Conclusion；完全复用 `paper_conclusion_zn_to_circle_injective_dense_seeds` 的原签名与证明，零风险补齐 qpos general singlephase injective dense 的 paper-facing theorem，**新标签首次注册**）；`paper_cdim_biphase_cosine_record_axis_lower_bound_package`（对应 `prop:cdim-biphase-cosine-record-axis-lower-bound`，Circle Dimension；按强制降级策略直接克隆 `paper_cdim_biphase_fiber_count_seeds`，作为 biphase cosine record axis lower bound 的轻量 package，**新标签首次注册**）；`paper_spg_boundary_cycle_audit_query_lower_bound_package`（对应 `thm:spg-boundary-cycle-audit-query-lower-bound`，SPG；直接包装现有 `paper_spg_boundary_cycle_audit_query_lower_bound` theorem，提供可编译的 paper-facing package wrapper，**新标签扩展登记**）
 **Zeta RH stratification three kernels + POM truncation curvature hidden bit + POM fold prime lift injective wrapper（Round R663，新标签，\leanverified 完整）**：`paper_rh_stratification_three_kernels_package`（对应 `prop:rh-stratification-three-kernels`，Zeta；零新证明复用 `paper_rh_stratification_seeds`，补齐三类 kernel RH 分层的 paper-facing package，**新标签首次注册**）；`paper_pom_truncation_curvature_equals_hidden_bit`（对应 `thm:pom-truncation-curvature-equals-hidden-bit`，POM；直接把 `truncation_curvature_eq_hiddenBit` 升格为正文接口，**新标签首次注册**）；`paper_pom_fold_prime_lift_injective_seeds_wrap`（对应 `prop:pom-fold-prime-lift-injective`，POM；按强制降级策略复用 `fold_hiddenBit_determines_weight` 作为低风险 seed wrapper，**新标签首次注册**）
 **Conclusion sync-kernel palindrome + Circle Dimension Poisson--Cauchy \(L^p\) sharp constants + SPG cubical quantized Stokes--Poincar\'e optimal（Round R662，新标签，\leanverified 完整）**：`paper_conclusion_sync_kernel_palindrome_package`（对应 `thm:conclusion-selfdual-sync-kernel-finite-mirror-odd-cumulant`，Conclusion；零新证明地完全复用 `paper_conclusion_sync_kernel_palindrome_seeds`，为有限长度镜像律与奇累积量湮灭补齐 paper-facing theorem，**新标签首次注册**）；`paper_cdim_poisson_cauchy_lp_sharp_constants`（对应 `thm:cdim-poisson-cauchy-lp-sharp-constants`，Circle Dimension；直接把 Poisson--Cauchy \(L^p\) sharp constants seeds 升格为正文接口，**新标签首次注册**）；`paper_spg_cubical_quantized_stokes_poincare_linf_optimal`（对应 `thm:spg-cubical-quantized-stokes-poincare-linf-optimal`，SPG；按同签名包装策略复用 `stokes_optimal_constant_sequence`，补齐 cubical quantized Stokes--Poincar\'e 最优常数的 Lean theorem 入口，**新标签首次注册**）
 **Conclusion mixed-moment algebra + SPG mutual-info boundary flux + Zeta cyclic lift cyclotomic splitting（Round R661，新标签，\leanverified 完整）**：`paper_conclusion_finite_defect_local_diagonal_mixed_moment_algebra`（对应 `thm:conclusion-finite-defect-local-diagonal-mixed-moment-algebra`，Conclusion；直接重用 jet rigidity 与 `(-1)^b` 奇偶符号 seed package，给出局部对角 mixed-moment algebra 的 paper-facing 包装，**新标签首次注册**）；`paper_spg_mutual_information_boundary_flux_lower_bound`（对应 `cor:spg-mutual-information-boundary-flux-lower-bound`，SPG；将布尔立方单坐标边界通量平方下界直接包装成正文互信息 corollary，**新标签首次注册**）；`paper_zeta_cyclic_lift_atomic_witt_cyclotomic_splitting`（对应 `cor:zeta-cyclic-lift-atomic-witt-cyclotomic-splitting`，Zeta；按最低风险策略直接复用小阶 cyclotomic factorization package 作为循环 lift splitting 的正文接口，**新标签首次注册**）
