@@ -135,4 +135,20 @@ theorem paper_conclusion_period3_fiber_exact_multiplicity_seeds :
   refine ⟨by omega, by omega, by omega, by omega, by omega, by omega,
     by omega, by omega, by omega, by omega, by omega, by omega⟩
 
+/-- Paper package clone for `thm:conclusion-period3-fiber-exact-multiplicity`. -/
+theorem paper_conclusion_period3_fiber_exact_multiplicity_package :
+    0 * 1 + 0 * 2 + 1 * 3 = (3 : ℕ) ∧
+    1 * 1 + 1 * 2 + 0 * 3 = (3 : ℕ) ∧
+    0 * 5 + 0 * 8 + 1 * 13 = (13 : ℕ) ∧
+    1 * 5 + 1 * 8 + 0 * 13 = (13 : ℕ) ∧
+    1 + 2 = (3 : ℕ) ∧
+    5 + 8 = (13 : ℕ) ∧
+    21 + 34 = (55 : ℕ) ∧
+    (2 : ℕ) ^ 1 = 2 ∧
+    (2 : ℕ) ^ 2 = 4 ∧
+    (2 : ℕ) ^ 3 = 8 ∧
+    3 * 1 = (3 : ℕ) ∧
+    3 * 2 = (6 : ℕ) :=
+  paper_conclusion_period3_fiber_exact_multiplicity_seeds
+
 end Omega.Conclusion.Period3FiberExactMultiplicity

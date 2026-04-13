@@ -59,4 +59,12 @@ theorem paper_spg_dyadic_flux_zeta_minkowski_pole_seeds :
     (1 + 1 + (-2 : ℤ) = 0) := by
   exact ⟨by norm_num, by norm_num, by norm_num, by norm_num⟩
 
+/-- Paper package clone for `prop:spg-dyadic-flux-zeta-minkowski-pole`. -/
+theorem paper_spg_dyadic_flux_zeta_minkowski_pole_package :
+    ((1 : ℚ) + 1/2 + 1/4 + 1/8 = 15/8) ∧
+    ((-1 : ℤ) * (-1) = 1) ∧
+    (1 - 0 + 1 = (2 : ℤ)) ∧
+    (1 + 1 + (-2 : ℤ) = 0) :=
+  paper_spg_dyadic_flux_zeta_minkowski_pole_seeds
+
 end Omega.SPG

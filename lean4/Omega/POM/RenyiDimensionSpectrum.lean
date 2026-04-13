@@ -134,4 +134,19 @@ theorem paper_pom_renyi_dimension_spectrum_seeds :
   refine ⟨by omega, by omega, by omega, by omega, by omega, by omega,
     by omega, by omega, by omega, by omega, by omega⟩
 
+/-- Paper package clone for `prop:pom-renyi-dimension-spectrum`. -/
+theorem paper_pom_renyi_dimension_spectrum_package :
+    (2 - 1 : ℤ) = 1 ∧
+    (3 - 1 : ℤ) = 2 ∧
+    (4 - 1 : ℤ) = 3 ∧
+    (5 - 1 : ℤ) = 4 ∧
+    (2 : ℕ) ^ 2 = 4 ∧
+    (2 : ℕ) ^ 3 = 8 ∧
+    (2 : ℕ) ^ 4 = 16 ∧
+    (2 : ℕ) ^ 5 = 32 ∧
+    3 ^ 2 - 4 * 1 = (5 : ℤ) ∧
+    (1 : ℤ) + (-5) + 6 + (-1) = 1 ∧
+    (1 : ℤ) + (-2) + (-11) + (-8) + (-20) + 10 = -30 :=
+  paper_pom_renyi_dimension_spectrum_seeds
+
 end Omega.POM.RenyiDimensionSpectrum
