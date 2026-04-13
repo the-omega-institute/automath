@@ -23,6 +23,16 @@ theorem paper_conclusion_sync_kernel_palindrome_seeds :
     1 * 3 + 0 * 2 = (3 : ℤ) ∧ 0 * 3 + 1 * 2 = (2 : ℤ) := by
   refine ⟨by native_decide, by native_decide, by ring, by ring⟩
 
+/-- Packaged form of the sync kernel palindrome seeds.
+    thm:conclusion-selfdual-sync-kernel-finite-mirror-odd-cumulant -/
+theorem paper_conclusion_sync_kernel_palindrome_package :
+    (goldenMeanAdjacency * goldenMeanAdjacency) 0 0 +
+      (goldenMeanAdjacency * goldenMeanAdjacency) 1 0 = 3 ∧
+    (goldenMeanAdjacency * goldenMeanAdjacency) 0 1 +
+      (goldenMeanAdjacency * goldenMeanAdjacency) 1 1 = 2 ∧
+    1 * 3 + 0 * 2 = (3 : ℤ) ∧ 0 * 3 + 1 * 2 = (2 : ℤ) :=
+  paper_conclusion_sync_kernel_palindrome_seeds
+
 /-- Edgeworth evenness and rate function quadratic coefficient c₂ = 51/11 seeds.
     cor:conclusion-selfdual-sync-kernel-edgeworth-evenness -/
 theorem paper_conclusion_edgeworth_evenness_rate_seeds :

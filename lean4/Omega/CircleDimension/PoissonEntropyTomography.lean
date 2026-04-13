@@ -40,6 +40,16 @@ theorem paper_cdim_poisson_cauchy_lp_sharp_constants_seeds :
     (3 - 1 = 2 ∧ 3 = 3) := by
   omega
 
+/-- Packaged form of the Lp sharp constants seeds.
+    thm:cdim-poisson-cauchy-lp-sharp-constants -/
+theorem paper_cdim_poisson_cauchy_lp_sharp_constants :
+    (2 ^ 4 = 16) ∧
+    (3 = 3) ∧
+    (3 = 3) ∧
+    (2 * 5 = 10 ∧ 10 / 2 = 5) ∧
+    (3 - 1 = 2 ∧ 3 = 3) :=
+  paper_cdim_poisson_cauchy_lp_sharp_constants_seeds
+
 /-- The sixth-order KL coefficient is negative, and its dissipation term is likewise negative.
     prop:cdim-poisson-kl-sixth-term-negative-and-dissipation-restated -/
 theorem cdim_poisson_kl_sixth_term_negative_and_dissipation

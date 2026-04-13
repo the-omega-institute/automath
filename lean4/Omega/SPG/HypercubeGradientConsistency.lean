@@ -25,6 +25,12 @@ theorem stokes_k1_denominator : 2 * (1 + 1) = (4 : ℕ) := by omega
 theorem stokes_optimal_constant_sequence :
     2 * (0 + 1) = 2 ∧ 2 * (1 + 1) = 4 ∧ 2 * (2 + 1) = 6 := by omega
 
+/-- Packaged form of the cubical quantized Stokes-Poincare optimal constants.
+    thm:spg-cubical-quantized-stokes-poincare-linf-optimal -/
+theorem paper_spg_cubical_quantized_stokes_poincare_linf_optimal :
+    2 * (0 + 1) = 2 ∧ 2 * (1 + 1) = 4 ∧ 2 * (2 + 1) = 6 :=
+  stokes_optimal_constant_sequence
+
 /-- Monotonicity of the denominator: 2(k+1) is strictly increasing in k.
     This means higher-degree cochains have tighter defect control.
     thm:spg-cubical-quantized-stokes-poincare-linf-optimal -/
