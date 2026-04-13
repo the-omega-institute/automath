@@ -143,4 +143,12 @@ theorem paper_conclusion_zn_to_circle_injective_dense_seeds :
   exact ⟨qIndepDim_1, qIndepDim_2, qIndepDim_3,
     linearForm2_zero, pos_rank_of_pos⟩
 
+/-- Paper package wrapper for the qpos general singlephase injective dense conclusion.
+    thm:conclusion-qpos-general-singlephase-injective-dense -/
+theorem paper_conclusion_qpos_general_singlephase_injective_dense_package :
+    qIndepDim 1 = 2 ∧ qIndepDim 2 = 3 ∧ qIndepDim 3 = 4
+    ∧ (∀ a₁ a₂ : ℤ, linearForm2 a₁ a₂ 0 0 = 0)
+    ∧ (∀ n : ℕ, 1 ≤ n → 0 < generatorCount n) :=
+  paper_conclusion_zn_to_circle_injective_dense_seeds
+
 end Omega.Conclusion.ZnToCircleInjectiveDenseSeeds

@@ -31,4 +31,11 @@ theorem paper_spg_boundary_cycle_audit_query_lower_bound
     _ < r := hrq
     _ = finrank K V := hV.symm
 
+/-- Paper package wrapper for the boundary cycle audit query lower bound.
+    thm:spg-boundary-cycle-audit-query-lower-bound -/
+theorem paper_spg_boundary_cycle_audit_query_lower_bound_package
+    {r q : ℕ} (hrq : q < r) (hV : finrank K V = r) (z : Fin q → V) :
+    Submodule.span K (Set.range z) ≠ ⊤ := by
+  exact paper_spg_boundary_cycle_audit_query_lower_bound hrq hV z
+
 end Omega.SPG.BoundaryCycleAuditQueryLowerBound

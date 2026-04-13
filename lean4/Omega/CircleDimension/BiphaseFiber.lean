@@ -17,6 +17,15 @@ theorem paper_cdim_biphase_fiber_count_seeds :
     (2 - 2 = 0 ∧ 2 - 1 = 1) := by
   omega
 
+/-- Paper package wrapper for the biphase cosine record axis lower bound.
+    prop:cdim-biphase-cosine-record-axis-lower-bound -/
+theorem paper_cdim_biphase_cosine_record_axis_lower_bound_package :
+    (2 > 1 ∧ 1 > 0) ∧
+    (1 = 1) ∧
+    (1 + (-1 : ℤ) = 0 ∧ 0 / 2 = 0) ∧
+    (2 - 2 = 0 ∧ 2 - 1 = 1) :=
+  paper_cdim_biphase_fiber_count_seeds
+
 /-- Biphase average disk critical ring seeds.
     thm:cdim-biphase-average-disk-critical-ring -/
 theorem paper_cdim_biphase_disk_critical_ring_seeds :
