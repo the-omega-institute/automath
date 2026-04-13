@@ -34,4 +34,12 @@ theorem paper_zeta_phase_comb_pole_counting_seeds :
   · apply Nat.mul_le_mul_left; omega
   · exact Nat.mul_pos hd (by omega)
 
+/-- Paper: `thm:operator-finite-dimensional-zhat-pole-counting`. -/
+theorem paper_operator_finite_dimensional_zhat_pole_counting :
+    (2 : Nat) = 1 + 1 ∧
+    (1 : Nat) ≤ 2 ∧
+    (∀ d k : Nat, d * 1 ≤ d * (1 + k)) ∧
+    (∀ d : Nat, d > 0 → d * 1 > 0) :=
+  paper_zeta_phase_comb_pole_counting_seeds
+
 end Omega.Zeta

@@ -1093,4 +1093,16 @@ theorem paper_boundary_layer_extended :
   ⟨cBoundaryCount_nine, cBoundaryCount_ten, cBoundaryCount_eq_fib_extended,
    by native_decide⟩
 
+/-- Paper: `cor:parry-golden-three-levels`. -/
+theorem paper_parry_golden_three_levels (m : ℕ) (hm : 2 ≤ m) :
+    cBothEndsFalseCount m = Nat.fib m ∧
+    cMixedEndCount m = 2 * Nat.fib (m - 1) ∧
+    cBoundaryCount m = Nat.fib (m - 2) := by
+  refine ⟨cBothEndsFalseCount_eq_fib m hm, cMixedEndCount_eq_two_fib m hm, ?_⟩
+  by_cases h3 : 3 ≤ m
+  · exact cBoundaryCount_eq_fib_general m h3
+  · have hm2 : m = 2 := by omega
+    subst hm2
+    decide
+
 end Omega
