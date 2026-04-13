@@ -64,4 +64,23 @@ theorem paper_cdim_poisson_kl_sixth_term_negative_package
     3 * (σ^6 + 6 * mu3^2 - 8 * σ^2 * mu4) / 32 < 0 := by
   exact cdim_poisson_kl_sixth_term_negative_and_dissipation hσ hcoeff
 
+/-- Paper: `thm:cdim-poisson-entropy-moment-tomography-up-to-fourth`. -/
+theorem paper_cdim_poisson_entropy_moment_tomography
+    {A4 A6 B6 sigmaSq mu3Sq mu4 : ℝ}
+    (hsigma : sigmaSq ≠ 0)
+    (hA4 : 8 * A4 = sigmaSq ^ 2)
+    (hA6 : 64 * A6 = sigmaSq ^ 3 - 8 * sigmaSq * mu4 + 6 * mu3Sq)
+    (hB6 : 32 * B6 = 3 * mu3Sq) :
+    sigmaSq ^ 2 = 8 * A4 ∧
+    mu3Sq = (32 / 3) * B6 ∧
+    mu4 = (sigmaSq ^ 3 + 6 * mu3Sq - 64 * A6) / (8 * sigmaSq) := by
+  constructor
+  · linarith
+  constructor
+  · linarith
+  · have hsigma8 : 8 * sigmaSq ≠ 0 := by
+      exact mul_ne_zero (by norm_num) hsigma
+    apply (eq_div_iff hsigma8).2
+    linarith
+
 end Omega.CircleDimension

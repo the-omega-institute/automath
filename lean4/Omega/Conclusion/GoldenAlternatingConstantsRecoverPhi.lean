@@ -46,4 +46,12 @@ theorem paper_conclusion_golden_alternating_constants_recover_phi :
     (∀ (x : ℝ), x ^ 2 = 5 → ((1 + x) / 2) ^ 2 - (1 + x) / 2 - 1 = 0) := by
   exact ⟨fun a => by ring, fun a => by ring, fun a => by ring, fun x hx => by nlinarith⟩
 
+/-- Paper: `cor:conclusion-golden-fibonacci-two-phase-renormalization`. -/
+theorem paper_conclusion_golden_fibonacci_two_phase_renormalization
+    (a : ℝ) (ha : a ≠ 1 / 30) :
+    ((1 / 2 + a) + (1 / 2 - a + 1 / 15)) / 2 = 8 / 15 ∧
+    ((1 / 2 + a) - (1 / 2 - a + 1 / 15)) / 2 = a - 1 / 30 ∧
+    (1 / 2 + a) ≠ (1 / 2 - a + 1 / 15) := by
+  exact ⟨golden_alternating_center a, golden_alternating_amplitude a, two_phase_distinct a ha⟩
+
 end Omega.Conclusion

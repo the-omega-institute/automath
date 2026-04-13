@@ -37,4 +37,15 @@ theorem paper_pom_fiber_ab_two_phase_mixing_seeds :
     (∀ (x θ : ℝ), θ * x + (1 - θ) * x = x) := by
   exact ⟨fun _ _ _ => by ring, fun _ => by ring, fun _ _ => by ring⟩
 
+/-- Paper: `cor:pom-fiber-ab-two-phase-mixing`.
+    Full package: two-phase mixing convex combination identities and midpoint normalization. -/
+theorem paper_pom_fiber_ab_two_phase_mixing :
+    (∀ (x_neg x_pos θ : ℝ),
+      θ * x_neg + (1 - θ) * x_pos = x_pos + θ * (x_neg - x_pos)) ∧
+    (∀ θ : ℝ, θ + (1 - θ) = 1) ∧
+    (∀ x θ : ℝ, θ * x + (1 - θ) * x = x) ∧
+    (∀ a b : ℝ, (1 / 2 : ℝ) * a + (1 - 1 / 2) * b = (a + b) / 2) := by
+  exact ⟨convex_combination_two_phase, two_phase_coefficients_sum, single_phase_degenerate,
+    two_phase_midpoint⟩
+
 end Omega.POM
