@@ -604,6 +604,11 @@ theorem paper_pom_fold_prime_lift_injective_seeds_wrap (w1 w2 : Word m)
     weight w1 = weight w2 :=
   fold_hiddenBit_determines_weight w1 w2 hFold hBit
 
+theorem paper_pom_fold_prime_lift_injective_package (w1 w2 : Word m)
+    (hFold : Fold w1 = Fold w2) (hBit : hiddenBit w1 = hiddenBit w2) :
+    weight w1 = weight w2 :=
+  paper_pom_fold_prime_lift_injective_seeds_wrap w1 w2 hFold hBit
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase 146: weight truncation mod + curvature = hiddenBit
 -- ══════════════════════════════════════════════════════════════
