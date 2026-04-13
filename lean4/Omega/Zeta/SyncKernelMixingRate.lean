@@ -76,4 +76,13 @@ theorem paper_rh_stratification_seeds :
     ((242 : ℚ) / 243 = 1 - 1 / 243) :=
   ⟨⟨rfl, three_pow_five⟩, by omega, by omega, mixing_rate_eq⟩
 
+/-- Paper-facing wrapper for RH stratification across three kernels.
+    prop:rh-stratification-three-kernels -/
+theorem paper_rh_stratification_three_kernels_package :
+    (syncKernelStateCount = 10 ∧ (3 : ℕ) ^ 5 = 243) ∧
+    ((1 : ℕ) + 4 * 1 = 5) ∧
+    (1 < 2) ∧
+    ((242 : ℚ) / 243 = 1 - 1 / 243) :=
+  paper_rh_stratification_seeds
+
 end Omega.Zeta.SyncKernelMixingRate

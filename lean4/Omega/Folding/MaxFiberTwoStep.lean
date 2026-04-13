@@ -597,6 +597,13 @@ theorem fold_hiddenBit_determines_weight (w1 w2 : Word m)
   · exact congrArg stableValue hFold
   · rw [hBit]
 
+/-- Paper-facing wrapper for the fold + hiddenBit injective seed.
+    prop:pom-fold-prime-lift-injective -/
+theorem paper_pom_fold_prime_lift_injective_seeds_wrap (w1 w2 : Word m)
+    (hFold : Fold w1 = Fold w2) (hBit : hiddenBit w1 = hiddenBit w2) :
+    weight w1 = weight w2 :=
+  fold_hiddenBit_determines_weight w1 w2 hFold hBit
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase 146: weight truncation mod + curvature = hiddenBit
 -- ══════════════════════════════════════════════════════════════
@@ -613,7 +620,7 @@ theorem weight_truncate_mod (w : Word (m + 1)) :
     · rfl
   exact this.symm
 
-set_option maxHeartbeats 800000 in
+set_option maxHeartbeats 400000 in
 /-- thm:pom-truncation-curvature-equals-hidden-bit:
     The curvature indicator (Fold ∘ truncate ≠ restrict ∘ Fold) equals the hidden bit. -/
 theorem truncation_curvature_eq_hiddenBit (w : Word (m + 1)) :
@@ -719,6 +726,12 @@ theorem truncation_curvature_eq_hiddenBit (w : Word (m + 1)) :
       rw [fold_eq_iff_sv, Nat.mod_eq_of_lt (by omega : weight w < Nat.fib (m + 3))]
       exact weight_truncate_mod w
     simp only [heq, ite_true]
+
+/-- Paper-facing wrapper for the truncation-curvature/hiddenBit identity.
+    thm:pom-truncation-curvature-equals-hidden-bit -/
+theorem paper_pom_truncation_curvature_equals_hidden_bit (w : Word (m + 1)) :
+    (if Fold (truncate w) = X.restrict (Fold w) then 0 else 1) = hiddenBit w :=
+  truncation_curvature_eq_hiddenBit w
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R14: hiddenBitCount bounds
