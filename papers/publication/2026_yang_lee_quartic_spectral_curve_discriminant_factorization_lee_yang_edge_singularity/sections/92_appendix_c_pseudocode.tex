@@ -1,0 +1,68 @@
+\section{Computational templates for reproducibility}\label{app:pseudocode}
+
+\subsection{Single-point evaluation of \texorpdfstring{\(Z_m(y)\)}{Z\_m(y)}}
+
+\begin{verbatim}
+Input: m in N, y in C.
+
+Initialize:
+  Z0 = 1
+  Z1 = y + 1
+  Z2 = (y + 1)^2
+  Z3 = (y + 1)^3
+
+For k = 4,5,...,m:
+  Zk = Z{k-1} + (2y+1) Z{k-2} - Z{k-3} - y(y+1) Z{k-4}
+
+Output: Zm.
+\end{verbatim}
+
+\subsection{Certified isolation of the subdominant real branch point \texorpdfstring{\(\ySub\)}{ySub}}
+
+Let \(c(y)=256y^3+411y^2+165y+32\). Since \(c\) has exactly one real root, any rational interval \((\alpha,\beta)\) with
+\(c(\alpha)c(\beta)<0\) certifies \(\ySub\in(\alpha,\beta)\).
+
+\begin{verbatim}
+Input: rationals alpha < beta.
+Compute c(alpha), c(beta).
+If c(alpha)c(beta) < 0:
+  (alpha, beta) is a certified enclosure of y_sub.
+  Repeat bisection to refine to desired precision.
+\end{verbatim}
+
+\subsection{Dominant-modulus gap and zero-locus sampling}
+
+For a fixed sample point \(y\in\CC\), compute the four roots of \(\Pi(\lambda,y)=0\),
+sort them by decreasing modulus,
+and record the dominant-modulus gap
+\[
+g(y)=|\lambda_{(1)}(y)|-|\lambda_{(2)}(y)|.
+\]
+Small values of \(g(y)\) approximate the dominant equimodular set predicted by the Beraha--Kahane--Weiss mechanism.
+Separately, for a fixed \(m\), one may compute the roots of the polynomial \(Z_m(y)\) and compare them with the sampled small-gap region.
+
+\begin{verbatim}
+Input: grid points y in C, system size m.
+
+For each sample point y:
+  Compute the four roots lambda_i of Pi(lambda,y)=0.
+  Sort them so |lambda_(1)| >= |lambda_(2)| >= |lambda_(3)| >= |lambda_(4)|.
+  Record g(y) = |lambda_(1)| - |lambda_(2)|.
+
+Compute the polynomial Z_m(y) from the recurrence and find its zeros.
+Plot:
+  - points where g(y) is small;
+  - zeros of Z_m(y);
+  - exact markers y = 0, y = 1, y = y_sub, y = -1.
+\end{verbatim}
+
+For the figure in Section~\ref{sec:verification}, the implementation uses IEEE double precision (\texttt{numpy.float64}/\texttt{complex128}).
+Both the quartic spectral polynomial and the polynomials \(Z_m(y)\) are solved with \texttt{numpy.roots}.
+The real-axis modulus plot samples \(1500\) equally spaced points on \([-1.6,1.2]\), and the spectral roots are ordered by decreasing modulus
+\[
+\abs{\lambda}_{(1)}\ge \abs{\lambda}_{(2)}\ge \abs{\lambda}_{(3)}\ge \abs{\lambda}_{(4)}.
+\]
+The unique real root \(y_{\mathrm{sub}}\) of \(256y^3+411y^2+165y+32\) is selected by the criterion \(\abs{\Im y}<10^{-10}\).
+Negative real zeros in the endpoint-scaling plot are selected by \(\abs{\Im y}<10^{-8}\) together with \(-1<\Re y<0\), and the right panel uses \(m=80,120,200\) with the first four zeros nearest \(0\).
+For the center panel one inserts the known multiplicity-two contribution at \(y=-1\) explicitly after factoring out \((y+1)^2\).
+

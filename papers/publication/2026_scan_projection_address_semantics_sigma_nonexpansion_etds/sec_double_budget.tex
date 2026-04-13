@@ -1,13 +1,14 @@
 % ------------------------------------------------------------------
 %  Section 6: Survivor Renyi spectra and collision thresholds
 % ------------------------------------------------------------------
-\section{Survivor R\'enyi spectra and collision thresholds}\label{sec:double-budget}
+\section{Secondary thermodynamic consequences}\label{sec:double-budget}
 
-This section establishes the survivor R\'enyi pressure spectrum
-\(s\mapsto sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi)\) and derives the
-collision threshold at \(s=2\).  A supplementary subsection records the
-hidden-entropy cost of restoring a collapsed collision spectrum by
-injective refinement.
+This section records consequences of the pressure-gap calculation from
+Section~\ref{sec:open-system}.  The survivor R\'enyi spectrum comes from
+the same killed-matrix path sum with power weights, and the collision
+threshold then follows from Chen--Stein.  The final subsection on
+injective refinements is supplementary and may be skipped on a first
+reading.
 
 \subsection{Survivor R\'enyi pressure spectra}
 
@@ -280,7 +281,7 @@ For part~(i), Markov's inequality gives
 \]
 so \(\PP(\mathsf{Fail}_{m,n_m,N_m})\to 0\).
 
-For part~(ii), index unordered pairs by
+For parts~(ii) and~(iii), index unordered pairs by
 \[
   \mathcal{I}_m:=\set{\{i,j\}:1\leq i<j\leq N_m},
   \qquad
@@ -293,13 +294,12 @@ so \(W_m=\sum_{\alpha\in\mathcal{I}_m}I_\alpha\).  Then
   \qquad
   \EE[W_m]=\Lambda_m.
 \]
-If \(\alpha,\beta\in\mathcal{I}_m\) are disjoint, the corresponding
-indicators are independent.  If they share one index, then
+Disjoint pairs are independent, whereas pairs sharing one index satisfy
 \[
   \EE[I_\alpha I_\beta]=S_3(m).
 \]
-Using the usual dependency graph on pair-indicators, the Chen--Stein
-bound of \citet[Theorem~1]{ArratiaGoldsteinGordon1989} gives
+With the usual dependency graph on intersecting pairs,
+\citet[Theorem~1]{ArratiaGoldsteinGordon1989} gives
 \[
   d_{\mathrm{TV}}
    \bigl(W_m,\mathrm{Poisson}(\Lambda_m)\bigr)
@@ -311,8 +311,15 @@ where
   \qquad
   b_2=O\bigl(N_m^3S_3(m)\bigr).
 \]
-Since \(S_2(m)^2\leq S_3(m)\), the hypothesis
-\(N_m^3S_3(m)\to 0\) forces \(b_1+b_2\to 0\), and therefore
+Since \(S_2(m)^2\leq S_3(m)\) by Cauchy--Schwarz,
+\[
+  \Bigl(\sum_a\lambda_m(a)^2\Bigr)^2
+  \leq \Bigl(\sum_a\lambda_m(a)\Bigr)
+      \Bigl(\sum_a\lambda_m(a)^3\Bigr)
+  = S_3(m),
+\]
+the hypothesis \(N_m^3S_3(m)\to 0\) forces \(b_1+b_2\to 0\), and
+therefore
 \[
   W_m \Rightarrow \mathrm{Poisson}(\tau).
 \]
@@ -382,7 +389,7 @@ and the collision term satisfies
 Apply part~(i) of Theorem~\ref{thm:double-budget-poisson}.
 \end{proof}
 
-\subsection{Restoring collapsed R\'enyi spectra by injective refinement}
+\subsection{Supplementary note on injective refinements}
 
 If a visible quotient collapses the survivor collision spectrum, then any
 injective refinement that restores the microscopic R\'enyi profile must
@@ -432,8 +439,8 @@ In particular,
 \end{theorem}
 
 \begin{proof}
-Since \(Y_m=f_m(U_m)\), the fibre-uniform lift is a probability
-distribution on \(\Sigma^m\).  By definition,
+Since \(Y_m=f_m(U_m)\), the fibre-uniform lift is a probability law on
+\(\Sigma^m\).  Expanding the relative entropy gives
 \begin{align*}
   D(u_m\Vert \widetilde u_m)
   &= \sum_{\omega\in\Sigma^m}
@@ -445,33 +452,25 @@ distribution on \(\Sigma^m\).  By definition,
      + \sum_{\omega\in\Sigma^m}
         u_m(\omega)\log d_m(f_m(\omega)).
 \end{align*}
-The second term is \(H(Y_m)\), and the third is
-\(\EE[\log d_m(Y_m)]\).  Rearranging gives the first identity, and the
-second follows after subtracting \(H(Y_m)\) from both sides.  The
-inequality comes from non-negativity of relative entropy.
+The middle term is \(H(Y_m)\), because \(\PP(Y_m=f_m(\omega))\) is
+constant on each fibre, and the last term is
+\(\EE[\log d_m(Y_m)]\).  Rearranging yields the first identity, hence
+also the conditional-entropy formula and its upper bound by
+non-negativity of relative entropy.
 
-Assume now that \(\omega\mapsto(f_m(\omega),r_m(\omega))\) is injective.
-Then \(U_m\) is a measurable function of \((Y_m,r_m(U_m))\), so
+If \(\omega\mapsto(f_m(\omega),r_m(\omega))\) is injective, then
+\(U_m\) is measurable with respect to \((Y_m,r_m(U_m))\), while
+\((Y_m,r_m(U_m))\) is measurable with respect to \(U_m\).  Thus
 \[
-  H(U_m\mid Y_m,r_m(U_m))=0.
+  H(U_m\mid Y_m,r_m(U_m))=0,
+  \qquad
+  H(Y_m,r_m(U_m))=H(U_m),
 \]
-Since \((Y_m,r_m(U_m))\) is also a measurable function of \(U_m\), we
-have
+and therefore
 \[
-  H(Y_m,r_m(U_m))=H(U_m).
+  H(r_m(U_m)\mid Y_m)=H(U_m)-H(Y_m)=H(U_m\mid Y_m).
 \]
-Therefore
-\[
-  H(r_m(U_m)\mid Y_m)
-  = H(Y_m,r_m(U_m))-H(Y_m)
-  = H(U_m)-H(Y_m)
-  = H(U_m\mid Y_m).
-\]
-Finally,
-\[
-  H(r_m(U_m)\mid Y_m)\leq H(r_m(U_m))\leq \log\card{R_m},
-\]
-which proves the last claim.
+The bound \(H(U_m\mid Y_m)\le \log\card{R_m}\) is immediate.
 \end{proof}
 
 \begin{corollary}[Register lower bound]
@@ -513,7 +512,8 @@ Divide by \(\log 2\) to get
 \[
   \log_2\card{R_m}\geq m-H_2(Y_m).
 \]
-Since \(H_2(Y_m)\leq \log_2\card{Y_m}\), the remaining estimates follow.
+Since \(H_2(Y_m)\leq \log_2\card{\mathcal{Y}_m}\), the remaining
+estimates follow.
 \end{proof}
 
 \begin{theorem}[Injective refinements restore the microscopic collision profile]
@@ -582,31 +582,19 @@ For \(r\geq 1\), convexity of \(x\mapsto x^r\) on \([0,\infty)\) gives
   = \left(\sum_{\omega\in f_m^{-1}(y)}u_m(\omega)\right)^r
   \geq \sum_{\omega\in f_m^{-1}(y)}u_m(\omega)^r.
 \]
-Summing over \(y\in\mathcal Y_m\) yields \(S_r(Y_m)\geq S_r(U_m)\).  If
-\(r>1\), the inequality is strict on every fibre containing at least two
-points of positive \(u_m\)-mass, so equality holds exactly when \(f_m\)
-is injective on \(\supp u_m\).
+Summing over \(y\in\mathcal Y_m\) gives \(S_r(Y_m)\geq S_r(U_m)\).  For
+\(r>1\), equality holds exactly when each fibre contains at most one
+point of positive \(u_m\)-mass, i.e.\ when \(f_m\) is injective on
+\(\supp u_m\).
 
-If \(\omega\mapsto(f_m(\omega),r_m(\omega))\) is injective, then every
-atom \(z\) of \(Z_m\) has a unique preimage \(\omega_z\in\Sigma^m\), and
-\[
-  \PP(Z_m=z)=u_m(\omega_z).
-\]
-Therefore the multisets of atomic probabilities of \(U_m\) and \(Z_m\)
-coincide, which implies
-\[
-  S_r(Z_m)=S_r(U_m)
-  \qquad (r\geq 1).
-\]
-The statement about the collision term is then immediate from
-Theorem~\ref{thm:double-budget-poisson}, and the entropy identity is
-exactly the second conclusion of Theorem~\ref{thm:entropy-ledger}.  If
-\(U_m\) is uniform on \(\Sigma^m\), then
-\[
-  S_2(U_m)=2^m(2^{-m})^2=2^{-m},
-\]
-hence \(S_2(Z_m)=2^{-m}\), and the birthday scale is
-\(N_m\asymp S_2(Z_m)^{-1/2}=2^{m/2}\).
+If \(\omega\mapsto(f_m(\omega),r_m(\omega))\) is injective, then the
+atoms of \(Z_m\) are in bijection with those of \(U_m\), with the same
+probability weights.  Hence \(S_r(Z_m)=S_r(U_m)\) for every \(r\geq 1\).
+The collision statement is then immediate from
+Theorem~\ref{thm:double-budget-poisson}, and the entropy identity is the
+second conclusion of Theorem~\ref{thm:entropy-ledger}.  In the uniform
+case \(S_2(U_m)=2^{-m}\), so \(S_2(Z_m)=2^{-m}\) and the birthday scale
+is \(N_m\asymp 2^{m/2}\).
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:main-renyi}]

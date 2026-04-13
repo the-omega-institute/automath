@@ -105,6 +105,65 @@ U_N:=\{(w_1,\dots,w_N):\ w_1>\cdots>w_N>0,\ \sum_{i=1}^{N}w_i=1\}
 \textup{(ii)}\(\Leftrightarrow\)\textup{(iii)}：Bayes--InfoNCE 的 Hausdorff--Prony 编译链已经给出：完整数值族 \(\{L_{K,m}^{\star}\}_{K=2}^{N}\) 可唯一恢复有序纤维权重谱，反之有序谱当然唯一决定全部 Bayes 最优值。并且在开单纯形 \(U_N\) 上，少于 \(N-1\) 个此类标量时不存在连续单射恢复，这正是 fixed-resolution Bayes--InfoNCE 最小连续测量数的结论。故三类数据完全等价。证毕。
 \end{proof}
 
+\begin{corollary}[固定总质量切片上的 Schur--容量--InfoNCE 反序同构]\label{cor:conclusion-capacity-majorization-infonce-antiisomorphism}
+固定整数 \(S,N\ge 1\)，并记
+\[
+\mathcal S_{S,N}
+:=
+\left\{
+\mathbf d=(d_1,\dots,d_N)\in \ZZ_{\ge 1}^N:
+d_1\ge \cdots\ge d_N,
+\sum_{i=1}^{N}d_i=S
+\right\}.
+\]
+对每个 \(\mathbf d\in \mathcal S_{S,N}\)，定义连续容量曲线
+\[
+C_{\mathbf d}(u):=\sum_{i=1}^{N}\min(d_i,u)
+\qquad (u\ge 0),
+\]
+并令
+\[
+\mathscr L_{\mathbf d}
+:=
+\bigl(L_{2}^{\star}(\mathbf d),L_{3}^{\star}(\mathbf d),\dots,L_{N}^{\star}(\mathbf d)\bigr)
+\]
+表示把归一化谱 \(\mathbf d/S\) 代入 Bayes--InfoNCE 最优闭式后得到的完整数值塔。则：
+\begin{enumerate}
+  \item 映射
+  \[
+  \mathbf d\longmapsto C_{\mathbf d}(\cdot)
+  \]
+  在 \(\mathcal S_{S,N}\) 上是单射，并把 Hardy--Littlewood--P\'olya 主序反向送到容量曲线的逐点序；
+  \item 映射
+  \[
+  \mathbf d\longmapsto \mathscr L_{\mathbf d}
+  \]
+  在 \(\mathcal S_{S,N}\) 上也是单射；
+  \item 因而 \(\mathcal S_{S,N}\) 上的主序可唯一搬运到
+  \[
+  \mathscr L(\mathcal S_{S,N})
+  :=
+  \{\mathscr L_{\mathbf d}:\ \mathbf d\in \mathcal S_{S,N}\}
+  \]
+  上，使得
+  \[
+  \mathbf d\succcurlyeq_{\mathrm{HLP}}\mathbf e
+  \iff
+  C_{\mathbf d}(u)\le C_{\mathbf e}(u)\ (\forall u\ge 0)
+  \iff
+  \mathscr L_{\mathbf d}\preccurlyeq_{\mathrm{InfoNCE}}\mathscr L_{\mathbf e}.
+  \]
+\end{enumerate}
+换言之，固定总质量与可见类型数之后，纤维谱的 Schur 几何、容量几何与完整 Bayes--InfoNCE 审计塔只是同一对象的三种严格等价坐标。
+\end{corollary}
+\begin{proof}
+第一条正是定理 \ref{thm:conclusion-capacity-majorization-schur-hardness} 与容量曲线唯一反演性的合并表述。第二条则由定理 \ref{thm:conclusion-capacity-ordered-spectrum-infonce-equivalence} 立即得到：完整 Bayes--InfoNCE 塔与有序权重谱彼此唯一决定，而 \(\mathcal S_{S,N}\) 中的有序整数谱在归一化后正给出全部可能的有序权重谱切片。于是主序只能通过
+\[
+\mathbf d\longmapsto \mathscr L_{\mathbf d}
+\]
+以唯一方式搬运到其像空间上，并保持与容量逐点序完全一致的反向关系。证毕。
+\end{proof}
+
 \begin{corollary}[window-\texorpdfstring{$6$}{6} 的三重复杂度严格分离]\label{cor:conclusion-window6-inversion-linear-statistical-triple-separation}
 对二进制区间折叠 \(\Fold_6^{\mathrm{bin}}\)，同时成立：
 \[
@@ -136,6 +195,6 @@ B_{\mathrm{full}}^{\mathrm{bin}}(6)=\left\lceil\log_2 4\right\rceil=2.
 \end{proof}
 
 \paragraph{统一读法}
-这条链把 capacity、majorization 与 InfoNCE 的关系压到了一个更高的完备层：连续容量曲线不只是若干正矩的代换写法，而本身就构成有序纤维谱的一个 Schur--Hardy 完全坐标；而完整 Bayes--InfoNCE 塔又与这条容量曲线严格等价。于是，在固定有限窗口上，“可逆性最好/最坏”的模型不再依赖经验判断，而由主序精确给出；在最小窗口 \(m=6\) 上，反演预算、线性实现与统计审计更被拉成三条互不塌缩的资源轴。就本文整体语言而言，这说明预言机容量并不是附属于纤维谱的次级统计量，而是连接几何多重度、信息论预算与 Bayes 审计塔的中心对象。
+这条链把 capacity、majorization 与 InfoNCE 的关系压到了一个更高的完备层：连续容量曲线不只是若干正矩的代换写法，而本身就构成有序纤维谱的一个 Schur--Hardy 完全坐标；而完整 Bayes--InfoNCE 塔又与这条容量曲线严格等价，从而在固定总质量切片上与主序一起组成一条反向但无信息损失的三坐标对应。于是，在固定有限窗口上，“可逆性最好/最坏”的模型不再依赖经验判断，而由主序精确给出；在最小窗口 \(m=6\) 上，反演预算、线性实现与统计审计更被拉成三条互不塌缩的资源轴。就本文整体语言而言，这说明预言机容量并不是附属于纤维谱的次级统计量，而是连接几何多重度、信息论预算与 Bayes 审计塔的中心对象。
 
 \endinput

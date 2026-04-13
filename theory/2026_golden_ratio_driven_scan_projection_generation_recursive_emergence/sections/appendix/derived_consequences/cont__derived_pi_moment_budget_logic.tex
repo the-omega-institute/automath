@@ -1,0 +1,115 @@
+\subsection{固定阶矩、预算前沿与 soft 逻辑的三层审计闭包}
+
+正文小节 \ref{subsec:conclusion-renyi-schatten-choi-sat-gap-copy-amplification}、
+\ref{subsec:conclusion-collision-genfunc-renyi-soft-firstfit}
+与 \ref{subsec:conclusion-fold-ledger-dual-ldp-holography-undecidability-langlands}
+已分别给出固定阶 Rényi--Schatten 标量的 SAT 分离与平衡反演、归一化碰撞半径与输出 Rényi 熵密度的停机二值律、以及线性预算下 oracle 成功率的双大偏差变分公式。
+把这三条链重新并置后，可把 projective \(\pi\)-通道上的既有信息压缩为一组更直接的综合后果。
+
+\begin{theorem}[projective \texorpdfstring{$\pi$}{pi}-审计的 moment--budget--logic 三层闭包]\label{thm:derived-pi-moment-budget-logic-three-layer-closure}
+在正文既有构造族上，记
+\[
+\mathfrak R_{\mathrm{mom}}(\gamma):=\bigl(\Tr(\rho^\gamma),H_\gamma(\rho)\bigr)
+\qquad (\gamma>2),
+\]
+\[
+\mathfrak R_{\mathrm{bud}}:=\bigl(\Xi(\beta),I_U,I_w\bigr),
+\]
+\[
+\mathfrak R_{\mathrm{log}}(q):=\bigl(R_q,h_q,P_{\mathrm{acc}},N_\infty\bigr)
+\qquad (q\ge 2).
+\]
+则 projective \(\pi\)-链同时具有以下三层互补审计结构：
+\begin{enumerate}
+\normalfont
+  \item 对任意固定 \(\gamma>2\)，\(\mathfrak R_{\mathrm{mom}}(\gamma)\) 已经饱和 SAT 分离，并在两纤维可满足扇区内给出满足赋值比例相对 \(1/2\) 的二次偏离控制；进一步地，经纤维复制放大后，同一层上的 Rényi 熵缺口可提升到线性级。
+  \item 对任意固定 \(q\ge 2\)，\(\mathfrak R_{\mathrm{log}}(q)\) 在统一电路族上满足严格二值停机律
+  \[
+  R_q\in\{1,2^{-(q-1)}\},
+  \qquad
+  h_q\in\{1,0\},
+  \]
+  并且在任意可计算可求和退火调度
+  \(
+  \sum_{t\ge 1}u_t\le \varepsilon<1/2
+  \)
+  下，soft first-fit 的接受概率仍满足
+  \[
+  P_{\mathrm{acc}}\in \{0\}\cup[1-\varepsilon,1],
+  \]
+  同时总偏离次数 \(N_\infty\) 几乎处处有限。
+  \item 线性预算口径下的成功率指数由
+  \[
+  \Xi(\beta)
+  =
+  \max\!\Bigl\{
+  -\inf_{\theta\le \beta\log 2}I_w(\theta),\
+  \log\varphi+(\beta-1)\log 2-\inf_{\theta>\beta\log 2}I_U(\theta)
+  \Bigr\}
+  \]
+  精确控制，并满足强逆判据
+  \[
+  \Xi(\beta)=0
+  \iff
+  \inf_{\theta\le \beta\log 2}I_w(\theta)=0.
+  \]
+  因而可逆边界不由平均纤维大小决定，而由 \(w_m\) 下典型对数多重度零点集何时被线性预算覆盖所决定。
+  \item 即便把注意力限制到一致有界小纤维类
+  \[
+  \sup_y|\pi^{-1}(y)|\le 2,
+  \]
+  上述三层复杂性仍不会塌缩：预算函数不存在优于因子 \(2\) 的统一可计算逼近，最小状态数可达到 Busy--Beaver 级增长，而任意有限样本学习器的最坏风险仍至少为 \(1/2\)。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+第一条分别由定理 \ref{thm:conclusion-fixed-alpha-renyi-schatten-sat-gap}、
+定理 \ref{thm:conclusion-renyi-schatten-copy-amplification}、
+推论 \ref{cor:conclusion-renyi-entropy-copy-amplification}、
+命题 \ref{prop:conclusion-twofiber-renyi-stability-balance}
+与推论 \ref{cor:conclusion-twofiber-renyi-balance-inversion} 直接给出。
+第二条由定理 \ref{thm:conclusion-collision-genfunc-radius-halting}、
+推论 \ref{cor:conclusion-circuit-output-renyi-density-halting}、
+定理 \ref{thm:conclusion-annealed-soft-firstfit-gap-halting}
+与定理 \ref{thm:conclusion-soft-firstfit-summable-budget-finite-deviation} 立即推出。
+第三条正是定理 \ref{thm:conclusion-oracle-success-double-ldp-variational}
+与推论 \ref{cor:conclusion-oracle-success-strong-converse} 的合并重述。
+第四条则由定理 \ref{thm:conclusion-budget-factor2-inapproximability}、
+推论 \ref{cor:conclusion-bounded-fiber-unbounded-state-busybeaver}
+与定理 \ref{thm:conclusion-ml-finite-sample-nongeneralization-budget} 联立即得。
+\end{proof}
+
+\begin{conjecture}[faithful \texorpdfstring{$\pi$}{pi}-公式的 moment--budget--logic 三寄存器原理]\label{conj:derived-pi-moment-budget-logic-three-register-principle}
+若一个 faithful \(\pi\)-公式要同时承载定理
+\ref{thm:derived-pi-moment-budget-logic-three-layer-closure}
+中的三层审计信息，则它不能仅经由单一固定阶值层标量因子化，而至少应外置以下三类寄存器：
+\[
+\mathfrak R_{\mathrm{mom}}
+\quad\text{（固定阶 Rényi--Schatten / collision 标量寄存器）},
+\]
+\[
+\mathfrak R_{\mathrm{bud}}
+\quad\text{（线性预算成功率与强逆阈值寄存器）},
+\]
+\[
+\mathfrak R_{\mathrm{log}}
+\quad\text{（hard/soft first-fit 逻辑控制寄存器）}.
+\]
+更具体地说，若只保留其中任一单层，则至多能够 faithful 地恢复下列三类信息中的一类，而必在另外至少一类上发生结构性失真：
+\begin{enumerate}
+\normalfont
+  \item fixed-order moment 层能够饱和 SAT 分离并反演平衡偏差，但不应决定线性预算前沿与退火逻辑的停机敏感性；
+  \item budget 层能够给出可逆边界与大偏差临界，但不应单独恢复 fixed-order 平衡几何与 soft/hard first-fit 的轨迹分裂；
+  \item logic 层能够输出停机的二值概率/解析缺口，但不应单独恢复 fixed-order 矩的平衡信息与预算强逆相图。
+\end{enumerate}
+因此，任何试图把这三层同时压缩为单一固定阶标量的 faithful \(\pi\)-公式，都应在下列三项任务中至少失去一项：SAT/平衡分离、预算临界判据、或退火逻辑的停机敏感性。
+\end{conjecture}
+
+\begin{remark}[固定阶值层与 faithful 证书的分离]\label{rem:derived-pi-moment-budget-logic-separation}
+定理 \ref{thm:derived-pi-moment-budget-logic-three-layer-closure} 与猜想
+\ref{conj:derived-pi-moment-budget-logic-three-register-principle}
+共同指向同一终端判断：固定阶信息论标量已经足以饱和决策难度，退火平滑并不消解这种难度，而预算边界又以独立的大偏差变分律出现。
+因此，“数值上高效的 \(\pi\)-算法”与“逻辑上 faithful 的 \(\pi\)-证书”在这一支链上应视为两个不同对象。
+\end{remark}
+
+\endinput

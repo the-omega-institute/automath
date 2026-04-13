@@ -1,0 +1,370 @@
+\subsection{平方自由算术化的 primorial 最优性与共尾 prime-ledger 障碍}
+
+正文已经分别给出：平方自由素数寄存器对格结构的
+\(\gcd/\operatorname{lcm}\) 实现、有限素数支撑乘法单子的结构层/实现层半圆维分裂、
+faithful 时间寻址 Gödel 外置所强迫的无限素数支撑与超线性位复杂度、
+以及共尾 prime-support 上一致有界严格账本的不可能性。
+把这些接口按同一条链重新并读后，可得到下列更集中的派生命题。
+
+\begin{theorem}[Boolean 格严格算术化的 primorial 极小律]\label{thm:derived-boolean-squarefree-primorial-optimum}
+设
+\[
+B_r:=\bigl(\mathcal P([r]),\cap,\cup\bigr)
+\]
+为 \(r\) 维 Boolean 格，\(\NN_{\mathrm{sf}}\) 为平方自由正整数集合，并配以
+\[
+\wedge=\gcd,
+\qquad
+\vee=\operatorname{lcm}.
+\]
+若单射
+\[
+\eta:B_r\hookrightarrow \NN_{\mathrm{sf}}
+\]
+满足
+\[
+\eta(A\cap B)=\gcd(\eta(A),\eta(B)),
+\qquad
+\eta(A\cup B)=\operatorname{lcm}(\eta(A),\eta(B)),
+\qquad
+\eta(\varnothing)=1,
+\]
+则必有
+\[
+\boxed{\;
+\eta([r])\ge p_r\#:=\prod_{j=1}^{r}p_j,\;}
+\]
+其中 \(p_1<p_2<\cdots\) 为递增素数序列。
+并且等号成立当且仅当，在某个原子重编号之后，
+\[
+\boxed{\;
+\eta(A)=\prod_{i\in A}p_i
+\qquad (A\subseteq [r]).\;}
+\]
+\end{theorem}
+
+\begin{proof}
+记 Boolean 格的原子为
+\[
+e_i:=\{i\}
+\qquad (1\le i\le r).
+\]
+对 \(i\neq j\)，由
+\[
+e_i\cap e_j=\varnothing
+\]
+得到
+\[
+\gcd(\eta(e_i),\eta(e_j))
+=
+\eta(\varnothing)
+=1.
+\]
+故 \(\eta(e_1),\dots,\eta(e_r)\) 是两两互素的平方自由正整数。
+又因 \(\eta\) 为单射且 \(e_i\neq \varnothing\)，故每个 \(\eta(e_i)>1\)。
+
+另一方面，
+\[
+[r]=e_1\cup\cdots\cup e_r,
+\]
+于是
+\[
+\eta([r])
+=
+\operatorname{lcm}\bigl(\eta(e_1),\dots,\eta(e_r)\bigr).
+\]
+由于这些整数两两互素且平方自由，右端等于
+\[
+\prod_{i=1}^{r}\eta(e_i).
+\]
+在所有 \(r\) 个两两互素且严格大于 \(1\) 的平方自由整数中，乘积的最小值由 \(r\) 个最小互异素数取得，故
+\[
+\eta([r])\ge \prod_{j=1}^{r}p_j=p_r\#.
+\]
+
+若等号成立，则每个 \(\eta(e_i)\) 都必须恰为单个素数，且这些素数恰是 \(p_1,\dots,p_r\) 的一个排列。
+重编号后可设
+\[
+\eta(e_i)=p_i
+\qquad (1\le i\le r).
+\]
+任取 \(A\subseteq [r]\)，由
+\[
+A=\bigcup_{i\in A}e_i
+\]
+与 join 保持性得到
+\[
+\eta(A)=\operatorname{lcm}_{i\in A}\eta(e_i)=\prod_{i\in A}p_i.
+\]
+反过来，这个标准素数积编码显然满足全部条件并达到下界。证毕。
+\end{proof}
+
+\begin{corollary}[乘法对象的实现宽度、可寻址位长与严格账本秩三重分裂]\label{cor:derived-prime-register-triple-complexity-splitting}
+对乘法幺半群
+\[
+\NN_{\times}:=(\NN_{\ge 1},\times)
+\]
+同时存在三种彼此不可替代的复杂度尺度：
+\begin{enumerate}
+\normalfont
+  \item 集合论实现尺度
+  \[
+  \cdim^{\mathrm{impl}}(\NN_{\times})=\frac12;
+  \]
+  \item 严格同态账本尺度
+  \[
+  \cdim^{\mathrm{hom}}_{+}(\NN_{\times})=+\infty;
+  \]
+  \item faithful 时间寻址 Gödel 外置的最坏情形位长尺度：若
+  \[
+  E_T:\Sigma^T\hookrightarrow \NN_{\ge 1}
+  \]
+  是任意逐坐标可寻址且与时间移位严格兼容的 faithful 编码，则存在常数 \(c>0\) 与某个输入 \(s^\ast\in \Sigma^T\) 使
+  \[
+  \log E_T(s^\ast)\ge c\,T\log T.
+  \]
+\end{enumerate}
+因此，同一乘法对象可以在实现层被压缩到单寄存器，在可寻址整数化层只支付 \(T\log T\) 级位长，却仍然无法在任何有限秩加法账本中保持其乘法语义。
+\end{corollary}
+
+\begin{proof}
+前两条由命题 \ref{prop:killo-implementation-vs-structural-half-circle-dimension}
+直接给出。
+
+对第三条，推论 \ref{cor:conclusion-faithful-time-addressed-godel-needs-infinite-prime-support}
+表明：任何 shift-compatible faithful Gödel 编码都必须使用一条无限且两两不同的素数时间轴。
+进一步，由定理 \ref{thm:conclusion-prime-integerization-superlinear-bitlength}，
+这类编码的整数化位长在最坏情形下满足
+\[
+\log E_T(s^\ast)\ge c\,T\log T
+\]
+对某个绝对常数 \(c>0\) 成立。三者合并即得所述三重分裂。证毕。
+\end{proof}
+
+\begin{theorem}[共尾 prime-support 塔上的一致有界严格账本不可能性]\label{thm:derived-cofinal-prime-support-unbounded-ledger-rank}
+设
+\[
+S_1\subset S_2\subset\cdots\subset \mathbb P,
+\qquad
+\bigcup_{n\ge 1}S_n=\mathbb P,
+\]
+并对每个 \(n\) 记
+\[
+M_{S_n}:=\left\{\prod_{p\in S_n}p^{a_p}:a_p\in \ZZ_{\ge 0}\right\}.
+\]
+设进一步对每个 \(n\) 都给定一个 torsion-free additive/localized ledger \(L_n\)，并要求：
+\begin{enumerate}
+\normalfont
+  \item \(M_{S_n}\to L_n\) 在每层都是严格乘法同态；
+  \item 所有 \(S_n\) 中的素数方向在结构层上都被忠实保留；
+  \item 账本秩
+  \[
+  \operatorname{rank}L_n:=\dim_{\QQ}\bigl(G(L_n)\otimes_{\ZZ}\QQ\bigr)
+  \]
+  存在统一上界。
+\end{enumerate}
+则这样的塔不存在。更精确地，对任意此类忠实严格实现都必有
+\[
+\operatorname{rank}L_n\ge |S_n|
+\qquad (n\ge 1),
+\]
+从而
+\[
+\sup_n \operatorname{rank}L_n=+\infty.
+\]
+\end{theorem}
+
+\begin{proof}
+对每个固定的 \(n\)，\(M_{S_n}\) 是由 \(|S_n|\) 个独立素数方向生成的自由交换幺半群。
+若它可严格忠实地嵌入 \(L_n\)，则由 Grothendieck 完成得到群单射
+\[
+\ZZ^{|S_n|}\hookrightarrow G(L_n).
+\]
+张量到 \(\QQ\) 后仍为单射，故
+\[
+\QQ^{|S_n|}\hookrightarrow G(L_n)\otimes_{\ZZ}\QQ.
+\]
+于是
+\[
+|S_n|
+\le
+\dim_{\QQ}\bigl(G(L_n)\otimes_{\ZZ}\QQ\bigr)
+=
+\operatorname{rank}L_n.
+\]
+这就给出了每层的秩下界
+\[
+\operatorname{rank}L_n\ge |S_n|.
+\]
+
+由于 \(\bigcup_n S_n=\mathbb P\)，集合 \(S_n\) 的基数必趋于无穷。
+因此 \(\operatorname{rank}L_n\) 不可能一致有界，亦即所述三项条件不能同时成立。证毕。
+\end{proof}
+
+\begin{theorem}[严格乘法账本的二歧穷尽律]\label{thm:derived-strict-multiplicative-ledger-binary-exhaustion}
+设
+\[
+S_1\subset S_2\subset\cdots\subset \mathbb P,
+\qquad
+\bigcup_{n\ge 1}S_n=\mathbb P,
+\]
+并记
+\[
+M_{S_n}:=\left\{\prod_{p\in S_n}p^{a_p}:a_p\in \ZZ_{\ge 0}\right\}.
+\]
+则不存在第三种渐近制度；准确地说，下列三项不能同时成立：
+\begin{enumerate}
+\normalfont
+  \item 对每个 \(n\)，\(M_{S_n}\) 到某个 additive/localized ledger \(L_n\) 的传递保持严格乘法同态；
+  \item 所有素数方向在结构层上都被忠实保留而不发生不可逆合并；
+  \item 账本秩存在统一上界
+  \[
+  \sup_n\operatorname{rank}L_n<\infty.
+  \]
+\end{enumerate}
+因此，任何覆盖全部素数方向的渐近审计架构都只剩两条道路：
+\begin{enumerate}
+\normalfont
+  \item 要么在每一有限阶段都坚持严格同态与结构忠实，此时 \(\operatorname{rank}L_n\to\infty\)；
+  \item 要么若坚持秩一致有界，则在某个有限阶段严格同态性必然破裂，而该失配只能落入异常类与 strictification 商所控制的统一归约链。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:derived-cofinal-prime-support-unbounded-ledger-rank}，
+若每一层都保持严格乘法同态并忠实保留全部 \(S_n\)-素数方向，则必有
+\[
+\operatorname{rank}L_n\ge |S_n|
+\qquad(n\ge 1).
+\]
+由于 \(\bigcup_n S_n=\mathbb P\)，\(|S_n|\to\infty\)，故在这种 regime 下
+\[
+\operatorname{rank}L_n\to\infty.
+\]
+这就排除了“既严格同态、又结构忠实、同时秩一致有界”的第三条路径。
+
+反过来，若某族账本满足
+\[
+\sup_n\operatorname{rank}L_n<\infty,
+\]
+则上式说明：不可能对所有 \(n\) 继续保持严格同态并忠实区分全部素数方向。故必存在某个有限阶段使乘法到账本的传递不再严格。
+
+最后，由命题 \ref{prop:pom-bc-quotient-strictify} 与命题 \ref{prop:pom-bc-quotient-universal}，这种严格交换失配并不是无结构噪声，而恰由异常类与普适 strictification 商的正规形吸收。于是所述二歧穷尽律成立。证毕。
+\end{proof}
+
+\begin{theorem}[极小循环审计轴的 \texorpdfstring{$\widehat{\ZZ}$}{Zhat} 完备性与无限 prime unlocking]\label{thm:derived-minimal-cyclic-audit-axis-zhat-prime-unlocking}
+记偶层极大纤维多重度为 \(D_{2k}\)，并定义极小循环审计链
+\[
+N_k:=\operatorname{lcm}(D_2,D_4,\dots,D_{2k}).
+\]
+则：
+\begin{enumerate}
+\normalfont
+  \item \((N_k)_{k\ge1}\) 在循环审计链范畴中满足初始性：对任意循环审计链 \((M_k)\) 都有逐层整除
+  \[
+  N_k\mid M_k;
+  \]
+  \item 相应逆极限寄存器
+  \[
+  \mathfrak R_{\min}:=\varprojlim_k \ZZ/N_k\ZZ
+  \]
+  自然同构于
+  \[
+  \widehat{\ZZ};
+  \]
+  \item 存在 \(k_0\) 使得对全部 \(k\ge k_0\)，都存在新素数 \(p_k\) 满足
+  \[
+  p_k\mid N_k,
+  \qquad
+  p_k\nmid N_{k-1},
+  \]
+  因而任意循环审计链都不可能由有限素数集支撑。
+\end{enumerate}
+故极大纤维的 cyclic audit 不只是某种 bookkeeping；它强制出现一个不可再约化的 profinite 终端轴 \(\widehat{\ZZ}\)，而且该轴的 prime-support 在层间无限次严格扩张。
+\end{theorem}
+
+\begin{proof}
+第一条正是定理 \ref{thm:xi-minimal-cyclic-audit-chain-universal} 的内容。第二条由定理 \ref{thm:xi-rmin-is-zhat} 给出：
+\[
+\mathfrak R_{\min}\cong \widehat{\ZZ}.
+\]
+第三条则由定理 \ref{thm:xi-primitive-prime-divisor-forces-unbounded-prime-support} 与推论 \ref{cor:xi-any-cyclic-audit-chain-needs-infinitely-many-primes} 直接推出：从某一层起，每一步都解封新的 Fibonacci 原始素因子，因此任何覆盖全部偶层极大纤维的循环审计链都必须拥有无限 prime-support。证毕。
+\end{proof}
+
+\begin{theorem}[有限 prime-stage lift exactness 与全局 cyclic audit completeness 的结构性不兼容]\label{thm:derived-finite-prime-lift-exactness-vs-global-cyclic-audit-incompatibility}
+固定有限素数集 \(S\subset\mathbb P\)。则 \(S\)-局部对象
+\[
+\Sigma_S=\widehat{\ZZ[S^{-1}]},
+\qquad
+R_S=\Sigma_S\times_{\TT}\TT^S
+\]
+在连续 lift 层是完备的：它们分别闭合了全部有限素数局部的 circle-phase 完成与 \(S\)-phase continuous lifts。
+然而在 cyclic audit 层，这种有限 prime-stage 完备性永远不可能推广为跨尺度全局完备性：任何由循环审计链生成、并对全部偶层极大纤维保持满索引证书的审计寄存器，都必须连续满射到
+\[
+\widehat{\ZZ}.
+\]
+特别地，它不可能因子化经由任何固定有限 \(S\) 的局部对象；换言之，
+\[
+\text{有限 prime-stage 的 lift exactness}
+\quad\not\Rightarrow\quad
+\text{global cyclic audit completeness}.
+\]
+\end{theorem}
+
+\begin{proof}
+对第一部分，定理 \ref{thm:conclusion-s-solenoid-terminal-lifting-moduli} 已证明：有限素数局部完成的全部 circle-phase lifts 统一因子化到 \((\Sigma_S,\pi_S)\) 的纤维 torsor 中；而定理 \ref{thm:derived-arithmetic-singular-ring-rank-self-parameterization} 又表明 \(R_S\) 本身参数化全部连续 \(S\)-phase lifts。
+
+对第二部分，若某审计寄存器来自循环审计链 \((M_k)\)，并对全部偶层极大纤维保持满索引证书，则由定理 \ref{thm:derived-minimal-cyclic-audit-axis-zhat-prime-unlocking} 的初始性，必存在连续满同态
+\[
+\varprojlim_k \ZZ/M_k\ZZ \twoheadrightarrow \mathfrak R_{\min}\cong \widehat{\ZZ}.
+\]
+而 \(\widehat{\ZZ}\) 的 prime-support 是全体素数，故不可能由任何固定有限 \(S\) 的局部化对象承载。于是 lift exactness 与 global cyclic completeness 在结构上严格分裂。证毕。
+\end{proof}
+
+\begin{conjecture}[fold/prime-register 语义中的双层最小完备骨架]\label{conj:derived-fold-prime-register-double-layer-minimal-completion}
+在当前文稿接口内，任何 simultaneously 完备承载下列两类数据的可见对象：
+\begin{enumerate}
+\normalfont
+  \item 有限素数局部的连续相位与 lift 语义；
+  \item 跨尺度极大纤维的 cyclic audit 语义；
+\end{enumerate}
+都不可能是单一紧群或单一寄存器对象。最小完备对象应当严格分裂为双层：
+\[
+\bigl\{R_S\bigr\}_{S\Subset\mathbb P}
+\quad\oplus\quad
+\widehat{\ZZ}.
+\]
+其中第一层负责全部有限素数局部的连续 lifts、Lissajous 投影与隐藏 \(S\)-进 torsor；第二层负责跨尺度极大纤维的整除完备性与无限 prime unlocking。
+
+删去第一层，则失去局部连续轨道与隐藏 lift 的 exact 参数化；删去第二层，则失去任何对全偶层极大纤维 simultaneously sound 的 cyclic audit。
+\end{conjecture}
+
+\begin{proof}[论据]
+第一层的必要性由定理 \ref{thm:derived-localized-phase-fibers-sadic-torsor-forgetting}、
+定理 \ref{thm:derived-arithmetic-singular-ring-rank-self-parameterization}
+与推论 \ref{cor:derived-visible-lissajous-hidden-sadic-torsor-splitting} 给出：有限素数局部 lift 的完整语义确实由 \(R_S\) 及其 \(K_S\)-torsor 纤维完全承载。
+
+第二层的必要性由定理 \ref{thm:derived-minimal-cyclic-audit-axis-zhat-prime-unlocking}
+与定理 \ref{thm:derived-finite-prime-lift-exactness-vs-global-cyclic-audit-incompatibility} 给出：一旦要求跨全部偶层极大纤维 simultaneously sound 的 cyclic audit，任何循环审计寄存器都被迫连续满射到 \(\widehat{\ZZ}\)，因而无法再压缩为固定有限 prime-support 的局部对象。
+
+因此，在目前已证明的接口中，局部连续 lift 的 exactness 与全局 cyclic audit 的 completeness 已经分别锁定到两层彼此不可替代的宿主上；最小完备对象应当正是这条双层骨架。证毕。
+\end{proof}
+
+\begin{remark}[primorial 极小律与共尾账本障碍之间的闭链]\label{rem:derived-prime-register-primorial-ledger-closed-chain}
+定理 \ref{thm:derived-boolean-squarefree-primorial-optimum}
+、定理 \ref{thm:derived-cofinal-prime-support-unbounded-ledger-rank}
+与定理 \ref{thm:derived-strict-multiplicative-ledger-binary-exhaustion}
+共同说明：平方自由算术化的最优单整数代价与严格加法账本的结构代价并不是同一类资源。
+前者在有限深度上由 primorial 极值实现，后者则在 prime-support 共尾扩展时不可避免地转化为秩发散。
+再结合推论 \ref{cor:derived-prime-register-triple-complexity-splitting}，可见
+\[
+\text{单寄存器实现},
+\qquad
+\text{可寻址整数化位长},
+\qquad
+\text{严格同态账本秩}
+\]
+三者构成真正分裂的复杂度层，而不能由任何单一尺度统一代替。
+\end{remark}
+
+\endinput

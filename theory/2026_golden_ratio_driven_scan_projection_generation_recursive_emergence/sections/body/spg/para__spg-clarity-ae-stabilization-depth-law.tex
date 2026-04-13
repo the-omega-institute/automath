@@ -1,0 +1,181 @@
+% Almost-sure stabilization, risk thresholds, and arithmetic readout for scan clarity.
+
+\paragraph{几乎处处稳定、风险阈值与算术读出}
+边界柱厚度与 Gödel 双对数标度给出的并不只是清晰度指数的存在性。把命题 \ref{prop:spg-clarity-bayes-optimality} 的 Bayes 最优前缀判决与上述指数律并置之后，还可把“误差剖面可和”“几乎处处最终定解”“目标风险所需扫描深度”以及“边界柱 Gödel 码的双对数读出”压缩为同一条定量链。
+
+\begin{theorem}[可和扫描误差下的 Bayes 前缀判决稳定性]\label{thm:spg-bayes-finite-mistakes-summable}
+沿用命题 \ref{prop:spg-clarity-bayes-optimality} 的记号。若
+\[
+\sum_{m=1}^{\infty}\varepsilon_m(\mathsf P;\mu)<\infty,
+\]
+则对 \(\mu\)-几乎处处的 \(\omega\in X\) 都有
+\[
+\sum_{m=1}^{\infty}\ind_{\mathsf P\triangle \mathsf P_m^\star}(\omega)<\infty.
+\]
+因而 \(\ind_{\mathsf P_m^\star}(\omega)\to \ind_{\mathsf P}(\omega)\) 对 \(\mu\)-几乎处处的 \(\omega\) 成立；等价地，存在随机但有限的 \(m_0(\omega)\)，使得对所有 \(m\ge m_0(\omega)\) 都有
+\[
+\ind_{\mathsf P_m^\star}(\omega)=\ind_{\mathsf P}(\omega).
+\]
+\end{theorem}
+\begin{proof}
+令
+\[
+E_m:=\mathsf P\triangle \mathsf P_m^\star.
+\]
+由命题 \ref{prop:spg-clarity-bayes-optimality} 可知
+\[
+\mu(E_m)=\mu(\mathsf P\triangle \mathsf P_m^\star)=\varepsilon_m(\mathsf P;\mu).
+\]
+故 \(\sum_{m\ge 1}\mu(E_m)<\infty\)。由 Borel--Cantelli 引理，
+\[
+\mu\bigl(E_m\ \text{无穷多次发生}\bigr)=0.
+\]
+于是对 \(\mu\)-几乎处处的 \(\omega\)，仅有有限多个 \(m\) 满足 \(\omega\in E_m\)，亦即
+\[
+\sum_{m=1}^{\infty}\ind_{\mathsf P\triangle \mathsf P_m^\star}(\omega)<\infty.
+\]
+这正说明 \(\ind_{\mathsf P_m^\star}(\omega)\) 最终稳定到 \(\ind_{\mathsf P}(\omega)\)。证毕。
+\end{proof}
+
+\begin{corollary}[边界维数严格小于一时的几乎处处最终定解]\label{cor:spg-boundary-dimension-ae-stabilization}
+设定理 \ref{thm:spg-clarity-volume-boundary-scaling} 的厚度假设成立，并且对某个 \(d\in[0,1)\) 有
+\[
+N_m(\partial\mathsf P)=\lambda_{\mathrm{cyl}}^{dm+o(m)}.
+\]
+则
+\[
+\varepsilon_m(\mathsf P;\mu)=\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}.
+\]
+特别地，
+\[
+\sum_{m=1}^{\infty}\varepsilon_m(\mathsf P;\mu)<\infty,
+\]
+从而 \(\ind_{\mathsf P_m^\star}\to \ind_{\mathsf P}\) 在 \(\mu\)-几乎处处意义下最终稳定。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:spg-clarity-volume-boundary-scaling} 的双边估计，
+\[
+\theta c_-\,\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf P)
+\le
+\varepsilon_m(\mathsf P;\mu)
+\le
+\frac{c_+}{2}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf P).
+\]
+代入 \(N_m(\partial\mathsf P)=\lambda_{\mathrm{cyl}}^{dm+o(m)}\) 即得
+\[
+\varepsilon_m(\mathsf P;\mu)=\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}.
+\]
+由于 \(d<1\)，右端为指数衰减，故级数收敛。再由定理 \ref{thm:spg-bayes-finite-mistakes-summable} 即得几乎处处最终定解。证毕。
+\end{proof}
+
+\begin{theorem}[风险阈值的扫描深度渐近律]\label{thm:spg-clarity-risk-threshold-depth-law}
+在推论 \ref{cor:spg-boundary-dimension-ae-stabilization} 的假设下，对 \(\delta\in(0,1)\) 定义达到风险阈值所需的最小扫描深度
+\[
+m_\delta(\mathsf P):=\min\{m\ge 1:\ \varepsilon_m(\mathsf P;\mu)\le \delta\}.
+\]
+则当 \(\delta\downarrow 0\) 时，
+\[
+m_\delta(\mathsf P)
+=
+\frac{\log(1/\delta)}{(1-d)\log\lambda_{\mathrm{cyl}}}
++o\!\bigl(\log(1/\delta)\bigr).
+\]
+若进一步有更强计数式
+\[
+N_m(\partial\mathsf P)=\lambda_{\mathrm{cyl}}^{dm+O(1)},
+\]
+则可提升为
+\[
+m_\delta(\mathsf P)
+=
+\frac{\log(1/\delta)}{(1-d)\log\lambda_{\mathrm{cyl}}}
++O(1).
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:spg-boundary-dimension-ae-stabilization}，存在 \(u_m=o(m)\) 使
+\[
+\varepsilon_m(\mathsf P;\mu)
+=
+\lambda_{\mathrm{cyl}}^{-(1-d)m+u_m}.
+\]
+于是
+\[
+\log\frac{1}{\varepsilon_m(\mathsf P;\mu)}
+=
+(1-d)m\log\lambda_{\mathrm{cyl}}-u_m\log\lambda_{\mathrm{cyl}}.
+\]
+当 \(m=m_\delta(\mathsf P)\) 时，由 \(\varepsilon_{m_\delta}(\mathsf P;\mu)\le \delta<\varepsilon_{m_\delta-1}(\mathsf P;\mu)\) 与 \(u_m=o(m)\) 可解得
+\[
+m_\delta(\mathsf P)
+=
+\frac{\log(1/\delta)}{(1-d)\log\lambda_{\mathrm{cyl}}}
++o\!\bigl(\log(1/\delta)\bigr).
+\]
+若 \(N_m(\partial\mathsf P)=\lambda_{\mathrm{cyl}}^{dm+O(1)}\)，则同理有 \(\varepsilon_m(\mathsf P;\mu)=\lambda_{\mathrm{cyl}}^{-(1-d)m+O(1)}\)，反解后即得 \(O(1)\) 精度。证毕。
+\end{proof}
+
+\begin{corollary}[边界柱 Gödel 双对数维与清晰度指数的精确对应]\label{cor:spg-boundary-godel-clarity-exponent-equivalence}
+在定理 \ref{thm:spg-clarity-volume-boundary-scaling} 的厚度假设下，若极限
+\[
+d_\partial(\mathsf P)
+:=
+\lim_{m\to\infty}
+\frac{\log\log G_m^\partial(\mathsf P)}{m\log\lambda_{\mathrm{cyl}}}
+\]
+存在，则清晰度指数也存在，且
+\[
+\lim_{m\to\infty}
+\frac{-\log \varepsilon_m(\mathsf P;\mu)}{m\log\lambda_{\mathrm{cyl}}}
+=
+1-d_\partial(\mathsf P).
+\]
+特别地，
+\[
+d_\partial(\mathsf P)<1
+\quad\Longleftrightarrow\quad
+\exists\,\gamma>0:\ 
+\varepsilon_m(\mathsf P;\mu)\le e^{-\gamma m+o(m)},
+\]
+并且最优指数可取
+\[
+\gamma=(1-d_\partial(\mathsf P))\log\lambda_{\mathrm{cyl}}.
+\]
+\end{corollary}
+\begin{proof}
+定理 \ref{thm:spg-boundary-cylinder-godelization-clarity} 的证明已经给出
+\[
+\bigl|\log\log G_m^\partial(\mathsf P)-\log N_m(\partial\mathsf P)\bigr|
+\le
+A\log m+B
+\]
+对充分大 \(m\) 成立，其中 \(A,B\) 与 \(\mathsf P\) 无关。故
+\[
+\lim_{m\to\infty}
+\frac{\log N_m(\partial\mathsf P)}{m\log\lambda_{\mathrm{cyl}}}
+=
+d_\partial(\mathsf P).
+\]
+于是
+\[
+N_m(\partial\mathsf P)
+=
+\lambda_{\mathrm{cyl}}^{d_\partial(\mathsf P)m+o(m)}.
+\]
+再由定理 \ref{thm:spg-clarity-volume-boundary-scaling}，
+\[
+\varepsilon_m(\mathsf P;\mu)
+=
+\lambda_{\mathrm{cyl}}^{-(1-d_\partial(\mathsf P))m+o(m)},
+\]
+从而
+\[
+\lim_{m\to\infty}
+\frac{-\log \varepsilon_m(\mathsf P;\mu)}{m\log\lambda_{\mathrm{cyl}}}
+=
+1-d_\partial(\mathsf P).
+\]
+最后一组等价只是对该极限的重写。证毕。
+\end{proof}
+
+\endinput

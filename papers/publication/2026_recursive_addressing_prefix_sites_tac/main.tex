@@ -1,6 +1,5 @@
-\documentclass[11pt,letterpaper]{article}
+\documentclass{tac}
 
-\usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{array}
 \usepackage{booktabs}
@@ -18,6 +17,7 @@
 \newtheorem{corollary}[theorem]{Corollary}
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 
@@ -29,12 +29,13 @@
 \newcommand{\Ainf}{\mathcal{A}_{\infty}}
 \newcommand{\Avis}{A_{\mathrm{vis}}}
 \newcommand{\Rpre}{\mathscr{R}}
+\newcommand{\Comp}{\mathscr{Comp}}
 \DeclareMathOperator{\diam}{diam}
 \DeclareMathOperator{\Hom}{Hom}
 
 \title{Recursive Addressing via Prefix Sites, Local Sections, and Inverse Limits}
-\author{}
-\date{\today}
+\author{Anonymous}
+\date{}
 
 \begin{document}
 \maketitle
@@ -48,17 +49,16 @@ language: admissible addresses form a prefix site with cylinder covers, and the
 readout mechanism becomes a presheaf of local readout objects.  Within this
 internal formulation, address failure splits into three standard phenomena:
 empty local fibers, failure of effective descent, and failure of
-separatedness.  We make the finite-level obstruction theory explicit by
-introducing a Cech-type class, the minimal visible quotient on which the
-obstruction vanishes, and a sharp register lower bound for recovering the full
-resolution.  Finally, for a dyadic inverse system of finite address spaces we
-prove an inverse-limit theorem for stable addressed objects and identify
-single-valued readout with separatedness at an inverse-limit address.  All
-external protocol terminology from the larger manuscript is removed; the paper
-is self-contained in measurable, site-theoretic, and inverse-limit language.
+separatedness.  For finite covers equipped with an abelian banded comparison
+datum relating local readouts on overlaps, we define a \v{C}ech-type defect
+class, the minimal visible quotient on which the defect vanishes, and a sharp
+register lower bound for recovering the full band.  Finally, for a dyadic
+inverse system of finite address spaces we record the standard inverse-limit
+existence theorem for stable addressed objects and identify single-valued
+readout with separatedness at an inverse-limit address.  All external
+protocol-specific terminology is removed; the paper is self-contained in
+measurable, site-theoretic, and inverse-limit language.
 \end{abstract}
-
-\tableofcontents
 
 \section{Introduction}
 
@@ -66,15 +66,15 @@ The slogan behind recursive addressing is simple: addresses precede values.
 Used carelessly, however, that slogan invites too much external terminology.
 The aim of this paper is to rewrite the same structure internally.  We begin
 with a measurable dynamical system and a hierarchy of observable concepts.  The
-first theorem states that recursively generated address cylinders refine the
+first main result states that recursively generated address cylinders refine the
 visible information already present in the previous layer, but they do not add
-new measurable structure.  This is the bridge from the master manuscript to a
-standalone categorical paper.
+new measurable structure.  This is the bridge from the measurable formulation
+to a standalone categorical paper.
 
 Once the measurable statement is isolated, the rest of the paper can be stated
 in site language.  Admissible addresses form a prefix site whose covers are
 finite cylinder refinements.  Over that site we place a presheaf $\Rpre$ of
-admissible local readout objects.  What the master manuscript informally
+admissible local readout objects.  What informal recursive-addressing language
 treated as address failure is then rewritten internally:
 \begin{itemize}
 \item there may be no local object over a given address;
@@ -84,32 +84,62 @@ treated as address failure is then rewritten internally:
 The three cases correspond respectively to empty local fibers, descent
 obstructions, and non-separatedness.
 
-Two outputs drive the paper.  The first is a finite-level obstruction theory on
-the prefix site: we define a Cech-type obstruction class, quotient the band by
-the subgroup it generates, and identify the smallest visible quotient on which
-the obstruction disappears pointwise.  A quantitative consequence is a sharp
-register lower bound: recovering the full band requires at least as much extra
-memory as the size of the obstruction subgroup.  The second output is an
-inverse-limit theorem: in a dyadic tower of finite address spaces, compatible
-address threads determine unique stable objects once the fibers shrink at the
-correct rate, and single-valued readout at a stable address is equivalent to
-separatedness of the readout presheaf at that address.
+The paper makes four concrete contributions.
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item Proposition~\ref{prop:recursive-addressing-refinement} and
+Corollary~\ref{cor:recursive-addressing-visible-sigma-nonexpansion} isolate
+the measurable non-expansion statement that underlies recursive refinement.
+\item Proposition~\ref{prop:prefix-site-grothendieck-topology},
+Definition~\ref{def:prefix-sheaf-readout}, and
+Corollary~\ref{cor:null-trichotomy-local-section} recast admissible addresses
+and readout as a prefix site together with a presheaf-theoretic trichotomy, and
+Example~\ref{ex:binary-prefix-site-failure-modes} makes the three failure modes
+explicit on the binary prefix site.
+\item Definition~\ref{def:prefix-site-h2-gluing-obstruction},
+Lemma~\ref{prop:prefix-site-min-visible-quotient},
+Lemma~\ref{thm:prefix-site-register-lower-bound}, and
+Proposition~\ref{thm:prefix-site-spectral-definability-avis} show that, once an
+explicit abelian banded comparison datum has been fixed on a finite cylinder
+cover, one obtains a \v{C}ech defect class, its minimal visible quotient, a
+sharp register bound, and a character criterion for spectral definability.
+\item Proposition~\ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object}
+and Theorem~\ref{thm:recursive-addressing-readout-separatedness-null} record
+the dyadic inverse-limit background and identify single-valued readout at a
+stable address with separatedness along its dyadic neighborhood basis.
+\end{enumerate}
+
+Two outputs drive the paper.  The first is a finite-level obstruction theory
+for covers equipped with an abelian banded comparison datum: we define a
+\v{C}ech-type defect class, quotient the band by the subgroup it generates, and
+identify the smallest visible quotient on which the defect disappears
+pointwise.  A quantitative consequence is a sharp register lower bound:
+recovering the full band requires at least as much extra memory as the size of
+the defect subgroup.  The second output is an inverse-limit theorem: in a
+dyadic tower of finite address spaces, compatible address threads determine
+unique stable objects once the fibers shrink at the correct rate, and
+single-valued readout at a stable address is equivalent to separatedness of the
+readout presheaf at that address.
 
 The paper is deliberately self-contained.  We use measurable dynamics only to
 set up recursive refinement, then shift entirely to sites, local sections, and
 inverse limits.  We do not retain the external interface language, and we do
 not import folding, scan-error, arithmetic, or protocol-specific machinery.
-Background references for measurable dynamics, sheaves on sites, and Cech
-cohomology include
+Background references for measurable dynamics, sites and Grothendieck
+topologies, descent, \v{C}ech cohomology, symbolic dynamics, and profinite
+inverse limits include
 \cite{WaltersErgodicTheory,MacLaneMoerdijk1992,Bredon1997SheafTheory,
-Munkres2000Topology}.
+Munkres2000Topology,SGA4I,Johnstone2002Elephant,Vistoli2008Grothendieck,
+Milne1980EtaleCohomology,Tamme1994IntroductionEtaleCohomology,
+LindMarcus1995SymbolicDynamics,
+Kitchens1998SymbolicDynamics,RibesZalesskii2010ProfiniteGroups,
+Wilson1998ProfiniteGroups}.
 
 \begin{table}[ht]
 \centering
 \small
 \begin{tabular}{>{\raggedright\arraybackslash}p{0.33\textwidth} >{\raggedright\arraybackslash}p{0.56\textwidth}}
 \toprule
-Master-paper phrase & Standalone reformulation \\
+Informal phrase & Standalone reformulation \\
 \midrule
 ``addresses precede values'' & sections exist only after an admissible address object has been chosen \\
 ``semantic null'' & empty local fiber $\Rpre(a)=\varnothing$ \\
@@ -191,9 +221,19 @@ Then
 \end{corollary}
 
 \begin{proof}
-By Proposition~\ref{prop:recursive-addressing-refinement}, every generator of
-$\mathcal{G}^{(L+1)}$ already belongs to $\mathcal{G}^{(L)}$.  Taking the
-generated $\sigma$-algebra gives the inclusion.
+Each set $C\in\mathcal{C}^{(L+1)}$ is one of the derived cylinder events
+$C_{a,t_0}^{(L+1)}$, so Proposition~\ref{prop:recursive-addressing-refinement}
+gives $C\in\mathcal{G}^{(L)}$.  Since $\mathcal{G}^{(L)}$ is generated by all
+time shifts $T^{-s}C_i^{(L)}$, it is stable under every shift $T^{-t}$:
+\[
+T^{-t}\bigl(T^{-s}C_i^{(L)}\bigr)=T^{-(s+t)}C_i^{(L)}\in \mathcal{G}^{(L)}.
+\]
+Hence $T^{-t}C\in\mathcal{G}^{(L)}$ for every $C\in\mathcal{C}^{(L+1)}$ and
+every $t\in\ZZ$.  Therefore every generator of $\mathcal{G}^{(L+1)}$ lies in
+$\mathcal{G}^{(L)}$, so
+\[
+\mathcal{G}^{(L+1)}\subseteq \mathcal{G}^{(L)}.
+\]
 \end{proof}
 
 \begin{remark}
@@ -212,9 +252,14 @@ finite words.  We write $a\preceq b$ when $a$ is a prefix of $b$.  Let
 $\Aadm\subseteq \Sigma^{<\infty}$ be the set of admissible addresses.
 
 For each $a\in\Aadm$, let $C_a\subseteq X$ be the cylinder event determined by
-$a$.  Only the following two features matter:
+$a$.  Only the following three features matter:
 \begin{enumerate}[label=\textup{(\arabic*)}]
 \item if $b\succeq a$, then $C_b\subseteq C_a$;
+\item whenever $b,c\succeq a$ and $C_b\cap C_c\neq\varnothing$, there exists
+an admissible address $d$ with $d\succeq b,c$ and
+\[
+C_d=C_b\cap C_c;
+\]
 \item every finite refinement of a cylinder is again a finite union of deeper
 cylinders.
 \end{enumerate}
@@ -231,10 +276,57 @@ C_a = \bigcup_{i=1}^n C_{b_i}.
 Such covers will be called \emph{cylinder covers}.
 \end{definition}
 
+\begin{proposition}[Cylinder covers generate a Grothendieck topology]
+\label{prop:prefix-site-grothendieck-topology}
+The cylinder covers satisfy the identity, base-change, and transitivity axioms
+of a finitary pretopology on $\mathsf{Pref}(\Aadm)$.  Hence they generate a
+Grothendieck topology $J_{\mathrm{cyl}}$, and
+\[
+(\mathsf{Pref}(\Aadm),J_{\mathrm{cyl}})
+\]
+is a well-defined site.
+\end{proposition}
+
+\begin{proof}
+The singleton family $\{a\to a\}$ is a cylinder cover because $C_a=C_a$.
+
+Now let $\{b_i\to a\}_{i=1}^n$ be a cylinder cover and let $c\to a$ be a
+refinement.  Then
+\[
+C_c
+=
+C_c\cap C_a
+=
+\bigcup_{i=1}^n (C_c\cap C_{b_i}).
+\]
+For each index $i$ with $C_c\cap C_{b_i}\neq\varnothing$, property
+\textup{(2)} yields an admissible address $d_i$ with $d_i\succeq c,b_i$ and
+$C_{d_i}=C_c\cap C_{b_i}$.  Discarding the empty intersections, we obtain a
+finite cylinder cover $\{d_i\to c\}$ of $c$, and each composite
+$d_i\to c\to a$ factors through $b_i\to a$.
+
+Finally, if $\{b_i\to a\}_{i=1}^n$ is a cylinder cover and each
+$\{c_{ij}\to b_i\}_{j=1}^{m_i}$ is a cylinder cover of $b_i$, then
+\[
+C_a
+=
+\bigcup_{i=1}^n C_{b_i}
+=
+\bigcup_{i=1}^n \bigcup_{j=1}^{m_i} C_{c_{ij}},
+\]
+so the composite family $\{c_{ij}\to a\}_{i,j}$ is again a cylinder cover.
+Therefore the cylinder covers form a finitary pretopology and hence generate a
+Grothendieck topology.
+\end{proof}
+
 This is the site-theoretic version of prefix refinement.  The measurable
 non-expansion result from Section~2 says that recursive addressing does not
 leave this site: it only chooses deeper covers inside the same visible
-structure.
+structure.  Cylinder covers of this kind are familiar both from symbolic
+dynamics and from the general language of sites generated by finitary
+coverages; see
+\cite{LindMarcus1995SymbolicDynamics,Kitchens1998SymbolicDynamics,
+Johnstone2002Elephant,SGA4I}.
 
 \subsection{The Readout Presheaf}
 
@@ -272,94 +364,149 @@ and only if
 \[
 \Rpre(a)\neq\varnothing.
 \]
-Moreover, for every cylinder cover $\{b_i\to a\}$, at most one global section
-$s\in\Rpre(a)$ can restrict to a given compatible family of local sections
-$s_i\in \Rpre(b_i)$.
 \end{proposition}
 
 \begin{proof}
-The first statement is simply the internal reformulation of addressability: a
-readout over $a$ exists exactly when there is an admissible local object over
-the cylinder $C_a$.
-
-For uniqueness, if $s,t\in\Rpre(a)$ have identical restrictions to each
-$b_i$, then they agree on every piece of the cover.  Since the cover exhausts
-$C_a$, the two global sections induce the same local behavior on every visible
-piece, so the presheaf semantics treats them as the same global readout over
-$a$.
+By Definition~\ref{def:prefix-sheaf-readout}, the set $\Rpre(a)$ consists
+exactly of the admissible local readout objects over the cylinder $C_a$.
+Therefore $\Rpre(a)\neq\varnothing$ if and only if at least one such local
+readout exists.
 \end{proof}
+
+\begin{remark}
+Uniqueness of descent along a cylinder cover is not automatic for a presheaf of
+sets.  It is exactly the separatedness condition, which is treated explicitly
+in Section~6.
+\end{remark}
 
 \begin{corollary}[Finite-level trichotomy of address failure]
 \label{cor:null-trichotomy-local-section}
-For a finite-level address, failure of readout has exactly three internal
+For an admissible finite-level address $a\in\Aadm$, failure of a well-defined
+readout at $a$ has three internal
 forms:
 \begin{enumerate}[label=\textup{(\arabic*)}]
-\item the address is not admissible, so there is no object of the site at all;
-\item the address is admissible but $\Rpre(a)=\varnothing$, so no local section
-exists;
-\item local sections exist on a cylinder cover of $a$ but fail to descend to a
-global section.
+\item \emph{empty local fiber}: $\Rpre(a)=\varnothing$;
+\item \emph{descent failure}: local sections exist on a cylinder cover of $a$
+and are pairwise compatible, but no section of $\Rpre(a)$ restricts to them;
+\item \emph{non-separatedness}: two distinct sections of $\Rpre(a)$ have the
+same restrictions to a cylinder cover of $a$.
 \end{enumerate}
 \end{corollary}
 
 \begin{proof}
-The first two cases are immediate from the definition of the site and
-Proposition~\ref{prop:null-as-local-section-obstruction}.  If the address is
-admissible and some local sections exist but there is still no global readout,
-the remaining possibility is failure of descent along a cover.
+The first case is Proposition~\ref{prop:null-as-local-section-obstruction}.  If
+$\Rpre(a)\neq\varnothing$ but a compatible family on a cylinder cover does not
+come from any section of $\Rpre(a)$, then the failure is one of effective
+descent.  If distinct sections of $\Rpre(a)$ induce the same compatible family
+on a cover, then the failure is one of separatedness.  These are the three
+standard internal failure modes for the existence and uniqueness of readout on
+a presheaf over a fixed admissible object; admissibility itself is a standing
+input condition for belonging to the site.
 \end{proof}
 
-\subsection{Cech-Type Gluing Obstructions}
+\begin{example}[Binary prefix site and the three failure modes]
+\label{ex:binary-prefix-site-failure-modes}
+Let $X=\{0,1\}^{\NN}$, let $\Sigma=\{0,1\}$, let $\Aadm=\Sigma^{<\infty}$, and
+let $C_a\subseteq X$ be the usual cylinder of sequences beginning with the word
+$a$.  The root address $\varepsilon$ is covered by the two depth-one cylinders
+$0\to \varepsilon$ and $1\to \varepsilon$.
 
-We now record the standard Cech obstruction that witnesses finite-level
-descent failure.
+Three explicit readout presheaves on this same binary prefix site realize the
+three failure modes from Corollary~\ref{cor:null-trichotomy-local-section}.
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item \emph{Empty fiber}: let $\Rpre_{\mathrm{emp}}(\varepsilon)=\varnothing$
+and $\Rpre_{\mathrm{emp}}(b)=\{*\}$ for every nonempty word $b$, with the
+unique possible restriction maps.  Readout fails immediately at the root.
+\item \emph{Descent failure}: let $\Rpre_{\mathrm{desc}}(\varepsilon)=\{g\}$,
+let $\Rpre_{\mathrm{desc}}(0)=\{x_0,y_0\}$ and
+$\Rpre_{\mathrm{desc}}(1)=\{x_1,y_1\}$, and let every deeper cylinder below
+$0$ or $1$ inherit the corresponding two-point set with identity restrictions.
+The two restriction maps from $\varepsilon$ send $g$ to $x_0$ and $x_1$.
+The pair overlap $C_0\cap C_1$ is empty, so every pair of local sections on the
+cover is automatically compatible.  In particular, the family $(y_0,y_1)$ is
+compatible on the cover
+$\{0,1\to\varepsilon\}$ but does not descend to a global section.
+\item \emph{Non-separatedness}: let
+$\Rpre_{\mathrm{ns}}(\varepsilon)=\{u,v\}$ and
+$\Rpre_{\mathrm{ns}}(b)=\{*\}$ for every nonempty word $b$, with both
+restrictions from $\varepsilon$ constant.  Then $u\neq v$, but their
+restrictions to the cover $\{0,1\to\varepsilon\}$ agree.
+\end{enumerate}
+This concrete binary site keeps the geometry fixed while isolating the three
+internal presheaf-theoretic mechanisms.
+\end{example}
 
-\begin{definition}[Cech gluing obstruction]
+\subsection{\v{C}ech-Type Gluing Obstructions}
+
+The set-valued presheaf $\Rpre$ does not by itself produce group-valued
+transition functions.  To speak about a \v{C}ech defect, one must add
+comparison data for a chosen local readout problem.  The next definition makes
+that extra structure explicit in a way that still sits over the same finite
+cylinder cover; compare \cite{Bredon1997SheafTheory,Milne1980EtaleCohomology,
+Tamme1994IntroductionEtaleCohomology,Vistoli2008Grothendieck}.
+
+\begin{definition}[$A$-banded comparison datum and \v{C}ech defect]
 \label{def:prefix-site-h2-gluing-obstruction}
 Fix an admissible address $a\in\Aadm$, a cylinder cover $\{b_i\to a\}_{i=1}^n$,
 and an abelian group $A$.  Suppose one is given local sections
-$s_i\in \Rpre(b_i)$ together with transition data
-\[
-g_{ij}\in A
-\]
-on nonempty overlaps $C_{b_i}\cap C_{b_j}$, interpreted as the change of local
-trivialization from $s_j$ to $s_i$.  The associated \emph{Cech gluing
-obstruction} is the $2$-cochain
+$s_i\in \Rpre(b_i)$.  An \emph{$A$-banded comparison datum} for
+$\{s_i\}_{i=1}^n$ consists of:
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item for each nonempty pair overlap, an $A$-torsor
+$\Comp_{ij}$ of admissible comparisons between the restrictions of $s_j$ and
+$s_i$ to that overlap;
+\item chosen comparison elements $\gamma_{ij}\in \Comp_{ij}$;
+\item associative composition maps
+$\Comp_{ij}\times \Comp_{jk}\to \Comp_{ik}$ on triple overlaps, equivariant for
+the $A$-action.
+\end{enumerate}
+After choosing trivializations $\Comp_{ij}\cong A$ on the nonempty pair
+overlaps, write $g_{ij}\in A$ for the coordinate of $\gamma_{ij}$.  The
+associated \emph{\v{C}ech defect} is the $2$-cochain
 \[
 \alpha_{ijk}:=g_{ij}g_{jk}g_{ik}^{-1}\in A
 \]
 on triple overlaps $C_{b_i}\cap C_{b_j}\cap C_{b_k}\neq\varnothing$.  Its
-cohomology class will be denoted by $[\alpha]$.
+cohomology class will be denoted by $[\alpha]$.  A different choice of
+trivializations modifies the $g_{ij}$ by a $1$-cochain, hence changes
+$(\alpha_{ijk})$ by a \v{C}ech coboundary.  Therefore $[\alpha]$ depends only
+on the banded comparison datum.
 \end{definition}
 
-\begin{proposition}[Nontrivial gluing obstruction prevents global readout]
+\begin{proposition}[Nontrivial \v{C}ech defect prevents coherent global readout]
 \label{prop:null-as-h2-obstruction}
 In the setting of Definition~\ref{def:prefix-site-h2-gluing-obstruction}, if
-$[\alpha]\neq 0$, then the local sections $\{s_i\}$ do not descend to a global
-section of $\Rpre(a)$.
+$[\alpha]\neq 0$, then there is no section $s\in \Rpre(a)$ whose restrictions
+to the cover are the sections $\{s_i\}$ and whose induced comparison data agree
+with the chosen banded comparison datum.
 \end{proposition}
 
 \begin{proof}
-Assume for contradiction that a global section $s\in\Rpre(a)$ exists.  Then
-each $s_i$ is obtained by restricting $s$ to $b_i$, so the transition data can
-be chosen consistently across overlaps.  In particular, the resulting Cech
-$2$-cocycle is cohomologically trivial.  This contradicts $[\alpha]\neq 0$.
+Assume such a global section $s\in\Rpre(a)$ exists.  On every pair overlap the
+restrictions of $s$ induce a distinguished comparison between $s_j$ and $s_i$,
+and on every triple overlap these induced comparisons compose coherently:
+\[
+\gamma_{ij}\circ \gamma_{jk}=\gamma_{ik}.
+\]
+In the chosen trivializations this says $g_{ij}g_{jk}=g_{ik}$, so every
+$\alpha_{ijk}$ is trivial.  Hence $[\alpha]=0$, contrary to the assumption.
 \end{proof}
 
 \begin{remark}
-The point of the obstruction language is not to introduce a separate gerbe
-theory into the paper.  It is only to name the standard situation in which
-local sections exist and are pairwise compatible, but effective descent still
-fails.
+The comparison torsors are the bridge between the abstract set-valued readout
+presheaf and the abelian-group calculations of Section~5.  Once such a banded
+comparison datum has been fixed, the remaining statements of that section are
+elementary algebra attached to the defect family $(\alpha_{ijk})$.
 \end{remark}
 
 \section{Minimal Visible Quotients and Quantitative Recovery}
 
-Let $A$ be a finite abelian group, and let $[\alpha]$ be a gluing obstruction
+Let $A$ be a finite abelian group, and let $[\alpha]$ be a \v{C}ech defect
 class as above.  The visible content of the obstruction is determined by the
-subgroup generated by the actual triple-overlap defects.
+subgroup generated by the actual triple-overlap defects.  The next two results
+are elementary group-theoretic consequences of that datum.
 
-\begin{proposition}[Minimal visible quotient]
+\begin{lemma}[Minimal visible quotient]
 \label{prop:prefix-site-min-visible-quotient}
 Define
 \[
@@ -376,7 +523,7 @@ becomes trivial after passing to $\Avis$;
 for every nonempty triple overlap, then $\varphi$ factors uniquely through the
 quotient map $A\twoheadrightarrow \Avis$.
 \end{enumerate}
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
 Every generator $\alpha_{ijk}$ of $H_\alpha$ maps to zero in $\Avis$, so the
@@ -387,7 +534,7 @@ $H_\alpha\subseteq \ker\varphi$.  By the universal property of the quotient,
 $\varphi$ factors uniquely through $A/H_\alpha=\Avis$.
 \end{proof}
 
-\begin{theorem}[Register lower bound for full-resolution recovery]
+\begin{lemma}[Register lower bound for full-resolution recovery]
 \label{thm:prefix-site-register-lower-bound}
 Assume $A$ is finite.  Suppose one wishes to recover the full $A$-resolution
 from the visible quotient $\Avis$ by adjoining a finite register set $R$ in
@@ -400,7 +547,7 @@ Then
 \lvert R\rvert \ge \lvert H_\alpha\rvert.
 \]
 This bound is sharp: equality can be attained with $R=H_\alpha$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 Every fiber of the quotient map $A\twoheadrightarrow \Avis$ is a coset of
@@ -415,14 +562,26 @@ For sharpness, take $R:=H_\alpha$.  Choose a set-theoretic section
 $s:\Avis\to A$ of the quotient map.  Then every $a\in A$ can be written
 uniquely as
 \[
-a = s(\bar a)+h
+a = s(\bar a)h
 \qquad
 (\bar a\in\Avis,\ h\in H_\alpha),
 \]
 and the map $a\mapsto (\bar a,h)$ is injective.
 \end{proof}
 
-\begin{theorem}[Spectral definability occurs only on the visible quotient]
+\begin{definition}[Character-based spectral readout]
+\label{def:character-based-spectral-readout}
+Let $\chi\in \widehat A:=\Hom(A,\TT)$.  Applying $\chi$ to the comparison
+coordinates $g_{ij}$ of an $A$-banded comparison datum produces
+circle-valued multipliers $\chi(g_{ij})$ on the pair overlaps.  The resulting
+$\TT$-valued descent problem is called the \emph{character-based spectral
+readout} associated to $\chi$.  It is said to be \emph{spectrally definable} if
+the pushed-forward multipliers satisfy the \v{C}ech descent condition on triple
+overlaps, equivalently if the induced $\TT$-valued comparison datum descends to
+a well-defined global circle-valued object on the cover.
+\end{definition}
+
+\begin{proposition}[Spectral definability occurs only on the visible quotient]
 \label{thm:prefix-site-spectral-definability-avis}
 Let $\widehat A:=\Hom(A,\TT)$ be the Pontryagin dual, and define the
 annihilator
@@ -431,30 +590,64 @@ H_\alpha^\perp
 :=
 \{\chi\in \widehat A:\ \chi(h)=1\ \text{for all }h\in H_\alpha\}.
 \]
-Then $H_\alpha^\perp\cong \widehat{\Avis}$, and a character-based spectral
-readout descends to a well-defined global object if and only if the chosen
-character lies in $H_\alpha^\perp$.
-\end{theorem}
+Then $H_\alpha^\perp\cong \widehat{\Avis}$, and the character-based spectral
+readout of Definition~\ref{def:character-based-spectral-readout} is spectrally
+definable if and only if the chosen character lies in $H_\alpha^\perp$.
+\end{proposition}
 
 \begin{proof}
-The quotient map $A\twoheadrightarrow \Avis$ dualizes to an embedding
-$\widehat{\Avis}\hookrightarrow \widehat A$ with image exactly
-$H_\alpha^\perp$.
+Because $A$ is finite abelian, a character of $A$ factors through the quotient
+$A\twoheadrightarrow \Avis=A/H_\alpha$ if and only if it is trivial on
+$H_\alpha$.  This identifies $\widehat{\Avis}$ with the subgroup
+$H_\alpha^\perp\le \widehat A$.
 
-Now let $\chi\in\widehat A$.  On triple overlaps the obstruction contributes a
-multiplier $\chi(\alpha_{ijk})$.  If $\chi\notin H_\alpha^\perp$, then
-$\chi(\alpha_{ijk})\neq 1$ for some triple overlap, so the resulting spectral
-object depends on the choice of local trivialization and cannot descend to a
-global readout.  If $\chi\in H_\alpha^\perp$, all such multipliers are trivial,
-so the character factors through $\Avis$ and the spectral object is globally
-well defined.
+Now let $\chi\in\widehat A$.  The pushed-forward triple-overlap defect is
+$\chi(\alpha_{ijk})$.  The spectral readout is definable exactly when all of
+these defects are trivial, or equivalently when $\chi$ kills every generator of
+$H_\alpha$.  This is precisely the condition $\chi\in H_\alpha^\perp$.
 \end{proof}
+
+\begin{example}[Binary prefix cover with nontrivial defect subgroup]
+\label{ex:binary-prefix-site-defect-subgroup}
+Return to the binary prefix site of
+Example~\ref{ex:binary-prefix-site-failure-modes}, and let
+$a=\varepsilon$.  Consider the cylinder cover
+\[
+b_1=0,\qquad b_2=00,\qquad b_3=000,\qquad b_4=1.
+\]
+This is indeed a cylinder cover of $\varepsilon$ because
+$C_{b_1}\cup C_{b_4}=C_0\cup C_1=C_\varepsilon$.  Equip the site with the
+terminal presheaf $\Rpre(b)=\{*\}$ for every address $b$, with identity
+restrictions, and let $s_i=*$ be the unique local section on each $b_i$.
+The nested chain
+$C_{000}\subseteq C_{00}\subseteq C_0$
+provides a nonempty triple overlap for $(b_1,b_2,b_3)$.  Let
+$A=\ZZ/3\ZZ$, written additively, and fix an $A$-banded comparison datum whose comparison
+coordinates on $C_{000}$ satisfy
+\[
+g_{12}=1,\qquad g_{23}=1,\qquad g_{13}=0.
+\]
+Take all remaining comparison coordinates on nonempty overlaps to be $0$.  Then
+\[
+\alpha_{123}=g_{12}+g_{23}-g_{13}=2,
+\]
+so $H_\alpha=\langle 2\rangle=A$ and therefore $\Avis=0$.  By
+Lemma~\ref{thm:prefix-site-register-lower-bound}, every recovery register $R$
+must satisfy $\lvert R\rvert\ge 3$, and equality is attained by $R=A$.  This
+gives an explicit finite prefix-site example with nontrivial defect subgroup and
+sharp register bound.
+\end{example}
 
 \section{Dyadic Inverse Limits and Separatedness}
 
 \subsection{Stable Objects in the Dyadic Tower}
 
-\begin{theorem}[Dyadic inverse-limit stable objects]
+The next proposition records standard facts about inverse limits of finite
+discrete spaces and the Cantor intersection argument; see
+\cite{Johnstone1982StoneSpaces,RibesZalesskii2010ProfiniteGroups,
+Wilson1998ProfiniteGroups,Munkres2000Topology,Bourbaki1989GeneralTopology}.
+
+\begin{proposition}[Standard inverse-limit facts for dyadic towers]
 \label{thm:recursive-addressing-dyadic-inverse-limit-stable-object}
 Let $(\mathcal{A}_b,\pi_{b'\to b})_{b'\ge b\ge 0}$ be an inverse system of
 finite nonempty sets with surjective bonding maps
@@ -509,9 +702,9 @@ unique stable object
 x(a)\in \bigcap_{b\ge 0} F_b(a_b).
 \]
 \end{enumerate}
-\end{theorem}
+\end{proposition}
 
-\begin{proof}
+\begin{proof}[Proof sketch]
 For each $b\ge 0$, let
 \[
 E_b
@@ -524,7 +717,9 @@ E_b
 Because each $\mathcal{A}_j$ is finite and nonempty, the product
 $\prod_j \mathcal{A}_j$ is compact in the product topology, and each $E_b$ is
 closed.  Surjectivity of the bonding maps guarantees that every finite
-intersection $\bigcap_{r=0}^m E_r$ is nonempty, so compactness gives
+intersection $\bigcap_{r=0}^m E_r$ is nonempty: choose a compatible thread
+$a_0,\dots,a_m$ recursively through level $m$ using surjectivity, then choose
+arbitrary values in the remaining coordinates.  Compactness therefore gives
 $\Ainf=\bigcap_{b\ge 0} E_b\neq\varnothing$.
 
 The dyadic metric is the standard prefix ultrametric.  Compactness of $\Ainf$
@@ -551,66 +746,112 @@ d_Y(x,y)\le \diam(F_b(a_b))\le C2^{-b}
 which forces $x=y$ as $b\to\infty$.
 \end{proof}
 
+\begin{example}[Dyadic intervals]
+\label{ex:dyadic-intervals}
+Take $\mathcal{A}_b=\{0,1\}^b$ with the bonding maps that delete the last
+digit.  Let $Y=[0,1]$, and for
+$a_b=(\varepsilon_1,\dots,\varepsilon_b)\in\{0,1\}^b$ define
+\[
+F_b(a_b):=
+\left[
+\sum_{j=1}^b \varepsilon_j2^{-j},
+\sum_{j=1}^b \varepsilon_j2^{-j}+2^{-b}
+\right].
+\]
+Then $F_{b'}(a_{b'})\subseteq F_b(a_b)$ whenever
+$\pi_{b'\to b}(a_{b'})=a_b$, and
+$\diam(F_b(a_b))=2^{-b}$.  Theorem~\ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} therefore
+recovers the familiar fact that every compatible binary thread determines a
+unique point of $[0,1]$.
+\end{example}
+
 \subsection{Single-Valued Readout and Separatedness}
 
 Fix $a=(a_b)_{b\ge 0}\in \Ainf$ and write
 \[
 U_b(a):=\{a'\in\Ainf:\ a'_b=a_b\}.
 \]
-These sets form the dyadic neighborhood basis of $a$.  We identify each
-$U_b(a)$ with the finite address $a_b$, and therefore write
+These sets form the dyadic neighborhood basis of $a$.  If
+$c\in\mathcal{A}_n$ satisfies $\pi_{n\to b}(c)=a_b$, write
+\[
+U(c):=\{a'\in\Ainf:\ a'_n=c\}\subseteq U_b(a).
+\]
+A \emph{finite dyadic cylinder cover} of $U_b(a)$ is a finite family
+\[
+\{U(c_i)\to U_b(a)\}_{i=1}^r
+\]
+with $c_i\in\mathcal{A}_{n_i}$, $\pi_{n_i\to b}(c_i)=a_b$, and
+\[
+U_b(a)=\bigcup_{i=1}^r U(c_i).
+\]
+We identify each $U_b(a)$ with the finite address $a_b$ and each $U(c)$ with
+the finite address $c$, and therefore write
 \[
 \Rpre(U_b(a)):=\Rpre(a_b).
 \]
-The compatible readout threads at $a$ are collected in the inverse-limit fiber
-\[
-\Rpre_\infty(a)
-:=
-\varprojlim_b \Rpre(U_b(a)).
-\]
+Likewise, for such a cylinder $U(c)$ we write $\Rpre(U(c)):=\Rpre(c)$.
 
 \begin{theorem}[Separatedness criterion for single-valued readout]
 \label{thm:recursive-addressing-readout-separatedness-null}
 For a stable address $a\in\Ainf$, the following are equivalent.
 \begin{enumerate}[label=\textup{(\arabic*)}]
-\item Readout at $a$ is single-valued: whenever two compatible threads in
-$\Rpre_\infty(a)$ induce the same restrictions on every member of a finite
-dyadic cover of some neighborhood $U_b(a)$, the two threads are equal.
-\item The presheaf $\Rpre$ is separated at $a$: for every finite dyadic cover
+\item Readout at $a$ is single-valued: for every $b\ge 0$, every finite dyadic
+cylinder cover
 \[
-\{U_{b_i}(a)\to U_b(a)\}_{i=1}^r,
+\{U(c_i)\to U_b(a)\}_{i=1}^r,
 \]
-the map
+and every pair of sections $s,t\in \Rpre(U_b(a))$, if
 \[
-\Rpre(U_b(a))\longrightarrow \prod_{i=1}^r \Rpre(U_{b_i}(a))
+\rho_{a_b\leftarrow c_i}(s)=\rho_{a_b\leftarrow c_i}(t)
+\qquad
+(1\le i\le r),
 \]
-is injective on compatible families.
+then $s=t$.
+\item The presheaf $\Rpre$ is separated along the dyadic neighborhood basis of
+$a$: for every $b\ge 0$ and every finite dyadic cylinder cover
+\[
+\{U(c_i)\to U_b(a)\}_{i=1}^r,
+\]
+the canonical map
+\[
+\Rpre(U_b(a))\longrightarrow \prod_{i=1}^r \Rpre(U(c_i))
+\]
+is injective.
 \end{enumerate}
 
-Moreover, failure of single-valued readout at $a$ has three internal forms:
+Moreover, failure of a well-defined readout at $a$ has three internal forms:
 \begin{enumerate}[label=\textup{(\roman*)}]
 \item \emph{empty local fiber}: $\Rpre(U_b(a))=\varnothing$ for some sufficiently
 deep neighborhood;
-\item \emph{descent failure}: compatible local sections on a finite dyadic cover
-of some $U_b(a)$ do not glue to a section over $U_b(a)$;
+\item \emph{descent failure}: compatible local sections on a finite dyadic
+cylinder cover of some $U_b(a)$ do not glue to a section over $U_b(a)$;
 \item \emph{non-separatedness}: two distinct sections over some $U_b(a)$ have
-identical restrictions to a finite dyadic cover of $U_b(a)$.
+identical restrictions to a finite dyadic cylinder cover of $U_b(a)$.
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-The equivalence of \textup{(1)} and \textup{(2)} is exactly the usual
-separatedness condition, specialized to the dyadic neighborhood basis of the
-inverse-limit address.
+For fixed $b$ and a fixed finite dyadic cylinder cover
+$\{U(c_i)\to U_b(a)\}_{i=1}^r$, condition \textup{(1)} says exactly that the
+map
+\[
+\Rpre(U_b(a))\longrightarrow \prod_{i=1}^r \Rpre(U(c_i))
+\]
+sends no two distinct sections to the same tuple of restrictions.  That is the
+injectivity asserted in \textup{(2)}.  Thus \textup{(1)} and \textup{(2)} are
+identical formulations of separatedness along the dyadic neighborhood basis of
+$a$; compare \cite{MacLaneMoerdijk1992,Vistoli2008Grothendieck}.
 
-If some sufficiently deep neighborhood has empty fiber, then no readout thread
-through $a$ exists at all, so readout fails by absence of local data.  If local
-sections exist on a finite cover but do not glue, then the failure is one of
-effective descent.  Finally, if two distinct sections over $U_b(a)$ restrict to
-the same family on a finite cover, then finite observations do not distinguish
-them, so readout is not single-valued.  Conversely, any failure of single-valued
-readout must occur through one of these three mechanisms: no local object, no
-descent, or no separatedness.
+A well-defined readout at $a$ requires both the local existence condition
+$\Rpre(U_b(a))\neq\varnothing$ on sufficiently deep neighborhoods and the
+separatedness condition above.  If some sufficiently deep neighborhood has
+empty fiber, then readout fails by absence of local data.  If local sections
+exist on a finite dyadic cylinder cover but do not glue, then the failure is
+one of effective descent.  Finally, if two distinct sections over $U_b(a)$
+restrict to the same family on a finite dyadic cylinder cover, then finite
+observations do not distinguish them, so uniqueness fails.  Conversely, any
+failure of well-defined readout at $a$ must occur through one of these three
+mechanisms: no local object, no descent, or no separatedness.
 \end{proof}
 
 \section{Discussion}
@@ -620,24 +861,51 @@ The paper isolates one clean categorical chain:
 \begin{aligned}
 \text{recursive refinement of visible events}
 &\Longrightarrow \text{prefix site and readout presheaf} \\
-&\Longrightarrow \text{local-section and descent obstructions} \\
+&\Longrightarrow \text{local-section, descent, and separatedness obstructions} \\
 &\Longrightarrow \text{minimal visible quotient and register bound} \\
 &\Longrightarrow \text{inverse-limit stability and separatedness.}
 \end{aligned}
 \]
-This is the correct boundary for the categorical companion paper.  The opening
+This is the correct boundary for a categorical account of recursive addressing.
+The opening
 measurable proposition keeps the paper anchored to observable dynamics, but the
 main payoffs are site-theoretic and descent-theoretic.  In particular, the
 paper explains how recursive addressing can remain conservative at the level of
-visible $\sigma$-algebras while still exhibiting genuinely nontrivial internal
-obstruction theory.
+visible $\sigma$-algebras while still exhibiting nontrivial internal failure
+modes.
 
-Just as importantly, this is the right stopping point.  We do not retain the
-external interface terminology of the master manuscript, and we do not enlarge
-the paper with protocol semantics, gerbe packages, or unrelated dynamical
-machinery.  The contribution here is narrower and cleaner: recursive addressing
-as a prefix-site construction with explicit finite-level obstruction theory and
-a dyadic separatedness criterion at the inverse-limit level.
+From the categorical side, the prefix site is a finitary coverage in the sense
+of Johnstone, and the local-section, descent, and separatedness statements of
+Sections~4 and~6 are precisely the usual presheaf and sheaf conditions
+specialized to cylinder covers
+\cite{SGA4I,Johnstone2002Elephant,Vistoli2008Grothendieck}.  From the dynamical
+side, the basic geometry is the familiar symbolic-dynamical cylinder geometry
+of prefix codes and shift spaces
+\cite{WaltersErgodicTheory,LindMarcus1995SymbolicDynamics,
+Kitchens1998SymbolicDynamics}.  The inverse-limit step is likewise standard
+profinite compactness
+\cite{Johnstone1982StoneSpaces,RibesZalesskii2010ProfiniteGroups,
+Wilson1998ProfiniteGroups}.  The point of the paper is therefore not to claim
+new general theorems in these areas, but to isolate the recursive-addressing
+framework at the place where these standard tools meet.
+
+This also clarifies the present limitation.  The \v{C}ech defect of
+Sections~4.2 and~5 is not attached to an arbitrary set-valued presheaf
+$\Rpre$; it requires additional $A$-banded comparison data on a chosen finite
+cover.  Producing that banded datum functorially from a concrete readout
+semantics is the next mathematical step, and it would naturally lead toward
+stack-theoretic or gerbe-theoretic refinements.  Likewise, the register lower
+bound is elementary once the defect subgroup $H_\alpha$ has been identified, so
+the substantive problem is to compute $H_\alpha$ in examples where the prefix
+geometry forces nontrivial comparison defects.
+
+The examples in Sections~4--6 suggest two concrete directions.  The first is to
+classify recursive-addressing models that carry canonical banded comparison
+data.  The second is to determine which prefix-site geometries force empty
+fibers, descent failure, or non-separatedness in a way that does not collapse
+to generic presheaf pathology.  Those are the directions in which the present
+reorganization of standard machinery could develop into genuinely new
+categorical results.
 
 \bibliographystyle{alpha}
 \bibliography{references_local}

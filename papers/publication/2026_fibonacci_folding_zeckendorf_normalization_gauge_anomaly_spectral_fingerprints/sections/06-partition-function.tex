@@ -1,4 +1,4 @@
-\section{Weighted partition functions: a fourth-order minimal recurrence, Hankel rank, and Lee--Yang branching}
+\section{Weighted partition functions: a fourth-order minimal recurrence, Hankel rank, and discriminant factorization}
 \label{sec:partition}
 
 \subsection{Fold fibers and a weighted partition function}
@@ -14,30 +14,61 @@ and the associated generating function
 \[
 Z(t;y):=\sum_{m\ge 0} Z_m(y)\,t^m.
 \]
+Equivalently,
+\[
+Z_m(y)=\sum_{\omega\in\Om_m} y^{\abs{\Fold_m(\omega)}_1},
+\]
+so \(Z_m(y)\) is the moment generating polynomial of the output Hamming weight under the uniform measure on \(\Om_m\).
 
 \subsection{A fourth-order minimal recurrence and Hankel-rank collapse}
 \begin{theorem}[Fourth-order recurrence]\label{thm:recurrence}
-The sequence \((Z_m(y))_{m\ge 0}\) satisfies a linear recurrence of order \(4\). Equivalently, its generating function is rational with denominator
+The sequence \((Z_m(y))_{m\ge 0}\) satisfies
+\begin{equation}\label{eq:Zm-rec}
+Z_m(y)=Z_{m-1}(y)+(2y+1)Z_{m-2}(y)-Z_{m-3}(y)-y(y+1)Z_{m-4}(y)
+\qquad (m\ge 4),
+\end{equation}
+with initial values
+\[
+Z_0(y)=1,\qquad
+Z_1(y)=1+y,\qquad
+Z_2(y)=2+2y,\qquad
+Z_3(y)=2+5y+y^2.
+\]
+Equivalently, \(Z(t;y)\) is rational with denominator
 \begin{equation}\label{eq:Dty}
 D(t;y)=1-t-(2y+1)t^2+t^3+y(y+1)t^4.
 \end{equation}
-Equivalently, the minimal characteristic polynomial can be taken as
+Equivalently, the characteristic polynomial may be taken as
 \begin{equation}\label{eq:Pi}
 \Pi(\lambda,y)=\lambda^4-\lambda^3-(2y+1)\lambda^2+\lambda+y(y+1).
 \end{equation}
-For generic \(y\), the Hankel rank of \((Z_m(y))\) equals \(4\).
+The Hankel rank of \((Z_m(y))_{m\ge 0}\) equals \(4\) for all \(y\) outside the proper algebraic locus \(\{y\in\CC : D(t;y)\text{ has a factor cancelling with the numerator}\}\), which consists of at most finitely many values (namely the roots of the resultant of the numerator and denominator of \(Z(t;y)\) with respect to \(t\)). In particular, for all but finitely many real values of \(y\), the Hankel rank equals exactly \(4\).
 \end{theorem}
 
-\begin{remark}
-The recurrence and Hankel-rank statement can be derived from a finite-state transfer-matrix description of fold fibers. We outline a proof route in Appendix~\ref{app:recurrence}.
-\end{remark}
+\begin{proof}
+Appendix~\ref{app:recurrence} records the weighted transfer matrix
+\[
+M(y)=
+\begin{pmatrix}
+1&y&0&y\\
+0&0&1&0\\
+1&1+y&0&0\\
+1&0&0&0
+\end{pmatrix},
+\]
+obtained from the four boundary states of Appendix~\ref{app:pressure} by weighting each edge by \(y^{Y}\), where \(Y\in\{0,1\}\) is the emitted stable digit. The finite-word partition functions are linear functionals of \(M(y)^m\), so every scalar sequence extracted from this transfer-matrix system satisfies the characteristic recurrence of \(M(y)\). A direct determinant computation gives
+\[
+\det(\lambda I-M(y))=\Pi(\lambda,y),
+\]
+hence \eqref{eq:Zm-rec}. Summing the recurrence against \(t^m\) yields the denominator \eqref{eq:Dty}. The initial values are obtained by direct enumeration of \(\Om_m\) for \(m\le 3\). Finally, a rational generating function with denominator degree \(4\) has Hankel rank at most \(4\); outside the proper algebraic locus where cancellations occur, the rank is exactly \(4\).
+\end{proof}
 
-\subsection{Discriminant factorization and Lee--Yang type criticality}
+\subsection{Discriminant factorization and spectral degeneracy}
 The free energy (pressure)
 \[
 f(y):=\lim_{m\to\infty}\frac{1}{m}\log Z_m(y)
 \]
-is governed by the dominant root \(\lambda_\star(y)\) of \(\Pi(\lambda,y)\). Singularities arise at parameter values where this root ceases to be simple, i.e., where the discriminant vanishes.
+is governed by the dominant root \(\lambda_\star(y)\) of \(\Pi(\lambda,y)\), i.e., the root of largest modulus. Spectral degeneracies of \(\Pi\) arise at parameter values where the discriminant vanishes; whether such a degeneracy actually affects \(f(y)\) depends on whether the colliding roots are dominant.
 
 \begin{theorem}[Discriminant factorization]\label{thm:discriminant}
 The discriminant of \(\Pi(\lambda,y)\) with respect to \(\lambda\) factors as
@@ -45,23 +76,66 @@ The discriminant of \(\Pi(\lambda,y)\) with respect to \(\lambda\) factors as
 \Disc_{\lambda}\,\Pi(\lambda,y)
 =-y(y-1)\bigl(256y^3+411y^2+165y+32\bigr).
 \end{equation}
-The unique negative real root of the cubic factor,
+The cubic factor \(q(y):=256y^3+411y^2+165y+32\) has a unique negative real root
 \[
-y_{\mathrm{LY}}\approx -1.13445,
+y_{\mathrm{LY}}\approx -1.13445.
 \]
-is the nearest negative real branch point for \(f(y)\) (a Lee--Yang type critical point).
+At \(y=y_{\mathrm{LY}}\), the polynomial \(\Pi(\lambda,y_{\mathrm{LY}})\) has a repeated root.
 \end{theorem}
+
+\begin{proof}
+Appendix~\ref{app:recurrence} computes \(\Disc_\lambda \Pi(\lambda,y)\) explicitly and factors the result, giving \eqref{eq:disc}. Since \(q(-2)=-702<0\) and \(q(-1)=22>0\), the intermediate value theorem gives at least one root in \((-2,-1)\). The derivative is \(q'(y)=768y^2+822y+165\), whose real roots are
+\[
+y=\frac{-822\pm 411}{1536}\in\Bigl\{-\frac{411}{1536},\,-\frac{1233}{1536}\Bigr\}\approx\{-0.267,\,-0.803\}.
+\]
+Both roots lie in \((-1,0)\), so \(q'(y)>0\) for all \(y\le -1\). Hence \(q\) is strictly increasing on \((-\infty,-1]\), which means \(q\) has exactly one root in \((-2,-1)\), namely \(y_{\mathrm{LY}}\). The other discriminant zeros are \(y=0\) and \(y=1\). At each of these values, \(\Pi(\lambda,y)\) has a repeated root.
+\end{proof}
+
+\begin{remark}[Dominant-sheet status]\label{rem:dominant}
+The discriminant factorization identifies all parameter values where \(\Pi(\lambda,y)\) has repeated roots; it does not by itself determine whether those repeated roots are dominant. A repeated root of \(\Pi\) at \(y_{\mathrm{LY}}\) affects the pressure \(f(y)\) only if the colliding roots are the largest in modulus at that parameter value. Numerical root comparison at \(y=y_{\mathrm{LY}}\approx -1.13445\) shows that the repeated root of \(\Pi(\lambda,y_{\mathrm{LY}})\) is in fact subdominant: the dominant root at this parameter value is simple and has strictly larger modulus. Consequently, \(y_{\mathrm{LY}}\) is a spectral degeneracy point of \(\Pi\), but it does not produce a singularity of the dominant free energy \(f(y)\) on the negative real axis. The discriminant factorization remains a complete and correct algebraic description of when \(\Pi\) has a repeated root; the question of Lee--Yang type branch points in \(f(y)\) \cite{LeeYang1952} would require a separate dominant-sheet analysis.
+\end{remark}
 
 \subsection{Weight statistics under the fold pushforward}
 Let \(u_{\Om_m}\) be the uniform measure on \(\Om_m\), and let \(w_m:=\Fold_m\push u_{\Om_m}\) be its pushforward to \(X_m\). For \(X\sim w_m\), set \(H_m:=\abs{X}_1\).
 
-\begin{theorem}[LLN/CLT for \(\abs{X}_1\) under \(w_m\)]\label{thm:weight-stats}
+\begin{theorem}[LLN/CLT/LDP for \(\abs{X}_1\) under \(w_m\)]\label{thm:weight-stats}
 Under \(w_m\),
 \[
 \frac{H_m}{m}\xrightarrow{\ \PP\ }\frac{5}{18},
 \qquad
 \frac{H_m-\frac{5}{18}m}{\sqrt m}\Rightarrow \mathcal{N}\!\left(0,\frac{67}{972}\right).
 \]
-Moreover, \(\frac{H_m}{m}\) satisfies a large deviation principle with an explicit Legendre--Fenchel rate function.
+Moreover, \((H_m/m)_{m\ge1}\) satisfies a large deviation principle on \([0,1]\) with good rate function
+\[
+I(a):=\sup_{\theta\in\RR}\bigl(\theta a-\Lambda_Y(\theta)\bigr),
+\qquad
+\Lambda_Y(\theta):=\log \rho\!\bigl(M(e^\theta)\bigr)-\log 2,
+\]
+where \(\rho(\cdot)\) denotes the Perron root of the matrix from Theorem~\ref{thm:recurrence}.
 \end{theorem}
 
+\begin{proof}
+Since \(w_m=\Fold_m\push u_{\Om_m}\),
+\[
+\EE_{w_m}[e^{\theta H_m}]
+=
+2^{-m}\sum_{\omega\in\Om_m} e^{\theta\abs{\Fold_m(\omega)}_1}
+=
+2^{-m}Z_m(e^\theta).
+\]
+By Theorem~\ref{thm:recurrence}, the sequence \(Z_m(e^\theta)\) is governed by the transfer matrix \(M(e^\theta)\), so Perron--Frobenius theory gives the scaled cumulant generating function
+\[
+\lim_{m\to\infty}\frac{1}{m}\log \EE_{w_m}[e^{\theta H_m}]
+=
+\log \rho\!\bigl(M(e^\theta)\bigr)-\log 2
+=
+\Lambda_Y(\theta).
+\]
+The function \(\Lambda_Y\) is real-analytic near \(0\). Differentiating the Perron root at \(\theta=0\) (Appendix~\ref{app:recurrence}) gives
+\[
+\Lambda_Y'(0)=\frac{5}{18},
+\qquad
+\Lambda_Y''(0)=\frac{67}{972}.
+\]
+Therefore the convergence in probability and the central limit theorem follow from the usual analytic-perturbation argument for finite-state transfer matrices; see \cite[Chapter~4]{ParryPollicott1990} or \cite[Chapter~6]{Ruelle2004}. Since \(\Lambda_Y\) is finite on all of \(\RR\), the G\"artner--Ellis theorem yields the stated large deviation principle with rate function \(I\).
+\end{proof}

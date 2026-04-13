@@ -1,6 +1,17 @@
 \section{Analytic Obstructions}
 \label{sec:analytic}
 
+The two results in this section sit firmly within the classical
+tradition of P\'olya, Carlson, and Estermann
+\cite{Polya1923,Carlson1921,Estermann1928} and the determinant calculus
+of Artin and Mazur \cite{ArtinMazur1965}. They are included to round
+out the picture: the first shows that prime-supported generating
+functions cannot be meromorphically continued past the unit circle, and
+the second shows that the change of variables \(z=e^{-s}\) already
+separates Dirichlet series from finite-determinant models by a
+periodicity obstruction. Both proofs are elementary applications of the
+classical mechanisms.
+
 \begin{theorem}[Prime-supported Euler products have a natural boundary]
   \label{thm:euler-product-natural-boundary}
   Let \((b_n)_{n\ge 1}\subseteq\ZZ_{\ge 0}\) and assume that
@@ -13,39 +24,156 @@
 \end{theorem}
 
 \begin{proof}
-  If \(b_p>0\), then the factor \((1-z^p)^{-b_p}\) has poles at all
-  \(p\)th roots of unity. Since every other factor has non-negative
-  exponent, no cancellation can occur there. Thus every prime \(p\)
-  with \(b_p>0\) contributes poles at the \(p\)th roots of unity. These
-  roots are dense in the unit circle because the set of such primes is
-  infinite. A holomorphic continuation across any boundary arc would
-  therefore meet infinitely many poles, which is impossible. Hence
-  \(\abs{z}=1\) is a natural boundary.
+  Since every factor \((1-r^n)^{-b_n}\) is \(>1\) for \(0<r<1\), and
+  since \(b_p>0\) for at least one prime \(p\), one has
+  \(Z_b(r)\ge(1-r^p)^{-b_p}\to\infty\) as \(r\uparrow 1\). Thus the
+  power series of \(Z_b\) has radius of convergence exactly \(1\), and
+  all of its Taylor coefficients are non-negative integers.
+
+  Since \(Z_b(z)=\prod_{n\ge 1}(1-z^n)^{-b_n}\), taking logarithms
+  gives
+  \[
+    \log Z_b(z)=-\sum_{n\ge 1}b_n\log(1-z^n).
+  \]
+  For each \(m\), the coefficient of \(z^m\) in \(Z_b(z)\) depends only
+  on the finite product \(\prod_{n\le m}(1-z^n)^{-b_n}\). Each such
+  finite product has Taylor coefficients in \(\ZZ_{\ge 0}\) (the
+  coefficient of \(z^m\) counts partitions of \(m\) into parts of size
+  \(\le m\) with multiplicity weights \(b_n\)). Hence all Taylor
+  coefficients of \(Z_b\) lie in \(\ZZ_{\ge 0}\).
+
+  Fix \(0<r<1\). Since the Euler product converges at \(r^{1/2}\),
+  \[
+    \sum_{n\ge 1}b_n\bigl(-\log(1-r^{n/2})\bigr)<\infty.
+  \]
+  Because \(-\log(1-x)\ge x\) for \(0<x<1\), this implies
+  \(\sum_{n\ge 1}b_n r^{n/2}<\infty\). Moreover,
+  \(\sup_{n\ge 1}nr^{n/2}<\infty\), so
+  \[
+    \sum_{n\ge 1}nb_n r^n
+    \le\Bigl(\sup_{n\ge 1}nr^{n/2}\Bigr)\sum_{n\ge 1}b_n r^{n/2}
+    <\infty.
+  \]
+  Therefore \(\sum_{n\ge 1}nb_nz^n/(1-z^n)\) converges absolutely and
+  uniformly on \(\abs{z}\le r\), which justifies termwise logarithmic
+  differentiation:
+  \[
+    \frac{zZ_b'(z)}{Z_b(z)}
+    =\sum_{n\ge 1}\frac{n b_n z^n}{1-z^n}
+    =\sum_{m\ge 1} c_m z^m,
+  \]
+  where
+  \[
+    c_m:=\sum_{n\mid m} n b_n\in\ZZ_{\ge 0}.
+  \]
+  In particular, for every prime \(p\),
+  \[
+    c_p=c_1+p b_p.
+  \]
+
+  Suppose that \(Z_b\) admitted a holomorphic continuation across some
+  non-empty open arc of \(\abs{z}=1\). By the P\'olya--Carlson theorem
+  \cite{Polya1923,Carlson1921}, a power series with integer
+  coefficients and radius \(1\) that extends beyond the unit circle
+  must be rational. Hence \(Z_b\) is rational. Since \(Z_b(0)=1\) and
+  each partial Euler product is zero-free on \(\abs{z}<1\), Hurwitz's
+  theorem implies that \(Z_b\) is zero-free on \(\abs{z}<1\). Therefore
+  the logarithmic derivative
+  \[
+    R(z):=\frac{zZ_b'(z)}{Z_b(z)}=\sum_{m\ge 1} c_m z^m
+  \]
+  is rational and holomorphic on \(\abs{z}<1\).
+
+  Write the partial-fraction decomposition of \(R\) as
+  \[
+    R(z)=H(z)+\sum_{j=1}^J\frac{\alpha_j}{1-z/\rho_j},
+  \]
+  where \(H\) is a polynomial and \(\abs{\rho_j}\ge 1\), since \(R\)
+  has no poles in \(\abs{z}<1\). Because \(R\) is the logarithmic
+  derivative of a rational function, every pole is simple. Extracting
+  coefficients gives
+  \[
+    c_m
+    =\sum_{\abs{\rho_j}=1}\alpha_j\rho_j^{-m}+O(\theta^m)
+  \]
+  for some \(\theta\in(0,1)\). In particular, \((c_m)_{m\ge 1}\) is
+  bounded.
+
+  Since \(R\) is rational, the sequence \((c_m)\) satisfies a linear
+  recurrence after clearing the denominator of \(R\). Because the Taylor
+  coefficients \(c_m\) are integers and bounded, the state vectors
+  \[
+    (c_m,c_{m+1},\dots,c_{m+d-1})
+  \]
+  of any order-\(d\) recurrence take values in a finite set and evolve
+  deterministically. Hence \((c_m)\) is eventually periodic.
+
+  Eventual periodicity is incompatible with \(c_p=c_1+p b_p\) for
+  infinitely many primes \(p\) with \(b_p>0\), because the latter would
+  make \((c_p)\) unbounded along those primes. This contradiction shows
+  that \(Z_b\) cannot extend holomorphically across any non-empty arc of
+  \(\abs{z}=1\). The unit circle is therefore a natural boundary for
+  \(Z_b\).
 \end{proof}
 
-\begin{proposition}[Imaginary-periodicity rigidity of finite determinants]
+\begin{remark}
+  Theorem \ref{thm:euler-product-natural-boundary} is a
+  prime-supported instance of the classical rational-versus-natural
+  boundary mechanism for Euler products in the work of P\'olya, Carlson,
+  and Estermann \cite{Polya1923,Carlson1921,Estermann1928}.
+\end{remark}
+
+\begin{proposition}[Periodic determinant models after the change of variables \(z=e^{-s}\)]
   \label{prop:finite-zeta-imaginary-periodicity}
-  For every finite matrix \(M\), the function
+  Let \(A\) be the adjacency matrix of a shift of finite type \(X_A\).
+  Its Artin--Mazur zeta function is
   \[
-    F_M(s):=\det(I-e^{-s}M)^{-1}
+    \zeta_{X_A}(z)=\det(I-zA)^{-1}.
   \]
-  is \(2\pi i\)-periodic. In particular, the Riemann
-  \(\zeta\)-function cannot coincide with \(F_M\) on any open subset of
-  \(\Re(s)>1\).
+  Consequently \(\zeta_{X_A}(e^{-s})\) is \(2\pi i\)-periodic in \(s\).
+  More generally, let
+  \[
+    F(s)=\sum_{n\ge 1} a_n n^{-s}
+  \]
+  be a Dirichlet series with abscissa of convergence \(\sigma_c\). Assume
+  that there exists at least one index \(n\ge 2\) with \(a_n\neq 0\),
+  and let
+  \[
+    n_1:=\min\{n\ge 2:a_n\neq 0\}.
+  \]
+  Then \(F\) is not \(2\pi i\)-periodic on any right half-plane, and
+  therefore cannot agree with \(\zeta_{X_A}(e^{-s})\) on any non-empty
+  open subset of \(\Re(s)>\sigma_c\). In particular, the Riemann
+  \(\zeta\)-function cannot agree with \(\det(I-e^{-s}A)^{-1}\) on any
+  non-empty open subset of \(\Re(s)>1\).
 \end{proposition}
 
 \begin{proof}
-  The identity \(e^{-(s+2\pi i)}=e^{-s}\) implies
-  \(F_M(s+2\pi i)=F_M(s)\). On the other hand, for large real
-  \(\sigma>1\),
+  The determinant formula is classical for shifts of finite type; see
+  Artin and Mazur \cite{ArtinMazur1965} and
+  \cite[Chapter~6]{LindMarcus1995}. The identity
+  \(e^{-(s+2\pi i)}=e^{-s}\) then gives
+  \(\zeta_{X_A}(e^{-(s+2\pi i)})=\zeta_{X_A}(e^{-s})\).
+
+  For large real \(\sigma\),
   \[
-    \zeta(\sigma+2\pi i)-\zeta(\sigma)
-    =\sum_{n\ge 2}n^{-\sigma}(e^{-2\pi i\log n}-1).
+    F(\sigma+2\pi i)-F(\sigma)
+    =\sum_{n\ge 2}a_n n^{-\sigma}(e^{-2\pi i\log n}-1).
   \]
-  The \(n=2\) term has size comparable to \(2^{-\sigma}\), while the
-  tail is \(O(3^{-\sigma})\), so the difference is non-zero for
-  sufficiently large \(\sigma\). Hence \(\zeta(s)\) is not
-  \(2\pi i\)-periodic on \(\Re(s)>1\).
+  The dominant term as \(\sigma\to+\infty\) is
+  \[
+    a_{n_1}n_1^{-\sigma}(e^{-2\pi i\log n_1}-1)+O\!\bigl((n_1+1)^{-\sigma}\bigr).
+  \]
+  Since \(\log n_1\notin\ZZ\) (as \(n_1\ge 2\) is a positive integer),
+  the coefficient \(e^{-2\pi i\log n_1}-1\) is non-zero. Thus the
+  difference \(F(\sigma+2\pi i)-F(\sigma)\) is non-zero for all
+  sufficiently large \(\sigma\), so \(F\) is not \(2\pi i\)-periodic on
+  any right half-plane. By the identity theorem, \(F\) therefore cannot
+  agree on a non-empty open subset of \(\Re(s)>\sigma_c\) with the
+  \(2\pi i\)-periodic function \(\zeta_{X_A}(e^{-s})\). The Riemann
+  \(\zeta\)-function satisfies the hypothesis because \(a_n=1\neq 0\)
+  for all \(n\ge 2\), so taking \(F(s)=\zeta(s)\) with \(n_1=2\) gives
+  the final assertion.
 \end{proof}
 
 \begin{remark}

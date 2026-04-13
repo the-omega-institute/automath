@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      3.7
+// @version      4.4
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -23,6 +23,7 @@
   const MAX_WAIT = 7200000;       // 120 minutes
 
   let busy = false;
+  let active = GM_getValue("oracle_active", false); // starts PAUSED by default
 
   // ── Logging ──────────────────────────────────────────────────────────
   const logHistory = [];
@@ -32,6 +33,13 @@
     console.log(`[oracle] ${entry}`);
     logHistory.push(entry);
     if (logHistory.length > 20) logHistory.shift();
+    updatePanel();
+  }
+
+  function toggleActive() {
+    active = !active;
+    GM_setValue("oracle_active", active);
+    log(active ? "ACTIVATED — polling will start" : "PAUSED — your ChatGPT is free");
     updatePanel();
   }
 
@@ -53,8 +61,21 @@
 
   function updatePanel() {
     ensurePanel();
+    const statusColor = active ? (busy ? "#ff0" : "#0f0") : "#f55";
+    const statusText = active ? (busy ? "BUSY" : "ACTIVE") : "PAUSED";
+    const btnText = active ? "⏸ Pause" : "▶ Start";
+    const btnColor = active ? "#f55" : "#0f0";
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
-    panel.innerHTML = `<b>[Oracle Bridge v3.7]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
+    panel.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <b>[Oracle v4.4]</b>
+        <span style="color:${statusColor};font-weight:bold">${statusText}</span>
+        <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
+      </div>
+      <hr style="border-color:#333;margin:4px 0">
+      ${lines}`;
+    const btn = document.getElementById("oracle-toggle");
+    if (btn) btn.addEventListener("click", toggleActive);
   }
 
   // ── HTTP helpers ─────────────────────────────────────────────────────
@@ -497,13 +518,14 @@
     for (let i = 0; i < 60; i++) {
       const btn = findSendButton();
       if (btn && !btn.disabled) {
+        const tid = btn.getAttribute("data-testid");
+        const lbl = btn.getAttribute("aria-label");
+        log(`Send button found (testid=${tid}, label=${lbl}), clicking ONCE...`);
         btn.click();
-        await sleep(200);
-        btn.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
-        await sleep(200);
-        btn.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
-        btn.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
-        log(`Send button clicked (testid=${btn.getAttribute("data-testid")}, label=${btn.getAttribute("aria-label")})`);
+        // Do NOT dispatch additional click events — after btn.click() the
+        // send button morphs into stop-button. Any further click on the
+        // same DOM element would STOP the generation.
+        await sleep(500);
         return true;
       }
 
@@ -527,9 +549,7 @@
       disabledSend.removeAttribute("disabled");
       await sleep(100);
       disabledSend.click();
-      disabledSend.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
-      disabledSend.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
-      disabledSend.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
+      // Single click only — no extra dispatches (same stop-button risk)
       await sleep(500);
       // Check if it worked (prompt cleared or stop button appeared)
       const inp = findPromptInput();
@@ -594,6 +614,32 @@
     sentPromptText = text;
   }
 
+  function looksLikePromptEcho(text) {
+    // Detect when extractResponseText returns the USER's message instead of
+    // the assistant's response.  This happens when ChatGPT is still in
+    // extended-thinking mode and the only visible text is the prompt echo
+    // prefixed by "你说：" / "You said:".
+    if (!sentPromptText || sentPromptText.length < 20) return false;
+    const t = text.trim();
+    // 1) Starts with user-message indicator → always a prompt echo
+    if (/^(你说|You said)/i.test(t)) return true;
+    // 2) Strip UI chrome ("你说：", filename, "PDF") and check prompt match
+    const stripped = t
+      .replace(/^(你说|You said)[：:]?\s*/i, "")
+      .replace(/^main(\.pdf)?\s*/i, "")
+      .replace(/^PDF\s*/i, "")
+      .trim();
+    const promptStart = sentPromptText.slice(0, 80).trim();
+    if (stripped.length > 0 && stripped.startsWith(promptStart)) return true;
+    // 3) Short text with high prompt overlap (catches reformatted/truncated echo)
+    if (t.length < sentPromptText.length * 1.5 && t.length > 50) {
+      const chunks = sentPromptText.match(/.{20}/g) || [];
+      const hits = chunks.filter(c => t.includes(c)).length;
+      if (chunks.length > 0 && hits / chunks.length > 0.4) return true;
+    }
+    return false;
+  }
+
   function capturePostSendState() {
     const main = document.querySelector("main");
     const text = main ? (main.innerText || "").trim() : "";
@@ -603,39 +649,48 @@
 
   function extractResponseText() {
     // ═══ Strategy 0: Try to find the LAST assistant message directly ═══
-    // On the conversation page (chatgpt.com/c/xxx), messages are in article
-    // elements or divs with data-message-author-role or similar structure.
-    // The last assistant turn is what we want.
-    try {
-      // 2025-2026 ChatGPT: look for turn containers
-      const turns = document.querySelectorAll("[data-message-author-role='assistant']");
-      if (turns.length > 0) {
-        const lastTurn = turns[turns.length - 1];
-        const text = (lastTurn.innerText || "").trim();
-        if (text.length > 20) {
-          return text;
+    // ChatGPT DOM changes frequently. Try many selectors.
+    const s0Selectors = [
+      // 2024-2025 selectors
+      "[data-message-author-role='assistant']",
+      // 2025-2026 conversation turn containers
+      "[data-testid*='conversation-turn']",
+      // Article-based layout
+      "article",
+      // Div-based message containers
+      "div[class*='markdown']",
+      "div[class*='prose']",
+      "div.markdown",
+      // Message group containers
+      "[class*='agent-turn']",
+      "[class*='message']",
+    ];
+
+    for (const sel of s0Selectors) {
+      try {
+        const els = document.querySelectorAll(sel);
+        if (els.length === 0) continue;
+        // For turn/message selectors, take the LAST one (assistant response)
+        // For markdown/prose, take the last one that's long enough
+        for (let i = els.length - 1; i >= 0; i--) {
+          const el = els[i];
+          const text = (el.innerText || "").trim();
+          // Must be substantial and not just our prompt
+          if (text.length > 100) {
+            // Reject prompt echoes ("你说：..." or text matching the prompt)
+            if (looksLikePromptEcho(text)) continue;
+            // Legacy check (backup)
+            if (sentPromptText.length > 30) {
+              const promptStart = sentPromptText.slice(0, 40).trim();
+              if (text.startsWith(promptStart) && text.length < sentPromptText.length * 1.2) {
+                continue;
+              }
+            }
+            return text;
+          }
         }
-      }
-      // Alternative: article elements containing assistant responses
-      const articles = document.querySelectorAll("article");
-      if (articles.length >= 2) {
-        // Last article is typically the assistant response
-        const lastArticle = articles[articles.length - 1];
-        const text = (lastArticle.innerText || "").trim();
-        if (text.length > 20) {
-          return text;
-        }
-      }
-      // Alternative: div[data-testid*='conversation-turn'] — last even turn
-      const convTurns = document.querySelectorAll("[data-testid*='conversation-turn']");
-      if (convTurns.length >= 2) {
-        const lastTurn = convTurns[convTurns.length - 1];
-        const text = (lastTurn.innerText || "").trim();
-        if (text.length > 20) {
-          return text;
-        }
-      }
-    } catch {}
+      } catch {}
+    }
 
     // ═══ Fallback: grab all text from main, then post-process ═══
     const main = document.querySelector("main");
@@ -710,18 +765,19 @@
       if (/^Thought for \d+/.test(t)) return false;
       if (/^(你说|You said|ChatGPT\s*说|ChatGPT\s*said)[：:]?\s*$/.test(t)) return false;
       if (/^(正在思考|正在搜索|Searching)/.test(t)) return false;
-      // Remove PDF filename line
-      if (/^main\.pdf\s*$/.test(t)) return false;
+      // Remove PDF filename line and bare "main" artifacts
+      if (/^main(\.pdf)?\s*$/.test(t)) return false;
       if (/^PDF\s*$/.test(t)) return false;
       return true;
     }).join("\n").trim();
 
     // Step 4: Final check — don't return text that IS the prompt
     if (cleaned.length > 5) {
-      // Make sure we're not just returning the prompt itself
+      if (looksLikePromptEcho(cleaned)) return "";
+      // Legacy backup
       const promptStart = sentPromptText.slice(0, 40).trim();
       if (promptStart && cleaned.startsWith(promptStart) && cleaned.length < sentPromptText.length * 1.2) {
-        return ""; // This is just the prompt, not a response
+        return "";
       }
       return cleaned;
     }
@@ -762,15 +818,45 @@
       // Periodic status log (every 5 min)
       if (elapsed - lastLogTime >= 300) {
         lastLogTime = elapsed;
-        log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}`);
+        log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}, url=${window.location.href.slice(-30)}`);
+        // One-time DOM debug: log what selectors match
+        if (elapsed <= 300) {
+          const dbg = [];
+          for (const s of ["[data-message-author-role]", "article", "[data-testid*='conversation-turn']", "div[class*='markdown']", "div[class*='prose']", "[class*='agent-turn']"]) {
+            const n = document.querySelectorAll(s).length;
+            if (n > 0) dbg.push(`${s}:${n}`);
+          }
+          log(`DOM debug: ${dbg.join(", ") || "no matches"}`);
+        }
       }
 
       // Only count extracted text that's meaningful
       if (responseText.length >= 5) {
+        // CRITICAL: never accept a prompt echo as a response.
+        // This happens when ChatGPT is in extended thinking and only
+        // the user's message ("你说：...") is visible on the page.
+        if (looksLikePromptEcho(responseText)) {
+          if (stableCount === 0) {
+            log(`Prompt echo detected (${responseText.length} chars) — waiting for real response`);
+          }
+          stableCount = 0;
+          lastText = "";
+          continue;
+        }
+
         if (responseText === lastText) {
           stableCount++;
-          if (stableCount >= STABLE_CHECKS && !generating) {
-            log(`Response complete: ${responseText.length} chars (stable ${stableCount * STABLE_INTERVAL / 1000}s)`);
+          // Return when stable AND either not generating, or stable for long
+          // enough that "thinking" indicator is likely stale (ChatGPT 5.4
+          // keeps [class*='thinking'] present even after output completes).
+          // Short responses (<2000 chars) need more stability checks — ChatGPT 5.4
+          // often emits a brief "thinking" text before extended processing,
+          // which looks stable but is just the preamble to the real response.
+          const minChecks = responseText.length < 2000 ? STABLE_CHECKS * 3 : STABLE_CHECKS;
+          const stableEnough = stableCount >= minChecks && !generating;
+          const stableOverride = stableCount >= minChecks + 2;
+          if (stableEnough || stableOverride) {
+            log(`Response complete: ${responseText.length} chars (stable ${stableCount * STABLE_INTERVAL / 1000}s, gen=${generating})`);
             return responseText;
           }
         } else {
@@ -795,12 +881,22 @@
     updatePanel();
 
     try {
-      // ACK the task
+      // Navigate to a fresh chat page if we're not already on one.
+      // This prevents context buildup from prior conversations.
+      // PDF base64 data is re-fetched from the server after navigation.
+      if (!isOnNewChatPage()) {
+        log(`Not on fresh chat — navigating to chatgpt.com ...`);
+        GM_setValue("nav_task_id", task_id);
+        setTaskPhase("navigating");
+        busy = false;
+        updatePanel();
+        window.location.href = "https://chatgpt.com/";
+        return; // Script re-inits on new page, resumes from init()
+      }
+
+      // ACK the task (only after we're on the right page)
       try { await serverPost("/ack", { task_id }); } catch {}
 
-      // No navigation — work on whatever page we're on.
-      // Navigation destroys JS state (including PDF base64 data).
-      // If user is on an existing chat, the prompt still goes to the composer.
       setTaskPhase("processing");
 
       // Wait for prompt input to appear
@@ -915,7 +1011,7 @@
   // ── Main loop ────────────────────────────────────────────────────────
   async function pollLoop() {
     while (true) {
-      if (!busy) {
+      if (active && !busy) {
         try {
           const task = await serverGet("/task");
           if (task && task.task_id && task.status !== "idle") {
@@ -934,17 +1030,34 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log("Oracle Bridge v3.4 loaded");
+    log(`Oracle Bridge v4.4 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
-    // Check if we have a saved task from a page navigation
-    const savedTask = loadTaskState();
+    // Check if we navigated here to process a task on a fresh chat page
     const phase = getTaskPhase();
+    const navTaskId = GM_getValue("nav_task_id", "");
 
-    if (savedTask && phase === "navigating") {
-      log(`Resuming task after navigation: ${savedTask.task_id}`);
-      // We navigated to new chat page — now process the task
-      await sleep(3000); // Let page load
-      await processTask(savedTask);
+    if (phase === "navigating" && navTaskId) {
+      log(`Resuming after navigation for task: ${navTaskId}`);
+      GM_setValue("nav_task_id", "");
+      clearTaskState();
+      await sleep(3000); // Let fresh chat page fully load
+
+      // Re-fetch the full task (including PDF base64) from the server.
+      // The server keeps pending_task until a result is posted.
+      try {
+        const task = await serverGet("/task");
+        if (task && task.task_id && task.status !== "idle") {
+          log(`Re-fetched task: ${task.task_id} (prompt ${task.prompt?.length || 0} chars, pdf=${!!task.pdf_base64})`);
+          await processTask(task);
+        } else {
+          log("WARNING: server returned no pending task after navigation");
+        }
+      } catch (e) {
+        log(`Failed to re-fetch task after navigation: ${e.message}`);
+      }
+    } else if (phase === "navigating") {
+      // Stale navigating state without task_id — clear it
+      clearTaskState();
     }
 
     // Start polling

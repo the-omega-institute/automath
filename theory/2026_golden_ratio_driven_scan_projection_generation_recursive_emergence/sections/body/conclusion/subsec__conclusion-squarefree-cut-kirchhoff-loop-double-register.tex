@@ -1,0 +1,233 @@
+\subsection{平方自由极小割、Kirchhoff 行列式与回路格广延的双寄存器分裂}\label{subsec:conclusion-squarefree-cut-kirchhoff-loop-double-register}
+沿用边界邻接多图 \(B_f\)（定义 \ref{def:hypercube-boundary-multigraph}）、平方自由 Gödel--Ryu--Takayanagi 功能以及回路格 \(\Lambda(G)\) 的记号。此前结果已经分别给出：平方自由权下极小割的支撑唯一性与层状保序嵌套，Kirchhoff 余子式的基本割容量上界及其 Hadamard 等号判据，以及回路格球截断对生成树行列式的对数扣除项。把这三条接口合并之后，可把 boundary-holographic 资源进一步裂分为两个不可混淆的层次：区域型的 laminar cut 层与回路型的 determinant 层。
+
+\begin{theorem}[平方自由 RT 极小割的层状规范化]\label{thm:conclusion-squarefree-cut-layered-normalization}
+沿用定理 \ref{thm:conclusion-squarefree-rt-laminar-nesting} 的记号。对任意层状边界族
+\[
+\mathcal L\subseteq 2^{\partial V(\Gamma_m)},
+\]
+存在一族极小解
+\[
+\{S_A^\ast\}_{A\in\mathcal L}
+\]
+满足
+\[
+A\subseteq B \Longrightarrow S_A^\ast\subseteq S_B^\ast,
+\]
+并且每个 \(S_A^\ast\) 的割边支撑 \(\delta(S_A^\ast)\) 在边集层面是规范的。
+换言之，平方自由 RT 极小割在层状数据上可被 rigidify 为一条与包含偏序相容的 laminar skeleton。
+\end{theorem}
+
+\begin{proof}
+这正是定理 \ref{thm:conclusion-squarefree-rt-laminar-nesting} 的直接内容。
+其中支撑规范性来自定理 \ref{thm:spg-godel-rt-mincut-uniqueness-ssa} 的平方自由极小割唯一性，而保序嵌套来自交并运算保持极小性的递归构造。
+\end{proof}
+
+\begin{theorem}[Kirchhoff 上界的 Hadamard 刚性判据]\label{thm:conclusion-kirchhoff-hadamard-equality-criterion}
+设 \(G=(V,E)\) 为有限连通图，取正权 \(w_e>0\)，并令
+\[
+L_w:=B\,\mathrm{diag}(w)\,B^\top
+\]
+为加权 Laplacian。
+固定任意生成树 \(T\subseteq E\)，取约化关联矩阵 \(B_r\)，并记
+\[
+C:=(B_{r,T})^{-1}B_r.
+\]
+若 \(r_t\) 表示矩阵 \(C\) 的第 \(t\) 行，且
+\[
+c_t:=\sum_{e\in E}w_e\,r_t(e)^2=\sum_{e\in\delta_t}w_e
+\]
+为对应基本割 \(\delta_t\) 的容量，则
+\[
+\tau_w(G):=\det(L_w^\ast)\le \prod_{t\in T}c_t.
+\]
+更强地，若定义加权基本割向量
+\[
+u_t:=\bigl(\sqrt{w_e}\,r_t(e)\bigr)_{e\in E}\in\RR^E,
+\]
+则
+\[
+\tau_w(G)=\prod_{t\in T}c_t
+\iff
+\langle u_t,u_s\rangle=0\qquad (t\neq s).
+\]
+亦即，Kirchhoff 余子式被 treewise 基本割容量完全决定，当且仅当相应加权基本割向量满足 Hadamard 等号的正交刚性。
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:spg-kirchhoff-fundamental-cut-capacity-hadamard} 与定理 \ref{thm:conclusion-fundamental-cut-hadamard-rigidity}，
+\[
+\tau_w(G)=\det\!\bigl(C\,\mathrm{diag}(w)\,C^\top\bigr)\le \prod_{t\in T}c_t.
+\]
+记
+\[
+U:=C\,\mathrm{diag}(\sqrt{w}),
+\]
+则 \(UU^\top=C\,\mathrm{diag}(w)\,C^\top\)，且 \(U\) 的第 \(t\) 行正是 \(u_t\)。
+Hadamard 不等式给出
+\[
+\det(UU^\top)\le \prod_{t\in T}\|u_t\|_2^2=\prod_{t\in T}c_t,
+\]
+并且取等当且仅当这些行向量两两正交。
+\end{proof}
+
+\begin{theorem}[边界 \(1\)-形式计数的 cut--determinant 二项分解]\label{thm:conclusion-boundary-1form-cut-determinant-splitting}
+设 \(B_f\) 为有限连通的边界邻接多图，\(\delta\in\operatorname{im}\partial\subset C_0(B_f;\ZZ)\) 为固定散度数据，并以 \(w_e>0\) 计能。记
+\[
+r_f:=\rank_{\ZZ}H_1(B_f;\ZZ)=\rank_{\ZZ}H^1(B_f;\ZZ).
+\]
+对任意生成树 \(T\subseteq E(B_f)\)，定义导通型基本割容量
+\[
+C_t:=\sum_{e\in\delta_t}\frac1{w_e}
+\]
+及树相关的 determinant bonus
+\[
+\mathfrak B_T:=
+\frac12\left(\sum_{t\in T}\log C_t-\log\tau_{1/w}(B_f)\right)\ge 0.
+\]
+则能量阈值内的可兼容边界整数 \(1\)-形式数
+\[
+N_{\delta,w}(E):=
+\#\{\varphi\in C_1(B_f;\ZZ):\ \partial\varphi=\delta,\ \mathcal E_w(\varphi)\le E\}
+\]
+满足渐近分解
+\[
+\log N_{\delta,w}(E)
+=
+\frac{r_f}{2}\log E
+-\frac12\sum_{e\in E(B_f)}\log w_e
+-\frac12\sum_{t\in T}\log C_t
++\mathfrak B_T
++o(1).
+\]
+并且
+\[
+\mathfrak B_T=0
+\iff
+\text{以导通权 }1/w_e\text{ 加权的基本割向量两两正交}.
+\]
+因此，边界计数的常数项天然裂分为 treewise cut 容量项与不可消去的 Kirchhoff determinant bonus；除 Hadamard 正交极端外，后者始终严格为正。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:graph-energy-shell-lattice-counting} 应用于图 \(G=B_f\)，存在正定矩阵 \(A\) 使
+\[
+N_{\delta,w}(E)=\frac{\operatorname{Vol}(B_{r_f})}{\sqrt{\det A}}\,E^{r_f/2}+O(E^{(r_f-1)/2}).
+\]
+故
+\[
+\log N_{\delta,w}(E)
+=
+\frac{r_f}{2}\log E-\frac12\log\det A+o(1).
+\]
+再由定理 \ref{thm:graph-cycle-lattice-weighted-discriminant}，
+\[
+\det A=\Bigl(\prod_{e\in E(B_f)}w_e\Bigr)\tau_{1/w}(B_f),
+\]
+于是
+\[
+\log N_{\delta,w}(E)
+=
+\frac{r_f}{2}\log E
+-\frac12\sum_{e\in E(B_f)}\log w_e
+-\frac12\log\tau_{1/w}(B_f)
++o(1).
+\]
+对导通权 \(1/w_e\) 应用定理 \ref{thm:conclusion-kirchhoff-hadamard-equality-criterion}，得到
+\[
+\tau_{1/w}(B_f)\le \prod_{t\in T}C_t.
+\]
+将其改写为
+\[
+-\frac12\log\tau_{1/w}(B_f)
+=
+-\frac12\sum_{t\in T}\log C_t+\mathfrak B_T,
+\qquad
+\mathfrak B_T\ge 0,
+\]
+便得所示分解。
+等号判据同样来自定理 \ref{thm:conclusion-kirchhoff-hadamard-equality-criterion} 在权重 \(1/w_e\) 下的 Hadamard 正交条件。
+\end{proof}
+
+\begin{theorem}[回路格外置规模的行列式广延性]\label{thm:conclusion-cycle-lattice-determinant-extensivity}
+设 \(\Lambda(G)\subset \RR^{E(G)}\) 为有限连通图 \(G\) 的回路格，秩为 \(r\)，生成树个数为 \(\tau(G)\)。
+对整数 \(m\ge 1\) 定义正交直和格
+\[
+\Lambda(G)^{\oplus m}:=\Lambda(G)\oplus\cdots\oplus\Lambda(G).
+\]
+则球截断满足
+\[
+\log\bigl|\Lambda(G)^{\oplus m}(R)\bigr|
+=
+mr\log R-\frac{m}{2}\log\tau(G)+O(1),
+\qquad
+R\to\infty,
+\]
+并且同一对数主项对任意仿射陪集 \(h_0+\Lambda(G)^{\oplus m}\) 的球截断计数保持不变。
+因此，Kirchhoff 行列式修正对独立并行叠加是严格可加的；它不是区域并合意义下的 RT 型量，而是 loop-torsion 方向上的广延量。
+\end{theorem}
+
+\begin{proof}
+这正是推论 \ref{cor:hypercube-cycle-lattice-directsum-counting} 的直接内容。
+其中协体积乘法性给出
+\[
+\operatorname{covol}\bigl(\Lambda(G)^{\oplus m}\bigr)=\tau(G)^{m/2},
+\]
+从而对数扣除项严格线性增长为 \(-\frac{m}{2}\log\tau(G)\)。
+\end{proof}
+
+\begin{corollary}[treewise cut 代理对 determinant 层的系统性漏记]\label{cor:conclusion-treewise-cut-proxy-misses-determinant-layer}
+在定理 \ref{thm:conclusion-boundary-1form-cut-determinant-splitting} 的设定下，定义 treewise cut 代理
+\[
+\mathcal A_T(E):=
+\frac{r_f}{2}\log E
+-\frac12\sum_{e\in E(B_f)}\log w_e
+-\frac12\sum_{t\in T}\log C_t.
+\]
+则有
+\[
+\log N_{\delta,w}(E)=\mathcal A_T(E)+\mathfrak B_T+o(1).
+\]
+若对应导通权 \(1/w_e\) 下的基本割向量不两两正交，则 \(\mathfrak B_T>0\)，从而对充分大 \(E\) 有
+\[
+\log N_{\delta,w}(E)>\mathcal A_T(E).
+\]
+因此，任何只以 treewise cut 容量 \(\{C_t\}_{t\in T}\) 作为代理的 RT 型标量资源，在 generic 情形下都必系统性漏记一个严格正的 determinant 层。
+\end{corollary}
+
+\begin{proof}
+第一式是定理 \ref{thm:conclusion-boundary-1form-cut-determinant-splitting} 的重写。
+若基本割向量不两两正交，则由同一定理可知 \(\mathfrak B_T>0\)。
+于是
+\[
+\log N_{\delta,w}(E)-\mathcal A_T(E)=\mathfrak B_T+o(1),
+\]
+故当 \(E\) 充分大时右端为正，得到严格不等式。
+\end{proof}
+
+\begin{conjecture}[faithful \texorpdfstring{$\pi$}{pi}-formula 的 cut/determinant 双寄存器下界]\label{conj:conclusion-faithful-pi-formula-cut-determinant-two-register}
+任何若要在本文的 boundary-holographic 口径下 faithful 地承载 \(\pi\)-通道的公式，都不应只携带单一边界成本寄存器，而至少应同时外置两类彼此正交的寄存器
+\[
+\mathfrak R_{\mathrm{cut}}
+\qquad\text{与}\qquad
+\mathfrak R_{\mathrm{det}}.
+\]
+其中
+\[
+\mathfrak R_{\mathrm{cut}}
+\]
+负责定理 \ref{thm:conclusion-squarefree-cut-layered-normalization} 的平方自由极小割 laminar skeleton 及其区域型次模律；
+\[
+\mathfrak R_{\mathrm{det}}
+\]
+负责定理 \ref{thm:conclusion-boundary-1form-cut-determinant-splitting} 与定理 \ref{thm:conclusion-cycle-lattice-determinant-extensivity} 所揭示的 Kirchhoff determinant bonus 及其回路格广延性。
+只有在定理 \ref{thm:conclusion-kirchhoff-hadamard-equality-criterion} 的 Hadamard 正交极端中，这两层才可能偶然塌缩为单层。
+\end{conjecture}
+
+\begin{remark}[统一读法]\label{rem:conclusion-squarefree-cut-kirchhoff-loop-double-register}
+定理 \ref{thm:conclusion-squarefree-cut-layered-normalization} 表明，平方自由 RT 层是 laminar、区域型且 obey 包含偏序的；
+定理 \ref{thm:conclusion-boundary-1form-cut-determinant-splitting} 与定理 \ref{thm:conclusion-cycle-lattice-determinant-extensivity} 则表明，Kirchhoff 行列式层是回路型、广延型且在独立直和下严格可加的。
+因此，这两层并不是同一“面积律”的不同近似，而是必须分寄存器处理的两种边界资源。
+\end{remark}
+
+\endinput

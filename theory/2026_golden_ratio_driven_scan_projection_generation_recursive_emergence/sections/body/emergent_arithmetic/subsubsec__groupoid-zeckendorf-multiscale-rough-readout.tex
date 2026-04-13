@@ -1,0 +1,251 @@
+\subsubsection{多尺度粗糙读出：连续极限与不可导可见量}\label{subsubsec:groupoid-zeckendorf-multiscale-rough-readout}
+
+注 \ref{rem:residual} 已将残差解释为值纤维到规范横截面之间仍需外置承载的自由度；命题 \ref{prop:fold-renyi-collision-identity} 及附录 \ref{subsubsec:fold-fiber-groundstate-freezing-oracle-capacity} 则把 \(d_m(x)\)、\(S_q(m)\) 与预言机容量 \(\mathcal C_m(B)\) 固定为可审计的纤维尺度。本段讨论与之互补的一条读出链：若这些残差自由度不完全停留在独立账本中，而是沿分辨率层级以确定性方式重新注入可见读出，则可见层已经足以出现连续但不可导的几何。由此，不可微性不再需要被解释为本体随机，而可被解释为多尺度确定性读出的结果。
+
+\begin{definition}[残差相容的多尺度可见读出]\label{def:groupoid-zeckendorf-multiscale-rough-readout}
+令
+\[
+\Omega_\infty:=\{0,1\}^{\NN},
+\qquad
+\tau_{\infty\to m}:\Omega_\infty\to \Omega_m
+\]
+为取前 \(m\) 位前缀的截断映射。对每个 \(m\ge 1\) 与 \(x\in X_m\)，固定一个纤维编号
+\[
+\iota_{m,x}:\Fold_m^{-1}(x)\xrightarrow{\sim}\{1,\dots,d_m(x)\}.
+\]
+记
+\[
+D_m:=\max_{x\in X_m}d_m(x),
+\qquad
+r_m(\omega):=
+\iota_{m,\Fold_m(\tau_{\infty\to m}(\omega))}
+\bigl(\tau_{\infty\to m}(\omega)\bigr)
+\in \{1,\dots,d_m(\Fold_m(\tau_{\infty\to m}(\omega)))\}.
+\]
+
+再取一列振幅 \(a_m>0\)、频率 \(\lambda_m>0\)、连续轮廓 \(\psi_m:\RR/2\ZZ\to\RR\) 及相位映射
+\[
+\Theta_m:\{1,\dots,D_m\}\to \RR/2\ZZ.
+\]
+若
+\[
+\sum_{m\ge 1} a_m\|\psi_m\|_\infty<\infty,
+\]
+则定义第 \(M\) 阶截断读出
+\[
+Y_\omega^{(\le M)}(t):=
+\sum_{m=1}^{M}
+a_m\,
+\psi_m\!\bigl(\lambda_m t+\Theta_m(r_m(\omega))\bigr),
+\qquad t\in\RR,
+\]
+并把一致极限
+\[
+Y_\omega(t):=\lim_{M\to\infty}Y_\omega^{(\le M)}(t)
+\]
+称为由 Fold--fiber 残差诱导的多尺度可见量；上述按 \(r_m(\omega)\) 因子化的层级读出即称为残差相容。
+\end{definition}
+
+\begin{proposition}[连续极限的存在]\label{prop:groupoid-zeckendorf-multiscale-rough-readout-continuity}
+在定义 \ref{def:groupoid-zeckendorf-multiscale-rough-readout} 的假设下，对每个 \(\omega\in\Omega_\infty\)，级数
+\[
+\sum_{m\ge 1}
+a_m\,
+\psi_m\!\bigl(\lambda_m t+\Theta_m(r_m(\omega))\bigr)
+\]
+在 \(\RR\) 上一致收敛，从而 \(Y_\omega\) 为连续函数。
+\end{proposition}
+\begin{proof}
+对任意 \(t\in\RR\) 与 \(m\ge 1\)，有
+\[
+\left|
+a_m\,
+\psi_m\!\bigl(\lambda_m t+\Theta_m(r_m(\omega))\bigr)
+\right|
+\le
+a_m\|\psi_m\|_\infty.
+\]
+由假设 \(\sum_{m\ge 1} a_m\|\psi_m\|_\infty<\infty\)，Weierstrass 判别法给出一致收敛。连续函数级数的一致极限仍连续，故 \(Y_\omega\) 连续。证毕。
+\end{proof}
+
+\begin{definition}[局部振荡、点态 H\"older 指数与 \(p\)-variation]\label{def:groupoid-zeckendorf-visible-roughness-certificates}
+设 \(Y:I\to\RR\) 为连续函数，\(t\in I\) 为内点。
+\begin{enumerate}
+  \item 对 \(\delta>0\)，定义局部振荡
+  \[
+  \operatorname{osc}(Y;t,\delta):=
+  \sup_{|s-t|\le \delta}Y(s)-\inf_{|s-t|\le \delta}Y(s).
+  \]
+  \item 定义 \(Y\) 在 \(t\) 的点态 H\"older 指数为
+  \[
+  h_Y(t):=
+  \sup\Bigl\{
+  \alpha>0:\ \exists C,\delta_0>0,\ 
+  |Y(s)-Y(t)|\le C|s-t|^\alpha
+  \ \forall |s-t|\le \delta_0
+  \Bigr\}.
+  \]
+  \item 对闭区间 \(J=[u,v]\subset I\) 与 \(p>0\)，定义 \(p\)-variation
+  \[
+  V_p(Y;J):=
+  \sup_{\Pi}
+  \sum_{j=1}^{n}
+  |Y(t_j)-Y(t_{j-1})|^p,
+  \]
+  其中上确界取遍 \(J\) 的一切有限分割
+  \(
+  \Pi:u=t_0<t_1<\cdots<t_n=v
+  \)。
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[局部 H\"older 阈值与可导性的必要条件]\label{prop:groupoid-zeckendorf-visible-holder-nondifferentiability}
+若连续函数 \(Y\) 在内点 \(t\) 可导，则
+\[
+\operatorname{osc}(Y;t,\delta)=O(\delta)
+\qquad (\delta\downarrow 0),
+\]
+并且 \(h_Y(t)\ge 1\)。特别地，若存在 \(\alpha<1\)、常数 \(c>0\) 与 \(\delta_n\downarrow 0\) 使
+\[
+\operatorname{osc}(Y;t,\delta_n)\ge c\,\delta_n^\alpha,
+\]
+则 \(Y\) 在 \(t\) 不可导。
+\end{proposition}
+\begin{proof}
+若 \(Y\) 在 \(t\) 可导，则
+\[
+Y(s)-Y(t)=Y'(t)(s-t)+o(|s-t|)
+\qquad (s\to t).
+\]
+因此存在常数 \(C,\delta_0>0\) 使
+\[
+|Y(s)-Y(t)|\le C|s-t|
+\qquad (|s-t|\le \delta_0).
+\]
+于是
+\[
+\operatorname{osc}(Y;t,\delta)
+\le
+2\sup_{|s-t|\le \delta}|Y(s)-Y(t)|
+\le 2C\delta
+\qquad (0<\delta\le \delta_0),
+\]
+并由点态 H\"older 指数的定义得到 \(h_Y(t)\ge 1\)。
+
+反过来，若存在 \(\alpha<1\) 与序列 \(\delta_n\downarrow 0\) 使
+\(
+\operatorname{osc}(Y;t,\delta_n)\ge c\,\delta_n^\alpha
+\),
+则
+\[
+\frac{\operatorname{osc}(Y;t,\delta_n)}{\delta_n}
+\ge
+c\,\delta_n^{\alpha-1}\xrightarrow[n\to\infty]{}\infty.
+\]
+这与可导时 \(\operatorname{osc}(Y;t,\delta)=O(\delta)\) 矛盾，故 \(Y\) 在 \(t\) 不可导。证毕。
+\end{proof}
+
+\begin{proposition}[平滑投影的不可导边界]\label{prop:groupoid-zeckendorf-smooth-projection-nogo}
+设 \(M\) 为有限维 \(C^1\) 流形，\(\gamma:I\to M\) 为 \(C^1\) 轨道，\(O:M\to\RR\) 为 \(C^1\) 读出。则
+\[
+Y(t):=O(\gamma(t))
+\]
+仍为 \(C^1\) 函数。特别地，有限维平滑隐藏轨道经平滑读出不会自动生成处处不可导的可见量。
+\end{proposition}
+\begin{proof}
+由链式法则，
+\[
+Y'(t)=DO_{\gamma(t)}\bigl(\gamma'(t)\bigr),
+\]
+右端关于 \(t\) 连续，故 \(Y\in C^1(I)\)。证毕。
+\end{proof}
+
+\begin{remark}[粗糙可见量的来源边界]\label{rem:groupoid-zeckendorf-smooth-projection-boundary}
+命题 \ref{prop:groupoid-zeckendorf-smooth-projection-nogo} 表明，“高维到低维的普通投影”不足以解释处处不可导的可见曲线。若粗糙性确实出现，则其来源至少应包含下列机制之一：无限层级的相位再注入、多尺度频率放大、粗粒化极限，或非有限维状态空间中的确定性动力学。Fold--fiber 口径自然对应前两类机制，因为残差标签本身就是沿分辨率层级组织的。
+\end{remark}
+
+\begin{theorem}[确定性多尺度读出的不可导实现]\label{thm:groupoid-zeckendorf-deterministic-rough-visible-quantity}
+取奇整数 \(b\ge 3\) 与常数 \(a\in(0,1)\)，满足
+\[
+ab>1+\frac{3\pi}{2}.
+\]
+令
+\[
+M:=(\RR/2\ZZ)^{\NN},
+\qquad
+\Phi_t\bigl((\theta_m)_{m\ge 1}\bigr):=
+(\theta_m+b^m t)_{m\ge 1},
+\]
+并定义读出
+\[
+O\bigl((\theta_m)_{m\ge 1}\bigr):=
+\sum_{m\ge 1} a^m\cos(\pi\theta_m).
+\]
+则 \(O\) 在 \(M\) 上定义良好且连续；对基点 \(0=(0,0,\dots)\in M\)，对应的可见量
+\[
+Y(t):=O(\Phi_t(0))
+=
+\sum_{m\ge 1} a^m\cos(\pi b^m t)
+\]
+连续且处处不可导。特别地，确定性动力学配合多尺度读出已足以产生连续但不可导的可见层。
+\end{theorem}
+\begin{proof}
+对任意 \((\theta_m)_{m\ge 1}\in M\)，有
+\[
+\left|a^m\cos(\pi\theta_m)\right|\le a^m,
+\qquad
+\sum_{m\ge 1} a^m<\infty.
+\]
+故 \(O\) 由连续函数级数一致收敛定义，因而连续。于是 \(Y(t)=O(\Phi_t(0))\) 连续。
+
+另一方面，令 \(\psi_m=\cos(\pi\cdot)\)、\(\lambda_m=b^m\)、\(\Theta_m\equiv 0\)，则 \(Y\) 正是定义 \ref{def:groupoid-zeckendorf-multiscale-rough-readout} 中残差相容读出的特例。其处处不可导性由经典 Weierstrass--Hardy 判据给出：当 \(b\) 为奇整数且 \(ab>1+\frac{3\pi}{2}\) 时，级数
+\[
+\sum_{m\ge 1} a^m\cos(\pi b^m t)
+\]
+连续且处处不可导。证毕。
+\end{proof}
+
+\begin{proposition}[网格差商的指数发散证书]\label{prop:groupoid-zeckendorf-rough-visible-difference-quotient-certificate}
+在定理 \ref{thm:groupoid-zeckendorf-deterministic-rough-visible-quantity} 的设定下，令
+\[
+h_M:=b^{-M}\qquad (M\ge 1).
+\]
+则
+\[
+\left|
+\frac{Y(h_M)-Y(0)}{h_M}
+\right|
+\ge
+\frac{2a}{1-a}(ab)^{M-1}.
+\]
+因此沿网格 \(h_M=b^{-M}\) 的差商绝对值至少以 \((ab)^M\) 的指数尺度发散；这给出一个有限分辨率可复核的粗糙证书。
+\end{proposition}
+\begin{proof}
+由定义，
+\[
+\frac{Y(h_M)-Y(0)}{h_M}
+=
+b^M\sum_{m\ge 1} a^m\bigl(\cos(\pi b^{m-M})-1\bigr).
+\]
+当 \(m\ge M\) 时，\(b^{m-M}\) 为奇整数，故
+\[
+\cos(\pi b^{m-M})-1=-2.
+\]
+当 \(m<M\) 时，\(\cos(\pi b^{m-M})-1\le 0\)。于是
+\[
+\left|
+\frac{Y(h_M)-Y(0)}{h_M}
+\right|
+\ge
+2b^M\sum_{m\ge M}a^m
+=
+2b^M\frac{a^M}{1-a}
+=
+\frac{2a}{1-a}(ab)^{M-1}.
+\]
+证毕。
+\end{proof}
+
+\begin{remark}[残差相位与碰撞矩接口]\label{rem:groupoid-zeckendorf-rough-readout-fiber-interface}
+定理 \ref{thm:groupoid-zeckendorf-deterministic-rough-visible-quantity} 只说明粗糙可见量在确定性制度下确实存在；它所用的 \(\Theta_m\equiv 0\) 仍是相位冻结的特例。真正与 Fold--fiber 主链相接的情形，是让 \(\Theta_m\) 对残差标签 \(r_m(\omega)\) 产生非平凡分离。此时，纤维多重度 \(d_m(x)\)、碰撞矩 \(S_q(m)\)、冻结相阈值（定理 \ref{thm:fold-pressure-freezing-threshold}）、预言机容量（定理 \ref{thm:fold-oracle-capacity-closed-form}）以及最小在线延迟 \(\delta_{\min}(\Fold_\infty)=3\)（定理 \ref{thm:online-delay-fold} 与命题 \ref{prop:pom-delay-min}）共同给出可见粗糙度的几何、统计与时间约束。换言之，纤维残差并不只控制可逆恢复所需的侧信息预算，也控制可见层能够被抹平到何种程度。
+\end{remark}

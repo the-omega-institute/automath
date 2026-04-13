@@ -1,6 +1,6 @@
 # Pipeline: Scan Projection / Address Semantics / Sigma-Nonexpansion (ETDS)
 Target: Ergodic Theory and Dynamical Systems (ETDS)
-Status: submission-ready (author metadata missing)
+Status: submission-ready
 
 ## Stage Progress
 
@@ -14,10 +14,19 @@ Status: submission-ready (author metadata missing)
 | P5 Integration | completed | 2026-03-30 | 5 unused bib entries removed; sec_open_system split; intro subsection retitled |
 | P6 Lean Sync | completed | 2026-03-30 | 0% verified, 27% partial (4/15 active claims have partial Lean support) |
 | P7 Submission Pack | completed | 2026-03-30 | cover_letter_etds.txt + submission_checklist.md; 11 pass, 1 fail (author empty) |
+| P4 Gate 3 Review | completed | 2026-04-04 | Decision: MINOR_REVISION; 1 blocker (author), 4 medium, 6 minor |
+| P5 Integration (Gate 3 fixes) | completed | 2026-04-04 | B1 + M1--M4 fixed; 6 minor items deferred to referee feedback |
 
-### Remaining Blocker
+### Gate 3 Fixes Applied (2026-04-04)
 
-`\author{}` in main.tex is empty. Author names, affiliations, and corresponding-author email must be inserted before submission.
+| Item | Decision | Action |
+|------|----------|--------|
+| B1 author empty | ACCEPT | Added "Haobo Ma, CHRONOAI PTE. LTD., Singapore" in main.tex |
+| M1 Section 4 disconnected | ACCEPT | Replaced closing remark with forward pointer citing Theorems 5.1 and 6.2 |
+| M2 no post-2012 refs | ACCEPT | Added BruinDemers2022, DemersTodd2017, BunimovichYurchenko2011; cited in introduction |
+| M3 S2^2 <= S3 unjustified | ACCEPT | Added one-line Jensen/power-mean justification in sec_double_budget.tex |
+| M4 past-future spectral ID | ACCEPT | Added transpose-duality proof sketch in sec_open_system_resonance.tex |
+| m1--m6 (minor) | DEFER | Unlikely to cause rejection; address if referee flags them |
 
 ## Theorem Inventory
 
@@ -86,3 +95,56 @@ Decision: major revision. Strengths: recognizable ETDS theorem package, open-sys
 **Missing (11):** sigma-nonexpansion, finite-depth collapse, complete address reconstruction, Tanaka-Stokes (noted as future work item 14), boundary dimension, weighted boundary transfer, pressure gap, double-budget Poisson, register lower bound, first-entry escape rate, quasistationary ambiguity.
 
 Mismatches: Lean entropy is topological (h_top = log phi); paper's entropy-ledger is survivor Renyi formulation. Lean inverse-limit is set-theoretic; paper's determinacy is dynamical.
+
+### P5 Integration (Gate 3 fixes, 2026-04-04)
+
+Five issues from the Gate 3 MINOR_REVISION review were resolved:
+
+1. **B1:** Author field populated with Haobo Ma / CHRONOAI / email in main.tex.
+2. **M1:** Closing remark in sec_recursive_addressing.tex replaced with an explicit forward pointer explaining that the finite-depth collapse theorem guarantees Bayes error validity when passing from recursive codings to base-level, as used by Theorems 5.1 and 6.2.
+3. **M2:** Three post-2012 references added to references.bib (Bruin--Demers 2022, Demers--Todd 2017, Bunimovich--Yurchenko 2011) and cited in sec_introduction.tex. Bibliography now has 20 entries, all cited.
+4. **M3:** One-line Jensen/power-mean justification for $S_2^2 \le S_3$ added in the proof of Theorem 6.2(ii) in sec_double_budget.tex.
+5. **M4:** Proof sketch for past--future spectral identification added in the proof of Theorem 5.6(iv) in sec_open_system_resonance.tex: the backward specification operator and forward Ruelle operator are transposes under the equilibrium pairing, so they share the same nonzero spectrum.
+
+Six minor items (m1--m6) deferred to referee feedback. No theorem labels changed. No new mathematical content introduced.
+
+### Backflow to Core
+
+| Result | Core target section | Status |
+|---|---|---|
+| `prop:scan-error-cylinder` | `spg/` | pending |
+| `prop:bayes-optimality` | `spg/` | pending |
+| `thm:tanaka-stokes` | `spg/` | pending |
+| `cor:clarity-monotone` | `spg/` | pending |
+| `prop:weighted-boundary-decomposition` | `spg/` | pending |
+| `thm:clarity-boundary-dimension` | `spg/` | pending |
+| `thm:weighted-boundary-transfer` | `spg/` | pending |
+| `cor:weighted-boundary-pole` | `spg/` | pending |
+| `cor:pressure-gap` | `spg/` | pending |
+| `thm:survivor-renyi-pressure` | `spg/` | pending |
+| `cor:survivor-spectrum-collision` | `spg/` | pending |
+| `thm:double-budget-poisson` | `spg/` | pending |
+| `cor:capacity-region` | `spg/` | pending |
+| `thm:entropy-ledger` | `spg/` | pending |
+| `thm:register-lower-bound` | `spg/` | pending |
+| `thm:collision-profile-restoration` | `spg/` | pending |
+| `thm:main-amplitude` | `spg/` | pending |
+| `thm:main-renyi` | `spg/` | pending |
+| `thm:main-resonance` | `spg/` | pending |
+| `thm:first-entry-escape-rate` | `spg/` | pending |
+| `cor:survivor-pressure-recovery` | `spg/` | pending |
+| `thm:quasistationary-ambiguity` | `spg/` | pending |
+| `thm:error-resolvent-cyclotomic` | `spg/` | pending |
+| `thm:holder-open-resonance` | `spg/` | pending |
+| `prop:doubling-fibonacci-escape` | `spg/` | pending |
+| `prop:symbolic-factor` | `spg/` | pending |
+| `lem:prefix-ball-cylinder` | `spg/` | pending |
+| `prop:sliding-block-factor` | `spg/` | pending |
+| `cor:sigma-nonexpansion` | `spg/` | pending |
+| `cor:entropy-monotonicity` | `spg/` | pending |
+| `thm:finite-depth-collapse` | `spg/` | pending |
+| `prop:inverse-limit-space` | `spg/` | pending |
+| `thm:inverse-limit-determinacy` | `spg/` | pending |
+| `thm:complete-address-reconstruction` | `spg/` | pending |
+| `prop:decidable-clopen` | `spg/` | pending |
+| `prop:sturmian-cylinder-sandwich` | `spg/` | pending |
