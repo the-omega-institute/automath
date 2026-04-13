@@ -1,0 +1,122 @@
+\subsection{停机时间的赋值、Walsh 断点与账本平台的三重同一化}
+
+正文小节 \ref{subsubsec:conclusion-godel-leyang-halting-time-dichotomies}
+已经分别给出停机时间的 \(2\)-进代数化、Hausdorff 维数二值律、Fourier--Walsh 首断点、有限分辨率不可分辨下界、局部因子误差壁垒以及账本缺陷的断点剖面。
+把这些接口并读后，可把同一停机时间参数重新压缩为一条完全同步的赋值--谱--账本链。
+
+\begin{theorem}[停机时间的赋值--Walsh--账本三重同一化]\label{thm:derived-halting-valuation-walsh-ledger-unification}
+固定 \(B=2^L\)。对任意图灵机--输入对 \((M,x)\)，定义
+\[
+\alpha_{M,x}:=\sum_{n\ge 0}t_n(M,x)\,B^n\in\ZZ_2,
+\]
+其中 \(t_n(M,x)=1\) 当且仅当 \(M(x)\) 在不超过 \(n\) 步内停机。
+令
+\[
+D_{M,x}:=\{0,\alpha_{M,x}e\}\subset T_2(E_{\min}),
+\]
+\[
+k_\ast(M,x):=
+\inf\Bigl\{
+k\ge 0:\ \exists\,\chi,\ \mathrm{cond}(\chi)=k,\
+\widehat{\mu}_{D_{M,x}}(\chi)\neq 1
+\Bigr\},
+\]
+并记账本缺陷剖面为
+\[
+\kappa_m:=\mathbb E\bigl[\log|\pi_m^{-1}(Y)|\bigr].
+\]
+若 \(N\in\NN\cup\{\infty\}\) 为首次停机时间，则下列条件等价：
+\[
+N<\infty
+\Longleftrightarrow
+\alpha_{M,x}=-B^N
+\Longleftrightarrow
+v_2(\alpha_{M,x})=LN
+\Longleftrightarrow
+k_\ast(M,x)=LN+1
+\Longleftrightarrow
+\kappa_m=\min(m,N)\log 2\ \text{并最终平台化}.
+\]
+并且：
+\begin{enumerate}
+\normalfont
+  \item 若 \(N<\infty\)，则
+  \[
+  \dim_H K_{D_{M,x}}=\dim(\mu_{D_{M,x}})=\frac{1}{L},
+  \qquad
+  \mu_{D_{M,x}}\ \text{非原子};
+  \]
+  \item 若 \(N=\infty\)，则
+  \[
+  K_{D_{M,x}}=\{0\},
+  \qquad
+  \mu_{D_{M,x}}=\delta_0,
+  \qquad
+  \kappa_m=m\log 2,
+  \qquad
+  k_\ast(M,x)=\infty.
+  \]
+\end{enumerate}
+因此，停机时间在该 Gödel--Lee--Yang 地址化中同时显形为一个 \(2\)-进赋值、一个 Fourier--Walsh 首断点以及一条纤维账本曲线的平台起点。
+\end{theorem}
+
+\begin{proof}
+由引理 \ref{lem:conclusion-halting-alpha-algebraic-form}，
+\[
+N=\infty \iff \alpha_{M,x}=0,
+\qquad
+N<\infty \iff \alpha_{M,x}=-B^N=-2^{LN},
+\]
+故前两重等价与赋值公式
+\(
+v_2(\alpha_{M,x})=LN
+\)
+立即成立。
+第三重等价由定理 \ref{thm:conclusion-halting-walsh-breakpoint} 给出：若 \(N<\infty\)，则全部导子 \(k\le LN\) 上 Walsh 系数都等于 \(1\)，而存在导子 \(LN+1\) 首次偏离；若 \(N=\infty\)，则该首断点不存在。
+第四重等价由命题 \ref{prop:conclusion-halting-ledger-defect-kink} 给出，其断点剖面正是
+\[
+\kappa_m=\min(m,N)\log 2.
+\]
+最后，几何与测度分岔由定理 \ref{thm:conclusion-halting-dimension-binary-law}
+及推论 \ref{cor:conclusion-halting-measure-atomic-branch} 直接给出。证毕。
+\end{proof}
+
+\begin{proposition}[有限分辨率盲区与局部因子误差壁垒的同步化]\label{prop:derived-halting-resolution-localfactor-synchronization}
+沿定理 \ref{thm:derived-halting-valuation-walsh-ledger-unification} 的记号。
+对任意固定分辨率 \(m\ge 1\)，任何仅依赖截断观测
+\[
+X\bmod 2^m\ZZ_2 e
+\]
+的随机化学习器，都不可能在所有 \((M,x)\) 上以统一有界错误率区分“停机”与“不停机”；更精确地，只要某个停机实例满足
+\[
+N\ge \Bigl\lceil\frac{m}{L}\Bigr\rceil,
+\]
+则其截断分布与不停机情形完全一致。
+
+另一方面，Lee--Yang 局部因子端的相应可计算构造 \(g_{M,x}\in SL_2(\CC)\) 满足
+\[
+g_{M,x}=I \iff N=\infty,
+\]
+并且对任意固定 \(s>0\) 与素数 \(p\)，若 \(N<\infty\) 则
+\[
+\Bigl|L_p(s,g_{M,x})-(1-p^{-s})^{-2}\Bigr|
+\le C(s,p)\,2^{-N}.
+\]
+故同一停机时间 \(N\) 同时控制两类屏障：在截断学习侧，它给出一个严格的不可分辨盲区；在局部因子侧，它给出一个指数小的平凡模型误差壁垒。
+\end{proposition}
+
+\begin{proof}
+第一条正是定理 \ref{thm:conclusion-halting-finite-resolution-indistinguishability}
+的内容：当 \(N\ge \lceil m/L\rceil\) 时，停机实例在模 \(2^m\) 截断后与不停机情形同分布。
+第二条由定理
+\ref{thm:conclusion-halting-langlands-parameter-degeneration-barrier}
+立即给出。二者共享同一时间标尺 \(N\)，只是分别表现为“完全不可区分”与“指数接近平凡”，故构成同步壁垒。证毕。
+\end{proof}
+
+\begin{remark}[赋值、频谱与账本的共同坐标]\label{rem:derived-halting-threefold-coordinate}
+定理 \ref{thm:derived-halting-valuation-walsh-ledger-unification} 与命题
+\ref{prop:derived-halting-resolution-localfactor-synchronization}
+表明：停机时间在这里并不只是递归论意义上的 first-hit 参数，而是同一个隐藏坐标在 \(2\)-进赋值、Walsh 谱首断点、分形/测度相变、纤维账本平台与局部因子误差壁垒五个界面上的同步显影。
+\end{remark}
+
+\endinput

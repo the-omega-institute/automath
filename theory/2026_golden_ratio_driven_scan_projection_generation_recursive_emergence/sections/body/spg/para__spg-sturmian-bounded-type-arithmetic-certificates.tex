@@ -1,0 +1,160 @@
+% Bounded-type continued-fraction certificates for Sturmian information time.
+
+\paragraph{有界型连分数寄存器的常宽证书}
+\begin{theorem}[有界型 Sturmian 扫描的常宽算术证书]\label{thm:spg-bounded-type-sturmian-constant-width-certificate}
+设 \(\alpha=[0;a_1,a_2,\dots]\in(0,1)\setminus\QQ\) 为有界型无理数，即
+\[
+\sup_{n\ge 1}a_n\le A<\infty.
+\]
+对任意 \(t\ge 1\)，取唯一 \(N\ge 1\) 使
+\[
+q_N\le t<q_{N+1},
+\]
+并定义区间
+\[
+\mathcal I_N(\alpha)
+:=
+\left(
+\log\!\Bigl(\frac{q_N}{2}\Bigr),\ 
+\log(q_{N+1}+q_N)
+\right).
+\]
+则有限截断 \(\mathcal G_{\mathrm{cf},N+1}(\alpha)\) 唯一决定 \(\mathcal I_N(\alpha)\)，并且对任意长度 \(t\) 的 Sturmian 词 \(w\) 都有
+\[
+-\log \mathrm{Leb}(C(w))\in \mathcal I_N(\alpha).
+\]
+此外，区间宽度满足
+\[
+\log(q_{N+1}+q_N)-\log\!\Bigl(\frac{q_N}{2}\Bigr)
+\le
+\log\!\bigl(2(A+2)\bigr).
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:spg-continued-fraction-ledger-determines-cylinder-time-window}，\(\mathcal G_{\mathrm{cf},N+1}(\alpha)\) 唯一决定 \((q_N,q_{N+1})\)，从而唯一决定 \(\mathcal I_N(\alpha)\)，并且
+\[
+-\log \mathrm{Leb}(C(w))\in \mathcal I_N(\alpha)
+\]
+对所有长度 \(t\) 的 Sturmian 词 \(w\) 成立。
+另一方面，由收敛分母递推
+\[
+q_{N+1}=a_{N+1}q_N+q_{N-1}\le Aq_N+q_N=(A+1)q_N,
+\]
+于是
+\[
+q_{N+1}+q_N\le (A+2)q_N.
+\]
+将其代入即可得到宽度估计
+\[
+\log(q_{N+1}+q_N)-\log\!\Bigl(\frac{q_N}{2}\Bigr)
+\le
+\log\!\bigl(2(A+2)\bigr).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[黄金斜率下的对数深度算术认证]\label{cor:spg-golden-sturmian-logarithmic-arithmetic-certificate}
+取黄金斜率 \(\alpha=\varphi^{-1}\)。
+若 \(N\) 满足
+\[
+F_{N+1}\le t<F_{N+2},
+\]
+则有限截断
+\[
+\mathcal G_{\mathrm{cf},N+1}(\alpha)=\prod_{j=1}^{N+1}p_j
+\]
+已经足以把任意长度 \(t\) 的 Sturmian 词 \(w\) 的信息时间压入区间
+\[
+\log\!\Bigl(\frac{F_{N+1}}{2}\Bigr)
+<
+-\log \mathrm{Leb}(C(w))
+<
+\log F_{N+3}.
+\]
+该区间宽度满足
+\[
+\log\!\Bigl(\frac{2F_{N+3}}{F_{N+1}}\Bigr)<\log 6,
+\]
+并且所需寄存器前缀深度满足
+\[
+N=\log_\varphi t+O(1).
+\]
+\end{corollary}
+\begin{proof}
+黄金斜率的部分商恒为 \(a_n=1\)，故收敛分母为 \(q_N=F_{N+1}\)。将其代入定理 \ref{thm:spg-bounded-type-sturmian-constant-width-certificate} 即得
+\[
+\log\!\Bigl(\frac{F_{N+1}}{2}\Bigr)
+<
+-\log \mathrm{Leb}(C(w))
+<
+\log(F_{N+2}+F_{N+1})
+=
+\log F_{N+3}.
+\]
+又由于 \(F_{N+2}<2F_{N+1}\)，故
+\[
+F_{N+3}=F_{N+2}+F_{N+1}<3F_{N+1},
+\]
+于是
+\[
+\frac{2F_{N+3}}{F_{N+1}}<6.
+\]
+最后，由 Fibonacci 渐近
+\[
+F_{N+1}=\frac{\varphi^{N+1}}{\sqrt5}+O(\varphi^{-N})
+\]
+与 \(F_{N+1}\le t<F_{N+2}\) 可知 \(N=\log_\varphi t+O(1)\)。证毕。
+\end{proof}
+
+\begin{theorem}[有界型情形下证书深度与信息时间的准等距律]\label{thm:spg-sturmian-certificate-depth-information-time-quasi-isometry}
+在定理 \ref{thm:spg-bounded-type-sturmian-constant-width-certificate} 的假设下，对每个 \(t\ge 1\) 以 \(N(t)\) 表示满足
+\[
+q_{N(t)}\le t<q_{N(t)+1}
+\]
+的唯一整数。则存在仅依赖于 \(A\) 的常数 \(c_1,c_2,C_1,C_2>0\)，使得对任意长度 \(t\) 的 Sturmian 词 \(w\) 都有
+\[
+c_1N(t)-C_1
+\le
+-\log \mathrm{Leb}(C(w))
+\le
+c_2N(t)+C_2.
+\]
+因此，在有界型情形下，有限 continued-fraction 证书的前缀深度与柱集信息时间之间存在准等距对应。
+\end{theorem}
+\begin{proof}
+由 \(q_{n+1}=a_{n+1}q_n+q_{n-1}\le (A+1)q_n\) 可归纳得到
+\[
+q_n\le (A+2)^n
+\qquad(n\ge 1).
+\]
+另一方面，因 \(a_{n+1}\ge 1\)，总有
+\[
+q_{n+1}\ge q_n+q_{n-1},
+\]
+故 \(q_n\ge F_{n+1}\)。于是
+\[
+q_n\ge \frac{\varphi^{n-1}}{\sqrt5}
+\qquad(n\ge 1).
+\]
+对 \(N=N(t)\)，定理 \ref{thm:spg-bounded-type-sturmian-constant-width-certificate} 给出
+\[
+\log\!\Bigl(\frac{q_N}{2}\Bigr)
+<
+-\log \mathrm{Leb}(C(w))
+<
+\log(q_{N+1}+q_N)
+\le
+\log\bigl((A+2)q_N\bigr).
+\]
+结合上述两端对 \(q_N\) 的指数估计，得到
+\[
+(N-1)\log\varphi-\frac12\log 5-\log 2
+\le
+-\log \mathrm{Leb}(C(w))
+\le
+(N+1)\log(A+2).
+\]
+这正给出了所需的线性双边界。证毕。
+\end{proof}
+
+\endinput

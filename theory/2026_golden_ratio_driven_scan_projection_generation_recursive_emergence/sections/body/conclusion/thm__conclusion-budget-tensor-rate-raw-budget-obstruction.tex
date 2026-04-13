@@ -1,0 +1,109 @@
+\begin{theorem}[外置预算张量塔的熵率精确律]\label{thm:conclusion-external-budget-tensor-entropy-rate}
+设 \(D,Y\) 为可数集，\(\pi:D\to Y\) 为全定义可计算映射，并满足
+\[
+D(\pi):=\sup_{y\in Y}\#\pi^{-1}(y)<\infty.
+\]
+对每个 \(m\ge 1\)，定义 \(m\)-重直积
+\[
+\pi^{\times m}:D^m\to Y^m.
+\]
+再记
+\[
+r(\sigma):=\left\lceil\log_2 b(\sigma)\right\rceil.
+\]
+则对一切 \(m\ge 1\) 都有
+\[
+b(\pi^{\times m})=b(\pi)^m,
+\qquad
+r(\pi^{\times m})
+=
+\left\lceil m\log_2 b(\pi)\right\rceil.
+\]
+从而
+\[
+\lim_{m\to\infty}\frac{1}{m}r(\pi^{\times m})=\log_2 b(\pi),
+\]
+并且满足 sharp 误差界
+\[
+0\le r(\pi^{\times m})-m\log_2 b(\pi)<1.
+\]
+因此，原始预算 \(b(\pi)\) 的二进制对数正是张量外置复杂度的每副本熵率，而 \(r(\pi^{\times m})\) 只在不到一比特的舍入误差内围绕该线性率振荡。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:conclusion-external-budget-tensor-multiplicativity}，
+\[
+b(\pi^{\times m})=b(\pi)^m.
+\]
+代入 \(r\) 的定义即得
+\[
+r(\pi^{\times m})
+=
+\left\lceil\log_2 b(\pi^{\times m})\right\rceil
+=
+\left\lceil\log_2 b(\pi)^m\right\rceil
+=
+\left\lceil m\log_2 b(\pi)\right\rceil.
+\]
+记
+\[
+x_m:=m\log_2 b(\pi).
+\]
+则
+\[
+0\le \lceil x_m\rceil-x_m<1,
+\]
+这正是所述 sharp 误差界。再两边除以 \(m\) 并令 \(m\to\infty\)，便得到熵率极限。证毕。
+\end{proof}
+
+\begin{theorem}[原始外置预算不存在统一常数因子近似]\label{thm:conclusion-external-budget-no-computable-constant-factor-approx}
+对任意实常数 \(\lambda\ge 1\)，不存在全定义可计算函数
+\[
+A(\pi)\in\NN
+\]
+满足对一切有限纤维上界的全定义可计算映射 \(\pi\) 都有
+\[
+\lambda^{-1}b(\pi)\le A(\pi)\le \lambda b(\pi).
+\]
+换言之，原始外置预算 \(b(\pi)\) 不存在任何统一常数因子的可计算逼近。
+\end{theorem}
+\begin{proof}
+反设存在这样的 \(A\)。
+由定理 \ref{thm:conclusion-minimal-external-budget-undecidable}，存在可计算族 \(\{\pi_{M,x}\}\) 满足
+\[
+b(\pi_{M,x})=
+\begin{cases}
+1,& M(x)\ \text{不停机},\\
+2,& M(x)\ \text{停机}.
+\end{cases}
+\]
+对任意 \(m\ge 1\) 定义
+\[
+\Pi_{M,x}^{(m)}:=\pi_{M,x}^{\times m}.
+\]
+由定理 \ref{thm:conclusion-external-budget-tensor-entropy-rate}，
+\[
+b(\Pi_{M,x}^{(m)})=
+\begin{cases}
+1,& M(x)\ \text{不停机},\\
+2^m,& M(x)\ \text{停机}.
+\end{cases}
+\]
+
+取 \(m\) 足够大使
+\[
+2^m>\lambda^2.
+\]
+若 \(M(x)\) 不停机，则由近似假设
+\[
+A(\Pi_{M,x}^{(m)})\le \lambda.
+\]
+若 \(M(x)\) 停机，则
+\[
+A(\Pi_{M,x}^{(m)})\ge \lambda^{-1}2^m>\lambda.
+\]
+因此只需比较
+\[
+A(\Pi_{M,x}^{(m)})
+\]
+与阈值 \(\lambda\)，即可判定 \(M(x)\) 是否停机，矛盾。故此类 \(A\) 不存在。证毕。
+\end{proof}

@@ -1,0 +1,341 @@
+在同一折叠条件期望与均匀基线记号下，还可把最大纤维损失、纤维熵势与规范差的有限窗口审计进一步压缩为如下命题链。
+
+\begin{theorem}[最大纤维给出最坏外部化损失]\label{thm:conclusion-maxfiber-relative-entropy-loss}
+固定分辨率 \(m\)。设
+\[
+E_m:A_m=\CC^{\Omega_m}\longrightarrow B_m
+\]
+为沿折叠纤维均匀平均的条件期望，并记
+\[
+d_m(x):=\card{\Fold_m^{-1}(x)},
+\qquad
+D_m:=\max_{x\in X_m}d_m(x).
+\]
+则
+\[
+\Ind(E_m)=D_m,
+\]
+并且最坏相对熵损失满足严格等式
+\[
+\sup_{\rho,\sigma}
+\Bigl[
+D(\rho\Vert\sigma)-D(\rho\circ E_m\Vert \sigma\circ E_m)
+\Bigr]
+=
+\log D_m.
+\]
+更具体地，若 \(x_\star\in X_m\) 满足 \(d_m(x_\star)=D_m\)，取 \(a_\star\in \Fold_m^{-1}(x_\star)\)，并令
+\[
+\rho:=\delta_{a_\star},
+\qquad
+\sigma:=\mathrm{Unif}(\Fold_m^{-1}(x_\star)),
+\]
+则
+\[
+(\Fold_m)_\ast\rho=(\Fold_m)_\ast\sigma=\delta_{x_\star},
+\qquad
+D(\rho\Vert\sigma)=\log D_m,
+\]
+从而上述上确界由单条极大纤维见证。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-condexp-index-maxfiber}，\(\Ind(E_m)=D_m\) 且
+\[
+\sup_{\rho,\sigma}
+\Bigl[
+D(\rho\Vert\sigma)-D(\rho\circ E_m\Vert \sigma\circ E_m)
+\Bigr]
+=
+\log \Ind(E_m).
+\]
+代入 \(\Ind(E_m)=D_m\) 即得第一式。
+后半段由命题 \ref{prop:fold-condexp-index-maxfiber} 的单纤维极值构造直接给出。证毕。
+\end{proof}
+
+\begin{corollary}[最坏损失的图论归约]\label{cor:conclusion-maxfiber-loss-independent-set-reduction}
+若对每个 \(x\in X_m\) 取主稿中的候选位点图 \(\Gamma_x\)，使
+\[
+\Fold_m^{-1}(x)\cong \mathsf{Ind}(\Gamma_x),
+\qquad
+d_m(x)=\card{\mathsf{Ind}(\Gamma_x)},
+\]
+则
+\[
+D_m=\max_{x\in X_m}\card{\mathsf{Ind}(\Gamma_x)}.
+\]
+因此，最坏外部化损失的对数尺度
+\[
+\log \Ind(E_m)=\log D_m
+\]
+严格等价于在图族 \(\{\Gamma_x\}_{x\in X_m}\) 上最大化独立集总数。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-indset-factorization}，对每个 \(x\) 都有
+\(
+\Fold_m^{-1}(x)\cong \mathsf{Ind}(\Gamma_x)
+\)
+及
+\(
+d_m(x)=\card{\mathsf{Ind}(\Gamma_x)}
+\)。
+对 \(x\) 取最大值得
+\[
+D_m=\max_{x\in X_m}\card{\mathsf{Ind}(\Gamma_x)}.
+\]
+再与定理 \ref{thm:conclusion-maxfiber-relative-entropy-loss} 合并即可。证毕。
+\end{proof}
+
+\begin{theorem}[纤维熵势的 Jensen--Pimsner 双上界]\label{thm:conclusion-fiber-entropy-jensen-pimsner-double-bound}
+对任意 \(\pi\in\Delta(X_m)\)，定义纤维熵势
+\[
+S_{\mathrm{fib}}(\pi):=\mathbb E_{\pi}[\log d_m(X)].
+\]
+则有
+\[
+S_{\mathrm{fib}}(\pi)\le \log \mathbb E_{\pi}[d_m(X)]\le \log D_m.
+\]
+并且：
+\begin{enumerate}
+  \item 第一处取等当且仅当 \(d_m(X)\) 在 \(\pi\)-几乎处处为常数；
+  \item 第二处取等当且仅当 \(\pi\) 支撑于全部极大纤维集合
+  \[
+  X_m^{\max}:=\{x\in X_m:d_m(x)=D_m\}.
+  \]
+\end{enumerate}
+特别地，结合定理 \ref{thm:xi-fiber-entropy-potential-expected-conditional-complexity}，纤维内期望条件复杂度在 \(O(1)\) 误差内同时受这两条上界控制。
+\end{theorem}
+\begin{proof}
+第一不等式是对数凹性下的 Jensen 不等式。第二不等式由 \(d_m(X)\le D_m\) 几乎处处成立立即推出。
+第一处取等当且仅当 \(d_m(X)\) 在 \(\pi\)-几乎处处常值；第二处取等当且仅当 \(d_m(X)=D_m\) 在 \(\pi\)-几乎处处成立，即 \(\pi\) 支撑于 \(X_m^{\max}\)。证毕。
+\end{proof}
+
+\begin{corollary}[均匀可见基线的双缺口律]\label{cor:conclusion-uniform-visible-baseline-double-gap}
+取均匀可见基线
+\[
+\pi=\mathrm{Unif}(X_m).
+\]
+则
+\[
+\frac{1}{|X_m|}\sum_{x\in X_m}\log d_m(x)
+\le
+\log\frac{|\Omega_m|}{|X_m|}
+=
+\log\frac{2^m}{|X_m|}
+\le
+\log D_m.
+\]
+若定义
+\[
+\Delta_m^{\mathrm{vis}}
+:=
+\log D_m-\frac{1}{|X_m|}\sum_{x\in X_m}\log d_m(x),
+\]
+则有显式下界
+\[
+\Delta_m^{\mathrm{vis}}
+\ge
+\log\frac{D_m|X_m|}{2^m}.
+\]
+并且上述两条不等式同时取等，当且仅当全部纤维多重度 \(d_m(x)\) 在 \(X_m\) 上完全相等。
+\end{corollary}
+\begin{proof}
+由
+\[
+\mathbb E_{\mathrm{Unif}(X_m)}[d_m(X)]
+=
+\frac{1}{|X_m|}\sum_{x\in X_m}d_m(x)
+=
+\frac{|\Omega_m|}{|X_m|}
+=
+\frac{2^m}{|X_m|}
+\]
+代入定理 \ref{thm:conclusion-fiber-entropy-jensen-pimsner-double-bound} 即得。
+两处同时取等迫使 \(d_m(X)\) 在均匀基线下几乎处处常值，也即 \(d_m(x)\) 对全部 \(x\in X_m\) 相同。证毕。
+\end{proof}
+
+\begin{theorem}[均匀基线下一、二阶矩与 dyadic--sign 谱字母表]\label{thm:conclusion-gauge-anomaly-uniform-moments-alphabet-closure}
+在均匀基线
+\[
+\omega\sim \mathrm{Unif}(\Omega_{m+1})
+\]
+下，记规范差为 \(G_m\)，并令 \(\bar G_m:=\mathbb E[G_m]\)。则对一切 \(m\ge 0\) 有
+\[
+\bar G_m
+=
+\frac49\,m-\frac{29}{54}
++\frac58\,2^{-m}
++\Bigl(\frac{m}{36}-\frac{19}{216}\Bigr)\Bigl(-\frac12\Bigr)^m,
+\]
+\[
+\mathbb E\!\bigl[G_m(G_m-1)\bigr]
+=\frac{16}{81}m^2-\frac{106}{243}m+\frac{443}{729}
+-\Bigl(\frac{5}{16}m+\frac12\Bigr)2^{-m}
++\Bigl(-\frac{m^3}{648}+\frac{m^2}{27}-\frac{m}{432}-\frac{157}{1458}\Bigr)\Bigl(-\frac12\Bigr)^m,
+\]
+以及
+\[
+\begin{aligned}
+\operatorname{Var}(G_m)
+={}&\frac{118}{243}\,m-\frac{635}{2916}
++\Bigl(\frac{43}{54}-\frac{125}{144}m\Bigr)2^{-m}\\
+&+\Bigl(-\frac{m^3}{648}+\frac{m^2}{81}+\frac{173}{1296}m-\frac{47}{162}\Bigr)\Bigl(-\frac12\Bigr)^m\\
+&+\Bigl(-\frac{m^2}{1296}+\frac{19}{3888}m-\frac{9293}{23328}\Bigr)4^{-m}
++\Bigl(-\frac{5}{144}m+\frac{95}{864}\Bigr)\Bigl(-\frac14\Bigr)^m.
+\end{aligned}
+\]
+因此，均匀基线下一、二阶统计中的全部有限尺度修正仅来自
+\[
+\bigl\{2^{-m},\ (-1/2)^m,\ 4^{-m},\ (-1/4)^m\bigr\},
+\]
+不存在任何其他指数尺度。
+\end{theorem}
+\begin{proof}
+均值、二阶阶乘矩与方差的三条闭式分别是定理 \ref{thm:fold-gauge-anomaly-mean-finite-closed}、定理 \ref{thm:fold-gauge-anomaly-second-factorial-finite-closed} 与定理 \ref{thm:fold-gauge-anomaly-variance-finite-window-closed} 的直接重述。
+既然所有修正项都已写成上述四类 dyadic--sign 模态的多项式系数叠加，则一、二阶统计中不可能再出现其他指数尺度。证毕。
+\end{proof}
+
+\begin{corollary}[中尺度指数的严格排斥]\label{cor:conclusion-gauge-anomaly-no-mesoscopic-exponents}
+在定理 \ref{thm:conclusion-gauge-anomaly-uniform-moments-alphabet-closure} 的设定下，任何额外的修正通道
+\[
+P(m)\rho^{-m}\qquad (\rho\notin\{2,4\})
+\]
+或任何不属于 \(\{\pm 2^{-1},\pm 4^{-1}\}\) 的振荡底数，都与一、二阶矩的精确闭式矛盾。
+因此，均匀基线下一、二阶统计的有限尺度谱字母表已经关闭，不再容纳新的中尺度指数。
+\end{corollary}
+\begin{proof}
+若存在上述额外通道，则定理 \ref{thm:conclusion-gauge-anomaly-uniform-moments-alphabet-closure} 的 exact expansion 将不再成立。证毕。
+\end{proof}
+
+\begin{theorem}[超泊松 Fano 常数]\label{thm:conclusion-gauge-anomaly-superpoisson-fano}
+在均匀基线下，
+\[
+\lim_{m\to\infty}\frac{\mathbb E[G_m]}{m}=\frac49,
+\qquad
+\lim_{m\to\infty}\frac{\operatorname{Var}(G_m)}{m}=\frac{118}{243}.
+\]
+从而
+\[
+\lim_{m\to\infty}\frac{\operatorname{Var}(G_m)}{\mathbb E[G_m]}
+=
+\frac{118/243}{4/9}
+=
+\frac{59}{54}>1.
+\]
+因此，规范差在 Fano 口径上是永久超泊松的。
+\end{theorem}
+\begin{proof}
+第一极限由定理 \ref{thm:conclusion-gauge-anomaly-uniform-moments-alphabet-closure} 的均值闭式直接给出；第二极限由同一定理中的方差闭式读出。
+两式相除即得极限常数 \(59/54\)。证毕。
+\end{proof}
+
+\begin{corollary}[超泊松与自平均的并存]\label{cor:conclusion-gauge-anomaly-selfaveraging-despite-superpoisson}
+尽管
+\[
+\frac{\operatorname{Var}(G_m)}{\mathbb E[G_m]}\to \frac{59}{54}>1,
+\]
+仍有
+\[
+m\frac{\operatorname{Var}(G_m)}{\mathbb E[G_m]^2}\longrightarrow \frac{59}{24},
+\qquad
+\frac{\sqrt{\operatorname{Var}(G_m)}}{\mathbb E[G_m]}=O(m^{-1/2}).
+\]
+因此，规范差在 Fano 口径上保持超泊松，而在相对涨落口径上仍然自平均。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-gauge-anomaly-superpoisson-fano}，
+\[
+\mathbb E[G_m]\sim \frac49\,m,
+\qquad
+\operatorname{Var}(G_m)\sim \frac{118}{243}\,m.
+\]
+代入得
+\[
+m\frac{\operatorname{Var}(G_m)}{\mathbb E[G_m]^2}
+\sim
+m\frac{118m/243}{(4m/9)^2}
+=
+\frac{59}{24},
+\]
+并立即推出
+\(
+\sqrt{\operatorname{Var}(G_m)}/\mathbb E[G_m]=O(m^{-1/2})
+\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[归一化规范差的 \(L^2\) 大数律]\label{thm:conclusion-gauge-anomaly-l2-law}
+在均匀基线下，
+\[
+\frac{G_m}{m}\longrightarrow \frac49
+\qquad\text{于 }L^2.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-gauge-anomaly-superpoisson-fano} 与推论 \ref{cor:conclusion-gauge-anomaly-selfaveraging-despite-superpoisson}，
+\[
+\mathbb E\!\left[\frac{G_m}{m}\right]\to \frac49,
+\qquad
+\operatorname{Var}\!\left(\frac{G_m}{m}\right)=\frac{\operatorname{Var}(G_m)}{m^2}\to 0.
+\]
+于是
+\[
+\mathbb E\!\left[\left(\frac{G_m}{m}-\frac49\right)^2\right]
+=
+\operatorname{Var}\!\left(\frac{G_m}{m}\right)
++\left(\mathbb E\!\left[\frac{G_m}{m}\right]-\frac49\right)^2
+\longrightarrow 0.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[有限窗口 exact 审计的四维最小承载]\label{thm:conclusion-gauge-anomaly-fourdim-auditable-minimality}
+设观测者仅能访问两类有限数据：
+\begin{enumerate}
+  \item 功率谱在有限频点网格上的采样 \(\{\mathcal S_g(\omega_\ell)\}_{\ell=1}^{L}\)；
+  \item 对某个固定 \(u\neq 1\)，有限长度生成函数值 \(\{M_m(u)\}_{m=0}^{N}\)（其中 \(N\ge 3\)）。
+\end{enumerate}
+则任一同机制实现若要同时通过这两类有限数据的一致性审计，其承载态空间维数至少为 \(4\)。更具体地：
+\begin{enumerate}
+  \item \(\{M_m(u)\}_{m=0}^{N}\) 必须落在一个四阶递推所生成的四维线性空间中；
+  \item 任意对交错 \(({-1/2})\)-模态或其残差结构的改变，都会在有限个频点上产生可检测偏差。
+\end{enumerate}
+因此，规范差机制的最低阶可核验承载维数被严格锁定为 \(4\)。
+\end{theorem}
+\begin{proof}
+这正是命题 \ref{prop:fold-gauge-anomaly-spectrum-tomography-certificate-triangle} 的内容。
+其中第一条给出时间域上的四阶递推一致性，第二条给出频域上的有理极点与交错模态证书；二者合并即锁定最低可核验承载维数为 \(4\)。证毕。
+\end{proof}
+
+\begin{corollary}[三模 exact emulator 不存在]\label{cor:conclusion-gauge-anomaly-no-three-mode-emulator}
+任何承载维数 \(<4\) 的候选机制，都不可能在所有有限窗口上同时精确再现以下两类证书：
+\[
+\{M_m(u)\}_{m=0}^{N}\ \text{的四阶递推一致性},
+\qquad
+\{\mathcal S_g(\omega_\ell)\}_{\ell=1}^{L}\ \text{的有理谱极点结构}.
+\]
+特别地，不存在三模或更低维的 exact emulator。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-gauge-anomaly-fourdim-auditable-minimality}，满足两类有限窗口证书的最小可核验承载维数就是 \(4\)。因此任何维数 \(<4\) 的候选机制都必然破坏时间域或频域中的至少一端审计。证毕。
+\end{proof}
+
+\begin{proposition}[损失幅值轴与承载维数轴的分裂]\label{prop:conclusion-maxfiber-loss-vs-fourmode-carrier}
+在折叠条件期望与规范差的统一审计接口下，存在两条彼此正交的刚性量：
+\[
+\log D_m,
+\qquad
+4.
+\]
+其中，\(\log D_m\) 完全刻画最坏外部化损失的对数尺度，而 \(4\) 给出有限窗口 exact 审计的最低可核验承载维数。
+因此，同一机制的“最坏损失有多大”与“需要多少可核验模态才足以承载”不是同一量的两种写法，而是不可互代的两条资源轴。
+\end{proposition}
+\begin{proof}
+前一条由定理 \ref{thm:conclusion-maxfiber-relative-entropy-loss} 给出，后一条由定理 \ref{thm:conclusion-gauge-anomaly-fourdim-auditable-minimality} 给出。
+前者是相对熵损失的标量极值，后者是可核验实现的维数下界；两者在逻辑类型上已经不同，且主稿内不存在把它们塌缩为单一参数的定理。证毕。
+\end{proof}
+
+\begin{conjecture}[均匀基线规范差的四模普适性]\label{conj:conclusion-gauge-anomaly-fourmode-universality}
+对每个固定阶数 \(r\ge 1\)，\(G_m\) 的第 \(r\) 阶累积量序列都应当落在同一 dyadic--sign 谱字母表的闭包中；更强地，在适当整数化之后，它们应共享与定理 \ref{thm:conclusion-gauge-anomaly-fourdim-auditable-minimality} 相同的最低可核验承载维数下界 \(4\)。
+
+换言之，一、二阶矩所显现出的四模结构不应只是低阶偶然，而应是整个均匀基线规范差层级的普适承载骨架。
+\end{conjecture}
