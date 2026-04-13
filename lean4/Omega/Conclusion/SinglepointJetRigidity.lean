@@ -41,6 +41,14 @@ theorem paper_conclusion_singlepoint_infinite_jet_rigidity_seeds :
   refine ⟨fun f g h => funext h, fun b hb => Even.neg_one_pow hb,
     fun b hb => Odd.neg_one_pow hb⟩
 
+/-- Paper package clone for
+    `cor:conclusion-finite-defect-singlepoint-infinite-jet-rigidity`. -/
+theorem paper_conclusion_singlepoint_infinite_jet_rigidity_package :
+    (∀ (f g : ℕ → ℝ), (∀ r, f r = g r) → f = g) ∧
+    (∀ (b : ℕ), Even b → (-1 : ℤ) ^ b = 1) ∧
+    (∀ (b : ℕ), Odd b → (-1 : ℤ) ^ b = -1) := by
+  simpa using paper_conclusion_singlepoint_infinite_jet_rigidity_seeds
+
 /-- Paper: `thm:conclusion-finite-defect-local-diagonal-mixed-moment-algebra`.
     Wrapper package for jet rigidity and mixed-moment parity signs. -/
 theorem paper_conclusion_finite_defect_local_diagonal_mixed_moment_algebra :

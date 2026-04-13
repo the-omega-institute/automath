@@ -110,4 +110,20 @@ theorem paper_pom_s5_galois_s5_seeds :
     (1 : ℕ) + 1 + 3 = 5 := by
   refine ⟨by omega, by omega, by omega, by omega, by decide, by omega⟩
 
+/-- Paper package clone for `prop:pom-s5-galois-s5`. -/
+theorem paper_pom_s5_galois_s5_package :
+    -- Discriminant factorization
+    2 ^ 4 * 3 ^ 4 * 5 * 11 * 13 * 17383 = (16107783120 : ℕ) ∧
+    -- Discriminant is negative
+    -(16107783120 : ℤ) < 0 ∧
+    -- p=17 unramified (enables 5-cycle detection)
+    16107783120 % 17 ≠ 0 ∧
+    -- p=29 unramified (enables 3-cycle detection)
+    16107783120 % 29 ≠ 0 ∧
+    -- S₅ order
+    Nat.factorial 5 = 120 ∧
+    -- Splitting pattern degree check
+    (1 : ℕ) + 1 + 3 = 5 := by
+  simpa using paper_pom_s5_galois_s5_seeds
+
 end Omega.POM.S5GaloisArithmetic
