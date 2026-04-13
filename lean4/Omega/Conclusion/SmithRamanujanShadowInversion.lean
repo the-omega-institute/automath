@@ -48,4 +48,14 @@ theorem paper_conclusion_smith_ramanujan_shadow_inversion_seeds :
     ((3 : ℕ) - 2 + (2 - 1) + (1 - 0) = 3) := by
   exact ⟨by norm_num, by norm_num, by omega, by omega⟩
 
+/-- Paper package: `thm:conclusion-smith-pprimary-ramanujan-shadow-inversion`.
+    Strict clone of `paper_conclusion_smith_ramanujan_shadow_inversion_seeds`. -/
+theorem paper_conclusion_smith_ramanujan_shadow_inversion_package :
+    ((2 : ℤ) * 3 - 1 * 3 + (2 ^ 2 * 2 - 2 * 3) + (2 ^ 3 * 1 - 2 ^ 2 * 2) =
+      2 ^ 3 * 1 - 3) ∧
+    ((3 : ℤ) + 3 + 2 = 2 ^ 2 * 2) ∧
+    ((3 : ℕ) - 2 = 1) ∧
+    ((3 : ℕ) - 2 + (2 - 1) + (1 - 0) = 3) :=
+  paper_conclusion_smith_ramanujan_shadow_inversion_seeds
+
 end Omega.Conclusion

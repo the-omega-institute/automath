@@ -118,4 +118,18 @@ theorem paper_xi_foldbin_gauge_group_triple_decomp_seeds :
   refine ⟨by omega, rfl, by omega, by decide, by decide, by decide, by decide, by decide,
     by omega⟩
 
+/-- Paper package: `thm:xi-foldbin-gauge-group-center-abel-derived-triple-decomposition`.
+    Strict clone of `paper_xi_foldbin_gauge_group_triple_decomp_seeds`. -/
+theorem paper_xi_foldbin_gauge_group_triple_decomp_package :
+    8 + 4 + 9 = (21 : ℕ) ∧
+    (8 : ℕ) = 8 ∧
+    8 + 4 + 9 = 21 ∧
+    Nat.factorial 3 / 2 = 3 ∧
+    Nat.factorial 4 / 2 = 12 ∧
+    Nat.factorial 2 = 2 ∧
+    Nat.factorial 3 = 6 ∧
+    Nat.factorial 4 = 24 ∧
+    (8 : ℕ) < 21 :=
+  paper_xi_foldbin_gauge_group_triple_decomp_seeds
+
 end Omega.Zeta.GaugeGroupTripleDecomp

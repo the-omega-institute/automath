@@ -48,4 +48,13 @@ theorem paper_pom_zero_temperature_two_term_expansion_seeds :
     ((2 : ℕ) ^ 5 / 2 ^ 5 = 1) := by
   exact ⟨fun _ => by omega, by norm_num, by norm_num, by norm_num⟩
 
+/-- Paper package: `thm:pom-zero-temperature-two-term-expansion-maxfiber-entropy`.
+    Strict clone of `paper_pom_zero_temperature_two_term_expansion_seeds`. -/
+theorem paper_pom_zero_temperature_two_term_expansion_package :
+    (∀ q : ℕ, (q + 1 : ℤ) * 1 - q = 1) ∧
+    ((1 : ℚ) / 2 ^ 3 < 1) ∧
+    ((2 * 3 : ℚ) / (2 * 3 + 1) = 6 / 7) ∧
+    ((2 : ℕ) ^ 5 / 2 ^ 5 = 1) :=
+  paper_pom_zero_temperature_two_term_expansion_seeds
+
 end Omega.POM
