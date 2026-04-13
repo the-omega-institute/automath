@@ -11,9 +11,19 @@ namespace Omega
 -- m=8: X(8) = 55 elements (~5s)
 -- m=9: X(9) = 89 elements (~15s)
 -- m=10: X(10) = 144 elements (~60s)
-@[simp] theorem cached_cMaxFiberMult_8 : cMaxFiberMult 8 = 8 := by native_decide
-@[simp] theorem cached_cMaxFiberMult_9 : cMaxFiberMult 9 = 10 := by native_decide
-@[simp] theorem cached_cMaxFiberMult_10 : cMaxFiberMult 10 = 13 := by native_decide
+
+private theorem cached_cMaxFiberMult_values :
+    cMaxFiberMult 8 = 8 ∧ cMaxFiberMult 9 = 10 ∧ cMaxFiberMult 10 = 13 := by
+  native_decide
+
+@[simp] theorem cached_cMaxFiberMult_8 : cMaxFiberMult 8 = 8 :=
+  cached_cMaxFiberMult_values.1
+
+@[simp] theorem cached_cMaxFiberMult_9 : cMaxFiberMult 9 = 10 :=
+  cached_cMaxFiberMult_values.2.1
+
+@[simp] theorem cached_cMaxFiberMult_10 : cMaxFiberMult 10 = 13 :=
+  cached_cMaxFiberMult_values.2.2
 
 namespace X
 
