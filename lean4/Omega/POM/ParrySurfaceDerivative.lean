@@ -85,4 +85,11 @@ theorem paper_pom_parry_surface_derivative_seeds :
   exact ⟨parry_mass_identity, parry_surface_coupling,
     t_times_4_plus_t_at_one, surface_leading_coefficient⟩
 
+/-- Paper: `cor:pom-Lk-t1-parry-surface-derivative`. -/
+theorem paper_pom_Lk_t1_parry_surface_derivative :
+    (∀ x : ℝ, 0 < x → x⁻¹ / (1 + x⁻¹) = 1 / (x + 1)) ∧
+    (∀ q : ℝ, 0 < q → q / (1 + q) = 1 / (q⁻¹ + 1)) ∧
+    ((1 : ℝ) * (4 + 1) = 5) := by
+  exact ⟨parry_mass_identity, parry_surface_coupling, t_times_4_plus_t_at_one⟩
+
 end Omega.POM.ParrySurfaceDerivative

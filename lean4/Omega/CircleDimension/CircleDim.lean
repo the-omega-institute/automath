@@ -648,6 +648,14 @@ theorem phaseSpectrumCount_dyadic_visibility_boundary
   rw [phaseSpectrumCount_split, phaseSpectrumCount_split] at haEq
   exact Nat.eq_of_mul_eq_mul_left (Nat.pow_pos (Nat.two_pow_pos a)) haEq
 
+/-- Paper: `thm:cdim-dyadic-spectrum-visibility-boundary`. -/
+theorem paper_cdim_dyadic_spectrum_visibility_boundary
+    {r r' t t' : Nat} (ht : 0 < t) (ht' : 0 < t')
+    (h : ∀ a : Nat, 1 ≤ a →
+      phaseSpectrumCount r t (2 ^ a) = phaseSpectrumCount r' t' (2 ^ a)) :
+    r = r' ∧ ∀ a : Nat, 1 ≤ a → Nat.gcd t (2 ^ a) = Nat.gcd t' (2 ^ a) := by
+  simpa using phaseSpectrumCount_dyadic_visibility_boundary ht ht' h
+
 /-- Phase spectrum reconstruction for positive torsion parameters.
     thm:cdim-phase-spectrum-reconstruction -/
 theorem phaseSpectrumCount_reconstruction

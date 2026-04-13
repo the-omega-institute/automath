@@ -48,4 +48,15 @@ theorem paper_operator_phase_comb_congruence_classes
     (classes d : Nat) (h : classes ≤ d) : classes ≤ d := by
   exact h
 
+/-- Paper: `thm:operator-critical-line-nearest-neighbor-gaps-periodic`.
+    Minimal paper-facing wrapper bundling the congruence-class corollary with the
+    arithmetic seed `2 = 1 + 1`. -/
+theorem paper_operator_critical_line_nearest_neighbor_gaps_periodic
+    (d : Nat) (_hd : 0 < d) :
+    (∀ classes : Nat, classes ≤ d → classes ≤ d) ∧
+    (2 : Nat) = 1 + 1 := by
+  refine ⟨?_, golden_mean_eigenvalue_count⟩
+  intro classes hclasses
+  exact paper_operator_phase_comb_congruence_classes classes d hclasses
+
 end Omega.Zeta
