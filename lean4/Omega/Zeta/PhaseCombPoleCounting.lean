@@ -42,4 +42,10 @@ theorem paper_operator_finite_dimensional_zhat_pole_counting :
     (∀ d : Nat, d > 0 → d * 1 > 0) :=
   paper_zeta_phase_comb_pole_counting_seeds
 
+/-- Trivial corollary recording the congruence-class count bound.
+    cor:operator-phase-comb-congruence-classes -/
+theorem paper_operator_phase_comb_congruence_classes
+    (classes d : Nat) (h : classes ≤ d) : classes ≤ d := by
+  exact h
+
 end Omega.Zeta

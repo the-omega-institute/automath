@@ -84,4 +84,19 @@ theorem paper_conclusion_kernel_chain_rule_seeds :
     (1 + 0 = 1) := by
   exact ⟨fun a _ => Nat.add_zero a, fun _ b => Nat.zero_add b, rfl⟩
 
+/-- Paper conclusion wrapper for the finite-rank kernel chain rule.
+    thm:conclusion-finite-rank-kernel-chain-rule -/
+theorem paper_conclusion_finite_rank_kernel_chain_rule
+    {R : Type*} [CommRing R] [IsDomain R]
+    {M N P : Type*} [AddCommGroup M] [Module R M]
+    [AddCommGroup N] [Module R N]
+    [AddCommGroup P] [Module R P]
+    [Module.Free R M] [Module.Finite R M]
+    [Module.Free R N] [Module.Finite R N]
+    (f : M →ₗ[R] N) (g : N →ₗ[R] P) :
+    Module.finrank R (LinearMap.ker (g ∘ₗ f)) =
+      Module.finrank R (LinearMap.ker f) +
+      Module.finrank R (LinearMap.ker (g.domRestrict (LinearMap.range f))) := by
+  simpa using kernel_chain_rank_add f g
+
 end Omega.Conclusion

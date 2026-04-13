@@ -5,6 +5,7 @@ import Mathlib.Data.ZMod.Basic
 import Mathlib.GroupTheory.Perm.Cycle.Concrete
 import Mathlib.Data.Nat.Fib.Basic
 import Mathlib.Tactic
+import Omega.Zeta.DynZeta
 
 /-!
 # Cyclic Permutation Determinant
@@ -406,6 +407,16 @@ theorem cyclic_periodicity_orders :
     cyclicPerm4 ^ 4 = 1 ∧ cyclicPerm5 ^ 5 = 1 ∧ cyclicPerm6 ^ 6 = 1 :=
   ⟨cyclicPerm2_sq, cyclicPerm3_cube, cyclicPerm4_fourth,
    cyclicPerm5_fifth, cyclicPerm6_sixth⟩
+
+/-- Paper wrapper combining cyclic periodicity orders with the golden mean determinant
+    witness. thm:operator-finite-state-zeta-2pii-periodic-separation -/
+theorem paper_operator_finite_state_zeta_2pii_periodic_separation :
+    (cyclicPerm2 ^ 2 = 1 ∧ cyclicPerm3 ^ 3 = 1 ∧
+     cyclicPerm4 ^ 4 = 1 ∧ cyclicPerm5 ^ 5 = 1 ∧
+     cyclicPerm6 ^ 6 = 1) ∧
+    (∀ z : ℤ, (fredholmGoldenMean z).det = 1 - z - z ^ 2) := by
+  refine ⟨cyclic_periodicity_orders, ?_⟩
+  exact paper_finite_zeta_periodicity_witness.1
 
 /-- Block 2+3 Fredholm product.
     cor:cyclic-euler-product -/
