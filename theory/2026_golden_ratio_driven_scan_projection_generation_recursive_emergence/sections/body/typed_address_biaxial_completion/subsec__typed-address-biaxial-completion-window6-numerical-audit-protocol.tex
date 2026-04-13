@@ -1,0 +1,404 @@
+\subsection{数值审计协议：从固定窗闭式到跨尺度可证伪规则}\label{subsec:typed-address-biaxial-completion-window6-numerical-audit-protocol}
+上一节已经把
+\[
+\mathcal I_6
+=
+(\mathcal P_6,\mathcal X_6,\mathcal U_6,\mathcal R_6,\mathcal E_6,\mathcal C_6)
+\]
+组装成本文的第一个最小可审计粗糙时空样例。
+接下来的问题不再是“是否能写出这些对象”，而是：哪些量必须先被做成刚性证书，哪些量可以进入数值回归，哪些量又只有在前两层全部通过后才有资格被解释为几何或物理信号。
+在本文的写法里，数值协议不应先追求大模拟，而应先建立一条由闭式恒等式、固定窗枚举、有限状态核与协议门组成的分层审计链。
+window-\(6\) 之所以适合作为第一锚点，正因为它同时给出了显式纤维分类 \(2{:}8,3{:}4,4{:}9\)、规范体积密度 \(g_6\)、折叠缺陷 \(\kappa_6\)、\(21\) 维异常签名、三条 boundary 二层覆盖以及两比特精确回放阈值；这些对象都已在现稿中被闭式固定，而不是事后拟合。
+
+\subsubsection{固定窗精确基线}\label{subsubsec:typed-address-biaxial-completion-window6-numerical-audit-fixed-window-baseline}
+第一层协议只允许使用闭式等式与有限枚举恒等式。
+固定
+\[
+\Omega_6=\{0,1\}^6,
+\qquad
+X_6=\{w\in\{0,1\}^6:\ \text{不含相邻 }11\},
+\]
+并记
+\[
+p_6(w):=\frac{d_6^{\mathrm{bin}}(w)}{64},
+\qquad
+u_6(w):=\frac1{21}.
+\]
+对这个固定窗口，任何后续统计或几何解释都必须以前述可见层与 hidden fiber 的闭式为前提。
+
+\begin{proposition}[window-\texorpdfstring{$6$}{6} 的固定窗刚性基线]\label{prop:typed-address-biaxial-completion-window6-audit-fixed-baseline}
+window-\(6\) 的第一层审计基线由下列刚性对象组成：
+\begin{enumerate}
+  \item 纤维直方图、规范体积与异常秩
+  \[
+  d_6^{\mathrm{bin}}(w)\in\{2,3,4\},
+  \qquad
+  \#\{d=2\}=8,\ \#\{d=3\}=4,\ \#\{d=4\}=9,
+  \]
+  \[
+  |X_6|=21,
+  \qquad
+  g_6=\frac{39}{64}\log 2+\frac{13}{64}\log 3,
+  \qquad
+  \kappa_6=\frac{11}{8}\log 2+\frac{3}{16}\log 3,
+  \]
+  \[
+  \dim_{\FF_2}\bigl(G_6^{\mathrm{bin}}\bigr)^{\mathrm{ab}}=21;
+  \]
+  \item 似然比随机变量
+  \[
+  L_6(w):=\frac{p_6(w)}{u_6(w)}=\frac{21\,d_6^{\mathrm{bin}}(w)}{64}
+  \]
+  在均匀基线 \(u_6\) 下恰塌缩成三原子谱
+  \[
+  \nu_6
+  =
+  \frac8{21}\delta_{21/32}
+  +\frac4{21}\delta_{63/64}
+  +\frac9{21}\delta_{21/16};
+  \]
+  \item 相对熵满足精确恒等式
+  \[
+  D_{\mathrm{KL}}(p_6\|u_6)=\kappa_6-\log\frac{64}{21}.
+  \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+纤维直方图由推论 \ref{cor:fold-bin-m6-fiber-hist} 给出，
+\(g_6\) 与 \(\kappa_6\) 由定理 \ref{thm:conclusion-window6-rational-envelope-reconstructs-block-spectrum} 给出，
+而 anomaly 秩
+\[
+\dim_{\FF_2}\bigl(G_6^{\mathrm{bin}}\bigr)^{\mathrm{ab}}=21
+\]
+则由定理 \ref{thm:xi-window6-oracle-anomaly-coordinate-bifurcation} 给出。
+第二条正是定理 \ref{thm:conclusion-window6-three-atom-likelihood-law} 的内容。
+第三条则由推论 \ref{cor:conclusion-window6-synchronization-entropy-kl-anomaly-identity} 直接给出。证毕。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-window6-audit-fixed-baseline} 的作用并不是再列一遍 window-\(6\) 常数，而是把实现层的最小停机条件固定下来：任何脚本只要在这一层与闭式不符，后续关于几何、统计或历史外置的全部解释都应立即作废。
+
+\subsubsection{boundary 几何与最小 holonomy 证书}\label{subsubsec:typed-address-biaxial-completion-window6-numerical-audit-boundary-holonomy-certificates}
+第二层协议专门审计局部—全局障碍的最小来源。
+window-\(6\) 的 boundary 扇区
+\[
+X_6^{\mathrm{bdry}}=\{\texttt{100001},\texttt{100101},\texttt{101001}\}
+\]
+并不是可见层上的一个附属角落，而是首个非平凡 holonomy 的最小宿主。
+
+\begin{proposition}[window-\texorpdfstring{$6$}{6} 的 boundary holonomy 最小证书]\label{prop:typed-address-biaxial-completion-window6-audit-boundary-certificates}
+在 window-\(6\) 上，boundary 几何必须同时通过以下三条刚性核验：
+\begin{enumerate}
+  \item 离散中心残余满足
+  \[
+  C_{\partial}\cong (\ZZ/2\ZZ)^3,
+  \qquad
+  \operatorname{rank}_{\FF_2}C_{\partial}=3;
+  \]
+  \item 几何可实现子群满足
+  \[
+  P_6^{\mathrm{geo}}=\langle(1,1,1)\rangle\cong \ZZ/2\ZZ,
+  \qquad
+  C_{\partial}/P_6^{\mathrm{geo}}\cong (\ZZ/2\ZZ)^2;
+  \]
+  \item 若要求忠实地以紧 torus holonomy 实现全部 boundary parity，则最小 torus 秩满足
+  \[
+  r_{\mathrm{tor}}(Z_6^{\mathrm{bd}})=3.
+  \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+第一条与第二条分别由定理 \ref{thm:conclusion-window6-boundary-parity-directsummand-rational-blindness} 及定理 \ref{thm:conclusion-window6-boundary-parity-three-layer-blind-filtration} 给出。
+第三条由定理 \ref{thm:conclusion-window6-boundary-parity-minimal-torus-rank} 给出；把三者并读，即得到定理 \ref{thm:conclusion-window6-boundary-parity-zero-one-three-law} 的 \((0/1/3)\) 通道律。证毕。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-window6-audit-boundary-certificates} 的意义在于，它把本样例中的“曲率候选”压缩成一组有限、离散、可逐项核验的证书：局域几何至多吸收掉一条对角 bit，而仍有恰好两位残余自由度不能被局域平坦化。
+
+\subsubsection{局部回放预算与异常完备预算的分裂}\label{subsubsec:typed-address-biaxial-completion-window6-numerical-audit-budget-split}
+第三层协议审计的不是“是否能解码”，而是不同任务等级究竟需要多少预算。
+在 window-\(6\) 中，精确回放、boundary 超选分辨与 anomaly 完备根本不是同一件事。
+
+\begin{proposition}[window-\texorpdfstring{$6$}{6} 的回放—boundary—anomaly 位数制度]\label{prop:typed-address-biaxial-completion-window6-audit-budget-split}
+定义 window-\(6\) 的 fixed-window 预言机容量
+\[
+C_6(B):=\sum_{w\in X_6}\min\bigl(d_6^{\mathrm{bin}}(w),2^B\bigr).
+\]
+则有
+\[
+C_6(B)=8\min(2,2^B)+4\min(3,2^B)+9\min(4,2^B),
+\]
+从而
+\[
+C_6(0)=21,
+\qquad
+C_6(1)=42,
+\qquad
+C_6(B)=64\iff B\ge 2.
+\]
+特别地，三种最小位数制度满足
+\[
+B_6^{\mathrm{replay}}=2,
+\qquad
+B_6^{\mathrm{bdry}}=3,
+\qquad
+B_6^{\mathrm{anom}}=21,
+\]
+并且
+\[
+B_6^{\mathrm{bdry}}-B_6^{\mathrm{replay}}=1,
+\qquad
+B_6^{\mathrm{anom}}-B_6^{\mathrm{replay}}=19.
+\]
+若进一步要求乘法层与事件层的严格同态账本，则不存在任何有限 \(k\) 使
+\[
+\NN_{>0}^{\times}\hookrightarrow (\NN^k,+)
+\]
+成为单射幺半群同态；此时最小寄存器方向被 prime valuations 强迫为可数无穷。
+\end{proposition}
+
+\begin{proof}
+容量闭式由定理 \ref{thm:fold-oracle-capacity-closed-form} 与 window-\(6\) 直方图直接代入得到。
+三个位数制度则由定理 \ref{thm:conclusion-window6-perfect-replay-threshold-onebit-gap} 与推论 \ref{cor:conclusion-window6-replay-boundary-anomaly-bit-separation} 直接给出。
+最后一条正是推论 \ref{cor:killo-no-finite-additive-register-linearization} 的内容。证毕。
+\end{proof}
+
+因此，在本样例的账本轴上，至少应区分以下五个层级：
+\[
+L_6\in\{0,1,2,21,+\infty\},
+\]
+其中 \(L_6=0\) 表示当前图表内已单值，\(L_6=1\) 表示只需单个 boundary 选层 bit，\(L_6=2\) 表示达到精确回放阈值，\(L_6=21\) 表示保持全部异常签名，而 \(L_6=+\infty\) 则表示当前协议下无忠实外置。
+这一层次划分并不是解释性的修辞，而是由命题 \ref{prop:typed-address-biaxial-completion-window6-audit-budget-split} 中的 fixed-window 闭式严格固定的。
+
+\subsubsection{固定窗统计与表观随机证书}\label{subsubsec:typed-address-biaxial-completion-window6-numerical-audit-fixed-window-statistics}
+第四层协议处理“看起来像随机”的统计外观，但它只能在前三层全部通过的前提下启动。
+在本文语境中，统计层不应先求一条经验拟合曲线，而应先被拆成固定窗闭式证书与大窗渐近证书两类不同任务。
+
+\begin{definition}[window-\texorpdfstring{$6$}{6} 统计审计的两层证书]\label{def:typed-address-biaxial-completion-window6-audit-statistical-layers}
+将 window-\(6\) 的统计审计分成下列两层：
+\begin{enumerate}
+  \item 固定窗闭式证书层
+  \[
+  \mathcal A_{6,\mathrm{exact}}
+  :=
+  \Bigl\{
+  \nu_6,\ 
+  \mathrm{Col}^{\mathrm{bin}}_2(6),\
+  \|p_6-u_6\|_2^2,\
+  \chi^2(p_6\|u_6),\
+  D_{\mathrm{KL}}(p_6\|u_6)
+  \Bigr\};
+  \]
+  \item 大窗渐近证书层
+  \[
+  \mathcal A_{\infty,\mathrm{asymp}}
+  :=
+  \Bigl\{
+  r_q,\ 
+  P(q),\ 
+  f_{\mathrm{Leg}}(\gamma),\ 
+  \Delta_q^{(\ell)},\ 
+  \Xi_q^{(0,1)}
+  \Bigr\},
+  \]
+  其中 \(\Delta_q^{(\ell)}\) 与 \(\Xi_q^{(0,1)}\) 分别沿用 \S\ref{subsubsec:frt-apparent-randomness-freezing-rough-statistics} 的块碰撞缺口与归一化 mixed collision 相似度记号。
+\end{enumerate}
+\end{definition}
+
+定义 \ref{def:typed-address-biaxial-completion-window6-audit-statistical-layers} 的第一层完全由 fixed-window 闭式控制。
+事实上，由命题 \ref{prop:typed-address-biaxial-completion-window6-collision-closed-form} 与定理 \ref{thm:conclusion-window6-output-chi2-visible-blind-orthogonal-splitting}，
+\[
+\mathrm{Col}^{\mathrm{bin}}_2(6)=\frac{212}{64^2}=\frac{53}{1024},
+\qquad
+\|p_6-u_6\|_2^2=\frac{89}{21504},
+\qquad
+\chi^2(p_6\|u_6)=\frac{89}{1024}.
+\]
+再结合命题 \ref{prop:typed-address-biaxial-completion-window6-audit-fixed-baseline} 中的三原子似然律 \(\nu_6\) 与相对熵恒等式，便得到固定窗的第一层统计锚点。
+
+定义 \ref{def:typed-address-biaxial-completion-window6-audit-statistical-layers} 的第二层则对应大窗渐近审计。
+在这一层上，\(\texttt{scripts/exp\_fold\_collision\_moment\_recursions.py}\) 已给出 \(S_k(m)\) 的递推核验，\(\texttt{scripts/exp\_fold\_collision\_pressure\_multifractal\_q60.py}\) 已在 \(m\in[24,30]\)、\(2\le q\le 60\) 上回归 \(r_q\) 与离散压力曲线，并输出下凸包与 Legendre 候选谱；而 \(\Delta_q^{(\ell)}\) 与 \(\Xi_q^{(0,1)}\) 则给出“块层非因子化”与“高阶尾部几何相似度”的可证伪接口。
+就协议设计而言，\(q\in[18,22]\) 可被视为首批重点放大区间，用以检查顶端支配与冻结行为是否较低阶区间进一步增强。
+
+\subsubsection{粗糙可见量的最小采样协议}\label{subsubsec:typed-address-biaxial-completion-window6-numerical-audit-rough-visibility-sampling}
+前四层都还停留在现稿已经对象化的闭式与有限状态证书上。
+真正新增的，是把这些离散对象重新读成粗糙可见几何的采样协议。
+为避免数值层过度自由化，本节只允许一个受控截断族，而不允许任意信号类自由更换。
+
+\begin{definition}[window-\texorpdfstring{$6$}{6} 的受控截断粗糙采样族]\label{def:typed-address-biaxial-completion-window6-audit-rough-sampling}
+对每个 \(\omega\in\Omega_6\)，定义
+\[
+Y_\omega^{(\le J)}(t)
+:=
+\sum_{j=0}^{J} a^j
+\cos\!\Bigl(
+2^j t+\phi_j\bigl(w(\omega),\sigma(\omega),\ell_j(\omega)\bigr)
+\Bigr),
+\qquad 0<a<1,
+\]
+其中
+\[
+w(\omega):=\Fold_6^{\mathrm{bin}}(\omega),
+\]
+\(\sigma(\omega)\in(\ZZ/2\ZZ)^3\) 为 boundary parity 记录，\(\ell_j(\omega)\) 为动态 prime-register 的第 \(j\) 个前缀读数。
+并要求相位注入规则拆成
+\[
+\phi_j=\phi_j^{\mathrm{vis}}+\phi_j^{\mathrm{bdry}}+\phi_j^{\mathrm{ledger}},
+\]
+其中：
+\begin{enumerate}
+  \item \(\phi_j^{\mathrm{vis}}\) 只依赖 \(w(\omega)\)，作为无隐藏残差的参考项；
+  \item \(\phi_j^{\mathrm{bdry}}\) 只依赖 \(\sigma(\omega)\)，用于测试 boundary holonomy 是否留下粗糙几何指纹；
+  \item \(\phi_j^{\mathrm{ledger}}\) 只依赖 \(\ell_j(\omega)\)，用于测试动态账本是否在高频层留下可见痕迹。
+\end{enumerate}
+\end{definition}
+
+在定义 \ref{def:typed-address-biaxial-completion-window6-audit-rough-sampling} 的约束下，只允许审计下列四类量。
+记 dyadic 区间
+\[
+I_{n,r}:=[r2^{-n},(r+1)2^{-n}]
+\qquad (0\le r<2^n),
+\]
+并定义局部振荡代理
+\[
+\operatorname{Osc}_{J,n}(\omega)
+:=
+\max_{0\le r<2^n}
+\sup_{s,t\in I_{n,r}}
+\bigl|Y_\omega^{(\le J)}(s)-Y_\omega^{(\le J)}(t)\bigr|,
+\]
+离散 \(p\)-variation 代理
+\[
+V_p^{(J,N)}(\omega)
+:=
+\sum_{r=0}^{N-1}
+\bigl|Y_\omega^{(\le J)}(t_{r+1})-Y_\omega^{(\le J)}(t_r)\bigr|^p,
+\]
+块碰撞缺口
+\[
+\Delta_q^{(\ell)}(J,N)
+:=
+\log \mathrm{Col}_q^{(\ell)}(J,N)
+-\ell \log \mathrm{Col}_q^{(1)}(J,N),
+\]
+以及归一化 mixed collision 相似度
+\[
+\Xi_q^{(0,1)}(J,N)
+:=
+\frac{\mathrm{Col}_q^{(0,1)}(J,N)}
+{\bigl(\mathrm{Col}_q^{(0,0)}(J,N)\mathrm{Col}_q^{(1,1)}(J,N)\bigr)^{1/2}},
+\]
+其中上标 \((0)\) 表示仅保留 \(\phi_j^{\mathrm{vis}}\) 的参考机制，而上标 \((1)\) 表示打开 \(\phi_j^{\mathrm{bdry}}+\phi_j^{\mathrm{ledger}}\) 的全机制读出。
+
+定义 \ref{def:typed-address-biaxial-completion-window6-audit-rough-sampling} 的关键不在于引入一条新的可见信号，而在于为“boundary residual 与历史账本是否真的被重新注入可见层”给出可证伪判据。
+若关闭 \(\phi_j^{\mathrm{bdry}}\) 与 \(\phi_j^{\mathrm{ledger}}\) 之后，上述四类量的行为与全机制读出无系统差异，则该读出并未把 hidden residual 真正注回可见层；这种结果应被判定为读出设计失败，而不是“数据太噪”。
+
+\subsubsection{跨尺度延拓必须经过协议门}\label{subsubsec:typed-address-biaxial-completion-window6-numerical-audit-crossscale-gate}
+这里必须保持严格克制。
+window-\(6\) 上的 boundary parity 是一个极漂亮的二层覆盖事实，但它并不会自动跨尺度稳定。
+choice-free parity 锚点只在 \(m=6\) 出现；一旦升到 \(m=7,8\)，原始 uplift 增量集便已转成三层。
+
+\begin{proposition}[没有协议门的跨尺度 boundary 外推不被允许]\label{prop:typed-address-biaxial-completion-window6-audit-crossscale-gate}
+记
+\[
+\Delta_m^{\mathrm{bdry}}
+:=
+\{n-V_m(w):\ n\in \Fold_m^{\mathrm{bin}}{}^{-1}(w)\}
+\]
+为 boundary uplift 增量集。
+则
+\[
+\Delta_6^{\mathrm{bdry}}=\{0,34\},
+\qquad
+\Delta_7^{\mathrm{bdry}}=\{0,55,89\},
+\qquad
+\Delta_8^{\mathrm{bdry}}=\{0,89,144\}.
+\]
+因此，若未显式给出并核验一个重锁定协议门
+\[
+\Gamma_m:\Delta_m^{\mathrm{bdry}}\longrightarrow \widehat{\Delta}_m^{\mathrm{bdry}},
+\]
+则不得把 \(m=6\) 的 boundary parity 直接外推为更大窗口上的同名坐标。
+换言之，只有在 \(\Gamma_m\) 被指定并通过固定窗核验之后，才允许讨论再锁定后的跨尺度符号
+\[
+\widehat{\sigma}_m.
+\]
+\end{proposition}
+
+\begin{proof}
+增量集的具体值与 choice-free parity 锚点只在 \(m=6\) 出现，正是定理 \ref{thm:conclusion-window6-choicefree-parity-anchor-isolated} 的内容。
+进一步地，定理 \ref{thm:conclusion-window6-no-gateless-crossscale-parity-tower} 已证明，不存在无协议门的跨尺度 parity 塔。
+因此，若未先固定 \(\Gamma_m\)，则更大窗口上的 parity 读出根本没有共同坐标。证毕。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-window6-audit-crossscale-gate} 的作用，是阻止把一个局部真命题误写成全尺度真命题。
+在本文中，“window-\(6\) 的 boundary parity 可被审计”与“boundary parity 可以自然跨尺度延拓”是两件必须严格分开的事情。
+
+\subsubsection{脚本与审计产物}\label{subsubsec:typed-address-biaxial-completion-window6-numerical-audit-scripts-artifacts}
+为与全文既有风格保持一致，本节不主张先写一个巨型脚本，而主张把协议拆成若干职责清晰的审计产物。
+其中，现有稿件已经提供四个基础锚点：
+\[
+\texttt{scripts/exp\_fold\_bin\_gauge\_m6\_invariants.py},
+\qquad
+\texttt{scripts/exp\_fold\_collision\_moment\_recursions.py},
+\]
+\[
+\texttt{scripts/exp\_fold\_collision\_pressure\_multifractal\_q60.py},
+\qquad
+\texttt{scripts/exp\_window6\_c6\_orbit\_patisalam\_seed.py}.
+\]
+它们分别负责 fixed-window 纤维直方图与 \(g_6,\kappa_6\) 锚点、\(S_k(m)\) 的递推核验、\(r_q\) 与 \(P(q)\) 的大窗压力回归，以及 boundary uplift 与 preimage 对的 JSON 审计产物。
+
+在此基础上，为保持职责分离，可把后续协议继续拆成四个专题脚本：
+\[
+\texttt{scripts/exp\_window6\_rough\_visibility\_audit.py},
+\qquad
+\texttt{scripts/exp\_window6\_block\_collision\_audit.py},
+\]
+\[
+\texttt{scripts/exp\_window6\_boundary\_holonomy\_audit.py},
+\qquad
+\texttt{scripts/exp\_window6\_prime\_ledger\_prefix\_audit.py}.
+\]
+其中前两者对应粗糙可见量与表观随机统计，后两者对应 boundary residual 与动态账本。
+四者的输入应共享同一份 window-\(6\) canonical enumeration 及同一份 JSON 证书，以避免后期出现图表坐标不一致的问题。
+
+\subsubsection{通过与失败规则}\label{subsubsec:typed-address-biaxial-completion-window6-numerical-audit-pass-fail}
+前述各层最终要被压成明确的停机准则。
+
+\begin{proposition}[window-\texorpdfstring{$6$}{6} 审计协议的停机规则]\label{prop:typed-address-biaxial-completion-window6-audit-pass-fail-rules}
+设 \(\varepsilon_{\mathrm{num}}>0\) 为预先固定的数值容忍阈值。
+则本文对 window-\(6\) 的数值审计遵循以下规则：
+\begin{enumerate}
+  \item 若命题 \ref{prop:typed-address-biaxial-completion-window6-audit-fixed-baseline} 中的任一闭式常数未被逐项复现，则停止一切后续解释，并把失败判定为实现错误；
+  \item 若命题 \ref{prop:typed-address-biaxial-completion-window6-audit-boundary-certificates} 中任一 rank/quotient/torus-rank 条件失败，则停止 boundary 几何解释，并把失败判定为 boundary 坐标识别错误；
+  \item 若命题 \ref{prop:typed-address-biaxial-completion-window6-audit-budget-split} 中的位数制度未被同时追踪，则不得把“可逆预算”与“异常预算”混并为同一资源轴；
+  \item 若在打开 \(\phi_j^{\mathrm{bdry}}+\phi_j^{\mathrm{ledger}}\) 后，所有测试对 \((q,\ell)\) 与 \((J,N)\) 上都仍满足
+  \[
+  |\Delta_q^{(\ell)}(J,N)|\le \varepsilon_{\mathrm{num}},
+  \qquad
+  1-\Xi_q^{(0,1)}(J,N)\le \varepsilon_{\mathrm{num}},
+  \]
+  则当前粗糙读出并未把 residual 真正注回可见层，应判定为读出设计失败，而不是把结果解释为“真噪声”；
+  \item 若命题 \ref{prop:typed-address-biaxial-completion-window6-audit-crossscale-gate} 中的协议门 \(\Gamma_m\) 未被显式指定并核验，则不得报告任何“window-\(6\) 的 boundary parity 已跨尺度延拓”的结论。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+前四条分别只是把命题 \ref{prop:typed-address-biaxial-completion-window6-audit-fixed-baseline}、命题 \ref{prop:typed-address-biaxial-completion-window6-audit-boundary-certificates}、命题 \ref{prop:typed-address-biaxial-completion-window6-audit-budget-split} 与定义 \ref{def:typed-address-biaxial-completion-window6-audit-rough-sampling} 的逻辑顺序改写成停机规则。
+最后一条则直接来自命题 \ref{prop:typed-address-biaxial-completion-window6-audit-crossscale-gate}。证毕。
+\end{proof}
+
+\subsubsection{小结}\label{subsubsec:typed-address-biaxial-completion-window6-numerical-audit-summary}
+至此，window-\(6\) 的最小实例簇已经第一次被压成一套可证伪、可停机、可复算的研究协议。
+这套协议并不从“大模拟”开始，而是严格按如下顺序推进：
+\begin{enumerate}
+  \item 先审计固定窗闭式；
+  \item 再审计 boundary holonomy；
+  \item 然后审计回放预算与异常预算的裂分；
+  \item 继而审计表观随机的 fixed-window 与大窗统计证书；
+  \item 随后才允许进入粗糙可见量的采样协议；
+  \item 最后再以协议门限制跨尺度外推。
+\end{enumerate}
+只有这六层全部按顺序通过，window-\(6\) 才有资格被说成最小可审计粗糙时空样例；否则，它至多只是一个尚未与现有闭式链对齐的离散模型。
+下一步最自然的工作，则是把这一协议对应的首批图表、表格与 JSON 证书说明逐项固定下来，并把落图顺序直接嵌回正文层。
