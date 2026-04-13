@@ -221,6 +221,7 @@ import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.FibonacciDistortionThreshold
+import Omega.Conclusion.CdimKernelRegisterLowerBound
 import Omega.Conclusion.KernelChainRule
 import Omega.Conclusion.Window6ResidualBudget
 import Omega.Conclusion.Pisano1PositiveSea
@@ -252,6 +253,7 @@ import Omega.POM.FoldIndexSeeds
 import Omega.POM.FenceRiccatiError
 import Omega.POM.StarMomentKernelCompression
 import Omega.POM.FiberTwoPhaseMixing
+import Omega.POM.MaryAuxlength
 import Omega.POM.MaryAuxlengthSeeds
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky

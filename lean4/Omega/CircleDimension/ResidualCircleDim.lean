@@ -1,4 +1,5 @@
 import Mathlib.Tactic
+import Omega.CircleDimension.CircleDim
 
 namespace Omega.CircleDimension
 
@@ -118,6 +119,44 @@ theorem residual_register_lower_bound (r k b R : ℕ)
     push_neg at hR
     interval_cases R
     simp at hinj
+
+/-- Single-circle specialization of the finite residual-budget lower bound.
+    cor:cdim-single-circle-exponential-residual -/
+theorem paper_cdim_single_circle_exponential_residual
+    (b r t R : ℕ) (hr : 1 ≤ r)
+    (hinj : ∃ f : Fin ((2 ^ (b * r)) * t) → Fin ((2 ^ b) * R), Function.Injective f) :
+    t * 2 ^ (b * (r - 1)) ≤ R := by
+  rcases hinj with ⟨f, hf⟩
+  have hinj' :
+      ∃ f : Fin ((2 ^ (b * r)) * t) → Fin ((2 ^ (b * 1)) * R), Function.Injective f := by
+    let g : Fin ((2 ^ (b * r)) * t) → Fin ((2 ^ (b * 1)) * R) :=
+      fun i => ⟨f i, by simpa [Nat.mul_one] using (f i).2⟩
+    refine ⟨g, ?_⟩
+    intro i j h
+    have hval : (g i : ℕ) = g j := by
+      exact congrArg (fun x : Fin ((2 ^ (b * 1)) * R) => x.val) h
+    apply hf
+    apply Fin.ext
+    simpa [g] using hval
+  have hbudget :
+      (2 ^ (b * r)) * t ≤ (2 ^ (b * 1)) * R := by
+    exact phaseResidualBudget_lower_bound_finite b r 1 t R hinj'
+  have hexp : b * (r - 1) + b = b * r := by
+    calc
+      b * (r - 1) + b = b * (r - 1) + b * 1 := by rw [Nat.mul_one]
+      _ = b * ((r - 1) + 1) := by rw [← Nat.mul_add]
+      _ = b * r := by rw [Nat.sub_add_cancel hr]
+  have hmul :
+      (t * 2 ^ (b * (r - 1))) * 2 ^ b ≤ R * 2 ^ b := by
+    calc
+      (t * 2 ^ (b * (r - 1))) * 2 ^ b = t * (2 ^ (b * (r - 1)) * 2 ^ b) := by
+        rw [Nat.mul_assoc]
+      _ = t * 2 ^ (b * r) := by rw [residual_register_pow_add, hexp]
+      _ ≤ R * 2 ^ b := by simpa [Nat.mul_one, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hbudget
+  have hmul' : 2 ^ b * (t * 2 ^ (b * (r - 1))) ≤ 2 ^ b * R := by
+    simpa [Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm, hexp, residual_register_pow_add]
+      using hmul
+  exact Nat.le_of_mul_le_mul_left hmul' (by positivity)
 
 /-- Paper seeds: abelianization bottleneck concrete values.
     cor:cdim-abelianization-bottleneck -/
