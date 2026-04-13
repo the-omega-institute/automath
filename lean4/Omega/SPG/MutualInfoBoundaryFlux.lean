@@ -61,6 +61,15 @@ theorem mutualInfo_ge_boundaryFlux_sq (n : ℕ) (hn : 0 < n)
              sq_nonneg ((ct : ℤ) - 2 ^ (n - 1)),
              Int.natCast_nonneg cf, Int.natCast_nonneg ct]
 
+/-- Paper: `cor:spg-mutual-information-boundary-flux-lower-bound`.
+    Direct wrapper around the Boolean-cube boundary flux inequality. -/
+theorem paper_spg_mutual_information_boundary_flux_lower_bound
+    (n : ℕ) (hn : 0 < n) (S : Finset (Fin n → Bool))
+    (hS_nonempty : S.Nonempty) (hS_proper : S.card < 2 ^ n) :
+    ∀ i : Fin n,
+      (boundaryFlux n S i) ^ 2 ≤ 2 * (S.card : ℤ) * ((2 ^ n : ℤ) - S.card) := by
+  simpa using mutualInfo_ge_boundaryFlux_sq n hn S hS_nonempty hS_proper
+
 /-- Seed values for the mutual information boundary flux bound.
     cor:spg-mutual-information-boundary-flux-lower-bound -/
 theorem paper_spg_mutual_information_boundary_flux_seeds :

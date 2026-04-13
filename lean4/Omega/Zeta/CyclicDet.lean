@@ -606,6 +606,18 @@ theorem paper_cyclotomic_factorization_package_6_to_12 :
   ⟨cyclotomic_factor_6, cyclotomic_factor_7_neg,
    cyclotomic_factor_9, cyclotomic_factor_10, cyclotomic_factor_12⟩
 
+/-- Paper: `cor:zeta-cyclic-lift-atomic-witt-cyclotomic-splitting`.
+    Re-export of the small cyclotomic factorization package. -/
+theorem paper_zeta_cyclic_lift_atomic_witt_cyclotomic_splitting :
+    (∀ t : ℤ, t^6 - 1 = (t - 1) * (t + 1) * (t^2 + t + 1) * (t^2 - t + 1)) ∧
+    (∀ t : ℤ, t^7 + 1 = (t + 1) * (t^6 - t^5 + t^4 - t^3 + t^2 - t + 1)) ∧
+    (∀ t : ℤ, t^9 - 1 = (t - 1) * (t^2 + t + 1) * (t^6 + t^3 + 1)) ∧
+    (∀ t : ℤ, t^10 - 1 = (t - 1) * (t + 1) * (t^4 + t^3 + t^2 + t + 1) *
+                          (t^4 - t^3 + t^2 - t + 1)) ∧
+    (∀ t : ℤ, t^12 - 1 = (t - 1) * (t + 1) * (t^2 + 1) * (t^2 + t + 1) *
+                          (t^2 - t + 1) * (t^4 - t^2 + 1)) := by
+  exact paper_cyclotomic_factorization_package_6_to_12
+
 /-- Paper package.
     prop:cycle-permutation-determinant -/
 theorem paper_euler_factor_n7_n8_package :
