@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2982 |
+| \leanverified 标注数 | 2985 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3031 |
-| 轮次 | R670（round_count=671）|
+| 总标注数 | 3034 |
+| 轮次 | R671（round_count=672）|
 
-**Phase R670（本轮落地）**：`paper_cdim_double_discriminant_two_parameter_package`（对应 `prop:cdim-double-discriminant-two-parameter-family`，Circle Dimension；严格克隆 `paper_cdim_double_discriminant_two_parameter_seeds` 的原签名与证明，补齐 double discriminant two-parameter family 的 paper-facing package）；`paper_conclusion_pisano1_positive_sea_package`（对应 `cor:conclusion-pisano1-positive-sea-exponential-dominance`，Conclusion；严格克隆 `paper_conclusion_pisano1_positive_sea_seeds` 的原签名与证明，补齐 Pisano-1 positive sea exponential dominance 的 paper-facing package）；`paper_pom_typeclass_diagonal_coupling_package`（对应 `thm:pom-typeclass-diagonal-coupling-scalarization`，POM；严格克隆 `paper_pom_typeclass_diagonal_coupling_seeds` 的原签名与证明，补齐 typeclass diagonal coupling scalarization 的 paper-facing package）
+**Phase R671（本轮落地）**：`paper_conclusion_smith_ramanujan_shadow_inversion_package`（对应 `thm:conclusion-smith-pprimary-ramanujan-shadow-inversion`，Conclusion；严格克隆 `paper_conclusion_smith_ramanujan_shadow_inversion_seeds` 的原签名与证明，补齐 Smith p-primary Ramanujan shadow inversion 的 paper-facing package）；`paper_pom_zero_temperature_two_term_expansion_package`（对应 `thm:pom-zero-temperature-two-term-expansion-maxfiber-entropy`，POM；严格克隆 `paper_pom_zero_temperature_two_term_expansion_seeds` 的原签名与证明，补齐 zero temperature two-term expansion maxfiber entropy 的 paper-facing package）；`paper_xi_foldbin_gauge_group_triple_decomp_package`（对应 `thm:xi-foldbin-gauge-group-center-abel-derived-triple-decomposition`，Zeta；严格克隆 `paper_xi_foldbin_gauge_group_triple_decomp_seeds` 的原签名与证明，补齐 gauge group center/abelianization/derived triple decomposition 的 paper-facing package）
+
+**Phase R670（上一轮落地）**：`paper_cdim_double_discriminant_two_parameter_package`（对应 `prop:cdim-double-discriminant-two-parameter-family`，Circle Dimension；严格克隆 `paper_cdim_double_discriminant_two_parameter_seeds` 的原签名与证明，补齐 double discriminant two-parameter family 的 paper-facing package）；`paper_conclusion_pisano1_positive_sea_package`（对应 `cor:conclusion-pisano1-positive-sea-exponential-dominance`，Conclusion；严格克隆 `paper_conclusion_pisano1_positive_sea_seeds` 的原签名与证明，补齐 Pisano-1 positive sea exponential dominance 的 paper-facing package）；`paper_pom_typeclass_diagonal_coupling_package`（对应 `thm:pom-typeclass-diagonal-coupling-scalarization`，POM；严格克隆 `paper_pom_typeclass_diagonal_coupling_seeds` 的原签名与证明，补齐 typeclass diagonal coupling scalarization 的 paper-facing package）
 
 **Phase R669（上一轮落地）**：`paper_conclusion_period3_fiber_exact_multiplicity_package`（对应 `thm:conclusion-period3-fiber-exact-multiplicity`，Conclusion；严格克隆 `paper_conclusion_period3_fiber_exact_multiplicity_seeds` 的原签名与证明，补齐 period-3 fiber exact multiplicity 的 paper-facing package）；`paper_pom_renyi_dimension_spectrum_package`（对应 `prop:pom-renyi-dimension-spectrum`，POM；严格克隆 `paper_pom_renyi_dimension_spectrum_seeds` 的原签名与证明，补齐 Renyi dimension spectrum 的 paper-facing package）；`paper_spg_dyadic_flux_zeta_minkowski_pole_package`（对应 `prop:spg-dyadic-flux-zeta-minkowski-pole`，SPG；严格克隆 `paper_spg_dyadic_flux_zeta_minkowski_pole_seeds` 的原签名与证明，补齐 dyadic flux zeta Minkowski pole 的 paper-facing package）
 
