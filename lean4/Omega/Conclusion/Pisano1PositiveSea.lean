@@ -48,4 +48,12 @@ theorem paper_conclusion_pisano1_positive_sea_seeds :
   calc r * (r - 1) ≥ r * 2 := Nat.mul_le_mul_left r this
     _ = 2 * r := Nat.mul_comm r 2
 
+/-- Package wrapper for the Pisano-1 positive sea seeds.
+    cor:conclusion-pisano1-positive-sea-exponential-dominance -/
+theorem paper_conclusion_pisano1_positive_sea_package :
+    Nat.fib 8 % 3 = Nat.fib 0 % 3 ∧
+    (∀ n : Nat, n = 0 ∨ n = 1 ∨ n ≥ 2) ∧
+    (∀ r : Nat, r ≥ 3 → r * (r - 1) ≥ 2 * r) :=
+  paper_conclusion_pisano1_positive_sea_seeds
+
 end Omega.Conclusion

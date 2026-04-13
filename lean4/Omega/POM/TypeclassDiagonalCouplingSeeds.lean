@@ -152,4 +152,13 @@ theorem paper_pom_typeclass_diagonal_coupling_seeds :
     discriminant_seed_1_1_2, discriminant_seed_2_3_5,
     linear_root_seed, selfConsistency_n2⟩
 
+/-- Package wrapper for the typeclass diagonal coupling scalarization seeds.
+    thm:pom-typeclass-diagonal-coupling-scalarization -/
+theorem paper_pom_typeclass_diagonal_coupling_package :
+    quadConstraint 1 1 2 1 = 0 ∧ quadConstraint 2 3 5 1 = 0
+    ∧ discriminant 1 1 2 = 9 ∧ discriminant 2 3 5 = 49
+    ∧ quadConstraint 0 3 6 2 = 0
+    ∧ (quadConstraint 1 2 3 1 = 0 ∧ 2 * 1 = 2) :=
+  paper_pom_typeclass_diagonal_coupling_seeds
+
 end Omega.POM.TypeclassDiagonalCouplingSeeds
