@@ -13,14 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2924 |
+| \leanverified 标注数 | 2927 |
 | \leanpartial 标注数 | 50 |
-| 总标注数 | 2980 |
-| 轮次 | R655（round_count=656）|
+| 总标注数 | 2983 |
+| 轮次 | R656（round_count=657）|
 
-**Phase R655（本轮落地）**：`paper_pom_fiber_ab_two_phase_mixing`（对应 `cor:pom-fiber-ab-two-phase-mixing`，POM；把二相凸组合、系数归一、单相退化与 midpoint 归一化统一打包为正文接口）；`paper_conclusion_golden_fibonacci_two_phase_renormalization`（对应 `cor:conclusion-golden-fibonacci-two-phase-renormalization`，Conclusion；把黄金分支二相常数的中心、振幅与两聚点严格区分汇总为单一 paper-facing theorem）；`paper_cdim_poisson_entropy_moment_tomography`（对应 `thm:cdim-poisson-entropy-moment-tomography-up-to-fourth`，Circle Dimension；由 `A4,A6,B6` 反演 `sigmaSq^2, mu3Sq, mu4` 的闭式层析接口）
+**Phase R656（本轮落地）**：`paper_operator_finite_dimensional_zhat_pole_counting`（对应 `thm:operator-finite-dimensional-zhat-pole-counting`，Zeta；将有限维 \(\widehat\zeta\) 极点梳齿计数种子值提升为正文接口，统一封装 `2=1+1`、高度窗单调性与正性证书）；`paper_parry_golden_three_levels`（对应 `cor:parry-golden-three-levels`，Group Unification；将黄金均值端点三层基数 `F_m`, `2F_{m-1}`, `F_{m-2}` 汇总为单一 paper-facing theorem）；`paper_phi_m_sofic_graph`（对应 `thm:Phi_m-sofic-graph`，Folding；将显式 sofic 图的边数 `2^m` 与逐状态出度 `2` 打包为正文接口）
 
-**Phase R656（queued 设计）**：继续沿 Conclusion + POM + Circle Dimension 做 paper-facing 包装与扩展登记，优先挑选可直接复用现成引理的一步封装型目标，以维持零公理、零 sorry 的低风险增量。
+**Phase R657（queued 设计）**：继续沿 Conclusion + POM + Circle Dimension 做 paper-facing 包装与扩展登记，优先挑选可直接复用现成引理的一步封装型目标，以维持零公理、零 sorry 的低风险增量。
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -53,6 +53,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Zeta 有限维 \(\widehat\zeta\) 极点计数正文接口 + GU Parry 三层端点基数 + Folding \(\Phi_m\) sofic 图包（Round R656，新标签，\leanverified 完整）**：`paper_operator_finite_dimensional_zhat_pole_counting`（对应 `thm:operator-finite-dimensional-zhat-pole-counting`，Zeta；将有限维相位梳齿极点计数的种子值整理为正文接口，**新标签扩展登记**）；`paper_parry_golden_three_levels`（对应 `cor:parry-golden-three-levels`，Group Unification；将端点三层基数 `F_m`, `2F_{m-1}`, `F_{m-2}` 统一打包为正文接口，**新标签扩展登记**）；`paper_phi_m_sofic_graph`（对应 `thm:Phi_m-sofic-graph`，Folding；将显式 sofic 图的边数与逐点出度整理为正文接口，**新标签扩展登记**）
 **POM 二相混合接口 + Conclusion 黄金 Fibonacci 二相重整化 + Circle Dimension Poisson 熵矩层析闭式反演（Round R655，新标签，\leanverified 完整）**：`paper_pom_fiber_ab_two_phase_mixing`（对应 `cor:pom-fiber-ab-two-phase-mixing`，POM；将二相凸组合、系数和为一、单相退化与 midpoint 恒等式统一整理为正文接口，**新标签扩展登记**）；`paper_conclusion_golden_fibonacci_two_phase_renormalization`（对应 `cor:conclusion-golden-fibonacci-two-phase-renormalization`，Conclusion；将黄金分支双聚点的中心、振幅与 distinctness 汇总为单一 paper-facing theorem，**新标签扩展登记**）；`paper_cdim_poisson_entropy_moment_tomography`（对应 `thm:cdim-poisson-entropy-moment-tomography-up-to-fourth`，Circle Dimension；把四阶熵矩层析的三条反演闭式统一打包成正文接口，**新标签扩展登记**）
 **Window-6 SU(5) paper package + POM Riccati/Fibonacci paper package + Circle Dimension KL 六阶负性 paper package（Round R654，新标签，\leanverified 完整）**：`paper_conclusion_window6_su5_obstruction_package`（对应 `thm:conclusion-window6-su5-obstruction`，Conclusion；将 `cBinFiberMult 6 x ≤ 4` 与 `cBinFiberMax 6 = 4` 合并为 paper-facing package，**新标签扩展登记**）；`paper_pom_Lk_boundary_riccati_recursion_package`（对应 `prop:pom-Lk-boundary-riccati-recursion`，POM；统一打包 `qT1 (k+1)` 的 `fenceDet` 比值、奇 Fibonacci 比值、误差闭式与正性，**新标签扩展登记**）；`paper_cdim_poisson_kl_sixth_term_negative_package`（对应 `prop:cdim-poisson-kl-sixth-term-negative-and-dissipation-restated`，Circle Dimension；将六阶 KL 系数负性与耗散负性整理成正文接口，**新标签扩展登记**）
 **Window-6 SU(5) 禁阻 + POM Riccati/Fibonacci 边界递推 + Circle Dimension KL 六阶负性耗散（Round R653，新标签，\leanverified 完整）**：`conclusion_window6_su5_obstruction`（对应 `thm:conclusion-window6-su5-obstruction`，Conclusion；任意 `w ∈ X_6` 的 BinFold 纤维重数至多为 4，故不可能出现 \(\mathfrak{su}(5)\) 简单因子，**新标签首次注册**）；`pom_Lk_boundary_riccati_recursion_t1`（对应 `prop:pom-Lk-boundary-riccati-recursion`，POM；黄金耦合 `t=1` 的边界 Riccati 递推精确闭成奇指标 Fibonacci 比值 `F_{2k+1}/F_{2k+3}`，**新标签首次注册**）；`cdim_poisson_kl_sixth_term_negative_and_dissipation`（对应 `prop:cdim-poisson-kl-sixth-term-negative-and-dissipation-restated`，Circle Dimension；六阶 KL 系数上界直接推出主项与耗散二项同时严格为负，**新标签首次注册**）
