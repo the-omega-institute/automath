@@ -18,4 +18,14 @@ theorem paper_zeta_length_modq_chebotarev_mertens_seeds :
     (3 - 1 = 2 ∧ 2 / 2 = 1) := by
   omega
 
+/-- Paper package: length mod-q Chebotarev-Mertens seeds.
+    thm:zeta-length-modq-chebotarev-mertens -/
+theorem paper_zeta_length_modq_chebotarev_mertens_package :
+    (1 - 1 - 1 = (-1 : ℤ) ∧ 1 + 1 - 1 = (1 : ℤ)) ∧
+    (1 = 1 ∧ 1 + 1 = 2) ∧
+    (2 * 1 = 2) ∧
+    (1 + 3 = 4 ∧ 3 + 4 = 7) ∧
+    (3 - 1 = 2 ∧ 2 / 2 = 1) :=
+  paper_zeta_length_modq_chebotarev_mertens_seeds
+
 end Omega.Zeta

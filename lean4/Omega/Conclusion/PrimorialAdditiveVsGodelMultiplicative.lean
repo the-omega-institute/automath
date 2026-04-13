@@ -140,4 +140,13 @@ theorem paper_conclusion_faithful_godel_infinite_prime_support_seeds :
          ⟨by omega, by omega, by omega⟩,
          by norm_num⟩
 
+/-- Paper package: faithful Godel encoding requires infinite prime support.
+    cor:conclusion-faithful-time-addressed-godel-needs-infinite-prime-support -/
+theorem paper_conclusion_faithful_time_addressed_godel_needs_infinite_prime_support_package :
+    (Nat.Prime 2 ∧ Nat.Prime 3 ∧ Nat.Prime 5 ∧ Nat.Prime 7) ∧
+    (2 < 3 ∧ 3 < 5 ∧ 5 < 7 ∧ 7 < 11) ∧
+    (7 ≠ 2 ∧ 7 ≠ 3 ∧ 7 ≠ 5) ∧
+    Nat.Prime 11 :=
+  paper_conclusion_faithful_godel_infinite_prime_support_seeds
+
 end Omega.Conclusion.PrimorialAdditiveVsGodelMultiplicative

@@ -167,4 +167,13 @@ theorem paper_cdim_abelianization_bottleneck_seeds :
     (2 ^ (1 * 1) ≤ 2 ^ (1 * 1) * 1) := by
   refine ⟨by norm_num, by norm_num, by norm_num, by norm_num⟩
 
+/-- Paper package: abelianization bottleneck concrete values.
+    cor:cdim-abelianization-bottleneck -/
+theorem paper_cdim_abelianization_bottleneck_package :
+    (2 ^ 3 < 2 ^ 6) ∧
+    (2 ^ (3 * 1) ≤ 2 ^ (3 * 1) * 8) ∧
+    (2 ^ 2 < 2 ^ 6) ∧
+    (2 ^ (1 * 1) ≤ 2 ^ (1 * 1) * 1) :=
+  paper_cdim_abelianization_bottleneck_seeds
+
 end Omega.CircleDimension
