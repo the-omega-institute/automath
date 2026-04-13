@@ -1,6 +1,7 @@
 import Mathlib.Tactic
 import Mathlib.NumberTheory.Real.GoldenRatio
 import Omega.Core.Fib
+import Omega.Folding.FibonacciPolynomial
 
 namespace Omega.POM
 
@@ -75,6 +76,56 @@ private theorem qT1_closed_form (k : Nat) :
         nlinarith [hlin1, hlin2]
       rw [hEqDen]
       field_simp [hdenY, hdenxy, phiInvSq_ne_zero]
+
+private theorem qT1_eq_fenceDet_ratio (k : Nat) :
+    qT1 (k + 1) = (fenceDet k : ℝ) / fenceDet (k + 1) := by
+  induction k with
+  | zero =>
+      norm_num [qT1, fenceDet]
+  | succ k ih =>
+      rw [qT1, ih]
+      have hk1_nat : 0 < fenceDet (k + 1) := by
+        have hpos := fenceDet_pos (k + 1)
+        omega
+      have hk2_nat : 0 < fenceDet (k + 2) := by
+        have hpos := fenceDet_pos (k + 2)
+        omega
+      have hk1_ne : (fenceDet (k + 1) : ℝ) ≠ 0 := by
+        exact_mod_cast Nat.ne_of_gt hk1_nat
+      have hk2_ne : (fenceDet (k + 2) : ℝ) ≠ 0 := by
+        exact_mod_cast Nat.ne_of_gt hk2_nat
+      have hmono : fenceDet k ≤ fenceDet (k + 1) := by
+        rw [fenceDet_eq_fib, fenceDet_eq_fib]
+        exact Nat.fib_mono (by omega)
+      have hrec_nat : fenceDet (k + 2) + fenceDet k = 3 * fenceDet (k + 1) := by
+        show 3 * fenceDet (k + 1) - fenceDet k + fenceDet k = 3 * fenceDet (k + 1)
+        omega
+      have hrec : (fenceDet (k + 2) : ℝ) + fenceDet k = 3 * fenceDet (k + 1) := by
+        exact_mod_cast hrec_nat
+      calc
+        1 / (3 - (fenceDet k : ℝ) / fenceDet (k + 1))
+            = 1 / ((fenceDet (k + 2) : ℝ) / fenceDet (k + 1)) := by
+                congr 1
+                field_simp [hk1_ne]
+                nlinarith [hrec]
+        _ = (fenceDet (k + 1) : ℝ) / fenceDet (k + 2) := by
+              field_simp [hk1_ne, hk2_ne]
+
+private theorem fenceDet_eval_one_cast (k : Nat) :
+    (fenceDet k : ℝ) = (((detPoly k).eval 1 : ℤ) : ℝ) := by
+  exact_mod_cast fenceDet_eq_detPoly_eval_one k
+
+/-- Golden-coupling Riccati approximants are exact odd-Fibonacci ratios.
+    prop:pom-Lk-boundary-riccati-recursion -/
+theorem pom_Lk_boundary_riccati_recursion_t1 (k : Nat) :
+    qT1 (k + 1) = (Nat.fib (2 * k + 1) : ℝ) / Nat.fib (2 * k + 3) := by
+  calc
+    qT1 (k + 1) = (fenceDet k : ℝ) / fenceDet (k + 1) := qT1_eq_fenceDet_ratio k
+    _ = (((detPoly k).eval 1 : ℤ) : ℝ) / (((detPoly (k + 1)).eval 1 : ℤ) : ℝ) := by
+      rw [fenceDet_eval_one_cast k, fenceDet_eval_one_cast (k + 1)]
+    _ = (Nat.fib (2 * k + 1) : ℝ) / Nat.fib (2 * k + 3) := by
+      rw [detPoly_eval_one, detPoly_eval_one]
+      congr 1
 
 /-- Paper: `cor:pom-Lk-t1-error-closed-form`. -/
 theorem paper_pom_Lk_t1_error_closed_form (k : Nat) :

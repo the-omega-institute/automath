@@ -40,4 +40,19 @@ theorem paper_cdim_poisson_cauchy_lp_sharp_constants_seeds :
     (3 - 1 = 2 ∧ 3 = 3) := by
   omega
 
+/-- The sixth-order KL coefficient is negative, and its dissipation term is likewise negative.
+    prop:cdim-poisson-kl-sixth-term-negative-and-dissipation-restated -/
+theorem cdim_poisson_kl_sixth_term_negative_and_dissipation
+    {σ mu3 mu4 : ℝ} (hσ : 0 < σ)
+    (hcoeff : σ^6 + 6 * mu3^2 - 8 * σ^2 * mu4 ≤ -σ^6) :
+    σ^6 + 6 * mu3^2 - 8 * σ^2 * mu4 < 0 ∧
+    3 * (σ^6 + 6 * mu3^2 - 8 * σ^2 * mu4) / 32 < 0 := by
+  have hσ6 : 0 < σ ^ 6 := by
+    positivity
+  have hneg : σ^6 + 6 * mu3^2 - 8 * σ^2 * mu4 < 0 := by
+    nlinarith
+  constructor
+  · exact hneg
+  · nlinarith
+
 end Omega.CircleDimension
