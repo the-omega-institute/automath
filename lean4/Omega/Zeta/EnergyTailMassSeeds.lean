@@ -45,4 +45,12 @@ theorem paper_zeta_energy_tail_mass_seeds :
     (2 : ℚ) * (1 / 2) = 1 := by
   refine ⟨by norm_num, by norm_num, by norm_num, by norm_num⟩
 
+/-- Lightweight wrapper for `cor:xi-finite-defect-poisson-l2-energy-tail-mass`. -/
+theorem paper_xi_finite_defect_poisson_l2_energy_tail_mass_seeds_wrap :
+    (1 : ℚ) / 4 + 1 / 8 - 1 / 3 = 1 / 24 ∧
+    (1 : ℚ) / 8 - 2 / 10 + 1 / 12 = 1 / 120 ∧
+    (2 * 1 + 3 * 1 : ℕ) ^ 2 = 2 * 2 * 1 * 1 + 2 * 3 * 1 * 1 + 3 * 2 * 1 * 1 + 3 * 3 * 1 * 1 ∧
+    (2 : ℚ) * (1 / 2) = 1 :=
+  paper_zeta_energy_tail_mass_seeds
+
 end Omega.Zeta
