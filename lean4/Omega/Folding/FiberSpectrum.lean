@@ -451,6 +451,23 @@ theorem forbidden_pair_two_five_fib_gap (k : Nat) (hk : 6 ≤ k) :
   have hle3 : Nat.fib (k - 6) ≤ Nat.fib k := Nat.fib_mono (by omega)
   omega
 
+/-- The next forbidden-pair correction for the third spectral layer obeys the same Fibonacci gap
+    recurrence, shifted by one index.
+    lem:pom-forbidden-pair-fib-gap -/
+theorem forbidden_pair_one_four_fib_gap (k : Nat) (hk : 6 ≤ k) :
+    Nat.fib (k + 2) - Nat.fib (k - 3) =
+    (Nat.fib (k + 1) - Nat.fib (k - 4)) + (Nat.fib k - Nat.fib (k - 5)) := by
+  have hk3 : k - 3 = (k - 5) + 2 := by omega
+  have hk4 : k - 4 = (k - 5) + 1 := by omega
+  rw [hk3, hk4]
+  rw [Nat.fib_add_two (n := k), Nat.fib_add_two (n := k - 5)]
+  have hle1 : Nat.fib (k - 5) + Nat.fib (k - 5 + 1) ≤ Nat.fib (k + 1) := by
+    rw [← Nat.fib_add_two (n := k - 5)]
+    exact Nat.fib_mono (by omega)
+  have hle2 : Nat.fib (k - 5 + 1) ≤ Nat.fib (k + 1) := Nat.fib_mono (by omega)
+  have hle3 : Nat.fib (k - 5) ≤ Nat.fib k := Nat.fib_mono (by omega)
+  omega
+
 end BaseValues
 
 section Parity
@@ -587,6 +604,21 @@ theorem paper_pom_second_max_fiber_closed_form
     rw [forbidden_even k hk, Omega.X.maxFiberMultiplicity_even_of_two_step two_step k (by omega)]
   · intro k hk
     rw [forbidden_odd k hk, Omega.X.maxFiberMultiplicity_odd_of_two_step two_step k (by omega)]
+
+/-- Paper-facing wrapper: once the stable `{1,4}` forbidden-pair defect is supplied, the even
+    max-fiber closed form immediately yields the closed form for the third-largest distinct fiber
+    multiplicity on the even branch.
+    thm:pom-third-max-fiber-even-closed-form -/
+theorem paper_pom_third_max_fiber_even_closed_form
+    (two_step : ∀ m, 6 ≤ m →
+      Omega.X.maxFiberMultiplicity m =
+        Omega.X.maxFiberMultiplicity (m - 2) + Omega.X.maxFiberMultiplicity (m - 4))
+    (forbidden_even_third : ∀ k : Nat, 6 ≤ k →
+      cNthMaxFiber (2 * k) 2 =
+        Omega.X.maxFiberMultiplicity (2 * k) - Nat.fib (k - 3)) :
+    ∀ k : Nat, 6 ≤ k → cNthMaxFiber (2 * k) 2 = Nat.fib (k + 2) - Nat.fib (k - 3) := by
+  intro k hk
+  rw [forbidden_even_third k hk, Omega.X.maxFiberMultiplicity_even_of_two_step two_step k (by omega)]
 
 end Parity
 

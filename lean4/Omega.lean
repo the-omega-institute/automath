@@ -177,6 +177,7 @@ import Omega.LogicExpansionChain.LowerLayerProjection
 import Omega.LogicExpansionChain.ReadoutTransport
 import Omega.LogicExpansionChain.UpdatesPreserveForcing
 import Omega.LogicExpansionChain.DelayedDecidabilityNoNewTruth
+import Omega.LogicExpansionChain.IndispensabilityImpliesMinimality
 import Omega.Topos.NullTrichotomy
 import Omega.Topos.SheafificationCharacterization
 import Omega.Topos.SheafificationCharacterizationAPAL
@@ -209,6 +210,7 @@ import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
 import Omega.RecursiveAddressing.TypedReadoutPersistence
 import Omega.RecursiveAddressing.ObserverIndexedReadoutForcingCriterion
 import Omega.RecursiveAddressing.ObserverIndexedCommonRefinementDecidability
+import Omega.RecursiveAddressing.ObserverIndexedFiniteResolutionObjectEligibility
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
 import Omega.Combinatorics.GramDet
