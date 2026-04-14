@@ -75,6 +75,13 @@ theorem paper_conclusion_krylov_lowrank_rigidity_seeds :
   exact ⟨fun m hm => paper_krylov_word_count_vs_rank m hm,
          fun m q => krylov_dimension_bound m q⟩
 
+/-- Packaged form of the Krylov low-rank rigidity seeds.
+    thm:conclusion-disjointness-fixedm-krylov-lowrank -/
+theorem paper_conclusion_krylov_lowrank_rigidity_package :
+    (∀ m : ℕ, 1 ≤ m → 2 ^ m - 1 ≥ m) ∧
+    (∀ m q : ℕ, min m (2 ^ q) ≤ 2 ^ q) :=
+  paper_conclusion_krylov_lowrank_rigidity_seeds
+
 /-- Fibonacci matrix power identity: K^n = [[F_{n+1}, F_n], [F_n, F_{n-1}]].
     Seed values verify the 2×2 matrix entries for small n.
     thm:conclusion-disjointness-fixedm-krylov-lowrank -/
