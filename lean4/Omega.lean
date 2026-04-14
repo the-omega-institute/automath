@@ -107,6 +107,7 @@ import Omega.SPG.ErrorThreshold
 import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.WeightedBoundaryDecomposition
+import Omega.SPG.WeightedBoundaryTransfer
 import Omega.SPG.BoundaryDimensionUpper
 import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.TanakaIncrement
@@ -191,6 +192,7 @@ import Omega.RecursiveAddressing.FiniteThreeModeModel
 import Omega.RecursiveAddressing.EntropyMonotonicity
 import Omega.RecursiveAddressing.ObserverIndexedNormalizationNoFactCreation
 import Omega.RecursiveAddressing.ObserverNeutralReadoutAPAL
+import Omega.RecursiveAddressing.PrefixSiteRegisterLowerBound
 import Omega.RecursiveAddressing.ReadoutSeparatednessNull
 import Omega.RecursiveAddressing.SlidingBlockFactor
 import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
@@ -203,6 +205,7 @@ import Omega.Zeta.DynZeta
 import Omega.Zeta.ETDSEulerProductNaturalBoundary
 import Omega.Zeta.PrimeLanguagesEulerProductNaturalBoundary
 import Omega.Zeta.IntroFinitePart
+import Omega.Zeta.ETDSFinitePartPrimitiveClosedForm
 import Omega.Zeta.ETDSFinitePartGapPositive
 import Omega.Zeta.ETDSFinitePartGapPositiveCorollary
 import Omega.Zeta.ETDSFiniteZetaImaginaryPeriodicity
