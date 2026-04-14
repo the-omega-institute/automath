@@ -38,6 +38,7 @@ import Omega.Folding.CarryDefect
 import Omega.Folding.FiberFusion
 import Omega.Folding.InverseLimit
 import Omega.Folding.InverseLimitTopology
+import Omega.Folding.InverseLimitGolden
 import Omega.Folding.CircleDimension
 import Omega.Folding.ShiftDynamics
 import Omega.Folding.Rewrite
@@ -180,6 +181,7 @@ import Omega.Topos.SheafificationRemovesGlueAPAL
 import Omega.Topos.FocusedSheafificationRemovesGlueAPAL
 import Omega.Topos.GluingFailureSheafificationCharacterizationAPAL
 import Omega.Topos.GluingFailureSheafLocalToGlobalAPAL
+import Omega.Topos.GluingFailureSheafificationRemovesGlueAPAL
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
@@ -235,6 +237,7 @@ import Omega.Zeta.PhaseImplementationRankLimit
 import Omega.Zeta.SyncKernelMixingRate
 import Omega.Zeta.FredholmDetSeeds
 import Omega.Zeta.DFAPrimeSymmetricDiff
+import Omega.Zeta.DFAPrimeSymmetricDiffETDS
 import Omega.Zeta.DFAPrimeSymmetricDiffLowerBound
 import Omega.Zeta.IntroBinaryPrimes
 import Omega.Zeta.IntroBinaryPrecision
