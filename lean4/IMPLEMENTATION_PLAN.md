@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3164 |
+| \leanverified 标注数 | 3167 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3213 |
-| 轮次 | R717（round_count=R717）|
+| 总标注数 | 3216 |
+| 轮次 | R718（round_count=R718）|
+
+**Phase R718（本轮落地，全流程执行）**：`paper_scan_projection_address_weighted_boundary_decomposition_seeds`（对应 `prop:weighted-boundary-decomposition`，SPG；把 boundary-cylinder 上的 scan error 精确压成边界胞腔求和，并逐胞给出 `min(eventMass, complMass) ≤ cellMass/2` 的 sharp half-mass 控制，保留“误差只集中在边界且每个边界柱至多贡献半个柱质量”的核心 weighted-boundary 骨架）；`paper_scan_projection_address_clarity_boundary_dimension_seeds`（对应 `thm:clarity-boundary-dimension`，SPG；将每个深度 `m` 柱质量的统一上界 `κ` 下推为 `prefixScanErrorMeasure ≤ (boundary-count) * (κ/2)`，直接保留正文“柱质量上界 × 边界柱数量 gives scan-error upper bound”的核心账本；本轮 non-trivial 目标）；`paper_prime_languages_dfa_density_dichotomy_seeds`（对应 `thm:dfa-density-dichotomy`，Zeta；挂接现有 `DFADensityDichotomy` 算术包，把 periodic-density dichotomy 的 paper-facing witness 直接落到正文标签，保留“DFA 密度要么指数稀疏、要么沿某个周期类保持正密度”的核心 obstruction 骨架）；本轮 `\leanverified` +3，覆盖章节为 SPG / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/SPG/WeightedBoundaryDecomposition.lean`、`lean4/Omega/SPG/BoundaryDimensionUpper.lean`、`lean4/Omega/Zeta/DFADensityDichotomySeeds.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_clarity.tex`（`prop:weighted-boundary-decomposition`、`thm:clarity-boundary-dimension`），`/Users/chronoai/automath/papers/publication/2026_prime_languages_sofic_obstructions_dynamical_zeta/sec_automata.tex`（`thm:dfa-density-dichotomy`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R717（本轮落地，全流程执行）**：`paper_cdim_phase_spectrum_quotient_seeds`（对应 `prop:cdim-phase-spectrum-quotient`，CircleDimension；把 phase-sampling 计数与有限商基数的等式直接压成 `phaseSpectrumCount r t N = N^r * gcd(t,N)` 的 paper-facing seed，保留“采样计数恰等于有限商 `|G/NG|`”的核心有限商骨架）；`paper_zeckendorf_val_invariant_seeds`（对应 `prop:val-invariant`，EA；将局部 Fibonacci 重写规则生成的加法同余显式封装成 `FibCongruence`，证明 `value` 在该 congruence 下不变，并下推到 quotient 上的加法保持映射，保留“值函数对定义关系不变并因此下降到商”的核心 monoid-hom 骨架）；`paper_zeckendorf_rewrite_termination_seeds`（对应 `prop:rewrite-termination`，EA；把 Zeckendorf digit rewrite 系统的强终止、不可约态与 admissible 配置的精确等价、以及终端不可约配置唯一性直接挂接到正文标签，保留“每条重写链终止且正规形唯一”的核心 normal-form 骨架；本轮 non-trivial 目标）；本轮 `\leanverified` +5，覆盖章节为 CircleDimension / EA，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/PhaseSpectrumQuotient.lean`、`lean4/Omega/EA/ValInvariant.lean`、`lean4/Omega/EA/RewriteTermination.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_circle_dimension_algebra.tex`（`prop:cdim-phase-spectrum-quotient`），`/Users/chronoai/automath/papers/publication/submitted_2026_zeckendorf_streaming_normalization_automata_rairo_ita/main.tex`（`prop:val-invariant`、`prop:rewrite-termination`），`/Users/chronoai/automath/papers/publication/submitted_2026_zeckendorf_streaming_normalization_automata_rairo_ita/submission_source_20260313/main.tex`（`prop:val-invariant`、`prop:rewrite-termination`）；新增 tex theorem/corollary/lemma 环境数 0）
 
