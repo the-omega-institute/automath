@@ -8,15 +8,17 @@
 |---|---|
 | 总行数 | ~50,876 |
 | 定理/定义数 | ~4,436 |
-| 论文接口包装 | 770+ |
-| 文件数 | 186 |
+| 论文接口包装 | 773+ |
+| 文件数 | 189 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3314 |
+| \leanverified 标注数 | 3317 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3363 |
-| 轮次 | R771（round_count=R771）|
+| 总标注数 | 3366 |
+| 轮次 | R772（round_count=R772）|
+
+**Phase R772（本轮落地，全流程执行）**：`paper_scan_projection_address_main_renyi`（对应 `thm:main-renyi`，SPG；把 introduction theorem 中 ambient survivor partition decay、conditioned R\'enyi pressure identity 与 collision exponent ledger `\chi_H=2\gamma_H+h_{2,H}` 压成 introduction-facing wrapper，本轮 non-trivial 目标）；`paper_conservative_extension_h1_vanishing_class_trivializing`（对应 `cor:h1-vanishing-class-trivializing`，Topos；把 `H_1=0` 下 pure-`Ext` 消失与经由 intrinsic visible quotient 的唯一因子分解直接压成 non-focused APAL publication-facing corollary wrapper）；`paper_etds_quotient_functoriality`（对应 `thm:quotient-functoriality`，Zeta；把 quotient pullback 下 class-function logarithm equality、primitive profile equality 与 quotient conjugacy-class decomposition 统一压成 theorem-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 SPG / Topos / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/SPG/MainRenyi.lean`、`lean4/Omega/Topos/H1VanishingClassTrivializingPublication.lean`、`lean4/Omega/Zeta/QuotientFunctoriality.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_scan_projection_address_main_renyi`、`paper_conservative_extension_h1_vanishing_class_trivializing`、`paper_etds_quotient_functoriality`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_introduction.tex`（`thm:main-renyi`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_homological_visibility.tex`（`cor:h1-vanishing-class-trivializing`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_shadows.tex`（`thm:quotient-functoriality`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R771（本轮落地，全流程执行）**：`paper_circle_dimension_operational_half_circle_dimension_nd`（对应 `cor:cdim-operational-half-circle-dimension-Nd`，CircleDimension；把 `M_d(b)=(N_{\max}(b)+1)^d` 的 box-cardinality law、`2^{(d/2+o(1))b}` 的 growth exponent 与 `\cdim_+(\NN^d)=d/2` 的 operational readout 直接压成 publication-facing corollary wrapper）；`paper_gluing_failure_branch_decomposition`（对应 `cor:branch-decomposition`，Topos；把 branch constancy 下 canonical coproduct functor 的 fiberwise essential surjectivity、summand fullness 与 summand disjointness 统一压成 stack-equivalence corollary wrapper）；`paper_etds_sync_cyclotomic_degree_law`（对应 `thm:sync-cyclotomic-degree-law`，Zeta；把 cyclotomic resultant `R_m(w)` 的 `3\varphi(2m)` degree law 与 even-twist parity clause 统一压成 theorem-facing wrapper，本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 CircleDimension / Topos / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/OperationalHalfCircleDimensionNd.lean`、`lean4/Omega/Topos/BranchDecomposition.lean`、`lean4/Omega/Zeta/SyncCyclotomicDegreeLaw.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_circle_dimension_operational_half_circle_dimension_nd`、`paper_gluing_failure_branch_decomposition`、`paper_etds_sync_cyclotomic_degree_law`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_circle_dimension_algebra.tex`（`cor:cdim-operational-half-circle-dimension-Nd`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_gerbe_obstruction.tex`（`cor:branch-decomposition`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_online_kernel.tex`（`thm:sync-cyclotomic-degree-law`）；新增 tex theorem/corollary/lemma 环境数 0）
 
