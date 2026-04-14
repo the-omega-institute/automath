@@ -184,6 +184,7 @@ import Omega.EA.AutDimensionSqueeze
 import Omega.EA.PrimeLedger
 import Omega.EA.FoldAsSection
 import Omega.EA.CompositionPullback
+import Omega.EA.CompositionTwoLayer
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
@@ -257,6 +258,8 @@ import Omega.POM.MaryAuxlength
 import Omega.POM.MaryAuxlengthSeeds
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
+import Omega.GU.RadialQuadraticIdentifiability
+import Omega.GU.WeightedSubsetSumGap
 import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
