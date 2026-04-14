@@ -154,6 +154,9 @@ import Omega.Combinatorics.FibonacciCube
 import Omega.Combinatorics.GramDet
 import Omega.Combinatorics.FibonacciCubeGraph
 import Omega.Zeta.DynZeta
+import Omega.Zeta.ETDSEulerProductNaturalBoundary
+import Omega.Zeta.ETDSFinitePartGapPositive
+import Omega.Zeta.ETDSFiniteZetaImaginaryPeriodicity
 import Omega.Zeta.CyclicDet
 import Omega.Zeta.EvenLengthCorrection
 import Omega.Zeta.NecklaceCorrection
