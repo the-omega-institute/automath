@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3021 |
+| \leanverified 标注数 | 3024 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3070 |
-| 轮次 | R683（round_count=684）|
+| 总标注数 | 3073 |
+| 轮次 | R684（round_count=R684）|
 
-**Phase R683（本轮落地）**：`paper_spg_walsh_discrete_stokes_package`（对应 `thm:spg-walsh-discrete-stokes-holography`，SPG；严格克隆 `paper_spg_walsh_discrete_stokes_seeds` 的原签名与证明，补齐 Walsh discrete Stokes holography 的 paper-facing package）；`paper_conclusion_intermediate_quotient_package`（对应 `thm:conclusion-finite-alphabet-intermediate-quotient-count`，Conclusion；严格克隆 `paper_conclusion_intermediate_quotient_seeds` 的原签名与证明，补齐 finite alphabet intermediate quotient count 的 paper-facing package）；`paper_ea_aut_dimension_golden_squeeze_package`（对应 `thm:fold-aut-dimension-golden-squeeze`，EA；严格克隆 `paper_ea_aut_dimension_golden_squeeze_seeds` 的原签名与证明，补齐 aut dimension golden squeeze 的 paper-facing package；本轮 `\leanverified` +3）
+**Phase R684（本轮落地）**：`paper_conclusion_nonexposed_phase_integer_domination_package`（对应 `cor:conclusion-nonexposed-phase-fails-integer-domination`，Conclusion；严格克隆 `paper_conclusion_nonexposed_phase_integer_domination_seeds` 的原签名与证明，补齐 nonexposed phase integer domination 的 paper-facing package）；`paper_pom_kcollision_root_filter_recurrence_package`（对应 `thm:pom-kcollision-root-filter-recurrence`，POM；严格克隆 `paper_pom_kcollision_root_filter_recurrence_seeds` 的原签名与证明，补齐 K-collision root filter recurrence 的 paper-facing package）；`paper_xi_degree11_generic_galois_S11_package`（对应 `thm:xi-degree11-Et-specialization-galois-S11`，Zeta；严格克隆 `paper_xi_degree11_generic_galois_S11_seeds` 的原签名与证明，补齐 degree-11 generic Galois S11 的 paper-facing package；本轮 `\leanverified` +3）
+
+**Phase R683（上一轮落地）**：`paper_spg_walsh_discrete_stokes_package`（对应 `thm:spg-walsh-discrete-stokes-holography`，SPG；严格克隆 `paper_spg_walsh_discrete_stokes_seeds` 的原签名与证明，补齐 Walsh discrete Stokes holography 的 paper-facing package）；`paper_conclusion_intermediate_quotient_package`（对应 `thm:conclusion-finite-alphabet-intermediate-quotient-count`，Conclusion；严格克隆 `paper_conclusion_intermediate_quotient_seeds` 的原签名与证明，补齐 finite alphabet intermediate quotient count 的 paper-facing package）；`paper_ea_aut_dimension_golden_squeeze_package`（对应 `thm:fold-aut-dimension-golden-squeeze`，EA；严格克隆 `paper_ea_aut_dimension_golden_squeeze_seeds` 的原签名与证明，补齐 aut dimension golden squeeze 的 paper-facing package；本轮 `\leanverified` +3）
 
 **Phase R682（上一轮落地）**：`paper_gut_zero_defect_exp_rate_package`（对应 `cor:fold-gauge-anomaly-zero-defect-exp-rate`，GU；严格克隆 `paper_gut_zero_defect_exp_rate_seeds` 的原签名与证明，补齐 zero defect exponential rate 的 paper-facing package）；`paper_conclusion_free_energy_monotone_boolean_clone_package`（对应 `thm:conclusion-free-energy-gates-equal-monotone-boolean-clone`，Conclusion；严格克隆 `paper_conclusion_free_energy_monotone_boolean_clone_seeds` 的原签名与证明，补齐 free energy monotone Boolean clone completeness 的 paper-facing package）；`paper_conclusion_zeckendorf_euler_reindexing_package`（对应 `thm:conclusion-zeckendorf-euler-reindexing`，Conclusion；严格克隆 `paper_conclusion_zeckendorf_euler_reindexing_seeds` 的原签名与证明，补齐 Zeckendorf-Euler reindexing 的 paper-facing package；本轮 `\leanverified` +3）
 
