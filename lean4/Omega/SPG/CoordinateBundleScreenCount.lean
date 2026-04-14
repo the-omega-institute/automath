@@ -71,4 +71,15 @@ theorem paper_spg_coordinate_bundle_minimal_boundary_closure_seeds :
     (2 * 2 = 4 ∧ 3 * 4 = 12) := by
   omega
 
+set_option maxHeartbeats 400000 in
+/-- Injecting the `p`-ary residue box of size `p^auditCost` into a truncated prime-register
+    box of size `(E+1)^k` forces the expected budget lower bound.
+    thm:spg-coordinate-bundle-prime-register-residue-box-budget -/
+theorem paper_spg_coordinate_bundle_prime_register_residue_box_budget
+    (m n s p k E : Nat)
+    (encode : Fin (p ^ Omega.SPG.CoordinateBundleScreenCount.auditCost m n s) -> Fin ((E + 1) ^ k))
+    (hinj : Function.Injective encode) :
+    p ^ Omega.SPG.CoordinateBundleScreenCount.auditCost m n s <= (E + 1) ^ k := by
+  simpa [Fintype.card_fin] using Fintype.card_le_of_injective encode hinj
+
 end Omega.SPG.CoordinateBundleScreenCount

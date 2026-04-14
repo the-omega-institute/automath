@@ -428,6 +428,7 @@ import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.FibCubeEccentricityCore
 import Omega.POM.FibCubeEdgeParity
+import Omega.POM.FibCubeFrechetMedianUnique
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.ToggleOrder
 import Omega.POM.ReplicaSoftcoreDet

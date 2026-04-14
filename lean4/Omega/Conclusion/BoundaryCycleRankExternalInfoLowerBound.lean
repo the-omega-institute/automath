@@ -17,4 +17,16 @@ theorem paper_conclusion_boundary_cycle_rank_external_info_lower_bound_seeds
     rcases Function.Embedding.nonempty_of_card_le hcard with ⟨f⟩
     exact ⟨f, f.injective⟩
 
+set_option maxHeartbeats 400000 in
+/-- Transcript-plus-register encodings of a `p^r`-state boundary fiber into
+    `p^q × (E+1)^k` force the expected product-cardinality lower bound.
+    cor:conclusion-boundary-query-register-budget-exponential-law -/
+theorem paper_conclusion_boundary_query_register_budget_exponential_law
+    (p q r k E : Nat)
+    (encode : Fin (p ^ r) -> Prod (Fin (p ^ q)) (Fin ((E + 1) ^ k)))
+    (hinj : Function.Injective encode) :
+    p ^ r <= p ^ q * (E + 1) ^ k := by
+  simpa [Fintype.card_fin, Fintype.card_prod] using
+    Fintype.card_le_of_injective encode hinj
+
 end Omega.Conclusion
