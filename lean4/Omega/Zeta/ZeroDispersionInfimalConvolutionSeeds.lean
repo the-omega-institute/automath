@@ -154,4 +154,15 @@ theorem paper_xi_zero_dispersion_infimal_convolution_seeds :
     compositeRate_comm, splitCost_2_3_4_6,
     splitCost_equal, totalBudget_unit_diff⟩
 
+/-- Package wrapper for the zero-dispersion infimal convolution seeds.
+    thm:xi-zero-dispersion-infimal-convolution -/
+theorem paper_xi_zero_dispersion_infimal_convolution_package :
+    compositeRate 3 5 = 8 ∧ compositeRate 7 2 = 9
+    ∧ (∀ g1 g2 : ℤ, compositeRate g1 g2 = compositeRate g2 g1)
+    ∧ splitCost 2 3 4 6 = 26
+    ∧ (∀ c eps1 eps2 : ℤ, splitCost c c eps1 eps2 = c * (eps1 + eps2))
+    ∧ (∀ g1 g2 b m : ℤ,
+      totalBudget g1 g2 b (m + 1) - totalBudget g1 g2 b m = compositeRate g1 g2) :=
+  paper_xi_zero_dispersion_infimal_convolution_seeds
+
 end Omega.Zeta.ZeroDispersionInfimalConvolutionSeeds

@@ -22,6 +22,17 @@ theorem paper_conclusion_godel_leyang_ifs_dimension_seeds :
          ⟨by norm_num, by norm_num, by norm_num⟩,
          ⟨by omega, by omega⟩, ⟨by omega, by omega, by omega⟩⟩
 
+/-- Package wrapper for the Godel-Lee-Yang IFS exact dimension seeds.
+    thm:conclusion-godel-leyang-2adic-ifs-exact-dimension -/
+theorem paper_conclusion_godel_leyang_ifs_dimension_package :
+    (2 < 5) ∧
+    (Nat.log 2 2 = 1 ∧ Nat.log 2 4 = 2) ∧
+    (5 ^ 1 = 5 ∧ 5 ^ 2 = 25 ∧ 5 ^ 3 = 125) ∧
+    (2 ^ 1 = 2 ∧ 2 ^ 2 = 4 ∧ 2 ^ 3 = 8) ∧
+    (2 < 5 ∧ 1 < 2) ∧
+    (0 * 5 + 1 = 1 ∧ 1 * 5 + 0 = 5 ∧ 1 ≠ 5) :=
+  paper_conclusion_godel_leyang_ifs_dimension_seeds
+
 /-- Haar measure iff digit-complete seeds.
     thm:conclusion-godel-leyang-haar-complete-digit -/
 theorem paper_conclusion_godel_leyang_haar_complete_digit_seeds :

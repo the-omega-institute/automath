@@ -64,6 +64,15 @@ theorem paper_pom_toggle_scan_order_seeds :
     Nat.lcm (Nat.lcm (Nat.lcm 2 3) 14) 10 = 210 := by
   refine ⟨by decide, by decide, by decide, by decide⟩
 
+/-- Package wrapper for the scan-order intrinsic period lcm closed-form seeds.
+    thm:pom-toggle-scan-order-closed-form -/
+theorem paper_pom_toggle_scan_order_package :
+    Nat.lcm 3 5 = 15 ∧
+    Nat.lcm (Nat.lcm 2 3) 8 = 24 ∧
+    Nat.lcm (Nat.lcm 3 11) 7 = 231 ∧
+    Nat.lcm (Nat.lcm (Nat.lcm 2 3) 14) 10 = 210 :=
+  paper_pom_toggle_scan_order_seeds
+
 /-- Scan-element orbit length spectrum seeds.
     thm:pom-toggle-scan-orbit-length-spectrum -/
 theorem paper_pom_toggle_orbit_length_spectrum_seeds :
