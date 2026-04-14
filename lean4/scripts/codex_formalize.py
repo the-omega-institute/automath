@@ -189,8 +189,38 @@ def ensure_base_branch() -> None:
             logger.info(f"Base branch {BASE_BRANCH} exists")
 
 
+def _clone_lake_cache(wt_path: Path) -> None:
+    """Copy the .lake build cache into a new worktree using APFS clonefile.
+
+    On macOS APFS, ``cp -Rc`` creates copy-on-write clones — near-instant and
+    zero extra disk until files diverge.  Falls back to a regular copy on
+    non-APFS volumes (slower but still correct).
+    """
+    src = LEAN_ROOT / ".lake"
+    dst = wt_path / "lean4" / ".lake"
+    if not src.exists():
+        logger.info("No .lake cache to clone (main repo has none)")
+        return
+    if dst.exists():
+        return  # already present (shouldn't happen for a fresh worktree)
+
+    start = time.monotonic()
+    # Try APFS clone first (macOS)
+    result = run_cmd(
+        ["cp", "-Rc", str(src), str(dst)],
+        timeout=300,
+    )
+    if result.returncode != 0:
+        # Fallback: regular copy
+        logger.warning("APFS clone failed, falling back to regular copy")
+        shutil.copytree(str(src), str(dst), symlinks=True)
+
+    elapsed = time.monotonic() - start
+    logger.info(f"Cloned .lake cache into worktree ({elapsed:.1f}s)")
+
+
 def create_worktree(round_num: int) -> WorktreeInfo:
-    """Create an isolated worktree for a round."""
+    """Create an isolated worktree for a round, with warm .lake cache."""
     WORKTREE_DIR.mkdir(parents=True, exist_ok=True)
     branch = f"codex-R{round_num}"
     wt_path = WORKTREE_DIR / f"round_R{round_num}"
@@ -217,6 +247,9 @@ def create_worktree(round_num: int) -> WorktreeInfo:
                 f"Failed to create worktree: {result.stderr.strip()}"
             )
 
+    # Clone .lake cache outside the git lock (can run in parallel)
+    _clone_lake_cache(wt_path)
+
     return WorktreeInfo(path=wt_path, branch=branch, round_number=round_num)
 
 
@@ -231,55 +264,165 @@ def remove_worktree(wt: WorktreeInfo) -> None:
         run_cmd(["git", "branch", "-d", wt.branch], cwd=REPO_ROOT)
 
 
-def merge_worktree_to_base(wt: WorktreeInfo) -> bool:
-    """Merge the worktree branch back into BASE_BRANCH and push."""
+def _codex_resolve_conflicts(
+    wt_path: Path,
+    *,
+    model: Optional[str] = None,
+    timeout: int = 300,
+) -> bool:
+    """Use codex exec to resolve rebase conflicts in a worktree.
+
+    Typical conflicts: parallel worktrees both appending imports to Omega.lean,
+    both updating IMPLEMENTATION_PLAN.md header, or both adding \\leanverified
+    annotations to .tex files.  These are additive/append conflicts that codex
+    can resolve by keeping both sides' additions.
+    """
+    # List conflicted files
+    status = run_cmd(["git", "diff", "--name-only", "--diff-filter=U"], cwd=wt_path)
+    conflicted = [f.strip() for f in status.stdout.splitlines() if f.strip()]
+    if not conflicted:
+        return True  # no conflicts
+
+    logger.info(f"Codex conflict resolution: {len(conflicted)} file(s): {conflicted}")
+
+    prompt = textwrap.dedent(f"""\
+        You are resolving git rebase conflicts in a Lean4 formalization project.
+
+        The following files have merge conflicts (with <<<<<<< / ======= / >>>>>>> markers):
+        {', '.join(conflicted)}
+
+        ## Context
+        Two parallel formalization rounds modified shared files:
+        - lean4/Omega.lean: both rounds added `import` lines — keep ALL imports from both sides
+        - lean4/IMPLEMENTATION_PLAN.md: both rounds updated the header — keep the incoming
+          (HEAD/ours) version as base, then ADD the new round info from the other side
+        - theory/*.tex: both rounds added \\leanverified annotations — keep ALL annotations
+
+        ## Instructions
+        1. For each conflicted file, read it and resolve the conflict markers
+        2. The resolution strategy is ALWAYS "keep both sides' additions"
+        3. For Omega.lean: merge all import lines (union, no duplicates)
+        4. For IMPLEMENTATION_PLAN.md: keep both rounds' Phase entries
+        5. For .tex files: keep all \\leanverified lines
+        6. After resolving, run: git add <file> for each resolved file
+        7. Then run: git rebase --continue
+        8. Do NOT run git push
+
+        Resolve ALL conflicts and complete the rebase.
+    """)
+
+    output = codex_exec(
+        prompt,
+        work_dir=wt_path,
+        timeout_seconds=timeout,
+    )
+
+    # Check if rebase completed
+    rebase_status = run_cmd(["git", "status", "--short"], cwd=wt_path)
+    in_rebase = run_cmd(
+        ["git", "rev-parse", "--git-path", "rebase-merge"], cwd=wt_path
+    )
+    rebase_dir = wt_path / ".git" if (wt_path / ".git").is_file() else wt_path / ".git"
+
+    # Check if still in rebase state
+    still_rebasing = run_cmd(
+        ["git", "status"], cwd=wt_path
+    )
+    if "rebase in progress" in still_rebasing.stdout.lower():
+        logger.warning("Codex did not complete rebase, aborting")
+        run_cmd(["git", "rebase", "--abort"], cwd=wt_path)
+        return False
+
+    # Check for remaining conflicts
+    remaining = run_cmd(["git", "diff", "--name-only", "--diff-filter=U"], cwd=wt_path)
+    if remaining.stdout.strip():
+        logger.warning(f"Codex left unresolved conflicts: {remaining.stdout.strip()}")
+        run_cmd(["git", "rebase", "--abort"], cwd=wt_path)
+        return False
+
+    logger.info("Codex resolved all conflicts successfully")
+    return True
+
+
+def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> bool:
+    """Merge the worktree branch into BASE_BRANCH and push.
+
+    Strategy: rebase the worktree branch onto the latest BASE_BRANCH *inside
+    the worktree itself*, then fast-forward the local BASE_BRANCH ref via
+    ``git update-ref``.  This never checks out BASE_BRANCH in the main repo,
+    so it works even when the main working tree is dirty.
+
+    On rebase conflict, delegates to codex exec for automatic resolution
+    (typical: parallel import additions to Omega.lean, IMPLEMENTATION_PLAN
+    header updates, .tex annotation appends).
+    """
     with _git_lock:
         logger.info(f"Merging {wt.branch} into {BASE_BRANCH}...")
 
-        # Switch to base branch in main repo (we only do this under lock)
-        original_branch = run_cmd(
-            ["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=REPO_ROOT
-        ).stdout.strip()
+        # 1. Fetch latest base branch
+        run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT)
 
-        try:
-            run_cmd(["git", "checkout", BASE_BRANCH], cwd=REPO_ROOT, check=True)
-
-            # Pull latest first
-            run_cmd(["git", "pull", "--rebase", "origin", BASE_BRANCH], cwd=REPO_ROOT)
-
-            # Merge
-            result = run_cmd(
-                ["git", "merge", "--no-ff", wt.branch,
-                 "-m", f"Merge {wt.branch}: round R{wt.round_number} formalization"],
-                cwd=REPO_ROOT,
-            )
-
-            if result.returncode != 0:
-                logger.error(f"Merge conflict for {wt.branch}: {result.stderr[:300]}")
-                run_cmd(["git", "merge", "--abort"], cwd=REPO_ROOT)
+        # 2. Rebase the worktree branch onto latest base (inside the worktree)
+        rebase = run_cmd(
+            ["git", "rebase", f"origin/{BASE_BRANCH}"],
+            cwd=wt.path,
+            timeout=120,
+        )
+        if rebase.returncode != 0:
+            logger.warning(f"Rebase conflict for {wt.branch}, invoking codex to resolve...")
+            resolved = _codex_resolve_conflicts(wt.path, model=model)
+            if not resolved:
+                logger.error(f"Codex could not resolve conflicts for {wt.branch}")
+                run_cmd(["git", "rebase", "--abort"], cwd=wt.path)
                 return False
 
-            # Push
-            push_result = run_cmd(
-                ["git", "push", "origin", BASE_BRANCH], cwd=REPO_ROOT
+        # 3. Fast-forward BASE_BRANCH ref to the rebased worktree tip
+        wt_tip = run_cmd(
+            ["git", "rev-parse", "HEAD"], cwd=wt.path
+        ).stdout.strip()
+
+        update = run_cmd(
+            ["git", "update-ref", f"refs/heads/{BASE_BRANCH}", wt_tip],
+            cwd=REPO_ROOT,
+        )
+        if update.returncode != 0:
+            logger.error(f"update-ref failed: {update.stderr[:300]}")
+            return False
+
+        # 4. Push BASE_BRANCH
+        push = run_cmd(
+            ["git", "push", "origin", BASE_BRANCH],
+            cwd=REPO_ROOT,
+        )
+        if push.returncode != 0:
+            # Retry: fetch + rebase again (someone else pushed meanwhile)
+            logger.warning("Push rejected, retrying after fetch + rebase...")
+            run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT)
+            rebase2 = run_cmd(
+                ["git", "rebase", f"origin/{BASE_BRANCH}"], cwd=wt.path,
+                timeout=120,
             )
-            if push_result.returncode != 0:
-                # Retry with pull-rebase
-                logger.warning("Push failed, retrying with pull --rebase...")
-                run_cmd(["git", "pull", "--rebase", "origin", BASE_BRANCH], cwd=REPO_ROOT)
-                push_result = run_cmd(
-                    ["git", "push", "origin", BASE_BRANCH], cwd=REPO_ROOT
-                )
-                if push_result.returncode != 0:
-                    logger.error(f"Push retry failed: {push_result.stderr[:300]}")
+            if rebase2.returncode != 0:
+                resolved2 = _codex_resolve_conflicts(wt.path, model=model)
+                if not resolved2:
+                    run_cmd(["git", "rebase", "--abort"], cwd=wt.path)
                     return False
+            wt_tip2 = run_cmd(
+                ["git", "rev-parse", "HEAD"], cwd=wt.path
+            ).stdout.strip()
+            run_cmd(
+                ["git", "update-ref", f"refs/heads/{BASE_BRANCH}", wt_tip2],
+                cwd=REPO_ROOT,
+            )
+            push2 = run_cmd(
+                ["git", "push", "origin", BASE_BRANCH], cwd=REPO_ROOT,
+            )
+            if push2.returncode != 0:
+                logger.error(f"Push retry failed: {push2.stderr[:300]}")
+                return False
 
-            logger.info(f"Merged and pushed {wt.branch} to {BASE_BRANCH}")
-            return True
-
-        finally:
-            # Restore original branch
-            run_cmd(["git", "checkout", original_branch], cwd=REPO_ROOT)
+        logger.info(f"Merged and pushed {wt.branch} to {BASE_BRANCH}")
+        return True
 
 
 def cleanup_all_worktrees() -> int:
@@ -678,7 +821,7 @@ def run_round_in_worktree(
         # ── Merge back ────────────────────────────────────────────
         if success and new_commits and wt and not dry_run:
             logger.info(f"[{tag}] Merging to {BASE_BRANCH}...")
-            merged = merge_worktree_to_base(wt)
+            merged = merge_worktree_to_base(wt, model=model)
             if not merged:
                 logger.error(f"[{tag}] Merge failed — keeping worktree for manual resolution")
                 _save_round_log(round_num, phase_b, phase_c, new_commits, False)
