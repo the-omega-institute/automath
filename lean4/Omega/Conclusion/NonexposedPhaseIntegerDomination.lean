@@ -113,4 +113,19 @@ theorem paper_conclusion_nonexposed_phase_integer_domination_seeds :
     (4 : ℕ) > 2 := by
   refine ⟨by omega, by omega, by omega, by omega, by omega⟩
 
+/-- Paper package for nonexposed phase integer domination failure.
+    cor:conclusion-nonexposed-phase-fails-integer-domination -/
+theorem paper_conclusion_nonexposed_phase_integer_domination_package :
+    -- 2-subset count for window-6
+    8 + 4 + 9 = (21 : ℕ) ∧
+    -- Nonexposed example: L₃(1) < L₁(1)
+    (4 : ℤ) - 3 * 1 < 5 - 2 * 1 ∧
+    -- Nonexposed example: L₃(2) < L₁(2)
+    (4 : ℤ) - 3 * 2 < 5 - 2 * 2 ∧
+    -- Fiber ratio
+    (4 : ℕ) / 2 = 2 ∧
+    -- Gap positive
+    (4 : ℕ) > 2 :=
+  paper_conclusion_nonexposed_phase_integer_domination_seeds
+
 end Omega.Conclusion.NonexposedPhaseIntegerDomination

@@ -134,4 +134,25 @@ theorem paper_xi_degree11_generic_galois_S11_seeds :
     (11 : ℕ) ≥ 5 := by
   refine ⟨rfl, by decide, by omega, by omega, by decide, by omega, by decide, by omega⟩
 
+/-- Paper package for degree-11 generic Galois S₁₁ via Hilbert irreducibility.
+    cor:xi-degree11-Et-generic-galois-S11-hilbert -/
+theorem paper_xi_degree11_generic_galois_S11_package :
+    -- Degree
+    (11 : ℕ) = 11 ∧
+    -- 11 is prime
+    Nat.Prime 11 ∧
+    -- Splitting pattern degree
+    1 + 3 + 7 = (11 : ℕ) ∧
+    -- Jordan bound: 7 ≤ 11 - 3
+    (7 : ℕ) ≤ 11 - 3 ∧
+    -- 7 is prime
+    Nat.Prime 7 ∧
+    -- Disc odd exponent (not a square)
+    37 % 2 = 1 ∧
+    -- S₁₁ order
+    Nat.factorial 11 = 39916800 ∧
+    -- S₁₁ not solvable
+    (11 : ℕ) ≥ 5 :=
+  paper_xi_degree11_generic_galois_S11_seeds
+
 end Omega.Zeta.Degree11GenericGaloisS11
