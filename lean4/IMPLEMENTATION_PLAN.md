@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3151 |
+| \leanverified 标注数 | 3156 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3200 |
-| 轮次 | R714（round_count=R714）|
+| 总标注数 | 3205 |
+| 轮次 | R715（round_count=R715）|
+
+**Phase R715（本轮落地，全流程执行）**：`paper_cdim_phase_spectrum_limit_seeds`（对应 `thm:cdim-phase-spectrum-limit`，CircleDimension；以 `phaseSpectrumCount` 的 coprime / prime-divisible 二分律连同自由部分 `t=0` 的显式公式，压出 phase-sampling 增长只由自由秩主导的核心极限骨架；本轮 non-trivial 目标）；`paper_zeckendorf_monoid_quotient_is_N_seeds`（对应 `thm:monoid-quotient-is-N`，EA；把有限层稳定值映射的双射性与 `|X_m|=F_{m+2}` 的 Fibonacci 基数账本打包成 quotient-to-`ℕ` 的 paper-facing seed，保留“每个值类恰有一个 admissible normal form”的核心有限层证书）；`paper_zeckendorf_fold_as_section_seeds`（对应 `cor:fold-as-section`，EA；对任意有限层值指标给出唯一稳定代表元，从而把 fold 作为 canonical section 的可计算选取骨架直接落在 `∃!` 证书上）；本轮 `\leanverified` +5，覆盖章节为 CircleDimension / EA，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/PhaseSpectrumLimit.lean`、`lean4/Omega/EA/MonoidQuotientIsN.lean`、`lean4/Omega/EA/FoldAsSectionCorollary.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_circle_dimension_algebra.tex`（`thm:cdim-phase-spectrum-limit`），`/Users/chronoai/automath/papers/publication/submitted_2026_zeckendorf_streaming_normalization_automata_rairo_ita/main.tex`（`thm:monoid-quotient-is-N`、`cor:fold-as-section`），`/Users/chronoai/automath/papers/publication/submitted_2026_zeckendorf_streaming_normalization_automata_rairo_ita/submission_source_20260313/main.tex`（`thm:monoid-quotient-is-N`、`cor:fold-as-section`））
 
 **Phase R714（本轮落地，全流程执行）**：`paper_projection_rewrite_word_problem_seeds`（对应 `cor:rewrite-word-problem`，EA；以 `normalize` 的唯一公共后继判据把“同余当且仅当正规形相同”压成共同归约存在性，从而保留精确重写词问题可判定的核心正规形骨架；本轮 non-trivial 目标）；`paper_cdim_short_exact_additivity_seeds`（对应 `thm:cdim-short-exact-additivity`，CircleDimension；把短正合列的自由秩加法直接打包成 `circleDim` 加法，并同步挂接 `kernel + image = source` 的 rank-nullity 账本，保留 circle dimension 的短正合可加性核心）；`paper_cdim_tensor_hom_ext_laws_seeds`（对应 `prop:cdim-tensor-hom-ext-laws`，CircleDimension；以同一乘法秩公式统一见证 tensor / Hom 两条 circle-dimension 乘法律，并保留 `Ext¹` 仅贡献扭部分故维数为零的核心消失骨架）；本轮 `\leanverified` +3，覆盖章节为 EA / CircleDimension，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/EA/RewriteWordProblem.lean`、`lean4/Omega/CircleDimension/ShortExactAdditivity.lean`、`lean4/Omega/CircleDimension/TensorHomExtLaws.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_projection_ontological_mathematics_core_tams/sec_rewriting.tex`（`cor:rewrite-word-problem`），`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_circle_dimension_algebra.tex`（`thm:cdim-short-exact-additivity`、`prop:cdim-tensor-hom-ext-laws`））
 
