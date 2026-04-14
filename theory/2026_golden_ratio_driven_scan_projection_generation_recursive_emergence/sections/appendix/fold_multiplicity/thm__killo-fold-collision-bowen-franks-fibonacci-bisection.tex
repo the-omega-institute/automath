@@ -1,0 +1,67 @@
+\begin{theorem}[碰撞核 Bowen-Franks 不变量的 Fibonacci 偶数偏移律]\label{thm:killo-fold-collision-bowen-franks-fibonacci-bisection}
+设 \(A_q\) 为 \(q\) 阶碰撞核的伴随矩阵（定义见附录 \ref{app:fold-multiplicity}），
+\(I\) 为同阶单位矩阵。
+则 Bowen-Franks 不变量满足
+\[
+\boxed{\;
+\abs{\det(I-A_q)}=F_{2(q-1)},\qquad q=2,3,4,
+\;}
+\]
+其中 \(F_n\) 为第 \(n\) 个 Fibonacci 数。具体地：
+\[
+\abs{\det(I-A_2)}=1=F_2,\quad
+\abs{\det(I-A_3)}=3=F_4,\quad
+\abs{\det(I-A_4)}=8=F_6.
+\]
+上述不变量自身服从偶数 Fibonacci 二分递推
+\(
+F_{2n}=3F_{2(n-1)}-F_{2(n-2)}
+\)。
+\leanverified{collisionKernel2\_det\_I\_sub,collisionKernel3\_det\_I\_sub,collisionKernel4\_det\_I\_sub}
+\end{theorem}
+
+\begin{proof}
+由碰撞核的 Lean 4 机器验证矩阵：
+\[
+A_2=\begin{pmatrix}0&1&0\\0&0&1\\-2&2&2\end{pmatrix},\quad
+A_3=\begin{pmatrix}0&1&0\\0&0&1\\-2&4&2\end{pmatrix},\quad
+A_4=\begin{pmatrix}0&1&0&0&0\\0&0&1&0&0\\0&0&0&1&0\\0&0&0&0&1\\-2&2&0&7&2\end{pmatrix}.
+\]
+直接计算 \(\det(I-A_q)\):
+\begin{align*}
+\det(I-A_2)&=\det\begin{pmatrix}1&-1&0\\0&1&-1\\2&-2&-1\end{pmatrix}
+=1\cdot(1\cdot(-1)-(-1)\cdot(-2))-(-1)\cdot(0\cdot(-1)-(-1)\cdot 2)=-1,\\
+\det(I-A_3)&=\det\begin{pmatrix}1&-1&0\\0&1&-1\\2&-4&-1\end{pmatrix}=-3,\\
+\det(I-A_4)&=-8.
+\end{align*}
+取绝对值得 \(1,3,8\)，与 \(F_2,F_4,F_6\) 逐项吻合。
+二分递推验证：\(F_6=3\cdot F_4-F_2=3\cdot 3-1=8\)。
+\end{proof}
+
+\begin{theorem}[Bowen-Franks 律在 \(q=5\) 处的断裂与 Lucas 溢出]\label{thm:killo-fold-collision-bowen-franks-q5-break}
+\(q=5\) 处 Bowen-Franks 律断裂：
+\[
+\abs{\det(I-A_5)}=32,\qquad F_8=21,\qquad
+\abs{\det(I-A_5)}-F_8=11=L_5,
+\]
+其中 \(L_n\) 为第 \(n\) 个 Lucas 数。
+同时，碰撞核迹发生符号相变：
+\[
+\tr(A_q)=+2\quad(q=2,3,4),\qquad
+\tr(A_5)=-2.
+\]
+\leanverified{collisionKernel5\_det\_I\_sub,collisionKernel5\_trace}
+\end{theorem}
+
+\begin{proof}
+由 Lean 4 机器验证的碰撞核 \(A_5\) 直接计算。
+迹：\(\tr(A_2)=0+0+2=2\)，\(\tr(A_3)=0+0+2=2\)，\(\tr(A_4)=0+0+0+0+2=2\)；
+而 \(\tr(A_5)\) 的对角元之和为 \(-2\)。
+溢出量 \(32-21=11\) 恰为 Lucas 数 \(L_5=L_4+L_3=7+4=11\)。
+\end{proof}
+
+\begin{conjecture}[Bowen-Franks 律的断裂边界与碰撞核维度]\label{conj:killo-fold-collision-bowen-franks-dimension-bound}
+\(\abs{\det(I-A_q)}=F_{2(q-1)}\) 对所有满足
+碰撞核维度 \(d_q\le 2q-1\) 的 \(q\) 成立；
+在 \(d_q\) 首次超过 \(2q-1\) 时行列式偏离 Fibonacci 偶索引序列。
+\end{conjecture}

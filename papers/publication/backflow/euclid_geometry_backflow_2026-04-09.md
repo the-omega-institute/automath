@@ -8,7 +8,7 @@ The point is methodological rather than historical: Euclid provides a cleaner la
 
 ## Direct Backflow Completed
 
-Seven write-backs were integrated on this branch.
+Eleven write-backs were integrated on this branch.
 
 1. `POM` now carries an explicit Euclid-style primitive-discipline remark.
    - Target: `theory/.../sections/body/pom/parts/subsec__pom-position.tex`
@@ -38,6 +38,22 @@ Seven write-backs were integrated on this branch.
    - Target: `theory/.../sections/body/circle_dimension_phase_gate/subsec__circle-dimension-phase-gate-cauchy-kernel-rkhs-affine-translate.tex`
    - Effect: reframes normalized norm laws as proportion/similarity statements rather than coordinate-bound estimates.
 
+8. `physical_spacetime_skeleton` now states global Einstein closure as a threshold theorem built from audited local certificates.
+   - Target: `theory/.../sections/body/physical_spacetime_skeleton/subsec__physical-spacetime-skeleton-admissible-einstein-domain.tex`
+   - Effect: makes the final global domain read as a closure layer justified by local exactness and gluing certificates, not by diagrammatic extrapolation.
+
+9. `emergent_arithmetic/stable-add` now carries an explicit Book II constructive reading.
+   - Target: `theory/.../sections/body/emergent_arithmetic/subsec__emergent-arithmetic-stable-add.tex`
+   - Effect: presents addition as legal composition plus normalization, rather than as a pre-installed primitive operation.
+
+10. `emergent_arithmetic/stable-mul` now presents multiplication as a second-layer normalization law.
+   - Target: `theory/.../sections/body/emergent_arithmetic/subsec__emergent-arithmetic-stable-mul.tex`
+   - Effect: ties multiplication to canonical decomposition and read-back, extending the de-primitive arithmetic program.
+
+11. `circle_dimension_phase_gate/sync-causal-holonomy-spacetime` now separates locally constructible edges from globally rigid cone boundaries.
+   - Target: `theory/.../sections/body/circle_dimension_phase_gate/subsec__circle-dimension-phase-gate-sync-causal-holonomy-spacetime.tex`
+   - Effect: prevents causal cones from being misread as given background geometry rather than closure invariants of the protocol.
+
 ## Main Lessons from Euclid
 
 The strongest backflow points are these:
@@ -48,21 +64,69 @@ The strongest backflow points are these:
 - Limit/control arguments read better when presented as finite-stage disciplined approximation rather than as a black-box continuum jump.
 - Obstruction classes should be classified, not treated as annoying leftovers.
 
-## Recommended Next Integrations
+## Remaining Optional Extensions
 
-The next places worth editing are:
+The core Euclid backflow for this round is now integrated. Further extensions are optional rather than blocking:
 
-1. `theory/.../sections/body/circle_dimension_phase_gate/subsec__circle-dimension-phase-gate-sync-causal-holonomy-spacetime.tex`
-   - Goal: tighten the distinction between locally constructible causal edges and globally rigid propagation cones.
+1. `theory/.../sections/body/folding/`
+   - Goal: continue classifying results into constructibility, rigidity, and obstruction layers with even sharper local/global signage.
 
-2. `theory/.../sections/body/physical_spacetime_skeleton/subsec__physical-spacetime-skeleton-admissible-einstein-domain.tex`
-   - Goal: make the transition from admissible local certificates to global Einstein closure read more explicitly as a threshold theorem.
+2. `theory/.../sections/body/physical_spacetime_skeleton/`
+   - Goal: propagate the same staged dependency language into later compilation summaries and overview paragraphs.
 
 3. `theory/.../sections/body/emergent_arithmetic/`
-   - Goal: push the Book II geometric-algebra language deeper into stable addition/multiplication and decomposition identities.
+   - Goal: push the Book II vocabulary into additional decomposition identities if the arithmetic chapter is later expanded into a standalone note.
 
-4. `theory/.../sections/body/folding/`
-   - Goal: isolate more clearly which results are constructibility statements, which are rigidity statements, and which are obstruction statements.
+## Standing Knowledge Node
+
+This Euclid note should now be treated as a standing knowledge node, not as a one-off rewrite memo.
+
+- Source type: classical geometry / methodological kernel
+- Integration mode: local theorem-level expansion into the core
+- Primary target sections:
+  - `pom/`
+  - `folding/`
+  - `emergent_arithmetic/`
+  - `circle_dimension_phase_gate/`
+  - `physical_spacetime_skeleton/`
+
+The operating rule is simple: do not restructure the whole manuscript to imitate Euclid. Instead, keep adding bounded content where Euclid clarifies primitive legality, constructive existence, canonicalization, proportion transfer, or local-to-global closure thresholds.
+
+## Theorem Expansion Queue
+
+The next Euclid-derived theorem families worth growing are:
+
+1. `constructibility_rigidity_obstruction`
+   - Targets: `pom/`, `folding/`, `physical_spacetime_skeleton/`
+   - Goal: sharpen which claims are existence-by-construction, which are uniqueness/rigidity, and which are obstruction/barrier statements.
+
+2. `bookII_constructive_arithmetic`
+   - Targets: `emergent_arithmetic/`
+   - Goal: expand decomposition identities, stable add/mul normal forms, and normalization-based arithmetic readouts.
+
+3. `bookV_VI_proportion_scale_transfer`
+   - Targets: `circle_dimension_phase_gate/`, `zeta_finite_part/`
+   - Goal: restate scale laws and transfer identities as proportion/similarity statements rather than coordinate-bound formulas.
+
+4. `threshold_closure_local_to_global`
+   - Targets: `physical_spacetime_skeleton/`, `logic_expansion_chain/`
+   - Goal: make global closure theorems read as compatibility thresholds built from audited local certificates.
+
+Latest extension on this branch:
+
+- `logic_expansion_chain/` now carries an explicit gluing-closure threshold reading.
+  - Added: a named closure-threshold definition, a threshold-crossing proposition, and a corollary identifying `\mathsf{Null}^{glue}` with failure to cross the global closure threshold.
+  - Effect: local certificates, compatible local families, and global objects are now separated as distinct structural stages rather than being read as a single flattened existence claim.
+
+- `zeta_finite_part/` now carries explicit Book V--VI proportion laws.
+  - Added: Nyquist sampling-energy proportion stability, relative truncation/exhaustion error for `\log\mathfrak M`, and an Adams radius-similarity law for fixed-radius certificates.
+  - Effect: scale transfer in the zeta block is now stated as ratio/similarity control across finite resolutions, not just as isolated coordinate estimates.
+
+- `pom/`, `folding/`, and `physical_spacetime_skeleton/` now carry an explicit constructibility--rigidity--obstruction split.
+  - Added: a POM proposition forcing object-layer claims to enter through admissible projection words, a folding trichotomy theorem separating stable-object existence from fiber-level obstruction, and a spacetime proposition separating local skeleton construction from global untwisted closure.
+  - Effect: the main theory now states more sharply which claims are mere legal constructions, which require uniqueness certificates, and which are blocked by residual/Čech/holonomy data.
+
+Each family should be integrated as local theorem/definition/corollary additions inside the existing core. The purpose is to enlarge the nucleus, not to freeze it into any single inherited table of contents.
 
 ## Source Baseline
 
