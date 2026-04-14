@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3145 |
+| \leanverified 标注数 | 3148 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3194 |
-| 轮次 | R710（round_count=R710）|
+| 总标注数 | 3197 |
+| 轮次 | R711（round_count=R711）|
+
+**Phase R711（本轮落地，全流程执行）**：`paper_cdim_axiomatic_rigidity_seeds`（对应 `thm:cdim-axiomatic-rigidity`，CircleDimension；把 publication 版 circle-dimension 公理唯一性命题包装成 paper-facing seed，保留“满足加法、有限核不变与标准归一化的秩型函数只能等于 circle dimension”的核心唯一性骨架；本轮 non-trivial 目标之一）；`paper_cdim_phase_spectrum_reconstruction_seeds`（对应 `thm:cdim-phase-spectrum-reconstruction`，CircleDimension；把相位采样计数完全恢复 `r` 与 `t` 的重构判据包装成 paper-facing seed，保留“全体 phase spectrum 唯一确定自由秩与扭参数”的核心重构骨架；本轮 non-trivial 目标之一）；`paper_information_state_forcing_persistence_seeds`（对应 `prop:forcing-persistence`，LogicExpansionChain；把信息态细化下的 forcing 保持直接挂接到 publication 语境，保留“状态细化只会缩小 realization 集并抬升上下文，不会推翻已 forced 的事实”的核心单调性骨架）；本轮 `\leanverified` +3，覆盖章节为 CircleDimension / LogicExpansionChain，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/CircleDimension/AxiomaticRigidity.lean`、`lean4/Omega/CircleDimension/PhaseSpectrumReconstruction.lean`、`lean4/Omega/LogicExpansionChain/StateForcingPersistence.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_circle_dimension_algebra.tex`（`thm:cdim-axiomatic-rigidity`、`thm:cdim-phase-spectrum-reconstruction`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_information_states.tex`（`prop:forcing-persistence`））
 
 **Phase R710（本轮落地，全流程执行）**：`paper_scan_projection_address_scan_error_cylinder_seeds`（对应 `prop:scan-error-cylinder`，SPG；把 ETDS 文稿中的前缀柱误差精确公式直接落成 `prefixScanError = ∑_a min(eventMass_a, complMass_a)`，并同步给出 boundary-cell 截断和，从而保留“扫描误差逐柱取较小项再求和”的核心分解骨架）；`paper_scan_projection_address_bayes_optimality_seeds`（对应 `prop:bayes-optimality`，SPG；定义逐胞阈值判决 `cellComplMass ≤ cellEventMass` 并证明任意前缀可观测近似的对称差误差都不小于 `prefixScanError`，且阈值规则恰取等号，保留“Bayes 阈值规则最优且精确达到柱级最小误差”的核心判决骨架；本轮 non-trivial 目标）；`paper_scan_projection_address_sigma_nonexpansion_seeds`（对应 `cor:sigma-nonexpansion`，RecursiveAddressing；以 `observableEvent (Φ ∘ obsL) A = observableEvent obsL (Φ⁻¹' A)` 形式化递归后层事件必为旧层可见事件的原像，从而保留“后层可见域只是在旧层内重选而不扩张”的核心非扩张机制）；本轮 `\leanverified` +3，覆盖章节为 SPG / RecursiveAddressing，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/SPG/ScanProjectionScanErrorCylinder.lean`、`lean4/Omega/SPG/ScanProjectionBayesOptimality.lean`、`lean4/Omega/RecursiveAddressing/SigmaNonexpansion.lean`）
 
