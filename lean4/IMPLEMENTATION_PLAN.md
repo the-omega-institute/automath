@@ -8,15 +8,17 @@
 |---|---|
 | 总行数 | ~50,876 |
 | 定理/定义数 | ~4,436 |
-| 论文接口包装 | 773+ |
-| 文件数 | 189 |
+| 论文接口包装 | 776+ |
+| 文件数 | 192 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3317 |
+| \leanverified 标注数 | 3320 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3366 |
-| 轮次 | R772（round_count=R772）|
+| 总标注数 | 3369 |
+| 轮次 | R773（round_count=R773）|
+
+**Phase R773（本轮落地，全流程执行）**：`paper_scan_projection_address_main_amplitude`（对应 `thm:main-amplitude`，SPG；把 introduction theorem 中 quasistationary ambiguity amplitudes 的 Perron 左特征向量归一化、residue-class ambiguity ratio limit 与 survivor-mass asymptotic 直接压成 introduction-facing wrapper，本轮 non-trivial 目标）；`paper_conservative_extension_character_blind_obstructions_focused`（对应 `thm:character-blind-obstructions`，Topos；把 focused APAL publication 中 character-blind pure-`Ext` obstruction 的四段等价、non-neutral gerbe 结论与 singleton-visible `Null^{\\mathrm{glue}}` readout 统一压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_etds_abelian_cyclic_shadow`（对应 `cor:abelian-cyclic-shadow`，Zeta；把 shadow section 中 abelian pullback、cyclic quotient recovery 与 finite-part root-of-unity layer readout 压成 corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 SPG / Topos / Zeta，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/SPG/MainAmplitude.lean`、`lean4/Omega/Topos/CharacterBlindObstructionsFocused.lean`、`lean4/Omega/Zeta/AbelianCyclicShadow.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_scan_projection_address_main_amplitude`、`paper_conservative_extension_character_blind_obstructions_focused`、`paper_etds_abelian_cyclic_shadow`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_introduction.tex`（`thm:main-amplitude`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_homological_visibility.tex`（`thm:character-blind-obstructions`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_shadows.tex`（`cor:abelian-cyclic-shadow`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R772（本轮落地，全流程执行）**：`paper_scan_projection_address_main_renyi`（对应 `thm:main-renyi`，SPG；把 introduction theorem 中 ambient survivor partition decay、conditioned R\'enyi pressure identity 与 collision exponent ledger `\chi_H=2\gamma_H+h_{2,H}` 压成 introduction-facing wrapper，本轮 non-trivial 目标）；`paper_conservative_extension_h1_vanishing_class_trivializing`（对应 `cor:h1-vanishing-class-trivializing`，Topos；把 `H_1=0` 下 pure-`Ext` 消失与经由 intrinsic visible quotient 的唯一因子分解直接压成 non-focused APAL publication-facing corollary wrapper）；`paper_etds_quotient_functoriality`（对应 `thm:quotient-functoriality`，Zeta；把 quotient pullback 下 class-function logarithm equality、primitive profile equality 与 quotient conjugacy-class decomposition 统一压成 theorem-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 SPG / Topos / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/SPG/MainRenyi.lean`、`lean4/Omega/Topos/H1VanishingClassTrivializingPublication.lean`、`lean4/Omega/Zeta/QuotientFunctoriality.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_scan_projection_address_main_renyi`、`paper_conservative_extension_h1_vanishing_class_trivializing`、`paper_etds_quotient_functoriality`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_introduction.tex`（`thm:main-renyi`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_homological_visibility.tex`（`cor:h1-vanishing-class-trivializing`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_shadows.tex`（`thm:quotient-functoriality`）；新增 tex theorem/corollary/lemma 环境数 0）
 
