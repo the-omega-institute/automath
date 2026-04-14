@@ -1,4 +1,6 @@
 import Mathlib.Tactic
+import Omega.Folding.FiberSpectrum
+import Omega.Folding.MaxFiberHigh
 
 /-!
 # Top spectral gap odd/even limit constants
@@ -133,6 +135,156 @@ theorem phi_inv6_bounds : (13 : ℚ) * 17 < 233 ∧ (233 : ℚ) < 13 * 18 := by
 theorem phi_inv5_half_bounds : (4 : ℚ) * 21 < 89 ∧ (89 : ℚ) < 4 * 23 := by
   constructor <;> norm_num
 
+/-! ## Uniform Fibonacci gap certificate -/
+
+private theorem fib_add_five_le_thirteen_mul :
+    ∀ n : Nat, 1 ≤ n → Nat.fib (n + 5) ≤ 13 * Nat.fib n
+  | 0, h => by omega
+  | 1, _ => by norm_num
+  | 2, _ => by norm_num
+  | n + 3, _ => by
+      have h₁ : Nat.fib (n + 6) ≤ 13 * Nat.fib (n + 1) :=
+        fib_add_five_le_thirteen_mul (n + 1) (by omega)
+      have h₂ : Nat.fib (n + 7) ≤ 13 * Nat.fib (n + 2) :=
+        fib_add_five_le_thirteen_mul (n + 2) (by omega)
+      have hrec₁ : Nat.fib (n + 8) = Nat.fib (n + 7) + Nat.fib (n + 6) := by
+        simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+          _root_.Omega.fib_succ_succ' (n + 6)
+      have hrec₂ : Nat.fib (n + 3) = Nat.fib (n + 2) + Nat.fib (n + 1) := by
+        simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+          _root_.Omega.fib_succ_succ' (n + 1)
+      calc
+        Nat.fib (n + 8) = Nat.fib (n + 7) + Nat.fib (n + 6) := hrec₁
+        _ ≤ 13 * Nat.fib (n + 2) + 13 * Nat.fib (n + 1) := Nat.add_le_add h₂ h₁
+        _ = 13 * Nat.fib (n + 3) := by rw [hrec₂]; ring
+
+private theorem second_max_even_ratio
+    (two_step : ∀ m, 6 ≤ m →
+      Omega.X.maxFiberMultiplicity m =
+        Omega.X.maxFiberMultiplicity (m - 2) + Omega.X.maxFiberMultiplicity (m - 4))
+    (forbidden_even : ∀ k : Nat, 5 ≤ k →
+      Omega.cNthMaxFiber (2 * k) 1 =
+        Omega.X.maxFiberMultiplicity (2 * k) - Nat.fib (k - 4))
+    (_forbidden_odd : ∀ k : Nat, 5 ≤ k →
+      _root_.Omega.cNthMaxFiber (2 * k + 1) 1 =
+        _root_.Omega.X.maxFiberMultiplicity (2 * k + 1) - Nat.fib (k - 4))
+    (k : Nat) (hk : 5 ≤ k) :
+    (_root_.Omega.cNthMaxFiber (2 * k) 1 : ℚ) / _root_.Omega.X.maxFiberMultiplicity (2 * k) =
+      1 - (Nat.fib (k - 4) : ℚ) / Nat.fib (k + 2) := by
+  rw [forbidden_even k hk, _root_.Omega.X.maxFiberMultiplicity_even_of_two_step two_step k (by omega)]
+  have hle : Nat.fib (k - 4) ≤ Nat.fib (k + 2) := Nat.fib_mono (by omega)
+  rw [Nat.cast_sub hle]
+  have hpos : (Nat.fib (k + 2) : ℚ) ≠ 0 := by
+    exact_mod_cast (Nat.ne_of_gt (Nat.fib_pos.mpr (by omega)))
+  field_simp [hpos]
+
+private theorem second_max_odd_ratio
+    (two_step : ∀ m, 6 ≤ m →
+      Omega.X.maxFiberMultiplicity m =
+        Omega.X.maxFiberMultiplicity (m - 2) + Omega.X.maxFiberMultiplicity (m - 4))
+    (_forbidden_even : ∀ k : Nat, 5 ≤ k →
+      _root_.Omega.cNthMaxFiber (2 * k) 1 =
+        _root_.Omega.X.maxFiberMultiplicity (2 * k) - Nat.fib (k - 4))
+    (forbidden_odd : ∀ k : Nat, 5 ≤ k →
+      _root_.Omega.cNthMaxFiber (2 * k + 1) 1 =
+        _root_.Omega.X.maxFiberMultiplicity (2 * k + 1) - Nat.fib (k - 4))
+    (k : Nat) (hk : 5 ≤ k) :
+    (_root_.Omega.cNthMaxFiber (2 * k + 1) 1 : ℚ) / _root_.Omega.X.maxFiberMultiplicity (2 * k + 1) =
+      1 - (Nat.fib (k - 4) : ℚ) / (2 * Nat.fib (k + 1)) := by
+  rw [forbidden_odd k hk, _root_.Omega.X.maxFiberMultiplicity_odd_of_two_step two_step k (by omega)]
+  have hle : Nat.fib (k - 4) ≤ 2 * Nat.fib (k + 1) := by
+    have hmono : Nat.fib (k - 4) ≤ Nat.fib (k + 1) := Nat.fib_mono (by omega)
+    have hpos : 0 < Nat.fib (k + 1) := Nat.fib_pos.mpr (by omega)
+    omega
+  rw [Nat.cast_sub hle, Nat.cast_mul]
+  norm_num
+  have hpos : ((2 * Nat.fib (k + 1) : Nat) : ℚ) ≠ 0 := by
+    exact_mod_cast (Nat.ne_of_gt (by
+      have : 0 < Nat.fib (k + 1) := Nat.fib_pos.mpr (by omega)
+      omega))
+  field_simp [hpos]
+
+private theorem second_max_ratio_bound_small
+    (m : Nat) (hm₂ : 2 ≤ m) (hm₁₀ : m ≤ 10) :
+    (_root_.Omega.cNthMaxFiber m 1 : ℚ) / _root_.Omega.X.maxFiberMultiplicity m ≤ 25 / 26 := by
+  interval_cases m
+  · norm_num [_root_.Omega.cNthMaxFiber, _root_.Omega.cFiberSpectrum_two,
+      _root_.Omega.X.maxFiberMultiplicity_two]
+  · norm_num [_root_.Omega.cNthMaxFiber, _root_.Omega.cFiberSpectrum_three,
+      _root_.Omega.X.maxFiberMultiplicity_three]
+  · norm_num [_root_.Omega.cNthMaxFiber_second_four, _root_.Omega.X.maxFiberMultiplicity_four]
+  · norm_num [_root_.Omega.cNthMaxFiber_second_five, _root_.Omega.X.maxFiberMultiplicity_five]
+  · norm_num [_root_.Omega.cNthMaxFiber_second_six, _root_.Omega.X.maxFiberMultiplicity_six]
+  · norm_num [_root_.Omega.cNthMaxFiber_second_seven, _root_.Omega.X.maxFiberMultiplicity_seven]
+  · rw [_root_.Omega.cNthMaxFiber_second_eight, _root_.Omega.X.maxFiberMultiplicity_eight]
+    norm_num
+  · rw [_root_.Omega.cNthMaxFiber_second_nine, _root_.Omega.X.maxFiberMultiplicity_nine]
+    norm_num
+  · rw [_root_.Omega.cNthMaxFiber_second_ten, _root_.Omega.X.maxFiberMultiplicity_ten]
+    norm_num
+
+private theorem second_max_even_bound
+    (two_step : ∀ m, 6 ≤ m →
+      Omega.X.maxFiberMultiplicity m =
+        Omega.X.maxFiberMultiplicity (m - 2) + Omega.X.maxFiberMultiplicity (m - 4))
+    (forbidden_even : ∀ k : Nat, 5 ≤ k →
+      _root_.Omega.cNthMaxFiber (2 * k) 1 =
+        _root_.Omega.X.maxFiberMultiplicity (2 * k) - Nat.fib (k - 4))
+    (forbidden_odd : ∀ k : Nat, 5 ≤ k →
+      _root_.Omega.cNthMaxFiber (2 * k + 1) 1 =
+        _root_.Omega.X.maxFiberMultiplicity (2 * k + 1) - Nat.fib (k - 4))
+    (k : Nat) (hk : 5 ≤ k) :
+    (_root_.Omega.cNthMaxFiber (2 * k) 1 : ℚ) / _root_.Omega.X.maxFiberMultiplicity (2 * k) ≤ 25 / 26 := by
+  rw [second_max_even_ratio two_step forbidden_even forbidden_odd k hk]
+  have hstep : Nat.fib (k + 1) ≤ 13 * Nat.fib (k - 4) := by
+    simpa [show (k - 4) + 5 = k + 1 from by omega] using
+      fib_add_five_le_thirteen_mul (k - 4) (by omega)
+  have hmono : Nat.fib k ≤ Nat.fib (k + 1) := Nat.fib_mono (by omega)
+  have hbound : Nat.fib (k + 2) ≤ 26 * Nat.fib (k - 4) := by
+    have hrec : Nat.fib (k + 2) = Nat.fib (k + 1) + Nat.fib k := _root_.Omega.fib_succ_succ' k
+    omega
+  have hfrac : (1 : ℚ) / 26 ≤ (Nat.fib (k - 4) : ℚ) / Nat.fib (k + 2) := by
+    have hpos₂ : (0 : ℚ) < Nat.fib (k + 2) := by
+      exact_mod_cast (Nat.fib_pos.mpr (by omega))
+    rw [le_div_iff₀ hpos₂]
+    have hq : (Nat.fib (k + 2) : ℚ) ≤ 26 * Nat.fib (k - 4) := by
+      exact_mod_cast hbound
+    nlinarith
+  nlinarith
+
+private theorem second_max_odd_bound
+    (two_step : ∀ m, 6 ≤ m →
+      Omega.X.maxFiberMultiplicity m =
+        Omega.X.maxFiberMultiplicity (m - 2) + Omega.X.maxFiberMultiplicity (m - 4))
+    (forbidden_even : ∀ k : Nat, 5 ≤ k →
+      _root_.Omega.cNthMaxFiber (2 * k) 1 =
+        _root_.Omega.X.maxFiberMultiplicity (2 * k) - Nat.fib (k - 4))
+    (forbidden_odd : ∀ k : Nat, 5 ≤ k →
+      _root_.Omega.cNthMaxFiber (2 * k + 1) 1 =
+        _root_.Omega.X.maxFiberMultiplicity (2 * k + 1) - Nat.fib (k - 4))
+    (k : Nat) (hk : 5 ≤ k) :
+    (_root_.Omega.cNthMaxFiber (2 * k + 1) 1 : ℚ) / _root_.Omega.X.maxFiberMultiplicity (2 * k + 1) ≤ 25 / 26 := by
+  rw [second_max_odd_ratio two_step forbidden_even forbidden_odd k hk]
+  have hstep : Nat.fib (k + 1) ≤ 13 * Nat.fib (k - 4) := by
+    simpa [show (k - 4) + 5 = k + 1 from by omega] using
+      fib_add_five_le_thirteen_mul (k - 4) (by omega)
+  have hbound : 2 * Nat.fib (k + 1) ≤ 26 * Nat.fib (k - 4) := by
+    nlinarith
+  have hfrac : (1 : ℚ) / 26 ≤ (Nat.fib (k - 4) : ℚ) / (2 * Nat.fib (k + 1)) := by
+    have hpos₂ : (0 : ℚ) < (2 * Nat.fib (k + 1) : Nat) := by
+      have : 0 < Nat.fib (k + 1) := Nat.fib_pos.mpr (by omega)
+      exact_mod_cast (show 0 < 2 * Nat.fib (k + 1) by omega)
+    rw [le_div_iff₀ (by exact_mod_cast hpos₂)]
+    have hq : ((2 * Nat.fib (k + 1) : Nat) : ℚ) ≤ 26 * Nat.fib (k - 4) := by
+      exact_mod_cast hbound
+    have hq' : (((2 * Nat.fib (k + 1) : Nat) : ℚ) / 26) ≤ Nat.fib (k - 4) := by
+      have hq'' : ((2 * Nat.fib (k + 1) : Nat) : ℚ) ≤ (Nat.fib (k - 4) : ℚ) * 26 := by
+        simpa [mul_comm] using hq
+      exact (div_le_iff₀ (by norm_num : (0 : ℚ) < 26)).2 hq''
+    convert hq' using 1
+    norm_num [Nat.cast_mul, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc]
+  nlinarith
+
 /-! ## Paper interface -/
 
 /-- Paper: `cor:pom-top-gap-limit-constants`.
@@ -147,5 +299,44 @@ theorem paper_pom_top_gap_limit_constants :
     (13 : ℤ) * 89 = 1157 ∧
     (233 : ℤ) * 4 = 932 := by
   omega
+
+set_option maxHeartbeats 400000 in
+/-- Paper-facing gap-certificate wrapper: the closed forms for the second-largest fiber
+multiplicity yield exact odd/even ratio formulas and the uniform auditable bound `25/26`.
+    cor:pom-second-max-gap-constant -/
+theorem paper_pom_second_max_gap_constant
+    (two_step : ∀ m, 6 ≤ m →
+      _root_.Omega.X.maxFiberMultiplicity m =
+        _root_.Omega.X.maxFiberMultiplicity (m - 2) + _root_.Omega.X.maxFiberMultiplicity (m - 4))
+    (forbidden_even : ∀ k : Nat, 5 ≤ k →
+      _root_.Omega.cNthMaxFiber (2 * k) 1 =
+        _root_.Omega.X.maxFiberMultiplicity (2 * k) - Nat.fib (k - 4))
+    (forbidden_odd : ∀ k : Nat, 5 ≤ k →
+      _root_.Omega.cNthMaxFiber (2 * k + 1) 1 =
+        _root_.Omega.X.maxFiberMultiplicity (2 * k + 1) - Nat.fib (k - 4)) :
+    (∀ k : Nat, 5 ≤ k →
+      (_root_.Omega.cNthMaxFiber (2 * k) 1 : ℚ) / _root_.Omega.X.maxFiberMultiplicity (2 * k) =
+        1 - (Nat.fib (k - 4) : ℚ) / Nat.fib (k + 2)) ∧
+    (∀ k : Nat, 5 ≤ k →
+      (_root_.Omega.cNthMaxFiber (2 * k + 1) 1 : ℚ) / _root_.Omega.X.maxFiberMultiplicity (2 * k + 1) =
+        1 - (Nat.fib (k - 4) : ℚ) / (2 * Nat.fib (k + 1))) ∧
+    (∀ m : Nat, 2 ≤ m →
+      (_root_.Omega.cNthMaxFiber m 1 : ℚ) / _root_.Omega.X.maxFiberMultiplicity m ≤ 25 / 26) ∧
+    ((9 : ℤ) ^ 2 - 5 * 4 ^ 2 = 1 ∧
+      (25 : ℤ) * (-1) + 15 * 1 + 9 = -1 ∧
+      (13 : ℤ) * 89 = 1157 ∧
+      (233 : ℤ) * 4 = 932) := by
+  refine ⟨?_, ?_, ?_, paper_pom_top_gap_limit_constants⟩
+  · intro k hk
+    exact second_max_even_ratio two_step forbidden_even forbidden_odd k hk
+  · intro k hk
+    exact second_max_odd_ratio two_step forbidden_even forbidden_odd k hk
+  · intro m hm₂
+    by_cases hm₁₀ : m ≤ 10
+    · exact second_max_ratio_bound_small m hm₂ hm₁₀
+    · have hm₁₁ : 11 ≤ m := by omega
+      rcases Nat.even_or_odd' m with ⟨k, rfl | rfl⟩
+      · exact second_max_even_bound two_step forbidden_even forbidden_odd k (by omega)
+      · exact second_max_odd_bound two_step forbidden_even forbidden_odd k (by omega)
 
 end Omega.POM.TopGapLimitConstants
