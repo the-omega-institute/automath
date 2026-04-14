@@ -6,17 +6,19 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~50,823 |
-| 定理/定义数 | ~4,433 |
+| 总行数 | ~50,876 |
+| 定理/定义数 | ~4,436 |
 | 论文接口包装 | 770+ |
-| 文件数 | 183 |
+| 文件数 | 186 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3296 |
+| \leanverified 标注数 | 3299 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3345 |
-| 轮次 | R765（round_count=R765）|
+| 总标注数 | 3348 |
+| 轮次 | R766（round_count=R766）|
+
+**Phase R766（本轮落地，全流程执行）**：`paper_zeckendorf_add_fst`（对应 `thm:zeckendorf-add-fst`，EA；把 Zeckendorf normalization publication 中 “addition equals digitwise superposition followed by normalization” 的 arithmetic core 直接挂接到既有 `stableAdd`/`Fold` wrapper）；`paper_prime_languages_zeckendorf_regular_powerlaw`（对应 `thm:zeckendorf-regular-powerlaw`，Zeta；把 prime-languages publication 中 regular Zeckendorf language power-law theorem 映射到既有 ETDS power-law wrapper 的 publication-facing别名）；`paper_resolution_folding_uniform_synchronizing_length`（对应 `cor:uniform-synchronizing-length`，Folding；把 resolution-folding JNT rigidity section 中 “all length-`m` blocks synchronize but length `m-1` threshold fails” 的 exact-threshold packaging压成 monotone synchronizing-length wrapper，本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 EA / Zeta / Folding，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/EA/ZeckendorfAddFst.lean`、`lean4/Omega/Zeta/PrimeLanguagesZeckendorfRegularPowerlaw.lean`、`lean4/Omega/Folding/UniformSynchronizingLength.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_zeckendorf_add_fst`、`paper_prime_languages_zeckendorf_regular_powerlaw`、`paper_resolution_folding_uniform_synchronizing_length`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_zeckendorf_streaming_normalization_automata_rairo_ita/main.tex`（`thm:zeckendorf-add-fst`），`/Users/chronoai/automath/papers/publication/2026_prime_languages_sofic_obstructions_dynamical_zeta/sec_zeckendorf.tex`（`thm:zeckendorf-regular-powerlaw`），`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_reconstruction.tex`（`cor:uniform-synchronizing-length`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R765（本轮落地，全流程执行）**：`paper_gluing_failure_visible_value_components`（对应 `thm:visible-value-components`，Topos；把 gluing-failure publication 中 visible value classes、associated sheaf section 与 stackification connected-component 的两段等价压成 theorem-facing wrapper）；`paper_etds_finite_part_single_layer_square_root_test`（对应 `cor:finite-part-single-layer-square-root-test`，Zeta；把 ETDS finite-part section 中单层 root-of-unity reconstruction 对 square-root spectral bound 的判定直接挂接到既有 single-layer reconstruction package）；`paper_scan_projection_address_survivor_spectrum_collision`（对应 `cor:survivor-spectrum-collision`，SPG；把 scan-projection ETDS survivor spectrum corollary 中 second/third moment asymptotics、Poisson collision criterion 与 birthday-threshold conclusion 压成 theorem-facing wrapper，本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 Topos / Zeta / SPG，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Topos/VisibleValueComponents.lean`、`lean4/Omega/Zeta/FinitePartSingleLayerSquareRootTest.lean`、`lean4/Omega/SPG/SurvivorSpectrumCollision.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_gluing_failure_visible_value_components`、`paper_etds_finite_part_single_layer_square_root_test`、`paper_scan_projection_address_survivor_spectrum_collision`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal/sec_null_decomposition.tex`（`thm:visible-value-components`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_finite_part.tex`（`cor:finite-part-single-layer-square-root-test`），`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_double_budget.tex`（`cor:survivor-spectrum-collision`）；新增 tex theorem/corollary/lemma 环境数 0）
 
