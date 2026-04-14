@@ -141,6 +141,7 @@ import Omega.Frontier.Conjectures
 import Omega.Frontier.Certificates
 import Omega.LogicExpansionChain.FocusedConservativeComposition
 import Omega.LogicExpansionChain.StateTheoryMonotonicity
+import Omega.LogicExpansionChain.WholeChainInvariance
 import Omega.LogicExpansionChain.LiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FlatTeamReading
 import Omega.LogicExpansionChain.FocusedLiftedPointwiseSoundness
@@ -195,6 +196,8 @@ import Omega.Zeta.CriticalLineGapEntropyRateZero
 import Omega.Zeta.OperatorFixedKernelLocalDensityObstruction
 import Omega.Zeta.CyclicLiftGcdLcm
 import Omega.Zeta.SyncRhoM2ClosedForm
+import Omega.Zeta.SyncRhoM2Publication
+import Omega.Zeta.SyncKernelSpectrum
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
