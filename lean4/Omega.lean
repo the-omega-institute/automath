@@ -220,6 +220,7 @@ import Omega.Topos.CharacterBlindObstructions
 import Omega.Topos.CharacterBlindObstructionsFocused
 import Omega.Topos.BranchDecomposition
 import Omega.Topos.ComponentGerbeDecomposition
+import Omega.Topos.CechBridgeCompatibleRealizations
 import Omega.Topos.GerbeNullSemantics
 import Omega.Topos.FiniteAbelianDuality
 import Omega.Topos.IntrinsicVisibleQuotient
@@ -245,6 +246,7 @@ import Omega.RecursiveAddressing.EntropyMonotonicity
 import Omega.RecursiveAddressing.ObserverIndexedNormalizationNoFactCreation
 import Omega.RecursiveAddressing.ObserverNeutralReadoutAPAL
 import Omega.RecursiveAddressing.PrefixSiteRegisterLowerBound
+import Omega.RecursiveAddressing.PrefixSiteMinVisibleQuotient
 import Omega.RecursiveAddressing.ReadoutSeparatednessNull
 import Omega.RecursiveAddressing.SlidingBlockFactor
 import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
@@ -264,6 +266,7 @@ import Omega.Zeta.ClassMertensExplicit
 import Omega.Zeta.QuotientFunctoriality
 import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.AbelianShadowDefect
+import Omega.Zeta.ClassArtinMobiusTrace
 import Omega.Zeta.ResidueClassAsymptotics
 import Omega.Zeta.ETDSFinitePartGapPositive
 import Omega.Zeta.ETDSFinitePartGapPositiveCorollary
