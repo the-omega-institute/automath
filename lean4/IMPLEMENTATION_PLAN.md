@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3027 |
+| \leanverified 标注数 | 3030 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3076 |
-| 轮次 | R685（round_count=R685）|
+| 总标注数 | 3079 |
+| 轮次 | R686（round_count=R686）|
 
-**Phase R685（本轮落地）**：`paper_conclusion_prime_register_one_register_serialization_gap_package`（对应 Conclusion 的 prime-register one-register serialization gap，Conclusion；严格克隆 `paper_conclusion_prime_register_one_register_serialization_gap_seeds` 的原签名与证明，补齐 prime-register one-register serialization gap 的 paper-facing package）；`paper_cdim_poisson_entropy_moment_tomography_package`（对应 `thm:cdim-poisson-entropy-moment-tomography-up-to-fourth`，Circle Dimension；严格克隆 `paper_cdim_poisson_entropy_moment_tomography_seeds` 的原签名与证明，补齐 poisson entropy moment tomography 的 paper-facing package）；`paper_collisionKernel4_trace_power_package`（对应 `def:pom-collision-zeta-a4`，Folding/POM；严格克隆 `paper_collisionKernel4_trace_power_seeds` 的原签名与证明，补齐 collisionKernel4 trace power 的 paper-facing package；本轮 `\leanverified` +3）
+**Phase R686（本轮落地）**：`paper_conclusion_realinput40_uv_atomcore_package`（对应 `thm:conclusion-realinput40-uv-atomcore-spectral-radius-splitting` / `thm:conclusion-realinput40-uv-primitive-surgery-abel-shift` / `thm:conclusion-realinput40-uv-collision-output-delta-shell` / `thm:conclusion-realinput40-uv-atom-dominant-trace-law`，Conclusion；严格克隆 `paper_conclusion_realinput40_uv_atomcore_seeds` 的原签名与证明，补齐 realinput40 uv atomcore 的 paper-facing package）；`paper_pom_s5_two_subset_degree10_package`（对应 `prop:pom-s5-two-subset-degree10`，POM；严格克隆 `paper_pom_s5_two_subset_degree10_seeds` 的原签名与证明，补齐 s5 two-subset degree-10 的 paper-facing package）；`paper_spg_screen_kernel_connected_components_package`（对应 `thm:spg-screen-kernel-connected-components`，SPG；严格克隆 `paper_spg_screen_kernel_connected_components_seeds` 的原签名与证明，补齐 screen kernel connected components 的 paper-facing package；本轮 `\leanverified` +3）
+
+**Phase R685（上一轮落地）**：`paper_conclusion_prime_register_one_register_serialization_gap_package`（对应 Conclusion 的 prime-register one-register serialization gap，Conclusion；严格克隆 `paper_conclusion_prime_register_one_register_serialization_gap_seeds` 的原签名与证明，补齐 prime-register one-register serialization gap 的 paper-facing package）；`paper_cdim_poisson_entropy_moment_tomography_package`（对应 `thm:cdim-poisson-entropy-moment-tomography-up-to-fourth`，Circle Dimension；严格克隆 `paper_cdim_poisson_entropy_moment_tomography_seeds` 的原签名与证明，补齐 poisson entropy moment tomography 的 paper-facing package）；`paper_collisionKernel4_trace_power_package`（对应 `def:pom-collision-zeta-a4`，Folding/POM；严格克隆 `paper_collisionKernel4_trace_power_seeds` 的原签名与证明，补齐 collisionKernel4 trace power 的 paper-facing package；本轮 `\leanverified` +3）
 
 **Phase R684（上一轮落地）**：`paper_conclusion_nonexposed_phase_integer_domination_package`（对应 `cor:conclusion-nonexposed-phase-fails-integer-domination`，Conclusion；严格克隆 `paper_conclusion_nonexposed_phase_integer_domination_seeds` 的原签名与证明，补齐 nonexposed phase integer domination 的 paper-facing package）；`paper_pom_kcollision_root_filter_recurrence_package`（对应 `thm:pom-kcollision-root-filter-recurrence`，POM；严格克隆 `paper_pom_kcollision_root_filter_recurrence_seeds` 的原签名与证明，补齐 K-collision root filter recurrence 的 paper-facing package）；`paper_xi_degree11_generic_galois_S11_package`（对应 `thm:xi-degree11-Et-specialization-galois-S11`，Zeta；严格克隆 `paper_xi_degree11_generic_galois_S11_seeds` 的原签名与证明，补齐 degree-11 generic Galois S11 的 paper-facing package；本轮 `\leanverified` +3）
 
