@@ -238,6 +238,9 @@ import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Conclusion.AlphabetThreshold
+import Omega.FoldResidualTime.IidBlockFactorization
+import Omega.Principles.GoldenBranchFibonacciCoprime
+import Omega.Preliminaries.EmpiricalFrequencyBounds
 import Omega.Experiments.MultiscaleResidual
 import Omega.StatisticalStability.ResidueClassification
 import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
