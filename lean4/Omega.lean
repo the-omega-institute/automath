@@ -56,6 +56,7 @@ import Omega.Folding.FiberSplit
 import Omega.Folding.HammingDist
 import Omega.Folding.HankelSpectrum
 import Omega.Folding.LocalWeightRigidityFibonacci
+import Omega.Folding.LocalWeightRigidityPublication
 import Omega.Folding.StableSyntaxCounting
 import Omega.Folding.ModularTower
 import Omega.Folding.Window6
@@ -124,6 +125,7 @@ import Omega.SPG.WeightedBoundaryPole
 import Omega.SPG.BoundaryDimensionUpper
 import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.PressureGap
+import Omega.SPG.SurvivorPressureRecovery
 import Omega.SPG.TanakaIncrement
 import Omega.SPG.CoarsegrainedCutFlux
 import Omega.SPG.DyadicTopInversionBound
@@ -231,6 +233,7 @@ import Omega.Zeta.PrimeLanguagesEulerProductNaturalBoundary
 import Omega.Zeta.IntroFinitePart
 import Omega.Zeta.ETDSFinitePartPrimitiveClosedForm
 import Omega.Zeta.FinitePartMertensAsymptotic
+import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
 import Omega.Zeta.ResidueClassAsymptotics
 import Omega.Zeta.ETDSFinitePartGapPositive
 import Omega.Zeta.ETDSFinitePartGapPositiveCorollary
