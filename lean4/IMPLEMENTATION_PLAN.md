@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3139 |
+| \leanverified 标注数 | 3142 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3188 |
-| 轮次 | R708（round_count=R708）|
+| 总标注数 | 3191 |
+| 轮次 | R709（round_count=R709）|
+
+**Phase R709（本轮落地，全流程执行）**：`paper_cdim_bare_circle_not_complete_carrier_seeds`（对应 `cor:cdim-bare-circle-not-complete-carrier`，CircleDimension；把单圆可见通道下的注入预算直接压成 `|R_b| ≥ |T|·2^{(r-1)b}`，并给出模型残差账本的离散 residual circle-dimension 下界，从而保留“单圆只能充当相位商、剩余完备信息必须外置”的核心障碍）；`paper_cdim_stokes_homology_exact_splitting_seeds`（对应 `prop:cdim-stokes-homology-exact-splitting`，CircleDimension；以 `ℤ^u × ℤ^v → ℤ^u` 的投影分裂短正合列形式化低维 Stokes 同调序列的精确核/像/分裂结构，保留“边界项正是第二直和因子”的核心代数骨架；本轮 non-trivial 目标之一）；`paper_conclusion_budget_curve_exact_tail_difference_reconstruction_seeds`（对应 `thm:conclusion-budget-curve-exact-tail-difference-reconstruction`，Conclusion；对有限纤维多重度函数形式化 `Δ(s)=#\{x:d(x)\ge s\}` 与 `#\{x:d(x)=k\}=Δ(k)-Δ(k+1)`，从而保留“整数预算成功曲线完全恢复 multiplicity histogram”的核心重构骨架；本轮 non-trivial 目标之一）；本轮 `\leanverified` +3，覆盖章节为 CircleDimension / Conclusion，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/CircleDimension/BareCircleNotCompleteCarrier.lean`、`lean4/Omega/CircleDimension/StokesHomologyExactSplitting.lean`、`lean4/Omega/Conclusion/BudgetCurveExactTailDifferenceReconstruction.lean`）
 
 **Phase R708（本轮落地，全流程执行）**：`paper_logic_expansion_forcing_persistence_seeds`（对应 `prop:logic-expansion-forcing-persistence`，LogicExpansionChain；把细化态的估值限制映回旧态并显式接上公式提升，保留“已被 forcing 的对象层事实在细化后不会被推翻”的核心语义骨架）；`paper_logic_expansion_semantic_fidelity_seeds`（对应 `prop:logic-expansion-semantic-fidelity`，LogicExpansionChain；以抽象状态恢复映射与公式解释函数形式化 forcing 保持，从而把抽象语义后承真正在具体实现层下推；本轮 non-trivial 目标之一）；`paper_physical_spacetime_kernelization_template_seeds`（对应 `prop:physical-spacetime-kernelization-template`，PhysicalSpacetimeSkeleton；把局部规范不变的正核压成有限叠加上的代表元无关二次能量，保留“干涉项/Born 型读出统一降为正二次型一致性”的核心接口；本轮 non-trivial 目标之一）；本轮 `\leanverified` +3，覆盖章节为 LogicExpansionChain / PhysicalSpacetimeSkeleton，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/LogicExpansionChain/ForcingPersistence.lean`、`lean4/Omega/LogicExpansionChain/SemanticFidelity.lean`、`lean4/Omega/PhysicalSpacetimeSkeleton/KernelizationTemplate.lean`）
 
