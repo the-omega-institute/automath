@@ -132,6 +132,7 @@ import Omega.SPG.BoundaryCycleAuditQueryLowerBound
 import Omega.SPG.F2FiberCardinality
 import Omega.SPG.CycleRankFormula
 import Omega.SPG.DyadicCubicalCellCount
+import Omega.SPG.DyadicCubicalBoundaryInjective
 import Omega.SPG.ScreenKernelAuditCost
 import Omega.SPG.ScreenAuditCostMonotoneUnitDrop
 import Omega.SPG.ScreenKernelConnectedComponents
@@ -188,6 +189,7 @@ import Omega.LogicExpansionChain.ChoiceSpectrumStandardForm
 import Omega.LogicExpansionChain.ChoiceSpectrum
 import Omega.LogicExpansionChain.ChoiceSpectrumOneStepCriterion
 import Omega.LogicExpansionChain.ChoiceSpectrumSymmetryInvariance
+import Omega.LogicExpansionChain.ChoiceSpectrumNoDefinableSelector
 import Omega.Topos.NullTrichotomy
 import Omega.Topos.SheafificationCharacterization
 import Omega.Topos.SheafificationCharacterizationAPAL
@@ -225,6 +227,7 @@ import Omega.RecursiveAddressing.ObserverIndexedNoRetraction
 import Omega.RecursiveAddressing.GlobalLayerLogicOnly
 import Omega.RecursiveAddressing.ObserverIndexedCommonRefinementDecidability
 import Omega.RecursiveAddressing.ObserverIndexedFiniteResolutionObjectEligibility
+import Omega.RecursiveAddressing.ObserverIndexedReadingOfEmergentArithmetic
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
 import Omega.Combinatorics.GramDet
