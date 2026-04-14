@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3067 |
+| \leanverified 标注数 | 3073 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3116 |
-| 轮次 | R692（round_count=R692）|
+| 总标注数 | 3122 |
+| 轮次 | R693（round_count=R693）|
 
-**Phase R692（本轮落地，fresh seeds）**：`paper_spg_internal_coordinate_bundle_screen_cost_closed_form_seeds` / `paper_spg_internal_coordinate_bundle_screen_cost_closed_form_package`（对应 `thm:spg-internal-coordinate-bundle-screen-cost-closed-form`，SPG；直接复用 `screenComponentCount_eq_complement_plus_one` 与 `auditCost_eq_count_sub_one`，补齐内部坐标束屏幕连通分量与审计成本的闭式 seed/package wrapper）；`paper_pom_fold_injectivization_minsideinfo_seeds` / `paper_pom_fold_injectivization_minsideinfo_package`（对应 `cor:pom-fold-injectivization-minsideinfo-equals-unknot-norm-square`，POM；作为跨章节替代目标，直接包装 `fold6_binary_auxbits`，落地 Fold 在 `m=6` 时的最小二值侧信息预算核心值）；`paper_pom_fibcube_eccentricity_core_seeds` / `paper_pom_fibcube_eccentricity_core_package`（对应 `thm:pom-fibcube-eccentricity-closed-form`，POM；降级为复用 `popcount_le_half` 的核心半密度上界，保留 Fibonacci cube 离心率闭式中“每段零串最多贡献半长” 的离散骨架；本轮 `\leanverified` +6，降级项数 2）
+**Phase R693（本轮落地，fresh seeds）**：`paper_ea_stable_add_no_wrap_truncation_seeds` / `paper_ea_stable_add_no_wrap_truncation_package`（对应 `cor:emergent-arithmetic-stable-add-no-wrap-truncation`，EA；以 `X.stableValueRingEquiv` 的逆像定义地址 `addr`，在 `a+b < F_{m+2}` 的 no-wrap 假设下将整数地址直接识别为 `X.ofNat m (a+b)`，实质落实“稳定和真截断而非回绕”）；`paper_cdim_star_compatible_fg_seeds` / `paper_cdim_star_compatible_fg_package`（对应 `prop:cdim-star-compatible-fg`，Circle Dimension；直接复用 `circleDim_finite_extension r t 0`，把扩展圆维与有限生成口径的一致性压缩为 torsion 参数不影响 `circleDim`）；`paper_congruence_m6_idempotents_four_seeds` / `paper_congruence_m6_idempotents_four_package`（对应 `prop:congruence-m6-idempotents-four`，GU；新建 `idem21 : Finset (ZMod 21)` 并用 `by decide` 直接计算其基数为 `4`，避免 `native_decide` 且保留 squarefree 模 `21` 的四幂等刚性；本轮 `\leanverified` +6，降级项数 0）
+
+**Phase R692（上一轮落地，fresh seeds）**：`paper_spg_internal_coordinate_bundle_screen_cost_closed_form_seeds` / `paper_spg_internal_coordinate_bundle_screen_cost_closed_form_package`（对应 `thm:spg-internal-coordinate-bundle-screen-cost-closed-form`，SPG；直接复用 `screenComponentCount_eq_complement_plus_one` 与 `auditCost_eq_count_sub_one`，补齐内部坐标束屏幕连通分量与审计成本的闭式 seed/package wrapper）；`paper_pom_fold_injectivization_minsideinfo_seeds` / `paper_pom_fold_injectivization_minsideinfo_package`（对应 `cor:pom-fold-injectivization-minsideinfo-equals-unknot-norm-square`，POM；作为跨章节替代目标，直接包装 `fold6_binary_auxbits`，落地 Fold 在 `m=6` 时的最小二值侧信息预算核心值）；`paper_pom_fibcube_eccentricity_core_seeds` / `paper_pom_fibcube_eccentricity_core_package`（对应 `thm:pom-fibcube-eccentricity-closed-form`，POM；降级为复用 `popcount_le_half` 的核心半密度上界，保留 Fibonacci cube 离心率闭式中“每段零串最多贡献半长” 的离散骨架；本轮 `\leanverified` +6，降级项数 2）
 
 **Phase R691（上一轮落地，fresh seeds）**：`paper_folding_stable_syntax_entropy_logqdim_seeds` / `paper_folding_stable_syntax_entropy_logqdim_package`（对应 `cor:folding-stable-syntax-entropy-logqdim`，Folding；以 `dτ = φ` 为前提形式化 `Real.log dτ = Real.log φ`，稳定落地熵率与量子维数对数一致的 paper-facing 种子与包装）；`paper_gut_nap_so10_analytic_minimality_seeds` / `paper_gut_nap_so10_analytic_minimality_package`（对应 `thm:nap-so10-analytic-minimality`，GU；在禁用 `native_decide` 约束下直接证明 `45 = F_9 + F_6 + F_4`，保留 `so(10)` 的 Zeckendorf 维数签名）；`paper_cdim_finite_probe_extraction_seeds` / `paper_cdim_finite_probe_extraction_package`（对应 `thm:cdim-finite-probe-extraction`，Circle Dimension；以列表截断和差分精确等于满足 `a ≥ k` 的项数，形式化有限探针恢复 torsion 指数谱的核心离散部分；本轮 `\leanverified` +6，降级项数 0）
 
