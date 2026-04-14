@@ -55,6 +55,7 @@ import Omega.Folding.FiberSplit
 import Omega.Folding.HammingDist
 import Omega.Folding.HankelSpectrum
 import Omega.Folding.LocalWeightRigidityFibonacci
+import Omega.Folding.StableSyntaxCounting
 import Omega.Folding.ModularTower
 import Omega.Folding.Window6
 import Omega.Folding.LocalWeightRigidity
@@ -192,6 +193,7 @@ import Omega.Topos.GluingFailureSheafLocalToGlobalAPAL
 import Omega.Topos.GluingFailureSheafificationRemovesGlueAPAL
 import Omega.Topos.H2VanishingBlindness
 import Omega.Topos.H1FreeNoBlindness
+import Omega.Topos.H1VanishingClassTrivializing
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
@@ -258,6 +260,7 @@ import Omega.Zeta.DFAQuantitativeObstruction
 import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.DFADensityDichotomy
+import Omega.Zeta.ETDSZeckendorfPrimesNotSofic
 import Omega.Zeta.DFADensityDichotomySeeds
 import Omega.Zeta.IntroDensity
 import Omega.Zeta.PrimeLanguagesIntroDensity
