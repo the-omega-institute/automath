@@ -93,6 +93,7 @@ import Omega.Graph.Window6TranslationQuotient
 import Omega.Graph.LiftBound
 import Omega.SPG.Cylinder
 import Omega.SPG.PrefixMetric
+import Omega.SPG.SymbolicFactor
 import Omega.SPG.Clopen
 import Omega.SPG.DecidableClopen
 import Omega.SPG.ClarityMonotone
@@ -152,6 +153,7 @@ import Omega.RecursiveAddressing.FocusedAddressBeforeValue
 import Omega.RecursiveAddressing.FocusedNonNullReadoutCriterion
 import Omega.RecursiveAddressing.InverseLimitDeterminacy
 import Omega.RecursiveAddressing.SlidingBlockFactor
+import Omega.RecursiveAddressing.TypedReadoutPersistence
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
 import Omega.Combinatorics.GramDet
@@ -190,6 +192,7 @@ import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.DFADensityDichotomy
 import Omega.Zeta.DFADensityDichotomySeeds
+import Omega.Zeta.IntroDensity
 import Omega.Zeta.ETDSDFADensityDichotomy
 import Omega.Zeta.LucasBarrier
 import Omega.Zeta.NecklaceCounting
