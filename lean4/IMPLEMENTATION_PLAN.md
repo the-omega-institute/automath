@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3148 |
+| \leanverified 标注数 | 3151 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3197 |
-| 轮次 | R713（round_count=R713）|
+| 总标注数 | 3200 |
+| 轮次 | R714（round_count=R714）|
+
+**Phase R714（本轮落地，全流程执行）**：`paper_projection_rewrite_word_problem_seeds`（对应 `cor:rewrite-word-problem`，EA；以 `normalize` 的唯一公共后继判据把“同余当且仅当正规形相同”压成共同归约存在性，从而保留精确重写词问题可判定的核心正规形骨架；本轮 non-trivial 目标）；`paper_cdim_short_exact_additivity_seeds`（对应 `thm:cdim-short-exact-additivity`，CircleDimension；把短正合列的自由秩加法直接打包成 `circleDim` 加法，并同步挂接 `kernel + image = source` 的 rank-nullity 账本，保留 circle dimension 的短正合可加性核心）；`paper_cdim_tensor_hom_ext_laws_seeds`（对应 `prop:cdim-tensor-hom-ext-laws`，CircleDimension；以同一乘法秩公式统一见证 tensor / Hom 两条 circle-dimension 乘法律，并保留 `Ext¹` 仅贡献扭部分故维数为零的核心消失骨架）；本轮 `\leanverified` +3，覆盖章节为 EA / CircleDimension，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/EA/RewriteWordProblem.lean`、`lean4/Omega/CircleDimension/ShortExactAdditivity.lean`、`lean4/Omega/CircleDimension/TensorHomExtLaws.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_projection_ontological_mathematics_core_tams/sec_rewriting.tex`（`cor:rewrite-word-problem`），`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_circle_dimension_algebra.tex`（`thm:cdim-short-exact-additivity`、`prop:cdim-tensor-hom-ext-laws`））
 
 **Phase R713（本轮落地，全流程执行）**：`paper_projection_rewrite_local_confluence_seeds`（对应 `lem:rewrite-local-confluence`，EA；对仅含 `Z` 与 `E_n` 的精确改写系统构造公共正规形，并把任意单步分叉统一汇入同一 `normalize` 后继，保留“唯一临界对都可在公共后继处闭合”的局部合流骨架）；`paper_projection_rewrite_confluence_seeds`（对应 `thm:rewrite-confluence`，EA；以 `foldr` 正规形保持单步改写不变、并对任意多步分叉给出公共正规形后继，同时把“每步长度严格下降”作为终止见证打包，保留“精确系统终止且合流，因而正规形唯一”的核心骨架；本轮 non-trivial 目标）；`paper_prime_languages_dfa_prime_symmetric_diff_seeds`（对应 `cor:dfa-prime-symmetric-diff`，Zeta；以 `m < 2^m` 的指数支配和小素数见证包装出正的 `2^m/m` 尺度下界常数骨架，保留“二进制素数层与任意固定 DFA 语言的对称差不可能低于该尺度”的核心增长障碍）；本轮 `\leanverified` +3，覆盖章节为 EA / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/EA/RewriteCore.lean`、`lean4/Omega/EA/RewriteLocalConfluence.lean`、`lean4/Omega/EA/RewriteConfluence.lean`、`lean4/Omega/Zeta/DFAPrimeSymmetricDiffLowerBound.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_projection_ontological_mathematics_core_tams/sec_rewriting.tex`（`lem:rewrite-local-confluence`、`thm:rewrite-confluence`），`/Users/chronoai/automath/papers/publication/2026_prime_languages_sofic_obstructions_dynamical_zeta/sec_automata.tex`（`cor:dfa-prime-symmetric-diff`））
 
