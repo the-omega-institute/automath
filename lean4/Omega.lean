@@ -88,6 +88,7 @@ import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Folding.EndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
 import Omega.Folding.ImageSubshiftZeta
+import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.SyncDelay
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Graph.LabeledGraph
@@ -185,6 +186,7 @@ import Omega.LogicExpansionChain.DelayedDecidabilityNoNewTruth
 import Omega.LogicExpansionChain.IndispensabilityImpliesMinimality
 import Omega.LogicExpansionChain.ChoiceSpectrumStandardForm
 import Omega.LogicExpansionChain.ChoiceSpectrum
+import Omega.LogicExpansionChain.ChoiceSpectrumOneStepCriterion
 import Omega.LogicExpansionChain.ChoiceSpectrumSymmetryInvariance
 import Omega.Topos.NullTrichotomy
 import Omega.Topos.SheafificationCharacterization
@@ -218,6 +220,7 @@ import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
 import Omega.RecursiveAddressing.TypedReadoutPersistence
 import Omega.RecursiveAddressing.ObserverIndexedReadoutForcingCriterion
 import Omega.RecursiveAddressing.ObserverIndexedForcingMonotonicity
+import Omega.RecursiveAddressing.ObserverIndexedNoRetraction
 import Omega.RecursiveAddressing.GlobalLayerLogicOnly
 import Omega.RecursiveAddressing.ObserverIndexedCommonRefinementDecidability
 import Omega.RecursiveAddressing.ObserverIndexedFiniteResolutionObjectEligibility
