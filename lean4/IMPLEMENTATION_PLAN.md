@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3182 |
+| \leanverified 标注数 | 3185 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3231 |
-| 轮次 | R724（round_count=R724）|
+| 总标注数 | 3234 |
+| 轮次 | R725（round_count=R725）|
+
+**Phase R725（本轮落地，全流程执行）**：`paper_scan_projection_address_symbolic_factor_seeds`（对应 `prop:symbolic-factor`，SPG；把二值时间读出打包成 one-sided symbolic code，并同时记录 shift intertwining、长度 `m` cylinder preimage、以及有限 cylinder algebra pullback 的三段结构骨架；本轮 non-trivial 目标）；`paper_information_state_typed_readout_persistence_seeds`（对应 `prop:typed-readout-persistence`，RecursiveAddressing；把 refinement 下 admissibility 保持与 visible fiber 不变直接压成“非空唯一 typed readout 不会在细化后改值”的核心 persistence 骨架）；`paper_prime_languages_intro_density_seeds`（对应 `thm:intro-density`，Zeta；把正文 DFA density dichotomy 的既有 arithmetic seed package 重新挂接到 introduction 主定理标签，保留“周期密度/指数稀疏二分”的核心 automata-growth 骨架）；本轮 `\leanverified` +3，覆盖章节为 SPG / RecursiveAddressing / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/SPG/SymbolicFactor.lean`、`lean4/Omega/RecursiveAddressing/TypedReadoutPersistence.lean`、`lean4/Omega/Zeta/IntroDensity.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_preliminaries.tex`（`prop:symbolic-factor`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_null_decomposition.tex`（`prop:typed-readout-persistence`），`/Users/chronoai/automath/papers/publication/2026_prime_languages_sofic_obstructions_dynamical_zeta/sec_introduction.tex`（`thm:intro-density`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R724（本轮落地，全流程执行）**：`paper_information_state_state_theory_monotonicity_focused_seeds`（对应 `cor:state-theory-monotonicity`，Focused APAL information states；把 refinement 下 realization 集缩小直接转写为 `stateTheory` 的集合包含，保留“信息状态细化只会扩张可强制公式族”的核心 monotonicity 骨架）；`paper_etds_dfa_density_dichotomy_seeds`（对应 `thm:dfa-density-dichotomy`，Syntax zeta；把既有 DFA 周期密度 dichotomy 种子重新挂接到 ETDS publication 标签，保留“正密度算术级数/指数稀疏二分”的核心 automata-growth 骨架；本轮 non-trivial 目标）；`paper_resolution_phi_m_factor_seeds`（对应 `prop:Phi-m-factor`，Resolution folding overlapping windows；把 `Φ_m` 在子移位上的 factor-map 结构压成 shift-invariant image 与到像满射两条接口，保留“窗口折叠是 onto-its-image 的 shift factor”的核心 symbolic-dynamics 骨架）；本轮 `\leanverified` +3，覆盖章节为 LogicExpansionChain / Zeta / Folding，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/LogicExpansionChain/FocusedStateTheoryMonotonicity.lean`、`lean4/Omega/Zeta/ETDSDFADensityDichotomy.lean`、`lean4/Omega/Folding/PhiSubshiftFactorPublication.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_information_states.tex`（`cor:state-theory-monotonicity`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_syntax_zeta.tex`（`thm:dfa-density-dichotomy`），`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_overlapping.tex`（`prop:Phi-m-factor`）；新增 tex theorem/corollary/lemma 环境数 0）
 
