@@ -134,6 +134,7 @@ import Omega.SPG.EntropyLedger
 import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.QuasistationaryAmbiguityAmplitudes
 import Omega.SPG.SurvivorRenyiPressure
+import Omega.SPG.MainRenyi
 import Omega.SPG.SurvivorSpectrumCollision
 import Omega.SPG.PressureGap
 import Omega.SPG.SurvivorPressureRecovery
@@ -212,6 +213,7 @@ import Omega.Topos.GluingFailureSheafificationRemovesGlueAPAL
 import Omega.Topos.H2VanishingBlindness
 import Omega.Topos.H1FreeNoBlindness
 import Omega.Topos.H1VanishingClassTrivializing
+import Omega.Topos.H1VanishingClassTrivializingPublication
 import Omega.Topos.CharacterBlindObstructions
 import Omega.Topos.BranchDecomposition
 import Omega.Topos.ComponentGerbeDecomposition
@@ -256,6 +258,7 @@ import Omega.Zeta.ETDSFinitePartPrimitiveClosedForm
 import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
 import Omega.Zeta.ClassMertensExplicit
+import Omega.Zeta.QuotientFunctoriality
 import Omega.Zeta.ResidueClassAsymptotics
 import Omega.Zeta.ETDSFinitePartGapPositive
 import Omega.Zeta.ETDSFinitePartGapPositiveCorollary
