@@ -429,4 +429,13 @@ theorem paper_collisionKernel4_trace_power_seeds :
   ⟨collisionKernel4_trace, collisionKernel4_trace_sq,
    collisionKernel4_trace_cube, collisionKernel4_det⟩
 
+/-- Packaged form of the A₄ trace power seeds.
+    prop:pom-collision-det -/
+theorem paper_collisionKernel4_trace_power_package :
+    collisionKernel4.trace = 2 ∧
+    (collisionKernel4 ^ 2).trace = 18 ∧
+    (collisionKernel4 ^ 3).trace = 50 ∧
+    collisionKernel4.det = -2 :=
+  paper_collisionKernel4_trace_power_seeds
+
 end Omega

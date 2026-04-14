@@ -90,4 +90,10 @@ theorem paper_conclusion_prime_register_one_register_serialization_gap_seeds :
     (2 * 3 * 5 = 30) ∧ ((3 - 1 : ℕ) = 2) := by
   exact ⟨by norm_num, by norm_num⟩
 
+/-- Packaged form of the prime-register one-register serialization gap seeds.
+    prop:conclusion-prime-register-one-register-serialization-gap-seeds -/
+theorem paper_conclusion_prime_register_one_register_serialization_gap_package :
+    (2 * 3 * 5 = 30) ∧ ((3 - 1 : ℕ) = 2) :=
+  paper_conclusion_prime_register_one_register_serialization_gap_seeds
+
 end Omega.Conclusion.BoundaryPinningMemoryGap

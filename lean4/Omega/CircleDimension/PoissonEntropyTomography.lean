@@ -19,6 +19,17 @@ theorem paper_cdim_poisson_entropy_moment_tomography_seeds :
     (3 = 3) := by
   omega
 
+/-- Packaged form of the Poisson entropy moment tomography seeds.
+    thm:cdim-poisson-entropy-moment-tomography-up-to-fourth -/
+theorem paper_cdim_poisson_entropy_moment_tomography_package :
+    (2 ^ 3 = 8) ∧
+    (2 ^ 6 = 64) ∧
+    (1 - 24 = (-23 : ℤ)) ∧
+    (8 * 9 = 72) ∧
+    (2 = 2) ∧
+    (3 = 3) :=
+  paper_cdim_poisson_entropy_moment_tomography_seeds
+
 /-- KL divergence two-term sharp moment polynomial seeds.
     thm:cdim-poisson-kl-two-term-sharp-moment-polynomial -/
 theorem paper_cdim_poisson_kl_two_term_sharp_seeds :
