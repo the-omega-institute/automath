@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3012 |
+| \leanverified 标注数 | 3015 |
 | \leanpartial 标注数 | 49 |
 | 总标注数 | 3061 |
-| 轮次 | R680（round_count=681）|
+| 轮次 | R681（round_count=682）|
 
-**Phase R680（本轮落地）**：`paper_spg_cheeger_stokes_duality_package`（对应 `prop:spg-cheeger-stokes-duality`，SPG；严格克隆 `paper_spg_cheeger_stokes_duality_seeds` 的原签名与证明，补齐 Cheeger-Stokes duality 的 paper-facing package）；`paper_pom_parry_surface_derivative_package`（对应 `cor:pom-Lk-t1-parry-surface-derivative`，POM；严格克隆 `paper_pom_parry_surface_derivative_seeds` 的原签名与证明，补齐 Parry surface derivative 的 paper-facing package）；`paper_conclusion_frozen_moment_semigroup_package`（对应 `thm:conclusion-frozen-moment-spectrum-semigroup-linearization`，Conclusion；严格克隆 `paper_conclusion_frozen_moment_semigroup_seeds` 的原签名与证明，补齐 frozen moment semigroup linearization 的 paper-facing package；本轮 `\leanverified` +3）
+**Phase R681（本轮落地）**：`paper_conclusion_local_alphabet_smith_prefix_nonexchangeability_package`（对应 `thm:conclusion-local-alphabet-budget-smith-prefix-budget-nonexchangeability`，Conclusion；严格克隆 `paper_conclusion_local_alphabet_smith_prefix_nonexchangeability_seeds` 的原签名与证明，补齐 local alphabet / Smith prefix budget nonexchangeability 的 paper-facing package）；`paper_pom_val_monotone_boolean_nand_package`（对应 `cor:pom-val-monotone-boolean`，POM；严格克隆 `paper_pom_val_monotone_boolean_nand_seeds` 的原签名与证明，补齐 val monotone boolean barrier / NAND 的 paper-facing package）；`paper_spg_boundary_gauge_groupoid_circle_law_package`（对应 `thm:spg-boundary-gauge-groupoid-circle-law`，SPG；严格克隆 `paper_spg_boundary_gauge_groupoid_circle_law_seeds` 的原签名与证明，补齐 boundary gauge groupoid circle law 的 paper-facing package；本轮 `\leanverified` +3）
+
+**Phase R680（上一轮落地）**：`paper_spg_cheeger_stokes_duality_package`（对应 `prop:spg-cheeger-stokes-duality`，SPG；严格克隆 `paper_spg_cheeger_stokes_duality_seeds` 的原签名与证明，补齐 Cheeger-Stokes duality 的 paper-facing package）；`paper_pom_parry_surface_derivative_package`（对应 `cor:pom-Lk-t1-parry-surface-derivative`，POM；严格克隆 `paper_pom_parry_surface_derivative_seeds` 的原签名与证明，补齐 Parry surface derivative 的 paper-facing package）；`paper_conclusion_frozen_moment_semigroup_package`（对应 `thm:conclusion-frozen-moment-spectrum-semigroup-linearization`，Conclusion；严格克隆 `paper_conclusion_frozen_moment_semigroup_seeds` 的原签名与证明，补齐 frozen moment semigroup linearization 的 paper-facing package；本轮 `\leanverified` +3）
 
 **Phase R679（上一轮落地）**：`paper_cdim_mobius_inversion_package`（对应 `thm:cdim-multiprime-spectrum-realizability`，Circle Dimension；严格克隆 `paper_cdim_mobius_inversion_seeds` 的原签名与证明，补齐 multiprime spectrum realizability 的 paper-facing package）；`paper_pom_fisher_zeros_arcsine_package`（对应 `thm:pom-Lk-fisher-zeros-arcsine`，POM；严格克隆 `paper_pom_fisher_zeros_arcsine_seeds` 的原签名与证明，补齐 Fisher zeros arcsine law 的 paper-facing package）；`paper_dfa_density_dichotomy_package`（对应 `thm:zeta-syntax-dfa-density-dichotomy`，Zeta；严格克隆 `paper_dfa_density_dichotomy_seeds` 的原签名与证明，补齐 DFA density dichotomy 的 paper-facing package；本轮 `\leanverified` +3）
 
