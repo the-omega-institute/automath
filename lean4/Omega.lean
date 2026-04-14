@@ -132,6 +132,7 @@ import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.DoubleBudgetPoisson
 import Omega.SPG.EntropyLedger
 import Omega.SPG.FirstEntryEscapeRate
+import Omega.SPG.QuasistationaryAmbiguityAmplitudes
 import Omega.SPG.SurvivorRenyiPressure
 import Omega.SPG.SurvivorSpectrumCollision
 import Omega.SPG.PressureGap
@@ -216,6 +217,7 @@ import Omega.Topos.ComponentGerbeDecomposition
 import Omega.Topos.GerbeNullSemantics
 import Omega.Topos.FiniteAbelianDuality
 import Omega.Topos.IntrinsicVisibleQuotient
+import Omega.Topos.IntrinsicPureExtInitiality
 import Omega.Topos.IntrinsicCharacterDetection
 import Omega.Topos.UniqueBranchBandedGerbe
 import Omega.Topos.UniqueBranchContextualityComparison
@@ -420,6 +422,7 @@ import Omega.CircleDimension.PhaseSpectrumLimit
 import Omega.CircleDimension.PhaseSpectrumReconstruction
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
 import Omega.CircleDimension.FinitePrimeSupportMultiplicativeHalfCircleDimension
+import Omega.CircleDimension.OperationalHalfCircleDimensionNat
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
