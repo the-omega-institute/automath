@@ -29,4 +29,15 @@ theorem paper_dfa_density_dichotomy_seeds :
     (8 < Nat.fib 10) := by
   norm_num [Nat.fib_add_two]
 
+/-- Package wrapper for the DFA density dichotomy seeds.
+    thm:zeta-syntax-dfa-density-dichotomy -/
+theorem paper_dfa_density_dichotomy_package :
+    (2 ^ 4 / 4 = 4) ∧
+    (2 ^ 8 / 8 = 32) ∧
+    (2 ^ 16 / 16 = 4096) ∧
+    (3 < Nat.fib 5) ∧
+    (5 < Nat.fib 7) ∧
+    (8 < Nat.fib 10) :=
+  paper_dfa_density_dichotomy_seeds
+
 end Omega.Zeta.DFADensityDichotomy

@@ -701,6 +701,16 @@ theorem paper_cdim_mobius_inversion_seeds :
     · native_decide
     · native_decide
 
+/-- Package wrapper for the Möbius inversion localization multiset classification seeds.
+    thm:cdim-multiprime-spectrum-realizability -/
+theorem paper_cdim_mobius_inversion_package :
+    (let S : Finset PrimeSupport := {{2}}
+     multiPrimeSpectrum S ∅ = 1 ∧ multiPrimeSpectrum S {2} = 1 ∧ typeCount S {2} = 1) ∧
+    (let S : Finset PrimeSupport := {{2}, {3}}
+     multiPrimeSpectrum S ∅ = 2 ∧ multiPrimeSpectrum S {2} = 1 ∧
+     multiPrimeSpectrum S {3} = 1 ∧ multiPrimeSpectrum S {2, 3} = 0) :=
+  paper_cdim_mobius_inversion_seeds
+
 -- Phase R603: Inclusion-exclusion seeds
 -- ══════════════════════════════════════════════════════════════
 
