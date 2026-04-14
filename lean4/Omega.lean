@@ -151,6 +151,8 @@ import Omega.LogicExpansionChain.WholeChainInvariance
 import Omega.LogicExpansionChain.LiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FlatTeamReading
 import Omega.LogicExpansionChain.InformationStateForcingPersistencePublication
+import Omega.LogicExpansionChain.SingletonConservativityAPAL
+import Omega.LogicExpansionChain.WholeChainInvarianceAPAL
 import Omega.LogicExpansionChain.FocusedLiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FocusedSingletonConservativity
 import Omega.LogicExpansionChain.ConcreteSemanticFidelity
@@ -159,6 +161,7 @@ import Omega.LogicExpansionChain.ReadoutTransport
 import Omega.Topos.NullTrichotomy
 import Omega.Topos.SheafificationCharacterization
 import Omega.Topos.NullClassificationUnderRefinement
+import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
 import Omega.RecursiveAddressing.FocusedNonNullReadoutCriterion
 import Omega.RecursiveAddressing.InverseLimitDeterminacy
