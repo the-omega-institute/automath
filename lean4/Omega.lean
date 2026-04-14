@@ -83,6 +83,7 @@ import Omega.Folding.ZeroFiberLinear
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.VisibleValueOverflow
+import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.BernoulliHalfEndpoints
 import Omega.Folding.BernoulliPGammaMax
 import Omega.Folding.BernoulliPBitpairLaw
@@ -118,6 +119,7 @@ import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.WeightedBoundaryDecomposition
 import Omega.SPG.WeightedBoundaryTransfer
+import Omega.SPG.WeightedBoundaryPole
 import Omega.SPG.BoundaryDimensionUpper
 import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.PressureGap
@@ -196,6 +198,7 @@ import Omega.Topos.H2VanishingBlindness
 import Omega.Topos.H1FreeNoBlindness
 import Omega.Topos.H1VanishingClassTrivializing
 import Omega.Topos.CharacterBlindObstructions
+import Omega.Topos.IntrinsicVisibleQuotient
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
