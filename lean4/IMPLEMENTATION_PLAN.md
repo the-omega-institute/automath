@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3009 |
+| \leanverified 标注数 | 3012 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3058 |
-| 轮次 | R679（round_count=680）|
+| 总标注数 | 3061 |
+| 轮次 | R680（round_count=681）|
 
-**Phase R679（本轮落地）**：`paper_cdim_mobius_inversion_package`（对应 `thm:cdim-multiprime-spectrum-realizability`，Circle Dimension；严格克隆 `paper_cdim_mobius_inversion_seeds` 的原签名与证明，补齐 multiprime spectrum realizability 的 paper-facing package）；`paper_pom_fisher_zeros_arcsine_package`（对应 `thm:pom-Lk-fisher-zeros-arcsine`，POM；严格克隆 `paper_pom_fisher_zeros_arcsine_seeds` 的原签名与证明，补齐 Fisher zeros arcsine law 的 paper-facing package）；`paper_dfa_density_dichotomy_package`（对应 `thm:zeta-syntax-dfa-density-dichotomy`，Zeta；严格克隆 `paper_dfa_density_dichotomy_seeds` 的原签名与证明，补齐 DFA density dichotomy 的 paper-facing package；本轮 `\leanverified` +3）
+**Phase R680（本轮落地）**：`paper_spg_cheeger_stokes_duality_package`（对应 `prop:spg-cheeger-stokes-duality`，SPG；严格克隆 `paper_spg_cheeger_stokes_duality_seeds` 的原签名与证明，补齐 Cheeger-Stokes duality 的 paper-facing package）；`paper_pom_parry_surface_derivative_package`（对应 `cor:pom-Lk-t1-parry-surface-derivative`，POM；严格克隆 `paper_pom_parry_surface_derivative_seeds` 的原签名与证明，补齐 Parry surface derivative 的 paper-facing package）；`paper_conclusion_frozen_moment_semigroup_package`（对应 `thm:conclusion-frozen-moment-spectrum-semigroup-linearization`，Conclusion；严格克隆 `paper_conclusion_frozen_moment_semigroup_seeds` 的原签名与证明，补齐 frozen moment semigroup linearization 的 paper-facing package；本轮 `\leanverified` +3）
+
+**Phase R679（上一轮落地）**：`paper_cdim_mobius_inversion_package`（对应 `thm:cdim-multiprime-spectrum-realizability`，Circle Dimension；严格克隆 `paper_cdim_mobius_inversion_seeds` 的原签名与证明，补齐 multiprime spectrum realizability 的 paper-facing package）；`paper_pom_fisher_zeros_arcsine_package`（对应 `thm:pom-Lk-fisher-zeros-arcsine`，POM；严格克隆 `paper_pom_fisher_zeros_arcsine_seeds` 的原签名与证明，补齐 Fisher zeros arcsine law 的 paper-facing package）；`paper_dfa_density_dichotomy_package`（对应 `thm:zeta-syntax-dfa-density-dichotomy`，Zeta；严格克隆 `paper_dfa_density_dichotomy_seeds` 的原签名与证明，补齐 DFA density dichotomy 的 paper-facing package；本轮 `\leanverified` +3）
 
 **Phase R678（上一轮落地）**：`paper_pom_toggle_scan_order_package`（对应 `thm:pom-toggle-scan-order-closed-form`，POM；严格克隆 `paper_pom_toggle_scan_order_seeds` 的原签名与证明，补齐 toggle scan order closed-form 的 paper-facing package）；`paper_conclusion_godel_leyang_ifs_dimension_package`（对应 `thm:conclusion-godel-leyang-2adic-ifs-exact-dimension`，Conclusion；严格克隆 `paper_conclusion_godel_leyang_ifs_dimension_seeds` 的原签名与证明，补齐 Godel-Leyang 2-adic IFS exact dimension 的 paper-facing package）；`paper_xi_zero_dispersion_infimal_convolution_package`（对应 `thm:xi-zero-dispersion-infimal-convolution`，Zeta；严格克隆 `paper_xi_zero_dispersion_infimal_convolution_seeds` 的原签名与证明，补齐 zero dispersion infimal convolution 的 paper-facing package；本轮 `\leanverified` +3）
 
