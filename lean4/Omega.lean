@@ -43,6 +43,7 @@ import Omega.Folding.CircleDimension
 import Omega.Folding.ShiftDynamics
 import Omega.Folding.Rewrite
 import Omega.Folding.Defect
+import Omega.Folding.DiscreteStokesAuditableBound
 import Omega.Folding.DiscreteStokesDefectPublication
 import Omega.Folding.PiFunctorialGolden
 import Omega.Folding.Entropy
@@ -144,6 +145,7 @@ import Omega.SPG.TotalDegreeMomentThreshold
 import Omega.SPG.MutualInfoBoundaryFlux
 import Omega.SPG.GodelizationEntropy
 import Omega.SPG.PrefixScanErrorBoundaryDimensionUpper
+import Omega.SPG.NonuniformCylinder
 import Omega.SPG.VolumeBoundaryScaling
 import Omega.SPG.PrefixScanErrorTanakaRepresentation
 import Omega.Frontier.Assumptions
@@ -256,6 +258,7 @@ import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
 import Omega.Zeta.IntroFiniteGroup
 import Omega.Zeta.ETDSDFADensityDichotomy
+import Omega.Zeta.ETDSZeckendorfRegularPowerlaw
 import Omega.Zeta.ETDSZeckendorfPrimeLanguageNotRegular
 import Omega.Zeta.PrimeLanguagesZeckendorfPrimeLanguageNotRegular
 import Omega.Zeta.LucasBarrier
