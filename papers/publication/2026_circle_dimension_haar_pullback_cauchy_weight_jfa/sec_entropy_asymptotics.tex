@@ -112,6 +112,41 @@ Choosing $M=2L$ and $N=L$ makes both error sources $O(t^{-(2L+2)})$,
 which is the remainder claimed at the end of the lemma.
 \end{proof}
 
+\begin{lemma}[Entropy remainder order]\label{lem:entropy-remainder-order}
+Let $L\ge 2$ and assume $\nu$ has a finite centred $(2L+1)$st absolute
+moment.  Define
+\[
+\delta_t^{(2L)}(y):=\sum_{n=2}^{2L}\frac{\mu_n}{t^n}u_n(y),
+\qquad y\in\RR,
+\]
+and keep $\Phi(z)=(1+z)\log(1+z)-z$.  Then, uniformly in $y$,
+\[
+\delta_t(y)=\delta_t^{(2L)}(y)+O(t^{-(2L+1)}),
+\]
+and in $L^1(\omega)$,
+\[
+\Phi(\delta_t)
+=\sum_{k=2}^{L}\frac{(-1)^k}{k(k-1)}\bigl(\delta_t^{(2L)}\bigr)^k
+  +O(t^{-(2L+2)}).
+\]
+Consequently,
+\[
+D_{\mathrm{KL}}(h_t\|g_t)
+=\sum_{k=2}^{L}\frac{(-1)^k}{k(k-1)}
+  \int_{\RR}\frac{\bigl(\delta_t^{(2L)}(y)\bigr)^k}{\pi(1+y^2)}\dd y
+  +O(t^{-(2L+2)}).
+\]
+\end{lemma}
+
+\begin{proof}
+Lemma~\ref{lem:delta-expansion}(i) with $M=2L$ gives the uniform bound
+on $\delta_t-\delta_t^{(2L)}$.  Applying
+Lemma~\ref{lem:remainder-bookkeeping} with the same choice of $M$ and
+$N=L$ shows that truncating the Taylor series of $\Phi$ introduces an
+$L^1(\omega)$ error of size $O(t^{-(2L+2)})$.  Integrating against
+$\omega(\dd y)=[\pi(1+y^2)]^{-1}\dd y$ yields the final identity.
+\end{proof}
+
 \begin{remark}
 The preceding proposition is a standard change-of-variables formula for
 differential entropy.  It is included to fix notation and to make the
@@ -174,7 +209,7 @@ an approximate identity.  The $L^2$-multiplier statement is exactly
 \frac{e^{-t\abs{\xi}}-1}{t}\longrightarrow -\abs{\xi}
 \qquad(t\downarrow 0)
 \]
-in the Fourier representation.
+in $L^2$, which identifies the generator.
 \end{proof}
 
 \begin{remark}
@@ -563,9 +598,10 @@ Apply Lemma~\ref{lem:delta-expansion}(i) with $M=2N$: uniformly in $y$,
 =\sum_{n=2}^{2N}\frac{\mu_n}{t^n}u_n(y)+O(t^{-(2N+1)}).
 \]
 By Lemma~\ref{lem:delta-expansion}(ii)--(iii) and
-Lemma~\ref{lem:remainder-bookkeeping} (with $M=2N$ and $N$ as in the
-statement), one may substitute the $N$-term truncation of $\Phi$ and
-integrate term by term in $L^1(\omega)$, yielding
+Lemma~\ref{lem:entropy-remainder-order} (applied with $L=N$), one may
+replace $\delta_t$ by its $2N$-term truncation, substitute the $N$-term
+Taylor polynomial for $\Phi$, and integrate term by term in
+$L^1(\omega)$, yielding
 \[
 D_{\mathrm{KL}}(h_t\|g_t)
 =\int_{\RR}\frac{\Phi(\delta_t(\bar\gamma+ty))}{\pi(1+y^2)}\dd y
@@ -620,7 +656,8 @@ and contributions from $k\ge 5$ are $O(t^{-10})$),
 =\frac12\delta_t^2-\frac16\delta_t^3+\frac1{12}\delta_t^4+O(t^{-10}).
 \]
 Also $g_t(\bar\gamma+ty)\dd(\bar\gamma+ty)=\pi^{-1}(1+y^2)^{-1}\dd y$.
-Lemma~\ref{lem:remainder-bookkeeping} with $M=6$ and $N=4$ justifies the
+Lemma~\ref{lem:entropy-remainder-order} with $L=4$ (equivalently,
+$M=6$ and $N=4$ in Lemma~\ref{lem:remainder-bookkeeping}) justifies the
 term-by-term integration against $\omega(\dd y)=[\pi(1+y^2)]^{-1}\dd y$:
 the $\Phi$-tail and every occurrence of $r_{6,t}$ contribute
 $o(t^{-8})$ in $L^1(\omega)$.
@@ -789,6 +826,10 @@ and define
 \[
 Q_3:=XQ_2-\|Q_2\|_{L^2(\nu)}^2X-\frac{\beta_3}{4}Q_2.
 \]
+This definition is purely algebraic: $Q_3$ is the linear combination of
+$XQ_2$, $X$, and $Q_2$ that cancels the $X$ and $Q_2$ coefficients
+emerging in \eqref{eq:defect-c8}, so no orthogonal projection in
+$L^2(\nu)$ is being taken.
 Then
 \begin{equation}\label{eq:defect-c6}
 \frac{64}{\sigma^6}C_6
@@ -888,6 +929,8 @@ The converse is immediate.
 The coordinates $Q_2$ and $Q_3$ in Theorem~\ref{thm:poisson-defect-ladder}
 are designed to isolate the moment combinations that survive in the
 entropy coefficients.
+They are defined only through algebraic cancellations, and we do not
+interpret them as orthogonal projection residuals in $L^2(\nu)$.
 
 Let $X:=(\gamma-\bar\gamma)/\sigma$ with $\EE[X]=0$ and $\EE[X^2]=1$.
 The quadratic coordinate
@@ -1213,3 +1256,5 @@ Appendix~\ref{app:strip-lattice} records the explicit lattice symbol
 and cardinal norm formula for the integer secant orbit; the structural
 results are direct specializations of
 \cite{deBoorDeVoreRon1994,RonShen1995,AldroubiGrochenig2001}.
+
+
