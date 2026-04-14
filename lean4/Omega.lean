@@ -141,6 +141,8 @@ import Omega.Frontier.Conjectures
 import Omega.Frontier.Certificates
 import Omega.LogicExpansionChain.StateTheoryMonotonicity
 import Omega.LogicExpansionChain.LiftedPointwiseSoundness
+import Omega.LogicExpansionChain.FlatTeamReading
+import Omega.LogicExpansionChain.FocusedLiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FocusedSingletonConservativity
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
 import Omega.RecursiveAddressing.InverseLimitDeterminacy
@@ -174,6 +176,7 @@ import Omega.Zeta.SyncKernelMixingRate
 import Omega.Zeta.FredholmDetSeeds
 import Omega.Zeta.DFAPrimeSymmetricDiff
 import Omega.Zeta.DFAPrimeSymmetricDiffLowerBound
+import Omega.Zeta.DFAQuantitativeObstruction
 import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.DFADensityDichotomy
