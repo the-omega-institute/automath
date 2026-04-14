@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3254 |
+| \leanverified 标注数 | 3255 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3303 |
-| 轮次 | R751（round_count=R751）|
+| 总标注数 | 3304 |
+| 轮次 | R752（round_count=R752）|
+
+**Phase R752（本轮落地，部分完成）**：`paper_conclusion_recursive_solenoid_pcdim_halting_undecidable`（对应 `thm:conclusion-recursive-solenoid-pcdim-halting-undecidable`，Conclusion；把现有 `pcdim_kernel_halting_split` 的 `0 ≠ 1` 核心差异打包成 `Bool`-索引的 paper-facing 判别接口，形式化 `pcdim false = 0 ∧ pcdim true = 1 ∧ pcdim false ≠ pcdim true`）；`paper_pom_max_achievers_phase_stabilization`、`paper_pom_second_max_fiber_closed_form` 由于当前库中缺少 `cMaxFiberAchievers` / `cSecondMaxFiberMult` 在稳定区间上的递推与结构刻画基础设施，本轮未注册为 `\leanverified`；本轮 `\leanverified` +1，覆盖章节为 Conclusion，降级项数 2，non-trivial 计数 0；文件：`lean4/Omega/Conclusion/RecursiveSolenoidLieShadow.lean`；Lean theorem 名：`paper_conclusion_recursive_solenoid_pcdim_halting_undecidable`；tex 路径：`/Users/chronoai/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/conclusion/subsec__conclusion-recursive-solenoid-pcdim-undecidability.tex`（`thm:conclusion-recursive-solenoid-pcdim-halting-undecidable`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R751（本轮落地，全流程执行）**：`paper_fold_truncation_discrete_stokes_defect`（对应 `thm:fold-discrete-stokes-defect`，Folding；把 fold-truncation publication 中 Fold defect 的精确 telescoping/cocycle 分解直接挂接到既有 `globalDefect_eq_defectChain` paper wrapper）；`paper_prefix_scan_error_volume_boundary_scaling`（对应 `thm:volume-boundary-scaling`，SPG；把 prefix-scan publication 中 boundary thickness 驱动的 finite-volume scaling 两侧估计打包成 section-facing wrapper；本轮 non-trivial 目标）；`paper_etds_dfa_prime_recall_precision`（对应 `cor:dfa-prime-recall-precision`，Zeta；把 ETDS syntax-zeta section 中 fixed DFA 对 binary-prime language 的 recall/precision collapse obstruction 直接挂接到既有 introduction-level wrapper）；本轮 `\leanverified` +3，覆盖章节为 Folding / SPG / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Folding/DiscreteStokesDefectPublication.lean`、`lean4/Omega/SPG/VolumeBoundaryScaling.lean`、`lean4/Omega/Zeta/DFAPrimeRecallPrecisionETDS.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_fold_truncation_discrete_stokes_defect`、`paper_prefix_scan_error_volume_boundary_scaling`、`paper_etds_dfa_prime_recall_precision`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_fold_truncation_defect_stokes_dynamical_systems/main.tex`（`thm:fold-discrete-stokes-defect`），`/Users/chronoai/automath/papers/publication/2026_prefix_scan_error_boundary_rates_dynamical_systems/main.tex`（`thm:volume-boundary-scaling`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_syntax_zeta.tex`（`cor:dfa-prime-recall-precision`）；新增 tex theorem/corollary/lemma 环境数 0）
 
