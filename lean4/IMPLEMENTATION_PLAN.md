@@ -1,4 +1,4 @@
-# Lean4 无公理形式化实施方案（2026-03-29 登记同步版）
+# Lean4 无公理形式化实施方案（2026-04-14 登记同步版）
 
 ## 1. 项目现状
 
@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3054 |
+| \leanverified 标注数 | 3061 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3103 |
-| 轮次 | R690（round_count=R690）|
+| 总标注数 | 3110 |
+| 轮次 | R691（round_count=R691）|
+
+**Phase R691（本轮落地，fresh seeds）**：`paper_folding_stable_syntax_entropy_logqdim_seeds` / `paper_folding_stable_syntax_entropy_logqdim_package`（对应 `cor:folding-stable-syntax-entropy-logqdim`，Folding；以 `dτ = φ` 为前提形式化 `Real.log dτ = Real.log φ`，稳定落地熵率与量子维数对数一致的 paper-facing 种子与包装）；`paper_gut_nap_so10_analytic_minimality_seeds` / `paper_gut_nap_so10_analytic_minimality_package`（对应 `thm:nap-so10-analytic-minimality`，GU；在禁用 `native_decide` 约束下直接证明 `45 = F_9 + F_6 + F_4`，保留 `so(10)` 的 Zeckendorf 维数签名）；`paper_cdim_finite_probe_extraction_seeds` / `paper_cdim_finite_probe_extraction_package`（对应 `thm:cdim-finite-probe-extraction`，Circle Dimension；以列表截断和差分精确等于满足 `a ≥ k` 的项数，形式化有限探针恢复 torsion 指数谱的核心离散部分；本轮 `\leanverified` +6，降级项数 0）
 
 **Phase R690（本轮落地，fresh seeds）**：`paper_fib_divisibility_chain_seeds` / `paper_fib_divisibility_chain_package`（对应 `lem:fib-divisibility-chain`，EA；直接复用 `Nat.fib_dvd` 形式化 “若 `a ∣ b` 则 `F_a ∣ F_b`” 的 Fibonacci 整除链）；`paper_composition_pullback_seeds` / `paper_composition_pullback_package`（对应 `cor:composition-pullback`，EA；直接拼合现有 `compositionPullback_add` 与 `compositionPullback_mul`，在 `a+b`、`ab` 未溢出 `F_{m+2}` 时把稳定加法/乘法拉回 `X.ofNat`）；`paper_cdim_residual_circle_dim_laws_seeds` / `paper_cdim_residual_circle_dim_laws_package`（对应 `prop:cdim-residual-circle-dimension-laws`，Circle Dimension；以离散 per-`b` 版本形式化 residual 单调性、`2`-幂乘法加法律与 `Nat.log` 的对应可加性；本轮 `\leanverified` +6，降级项数 0）
 
