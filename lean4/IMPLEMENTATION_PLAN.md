@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3185 |
+| \leanverified 标注数 | 3188 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3234 |
-| 轮次 | R725（round_count=R725）|
+| 总标注数 | 3237 |
+| 轮次 | R726（round_count=R726）|
+
+**Phase R726（本轮落地，全流程执行）**：`paper_resolution_phi_m_equivariant_seeds`（对应 `prop:Phi-m-equivariant`，Folding；把 sliding-block code 与双侧 shift 的交换性直接挂接到 JNT overlapping-windows 正文标签，保留“局部窗口折叠与时间平移可交换”的核心 symbolic-dynamics 骨架）；`paper_scan_projection_address_prefix_ball_cylinder_seeds`（对应 `lem:prefix-ball-cylinder`，SPG；由 prefix cylinder 与 prefix closed ball 两条既有等式拼接出正文所需的闭球-柱集识别，保留“长度 `m` 前缀柱恰是任一点处半径 `2^{-m}` 的闭球”的核心 ultrametric 骨架；本轮 non-trivial 目标）；`paper_recursive_addressing_visible_sigma_nonexpansion_seeds`（对应 `cor:recursive-addressing-visible-sigma-nonexpansion`，RecursiveAddressing；把 postcomposition 下 observable-event family 只会缩小的既有接口挂接到 TAC 正文标签，保留“可见 `\sigma`-结构在递归细化后不会扩张”的核心 nonexpansion 骨架）；本轮 `\leanverified` +3，覆盖章节为 Folding / SPG / RecursiveAddressing，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Folding/PhiEquivariantPublication.lean`、`lean4/Omega/SPG/PrefixBallCylinder.lean`、`lean4/Omega/RecursiveAddressing/VisibleSigmaNonexpansion.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_overlapping.tex`（`prop:Phi-m-equivariant`），`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_preliminaries.tex`（`lem:prefix-ball-cylinder`），`/Users/chronoai/automath/papers/publication/2026_recursive_addressing_prefix_sites_tac/main.tex`（`cor:recursive-addressing-visible-sigma-nonexpansion`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R725（本轮落地，全流程执行）**：`paper_scan_projection_address_symbolic_factor_seeds`（对应 `prop:symbolic-factor`，SPG；把二值时间读出打包成 one-sided symbolic code，并同时记录 shift intertwining、长度 `m` cylinder preimage、以及有限 cylinder algebra pullback 的三段结构骨架；本轮 non-trivial 目标）；`paper_information_state_typed_readout_persistence_seeds`（对应 `prop:typed-readout-persistence`，RecursiveAddressing；把 refinement 下 admissibility 保持与 visible fiber 不变直接压成“非空唯一 typed readout 不会在细化后改值”的核心 persistence 骨架）；`paper_prime_languages_intro_density_seeds`（对应 `thm:intro-density`，Zeta；把正文 DFA density dichotomy 的既有 arithmetic seed package 重新挂接到 introduction 主定理标签，保留“周期密度/指数稀疏二分”的核心 automata-growth 骨架）；本轮 `\leanverified` +3，覆盖章节为 SPG / RecursiveAddressing / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/SPG/SymbolicFactor.lean`、`lean4/Omega/RecursiveAddressing/TypedReadoutPersistence.lean`、`lean4/Omega/Zeta/IntroDensity.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_preliminaries.tex`（`prop:symbolic-factor`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_null_decomposition.tex`（`prop:typed-readout-persistence`），`/Users/chronoai/automath/papers/publication/2026_prime_languages_sofic_obstructions_dynamical_zeta/sec_introduction.tex`（`thm:intro-density`）；新增 tex theorem/corollary/lemma 环境数 0）
 
