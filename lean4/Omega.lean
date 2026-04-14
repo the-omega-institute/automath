@@ -112,6 +112,7 @@ import Omega.SPG.F2FiberCardinality
 import Omega.SPG.CycleRankFormula
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.ScreenKernelAuditCost
+import Omega.SPG.ScreenAuditCostMonotoneUnitDrop
 import Omega.SPG.ScreenKernelConnectedComponents
 import Omega.SPG.GodelDoublelog
 import Omega.SPG.WalshStokes
@@ -221,6 +222,7 @@ import Omega.Conclusion.ZeckendorfResetBoundedCLTAbsent
 import Omega.Conclusion.CycleRankSaturation
 import Omega.Conclusion.PrimorialAdditiveVsGodelMultiplicative
 import Omega.Conclusion.FibadicLcmFiltrationLaw
+import Omega.Conclusion.FibadicPrimitiveCentralIdempotents
 import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
 import Omega.Conclusion.QuadraticFieldRamification
 import Omega.Conclusion.MinLatchesLogStates
@@ -282,6 +284,7 @@ import Omega.GU.FibTailP23Orbits
 import Omega.GU.MinSectorBudget
 import Omega.GU.NapSo10AnalyticMinimality
 import Omega.GU.BdryZ2JumpUniqueness
+import Omega.GU.BdryOrientationTsubsetLucasParity
 import Omega.GU.Window6DoubleLock12
 import Omega.GU.StrongLumpabilitySpectralRigidity
 import Omega.GU.SwapInvolutionDiagonal
