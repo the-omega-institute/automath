@@ -62,6 +62,7 @@ import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.PhiEquivariant
 import Omega.Folding.PhiSlidingBlockCode
 import Omega.Folding.PhiSubshiftFactor
+import Omega.Folding.PhiSubshiftFactorPublication
 import Omega.Folding.HolographicRateConservation
 import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.SummableNatEventuallyZero
@@ -141,6 +142,7 @@ import Omega.Frontier.Conjectures
 import Omega.Frontier.Certificates
 import Omega.LogicExpansionChain.FocusedConservativeComposition
 import Omega.LogicExpansionChain.StateTheoryMonotonicity
+import Omega.LogicExpansionChain.FocusedStateTheoryMonotonicity
 import Omega.LogicExpansionChain.WholeChainInvariance
 import Omega.LogicExpansionChain.LiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FlatTeamReading
@@ -188,6 +190,7 @@ import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.DFADensityDichotomy
 import Omega.Zeta.DFADensityDichotomySeeds
+import Omega.Zeta.ETDSDFADensityDichotomy
 import Omega.Zeta.LucasBarrier
 import Omega.Zeta.NecklaceCounting
 import Omega.Zeta.LocalizedQuotientLedger
