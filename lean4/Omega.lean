@@ -219,6 +219,7 @@ import Omega.RecursiveAddressing.SlidingBlockFactor
 import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
 import Omega.RecursiveAddressing.TypedReadoutPersistence
 import Omega.RecursiveAddressing.ObserverIndexedReadoutForcingCriterion
+import Omega.RecursiveAddressing.ObserverIndexedNullStructural
 import Omega.RecursiveAddressing.ObserverIndexedForcingMonotonicity
 import Omega.RecursiveAddressing.ObserverIndexedNoRetraction
 import Omega.RecursiveAddressing.GlobalLayerLogicOnly
@@ -487,6 +488,7 @@ import Omega.GU.M11Z34CyclotomicRepresentationRigidity
 import Omega.GU.Window6DyadicBudget
 import Omega.GU.SheetflipRegisterBound
 import Omega.GU.SideInformationBitLowerBound
+import Omega.GU.FixedPrecisionExponentialMultiplicity
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse
@@ -521,6 +523,7 @@ import Omega.CircleDimension.FiberPhaseQuantization
 import Omega.CircleDimension.CausalPreorder
 import Omega.CircleDimension.PrimeTruncation
 import Omega.CircleDimension.BiphaseFiber
+import Omega.CircleDimension.PhaseSpectrumMonoid
 import Omega.CircleDimension.LissajousChebyshev
 import Omega.CircleDimension.RhodoneaSubflow
 import Omega.CircleDimension.SolenoidKernelBlindness
