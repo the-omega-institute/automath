@@ -214,6 +214,8 @@ import Omega.Zeta.SyncKernelMixingRate
 import Omega.Zeta.FredholmDetSeeds
 import Omega.Zeta.DFAPrimeSymmetricDiff
 import Omega.Zeta.DFAPrimeSymmetricDiffLowerBound
+import Omega.Zeta.IntroBinaryPrimes
+import Omega.Zeta.IntroBinaryPrecision
 import Omega.Zeta.DFAQuantitativeObstruction
 import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.ZeckendorfPrimeLanguage
@@ -280,6 +282,7 @@ import Omega.Conclusion.BoundaryCycleRankExternalInfoLowerBound
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.Window6Collision
+import Omega.Conclusion.Window6RepresentationZetaCountRatio
 import Omega.Conclusion.TwoAtomScalarRecoveryAlpha2
 import Omega.Conclusion.ResonanceWindow
 import Omega.Conclusion.HypercubePhase
