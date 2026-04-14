@@ -168,4 +168,13 @@ theorem paper_xi_torsion_exact_order_ledger_seeds :
     sCoprime_12, sCoprime_30, sCoprime_7,
     totient_pow_2_2, totient_pow_3_2⟩
 
+/-- Packaged form of the torsion exact-order ledger seeds.
+    thm:xi-localized-torsion-exact-order-ledger -/
+theorem paper_xi_torsion_exact_order_ledger_package :
+    Nat.totient 1 = 1 ∧ Nat.totient 5 = 4 ∧ Nat.totient 7 = 6
+    ∧ sCoprimePart23 12 = 1 ∧ sCoprimePart23 30 = 5 ∧ sCoprimePart23 7 = 7
+    ∧ Nat.totient (2 ^ 2) = 2 ^ 2 - 2 ^ 1
+    ∧ Nat.totient (3 ^ 2) = 3 ^ 2 - 3 ^ 1 :=
+  paper_xi_torsion_exact_order_ledger_seeds
+
 end Omega.Zeta.TorsionExactOrderLedgerSeeds
