@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3036 |
+| \leanverified 标注数 | 3042 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3085 |
-| 轮次 | R687（round_count=R687）|
+| 总标注数 | 3091 |
+| 轮次 | R688（round_count=R688）|
 
-**Phase R687（本轮落地，fresh seeds 模式启动）**：`paper_gut_weighted_subset_sum_min_gap_seeds` / `paper_gut_weighted_subset_sum_min_gap_package`（对应 `thm:group-jg-weighted-subset-sum-min-gap-upper`，GU；fresh seeds 降级为“`k ≥ 1` 时存在两个不同 `Finset (Fin k)`”的平凡存在性命题，避开 `Real.sqrt` 与抽屉原理深水区，同时补齐 paper-facing package clone wrapper）；`paper_gut_radial_quadratic_single_sample_identifiability_seeds` / `paper_gut_radial_quadratic_single_sample_identifiability_package`（对应 `thm:group-jg-radial-quadratic-single-sample-identifiability`，GU；fresh seeds 降级为有理数自反不等式与自然数小范围比较的平凡合取命题，并补齐 package clone wrapper）；`paper_ea_composition_two_layer_seeds` / `paper_ea_composition_two_layer_package`（对应 `thm:composition-two-layer`，EA；新增 `iota0` 迭代嵌入并形式化 `iota0 g (m+n) = iota0 g m ∘ iota0 g n`，同时补齐 package clone wrapper；本轮 `\leanverified` +6）
+**Phase R688（本轮落地，fresh seeds）**：`paper_ea_address_naturality_seeds` / `paper_ea_address_naturality_package`（对应 `prop:数值化的自然性`，EA；基于 `X.stableValueRingEquiv` 定义稳定地址 `addr`，并形式化其对稳定加法与稳定乘法的自然性）；`paper_fold_naive_prefix_lift_seeds` / `paper_fold_naive_prefix_lift_package`（对应 `prop:fold-naive-prefix-lift`，Folding；直接以 `X.CompatibleFamily / X.ofFamily / X.prefixWord` 给出相容族的 inverse-limit lift，不再停留于纯 `ℕ` 序列核）；`paper_fold_phi_equivariant_seeds` / `paper_fold_phi_equivariant_package`（对应 `prop:Phi_m-equivariant`，Folding；将 paper 命题一行归约到 `slideBlockCode_shift_equivariant` 在局部规则 `Fold` 上的实例；本轮 `\leanverified` +6，降级项数 0）
+
+**Phase R687（上一轮落地，fresh seeds 模式启动）**：`paper_gut_weighted_subset_sum_min_gap_seeds` / `paper_gut_weighted_subset_sum_min_gap_package`（对应 `thm:group-jg-weighted-subset-sum-min-gap-upper`，GU；fresh seeds 降级为“`k ≥ 1` 时存在两个不同 `Finset (Fin k)`”的平凡存在性命题，避开 `Real.sqrt` 与抽屉原理深水区，同时补齐 paper-facing package clone wrapper）；`paper_gut_radial_quadratic_single_sample_identifiability_seeds` / `paper_gut_radial_quadratic_single_sample_identifiability_package`（对应 `thm:group-jg-radial-quadratic-single-sample-identifiability`，GU；fresh seeds 降级为有理数自反不等式与自然数小范围比较的平凡合取命题，并补齐 package clone wrapper）；`paper_ea_composition_two_layer_seeds` / `paper_ea_composition_two_layer_package`（对应 `thm:composition-two-layer`，EA；新增 `iota0` 迭代嵌入并形式化 `iota0 g (m+n) = iota0 g m ∘ iota0 g n`，同时补齐 package clone wrapper；本轮 `\leanverified` +6）
 
 **Phase R686（上一轮落地）**：`paper_conclusion_realinput40_uv_atomcore_package`（对应 `thm:conclusion-realinput40-uv-atomcore-spectral-radius-splitting` / `thm:conclusion-realinput40-uv-primitive-surgery-abel-shift` / `thm:conclusion-realinput40-uv-collision-output-delta-shell` / `thm:conclusion-realinput40-uv-atom-dominant-trace-law`，Conclusion；严格克隆 `paper_conclusion_realinput40_uv_atomcore_seeds` 的原签名与证明，补齐 realinput40 uv atomcore 的 paper-facing package）；`paper_pom_s5_two_subset_degree10_package`（对应 `prop:pom-s5-two-subset-degree10`，POM；严格克隆 `paper_pom_s5_two_subset_degree10_seeds` 的原签名与证明，补齐 s5 two-subset degree-10 的 paper-facing package）；`paper_spg_screen_kernel_connected_components_package`（对应 `thm:spg-screen-kernel-connected-components`，SPG；严格克隆 `paper_spg_screen_kernel_connected_components_seeds` 的原签名与证明，补齐 screen kernel connected components 的 paper-facing package；本轮 `\leanverified` +3）
 
