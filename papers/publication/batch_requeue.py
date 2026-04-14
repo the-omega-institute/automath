@@ -55,6 +55,7 @@ for d in sorted(PUB_DIR.glob("2026_*/")):
         "fredholm_witt_cyclic_block_spectral_rigidity_symbolic_zeta": "fredholm_witt",
         "gluing_failure_visible_quotients_pure_ext_blind_spots_apal": "gluing_failure",
         "JphisComm": "JphisComm",
+        "JphisComm_待投稿": "JphisComm",
         "prefix_scan_error_boundary_rates_dynamical_systems": "prefix_scan",
         "prime_languages_sofic_obstructions_dynamical_zeta": "prime_languages",
         "projection_ontological_mathematics_core_tams": "projection_ontological",

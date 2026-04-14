@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """Gate 2: Use OpenAI Codex to fix a paper based on ChatGPT review feedback.
 
 Usage:
@@ -11,10 +12,15 @@ and writes changes directly to the paper directory.
 
 import argparse
 import json
+import os
 import subprocess
 import sys
-import os
 from pathlib import Path
+
+# Ensure UTF-8 stdout on Windows (avoids cp1252 errors with non-ASCII paths)
+if sys.platform == "win32" and not os.environ.get("PYTHONIOENCODING"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 PUBLICATION_DIR = Path(__file__).parent
 
@@ -76,6 +82,9 @@ def run_codex(prompt: str, paper_dir: Path, model: str = None, timeout: int = 36
 
     if model:
         cmd += ["-c", f'model="{model}"']
+        # gpt-5-codex does not support reasoning effort 'xhigh'; cap at 'high'
+        if "codex" in model.lower():
+            cmd += ["-c", 'model_reasoning_effort="high"']
 
     # Full auto mode — let Codex read/write files without asking
     cmd += ["--full-auto"]
@@ -126,22 +135,57 @@ def run_codex(prompt: str, paper_dir: Path, model: str = None, timeout: int = 36
 
 
 def find_latest_review(paper_dir: Path) -> Path | None:
-    """Find the latest review file for a paper in oracle/done/."""
+    """Find the latest review file for a paper in oracle/done/.
+
+    Searches for both legacy *review*.md files and gate_R*.md files,
+    preferring the largest real review (>5000 bytes).
+    """
+    import re as _re
     done_dir = PUBLICATION_DIR / "oracle" / "done"
     paper_name = paper_dir.name.replace("2026_", "")
     prefix = "_".join(paper_name.split("_")[:3])
 
+    # Also resolve known aliases for gate review naming
+    aliases = {
+        "circle_dimension_haar": "circle_dim",
+        "conservative_extension_chain": "conservative_ext",
+        "cubical_stokes_inverse": "cubical_stokes",
+        "dynamical_zeta_finite": "dynamical_zeta",
+        "fibonacci_folding_zeckendorf": "fibonacci_folding",
+        "fold_truncation_defect": "fold_truncation",
+        "fredholm_witt_cyclic": "fredholm_witt",
+        "gluing_failure_visible": "gluing_failure",
+        "JphisComm_待投稿": "JphisComm",
+        "JphisComm": "JphisComm",
+        "prefix_scan_error": "prefix_scan",
+        "prime_languages_sofic": "prime_languages",
+        "projection_ontological_mathematics": "projection_ontological",
+        "recursive_addressing_prefix": "recursive_addressing",
+        "scan_projection_address": "scan_projection",
+        "self_dual_synchronisation": "self_dual_sync",
+        "yang_lee_quartic": "yang_lee",
+    }
+    gate_prefix = aliases.get(prefix, prefix)
+
     candidates = []
+    # Search legacy review files
     for f in done_dir.glob(f"*{prefix}*review*.md"):
         size = f.stat().st_size
         if size > 500:
             content = f.read_text(encoding="utf-8", errors="replace")
             if "ERROR:" not in content[:200]:
-                candidates.append((f.stat().st_mtime, f))
+                candidates.append((size, f.stat().st_mtime, f))
+
+    # Search gate review files (gate_R*.md)
+    for f in done_dir.glob(f"{gate_prefix}_gate_R*.md"):
+        size = f.stat().st_size
+        if size > 5000:  # only real reviews, skip stubs
+            candidates.append((size, f.stat().st_mtime, f))
 
     if candidates:
-        candidates.sort(reverse=True)
-        return candidates[0][1]
+        # Prefer largest real review, break ties by recency
+        candidates.sort(key=lambda x: (x[0] > 5000, x[1]), reverse=True)
+        return candidates[0][2]
     return None
 
 
@@ -207,9 +251,17 @@ def main():
         print(f"[codex] FAILED (exit {result['returncode']})")
         if result["stderr"]:
             print(f"  {result['stderr'][:500]}")
+        # Dump last few stdout items for diagnosis
+        for item in result["output"][-5:]:
+            if isinstance(item, dict):
+                for key in ("raw", "finalMessage", "error", "message"):
+                    if key in item:
+                        print(f"  [{key}] {str(item[key])[:300]}")
 
     return result
 
 
 if __name__ == "__main__":
-    main()
+    result = main()
+    if result and not result.get("success", False):
+        sys.exit(1)
