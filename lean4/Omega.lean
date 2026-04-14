@@ -154,6 +154,7 @@ import Omega.LogicExpansionChain.FlatTeamReading
 import Omega.LogicExpansionChain.InformationStateForcingPersistencePublication
 import Omega.LogicExpansionChain.SingletonConservativityAPAL
 import Omega.LogicExpansionChain.WholeChainInvarianceAPAL
+import Omega.LogicExpansionChain.GluingFailureWholeChainInvarianceAPAL
 import Omega.LogicExpansionChain.FocusedLiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FocusedSingletonConservativity
 import Omega.LogicExpansionChain.ConcreteSemanticFidelity
@@ -165,6 +166,8 @@ import Omega.Topos.SheafificationCharacterization
 import Omega.Topos.SheafificationCharacterizationAPAL
 import Omega.Topos.SheafLocalToGlobalAPAL
 import Omega.Topos.SheafificationRemovesGlueAPAL
+import Omega.Topos.GluingFailureSheafificationCharacterizationAPAL
+import Omega.Topos.GluingFailureSheafLocalToGlobalAPAL
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
