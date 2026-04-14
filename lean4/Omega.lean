@@ -43,6 +43,7 @@ import Omega.Folding.CircleDimension
 import Omega.Folding.ShiftDynamics
 import Omega.Folding.Rewrite
 import Omega.Folding.Defect
+import Omega.Folding.DiscreteStokesDefectPublication
 import Omega.Folding.PiFunctorialGolden
 import Omega.Folding.Entropy
 import Omega.Folding.BinFold
@@ -143,6 +144,7 @@ import Omega.SPG.TotalDegreeMomentThreshold
 import Omega.SPG.MutualInfoBoundaryFlux
 import Omega.SPG.GodelizationEntropy
 import Omega.SPG.PrefixScanErrorBoundaryDimensionUpper
+import Omega.SPG.VolumeBoundaryScaling
 import Omega.SPG.PrefixScanErrorTanakaRepresentation
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
@@ -241,6 +243,7 @@ import Omega.Zeta.DFAPrimeSymmetricDiffETDS
 import Omega.Zeta.DFAPrimeSymmetricDiffLowerBound
 import Omega.Zeta.IntroBinaryPrimes
 import Omega.Zeta.IntroBinaryPrecision
+import Omega.Zeta.DFAPrimeRecallPrecisionETDS
 import Omega.Zeta.DFAQuantitativeObstruction
 import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.ZeckendorfPrimeLanguage
