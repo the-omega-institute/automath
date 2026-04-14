@@ -8,15 +8,17 @@
 |---|---|
 | 总行数 | ~50,876 |
 | 定理/定义数 | ~4,436 |
-| 论文接口包装 | 782+ |
-| 文件数 | 198 |
+| 论文接口包装 | 785+ |
+| 文件数 | 201 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3326 |
+| \leanverified 标注数 | 3329 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3375 |
-| 轮次 | R775（round_count=R775）|
+| 总标注数 | 3378 |
+| 轮次 | R776（round_count=R776）|
+
+**Phase R776（本轮落地，全流程执行）**：`paper_etds_class_function_linearisation`（对应 `thm:class-function-linearisation`，Zeta；把 class-function Fourier expansion 与 irreducible-channel determinant logarithms 直接压成 theorem-facing linearisation wrapper）；`paper_scan_projection_address_main_resonance`（对应 `thm:main-resonance`，SPG；把 residue-twisted killed resolvent、killed/open cyclotomic pole lift、reciprocal escape-factor pole与 block-recoding asymptotic package 统一压成 introduction-facing wrapper，本轮 non-trivial 目标）；`paper_circle_dimension_poisson_cardinal_reconstruction`（对应 `thm:poisson-cardinal-reconstruction`，CircleDimension；把 lattice-generated strip RKHS 中的 Kronecker interpolation、cardinal series reconstruction、norm identity 与 nod-function Fourier formula 打包成 theorem-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 Zeta / SPG / CircleDimension，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Zeta/ClassFunctionLinearisation.lean`、`lean4/Omega/SPG/MainResonance.lean`、`lean4/Omega/CircleDimension/PoissonCardinalReconstruction.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_etds_class_function_linearisation`、`paper_scan_projection_address_main_resonance`、`paper_circle_dimension_poisson_cardinal_reconstruction`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_chebotarev.tex`（`thm:class-function-linearisation`），`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_introduction.tex`（`thm:main-resonance`），`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_strip_lattice.tex`（`thm:poisson-cardinal-reconstruction`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R775（本轮落地，全流程执行）**：`paper_etds_class_artin_mobius_trace`（对应 `cor:class-artin-mobius-trace`，Zeta；把 conjugacy-class primitive coefficient formula 与 Peter--Weyl channel trace expansion 直接串接成 corollary-facing wrapper）；`paper_gluing_failure_cech_bridge_compatible_realizations`（对应 `thm:cech-bridge-compatible-realizations`，Topos；把 branch gerbe 的 pairwise isomorphism existence、Cech 2-cocycle clause、class-independence clause 与 neutral/vanishing equivalence 统一压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_recursive_addressing_prefix_site_min_visible_quotient`（对应 `prop:prefix-site-min-visible-quotient`，RecursiveAddressing；把 visible quotient 上 defect 消失与“凡杀掉全部 triple-overlap defects 的同态都唯一经由 `A/H_\alpha` 因子化”打包成 lemma-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 Zeta / Topos / RecursiveAddressing，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Zeta/ClassArtinMobiusTrace.lean`、`lean4/Omega/Topos/CechBridgeCompatibleRealizations.lean`、`lean4/Omega/RecursiveAddressing/PrefixSiteMinVisibleQuotient.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_etds_class_artin_mobius_trace`、`paper_gluing_failure_cech_bridge_compatible_realizations`、`paper_recursive_addressing_prefix_site_min_visible_quotient`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_chebotarev.tex`（`cor:class-artin-mobius-trace`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_gerbe_obstruction.tex`（`thm:cech-bridge-compatible-realizations`），`/Users/chronoai/automath/papers/publication/2026_recursive_addressing_prefix_sites_tac/main.tex`（`prop:prefix-site-min-visible-quotient`）；新增 tex theorem/corollary/lemma 环境数 0）
 
