@@ -6,17 +6,19 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~50,719 |
-| 定理/定义数 | ~4,421 |
-| 论文接口包装 | 764+ |
-| 文件数 | 171 |
+| 总行数 | ~50,769 |
+| 定理/定义数 | ~4,424 |
+| 论文接口包装 | 767+ |
+| 文件数 | 174 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3248 |
+| \leanverified 标注数 | 3251 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3297 |
-| 轮次 | R749（round_count=R749）|
+| 总标注数 | 3300 |
+| 轮次 | R750（round_count=R750）|
+
+**Phase R750（本轮落地，全流程执行）**：`paper_resolution_folding_inverse_limit_golden`（对应 `thm:inverse-limit-golden`，Folding；把 resolution-folding publication 中 stable admissible one-sided shift 与 prefix-compatible inverse-limit 的自然双射直接挂接到既有 `inverseLimitEquiv`；本轮 non-trivial 目标）；`paper_etds_dfa_prime_symmetric_diff`（对应 `cor:dfa-prime-symmetric-diff`，Zeta；把 ETDS syntax-zeta section 中 fixed DFA 与 binary-prime language 的 symmetric-difference obstruction 重新挂接到既有 binary-prime seed wrapper，保留 `2^m/m` 量级与正密度分支的增长障碍接口）；`paper_gluing_failure_sheafification_removes_glue_apal`（对应 `cor:sheafification-removes-glue`，Topos；把 gluing-failure APAL publication 中 sheafification 消除 compatible-local/global-section gap 的 corollary 直接挂接到既有 sheafification-removes-glue APAL wrapper）；本轮 `\leanverified` +3，覆盖章节为 Folding / Zeta / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Folding/InverseLimitGolden.lean`、`lean4/Omega/Zeta/DFAPrimeSymmetricDiffETDS.lean`、`lean4/Omega/Topos/GluingFailureSheafificationRemovesGlueAPAL.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_resolution_folding_inverse_limit_golden`、`paper_etds_dfa_prime_symmetric_diff`、`paper_gluing_failure_sheafification_removes_glue_apal`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_compatibility.tex`（`thm:inverse-limit-golden`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_syntax_zeta.tex`（`cor:dfa-prime-symmetric-diff`），`/Users/chronoai/automath/papers/publication/2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal/sec_null_decomposition.tex`（`cor:sheafification-removes-glue`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R749（本轮落地，全流程执行）**：`paper_fold_truncation_pi_functorial_golden`（对应 `lem:pi-functorial-golden`，Folding；把 fold-truncation publication 中前缀映射 functoriality、立方前缀截断与 xor 相容性压成单个 paper-facing wrapper）；`paper_prefix_scan_error_basic_properties`（对应 `cor:basic-properties`，SPG；把 prefix-scan publication 中 scan-error resolution antitone 与 zero-error iff exact depth-`m` observable approximation 打包成 corollary-facing wrapper）；`paper_prime_languages_zeckendorf_prime_language_not_regular`（对应 `cor:zeckendorf-prime-language-not-regular`，Zeta；把 prime-languages publication 中 Zeckendorf prime language 非正则性的计数障碍直接挂接到既有 ETDS wrapper；本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 Folding / SPG / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Folding/PiFunctorialGolden.lean`、`lean4/Omega/SPG/BasicProperties.lean`、`lean4/Omega/Zeta/PrimeLanguagesZeckendorfPrimeLanguageNotRegular.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_fold_truncation_pi_functorial_golden`、`paper_prefix_scan_error_basic_properties`、`paper_prime_languages_zeckendorf_prime_language_not_regular`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_fold_truncation_defect_stokes_dynamical_systems/main.tex`（`lem:pi-functorial-golden`），`/Users/chronoai/automath/papers/publication/2026_prefix_scan_error_boundary_rates_dynamical_systems/main.tex`（`cor:basic-properties`），`/Users/chronoai/automath/papers/publication/2026_prime_languages_sofic_obstructions_dynamical_zeta/sec_zeckendorf.tex`（`cor:zeckendorf-prime-language-not-regular`）；新增 tex theorem/corollary/lemma 环境数 0）
 
