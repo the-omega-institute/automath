@@ -139,6 +139,7 @@ import Omega.SPG.TotalDegreeMomentThreshold
 import Omega.SPG.MutualInfoBoundaryFlux
 import Omega.SPG.GodelizationEntropy
 import Omega.SPG.PrefixScanErrorBoundaryDimensionUpper
+import Omega.SPG.PrefixScanErrorTanakaRepresentation
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
@@ -160,6 +161,7 @@ import Omega.LogicExpansionChain.SingletonConservativityAPAL
 import Omega.LogicExpansionChain.WholeChainInvarianceAPAL
 import Omega.LogicExpansionChain.GluingFailureWholeChainInvarianceAPAL
 import Omega.LogicExpansionChain.ExplicitLiftingAPAL
+import Omega.LogicExpansionChain.BranchBudgetMonotonicityAPAL
 import Omega.LogicExpansionChain.FocusedLiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FocusedSingletonConservativity
 import Omega.LogicExpansionChain.ConcreteSemanticFidelity
@@ -189,6 +191,7 @@ import Omega.RecursiveAddressing.FiniteThreeModeModel
 import Omega.RecursiveAddressing.EntropyMonotonicity
 import Omega.RecursiveAddressing.ObserverIndexedNormalizationNoFactCreation
 import Omega.RecursiveAddressing.ObserverNeutralReadoutAPAL
+import Omega.RecursiveAddressing.ReadoutSeparatednessNull
 import Omega.RecursiveAddressing.SlidingBlockFactor
 import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
 import Omega.RecursiveAddressing.TypedReadoutPersistence
