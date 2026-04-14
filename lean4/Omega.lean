@@ -182,6 +182,7 @@ import Omega.LogicExpansionChain.UpdatesPreserveForcing
 import Omega.LogicExpansionChain.DelayedDecidabilityNoNewTruth
 import Omega.LogicExpansionChain.IndispensabilityImpliesMinimality
 import Omega.LogicExpansionChain.ChoiceSpectrumStandardForm
+import Omega.LogicExpansionChain.ChoiceSpectrum
 import Omega.Topos.NullTrichotomy
 import Omega.Topos.SheafificationCharacterization
 import Omega.Topos.SheafificationCharacterizationAPAL

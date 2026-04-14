@@ -612,13 +612,57 @@ theorem paper_pom_second_max_fiber_closed_form
 theorem paper_pom_third_max_fiber_even_closed_form
     (two_step : ∀ m, 6 ≤ m →
       Omega.X.maxFiberMultiplicity m =
-        Omega.X.maxFiberMultiplicity (m - 2) + Omega.X.maxFiberMultiplicity (m - 4))
+      Omega.X.maxFiberMultiplicity (m - 2) + Omega.X.maxFiberMultiplicity (m - 4))
     (forbidden_even_third : ∀ k : Nat, 6 ≤ k →
       cNthMaxFiber (2 * k) 2 =
         Omega.X.maxFiberMultiplicity (2 * k) - Nat.fib (k - 3)) :
     ∀ k : Nat, 6 ≤ k → cNthMaxFiber (2 * k) 2 = Nat.fib (k + 2) - Nat.fib (k - 3) := by
   intro k hk
   rw [forbidden_even_third k hk, Omega.X.maxFiberMultiplicity_even_of_two_step two_step k (by omega)]
+
+/-- Type-uniform hit rate of the max-fiber achiever set. -/
+noncomputable def maxFiberUniformHitRate (m : Nat) : ℚ :=
+  (cMaxFiberAchievers m : ℚ) / (Fintype.card (X m) : ℚ)
+
+/-- Microstate-uniform pushforward hit rate of the max-fiber achiever set. -/
+noncomputable def maxFiberPushforwardHitRate (m : Nat) : ℚ :=
+  ((cMaxFiberAchievers m : ℚ) * (Omega.X.maxFiberMultiplicity m : ℚ)) / (2 : ℚ) ^ m
+
+set_option maxHeartbeats 400000 in
+/-- Paper-facing package: the max-fiber achiever set has the exact type-uniform and pushforward
+hit-rate formulas stated in the paper. After the audited window, the stable `2/4` phase for the
+number of achievers gives the corresponding exact even/odd specializations.
+    cor:pom-maxfiber-rarity-two-measures -/
+theorem paper_pom_maxfiber_rarity_two_measures :
+    (∀ m : Nat,
+      maxFiberUniformHitRate m = (cMaxFiberAchievers m : ℚ) / Nat.fib (m + 2)) ∧
+    (∀ m : Nat,
+      maxFiberPushforwardHitRate m =
+        ((cMaxFiberAchievers m : ℚ) * (Omega.X.maxFiberMultiplicity m : ℚ)) / (2 : ℚ) ^ m) ∧
+    (∀ k : Nat, 5 ≤ k →
+      maxFiberUniformHitRate (2 * k) = (2 : ℚ) / Nat.fib (2 * k + 2)) ∧
+    (∀ k : Nat, 6 ≤ k →
+      maxFiberUniformHitRate (2 * k + 1) = (4 : ℚ) / Nat.fib (2 * k + 3)) ∧
+    (∀ k : Nat, 5 ≤ k →
+      maxFiberPushforwardHitRate (2 * k) =
+        ((2 : ℚ) * (Omega.X.maxFiberMultiplicity (2 * k) : ℚ)) / (2 : ℚ) ^ (2 * k)) ∧
+    (∀ k : Nat, 6 ≤ k →
+      maxFiberPushforwardHitRate (2 * k + 1) =
+        ((4 : ℚ) * (Omega.X.maxFiberMultiplicity (2 * k + 1) : ℚ)) / (2 : ℚ) ^ (2 * k + 1)) := by
+  rcases paper_pom_max_achievers_phase_stabilization with ⟨heven, hodd⟩
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro m
+    simp [maxFiberUniformHitRate, Omega.X.card_eq_fib]
+  · intro m
+    simp [maxFiberPushforwardHitRate]
+  · intro k hk
+    simp [maxFiberUniformHitRate, Omega.X.card_eq_fib, heven k hk]
+  · intro k hk
+    simp [maxFiberUniformHitRate, Omega.X.card_eq_fib, hodd k hk]
+  · intro k hk
+    simp [maxFiberPushforwardHitRate, heven k hk]
+  · intro k hk
+    simp [maxFiberPushforwardHitRate, hodd k hk]
 
 end Parity
 
