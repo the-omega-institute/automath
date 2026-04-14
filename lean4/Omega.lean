@@ -48,6 +48,7 @@ import Omega.Folding.DiscreteStokesAuditableBound
 import Omega.Folding.DiscreteStokesDefectPublication
 import Omega.Folding.PiFunctorialGolden
 import Omega.Folding.Entropy
+import Omega.Folding.SummableDefectsEventualCompatibility
 import Omega.Folding.BinFold
 import Omega.Folding.BoundaryLayer
 import Omega.Folding.FiberSplit
@@ -188,6 +189,7 @@ import Omega.Topos.FocusedSheafificationRemovesGlueAPAL
 import Omega.Topos.GluingFailureSheafificationCharacterizationAPAL
 import Omega.Topos.GluingFailureSheafLocalToGlobalAPAL
 import Omega.Topos.GluingFailureSheafificationRemovesGlueAPAL
+import Omega.Topos.H2VanishingBlindness
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
@@ -264,6 +266,7 @@ import Omega.Zeta.ETDSDFADensityDichotomy
 import Omega.Zeta.ETDSZeckendorfRegularPowerlaw
 import Omega.Zeta.ETDSZeckendorfPrimeLanguageNotRegular
 import Omega.Zeta.PrimeLanguagesZeckendorfPrimeLanguageNotRegular
+import Omega.Zeta.ZeckendorfPrimesNotSofic
 import Omega.Zeta.LucasBarrier
 import Omega.Zeta.NecklaceCounting
 import Omega.Zeta.LocalizedQuotientLedger
