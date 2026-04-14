@@ -1,0 +1,45 @@
+\subsection{加法作为归一化：从规范形到交换幺半群}\label{subsec:emergent-arithmetic-stable-add}
+
+考虑无限 Zeckendorf 地址空间
+\[
+X_\infty=\{(c_1,c_2,\dots): c_k\in\{0,1\},\ c_kc_{k+1}=0,\ \text{仅有限个 }1\}.
+\]
+定义值映射
+\[
+\mathrm{Val}(c)=\sum_{k\ge1}c_kF_{k+1}\in\NN.
+\]
+
+为避免将“合流/终止”作为额外假设，本文首先用 Zeckendorf 唯一性给出运算的数学定义（\cite{Zeckendorf1972}），随后再说明其可计算实现（附录 E）。
+
+\begin{definition}[稳定加法]\label{def:stable-add}
+对 $c,d\in X_\infty$，定义
+\[
+c\oplus d:=\mathrm{Val}^{-1}\bigl(\mathrm{Val}(c)+\mathrm{Val}(d)\bigr)\in X_\infty.
+\]
+\end{definition}
+
+\begin{remark}[关于“同义反复”的澄清：定义性同构 vs. 可观测实现]\label{rem:arith-not-novel-as-abstract}
+需要承认：定义 \ref{def:stable-add} 将运算直接拉回到 $(\NN,+)$ 上，因此“\(\mathrm{Val}\) 给出同构”这一结论在抽象代数层面是\textbf{定义性的}，并不产生一个与 \((\NN,+)\) 非同构的新幺半群结构。
+
+本文把该同构写成定理的目的仅是：固定记号并强调“无需把 \(+\) 作为原语输入”。本节主要承担的数学内容是另外两类、与“扫描—投影读出”接口对齐的结论：
+\begin{itemize}
+  \item \textbf{（轨道/折叠的内容）}由群胚重写生成的轨道与值纤维一致，并存在唯一横截面（定理 \ref{thm:zeckendorf-transversal}）。这给出“折叠 = 沿值保持对称轨道投影到唯一稳定代表”的严格形式。
+  \item \textbf{（纯数字层的内容）}运算可等价表述为“逐位叠加/卷积 $\Rightarrow$ 归一化折叠”（推论 \ref{cor:add-as-fold}），从而把抽象的 \(\mathrm{Val}^{-1}\) 定义转成一个可实现、可审计的归一化规则；其复杂度界见附录 E$'$。
+\end{itemize}
+\end{remark}
+
+\begin{theorem}[Zeckendorf 加法的纯数字层实现（线性时间/有限状态）]\label{thm:zeckendorf-add-fst}
+设 $c,d\in X_\infty$ 仅有限个 $1$，并令
+\(
+m:=\max\{k:\ c_k=1\text{ 或 }d_k=1\}
+\)
+为有效分辨率。则存在一个仅对 Zeckendorf 数字进行局部有限操作的算法（等价地：一个确定的有限状态换能器/有限延迟顺序换能器），在时间 $O(m)$ 内直接从 $(c_1,\dots,c_m)$ 与 $(d_1,\dots,d_m)$ 计算出 $c\oplus d$ 的 Zeckendorf 数字输出，而不需要显式构造整数 $\mathrm{Val}(c),\mathrm{Val}(d)$。
+\end{theorem}
+
+\begin{proof}
+这是 Zeckendorf/黄金比例 Ostrowski 数制的标准“归一化可由有限自动机实现”结论在加法特例下的表述：加法可视为先逐位相加得到字母表 $\{0,1,2\}$ 上的非规范数字，再执行一个保持值不变的规范化（消去 $2$ 与相邻 $11$）得到唯一 Zeckendorf 形式。Pisot 基（特别是黄金比例）情形下，这类规范化映射可由有限自动机/顺序换能器实现，从而给出线性时间算法（见 \cite{Frougny1992NumbersAutomata,Frougny1999OnlineAddition}；对 Zeckendorf 情形的显式高效算法与实现细节可参见 \cite{AhlbachUsatineFrougnyPippenger2013}；Ostrowski 三遍扫描算法的黄金比例特例亦见 \cite{HieronymiTerry2018OstrowskiAddition}）。
+\end{proof}
+
+\begin{remark}[on-line 与不可并行化：时间读出语义的实现侧约束]\label{rem:online-not-parallel}
+在“扫描—读出”的语义里，运算规则若能由一个 on-line 换能器实现，意味着读出可以沿时间单向流式执行并维持有限记忆状态，这与第 \ref{sec:folding} 节的滑动块码/序列级算子视角一致。另一方面，黄金比例基上的加法虽可 on-line 实现，但一般不可并行化（即不存在把输入划分为并行块并在常数轮数内完成的加法电路口径），这一现象在本文语境中可解释为：\textbf{稳定读出虽是有限记忆的，但仍携带跨尺度的进位/归一化依赖}；参见 \cite{Frougny1999OnlineAddition} 的精确结论与讨论。
+\end{remark}

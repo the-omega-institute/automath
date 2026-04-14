@@ -1,0 +1,220 @@
+\subsection{Zeckendorf 值与稳定地址的数值化}\label{subsec:emergent-arithmetic-zeckendorf-value-address}
+
+对 $w=w_1\cdots w_m\in X_m$，定义其 Zeckendorf 值
+\[
+V_m(w)=\sum_{k=1}^m w_k F_{k+1}.
+\]
+当 $0\le N\le F_{m+2}-1$ 时，$N$ 的 Zeckendorf 数字 $Z(N)=(c_1,c_2,\dots)$ 在第 $m+1$ 位之后全为 $0$（引理 \ref{lem:zeckendorf-range-bijection}），故令
+\[
+w(N):=\pi_m(Z(N))=(c_1,\dots,c_m)\in X_m,
+\]
+则
+\[
+N=V_m\bigl(w(N)\bigr).
+\]
+因此 $X_m$ 在该范围上可作为自然数的规范地址表示。
+
+\subsubsection{有限分辨率算术与模结构}
+为把“有限分辨率读出”转化为一个闭合的代数对象，我们将 $X_m$ 上的运算定义为对值的模化回拉。
+
+\begin{definition}[有限分辨率算术]
+对任意 $w,v\in X_m$，定义
+\[
+w\boxplus_m v:=w\Bigl((V_m(w)+V_m(v))\bmod F_{m+2}\Bigr),
+\qquad
+w\boxtimes_m v:=w\Bigl((V_m(w)\cdot V_m(v))\bmod F_{m+2}\Bigr),
+\]
+并记 $0_m:=w(0)$，$1_m:=w(1)$。
+\end{definition}
+
+\begin{theorem}[有限分辨率算术的模结构]
+\label{thm:finite-resolution-mod}
+映射 $V_m:X_m\to\ZZ/(F_{m+2}\ZZ)$ 给出半环同构
+\[
+(X_m,\boxplus_m,\boxtimes_m)\cong\bigl(\ZZ/(F_{m+2}\ZZ),+,\times\bigr).
+\]
+特别地，$X_m$ 上的有限分辨率算术由“值模化 + 规范代表回拉”唯一确定。
+\end{theorem}
+
+\textbf{证明：}
+由引理 \ref{lem:zeckendorf-range-bijection} 与上文 $w(N)$ 的定义，$V_m$ 将 $X_m$ 双射到 $\{0,1,\dots,F_{m+2}-1\}$，从而可视为到 $\ZZ/(F_{m+2}\ZZ)$ 的双射。定义中的 $\boxplus_m,\boxtimes_m$ 直接保证
+\[
+V_m(w\boxplus_m v)\equiv V_m(w)+V_m(v)\pmod{F_{m+2}},
+\qquad
+V_m(w\boxtimes_m v)\equiv V_m(w)\,V_m(v)\pmod{F_{m+2}},
+\]
+故 $V_m$ 为半环同构。唯一性来自双射性：任何使 $V_m$ 成为半环同态的运算，必与上述回拉定义一致。证毕。
+
+\begin{corollary}[域相（field phase）：Fibonacci-prime 分辨率上的统一算术]\label{cor:field-phase-fib-prime}
+设 $m\ge 1$，记 $M:=F_{m+2}$。若 $M$ 为素数 $p$，则
+\[
+(X_m,\boxplus_m,\boxtimes_m)\ \cong\ \mathbb{F}_p
+\]
+为有限域；其非零元形成循环群
+\[
+(X_m\setminus\{0_m\},\boxtimes_m)\ \cong\ \mathbb{F}_p^\times\ \cong\ C_{p-1}.
+\]
+\leanverified{fib\_fifteen\_not\_prime}
+\leanverified{fib\_nineteen\_not\_prime}
+\leanverified{fib\_twentyone\_not\_prime}
+\leanverified{paper\_fibonacci\_prime\_composite\_classification\_1\_to\_29}
+\leanverified{pisano\_period\_67}
+\leanverified{pisano\_period\_73}
+\leanverified{pisano\_period\_79}
+\leanverified{paper\_pisano\_period\_67\_73\_79\_extended}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:finite-resolution-mod} 得 $(X_m,\boxplus_m,\boxtimes_m)\cong \ZZ/(p\ZZ)\cong \mathbb{F}_p$；并且 \(\mathbb{F}_p^\times\) 为循环群。
+\end{proof}
+
+\begin{corollary}[CRT 分裂（symmetry factorization）：合成模数的规范直积分解]\label{cor:crt-factorization}
+设 $m\ge 1$，记 $M:=F_{m+2}$，其素因子分解为
+\[
+M=\prod_{i=1}^{r} p_i^{k_i}\qquad(p_i\ \text{两两不同}).
+\]
+则有（环）同构
+\[
+\ZZ/(M\ZZ)\ \cong\ \prod_{i=1}^{r}\ZZ/(p_i^{k_i}\ZZ),
+\]
+从而 $(X_m,\boxplus_m,\boxtimes_m)$ 同构于上述直积环；其单位群亦满足
+\[
+(\ZZ/(M\ZZ))^\times\ \cong\ \prod_{i=1}^{r}(\ZZ/(p_i^{k_i}\ZZ))^\times.
+\]
+特别地，当 $r\ge 2$ 时，$\ZZ/(M\ZZ)$ 含有非平凡幂等元，因而在环意义下存在规范的多因子分裂。
+\end{corollary}
+\begin{proof}
+结论均为标准中国剩余定理及其直接推论：环同构给出直积分解；单位群分解由逐分量可逆性刻画；存在非平凡幂等元当且仅当出现至少两个互素因子。
+\end{proof}
+
+\begin{proposition}[2/3/5 三轴并存的最小模深度]\label{prop:crt-235-min-depth}
+记 \(M:=F_{m+2}\)。
+则如下条件等价：
+\begin{enumerate}
+  \item \(2,3,5\mid M\)（亦即 \(30\mid M\)）；
+  \item \(3,4,5\mid (m+2)\)；
+  \item \(60\mid (m+2)\)。
+\end{enumerate}
+因此在有限分辨率算术同构
+\((X_m,\boxplus_m,\boxtimes_m)\cong \ZZ/(F_{m+2}\ZZ)\)
+（定理 \ref{thm:finite-resolution-mod}）下，
+若要求同一模环内同时容纳 \(\bmod 2,\bmod 3,\bmod 5\) 三条基本同余轴的 CRT 并存读出，
+则最小分辨率强制为
+\[
+\boxed{\ m_{\min}=58\qquad(m_{\min}+2=60)\ }.
+\]
+\leanverified{crt\_235\_min\_depth}
+\end{proposition}
+\begin{proof}
+注意到 \(2=F_3\)、\(3=F_4\)、\(5=F_5\)。
+由 Fibonacci 最大公因子恒等式
+\(\gcd(F_a,F_b)=F_{\gcd(a,b)}\)，对任意 \(n\) 有
+\[
+F_d\mid F_n\quad\Longleftrightarrow\quad \gcd(F_d,F_n)=F_d
+\quad\Longleftrightarrow\quad
+F_{\gcd(d,n)}=F_d
+\quad\Longleftrightarrow\quad
+d\mid n.
+\]
+取 \(d=3,4,5\) 且 \(n=m+2\) 即得：
+\[
+2\mid F_{m+2}\Longleftrightarrow 3\mid(m+2),\qquad
+3\mid F_{m+2}\Longleftrightarrow 4\mid(m+2),\qquad
+5\mid F_{m+2}\Longleftrightarrow 5\mid(m+2).
+\]
+于是 \(30\mid F_{m+2}\) 当且仅当 \(3,4,5\mid(m+2)\)，这又当且仅当 \(60\mid(m+2)\)。
+最小解为 \(m+2=60\)，即 \(m_{\min}=58\)。
+\end{proof}
+
+\begin{remark}[\texorpdfstring{$m=58$}{m=58} 的三轴 CRT 模数与素因子丰富性]\label{rem:crt-235-m58-factorization}
+由命题 \ref{prop:crt-235-min-depth}，最小三轴并存窗对应模数为
+\[
+F_{60}=1548008755920
+=2^4\cdot 3^2\cdot 5\cdot 11\cdot 31\cdot 41\cdot 61\cdot 2521,
+\]
+从而除 \((2,3,5)\) 外自然携带更多素因子分量；
+在 CRT 分裂口径（推论 \ref{cor:crt-factorization}）下，这些额外素因子对应一组可审计的附加同余轴。
+\end{remark}
+
+\begin{remark}[统一/破缺的“硬”判据：field / local / CRT-split]\label{rem:ring-phase-trichotomy}
+由定理 \ref{thm:finite-resolution-mod}，分辨率 $m$ 上的“可逆内部对称”自然定位在单位群
+\[
+(X_m^\times,\boxtimes_m)\ \cong\ (\ZZ/(M\ZZ))^\times,\qquad M=F_{m+2},
+\]
+其中 $X_m^\times$ 表示 $(X_m,\boxplus_m,\boxtimes_m)$ 的单位群：
+\[
+X_m^\times:=\{w\in X_m:\ \exists\,w^{-1}\in X_m\ \text{s.t.}\ w\boxtimes_m w^{-1}=1_m\}.
+\]
+因此“统一/破缺”的最硬组织层首先是模环的结构事实，而非先验选取某个连续李群：
+\begin{itemize}
+  \item \textbf{field（最强统一）}：$M$ 为素数，算术为域（推论 \ref{cor:field-phase-fib-prime}）；
+  \item \textbf{local（单素数但非域）}：$M=p^k$ 为素幂，环不可 CRT 分裂但非域（存在非平凡主理想链）；
+  \item \textbf{CRT-split（多因子破缺模板）}：$M$ 含至少两个不同素因子时，环/单位群具有规范直积分裂（推论 \ref{cor:crt-factorization}）。
+\end{itemize}
+\end{remark}
+
+\subsubsection{可完成的跨尺度统一：Fibonacci-adic 逆极限环}\label{subsubsec:fib-adic-inverse-limit}
+一般地，分辨率 $m$ 的模数为 $M_m:=F_{m+2}$，但序列 $(M_m)_{m\ge 1}$ 并不形成整除链；
+因此若想把“跨尺度兼容”严格化为一个逆极限对象，必须选取一个使模数成整除链的分辨率子塔。
+
+\begin{lemma}[Fibonacci 整除链]\label{lem:fib-divisibility-chain}
+若 $a\mid b$，则 $F_a\mid F_b$。
+\end{lemma}
+\begin{proof}
+这是 Fibonacci 数列的标准性质。由恒等式
+\(
+\gcd(F_a,F_b)=F_{\gcd(a,b)}
+\)
+立即得到：若 $a\mid b$，则 $\gcd(a,b)=a$，从而 $\gcd(F_a,F_b)=F_a$，即 $F_a\mid F_b$。
+\end{proof}
+
+\begin{definition}[二幂子塔与 Fibonacci-adic 统一电荷环]\label{def:fib-adic-ring}
+令
+\[
+n_k:=2^k,\qquad m_k:=n_k-2,\qquad M_k:=F_{n_k}=F_{m_k+2}\qquad(k\ge 2).
+\]
+由引理 \ref{lem:fib-divisibility-chain}，$M_k\mid M_{k+1}$，因此存在自然满射环同态
+\[
+\rho_{k+1\to k}:\ZZ/(M_{k+1}\ZZ)\twoheadrightarrow \ZZ/(M_k\ZZ),
+\qquad [x]_{M_{k+1}}\mapsto [x]_{M_k}.
+\]
+定义逆极限环
+\[
+\boxed{\;
+\ZZ_{\mathrm{Fib},2}:=\varprojlim_{k\to\infty}\ZZ/(F_{2^k}\ZZ)
+\;}.
+\]
+\leanpartial{paper\_def\_fib\_adic\_ring\_divisibility}{仅形式化二幂子塔的 Fibonacci 整除链 $M_k \mid M_{k+1}$；逆极限环 $\mathbb{Z}_{\mathrm{Fib},2}$ 的 profinite 拓扑结构与单位群留后轮}
+\leanverified{n\_k}
+\leanverified{M\_k}
+\leanverified{two\_pow\_dvd\_succ}
+\leanverified{n\_k\_dvd\_succ}
+\leanverified{M\_k\_dvd\_succ}
+\leanverified{M\_k\_dvd\_of\_le}
+\end{definition}
+
+\begin{proposition}[逆极限环的基本性质：有限商与紧致单位群]\label{prop:fib-adic-basic}
+设 $\ZZ_{\mathrm{Fib},2}$ 如定义 \ref{def:fib-adic-ring}。
+则：
+\begin{enumerate}
+  \item \textbf{（profinite 完备性）}$\ZZ_{\mathrm{Fib},2}$ 是有限环的逆极限，因此在逆极限拓扑下是紧致、全不连通的交换拓扑环（profinite ring）。
+  \item \textbf{（有限分辨率作为有限商）}对每个 $k$，存在自然满射环同态
+  \[
+  \pi_k:\ZZ_{\mathrm{Fib},2}\twoheadrightarrow \ZZ/(F_{2^k}\ZZ),
+  \]
+  并且这些投影满足相容性 $\rho_{k+1\to k}\circ \pi_{k+1}=\pi_k$。
+  \item \textbf{（单位群的紧致化）}其单位群 $\ZZ_{\mathrm{Fib},2}^\times$ 是紧致拓扑群，且自然同构于有限单位群的逆极限
+  \[
+  \ZZ_{\mathrm{Fib},2}^\times\ \cong\ \varprojlim_k \bigl(\ZZ/(F_{2^k}\ZZ)\bigr)^\times.
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) 与 (2) 为逆极限的标准泛性质：有限离散环的乘积紧致，逆极限为其中闭子集，故紧致；环结构按分量继承且连续。
+(3) 单位群是逆系统中“逐层可逆”的极限：元素在逆极限中可逆当且仅当其在每一层投影均可逆；因此单位群与单位群的逆极限自然同构，并继承紧致性。
+\end{proof}
+
+\begin{remark}[与 \texorpdfstring{$X_\infty\cong\varprojlim X_m$}{X∞≅lim X_m} 的关系]\label{rem:fib-adic-vs-syntax}
+注意：定理 \ref{thm:inverse-limit-golden} 的 $X_\infty\cong\varprojlim X_m$ 是\emph{语法/稳定类型}集合在截断 restriction 下的逆极限；
+而本小节的 $\ZZ_{\mathrm{Fib},2}$ 是\emph{分辨率算术模结构}在整除子塔上的逆极限。
+二者分别对应“可见前缀的一致性”与“跨尺度电荷算术的完备化”，属于同一折叠框架下的两条互补极限轴。
+\end{remark}

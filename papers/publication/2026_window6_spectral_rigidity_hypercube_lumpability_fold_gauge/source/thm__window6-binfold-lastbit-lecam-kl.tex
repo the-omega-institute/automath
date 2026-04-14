@@ -1,0 +1,72 @@
+\begin{theorem}[bin-fold 推前分布的末位判别等价：全变差在一比特上塌缩]\label{thm:window6-binfold-lastbit-lecam-equivalence}
+令
+\(
+\mu_m:=\pi_m
+\)
+为 bin-fold 的推前分布（均匀微态在 \(X_m\) 上的像），并令 \(u_m:=\mathrm{Unif}(X_m)\)。
+取末位统计量 \(\ell:X_m\to\{0,1\}\) 为最后一位 \(\ell(x)=x_m\)。
+假设存在“块内均匀化”分布 \(\bar\mu_m\) 与参数 \(\beta_m\) 使
+\[
+\bar\mu_m(x)\ \propto\ u_m(x)\,e^{-\beta_m\ell(x)},
+\qquad
+D_{\mathrm{TV}}(\mu_m,\bar\mu_m)\ \le\ C\Bigl(\frac{\varphi}{2}\Bigr)^m,
+\qquad
+\beta_m\to\log\varphi.
+\]
+则对所有 \(m\ge 1\) 都有一比特判别等价不等式
+\[
+\boxed{\;
+\Bigl|D_{\mathrm{TV}}(\mu_m,u_m)-D_{\mathrm{TV}}(\ell_\#\mu_m,\ell_\#u_m)\Bigr|
+\ \le\ 2\,D_{\mathrm{TV}}(\mu_m,\bar\mu_m)\;}
+\]
+从而
+\[
+\Bigl|D_{\mathrm{TV}}(\mu_m,u_m)-D_{\mathrm{TV}}(\ell_\#\mu_m,\ell_\#u_m)\Bigr|
+\ \le\ 2C\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+\end{theorem}
+\begin{proof}
+由于 \(\bar\mu_m/u_m\) 的似然比仅依赖于 \(\ell(x)\)，对二点检验 \((\bar\mu_m,u_m)\) 的 Neyman--Pearson 最优检验可取为 \(\ell\)-可测，
+从而
+\(D_{\mathrm{TV}}(\bar\mu_m,u_m)=D_{\mathrm{TV}}(\ell_\#\bar\mu_m,\ell_\#u_m)\)。
+又由推前不增大全变差距离得
+\(D_{\mathrm{TV}}(\ell_\#\mu_m,\ell_\#\bar\mu_m)\le D_{\mathrm{TV}}(\mu_m,\bar\mu_m)\)。
+对三角不等式各用一次：
+\[
+D_{\mathrm{TV}}(\mu_m,u_m)
+\le D_{\mathrm{TV}}(\mu_m,\bar\mu_m)+D_{\mathrm{TV}}(\bar\mu_m,u_m)
+\le 2D_{\mathrm{TV}}(\mu_m,\bar\mu_m)+D_{\mathrm{TV}}(\ell_\#\mu_m,\ell_\#u_m),
+\]
+并同理交换 \(\mu_m\) 与 \(\ell_\#\mu_m\) 得到反向界，合并即得差值不超过 \(2D_{\mathrm{TV}}(\mu_m,\bar\mu_m)\)。证毕。
+\end{proof}
+
+\begin{corollary}[bin-fold 相对熵的极限常数：末位 Bernoulli 的 KL 闭式]\label{cor:window6-binfold-kl-limit-constant}
+在定理 \ref{thm:window6-binfold-lastbit-lecam-equivalence} 的设定下，令 \(D(\cdot\|\cdot)\) 为 Kullback--Leibler 相对熵。
+则极限
+\[
+\lim_{m\to\infty}D(\mu_m\|u_m)=:\mathcal D_\infty
+\]
+存在，并具有显式闭式
+\[
+\mathcal D_\infty
+=D\!\left(\mathrm{Bern}\!\left(\frac{1}{1+\varphi^2}\right)\Big\|\mathrm{Bern}\!\left(\frac{1}{\varphi^2}\right)\right)
+=\frac{1}{1+\varphi^2}\log\frac{\varphi^2}{1+\varphi^2}
++\frac{\varphi^2}{1+\varphi^2}\log\frac{\varphi^3}{1+\varphi^2}.
+\]
+并且存在常数 \(C'>0\) 使误差满足
+\[
+\bigl|D(\mu_m\|u_m)-D(\bar\mu_m\|u_m)\bigr|
+\ \le\ C' m\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+\end{corollary}
+\begin{proof}
+由 \(\bar\mu_m\propto u_m e^{-\beta_m\ell}\) 得
+\(D(\bar\mu_m\|u_m)=D(\ell_\#\bar\mu_m\|\ell_\#u_m)\)。
+又由 \(|X_m|=F_{m+2}\) 的末位组合计数可得 \(\ell_\#u_m(1)=F_m/F_{m+2}\to \varphi^{-2}\)，并由 \(\beta_m\to\log\varphi\) 得到 \(\ell_\#\bar\mu_m(1)\to (1+\varphi^2)^{-1}\)；
+因此 \(D(\bar\mu_m\|u_m)\to \mathcal D_\infty\) 且 \(\mathcal D_\infty\) 为所示 Bernoulli KL。
+误差界使用恒等式 \(D(\cdot\|u_m)=\log|X_m|-H(\cdot)\) 与有限空间熵连续性估计
+\(|H(P)-H(Q)|\le \varepsilon\log(|X_m|-1)+h(\varepsilon)\)（\(\varepsilon=D_{\mathrm{TV}}(P,Q)\)），
+再代入 \(D_{\mathrm{TV}}(\mu_m,\bar\mu_m)\le C(\varphi/2)^m\) 与 \(\log|X_m|=\Theta(m)\) 即得。证毕。
+\end{proof}
+
+\endinput

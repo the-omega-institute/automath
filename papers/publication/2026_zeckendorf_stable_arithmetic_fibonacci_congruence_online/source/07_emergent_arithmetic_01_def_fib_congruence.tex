@@ -1,0 +1,98 @@
+\subsection{从 Fibonacci 关系呈示的尺度计数单子到自然数（商与不变量）}\label{subsec:emergent-arithmetic-fib-congruence}
+
+本节的关键点是：\textbf{算术结构并非预置}，而是从“尺度计数的自由结构”在 Fibonacci 关系下取商（或取不变量）后被强制导出；Zeckendorf 规范形只是该商结构上的一个\textbf{可计算的规范代表系}。
+
+令
+\[
+\mathcal{D}:=\Bigl\{a=(a_1,a_2,\dots): a_k\in\NN,\ \text{仅有限个 }a_k\neq 0\Bigr\}.
+\]
+将 $a\in\mathcal{D}$ 视为“在各尺度 $k$ 上出现 $a_k$ 次”的计数配置；$\mathcal{D}$ 在逐点加法下是自由交换幺半群（自由交换单子）。
+记 $e_k\in\mathcal{D}$ 为第 $k$ 个标准基（$e_k$ 在第 $k$ 位为 $1$，其余为 $0$）。
+
+\begin{definition}[Fibonacci 关系生成的同余]\label{def:fib-congruence}
+记 $\equiv$ 为 $\mathcal{D}$ 上最小的交换幺半群同余，使得
+\begin{enumerate}
+  \item \textbf{（基准同余）}$e_2\equiv 2e_1$（把“同一权重的重复”折叠为下一尺度的单次出现）；
+  \item \textbf{（递推同余）}对所有 $k\ge 1$ 都有
+\[
+e_{k+2}\ \equiv\ e_{k+1}+e_k.
+\]
+\end{enumerate}
+等价地，$\equiv$ 由“基准折叠 + Fibonacci 递推”在“尺度计数”层面生成，并对加法封闭。
+\leanverified{paper\_val\_base\_e2}
+\leanverified{paper\_val\_recursion\_e}
+\end{definition}
+
+\begin{definition}[值同态（不变量）]\label{def:val-on-D}
+定义映射 $\mathrm{Val}:\mathcal{D}\to\NN$ 为
+\[
+\mathrm{Val}(a):=\sum_{k\ge 1} a_k F_{k+1}.
+\]
+这是交换幺半群同态，并与前述对 $X_\infty$ 的 $\mathrm{Val}$ 定义一致（将 $c\in X_\infty$ 视为 $a_k=c_k$ 的特殊情形）。
+\leanpartial{valE}{仅对单基底向量 e\_k 形式化；一般 $\mathcal{D}$ 元素上的 Val 尚未形式化}
+\end{definition}
+
+\begin{proposition}[Fibonacci 同余的完备性]\label{prop:val-invariant}
+若 $a\equiv b$，则 $\mathrm{Val}(a)=\mathrm{Val}(b)$。因此 $\mathrm{Val}$ 在商幺半群 $\mathcal{D}/\!\equiv$ 上诱导良定义的同态
+\[
+\overline{\mathrm{Val}}:\mathcal{D}/\!\equiv\ \to\ \NN.
+\]
+\end{proposition}
+
+\textbf{证明：}
+只需验证生成关系保持值。对递推同余 $e_{k+2}\equiv e_{k+1}+e_k$，
+\[
+\mathrm{Val}(e_{k+2})=F_{k+3}=F_{k+2}+F_{k+1}=\mathrm{Val}(e_{k+1}+e_k),
+\]
+对基准同余 $e_2\equiv 2e_1$，
+\[
+\mathrm{Val}(e_2)=F_3=2=2F_2=\mathrm{Val}(2e_1).
+\]
+其余由同余对加法封闭、以及 $\mathrm{Val}$ 的加法同态性推出。
+
+\begin{theorem}[自然数的涌现：商幺半群的同构]\label{thm:monoid-quotient-is-N}
+映射 $\overline{\mathrm{Val}}:\mathcal{D}/\!\equiv \to \NN$ 是交换幺半群同构。并且 $X_\infty$（Zeckendorf 合法序列）给出每个同余类的唯一规范代表：对任意 $a\in\mathcal{D}$，存在唯一 $c\in X_\infty$ 使得 $a\equiv c$ 且 $\mathrm{Val}(a)=\mathrm{Val}(c)$。
+\leanpartial{paper\_val\_e\_index\_eq\_fib\_succ}{已形式化标定引理 $[e\_k]=F\_{k+1}\varepsilon$ 的值侧；同构与规范代表唯一性尚未形式化}
+\leanverified{valE\_zero\_one\_two\_table}
+\leanverified{valE\_pos\_of\_ge\_one}
+\leanverified{valE\_mono}
+\leanverified{valE\_strict\_mono\_of\_ge\_two}
+\leanverified{paper\_valE\_milestone\_package}
+\end{theorem}
+
+\textbf{证明：}
+\begin{itemize}
+  \item \textbf{满射性：}对任意 $N\in\NN$，取其 Zeckendorf 数字 $Z(N)=(c_1,c_2,\dots)\in X_\infty$（\cite{Zeckendorf1972}），则 $\mathrm{Val}(Z(N))=N$，故 $\overline{\mathrm{Val}}$ 满射。
+  \item \textbf{同构性（用呈示把一切类压到单生成元）：}
+  在商幺半群 $\mathcal{D}/\!\equiv$ 中，令 $\varepsilon:=[e_1]$。由基准同余有 $[e_2]=2\varepsilon$。再由递推同余归纳得对所有 $k\ge 1$，
+  \[
+  [e_{k+2}]=[e_{k+1}]+[e_k],
+  \qquad
+  \Rightarrow\qquad
+  [e_k]=F_{k+1}\,\varepsilon.
+  \]
+  因此对任意 $a=\sum_{k\ge 1} a_k e_k\in\mathcal{D}$，
+  \[
+  [a]=\sum_{k\ge 1} a_k [e_k]=\left(\sum_{k\ge 1} a_k F_{k+1}\right)\varepsilon
+  =\mathrm{Val}(a)\,\varepsilon.
+  \]
+这说明每个同余类都由其值 $\mathrm{Val}(a)$ 完全刻画，且 $\overline{\mathrm{Val}}([a])=\mathrm{Val}(a)$ 正是把 $n\varepsilon$ 送到 $n$ 的单调同构。于是 $\overline{\mathrm{Val}}$ 为交换幺半群同构。
+  \item \textbf{规范代表：}对任意 $a\in\mathcal{D}$，令 $N=\mathrm{Val}(a)$，取 $c=Z(N)\in X_\infty$。上一步给出
+  \(
+  [a]=N\varepsilon=[c],
+  \)
+  即 $a\equiv c$。唯一性由 Zeckendorf 唯一性推出：若 $c,c'\in X_\infty$ 且 $c\equiv c'$，则 $\mathrm{Val}(c)=\mathrm{Val}(c')$，从而 $c=c'$。
+\end{itemize}
+
+\begin{corollary}[折叠作为商映射的可计算截面]\label{cor:fold-as-section}
+上一定理的结论可概括为：
+\[
+\mathcal{D}\ \twoheadrightarrow\ \mathcal{D}/\!\equiv\ \cong\ \NN
+\quad\text{且}\quad
+X_\infty \hookrightarrow \mathcal{D}
+\]
+是一个可计算的截面（选择规范代表）。这正是“折叠（folding）= 取不变量/取商 + 选规范形”的抽象机制在 Fibonacci 情形下的具体实现。
+\end{corollary}
+
+\textbf{证明：}
+由定理 \ref{thm:monoid-quotient-is-N} 的同构性与唯一规范代表结论直接推出。
