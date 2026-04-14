@@ -99,6 +99,7 @@ import Omega.Folding.EndpointUnique
 import Omega.Folding.ImageSubshiftZeta
 import Omega.Folding.SyncDelay
 import Omega.Folding.TimeLayerDichotomy
+import Omega.Folding.YmSynchronized
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -208,6 +209,7 @@ import Omega.Topos.FiniteAbelianDuality
 import Omega.Topos.IntrinsicVisibleQuotient
 import Omega.Topos.IntrinsicCharacterDetection
 import Omega.Topos.UniqueBranchBandedGerbe
+import Omega.Topos.UniqueBranchContextualityComparison
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
@@ -285,6 +287,7 @@ import Omega.Zeta.PrimeLanguagesIntroDensity
 import Omega.Zeta.IntroAnalytic
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
+import Omega.Zeta.FinitePartCyclicLiftSpectrumIdentifiability
 import Omega.Zeta.IntroFiniteGroup
 import Omega.Zeta.ETDSDFADensityDichotomy
 import Omega.Zeta.ETDSZeckendorfRegularPowerlaw
