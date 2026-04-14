@@ -7,16 +7,18 @@
 | 指标 | 数值 |
 |---|---|
 | 总行数 | ~50,823 |
-| 定理/定义数 | ~4,430 |
+| 定理/定义数 | ~4,433 |
 | 论文接口包装 | 770+ |
-| 文件数 | 180 |
+| 文件数 | 183 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3293 |
+| \leanverified 标注数 | 3296 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3342 |
-| 轮次 | R764（round_count=R764）|
+| 总标注数 | 3345 |
+| 轮次 | R765（round_count=R765）|
+
+**Phase R765（本轮落地，全流程执行）**：`paper_gluing_failure_visible_value_components`（对应 `thm:visible-value-components`，Topos；把 gluing-failure publication 中 visible value classes、associated sheaf section 与 stackification connected-component 的两段等价压成 theorem-facing wrapper）；`paper_etds_finite_part_single_layer_square_root_test`（对应 `cor:finite-part-single-layer-square-root-test`，Zeta；把 ETDS finite-part section 中单层 root-of-unity reconstruction 对 square-root spectral bound 的判定直接挂接到既有 single-layer reconstruction package）；`paper_scan_projection_address_survivor_spectrum_collision`（对应 `cor:survivor-spectrum-collision`，SPG；把 scan-projection ETDS survivor spectrum corollary 中 second/third moment asymptotics、Poisson collision criterion 与 birthday-threshold conclusion 压成 theorem-facing wrapper，本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 Topos / Zeta / SPG，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Topos/VisibleValueComponents.lean`、`lean4/Omega/Zeta/FinitePartSingleLayerSquareRootTest.lean`、`lean4/Omega/SPG/SurvivorSpectrumCollision.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_gluing_failure_visible_value_components`、`paper_etds_finite_part_single_layer_square_root_test`、`paper_scan_projection_address_survivor_spectrum_collision`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal/sec_null_decomposition.tex`（`thm:visible-value-components`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_finite_part.tex`（`cor:finite-part-single-layer-square-root-test`），`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_double_budget.tex`（`cor:survivor-spectrum-collision`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R764（本轮落地，全流程执行）**：`paper_resolution_folding_alternating_single_symbol_synchronizing`（对应 `thm:alternating-single-symbol-synchronizing`，Folding；把 resolution-folding JNT finite-state section 中 alternating symbols 的 singleton-fibre to unique-edge to synchronizing-word 证明链压成 theorem-facing wrapper）；`paper_etds_finite_part_single_q_torsion_reconstruction`（对应 `thm:finite-part-cyclic-lift-single-q-torsion-reconstruction`，Zeta；把 ETDS finite-part section 中单个 root-of-unity layer 对 reduced polynomial 的 Fourier reconstruction 从 introduction-level cyclic reconstruction package 中抽出为 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_scan_projection_address_entropy_ledger`（对应 `thm:entropy-ledger`，SPG；把 scan-projection ETDS double-budget section 中 finite refinement entropy ledger 的主恒等式、conditional-entropy bound 与 injective-register equality 压成 theorem-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 Folding / Zeta / SPG，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Folding/AlternatingSingleSymbolSynchronizing.lean`、`lean4/Omega/Zeta/FinitePartSingleQTorsionReconstruction.lean`、`lean4/Omega/SPG/EntropyLedger.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_resolution_folding_alternating_single_symbol_synchronizing`、`paper_etds_finite_part_single_q_torsion_reconstruction`、`paper_scan_projection_address_entropy_ledger`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_finite_state.tex`（`thm:alternating-single-symbol-synchronizing`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_finite_part.tex`（`thm:finite-part-cyclic-lift-single-q-torsion-reconstruction`），`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_double_budget.tex`（`thm:entropy-ledger`）；新增 tex theorem/corollary/lemma 环境数 0）
 
