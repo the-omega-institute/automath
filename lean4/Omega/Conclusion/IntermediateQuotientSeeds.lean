@@ -41,6 +41,18 @@ theorem paper_conclusion_intermediate_quotient_seeds :
     (stirling2 4 2 + stirling2 4 3 + stirling2 4 4 = 14) := by
   simp
 
+theorem paper_conclusion_intermediate_quotient_package :
+    stirling2 3 1 = 1 ∧
+    stirling2 3 2 = 3 ∧
+    stirling2 3 3 = 1 ∧
+    stirling2 4 2 = 7 ∧
+    stirling2 4 3 = 6 ∧
+    stirling2 4 4 = 1 ∧
+    stirling2 4 2 / stirling2 3 2 = 2 ∧
+    stirling2 4 3 / stirling2 3 3 = 6 ∧
+    (stirling2 4 2 + stirling2 4 3 + stirling2 4 4 = 14) :=
+  paper_conclusion_intermediate_quotient_seeds
+
 theorem paper_conclusion_intermediate_system_rank_generating_factorization_package :
     stirling2 3 1 = 1 ∧
     stirling2 3 2 = 3 ∧
