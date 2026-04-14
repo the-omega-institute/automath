@@ -143,6 +143,7 @@ import Omega.Frontier.ConditionalArithmetic
 import Omega.Frontier.ConditionalSummary
 import Omega.Frontier.Conjectures
 import Omega.Frontier.Certificates
+import Omega.Frontier.NullTrichotomyLocalSection
 import Omega.LogicExpansionChain.FocusedConservativeComposition
 import Omega.LogicExpansionChain.StateTheoryMonotonicity
 import Omega.LogicExpansionChain.FocusedStateTheoryMonotonicity
@@ -315,6 +316,8 @@ import Omega.CircleDimension.TensorHomExtLaws
 import Omega.CircleDimension.AxiomaticRigidity
 import Omega.CircleDimension.PhaseSpectrumLimit
 import Omega.CircleDimension.PhaseSpectrumReconstruction
+import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
+import Omega.CircleDimension.FinitePrimeSupportMultiplicativeHalfCircleDimension
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
