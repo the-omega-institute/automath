@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
-"""Lean4 Codex-First formalization automation.
+"""Lean4 Codex-First formalization automation with git-worktree parallelism.
 
-Replicates the lean4-codex-formalize.md workflow as a standalone Python script:
+Architecture:
+  - Base branch: lean4-codex-auto-dev (created from current HEAD if missing)
+  - Each round runs in an isolated git worktree with its own branch
+  - Multiple rounds execute in parallel via ThreadPoolExecutor
+  - Successful rounds merge back to base branch, then push
+
+Phases per round (each in its own worktree):
   Phase B: codex exec picks 3 formalization targets
   Gate:    validates target quality (count, difficulty, chapter diversity)
-  Phase C: codex exec implements + compiles + commits + registers + pushes
-  Phase D: verifies new commits via git log, then loops
+  Phase C: codex exec implements + compiles + commits + registers
+  Phase D: verifies new commits, merges to base branch, pushes
 
 Usage:
-  python3 lean4/scripts/codex_formalize.py                  # run one round
-  python3 lean4/scripts/codex_formalize.py --rounds 5       # run 5 rounds
-  python3 lean4/scripts/codex_formalize.py --continuous      # run until stopped
-  python3 lean4/scripts/codex_formalize.py --dry-run         # show prompts, don't call codex
+  python3 lean4/scripts/codex_formalize.py                          # 1 round, serial
+  python3 lean4/scripts/codex_formalize.py --parallel 3             # 3 rounds in parallel
+  python3 lean4/scripts/codex_formalize.py --parallel 3 --continuous  # continuous parallel
+  python3 lean4/scripts/codex_formalize.py --dry-run --parallel 2   # preview only
+  python3 lean4/scripts/codex_formalize.py --status                 # show state
+  python3 lean4/scripts/codex_formalize.py --cleanup                # remove stale worktrees
 """
 
 from __future__ import annotations
@@ -26,14 +34,16 @@ import subprocess
 import sys
 import tempfile
 import textwrap
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed, Future
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
 # ---------------------------------------------------------------------------
-# Paths
+# Paths & constants
 # ---------------------------------------------------------------------------
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -41,12 +51,17 @@ LEAN_ROOT = SCRIPT_DIR.parent                        # lean4/
 REPO_ROOT = LEAN_ROOT.parent                         # automath/
 IMPL_PLAN = LEAN_ROOT / "IMPLEMENTATION_PLAN.md"
 OMEGA_ROOT = LEAN_ROOT / "Omega"
-OMEGA_LEAN = LEAN_ROOT / "Omega.lean"
 
 LOG_DIR = LEAN_ROOT / "scripts" / "logs"
+WORKTREE_DIR = REPO_ROOT / ".worktrees"
 
-# Codex CLI discovery
+BASE_BRANCH = "lean4-codex-auto-dev"
 CODEX_PATH = shutil.which("codex") or "/opt/homebrew/bin/codex"
+
+# Thread-safe lock for git operations on the main repo
+_git_lock = threading.Lock()
+# Lock for round number allocation
+_round_lock = threading.Lock()
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -54,13 +69,13 @@ CODEX_PATH = shutil.which("codex") or "/opt/homebrew/bin/codex"
 
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
-log_file = LOG_DIR / f"codex_formalize_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+_log_file = LOG_DIR / f"codex_formalize_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
+    format="%(asctime)s [%(levelname)s] [%(threadName)s] %(message)s",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler(str(log_file), encoding="utf-8"),
+        logging.FileHandler(str(_log_file), encoding="utf-8"),
     ],
 )
 logger = logging.getLogger("codex-formalize")
@@ -80,21 +95,28 @@ class RoundState:
 
 
 @dataclass
-class PhaseB_Result:
+class PhaseBResult:
     raw_output: str = ""
     targets: list[dict] = field(default_factory=list)
     success: bool = False
 
 
 @dataclass
-class PhaseC_Result:
+class PhaseCResult:
     raw_output: str = ""
     new_commits: list[str] = field(default_factory=list)
     success: bool = False
 
 
+@dataclass
+class WorktreeInfo:
+    path: Path
+    branch: str
+    round_number: int
+
+
 # ---------------------------------------------------------------------------
-# Helpers
+# Shell helpers
 # ---------------------------------------------------------------------------
 
 def run_cmd(
@@ -104,7 +126,6 @@ def run_cmd(
     timeout: int = 120,
     check: bool = False,
 ) -> subprocess.CompletedProcess:
-    """Run a shell command and return the result."""
     logger.debug(f"Running: {' '.join(cmd)}")
     return subprocess.run(
         cmd,
@@ -117,31 +138,20 @@ def run_cmd(
     )
 
 
-def git_log_oneline(n: int = 5) -> list[str]:
-    """Return the last n commit one-liners."""
-    result = run_cmd(["git", "log", f"--oneline", f"-{n}"], cwd=REPO_ROOT)
-    return [line.strip() for line in result.stdout.strip().splitlines() if line.strip()]
+def git_log_oneline(n: int = 5, *, cwd: Optional[Path] = None) -> list[str]:
+    result = run_cmd(["git", "log", "--oneline", f"-{n}"], cwd=cwd or REPO_ROOT)
+    return [l.strip() for l in result.stdout.strip().splitlines() if l.strip()]
 
 
-def git_log_last_timestamp() -> Optional[str]:
-    """Return ISO timestamp of the most recent commit."""
-    result = run_cmd(
-        ["git", "log", "--oneline", "-1", "--format=%ci"],
-        cwd=REPO_ROOT,
-    )
-    return result.stdout.strip() or None
-
-
-def read_impl_plan_header(lines: int = 30) -> str:
-    """Read the first N lines of IMPLEMENTATION_PLAN.md."""
-    if not IMPL_PLAN.exists():
+def read_impl_plan_header(lines: int = 30, *, repo: Optional[Path] = None) -> str:
+    plan = (repo or REPO_ROOT) / "lean4" / "IMPLEMENTATION_PLAN.md"
+    if not plan.exists():
         return "(IMPLEMENTATION_PLAN.md not found)"
-    with open(IMPL_PLAN, "r", encoding="utf-8") as f:
+    with open(plan, "r", encoding="utf-8") as f:
         return "".join(f.readline() for _ in range(lines))
 
 
 def parse_round_from_plan(text: str) -> int:
-    """Extract the current round number from IMPLEMENTATION_PLAN header."""
     m = re.search(r"round_count\s*=\s*R?(\d+)", text)
     if m:
         return int(m.group(1))
@@ -151,20 +161,145 @@ def parse_round_from_plan(text: str) -> int:
     return 0
 
 
-def parse_coverage_from_plan(text: str) -> float:
-    """Extract coverage percentage from IMPLEMENTATION_PLAN header."""
-    m = re.search(r"coverage_rate_registry.*?([0-9.]+)%", text, re.IGNORECASE)
-    if m:
-        return float(m.group(1))
-    return 0.0
-
-
-def count_lean_theorems() -> int:
-    """Quick count of theorem/lemma declarations in lean4/Omega/."""
+def count_lean_theorems(omega_root: Optional[Path] = None) -> int:
+    root = omega_root or OMEGA_ROOT
+    if not root.exists():
+        return 0
     count = 0
-    for path in OMEGA_ROOT.rglob("*.lean"):
+    for path in root.rglob("*.lean"):
         text = path.read_text(encoding="utf-8", errors="replace")
         count += len(re.findall(r"^\s*(?:theorem|lemma)\s+", text, re.MULTILINE))
+    return count
+
+
+# ---------------------------------------------------------------------------
+# Git worktree management
+# ---------------------------------------------------------------------------
+
+def ensure_base_branch() -> None:
+    """Create BASE_BRANCH from current HEAD if it doesn't exist."""
+    with _git_lock:
+        result = run_cmd(["git", "branch", "--list", BASE_BRANCH], cwd=REPO_ROOT)
+        if BASE_BRANCH not in result.stdout:
+            logger.info(f"Creating base branch {BASE_BRANCH} from current HEAD")
+            run_cmd(["git", "branch", BASE_BRANCH], cwd=REPO_ROOT, check=True)
+            run_cmd(["git", "push", "-u", "origin", BASE_BRANCH], cwd=REPO_ROOT)
+            logger.info(f"Base branch {BASE_BRANCH} created and pushed")
+        else:
+            logger.info(f"Base branch {BASE_BRANCH} exists")
+
+
+def create_worktree(round_num: int) -> WorktreeInfo:
+    """Create an isolated worktree for a round."""
+    WORKTREE_DIR.mkdir(parents=True, exist_ok=True)
+    branch = f"codex-R{round_num}"
+    wt_path = WORKTREE_DIR / f"round_R{round_num}"
+
+    with _git_lock:
+        # Clean up stale worktree at this path if it exists
+        if wt_path.exists():
+            logger.warning(f"Removing stale worktree at {wt_path}")
+            run_cmd(["git", "worktree", "remove", "--force", str(wt_path)], cwd=REPO_ROOT)
+            if wt_path.exists():
+                shutil.rmtree(wt_path, ignore_errors=True)
+
+        # Delete stale branch if it exists
+        run_cmd(["git", "branch", "-D", branch], cwd=REPO_ROOT)
+
+        # Create worktree from base branch
+        logger.info(f"Creating worktree: {wt_path} on branch {branch}")
+        result = run_cmd(
+            ["git", "worktree", "add", "-b", branch, str(wt_path), BASE_BRANCH],
+            cwd=REPO_ROOT,
+        )
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"Failed to create worktree: {result.stderr.strip()}"
+            )
+
+    return WorktreeInfo(path=wt_path, branch=branch, round_number=round_num)
+
+
+def remove_worktree(wt: WorktreeInfo) -> None:
+    """Remove a worktree and its branch."""
+    with _git_lock:
+        logger.info(f"Removing worktree: {wt.path}")
+        run_cmd(["git", "worktree", "remove", "--force", str(wt.path)], cwd=REPO_ROOT)
+        if wt.path.exists():
+            shutil.rmtree(wt.path, ignore_errors=True)
+        # Delete the branch (already merged)
+        run_cmd(["git", "branch", "-d", wt.branch], cwd=REPO_ROOT)
+
+
+def merge_worktree_to_base(wt: WorktreeInfo) -> bool:
+    """Merge the worktree branch back into BASE_BRANCH and push."""
+    with _git_lock:
+        logger.info(f"Merging {wt.branch} into {BASE_BRANCH}...")
+
+        # Switch to base branch in main repo (we only do this under lock)
+        original_branch = run_cmd(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=REPO_ROOT
+        ).stdout.strip()
+
+        try:
+            run_cmd(["git", "checkout", BASE_BRANCH], cwd=REPO_ROOT, check=True)
+
+            # Pull latest first
+            run_cmd(["git", "pull", "--rebase", "origin", BASE_BRANCH], cwd=REPO_ROOT)
+
+            # Merge
+            result = run_cmd(
+                ["git", "merge", "--no-ff", wt.branch,
+                 "-m", f"Merge {wt.branch}: round R{wt.round_number} formalization"],
+                cwd=REPO_ROOT,
+            )
+
+            if result.returncode != 0:
+                logger.error(f"Merge conflict for {wt.branch}: {result.stderr[:300]}")
+                run_cmd(["git", "merge", "--abort"], cwd=REPO_ROOT)
+                return False
+
+            # Push
+            push_result = run_cmd(
+                ["git", "push", "origin", BASE_BRANCH], cwd=REPO_ROOT
+            )
+            if push_result.returncode != 0:
+                # Retry with pull-rebase
+                logger.warning("Push failed, retrying with pull --rebase...")
+                run_cmd(["git", "pull", "--rebase", "origin", BASE_BRANCH], cwd=REPO_ROOT)
+                push_result = run_cmd(
+                    ["git", "push", "origin", BASE_BRANCH], cwd=REPO_ROOT
+                )
+                if push_result.returncode != 0:
+                    logger.error(f"Push retry failed: {push_result.stderr[:300]}")
+                    return False
+
+            logger.info(f"Merged and pushed {wt.branch} to {BASE_BRANCH}")
+            return True
+
+        finally:
+            # Restore original branch
+            run_cmd(["git", "checkout", original_branch], cwd=REPO_ROOT)
+
+
+def cleanup_all_worktrees() -> int:
+    """Remove all formalization worktrees."""
+    if not WORKTREE_DIR.exists():
+        return 0
+    count = 0
+    for entry in WORKTREE_DIR.iterdir():
+        if entry.is_dir() and entry.name.startswith("round_R"):
+            logger.info(f"Cleaning up {entry}")
+            run_cmd(["git", "worktree", "remove", "--force", str(entry)], cwd=REPO_ROOT)
+            if entry.exists():
+                shutil.rmtree(entry, ignore_errors=True)
+            # Try to delete branch
+            m = re.match(r"round_R(\d+)", entry.name)
+            if m:
+                run_cmd(["git", "branch", "-D", f"codex-R{m.group(1)}"], cwd=REPO_ROOT)
+            count += 1
+    # Prune worktree list
+    run_cmd(["git", "worktree", "prune"], cwd=REPO_ROOT)
     return count
 
 
@@ -175,40 +310,28 @@ def count_lean_theorems() -> int:
 def codex_exec(
     prompt: str,
     *,
+    work_dir: Optional[Path] = None,
     timeout_seconds: int = 1800,
     output_file: Optional[Path] = None,
     model: Optional[str] = None,
     dry_run: bool = False,
 ) -> str:
-    """
-    Call `codex exec` with the given prompt.
-
-    The prompt is written to a temp file and piped via stdin to avoid
-    shell escaping issues. stdin is redirected from /dev/null after the
-    prompt (subprocess.DEVNULL handles this automatically when we pass
-    the prompt as the positional argument and use a temp file for long
-    prompts).
-    """
+    """Call `codex exec` with the given prompt, targeting work_dir."""
     if dry_run:
-        logger.info("[DRY RUN] Would call codex exec with prompt:\n"
-                     f"{prompt[:500]}{'...' if len(prompt) > 500 else ''}")
+        logger.info(f"[DRY RUN] codex exec (cwd={work_dir}):\n"
+                     f"{prompt[:400]}{'...' if len(prompt) > 400 else ''}")
         return "(dry run -- no output)"
 
-    if not Path(CODEX_PATH).exists() and not shutil.which("codex"):
-        raise FileNotFoundError(
-            f"Codex CLI not found at {CODEX_PATH} and not in PATH. "
-            "Install via: npm install -g @anthropic-ai/codex"
-        )
-
     codex_bin = CODEX_PATH if Path(CODEX_PATH).exists() else shutil.which("codex")
+    if not codex_bin:
+        raise FileNotFoundError("Codex CLI not found")
+
+    target_dir = str(work_dir or REPO_ROOT)
 
     # Write prompt to temp file
     with tempfile.NamedTemporaryFile(
-        mode="w",
-        suffix=".txt",
-        prefix="codex_prompt_",
-        delete=False,
-        encoding="utf-8",
+        mode="w", suffix=".txt", prefix="codex_prompt_",
+        delete=False, encoding="utf-8",
     ) as f:
         f.write(prompt)
         prompt_file = f.name
@@ -222,33 +345,30 @@ def codex_exec(
         "timeout", str(timeout_seconds),
         codex_bin, "exec",
         "--dangerously-bypass-approvals-and-sandbox",
-        "-C", str(REPO_ROOT),
+        "-C", target_dir,
         "-o", out_file,
     ]
     if model:
         cmd.extend(["-m", model])
-    # Read prompt from stdin via the temp file
     cmd.append("-")
 
-    logger.info(f"Calling codex exec (timeout={timeout_seconds}s)...")
+    logger.info(f"Calling codex exec (cwd={target_dir}, timeout={timeout_seconds}s)...")
     start = time.monotonic()
+    result = None
 
     try:
         with open(prompt_file, "r", encoding="utf-8") as pf:
             result = subprocess.run(
-                cmd,
-                stdin=pf,
-                capture_output=True,
-                text=True,
-                timeout=timeout_seconds + 30,  # extra buffer
-                cwd=str(REPO_ROOT),
+                cmd, stdin=pf, capture_output=True, text=True,
+                timeout=timeout_seconds + 30, cwd=target_dir,
             )
     except subprocess.TimeoutExpired:
         logger.warning(f"Codex exec timed out after {timeout_seconds}s")
         return "(timeout)"
     finally:
         elapsed = time.monotonic() - start
-        logger.info(f"Codex exec completed in {elapsed:.1f}s (rc={result.returncode if 'result' in dir() else '?'})")
+        rc = result.returncode if result else "?"
+        logger.info(f"Codex exec completed in {elapsed:.1f}s (rc={rc})")
         os.unlink(prompt_file)
 
     # Read output
@@ -258,14 +378,10 @@ def codex_exec(
             with open(out_file, "r", encoding="utf-8") as f:
                 output = f.read()
         else:
-            # Fallback to stdout
             output = result.stdout or ""
     finally:
         if output_file is None:
             os.unlink(out_file)
-
-    if result.stderr:
-        logger.debug(f"Codex stderr: {result.stderr[:500]}")
 
     return output
 
@@ -274,24 +390,21 @@ def codex_exec(
 # Phase B: Target Selection
 # ---------------------------------------------------------------------------
 
-def build_phase_b_prompt(state: RoundState) -> str:
-    """Build the prompt for Phase B (target selection)."""
-    recent = "\n".join(state.recent_commits[:5]) if state.recent_commits else "(none)"
-
+def build_phase_b_prompt(round_num: int, total_theorems: int, recent: str) -> str:
     return textwrap.dedent(f"""\
-        You are the target-selection phase for Lean4 formalization round R{state.round_number + 1}.
+        You are the target-selection phase for Lean4 formalization round R{round_num}.
 
         ## Project Layout
         - lean4/Omega/ — Lean4 code (Omega library, depends on mathlib)
         - theory/ — papers in LaTeX
         - lean4/IMPLEMENTATION_PLAN.md — tracking file
-        - Current round: R{state.round_number}, next: R{state.round_number + 1}
-        - Current theorem count: ~{state.total_theorems}
+        - Current round: R{round_num}
+        - Current theorem count: ~{total_theorems}
         - Recent commits:
         {recent}
 
         ## Task
-        Select 3 formalization targets for R{state.round_number + 1}.
+        Select 3 formalization targets for R{round_num}.
 
         Steps:
         1. Read lean4/IMPLEMENTATION_PLAN.md (first 120 lines) to identify the latest phase
@@ -304,7 +417,7 @@ def build_phase_b_prompt(state: RoundState) -> str:
            - Prioritize different chapters for diversity
 
         ## Output Format (MUST follow exactly)
-        For each target, output a JSON block:
+        Output a single JSON block:
 
         ```json
         {{
@@ -318,32 +431,29 @@ def build_phase_b_prompt(state: RoundState) -> str:
               "difficulty": "low/medium/high",
               "chapter": "Folding/SPG/Zeta/etc",
               "grep_confirmed_missing": true
-            }},
-            ...
+            }}
           ]
         }}
         ```
 
         You MUST grep to confirm each target does not already exist.
         Do NOT guess mathlib API names.
-        Do NOT pick targets that are already implemented.
     """)
 
 
-def parse_phase_b_output(raw: str) -> PhaseB_Result:
-    """Parse the Phase B codex output to extract targets."""
-    result = PhaseB_Result(raw_output=raw)
+def parse_phase_b_output(raw: str) -> PhaseBResult:
+    result = PhaseBResult(raw_output=raw)
 
-    # Try to find JSON block
+    # Try fenced JSON block
     json_match = re.search(r"```json\s*(\{.*?\})\s*```", raw, re.DOTALL)
     if json_match:
         try:
             data = json.loads(json_match.group(1))
             result.targets = data.get("targets", [])
         except json.JSONDecodeError:
-            logger.warning("Failed to parse Phase B JSON output")
+            pass
 
-    # Fallback: try to find any JSON object with "targets" key
+    # Fallback: bare JSON
     if not result.targets:
         for m in re.finditer(r'\{[^{}]*"targets"\s*:\s*\[.*?\]\s*\}', raw, re.DOTALL):
             try:
@@ -359,42 +469,27 @@ def parse_phase_b_output(raw: str) -> PhaseB_Result:
 
 
 def gate_check(targets: list[dict]) -> tuple[bool, str]:
-    """
-    Validate Phase B targets against gate criteria:
-    - At least 3 targets (or at least 1 if we're being lenient)
-    - At least 1 medium difficulty
-    - Not all from the same chapter
-    """
     if len(targets) < 1:
         return False, "No targets found"
-
     difficulties = [t.get("difficulty", "low") for t in targets]
     chapters = set(t.get("chapter", "unknown") for t in targets)
-
     issues = []
-
     if len(targets) < 3:
         issues.append(f"Only {len(targets)} targets (want 3)")
-
-    has_medium = any(d in ("medium", "high") for d in difficulties)
-    if not has_medium:
+    if not any(d in ("medium", "high") for d in difficulties):
         issues.append("No medium/high difficulty target")
-
     if len(targets) >= 3 and len(chapters) <= 1:
         issues.append(f"All targets from same chapter: {chapters}")
-
     if issues:
         return False, "; ".join(issues)
-
     return True, "Gate passed"
 
 
 # ---------------------------------------------------------------------------
-# Phase C: Implementation + Compile + Commit + Register + Push
+# Phase C: Implementation (runs inside worktree)
 # ---------------------------------------------------------------------------
 
-def build_phase_c_prompt(state: RoundState, targets: list[dict]) -> str:
-    """Build the prompt for Phase C (full implementation flow)."""
+def build_phase_c_prompt(round_num: int, targets: list[dict]) -> str:
     targets_text = ""
     for i, t in enumerate(targets, 1):
         targets_text += textwrap.dedent(f"""\
@@ -412,9 +507,9 @@ def build_phase_c_prompt(state: RoundState, targets: list[dict]) -> str:
         """)
 
     return textwrap.dedent(f"""\
-        Implement Lean4 theorems + compile + commit + register + push. Complete in one pass.
+        Implement Lean4 theorems + compile + commit (do NOT push). Complete in one pass.
 
-        ## Round R{state.round_number + 1}
+        ## Round R{round_num}
 
         ## Targets to Implement
         {targets_text}
@@ -439,7 +534,7 @@ def build_phase_c_prompt(state: RoundState, targets: list[dict]) -> str:
         ## Step 3: Git commit the proofs
         ```bash
         git add lean4/Omega/ lean4/Omega.lean
-        git commit -m "R{state.round_number + 1}: [brief description of what was proved]
+        git commit -m "R{round_num}: [brief description of what was proved]
 
         Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
         ```
@@ -449,92 +544,188 @@ def build_phase_c_prompt(state: RoundState, targets: list[dict]) -> str:
         - Add \\leanverified{{theorem_name}} to the corresponding .tex files
           (find them via the paper_label, escape underscores as \\_)
 
-        ## Step 5: Git commit registration + push
+        ## Step 5: Git commit registration
         ```bash
         git add lean4/IMPLEMENTATION_PLAN.md theory/
-        git commit -m "Register R{state.round_number + 1}: [brief description]
+        git commit -m "Register R{round_num}: [brief description]
 
         Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
-        git push
         ```
+
+        ## IMPORTANT: Do NOT git push. The merge and push will be handled externally.
 
         ## Completion Contract
         - No sorry / admit / axiom; lake build must pass with zero errors
         - Must complete all 5 steps; if a theorem is stuck, skip it and continue
-        - After each theorem, verify with lean_diagnostic_messages
         - Tactic failure: auto-try next; compile error: auto-fix up to 3 rounds
-        - Push failure: pull --rebase and retry
         - Implementation changes: only in lean4/Omega/
         - Registration changes: only in IMPLEMENTATION_PLAN.md and theory/
         - Do NOT refactor or delete existing code
+        - Do NOT git push
     """)
 
 
-def parse_phase_c_output(raw: str) -> PhaseC_Result:
-    """Parse Phase C output to detect new commits."""
-    result = PhaseC_Result(raw_output=raw)
-
-    # Look for commit hashes in the output
+def parse_phase_c_output(raw: str) -> PhaseCResult:
+    result = PhaseCResult(raw_output=raw)
     commit_hashes = re.findall(r"[0-9a-f]{7,40}", raw)
-    # Filter to plausible short hashes
     result.new_commits = list(dict.fromkeys(
         h for h in commit_hashes if 7 <= len(h) <= 12
     ))[:10]
-
-    # Check for success indicators
-    success_indicators = [
-        "git push",
-        "lake build",
-        "pushed",
-        "commit",
-        "Register R",
-    ]
+    success_indicators = ["lake build", "commit", f"Register R"]
     result.success = any(ind.lower() in raw.lower() for ind in success_indicators)
-
     return result
 
 
 # ---------------------------------------------------------------------------
-# Phase D: Verification
+# Worktree-based round execution
 # ---------------------------------------------------------------------------
 
-def verify_round(pre_commits: list[str]) -> tuple[bool, list[str]]:
-    """Check if new commits appeared since Phase C started."""
-    post_commits = git_log_oneline(5)
-
-    new = []
-    for c in post_commits:
-        if c not in pre_commits:
-            new.append(c)
-
+def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
+    """Check for new commits in the worktree."""
+    post = git_log_oneline(10, cwd=wt.path)
+    new = [c for c in post if c not in pre_commits]
     if new:
-        logger.info(f"Phase D: {len(new)} new commit(s) detected:")
+        logger.info(f"[R{wt.round_number}] Phase D: {len(new)} new commit(s):")
         for c in new:
             logger.info(f"  {c}")
         return True, new
-    else:
-        logger.warning("Phase D: No new commits detected")
-        return False, []
+    logger.warning(f"[R{wt.round_number}] Phase D: No new commits")
+    return False, []
+
+
+def run_round_in_worktree(
+    round_num: int,
+    total_theorems: int,
+    recent_commits: list[str],
+    *,
+    dry_run: bool = False,
+    model: Optional[str] = None,
+    phase_b_timeout: int = 1800,
+    phase_c_timeout: int = 3600,
+) -> tuple[bool, int, list[str]]:
+    """
+    Execute one formalization round inside an isolated git worktree.
+    Returns (success, round_number, new_commit_lines).
+    """
+    tag = f"R{round_num}"
+    logger.info(f"{'='*60}")
+    logger.info(f"[{tag}] Starting round (worktree mode, {total_theorems} theorems)")
+    logger.info(f"{'='*60}")
+
+    wt: Optional[WorktreeInfo] = None
+    try:
+        # ── Create worktree ───────────────────────────────────────
+        if not dry_run:
+            wt = create_worktree(round_num)
+            wt_cwd = wt.path
+        else:
+            wt_cwd = REPO_ROOT
+
+        pre_commits = git_log_oneline(10, cwd=wt_cwd)
+        recent_text = "\n".join(recent_commits[:5]) if recent_commits else "(none)"
+
+        # ── Phase B ───────────────────────────────────────────────
+        logger.info(f"[{tag}] Phase B: Target selection...")
+        phase_b_prompt = build_phase_b_prompt(round_num, total_theorems, recent_text)
+        phase_b_raw = codex_exec(
+            phase_b_prompt,
+            work_dir=wt_cwd,
+            timeout_seconds=phase_b_timeout,
+            model=model,
+            dry_run=dry_run,
+        )
+        phase_b = parse_phase_b_output(phase_b_raw)
+
+        if not phase_b.success:
+            logger.error(f"[{tag}] Phase B failed: no targets extracted "
+                         f"({len(phase_b.raw_output)} chars)")
+            _save_round_log(round_num, phase_b, PhaseCResult(), [], False)
+            return False, round_num, []
+
+        logger.info(f"[{tag}] Phase B: {len(phase_b.targets)} target(s) extracted")
+        for i, t in enumerate(phase_b.targets, 1):
+            logger.info(f"  Target {i}: {t.get('lean_name', '?')} "
+                         f"({t.get('difficulty', '?')}, {t.get('chapter', '?')})")
+
+        # ── Gate ──────────────────────────────────────────────────
+        gate_ok, gate_msg = gate_check(phase_b.targets)
+        if not gate_ok:
+            logger.warning(f"[{tag}] Gate: {gate_msg} (proceeding anyway)")
+        else:
+            logger.info(f"[{tag}] Gate: {gate_msg}")
+
+        # ── Phase C ───────────────────────────────────────────────
+        logger.info(f"[{tag}] Phase C: Implementation (in worktree)...")
+        phase_c_prompt = build_phase_c_prompt(round_num, phase_b.targets)
+        phase_c_raw = codex_exec(
+            phase_c_prompt,
+            work_dir=wt_cwd,
+            timeout_seconds=phase_c_timeout,
+            model=model,
+            dry_run=dry_run,
+        )
+        phase_c = parse_phase_c_output(phase_c_raw)
+
+        # ── Phase D: Verify ───────────────────────────────────────
+        logger.info(f"[{tag}] Phase D: Verification...")
+        if dry_run:
+            new_commits: list[str] = []
+            success = True
+        else:
+            assert wt is not None
+            success, new_commits = verify_worktree_commits(wt, pre_commits)
+
+        # ── Merge back ────────────────────────────────────────────
+        if success and new_commits and wt and not dry_run:
+            logger.info(f"[{tag}] Merging to {BASE_BRANCH}...")
+            merged = merge_worktree_to_base(wt)
+            if not merged:
+                logger.error(f"[{tag}] Merge failed — keeping worktree for manual resolution")
+                _save_round_log(round_num, phase_b, phase_c, new_commits, False)
+                return False, round_num, new_commits
+            logger.info(f"[{tag}] SUCCESS: merged {len(new_commits)} commit(s) to {BASE_BRANCH}")
+        elif success and dry_run:
+            logger.info(f"[{tag}] [DRY RUN] Would merge to {BASE_BRANCH}")
+
+        _save_round_log(round_num, phase_b, phase_c, new_commits, success)
+
+        if success and new_commits:
+            logger.info(f"[{tag}] Round SUCCESS: {len(new_commits)} commit(s)")
+        else:
+            logger.warning(f"[{tag}] Round FAILED")
+
+        return success and bool(new_commits or dry_run), round_num, new_commits
+
+    except Exception as exc:
+        logger.error(f"[{tag}] Exception: {exc}", exc_info=True)
+        return False, round_num, []
+
+    finally:
+        # Cleanup worktree on success or non-merge-conflict failure
+        if wt and not dry_run:
+            try:
+                # Only remove if we successfully merged or had no commits
+                if not new_commits or (success and new_commits):
+                    remove_worktree(wt)
+            except Exception:
+                logger.warning(f"[{tag}] Failed to clean up worktree {wt.path}")
 
 
 # ---------------------------------------------------------------------------
-# State persistence
+# State & logging persistence
 # ---------------------------------------------------------------------------
 
 STATE_FILE = LOG_DIR / "formalize_state.json"
 
 
 def load_state() -> RoundState:
-    """Load persistent state from disk, or read from IMPLEMENTATION_PLAN."""
     if STATE_FILE.exists():
         try:
             with open(STATE_FILE, "r", encoding="utf-8") as f:
                 data = json.load(f)
             return RoundState(**data)
         except Exception:
-            logger.warning("Failed to load state file, rebuilding from IMPLEMENTATION_PLAN")
-
-    # Bootstrap from IMPLEMENTATION_PLAN
+            logger.warning("Failed to load state, rebuilding from IMPLEMENTATION_PLAN")
     plan_text = read_impl_plan_header(30)
     return RoundState(
         round_number=parse_round_from_plan(plan_text),
@@ -544,7 +735,6 @@ def load_state() -> RoundState:
 
 
 def save_state(state: RoundState) -> None:
-    """Persist state to disk."""
     with open(STATE_FILE, "w", encoding="utf-8") as f:
         json.dump({
             "round_number": state.round_number,
@@ -555,18 +745,13 @@ def save_state(state: RoundState) -> None:
         }, f, indent=2)
 
 
-# ---------------------------------------------------------------------------
-# Round log
-# ---------------------------------------------------------------------------
-
-def save_round_log(
+def _save_round_log(
     round_num: int,
-    phase_b: PhaseB_Result,
-    phase_c: PhaseC_Result,
+    phase_b: PhaseBResult,
+    phase_c: PhaseCResult,
     new_commits: list[str],
     success: bool,
 ) -> Path:
-    """Save detailed round log to disk."""
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_path = LOG_DIR / f"round_R{round_num}_{ts}.json"
     with open(log_path, "w", encoding="utf-8") as f:
@@ -585,261 +770,253 @@ def save_round_log(
 
 
 # ---------------------------------------------------------------------------
-# Main loop
+# Parallel dispatcher
 # ---------------------------------------------------------------------------
 
-def run_round(
+def allocate_round_numbers(state: RoundState, count: int) -> list[int]:
+    """Thread-safe allocation of consecutive round numbers."""
+    with _round_lock:
+        base = state.round_number + 1
+        nums = list(range(base, base + count))
+        state.round_number = base + count - 1  # reserve them
+        save_state(state)
+        return nums
+
+
+def run_parallel_batch(
+    state: RoundState,
+    *,
+    parallel: int,
+    dry_run: bool = False,
+    model: Optional[str] = None,
+    phase_b_timeout: int = 1800,
+    phase_c_timeout: int = 3600,
+) -> tuple[int, int]:
+    """
+    Dispatch `parallel` rounds concurrently using worktrees.
+    Returns (succeeded_count, failed_count).
+    """
+    round_nums = allocate_round_numbers(state, parallel)
+    total_theorems = state.total_theorems
+    recent = state.recent_commits
+
+    logger.info(f"Dispatching parallel batch: R{round_nums[0]}..R{round_nums[-1]} "
+                f"({parallel} workers)")
+
+    succeeded = 0
+    failed = 0
+
+    with ThreadPoolExecutor(max_workers=parallel, thread_name_prefix="worker") as pool:
+        futures: dict[Future, int] = {}
+        for rn in round_nums:
+            fut = pool.submit(
+                run_round_in_worktree,
+                rn, total_theorems, recent,
+                dry_run=dry_run,
+                model=model,
+                phase_b_timeout=phase_b_timeout,
+                phase_c_timeout=phase_c_timeout,
+            )
+            futures[fut] = rn
+
+        for fut in as_completed(futures):
+            rn = futures[fut]
+            try:
+                ok, _, commits = fut.result()
+                if ok:
+                    succeeded += 1
+                    logger.info(f"[R{rn}] Batch result: SUCCESS ({len(commits)} commits)")
+                else:
+                    failed += 1
+                    logger.warning(f"[R{rn}] Batch result: FAILED")
+            except Exception as exc:
+                failed += 1
+                logger.error(f"[R{rn}] Batch result: EXCEPTION: {exc}")
+
+    # Update state after batch
+    state.total_theorems = count_lean_theorems()
+    state.recent_commits = git_log_oneline(5)
+    if failed == parallel:
+        state.consecutive_failures += 1
+    else:
+        state.consecutive_failures = 0
+    save_state(state)
+
+    return succeeded, failed
+
+
+# ---------------------------------------------------------------------------
+# Serial fallback (single-threaded, no worktree — backward compatible)
+# ---------------------------------------------------------------------------
+
+def run_round_serial(
     state: RoundState,
     *,
     dry_run: bool = False,
     model: Optional[str] = None,
     phase_b_timeout: int = 1800,
     phase_c_timeout: int = 3600,
-    gate_retries: int = 1,
 ) -> bool:
-    """
-    Execute one formalization round.
-    Returns True if the round produced new commits.
-    """
-    next_round = state.round_number + 1
-    logger.info(f"{'='*60}")
-    logger.info(f"Starting round R{next_round}")
-    logger.info(f"Current state: {state.total_theorems} theorems, "
-                f"consecutive_failures={state.consecutive_failures}")
-    logger.info(f"{'='*60}")
-
-    # Snapshot pre-round commits
-    pre_commits = git_log_oneline(10)
-
-    # ── Phase B: Target Selection ──────────────────────────────────
-    logger.info("Phase B: Target selection...")
-    phase_b_prompt = build_phase_b_prompt(state)
-    phase_b_raw = codex_exec(
-        phase_b_prompt,
-        timeout_seconds=phase_b_timeout,
-        model=model,
+    """Single-round execution using worktree (parallel=1)."""
+    s, f = run_parallel_batch(
+        state,
+        parallel=1,
         dry_run=dry_run,
-    )
-    phase_b = parse_phase_b_output(phase_b_raw)
-
-    if not phase_b.success:
-        logger.error(f"Phase B failed: no targets extracted from codex output "
-                     f"({len(phase_b.raw_output)} chars)")
-        logger.debug(f"Phase B raw output: {phase_b.raw_output[:1000]}")
-        save_round_log(next_round, phase_b, PhaseC_Result(), [], False)
-        return False
-
-    logger.info(f"Phase B: {len(phase_b.targets)} target(s) extracted")
-    for i, t in enumerate(phase_b.targets, 1):
-        logger.info(f"  Target {i}: {t.get('lean_name', '?')} "
-                     f"({t.get('difficulty', '?')}, {t.get('chapter', '?')})")
-
-    # ── Gate Check ─────────────────────────────────────────────────
-    gate_ok, gate_msg = gate_check(phase_b.targets)
-    if not gate_ok:
-        logger.warning(f"Gate check failed: {gate_msg}")
-        if gate_retries > 0:
-            logger.info("Retrying Phase B with stricter prompt...")
-            # Could add retry logic here; for now proceed with what we have
-            logger.info("Proceeding with available targets despite gate failure")
-        else:
-            save_round_log(next_round, phase_b, PhaseC_Result(), [], False)
-            return False
-    else:
-        logger.info(f"Gate check: {gate_msg}")
-
-    # ── Phase C: Implementation ────────────────────────────────────
-    logger.info("Phase C: Implementation + compile + commit + register + push...")
-    phase_c_prompt = build_phase_c_prompt(state, phase_b.targets)
-    phase_c_raw = codex_exec(
-        phase_c_prompt,
-        timeout_seconds=phase_c_timeout,
         model=model,
-        dry_run=dry_run,
+        phase_b_timeout=phase_b_timeout,
+        phase_c_timeout=phase_c_timeout,
     )
-    phase_c = parse_phase_c_output(phase_c_raw)
+    return s > 0
 
-    if not phase_c.success:
-        logger.warning(f"Phase C may have failed: no success indicators in output "
-                       f"({len(phase_c.raw_output)} chars)")
 
-    # ── Phase D: Verification ──────────────────────────────────────
-    logger.info("Phase D: Verification...")
-    if dry_run:
-        logger.info("[DRY RUN] Skipping verification")
-        new_commits = []
-        success = True
-    else:
-        success, new_commits = verify_round(pre_commits)
-
-    # ── Update state ───────────────────────────────────────────────
-    if success and new_commits:
-        state.round_number = next_round
-        state.total_theorems = count_lean_theorems()
-        state.recent_commits = git_log_oneline(5)
-        state.consecutive_failures = 0
-        logger.info(f"Round R{next_round} SUCCESS: {len(new_commits)} new commit(s), "
-                     f"total theorems now ~{state.total_theorems}")
-    else:
-        state.consecutive_failures += 1
-        logger.warning(f"Round R{next_round} FAILED: consecutive_failures="
-                       f"{state.consecutive_failures}")
-
-        # Cleanup if needed
-        if not dry_run:
-            result = run_cmd(["git", "status", "--short"], cwd=REPO_ROOT)
-            if result.stdout.strip():
-                logger.info(f"Dirty working tree:\n{result.stdout[:500]}")
-
-    save_state(state)
-    log_path = save_round_log(next_round, phase_b, phase_c, new_commits, success)
-    logger.info(f"Round log saved: {log_path}")
-
-    return success and bool(new_commits)
-
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
 
 def main() -> int:
+    global BASE_BRANCH
+
     parser = argparse.ArgumentParser(
-        description="Lean4 Codex-First formalization automation",
+        description="Lean4 Codex-First formalization with worktree parallelism",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent("""\
             Examples:
-              python3 lean4/scripts/codex_formalize.py                    # one round
-              python3 lean4/scripts/codex_formalize.py --rounds 5         # five rounds
-              python3 lean4/scripts/codex_formalize.py --continuous       # until stopped
-              python3 lean4/scripts/codex_formalize.py --dry-run          # preview only
-              python3 lean4/scripts/codex_formalize.py --model o3         # use specific model
+              python3 lean4/scripts/codex_formalize.py                          # 1 round
+              python3 lean4/scripts/codex_formalize.py --parallel 3             # 3 parallel
+              python3 lean4/scripts/codex_formalize.py --parallel 3 --continuous  # continuous
+              python3 lean4/scripts/codex_formalize.py --dry-run --parallel 2   # preview
+              python3 lean4/scripts/codex_formalize.py --status                 # state
+              python3 lean4/scripts/codex_formalize.py --cleanup                # remove worktrees
         """),
     )
     parser.add_argument(
-        "--rounds", "-n",
-        type=int,
-        default=1,
-        help="Number of rounds to run (default: 1)",
+        "--rounds", "-n", type=int, default=1,
+        help="Number of batch iterations (default: 1)",
     )
     parser.add_argument(
-        "--continuous",
-        action="store_true",
-        help="Run continuously until stopped or 3 consecutive failures",
+        "--parallel", "-p", type=int, default=1,
+        help="Number of parallel workers per batch (default: 1 = serial)",
     )
     parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Show prompts without calling codex",
+        "--continuous", action="store_true",
+        help="Run continuously until stopped or max consecutive failures",
+    )
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--model", "-m", type=str, default=None,
+        help="Model override for codex exec",
+    )
+    parser.add_argument("--phase-b-timeout", type=int, default=1800)
+    parser.add_argument("--phase-c-timeout", type=int, default=3600)
+    parser.add_argument(
+        "--max-consecutive-failures", type=int, default=3,
+        help="Stop after N consecutive all-fail batches (default: 3)",
+    )
+    parser.add_argument("--reset-state", action="store_true")
+    parser.add_argument("--status", action="store_true")
+    parser.add_argument(
+        "--cleanup", action="store_true",
+        help="Remove all stale formalization worktrees and exit",
     )
     parser.add_argument(
-        "--model", "-m",
-        type=str,
-        default=None,
-        help="Model override for codex exec (e.g. o3, o4-mini, claude-sonnet-4-20250514)",
-    )
-    parser.add_argument(
-        "--phase-b-timeout",
-        type=int,
-        default=1800,
-        help="Timeout for Phase B in seconds (default: 1800)",
-    )
-    parser.add_argument(
-        "--phase-c-timeout",
-        type=int,
-        default=3600,
-        help="Timeout for Phase C in seconds (default: 3600)",
-    )
-    parser.add_argument(
-        "--max-consecutive-failures",
-        type=int,
-        default=3,
-        help="Stop after N consecutive failures (default: 3)",
-    )
-    parser.add_argument(
-        "--reset-state",
-        action="store_true",
-        help="Reset persistent state and re-read from IMPLEMENTATION_PLAN",
-    )
-    parser.add_argument(
-        "--status",
-        action="store_true",
-        help="Print current state and exit",
+        "--base-branch", type=str, default=BASE_BRANCH,
+        help=f"Base branch name (default: {BASE_BRANCH})",
     )
     args = parser.parse_args()
+
+    BASE_BRANCH = args.base_branch
+
+    # ── Cleanup ────────────────────────────────────────────────────
+    if args.cleanup:
+        n = cleanup_all_worktrees()
+        print(f"Cleaned up {n} worktree(s)")
+        return 0
 
     # ── Status ─────────────────────────────────────────────────────
     if args.status:
         state = load_state()
+        # List active worktrees
+        wt_result = run_cmd(["git", "worktree", "list"], cwd=REPO_ROOT)
+        active_wts = [
+            l for l in wt_result.stdout.splitlines()
+            if "round_R" in l
+        ]
         print(f"Round:                 R{state.round_number}")
         print(f"Total theorems:        ~{state.total_theorems}")
         print(f"Consecutive failures:  {state.consecutive_failures}")
+        print(f"Base branch:           {BASE_BRANCH}")
+        print(f"Active worktrees:      {len(active_wts)}")
+        for wt in active_wts:
+            print(f"  {wt.strip()}")
         print(f"Recent commits:")
         for c in state.recent_commits[:5]:
             print(f"  {c}")
         print(f"Codex CLI:             {CODEX_PATH}")
-        print(f"Log directory:         {LOG_DIR}")
-        print(f"State file:            {STATE_FILE}")
+        print(f"Log dir:               {LOG_DIR}")
         return 0
 
     # ── Reset ──────────────────────────────────────────────────────
     if args.reset_state and STATE_FILE.exists():
         STATE_FILE.unlink()
-        logger.info("State file deleted, will re-read from IMPLEMENTATION_PLAN")
+        logger.info("State reset")
 
     # ── Preflight ──────────────────────────────────────────────────
     codex_bin = CODEX_PATH if Path(CODEX_PATH).exists() else shutil.which("codex")
     if not codex_bin and not args.dry_run:
-        logger.error(f"Codex CLI not found. Searched: {CODEX_PATH}, PATH")
+        logger.error("Codex CLI not found")
         return 1
     logger.info(f"Codex CLI: {codex_bin}")
+    logger.info(f"Base branch: {BASE_BRANCH}")
+    logger.info(f"Parallelism: {args.parallel}")
 
-    # Check git status
-    result = run_cmd(["git", "status", "--short"], cwd=REPO_ROOT)
-    if result.stdout.strip():
-        logger.warning(f"Working tree is dirty:\n{result.stdout[:300]}")
+    # Ensure base branch
+    if not args.dry_run:
+        ensure_base_branch()
 
-    # ── Load state ─────────────────────────────────────────────────
     state = load_state()
-    logger.info(f"Starting state: R{state.round_number}, "
-                f"~{state.total_theorems} theorems")
+    logger.info(f"Starting: R{state.round_number}, ~{state.total_theorems} theorems")
 
     # ── Run ────────────────────────────────────────────────────────
-    max_rounds = 999999 if args.continuous else args.rounds
-    rounds_completed = 0
-    rounds_succeeded = 0
+    max_batches = 999999 if args.continuous else args.rounds
+    total_succeeded = 0
+    total_failed = 0
 
-    for i in range(max_rounds):
+    for batch_idx in range(max_batches):
         if state.consecutive_failures >= args.max_consecutive_failures:
             logger.error(
-                f"Stopping: {state.consecutive_failures} consecutive failures "
+                f"Stopping: {state.consecutive_failures} consecutive all-fail batches "
                 f"(limit: {args.max_consecutive_failures})"
             )
             break
 
-        success = run_round(
+        logger.info(f"{'='*60}")
+        logger.info(f"Batch {batch_idx + 1}: dispatching {args.parallel} worker(s)")
+        logger.info(f"{'='*60}")
+
+        s, f = run_parallel_batch(
             state,
+            parallel=args.parallel,
             dry_run=args.dry_run,
             model=args.model,
             phase_b_timeout=args.phase_b_timeout,
             phase_c_timeout=args.phase_c_timeout,
         )
+        total_succeeded += s
+        total_failed += f
 
-        rounds_completed += 1
-        if success:
-            rounds_succeeded += 1
+        logger.info(f"Batch {batch_idx + 1} done: {s} succeeded, {f} failed")
 
-        # Brief pause between rounds to avoid hammering
-        if i < max_rounds - 1 and not args.dry_run:
-            logger.info("Waiting 10s before next round...")
-            time.sleep(10)
+        if batch_idx < max_batches - 1 and not args.dry_run:
+            logger.info("Waiting 5s before next batch...")
+            time.sleep(5)
 
     # ── Summary ────────────────────────────────────────────────────
     logger.info(f"{'='*60}")
-    logger.info(f"Session complete: {rounds_completed} round(s), "
-                f"{rounds_succeeded} succeeded, "
-                f"{rounds_completed - rounds_succeeded} failed")
-    logger.info(f"Final state: R{state.round_number}, "
-                f"~{state.total_theorems} theorems")
-    logger.info(f"Logs: {LOG_DIR}")
+    logger.info(f"Session complete: {total_succeeded} succeeded, {total_failed} failed")
+    logger.info(f"Final: R{state.round_number}, ~{state.total_theorems} theorems")
     logger.info(f"{'='*60}")
 
-    return 0 if rounds_succeeded > 0 or args.dry_run else 1
+    return 0 if total_succeeded > 0 or args.dry_run else 1
 
 
 if __name__ == "__main__":
