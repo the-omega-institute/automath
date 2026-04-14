@@ -31,6 +31,7 @@
 \DeclareMathOperator{\Aut}{Aut}
 \DeclareMathOperator{\tr}{tr}
 \DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\spr}{spr}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\CC}{\mathbb{C}}
 \newcommand{\ZZ}{\mathbb{Z}}
@@ -82,11 +83,11 @@ The paper is organized as follows. Section \ref{sec:preliminaries} records the n
 %% ============================================================
 \section{Preliminaries}\label{sec:preliminaries}
 \subsection{Finite groups, characters, and divergences}
-If \(G\) is a finite abelian group, we write \(\widehat G\) for its Pontryagin dual and \(\mathrm{unif}_G\) for the uniform probability measure on \(G\). For a surjective homomorphism \(\pi:G_2\twoheadrightarrow G_1\) with kernel \(K\), we set
+If \(G\) is a finite group, we write \(\widehat G\) for a complete set of irreducible complex representations of \(G\); when \(G\) is abelian, this is identified with its Pontryagin dual of characters. We write \(\mathrm{unif}_G\) for the uniform probability measure on \(G\). For a surjective homomorphism \(\pi:G_2\twoheadrightarrow G_1\) with kernel \(K\), we set
 \[
 K^\perp:=\{\chi\in\widehat G_2:\chi|_K\equiv 1\}\cong \widehat G_1.
 \]
-For a function \(f:G\to \CC\), its Fourier transform is
+When \(G\) is abelian and \(f:G\to \CC\), its Fourier transform is
 \[
 \widehat f(\chi):=\frac{1}{|G|}\sum_{c\in G} f(c)\,\overline{\chi(c)}.
 \]
@@ -115,20 +116,22 @@ D(\mu\Vert \nu)=D(\pi_\ast\mu\Vert \pi_\ast\nu)+\sum_{y\in Y}(\pi_\ast\mu)(y)\,D
 whenever the conditional distributions are defined.
 
 \subsection{Spectral Chebotarev input}
-Fix a finite abelian label group \(G\), a temperature parameter \(u\in(0,1]\), and primitive Chebotarev counts \(B_{n,c}(u)\) indexed by \(c\in G\). We write
+Fix a finite group \(G\), a temperature parameter \(u\in(0,1]\), and primitive Chebotarev counts \(B_{n,c}(u)\) indexed by \(c\in G\). We write
 \[
 B_n(\ind;u):=\sum_{c\in G}B_{n,c}(u),
-\qquad
+\]
+and, when \(G\) is abelian,
+\[
 B_n(\chi;u):=\sum_{c\in G}\chi(c)\,B_{n,c}(u)
 \quad(\chi\in \widehat G),
 \]
 and for each irreducible channel \(\rho\) we let \(M_{K,\rho}(u)\) denote the corresponding transfer matrix. The trivial-channel Perron root is
 \[
-\lambda_1(u):=\rho(M_{K,\ind}(u)),
+\lambda_1(u):=\spr(M_{K,\ind}(u)),
 \]
 the nontrivial spectral radius is
 \[
-\eta(u):=\max_{\rho\neq \ind}\rho(M_{K,\rho}(u)),
+\eta(u):=\max_{\rho\neq \ind}\spr(M_{K,\rho}(u)),
 \]
 and we set
 \[
@@ -151,7 +154,17 @@ B_n(\ind;u)
 \frac{\lambda_1(u)^n}{n}
 +O\!\left(\frac{\Lambda(u)^n}{n}\right).
 \]
-Moreover, if \(A\subseteq G\) is conjugacy-invariant and \(U=\pi^{-1}(A)\) is the associated cylinder event, then \(B_{n,U}(u)\) is obtained from the Fourier decomposition of \(1_A\) by pairing each Fourier component with the corresponding twisted channel contribution \(B_n(\rho;u)\).
+Moreover, for every conjugacy-invariant subset \(A\subseteq G\), if we set
+\[
+B_{n,A}(u):=\sum_{c\in A}B_{n,c}(u),
+\]
+then there exist linear functionals \(L_{A,\rho}\) on the corresponding channel spaces such that
+\[
+B_{n,A}(u)
+=
+\mathrm{unif}_G(A)\frac{\lambda_1(u)^n}{n}
++\frac{1}{n}\sum_{\rho\in\widehat G\setminus\{\ind\}}L_{A,\rho}\!\bigl(M_{K,\rho}(u)^n\bigr).
+\]
 \end{theorem}
 
 \begin{proposition}[Artin factorization]\label{prop:kernel-artin-factorization}
@@ -174,16 +187,20 @@ and hence
 \begin{definition}[Square-root spectral gap]\label{def:kernel-rh}
 We write
 \[
-\textsf{GRH}_{K,G}(u):\qquad \eta(u)\le \lambda_1(u)^{1/2}
+\textsf{GRH}_{K,G}(u):\qquad \Lambda(u)\le \lambda_1(u)^{1/2}
 \]
 for the square-root spectral gap condition that plays the role of a generalized Riemann-hypothesis bound in the present transfer-matrix setting.
 \end{definition}
+
+\begin{remark}
+Theorem \ref{thm:kernel-chebotarev-exp} and Proposition \ref{prop:kernel-artin-factorization} are the standing spectral inputs from the underlying transfer formalism. The later arguments use only the explicit asymptotic expansion, the channel decomposition of subset counts, and the Artin factorization recorded here.
+\end{remark}
 
 \subsection{Fold groupoids and central observables}
 We now record the finite-dimensional groupoid-algebraic framework used in Sections \ref{sec:groupoid-rigidity} and \ref{sec:central-idempotents}.
 
 \begin{definition}[Fold equivalence groupoid algebra]\label{def:fold-equivalence-groupoid-algebra}
-For each resolution \(m\), let \(\Fold_m:\Omega_m\to X_m\) be the fold map from microstates to stable macrostates. The associated equivalence-relation groupoid is
+For each resolution \(m\), let \(\Fold_m:\Omega_m\to X_m\) be the fold map from microstates to stable macrostates, where \(\Omega_m\) is a binary microstate set of cardinality \(2^m\). The associated equivalence-relation groupoid is
 \[
 \mathcal R_m:=\Omega_m\times_{X_m}\Omega_m
 =
@@ -264,23 +281,23 @@ such that
 In the odd-\(m\) stable periodic regime, one furthermore has \(\beta_m=+1\).
 \end{theorem}
 
-\begin{proposition}[Maximal data-processing loss]\label{prop:fold-condexp-index-maxfiber}
-Let \(E_m\) be the conditional expectation induced by \(\Fold_m\), that is, averaging uniformly on the fibers of \(\Fold_m\). Then
+\begin{proposition}[Maximal entropy loss to fiber uniformization]\label{prop:fold-condexp-index-maxfiber}
+Let \(E_m\) be the conditional expectation induced by \(\Fold_m\), that is, averaging uniformly on the fibers of \(\Fold_m\). For a probability distribution \(\rho\) on \(\Omega_m\), write \(\rho^\flat:=\rho\circ E_m\); equivalently, \(\rho^\flat\) has the same pushforward to \(X_m\) as \(\rho\) and is uniform on each fiber of \(\Fold_m\). Then
 \[
-\sup_{\rho,\sigma}\Bigl(D(\rho\Vert \sigma)-D(\rho\circ E_m\Vert \sigma\circ E_m)\Bigr)=\log D_m,
+\sup_{\rho}D(\rho\Vert \rho^\flat)=\log D_m,
 \]
-where \(\rho,\sigma\) range over probability distributions on \(\Omega_m\).
+where \(\rho\) ranges over probability distributions on \(\Omega_m\).
 \end{proposition}
 
 \begin{proof}
-The relative-entropy chain rule gives
+Let \(\rho_X:=(\Fold_m)_\ast\rho\), and for each \(x\in X_m\) let \(u_x\) denote the uniform distribution on the fiber \(\Fold_m^{-1}(x)\). Since \(\rho^\flat\) has the same macroscopic marginal as \(\rho\) and fiberwise conditionals \(u_x\), the relative-entropy chain rule gives
 \[
-D(\rho\Vert \sigma)-D(\rho\circ E_m\Vert \sigma\circ E_m)
+D(\rho\Vert \rho^\flat)
 =
-\sum_{x\in X_m}(\Fold_m)_\ast\rho(x)\,
-D\!\bigl(\rho(\cdot\mid x)\Vert \sigma(\cdot\mid x)\bigr).
+\sum_{x\in X_m}\rho_X(x)\,
+D\!\bigl(\rho(\cdot\mid x)\Vert u_x\bigr).
 \]
-Since each conditional divergence is supported on a fiber of size \(d_m(x)\), it is bounded above by \(\log d_m(x)\le \log D_m\). Hence the displayed supremum is at most \(\log D_m\). Conversely, if \(x_\star\in X_m\) satisfies \(d_m(x_\star)=D_m\), choose \(\rho\) to be a Dirac mass on a point of \(\Fold_m^{-1}(x_\star)\) and \(\sigma\) to be the uniform distribution on that same fiber. Then the coarse-grained states coincide, while \(D(\rho\Vert \sigma)=\log D_m\).
+For each \(x\), the divergence to the uniform measure on a fiber of size \(d_m(x)\) is at most \(\log d_m(x)\le \log D_m\). Hence \(D(\rho\Vert \rho^\flat)\le \log D_m\) for every \(\rho\). Conversely, if \(x_\star\in X_m\) satisfies \(d_m(x_\star)=D_m\), choose \(\rho\) to be a Dirac mass on a point of \(\Fold_m^{-1}(x_\star)\). Then \(\rho^\flat\) is the uniform distribution on that same fiber, and therefore \(D(\rho\Vert \rho^\flat)=\log D_m\).
 \end{proof}
 
 \begin{corollary}[Window-\texorpdfstring{$6$}{6} fiber histogram]\label{cor:fold-bin-m6-fiber-hist}
@@ -299,6 +316,10 @@ and therefore
 \abs{X_6}=21.
 \]
 \end{corollary}
+
+\begin{remark}
+Theorem \ref{thm:pom-maxfiber-orientation-charge-periodic} and Corollary \ref{cor:fold-bin-m6-fiber-hist} are used below as standing structural and computational inputs from the underlying fold model. The later arguments depend only on the statements recorded here.
+\end{remark}
 
 %% ============================================================
 \section{Entropy chain decomposition under group quotients}\label{sec:entropy-chain}
@@ -332,7 +353,7 @@ Having established \(\chi\)-rigidity, we can exploit the fingerprint to organize
 \section{Discussion}\label{sec:discussion}
 The Chebotarev results of this paper give a concrete answer to a basic quotient question: after passing from a fine label group to a quotient, exactly which part of the nonuniformity survives? The answer is encoded simultaneously in entropy and in Fourier energy. Relative entropy splits into visible and fiber contributions, while the \(L^2\)-defect splits into characters that factor through the quotient and characters that remain genuinely hidden on the kernel. In this sense, the quotient map behaves as an information projection whose loss is measured by hidden character energy, a viewpoint that is close in spirit to information geometry and large-deviation theory \cite{CoverThomas2006,CsiszarKorner2011,DemboZeitouni1998}.
 
-The analytic consequences are equally sharp. Dominant nontrivial Artin channels do not merely perturb the main term: they determine exact pole orders and produce explicit witness sets exhibiting oscillations of order \(\Lambda(u)^n/n\). Thus the square-root threshold appearing in \(\textsf{GRH}_{K,G}(u)\) is not a cosmetic normalization but a genuine boundary between rapid statistical convergence and detectable oscillatory obstruction. It would be interesting to extend this mechanism to nonabelian quotient towers, where the visible/hidden dichotomy should be governed by restriction to normal subgroups and the loss of matrix-valued Fourier modes rather than scalar characters.
+The analytic consequences are equally sharp. Dominant nontrivial Artin channels do not merely perturb the main term: they determine exact pole orders and produce explicit witness sets exhibiting oscillations of order \(\eta(u)^n/n\). Thus the square-root threshold appearing in \(\textsf{GRH}_{K,G}(u)\) is not a cosmetic normalization but a genuine boundary between rapid statistical convergence and detectable oscillatory obstruction. It would be interesting to extend this mechanism to nonabelian quotient towers, where the visible/hidden dichotomy should be governed by restriction to normal subgroups and the loss of matrix-valued Fourier modes rather than scalar characters.
 
 On the fold-groupoid side, the \(\ZZ_2\times\ZZ_2\) fingerprint behaves like a minimal two-bit central observable that survives every symmetry considered here. The explicit projectors \(e_{\alpha,\beta}\) show that sector decomposition is intrinsic to the algebra, not an external labeling convention, while the window-\(6\) reconstruction results quantify exactly how far the observables \(\mathrm{IndW}(E_{m,1})\), \(\varepsilon_{\mathrm{scan}}\), and \(\varepsilon_{\mathrm{rev}}\) are from generating the full center. The conjectural eventual injectivity of \(d_m\) on each sector would identify a regime in which these three observables attain the maximal possible resolution, echoing rigidity phenomena familiar from groupoid and subfactor theory \cite{Renault1980,Paterson1999,Watatani1990,BrownOzawa2008}.
 

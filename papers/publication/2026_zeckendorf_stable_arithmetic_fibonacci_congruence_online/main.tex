@@ -34,12 +34,11 @@
 \newcommand{\norm}[1]{\lVert #1\rVert}
 \newcommand{\Fold}{\operatorname{Fold}}
 
-% Lean verification macros
-\newcommand{\leanverified}[1]{\marginpar{\tiny\texttt{L4:~#1}}}
-\newcommand{\leanpartial}[2]{\marginpar{\tiny\texttt{L4p:~#1}}}
+\newcommand{\leanverified}[1]{}
+\newcommand{\leanpartial}[2]{}
 
 \title{Zeckendorf Stable Arithmetic:\\
-Fibonacci Congruence, Field Phases, and Online Addition}
+Fibonacci Congruence, Field Phases, and Online Algorithms}
 \author{
   Haobo Ma\thanks{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981. Email: \texttt{auric@aelf.io}}
   \and
@@ -50,37 +49,8 @@ Fibonacci Congruence, Field Phases, and Online Addition}
 \begin{document}
 \maketitle
 
-%% CODEX SCOPE:
-%% This paper studies arithmetic on Zeckendorf representations (non-adjacent
-%% Fibonacci sums). It develops:
-%% 1. Fibonacci congruence structure (F_a | F_b iff a | b)
-%% 2. Zeckendorf stable value map V_m: X_m -> Z/(F_{m+2})
-%% 3. Finite-resolution semiring (X_m, +_m, x_m) isomorphic to Z/(F_{m+2})
-%% 4. Field phases when F_{m+2} is prime, CRT factorization otherwise
-%% 5. Online stable addition and multiplication algorithms
-%% 6. Fibonacci-adic inverse limit ring
-%%
-%% Source files (4 files, ~595 lines):
-%% - 07_emergent_arithmetic_01_def_fib_congruence.tex: Fibonacci divisibility, Pisano periods
-%% - 07_emergent_arithmetic_03_zeckendorf_stable_value.tex: V_m, semiring iso, field phases, CRT, inverse limit
-%% - 07_emergent_arithmetic_04_def_stable_add.tex: Online stable addition
-%% - 07_emergent_arithmetic_06_def_stable_mul.tex: Online stable multiplication
-%%
-%% TASK FOR CODEX:
-%% Write a complete paper:
-%% - Abstract: Zeckendorf representations yield a natural semiring iso to Z/(F_{m+2}),
-%%   giving field phases at Fibonacci primes and CRT decomposition at composites
-%% - Introduction: Zeckendorf theorem, numeration systems, connections to coding theory
-%% - Preliminaries: Fibonacci numbers, Zeckendorf representation, golden ratio
-%% - Main results sections incorporating all 4 source files
-%% - Discussion: connections to Fibonacci numeration, symbolic dynamics, cryptography
-%%
-%% TRANSLATE all Chinese text to English. Keep math notation intact.
-%% Target journal: Journal of Number Theory or Integers.
-%% Style: elementary number theory, explicit constructions, computational examples.
-
 \begin{abstract}
-We study arithmetic induced by Zeckendorf representations and show that the relevant algebraic structure is forced by local Fibonacci rewriting rather than inserted a priori. Starting from the free commutative monoid of scale-counting configurations, we quotient by the Fibonacci relations and prove that the resulting monoid is canonically isomorphic to \(\NN\), with the Zeckendorf language furnishing a unique computable normal representative in each class. At finite resolution \(m\), the stable value map \(V_m:X_m\to \ZZ/(F_{m+2}\ZZ)\) transports addition and multiplication to a semiring structure on \(X_m\), yielding field phases when \(F_{m+2}\) is prime and Chinese-remainder decompositions when it is composite. We then connect this algebraic picture with online Zeckendorf addition, multiplicative generation by iteration, and a Fibonacci-adic inverse-limit ring obtained from the divisibility chain \(F_{2^k}\mid F_{2^{k+1}}\).
+We study arithmetic induced by Zeckendorf representations and show that the relevant algebraic structure is forced by local Fibonacci rewriting rather than inserted a priori. Starting from the free commutative monoid of scale-counting configurations, we quotient by the Fibonacci relations and prove that the resulting monoid is canonically isomorphic to \(\NN\), with the Zeckendorf language furnishing a unique computable normal representative in each class. At finite resolution \(m\), the stable value map \(V_m:X_m\to \ZZ/(F_{m+2}\ZZ)\) transports addition and multiplication to a commutative ring structure on \(X_m\), yielding field phases when \(F_{m+2}\) is prime and Chinese-remainder decompositions when it is composite. We then connect this algebraic picture with online Zeckendorf addition, multiplicative generation by iteration, and a Fibonacci-adic inverse-limit ring obtained from the divisibility chain \(F_{2^k}\mid F_{2^{k+1}}\).
 \end{abstract}
 
 %% ============================================================
@@ -89,13 +59,13 @@ Zeckendorf's theorem states that every nonnegative integer admits a unique expan
 
 From a computational point of view, Fibonacci numeration has been studied through finite automata, symbolic dynamics, and online algorithms. The admissible digit strings form the language of the golden-mean shift, and normalization in Pisot-based numeration systems is known to admit automata-theoretic descriptions \cite{Blanchard1989Beta,AlloucheShallit2003,LindMarcus1995,PytheasFogg2002}. For Zeckendorf digits in particular, addition can be implemented in linear time and, in suitable senses, online \cite{Frougny1999OnlineAddition,AhlbachUsatineFrougnyPippenger2013,HieronymiTerry2018OstrowskiAddition}. What is less explicit in the literature is the algebra forced by these normal forms when one treats finite windows of admissible digits as arithmetic objects in their own right.
 
-The present paper develops that algebraic viewpoint. Our starting point is not the semiring \((\NN,+,\times)\), but the free commutative monoid of scale-counting configurations together with the local Fibonacci relations. We show that quotienting by those relations produces \(\NN\) canonically, while the Zeckendorf language provides a computable transversal of the quotient. At finite resolution \(m\), the stable value map \(V_m\) identifies admissible words of length \(m\) with the residue ring \(\ZZ/(F_{m+2}\ZZ)\), so that addition and multiplication on stable addresses are obtained by transport of structure. This yields a concrete semiring on \(X_m\), field phases when \(F_{m+2}\) is prime, and canonical Chinese-remainder splittings when \(F_{m+2}\) is composite.
+The present paper develops that algebraic viewpoint. Our starting point is not the semiring \((\NN,+,\times)\), but the free commutative monoid of scale-counting configurations together with the local Fibonacci relations. We show that quotienting by those relations produces \(\NN\) canonically, while the Zeckendorf language provides a computable transversal of the quotient. At finite resolution \(m\), the stable value map \(V_m\) identifies admissible words of length \(m\) with the residue ring \(\ZZ/(F_{m+2}\ZZ)\), so that addition and multiplication on stable addresses are obtained by transport of structure. This yields a concrete commutative ring on \(X_m\), field phases when \(F_{m+2}\) is prime, and canonical Chinese-remainder splittings when \(F_{m+2}\) is composite.
 
 The paper also records consequences for computation across scales. After establishing the quotient and finite-resolution structures, we discuss online stable addition, multiplication generated from addition and successor, and a Fibonacci-adic inverse-limit ring built from the dyadic divisibility tower \(F_{2^k}\mid F_{2^{k+1}}\). In this way the paper links classical divisibility properties of Fibonacci numbers \cite{Wall1960} with normal forms, automata, and resolution-dependent arithmetic in a single framework.
 
 %% ============================================================
 \section{Preliminaries}\label{sec:preliminaries}
-For \(n\ge 0\), let \((F_n)_{n\ge 0}\) denote the Fibonacci sequence
+Throughout, we write \(\NN=\{0,1,2,\dots\}\). For \(n\ge 0\), let \((F_n)_{n\ge 0}\) denote the Fibonacci sequence
 \[
 F_0=0,\qquad F_1=1,\qquad F_{n+2}=F_{n+1}+F_n\quad(n\ge 0),
 \]
@@ -165,7 +135,7 @@ and in particular
 \[
 F_a\mid F_b \quad\Longleftrightarrow\quad a\mid b
 \]
-for positive integers \(a,b\); see \cite{Wall1960,Koshy2018}. Finally, if one drops the eventual-zero restriction in the definition of \(X_\infty\), the resulting full Fibonacci shift is recovered as the projective limit of the truncation system \((X_m,\pi_m)\), a viewpoint that will reappear in the discussion of symbolic dynamics \cite{LindMarcus1995,PytheasFogg2002}.
+for positive integers \(a,b\); see \cite{Wall1960,Koshy2018}. Finally, if one drops the eventual-zero restriction in the definition of \(X_\infty\), one obtains the full Fibonacci shift. Its finite windows are the sets \(X_m\), linked by the obvious truncation maps \(X_n\to X_m\) for \(n\ge m\), and this symbolic-dynamical viewpoint will reappear in the discussion \cite{LindMarcus1995,PytheasFogg2002}.
 
 %% ============================================================
 \section{Fibonacci congruence structure}\label{sec:fib-congruence}
@@ -191,12 +161,15 @@ For \(a\in\mathcal{D}\), define the folding map
 \Fold_\infty(a):=Z(\mathrm{Val}(a))\in X_\infty.
 \]
 
-\begin{theorem}[Definitional transport of addition]\label{thm:add-definitional}
-The operation
+\begin{definition}[Stable addition]\label{def:stable-add}
+For \(c,d\in X_\infty\), define
 \[
-c\oplus d:=\mathrm{Val}^{-1}\bigl(\mathrm{Val}(c)+\mathrm{Val}(d)\bigr)
+c\oplus d:=\mathrm{Val}^{-1}\bigl(\mathrm{Val}(c)+\mathrm{Val}(d)\bigr).
 \]
-makes \(X_\infty\) into a commutative monoid, and
+\end{definition}
+
+\begin{theorem}[Definitional transport of addition]\label{thm:add-definitional}
+The operation \(\oplus\) makes \(X_\infty\) into a commutative monoid, and
 \[
 \mathrm{Val}:(X_\infty,\oplus)\longrightarrow (\NN,+)
 \]
@@ -229,11 +202,11 @@ Multiplication admits a parallel hierarchy of descriptions: as transported integ
 
 %% ============================================================
 \section{Discussion}\label{sec:discussion}
-The constructions above place Zeckendorf arithmetic at the intersection of numeration theory, symbolic dynamics, and algebra. The admissible-word sets \(X_m\) are the length-\(m\) windows of the golden-mean shift, while the fold map identifies arithmetic as a normalization problem on this shift space; this is precisely the perspective in which Pisot numeration, finite automata, and symbolic codings interact \cite{Blanchard1989Beta,Frougny1992NumbersAutomata,BerendFrougny1994Pisot,AlloucheShallit2003,LindMarcus1995,PytheasFogg2002}. What the present paper adds is an explicit finite-resolution algebra: each admissible window \(X_m\) carries a canonical semiring structure, not merely a convenient encoding.
+The constructions above place Zeckendorf arithmetic at the intersection of numeration theory, symbolic dynamics, and algebra. The admissible-word sets \(X_m\) are the length-\(m\) windows of the golden-mean shift, while the fold map identifies arithmetic as a normalization problem on this shift space; this is precisely the perspective in which Pisot numeration, finite automata, and symbolic codings interact \cite{Blanchard1989Beta,Frougny1992NumbersAutomata,BerendFrougny1994Pisot,AlloucheShallit2003,LindMarcus1995,PytheasFogg2002}. What the present paper adds is an explicit finite-resolution algebra: each admissible window \(X_m\) carries a canonical commutative ring structure, not merely a convenient encoding.
 
 The ``field phase'' phenomenon is especially striking. Whenever \(F_{m+2}\) is prime, the stable arithmetic on \(X_m\) is literally the finite field \(\mathbb{F}_{F_{m+2}}\); when \(F_{m+2}\) is composite, the same address space decomposes canonically through the Chinese remainder theorem. This suggests a resolution-dependent supply of sparse coordinate systems for modular arithmetic. Any cryptographic application, however, would require much more than the present structural observations: one would need effective control of the distribution of Fibonacci primes, the behavior of unit groups, leakage under normalization algorithms, and implementation costs in concrete architectures \cite{Wall1960,Knuth1988FibonacciMultiplication,Koshy2018}.
 
-The inverse-limit ring \(\ZZ_{\mathrm{Fib},2}\) should be viewed as complementary to the symbolic inverse system of admissible prefixes. The latter records consistency of visible words in the Fibonacci shift, while the former records consistency of finite quotient rings along a divisibility tower. This separation between syntax and arithmetic is useful conceptually: it distinguishes the projective limit of words from the projective limit of quotient semirings, yet both are controlled by the same Fibonacci recurrence and the same normalization map. On the computational side, the online-addition results of Frougny and the linear-time Zeckendorf algorithms of Ahlbach, Usatine, Frougny, and Pippenger show that the additive fold has efficient implementations, whereas direct multiplicative normalizers remain less explicit \cite{Frougny1999OnlineAddition,AhlbachUsatineFrougnyPippenger2013,HieronymiTerry2018OstrowskiAddition,Bernat2006FibonacciBase}.
+The inverse-limit ring \(\ZZ_{\mathrm{Fib},2}\) should be viewed as complementary to the symbolic inverse system of admissible prefixes. The latter records consistency of visible words in the Fibonacci shift, while the former records consistency of finite quotient rings along a divisibility tower. This separation between syntax and arithmetic is useful conceptually: it distinguishes the projective limit of words from the projective limit of quotient rings, yet both are controlled by the same Fibonacci recurrence and the same normalization map. On the computational side, the online-addition results of Frougny and the linear-time Zeckendorf algorithms of Ahlbach, Usatine, Frougny, and Pippenger show that the additive fold has efficient implementations, whereas direct multiplicative normalizers remain less explicit \cite{Frougny1999OnlineAddition,AhlbachUsatineFrougnyPippenger2013,HieronymiTerry2018OstrowskiAddition,Bernat2006FibonacciBase}.
 
 Several problems remain open.
 \begin{enumerate}[label=\arabic*.]
