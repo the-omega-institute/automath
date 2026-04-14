@@ -2,6 +2,7 @@ import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 import Mathlib.NumberTheory.Real.GoldenRatio
 import Omega.Core.Fib
 
@@ -41,6 +42,18 @@ theorem goldenMeanAdjacency_trace : goldenMeanAdjacency.trace = 1 := by native_d
 /-- Determinant of the golden-mean adjacency matrix is -1.
     prop:golden-mean-adjacency-det -/
 theorem goldenMeanAdjacency_det : goldenMeanAdjacency.det = -1 := by native_decide
+
+/-- The characteristic polynomial of the golden mean adjacency matrix is X^2 - X - 1.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem goldenMeanAdjacency_charpoly :
+    goldenMeanAdjacency.charpoly = Polynomial.X ^ 2 - Polynomial.X - 1 := by
+  unfold Matrix.charpoly
+  rw [Matrix.det_fin_two]
+  simp only [Matrix.charmatrix_apply, goldenMeanAdjacency, Matrix.diagonal_apply,
+    Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
+    Polynomial.C_1, Polynomial.C_0]
+  simp (config := { decide := true }) only [if_true, if_false]
+  ring
 
 /-! ### Transfer matrix and Fibonacci numbers -/
 
@@ -259,6 +272,16 @@ theorem goldenMeanAdjacency_mul_goldenEigenvector :
     nlinarith [Real.goldenRatio_sq]
   · simp [goldenMeanEigenvector, Matrix.mulVec, dotProduct]
 
+/-- Any `φ`-eigenvector satisfies the Perron coordinate ratio `w₀ = φ w₁`.
+    thm:golden-mean-pf-root-eq-phi -/
+theorem goldenMeanAdjacency_phi_eigenvector_ratio
+    {w : Fin 2 → ℝ}
+    (hμ : Matrix.mulVec goldenMeanAdjacencyℝ w = fun i => Real.goldenRatio * w i) :
+    w 0 = Real.goldenRatio * w 1 := by
+  have h1 := congrFun hμ 1
+  rw [goldenMeanAdjacencyℝ_eq] at h1
+  simpa [Matrix.mulVec, dotProduct] using h1
+
 /-- Concrete witness form of the golden-ratio eigenvalue statement.
     lem:golden-mean-has-phi-eigenvector -/
 theorem goldenMeanAdjacency_has_goldenRatio_eigenvector :
@@ -366,6 +389,48 @@ theorem goldenMeanAdjacency_pf_root_eq_goldenRatio :
   · exact ⟨Real.goldenRatio_pos, by norm_num⟩
   · intro μ hμ
     exact goldenMeanAdjacency_dominates_all_real_eigenvalues hμ
+
+/-- A positive real eigenvector forces the Perron root `φ`.
+    thm:golden-mean-pf-root-eq-phi -/
+theorem goldenMeanAdjacency_positive_eigenvalue_eq_goldenRatio
+    {μ : ℝ} {w : Fin 2 → ℝ}
+    (hw : w ≠ 0)
+    (hpos : 0 < w 0 ∧ 0 < w 1)
+    (hμ : Matrix.mulVec goldenMeanAdjacencyℝ w = fun i => μ * w i) :
+    μ = Real.goldenRatio := by
+  rcases eigenvalue_eq_goldenRatio_or_goldenConj (eigenvalue_satisfies_quadratic hw hμ) with hφ | hψ
+  · exact hφ
+  · have h1 := congrFun hμ 1
+    rw [goldenMeanAdjacencyℝ_eq] at h1
+    simp [Matrix.mulVec, dotProduct] at h1
+    have hμpos : 0 < μ := by
+      rw [hψ] at h1
+      nlinarith [hpos.1, hpos.2, Real.goldenConj_neg]
+    rw [hψ] at hμpos
+    linarith [Real.goldenConj_neg]
+
+/-- Any strictly positive `φ`-eigenvector is a positive scalar multiple of `(φ,1)`.
+    thm:golden-mean-positive-eigenvector-rigidity -/
+theorem goldenMeanAdjacency_positive_eigenvector_rigidity
+    {w : Fin 2 → ℝ}
+    (hw : w ≠ 0)
+    (hpos : 0 < w 0 ∧ 0 < w 1)
+    (hμ : Matrix.mulVec goldenMeanAdjacencyℝ w = fun i => Real.goldenRatio * w i) :
+    ∃ c : ℝ, 0 < c ∧ w = fun i => c * goldenMeanEigenvector i := by
+  have h1 := congrFun hμ 1
+  rw [goldenMeanAdjacencyℝ_eq] at h1
+  simp [Matrix.mulVec, dotProduct] at h1
+  have hw1_ne : w 1 ≠ 0 := by
+    intro hw1_zero
+    have hw0_zero : w 0 = 0 := by simpa [hw1_zero] using h1
+    apply hw
+    funext i
+    fin_cases i <;> simp [hw0_zero, hw1_zero]
+  refine ⟨w 1, hpos.2, ?_⟩
+  funext i
+  fin_cases i
+  · simpa [goldenMeanEigenvector, mul_comm] using h1
+  · simp [goldenMeanEigenvector]
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase 185

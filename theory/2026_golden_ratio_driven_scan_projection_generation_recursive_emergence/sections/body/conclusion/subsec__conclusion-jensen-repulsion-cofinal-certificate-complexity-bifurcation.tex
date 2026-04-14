@@ -1,0 +1,310 @@
+\subsection{Jensen 缺陷的分段幂律、共终证书稀疏化与验证/合成复杂度分岔}\label{subsec:conclusion-jensen-repulsion-cofinal-certificate-complexity-bifurcation}
+
+在定理 \ref{thm:conclusion-jensen-defect-radial-spline-rigidity} 与推论 \ref{cor:conclusion-exclusion-radius-concave-spline} 已把 Jensen 缺陷与排斥半径曲线编码为同一有限径向零点账本的凸--凹双样条、命题 \ref{prop:typed-address-biaxial-completion-jensen-defect-log-derivative} 已把该账本重新展开为对数半径方向上的零点计数驱动律、命题 \ref{prop:cdim-certificate-inverse-limit-addressing} 与命题 \ref{prop:cdim-dyadic-cofinal-sparsification} 已把 dyadic 证书对象的逆系统语义与共终稀疏化不变性固定、而定义 \ref{def:typed-address-biaxial-completion-boundary-verifier} 与定理 \ref{thm:spg-polytime-certificate-synthesis-implies-p-equals-np} 又已把统一离线验证器与证书合成的复杂度壁垒固定之后，还可进一步把这些接口压成一条更终端的双主线。其一，排斥半径并不是零点分布的粗糙压缩，而是径向零点数据的单标量完备编码；其二，证书语义对共终稀疏化完全不敏感，但一旦要求统一的多项式时间证书合成，复杂度屏障便立即出现。
+
+\begin{theorem}[排斥半径函数的分段幂律刚性]\label{thm:conclusion-jensen-repulsion-piecewise-power-law}
+设 \(F_\zeta\) 在单位圆盘内的零点模长按重数合并后写为
+\[
+0<\rho_1<\rho_2<\cdots<\rho_s<1,
+\qquad
+m_j:=\#\{a:\ F_\zeta(a)=0,\ |a|=\rho_j\},
+\]
+并记累积重数
+\[
+M_j:=\sum_{t\le j}m_t,
+\qquad
+\rho_{s+1}:=1.
+\]
+则对任意
+\[
+\rho\in(\rho_j,\rho_{j+1}),
+\]
+Jensen 缺陷与排斥半径都具有精确闭式
+\[
+D_\zeta(\rho)=\sum_{t\le j}m_t\log\frac{\rho}{\rho_t},
+\]
+\[
+r_\ast(\rho)=\rho e^{-D_\zeta(\rho)}
+=
+\rho^{\,1-M_j}\prod_{t\le j}\rho_t^{m_t}.
+\]
+特别地，\(r_\ast\) 在每个无零环带上都是严格的分段幂函数。
+\end{theorem}
+
+\begin{proof}
+令
+\[
+x:=\log \rho,
+\qquad
+x_t:=\log \rho_t.
+\]
+由定理 \ref{thm:conclusion-jensen-defect-radial-spline-rigidity}，
+\[
+\Delta(x):=D_\zeta(e^x)=\sum_{t=1}^{s}m_t(x-x_t)_+.
+\]
+当 \(x\in(x_j,x_{j+1})\) 时，恰有前 \(j\) 项取正，故
+\[
+\Delta(x)=\sum_{t\le j}m_t(x-x_t).
+\]
+代回 \(\rho=e^x\)、\(\rho_t=e^{x_t}\) 即得
+\[
+D_\zeta(\rho)=\sum_{t\le j}m_t\log\frac{\rho}{\rho_t}.
+\]
+再由推论 \ref{cor:conclusion-exclusion-radius-concave-spline} 中
+\[
+r_\ast(\rho)=\rho e^{-D_\zeta(\rho)}
+\]
+的定义式，直接得到
+\[
+r_\ast(\rho)
+=
+\rho
+\exp\!\left(-\sum_{t\le j}m_t\log\frac{\rho}{\rho_t}\right)
+=
+\rho^{\,1-M_j}\prod_{t\le j}\rho_t^{m_t}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[排斥半径对径向零点数据的完备编码]\label{thm:conclusion-jensen-repulsion-complete-radial-code}
+记盘内零点计数函数为
+\[
+N_{F_\zeta}(\rho):=\#\{a:\ F_\zeta(a)=0,\ |a|<\rho\}.
+\]
+则对几乎处处的 \(\rho\in(0,1)\)，有
+\[
+N_{F_\zeta}(\rho)
+=
+1-\frac{\dd}{\dd(\log \rho)}\log r_\ast(\rho).
+\]
+因此 \(r_\ast:(0,1)\to(0,1]\) 唯一决定 \(F_\zeta\) 的径向零点计数测度
+\[
+\nu_{F_\zeta}^{\mathrm{rad}}
+:=
+\sum_{j=1}^{s}m_j\delta_{\rho_j}.
+\]
+更具体地说，\(N_{F_\zeta}\) 的跳跃点恰给出全部 \(\rho_j\)，而跳跃高度恰给出全部 \(m_j\)。
+\end{theorem}
+
+\begin{proof}
+命题 \ref{prop:typed-address-biaxial-completion-jensen-defect-log-derivative} 已给出
+\[
+\frac{\dd}{\dd(\log \rho)}\log r_\ast(\rho)=1-N_{F_\zeta}(\rho)
+\qquad\text{a.e. on }(0,1).
+\]
+移项即得所示公式。
+而 \(N_{F_\zeta}\) 是右连续阶梯函数，其跳跃点正是不同模长壳层 \(\rho_j\)，跳跃幅度正是相应重数 \(m_j\)。因此 \(r_\ast\) 通过上述导数律唯一决定 \(N_{F_\zeta}\)，从而唯一决定径向零点计数测度 \(\nu_{F_\zeta}^{\mathrm{rad}}\)。证毕。
+\end{proof}
+
+\begin{theorem}[纯标量 Jensen 证书的最优零点禁入半径]\label{thm:conclusion-jensen-scalar-certificate-optimal-exclusion}
+设 \(0<\rho<1\)，并且仅已知标量不等式
+\[
+D_\zeta(\rho)\le \varepsilon.
+\]
+若某个只依赖于 \((\rho,\varepsilon)\) 的函数 \(R(\rho,\varepsilon)\) 满足下列普适性质：
+\[
+D_\zeta(\rho)\le \varepsilon
+\Longrightarrow
+F_\zeta\text{ 在 }|w|<R(\rho,\varepsilon)\text{ 内无零点},
+\]
+则必有
+\[
+R(\rho,\varepsilon)\le \rho e^{-\varepsilon}.
+\]
+另一方面，定理 \ref{thm:typed-address-biaxial-completion-horizon-purity-repulsion} 已给出
+\[
+|w|<\rho e^{-\varepsilon}
+\]
+的普适禁入结论。因而，\(\rho e^{-\varepsilon}\) 正是纯标量 Jensen 证书所允许的严格最优禁入半径。
+\end{theorem}
+
+\begin{proof}
+充分性正是定理 \ref{thm:typed-address-biaxial-completion-horizon-purity-repulsion} 的直接内容。
+
+为证最优性，固定一点
+\[
+a:=\rho e^{-\varepsilon}\in(0,\rho),
+\]
+并考虑单位圆盘中的单零点 Blaschke 因子
+\[
+B_a(w):=\frac{a-w}{1-\overline a\,w}.
+\]
+它在 \(|w|<\rho\) 内只有一个简单零点 \(w=a\)，故
+\[
+D_{B_a}(\rho)=\log\frac{\rho}{|a|}=\varepsilon.
+\]
+若存在 \(R(\rho,\varepsilon)>\rho e^{-\varepsilon}=|a|\)，则 \(B_a\) 同时满足 \(D_{B_a}(\rho)\le\varepsilon\) 与
+\[
+B_a(a)=0,
+\qquad
+|a|<R(\rho,\varepsilon),
+\]
+这与题设中的普适禁入性质矛盾。故必有
+\[
+R(\rho,\varepsilon)\le \rho e^{-\varepsilon}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[证书链的共终稀疏化不改变逆极限对象]\label{thm:conclusion-certificate-cofinal-sparsification-invariant}
+设 \(F\) 为 unitary slice 上的可核验实值函数，\((\mathrm{Cert}_b(F),\preceq)\) 为命题 \ref{prop:cdim-certificate-inverse-limit-addressing} 所对应的 dyadic 证书逆系统。
+设存在一条嵌套证书链
+\[
+C_b\in \mathrm{Cert}_b(F),
+\qquad
+C_{b+1}\preceq C_b,
+\qquad
+|I(C_b)|\to 0,
+\]
+并且每个 \(C_b\) 都以“至多一根”的语义隔离出同一对象 \(\theta_\ast\)。
+则对任意共终子序列
+\[
+b_1<b_2<\cdots,
+\qquad
+b_j\to\infty,
+\]
+其限制链 \((C_{b_j})\) 与全链定义同一逆极限对象、同一可核验等价类与同一单点交
+\[
+\bigcap_{j\ge 1} I(C_{b_j})=\{\theta_\ast\}.
+\]
+因此，证书深度的语义完备性只依赖于共终性，而不依赖深度采样的密度。
+\end{theorem}
+
+\begin{proof}
+命题 \ref{prop:cdim-certificate-inverse-limit-addressing} 已说明：任一满足嵌套与直径收缩条件的证书链，都唯一对应于一个逆极限点对象 \(\theta_\ast\) 及其可核验等价类。
+另一方面，命题 \ref{prop:cdim-dyadic-cofinal-sparsification} 进一步说明：任意共终深度子链都给出同一单点交与同一等价类。
+把这两条结论并读，即得所述不变性。证毕。
+\end{proof}
+
+\begin{corollary}[零密度深度档案仍然证书完备]\label{cor:conclusion-zero-density-depth-archive-still-complete}
+在定理 \ref{thm:conclusion-certificate-cofinal-sparsification-invariant} 的设定下，任取任意无界深度集
+\[
+B\subset \NN.
+\]
+只要沿 \(B\) 选取一条共终嵌套证书链，它就与逐层深度链定义同一逆极限对象 \(\theta_\ast\)。
+特别地，
+\[
+b_j=2^j,
+\qquad
+b_j=j!,
+\qquad
+b_j=\lfloor e^{\sqrt j}\rfloor
+\]
+这些零密度深度日程在证书语义上都与 \(b=j\) 完全等价。
+\end{corollary}
+
+\begin{proof}
+把 \(B\) 递增枚举为 \(b_1<b_2<\cdots\)。由于 \(B\) 无界，故 \(b_j\to\infty\)，这正是一条共终子序列。于是定理 \ref{thm:conclusion-certificate-cofinal-sparsification-invariant} 立即适用。证毕。
+\end{proof}
+
+\begin{theorem}[RH 的共终稀疏证书等价表述]\label{thm:conclusion-rh-cofinal-sparse-certificate-equivalence}
+令 \(D_\zeta(\rho)\) 为 Jensen 缺陷。
+则 RH 等价于下述有限证书表述：
+
+\smallskip
+\noindent
+存在某个共终半径序列
+\[
+\rho_j\uparrow 1
+\]
+以及一列有限数据证书 \(C_j\)，使每个 \(C_j\) 都按定义 \ref{def:cdim-finite-data-certificate-offline-verifier} 的确定性离线验证器通过，并可核验证明
+\[
+D_\zeta(\rho_j)\le \varepsilon_j,
+\qquad
+\varepsilon_j\downarrow 0.
+\]
+\smallskip
+
+换言之，RH 不仅等价于连续边界极限
+\[
+\lim_{\rho\uparrow 1}D_\zeta(\rho)=0,
+\]
+而且等价于任意共终稀疏半径日程上的有限证书收敛。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:typed-address-biaxial-completion-horizon-purity-repulsion}，RH 等价于
+\[
+\lim_{\rho\uparrow 1}D_\zeta(\rho)=0.
+\]
+若 RH 成立，则沿任意共终序列 \(\rho_j\uparrow 1\) 都有 \(D_\zeta(\rho_j)\to 0\)。对每个 \(j\) 选取一份有限数据证书以核验某个有理上界
+\[
+D_\zeta(\rho_j)\le \varepsilon_j,
+\qquad
+\varepsilon_j\downarrow 0,
+\]
+即可得到所述证书列。
+
+反之，若存在某个共终序列 \(\rho_j\uparrow 1\) 与通过证书满足
+\[
+D_\zeta(\rho_j)\le \varepsilon_j\to 0,
+\]
+则由 Jensen 缺陷的定义式
+\[
+D_\zeta(\rho)=\sum_{|a|<\rho}\log\frac{\rho}{|a|}
+\]
+可知 \(\rho\mapsto D_\zeta(\rho)\) 单调不减且非负。任取 \(0<\rho<1\)。由于 \(\rho_j\uparrow 1\)，对充分大的 \(j\) 有 \(\rho<\rho_j\)，故
+\[
+0\le D_\zeta(\rho)\le D_\zeta(\rho_j)\le \varepsilon_j.
+\]
+令 \(j\to\infty\) 得 \(D_\zeta(\rho)=0\)。因此 \(D_\zeta(\rho)\equiv 0\) 对所有 \(\rho<1\) 都成立，特别地
+\[
+\lim_{\rho\uparrow 1}D_\zeta(\rho)=0.
+\]
+再由定理 \ref{thm:typed-address-biaxial-completion-horizon-purity-repulsion} 得 RH。证毕。
+\end{proof}
+
+\begin{theorem}[统一离线验证器的多项式证书合成壁垒]\label{thm:conclusion-unified-offline-verifier-synthesis-barrier}
+令
+\[
+\operatorname{Ver}^{\partial}
+\]
+为定义 \ref{def:typed-address-biaxial-completion-boundary-verifier} 的三端统一离线验证器，其输入为证书对象
+\[
+(C_{\mathrm{addr}},C_{\mathrm{def}},C_{\mathrm{lin}})
+\]
+并输出
+\[
+\mathrm{Accept}/\mathrm{Reject}/\mathrm{NULL}.
+\]
+若存在确定性多项式时间算法
+\[
+\operatorname{Synth},
+\]
+能对每个 CNF 公式 \(\varphi\) 构造一份三端证书 \(C^\partial(\varphi)\)，满足
+\[
+\operatorname{Ver}^{\partial}\!\bigl(C^\partial(\varphi)\bigr)=\mathrm{Accept}
+\quad\Longleftrightarrow\quad
+\varphi\ \text{不可满足},
+\]
+则
+\[
+\mathrm{P}=\mathrm{NP}.
+\]
+\end{theorem}
+
+\begin{proof}
+定义 \ref{def:typed-address-biaxial-completion-boundary-verifier} 所给的 \(\operatorname{Ver}^{\partial}\) 正是一个确定性离线验证器，只不过把 \(\mathrm{pass}\) 记作 \(\mathrm{Accept}\)。
+因此这正是定理 \ref{thm:spg-polytime-certificate-synthesis-implies-p-equals-np} 的直接特例。
+等价地，给定 \(\varphi\)，在多项式时间内计算 \(C^\partial(\varphi)\) 并运行 \(\operatorname{Ver}^{\partial}\)，即可在多项式时间内判定 \(\varphi\) 是否不可满足，从而 \(\mathrm{UNSAT}\in\mathrm{P}\)，故 \(\mathrm{P}=\mathrm{NP}\)。证毕。
+\end{proof}
+
+\begin{corollary}[统一证书语义的验证/合成严格二分]\label{cor:conclusion-certificate-verification-synthesis-bifurcation}
+统一证书语义在结构上呈现如下严格分岔：
+\begin{enumerate}
+  \item 一旦目标对象已经由一条通过证书链隔离，则任意共终稀疏化都不损失语义，因而核验可在零密度深度日程与零密度半径日程上完成；
+  \item 若进一步要求对一般 NP-困难目标统一地、多项式时间地合成这类通过证书，则复杂度屏障立即触发，并推出 \(\mathrm{P}=\mathrm{NP}\)。
+\end{enumerate}
+因此，本文制度中的困难不在于稀疏核验，而在于统一合成。
+\end{corollary}
+
+\begin{proof}
+第一点由定理 \ref{thm:conclusion-certificate-cofinal-sparsification-invariant}、推论 \ref{cor:conclusion-zero-density-depth-archive-still-complete} 与定理 \ref{thm:conclusion-rh-cofinal-sparse-certificate-equivalence} 联合给出。
+第二点由定理 \ref{thm:conclusion-unified-offline-verifier-synthesis-barrier} 给出。
+二者合并即得所述严格二分。证毕。
+\end{proof}
+
+\noindent
+上述结果把 unitary slice 的两条此前分离的链完全焊接起来：在解析侧，\(r_\ast\) 不是单纯的禁入半径，而是径向零点数据的单标量完备编码；在语义侧，证书对象的逆系统对共终稀疏化完全稳定，但统一的多项式时间证书合成却遭遇立即的复杂度壁垒。于是，Jensen 缺陷、排斥半径、共终证书链、统一离线验证器与复杂度屏障不再是彼此平行的接口，而共同构成一条“稀疏可核验而不可廉价统一合成”的终端主线。
+
+\endinput

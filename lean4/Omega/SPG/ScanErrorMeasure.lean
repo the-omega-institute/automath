@@ -915,6 +915,72 @@ theorem scanErrorMeasure_le_min_event_compl {α β : Type*} [MeasurableSpace α]
   le_min (scanErrorMeasure_le_event_measure μ obs hObs P hP)
     (scanErrorMeasure_le_compl_measure μ obs hObs P hP)
 
+private theorem scanErrorMeasure_symmDiff_observableEvent_eq
+    {α β : Type*} [MeasurableSpace α] [Fintype β]
+    (μ : MeasureTheory.Measure α) (obs : α → β) (P : Set α) (A : Set β) :
+    scanErrorMeasure μ obs (symmDiff P (observableEvent obs A)) = scanErrorMeasure μ obs P := by
+  classical
+  unfold scanErrorMeasure
+  refine Finset.sum_congr rfl (fun b _ => ?_)
+  by_cases hb : b ∈ A
+  · have hEvent :
+        cellEventMeasure μ obs (symmDiff P (observableEvent obs A)) b =
+          cellComplMeasure μ obs P b := by
+      have hs :
+          symmDiff P (observableEvent obs A) ∩ observableCell obs b =
+            observableCell obs b \ P := by
+        ext x
+        by_cases hxb : obs x = b <;> by_cases hp : x ∈ P <;>
+          simp [observableEvent, observableCell, symmDiff, hxb, hp, hb]
+      simpa [cellEventMeasure, cellComplMeasure] using congrArg μ hs
+    have hCompl :
+        cellComplMeasure μ obs (symmDiff P (observableEvent obs A)) b =
+          cellEventMeasure μ obs P b := by
+      have hs :
+          observableCell obs b \ symmDiff P (observableEvent obs A) =
+            P ∩ observableCell obs b := by
+        ext x
+        by_cases hxb : obs x = b <;> by_cases hp : x ∈ P <;>
+          simp [observableEvent, observableCell, symmDiff, hxb, hp, hb]
+      simpa [cellComplMeasure, cellEventMeasure, Set.inter_comm] using congrArg μ hs
+    rw [hEvent, hCompl, min_comm]
+  · have hEvent :
+        cellEventMeasure μ obs (symmDiff P (observableEvent obs A)) b =
+          cellEventMeasure μ obs P b := by
+      have hs :
+          symmDiff P (observableEvent obs A) ∩ observableCell obs b =
+            P ∩ observableCell obs b := by
+        ext x
+        by_cases hxb : obs x = b <;> by_cases hp : x ∈ P <;>
+          simp [observableEvent, observableCell, symmDiff, hxb, hp, hb]
+      simpa [cellEventMeasure] using congrArg μ hs
+    have hCompl :
+        cellComplMeasure μ obs (symmDiff P (observableEvent obs A)) b =
+          cellComplMeasure μ obs P b := by
+      have hs :
+          observableCell obs b \ symmDiff P (observableEvent obs A) =
+            observableCell obs b \ P := by
+        ext x
+        by_cases hxb : obs x = b <;> by_cases hp : x ∈ P <;>
+          simp [observableEvent, observableCell, symmDiff, hxb, hp, hb]
+      simpa [cellComplMeasure] using congrArg μ hs
+    rw [hEvent, hCompl]
+
+/-- Any observable-event approximation pays at least the scan-error symmetric-difference mass.
+    thm:spg-measure-scan-error-cylinder -/
+theorem scanErrorMeasure_le_measure_symmDiff_observableEvent
+    {α β : Type*} [MeasurableSpace α] [Fintype β] [MeasurableSpace β]
+    [MeasurableSingletonClass β]
+    (μ : MeasureTheory.Measure α) (obs : α → β) (P : Set α) (A : Set β)
+    (hObs : Measurable obs) (hP : MeasurableSet P) :
+    scanErrorMeasure μ obs P ≤ μ (symmDiff P (observableEvent obs A)) := by
+  rw [← scanErrorMeasure_symmDiff_observableEvent_eq μ obs P A]
+  have hA : MeasurableSet A := by
+    exact (Set.toFinite A).measurableSet
+  have hObsEvent : MeasurableSet (observableEvent obs A) :=
+    hObs hA
+  exact scanErrorMeasure_le_event_measure μ obs hObs _ (hP.symmDiff hObsEvent)
+
 /-- Scan error is non-negative (trivially for ENNReal). -/
 theorem scanErrorMeasure_nonneg {α β : Type*} [MeasurableSpace α] [Fintype β]
     (μ : MeasureTheory.Measure α) (obs : α → β) (P : Set α) :
@@ -1120,5 +1186,14 @@ theorem scanErrorMeasure_inter_le {α β : Type*} [MeasurableSpace α] [Fintype 
         rw [scanErrorMeasure_compl μ obs P, scanErrorMeasure_compl μ obs Q]
 
 end
+
+/-- Scan error measure stability: complement invariance + boundary bound.
+    prop:spg-scan-error-cylinder -/
+theorem paper_scanErrorMeasure_stability_package {α β : Type*} [MeasurableSpace α] [Fintype β]
+    (μ : MeasureTheory.Measure α) (obs : α → β) (P : Set α) :
+    scanErrorMeasure μ obs Pᶜ = scanErrorMeasure μ obs P ∧
+    scanErrorMeasure μ obs P ≤
+      Finset.sum (boundaryCellsMeasure μ obs P) (fun b => cellMeasure μ obs b) :=
+  ⟨scanErrorMeasure_compl μ obs P, scanErrorMeasure_le_boundaryMass μ obs P⟩
 
 end Omega.SPG

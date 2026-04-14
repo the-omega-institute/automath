@@ -33,7 +33,7 @@ theorem hammingDist_le {a b : Word m} : hammingDist a b ≤ m := by
     _ = m := Finset.card_fin m
 
 /-- The minimum Hamming distance between distinct stable words at resolution m.
-    def:min-stable-hamming-dist -/
+    thm:foldbin6-carry-hamming-distance -/
 def cMinStableHammingDist (m : Nat) : Nat :=
   let S := (@Finset.univ (X m) (fintypeX m))
   let pairs := S.product S |>.filter (fun (x, y) => x ≠ y)
@@ -287,6 +287,16 @@ theorem globalDefect_triangle (hmk : m ≤ k) (hkn : k ≤ n) (ω : Word n) :
           apply Nat.add_le_add_left
           exact popcount_restrictWord_le hmk _
 
+/-- Paper: defect cocycle package combining xor decomposition and popcount inequality.
+    prop:fold-defect-cocycle -/
+theorem paper_fold_defect_cocycle (hmk : m ≤ k) (hkn : k ≤ n) (ω : Word n) :
+    globalDefect (Nat.le_trans hmk hkn) ω =
+      xorWord (globalDefect hmk (restrictWord hkn ω))
+        (restrictWord hmk (globalDefect hkn ω)) ∧
+    popcount (globalDefect (Nat.le_trans hmk hkn) ω) ≤
+      popcount (globalDefect hmk (restrictWord hkn ω)) + popcount (globalDefect hkn ω) := by
+  exact ⟨globalDefect_compose hmk hkn ω, globalDefect_triangle hmk hkn ω⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R60
 -- ══════════════════════════════════════════════════════════════
@@ -338,5 +348,35 @@ theorem paper_X6_hammingWeight_distribution :
     cHammingWeightLayer 6 0 = 1 ∧ cHammingWeightLayer 6 1 = 6 ∧
     cHammingWeightLayer 6 2 = 10 ∧ cHammingWeightLayer 6 3 = 4 :=
   X6_hammingWeight_distribution
+
+/-- cMinStableHammingDist 5 = 1.
+    def:min-stable-hamming-dist -/
+theorem cMinStableHammingDist_five : cMinStableHammingDist 5 = 1 := by native_decide
+
+/-- cMinStableHammingDist 6 = 1.
+    def:min-stable-hamming-dist -/
+theorem cMinStableHammingDist_six : cMinStableHammingDist 6 = 1 := by native_decide
+
+/-- cMinStableHammingDist 7 = 1.
+    def:min-stable-hamming-dist -/
+theorem cMinStableHammingDist_seven : cMinStableHammingDist 7 = 1 := by native_decide
+
+/-- cMinStableHammingDist 8 = 1.
+    def:min-stable-hamming-dist -/
+theorem cMinStableHammingDist_eight : cMinStableHammingDist 8 = 1 := by native_decide
+
+/-- Paper package: minimum stable Hamming distance is constant 1 for m = 2..8.
+    def:min-stable-hamming-dist -/
+theorem paper_cMinStableHammingDist_constant_one_2_to_8 :
+    cMinStableHammingDist 2 = 1 ∧
+    cMinStableHammingDist 3 = 1 ∧
+    cMinStableHammingDist 4 = 1 ∧
+    cMinStableHammingDist 5 = 1 ∧
+    cMinStableHammingDist 6 = 1 ∧
+    cMinStableHammingDist 7 = 1 ∧
+    cMinStableHammingDist 8 = 1 :=
+  ⟨cMinStableHammingDist_two, cMinStableHammingDist_three, cMinStableHammingDist_four,
+   cMinStableHammingDist_five, cMinStableHammingDist_six,
+   cMinStableHammingDist_seven, cMinStableHammingDist_eight⟩
 
 end Omega

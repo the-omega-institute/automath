@@ -261,6 +261,12 @@ theorem tqft_triple_six :
     Fintype.card (X 6) = 21 ∧ 2 ^ 6 = 64 ∧ momentSum 2 6 = 220 :=
   ⟨X.card_X_six, by norm_num, momentSum_two_six⟩
 
+/-- The collision-to-type ratio at window 6 has floor value 10.
+    cor:conclusion-window6-collision-ratio-bounds -/
+theorem collision_ratio_floor_window_six :
+    momentSum 2 6 / Fintype.card (X 6) = 10 := by
+  rw [momentSum_two_six, X.card_X_six]
+
 /-- The collision-to-type ratio: S_2(6) / |X_6| ≈ 10.47.
     Verified: S_2(6) = 220 > 10 · 21 = 210 and 220 < 11 · 21 = 231.
     cor:conclusion-window6-collision-ratio-bounds -/
@@ -354,6 +360,13 @@ theorem genus_recurrence_order_six : (cFiberSpectrum 6).length = 5 := by native_
     prop:conclusion-tqft-genus-generating-function-rational-sq -/
 theorem distinct_fiber_sq_six :
     1 ^ 2 = 1 ∧ 2 ^ 2 = 4 ∧ 3 ^ 2 = 9 ∧ 4 ^ 2 = 16 ∧ 5 ^ 2 = 25 := by omega
+
+/-- The fourth collision moment at window 6 exceeds the third.
+    prop:conclusion-tqft-genus-generating-function-rational-q4 -/
+theorem sector_sum_six_q4_gt_q3 :
+    momentSum 4 6 > momentSum 3 6 := by
+  rw [momentSum_four_six, momentSum_three_six]
+  omega
 
 /-! ### Q_6 spectrum + binomial multiplicities -/
 

@@ -469,6 +469,12 @@ theorem Fold_add_weight (w1 w2 : Word m) :
       stableValue_Fold_mod, stableValue_Fold_mod]
   simp [ Nat.add_mod]
 
+/-- Paper wrapper for stable-add value consistency.
+    thm:stable-add-value-consistency -/
+theorem paper_stable_add_value_consistency (w1 w2 : Word m) :
+    Fold w1 + Fold w2 = X.ofNat m ((weight w1 + weight w2) % Nat.fib (m + 2)) := by
+  exact Fold_add_weight w1 w2
+
 /-- Paper label: stableAdd definition.
     def:stable-add -/
 theorem paper_stable_add_def (x y : X m) :
@@ -656,6 +662,14 @@ theorem stableSucc_iterate_eq_stableAdd (x y : X m) (hm : 1 ≤ m) :
     stableSucc^[stableValue y] x = stableAdd x y := by
   apply eq_of_stableValue_eq
   rw [stableValue_stableSucc_iterate x (stableValue y) hm, stableValue_stableAdd]
+
+/-- F_{m+2}-fold successor returns to the original element.
+    thm:finite-resolution-mod-commring -/
+theorem stableSucc_iterate_card_eq_id (x : X m) (hm : 1 ≤ m) :
+    (stableSucc^[Nat.fib (m + 2)]) x = x := by
+  apply eq_of_stableValue_eq
+  rw [stableValue_stableSucc_iterate x (Nat.fib (m + 2)) hm, Nat.add_mod_right,
+      Nat.mod_eq_of_lt (stableValue_lt_fib x)]
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R16: iterated add = mul + succ/pred bijective
@@ -889,5 +903,84 @@ theorem parity_split_identity_odd {α : Type*} [DecidableEq α] {S : Finset α} 
       (S.filter (fun x => f x = -1)).card := by
     rw [← Finset.card_union_of_disjoint hdisj, ← hpart]
   push_cast [hcard] at h1 ⊢; linarith
+
+/-- Fold is the unique map Ω_m → X_m satisfying the Zeckendorf congruence condition.
+    prop:discussion-zeckendorf-congruence-address-rigidity -/
+theorem Fold_unique_of_stableValue_mod (Φ : Word m → X m)
+    (hΦ : ∀ w : Word m, stableValue (Φ w) = weight w % Nat.fib (m + 2)) :
+    ∀ w : Word m, Φ w = Fold w := by
+  intro w
+  apply X.eq_of_stableValue_eq
+  rw [hΦ, stableValue_Fold_mod]
+
+namespace X
+
+/-- Extended EA stable arithmetic audit: succ/pred bijection.
+    thm:arith-composition -/
+theorem paper_ea_stable_arithmetic_extended :
+    (∀ m : Nat, Function.Injective (stableSucc (m := m))) ∧
+    (∀ m : Nat, Function.Surjective (stableSucc (m := m))) ∧
+    (∀ (m : Nat) (x : X m), stablePred (stableSucc x) = x) ∧
+    (∀ (m : Nat) (x : X m), stableSucc (stablePred x) = x) :=
+  ⟨fun m => stableSucc_injective m, fun m => stableSucc_surjective m,
+   fun _ x => stablePred_stableSucc x, fun _ x => stableSucc_stablePred x⟩
+
+/-- EA two-layer readout audit.
+    thm:composition-two-layer, thm:mul-by-iterated-add -/
+theorem paper_ea_two_layer_readout :
+    (∀ (m : Nat) (_hm : 1 ≤ m) (x y : X m),
+      iteratedStableAdd x (stableValue y) = stableMul y x) ∧
+    (∀ (m : Nat) (_hm : 1 ≤ m), stableSucc (stableZero (m := m)) = stableOne) :=
+  ⟨fun _ hm x y => iteratedStableAdd_eq_stableMul x y hm,
+   fun _ hm => stableSucc_zero hm⟩
+
+/-- EA core: value injective + range + modular addition.
+    thm:monoid-quotient-is-N -/
+theorem paper_ea_ring_iso_core :
+    (∀ (m : Nat) (x y : X m), stableValue x = stableValue y → x = y) ∧
+    (∀ (m : Nat) (x : X m), stableValue x < Nat.fib (m + 2)) ∧
+    (∀ (m : Nat) (x y : X m),
+      stableValue (stableAdd x y) = (stableValue x + stableValue y) % Nat.fib (m + 2)) :=
+  ⟨fun m _ _ h => stableValue_injective m h,
+   fun _ x => stableValue_lt_fib x,
+   fun _ x y => stableValue_stableAdd x y⟩
+
+/-- EA successor arithmetic: bijection, inverse, iterated add = mul.
+    cor:add-from-successor -/
+theorem paper_ea_successor_arithmetic :
+    (∀ m : Nat, Function.Bijective (stableSucc (m := m))) ∧
+    (∀ (m : Nat) (x : X m), stablePred (stableSucc x) = x) ∧
+    (∀ (m : Nat) (_hm : 1 ≤ m) (x y : X m),
+      iteratedStableAdd x (stableValue y) = stableMul y x) :=
+  ⟨fun m => stableSucc_bijective m, fun _ x => stablePred_stableSucc x,
+   fun _ hm x y => iteratedStableAdd_eq_stableMul x y hm⟩
+
+end X
+
+/-- Euler totient of Fibonacci numbers.
+    thm:mul-definitional -/
+theorem paper_ea_totient_fib_extended :
+    Nat.totient (Nat.fib 8) = 12 ∧
+    Nat.totient (Nat.fib 9) = 16 ∧
+    Nat.totient (Nat.fib 10) = 40 ∧
+    Nat.totient (Nat.fib 11) = 88 ∧
+    Nat.totient (Nat.fib 12) = 48 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- EA unit group audit: totient values and factorizations.
+    thm:mul-definitional -/
+theorem paper_ea_unit_group_audit :
+    Nat.totient 21 = 12 ∧ Nat.totient 34 = 16 ∧ Nat.totient 55 = 40 ∧
+    21 = 3 * 7 ∧ 34 = 2 * 17 ∧ 55 = 5 * 11 := by
+  refine ⟨?_, ?_, ?_, by omega, by omega, by omega⟩ <;> native_decide
+
+/-- EA ring characteristic for small m: Fibonacci values and 89 prime.
+    thm:monoid-quotient-is-N -/
+theorem paper_ea_ring_char_small :
+    Nat.fib 11 = 89 ∧ Nat.Prime 89 ∧
+    Nat.fib 12 = 144 ∧ 144 = 2 ^ 4 * 3 ^ 2 ∧
+    Nat.fib 13 = 233 ∧ Nat.Prime 233 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by omega, by native_decide, by native_decide⟩
 
 end Omega

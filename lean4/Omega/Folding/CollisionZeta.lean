@@ -586,6 +586,29 @@ theorem dfa_linear_recurrence_instances :
     prop:pom-moment-five-six -/
 theorem momentSum_five_six : momentSum 5 6 = 13444 := by rw [← cMomentSum_eq]; native_decide
 
+/-- Moment sum hierarchy at m=6: S_1 < S_2 < S_3 < S_4 < S_5.
+    prop:pom-coarsegraining-collision-moment-strict-monotonicity -/
+theorem paper_collision_moment_hierarchy_m6 :
+    momentSum 1 6 < momentSum 2 6 ∧
+    momentSum 2 6 < momentSum 3 6 ∧
+    momentSum 3 6 < momentSum 4 6 ∧
+    momentSum 4 6 < momentSum 5 6 := by
+  rw [momentSum_one, momentSum_two_six, momentSum_three_six, momentSum_four_six,
+    momentSum_five_six]
+  omega
+
+/-- Moment sum hierarchy at m=7: S_1 < S_2 < S_3 < S_4 < S_5.
+    prop:pom-coarsegraining-collision-moment-strict-monotonicity -/
+theorem paper_collision_moment_hierarchy_m7 :
+    momentSum 1 7 < momentSum 2 7 ∧
+    momentSum 2 7 < momentSum 3 7 ∧
+    momentSum 3 7 < momentSum 4 7 ∧
+    momentSum 4 7 < momentSum 5 7 := by
+  have h4 : momentSum 4 7 = 12208 := by rw [← cMomentSum_eq]; native_decide
+  have h5 : momentSum 5 7 = 62168 := momentSum_five_seven
+  rw [momentSum_one, momentSum_two_seven, momentSum_three_seven, h4, h5]
+  omega
+
 /-- 4×4 Hankel matrix for S_5 using correct values. -/
 def hankelS5_4x4 : Matrix (Fin 4) (Fin 4) ℤ :=
   !![1, 2, 34, 98; 2, 34, 98, 616; 34, 98, 616, 2612; 98, 616, 2612, 13444]
@@ -896,5 +919,103 @@ theorem paper_collisionKernel5_trace_recurrence_unbounded (n : ℕ) :
       - 20 * (collisionKernel5 ^ (n + 1)).trace
       + 10 * (collisionKernel5 ^ n).trace :=
   collisionKernel5_trace_recurrence_unbounded n
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R254: Newton e_2 for A_5 and family summary
+-- ══════════════════════════════════════════════════════════════
+
+/-- Newton identity for A_5: tr(A)^2 - tr(A^2) = 4 - (-18) = 22, i.e. 2·e_2 = 22 so e_2 = 11.
+    prop:pom-collision-kernel-family -/
+theorem collisionKernel5_e2 :
+    collisionKernel5.trace ^ 2 - (collisionKernel5 ^ 2).trace = 22 := by
+  rw [collisionKernel5_trace, collisionKernel5_trace_pow_2]; ring
+
+/-- Complete Newton identity verification for collisionKernel5.
+    prop:pom-s5-charpoly-newton -/
+theorem collisionKernel5_charpoly_coefficients :
+    collisionKernel5.trace = -2 ∧
+    collisionKernel5.det = 10 ∧
+    (collisionKernel5 ^ 2).trace = -18 ∧
+    (collisionKernel5 ^ 3).trace = 34 ∧
+    (collisionKernel5 ^ 4).trace = 66 ∧
+    (collisionKernel5 ^ 5).trace = -272 :=
+  ⟨collisionKernel5_trace, collisionKernel5_det,
+   collisionKernel5_trace_pow_2, collisionKernel5_trace_pow_3,
+   collisionKernel5_trace_pow_4, collisionKernel5_trace_pow_5⟩
+
+/-- Newton e3 for collisionKernel5: the third symmetric function.
+    prop:pom-s5-charpoly-newton -/
+theorem collisionKernel5_e3 :
+    let t1 := collisionKernel5.trace
+    let t2 := (collisionKernel5 ^ 2).trace
+    let t3 := (collisionKernel5 ^ 3).trace
+    t1 ^ 3 - 3 * t1 * t2 + 2 * t3 = 6 * (-8) := by
+  rw [collisionKernel5_trace, collisionKernel5_trace_pow_2, collisionKernel5_trace_pow_3]
+  ring
+
+/-- Newton e_2 family for A_2..A_5: tr(A)^2 - tr(A^2).
+    prop:pom-collision-kernel-family -/
+theorem collisionKernel_e2_family :
+    collisionKernel2.trace ^ 2 - (collisionKernel2 ^ 2).trace = -4 ∧
+    collisionKernel3.trace ^ 2 - (collisionKernel3 ^ 2).trace = -8 ∧
+    collisionKernel4.trace ^ 2 - (collisionKernel4 ^ 2).trace = -14 ∧
+    collisionKernel5.trace ^ 2 - (collisionKernel5 ^ 2).trace = 22 := by
+  refine ⟨by native_decide, by native_decide, ?_, collisionKernel5_e2⟩
+  exact collisionKernel4_e2
+
+/-- Trace recurrence for q=4 collision kernel A_4.
+    prop:pom-s4-recurrence -/
+theorem paper_collisionKernel4_trace_recurrence (n : Nat) :
+    (collisionKernel4 ^ (n + 5)).trace =
+    2 * (collisionKernel4 ^ (n + 4)).trace + 7 * (collisionKernel4 ^ (n + 3)).trace +
+    2 * (collisionKernel4 ^ (n + 1)).trace - 2 * (collisionKernel4 ^ n).trace :=
+  collisionKernel4_trace_recurrence n
+
+/-- Collision kernel A_3 Fredholm determinant and trace recurrence.
+    prop:pom-collision-renyi-perron-closure -/
+theorem paper_collisionKernel3_fredholm_and_recurrence :
+    (∀ z : ℤ, (1 - z • collisionKernel3).det = 1 - 2*z - 4*z^2 + 2*z^3) ∧
+    (collisionKernel3 ^ 0).trace = 3 ∧
+    (collisionKernel3 ^ 1).trace = 2 ∧
+    (collisionKernel3 ^ 2).trace = 12 ∧
+    (∀ n : Nat, (collisionKernel3 ^ (n + 3)).trace =
+      2 * (collisionKernel3 ^ (n + 2)).trace + 4 * (collisionKernel3 ^ (n + 1)).trace -
+      2 * (collisionKernel3 ^ n).trace) := by
+  refine ⟨fun z => ?_, by native_decide, by native_decide, by native_decide,
+    collisionKernel3_trace_recurrence_unbounded⟩
+  simp [collisionKernel3, Matrix.det_fin_three]
+  ring
+
+/-- Collision kernel A_2 full package.
+    prop:pom-collision-renyi-perron-closure -/
+theorem paper_collisionKernel2_full_package :
+    (∀ z : ℤ, (1 - z • collisionKernel2).det = 1 - 2*z - 2*z^2 + 2*z^3) ∧
+    (∀ n : ℕ, (collisionKernel2 ^ (n + 3)).trace =
+      2 * (collisionKernel2 ^ (n + 2)).trace +
+      2 * (collisionKernel2 ^ (n + 1)).trace -
+      2 * (collisionKernel2 ^ n).trace) ∧
+    (collisionKernel2 ^ 0).trace = 3 ∧
+    (collisionKernel2 ^ 1).trace = 2 := by
+  refine ⟨fun z => ?_, collisionKernel2_trace_recurrence_unbounded,
+    by native_decide, by native_decide⟩
+  simp [collisionKernel2, Matrix.det_fin_three]
+  ring
+
+/-- Collision kernel A_5 Perron audit.
+    prop:pom-collision-renyi-perron-closure -/
+theorem paper_collisionKernel5_perron_audit :
+    (collisionKernel5 ^ 0).trace = 5 ∧
+    (collisionKernel5 ^ 1).trace = -2 ∧
+    (collisionKernel5 ^ 2).trace = -18 ∧
+    (collisionKernel5 ^ 3).trace = 34 ∧
+    (∀ n : ℕ, (collisionKernel5 ^ (n + 5)).trace =
+      -2 * (collisionKernel5 ^ (n + 4)).trace
+      - 11 * (collisionKernel5 ^ (n + 3)).trace
+      - 8 * (collisionKernel5 ^ (n + 2)).trace
+      - 20 * (collisionKernel5 ^ (n + 1)).trace
+      + 10 * (collisionKernel5 ^ n).trace) :=
+  ⟨collisionKernel5_trace_pow_0, collisionKernel5_trace_pow_1,
+   collisionKernel5_trace_pow_2, collisionKernel5_trace_pow_3,
+   collisionKernel5_trace_recurrence_unbounded⟩
 
 end Omega

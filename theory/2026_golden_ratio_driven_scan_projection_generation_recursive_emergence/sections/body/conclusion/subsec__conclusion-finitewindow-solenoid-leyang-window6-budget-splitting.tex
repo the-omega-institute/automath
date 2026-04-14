@@ -172,6 +172,68 @@ Z_n(t)=\Tr\!\bigl(e^{-tA_n^{\mathrm{LY}}}\bigr)=5(2\cosh t)^{2n}.
 令 \(t=0\) 便得 \(Z_n(0)=5\cdot 4^n\)，取对数即得 \(H_n=\log 5+2n\log 2\)。证毕。
 \end{proof}
 
+\begin{theorem}[Lee--Yang 五分支体相地址的精确累积量定理]\label{thm:conclusion-leyang-five-branch-body-address-rademacher-cumulants}
+在定理 \ref{thm:conclusion-leyang-five-hypercube-partition-splitting} 的设定下，定义与参数 \(t\) 共轭的体相地址随机变量 \(Y_n\) 为
+\[
+\EE\!\left[e^{tY_n}\right]
+:=
+\frac{Z_n(t)}{Z_n(0)}.
+\]
+则有严格闭式
+\[
+\log \EE\!\left[e^{tY_n}\right]=2n\log\cosh t.
+\]
+因此，\(Y_n\) 的全部累积量都与 \(2n\) 个独立 Rademacher 变量之和完全一致。特别地，
+\[
+\kappa_2(Y_n)=2n,\qquad
+\kappa_4(Y_n)=-4n,\qquad
+\kappa_6(Y_n)=32n,
+\]
+且所有奇数阶累积量严格为零。
+
+换言之，五分支因子 \(5\) 只在未归一化配分函数中贡献一个加法常数 \(\log 5\)，却不贡献任何高阶体相涨落；branch multiplicity 与 body-address fluctuations 在累积量层严格分裂。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-leyang-five-hypercube-partition-splitting}，
+\[
+\frac{Z_n(t)}{Z_n(0)}
+=
+\frac{5(2\cosh t)^{2n}}{5\cdot 4^n}
+=
+(\cosh t)^{2n}.
+\]
+故
+\[
+\log \EE\!\left[e^{tY_n}\right]=2n\log\cosh t.
+\]
+右端正是 \(2n\) 个独立 Rademacher 变量之和的累积母函数，因此全部累积量逐阶一致。
+
+又因 \(\log\cosh t\) 是偶函数，所有奇数阶累积量都严格为零。对偶次项，使用 Taylor 展开
+\[
+\log\cosh t
+=
+\frac{t^2}{2}-\frac{t^4}{12}+\frac{t^6}{45}+O(t^8),
+\]
+便得到
+\[
+2n\log\cosh t
+=
+n t^2-\frac{n}{6}t^4+\frac{2n}{45}t^6+O(t^8).
+\]
+把它与
+\[
+\sum_{r\ge 1}\kappa_r(Y_n)\frac{t^r}{r!}
+\]
+比较系数，即得
+\[
+\kappa_2(Y_n)=2n,\qquad
+\kappa_4(Y_n)=4!\left(-\frac{n}{6}\right)=-4n,
+\qquad
+\kappa_6(Y_n)=6!\left(\frac{2n}{45}\right)=32n.
+\]
+证毕。
+\end{proof}
+
 \begin{proposition}[统一机制的最小分层 Lie 群胚提升]\label{prop:conclusion-minimal-stratified-lie-groupoid-lift}
 若某一统一形式主义同时要求保留
 \begin{enumerate}
@@ -281,6 +343,199 @@ f:\Sigma_S\to \TT^n,
 0\to P_S\to \Sigma_S\to \TT\to 0
 \]
 严格不分裂。故此类分离模型不存在。更一般的结论只是同一矛盾的重述。证毕。
+\end{proof}
+
+\begin{theorem}[单位圆零点约束下的对数振幅全息刚性]\label{thm:conclusion-unit-circle-zero-logamplitude-holographic-rigidity}
+对任意有限支撑素数账本
+\[
+r\in \NN^{(\mathbb P)},
+\qquad
+L(r)(z):=\prod_{p\in \mathbb P}(1+z^p)^{r(p)},
+\qquad
+A_r(\theta):=\log\bigl|L(r)(e^{i\theta})\bigr|,
+\]
+成立：
+\begin{enumerate}
+  \item \(L(r)\) 的全部零点都落在单位圆 \(S^1\)，并且都是偶阶单位根；
+  \item 对每个素数 \(p\)，有逐素 Fourier 反演公式
+  \[
+  r(p)=\frac{1}{\pi}\int_{-\pi}^{\pi}A_r(\theta)\cos(p\theta)\,\dd\theta.
+  \]
+\end{enumerate}
+因此映射 \(r\mapsto A_r\) 为单射。更强地，对任意 \(r,s\in \NN^{(\mathbb P)}\)，都有
+\[
+\|A_r-A_s\|_{L^2[-\pi,\pi]}
+\ge
+\sqrt{\pi}\,\sup_{p\in\mathbb P}|r(p)-s(p)|.
+\]
+\end{theorem}
+\begin{proof}
+对任意素数 \(p\)，
+\[
+1+z^p=0
+\iff
+z^{2p}=1,\ z^p=-1,
+\]
+故每个因子的零点都位于 \(S^1\)，且均为偶阶单位根；乘积 \(L(r)\) 的零点仍满足同一性质。
+
+另一方面，经典 Fourier 展开
+\[
+\log|1+e^{i\phi}|
+=
+\sum_{m\ge 1}\frac{(-1)^{m+1}}{m}\cos(m\phi)
+\qquad\text{于 }L^2[-\pi,\pi]\text{ 中成立},
+\]
+故
+\[
+A_r(\theta)
+=
+\sum_{q\in\mathbb P}r(q)\sum_{m\ge 1}\frac{(-1)^{m+1}}{m}\cos(mq\theta).
+\]
+将其与 \(\cos(p\theta)\) 配对，并利用余弦正交性，得到
+\[
+\frac{1}{\pi}\int_{-\pi}^{\pi}A_r(\theta)\cos(p\theta)\,\dd\theta
+=
+\sum_{q\in\mathbb P}r(q)\sum_{m\ge 1}\frac{(-1)^{m+1}}{m}\mathbf 1_{\{mq=p\}}.
+\]
+由于 \(p\) 与 \(q\) 都是素数，只有 \(q=p,m=1\) 这一项存活，故上式恰等于 \(r(p)\)。
+
+令 \(f:=A_r-A_s\)。则对每个素数 \(p\)，有
+\[
+|r(p)-s(p)|
+=
+\left|
+\frac{1}{\pi}\int_{-\pi}^{\pi}f(\theta)\cos(p\theta)\,\dd\theta
+\right|
+\le
+\frac{1}{\pi}\|f\|_{L^2[-\pi,\pi]}\|\cos(p\theta)\|_{L^2[-\pi,\pi]}.
+\]
+而
+\[
+\|\cos(p\theta)\|_{L^2[-\pi,\pi]}=\sqrt{\pi},
+\]
+故
+\[
+|r(p)-s(p)|\le \frac{1}{\sqrt{\pi}}\|A_r-A_s\|_{L^2[-\pi,\pi]}.
+\]
+对全部素数取上确界即得定量下界。证毕。
+\end{proof}
+
+\begin{theorem}[Haar 零点普适与固定素数账本的完全失耦]\label{thm:conclusion-haar-zero-universality-fixed-prime-ledger-decoupling}
+固定一素数 \(p_0\)，并取两整数 \(a\neq b\)。令 \((q_N)_{N\ge 1}\) 为趋于无穷的素数列，定义
+\[
+r_N^{(a)}:=a\,e_{p_0}+e_{q_N},
+\qquad
+r_N^{(b)}:=b\,e_{p_0}+e_{q_N},
+\]
+其中 \(e_p\) 为素数账本基元。再记 \(\mu_r\) 为 \(L(r)\) 的零点经验测度（按重数归一化到总质量 \(1\)）。则：
+\begin{enumerate}
+  \item 两列零点经验测度都满足
+  \[
+  \mu_{r_N^{(a)}}\Rightarrow m_{S^1},
+  \qquad
+  \mu_{r_N^{(b)}}\Rightarrow m_{S^1},
+  \]
+  其中 \(m_{S^1}\) 为单位圆 Haar 概率测度；
+  \item 但对所有 \(N\)，都有
+  \[
+  \|A_{r_N^{(a)}}-A_{r_N^{(b)}}\|_{L^2[-\pi,\pi]}
+  \ge
+  \sqrt{\pi}\,|a-b|.
+  \]
+\end{enumerate}
+故相同的 Haar 极限零点律与固定素数账本的刚性分离可以同时成立：渐近零点几何对固定素数寄存量完全失明，而振幅层却以不衰减的 \(L^2\) 幅度将其保存。
+\end{theorem}
+\begin{proof}
+记
+\[
+D_N^{(a)}:=\sum_{p\in\mathbb P}p\,r_N^{(a)}(p)=ap_0+q_N,
+\qquad
+D_N^{(b)}:=bp_0+q_N.
+\]
+由于 \(q_N\to\infty\)，两列总次数都趋于无穷；同时对每个固定素数 \(p\)，
+\[
+\sup_N r_N^{(a)}(p)<\infty,
+\qquad
+\sup_N r_N^{(b)}(p)<\infty.
+\]
+故可直接调用正文中 bounded-local regime 的 Lee--Yang--Gödel 零点普适律，得到
+\[
+\mu_{r_N^{(a)}}\Rightarrow m_{S^1},
+\qquad
+\mu_{r_N^{(b)}}\Rightarrow m_{S^1}.
+\]
+
+另一方面，
+\[
+r_N^{(a)}(p_0)-r_N^{(b)}(p_0)=a-b
+\qquad(\forall N),
+\]
+故由定理 \ref{thm:conclusion-unit-circle-zero-logamplitude-holographic-rigidity} 的定量下界，
+\[
+\|A_{r_N^{(a)}}-A_{r_N^{(b)}}\|_{L^2[-\pi,\pi]}
+\ge
+\sqrt{\pi}\,|a-b|
+\qquad(\forall N).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[仅依赖渐近零点律的相位证书无法恢复固定素数记账]\label{cor:conclusion-asymptotic-zero-law-certificate-cannot-recover-fixed-prime}
+不存在任何只把对象压缩到其渐近零点经验律
+\[
+\mu_{r_N}\Rightarrow \nu
+\]
+的证书范式，能够在 bounded-local 且 \(D_N\to\infty\) 的 Lee--Yang--Gödel 口径下恢复任意固定素数坐标 \(r(p_0)\)。更精确地，对每个固定素数 \(p_0\)，同一个极限相位对象 \(m_{S^1}\) 兼容无穷多个彼此不同的 \(p_0\)-账本值。
+\end{corollary}
+\begin{proof}
+对任意 \(a\neq b\)，定理 \ref{thm:conclusion-haar-zero-universality-fixed-prime-ledger-decoupling} 构造了两列账本 \((r_N^{(a)})\)、\((r_N^{(b)})\)，使得
+\[
+\mu_{r_N^{(a)}}\Rightarrow m_{S^1},
+\qquad
+\mu_{r_N^{(b)}}\Rightarrow m_{S^1},
+\]
+但
+\[
+r_N^{(a)}(p_0)=a,
+\qquad
+r_N^{(b)}(p_0)=b
+\qquad(\forall N).
+\]
+故任何仅以极限零点律为输入的读出都不可能区分 \(a\) 与 \(b\)。证毕。
+\end{proof}
+
+\begin{theorem}[Haar 级零点普适并不诱导振幅层的普适极限]\label{thm:conclusion-haar-zero-universality-does-not-force-amplitude-universality}
+在 bounded-local 且 \(D_N\to\infty\) 的 Lee--Yang--Gödel 假设类中，不存在单一函数
+\[
+A_\infty\in L^2[-\pi,\pi]
+\]
+使得对每一列账本族 \((r_N)\) 都有
+\[
+A_{r_N}\longrightarrow A_\infty
+\qquad\text{于 }L^2[-\pi,\pi].
+\]
+换言之，Haar 级的零点普适并不推出振幅层的普适极限；两者之间存在严格断裂。
+\end{theorem}
+\begin{proof}
+反设存在这样的 \(A_\infty\)。取定理 \ref{thm:conclusion-haar-zero-universality-fixed-prime-ledger-decoupling} 中的两列 \((r_N^{(a)})\)、\((r_N^{(b)})\)，则应有
+\[
+A_{r_N^{(a)}}\to A_\infty,
+\qquad
+A_{r_N^{(b)}}\to A_\infty
+\qquad\text{于 }L^2[-\pi,\pi].
+\]
+从而
+\[
+\|A_{r_N^{(a)}}-A_{r_N^{(b)}}\|_{L^2[-\pi,\pi]}\to 0.
+\]
+但定理 \ref{thm:conclusion-haar-zero-universality-fixed-prime-ledger-decoupling} 已给出统一下界
+\[
+\|A_{r_N^{(a)}}-A_{r_N^{(b)}}\|_{L^2[-\pi,\pi]}
+\ge
+\sqrt{\pi}\,|a-b|>0
+\qquad(\forall N),
+\]
+矛盾。证毕。
 \end{proof}
 
 \begin{conjecture}[\texorpdfstring{$q$}{q}-碰撞核层级上的一圆上界与零维账本壁垒]\label{conj:conclusion-qcollision-one-circle-zero-dimensional-ledger-barrier}

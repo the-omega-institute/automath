@@ -1057,4 +1057,64 @@ theorem momentSum_two_fib_superadditive (m : Nat) (hm : 1 ≤ m) :
   have hm2 := momentSum_two_mono' (k + 1)
   linarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R313: momentSum strict mono in q (numerical instances)
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_1(m) < S_2(m) for m=4..8. prop:pom-sq-lower -/
+theorem momentSum_q_mono_instances :
+    cMomentSum 1 4 < cMomentSum 2 4 ∧
+    cMomentSum 1 5 < cMomentSum 2 5 ∧
+    cMomentSum 1 6 < cMomentSum 2 6 ∧
+    cMomentSum 1 7 < cMomentSum 2 7 ∧
+    cMomentSum 1 8 < cMomentSum 2 8 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- S_2(m) < S_3(m) for m=4..7. prop:pom-sq-lower -/
+theorem momentSum_q2_lt_q3_instances :
+    cMomentSum 2 4 < cMomentSum 3 4 ∧
+    cMomentSum 2 5 < cMomentSum 3 5 ∧
+    cMomentSum 2 6 < cMomentSum 3 6 ∧
+    cMomentSum 2 7 < cMomentSum 3 7 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- Paper package. prop:pom-sq-lower -/
+theorem paper_momentSum_q_mono :
+    cMomentSum 1 6 < cMomentSum 2 6 ∧
+    cMomentSum 2 6 < cMomentSum 3 6 ∧
+    cMomentSum 3 6 < cMomentSum 4 6 := by
+  refine ⟨?_, ?_, ?_⟩ <;> native_decide
+
+/-- S_2(m) growth audit: strict mono, evenness, 4-divisibility.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_momentSum_two_growth_audit :
+    (∀ m : Nat, 1 ≤ m → momentSum 2 m < momentSum 2 (m + 1)) ∧
+    (∀ m : Nat, 1 ≤ m → 2 ∣ momentSum 2 m) ∧
+    (∀ m : Nat, 4 ≤ m → 4 ∣ momentSum 2 m) :=
+  ⟨momentSum_two_strict_mono', momentSum_two_even, momentSum_two_mod_four⟩
+
+/-- S_2 growth ratio bounds: 2·S_2(m) ≤ S_2(m+1) ≤ 4·S_2(m) for m ≥ 2.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_momentSum_two_ratio_bounds (m : Nat) (hm : 2 ≤ m) :
+    2 * momentSum 2 m ≤ momentSum 2 (m + 1) ∧
+    momentSum 2 (m + 1) ≤ 4 * momentSum 2 m :=
+  ⟨momentSum_two_succ_ge_double m hm, momentSum_two_succ_le_quadruple m⟩
+
+/-- Collision moment S_2 properties package.
+    prop:fold-renyi-collision-identity, prop:fold-groupoid-wedderburn -/
+theorem paper_pom_collision_moment_package :
+    (∀ m : Nat, 0 < momentSum 2 m) ∧
+    (∀ m : Nat, 1 ≤ m → momentSum 2 m < momentSum 2 (m + 1)) ∧
+    (∀ q m : Nat, Nat.fib (m + 2) ≤ momentSum q m) ∧
+    (∀ q m : Nat, 1 ≤ q → 2 ^ m ≤ momentSum q m) :=
+  ⟨momentSum_two_pos', momentSum_two_strict_mono', momentSum_ge_card', momentSum_ge_pow'⟩
+
+/-- Moment sum hierarchy: S_0, S_1, monotonicity in q.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_momentSum_hierarchy :
+    (∀ m : Nat, momentSum 0 m = Nat.fib (m + 2)) ∧
+    (∀ m : Nat, momentSum 1 m = 2 ^ m) ∧
+    (∀ q m : Nat, momentSum q m ≤ momentSum (q + 1) m) :=
+  ⟨momentSum_zero, momentSum_one, momentSum_le_succ'⟩
+
 end Omega

@@ -16,10 +16,16 @@ N(\omega):=\sum_{k=1}^{m}\omega_k F_{k+1}\ \in\ \NN.
 \leanverified{Fold}
 \end{definition}
 
+\begin{remark}[折叠映射应读作“合法构造”，不只是取商]\label{rem:fold-map-admissible-construction}
+定义 \ref{def:fold-word} 的重点不只是把 \(\Omega_m\) 压到 \(X_m\)，而是给出一条可审计的对象生成链：先取 Fibonacci 加权值，再进入 Zeckendorf 规范形，再截断到分辨率 \(m\) 的可见层。按 Euclid 式口径，这一步属于构造层，而不是刚性层。后面的幂等、满射、纤维规模与残差定理，才是在“对象已被合法构造出来”之后，进一步描述它有多唯一、还剩多少不可见自由度。
+\end{remark}
+
 \input{subsubsec__fold-zeckendorf-mod-topbits}
 
 \subsubsection{折叠的局部重写实现：终止、合流与顺序无关}\label{subsec:fold-local-rewrite}
 定义 \ref{def:fold-word} 以“先取值、再取 Zeckendorf 规范形”给出 $\Fold_m$。为将其落实为\textbf{局部、可执行}的归一化过程，并澄清“归约顺序不影响正规形”，我们把输入窗口嵌入到允许中间态出现冗余数字的配置空间上实施值保持重写。
+
+这一实现顺序也很适合主论文的整体叙述：先说明对象可由哪些局部许可重写得到，再说明为何不同归约顺序会坍缩到同一正规形。前者是 constructibility，后者是 rigidity；两层若不拆开，折叠就会被误读成“定义一个商映射”，而不是“通过合法局部作图获得规范对象”。
 
 \paragraph{配置空间与值函数}
 令
@@ -201,6 +207,50 @@ j=\sum_i j_i\prod_{k<i}N_k
 \begin{remark}[规范截面与可计算性]\label{rem:fold-normal-form-computable-section}
 命题 \ref{prop:fold-rewrite-newman} 给出一个可计算的规范截面：对任意 $a\in\mathcal{D}$，正规形 $\mathrm{NF}(a)\in X_\infty$ 唯一存在且与归约顺序无关。因此，当“第三参数”仅对应于等价类中代表的选择（规范冗余）时，无需显式记录该参数；可通过求正规形在多项式时间内选出唯一代表（分辨率口径为线性，见命题 \ref{prop:fold-complexity}）。需要强调的是，该消去仅恢复稳定代表，不恢复同一纤维内的微态残差。
 \end{remark}
+
+\begin{theorem}[折叠的构造--刚性--障碍三分]\label{thm:fold-constructibility-rigidity-obstruction}
+固定分辨率 \(m\ge 1\) 与稳定词 \(x\in X_m\)，记
+\[
+d_m(x):=\bigl|\Fold_m^{-1}(x)\bigr|.
+\]
+则折叠 \(\Fold_m\) 的对象论地位可分为三层：
+\begin{enumerate}
+  \item \textbf{构造层：}每个稳定词 \(x\) 都有一个显式 admissible witness，事实上 \(x\in\Omega_m\) 且 \(\Fold_m(x)=x\)。
+  \item \textbf{刚性层：}若 \(a,b\in\mathcal D\) 满足 \(\mathrm{Val}(a)=\mathrm{Val}(b)\)，则
+  \[
+  \pi_m(\mathrm{NF}(a))=\pi_m(\mathrm{NF}(b)).
+  \]
+  换言之，分辨率 \(m\) 的稳定代表只依赖于值类，而不依赖于局部重写路径或初始冗余表示。
+  \item \textbf{障碍层：}从 \(x\) 恢复唯一微态当且仅当 \(d_m(x)=1\)。
+  若 \(d_m(x)>1\)，则以 \(\pi=\delta_x\) 代入定理 \ref{thm:fold-microstate-residual-window-reachability}，可实现的纤维残差恰覆盖闭区间
+  \[
+  [0,\log d_m(x)],
+  \]
+  等价地，可实现的纤维熵恰覆盖同一区间。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\textbf{(1)} 由命题 \ref{prop:fold-basic} 的幂等性，任意 \(x\in X_m\subset\Omega_m\) 都满足 \(\Fold_m(x)=x\)，故稳定对象先以显式输入的形式被合法构造出来。
+
+\textbf{(2)} 由命题 \ref{prop:fold-rewrite-newman}，正规形 \(\mathrm{NF}(a)\in X_\infty\) 唯一存在并仅由 \(\mathrm{Val}(a)\) 决定；故若 \(\mathrm{Val}(a)=\mathrm{Val}(b)\)，则 \(\mathrm{NF}(a)=\mathrm{NF}(b)\)，再取前 \(m\) 位即得
+\(
+\pi_m(\mathrm{NF}(a))=\pi_m(\mathrm{NF}(b))
+\)。
+这与推论 \ref{cor:foldm-order-indep} 一致地说明：折叠读出在值类上是刚性的。
+
+\textbf{(3)} 若 \(d_m(x)=1\)，则纤维 \(\Fold_m^{-1}(x)\) 仅含一个元素，故微态恢复唯一。
+反之若 \(d_m(x)>1\)，则唯一恢复显然失败。
+将定理 \ref{thm:fold-microstate-residual-window-reachability} 中的宏观分布取为 \(\pi=\delta_x\)，便得
+\[
+\{\mathsf R(\mu):\ (\Fold_m)_{\#}\mu=\delta_x\}=[0,\log d_m(x)],
+\]
+且对应的熵谱为
+\[
+\{H(\mu):\ (\Fold_m)_{\#}\mu=\delta_x\}=[0,\log d_m(x)].
+\]
+因此当纤维非单点时，障碍不是“没有稳定对象”，而是存在一个不可由 \(x\) 本身消去的纤维残差窗口。
+证毕。
+\end{proof}
 
 \input{thm__fold-microstate-residual-window-reachability}
 

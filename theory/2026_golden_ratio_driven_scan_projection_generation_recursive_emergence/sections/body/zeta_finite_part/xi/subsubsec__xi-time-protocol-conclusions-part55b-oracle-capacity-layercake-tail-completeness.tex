@@ -175,4 +175,124 @@ C_m(s)-C_m(s-1)
 故整条整数预算曲线唯一恢复纤维多重度直方图。证毕。
 \end{proof}
 
+\begin{theorem}[精确反演阈值等于峰值纤维指数]\label{thm:xi-exact-inversion-threshold-peak-index}
+沿用定理 \ref{thm:xi-oracle-capacity-full-budget-discrete-inversion} 的记号，并定义
+\[
+s_{\mathrm{inv}}(m)
+:=
+\min\{s\ge 1:\ \mathrm{Succ}_m(s)=1\},
+\qquad
+\mathrm{Succ}^{\mathrm{bin}}_m(B):=\mathrm{Succ}_m(2^B),
+\]
+\[
+B_{\mathrm{inv}}(m)
+:=
+\min\{B\ge 0:\ \mathrm{Succ}^{\mathrm{bin}}_m(B)=1\}.
+\]
+则有闭式
+\[
+\boxed{\;
+s_{\mathrm{inv}}(m)=\max_{x\in X_m}d_m(x),\qquad
+B_{\mathrm{inv}}(m)=\Bigl\lceil\log_2\max_{x\in X_m}d_m(x)\Bigr\rceil.\;}
+\]
+在交换情形下，若 \(E_m\) 为折叠 \(\Fold_m\) 诱导的纤维平均条件期望，则由 Watatani 指数元的闭式（定理 \ref{thm:op-algebra-fold-watatani-index-equals-multiplicity-field}）进一步得到
+\[
+\boxed{\;
+B_{\mathrm{inv}}(m)
+=
+\Bigl\lceil
+\log_2 \operatorname*{ess\,sup}_{x}\Ind(E_m)(x)
+\Bigr\rceil.\;}
+\]
+更一般地，若每步可读字母表大小为 \(|\mathfrak A_0|\)，则最小精确反演时间预算满足
+\[
+\boxed{\;
+T_{\mathrm{inv}}(m)
+=
+\Bigl\lceil
+\log_{|\mathfrak A_0|}
+\operatorname*{ess\,sup}_{x}\Ind(E_m)(x)
+\Bigr\rceil.\;}
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-oracle-capacity-full-budget-discrete-inversion}，
+\[
+\mathrm{Succ}_m(s)=1
+\quad\Longleftrightarrow\quad
+\sum_{x\in X_m}\min\bigl(d_m(x),s\bigr)=\sum_{x\in X_m}d_m(x).
+\]
+右端成立当且仅当对每个 \(x\in X_m\) 都有 \(\min(d_m(x),s)=d_m(x)\)，亦即
+\[
+s\ge d_m(x)\qquad(\forall x\in X_m).
+\]
+故
+\[
+s_{\mathrm{inv}}(m)=\max_{x\in X_m}d_m(x),
+\]
+从而 dyadic 预算下
+\[
+B_{\mathrm{inv}}(m)
+=
+\min\{B\ge 0:\ 2^B\ge \max_x d_m(x)\}
+=
+\Bigl\lceil\log_2\max_x d_m(x)\Bigr\rceil.
+\]
+交换情形下，定理 \ref{thm:op-algebra-fold-watatani-index-equals-multiplicity-field} 给出
+\(
+\Ind(E_m)(x)=d_m(x)
+\)
+（a.e.），故第二式成立。
+若每步可读字母表大小为 \(|\mathfrak A_0|\)，则 \(T\) 步至多提供 \(|\mathfrak A_0|^T\) 个可区分标签；将上式中的 \(s\) 替换为 \(|\mathfrak A_0|^T\) 即得
+\[
+T_{\mathrm{inv}}(m)
+=
+\min\{T\ge 0:\ |\mathfrak A_0|^T\ge \operatorname*{ess\,sup}_x \Ind(E_m)(x)\},
+\]
+亦即所述闭式。证毕。
+\end{proof}
+
+\begin{corollary}[平均缺陷预算与峰值指数预算的分层]\label{cor:xi-average-defect-vs-peak-index-budget}
+固定分辨率 \(m\) 与宏观边缘 \(\pi\in\Delta(X_m)\)。
+若记录轴 \(r\) 使扩展读出 \((\Fold_m,r)\) 为单射，并令 \(A\sim\pi^{\mathrm e}\)、\(X:=\Fold_m(A)\sim\pi\)，则由定理 \ref{thm:address-defect-law} 有平均预算下界
+\[
+H(r(A)\mid X)\ \ge\ \kappa_m(\pi)
+=
+\mathbb E_{\pi}\bigl[\log d_m(X)\bigr].
+\]
+若进一步要求在全部纤维上一致地实现精确反演，则由定理 \ref{thm:xi-exact-inversion-threshold-peak-index}，任意 \(|\mathfrak A_0|\)-进实现都必须满足
+\[
+T\ \ge\
+\log_{|\mathfrak A_0|}
+\operatorname*{ess\,sup}_{x}\Ind(E_m)(x).
+\]
+因此，平均型辅助资源由 \(\kappa_m(\pi)\) 控制，而一致精确可逆性由峰值指数
+\(
+\operatorname*{ess\,sup}_{x}\Ind(E_m)(x)
+\)
+控制；二者一般不能塌缩为同一标尺。
+更具体地，
+\[
+\kappa_m(\pi)
+\le
+\log \operatorname*{ess\,sup}_{x}\Ind(E_m)(x),
+\]
+且只有当 \(d_m(x)\) 在 \(\pi\)-几乎处处的支撑上本质常值时，上述两个量才可能取同一数值。
+特别地，window-\(6\) 的纤维谱 \(\{2,3,4\}\) 排除了把平均预算与峰值预算压成单一数的可能性。
+\end{corollary}
+\begin{proof}
+第一条不等式是定理 \ref{thm:address-defect-law} 第 (2) 条的直接重述。
+第二条不等式由定理 \ref{thm:xi-exact-inversion-threshold-peak-index} 直接给出。
+最后，由
+\[
+\log d_m(X)\le \log \operatorname*{ess\,sup}_{x}\Ind(E_m)(x)
+\qquad\text{\(\pi\)-a.e.}
+\]
+取 \(\pi\)-期望即得
+\(
+\kappa_m(\pi)\le \log \operatorname*{ess\,sup}_{x}\Ind(E_m)(x)
+\)。
+只有当 \(\log d_m(X)\) 在 \(\pi\)-几乎处处取等时，期望才可取等；这等价于 \(d_m(x)\) 在相关支撑上本质常值。证毕。
+\end{proof}
+
 \endinput

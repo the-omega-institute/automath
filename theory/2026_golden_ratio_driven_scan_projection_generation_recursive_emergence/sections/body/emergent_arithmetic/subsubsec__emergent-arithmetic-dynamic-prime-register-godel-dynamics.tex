@@ -1,0 +1,302 @@
+\subsubsection{动态 prime-register：Gödel 外置动力学}\label{subsubsec:emergent-arithmetic-dynamic-prime-register-godel-dynamics}
+
+前两小节已经把 prime-register 的静态骨架固定下来。
+一方面，推论 \ref{cor:killo-no-finite-additive-register-linearization} 与定理 \ref{thm:killo-godel-compression-not-finite-rank-homologizable} 表明：若坚持“乘法 \(\to\) 寄存器加法”的严格同态语义，则有限个加法寄存器不足以忠实承载 \((\NN_{\ge 1},\times)\)，而可数无穷素数轴
+\[
+n\longmapsto (v_p(n))_{p\in\PP}
+\]
+给出最小可行的严格同态骨架。
+另一方面，定理 \ref{thm:killo-localization-circle-dimension-prime-ledger-splitting} 又把局部化数系的对偶分解写成
+\[
+0\to \prod_{p\in S}\ZZ_p\to \widehat{G_S}\to \TT\to 0,
+\]
+从而把连通的相位圆维与全不连通的素数账本核严格区分开，并证明有限支持集合 \(S\) 可由该核完全恢复。
+这说明 prime-register 在本文中并不是附加编码技巧，而是乘法保持、可逆外置与历史可审计同时成立时被结构强迫出来的最小账本。
+
+但到目前为止，这一账本主要以静态外置出现：它告诉我们对象层值如何被编码，却尚未单独对象化“编码如何随时间推进”。
+本小节的任务就是补上这一步。
+其核心思想是：Gödel 编码不应只被看成单个对象的标签，而应被提升为事件词、前史地址与时间顺序的动力学账本。
+一旦这样做，prime-register 就不再只是乘法层坐标系，而会成为一条真正的时间外置轴；地址精度提升、前缀延长、事件流拼接与几何实现，都可在同一半直积框架中统一书写。
+
+\begin{definition}[动态 prime-register 过程]\label{def:emergent-arithmetic-dynamic-prime-register-process}
+设 \(\mathcal E\) 为原子事件集合，\(\mathrm{code}:\mathcal E\hookrightarrow \NN_{\ge 1}\) 为单射编码。
+记素数序列为
+\[
+p_1<p_2<\cdots,
+\qquad
+\mathcal P:=\NN^{(\PP)}.
+\]
+对任意事件流 \((e_t)_{t\ge 1}\in \mathcal E^{\NN}\) 及其长度为 \(T\) 的前缀，定义动态 prime-register
+\[
+r_T(p_t):=
+\begin{cases}
+\mathrm{code}(e_t),& 1\le t\le T,\\
+0,& t>T,
+\end{cases}
+\]
+以及对应的 Gödel 前缀整数
+\[
+N_T:=N(r_T)=\prod_{t=1}^{T}p_t^{\,\mathrm{code}(e_t)}.
+\]
+若事件流来自某个输入 \(\omega\) 的归一化、回放或自然扩张策略，则称 \((r_T(\omega),N_T(\omega))\) 为该输入的动态 Gödel 账本前缀。
+\end{definition}
+
+这个定义把静态 prime-register 外置提升为真正的时间对象：\(T\) 不再只是外部时钟，而是账本前缀长度；\(r_T\) 不再只是指数向量，而是带有时间寻址的前史地址；\(N_T\) 则是该前史地址在交换乘法层上的整数影子。
+
+\begin{theorem}[动态账本的拼接律与时间寻址]\label{thm:emergent-arithmetic-dynamic-prime-register-concatenation}
+设 \(\Sigma^k:\mathcal P\to \mathcal P\) 为移位端同态
+\[
+(\Sigma^k r)(p_t):=
+\begin{cases}
+0,& t\le k,\\
+r(p_{t-k}),& t>k,
+\end{cases}
+\]
+并定义半直积幺半群
+\[
+\mathcal H:=\mathcal P\rtimes_{\Sigma}\NN,
+\qquad
+(r,k)\cdot(s,\ell):=(r+\Sigma^k s,\ k+\ell).
+\]
+对任意有限事件词 \(w=e_1\cdots e_T\in\mathcal E^\ast\)，记
+\[
+r_w(p_t):=
+\begin{cases}
+\mathrm{code}(e_t),& 1\le t\le T,\\
+0,& t>T,
+\end{cases}
+\qquad
+h(w):=(r_w,T)\in \mathcal H.
+\]
+则对任意 \(u,v\in\mathcal E^\ast\)，有
+\[
+h(uv)=h(u)\cdot h(v),
+\]
+亦即
+\[
+r_{uv}=r_u+\Sigma^{|u|}r_v,
+\qquad
+|uv|=|u|+|v|.
+\]
+等价地，若记 \(N_w:=N(r_w)\)，则存在由 \(p_t\mapsto p_{t+k}\) 诱导的整数端同态 \(\mathrm{Sh}_k\) 使
+\[
+N_{uv}=N_u\cdot \mathrm{Sh}_{|u|}(N_v).
+\]
+\end{theorem}
+
+\begin{proof}
+这是定理 \ref{thm:conclusion-godel-semidirect-law} 的直接转写。
+该定理已经证明 \(h:\mathcal E^\ast\to \mathcal H\) 为幺半群嵌入，并满足
+\[
+h(uv)=h(u)\cdot h(v).
+\]
+把半直积乘法
+\[
+(r,k)\cdot(s,\ell)=(r+\Sigma^k s,\ k+\ell)
+\]
+展开，即得
+\[
+r_{uv}=r_u+\Sigma^{|u|}r_v,
+\qquad
+|uv|=|u|+|v|.
+\]
+再由同一结果中的整数化形式
+\[
+N( r+s)=N(r)N(s),
+\qquad
+N(\Sigma^k r)=\mathrm{Sh}_k(N(r))
+\]
+便得
+\[
+N_{uv}=N_u\cdot \mathrm{Sh}_{|u|}(N_v).
+\]
+证毕。
+\end{proof}
+
+\begin{remark}[顺序不是附加注释，而是 prime-slice 位移]\label{rem:emergent-arithmetic-dynamic-prime-register-time-addressing}
+定理 \ref{thm:emergent-arithmetic-dynamic-prime-register-concatenation} 的含义在于：动态 Gödel 账本并不是把事件词简单压缩成一个大整数，而是把“连接 = 位移后相加”的时间拼接律直接内建到 prime-slices 中。
+因此，顺序信息不是靠外部时间标签补上，而是由 \(r_u+\Sigma^{|u|}r_v\) 这一位移规则内生保留。
+这也解释了为何普通单整数乘法同态不足以承载非交换顺序：一旦去掉时间位移，剩下的就只是一条交换乘法通道。
+\end{remark}
+
+\begin{proposition}[有限窗口账本的可行域]\label{prop:emergent-arithmetic-dynamic-prime-register-bounded-feasibility}
+设 \(f:\Omega\twoheadrightarrow X\) 为有限集合间满射，并记
+\[
+D(f):=\max_{x\in X}|f^{-1}(x)|.
+\]
+对 \(k,E\in\NN\)，令
+\[
+\mathcal P_{k,E}
+:=
+\left\{
+r\in\mathcal P:\ r(p_i)\in\{0,\dots,E\}\ (1\le i\le k),\ r(p)=0\ (p>p_k)
+\right\}.
+\]
+则存在单射
+\[
+\iota:\Omega\to X\times\mathcal P_{k,E},
+\qquad
+\operatorname{pr}_X\circ\iota=f,
+\]
+当且仅当
+\[
+(E+1)^k\ge D(f).
+\]
+特别地，对 \(f=\Fold_m\) 而言，若
+\[
+\iota_m:\Omega_m\to X_m\times\mathcal P_{k,E},
+\qquad
+\operatorname{pr}_X\circ\iota_m=\Fold_m,
+\]
+为单射，则必有
+\[
+(E+1)^k\ge D_m,
+\qquad
+D_m:=\max_{x\in X_m}|\Fold_m^{-1}(x)|.
+\]
+\end{proposition}
+
+\begin{proof}
+前半部分正是定理 \ref{thm:conclusion-bounded-prime-register-feasibility} 的内容；后半部分则是将该定理应用于 \(f=\Fold_m\) 的直接结论。
+进一步，对 \(\Fold_m\) 的最大纤维尺度，定理 \ref{thm:conclusion-fold-prime-axis-exponent-lower-bound} 已给出
+\[
+D_{2j}=F_{j+2},
+\qquad
+D_{2j+1}=2F_{j+1},
+\]
+从而
+\[
+\log D_m=\frac{m}{2}\log\varphi+O(1).
+\]
+这说明有限窗口下的忠实外置虽可由有限 prime-slices 实现，但轴数与指数上界之间必须满足严格的乘法容量约束。证毕。
+\end{proof}
+
+\begin{remark}[全深度前史强迫无限 prime-support]\label{rem:emergent-arithmetic-dynamic-prime-register-infinite-support}
+有限窗口的可行性并不意味着全深度前史也能被固定有限账本吸收。
+相反，推论 \ref{cor:conclusion-faithful-time-addressed-godel-needs-infinite-prime-support} 已表明：任何 shift-compatible 且 faithful 的时间寻址 Gödel 编码都必然使用无限素数支撑。
+若进一步要求与自然扩张的真实分支历史兼容，则推论 \ref{cor:xi-time-part9zq-natural-extension-infinite-primeslice-support} 给出更强的结论：只要每一深度都存在非平凡分支，则任一与有限截断相容的 injective prime-slice 账本在无限深度上都必须具有无限活跃片支撑。
+于是，定理 \ref{thm:xi-time-part9zq-no-fixed-finite-support-solenoid-host} 进一步排除了把全部无穷分支历史压入某个固定有限支持局部化系统 \(G_S\) 或其 Pontryagin 对偶 \(\widehat{G_S}\) 的可能性。
+因此，动态 prime-register 必须严格区分两层问题：有限窗口的可审计外置与无穷前史的忠实宿主，一般并不是同一尺度上的对象。
+\end{remark}
+
+\begin{proposition}[动态 Gödel 账本的位长代价]\label{prop:emergent-arithmetic-dynamic-prime-register-bitlength}
+沿用定义 \ref{def:pom-fold-prime-lift} 中的策略 \(\mathsf S\) 与 prime-register 回放记号。
+对输入 \(\omega\in\Omega_{m+1}\)，记
+\[
+G_{\mathsf S}(\omega):=N\!\bigl(r_{\mathsf S}(\omega)\bigr)
+=\prod_{t=1}^{T_{m+1}^{\mathsf S}(\omega)}
+p_t^{\,\mathrm{code}(e_t(\omega))}.
+\]
+则对任意 \(\omega\) 都有点态下界
+\[
+\log_2 G_{\mathsf S}(\omega)
+\ge
+\log_2\!\bigl((T_{m+1}^{\mathsf S}(\omega)+1)!\bigr),
+\]
+从而
+\[
+\log_2 G_{\mathsf S}(\omega)
+=
+\Omega\!\bigl(T_{m+1}^{\mathsf S}(\omega)\log T_{m+1}^{\mathsf S}(\omega)\bigr).
+\]
+并且在均匀基线 \(\omega\sim\mathrm{Unif}(\Omega_{m+1})\) 下，存在常数 \(C>0\) 使
+\[
+\EE[\log_2 G_{\mathsf S}(\omega)]
+\ge
+\frac{4}{27\ln 2}\,m\log m-Cm.
+\]
+\end{proposition}
+
+\begin{proof}
+这是定理 \ref{thm:conclusion-prime-integerization-superlinear-bitlength} 的直接转写；同样的 \(m\log m\) 下界也由定理 \ref{thm:pom-fold-prime-godel-bitlength-superlinear} 给出。
+其证明机制很简单：由 \(\mathrm{code}(e_t)\ge 1\) 可知
+\[
+G_{\mathsf S}(\omega)\ge \prod_{t=1}^{T_{m+1}^{\mathsf S}(\omega)}p_t\ge (T_{m+1}^{\mathsf S}(\omega)+1)!,
+\]
+再结合 Stirling 型下界与事件步数的线性期望下界，便得到点态 \(T\log T\) 量级以及均值 \(m\log m\) 量级。
+证毕。
+\end{proof}
+
+\begin{remark}[位长增长就是时间外置成本]\label{rem:emergent-arithmetic-dynamic-prime-register-bitlength-cost}
+命题 \ref{prop:emergent-arithmetic-dynamic-prime-register-bitlength} 的意义在于：动态账本一旦承担可回放前史，就不再是“免费可逆化”。
+时间前缀越长，Gödel 整数位长就越昂贵；因此这里的时间不仅是步骤数，也是一种不可压缩的外置成本。
+这正把 prime-register 账本与后文关于同步、资源与解析深度的讨论接通起来。
+\end{remark}
+
+\begin{theorem}[\texorpdfstring{$2^L$}{2\^L}-进仿射宿主中的动态账本]\label{thm:emergent-arithmetic-dynamic-prime-register-2adic-affine-host}
+设 \(\mathcal E\) 为有限原子事件集，并固定单射编码
+\[
+\mathrm{code}:\mathcal E\hookrightarrow \NN,
+\qquad
+M:=\max_{e\in\mathcal E}\mathrm{code}(e).
+\]
+取 \(B:=2^L>M\)，记
+\[
+T:=T_2(E_{\min})\cong \ZZ_2^2,
+\]
+并固定非零向量 \(v\in T\)。
+定义
+\[
+\mathrm{ev}_B(r):=\sum_{t\ge 1}r(p_t)B^{t-1}v
+\qquad (r\in\mathcal P),
+\]
+以及
+\[
+\Psi:\mathcal H\to \mathrm{Aff}(T),
+\qquad
+\Psi(r,k)(x):=B^k x+\mathrm{ev}_B(r).
+\]
+则：
+\begin{enumerate}
+  \item \(\Psi\) 是从半直积幺半群 \(\mathcal H=\mathcal P\rtimes_{\Sigma}\NN\) 到 \(\mathrm{Aff}(T)\) 的单子同态；
+  \item 在规范编码子集上，\(\Psi\) 为忠实表示；
+  \item 对任意无限事件流 \(\mathbf e=(e_1,e_2,\dots)\in\mathcal E^{\NN}\)，级数
+  \[
+  X(\mathbf e):=\sum_{t\ge 1}\mathrm{code}(e_t)B^{t-1}v
+  \]
+  在 \(2\)-进拓扑下收敛；其前缀和
+  \[
+  X_n(\mathbf e):=\sum_{t=1}^{n}\mathrm{code}(e_t)B^{t-1}v
+  \]
+  满足
+  \[
+  X_n(\mathbf e)\equiv X(\mathbf e)\pmod{B^nT},
+  \]
+  且映射 \(\mathbf e\mapsto X(\mathbf e)\) 为单射。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+第 (1)--(2) 条正是定理 \ref{thm:killo-godel-semidir-affine-2adic} 的内容；第 (3) 条则由推论 \ref{cor:killo-infinite-stream-2adic-holographic-point} 直接给出。
+其中关键恒等式是
+\[
+\mathrm{ev}_B(\Sigma^k r)=B^k\mathrm{ev}_B(r),
+\]
+它把 prime-slice 位移精确转写为 \(2^L\)-进尺度放大。
+因此
+\[
+\Psi(r,k)\circ \Psi(s,\ell)=\Psi(r+\Sigma^k s,\ k+\ell),
+\]
+而无限流的前缀和则在 \(B^nT\) 意义下逼近唯一的全息点 \(X(\mathbf e)\)。
+证毕。
+\end{proof}
+
+\begin{remark}[时间推进可解释为地址精度提升]\label{rem:emergent-arithmetic-dynamic-prime-register-address-refinement}
+定理 \ref{thm:emergent-arithmetic-dynamic-prime-register-2adic-affine-host} 给出了一种特别适合后文继续使用的解释：
+在这个 \(2^L\)-进仿射宿主中，时间推进并不是“点在外部时间轴上运动”，而是同一个地址点被越来越精细地读取。
+半直积中的 \(k\) 负责尺度提升，\(\mathrm{ev}_B(r)\) 负责平移注入，而 \(X_n(\mathbf e)\equiv X(\mathbf e)\pmod{B^nT}\) 则说明第 \(n\) 步前缀只是在同一全息地址上增加了一位可解析精度。
+\end{remark}
+
+\begin{remark}[与 prime-indexed 粗糙读出的接口]\label{rem:emergent-arithmetic-dynamic-prime-register-rough-readout-interface}
+动态 prime-register 一旦被对象化，6.5.2 中的多尺度粗糙读出就获得了一种更贴合本文语义的频率来源：高频层不必再来自任意的 lacunary 频率族，而可以直接由 prime-slices 或 \(B\)-进地址层产生。
+因此，最自然的下一步不是直接把 \(N_T\) 当作可见量，而是考虑由动态账本前缀调制相位的读出，例如
+\[
+W_\omega(t)
+:=
+\sum_{j\ge 1}
+a_j
+\cos\!\bigl(\lambda_j t+\phi_j(r_j(\omega))\bigr),
+\]
+其中 \(\lambda_j\) 可取 \(p_j\)、\(\log p_j\) 或 \(B^j\) 型尺度，而 \(\phi_j\) 则由第 \(j\) 个 prime-slice 上的账本前缀决定。
+在这一接口下，6.5.2 的“确定性产生不可导可见量”、14.2.9 的“粗糙可见量在有限分辨率下表现为表观随机”，以及本节的“prime-register 是乘法与前史的最小动态账本”，便可被读成同一生成机制的不同投影面。
+\end{remark}

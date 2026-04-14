@@ -214,6 +214,23 @@ theorem hiddenBitCount_closed (m : Nat) :
       omega
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R320: hiddenBitCount mod 3 periodicity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Hidden bit count mod 3 has period 6: B(m+6) % 3 = B(m) % 3.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_period6_mod3 (m : Nat) :
+    hiddenBitCount (m + 6) % 3 = hiddenBitCount m % 3 := by
+  -- B(m+6) = 2^(m+4) + B(m+4) = 2^(m+4) + 2^(m+2) + B(m+2)
+  --        = 2^(m+4) + 2^(m+2) + 2^m + B(m)
+  rw [hiddenBitCount_recurrence (m + 4), hiddenBitCount_recurrence (m + 2),
+      hiddenBitCount_recurrence m]
+  -- Goal: (2^(m+4) + (2^(m+2) + (2^m + B(m)))) % 3 = B(m) % 3
+  -- 2^(m+4) + 2^(m+2) + 2^m = 2^m * (16 + 4 + 1) = 21 * 2^m
+  have : 2 ^ (m + 4) + 2 ^ (m + 2) + 2 ^ m = 21 * 2 ^ m := by ring
+  omega
+
+-- ══════════════════════════════════════════════════════════════
 -- lem:pom-one-bit: single hidden bit decomposition
 -- ══════════════════════════════════════════════════════════════
 
@@ -952,6 +969,111 @@ theorem hiddenBitCount_floor_div_three (m : Nat) :
   have hmod := two_pow_mod_three m
   split_ifs at hclosed hmod with heven <;> omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R323: hiddenBitCount double-index closed forms
+-- ══════════════════════════════════════════════════════════════
+
+/-- Closed form for hiddenBitCount at even indices: 3·B(2m) + 1 = 4^m.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_double_closed (m : Nat) :
+    3 * hiddenBitCount (2 * m) + 1 = 4 ^ m := by
+  match m with
+  | 0 => simp [hiddenBitCount_zero]
+  | m + 1 =>
+    have h := hiddenBitCount_even_closed (m + 1) (by omega)
+    have hpos : 1 ≤ 4 ^ (m + 1) := Nat.one_le_pow _ _ (by omega)
+    omega
+
+private theorem four_pow_mod_three (m : Nat) : 4 ^ m % 3 = 1 := by
+  induction m with
+  | zero => simp
+  | succ n ih =>
+    have : 4 ^ (n + 1) = 4 * 4 ^ n := by ring
+    rw [this]; omega
+
+/-- hiddenBitCount at even indices via floor division.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_double_eq (m : Nat) :
+    hiddenBitCount (2 * m) = (4 ^ m - 1) / 3 := by
+  have hclosed := hiddenBitCount_double_closed m
+  have hmod := four_pow_mod_three m
+  omega
+
+/-- hiddenBitCount is monotone.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_le_succ (m : Nat) :
+    hiddenBitCount m ≤ hiddenBitCount (m + 1) := by
+  simp only [hiddenBitCount_floor_div_three]
+  exact Nat.div_le_div_right (Nat.pow_le_pow_right (by omega) (by omega))
+
+/-- Successor relation: B(m+1) = 2·B(m) + m % 2.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_succ_eq (m : Nat) :
+    hiddenBitCount (m + 1) = 2 * hiddenBitCount m + m % 2 := by
+  simp only [hiddenBitCount_floor_div_three, show 2 ^ (m + 1) = 2 * 2 ^ m from by ring]
+  have hmod := two_pow_mod_three m
+  by_cases hm : m % 2 = 0
+  · rw [hm] at hmod; simp at hmod; omega
+  · have hm1 : m % 2 = 1 := by omega
+    rw [hm1] at hmod; simp at hmod; omega
+
+/-- Complement relation: 2^m - B(m) = 2·B(m) + δ where δ ∈ {1,2}.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_complement (m : Nat) :
+    2 ^ m - hiddenBitCount m = 2 * hiddenBitCount m + (if m % 2 = 0 then 1 else 2) := by
+  have := hiddenBitCount_closed m; omega
+
+/-- hiddenBitCount mod 2 parity: B(m+2) % 2 = (m+1) % 2.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_mod2 (m : Nat) :
+    hiddenBitCount (m + 2) % 2 = (m + 1) % 2 := by
+  rw [hiddenBitCount_succ_eq (m + 1), hiddenBitCount_succ_eq m]
+  omega
+
+/-- B(m+2) % 2 = B(m) % 2 for m ≥ 1.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_add_two_mod2 (m : Nat) (hm : 1 ≤ m) :
+    hiddenBitCount (m + 2) % 2 = hiddenBitCount m % 2 := by
+  rw [hiddenBitCount_recurrence]
+  have h2m : 2 ∣ 2 ^ m := by
+    exact dvd_pow_self 2 (by omega : m ≠ 0)
+  omega
+
+/-- B(m) + B(m+1) = 2^m - 1.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_add_succ_eq (m : Nat) :
+    hiddenBitCount m + hiddenBitCount (m + 1) = 2 ^ m - 1 := by
+  have h1 := hiddenBitCount_closed m
+  have h2 := hiddenBitCount_closed (m + 1)
+  have hpow : 2 ^ (m + 1) = 2 * 2 ^ m := by ring
+  rw [hpow] at h2
+  split_ifs at h1 h2 with hm hm1 <;> omega
+
+/-- Closed form: 3·B(2m+1) + 2 = 2·4^m.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_odd_closed_eq (m : Nat) :
+    3 * hiddenBitCount (2 * m + 1) + 2 = 2 * 4 ^ m := by
+  have := hiddenBitCount_odd_closed m
+  have hpos : 2 ≤ 2 * 4 ^ m := by
+    have := Nat.one_le_pow m 4 (by omega)
+    omega
+  omega
+
+private theorem two_four_pow_mod_three (m : Nat) : (2 * 4 ^ m) % 3 = 2 := by
+  induction m with
+  | zero => simp
+  | succ n ih =>
+    have : 2 * 4 ^ (n + 1) = 4 * (2 * 4 ^ n) := by ring
+    rw [this]; omega
+
+/-- hiddenBitCount at odd indices via floor division.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_odd_eq (m : Nat) :
+    hiddenBitCount (2 * m + 1) = (2 * 4 ^ m - 2) / 3 := by
+  have hclosed := hiddenBitCount_odd_closed_eq m
+  have hmod := two_four_pow_mod_three m
+  omega
+
 /-- Fold is canonical (value-preserving), idempotent, and surjective.
     prop:fold-basic-paper -/
 theorem paper_fold_basic (m : Nat) :
@@ -959,5 +1081,25 @@ theorem paper_fold_basic (m : Nat) :
     (Function.Surjective (Fold (m := m))) ∧
     (∀ w : Word m, stableValue (Fold w) = weight w % Nat.fib (m + 2)) :=
   ⟨fun w => Fold_idempotent w, Fold_surjective m, fun w => stableValue_Fold_mod w⟩
+
+/-- Hidden bit count extended values m=13..16.
+    thm:pom-hidden-bit-count -/
+theorem paper_hiddenBitCount_extended_values :
+    hiddenBitCount 13 = 2730 ∧
+    hiddenBitCount 14 = 5461 ∧
+    hiddenBitCount 15 = 10922 ∧
+    hiddenBitCount 16 = 21845 := by
+  simp only [hiddenBitCount_floor_div_three]; omega
+
+/-- Hidden bit stability and threshold properties.
+    lem:pom-one-bit + thm:pom-hidden-bit-count -/
+theorem paper_hiddenBit_stable_and_threshold :
+    (∀ (m : Nat) (w : Word m), hiddenBit w = 1 ↔ Nat.fib (m + 2) ≤ weight w) ∧
+    3 * hiddenBitCount 6 = 2 ^ 6 - 1 ∧
+    3 * hiddenBitCount 7 = 2 ^ 7 - 2 := by
+  refine ⟨fun m w => ?_, ?_, ?_⟩
+  · simp only [hiddenBit]; split <;> omega
+  · have := hiddenBitCount_even_closed 3 (by omega); omega
+  · have := hiddenBitCount_odd_closed 3; omega
 
 end Omega

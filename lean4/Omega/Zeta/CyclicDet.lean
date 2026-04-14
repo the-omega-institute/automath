@@ -106,6 +106,46 @@ theorem cyclicPerm3_trace_powers :
     by native_decide, by native_decide, by native_decide⟩
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R254: Cyclic trace divisibility
+-- ══════════════════════════════════════════════════════════════
+
+/-- tr(Π_2^k) = 2 when k is even.
+    subsec:operator-zeta-interface -/
+theorem cyclicPerm2_trace_even (k : ℕ) (hk : Even k) :
+    (cyclicPerm2 ^ k).trace = 2 := by
+  obtain ⟨j, rfl⟩ := hk
+  rw [show j + j = 2 * j from by ring, pow_mul, cyclicPerm2_sq, one_pow]
+  native_decide
+
+/-- tr(Π_2^k) = 0 when k is odd.
+    subsec:operator-zeta-interface -/
+theorem cyclicPerm2_trace_odd (k : ℕ) (hk : ¬ Even k) :
+    (cyclicPerm2 ^ k).trace = 0 := by
+  rw [Nat.not_even_iff_odd] at hk
+  obtain ⟨j, rfl⟩ := hk
+  rw [show 2 * j + 1 = 1 + 2 * j from by ring, pow_add, pow_mul,
+    cyclicPerm2_sq, one_pow, mul_one]
+  native_decide
+
+/-- tr(Π_3^k) = 3 when 3 ∣ k.
+    subsec:operator-zeta-interface -/
+theorem cyclicPerm3_trace_mod3_zero (k : ℕ) (hk : 3 ∣ k) :
+    (cyclicPerm3 ^ k).trace = 3 := by
+  obtain ⟨j, rfl⟩ := hk
+  rw [mul_comm, pow_mul, pow_right_comm, cyclicPerm3_cube, one_pow, Matrix.trace_one]
+  simp [Fintype.card_fin]
+
+/-- tr(Π_3^k) = 0 when ¬ 3 ∣ k.
+    subsec:operator-zeta-interface -/
+theorem cyclicPerm3_trace_mod3_nonzero (k : ℕ) (hk : ¬ 3 ∣ k) :
+    (cyclicPerm3 ^ k).trace = 0 := by
+  have hmod : k % 3 = 1 ∨ k % 3 = 2 := by omega
+  conv_lhs => rw [show k = k % 3 + 3 * (k / 3) from by omega]
+  rw [pow_add, show 3 * (k / 3) = (k / 3) * 3 from by ring, pow_mul]
+  simp [pow_right_comm, cyclicPerm3_cube]
+  rcases hmod with h | h <;> rw [h] <;> native_decide
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R103
 -- ══════════════════════════════════════════════════════════════
 
@@ -371,9 +411,195 @@ theorem cyclic_periodicity_orders :
 theorem fredholm_block_diag_2_3 (t : ℤ) :
     (1 - t ^ 2) * (1 - t ^ 3) = 1 - t ^ 2 - t ^ 3 + t ^ 5 := by ring
 
+/-- Evaluate the 2+3 Fredholm block splice in determinant form.
+    cor:cyclic-euler-product -/
+theorem fredholm_block_diag_2_3_eval (t : ℤ) :
+    (1 - t • cyclicPerm2).det * (1 - t • cyclicPerm3).det =
+      1 - t ^ 2 - t ^ 3 + t ^ 5 := by
+  calc
+    (1 - t • cyclicPerm2).det * (1 - t • cyclicPerm3).det = (1 - t ^ 2) * (1 - t ^ 3) := by
+      rw [cyclicPerm2_fredholm_det, cyclicPerm3_fredholm_det]
+    _ = 1 - t ^ 2 - t ^ 3 + t ^ 5 := fredholm_block_diag_2_3 t
+
 /-- Block 2+4 Fredholm product.
     cor:cyclic-euler-product -/
 theorem fredholm_block_diag_2_4 (t : ℤ) :
     (1 - t ^ 2) * (1 - t ^ 4) = 1 - t ^ 2 - t ^ 4 + t ^ 6 := by ring
+
+/-- Evaluate the 2+4 Fredholm block splice in determinant form.
+    cor:cyclic-euler-product -/
+theorem fredholm_block_diag_2_4_eval (t : ℤ) :
+    (1 - t • cyclicPerm2).det * (1 - t • cyclicPerm4).det =
+      1 - t ^ 2 - t ^ 4 + t ^ 6 := by
+  calc
+    (1 - t • cyclicPerm2).det * (1 - t • cyclicPerm4).det = (1 - t ^ 2) * (1 - t ^ 4) := by
+      rw [cyclicPerm2_fredholm_det, cyclicPerm4_fredholm_det]
+    _ = 1 - t ^ 2 - t ^ 4 + t ^ 6 := fredholm_block_diag_2_4 t
+
+/-- Evaluate the 2+3+4 Fredholm block splice in determinant form.
+    cor:cyclic-euler-product -/
+theorem fredholm_block_diag_2_3_4_eval (t : ℤ) :
+    (1 - t • cyclicPerm2).det * (1 - t • cyclicPerm3).det * (1 - t • cyclicPerm4).det =
+      1 - t ^ 2 - t ^ 3 - t ^ 4 + t ^ 5 + t ^ 6 + t ^ 7 - t ^ 9 := by
+  calc
+    (1 - t • cyclicPerm2).det * (1 - t • cyclicPerm3).det * (1 - t • cyclicPerm4).det =
+        ((1 - t ^ 2) * (1 - t ^ 3)) * (1 - t ^ 4) := by
+      rw [cyclicPerm2_fredholm_det, cyclicPerm3_fredholm_det, cyclicPerm4_fredholm_det]
+    _ = 1 - t ^ 2 - t ^ 3 - t ^ 4 + t ^ 5 + t ^ 6 + t ^ 7 - t ^ 9 := by ring
+
+/-- The 2+3+4+5 Fredholm block product in factored form.
+    cor:cyclic-euler-product -/
+theorem fredholm_block_diag_2_3_4_5_eval (t : ℤ) :
+    (1 - t • cyclicPerm2).det * (1 - t • cyclicPerm3).det *
+    (1 - t • cyclicPerm4).det * (1 - t • cyclicPerm5).det =
+      (1 - t ^ 2) * (1 - t ^ 3) * (1 - t ^ 4) * (1 - t ^ 5) := by
+  rw [cyclicPerm2_fredholm_det, cyclicPerm3_fredholm_det,
+      cyclicPerm4_fredholm_det, cyclicPerm5_fredholm_det]
+
+/-- The full 2+3+4+5+6 Fredholm block product.
+    cor:cyclic-euler-product -/
+theorem fredholm_block_diag_2_3_4_5_6_eval (t : ℤ) :
+    (1 - t • cyclicPerm2).det * (1 - t • cyclicPerm3).det *
+    (1 - t • cyclicPerm4).det * (1 - t • cyclicPerm5).det *
+    (1 - t • cyclicPerm6).det =
+      (1 - t ^ 2) * (1 - t ^ 3) * (1 - t ^ 4) * (1 - t ^ 5) * (1 - t ^ 6) := by
+  rw [cyclicPerm2_fredholm_det, cyclicPerm3_fredholm_det,
+      cyclicPerm4_fredholm_det, cyclicPerm5_fredholm_det, cyclicPerm6_fredholm_det]
+
+/-- Cyclic permutation P_2 trace filter: Tr(P_2^n) = 2 when 2|n, = 0 otherwise.
+    cor:zeta-cyclic-lift-primitive-orbits -/
+theorem paper_cyclic_lift_trace_filter_q2 :
+    (∀ k : ℕ, (cyclicPerm2 ^ (2 * k)).trace = 2) ∧
+    (∀ k : ℕ, (cyclicPerm2 ^ (2 * k + 1)).trace = 0) :=
+  ⟨fun k => cyclicPerm2_trace_even (2 * k) ⟨k, by ring⟩,
+   fun k => cyclicPerm2_trace_odd (2 * k + 1) (Nat.not_even_two_mul_add_one k)⟩
+
+/-- Cyclic permutation P_3 trace filter: Tr(P_3^n) = 3 when 3|n, = 0 otherwise.
+    cor:zeta-cyclic-lift-primitive-orbits -/
+theorem paper_cyclic_lift_trace_filter_q3 :
+    (∀ k : ℕ, (cyclicPerm3 ^ (3 * k)).trace = 3) ∧
+    (∀ k : ℕ, (cyclicPerm3 ^ (3 * k + 1)).trace = 0) ∧
+    (∀ k : ℕ, (cyclicPerm3 ^ (3 * k + 2)).trace = 0) :=
+  ⟨fun k => cyclicPerm3_trace_mod3_zero (3 * k) ⟨k, rfl⟩,
+   fun k => cyclicPerm3_trace_mod3_nonzero (3 * k + 1) (by omega),
+   fun k => cyclicPerm3_trace_mod3_nonzero (3 * k + 2) (by omega)⟩
+
+/-- Fredholm determinant block-diagonal product for P_2 ⊕ P_3.
+    def:fredholm-determinant -/
+theorem paper_fredholm_block_product_2_3_extended (t : ℤ) :
+    (1 - t • cyclicPerm2).det = 1 - t ^ 2 ∧
+    (1 - t • cyclicPerm3).det = 1 - t ^ 3 ∧
+    (1 - t ^ 2) * (1 - t ^ 3) = 1 - t ^ 2 - t ^ 3 + t ^ 5 :=
+  ⟨cyclicPerm2_fredholm_det t, cyclicPerm3_fredholm_det t, by ring⟩
+
+/-- Cyclic permutation P_4 trace filter: Tr(P_4^n) = 4 when 4|n, = 0 otherwise.
+    cor:zeta-cyclic-lift-primitive-orbits -/
+theorem paper_cyclic_lift_trace_filter_q4 :
+    (∀ k : ℕ, (cyclicPerm4 ^ (4 * k)).trace = 4) ∧
+    (∀ k : ℕ, (cyclicPerm4 ^ (4 * k + 1)).trace = 0) ∧
+    (∀ k : ℕ, (cyclicPerm4 ^ (4 * k + 2)).trace = 0) ∧
+    (∀ k : ℕ, (cyclicPerm4 ^ (4 * k + 3)).trace = 0) := by
+  refine ⟨fun k => ?_, fun k => ?_, fun k => ?_, fun k => ?_⟩
+  · rw [pow_mul, cyclicPerm4_fourth, one_pow]; native_decide
+  · rw [show 4 * k + 1 = 1 + 4 * k from by ring, pow_add, pow_mul,
+      cyclicPerm4_fourth, one_pow, mul_one]; native_decide
+  · rw [show 4 * k + 2 = 2 + 4 * k from by ring, pow_add, pow_mul,
+      cyclicPerm4_fourth, one_pow, mul_one]; native_decide
+  · rw [show 4 * k + 3 = 3 + 4 * k from by ring, pow_add, pow_mul,
+      cyclicPerm4_fourth, one_pow, mul_one]; native_decide
+
+/-- Cyclic permutation P_5 trace filter concrete values.
+    cor:zeta-cyclic-lift-primitive-orbits -/
+theorem paper_cyclic_lift_trace_filter_q5 :
+    (∀ k : ℕ, (cyclicPerm5 ^ (5 * k)).trace = 5) ∧
+    (cyclicPerm5 ^ 1).trace = 0 ∧ (cyclicPerm5 ^ 2).trace = 0 ∧
+    (cyclicPerm5 ^ 3).trace = 0 ∧ (cyclicPerm5 ^ 4).trace = 0 := by
+  refine ⟨fun k => ?_, by native_decide, by native_decide,
+    by native_decide, by native_decide⟩
+  rw [pow_mul, cyclicPerm5_fifth, one_pow]; native_decide
+
+/-- Euler factor product for cyclic permutations n=4,5,6.
+    def:fredholm-determinant -/
+theorem paper_euler_factor_product_456 (t : ℤ) :
+    (1 - t • cyclicPerm4).det = 1 - t ^ 4 ∧
+    (1 - t • cyclicPerm5).det = 1 - t ^ 5 ∧
+    (1 - t • cyclicPerm6).det = 1 - t ^ 6 ∧
+    (1 - t ^ 4) * (1 - t ^ 5) = 1 - t ^ 4 - t ^ 5 + t ^ 9 :=
+  ⟨cyclicPerm4_fredholm_det t, cyclicPerm5_fredholm_det t,
+   cyclicPerm6_fredholm_det t, by ring⟩
+
+/-- P_6 trace filter: Tr(P_6^n) = 6 when 6|n, = 0 otherwise.
+    cor:zeta-cyclic-lift-primitive-orbits -/
+theorem paper_cyclic_lift_trace_filter_q6 :
+    (∀ k : ℕ, (cyclicPerm6 ^ (6 * k)).trace = 6) ∧
+    (cyclicPerm6 ^ 1).trace = 0 ∧ (cyclicPerm6 ^ 2).trace = 0 ∧
+    (cyclicPerm6 ^ 3).trace = 0 ∧ (cyclicPerm6 ^ 4).trace = 0 ∧
+    (cyclicPerm6 ^ 5).trace = 0 := by
+  refine ⟨fun k => ?_, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide⟩
+  rw [pow_mul, cyclicPerm6_sixth, one_pow]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R301: Euler factor n=7,8 + Fredholm block product
+-- ══════════════════════════════════════════════════════════════
+
+/-- Euler factor for n=7 cyclic permutation.
+    prop:cycle-permutation-determinant -/
+theorem euler_factor_n7 (α r : ℤ) :
+    (α + r) * (α^6 - α^5 * r + α^4 * r^2 - α^3 * r^3 + α^2 * r^4 - α * r^5 + r^6)
+    = α^7 + r^7 := by ring
+
+/-- Euler factor for n=8 cyclic permutation.
+    prop:cycle-permutation-determinant -/
+theorem euler_factor_n8 (α r : ℤ) :
+    (α^2 + r^2) * (α^2 - r^2) * (α^4 + r^4) = α^8 - r^8 := by ring
+
+/-- Cyclotomic factor: t^6 - 1 = (t-1)(t+1)(t^2+t+1)(t^2-t+1).
+    prop:cycle-permutation-determinant -/
+theorem cyclotomic_factor_6 (t : ℤ) :
+    t^6 - 1 = (t - 1) * (t + 1) * (t^2 + t + 1) * (t^2 - t + 1) := by ring
+
+/-- Cyclotomic factor: t^7 + 1 = (t+1)(t^6-t^5+t^4-t^3+t^2-t+1).
+    prop:cycle-permutation-determinant -/
+theorem cyclotomic_factor_7_neg (t : ℤ) :
+    t^7 + 1 = (t + 1) * (t^6 - t^5 + t^4 - t^3 + t^2 - t + 1) := by ring
+
+/-- Cyclotomic factor: t^9 - 1 = (t-1)(t²+t+1)(t^6+t³+1).
+    prop:cycle-permutation-determinant -/
+theorem cyclotomic_factor_9 (t : ℤ) :
+    t^9 - 1 = (t - 1) * (t^2 + t + 1) * (t^6 + t^3 + 1) := by ring
+
+/-- Cyclotomic factor: t^10 - 1 = (t-1)(t+1)(t^4+t³+t²+t+1)(t^4-t³+t²-t+1).
+    prop:cycle-permutation-determinant -/
+theorem cyclotomic_factor_10 (t : ℤ) :
+    t^10 - 1 = (t - 1) * (t + 1) * (t^4 + t^3 + t^2 + t + 1) *
+               (t^4 - t^3 + t^2 - t + 1) := by ring
+
+/-- Cyclotomic factor: t^12 - 1 = Φ_1·Φ_2·Φ_3·Φ_4·Φ_6·Φ_12.
+    prop:cycle-permutation-determinant -/
+theorem cyclotomic_factor_12 (t : ℤ) :
+    t^12 - 1 = (t - 1) * (t + 1) * (t^2 + 1) * (t^2 + t + 1) *
+               (t^2 - t + 1) * (t^4 - t^2 + 1) := by ring
+
+/-- Paper package: cyclotomic factorizations for n = 6, 7 (neg), 9, 10, 12.
+    prop:cycle-permutation-determinant -/
+theorem paper_cyclotomic_factorization_package_6_to_12 :
+    (∀ t : ℤ, t^6 - 1 = (t - 1) * (t + 1) * (t^2 + t + 1) * (t^2 - t + 1)) ∧
+    (∀ t : ℤ, t^7 + 1 = (t + 1) * (t^6 - t^5 + t^4 - t^3 + t^2 - t + 1)) ∧
+    (∀ t : ℤ, t^9 - 1 = (t - 1) * (t^2 + t + 1) * (t^6 + t^3 + 1)) ∧
+    (∀ t : ℤ, t^10 - 1 = (t - 1) * (t + 1) * (t^4 + t^3 + t^2 + t + 1) *
+                          (t^4 - t^3 + t^2 - t + 1)) ∧
+    (∀ t : ℤ, t^12 - 1 = (t - 1) * (t + 1) * (t^2 + 1) * (t^2 + t + 1) *
+                          (t^2 - t + 1) * (t^4 - t^2 + 1)) :=
+  ⟨cyclotomic_factor_6, cyclotomic_factor_7_neg,
+   cyclotomic_factor_9, cyclotomic_factor_10, cyclotomic_factor_12⟩
+
+/-- Paper package.
+    prop:cycle-permutation-determinant -/
+theorem paper_euler_factor_n7_n8_package :
+    (∀ α r : ℤ, (α + r) * (α^6 - α^5 * r + α^4 * r^2 - α^3 * r^3 + α^2 * r^4 - α * r^5 + r^6)
+      = α^7 + r^7) ∧
+    (∀ α r : ℤ, (α^2 + r^2) * (α^2 - r^2) * (α^4 + r^4) = α^8 - r^8) := by
+  exact ⟨fun α r => by ring, fun α r => by ring⟩
 
 end Omega.Zeta

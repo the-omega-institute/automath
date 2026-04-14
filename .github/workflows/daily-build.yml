@@ -1,8 +1,9 @@
 name: Daily Build
 
 on:
-  schedule:
-    - cron: "0 2 * * *"
+  push:
+    branches:
+      - dev
   workflow_dispatch:
     inputs:
       target_ref:
@@ -16,7 +17,7 @@ permissions:
 
 concurrency:
   group: daily-build
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   resolve_target:
@@ -27,20 +28,39 @@ jobs:
       target_sha: ${{ steps.resolve_target.outputs.target_sha }}
       release_tag: ${{ steps.resolve_target.outputs.release_tag }}
       release_name: ${{ steps.resolve_target.outputs.release_name }}
+      should_publish: ${{ steps.resolve_target.outputs.should_publish }}
+      skip_reason: ${{ steps.resolve_target.outputs.skip_reason }}
     steps:
       - name: Check out repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.target_ref || 'dev' }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.target_ref || github.sha }}
           fetch-depth: 0
 
       - name: Resolve daily target
         id: resolve_target
         run: |
           daily_date="$(date -u +%Y-%m-%d)"
+          release_tag="daily-dev-$daily_date"
+
           echo "target_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-          echo "release_tag=daily-dev-$daily_date" >> "$GITHUB_OUTPUT"
-          echo "release_name=Daily Build $daily_date (dev)" >> "$GITHUB_OUTPUT"
+          echo "release_tag=$release_tag" >> "$GITHUB_OUTPUT"
+          echo "release_name=Daily Build $daily_date (first dev merge)" >> "$GITHUB_OUTPUT"
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+            echo "skip_reason=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git fetch origin --tags --force
+          if git rev-parse -q --verify "refs/tags/$release_tag" >/dev/null; then
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+            echo "skip_reason=Release tag $release_tag already exists, so this is not the first merge to dev today." >> "$GITHUB_OUTPUT"
+          else
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+            echo "skip_reason=" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Ensure daily target points to dev
         run: |
@@ -54,11 +74,16 @@ jobs:
             echo
             echo "- target SHA: \`${{ steps.resolve_target.outputs.target_sha }}\`"
             echo "- release tag: \`${{ steps.resolve_target.outputs.release_tag }}\`"
+            echo "- should publish: \`${{ steps.resolve_target.outputs.should_publish }}\`"
+            if [ -n "${{ steps.resolve_target.outputs.skip_reason }}" ]; then
+              echo "- skip reason: ${{ steps.resolve_target.outputs.skip_reason }}"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
 
   build_pdf:
     name: Build main.pdf
     needs: resolve_target
+    if: ${{ needs.resolve_target.outputs.should_publish == 'true' }}
     uses: ./.github/workflows/reusable-pdf.yml
     with:
       checkout_ref: ${{ needs.resolve_target.outputs.target_sha }}
@@ -70,6 +95,7 @@ jobs:
   build_lean4:
     name: Build Lean4
     needs: resolve_target
+    if: ${{ needs.resolve_target.outputs.should_publish == 'true' }}
     uses: ./.github/workflows/reusable-lean4.yml
     with:
       checkout_ref: ${{ needs.resolve_target.outputs.target_sha }}
@@ -78,6 +104,7 @@ jobs:
   generate_lean_manifest:
     name: Generate Lean4 manifest
     needs: resolve_target
+    if: ${{ needs.resolve_target.outputs.should_publish == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -106,7 +133,7 @@ jobs:
   publish_prerelease:
     name: Publish daily prerelease
     needs: [resolve_target, build_pdf, build_lean4, generate_lean_manifest]
-    if: ${{ always() && needs.resolve_target.result == 'success' && needs.build_pdf.result == 'success' && needs.build_lean4.result == 'success' && needs.generate_lean_manifest.result == 'success' }}
+    if: ${{ always() && needs.resolve_target.result == 'success' && needs.resolve_target.outputs.should_publish == 'true' && needs.build_pdf.result == 'success' && needs.build_lean4.result == 'success' && needs.generate_lean_manifest.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -158,7 +185,7 @@ jobs:
           prerelease: true
           target_commitish: ${{ needs.resolve_target.outputs.target_sha }}
           body: |
-            Automated daily build from `dev`.
+            Automated daily build from the first merge to `dev` on this UTC day.
 
             - target SHA: `${{ needs.resolve_target.outputs.target_sha }}`
             - source branch: `dev`

@@ -1,234 +1,270 @@
-# Automath — Omega 项目
+# Omega 项目
 
-[English](README.md)
+[![Daily Build](https://github.com/the-omega-institute/automath/actions/workflows/daily-build.yml/badge.svg)](https://github.com/the-omega-institute/automath/actions/workflows/daily-build.yml)
+[![PR Gate](https://github.com/the-omega-institute/automath/actions/workflows/pr-gate.yml/badge.svg)](https://github.com/the-omega-institute/automath/actions/workflows/pr-gate.yml)
+[![License: GPOL](https://img.shields.io/badge/license-GPOL-blue.svg)](LICENSE)
+[![Lean 4](https://img.shields.io/badge/Lean-4-blue?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHRleHQgeD0iMCIgeT0iMTIiIGZvbnQtc2l6ZT0iMTIiPkw8L3RleHQ+PC9zdmc+)](https://lean-lang.org)
+[![Axioms: 0](https://img.shields.io/badge/axioms-0-brightgreen.svg)](#status)
+[![Theorems: 3,427+](https://img.shields.io/badge/theorems-3%2C427%2B-orange.svg)](#status)
 
-## 问题
+> 一个可审计的理论编译器，从单一方程出发，推导、验证、可视化并发表数学。
 
-如果从一个单独的代数恒等式 $x^{2} = x + 1$ 出发，在一个形式化验证的证明助手里、在零公理前提下，把所有能推出的东西都推出来，会发生什么？
+[English](README.md) · **[为什么一切都是不可避免的](docs/INEVITABILITY.zh-CN.md)** — 10 分钟理解迫使链 · **[Dossier](https://the-omega-institute.github.io/automath/)** · [autoresearch 直播](https://www.youtube.com/live/pn_W3I5-qdo)
 
-Omega 项目是一次关于**生成式数学**的实验。我们不是去形式化已有结论，而是从黄金均值移位（golden-mean shift）及其 Zeckendorf 表示出发，系统地推导代数、组合、拓扑与动力系统结构，观察究竟会涌现出什么。它的方法论是 *derive, discover, name*：从第一性原理严格推出，观察出现了哪些结构，再识别它们在数学与物理中的对应物。
+## 快速开始
 
-每一条定理都由 Lean 4 机器验证。每一条推导链都可追溯。除 Lean 4 核心逻辑与 Mathlib 外，不额外假设任何公理。
+```bash
+# 克隆并构建
+git clone https://github.com/the-omega-institute/automath.git
+cd automath/lean4 && lake build
+```
 
-## 为什么采用这种方法
+Mathlib 在首次构建时自动获取和缓存。
 
-大多数数学形式化项目是在验证已知定理。Omega 则反过来：把形式化当作一种**发现引擎**。零公理这一约束迫使每个结构都必须通过推导“挣”出来，而不是先验假定。当一个熟悉的结构出现时，比如环、递推、谱不变量，它都会带着一条完整的来源链，一路回到最初的种子。这使我们可以追问：这个结构为什么会在这里出现？它的涌现说明了种子的什么性质？
+```bash
+# 复现理论论文
+cd theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
+pip install -r requirements.txt
+python3 scripts/run_all.py    # 生成所有图表
+latexmk -pdfxe main.tex       # 编译论文
+```
 
-黄金比例并不是随便选的。方程 $x^{2} = x + 1$ 同时生成了最简单的非平凡 sofic 移位（黄金均值移位）、最简单的非平凡线性递推（Fibonacci 数列），以及“最不有理”的数（对有理逼近最坏的情形）。这三者是同一个代数对象的三种视角。Omega 研究的是：如果认真对待这三种视角，并同时沿着它们的后果一路推下去，会发生什么。
+## 核心问题
+
+当你只能通过有限长度的二元窗口观测一个动力系统时，哪些数学结构是不可避免的？
+
+最简的设定：一个系统，一个窗口，每步输出一个 bit。记录 $m$ 步，得到微态空间 $\{0,1\}^m$ ，共 $2^m$ 个元素。但其中跨分辨率稳定的——不含相邻两个 1 的词——只有 $F_{m+2}$ 个（Fibonacci 数）。这个约束不是选择，而是跨分辨率一致性的必然后果。它的特征方程是 $x^2 = x + 1$ 。
+
+Omega 项目从这个单一的被强迫约束出发，追踪一切后果。在 Lean 4 中。零公理。方法论是 *推导、发现、命名* ：从第一性原理严格推出，观察涌现出什么结构，再识别它们在数学与物理中的对应物。
+
+每条定理由 Lean 4 机器验证。每条推导链可追溯。除 Lean 4 核心逻辑与 Mathlib 外不假设任何公理。
 
 ## 种子
 
-考虑长度为 $m$、且不含相邻两个 1 的二进制词构成的集合 $X_{m}$。这就是**黄金均值移位**，也是符号动力系统中最简单的非平凡有限型子移位。
+长度为 $m$ 、不含相邻两个 1 的二进制词构成集合 $X_m$ ——符号动力学中最简的非平凡有限型子移位，即**黄金均值移位**。
 
-- $|X_{m}| = F_{m+2}$（Fibonacci 数）
-- 每个 $n < F_{m+2}$ 都有唯一的 **Zeckendorf 表示**，即写成若干互不相邻 Fibonacci 数之和，从而给出一个规范双射 $X_{m} \leftrightarrow \{0, \ldots, F_{m+2}-1\}$
-- **折叠算子** $\Phi: X_{m+1} \to X_{m}$（去掉最后一位）把词分成若干**纤维**，其重数结构编码了深层算术信息
+- $|X_m| = F_{m+2}$ （Fibonacci 数）
+- 每个 $n < F_{m+2}$ 都有唯一的 **Zeckendorf 表示**（互不相邻 Fibonacci 数之和），给出规范双射 $X_m \leftrightarrow \{0, \ldots, F_{m+2}-1\}$
+- **折叠算子** $\Phi: X_{m+1} \to X_m$ （去掉末位）把词分成若干**纤维**，其重数结构编码深层算术
 
-以下所有内容，都是从这三样东西中**推导**出来的。
+以下所有内容，都从这三样东西中**推导**出来。
 
 ## 涌现出的结构
 
 ### I. 萌生算术
 
-Zeckendorf 双射直接在二进制词上诱导出加法 $\oplus$ 与乘法 $\otimes$。不需要先引入整数，算术本身就是 $X_{m}$ 的“原生结构”。
+Zeckendorf 双射直接在二进制词上诱导出加法 $\oplus$ 与乘法 $\otimes$ 。不需要先引入整数——算术是 $X_m$ 的原生结构。
 
-$$X_{m} \;\cong\; \mathbb{Z}/F_{m+2}\mathbb{Z}$$
+$$X_m \;\cong\; \mathbb{Z}/F_{m+2}\mathbb{Z}$$
 
-这个同构（`stableValueRingEquiv`）表明，组合空间 $X_{m}$ 本身就是一个循环环，其模数正是对应的 Fibonacci 数。当 $F_{m+2}$ 为素数时（例如 $F_{3} = 2$, $F_{5} = 5$, $F_{7} = 13$, $F_{13} = 233$）， $X_{m}$ 成为有限域（`instFieldOfPrime`）。当 $F_{m+2}$ 可分解时，中国剩余定理会把 $X_{m}$ 分解为积环（`crtDecomposition`）；例如， $X_{7} \cong \mathbb{Z}/2 \times \mathbb{Z}/17$。
+该同构（`stableValueRingEquiv`）表明组合空间 $X_m$ 本身就是一个循环环。当 $F_{m+2}$ 为素数时（ $F_3 = 2$ ， $F_5 = 5$ ， $F_7 = 13$ ， $F_{13} = 233$ ）， $X_m$ 成为有限域（`instFieldOfPrime`）。当 $F_{m+2}$ 可分解时，中国剩余定理把它分解为积环：例如 $X_7 \cong \mathbb{Z}/2 \times \mathbb{Z}/17$ 。
 
-令人意外的是：这个环结构是“不含连续 1”约束的**内生结果**。它不需要从外部导入整数算术，而是仅凭 Zeckendorf 结构自行涌现。
+环结构是"不含连续 1"约束的**内生结果**。不需要从外部导入整数算术——它仅凭 Zeckendorf 结构自行涌现。
 
-**与已知数学的桥梁：** 这是一个由组合编码约束导出的商环的具体实例，把数制系统（Zeckendorf、Ostrowski）与有限域理论、模算术连接起来。
+**桥接已知数学：** 这是由组合编码约束产生商环的具体实例，连接 Zeckendorf/Ostrowski 计数系统与有限域理论。
 
 ### II. 纤维谱与矩理论
 
-折叠算子 $\Phi: X_{m+1} \to X_{m}$ 会产生纤维 $\Phi^{-1}(x)$，它们的基数 $d(x)$ 在 $X_{m}$ 上并不恒定。**矩和**刻画了这种波动：
+折叠算子 $\Phi: X_{m+1} \to X_m$ 产生纤维 $\Phi^{-1}(x)$ ，其基数 $d(x)$ 在 $X_m$ 上变化。**矩和**量化这种变化：
 
-$$S_{q}(m) = \sum_{x \in X_{m}} d(x)^{q}$$
+$$S_q(m) = \sum_{x \in X_m} d(x)^q$$
 
-基本恒等式有： $S_{0}(m) = F_{m+1}$（稳定点个数）， $S_{1}(m) = 2^{m}$（所有词按纤维拆分后的总数）。更高阶矩则编码了纤维分布中越来越细的结构。
+$S_2$ 满足线性递推：
 
-**S₂ 递推**是本项目第一个无条件的无限族定理。它的证明链很好地体现了整个项目的推导方法：
+$$S_2(m+3) + 2\,S_2(m) = 2\,S_2(m+2) + 2\,S_2(m+1)$$
 
-1. **隐藏位分解**： $\text{weight}(w) = \text{stableValue}(\Phi(w)) + \text{hiddenBit}(w) \cdot F_{m+2}$
-2. **折叠同余**： $\Phi(w) = \Phi(w')$ 当且仅当 $\text{weight}(w) \equiv \text{weight}(w') \pmod{F_{m+2}}$
-3. **碰撞分解**： $S_{2}$ 分解为精确权重碰撞 $E_{00}$ 与互相关 $C(m,d)$
-4. **望远镜求和**： $E_{00}(m) = 1 + \sum_{k<m} S_{2}(k)$
-5. **互相关平移**： $C(m+1, F_{m+2}) = S_{2}(m)$，把相邻层联系起来
-6. **递推式**：
+从 6 步证明链（隐藏位分解 → 折叠同余 → 碰撞分解 → 伸缩 → 交叉相关平移 → 递推）在 Lean 中用 4 行证明，零 `native_decide` 。纯组合量满足小整数系数线性递推——纤维动力学中的隐藏线性性。
 
-$$S_{2}(m+3) + 2\,S_{2}(m) = 2\,S_{2}(m+2) + 2\,S_{2}(m+1)$$
-
-在 Lean 中，这个结论可以在前述链条基础上用 4 行代码证明出来，而且完全不需要 `native_decide`。这相当出人意料：一个纯组合量（纤维碰撞计数）竟然满足一个系数很小的线性递推，暗示纤维动力学内部隐藏着线性结构。
-
-**推论：**
-- 严格单调性：当 $m \geq 1$ 时， $S_{2}(m) < S_{2}(m+1)$
-- 正性
-- Cauchy-Schwarz 界： $S_{2}(m) \cdot F_{m+2} \geq 4^{m}$
-- 一般矩层级： $S_{q}(m) \leq S_{q+1}(m)$
-
-**S₃ 及更高阶：** 碰撞三元组框架可推广到 $S_{3}$，并伴随自己的伴随矩阵与 Cayley-Hamilton 关系。S₃ 递推
-$S_{3}(m+3) = 2S_{3}(m+2) + 4S_{3}(m+1) - 2S_{3}(m)$
-已在有界的 $m$ 范围内验证；其无条件证明仍是当前前沿问题。
-
-**与已知数学的桥梁：** 控制 $S_{q}$ 递推的伴随矩阵，与统计力学中的传递算子有关。矩层级 $S_{0}, S_{1}, S_{2}, \ldots$ 与概率论中的矩问题、以及热力学形式主义中的配分函数方法相呼应。
+**桥接已知数学：** 控制 $S_q$ 递推的伴随矩阵与统计力学中的转移算子相关。矩阶层与概率论中的矩问题和热力学形式主义中的配分函数方法平行。
 
 ### III. 碰撞核与谱理论
 
-$S_{q}$ 递推由**碰撞核矩阵**控制，即一些伴随矩阵，它们的谱性质决定了各阶矩的渐近增长。
+$S_q$ 递推由**碰撞核矩阵**控制，其谱性质决定矩的渐近增长。对 $S_2$ ：一个 $3 \times 3$ 矩阵，迹为 2，行列式为 $-2$ ，满足 Cayley-Hamilton $M^3 = 2M^2 + 2M - 2I$ 。Hankel 行列式分析确认递推阶恰好为 3。
 
-以 $S_{2}$ 为例：它对应一个 $3 \times 3$ 矩阵，满足 $\text{tr} = 2$、 $\det = -2$，以及 Cayley-Hamilton 关系 $M^{3} = 2M^{2} + 2M - 2I$。其特征多项式的根控制 $S_{2}(m)$ 的指数增长率。
-
-**Hankel 行列式**分析确认，递推的阶数恰为 3（不能降到 2 阶），而其谱则通过**碰撞 zeta 算子**框架计算出来。这是一个形式幂级数，其有理性编码了所有矩的渐近信息。
-
-**与已知数学的桥梁：** 这一结构与动力系统中的 Ruelle zeta 函数、图论中的 Ihara zeta 函数同构性很强。碰撞 zeta 的有理性，是 sofic 移位 zeta 函数有理性定理的一种有限型版本。
+**桥接已知数学：** 结构上类似于动力系统中的 Ruelle zeta 函数和图论中的 Ihara zeta 函数。
 
 ### IV. 缺陷代数与离散微积分
 
-折叠算子一般并不与算术交换。**缺陷**刻画了这种失败：
+折叠算子一般不与算术交换。**缺陷** $\delta(x, y) = \Phi(x \oplus y) - \Phi(x) \oplus \Phi(y)$ 度量这种失败。它满足链代数、进位结构和**离散 Stokes 恒等式**。
 
-$$\delta(x, y) = \Phi(x \oplus y) - \Phi(x) \oplus \Phi(y)$$
-
-缺陷恰好在折叠与加法交换时消失，而这又刻画了 $X_{m}$ 中一个特殊的子集。缺陷满足：
-
-- **链式代数**：缺陷沿模塔方向可复合
-- **进位结构**： $\text{restrict}(x \oplus_{m+1} y) = \text{restrict}(x) \oplus_{m} \text{restrict}(y) + \kappa \cdot \chi^{\text{carry}}$
-- **离散 Stokes 恒等式**：一种将边界缺陷与内部结构联系起来的求和分部公式
-
-**与已知数学的桥梁：** 缺陷代数是微分几何中曲率的离散类比。离散 Stokes 恒等式则连接到非交换微分法与格点规范场理论。
+**桥接已知数学：** 缺陷代数是微分几何中曲率的离散类比。离散 Stokes 恒等式连接非交换微分学和格规范场论。
 
 ### V. 扫描-投影生成（SPG）
 
-**扫描误差** $\varepsilon_{m}$ 衡量：当把完整词空间通过折叠算子投影到稳定子空间时，会损失多少信息。
+**扫描误差** $\varepsilon_m$ 度量通过折叠算子从完整词空间投影到稳定子空间时的信息损失。离散与测度论版本均已形式化，包括贝叶斯半界 $2\varepsilon \leq 1$ 、观测细化单调性和补集对称性。
 
-- 离散版与测度论版都已形式化
-- **贝叶斯半界**： $2\varepsilon \leq 1$
-- **观测细化单调性**：观测越细，扫描误差不会增大
-- **补集对称性**：一个事件与其补集的扫描误差彼此相关
-
-SPG 是论文中的核心构造：它是一个递归过程，在每个尺度上生成投影，而黄金比例控制了每一层信息损失的几何结构。
-
-**与已知数学的桥梁：** SPG 把信息论中的率失真理论、小波多分辨率分析（不同尺度上的逐级逼近）以及统计物理中的重整化群（带有可控误差的粗粒化）联系在一起。
+**桥接已知数学：** SPG 连接信息论中的率失真理论、小波多分辨率分析和统计物理中的重整化群。
 
 ### VI. 动力学与拓扑
 
-移位映射 $\sigma: X_{m} \to X_{m}$ 赋予黄金均值移位以动力学结构：
+移位映射 $\sigma: X_m \to X_m$ 携带拓扑熵 $h_{\text{top}} = \log \varphi$ （`topological_entropy_eq_log_phi`）、传递矩阵 $A^2 = A + I$ 上的 Perron-Frobenius 谱理论、唯一不动点和周期轨道极小性证明。
 
-- **拓扑熵**： $h_{\text{top}} = \log \varphi$，通过 Fibonacci 比值收敛 → 对数连续性 → Cesaro 平均 → 望远镜求和来证明（`topological_entropy_eq_log_phi`）
-- **传递矩阵**：黄金均值邻接矩阵及其 Fibonacci 恒等式：
-
-$$
-A = \begin{pmatrix}
-1 & 1 \\
-1 & 0
-\end{pmatrix},
-\qquad
-A^{2} = A + I
-$$
-
-  以及 Cassini 恒等式 $F_{n+1}F_{n-1} - F_{n}^{2} = (-1)^{n}$ 与 Lucas 迹公式 $\text{tr}(A^{n}) = L_{n}$
-- **Perron-Frobenius**：正特征向量、实特征值受限于 $x^{2} - x - 1 = 0$，主导根为 $\varphi$
-- **唯一不动点**： $\sigma$ 恰有一个不动点（全 0 词）
-- **周期轨道**：给出周期 2、3、4 轨道及其极小性证明
-
-**与已知数学的桥梁：** 黄金均值移位是符号动力系统中的经典基本例子（Lind-Marcus）。Perron-Frobenius 分析连接到热力学形式主义（Ruelle、Bowen）以及 Markov 链理论。熵 $\log \varphi$ 也出现在编码理论中的 $(1,\infty)$ RLL 约束信道容量里。
+**桥接已知数学：** 黄金均值移位是符号动力学的典范例子（Lind-Marcus）。熵 $\log \varphi$ 是编码理论中 $(1,\infty)$ RLL 受限信道的容量。
 
 ### VII. 模塔与逆极限
 
-限制映射 $\text{restrict}: X_{m+1} \to X_{m}$ 构成一个**射影系统**，其态射都是环同态：
+restriction 映射构成环同态的射影系统。逆极限 $X_\infty = \varprojlim X_m$ 紧致、全不连通、可度量化、无穷（`inverseLimitEquiv`）。
 
-- 每一层都满射、可传递、保持零元
-- 纤维非空：每个稳定词都有原像
-- 进位缺陷：加法与限制映射之间通过一个受控误差项发生相互作用
-
-逆极限
-
-$$
-X_{\infty} = \varprojlim X_{m}
-$$
-
-具有如下性质：
-- **紧致**（Tychonoff）
-- **全不连通**（clopen 基）
-- **可度量**（由 PiNat 给出的前缀超度量）
-- **无限**（注入 $n \mapsto$ 第 $2n$ 位的比特）
-
-**与已知数学的桥梁：** 这个塔在结构上类似于 p 进整数
-
-$$
-\mathbb{Z}_{p} = \varprojlim \mathbb{Z}/p^{n}\mathbb{Z}
-$$
-
-只是这里用 Fibonacci 数替代了素数幂。进位缺陷正是 p 进加法中进位现象的类比。逆极限 $X_{\infty}$ 是一个由黄金比例而不是素数控制的拟有限环。
+**桥接已知数学：** 结构上类似 p-adic 整数 $`\mathbb{Z}_p = \varprojlim \mathbb{Z}/p^n\mathbb{Z}`$ ，但 Fibonacci 数替代了素数幂。 $`X_\infty`$ 是由黄金比例而非素数控制的 profinite 环。
 
 ### VIII. 圆维数与丢番图结构
 
-**审计稳定性**框架研究：纤维结构在扰动下究竟有多稳定。
+**圆维数** $\text{cdim}(G) = \dim((\widehat{G})^0)$ 通过 Pontryagin 对偶计数独立相位圆因子。同构不变、直和可加、有限扩张不变（`circleDim`，`circleDim_add`，`circleDim_finite_extension`）。**审计稳定性**框架连接劣逼近矩阵，高阶纤维谱不被边缘分布决定。
 
-- 盒式审计稳定性 ↔ 劣逼近矩阵（`audit_stability_iff_badly_approximable`）
-- 高阶纤维谱不由边缘分布决定（`higher_spectrum_not_determined_by_marginals`）
-- 素支撑对象与谱计数
-
-**与已知数学的桥梁：** 这把问题连接到丢番图逼近的度量理论（Khintchine、Schmidt）与数的几何。这里的“劣逼近”条件，是经典实数情形在黄金比例环境下的对应版本。
+**桥接已知数学：** 连接丢番图逼近的度量理论（Khintchine, Schmidt）、数的几何和紧群上的 Haar 测度论。
 
 ### IX. 组合结构
 
-- **路径独立集**：路径图 $P_{n}$ 的独立集个数等于 $F_{n+2}$（`path_independent_set_count`），证明使用了划分、双射与强归纳
-- **Fibonacci 立方体**：对由 Zeckendorf 表示诱导出的超立方体子图，已建立约 510 条定理
-- **Fibonacci 多项式**： $F_{n}(x)$ 满足 $F_{n+2}(x) = F_{n+1}(x) + x \cdot F_{n}(x)$，且 $F_{n}(1) = \text{fib}(n)$
+路径 $P_n$ 的独立集数为 $F_{n+2}$ （`path_independent_set_count`）。约 510 条关于 Fibonacci 立方体的定理。Fibonacci 多项式 $F_n(x)$ 满足 $F_{n+2}(x) = F_{n+1}(x) + x \cdot F_n(x)$ 。
 
-**与已知数学的桥梁：** Fibonacci 立方体在分布式计算（互连网络）、编码理论（带 Fibonacci 结构的纠错码）以及组合优化中都有研究。
+**桥接已知数学：** Fibonacci 立方体在分布式计算、编码理论和组合优化中被研究。
+
+### X. 递归地址化与空值语义
+
+新概念由旧层读出序列生成。核心定理：派生的 $\sigma$ -代数**绝不扩张**：
+
+$$\mathcal{G}^{(L+1)} \subseteq \mathcal{G}^{(L)}$$
+
+递归地址化只在既有可测结构内部重新组织可见事件。没有外部注入。整个构造是内生的。
+
+**地址先于概念值。** 在地址 $a$ 被给出之前，评价函数 $\mathbf{1}_{C_a}$ 在类型层不成立——不是数值零，而是结构性缺失。论文定义此为 NULL："因为地址不存在，所以这个问题不能被提问。"三种结构上截然不同的空值：
+
+- **语义空值** ：地址不在协议内
+- **协议空值** ：可见域拒绝它
+- **碰撞空值** ：侧信息不足以唯一重构
+
+当局部证书存在但全局无法粘合时，障碍是一个 **Cech $H^2$ 上同调类**。gerbe 结构（定理 `prefix-site-cech-null-gerbe`）将其提升到完整的 2-范畴框架。
+
+这一步的认识论含义值得注意：传统数学把对象视为先验存在的，然后用公理去描述。这里恰好相反——**对象是被地址化过程生成的**。不是"对象存在但我们不知道"，而是"在地址被给出之前，评价函数在类型层不成立"。
+
+**桥接已知数学：** $\sigma$ -代数不扩张连接充分统计量理论和信息论中的数据处理不等式。 $H^2$ 障碍框架连接层上同调、gerbe 和纤维丛分类。
+
+### XI. Forcing 框架
+
+所有具体结果之上是一条逻辑脊柱：11 层保守扩张链
+
+$$\mathbb{L}_0 \preceq \mathbb{L}_1 \preceq \cdots \preceq \mathbb{L}_{10}^{\text{OST}}$$
+
+每层增加结构（类型、上下文、引用、NULL 语义、动态、多轴细化、观察者索引）但不改写低层的含义。在第 $n$ 层被 forcing 的公式在第 $n+k$ 层仍然成立。这不是若干并列理论的集合，而是一条每步保守扩张的单一生成链。
+
+Forcing 关系 $M, p \Vdash \varphi$ 意为：公式 $\varphi$ 对信息状态 $p$ 仍保留的**所有**实现成立。细化只收缩未定部分，绝不推翻已确立的事实。
+
+**桥接已知数学：** forcing 框架推广了集合论中的 Kripke 语义和 Cohen forcing 到带类型、多层、观察者索引的设定。保守扩张链类似代数中的域扩张塔。
+
+### XII. 投影本体数学（POM）
+
+POM 不是新理论，而是前面一切的**统一语法提升**。
+
+所有构造——折叠、地址化、算术、重写——被压缩为一条微语法：提升 $\circ$ $U^t$ $\circ$ 投影。对象是投影门下的稳定读出。运算是可复合的投影词。定理是投影词的等价。证明是可审计的重写证书（终止、合流、在局部片段上可判定）。
+
+四个不可消去的投影门分层全部可见数学：
+
+1. 仅 $P_Z$ → 归一化算术
+2. $P_Z + P_\leq$ → 序与商余（不可消去的顺序瓶颈）
+3. 加 $P_{\text{prim}}$ → 素数类原子层（从时间迹提取的 primitive 轨道分解）
+4. 加 $P_\chi$ → 角色切片与 Fourier 层
+
+碰撞矩（第 II 节）成为同余类上的幂次和： $S_q(m) = \sum_r c_m(r)^q$ ——模算术的谱学影子。当碰撞阶 $q \to \infty$ 时，Perron 特征值满足 $r_q^{1/q} \to \sqrt{\varphi}$ 。黄金比例作为**谱不变量被反演回收**，而非作为输入被假设。
+
+**桥接已知数学：** 投影词 2-范畴连接重写系统与项代数。四门分层平行于从算术到解析数论的层级。谱端点反演连接大偏差理论和热力学形式主义。
+
+### XIII. Zeta 函数、Canonical System 与 RH 模板
+
+黄金均值 SFT 的动力学 zeta 函数为 $\zeta(z) = 1/(1 - z - z^2)$ ，主极点在 $z = \varphi^{-1}$ 。经完成化到 $\Xi$ ，并假设完成化行列式 $D(s)$ 在临界线上有纯相位（视界零知识幺正性），de Branges 理论给出：
+
+- **Canonical system** ： $D$ 唯一提升为秩-1 Hamiltonian 常微分方程；"极端零知识" $\iff$ $\text{rank}\,H(x) = 1$ a.e.
+- **谱移 = 信息泄漏** ：Krein 公式将转录的 KL 散度等同于谱移密度
+- **SU(1,1) Riemann-Hilbert 等价** ：所有零点在临界线上 $\iff$ 正定范畴可解性（无离临界线共振极）
+- **Adelic 拼接** ：局部 Weil 纯权 + 跨素数一致模拟器 $\Rightarrow$ 内函数且外因子消失 $\Rightarrow$ 临界线集中
+- **非正规性障碍** ：离临界线零点 $\iff$ 视界更新算子不可相似为正规算子
+
+这不是 Riemann 猜想的证明。它是一个**充分条件模板**，把 RH 翻译为零知识框架内可审计的正定性条件。
+
+**桥接已知数学：** canonical system 框架连接 de Branges 空间、逆谱理论和 Hilbert-Polya 纲领。SU(1,1) RH 等价连接可积系统中的 Riemann-Hilbert 问题。adelic 拼接连接 Langlands 纲领和自守形式。
+
+### XIV. 物理时空骨架
+
+推导链没有在谱理论处停下。从已建立的 forcing 框架出发，一个最小的物理时空骨架涌现——不是假设物理学，而是把已有结构读成时空：
+
+- **观察者**不是特权主体，而是状态空间上的纤维索引。"谁在观测什么"被改写为"哪个状态纤维在什么条件下允许哪些局部比较"。
+- **时间**不是预设坐标，而是**决定包络**在精化链上的投影： $`T^{i,U}_{\mathcal{O}}(H) := H/{\sim_{\mathcal{O}}}`$ 。时间仅在 $`\text{Dec}_{\mathcal{O}}(p) \subsetneq \text{Dec}_{\mathcal{O}}(q)`$ 时前进。时间之箭是 forcing 的单调性。
+- **空间**来自共同支撑、共同 forcing 和资源运输代价。
+- **因果**来自允许精化链上的偏序关系。
+- **时钟运输**满足 $\delta\Theta = \Omega$ （运输曲率）。局域势给出 lapse $N = e^{-\phi}$ 和红移 $\nu_B/\nu_A = N(A)/N(B)$ 。
+- **审计种子**（真实输入 40 态核在 $\theta = 0$ 处）提供秩-3 局域空间。粘接相容图产生四维 Lorentz 流形 $M_{\text{adm}}$ 。
+- **最小二阶协变闭包**是唯一的： $R_g - 2\Lambda$ 。变分得到 Einstein 方程：
+
+$$G_{\mu\nu} + \Lambda\,g_{\mu\nu} = \kappa\,T^{(\text{res})}_{\mu\nu}$$
+
+没有添加任何物理公理。方程是 $M_{\text{adm}}$ 上 forcing 结构的唯一闭合。
+
+**未声称的内容：** 本项目不声称已经完整恢复了标准量子力学或标准广义相对论。它声称的是一条从有限窗口二元观测到 Hilbert 型量子结构和 $M_{\text{adm}}$ 上 Einstein 闭合的纯推导链。在更强全局化、完整协变性和连续极限刚性下的完整恢复，需要表示定理、极限定理和刚性定理，这些被明确推迟。
+
+**桥接已知数学：** 决定包络时间连接量子引力中的内禀时间问题。时钟运输方程连接 Unruh 效应和引力红移。 $R_g - 2\Lambda$ 的唯一性是四维下的 Lovelock 定理。
+
+### XV. 三条结构界面
+
+这些结果不是独立的。三条结构界面在所有章节中反复出现：
+
+1. **分辨率降阶的非局域性。** 折叠不是朴素截断。局部窗口的影响在投影到低分辨率时经纤维结构传播到更大范围。规范差 $G_m$ 精确量化这种非局域性。
+
+2. **序列层对局部损失的补偿。** 窗口层的折叠是多对一的（局部信息丢失）。但在序列层，有限记忆逆码恢复了丢失的信息。熵率不降。"局部丢失，整体恢复"是结构性特征，不是偶然。
+
+3. **值保持群胚 + 唯一截面 = 算术。** 局部可逆重写把表示不同但值相同的状态组织成群胚轨道。Zeckendorf 横截面是唯一正规形。稳定算术在这个横截面上涌现。
 
 ## 推导链
-
-这个项目的不寻常之处，不在于任何单个结果，而在于从种子出发形成了一条**不中断的推导链**：
 
 ```
 x² = x + 1
 │
-├─► 黄金均值移位 X_m（无连续 1）
+├─► 黄金均值移位 X_m（不含连续 1）
 │   │
 │   ├─► Zeckendorf 双射 X_m ↔ {0, ..., F_{m+2}-1}
 │   │   │
 │   │   ├─► 折叠算子 Φ: X_{m+1} → X_m
 │   │   │   ├─► 纤维结构、重数 d(x)
 │   │   │   │   ├─► 矩和 S_q(m) = Σ d(x)^q
-│   │   │   │   │   ├─► 碰撞分解 E₀₀, C(m,d)
-│   │   │   │   │   │   └─► S₂ 递推（无条件，对所有 m）
-│   │   │   │   │   │       ├─► 严格单调性、正性
-│   │   │   │   │   │       └─► 碰撞核矩阵
-│   │   │   │   │   │           ├─► Cayley-Hamilton、特征多项式
-│   │   │   │   │   │           ├─► Hankel 行列式、最小阶
-│   │   │   │   │   │           └─► 碰撞 zeta 有理性
+│   │   │   │   │   ├─► 碰撞分解 → S₂ 递推（无条件，∀m）
+│   │   │   │   │   │   └─► 碰撞核矩阵 → Cayley-Hamilton
+│   │   │   │   │   │       └─► Hankel 秩 → 碰撞 zeta 有理性
 │   │   │   │   │   └─► S₃ 递推（有界验证）
-│   │   │   │   ├─► 纤维谱 D_m^(k) 及闭式
+│   │   │   │   ├─► 纤维独立集复形 → 球面/可缩二分律
 │   │   │   │   └─► 纤维融合不等式
-│   │   │   ├─► 缺陷代数
-│   │   │   │   ├─► 零条件 ↔ 折叠可交换性
-│   │   │   │   ├─► 离散 Stokes 恒等式
-│   │   │   │   └─► 进位缺陷链
-│   │   │   └─► 扫描误差（SPG）
-│   │   │       ├─► 贝叶斯半界
-│   │   │       ├─► 观测细化单调性
-│   │   │       └─► 补集对称性
+│   │   │   ├─► 缺陷代数 → 离散 Stokes → 进位链
+│   │   │   └─► 扫描误差（SPG）→ 贝叶斯界、单调性
 │   │   │
-│   │   ├─► X_m 上的稳定算术 ⊕, ⊗
+│   │   ├─► 稳定算术 ⊕, ⊗
 │   │   │   ├─► 环同构 X_m ≃ ℤ/F_{m+2}ℤ
 │   │   │   │   ├─► Fibonacci 素数域
-│   │   │   │   └─► CRT 分解（复合的 F_{m+2}）
-│   │   │   └─► 带进位缺陷的模塔
-│   │   │       └─► 逆极限 X_∞（紧致、全不连通）
+│   │   │   │   └─► CRT 分解
+│   │   │   └─► 模塔 → 逆极限 X_∞（profinite 环）
 │   │   │
-│   │   └─► 圆维数
-│   │       ├─► 审计稳定性 ↔ 劣逼近
-│   │       └─► 高阶谱 ≠ 边缘分布
+│   │   ├─► 圆维数（Pontryagin 对偶）→ 相位通道计数
+│   │   │
+│   │   └─► 递归地址化
+│   │       ├─► σ-代数不扩张：G^{L+1} ⊆ G^{L}
+│   │       ├─► NULL 三分解（语义/协议/碰撞）
+│   │       └─► Čech H² 粘合障碍 → gerbe 语义
 │   │
-│   └─► 移位动力学 σ: X_m → X_m
-│       ├─► 拓扑熵 = log φ
-│       ├─► Perron-Frobenius 谱理论
-│       │   └─► 传递矩阵特征值
-│       ├─► 周期轨道（周期 2、3、4）
-│       └─► 唯一不动点
+│   ├─► forcing 框架 L₀ ⪯ L₁ ⪯ ··· ⪯ L₁₀ᴼˢᵀ
+│   │
+│   ├─► POM：统一投影语法（提升 ∘ Uᵗ ∘ 投影）
+│   │   ├─► 四个不可消去门：P_Z, P_≤, P_prim, P_χ
+│   │   ├─► 投影词 2-范畴、重写证书
+│   │   └─► 碰撞谱端点：r_q^{1/q} → √φ
+│   │
+│   ├─► ζ / Ξ / canonical system
+│   │   ├─► de Branges 秩-1 Hamiltonian
+│   │   ├─► Krein 谱移 = KL 散度
+│   │   ├─► SU(1,1) RH 等价
+│   │   └─► adelic 拼接 → 临界线模板
+│   │
+│   └─► 物理时空骨架
+│       ├─► 观察者 = 状态纤维
+│       ├─► 时间 = 决定包络投影
+│       ├─► 时钟运输：δΘ = Ω → lapse、红移
+│       ├─► 审计种子 → 秩-3 空间 → 4D Lorentz M_adm
+│       └─► 最小闭包唯一性 → Einstein 方程
 │
 └─► 组合学
     ├─► 路径独立集计数 = F_{n+2}
@@ -236,87 +272,113 @@ x² = x + 1
     └─► Fibonacci 多项式 F_n(x)
 ```
 
-每一条箭头都对应一条经过形式化验证的推导步骤。没有公理。没有缺口。
+每条箭头都是经过形式化验证的推导步骤或论文中可追溯的推导。没有公理。没有缺口。
 
-## 开放前沿
+## 系统架构
 
-- **纤维重数闭式**：猜想公式 $D_{2k} = F_{k+2}$、 $D_{2k+1} = 2F_{k}$ 已在一个两步递推假设下得到证明；去掉该条件仍在进行中
-- **S₃ 的无条件递推**： $S_{3}(m+3) = 2S_{3}(m+2) + 4S_{3}(m+1) - 2S_{3}(m)$ 已在有界范围内验证；无条件证明是下一个主要里程碑
-- **谱半径**：黄金均值邻接矩阵满足 $\rho(A) = \varphi$；具体的 Perron 根已经证明，但 Mathlib 中的谱半径 API 仍待完善
-- **SPG 鞅收敛**：证明前缀扫描误差序列是一个超鞅
-- **Cantor 集同胚**： $X_{\infty}$ 与 Cantor 集同胚（逆极限的拓扑分类）
-- **物理对应**：系统识别这些导出结构与统计力学、编码理论、动力系统中已知对象的对应关系
-- **Zeta 有理性**：碰撞 zeta 函数的解析延拓
+Omega 项目是一个包含三层的统一系统：
+
+```
+种子: x² = x + 1
+    │
+    ▼
+┌─────────────────────────────────┐
+│  第一层：推导引擎               │
+│  Lean 4 — 10,588+ 条定理        │
+│  零公理，机器验证               │
+└───────────────┬─────────────────┘
+                │
+                ▼
+┌─────────────────────────────────┐
+│  第二层：知识图谱               │
+│  Sisyphus — ~20,998 个节点      │
+│  定理依赖关系与推导深度         │
+└───────────────┬─────────────────┘
+                │
+                ▼
+┌─────────────────────────────────┐
+│  第三层：出版管线               │
+│  16 个 AI 智能体 → 期刊论文     │
+└─────────────────────────────────┘
+```
+
+一个方程输入。经过验证、可视化、发表的数学输出。
+
+![Sisyphus 知识图谱](docs/dossier/assets/sisyphus.png)
+
+→ [完整系统架构](docs/dossier/) · [浏览论文](papers/publication/) · [观看 autoresearch 直播](https://www.youtube.com/live/pn_W3I5-qdo)
+
+## 出版管线
+
+16 个 AI 智能体协作，从核心理论自动提取、形式化、审稿和出版期刊论文：
+
+- **8 个形式化智能体**（分析师、形式化者、审核者、登记者、优化器、编排者 + 2 个 Codex 顾问）并行工作，在 Lean 4 中机器验证定理
+- **8 个出版智能体**（编排者、研究者、期刊改写者、编辑审稿者、整合者、文献管理者、Lean 同步检查者、投稿准备者）运行从接收（P0）到可投稿（P7）的 7 阶段管线
+
+当前状态：42 篇论文在管线中。3 篇达到 P7（可投稿），目标期刊为 Ergodic Theory & Dynamical Systems、Annals of Pure and Applied Logic 和 Transactions of the AMS。
+
+→ [系统端到端工作原理](docs/dossier/#the-system)
 
 ## 项目结构
 
-```text
+```
 automath/
-├── lean4/                  # Omega Lean 4 库（见 lean4/README.md）
-│   ├── Omega/
-│   │   ├── Core/           # Fibonacci, Word, No11, CoprimeSMul
-│   │   ├── Folding/        # 44 个文件：fold, fibers, moments, collisions, defects,
-│   │   │                   #   carry, entropy, inverse limits, circle dimension,
-│   │   │                   #   shift dynamics, SPG interface, Hankel, zeta operators
-│   │   ├── SPG/            # 扫描-投影生成：cylinders, prefix metric,
-│   │   │                   #   clopen sets, scan error（离散版 + 测度版）
-│   │   ├── Graph/          # 标记图、sofic shifts、transfer matrices
-│   │   ├── Frontier/       # 论文接口：assumptions, certificates, conjectures
-│   │   └── Combinatorics/  # 路径独立集、Fibonacci cubes
-│   ├── Omega.lean          # 顶层导入（66 个模块）
+├── docs/                   # 补充文档
+│   └── dossier/            # 面向广泛受众的叙事性介绍
+├── lean4/                  # Omega Lean 4 库（38,876 行，104 个文件）
+│   ├── Omega/              # Core, Folding, SPG, Graph, Frontier, Combinatorics,
+│   │                       #   CircleDimension, Conclusion, EmergentAlgebra, Zeta
+│   ├── Omega.lean          # 顶层导入
 │   └── IMPLEMENTATION_PLAN.md
-├── theory/                 # 数学论文 + 可复现实验流水线
-│   └── 2026_golden_.../    # 10,588 条定理级陈述，21 章正文 + 13 个附录
-│       ├── main.tex
-│       ├── scripts/        # 可复现实验脚本
-│       └── sections/       # 正文、附录、生成的 LaTeX
-└── .github/workflows/      # CI：带 mathlib 缓存的 Lean 构建
+├── theory/                 # 核心理论论文（770K 行）
+│   └── 2026_golden_.../    # 10,588 条定理，21 章 + 13 附录
+│       ├── sections/       # 2,823 个 .tex 文件（正文 + 附录 + 生成）
+│       └── scripts/        # 515 个可复现 Python 实验脚本
+├── papers/publication/     # 42 篇提取的期刊论文（P0-P7 管线）
+├── .claude/agents/         # 16 个 AI 智能体定义
+└── .github/workflows/      # CI：Lean 构建 + 公理审计 + 覆盖率
 ```
 
 ## 当前状态
 
 | 指标 | 数值 |
 |------|------|
-| Lean 4 代码行数 | ~25,000 |
-| 定理与定义 | ~2,350 |
-| Lean 文件数 | 66 |
-| **公理** | **0** |
-| 论文中的定理级陈述 | 10,588 |
-| 论文篇章数 | 21 章正文 + 13 个附录 |
-| 形式化覆盖率 | ~12.3% (1,300 / 10,588) |
+| 理论：定理级陈述 | 10,588 |
+| 理论：篇章数 | 21 章正文 + 13 附录 |
+| 理论：数学领域 | 12+ |
+| 理论：代码行数 | ~770,000 |
+| Lean 4：代码行数 | 38,876 |
+| Lean 4：定理与定义 | 3,427 |
+| Lean 4：**公理** | **0** |
+| Lean 4：形式化轮次 | 182 |
+| 论文：管线中总数 | 42 |
+| 论文：可投稿（P7） | 3 |
+| AI 智能体 | 16（8 形式化 + 8 出版） |
+| Python 实验脚本 | 515 |
 
-**各章节覆盖率：**
+该库依赖 [Mathlib](https://github.com/leanprover-community/mathlib4) 和 Lean 4。
 
-| 章节 | 论文定理数 | 已形式化 | 覆盖率 |
-|------|-----------|---------|--------|
-| SPG | 127 | ~70 | ~55% |
-| 萌生算术 | 151 | ~88 | ~58% |
-| POM（纤维谱） | 1,525 | ~507 | ~33% |
-| Folding | 317 | ~91 | ~29% |
-| Group Unification | 457 | ~106 | ~23% |
-| Circle Dimension | 342 | 62 | ~18% |
-| Zeta Finite Part | 4,437 | ~255 | ~6% |
-| Conclusions | 1,727 | 83 | ~5% |
+## Star History
 
-该库依赖 [Mathlib](https://github.com/leanprover-community/mathlib4) v4.28.0 与 Lean 4 v4.28.0。
+[![Star History Chart](https://api.star-history.com/svg?repos=the-omega-institute/automath&type=Date)](https://star-history.com/#the-omega-institute/automath&Date)
 
-## 构建
+## 安装 Omega 思维框架
 
-```bash
-cd lean4 && lake build
+让你的 AI 编程助手用 forcing、最小化和可审计推导链来思考：
+
+```
+https://raw.githubusercontent.com/the-omega-institute/automath/dev/prompts/omega-skill/SKILL.md
 ```
 
-首次构建时会自动拉取并缓存 Mathlib。
+把这个 URL 丢进 Claude Code，让它安装这个 skill。然后输入 `/omega` 即可。
 
-## 复现实验论文
+## 开放前沿
 
-```bash
-cd theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
-pip install -r requirements.txt
-python3 scripts/run_all.py    # 生成所有图表
-latexmk -pdfxe main.tex       # 编译论文
-```
+- **S₃ 无条件递推** ： $S_3(m+3) = 2S_3(m+2) + 4S_3(m+1) - 2S_3(m)$ ，已在有界范围内验证
+- **纤维重数闭式** ： $D_{2k} = F_{k+2}$ ， $D_{2k+1} = 2F_k$ ，条件于两步递推
+- **Cantor 集同胚** ： $X_\infty$ 的拓扑分类
+- **超出 $M_{\text{adm}}$ 的全局化** ：表示定理、极限定理和刚性定理
 
 ## 许可协议
 
-[Global Prosperity Open License (GPOL) v1.0](LICENSE) — 允许自由使用、修改与分发；如果你的总收入超过全球 GDP 的 0.01%，则适用 1% 净利润贡献条款。
+[Global Prosperity Open License (GPOL) v1.0](LICENSE) — 允许自由使用、修改与分发。如果你的总收入超过全球 GDP 的 0.01%，则适用 1% 净利润贡献条款。

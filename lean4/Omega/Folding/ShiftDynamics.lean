@@ -895,6 +895,19 @@ theorem fib_fusion_defect_cocycle (a b c : Nat) :
     push_cast [Nat.fib_add_two]; ring
   rw [hc, ha]; nlinarith
 
+/-- Paper package: fusion defect, determinant volume law, 2-cocycle.
+    lem:pom-shifted-fib-fusion-defect-positive, cor:pom-fib-determinant-volume-law,
+    prop:pom-fusion-defect-2cocycle-identity -/
+theorem paper_pom_shifted_fusion_defect_package :
+    (∀ a b : Nat, Nat.fib (a + 2) * Nat.fib (b + 2) =
+      Nat.fib (a + b + 2) + Nat.fib a * Nat.fib b) ∧
+    (∀ a b : Nat, (Nat.fib (a + 2) : ℤ) * Nat.fib (b + 2) - (Nat.fib a : ℤ) * Nat.fib b =
+      Nat.fib (a + b + 2)) ∧
+    (∀ a b c : Nat,
+      Nat.fib a * Nat.fib b * Nat.fib (c + 2) + Nat.fib (a + b) * Nat.fib c =
+      Nat.fib b * Nat.fib c * Nat.fib (a + 2) + Nat.fib (b + c) * Nat.fib a) :=
+  ⟨fib_shifted_fusion_defect, fib_determinant_volume_law, fib_fusion_defect_cocycle⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase 234: Fib strict supermultiplicativity
 -- ══════════════════════════════════════════════════════════════
@@ -1242,5 +1255,38 @@ theorem paper_shift_period2Seq : X.shiftN 2 X.period2Seq = X.period2Seq :=
 /-- Paper: thm:pom-entropy-saturation (period-2 not fixed) -/
 theorem paper_shift_period2Seq_ne : X.shift X.period2Seq ≠ X.period2Seq :=
   X.shift_period2_ne
+
+/-- 3 ∣ (2q - 2) iff q ≡ 1 (mod 3), for q ≥ 1.
+    cor:pom-collision-fibonacci-twist-2primary-first-appearance -/
+theorem three_dvd_2q_minus_2_iff_q_mod_3 (q : Nat) (hq : 1 ≤ q) :
+    3 ∣ (2 * q - 2) ↔ q % 3 = 1 := by
+  constructor
+  · intro h
+    obtain ⟨k, hk⟩ := h
+    omega
+  · intro h
+    omega
+
+/-- First BF 2-primary trigger: q = 4 gives F_6 = 8 which is divisible by 2.
+    cor:pom-collision-fibonacci-twist-2primary-first-appearance -/
+theorem bf_first_trigger_q4_fib6 :
+    Nat.fib (2 * 4 - 2) = 8 ∧ 2 ∣ Nat.fib (2 * 4 - 2) := by
+  refine ⟨by native_decide, by native_decide⟩
+
+/-- Paper BF 2-primary trigger sequence witness package.
+    cor:pom-collision-fibonacci-twist-2primary-first-appearance -/
+theorem paper_bf_2primary_trigger_sequence :
+    (∀ q : Nat, 1 ≤ q → (3 ∣ (2 * q - 2) ↔ q % 3 = 1)) ∧
+    (∀ n : Nat, 2 ∣ Nat.fib n ↔ 3 ∣ n) ∧
+    (Nat.fib 6 = 8 ∧ 2 ∣ Nat.fib 6) ∧
+    (¬ 3 ∣ (2 * 2 - 2) ∧ ¬ 3 ∣ (2 * 3 - 2)) ∧
+    ((2 * 7 - 2) = 12 ∧ 3 ∣ 12 ∧ Nat.fib 12 = 144 ∧ 2 ∣ Nat.fib 12) ∧
+    ((2 * 10 - 2) = 18 ∧ 3 ∣ 18) :=
+  ⟨three_dvd_2q_minus_2_iff_q_mod_3,
+   Omega.fib_even_iff_three_dvd,
+   ⟨by native_decide, by native_decide⟩,
+   ⟨by decide, by decide⟩,
+   ⟨by decide, by decide, by native_decide, by native_decide⟩,
+   ⟨by decide, by decide⟩⟩
 
 end Omega

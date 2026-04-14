@@ -1,20 +1,177 @@
 \paragraph{对称幂升级的平方根谱界不稳定：第一变分放大、线性激发过滤与预言机化选择轴}
-在本文的 moment-kernel 编译口径下，“占据数对称幂商”是一条自然的多项式态压缩路线（命题 \ref{prop:pom-moment-symmetric-power}；命题 \ref{prop:pom-factorized-sympower-upper-bound}）。
-然而，对称幂在谱界上并不保守：它会把任何非 Perron 模态沿乘法尺度系统性放大到最终穿越平方根界，从而把“核版 RH”从一个可验证约束提升为一个\emph{需要额外选择轴才能维持}的结构性工程问题。其结论性接口可概括为：
-\begin{enumerate}
-  \item \textbf{对称幂的平方根谱界不稳定性：除谱秩一外，任意原始核终将违反核版 RH。}
-  对原始非负矩阵 \(A\)，若非 Perron 谱半径 \(\eta>0\)，则存在 \(b_0\) 使得对所有 \(b\ge b_0\)，\(\mathrm{Sym}^b(A)\) 的非 Perron 谱半径严格大于 \(\sqrt{\rho(A)^b}\)，从而对称幂最终必违反核版 RH 的平方根谱界（定理 \ref{thm:pom-sympower-sqrt-bound-instability}）。
-  并且“对所有 \(b\ge 2\) 始终满足平方根谱界”当且仅当 \(\eta=0\)，亦即非零谱仅含 Perron 根的谱秩一退化（推论 \ref{cor:pom-sympower-sqrt-bound-stable-iff-spectral-rankone}）。
+在本文的 moment-kernel 编译口径下，占据数对称幂商提供了一条维数上温和的乘法升级路线：由命题 \ref{prop:pom-factorized-sympower-upper-bound} 与定理 \ref{thm:conclusion-moment-hankel-rank-polynomial-taming}，高阶 realization 维数至多按多项式增长。
+然而，这种多项式态压缩并不保守于平方根谱界。
+一旦基础核保留了非 Perron 模态，对称幂升级便会沿第一变分壳把该模态以乘法尺度放大；因此，真正决定核版 RH 能否在高阶持续的，并不是状态维数是否仍可压缩，而是是否存在一条随阶数线性增长的激发过滤选择轴。
 
-  \item \textbf{第一变分保真 \texorpdfstring{$\Rightarrow$}{=>} 高阶核版 RH 不可能：MOM 乘法升级的致命放大。}
-  若乘法升级 \(a\mapsto ab\) 的编译存在满射 intertwiner \(\Pi_{a,b}:\mathrm{Sym}^b(A_a)\twoheadrightarrow A_{ab}\) 且在第一变分扇区上不被消灭（第一变分保真），则当 \(b\) 足够大时 \(A_{ab}\) 必出现 \(\eta_{ab}>\sqrt{\rho_{ab}}\) 的越线（定义 \ref{def:pom-first-variation-sector}；定理 \ref{thm:pom-first-variation-fidelity-rh-breaking}）。
+\begin{theorem}[对称幂失稳的显式临界阶只由谱比决定]\label{thm:conclusion-sympower-explicit-critical-order}
+设 \(A\) 为原始非负矩阵，Perron 根为 \(\rho=\rho(A)>1\)，非 Perron 谱半径为
+\[
+\eta:=\max\{|\mu|:\ \mu\in\operatorname{spec}(A),\ \mu\neq \rho\}\in(0,\rho).
+\]
+定义
+\[
+b_{\mathrm{crit}}(A):=
+\Bigl\lfloor 2\Bigl(1-\frac{\log \eta}{\log \rho}\Bigr)\Bigr\rfloor+1.
+\]
+则对每个整数 \(b\ge b_{\mathrm{crit}}(A)\)，都有
+\[
+\max\bigl\{|\lambda|:\ \lambda\in\operatorname{spec}(\operatorname{Sym}^b(A)),\ \lambda\neq \rho^b\bigr\}
+\ >\
+\rho^{b/2}.
+\]
+亦即，无额外选择子的对称幂升级一旦越过 \(b_{\mathrm{crit}}(A)\)，便必然突破平方根谱界，从而失去核版 RH。
+\end{theorem}
 
-  \item \textbf{线性“激发过滤”下界：维持核版 RH 必须消灭线性比例的低激发扇区。}
-  对任意 \(\mathrm{Sym}^b(A)\) 的非零子商 \(B_b\)，若其满足核版 RH，则最小存活激发数 \(k_b\) 必满足显式线性下界
-  \(k_b\ge \frac{b}{2}\frac{\log\rho}{\log(\rho/\eta)}\)，在 RH-sharp 情形进一步强制 \(k_b\ge b\)（定理 \ref{thm:pom-excitation-filter-linear-bound}）。
+\begin{proof}
+由定理 \ref{thm:pom-sympower-sqrt-bound-instability} 的证明，\(\operatorname{Sym}^b(A)\) 中存在模至少为 \(\rho^{b-1}\eta\) 的非 Perron 模态。
+因此只需比较
+\[
+\rho^{b-1}\eta>\rho^{b/2}
+\quad\Longleftrightarrow\quad
+b>2\Bigl(1-\frac{\log\eta}{\log\rho}\Bigr).
+\]
+满足该严格不等式的最小整数正是
+\(
+\lfloor 2(1-\frac{\log\eta}{\log\rho})\rfloor+1
+\)。
+故对一切 \(b\ge b_{\mathrm{crit}}(A)\) 皆发生越线。证毕。
+\end{proof}
 
-  \item \textbf{对称幂商编译的不可避免障碍：无限核 RH 必然要求额外选择子，等价于预言机轴。}
-  若 \(A_{ab}\) 的 realization 仅由占据数对称幂商给出（不引入随 \(b\) 变化的额外投影/选择子去消灭低激发扇区），则高阶核版 RH 必破裂；
-  反之，若要求对固定 \(a\) 的全部 \(b\ge 2\) 同时维持核版 RH，则除谱秩一退化外，必须引入满足线性阈值的激发过滤选择子族 \(P_{a,b}\)，其在协议语义中表现为一条外置的“选择/预言机”编译轴（定理 \ref{thm:pom-occupancy-symquotient-rh-obstruction}）。
-\end{enumerate}
+\begin{corollary}[固定乘法射线上核版 RH 只能有限次成立]\label{cor:conclusion-kernel-rh-only-finitely-often-on-fixed-ray}
+固定 \(a\ge 1\)。
+设对某个无界整数集 \(B\subseteq \mathbf N_{\ge 2}\)，每个 \(b\in B\) 上都存在满射 intertwiner
+\[
+\Pi_{a,b}:\operatorname{Sym}^b(A_a)\twoheadrightarrow A_{ab},
+\qquad
+\Pi_{a,b}\circ \operatorname{Sym}^b(A_a)=A_{ab}\circ \Pi_{a,b},
+\]
+并且该编译在阶 \(b\) 上第一变分保真。
+若 \(\eta(A_a)>0\)，则满足核版 RH 的 \(A_{ab}\) 只可能对应有限多个 \(b\in B\)。
+等价地，若同一乘法射线 \(q=ab\) 上存在无界多个核版 RH 节点，则必有
+\[
+\eta(A_a)=0.
+\]
+\end{corollary}
 
+\begin{proof}
+由定理 \ref{thm:pom-first-variation-fidelity-rh-breaking}，若 \(\eta(A_a)>0\) 且第一变分在无界多个 \(b\) 上保真，则对充分大的这些 \(b\) 必有
+\[
+\eta(A_{ab})>\sqrt{\rho(A_{ab})},
+\]
+于是核版 RH 不可能继续成立。
+因此可满足核版 RH 的 \(b\) 至多有限多个。
+逆否命题即得最后一式。证毕。
+\end{proof}
+
+\begin{theorem}[任何次线性激发过滤都不足以维持高阶核版 RH]\label{thm:conclusion-sublinear-excitation-filter-insufficient}
+设 \(A\) 为原始非负矩阵，\(\rho=\rho(A)>1\)，\(\eta\in(0,\rho)\)。
+对每个 \(b\ge 2\)，设 \(B_b\) 为 \(\operatorname{Sym}^b(A)\) 的某个非零子商，并记 \(k_b\) 为其最小存活激发数。
+令
+\[
+c_\ast:=\frac12\cdot\frac{\log\rho}{\log(\rho/\eta)}.
+\]
+若某族子商满足
+\[
+\limsup_{b\to\infty}\frac{k_b}{b}<c_\ast,
+\]
+则该族不可能在所有充分大的 \(b\) 上维持核版 RH。
+\end{theorem}
+
+\begin{proof}
+定理 \ref{thm:pom-excitation-filter-linear-bound} 给出必要条件
+\[
+k_b\ge c_\ast b
+\]
+对一切满足核版 RH 的 \(B_b\) 都成立。
+若 \(\limsup_{b\to\infty}k_b/b<c_\ast\)，则沿某个无穷子列有 \(k_b<c_\ast b\)，从而与上述必要条件矛盾。
+故这类过滤不可能在充分大阶上持续维持核版 RH。证毕。
+\end{proof}
+
+\begin{corollary}[有限状态选择轴不可能支撑无限核版 RH]\label{cor:conclusion-finite-state-selector-cannot-sustain-kernel-rh}
+沿用定理 \ref{thm:conclusion-sublinear-excitation-filter-insufficient} 的记号。
+设某选择机制在每个阶 \(b\) 上输出阈值 \(k_b\)，且其输出值始终落在某个有限集合
+\[
+\mathcal K\subset \mathbf Z_{\ge 0}.
+\]
+若 \(\eta>0\)，则该机制不可能使相应子商在所有充分大的 \(b\) 上满足核版 RH。
+特别地，任何有限状态、有限值域或最终周期型的阈值控制机制，都不能充当维持无限核版 RH 的内生选择轴。
+\end{corollary}
+
+\begin{proof}
+\(\mathcal K\) 有限意味着 \(k_b\) 有统一上界 \(K\)，故
+\[
+\limsup_{b\to\infty}\frac{k_b}{b}=0<c_\ast.
+\]
+由定理 \ref{thm:conclusion-sublinear-excitation-filter-insufficient} 即得结论。
+最终周期型机制当然仍只有有限值域，因此同样被排除。证毕。
+\end{proof}
+
+\begin{theorem}[RH-sharp 情形强制 Perron 线唯一存活]\label{thm:conclusion-rhsharp-forces-perron-pure-quotient}
+设 \(A\) 为原始非负矩阵，且其非 Perron 谱半径满足
+\[
+\eta=\sqrt{\rho(A)}.
+\]
+若 \(B_b\) 是 \(\operatorname{Sym}^b(A)\) 的非零子商，并且 \(B_b\) 满足核版 RH，则 \(B_b\) 必须消灭全部非 Perron 激发扇区；换言之，\(B_b\) 仅剩 Perron 直线存活，在谱意义上退化为一维主模。
+\end{theorem}
+
+\begin{proof}
+在 \(\eta=\sqrt{\rho(A)}\) 时，定理 \ref{thm:pom-excitation-filter-linear-bound} 中的下界退化为
+\[
+k_b\ge b.
+\]
+而 \(b\) 次对称幂中的激发数至多为 \(b\)。
+因此若某个非 Perron 激发扇区仍然存活，则其激发数必小于等于 \(b-1\)，与上式矛盾。
+故全部非 Perron 激发都必须被消灭，只余 Perron 直线。证毕。
+\end{proof}
+
+\begin{theorem}[多项式态压缩与平方根谱稳定是两条渐近正交约束]\label{thm:conclusion-polynomial-compression-vs-sqrt-stability-orthogonal}
+固定 \(q_1\ge 2\)，记 \(d_{q_1}\) 为 \(q_1\)-阶碰撞矩序列的最小 realization 维数。
+则对任意 \(q_2\ge 2\)，由对称幂商编译有
+\[
+d_{q_1q_2}\le \binom{q_2+d_{q_1}-1}{d_{q_1}-1},
+\]
+因而在固定 \(q_1\) 下，状态空间随 \(q_2\) 至多按多项式增长。
+然而，若基础核 \(A_{q_1}\) 满足 \(\eta(A_{q_1})>0\)，并且乘法升级 \(q_1\mapsto q_1q_2\) 仅由占据数对称幂商实现而不附加随 \(q_2\) 增长的选择子，则当 \(q_2\) 充分大时，\(A_{q_1q_2}\) 必违反核版 RH。
+因此，多项式规模可实现与平方根谱界可保持是两条渐近正交的约束：前者不推出后者，而后者反而要求额外的线性激发过滤结构。
+\end{theorem}
+
+\begin{proof}
+维数上界由命题 \ref{prop:pom-factorized-sympower-upper-bound} 给出，其 conclusion 版本见定理 \ref{thm:conclusion-moment-hankel-rank-polynomial-taming}。
+另一方面，若不附加随 \(q_2\) 增长的选择子，则由定理 \ref{thm:pom-occupancy-symquotient-rh-obstruction}，只要 \(\eta(A_{q_1})>0\)，高阶乘法升级便必然突破平方根谱界。
+于是“维数上可多项式压缩”与“谱界上可长期稳定”并非同一约束。证毕。
+\end{proof}
+
+\begin{corollary}[无选择子失稳门槛与 realization 维数无关]\label{cor:conclusion-selector-free-threshold-independent-of-realization-dimension}
+对 primitive 核 \(A\)，无选择子对称幂升级的平方根谱界失稳门槛
+\[
+b_{\mathrm{crit}}(A)=
+\Bigl\lfloor 2\Bigl(1-\frac{\log \eta}{\log \rho}\Bigr)\Bigr\rfloor+1
+\]
+只依赖于谱数据 \((\rho,\eta)\)，与 \(A\) 的维数、最小 realization 阶数及任何多项式态压缩上界无关。
+特别地，若两条 primitive 核 \(A\) 与 \(A'\) 满足
+\[
+\rho(A)=\rho(A'),
+\qquad
+\eta(A)=\eta(A'),
+\]
+则它们在无选择子对称幂升级下具有完全相同的核版 RH 失稳门槛。
+\end{corollary}
+
+\begin{proof}
+临界阶公式由定理 \ref{thm:conclusion-sympower-explicit-critical-order} 直接给出，其中只出现 \(\rho\) 与 \(\eta\) 两项谱数据，而不含任何 realization 维数参数。
+故结论成立。证毕。
+\end{proof}
+
+\begin{conjecture}[线性激发过滤下界的渐近充分性]\label{conj:conclusion-linear-excitation-threshold-asymptotically-sufficient}
+设 \(A\) 为 primitive 非负矩阵，\(\rho=\rho(A)>1\)，\(\eta\in(0,\rho)\)，并记
+\[
+c_\ast=\frac12\cdot\frac{\log\rho}{\log(\rho/\eta)}.
+\]
+对每个 \(b\)，设 \(P_b\) 为 \(\operatorname{Sym}^b(A)\) 上的投影，恰好消去全部激发数 \(<\lceil c_\ast b\rceil\) 的扇区。
+若剩余高激发层在大 \(b\) 时满足半单性，并且不存在新的 Jordan 聚合或额外非 Perron 共振，则相应子商 \(B_b\) 对充分大的 \(b\) 应满足核版 RH。
+
+这意味着定理 \ref{thm:pom-excitation-filter-linear-bound} 所给出的线性必要阈值，很可能同时也是渐近充分阈值；真正的障碍不在阈值高度本身，而在高激发余层是否仍引入新的非半单耦合。
+\end{conjecture}
+
+综上，对称幂升级中的真正障碍并不是维数爆炸，而是非 Perron 激发沿乘法尺度的线性可见化。
+因此，核版 RH 并不是一个自然随乘法闭合的性质；除谱秩一退化外，若要在高阶上长期维持平方根谱界，就必须引入一条随阶数线性增长的外置选择轴。

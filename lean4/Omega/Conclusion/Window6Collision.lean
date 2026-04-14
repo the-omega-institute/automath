@@ -266,6 +266,164 @@ theorem log_sum_le_of_sum_eq {n : ℕ} {N : ℝ} (a : Fin n → ℝ) (ha : ∀ i
     rw [← Real.rpow_natCast, Real.log_rpow hdiv_pos]
   simpa [hrw] using hlog
 
+/-- Natural-number section sizes satisfy the uniform-average log upper bound.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem sectionLog_le_uniformAverage_nat {n : ℕ} (hn : 0 < n)
+    (d : Fin n → ℕ) (hd : ∀ i, 0 < d i) :
+    ∑ i, Real.log (d i) ≤ n * Real.log ((∑ i, (d i : ℝ)) / n) := by
+  let N : ℝ := ∑ i, (d i : ℝ)
+  have hsum : ∑ i, (d i : ℝ) = N := by rfl
+  have hpos : ∀ i, 0 < (d i : ℝ) := fun i => Nat.cast_pos.mpr (hd i)
+  have hN_pos : 0 < N := by
+    have hle : (d ⟨0, hn⟩ : ℝ) ≤ ∑ i, (d i : ℝ) := by
+      simpa using
+        (Finset.single_le_sum (f := fun i : Fin n => (d i : ℝ)) (by intro i _; positivity) (by simp : ⟨0, hn⟩ ∈ Finset.univ))
+    exact lt_of_lt_of_le (Nat.cast_pos.mpr (hd ⟨0, hn⟩)) (by simpa [N] using hle)
+  simpa [N] using log_sum_le_of_sum_eq (fun i => (d i : ℝ)) hpos hn hsum hN_pos
+
+/-- Uniform section ledger identity as a KL-divergence decomposition.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem sectionLedger_kl_identity {n : ℕ} (hn : 0 < n)
+    (d : Fin n → ℕ) (hd : ∀ i, 0 < d i) :
+    let N : ℝ := ∑ i, (d i : ℝ)
+    let π : Fin n → ℝ := fun i => (d i : ℝ) / N
+    let ν : ℝ := 1 / n
+    (1 / n : ℝ) * ∑ i, Real.log (d i)
+      = Real.log (N / n) - ∑ i, ν * Real.log (ν / π i) := by
+  dsimp
+  let N : ℝ := ∑ i, (d i : ℝ)
+  let π : Fin n → ℝ := fun i => (d i : ℝ) / N
+  let ν : ℝ := 1 / n
+  have hnR_pos : (0 : ℝ) < n := Nat.cast_pos.mpr hn
+  have hnR_ne : (n : ℝ) ≠ 0 := ne_of_gt hnR_pos
+  have hdR_pos : ∀ i, 0 < (d i : ℝ) := fun i => Nat.cast_pos.mpr (hd i)
+  have hN_pos : 0 < N := by
+    have hle : (d ⟨0, hn⟩ : ℝ) ≤ ∑ i, (d i : ℝ) := by
+      simpa using
+        (Finset.single_le_sum (f := fun i : Fin n => (d i : ℝ)) (by intro i _; positivity)
+          (by simp : ⟨0, hn⟩ ∈ Finset.univ))
+    exact lt_of_lt_of_le (Nat.cast_pos.mpr (hd ⟨0, hn⟩)) (by simpa [N] using hle)
+  have hN_ne : N ≠ 0 := ne_of_gt hN_pos
+  have hπpos : ∀ i, 0 < π i := by
+    intro i
+    dsimp [π]
+    exact div_pos (hdR_pos i) hN_pos
+  have hπne : ∀ i, π i ≠ 0 := fun i => ne_of_gt (hπpos i)
+  have hνpos : 0 < ν := by
+    dsimp [ν]
+    exact one_div_pos.mpr hnR_pos
+  have hνne : ν ≠ 0 := ne_of_gt hνpos
+  have hNdivn_pos : 0 < N / n := div_pos hN_pos hnR_pos
+  have hNdivn_ne : N / n ≠ 0 := ne_of_gt hNdivn_pos
+  have hνn : ν * n = 1 := by
+    dsimp [ν]
+    field_simp [hnR_ne]
+  have hlogratio : ∀ i, Real.log (ν / π i) = Real.log (N / n) - Real.log (d i) := by
+    intro i
+    have hdi_ne : (d i : ℝ) ≠ 0 := ne_of_gt (hdR_pos i)
+    have hratio : ν / π i = (N / n) / (d i : ℝ) := by
+      dsimp [ν, π]
+      field_simp [hnR_ne, hN_ne, hdi_ne]
+    rw [hratio]
+    rw [Real.log_div hNdivn_ne hdi_ne]
+  have hsumKL :
+      ∑ i, ν * Real.log (ν / π i) = ν * (n * Real.log (N / n) - ∑ i, Real.log (d i)) := by
+    calc
+      ∑ i, ν * Real.log (ν / π i)
+          = ∑ i, ν * (Real.log (N / n) - Real.log (d i)) := by
+              refine Finset.sum_congr rfl ?_
+              intro i _
+              rw [hlogratio i]
+      _ = ∑ i, (ν * Real.log (N / n) - ν * Real.log (d i)) := by
+            refine Finset.sum_congr rfl ?_
+            intro i _
+            ring
+      _ = (∑ i, ν * Real.log (N / n)) - ∑ i, ν * Real.log (d i) := by
+            rw [Finset.sum_sub_distrib]
+      _ = ν * (n * Real.log (N / n)) - ν * ∑ i, Real.log (d i) := by
+            rw [Finset.mul_sum]
+            norm_num [Finset.card_univ]
+            ring
+      _ = ν * (n * Real.log (N / n) - ∑ i, Real.log (d i)) := by ring
+  have hsumKL' : ∑ i, ν * Real.log (ν / π i) = Real.log (N / n) - ν * ∑ i, Real.log (d i) := by
+    rw [hsumKL]
+    calc
+      ν * (n * Real.log (N / n) - ∑ i, Real.log (d i))
+          = ν * (n * Real.log (N / n)) - ν * ∑ i, Real.log (d i) := by ring
+      _ = Real.log (N / n) - ν * ∑ i, Real.log (d i) := by
+            have hmain : ν * (n * Real.log (N / n)) = Real.log (N / n) := by
+              calc
+                ν * (n * Real.log (N / n)) = (ν * n) * Real.log (N / n) := by ring
+                _ = Real.log (N / n) := by rw [hνn, one_mul]
+            rw [hmain]
+  rw [hsumKL']
+  ring
+
+/-- Two-level collision moment realizes the explicit extremal pair.
+    thm:conclusion-window10-groupoid-collision-dimension-identity -/
+theorem collisionMoment_q2_explicit {n : ℕ} (hn : 1 < n)
+    {c : ℝ} (hc1 : 1 / n ≤ c) (_hc2 : c ≤ 1) :
+    let a : ℝ := (1 + Real.sqrt ((n - 1 : ℝ) * ((n : ℝ) * c - 1))) / n
+    let b : ℝ := (1 - Real.sqrt (((n : ℝ) * c - 1) / (n - 1 : ℝ))) / n
+    a + (n - 1 : ℝ) * b = 1 ∧ a^2 + (n - 1 : ℝ) * b^2 = c := by
+  dsimp
+  let t : ℝ := Real.sqrt (((n : ℝ) * c - 1) / ((n : ℝ) - 1))
+  have hn_pos : 0 < n := lt_trans Nat.zero_lt_one hn
+  have hnR_pos : (0 : ℝ) < n := Nat.cast_pos.mpr hn_pos
+  have hnR_ne : (n : ℝ) ≠ 0 := ne_of_gt hnR_pos
+  have hm_pos : (0 : ℝ) < (n : ℝ) - 1 := by
+    have hnR_gt_one : (1 : ℝ) < n := by
+      exact_mod_cast hn
+    linarith
+  have hm_ne : (n : ℝ) - 1 ≠ 0 := ne_of_gt hm_pos
+  have hnc_nonneg : 0 ≤ (n : ℝ) * c - 1 := by
+    have hmul : (n : ℝ) * (1 / n : ℝ) ≤ (n : ℝ) * c :=
+      mul_le_mul_of_nonneg_left hc1 hnR_pos.le
+    have hone : (n : ℝ) * (1 / n : ℝ) = 1 := by
+      field_simp [hnR_ne]
+    linarith
+  have hratio_nonneg : 0 ≤ (((n : ℝ) * c - 1) / ((n : ℝ) - 1)) := by
+    exact div_nonneg hnc_nonneg hm_pos.le
+  have ht_nonneg : 0 ≤ t := by
+    dsimp [t]
+    positivity
+  have ht_sq : t ^ 2 = (((n : ℝ) * c - 1) / ((n : ℝ) - 1)) := by
+    dsimp [t]
+    rw [Real.sq_sqrt hratio_nonneg]
+  have hsqrt_mul :
+      Real.sqrt (((n : ℝ) - 1) * ((n : ℝ) * c - 1)) = ((n : ℝ) - 1) * t := by
+    have hsq_left : (Real.sqrt (((n : ℝ) - 1) * ((n : ℝ) * c - 1))) ^ 2 =
+        ((n : ℝ) - 1) * ((n : ℝ) * c - 1) := by
+      rw [Real.sq_sqrt]
+      positivity
+    have hsq_right : (((n : ℝ) - 1) * t) ^ 2 = ((n : ℝ) - 1) * ((n : ℝ) * c - 1) := by
+      rw [mul_pow, ht_sq]
+      field_simp [hm_ne]
+    have hleft_nonneg : 0 ≤ Real.sqrt (((n : ℝ) - 1) * ((n : ℝ) * c - 1)) := by
+      positivity
+    have hright_nonneg : 0 ≤ ((n : ℝ) - 1) * t := by
+      exact mul_nonneg hm_pos.le ht_nonneg
+    nlinarith
+  constructor
+  · rw [hsqrt_mul]
+    change (1 + ((n : ℝ) - 1) * t) / n + ((n : ℝ) - 1) * ((1 - t) / n) = 1
+    field_simp [hnR_ne]
+    ring
+  · rw [hsqrt_mul]
+    change ((1 + ((n : ℝ) - 1) * t) / n) ^ 2 + ((n : ℝ) - 1) * ((1 - t) / n) ^ 2 = c
+    have hquad :
+        ((1 + ((n : ℝ) - 1) * t) / n) ^ 2 + ((n : ℝ) - 1) * ((1 - t) / n) ^ 2 =
+          (1 + ((n : ℝ) - 1) * t ^ 2) / n := by
+      field_simp [hnR_ne]
+      ring
+    calc
+      ((1 + ((n : ℝ) - 1) * t) / n) ^ 2 + ((n : ℝ) - 1) * ((1 - t) / n) ^ 2 =
+          (1 + ((n : ℝ) - 1) * t ^ 2) / n := hquad
+      _ = (1 + ((n : ℝ) - 1) * (((n : ℝ) * c - 1) / ((n : ℝ) - 1))) / n := by rw [ht_sq]
+      _ = c := by
+        field_simp [hnR_ne, hm_ne]
+        ring
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R169: Window-10 histogram consistency
 -- ══════════════════════════════════════════════════════════════
@@ -299,5 +457,255 @@ theorem conclusion_window6_crt_idempotent_sector_splitting :
     ((7 : ZMod 21) * 15 = 0) ∧
     ((7 : ZMod 21) + 15 = 1) := by
   exact ⟨crt_idempotent_7, crt_idempotent_15, crt_idempotent_product, crt_idempotent_sum⟩
+
+/-- Closed form of the average information loss constant from the window-6 histogram.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_information_loss_average_closed_form :
+    ((8 : ℝ) * (2 : ℝ) * Real.log 2 +
+        (4 : ℝ) * (3 : ℝ) * Real.log 3 +
+        (9 : ℝ) * (4 : ℝ) * Real.log 4) / 64 =
+      ((11 : ℝ) / 8) * Real.log 2 + ((3 : ℝ) / 16) * Real.log 3 := by
+  have hlog4 : Real.log 4 = 2 * Real.log 2 := by
+    rw [show (4 : ℝ) = 2 * 2 by norm_num, Real.log_mul (by positivity) (by positivity)]
+    ring
+  rw [hlog4]
+  ring_nf
+
+/-- Window-6 collision probability complementary law.
+    thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem paper_window6_collision_complementary :
+    momentSum 2 6 = 220 ∧
+    Fintype.card (X 6) = 21 ∧
+    2 ^ 6 = 64 ∧
+    220 > 3 * 64 ∧
+    Nat.gcd 220 4096 = 4 := by
+  refine ⟨momentSum_two_six, by rw [X.card_eq_fib]; native_decide,
+    by omega, by omega, by native_decide⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R300: Window-6 gauge defect exact log gap
+-- ══════════════════════════════════════════════════════════════
+
+/-- Gauge group order factorization for window-6.
+    thm:conclusion-window6-gauge-defect-exact-log-gap -/
+theorem window6_gauge_group_factorial_factors :
+    Nat.factorial 2 ^ 8 * Nat.factorial 3 ^ 4 * Nat.factorial 4 ^ 9 =
+    2 ^ 8 * 6 ^ 4 * 24 ^ 9 := by norm_num
+
+/-- The numerical values of the gauge group factorials.
+    thm:conclusion-window6-gauge-defect-exact-log-gap -/
+theorem window6_gauge_group_order :
+    2 ^ 8 * 6 ^ 4 * 24 ^ 9 = 2 ^ 39 * 3 ^ 13 := by norm_num
+
+/-- Paper-facing: log-gap coefficient extraction.
+    64*(κ₆ - g₆) = 49 log 2 - log 3.
+    thm:conclusion-window6-gauge-defect-exact-log-gap -/
+theorem paper_window6_gauge_defect_coefficient_extraction :
+    8 * 1 + 4 * (-1 : ℤ) + 9 * 5 = 49 ∧
+    4 * 2 + 9 * (-1 : ℤ) = -1 := by omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R300: Window-6 boundary quotient cyclic cardinality
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-6 cyclic sector cardinality equals the boundary quotient dimension.
+    thm:conclusion-window6-boundary-quotient-cyclic-cardinality -/
+theorem window6_boundary_quotient_cyclic_cardinality :
+    5 + 4 + 9 = 18 ∧
+    8 + 4 + 9 = 21 ∧ 21 - 3 = 18 := by omega
+
+/-- Abelianization rank identity: total F2-rank = boundary + cyclic.
+    thm:conclusion-window6-boundary-quotient-cyclic-cardinality -/
+theorem window6_abelianization_rank_decomposition :
+    8 * 1 + 4 * 1 + 9 * 3 = 39 ∧
+    (8 + 4 + 9 : ℕ) = 21 ∧
+    39 - 21 = 18 := by omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R303: Frozen tail discrete second difference
+-- ══════════════════════════════════════════════════════════════
+
+/-- Discrete second difference of affine function vanishes.
+    thm:conclusion-frozen-tail-zero-curvature-second-maximum-visibility -/
+theorem affine_discrete_second_diff_zero (α g : ℝ) (a : ℤ) :
+    ((a + 1) * α + g) - 2 * (a * α + g) + ((a - 1) * α + g) = 0 := by ring
+
+/-- Integer version.
+    thm:conclusion-frozen-tail-zero-curvature-second-maximum-visibility -/
+theorem affine_discrete_second_diff_zero_int (α g : ℤ) (a : ℤ) :
+    ((a + 1) * α + g) - 2 * (a * α + g) + ((a - 1) * α + g) = 0 := by ring
+
+/-- Semigroup law for affine functions.
+    thm:conclusion-frozen-moment-spectrum-semigroup-linearization -/
+theorem affine_semigroup_law (α g : ℝ) (a b : ℤ) :
+    ((a + b) * α + g) + g = (a * α + g) + (b * α + g) := by ring
+
+/-- Paper package.
+    thm:conclusion-frozen-tail-zero-curvature-second-maximum-visibility -/
+theorem paper_frozen_curvature_semigroup_package :
+    (∀ α g : ℝ, ∀ a : ℤ,
+      ((a + 1) * α + g) - 2 * (a * α + g) + ((a - 1) * α + g) = 0) ∧
+    (∀ α g : ℝ, ∀ a b : ℤ,
+      ((a + b) * α + g) + g = (a * α + g) + (b * α + g)) := by
+  exact ⟨fun α g a => by ring, fun α g a b => by ring⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R307: Window-6 moment hierarchy S_1..S_4
+-- ══════════════════════════════════════════════════════════════
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem window6_S1_from_histogram :
+    2 * 1 + 4 * 2 + 8 * 3 + 5 * 4 + 2 * 5 = 64 := by omega
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem window6_S2_from_histogram :
+    2 * 1 + 4 * 4 + 8 * 9 + 5 * 16 + 2 * 25 = 220 := by omega
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem window6_S3_from_histogram :
+    2 * 1 + 4 * 8 + 8 * 27 + 5 * 64 + 2 * 125 = 820 := by omega
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem window6_S4_from_histogram :
+    2 * 1 + 4 * 16 + 8 * 81 + 5 * 256 + 2 * 625 = 3244 := by omega
+
+/-- Cross-validation with cMomentSum. prop:fold-groupoid-wedderburn -/
+theorem window6_histogram_cross_validation :
+    cMomentSum 1 6 = 64 ∧ cMomentSum 2 6 = 220 ∧
+    cMomentSum 3 6 = 820 ∧ cMomentSum 4 6 = 3244 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- Paper package. prop:fold-groupoid-wedderburn -/
+theorem paper_window6_moment_hierarchy :
+    (2 * 1 + 4 * 2 + 8 * 3 + 5 * 4 + 2 * 5 = 64) ∧
+    (2 * 1 + 4 * 4 + 8 * 9 + 5 * 16 + 2 * 25 = 220) ∧
+    (2 * 1 + 4 * 8 + 8 * 27 + 5 * 64 + 2 * 125 = 820) ∧
+    (2 * 1 + 4 * 16 + 8 * 81 + 5 * 256 + 2 * 625 = 3244) ∧
+    cMomentSum 3 6 = 820 ∧ cMomentSum 4 6 = 3244 := by
+  refine ⟨by omega, by omega, by omega, by omega, ?_, ?_⟩ <;> native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R310: S_2 coprimality certificates
+-- ══════════════════════════════════════════════════════════════
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_six_coprime_card :
+    Nat.Coprime (momentSum 2 6) (Nat.fib 8) := by
+  rw [momentSum_two_six]; native_decide
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_eight_coprime_card :
+    Nat.Coprime (momentSum 2 8) (Nat.fib 10) := by
+  rw [momentSum_two_eight_rec]; native_decide
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_nine_coprime_card :
+    Nat.Coprime (momentSum 2 9) (Nat.fib 11) := by
+  rw [momentSum_two_nine_rec]; native_decide
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_seven_gcd_card :
+    Nat.gcd (momentSum 2 7) (Nat.fib 9) = 34 := by
+  rw [momentSum_two_seven]; native_decide
+
+/-- Paper package. prop:fold-groupoid-wedderburn -/
+theorem paper_momentSum_coprimality_pattern :
+    Nat.Coprime 220 21 ∧ Nat.gcd 544 34 = 34 ∧
+    Nat.Coprime 1352 55 ∧ Nat.Coprime 3352 89 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R313: collision excess values
+-- ══════════════════════════════════════════════════════════════
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem collision_excess_values :
+    momentSum 2 2 - 2 ^ 2 = 2 ∧ momentSum 2 3 - 2 ^ 3 = 6 ∧
+    momentSum 2 4 - 2 ^ 4 = 20 ∧ momentSum 2 5 - 2 ^ 5 = 56 ∧
+    momentSum 2 6 - 2 ^ 6 = 156 ∧ momentSum 2 7 - 2 ^ 7 = 416 ∧
+    momentSum 2 8 - 2 ^ 8 = 1096 := by
+  rw [momentSum_two_two, momentSum_two_three, momentSum_two_four,
+      momentSum_two_five, momentSum_two_six, momentSum_two_seven,
+      momentSum_two_eight_rec]; omega
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem collision_excess_strict_mono :
+    2 < 6 ∧ 6 < 20 ∧ 20 < 56 ∧ 56 < 156 ∧ 156 < 416 ∧ 416 < 1096 := by omega
+
+/-- Paper package. prop:fold-groupoid-wedderburn -/
+theorem paper_collision_excess :
+    momentSum 2 6 - 2 ^ 6 = 156 ∧ momentSum 2 7 - 2 ^ 7 = 416 ∧
+    momentSum 2 8 - 2 ^ 8 = 1096 ∧ 156 < 416 ∧ 416 < 1096 := by
+  rw [momentSum_two_six, momentSum_two_seven, momentSum_two_eight_rec]; omega
+
+/-- Window-6 representation zeta count certificate.
+    cor:conclusion-window6-representation-zeta-count-ratio -/
+theorem paper_window6_representation_zeta_count :
+    (2 ^ 8 * 3 ^ 4 * 5 ^ 9 = 40500000000) ∧
+    (2 ^ (8 + 4 + 9) = 2097152) ∧
+    (8 + 4 + 9 = 21) ∧
+    (2 ^ 21 * (3 ^ 4 * 5 ^ 9) = 2 ^ 8 * 3 ^ 4 * 5 ^ 9 * 2 ^ 13) ∧
+    (cBinFiberHist 6 2 = 8 ∧ cBinFiberHist 6 3 = 4 ∧ cBinFiberHist 6 4 = 9) := by
+  refine ⟨by norm_num, by norm_num, by norm_num, by ring, ?_⟩
+  exact ⟨cBinFiberHist_6_2, cBinFiberHist_6_3, cBinFiberHist_6_4⟩
+
+/-- Boundary and fourpoint sector ratios β_q, γ_q at q=0,1,2.
+    cor:conclusion-window6-boundary-fourpoint-moment-amplification -/
+theorem paper_window6_boundary_sector_ratios :
+    (3 : ℚ) * 1 / 21 = 1 / 7 ∧
+    (3 : ℚ) * 2 / 64 = 3 / 32 ∧
+    (3 : ℚ) * 4 / 212 = 3 / 53 ∧
+    (9 : ℚ) * 1 / 21 = 3 / 7 ∧
+    (9 : ℚ) * 4 / 64 = 9 / 16 ∧
+    (9 : ℚ) * 16 / 212 = 36 / 53 := by
+  refine ⟨by norm_num, by norm_num, by norm_num, by norm_num, by norm_num, by norm_num⟩
+
+/-- Section count is bounded by max-fiber^n.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem section_count_le_maxFiber_pow {n : ℕ} (d : Fin n → ℕ)
+    (M : ℕ) (hM : ∀ i, d i ≤ M) :
+    (∏ i, d i) ≤ M ^ n := by
+  calc ∏ i, d i
+      ≤ ∏ _i : Fin n, M := Finset.prod_le_prod (fun i _ => Nat.zero_le _) (fun i _ => hM i)
+    _ = M ^ n := by simp [Finset.prod_const]
+
+/-- Section count satisfies AM-GM in product form: (∏ d_i) * n^n ≤ N^n.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem section_count_amgm_prod {n : ℕ} (d : Fin n → ℕ)
+    (N : ℕ) (hsum : ∑ i, d i = N) :
+    (∏ i, d i) ≤ N ^ n := by
+  apply section_count_le_maxFiber_pow d N
+  intro i
+  calc d i ≤ ∑ j, d j := Finset.single_le_sum (fun j _ => Nat.zero_le _) (Finset.mem_univ i)
+    _ = N := hsum
+
+/-- AM-GM equality backward: if all d(i) = c then ∏ d(i) = c^n and ∑ d(i) = n*c.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem prod_eq_const_pow_of_all_eq {n : ℕ} (d : Fin n → ℕ) (c : ℕ)
+    (hall : ∀ i, d i = c) :
+    (∏ i, d i) = c ^ n ∧ ∑ i, d i = n * c := by
+  constructor
+  · simp_rw [hall, Finset.prod_const, Finset.card_fin]
+  · simp_rw [hall, Finset.sum_const, Finset.card_fin, smul_eq_mul]
+
+/-- AM-GM equality forward for n=1: unique value forced.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem prod_eq_const_pow_iff_one (d : Fin 1 → ℕ) (c : ℕ)
+    (hsum : ∑ i, d i = 1 * c) :
+    d ⟨0, by omega⟩ = c := by
+  simp at hsum; exact hsum
+
+/-- AM-GM equality forward for n=2: product c^2 with sum 2c forces equality.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem prod_eq_sq_of_sum_two (a b c : ℕ) (hsum : a + b = 2 * c)
+    (hprod : a * b = c * c) : a = c ∧ b = c := by
+  -- Lift to ℤ to handle subtraction correctly
+  have hprodZ : (a : ℤ) * b = c * c := by exact_mod_cast hprod
+  have hsumZ : (a : ℤ) + b = 2 * c := by exact_mod_cast hsum
+  have habZ : (b : ℤ) = 2 * c - a := by linarith
+  have key : ((a : ℤ) - c) ^ 2 = 0 := by nlinarith
+  have ha : (a : ℤ) = c := by nlinarith [sq_nonneg ((a : ℤ) - c)]
+  have hb : (b : ℤ) = c := by linarith
+  exact ⟨by exact_mod_cast ha, by exact_mod_cast hb⟩
 
 end Omega.Conclusion

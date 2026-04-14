@@ -1,0 +1,276 @@
+\subsection{证书链闭环、Toeplitz 正性与统一离线验证器}\label{subsec:typed-address-biaxial-completion-certificate-loop-toeplitz-offline-verifier}
+上一节已经把盘内零点事件压缩为 Jensen 缺陷与排斥半径的半径族证书。本节进一步把这条解析链与视界 Carath\'eodory--Toeplitz 的正性链焊成同一条离线核验语法：一侧输出缺陷值与禁入半径，另一侧输出有限阶 Toeplitz 主子矩阵、谱裕度与负惯性见证，而地址端则把这些有限对象组织成可细化的逆系统。这样，后文关心的便不再只是某个全局命题是否为真，而是哪些有限证书对象能够被统一验证器接受，哪些只能产生附带见证的 \(\mathsf{fail}\) 或 \(\mathrm{NULL}\)。
+
+\subsubsection{闭环定理：解析链与线性代数链的同一性}\label{subsubsec:typed-address-biaxial-completion-certificate-loop}
+原稿关于 RH 的缺陷链与 Toeplitz--PSD 链，并不是两套平行叙事，而是同一闭环的两种前端编码。
+
+\begin{theorem}[闭环定理的双证书表述]\label{thm:typed-address-biaxial-completion-certificate-loop}
+在乘法 Haar 测度下，若协议要求 Mellin 读出等距且拒绝外置权重扭曲，则幺正切片被唯一钉死在
+\[
+\Re(s)=\tfrac12.
+\]
+在这一切片上，记圆盘完成化的 Jensen 缺陷为 \(D_{\zeta}(\varrho)\)，排斥半径为
+\[
+r_{\ast}(\varrho):=\varrho e^{-D_{\zeta}(\varrho)},
+\]
+并记视界 Carath\'eodory 函数
+\[
+\mathscr{C}_{\zeta}(w)=c_0+2\sum_{n\ge 1}c_n w^n,
+\qquad
+\mathbf{T}_N:=(c_{j-k})_{0\le j,k\le N}.
+\]
+则下列命题等价：
+\[
+\mathrm{RH}
+\iff
+\lim_{\varrho\uparrow 1}D_{\zeta}(\varrho)=0
+\iff
+\exists\,\varrho_n\uparrow 1,\ r_{\ast}(\varrho_n)\uparrow 1
+\iff
+\forall N\ge 0,\ \mathbf{T}_N\succeq 0.
+\]
+并且最后一条进一步等价于：对任意共终端严格递增子序列 \(N_k\to\infty\)，只要
+\[
+\mathbf{T}_{N_k}\succeq 0\qquad(\forall k),
+\]
+就已经足够。
+\end{theorem}
+\begin{proof}
+幺正切片唯一性由定理 \ref{thm:mellin-unitary-slice-unique} 给出；上述等价链则是定理 \ref{thm:cdim-closed-loop-unitary-horizon-repulsion-toeplitz} 的直接重述，而共终端子序列上的等价核验由定理 \ref{thm:xi-toeplitz-psd-cofinal-sparsification} 给出。证毕。
+\end{proof}
+
+定理 \ref{thm:typed-address-biaxial-completion-certificate-loop} 的制度含义在于：Jensen 缺陷链与 Toeplitz--PSD 层级只是同一对象的两种坐标。前者把缺陷压成单参数标量与几何排斥半径，后者把同一命题压成有限阶 Hermitian 矩阵的半正定可行性问题；两条链均可直接进入离线证书语法。
+
+\subsubsection{时间纤维与端点压缩：高高度信息被推入边界层}\label{subsubsec:typed-address-biaxial-completion-time-fiber-endpoint-compression}
+Jensen 缺陷虽然写在圆盘半径 \(\varrho\) 上，但其上半平面圆平均并不均匀看见各个高度层；高高度信息会被结构性地压入端点邻域。
+
+\begin{proposition}[时间纤维的端点压缩语义]\label{prop:typed-address-biaxial-completion-time-fiber-endpoint-compression}
+当 \(\varrho\uparrow 1\) 时，等半径层 \(|w|=\varrho\) 的 Cayley 逆像同时触及 \(y\downarrow 0\) 与 \(y\uparrow \infty\) 两端，并且高高度贡献被强制集中于端点角窗 \(w\approx -1\)。因此，圆盘变量上的边界极限可被重新理解为边界层载荷的审计，而不是“高高度信息自行消失”。
+\end{proposition}
+\begin{proof}
+这正是定理 \ref{thm:dephys-timefiber-two-ended} 及小节 \ref{subsec:cdim-timefiber-endpoint-compression} 的制度内容。证毕。
+\end{proof}
+
+因此，前一节中的有限采样盲区、端点二次压缩与边界层预算，不是附属技术现象，而是时间纤维在端点处的结构性投影。解析链与线性代数链之所以都能够被编译为边界审计对象，根源就在于这一端点压缩机制。
+
+\subsubsection{Jensen 缺陷证书的编译：从圆周平均到禁入律}\label{subsubsec:typed-address-biaxial-completion-compiled-defect-certificate}
+Jensen 缺陷一旦被压成单参数标量，就可以直接编译成有限证书对象，而不必保留连续圆周平均的原始表达。
+
+\begin{definition}[编译式 Jensen 缺陷证书]\label{def:typed-address-biaxial-completion-compiled-defect-certificate}
+固定半径 \(0<\varrho<1\) 与 dyadic 深度 \(b\in\mathbb N\)。称
+\[
+\mathcal C_{\mathrm{def}}(\varrho,b)
+:=
+\bigl(
+\varrho,\,
+b,\,
+[\underline D(\varrho),\overline D(\varrho)],\,
+r_{\mathrm{cert}}(\varrho)
+\bigr)
+\]
+为一份编译式 Jensen 缺陷证书，若其中区间包络满足
+\[
+D_{\zeta}(\varrho)\in[\underline D(\varrho),\overline D(\varrho)],
+\]
+并且
+\[
+r_{\mathrm{cert}}(\varrho):=\varrho e^{-\overline D(\varrho)}.
+\]
+\end{definition}
+
+\begin{proposition}[缺陷证书的禁入语义]\label{prop:typed-address-biaxial-completion-compiled-defect-certificate}
+若 \(\mathcal C_{\mathrm{def}}(\varrho,b)\) 通过算法 \ref{alg:cdim-jensen-defect-certificate-compiler} 的离线核验，则子盘
+\[
+|w|<r_{\mathrm{cert}}(\varrho)
+\]
+内无零点。特别地，若存在一列 \(\varrho_n\uparrow 1\) 使得对应的编译证书满足
+\[
+r_{\mathrm{cert}}(\varrho_n)\uparrow 1,
+\]
+则该列有限证书已足以给出 RH 的充分证书。
+\end{proposition}
+\begin{proof}
+算法 \ref{alg:cdim-jensen-defect-certificate-compiler} 通过固定 dyadic 角网格、区间算术与外向舍入给出 \(D_{\zeta}(\varrho)\) 的区间包络。于是 \(\overline D(\varrho)\) 给出排斥半径的可核验下界，而零点禁入与趋一证书分别由定理 \ref{thm:cdim-defect-repulsion-radius} 与定理 \ref{thm:typed-address-biaxial-completion-certificate-loop} 给出。证毕。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-compiled-defect-certificate} 的关键，不仅在于“圆周平均”被编译成有限对象，还在于该对象保留了 Jensen 缺陷的结构约束：单调性、几乎处处的整数斜率，以及零点进入时的折角原子，均可作为离线否证器的附加审计条件。
+
+\subsubsection{Toeplitz--PSD 证书的编译：从 Carath\'eodory 正性到谱裕度}\label{subsubsec:typed-address-biaxial-completion-compiled-psd-certificate}
+与缺陷链平行，视界 Carath\'eodory 正性也可被完全编译成有限阶 Toeplitz 主子矩阵、误差界与谱裕度。
+
+\begin{definition}[编译式 Toeplitz--PSD 证书]\label{def:typed-address-biaxial-completion-compiled-psd-certificate}
+固定截断阶 \(N\ge 0\)。称
+\[
+\mathcal C_{\mathrm{psd}}(N)
+:=
+\bigl(
+N,\,
+\widehat{\mathbf{T}}_N,\,
+\eta,\,
+\varepsilon
+\bigr)
+\]
+为一份编译式 Toeplitz--PSD 证书，若 \(\widehat{\mathbf{T}}_N\) 为 \(\mathbf{T}_N\) 的 Hermitian 近似矩阵，并满足
+\[
+\lambda_{\min}(\widehat{\mathbf{T}}_N)\ge \eta>0,
+\qquad
+\|\widehat{\mathbf{T}}_N-\mathbf{T}_N\|_{\mathrm{op}}\le \varepsilon\le \eta/2.
+\]
+\end{definition}
+
+\begin{proposition}[有限阶 PSD 证书与谱裕度缓冲]\label{prop:typed-address-biaxial-completion-compiled-psd-certificate}
+若 \(\mathcal C_{\mathrm{psd}}(N)\) 通过离线核验，则
+\[
+\mathbf{T}_N\succeq 0.
+\]
+进一步地，对任意 \(r=|w|<1\) 有
+\[
+\Re \mathscr{C}_{\zeta}(w)\ge \eta\frac{1-r^{N+1}}{1+r^{N+1}}.
+\]
+若再记 \(c_0=\mathscr{C}_{\zeta}(0)\)，
+\[
+\widetilde{\mathscr{C}}_{\zeta}:=\frac{\mathscr{C}_{\zeta}}{c_0},
+\qquad
+S(w):=\frac{\widetilde{\mathscr{C}}_{\zeta}(w)-1}{\widetilde{\mathscr{C}}_{\zeta}(w)+1},
+\qquad
+S_r(w):=S(rw),
+\]
+以及
+\[
+\delta_N(r):=\frac{\eta}{c_0}\frac{1-r^{N+1}}{1+r^{N+1}},
+\]
+则还有严格收缩界
+\[
+\|S_r\|_{H^\infty(\mathbb D)}
+\le
+\sqrt{1-\delta_N(r)(1-r)^2}
+<1.
+\]
+\end{proposition}
+\begin{proof}
+有限阶 PSD 结论由定理 \ref{thm:xi-spectral-margin-finite-psd-certificate} 直接给出；Carath\'eodory 缓冲下界与 Cayley--Schur 收缩常数分别由定理 \ref{thm:cdim-toeplitz-spectral-gap-carath-buffer} 与定理 \ref{thm:cdim-toeplitz-gap-schur-contraction} 给出。证毕。
+\end{proof}
+
+因此，Toeplitz 证书并不要求完美精确的矩系数输入；它真正需要的是一组可以被第三方复核的有限矩阵数据、明确的算子范数误差上界，以及足以封口的谱裕度。这与 Jensen 缺陷证书中“半径 + 区间包络 + 禁入半径”的格式完全同型。
+
+\subsubsection{两条证书链的共同核：缺陷标量与负惯性测量同一缺陷}\label{subsubsec:typed-address-biaxial-completion-common-defect-kernel}
+缺陷链与 Toeplitz 链之所以能够互译，并不是因为它们偶然给出同一个真值，而是因为二者在有限型点状缺陷口径下审计同一对象。
+
+\begin{proposition}[有限型点状缺陷的共同核]\label{prop:typed-address-biaxial-completion-common-defect-kernel}
+若允许进入有限型广义 Carath\'eodory/Schur 口径，则盘内点状缺陷总重数 \(\kappa\) 一方面等于负平方指数，另一方面等于高阶 Toeplitz 截断的稳定负惯性：
+\[
+\kappa
+=
+\mathrm{sq}_{-}(\mathscr{C})
+=
+\nu_{-}(\mathbf{T}_N)
+\qquad (N\gg 1).
+\]
+因此，Jensen 求和中的正缺陷项与 Toeplitz 链中的负惯性指标，测量的是同一类点状缺陷，只是分别落在凸分析与线性代数的不同证书语法中。
+\end{proposition}
+\begin{proof}
+极点计数与负平方指数的等价见定理 \ref{thm:xi-poles-negative-squares-equivalence}；高阶 Toeplitz 截断的负惯性稳定读出见定理 \ref{thm:xi-toeplitz-inertia-stabilizes-to-kappa}。证毕。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-common-defect-kernel} 并不把 \(D_{\zeta}(\varrho)\) 与 \(\nu_-(\mathbf{T}_N)\) 混成单一数值，而是指出：前者以半径族累积方式记录“缺陷何时进入”，后者以惯性稳定方式记录“缺陷总重数有多少”。二者共享同一对象核，却承担不同的审计任务。
+
+\subsubsection{统一可计算证书：Hardy 有限模态与有理核模板}\label{subsubsec:typed-address-biaxial-completion-computable-certificate-template}
+若要把连续边界对象统一送入有限数据语法，就需要一条共同的编译模板。现有主稿已经给出这条模板：相位 Fourier 的有限模态投影、显式有理核以及 Poisson 粗粒化的尺度收缩律。
+
+\begin{proposition}[统一可计算证书模板]\label{prop:typed-address-biaxial-completion-computable-certificate-template}
+连续边界数据可以被统一编译为
+\[
+\text{有限网格}
+\;+\;
+\text{有限模态投影}
+\;+\;
+\text{显式有理核}
+\;+\;
+\text{区间误差预算}
+\]
+的有限证书对象。更具体地说：
+\begin{enumerate}
+  \item 相位 Fourier 系数与圆级数重构分别由 \eqref{eq:unit-circle-phase-fourier-coeff} 与 \eqref{eq:unit-circle-phase-fourier-reconstruct} 给出；
+  \item 有限模态 Hardy 投影具有显式有理核表示，见命题 \ref{prop:unit-circle-phase-hardy-kernel-rational} 与小节 \ref{subsec:cdim-hardy-finite-mode-projection}；
+  \item Poisson 粗粒化沿尺度单调压缩相对熵，并在大尺度下服从统一二阶正规形与 TV/KL 量纲律，见命题 \ref{prop:xi-poisson-relative-entropy-contraction}、命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form} 与命题 \ref{prop:xi-poisson-tv-kl-second-order}。
+\end{enumerate}
+因此，无论走 Jensen 圆平均路线还是 Toeplitz 矩数据路线，最终都可在同一编译格式下进入离线核验。
+\end{proposition}
+\begin{proof}
+这只是上述结果在证书编译层的合并表述。有限模态投影把连续对象压到显式有理核积分，Poisson 粗粒化则为该压缩过程提供尺度单调性与统一误差量纲。证毕。
+\end{proof}
+
+因此，“可计算证书”的统一性并不仅仅是逻辑上的等价，而是输入格式上的统一：它们都可以被还原为有限地址、有限核、有限矩与有限误差界。
+
+\subsubsection{确定性离线验证器：地址不是点，点是逆极限}\label{subsubsec:typed-address-biaxial-completion-unified-offline-verifier}
+统一离线验证器的核心类型纪律，并不在于某种数值算法，而在于地址对象、证书对象与点对象的区分。
+
+\begin{definition}[统一离线验证接口]\label{def:typed-address-biaxial-completion-unified-offline-verifier}
+记
+\[
+\mathsf{Cert}^{\mathrm{off}}
+:=
+\mathsf{Cert}_{\mathrm{def}}
+\sqcup
+\mathsf{Cert}_{\mathrm{psd}}
+\sqcup
+\mathrm{Addr}_{\mathrm{US}},
+\]
+其中前两类分别代表编译式 Jensen 缺陷证书与编译式 Toeplitz--PSD 证书，后一类代表类型化地址查询。定义统一离线验证接口
+\[
+\operatorname{Ver}^{\mathrm{off}}:\mathsf{Cert}^{\mathrm{off}}\longrightarrow \{\mathsf{pass},\mathsf{fail},\mathrm{NULL}\}
+\]
+如下：
+\begin{enumerate}
+  \item 对 \(\mathsf{Cert}_{\mathrm{def}}\) 与 \(\mathsf{Cert}_{\mathrm{psd}}\) 中的有限证书，若其局部验证器接受，则输出 \(\mathsf{pass}\)，否则输出附带有限否证见证的 \(\mathsf{fail}\)；
+  \item 对 \(\mathrm{Addr}_{\mathrm{US}}\) 中的地址对象，若对应证书纤维非空，则按定理 \ref{thm:xi-us-deterministic-tristate} 输出可见读出；若纤维为空，则输出 \(\mathrm{NULL}\)。
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[地址对象与点对象的类型分离]\label{prop:typed-address-biaxial-completion-address-not-point}
+在定义 \ref{def:typed-address-biaxial-completion-unified-offline-verifier} 的接口中，地址对象不是点对象；点对象只能由一条嵌套证书链的逆极限实现。因而“零点作为地址”的说法在类型层不成立；若拒绝这一区分，则有限深度下的不可分离聚类会在协议内直接表现为 \(\mathrm{NULL}\)。
+\end{proposition}
+\begin{proof}
+证书对象、细化与可核验等价由定义 \ref{def:xi-cert-refinement-equivalence} 给出；嵌套证书链的逆极限归并由定理 \ref{thm:xi-cert-inverse-limit-coherence} 与命题 \ref{prop:cdim-certificate-inverse-limit-addressing} 给出；“零点不是地址”由推论 \ref{cor:xi-zero-not-address} 与注 \ref{rem:cdim-zero-not-address} 制度化；而 unitary-slice 下的确定性三值读出则由定理 \ref{thm:xi-us-deterministic-tristate} 给出。证毕。
+\end{proof}
+
+因此，本节所谓“统一离线验证器”并不是把所有输出压成同一种数值，而是把不同证书对象统一到同一类型纪律下：有限证书给出 \(\mathsf{pass}/\mathsf{fail}\)，地址查询给出可见读出或 \(\mathrm{NULL}\)。
+
+\subsubsection{稀疏化、量词消去与深度作为硬资源}\label{subsubsec:typed-address-biaxial-completion-sparsification-depth}
+统一验证器并不要求机械地逐层跑完全部层级；它允许共终端稀疏化，并且在一致维数上界制度下发生真正的量词消去。但这一压缩并不消除深度与预算的硬资源性质。
+
+\begin{proposition}[稀疏化、量词消去与硬资源]\label{prop:typed-address-biaxial-completion-sparsification-depth}
+在统一离线验证接口下，同时成立以下三点。
+\begin{enumerate}
+  \item Toeplitz--PSD 层级允许共终端稀疏化：只核验任意一条共终端子序列，不损失逻辑强度，见定理 \ref{thm:xi-toeplitz-psd-cofinal-sparsification}。
+  \item 若最小 realization 维数在所考虑对象族上一致有界，则无穷量词
+  \[
+  \forall N\ge 0
+  \]
+  可被统一消去为某个有限截断 \(N\le N_0\) 的核验，见定理 \ref{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation}。
+  \item 若不存在一致维数上界，则任意固定有限审计都可能遭遇谱替身，见定理 \ref{thm:xi-spectral-surrogate-finite-audit-undecidable}；同时，dyadic 深度 \(b\) 仍是不可替代的硬资源，高高度窗口中的可寻址性必须跨越前面各节给出的端点压缩与地址碰撞门槛。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+前两条分别是定理 \ref{thm:xi-toeplitz-psd-cofinal-sparsification} 与定理 \ref{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation} 的直接重述；第三条的不可判定性由定理 \ref{thm:xi-spectral-surrogate-finite-audit-undecidable} 给出，而深度作为硬资源的制度解释则已在小节 \ref{subsec:typed-address-biaxial-completion-boundary-joint-budget}、小节 \ref{subsec:typed-address-biaxial-completion-jensen-defect-repulsion-blindspot} 与命题 \ref{prop:typed-address-biaxial-completion-nonnull-requires-three-axes} 中固定。证毕。
+\end{proof}
+
+由此可见，稀疏化与量词消去并不等于“免费完成”全局核验。它们依赖一致维数上界与共终端结构；一旦这些条件失效，有限审计便会重新暴露出谱替身与结构性 \(\mathrm{NULL}\) 的边界。
+
+\subsubsection{小结}\label{subsubsec:typed-address-biaxial-completion-certificate-loop-summary}
+本节压缩出的闭环可以写成
+\[
+\text{幺正切片唯一性}
+\Longrightarrow
+\text{缺陷链 / PSD 链双证书}
+\Longrightarrow
+\text{有限数据对象}
+\Longrightarrow
+\operatorname{Ver}^{\mathrm{off}}
+\Longrightarrow
+\mathsf{pass}/\mathsf{fail}/\mathrm{NULL}.
+\]
+
+若走 Jensen 路线，证书对象是半径、区间化缺陷上界与排斥半径；若走 Toeplitz 路线，证书对象是有限阶矩、主子矩阵、谱裕度与误差界；若走地址路线，证书对象则是 dyadic 深度下的区间盒、细化关系与逆极限点对象。三条路线看似不同，但在本节已经被焊成同一套可核验语法。
+
+于是，后续的可见域约束、\(\mathrm{NULL}\) 三分解、\(\mathrm{Read}_{\mathrm{US}}\) 偏函数以及三端证书输入，就不再是孤立接口，而是这条闭环在对象层、证书层与验证器层的继续展开。

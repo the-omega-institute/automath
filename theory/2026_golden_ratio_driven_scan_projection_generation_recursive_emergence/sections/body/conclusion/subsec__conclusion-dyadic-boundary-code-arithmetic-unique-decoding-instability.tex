@@ -1,0 +1,498 @@
+\subsection{dyadic 边界全息码的算术实现、唯一译码半径与局部反演病态}\label{subsec:conclusion-dyadic-boundary-code-arithmetic-unique-decoding-instability}
+
+沿用正文第 \(5.1.2\) 节关于 dyadic 边界像码、边界 Gödel 编码、平方类综合征与线性时间 bulk 译码的记号。前述结果已经分别给出：dyadic 顶维边界像 \(\mathcal C_{m,n}\) 的精确 LDPC 参数、边界 Gödel 整数与 Hamming 距离之间的算术等距、平方类综合征的可填充判据，以及 fixed-resolution 线性左逆的指数病态。把这些接口合并后，可以把同一对象更清楚地理解为一族同时具有两种实现的边界全息码：离散侧它是平方类算术码与唯一 bulk 填充问题，连续侧它又强制任何精确局部反演出现分辨率级的条件数爆炸。
+
+\begin{theorem}[dyadic 边界全息码的双重实现与精确参数]\label{thm:conclusion-dyadic-boundary-code-dual-realization-parameters}
+固定 \(m,n\ge 1\)。令
+\[
+\mathcal C_{m,n}
+:=
+\operatorname{im}\bigl(\partial_n:C_n(\mathcal Q_m;\FF_2)\to C_{n-1}(\mathcal Q_m;\FF_2)\bigr)
+\]
+为 dyadic 顶维 \(0/1\)-链的模 \(2\) 边界像，并令
+\[
+\mathcal G_{m,n}
+:=
+\{H_m(U):\ U\subset I^n\ \text{为分辨率 }m\text{ 的 dyadic polycube}\}
+\subset \mathfrak Q_m^{\partial}
+\]
+为对应的边界 Gödel 整数像。再以
+\[
+d_m^{\mathrm{arith}}(A,B)
+:=
+\omega\!\left(\frac{AB}{\gcd(A,B)^2}\right)
+\]
+定义 \(\mathcal G_{m,n}\) 上的算术距离。则映射
+\[
+U\longmapsto \partial_n[U]\longmapsto H_m(U)
+\]
+把 \((\mathcal G_{m,n},d_m^{\mathrm{arith}})\) 与二元线性码 \((\mathcal C_{m,n},d_H)\) 等距同构。特别地，\(\mathcal G_{m,n}\) 继承 \(\mathcal C_{m,n}\) 的全部精确码参数：
+\[
+N_{m,n}=n(2^m+1)2^{m(n-1)},
+\qquad
+\dim_{\FF_2}\mathcal C_{m,n}=2^{mn},
+\qquad
+d_{\min}(\mathcal C_{m,n})=2n.
+\]
+因此
+\[
+R_{m,n}
+:=
+\frac{\dim_{\FF_2}\mathcal C_{m,n}}{N_{m,n}}
+=
+\frac{2^m}{n(2^m+1)}
+\longrightarrow
+\frac1n,
+\qquad
+d_{\min}^{\mathrm{arith}}(\mathcal G_{m,n})=2n.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:spg-boundary-godelization-holographic-dictionary}，映射
+\[
+U\longmapsto H_m(U)
+\]
+在 dyadic polycube 类上是单射，并且 \(H_m(U)\) 的素因子支撑唯一记录 \(\partial_n[U]\) 的取向面支撑。另一方面，定理 \ref{thm:spg-boundary-godel-arithmetic-hypercube-median} 已经给出
+\[
+d_m^{\mathrm{arith}}\bigl(H_m(U),H_m(V)\bigr)
+=
+\operatorname{Dist}_m(U,V),
+\]
+而对模 \(2\) 边界像，\(\operatorname{Dist}_m(U,V)\) 恰等于 \(\partial_n[U]\) 与 \(\partial_n[V]\) 的 Hamming 距离。故 \(\mathcal G_{m,n}\) 与 \(\mathcal C_{m,n}\) 等距同构。
+
+再由定理 \ref{thm:spg-dyadic-boundary-image-ldpc}，\(\mathcal C_{m,n}\) 的长度与维数分别为
+\[
+N_{m,n}=n(2^m+1)2^{m(n-1)},
+\qquad
+\dim_{\FF_2}\mathcal C_{m,n}=2^{mn},
+\]
+并由推论 \ref{cor:spg-dyadic-boundary-image-min-distance} 得
+\[
+d_{\min}(\mathcal C_{m,n})=2n.
+\]
+由于 \(\mathcal G_{m,n}\) 与 \(\mathcal C_{m,n}\) 等距，上述最小距离也等于 \(\mathcal G_{m,n}\) 的算术最小距离。证毕。
+\end{proof}
+
+\begin{theorem}[边界 Gödel 码的区间几何与最短路径计数闭式]\label{thm:conclusion-dyadic-boundary-code-interval-geometry-geodesic-count}
+设 \(A,B\in \mathcal G_{m,n}\)，并写
+\[
+g:=\gcd(A,B),\qquad a:=A/g,\qquad b:=B/g.
+\]
+由于 \(A,B\) 皆为平方自由整数，故 \(a,b\) 亦平方自由且互素。
+则 \((A,B)\) 之间的测地线区间恰为
+\[
+I(A,B)
+=
+\Bigl\{\operatorname{rad}(g\,u\,v):\ u\mid a,\ v\mid b\Bigr\}.
+\]
+因而
+\[
+\card{I(A,B)}=2^{\omega(ab)}=2^{d_m^{\mathrm{arith}}(A,B)}.
+\]
+此外，\(A\) 与 \(B\) 之间最短路径的总数精确等于
+\[
+d_m^{\mathrm{arith}}(A,B)!.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:spg-boundary-godel-arithmetic-hypercube-median}，\((\mathfrak Q_m^\partial,d_m^{\mathrm{arith}})\) 与有限 Hamming 超立方等距，边界 Gödel 码可视为取向 \((n-1)\)-面素数坐标上的 \(0/1\)-向量。
+其中 \(g\) 对应共同为 \(1\) 的坐标，\(a\) 与 \(b\) 分别对应只在 \(A\) 与只在 \(B\) 中出现的差异坐标。
+Hamming 立方体中两点的区间恰是“公共坐标固定、全部差异坐标自由二选一”的点集；转回算术表示即得
+\[
+I(A,B)=\Bigl\{\operatorname{rad}(g\,u\,v):\ u\mid a,\ v\mid b\Bigr\}.
+\]
+每个差异素因子提供一个独立二值选择，故区间基数为 \(2^{\omega(ab)}\)；而
+\[
+\omega(ab)=d_m^{\mathrm{arith}}(A,B)
+\]
+正是差异坐标总数。
+任一最短路径都必须把这 \(\omega(ab)\) 个差异坐标各翻转一次且仅一次，因此最短路径条数恰为这些翻转次序的排列数
+\(
+\omega(ab)!
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[分辨率无关的唯一译码半径]\label{cor:conclusion-dyadic-boundary-code-uniform-unique-decoding-radius}
+在 Hamming 度量与算术度量两种口径下，dyadic 边界全息码 \(\mathcal C_{m,n}\) 与 \(\mathcal G_{m,n}\) 的最大统一可保证唯一译码半径均为
+\[
+t_{\mathrm{UD}}=n-1.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-dyadic-boundary-code-dual-realization-parameters}，
+\[
+d_{\min}=2n.
+\]
+因此半径 \(n-1\) 的闭球两两不交，故任何落在某个码字半径 \(n-1\) 球内的接收字都具有唯一最近码字。
+
+反之，半径 \(n\) 不能被统一保证。取空 polycube 与任意单个 \(n\)-胞腔所对应的两个码字，则两者的边界距离恰为 \(2n\)。于是半径 \(n\) 已允许对应闭球相交，故不能作为统一唯一译码半径。证毕。
+\end{proof}
+
+\begin{theorem}[dyadic polycube 边界码的精确唯一译码半径]\label{thm:conclusion-dyadic-boundary-code-exact-unique-decoding-radius}
+设 \(Y\in \mathfrak Q_m^\partial\)。
+则 dyadic admissible 边界码族 \(\mathcal G_{m,n}\) 关于算术距离 \(d_m^{\mathrm{arith}}\) 的精确唯一译码半径为
+\[
+t_{\mathrm{ud}}(m,n)=n-1.
+\]
+更具体地：
+\begin{enumerate}
+  \item 若
+  \[
+  d_m^{\mathrm{arith}}(Y,\mathcal G_{m,n})\le n-1,
+  \]
+  则存在唯一 \(\widehat A\in \mathcal G_{m,n}\) 使
+  \[
+  d_m^{\mathrm{arith}}(Y,\widehat A)=d_m^{\mathrm{arith}}(Y,\mathcal G_{m,n});
+  \]
+  \item 半径 \(n\) 处该性质一般失效：存在 \(Y\in \mathfrak Q_m^\partial\) 同时距两个不同码字都等于 \(n\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一条只是推论 \ref{cor:conclusion-dyadic-boundary-code-uniform-unique-decoding-radius} 的重述。
+为证尖锐性，取一对达到最小距离的码字 \(A,B\in \mathcal G_{m,n}\)，使
+\[
+d_m^{\mathrm{arith}}(A,B)=2n.
+\]
+按定理 \ref{thm:conclusion-dyadic-boundary-code-interval-geometry-geodesic-count}，写 \(A=ga\)、\(B=gb\)，其中
+\[
+\omega(ab)=2n.
+\]
+任取 \(u\mid a\)、\(v\mid b\) 使
+\[
+\omega(u)+\omega(v)=n,
+\]
+并令
+\[
+Y:=\operatorname{rad}(g\,u\,v)\in I(A,B).
+\]
+则 \(Y\) 与 \(A\) 的差异坐标总数正是从 \(a\) 中删去者与从 \(b\) 中加入者之和，恰为 \(n\)；同理 \(d_m^{\mathrm{arith}}(Y,B)=n\)。
+故半径 \(n\) 已允许两不同码字同时成为最近码字，尖锐性得证。证毕。
+\end{proof}
+
+\begin{corollary}[三视图算术中值去噪的精确容错阈值]\label{cor:conclusion-dyadic-boundary-code-threeview-median-denoising-threshold}
+设真实 admissible 边界码为 \(A\in \mathcal G_{m,n}\)。
+给定三份噪声观测
+\[
+Y_1,Y_2,Y_3\in \mathfrak Q_m^\partial,
+\qquad
+d_m^{\mathrm{arith}}(Y_i,A)\le r
+\quad(i=1,2,3).
+\]
+记其算术中值为
+\[
+M:=\operatorname{med}(Y_1,Y_2,Y_3).
+\]
+若
+\[
+r\le \left\lfloor \frac{2n-2}{3}\right\rfloor,
+\]
+则 \(M\) 的唯一最近 admissible 码字就是 \(A\)。
+换言之，三视图算术中值加最近码字译码在该阈值以下给出严格无误恢复。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:spg-boundary-godel-arithmetic-hypercube-median}，算术中值对应于 Hamming 超立方中的坐标多数表决。
+把 \(A\) 视作原点，并令各误差支撑满足 \(\card{E_i}\le r\)。
+则中值误差支撑 \(E_M\) 恰是至少出现在两个 \(E_i\) 中的坐标集合，因此
+\[
+2\card{E_M}\le \card{E_1}+\card{E_2}+\card{E_3}\le 3r.
+\]
+故
+\[
+d_m^{\mathrm{arith}}(M,A)=\card{E_M}\le \left\lfloor \frac{3r}{2}\right\rfloor.
+\]
+若 \(r\le \lfloor(2n-2)/3\rfloor\)，则
+\[
+d_m^{\mathrm{arith}}(M,A)\le n-1.
+\]
+再由定理 \ref{thm:conclusion-dyadic-boundary-code-exact-unique-decoding-radius}，\(A\) 必为 \(M\) 的唯一最近 admissible 码字。证毕。
+\end{proof}
+
+\begin{theorem}[顶维边界码的秩饱和不可压缩性]\label{thm:conclusion-dyadic-boundary-code-rank-saturation-incompressibility}
+固定 \(m,n\ge 1\)，令
+\[
+\mathcal P_{m,n}
+:=
+\{U:\ U\text{ 为 }\mathcal Q_m\text{ 的 dyadic polycube}\}.
+\]
+若一个精确边界码
+\[
+\mathfrak C:\mathcal P_{m,n}\to (\ZZ/2\ZZ)^t
+\]
+仅通过顶维边界链
+\[
+\partial_n[U]\in Z_{n-1}(\mathcal Q_m;\FF_2)
+\]
+因子化，且在 \(\mathcal P_{m,n}\) 上单射，则必有
+\[
+t\ge 2^{mn}.
+\]
+\end{theorem}
+\begin{proof}
+每个 dyadic polycube \(U\) 唯一对应于一个顶维 \(0/1\)-链
+\(
+[U]\in C_n(\mathcal Q_m;\FF_2)
+\)，反之亦然，故
+\[
+\card{\mathcal P_{m,n}}
+=
+\card{C_n(\mathcal Q_m;\FF_2)}
+=
+2^{2^{mn}}.
+\]
+又由于顶维边界算子 \(\partial_n\) 单射，\(\mathfrak C\) 通过 \(\partial_n[U]\) 因子化且在 \(\mathcal P_{m,n}\) 上单射，便诱导出从 \(C_n(\mathcal Q_m;\FF_2)\) 到 \((\FF_2)^t\) 的单射。于是
+\[
+2^t\ge 2^{2^{mn}},
+\]
+从而
+\[
+t\ge 2^{mn}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[平方自由 prime-register 的最小生成元数必须指数增长]\label{cor:conclusion-dyadic-boundary-squarefree-prime-register-exponential-lower-bound}
+若一个平方自由乘法编码
+\[
+H:\mathcal P_{m,n}\to \Bigl\{\prod_{j=1}^t p_j^{\varepsilon_j}:\ \varepsilon_j\in\{0,1\}\Bigr\}
+\]
+在 \(\mathcal P_{m,n}\) 上单射，且其值只依赖于边界取向面的出现与否，则必有
+\[
+t\ge 2^{mn}.
+\]
+特别地，不存在固定轴数的 prime-register 方案，能够在全部分辨率上对 dyadic polycube 提供精确边界全息。
+\end{corollary}
+\begin{proof}
+把平方自由整数按素因子支撑送入平方类群，可唯一识别为 \((\ZZ/2)^t\) 中的一个点。于是 \(H\) 正是定理 \ref{thm:conclusion-dyadic-boundary-code-rank-saturation-incompressibility} 意义下的边界码，故其寄存器轴数必须满足 \(t\ge 2^{mn}\)。证毕。
+\end{proof}
+
+\begin{theorem}[平方类综合征的局部闭合判据与唯一 bulk 填充]\label{thm:conclusion-dyadic-boundary-squareclass-syndrome-unique-fill}
+设 \(N\in \mathfrak Q_m^{\partial}\) 为任意平方自由边界整数，并令
+\[
+b_N:=\mathbf G_{n-1}^{-1}(N)\in C_{n-1}(\mathcal Q_m;\FF_2).
+\]
+则下列命题等价：
+\begin{enumerate}
+  \item \(N\in \mathcal G_{m,n}\)；
+  \item \(\delta_{n-1}(N)=1\)；
+  \item \(\partial_{n-1}b_N=0\)。
+\end{enumerate}
+并且一旦这些条件成立，存在唯一
+\[
+x_N\in C_n(\mathcal Q_m;\FF_2)
+\]
+满足
+\[
+\partial_n x_N=b_N,
+\]
+且 \(x_N\) 可由 spanning-tree 递推在
+\[
+O\bigl(|V(\Gamma_m)|+|E(\Gamma_m)|\bigr)
+\]
+时间内显式恢复。
+\end{theorem}
+\begin{proof}
+等价性与唯一性正是推论 \ref{cor:spg-dyadic-boundary-syndrome-fillability} 的内容：平方类边界综合征为 \(1\) 当且仅当相应 \((n-1)\)-链局部闭合，亦即当且仅当它属于 \(\partial_n\) 的像；而顶维边界算子 \(\partial_n\) 的单射性保证填充唯一。
+
+在线性时间复杂度方面，定理 \ref{thm:spg-linear-time-bulk-decode-from-boundary} 已给出生成树上的 parity 递推：固定外部顶点取值后，沿 \(n\)-胞腔邻接图 \(\Gamma_m\) 的生成树逐边传播，即可在
+\[
+O\bigl(|V(\Gamma_m)|+|E(\Gamma_m)|\bigr)
+\]
+时间内恢复唯一的顶维 \(0/1\)-链 \(x_N\)。证毕。
+\end{proof}
+
+\begin{corollary}[边界全息中的判定—构造分裂]\label{cor:conclusion-dyadic-boundary-fillability-construction-split}
+在定理 \ref{thm:conclusion-dyadic-boundary-squareclass-syndrome-unique-fill} 的设定下，存在严格分裂：
+\begin{enumerate}
+  \item 可填充性判定只需检验局部综合征
+  \[
+  \delta_{n-1}(N)=1,
+  \]
+  它是 codimension-one 的局部闭合条件；
+  \item 一旦可填充，唯一 bulk 链的构造却必须沿 \(n\)-胞腔邻接图的一棵生成树作全局积分，因此属于 codimension-zero 的全局任务；并且该任务可在
+  \[
+  O\bigl(|V(\Gamma_m)|+|E(\Gamma_m)|\bigr)
+  \]
+  时间内完成。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-dyadic-boundary-squareclass-syndrome-unique-fill}，
+\[
+N\in \mathcal G_{m,n}
+\iff
+\delta_{n-1}(N)=1
+\iff
+\partial_{n-1}b_N=0.
+\]
+故 fillability 的判定完全降到局部综合征闭合。
+
+同一定理又表明：一旦该局部条件成立，唯一 bulk 填充 \(x_N\) 需要通过 \(\Gamma_m\) 上的 spanning-tree 递推来恢复，这是一项全局积分任务；其复杂度恰为
+\[
+O\bigl(|V(\Gamma_m)|+|E(\Gamma_m)|\bigr).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[数字精确性与模拟病态性的严格二歧]\label{thm:conclusion-dyadic-boundary-digital-exact-analog-illposed-split}
+同一边界算子 \(\partial_n\) 在离散算术范畴与实线性范畴中呈现严格分裂：
+\begin{enumerate}
+  \item 对任意满足定理 \ref{thm:conclusion-dyadic-boundary-squareclass-syndrome-unique-fill} 判据的平方自由边界整数 \(N\)，存在精确且线性时间的唯一 bulk 回放；
+  \item 对任意实线性左逆
+        \[
+        L_m:C_{n-1}(\mathcal Q_m;\RR)\to C_n(\mathcal Q_m;\RR),
+        \qquad
+        L_m\partial_n=I,
+        \]
+        都有
+        \[
+        \|L_m\|_{2\to 2}\ge \frac{2^{m/2}}{\sqrt{2n}}.
+        \]
+\end{enumerate}
+因而，若要求对所有噪声 \(\eta\) 统一满足
+\[
+\|L_m(\partial_n x+\eta)-x\|_2\le \delta,
+\]
+则必需有
+\[
+\|\eta\|_2\le \sqrt{2n}\,\delta\,2^{-m/2}.
+\]
+因此，dyadic 边界全息在离散码论语义下是完全可逆的，在连续线性语义下却又是指数病态的。
+\end{theorem}
+\begin{proof}
+第一条正是定理 \ref{thm:conclusion-dyadic-boundary-squareclass-syndrome-unique-fill} 的内容。第二条由定理 \ref{thm:conclusion-godel-arithmetic-exact-vs-linear-stable-separation} 的第二部分直接给出。
+
+若希望统一保证
+\[
+\|L_m(\partial_n x+\eta)-x\|_2=\|L_m\eta\|_2\le \delta,
+\]
+则必须有
+\[
+\|\eta\|_2\le \delta\,\|L_m\|_{2\to2}^{-1}
+\le
+\sqrt{2n}\,\delta\,2^{-m/2}.
+\]
+这说明离散侧的 exact recovery 与连续侧的 uniform stability 不能兼容。证毕。
+\end{proof}
+
+\begin{theorem}[任何 \(C^1\) 精确局部反演都必发生导数爆炸]\label{thm:conclusion-dyadic-boundary-c1-local-inverse-derivative-blowup}
+设 \(\mathcal N_m\subset C_{n-1}(\mathcal Q_m;\RR)\) 为包含 \(\operatorname{im}\partial_n\) 的开邻域。若
+\[
+R_m:\mathcal N_m\to C_n(\mathcal Q_m;\RR)
+\]
+为 \(C^1\) 映射并满足精确性
+\[
+R_m(\partial_n x)=x
+\qquad
+(\forall x\in C_n(\mathcal Q_m;\RR)),
+\]
+则
+\[
+\sup_{y\in \operatorname{im}\partial_n}\|DR_m(y)\|_{2\to 2}
+\ge
+\frac{2^{m/2}}{\sqrt{2n}}.
+\]
+特别地，任何 \(C^1\) 精确局部反演在分辨率提升时都必须产生 \(2^{m/2}\) 级的导数爆炸。
+\end{theorem}
+\begin{proof}
+固定任意 \(x,v\in C_n(\mathcal Q_m;\RR)\)。由精确性，
+\[
+R_m\bigl(\partial_n(x+tv)\bigr)=x+tv
+\]
+对一切充分小的 \(t\) 成立。于 \(t=0\) 处求导得到
+\[
+DR_m(\partial_n x)\circ \partial_n(v)=v.
+\]
+故
+\[
+DR_m(\partial_n x)\circ \partial_n=I,
+\]
+即 \(DR_m(\partial_n x)\) 是 \(\partial_n\) 的一个实线性左逆。于是可直接应用定理 \ref{thm:conclusion-dyadic-boundary-digital-exact-analog-illposed-split} 的左逆范数下界，得到
+\[
+\|DR_m(\partial_n x)\|_{2\to2}\ge \frac{2^{m/2}}{\sqrt{2n}}.
+\]
+该下界对每个 \(x\) 都成立，取上确界即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[正码率、零相对距离与常半径的混合渐近律]\label{cor:conclusion-dyadic-boundary-positive-rate-zero-distance-constant-radius}
+固定维数 \(n\)。则 dyadic 边界全息码族 \((\mathcal G_{m,n})_{m\ge 1}\) 同时满足
+\[
+R_{m,n}\longrightarrow \frac1n,
+\qquad
+\Delta_{m,n}
+:=
+\frac{d_{\min}}{N_{m,n}}
+=
+\frac{2}{(2^m+1)2^{m(n-1)}}
+\longrightarrow 0,
+\qquad
+t_{\mathrm{UD}}=n-1.
+\]
+因此，该族并不是经典意义下的渐近优码族；但其可统一保证的唯一译码半径却完全不随分辨率 \(m\) 退化。
+\end{corollary}
+\begin{proof}
+码率与最小距离由定理 \ref{thm:conclusion-dyadic-boundary-code-dual-realization-parameters} 给出，故相对距离满足
+\[
+\Delta_{m,n}
+=
+\frac{2n}{n(2^m+1)2^{m(n-1)}}
+=
+\frac{2}{(2^m+1)2^{m(n-1)}}
+\longrightarrow 0.
+\]
+常数唯一译码半径则由推论 \ref{cor:conclusion-dyadic-boundary-code-uniform-unique-decoding-radius} 给出。证毕。
+\end{proof}
+
+\begin{proposition}[最近码字失唯一性的起始并非单点，而是中心二项墙]\label{prop:conclusion-dyadic-boundary-code-central-binomial-wall}
+取一对达到最小距离的 admissible 码字 \(A,B\in \mathcal G_{m,n}\)，使
+\[
+d_m^{\mathrm{arith}}(A,B)=2n.
+\]
+定义它们的等距壳
+\[
+\Sigma(A,B):=
+\{Y\in \mathfrak Q_m^\partial:\ d_m^{\mathrm{arith}}(Y,A)=d_m^{\mathrm{arith}}(Y,B)=n\}.
+\]
+则有精确计数
+\[
+\card{\Sigma(A,B)}=\binom{2n}{n}.
+\]
+因此，唯一译码在半径 \(n\) 处的失效并非由孤立病态点触发，而是由一个规模精确为中心二项系数的组合墙触发。
+\end{proposition}
+\begin{proof}
+按定理 \ref{thm:conclusion-dyadic-boundary-code-interval-geometry-geodesic-count}，写 \(A=ga\)、\(B=gb\)，其中
+\[
+\omega(ab)=2n.
+\]
+等距条件
+\(
+d_m^{\mathrm{arith}}(Y,A)=d_m^{\mathrm{arith}}(Y,B)=n
+\)
+等价于：在这 \(2n\) 个差异坐标中，\(Y\) 恰从 \(A\)-侧继承其中 \(n\) 个，并从 \(B\)-侧继承其余 \(n\) 个。
+故 \(Y\) 的选择等价于从 \(2n\) 个差异坐标中选出 \(n\) 个归于 \(A\)-侧，其数目正为
+\[
+\binom{2n}{n}.
+\]
+证毕。
+\end{proof}
+
+\begin{conjecture}[无可微性假设下的局部 Lipschitz 爆炸]\label{conj:conclusion-dyadic-boundary-local-lipschitz-blowup}
+对每个 \(m\)，设
+\[
+R_m:\mathcal N_m\to C_n(\mathcal Q_m;\RR)
+\]
+定义在 \(\operatorname{im}\partial_n\) 的某个邻域上，并满足精确性
+\[
+R_m(\partial_n x)=x.
+\]
+则即便不要求 \(R_m\) 可微，只要 \(R_m\) 在该邻域局部 Lipschitz，仍应有
+\[
+\operatorname{Lip}(R_m)\ge c_n\,2^{m/2}
+\]
+对某个仅依赖于 \(n\) 的常数 \(c_n>0\) 成立。换言之，dyadic 边界全息中的指数病态并非微分结构的副产物，而是精确局部反演问题本身的度量拓扑宿命。
+\end{conjecture}
+
+\paragraph{统一读法}
+这一组结果把 dyadic 边界像的三种语义压成了同一对象的三面：在 \(\FF_2\) 码论口径下，它是一族长度显式、码率趋于 \(1/n\)、最小距离恒为 \(2n\) 的边界像码；在平方类算术口径下，它又是一族由局部闭合综合征完全刻画、并可线性时间唯一填充的边界整数码；而在连续实分析口径下，同一边界算子却强制所有精确局部反演出现 \(2^{m/2}\) 级的微分爆炸。故本文中的 boundary holography 既不是单纯的 LDPC 码，也不是单纯的 Gödel 字典；更精确的事实是：它同时给出一族离散完全可逆的算术全息码，以及一族连续意义上指数病态的局部反演问题。
+
+\endinput

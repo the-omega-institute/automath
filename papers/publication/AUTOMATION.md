@@ -248,6 +248,27 @@ In each paper's PIPELINE.md, add a "Backflow" section after P2:
 | thm:new-result | sec_foo | pending / integrated |
 ```
 
+### Knowledge-source backflow
+
+Not every high-value backflow originates from a publication paper. Some inputs are better treated as standing knowledge nodes: classical sources, historical formalisms, external theorem schemas, or methodological frameworks that sharpen how the core grows.
+
+These nodes should not force a global manuscript rewrite. Instead, they should feed the core incrementally by adding local theorem statements, definitions, proof schemas, and structural distinctions wherever they strengthen the existing nucleus.
+
+**Registry:** `papers/publication/backflow/knowledge_backflow_inventory.json`
+
+For each knowledge node:
+
+1. **Register the source** — assign `source_slug`, `source_type`, primary note, target core sections, and active theorem families.
+2. **Create a standing note** — record what has already been integrated, what remains only methodological, and what theorem-level additions are queued next.
+3. **Integrate locally** — push content into the core as bounded additions:
+   - new definition / theorem / corollary / remark
+   - stronger derivation chain
+   - sharper constructibility / rigidity / obstruction split
+   - new cross-section bridge
+4. **Track queue status** — mark each theorem family as `queued`, `active`, `partial`, or `integrated`.
+
+This lets the core behave as an expanding knowledge base rather than a fixed single-paper narrative. Backflow remains cumulative, local, and indefinitely extensible.
+
 ## Layer 4: Quality Gates (Automated)
 
 These checks can run independently at any pipeline stage. Implement as a single Python script.
