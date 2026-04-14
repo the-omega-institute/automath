@@ -204,6 +204,8 @@ import Omega.EA.StableAddNoWrapTruncation
 import Omega.EA.AutDimensionSqueeze
 import Omega.EA.PrimeLedger
 import Omega.EA.FoldAsSection
+import Omega.EA.FoldAsSectionCorollary
+import Omega.EA.MonoidQuotientIsN
 import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
@@ -258,6 +260,7 @@ import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.ShortExactAdditivity
 import Omega.CircleDimension.TensorHomExtLaws
 import Omega.CircleDimension.AxiomaticRigidity
+import Omega.CircleDimension.PhaseSpectrumLimit
 import Omega.CircleDimension.PhaseSpectrumReconstruction
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
