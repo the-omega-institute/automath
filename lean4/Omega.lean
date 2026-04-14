@@ -108,6 +108,7 @@ import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.WeightedBoundaryDecomposition
 import Omega.SPG.BoundaryDimensionUpper
+import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.TanakaIncrement
 import Omega.SPG.CoarsegrainedCutFlux
 import Omega.SPG.DyadicTopInversionBound
@@ -168,6 +169,7 @@ import Omega.Topos.SheafificationCharacterizationAPAL
 import Omega.Topos.SheafLocalToGlobalAPAL
 import Omega.Topos.FocusedSheafLocalToGlobalAPAL
 import Omega.Topos.SheafificationRemovesGlueAPAL
+import Omega.Topos.FocusedSheafificationRemovesGlueAPAL
 import Omega.Topos.GluingFailureSheafificationCharacterizationAPAL
 import Omega.Topos.GluingFailureSheafLocalToGlobalAPAL
 import Omega.Topos.NullClassificationUnderRefinement
@@ -230,6 +232,7 @@ import Omega.Zeta.DFADensityDichotomy
 import Omega.Zeta.DFADensityDichotomySeeds
 import Omega.Zeta.IntroDensity
 import Omega.Zeta.PrimeLanguagesIntroDensity
+import Omega.Zeta.IntroAnalytic
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
 import Omega.Zeta.ETDSDFADensityDichotomy
