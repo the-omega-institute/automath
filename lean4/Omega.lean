@@ -77,6 +77,7 @@ import Omega.Folding.BernoulliPJordanResonance
 import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPPressureQuartic
 import Omega.Folding.EpsilonMachineFibMobius
+import Omega.Folding.EndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
 import Omega.Folding.ImageSubshiftZeta
 import Omega.Folding.SyncDelay
@@ -183,6 +184,7 @@ import Omega.EA.StableAddComputable
 import Omega.EA.InternalProductAddsValues
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.AddressNaturality
+import Omega.EA.StableAddFiniteResolutionCompatibility
 import Omega.EA.AutDimensionSqueeze
 import Omega.EA.PrimeLedger
 import Omega.EA.FoldAsSection
@@ -272,6 +274,7 @@ import Omega.GU.BdryZ2JumpUniqueness
 import Omega.GU.Window6DoubleLock12
 import Omega.GU.StrongLumpabilitySpectralRigidity
 import Omega.GU.SwapInvolutionDiagonal
+import Omega.GU.U1ThroatIdentity
 import Omega.GU.DiscriminantWedge2Square
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.Window6SingleGoodPrimeRecovery
