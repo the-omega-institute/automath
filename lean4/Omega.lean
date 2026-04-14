@@ -167,6 +167,7 @@ import Omega.Zeta.PhaseImplementationRankLimit
 import Omega.Zeta.SyncKernelMixingRate
 import Omega.Zeta.FredholmDetSeeds
 import Omega.Zeta.DFAPrimeSymmetricDiff
+import Omega.Zeta.DFAPrimeSymmetricDiffLowerBound
 import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.DFADensityDichotomy
@@ -206,6 +207,8 @@ import Omega.EA.FoldAsSection
 import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
+import Omega.EA.RewriteLocalConfluence
+import Omega.EA.RewriteConfluence
 import Omega.Topos.LocalSectionCriterion
 import Omega.HighDimensionalCutProject.IndicatorSumRewrite
 import Omega.Conclusion.AffineRegisterBudget
