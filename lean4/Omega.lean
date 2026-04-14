@@ -170,6 +170,7 @@ import Omega.Zeta.NecklaceCounting
 import Omega.Zeta.LocalizedQuotientLedger
 import Omega.Zeta.PhaseCombPoleCounting
 import Omega.Zeta.CriticalLineGapEntropyRateZero
+import Omega.Zeta.OperatorFixedKernelLocalDensityObstruction
 import Omega.Zeta.CyclicLiftGcdLcm
 import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Discussion.ChebyshevAdams
@@ -311,6 +312,7 @@ import Omega.GU.Window6DoubleLock12
 import Omega.GU.StrongLumpabilitySpectralRigidity
 import Omega.GU.SwapInvolutionDiagonal
 import Omega.GU.U1ThroatIdentity
+import Omega.GU.U1ThroatIdentityFixedPoint
 import Omega.GU.DiscriminantWedge2Square
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.Window6SingleGoodPrimeRecovery
@@ -327,6 +329,7 @@ import Omega.GU.FoldbinDegeneracySector
 import Omega.GU.WedderburnBernoulliZeta
 import Omega.GU.AnomalyLedgerNoMultiplicative
 import Omega.GU.CongruenceM6IdempotentsFour
+import Omega.GU.CongruenceM6IdempotentsFourRegistered
 import Omega.GU.Z6CenterQuotient
 import Omega.GU.ThreefoldRigidity
 import Omega.GU.BdrySquareIdentity
