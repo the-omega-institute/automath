@@ -67,6 +67,7 @@ import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.SummableNatEventuallyZero
 import Omega.Folding.PeriodicCompressionRatio
 import Omega.Folding.RationalGeneratorGap
+import Omega.Folding.MetallicCompressionExtremum
 import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.ZeroFiberLinear
 import Omega.Folding.ModRigidityPeriodicPredicates
@@ -169,6 +170,7 @@ import Omega.Zeta.NecklaceCounting
 import Omega.Zeta.LocalizedQuotientLedger
 import Omega.Zeta.PhaseCombPoleCounting
 import Omega.Zeta.CyclicLiftGcdLcm
+import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -248,6 +250,7 @@ import Omega.Core.MaxFiberSplitGcdTrichotomy
 import Omega.POM.MultiplicityFixedRExtrema
 import Omega.POM.MassSplittingMomentRoot
 import Omega.POM.OrbitProductNorm
+import Omega.POM.FiberTripleMedianMajority
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.LeyangMonotoneCouplingPrimeRegister
 import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
