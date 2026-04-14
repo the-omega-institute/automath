@@ -169,6 +169,7 @@ import Omega.Zeta.LucasBarrier
 import Omega.Zeta.NecklaceCounting
 import Omega.Zeta.LocalizedQuotientLedger
 import Omega.Zeta.PhaseCombPoleCounting
+import Omega.Zeta.CriticalLineGapEntropyRateZero
 import Omega.Zeta.CyclicLiftGcdLcm
 import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Discussion.ChebyshevAdams
@@ -339,6 +340,7 @@ import Omega.GroupUnification.SpreadEquivalence
 import Omega.GroupUnification.SMSignatureCyclicDivides6
 import Omega.GroupUnification.ParryEndpointCollapse
 import Omega.GroupUnification.ParryCommutingSquarePhi
+import Omega.GroupUnification.ChiralOrthogonalityTypeObservables
 import Omega.CD.AnomalyCompressionOverhead
 import Omega.CD.PeriodicPointCount
 import Omega.CircleDimension.MultiPrimeSpectrum
@@ -419,6 +421,7 @@ import Omega.Folding.GaugeAnomalyTrigonalGenus
 import Omega.Folding.GaugeAnomalyS4PicardRank
 import Omega.Folding.GaugeAnomalyS4ArtinConductor
 import Omega.Conclusion.CompressionLadderSpin10
+import Omega.Conclusion.PhaseBudgetBinaryQuantization
 import Omega.POM.S5GaloisArithmetic
 import Omega.Zeta.GaugeGroupTripleDecomp
 import Omega.Conclusion.ParetoColdendCurvaturePole
