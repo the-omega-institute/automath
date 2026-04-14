@@ -133,6 +133,7 @@ import Omega.SPG.DoubleBudgetPoisson
 import Omega.SPG.EntropyLedger
 import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.QuasistationaryAmbiguityAmplitudes
+import Omega.SPG.MainAmplitude
 import Omega.SPG.SurvivorRenyiPressure
 import Omega.SPG.MainRenyi
 import Omega.SPG.SurvivorSpectrumCollision
@@ -215,6 +216,7 @@ import Omega.Topos.H1FreeNoBlindness
 import Omega.Topos.H1VanishingClassTrivializing
 import Omega.Topos.H1VanishingClassTrivializingPublication
 import Omega.Topos.CharacterBlindObstructions
+import Omega.Topos.CharacterBlindObstructionsFocused
 import Omega.Topos.BranchDecomposition
 import Omega.Topos.ComponentGerbeDecomposition
 import Omega.Topos.GerbeNullSemantics
@@ -259,6 +261,7 @@ import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
 import Omega.Zeta.ClassMertensExplicit
 import Omega.Zeta.QuotientFunctoriality
+import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.ResidueClassAsymptotics
 import Omega.Zeta.ETDSFinitePartGapPositive
 import Omega.Zeta.ETDSFinitePartGapPositiveCorollary
