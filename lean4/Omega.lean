@@ -139,6 +139,7 @@ import Omega.SPG.MainAmplitude
 import Omega.SPG.SurvivorRenyiPressure
 import Omega.SPG.MainRenyi
 import Omega.SPG.MainResonance
+import Omega.SPG.HolderOpenResonance
 import Omega.SPG.SurvivorSpectrumCollision
 import Omega.SPG.PressureGap
 import Omega.SPG.SurvivorPressureRecovery
@@ -265,6 +266,7 @@ import Omega.Zeta.ETDSFinitePartPrimitiveClosedForm
 import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
 import Omega.Zeta.ClassMertensExplicit
+import Omega.Zeta.ClassMertensFourier
 import Omega.Zeta.QuotientFunctoriality
 import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.AbelianShadowDefect
@@ -444,6 +446,7 @@ import Omega.CircleDimension.OperationalHalfCircleDimensionNd
 import Omega.CircleDimension.HaarPullbackUniqueness
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
+import Omega.CircleDimension.PoissonDefectAmplification
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
