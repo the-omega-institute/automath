@@ -188,6 +188,7 @@ import Omega.EA.InternalProductAddsValues
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.AddressNaturality
 import Omega.EA.StableAddFiniteResolutionCompatibility
+import Omega.EA.StableAddNoWrapTruncation
 import Omega.EA.AutDimensionSqueeze
 import Omega.EA.PrimeLedger
 import Omega.EA.FoldAsSection
@@ -297,6 +298,7 @@ import Omega.GU.BulkResonanceDeficit
 import Omega.GU.FoldbinDegeneracySector
 import Omega.GU.WedderburnBernoulliZeta
 import Omega.GU.AnomalyLedgerNoMultiplicative
+import Omega.GU.CongruenceM6IdempotentsFour
 import Omega.GU.Z6CenterQuotient
 import Omega.GU.ThreefoldRigidity
 import Omega.GU.BdrySquareIdentity
@@ -312,6 +314,7 @@ import Omega.CD.AnomalyCompressionOverhead
 import Omega.CD.PeriodicPointCount
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
+import Omega.CircleDimension.CdimStarCompatibleFG
 import Omega.CircleDimension.ResidualCircleDim
 import Omega.CircleDimension.ResidualCircleDimLaws
 import Omega.CircleDimension.DyadicKernelCube
