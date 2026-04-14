@@ -103,6 +103,7 @@ import Omega.SPG.SymbolicFactor
 import Omega.SPG.Clopen
 import Omega.SPG.DecidableClopen
 import Omega.SPG.ClarityMonotone
+import Omega.SPG.ClarityWalshFamilyStability
 import Omega.SPG.BasicProperties
 import Omega.SPG.ScanErrorDiscrete
 import Omega.SPG.ScanProjectionScanErrorCylinder
@@ -180,6 +181,7 @@ import Omega.LogicExpansionChain.ReadoutTransport
 import Omega.LogicExpansionChain.UpdatesPreserveForcing
 import Omega.LogicExpansionChain.DelayedDecidabilityNoNewTruth
 import Omega.LogicExpansionChain.IndispensabilityImpliesMinimality
+import Omega.LogicExpansionChain.ChoiceSpectrumStandardForm
 import Omega.Topos.NullTrichotomy
 import Omega.Topos.SheafificationCharacterization
 import Omega.Topos.SheafificationCharacterizationAPAL
@@ -211,9 +213,9 @@ import Omega.RecursiveAddressing.SlidingBlockFactor
 import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
 import Omega.RecursiveAddressing.TypedReadoutPersistence
 import Omega.RecursiveAddressing.ObserverIndexedReadoutForcingCriterion
+import Omega.RecursiveAddressing.GlobalLayerLogicOnly
 import Omega.RecursiveAddressing.ObserverIndexedCommonRefinementDecidability
 import Omega.RecursiveAddressing.ObserverIndexedFiniteResolutionObjectEligibility
-import Omega.RecursiveAddressing.ObserverIndexedExplicitLifting
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
 import Omega.Combinatorics.GramDet
