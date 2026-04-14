@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,125 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3085 |
+| \leanverified 标注数 | 3091 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3134 |
-| 轮次 | R695（round_count=R695）|
+| 总标注数 | 3140 |
+| 轮次 | R696（round_count=R696）|
+
+**Phase R696（本轮落地，全流程执行）**：`paper_spg_godel_rt_mincut_uniqueness_ssa_seeds` / `paper_spg_godel_rt_mincut_uniqueness_ssa_package`（对应 `thm:spg-godel-rt-mincut-uniqueness-ssa`，SPG；在既有 `cutIndicator` / `cutWeight` 次模性骨架上补齐边集权重版 seeds/package wrapper，保留正文主定理整体仍为 `\leanpartial` 的现状，但本轮新增该标签下的 2 条 paper-facing `\leanverified` 注册）；`paper_xi_phase_implementation_rank_limit_seeds` / `paper_xi_phase_implementation_rank_limit_package`（对应 `thm:xi-phase-implementation-rank-triple-characterization`，Zeta；复用“bounded nonnegative / tends-to-infinity implies quotient tends to zero” 核心引理，补齐 `(r * g n + f n) / g n \to r` 的 seeds/package wrapper）；`paper_pom_prime_determinant_ellipse_ledger_seeds` / `paper_pom_prime_determinant_ellipse_ledger_package`（对应 `cor:pom-prime-determinant-ellipse-ledger`，POM；在既有 `encodingMatrix` / `det_encodingMatrix` / `det_encodingMatrix_mul` 基础上补齐列表乘积行列式账本的 seeds/package clone；本轮 `\leanverified` +6，body 覆盖计数不变，降级项数 0）
 
 **Phase R695（本轮落地，全流程执行）**：`paper_spg_screen_audit_cost_monotone_unit_drop_seeds` / `paper_spg_screen_audit_cost_monotone_unit_drop_package`（对应 `cor:spg-screen-audit-cost-monotone-unit-drop`，SPG；以 Finset 版 antitone `cost` 与单步单位下降界归纳证明“加行单调且加 `t` 行最多降 `t`”，保留 kernel nullity / audit cost 的核心数学骨架）；`paper_bdry_orientation_tsubset_lucas_parity_seeds` / `paper_bdry_orientation_tsubset_lucas_parity_package`（对应 `cor:bdry-orientation-tsubset-lucas-parity`，GU；通过 `Choose.choose_modEq_choose_mod_mul_choose_div_nat` 的 mod-2 Lucas 递推和 `Nat.binaryRec`，形式化 `Odd (Nat.choose a b)` 与 testBit 逐位支配的精确等价）；`paper_conclusion_fibadic_primitive_central_idempotents_seeds` / `paper_conclusion_fibadic_primitive_central_idempotents_package`（对应 `thm:conclusion-fibadic-finite-layer-gcd-primitive-central-idempotents`，Conclusion；以有理数幂等元必为 `0/1` 的分量分类，得到有限族幂等元即某个 `Finset` 指示函数的 paper-facing 版本；本轮 `\leanverified` +6，降级项数 0）
 
