@@ -134,6 +134,7 @@ import Omega.SPG.DoubleBudgetPoisson
 import Omega.SPG.CapacityRegion
 import Omega.SPG.EntropyLedger
 import Omega.SPG.FirstEntryEscapeRate
+import Omega.SPG.ErrorResolventCyclotomic
 import Omega.SPG.QuasistationaryAmbiguityAmplitudes
 import Omega.SPG.MainAmplitude
 import Omega.SPG.SurvivorRenyiPressure
@@ -267,6 +268,7 @@ import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
 import Omega.Zeta.ClassMertensExplicit
 import Omega.Zeta.ClassMertensFourier
+import Omega.Zeta.PrimitivePeterWeylDeterminant
 import Omega.Zeta.QuotientFunctoriality
 import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.AbelianShadowDefect
@@ -446,6 +448,7 @@ import Omega.CircleDimension.OperationalHalfCircleDimensionNd
 import Omega.CircleDimension.HaarPullbackUniqueness
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
+import Omega.CircleDimension.PoissonDefectLadder
 import Omega.CircleDimension.PoissonDefectAmplification
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
