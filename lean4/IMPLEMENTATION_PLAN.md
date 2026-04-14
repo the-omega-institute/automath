@@ -6,17 +6,19 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~50,769 |
-| 定理/定义数 | ~4,424 |
-| 论文接口包装 | 767+ |
-| 文件数 | 174 |
+| 总行数 | ~50,823 |
+| 定理/定义数 | ~4,427 |
+| 论文接口包装 | 770+ |
+| 文件数 | 177 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3251 |
+| \leanverified 标注数 | 3254 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3300 |
-| 轮次 | R750（round_count=R750）|
+| 总标注数 | 3303 |
+| 轮次 | R751（round_count=R751）|
+
+**Phase R751（本轮落地，全流程执行）**：`paper_fold_truncation_discrete_stokes_defect`（对应 `thm:fold-discrete-stokes-defect`，Folding；把 fold-truncation publication 中 Fold defect 的精确 telescoping/cocycle 分解直接挂接到既有 `globalDefect_eq_defectChain` paper wrapper）；`paper_prefix_scan_error_volume_boundary_scaling`（对应 `thm:volume-boundary-scaling`，SPG；把 prefix-scan publication 中 boundary thickness 驱动的 finite-volume scaling 两侧估计打包成 section-facing wrapper；本轮 non-trivial 目标）；`paper_etds_dfa_prime_recall_precision`（对应 `cor:dfa-prime-recall-precision`，Zeta；把 ETDS syntax-zeta section 中 fixed DFA 对 binary-prime language 的 recall/precision collapse obstruction 直接挂接到既有 introduction-level wrapper）；本轮 `\leanverified` +3，覆盖章节为 Folding / SPG / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Folding/DiscreteStokesDefectPublication.lean`、`lean4/Omega/SPG/VolumeBoundaryScaling.lean`、`lean4/Omega/Zeta/DFAPrimeRecallPrecisionETDS.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_fold_truncation_discrete_stokes_defect`、`paper_prefix_scan_error_volume_boundary_scaling`、`paper_etds_dfa_prime_recall_precision`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_fold_truncation_defect_stokes_dynamical_systems/main.tex`（`thm:fold-discrete-stokes-defect`），`/Users/chronoai/automath/papers/publication/2026_prefix_scan_error_boundary_rates_dynamical_systems/main.tex`（`thm:volume-boundary-scaling`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_syntax_zeta.tex`（`cor:dfa-prime-recall-precision`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R750（本轮落地，全流程执行）**：`paper_resolution_folding_inverse_limit_golden`（对应 `thm:inverse-limit-golden`，Folding；把 resolution-folding publication 中 stable admissible one-sided shift 与 prefix-compatible inverse-limit 的自然双射直接挂接到既有 `inverseLimitEquiv`；本轮 non-trivial 目标）；`paper_etds_dfa_prime_symmetric_diff`（对应 `cor:dfa-prime-symmetric-diff`，Zeta；把 ETDS syntax-zeta section 中 fixed DFA 与 binary-prime language 的 symmetric-difference obstruction 重新挂接到既有 binary-prime seed wrapper，保留 `2^m/m` 量级与正密度分支的增长障碍接口）；`paper_gluing_failure_sheafification_removes_glue_apal`（对应 `cor:sheafification-removes-glue`，Topos；把 gluing-failure APAL publication 中 sheafification 消除 compatible-local/global-section gap 的 corollary 直接挂接到既有 sheafification-removes-glue APAL wrapper）；本轮 `\leanverified` +3，覆盖章节为 Folding / Zeta / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Folding/InverseLimitGolden.lean`、`lean4/Omega/Zeta/DFAPrimeSymmetricDiffETDS.lean`、`lean4/Omega/Topos/GluingFailureSheafificationRemovesGlueAPAL.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_resolution_folding_inverse_limit_golden`、`paper_etds_dfa_prime_symmetric_diff`、`paper_gluing_failure_sheafification_removes_glue_apal`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_compatibility.tex`（`thm:inverse-limit-golden`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_syntax_zeta.tex`（`cor:dfa-prime-symmetric-diff`），`/Users/chronoai/automath/papers/publication/2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal/sec_null_decomposition.tex`（`cor:sheafification-removes-glue`）；新增 tex theorem/corollary/lemma 环境数 0）
 
