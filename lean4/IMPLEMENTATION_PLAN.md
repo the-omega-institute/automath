@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3133 |
+| \leanverified 标注数 | 3136 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3182 |
-| 轮次 | R706（round_count=R706）|
+| 总标注数 | 3185 |
+| 轮次 | R707（round_count=R707）|
+
+**Phase R707（本轮落地，全流程执行）**：`paper_u1_throat_identity_fixed_point_seeds`（对应 `prop:u1-throat-identity`，GU；将既有“正实轴上 `u = 1 / u` 当且仅当 `u = 1`”的固定点核重新注册为 paper-facing seed，保持统一点作为 `Ω`-反演唯一固定点的原命题本质）；`paper_congruence_m6_idempotents_four_registered_seeds`（对应 `prop:congruence-m6-idempotents-four`，GU；把既有 `ZMod 21` 四幂等计数核重新挂接到命题环境，保留 squarefree 模 `21` 强制四个幂等分量的原始骨架）；`paper_operator_fixed_kernel_local_density_obstruction_seeds`（对应 `prop:operator-fixed-kernel-local-density-obstruction`，Zeta；由严格周期最近邻间距序列导出有限 gap 谱与正常数胞均值 `Δ / B`，并证明该均值不可能趋于 `0`，从而保留“固定有限核无法承载变密度局部统计塌缩”的核心障碍；本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 GU / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/GU/U1ThroatIdentityFixedPoint.lean`、`lean4/Omega/GU/CongruenceM6IdempotentsFourRegistered.lean`、`lean4/Omega/Zeta/OperatorFixedKernelLocalDensityObstruction.lean`）
 
 **Phase R706（本轮落地，全流程执行）**：`paper_conclusion_phase_budget_binary_quantization_seeds`（对应 `cor:conclusion-phase-budget-binary-quantization`，Conclusion；把相位预算最小值抽象成整数半空间阈值问题，精确落地 `c \ge \alpha-1` 时最小可行相位数为 `1`、否则为 `2` 的二值量子化骨架）；`paper_operator_critical_line_gap_entropy_rate_zero_seeds`（对应 `prop:operator-critical-line-gap-entropy-rate-zero`，Zeta；对严格周期最近邻间距序列给出 `n mod B` 有限母块编码，保留“有限周期即有限描述”的核心构造骨架；本轮 non-trivial 目标之一）；`paper_window6_chiral_orthogonality_type_observables_seeds`（对应 `prop:window6-chiral-orthogonality-to-type-observables`，GroupUnification；在有限对合下形式化“不变量与反不变量在计数内积下严格正交”的抽象酉重排论证；本轮 non-trivial 目标之一）；本轮 `\leanverified` +3，覆盖章节为 Conclusion / Zeta / GroupUnification，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/Conclusion/PhaseBudgetBinaryQuantization.lean`、`lean4/Omega/Zeta/CriticalLineGapEntropyRateZero.lean`、`lean4/Omega/GroupUnification/ChiralOrthogonalityTypeObservables.lean`）
 
