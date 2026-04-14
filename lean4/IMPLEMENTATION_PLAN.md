@@ -7,16 +7,18 @@
 | 指标 | 数值 |
 |---|---|
 | 总行数 | ~50,823 |
-| 定理/定义数 | ~4,427 |
+| 定理/定义数 | ~4,430 |
 | 论文接口包装 | 770+ |
 | 文件数 | 179 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3266 |
+| \leanverified 标注数 | 3269 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3315 |
-| 轮次 | R756（round_count=R756）|
+| 总标注数 | 3318 |
+| 轮次 | R759（round_count=R759）|
+
+**Phase R759（本轮落地，全流程执行）**：`paper_logic_expansion_choice_spectrum_standard_form`（对应 `prop:logic-expansion-choice-spectrum-standard-form`，LogicExpansionChain；将 action 依 `Gamma`-像相等取商，并与 `Set.range Gamma` 建立自然双射；由于 Lean 不允许把非命题值声明为 `theorem`，该接口以同名 `noncomputable def` 落地）；`paper_recursive_addressing_observer_indexed_global_layer_logic_only`（对应 `prop:observer-indexed-global-layer-logic-only`，RecursiveAddressing；把论文中的“全局层只统一推理规则”压成 forcing 语义对任意演算层可靠性的直接 soundness wrapper）；`paper_spg_clarity_walsh_family_stability`（对应 `cor:spg-clarity-walsh-family-stability`，SPG；把有限 Walsh 系数族上的逐点 `ε`-界平方后求和，得到 `∑_{I∈\mathcal I} |a_I|^2 ≤ |\mathcal I| ε^2` 的统一稳定性核心估计）；本轮 `\leanverified` +3，覆盖章节为 LogicExpansionChain / RecursiveAddressing / SPG，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/LogicExpansionChain/ChoiceSpectrumStandardForm.lean`、`lean4/Omega/RecursiveAddressing/GlobalLayerLogicOnly.lean`、`lean4/Omega/SPG/ClarityWalshFamilyStability.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_logic_expansion_choice_spectrum_standard_form`、`paper_recursive_addressing_observer_indexed_global_layer_logic_only`、`paper_spg_clarity_walsh_family_stability`；tex 路径：`/Users/auric/automath-lean4-workflow/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/logic_expansion_chain/subsec__logic-expansion-chain-observer-spacetime.tex`（`prop:logic-expansion-choice-spectrum-standard-form`），`/Users/auric/automath-lean4-workflow/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/recursive_addressing/sec__recursive-addressing.tex`（`prop:observer-indexed-global-layer-logic-only`），`/Users/auric/automath-lean4-workflow/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/spg/prop__spg-clarity-bayes-optimality.tex`（`cor:spg-clarity-walsh-family-stability`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R757（本轮落地，全流程执行）**：`paper_pom_second_max_gap_constant`（对应 `cor:pom-second-max-gap-constant`，POM；在 second-max closed form 与 max-fiber Fibonacci 闭式之上形式化偶支/奇支的精确比值公式，并以 `F_{n+5}≤13F_n` 的归纳证书推出全局统一上界 `D_m^{(2)}/D_m≤25/26`，同时复用既有 golden-gap 常数算术包装）；`paper_logic_expansion_spacetime_fiberization_conservative`（对应 `prop:logic-expansion-spacetime-fiberization-conservative`，LogicExpansionChain；把 whole-chain invariance 直接特化到单步 fiberized-state forget/project 场景，得到“时空纤维化不改写旧语言层 forcing”的 paper-facing wrapper）；`paper_recursive_addressing_observer_indexed_explicit_lifting`（对应 `cor:observer-indexed-explicit-lifting`，RecursiveAddressing；把公共细化下的 typed-readout persistence 打包成 mixed observer-indexed readout 的显式提升接口，并同时给出“若在该公共细化上无法同时提升，则混合读出不定义”的逆否命题包装）；本轮 `\leanverified` +3，覆盖章节为 POM / LogicExpansionChain / RecursiveAddressing，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/POM/TopGapLimitConstants.lean`、`lean4/Omega/LogicExpansionChain/WholeChainInvariance.lean`、`lean4/Omega/RecursiveAddressing/ObserverIndexedCommonRefinementDecidability.lean`；Lean theorem 名：`paper_pom_second_max_gap_constant`、`paper_logic_expansion_spacetime_fiberization_conservative`、`paper_recursive_addressing_observer_indexed_explicit_lifting`；tex 路径：`/Users/auric/automath-lean4-workflow/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/pom/parts/def__pom-ind-lyapunov-fingerprint.tex`（`cor:pom-second-max-gap-constant`），`/Users/auric/automath-lean4-workflow/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/logic_expansion_chain/subsubsec__logic-expansion-chain-spacetime-fiberization-interface.tex`（`prop:logic-expansion-spacetime-fiberization-conservative`），`/Users/auric/automath-lean4-workflow/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/recursive_addressing/subsubsec__recursive-addressing-observer-indexed-forcing-continuation.tex`（`cor:observer-indexed-explicit-lifting`）；新增 tex theorem/corollary/lemma 环境数 0）
 
