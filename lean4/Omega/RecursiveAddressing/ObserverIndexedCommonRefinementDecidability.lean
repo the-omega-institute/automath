@@ -42,7 +42,7 @@ set_option maxHeartbeats 400000 in
 at parent states, any chosen common refinement carries both values simultaneously; contrapositively,
 failure of simultaneous lifting at that refinement rules out the mixed readout.
     cor:observer-indexed-explicit-lifting -/
-theorem paper_recursive_addressing_observer_indexed_explicit_lifting
+theorem paper_recursive_addressing_observer_indexed_explicit_lifting_common_refinement
     {State Ref Value : Type} [DecidableEq Value]
     (Adm : State → Set Ref) (Vis : State → Ref → Set Value)
     (Refines : State → State → Prop)
