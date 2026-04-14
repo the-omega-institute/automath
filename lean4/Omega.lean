@@ -226,6 +226,7 @@ import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.SectionLedgerKL
 import Omega.Conclusion.AffineNormalFormSemidirect
 import Omega.Conclusion.CapacityRamanujanPlateauLaw
+import Omega.Conclusion.BudgetCurveExactTailDifferenceReconstruction
 import Omega.Conclusion.ZeckendorfResetBoundedCLTAbsent
 import Omega.Conclusion.CycleRankSaturation
 import Omega.Conclusion.PrimorialAdditiveVsGodelMultiplicative
@@ -243,6 +244,8 @@ import Omega.Conclusion.GodelLeyangIFS
 import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.ShiftedHankelPrecision
+import Omega.CircleDimension.BareCircleNotCompleteCarrier
+import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
