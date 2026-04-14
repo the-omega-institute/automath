@@ -9,14 +9,16 @@
 | 总行数 | ~50,397 |
 | 定理/定义数 | ~4,403 |
 | 论文接口包装 | 749+ |
-| 文件数 | 150 |
+| 文件数 | 153 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3159 |
+| \leanverified 标注数 | 3164 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3208 |
-| 轮次 | R716（round_count=R716）|
+| 总标注数 | 3213 |
+| 轮次 | R717（round_count=R717）|
+
+**Phase R717（本轮落地，全流程执行）**：`paper_cdim_phase_spectrum_quotient_seeds`（对应 `prop:cdim-phase-spectrum-quotient`，CircleDimension；把 phase-sampling 计数与有限商基数的等式直接压成 `phaseSpectrumCount r t N = N^r * gcd(t,N)` 的 paper-facing seed，保留“采样计数恰等于有限商 `|G/NG|`”的核心有限商骨架）；`paper_zeckendorf_val_invariant_seeds`（对应 `prop:val-invariant`，EA；将局部 Fibonacci 重写规则生成的加法同余显式封装成 `FibCongruence`，证明 `value` 在该 congruence 下不变，并下推到 quotient 上的加法保持映射，保留“值函数对定义关系不变并因此下降到商”的核心 monoid-hom 骨架）；`paper_zeckendorf_rewrite_termination_seeds`（对应 `prop:rewrite-termination`，EA；把 Zeckendorf digit rewrite 系统的强终止、不可约态与 admissible 配置的精确等价、以及终端不可约配置唯一性直接挂接到正文标签，保留“每条重写链终止且正规形唯一”的核心 normal-form 骨架；本轮 non-trivial 目标）；本轮 `\leanverified` +5，覆盖章节为 CircleDimension / EA，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/PhaseSpectrumQuotient.lean`、`lean4/Omega/EA/ValInvariant.lean`、`lean4/Omega/EA/RewriteTermination.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_circle_dimension_algebra.tex`（`prop:cdim-phase-spectrum-quotient`），`/Users/chronoai/automath/papers/publication/submitted_2026_zeckendorf_streaming_normalization_automata_rairo_ita/main.tex`（`prop:val-invariant`、`prop:rewrite-termination`），`/Users/chronoai/automath/papers/publication/submitted_2026_zeckendorf_streaming_normalization_automata_rairo_ita/submission_source_20260313/main.tex`（`prop:val-invariant`、`prop:rewrite-termination`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R716（本轮落地，全流程执行）**：`paper_cdim_basic_computation_seeds`（对应 `prop:circle-dimension-basic`，CircleDimension；把正文 “`cdim` 等于自由秩、有限扭部分贡献零、`ℕ^d` 的 half-circle dimension 为 `d/2`” 的基础计算接口压成 paper-facing seed，保留 circle dimension 只读取 free rank 的核心骨架）；`paper_scan_projection_address_tanaka_stokes_seeds`（对应 `thm:tanaka-stokes`，SPG；把阈值 `1/2` 下的 discrete Tanaka 分解、局部时间非负性与单调性直接包装到正文标签，保留 clarity 论证中“误差由 signed martingale part 加 nonnegative local-time part 分解”的核心骨架；本轮 non-trivial 目标）；`paper_scan_projection_address_clarity_monotone_seeds`（对应 `cor:clarity-monotone`，SPG；以 prefix scan error 的一步反单调性和 Bayes-optimal observable event 的零误差刻画，压出“分辨率升高不会增大误差，且零误差当且仅当可被某个深度 `m` 事件精确实现”的核心 corollary 骨架）；本轮 `\leanverified` +3，覆盖章节为 CircleDimension / SPG，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/BasicComputation.lean`、`lean4/Omega/SPG/TanakaStokes.lean`、`lean4/Omega/SPG/ClarityMonotone.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_circle_dimension_algebra.tex`（`prop:circle-dimension-basic`），`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_clarity.tex`（`thm:tanaka-stokes`、`cor:clarity-monotone`）；新增 tex theorem/corollary/lemma 环境数 0）
 
