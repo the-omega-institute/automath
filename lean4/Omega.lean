@@ -99,6 +99,7 @@ import Omega.Folding.EndpointUnique
 import Omega.Folding.ImageSubshiftZeta
 import Omega.Folding.SyncDelay
 import Omega.Folding.TimeLayerDichotomy
+import Omega.Folding.AlternatingSingleSymbolSynchronizing
 import Omega.Folding.YmSynchronized
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
@@ -126,6 +127,7 @@ import Omega.SPG.WeightedBoundaryTransfer
 import Omega.SPG.WeightedBoundaryPole
 import Omega.SPG.BoundaryDimensionUpper
 import Omega.SPG.DoubleBudgetAddressCapacity
+import Omega.SPG.EntropyLedger
 import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.SurvivorRenyiPressure
 import Omega.SPG.PressureGap
@@ -287,6 +289,7 @@ import Omega.Zeta.PrimeLanguagesIntroDensity
 import Omega.Zeta.IntroAnalytic
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
+import Omega.Zeta.FinitePartSingleQTorsionReconstruction
 import Omega.Zeta.FinitePartCyclicLiftSpectrumIdentifiability
 import Omega.Zeta.IntroFiniteGroup
 import Omega.Zeta.ETDSDFADensityDichotomy
