@@ -25,6 +25,7 @@ import Omega.Folding.S3Recurrence
 import Omega.Folding.CCSPrimeTelescope
 import Omega.Folding.CCSPrime8Split
 import Omega.Folding.FiberSpectrum
+import Omega.Folding.SecondMaxFiberGapConstant
 import Omega.Folding.FiberArithmetic
 import Omega.Folding.FiberArithmeticProperties
 import Omega.Folding.FiberRing
@@ -167,6 +168,7 @@ import Omega.LogicExpansionChain.SingletonConservativityAPAL
 import Omega.LogicExpansionChain.WholeChainInvarianceAPAL
 import Omega.LogicExpansionChain.GluingFailureWholeChainInvarianceAPAL
 import Omega.LogicExpansionChain.ExplicitLiftingAPAL
+import Omega.LogicExpansionChain.OrthogonalFamilyJointReachability
 import Omega.LogicExpansionChain.BranchBudgetMonotonicityAPAL
 import Omega.LogicExpansionChain.FocusedLiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FocusedSingletonConservativity
@@ -211,6 +213,7 @@ import Omega.RecursiveAddressing.TypedReadoutPersistence
 import Omega.RecursiveAddressing.ObserverIndexedReadoutForcingCriterion
 import Omega.RecursiveAddressing.ObserverIndexedCommonRefinementDecidability
 import Omega.RecursiveAddressing.ObserverIndexedFiniteResolutionObjectEligibility
+import Omega.RecursiveAddressing.ObserverIndexedExplicitLifting
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
 import Omega.Combinatorics.GramDet
