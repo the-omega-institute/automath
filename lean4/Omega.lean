@@ -93,6 +93,7 @@ import Omega.Graph.LiftBound
 import Omega.SPG.Cylinder
 import Omega.SPG.PrefixMetric
 import Omega.SPG.Clopen
+import Omega.SPG.DecidableClopen
 import Omega.SPG.ScanErrorDiscrete
 import Omega.SPG.ScanProjectionScanErrorCylinder
 import Omega.SPG.ScanProjectionBayesOptimality
@@ -135,6 +136,8 @@ import Omega.Frontier.ConditionalArithmetic
 import Omega.Frontier.ConditionalSummary
 import Omega.Frontier.Conjectures
 import Omega.Frontier.Certificates
+import Omega.LogicExpansionChain.StateTheoryMonotonicity
+import Omega.LogicExpansionChain.LiftedPointwiseSoundness
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
 import Omega.Combinatorics.GramDet
