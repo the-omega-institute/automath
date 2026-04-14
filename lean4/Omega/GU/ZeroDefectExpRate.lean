@@ -17,4 +17,14 @@ theorem paper_gut_zero_defect_exp_rate_seeds :
   refine ⟨by native_decide, by norm_num, by native_decide, by norm_num,
           by native_decide, by native_decide, fun n => Nat.fib_add_two (n := n)⟩
 
+theorem paper_gut_zero_defect_exp_rate_package :
+    Nat.fib 7 = 13 ∧
+    9 * 2^2 = 36 ∧
+    Nat.fib 8 = 21 ∧
+    9 * 2^3 = 72 ∧
+    Nat.fib 9 < 2^9 ∧
+    Nat.fib 8 * 2^2 < Nat.fib 7 * 2^3 ∧
+    (∀ n, Nat.fib (n + 2) = Nat.fib n + Nat.fib (n + 1)) :=
+  paper_gut_zero_defect_exp_rate_seeds
+
 end Omega.GU.ZeroDefectExpRate
