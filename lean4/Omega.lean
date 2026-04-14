@@ -42,6 +42,7 @@ import Omega.Folding.CircleDimension
 import Omega.Folding.ShiftDynamics
 import Omega.Folding.Rewrite
 import Omega.Folding.Defect
+import Omega.Folding.PiFunctorialGolden
 import Omega.Folding.Entropy
 import Omega.Folding.BinFold
 import Omega.Folding.BoundaryLayer
@@ -99,6 +100,7 @@ import Omega.SPG.SymbolicFactor
 import Omega.SPG.Clopen
 import Omega.SPG.DecidableClopen
 import Omega.SPG.ClarityMonotone
+import Omega.SPG.BasicProperties
 import Omega.SPG.ScanErrorDiscrete
 import Omega.SPG.ScanProjectionScanErrorCylinder
 import Omega.SPG.ScanProjectionBayesOptimality
@@ -249,6 +251,7 @@ import Omega.Zeta.IntroCyclicReconstruction
 import Omega.Zeta.IntroFiniteGroup
 import Omega.Zeta.ETDSDFADensityDichotomy
 import Omega.Zeta.ETDSZeckendorfPrimeLanguageNotRegular
+import Omega.Zeta.PrimeLanguagesZeckendorfPrimeLanguageNotRegular
 import Omega.Zeta.LucasBarrier
 import Omega.Zeta.NecklaceCounting
 import Omega.Zeta.LocalizedQuotientLedger
