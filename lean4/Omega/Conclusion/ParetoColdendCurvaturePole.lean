@@ -116,4 +116,20 @@ theorem paper_conclusion_pareto_coldend_curvature_pole_seeds :
     (1 : ℤ) + 1 - 1 = 1 := by
   refine ⟨by omega, by omega, by omega, by omega, by omega, by omega⟩
 
+/-- Paper package clone for `cor:conclusion-pareto-coldend-curvature-pole`. -/
+theorem paper_conclusion_pareto_coldend_curvature_pole_package :
+    -- d_min = 2, d_max = 4
+    (4 : ℕ) / 2 = 2 ∧
+    -- Non-degenerate gap
+    (4 : ℕ) > 2 ∧
+    -- Histogram sums to |X_6| = 21
+    8 + 4 + 9 = (21 : ℕ) ∧
+    -- Contiguous range
+    4 - 2 + 1 = (3 : ℕ) ∧
+    -- S₂(6) = 212
+    8 * 2 ^ 2 + 4 * 3 ^ 2 + 9 * 4 ^ 2 = (212 : ℕ) ∧
+    -- Pole order
+    (1 : ℤ) + 1 - 1 = 1 :=
+  paper_conclusion_pareto_coldend_curvature_pole_seeds
+
 end Omega.Conclusion.ParetoColdendCurvaturePole

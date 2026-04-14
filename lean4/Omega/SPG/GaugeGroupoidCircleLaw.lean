@@ -30,4 +30,13 @@ theorem paper_spg_boundary_gauge_capacity_seeds :
   exact ⟨⟨by omega, by omega⟩, ⟨by omega, by omega⟩, by norm_num, by norm_num,
          fun _ _ h => by omega⟩
 
+/-- Paper package clone for `cor:spg-boundary-gauge-groupoid-capacity`. -/
+theorem paper_spg_boundary_gauge_capacity_package :
+    (4 - 4 + 1 = 1 ∧ 1 - 1 = 0) ∧
+    (12 - 8 + 1 = 5 ∧ 5 - 1 = 4) ∧
+    (2 ^ 4 = 16) ∧
+    (3 ^ 4 = 81) ∧
+    (∀ E V : Nat, V ≤ E → E - V + 1 = E + 1 - V) :=
+  paper_spg_boundary_gauge_capacity_seeds
+
 end Omega.SPG
