@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3006 |
+| \leanverified 标注数 | 3009 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3055 |
-| 轮次 | R678（round_count=679）|
+| 总标注数 | 3058 |
+| 轮次 | R679（round_count=680）|
 
-**Phase R678（本轮落地）**：`paper_pom_toggle_scan_order_package`（对应 `thm:pom-toggle-scan-order-closed-form`，POM；严格克隆 `paper_pom_toggle_scan_order_seeds` 的原签名与证明，补齐 toggle scan order closed-form 的 paper-facing package）；`paper_conclusion_godel_leyang_ifs_dimension_package`（对应 `thm:conclusion-godel-leyang-2adic-ifs-exact-dimension`，Conclusion；严格克隆 `paper_conclusion_godel_leyang_ifs_dimension_seeds` 的原签名与证明，补齐 Godel-Leyang 2-adic IFS exact dimension 的 paper-facing package）；`paper_xi_zero_dispersion_infimal_convolution_package`（对应 `thm:xi-zero-dispersion-infimal-convolution`，Zeta；严格克隆 `paper_xi_zero_dispersion_infimal_convolution_seeds` 的原签名与证明，补齐 zero dispersion infimal convolution 的 paper-facing package；本轮 `\leanverified` +3）
+**Phase R679（本轮落地）**：`paper_cdim_mobius_inversion_package`（对应 `thm:cdim-multiprime-spectrum-realizability`，Circle Dimension；严格克隆 `paper_cdim_mobius_inversion_seeds` 的原签名与证明，补齐 multiprime spectrum realizability 的 paper-facing package）；`paper_pom_fisher_zeros_arcsine_package`（对应 `thm:pom-Lk-fisher-zeros-arcsine`，POM；严格克隆 `paper_pom_fisher_zeros_arcsine_seeds` 的原签名与证明，补齐 Fisher zeros arcsine law 的 paper-facing package）；`paper_dfa_density_dichotomy_package`（对应 `thm:zeta-syntax-dfa-density-dichotomy`，Zeta；严格克隆 `paper_dfa_density_dichotomy_seeds` 的原签名与证明，补齐 DFA density dichotomy 的 paper-facing package；本轮 `\leanverified` +3）
+
+**Phase R678（上一轮落地）**：`paper_pom_toggle_scan_order_package`（对应 `thm:pom-toggle-scan-order-closed-form`，POM；严格克隆 `paper_pom_toggle_scan_order_seeds` 的原签名与证明，补齐 toggle scan order closed-form 的 paper-facing package）；`paper_conclusion_godel_leyang_ifs_dimension_package`（对应 `thm:conclusion-godel-leyang-2adic-ifs-exact-dimension`，Conclusion；严格克隆 `paper_conclusion_godel_leyang_ifs_dimension_seeds` 的原签名与证明，补齐 Godel-Leyang 2-adic IFS exact dimension 的 paper-facing package）；`paper_xi_zero_dispersion_infimal_convolution_package`（对应 `thm:xi-zero-dispersion-infimal-convolution`，Zeta；严格克隆 `paper_xi_zero_dispersion_infimal_convolution_seeds` 的原签名与证明，补齐 zero dispersion infimal convolution 的 paper-facing package；本轮 `\leanverified` +3）
 
 **Phase R677（上一轮落地）**：`paper_gut_finite_anomaly_no_multiplicative_embedding_package`（对应 `thm:gut-finite-anomaly-ledger-no-multiplicative-embedding`，Group Unification；严格克隆 `paper_gut_finite_anomaly_no_multiplicative_embedding_seeds` 的原签名与证明，补齐 finite anomaly ledger no multiplicative embedding 的 paper-facing package）；`paper_pom_replica_cycle_trace_bernoulli_package`（对应 `cor:pom-replica-softcore-cycle-trace-bernoulli-moment`，POM；严格克隆 `paper_pom_replica_cycle_trace_bernoulli_seeds` 的原签名与证明，补齐 replica cycle-trace Bernoulli moment 的 paper-facing package）；`paper_zeta_syntax_zeckendorf_prime_language_not_regular_package`（对应 `cor:zeta-syntax-zeckendorf-prime-language-not-regular`，Zeta；严格克隆 `paper_zeta_syntax_zeckendorf_prime_language_not_regular_seeds` 的原签名与证明，补齐 Zeckendorf prime language not regular 的 paper-facing package；本轮 `\leanverified` +3）
 
