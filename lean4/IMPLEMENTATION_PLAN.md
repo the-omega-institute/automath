@@ -9,16 +9,18 @@
 | 总行数 | ~50,308 |
 | 定理/定义数 | ~4,400 |
 | 论文接口包装 | 740+ |
-| 文件数 | 141 |
+| 文件数 | 144 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3048 |
+| \leanverified 标注数 | 3054 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3097 |
-| 轮次 | R689（round_count=R689）|
+| 总标注数 | 3103 |
+| 轮次 | R690（round_count=R690）|
 
-**Phase R689（本轮落地，fresh seeds）**：`paper_gut_u1_throat_identity_seeds` / `paper_gut_u1_throat_identity_package`（对应 `prop:u1-throat-identity`，GU；在正实条件下将 `u = 1 / u` 化归为 `u^2 = 1`，并用正性排除 `u = -1`，实质落实统一点 `u = 1` 的反演固定点唯一性）；`paper_ea_stable_add_finite_resolution_compatibility_seeds` / `paper_ea_stable_add_finite_resolution_compatibility_package`（对应 `prop:stable-add-finite-resolution-compatibility`，EA；直接复用 `Omega.EA.AddressNaturality.addr_add`，将 paper 命题落到有限分辨率地址化对稳定加法的自然性）；`paper_fold_endpoint_Mm_minus_one_unique_seeds` / `paper_fold_endpoint_Mm_minus_one_unique_package`（对应 `prop:fold-endpoint-Mm-minus-one-unique`，Folding；新建递归 endpoint 构造 `endpointWord`，形式化其 `No11`、权重公式 `weight = F_{m+2} - 1` 与端点唯一性归纳证明；本轮 `\leanverified` +6，降级项数 0）
+**Phase R690（本轮落地，fresh seeds）**：`paper_fib_divisibility_chain_seeds` / `paper_fib_divisibility_chain_package`（对应 `lem:fib-divisibility-chain`，EA；直接复用 `Nat.fib_dvd` 形式化 “若 `a ∣ b` 则 `F_a ∣ F_b`” 的 Fibonacci 整除链）；`paper_composition_pullback_seeds` / `paper_composition_pullback_package`（对应 `cor:composition-pullback`，EA；直接拼合现有 `compositionPullback_add` 与 `compositionPullback_mul`，在 `a+b`、`ab` 未溢出 `F_{m+2}` 时把稳定加法/乘法拉回 `X.ofNat`）；`paper_cdim_residual_circle_dim_laws_seeds` / `paper_cdim_residual_circle_dim_laws_package`（对应 `prop:cdim-residual-circle-dimension-laws`，Circle Dimension；以离散 per-`b` 版本形式化 residual 单调性、`2`-幂乘法加法律与 `Nat.log` 的对应可加性；本轮 `\leanverified` +6，降级项数 0）
+
+**Phase R689（上一轮落地，fresh seeds）**：`paper_gut_u1_throat_identity_seeds` / `paper_gut_u1_throat_identity_package`（对应 `prop:u1-throat-identity`，GU；在正实条件下将 `u = 1 / u` 化归为 `u^2 = 1`，并用正性排除 `u = -1`，实质落实统一点 `u = 1` 的反演固定点唯一性）；`paper_ea_stable_add_finite_resolution_compatibility_seeds` / `paper_ea_stable_add_finite_resolution_compatibility_package`（对应 `prop:stable-add-finite-resolution-compatibility`，EA；直接复用 `Omega.EA.AddressNaturality.addr_add`，将 paper 命题落到有限分辨率地址化对稳定加法的自然性）；`paper_fold_endpoint_Mm_minus_one_unique_seeds` / `paper_fold_endpoint_Mm_minus_one_unique_package`（对应 `prop:fold-endpoint-Mm-minus-one-unique`，Folding；新建递归 endpoint 构造 `endpointWord`，形式化其 `No11`、权重公式 `weight = F_{m+2} - 1` 与端点唯一性归纳证明；本轮 `\leanverified` +6，降级项数 0）
 
 **Phase R688（上一轮落地，fresh seeds）**：`paper_ea_address_naturality_seeds` / `paper_ea_address_naturality_package`（对应 `prop:数值化的自然性`，EA；基于 `X.stableValueRingEquiv` 定义稳定地址 `addr`，并形式化其对稳定加法与稳定乘法的自然性）；`paper_fold_naive_prefix_lift_seeds` / `paper_fold_naive_prefix_lift_package`（对应 `prop:fold-naive-prefix-lift`，Folding；直接以 `X.CompatibleFamily / X.ofFamily / X.prefixWord` 给出相容族的 inverse-limit lift，不再停留于纯 `ℕ` 序列核）；`paper_fold_phi_equivariant_seeds` / `paper_fold_phi_equivariant_package`（对应 `prop:Phi_m-equivariant`，Folding；将 paper 命题一行归约到 `slideBlockCode_shift_equivariant` 在局部规则 `Fold` 上的实例；本轮 `\leanverified` +6，降级项数 0）
 
