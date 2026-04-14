@@ -101,6 +101,7 @@ import Omega.Folding.SyncDelay
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.AlternatingSingleSymbolSynchronizing
 import Omega.Folding.YmSynchronized
+import Omega.Folding.UniformSynchronizingLength
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -297,6 +298,7 @@ import Omega.Zeta.FinitePartCyclicLiftSpectrumIdentifiability
 import Omega.Zeta.IntroFiniteGroup
 import Omega.Zeta.ETDSDFADensityDichotomy
 import Omega.Zeta.ETDSZeckendorfRegularPowerlaw
+import Omega.Zeta.PrimeLanguagesZeckendorfRegularPowerlaw
 import Omega.Zeta.ETDSZeckendorfPrimeLanguageNotRegular
 import Omega.Zeta.PrimeLanguagesZeckendorfPrimeLanguageNotRegular
 import Omega.Zeta.ZeckendorfPrimesNotSofic
@@ -338,6 +340,7 @@ import Omega.EA.AutDimensionSqueeze
 import Omega.EA.PrimeLedger
 import Omega.EA.FoldAsSection
 import Omega.EA.AddAsFold
+import Omega.EA.ZeckendorfAddFst
 import Omega.EA.FoldAsSectionCorollary
 import Omega.EA.MonoidQuotientIsN
 import Omega.EA.ValInvariant
