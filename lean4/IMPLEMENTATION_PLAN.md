@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3142 |
+| \leanverified 标注数 | 3145 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3191 |
-| 轮次 | R709（round_count=R709）|
+| 总标注数 | 3194 |
+| 轮次 | R710（round_count=R710）|
+
+**Phase R710（本轮落地，全流程执行）**：`paper_scan_projection_address_scan_error_cylinder_seeds`（对应 `prop:scan-error-cylinder`，SPG；把 ETDS 文稿中的前缀柱误差精确公式直接落成 `prefixScanError = ∑_a min(eventMass_a, complMass_a)`，并同步给出 boundary-cell 截断和，从而保留“扫描误差逐柱取较小项再求和”的核心分解骨架）；`paper_scan_projection_address_bayes_optimality_seeds`（对应 `prop:bayes-optimality`，SPG；定义逐胞阈值判决 `cellComplMass ≤ cellEventMass` 并证明任意前缀可观测近似的对称差误差都不小于 `prefixScanError`，且阈值规则恰取等号，保留“Bayes 阈值规则最优且精确达到柱级最小误差”的核心判决骨架；本轮 non-trivial 目标）；`paper_scan_projection_address_sigma_nonexpansion_seeds`（对应 `cor:sigma-nonexpansion`，RecursiveAddressing；以 `observableEvent (Φ ∘ obsL) A = observableEvent obsL (Φ⁻¹' A)` 形式化递归后层事件必为旧层可见事件的原像，从而保留“后层可见域只是在旧层内重选而不扩张”的核心非扩张机制）；本轮 `\leanverified` +3，覆盖章节为 SPG / RecursiveAddressing，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/SPG/ScanProjectionScanErrorCylinder.lean`、`lean4/Omega/SPG/ScanProjectionBayesOptimality.lean`、`lean4/Omega/RecursiveAddressing/SigmaNonexpansion.lean`）
 
 **Phase R709（本轮落地，全流程执行）**：`paper_cdim_bare_circle_not_complete_carrier_seeds`（对应 `cor:cdim-bare-circle-not-complete-carrier`，CircleDimension；把单圆可见通道下的注入预算直接压成 `|R_b| ≥ |T|·2^{(r-1)b}`，并给出模型残差账本的离散 residual circle-dimension 下界，从而保留“单圆只能充当相位商、剩余完备信息必须外置”的核心障碍）；`paper_cdim_stokes_homology_exact_splitting_seeds`（对应 `prop:cdim-stokes-homology-exact-splitting`，CircleDimension；以 `ℤ^u × ℤ^v → ℤ^u` 的投影分裂短正合列形式化低维 Stokes 同调序列的精确核/像/分裂结构，保留“边界项正是第二直和因子”的核心代数骨架；本轮 non-trivial 目标之一）；`paper_conclusion_budget_curve_exact_tail_difference_reconstruction_seeds`（对应 `thm:conclusion-budget-curve-exact-tail-difference-reconstruction`，Conclusion；对有限纤维多重度函数形式化 `Δ(s)=#\{x:d(x)\ge s\}` 与 `#\{x:d(x)=k\}=Δ(k)-Δ(k+1)`，从而保留“整数预算成功曲线完全恢复 multiplicity histogram”的核心重构骨架；本轮 non-trivial 目标之一）；本轮 `\leanverified` +3，覆盖章节为 CircleDimension / Conclusion，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/CircleDimension/BareCircleNotCompleteCarrier.lean`、`lean4/Omega/CircleDimension/StokesHomologyExactSplitting.lean`、`lean4/Omega/Conclusion/BudgetCurveExactTailDifferenceReconstruction.lean`）
 
