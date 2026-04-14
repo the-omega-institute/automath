@@ -229,6 +229,7 @@ import Omega.Topos.GerbeNullSemantics
 import Omega.Topos.FiniteAbelianDuality
 import Omega.Topos.IntrinsicVisibleQuotient
 import Omega.Topos.IntrinsicPureExtInitiality
+import Omega.Topos.StrictToIntrinsicVisible
 import Omega.Topos.IntrinsicCharacterDetection
 import Omega.Topos.UniqueBranchBandedGerbe
 import Omega.Topos.UniqueBranchContextualityComparison
@@ -269,6 +270,7 @@ import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
 import Omega.Zeta.ClassMertensExplicit
 import Omega.Zeta.ClassMertensFourier
 import Omega.Zeta.PrimitivePeterWeylDeterminant
+import Omega.Zeta.PrimitivePeterWeylTrace
 import Omega.Zeta.QuotientFunctoriality
 import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.AbelianShadowDefect
@@ -450,6 +452,7 @@ import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
 import Omega.CircleDimension.PoissonDefectLadder
 import Omega.CircleDimension.PoissonDefectAmplification
+import Omega.CircleDimension.PoissonDefectStability
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
