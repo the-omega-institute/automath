@@ -63,6 +63,10 @@ for d in sorted(PUB_DIR.glob("2026_*/")):
         "scan_projection_address_semantics_sigma_nonexpansion_etds": "scan_projection",
         "self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists": "self_dual_sync",
         "yang_lee_quartic_spectral_curve_discriminant_factorization_lee_yang_edge_singularity": "yang_lee",
+        "joukowsky_elliptic_godel_lorentz_mahler_capacity": "joukowsky_elliptic",
+        "window6_spectral_rigidity_hypercube_lumpability_fold_gauge": "window6_spectral",
+        "zeckendorf_stable_arithmetic_fibonacci_congruence_online": "zeckendorf_arith",
+        "chebotarev_quotient_entropy_fold_groupoid_rigidity": "chebotarev_entropy",
     }
     alias = aliases.get(short, short[:30])
     PAPER_MAP[alias] = d
@@ -99,7 +103,7 @@ def compile_paper(paper_dir: Path) -> Path | None:
 
     # Check if we need xelatex (Chinese content)
     content = main_tex.read_text(encoding="utf-8", errors="replace")
-    compiler = "xelatex" if "xeCJK" in content or "ctex" in content else "pdflatex"
+    compiler = "xelatex" if "xeCJK" in content or "ctex" in content or "fontspec" in content else "pdflatex"
 
     for i in range(2):
         subprocess.run(
