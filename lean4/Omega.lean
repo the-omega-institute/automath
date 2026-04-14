@@ -210,6 +210,7 @@ import Omega.Zeta.ETDSDFADensityDichotomy
 import Omega.Zeta.LucasBarrier
 import Omega.Zeta.NecklaceCounting
 import Omega.Zeta.LocalizedQuotientLedger
+import Omega.Zeta.CyclicEulerProduct
 import Omega.Zeta.FiniteQuotientScalarGodelLoglogOverhead
 import Omega.Zeta.PhaseCombPoleCounting
 import Omega.Zeta.CriticalLineGapEntropyRateZero
@@ -243,6 +244,7 @@ import Omega.EA.StableAddNoWrapTruncation
 import Omega.EA.AutDimensionSqueeze
 import Omega.EA.PrimeLedger
 import Omega.EA.FoldAsSection
+import Omega.EA.AddAsFold
 import Omega.EA.FoldAsSectionCorollary
 import Omega.EA.MonoidQuotientIsN
 import Omega.EA.ValInvariant
@@ -258,6 +260,7 @@ import Omega.Topos.LocalSectionCriterion
 import Omega.Topos.GlobalImpliesCompatibleLocal
 import Omega.HighDimensionalCutProject.IndicatorSumRewrite
 import Omega.Conclusion.AffineRegisterBudget
+import Omega.Conclusion.BoundaryCycleRankExternalInfoLowerBound
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.Window6Collision
