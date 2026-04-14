@@ -123,4 +123,15 @@ theorem paper_conclusion_frozen_moment_semigroup_seeds :
       + affinePressure alpha g (a - 1) = 0) := by
   exact ⟨semigroup_law, unit_difference, zero_curvature⟩
 
+theorem paper_conclusion_frozen_moment_semigroup_package :
+    (∀ alpha g a b : ℤ,
+      affinePressure alpha g (a + b) + g =
+      affinePressure alpha g a + affinePressure alpha g b)
+    ∧ (∀ alpha g a : ℤ,
+      affinePressure alpha g (a + 1) - affinePressure alpha g a = alpha)
+    ∧ (∀ alpha g a : ℤ,
+      affinePressure alpha g (a + 1) - 2 * affinePressure alpha g a
+      + affinePressure alpha g (a - 1) = 0) :=
+  paper_conclusion_frozen_moment_semigroup_seeds
+
 end Omega.Conclusion.FrozenMomentSemigroupSeeds
