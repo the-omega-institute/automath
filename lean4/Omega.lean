@@ -337,6 +337,7 @@ import Omega.Topos.GlobalImpliesCompatibleLocal
 import Omega.HighDimensionalCutProject.IndicatorSumRewrite
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.BoundaryCycleRankExternalInfoLowerBound
+import Omega.Conclusion.PcdimPropCycleRankMinimal
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.Window6Collision
@@ -493,6 +494,7 @@ import Omega.GU.Window6DyadicBudget
 import Omega.GU.SheetflipRegisterBound
 import Omega.GU.SideInformationBitLowerBound
 import Omega.GU.FixedPrecisionExponentialMultiplicity
+import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse
