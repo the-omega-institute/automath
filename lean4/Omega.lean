@@ -94,6 +94,8 @@ import Omega.SPG.Cylinder
 import Omega.SPG.PrefixMetric
 import Omega.SPG.Clopen
 import Omega.SPG.ScanErrorDiscrete
+import Omega.SPG.ScanProjectionScanErrorCylinder
+import Omega.SPG.ScanProjectionBayesOptimality
 import Omega.SPG.ScanErrorMeasure
 import Omega.SPG.ErrorThreshold
 import Omega.SPG.NoiseBudgetRecovery
@@ -262,6 +264,7 @@ import Omega.LogicExpansionChain.ForcingPersistence
 import Omega.LogicExpansionChain.SemanticFidelity
 import Omega.LogicExpansionChain.SingletonConservativity
 import Omega.RecursiveAddressing.AddressBeforeValue
+import Omega.RecursiveAddressing.SigmaNonexpansion
 import Omega.Conclusion.FibonacciDistortionThreshold
 import Omega.Conclusion.CdimKernelRegisterLowerBound
 import Omega.Conclusion.KernelChainRule
