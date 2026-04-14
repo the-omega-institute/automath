@@ -118,6 +118,7 @@ import Omega.SPG.WeightedBoundaryDecomposition
 import Omega.SPG.WeightedBoundaryTransfer
 import Omega.SPG.BoundaryDimensionUpper
 import Omega.SPG.DoubleBudgetAddressCapacity
+import Omega.SPG.PressureGap
 import Omega.SPG.TanakaIncrement
 import Omega.SPG.CoarsegrainedCutFlux
 import Omega.SPG.DyadicTopInversionBound
@@ -190,6 +191,7 @@ import Omega.Topos.GluingFailureSheafificationCharacterizationAPAL
 import Omega.Topos.GluingFailureSheafLocalToGlobalAPAL
 import Omega.Topos.GluingFailureSheafificationRemovesGlueAPAL
 import Omega.Topos.H2VanishingBlindness
+import Omega.Topos.H1FreeNoBlindness
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
@@ -218,6 +220,7 @@ import Omega.Zeta.ETDSEulerProductNaturalBoundary
 import Omega.Zeta.PrimeLanguagesEulerProductNaturalBoundary
 import Omega.Zeta.IntroFinitePart
 import Omega.Zeta.ETDSFinitePartPrimitiveClosedForm
+import Omega.Zeta.ResidueClassAsymptotics
 import Omega.Zeta.ETDSFinitePartGapPositive
 import Omega.Zeta.ETDSFinitePartGapPositiveCorollary
 import Omega.Zeta.ETDSFiniteZetaImaginaryPeriodicity
