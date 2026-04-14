@@ -167,6 +167,7 @@ import Omega.Zeta.LucasBarrier
 import Omega.Zeta.NecklaceCounting
 import Omega.Zeta.LocalizedQuotientLedger
 import Omega.Zeta.PhaseCombPoleCounting
+import Omega.Zeta.CyclicLiftGcdLcm
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -195,6 +196,7 @@ import Omega.EA.FoldAsSection
 import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
+import Omega.Topos.LocalSectionCriterion
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
@@ -218,6 +220,7 @@ import Omega.Conclusion.AffineNormalFormSemidirect
 import Omega.Conclusion.ZeckendorfResetBoundedCLTAbsent
 import Omega.Conclusion.CycleRankSaturation
 import Omega.Conclusion.PrimorialAdditiveVsGodelMultiplicative
+import Omega.Conclusion.FibadicLcmFiltrationLaw
 import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
 import Omega.Conclusion.QuadraticFieldRamification
 import Omega.Conclusion.MinLatchesLogStates
