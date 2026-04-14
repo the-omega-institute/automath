@@ -149,6 +149,7 @@ import Omega.LogicExpansionChain.FocusedStateTheoryMonotonicity
 import Omega.LogicExpansionChain.WholeChainInvariance
 import Omega.LogicExpansionChain.LiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FlatTeamReading
+import Omega.LogicExpansionChain.InformationStateForcingPersistencePublication
 import Omega.LogicExpansionChain.FocusedLiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FocusedSingletonConservativity
 import Omega.LogicExpansionChain.ConcreteSemanticFidelity
@@ -157,6 +158,7 @@ import Omega.RecursiveAddressing.FocusedAddressBeforeValue
 import Omega.RecursiveAddressing.FocusedNonNullReadoutCriterion
 import Omega.RecursiveAddressing.InverseLimitDeterminacy
 import Omega.RecursiveAddressing.CompleteAddressReconstruction
+import Omega.RecursiveAddressing.FiniteDepthCollapse
 import Omega.RecursiveAddressing.SlidingBlockFactor
 import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
 import Omega.RecursiveAddressing.TypedReadoutPersistence
@@ -247,6 +249,7 @@ import Omega.EA.RewriteConfluence
 import Omega.EA.RewriteWordProblem
 import Omega.CircleDimension.PhaseSpectrumQuotient
 import Omega.Topos.LocalSectionCriterion
+import Omega.Topos.GlobalImpliesCompatibleLocal
 import Omega.HighDimensionalCutProject.IndicatorSumRewrite
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
