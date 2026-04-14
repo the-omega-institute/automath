@@ -1,9 +1,6 @@
 % main.tex -- Chebotarev Quotient Entropy and Fold Groupoid Rigidity
 \documentclass[12pt,a4paper]{article}
 
-\usepackage{fontspec}
-\usepackage{xeCJK}
-\setCJKmainfont{SimSun}[AutoFakeBold,AutoFakeSlant]
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{mathrsfs}
 \usepackage{enumitem}
@@ -11,13 +8,17 @@
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{microtype}
 \usepackage{geometry}
+\usepackage{marginnote}
 \geometry{margin=2.8cm}
+\setlength{\marginparwidth}{2.3cm}
+\setlength{\marginparsep}{0.15cm}
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
 
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
@@ -29,20 +30,24 @@
 \DeclareMathOperator{\im}{im}
 \DeclareMathOperator{\Aut}{Aut}
 \DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\Tr}{Tr}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\CC}{\mathbb{C}}
 \newcommand{\ZZ}{\mathbb{Z}}
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\FF}{\mathbb{F}}
+\newcommand{\TT}{\mathbb{T}}
 \newcommand{\dd}{\,\mathrm{d}}
 \newcommand{\EE}{\mathbb{E}}
 \newcommand{\abs}[1]{\lvert #1\rvert}
 \newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\Fold}{\operatorname{Fold}}
+\newcommand{\ind}{\mathbf{1}}
 
 % Lean verification macros
-\newcommand{\leanverified}[1]{\marginpar{\tiny\texttt{L4:~#1}}}
-\newcommand{\leanpartial}[2]{\marginpar{\tiny\texttt{L4p:~#1}}}
+\newcommand{\leanverified}[1]{\marginnote{\raggedright\tiny\texttt{L4:~#1}}}
+\newcommand{\leanpartial}[2]{\marginnote{\raggedright\tiny\texttt{L4p:~#1}}}
 
 \title{Chebotarev Quotient Entropy Chains\\
 and Fold Groupoid Rigidity}
@@ -56,84 +61,282 @@ and Fold Groupoid Rigidity}
 \begin{document}
 \maketitle
 
-%% CODEX SCOPE:
-%% This paper studies the entropy decomposition in Chebotarev-type counting
-%% problems under group quotients, and proves rigidity results for fold groupoids.
-%%
-%% Source theorems (5 files, ~1104 lines):
-%% 1. Chebotarev quotient relative entropy chain decomposition
-%%    (thm__chebotarev-quotient-entropy-energy.tex, 180 lines)
-%%    - D(mu || unif_G2) = D(pi_* mu || unif_G1) + fiber entropy
-%%    - Fourier/Plancherel visible vs hidden character energy
-%% 2. Chebotarev Artin pole statistical convergence
-%%    (thm__chebotarev-artin-pole-stat-convergence.tex, 208 lines)
-%%    - Convergence of primitive distributions to uniform via Artin L-function poles
-%% 3. Chebotarev second main term witness
-%%    (thm__chebotarev-second-main-term-witness.tex, 43 lines)
-%%    - Explicit second-order correction term
-%% 4. Fold groupoid chi-rigidity
-%%    (thm__fold-groupoid-chi-rigidity-autchi.tex, 91 lines)
-%%    - Character rigidity of fold groupoid automorphisms
-%% 5. Fold groupoid Z2x2 central idempotents
-%%    (thm__fold-groupoid-z2x2-central-idempotents.tex, 582 lines)
-%%    - Complete classification of central idempotents in Z2xZ2 fold groupoid algebra
-%%
-%% TASK FOR CODEX:
-%% Write a complete paper:
-%% - Abstract: entropy chain rule for Chebotarev quotients + fold groupoid rigidity
-%% - Introduction: Chebotarev density theorem, entropy methods in number theory,
-%%   groupoid algebras
-%% - Preliminaries: finite abelian groups, characters, relative entropy, groupoid basics
-%% - Sections incorporating all 5 source theorems
-%% - Discussion: connections to Artin reciprocity, information geometry, open problems
-%%
-%% TRANSLATE all Chinese text to English. Keep math notation intact.
-%% Target journal: Journal of Algebra or International Mathematics Research Notices.
-%% Style: algebraic, with explicit examples; number-theoretic motivation.
-
 \begin{abstract}
-% TODO: Summarize:
-% 1. Entropy chain decomposition for Chebotarev quotients
-% 2. Artin pole convergence
-% 3. Fold groupoid character rigidity and central idempotent classification
+We study primitive Chebotarev counting through the joint lenses of entropy, Fourier analysis, and finite quotient maps. For surjective homomorphisms of finite abelian label groups, we prove that the relative entropy with respect to Haar measure decomposes exactly into a quotient contribution and an averaged fiber contribution, and we identify the corresponding \(L^2\)-defect as the sum of visible and hidden character energies. We then relate dominant nontrivial Artin channels to exact pole orders and explicit second main terms, obtaining exponential convergence of primitive label distributions to uniformity together with witness sets that obstruct square-root decay when the spectral gap is too small. On the fold-groupoid side, we prove \(\chi\)-rigidity for automorphisms, construct the \(\ZZ_2\times\ZZ_2\) central idempotents explicitly, and derive reconstruction and resolution results for the resulting central spectral data.
 \end{abstract}
 
 %% ============================================================
 \section{Introduction}\label{sec:introduction}
-% TODO: Chebotarev density theorem background, entropy methods,
-% groupoid algebras motivation
+The Chebotarev density theorem explains the asymptotic distribution of Frobenius data in finite Galois extensions and has become a central organizing principle in analytic and algebraic number theory \cite{Tschebotareff1926,NeukirchSchmidtWingberg2008,IwaniecKowalski2004}. In many refined counting problems, however, one does not observe the full Galois label: one passes instead to a quotient group, to a restricted list of channels, or to a coarse observable extracted from the original arithmetic datum. The first objective of this paper is to quantify precisely what is lost under such a passage, not merely at the level of counting functions, but at the level of information.
+
+Entropy offers a natural language for this question. Relative entropy, total variation, and \(\chi^2\)-distance provide complementary ways to measure deviation from Haar uniformity, while Fourier analysis on finite groups identifies the spectral modes responsible for that deviation \cite{CoverThomas2006,CsiszarKorner2011,DemboZeitouni1998,Diaconis1988,Terras1999}. Our Chebotarev analysis shows that quotienting a finite abelian label group removes exactly the Fourier energy carried by characters that are nontrivial on the kernel, and nothing else. This yields a clean information-theoretic interpretation of quotient statistics: visible modes survive on the quotient, whereas hidden modes remain confined to the fibers.
+
+The second objective is analytic. Once the primitive counting problem is organized by channel matrices \(M_{K,\rho}(u)\), Artin factorization turns dominant nontrivial spectral data into poles of zeta-type generating series. We make this correspondence explicit, extract a second main term attached to the dominant nontrivial channel, and prove exponential convergence of primitive label distributions toward Haar measure. The same mechanism also produces witness subsets detecting the sharp obstruction to square-root decay whenever the dominant nontrivial modulus exceeds the square-root threshold.
+
+The third objective is algebraic. Fold groupoids furnish finite semisimple groupoid algebras whose block structure records coarse geometric data of the fold map. The scan and reversal involutions define a \(\ZZ_2\times\ZZ_2\) fingerprint on each simple block, and the resulting sector decomposition interacts strongly with automorphisms, Watatani index observables, and central idempotents \cite{Renault1980,Paterson1999,Watatani1990,BrownOzawa2008,Jones1983}. We show that any blockwise \(\ast\)-automorphism compatible with these involutions preserves the fingerprint, and we give an explicit algebraic realization of the four sector projectors inside the center.
+
+The main results may be summarized as follows. Theorems \ref{thm:kernel-chebotarev-quotient-relative-entropy-chain} and \ref{thm:kernel-chebotarev-visible-hidden-character-energy} prove an exact entropy chain rule and a Fourier/Plancherel decomposition of quotient loss into visible and hidden character energies. Theorems \ref{thm:kernel-chebotarev-second-main-term-witness}, \ref{thm:kernel-artin-dominant-channel-pole-order}, and \ref{thm:kernel-chebotarev-statistical-convergence} connect dominant Artin channels to second main terms, pole orders, and statistical convergence. Theorem \ref{thm:fold-groupoid-chi-rigidity} and the results of Section \ref{sec:central-idempotents} establish rigidity, explicit central projectors, and reconstruction formulas for the \(\ZZ_2\times\ZZ_2\)-sectorized fold-groupoid algebra.
+
+The paper is organized as follows. Section \ref{sec:preliminaries} records the notation and standing spectral inputs used throughout. Section \ref{sec:entropy-chain} studies entropy and Fourier energy under quotient maps. Section \ref{sec:artin-pole} develops the second main term, Artin pole, and convergence consequences. Sections \ref{sec:groupoid-rigidity} and \ref{sec:central-idempotents} treat rigidity and central structure in the fold-groupoid algebra. We close in Section \ref{sec:discussion} with broader implications and open problems.
 
 %% ============================================================
 \section{Preliminaries}\label{sec:preliminaries}
-% TODO: Finite abelian groups, dual groups, KL divergence,
-% Plancherel theorem, groupoid basics
+\subsection{Finite groups, characters, and divergences}
+If \(G\) is a finite abelian group, we write \(\widehat G\) for its Pontryagin dual and \(\mathrm{unif}_G\) for the uniform probability measure on \(G\). For a surjective homomorphism \(\pi:G_2\twoheadrightarrow G_1\) with kernel \(K\), we set
+\[
+K^\perp:=\{\chi\in\widehat G_2:\chi|_K\equiv 1\}\cong \widehat G_1.
+\]
+For a function \(f:G\to \CC\), its Fourier transform is
+\[
+\widehat f(\chi):=\frac{1}{|G|}\sum_{c\in G} f(c)\,\overline{\chi(c)}.
+\]
+With respect to the normalized inner product
+\[
+\langle f,g\rangle_{L^2(\mathrm{unif}_G)}:=\frac{1}{|G|}\sum_{c\in G}f(c)\,\overline{g(c)},
+\]
+Parseval's identity takes the form
+\[
+\|f\|_{L^2(\mathrm{unif}_G)}^2=\sum_{\chi\in \widehat G}\abs{\widehat f(\chi)}^2.
+\]
+
+For probability measures \(\mu,\nu\) on a finite set \(X\) with \(\mu\ll\nu\), we use
+\[
+D(\mu\Vert \nu):=\sum_{x\in X}\mu(x)\log\frac{\mu(x)}{\nu(x)},
+\]
+\[
+\chi^2(\mu\Vert \nu):=\sum_{x\in X}\frac{(\mu(x)-\nu(x))^2}{\nu(x)},
+\qquad
+\|\mu-\nu\|_{\mathrm{TV}}:=\frac12\sum_{x\in X}\abs{\mu(x)-\nu(x)}.
+\]
+When \(X\) is partitioned into fibers of a map \(\pi:X\to Y\), the relative-entropy chain rule reads
+\[
+D(\mu\Vert \nu)=D(\pi_\ast\mu\Vert \pi_\ast\nu)+\sum_{y\in Y}(\pi_\ast\mu)(y)\,D(\mu(\cdot\mid y)\Vert \nu(\cdot\mid y)),
+\]
+whenever the conditional distributions are defined.
+
+\subsection{Spectral Chebotarev input}
+Fix a finite abelian label group \(G\), a temperature parameter \(u\in(0,1]\), and primitive Chebotarev counts \(B_{n,c}(u)\) indexed by \(c\in G\). We write
+\[
+B_n(\ind;u):=\sum_{c\in G}B_{n,c}(u),
+\qquad
+B_n(\chi;u):=\sum_{c\in G}\chi(c)\,B_{n,c}(u)
+\quad(\chi\in \widehat G),
+\]
+and for each irreducible channel \(\rho\) we let \(M_{K,\rho}(u)\) denote the corresponding transfer matrix. The trivial-channel Perron root is
+\[
+\lambda_1(u):=\rho(M_{K,\ind}(u)),
+\]
+the nontrivial spectral radius is
+\[
+\eta(u):=\max_{\rho\neq \ind}\rho(M_{K,\rho}(u)),
+\]
+and we set
+\[
+\Lambda(u):=\max\{|\lambda_2(u)|,\eta(u)\},
+\]
+where \(\lambda_2(u)\) denotes the second-largest eigenvalue modulus in the trivial channel.
+
+The results below use only the following standard spectral consequences of the transfer formalism.
+
+\begin{theorem}[Spectral expansion for primitive Chebotarev counts]\label{thm:kernel-chebotarev-exp}
+Assume \(\Lambda(u)<\lambda_1(u)\). Then, uniformly in \(c\in G\),
+\[
+B_{n,c}(u)
+=
+\frac{1}{|G|}\frac{\lambda_1(u)^n}{n}
++O\!\left(\frac{\Lambda(u)^n}{n}\right),
+\qquad
+B_n(\ind;u)
+=
+\frac{\lambda_1(u)^n}{n}
++O\!\left(\frac{\Lambda(u)^n}{n}\right).
+\]
+Moreover, if \(A\subseteq G\) is conjugacy-invariant and \(U=\pi^{-1}(A)\) is the associated cylinder event, then \(B_{n,U}(u)\) is obtained from the Fourier decomposition of \(1_A\) by pairing each Fourier component with the corresponding twisted channel contribution \(B_n(\rho;u)\).
+\end{theorem}
+
+\begin{proposition}[Artin factorization]\label{prop:kernel-artin-factorization}
+For a finite group \(G\), define
+\[
+L_{K,\rho}(z,u):=\det(I-zM_{K,\rho}(u))^{-1}.
+\]
+Then the associated zeta function satisfies
+\[
+\zeta_{K,G}(z,u)=\prod_{\rho\in\widehat G}L_{K,\rho}(z,u)^{\dim\rho},
+\]
+and hence
+\[
+\frac{\zeta_{K,G}(z,u)}{L_{K,\ind}(z,u)}
+=
+\prod_{\rho\in\widehat G\setminus\{\ind\}}L_{K,\rho}(z,u)^{\dim\rho}.
+\]
+\end{proposition}
+
+\begin{definition}[Square-root spectral gap]\label{def:kernel-rh}
+We write
+\[
+\textsf{GRH}_{K,G}(u):\qquad \eta(u)\le \lambda_1(u)^{1/2}
+\]
+for the square-root spectral gap condition that plays the role of a generalized Riemann-hypothesis bound in the present transfer-matrix setting.
+\end{definition}
+
+\subsection{Fold groupoids and central observables}
+We now record the finite-dimensional groupoid-algebraic framework used in Sections \ref{sec:groupoid-rigidity} and \ref{sec:central-idempotents}.
+
+\begin{definition}[Fold equivalence groupoid algebra]\label{def:fold-equivalence-groupoid-algebra}
+For each resolution \(m\), let \(\Fold_m:\Omega_m\to X_m\) be the fold map from microstates to stable macrostates. The associated equivalence-relation groupoid is
+\[
+\mathcal R_m:=\Omega_m\times_{X_m}\Omega_m
+=
+\{(\omega,\omega')\in \Omega_m\times\Omega_m:\Fold_m(\omega)=\Fold_m(\omega')\},
+\]
+and we write
+\[
+A_{m,1}:=\CC[\mathcal R_m]
+\]
+for its complex groupoid algebra. The fiber multiplicity at \(x\in X_m\) is
+\[
+d_m(x):=\abs{\Fold_m^{-1}(x)},
+\qquad
+D_m:=\max_{x\in X_m}d_m(x),
+\qquad
+\mathcal M_m:=\{x\in X_m:d_m(x)=D_m\}.
+\]
+\end{definition}
+
+\begin{proposition}[Wedderburn decomposition of the fold groupoid algebra]\label{prop:fold-groupoid-wedderburn}
+There is a canonical \(\ast\)-isomorphism
+\[
+A_{m,1}\cong \bigoplus_{x\in X_m}M_{d_m(x)}(\CC).
+\]
+For each \(x\in X_m\), we denote by \(\widetilde P_x\in Z(A_{m,1})\) the minimal central idempotent projecting onto the block \(M_{d_m(x)}(\CC)\).
+\end{proposition}
+
+\begin{proof}
+Each fiber \(\Fold_m^{-1}(x)\) determines a full equivalence-relation subgroupoid whose algebra is canonically \(M_{d_m(x)}(\CC)\); summing over all fibers gives the direct-sum decomposition.
+\end{proof}
+
+\begin{proposition}[\(\ZZ_2\times\ZZ_2\)-sector decomposition by orientation]\label{prop:fold-groupoid-z2x2-sector-by-orientation}
+For each \(x\in X_m\), let \(c_x\) and \(\iota_x\) be the scan and reversal permutations of the fiber \(\Fold_m^{-1}(x)\). Define the fingerprint
+\[
+\chi(x):=\bigl(\operatorname{sgn}(c_x),\operatorname{sgn}(\iota_x)\bigr)\in\{\pm1\}^2.
+\]
+For \((\alpha,\beta)\in\{\pm1\}^2\), set
+\[
+X_m^{\alpha,\beta}:=\{x\in X_m:\chi(x)=(\alpha,\beta)\},
+\qquad
+\CC[\mathcal R_m]^{\alpha,\beta}:=\bigoplus_{x\in X_m^{\alpha,\beta}}M_{d_m(x)}(\CC).
+\]
+Then
+\[
+A_{m,1}=\bigoplus_{(\alpha,\beta)\in\{\pm1\}^2}\CC[\mathcal R_m]^{\alpha,\beta}
+\]
+is the sector decomposition determined by the scan-reversal fingerprint.
+\end{proposition}
+
+\begin{theorem}[Automorphisms of the fold groupoid algebra]\label{thm:fold-groupoid-aut-semidirect-pi0}
+Let
+\[
+\Pi_0:=\{\sigma\in \mathrm{Sym}(X_m):d_m(\sigma(x))=d_m(x)\ \forall x\in X_m\}.
+\]
+Then the \(\ast\)-automorphism group of \(A_{m,1}\) is naturally isomorphic to
+\[
+\Aut^\ast(A_{m,1})
+\cong
+\Bigl(\prod_{x\in X_m}\mathrm{PU}(d_m(x))\Bigr)\rtimes \Pi_0.
+\]
+Equivalently, a \(\ast\)-automorphism acts by blockwise projective-unitary conjugation together with a permutation of blocks of equal size.
+\end{theorem}
+
+\begin{proof}
+By finite-dimensional \(C^\ast\)-algebra structure theory, every \(\ast\)-automorphism of \(\bigoplus_x M_{d_m(x)}(\CC)\) permutes simple summands and is inner on each summand. Compatibility with matrix size forces the permutation to lie in \(\Pi_0\).
+\end{proof}
+
+\begin{theorem}[Maximal-fiber orientation charge]\label{thm:pom-maxfiber-orientation-charge-periodic}
+For every resolution \(m\), there exists a fingerprint
+\[
+\chi_m=(\alpha_m,\beta_m)\in\{\pm1\}^2
+\]
+such that
+\[
+\chi(x)=\chi_m
+\qquad\text{for all }x\in \mathcal M_m.
+\]
+In the odd-\(m\) stable periodic regime, one furthermore has \(\beta_m=+1\).
+\end{theorem}
+
+\begin{proposition}[Maximal data-processing loss]\label{prop:fold-condexp-index-maxfiber}
+Let \(E_m\) be the conditional expectation induced by \(\Fold_m\), that is, averaging uniformly on the fibers of \(\Fold_m\). Then
+\[
+\sup_{\rho,\sigma}\Bigl(D(\rho\Vert \sigma)-D(\rho\circ E_m\Vert \sigma\circ E_m)\Bigr)=\log D_m,
+\]
+where \(\rho,\sigma\) range over probability distributions on \(\Omega_m\).
+\end{proposition}
+
+\begin{proof}
+The relative-entropy chain rule gives
+\[
+D(\rho\Vert \sigma)-D(\rho\circ E_m\Vert \sigma\circ E_m)
+=
+\sum_{x\in X_m}(\Fold_m)_\ast\rho(x)\,
+D\!\bigl(\rho(\cdot\mid x)\Vert \sigma(\cdot\mid x)\bigr).
+\]
+Since each conditional divergence is supported on a fiber of size \(d_m(x)\), it is bounded above by \(\log d_m(x)\le \log D_m\). Hence the displayed supremum is at most \(\log D_m\). Conversely, if \(x_\star\in X_m\) satisfies \(d_m(x_\star)=D_m\), choose \(\rho\) to be a Dirac mass on a point of \(\Fold_m^{-1}(x_\star)\) and \(\sigma\) to be the uniform distribution on that same fiber. Then the coarse-grained states coincide, while \(D(\rho\Vert \sigma)=\log D_m\).
+\end{proof}
+
+\begin{corollary}[Window-\texorpdfstring{$6$}{6} fiber histogram]\label{cor:fold-bin-m6-fiber-hist}
+For \(m=6\), direct enumeration yields
+\[
+d_6(x)\in\{2,3,4\},
+\qquad
+\#\{x\in X_6:d_6(x)=2\}=8,
+\qquad
+\#\{x\in X_6:d_6(x)=3\}=4,
+\qquad
+\#\{x\in X_6:d_6(x)=4\}=9,
+\]
+and therefore
+\[
+\abs{X_6}=21.
+\]
+\end{corollary}
 
 %% ============================================================
 \section{Entropy chain decomposition under group quotients}\label{sec:entropy-chain}
+We begin with the information-theoretic core of the paper. The first result identifies the exact entropy cost of replacing a fine Chebotarev label group by a quotient, while the second turns the same phenomenon into an orthogonal decomposition of Fourier energy into visible modes surviving the quotient and hidden modes carried by the kernel.
 
 \input{source/thm__chebotarev-quotient-entropy-energy}
 
 %% ============================================================
 \section{Artin pole convergence and second main term}\label{sec:artin-pole}
-
-\input{source/thm__chebotarev-artin-pole-stat-convergence}
+The next theorem isolates the dominant nontrivial spectral contribution to primitive Chebotarev counts. It produces the oscillatory second main term that will later serve as the witness mechanism for both pole-order detection and lower bounds against square-root equidistribution.
 
 \input{source/thm__chebotarev-second-main-term-witness}
 
+We now pass from the refined expansion to its analytic and probabilistic consequences. The following pair of theorems identifies the exact Artin pole created by the dominant channel and then converts the same spectral data into quantitative convergence of primitive label distributions toward Haar measure, together with explicit witness obstructions when the gap is too weak.
+
+\input{source/thm__chebotarev-artin-pole-stat-convergence}
+
 %% ============================================================
 \section{Fold groupoid character rigidity}\label{sec:groupoid-rigidity}
+We next turn to the finite semisimple algebra attached to the fold groupoid. The point of this section is that the scan-reversal fingerprint \(\chi\) is not merely a bookkeeping device: it is rigid under any blockwise \(\ast\)-automorphism compatible with the canonical involutive symmetries, and this rigidity forces the automorphism group to respect the sector decomposition.
 
 \input{source/thm__fold-groupoid-chi-rigidity-autchi}
 
 %% ============================================================
 \section{Central idempotents of the $\ZZ_2 \times \ZZ_2$ fold groupoid algebra}\label{sec:central-idempotents}
+Having established \(\chi\)-rigidity, we can exploit the fingerprint to organize the center of the fold-groupoid algebra itself. The results collected here construct the four sector idempotents explicitly, identify their joint spectral measure, analyze maximal-fiber rigidity, and show how a small family of central observables controls---and in window \(6\), fails to fully control---the complete central block structure.
 
 \input{source/thm__fold-groupoid-z2x2-central-idempotents}
 
 %% ============================================================
 \section{Discussion}\label{sec:discussion}
-% TODO: Connections to Artin reciprocity, information geometry,
-% higher groupoid extensions, open problems
+The Chebotarev results of this paper give a concrete answer to a basic quotient question: after passing from a fine label group to a quotient, exactly which part of the nonuniformity survives? The answer is encoded simultaneously in entropy and in Fourier energy. Relative entropy splits into visible and fiber contributions, while the \(L^2\)-defect splits into characters that factor through the quotient and characters that remain genuinely hidden on the kernel. In this sense, the quotient map behaves as an information projection whose loss is measured by hidden character energy, a viewpoint that is close in spirit to information geometry and large-deviation theory \cite{CoverThomas2006,CsiszarKorner2011,DemboZeitouni1998}.
+
+The analytic consequences are equally sharp. Dominant nontrivial Artin channels do not merely perturb the main term: they determine exact pole orders and produce explicit witness sets exhibiting oscillations of order \(\Lambda(u)^n/n\). Thus the square-root threshold appearing in \(\textsf{GRH}_{K,G}(u)\) is not a cosmetic normalization but a genuine boundary between rapid statistical convergence and detectable oscillatory obstruction. It would be interesting to extend this mechanism to nonabelian quotient towers, where the visible/hidden dichotomy should be governed by restriction to normal subgroups and the loss of matrix-valued Fourier modes rather than scalar characters.
+
+On the fold-groupoid side, the \(\ZZ_2\times\ZZ_2\) fingerprint behaves like a minimal two-bit central observable that survives every symmetry considered here. The explicit projectors \(e_{\alpha,\beta}\) show that sector decomposition is intrinsic to the algebra, not an external labeling convention, while the window-\(6\) reconstruction results quantify exactly how far the observables \(\mathrm{IndW}(E_{m,1})\), \(\varepsilon_{\mathrm{scan}}\), and \(\varepsilon_{\mathrm{rev}}\) are from generating the full center. The conjectural eventual injectivity of \(d_m\) on each sector would identify a regime in which these three observables attain the maximal possible resolution, echoing rigidity phenomena familiar from groupoid and subfactor theory \cite{Renault1980,Paterson1999,Watatani1990,BrownOzawa2008}.
+
+Several open problems emerge naturally. First, can one formulate a nonabelian hidden-energy decomposition in which quotient loss is measured by matrix coefficient energy outside the pullback subcategory of representations? Second, can the witness mechanism be upgraded from existence of oscillatory subsets to a canonical optimal witness extracted directly from the dominant channel? Third, on the fold side, one would like a conceptual proof of the eventual simple-spectrum conjecture and a classification of those additional central observables needed when sectorwise injectivity fails. Finally, it would be worthwhile to understand whether a common categorical framework can place the Chebotarev quotient problem and fold-groupoid rigidity on the same footing, with entropy loss and central resolution interpreted as parallel manifestations of a single functorial coarse-graining principle.
 
 %% ============================================================
 \bibliographystyle{plain}
