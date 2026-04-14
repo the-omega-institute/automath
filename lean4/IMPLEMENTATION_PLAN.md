@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3061 |
+| \leanverified 标注数 | 3067 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3110 |
-| 轮次 | R691（round_count=R691）|
+| 总标注数 | 3116 |
+| 轮次 | R692（round_count=R692）|
 
-**Phase R691（本轮落地，fresh seeds）**：`paper_folding_stable_syntax_entropy_logqdim_seeds` / `paper_folding_stable_syntax_entropy_logqdim_package`（对应 `cor:folding-stable-syntax-entropy-logqdim`，Folding；以 `dτ = φ` 为前提形式化 `Real.log dτ = Real.log φ`，稳定落地熵率与量子维数对数一致的 paper-facing 种子与包装）；`paper_gut_nap_so10_analytic_minimality_seeds` / `paper_gut_nap_so10_analytic_minimality_package`（对应 `thm:nap-so10-analytic-minimality`，GU；在禁用 `native_decide` 约束下直接证明 `45 = F_9 + F_6 + F_4`，保留 `so(10)` 的 Zeckendorf 维数签名）；`paper_cdim_finite_probe_extraction_seeds` / `paper_cdim_finite_probe_extraction_package`（对应 `thm:cdim-finite-probe-extraction`，Circle Dimension；以列表截断和差分精确等于满足 `a ≥ k` 的项数，形式化有限探针恢复 torsion 指数谱的核心离散部分；本轮 `\leanverified` +6，降级项数 0）
+**Phase R692（本轮落地，fresh seeds）**：`paper_spg_internal_coordinate_bundle_screen_cost_closed_form_seeds` / `paper_spg_internal_coordinate_bundle_screen_cost_closed_form_package`（对应 `thm:spg-internal-coordinate-bundle-screen-cost-closed-form`，SPG；直接复用 `screenComponentCount_eq_complement_plus_one` 与 `auditCost_eq_count_sub_one`，补齐内部坐标束屏幕连通分量与审计成本的闭式 seed/package wrapper）；`paper_pom_fold_injectivization_minsideinfo_seeds` / `paper_pom_fold_injectivization_minsideinfo_package`（对应 `cor:pom-fold-injectivization-minsideinfo-equals-unknot-norm-square`，POM；作为跨章节替代目标，直接包装 `fold6_binary_auxbits`，落地 Fold 在 `m=6` 时的最小二值侧信息预算核心值）；`paper_pom_fibcube_eccentricity_core_seeds` / `paper_pom_fibcube_eccentricity_core_package`（对应 `thm:pom-fibcube-eccentricity-closed-form`，POM；降级为复用 `popcount_le_half` 的核心半密度上界，保留 Fibonacci cube 离心率闭式中“每段零串最多贡献半长” 的离散骨架；本轮 `\leanverified` +6，降级项数 2）
+
+**Phase R691（上一轮落地，fresh seeds）**：`paper_folding_stable_syntax_entropy_logqdim_seeds` / `paper_folding_stable_syntax_entropy_logqdim_package`（对应 `cor:folding-stable-syntax-entropy-logqdim`，Folding；以 `dτ = φ` 为前提形式化 `Real.log dτ = Real.log φ`，稳定落地熵率与量子维数对数一致的 paper-facing 种子与包装）；`paper_gut_nap_so10_analytic_minimality_seeds` / `paper_gut_nap_so10_analytic_minimality_package`（对应 `thm:nap-so10-analytic-minimality`，GU；在禁用 `native_decide` 约束下直接证明 `45 = F_9 + F_6 + F_4`，保留 `so(10)` 的 Zeckendorf 维数签名）；`paper_cdim_finite_probe_extraction_seeds` / `paper_cdim_finite_probe_extraction_package`（对应 `thm:cdim-finite-probe-extraction`，Circle Dimension；以列表截断和差分精确等于满足 `a ≥ k` 的项数，形式化有限探针恢复 torsion 指数谱的核心离散部分；本轮 `\leanverified` +6，降级项数 0）
 
 **Phase R690（本轮落地，fresh seeds）**：`paper_fib_divisibility_chain_seeds` / `paper_fib_divisibility_chain_package`（对应 `lem:fib-divisibility-chain`，EA；直接复用 `Nat.fib_dvd` 形式化 “若 `a ∣ b` 则 `F_a ∣ F_b`” 的 Fibonacci 整除链）；`paper_composition_pullback_seeds` / `paper_composition_pullback_package`（对应 `cor:composition-pullback`，EA；直接拼合现有 `compositionPullback_add` 与 `compositionPullback_mul`，在 `a+b`、`ab` 未溢出 `F_{m+2}` 时把稳定加法/乘法拉回 `X.ofNat`）；`paper_cdim_residual_circle_dim_laws_seeds` / `paper_cdim_residual_circle_dim_laws_package`（对应 `prop:cdim-residual-circle-dimension-laws`，Circle Dimension；以离散 per-`b` 版本形式化 residual 单调性、`2`-幂乘法加法律与 `Nat.log` 的对应可加性；本轮 `\leanverified` +6，降级项数 0）
 
