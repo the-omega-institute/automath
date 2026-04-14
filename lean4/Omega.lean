@@ -209,6 +209,7 @@ import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
 import Omega.EA.RewriteLocalConfluence
 import Omega.EA.RewriteConfluence
+import Omega.EA.RewriteWordProblem
 import Omega.Topos.LocalSectionCriterion
 import Omega.HighDimensionalCutProject.IndicatorSumRewrite
 import Omega.Conclusion.AffineRegisterBudget
@@ -254,6 +255,8 @@ import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.CircleDimension.BareCircleNotCompleteCarrier
 import Omega.CircleDimension.StokesHomologyExactSplitting
+import Omega.CircleDimension.ShortExactAdditivity
+import Omega.CircleDimension.TensorHomExtLaws
 import Omega.CircleDimension.AxiomaticRigidity
 import Omega.CircleDimension.PhaseSpectrumReconstruction
 import Omega.GU.UnitgroupZ2CharacterCount
