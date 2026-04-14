@@ -129,6 +129,7 @@ import Omega.SPG.WeightedBoundaryTransfer
 import Omega.SPG.WeightedBoundaryPole
 import Omega.SPG.BoundaryDimensionUpper
 import Omega.SPG.DoubleBudgetAddressCapacity
+import Omega.SPG.DoubleBudgetPoisson
 import Omega.SPG.EntropyLedger
 import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.SurvivorRenyiPressure
@@ -212,6 +213,7 @@ import Omega.Topos.H1FreeNoBlindness
 import Omega.Topos.H1VanishingClassTrivializing
 import Omega.Topos.CharacterBlindObstructions
 import Omega.Topos.ComponentGerbeDecomposition
+import Omega.Topos.GerbeNullSemantics
 import Omega.Topos.FiniteAbelianDuality
 import Omega.Topos.IntrinsicVisibleQuotient
 import Omega.Topos.IntrinsicCharacterDetection
@@ -296,6 +298,7 @@ import Omega.Zeta.PrimeLanguagesIntroDensity
 import Omega.Zeta.IntroAnalytic
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
+import Omega.Zeta.FinitePartCyclicLiftReducedConstantClosed
 import Omega.Zeta.FinitePartSingleQTorsionReconstruction
 import Omega.Zeta.FinitePartCyclicLiftZetaTorsionDeterminesSpectrum
 import Omega.Zeta.FinitePartSingleLayerSquareRootTest
