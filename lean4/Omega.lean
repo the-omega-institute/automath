@@ -238,6 +238,9 @@ import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Conclusion.AlphabetThreshold
+import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
+import Omega.LogicExpansionChain.SingletonConservativity
+import Omega.RecursiveAddressing.AddressBeforeValue
 import Omega.Conclusion.FibonacciDistortionThreshold
 import Omega.Conclusion.CdimKernelRegisterLowerBound
 import Omega.Conclusion.KernelChainRule
