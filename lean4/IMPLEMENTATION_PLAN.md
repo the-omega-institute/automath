@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3042 |
+| \leanverified 标注数 | 3048 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3091 |
-| 轮次 | R688（round_count=R688）|
+| 总标注数 | 3097 |
+| 轮次 | R689（round_count=R689）|
 
-**Phase R688（本轮落地，fresh seeds）**：`paper_ea_address_naturality_seeds` / `paper_ea_address_naturality_package`（对应 `prop:数值化的自然性`，EA；基于 `X.stableValueRingEquiv` 定义稳定地址 `addr`，并形式化其对稳定加法与稳定乘法的自然性）；`paper_fold_naive_prefix_lift_seeds` / `paper_fold_naive_prefix_lift_package`（对应 `prop:fold-naive-prefix-lift`，Folding；直接以 `X.CompatibleFamily / X.ofFamily / X.prefixWord` 给出相容族的 inverse-limit lift，不再停留于纯 `ℕ` 序列核）；`paper_fold_phi_equivariant_seeds` / `paper_fold_phi_equivariant_package`（对应 `prop:Phi_m-equivariant`，Folding；将 paper 命题一行归约到 `slideBlockCode_shift_equivariant` 在局部规则 `Fold` 上的实例；本轮 `\leanverified` +6，降级项数 0）
+**Phase R689（本轮落地，fresh seeds）**：`paper_gut_u1_throat_identity_seeds` / `paper_gut_u1_throat_identity_package`（对应 `prop:u1-throat-identity`，GU；在正实条件下将 `u = 1 / u` 化归为 `u^2 = 1`，并用正性排除 `u = -1`，实质落实统一点 `u = 1` 的反演固定点唯一性）；`paper_ea_stable_add_finite_resolution_compatibility_seeds` / `paper_ea_stable_add_finite_resolution_compatibility_package`（对应 `prop:stable-add-finite-resolution-compatibility`，EA；直接复用 `Omega.EA.AddressNaturality.addr_add`，将 paper 命题落到有限分辨率地址化对稳定加法的自然性）；`paper_fold_endpoint_Mm_minus_one_unique_seeds` / `paper_fold_endpoint_Mm_minus_one_unique_package`（对应 `prop:fold-endpoint-Mm-minus-one-unique`，Folding；新建递归 endpoint 构造 `endpointWord`，形式化其 `No11`、权重公式 `weight = F_{m+2} - 1` 与端点唯一性归纳证明；本轮 `\leanverified` +6，降级项数 0）
+
+**Phase R688（上一轮落地，fresh seeds）**：`paper_ea_address_naturality_seeds` / `paper_ea_address_naturality_package`（对应 `prop:数值化的自然性`，EA；基于 `X.stableValueRingEquiv` 定义稳定地址 `addr`，并形式化其对稳定加法与稳定乘法的自然性）；`paper_fold_naive_prefix_lift_seeds` / `paper_fold_naive_prefix_lift_package`（对应 `prop:fold-naive-prefix-lift`，Folding；直接以 `X.CompatibleFamily / X.ofFamily / X.prefixWord` 给出相容族的 inverse-limit lift，不再停留于纯 `ℕ` 序列核）；`paper_fold_phi_equivariant_seeds` / `paper_fold_phi_equivariant_package`（对应 `prop:Phi_m-equivariant`，Folding；将 paper 命题一行归约到 `slideBlockCode_shift_equivariant` 在局部规则 `Fold` 上的实例；本轮 `\leanverified` +6，降级项数 0）
 
 **Phase R687（上一轮落地，fresh seeds 模式启动）**：`paper_gut_weighted_subset_sum_min_gap_seeds` / `paper_gut_weighted_subset_sum_min_gap_package`（对应 `thm:group-jg-weighted-subset-sum-min-gap-upper`，GU；fresh seeds 降级为“`k ≥ 1` 时存在两个不同 `Finset (Fin k)`”的平凡存在性命题，避开 `Real.sqrt` 与抽屉原理深水区，同时补齐 paper-facing package clone wrapper）；`paper_gut_radial_quadratic_single_sample_identifiability_seeds` / `paper_gut_radial_quadratic_single_sample_identifiability_package`（对应 `thm:group-jg-radial-quadratic-single-sample-identifiability`，GU；fresh seeds 降级为有理数自反不等式与自然数小范围比较的平凡合取命题，并补齐 package clone wrapper）；`paper_ea_composition_two_layer_seeds` / `paper_ea_composition_two_layer_package`（对应 `thm:composition-two-layer`，EA；新增 `iota0` 迭代嵌入并形式化 `iota0 g (m+n) = iota0 g m ∘ iota0 g n`，同时补齐 package clone wrapper；本轮 `\leanverified` +6）
 
