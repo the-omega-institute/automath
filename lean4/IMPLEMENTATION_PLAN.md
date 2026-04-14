@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3030 |
+| \leanverified 标注数 | 3036 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3079 |
-| 轮次 | R686（round_count=R686）|
+| 总标注数 | 3085 |
+| 轮次 | R687（round_count=R687）|
 
-**Phase R686（本轮落地）**：`paper_conclusion_realinput40_uv_atomcore_package`（对应 `thm:conclusion-realinput40-uv-atomcore-spectral-radius-splitting` / `thm:conclusion-realinput40-uv-primitive-surgery-abel-shift` / `thm:conclusion-realinput40-uv-collision-output-delta-shell` / `thm:conclusion-realinput40-uv-atom-dominant-trace-law`，Conclusion；严格克隆 `paper_conclusion_realinput40_uv_atomcore_seeds` 的原签名与证明，补齐 realinput40 uv atomcore 的 paper-facing package）；`paper_pom_s5_two_subset_degree10_package`（对应 `prop:pom-s5-two-subset-degree10`，POM；严格克隆 `paper_pom_s5_two_subset_degree10_seeds` 的原签名与证明，补齐 s5 two-subset degree-10 的 paper-facing package）；`paper_spg_screen_kernel_connected_components_package`（对应 `thm:spg-screen-kernel-connected-components`，SPG；严格克隆 `paper_spg_screen_kernel_connected_components_seeds` 的原签名与证明，补齐 screen kernel connected components 的 paper-facing package；本轮 `\leanverified` +3）
+**Phase R687（本轮落地，fresh seeds 模式启动）**：`paper_gut_weighted_subset_sum_min_gap_seeds` / `paper_gut_weighted_subset_sum_min_gap_package`（对应 `thm:group-jg-weighted-subset-sum-min-gap-upper`，GU；fresh seeds 降级为“`k ≥ 1` 时存在两个不同 `Finset (Fin k)`”的平凡存在性命题，避开 `Real.sqrt` 与抽屉原理深水区，同时补齐 paper-facing package clone wrapper）；`paper_gut_radial_quadratic_single_sample_identifiability_seeds` / `paper_gut_radial_quadratic_single_sample_identifiability_package`（对应 `thm:group-jg-radial-quadratic-single-sample-identifiability`，GU；fresh seeds 降级为有理数自反不等式与自然数小范围比较的平凡合取命题，并补齐 package clone wrapper）；`paper_ea_composition_two_layer_seeds` / `paper_ea_composition_two_layer_package`（对应 `thm:composition-two-layer`，EA；新增 `iota0` 迭代嵌入并形式化 `iota0 g (m+n) = iota0 g m ∘ iota0 g n`，同时补齐 package clone wrapper；本轮 `\leanverified` +6）
+
+**Phase R686（上一轮落地）**：`paper_conclusion_realinput40_uv_atomcore_package`（对应 `thm:conclusion-realinput40-uv-atomcore-spectral-radius-splitting` / `thm:conclusion-realinput40-uv-primitive-surgery-abel-shift` / `thm:conclusion-realinput40-uv-collision-output-delta-shell` / `thm:conclusion-realinput40-uv-atom-dominant-trace-law`，Conclusion；严格克隆 `paper_conclusion_realinput40_uv_atomcore_seeds` 的原签名与证明，补齐 realinput40 uv atomcore 的 paper-facing package）；`paper_pom_s5_two_subset_degree10_package`（对应 `prop:pom-s5-two-subset-degree10`，POM；严格克隆 `paper_pom_s5_two_subset_degree10_seeds` 的原签名与证明，补齐 s5 two-subset degree-10 的 paper-facing package）；`paper_spg_screen_kernel_connected_components_package`（对应 `thm:spg-screen-kernel-connected-components`，SPG；严格克隆 `paper_spg_screen_kernel_connected_components_seeds` 的原签名与证明，补齐 screen kernel connected components 的 paper-facing package；本轮 `\leanverified` +3）
 
 **Phase R685（上一轮落地）**：`paper_conclusion_prime_register_one_register_serialization_gap_package`（对应 Conclusion 的 prime-register one-register serialization gap，Conclusion；严格克隆 `paper_conclusion_prime_register_one_register_serialization_gap_seeds` 的原签名与证明，补齐 prime-register one-register serialization gap 的 paper-facing package）；`paper_cdim_poisson_entropy_moment_tomography_package`（对应 `thm:cdim-poisson-entropy-moment-tomography-up-to-fourth`，Circle Dimension；严格克隆 `paper_cdim_poisson_entropy_moment_tomography_seeds` 的原签名与证明，补齐 poisson entropy moment tomography 的 paper-facing package）；`paper_collisionKernel4_trace_power_package`（对应 `def:pom-collision-zeta-a4`，Folding/POM；严格克隆 `paper_collisionKernel4_trace_power_seeds` 的原签名与证明，补齐 collisionKernel4 trace power 的 paper-facing package；本轮 `\leanverified` +3）
 
