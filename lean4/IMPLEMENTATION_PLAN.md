@@ -8,15 +8,17 @@
 |---|---|
 | 总行数 | ~50,876 |
 | 定理/定义数 | ~4,436 |
-| 论文接口包装 | 779+ |
-| 文件数 | 195 |
+| 论文接口包装 | 782+ |
+| 文件数 | 198 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3323 |
+| \leanverified 标注数 | 3326 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3372 |
-| 轮次 | R774（round_count=R774）|
+| 总标注数 | 3375 |
+| 轮次 | R775（round_count=R775）|
+
+**Phase R775（本轮落地，全流程执行）**：`paper_etds_class_artin_mobius_trace`（对应 `cor:class-artin-mobius-trace`，Zeta；把 conjugacy-class primitive coefficient formula 与 Peter--Weyl channel trace expansion 直接串接成 corollary-facing wrapper）；`paper_gluing_failure_cech_bridge_compatible_realizations`（对应 `thm:cech-bridge-compatible-realizations`，Topos；把 branch gerbe 的 pairwise isomorphism existence、Cech 2-cocycle clause、class-independence clause 与 neutral/vanishing equivalence 统一压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_recursive_addressing_prefix_site_min_visible_quotient`（对应 `prop:prefix-site-min-visible-quotient`，RecursiveAddressing；把 visible quotient 上 defect 消失与“凡杀掉全部 triple-overlap defects 的同态都唯一经由 `A/H_\alpha` 因子化”打包成 lemma-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 Zeta / Topos / RecursiveAddressing，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Zeta/ClassArtinMobiusTrace.lean`、`lean4/Omega/Topos/CechBridgeCompatibleRealizations.lean`、`lean4/Omega/RecursiveAddressing/PrefixSiteMinVisibleQuotient.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_etds_class_artin_mobius_trace`、`paper_gluing_failure_cech_bridge_compatible_realizations`、`paper_recursive_addressing_prefix_site_min_visible_quotient`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_chebotarev.tex`（`cor:class-artin-mobius-trace`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_gerbe_obstruction.tex`（`thm:cech-bridge-compatible-realizations`），`/Users/chronoai/automath/papers/publication/2026_recursive_addressing_prefix_sites_tac/main.tex`（`prop:prefix-site-min-visible-quotient`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R774（本轮落地，全流程执行）**：`paper_resolution_folding_block_counts_threshold`（对应 `cor:block-counts-threshold`，Folding；把 rigidity reconstruction corollary 中 threshold 以上的 block-count law `|\mathcal L_n(Y_m)|=2^{n+m-1}` 与对角特例 `|\mathcal L_m(Y_m)|=2^{2m-1}` 直接压成 corollary-facing wrapper）；`paper_etds_abelian_shadow_defect`（对应 `thm:abelian-shadow-defect`，Zeta；把 abelian shadow / genuine non-abelian defect theorem 中正交分解、abelian/non-abelian energy identities，以及“经 abelianisation 因子化 / 非交换 defect 消失 / 高维 Fourier 系数全消失”三段等价统一压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_circle_dimension_haar_pullback_uniqueness`（对应 `thm:haar-pullback-uniqueness`，CircleDimension；把 Haar pullback uniqueness theorem 中 Haar 拉回律、导数律与 Cayley chart 唯一性三段等价压成 theorem-facing wrapper，本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 Folding / Zeta / CircleDimension，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/Folding/BlockCountsThreshold.lean`、`lean4/Omega/Zeta/AbelianShadowDefect.lean`、`lean4/Omega/CircleDimension/HaarPullbackUniqueness.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_resolution_folding_block_counts_threshold`、`paper_etds_abelian_shadow_defect`、`paper_circle_dimension_haar_pullback_uniqueness`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_reconstruction.tex`（`cor:block-counts-threshold`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_shadows.tex`（`thm:abelian-shadow-defect`），`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_haar_pullback.tex`（`thm:haar-pullback-uniqueness`）；新增 tex theorem/corollary/lemma 环境数 0）
 
