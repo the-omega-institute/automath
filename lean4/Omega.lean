@@ -153,6 +153,7 @@ import Omega.LogicExpansionChain.InformationStateForcingPersistencePublication
 import Omega.LogicExpansionChain.FocusedLiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FocusedSingletonConservativity
 import Omega.LogicExpansionChain.ConcreteSemanticFidelity
+import Omega.LogicExpansionChain.NormalizationNoFactCreation
 import Omega.LogicExpansionChain.ReadoutTransport
 import Omega.Topos.NullTrichotomy
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
@@ -162,6 +163,7 @@ import Omega.RecursiveAddressing.CompleteAddressReconstruction
 import Omega.RecursiveAddressing.FiniteDepthCollapse
 import Omega.RecursiveAddressing.FiniteThreeModeModel
 import Omega.RecursiveAddressing.EntropyMonotonicity
+import Omega.RecursiveAddressing.ObserverIndexedNormalizationNoFactCreation
 import Omega.RecursiveAddressing.SlidingBlockFactor
 import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
 import Omega.RecursiveAddressing.TypedReadoutPersistence
@@ -275,6 +277,7 @@ import Omega.Conclusion.EventEllipseGoldenMinimal
 import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.SectionLedgerKL
+import Omega.Conclusion.CdimFiniteQuotientGrowth
 import Omega.Conclusion.AffineNormalFormSemidirect
 import Omega.Conclusion.CapacityRamanujanPlateauLaw
 import Omega.Conclusion.BudgetCurveExactTailDifferenceReconstruction
