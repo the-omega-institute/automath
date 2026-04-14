@@ -5,6 +5,7 @@ import Omega.Core.CoprimeSMul
 import Omega.Core.PowerInequality
 import Omega.Core.WalshFourier
 import Omega.Folding.StableSyntax
+import Omega.Folding.StableSyntaxEntropyLogqdim
 import Omega.Folding.Weight
 import Omega.Folding.Value
 import Omega.Folding.Zeckendorf
@@ -272,6 +273,7 @@ import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
 import Omega.GU.FibTailP23Orbits
 import Omega.GU.MinSectorBudget
+import Omega.GU.NapSo10AnalyticMinimality
 import Omega.GU.BdryZ2JumpUniqueness
 import Omega.GU.Window6DoubleLock12
 import Omega.GU.StrongLumpabilitySpectralRigidity
@@ -319,6 +321,7 @@ import Omega.CircleDimension.DenominatorMultiplesUnionBound
 import Omega.CircleDimension.CoprimeFractionLowerBound
 import Omega.CircleDimension.SquarefreeMedianDistance
 import Omega.CircleDimension.FibonacciPrimitivePrimeBinaryLock
+import Omega.CircleDimension.FiniteProbeExtraction
 import Omega.CircleDimension.MobiusBipartiteColoring
 import Omega.CircleDimension.CoherenceTimeLowerBound
 import Omega.CircleDimension.CoherenceTimeBarrier2Pow
