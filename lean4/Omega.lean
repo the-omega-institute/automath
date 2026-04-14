@@ -254,6 +254,9 @@ import Omega.Experiments.MultiscaleResidual
 import Omega.StatisticalStability.ResidueClassification
 import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
+import Omega.PhysicalSpacetimeSkeleton.KernelizationTemplate
+import Omega.LogicExpansionChain.ForcingPersistence
+import Omega.LogicExpansionChain.SemanticFidelity
 import Omega.LogicExpansionChain.SingletonConservativity
 import Omega.RecursiveAddressing.AddressBeforeValue
 import Omega.Conclusion.FibonacciDistortionThreshold
