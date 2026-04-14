@@ -124,6 +124,7 @@ import Omega.SPG.RandomBulkBoundarySaturation
 import Omega.SPG.CutFunctionSubmodular
 import Omega.SPG.CoordinateBundleScreenCount
 import Omega.SPG.CoordinateBundleScreenClosure
+import Omega.SPG.AxialScreenAreaLawAuditCost
 import Omega.SPG.ProuhetThueMorsePowerSum
 import Omega.SPG.SingleParamLogReadoutPigeonhole
 import Omega.SPG.BoundaryCycleAuditQueryLowerBound
@@ -184,6 +185,7 @@ import Omega.LogicExpansionChain.DelayedDecidabilityNoNewTruth
 import Omega.LogicExpansionChain.IndispensabilityImpliesMinimality
 import Omega.LogicExpansionChain.ChoiceSpectrumStandardForm
 import Omega.LogicExpansionChain.ChoiceSpectrum
+import Omega.LogicExpansionChain.ChoiceSpectrumSymmetryInvariance
 import Omega.Topos.NullTrichotomy
 import Omega.Topos.SheafificationCharacterization
 import Omega.Topos.SheafificationCharacterizationAPAL
@@ -215,6 +217,7 @@ import Omega.RecursiveAddressing.SlidingBlockFactor
 import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
 import Omega.RecursiveAddressing.TypedReadoutPersistence
 import Omega.RecursiveAddressing.ObserverIndexedReadoutForcingCriterion
+import Omega.RecursiveAddressing.ObserverIndexedForcingMonotonicity
 import Omega.RecursiveAddressing.GlobalLayerLogicOnly
 import Omega.RecursiveAddressing.ObserverIndexedCommonRefinementDecidability
 import Omega.RecursiveAddressing.ObserverIndexedFiniteResolutionObjectEligibility
