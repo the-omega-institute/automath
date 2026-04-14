@@ -213,6 +213,7 @@ import Omega.Topos.H2VanishingBlindness
 import Omega.Topos.H1FreeNoBlindness
 import Omega.Topos.H1VanishingClassTrivializing
 import Omega.Topos.CharacterBlindObstructions
+import Omega.Topos.BranchDecomposition
 import Omega.Topos.ComponentGerbeDecomposition
 import Omega.Topos.GerbeNullSemantics
 import Omega.Topos.FiniteAbelianDuality
@@ -322,6 +323,7 @@ import Omega.Zeta.PhaseCombPoleCounting
 import Omega.Zeta.CriticalLineGapEntropyRateZero
 import Omega.Zeta.OperatorFixedKernelLocalDensityObstruction
 import Omega.Zeta.CyclicLiftGcdLcm
+import Omega.Zeta.SyncCyclotomicDegreeLaw
 import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Zeta.SyncRhoM2Publication
 import Omega.Zeta.SyncKernelSpectrum
@@ -423,6 +425,7 @@ import Omega.CircleDimension.PhaseSpectrumReconstruction
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
 import Omega.CircleDimension.FinitePrimeSupportMultiplicativeHalfCircleDimension
 import Omega.CircleDimension.OperationalHalfCircleDimensionNat
+import Omega.CircleDimension.OperationalHalfCircleDimensionNd
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
