@@ -6,17 +6,19 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~50,503 |
-| 定理/定义数 | ~4,409 |
+| 总行数 | ~50,557 |
+| 定理/定义数 | ~4,412 |
 | 论文接口包装 | 755+ |
-| 文件数 | 156 |
+| 文件数 | 159 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3179 |
+| \leanverified 标注数 | 3182 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3228 |
-| 轮次 | R723（round_count=R723）|
+| 总标注数 | 3231 |
+| 轮次 | R724（round_count=R724）|
+
+**Phase R724（本轮落地，全流程执行）**：`paper_information_state_state_theory_monotonicity_focused_seeds`（对应 `cor:state-theory-monotonicity`，Focused APAL information states；把 refinement 下 realization 集缩小直接转写为 `stateTheory` 的集合包含，保留“信息状态细化只会扩张可强制公式族”的核心 monotonicity 骨架）；`paper_etds_dfa_density_dichotomy_seeds`（对应 `thm:dfa-density-dichotomy`，Syntax zeta；把既有 DFA 周期密度 dichotomy 种子重新挂接到 ETDS publication 标签，保留“正密度算术级数/指数稀疏二分”的核心 automata-growth 骨架；本轮 non-trivial 目标）；`paper_resolution_phi_m_factor_seeds`（对应 `prop:Phi-m-factor`，Resolution folding overlapping windows；把 `Φ_m` 在子移位上的 factor-map 结构压成 shift-invariant image 与到像满射两条接口，保留“窗口折叠是 onto-its-image 的 shift factor”的核心 symbolic-dynamics 骨架）；本轮 `\leanverified` +3，覆盖章节为 LogicExpansionChain / Zeta / Folding，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/LogicExpansionChain/FocusedStateTheoryMonotonicity.lean`、`lean4/Omega/Zeta/ETDSDFADensityDichotomy.lean`、`lean4/Omega/Folding/PhiSubshiftFactorPublication.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_information_states.tex`（`cor:state-theory-monotonicity`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_syntax_zeta.tex`（`thm:dfa-density-dichotomy`），`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_overlapping.tex`（`prop:Phi-m-factor`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R723（本轮落地，全流程执行）**：`paper_conservative_extension_whole_chain_invariance_seeds`（对应 `cor:whole-chain-invariance`，Focused APAL preliminaries；把有限 conservative-extension 链逐步复合成到底层 forcing 的迭代 forget/project 等价，保留“有限层级上升不会改写任何较低层公式的 forcing 行为”的核心 chain-invariance 骨架；本轮 non-trivial 目标）；`paper_sync_kernel_spectrum_seeds`（对应 `prop:sync-kernel-spectrum`，Kernel spectrum；把 `s=2` 截面的同步核多项式因式分解与三处显式根检验直接挂接到两份 publication 标签，保留“无权 kernel determinant 在 `u=1` 时裂解为 `(z-1)(z+1)(3z-1)(z^3-z^2+z+1)` 的核心 factorization 骨架）；`paper_sync_rho_m2_publication_seeds`（对应 `cor:rho-m2-closed-form`，Kernel twists；把最坏 twist `m=2` 的 quartic 根闭式直接挂接到两份 publication 标签，保留“`ρ_2` 由 `sqrt (2 - sqrt 3)` 的倒数给出”的核心 closed-form 骨架）；本轮 `\leanverified` +5，覆盖章节为 LogicExpansionChain / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/LogicExpansionChain/WholeChainInvariance.lean`、`lean4/Omega/Zeta/SyncKernelSpectrum.lean`、`lean4/Omega/Zeta/SyncRhoM2Publication.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_preliminaries.tex`（`cor:whole-chain-invariance`），`/Users/chronoai/automath/papers/publication/2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists/sec_kernel.tex`（`prop:sync-kernel-spectrum`、`cor:rho-m2-closed-form`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_online_kernel.tex`（`prop:sync-kernel-spectrum`、`cor:rho-m2-closed-form`）；新增 tex theorem/corollary/lemma 环境数 0）
 
