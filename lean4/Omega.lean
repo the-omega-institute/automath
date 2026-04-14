@@ -61,6 +61,7 @@ import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.PhiEquivariant
 import Omega.Folding.PhiSlidingBlockCode
+import Omega.Folding.PhiEquivariantPublication
 import Omega.Folding.PhiSubshiftFactor
 import Omega.Folding.PhiSubshiftFactorPublication
 import Omega.Folding.HolographicRateConservation
@@ -93,6 +94,7 @@ import Omega.Graph.Window6TranslationQuotient
 import Omega.Graph.LiftBound
 import Omega.SPG.Cylinder
 import Omega.SPG.PrefixMetric
+import Omega.SPG.PrefixBallCylinder
 import Omega.SPG.SymbolicFactor
 import Omega.SPG.Clopen
 import Omega.SPG.DecidableClopen
@@ -153,6 +155,7 @@ import Omega.RecursiveAddressing.FocusedAddressBeforeValue
 import Omega.RecursiveAddressing.FocusedNonNullReadoutCriterion
 import Omega.RecursiveAddressing.InverseLimitDeterminacy
 import Omega.RecursiveAddressing.SlidingBlockFactor
+import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
 import Omega.RecursiveAddressing.TypedReadoutPersistence
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
