@@ -4,7 +4,10 @@
 Throughout this section, \(A\) denotes a primitive non-negative matrix
 with Perron root \(\lambda>1\). No further symbolic-dynamical input is
 used: the arguments depend only on the primitive matrix formalism, the
-Perron pole, and the non-Perron spectrum.
+Perron pole, and the non-Perron spectrum. The section is included as
+supporting finite-state infrastructure for the finite-group arguments of
+\Cref{sec:chebotarev}; it is not intended as a separate main theorem
+branch.
 
 \medskip\noindent\textbf{Logarithm convention.}
 All logarithms in this section are taken in the principal branch
@@ -19,28 +22,51 @@ so \(\Log F_A(e^{i\theta})\) is well defined and
 Fourier series of a continuous function on the torus. All subsequent
 power series and determinant logarithms use this branch consistently.
 
+\subsection{Relation with classical dynamical Mertens constants}
+\label{subsec:relation-classical-mertens}
+
+The existence of Mertens-type asymptotics for orbit sums in hyperbolic
+dynamics is well established. Sharp \cite{Sharp1991Mertens} proved
+that for a mixing Axiom~A flow with topological entropy \(h\), the
+closed-orbit analogue of Mertens' theorem takes the form
+\[
+  \sum_{\ell(\gamma)\le T}\frac{1}{e^{h\ell(\gamma)}}
+  =\log T+c_0+o(1),
+\]
+where \(\ell(\gamma)\) is the period of the primitive orbit \(\gamma\)
+and \(c_0\) is a dynamical Mertens constant determined by the
+non-leading spectral data of the Ruelle operator. Pollicott--Sharp
+\cite{PollicottSharp1998Mertens} refined this to homology-class Mertens
+constants with explicit leading-order expressions involving the
+determinant of the Hessian of the pressure function. In the
+graph-theoretic setting, Stark--Terras
+\cite{StarkTerras1996ZetaGraphCoverings} obtained analogous Mertens
+constants for the Ihara zeta function of a finite graph via the
+Bass--Ihara determinant formula, and Hasegawa--Saito
+\cite{HasegawaSaito2016GraphMertens} derived graph-theoretic Mertens
+refinements explicitly parallel to the Sharp--Pollicott formulas.
+
+The finite-part formula below is a specialisation of these results to
+the finite-state symbolic setting. The structural form of the constant
+parallels those in the cited works; the specific contribution is the
+explicit expression as a reduced-determinant identity in the
+primitive-matrix language of finite non-negative matrices:
+\begin{enumerate}[label=(\roman*)]
+  \item it expresses the classical constant as an explicit
+    reduced-determinant identity,
+  \item the determinant form connects directly to the cyclic-lift
+    reconstruction of the non-Perron spectrum in the next subsection,
+    and
+  \item it provides the abelian baseline for the Adams--M\"obius
+    mechanism in \Cref{sec:chebotarev}.
+\end{enumerate}
+In particular, \Cref{thm:finite-part-primitive-closed-form} does not
+claim a new prime-orbit theorem; it is the translation of the classical
+Mertens asymptotic into finite-state reduced-determinant coordinates.
+
 \subsection{Finite parts and reduced determinants}
 
-\begin{remark}[Relation to classical dynamical Mertens constants]
-  \label{rem:relation-classical-mertens}
-  The orbit-Mertens constant appearing below is the SFT specialisation
-  of the broader Mertens-type asymptotics established by Sharp
-  \cite{Sharp1991Mertens} for Axiom~A flows and refined by
-  Pollicott--Sharp \cite{PollicottSharp1998Mertens}; see also the
-  graph-covering context of Stark--Terras
-  \cite{StarkTerras1996ZetaGraphCoverings}.
-  The present theorem does not claim a new prime-orbit result.
-  Its value is threefold: (i)~it expresses the classical constant as an
-  explicit reduced-determinant identity; (ii)~the determinant form
-  connects directly to the cyclic-lift reconstruction of the non-Perron
-  spectrum in the next subsection; and (iii)~it provides the abelian
-  baseline for the Adams--M\"obius mechanism in
-  \Cref{sec:chebotarev}. The structural form of the constant is
-  closely related to those in the cited works; the increment is the
-  translation into finite-state reduced-determinant language.
-\end{remark}
-
-\begin{theorem}[Primitive-orbit closed form for the finite part]
+\begin{proposition}[Primitive-orbit closed form for the finite part]
   \label{thm:finite-part-primitive-closed-form}
   The finite-part constant \(\FP(A)\) exists and satisfies
   \[
@@ -55,7 +81,7 @@ power series and determinant logarithms use this branch consistently.
       +\sum_{n\ge 1}p_n(A)
         \bigl(\lambda^{-n}+\log(1-\lambda^{-n})\bigr).
   \]
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
   We separate the argument into two steps.
@@ -128,11 +154,20 @@ power series and determinant logarithms use this branch consistently.
   Taking \(x=\lambda^{-n}\) yields the second formula.
 \end{proof}
 
-\begin{proposition}[Reduced determinant identity]
+\begin{proposition}[Residue constant and reduced determinant]
   \label{prop:finite-part-residue-reduced-determinant}
-  Let \(\mu_2,\dots,\mu_d\) be the non-Perron eigenvalues of \(A\). Then
+  Let \(M\) be a finite matrix and let \(\lambda\) be a simple
+  eigenvalue of \(M\). If \(\nu_2,\dots,\nu_d\) are the remaining
+  eigenvalues of \(M\), counted with algebraic multiplicity, then
   \[
-    C(A)
+    C_\lambda(M)
+    =\prod_{j=2}^d\left(1-\frac{\nu_j}{\lambda}\right)^{-1}
+    =\det\nolimits'(I-M/\lambda)^{-1}.
+  \]
+  In particular, if \(M=A\) is primitive with Perron root \(\lambda\),
+  then
+  \[
+    C(A)=C_\lambda(A)
     =\prod_{j=2}^d\left(1-\frac{\mu_j}{\lambda}\right)^{-1}
     =\det\nolimits'(I-A/\lambda)^{-1}.
   \]
@@ -141,8 +176,8 @@ power series and determinant logarithms use this branch consistently.
 \begin{proof}
   Factor
   \[
-    \det(I-zA)
-    =(1-\lambda z)\prod_{j=2}^d(1-\mu_j z).
+    \det(I-zM)
+    =(1-\lambda z)\prod_{j=2}^d(1-\nu_j z).
   \]
   Multiplying by \(1-\lambda z\) and letting \(z\to\lambda^{-1}\) gives
   the claim.
@@ -228,7 +263,8 @@ and
     \{\mu\,\omega_q^k:\mu\in\spec(A),\ 0\le k\le q-1\}.
   \]
   Applying \Cref{prop:finite-part-residue-reduced-determinant} to
-  \(A^{\langle q\rangle}\) yields
+  \(M=A^{\langle q\rangle}\), with the simple eigenvalue \(\lambda\),
+  yields
   \[
     C(A^{\langle q\rangle})
     =\prod_{k=1}^{q-1}(1-\omega_q^k)^{-1}
@@ -513,44 +549,3 @@ and
   polynomial and hence the non-Perron eigenvalue \(\mu=-\lambda^{-1}\).
 \end{remark}
 
-\subsection{Selected consequences}
-
-\begin{corollary}[Finite square-root test from one root-of-unity layer]
-  \label{cor:finite-part-single-layer-square-root-test}
-  Let \(q\ge d\). Then the single root-of-unity layer
-  \(\{F_A(\omega_q^j)\}_{0\le j\le q-1}\), equivalently the data
-  \[
-    \Bigl(C(A),\{\zeta_A(\omega_q^j/\lambda)\}_{j=1}^{q-1}\Bigr),
-  \]
-  determines whether the square-root bound \(\Lambda(A)\le \lambda^{1/2}\)
-  holds.
-\end{corollary}
-
-\begin{proof}
-  By \Cref{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction},
-  the given data determine \(F_A\), hence the reciprocal roots
-  \(\mu_j/\lambda\). The square-root bound is equivalent to
-  \(\max_{j\ge 2}|\mu_j/\lambda|\le \lambda^{-1/2}\).
-\end{proof}
-
-\begin{corollary}[Positivity of the primitive gap]
-  \label{cor:finite-part-gap-positive}
-  Define
-  \[
-    \mathrm{Gap}(A):=\log C(A)-\FP(A).
-  \]
-  Then
-  \[
-    \mathrm{Gap}(A)
-    =\sum_{n\ge 1}p_n(A)\psi(\lambda^{-n}),
-    \qquad
-    \psi(x):=-x-\log(1-x)=\sum_{m\ge 2}\frac{x^m}{m},
-  \]
-  and in particular \(\mathrm{Gap}(A)>0\).
-\end{corollary}
-
-\begin{proof}
-  This is a rearrangement of
-  \Cref{thm:finite-part-primitive-closed-form}. Since \(\psi(x)>0\) for
-  \(0<x<1\), every term in the series is positive.
-\end{proof}

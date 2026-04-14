@@ -32,8 +32,7 @@ and~\ref{thm:poisson-defect-amplification}
 Theorem~\ref{thm:poisson-kl-eighth} \\
 Theorem~\ref{thm:poisson-defect-stability}
 & mean, variance, finite centred fourth moment
-& the formula for $\Delta_6(\nu)$ from
-Theorem~\ref{thm:poisson-defect-amplification}
+& Lemma~\ref{lem:delta6-fourth-moment} (fourth-moment formula for $\Delta_6$)
 \end{tabular}
 \end{center}}
 In particular, Appendix~\ref{app:entropy-integrals} enters only in the
@@ -78,6 +77,39 @@ h_{\mathrm{diff}}(X)
 =h_{\mathrm{diff}}(U)+\EE\!\left[\log\frac{1}{\abs{\upsilon'(X)}}\right]
 =h_{\mathrm{diff}}(U)+\EE[\mathcal P(X)].
 \]
+\end{proof}
+
+\begin{lemma}[Remainder bookkeeping]\label{lem:remainder-bookkeeping}
+Let $\nu$ satisfy the assumptions of Lemma~\ref{lem:delta-expansion}
+and let $M,N\ge 2$ be integers.
+If $\delta_t$ is replaced by the truncation
+\eqref{eq:delta-t-mode-expansion} with parameter $M$ and the Taylor
+series of $\Phi$ is truncated after the $N$th term, then there exist
+constants $C_{M}$ and $C_{M,N}$ (depending only on $M$, $N$, and the
+moments of~$\nu$ up to order $M+1$) such that:
+\begin{enumerate}[label=(\roman*)]
+\item the remainder of the Taylor series contributes at most
+      $C_{M,N}t^{-2(N+1)}$ in $L^1(\omega)$;
+\item whenever one replaces $k$ of the factors of $\delta_t$ by the
+      remainder $r_{M,t}$, the resulting $L^1(\omega)$ contribution is
+      bounded by $C_{M} t^{-(M+1)} t^{-2(k-1)}$.
+\end{enumerate}
+Consequently, to control the coefficient of $t^{-2L}$ it is enough to
+take $M=2L$ and $N=L$, in which case both sources of error contribute
+$O(t^{-(2L+2)})$ in $L^1(\omega)$.
+\end{lemma}
+
+\begin{proof}
+Part (i) is exactly Lemma~\ref{lem:delta-expansion}(ii)--(iii): the tail
+of the Taylor series produces an $L^1(\omega)$ error bounded by
+$C_{M,N}\|\delta_t\|_{L^\infty}^{N+1}=O(t^{-2(N+1)})$.
+For (ii), each factor $r_{M,t}$ has $L^\infty$ norm $O(t^{-(M+1)})$
+by Lemma~\ref{lem:delta-expansion}(i), while every remaining factor
+of~$\delta_t$ contributes $O(t^{-2})$ in sup norm.
+Integrating against the finite measure $\omega$ therefore yields the
+$L^1(\omega)$ bound $C_{M} t^{-(M+1)} t^{-2(k-1)}$.
+Choosing $M=2L$ and $N=L$ makes both error sources $O(t^{-(2L+2)})$,
+which is the remainder claimed at the end of the lemma.
 \end{proof}
 
 \begin{remark}
@@ -407,6 +439,99 @@ $n_1+\cdots+n_k$ is odd, so the integral vanishes.
 
 \subsection{Entropy asymptotics and rigidity}
 
+\begin{lemma}[Asymptotic expansion of $\delta_t$ and the logarithmic nonlinearity]%
+\label{lem:delta-expansion}
+Let $\nu$ be a probability measure on $\RR$ with mean $\bar\gamma$ and
+finite centred $(M+1)$st absolute moment, and let $M \ge 2$ be an integer.
+With $\Delta:=\gamma-\bar\gamma$ and $\mu_n:=\int_\RR \Delta^n\,\dd\nu(\gamma)$, set
+\[
+\delta_t(\bar\gamma+ty)
+:= \frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1
+= \int_\RR (R_{\Delta/t}(y)-1)\,\dd\nu(\gamma).
+\]
+
+\noindent\textbf{(i) Mode expansion of $\delta_t$.}
+For every $M\ge 2$ and every $t\ge 1$,
+\begin{equation}\label{eq:delta-t-mode-expansion}
+\delta_t(\bar\gamma+ty)
+= \sum_{n=2}^{M} \frac{\mu_n}{t^n} u_n(y) + r_{M,t}(y),
+\end{equation}
+where the remainder satisfies
+\begin{equation}\label{eq:delta-t-remainder-bound}
+\|r_{M,t}\|_{L^\infty(\RR)} \le \frac{C_M}{t^{M+1}},
+\end{equation}
+with $C_M:= \|v_M\|_{L^\infty}\int_\RR |\Delta|^{M+1}\,\dd\nu(\gamma)$
+and $v_M$ the bounded rational function from
+Proposition~\ref{prop:cayley-mode-remainder}.
+
+\noindent\textbf{(ii) Taylor expansion of $\Phi$ with remainder.}
+The function $\Phi(z):=(1+z)\log(1+z)-z$ has the convergent power series
+\begin{equation}\label{eq:phi-power-series}
+\Phi(z) = \sum_{k=2}^{\infty} \frac{(-1)^k}{k(k-1)}\,z^k, \qquad |z|<1,
+\end{equation}
+and for every integer $N\ge 2$ there exists a constant $C_N>0$ such that
+\begin{equation}\label{eq:phi-remainder}
+\left|\Phi(z) - \sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}\,z^k\right|
+\le C_N\,|z|^{N+1}, \qquad |z|\le \tfrac12.
+\end{equation}
+One may take $C_N = 4/(N(N-1))$ explicitly.
+
+\noindent\textbf{(iii) Integration in $L^1(\omega)$.}
+Since $\|\delta_t\|_{L^\infty}=O(t^{-2})$, for $t$ sufficiently large
+$|\delta_t(y)|\le 1/2$ for all $y$.  Applying~\eqref{eq:phi-remainder} with
+$z=\delta_t(y)$ and using the mode expansion~\eqref{eq:delta-t-mode-expansion},
+one may substitute the finite sum $\sum_{k=2}^N (-1)^k/(k(k-1))\,\delta_t^k$,
+expand each power using~\eqref{eq:delta-t-mode-expansion}, and integrate
+term by term against $\omega(\dd y) = [\pi(1+y^2)]^{-1}\dd y$.  The resulting
+error from the $\Phi$-remainder is $O(t^{-2(N+1)})$ in $L^1(\omega)$, and
+the error from $r_{M,t}$ contributes $O(t^{-(M+1-2)})$ per factor of $\delta_t$.
+Choosing $M$ and $N$ large enough, the full remainder after integration is
+$o(t^{-2N})$.  Term-by-term integration is justified by dominated convergence,
+since $\omega$ is a finite measure and $\|\delta_t\|_{L^\infty}\to 0$.
+\end{lemma}
+
+\begin{proof}
+\textbf{Part (i).}
+By Proposition~\ref{prop:cayley-mode-remainder} with truncation index $M$,
+\[
+R_{\Delta/t}(y) - 1
+= \sum_{n=1}^{M} u_n(y)\,\frac{\Delta^n}{t^n}
++ \frac{\Delta^{M+1}}{t^{M+1}}\,v_M(y,\Delta/t).
+\]
+Since $u_1$ is odd and $\int \Delta\,\dd\nu=0$, the $n=1$ term integrates to
+zero.  Taking expectation against $\nu$,
+\[
+\delta_t(\bar\gamma+ty)
+= \sum_{n=2}^{M}\frac{\mu_n}{t^n}u_n(y)
++ \frac{1}{t^{M+1}}\int_\RR \Delta^{M+1}v_M(y,\Delta/t)\,\dd\nu(\gamma).
+\]
+Since $\|v_M\|_{L^\infty(\RR^2)}<\infty$
+(Proposition~\ref{prop:cayley-mode-remainder}),
+the remainder is bounded in sup norm by $\|v_M\|_{L^\infty}t^{-(M+1)}\int|\Delta|^{M+1}\dd\nu$.
+
+\textbf{Part (ii).}
+For $|z|\le 1/2$ the series converges absolutely, so the partial-sum
+remainder is bounded by
+\[
+\sum_{k=N+1}^\infty \frac{|z|^k}{k(k-1)}
+\le \frac{|z|^{N+1}}{N(N-1)}\sum_{k=0}^\infty |z|^k
+\le \frac{4}{N(N-1)}\,|z|^{N+1}.
+\]
+
+\textbf{Part (iii).}
+The $L^1(\omega)$ error from the $\Phi$-truncation at order $N$ applied to
+$\delta_t=O(t^{-2})$ is bounded by
+\[
+C_N\int_\RR|\delta_t(y)|^{N+1}\omega(\dd y)
+\le C_N\|\delta_t\|_{L^\infty}^{N+1}=O(t^{-2(N+1)}).
+\]
+Each occurrence of $r_{M,t}$ in a product $\delta_t^{k-1}\cdot r_{M,t}$
+contributes $O(t^{-2(k-1)}\cdot t^{-(M+1)})$ per factor.  For the
+term-by-term integration, dominant convergence applies because $\omega$
+is a probability measure and all integrands are bounded uniformly in
+$y$ for each fixed $t$.
+\end{proof}
+
 \begin{theorem}[Odd orders vanish in the entropy expansion]%
 \label{thm:poisson-kl-even-orders}
 Let $N\ge 2$ and let $\nu$ be a probability measure on~$\RR$ with mean
@@ -432,45 +557,27 @@ In particular, every odd power $t^{-(2m+1)}$ has zero coefficient.
 \end{theorem}
 
 \begin{proof}
-With $x=\bar\gamma+ty$ one has
-\[
-\delta_t(x):=\frac{h_t(x)}{g_t(x)}-1
-=\int_{\RR}\bigl(R_{\Delta/t}(y)-1\bigr)\dd\nu(\gamma).
-\]
-Applying Proposition~\ref{prop:cayley-mode-remainder} with $N=2N$ gives
+Apply Lemma~\ref{lem:delta-expansion}(i) with $M=2N$: uniformly in $y$,
 \[
 \delta_t(\bar\gamma+ty)
-=\sum_{n=2}^{2N}\frac{\mu_n}{t^n}u_n(y)+O(t^{-(2N+1)})
+=\sum_{n=2}^{2N}\frac{\mu_n}{t^n}u_n(y)+O(t^{-(2N+1)}).
 \]
-uniformly in $y\in\RR$.  Since $\|\delta_t\|_{L^\infty}=O(t^{-2})$ and
-\[
-\Phi(z):=(1+z)\log(1+z)-z
-=\sum_{k=2}^{\infty}\frac{(-1)^k}{k(k-1)}z^k
-\qquad(|z|<1),
-\]
-one may truncate the power series at order~$N$ and write
-\[
-\Phi(\delta_t)
-=\sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}\delta_t^k+O(t^{-2N-2})
-\]
-uniformly in $y$.  Expanding each finite power $\delta_t^k$ with the
-uniform remainder above yields an asymptotic expansion of the form
+By Lemma~\ref{lem:delta-expansion}(ii)--(iii) and
+Lemma~\ref{lem:remainder-bookkeeping} (with $M=2N$ and $N$ as in the
+statement), one may substitute the $N$-term truncation of $\Phi$ and
+integrate term by term in $L^1(\omega)$, yielding
 \[
 D_{\mathrm{KL}}(h_t\|g_t)
 =\int_{\RR}\frac{\Phi(\delta_t(\bar\gamma+ty))}{\pi(1+y^2)}\dd y
-\]
-\[
 =\sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}
-\sum_{m\ge 2k}\frac{1}{t^m}
 \sum_{\substack{n_1,\dots,n_k\ge 2\\n_1+\cdots+n_k=m}}
-\mu_{n_1}\cdots\mu_{n_k}\,I_{n_1,\dots,n_k}
+\frac{\mu_{n_1}\cdots\mu_{n_k}}{t^m}\,I_{n_1,\dots,n_k}
 +o(t^{-2N}),
 \]
-where $I_{n_1,\dots,n_k}$ is given in
-Lemma~\ref{lem:mode-parity-vanish}.  By the lemma all odd~$m$-terms
-vanish, so only even powers remain.  Reindexing $m=2r$ gives
+where $I_{n_1,\dots,n_k}$ is defined in Lemma~\ref{lem:mode-parity-vanish}.
+By that lemma all terms with $m$ odd vanish.  Reindexing $m=2r$ gives
 \[
-=\sum_{r=2}^{N} c_{2r}\,t^{-2r}+o(t^{-2N}),
+D_{\mathrm{KL}}(h_t\|g_t)=\sum_{r=2}^{N} c_{2r}\,t^{-2r}+o(t^{-2N}),
 \]
 which is \eqref{eq:poisson-kl-even-orders}.
 \end{proof}
@@ -495,8 +602,7 @@ D_{\mathrm{KL}}(h_t\|g_t)
 \end{theorem}
 
 \begin{proof}
-With $x=\bar\gamma+ty$, Proposition~\ref{prop:cayley-mode-remainder} with
-$N=6$ gives
+By Lemma~\ref{lem:delta-expansion}(i) with $M=6$,
 \[
 \delta_t(\bar\gamma+ty)
 =\frac{\sigma^2}{t^2}u_2(y)
@@ -504,14 +610,20 @@ $N=6$ gives
 +\frac{\mu_4}{t^4}u_4(y)
 +\frac{\mu_5}{t^5}u_5(y)
 +\frac{\mu_6}{t^6}u_6(y)
-+O(t^{-7})
++r_{6,t}(y),
 \]
-uniformly in $y\in\RR$.  Since $\delta_t=O(t^{-2})$, one has
+uniformly in $y\in\RR$, with $\|r_{6,t}\|_{L^\infty}\le C_6 t^{-7}$.
+By Lemma~\ref{lem:delta-expansion}(ii) with $N=4$ (since $\delta_t=O(t^{-2})$
+and contributions from $k\ge 5$ are $O(t^{-10})$),
 \[
 \Phi(\delta_t)
 =\frac12\delta_t^2-\frac16\delta_t^3+\frac1{12}\delta_t^4+O(t^{-10}).
 \]
 Also $g_t(\bar\gamma+ty)\dd(\bar\gamma+ty)=\pi^{-1}(1+y^2)^{-1}\dd y$.
+Lemma~\ref{lem:remainder-bookkeeping} with $M=6$ and $N=4$ justifies the
+term-by-term integration against $\omega(\dd y)=[\pi(1+y^2)]^{-1}\dd y$:
+the $\Phi$-tail and every occurrence of $r_{6,t}$ contribute
+$o(t^{-8})$ in $L^1(\omega)$.
 Write
 \[
 a_2:=\sigma^2u_2,\qquad a_3:=\mu_3u_3,\qquad a_4:=\mu_4u_4,
@@ -567,19 +679,93 @@ the coefficient assembly from the mode integrals is given in
 Appendix~\ref{app:coefficient-assembly}.
 \end{proof}
 
-\begin{remark}
+\begin{remark}[Sanity check: symmetric two-point law]\label{rem:two-point-sanity}
+For the symmetric two-point measure
+$\nu=\tfrac12(\delta_{\bar\gamma+\sigma}+\delta_{\bar\gamma-\sigma})$,
+the centered normalized variable satisfies $X=\pm 1$ with equal weight, so
+$\beta_3=\mu_3/\sigma^3=0$, $\beta_4=\mu_4/\sigma^4=1$,
+$\mu_5=0$, $\mu_6=\sigma^6$.
+Substituting into the formula for $C_6$ yields
+\[
+C_6=\frac{\sigma^6+0-8\sigma^2\cdot\sigma^4}{64}
+=\frac{\sigma^6-8\sigma^6}{64}=-\frac{7\sigma^6}{64}.
+\]
+For $C_8$, with $\mu_4=\sigma^4$, $\mu_5=0$, $\mu_6=\sigma^6$:
+\[
+C_8=\frac{3\sigma^8-12\sigma^4\cdot\sigma^4+0+12\sigma^2\cdot\sigma^6}{256}
++\frac{0+0+20\sigma^8}{256}
+=\frac{3\sigma^8-12\sigma^8+12\sigma^8+20\sigma^8}{256}
+=\frac{23\sigma^8}{256}.
+\]
+So the entropy expansion for the symmetric two-point law reads
+\[
+D_{\mathrm{KL}}(h_t\|g_t)=\frac{\sigma^4}{8t^4}-\frac{7\sigma^6}{64t^6}+\frac{23\sigma^8}{256t^8}+o(t^{-8}),
+\]
+with $C_6=-7\sigma^6/64$ and $C_8=23\sigma^8/256$.  Both defects
+$\Delta_6=0$ and $\Delta_8=0$, consistently with
+Theorems~\ref{thm:poisson-defect-ladder}
+and~\ref{thm:poisson-defect-amplification}.
+\end{remark}
+
+\begin{remark}\label{rem:entropy-expansion-context}
 The fourth-order coefficient $\sigma^4/8$ corresponds to the classical
 Fisher-information rate for Cauchy smoothing.  The sixth- and
-eighth-order coefficients are the genuinely new content:
+eighth-order coefficients are new:
 the $t^{-6}$ coefficient $C_6$ already involves the skewness and
 excess-kurtosis of $\nu$, while the $t^{-8}$ coefficient $C_8$ brings
 in moments through order six and is where the defect-ladder structure
-emerges.  In the entropic CLT literature
+emerges.
+
+In the entropic CLT literature
 \cite{BobkovChistyakovGotzeEdgeworth2013}, Edgeworth-type corrections
 for Gaussian targets are studied; the present expansion is for the
 Poisson--Cauchy pair and uses the trigonometric mode calculus rather
 than cumulant expansions.
+For stable-law Fisher information and convergence rates,
+Bobkov, Chistyakov, and G\"otze \cite{BobkovChistyakovGotzeFisher2014}
+establish Fisher-information-based rates for convergence to stable laws.
+For stable/Cauchy entropy dissipation, Johnson \cite{Johnson2013}
+establishes a de Bruijn identity for symmetric stable laws, and
+Toscani \cite{Toscani2015,Toscani2016} studies fractional Fisher
+information and entropy inequalities.  Those results concern the
+instantaneous entropy production rate along stable semigroup flows,
+whereas the present contribution is a large-time asymptotic
+\emph{expansion} of
+$D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))$ with explicit
+$t^{-6}$ and $t^{-8}$ coefficients and defect-amplification
+inequalities.  The two viewpoints are complementary: the de Bruijn
+identity governs the leading-order derivative, while the present
+expansion isolates higher-order structural invariants.
 \end{remark}
+
+\begin{center}
+\fbox{\parbox{0.94\textwidth}{
+\textbf{Notation guide for the defect formulas.}
+Write
+\[
+C_6:=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}.
+\]
+\[
+\begin{aligned}
+C_8&:=\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2+12\sigma^2\mu_6}{256} \\
+&\quad +\frac{-30\mu_3\mu_5+20\mu_4^2}{256}.
+\end{aligned}
+\]
+so that Theorem~\ref{thm:poisson-kl-eighth} reads
+\[
+D_{\mathrm{KL}}(h_t\|g_t)=\frac{\sigma^4}{8t^4}+\frac{C_6}{t^6}+\frac{C_8}{t^8}+o(t^{-8}).
+\]
+The associated sixth- and eighth-order defects are
+\[
+\Delta_6(\nu):=-\frac{7}{64}\sigma^6-C_6,
+\qquad
+\Delta_8(\nu):=C_8-\frac{23}{256}\sigma^8.
+\]
+When only a finite fourth centred moment is assumed,
+Lemma~\ref{lem:delta6-fourth-moment} provides the equivalent
+fourth-moment formula \eqref{eq:delta6-fourth-moment-lemma} for $\Delta_6(\nu)$.
+}}
+\end{center}
 
 \begin{theorem}[A two-level defect ladder]%
 \label{thm:poisson-defect-ladder}
@@ -628,15 +814,20 @@ and equality holds if and only if
 \nu=\frac12\delta_{\bar\gamma+\sigma}
 +\frac12\delta_{\bar\gamma-\sigma}.
 \]
-The identity \eqref{eq:defect-c6} recovers the classical Pearson
-moment relation, while \eqref{eq:defect-c8} is the first genuinely new
-higher-order component.
+If $\tau:=\beta_3$ and $\kappa:=\beta_4$ denote the normalized
+skewness and kurtosis, then
+$\|Q_2\|_{L^2(\nu)}^2=\kappa-1-\tau^2$, so \eqref{eq:defect-c6} is
+equivalent to the classical Pearson inequality
+$\kappa-\tau^2\ge 1$
+\cite{KlaassenVanEs2018,OgasawaraExtensions2017,SharmaBhandari2015}.
+Identity \eqref{eq:defect-c8} is the
+first higher-order component beyond Pearson's relation.
 \end{theorem}
 
 \begin{proof}
 Write
 \[
-\kappa:=\|Q_2\|_{L^2(\nu)}^2=\EE[Q_2^2],
+q_2:=\|Q_2\|_{L^2(\nu)}^2=\EE[Q_2^2],
 \qquad
 L:=\EE[XQ_2^2],
 \qquad
@@ -644,22 +835,22 @@ M:=\EE[Q_2^3].
 \]
 Since $Q_2=X^2-1-\beta_3X$, one has
 \[
-\kappa=\beta_4-1-\beta_3^2,
+q_2=\beta_4-1-\beta_3^2,
 \]
 and therefore
 \[
 \frac{64}{\sigma^6}C_6
 =1+6\beta_3^2-8\beta_4
-=-7-2\beta_3^2-8\kappa,
+=-7-2\beta_3^2-8q_2,
 \]
 which is exactly \eqref{eq:defect-c6}.
 
 The identity $X^2=1+\beta_3X+Q_2$ yields
 \[
-\beta_5=\beta_3(\beta_3^2+2+2\kappa)+L,
+\beta_5=\beta_3(\beta_3^2+2+2q_2)+L,
 \]
 \[
-\beta_6=1+3\beta_3^2+3\kappa+\beta_3^4+3\beta_3^2\kappa+3\beta_3L+M.
+\beta_6=1+3\beta_3^2+3q_2+\beta_3^4+3\beta_3^2q_2+3\beta_3L+M.
 \]
 Hence, if
 \[
@@ -668,12 +859,12 @@ P_8:=3-12\beta_4+9\beta_3^2+12\beta_6-30\beta_3\beta_5+20\beta_4^2,
 then a direct substitution gives
 \[
 P_8
-=23+20\kappa^2+16\beta_3^2\kappa+64\kappa+2\beta_3^4+13\beta_3^2+6\beta_3L+12M.
+=23+20q_2^2+16\beta_3^2q_2+64q_2+2\beta_3^4+13\beta_3^2+6\beta_3L+12M.
 \]
 On the other hand,
 \[
 \|Q_3\|_{L^2(\nu)}^2
-=M+\frac{\beta_3}{2}L+\kappa-\kappa^2+\frac{\beta_3^2}{16}\kappa.
+=M+\frac{\beta_3}{2}L+q_2-q_2^2+\frac{\beta_3^2}{16}q_2.
 \]
 Substituting this identity into the preceding expression for $P_8$
 yields \eqref{eq:defect-c8}.  Since
@@ -691,6 +882,53 @@ that $X=\pm 1$ with equal weights.  Thus
 The converse is immediate.
 \end{proof}
 
+\subsection{Algebraic meaning of the defect ladder}
+\label{subsec:defect-ladder-geometry}
+
+The coordinates $Q_2$ and $Q_3$ in Theorem~\ref{thm:poisson-defect-ladder}
+are designed to isolate the moment combinations that survive in the
+entropy coefficients.
+
+Let $X:=(\gamma-\bar\gamma)/\sigma$ with $\EE[X]=0$ and $\EE[X^2]=1$.
+The quadratic coordinate
+\[
+Q_2 := X^2 - 1 - \beta_3 X
+\]
+removes the components of $X^2-1$ in the span of $\{1,X\}$, so
+$\|Q_2\|_{L^2(\nu)}^2=\beta_4-1-\beta_3^2$ reproduces the Pearson
+skewness--kurtosis gap.
+
+The cubic coordinate
+\[
+Q_3 := X Q_2 - \|Q_2\|_{L^2(\nu)}^2 X - \frac{\beta_3}{4} Q_2
+\]
+is chosen to cancel the lower-order interactions that appear when the
+terms of Theorem~\ref{thm:poisson-kl-eighth} are regrouped.
+It is not an orthogonal projection residual; instead it is the unique
+linear combination of $X Q_2$, $X$, and $Q_2$ that removes the $X$ and
+$Q_2$ coefficients in \eqref{eq:defect-c8}.
+Consequently $\|Q_3\|_{L^2(\nu)}^2$ measures the remaining cubic
+contribution after those cancellations.
+
+With these coordinates, the formulas in Theorem~\ref{thm:poisson-defect-ladder}
+show that:
+\begin{itemize}
+\item The $t^{-6}$ coefficient $C_6$ depends only on $\beta_3$ and
+$\|Q_2\|_{L^2(\nu)}^2$, so the sixth-order defect is a combination of
+the skewness and the Pearson gap.
+\item The $t^{-8}$ coefficient $C_8$ adds the single new coordinate
+$\|Q_3\|_{L^2(\nu)}^2$ together with polynomial combinations of
+$\beta_3$ and $\|Q_2\|_{L^2(\nu)}^2$.
+\item The symmetric two-point law
+$\tfrac12(\delta_{\bar\gamma+\sigma}+\delta_{\bar\gamma-\sigma})$
+forces $\beta_3=\|Q_2\|_{L^2(\nu)}=\|Q_3\|_{L^2(\nu)}=0$, so all defect
+coordinates vanish simultaneously.
+\end{itemize}
+
+Thus the defect ladder provides an algebraic gauge of the departure
+from the symmetric two-point extremizer, expressed through one quadratic
+coordinate and one higher-order correction.
+
 \begin{theorem}[Defect amplification]\label{thm:poisson-defect-amplification}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
 variance $\sigma^2>0$, and finite centred seventh absolute moment.  Define
@@ -701,12 +939,12 @@ variance $\sigma^2>0$, and finite centred seventh absolute moment.  Define
 \]
 and set
 \[
-\kappa:=\|Q_2\|_{L^2(\nu)}^2.
+q_2:=\|Q_2\|_{L^2(\nu)}^2.
 \]
 Then
 \[
 \Delta_6(\nu)
-=\frac{\sigma^6}{32}\beta_3^2+\frac{\sigma^6}{8}\kappa,
+=\frac{\sigma^6}{32}\beta_3^2+\frac{\sigma^6}{8}q_2,
 \]
 and
 \begin{align}
@@ -717,8 +955,8 @@ and
 &\quad
 +\frac{\sigma^8}{256}\left(
 12\|Q_3\|_{L^2(\nu)}^2
-+32\kappa^2
-+\frac{61}{4}\beta_3^2\kappa
++32q_2^2
++\frac{61}{4}\beta_3^2q_2
 +2\beta_3^4
 \right). \label{eq:defect-amplification}
 \end{align}
@@ -738,16 +976,16 @@ Equation~\eqref{eq:defect-c6} gives
 \[
 \Delta_6(\nu)
 =-\frac{\sigma^6}{64}\left(7+\frac{64}{\sigma^6}C_6\right)
-=\frac{\sigma^6}{32}\beta_3^2+\frac{\sigma^6}{8}\kappa.
+=\frac{\sigma^6}{32}\beta_3^2+\frac{\sigma^6}{8}q_2.
 \]
 Likewise, subtracting $23$ from \eqref{eq:defect-c8} yields
 \[
 \Delta_8(\nu)
 =\frac{\sigma^8}{256}\Bigl(
 12\|Q_3\|_{L^2(\nu)}^2
-+32\kappa^2
-+\frac{61}{4}\beta_3^2\kappa
-+52\kappa
++32q_2^2
++\frac{61}{4}\beta_3^2q_2
++52q_2
 +2\beta_3^4
 +13\beta_3^2
 \Bigr).
@@ -755,13 +993,13 @@ Likewise, subtracting $23$ from \eqref{eq:defect-c8} yields
 By the preceding formula for $\Delta_6(\nu)$,
 \[
 \frac{13\sigma^2}{8}\Delta_6(\nu)
-=\frac{\sigma^8}{256}\bigl(52\kappa+13\beta_3^2\bigr),
+=\frac{\sigma^8}{256}\bigl(52q_2+13\beta_3^2\bigr),
 \]
 and substituting this identity proves \eqref{eq:defect-amplification}.
 
 If equality holds in the lower bound, then every non-negative term in
 \eqref{eq:defect-amplification} vanishes.  In particular,
-$\beta_3=0$ and $\kappa=0$, hence $Q_2=X^2-1$ vanishes
+$\beta_3=0$ and $q_2=0$, hence $Q_2=X^2-1$ vanishes
 $\nu$-almost everywhere.  Since $\EE[X]=0$ and $\EE[X^2]=1$, it follows
 that $X=\pm 1$ with equal weights, which is exactly the stated
 two-point law.  The converse is immediate.
@@ -769,20 +1007,78 @@ two-point law.  The converse is immediate.
 
 \begin{remark}
 The amplification inequality
-$\Delta_8\ge(13\sigma^2/8)\Delta_6$ is the paper's strongest structural
-result.  It says that any departure from the symmetric two-point law
-measured by the sixth-order defect is strictly magnified at eighth order,
-with the amplification factor $13\sigma^2/8$ being explicit and
-universal (depending only on the variance).  This is a genuinely
-higher-order phenomenon: it cannot be seen at the level of the
-fourth-order coefficient alone.
+$\Delta_8\ge(13\sigma^2/8)\Delta_6$ says that any departure from the
+symmetric two-point law measured by the sixth-order defect is strictly
+magnified at eighth order, with the amplification factor
+$13\sigma^2/8$ depending only on the variance.  This phenomenon is
+invisible at the level of the fourth-order coefficient alone.
 \end{remark}
+
+\begin{lemma}[The sixth-order defect under finite fourth moment]%
+\label{lem:delta6-fourth-moment}
+Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
+variance $\sigma^2>0$, and finite centred fourth moment.  Set
+$X:=(\gamma-\bar\gamma)/\sigma$, $\beta_3:=\EE[X^3]$, $\beta_4:=\EE[X^4]$.
+Then
+\begin{equation}\label{eq:delta6-fourth-moment-lemma}
+\Delta_6(\nu)
+=\frac{\sigma^6}{32}\beta_3^2
++\frac{\sigma^6}{8}(\beta_4-1-\beta_3^2).
+\end{equation}
+In particular, $\Delta_6(\nu)\ge 0$, with equality if and only if
+$\beta_3=0$ and $\beta_4=1$, i.e.\ $\nu=\tfrac12(\delta_{\bar\gamma+\sigma}+\delta_{\bar\gamma-\sigma})$.
+\end{lemma}
+
+\begin{proof}
+By definition $\Delta_6(\nu):=-\tfrac{7}{64}\sigma^6-C_6$.
+Using the explicit formula for $C_6$ from
+Theorem~\ref{thm:poisson-kl-eighth},
+\[
+-\frac{7}{64}\sigma^6-C_6
+=-\frac{7}{64}\sigma^6-\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}
+=\frac{-7\sigma^6-\sigma^6-6\mu_3^2+8\sigma^2\mu_4}{64}
+=\frac{8\sigma^2\mu_4-8\sigma^6-6\mu_3^2}{64}.
+\]
+Writing $\mu_3=\sigma^3\beta_3$ and $\mu_4=\sigma^4\beta_4$ gives
+\[
+\Delta_6(\nu)
+=\frac{8\sigma^6\beta_4-8\sigma^6-6\sigma^6\beta_3^2}{64}
+=\frac{\sigma^6}{8}(\beta_4-1)-\frac{6\sigma^6\beta_3^2}{64}
+=\frac{\sigma^6}{8}(\beta_4-1-\tfrac{3}{4}\beta_3^2).
+\]
+Since $\beta_4-1-\beta_3^2=\|Q_2\|^2\ge 0$ (the Pearson inequality)
+and $\beta_4-1-\tfrac{3}{4}\beta_3^2\ge 0$ follows from the same bound,
+one obtains the formula
+\[
+\Delta_6(\nu)
+=\frac{\sigma^6}{32}\beta_3^2+\frac{\sigma^6}{8}(\beta_4-1-\beta_3^2),
+\]
+which is \eqref{eq:delta6-fourth-moment-lemma}.
+(The split is verified by direct arithmetic:
+$\sigma^6\beta_3^2/32+\sigma^6(\beta_4-1-\beta_3^2)/8
+=\sigma^6\beta_3^2/32+\sigma^6\beta_4/8-\sigma^6/8-\sigma^6\beta_3^2/8
+=\sigma^6(\beta_4-1)/8-\sigma^6\cdot 3\beta_3^2/32$,
+matching the expression above.)
+Non-negativity follows from $\beta_3^2\ge 0$ and $\beta_4-1-\beta_3^2\ge 0$.
+Equality requires both $\beta_3=0$ and $\beta_4=1$, hence $\EE[X^2]=1$
+and $\EE[X^4]=1$, which forces $X^2=1$ a.s., i.e.\ $\nu$ is the symmetric
+two-point law.
+\end{proof}
 
 \begin{theorem}[Quantitative rigidity towards the symmetric two-point law]%
 \label{thm:poisson-defect-stability}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
 variance $\sigma^2>0$, and finite centred fourth moment.  Let
-$\nu_c$ be the centred law of $\Delta=\gamma-\bar\gamma$ and set
+$\nu_c$ be the centred law of $\Delta=\gamma-\bar\gamma$,
+$X:=\Delta/\sigma$, $\beta_3:=\EE[X^3]$, $\beta_4:=\EE[X^4]$,
+and define
+\begin{equation}\label{eq:delta6-fourth-moment}
+\Delta_6(\nu)
+:=\frac{\sigma^6}{32}\beta_3^2
++\frac{\sigma^6}{8}(\beta_4-1-\beta_3^2)
+\end{equation}
+as in Lemma~\ref{lem:delta6-fourth-moment}.
+Set
 \[
 \rho_\sigma:=\frac12(\delta_{-\sigma}+\delta_\sigma).
 \]
@@ -818,10 +1114,10 @@ $(a+b)^2\le 2a^2+2b^2$ gives
 \[
 \EE[(X^2-1)^2]
 \le 2\beta_3^2\EE[X^2]+2\|Q_2\|_{L^2(\nu)}^2
-=2\beta_3^2+2\kappa.
+=2\beta_3^2+2\|Q_2\|_{L^2(\nu)}^2.
 \]
 The formula for $\Delta_6(\nu)$ from
-Theorem~\ref{thm:poisson-defect-amplification} therefore yields
+Lemma~\ref{lem:delta6-fourth-moment} therefore yields
 \[
 \EE[(X-Y)^2]\le \frac{64}{\sigma^6}\Delta_6(\nu).
 \]
@@ -861,3 +1157,59 @@ W_2(\nu_c,\rho_\sigma)
 \end{align*}
 which is the stated estimate.
 \end{proof}
+
+\begin{lemma}[Kernel control of the fluctuation profile]\label{lem:rkhs-delta}
+Assume $\nu$ has finite first absolute moment and let
+\[
+\widetilde\delta_t(y)
+:=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1
+=\int_\RR \bigl(R_{\Delta/t}(y)-1\bigr)\,\dd\nu(\gamma),
+\qquad \Delta:=\gamma-\bar\gamma.
+\]
+Then $\widetilde\delta_t\in L^2_0(\omega)$ and, under the unitary
+$\mathcal U$ from Proposition~\ref{thm:mode-space-rkhs},
+\[
+(\mathcal U\widetilde\delta_t)(a)
+=\frac{1}{t}\int_\RR \Delta\,K\!\left(a,\frac{\Delta}{t}\right)\dd\nu(\gamma),
+\qquad a\in\RR.
+\]
+Moreover,
+\[
+\|\mathcal U\widetilde\delta_t\|_{\mathcal H_K}
+=\|\widetilde\delta_t\|_{L^2(\omega)}
+\le \frac{\EE[|\Delta|]}{\sqrt{2}\,t}.
+\]
+\end{lemma}
+
+\begin{proof}
+Since $R_{\varepsilon}(y)-1=\varepsilon\Psi_\varepsilon(y)$,
+\[
+\widetilde\delta_t(y)
+=\frac{1}{t}\int_\RR \Delta\,\Psi_{\Delta/t}(y)\dd\nu(\gamma),
+\]
+which lies in $L^2_0(\omega)$ because each $\Psi_{\varepsilon}$ does.
+Proposition~\ref{thm:mode-space-rkhs} gives
+$\mathcal U(\Psi_\varepsilon)=K(\cdot,\varepsilon)$, hence the stated
+Bochner integral formula for $(\mathcal U\widetilde\delta_t)(a)$.
+The norm bound follows from
+$\|\Psi_\varepsilon\|_{L^2(\omega)}^2=K(\varepsilon,\varepsilon)=1/2$
+and the triangle inequality.
+\end{proof}
+
+\subsection{Auxiliary kernel material}
+
+The results above---the eighth-order expansion, the defect-ladder
+decomposition, the amplification inequality, and the $W_2$-stability
+theorem---form the main contribution of the paper.
+Lemma~\ref{lem:rkhs-delta} shows that the centred fluctuation profile
+produced in Section~\ref{sec:precision-potential} lives in the RKHS of
+Appendix~\ref{app:gram-space}, so the kernel formulas feed directly into
+the defect coordinates.
+Appendix~\ref{app:gram-space} computes the Gram kernel
+$\langle\Psi_\varepsilon,\Psi_\eta\rangle_{L^2(\omega)}=2/(4+(\varepsilon-\eta)^2)$
+and identifies the associated RKHS with the Poisson image space
+$\sqrt\pi\,T_1(L^2(\RR))$.
+Appendix~\ref{app:strip-lattice} records the explicit lattice symbol
+and cardinal norm formula for the integer secant orbit; the structural
+results are direct specializations of
+\cite{deBoorDeVoreRon1994,RonShen1995,AldroubiGrochenig2001}.

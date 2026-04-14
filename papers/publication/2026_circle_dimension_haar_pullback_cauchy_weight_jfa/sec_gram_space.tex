@@ -1,8 +1,16 @@
-% sec_gram_space.tex -- Mode Gram kernel, RKHS completion, and centered reconstruction
-\section{The Mode Gram Space and Centered Reconstruction}%
-\label{sec:gram-space}
+% sec_gram_space.tex -- Mode Gram kernel and RKHS completion
+\section{The Mode Gram Kernel}%
+\label{app:gram-space}
 
-\subsection{The mode Gram kernel and Hilbert completion}
+This appendix computes the Gram kernel attached to the comparison kernel
+$R_\varepsilon$ and identifies the resulting RKHS.  The closed-form kernel
+$K(a,b)=2/(4+(a-b)^2)$ supports the entropy story directly: it encodes
+the $L^2(\omega)$ geometry of the mode fluctuation profiles $\delta_t$.
+The RKHS framework follows the general analytic translation-invariant
+theory of \cite{SunZhou2008}; orthonormal expansions for the Cauchy/Lorentz
+class are in \cite{TronarpKarvonen2024}.
+
+\subsection{The Gram kernel computation}
 
 Let
 \[
@@ -12,22 +20,10 @@ For $\varepsilon\in\RR$ define the secant family
 \begin{equation}\label{eq:mode-secant-family}
 \Psi_\varepsilon(y):=\frac{R_\varepsilon(y)-1}{\varepsilon}
 =\frac{2y-\varepsilon}{1+(y-\varepsilon)^2},
-\qquad y\in\RR,
+\qquad y\in\RR.
 \end{equation}
-where the formula remains valid at $\varepsilon=0$ and gives
-\[
-\Psi_0(y)=u_1(y)=\frac{2y}{1+y^2}.
-\]
-Since
-\[
-R_\varepsilon(y)\,\omega(\dd y)=P_1(y-\varepsilon)\,\dd y,
-\]
-one has
-\[
-\int_{\RR}R_\varepsilon(y)\,\omega(\dd y)=1
-\qquad(\varepsilon\in\RR),
-\]
-and therefore $\Psi_\varepsilon\in L^2_0(\omega)$ for every
+Since $R_\varepsilon(y)\,\omega(\dd y)=P_1(y-\varepsilon)\,\dd y$ and
+$\int P_1=1$, one has $\Psi_\varepsilon\in L^2_0(\omega)$ for every
 $\varepsilon\in\RR$.
 
 \begin{theorem}[The mode Gram kernel]%
@@ -35,477 +31,113 @@ $\varepsilon\in\RR$.
 For every $\varepsilon,\eta\in\RR$,
 \begin{equation}\label{eq:mode-gram-kernel}
 \langle \Psi_\varepsilon,\Psi_\eta\rangle_{L^2(\omega)}
-=\frac{2}{4+(\varepsilon-\eta)^2}.
-\end{equation}
-Equivalently,
-\begin{equation}\label{eq:mode-gram-RR}
-\int_{\RR}R_\varepsilon(y)R_\eta(y)\,\omega(\dd y)
-=\frac{\varepsilon^2+\eta^2+4}{(\varepsilon-\eta)^2+4}.
+=K(\varepsilon,\eta)
+:=\frac{2}{4+(\varepsilon-\eta)^2}.
 \end{equation}
 \end{theorem}
 
 \begin{proof}
-For $\varepsilon\neq\eta$ define
+Set
 \[
 I(\varepsilon,\eta)
 :=\frac{1}{\pi}\int_{\RR}
 \frac{1+y^2}{(1+(y-\varepsilon)^2)(1+(y-\eta)^2)}\,\dd y.
 \]
-The integrand is $O(|z|^{-2})$ on the upper half-plane and has simple
-poles at $z=\varepsilon+\ii$ and $z=\eta+\ii$.  A direct residue
-computation gives
-\[
-\operatorname{Res}_{z=\varepsilon+\ii}
-=\frac{\varepsilon(\varepsilon+2\ii)}
-{2\ii(\varepsilon-\eta)(\varepsilon-\eta+2\ii)},
-\]
-\[
-\operatorname{Res}_{z=\eta+\ii}
-=\frac{\eta(\eta+2\ii)}
-{2\ii(\eta-\varepsilon)(\eta-\varepsilon+2\ii)}.
-\]
-Hence, by the residue theorem,
+The integrand is $O(|z|^{-2})$ on the upper half-plane with simple poles
+at $z=\varepsilon+\ii$ and $z=\eta+\ii$.  A direct residue computation gives
 \[
 I(\varepsilon,\eta)
-=2\ii\Bigl(
-\operatorname{Res}_{z=\varepsilon+\ii}
-+\operatorname{Res}_{z=\eta+\ii}
-\Bigr)
 =\frac{\varepsilon^2+\eta^2+4}{(\varepsilon-\eta)^2+4}.
 \]
-This proves \eqref{eq:mode-gram-RR} for $\varepsilon\neq\eta$, and the
-diagonal case follows by continuity.
-
-Since
+Since $\int R_\varepsilon\,\dd\omega=1$, one obtains
 \[
-\int_{\RR}R_\varepsilon(y)\,\omega(\dd y)=1,
+\int_{\RR}(R_\varepsilon-1)(R_\eta-1)\,\dd\omega
+=I(\varepsilon,\eta)-1
+=\frac{2\varepsilon\eta}{4+(\varepsilon-\eta)^2},
 \]
-one obtains
-\[
-\int_{\RR}(R_\varepsilon(y)-1)(R_\eta(y)-1)\,\omega(\dd y)
-=\frac{2\varepsilon\eta}{4+(\varepsilon-\eta)^2}.
-\]
-For $\varepsilon\eta\neq 0$, division by $\varepsilon\eta$ yields
-\eqref{eq:mode-gram-kernel}; the remaining cases follow by continuity in
-$(\varepsilon,\eta)$.
+and dividing by $\varepsilon\eta\neq 0$ gives \eqref{eq:mode-gram-kernel};
+the remaining cases follow by continuity.
 \end{proof}
 
 \begin{corollary}[Closed formulas for quadratic mode integrals]%
 \label{cor:mode-quadratic-integrals}
-For $|\varepsilon|$ small one has the $L^2(\omega)$ expansion
-\[
-\Psi_\varepsilon
-=\sum_{n=1}^{\infty}u_n\,\varepsilon^{n-1}.
-\]
-Consequently, for every $p,q\ge 1$,
+For $|\varepsilon|$ small, $\Psi_\varepsilon=\sum_{n=1}^\infty u_n\varepsilon^{n-1}$
+in $L^2(\omega)$.  Comparing the power series of $K(\varepsilon,\eta)=
+\frac12\sum_{\ell=0}^\infty (-1)^\ell 4^{-\ell}(\varepsilon-\eta)^{2\ell}$
+with $\sum_{m,n}\langle u_m,u_n\rangle\varepsilon^{m-1}\eta^{n-1}$ gives,
+for $p,q\ge 1$,
 \[
 \langle u_{2p},u_{2q}\rangle_{L^2(\omega)}
-=(-1)^{p+q}2^{-(2p+2q-1)}
-\binom{2p+2q-2}{2p-1},
+=(-1)^{p+q}2^{-(2p+2q-1)}\tbinom{2p+2q-2}{2p-1},
 \]
-for every $p,q\ge 0$,
+for $p,q\ge 0$,
 \[
 \langle u_{2p+1},u_{2q+1}\rangle_{L^2(\omega)}
-=(-1)^{p+q}2^{-(2p+2q+1)}
-\binom{2p+2q}{2p},
+=(-1)^{p+q}2^{-(2p+2q+1)}\tbinom{2p+2q}{2p},
 \]
-and
-\[
-\langle u_{2p},u_{2q+1}\rangle_{L^2(\omega)}=0.
-\]
+and $\langle u_{2p},u_{2q+1}\rangle_{L^2(\omega)}=0$.
 \end{corollary}
 
-\begin{proof}
-By Proposition~\ref{prop:cayley-mode-remainder},
-\[
-\Psi_\varepsilon
-=\sum_{n=1}^{N}u_n\,\varepsilon^{n-1}
-+\varepsilon^N v_N(\cdot,\varepsilon)
-\]
-with $v_N$ bounded uniformly on~$\RR^2$.  Since $\omega$ is a probability
-measure, this implies convergence in $L^2(\omega)$ for $|\varepsilon|$
-sufficiently small.  Hence
-\[
-\frac{2}{4+(\varepsilon-\eta)^2}
-=\sum_{m,n\ge 1}
-\langle u_m,u_n\rangle_{L^2(\omega)}\,
-\varepsilon^{m-1}\eta^{n-1}.
-\]
-On the other hand,
-\[
-\frac{2}{4+(\varepsilon-\eta)^2}
-=\frac12\sum_{\ell=0}^{\infty}
-(-1)^\ell 4^{-\ell}(\varepsilon-\eta)^{2\ell}.
-\]
-Comparing coefficients gives the stated formulas.  Mixed parity terms
-vanish because the kernel only contains even total degree.
-\end{proof}
-
-\begin{lemma}[Poisson convolution in $L^2(\omega)$]%
-\label{lem:poisson-L2-omega}
-Let $f\in L^2(\omega)$.  Then $f$ defines a tempered distribution via
-\[
-\langle f,\psi\rangle_{\mathscr S',\mathscr S}
-:=\int_{\RR}f(y)\psi(y)\,\omega(\dd y)
-\qquad(\psi\in\mathscr S(\RR)),
-\]
-the convolution $P_1*f$ is well-defined in $\mathscr S'(\RR)$, and its
-Fourier transform satisfies
-\[
-\widehat{P_1*f}(\xi)=e^{-|\xi|}\widehat f(\xi)
-\]
-in $\mathscr S'(\RR)$.  In particular, $P_1*f=0$ in $\mathscr S'(\RR)$
-if and only if $f=0$ in~$L^2(\omega)$.
-\end{lemma}
-
-\begin{proof}
-Since $\omega(\dd y)=\pi^{-1}(1+y^2)^{-1}\dd y$, one has for
-$\psi\in\mathscr S(\RR)$:
-\[
-\left|\int_{\RR}f(y)\psi(y)\,\omega(\dd y)\right|
-\le \|f\|_{L^2(\omega)}\|\psi\|_{L^2(\omega)}.
-\]
-The map $\psi\mapsto\psi/(1+y^2)^{1/2}$ is continuous on
-$\mathscr S(\RR)$, so the linear functional above is continuous and
-$f\in\mathscr S'(\RR)$.
-
-For $P_1*f$, write $g:=f\cdot\omega/\dd y=f/(\pi(1+y^2))$ so that
-$g\in L^1(\RR)\cap\mathscr S'(\RR)$.  Then
-$P_1*f$ in the distributional sense equals the Poisson regularization of
-the tempered distribution~$f$.  Since $\widehat{P_1}(\xi)=e^{-|\xi|}$ is
-a Schwartz multiplier, the identity
-$\widehat{P_1*f}=e^{-|\xi|}\widehat f$ holds in $\mathscr S'(\RR)$.
-Because $e^{-|\xi|}$ never vanishes, $\widehat{P_1*f}=0$ implies
-$\widehat f=0$, hence $f=0$.
-\end{proof}
-
-\begin{theorem}[The mode space and its RKHS completion]%
+\begin{proposition}[The mode space and its RKHS completion]%
 \label{thm:mode-space-rkhs}
-Let
-\[
-L^2_0(\omega):=
-\left\{
-f\in L^2(\omega):\ \int_{\RR}f(y)\,\omega(\dd y)=0
-\right\},
-\]
-and let $\mathcal H_K$ be the reproducing-kernel Hilbert space generated
-by the kernel
-\[
-K(a,b):=\frac{2}{4+(a-b)^2}.
-\]
-Set
-\[
-\mathcal S_0:=\operatorname{span}\{\Psi_\varepsilon:\varepsilon\in\RR\},
-\qquad
-\mathcal S:=\overline{\mathcal S_0}^{\,L^2(\omega)}
-\subset L^2_0(\omega),
-\]
-Then
-\[
-\mathcal S=L^2_0(\omega).
-\]
-Equivalently, the algebraic span
-$\mathcal S_0$ is dense in~$L^2_0(\omega)$.
-Moreover, the linear assignment
-\[
-\mathcal U_0:\mathcal S_0\longrightarrow \mathcal H_K,
-\qquad
-\mathcal U_0(\Psi_\varepsilon):=K(\cdot,\varepsilon)
-\qquad(\varepsilon\in\RR)
-\]
-is an isometry and extends uniquely to a unitary operator
-\[
-\mathcal U:L^2_0(\omega)\longrightarrow \mathcal H_K.
-\]
-\end{theorem}
-
-\begin{proof}
-We already noted that $\Psi_\varepsilon\in L^2_0(\omega)$, so
-$\mathcal S_0\subset L^2_0(\omega)$.  Let
-$f\in L^2_0(\omega)$ be orthogonal to~$\mathcal S_0$.  Then for every
-$\varepsilon\in\RR$,
-\[
-0=\langle f,\Psi_\varepsilon\rangle_{L^2(\omega)}.
-\]
-If $\varepsilon\neq 0$, multiplying by~$\varepsilon$ gives
-\[
-0=\int_{\RR}f(y)\bigl(R_\varepsilon(y)-1\bigr)\,\omega(\dd y)
-=\int_{\RR}f(y)R_\varepsilon(y)\,\omega(\dd y),
-\]
-because $\int f\,\dd\omega=0$.  Since
-$R_\varepsilon(y)\,\omega(\dd y)=P_1(y-\varepsilon)\,\dd y$, this means
-\[
-0=\int_{\RR}f(y)P_1(\varepsilon-y)\,\dd y
-\qquad(\varepsilon\in\RR).
-\]
-In other words, the Poisson regularization $T_1f=P_1*f$ vanishes
-identically.  By Lemma~\ref{lem:poisson-L2-omega}, $f\in L^2(\omega)$
-defines a tempered distribution and
-$\widehat{P_1*f}=e^{-|\xi|}\widehat f=0$ in $\mathscr S'(\RR)$.
-Since $e^{-|\xi|}$ never vanishes, $\widehat f=0$, hence $f=0$.  Therefore $\mathcal S_0^\perp=\{0\}$ in $L^2_0(\omega)$, so
-\[
-\overline{\mathcal S_0}^{\,L^2(\omega)}=L^2_0(\omega).
-\]
-By definition this closure is~$\mathcal S$, hence
-$\mathcal S=L^2_0(\omega)$.
-
-Theorem~\ref{thm:mode-gram-kernel} shows that
-\[
-\langle \Psi_\varepsilon,\Psi_\eta\rangle_{L^2(\omega)}
-=K(\varepsilon,\eta)
-=\langle K(\cdot,\varepsilon),K(\cdot,\eta)\rangle_{\mathcal H_K},
-\]
-so $\mathcal U_0$ is an isometry on~$\mathcal S_0$.  Since the
-kernel sections span a dense subspace of~$\mathcal H_K$, the isometry
-extends uniquely to a surjective isometry
-$\mathcal U:L^2_0(\omega)\to\mathcal H_K$, that is, to a unitary
-operator.
-\end{proof}
-
-\subsection{Centered reconstruction from Poisson data}
-
-\begin{proposition}[Centered Poisson reconstruction by Laplace uniqueness]%
-\label{thm:poisson-central-two-channel}
-Let $\nu$ be a probability measure on~$\RR$ with finite mean~$\bar\gamma$.
-Let $\nu_c$ denote the law of the centred variable
-$\Delta:=\gamma-\bar\gamma$.  Define
-\[
-h_t(x):=\int_{\RR}P_t(x-\gamma)\dd\nu(\gamma),
-\]
-the central observation functions
-\[
-A(t):=\pi\,h_t(\bar\gamma),
-\qquad
-B(t):=\pi\,\partial_x h_t(x)\big|_{x=\bar\gamma}
-\qquad(t>0).
-\]
-\[
-H(t):=\int_t^\infty B(s)\dd s
-\qquad(t>0),
-\]
-and let
-\[
-\phi_{\nu_c}(r):=\int_{\RR}e^{ir\Delta}\dd\nu(\gamma),
-\qquad r\in\RR,
-\]
-be the centred characteristic function.  Then for every $t>0$ one has
-\begin{equation}\label{eq:poisson-laplace-reconstruction}
-A(t)+\ii H(t)
-=\int_0^\infty e^{-tr}\phi_{\nu_c}(r)\dd r.
-\end{equation}
-Consequently, the pair $(A,B)$ determines the centred law~$\nu_c$
-uniquely.  Equivalently, the triple $(\bar\gamma,A,B)$ determines the
-original measure~$\nu$ uniquely.
+Let $L^2_0(\omega):=\{f\in L^2(\omega):\int f\,\dd\omega=0\}$ and let
+$\mathcal H_K$ be the RKHS with kernel $K$.  Then
+$\operatorname{span}\{\Psi_\varepsilon:\varepsilon\in\RR\}$ is dense in
+$L^2_0(\omega)$, and the assignment $\Psi_\varepsilon\mapsto K(\cdot,\varepsilon)$
+extends to a unitary $\mathcal U:L^2_0(\omega)\to\mathcal H_K$.
 \end{proposition}
 
 \begin{proof}
-By the elementary Laplace identities
-\[
-\int_0^\infty e^{-tr}\cos(r\Delta)\dd r=\frac{t}{t^2+\Delta^2},
-\qquad
-\int_0^\infty e^{-tr}\sin(r\Delta)\dd r=\frac{\Delta}{t^2+\Delta^2},
-\]
-one obtains
-\[
-A(t)
-=\int_{\RR}\frac{t}{t^2+\Delta^2}\dd\nu(\gamma)
-=\int_0^\infty e^{-tr}\Re\phi_{\nu_c}(r)\dd r.
-\]
-Now we verify the differentiation under the integral sign that produces
-$B(t)$.  The derivative of the Poisson kernel in~$x$ is
-\[
-\partial_x P_t(x-\gamma)
-=-\frac{1}{\pi}\frac{2t(x-\gamma)}{((x-\gamma)^2+t^2)^2}.
-\]
-For fixed $t>0$ and any $x,\gamma\in\RR$, set $u=(x-\gamma)/t$.  Then
-\[
-\left|\partial_x P_t(x-\gamma)\right|
-=\frac{2}{\pi t^2}\frac{|u|}{(u^2+1)^2}.
-\]
-Since $\sup_{u\in\RR}|u|/(u^2+1)^2=3\sqrt{3}/16$ (attained at
-$u^2=1/3$), one obtains the uniform bound
-\[
-\left|\partial_x P_t(x-\gamma)\right|
-\le \frac{3\sqrt{3}}{8\pi t^2}
-\qquad(x,\gamma\in\RR).
-\]
-This is integrable against~$\nu$ (which is a probability measure), so
-dominated convergence justifies
-\[
-\partial_x h_t(x)\big|_{x=\bar\gamma}
-=-\frac{2}{\pi}\int_{\RR}\frac{t\,\Delta}{(\Delta^2+t^2)^2}\dd\nu(\gamma),
-\]
-and hence
-\[
-B(t)=\pi\,\partial_x h_t(x)\big|_{x=\bar\gamma}
-=-2t\int_{\RR}\frac{\Delta}{(\Delta^2+t^2)^2}\dd\nu(\gamma).
-\]
-For the Fubini step, note that $B(s)$ involves $\Delta/(\Delta^2+s^2)^2$.
-Since
-\[
-\int_t^\infty \frac{2s|\Delta|}{(\Delta^2+s^2)^2}\dd s
-=\frac{|\Delta|}{\Delta^2+t^2}
-\le \frac{1}{2t},
-\]
-the double integral $\int_{\RR}\int_t^\infty|B(s)|\dd s\dd\nu(\gamma)$
-converges.  Fubini's theorem therefore applies, and integrating
-the identity
-\[
--\int_t^\infty \frac{2s\,\Delta}{(\Delta^2+s^2)^2}\dd s
-=\frac{\Delta}{\Delta^2+t^2}
-\]
-against~$\nu$ gives
-\[
-H(t)
-=\int_{\RR}\frac{\Delta}{t^2+\Delta^2}\dd\nu(\gamma)
-=\int_0^\infty e^{-tr}\Im\phi_{\nu_c}(r)\dd r.
-\]
-Combining the two formulas yields
-\eqref{eq:poisson-laplace-reconstruction}.  By uniqueness of the Laplace
-transform on bounded continuous functions \cite{Widder1941}, $(A,H)$, and
-therefore $(A,B)$, determine $\Re\phi_{\nu_c}(r)$ and
-$\Im\phi_{\nu_c}(r)$ for every $r\ge 0$.  Hence $\phi_{\nu_c}(r)$ is known
-on $[0,\infty)$.  For $r>0$ set
-\[
-\phi_{\nu_c}(-r):=\overline{\phi_{\nu_c}(r)}.
-\]
-This is the standard characteristic-function symmetry, so the entire
-characteristic function is determined.  Levy's inversion theorem for
-characteristic functions then recovers the centred law~$\nu_c$
-\cite{Lukacs1970,Feller1971}, and adding the mean recovers~$\nu$.
+Identify $L^2(\omega)$ with $L^2((-\pi/2,\pi/2),\dd\theta/\pi)$ via
+$y=\tan\theta$.  Equations
+\eqref{eq:cayley-mode-even-fourier}--\eqref{eq:cayley-mode-odd-fourier}
+show that $\{u_n\}$ generate all trigonometric polynomials built from
+$\{\cos(2k\theta),\sin(2k\theta):k\ge 1\}$, hence
+$\operatorname{span}\{u_n:n\ge 1\}$ is dense in $L^2_0(\omega)$.
+
+For $|\varepsilon|<1$ the series
+$\Psi_\varepsilon=\sum_{n\ge 1}u_n\varepsilon^{n-1}$ converges in
+$L^2(\omega)$, so the scalar function
+$F(\varepsilon):=\langle f,\Psi_\varepsilon\rangle_{L^2(\omega)}$ is
+analytic on the unit disc with Taylor coefficients $\langle f,u_n\rangle$.
+If $f$ is orthogonal to all $\Psi_\varepsilon$, then $F(\varepsilon)\equiv 0$
+and therefore $\langle f,u_n\rangle=0$ for every $n\ge 1$, which forces
+$f=0$ by the density of $\operatorname{span}\{u_n\}$.
+Hence $\operatorname{span}\{\Psi_\varepsilon\}$ is dense in $L^2_0(\omega)$.
+
+The assignment $\Psi_\varepsilon\mapsto K(\cdot,\varepsilon)$ preserves
+inner products by Theorem~\ref{thm:mode-gram-kernel}, so it extends by
+density to the desired unitary $\mathcal U$.
 \end{proof}
 
-\begin{corollary}[The symmetric channel]%
-\label{cor:poisson-symmetrization}
-Under the hypotheses of Proposition~\ref{thm:poisson-central-two-channel}, the
-function $A$ determines the symmetrization of the centred law~$\nu_c$.
-\end{corollary}
-
-\begin{proof}
-The real part of $\phi_{\nu_c}$ is exactly the characteristic function of
-the centred symmetrization
-$\frac12(\nu_c+\check\nu_c)$, where $\check\nu_c(E):=\nu_c(-E)$.  Since
-$A$ is the Laplace transform of $\Re\phi_{\nu_c}$, the claim follows from
-Laplace inversion.
-\end{proof}
-
-\begin{corollary}[The symmetric case]%
-\label{cor:poisson-symmetric-case}
-Under the hypotheses of Proposition~\ref{thm:poisson-central-two-channel}, the
-centred law~$\nu_c$ is symmetric if and only if $B\equiv 0$.  In that
-case $A$ alone determines~$\nu_c$, and the pair $(\bar\gamma,A)$
-determines~$\nu$.
-\end{corollary}
-
-\begin{proof}
-The centred law is symmetric if and only if
-$\Im\phi_{\nu_c}\equiv 0$.  By
-\eqref{eq:poisson-laplace-reconstruction}, this is equivalent to
-$H\equiv 0$, hence to $B\equiv 0$.
-\end{proof}
-
-\begin{proposition}[Observation channels as evaluation functionals]%
-\label{thm:poisson-channel-rkhs}
-Let $\nu$ be a probability measure on~$\RR$ with finite mean~$\bar\gamma$.
-For $t>0$ define the centred fluctuation profile
+\begin{remark}[Connection to entropy asymptotics]\label{rem:rkhs-entropy}
+The unitary $\mathcal U$ identifies the centred fluctuation profile
+$\widetilde\delta_t(y):=h_t(\bar\gamma+ty)/g_t(\bar\gamma+ty)-1$ with a
+Bochner integral in $\mathcal H_K$:
 \[
-\widetilde\delta_t(y):=
-\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1,
-\qquad y\in\RR.
-\]
-Then $\widetilde\delta_t\in L^2_0(\omega)$ and
-\begin{equation}\label{eq:delta-t-secant}
-\widetilde\delta_t(y)
-=\frac{1}{t}\int_{\RR}\Delta\,\Psi_{\Delta/t}(y)\,\dd\nu(\gamma).
-\end{equation}
-Consequently,
-\begin{equation}\label{eq:delta-t-rkhs}
 (\mathcal U\widetilde\delta_t)(a)
-=\frac{1}{t}\int_{\RR}\Delta\,K(a,\Delta/t)\,\dd\nu(\gamma),
-\qquad a\in\RR.
-\end{equation}
-Moreover,
-\begin{equation}\label{eq:delta-t-origin}
-\widetilde\delta_t(0)=tA(t)-1,
-\end{equation}
-and
-\begin{equation}\label{eq:delta-t-rkhs-origin}
-(\mathcal U\widetilde\delta_t)(0)=2t\,H(2t)
-=2t\int_{2t}^{\infty}B(s)\,\dd s.
-\end{equation}
+=\frac{1}{t}\int_\RR \Delta\,K(a,\Delta/t)\,\dd\nu(\gamma),\qquad a\in\RR.
+\]
+This provides the functional-analytic home for $\widetilde\delta_t$ and is
+consistent with the mode-expansion approach used throughout
+Section~\ref{sec:precision-potential}.
+\end{remark}
+
+\begin{proposition}[RKHS as Poisson image space]%
+\label{thm:gram-space-poisson-image}
+The RKHS $\mathcal H_K$ is isometrically equal to
+$\mathcal X:=\{f\in L^2(\RR):\int e^{2|\xi|}|\widehat f(\xi)|^2\dd\xi<\infty\}$
+with norm $\|f\|_\mathcal X^2:=\frac{1}{2\pi^2}\int e^{2|\xi|}|\widehat f|^2\dd\xi$.
+Equivalently, $\mathcal H_K=\sqrt\pi\,T_1(L^2(\RR))$ isometrically, and every
+$f\in\mathcal H_K$ extends holomorphically to the strip
+$\mathbb S:=\{z\in\CC:|\Im z|<1\}$ with pointwise bound
+$|f(x+\ii y)|\le \|f\|_{\mathcal H_K}/\sqrt{2(1-y^2)}$.
 \end{proposition}
 
 \begin{proof}
-By definition,
-\[
-\widetilde\delta_t(y)
-=\int_{\RR}\bigl(R_{\Delta/t}(y)-1\bigr)\,\dd\nu(\gamma)
-=\frac{1}{t}\int_{\RR}\Delta\,\Psi_{\Delta/t}(y)\,\dd\nu(\gamma),
-\]
-which is \eqref{eq:delta-t-secant}.  By Theorem~\ref{thm:mode-gram-kernel},
-\[
-\|\Psi_\varepsilon\|_{L^2(\omega)}^2
-=\frac{2}{4+(\varepsilon-\varepsilon)^2}
-=\frac12.
-\]
-Hence
-\[
-\left\|\widetilde\delta_t\right\|_{L^2(\omega)}
-\le\frac{1}{t}\int_{\RR}|\Delta|\,\left\|\Psi_{\Delta/t}\right\|_{L^2(\omega)}\,\dd\nu(\gamma)
-=\frac{1}{\sqrt2\,t}\int_{\RR}|\Delta|\,\dd\nu(\gamma)
-<\infty,
-\]
-so \eqref{eq:delta-t-secant} is a Bochner integral in $L^2_0(\omega)$.
-Therefore,
-\[
-\int_{\RR}\widetilde\delta_t(y)\,\omega(\dd y)
-=\int_{\RR}(h_t(x)-g_t(x))\,\dd x=0,
-\]
-and thus $\widetilde\delta_t\in L^2_0(\omega)$.  Applying the unitary map
-$\mathcal U$ from Theorem~\ref{thm:mode-space-rkhs} to
-\eqref{eq:delta-t-secant} yields \eqref{eq:delta-t-rkhs}.
-
-At $y=0$ one has
-\[
-g_t(\bar\gamma)=\frac{1}{\pi t},
-\]
-so
-\[
-\widetilde\delta_t(0)
-=\frac{h_t(\bar\gamma)}{g_t(\bar\gamma)}-1
-=tA(t)-1,
-\]
-which proves \eqref{eq:delta-t-origin}.  Finally, evaluating
-\eqref{eq:delta-t-rkhs} at $a=0$ and using
-$K(0,b)=2/(4+b^2)$ gives
-\[
-(\mathcal U\widetilde\delta_t)(0)
-=\frac{1}{t}\int_{\RR}\Delta\frac{2}{4+(\Delta/t)^2}\,\dd\nu(\gamma)
-=2t\int_{\RR}\frac{\Delta}{4t^2+\Delta^2}\,\dd\nu(\gamma).
-\]
-The definition of $H$ in
-Proposition~\ref{thm:poisson-central-two-channel} gives
-\[
-H(2t)=\int_{\RR}\frac{\Delta}{4t^2+\Delta^2}\,\dd\nu(\gamma),
-\]
-and \eqref{eq:delta-t-rkhs-origin} follows.
+The Fourier transform of $k(x):=2/(4+x^2)$ is $\widehat k(\xi)=\pi e^{-2|\xi|}$.
+Reproducing: $\langle f,K(\cdot,a)\rangle_\mathcal X = f(a)$ by Fourier inversion.
+Moore--Aronszajn uniqueness gives $\mathcal X=\mathcal H_K$.  The Poisson image
+description and strip estimate follow by Cauchy--Schwarz as in the proof of
+\cite[Proposition~3.1]{SunZhou2008}.
 \end{proof}
-
-\begin{remark}\label{rem:cauchy-transform}
-The previous proposition recovers the centred Cauchy transform on the
-imaginary axis:
-\[
-G_{\nu_c}(\ii t)
-=\int_{\RR}\frac{1}{\ii t-\Delta}\dd\nu(\gamma)
-=-H(t)-\ii A(t)
-\qquad(t>0).
-\]
-Thus the Laplace-transform formulation strengthens the earlier
-Cauchy-transform identity while also isolating the loss of the translation
-parameter.  The proof of
-Proposition~\ref{thm:poisson-central-two-channel} is better viewed as a
-Laplace-uniqueness plus characteristic-function-inversion argument than
-as a classical Stieltjes inversion; for the latter approach and its
-relation to Cauchy-transform recovery see
-\cite{Widder1941,Lukacs1970}.
-\end{remark}

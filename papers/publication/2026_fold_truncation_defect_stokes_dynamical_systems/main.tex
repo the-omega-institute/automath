@@ -30,7 +30,7 @@
 \DeclareMathOperator{\Fold}{Fold}
 \DeclareMathOperator{\Law}{Law}
 
-\title{A Deterministic Telescoping Identity for Fold-Truncation Defects Across Resolutions}
+\title{Fold-Truncation Defects Across Resolutions: Thresholds, Telescoping, and Uniform Counts}
 \author{
   Haobo Ma\thanks{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981. Email: \texttt{auric@aelf.io}}
   \and
@@ -42,66 +42,85 @@
 \maketitle
 
 \begin{abstract}
-This note studies one concrete multiscale phenomenon in the Fold tower: folding
-does not commute with naive truncation.  For binary windows of length $n$, the
-direct prefix truncation to length $m$ and the fold-aware restriction obtained
-from the resolution-$n$ folded output produce different words in general.  We
-encode this failure by an adjacent-scale local defect $\kappa_{m+1\to m}$ and a
-tower-level global defect $D_{n\to m}$.  The main telescoping identity expresses
-$D_{n\to m}$ as the xor-sum of prefix-truncated local defects across the
-resolution band $m,\dots,n-1$.  The Fold-specific arithmetic content is
-twofold.  First, we classify the adjacent defect by a Fibonacci threshold: for
-$\eta=(p,b)$ with $p\in\Omega_m$ and $s=N(p)$, a local defect occurs precisely
-when $b=1$ and $s\ge F_{m+1}$.  Second, we give an exact closed-form count of
-words triggering a defect under the uniform law: the probability equals
-$\lfloor 2^{m+1}/3\rfloor/2^{m+1}$, obtained via the recurrence
-$C_m=2^{m-2}+C_{m-2}$ for the number of below-threshold words in $\Omega_m$.
-Further consequences include a total-variation coupling bound, a
-Hamming--Lipschitz budget, a cocycle formula across intermediate scales, and an
-exact inverse-limit compatibility criterion stated directly in terms of the
-carry-threshold condition.  An appendix records a standard Fourier criterion for
-finite-state additive models, for future reference.
+Let $\Fold_m$ denote Zeckendorf evaluation of a binary window followed by
+normalization and truncation back to length $m$.  For $m\le n$ and
+$\omega\in\Omega_n$ we compare $\Fold_m(r_{n\to m}(\omega))$ with
+$\pi_{n\to m}(\Fold_n(\omega))$.  Their xor difference is a global defect
+$D_{n\to m}$ obtained by summing adjacent local defects
+$\kappa_{m+1\to m}$ across the resolution band $m,\dots,n-1$.  The only new
+arithmetic inputs of this short note are (i) the threshold criterion of
+Proposition~3.2, which states that $\kappa_{m+1\to m}(p,b)$ is nonzero exactly
+when $b=1$ and the Fibonacci value of $p$ crosses $F_{m+1}$, and
+(ii) the closed-form adjacent defect probability of Theorem~5.3, namely
+$\lfloor 2^{m+1}/3\rfloor/2^{m+1}$ via the recurrence $C_m=2^{m-2}+C_{m-2}$ for
+below-threshold words.  Once these local statements are recorded, the remaining
+sections mechanically unpack the xor-telescoping identity: deterministic bounds
+on total variation and Hamming distance, a cocycle relation across intermediate
+levels, an inverse-limit compatibility test, and tables of the exact small-scale
+probabilities $P_{n,m}=\PP[D_{n\to m}\ne 0]$ that illustrate how quickly
+scalar heuristics saturate.
 \end{abstract}
 
 \tableofcontents
 
 \section{Introduction}
 
-This paper isolates one obstruction in the resolution tower of Fold maps.
-Prefix restriction on raw binary windows does not commute with Zeckendorf
-normalization followed by prefix restriction.  For $\omega\in\Omega_n$ and
+This paper isolates one obstruction in the resolution tower of the Zeckendorf
+normalization/truncation maps informally denoted by $\Fold$.  For
+$\omega\in\Omega_n$ and
 $m\le n$, we compare the two words
 \[
 \Fold_m(r_{n\to m}(\omega))
 \qquad\text{and}\qquad
 \pi_{n\to m}(\Fold_n(\omega)).
 \]
+Here $\Fold_m$ means: evaluate the $m$-bit window in the Fibonacci basis,
+normalize the result to an admissible Zeckendorf word, and truncate back to
+length $m$ (see Section~\ref{sec:folding-naive-truncation} for the formal
+definition).
 Their xor-difference is the global defect $D_{n\to m}(\omega)$.
 
-The answer is clean enough to isolate as a short deterministic note.  Direct
-truncation on raw windows does not commute with folding.  The discrepancy is
-not noise, however.  It admits a rigid bookkeeping scheme across scales.  At
-each adjacent step $m+1\to m$ one has a local defect $\kappa_{m+1\to m}$, and
-across a whole resolution band one has a global defect $D_{n\to m}$.  The main
-new point of the note is that this obstruction satisfies an exact
-xor-telescoping identity:
+Direct truncation on raw windows does not commute with Zeckendorf
+normalization-plus-truncation, so the mismatch $D_{n\to m}$ is genuine and
+structured.  At each adjacent step $m+1\to m$ there is a local defect
+$\kappa_{m+1\to m}$, and across a whole resolution band there is the global
+defect $D_{n\to m}$.  The bookkeeping backbone is the formal xor-telescoping
+identity
 \[
 \text{global defect}
 \;=\;
 \text{sum of prefix-truncated local defects}.
 \]
-The sum is taken in the xor group $(\ZZ/2\ZZ)^m$, so the identity is exact and
-completely explicit.
+The sum is taken in the xor group $(\ZZ/2\ZZ)^m$, so the decomposition is exact
+and completely explicit.  The Fold-specific arithmetic content lies in the
+threshold classification of the adjacent defect and in the exact counts derived
+from that threshold.
 
-The deterministic core of the paper has three parts.  First, we formulate the
-local and global defects and prove the exact telescoping identity.  Second, we
-show that the adjacent defect has a sharp threshold description: for
-$\eta=(p,b)\in\Omega_{m+1}$, the defect is nonzero exactly when the appended
-bit is $1$ and the prefix value $N(p)$ crosses the level $F_{m+1}$.  Third, we
-derive explicit consequences: a probability bound written directly in terms of
-those threshold events, a dynamic-programming formula for the uniform raw-word
-law, a Hamming--Lipschitz budget, a cocycle relation across intermediate
-scales, and an exact eventual-compatibility criterion for inverse-limit lifts.
+The new content of this note consists entirely of two local inputs and their
+immediate consequences.  First, Proposition~\ref{prop:adjacent-defect-threshold}
+provides the sharp threshold description: for $\eta=(p,b)\in\Omega_{m+1}$,
+$\kappa_{m+1\to m}(p,b)$ is nonzero exactly when $b=1$ and the prefix value
+$N(p)$ crosses the level $F_{m+1}$.  Second, Theorem~\ref{thm:fold-defect-count-explicit}
+gives the exact closed-form count for that event under the uniform raw-word law.
+Everything else is formal unpacking of the xor decomposition: recording the
+adjacent defect observable, propagating it across a finite band, and tabulating
+the resulting global probabilities for small $(n,m)$.
+
+These statements should be compared with two classical one-parameter families
+of Zeckendorf observables: successor carry statistics and digit-frequency laws.
+Carry lengths and sequentiality for admissible words have been analyzed in
+detail in the transducer literature
+\cite{Frougny1996Successor,Frougny1997Sequential,FrougnySolomyak1996,Frougny1999,%
+AhlbachUsatineFrougnyPippenger2013,BertheFrougnyRigoSakarovitch2020,FrougnySakarovitch1999},
+while block distributions and digit proportions go back to
+\cite{Grabner1995,Griffiths2010,DrmotaSteiner2002,KologluKoppMillerWang2011,MillerWang2012,%
+CoquetVanDenBosch1986,Steiner2005}.  The observable recorded here compares two
+competing morphisms---truncate then normalize versus normalize then project---so
+it takes values in $(\ZZ/2\ZZ)^m$ and cannot be recovered from a scalar carry
+length or from the individual digit densities considered in the references
+above.  Proposition-level evidence for that distinction appears already in
+Examples~\ref{ex:carry-without-defect} and~\ref{ex:defect-without-carry}, which
+exhibit a nonzero carry with no truncation defect and vice versa.
 
 The point of this paper is therefore narrow and fully deterministic:
 \[
@@ -111,62 +130,144 @@ The point of this paper is therefore narrow and fully deterministic:
 &\Longrightarrow
 \text{local defect} \\
 &\Longrightarrow
-\text{exact telescoping law} \\
+\text{threshold classification and exact counts} \\
+&\Longrightarrow
+\text{formal telescoping law} \\
 &\Longrightarrow
 \text{explicit bounds and compatibility criteria}.
 \end{aligned}
 \]
+Sections~4--6 are therefore recorded as a short compendium of deterministic
+consequences: each statement is a remark-level corollary of the threshold and
+count inputs, included only so that the telescoping dictionary is available in
+one place.
+
 We use only minimal background on Zeckendorf normalization and symbolic
 systems; see
 \cite{Lekkerkerker1952,Zeckendorf1972,Carlitz1968,CarlitzScovHoggatt1972,%
-Frougny1991,Frougny1992,Frougny1999,FrougnyS2010,Berstel1986} and
-\cite{LabbeLepsova2023,MarquesTrojovsky2025,Fraenkel1985} for Fibonacci
-numeration and automata, and
+Frougny1991,Frougny1992,Frougny1999,FrougnyS2010,Berstel1986,FrougnySakarovitch1999}
+and
+\cite{LabbeLepsova2023,MarquesTrojovsky2025,Fraenkel1985,%
+AhlbachUsatineFrougnyPippenger2013,BertheFrougnyRigoSakarovitch2020,%
+HieronymiTerry2018,ShallitShan2024,Hosten2024,KologluKoppMillerWang2011,MillerWang2012,%
+DrmotaSteiner2002,Griffiths2010,CoquetVanDenBosch1986,Steiner2005} for Fibonacci
+numeration, digit statistics, carry propagation, and automata, and
 \cite{Parry1964,LindMarcus1995,Kitchens1998,WaltersErgodicTheory} for the
 symbolic-dynamics framework.
 
-\subsection{Related Work and Scope of Contribution}
+\subsection{Related Work and Positioning}
 
 Zeckendorf representations and Fibonacci numeration have a substantial
 literature.  The foundational uniqueness results go back to
 \cite{Lekkerkerker1952,Zeckendorf1972}, with representation-theoretic
-developments in \cite{Carlitz1968,CarlitzScovHoggatt1972}, and automata-theoretic
+developments in \cite{Carlitz1968,CarlitzScovHoggatt1972} and automata-theoretic
 and normalization viewpoints in
-\cite{Frougny1991,Frougny1992,Frougny1999,FrougnyS2010,Fraenkel1985}.
-Recent Fibonacci-transducer developments appear in
+\cite{Frougny1991,Frougny1992,Frougny1999,FrougnyS2010,Fraenkel1985}.  Efficient
+algorithms for Zeckendorf addition and carry normalization are studied in
+\cite{AhlbachUsatineFrougnyPippenger2013}, and the successor/carry observable in
+non-classical numeration systems is analyzed in
+\cite{Frougny1996Successor,Frougny1997Sequential,FrougnySolomyak1996,BertheFrougnyRigoSakarovitch2020}.
+The Ostrowski numeration perspective and its connection to finite automata,
+including the identification of Zeckendorf as the golden-ratio Ostrowski case,
+appear in \cite{HieronymiTerry2018}.  Automata-theoretic properties of Fibonacci
+representations are developed further in \cite{ShallitShan2024}, and digit
+variation and mixing in the Zeckendorf setting in \cite{Hosten2024}.  Recent
+Fibonacci-transducer developments appear in
 \cite{LabbeLepsova2023,MarquesTrojovsky2025}.  Broader numeration-system
 perspectives may be found in
-\cite{Grabner1995,Berstel1986,BerstelReutenauer2011}.  In that circle of ideas
-the main themes are canonical representation, normalization, and finite-state
-structure.  The Fold maps used here belong to that background, but the
-observable studied in this paper is different: we do not analyze normalization
-in isolation, but rather the failure of normalization to commute with prefix
-restriction across resolutions.
+\cite{Grabner1995,Berstel1986,BerstelReutenauer2011}.
 
-On the symbolic-dynamics side, the ambient space is the golden-mean shift and
-its finite-window factors, so factor maps, finite-state presentations, and
-compact-group extensions provide the natural context; see
-\cite{Parry1964,WaltersErgodicTheory,LindMarcus1995,Kitchens1998,Boyle1983,KitchensSchmidt1989}.
-Most of that background is standard and is used here only as context.
+\medskip\noindent\textbf{Three literature lanes.}
+The necessary literature comparisons can be organized into three parallel lanes:
+\begin{enumerate}[label=(\alph*)]
+\item \emph{Normalization/successor analyses} focus on how carries propagate
+when incrementing admissible words
+\cite{Frougny1996Successor,Frougny1997Sequential,FrougnySolomyak1996,Frougny1999,AhlbachUsatineFrougnyPippenger2013,BertheFrougnyRigoSakarovitch2020}.
+Those works study scalar observables such as carry length and sequentiality.
+Our $\kappa_{m+1\to m}$ instead compares two distinct morphisms (truncate-then-fold
+versus fold-then-project) and outputs an xor vector in $(\ZZ/2\ZZ)^m$.
+\item \emph{Numeration dynamics and odometers} model normalization via finite
+automata or symbolic factors
+\cite{Parry1964,WaltersErgodicTheory,LindMarcus1995,Kitchens1998,Boyle1983,KitchensSchmidt1989,BertheRigo2007,BaratGrabner2014}.
+These frameworks control inverse limits and eigenvalues.  Our note only needs
+their ambient language to state the telescoping identity; we make no new claims
+about odometer dynamics, and ``Fold'' is simply shorthand for the map defined in
+Section~\ref{sec:folding-naive-truncation}.
+\item \emph{Zeckendorf digit-block and density questions} deal with local digit
+statistics and block frequencies
+\cite{Grabner1995,Dekking2021,Hosten2024,Griffiths2010,DrmotaSteiner2002,%
+KologluKoppMillerWang2011,MillerWang2012,CoquetVanDenBosch1986,Steiner2005}.
+The adjacent defect threshold proved here is consistent with that tradition but
+targets a different observable: non-commutation of Zeckendorf normalization with
+naive truncation.  We do not introduce new terminology beyond the shorthand
+``Fold'' once the map has been defined.
+\end{enumerate}
 
-The telescoping identity of Section~4 is formal once the defects are defined.
-The Fold-specific arithmetic input enters through
-Proposition~\ref{prop:adjacent-defect-threshold} and the adjacent-defect
-analysis of Section~3.  The specific contribution of this note is: an explicit
-xor-valued defect observable attached to the failure of Fold to commute with
-prefix restriction; a sharp threshold criterion (Proposition~\ref{prop:adjacent-defect-threshold})
-classifying the adjacent defect by arithmetic in the Fibonacci numeration system;
-an exact counting formula for defect probabilities under the uniform law
-(Theorem~\ref{thm:fold-defect-count-explicit} below); and the telescoping
-identity that assembles these into global estimates.  The probability and
-Hamming estimates are deterministic consequences of that bookkeeping once the
-threshold criterion is in place.  To the best of my knowledge, I am not aware
-of a prior paper isolating exactly this xor-valued defect observable together
-with its explicit counting formula.
+To keep the positioning explicit, Table~\ref{tab:lane-comparison} records how the
+statements in this manuscript complement prior work.  Each entry should be read
+as ``we are not aware of the following exact statement elsewhere'' rather than as
+an exclusivity claim.
+
+\begin{table}[t]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{>{\raggedright\arraybackslash}p{1.55in}%
+                >{\raggedright\arraybackslash}p{1.55in}%
+                >{\raggedright\arraybackslash}p{2.15in}}
+\toprule
+Prior result & What it measures & What this paper adds \\
+\midrule
+Carry propagation of successor \cite{BertheFrougnyRigoSakarovitch2020} &
+  expected carry length in linear numeration systems &
+  xor-valued defect observable comparing truncate/fold routes; exact threshold criterion for non-commutativity \\
+\addlinespace
+Zeckendorf addition automata \cite{AhlbachUsatineFrougnyPippenger2013,Frougny1999} &
+  finite-state normalization of Fibonacci sums &
+  exact count $C_m$ and closed-form adjacent defect probability $\lfloor 2^{m+1}/3\rfloor/2^{m+1}$ \\
+\addlinespace
+Ostrowski/Fibonacci automata \cite{HieronymiTerry2018,ShallitShan2024} &
+  decidability and structure of Fibonacci representations &
+  exact inverse-limit compatibility criterion in terms of the carry-threshold \\
+\bottomrule
+\end{tabular}
+\caption{Positioning relative to earlier scalar observables.  The present note
+records a deterministic xor-valued defect observable rather than new global
+probabilistic asymptotics.}
+\label{tab:lane-comparison}
+\end{table}
+
+\medskip
+The defect observable $\kappa_{m+1\to m}$ is therefore a bookkeeping tool for
+non-commutation rather than a repackaged successor or digit statistic, and all
+later consequences are formal once that observable is defined.
+
+\subsection{Concrete Comparison with Carry-type Observables}
+
+Two short computations make the distinction precise.
+
+\begin{example}[Carry propagation without a truncation defect]
+\label{ex:carry-without-defect}
+Take $m=4$, $p=1100$, and append $b=1$.  Normalizing the raw word
+$(p,b)=11001$ produces $\Fold_5(11001)=00101$, so the standard successor/carry
+observable registers a nontrivial propagation.  Nevertheless
+$\Fold_4(p)=0010$ and $\pi_{5\to 4}(\Fold_5(11001))=0010$, hence
+$\kappa_{5\to 4}(p,1)=0$.  A genuine carry event can therefore leave the
+adjacent truncation defect unchanged.
+\end{example}
+
+\begin{example}[Nonzero defect without a top-level carry indicator]
+\label{ex:defect-without-carry}
+Let $n=4$, $m=2$, and $\omega=0110$.  Direct computation gives
+$D_{4\to 2}(\omega)=(0,1)\neq 0$, while the adjacent indicator satisfies
+$K_{4\to 3}(\omega)=0$.  The xor-valued global defect records an obstruction
+arising two levels below the top, so a scalar carry-length statistic at the top
+scale does not determine $D_{n\to m}$.
+\end{example}
 
 \subsection{External Inputs and Dependence Map}
 
-This note is intended to be self-contained modulo standard background.  The
+This note is self-contained modulo standard background.  The
 only external inputs used in Sections~2--6 are:
 \begin{enumerate}[label=(\roman*)]
 \item existence and uniqueness of Zeckendorf expansions, via
@@ -176,13 +277,36 @@ prefix projections, for which \cite{Parry1964,LindMarcus1995,Kitchens1998} give
 convenient background.
 \end{enumerate}
 No theorem from any prior Fold manuscript is used in Sections~2--6.  The
-appendix is auxiliary: it records a standard finite-group Fourier criterion,
-following \cite{Diaconis1988,LevinPeresWilmer2009MarkovMixing,Norris1997,Terras1999},
-and is not invoked anywhere in the deterministic core.
+maps $\Fold_m$ are defined from first principles in Section~\ref{sec:folding-naive-truncation};
+the only Fold-specific input is the name of the observable and the
+resolution-tower framework, both of which are set up afresh here.
 
 \section{Folding and Naive Truncation}
+\label{sec:folding-naive-truncation}
 
 \subsection{Minimal Setup}
+
+\noindent\textbf{Indexing convention.}
+Throughout this paper, digits are indexed \emph{low-order first}: position $k$
+carries Fibonacci weight $F_{k+1}$, where $F_1=F_2=1$ and
+$F_{j+2}=F_{j+1}+F_j$.  Thus position $1$ has weight $F_2=1$ and position $2$
+has weight $F_3=2$.  For a two-bit word, $N(10)=F_2=1$ (the nonzero digit sits
+at position $1$, the lowest-order place) and $N(01)=F_3=2$ (the nonzero digit
+sits at position $2$).  The word $10$ represents the number $1$; the word $01$
+represents the number $2$.  The map ``$r_{n\to m}$'' (prefix truncation) retains
+the \emph{low-order} end: $r_{n\to m}(\omega_1\cdots\omega_n)=\omega_1\cdots\omega_m$.
+This convention is opposite to that of several carry-propagation papers which index
+from the high-order end; every numerical example in this paper follows the
+low-order-first convention.
+
+\[
+\begin{array}{c|cccc}
+\text{position} & 1 & 2 & 3 & 4 \\ \hline
+\text{weight} & F_2=1 & F_3=2 & F_4=3 & F_5=5
+\end{array}
+\qquad
+\text{(low-order digits sit on the left).}
+\]
 
 For $m\ge 1$, let
 \[
@@ -421,23 +545,23 @@ Then
 \[
 K_{m+1\to m}(\eta)=b\,\mathbf{1}_{\{s\ge F_{m+1}\}}.
 \]
-More precisely:
-\begin{enumerate}[label=(\roman*)]
-\item if $b=0$, then $\kappa_{m+1\to m}(p,0)=0$;
-\item if $b=1$ and $s<F_{m+1}$, then $\kappa_{m+1\to m}(p,1)=0$;
-\item if $b=1$ and $s=F_{m+1}+t$ with $0\le t<F_{m+2}$, then
+More precisely,
 \[
-\pi_{m+1\to m}(\Fold_{m+1}(p,1))=\pi_{\infty\to m}(Z(t))
+\kappa_{m+1\to m}(p,0)=0,
 \]
 and
 \[
-\kappa_{m+1\to m}(p,1)
-=
-\Fold_m(p)\oplus \pi_{\infty\to m}(Z(t)).
+\kappa_{m+1\to m}(p,1)=
+\begin{cases}
+0, & s<F_{m+1},\\[4pt]
+\pi_{\infty\to m}\!\bigl(Z(s\bmod F_{m+2})\bigr)
+\oplus
+\pi_{\infty\to m}\!\bigl(Z(s-F_{m+1})\bigr),
+& s\ge F_{m+1}.
+\end{cases}
 \]
-In particular, local defects occur exactly when appending the final bit $1$
-pushes the prefix value across the threshold $F_{m+1}$.
-\end{enumerate}
+When $s\ge F_{m+1}$, the two summands above are distinct elements of $X_m$ and
+hence their xor is nonzero.
 \end{proposition}
 
 \begin{proof}
@@ -473,7 +597,12 @@ therefore gives
 \]
 so $\kappa_{m+1\to m}(p,1)=0$.
 
-Finally, suppose $b=1$ and $s\ge F_{m+1}$.  Write
+Finally, suppose $b=1$ and $s\ge F_{m+1}$.  By
+Proposition~\ref{prop:fold-residue-characterization} at level $m$,
+\[
+\Fold_m(p)=\pi_{\infty\to m}\!\bigl(Z(s\bmod F_{m+2})\bigr).
+\]
+Write
 \[
 s=F_{m+1}+t
 \qquad\text{with}\qquad
@@ -496,12 +625,14 @@ and hence
 \[
 \kappa_{m+1\to m}(p,1)
 =
-\Fold_m(p)\oplus \pi_{\infty\to m}(Z(t)).
+\pi_{\infty\to m}\!\bigl(Z(s\bmod F_{m+2})\bigr)
+\oplus
+\pi_{\infty\to m}\!\bigl(Z(s-F_{m+1})\bigr).
 \]
-If this xor were zero, then $\Fold_m(p)=\pi_{\infty\to m}(Z(t))$.  Applying
+If the two summands were equal, then applying
 Proposition~\ref{prop:fold-residue-characterization} at level $m$ to the
 admissible word $\pi_{\infty\to m}(Z(t))$ would imply
-$s\equiv t\pmod{F_{m+2}}$.  But $s=t+F_{m+1}$ and
+$s\bmod F_{m+2}=t$.  But $s=t+F_{m+1}$ and
 $0<F_{m+1}<F_{m+2}$, a contradiction.  Therefore
 $\kappa_{m+1\to m}(p,1)\neq 0$, and the indicator formula follows.
 \end{proof}
@@ -547,7 +678,8 @@ Hamming size of the global defect \\
 \label{tab:defect-observables}
 \end{table}
 
-\section{An Exact Telescoping Identity}
+\section{A Telescoping Decomposition}
+\label{sec:telescoping}
 
 \subsection{Telescoping Structure}
 
@@ -606,7 +738,7 @@ because $\tau_{j\to j-1}$ agrees with $\pi_{j\to j-1}$ on admissible words and
 is a homomorphism for xor.
 \end{proof}
 
-\begin{theorem}[Exact telescoping identity for Fold defects]
+\begin{proposition}[Telescoping decomposition of the global defect]
 \label{thm:fold-discrete-stokes-defect}
 For every $n>m$ and every $\omega\in\Omega_n$,
 \[
@@ -619,7 +751,7 @@ D_{n\to m}(\omega)
 \right).
 }
 \]
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 We claim that for every $j\in\{m,\dots,n\}$,
@@ -655,7 +787,7 @@ $\tau_{j\to m}\circ \tau_{j+1\to j}=\tau_{j+1\to m}$, we obtain
 \tau_{j+1\to m}(\Delta_{j+1}(\omega)).
 \]
 Substituting this into the induction hypothesis proves the displayed formula at
-$j+1$.  Setting $j=n$ and using $\Delta_n(\omega)=0$ yields the theorem.
+$j+1$.  Setting $j=n$ and using $\Delta_n(\omega)=0$ yields the proposition.
 \end{proof}
 
 \begin{remark}[Interpretation as a telescoping cocycle sum]
@@ -663,11 +795,9 @@ The quantity
 $D_{n\to m}(\omega)$ is a boundary-level discrepancy between two routes from
 resolution $n$ to resolution $m$, while the adjacent defects
 $\kappa_{j+1\to j}$ are the interior contributions picked up one scale at a
-time.  Theorem~\ref{thm:fold-discrete-stokes-defect} is therefore a finite
+time.  Proposition~\ref{thm:fold-discrete-stokes-defect} is therefore a finite
 telescoping identity, or equivalently a cocycle decomposition along the
-resolution tower.  It is closer to a coboundary computation in a finite
-cochain complex than to a differential-geometric statement; compare
-\cite{Hatcher2002,Forman1998}.
+resolution tower.
 \end{remark}
 
 \begin{example}[A worked telescoping computation at $n=3$, $m=1$]
@@ -730,8 +860,8 @@ contribute to the telescoping identity.
 
 \subsection{Explicit Consequences}
 
-\begin{corollary}[Total-variation bound from local threshold events]
-\label{cor:fold-discrete-stokes-auditable-bound}
+\begin{remark}[Total-variation bound from local threshold events]
+\label{rem:fold-discrete-stokes-auditable-bound}
 Let $n>m$ and let $\mu$ be any probability measure on $\Omega_n$.  Setting
 \[
 X:=\Fold_m(r_{n\to m}(\omega)),
@@ -779,7 +909,7 @@ d_{\mathrm{TV}}\!\bigl(\Law(X),\Law(Y)\bigr)
 2\lVert f\rVert_\infty\,
 \PP_\mu[D_{n\to m}(\omega)\neq 0].
 \]
-\end{corollary}
+\end{remark}
 
 \begin{proof}
 Since $X$ and $Y$ are defined on the common probability space $(\Omega_n,\mu)$,
@@ -793,7 +923,7 @@ d_{\mathrm{TV}}\!\bigl(\Law(X),\Law(Y)\bigr)
 \]
 
 If $D_{n\to m}(\omega)\neq 0$, then
-Theorem~\ref{thm:fold-discrete-stokes-defect} implies that some local defect
+Proposition~\ref{thm:fold-discrete-stokes-defect} implies that some local defect
 $\kappa_{j+1\to j}(r_{n\to j+1}(\omega))$ is nonzero.  Writing
 $r_{n\to j+1}(\omega)=(r_{n\to j}(\omega),\omega_{j+1})$ and applying
 Proposition~\ref{prop:adjacent-defect-threshold}, this can happen only when
@@ -860,8 +990,8 @@ Under the uniform law on $\Omega_{j+1}$, this yields
 which is the stated sum over $A_j(t)$.
 \end{proof}
 
-\begin{corollary}[Uniform-law bound for the global defect]
-\label{cor:uniform-global-defect-bound}
+\begin{remark}[Uniform-law bound for the global defect]
+\label{rem:uniform-global-defect-bound}
 Let $\mathsf{Unif}_n$ be the uniform law on $\Omega_n$.  Then
 \[
 \PP_{\mathsf{Unif}_n}[D_{n\to m}\neq 0]
@@ -870,10 +1000,10 @@ Let $\mathsf{Unif}_n$ be the uniform law on $\Omega_n$.  Then
 2^{-(j+1)}
 \sum_{t\ge F_{j+1}} A_j(t).
 \]
-\end{corollary}
+\end{remark}
 
 \begin{proof}
-Apply Corollary~\ref{cor:fold-discrete-stokes-auditable-bound} with
+Apply Remark~\ref{rem:fold-discrete-stokes-auditable-bound} with
 $\mu=\mathsf{Unif}_n$.  For each $j$, the prefix $r_{n\to j+1}(\omega)$ is
 uniform on $\Omega_{j+1}$, so
 \[
@@ -923,7 +1053,7 @@ and the global coupling bound becomes
 
 \begin{proof}
 \textit{Recurrence.}  We derive $C_m=2^{m-2}+C_{m-2}$ for $m\ge 3$ by
-conditioning on the two leading bits $(\alpha_{m-1},\alpha_m)$.
+conditioning on the last two coordinates $(\alpha_{m-1},\alpha_m)$.
 
 If $\alpha_m=1$, then $N(\alpha)\ge F_{m+1}$, so $N(\alpha)<F_{m+1}$ is
 impossible; no such word contributes to $C_m$.
@@ -940,7 +1070,8 @@ Summing the three cases gives $C_m=0+2^{m-2}+C_{m-2}$.
 
 \textit{Base cases.}  With Fibonacci values $F_2=1$, $F_3=2$: for $m=1$,
 $N(0)=0<1=F_2$ and $N(1)=1\not<1$, so $C_1=1$; for $m=2$,
-$N(00)=0<2=F_3$, $N(01)=1<2$, $N(10)=2\not<2$, $N(11)=3\not<2$, so $C_2=2$.
+$N(00)=0<2=F_3$, $N(10)=1<2$, $N(01)=2\not<2$, $N(11)=3\not<2$, so $C_2=2$.
+(Recall: position $k$ has weight $F_{k+1}$, so $N(10)=F_2=1$ and $N(01)=F_3=2$.)
 
 \textit{Closed form.}  Unrolling the recurrence with the convention $C_0:=1$
 (the empty word has value $0<F_1=1$): for $m=2r$,
@@ -963,7 +1094,7 @@ $(2^{2r+1}-2)/3=\lfloor 2^{2r+1}/3\rfloor$; for $m=2r+1$,
 $(2^{2r+2}-1)/3=\lfloor 2^{2r+2}/3\rfloor$.
 
 The global bound follows from the union bound in
-Corollary~\ref{cor:fold-discrete-stokes-auditable-bound}.
+Remark~\ref{rem:fold-discrete-stokes-auditable-bound}.
 \end{proof}
 
 \begin{remark}
@@ -976,8 +1107,8 @@ words trigger a carry across the threshold $F_{m+1}$.
 
 \subsection{Hamming--Lipschitz Budget}
 
-\begin{corollary}[Hamming--Lipschitz budget]
-\label{cor:fold-hamming-lipschitz-budget}
+\begin{remark}[Hamming--Lipschitz budget]
+\label{rem:fold-hamming-lipschitz-budget}
 Let $n>m$, let $\mu$ be any probability measure on $\Omega_n$, and let
 $d_{\mathrm H}(x,y):=\lvert x\oplus y\rvert_0$ be Hamming distance on $X_m$.
 If $f:X_m\to\RR$ is $L$-Lipschitz with respect to $d_{\mathrm H}$, then
@@ -999,11 +1130,11 @@ and
 \kappa_{j+1\to j}(r_{n\to j+1}(\omega))
 \right\rvert_0.
 \]
-\end{corollary}
+\end{remark}
 
 \begin{proof}
 For the same $x$ and $y$ as in the proof of
-Corollary~\ref{cor:fold-discrete-stokes-auditable-bound},
+Remark~\ref{rem:fold-discrete-stokes-auditable-bound},
 \[
 \lvert f(x)-f(y)\rvert
 \le
@@ -1013,7 +1144,7 @@ L\,\lvert D_{n\to m}(\omega)\rvert_0.
 \]
 Taking expectation gives the first inequality.
 
-For the second, apply Theorem~\ref{thm:fold-discrete-stokes-defect} and use the
+For the second, apply Proposition~\ref{thm:fold-discrete-stokes-defect} and use the
 subadditivity
 \[
 \lvert u\oplus v\rvert_0\le \lvert u\rvert_0+\lvert v\rvert_0
@@ -1021,8 +1152,8 @@ subadditivity
 together with the fact that prefix projection cannot increase Hamming weight.
 \end{proof}
 
-\begin{corollary}[Uniform-law Hamming budget]
-\label{cor:uniform-hamming-budget}
+\begin{remark}[Uniform-law Hamming budget]
+\label{rem:uniform-hamming-budget}
 Let $\mathsf{Unif}_n$ be the uniform law on $\Omega_n$.  Then
 \[
 \EE_{\mathsf{Unif}_n}\lvert D_{n\to m}(\omega)\rvert_0
@@ -1047,10 +1178,10 @@ L
 \sum_{\substack{p\in\Omega_j\\ N(p)\ge F_{j+1}}}
 \left\lvert \kappa_{j+1\to j}(p,1)\right\rvert_0.
 \]
-\end{corollary}
+\end{remark}
 
 \begin{proof}
-Apply Corollary~\ref{cor:fold-hamming-lipschitz-budget} with
+Apply Remark~\ref{rem:fold-hamming-lipschitz-budget} with
 $\mu=\mathsf{Unif}_n$.  For each fixed $j$, the prefix
 $r_{n\to j+1}(\omega)$ is uniform on $\Omega_{j+1}$, and
 Proposition~\ref{prop:adjacent-defect-threshold} shows that
@@ -1058,7 +1189,7 @@ $\kappa_{j+1\to j}$ can be nonzero only on words of the form $(p,1)$ with
 $N(p)\ge F_{j+1}$.  Averaging over the uniform law on $\Omega_{j+1}$ yields the
 stated bound on $\EE_{\mathsf{Unif}_n}\lvert D_{n\to m}\rvert_0$, and the
 Lipschitz estimate then follows from the first inequality in
-Corollary~\ref{cor:fold-hamming-lipschitz-budget}.
+Remark~\ref{rem:fold-hamming-lipschitz-budget}.
 \end{proof}
 
 \subsection{Cocycle and Triangle Structure}
@@ -1088,7 +1219,7 @@ then
 \end{proposition}
 
 \begin{proof}
-Split the telescoping sum of Theorem~\ref{thm:fold-discrete-stokes-defect} at the
+Split the telescoping sum of Proposition~\ref{thm:fold-discrete-stokes-defect} at the
 intermediate scale $k$:
 \[
 \begin{aligned}
@@ -1117,6 +1248,110 @@ The triangle inequality follows from
 \]
 and the nonexpansiveness of prefix projection in Hamming weight.
 \end{proof}
+
+\subsection{Exact enumeration identity for the global defect law}
+
+The union bound in Remark~\ref{rem:uniform-global-defect-bound} ignores
+cancellations between different local defects.  Capturing those cancellations
+requires the full xor distribution.  For $n>m$, define
+\[
+\mu_{n,m}(v):=2^{-n}\#\{\omega\in\Omega_n:\ D_{n\to m}(\omega)=v\},
+\qquad
+v\in\{0,1\}^m.
+\]
+Equivalently, $\mu_{n,m}$ is the law of the $m$-bit defect vector under the
+uniform raw-word law.  The next proposition only records the exact enumeration
+identity provided by the telescoping decomposition; it still references the full
+prefix data $p\in\Omega_{n-1}$ and therefore is not a closed finite-state
+recursion on $(\mu_{n,m})_{n>m}$.
+
+\begin{proposition}[Exact enumeration identity]
+\label{prop:exact-vector-recursion}
+For $n>m$ and $v\in\{0,1\}^m$,
+\[
+\mu_{n,m}(v)
+=
+2^{-n}
+\sum_{p\in\Omega_{n-1}}
+\sum_{b\in\{0,1\}}
+\mathbf{1}\!\left\{
+D_{n-1\to m}(p)
+\oplus
+\tau_{n-1\to m}\bigl(\kappa_{n\to n-1}(p,b)\bigr)
+=
+v
+\right\}.
+\]
+Consequently, the scalar probabilities satisfy
+\[
+P_{n,m}
+=
+\sum_{v\neq 0}\mu_{n,m}(v).
+\]
+\end{proposition}
+
+\begin{proof}
+By Proposition~\ref{prop:fold-defect-cocycle} with $k=n-1$,
+\[
+D_{n\to m}(\omega)
+=
+D_{n-1\to m}(r_{n\to n-1}(\omega))
+\oplus
+\tau_{n-1\to m}\bigl(\kappa_{n\to n-1}(\omega)\bigr).
+\]
+Under the uniform law on $\Omega_n$, the prefix $r_{n\to n-1}(\omega)$ ranges
+uniformly over $\Omega_{n-1}$, and each choice of prefix $p\in\Omega_{n-1}$ can
+be paired with either terminal bit $b\in\{0,1\}$.  Counting the number of pairs
+$(p,b)$ that produce a prescribed vector $v$ gives the stated formula.
+\end{proof}
+
+\begin{remark}[Finite-state compression]
+\label{rem:finite-state-compression}
+Proposition~\ref{prop:exact-vector-recursion} is exact but requires a table of
+size $2^{n-1}$ to advance one step.  Compressing the prefix $p$ with a
+Fibonacci-normalization transducer
+\cite{Frougny1991,FrougnyS2010} while carrying the current projected defect
+would turn the identity into a finite-state convolution amenable to spectral
+analysis.  Building that automaton and analyzing its spectrum is a separate
+project; the present note only records the explicit xor enumeration.
+\end{remark}
+
+\subsection{Sanity-check values for small $(n,m)$}
+
+Direct enumeration for $n\le 5$ and $m<n$ gives the exact joint counts recorded
+in Table~\ref{tab:small-values}.  These values agree with quick checks such as
+$P_{2,1}=1/4$ and $P_{3,1}=1/8$ and show, for instance, that the scalar
+probability is not monotone in $n$ when $m$ is fixed.  The table also reveals
+how far the union bound can be from the truth.  For $(n,m)=(4,1)$ the exact
+probability is $P_{4,1}=3/16$, whereas the union bound from
+Remark~\ref{rem:fold-discrete-stokes-auditable-bound} sums to $13/16$; even a
+single short resolution band can therefore saturate the coarse estimate.
+
+\begin{table}[t]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{ccc}
+\toprule
+$(n,m)$ & $\#\{\omega:\ D_{n\to m}(\omega)\ne 0\}$ & $P_{n,m}$ \\
+\midrule
+(2,1) & $1$ & $1/4$ \\
+(3,1) & $1$ & $1/8$ \\
+(3,2) & $2$ & $1/4$ \\
+(4,1) & $3$ & $3/16$ \\
+(4,2) & $2$ & $1/8$ \\
+(4,3) & $5$ & $5/16$ \\
+(5,1) & $5$ & $5/32$ \\
+(5,2) & $6$ & $3/16$ \\
+(5,3) & $5$ & $5/32$ \\
+(5,4) & $10$ & $5/16$ \\
+\bottomrule
+\end{tabular}
+\caption{Exact global defect probabilities $P_{n,m}$ for all $(n,m)$ with
+$n\le 5$ and $m<n$ under the uniform raw-word law.  Counts are the number of
+$\omega\in\Omega_n$ with $D_{n\to m}(\omega)\ne 0$; the denominator is $2^n$.}
+\label{tab:small-values}
+\end{table}
 
 \section{A Simple Lift Criterion}
 
@@ -1189,8 +1424,8 @@ there exists a unique $x^\infty\in\Xinf$ with
 $\pi_{\infty\to m}(x^\infty)=x_m$ for all $m\ge M$.
 \end{proof}
 
-\begin{corollary}[Explicit Fold-specific compatibility criterion]
-\label{cor:summable-defects-eventual-compatibility}
+\begin{remark}[Explicit Fold-specific compatibility criterion]
+\label{rem:summable-defects-eventual-compatibility}
 In the setting of Proposition~\ref{prop:fold-naive-prefix-lift}, the following
 are equivalent.
 \begin{enumerate}[label=(\roman*)]
@@ -1205,7 +1440,7 @@ N(r_{\infty\to m}(\omega^\infty))<F_{m+1}.
 \end{enumerate}
 When these conditions hold, there exists a unique $x^\infty\in\Xinf$ such that
 $\pi_{\infty\to m}(x^\infty)=x_m$ for all $m\ge M$.
-\end{corollary}
+\end{remark}
 
 \begin{proof}
 The equivalence (i)$\Leftrightarrow$(ii) holds because each $|\delta_m|_0$ is
@@ -1230,293 +1465,49 @@ Proposition~\ref{prop:fold-naive-prefix-lift}.
 
 \section{Discussion}
 
-This note isolates one exact mechanism: folding and naive truncation fail to
-commute, but the failure is structured.  Local adjacent-scale defects assemble
-into a global tower defect by an exact telescoping formula.  Once this identity
-is in place, quantitative corollaries follow: explicit probability bounds,
-Lipschitz budgets, and cocycle inequalities.
+This note isolates a concrete deterministic obstruction in the Zeckendorf normalization/truncation tower.
+Once the telescoping framework of Section~\ref{sec:telescoping} is fixed, every
+subsequent corollary follows formally from the xor bookkeeping.  The genuinely
+arithmetical inputs are Proposition~\ref{prop:adjacent-defect-threshold} and
+Theorem~\ref{thm:fold-defect-count-explicit}.
 
-The Fold-specific arithmetic content enters through two places.
 Proposition~\ref{prop:adjacent-defect-threshold} gives a sharp threshold
-description of the adjacent defect: a local defect occurs exactly when
+description of the adjacent defect: once $s=N(p)$ is fixed, the two competing
+routes are explicitly
+$\pi_{\infty\to m}(Z(s\bmod F_{m+2}))$ and
+$\pi_{\infty\to m}(Z(s-F_{m+1}))$, and a local defect occurs exactly when
 appending the final bit $1$ pushes the prefix value across the Fibonacci level
-$F_{m+1}$.  Theorem~\ref{thm:fold-defect-count-explicit} converts that
-threshold into an exact closed-form count, showing that the fraction of
-$(m+1)$-bit raw words that trigger a defect at scale $m$ equals
-$\lfloor 2^{m+1}/3\rfloor/2^{m+1}$, converging to $1/3$ as $m\to\infty$.
-This is a carry-threshold phenomenon peculiar to Fibonacci numeration, and the
-recurrence $C_m=2^{m-2}+C_{m-2}$ reflects the structure of the Zeckendorf
-representation.  The telescoping identity then assembles these per-scale
-probabilities into the global bound.
+$F_{m+1}$.  This carry-threshold criterion is a local fact peculiar to Fibonacci
+numeration; it has a precise analogue in the carry-propagation literature
+\cite{BertheFrougnyRigoSakarovitch2020} but the xor-valued defect observable
+and the non-commutativity it encodes are new.
+
+Theorem~\ref{thm:fold-defect-count-explicit} converts the threshold into an
+exact closed-form count: the number of below-threshold words in $\Omega_m$
+satisfies $C_m=2^{m-2}+C_{m-2}$, giving the adjacent-defect probability
+$\lfloor 2^{m+1}/3\rfloor/2^{m+1}\to 1/3$ as $m\to\infty$.  Beyond the union
+bound, Proposition~\ref{prop:exact-vector-recursion} records an exact recursion
+for the entire distribution of $D_{n\to m}$, and
+Table~\ref{tab:small-values} tabulates the resulting scalar probabilities for
+small $(n,m)$.  No asymptotic claim is made beyond what those explicit formulas
+and tables show.
 
 Proposition~\ref{prop:fold-naive-prefix-lift} and
-Corollary~\ref{cor:summable-defects-eventual-compatibility} give the exact
+Remark~\ref{rem:summable-defects-eventual-compatibility} give the exact
 finite-to-infinite compatibility criterion, restated in terms of the same
 carry-threshold condition: the sequence of folded prefixes converges in the
 inverse limit exactly when, for all large $m$, either the $(m+1)$-th bit of
 the raw sequence is $0$ or the truncated prefix value falls below $F_{m+1}$.
 
-\appendix
-
-\section{A General Fourier Criterion for Finite-State Additive Models}
-
-\subsection{Ambient-group formulation}
-
-This appendix records a standard finite-group Fourier criterion for additive
-defect models on an ambient cube; see
-\cite{Diaconis1988,LevinPeresWilmer2009MarkovMixing,Norris1997,Terras1999}.
-It is external background, not a main result of the paper.  It is not invoked
-anywhere in Sections~2--6 and does not deliver a new theorem about the Fold
-defect process.  It is recorded here as a reference point for possible future
-instantiation (see Remark~\ref{rem:standing-hypotheses-haar-mixing}).
-
-\begin{theorem}[Conditional Haar mixing from an ambient-cube additive model]
-\label{thm:fold-stokes-defect-haar-mixing}
-Fix $m\ge 1$ and set
-\[
-\mathsf{G}_m:=(\ZZ/2\ZZ)^m.
-\]
-Suppose there exist a finite state space $\mathsf{S}_m$, a stochastic matrix
-$P_m=(p_{ab})_{a,b\in\mathsf{S}_m}$, an initial distribution $\nu_m$ on
-$\mathsf{S}_m$, and an increment map
-\[
-\Gamma_m:\mathsf{S}_m\times\mathsf{S}_m\to\mathsf{G}_m.
-\]
-Define the \emph{reachable state set}
-\[
-\mathsf{R}_m
-:=
-\{a\in\mathsf{S}_m:\text{there is a path from }\mathrm{supp}\,\nu_m\text{ to }a\text{ with positive probability}\},
-\]
-and the \emph{reachable increment subgroup}
-\[
-\mathsf{H}_m
-:=
-\left\langle
-\Gamma_m(a,b)
-:\;
-a,b\in\mathsf{R}_m,\ p_{ab}>0
-\right\rangle
-\le \mathsf{G}_m.
-\]
-For $u,v\in\mathsf{G}_m$, define the ambient character
-$\chi_u(v):=(-1)^{\langle u,v\rangle}$, and for $a,b\in\mathsf{R}_m$ set
-\[
-P_{m,u}(a,b):=p_{ab}\,\chi_u(\Gamma_m(a,b)).
-\]
-This is well-defined on $\mathsf{R}_m$ because $\Gamma_m(a,b)$ is evaluated
-only on reachable transitions $p_{ab}>0$ with $a,b\in\mathsf{R}_m$.
-Finally, let
-\[
-\mathsf{H}_m^\perp
-:=
-\{u\in\mathsf{G}_m:\chi_u|_{\mathsf{H}_m}\equiv 1\}.
-\]
-We use the empty xor-sum convention $\bigoplus_{t=0}^{-1}:=0$,
-so that assumption (i) below also covers the case $n=m$.  Assume:
-\begin{enumerate}[label=(\roman*)]
-\item if $(Y_t)_{t\ge 0}$ is the Markov chain with initial law $\nu_m$,
-transition matrix $P_m$, and state space restricted to $\mathsf{R}_m$, then
-for every $n\ge m$ the defect satisfies the distributional identity
-\[
-D_{n\to m}
-\stackrel{\mathrm{law}}=
-\bigoplus_{t=0}^{n-m-1}\Gamma_m(Y_t,Y_{t+1});
-\]
-\item for every $u\notin \mathsf{H}_m^\perp$, the twisted matrix
-$P_{m,u}$ restricted to $\mathsf{R}_m$ satisfies $\rho(P_{m,u})<1$.
-\end{enumerate}
-Then there exist constants $C_m>0$ and $0<\rho_m<1$ such that for all $n\ge m$,
-\[
-\left\|
-\Law(D_{n\to m})-\mathrm{Haar}(\mathsf{H}_m)
-\right\|_{\mathrm{TV}}
-\le
-C_m\,\rho_m^{\,n-m},
-\]
-where $\mathrm{Haar}(\mathsf{H}_m)$ is viewed as a probability measure on
-$\mathsf{G}_m$ supported on $\mathsf{H}_m$.
-\end{theorem}
-
-\begin{remark}[Standing hypotheses and scope]
-\label{rem:standing-hypotheses-haar-mixing}
-This appendix records the general criterion for future use; it is not invoked
-anywhere in the deterministic core.  Assumption~(i) requires a finite-state
-model for the defect process.  A natural construction strategy for the Fold
-tower would use the finite-state normalization framework for Fibonacci numeration
-(see \cite{Frougny1991,FrougnyS2010}): for each fixed $m$, let $Q$ be the state
-set of a Fibonacci normalization transducer, enlarge the state to
-$\mathsf{S}_m=Q\times(\ZZ/2\ZZ)^m$ where the second component carries the
-current $m$-bit projected defect, and define $\Gamma_m$ as the increment in the
-defect coordinate.  That construction would realize assumption~(i) from first
-principles.  Assumption~(ii) is the genuinely conditional spectral input;
-verifying $\rho(P_{m,u})<1$ for each $u\notin\mathsf{H}_m^\perp$ would then
-require a direct computation on the resulting twisted matrices.  Neither
-construction nor verification is carried out here.
-\end{remark}
-
-\begin{example}[A toy one-bit additive model]
-\label{ex:toy-one-bit-additive-model}
-For illustration, take $m=1$, let $\mathsf{S}_1=\{0,1\}$, let
-$P_1(a,b)=\tfrac12$ for all $a,b\in\mathsf{S}_1$, and define
-$\Gamma_1(a,b)=b\in \ZZ/2\ZZ$.  Then
-$\mathsf{H}_1=\mathsf{G}_1=\ZZ/2\ZZ$ and
-$\mathsf{H}_1^\perp=\{0\}$.  For the unique
-$u\notin\mathsf{H}_1^\perp$, namely $u=1$, we have
-\[
-P_{1,1}
-=
-\frac12
-\begin{pmatrix}
-1 & -1 \\
-1 & -1
-\end{pmatrix},
-\qquad
-\rho(P_{1,1})=0.
-\]
-Hence Theorem~\ref{thm:fold-stokes-defect-haar-mixing} applies, and the
-accumulated increment is already Haar-uniform on $\ZZ/2\ZZ$ for every
-$n>1$.  This is only a model calculation, not a realization of the Fold defect
-process.
-\end{example}
-
-\begin{proof}[Proof of Theorem~\ref{thm:fold-stokes-defect-haar-mixing}]
-Set $\ell:=n-m$ and let $\mu_\ell:=\Law(D_{n\to m})$, viewed as a probability
-measure on $\mathsf{G}_m$.  For $u\in\mathsf{G}_m$, define the ambient Fourier
-transform
-\[
-\widehat{\mu_\ell}(u)
-:=
-\sum_{v\in\mathsf{G}_m}\mu_\ell(v)\chi_u(v)
-=
-\EE[\chi_u(D_{n\to m})].
-\]
-Fix any operator norm $\lVert\cdot\rVert_{\mathrm{mat}}$ on
-$\mathbb{C}^{\mathsf{R}_m\times\mathsf{R}_m}$ induced by a vector norm on
-$\mathbb{C}^{\mathsf{R}_m}$.  Since the space is finite-dimensional, the choice
-of norm affects only the constants.
-
-Using assumption (i) and expanding over all state paths of the Markov chain
-(which stays in $\mathsf{R}_m$), we obtain
-\[
-\widehat{\mu_\ell}(u)=\nu_m P_{m,u}^{\,\ell}\mathbf{1},
-\]
-where $\mathbf{1}$ denotes the all-ones column vector on $\mathsf{R}_m$.
-
-Every realization of $D_{n\to m}$ is a reachable xor-sum of increments, hence
-takes values in $\mathsf{H}_m$.  Therefore, if $u\in\mathsf{H}_m^\perp$, then
-$\chi_u(D_{n\to m})=1$ almost surely and
-\[
-\widehat{\mu_\ell}(u)=1.
-\]
-Choose $\rho_m$ such that
-\[
-\max_{u\notin\mathsf{H}_m^\perp}\rho(P_{m,u})<\rho_m<1.
-\]
-Since $\mathsf{G}_m$ is finite and each $P_{m,u}$ is a finite matrix, standard
-finite-dimensional spectral theory yields constants $C'_u>0$ such that
-\[
-\lvert\widehat{\mu_\ell}(u)\rvert
-\le
-C'_u\,\rho_m^{\,\ell}
-\qquad\text{for every }u\notin\mathsf{H}_m^\perp.
-\]
-
-Let $\lambda_m:=\mathrm{Haar}(\mathsf{H}_m)$, viewed as a probability measure
-on $\mathsf{G}_m$ by extension by zero outside $\mathsf{H}_m$.  Its ambient
-Fourier transform is
-\[
-\widehat{\lambda_m}(u)=\mathbf{1}_{\{u\in\mathsf{H}_m^\perp\}}.
-\]
-Fourier inversion on the finite abelian group $\mathsf{G}_m$ therefore gives,
-for each $v\in\mathsf{G}_m$,
-\[
-\mu_\ell(v)-\lambda_m(v)
-=
-2^{-m}
-\sum_{u\in\mathsf{G}_m}
-\bigl(
-\widehat{\mu_\ell}(u)-\widehat{\lambda_m}(u)
-\bigr)\chi_u(v)
-=
-2^{-m}
-\sum_{u\notin\mathsf{H}_m^\perp}
-\widehat{\mu_\ell}(u)\chi_u(v).
-\]
-Hence
-\[
-\begin{aligned}
-\left\|
-\mu_\ell-\lambda_m
-\right\|_{\mathrm{TV}}
-&=
-\frac12\sum_{v\in\mathsf{G}_m}\left|\mu_\ell(v)-\lambda_m(v)\right| \\
-&\le
-\frac12\sum_{u\notin\mathsf{H}_m^\perp}\lvert\widehat{\mu_\ell}(u)\rvert \\
-&\le
-\frac12\sum_{u\notin\mathsf{H}_m^\perp} C'_u\,\rho_m^{\,\ell}.
-\end{aligned}
-\]
-Setting
-\[
-C_m:=\frac12\sum_{u\notin\mathsf{H}_m^\perp} C'_u
-\]
-and recalling that $\ell=n-m$ proves the claim.
-\end{proof}
-
-\subsection{Parity Polarization}
-
-\begin{corollary}[Conditional parity polarization and binomial limit]
-\label{cor:fold-stokes-defect-parity-polarization}
-Under the hypotheses of
-Theorem~\ref{thm:fold-stokes-defect-haar-mixing}, fix $u\in\mathsf{G}_m$.  Then
-there exist constants $C_m>0$ and $0<\rho_m<1$ such that for all $n\ge m$,
-\[
-\left|
-\EE[\chi_u(D_{n\to m})]
--
-\mathbf{1}_{\{u\in \mathsf{H}_m^\perp\}}
-\right|
-\le
-C_m\,\rho_m^{\,n-m}.
-\]
-In particular, if $\mathsf{H}_m=\mathsf{G}_m$, then
-\[
-\EE[\chi_u(D_{n\to m})]=O(\rho_m^{\,n-m})
-\qquad\text{for every }u\neq 0,
-\]
-and
-\[
-\lvert D_{n\to m}\rvert_0
-\xrightarrow[n\to\infty]{\mathrm{law}}
-\mathrm{Binomial}\!\left(m,\frac12\right).
-\]
-\end{corollary}
-
-\begin{proof}
-Let $\lambda_m:=\mathrm{Haar}(\mathsf{H}_m)$, viewed as a measure on
-$\mathsf{G}_m$.  Since $\chi_u$ is $\{\pm 1\}$-valued,
-Theorem~\ref{thm:fold-stokes-defect-haar-mixing} gives
-\[
-\left|
-\EE_{\mu_\ell}[\chi_u]-\EE_{\lambda_m}[\chi_u]
-\right|
-\le
-2\left\|
-\mu_\ell-\lambda_m
-\right\|_{\mathrm{TV}}
-=
-O(\rho_m^{\,\ell}),
-\]
-so, after possibly enlarging the constant, we obtain the stated exponential
-bound.  Under $\lambda_m$, the character average is $1$ exactly on
-$\mathsf{H}_m^\perp$ and vanishes otherwise.
-
-If $\mathsf{H}_m=\mathsf{G}_m$, then $\lambda_m$ is uniform on all binary
-vectors of length $m$.  Under that law the coordinates are independent
-Bernoulli$(1/2)$ variables, so the Hamming weight has the stated binomial
-distribution.
-\end{proof}
+\medskip\noindent\textbf{Limitations and scope.}
+The vector recursion in Proposition~\ref{prop:exact-vector-recursion} is exact
+but exponentially large; a practical recursion would compress prefixes using a
+finite Fibonacci-normalization transducer as suggested in
+Remark~\ref{rem:finite-state-compression}.  Carrying out that construction and
+deriving spectral information from the resulting finite-state model is beyond
+the scope of this short note.  Likewise, everything beyond the telescoping
+framework is deterministic and local; no global probabilistic limit claim is
+asserted without an explicit computation or table.
 
 \bibliographystyle{alpha}
 \bibliography{references}

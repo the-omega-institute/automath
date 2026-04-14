@@ -15,6 +15,7 @@ Equivalently, if
 \naive_{m+1\to m}(\omega)\oplus \aware_{m+1\to m}(\omega)\in \set{0,1}^m,
 \]
 then \(G_m(\omega)=\sum_{k=1}^m \Delta^{(m)}_k(\omega)\).
+Thus \(G_m\) is the symbolic-dynamics obstruction to commuting restriction with normalization: it measures exactly how far naive truncation fails to match the fold-aware restriction defined in Section~\ref{sec:multiscale}.
 
 \subsection{Worst-case extensive deviation and non-patchability}
 \begin{proposition}[Extensive worst case]\label{prop:worst}
@@ -74,15 +75,41 @@ Assume that \eqref{eq:tail-patch-form} holds for some fixed \(\ell\) and all suf
 But the right-hand side of \eqref{eq:tail-patch-form} leaves those first \(m-\ell\) coordinates unchanged: it agrees with \(\omega^\star_1\cdots \omega^\star_{m-\ell}\) there and only modifies the last \(\ell\) positions. This contradicts the previous paragraph. Hence no such bounded tail patch exists.
 \end{proof}
 
+\begin{example}[A worst-case word at \(m=4\)]\label{ex:worst4}
+For \(m=4\), the explicit family of Remark~\ref{rem:explicit-worst} gives \(\omega^\star=11011\in\Om_5\). Its Fibonacci value is
+\[
+N(\omega^\star)=\Fib_2+\Fib_3+\Fib_5+\Fib_6=1+2+5+8=16,
+\]
+so \(Z(16)=\Fib_7+\Fib_4\) with \(\Fib_7=13\) at position \(6\) (outside the window) and \(\Fib_4=3\) at position \(3\), giving
+\[
+\Fold_5(\omega^\star)=00100,
+\qquad
+\aware_{5\to4}(\omega^\star)=0010,
+\qquad
+\naive_{5\to4}(\omega^\star)=1101.
+\]
+Thus \(G_4(\omega^\star)=4\), with disagreement at every site.
+\end{example}
+
 \subsection{Bulk stationary model and the exact joint law}
 \label{subsec:joint-law}
-To state the limiting statistical results precisely, we pass from finite windows to the stationary bulk model. Let \(\eta=(\eta_t)_{t\in\ZZ}\) be a bi-infinite Bernoulli-\(\frac12\) sequence, and let \((X_t,Y_t)_{t\in\ZZ}\) be the input/output pair process produced by the boundary-state normalization transducer of Appendix~\ref{app:pressure}. Thus \(X_t=\eta_t\), while \(Y_t\) is the stable digit emitted at site \(t\). By construction, \((X_t,Y_t)\) is stationary. We refer to its law as the \emph{bulk law}. Standard path-counting for primitive right-resolving presentations implies that this bulk law is the local weak limit of the uniform measures on \(\Om_M\): if \(\omega^{(M)}\) is uniform on \(\Om_M\) and \(k_M\to\infty\) with \(M-k_M\to\infty\), then
+To state the limiting statistical results precisely, we pass from finite windows to the stationary bulk model. Let \(\eta=(\eta_t)_{t\in\ZZ}\) be a bi-infinite Bernoulli-\(\frac12\) sequence, and let \((X_t,Y_t)_{t\in\ZZ}\) be the sitewise microstate/stable-digit process whose finite factors are encoded by the reversed pair shift of Appendix~\ref{app:pressure}. Thus \(X_t=\eta_t\), while \(Y_t\) is the stable digit at site \(t\) in the bulk limit. By construction, \((X_t,Y_t)\) is stationary. We refer to its law as the \emph{bulk law}. Lemma~\ref{lem:interior-factors} identifies interior blocks of \(\mathcal{R}_M(\omega)\) with admissible labeled paths, so standard path-counting for primitive right-resolving presentations implies that this bulk law is the local weak limit of the uniform measures on \(\Om_M\): if \(\omega^{(M)}\) is uniform on \(\Om_M\) and \(k_M\to\infty\) with \(M-k_M\to\infty\), then
 \[
 \bigl(\omega^{(M)}_{k_M},(\Fold_M(\omega^{(M)}))_{k_M}\bigr)
 \Rightarrow
 (X_0,Y_0);
 \]
 see \cite[Chapter~8]{LindMarcus1995} and \cite[Chapter~2]{Kitchens1998}.
+
+\begin{lemma}[Interior factors and admissible paths]\label{lem:interior-factors}
+For every \(M\ge 1\) and every block length \(\ell\), the reversed-pair map \(\mathcal{R}_M\) from Appendix~\ref{app:pressure} is injective, and any length-\(\ell\) factor of \(\mathcal{R}_M(\omega)\) whose indices stay at least \(\ell\) sites away from the boundary belongs to the language \(\mathcal{L}_{\mathrm{pair}}\). Conversely, every word in \(\mathcal{L}_{\mathrm{pair}}\) occurs as such an interior factor of \(\mathcal{R}_M(\omega)\) for some \(\omega\in\Om_M\), and one may choose \(M\) arbitrarily large by padding zeros at high weights.
+\end{lemma}
+
+\begin{proof}
+Injectivity is immediate from the definition \(\mathcal{R}_M(\omega)=((\omega_M,z_M),\dots,(\omega_1,z_1))\): the first coordinate of \(\mathcal{R}_M(\omega)\) is the reversed microstate word, so the map recovers \(\omega\) exactly. Lemma~\ref{lem:zero-padding} shows that padding by zeros at high weights does not change the interior of the reversed pair word, so every interior factor of \(\mathcal{R}_M(\omega)\) with distance at least \(\ell\) from the boundary may be viewed as a factor of a much longer word whose synchronized prefix starts with \(00\). Appendix~\ref{app:pressure} then proves that the synchronized factors are precisely the path labels of the four-state right Fischer cover; in particular they lie in \(\mathcal{L}_{\mathrm{pair}}\).
+
+Conversely, every \(w\in\mathcal{L}_{\mathrm{pair}}\) appears as a finite path label in that graph. By Lemma~\ref{lem:zero-padding} we may prepend \(00\)'s to synchronize the path, then realize the corresponding microstate/stable pair by running the normalization transducer in Appendix~\ref{app:pressure}. Stripping the synchronizing zeros places \(w\) in the interior of \(\mathcal{R}_M(\omega)\) for some \(\omega\in\Om_M\). Choosing longer paddings if necessary separates \(w\) from the boundary by \(\ell\) sites. This proves the claim.
+\end{proof}
 
 \begin{theorem}[Exact bulk joint law]\label{thm:joint}
 Under the bulk law, the one-site joint distribution of \((X_0,Y_0)\) is
@@ -102,7 +129,7 @@ Consequently,
 \end{theorem}
 
 \begin{proof}
-Appendix~\ref{app:pressure} derives the four-state boundary transducer associated with the local rewrite \(011\to 100\). In the state order \((00,01,10,11)\), its adjacency matrix is
+Appendix~\ref{app:pressure} constructs the right Fischer cover of the reversed pair shift and shows that, in the state order \((00,01,10,11)\), its adjacency matrix is
 \[
 A=\begin{pmatrix}
 1&1&0&1\\
@@ -138,6 +165,10 @@ The probability of a labeled edge \(i\to j\) is \(\pi_iP_{ij}/A_{ij}\), where \(
 which is exactly the stated table. The two displayed marginals follow by summation.
 \end{proof}
 
+\begin{remark}[Comparison with earlier normalization results]
+The two-sided normalization transducers studied by Alexander--Zagier, Sidorov--Vershik, and Kempton \cite{AlexanderZagier1991,SidorovVershik1998,Kempton2014} also produce the marginal density \(\PP(Y_0=1)=5/18\). Our contribution here is the exact joint law with the naive digit and its anomaly interpretation; the agreement of the marginal is a consistency check with the prior Erd\H{o}s-measure literature.
+\end{remark}
+
 \subsection{Law of large numbers and central limit theorem}
 \label{subsec:lln-clt}
 Let \(\Delta_t:=X_t\oplus Y_t\) be the stationary discrepancy indicator process in the bulk. For \(n\ge 1\), set
@@ -145,7 +176,7 @@ Let \(\Delta_t:=X_t\oplus Y_t\) be the stationary discrepancy indicator process 
 S_n:=\sum_{t=1}^n \Delta_t.
 \]
 
-\begin{theorem}[LLN and CLT for anomaly density]\label{thm:llnclt}
+\begin{corollary}[LLN and CLT for anomaly density]\label{thm:llnclt}
 Under the bulk law,
 \[
 \frac{S_n}{n}\xrightarrow{\ \mathrm{a.s.}\ }\frac{4}{9},
@@ -154,17 +185,20 @@ and
 \[
 \frac{S_n-\frac{4}{9}n}{\sqrt n}\ \Rightarrow\ \mathcal{N}\!\left(0,\frac{118}{243}\right).
 \]
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
-Appendix~\ref{app:pressure} realizes \(\Delta_t\) as a bounded observable of an irreducible, aperiodic, finite-state Markov chain (equivalently, of the edge chain of the four-state presentation). The almost-sure law of large numbers is therefore the ergodic theorem for finite-state Markov chains \cite[Section~4]{Billingsley1961}. The central limit theorem follows from the standard Markov-chain CLT, for instance in Gordin's martingale-coboundary form \cite{Gordin1969}; see also \cite[Chapter~4]{ParryPollicott1990}. The asymptotic variance is the second derivative at \(0\) of the logarithmic pressure of the tilted matrix \(A_\theta\) computed in Appendix~\ref{app:pressure}, namely
+Appendix~\ref{app:pressure} realizes \(\Delta_t\) as a bounded observable of an irreducible, aperiodic, finite-state Markov chain (equivalently, of the edge chain of the four-state Fischer cover). The almost-sure law of large numbers is therefore the ergodic theorem for finite-state Markov chains \cite[Section~4]{Billingsley1961}. The central limit theorem follows from the standard Markov-chain CLT, for instance in Gordin's martingale-coboundary form \cite{Gordin1969}; see also \cite[Chapter~4]{ParryPollicott1990}. The asymptotic variance is the second derivative at \(0\) of the logarithmic pressure of the tilted matrix \(A_\theta\) computed in Appendix~\ref{app:pressure}, namely
 \[
 \Lambda''(0)=\frac{118}{243}.
 \]
 \end{proof}
+\begin{remark}
+The LLN and CLT are routine consequences of the four-state Markov structure established in Theorem~\ref{thm:joint} and Appendix~\ref{app:pressure}; the model-specific content is the anomaly density $4/9$ and the variance constant $118/243$.
+\end{remark}
 
 \begin{remark}[Finite-window interpretation]
-The process \((X_t,Y_t)\) is the bulk limit of the uniform measures on finite windows. Consequently, the constants in Theorems~\ref{thm:joint} and \ref{thm:llnclt} govern the interior statistics of the finite-window anomaly \(G_m\); boundary effects contribute only \(O(1)\) sites and do not alter the limiting density or variance.
+The process \((X_t,Y_t)\) is the bulk limit of the uniform measures on finite windows. Consequently, the constants in Theorem~\ref{thm:joint} and Corollary~\ref{thm:llnclt} govern the interior statistics of the finite-window anomaly \(G_m\); boundary effects contribute only \(O(1)\) sites and do not alter the limiting density or variance.
 \end{remark}
 
 \subsection{Closed-form autocovariance and rational power spectrum}
@@ -193,7 +227,7 @@ In particular,
 \[
 S(0)=\sum_{j\in\ZZ}c_j=\frac{118}{243},
 \]
-in agreement with Theorem~\ref{thm:llnclt}.
+in agreement with Corollary~\ref{thm:llnclt}.
 \end{theorem}
 
 \begin{proof}

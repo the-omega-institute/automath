@@ -21,15 +21,23 @@ structure of the associated open system.
 
 Fix a topologically mixing one-step subshift of finite type \(Y\), a
 one-step potential \(\varphi\), and the equilibrium Markov measure
-\(\nu_\varphi\).  Let \(H\) be a Markov hole with mixing survivor
-subshift \(Y_H\), and write
+\(\nu_\varphi\).  Let \(A_{\mathrm{hole}}\subsetneq A\) be a non-empty
+proper subset, let
+\[
+  H:=\bigcup_{h\in A_{\mathrm{hole}}}[h]
+\]
+be the corresponding Markov hole with mixing survivor subshift \(Y_H\),
+and write
 \[
   \gamma_H(\varphi):=P_Y(\varphi)-P_{Y_H}(\varphi)
 \]
 for the escape rate.  For a non-empty proper subset
 \(R\subsetneq \ZZ/q\ZZ\), let \(\mathsf P_R\) be the event that the
-first entry time into \(H\) is finite and belongs to \(R\) modulo
-\(q\).
+first entry time
+\[
+  \tau_H(y):=\inf\set{n\geq 0:\sigma^n y\in H}
+\]
+is finite and belongs to \(R\) modulo \(q\).
 
 \subsection*{Main results}
 
@@ -37,21 +45,26 @@ The paper is organized around one main theorem with subsequent
 refinements and consequences.
 \begin{enumerate}[label=(\roman*)]
   \item \textbf{Main theorem.}  An exact killed-matrix formula for the
-    Bayes error of first-entry residue events of Markov holes,
-    identifying its exponential decay with the escape rate and refining
-    the leading term by residue-dependent quasistationary ambiguity
-    amplitudes
-    (Theorems~\ref{thm:main-amplitude}
-    and~\ref{thm:first-entry-escape-rate}).
-  \item \textbf{Algebraic corollary.}  A resolvent reformulation that
-    places the error generating function in the \(q\)-th cyclotomic lift
-    of the killed spectrum, with dominant real pole
-    \(e^{\gamma_H(\varphi)}>1\)
-    (Theorem~\ref{thm:main-resonance}).
-  \item \textbf{Secondary consequence.}  A survivor R\'enyi pressure
-    formalism for the conditioned survivor law, yielding the R\'enyi-\(2\)
-    entropy rate and the resulting Poisson birthday thresholds
-    (Theorem~\ref{thm:main-renyi}).
+    Bayes error of first-entry residue events of Markov holes, with
+    exponential decay governed by the escape rate
+    (Theorem~\ref{thm:main-escape} and
+    Theorem~\ref{thm:first-entry-escape-rate}).
+  \item \textbf{Refinement.}  A residue-dependent quasistationary
+    amplitude refining the leading asymptotics
+    (Theorem~\ref{thm:main-amplitude} and
+    Theorem~\ref{thm:quasistationary-ambiguity}).
+  \item \textbf{Algebraic corollary.}  A resolvent reformulation showing
+    that the error generating function is a scalar resolvent coefficient
+    whose poles are contained in the \(q\)-th cyclotomic lift of the
+    killed spectrum and whose dominant real pole
+    \(e^{\gamma_H(\varphi)}>1\) is genuine
+    (Corollary~\ref{cor:main-resonance} and
+    Corollary~\ref{cor:error-resolvent-cyclotomic}).
+  \item \textbf{Secondary consequences.}  A survivor R\'enyi pressure
+    formalism for the conditioned survivor law, together with the
+    resulting Poisson birthday threshold
+    (Corollary~\ref{cor:main-renyi}, Corollary~\ref{cor:survivor-renyi-pressure},
+    and Proposition~\ref{prop:double-budget-poisson}).
 \end{enumerate}
 The center of gravity is the escape-rate theorem together with its
 quasistationary amplitude refinement in
@@ -59,17 +72,66 @@ Section~\ref{sec:open-system}; the resonance and survivor-R\'enyi
 statements are recorded as subsequent consequences of the same
 killed-operator formalism.
 
+\begin{theorem}[First-entry residue events and escape rates]
+\label{thm:main-escape}
+Assume the setting above.  Let \(\mathcal S:=A\setminus A_{\mathrm{hole}}\),
+define
+\[
+  B_H(i,j):=K_{ij}\mathbf 1_{\{j\in\mathcal S\}},
+  \qquad
+  u_i:=\pi_i,
+\]
+and for \(i\in\mathcal S\) let \(\PP_i\) be the Markov law conditioned to
+start at state \(i\).  Set
+\[
+  \tau_H^+
+  := \inf\set{n\geq 1:y_n\in A_{\mathrm{hole}}}.
+\]
+For each \(i\in\mathcal S\), let
+\[
+  D_i:=\set{d\bmod q:\PP_i(\tau_H^+=d)>0}
+  \subseteq \ZZ/q\ZZ
+\]
+be the set of attainable first-hit residues from \(i\), and assume that
+for every \(i\in\mathcal S\) and \(r\in\ZZ/q\ZZ\),
+\[
+  D_i\cap (R-r)\neq\varnothing,
+  \qquad
+  D_i\cap ((\ZZ/q\ZZ\setminus R)-r)\neq\varnothing.
+\]
+For \(r\in \ZZ/q\ZZ\), define
+\[
+  b_r(i):=
+  \min\set{
+    \PP_i(r+\tau_H^+\in R\bmod q),
+    1-\PP_i(r+\tau_H^+\in R\bmod q)
+  }.
+\]
+Then for every \(m\geq 1\),
+\[
+  \varepsilon_m(\mathsf P_R;\nu_\varphi)
+  = u^{\mathsf T}B_H^{m-1}b_{m-1\bmod q}.
+\]
+Moreover,
+\[
+  \lim_{m\to\infty}
+  -\frac1m\log\varepsilon_m(\mathsf P_R;\nu_\varphi)
+  = -\log\rho(B_H)
+  = P_Y(\varphi)-P_{Y_H}(\varphi).
+\]
+Thus the finite-observation exponent of \(\mathsf P_R\) recovers the
+escape rate \(\gamma_H(\varphi)\).
+\end{theorem}
+
 \begin{theorem}[Quasistationary ambiguity amplitudes]
 \label{thm:main-amplitude}
-Assume the setting above and the residue non-degeneracy hypothesis from
-Section~\ref{sec:open-system}.  Let \(B_H\) be the killed transition
-matrix on the safe alphabet, and let \(\ell_H\) be a non-negative left
+Under the hypotheses and notation of
+Theorem~\ref{thm:main-escape}, let \(\ell_H\) be a non-negative left
 eigenvector of \(B_H\) for \(\rho_H:=\rho(B_H)\), normalized by
 \[
   \xi_H:=\frac{\ell_H}{\ell_H^{\mathsf T}\mathbf 1}.
 \]
-For \(r\in \ZZ/q\ZZ\), let \(b_r\) be the residue ambiguity vector from
-Theorem~\ref{thm:first-entry-escape-rate}.  Then for every residue class
+Then for every residue class
 \(r\),
 \[
   \lim_{n\to\infty}
@@ -88,96 +150,98 @@ In particular, finite observation records not only the escape exponent
 ambiguity amplitude.
 \end{theorem}
 
-\noindent
-Theorem~\ref{thm:main-renyi} is a thermodynamic consequence of the same
-path-sum calculation, now applied to power weights on survivor words.
+\begin{remark}[Quasistationary interpretation]
+\label{rem:intro-qsd}
+The normalized left eigenvector \(\xi_H\) coincides with the
+quasistationary distribution of the killed chain, so
+Theorem~\ref{thm:main-amplitude} states that the Bayes ambiguity
+converges to the expectation of the residue weight \(b_r\) under the
+quasistationary law.  This makes the connection with the
+quasistationarity framework of \citet{KellerLiverani2009} explicit: the
+finite-observation observable extracts the same quasistationary limit
+but weights it by the residue-dependent Bayes ambiguity.
+\end{remark}
 
-\begin{theorem}[Survivor R\'enyi pressure spectrum]
-\label{thm:main-renyi}
-Assume again that \(Y\) is a mixing one-step subshift of finite type,
-\(\nu_\varphi\) is the equilibrium Markov measure of a one-step
-potential \(\varphi\), and \(H\) is a Markov hole with mixing survivor
-subshift \(Y_H\).  For \(m\geq 1\), let \(\mathcal L_m^H\) be the set of
-admissible length-\(m\) words that avoid \(H\) for the first \(m\)
-steps, and for \(s>0\) define
+\begin{corollary}[Cyclotomic resonance lift]
+\label{cor:main-resonance}
+Under the hypotheses and notation of
+Theorem~\ref{thm:main-escape}, set
 \[
-  \mathcal Z_{H,m}(s)
-  := \sum_{a\in \mathcal L_m^H} \nu_\varphi([a])^s.
+  \widehat{\mathcal S}:=\mathcal S\times \ZZ/q\ZZ,
 \]
-Then
+define
 \[
-  \lim_{m\to\infty}
-  -\frac1m\log \mathcal Z_{H,m}(s)
-  = sP_Y(\varphi)-P_{Y_H}(s\varphi).
+  \widehat B_H\bigl((i,r),(j,s)\bigr)
+  := B_H(i,j)\mathbf{1}_{\{s=r+1\bmod q\}},
 \]
-
-If \(\lambda_m^H\) denotes the law of the survivor word conditioned on
-survival to depth \(m\),
 \[
-  \lambda_m^H(a)
-  := \frac{\nu_\varphi([a])}{\nu_\varphi(\tau_H\ge m)},
-  \qquad a\in\mathcal L_m^H,
+  \widehat u(i,r):=u_i\mathbf 1_{\{r=0\}},
+  \qquad
+  \widehat b(i,r):=b_r(i).
 \]
-then
+Then the error generating function
 \[
-  \lim_{m\to\infty}
-  -\frac1m\log
-  \sum_{a\in\mathcal L_m^H} \lambda_m^H(a)^s
-  = sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi).
+  \mathcal E_{\mathsf P_R}(z)
+  := \sum_{m\geq 1}\varepsilon_m(\mathsf P_R;\nu_\varphi)z^m
 \]
-
-In particular, at \(s=2\) the conditioned survivor law has R\'enyi-\(2\)
-entropy rate
-\[
-  h_{2,H}:=2P_{Y_H}(\varphi)-P_{Y_H}(2\varphi),
-\]
-while the ambient two-sample exponent for simultaneous survival and
-visible collision is
-\[
-  \chi_H:=2P_Y(\varphi)-P_{Y_H}(2\varphi)
-        = 2\gamma_H(\varphi)+h_{2,H}.
-\]
-\end{theorem}
-
-The identity \(\chi_H = 2\gamma_H(\varphi)+h_{2,H}\) places the
-collision story inside open-system thermodynamic formalism.  Combined
-with a Chen--Stein argument (Section~\ref{sec:double-budget}), it yields
-Poisson birthday thresholds for surviving samples on the scale
-\(\binom{N_m}{2}e^{-m h_{2,H}}\asymp 1\).
-
-\medskip
-\noindent
-The next theorem is a supplementary resolvent reformulation of the
-preceding asymptotics.
-
-\begin{theorem}[Cyclotomic resonance lift]
-\label{thm:main-resonance}
-For first-entry residue events of Markov holes, the Bayes error
-generating function is a residue-twisted killed resolvent,
+satisfies
 \[
   \mathcal E_{\mathsf P_R}(z)
   = z\,\widehat u^{\mathsf T}(I-z\widehat B_H)^{-1}\widehat b,
 \]
-and every pole belongs to the \(q\)-th cyclotomic lift of the killed
-spectrum.  The positive real pole of smallest modulus is
+and every pole belongs to the reciprocal \(q\)-th cyclotomic lift of
+\(\spec(B_H)\).  The positive real pole of smallest modulus is
 \[
-  z_H=\rho_H^{-1}=e^{P_Y(\varphi)-P_{Y_H}(\varphi)}=e^{\gamma_H(\varphi)},
+\rho_H^{-1}
+= e^{P_Y(\varphi)-P_{Y_H}(\varphi)}
+= e^{\gamma_H(\varphi)}
+> 1.
 \]
-which is the reciprocal escape factor; since
-\(\rho_H=e^{-\gamma_H(\varphi)}<1\), one has \(z_H>1\).
-\end{theorem}
+\end{corollary}
 
-\begin{remark}[Expected H\"older extension]
-After a sufficiently high block recoding, the same resolvent description
-is expected to hold for finite unions of cylinders and H\"older
-potentials, with poles in the reciprocal \(q\)-th cyclotomic lift of the
-open Ruelle spectrum.  We develop the formal transfer-operator setup for
-this extension in
+\begin{corollary}[Survivor R\'enyi pressure spectrum and collision scale]
+\label{cor:main-renyi}
+Under the hypotheses of Theorem~\ref{thm:main-escape}, let
+\(\mathcal L_m^H\) be the set of admissible length-\(m\) words that
+avoid \(H\) for the first \(m\) steps, and let \(\lambda_m^H\) denote
+the corresponding survivor-prefix law conditioned on survival to depth
+\(m\).  Then for every \(s>0\),
+\[
+  \lim_{m\to\infty}
+  -\frac1m\log
+  \sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^s
+  = sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi).
+\]
+In particular, the conditioned survivor law has R\'enyi-\(2\) entropy
+rate
+\[
+  h_{2,H}:=2P_{Y_H}(\varphi)-P_{Y_H}(2\varphi),
+\]
+and the ambient two-sample exponent satisfies
+\[
+  \chi_H:=2P_Y(\varphi)-P_{Y_H}(2\varphi)
+        = 2\gamma_H(\varphi)+h_{2,H}.
+\]
+Consequently the birthday threshold for surviving samples lies on the
+scale
+\[
+  \binom{N_m}{2}e^{-m h_{2,H}}\asymp 1.
+\]
+\end{corollary}
+
+\begin{remark}[Conjectural H\"older extension]
+After a sufficiently high block recoding, one expects the same
+resolvent description to hold for finite unions of cylinders and
+H\"older potentials, with poles in the reciprocal \(q\)-th cyclotomic
+lift of the open Ruelle spectrum.  Section~\ref{sec:open-system-resonance}
+records only a conjectural transfer-operator roadmap for this extension:
+no theorem is claimed there beyond the finite-state setting treated in
+the body of the paper.  A complete proof of the spectral-gap and
+regularity claims in the infinite-state H\"older setting would require
+significant additional operator-theoretic work and is deferred.  The
+formal setup appears in
 Section~\ref{sec:open-system-resonance}
-(Theorem~\ref{thm:holder-open-resonance}), but a complete
-publication-level proof of the spectral-gap and regularity claims in the
-infinite-state H\"older setting would require significant additional
-operator-theoretic work and is deferred.
+(Remark~\ref{rem:holder-open-resonance}).
 \end{remark}
 
 \subsection*{Context and comparison}
@@ -223,22 +287,63 @@ resolvent accessible from the error generating function.  The Poisson
 collision thresholds recorded in Section~\ref{sec:double-budget} are
 classical in method but acquire their dynamical content from the survivor
 R\'enyi pressure spectrum, which emerges from the same killed-matrix
-calculation.
+calculation.  To summarize the division of novelty: new in this paper
+is the Bayes-error observable and its residue-dependent ambiguity
+amplitude; the pressure-gap escape formula,
+Perron--Frobenius asymptotics for the killed matrix, and
+Chen--Stein Poisson approximation are standard ingredients used in
+the analysis.
+
+\subsection*{Relation to recent escape-rate work for SFTs with holes}
+
+Two recent papers closest in spirit to the present finite-state setting
+are due to Cheriyath--Agarwal and Agarwal--Cheriyath--Tikekar.
+\citet{CheriyathAgarwal2024} treat subshifts of finite type with holes
+and obtain pressure-gap formulas and recurrence relations for escape
+rates of Markov measures, while
+\citet{AgarwalCheriyathTikekar2024} derive spectral-radius and recurrence
+descriptions for Markov-measure escape rates using Perron--Frobenius
+machinery.  Both works focus on the survivor mass itself; they do not
+introduce a new observation process or residue-dependent refinement.  In
+contrast, the present paper keeps the standard escape-rate inputs but
+packages them into the Bayes-error observable, thereby extracting
+quasistationary amplitudes and residue-sensitive generating functions
+from finite observation.
+
+From an operator-theoretic viewpoint,
+\citet{FroylandStancevic2011} compare open and closed Perron--Frobenius
+operators and describe how escape rates appear in the spectrum of the
+open operator.  Our cyclotomic resolvent reformulation should therefore
+be read as a scalar resolvent coefficient compatible with that
+framework: we prove inclusion of poles and the genuineness of the
+dominant real pole, but we do not assert that the error generating
+function detects every spectral value.  The additional comparison with
+the quasistationary literature of \citet{KellerLiverani2009} clarifies
+that the Bayes ambiguity is a quasistationary expectation of a new
+residue weight.  This repositioning is the main editorial change relative
+to the first submission.
 
 \subsection*{ETDS focus and hierarchy}
 
 Prepared for \emph{Ergodic Theory and Dynamical Systems}, the manuscript
-is organized around one dynamical theorem: the killed-matrix Bayes error
-formula that identifies finite-observation exponents with the escape
-rate.  The main result is
+is organized as a focused finite-state contribution around one dynamical
+theorem: the killed-matrix Bayes error formula that identifies
+finite-observation exponents with the escape rate.  The main result is
 Theorem~\ref{thm:first-entry-escape-rate}, proved in
 Section~\ref{sec:open-system}, which is the center of gravity.  Its
 principal refinement is
 Theorem~\ref{thm:quasistationary-ambiguity}, which resolves the
 quasistationary amplitudes.  The resolvent reformulation
-(Theorem~\ref{thm:error-resolvent-cyclotomic}) is an algebraic
+(Corollary~\ref{cor:error-resolvent-cyclotomic}) is an algebraic
 corollary.  Section~\ref{sec:double-budget} records secondary
-thermodynamic consequences of the same calculation.
+thermodynamic consequences of the same calculation.  The broader
+H\"older/cylinder-hole extension is not asserted as a theorem here; it
+is isolated in Remark~\ref{rem:holder-open-resonance} as a conjectural
+framework for future work.  In line with this scope choice, the
+preliminary Sections~\ref{sec:preliminaries}--\ref{sec:clarity} have
+been compressed to short lemmas and proof sketches, and
+Section~\ref{sec:double-budget} is presented purely as corollaries of
+the killed-matrix calculation rather than as a second line of results.
 
 \subsection*{Notation summary}
 
@@ -255,20 +360,22 @@ Bayes error of an event \(\mathsf P\).
 
 \subsection*{Organization}
 
-Section~\ref{sec:preliminaries} introduces the visible symbolic factor
-and finite observation \(\sigma\)-algebras.
-Section~\ref{sec:spg} records visible words and a Sturmian remark.
-Section~\ref{sec:recursive-addressing} summarizes the key fact that
-recursive visible refinements reduce to base-level observations;
-this material is compressed and is used only to justify reductions in
-later sections.
-Section~\ref{sec:clarity} develops the exact Bayes error formulas and
-the weighted boundary transfer theorem.
-Section~\ref{sec:open-system} proves
-Theorems~\ref{thm:main-amplitude} and~\ref{thm:main-resonance}; this is
-the core of the paper.
-Section~\ref{sec:double-budget} proves
-Theorem~\ref{thm:main-renyi} and derives the collision consequences.
-Appendix~\ref{sec:injective-appendix} records a supplementary note on
-injective refinements.
+Sections~\ref{sec:preliminaries}--\ref{sec:recursive-addressing}
+collect the necessary background: the visible symbolic factor, finite
+observation \(\sigma\)-algebras, and the finite-depth collapse theorem
+for recursive refinements.
+Section~\ref{sec:clarity} develops the general Bayes error formulas and
+the weighted boundary transfer theorem
+(Theorem~\ref{thm:weighted-boundary-transfer}).
+Section~\ref{sec:open-system} specializes this framework to Markov holes
+and proves the main escape-rate theorem
+(Theorem~\ref{thm:first-entry-escape-rate}), the quasistationary
+amplitude refinement (Theorem~\ref{thm:quasistationary-ambiguity}), and
+the resolvent reformulation
+(Corollary~\ref{cor:error-resolvent-cyclotomic}); this is the core of the
+paper and now includes explicit examples that separate equal escape rates
+from different residue amplitudes and display the cyclotomic poles of the
+error generating function.
+Section~\ref{sec:double-budget} derives the survivor R\'enyi spectrum
+and collision consequences as corollaries of the same calculation.
 Section~\ref{sec:conclusion} collects brief final remarks.

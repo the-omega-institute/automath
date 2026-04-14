@@ -4,15 +4,35 @@ We next distinguish admissible reference from objecthood. An admitted reference 
 
 \subsection{Refinement axioms}\label{sec:refinement-axioms}
 
-The local-object layer interacts with state refinement through the following standing axioms. They are used explicitly in \Cref{prop:typed-readout-persistence,thm:null-classification-under-refinement} and implicitly wherever refinement stability of visible classes is invoked.
+The local-object layer interacts with state refinement through the following standing axioms. Whenever $q\le p$ we fix the variance convention
+\[
+p\longrightarrow q,
+\]
+meaning that every object defined at the coarser state $p$ pulls back functorially to $q$. All structural maps below are natural in chains of refinements. The axioms are used explicitly in \Cref{prop:typed-readout-persistence,thm:null-classification-under-refinement} and implicitly wherever refinement stability of visible classes is invoked.
 
 \begin{definition}[Refinement axioms for the local-object layer]\label{def:refinement-axioms}
 Let $q\le p$ be a refinement of information states. The local-object layer satisfies:
 \begin{enumerate}[label=(RA\arabic*),nosep]
-\item\label{ax:ref-restriction} \emph{Reference restriction:} there is a map $\mathcal{R}_s(p)\to \mathcal{R}_s(q)$ compatible with the admissibility predicate, so that if $M,p\Vdash\Adm_s(r)$ then $M,q\Vdash\Adm_s(r)$, and $[r]_q$ depends only on $[r]_p$ and the refinement $q\le p$.
-\item\label{ax:cover-restriction} \emph{Cover restriction:} there is a functor $\mathcal{B}_{q,s}\to\mathcal{B}_{p,s}$ that sends covering families at $q$ to covering families at $p$, preserving the Grothendieck pretopology structure.
-\item\label{ax:section-restriction} \emph{Section restriction:} for every $a\in\mathcal{R}_s(p)$, there is a natural transformation $F_{q,s}|_{\mathcal{C}_q/a}\to F_{p,s}|_{\mathcal{C}_p/a}$ that is compatible with the restriction maps. In particular, compatible local families at $q$ restrict to compatible local families at $p$.
-\item\label{ax:vis-stability} \emph{Visible class stability:} if $\Vis_{p,s}(r)=\{v\}$, then $\Vis_{q,s}(r)=\{v'\}$ with $v'$ the image of $v$ under the restriction of \ref{ax:section-restriction}. That is, a uniquely determined visible class at $p$ is not split by further refinement.
+\item\label{ax:ref-restriction} \emph{Reference pullback:} there is a map
+\[
+\rho^{s}_{p\to q}:\mathcal{R}_s(p)\longrightarrow \mathcal{R}_s(q)
+\]
+compatible with admissibility, so that if $M,p\Vdash\Adm_s(r)$ then $M,q\Vdash\Adm_s(r)$ and $[r]_q=\rho^{s}_{p\to q}([r]_p)$.
+\item\label{ax:cover-restriction} \emph{Cover pullback:} there is a functor
+\[
+\Phi^{s}_{p\to q}:\mathcal{B}_{p,s}\longrightarrow\mathcal{B}_{q,s}
+\]
+preserving identities, refinements, and covering families. Concretely, a cover $\{a_i\to a\}$ at $p$ pulls back to a cover $\{\Phi^{s}_{p\to q}(a_i)\to \Phi^{s}_{p\to q}(a)\}$ at $q$.
+\item\label{ax:section-restriction} \emph{Section transport:} for every $a\in\mathcal{R}_s(p)$ with image $\rho^{s}_{p\to q}(a)$, there is a natural transformation
+\[
+T^{s}_{p\to q}:F_{p,s}|_{\mathcal{C}_{p,s}/a}\Longrightarrow F_{q,s}|_{\mathcal{C}_{q,s}/\rho^{s}_{p\to q}(a)}
+\]
+compatible with the restriction maps of the two slice sites. Consequently, a compatible local family at $p$ pulls back to a compatible local family at $q$.
+\item\label{ax:vis-stability} \emph{Visible class transport:} there is a well-defined induced map
+\[
+\Vis_{p\to q}:\Vis_{p,s}(r)\longrightarrow \Vis_{q,s}(r)
+\]
+defined by pulling a representative covering family along \ref{ax:cover-restriction} and transporting its sections via \ref{ax:section-restriction}. Whenever $\Vis_{p,s}(r)$ is a singleton, $\Vis_{p\to q}$ sends that unique class to the unique class at $q$.
 \end{enumerate}
 \end{definition}
 
@@ -80,15 +100,7 @@ Then the covering families $\Cov_{p,s}$ form a Grothendieck pretopology on $\mat
 \end{proposition}
 
 \begin{proof}
-The identity axiom in \Cref{def:local-reference-frame} gives the covering family $\{a\to a\}$ for every object $a$. If $\{a_i\to a\}_{i\in I}$ is a cover and $b\to a$ is any morphism, the pullback-stability axiom provides a cover
-\[
-\{b_{ij}\to b\}_{i\in I,\;j\in J_i}
-\]
-such that each arrow factors through $a_i\to a$. Finally, if $\{a_i\to a\}_{i\in I}$ covers $a$ and each $\{b_{ij}\to a_i\}_{j\in J_i}$ covers $a_i$, the transitivity axiom gives the composite cover
-\[
-\{b_{ij}\to a\}_{i\in I,\;j\in J_i}.
-\]
-These are exactly the identity, pullback, and transitivity axioms for a Grothendieck pretopology on a preorder category \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}, \cite[Part~B2.1]{Johnstone2002}.
+See Appendix~\ref{app:deferred-proofs}.
 \end{proof}
 
 Accordingly, we use the same symbol $\mathcal{B}_{p,s}$ for the resulting preorder category in the presheaf and sheaf constructions below.
@@ -126,8 +138,18 @@ M,p\Vdash \LocSec_s(r).
 \end{proposition}
 
 \begin{proof}
-Let $a=[r]_p$ and choose $\sigma\in F_{p,s}(a)$. The trivial cover $\{a\to a\}$ is available by \Cref{def:local-reference-frame}. The singleton family $(\sigma)$ is therefore a compatible local family, so both compatible local sectionability and local sectionability follow immediately.
+See Appendix~\ref{app:deferred-proofs}.
 \end{proof}
+
+\begin{example}[Toy behaviors of $\LocSec$, $\CompSec$, and $\Sec$]\label{ex:toy-loc-comp-sec}
+Let $p$ be a state with one referenceable sort $s$ and a local reference frame generated by a root $a$, two refinements $u,v\sqsubseteq_{p,s} a$ that cover $a$, and their common refinement $w\sqsubseteq_{p,s} u,v$. Define three references $r_{\mathrm{loc}}, r_{\mathrm{cmp}}, r_{\mathrm{glue}}$ that share this frame but differ in their presheaves:
+\begin{itemize}[nosep]
+\item $F_{p,s}^{\mathrm{loc}}(u)=F_{p,s}^{\mathrm{loc}}(v)=\varnothing$, so $\LocSec_s(r_{\mathrm{loc}})$ already fails;
+\item $F_{p,s}^{\mathrm{cmp}}(u)=\{\sigma_u\}$ and $F_{p,s}^{\mathrm{cmp}}(v)=\{\sigma_v\}$ while $F_{p,s}^{\mathrm{cmp}}(w)=\{0,1\}$ with $\res_w^u(\sigma_u)=0$ and $\res_w^v(\sigma_v)=1$, so local witnesses exist but are incompatible on $w$, meaning $\LocSec_s(r_{\mathrm{cmp}})$ holds and $\CompSec_s(r_{\mathrm{cmp}})$ fails;
+\item $F_{p,s}^{\mathrm{glue}}(u)=F_{p,s}^{\mathrm{glue}}(v)=F_{p,s}^{\mathrm{glue}}(w)=\{*\}$ while $F_{p,s}^{\mathrm{glue}}(a)=\varnothing$, so both $\LocSec_s(r_{\mathrm{glue}})$ and $\CompSec_s(r_{\mathrm{glue}})$ hold but $\Sec_s(r_{\mathrm{glue}})$ fails.
+\end{itemize}
+This toy picture isolates the three semantic levels before any gerbe machinery is invoked: absence may arise from missing local sections, incompatible local sections, or genuine gluing failure.
+\end{example}
 
 \subsection{Sheafification and gluing failure}
 
@@ -155,7 +177,7 @@ M,p\Vdash \CompSec_s(r)
 \end{proposition}
 
 \begin{proof}
-By the standard site-theoretic description of sheafification, a section of $a_{p,s}F_{p,s}$ at $a$ is represented by a matching family over some covering sieve of $a$, equivalently over some covering family of $a$ \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}, \cite[Part~B2.2]{Johnstone2002}. In the present setting, such a matching family is exactly a compatible local family as in \Cref{def:existence-levels}(ii). Hence the sheafified fiber is nonempty exactly when $r$ is compatibly locally sectionable at $p$.
+See Appendix~\ref{app:deferred-proofs}.
 \end{proof}
 
 \begin{remark}\label{rem:sheafification-standard}
@@ -191,7 +213,7 @@ This is \Cref{thm:sheafification-characterization} rewritten for the sheaf $a_{p
 
 \subsection{Realization prestacks and connected components}
 
-The presheaf $F_{p,s}$ records only the isomorphism classes of local realizations. To pass from compatible local families to gerbes and cohomology, one works with a chosen groupoid-valued lift whose connected components recover $F_{p,s}$ after sheafification. The first point is purely categorical: once an abelian band has been fixed on the slice site, such lifts always exist. The substantive issue is therefore not bare existence, but whether one has chosen a lift whose stackification still reflects the intended gluing semantics at the terminal fibre.
+The presheaf $F_{p,s}$ records only the isomorphism classes of local realizations. To pass from compatible local families to gerbes and cohomology, one works with a chosen groupoid-valued lift whose connected components recover $F_{p,s}$ after sheafification. For separated $F_{p,s}|_{\mathcal C_a}$, the split construction below provides such a lift. For a general presheaf, however, the existence of a banded prestack lift is not automatic. The substantive issue for the later semantics is therefore twofold: first, to specify a lift when one is available, and second, to require that its stackification still reflects the intended gluing semantics at the terminal fibre.
 
 \begin{definition}[Realization prestack and stackification]\label{def:realization-prestack}
 Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, and write
@@ -302,15 +324,7 @@ In the setting of \Cref{def:realization-prestack}, there is a canonical isomorph
 \end{proposition}
 
 \begin{proof}
-By stackification, the morphism presheaves of $\mathfrak P_r$ are sheafified and every object of $\mathfrak L_r$ is locally in the essential image of $\mathfrak P_r\to \mathfrak L_r$ \cite[Tag 02ZP]{StacksProject}. Passing to isomorphism classes therefore shows that $\pi_0(\mathfrak L_r)$ is the sheafification of $\pi_0^{\mathrm{pre}}(\mathfrak P_r)$. Since stacks in setoids are precisely sheaves of sets \cite[Tag 042Y]{StacksProject}, we obtain
-\[
-\pi_0(\mathfrak L_r)\cong a\bigl(\pi_0^{\mathrm{pre}}(\mathfrak P_r)\bigr).
-\]
-Using \Cref{def:realization-prestack}(i), this becomes
-\[
-\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a}.
-\qedhere
-\]
+See Appendix~\ref{app:deferred-proofs}.
 \end{proof}
 
 \begin{definition}[Global conservativity at the terminal fibre]\label{def:global-conservativity}
@@ -335,22 +349,47 @@ M,p\Vdash \Sec_s(r)
 \end{proposition}
 
 \begin{proof}
-By \Cref{def:existence-levels} and \Cref{def:realization-prestack}(i),
-\[
-M,p\Vdash \Sec_s(r)
-\quad\Longleftrightarrow\quad
-F_{p,s}(a)\neq\varnothing
-\quad\Longleftrightarrow\quad
-\pi_0^{\mathrm{pre}}(\mathfrak P_r)(a)\neq\varnothing
-\quad\Longleftrightarrow\quad
-(\mathfrak P_r)_a\neq\varnothing.
-\]
-If $(\mathfrak P_r)_a\neq\varnothing$, choose $y\in (\mathfrak P_r)_a$. Then $\iota_r(y)\in \mathfrak L_r(a)$, so $\mathfrak L_r(a)\neq\varnothing$. Conversely, if $x\in \mathfrak L_r(a)$, essential surjectivity of $(\iota_r)_a$ yields $y\in (\mathfrak P_r)_a$ with $\iota_r(y)\cong x$, so $(\mathfrak P_r)_a\neq\varnothing$.
+See Appendix~\ref{app:deferred-proofs}.
 \end{proof}
 
 \begin{remark}[What remains conditional]\label{rem:gluing-sensitive-lifts}
 \Cref{prop:split-realization-prestack} shows that, for a separated presheaf $F_{p,s}|_{\mathcal C_a}$ and a fixed band, a canonical split realization prestack is always available. What remains conditional in the later branch-obstruction theory is the choice of a \emph{gluing-sensitive} lift, namely a realization prestack whose stackification is globally conservative at $a$ and whose component gerbes satisfy the vanishing hypotheses needed to produce branch obstruction classes. The branch obstruction classes of \Cref{sec:gerbe-obstruction} are therefore attached to a chosen gluing-sensitive lift and its band, not to the bare set-valued functor $F_{p,s}$ alone. The substantive semantic claims concern which lifts preserve the intended local-to-global content, not whether a formal groupoid-valued lift exists at all.
 \end{remark}
+
+\subsection{Scope of the chosen-lift formalism}\label{subsec:scope-chosen-lift}
+
+The revision introduces an explicit checklist for when the chosen-lift formalism applies and a dependency diagram for the hypotheses used by later results. The diagram in \Cref{fig:assumption-map} lists the standing assumptions from the introduction and the statements that cite them.
+
+\begin{figure}[h]
+\centering
+\begin{tabular}{ll}
+\toprule
+Assumption & Results depending on it \\
+\midrule
+A1 (gluing-sensitive lift) & \Cref{thm:visible-value-components,thm:component-gerbe-decomposition} \\
+A2 (global conservativity) & \Cref{prop:no-new-global-objects,thm:gerbe-null-semantics} \\
+A3 (finite nerve presentation) & \Cref{def:finite-nerve-presentation,thm:intrinsic-visible-quotient} \\
+A4 (branch constancy) & \Cref{cor:branch-decomposition} \\
+\bottomrule
+\end{tabular}
+\caption{Assumption-versus-result map used throughout the paper.}\label{fig:assumption-map}
+\end{figure}
+
+\paragraph{Checklist.}
+Given an admitted reference $r:\mathsf{Ref}_s$, the chosen-lift formalism is applicable once the following verifications have been completed.
+\begin{enumerate}[label=(\arabic*),nosep]
+\item (\emph{Separated presheaf}) Check that $F_{p,s}|_{\mathcal C_a}$ is separated on the slice site of a reference class $a=[r]_p$ so that the split prestack of \Cref{prop:split-realization-prestack} exists.
+\item (\emph{Gluing-sensitive lift}) Choose a realization prestack $\mathfrak P_r$ whose stackification $\mathfrak L_r$ is globally conservative at $a$ (\Cref{def:global-conservativity}).
+\item (\emph{Finite presentation}) Produce a finite cover $\mathcal U$ with finite nerve $N(\mathcal U)$ and trivialize the band on $\mathcal U$ so that \Cref{def:finite-nerve-presentation} applies.
+\item (\emph{Branch hypotheses}) When branch constancy or visibility invariance is needed, verify the bijectivity condition of \Cref{def:branch-constancy} on the chosen cover.
+\end{enumerate}
+Section~\ref{sec:homological-visibility} turns the finite presentation into concrete homological data only after this checklist has been satisfied.
+
+\paragraph{Example 1 (GHZ support presheaf).}
+Let $e$ be the Greenberger--Horne--Zeilinger empirical model on the standard cyclic cover of contexts studied by Abramsky and Brandenburger \cite{AbramskyBrandenburger2011}. Its support presheaf $S_e$ on the measurement cover is separated, so condition~(1) holds and the split prestack is available with any abelian band. Choosing the constant band $\Band=\mathbb Z/2\mathbb Z$ and the gluing-sensitive lift whose stackification coincides with the neutral component of the Abramsky--Brandenburger stack yields condition~(2); the global-conservativity property follows because stack-global objects already coincide with compatible families of outcome assignments. Finite nerve data are obtained by restricting to one finite cyclic subcover, so (3) holds. Finally, the unique visible branch is constant on every face of the nerve, so branch constancy holds and (4) is verified. Every hypothesis used later in \S\ref{sec:gerbe-obstruction} and \S\ref{sec:homological-visibility} is therefore satisfied by this standard contextuality model.
+
+\paragraph{Example 2 (Kripke--Beth semantic tower).}
+Consider a finitely generated Kripke frame equipped with the Beth-frame semantics studied in \cite{Beth1956,Kripke1965}. Let $r$ be a reference recording the admissible partial sections of a predicate over the Kripke frame. The associated local object functor is a presheaf on the Alexandrov site of the frame and is separated (Kripke monotonicity implies uniqueness of glued sections), so (1) holds. The realization prestack obtained by promoting local sections to slice groupoids, with automorphisms given by the identity band, is globally conservative because forcing at the limit node detects exactly the global sections that were already present—hence (2). Covers by finite antichains yield finite nerves, providing (3). Because visibility distinguishes connected components of the Alexandrov stack and the Kripke frame has finitely many maximal nodes, the restriction maps on components are bijective, so (4) holds. This construction verifies that the same hypotheses apply to a standard semantic example unrelated to contextuality.
 
 \subsection{Visible value classes and typed readouts}
 
@@ -370,11 +409,7 @@ Assume that $r$ admits a realization prestack in the sense of \Cref{def:realizat
 \end{proposition}
 
 \begin{proof}
-By the standard description of sheafification on a site, a section of $a_{p,s}F_{p,s}$ at $a$ is represented by a matching family over a cover of $a$, modulo passage to common refinements. This is exactly the equivalence relation imposed in \Cref{def:visible-value-classes}. Hence
-\[
-\Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a).
-\]
-The second identification is \Cref{prop:stackification-components} evaluated at $a$.
+See Appendix~\ref{app:deferred-proofs}.
 \end{proof}
 
 \begin{definition}[Typed readout]\label{def:typed-readout}
@@ -444,7 +479,7 @@ Then
 \end{proposition}
 
 \begin{proof}
-Since $v\neq\Null$, the readout at $p$ is represented by a unique visible value class. By the refinement axioms \ref{ax:section-restriction} and \ref{ax:vis-stability} (\Cref{def:refinement-axioms}), compatible local families restrict functorially from $q$ to $p$, and a uniquely determined visible class at $p$ cannot split under further refinement. Hence the same class $v$ remains the unique visible class at $q$, so \Cref{def:typed-readout} gives $\Read_{q,s}(r)=v$.
+Since $v\neq\Null$, the readout at $p$ is represented by a unique visible value class. By the refinement axioms \ref{ax:section-restriction} and \ref{ax:vis-stability} (\Cref{def:refinement-axioms}), compatible local families pull back functorially from $p$ to $q$ and the induced map $\Vis_{p\to q}$ sends a singleton of visible classes to a singleton. Hence the same class $v$ remains the unique visible class at $q$, so \Cref{def:typed-readout} gives $\Read_{q,s}(r)=v$.
 \end{proof}
 
 \subsection{Structural absence}
@@ -589,71 +624,168 @@ and identify the three reference classes with $a_{\mathrm{loc}},a_{\mathrm{cmp}}
 
 The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. The following result makes this precise: the gluing predicates introduced at the local-object layer cannot be reduced to the lower layers.
 
-We first specify the formal languages involved in the separation argument.
+We first isolate the three language layers used in the separation argument and reformulate the local-object predicates in a one-variable, constant-free manner.
 
-\begin{definition}[Lower-layer language $\mathcal L_{\mathrm{low}}$ and enriched language $\mathcal L_{\mathrm{lo}}$]\label{def:lower-enriched-languages}
-Fix a many-sorted first-order signature $\Sigma=(S,F,R)$ as in \Cref{sec:information-states}. The \emph{lower-layer language} $\mathcal L_{\mathrm{low}}$ is the first-order language with signature $\Sigma$, including equality, all function and relation symbols, and quantifiers over sorts in $S$. The forcing semantics of $\mathcal L_{\mathrm{low}}$ at an information state $p$ is flat team forcing:
+\begin{definition}[Lower and enriched one-variable languages]\label{def:lower-enriched-languages}
+Fix a referenceable sort $s\in S_{\mathrm{ref}}$.
+\begin{enumerate}[label=(\roman*),nosep]
+\item $\mathcal L_0$ is the lower many-sorted first-order language of \Cref{def:lower-layer-syntax}, interpreted pointwise by the usual Tarskian relation $M,\rho\models\varphi$.
+\item $\mathcal L_1$ has exactly the same formulas as $\mathcal L_0$ and is interpreted at information states by the forcing relation of \Cref{def:state-forcing}.
+\item $\mathcal L_2$ extends $\mathcal L_1$ by unary predicates
 \[
-M,p\Vdash\varphi
-\quad\Longleftrightarrow\quad
-\forall \rho\in R_p\;(M,\rho\models\varphi).
+\Adm_s(x),\qquad \LocSec_s(x),\qquad \CompSec_s(x),\qquad \Sec_s(x)
 \]
-The \emph{enriched language} $\mathcal L_{\mathrm{lo}}$ extends $\mathcal L_{\mathrm{low}}$ by adding the predicates $\Adm_s$, $\LocSec_s$, $\CompSec_s$, and $\Sec_s$ for each referenceable sort $s\in S_{\mathrm{ref}}$, whose semantics are defined in \Cref{def:existence-levels}. These predicates depend on the local-object layer (the site and the presheaf $F_{p,s}$) and are not part of $\mathcal L_{\mathrm{low}}$.
+for variables $x$ of sort $s$.
+\end{enumerate}
+
+A \emph{parameter-indexed local-object expansion} of a lower structure $M$ at the sort $s$ consists of:
+\begin{enumerate}[label=(\alph*),nosep]
+\item a subset $\Adm_s^M\subseteq D_s^M$ of admitted parameters;
+\item for each $u\in \Adm_s^M$, a local reference frame with distinguished root $a_u$ and a presheaf
+\[
+F_u:\mathcal C_u^{op}\to\mathsf{Set}
+\]
+on the corresponding slice site $\mathcal C_u$.
+\end{enumerate}
+For each $u\in D_s^M$, let
+\[
+p_u:=(x:s,\{\rho_u\}),
+\qquad
+\rho_u(x)=u,
+\]
+be the singleton information state determined by $u$. The new atomic predicates are evaluated by
+\[
+M,p_u\Vdash \Adm_s(x)
+\quad\Longleftrightarrow\quad
+u\in \Adm_s^M,
+\]
+and, when $u\in \Adm_s^M$, the predicates $\LocSec_s(x)$, $\CompSec_s(x)$, and $\Sec_s(x)$ are interpreted exactly as in \Cref{def:existence-levels}, with the distinguished root $a_u$ playing the role of the reference class $[r]_p$. For $u\notin\Adm_s^M$, these three section predicates are declared false.
+\end{definition}
+
+\begin{definition}[Information-state definability]\label{def:information-state-definability}
+Let $\mathcal{K}$ be a class of $\mathcal{L}_2$-expansions constructed as above, and let $P(x)$ be one of the $\mathcal{L}_2$-predicates in the variable $x$ of sort $s$. We say that $P$ is \emph{$\mathcal{L}_1$-definable over $\mathcal{K}$} if there exists an $\mathcal{L}_1$-formula $\theta(x)$ such that for every $M\in\mathcal{K}$ and every singleton parameter-state $p_u$,
+\[
+M,p_u\Vdash \theta(x)
+\quad\Longleftrightarrow\quad
+M,p_u\Vdash P(x).
+\]
 \end{definition}
 
 \begin{theorem}[Pointwise irreducibility of gluing predicates]\label{thm:pointwise-irreducibility}
-Let $\Sigma_0$ be any first-order signature with a sort $s_{\mathrm{ref}}$ containing at least four elements. There exist:
-\begin{enumerate}[label=(\alph*),nosep]
-\item two $\Sigma_0$-structures $M_1,M_2$ that are elementarily equivalent,
+Let $\Sigma_{\mathrm{eq}}$ be the constant-free signature with one referenceable sort $s$ and equality only. Then there exist a $\Sigma_{\mathrm{eq}}$-structure $M$, singleton states
 \[
-M_1\equiv_{\mathcal L_{\mathrm{low}}} M_2,
+p_a,\qquad p_b,\qquad p_c,\qquad p_d,
 \]
-and a pair of elements $a,b\in s_{\mathrm{ref}}^{M_1}=s_{\mathrm{ref}}^{M_2}$;
-\item two $\Sigma_0$-structures $M_3,M_4$ that are elementarily equivalent,
-\[
-M_3\equiv_{\mathcal L_{\mathrm{low}}} M_4,
-\]
-and a pair of elements $c,d\in s_{\mathrm{ref}}^{M_3}=s_{\mathrm{ref}}^{M_4}$;
-\end{enumerate}
-together with local-object data on each $M_k$, such that:
+and a parameter-indexed local-object expansion of $M$ such that:
 \begin{enumerate}[label=(\roman*),nosep]
-\item in the common $\mathcal L_{\mathrm{low}}$-theory, no formula $\varphi(x)\in\mathcal L_{\mathrm{low}}$ separates $a$ from $b$;
-\item no formula $\varphi(x)\in\mathcal L_{\mathrm{low}}$ separates $c$ from $d$;
-\item $M_1,p_1\Vdash \CompSec_s(a)\land \Sec_s(a)$ and $M_1,p_1\Vdash \CompSec_s(b)\land \neg\Sec_s(b)$;
-\item $M_3,p_3\Vdash \CompSec_s(c)$ and $M_3,p_3\Vdash \LocSec_s(d)\land \neg\CompSec_s(d)$.
+\item the parameters $a,b\in D_s^M$ lie in the same $\mathrm{Aut}(M)$-orbit, and so do $c,d\in D_s^M$;
+\item
+\[
+M,p_a\Vdash \CompSec_s(x)\land \Sec_s(x),
+\qquad
+M,p_b\Vdash \CompSec_s(x)\land \neg\Sec_s(x);
+\]
+\item
+\[
+M,p_c\Vdash \CompSec_s(x),
+\qquad
+M,p_d\Vdash \LocSec_s(x)\land \neg\CompSec_s(x).
+\]
 \end{enumerate}
-In particular, none of the predicates $\CompSec_s$, $\Sec_s$, $\Null^{\mathrm{glue}}_s$ is definable in $\mathcal L_{\mathrm{low}}$.
+Consequently, none of the predicates $\CompSec_s(x)$, $\Sec_s(x)$, or
+\[
+\Null^{\mathrm{glue}}_s(x):=\Adm_s(x)\land \CompSec_s(x)\land \neg\Sec_s(x)
+\]
+is $\mathcal L_1$-definable over the class of $\mathcal L_2$-expansions in the sense of \Cref{def:information-state-definability}.
 \end{theorem}
 
 \begin{proof}
-Let $\Sigma_0$ contain a sort $s_{\mathrm{ref}}$ with at least four constants, and let $\Sigma_0$ have no relation or function symbols other than equality. Then every $\Sigma_0$-structure is determined by its carrier sets, and two structures with the same carrier are isomorphic. We may therefore take $M_1=M_2=M_3=M_4=:M$, all with the same carrier set, so elementary equivalence is trivially satisfied (in fact we have isomorphism).
-
-Choose four distinct elements $a,b,c,d\in s_{\mathrm{ref}}^M$. Since the only atomic $\mathcal L_{\mathrm{low}}$-formulas are equalities, and $a\neq b$ and $c\neq d$, the map swapping $a\leftrightarrow b$ (and fixing everything else) is an $\mathcal L_{\mathrm{low}}$-automorphism of $M$. By invariance of first-order truth under automorphisms (a standard result of model theory; see e.g.\ \cite[Theorem~1.3.9]{HodgesShorter1997}), no $\mathcal L_{\mathrm{low}}$-formula $\varphi(x)$ can separate $a$ from $b$. Similarly for $c$ and $d$.
-
-Now choose a single state $p=(\Gamma_p,\{*\})$ with a trivial singleton team. We equip $M$ with two different local-object structures.
-
-For the pair $(a,b)$: let the local reference frame at $a$ have objects $\{u_a\to a, v_a\to a\}$ with overlap $c_a$, and set
+Let $M$ be the pure equality structure on the four-element carrier
 \[
-F(u_a)=F(v_a)=F(c_a)=F(a)=\{*\},
+D_s^M=\{a,b,c,d\}.
 \]
-with all restrictions the identity. Then $a$ has a compatible local family and a global section.
+Because $\Sigma_{\mathrm{eq}}$ has equality only, every permutation of $D_s^M$ is an automorphism of $M$. In particular, the transpositions $(a\,b)$ and $(c\,d)$ show that $a,b$ lie in one automorphism orbit and $c,d$ lie in another.
 
-Let the local reference frame at $b$ have the same shape, but set
+For each $u\in\{a,b,c,d\}$, define a local reference frame with distinguished root $a_u$ and three further objects
 \[
-F(u_b)=F(v_b)=F(c_b)=\{*\},\qquad F(b)=\varnothing,
+w_u\sqsubseteq u_u\sqsubseteq a_u,
+\qquad
+w_u\sqsubseteq v_u\sqsubseteq a_u,
 \]
-with all restrictions to the overlap the identity. Then $b$ has a compatible local family but no global section.
-
-Since no $\mathcal L_{\mathrm{low}}$-formula separates $a$ from $b$, yet $\Sec_s(a)$ holds and $\Sec_s(b)$ fails, the predicate $\Sec_s$ is not $\mathcal L_{\mathrm{low}}$-definable. Similarly, $\Null^{\mathrm{glue}}_s$ holds at $b$ but not at $a$.
-
-For the pair $(c,d)$: let the local reference frame at $c$ have the same shape as $a$ above, with $F(c)=\{*\}$ everywhere and all restrictions the identity. Then $c$ is compatibly locally sectionable.
-
-At $d$, set
+whose only nontrivial covering family is
 \[
-F(u_d)=\{\sigma_u\},\quad F(v_d)=\{\sigma_v\},\quad F(c_d)=\{0,1\},\quad F(d)=\varnothing,
+\{u_u\to a_u,\ v_u\to a_u\}.
 \]
-with $\res_{c_d}^{u_d}(\sigma_u)=0$ and $\res_{c_d}^{v_d}(\sigma_v)=1$. Then $d$ is locally sectionable but not compatibly locally sectionable.
+All other covers are trivial identity covers. Declare every parameter admitted, so
+\[
+\Adm_s^M=\{a,b,c,d\}.
+\]
 
-Since no $\mathcal L_{\mathrm{low}}$-formula separates $c$ from $d$, yet $\CompSec_s(c)$ holds and $\CompSec_s(d)$ fails, the predicate $\CompSec_s$ is not $\mathcal L_{\mathrm{low}}$-definable.
+Now define the presheaves $F_u$.
+
+For $u=a$ and $u=c$, let
+\[
+F_u(a_u)=F_u(u_u)=F_u(v_u)=F_u(w_u)=\{*\},
+\]
+and let every restriction map be the identity on $\{*\}$. Then there is a compatible local family on the displayed cover, and there is also a global section at the root. Hence
+\[
+M,p_a\Vdash \CompSec_s(x)\land \Sec_s(x),
+\qquad
+M,p_c\Vdash \CompSec_s(x)\land \Sec_s(x).
+\]
+
+For $u=b$, let
+\[
+F_b(u_b)=F_b(v_b)=F_b(w_b)=\{*\},
+\qquad
+F_b(a_b)=\varnothing,
+\]
+again with identity restrictions on the singleton fibres. Then $b$ has a compatible local family on the cover $\{u_b\to a_b,v_b\to a_b\}$ but no global section at $a_b$, so
+\[
+M,p_b\Vdash \CompSec_s(x)\land \neg\Sec_s(x).
+\]
+Since $b$ is admitted, this also gives
+\[
+M,p_b\Vdash \Null^{\mathrm{glue}}_s(x).
+\]
+
+For $u=d$, let
+\[
+F_d(u_d)=\{\sigma_u\},\qquad
+F_d(v_d)=\{\sigma_v\},\qquad
+F_d(w_d)=\{0,1\},\qquad
+F_d(a_d)=\varnothing,
+\]
+with restriction maps determined by
+\[
+\res_{w_d}^{u_d}(\sigma_u)=0,
+\qquad
+\res_{w_d}^{v_d}(\sigma_v)=1.
+\]
+Then local sections exist on the cover of $a_d$, but the only available local family is incompatible on the overlap $w_d$. Therefore
+\[
+M,p_d\Vdash \LocSec_s(x)\land \neg\CompSec_s(x).
+\]
+
+We now pass to the lower language. Let $\theta(x)$ be any formula of $\mathcal L_1$. Because $p_a,p_b,p_c,p_d$ are singleton states, \Cref{prop:singleton-conservativity} gives
+\[
+M,p_u\Vdash\theta(x)
+\quad\Longleftrightarrow\quad
+M,\rho_u\models\theta(x)
+\qquad
+(u\in\{a,b,c,d\}).
+\]
+By invariance of first-order satisfaction under automorphisms \cite[Theorem~1.3.9]{HodgesShorter1997},
+\[
+M,\rho_a\models\theta(x)
+\Longleftrightarrow
+M,\rho_b\models\theta(x),
+\qquad
+M,\rho_c\models\theta(x)
+\Longleftrightarrow
+M,\rho_d\models\theta(x).
+\]
+Hence no lower-language formula separates $a$ from $b$, and no lower-language formula separates $c$ from $d$.
+
+If some $\mathcal L_1$-formula defined $\Sec_s(x)$ throughout all $\mathcal L_2$-expansions, it would separate $a$ from $b$, contradicting the previous paragraph. The same contradiction with $c$ and $d$ rules out definability of $\CompSec_s(x)$. Finally, $\Null^{\mathrm{glue}}_s(x)$ holds at $p_b$ but fails at $p_a$, so it too cannot be defined by any $\mathcal L_1$-formula.
 \end{proof}
-

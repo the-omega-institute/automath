@@ -12,6 +12,30 @@ X_m := \set{x\in \set{0,1}^m : \text{$x$ contains no occurrence of the block \(1
 \]
 the length-\(m\) blocks of the golden-mean shift.
 
+\subsection{Notation guide and convention map}
+\label{subsec:notation-guide}
+Two orderings of the same finite word appear in the manuscript. We record them once here and keep each appendix in a single convention.
+
+\begin{center}
+\begin{tabular}{|p{0.25\linewidth}|p{0.67\linewidth}|}
+\hline
+Object & Meaning \\ \hline
+\(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\) & The \emph{low-to-high} (LH) word used in Sections~\ref{sec:preliminaries}--\ref{sec:partition}. Position \(k\) carries weight \(\Fib_{k+1}\). \\ \hline
+\(\omega^\sharp=(\omega_m,\dots,\omega_1)\) & The same word written in \emph{most-significant-digit-first} (MSD-first) order. Appendix~\ref{app:rewriting} uses this convention exclusively. \\ \hline
+\(\proj_m\) & Truncation to the first \(m\) LH digits, i.e.\ to the \(m\) lowest-weight coordinates. \\ \hline
+\(\Fold_m(\omega)\) & Fibonacci-weighted evaluation, Zeckendorf normalization, and truncation back to the first \(m\) LH digits. \\ \hline
+\(\aware_{m+1\to m}\) & Fold-aware restriction, characterized by the commuting square \(\Fold_m\circ \aware_{m+1\to m}=\proj_{m+1\to m}\circ \Fold_{m+1}\). \\ \hline
+Carry slot & An auxiliary zero at the high-weight end used when a local rewrite needs one more site. In MSD-first order this is the leading zero of Appendix~\ref{app:rewriting}; in LH order it is a trailing zero. \\ \hline
+\end{tabular}
+\end{center}
+
+The reversal map
+\[
+\rev_m:\Om_m\to\Om_m,\qquad
+\rev_m(\omega_1,\dots,\omega_m):=(\omega_m,\dots,\omega_1),
+\]
+implements the passage between the two orderings. Appendix~\ref{app:pressure} will stay in LH convention and read the pair process from high weight to low weight, so no further convention changes occur there.
+
 \subsection{Fibonacci evaluation}
 Let \((\Fib_k)_{k\ge 0}\) be the Fibonacci sequence with \(\Fib_0=0\), \(\Fib_1=1\), and \(\Fib_{k+2}=\Fib_{k+1}+\Fib_k\). For \(\omega=(\omega_1,\dots,\omega_m)\in \Om_m\), define the Fibonacci-weighted evaluation
 \begin{equation}\label{eq:Nomega}
@@ -19,7 +43,7 @@ N(\omega) := \sum_{k=1}^m \omega_k \,\Fib_{k+1}.
 \end{equation}
 
 \begin{remark}[Weight convention and indexing]\label{rem:conventions}
-We adopt the convention that position \(k\) carries weight \(\Fib_{k+1}\). Thus position \(1\) has weight \(\Fib_2=1\) and position \(2\) has weight \(\Fib_3=2\). This is shifted by one from some common numeration conventions; compare \cite{Fraenkel1985,Frougny1992,FrougnySolomyak1996,Berstel1985,AlloucheShallit2003}. We call this the \emph{low-to-high} (LH) convention because position \(1\) carries the lowest weight. The classical numeration-theoretic convention writes the most significant digit first (MSD-first); see Section~\ref{sec:multiscale} for a precise translation between the two. Both conventions appear in this paper: the LH convention is used for all formulas involving window spaces \(\Om_m\) and \(X_m\), while the MSD-first convention is used in the normalization rewriting system (Appendix~\ref{app:rewriting}) and in the boundary-state transducer (Appendix~\ref{app:pressure}), where left-to-right processing is natural.
+We adopt the convention that position \(k\) carries weight \(\Fib_{k+1}\). Thus position \(1\) has weight \(\Fib_2=1\) and position \(2\) has weight \(\Fib_3=2\). This is shifted by one from some common numeration conventions; compare \cite{Fraenkel1985,Frougny1988,Frougny1992,FrougnyConfluent1992,FrougnySolomyak1996,Berstel1985,AlloucheShallit2003}. We call this the \emph{low-to-high} (LH) convention because position \(1\) carries the lowest weight. The classical numeration-theoretic convention writes the most significant digit first (MSD-first); see Section~\ref{sec:multiscale} for a precise translation between the two. Both conventions appear in this paper, but each appendix now stays in one convention only: Appendix~\ref{app:rewriting} is MSD-first, while Appendix~\ref{app:pressure} and Appendix~\ref{app:sofic} are LH throughout.
 \end{remark}
 
 \subsection{Zeckendorf normalization and truncation}
@@ -43,4 +67,18 @@ For \(m\ge 1\), define the folding map
 \end{definition}
 
 The fold simultaneously performs a \emph{numeric} normalization (passing from a possibly non-Zeckendorf Fibonacci digit string to the unique Zeckendorf digits of the same value) and a \emph{language} normalization (projecting onto the golden-mean constraint). Note that \(X_m\subset \Om_m\) consists precisely of fixed points: if \(x\in X_m\) then \(\Fold_m(x)=x\).
+
+\begin{example}[A short fold computation]\label{ex:fold4}
+Let \(\omega=1110\in\Om_4\). Then
+\[
+N(\omega)=\Fib_2+\Fib_3+\Fib_4=1+2+3=6.
+\]
+The Zeckendorf expansion of \(6\) is \(\Fib_5+\Fib_2=5+1\), so
+\[
+Z(6)=(1,0,0,1,0,\dots),
+\qquad
+\Fold_4(1110)=1001.
+\]
+This small example already shows the two basic effects of folding: adjacent \(1\)s are eliminated, and mass can move to a higher Fibonacci site.
+\end{example}
 

@@ -1,0 +1,221 @@
+
+\section{State diagram, timing convention, and carryover rule}\label{app:state-diagram}
+
+The detector has two hidden states $R$ (ready) and $D$ (refractory/dead). The state diagram and timing convention for one sampling interval $[0,\Delta\tau]$ are as follows.
+
+To remove any ambiguity in the sampling protocol, we distinguish three moments in each interval:
+\begin{enumerate}[label=(\roman*),itemsep=0.15em]
+\item immediately after the readout at time $n\Delta\tau^+$, which sets the hidden state for interval $n$;
+\item during the open interval $(n\Delta\tau,(n+1)\Delta\tau)$, where recovery and excitation can occur;
+\item immediately before the next readout at time $(n+1)\Delta\tau^-$, whose hidden state is then carried into interval $n+1$ unless a click occurred.
+\end{enumerate}
+The carryover rule is the following: a click in interval $n$ forces interval $n+1$ to start in $D$; a no-click does \emph{not} reset the detector to $R$, but instead carries the hidden end-of-interval state into the next interval.
+
+\begin{center}
+\begin{tikzpicture}[
+  state/.style={draw, circle, minimum size=1.2cm, thick},
+  arr/.style={-Latex, thick},
+  every node/.style={font=\small}
+]
+\node[state, fill=green!12] (R) at (0,0) {$R$};
+\node[state, fill=red!12] (D) at (4,0) {$D$};
+
+\draw[arr] (R) to[bend left=25] node[above] {excite at rate $\Gamma$} node[below] {output $A_n=1$} (D);
+\draw[arr] (R) to[loop left, looseness=8] node[left] {no excitation} node[right,xshift=-0.3cm,yshift=-0.5cm] {$A_n=0$} (R);
+\draw[arr] (D) to[bend left=25] node[below] {recover at rate $\kappa_{\mathrm r}$} (R);
+\draw[arr] (D) to[loop right, looseness=8] node[right] {no recovery} node[left,xshift=0.3cm,yshift=-0.5cm] {$A_n=0$} (D);
+
+\node[anchor=north, text width=7cm, align=left] at (2,-2.2) {
+\textbf{Key rule.} Every click ($A_n=1$) leaves the detector in state $D$ at the start of interval $n+1$, regardless of the hidden state at the start of interval $n$. This is the single assumption that makes click times regeneration points.
+};
+\end{tikzpicture}
+\end{center}
+
+\noindent\textbf{Timing within one interval.}
+\begin{enumerate}[label=(\alph*),itemsep=0.15em]
+\item \emph{Start in $R$:} The detector may be excited during $[0,\Delta\tau]$ at rate $\Gamma$. If excited (probability $1-p$, with $p=e^{-\Gamma\Delta\tau}$), it ends in $D$ and emits $A_n=1$. If not excited (probability $p$), it ends in $R$ and emits $A_n=0$.
+\item \emph{Start in $D$:} Recovery to $R$ occurs at an exponential time $s$ with rate $\kappa_{\mathrm r}$. If $s\le\Delta\tau$, the detector is ready for the remaining subinterval $[s,\Delta\tau]$ and may be excited at rate $\Gamma$. If excited after recovery, it ends in $D$ with $A_n=1$ (probability $a$). If not excited after recovery, it ends in $R$ with $A_n=0$ (probability $b$). If $s>\Delta\tau$ (no recovery during the interval), it remains in $D$ with $A_n=0$ (probability $c=e^{-\kappa_{\mathrm r}\Delta\tau}$). Here $a+b=1-c$, so $a+b+c=1$.
+\end{enumerate}
+
+The output-labelled kernels $T_0$ and $T_1$ in~\eqref{eq:t0-t1-main} encode precisely these transition-and-output probabilities. Note that the transition $(D,D)$ can produce either output: $A_n=0$ with probability $c$ (no recovery) or $A_n=1$ with probability $a$ (recovery followed by re-excitation). This is why the output is \emph{not} a deterministic function of the hidden-state pair $(H_n,H_{n+1})$, a point exploited in the factorization proof of $1$-dependence in \cref{sec:records}.
+
+\section{GKLS derivation of the phenomenological kernels}\label{app:gkls}
+
+The phenomenological counter model of \cref{sec:operational} can be obtained from a standard weak-coupling GKLS description. For clarity we summarize the derivation and the approximations that go into it.
+
+Let $\rho_{\mathrm{det}}$ denote the reduced density matrix of a two-level detector with Hamiltonian $H_{\mathrm{det}}=(\Omega/2)\sigma_z$. Along a stationary worldline in a static KMS state, the usual Born--Markov and rotating-wave approximations lead to the GKLS master equation
+\[
+\dot\rho_{\mathrm{det}}
+=
+-i[\tfrac{\Omega}{2}\sigma_z,\rho_{\mathrm{det}}]
++\Gamma_+\,\mathcal D[\sigma_+](\rho_{\mathrm{det}})
++\Gamma_-\,\mathcal D[\sigma_-](\rho_{\mathrm{det}})
+\]
+with dissipator $\mathcal D[L](\rho)=L\rho L^\dagger-\tfrac12\{L^\dagger L,\rho\}$ and upward/downward transition rates $(\Gamma_+,\Gamma_-)$ given by the usual Wightman-function integrals \cite{LoukoSatz2006,KayWald1991}. Weak coupling means $\lambda_c^2\mathcal S_x(\Omega)$ is small enough that $\Gamma_\pm\Delta\tau\ll1$ remains controlled while still allowing $\Gamma_\pm\Delta\tau=O(1)$. The coarse graining assumes that the field correlation time $\tau_{\mathrm{corr}}$ obeys $\tau_{\mathrm{corr}}\ll\Delta\tau\ll 1/\kappa_{\mathrm r}$, so that the field re-equilibrates between readouts and the GKLS generator may be treated as constant over each interval.
+
+Within one sampling interval we integrate the master equation exactly to obtain the propagator $e^{\Delta\tau\mathcal L}$, where $\mathcal L$ is the GKLS generator above augmented with a recovery term $\kappa_{\mathrm r}\mathcal D[\sigma_-]$ that enforces exponential relaxation of the refractory state. Conditioning on the readout outcome gives two Kraus maps:
+\begin{align*}
+K_1\rho_{\mathrm{det}}K_1^\dagger &= (1-e^{-\Gamma_+\Delta\tau})\,|1\rangle\!\langle0|\,\rho_{\mathrm{det}}\,|0\rangle\!\langle1|,\\
+K_0\rho_{\mathrm{det}}K_0^\dagger &= e^{-\Gamma_+\Delta\tau}\,|0\rangle\!\langle0|\,\rho_{\mathrm{det}}\,|0\rangle\!\langle0| + \text{(terms with }\kappa_{\mathrm r}\text{)}.
+\end{align*}
+Tracing over the hidden state and using the carryover rule specified in Appendix~\ref{app:state-diagram} yields the classical output-labelled kernels
+\[
+T_0=
+\begin{pmatrix}
+e^{-\Gamma\Delta\tau} & 0\\
+\dfrac{\kappa_{\mathrm r}(e^{-\Gamma\Delta\tau}-e^{-\kappa_{\mathrm r}\Delta\tau})}{\kappa_{\mathrm r}-\Gamma} & e^{-\kappa_{\mathrm r}\Delta\tau}
+\end{pmatrix},
+\qquad
+T_1=
+\begin{pmatrix}
+0 & 1-e^{-\Gamma\Delta\tau}\\
+0 & \dfrac{\kappa_{\mathrm r}(1-e^{-\Gamma\Delta\tau})-\Gamma(1-e^{-\kappa_{\mathrm r}\Delta\tau})}{\kappa_{\mathrm r}-\Gamma}
+\end{pmatrix},
+\]
+which coincide with~\eqref{eq:t0-t1-main}. The remainder terms are of order $O((\lambda_c\Delta\tau)^2)$ and vanish uniformly as the coarse-graining assumptions are enforced. This shows that the phenomenological kernels arise from a GKLS evolution with repeated projective readout and the stipulated carryover rule.
+
+\section{Key derivations}\label{app:derivations}
+
+This appendix collects the proofs of the main technical results. Complete details for all intermediate steps appear in the Supplementary Material.
+
+\subsection{Zero-run law and hazard monotonicity}
+
+\begin{proof}[Proof of \cref{prop:recovery-main}: zero-run law]
+Every observed click places the detector in the refractory state $D$ for the next interval, independently of the earlier history. Hence the post-click hidden state is deterministic, and the strong Markov property of the hidden two-state chain makes click times regeneration times. The resulting zero-run lengths are therefore i.i.d., and a gap of length $k$ consists of $k$ successive output-$0$ transitions followed by one output-$1$ transition, giving~\eqref{eq:gap-main}.
+
+To evaluate it explicitly, note that $T_0$ is lower triangular with eigenvalues $p$ and $c$. Direct integration of~\eqref{eq:a-b-main} yields, for $\kappa_{\mathrm r}\neq\Gamma$,
+\[
+a=\frac{\kappa_{\mathrm r}(1-p)-\Gamma(1-c)}{\kappa_{\mathrm r}-\Gamma},
+\qquad
+b=\frac{\kappa_{\mathrm r}(p-c)}{\kappa_{\mathrm r}-\Gamma}.
+\]
+Since $T_0$ is lower triangular,
+\[
+T_0^k=
+\begin{pmatrix}
+ p^k & 0 \\
+ b\,\dfrac{p^k-c^k}{p-c} & c^k
+\end{pmatrix}.
+\]
+Substituting into~\eqref{eq:gap-main} with $e_D=(0,1)^\top$ and $T_1\mathbf{1}=(1-p,\,a)^\top$ gives
+\[
+g_k = e_D^\top T_0^k T_1\mathbf{1}
+= qb\frac{p^k-c^k}{p-c}+ac^k
+= \frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}{\kappa_{\mathrm r}-\Gamma},
+\]
+where $q=1-p$ and the simplification uses the explicit forms of $a$ and $b$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:recovery-main}: hazard monotonicity]
+The tail of the gap law is
+\[
+\sum_{j\ge k}g_j=\frac{\kappa_{\mathrm r}p^k-\Gamma c^k}{\kappa_{\mathrm r}-\Gamma}.
+\]
+Therefore
+\[
+h_k = \frac{g_k}{\sum_{j\ge k}g_j}
+= \frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}{\kappa_{\mathrm r}p^k-\Gamma c^k}.
+\]
+Direct subtraction yields
+\[
+h_{k+1}-h_k = \frac{\kappa_{\mathrm r}\Gamma(p-c)^2p^kc^k}{(\kappa_{\mathrm r}p^k-\Gamma c^k)(\kappa_{\mathrm r}p^{k+1}-\Gamma c^{k+1})} > 0,
+\]
+since all factors in the numerator and denominator are strictly positive for $p\neq c$ (i.e.\ $\Gamma\neq\kappa_{\mathrm r}$). Strict monotonicity excludes the possibility that the visible process is an $r$-step Markov chain for any finite $r$: if it were, $h_k$ would eventually be constant.
+\end{proof}
+
+\subsection{Covariance formula and 1-dependence}
+
+\begin{proof}[Proof of \cref{prop:recovery-main}: covariance formula]
+The aggregate transition matrix is
+\[
+P = T_0+T_1 =
+\begin{pmatrix}
+ p & 1-p\\
+ b & 1-b
+\end{pmatrix}.
+\]
+Its eigenvalues are $1$ (with stationary left eigenvector $\pi$) and $\lambda=p-b$. The column vector $u=T_1\mathbf{1}=(1-p,\,a)^\top$ satisfies $\rho=\pi u$. Whenever $A_0=1$, the next hidden state is deterministically $D$, so
+\[
+\PP(A_0=1,A_n=1)=\rho\,e_D^\top P^{n-1}u,\qquad n\ge1.
+\]
+The two-state spectral decomposition gives
+\[
+P^{n-1}u = \rho\mathbf{1}+\lambda^{n-1}(u-\rho\mathbf{1}),
+\]
+so
+\[
+e_D^\top P^{n-1}u = \rho+\lambda^{n-1}(a-\rho),
+\]
+and therefore
+\[
+\operatorname{Cov}(A_0,A_n) = \PP(A_0=1,A_n=1)-\rho^2 = \rho(a-\rho)\lambda^{n-1}.
+\]
+The inequality $a<\rho<1-p$ follows because $\rho$ is a strict convex combination of $a$ (the click probability from state $D$) and $1-p$ (the click probability from state $R$), with both weights positive. Hence $\operatorname{Cov}(A_0,A_1)=\rho(a-\rho)<0$: the record is negatively correlated at lag~$1$.
+\end{proof}
+
+\begin{proof}[Proof of exact $1$-dependence]
+At the critical line~\eqref{eq:gamma-c-main}, $\lambda=p-b=0$, so $P=\mathbf{1}\pi$ (rank one), and hence $P^\ell=P$ for every $\ell\ge1$. Let $u$ and $v$ be visible words, with corresponding output-labelled kernel products $T_u$ and $T_v$. If the words are separated by at least one sampling step, then for some $\ell\ge1$ their joint cylinder probability is
+\[
+\pi\,T_u\,P^\ell\,T_v\,\mathbf{1}.
+\]
+Using $P^\ell=P=\mathbf{1}\pi$ gives
+\[
+\pi\,T_u\,P^\ell\,T_v\,\mathbf{1}
+=
+\pi\,T_u\,(\mathbf{1}\pi)\,T_v\,\mathbf{1}
+=
+(\pi\,T_u\,\mathbf{1})(\pi\,T_v\,\mathbf{1}),
+\]
+which is the product of the two marginal cylinder probabilities. By linearity, any events $B\in\sigma(A_i:i\le m)$ and $C\in\sigma(A_j:j\ge m+2)$ factorize in the same way, so the process is exact $1$-dependent.
+\end{proof}
+
+\subsection{Spectral density and Fano factor}
+
+\begin{proof}[Proof of \cref{prop:spectrum-main}]
+From the covariance formula, $\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda^{n-1}$ for $n\ge1$ with $|\lambda|<1$. Hence
+\[
+f(\theta) = \rho(1-\rho)+2\rho(a-\rho)\sum_{n\ge1}\lambda^{n-1}\cos(n\theta).
+\]
+The geometric sum evaluates via
+\[
+\sum_{n\ge1}\lambda^{n-1}e^{in\theta} = \frac{e^{i\theta}}{1-\lambda e^{i\theta}},
+\]
+taking real parts gives~\eqref{eq:spectrum-main}. Monotonicity: write $x=\cos\theta$ and $R_\lambda(x)=(x-\lambda)/(1-2\lambda x+\lambda^2)$; then $R_\lambda'(x)=(1-\lambda^2)/(1-2\lambda x+\lambda^2)^2>0$. Since $a-\rho<0$, the spectral density is decreasing in $x$, hence increasing in $\theta$ on $[0,\pi]$.
+
+For the counting variance,
+\[
+\Var(N_N) = N\gamma_0 + 2\sum_{n=1}^{N-1}(N-n)\gamma_n
+= N\rho(1-\rho) + 2\rho(a-\rho)\sum_{n=1}^{N-1}(N-n)\lambda^{n-1}.
+\]
+The geometric sum evaluates to $(N(1-\lambda)-1+\lambda^N)/(1-\lambda)^2$, giving~\eqref{eq:fano-main} in the limit $N\to\infty$. The strict inequality $F<1$ follows from $a-\rho<0$ and $1-\lambda>0$.
+\end{proof}
+
+\subsection{Near-horizon expansion and local inverse theorem}
+
+\begin{proof}[Proof of \cref{thm:horizon-main}]
+In Gaussian normal coordinates from the bifurcation surface, the lapse expands as $N(\rho)=\kappa_{\mathrm H}\rho+O(\rho^3)$ with $\beta_\infty=2\pi/\kappa_{\mathrm H}$. Therefore
+\[
+e^{\beta_\infty\Omega N(\rho)}-1 = 2\pi\Omega\rho\,(1+O(\rho)).
+\]
+Inserting both shell points into~\eqref{eq:ratio-main} and cancelling the common factor $2\pi\Omega$ gives
+\[
+\frac{\rho_\varphi}{\rho_{\mathrm{mem}}} = \frac{\Delta\tau\,\Gamma_c}{\log\varphi}\,(1+O(\rho_\varphi+\rho_{\mathrm{mem}})).
+\]
+For the area excess in Schwarzschild, $d\rho=(1-2M/r)^{-1/2}\,dr$ gives $r-r_H=\rho^2/(8M)+O(\rho^4)$ near the horizon. Hence
+\[
+A(\rho)-A_H = 4\pi(r(\rho)^2-r_H^2) = 4\pi(2r_H)(r-r_H)+O(\rho^4) = 2\pi\rho^2+O(\rho^4),
+\]
+and the area-excess ratio is the square of the proper-distance ratio.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:two-mode-main}: local inverse]
+Each mode $D_m$ contributes one equation $F_m(\theta)=0$ by the ratio law~\eqref{eq:ratio-main}. Both $F_m$ are $C^1$ in $\theta$ under the stated regularity of $N$ and $\beta_\infty$; the common amplitude $\lambda_c^2\mathcal S(\Omega)$ cancels from each $F_m$. At a solution $\theta_*$ with $\det D(F_1,F_2)(\theta_*)\neq0$, the implicit function theorem \cite{KrantzParks2002} guarantees that $\theta_*$ is locally unique and the solution map is a $C^1$ diffeomorphism. The Jacobian degenerates when $C_1=C_2$, a codimension-one condition avoided by choosing modes with distinct sampling intervals.
+\end{proof}
+
+\section{Simulation methodology for Sections~\ref{subsec:finite-sample} and~\ref{subsec:noisy-inverse}}\label{app:monte}
+
+All Monte Carlo statements in the main text were produced with reproducible scripts that sample directly from the analytic renewal law. The pseudo-random generator is the PCG64 bit generator as implemented in \texttt{NumPy~1.26}, seeded at $2^{10}$ for the Section~\ref{subsec:finite-sample} sweeps and at $2^{12}$ for the perturbation study of Section~\ref{subsec:noisy-inverse}.
+
+\paragraph{Finite-recovery records.} For a chosen $(\Gamma,\kappa_{\mathrm r},\Delta\tau)$ we draw successive zero-run lengths from the discrete distribution $g_k$ in~\eqref{eq:gap-closed-main} by inverse transform sampling: we precompute the cumulative distribution up to $k=200$ (which already captures probability~$>0.999$ for the parameter ranges displayed) and sample from the remaining tail via rejection. Each record contains $N$ clicks after discarding an initial burn-in of $5\times10^3$ samples. Hazards $\widehat h_k$ use the exact run-length counts, covariances $\widehat\gamma_n$ use the unbiased $(N-n)^{-1}$ estimator, and Fano factors $\widehat F$ use block sizes $B=50$. The figures in Sections~\ref{sec:records} and~\ref{subsec:finite-sample} use $\Delta\tau=0.3$, $\kappa_{\mathrm r}=5$, and $\Gamma$ ranging from $0.8\Gamma_c$ to $1.6\Gamma_c$ in steps of $0.05\Gamma_c$. For each grid point we simulate $5\times10^3$ independent records at $N=5\times10^3$, $5\times10^4$, and $10^5$ and report the empirical frequency with which $\widehat\gamma_2$ matches the sign of $\gamma_2$. The error bars quoted in the main text correspond to $\pm$ one empirical standard deviation divided by $\sqrt{\text{replicates}}$.
+
+\paragraph{Noisy shell inversion.} The perturbation study of Section~\ref{subsec:noisy-inverse} takes the analytic shell radii produced by mode~$D_1$ in \cref{tab:worked}, draws $\delta r\sim\mathcal N(0,\sigma_r^2)$ independently for each shell, and evaluates~\eqref{eq:beta-infty-main}--\eqref{eq:mass-main}. For each $\sigma_r$ we use $10^4$ independent perturbations with seed $2^{12}$; the reported uncertainties are empirical standard deviations across those draws. The same code can be reused with arbitrary radii or detector parameters by supplying the desired $(\Delta\tau,\kappa_{\mathrm r},\Omega,\lambda_c^2\mathcal S)$.

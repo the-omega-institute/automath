@@ -20,6 +20,43 @@ Z_m(y)=\sum_{\omega\in\Om_m} y^{\abs{\Fold_m(\omega)}_1},
 \]
 so \(Z_m(y)\) is the moment generating polynomial of the output Hamming weight under the uniform measure on \(\Om_m\).
 
+\subsection{Weighted automaton and state interpretation}
+The four-state synchronized graph from Appendix~\ref{app:pressure} may be read as a weighted automaton. Each state \(s\in\{00,01,10,11\}\) records the two trailing symbols of the reversed pair process \((X_t,Y_t)\); the outgoing edges from \(s\) encode the admissible appended microstate bits together with their normalized outputs. Weighting each edge by \(y^{Y}\), where \(Y\) is the second component of the corresponding label, therefore records the contribution of that transition to the generating function of \(\abs{\Fold_m(\omega)}_1\). This is the standard transfer-matrix set-up used in weighted numeration problems \cite{GrabnerKirschenhoferTichy2002,DumontSidorovThomas1999}.
+
+The synchronized presentation always starts in state \(00\), because padding by high-weight zeros forces the fold to begin with two stable zeros (Lemma~\ref{lem:zero-padding}). After \(m\) steps the automaton is in some terminal state \(s\). To forget that state we append the unique completion associated with \(s\): if \(s=00\) there is nothing to add, whereas if \(s\in\{01,10,11\}\) one must resolve the pending carry by running the normalization transducer through the short follower set displayed in Appendix~\ref{app:pressure}. These completions contribute rational functions in \(y\); collecting them into a column vector defines the terminal weights \(\beta(y)\) used below.
+
+\subsection{Boundary-vector form}
+With \(\alpha\) encoding the initial state \(00\) and \(\beta(y)\) encoding the completion weights, the partition function admits the explicit boundary-vector form
+\begin{equation}\label{eq:boundary-vector}
+Z_m(y)=\alpha^{\mathsf T} M(y)^m \beta(y),
+\end{equation}
+where
+\begin{equation}\label{eq:boundary-data}
+\alpha=
+\begin{pmatrix}
+1\\ 0\\ 0\\ 0
+\end{pmatrix},
+\qquad
+\beta(y)=
+\begin{pmatrix}
+1\\[1mm]
+\dfrac{1}{1+y}\\[2mm]
+\dfrac{1}{y}\\[2mm]
+\dfrac{y}{1+y}
+\end{pmatrix},
+\end{equation}
+and
+\begin{equation}\label{eq:My}
+M(y)=
+\begin{pmatrix}
+1&y&0&y\\
+0&0&1&0\\
+1&1+y&0&0\\
+1&0&0&0
+\end{pmatrix}.
+\end{equation}
+The entries of \(\beta(y)\) are obtained by summing the geometric series of completions determined by the follower sets of Proposition~\ref{prop:transitions}---for instance, the tail after state \(01\) alternates deterministically and contributes \(1/(1+y)\), while the tails after states \(10\) and \(11\) resolve a pending \(1\) in one or two steps. Although \(\beta(y)\) is rational, the product \(\alpha^{\mathsf T}M(y)^m\beta(y)\) is a polynomial in \(y\); the apparent poles at \(y=0\) and \(y=-1\) cancel identically.
+
 \subsection{A fourth-order minimal recurrence}
 \begin{theorem}[Fourth-order recurrence]\label{thm:recurrence}
 The sequence \((Z_m(y))_{m\ge 0}\) satisfies
@@ -53,34 +90,35 @@ Equivalently, the characteristic polynomial of the transfer matrix may be taken 
 \end{theorem}
 
 \begin{proof}
-Appendix~\ref{app:recurrence} records the weighted transfer matrix
+Appendix~\ref{app:recurrence} records the weighted transfer matrix \(M(y)\) from \eqref{eq:My}. The explicit boundary vectors \eqref{eq:boundary-data} are chosen so that
 \[
-M(y)=
-\begin{pmatrix}
-1&y&0&y\\
-0&0&1&0\\
-1&1+y&0&0\\
-1&0&0&0
-\end{pmatrix},
+\alpha^{\mathsf T}M(y)^m\beta(y)=Z_m(y)\qquad (m=0,1,2,3),
 \]
-obtained from the four boundary states of Appendix~\ref{app:pressure} by weighting each edge by \(y^{Y}\), where \(Y\in\{0,1\}\) is the emitted stable digit. The finite-word partition functions are linear functionals of \(M(y)^m\), so every scalar sequence extracted from this transfer-matrix system satisfies the characteristic recurrence of \(M(y)\). A direct determinant computation gives
+that is,
+\[
+\alpha^{\mathsf T}\beta(y)=1,\qquad
+\alpha^{\mathsf T}M(y)\beta(y)=1+y,\qquad
+\alpha^{\mathsf T}M(y)^2\beta(y)=2+2y,\qquad
+\alpha^{\mathsf T}M(y)^3\beta(y)=2+5y+y^2.
+\]
+Since every scalar sequence extracted from a fixed transfer matrix satisfies the characteristic recurrence of that matrix, \eqref{eq:boundary-vector} holds for all \(m\ge0\). A direct determinant computation gives
 \[
 \det(\lambda I-M(y))=\Pi(\lambda,y),
 \]
-hence \eqref{eq:Zm-rec}. The initial values are obtained by direct enumeration of \(\Om_m\) for \(m\le 3\). Summing the recurrence against \(t^m\) and solving for \(Z(t;y)\) yields \eqref{eq:Zty}--\eqref{eq:Nty}. One verifies the numerator by checking that \(Z(t;y)\cdot D(t;y)=(1+ty)(1-yt^2)\) using the initial values.
+hence \eqref{eq:Zm-rec} by Cayley--Hamilton. Summing the recurrence against \(t^m\) and solving for \(Z(t;y)\) yields \eqref{eq:Zty}--\eqref{eq:Nty}. One verifies the numerator by checking that \(Z(t;y)\cdot D(t;y)=(1+ty)(1-yt^2)\) using the four initial values above.
 \end{proof}
 
 \subsection{Explicit generating function and exceptional locus}
 The explicit numerator~\eqref{eq:Nty} identifies the parameter values at which the effective recurrence order drops.
 
-\begin{theorem}[Exceptional locus]\label{thm:hankel}
+\begin{corollary}[Exceptional locus]\label{thm:hankel}
 The generating function \(Z(t;y)=N(t;y)/D(t;y)\) with \(N\) and \(D\) as in \eqref{eq:Nty}--\eqref{eq:Dty} has the following exceptional behavior:
 \begin{enumerate}
 \item At \(y=0\): the leading coefficient \(y(y+1)\) of \(D\) vanishes, so \(D(t;0)=(1-t)^2(1+t)\) has degree \(3\) and \(N(t;0)=1\). The effective recurrence order drops to \(3\).
 \item At \(y=1\): \(N(t;1)=-(t-1)(t+1)^2\) and \(D(t;1)=(t-1)(t+1)^2(2t-1)\). All three common factors cancel, giving \(Z(t;1)=1/(1-2t)\), consistent with \(Z_m(1)=2^m\). The effective recurrence order drops to \(1\).
 \item For all \(y\in\CC\setminus\{0,1\}\), the numerator and denominator share no common factor, and the effective recurrence order (equivalently, the Hankel rank of the sequence \((Z_m(y))_{m\ge 0}\)) is exactly \(4\).
 \end{enumerate}
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
 Parts (1) and (2) are verified by direct factorization. For part (3), compute the resultant of \(N(t;y)\) and \(D(t;y)\) with respect to \(t\); this is a polynomial in \(y\) whose only roots are \(y=0\) and \(y=1\). Hence for \(y\notin\{0,1\}\) there is no common root in \(t\), and the rational function is in lowest terms with denominator degree \(4\).
@@ -124,7 +162,7 @@ The cubic root \(y_{\mathrm{c}}\approx -1.13445\) lies on the negative real axis
 \label{subsec:weight-stats}
 Let \(u_{\Om_m}\) be the uniform measure on \(\Om_m\), and let \(w_m:=\Fold_m\push u_{\Om_m}\) be its pushforward to \(X_m\). For \(X\sim w_m\), set \(H_m:=\abs{X}_1\).
 
-\begin{theorem}[LLN/CLT/LDP for \(\abs{X}_1\) under \(w_m\)]\label{thm:weight-stats}
+\begin{corollary}[LLN/CLT/LDP for \(\abs{X}_1\) under \(w_m\)]\label{thm:weight-stats}
 Under \(w_m\),
 \[
 \frac{H_m}{m}\xrightarrow{\ \PP\ }\frac{5}{18},
@@ -138,7 +176,7 @@ I(a):=\sup_{\theta\in\RR}\bigl(\theta a-\Lambda_Y(\theta)\bigr),
 \Lambda_Y(\theta):=\log \rho\!\bigl(M(e^\theta)\bigr)-\log 2,
 \]
 where \(\rho(\cdot)\) denotes the Perron root of the matrix from Theorem~\ref{thm:recurrence}.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
 Since \(w_m=\Fold_m\push u_{\Om_m}\),

@@ -1,482 +1,76 @@
-% sec_strip_lattice.tex -- Strip RKHS, lattice sampling, and cardinal reconstruction
-\section{The Strip RKHS, Lattice Sampling, and Cardinal Reconstruction}%
-\label{sec:strip-lattice}
+% sec_strip_lattice.tex -- Lattice sampling and cardinal reconstruction
+\section{Lattice Sampling for the Secant Kernel}%
+\label{app:strip-lattice}
 
-\paragraph{Complex Hilbert space convention.}
-From this point onward, we work with the complexification of the real
-Hilbert space from Section~\ref{sec:gram-space}, still denoted
-$\mathcal H_K$.  Its inner product is linear in the first variable and
-conjugate-linear in the second:
-\[
-\langle f,g\rangle_{\mathcal H_K}
-:=\frac{1}{2\pi^2}\int_{\RR}e^{2|\xi|}\widehat f(\xi)\,
-\overline{\widehat g(\xi)}\,\dd\xi.
-\]
-All reproducing kernels satisfy the Hermitian symmetry
-$K(z,w)=\overline{K(w,z)}$, and evaluation representers depend on
-$\overline w$, not on~$w$, in the second slot.
+This appendix specializes the standard principal shift-invariant-space
+framework \cite{deBoorDeVoreRon1994,RonShen1995,AldroubiGrochenig2001}
+to the secant Gram kernel $K(a,b)=2/(4+(a-b)^2)$.
+The novelty is limited to three explicit formulas: the closed-form
+lattice symbol, the cardinal kernel's Fourier description, and the
+exact interpolation norm.  All structural claims (Riesz-basis property,
+cardinal reconstruction, invertibility) are direct consequences of the
+standard theory once the symbol is computed.
 
-\paragraph{Roadmap for Section~\ref{sec:strip-lattice}.}
-Proposition~\ref{thm:gram-space-poisson-image} identifies
-$\mathcal H_K$ with the Poisson image space
-$\sqrt{\pi}\,e^{-|D|}L^2(\RR)$ and provides the strip model.
-Proposition~\ref{prop:poisson-hardy-splitting} then separates positive and
-negative Fourier supports into two Hardy-type summands.  For the lattice
-results we work with the closed shift-generated spaces
-$\mathcal H_K(\ZZ)$ and $\mathcal S_{\ZZ}$; the underlying sampling and
-cardinal-reconstruction mechanism is the standard principal
-shift-invariant-space framework, whereas the new information here is the
-closed form of the lattice symbol \eqref{eq:lattice-symbol}, the cardinal
-kernel formula \eqref{eq:cardinal-kernel-fourier}, and the exact norm
-identity \eqref{eq:cardinal-norm-formula}.
+\paragraph{Complex inner product convention.}
+We work with the complexification of $\mathcal H_K$, inner product
+linear in the first variable, with norm
+$\|f\|_{\mathcal H_K}^2 := \frac{1}{2\pi^2}\int_\RR e^{2|\xi|}|\widehat f(\xi)|^2\dd\xi$.
 
-\subsection{A Poisson image realization of the mode space}
+\subsection{Lattice symbol, Riesz basis, and cardinal reconstruction}
 
-\begin{proposition}[The mode Gram space as a Poisson image space]%
-\label{thm:gram-space-poisson-image}
-Let
-\[
-K(a,b):=\frac{2}{4+(a-b)^2}=\pi\,P_2(a-b),
-\qquad a,b\in\RR,
-\]
-and let $\mathcal H_K$ be the reproducing-kernel Hilbert space generated
-by~$K$.  Define
-\[
-\mathcal X
-:=
-\left\{
-f\in L^2(\RR):
-\int_{\RR}e^{2|\xi|}\abs{\widehat f(\xi)}^2\dd\xi<\infty
-\right\},
-\]
-with norm
-\[
-\|f\|_{\mathcal X}^2
-:=\frac{1}{2\pi^2}\int_{\RR}e^{2|\xi|}\abs{\widehat f(\xi)}^2\dd\xi.
-\]
-Then $\mathcal H_K=\mathcal X$ isometrically.  Equivalently,
-\[
-\mathcal H_K=\sqrt{\pi}\,T_1(L^2(\RR)),
-\qquad
-\|\sqrt{\pi}\,T_1 g\|_{\mathcal H_K}=\|g\|_{L^2(\RR)}
-\quad(g\in L^2(\RR)).
-\]
-Every $f\in\mathcal H_K$ admits a unique holomorphic extension to the
-strip
-\[
-\mathbb S:=\{z\in\CC:\ |\Im z|<1\},
-\]
-given by
-\[
-f(z)=\frac{1}{2\pi}\int_{\RR}\widehat f(\xi)e^{\ii z\xi}\dd\xi,
-\qquad z\in\mathbb S,
-\]
-and satisfying the sharp pointwise estimate
-\[
-|f(x+\ii y)|\le \frac{1}{\sqrt{2(1-y^2)}}\,\|f\|_{\mathcal H_K}
-\qquad(x\in\RR,\ |y|<1).
-\]
-\end{proposition}
-
-\begin{proof}
-The Fourier transform of the translation kernel $k(x):=2/(4+x^2)$ is
-\[
-\widehat k(\xi)=\pi e^{-2|\xi|}.
-\]
-Hence
-\[
-\widehat{K(\cdot,a)}(\xi)=\pi e^{-2|\xi|}e^{-\ii a\xi}.
-\]
-For $f\in\mathcal X$ one therefore has
-\begin{align*}
-\langle f,K(\cdot,a)\rangle_{\mathcal X}
-&=
-\frac{1}{2\pi^2}\int_{\RR}
-e^{2|\xi|}\widehat f(\xi)\,
-\overline{\widehat{K(\cdot,a)}(\xi)}\dd\xi \\
-&=
-\frac{1}{2\pi}\int_{\RR}\widehat f(\xi)e^{\ii a\xi}\dd\xi
-=f(a)
-\end{align*}
-by Fourier inversion.  Thus $\mathcal X$ is a reproducing-kernel Hilbert
-space with kernel~$K$, and the Moore--Aronszajn uniqueness theorem yields
-$\mathcal X=\mathcal H_K$ \cite{Aronszajn1950}.
-
-Now let $g\in L^2(\RR)$ and set $f:=\sqrt{\pi}\,T_1 g$.  Since
-\[
-\widehat f(\xi)=\sqrt{\pi}\,e^{-|\xi|}\widehat g(\xi),
-\]
-Plancherel gives
-\[
-\|f\|_{\mathcal X}^2
-=\frac{1}{2\pi^2}\int_{\RR}e^{2|\xi|}\pi e^{-2|\xi|}
-\abs{\widehat g(\xi)}^2\dd\xi
-=\frac{1}{2\pi}\int_{\RR}\abs{\widehat g(\xi)}^2\dd\xi
-=\|g\|_{L^2}^2.
-\]
-Conversely, if $f\in\mathcal X$, define
-\[
-\widehat g(\xi):=\pi^{-1/2}e^{|\xi|}\widehat f(\xi).
-\]
-Then $g\in L^2(\RR)$ and
-$\widehat f=\sqrt{\pi}\,e^{-|\xi|}\widehat g$, so
-$f=\sqrt{\pi}\,T_1 g$.  This proves the image-space description.
-
-If $z=x+\ii y$ with $|y|<1$, Cauchy--Schwarz gives
-\begin{align*}
-|f(z)|
-&\le \frac{1}{2\pi}
-\left(\int_{\RR}e^{2|\xi|}\abs{\widehat f(\xi)}^2\dd\xi\right)^{1/2}
-\left(\int_{\RR}e^{-2|\xi|}e^{-2y\xi}\dd\xi\right)^{1/2} \\
-&=
-\frac{1}{\sqrt{2(1-y^2)}}\,\|f\|_{\mathcal X},
-\end{align*}
-because
-\[
-\int_{\RR}e^{-2|\xi|}e^{-2y\xi}\dd\xi=\frac{1}{1-y^2}.
-\]
-Hence the integral defining $f(z)$ converges absolutely and locally
-uniformly on $\mathbb S$, so the extension is holomorphic there.  The same
-estimate shows uniqueness by continuity from the real axis.
-\end{proof}
-
-\begin{remark}\label{rem:poisson-image-framework}
-The identity $K(a,b) = \pi P_2(a-b)$ means that the Gram kernel is,
-up to the factor~$\pi$, the Poisson kernel at time~$2$.  This explains
-why the RKHS is a Poisson image space: the kernel itself arises from the
-semigroup.  The holomorphic extension and pointwise estimate above are
-the standard $H^2$ Poisson-boundary statements transported to a
-translation-invariant strip model; see
-\cite{Duren1970,Rudin1987}.
-\end{remark}
-
-\subsection{Hardy splitting, lattice sampling, and cardinal reconstruction}
-
-\begin{proposition}[Hardy splitting of the strip model]%
-\label{prop:poisson-hardy-splitting}
-Let
-\[
-\mathcal H_K^+
-:=
-\left\{
-f\in\mathcal H_K:\ \widehat f(\xi)=0 \text{ for a.e. }\xi<0
-\right\},
-\]
-\[
-\mathcal H_K^-
-:=
-\left\{
-f\in\mathcal H_K:\ \widehat f(\xi)=0 \text{ for a.e. }\xi>0
-\right\}.
-\]
-Then
-\[
-\mathcal H_K=\mathcal H_K^+\oplus \mathcal H_K^-
-\]
-orthogonally.  Moreover, each $f_\pm\in\mathcal H_K^\pm$ extends
-holomorphically to $\mathbb S$, and $\mathcal H_K^\pm$ is a
-reproducing-kernel Hilbert space on~$\mathbb S$ with kernel
-\begin{equation}\label{eq:hardy-splitting-kernels}
-K_+(z,w)=\frac{1}{2(2-\ii(z-\overline w))},
-\qquad
-K_-(z,w)=\frac{1}{2(2+\ii(z-\overline w))}.
-\end{equation}
-For $a,b\in\RR$ one has
-\begin{equation}\label{eq:hardy-splitting-real-kernel}
-K(a,b)=K_+(a,b)+K_-(a,b).
-\end{equation}
-\end{proposition}
-
-\begin{proof}
-The norm formula from Proposition~\ref{thm:gram-space-poisson-image}
-shows that $\mathcal H_K^+$ and $\mathcal H_K^-$ are closed subspaces of
-$\mathcal H_K$, and they are orthogonal because their Fourier supports are
-disjoint.  The decomposition
-\[
-\widehat f
-=\widehat f\,\mathbf 1_{[0,\infty)}
-+\widehat f\,\mathbf 1_{(-\infty,0]}
-\]
-therefore yields the asserted orthogonal sum.
-
-For $w\in\mathbb S$, define $K_\pm(\cdot,w)$ by
-\[
-\widehat{K_+(\cdot,w)}(\xi)
-:=
-\pi e^{-2\xi}e^{-\ii\overline w\,\xi}\mathbf 1_{[0,\infty)}(\xi),
-\]
-\[
-\widehat{K_-(\cdot,w)}(\xi)
-:=
-\pi e^{2\xi}e^{-\ii\overline w\,\xi}\mathbf 1_{(-\infty,0]}(\xi).
-\]
-Since $|\Im w|<1$, these functions belong to $\mathcal H_K^\pm$.  If
-$f_+\in\mathcal H_K^+$, then
-\begin{align*}
-\langle f_+,K_+(\cdot,w)\rangle_{\mathcal H_K}
-&=
-\frac{1}{2\pi^2}\int_0^\infty
-e^{2\xi}\widehat f_+(\xi)\,
-\overline{\pi e^{-2\xi}e^{-\ii\overline w\,\xi}}\dd\xi \\
-&=
-\frac{1}{2\pi}\int_0^\infty \widehat f_+(\xi)e^{\ii w\xi}\dd\xi
-=f_+(w).
-\end{align*}
-The same argument gives the reproducing identity for $\mathcal H_K^-$.  By
-Fourier inversion,
-\[
-K_+(z,w)
-=\frac{1}{2\pi}\int_0^\infty
-\pi e^{-2\xi}e^{\ii(z-\overline w)\xi}\dd\xi
-=\frac{1}{2(2-\ii(z-\overline w))},
-\]
-\[
-K_-(z,w)
-=\frac{1}{2\pi}\int_{-\infty}^0
-\pi e^{2\xi}e^{\ii(z-\overline w)\xi}\dd\xi
-=\frac{1}{2(2+\ii(z-\overline w))},
-\]
-which proves \eqref{eq:hardy-splitting-kernels}.  Adding the two kernels
-on the real axis yields \eqref{eq:hardy-splitting-real-kernel}.
-\end{proof}
-
-\paragraph{Positioning against prior shift-invariant and Cauchy sampling theory.}
-The Riesz bounds and lattice reconstruction are instances of the standard
-shift-invariant-space machinery for principal generators, as in the
-classical structure theory of finitely generated shift-invariant spaces
-and stable translates
-\cite{deBoorDeVoreRon1994,RonShen1995,Bownik2000,AldroubiGrochenig2001,GrochenigRomeroStockler2020},
-and more broadly in the cardinal-interpolation and radial-basis-function
-literature \cite{Buhmann2003}.
-In particular, the symbol criterion in the proof of
-Theorem~\ref{thm:poisson-lattice-sampling} is the usual Fourier-symbol
-approach.
-
-For the Cauchy/Lorentz generator, integer-shift explicit nod-function and
-Riesz-constant computations appear in the existing Cauchy--type literature,
-including integer shifts and nod-function constructions
-\cite{KiselevMininNovikov2016,KiselevMininNovikov2019}.
-For the present paper, the additional content beyond the abstract
-shift-invariant framework is the Poisson-strip reinterpretation together
-with the closed-form lattice symbol
-\eqref{eq:lattice-symbol}, and the exact cardinal Fourier formula and
-norm formula
-\eqref{eq:cardinal-kernel-fourier},\eqref{eq:cardinal-norm-formula}.
-
-\begin{theorem}[Lattice sampling for the integer secant orbit]%
+\begin{proposition}[Lattice sampling]%
 \label{thm:poisson-lattice-sampling}
-Define the closed shift-generated Hilbert subspaces
+Define
 \[
 \mathcal H_K(\ZZ)
-:=
-\overline{\operatorname{span}}\{K(\cdot,n):n\in\ZZ\}
-\subset \mathcal H_K,
+:=\overline{\operatorname{span}}\{K(\cdot,n):n\in\ZZ\}\subset\mathcal H_K.
 \]
-\[
-\mathcal S_{\ZZ}
-:=
-\overline{\operatorname{span}}\{\Psi_n:n\in\ZZ\}
-\subset L^2_0(\omega).
-\]
-Thus $\mathcal H_K(\ZZ)$ and $\mathcal S_{\ZZ}$ are the Hilbert closures
-of finite linear combinations of the corresponding kernel sections and
-secants.
 Set
 \begin{equation}\label{eq:lattice-sampling-constants}
-A_{\ZZ}:=\frac{\pi}{\sinh(2\pi)},
-\qquad
-B_{\ZZ}:=\pi\coth(2\pi).
+A_{\ZZ}:=\frac{\pi}{\sinh(2\pi)},\qquad B_{\ZZ}:=\pi\coth(2\pi).
 \end{equation}
-Then the families $\{K(\cdot,n)\}_{n\in\ZZ}$ and
-$\{\Psi_n\}_{n\in\ZZ}$ are Riesz bases for
-$\mathcal H_K(\ZZ)$ and $\mathcal S_{\ZZ}$, respectively.  More
-precisely, for every
-finitely supported scalar sequence $(c_n)_{n\in\ZZ}$ one has
-\begin{equation}\label{eq:lattice-riesz-kernel}
-A_{\ZZ}\sum_{n\in\ZZ}|c_n|^2
-\le
-\left\|
-\sum_{n\in\ZZ}c_nK(\cdot,n)
-\right\|_{\mathcal H_K}^2
-\le
-B_{\ZZ}\sum_{n\in\ZZ}|c_n|^2,
-\end{equation}
-\begin{equation}\label{eq:lattice-riesz-secant}
-A_{\ZZ}\sum_{n\in\ZZ}|c_n|^2
-\le
-\left\|
-\sum_{n\in\ZZ}c_n\Psi_n
-\right\|_{L^2(\omega)}^2
-\le
-B_{\ZZ}\sum_{n\in\ZZ}|c_n|^2.
-\end{equation}
-Consequently, the synthesis maps
-\[
-\mathcal C_K(c):=\sum_{n\in\ZZ}c_nK(\cdot,n),
-\qquad
-\mathcal C_S(c):=\sum_{n\in\ZZ}c_n\Psi_n,
-\qquad c\in c_{00}(\ZZ),
-\]
-extend uniquely to topological isomorphisms
-\[
-\mathcal C_K:\ell^2(\ZZ)\xrightarrow{\sim}\mathcal H_K(\ZZ),
-\qquad
-\mathcal C_S:\ell^2(\ZZ)\xrightarrow{\sim}\mathcal S_{\ZZ}.
-\]
-If $F\in\mathcal H_K(\ZZ)$, then
-\begin{equation}\label{eq:lattice-sampling-HK}
-A_{\ZZ}\|F\|_{\mathcal H_K}^2
-\le
-\sum_{n\in\ZZ}|F(n)|^2
-\le
-B_{\ZZ}\|F\|_{\mathcal H_K}^2.
-\end{equation}
-Consequently, the restriction map
-\[
-R_{\ZZ}:\mathcal H_K(\ZZ)\to \ell^2(\ZZ),
-\qquad
-R_{\ZZ}F:=(F(n))_{n\in\ZZ},
-\]
-is an isomorphism of Hilbert spaces.  Equivalently, every
-$\alpha\in\ell^2(\ZZ)$ admits a unique interpolant
-$F_\alpha\in\mathcal H_K(\ZZ)$ satisfying
-\[
-F_\alpha(n)=\alpha_n
-\qquad(n\in\ZZ).
-\]
-\end{theorem}
-
-\begin{proof}
-The proof follows the standard Fourier-symbol approach for principal
-shift-invariant spaces
-\cite{deBoorDeVoreRon1994,RonShen1995,AldroubiGrochenig2001}.
-For finitely supported $c=(c_n)_{n\in\ZZ}$, set
-$\widehat c(\theta):=\sum_{n}c_ne^{-\ii n\theta}$ and
-$F_c:=\sum_nc_nK(\cdot,n)$.  By Theorem~\ref{thm:mode-gram-kernel} and
-Parseval on~$\ZZ$,
-\begin{equation}\label{eq:lattice-symbol-form}
-\|F_c\|_{\mathcal H_K}^2
-=\frac{1}{2\pi}\int_{-\pi}^{\pi}\sigma(\theta)\,
-|\widehat c(\theta)|^2\dd\theta,
-\end{equation}
-where $\sigma(\theta):=\sum_{n\in\ZZ}K(0,n)e^{-\ii n\theta}$.
-With $\widehat k(\xi)=\pi e^{-2|\xi|}$ from
-Proposition~\ref{thm:gram-space-poisson-image}, Poisson summation
-\cite[Chapter~III]{Stein1971} gives
+Then $\{K(\cdot,n)\}_{n\in\ZZ}$ is a Riesz basis for $\mathcal H_K(\ZZ)$
+with bounds $A_{\ZZ}\le\sigma\le B_{\ZZ}$, where the lattice symbol is
 \begin{equation}\label{eq:lattice-symbol}
 \sigma(\theta)
+=\sum_{n\in\ZZ}K(0,n)e^{-\ii n\theta}
 =\frac{\pi\cosh(2(\pi-|\theta|))}{\sinh(2\pi)},
 \qquad\theta\in[-\pi,\pi].
 \end{equation}
-The bounds $A_{\ZZ}\le\sigma\le B_{\ZZ}$ are immediate.  The Riesz
-inequalities \eqref{eq:lattice-riesz-kernel} and
-\eqref{eq:lattice-riesz-secant} follow from~\eqref{eq:lattice-symbol-form};
-the secant version uses the unitary $\mathcal U\Psi_n=K(\cdot,n)$ from
-Theorem~\ref{thm:mode-space-rkhs}.  The synthesis maps extend to
-topological isomorphisms by density.
-
-For the sampling inequality~\eqref{eq:lattice-sampling-HK}, let
-$G$ be the Toeplitz Gram operator $(K(m,n))_{m,n}$.  Since
-$\widehat{Gc}(\theta)=\sigma(\theta)\widehat c(\theta)$, one has
-$\sum|F_c(n)|^2=\frac{1}{2\pi}\int\sigma^2|\widehat c|^2\dd\theta$,
-and \eqref{eq:lattice-sampling-HK} follows from the symbol bounds.  The
-bounded invertibility of~$G$ yields existence and uniqueness of the
-interpolant.
-\end{proof}
-
-\begin{theorem}[Cardinal reconstruction in the lattice-generated strip RKHS]%
-\label{thm:poisson-cardinal-reconstruction}
-Under the hypotheses of Theorem~\ref{thm:poisson-lattice-sampling}, let
-\[
-L:=R_{\ZZ}^{-1}\delta_0\in\mathcal H_K(\ZZ).
-\]
-Here $\mathcal H_K(\ZZ)$ is the closed span of the kernel sections
-$\{K(\cdot,n):n\in\ZZ\}$.
-Then $L(n)=\delta_{0n}$ for every $n\in\ZZ$.  For every
-$\alpha=(\alpha_n)_{n\in\ZZ}\in\ell^2(\ZZ)$, the series
-\[
-F_\alpha(z):=\sum_{n\in\ZZ}\alpha_nL(z-n)
-\]
-converges in $\mathcal H_K(\ZZ)$ and uniformly on compact subsets of the
-strip $\mathbb S$, and it is the unique function in $\mathcal H_K(\ZZ)$
-satisfying
-\[
-F_\alpha(n)=\alpha_n
-\qquad(n\in\ZZ).
-\]
-If
-\[
-\widehat\alpha(\theta):=\sum_{n\in\ZZ}\alpha_ne^{-\ii n\theta},
-\qquad \theta\in[-\pi,\pi],
-\]
-then
+For every $\alpha\in\ell^2(\ZZ)$ there is a unique interpolant
+$F_\alpha\in\mathcal H_K(\ZZ)$ with $F_\alpha(n)=\alpha_n$, and
 \begin{equation}\label{eq:cardinal-norm-formula}
 \|F_\alpha\|_{\mathcal H_K}^2
 =\frac{1}{2\pi}\int_{-\pi}^{\pi}
-\frac{|\widehat\alpha(\theta)|^2}{\sigma(\theta)}\dd\theta,
+\frac{|\widehat\alpha(\theta)|^2}{\sigma(\theta)}\dd\theta.
 \end{equation}
-where $\sigma$ is the lattice symbol from \eqref{eq:lattice-symbol}.  If
-$d\in\ell^2(\ZZ)$ is the unique sequence satisfying
-\[
-\widehat d(\theta)=\sigma(\theta)^{-1}
-\qquad\text{for a.e. }\theta\in[-\pi,\pi],
-\]
-then
-\[
-L(z)=\sum_{n\in\ZZ}d_nK(z,n)
-\]
-in $\mathcal H_K$, and for almost every $\theta\in[-\pi,\pi]$ and every
-$m\in\ZZ$ one has
-\begin{equation}\label{eq:cardinal-kernel-fourier}
-\widehat L(\theta+2\pi m)
-=\frac{\pi e^{-2|\theta+2\pi m|}}{\sigma(\theta)}.
-\end{equation}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
-Integer translations preserve $\mathcal H_K(\ZZ)$ since
-$K(z-n,m)=K(z,m+n)$.  The intertwining
-$R_{\ZZ}\tau_n=S_nR_{\ZZ}$ gives $L(n)=\delta_{0n}$.  The cardinal
-expansion $F_\alpha=\sum_n\alpha_nL(\cdot-n)$ converges in
-$\mathcal H_K(\ZZ)$ by the continuity of $R_{\ZZ}^{-1}$, and the
-pointwise estimate from Proposition~\ref{thm:gram-space-poisson-image}
-upgrades this to uniform convergence on compact subsets of~$\mathbb S$.
-
-For \eqref{eq:cardinal-norm-formula}, write
-$F_\alpha=\sum_nc_nK(\cdot,n)$ with $Gc=\alpha$.  In the Fourier
-representation $\widehat\alpha=\sigma\widehat c$, so
-\eqref{eq:lattice-symbol-form} gives
+Set $\widehat c(\theta):=\sum_n c_n e^{-\ii n\theta}$ and
+$F_c:=\sum_n c_n K(\cdot,n)$.  By Theorem~\ref{thm:mode-gram-kernel} and
+Parseval,
 \[
-\|F_\alpha\|_{\mathcal H_K}^2
-=\frac{1}{2\pi}\int_{-\pi}^{\pi}
-\frac{|\widehat\alpha(\theta)|^2}{\sigma(\theta)}\dd\theta.
+\|F_c\|_{\mathcal H_K}^2
+=\frac{1}{2\pi}\int_{-\pi}^\pi\sigma(\theta)|\widehat c(\theta)|^2\dd\theta.
 \]
-Since $1/\sigma\in L^\infty$, this extends to all
-$\alpha\in\ell^2(\ZZ)$ by density.  Finally, $d:=G^{-1}\delta_0$ has
-$\widehat d=\sigma^{-1}$, and
-$\widehat{K(\cdot,n)}(\xi)=\pi e^{-2|\xi|}e^{-\ii n\xi}$ yields
-\eqref{eq:cardinal-kernel-fourier} by periodicity of $\widehat d$.
+Poisson summation with $\widehat k(\xi)=\pi e^{-2|\xi|}$ gives
+\eqref{eq:lattice-symbol}.  The bounds $A_\ZZ\le\sigma\le B_\ZZ$ are
+immediate, establishing the Riesz inequalities.  The synthesis map
+extends to an isomorphism $\ell^2(\ZZ)\to\mathcal H_K(\ZZ)$ by density.
+The Gram operator $G=(K(m,n))_{m,n}$ is bounded and invertible with
+symbol $\sigma$; the unique interpolant $F_\alpha=\mathcal C_K(G^{-1}\alpha)$
+satisfies \eqref{eq:cardinal-norm-formula}.
 \end{proof}
 
 \begin{remark}
-Theorems~\ref{thm:poisson-lattice-sampling}
-and~\ref{thm:poisson-cardinal-reconstruction} fit the standard principal
-shift-invariant sampling paradigm.
-The sampling inequalities come from the bounded and invertible symbol
-$\sigma(\theta)=\pi\cosh(2(\pi-|\theta|))/\sinh(2\pi)$ and the
-frame characterization by Riesz bounds in \cite{deBoorDeVoreRon1994,RonShen1995,AldroubiGrochenig2001}.
-
-For this same paradigm, explicit nod-function formulae are known for many
-generators, including Gaussian families
-\cite{RomeroUlanovskiiZlotnikov2024,BaranovBelovGrochenig2022}
-and recent derivative-sampling extensions
-\cite{GrochenigRomeroStockler2020,RomeroUlanovskiiZlotnikov2024}.
-The classical Cauchy/Lorentz integer-shift literature also contains Riesz
-and interpolation statements of this type
+The symbol \eqref{eq:lattice-symbol} and the norm identity
+\eqref{eq:cardinal-norm-formula} are the explicit new content of this
+appendix relative to the general theory in
+\cite{deBoorDeVoreRon1994,RonShen1995,AldroubiGrochenig2001}.
+Analogous closed-form formulas are known for Gaussian generators
+\cite{RomeroUlanovskiiZlotnikov2024,BaranovBelovGrochenig2022};
+for the Cauchy/Lorentz integer-shift family, Riesz and interpolation
+statements of this type appear in
 \cite{KiselevMininNovikov2016,KiselevMininNovikov2019}.
-The Poisson-strip representation added here makes the symbol and the
-interpolation norm completely explicit, yielding the closed formula for
-$\sigma$ and the cardinal norm identity
-\eqref{eq:cardinal-norm-formula}.
 \end{remark}
-

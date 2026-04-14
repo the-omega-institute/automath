@@ -1,12 +1,15 @@
 % ------------------------------------------------------------------
-%  Section 6: Survivor Renyi spectra and collision thresholds
+%  Section 7: Survivor Renyi spectra and collision thresholds
 % ------------------------------------------------------------------
-\section{Secondary thermodynamic consequences}\label{sec:double-budget}
+\section{Consequences of the killed-matrix formula}\label{sec:double-budget}
 
-This section records consequences of the pressure-gap calculation from
-Section~\ref{sec:open-system}.  The survivor R\'enyi spectrum comes from
-the same killed-matrix path sum with power weights, and the collision
-threshold then follows from Chen--Stein.
+The results in this section are consequences of the killed-matrix
+calculation from Section~\ref{sec:open-system}, obtained by replacing the
+residue-ambiguity terminal weight with an \(s\)-th power weight.  The
+survivor R\'enyi spectrum is the first corollary of that path sum, and
+the collision threshold is then extracted by a standard Chen--Stein
+occupancy estimate.  We record them as secondary consequences of the
+same finite-state calculation rather than as independent main theorems.
 
 \subsection{Survivor R\'enyi pressure spectra}
 
@@ -16,8 +19,8 @@ Under the hypotheses of Theorem~\ref{thm:first-entry-escape-rate}, let
 \(0\leq t<m\), equivalently the set of length-\(m\) words whose cylinder
 is contained in \(\{\tau_H\ge m\}\).
 
-\begin{theorem}[Survivor R\'enyi pressure spectrum]
-\label{thm:survivor-renyi-pressure}
+\begin{corollary}[Survivor R\'enyi pressure spectrum]
+\label{cor:survivor-renyi-pressure}
 Assume the hypotheses of
 Theorem~\ref{thm:first-entry-escape-rate}.  For \(s>0\) and \(m\geq 1\),
 define
@@ -69,7 +72,7 @@ collision is
   \chi_H:=2P_Y(\varphi)-P_{Y_H}(2\varphi)
         = 2\gamma_H(\varphi)+h_{2,H}.
 \]
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
 For \(a=a_0\cdots a_{m-1}\in\mathcal L_m^H\), the Markov property gives
@@ -162,7 +165,7 @@ The formulas for \(h_{2,H}\) and \(\chi_H\) are the special case
 \begin{corollary}[Collision consequences of the survivor spectrum]
 \label{cor:survivor-spectrum-collision}
 Under the hypotheses of
-Theorem~\ref{thm:survivor-renyi-pressure}, let
+Corollary~\ref{cor:survivor-renyi-pressure}, let
 \((X_m^{H,(i)})_{1\leq i\leq N_m}\) be independent survivor prefixes of
 depth \(m\) with common law \(\lambda_m^H\).  Write
 \[
@@ -191,8 +194,8 @@ samples lies on the scale
 
 \begin{proof}
 The asymptotics of \(S_2^H(m)\) and \(S_3^H(m)\) are the cases \(s=2\)
-and \(s=3\) of Theorem~\ref{thm:survivor-renyi-pressure}.  Apply
-Theorem~\ref{thm:double-budget-poisson} with deterministic synchronization
+and \(s=3\) of Corollary~\ref{cor:survivor-renyi-pressure}.  Apply
+Proposition~\ref{prop:double-budget-poisson} with deterministic synchronization
 time \(T_m\equiv 0\), so that \(q_m=0\) and
 \(\Lambda_m=\binom{N_m}{2}S_2^H(m)\).
 \end{proof}
@@ -207,8 +210,8 @@ law of \(X_m\), and for \(r\geq 2\) define
   S_r(m):=\sum_{a\in A_m}\lambda_m(a)^r.
 \]
 
-\begin{theorem}[Poisson threshold for collision failure]
-\label{thm:double-budget-poisson}
+\begin{proposition}[Poisson collision threshold]
+\label{prop:double-budget-poisson}
 Let \(n_m\in\NN\) and \(N_m\in\NN\).  Let
 \((T_m^{(i)},X_m^{(i)})_{1\leq i\leq N_m}\) be independent copies of
 \((T_m,X_m)\), and let \(\mathsf{Fail}_{m,n_m,N_m}\) be the event that
@@ -250,101 +253,23 @@ In particular, the collision threshold lies on the scale
   \qquad\text{equivalently}\qquad
   2\log N_m \asymp -\log S_2(m).
 \]
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
-Let
-\[
-  U_m:=\bigcup_{i=1}^{N_m}\{T_m^{(i)}>n_m\}
-\]
-be the event that some object has not synchronized by time \(n_m\).
-On \(U_m^c\), every object has synchronized, so
-\[
-  \mathsf{Fail}_{m,n_m,N_m}\cap U_m^c
-  = \{W_m\geq 1\}\cap U_m^c.
-\]
-Therefore
-\[
-  \bigl|
-    \PP(\mathsf{Fail}_{m,n_m,N_m})
-    - \PP(W_m\geq 1)
-  \bigr|
-  \leq \PP(U_m)
-  \leq N_m q_m.
-\]
-
-For part~(i), Markov's inequality gives
-\[
-  \PP(W_m\geq 1)\leq \EE[W_m]=\Lambda_m,
-\]
-so \(\PP(\mathsf{Fail}_{m,n_m,N_m})\to 0\).
-
-For parts~(ii) and~(iii), index unordered pairs by
-\[
-  \mathcal{I}_m:=\set{\{i,j\}:1\leq i<j\leq N_m},
-  \qquad
-  I_\alpha:=\mathbf{1}_{\{X_m^{(i)}=X_m^{(j)}\}}
-  \quad (\alpha=\{i,j\}),
-\]
-so \(W_m=\sum_{\alpha\in\mathcal{I}_m}I_\alpha\).  Then
-\[
-  \EE[I_\alpha]=S_2(m),
-  \qquad
-  \EE[W_m]=\Lambda_m.
-\]
-Disjoint pairs are independent, whereas pairs sharing one index satisfy
-\[
-  \EE[I_\alpha I_\beta]=S_3(m).
-\]
-With the usual dependency graph on intersecting pairs,
-\citet[Theorem~1]{ArratiaGoldsteinGordon1989} gives
-\[
-  d_{\mathrm{TV}}
-   \bigl(W_m,\mathrm{Poisson}(\Lambda_m)\bigr)
-  \leq \min\{1,\Lambda_m^{-1}\}(b_1+b_2),
-\]
-where
-\[
-  b_1=O\bigl(N_m^3S_2(m)^2\bigr),
-  \qquad
-  b_2=O\bigl(N_m^3S_3(m)\bigr).
-\]
-Since \(S_2(m)^2\leq S_3(m)\) by Cauchy--Schwarz,
-\[
-  \Bigl(\sum_a\lambda_m(a)^2\Bigr)^2
-  \leq \Bigl(\sum_a\lambda_m(a)\Bigr)
-      \Bigl(\sum_a\lambda_m(a)^3\Bigr)
-  = S_3(m),
-\]
-the hypothesis \(N_m^3S_3(m)\to 0\) forces \(b_1+b_2\to 0\), and
-therefore
-\[
-  W_m \Rightarrow \mathrm{Poisson}(\tau).
-\]
-Hence
-\[
-  \PP(W_m\geq 1)\longrightarrow 1-e^{-\tau},
-\]
-and the same limit holds for \(\PP(\mathsf{Fail}_{m,n_m,N_m})\).
-
-For part~(iii), the same pair decomposition gives
-\[
-  \Var(W_m)
-  \leq \EE[W_m] + O\bigl(N_m^3S_3(m)\bigr)
-  = \Lambda_m + O\bigl(N_m^3S_3(m)\bigr).
-\]
-Thus
-\[
-  \frac{\Var(W_m)}{\Lambda_m^2}\longrightarrow 0.
-\]
-Chebyshev's inequality implies \(W_m/\Lambda_m\to 1\) in probability, so
-\[
-  \PP(W_m=0)\leq
-  \PP\!\left(\abs{W_m-\Lambda_m}\geq \frac{\Lambda_m}{2}\right)
-  \longrightarrow 0.
-\]
-Therefore \(\PP(W_m\geq 1)\to 1\), and the same is true for
-\(\PP(\mathsf{Fail}_{m,n_m,N_m})\).
+Let \(U_m\) be the event that some object has not synchronized by time
+\(n_m\); then
+\(|\PP(\mathsf{Fail}_{m,n_m,N_m})-\PP(W_m\geq 1)|\leq N_m q_m\).
+Part~(i) follows from Markov's inequality applied to \(W_m\).
+For part~(ii) we index unordered pairs and use the Chen--Stein
+dependency-graph estimate of \citet[Theorem~1]{ArratiaGoldsteinGordon1989}:
+the hypotheses \(N_mq_m\to 0\), \(\Lambda_m\to\tau\), and
+\(N_m^3S_3(m)\to 0\) imply
+\(W_m\Rightarrow\mathrm{Poisson}(\tau)\), hence
+\(\PP(W_m\geq 1)\to 1-e^{-\tau}\).
+For part~(iii) the same decomposition shows
+\(\Var(W_m)=\Lambda_m+O(N_m^3S_3(m))=o(\Lambda_m^2)\), so
+Chebyshev's inequality forces \(\PP(W_m=0)\to 0\), and therefore
+\(\PP(\mathsf{Fail}_{m,n_m,N_m})\to 1\).
 \end{proof}
 
 \begin{corollary}[Subcritical capacity region]
@@ -384,9 +309,13 @@ and the collision term satisfies
   = \exp\bigl(2\log N_m-h_2m+o(m)\bigr)
   \longrightarrow 0.
 \]
-Apply part~(i) of Theorem~\ref{thm:double-budget-poisson}.
+Apply part~(i) of Proposition~\ref{prop:double-budget-poisson}.
 \end{proof}
 
-\begin{proof}[Proof of Theorem~\ref{thm:main-renyi}]
-This is Theorem~\ref{thm:survivor-renyi-pressure}.
+\begin{proof}[Proof of Corollary~\ref{cor:main-renyi}]
+The pressure identity is Corollary~\ref{cor:survivor-renyi-pressure}.
+The collision-scale statement follows from
+Corollary~\ref{cor:survivor-spectrum-collision}, which invokes the
+standard Chen--Stein estimate recorded in
+Proposition~\ref{prop:double-budget-poisson}.
 \end{proof}

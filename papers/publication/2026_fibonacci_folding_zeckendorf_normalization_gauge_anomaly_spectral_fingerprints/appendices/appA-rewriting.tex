@@ -1,7 +1,7 @@
 \section{Appendix A: Termination and confluence of the fold normalization}
 \label{app:rewriting}
 
-We briefly record a verifiable normalization procedure realizing Zeckendorf form. Consider a binary Fibonacci digit string written in MSD-first convention. After prefixing a leading zero, repeatedly apply the local rewrite
+We briefly record a verifiable normalization procedure realizing Zeckendorf form. This appendix uses MSD-first convention only. Appendix~\ref{app:pressure} does \emph{not} use this left-to-right scan; it works in LH convention and reconstructs the bulk pair shift from synchronized reversed pair blocks. Consider a binary Fibonacci digit string written in MSD-first convention. After prefixing a leading zero, repeatedly apply the local rewrite
 \[
 011 \to 100
 \]
@@ -28,7 +28,7 @@ so replacing \(011\) by \(100\) leaves the represented integer unchanged.
 
 To prove confluence, it is enough to prove local confluence because termination is already known from Proposition~\ref{prop:termination}. The rule \(011\to 100\) has no nontrivial critical overlaps: two occurrences of \(011\) are either disjoint or identical. Hence if two rewrites start from the same word, they commute when they are distinct, and there is nothing to check when they coincide. Therefore the system is locally confluent, and Newman's lemma gives global confluence.
 
-Let \(w^\sharp\) be the unique normal form. Since it is irreducible, the prefixed word \(0w^\sharp\) contains no occurrence of \(011\). Any occurrence of \(11\) in \(w^\sharp\) would then be preceded either by the prefixed \(0\) or by an internal \(0\), producing an occurrence of \(011\) in \(0w^\sharp\). Hence \(w^\sharp\) contains no block \(11\).
+Let \(w^\sharp\) be the unique normal form. Since it is irreducible, the prefixed word \(0w^\sharp\) contains no occurrence of \(011\). If \(w^\sharp\) contained a block \(11\), take the leftmost occurrence and examine the symbol immediately to its left inside \(0w^\sharp\). That symbol must be \(0\) (it is either the prefixed \(0\) or the digit that separates this run of \(1\)s from the previous digit), so \(0w^\sharp\) would contain \(011\), contradicting irreducibility. Hence \(w^\sharp\) contains no block \(11\).
 
 Finally, \(w^\sharp\) has the same Fibonacci value as the initial word, and it has no adjacent \(1\)s. By Zeckendorf uniqueness \cite{Lekkerkerker1952,Zeckendorf1972}, there is exactly one binary Fibonacci expansion with that property. Therefore \(w^\sharp\) is precisely the Zeckendorf representation of the input value.
 \end{proof}

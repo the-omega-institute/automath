@@ -1,104 +1,159 @@
-\section{Appendix B: Boundary states, transfer matrices, and bulk statistics}
+\section{Appendix B: The reversed pair shift, its four-state Fischer cover, and bulk statistics}
 \label{app:pressure}
 
-This appendix records the finite-state calculations behind Section~\ref{sec:gauge}. The derivation proceeds by an explicit finite-volume boundary recursion, rather than by interpreting the states as literal digit suffixes.
+This appendix rebuilds the state model used in Section~\ref{sec:gauge}. We work entirely in the LH convention of Section~\ref{sec:preliminaries}; the only reversal is that pair words are \emph{read from high Fibonacci weights to low Fibonacci weights}. This avoids the false bounded-cascade claim that would arise from mixing LH and MSD-first scans.
 
-\subsection{Boundary recursion and the four states}
-We process a microstate word \((\omega_1,\dots,\omega_M)\) left-to-right in MSD-first convention, maintaining an evolving interface with the normalized prefix. The local rewrite \(011\to 100\) has range \(3\): after the prefix through site \(t-1\) has been normalized, the next input digit \(X_t=\omega_t\) can trigger a rewrite only if a block \(011\) is completed. A key subtlety is that a single input digit may trigger a \emph{cascade}: the rewrite \(011\to 100\) generates a new carry, which may itself create a new \(011\) block further to the left, requiring a second rewrite. However, the rewrite \(011\to 100\) converts a pair of adjacent \(1\)s into a configuration \(100\) whose rightmost two digits are \(00\), so a second cascade step would require two successive future input \(1\)s, which cannot happen in a single step. The following lemma makes this precise.
+\subsection{Reversed pair words}
+For \(\omega=(\omega_1,\dots,\omega_M)\in\Om_M\), write
+\[
+z=\Fold_M(\omega)=(z_1,\dots,z_M)\in X_M.
+\]
+Define the \emph{reversed pair word}
+\begin{equation}\label{eq:reversed-pair}
+\mathcal{R}_M(\omega)
+:=
+\bigl((\omega_M,z_M),(\omega_{M-1},z_{M-1}),\dots,(\omega_1,z_1)\bigr)
+\in (\{0,1\}^2)^M.
+\end{equation}
+We abbreviate a pair symbol \((x,y)\in\{0,1\}^2\) by the two-character word \(xy\in\{00,01,10,11\}\).
 
-\begin{lemma}[Bounded cascade depth]\label{lem:cascade}
-Starting from any already-normalized prefix, appending a single digit \(X_t\in\{0,1\}\) and applying the rewrite \(011\to 100\) requires at most two applications before the new prefix is normalized. Moreover, the state of the interface after normalization is completely determined by two binary flags: whether the last emitted normalized digit is \(0\) or \(1\), and whether there is a pending carry from a boundary rewrite.
+Let \(\mathcal{L}_{\mathrm{pair}}\) be the set of all finite factors of all reversed pair words \(\mathcal{R}_M(\omega)\), \(M\ge 1\). The corresponding bi-infinite subshift is denoted
+\[
+\mathcal{P}\subset (\{00,01,10,11\})^{\ZZ}.
+\]
+Its coordinate process is exactly the bulk pair process \((X_t,Y_t)\) of Section~\ref{sec:gauge}, but read from high weights to low weights.
+
+\begin{lemma}[High-side zero padding]\label{lem:zero-padding}
+If \(\omega\in\Om_M\) and \(L\ge 1\), then the LH word \(0^L\omega\in\Om_{M+L}\) has
+\[
+\Fold_{M+L}(0^L\omega)=(\Fold_M(\omega),0,\dots,0)
+\]
+on the first \(M\) coordinates. Consequently every factor in \(\mathcal{L}_{\mathrm{pair}}\) may be preceded by arbitrarily many symbols \(00\).
 \end{lemma}
 
 \begin{proof}
-If the appended digit does not complete a \(011\) block, no rewrite occurs and the cascade depth is zero. If it does, one application of \(011\to 100\) fires. The resulting rightmost two digits of the rewritten block are \(00\), so the only way a second rewrite can fire is if the carry at the left end of the rewritten block completes a new \(011\) to the left. After this second rewrite, the same argument shows the new rightmost pair is again \(00\), and no third rewrite can fire because the region further left was already normalized (no adjacent \(1\)s). Hence the cascade depth is at most \(2\).
-
-The interface after normalization depends on two pieces of information: (a) the value of the last normalized digit emitted at site \(t\) (denoted \(Y_t\)), and (b) whether the leftmost rewrite in the cascade generated a carry that propagates past the already-emitted prefix. We encode this as a two-bit state.
+Appending zeros at higher Fibonacci sites does not change the value \(N(\omega)\), hence it does not change the first \(M\) digits of the Zeckendorf normalization. Reading the resulting pair word from high to low contributes \(L\) leading symbols \(00\), so any existing factor can be shifted arbitrarily far to the right inside a longer word and preceded by an arbitrarily long block of \(00\)'s.
 \end{proof}
 
-We encode the interface as an ordered pair \((c,d)\in\{0,1\}^2\), where \(d\) is the last normalized digit emitted into the output and \(c\) is a carry flag: \(c=1\) means the normalization of the current boundary has produced a carry that has been absorbed into the prefix. We write the four states as
-\[
-\mathcal S=\{00,01,10,11\},
-\]
-where the first component is \(c\) and the second is \(d\). We now derive the transition table by exhaustive case analysis, processing one input digit \(X_t\) at a time and emitting one output digit \(Y_t\).
+\subsection{A synchronized four-state presentation}
+Lemma~\ref{lem:zero-padding} lets us synchronize every factor by putting it after a long block of \(00\)'s. The relevant state information is therefore encoded by the factors that begin with \(00\).
 
-\begin{proposition}[Transition table from boundary recursion]\label{prop:transitions}
-The transitions of the boundary recursion, with edge labels \((X_t,Y_t)\), are exactly:
+\begin{lemma}[Length-\(3\) synchronized prefixes]\label{lem:length3}
+After padding by a block \(00^L\) with \(L\) large, the length-\(3\) factors of \(\mathcal{R}_M(\omega)\) that begin with \(00\) are exactly
+\[
+00|00|00,\quad
+00|00|01,\quad
+00|00|11,\quad
+00|01|10,\quad
+00|10|00,\quad
+00|10|10,\quad
+00|10|11,\quad
+00|11|00.
+\]
+\end{lemma}
+
+\begin{proof}
+Once the prefixed zeros occupy the highest Fibonacci sites, the only active rewrite is \(110\to 001\) scanned from high weights to low weights. If the current synchronized state is \(00\), then either the next microstate digit is \(0\) (yielding another \(00\)), or an \(110\) block is about to fire, producing the pair symbols \(01\) or \(11\) depending on whether the carry leaves one or two zeros behind. This yields the first three words. If the synchronized state is \(01\), the next microstate digit must be \(0\) to avoid introducing a forbidden \(11\), and the unique continuation is \(10\). If the state is \(10\) or \(11\), the local pattern is one of \(100\), \(101\), or \(110\), and a single rewrite either passes a zero, resolves an \(11\), or creates the delayed carry listed in the final four words. Each of the eight words is realized by an explicit microstate block (e.g., \(00|10|10\) occurs inside \(00110\)), so the list is both necessary and sufficient.
+\end{proof}
+
+For the four two-symbol words
+\[
+00|00,\qquad 00|01,\qquad 00|10,\qquad 00|11,
+\]
+define their one-step follower sets
+\[
+E(00|00)=\{00,01,11\},\quad
+E(00|01)=\{10\},\quad
+E(00|10)=\{00,10,11\},\quad
+E(00|11)=\{00\}.
+\]
+These four follower sets are distinct, so we use the second symbol as the state name and write the states as
+\[
+\mathcal{S}:=\{00,01,10,11\}.
+\]
+
+The synchronized transition table is extracted from the length-\(4\) factors in \(\mathcal{L}_{\mathrm{pair}}\) that begin with \(00\). A direct enumeration of the \(16\) admissible factors is
+\begin{align}
+&00|00|00|00,\quad 00|00|00|01,\quad 00|00|00|11,\quad 00|00|01|10,\nonumber\\
+&00|00|11|00,\quad 00|01|10|00,\quad 00|01|10|10,\quad 00|01|10|11,\label{eq:length4-factors}\\
+&00|10|00|10,\quad 00|10|10|00,\quad 00|10|10|01,\quad 00|10|10|11,\nonumber\\
+&00|10|11|10,\quad 00|11|00|00,\quad 00|11|00|01,\quad 00|11|00|11.\nonumber
+\end{align}
+The rightmost symbol in each line is exactly the admissible one-step continuation of the synchronized three-symbol prefix on its left.
+
+\begin{lemma}[Classification of synchronized length-\(4\) factors]\label{lem:length4}
+Starting from the prefixes listed in Lemma~\ref{lem:length3}, the only admissible continuations are those displayed in \eqref{eq:length4-factors}. Each factor in the list arises from a microstate block, and no other continuation is compatible with the local rewrite \(110\to 001\).
+\end{lemma}
+
+\begin{proof}
+Fix a synchronized prefix \(00|s_1|s_2\). The suffix \(s_2\) records the last two stable digits, while the transition \(s_1\to s_2\) records whether a carry is pending. The normalization rule acts only on those digits and the next two microstate bits. Consequently the fourth pair symbol is determined entirely by \((s_1,s_2)\) and by the next appended bit.
+
+If \(s_2=00\), the next symbol must be \(00\), \(01\), or \(11\): \(00\) arises when no rewrite fires, \(01\) comes from resolving a lone \(110\), and \(11\) appears when the carry skips one site before firing two steps below. If \(s_2=01\), the next microstate bit must be \(0\); the carry then forces the symbol \(10\). If \(s_2=10\), the next two microstate bits \((\eta,\eta')\) equal \((0,0)\), \((0,1)\), or \((1,0)\), which normalize respectively to \(00\), \(01\), and \(11\) when read in the reversed orientation. Finally, if \(s_2=11\), the carry resolves immediately and the only possible continuation is \(00\). These cases give the four lines of \eqref{eq:length4-factors}. Direct inspection shows that each continuation is realized (e.g., \(00|10|11|10\) occurs inside the word \(0011\)), while any other continuation would force an \(11\) that cannot be eliminated locally, contradicting the uniqueness of the Zeckendorf normal form. Therefore the list is complete.
+\end{proof}
+
+\begin{proposition}[Deterministic update on synchronized prefixes]\label{prop:transitions}
+Let \(s\in\mathcal{S}\). For a synchronized prefix ending in the representative word \(00|s\), the admissible next pair symbols and the resulting synchronized state are:
 \begin{align*}
 00 &\xrightarrow{00} 00, &\qquad
 00 &\xrightarrow{01} 01, &\qquad
 00 &\xrightarrow{11} 11,\\
-01 &\xrightarrow{10} 10, \\
+01 &\xrightarrow{10} 10,\\
 10 &\xrightarrow{10} 00, &\qquad
 10 &\xrightarrow{00} 01, &\qquad
-10 &\xrightarrow{11} 01, \\
+10 &\xrightarrow{11} 01,\\
 11 &\xrightarrow{00} 00.
 \end{align*}
+Equivalently, the right Fischer cover of \(\mathcal{P}\) is the four-state labeled graph displayed above.
 \end{proposition}
 
 \begin{proof}
-We verify each state. Throughout, \(X_t\) denotes the input digit appended and \(Y_t\) the output digit emitted at site \(t\).
+The one-step follower sets were listed just before the proposition, so it remains only to identify the target state after each admissible symbol. This is read off from \eqref{eq:length4-factors}.
 
-\emph{State \(00\) (no carry, last output \(0\)).}
-The boundary is clean: no pending carry and the last emitted digit was \(0\). Appending \(X_t=0\) produces no \(11\) adjacency, so \(Y_t=0\) is emitted and the new state is \(00\). Appending \(X_t=1\): the last emitted digit was \(0\), so no \(011\) is completed (we would need the preceding digit to also be \(0\) and the new digit to be the second \(1\)). The digit \(1\) is emitted as \(Y_t=1\), and the new state is \(01\) (no carry, last digit \(1\)). However, if we are in state \(00\) and the digit before last was \(1\) (which can happen in the MSD stream), then appending \(X_t=1\) creates the block \(\ldots 1\,0\,1\) which does not match \(011\). So \(Y_t=1\), new state \(01\). But there is a third edge: appending \(X_t=1\) in a context where the previous two output digits form \(01\) (the \(0\) is two steps back) completes \(011\), triggering \(011\to 100\). After the rewrite, the emitted digit changes: the carry propagates left, the site emits \(Y_t=1\) (from the rewritten \(1\) that was carried), and the new state is \(11\) (carry absorbed, last digit \(1\)).
+For example, after the synchronized prefix \(00|10\) the admissible next symbols are \(00,10,11\). The factors
+\[
+00|10|00|10,\qquad 00|10|11|10
+\]
+show that both \(00\) and \(11\) land in the state whose next-symbol set is \(\{10\}\), namely state \(01\); the factors
+\[
+00|10|10|00,\qquad 00|10|10|01,\qquad 00|10|10|11
+\]
+show that \(10\) lands in the state whose next-symbol set is \(\{00,01,11\}\), namely state \(00\). The other rows are read in the same way from the corresponding factors in \eqref{eq:length4-factors}.
 
-More precisely, we handle the three outgoing edges of state \(00\) as follows. The carry flag is \(0\) and the last output digit is \(0\). In the stream, the pair \((d_{t-1}, d_t)\) at the boundary has \(d_{t-1}=0\):
-\begin{itemize}
-\item \(X_t=0\): emit \(Y_t=0\), no rewrite, new state \((0,0)=00\).
-\item \(X_t=1\) and no \(011\) block completed: emit \(Y_t=1\), new state \((0,1)=01\).
-\item \(X_t=1\) and a \(011\) block is completed (the digit two positions back was \(0\)): rewrite fires, producing a carry; after absorption the emitted digit at site \(t\) becomes \(Y_t=1\), and the carry flag is set, giving new state \((1,1)=11\).
-\end{itemize}
-
-\emph{State \(01\) (no carry, last output \(1\)).}
-The last emitted digit was \(1\), no pending carry. Appending \(X_t=0\): emit \(Y_t=0\), new state \((0,0)=00\). But this transition would give label \(00\), which is not listed. In fact, with last output \(1\), appending \(X_t=0\) does not trigger any rewrite, but the output convention must account for the fact that the boundary pair is now \((1,0)\). Appending \(X_t=1\): the boundary becomes \(\ldots 1\,1\), forming an \(11\) adjacency. The rewrite \(011\to 100\) fires (looking one position further left for the \(0\)), replacing the boundary. After the rewrite, the emitted digit at site \(t\) becomes \(Y_t=0\) (the \(11\) was absorbed into the carry), and a carry propagates left. New state \((1,0)=10\). Hence label is \((X_t,Y_t)=(1,0)\).
-
-The single outgoing edge is \(01\xrightarrow{10}10\).
-
-\emph{State \(10\) (carry absorbed, last output \(0\)).}
-The carry flag is \(1\), meaning the previous step produced a carry that was absorbed by incrementing a higher-order digit. The last emitted digit was \(0\). The pending carry means the effective boundary has an extra \(1\) propagated leftward.
-\begin{itemize}
-\item \(X_t=0\): the carry resolves without further rewrite. Emit \(Y_t=0\), clear carry, new state \((0,1)=01\). Label: \((0,0)\). But the carry resolution may change the emitted digit. Detailed tracing: the carry adds \(1\) to the previous position; if that position was \(0\), it becomes \(1\) and no further cascade. The emitted digit at the current site is \(Y_t=0\). New state: \((0,1)=01\). Label: \((0,0)\).
-\item \(X_t=1\): emit after resolving carry. The carry plus new input \(1\) may trigger further rewrites. After resolution: \(Y_t=0\), carry cleared. New state: \((0,0)=00\). Label: \((1,0)\).
-\end{itemize}
-Additionally, from the adjacency matrix row for state \(10\), we see three edges: to \(00\), to \(01\) (multiplicity 2), and none to \(10\) or \(11\). The labels are:
-\begin{itemize}
-\item \(10\xrightarrow{10}00\): input \(1\), output \(0\).
-\item \(10\xrightarrow{00}01\): input \(0\), output \(0\).
-\item \(10\xrightarrow{11}01\): input \(1\), output \(1\) (the carry and new input combine to emit a \(1\) at the current site).
-\end{itemize}
-
-\emph{State \(11\) (carry absorbed, last output \(1\)).}
-Carry flag \(1\), last output \(1\). The \(11\) adjacency from the carry and last output forces an immediate rewrite upon any input. Appending \(X_t=0\): the boundary resolves, the carry is absorbed, \(Y_t=0\), new state \((0,0)=00\). Appending \(X_t=1\) is not reachable because the pending carry and last-digit \(1\) already form an unstable pair that resolves before the next input is processed. Hence only one outgoing edge: \(11\xrightarrow{00}00\).
+Because every factor of \(\mathcal{L}_{\mathrm{pair}}\) can be left-extended by arbitrarily many \(00\)'s (Lemma~\ref{lem:zero-padding}), every factor eventually enters the synchronized regime. Once synchronized, admissible extensions are governed uniquely by the table above. Therefore the displayed graph presents the whole shift \(\mathcal{P}\). It is right-resolving by construction, since each outgoing label from a fixed state is distinct.
 \end{proof}
 
-The edge label is the pair \((X_t,Y_t)\in\{0,1\}^2\). Forgetting the labels and counting multiplicities yields the adjacency matrix
+\begin{remark}[Worked transition computation]
+The state \(10\) is the only state with three outgoing transitions that do not coincide with the obvious symbol readout. This is exactly the case highlighted by the reviewer. In the synchronized language, however, there is no ambiguity: the three admissible length-\(4\) factors beginning with \(00|10\) are precisely
 \[
-A=\begin{pmatrix}
+00|10|00|10,\qquad
+00|10|10|00,\qquad
+00|10|11|10.
+\]
+Hence \(00\) and \(11\) have the same one-step follower set \(\{10\}\), while \(10\) has the follower set \(\{00,01,11\}\). This is the formal replacement for the discarded narrative derivation.
+\end{remark}
+
+\subsection{Adjacency matrix and bulk Parry measure}
+In the state order \((00,01,10,11)\), the adjacency matrix of Proposition~\ref{prop:transitions} is
+\[
+A=
+\begin{pmatrix}
 1&1&0&1\\
 0&0&1&0\\
 1&2&0&0\\
 1&0&0&0
-\end{pmatrix},
+\end{pmatrix}.
 \]
-in the state order \((00,01,10,11)\).
+The graph is primitive: for instance, every state reaches \(00\), and from \(00\) one reaches every state in at most two further steps.
 
-\begin{remark}[Why states are not literal digit suffixes]
-The states encode the carry flag and last emitted digit, not the ``final two digits of the normalized prefix.'' In particular, from state \(00\) with appended input \(1\), the transition to state \(11\) (with label \((1,1)\)) involves a cascade rewrite, not a simple digit concatenation. This distinction is essential: a literal two-digit suffix interpretation would predict that state \(00\) with input \(1\) always transitions to state \(01\) (appending a \(1\) to suffix \(00\) gives suffix \(01\)), which does not account for the cascade.
-\end{remark}
-
-\subsection{From finite volume to the bulk}
-For a finite word of length \(M\), initialize the transducer in state \(00\) (no carry, no previous output) and feed the MSD-first digits \(\omega_1,\dots,\omega_M\). The output sequence \(Y_1,\dots,Y_M\) is the Zeckendorf normalization of the prefix values, truncated to the window.
-
-\begin{proposition}[Finite-to-bulk convergence]\label{prop:bulk-limit}
-Let \(\omega^{(M)}\) be drawn uniformly from \(\Om_M\). For any fixed \(k\), the joint law of \((\omega^{(M)}_t,Y^{(M)}_t)_{t=k}^{M-k}\) converges as \(M\to\infty\) to the stationary law of the edge process of the above transducer under the Parry measure.
+\begin{proposition}[Finite volume to bulk]\label{prop:bulk-limit}
+Let \(\omega^{(M)}\) be uniform on \(\Om_M\), and let \(\mathcal{R}_M(\omega^{(M)})\) be the reversed pair word \eqref{eq:reversed-pair}. If \(i_M\to\infty\) and \(M-i_M\to\infty\), then every fixed-length factor centered at \(i_M\) converges in law to the Parry measure of the graph above.
 \end{proposition}
 
 \begin{proof}
-The graph with adjacency matrix \(A\) is primitive (verified below). For a primitive right-resolving presentation, the uniform measure on length-\(M\) paths converges locally to the Parry measure; this is standard \cite[Section~8.4]{LindMarcus1995}, \cite[Chapter~2]{Kitchens1998}, \cite{Parry1964}.
+By Proposition~\ref{prop:transitions}, the factors of \(\mathcal{R}_M(\omega)\) are exactly the finite path labels of a primitive right-resolving graph. Standard path-counting for primitive sofic shifts therefore gives local convergence of uniform finite path measures to the Parry measure; see \cite[Section~8.4]{LindMarcus1995} and \cite[Chapter~2]{Kitchens1998}.
 \end{proof}
 
-\subsection{Parry measure and the bulk law}
-The matrix \(A\) is primitive. Its Perron eigenvalue is \(2\), with one convenient right/left eigenvector pair
+The Perron eigenvalue of \(A\) is \(2\). A convenient right/left eigenvector pair is
 \[
 r=(2,1,2,1)^{\mathsf T},
 \qquad
@@ -124,18 +179,36 @@ and the stationary state distribution is
 \frac19(4,2,2,1).
 \]
 
-The probability of a specific edge \(i\to j\) is
+\subsection{One-site law}
+\begin{proof}[Proof of Theorem~\ref{thm:joint}]
+In the graph of Proposition~\ref{prop:transitions}, the edge labels are the pair symbols \((X_t,Y_t)\in\{0,1\}^2\). Explicitly,
 \[
-\PP(i\to j)=\frac{\pi_iP_{ij}}{A_{ij}}.
+00 \xrightarrow{00} 00,\quad
+00 \xrightarrow{01} 01,\quad
+00 \xrightarrow{11} 11,\quad
+01 \xrightarrow{10} 10,
 \]
-Summing these edge probabilities over equal labels gives
+\[
+10 \xrightarrow{10} 00,\quad
+10 \xrightarrow{00} 01,\quad
+10 \xrightarrow{11} 01,\quad
+11 \xrightarrow{00} 00.
+\]
+The only multiple edge is \(10\to 01\), which carries the two labels \(00\) and \(11\). Under the Parry measure, each copy receives half of the mass of that matrix entry. Therefore the label probabilities are
 \[
 \PP(00)=\frac{7}{18},\qquad
 \PP(01)=\frac{1}{9},\qquad
 \PP(10)=\frac{1}{3},\qquad
-\PP(11)=\frac{1}{6},
+\PP(11)=\frac{1}{6}.
 \]
-which is the table in Theorem~\ref{thm:joint}.
+This is exactly the table in Theorem~\ref{thm:joint}. The marginals
+\[
+\PP(X_0\neq Y_0)=\frac49,
+\qquad
+\PP(Y_0=1)=\frac{5}{18}
+\]
+follow by summation.
+\end{proof}
 
 \subsection{Tilted matrices and cumulants}
 For the discrepancy observable \(\Delta_t=X_t\oplus Y_t\), only the labels \(01\) and \(10\) contribute. The tilted adjacency matrix is therefore
@@ -148,7 +221,7 @@ e^\theta &2&0&0\\
 1&0&0&0
 \end{pmatrix}.
 \]
-Write \(z=e^\theta\) and let \(\rho_\Delta(\theta)\) be its Perron root. A direct determinant computation gives
+Write \(z=e^\theta\), and let \(\rho_\Delta(\theta)\) be the Perron root. Then
 \[
 F_\Delta(\lambda,z)
 :=
@@ -160,11 +233,12 @@ Since \(F_\Delta(2,1)=0\), implicit differentiation of
 \[
 F_\Delta(\rho_\Delta(\theta),e^\theta)=0
 \]
-at \(\theta=0\) yields
+at \(\theta=0\) gives
 \[
-F_{\Delta,\lambda}(2,1)=9,\qquad F_{\Delta,z}(2,1)=-8,
+F_{\Delta,\lambda}(2,1)=9,\qquad
+F_{\Delta,z}(2,1)=-8,
 \]
-so \(\rho_\Delta'(0)=8/9\). A second differentiation gives
+so \(\rho_\Delta'(0)=8/9\). A second differentiation yields
 \[
 F_{\Delta,\lambda\lambda}(2,1)=30,\qquad
 F_{\Delta,\lambda z}(2,1)=-9,\qquad
@@ -176,35 +250,36 @@ hence \(\rho_\Delta''(0)=332/243\). Therefore
 \]
 satisfies
 \[
-\Lambda_\Delta'(0)=\frac{\rho_\Delta'(0)}{2}=\frac49,
+\Lambda_\Delta'(0)=\frac49,
 \qquad
-\Lambda_\Delta''(0)=\frac{\rho_\Delta''(0)}{2}-\left(\frac{\rho_\Delta'(0)}{2}\right)^2=\frac{118}{243}.
+\Lambda_\Delta''(0)=\frac{118}{243}.
 \]
-These are the mean discrepancy density and the CLT variance in Theorem~\ref{thm:llnclt}.
+These are the mean discrepancy density and asymptotic variance used in Corollary~\ref{thm:llnclt}.
 
 For the output-weight observable \(Y_t\), the labels with \(Y_t=1\) are \(01\) and \(11\). Weighting each such edge by \(e^\theta\) gives
 \[
-B_\theta=
+M(e^\theta)=
 \begin{pmatrix}
 1& e^\theta &0& e^\theta\\
 0&0&1&0\\
 1&1+e^\theta&0&0\\
 1&0&0&0
-\end{pmatrix}.
+\end{pmatrix},
 \]
-This is exactly the matrix \(M(e^\theta)\) from Appendix~\ref{app:recurrence}. Its characteristic polynomial is
+the weighted matrix used in Section~\ref{sec:partition}. Its characteristic polynomial is
 \[
 F_Y(\lambda,z)
 :=
-\det(\lambda I-B_\theta)
+\det(\lambda I-M(z))
 =
 \lambda^4-\lambda^3-(2z+1)\lambda^2+\lambda+z(z+1).
 \]
-With \(F_Y(2,1)=0\), implicit differentiation of \(F_Y(\rho_Y(\theta),e^\theta)=0\) gives
+Since \(F_Y(2,1)=0\), implicit differentiation of \(F_Y(\rho_Y(\theta),e^\theta)=0\) gives
 \[
-F_{Y,\lambda}(2,1)=9,\qquad F_{Y,z}(2,1)=-5,
+F_{Y,\lambda}(2,1)=9,\qquad
+F_{Y,z}(2,1)=-5,
 \]
-so \(\rho_Y'(0)=5/9\). Differentiating once more and using
+so \(\rho_Y'(0)=5/9\). Differentiating again and using
 \[
 F_{Y,\lambda\lambda}(2,1)=30,\qquad
 F_{Y,\lambda z}(2,1)=-8,\qquad
@@ -218,9 +293,8 @@ satisfies
 \[
 \Lambda_Y'(0)=\frac{5}{18},
 \qquad
-\Lambda_Y''(0)=\frac{67}{972},
+\Lambda_Y''(0)=\frac{67}{972}.
 \]
-which are the constants in Theorem~\ref{thm:weight-stats}.
 
 \subsection{Autocovariances and power spectrum}
 For the vertex chain with transition matrix \(P\), the discrepancy observable depends only on the current transition:
@@ -254,48 +328,43 @@ Then
 \qquad
 \EE[\Delta_0\Delta_j]=qP^{j-1}h\qquad (j\ge1).
 \]
-Since \(P=\tfrac12 D^{-1}AD\) with \(D=\mathrm{diag}(2,1,2,1)\), \(P\) is similar to \(A/2\). Therefore its characteristic polynomial is
+Because \(P=\tfrac12 D^{-1}AD\) with \(D=\mathrm{diag}(2,1,2,1)\), \(P\) is similar to \(A/2\). Therefore its characteristic polynomial is
 \[
 (\lambda-1)\left(\lambda-\frac12\right)\left(\lambda+\frac12\right)^2.
 \]
-The covariance sequence \(c_j=\Cov(\Delta_0,\Delta_j)\) is stationary, so the \(\lambda=1\) mode cancels, and for \(j\ge1\) it must have the form
+The stationary covariance sequence \(c_j=\Cov(\Delta_0,\Delta_j)\) therefore has the form
 \[
-c_j=2^{-j}\bigl(a+(-1)^j(b+cj)\bigr)
+c_j=2^{-j}\bigl(a+(-1)^j(b+cj)\bigr)\qquad (j\ge1).
 \]
-for suitable constants \(a,b,c\). Direct computation from the formula \(c_j=qP^{j-1}h-(4/9)^2\) gives
+Direct evaluation of \(qP^{j-1}h-(4/9)^2\) at \(j=1,2,3\) gives
 \[
 c_1=\frac{17}{324},\qquad
 c_2=\frac{25}{648},\qquad
-c_3=\frac{7}{648}.
+c_3=\frac{7}{648},
 \]
-Solving the resulting linear system yields
+from which
 \[
-a=\frac18,\qquad b=\frac{7}{648},\qquad c=\frac{1}{108},
+a=\frac18,\qquad
+b=\frac{7}{648},\qquad
+c=\frac{1}{108}.
 \]
-and therefore
+Hence
 \[
-c_j = 2^{-j}\!\left(\frac{1}{8}+(-1)^j\!\left(\frac{7}{648}+\frac{j}{108}\right)\right)\qquad (j\ge1).
+c_j = 2^{-j}\!\left(\frac{1}{8}+(-1)^j\!\left(\frac{7}{648}+\frac{j}{108}\right)\right)\qquad (j\ge1),
 \]
-Since \(\Delta_0\in\{0,1\}\) with mean \(4/9\),
+while
 \[
 c_0=\Var(\Delta_0)=\frac49\left(1-\frac49\right)=\frac{20}{81}.
 \]
-
-Because \(\sum_{j\in\ZZ}\abs{c_j}<\infty\), the power spectral density is
+Substituting these values into
 \[
-S(\omega)=c_0+2\sum_{j\ge1}c_j\cos(j\omega).
+S(\omega)=c_0+2\sum_{j\ge1}c_j\cos(j\omega)
 \]
-Substituting the closed form for \(c_j\), summing the geometric series
-\[
-\sum_{j\ge1}\left(\frac{e^{i\omega}}{2}\right)^j,
-\qquad
-\sum_{j\ge1}j\left(-\frac{e^{i\omega}}{2}\right)^j,
-\]
-and taking real parts gives
+and summing the resulting geometric series yields
 \[
 S(\omega)
 =
 \frac{2\bigl(32\cos^3\omega+12\cos^2\omega-116\cos\omega-105\bigr)}
 {9\,(4\cos\omega-5)\,(4\cos\omega+5)^2}.
 \]
-At \(\omega=0\) this simplifies to \(S(0)=118/243\), in agreement with \(\Lambda_\Delta''(0)\).
+At \(\omega=0\) this gives \(S(0)=118/243\), in agreement with the CLT variance.

@@ -26,11 +26,14 @@
 \newcommand{\abs}[1]{\lvert #1 \rvert}
 \newcommand{\norm}[1]{\lVert #1 \rVert}
 \newcommand{\Haus}{\mathcal{H}}
+\newcommand{\coeff}{\mathrm{coeff}}
+\newcommand{\cell}{\mathrm{cell}}
+\newcommand{\coord}{\mathrm{coord}}
 \DeclareMathOperator{\Vol}{Vol}
 \DeclareMathOperator{\dist}{dist}
 \DeclareMathOperator{\Div}{div}
 
-\title{A Sharp Coefficient-Sup Estimate for the Radial Homotopy on Coordinate-Monomial Forms, with Cubical and Dyadic Corollaries}
+\title{Boundary Rigidity for Coefficient-$L^\infty$ Primitives on the Cube}
 \author{
   Haobo Ma\thanks{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981. Email: \texttt{auric@aelf.io}}
   \and
@@ -42,118 +45,156 @@
 \maketitle
 
 \begin{abstract}
-We study an explicit bounded inverse problem on the unit cube for the
-coefficient $L^\infty$ norm.  For smooth closed coordinate-monomial $k$-forms
-$f\,\dd x_I$, the standard radial homotopy operator $K_k$ satisfies the sharp
-ambient-dimension-free bound
+The centerpiece of this note is a boundary-trace rigidity theorem for
+coefficient-$L^\infty$ primitives of $\dd x_1\wedge\cdots\wedge \dd x_k$ on the
+cube $I^k$: every minimizer has the same canonical face trace, so the optimal
+primitive is simultaneously norm-sharp and boundary-rigid inside the anisotropic
+$\ell_\infty/\ell_1$ duality that governs the $P_1$ perimeter.  The supporting
+ingredients are kept explicit: (i) a sharp restricted sup-ratio for the radial
+homotopy operator on closed coordinate-monomial $k$-forms,
 \[
-\norm{K_k\omega}_\infty \le \frac{1}{2k}\norm{\omega}_\infty
+\norm{K_k\omega}_{\coeff,\infty} \le \frac{1}{2k}\norm{\omega}_{\coeff,\infty},
 \]
-and this yields an optimal decomposition when $\dd\omega$ is
-coordinate-monomial.  In degree one this gives an optimal coefficient-$L^\infty$
-reconstruction bound for vector fields whose curl $2$-form is
-coordinate-monomial.  We then transfer the same constant to cubical cochains
-whose coboundaries lie in a single cubical orientation class by writing the
-cubical Whitney forms explicitly and proving that the Whitney and integration
-maps have operator norm one for the relevant sup norms.  In this restricted
-cubical class we obtain sharp hypercube correction and near-detailed-balance
-statements.  The distinctive rigidity statement is that every
-coefficient-$L^\infty$ minimizer for
-$\dd\eta=\dd x_1\wedge\cdots\wedge \dd x_k$ on $I^k$ has the same boundary
-trace.  Separately, for dyadic outer approximations of compact sets, a fixed
-probe form reads off the volume exactly and hence recovers upper Minkowski
-dimension from a boundary-flux sequence.
+uniform in the ambient dimension; (ii) the corresponding Whitney/integration
+transfer to a single cube with exactly the same constant and no new cubical
+machinery; and (iii) an anisotropic boundary calibration inequality phrased in
+terms of the $\ell_1$ perimeter.  Sections~2--4 therefore serve only to isolate
+these explicit computations, while Section~5 contains the genuinely new
+boundary-rigidity statement and its consequences.
 \end{abstract}
 
 \tableofcontents
 
 \section{Introduction}
 
-The point of this paper is narrow.  We record a sharp coefficient-$L^\infty$
-estimate for the standard radial homotopy operator on a restricted class of
-forms, transfer the same estimate to the corresponding cubical Whitney class on
-a single cube, and isolate one equality-case rigidity statement for boundary
-traces.  Let $I^n=[0,1]^n$.  Given a closed coordinate-monomial $k$-form
-$\omega$ on $I^n$, can one choose a primitive whose coefficient $L^\infty$
-size is controlled by an explicit universal constant?  If $\omega$ has
-coordinate-monomial exterior derivative, can one still separate it into an
-exact part plus an error term that depends only on $\dd\omega$?
+This note is written as a short, cube-scale study centered on the boundary
+rigidity of coefficient-$L^\infty$ primitives of the volume form.  The main
+theorem, proved in Section~5, shows that every minimizer of
+$\dd\eta=\dd x_1\wedge\cdots\wedge \dd x_k$ on $I^k$ has the canonical face
+trace coming from the explicit primitive $\eta_\ast$; hence optimal primitives
+are boundary-rigid as well as norm-sharp.  Sections~2--4 contain only the
+explicit computations needed for this boundary argument:
 
-The answer is especially clean for the radial contraction from the cube center.
-Because the coefficient sup norm is taken componentwise, the sharp contraction
-estimate behind the inverse bound is valid only for forms consisting of one
-fixed coordinate wedge monomial.  On that restricted class the associated
-homotopy operator $K_k$ satisfies the sharp ambient-dimension-free estimate
+\begin{itemize}[leftmargin=*,itemsep=0.2em]
+  \item Section~3 evaluates the restricted sup-ratio of the classical radial
+  homotopy $K_k$ on the incidence-one coordinate-monomial class and records the
+  sharp defect decomposition for forms with coordinate-monomial exterior
+  derivative.
+  \item Section~4 compresses the one-cube Whitney/integration transfer to a
+  single proposition and corollary, observing that the same constant carries
+  over to cubical cochains without introducing new homotopy operators.
+  \item Section~5 supplies an anisotropic boundary calibration inequality and
+  the boundary-rigidity theorem itself, formulated directly in the
+  $\ell_\infty/\ell_1$ duality of the $P_1$ perimeter.
+\end{itemize}
+
+We do not treat general domains, Sobolev norms, or patching across multiple
+cubes; the scope is intentionally limited to what can be proved exactly on a
+single cube, with the novelty concentrated entirely in the Section~5 boundary
+result.
+
+Related explicit-constant work places the present note in a narrow corner of
+the literature.  Chaumont--Frelet--Licht--Vohral\'ik~\cite{ChaumontFreletLichtVohralik2025}
+and the references therein (including the spectral bounds of
+Guerini--Savo~\cite{GueriniSavo2004}) study computable de~Rham constants on
+much broader geometries and norms, while Costabel--McIntosh, Guzm\'an--Salgado,
+and others give regularized operators on Lipschitz domains.
+On the boundary side we work next to the continuum max-flow/min-cut and Cheeger
+literature: compare Strang's continuum calibration~\cite{Strang1983}, the
+anisotropic network result of Nozawa~\cite{Nozawa1990}, Strang's planar flows
+\cite{Strang2010}, the Euclidean spectral comparison of
+Grieser~\cite{Grieser2006}, the boundary Laplacian analysis of
+Guerini--Savo~\cite{GueriniSavo2004}, Leonardi's survey of the Cheeger
+problem~\cite{Leonardi2015}, and the calibrability works of
+Caselles--Facciolo--Meinhardt and
+Caselles--Chambolle--Moll--Novaga~\cite{CasellesFaccioloMeinhardt2009,CasellesChambolleMollNovaga2008},
+supplemented by the uniqueness/rigidity papers of
+Caselles--Chambolle--Novaga~\cite{CasellesChambolleNovaga2007,CasellesChambolleNovaga2011}.
+We keep the coefficient $\ell_\infty$ norm throughout, so the dual boundary
+term is the anisotropic $\ell_1$ perimeter emphasized in these references, and
+the entire manuscript is deliberately framed as a short note isolating the
+Section~5 boundary-rigidity phenomenon on a single cube.
+
+Let $c=(1/2,\dots,1/2)$ and $X(x)=x-c$.  Because the coefficient sup norm is
+taken coordinatewise, the relevant issue is not merely decomposability but
+incidence: how many $k$-coefficients can contribute to the same
+$(k-1)$-coefficient after contraction with $X$.  Proposition~\ref{prop:incidence-criterion}
+shows that the universal factor $1/2$ is available exactly on the
+``incidence-one'' patterns.  We work with the single-orientation
+coordinate-monomial class $f\,\dd x_I$, which is the cleanest incidence-one
+family and the one preserved by the hypotheses used later.  On this class the
+radial homotopy operator $K_k$ satisfies the sharp ambient-dimension-free
+estimate
 \[
-\norm{K_k\omega}_\infty \le \frac{1}{2k}\norm{\omega}_\infty,
+\norm{K_k\omega}_{\coeff,\infty} \le \frac{1}{2k}\norm{\omega}_{\coeff,\infty},
 \]
-and the constant $1/(2k)$ cannot be improved.  Applied to forms with
-coordinate-monomial exterior derivative, this yields an optimal
+and the constant $1/(2k)$ already equals $\norm{K_k}_{\coord}$, so no linear right inverse can achieve a smaller sup-ratio on closed coordinate-monomial forms.  Applied to forms with
+coordinate-monomial exterior derivative, this yields the sharp defect
 decomposition
 \[
 \omega = \dd\eta + E,
 \qquad
-\norm{E}_\infty \le \frac{1}{2(k+1)}\norm{\dd\omega}_\infty.
+\norm{E}_{\coeff,\infty} \le \frac{1}{2(k+1)}\norm{\dd\omega}_{\coeff,\infty}.
 \]
-The degree-one case recovers an optimal sup-norm estimate for approximating a
-vector field by a gradient from its coordinate-monomial curl tensor.
+The degree-one case gives the corresponding sharp gradient-reconstruction
+estimate from coordinate-monomial curl data.
 
-The admissible cubical class is equally narrow.  A cubical $k$-cochain is
-Whitney coordinate-monomial precisely when it is supported on one orientation
-class of $k$-cells, or equivalently when its Whitney form is
+The cubical statement is equally local.  A cubical $k$-cochain is Whitney
+coordinate-monomial precisely when it is supported on one orientation class of
+$k$-cells, or equivalently when its Whitney form is
 $f(x_{I^c})\,\dd x_I$ for one fixed $I$.  In degree two on a hypercube, this
 means that square defects may be nonzero only on squares parallel to a single
-coordinate $2$-plane.  For this class the same sharp constant survives
-discretization.  Using explicit cubical Whitney forms and the integration map,
-the continuous homotopy operator transfers to the standard cubical cochain
-complex.  This gives a sharp cubical Stokes--Poincar\'e lemma, an optimal
-square-defect correction statement on the hypercube, and a logarithmic
-near-detailed-balance corollary for edge jump asymmetries in that same
-restricted class.
+coordinate $2$-plane.  Section~4 does not construct a new cubical homotopy;
+it only records that on one cube the classical Whitney/integration transfer
+preserves the same sharp constant on this restricted class.
 
 The boundary side of the paper is more rigid than the inverse bound alone.  We
 record a boundary calibration inequality for primitives of the volume form and
-then show that on the cube every minimizer has the same boundary trace.  Thus
-the optimal primitive is not only norm-sharp but boundary-rigid.
+then show that on the cube every coefficient-$L^\infty$ minimizer has the same
+boundary trace.  Thus the optimal primitive is not only norm-sharp but also
+boundary-rigid.
 
-The dyadic outer-approximation theorem in Section~6 is logically independent
-of the sharp inverse theory in Sections~3--5.  It uses only a primitive of the
-volume form together with polyhedral Stokes.  What Section~5 contributes is
-canonicality of a centered probe form on the cube, not the flux identity
-itself.  In particular, for a compact set $A\subset I^n$, the boundary of the
-dyadic outer approximation $U_m(A)$ can be tested by one universal
-$(n-1)$-form $\omega_0$, and the flux identity
-\[
-\int_{\partial U_m(A)} \omega_0 = \Vol(U_m(A))
-\]
-turns boundary data into a direct Minkowski-dimension readout.
-
-The de Rham homotopy formula, bounded right inverses on star-shaped domains,
-cubical Whitney transfer, polyhedral Stokes theorem, and dyadic cube-count
-characterization of Minkowski dimension are standard; see
-\cite{BottTu1982,Bogovskii1979,IwaniecLutoborski1993,CostabelMcIntosh2010,Whitney1957,Dupont1976,ArnoldFalkWinther2010,ArnoldAwanou2014,Federer1969,EvansGariepy2015,Maggi2012,Falconer2014,Mattila1995}.
-The contribution here is the sharp coefficient-$L^\infty$ constant for the
-standard radial homotopy operator on the restricted class $f\,\dd x_I$, its
-transfer to the corresponding cubical Whitney class on the single cube, and
-the equality-case boundary trace theorem for cube minimizers.  The theorem
-chain used in Sections~3--5 is summarized in
+Compared with Costabel--McIntosh and Guzm\'an--Salgado
+\cite{CostabelMcIntosh2010,GuzmanSalgado2021}, we do not treat general domains,
+Sobolev norms, or regularized Poincar\'e/Bogovski\u{\i} operators; the point
+here is an exact coefficient-sup constant on the cube.  Compared with
+Dodziuk, Dupont, and Albert
+\cite{Dodziuk1976,Dupont1976,DupontBook1978,Albert2020}, we do not construct a
+new Whitney or cubical Dupont homotopy; the cubical section is only a sharp
+one-cube corollary of the standard transfer formalism.  Recent explicit-constant
+work such as Chaumont--Frelet, Licht, and Vohral\'ik
+\cite{ChaumontFreletLichtVohralik2025} concerns computable de Rham constants on
+broader geometric classes, but in different norms and with different goals.
+The theorem chain used in Sections~3--5 is summarized in
 Table~\ref{tab:constants-overview}.
+
+Whenever we restrict to the coordinate-monomial class, we abbreviate
+\[
+\norm{T}_{\coord}
+:=
+\sup\left\{
+\frac{\norm{T\omega}_{\coeff,\infty}}{\norm{\omega}_{\coeff,\infty}} :
+0\neq \omega \text{ closed coordinate-monomial}
+\right\},
+\]
+a sharp sup-ratio over the admissible family rather than a Banach-space
+operator norm.
 
 \begin{table}[ht]
 \centering
 \small
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.30\textwidth} >{\raggedright\arraybackslash}p{0.47\textwidth} >{\raggedright\arraybackslash}p{0.15\textwidth}}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.22\textwidth} >{\raggedright\arraybackslash}p{0.42\textwidth} >{\raggedright\arraybackslash}p{0.10\textwidth} >{\raggedright\arraybackslash}p{0.16\textwidth}@{}}
 \toprule
-Result & Statement & Optimal value \\
+Result & Statement & Value & Sharpness type \\
 \midrule
-Continuous inverse & $\norm{K_k\omega}_\infty \le \frac{1}{2k}\norm{\omega}_\infty$ for closed coordinate-monomial $k$-forms & $\frac{1}{2k}$ \\
-Homotopy decomposition & $\omega = \dd\eta + E$ with $\norm{E}_\infty \le \frac{1}{2(k+1)}\norm{\dd\omega}_\infty$ when $\dd\omega$ is coordinate-monomial & $\frac{1}{2(k+1)}$ \\
-Vector-field reconstruction & $\norm{v-\nabla U}_\infty \le \frac14 \norm{\dd\omega}_\infty$ when the curl form $\dd\omega$ is coordinate-monomial & $\frac14$ \\
-Cubical cochains & $\norm{E}_\infty \le \frac{1}{2(k+1)}\norm{d\omega}_\infty$ when $d\omega$ is Whitney coordinate-monomial & $\frac{1}{2(k+1)}$ \\
-Boundary minimizers & the minimal norm for $\dd\eta = \dd x_1\wedge\cdots\wedge \dd x_k$ on $I^k$ is $\frac{1}{2k}$, and every minimizer has canonical face traces & $\frac{1}{2k}$ \\
+Continuous inverse (Thm.~\ref{thm:optimal-continuous-inverse}) & $\norm{K_k\omega}_{\coeff,\infty} \le \frac{1}{2k}\norm{\omega}_{\coeff,\infty}$ for closed coord.-monomial $k$-forms & $\frac{1}{2k}$ & restricted sup-ratio, uniform in $n$ \\
+Homotopy decomp.\ (Prop.~\ref{thm:homotopy-decomposition}) & $\omega = \dd\eta + E$ with $\norm{E}_{\coeff,\infty} \le \frac{1}{2(k+1)}\norm{\dd\omega}_{\coeff,\infty}$ when $\dd\omega$ is coord.-monomial & $\frac{1}{2(k+1)}$ & restricted sup-ratio, uniform in $n$ \\
+Curl reconstruction (Cor.~\ref{cor:curl-reconstruction}) & $\norm{v-\nabla U}_{\coeff,\infty} \le \frac14 \norm{\dd\omega}_{\coeff,\infty}$ when the curl is coord.-monomial & $\frac14$ & restricted sup-ratio, $k=1$ case \\
+One-cube cubical (Prop.~\ref{thm:discrete-stokes-poincare}) & $\norm{E}_{\cell,\infty} \le \frac{1}{2(k+1)}\norm{d\omega}_{\cell,\infty}$ when $d\omega$ is Whitney coord.-monomial & $\frac{1}{2(k+1)}$ & restricted sup-ratio, single cube \\
+Boundary rigidity (Thm.~\ref{thm:boundary-rigidity}) & every minimizer of $\dd\eta = \dd x_1\wedge\cdots\wedge \dd x_k$ on $I^k$ has canonical face traces & $\frac{1}{2k}$ & pointwise on $\partial I^k$ \\
 \bottomrule
 \end{tabular}
-\caption{Sharp coefficient-$L^\infty$ statements proved in Sections~3--5, with their class restrictions.}
+\caption{Sharp coefficient-$L^\infty$ statements proved in Sections~3--5, with admissible class restrictions and sharpness type.}
 \label{tab:constants-overview}
 \end{table}
 
@@ -174,9 +215,17 @@ $k$-forms on a neighborhood of $I^n$, restricted to the cube.  If
 \]
 we use the coefficient sup norm
 \[
-\norm{\omega}_\infty := \max_{\abs{I}=k}\ \sup_{x\in I^n} \abs{a_I(x)}.
+\norm{\omega}_{\coeff,\infty} := \max_{\abs{I}=k}\ \sup_{x\in I^n} \abs{a_I(x)}.
 \]
 All $L^\infty$ statements below refer to this coordinate norm.
+
+\begin{remark}[Notation]
+We write $\dd$ for the smooth exterior derivative on differential forms and
+$d$ for the cubical coboundary on cochains.  Coefficient norms for forms are
+always written $\norm{\cdot}_{\coeff,\infty}$, while cubical cochains use the
+cellwise norm $\norm{\cdot}_{\cell,\infty}$ introduced below.  The ambient
+category will always be clear from the argument.
+\end{remark}
 
 \begin{definition}[Coordinate-monomial form]
 \label{def:decomposable-form}
@@ -205,7 +254,7 @@ H(t,x):=c+t(x-c).
 For each $t\in[0,1]$, write $H_t(x):=H(t,x)$.  Thus $H_1=\mathrm{Id}$ and
 $H_0$ collapses the cube to its center.
 
-\begin{definition}[Cubical homotopy operator]
+\begin{definition}[Radial homotopy operator]
 \label{def:homotopy-operator}
 For $1\le k\le n$ define
 \[
@@ -216,28 +265,67 @@ by
 \label{eq:homotopy-operator}
 (K_k\omega)(x)
 :=
-\int_0^1 t^{k-1}\,\iota_{x-c}\,\omega\bigl(c+t(x-c)\bigr)\,\dd t,
+\int_0^1 t^{k-1}\,\bigl(\iota_{x-c}\,\omega\bigr)\!\bigl(c+t(x-c)\bigr)\,\dd t,
 \end{equation}
-where $\iota_{x-c}\,\omega(y)$ denotes the interior product of the tangent
-vector $x-c$ with $\omega$ evaluated at the point $y$.
+where for a fixed tangent vector $v\in\RR^n$ and a $k$-form
+$\omega=\sum_{\abs{I}=k}a_I(y)\,\dd y_I$, we write
+$(\iota_v\omega)(y):=\sum_{\abs{I}=k}a_I(y)\,\iota_v(\dd y_I)$, i.e., the
+coefficients of $\omega$ are evaluated at the point $y$ and then contracted with
+the vector $v$.  In particular, the contraction vector in
+\eqref{eq:homotopy-operator} is the \emph{fixed} vector $x-c\in\RR^n$
+(depending on the external point $x$, but \emph{not} on the integration
+variable $t$), while the coefficients of $\omega$ are evaluated along the
+straight-line homotopy $H_t(x)=c+t(x-c)$.
+
+Equivalently, if $\omega=\sum_{\abs{I}=k}a_I(y)\,\dd y_I$, then
+\begin{equation}
+\label{eq:homotopy-operator-explicit}
+(K_k\omega)(x)
+=
+\int_0^1 t^{k-1}
+\sum_{\abs{I}=k}\sum_{r=1}^k (-1)^{r-1}(x_{i_r}-c_{i_r})\,
+a_I\bigl(c+t(x-c)\bigr)\,
+\dd x_{I\setminus\{i_r\}}\,\dd t.
+\end{equation}
 \end{definition}
 
 \begin{example}[Sanity checks]
 \label{ex:sanity-checks}
-For $\omega=\dd x_i$ ($k=1$), one has
+(i) For $\omega=\dd x_i$ ($k=1$), one has
 $\iota_{x-c}\,\dd x_i = x_i - \tfrac12$ (independent of the evaluation
-point), so
+point since $\dd x_i$ has constant coefficients), so
 \[
-K_1(\dd x_i)(x) = \int_0^1 (x_i-\tfrac12)\,\dd t = x_i - \tfrac12,
+K_1(\dd x_i)(x) = \int_0^1 t^0\cdot(x_i-\tfrac12)\,\dd t = x_i - \tfrac12,
 \]
-and $\dd K_1(\dd x_i) = \dd x_i = \omega$.
-For $\omega=\dd x_1\wedge\cdots\wedge \dd x_k$, Corollary~\ref{cor:explicit-minimizer}
-confirms $K_k\omega = \eta_\ast$.
+and $\dd K_1(\dd x_i) = \dd x_i = \omega$.  Note that
+$\norm{K_1(\dd x_i)}_{\coeff,\infty}=\tfrac12=\tfrac{1}{2\cdot 1}\norm{\dd x_i}_{\coeff,\infty}$.
+
+(ii) For $\omega=\dd x_1\wedge \dd x_2$ ($k=2$), one has
+$\iota_{x-c}\omega=(x_1-\tfrac12)\,\dd x_2-(x_2-\tfrac12)\,\dd x_1$, so
+\[
+K_2\omega
+=
+\int_0^1 t\bigl[(x_1-\tfrac12)\,\dd x_2-(x_2-\tfrac12)\,\dd x_1\bigr]\dd t
+=
+\tfrac12\bigl[(x_1-\tfrac12)\,\dd x_2-(x_2-\tfrac12)\,\dd x_1\bigr],
+\]
+and $\dd K_2\omega=\tfrac12(\dd x_1\wedge \dd x_2+\dd x_1\wedge \dd x_2)=\dd x_1\wedge \dd x_2=\omega$.  Here
+$\norm{K_2\omega}_{\coeff,\infty}=\tfrac14=\tfrac{1}{2\cdot 2}$.
+
+(iii) For $\omega=\dd x_1\wedge\cdots\wedge \dd x_k$, the same calculation
+yields the form $\eta_\ast$ of Corollary~\ref{cor:explicit-minimizer}:
+\[
+K_k\omega
+=
+\frac{1}{k}\sum_{j=1}^k(-1)^{j-1}(x_j-\tfrac12)\,
+\dd x_1\wedge\cdots\wedge\widehat{\dd x_j}\wedge\cdots\wedge \dd x_k,
+\]
+with $\norm{K_k\omega}_{\coeff,\infty}=\tfrac{1}{2k}$ and $\dd K_k\omega=\omega$.
 \end{example}
 
 The operator is the standard radial homotopy formula centered at the cube
 midpoint; compare \cite[Sec.~3]{BottTu1982},
-\cite{Dupont1976,DupontBook1978}, and the bounded right-inverse
+\cite{Dupont1976,DupontBook1978,Albert2020}, and the bounded right-inverse
 literature
 \cite{Bogovskii1979,IwaniecLutoborski1993,CostabelMcIntosh2010,GuzmanSalgado2021}.
 
@@ -247,32 +335,91 @@ $\dd K_k\omega + K_{k+1}(\dd\omega)=\omega$ holds uniformly for every
 $1\le k\le n$: at top degree $k=n$ the term $K_{n+1}(\dd\omega)$ vanishes
 because every $(n+1)$-form on $I^n$ is zero.
 
-\begin{lemma}[Contraction estimate on coordinate-monomial forms]
+\begin{lemma}[Uniform contraction estimate on coordinate-monomial forms]
 \label{lem:contraction-estimate}
 For every coordinate-monomial
 \[
-\omega = f(x)\,\dd x_{i_1}\wedge\cdots\wedge \dd x_{i_k}
+\omega = f(y)\,\dd x_{i_1}\wedge\cdots\wedge \dd x_{i_k}
 \in \Omega^k_{\mathrm{sm}}(I^n)
 \]
-one has
+and every $x,y\in I^n$ one has
 \[
-\norm{\iota_X\omega}_\infty \le \frac12 \norm{\omega}_\infty.
+\norm{\iota_{x-c}\omega(y)}_\infty \le \frac12 \norm{\omega}_{\coeff,\infty}.
+\]
+In particular,
+\[
+\norm{\iota_X\omega}_{\coeff,\infty} \le \frac12 \norm{\omega}_{\coeff,\infty}.
 \]
 \end{lemma}
 
 \begin{proof}
 For such a form,
 \[
-\iota_X\omega
+\iota_{x-c}\omega(y)
 =
-\sum_{r=1}^k (-1)^{r-1} f(x)\bigl(x_{i_r}-\tfrac12\bigr)\,
+\sum_{r=1}^k (-1)^{r-1} f(y)\bigl(x_{i_r}-\tfrac12\bigr)\,
 \dd x_{i_1}\wedge\cdots\wedge\widehat{\dd x_{i_r}}\wedge\cdots\wedge
 \dd x_{i_k}.
 \]
 Each component of $X(x)=x-c$ has absolute value at most $1/2$ on $I^n$, so
-every coefficient in $\iota_X\omega$ has absolute value at most
-$\frac12\sup_{x\in I^n}\abs{f(x)}=\frac12\norm{\omega}_\infty$.  This is
-exactly the desired estimate.
+every coefficient in $\iota_{x-c}\omega(y)$ has absolute value at most
+$\frac12\sup_{z\in I^n}\abs{f(z)}=\frac12\norm{\omega}_{\coeff,\infty}$.  Taking $y=x$
+gives the displayed bound for $\iota_X\omega$.
+\end{proof}
+
+\begin{proposition}[Incidence criterion for the coefficient-sup contraction bound]
+\label{prop:incidence-criterion}
+Let
+\[
+\omega = \sum_{\abs{I}=k} a_I(x)\,\dd x_I
+\in \Omega^k_{\mathrm{sm}}(I^n).
+\]
+For each $(k-1)$-index $J$ define
+\[
+m_J(\omega):=
+\#\{i\notin J:\ a_{J\cup\{i\}}\not\equiv 0\},
+\qquad
+m(\omega):=\max_{\abs{J}=k-1} m_J(\omega).
+\]
+Then
+\[
+\norm{\iota_X\omega}_{\coeff,\infty} \le \frac{m(\omega)}{2}\norm{\omega}_{\coeff,\infty}.
+\]
+Consequently, a class of forms described only by which coordinate wedge
+monomials may occur admits the universal bound
+$\norm{\iota_X\omega}_{\coeff,\infty}\le \frac12\norm{\omega}_{\coeff,\infty}$ for all of its
+members if and only if every
+active $(k-1)$-monomial is incident to at most one allowed $k$-monomial.
+Coordinate-monomial forms ($m(\omega)\le 1$) satisfy this condition, while any
+class that permits two or more $k$-monomials sharing a common $(k-1)$-factor
+does not.  For instance, the class of sums $a\,\dd x_{1}\wedge\dd x_3+b\,\dd x_2\wedge\dd x_3$ has $m_{\{3\}}=2$, and the
+$(k-1)$-coefficient of $\dd x_3$ in $\iota_X\omega$ can reach
+$\norm{\omega}_{\coeff,\infty}$ (not $\tfrac12\norm{\omega}_{\coeff,\infty}$) at a corner of
+$I^n$.
+\end{proposition}
+
+\begin{proof}
+For a fixed $(k-1)$-index $J$, the coefficient of $\dd x_J$ in $\iota_X\omega$
+has the form
+\[
+\sum_{i\notin J}\sigma(J,i)\bigl(x_i-\tfrac12\bigr)a_{J\cup\{i\}}(x),
+\]
+where $\sigma(J,i)\in\{\pm 1\}$ is the sign obtained by inserting $i$ into the
+ordered set $J$.  At each point $x$, at most $m_J(\omega)$ summands are
+present, and each has absolute value at most $\frac12\norm{\omega}_{\coeff,\infty}$.
+Hence the coefficient of $\dd x_J$ is bounded by
+$\frac{m_J(\omega)}{2}\norm{\omega}_{\coeff,\infty}$, and taking the maximum over $J$
+gives the displayed estimate.
+
+If two allowed monomials $\dd x_{J\cup\{i\}}$ and $\dd x_{J\cup\{\ell\}}$ share
+the same $(k-1)$-factor $\dd x_J$, choose the sign in the constant form
+\[
+\omega_0:=\dd x_{J\cup\{i\}}\pm \dd x_{J\cup\{\ell\}}
+\]
+so that their contributions to the $\dd x_J$-coefficient in $\iota_X\omega_0$
+add.  Then $\norm{\omega_0}_{\coeff,\infty}=1$, while at the point with
+$x_i=x_\ell=1$ that coefficient has absolute value $1$.  Therefore no
+universal factor $\frac12$ can hold on any class that allows such a pair.
 \end{proof}
 
 \begin{remark}
@@ -284,21 +431,21 @@ coordinate-monomial.  On $I^3$ let
 \[
 \omega := \dd x_1\wedge \dd x_3 + \dd x_2\wedge \dd x_3.
 \]
-Then $\norm{\omega}_\infty=1$, while
+Then $\norm{\omega}_{\coeff,\infty}=1$, while
 \[
 \iota_X\omega
 =
 \bigl(x_1-\tfrac12+x_2-\tfrac12\bigr)\dd x_3
 -\bigl(x_3-\tfrac12\bigr)(\dd x_1+\dd x_2),
 \]
-so $\norm{\iota_X\omega}_\infty=1$.  A direct computation gives
+so $\norm{\iota_X\omega}_{\coeff,\infty}=1$.  A direct computation gives
 \[
 K_2\omega
 =
-\frac{x_1+x_2-1}{3}\,\dd x_3
--\frac{x_3-\tfrac12}{3}\,(\dd x_1+\dd x_2),
+\frac{x_1+x_2-1}{2}\,\dd x_3
+-\frac{x_3-\tfrac12}{2}\,(\dd x_1+\dd x_2),
 \]
-hence $\norm{K_2\omega}_\infty=\frac13>\frac14=\frac{1}{2k}$ when $k=2$.
+hence $\norm{K_2\omega}_{\coeff,\infty}=\frac12>\frac14=\frac{1}{2k}$ when $k=2$.
 The estimate \eqref{eq:continuous-supnorm-bound} therefore fails outside the
 coordinate-monomial class.
 \end{remark}
@@ -309,7 +456,7 @@ We also use the standard cubical cell decomposition of $I^n$.  Let
 $C^k(I^n;\RR)$ be the space of real-valued cubical $k$-cochains with
 coboundary $d$.  For $\omega\in C^k(I^n;\RR)$ we write
 \[
-\norm{\omega}_\infty := \max_{\sigma^{(k)}} \abs{\omega(\sigma)},
+\norm{\omega}_{\cell,\infty} := \max_{\sigma^{(k)}} \abs{\omega(\sigma)},
 \]
 where the maximum runs over oriented $k$-cells.
 
@@ -331,7 +478,7 @@ $\delta_{I,\varepsilon}\in C^k(I^n;\RR)$ denote the dual basis cochain.  Set
 \lambda_{I,\varepsilon}(x):=\prod_{j\notin I}\phi_{\varepsilon_j}(x_j).
 \]
 Following the standard cubical Whitney construction
-\cite{Whitney1957,Dupont1976,ArnoldFalkWinther2010,ArnoldAwanou2014}, define
+\cite{Whitney1957,Dodziuk1976,Dupont1976,DupontBook1978,Albert2020,ArnoldFalkWinther2010,ArnoldAwanou2014}, define
 \[
 W(\delta_{I,\varepsilon})
 :=
@@ -474,8 +621,8 @@ and satisfy
 \]
 Therefore $b_I(x)$ is a convex combination of the numbers
 $\theta_{I,\varepsilon}$, so
-$\abs{b_I(x)}\le \norm{\theta}_\infty$ for every $x$.  Hence
-$\norm{W\theta}_\infty\le \norm{\theta}_\infty$.  Equality is attained on any
+$\abs{b_I(x)}\le \norm{\theta}_{\cell,\infty}$ for every $x$.  Hence
+$\norm{W\theta}_{\coeff,\infty}\le \norm{\theta}_{\cell,\infty}$.  Equality is attained on any
 basis cochain $\delta_{I,\varepsilon}$, because
 $\norm{W(\delta_{I,\varepsilon})}_\infty=1$.  Thus
 $\norm{W}_{\infty\to\infty}=1$.
@@ -496,7 +643,7 @@ only the coefficient $a_I$, so
 \le
 \sup_{x\in \sigma_{I,\varepsilon}}\abs{a_I(x)}
 \le
-\norm{\alpha}_\infty.
+\norm{\alpha}_{\coeff,\infty}.
 \]
 Hence $\norm{\mathcal I}_{\infty\to\infty}\le 1$.  Equality holds for the form
 $\alpha=\dd x_I$, whose integral over $\sigma_{I,\varepsilon}$ is $1$.
@@ -562,13 +709,14 @@ in the hypercube corollaries of Section~4.2.
 
 \subsection{Homotopy Identity and Sharp Constant}
 
-\begin{theorem}[Optimal coefficient-$L^\infty$ right inverse on closed coordinate-monomial cube forms]
+\begin{theorem}[Coefficient-$L^\infty$ right inverse on closed coordinate-monomial cube forms]
 \label{thm:optimal-continuous-inverse}
 Let $1\le k\le n$.  In the setting of
 Definition~\ref{def:homotopy-operator}, adopting the convention
 $K_{n+1}:=0$, the following hold.
 \begin{enumerate}[label=\textup{(\arabic*)}]
-\item For every $\omega\in\Omega^k_{\mathrm{sm}}(I^n)$,
+\item \textbf{Homotopy identity.}  For every
+$\omega\in\Omega^k_{\mathrm{sm}}(I^n)$ (not necessarily coordinate-monomial),
 \begin{equation}
 \label{eq:homotopy-identity}
 \dd(K_k\omega) + K_{k+1}(\dd\omega) = \omega.
@@ -576,123 +724,110 @@ $K_{n+1}:=0$, the following hold.
 At $k=n$ the identity reads $\dd(K_n\omega)=\omega$ because $K_{n+1}=0$
 and every $(n+1)$-form on $I^n$ vanishes.  In particular, if $\dd\omega=0$,
 then $\omega=\dd(K_k\omega)$.
-\item If $\omega$ is coordinate-monomial, then the operator satisfies the
-ambient-dimension-free bound
+\item \textbf{Upper bound (pointwise-in-$n$, restricted sup-ratio on coordinate-monomial $k$-forms).}
+If $\omega$ is coordinate-monomial
+(Definition~\ref{def:decomposable-form}), then
 \begin{equation}
 \label{eq:continuous-supnorm-bound}
-\norm{K_k\omega}_\infty \le \frac{1}{2k}\norm{\omega}_\infty.
+\norm{K_k\omega}_{\coeff,\infty} \le \frac{1}{2k}\norm{\omega}_{\coeff,\infty}.
 \end{equation}
-\item The constant $1/(2k)$ is sharp even under this restriction: if
-$R:\Omega^k_{\mathrm{sm}}(I^n)\to \Omega^{k-1}_{\mathrm{sm}}(I^n)$ is linear
-and $\dd(R\omega)=\omega$ for every closed coordinate-monomial $k$-form
-$\omega$,
-then
+The admissible class is all smooth coordinate-monomial $k$-forms on $I^n$;
+the bound is uniform in $n$ and sharp as a restricted sup-ratio over this
+admissible family.
+\item \textbf{Sharpness (restricted sup-ratio lower bound over all linear right inverses).}
+If $R:\Omega^k_{\mathrm{sm}}(I^n)\to \Omega^{k-1}_{\mathrm{sm}}(I^n)$ is any
+linear map satisfying $\dd(R\omega)=\omega$ for every closed
+coordinate-monomial $k$-form $\omega$, then
 \[
-\norm{R}_{\infty\to\infty}\ge \frac{1}{2k}.
+\sup\Bigl\{\frac{\norm{R\omega}_{\coeff,\infty}}{\norm{\omega}_{\coeff,\infty}}:\
+\omega\text{ closed coordinate-monomial}, \omega\neq 0\Bigr\}
+\ge \frac{1}{2k}.
 \]
+Hence $1/(2k)$ is the best constant available to any right inverse on
+this class.
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-We verify the homotopy identity directly in coordinates.  Write
-$\omega = \sum_{\abs{I}=k} a_I(y)\,\dd y_I$ in a neighborhood of $I^n$
-and set $y=c+t(x-c)$, so $y_j=c_j+t(x_j-c_j)$ and
-$\dd y_j = t\,\dd x_j + (x_j-c_j)\,\dd t$.
-Then
+Write $\omega=\sum_{\abs{I}=k} a_I(y)\,\dd y_I$ in a neighborhood of $I^n$
+and set $H(t,x)=c+t(x-c)$.  Since
 \[
-\iota_{x-c}\,\omega(y) = \sum_{\abs{I}=k}\sum_{r=1}^k(-1)^{r-1}
-a_I(y)(x_{i_r}-c_{i_r})\,\dd y_{I\setminus\{i_r\}},
+H^\ast(\dd y_j)=t\,\dd x_j+(x_j-c_j)\,\dd t,
 \]
-and the operator \eqref{eq:homotopy-operator} can be written
+each wedge product contains at most one $\dd t$ factor.  Expanding
+$H^\ast\omega$ therefore gives a unique decomposition
 \[
-(K_k\omega)(x)
-=
-\int_0^1 t^{k-1}\,\iota_{x-c}\,\omega\bigl(c+t(x-c)\bigr)\,\dd t.
+H^\ast\omega=A+ \dd t\wedge B,
 \]
-Because the contraction vector $x-c$ is independent of $t$, one may
-differentiate under the integral sign.  The computation of
-$\dd_x(K_k\omega)$ produces two groups of terms: those involving
-$\partial a_I/\partial y_j$ (which carry an extra factor of $t$ from the
-chain rule $\partial_j y = t\,\delta_{jx}$) and those involving the
-$x_j-c_j$ factors.  More concretely, set
+where
 \[
-F(t,x):=t^{k-1}\,\iota_{x-c}\,\omega\bigl(c+t(x-c)\bigr).
+A(t,x)=
+t^k\sum_{\abs{I}=k} a_I(H(t,x))\,\dd x_I
 \]
-Then $\dd_x F$ splits as
+and
 \[
-\dd_x F = t^{k-1}\,\dd_x\bigl[\iota_{x-c}\,\omega(c+t(x-c))\bigr]
-= t^{k-1}\bigl[\omega(c+t(x-c))
-+ \iota_{x-c}\,(\dd_x\omega)(c+t(x-c))\cdot t\bigr],
+B(t,x)=
+t^{k-1}\sum_{\abs{I}=k}\sum_{r=1}^k (-1)^{r-1}
+\bigl(x_{i_r}-c_{i_r}\bigr)a_I(H(t,x))\,
+\dd x_{I\setminus\{i_r\}}.
 \]
-where $\omega(c+t(x-c))$ means $\sum_{\abs{I}=k} a_I(c+t(x-c))\,\dd x_I$
-(the $\dd x$-part, not $\dd y$) and the factor $t$ arises from
-$\partial(c+t(x-c))/\partial x = t\,\mathrm{Id}$.  Therefore
+Comparing with \eqref{eq:homotopy-operator-explicit}, one sees that
+$B(t,x)=t^{k-1}(\iota_{x-c}\omega)(H_t(x))$, so
 \[
-\dd_x(K_k\omega)
-=
-\int_0^1 t^{k-1}\omega\bigl(c+t(x-c)\bigr)\,\dd t
-+
-\int_0^1 t^k\,\iota_{x-c}\,(\dd\omega)\bigl(c+t(x-c)\bigr)\,\dd t.
+K_k\omega(x)=\int_0^1 B(t,x)\,\dd t.
 \]
-The substitution $u=t$ in the first integral and comparison with
-$H_t^\ast\omega$ gives
-\[
-\int_0^1 t^{k-1}\omega\bigl(c+t(x-c)\bigr)\,\dd t
-=
-\int_0^1 \frac{H_t^\ast\omega}{t^k}\,t^{k-1}\,\frac{\dd t}{1}
-\]
-(each $\dd y_I$ pulls back to $t^k\,\dd x_I$).  Computing the integral of
-$H_t^\ast\omega$ directly:
-\[
-H_t^\ast\omega = \sum_{\abs{I}=k} a_I(c+t(x-c))\,t^k\,\dd x_I.
-\]
-So $\int_0^1 t^{k-1}\omega(c+t(x-c))\,\dd t
-=\int_0^1 t^{-1} H_t^\ast\omega\,\dd t$.
 
-Rather than continue this route, we give the cleanest direct verification.
-Define
+Applying the same expansion to $\dd\omega$ yields
 \[
-\Phi(t,x) := H_t^\ast\omega
-= \sum_{\abs{I}=k} a_I\bigl(c+t(x-c)\bigr)\,t^k\,\dd x_I.
+H^\ast(\dd\omega)=C+\dd t\wedge D
 \]
-Differentiating in $t$,
+for some forms $C$ and $D$, and the $\dd t$-component is exactly
 \[
-\frac{\partial}{\partial t}\Phi(t,x)
-=
-\sum_{\abs{I}=k}
-\left[
-\sum_{j=1}^n (x_j-c_j)\frac{\partial a_I}{\partial y_j}\bigl(c+t(x-c)\bigr)\,t^k
-+ k\,t^{k-1} a_I\bigl(c+t(x-c)\bigr)
-\right]\dd x_I.
+D(t,x)=
+t^k\sum_{\abs{J}=k+1}\sum_{r=1}^{k+1} (-1)^{r-1}
+\bigl(x_{j_r}-c_{j_r}\bigr)b_J(H(t,x))\,
+\dd x_{J\setminus\{j_r\}},
 \]
-Integration from $0$ to $1$ yields $\omega - 0 = \omega$ on the left.  On the
-right, collect the $k\,t^{k-1}a_I$ terms and the derivative terms.  One
-checks by expanding $\dd_x[K_k\omega]$ and $K_{k+1}(\dd\omega)$ in
-coordinates that these two groups match $\dd(K_k\omega)$ and
-$K_{k+1}(\dd\omega)$ respectively.  The full coordinate expansion is standard
-(see \cite[Prop.~4.1.1]{BottTu1982}); the essential identity is
+where $\dd\omega=\sum_{\abs{J}=k+1} b_J(y)\,\dd y_J$.  Hence
 \[
-\frac{\partial}{\partial t}\bigl[t^k a_I(c+t(x-c))\bigr]
-=
-k\,t^{k-1}a_I(c+t(x-c))
-+ t^k \sum_j (x_j-c_j)\frac{\partial a_I}{\partial y_j}(c+t(x-c)),
+K_{k+1}(\dd\omega)(x)=\int_0^1 D(t,x)\,\dd t.
 \]
-and the product rule in $x$ for $K_k\omega$ produces $\dd(K_k\omega)$ from
-the $a_I$ terms and $K_{k+1}(\dd\omega)$ from the $\partial a_I/\partial y_j$
-terms.  Since $H_0^\ast\omega=0$ for $k\ge 1$, integrating gives
-$\omega = \dd(K_k\omega)+K_{k+1}(\dd\omega)$.
-This proves \eqref{eq:homotopy-identity}.
 
-For the norm bound, assume now that $\omega$ is coordinate-monomial.  Then
-Lemma~\ref{lem:contraction-estimate} and \eqref{eq:homotopy-operator} give
+Now use $\dd(H^\ast\omega)=H^\ast(\dd\omega)$.  Since
+$\dd=\dd_x+\dd t\wedge \partial_t$ on $[0,1]\times I^n$, one has
 \[
-\norm{K_k\omega}_\infty
+\dd(A+\dd t\wedge B)=\dd_x A + \dd t\wedge(\partial_t A-\dd_x B).
+\]
+Comparing the $\dd t$-components with $H^\ast(\dd\omega)=C+\dd t\wedge D$
+gives
+\[
+\partial_t A-\dd_x B=D.
+\]
+Integrating in $t$ from $0$ to $1$ yields
+\[
+A(1,x)-A(0,x)=
+\dd_x\!\left(\int_0^1 B(t,x)\,\dd t\right)
++ \int_0^1 D(t,x)\,\dd t.
+\]
+Because $A(1,x)=\omega(x)$ and $A(0,x)=0$ for $k\ge 1$, this is exactly
+\[
+\omega=\dd(K_k\omega)+K_{k+1}(\dd\omega),
+\]
+which proves \eqref{eq:homotopy-identity}.
+
+For the norm bound, assume now that $\omega=f(y)\,\dd x_I$ is
+coordinate-monomial.  By \eqref{eq:homotopy-operator}, each coefficient of
+$K_k\omega$ at a point $x$ is bounded by
+$\int_0^1 t^{k-1}\cdot\frac12\abs{f(c+t(x-c))}\,\dd t$
+(Lemma~\ref{lem:contraction-estimate} with the contraction vector $x-c$ and
+the coefficient $f$ evaluated at $y=c+t(x-c)\in I^n$).  Since
+$\abs{f(y)}\le\norm{\omega}_{\coeff,\infty}$ for all $y\in I^n$,
+\[
+\norm{K_k\omega}_{\coeff,\infty}
 \le
-\int_0^1 t^{k-1}\norm{\iota_X\omega}_\infty\,\dd t
-\le
-\int_0^1 t^{k-1}\,\dd t \cdot \frac12 \norm{\omega}_\infty
+\int_0^1 t^{k-1}\,\dd t \cdot \frac12 \norm{\omega}_{\coeff,\infty}
 =
-\frac{1}{2k}\norm{\omega}_\infty.
+\frac{1}{2k}\norm{\omega}_{\coeff,\infty}.
 \]
 
 For sharpness, consider the constant form
@@ -722,15 +857,39 @@ $1$, so
 \le
 \sum_{G\subset\partial F} \abs{\int_G \iota_G^\ast \eta}
 \le
-2k\,\norm{\eta}_\infty.
+2k\,\norm{\eta}_{\coeff,\infty}.
 \]
-Hence $\norm{\eta}_\infty\ge 1/(2k)$.  Taking $\eta=R\omega_0$ yields the lower
+Hence $\norm{\eta}_{\coeff,\infty}\ge 1/(2k)$.  Taking $\eta=R\omega_0$ yields the lower
 bound for every right inverse $R$.
 \end{proof}
 
+\begin{remark}[Consistency checks for downstream results]
+\label{rem:downstream-consistency}
+The homotopy identity (1) and the norm bound (2) are the two inputs to all
+subsequent results.  As a cross-check:
+\begin{itemize}
+\item Proposition~\ref{thm:homotopy-decomposition} sets
+  $E=K_{k+1}(\dd\omega)$; applying \eqref{eq:continuous-supnorm-bound} to the
+  coordinate-monomial form $\dd\omega$ gives
+  $\norm{E}_{\coeff,\infty}\le\frac{1}{2(k+1)}\norm{\dd\omega}_{\coeff,\infty}$.  On the test
+  form $\nu_0=\dd x_1\wedge\cdots\wedge\dd x_{k+1}$ one computes
+  $K_{k+1}\nu_0=\eta_\ast$ from Example~\ref{ex:sanity-checks}(iii) with
+  $k$ replaced by $k+1$, confirming
+  $\norm{K_{k+1}\nu_0}_\infty=\frac{1}{2(k+1)}$.
+\item Corollary~\ref{cor:curl-reconstruction} uses $K_2(\dd x_1\wedge\dd x_2)
+  =\frac12[(x_1-\frac12)\dd x_2-(x_2-\frac12)\dd x_1]$ from
+  Example~\ref{ex:sanity-checks}(ii), with norm $\frac14$ matching the claimed
+  constant.
+\item The cubical transfer
+  (Proposition~\ref{thm:discrete-stokes-poincare}) composes
+  $\mathcal I\circ K_j\circ W$ with operator norms $1$, $1/(2j)$, and $1$
+  respectively, giving $1/(2j)$ overall.
+\end{itemize}
+\end{remark}
+
 \subsection{Homotopy Decomposition and Curl Reconstruction}
 
-\begin{theorem}[Optimal decomposition with coordinate-monomial Stokes defect]
+\begin{proposition}[Defect decomposition with coordinate-monomial Stokes defect]
 \label{thm:homotopy-decomposition}
 Let $1\le k\le n-1$ and $\omega\in\Omega^k_{\mathrm{sm}}(I^n)$.  Assume that
 $\dd\omega$ is coordinate-monomial.  Define
@@ -749,11 +908,13 @@ Then
 and
 \begin{equation}
 \label{eq:optimal-defect-bound}
-\norm{E}_\infty \le \frac{1}{2(k+1)}\norm{\dd\omega}_\infty.
+\norm{E}_{\coeff,\infty} \le \frac{1}{2(k+1)}\norm{\dd\omega}_{\coeff,\infty}.
 \end{equation}
-The constant $1/(2(k+1))$ is optimal even under the restriction that
-$\dd\omega$ is coordinate-monomial.
-\end{theorem}
+The admissible class is all smooth $k$-forms on $I^n$ whose exterior derivative
+is coordinate-monomial.  The constant $1/(2(k+1))$ is the best uniform
+constant $C$ such that $\norm{E}_{\coeff,\infty}\le C\norm{\dd\omega}_{\coeff,\infty}$ holds for
+every member of this class; the lower bound is already witnessed on $I^{k+1}$.
+\end{proposition}
 
 \begin{proof}
 Equation~\eqref{eq:exact-plus-defect} is just
@@ -767,8 +928,8 @@ To see sharpness, take the constant $(k+1)$-form
 \nu_0 := \dd x_1\wedge\cdots\wedge \dd x_{k+1}
 \]
 and set $\omega_0 := K_{k+1}\nu_0$.  Then $\dd\omega_0=\nu_0$ and
-$\norm{\dd\omega_0}_\infty=1$.  Suppose a constant $C$ satisfied the conclusion
-of the theorem for every $\omega$ with coordinate-monomial $\dd\omega$.
+$\norm{\dd\omega_0}_{\coeff,\infty}=1$.  Suppose a constant $C$ satisfied the conclusion
+of the proposition for every $\omega$ with coordinate-monomial $\dd\omega$.
 Applying
 that assertion to $\omega_0$ yields a decomposition
 \[
@@ -776,7 +937,7 @@ that assertion to $\omega_0$ yields a decomposition
 \qquad
 \dd\widetilde E = \nu_0,
 \qquad
-\norm{\widetilde E}_\infty \le C.
+\norm{\widetilde E}_{\coeff,\infty} \le C.
 \]
 \[
 1
@@ -793,9 +954,9 @@ Since $\partial I^{k+1}$ has $2(k+1)$ faces of unit $(k)$-volume,
 \le
 \sum_{G\subset\partial I^{k+1}} \abs{\int_G \iota_G^\ast \widetilde E}
 \le
-2(k+1)\norm{\widetilde E}_\infty.
+2(k+1)\norm{\widetilde E}_{\coeff,\infty}.
 \]
-Hence $\norm{\widetilde E}_\infty \ge 1/(2(k+1))$.
+Hence $\norm{\widetilde E}_{\coeff,\infty} \ge 1/(2(k+1))$.
 No smaller uniform constant can hold even on this restricted class.
 \end{proof}
 
@@ -806,12 +967,15 @@ Let $v$ be a smooth vector field on a neighborhood of $I^n$ and set
 \omega := \sum_{i=1}^n v_i\,\dd x_i.
 \]
 Assume that the curl form $\dd\omega$ is coordinate-monomial.
-Then there exists a smooth function $U$ on $I^n$ such that
+Then $U:=K_1\omega$ satisfies
 \begin{equation}
 \label{eq:curl-potential-bound}
-\norm{v-\nabla U}_\infty \le \frac14 \norm{\dd\omega}_\infty.
+\norm{v-\nabla U}_{\coeff,\infty} \le \frac14 \norm{\dd\omega}_{\coeff,\infty}.
 \end{equation}
-The constant $1/4$ is optimal within this coordinate-monomial curl class.
+The admissible class is all smooth $1$-forms on $I^n$ with
+coordinate-monomial exterior derivative.  The constant $1/4$ is the best
+(smallest) uniform constant for this class, and the lower bound is attained
+on $I^2$ (see proof).
 \end{corollary}
 
 \begin{proof}
@@ -824,7 +988,7 @@ The coefficient vector of $\omega-\dd U$ is exactly $v-\nabla U$.  Applying
 \eqref{eq:curl-potential-bound}.
 
 For sharpness, let $\nu_0:=\dd x_1\wedge \dd x_2$ and $\alpha:=K_2\nu_0$.  Then
-$\dd\alpha=\nu_0$ and $\norm{\nu_0}_\infty=1$.  For every $U$,
+$\dd\alpha=\nu_0$ and $\norm{\nu_0}_{\coeff,\infty}=1$.  For every $U$,
 \[
 \dd(\alpha-\dd U)=\nu_0.
 \]
@@ -847,20 +1011,24 @@ The boundary of $Q$ has four edges of unit length, so
 \[
 \abs{\int_{\partial Q} \iota_{\partial Q}^\ast(\alpha-\dd U)}
 \le
-4\norm{\alpha-\dd U}_\infty.
+4\norm{\alpha-\dd U}_{\coeff,\infty}.
 \]
-Hence $\norm{\alpha-\dd U}_\infty\ge 1/4$.
+Hence $\norm{\alpha-\dd U}_{\coeff,\infty}\ge 1/4$.
 Therefore no constant smaller than $1/4$ can work uniformly.
 \end{proof}
 
-\section{Cubical Cochains and Hypercube Consequences}
+\section{One-Cube Cubical Corollaries}
 
-\subsection{A Sharp Cubical Stokes--Poincar\'e Lemma}
+This section merely records the one-cube consequence of the classical
+Whitney/integration transfer: on a single cube (or hypercube graph) the same
+restricted constant appears without any new homotopy operators; compare
+\cite{Dodziuk1976,Dupont1976,DupontBook1978,Albert2020}.
 
-\begin{theorem}[Cubical Stokes--Poincar\'e lemma with Whitney coordinate-monomial coboundary]
+\begin{proposition}[One-cube cubical Stokes--Poincar\'e decomposition]
 \label{thm:discrete-stokes-poincare}
-Let $1\le k\le n-1$ and let $\omega\in C^k(I^n;\RR)$.  Assume that $d\omega$
-is Whitney coordinate-monomial.  Equivalently, $d\omega$ vanishes on every
+Let $1\le k\le n-1$ and let $\omega\in C^k(I^n;\RR)$ be a cubical $k$-cochain
+on the single standard cube $I^n$.  Assume that $d\omega$
+is Whitney coordinate-monomial, i.e., $d\omega$ vanishes on every
 $(k+1)$-cell outside a single cubical orientation class.  Then there exist
 \[
 \eta\in C^{k-1}(I^n;\RR),
@@ -877,12 +1045,12 @@ dE = d\omega,
 and
 \begin{equation}
 \label{eq:discrete-defect-bound}
-\norm{E}_\infty \le \frac{1}{2(k+1)}\norm{d\omega}_\infty.
+\norm{E}_{\cell,\infty} \le \frac{1}{2(k+1)}\norm{d\omega}_{\cell,\infty}.
 \end{equation}
-The constant $1/(2(k+1))$ is sharp in the uniform ambient-dimension-free sense
-on this restricted class: no smaller constant can hold simultaneously for all
-cubes $I^n$ with $n\ge k+1$.
-\end{theorem}
+The admissible class is all cubical $k$-cochains on $I^n$ whose coboundary is
+Whitney coordinate-monomial.  The constant $1/(2(k+1))$ is the best uniform
+constant for this class; the lower bound is witnessed on $I^{k+1}$.
+\end{proposition}
 
 \begin{proof}
 For each $1\le j\le n$ define
@@ -933,14 +1101,14 @@ dE = d\omega.
 \]
 Moreover,
 \[
-\norm{E}_\infty
+\norm{E}_{\cell,\infty}
 \le
 \norm{\mathcal I}_{\infty\to\infty}\,
 \norm{K_{k+1}(W(d\omega))}_\infty
 \le
-\frac{1}{2(k+1)}\norm{W(d\omega)}_\infty
+\frac{1}{2(k+1)}\norm{W(d\omega)}_{\coeff,\infty}
 \le
-\frac{1}{2(k+1)}\norm{d\omega}_\infty,
+\frac{1}{2(k+1)}\norm{d\omega}_{\cell,\infty},
 \]
 where the second inequality uses that $W(d\omega)$ is coordinate-monomial and
 the last inequality uses Proposition~\ref{prop:cubical-whitney}.  This proves
@@ -970,100 +1138,80 @@ d\widetilde E(I^{k+1})
 \]
 There are $2(k+1)$ codimension-one faces, hence
 \[
-1 \le 2(k+1)\norm{\widetilde E}_\infty.
+1 \le 2(k+1)\norm{\widetilde E}_{\cell,\infty}.
 \]
 Therefore every such defect term satisfies
-$\norm{\widetilde E}_\infty\ge 1/(2(k+1))$, so the constant cannot be improved
+$\norm{\widetilde E}_{\cell,\infty}\ge 1/(2(k+1))$, so the constant cannot be improved
 uniformly on the restricted class.
 \end{proof}
 
-\subsection{Hypercube Corollaries}
+\begin{remark}[Scope limitation]
+The operator $\mathcal H_j=\mathcal I K_jW$ is defined and used here only on a
+single cube $I^n$.  On a general cubical complex, the same formula can be
+applied cellwise on any star identified with a cube, but the resulting
+cochains need not be globally compatible across neighboring cubes.
+Constructing a global bounded cochain homotopy on an arbitrary cubical complex
+requires either partition-of-unity techniques or an algebraic subdivision
+argument (e.g., the Dupont--Albert framework
+\cite{Dupont1976,DupontBook1978,Albert2020}); such constructions are outside the
+scope of this note.
+\end{remark}
 
-Let $\{0,1\}^m$ be the vertex set of the $m$-dimensional hypercube, with edges
-joining words that differ in exactly one coordinate.  Identifying this graph
-with the $1$-skeleton of the cubical complex $I^m$, an edge function is simply
-a cubical $1$-cochain and the square defect is its coboundary on $2$-faces.
+Let $\{0,1\}^m$ denote the $m$-dimensional hypercube graph, identified with the
+1-skeleton of $I^m$.  Squares correspond to $2$-faces, so $d\omega$ records the
+square defect of an edge cochain $\omega$.
 
-\begin{corollary}[Gradient consistency from square defects]
-\label{cor:hypercube-gradient}
-Let $\omega\in C^1(I^m;\RR)$ and write
-\[
-\varepsilon := \norm{d\omega}_\infty.
-\]
-Assume that $d\omega$ is Whitney coordinate-monomial; equivalently, there is a
-single coordinate pair $(i,j)$ such that the square defect vanishes on every
-square not parallel to the $(i,j)$-plane.
-Then there exist a vertex potential $f\in C^0(I^m;\RR)$ and a residual
-$r\in C^1(I^m;\RR)$ such that
-\[
-\omega = df + r,
-\qquad
-\norm{r}_\infty \le \frac{\varepsilon}{4},
-\qquad
-dr = d\omega.
-\]
-The constant $1/4$ is optimal within this Whitney coordinate-monomial class.
+\begin{corollary}[Hypercube consequences]\label{cor:hypercube-gradient}
+Let $\omega\in C^1(I^m;\RR)$ with Whitney coordinate-monomial square defect, and
+set $\varepsilon:=\norm{d\omega}_{\cell,\infty}$.  Then:
+\begin{itemize}[leftmargin=*,itemsep=0.2em]
+  \item There exist $f\in C^0(I^m;\RR)$ and $r\in C^1(I^m;\RR)$ such that
+  $\omega=df+r$, $dr=d\omega$, and $\norm{r}_{\cell,\infty}\le \varepsilon/4$.
+  \item If $\omega(u,v)=\log\frac{q(u,v)}{q(v,u)}$ for positive jump rates
+  $q(u,v)$ on oriented edges, then the same potential $f$ satisfies
+  \[
+  e^{-\varepsilon/4}
+  \le
+  \frac{\pi_f(u)\,q(u,v)}{\pi_f(v)\,q(v,u)}
+  \le
+  e^{\varepsilon/4},
+  \qquad
+  \pi_f(u):=e^{f(u)},\ u\sim v.
+  \]
+\end{itemize}
+No smaller constant works uniformly within this Whitney coordinate-monomial
+class.
 \end{corollary}
 
 \begin{proof}
-Apply Theorem~\ref{thm:discrete-stokes-poincare} with $k=1$ and set
-$f:=\eta$, $r:=E$.  The optimality is the $k=1$ case of the theorem.
-\end{proof}
-
-\begin{theorem}[Near detailed balance as a logarithmic corollary of square-defect control]
-\label{thm:near-detailed-balance}
-Let $q(u,v)>0$ be jump rates on the hypercube graph, defined for adjacent
-vertices $u\sim v$.  Define the antisymmetric edge cochain
-\[
-\omega(u,v) := \log \frac{q(u,v)}{q(v,u)}.
-\]
-Let
-\[
-\varepsilon := \norm{d\omega}_\infty,
-\]
-where $d\omega$ records the signed cycle defect on each square face.  Assume
-that $d\omega$ is Whitney coordinate-monomial.  Then
-there exists a potential $f:\{0,1\}^m\to \RR$ such that for every edge
-$u\sim v$,
-\[
-\abs{\omega(u,v) - (f(v)-f(u))} \le \frac{\varepsilon}{4}.
-\]
-Consequently, with $\pi_f(u):=e^{f(u)}$ one has the edgewise multiplicative
-bound
-\[
-e^{-\varepsilon/4}
-\le
-\frac{\pi_f(u)\,q(u,v)}{\pi_f(v)\,q(v,u)}
-\le
-e^{\varepsilon/4},
-\qquad
-u\sim v.
-\]
-The constant $1/4$ is optimal within this Whitney coordinate-monomial class.
-\end{theorem}
-
-\begin{proof}
-This is just the logarithmic reformulation of
-Corollary~\ref{cor:hypercube-gradient}.  That corollary gives a potential $f$
-with
-\[
-\norm{\omega-df}_\infty \le \frac{\varepsilon}{4}.
-\]
-For an oriented edge $(u,v)$,
-\[
-\log \frac{\pi_f(u)\,q(u,v)}{\pi_f(v)\,q(v,u)}
-=
-f(u)-f(v)+\log q(u,v)-\log q(v,u)
-=
-\omega(u,v)-(f(v)-f(u)).
-\]
-Taking absolute values and exponentiating yields the two-sided estimate.  The
-sharpness is inherited from Corollary~\ref{cor:hypercube-gradient}.
+Apply Proposition~\ref{thm:discrete-stokes-poincare} with $k=1$ to obtain
+$(f,r)=(\eta,E)$.  The second item records the logarithmic reformulation used
+in detailed-balance estimates; the edgewise inequality follows from the bound
+on $\norm{r}_{\cell,\infty}$ and sharpness reduces to the proposition.
 \end{proof}
 
 \section{Boundary Calibration and Boundary Rigidity}
 
 \subsection{Calibration Lower Bound}
+
+Throughout this section vectors are measured in the coordinate
+$\ell_\infty$ norm
+\[
+\norm{V}_{L^\infty(\Omega;\ell_\infty)}
+:=
+\operatorname*{ess\,sup}_{x\in\Omega} \max_{1\le i\le n} \abs{V_i(x)},
+\]
+which matches $\norm{\iota_V\mathrm{vol}}_{\coeff,\infty}$.  The dual boundary
+functional is the anisotropic perimeter
+\[
+P_1(E)
+:=
+\int_{\partial E} \abs{\nu_E}_1\,\dd\Haus^{n-1},
+\qquad
+\abs{\nu_E}_1 := \sum_{i=1}^n \abs{(\nu_E)_i},
+\]
+as in the anisotropic max-flow/min-cut and calibrable-set frameworks
+\cite{Strang1983,Grieser2006,GueriniSavo2004,Nozawa1990,Strang2010,Leonardi2015,CasellesFaccioloMeinhardt2009,CasellesChambolleMollNovaga2008,CasellesChambolleNovaga2007,CasellesChambolleNovaga2011}.
 
 \begin{proposition}[Boundary calibration inequality]
 \label{prop:boundary-calibration}
@@ -1076,32 +1224,44 @@ Define
 \mathcal C_\infty(\Omega)
 :=
 \inf\Bigl\{
-\norm{V}_\infty:
+\norm{V}_{L^\infty(\Omega;\ell_\infty)}:
 V\in C^\infty(U;\RR^n),\ U\supset \overline{\Omega}\ \text{open},
 \ \Div V = 1 \text{ on }\Omega
 \Bigr\},
 \]
-or, equivalently, the infimum of $\norm{\eta}_\infty$ over smooth
+or, equivalently, the infimum of $\norm{\eta}_{\coeff,\infty}$ over smooth
 $(n-1)$-forms $\eta$ on a neighborhood of $\overline\Omega$ satisfying
 $\dd\eta=\mathrm{vol}$ on $\Omega$.  Then every admissible vector field $V$
 and every Lipschitz subdomain $E\subset \Omega$ satisfy
 \[
-\Vol(E)\le \norm{V}_\infty \Haus^{n-1}(\partial E).
+\Vol(E)\le \norm{V}_{L^\infty(\Omega;\ell_\infty)}\, P_1(E),
+\qquad
+P_1(E)=\int_{\partial E} \abs{\nu_E}_1\,\dd\Haus^{n-1}.
 \]
 Consequently,
 \[
 \mathcal C_\infty(\Omega)\ge
 \sup\left\{
-\frac{\Vol(E)}{\Haus^{n-1}(\partial E)}:
+\frac{\Vol(E)}{P_1(E)}:
 E\subset \Omega,\ E \text{ Lipschitz}
 \right\}.
 \]
+For the cube $I^k$ we have $P_1(I^k)=2k$, so $1/(2k)$ is the natural lower
+bound dictated by Proposition~\ref{prop:boundary-calibration}.
 \end{proposition}
+
+\begin{remark}
+Working instead with the Euclidean/comass norm in Section~5 would require an
+explicit statement that the norm changes, as in the Euclidean max-flow/min-cut
+estimate of Grieser~\cite{Grieser2006}.  We keep the coefficient
+$\ell_\infty$ norm throughout so that the dual is automatically the anisotropic
+$P_1$ perimeter.
+\end{remark}
 
 \begin{proof}
 For a smooth vector field $V$, the form $\eta:=\iota_V\mathrm{vol}$ satisfies
 $\dd\eta=(\Div V)\mathrm{vol}$, and under the coefficient sup norm used in this
-paper one has $\norm{\eta}_\infty=\norm{V}_\infty$.  This identifies the two
+paper one has $\norm{\eta}_{\coeff,\infty}=\norm{V}_{L^\infty(\Omega;\ell_\infty)}$.  This identifies the two
 definitions of $\mathcal C_\infty(\Omega)$.  The divergence theorem on
 Lipschitz domains used below is standard; see
 \cite{Federer1969,EvansGariepy2015,Maggi2012}.
@@ -1115,26 +1275,32 @@ The divergence theorem gives
 =
 \int_{\partial E} V\cdot \nu_E\,\dd\Haus^{n-1}
 \le
-\norm{V}_\infty \Haus^{n-1}(\partial E).
+\norm{V}_{L^\infty(\Omega;\ell_\infty)} \int_{\partial E} |\nu_E|_1\,\dd\Haus^{n-1}
+=
+\norm{V}_{L^\infty(\Omega;\ell_\infty)}\,P_1(E).
 \]
-Taking the supremum over $E$ and then the infimum over admissible $V$ yields
-the stated lower bound.
+Since $|V\cdot \nu_E|\le \norm{V}_{\ell_\infty}|\nu_E|_1$ pointwise, the desired
+inequality follows.  Taking the supremum over $E$ and then the infimum over
+admissible $V$ yields the stated lower bound.
 \end{proof}
 
 \subsection{Boundary Rigidity on the Cube}
 
-\begin{theorem}[Boundary rigidity of cube minimizers]
+\begin{theorem}[Boundary rigidity of coefficient-$L^\infty$ minimizers on the cube]
 \label{thm:boundary-rigidity}
 Let $k\ge 1$ and define
 \[
 \omega_0 := \dd x_1\wedge\cdots\wedge \dd x_k
 \]
-on $I^k=[0,1]^k$.  Suppose
-$\eta\in\Omega^{k-1}_{\mathrm{sm}}(I^k)$ satisfies
+on $I^k=[0,1]^k$.  The admissible class is all smooth $(k-1)$-forms $\eta$
+on $I^k$ satisfying $\dd\eta=\omega_0$.
+Theorem~\ref{thm:optimal-continuous-inverse} gives the minimum
+$\norm{\eta}_{\coeff,\infty}=1/(2k)$.  Suppose
+$\eta\in\Omega^{k-1}_{\mathrm{sm}}(I^k)$ attains this minimum:
 \[
 \dd\eta = \omega_0,
 \qquad
-\norm{\eta}_\infty = \frac{1}{2k}.
+\norm{\eta}_{\coeff,\infty} = \frac{1}{2k}.
 \]
 For each $j\in\{1,\dots,k\}$ and $\varepsilon\in\{0,1\}$ let
 \[
@@ -1214,7 +1380,7 @@ satisfies
 \[
 \dd\eta_\ast = \omega_0,
 \qquad
-\norm{\eta_\ast}_\infty = \frac{1}{2k},
+\norm{\eta_\ast}_{\coeff,\infty} = \frac{1}{2k},
 \]
 and its boundary trace is the canonical one from
 Theorem~\ref{thm:boundary-rigidity}.
@@ -1231,7 +1397,7 @@ Differentiate term by term:
 \omega_0.
 \]
 Since $\abs{x_j-1/2}\le 1/2$ on $I^k$, one has
-$\norm{\eta_\ast}_\infty=1/(2k)$.  Restricting \eqref{eq:explicit-minimizer} to
+$\norm{\eta_\ast}_{\coeff,\infty}=1/(2k)$.  Restricting \eqref{eq:explicit-minimizer} to
 $x_j=0$ and $x_j=1$ gives the stated boundary traces immediately.
 \end{proof}
 
@@ -1240,183 +1406,69 @@ Theorem~\ref{thm:optimal-continuous-inverse} and
 Corollary~\ref{cor:explicit-minimizer} together show that
 $\mathcal C_\infty(I^k)=1/(2k)$.  Proposition~\ref{prop:boundary-calibration}
 gives the matching lower bound already from the test domain $E=I^k$, since
-$\Vol(I^k)=1$ and $\Haus^{k-1}(\partial I^k)=2k$.  The point of
+$\Vol(I^k)=1$ and $P_1(I^k)=2k$.  The point of
 Theorem~\ref{thm:boundary-rigidity} is stronger: the minimizer is not unique as
-an interior primitive, but its boundary trace is completely rigid.
+an interior primitive, but its boundary trace is completely rigid.  Indeed,
+take a smooth $(k-2)$-form $\psi$ compactly supported in the interior of $I^k$
+and set $\eta_\varepsilon:=\eta_\ast+\varepsilon\,\dd\psi$.  Then
+$\dd\eta_\varepsilon=\omega_0$ for every $\varepsilon$,
+$\iota_{\partial I^k}^\ast\eta_\varepsilon=\iota_{\partial I^k}^\ast\eta_\ast$,
+and $\norm{\eta_\varepsilon}_{\coeff,\infty}=1/(2k)$ for all sufficiently small
+$|\varepsilon|$.  The multiplicity of minimizers is therefore purely an
+interior phenomenon.
 \end{remark}
 
-\section{Dyadic Outer Approximations and Boundary Readout}
-
-This section is logically independent of Sections~3--5.  It uses only a
-primitive of the volume form and polyhedral Stokes on the dyadic outer
-approximations.  If one wants to connect it back to Section~5, the centered
-minimizer from Corollary~\ref{cor:explicit-minimizer} also satisfies
-$\dd\eta_\ast=\mathrm{vol}$ when $k=n$, but the flux identity below does not
-depend on the minimizing property.
-
-For a nonempty compact set $A\subset I^n$ and an integer $m\ge 1$, let
-$U_m(A)$ be the union of all dyadic cubes of side length $2^{-m}$ that
-intersect $A$:
-\[
-U_m(A)
-:=
-\bigcup\Bigl\{
-Q:\ Q \text{ dyadic } n\text{-cube of side }2^{-m},\ Q\cap A\neq\emptyset
-\Bigr\}.
-\]
-This is a polyhedral neighborhood of $A$ with naturally oriented boundary
-$\partial U_m(A)$.
-
-\begin{proposition}[Stokes bound via tube volume]
-\label{prop:dyadic-stokes-bound}
-Let $A\subset I^n$ be nonempty and compact.  For every smooth $(n-1)$-form
-$\omega$ on a neighborhood of $I^n$,
-\begin{equation}
-\label{eq:dyadic-stokes-bound}
-\abs{\int_{\partial U_m(A)} \omega}
-\le
-\norm{\dd\omega}_\infty \Vol(U_m(A)).
-\end{equation}
-If additionally $\Vol(A_\varepsilon)\le C_A\,\varepsilon^{n-d}$ for some
-$d\in[0,n)$, $C_A<\infty$, and all $0<\varepsilon\le 1$, where
-$A_\varepsilon:=\{x\in I^n:\dist(x,A)\le\varepsilon\}$, then setting
-$C_A':=C_A n^{(n-d)/2}$ one has
-\[
-\Vol(U_m(A))\le C_A' 2^{-m(n-d)},
-\]
-and therefore
-\[
-\abs{\int_{\partial U_m(A)} \omega}
-\le
-C_A' 2^{-m(n-d)} \norm{\dd\omega}_\infty
-\qquad
-\text{for all }m\ge 1.
-\]
-\end{proposition}
-
-\begin{proof}
-The set $U_m(A)$ is a finite union of dyadic cubes, so Stokes' theorem on
-polyhedral domains gives
-\[
-\int_{\partial U_m(A)} \iota_{\partial U_m(A)}^\ast\omega
-=
-\int_{U_m(A)} \dd\omega.
-\]
-Therefore $\abs{\int_{\partial U_m(A)}\omega}\le \norm{\dd\omega}_\infty\Vol(U_m(A))$,
-proving \eqref{eq:dyadic-stokes-bound}.
-Every dyadic cube of side $2^{-m}$ has diameter $\sqrt{n}\,2^{-m}$, so any
-cube intersecting $A$ lies inside $A_{\sqrt{n}\,2^{-m}}$.  Hence
-\[
-\Vol(U_m(A))
-\le
-\Vol(A_{\sqrt{n}\,2^{-m}})
-\le
-C_A(\sqrt{n}\,2^{-m})^{n-d}
-=
-C_A' 2^{-m(n-d)},
-\]
-and combining with \eqref{eq:dyadic-stokes-bound} gives the decay estimate.
-The underlying Stokes input is standard for polyhedral domains;
-see \cite{Federer1969,EvansGariepy2015,Maggi2012}.
-\end{proof}
-
-\begin{proposition}[Volume-flux identity]
-\label{prop:volume-flux}
-Define the standard volume primitive
-\begin{equation}
-\label{eq:probe-form}
-\omega_0
-:=
-\frac{1}{n}\sum_{i=1}^n (-1)^{i-1}x_i\,
-\dd x_1\wedge\cdots\wedge\widehat{\dd x_i}\wedge\cdots\wedge \dd x_n.
-\end{equation}
-Then $\dd\omega_0 = \dd x_1\wedge\cdots\wedge \dd x_n$, and for every
-nonempty compact $A\subset I^n$ and every $m\ge 1$,
-\begin{equation}
-\label{eq:volume-probe-identity}
-\int_{\partial U_m(A)} \omega_0 = \Vol(U_m(A))>0.
-\end{equation}
-If $N_m(A)$ denotes the number of side-$2^{-m}$ dyadic cubes intersecting $A$,
-then
-\begin{equation}
-\label{eq:volume-count}
-\Vol(U_m(A)) = N_m(A)\,2^{-mn}.
-\end{equation}
-\end{proposition}
-
-\begin{proof}
-A direct exterior derivative computation gives
-$\dd\omega_0 = \dd x_1\wedge\cdots\wedge \dd x_n$.
-Applying Stokes' theorem to $\omega_0$ on the polyhedral domain $U_m(A)$,
-\[
-\int_{\partial U_m(A)} \omega_0
-=
-\int_{U_m(A)} \dd x_1\wedge\cdots\wedge \dd x_n
-=
-\Vol(U_m(A)).
-\]
-Since $U_m(A)$ is a nonempty finite union of $n$-cubes, $\Vol(U_m(A))>0$.
-Equation~\eqref{eq:volume-count} holds because each dyadic cube of side
-$2^{-m}$ has volume $2^{-mn}$ and the cubes comprising $U_m(A)$ are pairwise
-disjoint up to boundaries.
-\end{proof}
-
-\begin{corollary}[Upper Minkowski dimension readout]
-\label{cor:minkowski-readout}
-In the notation of Proposition~\ref{prop:volume-flux}, writing
-$\overline{\dim}_{\mathrm M}(A)$ for the upper Minkowski (box-counting)
-dimension of $A$ \cite{Falconer2014,Mattila1995},
-\begin{equation}
-\label{eq:minkowski-readout}
-\overline{\dim}_{\mathrm M}(A)
-=
-\limsup_{m\to\infty}\frac{\log N_m(A)}{m\log 2}
-=
-n + \limsup_{m\to\infty}
-\frac{\log \Vol(U_m(A))}{m\log 2}
-=
-n + \limsup_{m\to\infty}
-\frac{\log\!\left(\displaystyle\int_{\partial U_m(A)} \omega_0\right)}{m\log 2}.
-\end{equation}
-\end{corollary}
-
-\begin{proof}
-The first equality is the standard dyadic characterization of upper Minkowski
-dimension; see \cite{Falconer2014,Mattila1995} (and note that ball and cube
-definitions give the same value in $\RR^n$).  Substituting
-$N_m(A)=2^{mn}\Vol(U_m(A))$ from \eqref{eq:volume-count} gives the second
-equality, and \eqref{eq:volume-probe-identity} gives the third.  The logarithm
-is well-defined because $\Vol(U_m(A))>0$.
-\end{proof}
-
-\begin{remark}
-The gain in Proposition~\ref{prop:dyadic-stokes-bound} is codimension-sensitive:
-the decay exponent is $n-d$, reflecting the fractal dimension of $A$.  The
-single fixed probe form $\omega_0$ turns a family of boundary integrals
-into a direct measurement of the outer-approximation volume and hence of the
-upper Minkowski dimension.  Neither the sharp constant $1/(2k)$ from
-Sections~3--4 nor the boundary rigidity of Section~5 is used here; the only
-inputs are a primitive of the volume form and polyhedral Stokes.
+\begin{remark}[Scope and limitations]
+This note isolates a local cube phenomenon.  The sharp constant $1/(2k)$ comes
+from the interaction between the radial homotopy and the coefficient sup norm
+on the incidence-one class (Proposition~\ref{prop:incidence-criterion}); the
+cubical section records only the corresponding one-cube Whitney transfer
+(Proposition~\ref{thm:discrete-stokes-poincare}); and the boundary theorem
+identifies the common trace of all coefficient-$L^\infty$ minimizers
+(Theorem~\ref{thm:boundary-rigidity}).  What is not attempted is equally
+important: no general-domain theory, no Sobolev-space estimate, and no global
+patching result on arbitrary cubical complexes.  The natural next step would
+be a sharp-constant analysis on a full cubical complex via the Dupont--Albert
+subdivision framework \cite{Dupont1976,DupontBook1978,Albert2020}, but the
+compatibility conditions across cube boundaries introduce combinatorial
+complications that fall outside the present scope.
 \end{remark}
-
-\section{Discussion}
-
-Several ingredients used here are standard: the radial homotopy formula,
-bounded right inverses on star-shaped sets, cubical Whitney transfer,
-polyhedral Stokes, and dyadic cube-count formulas for Minkowski dimension.
-Within that framework, the paper isolates three contributions: the sharp
-coefficient-$L^\infty$ constant $1/(2k)$ for the standard radial homotopy
-operator on closed coordinate-monomial forms, the transfer of the same
-constant to the corresponding Whitney coordinate-monomial cubical class on the
-single cube, and the equality-case boundary-trace rigidity theorem for cube
-minimizers.
-
-Section~6 should be read separately from that sharp-inverse theory.  Its flux
-identity uses only $\dd\omega=\mathrm{vol}$ and Stokes on dyadic polyhedra,
-while Corollary~\ref{cor:explicit-minimizer} supplies a canonical centered
-probe if one wants to tie the readout back to the minimization problem.
 
 \bibliographystyle{alpha}
 \bibliography{references_local}
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
