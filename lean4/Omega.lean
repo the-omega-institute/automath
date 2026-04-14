@@ -173,6 +173,7 @@ import Omega.LogicExpansionChain.FocusedSingletonConservativity
 import Omega.LogicExpansionChain.ConcreteSemanticFidelity
 import Omega.LogicExpansionChain.NormalizationNoFactCreation
 import Omega.LogicExpansionChain.ConcreteNormalizationNoFactCreation
+import Omega.LogicExpansionChain.LowerLayerProjection
 import Omega.LogicExpansionChain.ReadoutTransport
 import Omega.Topos.NullTrichotomy
 import Omega.Topos.SheafificationCharacterization
@@ -197,6 +198,7 @@ import Omega.RecursiveAddressing.FiniteDepthCollapse
 import Omega.RecursiveAddressing.FiniteThreeModeModel
 import Omega.RecursiveAddressing.EntropyMonotonicity
 import Omega.RecursiveAddressing.ObserverIndexedNormalizationNoFactCreation
+import Omega.RecursiveAddressing.ObserverIndexedValuePreservingNoCreation
 import Omega.RecursiveAddressing.ObserverNeutralReadoutAPAL
 import Omega.RecursiveAddressing.PrefixSiteRegisterLowerBound
 import Omega.RecursiveAddressing.ReadoutSeparatednessNull
