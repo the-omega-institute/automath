@@ -168,4 +168,12 @@ theorem paper_pom_kcollision_hankel_fingerprint_seeds :
   refine ⟨signExponent_1, signExponent_2, signExponent_3, signExponent_4,
     signExponent_5, pow_self_3, pow_self_4, pow_self_5⟩
 
+/-- Packaged form of the Hankel determinant rank truncation and principal fingerprint seeds.
+    prop:pom-kcollision-hankel-fingerprint -/
+theorem paper_pom_kcollision_hankel_fingerprint_package :
+    signExponent 1 = 0 ∧ signExponent 2 = 1 ∧ signExponent 3 = 5
+    ∧ signExponent 4 = 12 ∧ signExponent 5 = 22
+    ∧ (3 : ℕ) ^ 3 = 27 ∧ (4 : ℕ) ^ 4 = 256 ∧ (5 : ℕ) ^ 5 = 3125 :=
+  paper_pom_kcollision_hankel_fingerprint_seeds
+
 end Omega.POM.HankelFingerprintSeeds

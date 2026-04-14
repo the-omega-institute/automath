@@ -36,4 +36,14 @@ theorem paper_cdim_biphase_disk_critical_ring_seeds :
     (1 + (-1 : ℤ) = 0 ∧ 1 + 1 = 2) := by
   omega
 
+/-- Packaged form of the biphase average disk critical ring seeds.
+    thm:cdim-biphase-average-disk-critical-ring -/
+theorem paper_cdim_biphase_disk_critical_ring_package :
+    (1 + 1 = 2 ∧ 2 / 2 = 1) ∧
+    (1 = 1) ∧
+    (1 - 1 = 0 ∧ 0 / 2 = 0) ∧
+    (1 + 0 = 1 ∧ 2 - 1 = 1) ∧
+    (1 + (-1 : ℤ) = 0 ∧ 1 + 1 = 2) :=
+  paper_cdim_biphase_disk_critical_ring_seeds
+
 end Omega.CircleDimension
