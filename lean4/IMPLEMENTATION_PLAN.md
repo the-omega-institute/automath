@@ -11,12 +11,14 @@
 | 论文接口包装 | 740+ |
 | 文件数 | 144 |
 | 公理数 | 0 |
-| 论文定理环境总数（body） | ~10,508 |
-| 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3079 |
+| 论文定理环境总数（body） | ~12,125 |
+| 论文定理环境总数（appendix） | ~1,453 |
+| \leanverified 标注数 | 3085 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3128 |
-| 轮次 | R694（round_count=R694）|
+| 总标注数 | 3134 |
+| 轮次 | R695（round_count=R695）|
+
+**Phase R695（本轮落地，全流程执行）**：`paper_spg_screen_audit_cost_monotone_unit_drop_seeds` / `paper_spg_screen_audit_cost_monotone_unit_drop_package`（对应 `cor:spg-screen-audit-cost-monotone-unit-drop`，SPG；以 Finset 版 antitone `cost` 与单步单位下降界归纳证明“加行单调且加 `t` 行最多降 `t`”，保留 kernel nullity / audit cost 的核心数学骨架）；`paper_bdry_orientation_tsubset_lucas_parity_seeds` / `paper_bdry_orientation_tsubset_lucas_parity_package`（对应 `cor:bdry-orientation-tsubset-lucas-parity`，GU；通过 `Choose.choose_modEq_choose_mod_mul_choose_div_nat` 的 mod-2 Lucas 递推和 `Nat.binaryRec`，形式化 `Odd (Nat.choose a b)` 与 testBit 逐位支配的精确等价）；`paper_conclusion_fibadic_primitive_central_idempotents_seeds` / `paper_conclusion_fibadic_primitive_central_idempotents_package`（对应 `thm:conclusion-fibadic-finite-layer-gcd-primitive-central-idempotents`，Conclusion；以有理数幂等元必为 `0/1` 的分量分类，得到有限族幂等元即某个 `Finset` 指示函数的 paper-facing 版本；本轮 `\leanverified` +6，降级项数 0）
 
 **Phase R694（本轮落地，fresh seeds）**：`paper_finite_part_cyclic_lift_gcd_lcm_seeds` / `paper_finite_part_cyclic_lift_gcd_lcm_package`（对应 `prop:finite-part-cyclic-lift-gcd-lcm`，Zeta；以 `Nat.gcd_mul_lcm` 直接形式化 `m * n = gcd(m,n) * lcm(m,n)`，保留对角平移作用中“轨道数 × 轨道长度 = 总基数”的算术骨架）；`paper_typed_address_biaxial_completion_local_section_seeds` / `paper_typed_address_biaxial_completion_local_section_package`（对应 `prop:typed-address-biaxial-completion-local-section`，Topos；将 `read a ≠ none` 与证书纤维 `F a` 的非空性精确等价化，落实局部截面判据的站点语义核心）；`paper_conclusion_fibadic_lcm_filtration_law_seeds` / `paper_conclusion_fibadic_lcm_filtration_law_package`（对应 `thm:conclusion-fibadic-finite-layer-lcm-filtration-law`，Conclusion；把层级封闭性与最小深度整除性组合成 `D (f + g)`、`D (f * g)` 同时整除 `lcm (D f) (D g)` 的 paper-facing 包装；本轮 `\leanverified` +6，降级项数 0）
 
