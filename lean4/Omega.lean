@@ -154,11 +154,13 @@ import Omega.LogicExpansionChain.FocusedLiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FocusedSingletonConservativity
 import Omega.LogicExpansionChain.ConcreteSemanticFidelity
 import Omega.LogicExpansionChain.ReadoutTransport
+import Omega.Topos.NullTrichotomy
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
 import Omega.RecursiveAddressing.FocusedNonNullReadoutCriterion
 import Omega.RecursiveAddressing.InverseLimitDeterminacy
 import Omega.RecursiveAddressing.CompleteAddressReconstruction
 import Omega.RecursiveAddressing.FiniteDepthCollapse
+import Omega.RecursiveAddressing.FiniteThreeModeModel
 import Omega.RecursiveAddressing.EntropyMonotonicity
 import Omega.RecursiveAddressing.SlidingBlockFactor
 import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
@@ -374,6 +376,7 @@ import Omega.GU.BdryZ2JumpUniqueness
 import Omega.GU.BdryOrientationTsubsetLucasParity
 import Omega.GU.Window6DoubleLock12
 import Omega.GU.StrongLumpabilitySpectralRigidity
+import Omega.GU.StrongLumpabilitySpectralFalsifier
 import Omega.GU.SwapInvolutionDiagonal
 import Omega.GU.U1ThroatIdentity
 import Omega.GU.U1ThroatIdentityFixedPoint
