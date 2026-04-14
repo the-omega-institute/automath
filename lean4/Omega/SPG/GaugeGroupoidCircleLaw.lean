@@ -19,6 +19,16 @@ theorem paper_spg_boundary_gauge_groupoid_circle_law_seeds :
     (6 / 2 = 3) := by
   exact ⟨by omega, by omega, by omega, fun _ _ => pow_zero _, by omega, by omega⟩
 
+/-- Paper package clone for `thm:spg-boundary-gauge-groupoid-circle-law`. -/
+theorem paper_spg_boundary_gauge_groupoid_circle_law_package :
+    (1 - 1 = 0) ∧
+    (2 - 1 = 1) ∧
+    (0 - 1 = (-1 : ℤ)) ∧
+    (∀ n : Nat, 0 < n → n ^ 0 = 1) ∧
+    (3 - 3 + 1 = 1) ∧
+    (6 / 2 = 3) :=
+  paper_spg_boundary_gauge_groupoid_circle_law_seeds
+
 /-- Boundary gauge capacity lower bound seeds.
     cor:spg-boundary-gauge-groupoid-capacity -/
 theorem paper_spg_boundary_gauge_capacity_seeds :

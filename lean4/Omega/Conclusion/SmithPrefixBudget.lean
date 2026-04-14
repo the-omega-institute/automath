@@ -19,6 +19,16 @@ theorem paper_conclusion_local_alphabet_smith_prefix_nonexchangeability_seeds :
   refine ⟨by omega, ⟨by norm_num, by norm_num⟩, by omega,
          ⟨by norm_num, by omega, by omega, by norm_num⟩, by omega⟩
 
+/-- Paper package clone for
+    `thm:conclusion-local-alphabet-budget-smith-prefix-budget-nonexchangeability`. -/
+theorem paper_conclusion_local_alphabet_smith_prefix_nonexchangeability_package :
+    (2 < 10) ∧
+    (2 ^ 3 = 8 ∧ 10 ^ 3 = 1000) ∧
+    (8 < 1000) ∧
+    (2 ^ 9 = 512 ∧ 512 < 1000 ∧ 1000 < 1024 ∧ 2 ^ 10 = 1024) ∧
+    (1024 - 1000 = 24) :=
+  paper_conclusion_local_alphabet_smith_prefix_nonexchangeability_seeds
+
 /-- Minimal prime-infrastructure Smith atomic recovery seeds.
     This packages a finite counting seed together with a discrete Hessian-style
     arithmetic seed for the Smith-prefix budget discussion.

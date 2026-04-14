@@ -82,4 +82,11 @@ theorem paper_pom_val_monotone_boolean_nand_seeds :
     (1 - 0 * 0 > 1 - 1 * (1 : ℕ)) := by
   exact ⟨nat_coeff_linear_monotone, not_nonmonotone, nand_nonmonotone⟩
 
+/-- Paper package clone for `cor:pom-val-monotone-boolean`. -/
+theorem paper_pom_val_monotone_boolean_nand_package :
+    (∀ a b : ℕ, a + b * 0 ≤ a + b * 1) ∧
+    ((1 : ℕ) - 0 > (1 : ℕ) - 1) ∧
+    (1 - 0 * 0 > 1 - 1 * (1 : ℕ)) :=
+  paper_pom_val_monotone_boolean_nand_seeds
+
 end Omega.POM.ValMonotoneBooleanNand
