@@ -102,6 +102,7 @@ import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.AlternatingSingleSymbolSynchronizing
 import Omega.Folding.YmSynchronized
 import Omega.Folding.UniformSynchronizingLength
+import Omega.Folding.BlockBijectionThreshold
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -210,6 +211,7 @@ import Omega.Topos.H2VanishingBlindness
 import Omega.Topos.H1FreeNoBlindness
 import Omega.Topos.H1VanishingClassTrivializing
 import Omega.Topos.CharacterBlindObstructions
+import Omega.Topos.ComponentGerbeDecomposition
 import Omega.Topos.FiniteAbelianDuality
 import Omega.Topos.IntrinsicVisibleQuotient
 import Omega.Topos.IntrinsicCharacterDetection
@@ -295,6 +297,7 @@ import Omega.Zeta.IntroAnalytic
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
 import Omega.Zeta.FinitePartSingleQTorsionReconstruction
+import Omega.Zeta.FinitePartCyclicLiftZetaTorsionDeterminesSpectrum
 import Omega.Zeta.FinitePartSingleLayerSquareRootTest
 import Omega.Zeta.FinitePartSingleLayerTorsionNearRh
 import Omega.Zeta.FinitePartCyclicLiftSpectrumIdentifiability
