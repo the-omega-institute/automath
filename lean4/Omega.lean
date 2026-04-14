@@ -170,6 +170,7 @@ import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
 import Omega.EA.ChiRigidityShadow
 import Omega.EA.FibCongruence
+import Omega.EA.FibDivisibilityChain
 import Omega.EA.PrimeRegisterFibValuation
 import Omega.EA.GodelLogBusemann
 import Omega.EA.BrauerXorLaw
@@ -189,6 +190,7 @@ import Omega.EA.AutDimensionSqueeze
 import Omega.EA.PrimeLedger
 import Omega.EA.FoldAsSection
 import Omega.EA.CompositionPullback
+import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
@@ -306,6 +308,7 @@ import Omega.CD.PeriodicPointCount
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.ResidualCircleDim
+import Omega.CircleDimension.ResidualCircleDimLaws
 import Omega.CircleDimension.DyadicKernelCube
 import Omega.CircleDimension.SolenoidFiberTorsor
 import Omega.CircleDimension.OrthogonalAmalgamatedWdim
