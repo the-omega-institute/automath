@@ -8,15 +8,17 @@
 |---|---|
 | 总行数 | ~50,719 |
 | 定理/定义数 | ~4,421 |
-| 论文接口包装 | 761+ |
-| 文件数 | 168 |
+| 论文接口包装 | 764+ |
+| 文件数 | 171 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3233 |
+| \leanverified 标注数 | 3236 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3282 |
-| 轮次 | R744（round_count=R744）|
+| 总标注数 | 3285 |
+| 轮次 | R745（round_count=R745）|
+
+**Phase R745（本轮落地，全流程执行）**：`paper_etds_intro_finite_part`（对应 `thm:intro-finite-part`，Zeta；把 ETDS introduction 中 Perron 极点有限部公式、primitive-orbit 展开与 Mertens 渐近打包成 theorem-facing seed wrapper；本轮 non-trivial 目标）；`paper_gluing_failure_nonnull_readout_criterion_apal`（对应 `cor:nonnull-readout-criterion`，RecursiveAddressing；把 gluing-failure APAL publication 中 admissible + singleton visible class gives non-null typed readout 的 corollary 直接挂接到既有 non-null readout criterion wrapper）；`paper_scan_projection_address_register_lower_bound`（对应 `thm:register-lower-bound`，SPG；把 scan-projection publication 中 injective refinement 必须逐纤维分离的寄存器容量下界压成有限纤维基数下界核心 theorem）；本轮 `\leanverified` +3，覆盖章节为 Zeta / RecursiveAddressing / SPG，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Zeta/IntroFinitePart.lean`、`lean4/Omega/RecursiveAddressing/GluingFailureNonNullReadoutCriterionAPAL.lean`、`lean4/Omega/SPG/RegisterLowerBound.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_etds_intro_finite_part`、`paper_gluing_failure_nonnull_readout_criterion_apal`、`paper_scan_projection_address_register_lower_bound`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_introduction.tex`（`thm:intro-finite-part`），`/Users/chronoai/automath/papers/publication/2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal/sec_null_decomposition.tex`（`cor:nonnull-readout-criterion`），`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_double_budget.tex`（`thm:register-lower-bound`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R744（本轮落地，全流程执行）**：`paper_prime_languages_intro_analytic`（对应 `thm:intro-analytic`，Zeta；把 prime-languages publication 中自然边界与有限状态 zeta 周期分离的 introduction theorem 直接挂接到既有 Euler-product natural-boundary 与 finite-state periodic-separation wrappers；本轮 non-trivial 目标）；`paper_conservative_extension_sheafification_removes_glue_focused_apal`（对应 `cor:sheafification-removes-glue`，Topos；把 focused APAL publication 中 sheafification 消除 gluing failure 的 corollary 直接挂接到既有 sheafification wrapper）；`paper_spg_double_budget_address_capacity`（对应 `thm:spg-double-budget-address-capacity`，SPG；把 theory SPG section 中双预算寻址容量 theorem 直接挂接到既有 noise-budget strict-antitone 与 Fibonacci capacity witnesses；本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 Zeta / Topos / SPG，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/Zeta/IntroAnalytic.lean`、`lean4/Omega/Topos/FocusedSheafificationRemovesGlueAPAL.lean`、`lean4/Omega/SPG/DoubleBudgetAddressCapacity.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_prime_languages_intro_analytic`、`paper_conservative_extension_sheafification_removes_glue_focused_apal`、`paper_spg_double_budget_address_capacity`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_prime_languages_sofic_obstructions_dynamical_zeta/sec_introduction.tex`（`thm:intro-analytic`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_null_decomposition.tex`（`cor:sheafification-removes-glue`），`/Users/chronoai/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/spg/sec__spg.tex`（`thm:spg-double-budget-address-capacity`）；新增 tex theorem/corollary/lemma 环境数 0）
 
