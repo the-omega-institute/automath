@@ -146,6 +146,7 @@ import Omega.Frontier.Certificates
 import Omega.Frontier.NullTrichotomyLocalSection
 import Omega.LogicExpansionChain.FocusedConservativeComposition
 import Omega.LogicExpansionChain.StateTheoryMonotonicity
+import Omega.LogicExpansionChain.GluingFailureStateTheoryMonotonicityAPAL
 import Omega.LogicExpansionChain.FocusedStateTheoryMonotonicity
 import Omega.LogicExpansionChain.WholeChainInvariance
 import Omega.LogicExpansionChain.LiftedPointwiseSoundness
@@ -161,6 +162,7 @@ import Omega.LogicExpansionChain.ConcreteNormalizationNoFactCreation
 import Omega.LogicExpansionChain.ReadoutTransport
 import Omega.Topos.NullTrichotomy
 import Omega.Topos.SheafificationCharacterization
+import Omega.Topos.SheafificationCharacterizationAPAL
 import Omega.Topos.SheafLocalToGlobalAPAL
 import Omega.Topos.SheafificationRemovesGlueAPAL
 import Omega.Topos.NullClassificationUnderRefinement
@@ -184,6 +186,7 @@ import Omega.Combinatorics.GramDet
 import Omega.Combinatorics.FibonacciCubeGraph
 import Omega.Zeta.DynZeta
 import Omega.Zeta.ETDSEulerProductNaturalBoundary
+import Omega.Zeta.PrimeLanguagesEulerProductNaturalBoundary
 import Omega.Zeta.ETDSFinitePartGapPositive
 import Omega.Zeta.ETDSFiniteZetaImaginaryPeriodicity
 import Omega.Zeta.CyclicDet
