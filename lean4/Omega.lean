@@ -166,6 +166,7 @@ import Omega.Topos.NullTrichotomy
 import Omega.Topos.SheafificationCharacterization
 import Omega.Topos.SheafificationCharacterizationAPAL
 import Omega.Topos.SheafLocalToGlobalAPAL
+import Omega.Topos.FocusedSheafLocalToGlobalAPAL
 import Omega.Topos.SheafificationRemovesGlueAPAL
 import Omega.Topos.GluingFailureSheafificationCharacterizationAPAL
 import Omega.Topos.GluingFailureSheafLocalToGlobalAPAL
@@ -193,6 +194,7 @@ import Omega.Zeta.DynZeta
 import Omega.Zeta.ETDSEulerProductNaturalBoundary
 import Omega.Zeta.PrimeLanguagesEulerProductNaturalBoundary
 import Omega.Zeta.ETDSFinitePartGapPositive
+import Omega.Zeta.ETDSFinitePartGapPositiveCorollary
 import Omega.Zeta.ETDSFiniteZetaImaginaryPeriodicity
 import Omega.Zeta.CyclicDet
 import Omega.Zeta.EvenLengthCorrection
@@ -231,6 +233,7 @@ import Omega.Zeta.PrimeLanguagesIntroDensity
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
 import Omega.Zeta.ETDSDFADensityDichotomy
+import Omega.Zeta.ETDSZeckendorfPrimeLanguageNotRegular
 import Omega.Zeta.LucasBarrier
 import Omega.Zeta.NecklaceCounting
 import Omega.Zeta.LocalizedQuotientLedger
