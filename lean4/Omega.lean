@@ -138,6 +138,7 @@ import Omega.SPG.PolycubeAdhesion
 import Omega.SPG.TotalDegreeMomentThreshold
 import Omega.SPG.MutualInfoBoundaryFlux
 import Omega.SPG.GodelizationEntropy
+import Omega.SPG.PrefixScanErrorBoundaryDimensionUpper
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
@@ -146,6 +147,7 @@ import Omega.Frontier.ConditionalSummary
 import Omega.Frontier.Conjectures
 import Omega.Frontier.Certificates
 import Omega.Frontier.NullTrichotomyLocalSection
+import Omega.Frontier.RecursiveAddressingNullTrichotomyLocalSection
 import Omega.LogicExpansionChain.FocusedConservativeComposition
 import Omega.LogicExpansionChain.StateTheoryMonotonicity
 import Omega.LogicExpansionChain.GluingFailureStateTheoryMonotonicityAPAL
@@ -238,6 +240,7 @@ import Omega.Zeta.PrimeLanguagesIntroDensity
 import Omega.Zeta.IntroAnalytic
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
+import Omega.Zeta.IntroFiniteGroup
 import Omega.Zeta.ETDSDFADensityDichotomy
 import Omega.Zeta.ETDSZeckendorfPrimeLanguageNotRegular
 import Omega.Zeta.LucasBarrier
