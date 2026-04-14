@@ -8,15 +8,17 @@
 |---|---|
 | 总行数 | ~50,308 |
 | 定理/定义数 | ~4,400 |
-| 论文接口包装 | 740+ |
+| 论文接口包装 | 746+ |
 | 文件数 | 147 |
 | 公理数 | 0 |
-| 论文定理环境总数（body） | ~12,125 |
+| 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3109 |
-| \leanpartial 标注数 | 49 |
-| 总标注数 | 3158 |
-| 轮次 | R699（round_count=R699）|
+| \leanverified 标注数 | 3114 |
+| \leanpartial 标注数 | 48 |
+| 总标注数 | 3162 |
+| 轮次 | R700（round_count=R700）|
+
+**Phase R700（本轮落地，全流程执行）**：`paper_frt_iid_block_factorization_seeds` / `paper_frt_iid_block_factorization_package`（对应 `prop:frt-iid-block-factorization`，FoldResidualTime；以 `Finset.sum_pow'` 直接形式化 `∑_{u : Fin ℓ → Fin n} ∏_j f (u j) = (∑_a f a)^ℓ`，保留同边缘 i.i.d. 基线的乘法分解核心）；`paper_golden_branch_fibonacci_coprime_seeds` / `paper_golden_branch_fibonacci_coprime_package`（对应 `cor:golden-branch-star-discrepancy-audit`，Principles；对任意满足 `(1,1)` 初值和 Fibonacci 递推的分母序列，用 `Nat.coprime_add_self_right` 归纳推出相邻项互素，保留黄金分支收敛分母的互素审计骨架）；`paper_empirical_frequency_mem_unit_interval_seeds` / `paper_empirical_frequency_mem_unit_interval_package`（对应 `prop:empirical-frequency-mem-unit-interval`，Preliminaries；因 `def:stable-concept` 为 definition 无法直接挂 `\leanverified`，故在同节补充经验频率单位区间命题并形式化 `0 ≤ #A/N ≤ 1` 的基本有界性接口；本轮 `\leanverified` +6，打开 3 个零覆盖章节：FoldResidualTime / Principles / Preliminaries，降级项数 0）
 
 **Phase R699（本轮落地，全流程执行）**：`paper_multiscale_zero_stable_seeds` / `paper_multiscale_zero_stable_package`（对应 `cor:multiscale-zero-stable`，Experiments；以 `0 ≤ residual ≤ bound = 0` 直接推出 `residual = 0`，保留多尺度零残差稳定性的核心数值骨架）；`paper_stable_predicate_residue_classification_seeds` / `paper_stable_predicate_residue_classification_package`（对应 `prop:stable-predicate-residue-classification`，StatisticalStability；将 `fold = s ∘ r` 下的谓词判定等价改写为 preimage 成员关系，保留稳定谓词余类分类的因子化骨架）；`paper_chainwise_propagation_bound_seeds` / `paper_chainwise_propagation_bound_package`（对应 `prop:typed-address-biaxial-completion-chainwise-propagation-bound`，TypedAddressBiaxialCompletion；由逐步界 `dSpace i ≤ cStar * tauSync i` 经 `Finset.sum_le_sum` 汇总为链式传播总界，保留同步因果 holonomy 中传播斜率压制的核心账本骨架；本轮 `\leanverified` +6，打开 3 个零覆盖章节：Experiments / StatisticalStability / TypedAddressBiaxialCompletion，降级项数 0）
 
