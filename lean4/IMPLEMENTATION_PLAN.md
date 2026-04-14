@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,125 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3103 |
+| \leanverified 标注数 | 3109 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3152 |
-| 轮次 | R698（round_count=R698）|
+| 总标注数 | 3158 |
+| 轮次 | R699（round_count=R699）|
+
+**Phase R699（本轮落地，全流程执行）**：`paper_multiscale_zero_stable_seeds` / `paper_multiscale_zero_stable_package`（对应 `cor:multiscale-zero-stable`，Experiments；以 `0 ≤ residual ≤ bound = 0` 直接推出 `residual = 0`，保留多尺度零残差稳定性的核心数值骨架）；`paper_stable_predicate_residue_classification_seeds` / `paper_stable_predicate_residue_classification_package`（对应 `prop:stable-predicate-residue-classification`，StatisticalStability；将 `fold = s ∘ r` 下的谓词判定等价改写为 preimage 成员关系，保留稳定谓词余类分类的因子化骨架）；`paper_chainwise_propagation_bound_seeds` / `paper_chainwise_propagation_bound_package`（对应 `prop:typed-address-biaxial-completion-chainwise-propagation-bound`，TypedAddressBiaxialCompletion；由逐步界 `dSpace i ≤ cStar * tauSync i` 经 `Finset.sum_le_sum` 汇总为链式传播总界，保留同步因果 holonomy 中传播斜率压制的核心账本骨架；本轮 `\leanverified` +6，打开 3 个零覆盖章节：Experiments / StatisticalStability / TypedAddressBiaxialCompletion，降级项数 0）
 
 **Phase R698（本轮落地，全流程执行）**：`paper_physical_spacetime_local_space_quadratic_positive_seeds` / `paper_physical_spacetime_local_space_quadratic_positive_package`（对应 `prop:physical-spacetime-local-space-quadratic-positive`，PhysicalSpacetimeSkeleton；以 `A.mulVec` 的单射性推出对任意 `v ≠ 0` 有 `vᵀAᵀAv > 0`，保留局域空间二次型正定性的核心线性代数骨架）；`paper_logic_expansion_singleton_conservativity_seeds` / `paper_logic_expansion_singleton_conservativity_package`（对应 `prop:logic-expansion-singleton-conservativity`，LogicExpansionChain；将 singleton state forcing 直接化简为点语义满足，保留“状态 forcing 对单点语义保守”的核心语义骨架）；`paper_observer_indexed_address_before_value_seeds` / `paper_observer_indexed_address_before_value_package`（对应 `prop:observer-indexed-address-before-value`，RecursiveAddressing；以“取值蕴含地址已形成且证书纤维非空”的前提推出地址缺失或证书为空时不可能有值，保留地址先于取值的对象层骨架；本轮 `\leanverified` +6，打开 3 个零覆盖章节：PhysicalSpacetimeSkeleton / LogicExpansionChain / RecursiveAddressing，降级项数 0）
 
