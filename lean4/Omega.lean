@@ -366,6 +366,9 @@ import Omega.CircleDimension.RhodoneaSubflow
 import Omega.CircleDimension.SolenoidKernelBlindness
 import Omega.CircleDimension.PoissonEntropyTomography
 import Omega.CircleDimension.DoubleDiscriminant
+import Omega.CircleDimension.WdimBettiAverageLaw
+import Omega.CircleDimension.ComovingDefectDeltaBound
+import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.Zeta.VandermondeResultantSeeds
 import Omega.GU.ZeroDefectExpRate
 import Omega.Conclusion.ZeckendorfEulerSeeds
