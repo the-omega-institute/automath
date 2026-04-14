@@ -131,6 +131,7 @@ import Omega.SPG.WalshStokes
 import Omega.SPG.CheegerStokes
 import Omega.SPG.MomentHolographyGap
 import Omega.SPG.GaugeGroupoidCircleLaw
+import Omega.SPG.RegisterLowerBound
 import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CubePoincareInverse
 import Omega.SPG.PolycubeAdhesion
@@ -178,6 +179,7 @@ import Omega.RecursiveAddressing.FocusedAddressBeforeValue
 import Omega.RecursiveAddressing.AddressBeforeValueAPAL
 import Omega.RecursiveAddressing.FocusedNonNullReadoutCriterion
 import Omega.RecursiveAddressing.NonNullReadoutCriterionAPAL
+import Omega.RecursiveAddressing.GluingFailureNonNullReadoutCriterionAPAL
 import Omega.RecursiveAddressing.InverseLimitDeterminacy
 import Omega.RecursiveAddressing.CompleteAddressReconstruction
 import Omega.RecursiveAddressing.FiniteDepthCollapse
@@ -195,6 +197,7 @@ import Omega.Combinatorics.FibonacciCubeGraph
 import Omega.Zeta.DynZeta
 import Omega.Zeta.ETDSEulerProductNaturalBoundary
 import Omega.Zeta.PrimeLanguagesEulerProductNaturalBoundary
+import Omega.Zeta.IntroFinitePart
 import Omega.Zeta.ETDSFinitePartGapPositive
 import Omega.Zeta.ETDSFinitePartGapPositiveCorollary
 import Omega.Zeta.ETDSFiniteZetaImaginaryPeriodicity
