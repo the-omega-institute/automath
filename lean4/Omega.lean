@@ -40,6 +40,7 @@ import Omega.Folding.FiberFusion
 import Omega.Folding.InverseLimit
 import Omega.Folding.InverseLimitTopology
 import Omega.Folding.InverseLimitGolden
+import Omega.Folding.PiFunctorial
 import Omega.Folding.CircleDimension
 import Omega.Folding.ShiftDynamics
 import Omega.Folding.Rewrite
@@ -199,6 +200,7 @@ import Omega.Topos.H1FreeNoBlindness
 import Omega.Topos.H1VanishingClassTrivializing
 import Omega.Topos.CharacterBlindObstructions
 import Omega.Topos.IntrinsicVisibleQuotient
+import Omega.Topos.IntrinsicCharacterDetection
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
@@ -228,6 +230,7 @@ import Omega.Zeta.ETDSEulerProductNaturalBoundary
 import Omega.Zeta.PrimeLanguagesEulerProductNaturalBoundary
 import Omega.Zeta.IntroFinitePart
 import Omega.Zeta.ETDSFinitePartPrimitiveClosedForm
+import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.ResidueClassAsymptotics
 import Omega.Zeta.ETDSFinitePartGapPositive
 import Omega.Zeta.ETDSFinitePartGapPositiveCorollary
