@@ -242,6 +242,8 @@ import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.GU.UnitgroupZ2CharacterCount
+import Omega.GU.ParryEndpointMassMatrix
+import Omega.GU.ParryEndpointPhiEstimators
 import Omega.Conclusion.AlphabetThreshold
 import Omega.FoldResidualTime.IidBlockFactorization
 import Omega.Principles.GoldenBranchFibonacciCoprime
@@ -257,6 +259,7 @@ import Omega.Conclusion.CdimKernelRegisterLowerBound
 import Omega.Conclusion.KernelChainRule
 import Omega.Conclusion.Window6ResidualBudget
 import Omega.Conclusion.Pisano1PositiveSea
+import Omega.Conclusion.NumberFieldSignatureFromTwoCdims
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
