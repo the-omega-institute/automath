@@ -131,6 +131,7 @@ import Omega.SPG.WeightedBoundaryPole
 import Omega.SPG.BoundaryDimensionUpper
 import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.DoubleBudgetPoisson
+import Omega.SPG.CapacityRegion
 import Omega.SPG.EntropyLedger
 import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.QuasistationaryAmbiguityAmplitudes
@@ -268,6 +269,7 @@ import Omega.Zeta.QuotientFunctoriality
 import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.AbelianShadowDefect
 import Omega.Zeta.ClassArtinMobiusTrace
+import Omega.Zeta.ClassFunctionAdamsMobius
 import Omega.Zeta.ClassFunctionLinearisation
 import Omega.Zeta.ResidueClassAsymptotics
 import Omega.Zeta.ETDSFinitePartGapPositive
@@ -440,6 +442,7 @@ import Omega.CircleDimension.FinitePrimeSupportMultiplicativeHalfCircleDimension
 import Omega.CircleDimension.OperationalHalfCircleDimensionNat
 import Omega.CircleDimension.OperationalHalfCircleDimensionNd
 import Omega.CircleDimension.HaarPullbackUniqueness
+import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
