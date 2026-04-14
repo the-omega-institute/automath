@@ -155,6 +155,7 @@ import Omega.LogicExpansionChain.InformationStateForcingPersistencePublication
 import Omega.LogicExpansionChain.SingletonConservativityAPAL
 import Omega.LogicExpansionChain.WholeChainInvarianceAPAL
 import Omega.LogicExpansionChain.GluingFailureWholeChainInvarianceAPAL
+import Omega.LogicExpansionChain.ExplicitLiftingAPAL
 import Omega.LogicExpansionChain.FocusedLiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FocusedSingletonConservativity
 import Omega.LogicExpansionChain.ConcreteSemanticFidelity
@@ -180,6 +181,7 @@ import Omega.RecursiveAddressing.FiniteDepthCollapse
 import Omega.RecursiveAddressing.FiniteThreeModeModel
 import Omega.RecursiveAddressing.EntropyMonotonicity
 import Omega.RecursiveAddressing.ObserverIndexedNormalizationNoFactCreation
+import Omega.RecursiveAddressing.ObserverNeutralReadoutAPAL
 import Omega.RecursiveAddressing.SlidingBlockFactor
 import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
 import Omega.RecursiveAddressing.TypedReadoutPersistence
@@ -225,6 +227,7 @@ import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.DFADensityDichotomy
 import Omega.Zeta.DFADensityDichotomySeeds
 import Omega.Zeta.IntroDensity
+import Omega.Zeta.PrimeLanguagesIntroDensity
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
 import Omega.Zeta.ETDSDFADensityDichotomy
