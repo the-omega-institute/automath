@@ -8,15 +8,17 @@
 |---|---|
 | 总行数 | ~50,876 |
 | 定理/定义数 | ~4,436 |
-| 论文接口包装 | 776+ |
-| 文件数 | 192 |
+| 论文接口包装 | 779+ |
+| 文件数 | 195 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3320 |
+| \leanverified 标注数 | 3323 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3369 |
-| 轮次 | R773（round_count=R773）|
+| 总标注数 | 3372 |
+| 轮次 | R774（round_count=R774）|
+
+**Phase R774（本轮落地，全流程执行）**：`paper_resolution_folding_block_counts_threshold`（对应 `cor:block-counts-threshold`，Folding；把 rigidity reconstruction corollary 中 threshold 以上的 block-count law `|\mathcal L_n(Y_m)|=2^{n+m-1}` 与对角特例 `|\mathcal L_m(Y_m)|=2^{2m-1}` 直接压成 corollary-facing wrapper）；`paper_etds_abelian_shadow_defect`（对应 `thm:abelian-shadow-defect`，Zeta；把 abelian shadow / genuine non-abelian defect theorem 中正交分解、abelian/non-abelian energy identities，以及“经 abelianisation 因子化 / 非交换 defect 消失 / 高维 Fourier 系数全消失”三段等价统一压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_circle_dimension_haar_pullback_uniqueness`（对应 `thm:haar-pullback-uniqueness`，CircleDimension；把 Haar pullback uniqueness theorem 中 Haar 拉回律、导数律与 Cayley chart 唯一性三段等价压成 theorem-facing wrapper，本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 Folding / Zeta / CircleDimension，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/Folding/BlockCountsThreshold.lean`、`lean4/Omega/Zeta/AbelianShadowDefect.lean`、`lean4/Omega/CircleDimension/HaarPullbackUniqueness.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_resolution_folding_block_counts_threshold`、`paper_etds_abelian_shadow_defect`、`paper_circle_dimension_haar_pullback_uniqueness`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_reconstruction.tex`（`cor:block-counts-threshold`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_shadows.tex`（`thm:abelian-shadow-defect`），`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_haar_pullback.tex`（`thm:haar-pullback-uniqueness`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R773（本轮落地，全流程执行）**：`paper_scan_projection_address_main_amplitude`（对应 `thm:main-amplitude`，SPG；把 introduction theorem 中 quasistationary ambiguity amplitudes 的 Perron 左特征向量归一化、residue-class ambiguity ratio limit 与 survivor-mass asymptotic 直接压成 introduction-facing wrapper，本轮 non-trivial 目标）；`paper_conservative_extension_character_blind_obstructions_focused`（对应 `thm:character-blind-obstructions`，Topos；把 focused APAL publication 中 character-blind pure-`Ext` obstruction 的四段等价、non-neutral gerbe 结论与 singleton-visible `Null^{\\mathrm{glue}}` readout 统一压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_etds_abelian_cyclic_shadow`（对应 `cor:abelian-cyclic-shadow`，Zeta；把 shadow section 中 abelian pullback、cyclic quotient recovery 与 finite-part root-of-unity layer readout 压成 corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 SPG / Topos / Zeta，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/SPG/MainAmplitude.lean`、`lean4/Omega/Topos/CharacterBlindObstructionsFocused.lean`、`lean4/Omega/Zeta/AbelianCyclicShadow.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_scan_projection_address_main_amplitude`、`paper_conservative_extension_character_blind_obstructions_focused`、`paper_etds_abelian_cyclic_shadow`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_introduction.tex`（`thm:main-amplitude`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_homological_visibility.tex`（`thm:character-blind-obstructions`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_shadows.tex`（`cor:abelian-cyclic-shadow`）；新增 tex theorem/corollary/lemma 环境数 0）
 
