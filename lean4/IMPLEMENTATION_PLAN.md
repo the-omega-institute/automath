@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3136 |
+| \leanverified 标注数 | 3139 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3185 |
-| 轮次 | R707（round_count=R707）|
+| 总标注数 | 3188 |
+| 轮次 | R708（round_count=R708）|
+
+**Phase R708（本轮落地，全流程执行）**：`paper_logic_expansion_forcing_persistence_seeds`（对应 `prop:logic-expansion-forcing-persistence`，LogicExpansionChain；把细化态的估值限制映回旧态并显式接上公式提升，保留“已被 forcing 的对象层事实在细化后不会被推翻”的核心语义骨架）；`paper_logic_expansion_semantic_fidelity_seeds`（对应 `prop:logic-expansion-semantic-fidelity`，LogicExpansionChain；以抽象状态恢复映射与公式解释函数形式化 forcing 保持，从而把抽象语义后承真正在具体实现层下推；本轮 non-trivial 目标之一）；`paper_physical_spacetime_kernelization_template_seeds`（对应 `prop:physical-spacetime-kernelization-template`，PhysicalSpacetimeSkeleton；把局部规范不变的正核压成有限叠加上的代表元无关二次能量，保留“干涉项/Born 型读出统一降为正二次型一致性”的核心接口；本轮 non-trivial 目标之一）；本轮 `\leanverified` +3，覆盖章节为 LogicExpansionChain / PhysicalSpacetimeSkeleton，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/LogicExpansionChain/ForcingPersistence.lean`、`lean4/Omega/LogicExpansionChain/SemanticFidelity.lean`、`lean4/Omega/PhysicalSpacetimeSkeleton/KernelizationTemplate.lean`）
 
 **Phase R707（本轮落地，全流程执行）**：`paper_u1_throat_identity_fixed_point_seeds`（对应 `prop:u1-throat-identity`，GU；将既有“正实轴上 `u = 1 / u` 当且仅当 `u = 1`”的固定点核重新注册为 paper-facing seed，保持统一点作为 `Ω`-反演唯一固定点的原命题本质）；`paper_congruence_m6_idempotents_four_registered_seeds`（对应 `prop:congruence-m6-idempotents-four`，GU；把既有 `ZMod 21` 四幂等计数核重新挂接到命题环境，保留 squarefree 模 `21` 强制四个幂等分量的原始骨架）；`paper_operator_fixed_kernel_local_density_obstruction_seeds`（对应 `prop:operator-fixed-kernel-local-density-obstruction`，Zeta；由严格周期最近邻间距序列导出有限 gap 谱与正常数胞均值 `Δ / B`，并证明该均值不可能趋于 `0`，从而保留“固定有限核无法承载变密度局部统计塌缩”的核心障碍；本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 GU / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/GU/U1ThroatIdentityFixedPoint.lean`、`lean4/Omega/GU/CongruenceM6IdempotentsFourRegistered.lean`、`lean4/Omega/Zeta/OperatorFixedKernelLocalDensityObstruction.lean`）
 
