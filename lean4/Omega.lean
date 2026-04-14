@@ -91,6 +91,7 @@ import Omega.SPG.ProuhetThueMorsePowerSum
 import Omega.SPG.SingleParamLogReadoutPigeonhole
 import Omega.SPG.BoundaryCycleAuditQueryLowerBound
 import Omega.Frontier.Assumptions
+import Omega.Frontier.OblivionBridge
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
 import Omega.Frontier.ConditionalArithmetic
