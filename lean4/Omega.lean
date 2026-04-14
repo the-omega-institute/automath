@@ -137,6 +137,7 @@ import Omega.SPG.QuasistationaryAmbiguityAmplitudes
 import Omega.SPG.MainAmplitude
 import Omega.SPG.SurvivorRenyiPressure
 import Omega.SPG.MainRenyi
+import Omega.SPG.MainResonance
 import Omega.SPG.SurvivorSpectrumCollision
 import Omega.SPG.PressureGap
 import Omega.SPG.SurvivorPressureRecovery
@@ -267,6 +268,7 @@ import Omega.Zeta.QuotientFunctoriality
 import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.AbelianShadowDefect
 import Omega.Zeta.ClassArtinMobiusTrace
+import Omega.Zeta.ClassFunctionLinearisation
 import Omega.Zeta.ResidueClassAsymptotics
 import Omega.Zeta.ETDSFinitePartGapPositive
 import Omega.Zeta.ETDSFinitePartGapPositiveCorollary
@@ -438,6 +440,7 @@ import Omega.CircleDimension.FinitePrimeSupportMultiplicativeHalfCircleDimension
 import Omega.CircleDimension.OperationalHalfCircleDimensionNat
 import Omega.CircleDimension.OperationalHalfCircleDimensionNd
 import Omega.CircleDimension.HaarPullbackUniqueness
+import Omega.CircleDimension.PoissonCardinalReconstruction
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
