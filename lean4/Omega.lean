@@ -223,6 +223,7 @@ import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.SectionLedgerKL
 import Omega.Conclusion.AffineNormalFormSemidirect
+import Omega.Conclusion.CapacityRamanujanPlateauLaw
 import Omega.Conclusion.ZeckendorfResetBoundedCLTAbsent
 import Omega.Conclusion.CycleRankSaturation
 import Omega.Conclusion.PrimorialAdditiveVsGodelMultiplicative
@@ -333,6 +334,8 @@ import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse
 import Omega.GroupUnification.SpreadEquivalence
 import Omega.GroupUnification.SMSignatureCyclicDivides6
+import Omega.GroupUnification.ParryEndpointCollapse
+import Omega.GroupUnification.ParryCommutingSquarePhi
 import Omega.CD.AnomalyCompressionOverhead
 import Omega.CD.PeriodicPointCount
 import Omega.CircleDimension.MultiPrimeSpectrum
