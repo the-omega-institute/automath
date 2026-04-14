@@ -3,6 +3,7 @@ import Omega.Core.Word
 import Omega.Core.No11
 import Omega.Core.CoprimeSMul
 import Omega.Core.PowerInequality
+import Omega.Core.ZeckendorfParallelPropagationLowerBound
 import Omega.Core.WalshFourier
 import Omega.Folding.StableSyntax
 import Omega.Folding.StableSyntaxEntropyLogqdim
@@ -52,6 +53,7 @@ import Omega.Folding.BoundaryLayer
 import Omega.Folding.FiberSplit
 import Omega.Folding.HammingDist
 import Omega.Folding.HankelSpectrum
+import Omega.Folding.LocalWeightRigidityFibonacci
 import Omega.Folding.ModularTower
 import Omega.Folding.Window6
 import Omega.Folding.LocalWeightRigidity
@@ -246,6 +248,7 @@ import Omega.Zeta.DFAPrimeSymmetricDiffLowerBound
 import Omega.Zeta.IntroBinaryPrimes
 import Omega.Zeta.IntroBinaryPrecision
 import Omega.Zeta.DFAPrimeRecallPrecisionETDS
+import Omega.Zeta.PrimeLanguagesDFAPrimeRecallPrecision
 import Omega.Zeta.DFAQuantitativeObstruction
 import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.ZeckendorfPrimeLanguage
