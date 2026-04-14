@@ -94,6 +94,7 @@ import Omega.SPG.Cylinder
 import Omega.SPG.PrefixMetric
 import Omega.SPG.Clopen
 import Omega.SPG.DecidableClopen
+import Omega.SPG.ClarityMonotone
 import Omega.SPG.ScanErrorDiscrete
 import Omega.SPG.ScanProjectionScanErrorCylinder
 import Omega.SPG.ScanProjectionBayesOptimality
@@ -256,8 +257,10 @@ import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.CircleDimension.BareCircleNotCompleteCarrier
+import Omega.CircleDimension.BasicComputation
 import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.ShortExactAdditivity
+import Omega.SPG.TanakaStokes
 import Omega.CircleDimension.TensorHomExtLaws
 import Omega.CircleDimension.AxiomaticRigidity
 import Omega.CircleDimension.PhaseSpectrumLimit
