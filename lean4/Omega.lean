@@ -157,6 +157,7 @@ import Omega.SPG.CheegerStokes
 import Omega.SPG.MomentHolographyGap
 import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.RegisterLowerBound
+import Omega.SPG.CollisionProfileRestoration
 import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CubePoincareInverse
 import Omega.SPG.PolycubeAdhesion
@@ -214,6 +215,7 @@ import Omega.Topos.IntrinsicVisibleQuotient
 import Omega.Topos.IntrinsicCharacterDetection
 import Omega.Topos.UniqueBranchBandedGerbe
 import Omega.Topos.UniqueBranchContextualityComparison
+import Omega.Topos.PointwiseIrreducibility
 import Omega.Topos.VisibleValueComponents
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
@@ -294,6 +296,7 @@ import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
 import Omega.Zeta.FinitePartSingleQTorsionReconstruction
 import Omega.Zeta.FinitePartSingleLayerSquareRootTest
+import Omega.Zeta.FinitePartSingleLayerTorsionNearRh
 import Omega.Zeta.FinitePartCyclicLiftSpectrumIdentifiability
 import Omega.Zeta.IntroFiniteGroup
 import Omega.Zeta.ETDSDFADensityDichotomy
