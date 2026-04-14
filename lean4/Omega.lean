@@ -162,11 +162,13 @@ import Omega.LogicExpansionChain.ReadoutTransport
 import Omega.Topos.NullTrichotomy
 import Omega.Topos.SheafificationCharacterization
 import Omega.Topos.SheafLocalToGlobalAPAL
+import Omega.Topos.SheafificationRemovesGlueAPAL
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
 import Omega.RecursiveAddressing.AddressBeforeValueAPAL
 import Omega.RecursiveAddressing.FocusedNonNullReadoutCriterion
+import Omega.RecursiveAddressing.NonNullReadoutCriterionAPAL
 import Omega.RecursiveAddressing.InverseLimitDeterminacy
 import Omega.RecursiveAddressing.CompleteAddressReconstruction
 import Omega.RecursiveAddressing.FiniteDepthCollapse
@@ -215,6 +217,7 @@ import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.DFADensityDichotomy
 import Omega.Zeta.DFADensityDichotomySeeds
 import Omega.Zeta.IntroDensity
+import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
 import Omega.Zeta.ETDSDFADensityDichotomy
 import Omega.Zeta.LucasBarrier
