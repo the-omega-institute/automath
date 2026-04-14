@@ -16,7 +16,9 @@
 | \leanverified 标注数 | 3130 |
 | \leanpartial 标注数 | 49 |
 | 总标注数 | 3179 |
-| 轮次 | R703（round_count=R703）|
+| 轮次 | R704（round_count=R704）|
+
+**Phase R704（本轮落地，全流程执行）**：`paper_witt_pk_sparsification_seeds` / `paper_witt_pk_sparsification_package`（对应 `prop:witt-pk-sparsification`，SyncKernelWeighted；把 Dwork 型 Frobenius 同余压到逐系数层面，直接抽取“非 `p` 次幂位消失 / `pℓ` 位继承低层系数”的稀疏化骨架）；`paper_cdim_wdim_betti_average_law_seeds` / `paper_cdim_wdim_betti_average_law_package`（对应 `cor:cdim-wdim-betti-average-law`，CircleDimension；把短正合列给出的相对秩差代回 `wdim` 定义，得到边界/本体一阶 Betti 秩的平均律）；`paper_cdim_comoving_defect_implies_delta_bound_seeds` / `paper_cdim_comoving_defect_implies_delta_bound_package`（对应 `prop:cdim-comoving-defect-implies-delta-bound`，CircleDimension；对共动 Jensen 缺陷半径界做显式代数消元，直接解出偏移 `δ` 的上界；本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 SyncKernelWeighted / CircleDimension，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/SyncKernelWeighted/WittPkSparsification.lean`、`lean4/Omega/CircleDimension/WdimBettiAverageLaw.lean`、`lean4/Omega/CircleDimension/ComovingDefectDeltaBound.lean`）
 
 **Phase R703（本轮落地，全流程执行）**：`paper_conclusion_capacity_ramanujan_plateau_law_seeds`（对应 `prop:conclusion-capacity-ramanujan-plateau-law`，Conclusion；对有限型纤维大小函数 `d` 直接形式化 `ΔC(s)=\#\{x:\ s\le d(x)\}` 及其正性/归零判据，保留容量平台由阈值超层计数刻画的核心离散骨架；本轮 non-trivial 目标）；`paper_parry_endpoint_collapse_seeds` / `paper_parry_endpoint_collapse_package`（对应 `thm:parry-endpoint-collapse`，GU；沿非空词的转移权重做望远镜化简，得到柱分布只依赖首尾端点的显式闭式）；`paper_parry_commuting_square_gives_phi_seeds` / `paper_parry_commuting_square_gives_phi_package`（对应 `prop:parry-commuting-square-gives-phi`，GU；由局部交换方块关系 `a^2=1-a` 与区间约束直接锁定黄金倒数及其平方补量）；本轮 `\leanverified` +3，覆盖章节为 Conclusion / GU，降级项数 0，non-trivial 计数 1）
 
