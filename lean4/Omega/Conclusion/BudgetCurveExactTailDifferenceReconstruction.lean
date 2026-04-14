@@ -70,4 +70,37 @@ theorem paper_conclusion_budget_curve_exact_tail_difference_reconstruction_seeds
               deltaCapacity_eq_count_ge d' (k + 1) (Nat.succ_le_succ (Nat.zero_le k))]
             simpa [Nat.succ_le_iff] using (card_eq_card_ge_sub_card_ge_succ (α := α) d' k).symm
 
+/-- Any observable that depends only on the multiplicity histogram factors through the exact budget
+curve. This is the paper-facing Mellin--Rényi factorization layer wrapper. -/
+theorem paper_conclusion_budget_curve_mellin_renyi_factorization_layer
+    {β : Type*} (Obs : (α → ℕ) → β)
+    (hObs : ∀ d d', (∀ k : ℕ, #{x | d x = k} = #{x | d' x = k}) → Obs d = Obs d')
+    (d d' : α → ℕ)
+    (hcurve : ∀ t : ℕ,
+      Omega.Conclusion.CapacityRamanujanPlateauLaw.deltaCapacity d t =
+        Omega.Conclusion.CapacityRamanujanPlateauLaw.deltaCapacity d' t) :
+    Obs d = Obs d' := by
+  apply hObs
+  intro k
+  by_cases hk : k = 0
+  · subst hk
+    calc
+      #{x | d x = 0} = Fintype.card α - #{x | 1 ≤ d x} := by
+        simpa using (card_eq_card_ge_sub_card_ge_succ (α := α) d 0)
+      _ = Fintype.card α -
+            Omega.Conclusion.CapacityRamanujanPlateauLaw.deltaCapacity d 1 := by
+          rw [deltaCapacity_eq_count_ge d 1 (by norm_num)]
+      _ = Fintype.card α -
+            Omega.Conclusion.CapacityRamanujanPlateauLaw.deltaCapacity d' 1 := by
+          rw [hcurve 1]
+      _ = Fintype.card α - #{x | 1 ≤ d' x} := by
+          rw [deltaCapacity_eq_count_ge d' 1 (by norm_num)]
+      _ = #{x | d' x = 0} := by
+          symm
+          simpa using (card_eq_card_ge_sub_card_ge_succ (α := α) d' 0)
+  · have hk1 : 1 ≤ k := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hk)
+    exact
+      (paper_conclusion_budget_curve_exact_tail_difference_reconstruction_seeds
+        (α := α) d k k hk1 hk1).2.2 d' hcurve
+
 end Omega.Conclusion.BudgetCurveExactTailDifferenceReconstruction
