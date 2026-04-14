@@ -248,6 +248,8 @@ import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.CircleDimension.BareCircleNotCompleteCarrier
 import Omega.CircleDimension.StokesHomologyExactSplitting
+import Omega.CircleDimension.AxiomaticRigidity
+import Omega.CircleDimension.PhaseSpectrumReconstruction
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
@@ -261,6 +263,7 @@ import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
 import Omega.PhysicalSpacetimeSkeleton.KernelizationTemplate
 import Omega.LogicExpansionChain.ForcingPersistence
+import Omega.LogicExpansionChain.StateForcingPersistence
 import Omega.LogicExpansionChain.SemanticFidelity
 import Omega.LogicExpansionChain.SingletonConservativity
 import Omega.RecursiveAddressing.AddressBeforeValue
