@@ -82,6 +82,7 @@ import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.ZeroFiberLinear
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
+import Omega.Folding.VisibleValueOverflow
 import Omega.Folding.BernoulliHalfEndpoints
 import Omega.Folding.BernoulliPGammaMax
 import Omega.Folding.BernoulliPBitpairLaw
@@ -194,6 +195,7 @@ import Omega.Topos.GluingFailureSheafificationRemovesGlueAPAL
 import Omega.Topos.H2VanishingBlindness
 import Omega.Topos.H1FreeNoBlindness
 import Omega.Topos.H1VanishingClassTrivializing
+import Omega.Topos.CharacterBlindObstructions
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
@@ -201,6 +203,7 @@ import Omega.RecursiveAddressing.AddressBeforeValueAPAL
 import Omega.RecursiveAddressing.FocusedNonNullReadoutCriterion
 import Omega.RecursiveAddressing.NonNullReadoutCriterionAPAL
 import Omega.RecursiveAddressing.GluingFailureNonNullReadoutCriterionAPAL
+import Omega.RecursiveAddressing.GluingFailureTypedReadoutPersistenceAPAL
 import Omega.RecursiveAddressing.InverseLimitDeterminacy
 import Omega.RecursiveAddressing.CompleteAddressReconstruction
 import Omega.RecursiveAddressing.FiniteDepthCollapse
