@@ -1,4 +1,4 @@
-# Lean4 无公理形式化实施方案（2026-04-14 登记同步版）
+# Lean4 无公理形式化实施方案（2026-04-15 登记同步版）
 
 ## 1. 项目现状
 
@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3221 |
+| \leanverified 标注数 | 3224 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3270 |
-| 轮次 | R740（round_count=R740）|
+| 总标注数 | 3273 |
+| 轮次 | R741（round_count=R741）|
+
+**Phase R741（本轮落地，全流程执行）**：`paper_gluing_failure_whole_chain_invariance_apal`（对应 `cor:whole-chain-invariance`，LogicExpansionChain；把 gluing-failure APAL publication 中有限 conservative-extension 链整体下投保持 forcing 不变的 corollary 直接挂接到既有 finite-chain invariance wrapper）；`paper_gluing_failure_sheafification_characterization_apal`（对应 `thm:sheafification-characterization`，Topos；把 compatible local sectionability 与 sheafified fiber 非空的 gluing-failure publication 主定理直接挂接到既有 sheafification characterization wrapper；本轮 non-trivial 目标）；`paper_gluing_failure_sheaf_local_to_global_apal`（对应 `cor:sheaf-local-to-global`，Topos；把 “sheaf at a reference collapses compatible local sections to global sections”的 gluing-failure publication corollary 直接挂接到既有 local/global equivalence wrapper）；本轮 `\leanverified` +3，覆盖章节为 LogicExpansionChain / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/LogicExpansionChain/GluingFailureWholeChainInvarianceAPAL.lean`、`lean4/Omega/Topos/GluingFailureSheafificationCharacterizationAPAL.lean`、`lean4/Omega/Topos/GluingFailureSheafLocalToGlobalAPAL.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_gluing_failure_whole_chain_invariance_apal`、`paper_gluing_failure_sheafification_characterization_apal`、`paper_gluing_failure_sheaf_local_to_global_apal`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal/sec_preliminaries.tex`（`cor:whole-chain-invariance`），`/Users/chronoai/automath/papers/publication/2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal/sec_null_decomposition.tex`（`thm:sheafification-characterization`、`cor:sheaf-local-to-global`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R740（本轮落地，全流程执行）**：`paper_prime_languages_intro_binary_primes`（对应 `cor:intro-binary-primes`，Zeta；把 binary-prime symmetric-difference obstruction 的既有 `2^m / m` 尺度下界 seed 重新挂接到 introduction corollary 标签，保留“固定 DFA 与二进制素数语言的对称差不可能低于该尺度”的核心增长障碍）；`paper_prime_languages_intro_binary_precision`（对应 `cor:intro-binary-precision`，Zeta；把 fixed DFA recall/precision collapse 的既有 Fibonacci-vs-`2^m` witness 重新挂接到 introduction corollary 标签，保留“固定 DFA 不可能在无限多长度上同时维持非退化 recall 与 precision”的核心稀疏性障碍；本轮 non-trivial 目标）；`paper_conclusion_window6_representation_zeta_count_ratio`（对应 `cor:conclusion-window6-representation-zeta-count-ratio`，Conclusion；把 window-6 representation zeta count certificate 直接挂接到一维扇区占比的 theory corollary 标签，保留“全部不可约表示总数与一维表示总数给出精确比例 `2^13 / (3^4 5^9)`”的核心计数骨架）；本轮 `\leanverified` +3，覆盖章节为 Zeta / Conclusion，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Zeta/IntroBinaryPrimes.lean`、`lean4/Omega/Zeta/IntroBinaryPrecision.lean`、`lean4/Omega/Conclusion/Window6RepresentationZetaCountRatio.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_prime_languages_intro_binary_primes`、`paper_prime_languages_intro_binary_precision`、`paper_conclusion_window6_representation_zeta_count_ratio`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_prime_languages_sofic_obstructions_dynamical_zeta/sec_introduction.tex`（`cor:intro-binary-primes`、`cor:intro-binary-precision`），`/Users/chronoai/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/conclusion/subsec__conclusion-foldbin-center-zeta-fibonacci-measure-rigidity.tex`（`cor:conclusion-window6-representation-zeta-count-ratio`）；新增 tex theorem/corollary/lemma 环境数 0）
 
