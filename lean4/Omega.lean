@@ -141,6 +141,9 @@ import Omega.Frontier.Conjectures
 import Omega.Frontier.Certificates
 import Omega.LogicExpansionChain.StateTheoryMonotonicity
 import Omega.LogicExpansionChain.LiftedPointwiseSoundness
+import Omega.LogicExpansionChain.FocusedSingletonConservativity
+import Omega.RecursiveAddressing.FocusedAddressBeforeValue
+import Omega.RecursiveAddressing.InverseLimitDeterminacy
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
 import Omega.Combinatorics.GramDet
