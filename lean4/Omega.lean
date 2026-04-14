@@ -130,6 +130,7 @@ import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.EntropyLedger
 import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.SurvivorRenyiPressure
+import Omega.SPG.SurvivorSpectrumCollision
 import Omega.SPG.PressureGap
 import Omega.SPG.SurvivorPressureRecovery
 import Omega.SPG.TanakaIncrement
@@ -212,6 +213,7 @@ import Omega.Topos.IntrinsicVisibleQuotient
 import Omega.Topos.IntrinsicCharacterDetection
 import Omega.Topos.UniqueBranchBandedGerbe
 import Omega.Topos.UniqueBranchContextualityComparison
+import Omega.Topos.VisibleValueComponents
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
@@ -290,6 +292,7 @@ import Omega.Zeta.IntroAnalytic
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
 import Omega.Zeta.FinitePartSingleQTorsionReconstruction
+import Omega.Zeta.FinitePartSingleLayerSquareRootTest
 import Omega.Zeta.FinitePartCyclicLiftSpectrumIdentifiability
 import Omega.Zeta.IntroFiniteGroup
 import Omega.Zeta.ETDSDFADensityDichotomy
