@@ -103,6 +103,7 @@ import Omega.Folding.AlternatingSingleSymbolSynchronizing
 import Omega.Folding.YmSynchronized
 import Omega.Folding.UniformSynchronizingLength
 import Omega.Folding.BlockBijectionThreshold
+import Omega.Folding.BlockCountsThreshold
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -262,6 +263,7 @@ import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
 import Omega.Zeta.ClassMertensExplicit
 import Omega.Zeta.QuotientFunctoriality
 import Omega.Zeta.AbelianCyclicShadow
+import Omega.Zeta.AbelianShadowDefect
 import Omega.Zeta.ResidueClassAsymptotics
 import Omega.Zeta.ETDSFinitePartGapPositive
 import Omega.Zeta.ETDSFinitePartGapPositiveCorollary
@@ -432,6 +434,7 @@ import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
 import Omega.CircleDimension.FinitePrimeSupportMultiplicativeHalfCircleDimension
 import Omega.CircleDimension.OperationalHalfCircleDimensionNat
 import Omega.CircleDimension.OperationalHalfCircleDimensionNd
+import Omega.CircleDimension.HaarPullbackUniqueness
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
