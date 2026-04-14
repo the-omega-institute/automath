@@ -207,12 +207,15 @@ import Omega.EA.PrimeLedger
 import Omega.EA.FoldAsSection
 import Omega.EA.FoldAsSectionCorollary
 import Omega.EA.MonoidQuotientIsN
+import Omega.EA.ValInvariant
 import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
+import Omega.EA.RewriteTermination
 import Omega.EA.RewriteLocalConfluence
 import Omega.EA.RewriteConfluence
 import Omega.EA.RewriteWordProblem
+import Omega.CircleDimension.PhaseSpectrumQuotient
 import Omega.Topos.LocalSectionCriterion
 import Omega.HighDimensionalCutProject.IndicatorSumRewrite
 import Omega.Conclusion.AffineRegisterBudget
