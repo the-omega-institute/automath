@@ -177,6 +177,7 @@ import Omega.LogicExpansionChain.ConcreteSemanticFidelity
 import Omega.LogicExpansionChain.NormalizationNoFactCreation
 import Omega.LogicExpansionChain.ConcreteNormalizationNoFactCreation
 import Omega.LogicExpansionChain.LowerLayerProjection
+import Omega.LogicExpansionChain.NoPrivilegedObserver
 import Omega.LogicExpansionChain.ReadoutTransport
 import Omega.LogicExpansionChain.UpdatesPreserveForcing
 import Omega.LogicExpansionChain.DelayedDecidabilityNoNewTruth

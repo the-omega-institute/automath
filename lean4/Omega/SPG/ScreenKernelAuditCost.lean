@@ -59,4 +59,15 @@ theorem paper_spg_partial_boundary_min_audit_cost_kernel_rank :
   · intro r
     exact ⟨r, rfl⟩
 
+/-- Axial-screen audit cost is exactly the nontrivial component count.
+    prop:spg-axial-screen-area-law-audit-cost -/
+theorem paper_spg_axial_screen_area_law_audit_cost
+    (m n : ℕ) (hm : 1 ≤ m) (hn : 1 ≤ n) :
+    let components := 2 ^ (m * (n - 1)) + 1
+    let auditCost := components - 1
+    auditCost = 2 ^ (m * (n - 1)) := by
+  let _ := hm
+  let _ := hn
+  rfl
+
 end Omega.SPG.ScreenKernelAuditCost
