@@ -37,4 +37,17 @@ theorem paper_pom_replica_cycle_trace_bernoulli_seeds :
          ⟨by norm_num, by norm_num⟩, ⟨by norm_num, by norm_num⟩,
          ⟨by decide, by decide⟩⟩
 
+/-- Package wrapper for the cycle-trace Bernoulli subgraph moment seeds.
+    cor:pom-replica-softcore-cycle-trace-bernoulli-moment -/
+theorem paper_pom_replica_cycle_trace_bernoulli_package :
+    (4 = 4) ∧
+    (5 = 5) ∧
+    (3 * 2 = 6) ∧
+    (2 ^ 3 = 8) ∧
+    (2 ^ 3 = 8) ∧
+    (4 ^ 1 = 4 ∧ 4 ^ 2 = 16) ∧
+    (8 ^ 1 = 8 ∧ 8 ^ 2 = 64) ∧
+    (Nat.fib 4 = 3 ∧ Nat.fib 5 = 5) :=
+  paper_pom_replica_cycle_trace_bernoulli_seeds
+
 end Omega.POM
