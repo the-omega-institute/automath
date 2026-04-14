@@ -1,4 +1,5 @@
 import Mathlib.Tactic
+import Omega.Folding.BinFold
 import Omega.Folding.MomentRecurrence
 import Omega.Folding.Window6
 
@@ -118,6 +119,15 @@ theorem window6_collision_exceeds_linear : 212 > 3 * 64 := by omega
 /-- Paper: thm:conclusion-window6-groupoid-collision-dimension-identity -/
 theorem paper_window6_collision_prob :
     212 * 1024 = 53 * 4096 := window6_collision_prob_reduced
+
+/-- Paper-facing discrete wrapper for the window-6 capacity curve.
+    cor:conclusion-window6-continuous-capacity-piecewise-closed -/
+theorem paper_conclusion_window6_continuous_capacity_piecewise_closed :
+    8 * min 2 (2 ^ 0) + 4 * min 3 (2 ^ 0) + 9 * min 4 (2 ^ 0) = 21 ∧
+    8 * min 2 (2 ^ 1) + 4 * min 3 (2 ^ 1) + 9 * min 4 (2 ^ 1) = 42 ∧
+    (∀ B : Nat, 2 ≤ B →
+      8 * min 2 (2 ^ B) + 4 * min 3 (2 ^ B) + 9 * min 4 (2 ^ B) = 64) :=
+  Omega.conclusion_window6_capacity_bifurcation
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R136: Quadratic residues mod 21

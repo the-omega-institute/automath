@@ -57,4 +57,35 @@ theorem paper_fold_local_rewrite_identities :
    fold_rule_R3_identity,
    fold_rule_R4_identity⟩
 
+-- Phase R609: Fold rule R4 gap form and completeness seeds
+-- ══════════════════════════════════════════════════════════════
+
+/-- R4 gap form: F_{k+2} - F_{k+1} = F_{k+1} - F_{k-1} for k ≥ 2.
+    lem:fold-local-weight-rigidity-fibonacci -/
+theorem fold_rule_R4_gap (k : Nat) (hk : 2 ≤ k) :
+    Nat.fib (k + 2) - Nat.fib (k + 1) = Nat.fib (k + 1) - Nat.fib (k - 1) := by
+  have h := fold_rule_R4_identity k hk
+  have hle : Nat.fib (k - 1) ≤ Nat.fib (k + 1) := Nat.fib_mono (by omega)
+  have hle2 : Nat.fib (k + 1) ≤ Nat.fib (k + 2) := Nat.fib_le_fib_succ
+  omega
+
+/-- Fold rule completeness seeds: Fibonacci recurrence and doubling identities.
+    lem:fold-local-weight-rigidity-fibonacci -/
+theorem fold_rule_completeness_seeds :
+    (Nat.fib 2 + Nat.fib 3 = Nat.fib 4) ∧
+    (Nat.fib 3 + Nat.fib 4 = Nat.fib 5) ∧
+    (Nat.fib 4 + Nat.fib 5 = Nat.fib 6) ∧
+    (Nat.fib 5 + Nat.fib 6 = Nat.fib 7) ∧
+    (Nat.fib 6 + Nat.fib 7 = Nat.fib 8) ∧
+    (2 * Nat.fib 2 = Nat.fib 3) ∧
+    (2 * Nat.fib 3 = Nat.fib 2 + Nat.fib 4) ∧
+    (2 * Nat.fib 4 = Nat.fib 2 + Nat.fib 5) ∧
+    (2 * Nat.fib 5 = Nat.fib 3 + Nat.fib 6) ∧
+    (2 * Nat.fib 6 = Nat.fib 4 + Nat.fib 7) ∧
+    (2 * Nat.fib 7 = Nat.fib 5 + Nat.fib 8) := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide⟩
+
 end Omega

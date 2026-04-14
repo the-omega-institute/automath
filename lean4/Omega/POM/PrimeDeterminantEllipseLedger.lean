@@ -34,4 +34,20 @@ theorem paper_pom_prime_determinant_ellipse_ledger
     simp only [List.map_cons, List.prod_cons]
     rw [Matrix.det_mul, ih, det_encodingMatrix]
 
+/-- Paper-facing seeds wrapper for the prime determinant ellipse ledger.
+    cor:pom-prime-determinant-ellipse-ledger -/
+theorem paper_pom_prime_determinant_ellipse_ledger_seeds
+    (ms : List (ℤ × ℤ)) (N : ℤ) :
+    (ms.map (fun bp => encodingMatrix bp.1 N bp.2)).prod.det =
+      (ms.map (fun bp => bp.2)).prod :=
+  paper_pom_prime_determinant_ellipse_ledger ms N
+
+/-- Package clone for the prime determinant ellipse ledger.
+    cor:pom-prime-determinant-ellipse-ledger -/
+theorem paper_pom_prime_determinant_ellipse_ledger_package
+    (ms : List (ℤ × ℤ)) (N : ℤ) :
+    (ms.map (fun bp => encodingMatrix bp.1 N bp.2)).prod.det =
+      (ms.map (fun bp => bp.2)).prod :=
+  paper_pom_prime_determinant_ellipse_ledger_seeds ms N
+
 end Omega.POM.PrimeDeterminantEllipseLedger

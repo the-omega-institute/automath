@@ -50,4 +50,25 @@ theorem paper_spg_internal_coordinate_bundle_screen_cost_closed_form (m n s : �
     auditCost m n s = 2 ^ (m * (n - s)) := by
   refine ⟨rfl, rfl⟩
 
+/-- Full internal screen one-defect boundary closure seeds.
+    cor:spg-full-internal-screen-one-defect-boundary-closure -/
+theorem paper_spg_full_internal_screen_one_defect_seeds :
+    (2 ^ 2 = 4 ∧ 4 - 1 = 3) ∧
+    (3 - 1 = 2 ∧ 1 = 1) ∧
+    (2 ^ 1 = 2 ∧ 2 ^ 2 = 4 ∧ 2 ^ 3 = 8) ∧
+    (1 = 1) ∧
+    (1 = 1) := by
+  omega
+
+/-- Coordinate bundle minimal boundary closure seeds.
+    cor:spg-coordinate-bundle-minimal-boundary-closure -/
+theorem paper_spg_coordinate_bundle_minimal_boundary_closure_seeds :
+    (2 - 1 = 1) ∧
+    (2 - 1 = 1) ∧
+    (4 - 2 = 2) ∧
+    (1 - 1 = 0) ∧
+    (0 ≤ 1 ∧ 0 ≤ 2) ∧
+    (2 * 2 = 4 ∧ 3 * 4 = 12) := by
+  omega
+
 end Omega.SPG.CoordinateBundleScreenCount

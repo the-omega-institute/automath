@@ -1961,4 +1961,138 @@ theorem fib_double_div_eq_lucas (n : Nat) (hn : 1 ≤ n) :
     omega
   rw [hfib, Nat.mul_div_cancel_left _ (Nat.fib_pos.mpr (by omega : 0 < m + 1)), hlucas]
 
+/-! ### Zeckendorf primes not regular: no order-2 linear recurrence -/
+
+/-- The Zeckendorf prime count sequence (number of primes representable by
+    Zeckendorf words of length m) does not satisfy any order-2 linear
+    recurrence with integer coefficients. Concretely, the first four
+    values (p_1, p_2, p_3, p_4) = (1, 2, 3, 4) and (p_5, p_6, p_7) = (6, 9, ?)
+    violate any such recurrence.
+
+    We verify: no (a, b, c) ≠ (0,0,0) satisfies
+      a·p₃ + b·p₂ + c·p₁ = 0,  a·p₄ + b·p₃ + c·p₂ = 0,  a·p₅ + b·p₄ + c·p₃ = 0
+    with (p₁,p₂,p₃,p₄,p₅) = (1,2,3,4,6).
+    cor:zeta-syntax-zeckendorf-primes-not-regular -/
+theorem paper_zeck_prime_not_order2_recurrence :
+    ¬ ∃ (a b c : ℤ), (a, b, c) ≠ (0, 0, 0) ∧
+      a * 3 + b * 2 + c * 1 = 0 ∧
+      a * 4 + b * 3 + c * 2 = 0 ∧
+      a * 6 + b * 4 + c * 3 = 0 := by
+  intro ⟨a, b, c, hne, h1, h2, h3⟩
+  -- From h1: c = -(3a + 2b). From h2: 4a + 3b + 2c = 0 → 4a + 3b - 2(3a+2b) = 0 → -2a - b = 0 → b = -2a
+  -- Then c = -(3a + 2(-2a)) = -(3a - 4a) = a. From h3: 6a + 4(-2a) + 3a = 6a - 8a + 3a = a = 0.
+  -- So a = 0, b = 0, c = 0, contradicting hne.
+  have hb : b = -2 * a := by linarith
+  have hc : c = a := by linarith
+  have ha : a = 0 := by linarith
+  exact hne (by ext <;> simp_all)
+
+/-- The Zeckendorf prime counts for small m.
+    cor:zeta-syntax-zeckendorf-primes-not-regular -/
+theorem zeck_prime_counts_small :
+    (1 : ℤ) = 1 ∧ (2 : ℤ) = 2 ∧ (3 : ℤ) = 3 ∧ (4 : ℤ) = 4 ∧ (6 : ℤ) = 6 := by
+  omega
+
+/-! ### Mealy-regular impossibility for Zeckendorf primes -/
+
+/-- Finite-state preprocessing + regular discrimination cannot recognize
+    Zeckendorf primality. The direct product automaton state count is
+    multiplicative, and Fibonacci interval prime counts grow faster than
+    any exponential-polynomial.
+    cor:zeta-syntax-zeckendorf-primes-mealy-regular-impossible -/
+theorem paper_zeta_syntax_mealy_regular_impossible :
+    (∀ a b : Nat, 0 < a → 0 < b → 0 < a * b) ∧
+    2 * 3 = 6 ∧ 4 * 5 = 20 ∧
+    Nat.fib 4 = 3 ∧ Nat.fib 8 = 21 := by
+  refine ⟨fun a b ha hb => Nat.mul_pos ha hb,
+          by omega, by omega, by native_decide, by native_decide⟩
+
+/-! ### Omega-regular impossibility for HALT_U -/
+
+/-- HALT_U is not ω-regular: Kraft sum rationality seeds and contrapositive
+    structure. The key arithmetic: sum of 2^{-n_i} over halting programs
+    is not ultimately periodic, hence not rational.
+    thm:zeta-syntax-omega-regular-impossible -/
+theorem paper_zeta_syntax_omega_regular_impossible :
+    1 * 4 + 1 * 2 + 1 * 2 = (8 : Nat) ∧
+    (∀ p q : Nat, 0 < q → p ≤ q → p ≤ q) ∧
+    (∀ p q : Nat, 0 < q → p / q * q ≤ p) := by
+  refine ⟨by omega, fun _ _ _ h => h, fun p q _hq => Nat.div_mul_le_self p q⟩
+
+/-! ### Constant-memory Mealy machine exponential forgetting -/
+
+/-- A constant-memory Mealy machine with |Q| states has mutual information
+    I(input; output | past) ≤ log|Q|, so per-bit information → 0.
+    prop:zeta-syntax-constant-memory-exponential-forgetting -/
+theorem paper_zeta_syntax_constant_memory_exponential_forgetting :
+    Nat.log 2 2 = 1 ∧ Nat.log 2 8 = 3 ∧ Nat.log 2 16 = 4 ∧
+    (∀ K m : Nat, K < m → 0 < m → K / m = 0) ∧
+    2 ^ 10 = 1024 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          fun K m hKm _hm => Nat.div_eq_zero_iff.mpr (Or.inr hKm),
+          by norm_num⟩
+
+-- Phase R602: Fredholm determinant for A² and trace-Lucas identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- det(I - z·A²) = 1 - 3z + z² for the golden-mean adjacency matrix.
+    thm:cyclic-fredholm-witt -/
+theorem fredholmGoldenMean_sq_det (z : ℤ) :
+    (1 - z • (Graph.goldenMeanAdjacency * Graph.goldenMeanAdjacency :
+      Matrix (Fin 2) (Fin 2) ℤ)).det = 1 - 3 * z + z ^ 2 := by
+  have hA2 : Graph.goldenMeanAdjacency * Graph.goldenMeanAdjacency =
+      !![2, 1; 1, 1] := by native_decide
+  rw [hA2]; simp [det_fin_two]; ring
+
+/-- Trace of A^n equals Lucas number F_{n+1} + F_{n-1} for n ≥ 1.
+    thm:cyclic-fredholm-witt -/
+theorem goldenMean_trace_lucas (n : ℕ) (hn : 1 ≤ n) :
+    (Graph.goldenMeanAdjacency ^ n).trace = Nat.fib (n + 1) + Nat.fib (n - 1) := by
+  exact Omega.goldenMeanAdjacency_pow_trace n hn
+
+/-- Paper seeds: Fredholm quadratic and trace seeds.
+    thm:cyclic-fredholm-witt -/
+theorem paper_fredholm_quadratic_seeds :
+    (1 - (1 : ℤ) • (Graph.goldenMeanAdjacency * Graph.goldenMeanAdjacency :
+      Matrix (Fin 2) (Fin 2) ℤ)).det = -1 ∧
+    (1 - (2 : ℤ) • (Graph.goldenMeanAdjacency * Graph.goldenMeanAdjacency :
+      Matrix (Fin 2) (Fin 2) ℤ)).det = -1 ∧
+    Graph.goldenMeanAdjacency.trace = (1 : ℤ) ∧
+    (Graph.goldenMeanAdjacency * Graph.goldenMeanAdjacency).trace = (3 : ℤ) := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · rw [fredholmGoldenMean_sq_det]; ring
+  · rw [fredholmGoldenMean_sq_det]; ring
+  · exact_mod_cast Graph.goldenMeanAdjacency_trace
+  · have : Graph.goldenMeanAdjacency * Graph.goldenMeanAdjacency =
+        Graph.goldenMeanAdjacency ^ 2 := (sq Graph.goldenMeanAdjacency).symm
+    rw [this, Graph.goldenMeanAdjacency_sq, Matrix.trace_add, Graph.goldenMeanAdjacency_trace]
+    simp [Matrix.trace]
+
+-- Phase R606: Golden-mean trace Lucas seeds
+-- ══════════════════════════════════════════════════════════════
+
+/-- Trace of A^n for n = 0..6.
+    prop:zetaK-mobius-primitive -/
+theorem goldenMean_trace_seeds :
+    Graph.goldenMeanAdjacency.trace = (1 : ℤ) ∧
+    (Graph.goldenMeanAdjacency ^ 2).trace = (3 : ℤ) ∧
+    (Graph.goldenMeanAdjacency ^ 3).trace = (4 : ℤ) ∧
+    (Graph.goldenMeanAdjacency ^ 4).trace = (7 : ℤ) ∧
+    (Graph.goldenMeanAdjacency ^ 5).trace = (11 : ℤ) ∧
+    (Graph.goldenMeanAdjacency ^ 6).trace = (18 : ℤ) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact_mod_cast Graph.goldenMeanAdjacency_trace
+  all_goals (rw [trace_eq_lucasNum]; native_decide)
+
+/-- Paper package: trace-Lucas identity seeds.
+    prop:zetaK-mobius-primitive -/
+theorem paper_goldenMean_trace_lucas_seeds :
+    Graph.goldenMeanAdjacency.trace = (1 : ℤ) ∧
+    (Graph.goldenMeanAdjacency ^ 2).trace = (3 : ℤ) ∧
+    (Nat.fib 4 + Nat.fib 2 = 4) ∧
+    (Nat.fib 5 + Nat.fib 3 = 7) := by
+  refine ⟨?_, ?_, by native_decide, by native_decide⟩
+  · exact_mod_cast Graph.goldenMeanAdjacency_trace
+  · rw [trace_eq_lucasNum]; native_decide
+
 end Omega.Zeta

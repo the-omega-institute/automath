@@ -18,16 +18,46 @@ def cBinFiberMult (m : Nat) (x : X m) : Nat :=
 def cBinFiberHist (m k : Nat) : Nat :=
   (@Finset.univ (X m) (fintypeX m)).filter (fun x => cBinFiberMult m x = k) |>.card
 
+private theorem cached_cBinFiberHist_6_values :
+    cBinFiberHist 6 0 = 0 ∧
+    cBinFiberHist 6 1 = 0 ∧
+    cBinFiberHist 6 2 = 8 ∧
+    cBinFiberHist 6 3 = 4 ∧
+    cBinFiberHist 6 4 = 9 ∧
+    cBinFiberHist 6 5 = 0 := by
+  native_decide
+
+private theorem cached_cBinFiberHist_7_values :
+    cBinFiberHist 7 0 = 0 ∧
+    cBinFiberHist 7 1 = 0 ∧
+    cBinFiberHist 7 2 = 0 ∧
+    cBinFiberHist 7 3 = 13 ∧
+    cBinFiberHist 7 4 = 16 ∧
+    cBinFiberHist 7 5 = 5 := by
+  native_decide
+
+private theorem cached_cBinFiberHist_8_values :
+    cBinFiberHist 8 3 = 21 ∧
+    cBinFiberHist 8 5 = 11 ∧
+    cBinFiberHist 8 6 = 23 := by
+  native_decide
+
 /-! ### m = 6 BinFold histogram -/
 
-theorem cBinFiberHist_6_0 : cBinFiberHist 6 0 = 0 := by native_decide
-theorem cBinFiberHist_6_1 : cBinFiberHist 6 1 = 0 := by native_decide
+theorem cBinFiberHist_6_0 : cBinFiberHist 6 0 = 0 :=
+  cached_cBinFiberHist_6_values.1
+
+theorem cBinFiberHist_6_1 : cBinFiberHist 6 1 = 0 :=
+  cached_cBinFiberHist_6_values.2.1
 /-- thm:terminal-foldbin6-hist-2 -/
-theorem cBinFiberHist_6_2 : cBinFiberHist 6 2 = 8 := by native_decide
+theorem cBinFiberHist_6_2 : cBinFiberHist 6 2 = 8 :=
+  cached_cBinFiberHist_6_values.2.2.1
 /-- thm:terminal-foldbin6-hist-3 -/
-theorem cBinFiberHist_6_3 : cBinFiberHist 6 3 = 4 := by native_decide
+theorem cBinFiberHist_6_3 : cBinFiberHist 6 3 = 4 :=
+  cached_cBinFiberHist_6_values.2.2.2.1
 /-- thm:terminal-foldbin6-hist-4 -/
-theorem cBinFiberHist_6_4 : cBinFiberHist 6 4 = 9 := by native_decide
+theorem cBinFiberHist_6_4 : cBinFiberHist 6 4 = 9 :=
+  cached_cBinFiberHist_6_values.2.2.2.2.1
 
 /-- cor:terminal-foldbin6-certificate -/
 theorem binFold6_histogram_certificate : 8 * 2 + 4 * 3 + 9 * 4 = 64 := by omega
@@ -46,17 +76,23 @@ theorem binFold6_sum_check :
 /-! ### m = 7 BinFold histogram -/
 
 /-- thm:terminal-foldbin-hist -/
-theorem cBinFiberHist_7_0 : cBinFiberHist 7 0 = 0 := by native_decide
+theorem cBinFiberHist_7_0 : cBinFiberHist 7 0 = 0 :=
+  cached_cBinFiberHist_7_values.1
 /-- thm:terminal-foldbin-hist -/
-theorem cBinFiberHist_7_1 : cBinFiberHist 7 1 = 0 := by native_decide
+theorem cBinFiberHist_7_1 : cBinFiberHist 7 1 = 0 :=
+  cached_cBinFiberHist_7_values.2.1
 /-- thm:terminal-foldbin-hist -/
-theorem cBinFiberHist_7_2 : cBinFiberHist 7 2 = 0 := by native_decide
+theorem cBinFiberHist_7_2 : cBinFiberHist 7 2 = 0 :=
+  cached_cBinFiberHist_7_values.2.2.1
 /-- thm:terminal-foldbin-hist -/
-theorem cBinFiberHist_7_3 : cBinFiberHist 7 3 = 13 := by native_decide
+theorem cBinFiberHist_7_3 : cBinFiberHist 7 3 = 13 :=
+  cached_cBinFiberHist_7_values.2.2.2.1
 /-- thm:terminal-foldbin-hist -/
-theorem cBinFiberHist_7_4 : cBinFiberHist 7 4 = 16 := by native_decide
+theorem cBinFiberHist_7_4 : cBinFiberHist 7 4 = 16 :=
+  cached_cBinFiberHist_7_values.2.2.2.2.1
 /-- thm:terminal-foldbin-hist -/
-theorem cBinFiberHist_7_5 : cBinFiberHist 7 5 = 5 := by native_decide
+theorem cBinFiberHist_7_5 : cBinFiberHist 7 5 = 5 :=
+  cached_cBinFiberHist_7_values.2.2.2.2.2
 
 /-- thm:terminal-foldbin-hist -/
 theorem binFold7_histogram_certificate : 13 * 3 + 16 * 4 + 5 * 5 = 128 := by omega
@@ -83,13 +119,16 @@ theorem window7_collision_dimension :
 
 set_option maxHeartbeats 800000 in
 /-- thm:terminal-foldbin-hist -/
-theorem cBinFiberHist_8_3 : cBinFiberHist 8 3 = 21 := by native_decide
+theorem cBinFiberHist_8_3 : cBinFiberHist 8 3 = 21 :=
+  cached_cBinFiberHist_8_values.1
 set_option maxHeartbeats 800000 in
 /-- thm:terminal-foldbin-hist -/
-theorem cBinFiberHist_8_5 : cBinFiberHist 8 5 = 11 := by native_decide
+theorem cBinFiberHist_8_5 : cBinFiberHist 8 5 = 11 :=
+  cached_cBinFiberHist_8_values.2.1
 set_option maxHeartbeats 800000 in
 /-- thm:terminal-foldbin-hist -/
-theorem cBinFiberHist_8_6 : cBinFiberHist 8 6 = 23 := by native_decide
+theorem cBinFiberHist_8_6 : cBinFiberHist 8 6 = 23 :=
+  cached_cBinFiberHist_8_values.2.2
 
 /-- thm:terminal-foldbin-hist -/
 theorem window8_histogram_count_sum :
@@ -148,13 +187,22 @@ def cBinFiberMinHamming (m : Nat) (x : X m) : Nat :=
 def cBinFiberMinHammingHist (m d : Nat) : Nat :=
   (@Finset.univ (X m) (fintypeX m)).filter (fun x => cBinFiberMinHamming m x = d) |>.card
 
+private theorem cached_cBinFiberMinHammingHist_6_values :
+    cBinFiberMinHammingHist 6 2 = 13 ∧
+    cBinFiberMinHammingHist 6 3 = 6 ∧
+    cBinFiberMinHammingHist 6 5 = 2 := by
+  native_decide
+
 /-- At m = 6, intra-fiber min Hamming distances take values 2, 3, 5.
     thm:terminal-foldbin6-fiber-hamming-three-valued-2 -/
-theorem binFiber6_minHamming_hist_2 : cBinFiberMinHammingHist 6 2 = 13 := by native_decide
+theorem binFiber6_minHamming_hist_2 : cBinFiberMinHammingHist 6 2 = 13 :=
+  cached_cBinFiberMinHammingHist_6_values.1
 /-- thm:terminal-foldbin6-fiber-hamming-three-valued-3 -/
-theorem binFiber6_minHamming_hist_3 : cBinFiberMinHammingHist 6 3 = 6 := by native_decide
+theorem binFiber6_minHamming_hist_3 : cBinFiberMinHammingHist 6 3 = 6 :=
+  cached_cBinFiberMinHammingHist_6_values.2.1
 /-- thm:terminal-foldbin6-fiber-hamming-three-valued-5 -/
-theorem binFiber6_minHamming_hist_5 : cBinFiberMinHammingHist 6 5 = 2 := by native_decide
+theorem binFiber6_minHamming_hist_5 : cBinFiberMinHammingHist 6 5 = 2 :=
+  cached_cBinFiberMinHammingHist_6_values.2.2
 
 theorem binFiber6_minHamming_total :
     cBinFiberMinHammingHist 6 2 + cBinFiberMinHammingHist 6 3 +
@@ -201,7 +249,8 @@ theorem geoStabilizer_trivial :
 theorem geoStabilizer_order_one :
     ((Finset.range 64).filter (fun δ =>
       ∀ N : Fin 64, cBinFold 6 N.val = cBinFold 6 (N.val ^^^ δ))).card = 1 := by
-  native_decide
+  rw [geoStabilizer_trivial]
+  norm_num
 
 /-! ### Type adjacency and Markov kernel
 
@@ -251,13 +300,45 @@ def cBinFiberMax (m : Nat) : Nat :=
   (@Finset.univ (X m) (fintypeX m)).sup' (@Finset.univ_nonempty _ (fintypeX m) (X.instNonempty m))
     (fun x => cBinFiberMult m x)
 
+private theorem cached_cBinFiberExtrema_six :
+    cBinFiberMin 6 = 2 ∧ cBinFiberMax 6 = 4 := by
+  native_decide
+
+private theorem cached_cBinFiberExtrema_seven :
+    cBinFiberMin 7 = 3 ∧ cBinFiberMax 7 = 5 := by
+  native_decide
+
+private theorem cached_cBinFiberExtrema_eight :
+    cBinFiberMin 8 = 3 ∧ cBinFiberMax 8 = 6 := by
+  native_decide
+
 /-- Minimum BinFold multiplicity at m = 6 is 2.
     thm:conclusion-window6-local-index-global-compression-separation -/
-theorem cBinFiberMin_six : cBinFiberMin 6 = 2 := by native_decide
+theorem cBinFiberMin_six : cBinFiberMin 6 = 2 :=
+  cached_cBinFiberExtrema_six.1
 
 /-- Maximum BinFold multiplicity at m = 6 is 4.
     thm:conclusion-window6-bin-fiber-max-six -/
-theorem cBinFiberMax_six : cBinFiberMax 6 = 4 := by native_decide
+theorem cBinFiberMax_six : cBinFiberMax 6 = 4 :=
+  cached_cBinFiberExtrema_six.2
+
+/-- Window-6 BinFold fibers have size at most 4, obstructing an `SU(5)` factor.
+    thm:conclusion-window6-su5-obstruction -/
+theorem conclusion_window6_su5_obstruction (x : X 6) :
+    cBinFiberMult 6 x ≤ 4 := by
+  calc
+    cBinFiberMult 6 x ≤ cBinFiberMax 6 := by
+      exact Finset.le_sup' (s := (@Finset.univ (X 6) (fintypeX 6)))
+        (f := fun y => cBinFiberMult 6 y) (by
+          show x ∈ (@Finset.univ (X 6) (fintypeX 6))
+          simp)
+    _ = 4 := cBinFiberMax_six
+
+/-- Paper packaging of the window-6 `SU(5)` obstruction bound.
+    thm:conclusion-window6-su5-obstruction -/
+theorem paper_conclusion_window6_su5_obstruction_package (x : X 6) :
+    cBinFiberMult 6 x ≤ 4 ∧ cBinFiberMax 6 = 4 := by
+  exact ⟨conclusion_window6_su5_obstruction x, cBinFiberMax_six⟩
 
 /-- Local index < global compression: min_mult × |X_6| < 2^6.
     thm:conclusion-window6-local-index-lt-global-compression -/
@@ -286,7 +367,8 @@ theorem multiplicity_spread_six : cBinFiberMax 6 - cBinFiberMin 6 = 2 := by
 
 /-- Histogram entry: no stable words with BinFold multiplicity 5 at m=6.
     cor:conclusion-window6-three-rigidity-scales -/
-theorem cBinFiberHist_6_5 : cBinFiberHist 6 5 = 0 := by native_decide
+theorem cBinFiberHist_6_5 : cBinFiberHist 6 5 = 0 :=
+  cached_cBinFiberHist_6_values.2.2.2.2.2
 
 /-- Three rigidity scales at m=6: max fiber mult < |X_6| < 2^6.
     cor:conclusion-window6-three-rigidity-scales -/
@@ -346,11 +428,13 @@ theorem index_compression_gap_six :
 
 /-- Maximum BinFold multiplicity at m=7 is 5.
     cor:conclusion-window6-three-rigidity-scales -/
-theorem cBinFiberMax_seven : cBinFiberMax 7 = 5 := by native_decide
+theorem cBinFiberMax_seven : cBinFiberMax 7 = 5 :=
+  cached_cBinFiberExtrema_seven.2
 
 /-- Minimum BinFold multiplicity at m=7 is 3.
     cor:conclusion-window6-three-rigidity-scales -/
-theorem cBinFiberMin_seven : cBinFiberMin 7 = 3 := by native_decide
+theorem cBinFiberMin_seven : cBinFiberMin 7 = 3 :=
+  cached_cBinFiberExtrema_seven.1
 
 /-- Three rigidity scales at m=7: max fiber mult < |X_7| < 2^7.
     cor:conclusion-window6-three-rigidity-scales -/
@@ -384,12 +468,14 @@ theorem index_compression_gap_seven :
 set_option maxHeartbeats 1600000 in
 /-- Maximum binary fiber multiplicity at m=8.
     cor:conclusion-window8-max-fiber -/
-theorem cBinFiberMax_eight : cBinFiberMax 8 = 6 := by native_decide
+theorem cBinFiberMax_eight : cBinFiberMax 8 = 6 :=
+  cached_cBinFiberExtrema_eight.2
 
 set_option maxHeartbeats 1600000 in
 /-- Minimum binary fiber multiplicity at m=8.
     cor:conclusion-window8-min-fiber -/
-theorem cBinFiberMin_eight : cBinFiberMin 8 = 3 := by native_decide
+theorem cBinFiberMin_eight : cBinFiberMin 8 = 3 :=
+  cached_cBinFiberExtrema_eight.1
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R43: BinFold m=8 index-compression gap
@@ -540,7 +626,7 @@ theorem binFold_boundary_count_m6 :
 /-- Number of minimal-multiplicity fibers (mult = 3) at m=7 is exactly 13.
     prop:window6-foldbin-gauge-center-and-charge-separation -/
 theorem binFold_boundary_count_m7 :
-    cBinFiberHist 7 3 = 13 := by native_decide
+    cBinFiberHist 7 3 = 13 := cBinFiberHist_7_3
 
 /-- The minimum nonzero bin-fold multiplicity is 2 at m=6 (hist at 0 and 1 are both zero).
     prop:window6-foldbin-gauge-center-and-charge-separation -/

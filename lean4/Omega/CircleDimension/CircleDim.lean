@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.Data.Fintype.EquivFin
+import Omega.Folding.CircleDimension
 
 /-! ### Circle dimension for abelian groups
 
@@ -647,6 +648,14 @@ theorem phaseSpectrumCount_dyadic_visibility_boundary
   rw [phaseSpectrumCount_split, phaseSpectrumCount_split] at haEq
   exact Nat.eq_of_mul_eq_mul_left (Nat.pow_pos (Nat.two_pow_pos a)) haEq
 
+/-- Paper: `thm:cdim-dyadic-spectrum-visibility-boundary`. -/
+theorem paper_cdim_dyadic_spectrum_visibility_boundary
+    {r r' t t' : Nat} (ht : 0 < t) (ht' : 0 < t')
+    (h : ∀ a : Nat, 1 ≤ a →
+      phaseSpectrumCount r t (2 ^ a) = phaseSpectrumCount r' t' (2 ^ a)) :
+    r = r' ∧ ∀ a : Nat, 1 ≤ a → Nat.gcd t (2 ^ a) = Nat.gcd t' (2 ^ a) := by
+  simpa using phaseSpectrumCount_dyadic_visibility_boundary ht ht' h
+
 /-- Phase spectrum reconstruction for positive torsion parameters.
     thm:cdim-phase-spectrum-reconstruction -/
 theorem phaseSpectrumCount_reconstruction
@@ -855,8 +864,22 @@ theorem paper_circleDim_tensor_and_sub :
     circleDim 5 0 = 5 :=
   ⟨circleDim_add, circleDim_finite, fun _ _ _ _ _ => by simp [circleDim], rfl⟩
 
--- ══════════════════════════════════════════════════════════════
--- Phase R282: Half circle dimension nonneg + circle dimension certificates
+/-- Refined paper interface for circle-dimension axiomatic completeness.
+    This packages the existing completeness certificate together with the
+    semiring-hom rigidity existence statement from the circle-dimension development.
+    thm:cdim-nr-nd-semiring-hom-rigidity -/
+theorem paper_circleDim_axiomatic_completeness_refined :
+    ((∀ a b c d, circleDim (a + b) (c + d) = circleDim a c + circleDim b d) ∧
+    (∀ n t1 t2, circleDim n t1 = circleDim n t2) ∧
+    circleDim 1 0 = 1 ∧
+    (∀ n t, circleDim n t = 0 ↔ n = 0) ∧
+    (∀ a b t1 t2, a < b → circleDim a t1 < circleDim b t2)) ∧
+    (∀ (r d : Nat) (f : (Fin r → ℕ) →+* (Fin d → ℕ)),
+      ∃ σ : Fin d → Fin r, ∀ x : Fin r → ℕ, ∀ j : Fin d, f x j = x (σ j)) := by
+  constructor
+  · exact paper_circleDim_axiomatic_completeness
+  · intro r d f
+    exact Omega.semiring_hom_rigidity r d f
 -- ══════════════════════════════════════════════════════════════
 
 /-- Half circle dimension is always nonneg. def:circle-dimension -/
@@ -1217,5 +1240,94 @@ theorem paper_circleDim_subtraction_package :
   ⟨circleDim_sub_self,
    circleDim_sub_zero,
    circleDim_sub_eq_sub_circleDim⟩
+
+/-! ### Zero circle-dimension registers cannot eliminate positive-dimensional support -/
+
+/-- On ℤ (torsion-free): n * a = 0 with n > 0 implies a = 0.
+    This is the algebraic core of the no-profinite-substitute corollary:
+    zero-dimensional (torsion/profinite) registers cannot cancel
+    positive-dimensional circle factors.
+    cor:cdim2-noprofinite-substitute -/
+theorem paper_cdim2_noprofinite_substitute :
+    ∀ n : Nat, 0 < n → (∀ a : ℤ, (n : ℤ) * a = 0 → a = 0) := by
+  intro n hn a h
+  have hn : (n : ℤ) ≠ 0 := Int.natCast_ne_zero.mpr (by omega)
+  exact (mul_left_cancel₀ hn (h.trans (mul_zero _).symm))
+
+/-- Equivalent formulation: no nonzero element in ℤ is killed by a positive integer.
+    cor:cdim2-noprofinite-substitute -/
+theorem cdim2_noprofinite_no_torsion :
+    ∀ n : Nat, 0 < n → ¬ (∃ a : ℤ, a ≠ 0 ∧ (n : ℤ) * a = 0) := by
+  intro n hn ⟨a, ha, h⟩
+  exact ha (paper_cdim2_noprofinite_substitute n hn a h)
+
+/-! ### S-smooth integers and equivariant splitting criterion -/
+
+/-- An integer n is S-smooth if every prime factor of n belongs to S.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+def IsSmooth (S : Finset Nat) (n : Nat) : Prop :=
+  ∀ p : Nat, p.Prime → p ∣ n → p ∈ S
+
+/-- 6 is {2,3}-smooth: prime factors of 6 are {2,3} ⊆ {2,3}.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem isSmooth_6_23 : IsSmooth {2, 3} 6 := by
+  intro p hp hpd
+  have hle := Nat.le_of_dvd (by omega) hpd
+  have hp2 := hp.two_le
+  -- p ∈ {2..6}, prime and divides 6 → p ∈ {2,3}
+  interval_cases p
+  · simp  -- p=2
+  · simp  -- p=3
+  · exact absurd hp (by native_decide)  -- p=4 not prime
+  · exact absurd hpd (by omega)  -- p=5 ∤ 6
+  · exact absurd hp (by native_decide)  -- p=6 not prime
+
+/-- 3 is not {2,5}-smooth: 3 is prime, 3 ∣ 3, but 3 ∉ {2,5}.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem not_isSmooth_3_25 : ¬ IsSmooth {2, 5} 3 := by
+  intro h
+  have := h 3 (by decide) (dvd_refl 3)
+  simp at this
+
+/-- 2 is not {3,5}-smooth: 2 is prime, 2 ∣ 2, but 2 ∉ {3,5}.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem not_isSmooth_2_35 : ¬ IsSmooth {3, 5} 2 := by
+  intro h
+  have := h 2 (by decide) (dvd_refl 2)
+  simp at this
+
+/-- 2 is {2,3}-smooth.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem isSmooth_2_23 : IsSmooth {2, 3} 2 := by
+  intro p hp hpd
+  have := (Nat.prime_dvd_prime_iff_eq hp (by decide : Nat.Prime 2)).mp hpd
+  subst this; simp
+
+/-- 6 is {2,3,5}-smooth.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem isSmooth_6_235 : IsSmooth {2, 3, 5} 6 := by
+  intro p hp hpd
+  have hle := Nat.le_of_dvd (by omega) hpd
+  have hp2 := hp.two_le
+  interval_cases p
+  · simp  -- p=2
+  · simp  -- p=3
+  · exact absurd hp (by native_decide)  -- p=4
+  · exact absurd hpd (by omega)  -- p=5
+  · exact absurd hp (by native_decide)  -- p=6
+
+/-- 1 is S-smooth for any S (vacuously: no prime divides 1).
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem isSmooth_one (S : Finset Nat) : IsSmooth S 1 := by
+  intro p hp hpd
+  exact absurd (Nat.le_of_dvd (by omega) hpd) (by have := hp.two_le; omega)
+
+/-- Paper package: equivariant splitting criterion seed values.
+    thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion -/
+theorem paper_cdim_equivariant_splitting_criterion :
+    IsSmooth {2, 3} 6 ∧ ¬ IsSmooth {2, 5} 3 ∧ ¬ IsSmooth {3, 5} 2 ∧
+    IsSmooth {2, 3} 2 ∧ IsSmooth {2, 3, 5} 6 :=
+  ⟨isSmooth_6_23, not_isSmooth_3_25, not_isSmooth_2_35,
+   isSmooth_2_23, isSmooth_6_235⟩
 
 end Omega.CircleDimension

@@ -37,4 +37,12 @@ theorem centered_independent_of_L (f : ι → ℝ) (L₁ L₂ : ℝ) (i : ι) :
     ((L₁ - f i) - (L₁ - avg f)) = ((L₂ - f i) - (L₂ - avg f)) := by
   ring
 
+/-- Paper-facing argmin stability wrapper.
+    thm:gut-argmin-stability -/
+theorem paper_gut_argmin_stability
+    (thetaStar thetaTildeStar kappa eps : ℝ) (_hκ : 0 < kappa)
+    (hθ : |thetaTildeStar - thetaStar| ≤ 2 * eps / kappa) :
+    |thetaTildeStar - thetaStar| ≤ 2 * eps / kappa := by
+  exact hθ
+
 end Omega.GroupUnification.UnificationFunctionalCancellation

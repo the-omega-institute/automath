@@ -40,6 +40,13 @@ theorem paper_pom_fiber_index_cgf_q4_specialized (m : Nat) :
 theorem paper_pom_fiber_index_cgf_general (q m : Nat) :
     ∑ x : X m, (X.fiberMultiplicity x) ^ q = momentSum q m := rfl
 
+/-- Paper-facing expectation identity package for the fiber-index CGF.
+    prop:pom-fiber-index-cgf -/
+theorem paper_pom_fiber_index_cgf_expectation_identity (q m : Nat) :
+    (∑ x : X m, X.fiberMultiplicity x ^ q) = momentSum q m ∧
+      (∑ x : X m, X.fiberMultiplicity x) = 2 ^ m := by
+  refine ⟨paper_pom_fiber_index_cgf_general q m, X.fiberMultiplicity_total m⟩
+
 /-- Complete POM fiber-index CGF package.
     prop:pom-fiber-index-cgf -/
 theorem paper_pom_fiber_index_cgf_package :

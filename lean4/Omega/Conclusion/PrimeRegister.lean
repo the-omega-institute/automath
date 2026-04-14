@@ -1034,4 +1034,143 @@ theorem godelEncoding_ne_one_of_pos (primes : ℕ → ℕ) (offset : ℕ) (code 
     (fun ⟨j, hj⟩ => by simp) ⟨i.val, by rw [List.length_replicate]; exact i.isLt⟩
     (by simp; exact hi)
 
+-- Phase R600: Gödel shift monoid associativity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Gödel encoding from start=0 splits over concatenation with length-based shift.
+    prop:conclusion-godel-prefix-prime-monoid -/
+theorem godelEncodingFrom_shift_append (primes : ℕ → ℕ) (offset : ℕ)
+    (u v : List ℕ) :
+    godelEncodingFrom primes offset 0 (u ++ v) =
+      godelEncodingFrom primes offset 0 u *
+        godelEncodingFrom primes offset u.length v := by
+  rw [godelEncodingFrom_append]
+  simp
+
+/-- Gödel encoding respects list append associativity.
+    prop:conclusion-godel-prefix-prime-monoid -/
+theorem godelEncoding_append_assoc (primes : ℕ → ℕ) (offset : ℕ)
+    (u v w : List ℕ) :
+    godelEncoding primes offset (u ++ v ++ w) =
+      godelEncoding primes offset ((u ++ v) ++ w) := by
+  rw [List.append_assoc]
+
+-- Phase R602: Gödel encoding structural extensions
+-- ══════════════════════════════════════════════════════════════
+
+/-- Replicate encoding equals product of prime powers (alias for godelEncoding_replicate).
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_replicate_eq_prod (primes : ℕ → ℕ) (offset a n : ℕ) :
+    godelEncoding primes offset (List.replicate n a) =
+      ∏ i ∈ Finset.range n, primes (offset + i) ^ a :=
+  godelEncoding_replicate primes offset a n
+
+/-- godelEncodingFrom equality when prime access patterns agree.
+    thm:conclusion-godel-semidirect-law -/
+private theorem godelEncodingFrom_eq_of_access
+    (f g : ℕ → ℕ) (a sa b sb : ℕ) (code : List ℕ)
+    (h : ∀ i, i < code.length → f (a + sa + i) = g (b + sb + i)) :
+    godelEncodingFrom f a sa code = godelEncodingFrom g b sb code := by
+  induction code generalizing sa sb with
+  | nil => simp
+  | cons x rest ih =>
+    simp only [godelEncodingFrom_cons, List.length_cons] at h ⊢
+    have h0 := h 0 (by omega)
+    simp only [Nat.add_zero] at h0
+    rw [h0]; congr 1
+    exact ih (sa + 1) (sb + 1) (fun i hi => by
+      rw [show a + (sa + 1) + i = a + sa + (i + 1) from by omega,
+          show b + (sb + 1) + i = b + sb + (i + 1) from by omega]
+      exact h (i + 1) (by omega))
+
+/-- Reverse encoding equals encoding with reversed prime function.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_reverse_eq (primes : ℕ → ℕ) (offset : ℕ) (code : List ℕ) :
+    godelEncoding primes offset code.reverse =
+      godelEncoding (fun i => primes (offset + code.length - 1 - i)) 0 code := by
+  induction code generalizing offset with
+  | nil => simp [godelEncoding_nil]
+  | cons a rest ih =>
+    rw [List.reverse_cons, godelEncoding_snoc, ih, List.length_cons,
+        List.length_reverse]
+    simp only [godelEncoding, godelEncodingFrom_cons, Nat.zero_add]
+    rw [mul_comm, show offset + (rest.length + 1) - 1 - 0 = offset + rest.length from by omega]
+    congr 1
+    exact godelEncodingFrom_eq_of_access _ _ 0 0 0 1 rest (fun i hi => by
+      simp only [Nat.zero_add]
+      congr 1
+      omega)
+
+/-- Paper seeds: Gödel encoding structural identities.
+    thm:conclusion-godel-semidirect-law -/
+theorem paper_godel_structural_extended :
+    (∀ (p : ℕ → ℕ), godelEncoding p 0 [1, 2, 3] =
+      godelEncoding p 0 [1] * godelEncoding p 1 [2, 3]) ∧
+    ([1].length + [2].length = [1, 2].length) ∧
+    (∀ (p : ℕ → ℕ) (c : List ℕ), godelEncoding p 0 [] * godelEncoding p 0 c =
+      godelEncoding p 0 c) := by
+  refine ⟨fun p => ?_, by decide, fun p c => ?_⟩
+  · have h := godelEncoding_append p 0 [1] [2, 3]
+    simp only [List.length_cons, List.length_nil, Nat.zero_add] at h
+    exact h
+  · rw [godelEncoding_nil, one_mul]
+
+-- Phase R604: Gödel encoding cons decomposition
+-- ══════════════════════════════════════════════════════════════
+
+/-- Double cons decomposition: G(a :: b :: rest) = p₀^a · p₁^b · G_{+2}(rest).
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_double_cons (primes : ℕ → ℕ) (offset a b : ℕ) (rest : List ℕ) :
+    godelEncoding primes offset (a :: b :: rest) =
+      primes offset ^ a * primes (offset + 1) ^ b *
+        godelEncoding primes (offset + 2) rest := by
+  rw [godelEncoding_cons, godelEncoding_cons, Nat.mul_assoc]
+
+/-- Coprimality of split encodings when primes are pairwise coprime.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_append_coprime (primes : ℕ → ℕ) (offset : ℕ)
+    (u v : List ℕ)
+    (hcop : ∀ i j, i ≠ j → Nat.Coprime (primes i) (primes j))
+    (hp : ∀ i, 0 < primes i) :
+    Nat.Coprime (godelEncoding primes offset u)
+      (godelEncoding primes (offset + u.length) v) :=
+  godelEncoding_coprime_of_disjoint primes offset u v hcop hp
+
+/-- Paper seeds: cons decomposition for 2 and 3 elements.
+    thm:conclusion-godel-semidirect-law -/
+theorem paper_godel_cons_decomposition_seeds :
+    (∀ (p : ℕ → ℕ) (k a b : ℕ),
+      godelEncoding p k [a, b] = p k ^ a * p (k + 1) ^ b) ∧
+    (∀ (p : ℕ → ℕ) (k a b c : ℕ),
+      godelEncoding p k [a, b, c] = p k ^ a * p (k + 1) ^ b * p (k + 2) ^ c) := by
+  exact ⟨fun p k a b => by rw [godelEncoding_two],
+         fun p k a b c => by rw [godelEncoding_three, Nat.mul_assoc]⟩
+
+-- Phase R606: Gödel encoding divisibility chain
+-- ══════════════════════════════════════════════════════════════
+
+/-- Power monotonicity for p ≥ 1.
+    thm:conclusion-godel-semidirect-law -/
+theorem prime_pow_mono_of_le (p a b : ℕ) (hp : 1 ≤ p) (hab : a ≤ b) :
+    p ^ a ≤ p ^ b := Nat.pow_le_pow_right hp hab
+
+/-- Gödel encoding divisibility chain: prefix ∣ extension.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_dvd_chain (primes : ℕ → ℕ) (offset : ℕ)
+    (u v w : List ℕ) :
+    godelEncoding primes offset u ∣ godelEncoding primes offset (u ++ v) ∧
+    godelEncoding primes offset (u ++ v) ∣ godelEncoding primes offset (u ++ v ++ w) :=
+  ⟨godelEncoding_prefix_dvd primes offset u v,
+   List.append_assoc u v w ▸ godelEncoding_prefix_dvd primes offset (u ++ v) w⟩
+
+/-- Paper seeds: divisibility chain and power monotonicity.
+    thm:conclusion-godel-semidirect-law -/
+theorem paper_godel_dvd_chain_seeds :
+    (∀ (p : ℕ → ℕ), godelEncoding p 0 [1] ∣ godelEncoding p 0 [1, 2]) ∧
+    (∀ (p : ℕ → ℕ), godelEncoding p 0 [1, 2] ∣ godelEncoding p 0 [1, 2, 3]) ∧
+    (2 ^ 3 ≤ 2 ^ 5) := by
+  refine ⟨fun p => ?_, fun p => ?_, by norm_num⟩
+  · exact godelEncoding_prefix_dvd p 0 [1] [2]
+  · exact godelEncoding_prefix_dvd p 0 [1, 2] [3]
+
 end Omega.Conclusion

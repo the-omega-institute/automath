@@ -388,4 +388,54 @@ theorem paper_folding_collision_kernel_combined :
         * collisionKernel4.trace = 0 :=
   ⟨collisionKernel4_trace_cube, collisionKernel4_e3_zero⟩
 
+/-! ### A4 collision kernel characteristic polynomial parameterization -/
+
+/-- The A4 characteristic polynomial parameterized by t:
+    p_t(x) = x⁵ - 2x⁴ - tx³ - 2x + 2.
+    prop:pom-a4t-jones-ade-intersections -/
+def a4CharPoly (t x : ℤ) : ℤ := x ^ 5 - 2 * x ^ 4 - t * x ^ 3 - 2 * x + 2
+
+/-- Substituting t = x⁵ - 2x⁴ - 2x + 2 gives identically zero.
+    prop:pom-a4t-jones-ade-intersections -/
+theorem a4CharPoly_self_sub (x : ℤ) :
+    x ^ 5 - 2 * x ^ 4 - (x ^ 5 - 2 * x ^ 4 - 2 * x + 2) * x ^ 3 - 2 * x + 2 =
+    -(x ^ 8 - 2 * x ^ 7 - 2 * x ^ 4 + 2 * x ^ 3) + x ^ 5 - 2 * x ^ 4 - 2 * x + 2 := by ring
+
+/-- Evaluation at x = 0: p_t(0) = 2 for all t.
+    prop:pom-a4t-jones-ade-intersections -/
+theorem a4CharPoly_at_zero (t : ℤ) : a4CharPoly t 0 = 2 := by unfold a4CharPoly; ring
+
+/-- Evaluation at x = 1: p_t(1) = -1 - t.
+    prop:pom-a4t-jones-ade-intersections -/
+theorem a4CharPoly_at_one (t : ℤ) : a4CharPoly t 1 = -1 - t := by unfold a4CharPoly; ring
+
+/-- Paper package: A4 collision kernel ADE intersections.
+    prop:pom-a4t-jones-ade-intersections -/
+theorem paper_pom_a4t_jones_ade_intersections :
+    (∀ x : ℤ, x ^ 5 - 2 * x ^ 4 - (x ^ 5 - 2 * x ^ 4 - 2 * x + 2) - 2 * x + 2 = 0) ∧
+    (∀ t : ℤ, a4CharPoly t 0 = 2) ∧
+    (∀ t : ℤ, a4CharPoly t 1 = -1 - t) ∧
+    a4CharPoly 7 0 = 2 ∧ a4CharPoly 7 1 = -8 := by
+  refine ⟨fun x => by ring, a4CharPoly_at_zero, a4CharPoly_at_one,
+          by unfold a4CharPoly; ring, by unfold a4CharPoly; ring⟩
+
+/-- A₄ trace power seed package: tr=2, tr²=18, tr³=50, det=-2.
+    prop:pom-collision-det -/
+theorem paper_collisionKernel4_trace_power_seeds :
+    collisionKernel4.trace = 2 ∧
+    (collisionKernel4 ^ 2).trace = 18 ∧
+    (collisionKernel4 ^ 3).trace = 50 ∧
+    collisionKernel4.det = -2 :=
+  ⟨collisionKernel4_trace, collisionKernel4_trace_sq,
+   collisionKernel4_trace_cube, collisionKernel4_det⟩
+
+/-- Packaged form of the A₄ trace power seeds.
+    prop:pom-collision-det -/
+theorem paper_collisionKernel4_trace_power_package :
+    collisionKernel4.trace = 2 ∧
+    (collisionKernel4 ^ 2).trace = 18 ∧
+    (collisionKernel4 ^ 3).trace = 50 ∧
+    collisionKernel4.det = -2 :=
+  paper_collisionKernel4_trace_power_seeds
+
 end Omega

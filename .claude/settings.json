@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.tool_input.command' | { read -r cmd; if echo \"$cmd\" | grep -q 'lake build' && ! echo \"$cmd\" | grep -q '^timeout'; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"BLOCKED: lake build must use timeout 300 prefix. Use: timeout 300 lake build\"}}'; else echo '{\"continue\":true}'; fi; }",
+            "command": "jq -r '.tool_input.command' | python3 -c 'import sys,json,re; cmd=sys.stdin.read().strip(); has_lake=bool(re.search(r\"\\blake\\s+build\\b\",cmd)); m=re.search(r\"\\btimeout\\s+(\\d+)\\s+lake\\s+build\\b\",cmd); print(json.dumps({\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"BLOCKED: lake build must include timeout <= 300, e.g. cd /Users/chronoai/automath/lean4 && timeout 300 lake build\"}} if has_lake and not m else {\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"BLOCKED: lake build timeout must be <= 300 seconds.\"}} if m and int(m.group(1)) > 300 else {\"continue\": True}))'",
             "timeout": 5,
             "statusMessage": "Checking lake build timeout..."
           }

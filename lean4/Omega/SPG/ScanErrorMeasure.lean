@@ -208,6 +208,15 @@ theorem scanErrorMeasure_eq_sum_boundary {α β : Type*} [MeasurableSpace α] [F
       simp [hCompl'])]
   simp [boundaryCellsMeasure]
 
+/-- Paper-facing boundary-cell decomposition of the scan-error measure.
+    thm:spg-measure-boundary-decomposition -/
+theorem paper_spg_measure_boundary_cells_decomposition {α β : Type*} [MeasurableSpace α]
+    [Fintype β] (μ : MeasureTheory.Measure α) (obs : α → β) (P : Set α) :
+    scanErrorMeasure μ obs P
+      = Finset.sum (boundaryCellsMeasure μ obs P) (fun b =>
+          min (cellEventMeasure μ obs P b) (cellComplMeasure μ obs P b)) := by
+  simpa using scanErrorMeasure_eq_sum_boundary μ obs P
+
 theorem scanErrorMeasure_le_boundaryMass {α β : Type*} [MeasurableSpace α] [Fintype β]
     (μ : MeasureTheory.Measure α) (obs : α → β) (P : Set α) :
     scanErrorMeasure μ obs P
