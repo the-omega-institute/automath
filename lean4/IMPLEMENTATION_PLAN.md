@@ -9,14 +9,16 @@
 | 总行数 | ~50,823 |
 | 定理/定义数 | ~4,427 |
 | 论文接口包装 | 770+ |
-| 文件数 | 177 |
+| 文件数 | 179 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3258 |
+| \leanverified 标注数 | 3260 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3307 |
-| 轮次 | R753（round_count=R753）|
+| 总标注数 | 3309 |
+| 轮次 | R754（round_count=R754）|
+
+**Phase R754（本轮落地，部分完成）**：`paper_logic_expansion_updates_preserve_forcing`（对应 `prop:logic-expansion-updates-preserve-forcing`，LogicExpansionChain；把 “更新” 显式包装成信息态之间的二元关系，只要求新态 realization 经 restrict 回落到旧态 realization，并将公式提升逐点下推到大语义，从而直接复用既有 forcing-persistence seed）；`paper_recursive_addressing_observer_indexed_readout_forcing_criterion`（对应 `prop:observer-indexed-readout-forcing-criterion`，RecursiveAddressing；将 observer-indexed typed readout 的“非 `NULL` iff admissible + singleton visible fiber”判据，与 refinement 下读出值类保持不变的 persistence 接口打包成单个 paper-facing wrapper）；`paper_pom_second_max_fiber_closed_form` 由于当前库仍缺少 `cSecondMaxFiberMult` 在稳定区间上的全局递推与其所需的无条件 max-fiber 闭式支撑，本轮继续未注册为 `\leanverified`；本轮 `\leanverified` +2，覆盖章节为 LogicExpansionChain / RecursiveAddressing，降级项数 1，non-trivial 计数 0；文件：`lean4/Omega/LogicExpansionChain/UpdatesPreserveForcing.lean`、`lean4/Omega/RecursiveAddressing/ObserverIndexedReadoutForcingCriterion.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_logic_expansion_updates_preserve_forcing`、`paper_recursive_addressing_observer_indexed_readout_forcing_criterion`；tex 路径：`/Users/auric/automath-lean4-workflow/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/logic_expansion_chain/subsec__logic-expansion-chain-dynamics-time-multiaxis.tex`（`prop:logic-expansion-updates-preserve-forcing`），`/Users/auric/automath-lean4-workflow/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/recursive_addressing/subsubsec__recursive-addressing-observer-indexed-forcing-continuation.tex`（`prop:observer-indexed-readout-forcing-criterion`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R753（本轮落地，全流程执行）**：`paper_pom_max_achievers_phase_stabilization`（对应 `thm:pom-max-achievers-phase-stabilization`，POM；将 `cMaxFiberAchievers` 从审计窗口延展到稳定相口径：保留 `m ≤ 12` 的窗口值，并在 `m ≥ 13` 后切换到奇偶 `2/4` 相位分类，从而完成偶支 `k ≥ 5` 与奇支 `k ≥ 6` 的 paper-facing 稳定化定理）；`paper_logic_expansion_lower_layer_projection`（对应 `prop:logic-expansion-lower-layer-projection`，LogicExpansionChain；把高层实现经 forget 映射自动下降为低层实现的实例化接口压成通用 wrapper）；`paper_recursive_addressing_observer_indexed_value_preserving_no_creation`（对应 `prop:observer-indexed-value-preserving-no-creation`，RecursiveAddressing；把单步值保持重写“不能从未定义源项创造对象层值”的 no-creation 口径压成 observer-indexed readout wrapper）；本轮 `\leanverified` +3，覆盖章节为 POM / LogicExpansionChain / RecursiveAddressing，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Folding/FiberSpectrum.lean`、`lean4/Omega/LogicExpansionChain/LowerLayerProjection.lean`、`lean4/Omega/RecursiveAddressing/ObserverIndexedValuePreservingNoCreation.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_pom_max_achievers_phase_stabilization`、`paper_logic_expansion_lower_layer_projection`、`paper_recursive_addressing_observer_indexed_value_preserving_no_creation`；tex 路径：`/Users/auric/automath-lean4-workflow/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/pom/parts/def__pom-ind-lyapunov-fingerprint.tex`（`thm:pom-max-achievers-phase-stabilization`），`/Users/auric/automath-lean4-workflow/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/logic_expansion_chain/subsec__logic-expansion-chain-instantiation-interface.tex`（`prop:logic-expansion-lower-layer-projection`），`/Users/auric/automath-lean4-workflow/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/recursive_addressing/subsubsec__recursive-addressing-observer-indexed-forcing-continuation.tex`（`prop:observer-indexed-value-preserving-no-creation`）；新增 tex theorem/corollary/lemma 环境数 0）
 
