@@ -101,4 +101,10 @@ theorem paper_conclusion_realinput40_uv_atomcore_seeds :
       logM - logM_core = vz2) := by
   exact ⟨spectral_radius_max_splitting, spectral_gap_pos, abel_constant_shift⟩
 
+theorem paper_conclusion_realinput40_uv_atomcore_package :
+    (∀ a b : ℝ, max a b = a ∧ b ≤ a ∨ max a b = b ∧ a ≤ b) ∧
+    (∀ ρ Λ₂ : ℝ, 0 < ρ → Λ₂ < ρ → 0 < 1 - Λ₂ / ρ) ∧
+    (∀ logM logM_core vz2 : ℝ, logM = logM_core + vz2 →
+      logM - logM_core = vz2) := paper_conclusion_realinput40_uv_atomcore_seeds
+
 end Omega.Conclusion.RealInput40UVAtomCore

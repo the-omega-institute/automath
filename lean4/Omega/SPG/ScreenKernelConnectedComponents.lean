@@ -84,4 +84,11 @@ theorem paper_spg_screen_kernel_connected_components_seeds :
   exact ⟨kernel_dim_eq_components_minus_one, free_components_count,
     full_screen_injective, screen_monotone_kernel⟩
 
+theorem paper_spg_screen_kernel_connected_components_package :
+    (∀ c : ℕ, 0 < c → (c - 1 = 0 ↔ c = 1)) ∧
+    (∀ c : ℕ, 1 ≤ c → c - 1 + 1 = c) ∧
+    (1 - 1 = 0 ∧ 2 ^ (1 - 1 : ℕ) = 1) ∧
+    (∀ c c' : ℕ, 0 < c → 0 < c' → c' ≤ c → c' - 1 ≤ c - 1) :=
+  paper_spg_screen_kernel_connected_components_seeds
+
 end Omega.SPG.ScreenKernelConnectedComponents

@@ -143,4 +143,13 @@ theorem paper_pom_s5_two_subset_degree10_seeds :
     120 / 12 = (10 : ℕ) := by
   refine ⟨by decide, by omega, by omega, by omega, by decide, by decide, by omega⟩
 
+theorem paper_pom_s5_two_subset_degree10_package :
+    Nat.choose 5 2 = 10 ∧
+    2 ^ 5 * 3 ^ 2 * 5 ^ 2 = (7200 : ℕ) ∧
+    2 ^ 4 * 5 ^ 4 = (10000 : ℕ) ∧
+    5 * 4 = (20 : ℕ) ∧
+    Nat.factorial 5 = 120 ∧
+    Nat.factorial 3 * Nat.factorial 2 = 12 ∧
+    120 / 12 = (10 : ℕ) := paper_pom_s5_two_subset_degree10_seeds
+
 end Omega.POM.S5TwoSubsetDegree10
