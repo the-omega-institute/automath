@@ -6,17 +6,19 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~50,397 |
-| 定理/定义数 | ~4,403 |
-| 论文接口包装 | 749+ |
-| 文件数 | 153 |
+| 总行数 | ~50,503 |
+| 定理/定义数 | ~4,409 |
+| 论文接口包装 | 755+ |
+| 文件数 | 156 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3170 |
+| \leanverified 标注数 | 3173 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3219 |
-| 轮次 | R719（round_count=R719）|
+| 总标注数 | 3222 |
+| 轮次 | R720（round_count=R720）|
+
+**Phase R720（本轮落地，全流程执行）**：`paper_information_state_flat_team_reading_seeds`（对应 `prop:flat-team-reading`，LogicExpansionChain；把 lower-layer forcing 直接压成对 realization 集的逐点全称读取，保留“information state forcing 就是 flat team-style universal support”的核心语义骨架）；`paper_information_state_lifted_pointwise_soundness_focused_seeds`（对应 `prop:lifted-pointwise-soundness`，LogicExpansionChain；对任意对 ordinary satisfaction sound 的 derivability relation 证明其提升到 state forcing 后仍保持 soundness，保留“逐 realization 正确的推理规则逐 state 仍正确”的桥接语义骨架；本轮 non-trivial 目标）；`paper_prime_languages_dfa_quantitative_obstruction_seeds`（对应 `prop:dfa-quantitative-obstruction`，Zeta；将 recall / precision 的统一正下界直接压成 `δ * |P_m^{(2)}| ≤ |L_m ∩ P_m^{(2)}| ≤ |L_m| ≤ δ^{-1} |L_m ∩ P_m^{(2)}| ≤ δ^{-1} |P_m^{(2)}|` 的常数倍夹逼账本，保留“若 recall 与 precision 同时有正下界，则 DFA 接受层规模被迫落在 prime layer 的同尺度区间”的核心 obstruction 骨架）；本轮 `\leanverified` +3，覆盖章节为 LogicExpansionChain / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/LogicExpansionChain/FlatTeamReading.lean`、`lean4/Omega/LogicExpansionChain/FocusedLiftedPointwiseSoundness.lean`、`lean4/Omega/Zeta/DFAQuantitativeObstruction.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_information_states.tex`（`prop:flat-team-reading`、`prop:lifted-pointwise-soundness`），`/Users/chronoai/automath/papers/publication/2026_prime_languages_sofic_obstructions_dynamical_zeta/sec_automata.tex`（`prop:dfa-quantitative-obstruction`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R719（本轮落地，全流程执行）**：`paper_information_state_singleton_conservativity_seeds`（对应 `prop:singleton-conservativity`，LogicExpansionChain；把 singleton information state 上的 forcing 直接压回点语义满足，保留“单点状态 forcing 与 ordinary satisfaction 完全一致”的核心 conservativity 骨架）；`paper_information_state_address_before_value_seeds`（对应 `prop:address-before-value`，RecursiveAddressing；把 non-null readout 必然携带 admissibility 与 compatible-section witness 的对象层要求直接打包，保留“有值先有地址且有兼容截面证书”的核心 address-before-value 骨架）；`paper_scan_projection_address_inverse_limit_determinacy_seeds`（对应 `thm:inverse-limit-determinacy`，RecursiveAddressing；以具体 inverse-limit 等价 `CompatibleFamily ≃ XInfinity`、唯一重建 `∃!` 以及 prefix extensionality 直接包装稳定地址由全部有限前缀唯一决定的核心 determinacy 骨架；本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 LogicExpansionChain / RecursiveAddressing，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/LogicExpansionChain/FocusedSingletonConservativity.lean`、`lean4/Omega/RecursiveAddressing/FocusedAddressBeforeValue.lean`、`lean4/Omega/RecursiveAddressing/InverseLimitDeterminacy.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_information_states.tex`（`prop:singleton-conservativity`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_null_decomposition.tex`（`prop:address-before-value`），`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_recursive_addressing.tex`（`thm:inverse-limit-determinacy`）；新增 tex theorem/corollary/lemma 环境数 0）
 
