@@ -52,11 +52,13 @@ import Omega.Folding.Window6
 import Omega.Folding.LocalWeightRigidity
 import Omega.Folding.ZeckendorfSignature
 import Omega.Folding.MismatchLanguage
+import Omega.Folding.NaivePrefixLift
 import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.SpectralQuarticAutTrivial
 import Omega.Folding.BayesKinkGeometry
 import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.AutocovarianceSeedValues
+import Omega.Folding.PhiEquivariant
 import Omega.Folding.PhiSlidingBlockCode
 import Omega.Folding.PhiSubshiftFactor
 import Omega.Folding.HolographicRateConservation
@@ -180,6 +182,7 @@ import Omega.EA.MulNoNewPrimitive
 import Omega.EA.StableAddComputable
 import Omega.EA.InternalProductAddsValues
 import Omega.EA.PisanoPeriodSeeds
+import Omega.EA.AddressNaturality
 import Omega.EA.AutDimensionSqueeze
 import Omega.EA.PrimeLedger
 import Omega.EA.FoldAsSection
