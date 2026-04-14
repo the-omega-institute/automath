@@ -7,16 +7,18 @@
 | 指标 | 数值 |
 |---|---|
 | 总行数 | ~50,823 |
-| 定理/定义数 | ~4,427 |
+| 定理/定义数 | ~4,430 |
 | 论文接口包装 | 770+ |
-| 文件数 | 177 |
+| 文件数 | 180 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3281 |
+| \leanverified 标注数 | 3284 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3330 |
-| 轮次 | R760（round_count=R760）|
+| 总标注数 | 3333 |
+| 轮次 | R761（round_count=R761）|
+
+**Phase R761（本轮落地，全流程执行）**：`paper_etds_class_mertens_explicit`（对应 `thm:class-mertens-explicit`，Zeta；把 ETDS Chebotarev section 中 twisted spectral gap 下的 explicit class Mertens asymptotic、harmonic constant 包装与 Chebotarev density consequence 压成 theorem-facing wrapper；本轮 non-trivial 目标）；`paper_scan_projection_address_first_entry_escape_rate`（对应 `thm:first-entry-escape-rate`，SPG；把 scan-projection ETDS open-system section 中 killed-matrix escape exponent、pressure drop 与 first-entry ambiguity exponent 的识别压成 paper-facing wrapper）；`paper_gluing_failure_finite_abelian_duality`（对应 `lem:finite-abelian-duality`，Topos；把 gluing-failure publication 中 subgroup 与 annihilator character kernels 交的对偶识别压成 set-theoretic separation wrapper）；本轮 `\leanverified` +3，覆盖章节为 Zeta / SPG / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Zeta/ClassMertensExplicit.lean`、`lean4/Omega/SPG/FirstEntryEscapeRate.lean`、`lean4/Omega/Topos/FiniteAbelianDuality.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_etds_class_mertens_explicit`、`paper_scan_projection_address_first_entry_escape_rate`、`paper_gluing_failure_finite_abelian_duality`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_chebotarev.tex`（`thm:class-mertens-explicit`），`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_open_system.tex`（`thm:first-entry-escape-rate`），`/Users/chronoai/automath/papers/publication/2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal/sec_homological_visibility.tex`（`lem:finite-abelian-duality`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R760（本轮落地，全流程执行）**：`paper_resolution_folding_local_weight_rigidity`（对应 `lem:local-weight-rigidity`，Folding；把 resolution-folding publication 中 rewrite step 对 lexicographic termination rank 的严格下降直接挂接到既有 `Rewrite.step_rankLex`，本轮 non-trivial 目标）；`paper_etds_cyclic_quotients_one_dimensional_characters`（对应 `lem:cyclic-quotients-one-dimensional-characters`，Zeta；把 ETDS quotient-shadows section 中 cyclic pullback span 与一维角色张成空间的等式压成双向包含的线性包装）；`paper_scan_projection_address_survivor_pressure_recovery`（对应 `cor:survivor-pressure-recovery`，SPG；把 scan-projection ETDS open-system section 中 survivor pressure recovery 直接挂接到既有 pressure-gap wrapper 与 limit identification）；本轮 `\leanverified` +3，覆盖章节为 Folding / Zeta / SPG，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Folding/LocalWeightRigidityPublication.lean`、`lean4/Omega/Zeta/CyclicQuotientsOneDimensionalCharacters.lean`、`lean4/Omega/SPG/SurvivorPressureRecovery.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_resolution_folding_local_weight_rigidity`、`paper_etds_cyclic_quotients_one_dimensional_characters`、`paper_scan_projection_address_survivor_pressure_recovery`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rewrite.tex`（`lem:local-weight-rigidity`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_shadows.tex`（`lem:cyclic-quotients-one-dimensional-characters`），`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_open_system.tex`（`cor:survivor-pressure-recovery`）；新增 tex theorem/corollary/lemma 环境数 0）
 
