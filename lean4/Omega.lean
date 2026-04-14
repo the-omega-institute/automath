@@ -139,13 +139,16 @@ import Omega.Frontier.ConditionalArithmetic
 import Omega.Frontier.ConditionalSummary
 import Omega.Frontier.Conjectures
 import Omega.Frontier.Certificates
+import Omega.LogicExpansionChain.FocusedConservativeComposition
 import Omega.LogicExpansionChain.StateTheoryMonotonicity
 import Omega.LogicExpansionChain.LiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FlatTeamReading
 import Omega.LogicExpansionChain.FocusedLiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FocusedSingletonConservativity
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
+import Omega.RecursiveAddressing.FocusedNonNullReadoutCriterion
 import Omega.RecursiveAddressing.InverseLimitDeterminacy
+import Omega.RecursiveAddressing.SlidingBlockFactor
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
 import Omega.Combinatorics.GramDet
