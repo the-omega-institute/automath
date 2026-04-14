@@ -7,6 +7,7 @@ import Omega.Core.ZeckendorfParallelPropagationLowerBound
 import Omega.Core.WalshFourier
 import Omega.Folding.StableSyntax
 import Omega.Folding.StableSyntaxEntropyLogqdim
+import Omega.Folding.PhiMEntropy
 import Omega.Folding.Weight
 import Omega.Folding.Value
 import Omega.Folding.Zeckendorf
@@ -125,6 +126,7 @@ import Omega.SPG.WeightedBoundaryPole
 import Omega.SPG.BoundaryDimensionUpper
 import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.FirstEntryEscapeRate
+import Omega.SPG.SurvivorRenyiPressure
 import Omega.SPG.PressureGap
 import Omega.SPG.SurvivorPressureRecovery
 import Omega.SPG.TanakaIncrement
@@ -205,6 +207,7 @@ import Omega.Topos.CharacterBlindObstructions
 import Omega.Topos.FiniteAbelianDuality
 import Omega.Topos.IntrinsicVisibleQuotient
 import Omega.Topos.IntrinsicCharacterDetection
+import Omega.Topos.UniqueBranchBandedGerbe
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
