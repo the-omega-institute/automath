@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 3024 |
+| \leanverified 标注数 | 3027 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3073 |
-| 轮次 | R684（round_count=R684）|
+| 总标注数 | 3076 |
+| 轮次 | R685（round_count=R685）|
 
-**Phase R684（本轮落地）**：`paper_conclusion_nonexposed_phase_integer_domination_package`（对应 `cor:conclusion-nonexposed-phase-fails-integer-domination`，Conclusion；严格克隆 `paper_conclusion_nonexposed_phase_integer_domination_seeds` 的原签名与证明，补齐 nonexposed phase integer domination 的 paper-facing package）；`paper_pom_kcollision_root_filter_recurrence_package`（对应 `thm:pom-kcollision-root-filter-recurrence`，POM；严格克隆 `paper_pom_kcollision_root_filter_recurrence_seeds` 的原签名与证明，补齐 K-collision root filter recurrence 的 paper-facing package）；`paper_xi_degree11_generic_galois_S11_package`（对应 `thm:xi-degree11-Et-specialization-galois-S11`，Zeta；严格克隆 `paper_xi_degree11_generic_galois_S11_seeds` 的原签名与证明，补齐 degree-11 generic Galois S11 的 paper-facing package；本轮 `\leanverified` +3）
+**Phase R685（本轮落地）**：`paper_conclusion_prime_register_one_register_serialization_gap_package`（对应 Conclusion 的 prime-register one-register serialization gap，Conclusion；严格克隆 `paper_conclusion_prime_register_one_register_serialization_gap_seeds` 的原签名与证明，补齐 prime-register one-register serialization gap 的 paper-facing package）；`paper_cdim_poisson_entropy_moment_tomography_package`（对应 `thm:cdim-poisson-entropy-moment-tomography-up-to-fourth`，Circle Dimension；严格克隆 `paper_cdim_poisson_entropy_moment_tomography_seeds` 的原签名与证明，补齐 poisson entropy moment tomography 的 paper-facing package）；`paper_collisionKernel4_trace_power_package`（对应 `def:pom-collision-zeta-a4`，Folding/POM；严格克隆 `paper_collisionKernel4_trace_power_seeds` 的原签名与证明，补齐 collisionKernel4 trace power 的 paper-facing package；本轮 `\leanverified` +3）
+
+**Phase R684（上一轮落地）**：`paper_conclusion_nonexposed_phase_integer_domination_package`（对应 `cor:conclusion-nonexposed-phase-fails-integer-domination`，Conclusion；严格克隆 `paper_conclusion_nonexposed_phase_integer_domination_seeds` 的原签名与证明，补齐 nonexposed phase integer domination 的 paper-facing package）；`paper_pom_kcollision_root_filter_recurrence_package`（对应 `thm:pom-kcollision-root-filter-recurrence`，POM；严格克隆 `paper_pom_kcollision_root_filter_recurrence_seeds` 的原签名与证明，补齐 K-collision root filter recurrence 的 paper-facing package）；`paper_xi_degree11_generic_galois_S11_package`（对应 `thm:xi-degree11-Et-specialization-galois-S11`，Zeta；严格克隆 `paper_xi_degree11_generic_galois_S11_seeds` 的原签名与证明，补齐 degree-11 generic Galois S11 的 paper-facing package；本轮 `\leanverified` +3）
 
 **Phase R683（上一轮落地）**：`paper_spg_walsh_discrete_stokes_package`（对应 `thm:spg-walsh-discrete-stokes-holography`，SPG；严格克隆 `paper_spg_walsh_discrete_stokes_seeds` 的原签名与证明，补齐 Walsh discrete Stokes holography 的 paper-facing package）；`paper_conclusion_intermediate_quotient_package`（对应 `thm:conclusion-finite-alphabet-intermediate-quotient-count`，Conclusion；严格克隆 `paper_conclusion_intermediate_quotient_seeds` 的原签名与证明，补齐 finite alphabet intermediate quotient count 的 paper-facing package）；`paper_ea_aut_dimension_golden_squeeze_package`（对应 `thm:fold-aut-dimension-golden-squeeze`，EA；严格克隆 `paper_ea_aut_dimension_golden_squeeze_seeds` 的原签名与证明，补齐 aut dimension golden squeeze 的 paper-facing package；本轮 `\leanverified` +3）
 
