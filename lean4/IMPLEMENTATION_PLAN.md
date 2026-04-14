@@ -6,17 +6,19 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~50,308 |
-| 定理/定义数 | ~4,400 |
-| 论文接口包装 | 746+ |
-| 文件数 | 147 |
+| 总行数 | ~50,397 |
+| 定理/定义数 | ~4,403 |
+| 论文接口包装 | 749+ |
+| 文件数 | 150 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3156 |
+| \leanverified 标注数 | 3159 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3205 |
-| 轮次 | R715（round_count=R715）|
+| 总标注数 | 3208 |
+| 轮次 | R716（round_count=R716）|
+
+**Phase R716（本轮落地，全流程执行）**：`paper_cdim_basic_computation_seeds`（对应 `prop:circle-dimension-basic`，CircleDimension；把正文 “`cdim` 等于自由秩、有限扭部分贡献零、`ℕ^d` 的 half-circle dimension 为 `d/2`” 的基础计算接口压成 paper-facing seed，保留 circle dimension 只读取 free rank 的核心骨架）；`paper_scan_projection_address_tanaka_stokes_seeds`（对应 `thm:tanaka-stokes`，SPG；把阈值 `1/2` 下的 discrete Tanaka 分解、局部时间非负性与单调性直接包装到正文标签，保留 clarity 论证中“误差由 signed martingale part 加 nonnegative local-time part 分解”的核心骨架；本轮 non-trivial 目标）；`paper_scan_projection_address_clarity_monotone_seeds`（对应 `cor:clarity-monotone`，SPG；以 prefix scan error 的一步反单调性和 Bayes-optimal observable event 的零误差刻画，压出“分辨率升高不会增大误差，且零误差当且仅当可被某个深度 `m` 事件精确实现”的核心 corollary 骨架）；本轮 `\leanverified` +3，覆盖章节为 CircleDimension / SPG，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/BasicComputation.lean`、`lean4/Omega/SPG/TanakaStokes.lean`、`lean4/Omega/SPG/ClarityMonotone.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_circle_dimension_algebra.tex`（`prop:circle-dimension-basic`），`/Users/chronoai/automath/papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/sec_clarity.tex`（`thm:tanaka-stokes`、`cor:clarity-monotone`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R715（本轮落地，全流程执行）**：`paper_cdim_phase_spectrum_limit_seeds`（对应 `thm:cdim-phase-spectrum-limit`，CircleDimension；以 `phaseSpectrumCount` 的 coprime / prime-divisible 二分律连同自由部分 `t=0` 的显式公式，压出 phase-sampling 增长只由自由秩主导的核心极限骨架；本轮 non-trivial 目标）；`paper_zeckendorf_monoid_quotient_is_N_seeds`（对应 `thm:monoid-quotient-is-N`，EA；把有限层稳定值映射的双射性与 `|X_m|=F_{m+2}` 的 Fibonacci 基数账本打包成 quotient-to-`ℕ` 的 paper-facing seed，保留“每个值类恰有一个 admissible normal form”的核心有限层证书）；`paper_zeckendorf_fold_as_section_seeds`（对应 `cor:fold-as-section`，EA；对任意有限层值指标给出唯一稳定代表元，从而把 fold 作为 canonical section 的可计算选取骨架直接落在 `∃!` 证书上）；本轮 `\leanverified` +5，覆盖章节为 CircleDimension / EA，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/PhaseSpectrumLimit.lean`、`lean4/Omega/EA/MonoidQuotientIsN.lean`、`lean4/Omega/EA/FoldAsSectionCorollary.lean`、`lean4/Omega.lean`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_circle_dimension_algebra.tex`（`thm:cdim-phase-spectrum-limit`），`/Users/chronoai/automath/papers/publication/submitted_2026_zeckendorf_streaming_normalization_automata_rairo_ita/main.tex`（`thm:monoid-quotient-is-N`、`cor:fold-as-section`），`/Users/chronoai/automath/papers/publication/submitted_2026_zeckendorf_streaming_normalization_automata_rairo_ita/submission_source_20260313/main.tex`（`thm:monoid-quotient-is-N`、`cor:fold-as-section`））
 
