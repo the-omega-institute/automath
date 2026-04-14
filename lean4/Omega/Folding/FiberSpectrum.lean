@@ -336,6 +336,27 @@ theorem cNthMaxFiber_second_five : cNthMaxFiber 5 1 = 3 := by simp
 theorem cNthMaxFiber_second_six : cNthMaxFiber 6 1 = 4 := by simp
 theorem cNthMaxFiber_second_seven : cNthMaxFiber 7 1 = 5 := by simp
 
+private theorem cached_cNthMaxFiber_second_high_values :
+    cNthMaxFiber 8 1 = 7 ∧
+    cNthMaxFiber 9 1 = 9 ∧
+    cNthMaxFiber 10 1 = 12 := by
+  native_decide
+
+@[simp] theorem cached_cNthMaxFiber_second_eight : cNthMaxFiber 8 1 = 7 :=
+  cached_cNthMaxFiber_second_high_values.1
+
+@[simp] theorem cached_cNthMaxFiber_second_nine : cNthMaxFiber 9 1 = 9 :=
+  cached_cNthMaxFiber_second_high_values.2.1
+
+@[simp] theorem cached_cNthMaxFiber_second_ten : cNthMaxFiber 10 1 = 12 :=
+  cached_cNthMaxFiber_second_high_values.2.2
+
+/-- Extended audited second-largest fiber multiplicities entering the stable window.
+    thm:pom-second-max-fiber-closed-form -/
+theorem cNthMaxFiber_second_eight : cNthMaxFiber 8 1 = 7 := by simp
+theorem cNthMaxFiber_second_nine : cNthMaxFiber 9 1 = 9 := by simp
+theorem cNthMaxFiber_second_ten : cNthMaxFiber 10 1 = 12 := by simp
+
 -- Third largest fiber multiplicities (m = 4..7)
 @[simp] theorem cached_cNthMaxFiber_third_four : cNthMaxFiber 4 2 = 1 := by
   rw [cNthMaxFiber, cached_cFiberSpectrum_four]
@@ -412,6 +433,23 @@ theorem cNthMaxFiber_third_eq_max_sub_two (m : Nat) (hm : 6 ≤ m) (hm' : m ≤ 
 theorem cFiberSpectrum_length_eq_max_verified (m : Nat) (hm : 4 ≤ m) (hm' : m ≤ 7) :
     (cFiberSpectrum m).length = cMaxFiberMult m := by
   interval_cases m <;> simp
+
+/-- The `{2,5}` forbidden-pair correction obeys the Fibonacci gap recurrence appearing in the
+    second-max fiber closed form.
+    lem:pom-forbidden-pair-fib-gap -/
+theorem forbidden_pair_two_five_fib_gap (k : Nat) (hk : 6 ≤ k) :
+    Nat.fib (k + 2) - Nat.fib (k - 4) =
+    (Nat.fib (k + 1) - Nat.fib (k - 5)) + (Nat.fib k - Nat.fib (k - 6)) := by
+  have hk4 : k - 4 = (k - 6) + 2 := by omega
+  have hk5 : k - 5 = (k - 6) + 1 := by omega
+  rw [hk4, hk5]
+  rw [Nat.fib_add_two (n := k), Nat.fib_add_two (n := k - 6)]
+  have hle1 : Nat.fib (k - 6) + Nat.fib (k - 6 + 1) ≤ Nat.fib (k + 1) := by
+    rw [← Nat.fib_add_two (n := k - 6)]
+    exact Nat.fib_mono (by omega)
+  have hle2 : Nat.fib (k - 6 + 1) ≤ Nat.fib (k + 1) := Nat.fib_mono (by omega)
+  have hle3 : Nat.fib (k - 6) ≤ Nat.fib k := Nat.fib_mono (by omega)
+  omega
 
 end BaseValues
 
@@ -523,6 +561,32 @@ theorem oddEvenFiber_sum_eq_card (m : Nat) :
   · rw [hk]
     have hkmod : (2 * k + 1) % 2 = 1 := by omega
     simp [hkmod]
+
+/-- Paper-facing wrapper: once the stable `{2,5}` forbidden-pair defect has been supplied,
+    the existing Fibonacci closed forms for `D_m` give the even/odd closed forms for the
+    second-largest distinct fiber multiplicity. The audited values `m=8,9,10` are exposed
+    unconditionally as the verified entry window for this regime.
+    thm:pom-second-max-fiber-closed-form -/
+theorem paper_pom_second_max_fiber_closed_form
+    (two_step : ∀ m, 6 ≤ m →
+      Omega.X.maxFiberMultiplicity m =
+        Omega.X.maxFiberMultiplicity (m - 2) + Omega.X.maxFiberMultiplicity (m - 4))
+    (forbidden_even : ∀ k : Nat, 5 ≤ k →
+      cNthMaxFiber (2 * k) 1 =
+        Omega.X.maxFiberMultiplicity (2 * k) - Nat.fib (k - 4))
+    (forbidden_odd : ∀ k : Nat, 5 ≤ k →
+      cNthMaxFiber (2 * k + 1) 1 =
+        Omega.X.maxFiberMultiplicity (2 * k + 1) - Nat.fib (k - 4)) :
+    cNthMaxFiber 8 1 = 7 ∧
+    cNthMaxFiber 9 1 = 9 ∧
+    cNthMaxFiber 10 1 = 12 ∧
+    (∀ k : Nat, 5 ≤ k → cNthMaxFiber (2 * k) 1 = Nat.fib (k + 2) - Nat.fib (k - 4)) ∧
+    (∀ k : Nat, 5 ≤ k → cNthMaxFiber (2 * k + 1) 1 = 2 * Nat.fib (k + 1) - Nat.fib (k - 4)) := by
+  refine ⟨cNthMaxFiber_second_eight, cNthMaxFiber_second_nine, cNthMaxFiber_second_ten, ?_, ?_⟩
+  · intro k hk
+    rw [forbidden_even k hk, Omega.X.maxFiberMultiplicity_even_of_two_step two_step k (by omega)]
+  · intro k hk
+    rw [forbidden_odd k hk, Omega.X.maxFiberMultiplicity_odd_of_two_step two_step k (by omega)]
 
 end Parity
 
