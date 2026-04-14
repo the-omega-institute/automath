@@ -200,6 +200,7 @@ import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
 import Omega.Topos.LocalSectionCriterion
+import Omega.HighDimensionalCutProject.IndicatorSumRewrite
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
@@ -283,6 +284,7 @@ import Omega.POM.FoldInjectivizationMinsideinfo
 import Omega.POM.FenceRiccatiError
 import Omega.POM.StarMomentKernelCompression
 import Omega.POM.FiberTwoPhaseMixing
+import Omega.POM.MultiplicativeChainRuleFinite
 import Omega.POM.MaryAuxlength
 import Omega.POM.MaryAuxlengthSeeds
 import Omega.Core.FirstJointNonsemisimpleThreshold
@@ -366,6 +368,7 @@ import Omega.Conclusion.SinglepointJetRigidity
 import Omega.Conclusion.RealInput40UVAtomCore
 import Omega.Conclusion.SmithRamanujanShadowSeeds
 import Omega.Conclusion.SmithRamanujanShadowInversion
+import Omega.Conclusion.CofinalFixedQuotient
 import Omega.POM.ZeroTemperatureTwoTermExpansion
 import Omega.SPG.DyadicFluxZetaMinkowskiPole
 import Omega.Zeta.EnergyTailMassSeeds
