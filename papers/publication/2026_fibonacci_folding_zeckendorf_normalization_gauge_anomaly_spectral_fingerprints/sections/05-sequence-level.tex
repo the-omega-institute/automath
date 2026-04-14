@@ -29,8 +29,70 @@ and label the directed edge \(v\to v'\) by
 \[
 \lambda_m(vb):=\Fold_m(vb)\in X_m.
 \]
+Denote the resulting labeled graph by \(G_m\).
 Let \(\Sigma_m\) be the edge shift of this finite directed graph and let \(\Lambda_m:\Sigma_m\to X_m^{\ZZ}\) be the label map. By construction, \(\Lambda_m(\Sigma_m)=Y_m\), hence \(Y_m\) is sofic.
 \end{proof}
+
+\subsection{Ambiguous two-label blocks and a three-label decoder}
+The proof of the conjugacy threshold is most transparent in the fiber product of the graph from Proposition~\ref{prop:sofic}. We say that a two-label block \((y_{t-1},y_t)\in X_m^2\) is \emph{ambiguous} if it admits two distinct lifts in the graph \(G_m\) of Proposition~\ref{prop:sofic}. Equivalently, \((y_{t-1},y_t)\) labels an off-diagonal path of length \(2\) in the fiber product \(\widehat G_m\).
+
+An ambiguous block may contain coordinates on which the two lifts agree completely and which therefore play no role in the ambiguity. Removing all such passive coordinates leaves a minimal witness, called an \emph{ambiguous core}. Appendix~\ref{app:sofic} spells out the fiber-product bookkeeping behind this reduction. The point for the main text is that the local relation \(110\leftrightarrow 001\) has span \(3\), so the active part of a minimal witness can occupy at most four consecutive coordinates.
+
+\begin{theorem}[Ambiguous cores and three-label resolution]\label{thm:core-resolution}
+Fix \(m\ge 3\). Every ambiguous two-label block in \(Y_m\) strips to one of the following minimal cores.
+\begin{enumerate}
+\item[(a)] Two length-\(3\) cores:
+\[
+(000,001),\qquad (100,001).
+\]
+\item[(b)] Eight length-\(4\) cores:
+\[
+(0000,0001),\quad (1000,0001),\quad (0010,1001),\quad (0100,1001),
+\]
+\[
+(0001,0000),\quad (0001,0010),\quad (1001,0000),\quad (1001,0010).
+\]
+\end{enumerate}
+No minimal ambiguous core has length at least \(5\). In every listed case, the third label \(y_t\) determines the current appended microstate bit uniquely. Consequently there is a well-defined decoder
+\[
+\psi_m:\mathcal{B}_3(Y_m)\to\{0,1\},
+\qquad
+\eta_t=\psi_m(y_{t-2},y_{t-1},y_t),
+\]
+where \(\mathcal{B}_3(Y_m)\) is the set of admissible three-label blocks in \(Y_m\).
+\end{theorem}
+
+\begin{proof}
+Appendix~\ref{app:sofic} formulates the stripping operation on off-diagonal fiber-product paths: removing passive coordinates preserves ambiguity and terminates at a minimal core. In such a core, both the left boundary and the right boundary of the active interval must lie inside a local rewrite \(110\leftrightarrow 001\). Since each rewrite triple has length \(3\), the two boundary triples must overlap in a minimal witness; otherwise a coordinate strictly between them would be passive and could be stripped. Therefore the active interval has length at most \(4\), which proves that no minimal ambiguous core has length \(\ge 5\).
+
+The remaining possibilities are then the complete \(m=3\) and \(m=4\) core lists recorded in Appendix~\ref{app:sofic}. For length \(3\), the only ambiguous two-label blocks are
+\[
+(000,001)\quad\text{and}\quad (100,001).
+\]
+After the second label, the two competing lifts terminate at the vertices \(01\) and \(10\). Their successor label sets are
+\[
+\mathcal{L}^+(01)=\{000,010\},
+\qquad
+\mathcal{L}^+(10)=\{100,101\},
+\]
+which are disjoint. Hence the third label resolves the ambiguity, and therefore determines the appended bit on the third edge.
+
+For length \(4\), Appendix~\ref{app:sofic} shows that the only ambiguous cores are the eight listed in part (b). In every case the two possible lifts after the second label terminate at the vertices \(001\) and \(110\). Both vertices admit the same successor label set \(\{0000,0010\}\), but the appended bit is encoded oppositely on those successor edges: observing the third label \(0000\) forces the current bit to be \(1\), whereas observing \(0010\) forces it to be \(0\). Thus the third label resolves every length-\(4\) core as well.
+
+Finally, every ambiguous two-label block strips to one of the cores above, and reattaching passive coordinates does not alter the third label. Therefore the same three-label rule resolves every ambiguity in \(Y_m\), so the decoder \(\psi_m\) is well defined on all admissible three-label blocks.
+\end{proof}
+
+\begin{example}[Continuation of Example~\ref{ex:running}]
+For the block \(11011\) from Example~\ref{ex:running}, the three consecutive \(3\)-window labels are
+\[
+(001,101,000).
+\]
+They form the path
+\[
+11 \xrightarrow{001} 10 \xrightarrow{101} 01 \xrightarrow{000} 11.
+\]
+Hence the decoder reads the appended bit on the last edge as \(1\), exactly as claimed in Example~\ref{ex:running}.
+\end{example}
 
 \subsection{A conjugacy threshold at \texorpdfstring{$m\ge 3$}{m >= 3}}
 \begin{theorem}[Conjugacy for \(m \ge 3\)]\label{thm:conjugacy}
@@ -43,11 +105,22 @@ For \(m\ge 3\), the sliding block code \(\Phi_m:\set{0,1}^{\ZZ}\to Y_m\) is a to
 \end{theorem}
 
 \begin{proof}
-Appendix~\ref{app:sofic} proves that the labeled graph of Proposition~\ref{prop:sofic} is right-resolving and, more importantly, that every admissible three-label block determines the appended bit on its third edge. This gives an explicit inverse sliding block code
+Define
 \[
-(\Psi_m(y))_t=\psi_m(y_{t-2},y_{t-1},y_t),
+(\Psi_m(y))_t:=\psi_m(y_{t-2},y_{t-1},y_t),\qquad y\in Y_m,
 \]
-with memory \(2\) and anticipation \(0\). Since the edge shift of \(G_m\) is canonically conjugate to \(\{0,1\}^{\ZZ}\) by reading appended bits, \(\Phi_m\) is bijective onto \(Y_m\), and \(\Psi_m\) is its inverse.
+where \(\psi_m\) is the three-label decoder from Theorem~\ref{thm:core-resolution}. If \(y=\Phi_m(\eta)\), then each triple \((y_{t-2},y_{t-1},y_t)\) arises from three consecutive edges of \(G_m\), so Theorem~\ref{thm:core-resolution} gives
+\[
+(\Psi_m(\Phi_m(\eta)))_t=\eta_t
+\qquad\text{for every }t\in\ZZ.
+\]
+Hence \(\Psi_m\circ\Phi_m=\mathrm{id}_{\set{0,1}^{\ZZ}}\).
+
+Conversely, the edge shift of \(G_m\) is canonically conjugate to \(\set{0,1}^{\ZZ}\) by reading appended bits. The recovered bit sequence \(\Psi_m(y)\) therefore reconstructs the unique edge path lifting \(y\), and applying \(\Phi_m\) to that bit sequence recovers the original label sequence:
+\[
+\Phi_m(\Psi_m(y))=y.
+\]
+Thus \(\Phi_m\) is bijective onto \(Y_m\) with sliding block inverse \(\Psi_m\).
 \end{proof}
 
 \begin{proposition}[The degenerate case \(m=2\)]\label{thm:m2}
@@ -55,9 +128,9 @@ When \(m=2\), the only failure of injectivity is that the two fixed microstate s
 \end{proposition}
 
 \begin{proof}
-Appendix~\ref{app:sofic} identifies the only off-diagonal cycles in the fiber product for \(m=2\): they are the two ordered lifts of the constant label sequence \((00)^\ZZ\), corresponding to the two preimages \(0^\ZZ\) and \(1^\ZZ\). Every other label sequence contains \(01\) or \(10\), and these labels determine the adjacent microstate bits uniquely, so the resulting path lifts uniquely.
+Appendix~\ref{app:sofic} identifies the only off-diagonal bi-infinite cycle in the fiber product for \(m=2\): it is the constant label sequence \((00)^\ZZ\), lifted once by \(0^\ZZ\) and once by \(1^\ZZ\). Every other label sequence contains \(01\) or \(10\), and those labels determine the adjacent microstate bits uniquely. Hence \((00)^\ZZ\) is the unique non-injective fiber.
 \end{proof}
 
 \begin{remark}
-Appendix~\ref{app:sofic} supplies the structural proofs, the complete \(m=3\) label table, and the uniform decoder window for \(m\ge3\). The important point is that two labels may leave a finite ambiguity in the terminal vertex, but three labels already determine the appended microstate bit, so the inverse code has bounded memory independent of \(m\).
+Theorem~\ref{thm:core-resolution} is the precise form of the decoder statement used in the introduction: two labels can leave a finite ambiguity, but after stripping passive coordinates every ambiguity is one of finitely many length-\(3\) or length-\(4\) cores, and the third label resolves all of them.
 \end{remark}

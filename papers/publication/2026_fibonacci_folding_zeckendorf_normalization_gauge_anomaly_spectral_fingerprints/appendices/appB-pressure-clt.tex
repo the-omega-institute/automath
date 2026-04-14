@@ -86,9 +86,21 @@ Starting from the prefixes listed in Lemma~\ref{lem:length3}, the only admissibl
 \end{lemma}
 
 \begin{proof}
-Fix a synchronized prefix \(00|s_1|s_2\). The suffix \(s_2\) records the last two stable digits, while the transition \(s_1\to s_2\) records whether a carry is pending. The normalization rule acts only on those digits and the next two microstate bits. Consequently the fourth pair symbol is determined entirely by \((s_1,s_2)\) and by the next appended bit.
-
-If \(s_2=00\), the next symbol must be \(00\), \(01\), or \(11\): \(00\) arises when no rewrite fires, \(01\) comes from resolving a lone \(110\), and \(11\) appears when the carry skips one site before firing two steps below. If \(s_2=01\), the next microstate bit must be \(0\); the carry then forces the symbol \(10\). If \(s_2=10\), the next two microstate bits \((\eta,\eta')\) equal \((0,0)\), \((0,1)\), or \((1,0)\), which normalize respectively to \(00\), \(01\), and \(11\) when read in the reversed orientation. Finally, if \(s_2=11\), the carry resolves immediately and the only possible continuation is \(00\). These cases give the four lines of \eqref{eq:length4-factors}. Direct inspection shows that each continuation is realized (e.g., \(00|10|11|10\) occurs inside the word \(0011\)), while any other continuation would force an \(11\) that cannot be eliminated locally, contradicting the uniqueness of the Zeckendorf normal form. Therefore the list is complete.
+For each synchronized prefix from Lemma~\ref{lem:length3}, only the next two microstate bits can influence the fourth pair symbol, because the local normalization rule has length \(3\). Thus there are finitely many cases. Writing them out gives the following continuation sets:
+\[
+\begin{array}{c|c}
+\text{synchronized prefix} & \text{admissible fourth symbols} \\\hline
+00|00|00 & \{00,01,11\} \\
+00|00|01 & \{10\} \\
+00|00|11 & \{00\} \\
+00|01|10 & \{00,10,11\} \\
+00|10|00 & \{10\} \\
+00|10|10 & \{00,01,11\} \\
+00|10|11 & \{10\} \\
+00|11|00 & \{00,01,11\}.
+\end{array}
+\]
+These are exactly the sixteen words listed in \eqref{eq:length4-factors}. Each continuation is realized by the corresponding length-\(4\) factor from that display, so necessity and sufficiency reduce to checking that no further continuation can arise. But any additional continuation would give a new synchronized length-\(4\) factor, contradicting the complete finite case analysis above. Hence \eqref{eq:length4-factors} is exhaustive.
 \end{proof}
 
 \begin{proposition}[Deterministic update on synchronized prefixes]\label{prop:transitions}
@@ -130,6 +142,10 @@ The state \(10\) is the only state with three outgoing transitions that do not c
 00|10|11|10.
 \]
 Hence \(00\) and \(11\) have the same one-step follower set \(\{10\}\), while \(10\) has the follower set \(\{00,01,11\}\). This is the formal replacement for the discarded narrative derivation.
+\end{remark}
+
+\begin{remark}[Supplementary finite-state audit]
+The repository contains a supplementary verification script that reproduces the synchronized length-\(3\) and length-\(4\) factor lists, the adjacency matrix, and the Parry-measure calculations used in this appendix. The proofs above do not rely on that script, but it provides an independent finite-state audit of the classification.
 \end{remark}
 
 \subsection{Adjacency matrix and bulk Parry measure}

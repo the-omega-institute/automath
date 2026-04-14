@@ -2,7 +2,7 @@
 \label{sec:gauge}
 
 \subsection{Definition}
-Consider the scale change \(m+1\to m\). For \(\omega\in \Om_{m+1}\), define the \emph{gauge anomaly} as the Hamming distance between naive truncation and fold-aware restriction:
+Consider the scale change \(m+1\to m\). For \(\omega\in \Om_{m+1}\), define the \emph{gauge anomaly}, or \emph{restriction discrepancy}, as the Hamming distance between naive truncation and fold-aware restriction:
 \begin{equation}\label{eq:gauge-anomaly}
 G_m(\omega)
 :=
@@ -93,23 +93,51 @@ Thus \(G_4(\omega^\star)=4\), with disagreement at every site.
 
 \subsection{Bulk stationary model and the exact joint law}
 \label{subsec:joint-law}
-To state the limiting statistical results precisely, we pass from finite windows to the stationary bulk model. Let \(\eta=(\eta_t)_{t\in\ZZ}\) be a bi-infinite Bernoulli-\(\frac12\) sequence, and let \((X_t,Y_t)_{t\in\ZZ}\) be the sitewise microstate/stable-digit process whose finite factors are encoded by the reversed pair shift of Appendix~\ref{app:pressure}. Thus \(X_t=\eta_t\), while \(Y_t\) is the stable digit at site \(t\) in the bulk limit. By construction, \((X_t,Y_t)\) is stationary. We refer to its law as the \emph{bulk law}. Lemma~\ref{lem:interior-factors} identifies interior blocks of \(\mathcal{R}_M(\omega)\) with admissible labeled paths, so standard path-counting for primitive right-resolving presentations implies that this bulk law is the local weak limit of the uniform measures on \(\Om_M\): if \(\omega^{(M)}\) is uniform on \(\Om_M\) and \(k_M\to\infty\) with \(M-k_M\to\infty\), then
+To state the limiting statistical results precisely, we pass from finite windows to the stationary bulk model. Let \(\eta=(\eta_t)_{t\in\ZZ}\) be a bi-infinite Bernoulli-\(\frac12\) sequence, and let \((X_t,Y_t)_{t\in\ZZ}\) be the sitewise microstate/stable-digit process whose finite factors are encoded by the reversed pair shift of Appendix~\ref{app:pressure}. Thus \(X_t=\eta_t\), while \(Y_t\) is the stable digit at site \(t\) in the bulk limit. By construction, \((X_t,Y_t)\) is stationary. We refer to its law as the \emph{bulk law}.
+
+The next theorem is the formal core of the four-state model. It isolates the exact point at which the bulk pair process becomes finite-state: the interior language of reversed pair factors is \emph{exactly} the label language of a four-state right Fischer cover.
+
+\begin{theorem}[Interior language theorem for reversed pair factors]\label{thm:pair-language}
+Let \(G_{\mathrm{pair}}\) be the labeled graph with state set \(\mathcal{S}=\{00,01,10,11\}\) and edges
+\[
+00 \xrightarrow{00} 00,\quad
+00 \xrightarrow{01} 01,\quad
+00 \xrightarrow{11} 11,\quad
+01 \xrightarrow{10} 10,
+\]
+\[
+10 \xrightarrow{10} 00,\quad
+10 \xrightarrow{00} 01,\quad
+10 \xrightarrow{11} 01,\quad
+11 \xrightarrow{00} 00.
+\]
+For a finite word \(w\in(\{00,01,10,11\})^\ell\), the following are equivalent.
+\begin{enumerate}
+\item[(i)] \(w\) occurs as an interior factor of some reversed pair word \(\mathcal{R}_M(\omega)\).
+\item[(ii)] \(w\) is the label of a path in \(G_{\mathrm{pair}}\).
+\end{enumerate}
+Moreover, every path label in \(G_{\mathrm{pair}}\) is realized at arbitrarily large distance from the boundary by a reversed pair word \(\mathcal{R}_M(\omega)\).
+\end{theorem}
+
+\begin{proof}
+Suppose first that \(w\) occurs as an interior factor of \(\mathcal{R}_M(\omega)\). By Lemma~\ref{lem:zero-padding}, we may prepend arbitrarily many high-weight zeros and therefore assume that the factor is preceded by a synchronized block \(00|00\). Appendix~\ref{app:pressure} classifies all synchronized length-\(3\) and length-\(4\) factors. The length-\(3\) classification shows that once the synchronized regime has been entered, the future depends only on the current suffix state \(s\in\mathcal{S}\), namely on the last pair symbol in
+\[
+00|00,\qquad 00|01,\qquad 00|10,\qquad 00|11.
+\]
+The length-\(4\) classification then shows that the admissible one-step extensions are exactly the edges displayed in the statement. Reading the factor from left to right therefore determines a path in \(G_{\mathrm{pair}}\) labeled by \(w\).
+
+Conversely, every edge of \(G_{\mathrm{pair}}\) is realized by one of the synchronized length-\(4\) factors listed in Appendix~\ref{app:pressure}. Start with a long block \(00^L\), which keeps the presentation in state \(00\). We claim by induction on the path length that any labeled path in \(G_{\mathrm{pair}}\) can be realized after this synchronized prefix. The initial step is exactly the preceding sentence. For the induction step, suppose a synchronized factor ending in state \(s\) has been realized. By construction of the states as synchronized follower classes, the admissible continuations from that suffix are precisely the outgoing edges from \(s\), and Appendix~\ref{app:pressure} lists an explicit synchronized length-\(4\) witness for each such continuation. Appending that witness realizes the next edge and moves the suffix state to the prescribed target state. Iterating along the whole path realizes the complete path label.
+
+Finally, Lemma~\ref{lem:zero-padding} allows us to increase the initial high-weight padding arbitrarily, so the realized path label can be placed at arbitrary distance from the boundary. This proves both directions.
+\end{proof}
+
+Standard path-counting for primitive right-resolving presentations therefore implies that the bulk law is the local weak limit of the uniform measures on \(\Om_M\): if \(\omega^{(M)}\) is uniform on \(\Om_M\) and \(k_M\to\infty\) with \(M-k_M\to\infty\), then
 \[
 \bigl(\omega^{(M)}_{k_M},(\Fold_M(\omega^{(M)}))_{k_M}\bigr)
 \Rightarrow
 (X_0,Y_0);
 \]
 see \cite[Chapter~8]{LindMarcus1995} and \cite[Chapter~2]{Kitchens1998}.
-
-\begin{lemma}[Interior factors and admissible paths]\label{lem:interior-factors}
-For every \(M\ge 1\) and every block length \(\ell\), the reversed-pair map \(\mathcal{R}_M\) from Appendix~\ref{app:pressure} is injective, and any length-\(\ell\) factor of \(\mathcal{R}_M(\omega)\) whose indices stay at least \(\ell\) sites away from the boundary belongs to the language \(\mathcal{L}_{\mathrm{pair}}\). Conversely, every word in \(\mathcal{L}_{\mathrm{pair}}\) occurs as such an interior factor of \(\mathcal{R}_M(\omega)\) for some \(\omega\in\Om_M\), and one may choose \(M\) arbitrarily large by padding zeros at high weights.
-\end{lemma}
-
-\begin{proof}
-Injectivity is immediate from the definition \(\mathcal{R}_M(\omega)=((\omega_M,z_M),\dots,(\omega_1,z_1))\): the first coordinate of \(\mathcal{R}_M(\omega)\) is the reversed microstate word, so the map recovers \(\omega\) exactly. Lemma~\ref{lem:zero-padding} shows that padding by zeros at high weights does not change the interior of the reversed pair word, so every interior factor of \(\mathcal{R}_M(\omega)\) with distance at least \(\ell\) from the boundary may be viewed as a factor of a much longer word whose synchronized prefix starts with \(00\). Appendix~\ref{app:pressure} then proves that the synchronized factors are precisely the path labels of the four-state right Fischer cover; in particular they lie in \(\mathcal{L}_{\mathrm{pair}}\).
-
-Conversely, every \(w\in\mathcal{L}_{\mathrm{pair}}\) appears as a finite path label in that graph. By Lemma~\ref{lem:zero-padding} we may prepend \(00\)'s to synchronize the path, then realize the corresponding microstate/stable pair by running the normalization transducer in Appendix~\ref{app:pressure}. Stripping the synchronizing zeros places \(w\) in the interior of \(\mathcal{R}_M(\omega)\) for some \(\omega\in\Om_M\). Choosing longer paddings if necessary separates \(w\) from the boundary by \(\ell\) sites. This proves the claim.
-\end{proof}
 
 \begin{theorem}[Exact bulk joint law]\label{thm:joint}
 Under the bulk law, the one-site joint distribution of \((X_0,Y_0)\) is
@@ -129,7 +157,7 @@ Consequently,
 \end{theorem}
 
 \begin{proof}
-Appendix~\ref{app:pressure} constructs the right Fischer cover of the reversed pair shift and shows that, in the state order \((00,01,10,11)\), its adjacency matrix is
+By Theorem~\ref{thm:pair-language}, the graph \(G_{\mathrm{pair}}\) is the right Fischer cover of the interior reversed-pair language. In the state order \((00,01,10,11)\), its adjacency matrix is
 \[
 A=\begin{pmatrix}
 1&1&0&1\\
@@ -165,8 +193,8 @@ The probability of a labeled edge \(i\to j\) is \(\pi_iP_{ij}/A_{ij}\), where \(
 which is exactly the stated table. The two displayed marginals follow by summation.
 \end{proof}
 
-\begin{remark}[Comparison with earlier normalization results]
-The two-sided normalization transducers studied by Alexander--Zagier, Sidorov--Vershik, and Kempton \cite{AlexanderZagier1991,SidorovVershik1998,Kempton2014} also produce the marginal density \(\PP(Y_0=1)=5/18\). Our contribution here is the exact joint law with the naive digit and its anomaly interpretation; the agreement of the marginal is a consistency check with the prior Erd\H{o}s-measure literature.
+\begin{remark}[Comparison with earlier hidden-Markov models]
+The two-sided normalization transducers studied by Alexander--Zagier, Sidorov--Vershik, Kempton, and Bezhaeva--Oseledets \cite{AlexanderZagier1991,SidorovVershik1998,Kempton2014,BezhaevaOseledets2007,BezhaevaOseledets2010} also produce the marginal density \(\PP(Y_0=1)=5/18\). Our four-state graph should not be read as a replacement for those classical models of the normalized-digit process. It is a synchronized presentation for the \emph{pair} observable \((X_t,Y_t)\), and therefore for the restriction discrepancy \(X_t\oplus Y_t\). The agreement of the \(Y\)-marginal is a consistency check with the earlier Erd\H{o}s-measure literature.
 \end{remark}
 
 \subsection{Law of large numbers and central limit theorem}

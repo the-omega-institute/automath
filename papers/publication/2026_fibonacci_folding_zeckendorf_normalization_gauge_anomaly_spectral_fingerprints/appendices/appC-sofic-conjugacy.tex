@@ -1,6 +1,8 @@
 \section{Appendix C: Sofic graph models and the conjugacy threshold}
 \label{app:sofic}
 
+This appendix supplies the detailed fiber-product bookkeeping used in Section~\ref{sec:sequence}. The main theorem there is Theorem~\ref{thm:core-resolution}; here we record the graph models, the explicit \(m=3\) and \(m=4\) ambiguity tables, and the core-reduction lemmas.
+
 \subsection{The labeled graph presentation}
 Proposition~\ref{prop:sofic} constructs a labeled directed graph
 \[
@@ -24,7 +26,7 @@ For every \(m\ge 1\), the graph \(G_m\) is right-resolving: for each fixed verte
 \begin{proof}
 The two words \(v0\) and \(v1\) have values differing by \(\Fib_{m+1}\). On the other hand, a length-\(m\) word has value at most
 \[
-\sum_{k=1}^m \Fib_{k+1}=\Fib_{m+3}-2<2\Fib_{m+2},
+\sum_{k=1}^m \Fib_{k+1}=\Fib_{m+3}-2<\Fib_{m+3},
 \]
 so the full Zeckendorf normalization of any length-\(m\) word can have at most one nonzero digit beyond the first \(m\) coordinates, namely a possible \(1\) in position \(m+1\). Consequently, if two length-\(m\) words have the same fold label, then their values differ by a multiple of \(\Fib_{m+2}\). Since
 \[
@@ -33,13 +35,35 @@ so the full Zeckendorf normalization of any length-\(m\) word can have at most o
 the words \(v0\) and \(v1\) cannot have the same fold label. Hence \(\Fold_m(v0)\neq \Fold_m(v1)\).
 \end{proof}
 
-\subsection{Fiber product and ambiguous cores}
-For \(m\ge 1\), let \(\widehat{G}_m\) be the fiber product of \(G_m\) with itself: its vertices are ordered pairs \((v,v')\in V_m\times V_m\) with \(v\ne v'\), and there is a directed edge \((v,v')\xrightarrow{y} (w,w')\) whenever \(v\to w\) and \(v'\to w'\) are edges of \(G_m\) that carry the same label \(y\). Removing the diagonal ensures that edges of \(\widehat{G}_m\) parameterize precisely those label sequences that admit two distinct lifts in \(G_m\). In particular, a two-label block \((y_{t-1},y_t)\) is \emph{ambiguous} if and only if it extends to a path of length \(2\) in \(\widehat{G}_m\).
+\subsection{Fiber product, passive coordinates, and core reduction}
+For \(m\ge 1\), let \(\widehat{G}_m\) be the off-diagonal fiber product of \(G_m\) with itself: its vertices are ordered pairs \((v,v')\in V_m\times V_m\) with \(v\ne v'\), and there is an edge
+\[
+(v,v')\xrightarrow{y}(w,w')
+\]
+whenever \(v\to w\) and \(v'\to w'\) are edges of \(G_m\) carrying the same label \(y\). Thus an ambiguous two-label block is exactly a length-\(2\) path in \(\widehat{G}_m\).
 
-The normalization rule \(110\to 001\) can only move mass to higher Fibonacci weights. Therefore any disagreement between two lifts must lie in the highest-weight coordinates of the current window. Stripping all trailing coordinates on which the two lifts agree (equivalently, shifting the edge in \(\widehat{G}_m\) as far as possible until the head vertices differ at their lowest index) produces an \emph{ambiguous core}. Every ambiguous two-label block reduces uniquely to such a core, and every core lifts to an actual ambiguity by padding zeros at the higher weights. Consequently the list of ambiguous cores for the smallest window sizes controls the general case.
+\begin{definition}[Passive coordinate and ambiguous core]
+Consider a length-\(2\) path in \(\widehat{G}_m\), equivalently two distinct lifts of the same two-label block in \(G_m\). A coordinate is called \emph{passive} if deleting that coordinate from both lifted paths still yields two distinct lifts of the same two-label block, now in \(G_{m-1}\). Iterating this deletion produces a minimal witness with no passive coordinates; such a witness is called an \emph{ambiguous core}.
+\end{definition}
 
-\subsection{The base case \(m=3\): an explicit decoder}
-For \(m=3\) the decoder can be written down completely. The edge-label table is
+\begin{lemma}[Stripping lemma]\label{lem:stripping}
+Every ambiguous two-label block reduces, after finitely many deletions of passive coordinates, to an ambiguous core. Reattaching the deleted coordinates preserves the third-label resolution of the core.
+\end{lemma}
+
+\begin{proof}
+Each deletion shortens the window size by \(1\), so the process terminates. By construction, the resulting witness has no passive coordinates and is therefore an ambiguous core. Since the deleted coordinates agree in both lifts and contribute the same symbols to every later label, reattaching them does not change the set of admissible third labels and does not alter the decoded appended bit.
+\end{proof}
+
+\begin{lemma}[Core length bound]\label{lem:core-length}
+Every ambiguous core has length at most \(4\).
+\end{lemma}
+
+\begin{proof}
+Let the active interval of the core run from its leftmost differing coordinate to its rightmost differing coordinate. Equality of the first label and equality of the second label are both mediated by the local relation \(110\leftrightarrow 001\), whose support has length \(3\). Hence the left boundary of the active interval lies in a rewrite triple for one of the two labels, and the right boundary lies in a rewrite triple for the other label. If the active interval had length at least \(5\), then these two boundary triples would be disjoint and there would be at least one coordinate strictly between them. That coordinate would not participate in either boundary rewrite, so it would be passive, contradicting minimality. Therefore the active interval has length at most \(4\).
+\end{proof}
+
+\subsection{The base case \(m=3\): explicit ambiguous cores}
+For \(m=3\) the edge-label table is
 \[
 00\xrightarrow{000}00,\quad 00\xrightarrow{001}01,\quad
 01\xrightarrow{010}10,\quad 01\xrightarrow{000}11,
@@ -48,36 +72,24 @@ For \(m=3\) the decoder can be written down completely. The edge-label table is
 10\xrightarrow{100}00,\quad 10\xrightarrow{101}01,\quad
 11\xrightarrow{001}10,\quad 11\xrightarrow{100}11.
 \]
-If the third edge in a path is
-\[
-(\eta_{t-2},\eta_{t-1})\xrightarrow{\;y_t\;}(\eta_{t-1},\eta_t),
-\]
-then its appended bit is exactly the current microstate digit \(\eta_t\).
 
-\begin{lemma}[The \(m=3\) three-block decoder]\label{lem:m3-decoder}
-Every admissible label triple \((y_{t-2},y_{t-1},y_t)\in X_3^3\) determines a unique value of \(\eta_t\). Equivalently, there is a well-defined map
-\[
-\psi_3:\mathcal{B}_3(Y_3)\to\{0,1\},
-\qquad
-\eta_t=\psi_3(y_{t-2},y_{t-1},y_t),
-\]
-where \(\mathcal{B}_3(Y_3)\) denotes the admissible three-label blocks in \(Y_3\).
-\end{lemma}
-
-\begin{proof}
-Most two-label blocks already determine the terminal vertex uniquely. The only ambiguous pairs are
+\begin{lemma}[The \(m=3\) core table]\label{lem:m3-decoder}
+The only ambiguous two-label blocks in \(Y_3\) are
 \[
 (000,001)
 \quad\text{and}\quad
-(100,001),
+(100,001).
 \]
-for which the terminal vertex may be \(01\) or \(10\). These two candidates have disjoint successor label sets:
+In both cases the competing lifts after the second label terminate at the vertices \(01\) and \(10\), and the third label resolves the ambiguity via
 \[
 \mathcal{L}^+(01)=\{000,010\},
 \qquad
 \mathcal{L}^+(10)=\{100,101\}.
 \]
-Hence the third label resolves the ambiguity. If \(y_t\in\{000,010\}\), the terminal vertex is \(01\) and \(\eta_t=1\); if \(y_t\in\{100,101\}\), the terminal vertex is \(10\) and \(\eta_t=0\). In every other case the terminal vertex, hence its last bit, is already fixed by \((y_{t-2},y_{t-1})\).
+\end{lemma}
+
+\begin{proof}
+Enumerating the pairs of edges with equal labels in the table above shows that the only off-diagonal length-\(2\) paths in the fiber product are the two displayed pairs. Their terminal vertices are \(01\) and \(10\). Since the successor label sets of those vertices are disjoint, the third label determines which lift continues, and therefore determines the appended bit on the third edge.
 \end{proof}
 
 \begin{example}[A concrete \(m=3\) decoding step]\label{ex:m3-decoder}
@@ -87,79 +99,32 @@ The two-label block \((000,001)\) is ambiguous:
 \qquad
 00\xrightarrow{001}01\xrightarrow{?}\cdots.
 \]
-If the third label is \(010\), only the path through terminal vertex \(01\) can continue, so \(\eta_t=1\). If the third label is \(100\), only the path through terminal vertex \(10\) can continue, so \(\eta_t=0\).
+If the third label is \(000\) or \(010\), only the path through terminal vertex \(01\) can continue, so the current bit is \(1\). If the third label is \(100\) or \(101\), only the path through terminal vertex \(10\) can continue, so the current bit is \(0\).
 \end{example}
 
-\subsection{The base case \(m=4\): the last remaining core ambiguity}
-The fiber product \(\widehat{G}_4\) contains eight off-diagonal edges, and therefore eight ambiguous two-label blocks. Four of them place the ambiguity at the trailing end of the window:
+\subsection{The base case \(m=4\): the last remaining core ambiguities}
+\begin{lemma}[The \(m=4\) core table]\label{lem:m4-decoder}
+The only ambiguous two-label blocks in \(Y_4\) are
 \[
-(0000,0001),\quad (1000,0001),\quad (0010,1001),\quad (0100,1001).
+(0000,0001),\quad (1000,0001),\quad (0010,1001),\quad (0100,1001),
 \]
-The remaining four place it at the leading end (equivalently, they are the time reversals of the first four, written in the same left-to-right convention used in Section~\ref{sec:sequence}):
 \[
 (0001,0000),\quad (0001,0010),\quad (1001,0000),\quad (1001,0010).
 \]
-Direct inspection of \(G_4\) (or of \(\widehat{G}_4\)) shows that, in every case, the two possible lifts after the second label terminate at the vertices \(001\) and \(110\). Thus the appended bit on that edge is \(1\) along the \(001\)-lift and \(0\) along the \(110\)-lift, but the two lifts remain synchronized in the sense that their outgoing label sets agree:
+In every case the two possible lifts after the second label terminate at the vertices \(001\) and \(110\). The common successor label set is
 \[
-001\xrightarrow{0000}011,\qquad 001\xrightarrow{0010}010,
+\{0000,0010\},
 \]
-\[
-110\xrightarrow{0000}101,\qquad 110\xrightarrow{0010}100.
-\]
-Consequently a third label immediately distinguishes the two lifts, regardless of whether the ambiguity sits at the entering or exiting end of the window.
-
-\begin{lemma}[The \(m=4\) three-block decoder]\label{lem:m4-decoder}
-Every admissible label triple \((y_{t-2},y_{t-1},y_t)\in X_4^3\) determines a unique value of \(\eta_t\).
+and the third label resolves the ambiguity: \(0000\) forces the current bit \(1\), while \(0010\) forces the current bit \(0\).
 \end{lemma}
 
 \begin{proof}
-Outside the eight pairs displayed above, the terminal vertex after \((y_{t-2},y_{t-1})\) is already unique. For each displayed pair, the only possible terminal vertices are \(001\) and \(110\), and both have the same outgoing label set \(\{0000,0010\}\). Along the \(001\)-lift the edge labeled \(0000\) appends the bit \(1\) while the edge labeled \(0010\) appends the bit \(0\); the same statement holds for the \(110\)-lift. Hence the third label determines \(\eta_t\) even in the ambiguous cases: observing \(0000\) forces \(\eta_t=1\), while observing \(0010\) forces \(\eta_t=0\).
+The length-\(4\) label table of \(G_4\) has finitely many entries, so the off-diagonal fiber-product paths of length \(2\) can be listed exhaustively. The eight pairs displayed above are exactly those paths. For each pair, the two possible lifts after the second label terminate at \(001\) and \(110\). The outgoing edges from these vertices carry the same two labels \(0000\) and \(0010\), but they append opposite current bits. Hence the third label resolves every \(m=4\) ambiguity.
 \end{proof}
 
-\subsection{A uniform local decoder for \(m\ge 3\)}
-For general \(m\ge 3\), the same phenomenon persists: two labels may leave a finite ambiguity in the terminal vertex, but three labels determine the appended bit uniquely.
-
-\begin{lemma}[Three labels determine the current bit]\label{lem:three-block}
-Fix \(m\ge 3\). Let
-\[
-e_{t-2},e_{t-1},e_t
-\]
-be three consecutive edges of \(G_m\) with labels
-\[
-y_{t-2},y_{t-1},y_t\in X_m.
-\]
-Then the appended bit on \(e_t\) depends only on the label triple \((y_{t-2},y_{t-1},y_t)\), not on the chosen lift in \(G_m\). Equivalently, there is a well-defined map
-\[
-\psi_m:\mathcal{B}_3(Y_m)\to\{0,1\},
-\qquad
-\eta_t=\psi_m(y_{t-2},y_{t-1},y_t).
-\]
-\end{lemma}
-
-\begin{proof}
-Work in the LH convention so that the rewrite rule is \(110\to001\) scanned from high to low weights. As observed above, any ambiguity propagates only toward higher weights. Therefore if two lifts of the same two-label block agree on their lowest-weight coordinates, that common prefix is passive and may be stripped without affecting the remainder of the lift. This stripping process is exactly the projection of a path in \(\widehat{G}_m\) to an ambiguous core as described above.
-
-Lemma~\ref{lem:m3-decoder} shows that the only length-\(3\) cores are the two ambiguous pairs in the \(m=3\) decoder, and Lemma~\ref{lem:m4-decoder} lists all length-\(4\) cores (the eight pairs in the \(m=4\) analysis). No longer core can occur: if an ambiguity survived beyond four sites, the leftmost site of that core would be passive and could be stripped, contradicting minimality. In every core case, the third label separates the two potential lifts because the outgoing labels from the competing vertices have disjoint sets of appended bits: observing \(0000\) forces the bit \(1\), while observing \(0010\) forces the bit \(0\) (and for \(m=3\) the analogous statement holds with labels \(000\) and \(010/100\)). Reattaching the stripped passive prefix copies the third label verbatim, so the separation persists. Hence every admissible three-label block in \(Y_m\) yields a unique appended bit and the decoder \(\psi_m\) is well defined.
-\end{proof}
-
-\begin{remark}[Decoder window]
-Lemma~\ref{lem:three-block} gives a uniform inverse with memory \(2\) and anticipation \(0\):
-\[
-(\Psi_m(y))_t:=\psi_m(y_{t-2},y_{t-1},y_t),\qquad y\in Y_m.
-\]
-The window length does not grow with \(m\); only the finite lookup table \(\psi_m\) changes.
-\end{remark}
-
-\begin{proof}[Proof of Theorem~\ref{thm:conjugacy}]
-Read \(Y_m\) on the edge shift of \(G_m\). By Lemma~\ref{lem:three-block}, the local rule \(\psi_m\) recovers the appended bit on every edge from the output sequence alone. Hence the entire bi-infinite edge path is recovered uniquely, so the label map from the edge shift of \(G_m\) to \(Y_m\) is injective. Since the edge shift of \(G_m\) is canonically conjugate to \(\{0,1\}^{\ZZ}\) by reading appended bits, this proves that \(\Phi_m\) is bijective onto \(Y_m\).
-
-The inverse is the sliding block code \(\Psi_m\) from the preceding remark. Therefore
-\[
-\Psi_m\circ \Phi_m=\mathrm{id}_{\{0,1\}^{\ZZ}},
-\qquad
-\Phi_m\circ \Psi_m=\mathrm{id}_{Y_m},
-\]
-so \(\Phi_m\) is a topological conjugacy for every \(m\ge 3\).
+\subsection{Proof of the general decoder theorem}
+\begin{proof}[Detailed proof of Theorem~\ref{thm:core-resolution}]
+By Lemma~\ref{lem:stripping}, every ambiguous two-label block reduces to an ambiguous core. By Lemma~\ref{lem:core-length}, every such core has length \(3\) or \(4\). The complete length-\(3\) and length-\(4\) core lists are given by Lemmas~\ref{lem:m3-decoder} and \ref{lem:m4-decoder}. In every listed case the third label determines the current bit. Reattaching the stripped passive coordinates preserves that resolution by Lemma~\ref{lem:stripping}. Therefore every admissible three-label block in \(Y_m\) determines a unique current bit, which is exactly the statement of Theorem~\ref{thm:core-resolution}.
 \end{proof}
 
 \subsection{The degenerate case \texorpdfstring{$m=2$}{m = 2}}
@@ -173,5 +138,5 @@ For \(m=2\), the label table is
 Thus the only ambiguity is the collision \(00\leftarrow\{00,11\}\).
 
 \begin{proof}[Proof of Proposition~\ref{thm:m2}]
-The only off-diagonal bi-infinite lifts are the two constant microstate sequences \(0^\ZZ\) and \(1^\ZZ\), both mapped to \((00)^\ZZ\). Every other label sequence contains either \(01\) or \(10\), and these labels have unique preimages. Once one such block appears, the overlapping-window structure forces the entire lift uniquely. Hence \((00)^\ZZ\) is the unique non-injective fiber, with exactly the two preimages stated in Proposition~\ref{thm:m2}.
+The only off-diagonal bi-infinite path in \(\widehat G_2\) is the constant label sequence \((00)^\ZZ\), lifted once by \(0^\ZZ\) and once by \(1^\ZZ\). Every other label sequence contains \(01\) or \(10\), and those labels have unique preimages. Hence \((00)^\ZZ\) is the unique non-injective fiber, with exactly the two preimages stated in Proposition~\ref{thm:m2}.
 \end{proof}

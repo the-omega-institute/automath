@@ -238,14 +238,14 @@ g_t(x):=P_t(x-\bar\gamma).
 \]
 Let
 \[
-U(y):=\frac{3y^{2}-1}{(1+y^{2})^{2}}.
+V(y):=\frac{3y^{2}-1}{(1+y^{2})^{2}}.
 \]
 Then there exists a constant $C_\nu>0$ such that for every $t\ge 1$,
 \begin{equation}\label{eq:poisson-profile}
 \sup_{x\in\RR}\left|
 \frac{h_t(x)}{g_t(x)}
 -1
--\frac{\sigma^{2}}{t^{2}}U\!\left(\frac{x-\bar\gamma}{t}\right)
+-\frac{\sigma^{2}}{t^{2}}V\!\left(\frac{x-\bar\gamma}{t}\right)
 \right|
 \le \frac{C_\nu}{t^{3}}.
 \end{equation}
@@ -287,7 +287,7 @@ the remainder is bounded by $2\abs{\varepsilon}^{3}+\abs{\varepsilon}^{4}$
 uniformly in~$y$.  Taking expectation and using $\EE[\Delta]=0$ yields
 \[
 \frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}
-=1+\frac{\sigma^{2}}{t^{2}}U(y)+R_t(y),
+=1+\frac{\sigma^{2}}{t^{2}}V(y)+R_t(y),
 \]
 with
 \[
@@ -618,6 +618,19 @@ D_{\mathrm{KL}}(h_t\|g_t)=\sum_{r=2}^{N} c_{2r}\,t^{-2r}+o(t^{-2N}),
 which is \eqref{eq:poisson-kl-even-orders}.
 \end{proof}
 
+\begin{remark}[Moment input versus coefficient content]
+\label{rem:even-order-moment-input}
+The centred $(2N+1)$st absolute moment assumption in
+Theorem~\ref{thm:poisson-kl-even-orders} is a remainder-control
+hypothesis, not a claim that the coefficient of $t^{-2N}$ depends on
+moments up to order $2N+1$.  Once the mode expansion is truncated at
+order $2N$, the coefficient of $t^{-2N}$ is determined by moments up to
+order $2N$; the extra absolute moment enters only through the uniform
+bound on the remainder $r_{2N,t}$.  A more delicate truncation scheme
+should reduce this hypothesis, but that refinement is not needed for
+the present parity argument.
+\end{remark}
+
 \begin{theorem}[Eighth-order entropy expansion]%
 \label{thm:poisson-kl-eighth}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
@@ -716,6 +729,18 @@ the coefficient assembly from the mode integrals is given in
 Appendix~\ref{app:coefficient-assembly}.
 \end{proof}
 
+\begin{remark}[The seventh moment assumption is technical]
+\label{rem:eighth-order-moment-input}
+The coefficients in \eqref{eq:poisson-kl-eighth} involve only moments
+through order six.  The finite centred seventh absolute moment
+assumption is used only to obtain the uniform remainder
+$r_{6,t}=O(t^{-7})$ in Lemma~\ref{lem:delta-expansion} and thereby
+justify the $o(t^{-8})$ error after integration.  In that sense the
+assumption is technical rather than conceptual.  We have not attempted
+to optimize it here; a weaker hypothesis combining sixth-moment control
+with a finer domination argument should suffice.
+\end{remark}
+
 \begin{remark}[Sanity check: symmetric two-point law]\label{rem:two-point-sanity}
 For the symmetric two-point measure
 $\nu=\tfrac12(\delta_{\bar\gamma+\sigma}+\delta_{\bar\gamma-\sigma})$,
@@ -746,12 +771,12 @@ and~\ref{thm:poisson-defect-amplification}.
 
 \begin{remark}\label{rem:entropy-expansion-context}
 The fourth-order coefficient $\sigma^4/8$ corresponds to the classical
-Fisher-information rate for Cauchy smoothing.  The sixth- and
-eighth-order coefficients are new:
-the $t^{-6}$ coefficient $C_6$ already involves the skewness and
-excess-kurtosis of $\nu$, while the $t^{-8}$ coefficient $C_8$ brings
-in moments through order six and is where the defect-ladder structure
-emerges.
+Fisher-information rate for Cauchy smoothing.  At sixth order, the
+coefficient $C_6$ already combines the skewness and excess kurtosis of
+$\nu$, but its non-negativity reformulation is essentially Pearson's
+classical inequality in adapted coordinates.  The genuinely new content
+appears at eighth order: the coefficient $C_8$ brings in moments
+through order six and is where the defect-ladder structure emerges.
 
 In the entropic CLT literature
 \cite{BobkovChistyakovGotzeEdgeworth2013}, Edgeworth-type corrections
@@ -766,8 +791,8 @@ establishes a de Bruijn identity for symmetric stable laws, and
 Toscani \cite{Toscani2015,Toscani2016} studies fractional Fisher
 information and entropy inequalities.  Those results concern the
 instantaneous entropy production rate along stable semigroup flows,
-whereas the present contribution is a large-time asymptotic
-\emph{expansion} of
+whereas the present contribution is a fixed-$\nu$, large-$t$
+asymptotic \emph{expansion} of
 $D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))$ with explicit
 $t^{-6}$ and $t^{-8}$ coefficients and defect-amplification
 inequalities.  The two viewpoints are complementary: the de Bruijn
@@ -1129,8 +1154,8 @@ Then
 \[
 W_2(\nu_c,\rho_\sigma)
 \le
-4\,\sigma^{-1/2}\Delta_6(\nu)^{1/4}
-+8\,\sigma^{-2}\Delta_6(\nu)^{1/2}.
+2^{7/4}\sigma^{-1/2}\Delta_6(\nu)^{1/4}
++4\sqrt2\,\sigma^{-2}\Delta_6(\nu)^{1/2}.
 \]
 In particular, for fixed $\sigma$,
 \[
@@ -1140,7 +1165,11 @@ W_2(\nu_c,\rho_\sigma)=O\!\bigl(\Delta_6(\nu)^{1/4}\bigr)
 \end{theorem}
 
 \begin{proof}
-Keep the normalized variable $X=(\gamma-\bar\gamma)/\sigma$, and define
+Keep the normalized variable $X=(\gamma-\bar\gamma)/\sigma$, set
+\[
+Q_2:=X^2-1-\beta_3X,
+\]
+and define
 \[
 Y:=\mathbf{1}_{\{X\ge 0\}}-\mathbf{1}_{\{X<0\}}\in\{-1,1\}.
 \]
@@ -1152,24 +1181,29 @@ with the convention $\operatorname{sgn}(0)=1$.  Hence
 \[
 \EE[(X-Y)^2]\le \EE[(X^2-1)^2].
 \]
-Since $X^2-1=\beta_3X+Q_2$, the elementary bound
-$(a+b)^2\le 2a^2+2b^2$ gives
+Since $X^2-1=\beta_3X+Q_2$ and
+\[
+\EE[XQ_2]=\EE[X^3]-\EE[X]-\beta_3\EE[X^2]=0,
+\]
+one has the exact orthogonal decomposition
 \[
 \EE[(X^2-1)^2]
-\le 2\beta_3^2\EE[X^2]+2\|Q_2\|_{L^2(\nu)}^2
-=2\beta_3^2+2\|Q_2\|_{L^2(\nu)}^2.
+=\beta_3^2+\|Q_2\|_{L^2(\nu)}^2.
 \]
 The formula for $\Delta_6(\nu)$ from
 Lemma~\ref{lem:delta6-fourth-moment} therefore yields
 \[
-\EE[(X-Y)^2]\le \frac{64}{\sigma^6}\Delta_6(\nu).
+\EE[(X-Y)^2]
+\le \beta_3^2+\|Q_2\|_{L^2(\nu)}^2
+\le 4\left(\frac{\beta_3^2}{4}+\|Q_2\|_{L^2(\nu)}^2\right)
+=\frac{32}{\sigma^6}\Delta_6(\nu).
 \]
 Since $\EE[X]=0$,
 \[
 |\EE[Y]|=|\EE[Y-X]|
 \le \EE[|Y-X|]
 \le \EE[(Y-X)^2]^{1/2}
-\le \frac{8}{\sigma^3}\Delta_6(\nu)^{1/2}.
+\le \frac{4\sqrt2}{\sigma^3}\Delta_6(\nu)^{1/2}.
 \]
 Let $Z$ be a symmetric Rademacher random variable.  Because both
 $\mathcal L(Y)$ and $\mathcal L(Z)$ are supported on $\{-1,1\}$,
@@ -1179,13 +1213,13 @@ W_2(\mathcal L(Y),\mathcal L(Z))^2=2|\EE[Y]|.
 Thus
 \[
 W_2(\mathcal L(Y),\mathcal L(Z))
-\le \frac{4}{\sigma^{3/2}}\Delta_6(\nu)^{1/4}.
+\le \frac{2^{7/4}}{\sigma^{3/2}}\Delta_6(\nu)^{1/4}.
 \]
 Also,
 \[
 W_2(\mathcal L(X),\mathcal L(Y))
 \le \EE[(X-Y)^2]^{1/2}
-\le \frac{8}{\sigma^3}\Delta_6(\nu)^{1/2}.
+\le \frac{4\sqrt2}{\sigma^3}\Delta_6(\nu)^{1/2}.
 \]
 Since $\nu_c=\mathcal L(\sigma X)$ and $\rho_\sigma=\mathcal L(\sigma Z)$,
 the scaling property of $W_2$ and the triangle inequality give
@@ -1195,11 +1229,80 @@ W_2(\nu_c,\rho_\sigma)
 &\le \sigma W_2(\mathcal L(X),\mathcal L(Y))
 +\sigma W_2(\mathcal L(Y),\mathcal L(Z)) \\
 &\le
-8\,\sigma^{-2}\Delta_6(\nu)^{1/2}
-+4\,\sigma^{-1/2}\Delta_6(\nu)^{1/4},
+4\sqrt2\,\sigma^{-2}\Delta_6(\nu)^{1/2}
++2^{7/4}\sigma^{-1/2}\Delta_6(\nu)^{1/4},
 \end{align*}
 which is the stated estimate.
 \end{proof}
+
+\begin{remark}\label{rem:w2-stability-constants}
+The proof above is still coarse and we do not claim sharp constants in
+Theorem~\ref{thm:poisson-defect-stability}.  The displayed estimate is
+already stronger than the rough bound obtained from
+$(a+b)^2\le 2a^2+2b^2$, because the identity $\EE[XQ_2]=0$ gives the
+exact decomposition
+$\EE[(X^2-1)^2]=\beta_3^2+\|Q_2\|_{L^2(\nu)}^2$.
+\end{remark}
+
+\subsection{A worked asymmetric three-point example}
+
+\begin{example}[An asymmetric three-point law]
+\label{ex:asymmetric-three-point}
+Consider the centred probability measure
+\[
+\nu_{\mathrm{asym}}
+:=\frac12\delta_{-1}+\frac14\delta_{0}+\frac14\delta_{2}.
+\]
+Then $\bar\gamma=0$,
+\[
+\sigma^2=\frac32,
+\qquad
+\mu_3=\frac32,
+\qquad
+\mu_4=\frac92,
+\qquad
+\mu_5=\frac{15}{2},
+\qquad
+\mu_6=\frac{33}{2}.
+\]
+Substituting these moments into
+Theorems~\ref{thm:poisson-kl-eighth},
+\ref{thm:poisson-defect-ladder}, and
+\ref{thm:poisson-defect-amplification} gives
+\[
+D_{\mathrm{KL}}(P_t*\nu_{\mathrm{asym}}\|P_t)
+=\frac{9}{32t^4}-\frac{297}{512t^6}+\frac{4617}{4096t^8}+o(t^{-8}),
+\]
+\[
+\Delta_6(\nu_{\mathrm{asym}})=\frac{27}{128},
+\qquad
+\Delta_8(\nu_{\mathrm{asym}})=\frac{1377}{2048},
+\]
+and
+\[
+\frac{13\sigma^2}{8}\Delta_6(\nu_{\mathrm{asym}})
+=\frac{1053}{2048},
+\qquad
+\Delta_8(\nu_{\mathrm{asym}})
+-\frac{13\sigma^2}{8}\Delta_6(\nu_{\mathrm{asym}})
+=\frac{81}{512}.
+\]
+Thus $\nu_{\mathrm{asym}}$ is genuinely asymmetric
+($\mu_3,\mu_5\neq 0$), has a positive sixth-order Pearson gap, and
+exhibits strict eighth-order defect amplification.
+
+\begin{center}
+\small
+\begin{tabular}{lll}
+\textbf{Quantity} & \textbf{Exact value} & \textbf{Role} \\
+$C_6$ & $-\dfrac{297}{512}$ & sixth-order entropy coefficient \\
+$\Delta_6(\nu_{\mathrm{asym}})$ & $\dfrac{27}{128}$ & Pearson-level defect \\
+$C_8$ & $\dfrac{4617}{4096}$ & eighth-order entropy coefficient \\
+$\Delta_8(\nu_{\mathrm{asym}})$ & $\dfrac{1377}{2048}$ & eighth-order defect \\
+$\Delta_8-\dfrac{13\sigma^2}{8}\Delta_6$ & $\dfrac{81}{512}$ & strict amplification gap
+\end{tabular}
+\end{center}
+\end{example}
 
 \begin{lemma}[Kernel control of the fluctuation profile]\label{lem:rkhs-delta}
 Assume $\nu$ has finite first absolute moment and let
@@ -1239,22 +1342,57 @@ $\|\Psi_\varepsilon\|_{L^2(\omega)}^2=K(\varepsilon,\varepsilon)=1/2$
 and the triangle inequality.
 \end{proof}
 
+\begin{corollary}[Strip control of the fluctuation profile]
+\label{cor:rkhs-strip-control}
+Under the assumptions of Lemma~\ref{lem:rkhs-delta}, the function
+$\mathcal U\widetilde\delta_t$ extends holomorphically to the strip
+\[
+\mathbb S:=\{z\in\CC:|\Im z|<1\},
+\]
+and for every $a\in\RR$ and every $b\in(-1,1)$ one has
+\[
+\bigl|(\mathcal U\widetilde\delta_t)(a+\ii b)\bigr|
+\le \frac{\EE[|\Delta|]}{2t\sqrt{1-b^2}}.
+\]
+\end{corollary}
+
+\begin{proof}
+By Lemma~\ref{lem:rkhs-delta},
+$\mathcal U\widetilde\delta_t\in\mathcal H_K$ and
+\[
+\|\mathcal U\widetilde\delta_t\|_{\mathcal H_K}
+\le \frac{\EE[|\Delta|]}{\sqrt2\,t}.
+\]
+Proposition~\ref{thm:gram-space-poisson-image} gives the holomorphic
+extension to~$\mathbb S$ together with the pointwise bound
+\[
+\bigl|(\mathcal U\widetilde\delta_t)(a+\ii b)\bigr|
+\le \frac{\|\mathcal U\widetilde\delta_t\|_{\mathcal H_K}}
+{\sqrt{2(1-b^2)}},
+\]
+which yields the stated estimate.
+\end{proof}
+
 \subsection{Auxiliary kernel material}
 
 The results above---the eighth-order expansion, the defect-ladder
 decomposition, the amplification inequality, and the $W_2$-stability
 theorem---form the main contribution of the paper.
-Lemma~\ref{lem:rkhs-delta} shows that the centred fluctuation profile
-produced in Section~\ref{sec:precision-potential} lives in the RKHS of
-Appendix~\ref{app:gram-space}, so the kernel formulas feed directly into
-the defect coordinates.
+Lemma~\ref{lem:rkhs-delta} and
+Corollary~\ref{cor:rkhs-strip-control} show that the centred
+fluctuation profile produced in Section~\ref{sec:precision-potential}
+lives in the RKHS of Appendix~\ref{app:gram-space} and satisfies an
+explicit strip bound there.  In that sense Appendix~\ref{app:gram-space}
+feeds back into the same fluctuation profile that underlies the entropy
+expansion.
 Appendix~\ref{app:gram-space} computes the Gram kernel
 $\langle\Psi_\varepsilon,\Psi_\eta\rangle_{L^2(\omega)}=2/(4+(\varepsilon-\eta)^2)$
 and identifies the associated RKHS with the Poisson image space
 $\sqrt\pi\,T_1(L^2(\RR))$.
 Appendix~\ref{app:strip-lattice} records the explicit lattice symbol
-and cardinal norm formula for the integer secant orbit; the structural
-results are direct specializations of
+and cardinal norm formula for the integer secant orbit; it is included
+as an auxiliary closed-form specialization, and the structural results
+are direct consequences of
 \cite{deBoorDeVoreRon1994,RonShen1995,AldroubiGrochenig2001}.
 
 

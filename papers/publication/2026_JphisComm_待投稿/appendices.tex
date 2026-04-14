@@ -1,11 +1,11 @@
 
 \section{State diagram, timing convention, and carryover rule}\label{app:state-diagram}
 
-The detector has two hidden states $R$ (ready) and $D$ (refractory/dead). The state diagram and timing convention for one sampling interval $[0,\Delta\tau]$ are as follows.
+The counter has two hidden states $R$ (ready) and $D$ (refractory/dead). The visible output is produced by the interval click register described in Appendix~\ref{app:gkls}, not by a direct measurement of the hidden state. The state diagram and timing convention for one sampling interval $[0,\Delta\tau]$ are as follows.
 
 To remove any ambiguity in the sampling protocol, we distinguish three moments in each interval:
 \begin{enumerate}[label=(\roman*),itemsep=0.15em]
-\item immediately after the readout at time $n\Delta\tau^+$, which sets the hidden state for interval $n$;
+\item immediately after the interval-end readout at time $n\Delta\tau^+$, which resets the click register and sets the hidden state for interval $n$;
 \item during the open interval $(n\Delta\tau,(n+1)\Delta\tau)$, where recovery and excitation can occur;
 \item immediately before the next readout at time $(n+1)\Delta\tau^-$, whose hidden state is then carried into interval $n+1$ unless a click occurred.
 \end{enumerate}
@@ -39,40 +39,91 @@ The carryover rule is the following: a click in interval $n$ forces interval $n+
 
 The output-labelled kernels $T_0$ and $T_1$ in~\eqref{eq:t0-t1-main} encode precisely these transition-and-output probabilities. Note that the transition $(D,D)$ can produce either output: $A_n=0$ with probability $c$ (no recovery) or $A_n=1$ with probability $a$ (recovery followed by re-excitation). This is why the output is \emph{not} a deterministic function of the hidden-state pair $(H_n,H_{n+1})$, a point exploited in the factorization proof of $1$-dependence in \cref{sec:records}.
 
-\section{GKLS derivation of the phenomenological kernels}\label{app:gkls}
+\section{Interval click-register instrument for the phenomenological kernels}\label{app:gkls}
 
-The phenomenological counter model of \cref{sec:operational} can be obtained from a standard weak-coupling GKLS description. For clarity we summarize the derivation and the approximations that go into it.
+This appendix fixes the status of the model used in the main text. We do \emph{not} claim a microscopic reduction from a bare UDW detector to the sampled counter throughout the full regime explored in Sections~4--5. Instead, the UDW detector supplies the stationary excitation input rate $\Gamma_+(x,\Omega)$, while dead time, recovery, and interval readout are assigned to separate counter electronics. The resulting sampled counter admits an explicit interval instrument, which is all that is required for the record-level analysis of Section~\ref{sec:records}.
 
-Let $\rho_{\mathrm{det}}$ denote the reduced density matrix of a two-level detector with Hamiltonian $H_{\mathrm{det}}=(\Omega/2)\sigma_z$. Along a stationary worldline in a static KMS state, the usual Born--Markov and rotating-wave approximations lead to the GKLS master equation
+Let the hidden counter state be $H\in\{R,D\}$ and the click register be $C\in\{0,1\}$. At the beginning of each interval the register is reset to $C=0$. During the interval, the combined hidden/register process has three relevant states,
 \[
-\dot\rho_{\mathrm{det}}
-=
--i[\tfrac{\Omega}{2}\sigma_z,\rho_{\mathrm{det}}]
-+\Gamma_+\,\mathcal D[\sigma_+](\rho_{\mathrm{det}})
-+\Gamma_-\,\mathcal D[\sigma_-](\rho_{\mathrm{det}})
+(R,0),\qquad (D,0),\qquad (D,1),
 \]
-with dissipator $\mathcal D[L](\rho)=L\rho L^\dagger-\tfrac12\{L^\dagger L,\rho\}$ and upward/downward transition rates $(\Gamma_+,\Gamma_-)$ given by the usual Wightman-function integrals \cite{LoukoSatz2006,KayWald1991}. Weak coupling means $\lambda_c^2\mathcal S_x(\Omega)$ is small enough that $\Gamma_\pm\Delta\tau\ll1$ remains controlled while still allowing $\Gamma_\pm\Delta\tau=O(1)$. The coarse graining assumes that the field correlation time $\tau_{\mathrm{corr}}$ obeys $\tau_{\mathrm{corr}}\ll\Delta\tau\ll 1/\kappa_{\mathrm r}$, so that the field re-equilibrates between readouts and the GKLS generator may be treated as constant over each interval.
-
-Within one sampling interval we integrate the master equation exactly to obtain the propagator $e^{\Delta\tau\mathcal L}$, where $\mathcal L$ is the GKLS generator above augmented with a recovery term $\kappa_{\mathrm r}\mathcal D[\sigma_-]$ that enforces exponential relaxation of the refractory state. Conditioning on the readout outcome gives two Kraus maps:
-\begin{align*}
-K_1\rho_{\mathrm{det}}K_1^\dagger &= (1-e^{-\Gamma_+\Delta\tau})\,|1\rangle\!\langle0|\,\rho_{\mathrm{det}}\,|0\rangle\!\langle1|,\\
-K_0\rho_{\mathrm{det}}K_0^\dagger &= e^{-\Gamma_+\Delta\tau}\,|0\rangle\!\langle0|\,\rho_{\mathrm{det}}\,|0\rangle\!\langle0| + \text{(terms with }\kappa_{\mathrm r}\text{)}.
-\end{align*}
-Tracing over the hidden state and using the carryover rule specified in Appendix~\ref{app:state-diagram} yields the classical output-labelled kernels
-\[
-T_0=
+where $(D,1)$ means that the register has already fired and is then held until the interval-end readout. In the ordered basis $((R,0),(D,0),(D,1))$, the interval generator is the classical Markov generator
+\begin{equation}\label{eq:register-generator}
+\mathcal L_{\mathrm{ctr}}=
 \begin{pmatrix}
-e^{-\Gamma\Delta\tau} & 0\\
-\dfrac{\kappa_{\mathrm r}(e^{-\Gamma\Delta\tau}-e^{-\kappa_{\mathrm r}\Delta\tau})}{\kappa_{\mathrm r}-\Gamma} & e^{-\kappa_{\mathrm r}\Delta\tau}
+-\Gamma & \kappa_{\mathrm r} & 0\\
+0 & -\kappa_{\mathrm r} & 0\\
+\Gamma & 0 & 0
+\end{pmatrix}.
+\end{equation}
+The transition $(R,0)\to(D,1)$ represents a click. The transition $(D,0)\to(R,0)$ represents recovery. Once the register has fired, the state $(D,1)$ is absorbing until the interval-end measurement.
+
+Let
+\[
+J=
+\begin{pmatrix}
+1 & 0\\
+0 & 1\\
+0 & 0
+\end{pmatrix}
+\]
+embed the hidden-state distribution at the beginning of the interval into the combined hidden/register space, and let
+\[
+M_0=
+\begin{pmatrix}
+1 & 0 & 0\\
+0 & 1 & 0
 \end{pmatrix},
 \qquad
-T_1=
+M_1=
 \begin{pmatrix}
-0 & 1-e^{-\Gamma\Delta\tau}\\
-0 & \dfrac{\kappa_{\mathrm r}(1-e^{-\Gamma\Delta\tau})-\Gamma(1-e^{-\kappa_{\mathrm r}\Delta\tau})}{\kappa_{\mathrm r}-\Gamma}
+0 & 0 & 0\\
+0 & 0 & 1
+\end{pmatrix}
+\]
+denote the interval-end readout maps: outcome $0$ keeps the hidden state reached with register value $0$, while outcome $1$ resets the next interval to the refractory state $D$. The output-labelled instrument is therefore
+\begin{equation}\label{eq:instrument-main}
+\mathcal I_0=M_0e^{\Delta\tau\mathcal L_{\mathrm{ctr}}}J,
+\qquad
+\mathcal I_1=M_1e^{\Delta\tau\mathcal L_{\mathrm{ctr}}}J.
+\end{equation}
+
+A direct evaluation of~\eqref{eq:instrument-main} gives
+\[
+e^{\Delta\tau\mathcal L_{\mathrm{ctr}}}J=
+\begin{pmatrix}
+p & b\\
+0 & c\\
+1-p & a
 \end{pmatrix},
 \]
-which coincide with~\eqref{eq:t0-t1-main}. The remainder terms are of order $O((\lambda_c\Delta\tau)^2)$ and vanish uniformly as the coarse-graining assumptions are enforced. This shows that the phenomenological kernels arise from a GKLS evolution with repeated projective readout and the stipulated carryover rule.
+where
+\[
+p=e^{-\Gamma\Delta\tau},
+\qquad
+c=e^{-\kappa_{\mathrm r}\Delta\tau},
+\]
+and
+\[
+a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds,
+\qquad
+b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}e^{-\Gamma(\Delta\tau-s)}\,ds.
+\]
+Hence
+\[
+T_0=\mathcal I_0=
+\begin{pmatrix}
+p & 0\\
+b & c
+\end{pmatrix},
+\qquad
+T_1=\mathcal I_1=
+\begin{pmatrix}
+0 & 1-p\\
+0 & a
+\end{pmatrix},
+\]
+which are exactly the kernels used in~\eqref{eq:t0-t1-main}. The construction is consistent for all positive $\Gamma\Delta\tau$ and $\kappa_{\mathrm r}\Delta\tau$; no assumption such as $\kappa_{\mathrm r}\Delta\tau\ll1$ is used. This is the interval instrument implicitly underlying the main text.
 
 \section{Key derivations}\label{app:derivations}
 
@@ -125,6 +176,43 @@ since all factors in the numerator and denominator are strictly positive for $p\
 
 \subsection{Covariance formula and 1-dependence}
 
+\begin{proof}[Proof of \cref{lem:stationary-main}]
+The aggregate hidden-state matrix is
+\[
+P=T_0+T_1=
+\begin{pmatrix}
+ p & 1-p\\
+ b & 1-b
+\end{pmatrix}.
+\]
+Solving $\pi P=\pi$ with $\pi_R+\pi_D=1$ gives
+\[
+\pi_R=\frac{b}{1-p+b},
+\qquad
+\pi_D=\frac{1-p}{1-p+b}.
+\]
+The stationary click rate is therefore
+\[
+\rho=\pi_R(1-p)+\pi_D a
+=
+\frac{b(1-p)+(1-p)a}{1-p+b}
+=
+\frac{(1-p)(a+b)}{1-p+b}
+=
+\frac{(1-p)(1-c)}{1-p+b}.
+\]
+Finally,
+\[
+a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds
+<
+(1-p)\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\,ds
+=(1-p)(1-c)
+<
+1-p.
+\]
+Since $\rho=\pi_R(1-p)+\pi_D a$ is a strict convex combination of $a$ and $1-p$, one gets $a<\rho<1-p$.
+\end{proof}
+
 \begin{proof}[Proof of \cref{prop:recovery-main}: covariance formula]
 The aggregate transition matrix is
 \[
@@ -150,7 +238,7 @@ and therefore
 \[
 \operatorname{Cov}(A_0,A_n) = \PP(A_0=1,A_n=1)-\rho^2 = \rho(a-\rho)\lambda^{n-1}.
 \]
-The inequality $a<\rho<1-p$ follows because $\rho$ is a strict convex combination of $a$ (the click probability from state $D$) and $1-p$ (the click probability from state $R$), with both weights positive. Hence $\operatorname{Cov}(A_0,A_1)=\rho(a-\rho)<0$: the record is negatively correlated at lag~$1$.
+The bounds $a<\rho<1-p$ are given by \cref{lem:stationary-main}. Hence $\operatorname{Cov}(A_0,A_1)=\rho(a-\rho)<0$: the record is negatively correlated at lag~$1$.
 \end{proof}
 
 \begin{proof}[Proof of exact $1$-dependence]
@@ -214,8 +302,20 @@ Each mode $D_m$ contributes one equation $F_m(\theta)=0$ by the ratio law~\eqref
 
 \section{Simulation methodology for Sections~\ref{subsec:finite-sample} and~\ref{subsec:noisy-inverse}}\label{app:monte}
 
-All Monte Carlo statements in the main text were produced with reproducible scripts that sample directly from the analytic renewal law. The pseudo-random generator is the PCG64 bit generator as implemented in \texttt{NumPy~1.26}, seeded at $2^{10}$ for the Section~\ref{subsec:finite-sample} sweeps and at $2^{12}$ for the perturbation study of Section~\ref{subsec:noisy-inverse}.
+All Monte Carlo statements in the main text were produced with reproducible scripts that sample directly from the analytic laws of the ideal and finite-recovery models. We use fixed seeds for each experiment; the precise generator is not important for the conclusions because all reported uncertainties are empirical standard deviations across independent replicates.
 
-\paragraph{Finite-recovery records.} For a chosen $(\Gamma,\kappa_{\mathrm r},\Delta\tau)$ we draw successive zero-run lengths from the discrete distribution $g_k$ in~\eqref{eq:gap-closed-main} by inverse transform sampling: we precompute the cumulative distribution up to $k=200$ (which already captures probability~$>0.999$ for the parameter ranges displayed) and sample from the remaining tail via rejection. Each record contains $N$ clicks after discarding an initial burn-in of $5\times10^3$ samples. Hazards $\widehat h_k$ use the exact run-length counts, covariances $\widehat\gamma_n$ use the unbiased $(N-n)^{-1}$ estimator, and Fano factors $\widehat F$ use block sizes $B=50$. The figures in Sections~\ref{sec:records} and~\ref{subsec:finite-sample} use $\Delta\tau=0.3$, $\kappa_{\mathrm r}=5$, and $\Gamma$ ranging from $0.8\Gamma_c$ to $1.6\Gamma_c$ in steps of $0.05\Gamma_c$. For each grid point we simulate $5\times10^3$ independent records at $N=5\times10^3$, $5\times10^4$, and $10^5$ and report the empirical frequency with which $\widehat\gamma_2$ matches the sign of $\gamma_2$. The error bars quoted in the main text correspond to $\pm$ one empirical standard deviation divided by $\sqrt{\text{replicates}}$.
+\paragraph{Finite-recovery diagnostics.} For a chosen $(\Gamma,\kappa_{\mathrm r},\Delta\tau)$ we draw successive zero-run lengths from the discrete distribution $g_k$ in~\eqref{eq:gap-closed-main} by inverse transform sampling: we precompute the cumulative distribution up to $k=200$ (which already captures probability $>0.999$ for the parameter ranges displayed) and sample from the remaining tail by rejection. Each simulated record contains $N_{\mathrm{samp}}$ sampled intervals after discarding an initial burn-in of $5\times10^3$ intervals. Hazards $\widehat h_k$ use the exact run-length counts, covariances $\widehat\gamma_n$ use the unbiased $(N_{\mathrm{samp}}-n)^{-1}$ estimator, and Fano factors $\widehat F$ use block sizes $B=50$. The figures in Sections~\ref{sec:records} and~\ref{subsec:finite-sample} use $\Delta\tau=0.3$, $\kappa_{\mathrm r}=5$, and $\Gamma$ ranging from $0.8\Gamma_c$ to $1.6\Gamma_c$ in steps of $0.05\Gamma_c$. For each grid point we simulate $5\times10^3$ independent records at $N_{\mathrm{samp}}=5\times10^3$, $5\times10^4$, and $10^5$ and report the empirical frequency with which $\widehat\gamma_2$ matches the sign of $\gamma_2$. The error bars quoted in the main text correspond to $\pm$ one empirical standard deviation divided by $\sqrt{\text{replicates}}$.
 
-\paragraph{Noisy shell inversion.} The perturbation study of Section~\ref{subsec:noisy-inverse} takes the analytic shell radii produced by mode~$D_1$ in \cref{tab:worked}, draws $\delta r\sim\mathcal N(0,\sigma_r^2)$ independently for each shell, and evaluates~\eqref{eq:beta-infty-main}--\eqref{eq:mass-main}. For each $\sigma_r$ we use $10^4$ independent perturbations with seed $2^{12}$; the reported uncertainties are empirical standard deviations across those draws. The same code can be reused with arbitrary radii or detector parameters by supplying the desired $(\Delta\tau,\kappa_{\mathrm r},\Omega,\lambda_c^2\mathcal S)$.
+\paragraph{End-to-end shell pipeline.} The experiment of Section~\ref{subsec:noisy-inverse} uses the mode-$D_1$ design of \cref{tab:worked}. In the ideal-blanking mode we simulate records on the five-point radial grid
+\[
+r/r_{\mathrm s}\in\{1.006,\,1.007,\,1.008,\,1.009,\,1.010\},
+\]
+estimate
+\[
+\widehat p(r)=\frac{\#\{(A_n,A_{n+1})=(0,0)\}}{\#\{A_n=0\}},
+\]
+and linearly interpolate the zero of $\widehat p(r)-\varphi^{-1}$. In the finite-recovery mode we simulate records on the five-point grid
+\[
+r/r_{\mathrm s}\in\{1.041,\,1.043,\,1.045,\,1.047,\,1.049\},
+\]
+estimate the empirical click fraction $\widehat\rho(r)$, solve the monotone equation $\rho(\Gamma)=\widehat\rho(r)$ with $\rho(\Gamma)$ from~\eqref{eq:rho-main}, and then linearly interpolate the zero of $\widehat\Gamma(r)-\Gamma_c$. Each record again has $N_{\mathrm{samp}}=1.2\times10^5$ sampled intervals after a burn-in of $5\times10^3$ intervals. We use $120$ independent Monte Carlo replicates. Whenever both radial grids bracket the corresponding root, the resulting estimates $(\widehat r_\varphi,\widehat r_{\mathrm{mem}})$ are substituted into~\eqref{eq:beta-infty-main}--\eqref{eq:mass-main}; the reported uncertainties are empirical standard deviations across those end-to-end replicates.
