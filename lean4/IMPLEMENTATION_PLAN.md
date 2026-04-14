@@ -6,17 +6,19 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~50,669 |
-| 定理/定义数 | ~4,418 |
-| 论文接口包装 | 758+ |
-| 文件数 | 165 |
+| 总行数 | ~50,719 |
+| 定理/定义数 | ~4,421 |
+| 论文接口包装 | 761+ |
+| 文件数 | 168 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3218 |
+| \leanverified 标注数 | 3221 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3267 |
-| 轮次 | R739（round_count=R739）|
+| 总标注数 | 3270 |
+| 轮次 | R740（round_count=R740）|
+
+**Phase R740（本轮落地，全流程执行）**：`paper_prime_languages_intro_binary_primes`（对应 `cor:intro-binary-primes`，Zeta；把 binary-prime symmetric-difference obstruction 的既有 `2^m / m` 尺度下界 seed 重新挂接到 introduction corollary 标签，保留“固定 DFA 与二进制素数语言的对称差不可能低于该尺度”的核心增长障碍）；`paper_prime_languages_intro_binary_precision`（对应 `cor:intro-binary-precision`，Zeta；把 fixed DFA recall/precision collapse 的既有 Fibonacci-vs-`2^m` witness 重新挂接到 introduction corollary 标签，保留“固定 DFA 不可能在无限多长度上同时维持非退化 recall 与 precision”的核心稀疏性障碍；本轮 non-trivial 目标）；`paper_conclusion_window6_representation_zeta_count_ratio`（对应 `cor:conclusion-window6-representation-zeta-count-ratio`，Conclusion；把 window-6 representation zeta count certificate 直接挂接到一维扇区占比的 theory corollary 标签，保留“全部不可约表示总数与一维表示总数给出精确比例 `2^13 / (3^4 5^9)`”的核心计数骨架）；本轮 `\leanverified` +3，覆盖章节为 Zeta / Conclusion，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Zeta/IntroBinaryPrimes.lean`、`lean4/Omega/Zeta/IntroBinaryPrecision.lean`、`lean4/Omega/Conclusion/Window6RepresentationZetaCountRatio.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_prime_languages_intro_binary_primes`、`paper_prime_languages_intro_binary_precision`、`paper_conclusion_window6_representation_zeta_count_ratio`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_prime_languages_sofic_obstructions_dynamical_zeta/sec_introduction.tex`（`cor:intro-binary-primes`、`cor:intro-binary-precision`），`/Users/chronoai/automath/theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/conclusion/subsec__conclusion-foldbin-center-zeta-fibonacci-measure-rigidity.tex`（`cor:conclusion-window6-representation-zeta-count-ratio`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R739（本轮落地，全流程执行）**：`paper_conservative_extension_sheafification_characterization_apal`（对应 `thm:sheafification-characterization`，Topos；把 compatible local sectionability 与 sheafified fiber 非空的既有等价直接挂接到 non-focused APAL publication 主定理标签）；`paper_gluing_failure_state_theory_monotonicity_apal`（对应 `cor:state-theory-monotonicity`，LogicExpansionChain；把 refinement 下 realization 集收缩推出 `stateTheory` 单调扩张的核心 monotonicity 骨架直接挂接到 gluing-failure APAL publication corollary）；`paper_prime_languages_euler_product_natural_boundary`（对应 `thm:euler-product-natural-boundary`，Zeta；把 prime-supported Euler product 具有自然边界的现有 publication-facing witness 重新注册到 prime-languages publication analytic theorem；本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 Topos / LogicExpansionChain / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Topos/SheafificationCharacterizationAPAL.lean`、`lean4/Omega/LogicExpansionChain/GluingFailureStateTheoryMonotonicityAPAL.lean`、`lean4/Omega/Zeta/PrimeLanguagesEulerProductNaturalBoundary.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_conservative_extension_sheafification_characterization_apal`、`paper_gluing_failure_state_theory_monotonicity_apal`、`paper_prime_languages_euler_product_natural_boundary`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_null_decomposition.tex`（`thm:sheafification-characterization`），`/Users/chronoai/automath/papers/publication/2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal/sec_information_states.tex`（`cor:state-theory-monotonicity`），`/Users/chronoai/automath/papers/publication/2026_prime_languages_sofic_obstructions_dynamical_zeta/sec_analytic.tex`（`thm:euler-product-natural-boundary`）；新增 tex theorem/corollary/lemma 环境数 0）
 
