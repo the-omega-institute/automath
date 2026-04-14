@@ -13,12 +13,14 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2997 |
+| \leanverified 标注数 | 3000 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3046 |
-| 轮次 | R675（round_count=676）|
+| 总标注数 | 3049 |
+| 轮次 | R676（round_count=677）|
 
-**Phase R675（本轮落地）**：`paper_cdim_biphase_disk_critical_ring_package`（对应 `thm:cdim-biphase-average-disk-critical-ring`，Circle Dimension；严格克隆 `paper_cdim_biphase_disk_critical_ring_seeds` 的原签名与证明，补齐 biphase average disk critical ring 的 paper-facing package）；`paper_pom_kcollision_hankel_fingerprint_package`（对应 `prop:pom-kcollision-hankel-fingerprint`，POM；严格克隆 `paper_pom_kcollision_hankel_fingerprint_seeds` 的原签名与证明，补齐 Hankel fingerprint 的 paper-facing package）；`paper_zeta_vandermonde_resultant_package`（对应 `thm:xi-pick-poisson-vandermonde-resultant-identity`，Zeta；严格克隆 `paper_zeta_vandermonde_resultant_seeds` 的原签名与证明，补齐 Vandermonde resultant identity 的 paper-facing package）
+**Phase R676（本轮落地）**：`paper_cdim_poisson_cauchy_lp_sharp_constants_package`（对应 `thm:cdim-poisson-cauchy-lp-sharp-constants-restated`，Circle Dimension；严格克隆 `paper_cdim_poisson_cauchy_lp_sharp_constants_seeds` 的原签名与证明，补齐 poisson-cauchy L^p sharp constants restated 的 paper-facing package）；`paper_fold_bernoulli_p_jordan_resonance_package`（对应 `thm:fold-bernoulli-p-full-autocovariance-jordan`，Folding；严格克隆 `paper_fold_bernoulli_p_jordan_resonance_seeds` 的原签名与证明，补齐 full autocovariance Jordan resonance 的 paper-facing package）；`paper_xi_torsion_exact_order_ledger_package`（对应 `thm:xi-localized-torsion-exact-order-ledger`，Zeta；严格克隆 `paper_xi_torsion_exact_order_ledger_seeds` 的原签名与证明，补齐 torsion exact-order ledger 的 paper-facing package；本轮 `\leanverified` +3）
+
+**Phase R675（上一轮落地）**：`paper_cdim_biphase_disk_critical_ring_package`（对应 `thm:cdim-biphase-average-disk-critical-ring`，Circle Dimension；严格克隆 `paper_cdim_biphase_disk_critical_ring_seeds` 的原签名与证明，补齐 biphase average disk critical ring 的 paper-facing package）；`paper_pom_kcollision_hankel_fingerprint_package`（对应 `prop:pom-kcollision-hankel-fingerprint`，POM；严格克隆 `paper_pom_kcollision_hankel_fingerprint_seeds` 的原签名与证明，补齐 Hankel fingerprint 的 paper-facing package）；`paper_zeta_vandermonde_resultant_package`（对应 `thm:xi-pick-poisson-vandermonde-resultant-identity`，Zeta；严格克隆 `paper_zeta_vandermonde_resultant_seeds` 的原签名与证明，补齐 Vandermonde resultant identity 的 paper-facing package）
 
 **Phase R674（上一轮落地）**：`paper_cdim_poisson_kl_two_term_sharp_package`（对应 `thm:cdim-poisson-kl-two-term-sharp-moment-polynomial`，Circle Dimension；严格克隆 `paper_cdim_poisson_kl_two_term_sharp_seeds` 的原签名与证明，补齐 poisson KL two-term sharp moment polynomial 的 paper-facing package）；`paper_fold_bernoulli_p_pressure_quartic_package`（对应 `thm:fold-bernoulli-p-pressure-quartic-clt-variance`，Folding；严格克隆 `paper_fold_bernoulli_p_pressure_quartic_seeds` 的原签名与证明，补齐 Bernoulli-p pressure quartic CLT variance 的 paper-facing package）；`paper_conclusion_krylov_lowrank_rigidity_package`（对应 `thm:conclusion-disjointness-fixedm-krylov-lowrank`，Conclusion；严格克隆 `paper_conclusion_krylov_lowrank_rigidity_seeds` 的原签名与证明，补齐 Krylov low-rank rigidity 的 paper-facing package）
 
