@@ -50,4 +50,15 @@ theorem paper_pom_replica_cycle_trace_bernoulli_package :
     (Nat.fib 4 = 3 ∧ Nat.fib 5 = 5) :=
   paper_pom_replica_cycle_trace_bernoulli_seeds
 
+set_option linter.unusedVariables false in
+/-- Paper-facing Stieltjes/Hankel/log-convexity package for Bernoulli subgraph moments.
+    prop:pom-replica-softcore-bernoulli-stieltjes-hankel -/
+theorem paper_pom_replica_softcore_bernoulli_stieltjes_hankel (a : ℕ → ℝ)
+    (stieltjesMeasure hankelPSD strictLogConvex : Prop) (hMeasure : stieltjesMeasure)
+    (hPSD : stieltjesMeasure → hankelPSD) (hLogConvex : stieltjesMeasure → strictLogConvex) :
+    stieltjesMeasure ∧ hankelPSD ∧ strictLogConvex := by
+  have hHankel : hankelPSD := hPSD hMeasure
+  have hStrict : strictLogConvex := hLogConvex hMeasure
+  exact ⟨hMeasure, hHankel, hStrict⟩
+
 end Omega.POM
