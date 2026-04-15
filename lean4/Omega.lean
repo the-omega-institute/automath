@@ -149,6 +149,7 @@ import Omega.SPG.MainRenyi
 import Omega.SPG.MainResonance
 import Omega.SPG.HolderOpenResonance
 import Omega.SPG.BoundaryRigidity
+import Omega.SPG.DiscreteStokesPoincarePublication
 import Omega.SPG.HypercubeNearDetailedBalancePublication
 import Omega.SPG.HypercubeGradientPublication
 import Omega.SPG.SurvivorSpectrumCollision
@@ -381,6 +382,7 @@ import Omega.Zeta.CriticalLineGapEntropyRateZero
 import Omega.Zeta.OperatorFixedKernelLocalDensityObstruction
 import Omega.Zeta.CyclicLiftGcdLcm
 import Omega.Zeta.SyncCyclotomicDegreeLaw
+import Omega.Zeta.SyncCyclotomicDegreeLawPublication
 import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Zeta.SyncRhoM2Publication
 import Omega.Zeta.SyncKernelSpectrum
@@ -670,6 +672,7 @@ import Omega.POM.SideinfoExactEntropy
 import Omega.SPG.BoundaryDominanceExponent
 import Omega.POM.CentralizerFPdim
 import Omega.POM.PressureConvexity
+import Omega.POM.GlobalPressureConvexityPublication
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
 import Omega.Conclusion.FibonacciAnomalyBlock
