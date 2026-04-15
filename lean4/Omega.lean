@@ -255,6 +255,7 @@ import Omega.Topos.PointwiseIrreducibility
 import Omega.Topos.VisibleValueComponents
 import Omega.Topos.IntrinsicHiddenStateLowerBound
 import Omega.Topos.IntrinsicPrimeDecomposition
+import Omega.Topos.ConservativeRecoveryBudget
 import Omega.Topos.MaximalCollapseCriterion
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
@@ -288,6 +289,7 @@ import Omega.Zeta.DynZeta
 import Omega.Zeta.ETDSEulerProductNaturalBoundary
 import Omega.Zeta.PrimeLanguagesEulerProductNaturalBoundary
 import Omega.Zeta.IntroFinitePart
+import Omega.Zeta.PrimitiveOrbitAsymptotic
 import Omega.Zeta.ETDSFinitePartPrimitiveClosedForm
 import Omega.Zeta.FredholmPrimitiveClosedForm
 import Omega.Zeta.FinitePartMertensAsymptotic
@@ -479,6 +481,7 @@ import Omega.CircleDimension.OperationalHalfCircleDimensionNat
 import Omega.CircleDimension.OperationalHalfCircleDimensionNd
 import Omega.CircleDimension.HaarPullbackUniqueness
 import Omega.CircleDimension.CayleyChebyshevMode
+import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
 import Omega.CircleDimension.PoissonKLEighth
