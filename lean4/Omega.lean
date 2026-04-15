@@ -107,6 +107,7 @@ import Omega.Folding.GmFischerCover
 import Omega.Folding.SignedFibonacciGapShift
 import Omega.Folding.YmSynchronized
 import Omega.Folding.UniformSynchronizingLength
+import Omega.Folding.LocalComplexityScaleCoincidence
 import Omega.Folding.LengthMBlockUniqueLift
 import Omega.Folding.BlockBijectionThreshold
 import Omega.Folding.HigherBlockIdentification
@@ -245,6 +246,7 @@ import Omega.Topos.H1FreeNoBlindnessPublication
 import Omega.Topos.H1FreeNoBlindnessFocused
 import Omega.Topos.H1VanishingClassTrivializing
 import Omega.Topos.H1VanishingClassTrivializingPublication
+import Omega.Topos.H1VanishingClassTrivializingFocused
 import Omega.Topos.CharacterBlindObstructions
 import Omega.Topos.CharacterBlindObstructionsPublication
 import Omega.Topos.CharacterBlindObstructionsFocused
@@ -517,6 +519,7 @@ import Omega.CircleDimension.ModeParityVanish
 import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
+import Omega.CircleDimension.PoissonSymmetrization
 import Omega.CircleDimension.PoissonSymmetricCase
 import Omega.CircleDimension.PoissonKLEighth
 import Omega.CircleDimension.PoissonKLEvenOrders
