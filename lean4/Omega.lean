@@ -216,6 +216,7 @@ import Omega.SPG.GodelBoundaryDecodingRelativeErrorThreshold
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicCubicalBoundaryInjective
 import Omega.SPG.DyadicBoundarySyndromeFillability
+import Omega.SPG.LinearTimeBulkDecodeFromBoundary
 import Omega.SPG.RegularLanguageStokesDyadicZetaRationality
 import Omega.SPG.SquareclassChainComplex
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
@@ -739,6 +740,7 @@ import Omega.GU.DiscriminantWedge2Square
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.Window6SingleGoodPrimeRecovery
 import Omega.GU.Window6B3SupportCount
+import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6C3SupportCount
 import Omega.GU.FiberNonConstantNoFreeAction
 import Omega.GU.FibTailS3Closure
