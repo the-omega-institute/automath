@@ -205,6 +205,7 @@ import Omega.SPG.TanakaIncrement
 import Omega.SPG.CoarsegrainedCutFlux
 import Omega.SPG.DyadicTopInversionBound
 import Omega.SPG.DyadicFiniteMomentCompleteness
+import Omega.SPG.BoundaryGodelFiniteMomentCompleteness
 import Omega.SPG.PolycubeIsoperimetryUpper
 import Omega.SPG.RandomBulkBoundarySaturation
 import Omega.SPG.CutFunctionSubmodular
@@ -767,7 +768,6 @@ import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
 import Omega.GU.Window6B3C3EvenMomentGapLaplaceDomination
 import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
-import Omega.GU.Window6B3C3EvenMomentGapLaplaceDomination
 import Omega.GU.Window6C3SupportCount
 import Omega.GU.FiberNonConstantNoFreeAction
 import Omega.GU.FibTailS3Closure
