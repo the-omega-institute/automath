@@ -137,6 +137,7 @@ import Omega.Folding.YmAmbiguityShellDag
 import Omega.Folding.SyncDelay
 import Omega.Folding.YmSyncTail
 import Omega.Folding.YmAmbiguityShellExponentiallyThin
+import Omega.Folding.YmAmbiguityShellZetaFactorTrivial
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.AlternatingSingleSymbolSynchronizing
 import Omega.Folding.GmFischerCover
@@ -646,6 +647,7 @@ import Omega.CircleDimension.BasicComputation
 import Omega.CircleDimension.SignedCircleDimension
 import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.StokesFiberIntegrationDefect
+import Omega.CircleDimension.MedianStokesRigidityPotential
 import Omega.CircleDimension.ShortExactAdditivity
 import Omega.CircleDimension.FiniteExtensionAxiomaticUniqueness
 import Omega.SPG.TanakaStokes
@@ -748,6 +750,7 @@ import Omega.POM.FibCubeAntipodeCount
 import Omega.POM.FibCubeEdgeParity
 import Omega.POM.FibCubeFrechetMedianUnique
 import Omega.POM.FibCubeThetaClassSize
+import Omega.POM.ThetaGodelizationPrimeValuationIsometry
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.ToggleOrder
 import Omega.POM.ReplicaSoftcoreDet
