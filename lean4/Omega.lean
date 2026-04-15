@@ -13,6 +13,7 @@ import Omega.Folding.Value
 import Omega.Folding.Zeckendorf
 import Omega.Folding.Fold
 import Omega.Folding.Fiber
+import Omega.Folding.FiberRankUnrankLinear
 import Omega.Folding.MaxFiber
 import Omega.Folding.MaxFiberHigh
 import Omega.Folding.MaxFiberTwoStep
@@ -215,6 +216,7 @@ import Omega.SPG.GodelDoublelog
 import Omega.SPG.WalshStokes
 import Omega.SPG.CheegerStokes
 import Omega.SPG.MomentHolographyGap
+import Omega.SPG.LinearMomentHolographyMinimalDimension
 import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.RegisterLowerBound
 import Omega.SPG.CollisionProfileRestoration
@@ -409,6 +411,7 @@ import Omega.Zeta.ETDSFinitePartGapPositive
 import Omega.Zeta.ETDSFinitePartGapPositiveCorollary
 import Omega.Zeta.ETDSFiniteZetaImaginaryPeriodicity
 import Omega.Zeta.CyclicDet
+import Omega.Zeta.CyclicBlockTensorDeterminant
 import Omega.Zeta.EvenLengthCorrection
 import Omega.Zeta.NecklaceCorrection
 import Omega.Zeta.HankelVandermonde2

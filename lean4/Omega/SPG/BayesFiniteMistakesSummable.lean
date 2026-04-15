@@ -44,9 +44,14 @@ theorem paper_spg_bayes_finite_mistakes_summable
       {m | x ∈ bayesMismatchEvent μ (obs m) P}.Finite ∧
       ∀ᶠ m in atTop,
         (x ∈ observableEvent (obs m) (optimalObservableSet μ (obs m) P) ↔ x ∈ P) := by
+  have hmeasEq :
+      (fun m => μ.toMeasure (bayesMismatchEvent μ (obs m) P)) =
+        fun m => scanError μ (obs m) P := by
+    funext m
+    exact bayesMismatchEvent_measure_eq_scanError μ (obs m) P
   have hmass :
       (∑' m, μ.toMeasure (bayesMismatchEvent μ (obs m) P)) ≠ ⊤ := by
-    simpa [bayesMismatchEvent_measure_eq_scanError] using hsum
+    simpa [hmeasEq] using hsum
   have hfinite :
       ∀ᵐ x ∂μ.toMeasure, {m | x ∈ bayesMismatchEvent μ (obs m) P}.Finite :=
     MeasureTheory.ae_finite_setOf_mem hmass
