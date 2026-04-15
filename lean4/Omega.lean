@@ -142,6 +142,7 @@ import Omega.Folding.EndpointUnique
 import Omega.Folding.ImageSubshiftZeta
 import Omega.Folding.MicrostateResidualWindowReachability
 import Omega.Folding.PhiConjugacyThreshold
+import Omega.Folding.PhiMRightResolving
 import Omega.Folding.YmConjugacyAllMge3
 import Omega.Folding.YmSofic
 import Omega.Folding.YmAmbiguityShellDag
@@ -652,6 +653,7 @@ import Omega.Conclusion.BudgetCurveExactTailDifferenceReconstruction
 import Omega.Conclusion.ZeckendorfResetBoundedCLTAbsent
 import Omega.Conclusion.CycleRankSaturation
 import Omega.Conclusion.PrimorialAdditiveVsGodelMultiplicative
+import Omega.Conclusion.PrimorialBodycodePoleResidueInversion
 import Omega.Conclusion.FibadicLcmFiltrationLaw
 import Omega.Conclusion.FibadicPrimitiveCentralIdempotents
 import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
@@ -1030,6 +1032,7 @@ import Omega.Conclusion.Period3FiberExactMultiplicity
 import Omega.Zeta.IdempotentFixedIndexStratification
 import Omega.POM.ComplementaryGoldenBernoulliDivergence
 import Omega.POM.TopGapLimitConstants
+import Omega.POM.ToggleScanCycleGhostMultiplicativity
 import Omega.SPG.BoundaryGodelSquareclassIsometry
 import Omega.POM.HankelFingerprintSeeds
 import Omega.Conclusion.PrimorialMixedRadixSeeds
