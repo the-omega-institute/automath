@@ -8,15 +8,17 @@
 |---|---|
 | 总行数 | ~50,937 |
 | 定理/定义数 | ~4,442 |
-| 论文接口包装 | 794+ |
+| 论文接口包装 | 797+ |
 | 文件数 | 216 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3365 |
+| \leanverified 标注数 | 3368 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3414 |
-| 轮次 | R790（round_count=R790）|
+| 总标注数 | 3417 |
+| 轮次 | R791（round_count=R791）|
+
+**Phase R791（本轮落地，全流程执行）**：`paper_circle_dimension_cayley_chebyshev_mode`（对应 `thm:cayley-chebyshev-mode`，CircleDimension；把 Cayley--Chebyshev mode formula 到 trig readout / parity law / even-odd Fourier expansions 的链式 readout 压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_conservative_extension_strict_intrinsic_budget_comparison`（对应 `cor:strict-intrinsic-budget-comparison`，Topos；把 intrinsic hidden-state budget 不超过 strict presentation-level budget、且等号恰当对应 canonical quotient isomorphism 的 readout 压成 non-focused APAL corollary-facing wrapper）；`paper_etds_nontrivial_peter_weyl_channel_bound`（对应 `lem:nontrivial-peter-weyl-channel-bound`，Zeta；把 twisted-spectral-gap explicit asymptotic 到 non-trivial Peter--Weyl channel bound 的 readout 压成 ETDS lemma-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 CircleDimension / Topos / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/CayleyChebyshevMode.lean`、`lean4/Omega/Topos/StrictIntrinsicBudgetComparison.lean`、`lean4/Omega/Zeta/NontrivialPeterWeylChannelBound.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_circle_dimension_cayley_chebyshev_mode`、`paper_conservative_extension_strict_intrinsic_budget_comparison`、`paper_etds_nontrivial_peter_weyl_channel_bound`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_entropy_asymptotics.tex`（`thm:cayley-chebyshev-mode`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_homological_visibility.tex`（`cor:strict-intrinsic-budget-comparison`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_chebotarev.tex`（`lem:nontrivial-peter-weyl-channel-bound`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R790（本轮落地，全流程执行）**：`paper_circle_dimension_poisson_kl_even_orders`（对应 `thm:poisson-kl-even-orders`，CircleDimension；把 Poisson KL 渐近展开中“仅偶次项保留、奇次项系数全部消失”的 readout 压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_resolution_folding_signed_fibonacci_gap_shift`（对应 `lem:signed-fibonacci-gap-shift`，Folding；把 signed Fibonacci gap 的正负两种移位结论压成 rigidity-reconstruction lemma-facing wrapper）；`paper_conservative_extension_maximal_collapse`（对应 `cor:maximal-collapse`，Topos；把 evaluation surjective / intrinsic kernel maximal / visible quotient zero / budget maximal 四段等价压成 non-focused APAL corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 CircleDimension / Folding / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/PoissonKLEvenOrders.lean`、`lean4/Omega/Folding/SignedFibonacciGapShift.lean`、`lean4/Omega/Topos/MaximalCollapseCriterion.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_circle_dimension_poisson_kl_even_orders`、`paper_resolution_folding_signed_fibonacci_gap_shift`、`paper_conservative_extension_maximal_collapse`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_entropy_asymptotics.tex`（`thm:poisson-kl-even-orders`），`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_reconstruction.tex`（`lem:signed-fibonacci-gap-shift`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_homological_visibility.tex`（`cor:maximal-collapse`）；新增 tex theorem/corollary/lemma 环境数 0）
 
