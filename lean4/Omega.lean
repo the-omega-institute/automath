@@ -201,6 +201,7 @@ import Omega.SPG.DyadicCubicalBoundaryInjective
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.BoundaryGodelSequenceDeterminesClosure
 import Omega.SPG.ScreenKernelAuditCost
+import Omega.SPG.PartialBoundaryGodelAuditOptimal
 import Omega.SPG.ScreenAuditCostMonotoneUnitDrop
 import Omega.SPG.ScreenRankMatroidSupermodularity
 import Omega.SPG.ScreenKernelTopHomologySupermodular
@@ -670,6 +671,7 @@ import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
 import Omega.GU.FibTailP23Orbits
 import Omega.CircleDimension.PhaseSeparationPrecisionExponent
+import Omega.CircleDimension.PhasePrecisionTradeoff
 import Omega.POM.HighMultiplicitySparse
 import Omega.GU.MinSectorBudget
 import Omega.GU.NapSo10AnalyticMinimality
@@ -680,6 +682,7 @@ import Omega.GU.BdryOrientationTsubsetLucasParity
 import Omega.GU.Window6DoubleLock12
 import Omega.GU.StrongLumpabilitySpectralRigidity
 import Omega.GU.StrongLumpabilitySpectralFalsifier
+import Omega.GU.Window6NonlumpableBySpectrum
 import Omega.GU.SwapInvolutionDiagonal
 import Omega.GU.U1ThroatIdentity
 import Omega.GU.U1ThroatIdentityFixedPoint
