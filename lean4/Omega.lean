@@ -89,6 +89,7 @@ import Omega.Folding.BernoulliPBitpairLaw
 import Omega.Folding.BernoulliPJordanResonance
 import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPPressureQuartic
+import Omega.Folding.BernoulliPParryPressureChain
 import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Folding.EndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
@@ -155,6 +156,7 @@ import Omega.SPG.CheegerStokes
 import Omega.SPG.MomentHolographyGap
 import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.RegisterLowerBound
+import Omega.SPG.PrimeRegisterBudgetLowerBound
 import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CubePoincareInverse
 import Omega.SPG.PolycubeAdhesion
@@ -361,6 +363,7 @@ import Omega.Topos.GlobalImpliesCompatibleLocal
 import Omega.HighDimensionalCutProject.IndicatorSumRewrite
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.BoundaryCycleRankExternalInfoLowerBound
+import Omega.Conclusion.BoundaryMixedAuditRankConservation
 import Omega.Conclusion.PcdimPropCycleRankMinimal
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
