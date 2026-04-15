@@ -186,4 +186,29 @@ theorem paper_pom_fibcube_frechet_median_unique {n : Nat} (hn : 2 <= n) (x : Ome
     subst hx
     simp
 
+set_option maxHeartbeats 400000 in
+/-- Canonical representative corollary: if the Fréchet median is uniquely attained at `center`
+    and replay count zero characterizes `center`, then median minimizers are exactly the
+    canonical representatives.
+    cor:pom-fiber-frechet-median-canonical-representative -/
+theorem paper_pom_fiber_frechet_median_canonical_representative
+    {A : Type} [Fintype A] [DecidableEq A]
+    (dist : A → A → ℕ) (replayCount : A → ℕ) (center : A)
+    (hcanon : ∀ a, replayCount a = 0 ↔ a = center)
+    (hmedian :
+      ∀ a,
+        (Finset.univ.sum fun b => dist a b) =
+            (Finset.univ.sum fun b => dist center b) ↔
+          a = center) :
+    ∀ a,
+      (Finset.univ.sum fun b => dist a b) =
+          (Finset.univ.sum fun b => dist center b) ↔
+        replayCount a = 0 := by
+  intro a
+  constructor
+  · intro hdist
+    exact (hcanon a).2 ((hmedian a).1 hdist)
+  · intro hzero
+    exact (hmedian a).2 ((hcanon a).1 hzero)
+
 end Omega.POM

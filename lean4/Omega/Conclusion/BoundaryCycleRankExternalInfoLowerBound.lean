@@ -29,4 +29,13 @@ theorem paper_conclusion_boundary_query_register_budget_exponential_law
   simpa [Fintype.card_fin, Fintype.card_prod] using
     Fintype.card_le_of_injective encode hinj
 
+set_option maxHeartbeats 400000 in
+/-- Paper-facing conclusion: once the upper and lower query-complexity bounds are both
+    established, the minimum boundary path-independence query complexity is exactly the first
+    Betti rank.
+    thm:conclusion-boundary-path-independence-query-complexity-equals-betti -/
+theorem paper_conclusion_boundary_path_independence_query_complexity_equals_betti
+    (QminB rB : ℕ) (hUpper : QminB ≤ rB) (hLower : rB ≤ QminB) : QminB = rB := by
+  exact Nat.le_antisymm hUpper hLower
+
 end Omega.Conclusion
