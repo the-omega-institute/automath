@@ -125,4 +125,15 @@ theorem paper_physical_spacetime_procedural_grand_chain :
   · exact ⟨ga, gb, divergence, hAffine⟩
   · exact ⟨ga, gb, hga, hgb, hEinstein⟩
 
+/-- Once the backend preserves the chapter interface, the quantum and spacetime outputs are
+structural consequences and require no extra axioms.
+    cor:physical-spacetime-no-new-axioms -/
+theorem paper_physical_spacetime_no_new_axioms
+    (backendPreservesInterface quantumStructure spacetimeStructure : Prop)
+    (hQuantum : backendPreservesInterface → quantumStructure)
+    (hSpacetime : backendPreservesInterface → spacetimeStructure) :
+    backendPreservesInterface → quantumStructure ∧ spacetimeStructure := by
+  intro hBackend
+  exact ⟨hQuantum hBackend, hSpacetime hBackend⟩
+
 end Omega.PhysicalSpacetimeSkeleton
