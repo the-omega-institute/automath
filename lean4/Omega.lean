@@ -918,6 +918,7 @@ import Omega.CircleDimension.CausalPreorder
 import Omega.CircleDimension.BudgetCompleteness
 import Omega.CircleDimension.PrimeTruncation
 import Omega.CircleDimension.PrefixPrimeLedgerConservation
+import Omega.CircleDimension.PrefixResidualRegisterCapacity
 import Omega.CircleDimension.PrefixEntropyDepthConservation
 import Omega.CircleDimension.GodelScalarizationBitlengthLogB
 import Omega.CircleDimension.BiphaseFiber
