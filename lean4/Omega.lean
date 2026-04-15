@@ -122,6 +122,7 @@ import Omega.GU.Window6B3C3EuclideanCubature
 import Omega.GU.Window6B3C3QuarticRankoneHarmonicDetector
 import Omega.GU.Window6TypeSuperselectionAutGamma6
 import Omega.GU.Window6AffineFiberOrbitClassification
+import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.FreeInvolutionCount
 import Omega.Folding.ModRigidityPeriodicPredicates
@@ -160,6 +161,7 @@ import Omega.Folding.YmAmbiguityShellZetaFactorTrivial
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.AlternatingSingleSymbolSynchronizing
 import Omega.Folding.GmFischerCover
+import Omega.Folding.MismatchLanguageIntrinsicErgodic
 import Omega.Folding.SignedFibonacciGapShift
 import Omega.Folding.YmSynchronized
 import Omega.Folding.UniformSynchronizingLength
@@ -211,6 +213,7 @@ import Omega.SPG.BayesFiniteMistakesSummable
 import Omega.SPG.BoundaryDimensionAeStabilization
 import Omega.SPG.BoundaryGodelClarityExponentEquivalence
 import Omega.SPG.BoundaryCylinderGodelizationClarity
+import Omega.SPG.Hypercube6GodelSquareclass
 import Omega.SPG.ClarityRiskThresholdDepthLaw
 import Omega.SPG.ScanErrorMeasure
 import Omega.SPG.ErrorThreshold
