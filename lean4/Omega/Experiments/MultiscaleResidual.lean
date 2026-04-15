@@ -14,6 +14,14 @@ theorem paper_multiscale_residual_by_boundary
   intro hzero
   linarith
 
+/-- Paper-facing Parry-baseline wrapper for the multiscale residual bound.
+    prop:multiscale-residual-parry-bound -/
+theorem paper_multiscale_residual_parry_bound
+    (residual boundaryMass : ℝ)
+    (hnn : 0 ≤ residual) (hbound : residual ≤ boundaryMass) :
+    residual ≤ boundaryMass ∧ (boundaryMass = 0 → residual = 0) := by
+  exact paper_multiscale_residual_by_boundary residual boundaryMass hnn hbound
+
 /-- cor:multiscale-zero-stable -/
 theorem paper_multiscale_zero_stable_seeds
     (residual bound : ℝ)

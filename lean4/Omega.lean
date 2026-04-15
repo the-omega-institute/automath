@@ -410,6 +410,7 @@ import Omega.SPG.TanakaStokes
 import Omega.CircleDimension.TensorHomExtLaws
 import Omega.CircleDimension.AxiomaticRigidity
 import Omega.CircleDimension.PhaseSpectrumLimit
+import Omega.CircleDimension.PhaseSpectrumCharacterization
 import Omega.CircleDimension.PhaseSpectrumReconstruction
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
 import Omega.CircleDimension.FinitePrimeSupportMultiplicativeHalfCircleDimension
