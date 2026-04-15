@@ -8,7 +8,7 @@ set_option maxHeartbeats 400000 in
     `paper_parry_baseline_gap_sturmian` is rewritten using the explicit all-zero cylinder mass, the
     complement `1 - D_TV` is bounded by an exponentially decaying term of order `m · φ^{-m}`.
     cor:parry-gap-exp -/
-theorem paper_parry_gap_exp
+theorem paper_parry_gap_exp_pointwise
     (m : ℕ)
     (tvDist supportMass zeroCylinderMass π0 φ : ℝ)
     (hSupport : supportMass ≤ (m + 1 : ℝ) * zeroCylinderMass)
