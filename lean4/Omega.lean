@@ -402,6 +402,7 @@ import Omega.Preliminaries.EmpiricalFrequencyBounds
 import Omega.Experiments.MultiscaleResidual
 import Omega.StatisticalStability.ResidueClassification
 import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
+import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
 import Omega.PhysicalSpacetimeSkeleton.KernelizationTemplate
 import Omega.LogicExpansionChain.ForcingPersistence

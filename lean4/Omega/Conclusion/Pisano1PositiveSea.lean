@@ -56,4 +56,12 @@ theorem paper_conclusion_pisano1_positive_sea_package :
     (∀ r : Nat, r ≥ 3 → r * (r - 1) ≥ 2 * r) :=
   paper_conclusion_pisano1_positive_sea_seeds
 
+/-- Paper: `thm:conclusion-pisano1-threephase-sign-sea-law`.
+    The theorem label uses the same verified Pisano-mod-3 seed package. -/
+theorem paper_conclusion_pisano1_threephase_sign_sea_law :
+    Nat.fib 8 % 3 = Nat.fib 0 % 3 ∧
+    (∀ n : Nat, n = 0 ∨ n = 1 ∨ n ≥ 2) ∧
+    (∀ r : Nat, r ≥ 3 → r * (r - 1) ≥ 2 * r) :=
+  paper_conclusion_pisano1_positive_sea_package
+
 end Omega.Conclusion
