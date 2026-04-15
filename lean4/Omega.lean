@@ -99,6 +99,7 @@ import Omega.Folding.MetallicCompressionLockingLambda2
 import Omega.Folding.MetallicParetoFrontier
 import Omega.Folding.MetallicTwoStateSFT
 import Omega.Folding.MetallicIntegerScalarizationThreshold
+import Omega.Folding.OstrowskiMetallicTwoRuleNormalization
 import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.LocalRewriteLdpBarrier
 import Omega.Folding.ZeroFiberLinear
@@ -575,6 +576,7 @@ import Omega.Topos.LocalSectionCriterion
 import Omega.Topos.GlobalImpliesCompatibleLocal
 import Omega.HighDimensionalCutProject.IndicatorSumRewrite
 import Omega.Conclusion.AffineRegisterBudget
+import Omega.Conclusion.RateCdimTwoCircleThreshold
 import Omega.Conclusion.AuditComplexityAreaEquivalence
 import Omega.Conclusion.BoundaryCycleRankExternalInfoLowerBound
 import Omega.Conclusion.BoundaryMixedAuditRankConservation
