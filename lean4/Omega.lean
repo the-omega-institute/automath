@@ -46,6 +46,7 @@ import Omega.Folding.InverseLimitGolden
 import Omega.Folding.PiFunctorial
 import Omega.Folding.CircleDimension
 import Omega.CircleDimension.MinimalAuditCompletion
+import Omega.CircleDimension.AuditedRealizationBudgetLowerBound
 import Omega.Folding.ShiftDynamics
 import Omega.Folding.Rewrite
 import Omega.Folding.Defect
@@ -268,6 +269,8 @@ import Omega.LogicExpansionChain.GluingFailureStateTheoryMonotonicityAPAL
 import Omega.LogicExpansionChain.FocusedStateTheoryMonotonicity
 import Omega.LogicExpansionChain.WholeChainInvariance
 import Omega.LogicExpansionChain.LocalToGlobal
+import Omega.LogicExpansionChain.ThresholdCrossingGivesGlobal
+import Omega.LogicExpansionChain.GlueNullThresholdFailure
 import Omega.LogicExpansionChain.LiftedPointwiseSoundness
 import Omega.LogicExpansionChain.FlatTeamReading
 import Omega.LogicExpansionChain.InformationStateForcingPersistencePublication
