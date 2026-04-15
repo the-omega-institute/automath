@@ -241,6 +241,7 @@ import Omega.Topos.H2VanishingBlindness
 import Omega.Topos.H2VanishingBlindnessFocused
 import Omega.Topos.H1FreeNoBlindness
 import Omega.Topos.H1FreeNoBlindnessPublication
+import Omega.Topos.H1FreeNoBlindnessFocused
 import Omega.Topos.H1VanishingClassTrivializing
 import Omega.Topos.H1VanishingClassTrivializingPublication
 import Omega.Topos.CharacterBlindObstructions
@@ -630,6 +631,7 @@ import Omega.GroupUnification.ParryCommutingSquarePhi
 import Omega.GroupUnification.ChiralOrthogonalityTypeObservables
 import Omega.GroupUnification.ExactClock
 import Omega.GroupUnification.FiniteTimeLaw
+import Omega.GroupUnification.NormalForm
 import Omega.GroupUnification.TiltDynamics
 import Omega.GroupUnification.TiltedFreeEnergy
 import Omega.GroupUnification.TiltedLDP
@@ -708,6 +710,7 @@ import Omega.POM.PressureSlopes
 import Omega.POM.GibbsSelection
 import Omega.POM.RenyiEndpoint
 import Omega.POM.LambdaAlgebraic
+import Omega.POM.CollisionKernelPublication
 import Omega.POM.SymmetricCompression
 import Omega.POM.MaxFiberPublication
 import Omega.POM.ZeroTempConcentration
