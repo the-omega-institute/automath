@@ -20,4 +20,13 @@ theorem rotation_microstate_kl_certificate_of_nonneg
     exact div_le_div_of_nonneg_right hMul (le_of_lt hq)
   exact le_trans hKL hScaled
 
+/-- A paper-facing corollary: once KL is monotone under the folding pushforward, the microstate
+    certificate immediately transfers to the folded distribution.
+    cor:rotation-folded-kl-certificate -/
+theorem paper_rotation_folded_kl_certificate
+    (m : ℕ) (dKlMicro dKlFold star qMin : ℝ) (hPush : dKlFold ≤ dKlMicro)
+    (hMicro : dKlMicro ≤ 2 * ((m + 1 : ℝ) * star) ^ 2 / qMin) :
+    dKlFold ≤ 2 * ((m + 1 : ℝ) * star) ^ 2 / qMin := by
+  exact le_trans hPush hMicro
+
 end Omega.Experiments.RotationMicrostateKLCertificate
