@@ -96,4 +96,19 @@ theorem paper_pom_resonance_deficit
   · intro m hm j
     simpa [Matrix.mulVec, dotProduct] using hTail m hm j
 
+set_option maxHeartbeats 400000 in
+/-- Paper-facing `Delta(q)` wrapper: the resonance deficit is realized by `Delta` linearly
+    independent constraints on the visible moments.
+    prop:pom-delta-counts-constraints -/
+theorem paper_pom_delta_counts_constraints
+    (d Delta m0 : ℕ)
+    (M : ℕ → Fin (d + Delta) → ℝ)
+    (T : Matrix (Fin (d + Delta)) (Fin (d + Delta)) ℝ)
+    (hInv : IsUnit T.det)
+    (hTail : ∀ m ≥ m0, ∀ j : Fin Delta, (T.mulVec (M m)) (Fin.natAdd d j) = 0) :
+    ∃ constraints : Fin Delta → Fin (d + Delta) → ℝ,
+      LinearIndependent ℝ constraints ∧
+        ∀ m ≥ m0, ∀ j, (∑ i, constraints j i * M m i) = 0 := by
+  exact paper_pom_resonance_deficit d Delta m0 M T hInv hTail
+
 end Omega.POM

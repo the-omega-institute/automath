@@ -29,14 +29,15 @@ theorem paper_conclusion_s4_boundary_total_torus_rank_conservation :
   intro r
   cases r <;> decide
 
-/-- Paper: `cor:conclusion-s4-boundary-type-by-total-toric-rank`.
-For the three semistable `S₄` boundary types, the total torus rank alone
-determines the boundary type. -/
+/-- Paper-facing rank classification corollary: the total torus rank determines the
+    semistable `S₄` boundary type.
+    cor:conclusion-s4-boundary-type-by-total-toric-rank -/
 theorem paper_conclusion_s4_boundary_type_by_total_toric_rank :
-    (∀ r : S4BoundaryType, r = .one ↔ totalTorusRank r = 12) ∧
-      (∀ r : S4BoundaryType, r = .two ↔ totalTorusRank r = 6) ∧
-      ∀ r : S4BoundaryType, r = .three ↔ totalTorusRank r = 4 := by
-  have hConservation := paper_conclusion_s4_boundary_total_torus_rank_conservation
-  refine ⟨?_, ?_, ?_⟩ <;> intro r <;> cases r <;> simp [totalTorusRank] at *
+    ∀ r : S4BoundaryType,
+      (r = S4BoundaryType.one ↔ totalTorusRank r = 12) ∧
+        (r = S4BoundaryType.two ↔ totalTorusRank r = 6) ∧
+          (r = S4BoundaryType.three ↔ totalTorusRank r = 4) := by
+  intro r
+  cases r <;> simp [totalTorusRank]
 
 end Omega.Conclusion
