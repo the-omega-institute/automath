@@ -1556,6 +1556,12 @@
 11. 计划 20-22（动力系统系列）
 12. 计划 27-30（远层探索系列）
 
+### Round R791
+
+- 已完成 `paper_logic_expansion_singleton_conservativity`（`prop:logic-expansion-singleton-conservativity`，`LogicExpansionChain/SingletonConservativity.lean`）：将既有 singleton forcing 的 `_seeds` 结果提升为 unsuffixed 论文接口定理，并把 tex 注册切到直接论文名。
+- 已完成 `paper_tv_certificate_hist`（`thm:tv-certificate-hist`，`Experiments/TVCertificateHist.lean`）：把微态 TV 证书与 pushforward 下 TV 单调性桥接成折叠直方图的联合上界。
+- `paper_cdim_torus_packing_bound` 暂跳过：给定目标签名 `cardE ≤ Ck / Δ ^ k` 没有任何前提，在 `ℝ` 上不可证明；本轮未对该 paper label 做不实登记。
+
 ## 6. 质量闸门
 
 - `lake build` 全量通过
