@@ -409,7 +409,7 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     os.close(out_fd)
 
     cmd = [
-        "timeout", str(timeout_seconds), codex_bin, "exec",
+        codex_bin, "exec",
         "--dangerously-bypass-approvals-and-sandbox",
         "-C", str(work_dir or REPO_ROOT), "-o", out_file,
     ]
@@ -1532,14 +1532,18 @@ def run_paper_pipeline(
 # Rolling parallel dispatcher
 # ---------------------------------------------------------------------------
 
+PAPERS_PUB_DIR = REPO_ROOT / "papers" / "publication"
+
+
 def discover_papers(paper_dirs: Optional[list[str]] = None) -> list[str]:
     if paper_dirs:
         return paper_dirs
     papers = []
-    if THEORY_DIR.exists():
-        for d in sorted(THEORY_DIR.iterdir()):
-            if d.is_dir() and (d / "main.tex").exists():
-                papers.append(str(d))
+    for base in (PAPERS_PUB_DIR, THEORY_DIR):
+        if base.exists():
+            for d in sorted(base.iterdir()):
+                if d.is_dir() and (d / "main.tex").exists():
+                    papers.append(str(d))
     return papers
 
 
