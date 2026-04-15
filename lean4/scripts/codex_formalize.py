@@ -769,15 +769,16 @@ def detect_signature_degradation(wt: WorktreeInfo) -> list[str]:
     """
     violations = []
     try:
-        diff_out = run_cmd(
+        result = run_cmd(
             ["git", "diff", f"origin/{BASE_BRANCH}...HEAD", "--", "lean4/Omega/"],
             cwd=wt.path,
         )
+        diff_out = result.stdout or ""
     except Exception:
         return violations  # can't check, allow through
 
     if not diff_out:
-        return violations  # empty diff or None → nothing to check
+        return violations  # empty diff → nothing to check
 
     # Find blocks that add a `theorem paper_` with ONLY Prop parameters
     # Pattern: lines starting with `+theorem paper_` whose signature uses only `Prop`
