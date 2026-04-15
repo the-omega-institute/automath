@@ -89,6 +89,7 @@ import Omega.Folding.RationalGeneratorGap
 import Omega.Folding.MetallicCompressionExtremum
 import Omega.Folding.MetallicCompressionLockingLambda2
 import Omega.Folding.MetallicParetoFrontier
+import Omega.Folding.MetallicIntegerScalarizationThreshold
 import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.LocalRewriteLdpBarrier
 import Omega.Folding.ZeroFiberLinear
@@ -517,6 +518,7 @@ import Omega.EA.PrimeRegisterLocalMoves
 import Omega.EA.MulNoNewPrimitive
 import Omega.EA.StableAddComputable
 import Omega.EA.InternalProductAddsValues
+import Omega.EA.PrimeRegisterMultiplicativeNormalizationAdditiveIso
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.AddressNaturality
 import Omega.EA.StableAddFiniteResolutionCompatibility
@@ -701,6 +703,7 @@ import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
 import Omega.GU.FibTailP23Orbits
+import Omega.GU.TerminalWindow6Sl2zHyperbolicFromTailTriple
 import Omega.CircleDimension.PhaseSeparationPrecisionExponent
 import Omega.CircleDimension.PhasePrecisionTradeoffDyadic
 import Omega.CircleDimension.PhasePrecisionTradeoff
