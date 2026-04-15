@@ -501,6 +501,7 @@ import Omega.Zeta.BlockCyclicRigidity
 import Omega.Zeta.FiniteRankRealisation
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Discussion.ChebyshevAdams
+import Omega.Discussion.HypercubePotentialCurvatureControlledStrictification
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
 import Omega.EA.ChiRigidityShadow
@@ -619,6 +620,7 @@ import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
 import Omega.CircleDimension.PoissonCentralTwoChannel
+import Omega.CircleDimension.PoissonCentralTwoChannelReconstruction
 import Omega.CircleDimension.PoissonChannelRKHS
 import Omega.CircleDimension.PoissonSymmetrization
 import Omega.CircleDimension.PoissonSymmetricCase
@@ -704,6 +706,7 @@ import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
 import Omega.GU.FibTailP23Orbits
 import Omega.GU.TerminalWindow6Sl2zHyperbolicFromTailTriple
+import Omega.GU.Window6CyclicWeightThresholdRootLength
 import Omega.CircleDimension.PhaseSeparationPrecisionExponent
 import Omega.CircleDimension.PhasePrecisionTradeoffDyadic
 import Omega.CircleDimension.PhasePrecisionTradeoff
