@@ -8,15 +8,17 @@
 |---|---|
 | 总行数 | ~50,937 |
 | 定理/定义数 | ~4,442 |
-| 论文接口包装 | 797+ |
+| 论文接口包装 | 800+ |
 | 文件数 | 216 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3374 |
+| \leanverified 标注数 | 3377 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3423 |
-| 轮次 | R793（round_count=R793）|
+| 总标注数 | 3426 |
+| 轮次 | R794（round_count=R794）|
+
+**Phase R794（本轮落地，全流程执行）**：`paper_cubical_stokes_boundary_rigidity`（对应 `thm:boundary-rigidity`，SPG；把 cube minimizer 的 canonical boundary-trace 与 rigid readout 压成 cubical Stokes theorem-facing wrapper，本轮 non-trivial 目标）；`paper_gluing_failure_minimal_information_cost_of_strictification`（对应 `thm:minimal-information-cost-of-strictification`，Topos；把 auxiliary strictification code 的 hidden-state lower-bound 与 sharpness readout 压成 gerbe-obstruction proposition-facing wrapper）；`paper_etds_geometric_harmonic_tail`（对应 `lem:geometric-harmonic-tail`，Zeta；把 geometric-series tail estimate 与 `O(ϑ^N/N)` remainder control 压成 ETDS lemma-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 SPG / Topos / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/SPG/BoundaryRigidity.lean`、`lean4/Omega/Topos/MinimalInformationCostOfStrictification.lean`、`lean4/Omega/Zeta/GeometricHarmonicTail.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_cubical_stokes_boundary_rigidity`、`paper_gluing_failure_minimal_information_cost_of_strictification`、`paper_etds_geometric_harmonic_tail`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_cubical_stokes_inverse_boundary_readout_jdsgt/main.tex`（`thm:boundary-rigidity`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_gerbe_obstruction.tex`（`thm:minimal-information-cost-of-strictification`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_chebotarev.tex`（`lem:geometric-harmonic-tail`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R793（本轮落地，全流程执行）**：`paper_circle_dimension_mode_parity_vanish`（对应 `lem:mode-parity-vanish`，CircleDimension；把 Cayley--Chebyshev mode parity cancellation 的 odd-integrand readout 压成 entropy-asymptotics lemma-facing wrapper）；`paper_gluing_failure_visible_quotient_character_separation`（对应 `cor:visible-quotient-character-separation`，Topos；把 globally admissible character factoring 与 converse separation 合并成 visible quotient exact-readout corollary-facing wrapper，本轮 non-trivial 目标）；`paper_etds_perron_channel_contribution`（对应 `lem:perron-channel-contribution`，Zeta；把 primitive-orbit asymptotic、tail estimate 与 correction-series identification 合并成 ETDS Perron-channel lemma-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 CircleDimension / Topos / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/ModeParityVanish.lean`、`lean4/Omega/Topos/VisibleQuotientCharacterSeparation.lean`、`lean4/Omega/Zeta/PerronChannelContribution.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_circle_dimension_mode_parity_vanish`、`paper_gluing_failure_visible_quotient_character_separation`、`paper_etds_perron_channel_contribution`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_entropy_asymptotics.tex`（`lem:mode-parity-vanish`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_gerbe_obstruction.tex`（`cor:visible-quotient-character-separation`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_chebotarev.tex`（`lem:perron-channel-contribution`）；新增 tex theorem/corollary/lemma 环境数 0）
 
