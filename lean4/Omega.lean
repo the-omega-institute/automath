@@ -704,6 +704,7 @@ import Omega.TypedAddressBiaxialCompletion.BoundaryAddressCollision
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
+import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
 import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
 import Omega.PhysicalSpacetimeSkeleton.LocalSkeletonBeforeGlobalTrivialization
 import Omega.PhysicalSpacetimeSkeleton.AuditedSeedRankThree
@@ -795,6 +796,7 @@ import Omega.GU.Window6NonlumpableBySpectrum
 import Omega.GU.SwapInvolutionDiagonal
 import Omega.GU.U1ThroatIdentity
 import Omega.GU.U1ThroatIdentityFixedPoint
+import Omega.GU.MobiusDualityUnified
 import Omega.GU.DiscriminantWedge2Square
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.Window6SingleGoodPrimeRecovery
@@ -885,6 +887,7 @@ import Omega.CircleDimension.BudgetCompleteness
 import Omega.CircleDimension.PrimeTruncation
 import Omega.CircleDimension.PrefixPrimeLedgerConservation
 import Omega.CircleDimension.PrefixEntropyDepthConservation
+import Omega.CircleDimension.GodelScalarizationBitlengthLogB
 import Omega.CircleDimension.BiphaseFiber
 import Omega.CircleDimension.PhaseSpectrumMonoid
 import Omega.CircleDimension.LissajousChebyshev
