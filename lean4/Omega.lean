@@ -104,6 +104,7 @@ import Omega.Folding.YmSynchronized
 import Omega.Folding.UniformSynchronizingLength
 import Omega.Folding.LengthMBlockUniqueLift
 import Omega.Folding.BlockBijectionThreshold
+import Omega.Folding.HigherBlockIdentification
 import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.PhiMemoryThresholdExact
 import Omega.Folding.BlockCountsThreshold
@@ -230,6 +231,7 @@ import Omega.Topos.H1FreeNoBlindnessPublication
 import Omega.Topos.H1VanishingClassTrivializing
 import Omega.Topos.H1VanishingClassTrivializingPublication
 import Omega.Topos.CharacterBlindObstructions
+import Omega.Topos.CharacterBlindObstructionsPublication
 import Omega.Topos.CharacterBlindObstructionsFocused
 import Omega.Topos.BranchDecomposition
 import Omega.Topos.ComponentGerbeDecomposition
@@ -352,6 +354,7 @@ import Omega.Zeta.FinitePartSingleLayerTorsionNearRh
 import Omega.Zeta.FinitePartCyclicLiftSpectrumIdentifiability
 import Omega.Zeta.IntroFiniteGroup
 import Omega.Zeta.ETDSDFADensityDichotomy
+import Omega.Zeta.NontrivialPerronPointConvergence
 import Omega.Zeta.ETDSZeckendorfRegularPowerlaw
 import Omega.Zeta.PrimeLanguagesZeckendorfRegularPowerlaw
 import Omega.Zeta.ETDSZeckendorfPrimeLanguageNotRegular
