@@ -89,6 +89,7 @@ import Omega.Folding.VisibleValueOverflow
 import Omega.Folding.CongruenceRigidityPublication
 import Omega.Folding.FingerprintSeparationPublication
 import Omega.Folding.BitRecoveryFromLocalCongruenceData
+import Omega.Folding.RandomResidueDistribution
 import Omega.Folding.EntropyRandomResidues
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.BernoulliHalfEndpoints
@@ -520,6 +521,7 @@ import Omega.CircleDimension.OperationalHalfCircleDimensionNd
 import Omega.CircleDimension.HaarPullbackUniqueness
 import Omega.CircleDimension.CayleyChebyshevMode
 import Omega.CircleDimension.ModeParityVanish
+import Omega.CircleDimension.ModeGramKernel
 import Omega.CircleDimension.ModeSpaceRKHS
 import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling
@@ -770,6 +772,7 @@ import Omega.POM.FisherZerosArcsineSeeds
 import Omega.POM.DiagonalHighMoments
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Zeta.TorsionExactOrderLedgerSeeds
+import Omega.Zeta.TwistedDeterminantRigidity
 import Omega.Zeta.TwistedDeterminantCumulants
 import Omega.Zeta.CLTSpectral
 import Omega.Zeta.RhoGapM12
