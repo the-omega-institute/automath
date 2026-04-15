@@ -179,6 +179,7 @@ import Omega.Folding.ExactMarkovOrderBernoulli
 import Omega.Folding.YmConjugacyCollapse
 import Omega.Folding.ResidueMarkovOrder
 import Omega.Folding.FoldSuitePublication
+import Omega.EA.FiniteLedgerRecoverability
 import Omega.EA.PrimeRegisterNormalFormUniqueness
 import Omega.EA.PrimeRegisterOrbitFiberCoincidence
 import Omega.PhysicalSpacetimeSkeleton.DerivedStressEnergyConservation
@@ -301,6 +302,7 @@ import Omega.SPG.BoundedTypeSturmianConstantWidthCertificate
 import Omega.Conclusion.FixedResolutionPrimeBarrierPostprocessingNeutrality
 import Omega.SPG.PrimeRegisterBudgetLowerBound
 import Omega.SPG.FixedAxisGodelOrderInformation
+import Omega.SPG.StokesGodelDimensionChain
 import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CurlReconstructionPublication
 import Omega.SPG.CubePoincareInverse
@@ -708,6 +710,7 @@ import Omega.CircleDimension.ModeParityVanish
 import Omega.CircleDimension.ModeGramKernel
 import Omega.CircleDimension.ModeQuadraticIntegrals
 import Omega.CircleDimension.ModeSpaceRKHS
+import Omega.CircleDimension.PrefixQuantileCRTJointModulus
 import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
