@@ -99,6 +99,7 @@ import Omega.Folding.RandomResidueDistribution
 import Omega.Folding.EntropyRandomResidues
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.BernoulliHalfEndpoints
+import Omega.Folding.BernoulliPEndpointExactFinite
 import Omega.Folding.BernoulliPGammaMax
 import Omega.Folding.BernoulliPBitpairLaw
 import Omega.Folding.BernoulliPJordanResonance
