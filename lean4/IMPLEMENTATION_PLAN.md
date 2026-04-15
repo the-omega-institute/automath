@@ -7,16 +7,18 @@
 | 指标 | 数值 |
 |---|---|
 | 总行数 | ~50,876 |
-| 定理/定义数 | ~4,436 |
+| 定理/定义数 | ~4,439 |
 | 论文接口包装 | 785+ |
-| 文件数 | 201 |
+| 文件数 | 204 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3341 |
+| \leanverified 标注数 | 3344 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3390 |
-| 轮次 | R780（round_count=R780）|
+| 总标注数 | 3393 |
+| 轮次 | R781（round_count=R781）|
+
+**Phase R781（本轮落地，全流程执行）**：`paper_recursive_addressing_dyadic_inverse_limit_stable_object`（对应 `thm:recursive-addressing-dyadic-inverse-limit-stable-object`，RecursiveAddressing；把 dyadic tower inverse-limit nonempty、compact/complete/totally disconnected ultrametric structure，以及 stable-fiber 唯一交点 readout 压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_resolution_folding_phi_m_memory_threshold_exact`（对应 `cor:Phi-m-memory-threshold-exact`，Folding；把 one-sided inverse 的 threshold witness 与 universal lower bound 压成 exact-memory corollary-facing wrapper）；`paper_conservative_extension_strict_intrinsic_coincidence_criterion`（对应 `cor:strict-intrinsic-coincidence-criterion`，Topos；把 strict quotient coincidence、kernel coincidence 与 chain-image coincidence 三段等价压成 corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 RecursiveAddressing / Folding / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/RecursiveAddressing/DyadicInverseLimitStableObject.lean`、`lean4/Omega/Folding/PhiMemoryThresholdExact.lean`、`lean4/Omega/Topos/StrictIntrinsicCoincidenceCriterion.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_recursive_addressing_dyadic_inverse_limit_stable_object`、`paper_resolution_folding_phi_m_memory_threshold_exact`、`paper_conservative_extension_strict_intrinsic_coincidence_criterion`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_recursive_addressing_prefix_sites_tac/main.tex`（`thm:recursive-addressing-dyadic-inverse-limit-stable-object`），`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_reconstruction.tex`（`cor:Phi-m-memory-threshold-exact`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_homological_visibility.tex`（`cor:strict-intrinsic-coincidence-criterion`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R780（本轮落地，全流程执行）**：`paper_circle_dimension_poisson_defect_stability`（对应 `thm:poisson-defect-stability`，CircleDimension；把 centered-law to sign-law、sign-law to symmetric Rademacher、以及最终 Wasserstein triangle readout 压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_etds_primitive_peter_weyl_trace`（对应 `cor:primitive-peter-weyl-trace`，Zeta；把 irreducible-channel determinant expansion 的 coefficient readout 直接压成 trace-formula corollary-facing wrapper）；`paper_conservative_extension_strict_to_intrinsic_visible`（对应 `cor:strict-to-intrinsic-visible`，Topos；把 strict visible quotient kills the presentation class 的输入接到 intrinsic pure-Ext initiality，得到 canonical quotient factorization）；本轮 `\leanverified` +3，覆盖章节为 CircleDimension / Zeta / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/PoissonDefectStability.lean`、`lean4/Omega/Zeta/PrimitivePeterWeylTrace.lean`、`lean4/Omega/Topos/StrictToIntrinsicVisible.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_circle_dimension_poisson_defect_stability`、`paper_etds_primitive_peter_weyl_trace`、`paper_conservative_extension_strict_to_intrinsic_visible`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_entropy_asymptotics.tex`（`thm:poisson-defect-stability`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_chebotarev.tex`（`cor:primitive-peter-weyl-trace`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_homological_visibility.tex`（`cor:strict-to-intrinsic-visible`）；新增 tex theorem/corollary/lemma 环境数 0）
 
