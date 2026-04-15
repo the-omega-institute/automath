@@ -120,6 +120,7 @@ import Omega.Folding.BlockCountsThreshold
 import Omega.Folding.LinearTimeBlockDecoding
 import Omega.Folding.YmExactSFTOrder
 import Omega.Folding.ExactMarkovOrderBernoulli
+import Omega.Folding.YmConjugacyCollapse
 import Omega.Folding.ResidueMarkovOrder
 import Omega.Folding.FoldSuitePublication
 import Omega.Graph.LabeledGraph
@@ -745,6 +746,7 @@ import Omega.POM.ZeroTempConcentration
 import Omega.POM.DoubleLimit
 import Omega.POM.ThickFiberEnvelope
 import Omega.POM.VisibleThickTail
+import Omega.POM.CollisionEntropyRate
 import Omega.POM.MicrocanonicalBandBounds
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
@@ -781,6 +783,7 @@ import Omega.POM.FisherZerosArcsineSeeds
 import Omega.POM.DiagonalHighMoments
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Zeta.TorsionExactOrderLedgerSeeds
+import Omega.Zeta.LogMHolomorphicVariation
 import Omega.Zeta.TwistedDeterminantRigidity
 import Omega.Zeta.TwistedDeterminantCumulants
 import Omega.Zeta.CLTSpectral
