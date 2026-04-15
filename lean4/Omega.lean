@@ -50,6 +50,7 @@ import Omega.CircleDimension.MinimalLogAuditablePhaseCircles
 import Omega.CircleDimension.MinimalAuditCompletion
 import Omega.CircleDimension.AuditedRealizationBudgetLowerBound
 import Omega.CircleDimension.AnomalyQuadraticLaw
+import Omega.CircleDimension.NonresonantLissajousNodeCount
 import Omega.Folding.ShiftDynamics
 import Omega.Folding.Rewrite
 import Omega.Folding.Defect
@@ -73,6 +74,7 @@ import Omega.Experiments.MetallicMeanGoldenUniqueOptimalTVConstant
 import Omega.POM.S4Asymptotic
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
+import Omega.POM.OrderSpatialization
 import Omega.Folding.LocalWeightRigidityFibonacci
 import Omega.Folding.LocalWeightRigidityPublication
 import Omega.Folding.StableSyntaxCounting
@@ -221,6 +223,7 @@ import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.ErrorResolventCyclotomic
 import Omega.SPG.ScreenAuditCostMonotoneUnitDrop
 import Omega.SPG.QuasistationaryAmbiguityAmplitudes
+import Omega.Conclusion.ZGDensityExactInhomogeneousMarkov
 import Omega.SPG.MainAmplitude
 import Omega.SPG.SurvivorRenyiPressure
 import Omega.SPG.MainRenyi
