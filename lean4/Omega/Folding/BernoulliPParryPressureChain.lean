@@ -90,6 +90,30 @@ theorem bernoulliParry_stationary_sum (p : ℚ) (hp : 0 < p) :
   field_simp [hnorm]
   ring
 
+/-- Probability of the one-step return branch `a → a`. -/
+def bernoulliReturnTimeAProb1 (p : ℚ) : ℚ :=
+  1 - p
+
+/-- Probability of the two-step return branch `a → d → a`. -/
+def bernoulliReturnTimeAProb2 (p : ℚ) : ℚ :=
+  p * (1 - p)
+
+/-- Probability of the long return branch `a → b → c(↔b)^n → a`. -/
+def bernoulliReturnTimeALongProb (p : ℚ) (n : ℕ) : ℚ :=
+  p ^ (n + 2) * (1 - p)
+
+/-- Return length along the long branch indexed by the number of `c → b → c` loops. -/
+def bernoulliReturnTimeALongLength (n : ℕ) : ℕ :=
+  2 * n + 3
+
+/-- Mismatch count along the long return branch. -/
+def bernoulliReturnTimeALongMismatch (n : ℕ) : ℕ :=
+  n + 3
+
+/-- Closed-form PGF of the first return time to `a`. -/
+def bernoulliReturnTimeAPGF (p z : ℚ) : ℚ :=
+  (1 - p) * z + p * (1 - p) * z ^ 2 + p ^ 2 * (1 - p) * z ^ 3 / (1 - p * z ^ 2)
+
 /-- Paper-facing Bernoulli-`p` Parry-kernel package. -/
 theorem paper_fold_bernoulli_p_parry_pressure_chain :
     ∀ p : ℚ, 0 < p → p < 1 →
@@ -110,5 +134,38 @@ theorem paper_fold_bernoulli_p_parry_pressure_chain :
     bernoulliParry_kernel_eq_conjugation p hp hp1, bernoulliParry_normalizer p,
     bernoulliParry_stationary_eq_normalized p, bernoulliParry_stationary_left_fixed p hp,
     bernoulliParry_stationary_sum p hp⟩
+
+/-- Paper-facing first-return law from state `a` in the Bernoulli-`p` Parry chain.
+    prop:fold-bernoulli-p-return-time-a -/
+theorem paper_fold_bernoulli_p_return_time_a :
+    ∀ p : ℚ, 0 < p → p < 1 →
+      bernoulliReturnTimeAProb1 p = 1 - p ∧
+      bernoulliReturnTimeAProb2 p = p * (1 - p) ∧
+      (∀ n : ℕ, bernoulliReturnTimeALongProb p n = p ^ 2 * (p ^ n * (1 - p))) ∧
+      (∀ n : ℕ, bernoulliReturnTimeALongLength n = 2 * n + 3) ∧
+      (∀ n : ℕ, bernoulliReturnTimeALongMismatch n = n + 3) ∧
+      (∀ n : ℕ,
+        (bernoulliReturnTimeALongLength n : ℤ) =
+          2 * bernoulliReturnTimeALongMismatch n - 3) ∧
+      (∀ z : ℚ,
+        bernoulliReturnTimeAPGF p z =
+          (1 - p) * z + p * (1 - p) * z ^ 2 + p ^ 2 * (1 - p) * z ^ 3 / (1 - p * z ^ 2)) ∧
+      (bernoulliReturnTimeAProb1 p + bernoulliReturnTimeAProb2 p + p ^ 2 = 1) := by
+  intro p hp hp1
+  refine ⟨rfl, rfl, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro n
+    rw [bernoulliReturnTimeALongProb]
+    ring_nf
+  · intro n
+    rfl
+  · intro n
+    rfl
+  · intro n
+    simp [bernoulliReturnTimeALongLength, bernoulliReturnTimeALongMismatch]
+    ring
+  · intro z
+    rfl
+  · simp [bernoulliReturnTimeAProb1, bernoulliReturnTimeAProb2]
+    ring
 
 end Omega.Folding
