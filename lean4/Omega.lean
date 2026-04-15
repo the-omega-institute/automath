@@ -239,6 +239,7 @@ import Omega.Topos.ComponentGerbeDecomposition
 import Omega.Topos.CechBridgeCompatibleRealizations
 import Omega.Topos.GerbeNullSemantics
 import Omega.Topos.GerbeNullSemanticsPublication
+import Omega.Topos.VisibleQuotientCharacterSeparation
 import Omega.Topos.FiniteAbelianDuality
 import Omega.Topos.IntrinsicVisibleQuotient
 import Omega.Topos.IntrinsicVisibleQuotientPublication
@@ -296,6 +297,7 @@ import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
 import Omega.Zeta.ClassPrimitiveDecomposition
 import Omega.Zeta.ClassMertensExplicit
+import Omega.Zeta.PerronChannelContribution
 import Omega.Zeta.NontrivialPeterWeylChannelBound
 import Omega.Zeta.ClassMertensFourier
 import Omega.Zeta.ClassPrimitiveTrivialSplit
@@ -481,6 +483,7 @@ import Omega.CircleDimension.OperationalHalfCircleDimensionNat
 import Omega.CircleDimension.OperationalHalfCircleDimensionNd
 import Omega.CircleDimension.HaarPullbackUniqueness
 import Omega.CircleDimension.CayleyChebyshevMode
+import Omega.CircleDimension.ModeParityVanish
 import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
