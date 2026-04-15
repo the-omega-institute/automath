@@ -686,6 +686,7 @@ import Omega.CircleDimension.StokesFiberIntegrationDefect
 import Omega.CircleDimension.MedianStokesRigidityPotential
 import Omega.CircleDimension.PhasePrefixOccupancyBarrier
 import Omega.CircleDimension.RegisterCircleModpFormula
+import Omega.CircleDimension.AddressLedgerJointBudgetLowerBound
 import Omega.CircleDimension.ShortExactAdditivity
 import Omega.CircleDimension.FiniteExtensionAxiomaticUniqueness
 import Omega.SPG.TanakaStokes
@@ -748,6 +749,7 @@ import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
 import Omega.TypedAddressBiaxialCompletion.VisiblePhaseLift
+import Omega.TypedAddressBiaxialCompletion.GlobalizationFlatness
 import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
 import Omega.PhysicalSpacetimeSkeleton.LocalSkeletonBeforeGlobalTrivialization
 import Omega.PhysicalSpacetimeSkeleton.AuditedSeedRankThree
@@ -810,6 +812,7 @@ import Omega.POM.CatalanMoments
 import Omega.POM.FoldIndexSeeds
 import Omega.POM.FoldInjectivizationMinsideinfo
 import Omega.POM.DefectBand
+import Omega.POM.TauTerminalSignIndependence
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete
 import Omega.POM.FenceRiccatiError
 import Omega.POM.StarMomentKernelCompression
