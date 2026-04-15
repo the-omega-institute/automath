@@ -110,6 +110,7 @@ import Omega.FoldResidualTime.Window6SecondCollisionConstant
 import Omega.FoldResidualTime.ApparentRandomnessFreezingEscort
 import Omega.GU.Window6B3C3QuarticDefectOnedim
 import Omega.GU.Window6LieEnvelopeClosure
+import Omega.GU.FreeInvolutionCount
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.VisibleValueOverflow
