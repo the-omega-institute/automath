@@ -249,6 +249,7 @@ import Omega.SPG.AxialScreenAreaLawAuditCost
 import Omega.SPG.ProuhetThueMorsePowerSum
 import Omega.SPG.SingleParamLogReadoutPigeonhole
 import Omega.SPG.BoundaryCycleAuditQueryLowerBound
+import Omega.SPG.BoundaryAffineFiberCycleRank
 import Omega.SPG.F2FiberCardinality
 import Omega.SPG.CycleRankFormula
 import Omega.SPG.BoundaryCycleRankFromEntropy
@@ -793,6 +794,7 @@ import Omega.POM.CatalanMoments
 import Omega.POM.FoldIndexSeeds
 import Omega.POM.FoldInjectivizationMinsideinfo
 import Omega.POM.DefectBand
+import Omega.POM.DiagonalRateDiagonalStatisticsComplete
 import Omega.POM.FenceRiccatiError
 import Omega.POM.StarMomentKernelCompression
 import Omega.POM.FiberTwoPhaseMixing
@@ -825,6 +827,7 @@ import Omega.GU.BdryUpliftOrientationParity
 import Omega.GU.BdryBinaryLayeringOrbitClassification
 import Omega.GU.BdryOrientationTsubsetLucasParity
 import Omega.GU.Window6DoubleLock12
+import Omega.GU.Window6Z2Z3ToZ6Readout
 import Omega.GU.StrongLumpabilitySpectralRigidity
 import Omega.GU.StrongLumpabilitySpectralFalsifier
 import Omega.GU.Window6NonlumpableBySpectrum
