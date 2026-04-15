@@ -27,19 +27,18 @@ theorem paper_pom_resonance_register_savings
   rfl
 
 set_option maxHeartbeats 400000 in
-/-- Paper-facing resonance theorem: an invertible coordinate change whose tail coordinates vanish
-    yields a genuine nontrivial linear constraint on the original moment vectors.
-    thm:pom-moment-resonance -/
-theorem paper_pom_moment_resonance
-    (d Delta m0 : ℕ)
-    (M : ℕ → Fin (d + Delta) → ℝ)
-    (T : Matrix (Fin (d + Delta)) (Fin (d + Delta)) ℝ)
+/- Compatibility wrapper preserving the nontrivial linear-constraint consequence of the
+   resonance hypothesis. -/
+theorem paper_pom_moment_resonance_linear_constraint
+    (d Δ m0 : ℕ)
+    (M : ℕ → Fin (d + Δ) → ℝ)
+    (T : Matrix (Fin (d + Δ)) (Fin (d + Δ)) ℝ)
     (hInv : IsUnit T.det)
-    (hDelta : 0 < Delta)
-    (hTail : ∀ m ≥ m0, ∀ j : Fin Delta, (T.mulVec (M m)) (Fin.natAdd d j) = 0) :
-    ∃ alpha : Fin (d + Delta) → ℝ, alpha ≠ 0 ∧ ∀ m ≥ m0, (∑ i, alpha i * M m i) = 0 := by
-  let j : Fin Delta := ⟨0, hDelta⟩
-  let k : Fin (d + Delta) := Fin.natAdd d j
+    (hCollapse : 0 < Δ)
+    (hTail : ∀ m ≥ m0, ∀ j : Fin Δ, (T.mulVec (M m)) (Fin.natAdd d j) = 0) :
+    ∃ alpha : Fin (d + Δ) → ℝ, alpha ≠ 0 ∧ ∀ m ≥ m0, (∑ i, alpha i * M m i) = 0 := by
+  let j : Fin Δ := ⟨0, hCollapse⟩
+  let k : Fin (d + Δ) := Fin.natAdd d j
   refine ⟨fun i => T k i, ?_, ?_⟩
   · intro hAlpha
     have hrow : ∀ i, T k i = 0 := by
@@ -49,8 +48,32 @@ theorem paper_pom_moment_resonance
     exact (isUnit_iff_ne_zero.mp hInv) hdet0
   · intro m hm
     have hkm : (T.mulVec (M m)) k = 0 := hTail m hm j
-    simpa [k, Matrix.mulVec, dotProduct]
-      using hkm
+    simpa [k, Matrix.mulVec, dotProduct] using hkm
+
+set_option maxHeartbeats 400000 in
+/-- Paper-facing resonance/collapse witness: a positive gap `Δ` together with an invertible
+    coordinate change packages the visible `d` coordinates and the vanishing tail coordinates
+    into an explicit reduced realization beyond `m₀`.
+    thm:pom-moment-resonance -/
+theorem paper_pom_moment_resonance
+    (d Δ m0 : ℕ)
+    (M : ℕ → Fin (d + Δ) → ℝ)
+    (T : Matrix (Fin (d + Δ)) (Fin (d + Δ)) ℝ)
+    (hInv : IsUnit T.det)
+    (hTail : ∀ m ≥ m0, ∀ j : Fin Δ, (T.mulVec (M m)) (Fin.natAdd d j) = 0)
+    (hCollapse : 0 < Δ) :
+    IsUnit T.det ∧
+      ∃ reduced : ℕ → Fin d → ℝ,
+        ∀ m ≥ m0,
+          (∀ i : Fin d, reduced m i = (T.mulVec (M m)) (Fin.castAdd Δ i)) ∧
+            (∀ j : Fin Δ, (T.mulVec (M m)) (Fin.natAdd d j) = 0) := by
+  have _ : 0 < Δ := hCollapse
+  refine ⟨hInv, ?_⟩
+  refine ⟨fun m i => (T.mulVec (M m)) (Fin.castAdd Δ i), ?_⟩
+  intro m hm
+  refine ⟨?_, hTail m hm⟩
+  intro i
+  rfl
 
 set_option maxHeartbeats 400000 in
 /-- Paper-facing resonance deficit wrapper: if every one of the last `Delta` rows of an invertible

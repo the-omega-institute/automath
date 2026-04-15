@@ -781,6 +781,7 @@ import Omega.GU.FibTailP23Orbits
 import Omega.GU.TerminalWindow6Sl2zHyperbolicFromTailTriple
 import Omega.GU.Window6CyclicWeightThresholdRootLength
 import Omega.GU.TerminalFoldbin6TailCubeSection
+import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalFoldbin6BoundaryPureF9Alias
 import Omega.CircleDimension.PhaseSeparationPrecisionExponent
 import Omega.CircleDimension.PhasePrecisionTradeoffDyadic
@@ -921,6 +922,7 @@ import Omega.Zeta.EnergyTailMassSeeds
 import Omega.Conclusion.WallisFactorMonoid
 import Omega.POM.CRTSpatializationPrimeBudget
 import Omega.SPG.GodelDoublelogMinkowski
+import Omega.SPG.BoundaryGodelVolumeUpperbound
 import Omega.SPG.BulkBoundaryGodelDimensionSandwich
 import Omega.Conclusion.DisjointnessPowerWordDecomposition
 import Omega.SPG.SquareclassHammingIsometry
