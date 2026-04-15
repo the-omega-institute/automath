@@ -106,6 +106,7 @@ import Omega.Folding.BlockBijectionThreshold
 import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.PhiMemoryThresholdExact
 import Omega.Folding.BlockCountsThreshold
+import Omega.Folding.YmExactSFTOrder
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -239,6 +240,7 @@ import Omega.Topos.UniqueBranchContextualityComparison
 import Omega.Topos.PointwiseIrreducibility
 import Omega.Topos.VisibleValueComponents
 import Omega.Topos.IntrinsicHiddenStateLowerBound
+import Omega.Topos.IntrinsicPrimeDecomposition
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
@@ -257,6 +259,7 @@ import Omega.RecursiveAddressing.ObserverIndexedNormalizationNoFactCreation
 import Omega.RecursiveAddressing.ObserverNeutralReadoutAPAL
 import Omega.RecursiveAddressing.PrefixSiteRegisterLowerBound
 import Omega.RecursiveAddressing.PrefixSiteMinVisibleQuotient
+import Omega.RecursiveAddressing.SpectralDefinabilityAvis
 import Omega.RecursiveAddressing.ReadoutSeparatednessNull
 import Omega.RecursiveAddressing.RecursiveAddressingRefinement
 import Omega.RecursiveAddressing.SlidingBlockFactor
