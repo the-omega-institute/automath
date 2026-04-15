@@ -67,6 +67,7 @@ import Omega.Folding.HammingDist
 import Omega.Folding.HankelSpectrum
 import Omega.Experiments.ParryBaselineGapSturmian
 import Omega.Experiments.RotationMicrostateKLCertificate
+import Omega.Experiments.MetallicMeanGoldenUniqueOptimalTVConstant
 import Omega.Folding.LocalWeightRigidityFibonacci
 import Omega.Folding.LocalWeightRigidityPublication
 import Omega.Folding.StableSyntaxCounting
@@ -227,6 +228,7 @@ import Omega.SPG.GodelBoundaryDecodingRelativeErrorThreshold
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicCubicalBoundaryInjective
 import Omega.SPG.DyadicBoundaryImageLDPC
+import Omega.SPG.DyadicBoundaryImageMinDistance
 import Omega.SPG.DyadicBoundarySyndromeFillability
 import Omega.SPG.LinearTimeBulkDecodeFromBoundary
 import Omega.SPG.IntegerBulkDecodeOrCycleCertificate

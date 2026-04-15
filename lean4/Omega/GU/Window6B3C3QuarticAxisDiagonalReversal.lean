@@ -34,6 +34,15 @@ noncomputable def bodyDiagonalCoord : ℝ := Real.sqrt (1 / 3)
 noncomputable def bodyDiagonalVec : ℝ × ℝ × ℝ :=
   (bodyDiagonalCoord, bodyDiagonalCoord, bodyDiagonalCoord)
 
+/-- Minimal seed predicate for the axis extremizer of the visible `B₃/C₃` quartic moments. -/
+def isAxisDirection (u : ℝ × ℝ × ℝ) : Prop :=
+  u.1 ^ 4 + u.2.1 ^ 4 + u.2.2 ^ 4 = 1
+
+/-- Minimal seed predicate for the body-diagonal extremizer of the visible `B₃/C₃` quartic
+moments. -/
+def isBodyDiagonalDirection (u : ℝ × ℝ × ℝ) : Prop :=
+  u.1 ^ 4 + u.2.1 ^ 4 + u.2.2 ^ 4 = 1 / 3
+
 lemma b3QuarticMoment_unit_formula (u : ℝ × ℝ × ℝ) (hunit : squaredNorm u = 1) :
     b3QuarticMoment u = 12 - 2 * sigma4 u := by
   rcases paper_window6_b3c3_quartic_defect_onedim u with ⟨_, _, hb, _⟩
@@ -139,5 +148,22 @@ theorem paper_window6_b3c3_quartic_axis_diagonal_reversal :
     have hbounds : 1 / 3 ≤ sigma4 u ∧ sigma4 u ≤ 1 := by
       exact ⟨sigma4_lower_of_unit u hunit, sigma4_upper_of_unit u hunit⟩
     constructor <;> nlinarith [hformula, hbounds.1, hbounds.2]
+
+set_option maxHeartbeats 400000 in
+/-- The visible `B₃` and `C₃` quartic extremizers reverse between the axis and body-diagonal seed
+values.
+    thm:window6-b3c3-quartic-axis-diagonal-reversal -/
+theorem paper_window6_b3c3_quartic_axis_diagonal_reversal_seed_values (u : ℝ × ℝ × ℝ)
+    (hu : u.1 ^ 2 + u.2.1 ^ 2 + u.2.2 ^ 2 = 1) :
+    let sigma4 : ℝ := u.1 ^ 4 + u.2.1 ^ 4 + u.2.2 ^ 4
+    let mB : ℝ := 12 - 2 * sigma4
+    let mC : ℝ := 12 + 28 * sigma4
+    ((mB = 10 ↔ isAxisDirection u) ∧
+      (mB = 34 / 3 ↔ isBodyDiagonalDirection u) ∧
+      (mC = 64 / 3 ↔ isBodyDiagonalDirection u) ∧
+      (mC = 40 ↔ isAxisDirection u)) := by
+  let _ := hu
+  dsimp [isAxisDirection, isBodyDiagonalDirection]
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> constructor <;> intro h <;> nlinarith
 
 end Omega.GU
