@@ -8,15 +8,17 @@
 |---|---|
 | 总行数 | ~50,876 |
 | 定理/定义数 | ~4,439 |
-| 论文接口包装 | 785+ |
-| 文件数 | 204 |
+| 论文接口包装 | 788+ |
+| 文件数 | 207 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3347 |
+| \leanverified 标注数 | 3350 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3396 |
-| 轮次 | R782（round_count=R782）|
+| 总标注数 | 3399 |
+| 轮次 | R783（round_count=R783）|
+
+**Phase R783（本轮落地，全流程执行）**：`paper_resolution_folding_y_m_exact_sft_order`（对应 `thm:Y-m-exact-SFT-order`，Folding；把 folded alphabet 上“`m`-step SFT 且非 `(m-1)`-step”的 exact-order readout 直接压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_recursive_addressing_prefix_site_spectral_definability_avis`（对应 `thm:prefix-site-spectral-definability-avis`，RecursiveAddressing；把 visible quotient 的 annihilator identification 与 spectral definability criterion 合并成 proposition-facing wrapper）；`paper_conservative_extension_intrinsic_prime_decomposition`（对应 `thm:intrinsic-prime-decomposition`，Topos；把 intrinsic evaluation / hidden subgroup / visible quotient 的 `p`-primary decomposition 以及 budget multiplicative/additive readout 压成 proposition-facing wrapper，本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 Folding / RecursiveAddressing / Topos，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/Folding/YmExactSFTOrder.lean`、`lean4/Omega/RecursiveAddressing/SpectralDefinabilityAvis.lean`、`lean4/Omega/Topos/IntrinsicPrimeDecomposition.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_resolution_folding_y_m_exact_sft_order`、`paper_recursive_addressing_prefix_site_spectral_definability_avis`、`paper_conservative_extension_intrinsic_prime_decomposition`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_reconstruction.tex`（`thm:Y-m-exact-SFT-order`），`/Users/chronoai/automath/papers/publication/2026_recursive_addressing_prefix_sites_tac/main.tex`（`thm:prefix-site-spectral-definability-avis`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_homological_visibility.tex`（`thm:intrinsic-prime-decomposition`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R782（本轮落地，全流程执行）**：`paper_recursive_addressing_refinement`（对应 `prop:recursive-addressing-refinement`，RecursiveAddressing；把 derived finite-window observable event 直接压回上一层 observable-event family，落成 measurable-refinement proposition-facing wrapper）；`paper_resolution_folding_phi_m_conjugacy_threshold`（对应 `thm:Phi-m-conjugacy-threshold`，Folding；把按窗口索引的 local inverse rule 与双侧 inverse identities 统一压成 theorem-facing conjugacy wrapper，本轮 non-trivial 目标）；`paper_conservative_extension_intrinsic_hidden_state_lower_bound`（对应 `cor:intrinsic-hidden-state-lower-bound`，Topos；把 intrinsic quotient 的 fiber-vs-register lower bound 与 sharpness witness 直接压成 corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 RecursiveAddressing / Folding / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/RecursiveAddressing/RecursiveAddressingRefinement.lean`、`lean4/Omega/Folding/PhiConjugacyThreshold.lean`、`lean4/Omega/Topos/IntrinsicHiddenStateLowerBound.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_recursive_addressing_refinement`、`paper_resolution_folding_phi_m_conjugacy_threshold`、`paper_conservative_extension_intrinsic_hidden_state_lower_bound`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_recursive_addressing_prefix_sites_tac/main.tex`（`prop:recursive-addressing-refinement`），`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_reconstruction.tex`（`thm:Phi-m-conjugacy-threshold`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_homological_visibility.tex`（`cor:intrinsic-hidden-state-lower-bound`）；新增 tex theorem/corollary/lemma 环境数 0）
 
