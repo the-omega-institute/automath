@@ -47,6 +47,7 @@ import Omega.Folding.PiFunctorial
 import Omega.Folding.CircleDimension
 import Omega.CircleDimension.MinimalAuditCompletion
 import Omega.CircleDimension.AuditedRealizationBudgetLowerBound
+import Omega.CircleDimension.AnomalyQuadraticLaw
 import Omega.Folding.ShiftDynamics
 import Omega.Folding.Rewrite
 import Omega.Folding.Defect
@@ -218,6 +219,7 @@ import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicCubicalBoundaryInjective
 import Omega.SPG.DyadicBoundarySyndromeFillability
 import Omega.SPG.LinearTimeBulkDecodeFromBoundary
+import Omega.SPG.IntegerBulkDecodeOrCycleCertificate
 import Omega.SPG.RegularLanguageStokesDyadicZetaRationality
 import Omega.SPG.SquareclassChainComplex
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
@@ -743,6 +745,7 @@ import Omega.GU.LeyangHolographicN2
 import Omega.GU.Window6SingleGoodPrimeRecovery
 import Omega.GU.Window6B3SupportCount
 import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
+import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
 import Omega.GU.Window6C3SupportCount
 import Omega.GU.FiberNonConstantNoFreeAction
 import Omega.GU.FibTailS3Closure
