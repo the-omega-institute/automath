@@ -120,6 +120,7 @@ import Omega.GU.Window6B3C3QuarticDefectOnedim
 import Omega.GU.Window6B3C3EuclideanCubature
 import Omega.GU.Window6B3C3QuarticRankoneHarmonicDetector
 import Omega.GU.Window6TypeSuperselectionAutGamma6
+import Omega.GU.Window6AffineFiberOrbitClassification
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.FreeInvolutionCount
 import Omega.Folding.ModRigidityPeriodicPredicates
@@ -683,6 +684,7 @@ import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.StokesFiberIntegrationDefect
 import Omega.CircleDimension.MedianStokesRigidityPotential
 import Omega.CircleDimension.PhasePrefixOccupancyBarrier
+import Omega.CircleDimension.RegisterCircleModpFormula
 import Omega.CircleDimension.ShortExactAdditivity
 import Omega.CircleDimension.FiniteExtensionAxiomaticUniqueness
 import Omega.SPG.TanakaStokes
@@ -1041,6 +1043,7 @@ import Omega.Zeta.IdempotentFixedIndexStratification
 import Omega.POM.ComplementaryGoldenBernoulliDivergence
 import Omega.POM.TopGapLimitConstants
 import Omega.POM.ToggleScanCycleGhostMultiplicativity
+import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.SPG.BoundaryGodelSquareclassIsometry
 import Omega.POM.HankelFingerprintSeeds
 import Omega.Conclusion.PrimorialMixedRadixSeeds
