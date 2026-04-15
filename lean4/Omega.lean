@@ -57,6 +57,7 @@ import Omega.Folding.DiscreteStokesDefectPublication
 import Omega.Folding.StokesDefectHaarMixing
 import Omega.Folding.PiFunctorialGolden
 import Omega.Folding.NormalizeThenTruncateFunctorial
+import Omega.Folding.TailPatchIncomplete
 import Omega.Folding.Entropy
 import Omega.Folding.SummableDefectsEventualCompatibility
 import Omega.Folding.BinFold
@@ -103,6 +104,7 @@ import Omega.Folding.ZeroFiberLinear
 import Omega.FoldResidualTime.Window6SecondCollisionConstant
 import Omega.FoldResidualTime.ApparentRandomnessFreezingEscort
 import Omega.GU.Window6B3C3QuarticDefectOnedim
+import Omega.GU.Window6B3C3QuarticAxisDiagonalReversal
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.VisibleValueOverflow
@@ -685,6 +687,7 @@ import Omega.PhysicalSpacetimeSkeleton.KernelizationTemplate
 import Omega.PhysicalSpacetimeSkeleton.InstantiationCriterion
 import Omega.PhysicalSpacetimeSkeleton.GlobalLorentzStructure
 import Omega.PhysicalSpacetimeSkeleton.LocalClockPotential
+import Omega.PhysicalSpacetimeSkeleton.LocalRedshift
 import Omega.LogicExpansionChain.ForcingPersistence
 import Omega.LogicExpansionChain.StateForcingPersistence
 import Omega.LogicExpansionChain.SemanticFidelity
