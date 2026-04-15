@@ -97,6 +97,25 @@ theorem paper_fold_local_rewrite_saturation_step_efficiency_rigidity :
   · intro R ε T hT hε Δ hBound hAvg
     exact lowDeletionDensity_eq_zero_of_averageDeletion_eq_max hT hε Δ hBound hAvg
 
+/-- Paper-facing wrapper for the local-rewrite lower-tail barrier: the pointwise inequality
+    `G_m ≤ R T_m` yields the lower-tail event inclusion, the LDP upper wrapper makes the tail
+    summable, and Borel-Cantelli upgrades this to an almost-sure linear lower bound.
+    thm:fold-local-rewrite-ldp-lower-tail-barrier -/
+theorem paper_fold_local_rewrite_ldp_lower_tail_barrier
+    (gStar R a : ℝ)
+    (pointwiseBound eventInclusion exponentialLowerTail summableLowerTail
+      almostSureLiminfLowerBound : Prop)
+    (ha : a < gStar / R)
+    (hInclusion : pointwiseBound → eventInclusion)
+    (hLdp : eventInclusion → a < gStar / R → exponentialLowerTail)
+    (hSummable : exponentialLowerTail → summableLowerTail)
+    (hBorelCantelli : summableLowerTail → almostSureLiminfLowerBound) :
+    pointwiseBound → exponentialLowerTail ∧ almostSureLiminfLowerBound := by
+  intro hBound
+  have hEventInclusion : eventInclusion := hInclusion hBound
+  have hTail : exponentialLowerTail := hLdp hEventInclusion ha
+  exact ⟨hTail, hBorelCantelli (hSummable hTail)⟩
+
 set_option maxHeartbeats 400000 in
 /-- Publication-facing wrapper for the average-case `B`-bit inversion barrier and its
     separation from the zero-error worst-case threshold.

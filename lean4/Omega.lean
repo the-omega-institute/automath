@@ -229,6 +229,7 @@ import Omega.SPG.RegularLanguageStokesDyadicZetaRationality
 import Omega.SPG.SquareclassChainComplex
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.BoundaryGodelMomentReadout
+import Omega.SPG.BoundaryGodelMomentRobustGcdBound
 import Omega.SPG.BoundaryGodelGcdLipschitzStability
 import Omega.SPG.GodelMomentRobustGcdBound
 import Omega.SPG.BoundaryGodelSequenceDeterminesClosure
@@ -267,6 +268,7 @@ import Omega.Frontier.Assumptions
 import Omega.Frontier.OblivionBridge
 import Omega.Frontier.Conditional
 import Omega.PhysicalSpacetimeSkeleton.ClockTransportEquation
+import Omega.PhysicalSpacetimeSkeleton.LocalClockPotential
 import Omega.Frontier.ConditionalSPG
 import Omega.Frontier.ConditionalArithmetic
 import Omega.Frontier.ConditionalSummary
