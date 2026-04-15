@@ -36,7 +36,7 @@ import tempfile
 import textwrap
 import threading
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed, Future
+from concurrent.futures import ThreadPoolExecutor, as_completed, wait, FIRST_COMPLETED, Future
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -1137,39 +1137,95 @@ def main() -> int:
     state = load_state()
     logger.info(f"Starting: R{state.round_number}, ~{state.total_theorems} theorems")
 
-    # ── Run ────────────────────────────────────────────────────────
-    max_batches = 999999 if args.continuous else args.rounds
     total_succeeded = 0
     total_failed = 0
 
-    for batch_idx in range(max_batches):
-        if state.consecutive_failures >= args.max_consecutive_failures:
-            logger.error(
-                f"Stopping: {state.consecutive_failures} consecutive all-fail batches "
-                f"(limit: {args.max_consecutive_failures})"
+    if args.continuous:
+        # ── True rolling pipeline: as soon as one worker finishes, start the next ──
+        logger.info(f"{'='*60}")
+        logger.info(f"Rolling pipeline: {args.parallel} concurrent workers, running until stopped")
+        logger.info(f"{'='*60}")
+
+        with ThreadPoolExecutor(max_workers=args.parallel, thread_name_prefix="worker") as pool:
+            futures: dict[Future, int] = {}
+
+            def _submit_next() -> None:
+                if state.consecutive_failures >= args.max_consecutive_failures:
+                    return
+                with _round_lock:
+                    rn = state.round_number
+                    state.round_number += 1
+                fut = pool.submit(
+                    run_round_in_worktree,
+                    rn, state.total_theorems, state.recent_commits,
+                    dry_run=args.dry_run,
+                    model=args.model,
+                    phase_b_timeout=args.phase_b_timeout,
+                    phase_c_timeout=args.phase_c_timeout,
+                )
+                futures[fut] = rn
+                logger.info(f"Dispatching R{rn} (rolling)")
+
+            # Fill the pool initially
+            for _ in range(args.parallel):
+                _submit_next()
+
+            while futures:
+                if state.consecutive_failures >= args.max_consecutive_failures:
+                    logger.error(
+                        f"Stopping: {state.consecutive_failures} consecutive failures"
+                    )
+                    break
+                done, _ = wait(futures, return_when=FIRST_COMPLETED)
+                for fut in done:
+                    rn = futures.pop(fut)
+                    try:
+                        ok, _, commits = fut.result()
+                        if ok:
+                            total_succeeded += 1
+                            state.consecutive_failures = 0
+                            logger.info(f"[R{rn}] SUCCESS ({len(commits)} commits)")
+                        else:
+                            total_failed += 1
+                            state.consecutive_failures += 1
+                            logger.warning(f"[R{rn}] FAILED")
+                    except Exception as exc:
+                        total_failed += 1
+                        state.consecutive_failures += 1
+                        logger.error(f"[R{rn}] EXCEPTION: {exc}")
+                    state.total_theorems = count_lean_theorems()
+                    state.recent_commits = git_log_oneline(5)
+                    save_state(state)
+                    # Immediately launch a replacement worker
+                    _submit_next()
+
+    else:
+        # ── Batch mode (non-continuous) ────────────────────────────────────────────
+        max_batches = args.rounds
+        for batch_idx in range(max_batches):
+            if state.consecutive_failures >= args.max_consecutive_failures:
+                logger.error(
+                    f"Stopping: {state.consecutive_failures} consecutive all-fail batches"
+                )
+                break
+
+            logger.info(f"{'='*60}")
+            logger.info(f"Batch {batch_idx + 1}: dispatching {args.parallel} worker(s)")
+            logger.info(f"{'='*60}")
+
+            s, f = run_parallel_batch(
+                state,
+                parallel=args.parallel,
+                dry_run=args.dry_run,
+                model=args.model,
+                phase_b_timeout=args.phase_b_timeout,
+                phase_c_timeout=args.phase_c_timeout,
             )
-            break
-
-        logger.info(f"{'='*60}")
-        logger.info(f"Batch {batch_idx + 1}: dispatching {args.parallel} worker(s)")
-        logger.info(f"{'='*60}")
-
-        s, f = run_parallel_batch(
-            state,
-            parallel=args.parallel,
-            dry_run=args.dry_run,
-            model=args.model,
-            phase_b_timeout=args.phase_b_timeout,
-            phase_c_timeout=args.phase_c_timeout,
-        )
-        total_succeeded += s
-        total_failed += f
-
-        logger.info(f"Batch {batch_idx + 1} done: {s} succeeded, {f} failed")
-
-        if batch_idx < max_batches - 1 and not args.dry_run:
-            logger.info("Waiting 5s before next batch...")
-            time.sleep(5)
+            total_succeeded += s
+            total_failed += f
+            logger.info(f"Batch {batch_idx + 1} done: {s} succeeded, {f} failed")
+            if batch_idx < max_batches - 1 and not args.dry_run:
+                time.sleep(5)
 
     # ── Summary ────────────────────────────────────────────────────
     logger.info(f"{'='*60}")
