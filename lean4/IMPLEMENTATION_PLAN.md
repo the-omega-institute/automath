@@ -8,15 +8,17 @@
 |---|---|
 | 总行数 | ~50,937 |
 | 定理/定义数 | ~4,442 |
-| 论文接口包装 | 791+ |
-| 文件数 | 213 |
+| 论文接口包装 | 794+ |
+| 文件数 | 216 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3362 |
+| \leanverified 标注数 | 3365 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3411 |
-| 轮次 | R788（round_count=R788）|
+| 总标注数 | 3414 |
+| 轮次 | R789（round_count=R789）|
+
+**Phase R789（本轮落地，全流程执行）**：`paper_conservative_extension_character_blind_obstructions`（对应 `thm:character-blind-obstructions`，Topos；把 kernel-zero / visible-quotient-full / eval-zero / pure-`Ext` / singleton-visible null-glue 链压成 non-focused APAL theorem-facing wrapper，本轮 non-trivial 目标）；`paper_resolution_folding_higher_block_identification`（对应 `cor:higher-block-identification`，Folding；把 higher-block adjacency 与 raw-lift overlap identification 压成 rigidity-reconstruction corollary-facing wrapper）；`paper_etds_nontrivial_perron_point_convergence`（对应 `lem:nontrivial-perron-point-convergence`，Zeta；把 twisted-spectral-gap explicit asymptotic 到 non-trivial channel bound 再到 Perron-point absolute convergence 的 readout 压成 ETDS lemma-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 Topos / Folding / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Topos/CharacterBlindObstructionsPublication.lean`、`lean4/Omega/Folding/HigherBlockIdentification.lean`、`lean4/Omega/Zeta/NontrivialPerronPointConvergence.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_conservative_extension_character_blind_obstructions`、`paper_resolution_folding_higher_block_identification`、`paper_etds_nontrivial_perron_point_convergence`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_homological_visibility.tex`（`thm:character-blind-obstructions`），`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_reconstruction.tex`（`cor:higher-block-identification`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_chebotarev.tex`（`lem:nontrivial-perron-point-convergence`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R788（本轮落地，全流程执行）**：`paper_cubical_stokes_hypercube_gradient`（对应 `cor:hypercube-gradient`，SPG；把 cubical Stokes--Poincaré 在 `k=1` 的 sharp denominator、strict-monotonicity 与 hypercube cell-count readout 复用于 cubical Stokes corollary-facing wrapper）；`paper_conservative_extension_intrinsic_character_detection`（对应 `cor:intrinsic-character-detection`，Topos；把 intrinsic visible quotient 的 dual identification 与 class-admissible character separation 复用于 non-focused APAL corollary-facing wrapper）；`paper_conservative_extension_gerbe_null_semantics`（对应 `thm:gerbe-null-semantics`，Topos；把 compatible-sections / global-sections / branchwise neutral-vs-obstructed equivalences 统一压成 branched-gerbe semantics theorem-facing wrapper，本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 SPG / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/SPG/HypercubeGradientPublication.lean`、`lean4/Omega/Topos/IntrinsicCharacterDetectionPublication.lean`、`lean4/Omega/Topos/GerbeNullSemanticsPublication.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_cubical_stokes_hypercube_gradient`、`paper_conservative_extension_intrinsic_character_detection`、`paper_conservative_extension_gerbe_null_semantics`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_cubical_stokes_inverse_boundary_readout_jdsgt/main.tex`（`cor:hypercube-gradient`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_homological_visibility.tex`（`cor:intrinsic-character-detection`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_gerbe_obstruction.tex`（`thm:gerbe-null-semantics`）；新增 tex theorem/corollary/lemma 环境数 0）
 
