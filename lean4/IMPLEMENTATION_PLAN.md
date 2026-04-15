@@ -1867,6 +1867,12 @@ SPG / PhysicalSpacetimeSkeleton，降级项数 1，non-trivial 计数 1；文件
 - 已完成 `paper_spg_screen_audit_cost_monotone_unit_drop`（`cor:spg-screen-audit-cost-monotone-unit-drop`，`SPG/ScreenAuditCostMonotoneUnitDrop.lean`）：将既有 `_seeds` / `_package` 结果提升为 unsuffixed 论文接口定理，直接复用按新增面数归纳得到的审计成本单调与单位下降界。
 - 已完成 `paper_physical_spacetime_global_geometric_objects`（`prop:physical-spacetime-global-geometric-objects`，`PhysicalSpacetimeSkeleton/GlobalGeometricObjects.lean`）：在全局 Lorentz 商域上新建 chapter-local `GlobalGeometricObjects` 结构，用商下降的全局度规给出存在性，并以 quotient/extensionality 证明唯一性。
 
+### Round R886
+
+- 已完成 `paper_typed_address_biaxial_completion_multiscale_threshold`（`prop:typed-address-biaxial-completion-multiscale-threshold`，`TypedAddressBiaxialCompletion/MultiscaleThreshold.lean`）：新建 chapter-local `MultiscaleOntologyClaim`、`IsInverseSystem` 与 `InverseLimit` scaffold，把“同一本体跨尺度一致”形式化为兼容线程存在性，并据此直接构造 restriction family、逆系统见证与非空逆极限对象。
+- 已完成 `paper_gut_mobius_duality_unified`（`prop:mobius-duality-unified`，`GU/MobiusDualityUnified.lean`）：新建 `MobiusDualityWitness`，将 \(\Omega\)-反演固定点、Cayley 符号翻转与 pole-barrier 边界正规化三项见证打包，并复用 `paper_gut_u1_throat_identity_package` 将统一点压到 `u = 1` 后输出统一 Möbius 对偶结论。
+- 已完成 `paper_cdim_godel_scalarization_bitlength_logB`（`prop:cdim-godel-scalarization-bitlength-logB`，`CircleDimension/GodelScalarizationBitlengthLogB.lean`）：新建 `GodelScalarizationWitness`，显式记录 distinct-prime scalarization 数据与 `B log B` 上下界常数；证明中复用 `paper_cdim_signed_orthant_closed` 给出全一顶点的 signed-circle bookkeeping，并调用现有 `product_distinct_primes_lower` 作为 multiplicative lower-bound bridge。
+
 ### Round R791
 
 - 已完成 `paper_logic_expansion_singleton_conservativity`（`prop:logic-expansion-singleton-conservativity`，`LogicExpansionChain/SingletonConservativity.lean`）：将既有 singleton forcing 的 `_seeds` 结果提升为 unsuffixed 论文接口定理，并把 tex 注册切到直接论文名。
