@@ -1795,6 +1795,12 @@
 - 已完成 `paper_window6_b3c3_quartic_axis_diagonal_reversal`（`thm:window6-b3c3-quartic-axis-diagonal-reversal`，`GU/Window6B3C3QuarticAxisDiagonalReversal.lean`）：在既有 quartic defect 公式上补出单位球面化简、`\Sigma_4(u)` 的 `1/3 ≤ · ≤ 1` 界，以及轴向/体对角见证值 `10, 34/3, 64/3, 40`。
 - 已完成 `paper_conclusion_rate_cdim_two_circle_threshold`（`cor:conclusion-rate-cdim-two-circle-threshold`，`Conclusion/RateCdimTwoCircleThreshold.lean`）：补入黄金比对数阈值 `log 2 / log φ` 的两圆门槛与单圆缺口包装，并形式化 `log(2/φ)/log φ = log 2 / log φ - 1` 及其严格正性。
 
+### Round R878
+
+- 已完成 `paper_physical_spacetime_admissible_einstein_closure_main`（`thm:physical-spacetime-admissible-einstein-closure-main`，`PhysicalSpacetimeSkeleton/AdmissibleEinsteinClosureMain.lean`）：复用 `paper_physical_spacetime_procedural_grand_chain` 的对象到几何链条，并追加 admissible Einstein 方程包装，把最大 admissible 域上的全局 Einstein 闭包压成单一定理接口。
+- 已完成 `paper_spg_screen_audit_cost_monotone_unit_drop`（`cor:spg-screen-audit-cost-monotone-unit-drop`，`SPG/ScreenAuditCostMonotoneUnitDrop.lean`）：将既有 `_seeds` / `_package` 结果提升为 unsuffixed 论文接口定理，直接复用按新增面数归纳得到的审计成本单调与单位下降界。
+- 已完成 `paper_physical_spacetime_global_geometric_objects`（`prop:physical-spacetime-global-geometric-objects`，`PhysicalSpacetimeSkeleton/GlobalGeometricObjects.lean`）：在全局 Lorentz 商域上新建 chapter-local `GlobalGeometricObjects` 结构，用商下降的全局度规给出存在性，并以 quotient/extensionality 证明唯一性。
+
 ### Round R791
 
 - 已完成 `paper_logic_expansion_singleton_conservativity`（`prop:logic-expansion-singleton-conservativity`，`LogicExpansionChain/SingletonConservativity.lean`）：将既有 singleton forcing 的 `_seeds` 结果提升为 unsuffixed 论文接口定理，并把 tex 注册切到直接论文名。
