@@ -182,6 +182,7 @@ import Omega.SPG.CollisionProfileRestoration
 import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CurlReconstructionPublication
 import Omega.SPG.CubePoincareInverse
+import Omega.SPG.OptimalContinuousInversePublication
 import Omega.SPG.PolycubeAdhesion
 import Omega.SPG.TotalDegreeMomentThreshold
 import Omega.SPG.MutualInfoBoundaryFlux
@@ -608,6 +609,7 @@ import Omega.GroupUnification.ParryEndpointCollapse
 import Omega.GroupUnification.ParryCommutingSquarePhi
 import Omega.GroupUnification.ChiralOrthogonalityTypeObservables
 import Omega.GroupUnification.ExactClock
+import Omega.GroupUnification.FiniteTimeLaw
 import Omega.CD.AnomalyCompressionOverhead
 import Omega.CD.PeriodicPointCount
 import Omega.CircleDimension.MultiPrimeSpectrum
@@ -676,6 +678,7 @@ import Omega.SPG.BoundaryDominanceExponent
 import Omega.POM.CentralizerFPdim
 import Omega.POM.PressureConvexity
 import Omega.POM.GlobalPressureConvexityPublication
+import Omega.POM.AdjacentPressureConvexity
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
 import Omega.Conclusion.FibonacciAnomalyBlock
