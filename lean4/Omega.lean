@@ -88,6 +88,7 @@ import Omega.Folding.OverflowGapRate
 import Omega.Folding.VisibleValueOverflow
 import Omega.Folding.CongruenceRigidityPublication
 import Omega.Folding.FingerprintSeparationPublication
+import Omega.Folding.BitRecoveryFromLocalCongruenceData
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.BernoulliHalfEndpoints
 import Omega.Folding.BernoulliPGammaMax
@@ -403,6 +404,7 @@ import Omega.Zeta.SyncRhoM2Publication
 import Omega.Zeta.SyncKernelSpectrum
 import Omega.Zeta.CyclicFredholmRealization
 import Omega.Zeta.BlockCyclicRigidity
+import Omega.Zeta.FiniteRankRealisation
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -705,6 +707,7 @@ import Omega.POM.MaxFiberPublication
 import Omega.POM.ZeroTempConcentration
 import Omega.POM.DoubleLimit
 import Omega.POM.ThickFiberEnvelope
+import Omega.POM.MicrocanonicalBandBounds
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
 import Omega.Conclusion.FibonacciAnomalyBlock
