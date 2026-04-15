@@ -685,6 +685,80 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
 
 
 # ---------------------------------------------------------------------------
+# Claude CLI exec (independent verification — NOT codex)
+# ---------------------------------------------------------------------------
+
+def _find_claude() -> str:
+    """Find the Claude Code CLI binary."""
+    found = shutil.which("claude")
+    if found:
+        return found
+    if sys.platform == "darwin":
+        for p in ("/opt/homebrew/bin/claude", "/usr/local/bin/claude"):
+            if Path(p).exists():
+                return p
+    elif sys.platform == "win32":
+        npm_claude = Path.home() / "AppData" / "Roaming" / "npm" / "claude.cmd"
+        if npm_claude.exists():
+            return str(npm_claude)
+    return "claude"
+
+CLAUDE_PATH = _find_claude()
+
+
+def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
+                timeout_seconds: int = 600,
+                dry_run: bool = False) -> str:
+    """Call Claude Code CLI for independent review/verification.
+
+    Uses `claude -p --dangerously-skip-permissions` for non-interactive
+    execution. Claude reads the repo, has full context, and provides
+    independent judgment separate from Codex.
+
+    Used for: Stage F2, A4, C1, D2 (all verification/review steps).
+    """
+    if dry_run:
+        logger.info(f"[DRY RUN] claude_exec:\n{prompt[:200]}...")
+        return "(dry run)"
+
+    claude_bin = CLAUDE_PATH
+    if not Path(claude_bin).exists() and not shutil.which(claude_bin):
+        logger.warning("Claude CLI not found — falling back to codex_exec")
+        return codex_exec(prompt, work_dir=work_dir, dry_run=dry_run)
+
+    cmd = [claude_bin, "-p", "--dangerously-skip-permissions"]
+
+    use_shell = IS_WINDOWS and str(claude_bin).endswith(".cmd")
+
+    start = time.monotonic()
+    result = None
+    try:
+        result = subprocess.run(
+            cmd, input=prompt, capture_output=True, text=True,
+            timeout=timeout_seconds,
+            cwd=str(work_dir or REPO_ROOT),
+            shell=use_shell,
+            encoding="utf-8", errors="replace",
+        )
+    except subprocess.TimeoutExpired:
+        logger.warning(f"Claude CLI timed out after {timeout_seconds}s")
+        return "(timeout)"
+    finally:
+        elapsed = time.monotonic() - start
+        rc = result.returncode if result else "?"
+        logger.info(f"Claude CLI: {elapsed:.1f}s (rc={rc})")
+
+    output = result.stdout or ""
+    if result and result.returncode != 0:
+        logger.warning(f"Claude CLI error: {result.stderr[:300]}")
+        if not output:
+            logger.warning("Falling back to codex_exec")
+            return codex_exec(prompt, work_dir=work_dir, dry_run=dry_run)
+
+    return output
+
+
+# ---------------------------------------------------------------------------
 # Compile PDF
 # ---------------------------------------------------------------------------
 
@@ -1186,8 +1260,7 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
         }}
         ```
     """)
-    out2 = codex_exec(claude_prompt, work_dir=paper_path,
-                      timeout_seconds=600, model=model, dry_run=dry_run)
+    out2 = claude_exec(claude_prompt, work_dir=paper_path, dry_run=dry_run)
     claude_data = parse_json_from_output(out2) if not dry_run else {
         "adjusted_fit_score": 4,
         "recommended_journal": "Journal of Functional Analysis",
@@ -1314,8 +1387,8 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             }}
             ```
         """)
-        out_a4 = codex_exec(claude_review_prompt, work_dir=paper_path,
-                            timeout_seconds=600, model=model, dry_run=dry_run)
+        out_a4 = claude_exec(claude_review_prompt, work_dir=paper_path,
+                             dry_run=dry_run)
         claude_data = parse_json_from_output(out_a4) if not dry_run else {
             "adjusted_score": 5 + rnd, "agree_with_issues": True,
         }
@@ -1490,8 +1563,8 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
         logger.info(f"{tag} Round {rnd}: C1 — Claude independent review")
         review_prompt = build_claude_independent_review_prompt(
             state.paper_dir, state.target_journal)
-        out_c1 = codex_exec(review_prompt, work_dir=paper_path,
-                            timeout_seconds=900, model=model, dry_run=dry_run)
+        out_c1 = claude_exec(review_prompt, work_dir=paper_path,
+                             dry_run=dry_run)
         review_data = parse_json_from_output(out_c1) if not dry_run else {
             "verdict": "revise" if rnd < 2 else "submit",
             "issues": [f"dry run issue R{rnd}"] if rnd < 2 else [],
@@ -1605,8 +1678,8 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
         }}
         ```
     """)
-    out_d2 = codex_exec(claude_bf_prompt, work_dir=REPO_ROOT,
-                        timeout_seconds=600, model=model, dry_run=dry_run)
+    out_d2 = claude_exec(claude_bf_prompt, work_dir=REPO_ROOT,
+                         dry_run=dry_run)
     approval = parse_json_from_output(out_d2) if not dry_run else {
         "approved": True, "approved_items": list(range(len(items))),
     }
