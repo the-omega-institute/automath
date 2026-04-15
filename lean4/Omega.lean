@@ -108,6 +108,7 @@ import Omega.Folding.SignedFibonacciGapShift
 import Omega.Folding.YmSynchronized
 import Omega.Folding.UniformSynchronizingLength
 import Omega.Folding.LocalComplexityScaleCoincidence
+import Omega.Folding.NaturalStateComplexityGap
 import Omega.Folding.LengthMBlockUniqueLift
 import Omega.Folding.BlockBijectionThreshold
 import Omega.Folding.HigherBlockIdentification
@@ -639,6 +640,7 @@ import Omega.GroupUnification.ExactClock
 import Omega.GroupUnification.FiniteTimeLaw
 import Omega.GroupUnification.NormalForm
 import Omega.GroupUnification.GeneralNormalForm
+import Omega.GroupUnification.GeneralRigidity
 import Omega.GroupUnification.TiltDynamics
 import Omega.GroupUnification.TiltedFreeEnergy
 import Omega.GroupUnification.TiltedLDP
@@ -760,4 +762,5 @@ import Omega.POM.DiagonalHighMoments
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Zeta.TorsionExactOrderLedgerSeeds
 import Omega.Zeta.TwistedDeterminantCumulants
+import Omega.Zeta.CLTSpectral
 import Omega.Zeta.RhoGapM12
