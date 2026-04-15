@@ -64,6 +64,7 @@ import Omega.Folding.BoundaryLayer
 import Omega.Folding.FiberSplit
 import Omega.Folding.HammingDist
 import Omega.Folding.HankelSpectrum
+import Omega.Experiments.ParryBaselineGapSturmian
 import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Folding.LocalWeightRigidityFibonacci
 import Omega.Folding.LocalWeightRigidityPublication
@@ -232,7 +233,6 @@ import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.BoundaryGodelMomentReadout
 import Omega.SPG.BoundaryGodelMomentRobustGcdBound
 import Omega.SPG.BoundaryGodelGcdLipschitzStability
-import Omega.SPG.GodelMomentRobustGcdBound
 import Omega.SPG.BoundaryGodelSequenceDeterminesClosure
 import Omega.SPG.BoundaryGodelBitcomplexityIsoperimetric
 import Omega.SPG.ScreenKernelAuditCost
@@ -903,6 +903,7 @@ import Omega.POM.RenyiEntropyRate
 import Omega.POM.RenyiEndpoint
 import Omega.POM.LambdaAlgebraic
 import Omega.POM.CollisionKernelPublication
+import Omega.POM.MomentResonance
 import Omega.POM.SymmetricCompression
 import Omega.POM.MaxFiberPublication
 import Omega.POM.ZeroTempConcentration

@@ -129,6 +129,27 @@ theorem paper_fold_local_rewrite_bbit_inversion_avg_worst_gap (m B : ℕ)
   let _ := B
   exact ⟨hAvg, hWorst⟩
 
+set_option maxHeartbeats 400000 in
+/-- Paper-facing finite-alphabet strong converse wrapper for the maximal-fiber argument:
+    if the recoverable microstates are bounded by the available codewords and that ratio is
+    already dominated by an exponential envelope, then the conditional success probability
+    inherits both bounds.
+    thm:fold-local-rewrite-maxfiber-strong-converse-finite-alphabet -/
+theorem paper_fold_local_rewrite_maxfiber_strong_converse_finite_alphabet
+    (m alphabetCard lengthBudget : ℕ)
+    (recoverableCount successProbability maxFiber expUpper : ℝ)
+    (hMaxFiber : 0 < maxFiber)
+    (hCount : successProbability ≤ recoverableCount / maxFiber)
+    (hCode : recoverableCount ≤ (alphabetCard : ℝ) ^ (lengthBudget + 1))
+    (hExp : ((alphabetCard : ℝ) ^ (lengthBudget + 1)) / maxFiber ≤ expUpper) :
+    successProbability ≤ ((alphabetCard : ℝ) ^ (lengthBudget + 1)) / maxFiber ∧
+      successProbability ≤ expUpper := by
+  let _ := m
+  have hCodeDiv :
+      recoverableCount / maxFiber ≤ ((alphabetCard : ℝ) ^ (lengthBudget + 1)) / maxFiber := by
+    exact div_le_div_of_nonneg_right hCode (le_of_lt hMaxFiber)
+  refine ⟨le_trans hCount hCodeDiv, le_trans (le_trans hCount hCodeDiv) hExp⟩
+
 end
 
 end Omega.Folding.LocalRewriteLdpBarrier
