@@ -45,6 +45,7 @@ import Omega.Folding.InverseLimitTopology
 import Omega.Folding.InverseLimitGolden
 import Omega.Folding.PiFunctorial
 import Omega.Folding.CircleDimension
+import Omega.CircleDimension.MinimalAuditCompletion
 import Omega.Folding.ShiftDynamics
 import Omega.Folding.Rewrite
 import Omega.Folding.Defect
@@ -212,6 +213,7 @@ import Omega.SPG.EllipsoidFluxDecodingPerturbationStability
 import Omega.SPG.GodelBoundaryDecodingRelativeErrorThreshold
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicCubicalBoundaryInjective
+import Omega.SPG.DyadicBoundarySyndromeFillability
 import Omega.SPG.RegularLanguageStokesDyadicZetaRationality
 import Omega.SPG.SquareclassChainComplex
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
@@ -707,6 +709,7 @@ import Omega.GU.FibPrimePisano
 import Omega.GU.FibTailP23Orbits
 import Omega.GU.TerminalWindow6Sl2zHyperbolicFromTailTriple
 import Omega.GU.Window6CyclicWeightThresholdRootLength
+import Omega.GU.TerminalFoldbin6BoundaryPureF9Alias
 import Omega.CircleDimension.PhaseSeparationPrecisionExponent
 import Omega.CircleDimension.PhasePrecisionTradeoffDyadic
 import Omega.CircleDimension.PhasePrecisionTradeoff
