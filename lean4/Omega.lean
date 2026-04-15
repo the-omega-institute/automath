@@ -638,6 +638,7 @@ import Omega.GroupUnification.ChiralOrthogonalityTypeObservables
 import Omega.GroupUnification.ExactClock
 import Omega.GroupUnification.FiniteTimeLaw
 import Omega.GroupUnification.NormalForm
+import Omega.GroupUnification.GeneralNormalForm
 import Omega.GroupUnification.TiltDynamics
 import Omega.GroupUnification.TiltedFreeEnergy
 import Omega.GroupUnification.TiltedLDP
@@ -755,6 +756,8 @@ import Omega.POM.HankelFingerprintSeeds
 import Omega.Conclusion.PrimorialMixedRadixSeeds
 import Omega.Zeta.QuotientIndexLedgerSeeds
 import Omega.POM.FisherZerosArcsineSeeds
+import Omega.POM.DiagonalHighMoments
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Zeta.TorsionExactOrderLedgerSeeds
+import Omega.Zeta.TwistedDeterminantCumulants
 import Omega.Zeta.RhoGapM12
