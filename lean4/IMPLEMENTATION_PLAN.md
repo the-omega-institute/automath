@@ -7,16 +7,18 @@
 | 指标 | 数值 |
 |---|---|
 | 总行数 | ~51,069 |
-| 定理/定义数 | ~4,448 |
+| 定理/定义数 | ~4,451 |
 | 论文接口包装 | 800+ |
-| 文件数 | 234 |
+| 文件数 | 237 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3416 |
+| \leanverified 标注数 | 3419 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3465 |
-| 轮次 | R816（round_count=R816）|
+| 总标注数 | 3468 |
+| 轮次 | R817（round_count=R817）|
+
+**Phase R817（本轮落地，全流程执行）**：`paper_zero_jitter_universal_quadratic_coefficient`（对应 `thm:universal`，GroupUnification；把 Parry-relative fluctuation normal form、smooth variance expansion、Fisher quadratic form 与 entropy/jitter quadratic expansions 串成 universal coefficient theorem-facing wrapper，本轮 non-trivial 目标）；`paper_circle_dimension_mode_space_rkhs`（对应 `thm:mode-space-rkhs`，CircleDimension；把 mode Gram kernel、density of the secant span、isometry 与 unitary extension 汇总成 RKHS completion theorem-facing wrapper）；`paper_resolution_folding_entropy_random_residues`（对应 `cor:entropy-random-residues`，Folding；把 random residue distribution、bijective relabeling 与 entropy readout 压成 entropy corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 GroupUnification / CircleDimension / Folding，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/GroupUnification/UniversalQuadraticCoefficient.lean`、`lean4/Omega/CircleDimension/ModeSpaceRKHS.lean`、`lean4/Omega/Folding/EntropyRandomResidues.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_zero_jitter_universal_quadratic_coefficient`、`paper_circle_dimension_mode_space_rkhs`、`paper_resolution_folding_entropy_random_residues`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp/main.tex`（`thm:universal`），`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_gram_space.tex`（`thm:mode-space-rkhs`），`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_arithmetic.tex`（`cor:entropy-random-residues`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R816（本轮落地，全流程执行）**：`paper_zero_jitter_markov_zero_variance`（对应 `lem:markov-zero-variance`，GroupUnification；把 Poisson equation、martingale decomposition、asymptotic variance formula 与 coboundary criterion 压成 lemma-facing wrapper）；`paper_circle_dimension_poisson_channel_rkhs`（对应 `thm:poisson-channel-rkhs`，CircleDimension；把 centered fluctuation profile、secant representation、RKHS evaluation 与 origin readout 汇总成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_conservative_extension_component_gerbe_decomposition_focused`（对应 `thm:component-gerbe-decomposition`，Topos；把 visible-branch local nonemptiness、local isomorphism 与 band inheritance 重挂到 focused publication theorem-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 GroupUnification / CircleDimension / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/GroupUnification/MarkovZeroVariance.lean`、`lean4/Omega/CircleDimension/PoissonChannelRKHS.lean`、`lean4/Omega/Topos/ComponentGerbeDecompositionFocused.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_zero_jitter_markov_zero_variance`、`paper_circle_dimension_poisson_channel_rkhs`、`paper_conservative_extension_component_gerbe_decomposition_focused`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp/main.tex`（`lem:markov-zero-variance`），`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_gram_space.tex`（`thm:poisson-channel-rkhs`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_gerbe_obstruction.tex`（`thm:component-gerbe-decomposition`）；新增 tex theorem/corollary/lemma 环境数 0）
 
