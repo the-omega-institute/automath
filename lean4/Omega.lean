@@ -542,6 +542,8 @@ import Omega.Zeta.VandermondeResultantSeeds
 import Omega.GU.ZeroDefectExpRate
 import Omega.Conclusion.ZeckendorfEulerSeeds
 import Omega.Conclusion.IntermediateQuotientSeeds
+import Omega.Conclusion.JGEllipseConditionNumberThreshold
+import Omega.Conclusion.JGEllipseFixedEpsilonInformationBarrier
 import Omega.Conclusion.SinglepointJetRigidity
 import Omega.Conclusion.RealInput40UVAtomCore
 import Omega.Conclusion.SmithRamanujanShadowSeeds
