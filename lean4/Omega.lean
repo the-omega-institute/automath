@@ -244,6 +244,7 @@ import Omega.Topos.IntrinsicVisibleQuotient
 import Omega.Topos.IntrinsicVisibleQuotientPublication
 import Omega.Topos.IntrinsicPureExtInitiality
 import Omega.Topos.StrictToIntrinsicVisible
+import Omega.Topos.StrictIntrinsicBudgetComparison
 import Omega.Topos.StrictIntrinsicCoincidenceCriterion
 import Omega.Topos.IntrinsicCharacterDetection
 import Omega.Topos.IntrinsicCharacterDetectionPublication
@@ -293,6 +294,7 @@ import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
 import Omega.Zeta.ClassPrimitiveDecomposition
 import Omega.Zeta.ClassMertensExplicit
+import Omega.Zeta.NontrivialPeterWeylChannelBound
 import Omega.Zeta.ClassMertensFourier
 import Omega.Zeta.ClassPrimitiveTrivialSplit
 import Omega.Zeta.PrimitivePeterWeylDeterminant
@@ -476,6 +478,7 @@ import Omega.CircleDimension.FinitePrimeSupportMultiplicativeHalfCircleDimension
 import Omega.CircleDimension.OperationalHalfCircleDimensionNat
 import Omega.CircleDimension.OperationalHalfCircleDimensionNd
 import Omega.CircleDimension.HaarPullbackUniqueness
+import Omega.CircleDimension.CayleyChebyshevMode
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
 import Omega.CircleDimension.PoissonKLEighth
