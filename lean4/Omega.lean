@@ -86,6 +86,8 @@ import Omega.Folding.ZeroFiberLinear
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.VisibleValueOverflow
+import Omega.Folding.CongruenceRigidityPublication
+import Omega.Folding.FingerprintSeparationPublication
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.BernoulliHalfEndpoints
 import Omega.Folding.BernoulliPGammaMax
@@ -254,6 +256,7 @@ import Omega.Topos.TerminalFibreNeutrality
 import Omega.Topos.VisibleQuotientCharacterSeparation
 import Omega.Topos.FiniteAbelianDuality
 import Omega.Topos.IntrinsicVisibleQuotient
+import Omega.Topos.FocusedIntrinsicVisibleQuotient
 import Omega.Topos.IntrinsicVisibleQuotientPublication
 import Omega.Topos.IntrinsicPureExtInitiality
 import Omega.Topos.StrictToIntrinsicVisible
