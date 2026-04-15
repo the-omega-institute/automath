@@ -229,6 +229,7 @@ import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.BoundaryGodelMomentReadout
 import Omega.SPG.BoundaryGodelGcdLipschitzStability
 import Omega.SPG.BoundaryGodelSequenceDeterminesClosure
+import Omega.SPG.BoundaryGodelBitcomplexityIsoperimetric
 import Omega.SPG.ScreenKernelAuditCost
 import Omega.SPG.PartialBoundaryGodelAuditOptimal
 import Omega.SPG.ScreenAuditCostMonotoneUnitDrop

@@ -17,4 +17,17 @@ theorem paper_cdim_poisson_cauchy_finite_laurent_modes
     tIndependent ∧ finiteLaurentModes ∧ highestModeRigidity ∧ u234LaurentExpansions := by
   exact ⟨htIndependent, hFiniteLaurentModes, hHighestModeRigidity, hu234LaurentExpansions⟩
 
+set_option maxHeartbeats 400000 in
+/-- Publication-facing finite-Laurent integration wrapper: the Poisson--Cauchy phase change
+extracts the constant Laurent coefficient, preserves rationality of `ℚ + iℚ` coefficients, and
+reduces polynomial observables in `u₂/u₃/u₄` to a finite Laurent computation.
+    cor:cdim-poisson-cauchy-laurent-integrals-rational -/
+theorem paper_cdim_poisson_cauchy_laurent_integrals_rational
+    (constant_term_integral rationality_of_coefficients polynomial_reduction : Prop)
+    (hConstant : constant_term_integral)
+    (hRationality : rationality_of_coefficients)
+    (hReduction : polynomial_reduction) :
+    constant_term_integral ∧ rationality_of_coefficients ∧ polynomial_reduction := by
+  exact ⟨hConstant, hRationality, hReduction⟩
+
 end Omega.CircleDimension

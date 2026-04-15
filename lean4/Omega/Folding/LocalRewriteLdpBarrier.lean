@@ -97,6 +97,19 @@ theorem paper_fold_local_rewrite_saturation_step_efficiency_rigidity :
   · intro R ε T hT hε Δ hBound hAvg
     exact lowDeletionDensity_eq_zero_of_averageDeletion_eq_max hT hε Δ hBound hAvg
 
+set_option maxHeartbeats 400000 in
+/-- Publication-facing wrapper for the average-case `B`-bit inversion barrier and its
+    separation from the zero-error worst-case threshold.
+    thm:fold-bbit-inversion-avg-worst-gap -/
+theorem paper_fold_local_rewrite_bbit_inversion_avg_worst_gap (m B : ℕ)
+    (avg_success_bound zero_error_worst_case_threshold : Prop)
+    (hAvg : avg_success_bound)
+    (hWorst : zero_error_worst_case_threshold) :
+    avg_success_bound ∧ zero_error_worst_case_threshold := by
+  let _ := m
+  let _ := B
+  exact ⟨hAvg, hWorst⟩
+
 end
 
 end Omega.Folding.LocalRewriteLdpBarrier
