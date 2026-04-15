@@ -221,6 +221,7 @@ import Omega.Topos.GluingFailureSheafificationCharacterizationAPAL
 import Omega.Topos.GluingFailureSheafLocalToGlobalAPAL
 import Omega.Topos.GluingFailureSheafificationRemovesGlueAPAL
 import Omega.Topos.H2VanishingBlindness
+import Omega.Topos.H2VanishingBlindnessFocused
 import Omega.Topos.H1FreeNoBlindness
 import Omega.Topos.H1VanishingClassTrivializing
 import Omega.Topos.H1VanishingClassTrivializingPublication
@@ -238,6 +239,7 @@ import Omega.Topos.StrictIntrinsicCoincidenceCriterion
 import Omega.Topos.IntrinsicCharacterDetection
 import Omega.Topos.UniqueBranchBandedGerbe
 import Omega.Topos.UniqueBranchContextualityComparison
+import Omega.Topos.UniqueBranchContextualityComparisonFocused
 import Omega.Topos.PointwiseIrreducibility
 import Omega.Topos.VisibleValueComponents
 import Omega.Topos.IntrinsicHiddenStateLowerBound
@@ -393,6 +395,7 @@ import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
 import Omega.EA.RewriteTermination
+import Omega.EA.RewriteTerminationPublication
 import Omega.EA.RewriteLocalConfluence
 import Omega.EA.RewriteConfluence
 import Omega.EA.RewriteWordProblem
