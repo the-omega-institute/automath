@@ -155,6 +155,24 @@ p\Vdash \mathsf{CompSec}_s(r).
 
 反过来，若局部对象系在 \(a\) 上满足 sheaf 型粘接条件，则整体对象也可由相容局部片段恢复出来。
 
+\begin{definition}[粘接闭包阈值]\label{def:logic-expansion-gluing-closure-threshold}
+设 \(a=[r]_p\)。称局部对象系 \(F_{p,s}\) 在 \(a\) 上\emph{跨过粘接闭包阈值}，若对任意覆盖
+\[
+\{a_i\to a\}_{i\in I}\in \mathrm{Cov}_{p,s}(a)
+\]
+上的任意相容局部族 \((\sigma_i)_{i\in I}\)，都存在唯一整体截面
+\[
+\sigma\in F_{p,s}(a)
+\]
+满足
+\[
+\mathrm{res}^{a}_{a_i}(\sigma)=\sigma_i
+\qquad(\forall i\in I).
+\]
+\end{definition}
+
+定义 \ref{def:logic-expansion-gluing-closure-threshold} 并未增加新的对象层事实，而只是把命题 \ref{prop:logic-expansion-local-to-global} 中原本作为假设出现的 sheaf 型粘接条件单独命名。这样做的目的，是把“相容局部证书已经足够多，因而允许形成整体对象”这一临界点显式地记录为一个可讨论的结构阈值。
+
 \begin{proposition}[局部到整体原理]\label{prop:logic-expansion-local-to-global}
 设 \(a=[r]_p\)。若 \(F_{p,s}\) 在 \(a\) 上满足如下粘接条件：任意覆盖 \(\{a_i\to a\}_{i\in I}\in \mathrm{Cov}_{p,s}(a)\) 上的每个相容局部族 \((\sigma_i)_{i\in I}\) 都能唯一粘接为某个 \(\sigma\in F_{p,s}(a)\)，并且
 \[
@@ -173,6 +191,51 @@ p\Vdash \mathsf{Sec}_s(r).
 由 \(p\Vdash \mathsf{CompSec}_s(r)\)，存在某个覆盖 \(\{a_i\to a\}_{i\in I}\) 及其上的相容局部族 \((\sigma_i)_{i\in I}\)。按假设，可将其唯一粘接为某个 \(\sigma\in F_{p,s}(a)\)。故 \(F_{p,s}(a)\neq \varnothing\)，即 \(p\Vdash \mathsf{Sec}_s(r)\)。
 \end{proof}
 \leanverified{paper\_logic\_expansion\_local\_to\_global}
+
+\begin{proposition}[闭包阈值跨越推出整体对象]\label{prop:logic-expansion-threshold-crossing-gives-global}
+设 \(a=[r]_p\)。若
+\[
+p\Vdash \mathsf{CompSec}_s(r)
+\]
+且 \(F_{p,s}\) 在 \(a\) 上跨过定义 \ref{def:logic-expansion-gluing-closure-threshold} 的粘接闭包阈值，则
+\[
+p\Vdash \mathsf{Sec}_s(r).
+\]
+\end{proposition}
+
+\begin{proof}
+这只是把命题 \ref{prop:logic-expansion-local-to-global} 以“阈值已跨过”的语言重述。由 \(p\Vdash \mathsf{CompSec}_s(r)\)，存在某个覆盖上的相容局部族；由粘接闭包阈值的定义，该相容局部族可唯一提升为整体截面，故 \(p\Vdash \mathsf{Sec}_s(r)\)。
+\end{proof}
+
+\begin{corollary}[粘接型 \texorpdfstring{$\mathsf{NULL}$}{NULL} 是闭包阈值失败]\label{cor:logic-expansion-glue-null-threshold-failure}
+设 \(a=[r]_p\)。若
+\[
+p\Vdash \mathsf{Null}^{\mathrm{glue}}_s(r),
+\]
+则 \(F_{p,s}\) 在 \(a\) 上不跨过定义 \ref{def:logic-expansion-gluing-closure-threshold} 的粘接闭包阈值。
+\end{corollary}
+
+\begin{proof}
+由定义 \ref{def:logic-expansion-null-three-modes}，
+\[
+p\Vdash \mathsf{Null}^{\mathrm{glue}}_s(r)
+\]
+意味着
+\[
+p\Vdash \mathsf{CompSec}_s(r)
+\qquad\text{且}\qquad
+p\Vdash \neg \mathsf{Sec}_s(r).
+\]
+若 \(F_{p,s}\) 在 \(a\) 上已经跨过粘接闭包阈值，则由命题 \ref{prop:logic-expansion-threshold-crossing-gives-global} 必有
+\[
+p\Vdash \mathsf{Sec}_s(r),
+\]
+矛盾。故该阈值尚未跨过。
+\end{proof}
+
+\begin{remark}[从局域证书到整体对象的阈值读法]\label{rem:logic-expansion-local-global-threshold-reading}
+命题 \ref{prop:logic-expansion-threshold-crossing-gives-global} 与推论 \ref{cor:logic-expansion-glue-null-threshold-failure} 把本小节的局部—整体链读成了一个真正的闭包阈值问题。局部片段的存在给出最弱证书，相容局部族给出更强证书，而整体对象并不是自动附送的最后一步；只有当引用 \(a=[r]_p\) 上的粘接闭包阈值被跨过时，相容证书才被允许提升为整体对象。因此，\(\mathsf{Null}^{\mathrm{glue}}\) 不应被理解为“对象差一点就存在”，而应被理解为“局域证书已经到位，但全局闭包门槛仍未通过”的精确结构状态。
+\end{remark}
 
 在此基础上，才能正式引入结构性空缺。首先必须区分“外域未定义”与“内域空缺”。
 
