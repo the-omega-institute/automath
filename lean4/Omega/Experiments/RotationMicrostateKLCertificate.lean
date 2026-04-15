@@ -52,24 +52,21 @@ theorem paper_rotation_folded_kl_certificate
     (hMicro : dKlMicro ≤ 2 * ((m + 1 : ℝ) * star) ^ 2 / qMin) :
     dKlFold ≤ 2 * ((m + 1 : ℝ) * star) ^ 2 / qMin := by
   exact le_trans hPush hMicro
-
-/-- Paper-facing KL certificate for rotation microstates: combine the total-variation
-    certificate, the KL-from-TV inequality, and any explicit lower bound on `qMin`.
-    cor:rotation-microstate-kl-certificate -/
-theorem paper_rotation_microstate_kl_certificate
-    (m : ℕ) (dKL dTV star qMin qMinLower : ℝ)
-    (hq : 0 < qMin) (hqLower : 0 < qMinLower) (hqBound : qMinLower ≤ qMin)
-    (hStar : 0 ≤ star) (hTV0 : 0 ≤ dTV)
-    (hTV : dTV ≤ (m + 1 : ℝ) * star) (hKL : dKL ≤ 2 * dTV ^ 2 / qMin) :
-    dKL ≤ 2 * ((m + 1 : ℝ) * star) ^ 2 / qMin ∧
-      dKL ≤ 2 * ((m + 1 : ℝ) * star) ^ 2 / qMinLower := by
-  have hBase :=
-    rotation_microstate_kl_certificate_of_nonneg m dKL dTV qMin star hq hStar hTV0 hTV hKL
-  have hNum : 0 ≤ 2 * ((m + 1 : ℝ) * star) ^ 2 := by
-    positivity
-  have hScale :
-      2 * ((m + 1 : ℝ) * star) ^ 2 / qMin ≤ 2 * ((m + 1 : ℝ) * star) ^ 2 / qMinLower := by
-    exact div_le_div_of_nonneg_left hNum hqLower hqBound
-  exact ⟨hBase, le_trans hBase hScale⟩
+set_option maxHeartbeats 400000 in
+/-- Paper-facing Markov lower bound for the smallest rotation microstate atom: once the atom size
+    is bounded below by the shortest endpoint gap, and that gap is controlled by the badly
+    approximable constant, the golden branch specializes to the explicit `1 / (sqrt 5 * m)` scale.
+    prop:qmin-lowerbound-markov -/
+theorem paper_qmin_lowerbound_markov
+    (m : ℕ) (qMin minGap cα : ℝ) (hm : 1 ≤ m) (hAtom : minGap ≤ qMin)
+    (hMarkov : cα / (m : ℝ) ≤ minGap) (hGolden : (1 : ℝ) / Real.sqrt 5 ≤ cα) :
+    cα / (m : ℝ) ≤ qMin ∧ ((1 : ℝ) / Real.sqrt 5) / (m : ℝ) ≤ qMin := by
+  have hm_one : (1 : ℝ) ≤ m := by
+    exact_mod_cast hm
+  have hm0 : 0 ≤ (m : ℝ) := le_trans (by positivity : (0 : ℝ) ≤ 1) hm_one
+  have hMarkovToQ : cα / (m : ℝ) ≤ qMin := le_trans hMarkov hAtom
+  have hGoldenDiv : ((1 : ℝ) / Real.sqrt 5) / (m : ℝ) ≤ cα / (m : ℝ) :=
+    div_le_div_of_nonneg_right hGolden hm0
+  exact ⟨hMarkovToQ, le_trans hGoldenDiv hMarkovToQ⟩
 
 end Omega.Experiments.RotationMicrostateKLCertificate

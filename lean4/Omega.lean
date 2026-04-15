@@ -635,6 +635,7 @@ import Omega.CircleDimension.BareCircleNotCompleteCarrier
 import Omega.CircleDimension.BasicComputation
 import Omega.CircleDimension.SignedCircleDimension
 import Omega.CircleDimension.StokesHomologyExactSplitting
+import Omega.CircleDimension.StokesFiberIntegrationDefect
 import Omega.CircleDimension.ShortExactAdditivity
 import Omega.SPG.TanakaStokes
 import Omega.CircleDimension.TensorHomExtLaws
