@@ -180,6 +180,7 @@ import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.RegisterLowerBound
 import Omega.SPG.CollisionProfileRestoration
 import Omega.SPG.CubePotentialCurl
+import Omega.SPG.CurlReconstructionPublication
 import Omega.SPG.CubePoincareInverse
 import Omega.SPG.PolycubeAdhesion
 import Omega.SPG.TotalDegreeMomentThreshold
@@ -258,6 +259,7 @@ import Omega.Topos.UniqueBranchContextualityComparisonFocused
 import Omega.Topos.PointwiseIrreducibility
 import Omega.Topos.VisibleValueComponents
 import Omega.Topos.IntrinsicHiddenStateLowerBound
+import Omega.Topos.IntrinsicHiddenStateLowerBoundPublication
 import Omega.Topos.IntrinsicPrimeDecomposition
 import Omega.Topos.ConservativeRecoveryBudget
 import Omega.Topos.MaximalCollapseCriterion
@@ -605,6 +607,7 @@ import Omega.GroupUnification.SMSignatureCyclicDivides6
 import Omega.GroupUnification.ParryEndpointCollapse
 import Omega.GroupUnification.ParryCommutingSquarePhi
 import Omega.GroupUnification.ChiralOrthogonalityTypeObservables
+import Omega.GroupUnification.ExactClock
 import Omega.CD.AnomalyCompressionOverhead
 import Omega.CD.PeriodicPointCount
 import Omega.CircleDimension.MultiPrimeSpectrum
