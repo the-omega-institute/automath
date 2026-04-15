@@ -89,6 +89,7 @@ import Omega.Folding.EndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
 import Omega.Folding.ImageSubshiftZeta
 import Omega.Folding.PhiConjugacyThreshold
+import Omega.Folding.YmConjugacyAllMge3
 import Omega.Folding.SyncDelay
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Graph.LabeledGraph
@@ -185,6 +186,7 @@ import Omega.LogicExpansionChain.NoPrivilegedObserver
 import Omega.LogicExpansionChain.ReadoutTransport
 import Omega.LogicExpansionChain.UpdatesPreserveForcing
 import Omega.LogicExpansionChain.DelayedDecidabilityNoNewTruth
+import Omega.LogicExpansionChain.NullTrichotomy
 import Omega.LogicExpansionChain.IndispensabilityImpliesMinimality
 import Omega.LogicExpansionChain.ChoiceSpectrumStandardForm
 import Omega.LogicExpansionChain.ChoiceSpectrum
@@ -229,6 +231,7 @@ import Omega.RecursiveAddressing.ObserverIndexedNoRetraction
 import Omega.RecursiveAddressing.GlobalLayerLogicOnly
 import Omega.RecursiveAddressing.ObserverIndexedCommonRefinementDecidability
 import Omega.RecursiveAddressing.ObserverIndexedDelayedClassification
+import Omega.RecursiveAddressing.ObserverIndexedDelayedClassificationNoRetrocausal
 import Omega.RecursiveAddressing.ObserverIndexedFiniteResolutionObjectEligibility
 import Omega.RecursiveAddressing.ObserverIndexedReadingOfEmergentArithmetic
 import Omega.RecursiveAddressing.Refinement
