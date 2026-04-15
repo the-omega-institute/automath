@@ -52,4 +52,25 @@ theorem paper_pom_moment_resonance
     simpa [k, Matrix.mulVec, dotProduct]
       using hkm
 
+set_option maxHeartbeats 400000 in
+/-- Paper-facing resonance deficit wrapper: if every one of the last `Delta` rows of an invertible
+    change-of-basis matrix annihilates the visible moment vectors for `m ≥ m₀`, then those rows
+    furnish `Delta` linearly independent linear constraints on the original moments.
+    cor:pom-resonance-deficit -/
+theorem paper_pom_resonance_deficit
+    (d Delta m0 : ℕ)
+    (M : ℕ → Fin (d + Delta) → ℝ)
+    (T : Matrix (Fin (d + Delta)) (Fin (d + Delta)) ℝ)
+    (hInv : IsUnit T.det)
+    (hTail : ∀ m ≥ m0, ∀ j : Fin Delta, (T.mulVec (M m)) (Fin.natAdd d j) = 0) :
+    ∃ constraints : Fin Delta → Fin (d + Delta) → ℝ,
+      LinearIndependent ℝ constraints ∧
+        ∀ m ≥ m0, ∀ j, (∑ i, constraints j i * M m i) = 0 := by
+  refine ⟨fun j i => T (Fin.natAdd d j) i, ?_, ?_⟩
+  · have hUnit : IsUnit T := (Matrix.isUnit_iff_isUnit_det (A := T)).2 hInv
+    have hRows : LinearIndependent ℝ T.row := Matrix.linearIndependent_rows_of_isUnit hUnit
+    simpa [Matrix.row] using hRows.comp (Fin.natAdd d) (Fin.natAddEmb d).injective
+  · intro m hm j
+    simpa [Matrix.mulVec, dotProduct] using hTail m hm j
+
 end Omega.POM

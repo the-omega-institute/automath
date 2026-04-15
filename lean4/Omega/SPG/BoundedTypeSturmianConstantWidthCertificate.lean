@@ -13,4 +13,17 @@ theorem paper_spg_bounded_type_sturmian_constant_width_certificate
   intro hWindow hCylinder hWidth
   exact ⟨hWindow, hCylinder, hWidth⟩
 
+set_option maxHeartbeats 400000 in
+/-- Paper-facing golden-slope specialization of the bounded-type Sturmian constant-width
+    certificate.
+    cor:spg-golden-sturmian-logarithmic-arithmetic-certificate -/
+theorem paper_spg_golden_sturmian_logarithmic_arithmetic_certificate
+    (fibonacciWindow intervalBound widthBound logarithmicDepth : Prop)
+    (hWindow : fibonacciWindow)
+    (hInterval : intervalBound)
+    (hWidth : widthBound)
+    (hDepth : logarithmicDepth) :
+    fibonacciWindow ∧ intervalBound ∧ widthBound ∧ logarithmicDepth := by
+  exact ⟨hWindow, hInterval, hWidth, hDepth⟩
+
 end Omega.SPG

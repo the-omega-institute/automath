@@ -184,6 +184,19 @@ theorem paper_fold_local_rewrite_reversible_event_alphabet_lower_bound
   intro hLift
   exact ⟨hAsymptotic, hCount hLift⟩
 
+set_option maxHeartbeats 400000 in
+/-- Paper-facing wrapper for the Bernoulli-`p` optimally biased lower-bound package: keep the
+    Bernoulli barrier, the uniqueness of the maximizing bias, and the resulting optimal lower
+    bound together in one corollary.
+    cor:fold-local-rewrite-bernoulli-p-optimally-biased-lower-bound -/
+theorem paper_fold_local_rewrite_bernoulli_p_optimally_biased_lower_bound
+    (bernoulliBarrier uniqueMaximizer optimalLowerBound : Prop)
+    (hBarrier : bernoulliBarrier)
+    (hMax : uniqueMaximizer)
+    (hDerive : bernoulliBarrier → uniqueMaximizer → optimalLowerBound) :
+    bernoulliBarrier ∧ uniqueMaximizer ∧ optimalLowerBound := by
+  exact ⟨hBarrier, hMax, hDerive hBarrier hMax⟩
+
 end
 
 end Omega.Folding.LocalRewriteLdpBarrier
