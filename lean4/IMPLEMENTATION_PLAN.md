@@ -9,14 +9,16 @@
 | 总行数 | ~50,937 |
 | 定理/定义数 | ~4,442 |
 | 论文接口包装 | 800+ |
-| 文件数 | 219 |
+| 文件数 | 222 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3395 |
+| \leanverified 标注数 | 3398 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3444 |
-| 轮次 | R805（round_count=R805）|
+| 总标注数 | 3447 |
+| 轮次 | R806（round_count=R806）|
+
+**Phase R806（本轮落地，全流程执行）**：`paper_conservative_extension_intrinsic_visible_quotient_focused`（对应 `thm:intrinsic-visible-quotient`，Topos；把 focused APAL 版本中的 class-admissible / annihilator / kernel-intersection / quotient-identification 链重新挂接成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_resolution_folding_congruence_rigidity`（对应 `thm:congruence-rigidity`，Folding；把 residue readout 识别为 visible-code 组合并压成 arithmetic injectivity wrapper）；`paper_resolution_folding_fingerprint_separation`（对应 `cor:fingerprint-separation`，Folding；把 global fingerprint injectivity 限制到等值纤维并压成 corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 Topos / Folding，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Topos/FocusedIntrinsicVisibleQuotient.lean`、`lean4/Omega/Folding/CongruenceRigidityPublication.lean`、`lean4/Omega/Folding/FingerprintSeparationPublication.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_conservative_extension_intrinsic_visible_quotient_focused`、`paper_resolution_folding_congruence_rigidity`、`paper_resolution_folding_fingerprint_separation`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_homological_visibility.tex`（`thm:intrinsic-visible-quotient`），`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_arithmetic.tex`（`thm:congruence-rigidity`、`cor:fingerprint-separation`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R805（本轮落地，全流程执行）**：`paper_gluing_failure_global_sections_vs_neutral_components`（对应 `prop:global-sections-vs-neutral-components`，Topos；把 global sections 与 visible branch terminal-fibre / neutrality readout 的双向对应压成 APAL proposition-facing wrapper，本轮 non-trivial 目标）；`paper_circle_dimension_poisson_second_order`（对应 `thm:poisson-second-order`，CircleDimension；把 translated Poisson profile 的 second-order approximation 与其 `L^1` / KL corollaries 压成 JFA theorem-facing wrapper）；`paper_cubical_stokes_minkowski_readout`（对应 `cor:minkowski-readout`，SPG；把 dyadic counting、volume readout 与 Stokes flux readout 的 upper Minkowski dimension chain 打包成 JDSGT corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 Topos / CircleDimension / SPG，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Topos/GlobalSectionsNeutralComponents.lean`、`lean4/Omega/CircleDimension/PoissonSecondOrder.lean`、`lean4/Omega/SPG/MinkowskiReadout.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_gluing_failure_global_sections_vs_neutral_components`、`paper_circle_dimension_poisson_second_order`、`paper_cubical_stokes_minkowski_readout`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_gerbe_obstruction.tex`（`prop:global-sections-vs-neutral-components`），`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_entropy_asymptotics.tex`（`thm:poisson-second-order`），`/Users/chronoai/automath/papers/publication/2026_cubical_stokes_inverse_boundary_readout_jdsgt/main.tex`（`cor:minkowski-readout`）；新增 tex theorem/corollary/lemma 环境数 0）
 
