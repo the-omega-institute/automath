@@ -6,17 +6,19 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~50,876 |
-| 定理/定义数 | ~4,439 |
+| 总行数 | ~50,937 |
+| 定理/定义数 | ~4,442 |
 | 论文接口包装 | 791+ |
-| 文件数 | 210 |
+| 文件数 | 213 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3353 |
+| \leanverified 标注数 | 3356 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3402 |
-| 轮次 | R784（round_count=R784）|
+| 总标注数 | 3405 |
+| 轮次 | R785（round_count=R785）|
+
+**Phase R785（本轮落地，全流程执行）**：`paper_projection_rewrite_termination`（对应 `lem:rewrite-termination`，EA；把 exact rewrite system 的“一步严格缩短长度”压成 `WellFounded (flip Step)` 的 lemma-facing termination wrapper，补齐 TAMS rewriting 节未登记的终止性标签）；`paper_conservative_extension_h2_vanishing_blindness_focused`（对应 `cor:h2-vanishing-blindness`，Topos；把 `H_2=0` 时 evaluation / kernel / intrinsic visible quotient 的三段塌缩直接压成 focused APAL corollary-facing wrapper）；`paper_conservative_extension_unique_branch_contextuality_comparison_focused`（对应 `thm:unique-branch-contextuality-comparison`，Topos；把 compatible-family / global-section / gluing-nullity 三段等价在 focused APAL unique-branch 语境下压成 theorem-facing wrapper，本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 EA / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/EA/RewriteTerminationPublication.lean`、`lean4/Omega/Topos/H2VanishingBlindnessFocused.lean`、`lean4/Omega/Topos/UniqueBranchContextualityComparisonFocused.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_projection_rewrite_termination`、`paper_conservative_extension_h2_vanishing_blindness_focused`、`paper_conservative_extension_unique_branch_contextuality_comparison_focused`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_projection_ontological_mathematics_core_tams/sec_rewriting.tex`（`lem:rewrite-termination`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_homological_visibility.tex`（`cor:h2-vanishing-blindness`、`thm:unique-branch-contextuality-comparison`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R784（本轮落地，全流程执行）**：`paper_circle_dimension_poisson_kl_eighth`（对应 `thm:poisson-kl-eighth`，CircleDimension；把 eighth-order Poisson KL expansion 的四阶/六阶/八阶显式系数 readout 压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_etds_class_primitive_trivial_split`（对应 `lem:class-primitive-trivial-split`，Zeta；把 conjugacy-class primitive decomposition 中 trivial Peter--Weyl channel 与非平凡通道余项分拆成 lemma-facing wrapper）；`paper_resolution_folding_linear_time_block_decoding`（对应 `cor:linear-time-block-decoding`，Folding；把 length-`m` 初始化与逐步右解析延拓压成 finite-block decoding corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 CircleDimension / Zeta / Folding，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/PoissonKLEighth.lean`、`lean4/Omega/Zeta/ClassPrimitiveTrivialSplit.lean`、`lean4/Omega/Folding/LinearTimeBlockDecoding.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_circle_dimension_poisson_kl_eighth`、`paper_etds_class_primitive_trivial_split`、`paper_resolution_folding_linear_time_block_decoding`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_entropy_asymptotics.tex`（`thm:poisson-kl-eighth`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_chebotarev.tex`（`lem:class-primitive-trivial-split`），`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_reconstruction.tex`（`cor:linear-time-block-decoding`）；新增 tex theorem/corollary/lemma 环境数 0）
 
