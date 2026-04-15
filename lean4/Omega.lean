@@ -269,6 +269,7 @@ import Omega.SPG.BoundaryAffineFiberCycleRank
 import Omega.SPG.F2FiberCardinality
 import Omega.SPG.CycleRankFormula
 import Omega.SPG.BoundaryCycleRankFromEntropy
+import Omega.SPG.GaugeVolumeAreaComplementarity
 import Omega.SPG.EllipsoidFluxDecodingPerturbationStability
 import Omega.SPG.GodelBoundaryDecodingRelativeErrorThreshold
 import Omega.SPG.DyadicCubicalCellCount
@@ -757,6 +758,7 @@ import Omega.TypedAddressBiaxialCompletion.ComovingDefectBound
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.PreferredMinimalInstantiationExtraction
+import Omega.TypedAddressBiaxialCompletion.CompletenessGapAudit
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
 import Omega.TypedAddressBiaxialCompletion.PcdimModpFormula
@@ -971,6 +973,7 @@ import Omega.CircleDimension.PhaseSpectrumMonoid
 import Omega.CircleDimension.LissajousChebyshev
 import Omega.CircleDimension.RhodoneaSubflow
 import Omega.CircleDimension.SolenoidKernelBlindness
+import Omega.CircleDimension.BorelHomomorphismNoncollapse
 import Omega.CircleDimension.PoissonEntropyTomography
 import Omega.CircleDimension.DoubleDiscriminant
 import Omega.CircleDimension.WdimBettiAverageLaw
