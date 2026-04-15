@@ -1,0 +1,320 @@
+% ══════════════════════════════════════════════════════════
+\section{Derived Consequences}\label{sec:consequences}
+% ══════════════════════════════════════════════════════════
+
+The three-level hierarchy yields a chain of structural consequences
+that exploit the interaction between fold fibers, collision moments,
+and the Hankel certificate.
+All results below are stated at the level of the short-paper
+framework; precise theorem labels in the parent
+work~\cite{OmegaSPG2026} are indicated where applicable.
+
+% ── 7.1  Mixture decomposition ────────────────────────────
+\subsection{Mixture decomposition of the collision law}
+
+\begin{theorem}[Finite mixture decomposition of the $q$-collision
+  law]\label{thm:mixture}
+Fix $m \ge 1$ and $q \ge 1$.  Let
+\[
+  R_{m}^{(q)} := \bigl\{(\omega^{(1)},\ldots,\omega^{(q)})
+    \in \Omega_{m}^{q} :
+    \Fold_{m}(\omega^{(1)}) = \cdots
+      = \Fold_{m}(\omega^{(q)})\bigr\},
+\]
+and let $U_{m,q}$ be the uniform probability measure
+on~$R_{m}^{(q)}$.  For $x \in X_{m}$, write
+$F_{x} := \Fold_{m}^{-1}(x)$ and
+$\nu_{x} := \mathrm{Unif}(F_{x})$.  Then
+\begin{equation}\label{eq:mixture}
+  U_{m,q}
+    = \sum_{x \in X_{m}}
+      \frac{d_{m}(x)^{q}}{S_{q}(m)}\;
+      \nu_{x}^{\otimes q}.
+\end{equation}
+Equivalently, if $X$ denotes the common fold image under
+$U_{m,q}$, then
+$\Pr[X = x] = d_{m}(x)^{q}/S_{q}(m)$,
+and, conditional on $X = x$, the coordinates
+$\omega^{(1)},\ldots,\omega^{(q)}$ are independent and uniformly
+distributed on~$F_{x}$.
+\end{theorem}
+
+\begin{proof}
+The partition
+$R_{m}^{(q)} = \bigsqcup_{x \in X_{m}} F_{x}^{q}$ is
+disjoint with $|F_{x}^{q}| = d_{m}(x)^{q}$.
+The right-hand side of~\eqref{eq:mixture} assigns to each
+element of~$F_{x}^{q}$ the mass
+$d_{m}(x)^{q}/S_{q}(m) \cdot d_{m}(x)^{-q} = 1/S_{q}(m)$.
+Since $|R_{m}^{(q)}| = S_{q}(m)$, this is the uniform law.
+\end{proof}
+
+The extreme points of the convex hull
+$\mathcal{C}_{m,q} :=
+\operatorname{conv}\{\nu_{x}^{\otimes q} : x \in X_{m}\}$
+are exactly the product laws $\nu_{x}^{\otimes q}$
+for $x \in X_{m}$, so $\mathcal{C}_{m,q}$ is a
+finite-dimensional simplex.
+
+% ── 7.2  Jacobi realization ──────────────────────────────
+\subsection{Jacobi spectral realization and Stieltjes
+  continued fraction}
+
+\begin{theorem}[Jacobi realization of collision moments]
+\label{thm:jacobi}
+Fix $m \ge 1$.  Let
+\[
+  \nu_{m} := \sum_{x \in X_{m}} \delta_{d_{m}(x)}
+    = \sum_{i=1}^{r_{m}} n_{i}\, \delta_{a_{i}},
+  \qquad a_{1} < \cdots < a_{r_{m}},
+\]
+where $a_{i}$ are the distinct fiber sizes and $n_{i}$ their
+multiplicities.  Then
+$S_{q}(m) = \int t^{q}\, d\nu_{m}(t)$ for all $q \ge 0$.
+There exists a unique real Jacobi matrix
+$J_{m} \in M_{r_{m}}(\RR)$
+with positive subdiagonal entries
+$\beta_{1},\ldots,\beta_{r_{m}-1} > 0$
+and a cyclic vector $\xi_{m} \in \RR^{r_{m}}$ such that
+\begin{equation}\label{eq:jacobi-moments}
+  S_{q}(m) = \langle \xi_{m},\, J_{m}^{q}\, \xi_{m} \rangle
+  \qquad (q \ge 0).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Take $H_{m} = L^{2}(\nu_{m})$, $J_{m} f(t) = t\, f(t)$,
+and $\xi_{m} \equiv 1$.  Then
+$\langle \xi_{m}, J_{m}^{q} \xi_{m}\rangle
+= \int t^{q}\, d\nu_{m}(t) = S_{q}(m)$.
+Since $\nu_{m}$ has $r_{m}$ atoms, $\dim H_{m} = r_{m}$.
+The constant function is cyclic because polynomials separate
+points of the finite support.  Uniqueness up to unitary
+equivalence is the cyclic spectral theorem;
+Gram--Schmidt in the monomial basis yields the Jacobi form.
+\end{proof}
+
+\begin{corollary}[Stieltjes continued fraction]
+\label{cor:stieltjes}
+The Cauchy transform
+$G_{m}(z) := \langle \xi_{m},(zI - J_{m})^{-1}\xi_{m}\rangle$
+admits a unique finite Stieltjes continued fraction of
+length~$r_{m}$:
+\[
+  G_{m}(z)
+    = \cfrac{\|\xi_{m}\|^{2}}
+      {z - \alpha_{1}
+        - \cfrac{\beta_{1}^{2}}
+          {z - \alpha_{2}
+            - \cfrac{\beta_{2}^{2}}
+              {\ddots
+                - \cfrac{\beta_{r_{m}-1}^{2}}
+                  {z - \alpha_{r_{m}}}}}}.
+\]
+The Jacobi parameters
+$(\alpha_{j}, \beta_{j})_{j}$ are uniquely determined by
+$\nu_{m}$ and hence by the Hankel certificate.
+\end{corollary}
+
+% ── 7.3  Escort concentration ────────────────────────────
+\subsection{Escort concentration and freezing threshold}
+
+\begin{theorem}[Escort large-deviation estimate]
+\label{thm:escort-ldp}
+Fix $m \ge 1$ and define the escort law
+\[
+  \pi_{m,q}(x) := \frac{d_{m}(x)^{q}}{S_{q}(m)}
+  \qquad (x \in X_{m},\; q > 0).
+\]
+Let $D_{m} := \max_{x} d_{m}(x)$,
+$A_{m}^{\max} := \{x : d_{m}(x) = D_{m}\}$,
+$N_{m} := |A_{m}^{\max}|$,
+$D_{m}^{(2)} := \max_{x \notin A_{m}^{\max}} d_{m}(x)$,
+and $\Delta_{m} := \log D_{m} - \log D_{m}^{(2)}$.
+Then as $q \to \infty$,
+\begin{equation}\label{eq:escort-rate}
+  -\frac{1}{q}\, \log \pi_{m,q}(x)
+    \;\longrightarrow\;
+  I_{m}(x) := \log D_{m} - \log d_{m}(x).
+\end{equation}
+Moreover,
+\begin{equation}\label{eq:escort-tail}
+  1 - \pi_{m,q}(A_{m}^{\max})
+    \;\le\;
+  \frac{|X_{m}| - N_{m}}{N_{m}}\; e^{-q \Delta_{m}}.
+\end{equation}
+Hence any $q > \Delta_{m}^{-1}\,
+\log\bigl((|X_{m}| - N_{m})/N_{m}\bigr)$
+suffices to force
+$\pi_{m,q}(A_{m}^{\max}) > 1/2$.
+\end{theorem}
+
+\begin{proof}
+Write
+$S_{q}(m) = D_{m}^{q}\bigl(N_{m}
++ \sum_{x \notin A_{m}^{\max}}
+(d_{m}(x)/D_{m})^{q}\bigr)$.
+Then
+$\pi_{m,q}(x) = (d_{m}(x)/D_{m})^{q} /
+(N_{m} + \sum_{y \notin A_{m}^{\max}}
+(d_{m}(y)/D_{m})^{q})$,
+and~\eqref{eq:escort-rate} follows because the denominator
+converges to~$N_{m}$.  The tail
+bound~\eqref{eq:escort-tail} uses
+$d_{m}(x)/D_{m} \le e^{-\Delta_{m}}$ for
+$x \notin A_{m}^{\max}$.
+\end{proof}
+
+% ── 7.4  Cross-resolution kernel ─────────────────────────
+\subsection{Cross-resolution positive-definite kernel}
+
+\begin{theorem}[Cross-resolution kernel]
+\label{thm:cross-kernel}
+Let $\mu_{1/2}$ be Bernoulli-$\tfrac{1}{2}$ product measure on
+$\Omega_{\infty} = \{0,1\}^{\NN}$, and let
+$\mathrm{pref}_{m}(\omega) \in \Omega_{m}$ denote the
+length-$m$ prefix.  For $q \ge 0$, define
+\[
+  \Phi_{m,q}(\omega)
+    := d_{m}\!\bigl(\Fold_{m}(\mathrm{pref}_{m}(\omega))\bigr)^{q/2}
+\]
+and set
+\begin{equation}\label{eq:cross-kernel}
+  K_{q}(m,n)
+    := \int_{\Omega_{\infty}}
+      \Phi_{m,q}(\omega)\, \Phi_{n,q}(\omega)\,
+      d\mu_{1/2}(\omega).
+\end{equation}
+Then $K_{q}$ is a positive-definite kernel on~$\NN$.
+On the diagonal,
+\begin{equation}\label{eq:kernel-diagonal}
+  K_{q}(m,m) = 2^{-m}\, S_{q+1}(m).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+For any $m_{1},\ldots,m_{r} \in \NN$ and
+$c_{1},\ldots,c_{r} \in \RR$,
+\[
+  \sum_{i,j} c_{i}\, c_{j}\, K_{q}(m_{i}, m_{j})
+    = \int_{\Omega_{\infty}}
+      \Bigl(\sum_{i} c_{i}\, \Phi_{m_{i},q}(\omega)\Bigr)^{2}\,
+      d\mu_{1/2}(\omega) \ge 0.
+\]
+For the diagonal,
+$K_{q}(m,m) = \sum_{\eta \in \Omega_{m}} 2^{-m}\,
+d_{m}(\Fold_{m}(\eta))^{q}
+= 2^{-m} \sum_{x \in X_{m}} d_{m}(x)^{q+1}
+= 2^{-m}\, S_{q+1}(m)$.
+\end{proof}
+
+% ── 7.5  Collision zeta function ─────────────────────────
+\subsection{Collision zeta function}
+
+\begin{theorem}[Rationality of the collision zeta function]
+\label{thm:zeta}
+For fixed $m$, define
+\[
+  \zeta_{m}(z)
+    := \exp\Bigl(\sum_{q \ge 1}
+      \frac{S_{q}(m)}{q}\, z^{q}\Bigr).
+\]
+Then
+\begin{equation}\label{eq:zeta-rational}
+  \zeta_{m}(z)
+    = \prod_{x \in X_{m}} (1 - d_{m}(x)\, z)^{-1}
+    = \prod_{j=1}^{r_{m}} (1 - a_{j}\, z)^{-c_{j}},
+\end{equation}
+with radius of convergence $1/D_{m}$.
+Moreover, $\zeta_{m}$ admits the primitive expansion
+\begin{equation}\label{eq:zeta-primitive}
+  \zeta_{m}(z)
+    = \prod_{n \ge 1} (1 - z^{n})^{-p_{n}^{(m)}},
+  \qquad
+  p_{n}^{(m)}
+    = \sum_{x \in X_{m}} M_{n}(d_{m}(x)),
+\end{equation}
+where $M_{n}(a) := \frac{1}{n}\sum_{d \mid n}
+\mu(d)\, a^{n/d}$ is the necklace polynomial, so
+$p_{n}^{(m)} \in \NN$.
+\end{theorem}
+
+\begin{proof}
+Since $S_{q}(m) = \sum_{x} d_{m}(x)^{q}$,
+\[
+  \log \zeta_{m}(z)
+    = \sum_{q \ge 1} \sum_{x}
+      \frac{(d_{m}(x)\, z)^{q}}{q}
+    = -\sum_{x} \log(1 - d_{m}(x)\, z),
+\]
+which gives~\eqref{eq:zeta-rational}.
+The primitive expansion follows from standard Witt--M\"obius
+inversion:
+$S_{n}(m) = \sum_{d \mid n} d\, p_{d}^{(m)}$,
+hence $p_{n}^{(m)} = \frac{1}{n}\sum_{d \mid n}
+\mu(d)\, S_{n/d}(m) = \sum_{x} M_{n}(d_{m}(x))$.
+Integrality of $M_{n}(a)$ for $a \in \NN$ is classical.
+\end{proof}
+
+% ── 7.6  Free energy of rewriting ────────────────────────
+\subsection{Free energy of the fiber partition function}
+
+\begin{theorem}[Gibbs variational principle on fibers]
+\label{thm:gibbs}
+Fix $m \ge 1$, $x \in X_{m}$, and let
+$F_{x} := \Fold_{m}^{-1}(x)$.
+Let $R_{x} \colon F_{x} \to \RR$ be any statistic on the fiber.
+Define
+\[
+  Z_{x}(\theta) := \sum_{\omega \in F_{x}}
+    e^{\theta\, R_{x}(\omega)},
+  \qquad
+  \psi_{x}(\theta) := \log Z_{x}(\theta).
+\]
+Then
+\begin{equation}\label{eq:gibbs-vp}
+  \psi_{x}(\theta)
+    = \sup_{\pi \in \Delta(F_{x})}
+      \bigl\{\theta\, \mathbb{E}_{\pi}[R_{x}]
+        + H(\pi)\bigr\},
+\end{equation}
+and the unique maximizer is the Gibbs distribution
+$\pi_{\theta}(\omega)
+= e^{\theta R_{x}(\omega)}/Z_{x}(\theta)$.
+If $F_{x} \simeq F_{x}^{(1)} \times F_{x}^{(2)}$ and
+$R_{x}(\omega_{1},\omega_{2})
+= R_{x}^{(1)}(\omega_{1}) + R_{x}^{(2)}(\omega_{2})$,
+then $\psi_{x}$ decomposes additively.
+\end{theorem}
+
+\begin{proof}
+For any $\pi \in \Delta(F_{x})$,
+$D_{\mathrm{KL}}(\pi \| \pi_{\theta})
+= -H(\pi) - \theta\, \mathbb{E}_{\pi}[R_{x}]
++ \psi_{x}(\theta) \ge 0$,
+with equality iff $\pi = \pi_{\theta}$.
+This gives~\eqref{eq:gibbs-vp}.
+Additivity under product decomposition is immediate from
+$Z_{x}(\theta) = Z_{x}^{(1)}(\theta)\, Z_{x}^{(2)}(\theta)$.
+\end{proof}
+
+% ── 7.7  NNO and Church numerals ─────────────────────────
+\subsection{Natural numbers object and iteration}
+
+\begin{proposition}[Fold numerals as a natural numbers object]
+\label{prop:nno}
+Define $0_{X} := \Val^{-1}(0) \in X_{\infty}^{\mathrm{fin}}$ and
+$\mathsf{S}_{X}(c) := \Val^{-1}(\Val(c) + 1)$ for
+$c \in X_{\infty}^{\mathrm{fin}}$.
+Since $\Val \colon X_{\infty}^{\mathrm{fin}} \to \NN$ is a bijection,
+$(X_{\infty}^{\mathrm{fin}}, 0_{X}, \mathsf{S}_{X})$ is
+isomorphic to $(\NN, 0, \mathsf{S})$ in $\mathbf{Set}$, hence is a
+natural numbers object.
+Under this identification, the numeral
+$c_{n} := \Val^{-1}(n) \in X_{\infty}^{\mathrm{fin}}$ acts on every endomorphism
+$f \colon A \to A$ by $n$-fold iteration
+$f \mapsto f^{\circ n}$.
+The level-0 readout identifies addition with composition of
+iterates; the level-1 readout identifies multiplication with
+composition of the operators $f \mapsto f^{\circ n}$.
+\end{proposition}

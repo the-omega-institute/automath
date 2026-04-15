@@ -106,7 +106,7 @@ class OracleHandler(BaseHTTPRequestHandler):
             task = {
                 "task_id": task_id,
                 "prompt": data.get("prompt", ""),
-                "model": data.get("model", "o3-mini-high"),
+                "model": data.get("model", "chatgpt-5.4-pro"),
                 "status": "queued",
             }
 
@@ -150,7 +150,7 @@ class OracleHandler(BaseHTTPRequestHandler):
             out_file = done_dir / f"{task_id}.md"
             metadata = {
                 "timestamp": datetime.now().isoformat(),
-                "model": data.get("model", "o3-mini-high"),
+                "model": data.get("model", "chatgpt-5.4-pro"),
                 "response_length": len(response),
             }
             out_file.write_text(
@@ -177,7 +177,7 @@ class OracleHandler(BaseHTTPRequestHandler):
 
 
 def submit_task(prompt: str, pdf_path: Path | None = None,
-                task_id: str | None = None, model: str = "o3-mini-high"):
+                task_id: str | None = None, model: str = "chatgpt-5.4-pro"):
     """Submit a task to the server (called by agents)."""
     import urllib.request
 

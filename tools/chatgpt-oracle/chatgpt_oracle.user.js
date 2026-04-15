@@ -677,6 +677,8 @@
           const text = (el.innerText || "").trim();
           // Must be substantial and not just our prompt
           if (text.length > 100) {
+            // Reject UI chrome fragments
+            if (/^Extended\s*Pro$/i.test(text.trim())) continue;
             // Reject prompt echoes ("你说：..." or text matching the prompt)
             if (looksLikePromptEcho(text)) continue;
             // Legacy check (backup)
@@ -762,6 +764,8 @@
       // Remove known chrome
       if (/^(进阶专业|ChatGPT\s*也可能会犯错|请核查重要信息|查看\s*Cookie|Cookie\s*首选项)/.test(t)) return false;
       if (/^(ChatGPT can make mistakes|Check important info)/.test(t)) return false;
+      if (/^Extended\s*Pro$/i.test(t)) return false;
+      if (/^(Deep research|Deep thinking|Reasoning)$/i.test(t)) return false;
       if (/^Thought for \d+/.test(t)) return false;
       if (/^(你说|You said|ChatGPT\s*说|ChatGPT\s*said)[：:]?\s*$/.test(t)) return false;
       if (/^(正在思考|正在搜索|Searching)/.test(t)) return false;
