@@ -556,6 +556,7 @@ import Omega.Topos.LocalSectionCriterion
 import Omega.Topos.GlobalImpliesCompatibleLocal
 import Omega.HighDimensionalCutProject.IndicatorSumRewrite
 import Omega.Conclusion.AffineRegisterBudget
+import Omega.Conclusion.AuditComplexityAreaEquivalence
 import Omega.Conclusion.BoundaryCycleRankExternalInfoLowerBound
 import Omega.Conclusion.BoundaryMixedAuditRankConservation
 import Omega.Conclusion.PcdimPropCycleRankMinimal
@@ -630,6 +631,7 @@ import Omega.CircleDimension.ModeSpaceRKHS
 import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
+import Omega.CircleDimension.PoissonCauchyFiniteLaurentModes
 import Omega.CircleDimension.PoissonCentralTwoChannel
 import Omega.CircleDimension.PoissonCentralTwoChannelReconstruction
 import Omega.CircleDimension.PoissonCauchyMomentInversionByPhaseModes
@@ -706,6 +708,7 @@ import Omega.POM.KernelSpectrum
 import Omega.POM.CatalanMoments
 import Omega.POM.FoldIndexSeeds
 import Omega.POM.FoldInjectivizationMinsideinfo
+import Omega.POM.DefectBand
 import Omega.POM.FenceRiccatiError
 import Omega.POM.StarMomentKernelCompression
 import Omega.POM.FiberTwoPhaseMixing
