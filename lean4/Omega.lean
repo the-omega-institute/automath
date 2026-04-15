@@ -254,6 +254,7 @@ import Omega.Topos.CharacterBlindObstructionsFocused
 import Omega.Topos.BranchDecomposition
 import Omega.Topos.BranchDecompositionPublication
 import Omega.Topos.ComponentGerbeDecomposition
+import Omega.Topos.ComponentGerbeDecompositionFocused
 import Omega.Topos.CechBridgeCompatibleRealizations
 import Omega.Topos.GerbeNullSemantics
 import Omega.Topos.GerbeNullSemanticsPublication
@@ -522,6 +523,7 @@ import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
 import Omega.CircleDimension.PoissonCentralTwoChannel
+import Omega.CircleDimension.PoissonChannelRKHS
 import Omega.CircleDimension.PoissonSymmetrization
 import Omega.CircleDimension.PoissonSymmetricCase
 import Omega.CircleDimension.PoissonKLEighth
@@ -641,6 +643,7 @@ import Omega.GroupUnification.ChiralOrthogonalityTypeObservables
 import Omega.GroupUnification.ExactClock
 import Omega.GroupUnification.FiniteTimeLaw
 import Omega.GroupUnification.NormalForm
+import Omega.GroupUnification.MarkovZeroVariance
 import Omega.GroupUnification.GeneralNormalForm
 import Omega.GroupUnification.GeneralRigidity
 import Omega.GroupUnification.ParryRigidity
