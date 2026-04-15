@@ -51,7 +51,14 @@ theorem paper_spg_bayes_finite_mistakes_summable
     exact bayesMismatchEvent_measure_eq_scanError μ (obs m) P
   have hmass :
       (∑' m, μ.toMeasure (bayesMismatchEvent μ (obs m) P)) ≠ ⊤ := by
-    simpa [hmeasEq] using hsum
+    intro htop
+    apply hsum
+    calc
+      ∑' m, scanError μ (obs m) P
+        = ∑' m, μ.toMeasure (bayesMismatchEvent μ (obs m) P) := by
+            congr with m
+            exact (bayesMismatchEvent_measure_eq_scanError μ (obs m) P).symm
+      _ = ⊤ := htop
   have hfinite :
       ∀ᵐ x ∂μ.toMeasure, {m | x ∈ bayesMismatchEvent μ (obs m) P}.Finite :=
     MeasureTheory.ae_finite_setOf_mem hmass
