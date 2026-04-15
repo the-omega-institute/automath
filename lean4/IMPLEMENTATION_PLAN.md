@@ -1741,6 +1741,12 @@
 11. 计划 20-22（动力系统系列）
 12. 计划 27-30（远层探索系列）
 
+### Round R841
+
+- 已完成 `paper_fold_fiber_count_reciprocity`（`prop:fold-fiber-count-reciprocity`，`Folding/FiberWeightCountComplement.lean`）：在既有 `weightCongruenceCount_eq_sum_ewc`、`exactWeightCount_symmetric` 与 `weightCongruenceCount_complement` 之上补出 paper-facing reciprocity package，把互易分解与反射对称性合并为单一定理接口。
+- 已完成 `paper_window6_edge_flux_mod3_obstruction`（`cor:window6-edge-flux-mod3-obstruction`，`GroupUnification/EdgeFluxMod3Obstruction.lean`）：把整数矩阵按模 \(3\) 约化为奇异矩阵后，利用非零左核向量经 `dotProductEquiv` 产生非零线性泛函，得到对全部像向量的模 \(3\) 消失结论。
+- `paper_finite_part_cyclic_lift_cyclotomic_sector` 暂跳过：在当前 mathlib 快照下，`q` 次单位根的枚举与 `nthRootsFinset`/多项式根乘积之间还需一段额外的 finset-root bridge；本轮已尝试证明并保持工程可编译，但未做不实登记。
+
 ### Round R791
 
 - 已完成 `paper_logic_expansion_singleton_conservativity`（`prop:logic-expansion-singleton-conservativity`，`LogicExpansionChain/SingletonConservativity.lean`）：将既有 singleton forcing 的 `_seeds` 结果提升为 unsuffixed 论文接口定理，并把 tex 注册切到直接论文名。
