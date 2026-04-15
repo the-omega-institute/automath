@@ -32,4 +32,17 @@ theorem paper_observer_indexed_address_before_value_package
     ¬ ValueAt p a v :=
   paper_observer_indexed_address_before_value_seeds A Γ ValueAt haddr hcert h
 
+/-- Unsuffixed paper-facing wrapper matching the paper label.
+    prop:observer-indexed-address-before-value -/
+theorem paper_observer_indexed_address_before_value
+    {State Addr Val Cert : Type}
+    (A : State → Set Addr) (Γ : State → Addr → Set Cert)
+    (ValueAt : State → Addr → Val → Prop)
+    (haddr : ∀ {p a v}, ValueAt p a v → a ∈ A p)
+    (hcert : ∀ {p a v}, ValueAt p a v → (Γ p a).Nonempty)
+    {p : State} {a : Addr} {v : Val}
+    (h : a ∉ A p ∨ Γ p a = ∅) :
+    ¬ ValueAt p a v :=
+  paper_observer_indexed_address_before_value_package A Γ ValueAt haddr hcert h
+
 end Omega.RecursiveAddressing.AddressBeforeValue
