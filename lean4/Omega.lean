@@ -66,6 +66,7 @@ import Omega.Folding.FiberSplit
 import Omega.Folding.HammingDist
 import Omega.Folding.HankelSpectrum
 import Omega.Experiments.ParryBaselineGapSturmian
+import Omega.Experiments.ParryBaselineGapSturmianExp
 import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Experiments.MetallicMeanGoldenUniqueOptimalTVConstant
 import Omega.Folding.LocalWeightRigidityFibonacci
@@ -682,6 +683,7 @@ import Omega.Experiments.MarkovTVSampleComplexity
 import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Experiments.TVCertificateHist
 import Omega.StatisticalStability.ResidueClassification
+import Omega.StatisticalStability.PeriodicDirichletSeriesHurwitzDecomposition
 import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 import Omega.TypedAddressBiaxialCompletion.CausalPreorder
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
