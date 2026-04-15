@@ -72,6 +72,7 @@ import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Experiments.MetallicMeanGoldenUniqueOptimalTVConstant
 import Omega.POM.S4Asymptotic
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
+import Omega.POM.MacropriorFiberwiseReversibleCapacity
 import Omega.Folding.LocalWeightRigidityFibonacci
 import Omega.Folding.LocalWeightRigidityPublication
 import Omega.Folding.StableSyntaxCounting
@@ -175,6 +176,7 @@ import Omega.PhysicalSpacetimeSkeleton.AdmissibleEinsteinClosureMain
 import Omega.PhysicalSpacetimeSkeleton.AdmissibleGlobalEinsteinEquation
 import Omega.PhysicalSpacetimeSkeleton.GlobalGeometricObjects
 import Omega.PhysicalSpacetimeSkeleton.ResourceScalarWellDefined
+import Omega.PhysicalSpacetimeSkeleton.UnifiedObjectLayer
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -800,6 +802,7 @@ import Omega.GU.FibTailP23Orbits
 import Omega.GU.FibTailP23S3ActionOnOrbitQuotient
 import Omega.GU.TerminalWindow6Sl2zHyperbolicFromTailTriple
 import Omega.GU.Window6CyclicWeightThresholdRootLength
+import Omega.GU.Window6AdjointWeightMultiset
 import Omega.GU.TerminalFoldbin6TailCubeSection
 import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalFoldbin6BoundaryPureF9Alias
