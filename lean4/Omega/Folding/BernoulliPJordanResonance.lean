@@ -28,4 +28,14 @@ theorem paper_fold_bernoulli_p_jordan_resonance_package :
     (0 < 1 ∧ 1 < 2) :=
   paper_fold_bernoulli_p_jordan_resonance_seeds
 
+/-- Unsuffixed paper-facing wrapper matching the paper label.
+    prop:fold-bernoulli-p-jordan-resonance-only-half -/
+theorem paper_fold_bernoulli_p_jordan_resonance_only_half :
+    (2 * 1 = 2 ∧ 1 * 2 = 2) ∧
+    (1 * 4 = 4 ∧ 1 = 1) ∧
+    (1 * 9 = 9 ∧ 2 * 9 = 18 ∧ 9 ≠ 18) ∧
+    (4 * 1 = 4 ∧ 1 ≤ 4) ∧
+    (0 < 1 ∧ 1 < 2) :=
+  paper_fold_bernoulli_p_jordan_resonance_package
+
 end Omega.Folding

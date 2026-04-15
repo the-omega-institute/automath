@@ -87,6 +87,7 @@ import Omega.Folding.MetallicCompressionExtremum
 import Omega.Folding.MetallicCompressionLockingLambda2
 import Omega.Folding.MetallicParetoFrontier
 import Omega.Folding.CandidateSetMonotone
+import Omega.Folding.LocalRewriteLdpBarrier
 import Omega.Folding.ZeroFiberLinear
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
@@ -103,6 +104,7 @@ import Omega.Folding.BernoulliPBitpairLaw
 import Omega.Folding.BernoulliPJordanResonance
 import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPPressureQuartic
+import Omega.Folding.BernoulliPParryPressureChain
 import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Folding.EndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
@@ -196,6 +198,7 @@ import Omega.SPG.CycleRankFormula
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicCubicalBoundaryInjective
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
+import Omega.SPG.BoundaryGodelSequenceDeterminesClosure
 import Omega.SPG.ScreenKernelAuditCost
 import Omega.SPG.ScreenAuditCostMonotoneUnitDrop
 import Omega.SPG.ScreenRankMatroidSupermodularity
@@ -209,6 +212,7 @@ import Omega.SPG.MomentHolographyGap
 import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.RegisterLowerBound
 import Omega.SPG.CollisionProfileRestoration
+import Omega.SPG.PrimeRegisterBudgetLowerBound
 import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CurlReconstructionPublication
 import Omega.SPG.CubePoincareInverse
@@ -514,6 +518,7 @@ import Omega.Topos.GlobalImpliesCompatibleLocal
 import Omega.HighDimensionalCutProject.IndicatorSumRewrite
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.BoundaryCycleRankExternalInfoLowerBound
+import Omega.Conclusion.BoundaryMixedAuditRankConservation
 import Omega.Conclusion.PcdimPropCycleRankMinimal
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
@@ -561,6 +566,7 @@ import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Conclusion.BoundaryStokesObservationMinimalDimension
 import Omega.CircleDimension.BareCircleNotCompleteCarrier
 import Omega.CircleDimension.BasicComputation
+import Omega.CircleDimension.SignedCircleDimension
 import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.ShortExactAdditivity
 import Omega.SPG.TanakaStokes
@@ -600,6 +606,7 @@ import Omega.FoldResidualTime.IidBlockFactorization
 import Omega.Principles.GoldenBranchFibonacciCoprime
 import Omega.Preliminaries.EmpiricalFrequencyBounds
 import Omega.Experiments.MultiscaleResidual
+import Omega.Experiments.TVCertificateHist
 import Omega.StatisticalStability.ResidueClassification
 import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
@@ -666,6 +673,7 @@ import Omega.POM.HighMultiplicitySparse
 import Omega.GU.MinSectorBudget
 import Omega.GU.NapSo10AnalyticMinimality
 import Omega.GU.BdryZ2JumpUniqueness
+import Omega.GU.BdryUpliftOrientationParity
 import Omega.GU.BdryBinaryLayeringOrbitClassification
 import Omega.GU.BdryOrientationTsubsetLucasParity
 import Omega.GU.Window6DoubleLock12
