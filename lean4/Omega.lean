@@ -266,6 +266,7 @@ import Omega.Topos.StrictIntrinsicBudgetComparison
 import Omega.Topos.StrictIntrinsicCoincidenceCriterion
 import Omega.Topos.IntrinsicCharacterDetection
 import Omega.Topos.IntrinsicCharacterDetectionPublication
+import Omega.Topos.IntrinsicCharacterDetectionFocused
 import Omega.Topos.UniqueBranchBandedGerbe
 import Omega.Topos.UniqueBranchContextualityComparison
 import Omega.Topos.UniqueBranchContextualityComparisonFocused
@@ -406,6 +407,7 @@ import Omega.Zeta.SyncKernelSpectrum
 import Omega.Zeta.CyclicFredholmRealization
 import Omega.Zeta.BlockCyclicRigidity
 import Omega.Zeta.FiniteRankRealisation
+import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -706,6 +708,7 @@ import Omega.POM.PressureSlopes
 import Omega.POM.GibbsSelection
 import Omega.POM.RenyiEndpoint
 import Omega.POM.LambdaAlgebraic
+import Omega.POM.SymmetricCompression
 import Omega.POM.MaxFiberPublication
 import Omega.POM.ZeroTempConcentration
 import Omega.POM.DoubleLimit
