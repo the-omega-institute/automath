@@ -746,6 +746,7 @@ import Omega.TypedAddressBiaxialCompletion.BoundaryAddressCollision
 import Omega.TypedAddressBiaxialCompletion.ComovingDefectBound
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
+import Omega.TypedAddressBiaxialCompletion.PreferredMinimalInstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
 import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
@@ -813,6 +814,7 @@ import Omega.POM.KernelSpectrum
 import Omega.POM.CatalanMoments
 import Omega.POM.FoldIndexSeeds
 import Omega.POM.FoldInjectivizationMinsideinfo
+import Omega.POM.WitnessExtractionOptimalSuccess
 import Omega.POM.DefectBand
 import Omega.POM.TauTerminalSignIndependence
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete
@@ -889,6 +891,7 @@ import Omega.GU.Window6DyadicBudget
 import Omega.GU.SheetflipRegisterBound
 import Omega.GU.EllipticGateMinimalRegister
 import Omega.GU.SideInformationBitLowerBound
+import Omega.GU.BetaQuantizationStep
 import Omega.GU.FixedPrecisionExponentialMultiplicity
 import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GU.EllipticGatePadicsBlindspot
