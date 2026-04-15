@@ -93,7 +93,71 @@ LOG_DIR = SCRIPT_DIR / "logs"
 STATE_DIR = SCRIPT_DIR / "pipeline_state"
 
 ORACLE_SERVER = "http://localhost:8765"
-CODEX_PATH = shutil.which("codex") or "/opt/homebrew/bin/codex"
+PAPERS_PUB_DIR_CONST = REPO_ROOT / "papers" / "publication"
+
+# Platform-aware Codex discovery
+def _find_codex() -> str:
+    found = shutil.which("codex")
+    if found:
+        return found
+    if sys.platform == "win32":
+        npm_codex = Path.home() / "AppData" / "Roaming" / "npm" / "codex.cmd"
+        if npm_codex.exists():
+            return str(npm_codex)
+    elif sys.platform == "darwin":
+        for p in ("/opt/homebrew/bin/codex", "/usr/local/bin/codex"):
+            if Path(p).exists():
+                return p
+    return "codex"
+
+CODEX_PATH = _find_codex()
+IS_WINDOWS = sys.platform == "win32"
+
+# ── Machine assignment ─────────────────────────────────────────────────
+# Split 21 papers between two machines to avoid git conflicts.
+# Each machine only processes its assigned papers.
+# Windows (this machine if IS_WINDOWS): has Oracle server + Tampermonkey
+# Mac: parallel Codex processing
+#
+# Assignment: roughly balanced by review maturity (real review count).
+# Papers with more reviews = closer to done = Windows (Oracle machine).
+# Newer papers = more Codex work needed = Mac.
+
+MACHINE_ASSIGNMENT = {
+    # ── Windows machine (11 papers) ──────────────────────────────
+    # High review count, close to acceptance, need Oracle iterations
+    "win32": [
+        "2026_circle_dimension_haar_pullback_cauchy_weight_jfa",
+        "2026_conservative_extension_chain_state_forcing_apal",
+        "2026_conservative_extension_chain_state_forcing_apal_focused",
+        "2026_dynamical_zeta_finite_part_spectral_fingerprint_etds",
+        "2026_JphisComm_待投稿",
+        "2026_prime_languages_sofic_obstructions_dynamical_zeta",
+        "2026_yang_lee_quartic_spectral_curve_discriminant_factorization_lee_yang_edge_singularity",
+        "2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists",
+        "2026_scan_projection_address_semantics_sigma_nonexpansion_etds",
+        "2026_recursive_addressing_prefix_sites_tac",
+        "2026_fredholm_witt_cyclic_block_spectral_rigidity_symbolic_zeta",
+    ],
+    # ── Mac machine (10 papers) ──────────────────────────────────
+    # Newer or fewer reviews, need more Codex quality rounds
+    "darwin": [
+        "2026_cubical_stokes_inverse_boundary_readout_jdsgt",
+        "2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints",
+        "2026_fold_truncation_defect_stokes_dynamical_systems",
+        "2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal",
+        "2026_prefix_scan_error_boundary_rates_dynamical_systems",
+        "2026_projection_ontological_mathematics_core_tams",
+        "2026_chebotarev_quotient_entropy_fold_groupoid_rigidity",
+        "2026_joukowsky_elliptic_godel_lorentz_mahler_capacity",
+        "2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge",
+        "2026_zeckendorf_stable_arithmetic_fibonacci_congruence_online",
+    ],
+}
+
+def get_my_papers() -> list[str]:
+    """Return paper dir names assigned to this machine."""
+    return MACHINE_ASSIGNMENT.get(sys.platform, [])
 
 _git_lock = threading.Lock()
 _state_lock = threading.Lock()
@@ -247,11 +311,23 @@ LOG_DIR.mkdir(parents=True, exist_ok=True)
 STATE_DIR.mkdir(parents=True, exist_ok=True)
 
 _log_file = LOG_DIR / f"pipeline_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+
+# Windows console needs utf-8 stream handler to avoid cp1252 crashes
+class _Utf8StreamHandler(logging.StreamHandler):
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+            # Force utf-8 on Windows console
+            sys.stdout.buffer.write((msg + "\n").encode("utf-8", errors="replace"))
+            sys.stdout.buffer.flush()
+        except Exception:
+            self.handleError(record)
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] [%(threadName)s] %(message)s",
     handlers=[
-        logging.StreamHandler(sys.stdout),
+        _Utf8StreamHandler() if IS_WINDOWS else logging.StreamHandler(sys.stdout),
         logging.FileHandler(str(_log_file), encoding="utf-8"),
     ],
 )
@@ -427,6 +503,7 @@ def run_cmd(cmd: list[str], *, cwd: Optional[Path] = None,
         cmd, cwd=str(cwd or REPO_ROOT),
         capture_output=True, text=True, timeout=timeout,
         stdin=subprocess.DEVNULL,
+        encoding="utf-8", errors="replace",
     )
 
 
@@ -573,6 +650,9 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
         cmd.extend(["-m", model])
     cmd.append("-")
 
+    # Windows: .cmd wrappers need shell=True
+    use_shell = IS_WINDOWS and str(codex_bin).endswith(".cmd")
+
     start = time.monotonic()
     result = None
     try:
@@ -581,6 +661,8 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
                 cmd, stdin=pf, capture_output=True, text=True,
                 timeout=timeout_seconds + 30,
                 cwd=str(work_dir or REPO_ROOT),
+                shell=use_shell,
+                encoding="utf-8", errors="replace",
             )
     except subprocess.TimeoutExpired:
         return "(timeout)"
@@ -612,13 +694,20 @@ def compile_pdf(paper_path: Path, *, dry_run: bool = False) -> Optional[Path]:
     main_tex = paper_path / "main.tex"
     if not main_tex.exists():
         return None
+    # Auto-detect compiler: xelatex for CJK/fontspec, pdflatex otherwise
+    content = main_tex.read_text(encoding="utf-8", errors="replace")
+    compiler = ("xelatex" if any(k in content for k in ("xeCJK", "ctex", "fontspec"))
+                else "pdflatex")
     for _ in range(2):
-        run_cmd(["xelatex", "-interaction=nonstopmode", "-halt-on-error",
+        run_cmd([compiler, "-interaction=nonstopmode", "-halt-on-error",
                  "main.tex"], cwd=paper_path, timeout=120)
-    if (paper_path / "references.bib").exists():
+    # Also check references_local.bib (some papers use that name)
+    has_bib = ((paper_path / "references.bib").exists()
+               or (paper_path / "references_local.bib").exists())
+    if has_bib:
         run_cmd(["bibtex", "main"], cwd=paper_path, timeout=60)
         for _ in range(2):
-            run_cmd(["xelatex", "-interaction=nonstopmode", "-halt-on-error",
+            run_cmd([compiler, "-interaction=nonstopmode", "-halt-on-error",
                      "main.tex"], cwd=paper_path, timeout=120)
     pdf = paper_path / "main.pdf"
     return pdf if pdf.exists() else None
@@ -1928,18 +2017,32 @@ def run_paper_pipeline(
 # Rolling parallel dispatcher
 # ---------------------------------------------------------------------------
 
-PAPERS_PUB_DIR = REPO_ROOT / "papers" / "publication"
+PAPERS_PUB_DIR = PAPERS_PUB_DIR_CONST
 
 
-def discover_papers(paper_dirs: Optional[list[str]] = None) -> list[str]:
+def discover_papers(paper_dirs: Optional[list[str]] = None,
+                    *, respect_assignment: bool = True) -> list[str]:
+    """Discover papers to process.
+
+    If respect_assignment=True (default with --all), only return papers
+    assigned to this machine to avoid git conflicts with the other machine.
+    """
     if paper_dirs:
         return paper_dirs
+
+    my_papers = get_my_papers() if respect_assignment else []
     papers = []
     for base in (PAPERS_PUB_DIR, THEORY_DIR):
         if base.exists():
             for d in sorted(base.iterdir()):
                 if d.is_dir() and (d / "main.tex").exists():
+                    if my_papers and d.name not in my_papers:
+                        continue
                     papers.append(str(d))
+
+    if my_papers:
+        logger.info(f"Machine filter ({sys.platform}): "
+                    f"{len(papers)}/{len(my_papers)} papers matched")
     return papers
 
 
@@ -1994,8 +2097,11 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 1,
 def print_status():
     print(f"Oracle Pipeline v2 — Status")
     print(f"{'='*60}")
+    print(f"Platform:      {sys.platform}")
     print(f"Oracle server: {'UP' if oracle_server_alive() else 'DOWN'}")
     print(f"Codex CLI:     {CODEX_PATH}")
+    my = get_my_papers()
+    print(f"My papers:     {len(my)} assigned to {sys.platform}")
     print()
     if not STATE_DIR.exists():
         print("No pipeline state found.")
@@ -2093,6 +2199,8 @@ def main() -> int:
     parser.add_argument("--oracle-timeout", type=int, default=7200)
     parser.add_argument("--status", action="store_true")
     parser.add_argument("--reset", type=str, metavar="PAPER_NAME")
+    parser.add_argument("--no-assign", action="store_true",
+                        help="Ignore machine assignment, process all papers")
     args = parser.parse_args()
 
     if args.status:
@@ -2137,7 +2245,9 @@ def main() -> int:
         return 0 if ok else 1
 
     # ── Review mode ────────────────────────────────────────────
-    paper_dirs = args.paper or (discover_papers() if args.all else None)
+    paper_dirs = args.paper or (
+        discover_papers(respect_assignment=not args.no_assign) if args.all else None
+    )
     if not paper_dirs:
         print("Specify --paper or --all", file=sys.stderr)
         return 1
