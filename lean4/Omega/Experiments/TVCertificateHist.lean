@@ -27,4 +27,24 @@ theorem paper_tv_decomposition_parry
   refine ⟨hMicro', hFold', ?_⟩
   linarith
 
+/-- Paper-facing gap-zero specialization of the Parry decomposition corollary.
+    cor:tv-to-parry-when-gap-zero -/
+theorem paper_tv_to_parry_when_gap_zero_package
+    (m : ℕ) (tvMicro tvFold tvParry star : ℝ)
+    (hMicro : tvMicro ≤ (m + 1 : ℝ) * star) (hFold : tvFold ≤ tvMicro)
+    (hTriangle : tvParry ≤ tvFold) :
+    tvParry ≤ (m + 1 : ℝ) * star := by
+  obtain ⟨_, _, hParry⟩ :=
+    paper_tv_decomposition_parry m tvMicro tvFold tvParry 0 star hMicro hFold
+      (by simpa using hTriangle)
+  simpa using hParry
+
+/-- Paper label wrapper for the gap-zero Parry specialization. -/
+theorem paper_tv_to_parry_when_gap_zero
+    (m : ℕ) (tvMicro tvFold tvParry star : ℝ)
+    (hMicro : tvMicro ≤ (m + 1 : ℝ) * star) (hFold : tvFold ≤ tvMicro)
+    (hTriangle : tvParry ≤ tvFold) :
+    tvParry ≤ (m + 1 : ℝ) * star :=
+  paper_tv_to_parry_when_gap_zero_package m tvMicro tvFold tvParry star hMicro hFold hTriangle
+
 end Omega.Experiments.TVCertificateHist
