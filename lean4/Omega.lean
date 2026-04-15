@@ -75,6 +75,7 @@ import Omega.Folding.SummableNatEventuallyZero
 import Omega.Folding.PeriodicCompressionRatio
 import Omega.Folding.RationalGeneratorGap
 import Omega.Folding.MetallicCompressionExtremum
+import Omega.Folding.MetallicCompressionLockingLambda2
 import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.ZeroFiberLinear
 import Omega.Folding.ModRigidityPeriodicPredicates
@@ -221,8 +222,8 @@ import Omega.RecursiveAddressing.EntropyMonotonicity
 import Omega.RecursiveAddressing.ObserverIndexedNormalizationNoFactCreation
 import Omega.RecursiveAddressing.ObserverIndexedValuePreservingNoCreation
 import Omega.RecursiveAddressing.ObserverNeutralReadoutAPAL
-import Omega.RecursiveAddressing.PrefixSiteRegisterLowerBound
 import Omega.RecursiveAddressing.PrefixSiteMinVisibleQuotient
+import Omega.RecursiveAddressing.PrefixSiteRegisterLowerBound
 import Omega.RecursiveAddressing.PrefixSiteSpectralDefinabilityAvis
 import Omega.RecursiveAddressing.ReadoutSeparatednessNull
 import Omega.RecursiveAddressing.NullAsLocalSectionObstruction
@@ -360,6 +361,7 @@ import Omega.Conclusion.HypercubePhase
 import Omega.Conclusion.SaturationDefect
 import Omega.Conclusion.SpectrumSignLaw
 import Omega.Conclusion.Q13CrtPeriodCompression
+import Omega.Conclusion.CoordinateBundleDyadicBlockLaw
 import Omega.Conclusion.Window6VisibleHiddenSeparation
 import Omega.Conclusion.ImageLayerMinimalInverseMemory
 import Omega.Conclusion.ExtPiKernelPoset
