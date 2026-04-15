@@ -9,14 +9,16 @@
 | 总行数 | ~50,937 |
 | 定理/定义数 | ~4,442 |
 | 论文接口包装 | 800+ |
-| 文件数 | 216 |
+| 文件数 | 219 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3380 |
+| \leanverified 标注数 | 3383 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3429 |
-| 轮次 | R795（round_count=R795）|
+| 总标注数 | 3432 |
+| 轮次 | R796（round_count=R796）|
+
+**Phase R796（本轮落地，全流程执行）**：`paper_conservative_extension_intrinsic_hidden_state_lower_bound_publication`（对应 `cor:intrinsic-hidden-state-lower-bound`，Topos；把 intrinsic visible quotient 的 fiber-count lower bound 与 sharpness witness封装成 APAL corollary-facing publication wrapper）；`paper_cubical_stokes_curl_reconstruction`（对应 `cor:curl-reconstruction`，SPG；把 coordinate-monomial curl reconstruction seed package 压成 cubical Stokes corollary-facing wrapper）；`paper_zero_jitter_exact_clock`（对应 `thm:exact-clock`，GroupUnification；对 golden-mean 合法词上的 Parry cylinder telescope 做专门化形式化，得到 exact-clock theorem-facing wrapper，本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 Topos / SPG / GroupUnification，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Topos/IntrinsicHiddenStateLowerBoundPublication.lean`、`lean4/Omega/SPG/CurlReconstructionPublication.lean`、`lean4/Omega/GroupUnification/ExactClock.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_conservative_extension_intrinsic_hidden_state_lower_bound_publication`、`paper_cubical_stokes_curl_reconstruction`、`paper_zero_jitter_exact_clock`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_homological_visibility.tex`（`cor:intrinsic-hidden-state-lower-bound`），`/Users/chronoai/automath/papers/publication/2026_cubical_stokes_inverse_boundary_readout_jdsgt/main.tex`（`cor:curl-reconstruction`），`/Users/chronoai/automath/papers/publication/submitted_2026_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp/main.tex`（`thm:exact-clock`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R795（本轮落地，全流程执行）**：`paper_cubical_stokes_discrete_stokes_poincare`（对应 `thm:discrete-stokes-poincare`，SPG；把 Whitney coordinate-monomial coboundary、exact decomposition、defect control 与 sharpness readout 压成 cubical Stokes theorem-facing wrapper，本轮 non-trivial 目标）；`paper_self_dual_sync_cyclotomic_degree_law`（对应 `thm:sync-cyclotomic-degree-law`，Zeta；把 cyclotomic resultant degree law 与 even-twist polynomial law 压成 self-dual synchronization-kernel theorem-facing wrapper）；`paper_projection_global_pressure_convexity`（对应 `thm:global-pressure-convexity`，POM；把 moment Hölder convexity、entropy-rate convexity 与 Perron-rate convexity 压成 TAMS theorem-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 SPG / Zeta / POM，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/SPG/DiscreteStokesPoincarePublication.lean`、`lean4/Omega/Zeta/SyncCyclotomicDegreeLawPublication.lean`、`lean4/Omega/POM/GlobalPressureConvexityPublication.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_cubical_stokes_discrete_stokes_poincare`、`paper_self_dual_sync_cyclotomic_degree_law`、`paper_projection_global_pressure_convexity`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_cubical_stokes_inverse_boundary_readout_jdsgt/main.tex`（`thm:discrete-stokes-poincare`），`/Users/chronoai/automath/papers/publication/2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists/sec_kernel.tex`（`thm:sync-cyclotomic-degree-law`），`/Users/chronoai/automath/papers/publication/2026_projection_ontological_mathematics_core_tams/sec_moment_kernel.tex`（`thm:global-pressure-convexity`）；新增 tex theorem/corollary/lemma 环境数 0）
 
