@@ -103,6 +103,7 @@ import Omega.Folding.AlternatingSingleSymbolSynchronizing
 import Omega.Folding.YmSynchronized
 import Omega.Folding.UniformSynchronizingLength
 import Omega.Folding.BlockBijectionThreshold
+import Omega.Folding.PhiMemoryThresholdExact
 import Omega.Folding.BlockCountsThreshold
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
@@ -230,6 +231,7 @@ import Omega.Topos.FiniteAbelianDuality
 import Omega.Topos.IntrinsicVisibleQuotient
 import Omega.Topos.IntrinsicPureExtInitiality
 import Omega.Topos.StrictToIntrinsicVisible
+import Omega.Topos.StrictIntrinsicCoincidenceCriterion
 import Omega.Topos.IntrinsicCharacterDetection
 import Omega.Topos.UniqueBranchBandedGerbe
 import Omega.Topos.UniqueBranchContextualityComparison
@@ -244,6 +246,7 @@ import Omega.RecursiveAddressing.NonNullReadoutCriterionAPAL
 import Omega.RecursiveAddressing.GluingFailureNonNullReadoutCriterionAPAL
 import Omega.RecursiveAddressing.GluingFailureTypedReadoutPersistenceAPAL
 import Omega.RecursiveAddressing.InverseLimitDeterminacy
+import Omega.RecursiveAddressing.DyadicInverseLimitStableObject
 import Omega.RecursiveAddressing.CompleteAddressReconstruction
 import Omega.RecursiveAddressing.FiniteDepthCollapse
 import Omega.RecursiveAddressing.FiniteThreeModeModel
