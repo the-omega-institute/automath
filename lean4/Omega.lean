@@ -692,6 +692,7 @@ import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Experiments.TVCertificateHist
 import Omega.StatisticalStability.ResidueClassification
 import Omega.StatisticalStability.PeriodicDirichletSeriesHurwitzDecomposition
+import Omega.StatisticalStability.FixedResolutionPrimeSievePrecisionToZero
 import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 import Omega.TypedAddressBiaxialCompletion.CausalPreorder
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
@@ -872,6 +873,7 @@ import Omega.CircleDimension.CausalPreorder
 import Omega.CircleDimension.BudgetCompleteness
 import Omega.CircleDimension.PrimeTruncation
 import Omega.CircleDimension.PrefixPrimeLedgerConservation
+import Omega.CircleDimension.PrefixEntropyDepthConservation
 import Omega.CircleDimension.BiphaseFiber
 import Omega.CircleDimension.PhaseSpectrumMonoid
 import Omega.CircleDimension.LissajousChebyshev
