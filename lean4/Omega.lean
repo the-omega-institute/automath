@@ -119,6 +119,7 @@ import Omega.Folding.PhiMemoryThresholdExact
 import Omega.Folding.BlockCountsThreshold
 import Omega.Folding.LinearTimeBlockDecoding
 import Omega.Folding.YmExactSFTOrder
+import Omega.Folding.ResidueMarkovOrder
 import Omega.Folding.FoldSuitePublication
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
@@ -522,6 +523,7 @@ import Omega.CircleDimension.HaarPullbackUniqueness
 import Omega.CircleDimension.CayleyChebyshevMode
 import Omega.CircleDimension.ModeParityVanish
 import Omega.CircleDimension.ModeGramKernel
+import Omega.CircleDimension.ModeQuadraticIntegrals
 import Omega.CircleDimension.ModeSpaceRKHS
 import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling
@@ -657,6 +659,7 @@ import Omega.GroupUnification.TiltedLDP
 import Omega.GroupUnification.FreeEnergyComposition
 import Omega.GroupUnification.VarianceTransfer
 import Omega.GroupUnification.UniversalQuadraticCoefficient
+import Omega.GroupUnification.SecondOrder
 import Omega.CD.AnomalyCompressionOverhead
 import Omega.CD.PeriodicPointCount
 import Omega.CircleDimension.MultiPrimeSpectrum
