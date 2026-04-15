@@ -100,6 +100,7 @@ import Omega.Folding.ImageSubshiftZeta
 import Omega.Folding.SyncDelay
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.AlternatingSingleSymbolSynchronizing
+import Omega.Folding.SignedFibonacciGapShift
 import Omega.Folding.YmSynchronized
 import Omega.Folding.UniformSynchronizingLength
 import Omega.Folding.LengthMBlockUniqueLift
@@ -253,6 +254,7 @@ import Omega.Topos.PointwiseIrreducibility
 import Omega.Topos.VisibleValueComponents
 import Omega.Topos.IntrinsicHiddenStateLowerBound
 import Omega.Topos.IntrinsicPrimeDecomposition
+import Omega.Topos.MaximalCollapseCriterion
 import Omega.Topos.NullClassificationUnderRefinement
 import Omega.Topos.NullClassificationUnderRefinementAPAL
 import Omega.RecursiveAddressing.FocusedAddressBeforeValue
@@ -477,6 +479,7 @@ import Omega.CircleDimension.HaarPullbackUniqueness
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
 import Omega.CircleDimension.PoissonKLEighth
+import Omega.CircleDimension.PoissonKLEvenOrders
 import Omega.CircleDimension.PoissonDefectLadder
 import Omega.CircleDimension.PoissonDefectAmplification
 import Omega.CircleDimension.PoissonDefectStability
