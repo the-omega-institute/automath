@@ -3,7 +3,7 @@ Let \(\mathcal{R}_m=\Omega_m\times_{X_m}\Omega_m\) be the fold equivalence-relat
 \[
 A_{m,1}:=\CC[\mathcal{R}_m]\cong \bigoplus_{x\in X_m}M_{d_m(x)}(\CC)
 \]
-as in Proposition \ref{prop:fold-groupoid-wedderburn}. For each \(x\in X_m\), let \(\widetilde P_x\in Z(A_{m,1})\) be the minimal central idempotent corresponding to the block \(M_{d_m(x)}(\CC)\), and let
+as in Proposition \ref{prop:fold-groupoid-wedderburn}. For each \(x\in X_m\), let \(\widetilde P_x\in Z(A_{m,1})\) be the minimal central idempotent corresponding to the simple ideal \(\CC[\mathcal R_m(x)]\), and let
 \[
 \chi(x)=\bigl(\operatorname{sgn}(c_x),\operatorname{sgn}(\iota_x)\bigr)\in\{\pm1\}^2
 \]
@@ -81,11 +81,19 @@ For every function \(f:\{\pm1\}^2\to\CC\),
 \]
 Thus the joint spectral measure of \((\varepsilon_{\mathrm{scan}},\varepsilon_{\mathrm{rev}})\) with respect to \(\tau_{m,1}\) is exactly \(\chi_\ast\pi_m\).
 
-Moreover, if
+Moreover, if \(\mathrm{IndW}(E_{m,1})\in Z(A_{m,1})\) is the Watatani index element of the canonical blockwise normalized-trace expectation
 \[
-\mathrm{IndW}(E_{m,1})=\sum_{x\in X_m}d_m(x)\,\widetilde P_x\in Z(A_{m,1})
+E_{m,1}:A_{m,1}\to Z(A_{m,1}),
+\qquad
+E_{m,1}\bigl((A_x)_{x\in X_m}\bigr)
+:=
+\sum_{x\in X_m}\frac{\Tr(A_x)}{d_m(x)}\,\widetilde P_x,
 \]
-is the Watatani index element of the block-depolarizing conditional expectation \(E_{m,1}\), then for every \(q\ge 0\) and every \(s,t\in\{0,1\}\),
+then
+\[
+\mathrm{IndW}(E_{m,1})=\sum_{x\in X_m}d_m(x)\,\widetilde P_x,
+\]
+and for every \(q\ge 0\) and every \(s,t\in\{0,1\}\),
 \[
 \tau_{m,1}\!\bigl(\varepsilon_{\mathrm{scan}}^{\,s}\varepsilon_{\mathrm{rev}}^{\,t}\,\mathrm{IndW}(E_{m,1})^{\,q}\bigr)
 =
@@ -108,6 +116,10 @@ f(\varepsilon_{\mathrm{scan}},\varepsilon_{\mathrm{rev}})
 \]
 Taking traces gives the asserted formula for the joint spectral measure.
 
+On each block \(M_{d_m(x)}(\CC)\), the conditional expectation \(E_{m,1}\) restricts to the normalized trace expectation onto the scalar matrices. Its Watatani index is therefore \(d_m(x)\), for instance via the standard matrix-unit quasi-basis \(\{(\sqrt{d_m(x)}\,E_{ij},\sqrt{d_m(x)}\,E_{ji})\}_{i,j}\); see \cite{Watatani1990}. Summing over the blocks yields
+\[
+\mathrm{IndW}(E_{m,1})=\sum_{x\in X_m}d_m(x)\,\widetilde P_x.
+\]
 For the moment identity, note that \(\mathrm{IndW}(E_{m,1})\) acts on the \(x\)-block by the scalar \(d_m(x)\). Hence
 \[
 \varepsilon_{\mathrm{scan}}^{\,s}\varepsilon_{\mathrm{rev}}^{\,t}\,\mathrm{IndW}(E_{m,1})^{\,q}
@@ -120,7 +132,7 @@ and tracing once more yields the formula.
 \begin{proposition}\label{prop:fold-groupoid-maxblock-chi-homogeneity}
 Let \(\mathcal{M}_m:=\{x\in X_m:d_m(x)=D_m\}\), and define the maximal-block ideal
 \[
-I_m:=\bigoplus_{x\in\mathcal{M}_m}M_{D_m}(\CC)\subset A_{m,1}\cong\bigoplus_{x\in X_m}M_{d_m(x)}(\CC).
+I_m:=\bigoplus_{x\in\mathcal{M}_m}\CC[\mathcal R_m(x)]\subset A_{m,1}.
 \]
 Let \(\chi_m\in\{\pm1\}^2\) be the constant maximal-fiber fingerprint supplied by Assumption \ref{thm:pom-maxfiber-orientation-charge-periodic}, and let \(e_{\chi_m}\) denote the corresponding central idempotent from Theorem \ref{thm:fold-groupoid-z2x2-central-idempotents}. Then
 \[
@@ -132,7 +144,7 @@ In particular, the quotient algebra \(A_{m,1}/e_{\chi_m}A_{m,1}\) has no simple 
 \begin{proof}
 By Assumption \ref{thm:pom-maxfiber-orientation-charge-periodic}, every \(x\in\mathcal M_m\) satisfies \(\chi(x)=\chi_m\). Theorem \ref{thm:fold-groupoid-z2x2-central-idempotents} therefore implies that \(e_{\chi_m}\) acts as the identity on each maximal block and vanishes on the remaining sectors. Thus \(\widetilde P_x\le e_{\chi_m}\) for all \(x\in\mathcal M_m\), and
 \[
-M_{D_m}(\CC)\cong \widetilde P_xA_{m,1}\subseteq e_{\chi_m}A_{m,1}.
+\CC[\mathcal R_m(x)]=\widetilde P_xA_{m,1}\subseteq e_{\chi_m}A_{m,1}.
 \]
 Taking the direct sum over \(x\in\mathcal M_m\) yields the claim.
 \end{proof}
@@ -145,8 +157,8 @@ Let \(E_m\) be the conditional expectation induced by the fold map \(\Fold_m:\Om
 where \(\rho\) ranges over all probability distributions on \(\Omega_m\). Then:
 \begin{enumerate}
 \normalfont
-  \item \(\Delta_m=\log D_m\).
-  \item If \(\rho\) attains the supremum, then \((\Fold_m)_\ast\rho\) is supported on
+  \item \(\Delta_m=\log D_m\), and the supremum is attained.
+  \item Every probability distribution \(\rho\) with \(D(\rho\Vert \rho^\flat)=\Delta_m\) has \((\Fold_m)_\ast\rho\) supported on
   \[
   \mathcal{M}_m:=\{x\in X_m:d_m(x)=D_m\}.
   \]
@@ -159,9 +171,9 @@ where \(\rho\) ranges over all probability distributions on \(\Omega_m\). Then:
 \end{theorem}
 
 \begin{proof}
-The identity \(\Delta_m=\log D_m\) is exactly Proposition \ref{prop:fold-condexp-index-maxfiber}.
+The identity \(\Delta_m=\log D_m\) is exactly Proposition \ref{prop:fold-condexp-index-maxfiber}, and the same proposition exhibits a maximizing Dirac mass on a point of a maximal fiber. This proves (1).
 
-For the support statement, let \(\rho_X:=(\Fold_m)_\ast\rho\), and for each \(x\in X_m\) let \(u_x\) be the uniform measure on the fiber \(\Fold_m^{-1}(x)\). The relative-entropy chain rule gives
+Let \(\rho\) satisfy \(D(\rho\Vert \rho^\flat)=\Delta_m\). Write \(\rho_X:=(\Fold_m)_\ast\rho\), and for each \(x\in X_m\) let \(u_x\) be the uniform measure on the fiber \(\Fold_m^{-1}(x)\). The relative-entropy chain rule gives
 \[
 D(\rho\Vert\rho^\flat)
 =
@@ -171,7 +183,7 @@ Each fiber contribution satisfies
 \[
 D\!\bigl(\rho(\cdot\mid x)\,\Vert\,u_x\bigr)\le \log d_m(x)\le \log D_m.
 \]
-If \(\rho\) realizes the supremum \(\Delta_m=\log D_m\), then a convex combination of numbers bounded above by \(\log D_m\) attains that bound. Hence every \(x\) with \(\rho_X(x)>0\) must satisfy \(d_m(x)=D_m\), which proves (2).
+Because \(D(\rho\Vert\rho^\flat)=\log D_m\), this convex combination of numbers bounded above by \(\log D_m\) attains the maximal value. Hence every \(x\) with \(\rho_X(x)>0\) must satisfy \(d_m(x)=D_m\), which proves (2).
 
 The final statement follows from (2) together with Assumption \ref{thm:pom-maxfiber-orientation-charge-periodic}, which makes \(\chi\) constant on \(\mathcal M_m\).
 \end{proof}
