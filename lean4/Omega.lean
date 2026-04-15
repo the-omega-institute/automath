@@ -168,6 +168,7 @@ import Omega.PhysicalSpacetimeSkeleton.DerivedStressEnergyConservation
 import Omega.PhysicalSpacetimeSkeleton.AdmissibleEinsteinClosureMain
 import Omega.PhysicalSpacetimeSkeleton.AdmissibleGlobalEinsteinEquation
 import Omega.PhysicalSpacetimeSkeleton.GlobalGeometricObjects
+import Omega.PhysicalSpacetimeSkeleton.ResourceScalarWellDefined
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix

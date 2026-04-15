@@ -1,5 +1,6 @@
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Tactic
+import Omega.Core.Fib
 
 namespace Omega.SPG
 
@@ -63,5 +64,29 @@ theorem paper_spg_sturmian_cylinder_measure_continued_fraction_sandwich
   constructor
   · linarith
   · linarith
+
+set_option maxHeartbeats 400000 in
+/-- Golden-slope specialization of the continued-fraction cylinder sandwich: the convergent
+denominators are Fibonacci numbers, so the logarithmic information time bounds become rigid
+Fibonacci bounds.
+    cor:spg-golden-sturmian-log-information-time-rigid -/
+theorem paper_spg_golden_sturmian_log_information_time_rigid
+    (cyl : Nat -> Real) (N : Nat -> Nat)
+    (hIndex : forall t, 1 <= t -> Nat.fib (N t + 1) <= t /\ t < Nat.fib (N t + 2))
+    (hCyl : forall t, 1 <= t ->
+      (1 : Real) / (((Nat.fib (N t + 2) + Nat.fib (N t + 1) : Nat) : Real)) < cyl t /\
+        cyl t < (1 : Real) / ((Nat.fib (N t + 1) : Nat) : Real) +
+          (1 : Real) / ((Nat.fib (N t + 2) : Nat) : Real)) :
+    forall t, 1 <= t ->
+      Real.log (((Nat.fib (N t + 1) : Nat) : Real) / 2) < -Real.log (cyl t) /\
+        -Real.log (cyl t) < Real.log (((Nat.fib (N t + 2) + Nat.fib (N t + 1) : Nat) : Real)) := by
+  simpa using
+    paper_spg_sturmian_cylinder_measure_continued_fraction_sandwich
+      (q := fun n => Nat.fib (n + 1))
+      (cyl := cyl)
+      (N := N)
+      (hq := Omega.one_le_fib_succ)
+      (hIndex := hIndex)
+      (hCyl := hCyl)
 
 end Omega.SPG

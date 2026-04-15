@@ -46,6 +46,30 @@ theorem paper_cdim_stokes_fiber_integration_defect
   rw [hStokes ω]
   abel
 
+set_option maxHeartbeats 400000 in
+/-- The Stokes defect for a composite fiber integration splits into the pushed-forward main term,
+the pushed-forward vertical boundary from the first stage, and the vertical boundary from the
+second stage.
+    thm:cdim-stokes-composite-fiber-integration-defect -/
+theorem paper_cdim_stokes_composite_fiber_integration_defect
+    {EForm BForm CForm EBoundary BBoundary : Type*} [AddCommGroup BForm] [AddCommGroup CForm]
+    (dB : BForm -> BForm) (dC : CForm -> CForm) (piPush : EForm -> BForm)
+    (sigmaPush : BForm -> CForm) (piMain : EForm -> BForm)
+    (piBoundaryRestrict : EForm -> EBoundary) (piBoundaryPush : EBoundary -> BForm)
+    (sigmaBoundaryRestrict : BForm -> BBoundary) (sigmaBoundaryPush : BBoundary -> CForm)
+    (hSigmaAdd : forall x y, sigmaPush (x + y) = sigmaPush x + sigmaPush y)
+    (hPi : forall omega, dB (piPush omega) =
+      piMain omega + piBoundaryPush (piBoundaryRestrict omega))
+    (hSigma : forall eta, dC (sigmaPush eta) =
+      sigmaPush (dB eta) + sigmaBoundaryPush (sigmaBoundaryRestrict eta)) :
+    forall omega,
+      dC (sigmaPush (piPush omega)) =
+        sigmaPush (piMain omega) +
+          sigmaPush (piBoundaryPush (piBoundaryRestrict omega)) +
+            sigmaBoundaryPush (sigmaBoundaryRestrict (piPush omega)) := by
+  intro omega
+  rw [hSigma, hPi, hSigmaAdd]
+
 end FiberIntegrationDefect
 
 end Omega.CircleDimension
