@@ -130,6 +130,7 @@ import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.FreeInvolutionCount
 import Omega.GU.CyclotomicSpecializationRigidity
+import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.VisibleValueOverflow
@@ -260,6 +261,7 @@ import Omega.SPG.TanakaIncrement
 import Omega.SPG.CoarsegrainedCutFlux
 import Omega.SPG.DyadicTopInversionBound
 import Omega.SPG.DyadicFiniteMomentCompleteness
+import Omega.SPG.DyadicOuterApproxStokesGainMinkowskiReadout
 import Omega.SPG.BoundaryGodelFiniteMomentCompleteness
 import Omega.SPG.BoundaryGodelDimensionSeparatedUnionMax
 import Omega.SPG.PolycubeIsoperimetryUpper
@@ -965,6 +967,7 @@ import Omega.CircleDimension.DenominatorGrowthFiniteS
 import Omega.CircleDimension.DenominatorMultiplesUnionBound
 import Omega.CircleDimension.CoprimeFractionLowerBound
 import Omega.CircleDimension.SquarefreeMedianDistance
+import Omega.CircleDimension.SquarefreeMedianMetricEllipseRealization
 import Omega.CircleDimension.FibonacciPrimitivePrimeBinaryLock
 import Omega.CircleDimension.FiniteProbeExtraction
 import Omega.CircleDimension.ResidualQuotientProbe
