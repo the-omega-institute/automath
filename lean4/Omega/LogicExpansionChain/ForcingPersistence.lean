@@ -43,4 +43,19 @@ theorem paper_logic_expansion_forcing_persistence_package
   paper_logic_expansion_forcing_persistence_seeds
     restrict lift satisfiesSmall satisfiesLarge p q href hlift hp
 
+/-- Unsuffixed paper-facing wrapper matching the paper label.
+    prop:logic-expansion-forcing-persistence -/
+theorem paper_logic_expansion_forcing_persistence
+    {ContextSmall ContextLarge ValSmall ValLarge Formula : Type}
+    (restrict : ValLarge → ValSmall) (lift : Formula → Formula)
+    (satisfiesSmall : ValSmall → Formula → Prop) (satisfiesLarge : ValLarge → Formula → Prop)
+    (p : InformationState ContextSmall ValSmall) (q : InformationState ContextLarge ValLarge)
+    (href : ∀ {σ}, σ ∈ q.realizations → restrict σ ∈ p.realizations)
+    (hlift : ∀ (σ : ValLarge) (φ : Formula),
+      satisfiesSmall (restrict σ) φ → satisfiesLarge σ (lift φ))
+    {φ : Formula} (hp : Forces satisfiesSmall p φ) :
+    Forces satisfiesLarge q (lift φ) :=
+  paper_logic_expansion_forcing_persistence_package
+    restrict lift satisfiesSmall satisfiesLarge p q href hlift hp
+
 end Omega.LogicExpansionChain.ForcingPersistence

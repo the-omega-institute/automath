@@ -20,4 +20,12 @@ theorem paper_recursive_addressing_visible_sigma_nonexpansion_package
       SigmaNonexpansion.ObservableEventFamily obsL :=
   paper_recursive_addressing_visible_sigma_nonexpansion_seeds obsL Φ
 
+/-- Unsuffixed paper-facing wrapper matching the paper label.
+    cor:recursive-addressing-visible-sigma-nonexpansion -/
+theorem paper_recursive_addressing_visible_sigma_nonexpansion
+    {α β γ : Type*} (obsL : α → β) (Φ : β → γ) :
+    SigmaNonexpansion.ObservableEventFamily (Φ ∘ obsL) ⊆
+      SigmaNonexpansion.ObservableEventFamily obsL :=
+  paper_recursive_addressing_visible_sigma_nonexpansion_package obsL Φ
+
 end Omega.RecursiveAddressing

@@ -142,6 +142,7 @@ import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.ScreenKernelAuditCost
 import Omega.SPG.ScreenAuditCostMonotoneUnitDrop
 import Omega.SPG.ScreenRankMatroidSupermodularity
+import Omega.SPG.ScreenKernelTopHomologySupermodular
 import Omega.SPG.ExactScreenMinimaAreMatroidBases
 import Omega.SPG.ScreenKernelConnectedComponents
 import Omega.SPG.GodelDoublelog
