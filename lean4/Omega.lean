@@ -104,6 +104,7 @@ import Omega.Folding.MetallicCompressionLockingLambda2
 import Omega.Folding.MetallicParetoFrontier
 import Omega.Folding.MetallicTwoStateSFT
 import Omega.Folding.MetallicBinetClosedForm
+import Omega.Folding.MetallicFiniteScaleCompressionOscillation
 import Omega.Folding.MetallicIntegerScalarizationThreshold
 import Omega.Folding.OstrowskiMetallicTwoRuleNormalization
 import Omega.Folding.CandidateSetMonotone
@@ -199,6 +200,7 @@ import Omega.SPG.ScanProjectionBayesOptimality
 import Omega.SPG.BayesFiniteMistakesSummable
 import Omega.SPG.BoundaryDimensionAeStabilization
 import Omega.SPG.BoundaryGodelClarityExponentEquivalence
+import Omega.SPG.BoundaryCylinderGodelizationClarity
 import Omega.SPG.ClarityRiskThresholdDepthLaw
 import Omega.SPG.ScanErrorMeasure
 import Omega.SPG.ErrorThreshold
@@ -921,6 +923,7 @@ import Omega.CircleDimension.PrefixPrimeLedgerConservation
 import Omega.CircleDimension.PrefixResidualRegisterCapacity
 import Omega.CircleDimension.PrefixEntropyDepthConservation
 import Omega.CircleDimension.GodelScalarizationBitlengthLogB
+import Omega.CircleDimension.GodelPrimeBitlengthLowerBound
 import Omega.CircleDimension.BiphaseFiber
 import Omega.CircleDimension.PhaseSpectrumMonoid
 import Omega.CircleDimension.LissajousChebyshev
