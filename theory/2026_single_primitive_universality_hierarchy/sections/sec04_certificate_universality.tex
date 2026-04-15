@@ -1,0 +1,148 @@
+% ══════════════════════════════════════════════════════════
+\section{Certificate Universality: The Audit
+  Layer}\label{sec:L2}
+% ══════════════════════════════════════════════════════════
+
+Protocol universality provides computable canonical forms and
+decidable equivalence.  We now describe a third layer that
+endows the fold structure with a \emph{positive-definite kernel},
+turning abstract normal forms into quantitative, auditable spectral
+fingerprints.
+
+% ── 4.1  Collision moments ────────────────────────────────
+\subsection{Fold fibers and collision moments}\label{ssec:moments}
+
+The fold map $\Fold_{m} \colon \Omega_{m} \to X_{m}$ is
+generically many-to-one.  For $x \in X_{m}$ denote the fiber size
+\[
+  d_{m}(x) \;:=\; \bigl|\Fold_{m}^{-1}(x)\bigr|.
+\]
+
+\begin{definition}[$q$-fold collision moment]
+\label{def:collision-moment}
+For integer $q \ge 0$ and resolution $m \ge 1$, the
+\emph{$q$-fold collision moment} is
+\begin{equation}\label{eq:Sq}
+  S_{q}(m)
+    \;:=\; \sum_{x \in X_{m}} d_{m}(x)^{q}.
+\end{equation}
+Equivalently, $S_{q}(m) = |R_{m}^{(q)}|$ where $R_{m}^{(q)}$
+is the set of $q$-tuples in~$\Omega_{m}^{q}$ that fold to a
+common image.
+\end{definition}
+
+Note that $S_{0}(m) = |X_{m}| = F_{m+2}$
+(the $(m{+}2)$-nd Fibonacci number) and
+$S_{1}(m) = |\Omega_{m}| = 2^{m}$.
+
+% ── 4.2  Hankel positivity ───────────────────────────────
+\subsection{Hankel positive semi-definiteness}
+\label{ssec:hankel}
+
+\begin{theorem}[Hankel PSD and log-convexity
+  {\cite[Thm.~12.4]{OmegaSPG2026}}]
+\label{thm:hankel-psd}
+For each fixed $m \ge 1$, the Hankel matrix
+\[
+  H_{r}^{(m)}
+    \;:=\; \bigl[S_{i+j}(m)\bigr]_{0 \le i,j \le r}
+\]
+is positive semi-definite for every $r \ge 0$.  Consequently:
+\begin{enumerate}[label=(\roman*)]
+\item all principal minors of $H_{r}^{(m)}$ are non-negative;
+\item the sequence $(S_{q}(m))_{q \ge 0}$ is log-convex:
+  $S_{q}(m)^{2} \le S_{q-1}(m) \cdot S_{q+1}(m)$ for $q \ge 1$;
+\item the ratio $R_{q}(m) := S_{q+1}(m)/S_{q}(m)$ is monotone
+  non-decreasing in~$q$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Write $S_{q}(m) = \sum_{x} d_{m}(x)^{q}
+= \int t^{q}\, d\nu_{m}(t)$ where $\nu_{m}$ is the counting
+measure on the multiset $\{d_{m}(x) : x \in X_{m}\}$.
+The Hankel matrix $H_{r}^{(m)}$ is then the moment matrix of the
+non-negative measure~$\nu_{m}$, which is PSD by the
+Hamburger moment theorem.
+\end{proof}
+
+% ── 4.3  Prony--Hankel reconstruction ────────────────────
+\subsection{Finite spectral reconstruction}
+\label{ssec:prony}
+
+\begin{theorem}[Prony--Hankel reconstruction
+  {\cite[Thm.~12.7]{OmegaSPG2026}}]
+\label{thm:prony}
+The fiber-multiplicity spectrum
+$\{(a_{i}, n_{i})\}_{i=1}^{r_{m}}$---where
+$\{a_{1} < \cdots < a_{r_{m}}\}$ are the distinct fiber sizes
+and $n_{i}$ the number of points in~$X_{m}$ with fiber size~$a_{i}$%
+---is uniquely determined from the finite data
+$\{S_{q}(m)\}_{q=0}^{2r_{m}-1}$.  Specifically:
+\begin{enumerate}[label=(\roman*)]
+\item The minimum recursion order~$r_{m}$ equals the
+  \emph{Hankel rank}
+  $\rank\bigl[S_{i+j}(m)\bigr]_{i,j \ge 0}$.
+\item The sequence $(S_{q}(m))_{q \ge 0}$ satisfies a unique
+  minimum-order linear recurrence of length~$r_{m}$.
+\item The roots of its characteristic polynomial recover
+  $\{a_{i}\}$; a Vandermonde system then recovers~$\{n_{i}\}$.
+\end{enumerate}
+\end{theorem}
+
+In other words: $2r_{m}$ collision moments suffice to reconstruct
+the entire fold-fiber structure at resolution~$m$.  This is the
+\emph{certificate}: a finite, verifiable spectral fingerprint.
+
+% ── 4.4  Moment-kernel compilation ───────────────────────
+\subsection{Star moment-kernel and Perron compression}
+\label{ssec:kernel}
+
+\begin{theorem}[Star moment-kernel {\cite[Thm.~11.2]{OmegaSPG2026}}]
+\label{thm:star-kernel}
+For a family of non-negative matrices
+$\{B_{\alpha}\}_{\alpha \in \mathcal{A}} \subset M_{k}(\RR_{\ge 0})$,
+define the $q$-fold tensor transfer matrix
+\[
+  A^{(q)}
+    \;:=\; \sum_{\alpha \in \mathcal{A}}
+      B_{\alpha}^{\otimes(q-1)},
+\]
+acting on $V^{\otimes(q-1)}$ where $V = \RR^{k}$.  Then:
+\begin{enumerate}[label=(\roman*)]
+\item $A^{(q)}$ commutes with the symmetric group
+  $\mathfrak{S}_{q-1}$ acting by leaf permutation;
+\item the Perron eigenvalue satisfies
+  $\rho(A^{(q)}) = \rho\bigl(A^{(q)}|_{\Sym^{q-1}(V)}\bigr)$;
+\item the compressed dimension is
+  $\dim \Sym^{q-1}(V) = \binom{k+q-2}{q-1}$, polynomial in~$q$.
+\end{enumerate}
+\end{theorem}
+
+This compression makes the moment sequence
+$(S_{q}(m))_{q}$ computable via finite-state linear algebra, not
+combinatorial enumeration---the hallmark of certificate
+universality.
+
+% ── 4.5  Formal definition ───────────────────────────────
+\subsection{Formal definition}
+
+\begin{definition}[Certificate universality]
+\label{def:cert-univ}
+A protocol-universal system $(\sigma, \mathrm{NF},
+\{\Phi_{\ell}\})$ is \emph{certificate-universal} if the
+normalization fibers carry a family of moment sequences
+$\{S_{q}^{(m)}\}_{q,m}$ such that:
+\begin{enumerate}[label=(\alph*)]
+\item the Hankel matrices
+  $[S_{i+j}^{(m)}]_{i,j}$ are positive semi-definite
+  for each~$m$;
+\item a finite subset of moments (of size~$2r_{m}$) determines
+  the full fiber-multiplicity spectrum at each resolution~$m$;
+\item the moment sequence is computable by a finite-state kernel
+  (matrix transfer operator of polynomial dimension in~$q$).
+\end{enumerate}
+\end{definition}
+
+The scan--projection fold system satisfies (a)--(c) by
+\Cref{thm:hankel-psd,thm:prony,thm:star-kernel}.

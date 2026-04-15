@@ -1,13 +1,18 @@
 % main.tex -- Cayley transform, Poisson entropy, and reconstruction
 \documentclass[12pt,a4paper]{article}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage{lmodern}
+\else
+  \usepackage{fontspec}
+\fi
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{mathrsfs}
 \usepackage{enumitem}
-\usepackage[hidelinks]{hyperref}
+\usepackage{hyperref}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{microtype}
 \usepackage{geometry}
@@ -41,58 +46,42 @@
 \newcommand{\norm}[1]{\lVert #1\rVert}
 \newcommand{\ii}{\mathrm{i}}
 
-\title{Poisson Entropy Asymptotics and a Cauchy Comparison Kernel}
-\author{
-  Haobo Ma\thanks{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981. Email: \texttt{auric@aelf.io}}
-  \and
-  Wenlin Zhang\thanks{Corresponding author. National University of Singapore, Singapore. Email: \texttt{e1327962@u.nus.edu}}
-}
+\title{The Cayley Transform, Poisson Entropy Asymptotics, and Cardinal Reconstruction in a Cauchy Reproducing-Kernel Space}
+\author{}
 \date{}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-We study the large-time expansion of the relative entropy
-$D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))$,
-where $P_t$ is the Poisson semigroup and $\nu$ is a probability
-measure with mean $\bar\gamma$.
-The Cayley transform identifies this problem with a mode calculus
-governed by Chebyshev polynomials of the second kind, whose parity
-forces all odd-order terms to vanish.
-The paper is centered on Theorem~\ref{thm:poisson-kl-eighth}, which
-computes the expansion explicitly through order $t^{-8}$.
-Its sixth-order coefficient recovers a Pearson-type
-skewness--kurtosis combination in the Cayley coordinates, while the
-$t^{-8}$ coefficient is the genuinely new layer.
-Theorem~\ref{thm:poisson-defect-ladder} rewrites the
-sixth- and eighth-order entropy gaps as explicitly algebraic,
-non-negative defect coordinates obtained from the mode cancellations;
-these coordinates (defined without any orthogonality claim) are
-simultaneously minimized by the symmetric two-point law
-$\tfrac12(\delta_{\bar\gamma+\sigma}+\delta_{\bar\gamma-\sigma})$.
-Theorem~\ref{thm:poisson-defect-amplification} establishes a
-defect-amplification inequality: the eighth-order gap is bounded below
-by $(13\sigma^2/8)$ times the sixth-order gap, with equality only at
-the symmetric two-point extremizer.
-As a consequence (Theorem~\ref{thm:poisson-defect-stability}),
-small sixth-order defect forces the centred law to lie close to the
-symmetric two-point law in $W_2$ via a sharpened but still
-non-optimized corollary.
-Appendices~A and~B supply the weighted integrals and the
-coefficient-by-coefficient audit trail for the $t^{-6}$ and $t^{-8}$
-terms.  Auxiliary appendices record the RKHS and lattice formulas
-attached to the same kernel.
+The starting point of the paper is the classical fact that the Cayley
+transform pulls normalized Haar measure on~$\TT$ back to the Cauchy law
+on~$\RR$.  We first prove that, among normalized
+orientation-preserving $C^{1}$-homeomorphisms
+$\overline\RR\to\TT$, this pullback property characterizes the Cayley
+chart.  We then develop a finite Cayley--Chebyshev mode calculus for the
+comparison kernel
+$R_\varepsilon(y)=(1+y^{2})/(1+(y-\varepsilon)^{2})$ and use it to study
+$D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))$: the large-time
+expansion contains only even powers of~$t^{-1}$, and the coefficients
+through order~$t^{-8}$ yield a defect amplification principle together
+with a quantitative $W_2$-stability result for the symmetric two-point
+law.  On the functional-analytic side, the secant family has Gram kernel
+$K(a,b)=2/(4+(a-b)^{2})$, the corresponding reproducing-kernel space is
+exactly $\sqrt{\pi}\,e^{-|D|}L^{2}(\RR)$, and this space admits a strip
+realization with an orthogonal Hardy decomposition.  On the
+lattice-generated subspace over~$\ZZ$ we obtain stable sampling and an
+explicit cardinal interpolation formula.
 \end{abstract}
 
 \smallskip
-\noindent\textbf{Keywords:}
-Poisson semigroup, relative entropy, Cayley transform, Chebyshev
-polynomials, entropy asymptotics, defect amplification, Wasserstein
-stability, Cauchy law.
+\noindent\textbf{Keywords.}
+Cayley transform, Haar measure, Poisson semigroup, relative entropy,
+Chebyshev polynomials, reproducing kernels, Hardy spaces, sampling
+theorem, cardinal interpolation.
 
 \smallskip
-\noindent\textbf{MSC 2020:}
+\noindent\textbf{2020 Mathematics Subject Classification.}
 47D07, 94A17, 46E22, 42C15, 30H10.
 
 \input{sec_introduction}
@@ -100,10 +89,10 @@ stability, Cauchy law.
 \input{sec_cayley_gate}
 \input{sec_haar_pullback}
 \input{sec_entropy_asymptotics}
-\appendix
-\input{sec_appendix}
 \input{sec_gram_space}
 \input{sec_strip_lattice}
+\appendix
+\input{sec_appendix}
 
 \begin{thebibliography}{99}
 
@@ -127,6 +116,16 @@ A.~R. Barron.
 \newblock Entropy and the central limit theorem.
 \newblock \emph{Ann. Probab.} 14 (1986), no.~1, 336--342.
 
+\bibitem{BelovKulikovLyubarskii2022}
+Y.~Belov, A.~Kulikov, and Y.~Lyubarskii.
+\newblock Irregular {G}abor frames of {C}auchy kernels.
+\newblock \emph{Appl. Comput. Harmon. Anal.} 57 (2022), 101--104.
+
+\bibitem{BelovKulikovLyubarskii2023}
+Y.~Belov, A.~Kulikov, and Y.~Lyubarskii.
+\newblock {G}abor frames for rational functions.
+\newblock \emph{Invent. Math.} 231 (2023), no.~2, 431--466.
+
 \bibitem{Buhmann2003}
 M.~D. Buhmann.
 \newblock \emph{Radial Basis Functions: Theory and Implementations}.
@@ -137,21 +136,11 @@ S.~G. Bobkov, G.~P. Chistyakov, and F.~G\"otze.
 \newblock Convergence to stable laws in relative entropy.
 \newblock \emph{J. Theoret. Probab.} 26 (2013), no.~3, 803--818.
 
-\bibitem{BobkovChistyakovGotzeFisher2014}
-S.~G. Bobkov, G.~P. Chistyakov, and F.~G\"otze.
-\newblock Fisher information and convergence to stable laws.
-\newblock \emph{Bernoulli} 20 (2014), no.~3, 1620--1646.
-
 \bibitem{BobkovChistyakovGotzeBerryEsseen2014}
 S.~G. Bobkov, G.~P. Chistyakov, and F.~G\"otze.
 \newblock Berry--Esseen bounds in the entropic central limit theorem.
 \newblock \emph{Probab. Theory Related Fields} 159 (2014), nos.~3--4,
 435--478.
-
-\bibitem{BobkovChistyakovGotzeRenyi2019}
-S.~G. Bobkov, G.~P. Chistyakov, and F.~G\"otze.
-\newblock R\'enyi divergence and the central limit theorem.
-\newblock \emph{Ann. Probab.} 47 (2019), no.~1, 270--323.
 
 \bibitem{BobkovChistyakovGotzeEdgeworth2013}
 S.~G. Bobkov, G.~P. Chistyakov, and F.~G\"otze.
@@ -159,23 +148,11 @@ S.~G. Bobkov, G.~P. Chistyakov, and F.~G\"otze.
 central limit theorem.
 \newblock \emph{Ann. Probab.} 41 (2013), no.~4, 2479--2512.
 
-\bibitem{BobkovLedoux2009}
-S.~G. Bobkov and M.~Ledoux.
-\newblock Weighted Poincar\'e-type inequalities for Cauchy and other convex
-measures.
-\newblock \emph{Ann. Probab.} 37 (2009), no.~2, 403--427.
-
 \bibitem{CarlenCarvalho1992}
 E.~A. Carlen and M.~C. Carvalho.
 \newblock Strict entropy production bounds and stability of the rate of
 convergence to equilibrium for the Boltzmann equation.
 \newblock \emph{J. Stat. Phys.} 67 (1992), nos.~3--4, 575--608.
-
-\bibitem{ChyzakNielsen2019}
-F.~Chyzak and F.~Nielsen.
-\newblock A closed-form formula for the Kullback--Leibler divergence between
-Cauchy distributions.
-\newblock Preprint, arXiv:1905.10965, 2019.
 
 \bibitem{Bownik2000}
 M.~Bownik.
@@ -193,12 +170,6 @@ W.~Feller.
 \newblock \emph{An Introduction to Probability Theory and Its Applications},
 Vol.~II.
 \newblock 2nd ed., John Wiley \& Sons, New York, 1971.
-
-\bibitem{FahsAbouFaycal2018}
-J.~Fahs and I.~C. Abou-Faycal.
-\newblock Information measures, inequalities and performance bounds for
-parameter estimation in impulsive noise environments.
-\newblock \emph{IEEE Trans. Inform. Theory} 64 (2018), no.~3, 1825--1844.
 
 \bibitem{Duren1970}
 P.~L. Duren.
@@ -232,6 +203,12 @@ K.~Gr{\"o}chenig, J.~L. Romero, and J.~St{\"o}ckler.
 \newblock Sharp results on sampling with derivatives in shift-invariant spaces
 and multi-window Gabor frames.
 \newblock \emph{Constr. Approx.} 51 (2020), no.~1, 1--25.
+
+\bibitem{GrochenigRomeroStockler2018}
+K.~Gr{\"o}chenig, J.~L. Romero, and J.~St{\"o}ckler.
+\newblock Sampling theorems for shift-invariant spaces, {G}abor frames, and
+totally positive functions.
+\newblock \emph{Invent. Math.} 211 (2018), no.~3, 1119--1148.
 
 \bibitem{Lukacs1970}
 E.~Lukacs.
@@ -278,12 +255,6 @@ G.~Toscani.
 limit theorems.
 \newblock \emph{J. Stat. Phys.} 164 (2016), no.~6, 371--389.
 
-\bibitem{Toscani2017Score}
-G.~Toscani.
-\newblock Score functions, generalized relative Fisher information and
-applications.
-\newblock \emph{Ricerche Mat.} 66 (2017), no.~1, 15--26.
-
 \bibitem{BaranovBelovGrochenig2022}
 A.~Baranov, Y.~Belov, and K.~Gr{\"o}chenig.
 \newblock Complete interpolating sequences for the Gaussian shift-invariant
@@ -301,75 +272,11 @@ G.~Toscani.
 stable laws.
 \newblock \emph{Ricerche Mat.} 65 (2016), no.~1, 71--91.
 
-\bibitem{KiselevMininNovikSitnik2014}
-E.~A. Kiselev, L.~A. Minin, I.~Ya. Novikov, and S.~M. Sitnik.
-\newblock On the Riesz constants for systems of integer translates.
-\newblock \emph{Math. Notes} 96 (2014), no.~5, 686--701.
-
-\bibitem{MaiQian2018}
-W.~Mai and T.~Qian.
-\newblock Rational approximation in Hardy spaces on strips.
-\newblock \emph{Complex Var. Elliptic Equ.} 63 (2018), no.~7--8, 1090--1108.
-
-\bibitem{NielsenOkamura2023}
-F.~Nielsen and K.~Okamura.
-\newblock On $f$-divergences between Cauchy distributions.
-\newblock \emph{IEEE Trans. Inform. Theory} 69 (2023), no.~5, 3150--3171.
-
-\bibitem{Pearson1916}
-K.~Pearson.
-\newblock Mathematical contributions to the theory of evolution. XIX. Second
-supplement to a memoir on skew variation.
-\newblock \emph{Philos. Trans. Roy. Soc. London Ser.~A} 216 (1916), 429--457.
-
-\bibitem{Verdu2023}
-S.~Verd{\'u}.
-\newblock The Cauchy distribution in information theory.
-\newblock \emph{Entropy} 25 (2023), no.~2, 346.
-
-\bibitem{Johnson2013}
-O.~Johnson.
-\newblock A de Bruijn identity for symmetric stable laws.
-\newblock Preprint, arXiv:1310.2045, 2013.
-
-\bibitem{SunZhou2008}
-H.-W. Sun and D.-X. Zhou.
-\newblock Reproducing kernel Hilbert spaces associated with analytic
-translation-invariant Mercer kernels.
-\newblock \emph{J. Fourier Anal. Appl.} 14 (2008), no.~1, 89--101.
-
-\bibitem{TronarpKarvonen2024}
-F.~Tronarp and T.~Karvonen.
-\newblock Orthonormal expansions for translation-invariant kernels.
-\newblock \emph{J. Approx. Theory} 297 (2024), 106005.
-
-\bibitem{KlaassenVanEs2018}
-C.~A.~J. Klaassen and B.~van~Es.
-\newblock Inference via the skewness-kurtosis set.
-\newblock \emph{Statist. Neerl.} 79 (2025), no.~1, 3--29.
-
-\bibitem{SamorodnitskyTaqqu1994}
-G.~Samorodnitsky and M.~S. Taqqu.
-\newblock \emph{Stable Non-Gaussian Random Processes: Stochastic Models with
-Infinite Variance}.
-\newblock Chapman \& Hall, New York, 1994.
-
-\bibitem{OgasawaraExtensions2017}
-H.~Ogasawara.
-\newblock Extensions of Pearson's inequality between squared skewness and
-kurtosis to multivariate cases.
-\newblock \emph{Statist. Probab. Lett.} 130 (2017), 12--16.
-
-\bibitem{SharmaBhandari2015}
-R.~Sharma and R.~Bhandari.
-\newblock Skewness, kurtosis and Newton's inequality.
-\newblock \emph{Rocky Mountain J. Math.} 45 (2015), no.~5, 1639--1643.
-
-\bibitem{Zolotarev1986}
-V.~M. Zolotarev.
-\newblock \emph{One-Dimensional Stable Distributions}.
-\newblock Translations of Mathematical Monographs, vol.~65, American
-Mathematical Society, Providence, RI, 1986.
+\bibitem{UlanovskiiZlotnikov2025}
+A.~Ulanovskii and I.~Zlotnikov.
+\newblock Sampling in quasi shift-invariant spaces and {G}abor frames
+generated by ratios of exponential polynomials.
+\newblock \emph{Math. Ann.} 391 (2025), 3429--3456.
 
 \end{thebibliography}
 

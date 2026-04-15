@@ -357,6 +357,24 @@ def make_tab_worked_example():
     beta_inf_sq_rec = (bp1**2 * rp1 - bm1**2 * rm1) / (rp1 - rm1)
     M_rec = rp1 * rm1 * (bp1**2 - bm1**2) / (2 * (bp1**2 * rp1 - bm1**2 * rm1))
 
+    # Jacobian for the two-mode inverse on the family (beta_inf, M)
+    def shell_ratio(beta_inf_local, mass_local, r_phi_local, r_mem_local):
+        n_phi = np.sqrt(1.0 - 2.0 * mass_local / r_phi_local)
+        n_mem = np.sqrt(1.0 - 2.0 * mass_local / r_mem_local)
+        return ((np.exp(beta_inf_local * Omega * n_phi) - 1.0)
+                / (np.exp(beta_inf_local * Omega * n_mem) - 1.0))
+
+    def ratio_function(beta_inf_local, mass_local, row):
+        return shell_ratio(beta_inf_local, mass_local, row['r_phi'], row['r_mem']) - row['C']
+
+    h = 1e-6
+    jac_rows = []
+    for row in rows:
+        d_beta = (ratio_function(beta_inf + h, 0.5, row) - ratio_function(beta_inf - h, 0.5, row)) / (2 * h)
+        d_mass = (ratio_function(beta_inf, 0.5 + h, row) - ratio_function(beta_inf, 0.5 - h, row)) / (2 * h)
+        jac_rows.append((d_beta, d_mass))
+    jac_det = jac_rows[0][0] * jac_rows[1][1] - jac_rows[0][1] * jac_rows[1][0]
+
     # Write LaTeX table
     lines = []
     lines.append(r'\begin{table}[t]')
@@ -412,6 +430,13 @@ def make_tab_worked_example():
                  r'\multicolumn{2}{c}{'
                  f'{M_rec:.6f}'
                  r' (exact: $0.500000$)} \\')
+    lines.append(r'\midrule')
+    lines.append(r'\multicolumn{3}{l}{'
+                 r'\textit{Two-mode verification for the family $(\beta_\infty,M)$:}} \\')
+    lines.append(r'$\det D(F_1,F_2)|_{(\beta_\infty,M)}$ & '
+                 r'\multicolumn{2}{c}{'
+                 f'${jac_det:.6f}$'
+                 r'} \\')
     lines.append(r'\bottomrule')
     lines.append(r'\end{tabular}')
     lines.append(r'\end{table}')
@@ -429,6 +454,7 @@ def make_tab_worked_example():
               f"C = {r['C']:.6f}, ratio_check = {r['lhs_ratio']:.6f}")
     print(f"  Inverse: beta_inf^2 = {beta_inf_sq_rec:.6f} "
           f"(exact {beta_inf**2:.6f}), M = {M_rec:.6f} (exact 0.5)")
+    print(f"  Two-mode Jacobian determinant: {jac_det:.6f}")
     print(f"  Done ({time.time()-t0:.1f}s)")
 
 
