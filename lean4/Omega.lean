@@ -462,6 +462,8 @@ import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
 import Omega.GU.FibTailP23Orbits
+import Omega.CircleDimension.PhaseSeparationPrecisionExponent
+import Omega.POM.HighMultiplicitySparse
 import Omega.GU.MinSectorBudget
 import Omega.GU.NapSo10AnalyticMinimality
 import Omega.GU.BdryZ2JumpUniqueness
