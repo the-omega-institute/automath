@@ -136,6 +136,7 @@ import Omega.Folding.PhiMemoryThresholdExact
 import Omega.Folding.BlockCountsThreshold
 import Omega.Folding.LinearTimeBlockDecoding
 import Omega.Folding.YmSingletonEssentialFiniteDelay
+import Omega.Folding.YmAmbiguityShellDag
 import Omega.Folding.YmExactSFTOrder
 import Omega.Folding.ExactMarkovOrderBernoulli
 import Omega.Folding.YmConjugacyCollapse
@@ -562,6 +563,7 @@ import Omega.Conclusion.ScreenAtomicValueAntitone
 import Omega.Conclusion.EventEllipseGoldenMinimal
 import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.ConnectedToDiscreteConstant
+import Omega.Conclusion.DiscreteKinkFanPiecewiseLinearization
 import Omega.Conclusion.SectionLedgerKL
 import Omega.Conclusion.SectionLedgerCapacityFunctional
 import Omega.Conclusion.CdimFiniteQuotientGrowth
@@ -666,6 +668,7 @@ import Omega.POM.DoubleTransversalNormalForm
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.FibCubeEccentricityCore
+import Omega.POM.FibCubeAntipodeCount
 import Omega.POM.FibCubeEdgeParity
 import Omega.POM.FibCubeFrechetMedianUnique
 import Omega.POM.CollisionKernelDiscriminant
