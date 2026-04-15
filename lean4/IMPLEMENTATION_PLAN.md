@@ -1908,6 +1908,14 @@ SPG / PhysicalSpacetimeSkeleton，降级项数 1，non-trivial 计数 1；文件
 - 已完成 `paper_tv_certificate_hist`（`thm:tv-certificate-hist`，`Experiments/TVCertificateHist.lean`）：把微态 TV 证书与 pushforward 下 TV 单调性桥接成折叠直方图的联合上界。
 - `paper_cdim_torus_packing_bound` 暂跳过：给定目标签名 `cardE ≤ Ck / Δ ^ k` 没有任何前提，在 `ℝ` 上不可证明；本轮未对该 paper label 做不实登记。
 
+### Round R923
+
+- 已完成 `paper_gut_logCm_pole_ladder_evenzeta`（`thm:gut-logCm-pole-ladder-evenzeta`，`GU/BernoulliZetaTower.lean`）：把既有 arithmetic-subsequence / Stirling-Bernoulli seed 层合并为 unsuffixed paper-facing package，并保留原 even-ζ pole-ladder seed 结论供 tex 双注册。
+- 已完成 `paper_conclusion_primorial_mixed_radix_affine`（`thm:conclusion-primorial-mixed-radix-affine`，`Conclusion/PrimorialMixedRadixAffine.lean`）：新增 `2,3,5` primorial mixed-radix encode/decode 模块，形式化 `k < 30` 的 div/mod 反演与 `A_{2,a_1} A_{3,a_2} A_{5,a_3} = A_{30,a_1+2a_2+6a_3}` 的 affine collapse，并把既有 seed 定理并入 paper-facing package。
+- 已完成 `paper_pom_toggle_time_reversal_fixedpoints_sign_closed_form`（`thm:pom-toggle-time-reversal-fixedpoints-sign-closed-form`，`POM/ToggleOrder.lean`）：新增组件列表上的 fixed-point / total-count / sign-exponent 封装，证明路径分量 fixed-point 乘积公式、sign 闭式包装，以及与既有单路径 `timeReversalFix_le_total` 的 bridge。
+- 已执行 `git fetch origin lean4-codex-auto-dev` / `git rebase origin/lean4-codex-auto-dev`，本轮无 rebase 冲突；随后在 rebased 分支上执行 `cd lean4 && timeout 300 lake build`，全量通过（9043 jobs）。
+- 文件：`lean4/Omega/GU/BernoulliZetaTower.lean`、`lean4/Omega/Conclusion/PrimorialMixedRadixAffine.lean`、`lean4/Omega/POM/ToggleOrder.lean`、`lean4/Omega.lean`；tex 路径：`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/subsubsec__bdry-tower-zeck-gut-finite-spectral-boundary-primitive-atom-part4.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/conclusion/para__conclusion-affine-normal-form-primorial-ellipse-initial-object.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/pom/parts/subsubsec__pom-fiber-toggle-orientation-sign-general-fiber.tex`。
+
 ## 6. 质量闸门
 
 - `lake build` 全量通过
