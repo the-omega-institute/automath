@@ -128,39 +128,107 @@ JOURNAL_ABBREV = {
 }
 
 
+PROGRAM_BOARD = REPO_ROOT / "papers" / "publication" / "PROGRAM_BOARD.md"
+
+# Normalized short names used in PROGRAM_BOARD.md → match to dir names
+_BOARD_JOURNAL_EXPAND = {
+    "ergodic th. dyn. sys.": "Ergodic Theory and Dynamical Systems",
+    "ann. pure appl. logic": "Annals of Pure and Applied Logic",
+    "trans. ams": "Transactions of the American Mathematical Society",
+    "j. funct. anal.": "Journal of Functional Analysis",
+    "j. spectral theory": "Journal of Spectral Theory",
+    "monatshefte math.": "Monatshefte für Mathematik",
+    "dynamical systems": "Ergodic Theory and Dynamical Systems",
+    "imrn": "International Mathematics Research Notices",
+}
+
+
+def _load_board_journals() -> dict[str, str]:
+    """Parse PROGRAM_BOARD.md and return {dir_keyword: full_journal_name}."""
+    result: dict[str, str] = {}
+    if not PROGRAM_BOARD.exists():
+        return result
+    try:
+        text = PROGRAM_BOARD.read_text(encoding="utf-8")
+    except Exception:
+        return result
+
+    # Match table rows: | Paper desc | Target journal | Stage | Status |
+    for m in re.finditer(
+        r"\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*P\d",
+        text,
+    ):
+        paper_desc = m.group(1).strip()
+        raw_journal = m.group(2).strip()
+
+        # Expand abbreviated journal name
+        journal = _BOARD_JOURNAL_EXPAND.get(raw_journal.lower(), raw_journal)
+
+        # Extract dir-name hint from paper desc or parenthetical
+        # e.g. "ETDS (scan projection)" → "scan_projection"
+        # e.g. "JFA (circle dimension)" → "circle_dimension"
+        paren = re.search(r"\(([^)]+)\)", paper_desc)
+        if paren:
+            key = paren.group(1).strip().lower().replace(" ", "_")
+            result[key] = journal
+
+        # Also store the short name itself: "ETDS-zeta" → "etds_zeta"
+        short = paper_desc.split("(")[0].strip().lower()
+        short = re.sub(r"[^a-z0-9]+", "_", short).strip("_")
+        if short:
+            result[short] = journal
+
+    return result
+
+
+# Cache board journals at module load
+_board_journals: Optional[dict[str, str]] = None
+
+
+def _get_board_journals() -> dict[str, str]:
+    global _board_journals
+    if _board_journals is None:
+        _board_journals = _load_board_journals()
+    return _board_journals
+
+
 def detect_target_journal(paper_dir: str) -> str:
-    """Auto-detect target journal from directory name or PIPELINE.md.
+    """Auto-detect target journal for a paper.
 
     Priority:
-      1. PIPELINE.md explicit target journal line
-      2. Journal abbreviation in directory name
-      3. Empty string (caller should use CLI default or ask codex)
+      1. PROGRAM_BOARD.md (authoritative pub plan)
+      2. Paper's own PIPELINE.md
+      3. Journal abbreviation in directory name
+      4. Empty string → Stage F will select via codex
     """
     paper_path = Path(paper_dir)
     name_lower = paper_path.name.lower()
 
-    # 1. Check PIPELINE.md
+    # 1. Check PROGRAM_BOARD.md
+    board = _get_board_journals()
+    for key, journal in board.items():
+        if key in name_lower:
+            return journal
+
+    # 2. Check paper's own PIPELINE.md
     pipeline_md = paper_path / "PIPELINE.md"
     if pipeline_md.exists():
         try:
             text = pipeline_md.read_text(encoding="utf-8")[:3000]
-            # Pattern: "Target: Journal Name" or "Target journal: ..."
             m = re.search(
                 r"(?:target|venue|journal)\s*[:=]\s*(.+?)(?:\n|\(|$)",
                 text, re.IGNORECASE,
             )
             if m:
                 journal = m.group(1).strip().rstrip(".,;")
-                # Clean markdown bold
                 journal = re.sub(r"\*+", "", journal).strip()
                 if len(journal) > 5:
                     return journal
         except Exception:
             pass
 
-    # 2. Check directory name for known abbreviations
+    # 3. Check directory name for known abbreviations
     for abbrev, full_name in JOURNAL_ABBREV.items():
-        # Match abbreviation at end of dir name or as a standalone segment
         if (name_lower.endswith(f"_{abbrev}")
             or f"_{abbrev}_" in name_lower
             or name_lower == abbrev):
