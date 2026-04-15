@@ -127,6 +127,7 @@ import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.FreeInvolutionCount
+import Omega.GU.CyclotomicSpecializationRigidity
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.VisibleValueOverflow
@@ -139,6 +140,7 @@ import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.BernoulliHalfEndpoints
 import Omega.Folding.BernoulliPEndpointExactFinite
 import Omega.Folding.BernoulliPEndpointLdpRestated
+import Omega.Folding.BernoulliPhiHalfRatioLimits
 import Omega.Folding.BernoulliPGammaMax
 import Omega.Folding.BernoulliPBitpairLaw
 import Omega.Folding.BernoulliPJordanResonance
@@ -756,6 +758,7 @@ import Omega.StatisticalStability.PeriodicDirichletSeriesHurwitzDecomposition
 import Omega.StatisticalStability.FixedResolutionPrimeSievePrecisionToZero
 import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 import Omega.TypedAddressBiaxialCompletion.CausalPreorder
+import Omega.TypedAddressBiaxialCompletion.ClassicalContraction
 import Omega.TypedAddressBiaxialCompletion.BoundaryAddressCollision
 import Omega.TypedAddressBiaxialCompletion.ComovingDefectBound
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
