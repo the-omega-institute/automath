@@ -316,6 +316,7 @@ def _state_file(paper_name: str) -> Path:
 def save_state(state: PaperState) -> None:
     with _state_lock:
         path = _state_file(state.paper_name)
+        path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             json.dump(state.to_dict(), f, indent=2, ensure_ascii=False)
 
