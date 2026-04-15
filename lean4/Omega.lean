@@ -120,6 +120,7 @@ import Omega.Folding.YmSofic
 import Omega.Folding.YmAmbiguityShellDag
 import Omega.Folding.SyncDelay
 import Omega.Folding.YmSyncTail
+import Omega.Folding.YmAmbiguityShellExponentiallyThin
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.AlternatingSingleSymbolSynchronizing
 import Omega.Folding.GmFischerCover
@@ -213,6 +214,7 @@ import Omega.SPG.DyadicCubicalBoundaryInjective
 import Omega.SPG.RegularLanguageStokesDyadicZetaRationality
 import Omega.SPG.SquareclassChainComplex
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
+import Omega.SPG.BoundaryGodelGcdLipschitzStability
 import Omega.SPG.BoundaryGodelSequenceDeterminesClosure
 import Omega.SPG.ScreenKernelAuditCost
 import Omega.SPG.PartialBoundaryGodelAuditOptimal
@@ -483,6 +485,7 @@ import Omega.Zeta.CyclicEulerProduct
 import Omega.Zeta.FiniteQuotientScalarGodelLoglogOverhead
 import Omega.Zeta.PhaseCombPoleCounting
 import Omega.Zeta.CriticalLineGapEntropyRateZero
+import Omega.Zeta.CriticalLinePaircorrPurePoint
 import Omega.Zeta.OperatorFixedKernelLocalDensityObstruction
 import Omega.Zeta.CyclicLiftGcdLcm
 import Omega.Zeta.SyncCyclotomicDegreeLaw
