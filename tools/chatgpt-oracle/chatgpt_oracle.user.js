@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      4.4
+// @version      4.6
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -68,7 +68,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v4.4]</b>
+        <b>[Oracle v4.6]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -647,143 +647,146 @@
     log(`Post-send captured: ${postSendLines.size} lines`);
   }
 
+  // Chrome/UI lines to always strip
+  const CHROME_RE = [
+    /^(进阶专业|ChatGPT\s*也可能会犯错|请核查重要信息|查看\s*Cookie|Cookie\s*首选项)/,
+    /^(ChatGPT can make mistakes|Check important info)/,
+    /^Extended\s*Pro$/i,
+    /^(Deep research|Deep thinking|Reasoning)$/i,
+    /^Thought for \d+/,
+    /^(你说|You said|ChatGPT\s*说|ChatGPT\s*said)[：:]?\s*$/,
+    /^(正在思考|正在搜索|Searching)/,
+    /^main(\.pdf)?\s*$/,
+    /^PDF\s*$/,
+    /^(进阶专业模式|click to remove|Start dictation|Send prompt)/,
+    /^(新建聊天|New chat|搜索聊天|Search chats|图片|Images)/,
+    /^(查看方案|See plans|设置|Settings|帮助|Help)/,
+    /^(获取根据保存的聊天量身定制的回复|Get responses tailored)/,
+    /^(登录|Log in|注册|Sign up)/,
+    /^(我们使用\s*cookie|We use cookies|管理\s*Cookie|Manage Cookies)/,
+    /^(拒绝非必要|Reject non-essential|接受所有|Accept all)/,
+  ];
+
+  function isChromeLine(t) {
+    if (!t || t.length > 200) return false;
+    return CHROME_RE.some(re => re.test(t));
+  }
+
+  function cleanText(text) {
+    return text.split("\n").filter(line => {
+      const t = line.trim();
+      if (!t) return true;
+      return !isChromeLine(t);
+    }).join("\n").trim();
+  }
+
   function extractResponseText() {
-    // ═══ Strategy 0: Try to find the LAST assistant message directly ═══
-    // ChatGPT DOM changes frequently. Try many selectors.
+    // ═══ Strategy A: "Biggest text block" — DOM-structure agnostic ═══
+    // Walk all elements inside main, find the LARGEST single container
+    // whose text is NOT a prompt echo and NOT UI chrome.
+    // This works regardless of ChatGPT version because the assistant
+    // response is always the biggest text block on the page.
+    const main = document.querySelector("main");
+    if (!main) return "";
+
+    // Collect candidate blocks: any div/article/section with substantial text
+    const candidates = [];
+    const allBlocks = main.querySelectorAll("div, article, section");
+    for (const el of allBlocks) {
+      const text = (el.innerText || "").trim();
+      if (text.length < 200) continue;
+      // Skip if this is a parent of a bigger block we already have
+      // (we want the most specific container, not <main> itself)
+      candidates.push({ el, text, len: text.length });
+    }
+
+    // Sort by length descending, then pick the best non-prompt block
+    candidates.sort((a, b) => b.len - a.len);
+
+    for (const cand of candidates) {
+      const cleaned = cleanText(cand.text);
+      if (cleaned.length < 200) continue;
+      if (looksLikePromptEcho(cleaned)) continue;
+
+      // Check that this isn't just the full page (too broad)
+      // — if it's within 5% of the page length AND we have smaller candidates, skip it
+      const pageLen = (main.innerText || "").length;
+      if (cleaned.length > pageLen * 0.95 && candidates.length > 3) continue;
+
+      // Check it's not mostly the prompt
+      if (sentPromptText.length > 50) {
+        const promptStart = sentPromptText.slice(0, 60).trim();
+        if (cleaned.startsWith(promptStart) && cleaned.length < sentPromptText.length * 1.5) {
+          continue;
+        }
+      }
+
+      return cleaned;
+    }
+
+    // ═══ Strategy B: Selector-based (legacy, still useful as fallback) ═══
     const s0Selectors = [
-      // 2024-2025 selectors
       "[data-message-author-role='assistant']",
-      // 2025-2026 conversation turn containers
       "[data-testid*='conversation-turn']",
-      // Article-based layout
       "article",
-      // Div-based message containers
       "div[class*='markdown']",
       "div[class*='prose']",
       "div.markdown",
-      // Message group containers
       "[class*='agent-turn']",
-      "[class*='message']",
     ];
 
     for (const sel of s0Selectors) {
       try {
         const els = document.querySelectorAll(sel);
         if (els.length === 0) continue;
-        // For turn/message selectors, take the LAST one (assistant response)
-        // For markdown/prose, take the last one that's long enough
         for (let i = els.length - 1; i >= 0; i--) {
-          const el = els[i];
-          const text = (el.innerText || "").trim();
-          // Must be substantial and not just our prompt
-          if (text.length > 100) {
-            // Reject UI chrome fragments
-            if (/^Extended\s*Pro$/i.test(text.trim())) continue;
-            // Reject prompt echoes ("你说：..." or text matching the prompt)
-            if (looksLikePromptEcho(text)) continue;
-            // Legacy check (backup)
-            if (sentPromptText.length > 30) {
-              const promptStart = sentPromptText.slice(0, 40).trim();
-              if (text.startsWith(promptStart) && text.length < sentPromptText.length * 1.2) {
-                continue;
-              }
-            }
-            return text;
+          const text = (els[i].innerText || "").trim();
+          const cleaned = cleanText(text);
+          if (cleaned.length < 200) continue;
+          if (looksLikePromptEcho(cleaned)) continue;
+          if (sentPromptText.length > 30) {
+            const ps = sentPromptText.slice(0, 40).trim();
+            if (cleaned.startsWith(ps) && cleaned.length < sentPromptText.length * 1.2) continue;
           }
+          return cleaned;
         }
       } catch {}
     }
 
-    // ═══ Fallback: grab all text from main, then post-process ═══
-    const main = document.querySelector("main");
-    if (!main) return "";
+    // ═══ Strategy C: Full-page text minus prompt (absolute fallback) ═══
     const fullText = (main.innerText || "").trim();
-    if (fullText.length < 10) return "";
+    if (fullText.length < 100) return "";
 
-    // Step 1: Try to find our prompt in the page and take text AFTER it
-    let responseText = "";
-    if (sentPromptText.length > 20) {
-      // Try multiple anchor lengths (ChatGPT may reformat the prompt)
+    // Try to locate prompt in page text and take everything after it
+    if (sentPromptText.length > 30) {
       for (const anchorLen of [80, 50, 30]) {
         const anchor = sentPromptText.slice(0, anchorLen).trim();
         const idx = fullText.indexOf(anchor);
         if (idx >= 0) {
-          // Find where the prompt ends — try exact match from the end too
           let endIdx = idx + sentPromptText.length;
-
-          // Also try matching the last part of the prompt
           if (sentPromptText.length > 60) {
-            const tailAnchor = sentPromptText.slice(-40).trim();
-            const tailIdx = fullText.indexOf(tailAnchor, idx);
-            if (tailIdx >= 0) {
-              endIdx = Math.max(endIdx, tailIdx + tailAnchor.length);
-            }
+            const tail = sentPromptText.slice(-40).trim();
+            const tailIdx = fullText.indexOf(tail, idx);
+            if (tailIdx >= 0) endIdx = Math.max(endIdx, tailIdx + tail.length);
           }
-
-          const after = fullText.slice(endIdx).trim();
-          if (after.length > 5) {
-            responseText = after;
-            break;
-          }
+          const after = cleanText(fullText.slice(endIdx));
+          if (after.length > 100) return after;
         }
       }
     }
 
-    // Step 2: Line-diff against post-send snapshot
-    // Only return lines that are NEW (not present when we clicked send)
-    if (responseText.length < 5 && postSendLines.size > 0) {
-      const currentLines = fullText.split("\n");
-      const newLines = currentLines.filter(l => {
+    // Strategy D: Line-diff against post-send snapshot
+    if (postSendLines.size > 0) {
+      const newLines = fullText.split("\n").filter(l => {
         const t = l.trim();
-        return t.length > 0 && !postSendLines.has(t);
+        return t.length > 0 && !postSendLines.has(t) && !isChromeLine(t);
       });
-      if (newLines.length > 0) {
-        responseText = newLines.join("\n").trim();
-      }
-    }
-
-    // Step 2b: If still nothing, try removing prompt from full text
-    if (responseText.length < 5) {
-      responseText = fullText;
-      if (sentPromptText.length > 20) {
-        const idx = responseText.indexOf(sentPromptText.slice(0, 50).trim());
-        if (idx >= 0) {
-          const after = responseText.slice(idx + sentPromptText.length).trim();
-          if (after.length > 5) {
-            responseText = after;
-          }
+      if (newLines.length > 3) {
+        const diffText = newLines.join("\n").trim();
+        if (diffText.length > 100 && !looksLikePromptEcho(diffText)) {
+          return diffText;
         }
       }
-    }
-
-    // Step 3: Clean UI chrome lines
-    const lines = responseText.split("\n");
-    const cleaned = lines.filter(line => {
-      const t = line.trim();
-      if (!t) return true;
-      // Remove known chrome
-      if (/^(进阶专业|ChatGPT\s*也可能会犯错|请核查重要信息|查看\s*Cookie|Cookie\s*首选项)/.test(t)) return false;
-      if (/^(ChatGPT can make mistakes|Check important info)/.test(t)) return false;
-      if (/^Extended\s*Pro$/i.test(t)) return false;
-      if (/^(Deep research|Deep thinking|Reasoning)$/i.test(t)) return false;
-      if (/^Thought for \d+/.test(t)) return false;
-      if (/^(你说|You said|ChatGPT\s*说|ChatGPT\s*said)[：:]?\s*$/.test(t)) return false;
-      if (/^(正在思考|正在搜索|Searching)/.test(t)) return false;
-      // Remove PDF filename line and bare "main" artifacts
-      if (/^main(\.pdf)?\s*$/.test(t)) return false;
-      if (/^PDF\s*$/.test(t)) return false;
-      return true;
-    }).join("\n").trim();
-
-    // Step 4: Final check — don't return text that IS the prompt
-    if (cleaned.length > 5) {
-      if (looksLikePromptEcho(cleaned)) return "";
-      // Legacy backup
-      const promptStart = sentPromptText.slice(0, 40).trim();
-      if (promptStart && cleaned.startsWith(promptStart) && cleaned.length < sentPromptText.length * 1.2) {
-        return "";
-      }
-      return cleaned;
     }
 
     return "";
@@ -850,18 +853,31 @@
 
         if (responseText === lastText) {
           stableCount++;
-          // Return when stable AND either not generating, or stable for long
-          // enough that "thinking" indicator is likely stale (ChatGPT 5.4
-          // keeps [class*='thinking'] present even after output completes).
-          // Short responses (<2000 chars) need more stability checks — ChatGPT 5.4
-          // often emits a brief "thinking" text before extended processing,
-          // which looks stable but is just the preamble to the real response.
-          const minChecks = responseText.length < 2000 ? STABLE_CHECKS * 3 : STABLE_CHECKS;
+          // Determine minimum stability checks based on response size.
+          // Large responses (>=2000 chars) are almost certainly real — 3 checks.
+          // Medium (200-2000) — 5 checks (guard against thinking preamble).
+          // Tiny (<200) — 9 checks (likely UI chrome, wait longer).
+          let minChecks;
+          if (responseText.length >= 2000) {
+            minChecks = STABLE_CHECKS;        // 3
+          } else if (responseText.length >= 200) {
+            minChecks = STABLE_CHECKS + 2;    // 5
+          } else {
+            minChecks = STABLE_CHECKS * 3;    // 9
+          }
+
           const stableEnough = stableCount >= minChecks && !generating;
-          const stableOverride = stableCount >= minChecks + 2;
+          // Override: if stable for very long regardless of gen flag
+          // (ChatGPT 5.4 sometimes keeps stale [class*='thinking'])
+          const stableOverride = stableCount >= minChecks + 3;
           if (stableEnough || stableOverride) {
             log(`Response complete: ${responseText.length} chars (stable ${stableCount * STABLE_INTERVAL / 1000}s, gen=${generating})`);
             return responseText;
+          }
+
+          // Log progress for short responses
+          if (responseText.length < 2000 && stableCount % 3 === 0) {
+            log(`Short response (${responseText.length} chars) — waiting for real review (${elapsed}s)`);
           }
         } else {
           stableCount = 0;
@@ -886,15 +902,17 @@
 
     try {
       // Navigate to a fresh chat page if we're not already on one.
-      // This prevents context buildup from prior conversations.
-      // PDF base64 data is re-fetched from the server after navigation.
+      // IMPORTANT: Only redirect if we're actively processing a task.
+      // Never hijack the user's normal ChatGPT browsing.
       if (!isOnNewChatPage()) {
-        log(`Not on fresh chat — navigating to chatgpt.com ...`);
+        // Mark that WE are about to navigate (not the user)
+        GM_setValue("oracle_navigating", true);
         GM_setValue("nav_task_id", task_id);
         setTaskPhase("navigating");
+        log(`Not on fresh chat — navigating to chatgpt.com ...`);
         busy = false;
         updatePanel();
-        window.location.href = "https://chatgpt.com/";
+        window.location.href = "https://chatgpt.com/?oracle=1";
         return; // Script re-inits on new page, resumes from init()
       }
 
@@ -1015,11 +1033,19 @@
   // ── Main loop ────────────────────────────────────────────────────────
   async function pollLoop() {
     while (true) {
+      // Re-read active state each iteration (user may toggle mid-loop)
+      active = GM_getValue("oracle_active", false);
       if (active && !busy) {
         try {
           const task = await serverGet("/task");
           if (task && task.task_id && task.status !== "idle") {
-            await processTask(task);
+            // Double-check active right before processing
+            // (user might have paused between poll and response)
+            if (!GM_getValue("oracle_active", false)) {
+              log("Task available but oracle is PAUSED — skipping");
+            } else {
+              await processTask(task);
+            }
           }
         } catch (err) {
           // Server offline — silently continue
@@ -1034,20 +1060,30 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Oracle Bridge v4.4 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`Oracle Bridge v4.5 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
-    // Check if we navigated here to process a task on a fresh chat page
+    // Check if WE navigated here (not the user clicking around)
     const phase = getTaskPhase();
     const navTaskId = GM_getValue("nav_task_id", "");
+    const oracleNav = GM_getValue("oracle_navigating", false);
+    const urlHasOracleFlag = window.location.search.includes("oracle=1");
 
-    if (phase === "navigating" && navTaskId) {
-      log(`Resuming after navigation for task: ${navTaskId}`);
+    // Only resume task processing if this navigation was initiated by oracle
+    if (phase === "navigating" && navTaskId && (oracleNav || urlHasOracleFlag)) {
+      log(`Resuming after oracle navigation for task: ${navTaskId}`);
       GM_setValue("nav_task_id", "");
+      GM_setValue("oracle_navigating", false);
       clearTaskState();
+
+      // Clean oracle flag from URL without triggering navigation
+      if (urlHasOracleFlag) {
+        const cleanUrl = window.location.href.replace(/[?&]oracle=1/, "").replace(/\?$/, "");
+        history.replaceState(null, "", cleanUrl);
+      }
+
       await sleep(3000); // Let fresh chat page fully load
 
       // Re-fetch the full task (including PDF base64) from the server.
-      // The server keeps pending_task until a result is posted.
       try {
         const task = await serverGet("/task");
         if (task && task.task_id && task.status !== "idle") {
@@ -1060,7 +1096,10 @@
         log(`Failed to re-fetch task after navigation: ${e.message}`);
       }
     } else if (phase === "navigating") {
-      // Stale navigating state without task_id — clear it
+      // Stale navigating state or user-initiated navigation — clear it, don't hijack
+      log("Clearing stale navigation state (user browsing, not oracle)");
+      GM_setValue("nav_task_id", "");
+      GM_setValue("oracle_navigating", false);
       clearTaskState();
     }
 
