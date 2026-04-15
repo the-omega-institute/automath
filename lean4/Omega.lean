@@ -212,6 +212,7 @@ import Omega.SPG.CoarsegrainedCutFlux
 import Omega.SPG.DyadicTopInversionBound
 import Omega.SPG.DyadicFiniteMomentCompleteness
 import Omega.SPG.BoundaryGodelFiniteMomentCompleteness
+import Omega.SPG.BoundaryGodelDimensionSeparatedUnionMax
 import Omega.SPG.PolycubeIsoperimetryUpper
 import Omega.SPG.RandomBulkBoundarySaturation
 import Omega.SPG.CutFunctionSubmodular

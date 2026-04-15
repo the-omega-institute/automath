@@ -1,7 +1,7 @@
 import Mathlib.Tactic
 import Omega.Experiments.ParryBaselineGapSturmian
 
-namespace Omega.Experiments.ParryBaselineGapSturmian
+namespace Omega.Experiments.ParryBaselineGapSturmianExp
 
 set_option maxHeartbeats 400000 in
 /-- Exponential-decay corollary of the Parry/Sturmian baseline gap: once the lower bound from
@@ -16,8 +16,9 @@ theorem paper_parry_gap_exp
     (hZero : zeroCylinderMass = π0 * φ * (φ⁻¹) ^ m) :
     1 - tvDist ≤ (m + 1 : ℝ) * π0 * φ * (φ⁻¹) ^ m := by
   have hGap :=
-    paper_parry_baseline_gap_sturmian m tvDist supportMass zeroCylinderMass hSupport hTV
+    Omega.Experiments.ParryBaselineGapSturmian.paper_parry_baseline_gap_sturmian
+      m tvDist supportMass zeroCylinderMass hSupport hTV
   rw [hZero] at hGap
   linarith
 
-end Omega.Experiments.ParryBaselineGapSturmian
+end Omega.Experiments.ParryBaselineGapSturmianExp
