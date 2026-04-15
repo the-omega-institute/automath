@@ -135,6 +135,7 @@ import Omega.Folding.EntropyRandomResidues
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.BernoulliHalfEndpoints
 import Omega.Folding.BernoulliPEndpointExactFinite
+import Omega.Folding.BernoulliPEndpointLdpRestated
 import Omega.Folding.BernoulliPGammaMax
 import Omega.Folding.BernoulliPBitpairLaw
 import Omega.Folding.BernoulliPJordanResonance
@@ -540,6 +541,7 @@ import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
 import Omega.Zeta.FinitePartCyclicLiftReducedConstantClosed
 import Omega.Zeta.FinitePartCyclicLiftMobiusInversion
+import Omega.Zeta.FinitePartCyclicLiftDirichletMultipleSum
 import Omega.Zeta.FinitePartSingleQTorsionReconstruction
 import Omega.Zeta.FinitePartCyclicLiftZetaTorsionDeterminesSpectrum
 import Omega.Zeta.FinitePartSingleLayerSquareRootTest
