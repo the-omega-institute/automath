@@ -835,7 +835,7 @@ import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6VisibleCartanQuotientSyzygySplitting
 import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
 import Omega.GU.Window6B3C3EvenMomentGapLaplaceDomination
-import Omega.GU.Window6B3C3SphericalCubatureStrengthFive
+import Omega.GU.Window6B3C3SphericalCubatureStrength5
 import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
 import Omega.GU.Window6C3SupportCount
 import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
@@ -931,6 +931,7 @@ import Omega.CircleDimension.DoubleDiscriminant
 import Omega.CircleDimension.WdimBettiAverageLaw
 import Omega.CircleDimension.ComovingDefectDeltaBound
 import Omega.CircleDimension.UnitarySliceDecidable
+import Omega.CircleDimension.PhaseRegisterCommonAssignments
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.Zeta.VandermondeResultantSeeds
 import Omega.GU.ZeroDefectExpRate
@@ -951,6 +952,7 @@ import Omega.Zeta.EnergyTailMassSeeds
 import Omega.Conclusion.WallisFactorMonoid
 import Omega.POM.CRTSpatializationPrimeBudget
 import Omega.SPG.GodelDoublelogMinkowski
+import Omega.SPG.BoundaryCylinderGodelizationClarity
 import Omega.SPG.BoundaryGodelVolumeUpperbound
 import Omega.SPG.BulkBoundaryGodelDimensionSandwich
 import Omega.Conclusion.DisjointnessPowerWordDecomposition
