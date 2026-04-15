@@ -11,6 +11,13 @@ theorem spg_boundary_godel_doublelog_scale
     boundaryGodelDim ≤ boundaryGrowth ∧ boundaryGrowth ≤ boundaryGodelDim := by
   simp [hScale]
 
+/-- Paper-facing wrapper for the dyadic boundary Gödel double-log scale comparison.
+    prop:spg-dyadic-boundary-godel-doublelog-scale -/
+theorem paper_spg_dyadic_boundary_godel_doublelog_scale
+    (boundaryGodelDim boundaryGrowth : ℝ) (hScale : boundaryGodelDim = boundaryGrowth) :
+    boundaryGodelDim ≤ boundaryGrowth ∧ boundaryGrowth ≤ boundaryGodelDim := by
+  simpa using spg_boundary_godel_doublelog_scale boundaryGodelDim boundaryGrowth hScale
+
 /-- Publication-facing bulk/boundary Gödel-dimension sandwich: combine the boundary double-log
 scale identification with the existing dyadic boundary-face growth sandwich to squeeze the
 boundary Gödel dimension between the bulk dimension and its isoperimetric lower envelope.
