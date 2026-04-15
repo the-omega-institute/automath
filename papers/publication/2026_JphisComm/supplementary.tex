@@ -28,6 +28,8 @@
 \newtheorem{proposition}{Proposition}[section]
 \newtheorem{lemma}[proposition]{Lemma}
 \newtheorem{corollary}[proposition]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[proposition]{Remark}
 
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\EE}{\mathbb{E}}
@@ -42,7 +44,7 @@
 {\large for ``Two detector-defined shells from stationary Unruh--DeWitt click records in static KMS spacetimes''}\par
 \end{center}
 
-This Supplementary Material records the derivations supporting the main text. In addition to the shell equations and inverse formulas, we include the explicit proofs of the soft-dead-time limit and the sub-Poisson counting law for the finite-recovery renewal process.
+This Supplementary Material records the derivations supporting the main text. In addition to the shell equations and inverse formulas, we include the explicit proofs of the soft-dead-time limit and the sub-Poisson counting law for the finite-recovery renewal process. In the finite-recovery regime the symbolic support is the full two-shift, so the relevant maximal-entropy benchmark is its Parry measure, namely the fair Bernoulli law \cite{LindMarcus1995}.
 
 \section{Ideal dead time and the Parry threshold}
 
@@ -78,7 +80,7 @@ For the ideal dead-time detector,
 \end{corollary}
 
 \begin{proof}
-By \cref{prop:supp-ideal-markov}, the only free transition probability of the sampled output is $P_\beta(0,0)=p_\beta$. Matching the Parry matrix therefore requires $p_\beta=\varphi^{-1}$, or equivalently $\Gamma_+\Delta\tau=\log\varphi$.
+By \cref{prop:supp-ideal-markov}, the only free transition probability of the sampled output is $P_\beta(0,0)$. Matching the Parry matrix therefore requires $P_\beta(0,0)=\varphi^{-1}$, hence $p_\beta=\varphi^{-1}$. This is equivalent to $\Gamma_+\Delta\tau=\log\varphi$.
 \end{proof}
 
 \section{Finite recovery as a renewal process}\label{sec:supp-renewal}
@@ -178,7 +180,15 @@ The tail of the gap law is
 \sum_{j\ge k}g_j=
 \frac{\kappa_{\mathrm r}p^k-\Gamma c^k}{\kappa_{\mathrm r}-\Gamma}.
 \]
-This gives \cref{eq:supp-hazard}. Direct subtraction yields \cref{eq:supp-hazard-diff}. If the visible process were finite-order Markov, the next-click probability after a long run of zeros would eventually depend only on a fixed finite suffix, hence would be constant on sufficiently long zero runs. The strict monotonicity of $h_k$ excludes that possibility.
+This gives \cref{eq:supp-hazard}. Direct subtraction yields \cref{eq:supp-hazard-diff}. If the visible process were an $r$-step Markov chain for some finite $r$, then for every $k\ge r$,
+\[
+h_k
+=
+\PP(A_{k+1}=1\mid A_0=1,\ A_1=\cdots=A_k=0)
+=
+\PP(A_{r+1}=1\mid A_1=\cdots=A_r=0),
+\]
+where the second equality uses the $r$-step Markov property and stationarity. Thus $(h_k)_{k\ge r}$ would be constant, contrary to the strict increase in \cref{eq:supp-hazard-diff}. Hence no finite-order Markov reduction is possible.
 \end{proof}
 
 \begin{proposition}\label{prop:supp-cov}
@@ -222,7 +232,18 @@ Evaluating at $e_D$ yields
 \[
 e_D^\top P^{n-1}u=\rho+\lambda^{n-1}(a-\rho),
 \]
-which proves \cref{eq:supp-cov}. The inequality $a<\rho<1-p$ follows because $\rho$ is a strict convex combination of $a$ and the ready-state click probability $1-p$. Solving $\lambda=0$ gives \cref{eq:supp-critical}.
+which proves \cref{eq:supp-cov}. The inequality $a<\rho<1-p$ follows because $\rho$ is a strict convex combination of $a$ and the ready-state click probability $1-p$. Solving $\lambda=0$ gives \cref{eq:supp-critical}. The uniqueness follows because
+\[
+\Gamma\longmapsto \frac{\log\kappa_{\mathrm r}-\log\Gamma}{\kappa_{\mathrm r}-\Gamma}
+\]
+is strictly decreasing on $(0,\infty)\setminus\{\kappa_{\mathrm r}\}$ and extends continuously across $\Gamma=\kappa_{\mathrm r}$ with value $1/\kappa_{\mathrm r}$. Indeed, with $y=\kappa_{\mathrm r}/\Gamma$,
+\[
+\frac{d}{d\Gamma}
+\frac{\log\kappa_{\mathrm r}-\log\Gamma}{\kappa_{\mathrm r}-\Gamma}
+=
+-\frac{y-1-\log y}{(\kappa_{\mathrm r}-\Gamma)^2}<0
+\]
+for $\Gamma\neq\kappa_{\mathrm r}$, because $y-1-\log y>0$ whenever $y\neq1$.
 \end{proof}
 
 \begin{corollary}\label{cor:supp-1dep}
@@ -233,15 +254,35 @@ At the critical line \cref{eq:supp-critical}, the stationary finite-recovery out
 \end{corollary}
 
 \begin{proof}
-At the critical line, the hidden-state transition matrix has rank one because its nontrivial eigenvalue vanishes, so $P=\mathbf 1\pi$. Insert this factor between any cylinder event depending on the past and any cylinder event depending on the future beginning at time $2$. The factorization through $\mathbf 1\pi$ decouples the hidden state at the separating step and yields independence.
+At the critical line, the hidden-state transition matrix has rank one because its nontrivial eigenvalue vanishes, so $P=\mathbf 1\pi$. Let
+\[
+U=\{A_{-m}=u_{-m},\dots,A_0=u_0\},
+\qquad
+V=\{A_2=v_2,\dots,A_n=v_n\}
+\]
+be cylinder events, and write
+\[
+T_u=T_{u_{-m}}\cdots T_{u_0},
+\qquad
+T_v=T_{v_2}\cdots T_{v_n}.
+\]
+If $\pi$ also denotes the stationary hidden-state row vector, then
+\[
+\PP(U\cap V)=\pi T_uPT_v\mathbf 1.
+\]
+Using $P=\mathbf 1\pi$, this becomes
+\[
+\PP(U\cap V)=\bigl(\pi T_u\mathbf 1\bigr)\bigl(\pi T_v\mathbf 1\bigr)=\PP(U)\PP(V).
+\]
+Cylinder events generate $\sigma(A_i:i\le0)$ and $\sigma(A_j:j\ge2)$, so the two $\sigma$-fields are independent.
 \end{proof}
 
 \begin{corollary}\label{cor:supp-no-exact}
-No finite-recovery detector with positive parameters $(\Gamma,\kappa_{\mathrm r},\Delta\tau)$ realizes exact symbolic thermality within the full-support renewal class.
+No finite-recovery detector with positive parameters $(\Gamma,\kappa_{\mathrm r},\Delta\tau)$ coincides with a Bernoulli process. In particular, it does not realize the Parry measure of the full two-shift.
 \end{corollary}
 
 \begin{proof}
-The full-support Bernoulli benchmark would require constant hazard. By \cref{prop:supp-hazard}, the finite-recovery hazard is strictly increasing. Therefore the finite-recovery renewal law cannot coincide with the zero-jitter benchmark.
+A Bernoulli process has constant hazard. By \cref{prop:supp-hazard}, the finite-recovery hazard is strictly increasing. Therefore the finite-recovery renewal law cannot coincide with any Bernoulli benchmark.
 \end{proof}
 
 \section{Soft dead time and finite-window concentration}\label{sec:supp-soft}
@@ -397,6 +438,7 @@ and the weak-coupling response rate is
 \begin{equation}\label{eq:supp-kms-rate}
 \Gamma_+(x,\Omega)=\lambda_c^2\frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1}.
 \end{equation}
+Here $\mathcal S_x(\Omega)$ is the local commutator spectral weight \cite{KayWald1991,BuchholzSchlemmer2007,Solveen2012,GranseePinamontiVerch2017}.
 Substituting the ideal and memory thresholds yields the shell equations
 \begin{equation}\label{eq:supp-shell-phi}
 \frac{\lambda_c^2\mathcal S_x(\Omega)\Delta\tau}{e^{\beta_\infty N(x)\Omega}-1}=\log\varphi,
