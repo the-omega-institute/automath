@@ -73,6 +73,7 @@ import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Experiments.MetallicMeanGoldenUniqueOptimalTVConstant
 import Omega.POM.S4Asymptotic
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
+import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
 import Omega.POM.OrderSpatialization
 import Omega.Folding.LocalWeightRigidityFibonacci
@@ -534,6 +535,7 @@ import Omega.Zeta.IntroAnalytic
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.IntroCyclicReconstruction
 import Omega.Zeta.FinitePartCyclicLiftReducedConstantClosed
+import Omega.Zeta.FinitePartCyclicLiftMobiusInversion
 import Omega.Zeta.FinitePartSingleQTorsionReconstruction
 import Omega.Zeta.FinitePartCyclicLiftZetaTorsionDeterminesSpectrum
 import Omega.Zeta.FinitePartSingleLayerSquareRootTest
