@@ -569,6 +569,7 @@ import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Conclusion.BoundaryStokesObservationMinimalDimension
+import Omega.Conclusion.FoldbinGroupoidTracialSimplex
 import Omega.CircleDimension.BareCircleNotCompleteCarrier
 import Omega.CircleDimension.BasicComputation
 import Omega.CircleDimension.SignedCircleDimension
@@ -773,6 +774,7 @@ import Omega.CircleDimension.PoissonEntropyTomography
 import Omega.CircleDimension.DoubleDiscriminant
 import Omega.CircleDimension.WdimBettiAverageLaw
 import Omega.CircleDimension.ComovingDefectDeltaBound
+import Omega.CircleDimension.UnitarySliceDecidable
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.Zeta.VandermondeResultantSeeds
 import Omega.GU.ZeroDefectExpRate
@@ -866,3 +868,4 @@ import Omega.Zeta.TwistedDeterminantRigidity
 import Omega.Zeta.TwistedDeterminantCumulants
 import Omega.Zeta.CLTSpectral
 import Omega.Zeta.RhoGapM12
+import Omega.Zeta.ComovingEnergyDeltaBound
