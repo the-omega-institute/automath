@@ -111,6 +111,7 @@ import Omega.Folding.PhiMemoryThresholdExact
 import Omega.Folding.BlockCountsThreshold
 import Omega.Folding.LinearTimeBlockDecoding
 import Omega.Folding.YmExactSFTOrder
+import Omega.Folding.FoldSuitePublication
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -395,6 +396,7 @@ import Omega.Zeta.RootSeparation
 import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Zeta.SyncRhoM2Publication
 import Omega.Zeta.SyncKernelSpectrum
+import Omega.Zeta.CyclicFredholmRealization
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -617,6 +619,7 @@ import Omega.GroupUnification.ChiralOrthogonalityTypeObservables
 import Omega.GroupUnification.ExactClock
 import Omega.GroupUnification.FiniteTimeLaw
 import Omega.GroupUnification.TiltDynamics
+import Omega.GroupUnification.TiltedFreeEnergy
 import Omega.GroupUnification.FreeEnergyComposition
 import Omega.CD.AnomalyCompressionOverhead
 import Omega.CD.PeriodicPointCount
