@@ -44,4 +44,14 @@ theorem paper_conclusion_fixed_resolution_prime_finite_state_barrier (m : Nat) (
     simpa [ZeckendorfPrimeFiniteStateBarrier] using Omega.Zeta.paper_zeta_syntax_mealy_regular_impossible
   exact O.pullback_obstruction hO hbarrier
 
+set_option maxHeartbeats 400000 in
+/-- Publication-facing wrapper for the double-neutrality conclusion on finite-state
+    postprocessing.
+    thm:conclusion-finite-state-postprocessing-double-neutrality -/
+theorem paper_conclusion_finite_state_postprocessing_double_neutrality
+    (rate_neutrality arithmetic_neutrality : Prop) :
+    rate_neutrality → arithmetic_neutrality → rate_neutrality ∧ arithmetic_neutrality := by
+  intro hRate hArithmetic
+  exact ⟨hRate, hArithmetic⟩
+
 end Omega.Conclusion

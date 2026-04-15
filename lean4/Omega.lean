@@ -265,6 +265,7 @@ import Omega.SPG.LinearMomentHolographyMinimalDimension
 import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.RegisterLowerBound
 import Omega.SPG.CollisionProfileRestoration
+import Omega.SPG.BoundedTypeSturmianConstantWidthCertificate
 import Omega.Conclusion.FixedResolutionPrimeBarrierPostprocessingNeutrality
 import Omega.SPG.PrimeRegisterBudgetLowerBound
 import Omega.SPG.CubePotentialCurl

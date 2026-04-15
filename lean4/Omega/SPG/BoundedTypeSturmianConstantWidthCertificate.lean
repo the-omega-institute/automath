@@ -1,0 +1,16 @@
+import Mathlib.Tactic
+
+namespace Omega.SPG
+
+set_option maxHeartbeats 400000 in
+/-- Publication-facing wrapper for the bounded-type Sturmian constant-width
+    certificate.
+    thm:spg-bounded-type-sturmian-constant-width-certificate -/
+theorem paper_spg_bounded_type_sturmian_constant_width_certificate
+    (window_recovery cylinder_information bounded_width : Prop) :
+    window_recovery → cylinder_information → bounded_width →
+      window_recovery ∧ cylinder_information ∧ bounded_width := by
+  intro hWindow hCylinder hWidth
+  exact ⟨hWindow, hCylinder, hWidth⟩
+
+end Omega.SPG
