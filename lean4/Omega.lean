@@ -759,6 +759,7 @@ import Omega.POM.CouplingExpectationBound
 import Omega.POM.LeyangMonotoneCouplingPrimeRegister
 import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.BlockConsistencyRateBlockReduction
+import Omega.POM.MicrocanonicalAdaptiveNoGain
 import Omega.POM.DoubleTransversalNormalForm
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantEllipseLedger
@@ -828,6 +829,7 @@ import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6VisibleCartanQuotientSyzygySplitting
 import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
 import Omega.GU.Window6B3C3EvenMomentGapLaplaceDomination
+import Omega.GU.Window6B3C3SphericalCubatureStrengthFive
 import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
 import Omega.GU.Window6C3SupportCount
 import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
@@ -979,6 +981,7 @@ import Omega.POM.ThickFiberEnvelope
 import Omega.POM.VisibleThickTail
 import Omega.POM.CollisionEntropyRate
 import Omega.POM.MicrocanonicalBandBounds
+import Omega.Conclusion.PrimeRegisterFiberCdimDensity
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
 import Omega.Conclusion.FibonacciAnomalyBlock
