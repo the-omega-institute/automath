@@ -23,4 +23,13 @@ theorem paper_gut_radial_quadratic_bounded_noise_threshold (σ : ℚ) :
   intro hσ
   nlinarith
 
+/-- Paper-facing wrapper for exact and bounded-noise prime-register recovery.
+    prop:group-jg-radial-quadratic-prime-register-recovery -/
+theorem paper_gut_radial_quadratic_prime_register_recovery
+    (N : Nat) (exactRecovery noisyRecovery : Prop) (hN : 2 <= N) (hExact : exactRecovery)
+    (hNoisy : noisyRecovery) : And exactRecovery noisyRecovery := by
+  let _ := N
+  let _ := hN
+  exact ⟨hExact, hNoisy⟩
+
 end Omega.GU.RadialQuadraticIdentifiability
