@@ -776,6 +776,9 @@ def detect_signature_degradation(wt: WorktreeInfo) -> list[str]:
     except Exception:
         return violations  # can't check, allow through
 
+    if not diff_out:
+        return violations  # empty diff or None → nothing to check
+
     # Find blocks that add a `theorem paper_` with ONLY Prop parameters
     # Pattern: lines starting with `+theorem paper_` whose signature uses only `Prop`
     import re as _re
