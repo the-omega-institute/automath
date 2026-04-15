@@ -24,6 +24,9 @@ on:
         type: number
         default: 90
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-main-pdf:
     name: Build main.pdf
@@ -44,6 +47,21 @@ jobs:
 
       - name: Allow git metadata access in container
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Restore LaTeX aux cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.aux
+            theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.bbl
+            theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.blg
+            theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.fdb_latexmk
+            theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.fls
+            theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.out
+            theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.toc
+          key: ${{ runner.os }}-latex-aux-${{ hashFiles('theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.tex', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/latexmkrc', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/*.bib', 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/**/*.tex') }}
+          restore-keys: |
+            ${{ runner.os }}-latex-aux-
 
       - name: Build main.pdf
         run: |
