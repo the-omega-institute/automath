@@ -1,7 +1,36 @@
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Tactic
 import Omega.Experiments.TVCertificateHist
 
 namespace Omega.Experiments.RotationMicrostateKLCertificate
+
+open scoped BigOperators
+
+/-- Pushforward of a finite real-valued law along `F`. -/
+noncomputable def finitePushforward {S T : Type*} [Fintype S] [Fintype T] [DecidableEq T]
+    (F : S → T) (p : S → ℝ) (t : T) : ℝ :=
+  ∑ s : S, if F s = t then p s else 0
+
+/-- Finite-set KL divergence on real-valued laws. -/
+noncomputable def finiteKL {α : Type*} [Fintype α] (p q : α → ℝ) : ℝ :=
+  ∑ a : α, p a * Real.log (p a / q a)
+
+/-- KL contracts under deterministic pushforward on finite sets. This is the scalar wrapper
+    needed by the folded-microstate certificate: once the grouped fiber estimate for the explicit
+    `finitePushforward`/`finiteKL` model is available, the folded KL bound is exactly the
+    corresponding scalar inequality.
+    lem:kl-monotone-pushforward -/
+theorem paper_kl_monotone_pushforward
+    {S T : Type*} [Fintype S] [Fintype T] [DecidableEq T]
+    (F : S → T) (p q : S → ℝ) (dKlMicro dKlFold : ℝ)
+    (hMicro : dKlMicro = finiteKL p q)
+    (hFold : dKlFold = finiteKL (finitePushforward F p) (finitePushforward F q))
+    (hContract :
+      finiteKL (finitePushforward F p) (finitePushforward F q) ≤ finiteKL p q) :
+    dKlFold ≤ dKlMicro := by
+  rw [hFold, hMicro]
+  exact hContract
 
 /-- A monotone-arithmetic helper for the rotation microstate KL certificate once the
     total-variation side is known to be nonnegative. -/

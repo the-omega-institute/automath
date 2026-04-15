@@ -69,6 +69,7 @@ import Omega.Folding.HankelSpectrum
 import Omega.Experiments.ParryBaselineGapSturmian
 import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Experiments.MetallicMeanGoldenUniqueOptimalTVConstant
+import Omega.POM.S4Asymptotic
 import Omega.Folding.LocalWeightRigidityFibonacci
 import Omega.Folding.LocalWeightRigidityPublication
 import Omega.Folding.StableSyntaxCounting
@@ -108,6 +109,7 @@ import Omega.Folding.ZeroFiberLinear
 import Omega.FoldResidualTime.Window6SecondCollisionConstant
 import Omega.FoldResidualTime.ApparentRandomnessFreezingEscort
 import Omega.GU.Window6B3C3QuarticDefectOnedim
+import Omega.GU.Window6LieEnvelopeClosure
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.VisibleValueOverflow
