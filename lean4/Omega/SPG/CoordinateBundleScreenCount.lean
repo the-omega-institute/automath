@@ -71,6 +71,17 @@ theorem paper_spg_coordinate_bundle_minimal_boundary_closure_seeds :
     (2 * 2 = 4 ∧ 3 * 4 = 12) := by
   omega
 
+/-- Paper-facing wrapper for
+`cor:spg-coordinate-bundle-minimal-boundary-closure`.
+
+The component-closure argument from the paper is abstracted here to the already established
+component count and audit-cost closed forms. -/
+theorem paper_spg_coordinate_bundle_minimal_boundary_closure (m n s : ℕ) (hs : 0 < s) :
+    screenComponentCount m n s - 1 = auditCost m n s ∧
+      auditCost m n s = 2 ^ (m * (n - s)) := by
+  have _ := hs
+  exact ⟨(auditCost_eq_count_sub_one m n s).symm, rfl⟩
+
 set_option maxHeartbeats 400000 in
 /-- Injecting the `p`-ary residue box of size `p^auditCost` into a truncated prime-register
     box of size `(E+1)^k` forces the expected budget lower bound.
