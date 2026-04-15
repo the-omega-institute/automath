@@ -602,6 +602,7 @@ import Omega.EA.FibAdicTower
 import Omega.EA.PrimeRegisterLocalMoves
 import Omega.EA.MulNoNewPrimitive
 import Omega.EA.StableAddComputable
+import Omega.EA.StableAddNormalizationRealization
 import Omega.EA.InternalProductAddsValues
 import Omega.EA.PrimeRegisterMultiplicativeNormalizationAdditiveIso
 import Omega.EA.PrimeRegisterResidualLedgerGroup

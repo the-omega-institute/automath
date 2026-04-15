@@ -15,4 +15,13 @@ theorem paper_cyclic_euler_product_seeds (α r : ℤ) :
   exact ⟨euler_factor_n2 α r, euler_factor_n3 α r, euler_factor_n4 α r,
     euler_factor_n5 α r, euler_factor_n6 α r⟩
 
+/-- Publication-facing corollary name for the cyclic Euler product block identities. -/
+theorem paper_cyclic_euler_product (α r : ℤ) :
+    (1 - (α * r) • cyclicPerm2).det = 1 - (α * r) ^ 2 ∧
+      (1 - (α * r) • cyclicPerm3).det = 1 - (α * r) ^ 3 ∧
+      (1 - (α * r) • cyclicPerm4).det = 1 - (α * r) ^ 4 ∧
+      (1 - (α * r) • cyclicPerm5).det = 1 - (α * r) ^ 5 ∧
+      (1 - (α * r) • cyclicPerm6).det = 1 - (α * r) ^ 6 :=
+  paper_cyclic_euler_product_seeds α r
+
 end Omega.Zeta
