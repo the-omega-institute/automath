@@ -282,6 +282,7 @@ import Omega.SPG.CollisionProfileRestoration
 import Omega.SPG.BoundedTypeSturmianConstantWidthCertificate
 import Omega.Conclusion.FixedResolutionPrimeBarrierPostprocessingNeutrality
 import Omega.SPG.PrimeRegisterBudgetLowerBound
+import Omega.SPG.FixedAxisGodelOrderInformation
 import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CurlReconstructionPublication
 import Omega.SPG.CubePoincareInverse
@@ -733,6 +734,7 @@ import Omega.PhysicalSpacetimeSkeleton.AdmissibleGlobalEinsteinEquation
 import Omega.PhysicalSpacetimeSkeleton.LocalClockPotential
 import Omega.PhysicalSpacetimeSkeleton.LocalRedshift
 import Omega.PhysicalSpacetimeSkeleton.ProceduralGrandChain
+import Omega.PhysicalSpacetimeSkeleton.WeakFieldRedshiftPotential
 import Omega.LogicExpansionChain.ForcingPersistence
 import Omega.LogicExpansionChain.StateForcingPersistence
 import Omega.LogicExpansionChain.SemanticFidelity
@@ -794,6 +796,7 @@ import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
 import Omega.GU.FibTailP23Orbits
+import Omega.GU.FibTailP23S3ActionOnOrbitQuotient
 import Omega.GU.TerminalWindow6Sl2zHyperbolicFromTailTriple
 import Omega.GU.Window6CyclicWeightThresholdRootLength
 import Omega.GU.TerminalFoldbin6TailCubeSection
