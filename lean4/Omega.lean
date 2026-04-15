@@ -124,6 +124,7 @@ import Omega.GU.Window6BinfoldLastbitLecamEquivalence
 import Omega.GU.Window6TypeSuperselectionAutGamma6
 import Omega.GU.Window6AffineFiberOrbitClassification
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
+import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.FreeInvolutionCount
 import Omega.Folding.ModRigidityPeriodicPredicates
@@ -297,6 +298,7 @@ import Omega.SPG.ExactScreenMinimaAreMatroidBases
 import Omega.SPG.ScreenKernelConnectedComponents
 import Omega.SPG.GodelDoublelog
 import Omega.SPG.WalshStokes
+import Omega.SPG.FiberWalshL1AreaLowerBound
 import Omega.SPG.CheegerStokes
 import Omega.SPG.MomentHolographyGap
 import Omega.SPG.LinearMomentHolographyMinimalDimension
@@ -760,6 +762,7 @@ import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.PreferredMinimalInstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.CompletenessGapAudit
+import Omega.TypedAddressBiaxialCompletion.Window6ExplicitFibers
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
 import Omega.TypedAddressBiaxialCompletion.PcdimModpFormula
