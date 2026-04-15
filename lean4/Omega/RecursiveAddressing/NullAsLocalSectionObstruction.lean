@@ -64,4 +64,23 @@ theorem paper_null_as_local_section_obstruction
       (paper_recursive_addressing_readout_separatedness_null restrict).2 hinj
     exact hsep t s₀ (fun i => (ht i).trans (hs₀ i).symm)
 
+/-- Paper-facing obstruction readout: a nontrivial H2 gluing obstruction rules out any
+nonempty prefix fiber, so the fiber is empty and the existing NULL readout criterion fires.
+    prop:null-as-h2-obstruction -/
+theorem paper_null_as_h2_obstruction
+    {Addr Obj : Type}
+    (Fiber : Addr → Set Obj) (NullReadout Obstructed : Addr → Prop)
+    (htrivial : ∀ {a : Addr}, (Fiber a).Nonempty → ¬ Obstructed a)
+    (hnull : ∀ {a : Addr}, Fiber a = (∅ : Set Obj) → NullReadout a) :
+    ∀ a : Addr, Obstructed a → Fiber a = (∅ : Set Obj) ∧ NullReadout a := by
+  intro a hObs
+  have hEmpty : Fiber a = (∅ : Set Obj) := by
+    ext x
+    constructor
+    · intro hx
+      exact False.elim ((htrivial (a := a) ⟨x, hx⟩) hObs)
+    · intro hx
+      cases hx
+  exact ⟨hEmpty, hnull hEmpty⟩
+
 end Omega.RecursiveAddressing

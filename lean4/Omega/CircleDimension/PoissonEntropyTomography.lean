@@ -125,4 +125,15 @@ theorem paper_cdim_poisson_entropy_moment_tomography
     apply (eq_div_iff hsigma8).2
     linarith
 
+/-- Benchmark bridge: solve the sextic coefficient identity for `B6`, and record the
+zero-skew specialization used by the downstream tomography wrapper.
+    thm:cdim-poisson-second-order-edgeworth-benchmark -/
+theorem paper_cdim_poisson_second_order_edgeworth_benchmark
+    {B6 mu3Sq : ℝ} (hB6 : 32 * B6 = 3 * mu3Sq) :
+    B6 = (3 / 32) * mu3Sq ∧ (mu3Sq = 0 → B6 = 0) := by
+  constructor
+  · linarith
+  · intro hZero
+    linarith
+
 end Omega.CircleDimension

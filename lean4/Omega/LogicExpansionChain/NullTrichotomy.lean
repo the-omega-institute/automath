@@ -26,4 +26,29 @@ theorem paper_logic_expansion_null_trichotomy
     (fun {_} hx => hcompLoc hx)
     (fun {_} hx => hsecComp hx)
 
+/-- Logic-expansion wrapper: each chapter-local null mode forces ambient nullness by
+specializing the generic topos implications at the current state.
+    prop:logic-expansion-null-modes-imply-null -/
+theorem paper_logic_expansion_null_modes_imply_null
+    {State Ref : Type}
+    (Adm LocSec CompSec Sec : State → Ref → Prop)
+    {p : State} (r : Ref)
+    (hcompLoc : ∀ {s : State} {x : Ref}, CompSec s x → LocSec s x)
+    (hsecComp : ∀ {s : State} {x : Ref}, Sec s x → CompSec s x) :
+    (Omega.Topos.NullLoc (Adm p) (LocSec p) r → Omega.Topos.Null (Adm p) (Sec p) r) ∧
+      (Omega.Topos.NullCmp (Adm p) (LocSec p) (CompSec p) r →
+        Omega.Topos.Null (Adm p) (Sec p) r) ∧
+      (Omega.Topos.NullGlue (Adm p) (CompSec p) (Sec p) r →
+        Omega.Topos.Null (Adm p) (Sec p) r) := by
+  constructor
+  · intro hLoc
+    exact Omega.Topos.nullLoc_implies_null (Adm p) (LocSec p) (Sec p) r
+      (fun {x} hx => hcompLoc (hsecComp hx)) hLoc
+  constructor
+  · intro hCmp
+    exact Omega.Topos.nullCmp_implies_null (Adm p) (LocSec p) (CompSec p) (Sec p) r
+      (fun {x} hx => hsecComp hx) hCmp
+  · intro hGlue
+    exact Omega.Topos.nullGlue_implies_null (Adm p) (CompSec p) (Sec p) r hGlue
+
 end Omega.LogicExpansionChain
