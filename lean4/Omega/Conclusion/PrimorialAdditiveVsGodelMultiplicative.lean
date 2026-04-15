@@ -128,6 +128,18 @@ theorem paper_conclusion_primorial_additive_vs_godel_multiplicative_small :
    fun p a b => mixedRadixVal_injective_one p a b,
    fun _ p hp2 hcop => godelMul_injective_coprime p hp2 hcop⟩
 
+/-- Paper-facing wrapper for the additive/multiplicative inverse chain.
+    cor:conclusion-primorial-additive-vs-godel-multiplicative -/
+theorem paper_conclusion_primorial_additive_vs_godel_multiplicative :
+    (∀ (p : Fin 0 → ℕ), Function.Injective (godelMul p)) ∧
+    (∀ (p : Fin 1 → ℕ), (p 0).Prime → Function.Injective (godelMul p)) ∧
+    (∀ (p : Fin 1 → ℕ) (a b : Fin 1 → ℕ),
+      mixedRadixVal p a = mixedRadixVal p b → a = b) ∧
+    (∀ T (p : Fin T → ℕ), (∀ t, 2 ≤ p t) →
+      (∀ i j, i ≠ j → Nat.Coprime (p i) (p j)) →
+      Function.Injective (godelMul p)) :=
+  paper_conclusion_primorial_additive_vs_godel_multiplicative_small
+
 /-- Faithful Godel encoding requires infinite prime support: small prime witnesses.
     cor:conclusion-faithful-time-addressed-godel-needs-infinite-prime-support -/
 theorem paper_conclusion_faithful_godel_infinite_prime_support_seeds :
