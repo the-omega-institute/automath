@@ -111,6 +111,7 @@ import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Folding.EndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
 import Omega.Folding.ImageSubshiftZeta
+import Omega.Folding.MicrostateResidualWindowReachability
 import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.YmConjugacyAllMge3
 import Omega.Folding.YmSofic
@@ -202,6 +203,7 @@ import Omega.SPG.CycleRankFormula
 import Omega.SPG.BoundaryCycleRankFromEntropy
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicCubicalBoundaryInjective
+import Omega.SPG.RegularLanguageStokesDyadicZetaRationality
 import Omega.SPG.SquareclassChainComplex
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.BoundaryGodelSequenceDeterminesClosure
@@ -554,6 +556,7 @@ import Omega.Conclusion.EventEllipseGoldenMinimal
 import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.SectionLedgerKL
+import Omega.Conclusion.SectionLedgerCapacityFunctional
 import Omega.Conclusion.CdimFiniteQuotientGrowth
 import Omega.Conclusion.AffineNormalFormSemidirect
 import Omega.Conclusion.CapacityRamanujanPlateauLaw
