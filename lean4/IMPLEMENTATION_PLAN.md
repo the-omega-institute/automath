@@ -6,17 +6,19 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~51,006 |
-| 定理/定义数 | ~4,445 |
+| 总行数 | ~51,069 |
+| 定理/定义数 | ~4,448 |
 | 论文接口包装 | 800+ |
-| 文件数 | 228 |
+| 文件数 | 231 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3410 |
+| \leanverified 标注数 | 3413 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3459 |
-| 轮次 | R813（round_count=R813）|
+| 总标注数 | 3462 |
+| 轮次 | R814（round_count=R814）|
+
+**Phase R814（本轮落地，全流程执行）**：`paper_resolution_folding_natural_state_complexity_gap`（对应 `thm:natural-state-complexity-gap`，Folding；把 Fischer-cover state/edge counts、minimal right-resolving lower bound、alphabet cardinality 与 exponential representation-gap readout 汇总成 theorem-facing wrapper）；`paper_zero_jitter_general_rigidity`（对应 `thm:general-rigidity`，GroupUnification；把 Parry-relative normal form、zero-jitter cohomology criterion 与 Perron-normalization rigidification 串成 Markov-simplex rigidity theorem-facing wrapper，本轮 non-trivial 目标）；`paper_fredholm_witt_clt_spectral`（对应 `thm:clt-spectral`，Zeta；把 spectral-radius gap、analytic perturbation 与 non-coboundary positivity 压成 spectral CLT theorem-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 Folding / GroupUnification / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Folding/NaturalStateComplexityGap.lean`、`lean4/Omega/GroupUnification/GeneralRigidity.lean`、`lean4/Omega/Zeta/CLTSpectral.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_resolution_folding_natural_state_complexity_gap`、`paper_zero_jitter_general_rigidity`、`paper_fredholm_witt_clt_spectral`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_presentation.tex`（`thm:natural-state-complexity-gap`），`/Users/chronoai/automath/papers/publication/submitted_2026_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp/main.tex`（`thm:general-rigidity`），`/Users/chronoai/automath/papers/publication/2026_fredholm_witt_cyclic_block_spectral_rigidity_symbolic_zeta/sec_perturbation.tex`（`thm:clt-spectral`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R813（本轮落地，全流程执行）**：`paper_zero_jitter_general_normal_form`（对应 `thm:general-normal-form`，GroupUnification；把 Parry-relative fluctuation normal form、edge-deviation 零均值与 jitter-vs-edge variance readout 汇总成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_projection_diagonal_high_moments`（对应 `thm:diagonal-high-moments`，POM；把 diverging-tilt 与 max-fiber growth 假设压成 diagonal high-moment law 及 `S_m(m)` 自耦合读出）；`paper_fredholm_witt_twisted_determinant_cumulants`（对应 `cor:twisted-determinant-cumulants`，Zeta；把 twisted-determinant rigidity 经 dominant-eigenvalue agreement 串到 asymptotic cumulant / variance coincidence corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 GroupUnification / POM / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/GroupUnification/GeneralNormalForm.lean`、`lean4/Omega/POM/DiagonalHighMoments.lean`、`lean4/Omega/Zeta/TwistedDeterminantCumulants.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_zero_jitter_general_normal_form`、`paper_projection_diagonal_high_moments`、`paper_fredholm_witt_twisted_determinant_cumulants`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp/main.tex`（`thm:general-normal-form`），`/Users/chronoai/automath/papers/publication/2026_projection_ontological_mathematics_core_tams/sec_moment_kernel.tex`（`thm:diagonal-high-moments`），`/Users/chronoai/automath/papers/publication/2026_fredholm_witt_cyclic_block_spectral_rigidity_symbolic_zeta/sec_perturbation.tex`（`cor:twisted-determinant-cumulants`）；新增 tex theorem/corollary/lemma 环境数 0）
 
