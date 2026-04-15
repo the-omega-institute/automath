@@ -1023,3 +1023,4 @@ import Omega.Zeta.TwistedDeterminantCumulants
 import Omega.Zeta.CLTSpectral
 import Omega.Zeta.RhoGapM12
 import Omega.Zeta.ComovingEnergyDeltaBound
+import Omega.Conclusion.PrimorialMixedRadixAffine

@@ -218,4 +218,56 @@ theorem paper_pom_toggle_time_reversal_two_periods :
   constructor <;> intro ℓ hℓ <;> fin_cases hℓ <;>
     simp only [timeReversalSignExp, timeReversalFix] <;> native_decide
 
+/-- Fixed-point count of a fiberwise time-reversal involution over a list of path components. -/
+def fiberTimeReversalFixCount : List Nat → Nat
+  | [] => 1
+  | ℓ :: lengths => timeReversalFix ℓ * fiberTimeReversalFixCount lengths
+
+/-- Total number of independent-set states over a list of path components. -/
+def fiberTimeReversalVertexCount : List Nat → Nat
+  | [] => 1
+  | ℓ :: lengths => Nat.fib (ℓ + 2) * fiberTimeReversalVertexCount lengths
+
+/-- The number of transposition pairs in the involution decomposition. -/
+def fiberTimeReversalSignExp (lengths : List Nat) : Nat :=
+  (fiberTimeReversalVertexCount lengths - fiberTimeReversalFixCount lengths) / 2
+
+/-- The sign of the fiberwise time-reversal involution. -/
+def fiberTimeReversalSign (lengths : List Nat) : Int :=
+  if fiberTimeReversalSignExp lengths % 2 = 0 then 1 else -1
+
+@[simp] theorem fiberTimeReversalFixCount_eq_prod (lengths : List Nat) :
+    fiberTimeReversalFixCount lengths = (lengths.map timeReversalFix).prod := by
+  induction lengths with
+  | nil =>
+      rfl
+  | cons ℓ lengths ih =>
+      simp [fiberTimeReversalFixCount, ih]
+
+@[simp] theorem fiberTimeReversalVertexCount_eq_prod (lengths : List Nat) :
+    fiberTimeReversalVertexCount lengths = (lengths.map fun ℓ => Nat.fib (ℓ + 2)).prod := by
+  induction lengths with
+  | nil =>
+      rfl
+  | cons ℓ lengths ih =>
+      simp [fiberTimeReversalVertexCount, ih]
+
+/-- Paper-facing fixed-point product and sign closed-form package for componentwise time reversal.
+    thm:pom-toggle-time-reversal-fixedpoints-sign-closed-form -/
+theorem paper_pom_toggle_time_reversal_fixedpoints_sign_closed_form :
+    (∀ lengths : List Nat,
+      fiberTimeReversalFixCount lengths = (lengths.map timeReversalFix).prod) ∧
+    (∀ lengths : List Nat,
+      fiberTimeReversalVertexCount lengths = (lengths.map fun ℓ => Nat.fib (ℓ + 2)).prod) ∧
+    (∀ lengths : List Nat,
+      fiberTimeReversalSignExp lengths =
+        (fiberTimeReversalVertexCount lengths - fiberTimeReversalFixCount lengths) / 2) ∧
+    (∀ lengths : List Nat,
+      fiberTimeReversalSign lengths =
+        if ((fiberTimeReversalVertexCount lengths - fiberTimeReversalFixCount lengths) / 2) % 2 = 0
+        then 1 else -1) ∧
+    (∀ ℓ : Nat, 1 ≤ ℓ → timeReversalFix ℓ ≤ Nat.fib (ℓ + 2)) := by
+  exact ⟨fiberTimeReversalFixCount_eq_prod, fiberTimeReversalVertexCount_eq_prod,
+    fun _ => rfl, fun _ => rfl, timeReversalFix_le_total⟩
+
 end Omega.POM.ToggleOrder
