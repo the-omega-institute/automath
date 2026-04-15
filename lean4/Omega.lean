@@ -650,10 +650,12 @@ import Omega.Experiments.MarkovTVSampleComplexity
 import Omega.Experiments.TVCertificateHist
 import Omega.StatisticalStability.ResidueClassification
 import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
+import Omega.TypedAddressBiaxialCompletion.CausalPreorder
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
 import Omega.PhysicalSpacetimeSkeleton.AuditedSeedRankThree
 import Omega.PhysicalSpacetimeSkeleton.KernelizationTemplate
+import Omega.PhysicalSpacetimeSkeleton.InstantiationCriterion
 import Omega.LogicExpansionChain.ForcingPersistence
 import Omega.LogicExpansionChain.StateForcingPersistence
 import Omega.LogicExpansionChain.SemanticFidelity
@@ -808,6 +810,7 @@ import Omega.CircleDimension.CoherenceTimeLowerBound
 import Omega.CircleDimension.CoherenceTimeBarrier2Pow
 import Omega.CircleDimension.FiberPhaseQuantization
 import Omega.CircleDimension.CausalPreorder
+import Omega.CircleDimension.BudgetCompleteness
 import Omega.CircleDimension.PrimeTruncation
 import Omega.CircleDimension.BiphaseFiber
 import Omega.CircleDimension.PhaseSpectrumMonoid
