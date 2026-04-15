@@ -19,6 +19,7 @@ import Omega.Folding.MaxFiberHigh
 import Omega.Folding.MaxFiberTwoStep
 import Omega.Folding.FiberWeightCount
 import Omega.Folding.FiberWeightCountComplement
+import Omega.Folding.FiberFourierPhaseRigidity
 import Omega.Folding.CollisionDecomp
 import Omega.Folding.MomentRecurrence
 import Omega.Folding.MomentTriple
@@ -223,6 +224,7 @@ import Omega.SPG.IntegerBulkDecodeOrCycleCertificate
 import Omega.SPG.RegularLanguageStokesDyadicZetaRationality
 import Omega.SPG.SquareclassChainComplex
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
+import Omega.SPG.BoundaryGodelMomentReadout
 import Omega.SPG.BoundaryGodelGcdLipschitzStability
 import Omega.SPG.BoundaryGodelSequenceDeterminesClosure
 import Omega.SPG.ScreenKernelAuditCost
@@ -749,6 +751,7 @@ import Omega.GU.LeyangHolographicN2
 import Omega.GU.Window6SingleGoodPrimeRecovery
 import Omega.GU.Window6B3SupportCount
 import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
+import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
 import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
 import Omega.GU.Window6C3SupportCount
 import Omega.GU.FiberNonConstantNoFreeAction
