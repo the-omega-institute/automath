@@ -97,6 +97,7 @@ import Omega.Folding.PhiSlidingBlockCode
 import Omega.Folding.PhiEquivariantPublication
 import Omega.Folding.PhiSubshiftFactor
 import Omega.Folding.PhiSubshiftFactorPublication
+import Omega.Folding.PhiMParryPushforward
 import Omega.Folding.HolographicRateConservation
 import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.SummableNatEventuallyZero
@@ -290,6 +291,7 @@ import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.BoundaryGodelMomentReadout
 import Omega.SPG.BoundaryGodelMomentRobustGcdBound
 import Omega.SPG.BoundaryGodelGcdLipschitzStability
+import Omega.SPG.GodelStokesDistanceDimensionStability
 import Omega.SPG.BoundaryGodelArithmeticHypercubeMedian
 import Omega.SPG.BoundaryGodelSequenceDeterminesClosure
 import Omega.SPG.BoundaryGodelBitcomplexityIsoperimetric
@@ -774,6 +776,7 @@ import Omega.TypedAddressBiaxialCompletion.PcdimModpFormula
 import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
 import Omega.TypedAddressBiaxialCompletion.VisiblePhaseLift
+import Omega.TypedAddressBiaxialCompletion.OffsliceDichotomy
 import Omega.TypedAddressBiaxialCompletion.GlobalizationFlatness
 import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
 import Omega.PhysicalSpacetimeSkeleton.LocalSkeletonBeforeGlobalTrivialization

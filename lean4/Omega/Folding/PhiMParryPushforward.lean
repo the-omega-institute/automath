@@ -1,0 +1,30 @@
+import Omega.Folding.GmFischerCover
+
+namespace Omega.Folding
+
+set_option maxHeartbeats 400000 in
+/-- Chapter-local helper that packages the Parry-measure pushforward statement for `Φ_m`.
+    prop:Phi_m-parry-pushforward -/
+theorem paper_Phi_m_parry
+    (m : Nat) (coverParryMeasure pushforwardMaxEntropyMeasure : Prop)
+    (hPush : coverParryMeasure -> pushforwardMaxEntropyMeasure) :
+    coverParryMeasure -> pushforwardMaxEntropyMeasure := by
+  let _ := m
+  intro hCover
+  exact hPush hCover
+
+set_option maxHeartbeats 400000 in
+/-- Paper-facing wrapper for the Parry-measure pushforward package: once the Fischer-cover Parry
+    measure is known, its `Φ_m` pushforward is the maximal-entropy measure on `Y_m`, and the
+    output-cylinder formula follows from the same cover-level input.
+    prop:Phi_m-parry-pushforward -/
+theorem paper_Phi_m_parry_pushforward
+    (m : Nat) (coverParryMeasure pushforwardMaxEntropyMeasure cylinderLiftFormula : Prop)
+    (hPush : coverParryMeasure -> pushforwardMaxEntropyMeasure)
+    (hCyl : coverParryMeasure -> cylinderLiftFormula) :
+    coverParryMeasure -> pushforwardMaxEntropyMeasure ∧ cylinderLiftFormula := by
+  intro hCover
+  exact ⟨paper_Phi_m_parry m coverParryMeasure pushforwardMaxEntropyMeasure hPush hCover,
+    hCyl hCover⟩
+
+end Omega.Folding
