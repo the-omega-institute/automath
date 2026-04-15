@@ -103,6 +103,7 @@ import Omega.Folding.ImageSubshiftZeta
 import Omega.Folding.SyncDelay
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.AlternatingSingleSymbolSynchronizing
+import Omega.Folding.GmFischerCover
 import Omega.Folding.SignedFibonacciGapShift
 import Omega.Folding.YmSynchronized
 import Omega.Folding.UniformSynchronizingLength
@@ -406,6 +407,7 @@ import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Zeta.SyncRhoM2Publication
 import Omega.Zeta.SyncKernelSpectrum
 import Omega.Zeta.CyclicFredholmRealization
+import Omega.Zeta.IntroCyclicCharacterization
 import Omega.Zeta.BlockCyclicRigidity
 import Omega.Zeta.FiniteRankRealisation
 import Omega.Zeta.RealisabilityVsRigidity
@@ -515,6 +517,7 @@ import Omega.CircleDimension.ModeParityVanish
 import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
+import Omega.CircleDimension.PoissonSymmetricCase
 import Omega.CircleDimension.PoissonKLEighth
 import Omega.CircleDimension.PoissonKLEvenOrders
 import Omega.CircleDimension.PoissonSecondOrder
