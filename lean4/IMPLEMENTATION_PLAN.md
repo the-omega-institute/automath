@@ -6,17 +6,19 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~50,937 |
-| 定理/定义数 | ~4,442 |
+| 总行数 | ~51,006 |
+| 定理/定义数 | ~4,445 |
 | 论文接口包装 | 800+ |
-| 文件数 | 225 |
+| 文件数 | 228 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3407 |
+| \leanverified 标注数 | 3410 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3456 |
-| 轮次 | R812（round_count=R812）|
+| 总标注数 | 3459 |
+| 轮次 | R813（round_count=R813）|
+
+**Phase R813（本轮落地，全流程执行）**：`paper_zero_jitter_general_normal_form`（对应 `thm:general-normal-form`，GroupUnification；把 Parry-relative fluctuation normal form、edge-deviation 零均值与 jitter-vs-edge variance readout 汇总成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_projection_diagonal_high_moments`（对应 `thm:diagonal-high-moments`，POM；把 diverging-tilt 与 max-fiber growth 假设压成 diagonal high-moment law 及 `S_m(m)` 自耦合读出）；`paper_fredholm_witt_twisted_determinant_cumulants`（对应 `cor:twisted-determinant-cumulants`，Zeta；把 twisted-determinant rigidity 经 dominant-eigenvalue agreement 串到 asymptotic cumulant / variance coincidence corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 GroupUnification / POM / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/GroupUnification/GeneralNormalForm.lean`、`lean4/Omega/POM/DiagonalHighMoments.lean`、`lean4/Omega/Zeta/TwistedDeterminantCumulants.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_zero_jitter_general_normal_form`、`paper_projection_diagonal_high_moments`、`paper_fredholm_witt_twisted_determinant_cumulants`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp/main.tex`（`thm:general-normal-form`），`/Users/chronoai/automath/papers/publication/2026_projection_ontological_mathematics_core_tams/sec_moment_kernel.tex`（`thm:diagonal-high-moments`），`/Users/chronoai/automath/papers/publication/2026_fredholm_witt_cyclic_block_spectral_rigidity_symbolic_zeta/sec_perturbation.tex`（`cor:twisted-determinant-cumulants`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R812（本轮落地，全流程执行）**：`paper_resolution_folding_local_complexity_scale_coincidence`（对应 `cor:local-complexity-scale-coincidence`，Folding；把 exact SFT order / synchronizing length / ambiguity-shell nilpotency / inverse-memory threshold 汇总成 decoding-vs-presentation scale coincidence corollary，本轮 non-trivial 目标）；`paper_circle_dimension_poisson_symmetrization`（对应 `cor:poisson-symmetrization`，CircleDimension；把 two-channel hypothesis 下的 `A`-channel readout 与 Laplace inversion 合并成 centered-law symmetrization corollary）；`paper_conservative_extension_h1_vanishing_class_trivializing_focused`（对应 `cor:h1-vanishing-class-trivializing`，Topos；为 focused APAL 版本补齐 `H_1=0` 下 `q_\omega=0` 与 intrinsic pure-extension factorization 的 corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 Folding / CircleDimension / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Folding/LocalComplexityScaleCoincidence.lean`、`lean4/Omega/CircleDimension/PoissonSymmetrization.lean`、`lean4/Omega/Topos/H1VanishingClassTrivializingFocused.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_resolution_folding_local_complexity_scale_coincidence`、`paper_circle_dimension_poisson_symmetrization`、`paper_conservative_extension_h1_vanishing_class_trivializing_focused`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_presentation.tex`（`cor:local-complexity-scale-coincidence`），`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_gram_space.tex`（`cor:poisson-symmetrization`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_homological_visibility.tex`（`cor:h1-vanishing-class-trivializing`）；新增 tex theorem/corollary/lemma 环境数 0）
 
