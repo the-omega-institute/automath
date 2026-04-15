@@ -1775,6 +1775,12 @@
 - 已完成 `paper_window6_edge_flux_mod3_obstruction`（`cor:window6-edge-flux-mod3-obstruction`，`GroupUnification/EdgeFluxMod3Obstruction.lean`）：把整数矩阵按模 \(3\) 约化为奇异矩阵后，利用非零左核向量经 `dotProductEquiv` 产生非零线性泛函，得到对全部像向量的模 \(3\) 消失结论。
 - `paper_finite_part_cyclic_lift_cyclotomic_sector` 暂跳过：在当前 mathlib 快照下，`q` 次单位根的枚举与 `nthRootsFinset`/多项式根乘积之间还需一段额外的 finset-root bridge；本轮已尝试证明并保持工程可编译，但未做不实登记。
 
+### Round R861
+
+- 已完成 `paper_ostrowski_metallic_two_rule_normalization`（`thm:ostrowski-metallic-two-rule-normalization`，`Folding/OstrowskiMetallicTwoRuleNormalization.lean`）：补入金属平均常部分商 Ostrowski 分母下两条局部重写的 paper-facing 接口，形式化两条规则的局部权值守恒，以及局部不可约蕴含 `A`-digit 下位为零的合法性约束。
+- 已完成 `paper_window6_b3c3_quartic_axis_diagonal_reversal`（`thm:window6-b3c3-quartic-axis-diagonal-reversal`，`GU/Window6B3C3QuarticAxisDiagonalReversal.lean`）：在既有 quartic defect 公式上补出单位球面化简、`\Sigma_4(u)` 的 `1/3 ≤ · ≤ 1` 界，以及轴向/体对角见证值 `10, 34/3, 64/3, 40`。
+- 已完成 `paper_conclusion_rate_cdim_two_circle_threshold`（`cor:conclusion-rate-cdim-two-circle-threshold`，`Conclusion/RateCdimTwoCircleThreshold.lean`）：补入黄金比对数阈值 `log 2 / log φ` 的两圆门槛与单圆缺口包装，并形式化 `log(2/φ)/log φ = log 2 / log φ - 1` 及其严格正性。
+
 ### Round R791
 
 - 已完成 `paper_logic_expansion_singleton_conservativity`（`prop:logic-expansion-singleton-conservativity`，`LogicExpansionChain/SingletonConservativity.lean`）：将既有 singleton forcing 的 `_seeds` 结果提升为 unsuffixed 论文接口定理，并把 tex 注册切到直接论文名。
