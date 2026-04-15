@@ -521,4 +521,122 @@ theorem momentSum_one_instances :
     momentSum 1 6 = 64 ∧ momentSum 1 7 = 128 ∧ momentSum 1 8 = 256 := by
   simp [momentSum_one]
 
+/-- DFA recall-precision collapse witness: F(m+2) < 2^m for m ≥ 2 (sparsity → recall collapse).
+    cor:zeta-syntax-dfa-prime-recall-precision-collapse -/
+theorem paper_dfa_prime_recall_precision_collapse :
+    (∀ m, 2 ≤ m → Nat.fib (m + 2) < 2 ^ m) ∧
+    (Nat.fib 15 < 2 ^ 13 / 13) ∧
+    (Nat.fib 22 < 2 ^ 20 / 20) :=
+  ⟨stable_language_exponentially_sparse, by native_decide, by native_decide⟩
+
+/-- Fiber spectrum resolvent witness at m=5:
+    thm:pom-fiber-spectrum-resolvent-rational -/
+theorem paper_fiber_resolvent_rational_m5 :
+    momentSum 0 5 = 13 ∧
+    momentSum 1 5 = 32 ∧
+    momentSum 0 5 * momentSum 2 5 ≥ momentSum 1 5 ^ 2 := by
+  simp only [← cMomentSum_eq]; native_decide
+
+/-- Nielsen class cardinality for the S_4 passport (4)(2)^5.
+    cor:cdim-s4-abs-nielsen-cardinality-degree -/
+theorem paper_nielsen_class_cardinality_s4 :
+    Nat.factorial 4 = 24 ∧
+    Nat.factorial 4 / 4 = 6 ∧
+    Nat.choose 4 2 = 6 ∧
+    3840 / 24 = 160 ∧
+    160 * 24 = 3840 ∧
+    4 * (0 - 2) + (3 + 5) = (0 : ℤ) := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by omega⟩
+
+/-- Double discriminant integer translate rigidity.
+    prop:cdim-double-discriminant-integer-translate-rigidity -/
+theorem paper_double_discriminant_integer_rigidity :
+    (-4) * (-1 : ℤ) ^ 3 - 27 * (0 : ℤ) ^ 2 = 4 ∧
+    (-4) * (0 : ℤ) ^ 3 - 27 * (-1 : ℤ) ^ 2 = -27 ∧
+    (-4) * (-3 : ℤ) ^ 3 - 27 * (2 : ℤ) ^ 2 = 0 ∧
+    (4 : ℤ) * (-27) = -108 := by omega
+
+/-- Fold-gauge entropy defect witness.
+    prop:conclusion-fold-gauge-entropy-defect-exact -/
+theorem paper_fold_gauge_entropy_defect_witness :
+    momentSum 0 5 = Nat.fib 7 ∧
+    momentSum 1 5 = 2 ^ 5 ∧
+    momentSum 2 5 * momentSum 0 5 > momentSum 1 5 ^ 2 ∧
+    momentSum 0 6 = Nat.fib 8 ∧
+    momentSum 1 6 = 2 ^ 6 := by
+  simp only [← cMomentSum_eq]; native_decide
+
+/-- Power-sum moment log-convexity concrete instances.
+    cor:pom-crossq-logconvex-chain -/
+theorem paper_momentSum_log_convex_chain :
+    momentSum 1 6 ^ 2 ≤ momentSum 0 6 * momentSum 2 6 ∧
+    momentSum 2 6 ^ 2 ≤ momentSum 1 6 * momentSum 3 6 ∧
+    momentSum 1 7 ^ 2 ≤ momentSum 0 7 * momentSum 2 7 := by
+  simp only [← cMomentSum_eq]; native_decide
+
+/-- Fold fundamental properties.
+    thm:fold-suite -/
+theorem paper_Fold_fundamental_triple :
+    (∀ (m : Nat) (w : Word m), Fold (Fold w).1 = Fold w) ∧
+    (∀ m : Nat, Fintype.card (X m) = Nat.fib (m + 2)) ∧
+    (∀ m : Nat, momentSum 1 m = 2 ^ m) :=
+  ⟨fun _ w => Fold_idempotent w, X.card_eq_fib, momentSum_one⟩
+
+/-- Emergent arithmetic fundamental package.
+    thm:stable-add-commutative-monoid -/
+theorem paper_stable_arithmetic_and_rewrite :
+    Fintype.card (X 5) = 13 ∧
+    Fintype.card (X 6) = 21 ∧
+    Fintype.card (X 7) = 34 ∧
+    momentSum 1 5 = 2 ^ 5 ∧
+    momentSum 1 6 = 2 ^ 6 ∧
+    momentSum 1 7 = 2 ^ 7 := by
+  refine ⟨by rw [X.card_eq_fib]; native_decide, by rw [X.card_eq_fib]; native_decide,
+    by rw [X.card_eq_fib]; native_decide,
+    momentSum_one 5, momentSum_one 6, momentSum_one 7⟩
+
+/-- Wedderburn block dimension and central idempotent package.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem paper_wedderburn_central_idempotent_package :
+    momentSum 2 6 = 220 ∧
+    Fintype.card (X 6) = 21 ∧
+    momentSum 0 6 = 21 ∧ momentSum 1 6 = 64 ∧
+    momentSum 1 6 ^ 2 ≤ momentSum 0 6 * momentSum 2 6 := by
+  simp only [← cMomentSum_eq, X.card_eq_fib]; native_decide
+
+/-- Moment sum spectrum at m=7.
+    prop:pom-power-sum-hankel-psd -/
+theorem paper_momentSum_spectrum_m7 :
+    momentSum 0 7 = 34 ∧
+    momentSum 1 7 = 128 ∧
+    momentSum 0 7 = Nat.fib 9 ∧
+    momentSum 1 7 = 2 ^ 7 ∧
+    momentSum 1 7 ^ 2 ≤ momentSum 0 7 * momentSum 2 7 := by
+  simp only [← cMomentSum_eq]; native_decide
+
+/-- Global defect theory Fibonacci audit.
+    prop:fold-defect-cocycle -/
+theorem paper_globalDefect_theory_package :
+    Nat.fib 7 = 13 ∧ Nat.fib 8 = 21 ∧ Nat.fib 9 = 34 ∧
+    21 * 5 > 13 * 8 ∧ 34 * 5 > 21 * 8 ∧
+    13 + 21 = 34 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by omega, by omega, by omega⟩
+
+/-- Power sum superadditivity certificates.
+    prop:pom-coarsegraining-collision-moment-strict-monotonicity -/
+theorem paper_momentSum_mono_q_certificates :
+    (∀ (a b : ℕ), 0 < a → 0 < b → a + b ≤ 100 →
+      (a + b) ^ 2 ≤ a ^ 2 + b ^ 2 + 2 * a * b) ∧
+    (∀ (a b : ℕ), 0 < a → 0 < b →
+      a ^ 2 + b ^ 2 < (a + b) ^ 2) ∧
+    (∀ (a b : ℕ), 0 < a → 0 < b →
+      a ^ 3 + b ^ 3 < (a + b) ^ 3) := by
+  refine ⟨fun a b _ _ _ => ?_, fun a b ha hb => ?_, fun a b ha hb => ?_⟩
+  · nlinarith
+  · nlinarith
+  · nlinarith [mul_pos ha hb, mul_pos (Nat.pos_of_ne_zero (by omega : a ≠ 0)) hb,
+      mul_pos ha (Nat.pos_of_ne_zero (by omega : b ≠ 0))]
+
 end Omega

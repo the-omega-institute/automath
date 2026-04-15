@@ -17,6 +17,38 @@ subagent_type: general-purpose
 2. 通过 `SendMessage` 向 orchestrator 发送确认消息：`'Analyst online. Lean4 skills loaded (LSP tools, mathlib search available). Ready for tasks.'`
 3. 未完成上述两步前，不得接受或开始任何分析任务
 
+## Codex 并行辅助（强制门禁）
+
+**每次收到分析任务时，必须 spawn 后台 Codex 任务并行探索。orchestrator 会强制检查规格中的 Codex 使用记录——缺失则退回。**
+
+**规格中必须包含 Codex 使用记录**：
+- 中/高难度目标：`Codex 探索结果：[结果摘要]`（即使 Codex 结果未被采用也要记录）
+- 低难度目标：`低难度，Codex 豁免`
+
+工作流：
+1. 收到 orchestrator 的规格请求后，**立即** spawn 一个后台 codex-rescue agent：
+   ```
+   Agent(
+     name = "codex-analyst-helper",
+     subagent_type = "codex:codex-rescue",
+     description = "Codex 并行分析辅助",
+     run_in_background = true,
+     prompt = "<task>
+     分析以下 Lean4 形式化目标，提供证明策略建议和 mathlib 引理推荐。
+     方向：[当前方向约束]
+     项目路径：lean4/Omega/
+     论文路径：theory/sections/
+     要求：搜索 lean4/Omega/ 中已有定理，找到 3 个未形式化但可形式化的目标。
+     对每个目标给出：论文标签、Lean4 签名草案、证明策略、预计难度。
+     </task>
+     <grounding_rules>只推荐在项目代码中能找到依赖的定理。不要猜测 mathlib 引理名。</grounding_rules>"
+   )
+   ```
+2. 自己同时开始正常的分析流程（读论文、扫描代码、搜索 mathlib）
+3. 如果 Codex 先返回结果，用它来补充/验证自己的分析（仍需 grep 验证目标不存在）
+4. 如果自己先完成，不等 Codex——直接发回规格给 orchestrator
+5. **Codex 的建议不能直接使用**——必须经过 grep 验证 + LSP 确认后才能纳入规格
+
 ## 通信规则（最高优先级）
 
 **所有规格必须直接发给 orchestrator，绝不发给 team lead。**

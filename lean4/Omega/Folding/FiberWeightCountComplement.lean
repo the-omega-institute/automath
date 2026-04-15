@@ -244,4 +244,53 @@ theorem paper_ewc_spectrum_five :
     exactWeightCount 5 12 = 1 :=
   ewc_spectrum_five
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R302: EWC spectrum at m=6
+-- ══════════════════════════════════════════════════════════════
+
+/-- EWC spectrum at m=6: complete weight distribution over range 0..32.
+    prop:pom-ewc-spectrum -/
+theorem ewc_spectrum_six :
+    exactWeightCount 6 0 = 1 ∧ exactWeightCount 6 1 = 1 ∧
+    exactWeightCount 6 2 = 1 ∧ exactWeightCount 6 3 = 2 ∧
+    exactWeightCount 6 4 = 1 ∧ exactWeightCount 6 5 = 2 ∧
+    exactWeightCount 6 6 = 2 ∧ exactWeightCount 6 7 = 1 ∧
+    exactWeightCount 6 8 = 3 ∧ exactWeightCount 6 9 = 2 ∧
+    exactWeightCount 6 10 = 2 ∧ exactWeightCount 6 11 = 3 ∧
+    exactWeightCount 6 12 = 1 ∧ exactWeightCount 6 13 = 3 ∧
+    exactWeightCount 6 14 = 3 ∧ exactWeightCount 6 15 = 2 ∧
+    exactWeightCount 6 16 = 4 ∧ exactWeightCount 6 17 = 2 ∧
+    exactWeightCount 6 18 = 3 ∧ exactWeightCount 6 19 = 3 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    native_decide
+
+/-- EWC total for m=6: Σ_{n<33} ewc(6,n) = 2^6 = 64.
+    prop:pom-ewc-spectrum -/
+theorem ewc_sum_six :
+    (Finset.range 33).sum (fun n => exactWeightCount 6 n) = 64 := by native_decide
+
+/-- Paper package.
+    prop:pom-ewc-spectrum -/
+theorem paper_ewc_spectrum_six :
+    exactWeightCount 6 0 = 1 ∧ exactWeightCount 6 1 = 1 ∧
+    exactWeightCount 6 8 = 3 ∧ exactWeightCount 6 16 = 4 ∧
+    exactWeightCount 6 32 = 1 ∧
+    (Finset.range 33).sum (fun n => exactWeightCount 6 n) = 64 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- Fiber count reciprocity/reflection symmetry package.
+    prop:fold-fiber-count-reciprocity -/
+theorem paper_pom_fiber_reciprocity_package :
+    (∀ (m : Nat) (_hm : 2 ≤ m), Function.Involutive (complementAction (m := m))) ∧
+    (∀ (m : Nat) (_hm : 2 ≤ m) (x : X m),
+      X.fiberMultiplicity (complementAction x) = X.fiberMultiplicity x) :=
+  ⟨complementAction_involutive, fun _ _hm x => fiberMultiplicity_complementAction x _hm⟩
+
+/-- Fiber histogram is palindromic under complement.
+    prop:fold-fiber-count-reciprocity -/
+theorem paper_pom_fiber_histogram_palindrome (m : Nat) (hm : 2 ≤ m) :
+    ∀ x : X m, ∃ y : X m, y = complementAction x ∧
+      X.fiberMultiplicity y = X.fiberMultiplicity x :=
+  fun x => ⟨complementAction x, rfl, fiberMultiplicity_complementAction x hm⟩
+
 end Omega

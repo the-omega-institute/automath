@@ -81,6 +81,26 @@ theorem fib_le_pow_two : ∀ m : Nat, Nat.fib (m + 2) ≤ 2 ^ (m + 1)
           Nat.add_le_add_left (Nat.pow_le_pow_right (by omega) (by omega)) _
       _ = 2 ^ (m + 2 + 1) := by ring
 
+/-- Fibonacci doubling bound: 2 · F(n) ≤ F(n+2) for n ≥ 1.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem fib_double_le (n : Nat) (_hn : 1 ≤ n) :
+    2 * Nat.fib n ≤ Nat.fib (n + 2) := by
+  rw [Nat.fib_add_two]
+  linarith [Nat.fib_mono (show n ≤ n + 1 by omega)]
+
+/-- Fibonacci exponential growth: F(n+2k) ≥ 2^k · F(n) for n ≥ 1.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem fib_exponential_growth (n k : Nat) (hn : 1 ≤ n) :
+    2 ^ k * Nat.fib n ≤ Nat.fib (n + 2 * k) := by
+  induction k with
+  | zero => simp
+  | succ k ih =>
+    calc 2 ^ (k + 1) * Nat.fib n
+        = 2 * (2 ^ k * Nat.fib n) := by ring
+      _ ≤ 2 * Nat.fib (n + 2 * k) := by linarith
+      _ ≤ Nat.fib (n + 2 * k + 2) := fib_double_le (n + 2 * k) (by omega)
+      _ = Nat.fib (n + 2 * (k + 1)) := by ring_nf
+
 /-- gcd(F_m, F_n) = F_{gcd(m,n)} (strong divisibility).
     fib-gcd
     lem:fib-divisibility-iff -/
@@ -1148,6 +1168,110 @@ theorem fenceDet_succ_lt_triple (k : Nat) (hk : 1 ≤ k) :
   omega
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R301: Fence determinant partial sum = Fibonacci even index
+-- ══════════════════════════════════════════════════════════════
+
+/-- Partial sum of fence determinants equals even Fibonacci number.
+    cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_partial_sum (n : Nat) :
+    ∑ k ∈ Finset.range n, fenceDet k = Nat.fib (2 * n) := by
+  have : ∀ k, fenceDet k = Nat.fib (2 * k + 1) := fenceDet_eq_fib
+  simp_rw [this]
+  exact fib_odd_sum n
+
+/-- Concrete values: Σ_{k=0}^{4} D_k = F_10 = 55.
+    cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_partial_sum_5 :
+    fenceDet 0 + fenceDet 1 + fenceDet 2 + fenceDet 3 + fenceDet 4 = 55 := by
+  simp [fenceDet]
+
+/-- The running sum is positive for n ≥ 1.
+    cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_partial_sum_pos (n : Nat) (hn : 1 ≤ n) :
+    0 < ∑ k ∈ Finset.range n, fenceDet k := by
+  rw [fenceDet_partial_sum]
+  exact Nat.fib_pos.mpr (by omega)
+
+/-- Paper package.
+    cor:pom-Lk-t1-fibonacci-det-green -/
+theorem paper_fenceDet_partial_sum_package :
+    (∀ n, ∑ k ∈ Finset.range n, fenceDet k = Nat.fib (2 * n)) ∧
+    fenceDet 0 + fenceDet 1 + fenceDet 2 + fenceDet 3 + fenceDet 4 = 55 := by
+  exact ⟨fenceDet_partial_sum, by simp [fenceDet]⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R306: fenceDet consecutive difference = even Fibonacci
+-- ══════════════════════════════════════════════════════════════
+
+/-- cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_succ_sub (k : Nat) :
+    fenceDet (k + 1) - fenceDet k = Nat.fib (2 * k + 2) := by
+  rw [fenceDet_eq_fib (k + 1), fenceDet_eq_fib k]
+  have h := Nat.fib_add_two (n := 2 * k + 1)
+  rw [show (2 * k + 1) + 2 = 2 * k + 3 from by omega,
+      show (2 * k + 1) + 1 = 2 * k + 2 from by omega] at h
+  rw [show 2 * (k + 1) + 1 = 2 * k + 3 from by omega]
+  omega
+
+/-- cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_succ_eq_add (k : Nat) :
+    fenceDet (k + 1) = fenceDet k + Nat.fib (2 * k + 2) := by
+  have h := fenceDet_succ_sub k
+  have hmono := fenceDet_mono k
+  omega
+
+/-- Paper package. cor:pom-Lk-t1-fibonacci-det-green -/
+theorem paper_fenceDet_diff_package :
+    (∀ k, fenceDet (k + 1) - fenceDet k = Nat.fib (2 * k + 2)) ∧
+    (∀ k, fenceDet (k + 1) = fenceDet k + Nat.fib (2 * k + 2)) ∧
+    fenceDet 5 - fenceDet 4 = 55 := by
+  refine ⟨fenceDet_succ_sub, fenceDet_succ_eq_add, ?_⟩
+  rw [fenceDet_succ_sub]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R309: fenceDet consecutive product identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_mul_succ (k : Nat) :
+    fenceDet k * fenceDet (k + 1) = Nat.fib (2 * k + 2) ^ 2 + 1 := by
+  rw [fenceDet_eq_fib k, fenceDet_eq_fib (k + 1),
+      show 2 * (k + 1) + 1 = 2 * k + 3 from by omega]
+  have := fib_cassini_odd_indexed k
+  linarith
+
+/-- Paper package. cor:pom-Lk-t1-fibonacci-det-green -/
+theorem paper_fenceDet_product_package :
+    fenceDet 0 * fenceDet 1 = 2 ∧
+    fenceDet 1 * fenceDet 2 = 10 ∧
+    fenceDet 2 * fenceDet 3 = 65 ∧
+    fenceDet 3 * fenceDet 4 = 442 ∧
+    fenceDet 4 * fenceDet 5 = 3026 := by
+  simp [fenceDet]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R312: fenceDet D(8)..D(10) concrete values
+-- ══════════════════════════════════════════════════════════════
+
+/-- cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_eight : fenceDet 8 = 1597 := by rw [fenceDet_eq_fib]; native_decide
+
+/-- cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_nine : fenceDet 9 = 4181 := by rw [fenceDet_eq_fib]; native_decide
+
+/-- cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_ten : fenceDet 10 = 10946 := by rw [fenceDet_eq_fib]; native_decide
+
+/-- 1597 = F(17) is prime. cor:pom-Lk-t1-fibonacci-det-green -/
+theorem prime_1597 : Nat.Prime 1597 := by native_decide
+
+/-- Paper package. cor:pom-Lk-t1-fibonacci-det-green -/
+theorem paper_fenceDet_values_extended :
+    fenceDet 8 = 1597 ∧ fenceDet 9 = 4181 ∧ fenceDet 10 = 10946 ∧
+    Nat.Prime 1597 := by
+  exact ⟨fenceDet_eight, fenceDet_nine, fenceDet_ten, prime_1597⟩
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R29: Fibonacci product convolution sum
 -- ══════════════════════════════════════════════════════════════
 
@@ -1567,5 +1691,72 @@ theorem fib_prime_entry_point (p k n : Nat) (_hp : Nat.Prime p) (hk : 1 ≤ k)
   · -- (←) k | n → p | F(n)
     intro hkn
     exact dvd_trans hentry (Nat.fib_dvd k n hkn)
+
+/-- Cassini identity for fence determinant: D_{k+1}·D_{k-1} = D_k² + 1.
+    cor:pom-fiber-fence-rank-poly-factorization -/
+theorem paper_fenceDet_cassini (k : Nat) (hk : 1 ≤ k) :
+    fenceDet (k + 1) * fenceDet (k - 1) = fenceDet k ^ 2 + 1 :=
+  fenceDet_cassini k hk
+
+/-- Fence determinant values and strict monotonicity.
+    cor:pom-Lk-t1-fibonacci-det-green -/
+theorem paper_fenceDet_values_and_strict_mono :
+    fenceDet 0 = 1 ∧ fenceDet 1 = 2 ∧ fenceDet 2 = 5 ∧
+    fenceDet 3 = 13 ∧ fenceDet 4 = 34 ∧ fenceDet 5 = 89 ∧
+    (∀ k : ℕ, fenceDet k < fenceDet (k + 1)) := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide, fun k => ?_⟩
+  match k with
+  | 0 => native_decide
+  | k + 1 => exact fenceDet_strict_mono (k + 1) (by omega)
+
+/-- Pisano period π(12) = 24.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem fib_mod12_period_24 :
+    Nat.fib 24 % 12 = 0 ∧ Nat.fib 25 % 12 = 1 := by native_decide
+
+/-- Pisano period π(13) = 28.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem fib_mod13_period_28 :
+    Nat.fib 28 % 13 = 0 ∧ Nat.fib 29 % 13 = 1 := by native_decide
+
+/-- Pisano period π(15) = 40.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem fib_mod15_period_40 :
+    Nat.fib 40 % 15 = 0 ∧ Nat.fib 41 % 15 = 1 := by native_decide
+
+/-- Paper Pisano period witnesses for composite moduli 12, 13, 15.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem paper_pisano_period_12_13_15_package :
+    (Nat.fib 24 % 12 = 0 ∧ Nat.fib 25 % 12 = 1) ∧
+    (Nat.fib 28 % 13 = 0 ∧ Nat.fib 29 % 13 = 1) ∧
+    (Nat.fib 40 % 15 = 0 ∧ Nat.fib 41 % 15 = 1) :=
+  ⟨fib_mod12_period_24, fib_mod13_period_28, fib_mod15_period_40⟩
+
+/-- Pisano period π(16) = 24.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem fib_mod16_period_24 :
+    Nat.fib 24 % 16 = 0 ∧ Nat.fib 25 % 16 = 1 := by native_decide
+
+/-- Pisano period π(18) = 24.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem fib_mod18_period_24 :
+    Nat.fib 24 % 18 = 0 ∧ Nat.fib 25 % 18 = 1 := by native_decide
+
+/-- Pisano period π(24) = 24 (self-period).
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem fib_mod24_period_24 :
+    Nat.fib 24 % 24 = 0 ∧ Nat.fib 25 % 24 = 1 := by native_decide
+
+/-- Common Pisano period 24 witness package for moduli 16, 18, 24.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem paper_pisano_period_24_common_16_18_24_package :
+    (Nat.fib 24 % 16 = 0 ∧ Nat.fib 25 % 16 = 1) ∧
+    (Nat.fib 24 % 18 = 0 ∧ Nat.fib 25 % 18 = 1) ∧
+    (Nat.fib 24 % 24 = 0 ∧ Nat.fib 25 % 24 = 1) ∧
+    Nat.fib 24 = 46368 ∧
+    Nat.fib 25 = 75025 :=
+  ⟨fib_mod16_period_24, fib_mod18_period_24, fib_mod24_period_24,
+   by native_decide, by native_decide⟩
 
 end Omega

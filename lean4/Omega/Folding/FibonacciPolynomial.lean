@@ -141,6 +141,71 @@ theorem pathIndSetPoly_three_val : pathIndSetPoly 3 = 1 + 3 * X + X ^ 2 := by
 theorem pathIndSetPoly_four_val : pathIndSetPoly 4 = 1 + 4 * X + 3 * X ^ 2 := by
   simp [pathIndSetPoly, fibPoly_succ_succ]; ring
 
+/-- I_5(x) = 1 + 5x + 6x^2 + x^3.
+    def:pom-fibonacci-polynomial -/
+theorem pathIndSetPoly_five_val : pathIndSetPoly 5 = 1 + 5 * X + 6 * X ^ 2 + X ^ 3 := by
+  simp [pathIndSetPoly, fibPoly_succ_succ]; ring
+
+/-- I_6(x) = 1 + 6x + 10x^2 + 4x^3.
+    def:pom-fibonacci-polynomial -/
+theorem pathIndSetPoly_six_val : pathIndSetPoly 6 = 1 + 6 * X + 10 * X ^ 2 + 4 * X ^ 3 := by
+  simp [pathIndSetPoly, fibPoly_succ_succ]; ring
+
+/-- I_7(x) = 1 + 7x + 15x^2 + 10x^3 + x^4.
+    def:pom-fibonacci-polynomial -/
+theorem pathIndSetPoly_seven_val :
+    pathIndSetPoly 7 = 1 + 7 * X + 15 * X ^ 2 + 10 * X ^ 3 + X ^ 4 := by
+  simp [pathIndSetPoly, fibPoly_succ_succ]; ring
+
+/-- I_8(x) = 1 + 8x + 21x^2 + 20x^3 + 5x^4.
+    def:pom-fibonacci-polynomial -/
+theorem pathIndSetPoly_eight_val :
+    pathIndSetPoly 8 = 1 + 8 * X + 21 * X ^ 2 + 20 * X ^ 3 + 5 * X ^ 4 := by
+  simp [pathIndSetPoly, fibPoly_succ_succ]; ring
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R298: fibPoly natDegree
+-- ══════════════════════════════════════════════════════════════
+
+/-- Small degree values for fibPoly (= deg pathIndSetPoly).
+    Note: deg(fibPoly(n+2)) = ⌊n/2⌋, NOT n. The spec for fibPoly_natDegree was incorrect.
+    def:pom-fibonacci-polynomial -/
+theorem paper_fibPoly_degree_values :
+    (fibPoly 0).natDegree = 0 ∧ (fibPoly 1).natDegree = 0 ∧
+    (fibPoly 2).natDegree = 0 ∧ (fibPoly 3).natDegree = 1 ∧
+    (fibPoly 4).natDegree = 1 ∧ (fibPoly 5).natDegree = 2 ∧
+    (fibPoly 6).natDegree = 2 ∧ (fibPoly 7).natDegree = 3 := by
+  refine ⟨by simp [fibPoly], by simp [fibPoly], by simp [fibPoly], ?_, ?_, ?_, ?_, ?_⟩
+  · have : fibPoly 3 = 1 + Polynomial.X := pathIndSetPoly_one_val
+    rw [this]; simp [Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+  · have : fibPoly 4 = 1 + 2 * Polynomial.X := pathIndSetPoly_two_val
+    rw [this]; simp [Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+  · have h := pathIndSetPoly_three_val
+    rw [show fibPoly 5 = pathIndSetPoly 3 from rfl, h]
+    have : (1 + 3 * Polynomial.X + Polynomial.X ^ 2 : Polynomial ℤ) =
+      (1 + 3 * Polynomial.X) + Polynomial.X ^ 2 := by ring
+    rw [this, Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+    · simp
+    · simp [Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+  · have h := pathIndSetPoly_four_val
+    rw [show fibPoly 6 = pathIndSetPoly 4 from rfl, h]
+    have : (1 + 4 * Polynomial.X + 3 * Polynomial.X ^ 2 : Polynomial ℤ) =
+      (1 + 4 * Polynomial.X) + 3 * Polynomial.X ^ 2 := by ring
+    rw [this, Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+    · simp
+    · simp [Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+  · have h := pathIndSetPoly_five_val
+    rw [show fibPoly 7 = pathIndSetPoly 5 from rfl, h]
+    have : (1 + 5 * Polynomial.X + 6 * Polynomial.X ^ 2 + Polynomial.X ^ 3 : Polynomial ℤ) =
+      (1 + 5 * Polynomial.X + 6 * Polynomial.X ^ 2) + Polynomial.X ^ 3 := by ring
+    rw [this, Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+    · simp
+    · have : (1 + 5 * Polynomial.X + 6 * Polynomial.X ^ 2 : Polynomial ℤ) =
+        (1 + 5 * Polynomial.X) + 6 * Polynomial.X ^ 2 := by ring
+      rw [this, Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+      · simp
+      · simp [Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+
 /-- Fibonacci polynomial derivative recurrence:
     (F_{n+2})' = (F_{n+1})' + F_n + X·(F_n)'.
     def:pom-fibonacci-polynomial -/
@@ -647,6 +712,23 @@ theorem detPoly_eval_strict_log_convex (k : Nat) (hk : 1 ≤ k) (t : ℤ) (ht : 
   -- heval: D_{k+1}(t) * D_{k-1}(t) - D_k(t)^2 = t
   linarith
 
+/-- Evaluated Cassini-Pell gap identity for detPoly.
+    cor:pom-Lk-det-logconvex-ratio -/
+theorem detPoly_eval_cassini_gap (k : Nat) (hk : 1 ≤ k) (t : ℤ) :
+    (detPoly (k - 1)).eval t * (detPoly (k + 1)).eval t -
+        ((detPoly k).eval t) ^ 2 = t := by
+  have hcassini := detPoly_cassini_pell k hk
+  have heval := congr_arg (fun p => p.eval t) hcassini
+  simp only [eval_sub, eval_mul, eval_pow, eval_X] at heval
+  linarith
+
+/-- The evaluated Cassini-Pell gap is positive for positive parameter `t`.
+    cor:pom-Lk-det-logconvex-ratio -/
+theorem detPoly_eval_ratio_gap_pos (k : Nat) (hk : 1 ≤ k) (t : ℤ) (ht : 0 < t) :
+    0 < (detPoly (k - 1)).eval t * (detPoly (k + 1)).eval t - ((detPoly k).eval t) ^ 2 := by
+  rw [detPoly_eval_cassini_gap k hk t]
+  exact ht
+
 /-- Strict monotonicity in k: D_k(t) < D_{k+1}(t) for t > 0.
     cor:pom-Lk-det-logconvex-ratio -/
 theorem detPoly_eval_strict_mono (t : ℤ) (ht : 0 < t) :
@@ -774,5 +856,91 @@ theorem pathIndSetPolyNegOne_abs_le_one (l : Nat) :
   have hlt : l % 6 < 6 := Nat.mod_lt l (by omega)
   have : l % 6 = 0 ∨ l % 6 = 1 ∨ l % 6 = 2 ∨ l % 6 = 3 ∨ l % 6 = 4 ∨ l % 6 = 5 := by omega
   rcases this with h | h | h | h | h | h <;> simp [h]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R283: pathIndSetPoly eval at x=2
+-- ══════════════════════════════════════════════════════════════
+
+/-- pathIndSetPoly evaluated at x=2 for small values. def:pom-fibonacci-polynomial -/
+theorem pathIndSetPoly_eval_two_small :
+    (pathIndSetPoly 0).eval 2 = 1 ∧
+    (pathIndSetPoly 1).eval 2 = 3 ∧
+    (pathIndSetPoly 2).eval 2 = 5 ∧
+    (pathIndSetPoly 3).eval 2 = 11 ∧
+    (pathIndSetPoly 4).eval 2 = 21 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · rw [pathIndSetPoly_zero_val]; simp
+  · rw [pathIndSetPoly_one_val]; simp
+  · rw [pathIndSetPoly_two_val]; simp
+  · rw [pathIndSetPoly_three_val]; simp
+  · rw [pathIndSetPoly_four_val]; simp
+
+/-- pathIndSetPoly evaluated at x=1 equals Fibonacci numbers: I_m(1) = F(m+2).
+    def:pom-fibonacci-polynomial -/
+theorem paper_pathIndSetPoly_eval_one_extended :
+    (pathIndSetPoly 5).eval 1 = (Nat.fib 7 : ℤ) ∧
+    (pathIndSetPoly 6).eval 1 = (Nat.fib 8 : ℤ) ∧
+    (pathIndSetPoly 7).eval 1 = (Nat.fib 9 : ℤ) ∧
+    (pathIndSetPoly 8).eval 1 = (Nat.fib 10 : ℤ) := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · rw [pathIndSetPoly_five_val]; simp; native_decide
+  · rw [pathIndSetPoly_six_val]; simp; native_decide
+  · rw [pathIndSetPoly_seven_val]; simp; native_decide
+  · rw [pathIndSetPoly_eight_val]; simp; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R293: fibPoly eval at -1, pathIndSetPolyNegOne extended values
+-- ══════════════════════════════════════════════════════════════
+
+/-- fibPoly(n+2) evaluated at -1 equals pathIndSetPolyNegOne n.
+    def:pom-fibonacci-polynomial -/
+theorem fibPoly_eval_neg_one_eq : ∀ n : Nat,
+    (fibPoly (n + 2)).eval (-1) = pathIndSetPolyNegOne n
+  | 0 => by simp [fibPoly, pathIndSetPolyNegOne]
+  | 1 => by simp [fibPoly, pathIndSetPolyNegOne]
+  | n + 2 => by
+    -- fibPoly((n+2)+2) = fibPoly((n+2)+1) + X * fibPoly(n+2)
+    -- = fibPoly(n+3) + X * fibPoly(n+2)
+    -- At x=-1: fibPoly(n+3).eval(-1) + (-1)*fibPoly(n+2).eval(-1)
+    -- = pathIndSetPolyNegOne(n+1) - pathIndSetPolyNegOne(n)
+    -- = pathIndSetPolyNegOne(n+2)
+    show (fibPoly (n + 2 + 1) + X * fibPoly (n + 2)).eval (-1) = _
+    simp only [Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_X]
+    rw [show n + 2 + 1 = (n + 1) + 2 from by omega]
+    rw [fibPoly_eval_neg_one_eq (n + 1), fibPoly_eval_neg_one_eq n]
+    simp [pathIndSetPolyNegOne]; ring
+
+/-- Extended pathIndSetPolyNegOne values for l=0..8.
+    def:pom-fibonacci-polynomial -/
+theorem paper_pathIndSetPolyNegOne_values_extended :
+    pathIndSetPolyNegOne 0 = 1 ∧ pathIndSetPolyNegOne 1 = 0 ∧
+    pathIndSetPolyNegOne 2 = -1 ∧ pathIndSetPolyNegOne 3 = -1 ∧
+    pathIndSetPolyNegOne 4 = 0 ∧ pathIndSetPolyNegOne 5 = 1 ∧
+    pathIndSetPolyNegOne 6 = 1 ∧ pathIndSetPolyNegOne 7 = 0 ∧
+    pathIndSetPolyNegOne 8 = -1 := by
+  simp [pathIndSetPolyNegOne]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R325: fibPoly evaluated at t=2
+-- ══════════════════════════════════════════════════════════════
+
+/-- Recurrence for fibPoly at t=2: F_{n+2}(2) = F_{n+1}(2) + 2·F_n(2).
+    cor:field-phase-fib-prime -/
+theorem fibPoly_eval_two_recurrence (n : Nat) :
+    (fibPoly (n + 2)).eval 2 = (fibPoly (n + 1)).eval 2 + 2 * (fibPoly n).eval 2 := by
+  simp [fibPoly]
+
+/-- Base values: F_0(2) = 0, F_1(2) = 1.
+    cor:field-phase-fib-prime -/
+theorem fibPoly_eval_two_base :
+    (fibPoly 0).eval 2 = 0 ∧ (fibPoly 1).eval 2 = 1 := by
+  simp [fibPoly]
+
+/-- Concrete values: F_2(2)=1, F_3(2)=3, F_4(2)=5, F_5(2)=11.
+    cor:field-phase-fib-prime -/
+theorem fibPoly_eval_two_values :
+    (fibPoly 2).eval 2 = 1 ∧ (fibPoly 3).eval 2 = 3 ∧
+    (fibPoly 4).eval 2 = 5 ∧ (fibPoly 5).eval 2 = 11 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> simp [fibPoly]
 
 end Omega

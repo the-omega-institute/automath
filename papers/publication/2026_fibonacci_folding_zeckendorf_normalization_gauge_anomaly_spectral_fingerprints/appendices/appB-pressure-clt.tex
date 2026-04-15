@@ -1,19 +1,47 @@
-\section{Appendix B: Transfer matrices, pressure, and the CLT constant}
+\section{Appendix B: Boundary states, transfer matrices, and bulk statistics}
 \label{app:pressure}
 
-This appendix makes explicit the finite-state transfer-matrix objects underlying Section~\ref{sec:gauge}.
+This appendix records the finite-state calculations behind Section~\ref{sec:gauge}. The underlying point is that the local rewrite
+\[
+011\to 100
+\]
+has range \(3\), so after a prefix has been normalized only a two-digit interface with the unread suffix remains relevant.
 
-\subsection{The four-state sofic presentation and the Parry measure}
-The bulk pair process \((X_t,Y_t)\) is realized as the label process of a four-state edge shift with adjacency matrix
+\subsection{The four boundary states}
+Write the normalization in MSD-first convention and process the input from left to right. After the prefix through site \(t-1\) has been normalized, the only information that can interact with the next unread digit \(X_t\) is the final two digits of the normalized prefix. We therefore encode the interface by one of the four words
+\[
+\mathcal S=\{00,01,10,11\}.
+\]
+Appending \(X_t\), normalizing the resulting three-digit interface by repeated use of \(011\to100\), emitting the leftmost normalized digit \(Y_t\), and retaining the final two digits gives exactly the transitions
+\[
+00 \xrightarrow{00} 00,\qquad
+00 \xrightarrow{01} 01,\qquad
+00 \xrightarrow{11} 11,
+\]
+\[
+01 \xrightarrow{10} 10,
+\]
+\[
+10 \xrightarrow{10} 00,\qquad
+10 \xrightarrow{00} 01,\qquad
+10 \xrightarrow{11} 01,
+\]
+\[
+11 \xrightarrow{00} 00.
+\]
+The edge label is the pair \((X_t,Y_t)\in\{0,1\}^2\). Forgetting the labels and counting multiplicities yields the adjacency matrix
 \[
 A=\begin{pmatrix}
 1&1&0&1\\
 0&0&1&0\\
 1&2&0&0\\
 1&0&0&0
-\end{pmatrix}.
+\end{pmatrix},
 \]
-Its Perron eigenvalue is \(\lambda=2\). One choice of right/left Perron eigenvectors is
+in the state order \((00,01,10,11)\).
+
+\subsection{Parry measure and the bulk law}
+The matrix \(A\) is primitive. Its Perron eigenvalue is \(2\), with one convenient right/left eigenvector pair
 \[
 r=(2,1,2,1)^{\mathsf T},
 \qquad
@@ -21,9 +49,9 @@ r=(2,1,2,1)^{\mathsf T},
 \qquad
 \ell^{\mathsf T}r=9.
 \]
-The Parry transition matrix is
+Hence the Parry transition matrix is
 \[
-P_{ij}=\frac{A_{ij}\,r_j}{\lambda r_i}
+P_{ij}=\frac{A_{ij}r_j}{2r_i}
 =
 \begin{pmatrix}
 \frac12&\frac14&0&\frac14\\
@@ -32,12 +60,28 @@ P_{ij}=\frac{A_{ij}\,r_j}{\lambda r_i}
 1&0&0&0
 \end{pmatrix},
 \]
-and the stationary state distribution is \(\pi_i=\frac{\ell_i r_i}{\ell^{\mathsf T}r}=(4,2,2,1)/9\).
+and the stationary state distribution is
+\[
+\pi_i=\frac{\ell_ir_i}{\ell^{\mathsf T}r}
+=
+\frac19(4,2,2,1).
+\]
 
-Splitting multiplicity-\(2\) transitions uniformly among the parallel edges \(2\to 1\) produces the exact symbol law in Theorem~\ref{thm:joint}.
+Because the presentation is right-resolving, uniform finite words converge locally in the bulk to the Parry measure on this edge shift \cite{Parry1964}; see \cite[Section~8.4]{LindMarcus1995} and \cite[Chapter~8]{Walters1982}. The probability of a specific edge \(i\to j\) is
+\[
+\PP(i\to j)=\frac{\pi_iP_{ij}}{A_{ij}}.
+\]
+Summing these edge probabilities over equal labels gives
+\[
+\PP(00)=\frac{7}{18},\qquad
+\PP(01)=\frac{1}{9},\qquad
+\PP(10)=\frac{1}{3},\qquad
+\PP(11)=\frac{1}{6},
+\]
+which is the table in Theorem~\ref{thm:joint}.
 
-\subsection{Tilted adjacency and the pressure function}
-Let \(\Delta_t:=X_t\oplus Y_t\in\set{0,1}\) be the discrepancy indicator. On the sofic graph, \(\Delta_t=1\) exactly on the edges labeled \(01\) and \(10\). The corresponding tilted adjacency matrix is
+\subsection{Tilted matrices and cumulants}
+For the discrepancy observable \(\Delta_t=X_t\oplus Y_t\), only the labels \(01\) and \(10\) contribute. The tilted adjacency matrix is therefore
 \[
 A_\theta=
 \begin{pmatrix}
@@ -47,28 +91,154 @@ e^\theta &2&0&0\\
 1&0&0&0
 \end{pmatrix}.
 \]
-Let \(\rho(\theta)=\rho(A_\theta)\) be its Perron root and set \(\Lambda(\theta)=\log\rho(\theta)-\log\rho(0)\) (so \(\rho(0)=2\)).
-Then \(\Lambda\) is the scaled cumulant generating function for \(\sum_{t=1}^m \Delta_t\) under the Parry measure. Differentiating at \(0\) yields
+Write \(z=e^\theta\) and let \(\rho_\Delta(\theta)\) be its Perron root. A direct determinant computation gives
 \[
-\Lambda'(0)=\frac{4}{9},
-\qquad
-\Lambda''(0)=\frac{118}{243}.
+F_\Delta(\lambda,z)
+:=
+\det(\lambda I-A_\theta)
+=
+\lambda^4-\lambda^3-(2z+1)\lambda^2+(2z-z^3)\lambda+2z.
 \]
-The second derivative equals the Green--Kubo variance \(\Var(\Delta_0)+2\sum_{j\ge 1}\Cov(\Delta_0,\Delta_j)\), establishing the CLT variance constant in Theorem~\ref{thm:llnclt}.
+Since \(F_\Delta(2,1)=0\), implicit differentiation of
+\[
+F_\Delta(\rho_\Delta(\theta),e^\theta)=0
+\]
+at \(\theta=0\) yields
+\[
+F_{\Delta,\lambda}(2,1)=9,\qquad F_{\Delta,z}(2,1)=-8,
+\]
+so \(\rho_\Delta'(0)=8/9\). A second differentiation gives
+\[
+F_{\Delta,\lambda\lambda}(2,1)=30,\qquad
+F_{\Delta,\lambda z}(2,1)=-9,\qquad
+F_{\Delta,zz}(2,1)=-12,
+\]
+hence \(\rho_\Delta''(0)=332/243\). Therefore
+\[
+\Lambda_\Delta(\theta):=\log \rho_\Delta(\theta)-\log 2
+\]
+satisfies
+\[
+\Lambda_\Delta'(0)=\frac{\rho_\Delta'(0)}{2}=\frac49,
+\qquad
+\Lambda_\Delta''(0)=\frac{\rho_\Delta''(0)}{2}-\left(\frac{\rho_\Delta'(0)}{2}\right)^2=\frac{118}{243}.
+\]
+These are the mean discrepancy density and the CLT variance in Theorem~\ref{thm:llnclt}.
 
-\subsection{Closed-form autocovariances and spectrum}
-The edge-chain transition matrix associated to \(P\) has eigenvalues \(\{1,\tfrac12,-\tfrac12,-\tfrac12,0,0,0\}\). As a consequence, the autocovariances \(c_j=\Cov(\Delta_0,\Delta_j)\) admit a two-mode closed form for \(j\ge 1\), with a single-step correction at \(j=0\) coming from the nilpotent sector. One convenient presentation is the one in Theorem~\ref{thm:spectrum}:
+For the output-weight observable \(Y_t\), the labels with \(Y_t=1\) are \(01\) and \(11\). Weighting each such edge by \(e^\theta\) gives
 \[
-c_0=\frac{20}{81},
-\qquad
-c_j = 2^{-j}\!\left(\frac{1}{8}+(-1)^j\!\left(\frac{7}{648}+\frac{j}{108}\right)\right)\quad (j\ge 1).
+B_\theta=
+\begin{pmatrix}
+1& e^\theta &0& e^\theta\\
+0&0&1&0\\
+1&1+e^\theta&0&0\\
+1&0&0&0
+\end{pmatrix}.
 \]
-Summing the corresponding cosine series gives the rational power spectral density
+This is exactly the matrix \(M(e^\theta)\) from Appendix~\ref{app:recurrence}. Its characteristic polynomial is
+\[
+F_Y(\lambda,z)
+:=
+\det(\lambda I-B_\theta)
+=
+\lambda^4-\lambda^3-(2z+1)\lambda^2+\lambda+z(z+1).
+\]
+With \(F_Y(2,1)=0\), implicit differentiation of \(F_Y(\rho_Y(\theta),e^\theta)=0\) gives
+\[
+F_{Y,\lambda}(2,1)=9,\qquad F_{Y,z}(2,1)=-5,
+\]
+so \(\rho_Y'(0)=5/9\). Differentiating once more and using
+\[
+F_{Y,\lambda\lambda}(2,1)=30,\qquad
+F_{Y,\lambda z}(2,1)=-8,\qquad
+F_{Y,zz}(2,1)=2,
+\]
+gives \(\rho_Y''(0)=71/243\). Hence
+\[
+\Lambda_Y(\theta):=\log \rho_Y(\theta)-\log 2
+\]
+satisfies
+\[
+\Lambda_Y'(0)=\frac{5}{18},
+\qquad
+\Lambda_Y''(0)=\frac{67}{972},
+\]
+which are the constants in Theorem~\ref{thm:weight-stats}.
+
+\subsection{Autocovariances and power spectrum}
+For the vertex chain with transition matrix \(P\), the discrepancy observable depends only on the current transition:
+\[
+g(i,j)=
+\begin{cases}
+1,& (i,j)\in\{(00,01),(01,10),(10,00)\},\\
+0,& \text{otherwise}.
+\end{cases}
+\]
+Define
+\[
+h_j:=\sum_k P_{jk}g(j,k)
+=
+\begin{pmatrix}
+\frac14\\[2mm]
+1\\[2mm]
+\frac12\\[2mm]
+0
+\end{pmatrix},
+\qquad
+q_k:=\sum_j \pi_jP_{jk}g(j,k)
+=
+\begin{pmatrix}
+\frac19 & \frac19 & \frac29 & 0
+\end{pmatrix}.
+\]
+Then
+\[
+\EE[\Delta_0]=\pi h=\frac49,
+\qquad
+\EE[\Delta_0\Delta_j]=qP^{j-1}h\qquad (j\ge1).
+\]
+Since \(P=\tfrac12 D^{-1}AD\) with \(D=\mathrm{diag}(2,1,2,1)\), \(P\) is similar to \(A/2\). Therefore its characteristic polynomial is
+\[
+(\lambda-1)\left(\lambda-\frac12\right)\left(\lambda+\frac12\right)^2.
+\]
+The covariance sequence \(c_j=\Cov(\Delta_0,\Delta_j)\) is stationary, so the \(\lambda=1\) mode cancels, and for \(j\ge1\) it must have the form
+\[
+c_j=2^{-j}\bigl(a+(-1)^j(b+cj)\bigr)
+\]
+for suitable constants \(a,b,c\). Direct computation from the formula \(c_j=qP^{j-1}h-(4/9)^2\) gives
+\[
+c_1=\frac{17}{324},\qquad
+c_2=\frac{25}{648},\qquad
+c_3=\frac{7}{648}.
+\]
+Solving the resulting linear system yields
+\[
+a=\frac18,\qquad b=\frac{7}{648},\qquad c=\frac{1}{108},
+\]
+and therefore
+\[
+c_j = 2^{-j}\!\left(\frac{1}{8}+(-1)^j\!\left(\frac{7}{648}+\frac{j}{108}\right)\right)\qquad (j\ge1).
+\]
+Since \(\Delta_0\in\{0,1\}\) with mean \(4/9\),
+\[
+c_0=\Var(\Delta_0)=\frac49\left(1-\frac49\right)=\frac{20}{81}.
+\]
+
+Because \(\sum_{j\in\ZZ}\abs{c_j}<\infty\), the power spectral density is
+\[
+S(\omega)=c_0+2\sum_{j\ge1}c_j\cos(j\omega).
+\]
+Substituting the closed form for \(c_j\), summing the geometric series
+\[
+\sum_{j\ge1}\left(\frac{e^{i\omega}}{2}\right)^j,
+\qquad
+\sum_{j\ge1}j\left(-\frac{e^{i\omega}}{2}\right)^j,
+\]
+and taking real parts gives
 \[
 S(\omega)
 =
 \frac{2\bigl(32\cos^3\omega+12\cos^2\omega-116\cos\omega-105\bigr)}
-{9\,(4\cos\omega-5)\,(4\cos\omega+5)^2},
+{9\,(4\cos\omega-5)\,(4\cos\omega+5)^2}.
 \]
-and \(S(0)=118/243\) recovers \(\Lambda''(0)\).
-
+At \(\omega=0\) this simplifies to \(S(0)=118/243\), in agreement with \(\Lambda_\Delta''(0)\).

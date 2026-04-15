@@ -2,6 +2,8 @@
 \label{sec:ledger}
 
 \subsection{An exact information ledger identity}
+The following identity is a fiberwise refinement of the usual entropy chain-rule bookkeeping from information theory; compare \cite[Chapter~2]{CoverThomas2006}.
+
 Let \(\Delta(\Om_m)\) and \(\Delta(X_m)\) denote the probability simplices on \(\Om_m\) and \(X_m\), respectively. Define the pushforward operator
 \[
 P_m := \Fold_m\push : \Delta(\Om_m)\to \Delta(X_m),
@@ -18,16 +20,61 @@ H(\mu)=H(\pi)+\EE_{\pi}[\log d_m(X)]-\KL(\mu\|\tilde \mu).
 \end{equation}
 \end{theorem}
 
+\begin{proof}
+By definition,
+\[
+\tilde\mu(a)=\frac{\pi(\Fold_m(a))}{d_m(\Fold_m(a))}\qquad (a\in\Om_m).
+\]
+Since \(\mu\) is supported on \(\Om_m\),
+\[
+H(\mu)
+=
+-\sum_{a\in\Om_m}\mu(a)\log \mu(a)
+=
+-\sum_{a\in\Om_m}\mu(a)\log \tilde\mu(a)-\KL(\mu\|\tilde\mu).
+\]
+Write \(x=\Fold_m(a)\). Then
+\[
+-\log \tilde\mu(a)
+=
+-\log \pi(x)+\log d_m(x),
+\]
+so
+\[
+-\sum_{a\in\Om_m}\mu(a)\log \tilde\mu(a)
+=
+\sum_{a\in\Om_m}\mu(a)\bigl(-\log \pi(\Fold_m(a))+\log d_m(\Fold_m(a))\bigr).
+\]
+Grouping terms by fibers of \(\Fold_m\) and using \(\pi=P_m\mu\) gives
+\[
+\sum_{x\in X_m}\pi(x)\bigl(-\log \pi(x)+\log d_m(x)\bigr)
+=
+H(\pi)+\EE_\pi[\log d_m(X)].
+\]
+Substituting this into the previous display yields \eqref{eq:ledger}.
+\end{proof}
+
 \begin{remark}
 Equation \eqref{eq:ledger} decomposes microscopic uncertainty into (i) visible entropy on the stable layer, (ii) a fiber-volume term, and (iii) a residual microscopic mismatch measured by KL divergence. No approximation is involved.
 \end{remark}
 
 \subsection{A dual-budget addressing capacity upper bound}
-Under an ``address-before-value'' convention, let \(T_m\) denote a synchronization time and let \(\nu_m\) be a corresponding maximal-entropy measure. Let \(\nu_{u,m}\) be a temperature-gated pushforward distribution on the length-\(m\) address space, and define the order-2 collision probability
+To keep the notation self-contained, fix a finite address space \(A_m\) of length-\(m\) codewords. For a single object, let \(T_m\) be a nonnegative integer-valued synchronization time with tail law computed under a reference measure \(\nu_m\). After synchronization, assume the emitted address has law \(\nu_{u,m}\in\Delta(A_m)\), where \(u\) is an external temperature parameter. For \(N\) independent objects, write
+\[
+\xi_1,\dots,\xi_N\stackrel{\mathrm{i.i.d.}}{\sim}\nu_{u,m},
+\qquad
+T_m^{(1)},\dots,T_m^{(N)}\stackrel{\mathrm{i.i.d.}}{\sim}\nu_m.
+\]
+Define the order-\(2\) collision probability
 \[
 \Col_u(m):=\sum_x \nu_{u,m}(x)^2.
 \]
-For \(N\) independent objects, let \(\mathrm{Fail}_{m,n,N}\) be the event that either (i) some object remains unsynchronized (NULL) by time \(n\), or (ii) an address collision occurs.
+When the limit exists, we also write
+\[
+h_2(u):=
+-\lim_{m\to\infty}\frac{1}{m}\log \Col_u(m)
+\]
+for the order-\(2\) collision exponent. Let \(\mathrm{Fail}_{m,n,N}\) be the event that either (i) at least one object remains unsynchronized by time \(n\), or (ii) two synchronized objects emit the same address.
 
 \begin{theorem}[Union bound and asymptotic budgets]\label{thm:budget}
 One has the union bound
@@ -44,7 +91,42 @@ m\ \ge\ \frac{2}{h_2(u)}\Bigl(\log N+\log\frac{2}{\delta}\Bigr)
 \ \Longrightarrow\ 
 \PP(\mathrm{Fail}_{m,n,N})\le\delta.
 \]
+for all sufficiently large \(m\).
 \end{theorem}
+
+\begin{proof}
+For \(1\le i\le N\), let
+\[
+A_i:=\{T_m^{(i)}>n\},
+\]
+and for \(1\le i<j\le N\), let
+\[
+B_{ij}:=\{\xi_i=\xi_j\}.
+\]
+By definition,
+\[
+\mathrm{Fail}_{m,n,N}\subset \bigcup_{i=1}^N A_i \,\cup\, \bigcup_{1\le i<j\le N} B_{ij}.
+\]
+The union bound therefore gives
+\[
+\PP(\mathrm{Fail}_{m,n,N})
+\le
+\sum_{i=1}^N\PP(A_i)+\sum_{1\le i<j\le N}\PP(B_{ij})
+=
+N\,\nu_m(T_m>n)+\binom{N}{2}\Col_u(m),
+\]
+which is \eqref{eq:union}.
+
+Assume now that \(\nu_m(T_m>n)\le C_m e^{-\varepsilon_m n}\) and \(\Col_u(m)=\exp(-h_2(u)m+o(m))\). If
+\[
+n\ge \frac{1}{\varepsilon_m}\Bigl(\log(NC_m)+\log\frac{2}{\delta}\Bigr),
+\]
+then \(N\,\nu_m(T_m>n)\le \delta/2\). Likewise, for \(m\) large enough that the \(o(m)\)-term is absorbed into \(\log(2/\delta)\), the bound
+\[
+m\ge \frac{2}{h_2(u)}\Bigl(\log N+\log\frac{2}{\delta}\Bigr)
+\]
+implies \(\binom{N}{2}\Col_u(m)\le \delta/2\). Substituting these two estimates into \eqref{eq:union} gives \(\PP(\mathrm{Fail}_{m,n,N})\le \delta\).
+\end{proof}
 
 \begin{remark}
 The leading-order budgets separate orthogonally: \(n\) is controlled by synchronization tails, while \(m\) is controlled by the collision exponent \(h_2(u)\).

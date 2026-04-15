@@ -478,4 +478,76 @@ theorem pathIndCount_cassini (n : Nat) :
     have := fib_cassini_odd (n + 2) hodd2
     linarith [Nat.mul_comm (Nat.fib (n + 2)) (Nat.fib (n + 4))]
 
+/-- pathIndCount 2 = 3.
+    infra:path-ind-set-count -/
+theorem pathIndCount_two : pathIndCount 2 = 3 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- pathIndCount 3 = 5.
+    infra:path-ind-set-count -/
+theorem pathIndCount_three : pathIndCount 3 = 5 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- pathIndCount 4 = 8.
+    infra:path-ind-set-count -/
+theorem pathIndCount_four : pathIndCount 4 = 8 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- pathIndCount 5 = 13.
+    infra:path-ind-set-count -/
+theorem pathIndCount_five : pathIndCount 5 = 13 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- Paper small-value package for pathIndCount, n = 0..5, plus the F_7 identity.
+    prop:folding-stable-syntax-fibonacci-count -/
+theorem paper_pathIndCount_small_values_package :
+    pathIndCount 0 = 1 ∧
+    pathIndCount 1 = 2 ∧
+    pathIndCount 2 = 3 ∧
+    pathIndCount 3 = 5 ∧
+    pathIndCount 4 = 8 ∧
+    pathIndCount 5 = 13 ∧
+    pathIndCount 5 = Nat.fib 7 :=
+  ⟨pathIndCount_zero, pathIndCount_one, pathIndCount_two,
+   pathIndCount_three, pathIndCount_four, pathIndCount_five,
+   path_independent_set_count 5⟩
+
+/-- pathIndCount 6 = 21 = F_8.
+    infra:path-ind-set-count -/
+theorem pathIndCount_six : pathIndCount 6 = 21 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- pathIndCount 7 = 34 = F_9.
+    infra:path-ind-set-count -/
+theorem pathIndCount_seven : pathIndCount 7 = 34 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- pathIndCount 8 = 55 = F_10.
+    infra:path-ind-set-count -/
+theorem pathIndCount_eight : pathIndCount 8 = 55 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- pathIndCount 9 = 89 = F_11.
+    infra:path-ind-set-count -/
+theorem pathIndCount_nine : pathIndCount 9 = 89 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- pathIndCount 10 = 144 = F_12.
+    infra:path-ind-set-count -/
+theorem pathIndCount_ten : pathIndCount 10 = 144 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- Paper package: pathIndCount values n = 6..10 plus the F_12 identity.
+    prop:folding-stable-syntax-fibonacci-count -/
+theorem paper_pathIndCount_6_to_10_package :
+    pathIndCount 6 = 21 ∧
+    pathIndCount 7 = 34 ∧
+    pathIndCount 8 = 55 ∧
+    pathIndCount 9 = 89 ∧
+    pathIndCount 10 = 144 ∧
+    pathIndCount 10 = Nat.fib 12 :=
+  ⟨pathIndCount_six, pathIndCount_seven, pathIndCount_eight,
+   pathIndCount_nine, pathIndCount_ten,
+   path_independent_set_count 10⟩
+
 end Omega

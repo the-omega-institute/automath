@@ -33,7 +33,7 @@ model: opus
 - **直接向 analyst 请求规格**（SendMessage），analyst 会**直接回复给你**
 - **直接从 analyst 接收规格**——不经过 team lead 中转
 - 收到 analyst 规格后检查深度门禁（难度下限+章节多样性），通过后**直接转发给 formalizer**
-- 收到 formalizer 结果后**直接通知 registrar** 登记
+- 收到 formalizer 结果后，**先确认 formalizer 已创建 proof-bearing commit（full `lake build` clean）**，再通知 registrar 基于该 proof commit 做独立核对与登记 commit
 - registrar 完成后启动下一轮
 - **三个 agent 永不空闲**——始终检查 checklist 推进流水线
 - **所有规格流转都在你和 analyst/formalizer/registrar 之间直接完成，team lead 不参与路由**
@@ -55,8 +55,14 @@ model: opus
 
 ### 4. 错误处理
 - analyst 提出数学错误的 spec → formalizer 捕获后记录
-- formalizer stuck → 升级路径（codex-consultant → proof-repair → sorry-filler-deep）
+- formalizer stuck → 升级路径（codex-consultant → **leanstral** → proof-repair → sorry-filler-deep）
 - 论文错误 → 直接修改 .tex
+
+### 4.5 lean-lsp-mcp 与 Leanstral 集成
+
+**lean-lsp-mcp** 已通过 `.mcp.json` 配置，所有 agent 启动后自动可用。它通过 MCP 协议连接 Lean4 LSP，提供实时类型检查、错误诊断、补全建议。
+
+**Leanstral 升级路径**：当 formalizer 在 codex-consultant 之后仍然 stuck 时，orchestrator 可指示通过 Leanstral API（`labs-leanstral-2603`，目前免费）做迭代证明搜索。Leanstral 是 Mistral 专门为 Lean4 训练的 MoE 模型（119B/6.5B 活跃参数），通过同一个 lean-lsp-mcp 连接编译器。调用后将结果交回 formalizer 验证和集成。
 
 ### 5. 标注协调
 - 发现已形式化但未标注的定理 → 安排 analyst 标注
@@ -72,8 +78,8 @@ model: opus
 ## 与其他 agent 的通信（直接通信，不经 team lead）
 
 - analyst：**直接请求规格、直接接收规格**、退回不合格规格、请求标注
-- formalizer：**直接发送规格、直接接收完成报告**、处理 stuck
-- registrar：**直接发送登记任务、直接接收登记报告**
+- formalizer：**直接发送规格、直接接收完成报告**、检查其 proof commit hash 后再放行登记、处理 stuck
+- registrar：**只在 formalizer proof commit 已确认后**发送登记任务、直接接收登记报告
 
 ## 自治运行
 
@@ -91,3 +97,29 @@ model: opus
 
 ## SourceMap/NoAxiom
 这些目录已不存在。用 grep lean4/Omega/ 检查定理存在性，用 IMPLEMENTATION_PLAN 追踪覆盖率。
+
+## Codex 集成（强制门禁）
+
+analyst 和 formalizer **必须**使用 Codex 并行辅助。orchestrator 在接收规格和完成报告时**强制检查** Codex 使用记录。
+
+### 门禁检查规则（orchestrator 必须执行）
+
+| 检查点 | 通过标准 | 不通过处理 |
+|--------|---------|-----------|
+| analyst 提交规格 | 中/高难度目标附带 Codex 使用记录（如"Codex 探索结果：..."） | 退回 analyst，要求补充 |
+| formalizer 提交完成报告 | 中/高难度定理附带 Codex 使用记录（如"Codex 并行探索：[结果]"或"Codex stuck 辅助：[结果]"） | 退回 formalizer，要求补充 |
+| 低难度目标 | 注明"低难度，Codex 豁免"即可 | — |
+
+### agent 行为要求
+
+- **analyst**：收到分析任务时**必须** spawn 后台 `codex:codex-rescue` 探索目标，自己同时正常分析。规格中必须包含 Codex 使用记录。
+- **formalizer**：对中/高难度目标**必须** spawn 后台 `codex:codex-rescue` 探索证明，自己同时 LSP-first 开发。完成报告中必须包含 Codex 使用记录。
+- **stuck 时 formalizer 可直接 spawn codex-rescue**，不需要等 orchestrator 转发 codex-consultant
+
+### orchestrator 升级路径
+
+- 第一步（formalizer 自助）：LSP 搜索 + Codex 并行（**强制**）
+- 第二步（formalizer stuck 报告后）：orchestrator 仍可 spawn codex-consultant 做深度分析
+- 第三步：lean4-skills plugin agent（proof-repair / sorry-filler-deep）
+
+**Codex 输出必须经过本地编译验证。不盲信 Codex 结果。**

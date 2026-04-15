@@ -699,6 +699,13 @@ theorem max_fiber_prob_bounds (m : Nat) :
     prop:no11-word-count -/
 theorem no11_count (m : Nat) : Fintype.card (X m) = Nat.fib (m + 2) := X.card_eq_fib m
 
+/-- Paper: projection entropy cardinality and strict gap package.
+    prop:pom-projection-entropy, prop:pom-projection-entropy-strict -/
+theorem paper_pom_projection_entropy_gap (m : ℕ) :
+    Fintype.card (Omega.X m) = Nat.fib (m + 2) ∧
+    (2 ≤ m → Nat.fib (m + 2) < 2 ^ m) := by
+  exact ⟨projection_entropy_cardinality m, entropy_gap_strict m⟩
+
 end
 
 end Omega.Frontier

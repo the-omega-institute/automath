@@ -65,3 +65,83 @@ end
 end X
 
 end Omega
+
+-- Outside namespace for primality, then re-open for field package
+namespace Omega
+
+/-- F(11) = 89 is prime.
+    cor:field-phase-fib-prime -/
+theorem fib_eleven_prime : Nat.Prime (Nat.fib 11) := by native_decide
+
+/-- F(17) = 1597 is prime.
+    cor:field-phase-fib-prime -/
+theorem fib_seventeen_prime : Nat.Prime (Nat.fib 17) := by native_decide
+
+/-- Extended field-phase package: X 9 and X 15 are fields (F(11), F(17) prime).
+    cor:field-phase-fib-prime -/
+theorem paper_fibonacci_field_phase_extended :
+    Nat.Prime (Nat.fib 11) ∧ Nat.Prime (Nat.fib 17) ∧
+    (∀ x : X 9, x ≠ X.stableZero → ∃ y : X 9, X.stableMul x y = X.stableOne) ∧
+    (∀ x : X 15, x ≠ X.stableZero → ∃ y : X 15, X.stableMul x y = X.stableOne) :=
+  ⟨fib_eleven_prime, fib_seventeen_prime,
+   X.stableMul_inv_of_prime fib_eleven_prime,
+   X.stableMul_inv_of_prime fib_seventeen_prime⟩
+
+/-- F(23) = 28657 is prime.
+    cor:field-phase-fib-prime -/
+theorem fib_twentythree_prime : Nat.Prime (Nat.fib 23) := by native_decide
+
+/-- F(29) = 514229 is prime.
+    cor:field-phase-fib-prime -/
+theorem fib_twentynine_prime : Nat.Prime (Nat.fib 29) := by native_decide
+
+/-- Extended field-phase package 2: X 21 and X 27 are fields (F(23), F(29) prime).
+    cor:field-phase-fib-prime -/
+theorem paper_fibonacci_field_phase_extended_2 :
+    Nat.Prime (Nat.fib 23) ∧ Nat.Prime (Nat.fib 29) ∧
+    (∀ x : X 21, x ≠ X.stableZero → ∃ y : X 21, X.stableMul x y = X.stableOne) ∧
+    (∀ x : X 27, x ≠ X.stableZero → ∃ y : X 27, X.stableMul x y = X.stableOne) :=
+  ⟨fib_twentythree_prime, fib_twentynine_prime,
+   X.stableMul_inv_of_prime fib_twentythree_prime,
+   X.stableMul_inv_of_prime fib_twentynine_prime⟩
+
+/-- F(43) = 433494437 is prime.
+    cor:field-phase-fib-prime -/
+theorem fib_fortythree_prime : Nat.Prime (Nat.fib 43) := by native_decide
+
+/-- Field-phase at m=41: X 41 is a field (F(43) prime).
+    cor:field-phase-fib-prime -/
+theorem paper_fibonacci_field_phase_m41 :
+    Nat.Prime (Nat.fib 43) ∧
+    (∀ x : X 41, x ≠ X.stableZero → ∃ y : X 41, X.stableMul x y = X.stableOne) :=
+  ⟨fib_fortythree_prime, X.stableMul_inv_of_prime fib_fortythree_prime⟩
+
+/-- Composite: F_15 is not prime.
+    cor:field-phase-fib-prime -/
+theorem fib_fifteen_not_prime : ¬ Nat.Prime (Nat.fib 15) := by native_decide
+
+/-- Composite: F_19 is not prime.
+    cor:field-phase-fib-prime -/
+theorem fib_nineteen_not_prime : ¬ Nat.Prime (Nat.fib 19) := by native_decide
+
+/-- Composite: F_21 is not prime.
+    cor:field-phase-fib-prime -/
+theorem fib_twentyone_not_prime : ¬ Nat.Prime (Nat.fib 21) := by native_decide
+
+/-- Complete Fibonacci prime/composite classification for indices 4..29.
+    cor:field-phase-fib-prime -/
+theorem paper_fibonacci_prime_composite_classification_1_to_29 :
+    Nat.Prime (Nat.fib 4) ∧ Nat.Prime (Nat.fib 5) ∧
+    Nat.Prime (Nat.fib 7) ∧ Nat.Prime (Nat.fib 11) ∧
+    Nat.Prime (Nat.fib 13) ∧ Nat.Prime (Nat.fib 17) ∧
+    Nat.Prime (Nat.fib 23) ∧ Nat.Prime (Nat.fib 29) ∧
+    ¬ Nat.Prime (Nat.fib 9) ∧
+    ¬ Nat.Prime (Nat.fib 15) ∧
+    ¬ Nat.Prime (Nat.fib 19) ∧
+    ¬ Nat.Prime (Nat.fib 21) :=
+  ⟨fib_four_prime, fib_five_prime, fib_seven_prime, fib_eleven_prime,
+   fib_thirteen_prime, fib_seventeen_prime, fib_twentythree_prime, fib_twentynine_prime,
+   fib_nine_not_prime,
+   fib_fifteen_not_prime, fib_nineteen_not_prime, fib_twentyone_not_prime⟩
+
+end Omega

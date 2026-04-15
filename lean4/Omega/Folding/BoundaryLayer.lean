@@ -186,6 +186,16 @@ theorem paper_boundaryUplift_card (n : Nat) (hn1 : 2 ≤ n) (hn2 : n ≤ 4) :
     cBoundaryCount (n + 4) = Fintype.card (X n) :=
   boundaryUplift_card n hn1 hn2
 
+/-- Paper small-range wrapper for the boundary shift-4 uplift.
+    thm:boundary-shift4-uplift-isomorphism -/
+theorem paper_boundary_shift4_uplift_small :
+    cBoundaryCount 6 = Fintype.card (X 2) ∧
+    cBoundaryCount 7 = Fintype.card (X 3) ∧
+    cBoundaryCount 8 = Fintype.card (X 4) := by
+  exact ⟨boundaryUplift_card 2 (by omega) (by omega),
+    boundaryUplift_card 3 (by omega) (by omega),
+    boundaryUplift_card 4 (by omega) (by omega)⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase 201: Involution obstruction
 -- ══════════════════════════════════════════════════════════════
@@ -984,5 +994,115 @@ theorem cMixedEndCount_eq_two_fib (m : Nat) (hm : 2 ≤ m) :
 theorem cMixedEndCount_eq_two_fib_bounded (m : Nat) (hm1 : 2 ≤ m) (hm2 : m ≤ 8) :
     cMixedEndCount m = 2 * Nat.fib (m - 1) := by
   interval_cases m <;> native_decide
+
+/-- The boundary square identity in cBoundaryCount form: b(2m-1) = b(m)² + b(m+1)² for m ≥ 2.
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_square_identity_general' (m : Nat) (hm : 2 ≤ m) :
+    cBoundaryCount (2 * m - 1) =
+    cBoundaryCount m ^ 2 + cBoundaryCount (m + 1) ^ 2 := by
+  match m, hm with
+  | 2, _ => native_decide
+  | 3, _ => native_decide
+  | m + 4, _ =>
+    rw [cBoundaryCount_eq_fib_general (2 * (m + 4) - 1) (by omega),
+        cBoundaryCount_eq_fib_general (m + 4) (by omega),
+        cBoundaryCount_eq_fib_general (m + 4 + 1) (by omega)]
+    have h1 : 2 * (m + 4) - 1 - 2 = 2 * (m + 2) + 1 := by omega
+    have h2 : m + 4 - 2 = m + 2 := by omega
+    have h3 : m + 4 + 1 - 2 = m + 3 := by omega
+    rw [h1, h2, h3, show m + 2 + 1 = m + 3 from by omega]
+    exact (fib_sq_add_sq (m + 2)).symm
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R304: cBoundaryCount extended + square identity instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- Boundary count = F(m-2) for m ∈ [3,12].
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_eq_fib_extended_twelve (m : Nat) (hm1 : 3 ≤ m) (hm : m ≤ 12) :
+    cBoundaryCount m = Nat.fib (m - 2) := by
+  by_cases h : m ≤ 10
+  · exact cBoundaryCount_eq_fib_extended m hm1 h
+  · push_neg at h
+    interval_cases m <;> native_decide
+
+/-- prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_square_identity_m4 :
+    cBoundaryCount 7 = cBoundaryCount 4 ^ 2 + cBoundaryCount 5 ^ 2 := by native_decide
+
+/-- prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_square_identity_m5 :
+    cBoundaryCount 9 = cBoundaryCount 5 ^ 2 + cBoundaryCount 6 ^ 2 := by native_decide
+
+/-- prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_square_identity_m6 :
+    cBoundaryCount 11 = cBoundaryCount 6 ^ 2 + cBoundaryCount 7 ^ 2 := by native_decide
+
+/-- Paper package. prop:bdry-fib-square-identity -/
+theorem paper_cBoundaryCount_extended :
+    cBoundaryCount 9 = 13 ∧ cBoundaryCount 10 = 21 ∧
+    cBoundaryCount 11 = 34 ∧ cBoundaryCount 12 = 55 ∧
+    cBoundaryCount 9 = cBoundaryCount 5 ^ 2 + cBoundaryCount 6 ^ 2 ∧
+    cBoundaryCount 11 = cBoundaryCount 6 ^ 2 + cBoundaryCount 7 ^ 2 := by
+  exact ⟨cBoundaryCount_nine, cBoundaryCount_ten, cBoundaryCount_eleven, cBoundaryCount_twelve,
+    cBoundaryCount_square_identity_m5, cBoundaryCount_square_identity_m6⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R304: Cassini gap factorization instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- Cassini gap factorization instances. prop:bdry-gap-33-cassini-factorization -/
+theorem cassini_gap_factorization_instances :
+    Nat.fib 5 - 1 = Nat.fib 2 * (Nat.fib 4 + Nat.fib 2) ∧
+    Nat.fib 9 - 1 = Nat.fib 4 * (Nat.fib 6 + Nat.fib 4) ∧
+    Nat.fib 13 - 1 = Nat.fib 6 * (Nat.fib 8 + Nat.fib 6) ∧
+    Nat.fib 17 - 1 = Nat.fib 8 * (Nat.fib 10 + Nat.fib 8) := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- Paper package. prop:bdry-gap-33-cassini-factorization -/
+theorem paper_cassini_gap_factorization_extended :
+    Nat.fib 9 - 1 = 33 ∧
+    33 = Nat.fib 4 * (Nat.fib 6 + Nat.fib 4) ∧
+    Nat.fib 13 - 1 = 232 ∧
+    232 = Nat.fib 6 * (Nat.fib 8 + Nat.fib 6) := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
+
+-- Phase R611: Boundary count recurrence and square identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Boundary count recurrence for m = 3..8.
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_recurrence (m : Nat) (hm1 : 3 ≤ m) (hm : m ≤ 8) :
+    cBoundaryCount (m + 2) = cBoundaryCount (m + 1) + cBoundaryCount m := by
+  interval_cases m <;> native_decide
+
+/-- Square identity seeds: b(2k+1) = b(k)² + b(k+1)².
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_square_identity_seeds :
+    cBoundaryCount 5 = cBoundaryCount 3 ^ 2 + cBoundaryCount 4 ^ 2 ∧
+    cBoundaryCount 7 = cBoundaryCount 4 ^ 2 + cBoundaryCount 5 ^ 2 ∧
+    cBoundaryCount 9 = cBoundaryCount 5 ^ 2 + cBoundaryCount 6 ^ 2 := by
+  refine ⟨by native_decide, by native_decide, by native_decide⟩
+
+/-- Paper package: boundary layer extended.
+    prop:bdry-fib-square-identity -/
+theorem paper_boundary_layer_extended :
+    cBoundaryCount 9 = 13 ∧ cBoundaryCount 10 = 21 ∧
+    (∀ m, 3 ≤ m → m ≤ 10 → cBoundaryCount m = Nat.fib (m - 2)) ∧
+    cBoundaryCount 9 = cBoundaryCount 5 ^ 2 + cBoundaryCount 6 ^ 2 :=
+  ⟨cBoundaryCount_nine, cBoundaryCount_ten, cBoundaryCount_eq_fib_extended,
+   by native_decide⟩
+
+/-- Paper: `cor:parry-golden-three-levels`. -/
+theorem paper_parry_golden_three_levels (m : ℕ) (hm : 2 ≤ m) :
+    cBothEndsFalseCount m = Nat.fib m ∧
+    cMixedEndCount m = 2 * Nat.fib (m - 1) ∧
+    cBoundaryCount m = Nat.fib (m - 2) := by
+  refine ⟨cBothEndsFalseCount_eq_fib m hm, cMixedEndCount_eq_two_fib m hm, ?_⟩
+  by_cases h3 : 3 ≤ m
+  · exact cBoundaryCount_eq_fib_general m h3
+  · have hm2 : m = 2 := by omega
+    subst hm2
+    decide
 
 end Omega

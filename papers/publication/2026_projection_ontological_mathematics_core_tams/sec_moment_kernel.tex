@@ -32,18 +32,15 @@ Thus \(S_0(m)=\card{X_m}=F_{m+2}\), \(S_1(m)=2^m\), and for \(q\ge 2\),
 
 \begin{theorem}[Finite-state collision kernels]
 \label{thm:collision-kernel}
+\leanverified{paper_projection_collision_kernel}
 For every integer \(q\ge 2\), there exist a finite nonnegative integer matrix
 \(A_q\) and nonnegative integer vectors \(u_q,v_q\) such that
 \[
   S_q(m)=u_q^{\mathsf T}A_q^m v_q
   \qquad (m\ge 0).
 \]
-Consequently,
-\[
-  \lim_{m\to\infty}\frac{1}{m}\log S_q(m)=\log r_q,
-  \qquad
-  r_q:=\rho(A_q).
-\]
+Moreover, \(A_q\) may be chosen trim: every state of the underlying automaton
+lies on a directed path from the initial state to an accepting terminal state.
 \end{theorem}
 
 \begin{proof}
@@ -60,17 +57,20 @@ checks equality of the newly committed visible blocks at each step, and accepts
 precisely those \(q\)-tuples with common finite-window fold.  Its adjacency
 matrix is a finite nonnegative integer matrix \(A_q\), and the initial and
 terminal conditions are encoded by nonnegative integer vectors \(u_q,v_q\).
-Thus
+Deleting any state that is not reachable from the initial synchronized state or
+cannot reach an accepting terminal state does not change the accepted path
+count.  Thus the automaton may be taken trim.  Let \(A_q\) be the adjacency
+matrix of this trim automaton, let \(u_q\) select the initial state, and let
+\(v_q\) mark the accepting terminal states.  Then
 \[
   S_q(m)=u_q^{\mathsf T}A_q^m v_q
   \qquad (m\ge 0).
 \]
-The limit formula now follows directly from Perron--Frobenius theory
-\cite{Seneta2006}.
 \end{proof}
 
 \begin{theorem}[Symmetric compression]
 \label{thm:symmetric-compression}
+\leanverified{paper_projection_symmetric_compression}
 Let \(k\) be the number of states of the one-copy augmented fold automaton from
 Appendix~\ref{app:transducer}.  The kernel \(A_q\) of
 \Cref{thm:collision-kernel} admits a symmetric quotient
@@ -117,6 +117,7 @@ the same eigenvalue, and therefore \(\rho(\widetilde A_q)=\rho(A_q)\).
 
 \begin{corollary}[Algebraic realization of the partition constants]
 \label{cor:lambda-algebraic}
+\leanverified{paper_projection_lambda_algebraic}
 For every integer \(q\ge 2\), the partition constant \(\lambda_q\) of
 \Cref{thm:all-q-transfer} is the spectral radius of a nonnegative integer
 matrix.  More precisely,
@@ -161,22 +162,24 @@ applying Cauchy--Schwarz to the sequences
 
 \begin{corollary}[Adjacent pressure convexity]
 \label{cor:cross-q-logconvex}
-For every \(q\ge 2\), the Perron roots of \Cref{thm:collision-kernel} satisfy
+\leanverified{paper_projection_adjacent_pressure_convexity}
+For every \(q\ge 2\), the partition constants satisfy
 \[
-  r_q^2\le r_{q-1}r_{q+1}.
+  \lambda_q^2\le \lambda_{q-1}\lambda_{q+1}.
 \]
 \end{corollary}
 
 \begin{proof}
 By \Cref{prop:hankel-psd},
 \(S_q(m)^2\le S_{q-1}(m)S_{q+1}(m)\) for every \(m\).  Take logarithms, divide
-by \(m\), and let \(m\to\infty\), using \Cref{thm:collision-kernel}.
+by \(m\), and let \(m\to\infty\), using \Cref{thm:all-q-transfer}.
 \end{proof}
 
 \subsection{Pressure geometry and the zero-temperature regime}
 
 \begin{theorem}[Global pressure convexity]
 \label{thm:global-pressure-convexity}
+\leanverified{paper_projection_global_pressure_convexity}
 Let \(1\le p<q<r\) be integers, and set \(\theta=(q-p)/(r-p)\).  Then
 \[
   S_q(m)\le S_p(m)^{1-\theta}S_r(m)^\theta
@@ -211,6 +214,7 @@ Take logarithms, divide by \(m\), and send \(m\to\infty\).  The
 
 \begin{corollary}[Endpoint law for the partition constants]
 \label{cor:renyi-endpoint}
+\leanverified{paper_projection_renyi_endpoint}
 The sequence \(q\mapsto \lambda_q^{1/q}\) is decreasing and satisfies
 \[
   \lim_{q\to\infty}\lambda_q^{1/q}=\varphi^{1/2}.
@@ -257,6 +261,7 @@ be the \(q\)-canonical law on the fiber space \(X_m\).
 
 \begin{corollary}[Pressure slopes]
 \label{cor:pressure-slopes}
+\leanverified{paper_projection_pressure_slopes}
 The discrete slopes \((\Delta_q)_{q\ge 1}\) form an increasing sequence and
 satisfy
 \[
@@ -287,6 +292,7 @@ itself to converge to the same limit.
 
 \begin{theorem}[Discrete Gibbs selection]
 \label{thm:gibbs-selection}
+\leanverified{paper_projection_gibbs_selection}
 Fix an integer \(q\ge 1\).  For every \(\varepsilon>0\),
 \[
   \mu_{m,q}\!\left\{
@@ -363,6 +369,7 @@ choosing \(\alpha=\Delta_1-\varepsilon=P_1-P_0-\varepsilon\) again yields
 
 \begin{theorem}[Microcanonical band bounds]
 \label{thm:microcanonical-bands}
+\leanverified{paper_projection_microcanonical_band_bounds}
 Fix an integer \(q\ge 1\) and \(\varepsilon>0\), and define
 \[
   B_{m,q}(\varepsilon)
@@ -469,6 +476,7 @@ Set
 
 \begin{theorem}[Zero-temperature law for the largest fiber]
 \label{thm:max-fiber}
+\leanverified{paper_projection_max_fiber}
 One has
 \[
   \lim_{m\to\infty} D_m^{1/m}=\varphi^{1/2}.
@@ -505,6 +513,7 @@ Let \(q\to\infty\) and use \Cref{cor:renyi-endpoint} once more.
 
 \begin{theorem}[Diagonal high-moment law]
 \label{thm:diagonal-high-moments}
+\leanverified{paper_projection_diagonal_high_moments}
 Let \(q=q(m)\) be any integer sequence with \(q(m)\to\infty\).  Then
 \[
   \log S_{q(m)}(m)
@@ -536,6 +545,7 @@ Since \(q(m)\to\infty\), the final term tends to \(0\).  Now use
 
 \begin{theorem}[Zero-temperature concentration of diverging tilts]
 \label{thm:zero-temp-concentration}
+\leanverified{paper_projection_zero_temp_concentration}
 Let \(q=q(m)\) be any integer sequence with \(q(m)\to\infty\), and define
 \[
   \nu_m(x):=\frac{d_m(x)^{q(m)}}{S_{q(m)}(m)}
@@ -586,6 +596,7 @@ expression tends to \(0\).  This proves the claim.
 
 \begin{corollary}[Exchange of thermodynamic and zero-temperature limits]
 \label{cor:double-limit}
+\leanverified{paper_projection_double_limit}
 \[
   \lim_{q\to\infty}\lim_{m\to\infty}\frac{1}{m q}\log S_q(m)
   =
@@ -621,6 +632,7 @@ For \(\alpha\ge 0\), define
 
 \begin{corollary}[Discrete pressure upper envelope for thick fibers]
 \label{cor:thick-fiber-envelope}
+\leanverified{paper_projection_thick_fiber_envelope}
 For every \(\alpha\ge 0\),
 \[
   \limsup_{m\to\infty}\frac{1}{m}\log \mathcal N_m(\alpha)

@@ -41,4 +41,11 @@ theorem phiGraph_outdegree_two (m : Nat) (v : PhiState m) :
         rfl }
   exact Fintype.card_congr e
 
+/-- Paper: `thm:Phi_m-sofic-graph`. -/
+theorem paper_phi_m_sofic_graph (m : ℕ) (hm : 1 ≤ m) :
+    Fintype.card (Omega.Graph.PhiEdge m) = 2 ^ m ∧
+    (∀ v : Omega.Graph.PhiState m,
+      Fintype.card {e : Omega.Graph.PhiEdge m // e.1 = v} = 2) := by
+  exact ⟨phiEdge_card m hm, phiGraph_outdegree_two m⟩
+
 end Omega.Graph

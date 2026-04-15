@@ -292,4 +292,38 @@ theorem semiring_aut_is_perm (r : Nat) (f : (Fin r → ℕ) ≃+* (Fin r → ℕ
     rw [← hσeq] at h2; linarith
   exact ⟨Equiv.ofBijective σ ⟨hinj, Finite.surjective_of_injective hinj⟩, hσ⟩
 
+/-- Fibonacci radius is monotone.
+    con:cdim-fibonacci-radius-time-conjugacy -/
+theorem fibRadius_mono (m : Nat) : fibRadius m ≤ fibRadius (m + 1) := by
+  unfold fibRadius
+  have hmono : (Nat.fib m : ℝ) ≤ Nat.fib (m + 1) := by
+    exact_mod_cast Nat.fib_mono (by omega)
+  rw [div_le_div_iff₀ (by positivity) (by positivity)]
+  nlinarith
+
+/-- Fibonacci radius is strictly monotone for m ≥ 2.
+    con:cdim-fibonacci-radius-time-conjugacy -/
+theorem fibRadius_strict_mono (m : Nat) (hm : 2 ≤ m) : fibRadius m < fibRadius (m + 1) := by
+  unfold fibRadius
+  have hlt : (Nat.fib m : ℝ) < Nat.fib (m + 1) := by
+    exact_mod_cast Nat.fib_lt_fib_succ (by omega)
+  rw [div_lt_div_iff₀ (by positivity) (by positivity)]
+  nlinarith
+
+/-- Fibonacci radius is strictly less than 1.
+    con:cdim-fibonacci-radius-time-conjugacy -/
+theorem fibRadius_lt_one (m : Nat) : fibRadius m < 1 := by
+  unfold fibRadius
+  rw [div_lt_one (by positivity : (0 : ℝ) < (Nat.fib m : ℝ) + 2)]
+  linarith
+
+/-- Gap from 1: 1 - fibRadius(m) = 2/(F(m)+2).
+    con:cdim-fibonacci-radius-time-conjugacy -/
+theorem one_sub_fibRadius (m : Nat) :
+    1 - fibRadius m = 2 / (↑(Nat.fib m) + 2) := by
+  unfold fibRadius
+  have h : (0 : ℝ) < (Nat.fib m : ℝ) + 2 := by positivity
+  field_simp
+  ring
+
 end Omega

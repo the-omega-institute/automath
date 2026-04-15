@@ -800,4 +800,43 @@ theorem exactWeightCount_one_eq (m : Nat) (hm : 1 ≤ m) :
           _ ≤ Nat.fib (j + 1 + 2) := Nat.fib_mono (by omega))]
       exact ih (by omega)
 
+/-- Weight distribution audit: total = 2^m, recurrence, boundary values.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_pom_weight_distribution :
+    (∀ m : Nat, ∑ n ∈ Finset.range (Nat.fib (m + 3)), exactWeightCount m n = 2 ^ m) ∧
+    (∀ m : Nat, exactWeightCount m 0 = 1) ∧
+    (∀ m n : Nat, Nat.fib (m + 3) ≤ n → exactWeightCount m n = 0) :=
+  ⟨exactWeightCount_sum, fun m => by rw [exactWeightCount_zero_eq_one],
+   fun m n hn => exactWeightCount_eq_zero_of_ge_fib m n hn⟩
+
+-- Phase R607: Fiber multiplicity allFalse extended seeds
+-- ══════════════════════════════════════════════════════════════
+
+/-- fiberMultiplicity(allFalse, 4) = 3.
+    thm:pom-fiberMultiplicity-allFalse -/
+theorem fiberMultiplicity_allFalse_four :
+    X.fiberMultiplicity (⟨fun _ => false, no11_allFalse⟩ : X 4) = 3 := by
+  rw [fiberMultiplicity_allFalse_closed]
+
+/-- fiberMultiplicity(allFalse, 5) = 3.
+    thm:pom-fiberMultiplicity-allFalse -/
+theorem fiberMultiplicity_allFalse_five :
+    X.fiberMultiplicity (⟨fun _ => false, no11_allFalse⟩ : X 5) = 3 := by
+  rw [fiberMultiplicity_allFalse_closed]
+
+/-- fiberMultiplicity(allFalse, 6) = 4.
+    thm:pom-fiberMultiplicity-allFalse -/
+theorem fiberMultiplicity_allFalse_six :
+    X.fiberMultiplicity (⟨fun _ => false, no11_allFalse⟩ : X 6) = 4 := by
+  rw [fiberMultiplicity_allFalse_closed]
+
+/-- Paper package: allFalse fiber multiplicity seeds.
+    thm:pom-fiberMultiplicity-allFalse -/
+theorem paper_fiberMultiplicity_allFalse_seeds :
+    X.fiberMultiplicity (⟨fun _ => false, no11_allFalse⟩ : X 2) = 2 ∧
+    X.fiberMultiplicity (⟨fun _ => false, no11_allFalse⟩ : X 3) = 2 ∧
+    X.fiberMultiplicity (⟨fun _ => false, no11_allFalse⟩ : X 4) = 3 ∧
+    X.fiberMultiplicity (⟨fun _ => false, no11_allFalse⟩ : X 5) = 3 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> rw [fiberMultiplicity_allFalse_closed]
+
 end Omega

@@ -32,22 +32,29 @@ and label the directed edge \(v\to v'\) by
 Let \(\Sigma_m\) be the edge shift of this finite directed graph and let \(\Lambda_m:\Sigma_m\to X_m^{\ZZ}\) be the label map. By construction, \(\Lambda_m(\Sigma_m)=Y_m\), hence \(Y_m\) is sofic.
 \end{proof}
 
-\subsection{A conjugacy threshold at m >= 3}
-\begin{theorem}[Conjugacy for m >= 3]\label{thm:conjugacy}
+\subsection{A conjugacy threshold at \texorpdfstring{$m\ge 3$}{m >= 3}}
+\begin{theorem}[Conjugacy for \(m \ge 3\)]\label{thm:conjugacy}
 For \(m\ge 3\), the sliding block code \(\Phi_m:\set{0,1}^{\ZZ}\to Y_m\) is a topological conjugacy: there exists a sliding block inverse \(\Psi_m:Y_m\to \set{0,1}^{\ZZ}\) such that
 \[
 \Psi_m\circ \Phi_m=\mathrm{id}_{\set{0,1}^{\ZZ}},
 \qquad
 \Phi_m\circ \Psi_m=\mathrm{id}_{Y_m}.
 \]
-Moreover, \(\Psi_m\) can be chosen with memory length \(m-1\).
 \end{theorem}
 
-\begin{theorem}[The degenerate case m=2]\label{thm:m2}
-When \(m=2\), the map \(\Phi_2\) is not everywhere injective: it is \(2\)-to-\(1\) exactly on two fixed points of the shift and otherwise injective.
+\begin{proof}
+Appendix~\ref{app:sofic} proves that the labeled graph of Proposition~\ref{prop:sofic} is right-resolving and that its fiber product has no off-diagonal bi-infinite path when \(m\ge 3\). Equivalently, the label map from the edge shift of \(G_m\) to \(Y_m\) is injective on bi-infinite paths; see \cite[Chapter~8]{LindMarcus1995} for the standard fiber-product criterion. Since the edge shift of \(G_m\) is canonically conjugate to \(\{0,1\}^{\ZZ}\) by reading the appended bit on each edge, \(\Phi_m\) is a bijective continuous shift-commuting map onto \(Y_m\). Its inverse is therefore continuous, shift-commuting, and hence a sliding block code by the Curtis--Hedlund--Lyndon theorem \cite[Chapter~1]{LindMarcus1995}.
+\end{proof}
+
+\begin{theorem}[The degenerate case \(m=2\)]\label{thm:m2}
+When \(m=2\), the only failure of injectivity is that the two fixed microstate sequences \(0^\ZZ\) and \(1^\ZZ\) have the same image \((00)^\ZZ\). Away from this pair, \(\Phi_2\) is injective.
 \end{theorem}
+
+\begin{proof}
+Appendix~\ref{app:sofic} identifies the only off-diagonal cycles in the fiber product for \(m=2\): they are the two ordered lifts of the constant label sequence \((00)^\ZZ\), corresponding to the two preimages \(0^\ZZ\) and \(1^\ZZ\). Every other label sequence contains \(01\) or \(10\), and these labels determine the adjacent microstate bits uniquely, so the resulting path lifts uniquely.
+\end{proof}
 
 \begin{remark}
-We give structural proofs and an explicit inverse-code construction in Appendix~\ref{app:sofic}. The threshold \(m\ge 3\) reflects a synchronization delay: for \(m\ge 3\) the labeled graph in Proposition~\ref{prop:sofic} becomes right-resolving after a finite delay, allowing a deterministic inverse block code.
+Appendix~\ref{app:sofic} supplies the structural proofs and works out the explicit decoder for \(m=3\). The decoder has anticipation \(1\): the decoded bit at site \(t\) requires the label at site \(t+1\) as a look-ahead. Specifically, two consecutive labels are not always sufficient to determine the current vertex (and hence the current microstate bit), because the label \(000\) is shared by two edges in \(G_3\) that lead to distinct vertices, producing ambiguous two-label blocks \((000,001)\) and \((100,001)\). A single additional label resolves these ambiguities, since the successor outgoing label sets of the two candidate vertices are disjoint. This gives a window of length four for the decoder, not two (\(m-1\)). The Curtis--Hedlund--Lyndon theorem guarantees that a sliding block inverse exists for any window size; the fiber-product analysis determines the precise synchronization structure.
 \end{remark}
 

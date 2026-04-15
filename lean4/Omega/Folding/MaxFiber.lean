@@ -35,6 +35,16 @@ theorem fiberMultiplicity_le_max (x : X m) :
 theorem maxFiberMultiplicity_pos (m : Nat) : 0 < maxFiberMultiplicity m := by
   obtain ⟨x, hx⟩ := maxFiberMultiplicity_achieved m; rw [← hx]; exact fiberMultiplicity_pos x
 
+/-- Paper: support package for conditional expectation index via max-fiber control.
+    thm:pom-max-fiber-pos -/
+theorem paper_fold_condexp_index_maxfiber_support (m : ℕ) :
+    (∃ x : Omega.X m, Omega.X.fiberMultiplicity x = Omega.X.maxFiberMultiplicity m) ∧
+    (∀ x : Omega.X m, Omega.X.fiberMultiplicity x ≤ Omega.X.maxFiberMultiplicity m) ∧
+    (0 < Omega.X.maxFiberMultiplicity m) := by
+  exact ⟨Omega.X.maxFiberMultiplicity_achieved m,
+    Omega.X.fiberMultiplicity_le_max,
+    Omega.X.maxFiberMultiplicity_pos m⟩
+
 end
 end X
 

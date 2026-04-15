@@ -222,6 +222,122 @@ theorem fib_shifted_prod_upper_bound (ls : List Nat) (hpos : ∀ l ∈ ls, 1 ≤
           Nat.mul_le_mul (fib_le_two_pow a) ih'
       _ = 2 ^ (a + tl.sum) := (Nat.pow_add 2 a tl.sum).symm
 
+private theorem fib_lt_two_pow (m : Nat) (hm : 2 ≤ m) : Nat.fib (m + 2) < 2 ^ m := by
+  induction m with
+  | zero => omega
+  | succ n ih =>
+    match n, hm with
+    | 0, h => omega
+    | 1, _ => simp [Nat.fib]
+    | n + 2, _ =>
+      have h1 := fib_le_two_pow (n + 1)
+      have h2 := fib_le_two_pow (n + 2)
+      have hrec : Nat.fib (n + 5) = Nat.fib (n + 3) + Nat.fib (n + 4) := by
+        have := Nat.fib_add_two (n := n + 3)
+        rw [show n + 3 + 2 = n + 5 from by omega, show n + 3 + 1 = n + 4 from by omega] at this
+        exact this
+      calc Nat.fib (n + 5)
+          = Nat.fib (n + 3) + Nat.fib (n + 4) := hrec
+        _ ≤ 2 ^ (n + 1) + 2 ^ (n + 2) := Nat.add_le_add h1 h2
+        _ < 2 ^ (n + 2) + 2 ^ (n + 2) := by
+            have : 2 ^ (n + 1) < 2 ^ (n + 2) := Nat.pow_lt_pow_right (by omega) (by omega)
+            omega
+        _ = 2 ^ (n + 3) := by ring
+
+private theorem map_fib_prod_pos (ls : List Nat) :
+    0 < (ls.map (fun l => Nat.fib (l + 2))).prod := by
+  induction ls with
+  | nil => simp
+  | cons a tl ih =>
+    simp only [List.map_cons, List.prod_cons]
+    exact Nat.mul_pos (Nat.fib_pos.mpr (by omega)) ih
+
+/-- Lower bound equality iff single component.
+    prop:pom-path-component-multiplicity-refinement-monotone-extrema -/
+theorem paper_pom_multiplicity_lower_eq_iff (ls : List Nat) (hpos : ∀ l ∈ ls, 1 ≤ l)
+    (hne : ls ≠ []) :
+    (ls.map (fun l => Nat.fib (l + 2))).prod = Nat.fib (ls.sum + 2) ↔ ls.length = 1 := by
+  constructor
+  · intro heq
+    by_contra hlen
+    rcases ls with _ | ⟨a, _ | ⟨b, tl⟩⟩
+    · exact absurd rfl hne
+    · simp at hlen
+    · simp only [List.map_cons, List.prod_cons, List.sum_cons] at heq
+      have ha : 1 ≤ a := hpos a (by simp)
+      have hb : 1 ≤ b := hpos b (by simp)
+      have htl : ∀ l ∈ tl, 1 ≤ l := fun l hl => hpos l (by simp [hl])
+      -- Use: prod on b::tl ≥ F(b + tl.sum + 2)
+      have hlb2 := fib_shifted_prod_lower_bound (b :: tl)
+        (fun l hl => hpos l (by simp [hl]))
+      simp only [List.map_cons, List.prod_cons, List.sum_cons] at hlb2
+      -- Use: F(a+2)*F(k+2) > F(a+k+2) for k = b+tl.sum ≥ 1
+      have hfuse := fib_shifted_fusion_aux a (b + tl.sum)
+      have hdefect_pos : 0 < Nat.fib a * Nat.fib (b + tl.sum) :=
+        Nat.mul_pos (Nat.fib_pos.mpr (by omega)) (Nat.fib_pos.mpr (by omega))
+      -- Chain: F(a+2) * (F(b+2) * tl_prod) ≥ F(a+2) * F(b+tl.sum+2) > F(a+b+tl.sum+2)
+      have h1 : Nat.fib (a + (b + tl.sum) + 2) <
+          Nat.fib (a + 2) * Nat.fib (b + tl.sum + 2) := by omega
+      have h2 : Nat.fib (a + 2) * Nat.fib (b + tl.sum + 2) ≤
+          Nat.fib (a + 2) * (Nat.fib (b + 2) *
+            (tl.map (fun l => Nat.fib (l + 2))).prod) :=
+        Nat.mul_le_mul_left _ hlb2
+      have : a + (b + tl.sum) = a + b + tl.sum := by omega
+      linarith
+  · intro hlen
+    rcases ls with _ | ⟨a, tl⟩
+    · exact absurd rfl hne
+    · simp at hlen; subst hlen; simp
+
+/-- Upper bound equality iff all ones.
+    prop:pom-path-component-multiplicity-refinement-monotone-extrema -/
+theorem paper_pom_multiplicity_upper_eq_iff (ls : List Nat) (hpos : ∀ l ∈ ls, 1 ≤ l) :
+    (ls.map (fun l => Nat.fib (l + 2))).prod = 2 ^ ls.sum ↔ ∀ l ∈ ls, l = 1 := by
+  constructor
+  · intro heq
+    by_contra hall
+    push_neg at hall
+    obtain ⟨l₀, hl₀_mem, hl₀_ne⟩ := hall
+    have hl₀_ge : 2 ≤ l₀ := by have := hpos l₀ hl₀_mem; omega
+    have hlt : (ls.map (fun l => Nat.fib (l + 2))).prod < 2 ^ ls.sum := by
+      clear heq
+      induction ls with
+      | nil => simp at hl₀_mem
+      | cons hd tl ih =>
+        simp only [List.map_cons, List.prod_cons, List.sum_cons]
+        have hhd : 1 ≤ hd := hpos hd (by simp)
+        have htl : ∀ l ∈ tl, 1 ≤ l := fun l' hl' =>
+          hpos l' (List.mem_cons_of_mem _ hl')
+        have hub := fib_shifted_prod_upper_bound tl htl
+        rcases List.mem_cons.mp hl₀_mem with rfl | hl₀_tl
+        · -- hd = l₀, now hd is renamed to l₀
+          have hlt_a : Nat.fib (l₀ + 2) < 2 ^ l₀ := fib_lt_two_pow l₀ hl₀_ge
+          calc Nat.fib (l₀ + 2) * (tl.map (fun l => Nat.fib (l + 2))).prod
+              < 2 ^ l₀ * (tl.map (fun l => Nat.fib (l + 2))).prod :=
+                Nat.mul_lt_mul_of_pos_right hlt_a (map_fib_prod_pos tl)
+            _ ≤ 2 ^ l₀ * 2 ^ tl.sum := Nat.mul_le_mul_left _ hub
+            _ = 2 ^ (l₀ + tl.sum) := (Nat.pow_add 2 l₀ tl.sum).symm
+        · have hfa : Nat.fib (hd + 2) ≤ 2 ^ hd := fib_le_two_pow hd
+          have ih' := ih htl hl₀_tl
+          calc Nat.fib (hd + 2) * (tl.map (fun l => Nat.fib (l + 2))).prod
+              ≤ 2 ^ hd * (tl.map (fun l => Nat.fib (l + 2))).prod :=
+                Nat.mul_le_mul_right _ hfa
+            _ < 2 ^ hd * 2 ^ tl.sum := Nat.mul_lt_mul_of_pos_left ih' (by positivity)
+            _ = 2 ^ (hd + tl.sum) := (Nat.pow_add 2 hd tl.sum).symm
+    omega
+  · intro hall
+    induction ls with
+    | nil => simp
+    | cons hd tl ih =>
+      simp only [List.map_cons, List.prod_cons, List.sum_cons]
+      have hhd := hall hd (by simp)
+      have htl : ∀ l ∈ tl, l = 1 := fun l hl =>
+        hall l (List.mem_cons_of_mem _ hl)
+      have hpos_tl : ∀ l ∈ tl, 1 ≤ l := fun l hl =>
+        hpos l (List.mem_cons_of_mem _ hl)
+      have ih' := ih hpos_tl htl
+      subst hhd; rw [ih']; simp [Nat.fib]; ring
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase 237: Fib splitting exact + replacement identities
 -- ══════════════════════════════════════════════════════════════

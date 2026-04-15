@@ -1,14 +1,30 @@
-\subsection{Component gerbes and branched gluing obstructions}
+\subsection{Component gerbes and branched gluing obstructions}\label{sec:gerbe-obstruction}
 
-The stackification $\mathfrak L_r$ may have several global connected components over $a$. Cohomological obstruction theory therefore belongs, in general, not to a single gerbe attached to $r$, but to the component gerbes indexed by the visible value classes of $r$.
+The stackification $\mathfrak L_r$ may have several global connected components over $a$. Cohomological obstruction theory therefore belongs, in general, not to a single gerbe attached to $r$, but to the component gerbes indexed by the visible value classes of $r$. This subsection is explicitly conditional on the extra realization and comparison data isolated in \Cref{thm:gluing-sensitive-realization}; no unconditional construction of a gluing-sensitive realization prestack is claimed here.
 
-The results of this subsection use the following hypotheses; individual theorems invoke only the subset they require.
+The results of this subsection use the following hypotheses; individual statements invoke only the subset they require.
 
 \begin{enumerate}[label=\textup{(H\arabic*)},nosep]
 \item\label{hyp:admitted-prestack} An admitted reference $r:\mathsf{Ref}_s$ at a state $p$ with $a=[r]_p$, equipped with a realization prestack $\mathfrak P_r \to \mathcal C_a$ and band $\Band$ in the sense of \Cref{def:realization-prestack}.
 \item\label{hyp:band-identification} The band $\Band$ is identified with a fixed abelian sheaf on the slice site $\mathcal C_{p,s}/a$.
 \item\label{hyp:global-conservativity} The realization prestack $\mathfrak P_r$ is globally conservative at $a$ in the sense of \Cref{def:global-conservativity}.
-\item\label{hyp:cofinal-gerbe-adapted} For every visible branch $v$, gerbe-adapted covers satisfying the vanishing hypotheses of \Cref{thm:cech-bridge-compatible-realizations} form a cofinal family in $\Cov_{p,s}(a)$.
+\item\label{hyp:cofinal-gerbe-adapted} For every visible branch $v$, there is a filtered cofinal family
+\[
+\Cov_v^{\mathrm{acyc}}(a)\subseteq \Cov_{p,s}(a)
+\]
+such that every cover
+\[
+\mathcal U=\{U_i\to a\}_{i\in I}\in \Cov_v^{\mathrm{acyc}}(a)
+\]
+has a \v{C}ech nerve in $\mathcal C_a$, satisfies
+\[
+H^1(U_{i_0\cdots i_n},\Band)=0
+\]
+for every nonempty intersection needed in the descent argument through degree $2$, and the comparison map
+\[
+\varinjlim_{\mathcal U\in \Cov_v^{\mathrm{acyc}}(a)} \check H^2(\mathcal U,\Band)\xrightarrow{\ \sim\ } H^2(\mathcal C_a,\Band)
+\]
+is an isomorphism.
 \end{enumerate}
 
 \begin{definition}[Component gerbes and branch obstruction classes]\label{def:compatible-realization-stack}\label{def:cech-gluing-obstruction}
@@ -26,20 +42,28 @@ define the \emph{component substack}
 \]
 for each object $U$ of $\mathcal C_{p,s}/a$. When \Cref{thm:component-gerbe-decomposition} applies, $\mathfrak G_v$ is called the \emph{component gerbe} of the visible branch $v$.
 
-Assume moreover that, for every visible branch $v$, gerbe-adapted covers of $a$ satisfying the vanishing hypotheses of \Cref{thm:cech-bridge-compatible-realizations} form a cofinal family in $\Cov_{p,s}(a)$. Then the resulting filtered Cech class of the branch gerbe $\mathfrak G_v$ is denoted
+Assume moreover that \textup{(H4)} holds. For each visible branch $v$ and each cover
 \[
-\omega_v\in \varinjlim_{\mathcal U}\Cech^2(\mathcal U,\Band)=:\Cech^2(\mathcal C_{p,s}/a,\Band)
+\mathcal U\in \Cov_v^{\mathrm{acyc}}(a),
 \]
-and called the \emph{branch obstruction class} of $v$.
+\Cref{thm:cech-bridge-compatible-realizations} produces a class
+\[
+[g_{\mathcal U}]\in \check H^2(\mathcal U,\Band).
+\]
+Refinement compatibility identifies these classes in the filtered system, and the comparison isomorphism in \textup{(H4)} therefore determines a unique derived class
+\[
+\omega_v\in H^2(\mathcal C_{p,s}/a,\Band),
+\]
+called the \emph{branch obstruction class} of $v$.
 \end{definition}
 
-\begin{theorem}[Component gerbes of visible branches]\label{thm:component-gerbe-decomposition}
+\begin{proposition}[Component gerbes of visible branches]\label{thm:component-gerbe-decomposition}
 In the setting of \Cref{def:compatible-realization-stack}, for every
 \[
 v\in \Vis_{p,s}(r)\cong \pi_0(\mathfrak L_r)(a),
 \]
 the full substack $\mathfrak G_v$ is a banded $\Band$-gerbe over $\mathcal C_{p,s}/a$.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 Since $\mathfrak L_r$ is a stack in groupoids and $\mathfrak G_v$ is a full substack, $\mathfrak G_v$ is again a stack in groupoids. Let $U$ be an object of $\mathcal C_{p,s}/a$. Because $v|_U\in \pi_0(\mathfrak L_r)(U)$ is a section of the sheaf of connected components, by the definition of $\pi_0(\mathfrak L_r)$ there exists a cover $\{U_i\to U\}$ and objects
@@ -64,6 +88,7 @@ is bijective.
 \end{definition}
 
 \begin{corollary}[Global branch decomposition under branch constancy]\label{cor:branch-decomposition}
+\leanverified{paper_conservative_extension_branch_decomposition}
 Assume branch constancy over $a$ in the sense of \Cref{def:branch-constancy}. Then the canonical functor
 \[
 \coprod_{v\in \Vis_{p,s}(r)} \mathfrak G_v\longrightarrow \mathfrak L_r
@@ -77,22 +102,20 @@ Let $U\in \mathcal C_{p,s}/a$ and $x\in \mathfrak L_r(U)$. Put $\xi:=[x]\in \pi_
 For full faithfulness, let $x\in \mathfrak G_v(U)$ and $y\in \mathfrak G_w(U)$, and suppose there is a morphism $f:x\to y$ in $\mathfrak L_r(U)$. Any morphism in a groupoid is an isomorphism, hence $[x]=[y]$ in $\pi_0(\mathfrak L_r)(U)$. Therefore $\rho_U(v)=\rho_U(w)$. By injectivity of $\rho_U$, one gets $v=w$. Thus there are no morphisms in $\mathfrak L_r(U)$ between objects of distinct summands, and within each summand the morphism sets coincide because $\mathfrak G_v$ is a full substack.
 \end{proof}
 
-\begin{theorem}[Constructing the Cech obstruction of a branch gerbe]\label{thm:cech-bridge-compatible-realizations}
+\begin{proposition}[\v{C}ech obstruction of a branch gerbe on an acyclic cover]\label{thm:cech-bridge-compatible-realizations}
 Assume that $\mathfrak G_v$ is a banded component gerbe with band $\Band$ in the sense of \Cref{def:compatible-realization-stack}. Let
 \[
-\mathcal U=\{a_i\to a\}_{i\in I}\in \Cov_{p,s}(a)
+\mathcal U=\{U_i\to a\}_{i\in I}\in \Cov_v^{\mathrm{acyc}}(a)
 \]
-be a cover whose Cech nerve exists in $\mathcal C_{p,s}/a$, and write
+be a cover whose \v{C}ech nerve exists in $\mathcal C_{p,s}/a$, and write
 \[
 U_{i_0\cdots i_n}
 \]
 for the corresponding simplices. Assume
 \[
-H^1(U_i,\Band)=0
-\qquad\text{and}\qquad
-H^1(U_{ij},\Band)=0
+H^1(U_{i_0\cdots i_n},\Band)=0
 \]
-for all $i,j\in I$. Choose objects
+for every nonempty intersection used below. Choose objects
 \[
 x_i\in \mathfrak G_v(U_i).
 \]
@@ -107,82 +130,183 @@ Then:
 g_{ijk}:=\phi_{ik}^{-1}|_{U_{ijk}}\circ \phi_{jk}|_{U_{ijk}}\circ \phi_{ij}|_{U_{ijk}}
 \in \Band(U_{ijk})
 \]
-defines a Cech $2$-cocycle $g=(g_{ijk})\in \check Z^2(\mathcal U,\Band)$;
-\item the class $[g]\in \Cech^2(\mathcal U,\Band)$ depends only on the branch gerbe $\mathfrak G_v$ and the chosen cover: changing the local objects or the isomorphisms changes $g$ by a Cech coboundary;
+defines a \v{C}ech $2$-cocycle $g=(g_{ijk})\in \check Z^2(\mathcal U,\Band)$;
+\item the class $[g]\in \check H^2(\mathcal U,\Band)$ depends only on the branch gerbe $\mathfrak G_v$ and the chosen cover: changing the local objects or the isomorphisms changes $g$ by a \v{C}ech coboundary;
 \item the class $[g]$ vanishes if and only if the branch gerbe $\mathfrak G_v$ is neutral over $a$.
 \end{enumerate}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
-Because $\mathfrak G_v$ is a banded gerbe, the sheaf
+Because $\mathfrak G_v$ is a gerbe, the chosen cover is locally nonempty, so the objects $x_i\in \mathfrak G_v(U_i)$ exist by assumption. For every pair $(i,j)$, the sheaf
 \[
 \mathrm{Isom}(x_i|_{U_{ij}},x_j|_{U_{ij}})
 \]
-is a $\Band|_{U_{ij}}$-torsor for every pair $(i,j)$. By the standard classification of torsors by $H^1$ \cite[Chap.~III]{MacLaneMoerdijk1994}, \cite[Sec.~11]{StacksProject}, the vanishing
+is a $\Band|_{U_{ij}}$-torsor. The vanishing
 \[
 H^1(U_{ij},\Band)=0
 \]
-forces this torsor to be trivial. Hence global sections exist, which gives the isomorphisms $\phi_{ij}$ and proves \textup{(i)}.
+therefore trivializes this torsor \cite[Chap.~III]{MacLaneMoerdijk1994}, \cite[Sec.~11]{StacksProject}, so we may choose a section
+\[
+\phi_{ij}:x_i|_{U_{ij}}\xrightarrow{\sim} x_j|_{U_{ij}}.
+\]
+This proves \textup{(i)}.
 
-For \textup{(ii)}, the composite
+On a triple overlap $U_{ijk}$, the composite
 \[
-\phi_{ik}^{-1}|_{U_{ijk}}\circ \phi_{jk}|_{U_{ijk}}\circ \phi_{ij}|_{U_{ijk}}
+g_{ijk}:=\phi_{ik}^{-1}|_{U_{ijk}}\circ \phi_{jk}|_{U_{ijk}}\circ \phi_{ij}|_{U_{ijk}}
 \]
-is an automorphism of $x_i|_{U_{ijk}}$, hence a section of $\Band(U_{ijk})$. The usual associativity calculation on quadruple overlaps shows that $(g_{ijk})$ satisfies the Cech cocycle identity \cite[Chap.~IV]{Giraud1971}, \cite[Sec.~11]{StacksProject}.
+is an automorphism of $x_i|_{U_{ijk}}$ and hence an element of $\Band(U_{ijk})$. On a quadruple overlap $U_{ijkl}$ one computes
+\[
+g_{jkl}\,g_{ijl}
+=
+\phi_{jl}^{-1}\phi_{kl}\phi_{jk}\,\phi_{il}^{-1}\phi_{jl}\phi_{ij}
+=
+\phi_{il}^{-1}\phi_{kl}\phi_{ik}^{-1}\phi_{ik}\phi_{jk}\phi_{ij}
+=
+g_{ikl}\,g_{ijk},
+\]
+where all restrictions to $U_{ijkl}$ are suppressed from the notation. This is exactly the \v{C}ech cocycle identity $\delta g=0$, so $g=(g_{ijk})$ lies in $\check Z^2(\mathcal U,\Band)$. This proves \textup{(ii)}.
 
-For \textup{(iii)}, first change the $\phi_{ij}$ while keeping the objects $x_i$ fixed. Any other choice has the form
+For \textup{(iii)}, first keep the objects $x_i$ fixed and replace $\phi_{ij}$ by another choice $\phi'_{ij}$. Since $\mathrm{Isom}(x_i|_{U_{ij}},x_j|_{U_{ij}})$ is a $\Band|_{U_{ij}}$-torsor, there exist unique sections $h_{ij}\in \Band(U_{ij})$ with
 \[
-\phi'_{ij}=\phi_{ij}\circ h_{ij}^{-1}
+\phi'_{ij}=\phi_{ij}\circ h_{ij}^{-1}.
 \]
-for a $1$-cochain $h=(h_{ij})\in \check C^1(\mathcal U,\Band)$, and the corresponding cocycle is
+A direct calculation on triple overlaps gives
 \[
-g'=(\delta h)\, g.
+g'_{ijk}=h_{ik}\,g_{ijk}\,h_{jk}^{-1}h_{ij}^{-1},
 \]
-Thus the Cech class is unchanged.
+which is the multiplicative form of the statement that $g'$ and $g$ differ by the coboundary $\delta h$.
 
-Next change the local objects. If $x'_i\in \mathfrak G_v(U_i)$ is another choice, then
+Next replace the objects $x_i$ by another family $x_i'\in \mathfrak G_v(U_i)$. Since $x_i$ and $x_i'$ lie in the same gerbe over $U_i$, the sheaf $\mathrm{Isom}(x_i,x_i')$ is a $\Band|_{U_i}$-torsor. The vanishing
 \[
-\mathrm{Isom}(x_i,x'_i)
+H^1(U_i,\Band)=0
 \]
-is a $\Band|_{U_i}$-torsor. Since $H^1(U_i,\Band)=0$, this torsor is trivial, so we may choose an isomorphism
+trivializes it, so choose isomorphisms
 \[
-\psi_i:x_i\xrightarrow{\sim} x'_i.
+\psi_i:x_i\xrightarrow{\sim} x_i'.
 \]
-Transporting the $\phi_{ij}$ across the $\psi_i$ shows that the cocycle attached to $(x'_i)$ differs from $g$ by a coboundary. Finally, passage to a refinement pulls the cocycle back along the refinement map, so the induced class is stable in the filtered Cech system.
+Define
+\[
+\phi_{ij}':=\psi_j|_{U_{ij}}\circ \phi_{ij}\circ \psi_i^{-1}|_{U_{ij}}.
+\]
+Then the associated cocycle satisfies
+\[
+g'_{ijk}
+=
+\psi_i|_{U_{ijk}}\,g_{ijk}\,\psi_i^{-1}|_{U_{ijk}}
+=
+g_{ijk},
+\]
+under the band identification $\underline{\mathrm{Aut}}(x_i)\cong \Band|_{U_i}$. Thus changing local objects changes the cocycle only by the preliminary freedom in the choice of the $\psi_i$, hence only by a coboundary. If
+\[
+\lambda:\mathcal V\to\mathcal U
+\]
+is a refinement in $\Cov_v^{\mathrm{acyc}}(a)$, then the same construction on $\mathcal V$ uses the pulled-back objects and isomorphisms, so the resulting cocycle is exactly $\lambda^*(g)$. Therefore the induced cohomology class is refinement compatible.
 
-If the gerbe is neutral, choose a global object $x\in \mathfrak G_v(a)$. Then each
-\[
-\mathrm{Isom}(x|_{U_i},x_i)
-\]
-is a $\Band|_{U_i}$-torsor, hence trivial by $H^1(U_i,\Band)=0$. Choose isomorphisms
+For \textup{(iv)}, suppose first that $\mathfrak G_v$ is neutral and choose a global object $x\in \mathfrak G_v(a)$. For each $i$, the sheaf $\mathrm{Isom}(x|_{U_i},x_i)$ is a $\Band|_{U_i}$-torsor and therefore trivial because $H^1(U_i,\Band)=0$. Choose
 \[
 \psi_i:x|_{U_i}\xrightarrow{\sim} x_i.
 \]
-With
+If we set
 \[
 \phi_{ij}:=\psi_j|_{U_{ij}}\circ \psi_i^{-1}|_{U_{ij}},
 \]
-the resulting cocycle is identically zero. Thus neutrality implies $[g]=0$.
+then the resulting cocycle is identically zero, so $[g]=0$.
 
-Conversely, if $[g]=0$, choose a $1$-cochain $h=(h_{ij})$ with
+Conversely, assume $[g]=0$. Then there is a $1$-cochain $h=(h_{ij})$ with
 \[
 g=\delta h.
 \]
-Replacing $\phi_{ij}$ by
+Replace $\phi_{ij}$ by
 \[
-\phi'_{ij}:=\phi_{ij}\circ h_{ij}^{-1},
+\phi_{ij}':=\phi_{ij}\circ h_{ij}^{-1}.
 \]
-we obtain isomorphisms satisfying the exact cocycle condition on triple overlaps. Since $\mathfrak G_v$ is a stack, the descent datum $(x_i,\phi'_{ij})$ is effective and glues to a global object over $a$. Hence the gerbe is neutral.
+The defining equation $g=\delta h$ is exactly the statement that the $\phi_{ij}'$ satisfy the strict cocycle condition on triple overlaps. Hence $(x_i,\phi_{ij}')$ is a descent datum for the stack $\mathfrak G_v$, and since $\mathfrak G_v$ is a stack in groupoids, that descent datum is effective. The resulting glued object of $\mathfrak G_v(a)$ is a global object, so the gerbe is neutral.
 \end{proof}
 
-\begin{theorem}[Branched gerbe semantics of gluing-level absence]\label{thm:gerbe-null-semantics}
+\begin{proposition}[Derived branch classes detect neutrality]\label{prop:derived-branch-classification}
+Assume \textup{(H1)}--\textup{(H4)}. For every visible branch $v$,
+\[
+\omega_v=0\ \text{in}\ H^2(\mathcal C_a,\Band)
+\quad\Longleftrightarrow\quad
+\mathfrak G_v\ \text{is neutral}.
+\]
+\end{proposition}
+
+\begin{proof}
+By \Cref{def:cech-gluing-obstruction}, the derived class $\omega_v$ is the image of the refinement-compatible \v{C}ech classes supplied by \Cref{thm:cech-bridge-compatible-realizations}. The comparison isomorphism in \textup{(H4)} identifies this class with the standard Giraud class of the banded gerbe $\mathfrak G_v$. The vanishing of that derived class is equivalent to neutrality by the classification of banded gerbes by $H^2$ \cite[Chap.~IV]{Giraud1971}, \cite[Tag 06NY]{StacksProject}.
+\end{proof}
+
+\begin{proposition}[Compatible local sections versus visible branches]\label{prop:compsecs-vs-visible-branches}
+Assume the hypotheses of \Cref{def:cech-gluing-obstruction}. For an admitted reference
+$r:\mathsf{Ref}_s$ at $p$,
+\[
+M,p\Vdash \CompSec_s(r)
+\quad\Longleftrightarrow\quad
+\Vis_{p,s}(r)\neq\varnothing.
+\]
+\end{proposition}
+
+\begin{proof}
+By \Cref{thm:sheafification-characterization},
+\[
+M,p\Vdash \CompSec_s(r)
+\quad\Longleftrightarrow\quad
+\bigl(a_{p,s}F_{p,s}\bigr)(a)\neq\varnothing.
+\]
+By \Cref{thm:visible-value-components}, this set is $\Vis_{p,s}(r)$.
+\end{proof}
+
+\begin{lemma}[Terminal-fibre nonemptiness and neutrality]\label{lem:terminal-fibre-neutrality}
+Let $v\in \Vis_{p,s}(r)$. Then
+\[
+\mathfrak G_v(a)\neq\varnothing
+\quad\Longleftrightarrow\quad
+\mathfrak G_v\ \text{is neutral}.
+\]
+\leanverified{paper_gluing_failure_terminal_fibre_neutrality}
+\end{lemma}
+
+\begin{proof}
+By definition of the gerbe notion used in this paper, neutrality means the existence of a global object over $a$. Therefore it is exactly the same as $\mathfrak G_v(a)\neq\varnothing$.
+\end{proof}
+
+\begin{proposition}[Global sections versus neutral component gerbes]\label{prop:global-sections-vs-neutral-components}
+\leanverified{paper_gluing_failure_global_sections_vs_neutral_components}
+Assume the hypotheses of \Cref{def:cech-gluing-obstruction} and global conservativity at $a$ in the sense of \Cref{def:global-conservativity}. For an admitted reference
+$r:\mathsf{Ref}_s$ at $p$,
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+\exists v\in \Vis_{p,s}(r)\ \text{with}\ \mathfrak G_v(a)\neq\varnothing.
+\]
+Equivalently, by \Cref{lem:terminal-fibre-neutrality},
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+\exists v\in \Vis_{p,s}(r)\ \text{with}\ \mathfrak G_v\ \text{is neutral}.
+\]
+\end{proposition}
+
+\begin{proof}
+From \Cref{prop:no-new-global-objects}, $M,p\Vdash \Sec_s(r)$ iff $\mathfrak L_r(a)\neq\varnothing$.
+
+If $\mathfrak L_r(a)\neq\varnothing$, choose $x\in \mathfrak L_r(a)$ and let
+\[
+v=[x]\in \pi_0(\mathfrak L_r)(a)\cong \Vis_{p,s}(r).
+\]
+Then $x\in \mathfrak G_v(a)$, so $\mathfrak G_v(a)\neq\varnothing$.
+
+Conversely, if $\mathfrak G_v(a)\neq\varnothing$ for some visible branch $v$, then $\mathfrak G_v(a)\subseteq \mathfrak L_r(a)$, so $\mathfrak L_r(a)\neq\varnothing$.
+\end{proof}
+
+\begin{theorem}[Conditional branched gerbe semantics of gluing-level absence]\label{thm:gerbe-null-semantics}
 Assume the hypotheses of \Cref{def:cech-gluing-obstruction} and global conservativity at $a$ in the sense of \Cref{def:global-conservativity}. Then, for the admitted reference $r:\mathsf{Ref}_s$ under consideration,
 \[
 M,p\Vdash \CompSec_s(r)
 \quad\Longleftrightarrow\quad
 \Vis_{p,s}(r)\neq\varnothing.
 \]
-Moreover,
 \[
 M,p\Vdash \Sec_s(r)
 \quad\Longleftrightarrow\quad
@@ -196,37 +320,22 @@ M,p\Vdash \Null^{\mathrm{glue}}_s(r)
 \ \text{and}\
 \forall v\in \Vis_{p,s}(r),\ \mathfrak G_v\ \text{is non-neutral}.
 \]
-If, in addition, the chosen cofinal family of gerbe-adapted covers computes derived cohomology in degree $2$, then the last condition is equivalent to
+Under the \v{C}ech-to-derived comparison hypothesis already built into \Cref{def:cech-gluing-obstruction}, the last condition is equivalent to
 \[
 \Vis_{p,s}(r)\neq\varnothing
 \ \text{and}\
 \omega_v\neq 0\ \text{for every}\ v\in \Vis_{p,s}(r).
 \]
 In particular, the single obstruction class picture is recovered precisely when $|\Vis_{p,s}(r)|=1$.
+\leanverified{paper_conservative_extension_gerbe_null_semantics}
 \end{theorem}
 
 \begin{proof}
-The first equivalence is the combination of \Cref{thm:sheafification-characterization,thm:visible-value-components}. Indeed, compatible local sectionability is equivalent to the nonemptiness of $(a_{p,s}F_{p,s})(a)$, and this set is exactly $\Vis_{p,s}(r)$.
-
-For the second equivalence, \Cref{prop:no-new-global-objects} gives
+The first equivalence is \Cref{prop:compsecs-vs-visible-branches}. The second is \Cref{prop:global-sections-vs-neutral-components}. The third is then immediate from the definition
 \[
-M,p\Vdash \Sec_s(r)
-\quad\Longleftrightarrow\quad
-\mathfrak L_r(a)\neq\varnothing.
+\Null^{\mathrm{glue}}_s(r):=\Adm_s(r)\land \CompSec_s(r)\land \neg\Sec_s(r).
 \]
-If $x\in \mathfrak L_r(a)$, then $x$ determines a visible value class
-\[
-v=[x]\in \pi_0(\mathfrak L_r)(a)\cong \Vis_{p,s}(r),
-\]
-and $x\in \mathfrak G_v(a)$, so $\mathfrak G_v$ is neutral. Conversely, if $\mathfrak G_v$ is neutral for some visible branch $v$, then any global object of $\mathfrak G_v(a)$ lies in $\mathfrak L_r(a)$, so $\mathfrak L_r(a)\neq\varnothing$.
-
-Since $r$ is admitted, the definition
-\[
-\Null^{\mathrm{glue}}_s(r):=\Adm_s(r)\land \CompSec_s(r)\land \neg\Sec_s(r)
-\]
-now yields the third equivalence immediately.
-
-For the final claim, if the chosen cofinal family computes derived cohomology in degree $2$, then \Cref{thm:cech-bridge-compatible-realizations}(iv) identifies the vanishing of each $\omega_v$ with neutrality of the corresponding component gerbe, while the comparison with derived $H^2$ is the standard banded-gerbe classification \cite[Chap.~IV]{Giraud1971}, \cite[Tag 06NY]{StacksProject}.
+The final claim is \Cref{prop:derived-branch-classification} applied branchwise.
 \end{proof}
 
 \subsection{Visible quotients and the information cost of strictification}
@@ -265,7 +374,7 @@ A_{\mathrm{vis}}:=A/H_\alpha.
 \]
 \end{definition}
 
-\begin{theorem}[Initial visible quotient of a gluing obstruction]\label{thm:initial-visible-quotient}
+\begin{proposition}[Initial visible quotient of a gluing obstruction]\label{thm:initial-visible-quotient}
 In the setting of \Cref{def:finite-obstruction-presentation}, let
 \[
 \pi:A\twoheadrightarrow A_{\mathrm{vis}}
@@ -280,7 +389,7 @@ be the canonical quotient map. Then:
 with $\varphi=\bar\varphi\circ\pi$.
 \end{enumerate}
 Hence $A_{\mathrm{vis}}$ is the initial coefficient quotient through which the chosen obstruction presentation becomes strictly trivial.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 By construction, every cocycle value $\alpha_{ijk}$ lies in the subgroup $H_\alpha$. Therefore $\pi(\alpha_{ijk})=0$ for every nonempty triple overlap, which proves (i).
@@ -290,7 +399,23 @@ For (ii), the hypothesis $\varphi(\alpha_{ijk})=0$ on every nonempty triple over
 
 The strict quotient $A/H_\alpha$ depends on the chosen cocycle representative $\alpha$, not only on the cohomology class $\omega_v$. The next subsection removes this dependence: the homological evaluation map $\mathrm{ev}_\omega$ is defined from the class itself, and its cokernel---the intrinsic visible quotient $A_{\mathrm{vis}}^\omega$---is a canonical invariant. The comparison between the two quotients is given by \Cref{cor:strict-to-intrinsic-visible} and \Cref{prop:chain-vs-homological-visibility}: every strict visible quotient is a quotient of the intrinsic one, and the gap between them is exactly the gap between the image of the cocycle on all $2$-chains and its image on $2$-cycles.
 
-\begin{theorem}[Definability barrier for character channels]\label{thm:character-definability-barrier}
+\begin{definition}[Gauge action and gauge-invariant character channels]\label{def:gauge-invariance-character}
+In the setting of \Cref{def:finite-obstruction-presentation}, the presentation-level gauge group on the chosen cover $\mathcal U$ is the \v{C}ech $1$-cochain group $C^1(\mathcal U,A)$. A cochain
+\[
+h=(h_{ij})\in C^1(\mathcal U,A)
+\]
+acts on a cocycle $\alpha$ by
+\[
+(h\cdot\alpha)_{ijk}:=\alpha_{ijk}+(\delta h)_{ijk}.
+\]
+A character $\chi\in\widehat A$ is called \emph{gauge-invariant} for the chosen obstruction presentation if it kills the obstruction subgroup $H_\alpha$, equivalently if it factors through the quotient
+\[
+\pi:A\twoheadrightarrow A_{\mathrm{vis}}=A/H_\alpha.
+\]
+In that case the $\chi$-channel depends only on the visible quotient and not on the chosen local trivializations.
+\end{definition}
+
+\begin{proposition}[Character channels and the presentation-level visible quotient]\label{thm:character-definability-barrier}
 In the setting of \Cref{def:finite-obstruction-presentation}, let
 \[
 \widehat A:=\mathrm{Hom}(A,\mathbb T),
@@ -310,9 +435,9 @@ for every nonempty triple overlap of $\mathcal U$. Then:
 \[
 \widehat{A_{\mathrm{vis}}}\cong H_\alpha^\perp;
 \]
-\item consequently, every globally admissible character channel factors uniquely through $A_{\mathrm{vis}}$, while no character outside $H_\alpha^\perp$ can define a gauge-invariant global readout.
+\item consequently, every globally admissible character channel factors uniquely through $A_{\mathrm{vis}}$, and a character is gauge-invariant for the chosen obstruction presentation if and only if it lies in $H_\alpha^\perp$.
 \end{enumerate}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 Since $H_\alpha$ is generated by the cocycle values $\alpha_{ijk}$, a character $\chi$ is trivial on $H_\alpha$ if and only if it is trivial on each generator $\alpha_{ijk}$. This proves (i).
@@ -323,7 +448,7 @@ For (ii), the quotient map $\pi$ induces by precomposition an injective homomorp
 \]
 Its image consists exactly of the characters on $A$ that are trivial on $\ker\pi=H_\alpha$, namely $H_\alpha^\perp$. Thus $\pi^*$ identifies $\widehat{A_{\mathrm{vis}}}$ with $H_\alpha^\perp$.
 
-For (iii), a character-level readout can be gauge-invariant only if the corresponding character kills the obstruction multipliers on all triple overlaps, which is the condition in (i). By (ii), this is equivalent to factorization through $A_{\mathrm{vis}}$. If $\chi\notin H_\alpha^\perp$, then some obstruction value survives in the $\chi$-channel, so the resulting would-be readout remains path-dependent and cannot descend to a global observable.
+Clause \textup{(iii)} is just \Cref{def:gauge-invariance-character} rewritten using \textup{(i)} and \textup{(ii)}.
 \end{proof}
 
 \begin{corollary}[The visible quotient is exactly the character-visible quotient]\label{cor:visible-quotient-character-separation}
@@ -367,6 +492,7 @@ is globally admissible. Since
 \]
 we have $\chi(x)\neq\chi(y)$, contradicting (ii). Thus $\pi(x)=\pi(y)$.
 \end{proof}
+\leanverified{paper_gluing_failure_visible_quotient_character_separation}
 
 \begin{definition}[Auxiliary strictification code]\label{def:auxiliary-strictification-code}
 In the setting of \Cref{def:finite-obstruction-presentation}, an \emph{auxiliary strictification code} consists of a finite set $R$ and an injective map
@@ -380,7 +506,7 @@ such that the first projection recovers the canonical quotient:
 Equivalently, the visible quotient is kept fixed, while the auxiliary register $R$ resolves the hidden information inside the fibers of $\pi$.
 \end{definition}
 
-\begin{theorem}[Minimal information cost of strictification]\label{thm:minimal-information-cost-of-strictification}
+\begin{proposition}[Minimal information cost of strictification]\label{thm:minimal-information-cost-of-strictification}
 In the setting of \Cref{def:auxiliary-strictification-code}, every auxiliary strictification code satisfies
 \[
 |R|\ge |H_\alpha|.
@@ -390,7 +516,8 @@ Equivalently,
 \log_2 |R|\ge \log_2 |H_\alpha|.
 \]
 Moreover, this lower bound is sharp.
-\end{theorem}
+\leanverified{paper_gluing_failure_minimal_information_cost_of_strictification}
+\end{proposition}
 
 \begin{proof}
 Let $\bar a\in A_{\mathrm{vis}}$. The fiber $\pi^{-1}(\bar a)$ is a coset of $\ker\pi=H_\alpha$, hence has cardinality $|H_\alpha|$. Since $\iota$ is injective and $\mathrm{pr}_1\circ\iota=\pi$, the restriction of $\iota$ to $\pi^{-1}(\bar a)$ lands inside the slice $\{\bar a\}\times R$ and remains injective. Therefore
@@ -421,6 +548,7 @@ For a finite obstruction presentation, no conservative enrichment that leaves th
 \begin{proof}
 Any such enrichment induces an auxiliary strictification code in the sense of \Cref{def:auxiliary-strictification-code}. Apply \Cref{thm:minimal-information-cost-of-strictification}.
 \end{proof}
+\leanverified{paper_conservative_extension_conservative_recovery_budget}
 
 \subsection{A worked finite example}
 

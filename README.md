@@ -1,8 +1,33 @@
 # The Omega Project
 
+[![Daily Build](https://github.com/the-omega-institute/automath/actions/workflows/daily-build.yml/badge.svg)](https://github.com/the-omega-institute/automath/actions/workflows/daily-build.yml)
+[![PR Gate](https://github.com/the-omega-institute/automath/actions/workflows/pr-gate.yml/badge.svg)](https://github.com/the-omega-institute/automath/actions/workflows/pr-gate.yml)
+[![License: GPOL](https://img.shields.io/badge/license-GPOL-blue.svg)](LICENSE)
+[![Lean 4](https://img.shields.io/badge/Lean-4-blue?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHRleHQgeD0iMCIgeT0iMTIiIGZvbnQtc2l6ZT0iMTIiPkw8L3RleHQ+PC9zdmc+)](https://lean-lang.org)
+[![Axioms: 0](https://img.shields.io/badge/axioms-0-brightgreen.svg)](#status)
+[![Theorems: 3,427+](https://img.shields.io/badge/theorems-3%2C427%2B-orange.svg)](#status)
+
 > An auditable theory compiler that derives, verifies, visualizes, and publishes mathematics from a single equation.
 
-[中文版](README.zh-CN.md) · **[Why Everything Is Inevitable](docs/INEVITABILITY.md)** — understand the forcing chain in 10 minutes
+[中文版](README.zh-CN.md) · **[Why Everything Is Inevitable](docs/INEVITABILITY.md)** — understand the forcing chain in 10 minutes · **[Dossier](https://the-omega-institute.github.io/automath/)** · [Live autoresearch stream](https://www.youtube.com/live/pn_W3I5-qdo)
+
+## Quick Start
+
+```bash
+# Clone and build
+git clone https://github.com/the-omega-institute/automath.git
+cd automath/lean4 && lake build
+```
+
+Mathlib is fetched and cached automatically on first build.
+
+```bash
+# Reproduce the theory paper
+cd theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
+pip install -r requirements.txt
+python3 scripts/run_all.py    # generates all figures/tables
+latexmk -pdfxe main.tex       # compiles the paper
+```
 
 ## The Question
 
@@ -281,7 +306,7 @@ One equation in. Verified, visualized, published mathematics out.
 
 ![Sisyphus Knowledge Graph](docs/dossier/assets/sisyphus.png)
 
-→ [Full system architecture](docs/dossier/) · [Browse the papers](papers/publication/)
+→ [Full system architecture](docs/dossier/) · [Browse the papers](papers/publication/) · [Watch autoresearch live](https://www.youtube.com/live/pn_W3I5-qdo)
 
 ## The Publication Pipeline
 
@@ -293,6 +318,41 @@ One equation in. Verified, visualized, published mathematics out.
 Current status: 42 papers in the pipeline. 3 at P7 (submission-ready) targeting Ergodic Theory & Dynamical Systems, Annals of Pure and Applied Logic, and Transactions of the AMS.
 
 → [How the system works end-to-end](docs/dossier/#the-system)
+
+## Publications
+
+Nine papers have been extracted from the Omega derivation chain and submitted to peer-reviewed journals. Each covers an independent facet of the structures that emerge from $x^2 = x + 1$.
+
+### Symbolic Dynamics & Ergodic Theory
+
+| Paper | Innovation | Journal | Repo |
+|-------|-----------|---------|------|
+| **Finite-Window Rigidity in Fibonacci Numeration** | Zeckendorf fold = confluent rewrite system; sharp block-bijection threshold at $m{=}3$; Fischer cover with $2^{m-1}$ states | JNT | [repo](https://github.com/the-omega-institute/resolution-folding-core-symbolic-dynamics) |
+| **A Sharp Three-Window Threshold and Finite-Memory Conjugacy** | For $m{\ge}3$ the stabilized-window map is injective with image conjugate to the full two-shift; full thermodynamic formalism transported exactly | JPA | [repo](https://github.com/the-omega-institute/fibonacci-stabilization-sharp-threshold-conjugacy-nonlinearity) |
+| **Zeckendorf Folds, Sturmian Rigidity, and Parry Divergence** | Fold on the Sturmian slice is bijective; exact KL formula and sharp Renyi minima; universal injective-placement barrier for primitive SFTs | ETDS | [repo](https://github.com/the-omega-institute/folded-rotation-histogram) |
+| **Folded Histograms: Sampling Certificates and Parry Mismatch** | Two-stage audit framework for coarse-grained orbit data; Fibonacci weighting uniquely characterized by contiguous numeration axiom | SIADS | [repo](https://github.com/the-omega-institute/folded-rotation-histogram-certificates) |
+| **Tilt Dynamics and the Parry Measure on the Golden-Mean Shift** | Exponential tilts close within one-step Markov family; Parry measure = unique zero-jitter law; universality of quadratic coefficient for mixing SFTs | JTP | [repo](https://github.com/the-omega-institute/zero-jitter-information-clocks-parry-gibbs-rigidity) |
+
+### Number Theory & Arithmetic Geometry
+
+| Paper | Innovation | Journal | Repo |
+|-------|-----------|---------|------|
+| **A Quartic Cover of 37a1 and Its Regular S4-Closure** | Complete Jacobian decomposition via rational idempotents; branch cubic splitting field = cubic ray class field sourcing weight-1 cusp form | JNT | [repo](https://github.com/the-omega-institute/branch-cubic-regular-s4-closure-prym-ray-class) |
+| **Upper Fibers and Witness Covers for the Fibonacci Apparition Map** | Witness covers for divisor fibers $B_n$; primitive-vs-ladder dichotomy; unique factorization into connected coordinate blocks | RINT | [repo](https://github.com/the-omega-institute/fibonacci-moduli-cross-resolution-arithmetic) |
+
+### Automata & Formal Languages
+
+| Paper | Innovation | Journal | Repo |
+|-------|-----------|---------|------|
+| **Canonical Zeckendorf Normalization and the Minimal Berstel Adder** | Canonical normalization is non-subsequential with $\Delta(n){=}n$; Berstel transducer is minimal (state complexity 10); linear round lower bound | RAIRO ITA | [repo](https://github.com/the-omega-institute/zeckendorf-streaming-normalization-automata-rairo) |
+
+### Mathematical Physics
+
+| Paper | Innovation | Journal | Repo |
+|-------|-----------|---------|------|
+| **Shell Geometry from Stationary Detector Thermality** | Unruh-DeWitt click statistics define exact-clock and memory-transition shells in static KMS spacetimes; self-calibrating ratio law recovers mass parameter | GRG | [repo](https://github.com/the-omega-institute/grg-shell-geometry-from-stationary-detector-thermality) |
+
+Each repository includes a **video presentation**, **slide deck**, and **audio podcast** generated by [NotebookLM](https://notebooklm.google.com), available under [Releases](https://github.com/the-omega-institute?tab=repositories).
 
 ## Project Structure
 
@@ -333,6 +393,10 @@ automath/
 
 The library depends on [Mathlib](https://github.com/leanprover-community/mathlib4) and Lean 4.
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=the-omega-institute/automath&type=Date)](https://star-history.com/#the-omega-institute/automath&Date)
+
 ## Install Omega Thinking
 
 Make your AI coding assistant think with forcing, minimization, and auditable derivation chains:
@@ -342,23 +406,6 @@ https://raw.githubusercontent.com/the-omega-institute/automath/dev/prompts/omega
 ```
 
 Paste this URL into Claude Code and ask it to install the skill. Then type `/omega` .
-
-## Build
-
-```bash
-cd lean4 && lake build
-```
-
-Mathlib is fetched and cached automatically on first build.
-
-## Reproduce the Paper
-
-```bash
-cd theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
-pip install -r requirements.txt
-python3 scripts/run_all.py    # generates all figures/tables
-latexmk -pdfxe main.tex       # compiles the paper
-```
 
 ## Open Frontiers
 
