@@ -20,4 +20,10 @@ theorem paper_chainwise_propagation_bound_package
     (∑ i, dSpace i) ≤ cStar * ∑ i, tauSync i :=
   paper_chainwise_propagation_bound_seeds dSpace tauSync cStar hstep
 
+theorem paper_chainwise_propagation_bound
+    {n : ℕ} (dSpace tauSync : Fin n → ℝ) (cStar : ℝ)
+    (hstep : ∀ i : Fin n, dSpace i ≤ cStar * tauSync i) :
+    (∑ i, dSpace i) ≤ cStar * ∑ i, tauSync i :=
+  paper_chainwise_propagation_bound_seeds dSpace tauSync cStar hstep
+
 end Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy

@@ -144,4 +144,11 @@ theorem paper_fold_endpoint_Mm_minus_one_unique_package (m : ℕ) :
     ∀ w : Word m, No11 w → weight w = Nat.fib (m + 2) - 1 → w = endpointWord m :=
   paper_fold_endpoint_Mm_minus_one_unique_seeds m
 
+/-- Paper-facing theorem using the canonical final name from the implementation ledger. -/
+theorem paper_fold_endpoint_Mm_minus_one_unique (m : ℕ) :
+    No11 (endpointWord m) ∧
+    weight (endpointWord m) = Nat.fib (m + 2) - 1 ∧
+    ∀ w : Word m, No11 w → weight w = Nat.fib (m + 2) - 1 → w = endpointWord m :=
+  paper_fold_endpoint_Mm_minus_one_unique_seeds m
+
 end Omega.Folding.EndpointMmMinusOneUnique
