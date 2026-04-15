@@ -120,6 +120,7 @@ import Omega.FoldResidualTime.ApparentRandomnessFreezingEscort
 import Omega.GU.Window6B3C3QuarticDefectOnedim
 import Omega.GU.Window6B3C3EuclideanCubature
 import Omega.GU.Window6B3C3QuarticRankoneHarmonicDetector
+import Omega.GU.Window6BinfoldLastbitLecamEquivalence
 import Omega.GU.Window6TypeSuperselectionAutGamma6
 import Omega.GU.Window6AffineFiberOrbitClassification
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
@@ -726,6 +727,7 @@ import Omega.CircleDimension.PoissonSymmetrization
 import Omega.CircleDimension.PoissonSymmetricCase
 import Omega.CircleDimension.PoissonKLEighth
 import Omega.CircleDimension.PoissonKLEvenOrders
+import Omega.CircleDimension.PoissonKernelDerivativeL1Energy
 import Omega.CircleDimension.PoissonSecondOrder
 import Omega.CircleDimension.PoissonDefectLadder
 import Omega.CircleDimension.PoissonDefectAmplification
@@ -757,6 +759,7 @@ import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.PreferredMinimalInstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
+import Omega.TypedAddressBiaxialCompletion.PcdimModpFormula
 import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
 import Omega.TypedAddressBiaxialCompletion.VisiblePhaseLift
