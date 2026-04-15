@@ -13,10 +13,12 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3383 |
+| \leanverified 标注数 | 3386 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3432 |
-| 轮次 | R797（round_count=R797）|
+| 总标注数 | 3435 |
+| 轮次 | R798（round_count=R798）|
+
+**Phase R798（本轮落地，全流程执行）**：`paper_projection_pressure_slopes`（对应 `cor:pressure-slopes`，POM；把 global-pressure-convexity 的 Perron 传递、Renyi endpoint 与 slope monotonicity/readout 压成 pressure-slopes corollary-facing wrapper）；`paper_cubical_stokes_explicit_minimizer`（对应 `cor:explicit-minimizer`，SPG；把 explicit centered primitive 与 boundary-rigidity trace readout压成 cubical Stokes corollary-facing wrapper）；`paper_self_dual_sync_rho_gap_m12`（对应 `thm:rho-gap-m12`，Zeta；把 root-separation 到 twisted Perron-root asymptotic expansion 与 leading-order readout压成 self-dual synchronization theorem-facing wrapper，本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 POM / SPG / Zeta，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/POM/PressureSlopes.lean`、`lean4/Omega/SPG/ExplicitMinimizer.lean`、`lean4/Omega/Zeta/RhoGapM12.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_projection_pressure_slopes`、`paper_cubical_stokes_explicit_minimizer`、`paper_self_dual_sync_rho_gap_m12`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_projection_ontological_mathematics_core_tams/sec_moment_kernel.tex`（`cor:pressure-slopes`），`/Users/chronoai/automath/papers/publication/2026_cubical_stokes_inverse_boundary_readout_jdsgt/main.tex`（`cor:explicit-minimizer`），`/Users/chronoai/automath/papers/publication/2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists/sec_kernel.tex`（`thm:rho-gap-m12`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R797（本轮落地，全流程执行）**：`paper_projection_adjacent_pressure_convexity`（对应 `cor:cross-q-logconvex`，POM；把 global-pressure-convexity 的 moment/entropy/Perron 传递封装成 adjacent partition-constant log-convexity corollary-facing wrapper）；`paper_cubical_stokes_optimal_continuous_inverse`（对应 `thm:optimal-continuous-inverse`，SPG；把 cube Poincaré--Stokes right-inverse seed package 压成 cubical Stokes theorem-facing wrapper，本轮 non-trivial 目标）；`paper_zero_jitter_finite_time_law`（对应 `cor:finite-time-law`，GroupUnification；把 exact-clock 的 endpoint readout 压成 finite-time variance corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 POM / SPG / GroupUnification，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/POM/AdjacentPressureConvexity.lean`、`lean4/Omega/SPG/OptimalContinuousInversePublication.lean`、`lean4/Omega/GroupUnification/FiniteTimeLaw.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_projection_adjacent_pressure_convexity`、`paper_cubical_stokes_optimal_continuous_inverse`、`paper_zero_jitter_finite_time_law`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_projection_ontological_mathematics_core_tams/sec_moment_kernel.tex`（`cor:cross-q-logconvex`），`/Users/chronoai/automath/papers/publication/2026_cubical_stokes_inverse_boundary_readout_jdsgt/main.tex`（`thm:optimal-continuous-inverse`），`/Users/chronoai/automath/papers/publication/submitted_2026_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp/main.tex`（`cor:finite-time-law`）；新增 tex theorem/corollary/lemma 环境数 0）
 
