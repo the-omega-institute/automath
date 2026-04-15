@@ -33,11 +33,19 @@ theorem compositionPullback_mul (m a b : ℕ) (hab : a * b < Nat.fib (m + 2)) :
   rw [stableValue_ofNat_lt a ha', stableValue_ofNat_lt b hb', Nat.mod_eq_of_lt hab]
 
 /-- Paper package: cor:composition-pullback -/
+theorem paper_composition_pullback (m : ℕ) :
+    (∀ a b : ℕ, a + b < Nat.fib (m + 2) →
+      X.stableAdd (X.ofNat m a) (X.ofNat m b) = X.ofNat m (a + b)) ∧
+    (∀ a b : ℕ, a * b < Nat.fib (m + 2) →
+      X.stableMul (X.ofNat m a) (X.ofNat m b) = X.ofNat m (a * b)) := by
+  exact ⟨compositionPullback_add m, compositionPullback_mul m⟩
+
+/-- Paper package: cor:composition-pullback -/
 theorem paper_composition_pullback_package (m : ℕ) :
     (∀ a b : ℕ, a + b < Nat.fib (m + 2) →
       X.stableAdd (X.ofNat m a) (X.ofNat m b) = X.ofNat m (a + b)) ∧
     (∀ a b : ℕ, a * b < Nat.fib (m + 2) →
       X.stableMul (X.ofNat m a) (X.ofNat m b) = X.ofNat m (a * b)) :=
-  ⟨compositionPullback_add m, compositionPullback_mul m⟩
+  paper_composition_pullback m
 
 end Omega.EA
