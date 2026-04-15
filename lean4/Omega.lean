@@ -127,6 +127,7 @@ import Omega.Folding.BernoulliPJordanResonance
 import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPPressureQuartic
 import Omega.Folding.BernoulliPParryPressureChain
+import Omega.Folding.BernoulliPDoobTransformClosed
 import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Folding.EndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
@@ -251,6 +252,7 @@ import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.BoundaryGodelMomentReadout
 import Omega.SPG.BoundaryGodelMomentRobustGcdBound
 import Omega.SPG.BoundaryGodelGcdLipschitzStability
+import Omega.SPG.BoundaryGodelArithmeticHypercubeMedian
 import Omega.SPG.BoundaryGodelSequenceDeterminesClosure
 import Omega.SPG.BoundaryGodelBitcomplexityIsoperimetric
 import Omega.SPG.ScreenKernelAuditCost
@@ -808,6 +810,7 @@ import Omega.GU.LeyangHolographicN2
 import Omega.GU.Window6SingleGoodPrimeRecovery
 import Omega.GU.Window6B3SupportCount
 import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
+import Omega.GU.Window6VisibleCartanQuotientSyzygySplitting
 import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
 import Omega.GU.Window6B3C3EvenMomentGapLaplaceDomination
 import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
