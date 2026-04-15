@@ -690,6 +690,7 @@ import Omega.PhysicalSpacetimeSkeleton.AuditedSeedRankThree
 import Omega.PhysicalSpacetimeSkeleton.KernelizationTemplate
 import Omega.PhysicalSpacetimeSkeleton.InstantiationCriterion
 import Omega.PhysicalSpacetimeSkeleton.GlobalLorentzStructure
+import Omega.PhysicalSpacetimeSkeleton.GravitationalScalarUniqueness
 import Omega.PhysicalSpacetimeSkeleton.LocalClockPotential
 import Omega.PhysicalSpacetimeSkeleton.LocalRedshift
 import Omega.LogicExpansionChain.ForcingPersistence

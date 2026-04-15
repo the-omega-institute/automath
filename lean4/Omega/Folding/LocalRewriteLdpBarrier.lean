@@ -116,6 +116,28 @@ theorem paper_fold_local_rewrite_ldp_lower_tail_barrier
   have hTail : exponentialLowerTail := hLdp hEventInclusion ha
   exact ⟨hTail, hBorelCantelli (hSummable hTail)⟩
 
+/-- Paper-facing Bernoulli-`p` analogue of the local-rewrite lower-tail barrier wrapper: the same
+event inclusion, LDP upper tail, and Borel-Cantelli packaging upgrade the Bernoulli-`p` pointwise
+barrier into an exponential lower-tail certificate and almost-sure linear lower bound.
+    thm:fold-local-rewrite-ldp-lower-tail-barrier-bernoulli-p -/
+theorem paper_fold_local_rewrite_ldp_lower_tail_barrier_bernoulli_p
+    (p gStarP R a : ℝ)
+    (pointwiseBound eventInclusion exponentialLowerTail summableLowerTail
+      almostSureLiminfLowerBound : Prop)
+    (hp : 0 < p ∧ p < 1)
+    (ha : a < gStarP / R)
+    (hInclusion : pointwiseBound → eventInclusion)
+    (hLdp : eventInclusion → a < gStarP / R → exponentialLowerTail)
+    (hSummable : exponentialLowerTail → summableLowerTail)
+    (hBorelCantelli : summableLowerTail → almostSureLiminfLowerBound) :
+    pointwiseBound → exponentialLowerTail ∧ almostSureLiminfLowerBound := by
+  let _ := p
+  let _ := hp
+  exact
+    paper_fold_local_rewrite_ldp_lower_tail_barrier
+      gStarP R a pointwiseBound eventInclusion exponentialLowerTail summableLowerTail
+      almostSureLiminfLowerBound ha hInclusion hLdp hSummable hBorelCantelli
+
 set_option maxHeartbeats 400000 in
 /-- Publication-facing wrapper for the average-case `B`-bit inversion barrier and its
     separation from the zero-error worst-case threshold.
