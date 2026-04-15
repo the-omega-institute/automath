@@ -207,6 +207,7 @@ import Omega.SPG.ScanErrorMeasure
 import Omega.SPG.ErrorThreshold
 import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.NoiseBudgetRecovery
+import Omega.SPG.LpSuperellipsoidDecodingMultiplicativeNoiseStability
 import Omega.SPG.WeightedBoundaryDecomposition
 import Omega.SPG.WeightedBoundaryTransfer
 import Omega.SPG.WeightedBoundaryPole
@@ -544,6 +545,7 @@ import Omega.Zeta.PrimeLanguagesZeckendorfPrimeLanguageNotRegular
 import Omega.Zeta.ZeckendorfPrimesNotSofic
 import Omega.Zeta.LucasBarrier
 import Omega.Zeta.NecklaceCounting
+import Omega.Zeta.BooleanDisjointnessZetaLDLT
 import Omega.Zeta.LocalizedQuotientLedger
 import Omega.Zeta.CyclicEulerProduct
 import Omega.Zeta.FiniteQuotientScalarGodelLoglogOverhead
@@ -619,6 +621,7 @@ import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.Window6Collision
 import Omega.Conclusion.Window6SizebiasEscortAmplification
+import Omega.Conclusion.CollisionMomentMoritaDefectFusion
 import Omega.Conclusion.Window6ThreeMomentSpectrumInversion
 import Omega.Conclusion.Window6RepresentationZetaCountRatio
 import Omega.Conclusion.Boundary1FormCutDeterminantSplitting
