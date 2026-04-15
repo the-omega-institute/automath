@@ -66,7 +66,6 @@ import Omega.Folding.FiberSplit
 import Omega.Folding.HammingDist
 import Omega.Folding.HankelSpectrum
 import Omega.Experiments.ParryBaselineGapSturmian
-import Omega.Experiments.ParryBaselineGapSturmianExp
 import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Experiments.MetallicMeanGoldenUniqueOptimalTVConstant
 import Omega.Folding.LocalWeightRigidityFibonacci
@@ -107,7 +106,6 @@ import Omega.Folding.ZeroFiberLinear
 import Omega.FoldResidualTime.Window6SecondCollisionConstant
 import Omega.FoldResidualTime.ApparentRandomnessFreezingEscort
 import Omega.GU.Window6B3C3QuarticDefectOnedim
-import Omega.GU.Window6B3C3QuarticAxisDiagonalReversal
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.VisibleValueOverflow
@@ -681,6 +679,7 @@ import Omega.Principles.GoldenBranchFibonacciCoprime
 import Omega.Preliminaries.EmpiricalFrequencyBounds
 import Omega.Experiments.MultiscaleResidual
 import Omega.Experiments.MarkovTVSampleComplexity
+import Omega.Experiments.QminLowerboundMarkov
 import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Experiments.TVCertificateHist
 import Omega.StatisticalStability.ResidueClassification
@@ -697,6 +696,7 @@ import Omega.PhysicalSpacetimeSkeleton.GlobalLorentzStructure
 import Omega.PhysicalSpacetimeSkeleton.GravitationalScalarUniqueness
 import Omega.PhysicalSpacetimeSkeleton.LocalClockPotential
 import Omega.PhysicalSpacetimeSkeleton.LocalRedshift
+import Omega.PhysicalSpacetimeSkeleton.ProceduralGrandChain
 import Omega.LogicExpansionChain.ForcingPersistence
 import Omega.LogicExpansionChain.StateForcingPersistence
 import Omega.LogicExpansionChain.SemanticFidelity
@@ -860,6 +860,7 @@ import Omega.CircleDimension.FiberPhaseQuantization
 import Omega.CircleDimension.CausalPreorder
 import Omega.CircleDimension.BudgetCompleteness
 import Omega.CircleDimension.PrimeTruncation
+import Omega.CircleDimension.PrefixPrimeLedgerConservation
 import Omega.CircleDimension.BiphaseFiber
 import Omega.CircleDimension.PhaseSpectrumMonoid
 import Omega.CircleDimension.LissajousChebyshev
