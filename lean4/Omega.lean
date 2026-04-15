@@ -84,6 +84,7 @@ import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.SummableNatEventuallyZero
 import Omega.Folding.PeriodicCompressionRatio
 import Omega.Folding.PeriodicCountSandwich
+import Omega.Folding.YmPeriodicRigidity
 import Omega.Folding.RationalGeneratorGap
 import Omega.Folding.MetallicCompressionExtremum
 import Omega.Folding.MetallicCompressionLockingLambda2
@@ -250,6 +251,7 @@ import Omega.Frontier.Certificates
 import Omega.Frontier.NullTrichotomyLocalSection
 import Omega.Frontier.RecursiveAddressingNullTrichotomyLocalSection
 import Omega.RecursiveAddressing.PrefixSiteProjectiveRepTwist
+import Omega.RecursiveAddressing.PrefixSiteCechNullGerbe
 import Omega.LogicExpansionChain.FocusedConservativeComposition
 import Omega.LogicExpansionChain.StateTheoryMonotonicity
 import Omega.LogicExpansionChain.GluingFailureStateTheoryMonotonicityAPAL
@@ -690,6 +692,7 @@ import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
 import Omega.GU.FibTailP23Orbits
 import Omega.CircleDimension.PhaseSeparationPrecisionExponent
+import Omega.CircleDimension.PhasePrecisionTradeoffDyadic
 import Omega.CircleDimension.PhasePrecisionTradeoff
 import Omega.POM.HighMultiplicitySparse
 import Omega.GU.MinSectorBudget
