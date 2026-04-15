@@ -153,6 +153,7 @@ import Omega.SPG.MainRenyi
 import Omega.SPG.MainResonance
 import Omega.SPG.HolderOpenResonance
 import Omega.SPG.BoundaryRigidity
+import Omega.SPG.ContractionEstimate
 import Omega.SPG.ExplicitMinimizer
 import Omega.SPG.DiscreteStokesPoincarePublication
 import Omega.SPG.HypercubeNearDetailedBalancePublication
@@ -629,6 +630,7 @@ import Omega.GroupUnification.ExactClock
 import Omega.GroupUnification.FiniteTimeLaw
 import Omega.GroupUnification.TiltDynamics
 import Omega.GroupUnification.TiltedFreeEnergy
+import Omega.GroupUnification.TiltedLDP
 import Omega.GroupUnification.FreeEnergyComposition
 import Omega.GroupUnification.VarianceTransfer
 import Omega.CD.AnomalyCompressionOverhead
@@ -701,6 +703,7 @@ import Omega.POM.PressureConvexity
 import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.PressureSlopes
+import Omega.POM.GibbsSelection
 import Omega.POM.RenyiEndpoint
 import Omega.POM.LambdaAlgebraic
 import Omega.POM.MaxFiberPublication
