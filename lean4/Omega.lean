@@ -646,6 +646,7 @@ import Omega.CircleDimension.SignedCircleDimension
 import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.StokesFiberIntegrationDefect
 import Omega.CircleDimension.ShortExactAdditivity
+import Omega.CircleDimension.FiniteExtensionAxiomaticUniqueness
 import Omega.SPG.TanakaStokes
 import Omega.CircleDimension.TensorHomExtLaws
 import Omega.CircleDimension.AxiomaticRigidity
@@ -700,6 +701,7 @@ import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 import Omega.TypedAddressBiaxialCompletion.CausalPreorder
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
+import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
 import Omega.PhysicalSpacetimeSkeleton.LocalSkeletonBeforeGlobalTrivialization
 import Omega.PhysicalSpacetimeSkeleton.AuditedSeedRankThree
@@ -742,6 +744,7 @@ import Omega.POM.FibCubeEccentricityCore
 import Omega.POM.FibCubeAntipodeCount
 import Omega.POM.FibCubeEdgeParity
 import Omega.POM.FibCubeFrechetMedianUnique
+import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.ToggleOrder
 import Omega.POM.ReplicaSoftcoreDet
