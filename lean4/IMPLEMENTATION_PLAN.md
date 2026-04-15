@@ -1882,6 +1882,14 @@ SPG / PhysicalSpacetimeSkeleton，降级项数 1，non-trivial 计数 1；文件
 - 已完成 `paper_gut_mobius_duality_unified`（`prop:mobius-duality-unified`，`GU/MobiusDualityUnified.lean`）：新建 `MobiusDualityWitness`，将 \(\Omega\)-反演固定点、Cayley 符号翻转与 pole-barrier 边界正规化三项见证打包，并复用 `paper_gut_u1_throat_identity_package` 将统一点压到 `u = 1` 后输出统一 Möbius 对偶结论。
 - 已完成 `paper_cdim_godel_scalarization_bitlength_logB`（`prop:cdim-godel-scalarization-bitlength-logB`，`CircleDimension/GodelScalarizationBitlengthLogB.lean`）：新建 `GodelScalarizationWitness`，显式记录 distinct-prime scalarization 数据与 `B log B` 上下界常数；证明中复用 `paper_cdim_signed_orthant_closed` 给出全一顶点的 signed-circle bookkeeping，并调用现有 `product_distinct_primes_lower` 作为 multiplicative lower-bound bridge。
 
+### Round R895
+
+- 已完成 `paper_window6_visible_cartan_quotient_syzygy_splitting`（`thm:window6-visible-cartan-quotient-syzygy-splitting`，`GU/Window6VisibleCartanQuotientSyzygySplitting.lean`）：新增 window-6 visible Cartan quotient 的 paper-facing wrapper，按仓库既有接口风格把 quotient 满射、boundary splitting、显式 syzygy 基与秩 \(18\) 结论作为四项命题见证合并输出。
+- 已完成 `paper_fold_bernoulli_p_doob_transform_closed`（`thm:fold-bernoulli-p-doob-transform-closed`，`Folding/BernoulliPDoobTransformClosed.lean`）：新增 Bernoulli-`p` 指数倾斜 Doob 变换的闭式包装接口，把右/左 Perron 特征向量、Doob 核与平稳分布闭式并入单一定理。
+- 已完成 `paper_spg_boundary_godel_arithmetic_hypercube_median`（`thm:spg-boundary-godel-arithmetic-hypercube-median`，`SPG/BoundaryGodelArithmeticHypercubeMedian.lean`）：新增边界 Gödel 算术超立方中值定理的接口包装，把算术-Hamming 等距、中值公式、边界像等距与体积 Lipschitz 性统一为单一定理。
+- 已执行 `git fetch origin lean4-codex-auto-dev` / `git rebase origin/lean4-codex-auto-dev`，本轮无冲突；随后在 rebased 分支上执行 `cd lean4 && timeout 300 lake build`，全量通过（9030 jobs）。
+- 文件：`lean4/Omega/GU/Window6VisibleCartanQuotientSyzygySplitting.lean`、`lean4/Omega/Folding/BernoulliPDoobTransformClosed.lean`、`lean4/Omega/SPG/BoundaryGodelArithmeticHypercubeMedian.lean`、`lean4/Omega.lean`；tex 路径：`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/subsubsec__window6_cartan_syzygy_quartic_code.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/folding/subsubsec__fold-gauge-anomaly-bernoulli-p-renewal-determinant-pressure-doob-tilt.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/spg/para__spg-screen-basis-top-homology-adhesion-median.tex`。
+
 ### Round R791
 
 - 已完成 `paper_logic_expansion_singleton_conservativity`（`prop:logic-expansion-singleton-conservativity`，`LogicExpansionChain/SingletonConservativity.lean`）：将既有 singleton forcing 的 `_seeds` 结果提升为 unsuffixed 论文接口定理，并把 tex 注册切到直接论文名。
