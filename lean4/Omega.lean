@@ -46,6 +46,7 @@ import Omega.Folding.InverseLimitTopology
 import Omega.Folding.InverseLimitGolden
 import Omega.Folding.PiFunctorial
 import Omega.Folding.CircleDimension
+import Omega.CircleDimension.MinimalLogAuditablePhaseCircles
 import Omega.CircleDimension.MinimalAuditCompletion
 import Omega.CircleDimension.AuditedRealizationBudgetLowerBound
 import Omega.CircleDimension.AnomalyQuadraticLaw
@@ -158,6 +159,7 @@ import Omega.Folding.ExactMarkovOrderBernoulli
 import Omega.Folding.YmConjugacyCollapse
 import Omega.Folding.ResidueMarkovOrder
 import Omega.Folding.FoldSuitePublication
+import Omega.PhysicalSpacetimeSkeleton.DerivedStressEnergyConservation
 import Omega.PhysicalSpacetimeSkeleton.AdmissibleEinsteinClosureMain
 import Omega.PhysicalSpacetimeSkeleton.AdmissibleGlobalEinsteinEquation
 import Omega.PhysicalSpacetimeSkeleton.GlobalGeometricObjects
@@ -794,6 +796,7 @@ import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
 import Omega.GU.Window6B3C3EvenMomentGapLaplaceDomination
 import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
 import Omega.GU.Window6C3SupportCount
+import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
 import Omega.GU.FiberNonConstantNoFreeAction
 import Omega.GU.FibTailS3Closure
 import Omega.GU.BoundaryTowerFibCount
