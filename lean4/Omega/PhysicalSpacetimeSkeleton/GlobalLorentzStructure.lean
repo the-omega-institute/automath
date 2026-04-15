@@ -69,6 +69,26 @@ theorem finite_compatible_family_glues {ι : Type u} [Fintype ι] (F : Compatibl
   intro i x
   rfl
 
+/-- Paper-facing finite-family gluing wrapper: a finite compatible family of local Lorentz charts
+glues to a unique scalar metric on the maximal admissible quotient domain.
+    prop:physical-spacetime-finite-compatible-family-glues -/
+theorem paper_physical_spacetime_finite_compatible_family_glues :
+    ∀ {ι : Type u} [Fintype ι] (F : CompatibleLorentzFamily ι),
+      ∃! g : maximalAdmissibleDomain F → ℝ, ∀ i x, g (pointClass F i x) = F.metric i x := by
+  intro ι _ F
+  obtain ⟨g, hg⟩ := finite_compatible_family_glues F
+  refine ⟨g, hg, ?_⟩
+  intro g' hg'
+  funext q
+  refine Quotient.inductionOn q ?_
+  intro p
+  rcases p with ⟨i, x⟩
+  have h1 : g ⟦⟨i, x⟩⟧ = F.metric i x := by
+    simpa [pointClass] using hg i x
+  have h2 : g' ⟦⟨i, x⟩⟧ = F.metric i x := by
+    simpa [pointClass] using hg' i x
+  linarith
+
 /-- Paper-facing global Lorentz wrapper: a finite compatible family of local Lorentz charts
 glues, their local metrics agree on overlaps, and the glued metric descends to the maximal
 admissible quotient domain.

@@ -178,6 +178,7 @@ import Omega.SPG.ScanProjectionScanErrorCylinder
 import Omega.SPG.ScanProjectionBayesOptimality
 import Omega.SPG.BayesFiniteMistakesSummable
 import Omega.SPG.BoundaryDimensionAeStabilization
+import Omega.SPG.ClarityRiskThresholdDepthLaw
 import Omega.SPG.ScanErrorMeasure
 import Omega.SPG.ErrorThreshold
 import Omega.SPG.NoiseBudgetRecovery
