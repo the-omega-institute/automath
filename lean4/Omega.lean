@@ -45,6 +45,7 @@ import Omega.Folding.ShiftDynamics
 import Omega.Folding.Rewrite
 import Omega.Folding.Defect
 import Omega.Folding.DiscreteStokesDefectPublication
+import Omega.Folding.StokesDefectHaarMixing
 import Omega.Folding.PiFunctorialGolden
 import Omega.Folding.NormalizeThenTruncateFunctorial
 import Omega.Folding.Entropy
@@ -125,6 +126,7 @@ import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.TanakaIncrement
 import Omega.SPG.CoarsegrainedCutFlux
 import Omega.SPG.DyadicTopInversionBound
+import Omega.SPG.DyadicFiniteMomentCompleteness
 import Omega.SPG.PolycubeIsoperimetryUpper
 import Omega.SPG.RandomBulkBoundarySaturation
 import Omega.SPG.CutFunctionSubmodular
@@ -519,6 +521,7 @@ import Omega.GU.BdrySquareIdentity
 import Omega.GU.M11Z34CyclotomicRepresentationRigidity
 import Omega.GU.Window6DyadicBudget
 import Omega.GU.SheetflipRegisterBound
+import Omega.GU.EllipticGateMinimalRegister
 import Omega.GU.SideInformationBitLowerBound
 import Omega.GU.FixedPrecisionExponentialMultiplicity
 import Omega.GU.IndistinguishablePairsCollisionProbability
