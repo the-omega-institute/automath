@@ -5,11 +5,8 @@ import Omega.RecursiveAddressing.ObserverIndexedValuePreservingNoCreation
 namespace Omega.RecursiveAddressing
 
 set_option maxHeartbeats 400000 in
-/-- Paper-facing delayed-classification wrapper: an observer-indexed update can refine which
-    previously indexed proposition is now decidable, but it cannot retrocausally create an
-    object-level value from a source that was still undefined before the update.
-    prop:observer-indexed-delayed-classification-not-retrocausal -/
-theorem paper_recursive_addressing_observer_indexed_delayed_classification_not_retrocausal
+/-- Seed lemma used by the paper-facing no-creation corollary in this file. -/
+private theorem observerIndexedDelayedClassificationNoRetrocausalSeed
     {Expr State Value : Type}
     (readout : State → Expr → Option Value)
     (step : Expr → Expr → Prop)
@@ -36,7 +33,7 @@ theorem paper_recursive_addressing_observer_indexed_update_decides_not_create
     (ht : readout p t = none) :
     readout p t' = none := by
   exact
-    paper_recursive_addressing_observer_indexed_delayed_classification_not_retrocausal
+    observerIndexedDelayedClassificationNoRetrocausalSeed
       readout step hpres hstep ht
 
 end Omega.RecursiveAddressing

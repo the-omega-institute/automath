@@ -46,6 +46,7 @@ import Omega.Folding.Rewrite
 import Omega.Folding.Defect
 import Omega.Folding.DiscreteStokesDefectPublication
 import Omega.Folding.PiFunctorialGolden
+import Omega.Folding.NormalizeThenTruncateFunctorial
 import Omega.Folding.Entropy
 import Omega.Folding.BinFold
 import Omega.Folding.BoundaryLayer
@@ -187,6 +188,7 @@ import Omega.LogicExpansionChain.ReadoutTransport
 import Omega.LogicExpansionChain.UpdatesPreserveForcing
 import Omega.LogicExpansionChain.DelayedDecidabilityNoNewTruth
 import Omega.LogicExpansionChain.NullTrichotomy
+import Omega.LogicExpansionChain.NullModesImplyNull
 import Omega.LogicExpansionChain.IndispensabilityImpliesMinimality
 import Omega.LogicExpansionChain.ChoiceSpectrumStandardForm
 import Omega.LogicExpansionChain.ChoiceSpectrum
@@ -221,6 +223,7 @@ import Omega.RecursiveAddressing.ObserverNeutralReadoutAPAL
 import Omega.RecursiveAddressing.PrefixSiteRegisterLowerBound
 import Omega.RecursiveAddressing.ReadoutSeparatednessNull
 import Omega.RecursiveAddressing.NullAsLocalSectionObstruction
+import Omega.RecursiveAddressing.NullAsH2Obstruction
 import Omega.RecursiveAddressing.SlidingBlockFactor
 import Omega.RecursiveAddressing.VisibleSigmaNonexpansion
 import Omega.RecursiveAddressing.TypedReadoutPersistence
