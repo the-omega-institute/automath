@@ -141,6 +141,7 @@ import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.ScreenKernelAuditCost
 import Omega.SPG.ScreenAuditCostMonotoneUnitDrop
 import Omega.SPG.ScreenRankMatroidSupermodularity
+import Omega.SPG.ExactScreenMinimaAreMatroidBases
 import Omega.SPG.ScreenKernelConnectedComponents
 import Omega.SPG.GodelDoublelog
 import Omega.SPG.WalshStokes
@@ -192,6 +193,7 @@ import Omega.LogicExpansionChain.ReadoutTransport
 import Omega.LogicExpansionChain.UpdatesPreserveForcing
 import Omega.LogicExpansionChain.DelayedDecidabilityNoNewTruth
 import Omega.LogicExpansionChain.NullTrichotomy
+import Omega.LogicExpansionChain.NullModesExclusive
 import Omega.LogicExpansionChain.NullModesImplyNull
 import Omega.LogicExpansionChain.IndispensabilityImpliesMinimality
 import Omega.LogicExpansionChain.ChoiceSpectrumStandardForm
@@ -225,6 +227,7 @@ import Omega.RecursiveAddressing.ObserverIndexedNormalizationNoFactCreation
 import Omega.RecursiveAddressing.ObserverIndexedValuePreservingNoCreation
 import Omega.RecursiveAddressing.ObserverNeutralReadoutAPAL
 import Omega.RecursiveAddressing.PrefixSiteMinVisibleQuotient
+import Omega.RecursiveAddressing.PrefixSiteVisibleCharactersAnnihilator
 import Omega.RecursiveAddressing.PrefixSiteRegisterLowerBound
 import Omega.RecursiveAddressing.PrefixSiteSpectralDefinabilityAvis
 import Omega.RecursiveAddressing.ReadoutSeparatednessNull
