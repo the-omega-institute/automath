@@ -221,6 +221,7 @@ import Omega.SPG.EllipsoidFluxDecodingPerturbationStability
 import Omega.SPG.GodelBoundaryDecodingRelativeErrorThreshold
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicCubicalBoundaryInjective
+import Omega.SPG.DyadicBoundaryImageLDPC
 import Omega.SPG.DyadicBoundarySyndromeFillability
 import Omega.SPG.LinearTimeBulkDecodeFromBoundary
 import Omega.SPG.IntegerBulkDecodeOrCycleCertificate
@@ -678,6 +679,7 @@ import Omega.PhysicalSpacetimeSkeleton.AuditedSeedRankThree
 import Omega.PhysicalSpacetimeSkeleton.KernelizationTemplate
 import Omega.PhysicalSpacetimeSkeleton.InstantiationCriterion
 import Omega.PhysicalSpacetimeSkeleton.GlobalLorentzStructure
+import Omega.PhysicalSpacetimeSkeleton.LocalClockPotential
 import Omega.LogicExpansionChain.ForcingPersistence
 import Omega.LogicExpansionChain.StateForcingPersistence
 import Omega.LogicExpansionChain.SemanticFidelity
@@ -787,6 +789,7 @@ import Omega.GU.EllipticGateMinimalRegister
 import Omega.GU.SideInformationBitLowerBound
 import Omega.GU.FixedPrecisionExponentialMultiplicity
 import Omega.GU.IndistinguishablePairsCollisionProbability
+import Omega.GU.EllipticGatePadicsBlindspot
 import Omega.FoldResidualTime.Window6FixedFreezingLaw
 import Omega.SPG.GodelAxisBoundaryInvertibility
 import Omega.GU.EllipticGatePrimeSpectrumClassification
