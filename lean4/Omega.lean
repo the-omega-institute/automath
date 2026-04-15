@@ -76,6 +76,7 @@ import Omega.Folding.PeriodicCompressionRatio
 import Omega.Folding.RationalGeneratorGap
 import Omega.Folding.MetallicCompressionExtremum
 import Omega.Folding.MetallicCompressionLockingLambda2
+import Omega.Folding.MetallicParetoFrontier
 import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.ZeroFiberLinear
 import Omega.Folding.ModRigidityPeriodicPredicates
@@ -423,6 +424,7 @@ import Omega.StatisticalStability.ResidueClassification
 import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
+import Omega.PhysicalSpacetimeSkeleton.AuditedSeedRankThree
 import Omega.PhysicalSpacetimeSkeleton.KernelizationTemplate
 import Omega.LogicExpansionChain.ForcingPersistence
 import Omega.LogicExpansionChain.StateForcingPersistence
