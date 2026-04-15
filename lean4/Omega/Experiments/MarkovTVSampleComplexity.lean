@@ -1,0 +1,58 @@
+import Mathlib.Tactic
+
+namespace Omega.Experiments.MarkovTVSampleComplexity
+
+/-- The radius term appearing in the Markov-TV envelope.
+    thm:markov-tv-envelope -/
+noncomputable def markovTvEnvelopeRadius (N stateCount delta gammaPs : ℝ) : ℝ :=
+  Real.sqrt ((2 / (gammaPs * N)) * Real.log (2 * stateCount / delta))
+
+/-- If the envelope radius is at most `2τ / |S|`, then the TV envelope is at most `τ`.
+    cor:markov-tv-sample-complexity -/
+theorem paper_markov_tv_sample_complexity
+    (stateCount N delta gammaPs tau dtv : ℝ)
+    (hState : 0 < stateCount)
+    (hNpos : 0 < N)
+    (hGamma : 0 < gammaPs)
+    (hTau : 0 < tau)
+    (_hLog : 0 ≤ Real.log (2 * stateCount / delta))
+    (hEnvelope : dtv ≤ (stateCount / 2) * markovTvEnvelopeRadius N stateCount delta gammaPs)
+    (hSample :
+      stateCount ^ 2 / (2 * gammaPs * tau ^ 2) * Real.log (2 * stateCount / delta) ≤ N) :
+    dtv ≤ tau := by
+  let L := Real.log (2 * stateCount / delta)
+  have hStateSq : 0 < stateCount ^ 2 := by positivity
+  have hSampleMul :
+      L * stateCount ^ 2 ≤ 2 * gammaPs * tau ^ 2 * N := by
+    have htmp :=
+      mul_le_mul_of_nonneg_right hSample (show 0 ≤ 2 * gammaPs * tau ^ 2 by positivity)
+    dsimp [L] at htmp ⊢
+    calc
+      L * stateCount ^ 2
+          = (stateCount ^ 2 / (2 * gammaPs * tau ^ 2) * L) * (2 * gammaPs * tau ^ 2) := by
+              field_simp [hGamma.ne', hTau.ne']
+      _ ≤ N * (2 * gammaPs * tau ^ 2) := htmp
+      _ = 2 * gammaPs * tau ^ 2 * N := by ring
+  have hL :
+      L ≤ (2 * gammaPs * tau ^ 2 * N) / stateCount ^ 2 := by
+    exact (le_div_iff₀ hStateSq).2 (by simpa [mul_comm, mul_left_comm, mul_assoc] using hSampleMul)
+  have hSqBound :
+      (2 / (gammaPs * N)) * L ≤ (2 * tau / stateCount) ^ 2 := by
+    calc
+      (2 / (gammaPs * N)) * L
+          ≤ (2 / (gammaPs * N)) * ((2 * gammaPs * tau ^ 2 * N) / stateCount ^ 2) := by
+              gcongr
+      _ = (2 * tau / stateCount) ^ 2 := by
+            field_simp [hGamma.ne', hNpos.ne', hState.ne']
+  have hRadius :
+      markovTvEnvelopeRadius N stateCount delta gammaPs ≤ 2 * tau / stateCount := by
+    unfold markovTvEnvelopeRadius
+    exact (Real.sqrt_le_iff).2 ⟨by positivity, hSqBound⟩
+  calc
+    dtv ≤ (stateCount / 2) * markovTvEnvelopeRadius N stateCount delta gammaPs := hEnvelope
+    _ ≤ (stateCount / 2) * (2 * tau / stateCount) := by
+          gcongr
+    _ = tau := by
+          field_simp [hState.ne']
+
+end Omega.Experiments.MarkovTVSampleComplexity

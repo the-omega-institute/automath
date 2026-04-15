@@ -83,6 +83,7 @@ import Omega.Folding.HolographicRateConservation
 import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.SummableNatEventuallyZero
 import Omega.Folding.PeriodicCompressionRatio
+import Omega.Folding.PeriodicCountSandwich
 import Omega.Folding.RationalGeneratorGap
 import Omega.Folding.MetallicCompressionExtremum
 import Omega.Folding.MetallicCompressionLockingLambda2
@@ -622,6 +623,7 @@ import Omega.FoldResidualTime.IidBlockFactorization
 import Omega.Principles.GoldenBranchFibonacciCoprime
 import Omega.Preliminaries.EmpiricalFrequencyBounds
 import Omega.Experiments.MultiscaleResidual
+import Omega.Experiments.MarkovTVSampleComplexity
 import Omega.Experiments.TVCertificateHist
 import Omega.StatisticalStability.ResidueClassification
 import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
@@ -754,6 +756,7 @@ import Omega.CD.AnomalyCompressionOverhead
 import Omega.CD.PeriodicPointCount
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
+import Omega.CircleDimension.FiniteFiberAuditExponent
 import Omega.CircleDimension.CdimStarCompatibleFG
 import Omega.CircleDimension.ResidualCircleDim
 import Omega.CircleDimension.ResidualCircleDimLaws
