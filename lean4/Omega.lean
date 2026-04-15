@@ -247,6 +247,7 @@ import Omega.Topos.CechBridgeCompatibleRealizations
 import Omega.Topos.GerbeNullSemantics
 import Omega.Topos.GerbeNullSemanticsPublication
 import Omega.Topos.MinimalInformationCostOfStrictification
+import Omega.Topos.TerminalFibreNeutrality
 import Omega.Topos.VisibleQuotientCharacterSeparation
 import Omega.Topos.FiniteAbelianDuality
 import Omega.Topos.IntrinsicVisibleQuotient
@@ -615,6 +616,7 @@ import Omega.GroupUnification.ParryCommutingSquarePhi
 import Omega.GroupUnification.ChiralOrthogonalityTypeObservables
 import Omega.GroupUnification.ExactClock
 import Omega.GroupUnification.FiniteTimeLaw
+import Omega.GroupUnification.TiltDynamics
 import Omega.CD.AnomalyCompressionOverhead
 import Omega.CD.PeriodicPointCount
 import Omega.CircleDimension.MultiPrimeSpectrum
@@ -687,6 +689,7 @@ import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.PressureSlopes
 import Omega.POM.RenyiEndpoint
 import Omega.POM.MaxFiberPublication
+import Omega.POM.DoubleLimit
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
 import Omega.Conclusion.FibonacciAnomalyBlock
