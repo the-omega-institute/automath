@@ -1,30 +1,34 @@
+import Mathlib.Tactic
+
 namespace Omega.PhysicalSpacetimeSkeleton
 
-/-- Minimal witness structure for the four continuum-limit template hypotheses together with the
-weak subsequential limit extracted from them. -/
-structure PhysicalSpacetimeContinuumTemplate where
-  chainSubadditiveControlled : Prop
-  chainSubadditiveControlled_holds : chainSubadditiveControlled
-  normalizedCurvatureWeaklyCompact : Prop
-  normalizedCurvatureWeaklyCompact_holds : normalizedCurvatureWeaklyCompact
-  observerEquivariant : Prop
-  observerEquivariant_holds : observerEquivariant
+/-- Chapter-local template for the paper's continuum-limit criterion. It stores the four
+hypotheses used by the text and an abstract compactness extractor producing a weak limit
+candidate. -/
+structure PhysicalSpacetimeContinuumFamily where
+  Limit : Type
+  convergesTo : Limit → Prop
+  subadditiveControlled : Prop
+  subadditiveControlledWitness : subadditiveControlled
+  curvatureWeaklyCompact : Prop
+  curvatureWeaklyCompactWitness : curvatureWeaklyCompact
+  observerInvariant : Prop
+  observerInvariantWitness : observerInvariant
   refinementCompatible : Prop
-  refinementCompatible_holds : refinementCompatible
-  weakLimit : Prop → Prop → Prop
-  weakLimit_exists :
-    chainSubadditiveControlled →
-      normalizedCurvatureWeaklyCompact →
-      observerEquivariant →
-      refinementCompatible →
-      ∃ cone curvature : Prop, weakLimit cone curvature
+  refinementCompatibleWitness : refinementCompatible
+  weakCompactness :
+    subadditiveControlled →
+      curvatureWeaklyCompact →
+        observerInvariant → refinementCompatible → ∃ limit, convergesTo limit
 
-/-- Paper-facing subsequence-extraction wrapper for the continuum-limit template.
+/-- The continuum-limit template packages the four chapter hypotheses into a single abstract
+compactness extraction, yielding a weak limit candidate.
     prop:physical-spacetime-continuum-limit-template -/
 theorem paper_physical_spacetime_continuum_limit_template
-    (T : PhysicalSpacetimeContinuumTemplate) : ∃ cone curvature : Prop, T.weakLimit cone curvature := by
+    (h : PhysicalSpacetimeContinuumFamily) :
+    ∃ limit, h.convergesTo limit := by
   exact
-    T.weakLimit_exists T.chainSubadditiveControlled_holds T.normalizedCurvatureWeaklyCompact_holds
-      T.observerEquivariant_holds T.refinementCompatible_holds
+    h.weakCompactness h.subadditiveControlledWitness h.curvatureWeaklyCompactWitness
+      h.observerInvariantWitness h.refinementCompatibleWitness
 
 end Omega.PhysicalSpacetimeSkeleton

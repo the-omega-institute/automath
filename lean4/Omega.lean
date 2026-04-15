@@ -90,6 +90,7 @@ import Omega.Folding.SpectralQuarticAutTrivial
 import Omega.Folding.BayesKinkGeometry
 import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.AutocovarianceSeedValues
+import Omega.Folding.GaugeAnomalyHankelJordanCertificate
 import Omega.Folding.PhiEquivariant
 import Omega.Folding.PhiSlidingBlockCode
 import Omega.Folding.PhiEquivariantPublication
@@ -746,6 +747,7 @@ import Omega.TypedAddressBiaxialCompletion.ComovingDefectBound
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
+import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
 import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
 import Omega.TypedAddressBiaxialCompletion.VisiblePhaseLift
