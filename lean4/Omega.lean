@@ -129,6 +129,7 @@ import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.PhiMemoryThresholdExact
 import Omega.Folding.BlockCountsThreshold
 import Omega.Folding.LinearTimeBlockDecoding
+import Omega.Folding.YmSingletonEssentialFiniteDelay
 import Omega.Folding.YmExactSFTOrder
 import Omega.Folding.ExactMarkovOrderBernoulli
 import Omega.Folding.YmConjugacyCollapse
@@ -152,6 +153,7 @@ import Omega.SPG.BasicProperties
 import Omega.SPG.ScanErrorDiscrete
 import Omega.SPG.ScanProjectionScanErrorCylinder
 import Omega.SPG.ScanProjectionBayesOptimality
+import Omega.SPG.BayesFiniteMistakesSummable
 import Omega.SPG.ScanErrorMeasure
 import Omega.SPG.ErrorThreshold
 import Omega.SPG.NoiseBudgetRecovery
@@ -196,6 +198,7 @@ import Omega.SPG.SingleParamLogReadoutPigeonhole
 import Omega.SPG.BoundaryCycleAuditQueryLowerBound
 import Omega.SPG.F2FiberCardinality
 import Omega.SPG.CycleRankFormula
+import Omega.SPG.BoundaryCycleRankFromEntropy
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicCubicalBoundaryInjective
 import Omega.SPG.SquareclassChainComplex
@@ -264,6 +267,7 @@ import Omega.LogicExpansionChain.ConcreteNormalizationNoFactCreation
 import Omega.LogicExpansionChain.LowerLayerProjection
 import Omega.LogicExpansionChain.NoPrivilegedObserver
 import Omega.LogicExpansionChain.ReadoutTransport
+import Omega.LogicExpansionChain.TechnicalModuleInstantiation
 import Omega.LogicExpansionChain.UpdatesPreserveForcing
 import Omega.LogicExpansionChain.DelayedDecidabilityNoNewTruth
 import Omega.LogicExpansionChain.NullTrichotomy

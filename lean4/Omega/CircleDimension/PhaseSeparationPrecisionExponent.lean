@@ -15,6 +15,20 @@ def gridBinCount (k L : ℕ) : ℕ := L ^ k
     thm:cdim-phase-separation-precision-exponent -/
 def dyadicPhaseBinCount (k b : ℕ) : ℕ := 2 ^ (k * b)
 
+set_option maxHeartbeats 400000 in
+/-- Finite-grid packing surrogate for the flat `k`-torus: an `L`-grid supplies at most `L^k`
+    distinct bins, so any injectively encoded finite set has cardinality bounded by `L^k`.
+    prop:cdim-torus-packing-bound -/
+theorem paper_cdim_torus_packing_bound
+    {E : Type*} [Fintype E] (k L : ℕ)
+    (henc : ∃ enc : E → Fin (gridBinCount k L), Function.Injective enc) :
+    Fintype.card E ≤ gridBinCount k L ∧
+      Fintype.card E ≤ L ^ k := by
+  rcases henc with ⟨enc, hinj⟩
+  constructor
+  · simpa using (Fintype.card_le_of_injective enc hinj)
+  · simpa [gridBinCount] using (Fintype.card_le_of_injective enc hinj)
+
 /-- Any positive-dimensional grid can host `M` points once the side length reaches `M`. -/
 private theorem exists_gridSide (k M : ℕ) (hk : 0 < k) :
     ∃ L, M ≤ gridBinCount k L := by
