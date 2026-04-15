@@ -633,6 +633,7 @@ import Omega.GU.ParryEndpointPhiEstimators
 import Omega.Conclusion.AlphabetThreshold
 import Omega.FoldResidualTime.IidBlockFactorization
 import Omega.FoldResidualTime.FoldKLPythagorasIProjection
+import Omega.FoldResidualTime.MixedCollisionCauchyGap
 import Omega.Principles.GoldenBranchFibonacciCoprime
 import Omega.Preliminaries.EmpiricalFrequencyBounds
 import Omega.Experiments.MultiscaleResidual
@@ -818,6 +819,7 @@ import Omega.Conclusion.SmithRamanujanShadowInversion
 import Omega.Conclusion.CofinalFixedQuotient
 import Omega.POM.ZeroTemperatureTwoTermExpansion
 import Omega.SPG.DyadicFluxZetaMinkowskiPole
+import Omega.SPG.MinkowskiDimensionBoundaryFaceGrowthSandwich
 import Omega.Zeta.EnergyTailMassSeeds
 import Omega.Conclusion.WallisFactorMonoid
 import Omega.POM.CRTSpatializationPrimeBudget
