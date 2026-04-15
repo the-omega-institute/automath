@@ -281,6 +281,7 @@ import Omega.Topos.UniqueBranchBandedGerbe
 import Omega.Topos.UniqueBranchContextualityComparison
 import Omega.Topos.UniqueBranchContextualityComparisonFocused
 import Omega.Topos.PointwiseIrreducibility
+import Omega.Topos.PointwiseIrreducibilityFocused
 import Omega.Topos.VisibleValueComponents
 import Omega.Topos.IntrinsicHiddenStateLowerBound
 import Omega.Topos.IntrinsicHiddenStateLowerBoundPublication
@@ -650,6 +651,7 @@ import Omega.GroupUnification.ExactClock
 import Omega.GroupUnification.FiniteTimeLaw
 import Omega.GroupUnification.NormalForm
 import Omega.GroupUnification.MarkovZeroVariance
+import Omega.GroupUnification.Gibbs
 import Omega.GroupUnification.GeneralNormalForm
 import Omega.GroupUnification.GeneralRigidity
 import Omega.GroupUnification.ParryRigidity
@@ -731,6 +733,7 @@ import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.PressureSlopes
 import Omega.POM.GibbsSelection
+import Omega.POM.RenyiEntropyRate
 import Omega.POM.RenyiEndpoint
 import Omega.POM.LambdaAlgebraic
 import Omega.POM.CollisionKernelPublication
