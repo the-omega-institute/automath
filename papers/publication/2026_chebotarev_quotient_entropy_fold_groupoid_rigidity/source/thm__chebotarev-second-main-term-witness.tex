@@ -2,7 +2,7 @@
 Fix a finite group \(G\) and \(u\in(0,1]\) in the setting of Assumption \ref{thm:kernel-chebotarev-exp}. Let \(\lambda_1(u)=\spr(M_{K,\ind}(u))\) be the Perron root in the trivial channel, and write \(M_{K,\rho}(u)\) for the twisted matrix attached to a nontrivial irreducible representation \(\rho\neq \ind\). Assume that there exist a nontrivial channel \(\rho_\star\neq \ind\) and a complex number \(\mu_\star\in\mathrm{spec}(M_{K,\rho_\star}(u))\) such that
 \begin{enumerate}
   \item \(\abs{\mu_\star}=\eta(u)>0\);
-  \item if \(\mu_\star\notin\RR\), then among all nontrivial channels the spectral values of modulus \(\eta(u)\) are exactly \(\mu_\star\) and \(\overline{\mu_\star}\), and each is simple; if \(\mu_\star\in\RR\), then \(\mu_\star\) is the unique nontrivial spectral value of modulus \(\eta(u)\), and it is simple;
+  \item if \(\mu_\star\notin\RR\), then the only eigenvalues of modulus \(\eta(u)\) occurring in the family \(\{M_{K,\rho}(u):\rho\neq \ind\}\) are \(\mu_\star\) and \(\overline{\mu_\star}\), and each occurs exactly once, with algebraic multiplicity \(1\); if \(\mu_\star\in\RR\), then \(\mu_\star\) is the only eigenvalue of modulus \(\eta(u)\) occurring in the family \(\{M_{K,\rho}(u):\rho\neq \ind\}\), and it occurs exactly once, with algebraic multiplicity \(1\);
   \item
   \[
   \Gamma(u):=\max\bigl\{\abs{\nu}:\nu\in\mathrm{spec}(M_{K,\rho}(u)),\ \rho\neq \ind,\ \nu\notin\{\mu_\star,\overline{\mu_\star}\}\bigr\}
@@ -43,22 +43,31 @@ B_{n,A}(u)
 \;+\;
 \frac{1}{n}\sum_{\rho\in\widehat G\setminus\{\ind\}}L_{A,\rho}\!\bigl(M_{K,\rho}(u)^n\bigr).
 \]
-Fix \(\Gamma_+(u)\in(\Gamma(u),\eta(u))\). For \(\rho\neq \ind\), write \(T_\rho:=M_{K,\rho}(u)\). Because the dominant eigenvalues are simple and isolated, the spectral decomposition of \(T_\rho\) yields an operator \(R_{\rho,1}\) with
+Fix \(\Gamma_+(u)\in(\Gamma(u),\eta(u))\). For \(\rho\neq \ind\), write \(T_\rho:=M_{K,\rho}(u)\), and set
 \[
-\mathrm{spec}(R_{\rho,1})\subseteq \{\nu\in\CC:\abs{\nu}\le \Gamma(u)\}
+\Sigma_\rho:=\mathrm{spec}(T_\rho)\cap\{\mu_\star,\overline{\mu_\star}\}.
 \]
-such that, for every \(n\ge 1\),
+For each \(\omega\in\Sigma_\rho\), let \(P_{\rho,\omega}\) be the corresponding Riesz projection, and set
+\[
+R_\rho:=T_\rho-\sum_{\omega\in\Sigma_\rho}\omega\,P_{\rho,\omega}.
+\]
+Since the eigenvalues in \(\Sigma_\rho\) are simple, the projections \(P_{\rho,\omega}\) have rank one, commute with \(T_\rho\), and satisfy \(P_{\rho,\omega}P_{\rho,\omega'}=0\) for \(\omega\neq \omega'\). Therefore
 \[
 T_\rho^n
 =
-\sum_{\omega\in\mathrm{spec}(T_\rho)\cap\{\mu_\star,\overline{\mu_\star}\}}\omega^n P_{\rho,\omega}
-+R_{\rho,1}^{\,n},
+\sum_{\omega\in\Sigma_\rho}\omega^n P_{\rho,\omega}+R_\rho^{\,n}
+\qquad(n\ge 1).
 \]
-where \(P_{\rho,\omega}\) is the Riesz projector onto the eigenspace for \(\omega\). Since \(\spr(R_{\rho,1})\le \Gamma(u)<\Gamma_+(u)\), finite-dimensional spectral-radius estimates give
+Moreover,
 \[
-\|R_{\rho,1}^{\,n}\|=O\!\bigl(\Gamma_+(u)^n\bigr)
+\mathrm{spec}(R_\rho)=\mathrm{spec}(T_\rho)\setminus \Sigma_\rho,
 \]
-for any fixed matrix norm. Because there are only finitely many nontrivial channels, summing over \(\rho\neq \ind\) yields coefficients \(a_{A,\omega}\in\CC\) for which
+so \(\spr(R_\rho)\le \Gamma(u)<\Gamma_+(u)\). Fix any matrix norm. By equivalence of norms in finite dimension and Gelfand's formula, there exists \(C_\rho>0\) such that
+\[
+\|R_\rho^{\,n}\|\le C_\rho\,\Gamma_+(u)^n
+\qquad(n\ge 1).
+\]
+Applying \(L_{A,\rho}\) and summing over the finitely many nontrivial channels yields coefficients \(a_{A,\omega}\in\CC\) for which
 \[
 S_n:=\sum_{\rho\in\widehat G\setminus\{\ind\}}L_{A,\rho}\!\bigl(M_{K,\rho}(u)^n\bigr)
 =
@@ -114,7 +123,12 @@ Finally, write \(c_A=\abs{c_A}e^{i\phi}\) and \(\mu_\star=\eta(u)e^{i\theta}\). 
 \[
 \Re(c_A\mu_\star^n)=\abs{c_A}\,\eta(u)^n\cos(\phi+n\theta).
 \]
-If \(\theta/\pi\in\QQ\), the sequence \((\cos(\phi+n\theta))_{n\ge 1}\) is periodic, hence attains a nonzero value infinitely often because \(c_A\neq 0\). If \(\theta/\pi\notin\QQ\), the sequence \((\phi+n\theta)\bmod 2\pi\) is dense in \(\TT\), so there are infinitely many \(n\) with \(\abs{\cos(\phi+n\theta)}\ge 1/2\). In either case there exists \(c(A)>0\) such that
+If \(\theta/\pi\in\QQ\), the sequence \((\cos(\phi+n\theta))_{n\ge 1}\) is periodic. It cannot vanish identically. Indeed, when \(\mu_\star\in\RR\) one has \(c_A\in\RR\), so \(\Re(c_A\mu_\star^n)=c_A\mu_\star^n\), which is not identically zero because \(c_A\neq 0\) and \(\eta(u)>0\). When \(\mu_\star\notin\RR\), the identity \(\Re(c_A\mu_\star^n)=0\) for all \(n\) would imply
+\[
+a_{A,\mu_\star}\left(\frac{\mu_\star}{\overline{\mu_\star}}\right)^n+\overline{a_{A,\mu_\star}}=0
+\qquad(n\ge 1),
+\]
+and comparing \(n=1\) with \(n=2\) would force \(a_{A,\mu_\star}=0\) because \(\mu_\star/\overline{\mu_\star}\neq 1\), hence \(c_A=0\), again a contradiction. Therefore the periodic sequence attains a positive absolute value infinitely often. If \(\theta/\pi\notin\QQ\), the sequence \((\phi+n\theta)\bmod 2\pi\) is dense in \(\TT\), so there are infinitely many \(n\) with \(\abs{\cos(\phi+n\theta)}\ge 1/2\). In either case there exists \(c(A)>0\) such that
 \[
 \abs{\Re(c_A\mu_\star^n)}\ge c(A)\,\eta(u)^n
 \]
