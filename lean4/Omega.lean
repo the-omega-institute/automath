@@ -190,6 +190,7 @@ import Omega.SPG.SymbolicFactor
 import Omega.SPG.Clopen
 import Omega.SPG.DecidableClopen
 import Omega.SPG.ClarityMonotone
+import Omega.SPG.ClarityBayesOptimality
 import Omega.SPG.ClarityWalshFamilyStability
 import Omega.SPG.BasicProperties
 import Omega.SPG.ScanErrorDiscrete
@@ -613,6 +614,7 @@ import Omega.Conclusion.PcdimPropCycleRankMinimal
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.Window6Collision
+import Omega.Conclusion.Window6SizebiasEscortAmplification
 import Omega.Conclusion.Window6ThreeMomentSpectrumInversion
 import Omega.Conclusion.Window6RepresentationZetaCountRatio
 import Omega.Conclusion.Boundary1FormCutDeterminantSplitting
@@ -722,6 +724,7 @@ import Omega.TypedAddressBiaxialCompletion.CausalPreorder
 import Omega.TypedAddressBiaxialCompletion.BoundaryAddressCollision
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
+import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
 import Omega.TypedAddressBiaxialCompletion.VisiblePhaseLift
