@@ -165,4 +165,44 @@ theorem paper_spg_sturmian_certificate_depth_information_time_quasi_isometry
   · linarith [hLinearLower, hLogLower, hInfoLower]
   · linarith [hInfoUpper, hLogUpper, hLogUpperEval, hUpperLinear]
 
+/-- Continued-fraction denominator recurrence normalized by `q 0 = q 1 = 1`. -/
+def cfDenominator (a : ℕ → ℕ) : ℕ → ℕ
+  | 0 => 1
+  | 1 => 1
+  | n + 2 => a (n + 2) * cfDenominator a (n + 1) + cfDenominator a n
+
+/-- Lower logarithmic cylinder-information endpoint extracted from `q_N`. -/
+noncomputable def sturmianInfoLower (q : ℕ → ℕ) (N : ℕ) : ℝ :=
+  Real.log ((q N : ℝ) / 2)
+
+/-- Upper logarithmic cylinder-information endpoint extracted from `(q_N, q_{N+1})`. -/
+noncomputable def sturmianInfoUpper (q : ℕ → ℕ) (N : ℕ) : ℝ :=
+  Real.log ((q (N + 1) + q N : ℕ) : ℝ)
+
+private theorem continued_fraction_denominator_eq (a q : ℕ → ℕ)
+    (hq0 : q 0 = 1) (hq1 : q 1 = 1)
+    (hrec : forall n, q (n + 2) = a (n + 2) * q (n + 1) + q n) :
+    ∀ n, q n = cfDenominator a n
+  | 0 => by simpa [cfDenominator] using hq0
+  | 1 => by simpa [cfDenominator] using hq1
+  | n + 2 => by
+      rw [hrec n, cfDenominator]
+      rw [continued_fraction_denominator_eq a q hq0 hq1 hrec (n + 1)]
+      rw [continued_fraction_denominator_eq a q hq0 hq1 hrec n]
+
+set_option maxHeartbeats 400000 in
+/-- Continued-fraction ledger data determines the denominator pair and hence the cylinder
+    information time window.
+    prop:spg-continued-fraction-ledger-determines-cylinder-time-window -/
+theorem paper_spg_continued_fraction_ledger_determines_cylinder_time_window
+    (a q : ℕ -> ℕ) (hq0 : q 0 = 1) (hq1 : q 1 = 1)
+    (hrec : forall n, q (n + 2) = a (n + 2) * q (n + 1) + q n) :
+    forall N, q N = cfDenominator a N ∧ q (N + 1) = cfDenominator a (N + 1) ∧
+      sturmianInfoLower q N = Real.log ((q N : ℝ) / 2) ∧
+      sturmianInfoUpper q N = Real.log ((q (N + 1) + q N : ℕ) : ℝ) := by
+  intro N
+  have hq : ∀ n, q n = cfDenominator a n :=
+    continued_fraction_denominator_eq a q hq0 hq1 hrec
+  exact ⟨hq N, hq (N + 1), rfl, rfl⟩
+
 end Omega.SPG

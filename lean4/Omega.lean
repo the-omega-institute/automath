@@ -601,6 +601,7 @@ import Omega.Conclusion.PcdimPropCycleRankMinimal
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.Window6Collision
+import Omega.Conclusion.Window6ThreeMomentSpectrumInversion
 import Omega.Conclusion.Window6RepresentationZetaCountRatio
 import Omega.Conclusion.Boundary1FormCutDeterminantSplitting
 import Omega.Conclusion.TwoAtomScalarRecoveryAlpha2
@@ -754,6 +755,7 @@ import Omega.POM.FibCubeAntipodeCount
 import Omega.POM.FibCubeEdgeParity
 import Omega.POM.FibCubeFrechetMedianUnique
 import Omega.POM.FibCubeThetaClassSize
+import Omega.POM.FibCubeKPointCount
 import Omega.POM.ThetaGodelizationPrimeValuationIsometry
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.ToggleOrder
