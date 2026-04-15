@@ -119,6 +119,7 @@ import Omega.Folding.PhiMemoryThresholdExact
 import Omega.Folding.BlockCountsThreshold
 import Omega.Folding.LinearTimeBlockDecoding
 import Omega.Folding.YmExactSFTOrder
+import Omega.Folding.ExactMarkovOrderBernoulli
 import Omega.Folding.ResidueMarkovOrder
 import Omega.Folding.FoldSuitePublication
 import Omega.Graph.LabeledGraph
@@ -283,6 +284,7 @@ import Omega.Topos.UniqueBranchContextualityComparisonFocused
 import Omega.Topos.PointwiseIrreducibility
 import Omega.Topos.PointwiseIrreducibilityFocused
 import Omega.Topos.VisibleValueComponents
+import Omega.Topos.VisibleValueComponentsFocused
 import Omega.Topos.IntrinsicHiddenStateLowerBound
 import Omega.Topos.IntrinsicHiddenStateLowerBoundPublication
 import Omega.Topos.IntrinsicPrimeDecomposition
@@ -742,6 +744,7 @@ import Omega.POM.MaxFiberPublication
 import Omega.POM.ZeroTempConcentration
 import Omega.POM.DoubleLimit
 import Omega.POM.ThickFiberEnvelope
+import Omega.POM.VisibleThickTail
 import Omega.POM.MicrocanonicalBandBounds
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
