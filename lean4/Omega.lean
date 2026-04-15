@@ -102,6 +102,7 @@ import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.AlternatingSingleSymbolSynchronizing
 import Omega.Folding.YmSynchronized
 import Omega.Folding.UniformSynchronizingLength
+import Omega.Folding.LengthMBlockUniqueLift
 import Omega.Folding.BlockBijectionThreshold
 import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.PhiMemoryThresholdExact
@@ -224,6 +225,7 @@ import Omega.Topos.GluingFailureSheafificationRemovesGlueAPAL
 import Omega.Topos.H2VanishingBlindness
 import Omega.Topos.H2VanishingBlindnessFocused
 import Omega.Topos.H1FreeNoBlindness
+import Omega.Topos.H1FreeNoBlindnessPublication
 import Omega.Topos.H1VanishingClassTrivializing
 import Omega.Topos.H1VanishingClassTrivializingPublication
 import Omega.Topos.CharacterBlindObstructions
@@ -282,6 +284,7 @@ import Omega.Zeta.ETDSFinitePartPrimitiveClosedForm
 import Omega.Zeta.FredholmPrimitiveClosedForm
 import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
+import Omega.Zeta.ClassPrimitiveDecomposition
 import Omega.Zeta.ClassMertensExplicit
 import Omega.Zeta.ClassMertensFourier
 import Omega.Zeta.ClassPrimitiveTrivialSplit
