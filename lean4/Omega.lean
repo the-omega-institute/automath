@@ -72,6 +72,7 @@ import Omega.Experiments.ParryBaselineGapSturmian
 import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Experiments.MetallicMeanGoldenUniqueOptimalTVConstant
 import Omega.POM.S4Asymptotic
+import Omega.POM.S5FieldDiscriminantMonogenic
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
@@ -186,6 +187,7 @@ import Omega.Folding.YmConjugacyCollapse
 import Omega.Folding.ResidueMarkovOrder
 import Omega.Folding.FoldSuitePublication
 import Omega.EA.FiniteLedgerRecoverability
+import Omega.EA.PrimeRegisterRewriteConfluentNormalForm
 import Omega.EA.PrimeRegisterNormalFormUniqueness
 import Omega.EA.PrimeRegisterOrbitFiberCoincidence
 import Omega.PhysicalSpacetimeSkeleton.DerivedStressEnergyConservation
