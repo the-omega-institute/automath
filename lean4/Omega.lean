@@ -115,6 +115,7 @@ import Omega.FoldResidualTime.ApparentRandomnessFreezingEscort
 import Omega.GU.Window6B3C3QuarticDefectOnedim
 import Omega.GU.Window6B3C3EuclideanCubature
 import Omega.GU.Window6B3C3QuarticRankoneHarmonicDetector
+import Omega.GU.Window6TypeSuperselectionAutGamma6
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.FreeInvolutionCount
 import Omega.Folding.ModRigidityPeriodicPredicates
@@ -669,6 +670,7 @@ import Omega.CircleDimension.SignedCircleDimension
 import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.StokesFiberIntegrationDefect
 import Omega.CircleDimension.MedianStokesRigidityPotential
+import Omega.CircleDimension.PhasePrefixOccupancyBarrier
 import Omega.CircleDimension.ShortExactAdditivity
 import Omega.CircleDimension.FiniteExtensionAxiomaticUniqueness
 import Omega.SPG.TanakaStokes
@@ -762,6 +764,7 @@ import Omega.POM.MultiplicityFixedRExtrema
 import Omega.POM.MassSplittingMomentRoot
 import Omega.POM.OrbitProductNorm
 import Omega.POM.FiberTripleMedianMajority
+import Omega.POM.FiberMedianMajorityPrimeValuation
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.LeyangMonotoneCouplingPrimeRegister
 import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
