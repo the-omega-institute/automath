@@ -149,6 +149,7 @@ import Omega.SPG.MainRenyi
 import Omega.SPG.MainResonance
 import Omega.SPG.HolderOpenResonance
 import Omega.SPG.BoundaryRigidity
+import Omega.SPG.ExplicitMinimizer
 import Omega.SPG.DiscreteStokesPoincarePublication
 import Omega.SPG.HypercubeNearDetailedBalancePublication
 import Omega.SPG.HypercubeGradientPublication
@@ -679,6 +680,7 @@ import Omega.POM.CentralizerFPdim
 import Omega.POM.PressureConvexity
 import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.AdjacentPressureConvexity
+import Omega.POM.PressureSlopes
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
 import Omega.Conclusion.FibonacciAnomalyBlock
@@ -713,3 +715,4 @@ import Omega.Zeta.QuotientIndexLedgerSeeds
 import Omega.POM.FisherZerosArcsineSeeds
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Zeta.TorsionExactOrderLedgerSeeds
+import Omega.Zeta.RhoGapM12
