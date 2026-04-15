@@ -148,6 +148,7 @@ import Omega.SPG.SurvivorRenyiPressure
 import Omega.SPG.MainRenyi
 import Omega.SPG.MainResonance
 import Omega.SPG.HolderOpenResonance
+import Omega.SPG.BoundaryRigidity
 import Omega.SPG.HypercubeNearDetailedBalancePublication
 import Omega.SPG.HypercubeGradientPublication
 import Omega.SPG.SurvivorSpectrumCollision
@@ -239,6 +240,7 @@ import Omega.Topos.ComponentGerbeDecomposition
 import Omega.Topos.CechBridgeCompatibleRealizations
 import Omega.Topos.GerbeNullSemantics
 import Omega.Topos.GerbeNullSemanticsPublication
+import Omega.Topos.MinimalInformationCostOfStrictification
 import Omega.Topos.VisibleQuotientCharacterSeparation
 import Omega.Topos.FiniteAbelianDuality
 import Omega.Topos.IntrinsicVisibleQuotient
@@ -297,6 +299,7 @@ import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
 import Omega.Zeta.ClassPrimitiveDecomposition
 import Omega.Zeta.ClassMertensExplicit
+import Omega.Zeta.GeometricHarmonicTail
 import Omega.Zeta.PerronChannelContribution
 import Omega.Zeta.NontrivialPeterWeylChannelBound
 import Omega.Zeta.ClassMertensFourier
