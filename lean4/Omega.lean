@@ -158,7 +158,9 @@ import Omega.Folding.ExactMarkovOrderBernoulli
 import Omega.Folding.YmConjugacyCollapse
 import Omega.Folding.ResidueMarkovOrder
 import Omega.Folding.FoldSuitePublication
+import Omega.PhysicalSpacetimeSkeleton.AdmissibleEinsteinClosureMain
 import Omega.PhysicalSpacetimeSkeleton.AdmissibleGlobalEinsteinEquation
+import Omega.PhysicalSpacetimeSkeleton.GlobalGeometricObjects
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
@@ -194,6 +196,7 @@ import Omega.SPG.CapacityRegion
 import Omega.SPG.EntropyLedger
 import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.ErrorResolventCyclotomic
+import Omega.SPG.ScreenAuditCostMonotoneUnitDrop
 import Omega.SPG.QuasistationaryAmbiguityAmplitudes
 import Omega.SPG.MainAmplitude
 import Omega.SPG.SurvivorRenyiPressure
