@@ -10,8 +10,14 @@
   → 自动进入 Review 管线 Stage A
 
 ═══════════════════════════════════════════════════════════════
-管线二: Review 已有文章 (默认)  A → B → C → D
+管线二: Review 已有文章 (默认)  F → A → B → C → D
 ═══════════════════════════════════════════════════════════════
+  Stage F: 期刊方向适配（fit-check, ≥6 pass, 否则自动建议更合适期刊）
+    F1: Codex 评估论文 vs 目标期刊适配度 (JSON)
+    F2: Claude review 适配评估
+    Gate: fit_score ≥ 6 → Stage A (原目标期刊)
+          fit_score < 6 → 自动切换到建议期刊, 进入 Stage A
+
   Stage A: Codex Review + 风格优化（score-gated loop, ≥8 pass）
     A1: Codex review 质量 + 修复 → commit
     A2: Codex 期刊风格优化 → commit
@@ -145,8 +151,14 @@ class PaperState:
     target_journal: str = ""
 
     # Current position
-    current_stage: str = "A"       # A / B / C / D / DONE
+    current_stage: str = "F"       # F / A / B / C / D / DONE
     current_round: int = 0         # within-stage round counter
+
+    # Stage F tracking (journal fit)
+    stage_f_fit_score: int = 0
+    stage_f_original_journal: str = ""
+    stage_f_suggested_journal: str = ""
+    stage_f_passed: bool = False
 
     # Stage A tracking
     stage_a_rounds: int = 0
@@ -199,6 +211,10 @@ class PaperState:
             "target_journal": self.target_journal,
             "current_stage": self.current_stage,
             "current_round": self.current_round,
+            "stage_f_fit_score": self.stage_f_fit_score,
+            "stage_f_original_journal": self.stage_f_original_journal,
+            "stage_f_suggested_journal": self.stage_f_suggested_journal,
+            "stage_f_passed": self.stage_f_passed,
             "stage_a_rounds": self.stage_a_rounds,
             "stage_a_scores": self.stage_a_scores,
             "stage_a_passed": self.stage_a_passed,
@@ -245,7 +261,10 @@ def load_state(paper_name: str) -> Optional[PaperState]:
             data = json.load(f)
         s = PaperState(paper_dir=data["paper_dir"], paper_name=data["paper_name"])
         for key in ("main_paper_dir", "target_journal", "current_stage",
-                     "current_round", "stage_a_rounds", "stage_a_passed",
+                     "current_round",
+                     "stage_f_fit_score", "stage_f_original_journal",
+                     "stage_f_suggested_journal", "stage_f_passed",
+                     "stage_a_rounds", "stage_a_passed",
                      "stage_b_rounds", "stage_b_passed", "stage_c_rounds",
                      "stage_c_passed", "stage_d_passed", "pdf_path",
                      "started_at", "completed_at", "error"):
@@ -822,6 +841,170 @@ def format_issues_for_codex(issues: list[dict]) -> str:
         if fix:
             lines.append(f"     Suggested fix: {fix}")
     return "\n".join(lines)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# STAGE F: Journal Fit Check (one-shot, auto-reroute if poor fit)
+# ═══════════════════════════════════════════════════════════════════════════
+
+FIT_PASS_THRESHOLD = 6
+
+
+def build_journal_fit_prompt(paper_dir: str, target_journal: str) -> str:
+    return textwrap.dedent(f"""\
+        You are an experienced editor who handles submissions for multiple
+        mathematics and mathematical-physics journals.
+
+        Paper directory: {paper_dir}
+        Proposed target journal: "{target_journal}"
+
+        ## Task: Journal-Fit Assessment
+
+        Read the paper and evaluate how well it fits "{target_journal}".
+        Consider:
+        1. **Subject area match** — does the paper's topic fall within the
+           journal's typical scope? (e.g., pure math journal vs applied,
+           analysis vs algebra vs geometry, physics-adjacent vs pure)
+        2. **Technical depth** — is the mathematical depth at the level the
+           journal expects? (top journal = deep new theory; specialized
+           journal = solid contribution in a niche)
+        3. **Length & style** — does the paper's size and exposition match
+           the journal's norms?
+        4. **Impact expectation** — would referees of this journal find the
+           results significant?
+        5. **Competition** — are there better-fit journals for this exact topic?
+
+        ## Output Format (MUST follow exactly)
+        ```json
+        {{
+          "fit_score": <1-10>,
+          "fit_verdict": "<excellent|good|marginal|poor>",
+          "subject_match": <1-10>,
+          "depth_match": <1-10>,
+          "style_match": <1-10>,
+          "rationale": "2-3 sentence explanation",
+          "suggested_journals": [
+            {{
+              "name": "Journal Name",
+              "fit_score": <1-10>,
+              "reason": "why this is a better fit"
+            }}
+          ]
+        }}
+        ```
+
+        suggested_journals: list 2-3 alternatives ranked by fit.
+        Always include the original target journal in your comparison.
+        Do NOT edit any files — only output the JSON assessment.
+    """)
+
+
+def run_stage_f(state: PaperState, *, dry_run: bool = False,
+                model: Optional[str] = None) -> bool:
+    """Stage F: Journal fit check. One-shot. Auto-reroutes if poor fit."""
+    tag = f"[{state.paper_name}|F]"
+    paper_path = Path(state.paper_dir)
+
+    state.stage_f_original_journal = state.target_journal
+    save_state(state)
+
+    # ── F1: Codex fit assessment ─────────────────────────────────
+    logger.info(f"{tag} F1 — Codex journal fit assessment "
+                f"(target: {state.target_journal})")
+    prompt = build_journal_fit_prompt(state.paper_dir, state.target_journal)
+    out = codex_exec(prompt, work_dir=paper_path,
+                     timeout_seconds=600, model=model, dry_run=dry_run)
+
+    fit_data = parse_json_from_output(out) if not dry_run else {
+        "fit_score": 5, "fit_verdict": "marginal",
+        "subject_match": 4, "depth_match": 6, "style_match": 5,
+        "rationale": "dry run: paper is marginal fit for target",
+        "suggested_journals": [
+            {"name": "Journal of Functional Analysis", "fit_score": 8,
+             "reason": "better scope match"},
+            {"name": "Advances in Mathematics", "fit_score": 5,
+             "reason": "too broad for this paper"},
+        ],
+    }
+
+    fit_score = fit_data.get("fit_score", 0)
+    state.stage_f_fit_score = fit_score
+    state.log_event("F", "codex_fit_assessment", score=fit_score,
+                    detail=json.dumps(fit_data, ensure_ascii=False)[:2000])
+    save_state(state)
+
+    logger.info(f"{tag} Fit score: {fit_score}/10 "
+                f"(threshold: {FIT_PASS_THRESHOLD})")
+
+    # ── F2: Claude review ────────────────────────────────────────
+    logger.info(f"{tag} F2 — Claude review fit assessment")
+    claude_prompt = textwrap.dedent(f"""\
+        Review this journal-fit assessment.
+        Paper: {state.paper_dir}
+        Target: {state.target_journal}
+
+        Codex assessment:
+        {json.dumps(fit_data, indent=2, ensure_ascii=False)[:3000]}
+
+        Questions:
+        1. Is the fit score fair?
+        2. Are the suggested alternative journals reasonable?
+        3. Which journal would you recommend?
+
+        Output ONLY:
+        ```json
+        {{
+          "adjusted_fit_score": <1-10>,
+          "recommended_journal": "journal name",
+          "notes": "brief explanation"
+        }}
+        ```
+    """)
+    out2 = codex_exec(claude_prompt, work_dir=paper_path,
+                      timeout_seconds=600, model=model, dry_run=dry_run)
+    claude_data = parse_json_from_output(out2) if not dry_run else {
+        "adjusted_fit_score": 4,
+        "recommended_journal": "Journal of Functional Analysis",
+        "notes": "dry run",
+    }
+
+    adjusted = claude_data.get("adjusted_fit_score", fit_score)
+    recommended = claude_data.get("recommended_journal", state.target_journal)
+    final_fit = min(fit_score, adjusted)
+
+    state.log_event("F", "claude_review_fit", score=adjusted,
+                    detail=json.dumps(claude_data, ensure_ascii=False)[:2000])
+    save_state(state)
+
+    logger.info(f"{tag} Final fit: {final_fit}/10 "
+                f"(codex={fit_score}, claude={adjusted})")
+
+    # ── Gate: fit ≥ threshold → keep target; else → reroute ──────
+    if final_fit >= FIT_PASS_THRESHOLD:
+        logger.info(f"{tag} STAGE F PASSED — keeping target: "
+                    f"{state.target_journal}")
+        state.stage_f_passed = True
+        save_state(state)
+        return True
+
+    # Auto-reroute to recommended journal
+    old = state.target_journal
+    state.target_journal = recommended
+    state.stage_f_suggested_journal = recommended
+    state.stage_f_passed = True
+    save_state(state)
+
+    logger.info(f"{tag} FIT TOO LOW ({final_fit} < {FIT_PASS_THRESHOLD}) — "
+                f"rerouting: {old} → {recommended}")
+
+    # Log the suggested alternatives
+    alts = fit_data.get("suggested_journals", [])
+    for alt in alts[:3]:
+        logger.info(f"{tag}   Alternative: {alt.get('name', '?')} "
+                    f"(fit={alt.get('fit_score', '?')}): "
+                    f"{alt.get('reason', '')}")
+
+    return True
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -1426,8 +1609,8 @@ def run_new_paper_pipeline(
 
     logger.info(f"{tag} New-paper pipeline complete → entering Review pipeline")
 
-    # Auto-enter review pipeline at Stage A
-    state.current_stage = "A"
+    # Auto-enter review pipeline at Stage F (fit check first)
+    state.current_stage = "F"
     save_state(state)
     return run_paper_pipeline(
         str(paper_path),
@@ -1443,8 +1626,9 @@ def run_new_paper_pipeline(
 # Main pipeline runner (Review: A → B → C → D)
 # ═══════════════════════════════════════════════════════════════════════════
 
-STAGE_ORDER = ["A", "B", "C", "D", "DONE"]
+STAGE_ORDER = ["F", "A", "B", "C", "D", "DONE"]
 STAGE_RUNNERS = {
+    "F": run_stage_f,
     "A": run_stage_a,
     "B": run_stage_b,
     "C": run_stage_c,
@@ -1621,9 +1805,19 @@ def print_status():
         c_verd = d.get("stage_c_verdicts", [])
         err = d.get("error", "")
 
+        f_fit = d.get("stage_f_fit_score", 0)
+        f_orig = d.get("stage_f_original_journal", "")
+        f_sugg = d.get("stage_f_suggested_journal", "")
+        journal = d.get("target_journal", "?")
+
         status = "DONE" if stage == "DONE" else ("FAILED" if err else f"Stage {stage}")
         print(f"  {name}")
         print(f"    Status:  {status}  |  Total rounds: {total}")
+        print(f"    Journal: {journal}"
+              + (f" (rerouted from {f_orig})" if f_sugg else ""))
+        if f_fit:
+            print(f"    Stage F: fit={f_fit}/10"
+                  + (f", suggested={f_sugg}" if f_sugg else ""))
         print(f"    Stage A: {a_r} rounds, scores={a_scores}")
         print(f"    Stage B: {b_r} rounds, verdicts={b_verd}")
         print(f"    Stage C: {c_r} rounds, verdicts={c_verd}")
@@ -1642,6 +1836,7 @@ def main() -> int:
               default  Review:   A(quality+style) → B(oracle) → C(claude) → D(backflow)
 
             Review stages:
+              F  Journal fit check (fit >= 6 to keep target; else auto-reroute)
               A  Codex quality review + journal style (score >= 8 to pass)
               B  Oracle (ChatGPT) review (accept/minor revision to pass)
               C  Claude independent review (submit to pass)
@@ -1680,7 +1875,7 @@ def main() -> int:
     parser.add_argument("--parallel", "-p", type=int, default=1)
     parser.add_argument("--continuous", action="store_true")
     parser.add_argument("--skip-to", type=str, default="",
-                        choices=["A", "B", "C", "D"])
+                        choices=["F", "A", "B", "C", "D"])
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--model", type=str, default=None)
     parser.add_argument("--oracle-timeout", type=int, default=7200)
