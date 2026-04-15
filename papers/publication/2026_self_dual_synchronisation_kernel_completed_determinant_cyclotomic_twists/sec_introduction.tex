@@ -38,10 +38,10 @@ explicit self-duality
 \[
   \Delta(z,u)=\Delta(uz,u^{-1}),
 \]
-which compresses the unit-circle twists \(u=e^{i\theta}\) to a single
+which compresses the unit-circle twists \(u=e^{2i\theta}\) to a single
 real parameter after the standard change of variables
 \[
-  u=r^2,\qquad s=r+r^{-1},\qquad w=zr.
+  r=e^{i\theta},\qquad u=r^2,\qquad s=r+r^{-1}=2\cos\theta,\qquad w=zr.
 \]
 The resulting completed determinant \(\widehat\Delta(w,s)\) provides a
 convenient algebraic model for the twisted spectrum, and the
@@ -76,22 +76,27 @@ Propositions~\ref{prop:kernel-delta-explicit},
 \ref{prop:sync-hatdelta-galois-s6-generic},
 \ref{prop:sync-endpoint-jet}, and
 Theorem~\ref{thm:rho-gap-m12} were carried out in SageMath~10.2 and
-Mathematica~14.0. The exact commands appear consecutively in
-\Cref{sec:appendix-computation}; in particular, the appendix can be run
-verbatim as the single supplementary script that accompanies the paper
-and reproduces every computer-assisted certificate.
+Mathematica~14.0. The appendix is organised as a theorem-to-command map
+rather than as a single executable script: items
+\textup{(a)}--\textup{(e)} record the SageMath certificates for the
+determinant, completion, smoothness, Galois-theoretic specialisations,
+and the finite small-\(m\) slice checks, while item \textup{(f)}
+records the Mathematica recursion for the endpoint jet. Each item
+states the exact output used in the corresponding proof.
 
 What makes this particular example worth isolating is a structural
 coincidence that does not hold for generic self-dual kernels. The
 self-duality \(\Delta(z,u)=\Delta(uz,u^{-1})\) compresses the full
-circle of unitary twists \(u=e^{i\theta}\) to a single real variable
+circle of unitary twists \(u=e^{2i\theta}\) to a single real variable
 \(s=2\cos\theta\), so that the twist data for all cyclic lifts of all
 orders is encoded in one polynomial \(\widehat\Delta(w,s)\in\ZZ[s][w]\)
-of degree six. This compression is the reason the genus, the Galois
-group, and the large-\(m\) asymptotics can all be pinned down
-completely for this example: the algebraic object is small enough to
-carry through every step explicitly. Beyond the formal consequences of
-\Cref{lem:self-dual-compression}, every claim in the paper is therefore
+of degree six. The significance of the example is therefore concrete
+rather than general: once everything is packaged into this one small
+polynomial, the quotient geometry, the generic Galois group, and the
+large-\(m\) asymptotics can all be computed completely and audited
+term by term. Beyond the formal consequences of
+\Cref{lem:self-dual-compression} and the cyclic-lift factorisation of
+\Cref{prop:sync-cyclic-lift-factorisation}, every claim in the paper is
 deliberately confined to the ten-state kernel.
 
 
@@ -193,56 +198,57 @@ Bass~\cite{BowenLanford1970Zeta,Manning1971Axiom,ParryPollicott1983,Bass1992};
 General background on symbolic dynamics may be found in
 \cite{LindMarcus2021,Kitchens1998}.
 
-The closest literature falls into three strands. First, graph zeta
-functions, graph coverings, and their Artin-style \(L\)-factorisations
-were developed by Hashimoto \cite{Hashimoto1990}, Stark and Terras
-\cite{StarkTerras1996,StarkTerras2000}, and Kotani--Sunada
-\cite{KotaniSunada2000}; see also Terras's monograph \cite{Terras2011}.
-The twisted-operator perspective underlying the cyclotomic slices here
-connects to the covering theory developed by Cimasoni--Kassel
-\cite{CimasoniKassel2023}. The voltage-graph and covering language
-for cyclic lifts is classical; see Gross--Tucker \cite{GrossTucker2001}
-for the foundational framework. Spectral properties of arbitrary lifts
-of graphs, directly relevant to the Fourier decomposition in
+The closest literature falls into three layers.
+
+Classical background on graph zeta functions, coverings, and
+Artin-style \(L\)-factorisations goes through Hashimoto
+\cite{Hashimoto1990,Hashimoto1992}, Stark and Terras
+\cite{StarkTerras1996,StarkTerras2000,StarkTerras2007}, and
+Kotani--Sunada \cite{KotaniSunada2000}; see also Terras's monograph
+\cite{Terras2011}. The voltage-graph and covering language for cyclic
+lifts is classical \cite{GrossTucker2001}, while the twisted-operator
+viewpoint relevant to the present Fourier decomposition connects to the
+covering theory of Cimasoni--Kassel \cite{CimasoniKassel2023}. Spectral
+properties of arbitrary lifts of graphs, directly relevant to
 \Cref{prop:sync-cyclic-lift-factorisation}, are studied systematically
 in \cite{DalfoFiolGarriga2019}.
 
-Second, finite-group extensions of shifts of finite type give the
-correct symbolic-dynamical framework for tracking output labels in a
-skew product. This viewpoint goes back to Adler--Kitchens--Marcus
+Direct precedents for determinant expressions and covering
+factorisations on digraphs and weighted graphs are due to Mizuno and
+Sato \cite{MizunoSato2000,MizunoSato2001,MizunoSato2002,MizunoSato2004},
+to Sato \cite{Sato2006}, and, on the dynamical/determinantal side, to
+Morita and collaborators
+\cite{Morita2020,IdeIshikawaMoritaSatoSegawa2021}. These works are the
+closest antecedents to the cyclic-lift/resultant discussion in the
+present note.
+
+Finite-group extensions of shifts of finite type provide the
+symbolic-dynamical framework for tracking output labels in a skew
+product. This viewpoint goes back to Adler--Kitchens--Marcus
 \cite{AdlerKitchensMarcus1985} and Fiebig \cite{Fiebig1993}; periodic
 data and recurrence in \(\ZZ_q\)-extensions were studied by
-Pollicott--Sharp \cite{PollicottSharp1994}, and the matrix-over-group-ring
-framework was developed further by Boyle--Schmieding
-\cite{BoyleSchmieding2017}. The underlying two-track comparison may be seen directly as the fibre product of labelled graphs in the sense of Nasu's textile systems \cite{Nasu1995}. The present note uses only the simplest
-cyclic extension attached to the binary output labels, but the
-interpretation of the twists belongs to that broader framework.
-
-Third, we rely on standard explicit tools rather than new methods:
-Baladi's monograph \cite{Baladi2018} and the determinant formulas of
-\cite{Morita2020,IdeIshikawaMoritaSatoSegawa2021} for weighted
-dynamical and graph zeta functions, the classical resultant machinery
-of \cite{CoxLittleOShea2005}, the basic algebraic geometry of smooth
-plane curves and quadratic extensions \cite{Hartshorne1977,Stichtenoth2009},
-and the standard specialisation/Frobenius strategy for generic Galois
-groups \cite{Dixon1996,Serre2008Topics}. The new point here is
-therefore narrower and more concrete: one explicit self-dual kernel is
-worked out completely enough to determine its completed determinant,
-its quotient geometry, its generic Galois group, and the large-\(m\)
-cyclotomic asymptotics in closed form.
+Pollicott--Sharp \cite{PollicottSharp1994}, and the
+matrix-over-group-ring framework was developed further by
+Boyle--Schmieding \cite{BoyleSchmieding2017}. The underlying two-track
+comparison may be seen directly as the fibre product of labelled graphs
+in the sense of Nasu's textile systems \cite{Nasu1995}. The present
+paper uses only the simplest cyclic extension attached to the binary
+output labels. Its novelty is correspondingly narrower: not a new
+general theory, but the complete analysis of one explicit self-dual
+kernel for which the completed determinant remains degree \(6\) while
+still carrying nontrivial quotient geometry, generic \(S_6\) Galois
+group, and explicit large-\(m\) cyclotomic asymptotics.
 
 \subsection{Organisation}
 
 \Cref{sec:preliminaries} recalls primitive orbit counts and defines the
 weighted synchronisation kernel together with its self-duality.
 \Cref{sec:completion-twists} contains the explicit determinant, the
-irreducibility and integrality of the completed curve, its geometry,
-the resultant degree law, and the asymptotics of the twisted Perron
-roots. \Cref{sec:appendix-computation} records the explicit transition
-matrix, the exact computer-algebra outputs underlying the central
-computations, and the cyclic-lift Fourier decomposition that connects
-the resultants to the character factors of the cyclic skew-product
-lifts.
+cyclic-lift Fourier decomposition, the irreducibility and integrality
+of the completed curve, its geometry, the resultant degree law, and the
+asymptotics of the twisted Perron roots.
+\Cref{sec:appendix-computation} records the explicit transition matrix
+and the exact theorem-to-command map for the computer-assisted checks.
 
 
 

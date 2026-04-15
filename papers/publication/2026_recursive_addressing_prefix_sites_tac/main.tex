@@ -59,9 +59,10 @@ visible information without enlarging the visible $\sigma$-algebra.  Fixing a
 time origin, the induced symbolic coding produces admissible words and cylinder
 objects for a prefix site.  Within this language, address failure splits into
 the standard presheaf-theoretic phenomena of empty local fibers, descent
-failure, and non-separatedness.  For a finite cover equipped with explicit
-abelian banded comparison data, we define the associated \v{C}ech defect class
-and the visible quotient obtained by killing that class.  This quotient yields
+failure, and non-separatedness.  For a finite cover together with local
+readout objects carrying an abelian band, we define the associated intrinsic
+\v{C}ech defect class and the visible quotient obtained by killing that class.
+This quotient yields
 a register lower bound.  We also give a concrete symbolic computation: a
 four-chart cylinder-algebra cover of the full binary shift whose ordered nerve is the
 boundary of a tetrahedron and whose prescribed $\ZZ/2\ZZ$-valued defect class
@@ -69,8 +70,8 @@ is nonzero; a companion $\ZZ/4\ZZ$ example exhibits partial visibility.
 Finally, for prefix inverse systems we formulate single-valued readout at an
 inverse-limit point via the local site of cylinders containing that point,
 together with stalks and germs.  The emphasis throughout is on organizing
-standard sheaf-theoretic language and on isolating the additional semantic data
-that would be needed for canonical comparison constructions in future work.
+standard sheaf-theoretic language and on isolating the additional semantic
+input needed to generate the relevant local objects and bands functorially.
 \end{abstract}
 
 \section{Introduction}
@@ -137,10 +138,10 @@ normalized \v{C}ech obstruction theory.  We first give the formal cover nerve
 and alternating cochain complex
 (Lemma~\ref{lem:cech-complex-formal}), following the general framework of
 \cite{StacksProject,Giraud1971CohomologieNonAbelienne,Bredon1997SheafTheory,HatcherAlgebraicTopology}.
-We then define the $A$-banded comparison datum and the associated
+We then define the intrinsic $A$-banded comparison torsors and the associated
 \v{C}ech defect class
-(Definition~\ref{def:prefix-site-h2-gluing-obstruction}) for an explicit choice
-of comparison torsors and compositions.
+(Definition~\ref{def:prefix-site-h2-gluing-obstruction}) once local objects
+with an abelian band have been fixed.
 
 Section~\ref{sec:visible-quotient} packages a routine universal-construction
 observation: for a fixed finite cover $\mathfrak{U}$ with defect class
@@ -182,7 +183,7 @@ material).
 \item Lemma~\ref{lem:cech-complex-formal},
 Definition~\ref{def:prefix-site-h2-gluing-obstruction}, and
 Proposition~\ref{prop:null-as-h2-obstruction}: the formal \v{C}ech complex and
-the defect obstruction for explicit comparison data on a fixed cover.
+the defect obstruction attached to banded local objects on a fixed cover.
 \item Proposition~\ref{thm:intrinsic-visible-quotient}: the visible quotient
 attached to a defect class via universal property, and its consequences
 (Lemma~\ref{thm:prefix-site-register-lower-bound},
@@ -216,9 +217,11 @@ terms of effect algebras and presheaves, and the continuation-sheaf story of
 \cite{DowlingKaliesVandervorst2023} supplies a dynamical complement.  The
 present note sits upstream of those works: we freeze the ``addresses precede
 values'' vocabulary, isolate the precise hypotheses needed for basic descent
-arguments, and keep the comparison data external except in the semantically
-generated example of Section~\ref{sec:semantic-example}.  The references cited
-above remain the canonical sources for genuinely new obstruction theorems.
+arguments, and treat the local objects together with their abelian band as the
+input datum.  Once that datum is fixed, the comparison torsors are intrinsic;
+Section~\ref{sec:semantic-example} records one example where the semantics
+supplies the datum directly.  The references cited above remain the canonical
+sources for genuinely new obstruction theorems.
 
 \section{Recursive Addressing in Measurable Systems}
 \label{sec:measurable}
@@ -939,16 +942,27 @@ factor it as
 A\xrightarrow{\ \bar\varphi\ }\im(\varphi)\xrightarrow{\ j\ } B,
 \]
 where $\bar\varphi$ is the canonical surjection and $j$ is the inclusion.
+The induced maps on cohomology fit into the commutative diagram
+\[
+\begin{array}{ccc}
+\check{H}^2(\mathfrak{U},A) & \xrightarrow{\ \bar\varphi_*\ } &
+\check{H}^2(\mathfrak{U},\im(\varphi))\\
+& \searrow_{\varphi_*} & \downarrow{j_*}\\
+&& \check{H}^2(\mathfrak{U},B).
+\end{array}
+\]
 Write $N:=\ker(\varphi)=\ker(\bar\varphi)$.  The torsion-free hypothesis on
 $N(\mathfrak{U})$ identifies $\check{H}^2(\mathfrak{U},-)$ with the
 Hom-functor $\Hom(H_2(N(\mathfrak{U})),{-})$, so $j_*$ is injective for every
-injective coefficient map.  Hence
+injective coefficient map.  Since $\varphi_*[\alpha]=0$, the diagram gives
 \[
 0=\varphi_*[\alpha]=j_*\bigl(\bar\varphi_*[\alpha]\bigr)
 \qquad\Longrightarrow\qquad
 \bar\varphi_*[\alpha]=0.
 \]
-But $\bar\varphi=q_N$ is the quotient map $A\twoheadrightarrow A/N$, so
+Identifying $\im(\varphi)$ with $A/N$ by the first isomorphism theorem, the
+map $\bar\varphi$ becomes the quotient map $q_N\colon A\twoheadrightarrow A/N$,
+so
 $N\in\mathcal{N}([\alpha])$.  Because $K$ is the intersection of all such
 subgroups, $K\subseteq N=\ker\varphi$.  By the universal property of the
 quotient $A\twoheadrightarrow A/K$, there exists a unique homomorphism
@@ -966,14 +980,13 @@ The universal property in Proposition~\ref{thm:intrinsic-visible-quotient}
 is intrinsic to the class $[\alpha]$.  In particular, it does not require a
 choice of cocycle representative or a subgroup generated by cocycle values.
 The subgroup $K$ is defined directly from the quotients on which the class
-vanishes, and $\Avis$ is the corresponding initial quotient.  We decorate the
-notation as $\Avis(\mathfrak{U},[\alpha])$ to keep the dependence on the fixed
-cover and class visible.
+vanishes, and $\Avis$ is the corresponding initial quotient.  The notation
+already records the dependence on the fixed cover and class.
 \end{remark}
 
 \begin{lemma}[Register lower bound for full-resolution recovery]
 \label{thm:prefix-site-register-lower-bound}
-Assume $A$ is finite and let $\Avis(\mathfrak{U},[\alpha])$ be the visible
+Assume $A$ is finite and let $\Avis$ be the visible
 quotient attached to the fixed cover and class.  Suppose one wishes to recover
 the full $A$-resolution from $\Avis$ by adjoining a finite register set $R$ in
 such a way that there exists an injection
@@ -1050,14 +1063,15 @@ readout is definable if and only if $\chi\in K^\perp$.
 \label{sec:forced-obstruction}
 
 The constructions of Sections~\ref{sec:descent}--\ref{sec:visible-quotient}
-apply to any finite cylinder-algebra cover equipped with explicit comparison data.  In
-applications, the main difficulty is to extract those comparison data
-canonically from an actual readout semantics.  As a concrete model computation,
-we now work out a symbolic example in which both the cover nerve and a
-nontrivial defect class can be written down explicitly.  The present section is
-deliberately positioned as a combinatorial appendix: it does not claim to come
-from a measurable readout model, and all torsors and cocycles are prescribed
-directly on the ordered nerve to illustrate the formalism in isolation.
+apply once one has fixed local objects and an abelian band on a finite
+cylinder-algebra cover.  In applications, the main difficulty is to generate
+that datum canonically from an actual readout semantics.  As a concrete model
+computation, we now work out a symbolic example in which both the cover nerve
+and a nontrivial defect class can be written down explicitly.  The present
+section is deliberately positioned as a combinatorial appendix: it specializes
+the general formalism to a prescribed banded datum on the ordered nerve, and it
+is included as a sanity check rather than as a semantically canonical readout
+model.
 
 \subsection{A Tetrahedral Cylinder-Algebra Cover}
 
@@ -1533,16 +1547,21 @@ by the chain
 \]
 ordered by refinement (larger $b$ = finer information).
 
+For the stalk discussion only the object-level separatedness question matters.
+Accordingly we pass from the groupoid-valued prestack $\Rpre$ to its underlying
+set-valued presheaf of objects $U\mapsto \Ob\Rpre(U)$, and by abuse of notation
+continue to denote that presheaf by $\Rpre$.
+
 \begin{definition}[Stalk and germ]
 \label{def:stalk-germ}
-The \emph{stalk} of the readout presheaf $\Rpre$ at $a\in\Ainf$ is the
+The \emph{stalk} of the underlying object presheaf $\Rpre$ at $a\in\Ainf$ is the
 filtered colimit
 \[
-\Rpre_a := \varinjlim_{b\ge 0} \Rpre(a_b),
+\Rpre_a := \varinjlim_{b\ge 0} \Ob\Rpre(a_b),
 \]
 where the colimit is taken over the refinement chain
 $a_0\preceq a_1\preceq a_2\preceq \cdots$.  Two elements
-$s\in\Rpre(a_b)$ and $s'\in\Rpre(a_{b'})$ define the same \emph{germ} at $a$
+$s\in\Ob\Rpre(a_b)$ and $s'\in\Ob\Rpre(a_{b'})$ define the same \emph{germ} at $a$
 if there exists $b''\ge b,b'$ such that
 $\rho_{a_b\leftarrow a_{b''}}(s)=\rho_{a_{b'}\leftarrow a_{b''}}(s')$.  The
 germ of $s$ at $a$ is denoted $[s]_a\in\Rpre_a$.
@@ -1557,7 +1576,7 @@ $c\in\mathcal{A}_n$ satisfies $\pi_{n\to b}(c)=a_b$, write
 $U(c):=\{a'\in\Ainf:\ a'_n=c\}\subseteq U_b(a)$.
 A \emph{finite cylinder-algebra cover of $U_b(a)$} is a finite family
 $\{U(c_i)\}_{i=1}^r$ with $U_b(a)=\bigcup_{i=1}^r U(c_i)$.
-We write $\Rpre(U_b(a)):=\Rpre(a_b)$ and $\Rpre(U(c)):=\Rpre(c)$.
+We write $\Rpre(U_b(a)):=\Ob\Rpre(a_b)$ and $\Rpre(U(c)):=\Ob\Rpre(c)$.
 
 \begin{theorem}[Stalk criterion for single-valued readout]
 \label{thm:recursive-addressing-readout-separatedness-null}
@@ -1597,8 +1616,8 @@ Moreover, failure of a well-defined readout at $a$ has three internal forms:
 \begin{enumerate}[label=\textup{(\roman*)}]
 \item \emph{empty local fiber}: $\Rpre(U_b(a))=\varnothing$ for some
 sufficiently deep neighborhood;
-\item \emph{descent failure}: compatible local sections on a finite cylinder
-cover of some $U_b(a)$ do not glue to a section over $U_b(a)$;
+\item \emph{descent failure}: compatible local sections on a finite
+cylinder-algebra cover of some $U_b(a)$ do not glue to a section over $U_b(a)$;
 \item \emph{non-separatedness at $a$}: for some $b$, the map
 $\lambda_b$ is not injective, equivalently two distinct sections over
 $U_b(a)$ define the same germ at $a$.
@@ -1633,8 +1652,9 @@ then gives $s=t$.
 The trichotomy follows from the same local-site dictionary as in
 Corollary~\ref{cor:null-trichotomy-local-section}, but now applied at the fixed
 point $a$.  If some sufficiently deep neighborhood has empty fiber, readout
-fails by absence of local data.  If compatible local sections on a cylinder
-cover of some $U_b(a)$ do not glue, the failure is one of descent.  If
+fails by absence of local data.  If compatible local sections on a
+cylinder-algebra cover of some $U_b(a)$ do not glue, the failure is one of
+descent.  If
 $\lambda_b$ fails to be injective for some $b$, then two distinct sections over
 $U_b(a)$ define the same germ at $a$, so uniqueness fails.
 \end{proof}
@@ -1685,8 +1705,9 @@ Equality on any actual cylinder-algebra cover containing the point then forces e
 of sections.
 
 Two directions for further development are visible.  The first is to construct
-canonical comparison data from honest symbolic or measurable readout semantics,
-rather than prescribing them externally on a chosen cover.  The second is to
+the local objects and their abelian bands functorially from honest symbolic or
+measurable readout semantics, rather than selecting them by hand on a chosen
+cover.  The second is to
 extend the comparison data from the abelian banded setting to a full
 stack-theoretic or gerbe-theoretic framework
 \cite{Giraud1971CohomologieNonAbelienne}, which would allow non-abelian

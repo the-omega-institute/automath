@@ -3,23 +3,15 @@
 
 \subsection{First-entry residue events and escape rates}
 
-This section contains the main dynamical theorem of the paper.  The
-general framework from Section~\ref{sec:clarity} applies to any event
-with a regular boundary language; the present section specializes
-Theorem~\ref{thm:weighted-boundary-transfer} to first-entry residue
-events of Markov holes.  Theorem~\ref{thm:first-entry-escape-rate} is
-therefore the explicit first-entry instantiation of
-Theorem~\ref{thm:weighted-boundary-transfer} together with
-Corollary~\ref{cor:pressure-gap}.  In this specialization the boundary
-automaton~\(\mathcal A_\partial\) becomes trivial (its accepting
-language consists of all safe words), the product matrix \(B\) reduces
-to the killed transition matrix \(B_H\), and the Perron eigenvalue
-\(\rho_\partial\) becomes the survivor spectral radius \(\rho_H\).  The
-pressure-gap corollary (Corollary~\ref{cor:pressure-gap}) then
-identifies \(-\log\rho_H\) with the escape rate
-\(\gamma_H(\varphi)=P_Y(\varphi)-P_{Y_H}(\varphi)\).  We give a
-self-contained proof below that makes these identifications explicit and
-incorporates the residue-dependent amplitude structure.
+This section contains the finite-state core of the paper.  The
+observation model here is the symbolic prefix filtration
+\(\mathcal F_m=\sigma(y_0,\ldots,y_{m-1})\) on the shift \(Y\), so the
+Bayes error is computed from full symbolic prefixes over the shift
+alphabet \(A\).  For first-entry residue events of a Markov hole, the
+required path sum can be derived directly from the Markov property,
+without any auxiliary boundary-language theorem.  We therefore give a
+self-contained proof of the exact killed-matrix formula, its escape-rate
+consequence, and the quasistationary amplitude refinement.
 
 The study of escape rates through holes in dynamical systems
 originates with
@@ -82,6 +74,11 @@ Fix \(q\geq 2\) and a non-empty proper subset
       \tau_H(y)<\infty,\
       \tau_H(y)\bmod q\in R }.
 \]
+For this theorem, depth \(m\) means conditioning on
+\[
+  \mathcal F_m=\sigma(y_0,\ldots,y_{m-1}),
+\]
+where \(y_t(y)=y_t\) is the coordinate process on \(Y\).
 
 For \(i\in\mathcal S\), let \(\PP_i\) be the Markov law on \(Y\)
 conditioned to start at state \(i\), and let
@@ -167,41 +164,6 @@ the escape rate of the open system \((Y,\sigma,H)\).
 \end{theorem}
 
 \begin{proof}
-The exact matrix formula is the first-entry specialization of the
-weighted-boundary formalism from Section~\ref{sec:clarity}.  Take the
-one-state deterministic automaton
-\[
-  \mathcal A_{\mathrm{safe}}
-  := (\{q_\ast\},q_\ast,\delta,\{q_\ast\}),
-  \qquad
-  \delta(q_\ast,j)=q_\ast \text{ for } j\in\mathcal S,
-\]
-with \(\delta(q_\ast,j)\) undefined for \(j\in A_{\mathrm{hole}}\).
-Its accepted language is exactly the set of safe words.  In
-Theorem~\ref{thm:weighted-boundary-transfer}, this gives
-\[
-  B_{(q_\ast,i),(q_\ast,j)}
-  = K_{ij}\mathbf{1}_{\{j\in\mathcal S\}}
-  = B_H(i,j),
-  \qquad
-  u_{(q_\ast,i)}=\pi_i,
-  \qquad
-  v_{(q_\ast,i)}=1.
-\]
-Hence
-\[
-  u^{\mathsf T}B_H^{m-1}\mathbf 1
-  = \nu_\varphi(\tau_H\ge m)
-\]
-is precisely the survivor-mass path sum supplied by
-Theorem~\ref{thm:weighted-boundary-transfer}(i).  The Bayes error is the
-same path sum with terminal weight
-\(\beta_{a_{m-1},\,m-1\bmod q}\), obtained by combining this
-specialization with
-Proposition~\ref{prop:weighted-boundary-decomposition}.  We spell out
-the argument because the residue-dependent terminal weights are needed
-again for the amplitude refinement.
-
 Let \(a=a_0\cdots a_{m-1}\in A^m\).  If \(a_t\in A_{\mathrm{hole}}\) for some
 \(0\leq t\leq m-1\), then \(\tau_H\leq m-1\) on the cylinder \([a]\), so
 the truth value of \(\mathsf{P}_R\) is already decided on \([a]\), and
@@ -354,78 +316,22 @@ The escape-rate interpretation follows from the comparison with
 This is exactly Theorem~\ref{thm:first-entry-escape-rate}.
 \end{proof}
 
-\begin{proposition}[Graph-theoretic residue criterion]
-\label{prop:graph-residue}
-Let \(G_H\) be the directed graph on the safe alphabet \(\mathcal S\) with
-adjacency \(i\to j\) whenever \(M_{ij}=1\) and \(j\in\mathcal S\).
-For \(i\in\mathcal S\), let \(C(i)\) be the strongly connected component
-of \(G_H\) that contains \(i\) and intersects \(\mathcal S_\infty\), and
-let
+\begin{remark}[Residue computation on a finite product graph]
+\label{rem:residue-bfs}
+For fixed \(q\), the attainable residue set \(D_i\) can be computed
+exactly on the finite graph with vertex set
+\(\mathcal S\times \ZZ/q\ZZ\) and edges
 \[
-  g_i:=\gcd\set{\ell\geq 1:
-    \text{\(\ell\) is the length of a closed walk in \(C(i)\)} }.
+  (j,r)\to (k,r+1\bmod q)
+  \qquad
+  \text{whenever } M_{jk}=1 \text{ and } k\in\mathcal S.
 \]
-Define the set of combinatorial first-hit lengths
-\[
-  \mathscr L_i
-  := \set{n\geq 1:
-      \exists\text{ path }
-      i=i_0,\ldots,i_{n-1}\in\mathcal S,
-      \ i_{n-1}\in\mathcal S,\
-      i_n\in A_{\mathrm{hole}}
-      }.
-\]
-Then there exist \(N_i\geq 1\) and a subset
-\(\Lambda_i\subseteq \ZZ/g_i\ZZ\) such that
-\[
-  \mathscr L_i
-  = F_i
-    \cup
-    \set{n\geq N_i:n\bmod g_i\in \Lambda_i}
-\]
-for some finite set \(F_i\subseteq\NN\).
-Consequently the attainable residue set is
-\[
-  D_i
-  = \set{n\bmod q:n\in F_i}
-    \cup
-    \set{r\in\ZZ/q\ZZ:
-          r \equiv \lambda \bmod \gcd(g_i,q)
-          \text{ for some }\lambda\in\Lambda_i }.
-\]
-In particular, residue non-degeneracy fails for a given
-non-empty proper \(R\subsetneq\ZZ/q\ZZ\) if and only if there exist
-\(i\in\mathcal S\) and \(r\in\ZZ/q\ZZ\) such that every residue class in
-\(\Lambda_i\) maps into \(R-r\) or into \((\ZZ/q\ZZ\setminus R)-r\).
-\end{proposition}
-
-\begin{proof}
-The languages \(\mathscr L_i\) are regular because they are defined by
-paths in a finite graph that avoid a specified absorbing set until the
-last step.  Hence \(\mathscr L_i\) is eventually periodic with period
-equal to the gcd of the lengths of cycles in the component containing
-the terminal state \cite[Proposition~4.4.4]{LindMarcus1995}.  The period
-is precisely \(g_i\), because every sufficiently long safe path must
-spend all but finitely many steps in \(C(i)\) before entering the hole.
-The description of \(D_i\) is the reduction of this eventual periodicity
-modulo \(q\), and the final statement is immediate.
-\end{proof}
-
-\begin{remark}[Failure modes]
-\label{rem:residue-failure}
-The practical test supplied by
-Proposition~\ref{prop:graph-residue} reduces residue verification to a
-finite computation: enumerate safe paths from \(i\) of length at most
-\(N_i\) to determine the exceptional set \(F_i\), compute \(g_i\) from
-the component \(C(i)\), and check whether \(\Lambda_i\) maps onto both
-of the cosets \(R-r\) and \((\ZZ/q\ZZ\setminus R)-r\).
-If every cycle in \(C(i)\) has even length, then \(g_i=2\) and only even
-first-hit lengths occur for large \(n\); this is exactly the obstruction
-visible in Example~\ref{ex:nondegen-fails}.  When the mixing survivor
-subshift is primitive, \(g_i=1\) for every \(i\in\mathcal S_\infty\), so
-only transient states can create residue gaps, and they do so by forcing
-congruence constraints on the first few safe steps before the orbit
-falls into the mixing survivor component.
+Start from \((i,0)\), perform breadth-first search, and record a residue
+\(r+1\bmod q\) whenever a visited vertex \((j,r)\) has an outgoing edge
+from \(j\) into \(A_{\mathrm{hole}}\).  The set of recorded residues is
+exactly \(D_i\).  If \(i\in\mathcal T\), the safe subgraph on
+\(\mathcal T\) is acyclic, so only finitely many transient safe paths
+occur before the search either terminates or enters \(\mathcal S_\infty\).
 \end{remark}
 
 \begin{lemma}[Sufficient condition for residue non-degeneracy]
@@ -574,6 +480,50 @@ the residue class of \(m\) changes.  The Bayes-error observable thus
 distinguishes events that the survivor mass alone would identify.
 \end{example}
 
+\begin{example}[An asymmetric two-state survivor component]
+\label{ex:two-state-asymmetric}
+Let \(A=\{0,1,h\}\), let \(Y=A^{\NNzero}\) be the full shift, and let
+\(H=[h]\).  Consider the one-step Markov measure with transition matrix
+\[
+  K=
+  \begin{pmatrix}
+    \tfrac12 & \tfrac14 & \tfrac14\\[2pt]
+    \tfrac18 & \tfrac12 & \tfrac38\\[2pt]
+    \tfrac12 & \tfrac14 & \tfrac14
+  \end{pmatrix},
+\]
+where the rows are indexed by \(0,1,h\).  Then
+\[
+  B_H=
+  \begin{pmatrix}
+    \tfrac12 & \tfrac14\\[2pt]
+    \tfrac18 & \tfrac12
+  \end{pmatrix}
+\]
+is primitive, so the survivor component is genuinely two-state and
+non-Bernoulli.  Take \(q=3\) and \(R=\{0\}\).  Solving the first-hit
+renewal equations for the residue classes of \(\tau_H^+\) gives
+\[
+  b_0\approx(0.244,0.194),\qquad
+  b_1\approx(0.336,0.304),\qquad
+  b_2\approx(0.420,0.498).
+\]
+The normalized left Perron eigenvector of \(B_H\) is
+\[
+  \xi_H=(\sqrt2-1,\ 2-\sqrt2).
+\]
+Hence
+\[
+  \xi_H^{\mathsf T}b_0\approx 0.215,\qquad
+  \xi_H^{\mathsf T}b_1\approx 0.317,\qquad
+  \xi_H^{\mathsf T}b_2\approx 0.466.
+\]
+Thus the residue-dependent ambiguity amplitudes remain visibly distinct
+even on a primitive two-state survivor component.  This is the finite
+Markov effect detected by Theorem~\ref{thm:quasistationary-ambiguity}
+beyond the one-state Bernoulli example above.
+\end{example}
+
 \begin{example}[Cyclotomic poles and residue subsequences]
 \label{ex:cyclotomic-example}
 Continue with Example~\ref{ex:amplitude-contrast} and take
@@ -683,7 +633,9 @@ Equivalently,
 \paragraph{Quasistationary view.}
 Because \(\xi_H\) is the normalized left Perron eigenvector of the
 killed matrix, it is the quasistationary distribution of the killed
-chain (see, for example, \citet{KellerLiverani2009}).  Hence
+chain; compare \citet{DarrochSeneta1965},
+\citet{ColletMartinezSanMartin2013}, and
+\citet{KellerLiverani2009}.  Hence
 Theorem~\ref{thm:quasistationary-ambiguity} identifies the Bayes
 ambiguity as the quasistationary expectation of the residue weight:
 \(\xi_H^{\mathsf T}b_r = \EE_{\xi_H}[b_r(Y_0)]\).  The finite-observation

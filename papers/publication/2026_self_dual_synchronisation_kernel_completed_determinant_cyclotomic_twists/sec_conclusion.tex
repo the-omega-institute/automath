@@ -1,13 +1,14 @@
 \section{Further remarks}\label{sec:conclusion}
 
-This note isolates a weighted synchronisation kernel in which
+This note isolates one explicit weighted self-dual kernel in which
 self-duality collapses all unit-circle twists to a single completed
-determinant. In this example that collapse is strong enough to make the
-quotient geometry, the generic Galois group, and the cyclotomic
-asymptotics completely explicit. The cyclotomic resultants arise as the
-primitive real factors of the natural cyclic skew-product lifts, reduce
-the unit-circle twists to a one-parameter elimination problem, and
-yield twisted Perron roots with an effective large-\(m\) expansion.
+determinant. The point is not a general theory but a complete
+calculation: in this example the same degree-\(6\) polynomial controls
+the quotient geometry, the generic Galois group, the cyclic-lift
+factors, and the cyclotomic asymptotics. The cyclotomic resultants
+therefore reduce the unit-circle twists to a one-parameter elimination
+problem and yield twisted Perron roots with an effective large-\(m\)
+expansion.
 
 Two directions seem natural. The first is to identify structural
 conditions on a general self-dual weighted kernel that force a
@@ -49,62 +50,36 @@ contributes weight \(u\), as in \Cref{def:sync-kernel}. The matrix \(B(1)\)
 is the unweighted adjacency matrix, and \(\det(I-zB(u))\) is the formula
 of \Cref{prop:kernel-delta-explicit}.
 
-\subsection*{Cyclic lifts and Fourier decomposition}
-\label{sec:appendix-cyclic-lift}
+\subsection*{Reproducibility guide}
 
-For \(q\ge 1\), let \(P_q\) be the cyclic permutation matrix on
-\(\ZZ/q\ZZ\), acting on the standard basis by \(P_q e_t=e_{t+1}\).
-The natural \(q\)-cyclic label lift attached to the binary output
-labelling is
-\[
-  \widetilde B_q:=B_0\otimes I_q+B_1\otimes P_q.
-\]
-Its state set is \(\mathcal S\times\ZZ/q\ZZ\), and an edge
-\(x\to y\) of output \(e\in\{0,1\}\) in the original kernel becomes
-the edge \((x,t)\to(y,t+e)\) in the lift. This is the standard
-skew-product extension associated with the output cocycle
-\cite{AdlerKitchensMarcus1985,Fiebig1993,BoyleSchmieding2017};
-the broader covering-theory perspective on such lifts may be found in
-\cite{GrossTucker2001,CimasoniKassel2023,DalfoFiolGarriga2019}.
+The cyclic-lift factorisation and the primitive real-factor
+interpretation are proved in the main text in
+\Cref{prop:sync-cyclic-lift-factorisation,prop:sync-primitive-real-factor}.
+The computer-assisted parts of the paper are organised here as a
+theorem-to-command map rather than as a single executable script,
+because the verification splits naturally into SageMath and Mathematica
+blocks.
 
-\begin{proposition}[Fourier decomposition of the cyclic lift]
-  \label{prop:sync-cyclic-lift-factorisation}
-  Let \(\omega_q=e^{2\pi i/q}\). Then
-  \[
-    \det(I-z\widetilde B_q)
-    =\prod_{j=0}^{q-1}\Delta(z,\omega_q^j).
-  \]
-\end{proposition}
-
-\begin{proof}
-Let \(F_q=(\omega_q^{ab})_{0\le a,b\le q-1}\) be the discrete Fourier
-matrix. Since \(F_q^{-1}P_qF_q=\operatorname{diag}(1,\omega_q,\dots,\omega_q^{q-1})\),
-conjugating \(I-z\widetilde B_q\) by \(I_{10}\otimes F_q\) gives
-\(\bigoplus_{j=0}^{q-1}(I-z(B_0+\omega_q^jB_1))\). Taking
-determinants yields the stated factorisation.
-\end{proof}
-
-Fix \(m\ge 2\) and \(a\in(\ZZ/2m\ZZ)^\times\). With
-\(r_a:=e^{\pi ia/m}\), \(r_a^2=\omega_m^a\), and
-\(s_a:=r_a+r_a^{-1}=2\cos(\pi a/m)\), the completed determinant
-satisfies \(\Delta(z,\omega_m^a)=\widehat\Delta(zr_a,s_a)\). Thus the
-primitive real factor
-\[
-  R_m(w)=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha)
-\]
-is obtained by taking the primitive Fourier blocks of the \(m\)-cyclic
-lift, pairing conjugate characters, and rewriting the corresponding
-determinants in the completed coordinate \(w=zr_a\). This is the
-dynamical interpretation of the cyclotomic twists underlying
-\Cref{thm:sync-cyclotomic-degree-law} and \Cref{lem:root-separation}.
+Items \textup{(a)}--\textup{(e)} were run in SageMath~10.2, and item
+\textup{(f)} was run in Mathematica~14.0. Their roles in the body are:
+\begin{itemize}[leftmargin=2.5em]
+  \item \textup{(a)} certifies \Cref{prop:kernel-delta-explicit};
+  \item \textup{(b)} certifies
+        \Cref{prop:sync-hatdelta-completion,prop:sync-hatdelta-quotient};
+  \item \textup{(c)} certifies the affine smoothness step in
+        \Cref{prop:sync-hatdelta-quotient};
+  \item \textup{(d)} certifies the discriminant and finite-field
+        factorisations used in
+        \Cref{prop:sync-hatdelta-galois-s6-generic};
+  \item \textup{(e)} certifies the finite small-\(m\) checks used in
+        the numerical remark after \Cref{thm:rho-gap-m12};
+  \item \textup{(f)} certifies
+        \Cref{prop:sync-endpoint-jet,thm:rho-gap-m12}.
+\end{itemize}
+Each item records the exact output used in the argument together with
+the corresponding command block.
 
 \subsection*{Exact verification data}
-
-To make the computer algebra reproducible, we record here the exact
-algebraic outputs used in the proofs together with short
-Sage/Mathematica commands that regenerate them. Each item contains the
-certificate used in the corresponding argument in the body, so no
-external file is needed to verify the decisive computations.
 
 \begin{enumerate}[label=(\alph*)]
   \item \textit{Determinant expansion and self-duality check.}\quad
@@ -158,6 +133,26 @@ factor(Delta.subs(u=1))
     \[
       F(x,y)=1-y-5x+3xy+5x^2-xy^2+xy^3-6x^2y+x^2y^2-x^3.
     \]
+
+    \medskip
+    \noindent\textit{Sage commands.}
+\begin{verbatim}
+R.<r,w> = LaurentPolynomialRing(QQ)
+Delta_rw = 1-(1+r^2)*(w/r)-5*r^2*(w/r)^2+3*r^2*(1+r^2)*(w/r)^3 \
+    - r^2*(r^4-3*r^2+1)*(w/r)^4 \
+    + r^2*(r^6-3*r^4-3*r^2+1)*(w/r)^5 \
+    + r^4*(r^4+r^2+1)*(w/r)^6
+Delta_rw.expand()
+
+S.<s,w> = PolynomialRing(QQ)
+H = 1 - s*w - 5*w^2 + 3*s*w^3 + (5 - s^2)*w^4 \
+    + (s^3 - 6*s)*w^5 + (s^2 - 1)*w^6
+
+T.<x,y> = PolynomialRing(QQ)
+F = 1 - y - 5*x + 3*x*y + 5*x^2 - x*y^2 + x*y^3 \
+    - 6*x^2*y + x^2*y^2 - x^3
+H, F
+\end{verbatim}
 
   \item \textit{Affine smoothness certificate.}\quad
     For the quartic \(F(x,y)\) above,
@@ -245,6 +240,48 @@ gcd(f27, f27.derivative()), factor(f27)
 R19.<w> = PolynomialRing(GF(19))
 f319 = R19(H(s=3))
 gcd(f319, f319.derivative()), factor(f319)
+\end{verbatim}
+
+  \item \textit{Finite verification for the displayed small values.}\quad
+    For the table following \Cref{thm:rho-gap-m12}, one computes
+    \[
+      \lambda(\alpha):=\min\{\abs{w}:\widehat\Delta(w,\alpha)=0\}
+    \]
+    for every conjugate \(\alpha\in A_m\) with \(m=4,6,8,10\). For
+    \(m=4\) and \(m=6\), the conjugate sets are
+    \(A_m=\{\pm s_m\}\), so there is nothing further to check. For
+    \(m=8\) and \(m=10\), the remaining positive conjugates are
+    \(2\cos(3\pi/8)\) and \(2\cos(3\pi/10)\), and the direct output is
+    \[
+      \lambda\!\bigl(2\cos(\pi/8)\bigr)
+      < \lambda\!\bigl(2\cos(3\pi/8)\bigr),
+    \]
+    \[
+      \lambda\!\bigl(2\cos(\pi/10)\bigr)
+      < \lambda\!\bigl(2\cos(3\pi/10)\bigr).
+    \]
+    Together with the symmetry \(\lambda(-\alpha)=\lambda(\alpha)\),
+    this verifies that the displayed values \(\rho_m\) are obtained from
+    the slices \(\alpha=\pm s_m\).
+
+    \medskip
+    \noindent\textit{Sage commands.}
+\begin{verbatim}
+R.<w> = PolynomialRing(QQ)
+def H(alpha):
+    return 1 - alpha*w - 5*w^2 + 3*alpha*w^3 + (5 - alpha^2)*w^4 \
+        + (alpha^3 - 6*alpha)*w^5 + (alpha^2 - 1)*w^6
+
+def lambda_alpha(alpha):
+    roots = H(alpha).change_ring(CC).roots(multiplicities=False)
+    return min(abs(root) for root in roots)
+
+for m in [4, 6, 8, 10]:
+    reps = []
+    for a in range(1, 2*m):
+        if gcd(a, 2*m) == 1 and a <= m:
+            reps.append(2*cos(pi*a/m))
+    print(m, [(alpha.n(), lambda_alpha(alpha).n()) for alpha in reps])
 \end{verbatim}
 
   \item \textit{Endpoint jet recursion.}\quad

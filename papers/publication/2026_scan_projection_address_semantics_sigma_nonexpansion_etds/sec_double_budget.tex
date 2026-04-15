@@ -3,27 +3,18 @@
 % ------------------------------------------------------------------
 \section{Consequences of the killed-matrix formula}\label{sec:double-budget}
 
-The results in this section are consequences of the killed-matrix
-calculation from Section~\ref{sec:open-system}, obtained by replacing the
-residue-ambiguity terminal weight with an \(s\)-th power weight.  The
-survivor R\'enyi spectrum is the first corollary of that path sum, and
-the collision threshold is then extracted by a standard Chen--Stein
-occupancy estimate.  We record them as secondary consequences of the
-same finite-state calculation rather than as independent main theorems.
-
-\subsection{Survivor R\'enyi pressure spectra}
-
-Under the hypotheses of Theorem~\ref{thm:first-entry-escape-rate}, let
-\(\mathcal L_m^H\) denote the set of admissible words
-\(a=a_0\cdots a_{m-1}\in A^m\) such that \(a_t\in\mathcal S\) for every
-\(0\leq t<m\), equivalently the set of length-\(m\) words whose cylinder
-is contained in \(\{\tau_H\ge m\}\).
+The results in this section are secondary consequences of the
+killed-matrix calculation from Section~\ref{sec:open-system}.  They use
+the same survivor path sum with different terminal weights and a standard
+Chen--Stein estimate for collisions of independent survivor prefixes.
 
 \begin{corollary}[Survivor R\'enyi pressure spectrum]
 \label{cor:survivor-renyi-pressure}
 Assume the hypotheses of
 Theorem~\ref{thm:first-entry-escape-rate}.  For \(s>0\) and \(m\geq 1\),
-define
+let \(\mathcal L_m^H\) denote the set of admissible words
+\(a=a_0\cdots a_{m-1}\in A^m\) with \(a_t\in\mathcal S\) for every
+\(0\leq t<m\), and define
 \[
   \mathcal Z_{H,m}(s)
   := \sum_{a\in\mathcal L_m^H}\nu_\varphi([a])^s.
@@ -38,9 +29,9 @@ Let
 Then
 \[
   \mathcal Z_{H,m}(s)=u_s^{\mathsf T}B_{H,s}^{m-1}\mathbf 1
-  \qquad (m\geq 1).
+  \qquad (m\geq 1),
 \]
-Moreover,
+and
 \[
   \lim_{m\to\infty}
   -\frac1m\log \mathcal Z_{H,m}(s)
@@ -65,28 +56,22 @@ In particular,
 \[
   h_{2,H}:=2P_{Y_H}(\varphi)-P_{Y_H}(2\varphi)
 \]
-is the R\'enyi-\(2\) entropy rate of the conditioned survivor law, while
-the ambient two-sample exponent for simultaneous survival and visible
-collision is
-\[
-  \chi_H:=2P_Y(\varphi)-P_{Y_H}(2\varphi)
-        = 2\gamma_H(\varphi)+h_{2,H}.
-\]
+is the R\'enyi-\(2\) entropy rate of the conditioned survivor law.
 \end{corollary}
 
 \begin{proof}
 For \(a=a_0\cdots a_{m-1}\in\mathcal L_m^H\), the Markov property gives
 \[
   \nu_\varphi([a])
-  = \pi_{a_0}K_{a_0a_1}\cdots K_{a_{m-2}a_{m-1}}.
+  = \pi_{a_0}K_{a_0a_1}\cdots K_{a_{m-2}a_{m-1}},
 \]
-Therefore
+so
 \[
   \nu_\varphi([a])^s
   = u_s(a_0)\,
-    B_{H,s}(a_0,a_1)\cdots B_{H,s}(a_{m-2},a_{m-1}),
+    B_{H,s}(a_0,a_1)\cdots B_{H,s}(a_{m-2},a_{m-1}).
 \]
-and summing over all safe words of length \(m\) yields
+Summing over all safe words of length \(m\) yields
 \[
   \mathcal Z_{H,m}(s)=u_s^{\mathsf T}B_{H,s}^{m-1}\mathbf 1.
 \]
@@ -158,18 +143,19 @@ Subtracting \(s\gamma_H(\varphi)\) from the first limit gives
 \[
   sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi).
 \]
-The formulas for \(h_{2,H}\) and \(\chi_H\) are the special case
-\(s=2\).
 \end{proof}
 
-\begin{corollary}[Collision consequences of the survivor spectrum]
-\label{cor:survivor-spectrum-collision}
+\begin{corollary}[Poisson birthday threshold for survivor prefixes]
+\label{cor:survivor-poisson-threshold}
 Under the hypotheses of
 Corollary~\ref{cor:survivor-renyi-pressure}, let
 \((X_m^{H,(i)})_{1\leq i\leq N_m}\) be independent survivor prefixes of
-depth \(m\) with common law \(\lambda_m^H\).  Write
+depth \(m\) with common law \(\lambda_m^H\).  Define
 \[
-  S_r^H(m):=\sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^r.
+  S_r^H(m):=\sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^r,
+  \qquad
+  W_m:=\sum_{1\leq i<j\leq N_m}
+       \mathbf{1}_{\{X_m^{H,(i)}=X_m^{H,(j)}\}}.
 \]
 Then
 \[
@@ -178,15 +164,27 @@ Then
   S_3^H(m)
   = e^{-m(3P_{Y_H}(\varphi)-P_{Y_H}(3\varphi))+o(m)}.
 \]
-In particular, if
+If
 \[
   \binom{N_m}{2}S_2^H(m)\to\tau\in[0,\infty)
   \qquad\text{and}\qquad
   N_m^3S_3^H(m)\to 0,
 \]
-then the collision count of the labels \(X_m^{H,(i)}\) converges to
-\(\mathrm{Poisson}(\tau)\).  Thus the birthday threshold for surviving
-samples lies on the scale
+then
+\[
+  W_m \Rightarrow \mathrm{Poisson}(\tau).
+\]
+In particular,
+\[
+  \PP(W_m\ge 1)\to
+  \begin{cases}
+    0, & \text{if }\binom{N_m}{2}e^{-m h_{2,H}}\to 0,\\[4pt]
+    1-e^{-\tau}, & \text{if }\binom{N_m}{2}e^{-m h_{2,H}}\to \tau\in(0,\infty),\\[4pt]
+    1, & \text{if }\binom{N_m}{2}e^{-m h_{2,H}}\to\infty
+         \text{ and } N_m^3S_3^H(m)=o\!\left(\binom{N_m}{2}^2S_2^H(m)^2\right).
+  \end{cases}
+\]
+Thus the birthday threshold for surviving samples lies on the scale
 \[
   \binom{N_m}{2}e^{-m h_{2,H}}\asymp 1.
 \]
@@ -194,128 +192,17 @@ samples lies on the scale
 
 \begin{proof}
 The asymptotics of \(S_2^H(m)\) and \(S_3^H(m)\) are the cases \(s=2\)
-and \(s=3\) of Corollary~\ref{cor:survivor-renyi-pressure}.  Apply
-Proposition~\ref{prop:double-budget-poisson} with deterministic synchronization
-time \(T_m\equiv 0\), so that \(q_m=0\) and
-\(\Lambda_m=\binom{N_m}{2}S_2^H(m)\).
-\end{proof}
-
-\subsection{Poisson thresholds for collision failure}
-
-Fix a resolution \(m\geq 1\).  Let \((T_m,X_m)\) be a random pair,
-where \(T_m\) is the synchronization time and \(X_m\in A_m\) is the
-visible address available at resolution \(m\).  Let \(\lambda_m\) be the
-law of \(X_m\), and for \(r\geq 2\) define
+and \(s=3\) of Corollary~\ref{cor:survivor-renyi-pressure}.  The
+Chen--Stein dependency-graph estimate of
+\citet[Theorem~1]{ArratiaGoldsteinGordon1989} gives
 \[
-  S_r(m):=\sum_{a\in A_m}\lambda_m(a)^r.
+  d_{\mathrm{TV}}\bigl(W_m,\mathrm{Poisson}(\EE W_m)\bigr)
+  \ll N_m^3S_3^H(m),
 \]
-
-\begin{proposition}[Poisson collision threshold]
-\label{prop:double-budget-poisson}
-Let \(n_m\in\NN\) and \(N_m\in\NN\).  Let
-\((T_m^{(i)},X_m^{(i)})_{1\leq i\leq N_m}\) be independent copies of
-\((T_m,X_m)\), and let \(\mathsf{Fail}_{m,n_m,N_m}\) be the event that
-some object has not synchronized by time \(n_m\) or that two objects
-with synchronization times at most \(n_m\) receive the same visible
-\(m\)-address.  Set
-\[
-  q_m:=\PP(T_m>n_m),
-  \qquad
-  \Lambda_m:=\binom{N_m}{2}S_2(m),
-\]
-and define the collision count
-\[
-  W_m:=\sum_{1\leq i<j\leq N_m}
-       \mathbf{1}_{\{X_m^{(i)}=X_m^{(j)}\}}.
-\]
-Then the following hold.
-\begin{enumerate}[label=(\roman*)]
-  \item If \(N_m q_m\to 0\) and \(\Lambda_m\to 0\), then
-    \[
-      \PP(\mathsf{Fail}_{m,n_m,N_m})\longrightarrow 0.
-    \]
-  \item If \(N_m q_m\to 0\), \(\Lambda_m\to\tau\in(0,\infty)\), and
-    \(N_m^3S_3(m)\to 0\), then
-    \[
-      W_m \Rightarrow \mathrm{Poisson}(\tau),
-      \qquad
-      \PP(\mathsf{Fail}_{m,n_m,N_m})\longrightarrow 1-e^{-\tau}.
-    \]
-  \item If \(N_m q_m\to 0\), \(\Lambda_m\to\infty\), and
-    \(N_m^3S_3(m)=o(\Lambda_m^2)\), then
-    \[
-      \PP(\mathsf{Fail}_{m,n_m,N_m})\longrightarrow 1.
-    \]
-\end{enumerate}
-In particular, the collision threshold lies on the scale
-\[
-  \binom{N_m}{2}S_2(m)\asymp 1,
-  \qquad\text{equivalently}\qquad
-  2\log N_m \asymp -\log S_2(m).
-\]
-\end{proposition}
-
-\begin{proof}
-Let \(U_m\) be the event that some object has not synchronized by time
-\(n_m\); then
-\(|\PP(\mathsf{Fail}_{m,n_m,N_m})-\PP(W_m\geq 1)|\leq N_m q_m\).
-Part~(i) follows from Markov's inequality applied to \(W_m\).
-For part~(ii) we index unordered pairs and use the Chen--Stein
-dependency-graph estimate of \citet[Theorem~1]{ArratiaGoldsteinGordon1989}:
-the hypotheses \(N_mq_m\to 0\), \(\Lambda_m\to\tau\), and
-\(N_m^3S_3(m)\to 0\) imply
-\(W_m\Rightarrow\mathrm{Poisson}(\tau)\), hence
-\(\PP(W_m\geq 1)\to 1-e^{-\tau}\).
-For part~(iii) the same decomposition shows
-\(\Var(W_m)=\Lambda_m+O(N_m^3S_3(m))=o(\Lambda_m^2)\), so
-Chebyshev's inequality forces \(\PP(W_m=0)\to 0\), and therefore
-\(\PP(\mathsf{Fail}_{m,n_m,N_m})\to 1\).
-\end{proof}
-
-\begin{corollary}[Subcritical capacity region]
-\label{cor:capacity-region}
-Suppose that
-\[
-  q_m\leq C_m e^{-\gamma_m n_m}
-  \qquad\text{and}\qquad
-  S_2(m)=e^{-h_2m+o(m)}
-\]
-for some sequences \(C_m>0\), \(\gamma_m>0\), and some \(h_2>0\).
-Assume also that
-\[
-  \log C_m=o\bigl(\min\{\gamma_m n_m,m\}\bigr).
-\]
-Fix \(\eta\in(0,1)\).  If
-\[
-  \log N_m
-  \leq (1-\eta)\min\bigl\{\gamma_m n_m,\tfrac12 h_2m\bigr\}
-\]
-for all sufficiently large \(m\), then
-\[
-  \PP(\mathsf{Fail}_{m,n_m,N_m})\longrightarrow 0.
-\]
-\end{corollary}
-
-\begin{proof}
-The synchronization term satisfies
-\[
-  N_m q_m
-  \leq \exp\bigl(\log C_m+\log N_m-\gamma_m n_m\bigr)
-  \longrightarrow 0,
-\]
-and the collision term satisfies
-\[
-  \Lambda_m
-  = \exp\bigl(2\log N_m-h_2m+o(m)\bigr)
-  \longrightarrow 0.
-\]
-Apply part~(i) of Proposition~\ref{prop:double-budget-poisson}.
+while \(\EE W_m=\binom{N_m}{2}S_2^H(m)\).  The stated limits follow.
 \end{proof}
 
 \begin{proof}[Proof of Corollary~\ref{cor:main-renyi}]
 The pressure identity is Corollary~\ref{cor:survivor-renyi-pressure}.
-The collision-scale statement follows from
-Corollary~\ref{cor:survivor-spectrum-collision}, which invokes the
-standard Chen--Stein estimate recorded in
-Proposition~\ref{prop:double-budget-poisson}.
+The collision-scale statement is Corollary~\ref{cor:survivor-poisson-threshold}.
 \end{proof}
