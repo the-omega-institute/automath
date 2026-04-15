@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      4.5
+// @version      4.6
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -664,6 +664,14 @@
       // Message group containers
       "[class*='agent-turn']",
       "[class*='message']",
+      // 2026 newer layouts
+      "[class*='response']",
+      "[class*='assistant']",
+      "[class*='answer']",
+      "[role='article']",
+      "[role='log'] > div",
+      "[class*='chat-message']",
+      "[class*='turn']",
     ];
 
     for (const sel of s0Selectors) {
@@ -692,7 +700,49 @@
       } catch {}
     }
 
-    // ═══ Fallback: grab all text from main, then post-process ═══
+    // ═══ Strategy 1: Nuclear fallback — walk ALL elements, find biggest text block ═══
+    // If no selector matched, scan the page for the largest text block that
+    // isn't our prompt. This handles unknown DOM structures.
+    try {
+      const candidates = [];
+      // Walk all elements with substantial text content
+      const allEls = document.querySelectorAll("main *");
+      for (const el of allEls) {
+        // Skip tiny elements, scripts, styles
+        if (["SCRIPT", "STYLE", "NOSCRIPT", "INPUT", "TEXTAREA", "BUTTON", "SVG", "PATH"].includes(el.tagName)) continue;
+        // Only consider leaf-ish elements (no child block elements, or markdown containers)
+        const text = (el.innerText || "").trim();
+        if (text.length < 200) continue;
+        if (looksLikePromptEcho(text)) continue;
+        // Avoid selecting the entire main container (too broad)
+        if (el.tagName === "MAIN") continue;
+        // Score by text length but prefer elements deeper in the DOM
+        const depth = getDepth(el);
+        candidates.push({ el, text, len: text.length, depth });
+      }
+
+      if (candidates.length > 0) {
+        // Prefer deep elements with substantial text (likely the response container)
+        // Sort by: has review-like content > length > depth
+        candidates.sort((a, b) => {
+          // Prefer texts that look like reviews (contain "##", "BLOCKER", "theorem", etc.)
+          const aReview = /#{1,3}\s|BLOCKER|MEDIUM|theorem|proof|Theorem|Proof|Accept|Reject|revision/i.test(a.text) ? 1 : 0;
+          const bReview = /#{1,3}\s|BLOCKER|MEDIUM|theorem|proof|Theorem|Proof|Accept|Reject|revision/i.test(b.text) ? 1 : 0;
+          if (bReview !== aReview) return bReview - aReview;
+          return b.len - a.len;
+        });
+
+        const best = candidates[0];
+        if (best.len > 200) {
+          log(`Nuclear fallback: found ${best.len} chars via DOM walk (tag=${best.el.tagName}, depth=${best.depth})`);
+          return cleanChromeLines(best.text);
+        }
+      }
+    } catch (e) {
+      log(`Nuclear fallback error: ${e.message}`);
+    }
+
+    // ═══ Strategy 2: grab all text from main, then post-process ═══
     const main = document.querySelector("main");
     if (!main) return "";
     const fullText = (main.innerText || "").trim();
@@ -754,22 +804,8 @@
       }
     }
 
-    // Step 3: Clean UI chrome lines
-    const lines = responseText.split("\n");
-    const cleaned = lines.filter(line => {
-      const t = line.trim();
-      if (!t) return true;
-      // Remove known chrome
-      if (/^(进阶专业|ChatGPT\s*也可能会犯错|请核查重要信息|查看\s*Cookie|Cookie\s*首选项)/.test(t)) return false;
-      if (/^(ChatGPT can make mistakes|Check important info)/.test(t)) return false;
-      if (/^Thought for \d+/.test(t)) return false;
-      if (/^(你说|You said|ChatGPT\s*说|ChatGPT\s*said)[：:]?\s*$/.test(t)) return false;
-      if (/^(正在思考|正在搜索|Searching)/.test(t)) return false;
-      // Remove PDF filename line and bare "main" artifacts
-      if (/^main(\.pdf)?\s*$/.test(t)) return false;
-      if (/^PDF\s*$/.test(t)) return false;
-      return true;
-    }).join("\n").trim();
+    // Step 3: Clean and return
+    const cleaned = cleanChromeLines(responseText);
 
     // Step 4: Final check — don't return text that IS the prompt
     if (cleaned.length > 5) {
@@ -785,6 +821,34 @@
     return "";
   }
 
+  function getDepth(el) {
+    let depth = 0;
+    let node = el;
+    while (node.parentElement) { depth++; node = node.parentElement; }
+    return depth;
+  }
+
+  function cleanChromeLines(text) {
+    const lines = text.split("\n");
+    const cleaned = lines.filter(line => {
+      const t = line.trim();
+      if (!t) return true;
+      // Remove known chrome
+      if (/^(进阶专业|ChatGPT\s*也可能会犯错|请核查重要信息|查看\s*Cookie|Cookie\s*首选项)/.test(t)) return false;
+      if (/^(ChatGPT can make mistakes|Check important info)/.test(t)) return false;
+      if (/^Thought for \d+/.test(t)) return false;
+      if (/^(你说|You said|ChatGPT\s*说|ChatGPT\s*said)[：:]?\s*$/.test(t)) return false;
+      if (/^(正在思考|正在搜索|Searching)/.test(t)) return false;
+      // Remove PDF filename line and bare "main" artifacts
+      if (/^main(\.pdf)?\s*$/.test(t)) return false;
+      if (/^PDF\s*$/.test(t)) return false;
+      // Remove nav/sidebar artifacts
+      if (/^(新建聊天|New chat|ChatGPT|GPT-4|GPT-5|升级|Upgrade|Log out|登出)\s*$/.test(t)) return false;
+      return true;
+    }).join("\n").trim();
+    return cleaned;
+  }
+
   function isStillGenerating() {
     return !!(
       document.querySelector("button[aria-label='Stop generating']") ||
@@ -795,7 +859,15 @@
       document.querySelector("[class*='result-streaming']") ||
       document.querySelector("[class*='streaming']") ||
       document.querySelector("[class*='thinking']") ||
-      document.querySelector("[class*='progress']")
+      document.querySelector("[class*='progress']") ||
+      // 2026 newer indicators
+      document.querySelector("[class*='generating']") ||
+      document.querySelector("[class*='loading']") ||
+      document.querySelector("[class*='typing']") ||
+      document.querySelector("[aria-busy='true']") ||
+      document.querySelector("[data-testid='stop-button']") ||
+      document.querySelector("button[aria-label*='stop' i]") ||
+      document.querySelector("button[aria-label*='Stop' i]")
     );
   }
 
@@ -819,14 +891,31 @@
       if (elapsed - lastLogTime >= 300) {
         lastLogTime = elapsed;
         log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}, url=${window.location.href.slice(-30)}`);
-        // One-time DOM debug: log what selectors match
-        if (elapsed <= 300) {
+        // DOM debug: log what selectors match (first 2 checks)
+        if (elapsed <= 600) {
           const dbg = [];
-          for (const s of ["[data-message-author-role]", "article", "[data-testid*='conversation-turn']", "div[class*='markdown']", "div[class*='prose']", "[class*='agent-turn']"]) {
+          for (const s of [
+            "[data-message-author-role]", "article",
+            "[data-testid*='conversation-turn']", "div[class*='markdown']",
+            "div[class*='prose']", "[class*='agent-turn']",
+            "[class*='response']", "[class*='assistant']",
+            "[class*='message']", "[class*='turn']",
+            "[role='article']", "[role='log']",
+            "[aria-busy]",
+          ]) {
             const n = document.querySelectorAll(s).length;
             if (n > 0) dbg.push(`${s}:${n}`);
           }
           log(`DOM debug: ${dbg.join(", ") || "no matches"}`);
+
+          // Log the main element's direct children structure
+          const mainEl = document.querySelector("main");
+          if (mainEl) {
+            const childTags = Array.from(mainEl.children).map(c =>
+              `${c.tagName}${c.className ? "." + c.className.split(" ")[0].slice(0, 20) : ""}(${(c.innerText || "").length}ch)`
+            ).slice(0, 8);
+            log(`Main children: ${childTags.join(", ")}`);
+          }
         }
       }
 
@@ -1042,7 +1131,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Oracle Bridge v4.4 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`Oracle Bridge v4.6 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
     // Check if we navigated here to process a task on a fresh chat page
     const phase = getTaskPhase();
