@@ -715,6 +715,22 @@ def build_phase_c_prompt(round_num: int, targets: list[dict]) -> str:
 
         ## IMPORTANT: Do NOT git push. The merge and push will be handled externally.
 
+        ## HARD PROHIBITION — Signature Integrity
+        Existing theorems already in the file have mathematically meaningful signatures.
+        You MUST NOT weaken or replace them. Specifically:
+        1. NEVER replace concrete parameter types (ℕ, ℝ, ℕ→ℕ, etc.) with abstract `Prop` variables.
+           Example of FORBIDDEN degradation:
+             -- BEFORE (correct, keep this):
+             theorem foo (n : ℕ) (h : n > 0) : ... := by ...
+             -- AFTER (FORBIDDEN, will be reverted):
+             theorem foo (p : Prop) (hp : p) : p := hp
+        2. NEVER simplify the conclusion to a trivial conjunction of the input hypotheses.
+        3. NEVER add new parameters of type `Prop` to replace concrete math objects.
+        4. If you cannot prove an existing theorem, LEAVE IT UNCHANGED (keep its current
+           proof or sorry if it already had one). Do NOT change its type signature.
+        5. New theorems you create may use abstract Prop parameters only if the paper label
+           genuinely refers to an abstract/wrapper statement.
+
         ## Completion Contract
         - No sorry / admit / axiom; lake build must pass with zero errors
         - Must complete all 6 steps; if a theorem is stuck, skip it and continue
@@ -722,6 +738,7 @@ def build_phase_c_prompt(round_num: int, targets: list[dict]) -> str:
         - Implementation changes: only in lean4/Omega/
         - Registration changes: only in IMPLEMENTATION_PLAN.md and theory/
         - Do NOT refactor or delete existing code
+        - Do NOT weaken or replace existing theorem signatures (see HARD PROHIBITION above)
         - Do NOT git push
     """)
 
@@ -741,14 +758,81 @@ def parse_phase_c_output(raw: str) -> PhaseCResult:
 # Worktree-based round execution
 # ---------------------------------------------------------------------------
 
+def detect_signature_degradation(wt: WorktreeInfo) -> list[str]:
+    """Detect theorems whose signatures were degraded to trivial Prop stubs.
+
+    Returns a list of violation descriptions. An empty list means no degradation.
+
+    Detection heuristic: scan git diff against base for `theorem paper_` blocks
+    where the new version has ONLY `Prop` parameters and a conclusion that is a
+    conjunction of those same propositions (pattern: `: P₁ ∧ P₂ ∧ ...`).
+    """
+    violations = []
+    try:
+        diff_out = run_cmd(
+            ["git", "diff", f"origin/{BASE_BRANCH}...HEAD", "--", "lean4/Omega/"],
+            cwd=wt.path,
+        )
+    except Exception:
+        return violations  # can't check, allow through
+
+    # Find blocks that add a `theorem paper_` with ONLY Prop parameters
+    # Pattern: lines starting with `+theorem paper_` whose signature uses only `Prop`
+    import re as _re
+    # Split diff into per-file chunks
+    chunks = _re.split(r'^diff --git ', diff_out, flags=_re.MULTILINE)
+    for chunk in chunks:
+        lines = chunk.splitlines()
+        added_lines = [l[1:] for l in lines if l.startswith('+') and not l.startswith('+++')]
+        removed_lines = [l[1:] for l in lines if l.startswith('-') and not l.startswith('---')]
+        added_text = '\n'.join(added_lines)
+        removed_text = '\n'.join(removed_lines)
+
+        # Find added paper_ theorems that have purely-Prop signatures
+        added_thms = _re.findall(
+            r'theorem (paper_\w+)\s+(.*?)(?=\ntheorem |\nend |\Z)',
+            added_text, _re.DOTALL
+        )
+        for thm_name, thm_body in added_thms:
+            # Check if body was also in removed (i.e. replacement, not new)
+            if thm_name not in removed_text:
+                continue  # purely new theorem, not a replacement — skip
+            # Extract parameter list up to first `:=` or `by`
+            param_match = _re.match(r'(.*?)(?::=\s|:= by\b|\n\s*by\b)', thm_body, _re.DOTALL)
+            if not param_match:
+                continue
+            params = param_match.group(1)
+            # Degrade pattern: all parameters are `(x : Prop)` or `(x y : Prop)`
+            # and no ℕ, ℝ, ℤ, List, Finset, Matrix, etc.
+            has_concrete = bool(_re.search(r':\s*(ℕ|ℝ|ℤ|ℚ|ℂ|ℕ→|ℝ→|Fin |List |Finset |Matrix |Set |Multiset )', params))
+            has_only_prop = bool(_re.search(r':\s*Prop\b', params)) and not has_concrete
+            if has_only_prop:
+                violations.append(
+                    f"{thm_name}: signature appears degraded to pure Prop parameters "
+                    f"(replaced concrete math types with abstract Prop)"
+                )
+    return violations
+
+
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
-    """Check for new commits in the worktree."""
+    """Check for new commits in the worktree. Also detects signature degradation."""
     post = git_log_oneline(10, cwd=wt.path)
     new = [c for c in post if c not in pre_commits]
     if new:
         logger.info(f"[R{wt.round_number}] Phase D: {len(new)} new commit(s):")
         for c in new:
             logger.info(f"  {c}")
+        # Check for signature degradation
+        violations = detect_signature_degradation(wt)
+        if violations:
+            for v in violations:
+                logger.error(f"[R{wt.round_number}] SIGNATURE DEGRADATION: {v}")
+            logger.error(
+                f"[R{wt.round_number}] Rejecting round: {len(violations)} theorem(s) had "
+                f"signatures replaced with trivial Prop stubs. "
+                f"Fix: keep original signature and leave proof as-is if stuck."
+            )
+            return False, new
         return True, new
     logger.warning(f"[R{wt.round_number}] Phase D: No new commits")
     return False, []
