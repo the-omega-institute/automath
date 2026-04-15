@@ -389,6 +389,10 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
             logger.error(f"update-ref failed: {update.stderr[:300]}")
             return False
 
+        # Align main working tree index + files with the new HEAD so that
+        # `git status` stays clean after the fast-forward.
+        run_cmd(["git", "reset", "--hard", "HEAD"], cwd=REPO_ROOT)
+
         # 4. Push BASE_BRANCH
         push = run_cmd(
             ["git", "push", "origin", BASE_BRANCH],
@@ -414,6 +418,7 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
                 ["git", "update-ref", f"refs/heads/{BASE_BRANCH}", wt_tip2],
                 cwd=REPO_ROOT,
             )
+            run_cmd(["git", "reset", "--hard", "HEAD"], cwd=REPO_ROOT)
             push2 = run_cmd(
                 ["git", "push", "origin", BASE_BRANCH], cwd=REPO_ROOT,
             )
