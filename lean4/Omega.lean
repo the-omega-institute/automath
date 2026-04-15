@@ -213,6 +213,7 @@ import Omega.SPG.ScanErrorMeasure
 import Omega.SPG.ErrorThreshold
 import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.NoiseBudgetRecovery
+import Omega.SPG.LpSuperellipsoidBoundaryVolumeDecoding
 import Omega.SPG.LpSuperellipsoidDecodingMultiplicativeNoiseStability
 import Omega.SPG.WeightedBoundaryDecomposition
 import Omega.SPG.WeightedBoundaryTransfer
@@ -830,6 +831,7 @@ import Omega.GU.Window6CyclicWeightThresholdRootLength
 import Omega.GU.Window6AdjointWeightMultiset
 import Omega.GU.TerminalFoldbin6TailCubeSection
 import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
+import Omega.GU.TerminalFoldbin6BitflipStabilityPolynomial
 import Omega.GU.TerminalFoldbin6BoundaryPureF9Alias
 import Omega.CircleDimension.PhaseSeparationPrecisionExponent
 import Omega.CircleDimension.PhasePrecisionTradeoffDyadic
@@ -993,6 +995,7 @@ import Omega.POM.ResidueRefinementJensen
 import Omega.POM.PositiveNegativeMomentCoupling
 import Omega.Conclusion.KrylovLowrankRigidity
 import Omega.Conclusion.BoundaryParityBlindFiltration
+import Omega.Conclusion.Window6BoundaryParityNotMeasurableFromF8
 import Omega.POM.SideinfoExactEntropy
 import Omega.SPG.BoundaryDominanceExponent
 import Omega.POM.CentralizerFPdim
