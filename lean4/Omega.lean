@@ -118,6 +118,7 @@ import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.YmConjugacyAllMge3
 import Omega.Folding.YmSofic
 import Omega.Folding.SyncDelay
+import Omega.Folding.YmSyncTail
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.AlternatingSingleSymbolSynchronizing
 import Omega.Folding.GmFischerCover
