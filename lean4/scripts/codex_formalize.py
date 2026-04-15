@@ -679,7 +679,20 @@ def build_phase_c_prompt(round_num: int, targets: list[dict]) -> str:
         If errors, fix them (up to 3 attempts per theorem).
         If a theorem is stuck, skip it and continue with the others.
 
-        ## Step 3: Git commit the proofs
+        ## Step 3: Sync with base branch before committing
+        Before making any commits, sync with the latest base to minimize merge conflicts:
+        ```bash
+        git fetch origin lean4-codex-auto-dev
+        git rebase origin/lean4-codex-auto-dev
+        ```
+        If rebase conflicts occur on lean4/Omega.lean or IMPLEMENTATION_PLAN.md,
+        resolve by keeping ALL lines from both sides (additive merge), then:
+        ```bash
+        git add <conflicted_file>
+        git rebase --continue
+        ```
+
+        ## Step 4: Git commit the proofs
         ```bash
         git add lean4/Omega/ lean4/Omega.lean
         git commit -m "R{round_num}: [brief description of what was proved]
@@ -687,12 +700,12 @@ def build_phase_c_prompt(round_num: int, targets: list[dict]) -> str:
         Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
         ```
 
-        ## Step 4: Update tracking + annotate
+        ## Step 5: Update tracking + annotate
         - Update lean4/IMPLEMENTATION_PLAN.md with new round info
         - Add \\leanverified{{theorem_name}} to the corresponding .tex files
           (find them via the paper_label, escape underscores as \\_)
 
-        ## Step 5: Git commit registration
+        ## Step 6: Git commit registration
         ```bash
         git add lean4/IMPLEMENTATION_PLAN.md theory/
         git commit -m "Register R{round_num}: [brief description]
@@ -704,7 +717,7 @@ def build_phase_c_prompt(round_num: int, targets: list[dict]) -> str:
 
         ## Completion Contract
         - No sorry / admit / axiom; lake build must pass with zero errors
-        - Must complete all 5 steps; if a theorem is stuck, skip it and continue
+        - Must complete all 6 steps; if a theorem is stuck, skip it and continue
         - Tactic failure: auto-try next; compile error: auto-fix up to 3 rounds
         - Implementation changes: only in lean4/Omega/
         - Registration changes: only in IMPLEMENTATION_PLAN.md and theory/
