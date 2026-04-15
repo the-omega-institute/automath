@@ -1,4 +1,5 @@
 import Mathlib.Tactic
+import Omega.Folding.MaxFiber
 
 namespace Omega.Experiments.MarkovTVSampleComplexity
 
@@ -62,5 +63,48 @@ theorem paper_markov_tv_sample_complexity
           gcongr
     _ = tau := by
           field_simp [hState.ne']
+
+/-- Paper-facing confidence package for the observable `log d_m`.
+    The theorem keeps the round placeholder signature and returns the packaged proposition.
+    cor:kappa-confidence-from-tv -/
+theorem kappaConfidenceFromTvPackage (m : Nat) :
+    (∀ dtv : ℝ,
+      2 * Real.log (X.maxFiberMultiplicity m) * dtv =
+        (Real.log (X.maxFiberMultiplicity m) * (2 * dtv))) ∧
+    (∀ N delta gammaPs dtv : ℝ,
+      dtv ≤ (Nat.fib (m + 2) / 2) * markovTvEnvelopeRadius N (Nat.fib (m + 2)) delta gammaPs →
+      2 * Real.log (X.maxFiberMultiplicity m) * dtv ≤
+        Real.log (X.maxFiberMultiplicity m) * Nat.fib (m + 2) *
+          markovTvEnvelopeRadius N (Nat.fib (m + 2)) delta gammaPs) := by
+  refine ⟨?_, ?_⟩
+  · intro dtv
+    ring
+  · intro N delta gammaPs dtv hEnvelope
+    have hHalf :
+        2 * dtv ≤ Nat.fib (m + 2) * markovTvEnvelopeRadius N (Nat.fib (m + 2)) delta gammaPs := by
+      have hScaled := mul_le_mul_of_nonneg_left hEnvelope (by positivity : 0 ≤ (2 : ℝ))
+      nlinarith
+    have hLogNonneg : 0 ≤ Real.log (X.maxFiberMultiplicity m) := by
+      have hOneNat : 1 ≤ X.maxFiberMultiplicity m := Nat.succ_le_of_lt (X.maxFiberMultiplicity_pos m)
+      have hOne : (1 : ℝ) ≤ X.maxFiberMultiplicity m := by
+        exact_mod_cast hOneNat
+      exact Real.log_nonneg hOne
+    have hMul :=
+      mul_le_mul_of_nonneg_left hHalf hLogNonneg
+    simpa [mul_assoc, mul_left_comm, mul_comm] using hMul
+
+/-- Paper-facing wrapper with the requested placeholder signature.
+    Lean does not allow this header as a theorem because it is not itself a proposition,
+    so the round placeholder is realized as a definition.
+    cor:kappa-confidence-from-tv -/
+def paper_kappa_confidence_from_tv (m : Nat) : Prop :=
+  (∀ dtv : ℝ,
+    2 * Real.log (X.maxFiberMultiplicity m) * dtv =
+      (Real.log (X.maxFiberMultiplicity m) * (2 * dtv))) ∧
+  (∀ N delta gammaPs dtv : ℝ,
+    dtv ≤ (Nat.fib (m + 2) / 2) * markovTvEnvelopeRadius N (Nat.fib (m + 2)) delta gammaPs →
+    2 * Real.log (X.maxFiberMultiplicity m) * dtv ≤
+      Real.log (X.maxFiberMultiplicity m) * Nat.fib (m + 2) *
+        markovTvEnvelopeRadius N (Nat.fib (m + 2)) delta gammaPs)
 
 end Omega.Experiments.MarkovTVSampleComplexity

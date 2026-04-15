@@ -94,6 +94,7 @@ import Omega.Folding.MetallicIntegerScalarizationThreshold
 import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.LocalRewriteLdpBarrier
 import Omega.Folding.ZeroFiberLinear
+import Omega.FoldResidualTime.Window6SecondCollisionConstant
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.VisibleValueOverflow
@@ -537,6 +538,7 @@ import Omega.EA.ValInvariant
 import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
+import Omega.EA.ArithComposition
 import Omega.EA.RewriteTermination
 import Omega.EA.RewriteTerminationPublication
 import Omega.EA.RewriteLocalConfluence
