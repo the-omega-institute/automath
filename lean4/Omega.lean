@@ -133,6 +133,7 @@ import Omega.SPG.F2FiberCardinality
 import Omega.SPG.CycleRankFormula
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicCubicalBoundaryInjective
+import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.ScreenKernelAuditCost
 import Omega.SPG.ScreenAuditCostMonotoneUnitDrop
 import Omega.SPG.ScreenKernelConnectedComponents
@@ -228,6 +229,7 @@ import Omega.RecursiveAddressing.GlobalLayerLogicOnly
 import Omega.RecursiveAddressing.ObserverIndexedCommonRefinementDecidability
 import Omega.RecursiveAddressing.ObserverIndexedFiniteResolutionObjectEligibility
 import Omega.RecursiveAddressing.ObserverIndexedReadingOfEmergentArithmetic
+import Omega.RecursiveAddressing.Refinement
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
 import Omega.Combinatorics.GramDet
@@ -545,6 +547,7 @@ import Omega.Conclusion.ZeckendorfEulerSeeds
 import Omega.Conclusion.IntermediateQuotientSeeds
 import Omega.Conclusion.JGEllipseConditionNumberThreshold
 import Omega.Conclusion.JGEllipseFixedEpsilonInformationBarrier
+import Omega.Conclusion.JGEllipsePackingSqrtLaw
 import Omega.Conclusion.SinglepointJetRigidity
 import Omega.Conclusion.RealInput40UVAtomCore
 import Omega.Conclusion.SmithRamanujanShadowSeeds
