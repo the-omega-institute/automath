@@ -241,6 +241,7 @@ import Omega.Topos.CharacterBlindObstructions
 import Omega.Topos.CharacterBlindObstructionsPublication
 import Omega.Topos.CharacterBlindObstructionsFocused
 import Omega.Topos.BranchDecomposition
+import Omega.Topos.BranchDecompositionPublication
 import Omega.Topos.ComponentGerbeDecomposition
 import Omega.Topos.CechBridgeCompatibleRealizations
 import Omega.Topos.GerbeNullSemantics
@@ -315,6 +316,7 @@ import Omega.Zeta.PrimitivePeterWeylTrace
 import Omega.Zeta.QuotientFunctoriality
 import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.AbelianShadowDefect
+import Omega.Zeta.CyclicDetectionBoundary
 import Omega.Zeta.ClassArtinMobiusTrace
 import Omega.Zeta.ClassFunctionAdamsMobius
 import Omega.Zeta.ClassFunctionLinearisation
@@ -684,6 +686,7 @@ import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.PressureSlopes
 import Omega.POM.RenyiEndpoint
+import Omega.POM.MaxFiberPublication
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
 import Omega.Conclusion.FibonacciAnomalyBlock
