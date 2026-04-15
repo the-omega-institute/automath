@@ -100,6 +100,7 @@ import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.SummableNatEventuallyZero
 import Omega.Folding.PeriodicCompressionRatio
 import Omega.Folding.PeriodicCountSandwich
+import Omega.Folding.YmZetaResidueRatio
 import Omega.Folding.YmPeriodicRigidity
 import Omega.Folding.RationalGeneratorGap
 import Omega.Folding.MetallicCompressionExtremum
@@ -737,6 +738,7 @@ import Omega.StatisticalStability.FixedResolutionPrimeSievePrecisionToZero
 import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 import Omega.TypedAddressBiaxialCompletion.CausalPreorder
 import Omega.TypedAddressBiaxialCompletion.BoundaryAddressCollision
+import Omega.TypedAddressBiaxialCompletion.ComovingDefectBound
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
@@ -746,6 +748,7 @@ import Omega.TypedAddressBiaxialCompletion.VisiblePhaseLift
 import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
 import Omega.PhysicalSpacetimeSkeleton.LocalSkeletonBeforeGlobalTrivialization
 import Omega.PhysicalSpacetimeSkeleton.AuditedSeedRankThree
+import Omega.PhysicalSpacetimeSkeleton.ContinuumLimitTemplate
 import Omega.PhysicalSpacetimeSkeleton.KernelizationTemplate
 import Omega.PhysicalSpacetimeSkeleton.InstantiationCriterion
 import Omega.PhysicalSpacetimeSkeleton.GlobalLorentzStructure
