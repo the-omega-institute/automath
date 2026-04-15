@@ -9,14 +9,16 @@
 | 总行数 | ~50,937 |
 | 定理/定义数 | ~4,442 |
 | 论文接口包装 | 800+ |
-| 文件数 | 222 |
+| 文件数 | 225 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3404 |
+| \leanverified 标注数 | 3407 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3453 |
-| 轮次 | R810（round_count=R810）|
+| 总标注数 | 3456 |
+| 轮次 | R811（round_count=R811）|
+
+**Phase R811（本轮落地，全流程执行）**：`paper_fredholm_witt_intro_cyclic_characterization`（对应 `thm:intro-cyclic-characterization`，Zeta；复用 cyclic-block realization / normal-realization characterization / dimension-optimality 包装，把导言主定理压成 intro-facing theorem wrapper，本轮 non-trivial 目标）；`paper_resolution_folding_g_m_fischer_cover`（对应 `cor:G-m-fischer-cover`，Folding；把 irreducibility、deterministic right-resolving presentation、singleton core、follower separation 与 Fischer-cover readout 串成 corollary-facing wrapper）；`paper_circle_dimension_poisson_symmetric_case`（对应 `cor:poisson-symmetric-case`，CircleDimension；把 two-channel hypothesis 下的 symmetry / `B \equiv 0` 等价与 `A` / `(\bar\gamma,A)` reconstruction readout 压成 corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 Zeta / Folding / CircleDimension，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/Zeta/IntroCyclicCharacterization.lean`、`lean4/Omega/Folding/GmFischerCover.lean`、`lean4/Omega/CircleDimension/PoissonSymmetricCase.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_fredholm_witt_intro_cyclic_characterization`、`paper_resolution_folding_g_m_fischer_cover`、`paper_circle_dimension_poisson_symmetric_case`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_fredholm_witt_cyclic_block_spectral_rigidity_symbolic_zeta/sec_introduction.tex`（`thm:intro-cyclic-characterization`），`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_presentation.tex`（`cor:G-m-fischer-cover`），`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_gram_space.tex`（`cor:poisson-symmetric-case`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R810（本轮落地，全流程执行）**：`paper_projection_collision_kernel`（对应 `thm:collision-kernel`，POM；把 finite-state kernel existence、matrix-vector realization 与 trim automaton witness 压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_zero_jitter_normal_form`（对应 `thm:normal-form`，GroupUnification；把 cylinder-information decomposition、occupation-number bulk term 与 Parry-point degeneracy 压成 theorem-facing wrapper）；`paper_conservative_extension_h1_free_no_blindness_focused`（对应 `cor:h1-free-no-blindness`，Topos；把 focused APAL 版本中的 `K_{\omega}=0 \leftrightarrow \omega=0` 与 proper intrinsic visible-quotient readout 压成 corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 POM / GroupUnification / Topos，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/POM/CollisionKernelPublication.lean`、`lean4/Omega/GroupUnification/NormalForm.lean`、`lean4/Omega/Topos/H1FreeNoBlindnessFocused.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_projection_collision_kernel`、`paper_zero_jitter_normal_form`、`paper_conservative_extension_h1_free_no_blindness_focused`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_projection_ontological_mathematics_core_tams/sec_moment_kernel.tex`（`thm:collision-kernel`），`/Users/chronoai/automath/papers/publication/submitted_2026_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp/main.tex`（`thm:normal-form`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal_focused/sec_homological_visibility.tex`（`cor:h1-free-no-blindness`）；新增 tex theorem/corollary/lemma 环境数 0）
 
