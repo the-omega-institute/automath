@@ -117,6 +117,7 @@ import Omega.Folding.MicrostateResidualWindowReachability
 import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.YmConjugacyAllMge3
 import Omega.Folding.YmSofic
+import Omega.Folding.YmAmbiguityShellDag
 import Omega.Folding.SyncDelay
 import Omega.Folding.YmSyncTail
 import Omega.Folding.TimeLayerDichotomy
@@ -205,6 +206,7 @@ import Omega.SPG.F2FiberCardinality
 import Omega.SPG.CycleRankFormula
 import Omega.SPG.BoundaryCycleRankFromEntropy
 import Omega.SPG.EllipsoidFluxDecodingPerturbationStability
+import Omega.SPG.GodelBoundaryDecodingRelativeErrorThreshold
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicCubicalBoundaryInjective
 import Omega.SPG.RegularLanguageStokesDyadicZetaRationality

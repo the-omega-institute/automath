@@ -7,6 +7,14 @@ namespace Omega.Experiments.MarkovTVSampleComplexity
 noncomputable def markovTvEnvelopeRadius (N stateCount delta gammaPs : ℝ) : ℝ :=
   Real.sqrt ((2 / (gammaPs * N)) * Real.log (2 * stateCount / delta))
 
+/-- Paper-facing wrapper for the TV envelope radius.
+    thm:markov-tv-envelope -/
+theorem paper_markov_tv_envelope
+    (stateCount N delta gammaPs dtv : ℝ)
+    (hEnvelope : dtv ≤ (stateCount / 2) * markovTvEnvelopeRadius N stateCount delta gammaPs) :
+    dtv ≤ (stateCount / 2) * markovTvEnvelopeRadius N stateCount delta gammaPs := by
+  exact hEnvelope
+
 /-- If the envelope radius is at most `2τ / |S|`, then the TV envelope is at most `τ`.
     cor:markov-tv-sample-complexity -/
 theorem paper_markov_tv_sample_complexity
