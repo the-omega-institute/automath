@@ -198,6 +198,7 @@ import Omega.SPG.F2FiberCardinality
 import Omega.SPG.CycleRankFormula
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicCubicalBoundaryInjective
+import Omega.SPG.SquareclassChainComplex
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.BoundaryGodelSequenceDeterminesClosure
 import Omega.SPG.ScreenKernelAuditCost
@@ -239,6 +240,7 @@ import Omega.Frontier.Conjectures
 import Omega.Frontier.Certificates
 import Omega.Frontier.NullTrichotomyLocalSection
 import Omega.Frontier.RecursiveAddressingNullTrichotomyLocalSection
+import Omega.RecursiveAddressing.PrefixSiteProjectiveRepTwist
 import Omega.LogicExpansionChain.FocusedConservativeComposition
 import Omega.LogicExpansionChain.StateTheoryMonotonicity
 import Omega.LogicExpansionChain.GluingFailureStateTheoryMonotonicityAPAL
@@ -282,6 +284,7 @@ import Omega.Topos.SheafificationRemovesGlueAPAL
 import Omega.Topos.FocusedSheafificationRemovesGlueAPAL
 import Omega.Topos.GluingFailureSheafificationCharacterizationAPAL
 import Omega.Topos.GluingFailureSheafLocalToGlobalAPAL
+import Omega.Conclusion.S4BoundaryTotalTorusRankConservation
 import Omega.Topos.GluingFailureSheafificationRemovesGlueAPAL
 import Omega.Topos.H2VanishingBlindness
 import Omega.Topos.H2VanishingBlindnessFocused
