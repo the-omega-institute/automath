@@ -35,6 +35,18 @@ def diagonalConsistencyRate (W : B → ℝ) (δ : ℝ) : ℝ :=
 def blockConsistencyRate (π : X → B) (w : X → ℝ) (δ : ℝ) : ℝ :=
   diagonalConsistencyRate (blockWeight π w) δ
 
+omit [DecidableEq X] in
+private theorem sum_blockWeight_eq_sum {X C : Type*} [Fintype X] [Fintype C] [DecidableEq C]
+    (π : X → C) (w : X → ℝ) :
+    ∑ c : C, blockWeight π w c = ∑ x : X, w x := by
+  classical
+  unfold blockWeight
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl ?_
+  intro x hx
+  simpa using
+    (Finset.sum_ite_eq' (s := (Finset.univ : Finset C)) (a := π x) (f := fun _ => w x))
+
 /-- Lift a block coupling by sampling independently inside each block. -/
 noncomputable def liftBlockCoupling (π : X → B) (w : X → ℝ) (C : BlockCoupling B) :
     X → X → ℝ :=
@@ -71,6 +83,17 @@ theorem paper_pom_block_consistency_rate_block_reduction
     rfl
   · intro C i j x y hx hy
     simp [liftBlockCoupling, hx, hy]
+
+/-- Refining the block labels cannot decrease the chapter-local consistency rate because the
+toy rate only depends on the total mass. -/
+theorem paper_pom_block_consistency_rate_refinement_monotone
+    {X B C : Type*} [Fintype X] [DecidableEq X] [Fintype B] [DecidableEq B] [Fintype C]
+    [DecidableEq C] (piP : X → B) (piQ : X → C) (w : X → ℝ) (δ : ℝ)
+    (hRefine : ∀ x y, piP x = piP y → piQ x = piQ y) :
+    blockConsistencyRate piP w δ ≥ blockConsistencyRate piQ w δ := by
+  let _ := hRefine
+  unfold blockConsistencyRate diagonalConsistencyRate
+  rw [sum_blockWeight_eq_sum, sum_blockWeight_eq_sum]
 
 end BlockReduction
 

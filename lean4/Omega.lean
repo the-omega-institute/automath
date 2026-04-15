@@ -213,6 +213,7 @@ import Omega.SPG.HolderOpenResonance
 import Omega.SPG.BoundaryRigidity
 import Omega.SPG.ContractionEstimate
 import Omega.SPG.ExplicitMinimizer
+import Omega.SPG.SturmianCylinderInformationTime
 import Omega.SPG.DiscreteStokesPoincarePublication
 import Omega.SPG.HypercubeNearDetailedBalancePublication
 import Omega.SPG.HypercubeGradientPublication
@@ -712,6 +713,7 @@ import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
+import Omega.TypedAddressBiaxialCompletion.VisiblePhaseLift
 import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
 import Omega.PhysicalSpacetimeSkeleton.LocalSkeletonBeforeGlobalTrivialization
 import Omega.PhysicalSpacetimeSkeleton.AuditedSeedRankThree
