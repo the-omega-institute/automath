@@ -104,6 +104,55 @@ lemma sigma4_bodyDiagonalVec : sigma4 bodyDiagonalVec = 1 / 3 := by
   nlinarith
 
 set_option maxHeartbeats 400000 in
+/-- Paper-facing quartic extremizer package for the `window-6` visible `B₃/C₃` supports:
+on the unit sphere both quartic moments are affine functions of `Σ₄(u)`, the sharp bounds
+`1 / 3 ≤ Σ₄(u) ≤ 1` force the `B₃` and `C₃` quartic extrema to occur on body-diagonal and axis
+directions in opposite order, and the axis/body-diagonal values realize those bounds. After the
+rebase, the canonical paper-facing theorem name is provided by
+`Window6B3C3QuarticDefectOnedim.lean`, so this file keeps the fuller package under a distinct
+name.
+    thm:window6-b3c3-quartic-axis-diagonal-reversal -/
+theorem paper_window6_b3c3_quartic_axis_diagonal_reversal_package :
+    (∀ u, squaredNorm u = 1 → b3QuarticMoment u = 12 - 2 * sigma4 u) ∧
+      (∀ u, squaredNorm u = 1 → c3QuarticMoment u = 12 + 28 * sigma4 u) ∧
+      (∀ u, squaredNorm u = 1 → 1 / 3 ≤ sigma4 u ∧ sigma4 u ≤ 1) ∧
+      b3QuarticMoment axisVec = 10 ∧
+      b3QuarticMoment bodyDiagonalVec = 34 / 3 ∧
+      c3QuarticMoment axisVec = 40 ∧
+      c3QuarticMoment bodyDiagonalVec = 64 / 3 ∧
+      (∀ u, squaredNorm u = 1 → 10 ≤ b3QuarticMoment u ∧ b3QuarticMoment u ≤ 34 / 3) ∧
+      (∀ u, squaredNorm u = 1 → 64 / 3 ≤ c3QuarticMoment u ∧ c3QuarticMoment u ≤ 40) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro u hunit
+    exact b3QuarticMoment_unit_formula u hunit
+  · intro u hunit
+    exact c3QuarticMoment_unit_formula u hunit
+  · intro u hunit
+    exact ⟨sigma4_lower_of_unit u hunit, sigma4_upper_of_unit u hunit⟩
+  · have hformula : b3QuarticMoment axisVec = 12 - 2 * sigma4 axisVec := by
+      exact b3QuarticMoment_unit_formula axisVec squaredNorm_axisVec
+    nlinarith [hformula, sigma4_axisVec]
+  · have hformula : b3QuarticMoment bodyDiagonalVec = 12 - 2 * sigma4 bodyDiagonalVec := by
+      exact b3QuarticMoment_unit_formula bodyDiagonalVec squaredNorm_bodyDiagonalVec
+    nlinarith [hformula, sigma4_bodyDiagonalVec]
+  · have hformula : c3QuarticMoment axisVec = 12 + 28 * sigma4 axisVec := by
+      exact c3QuarticMoment_unit_formula axisVec squaredNorm_axisVec
+    nlinarith [hformula, sigma4_axisVec]
+  · have hformula : c3QuarticMoment bodyDiagonalVec = 12 + 28 * sigma4 bodyDiagonalVec := by
+      exact c3QuarticMoment_unit_formula bodyDiagonalVec squaredNorm_bodyDiagonalVec
+    nlinarith [hformula, sigma4_bodyDiagonalVec]
+  · intro u hunit
+    have hformula : b3QuarticMoment u = 12 - 2 * sigma4 u := b3QuarticMoment_unit_formula u hunit
+    have hbounds : 1 / 3 ≤ sigma4 u ∧ sigma4 u ≤ 1 := by
+      exact ⟨sigma4_lower_of_unit u hunit, sigma4_upper_of_unit u hunit⟩
+    constructor <;> nlinarith [hformula, hbounds.1, hbounds.2]
+  · intro u hunit
+    have hformula : c3QuarticMoment u = 12 + 28 * sigma4 u := c3QuarticMoment_unit_formula u hunit
+    have hbounds : 1 / 3 ≤ sigma4 u ∧ sigma4 u ≤ 1 := by
+      exact ⟨sigma4_lower_of_unit u hunit, sigma4_upper_of_unit u hunit⟩
+    constructor <;> nlinarith [hformula, hbounds.1, hbounds.2]
+
+set_option maxHeartbeats 400000 in
 /-- The visible `B₃` and `C₃` quartic extremizers reverse between the axis and body-diagonal seed
 values.
     thm:window6-b3c3-quartic-axis-diagonal-reversal -/
