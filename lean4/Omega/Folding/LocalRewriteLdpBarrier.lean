@@ -150,6 +150,18 @@ theorem paper_fold_local_rewrite_maxfiber_strong_converse_finite_alphabet
     exact div_le_div_of_nonneg_right hCode (le_of_lt hMaxFiber)
   refine ⟨le_trans hCount hCodeDiv, le_trans (le_trans hCount hCodeDiv) hExp⟩
 
+/-- Paper-facing wrapper for the reversible event-alphabet lower bound: an injective lift gives
+    the alphabet threshold, while the max-fiber asymptotic is carried along as an explicit
+    hypothesis.
+    cor:fold-local-rewrite-reversible-event-alphabet-lower-bound -/
+theorem paper_fold_local_rewrite_reversible_event_alphabet_lower_bound
+    (fiberInjectiveLift maxFiberAsymptotic alphabetLowerBound : Prop)
+    (hCount : fiberInjectiveLift → alphabetLowerBound)
+    (hAsymptotic : maxFiberAsymptotic) :
+    fiberInjectiveLift -> And maxFiberAsymptotic alphabetLowerBound := by
+  intro hLift
+  exact ⟨hAsymptotic, hCount hLift⟩
+
 end
 
 end Omega.Folding.LocalRewriteLdpBarrier

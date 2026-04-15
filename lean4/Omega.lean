@@ -173,6 +173,7 @@ import Omega.SPG.ScanErrorDiscrete
 import Omega.SPG.ScanProjectionScanErrorCylinder
 import Omega.SPG.ScanProjectionBayesOptimality
 import Omega.SPG.BayesFiniteMistakesSummable
+import Omega.SPG.BoundaryDimensionAeStabilization
 import Omega.SPG.ScanErrorMeasure
 import Omega.SPG.ErrorThreshold
 import Omega.SPG.NoiseBudgetRecovery
@@ -270,6 +271,7 @@ import Omega.Frontier.OblivionBridge
 import Omega.Frontier.Conditional
 import Omega.PhysicalSpacetimeSkeleton.ClockTransportEquation
 import Omega.PhysicalSpacetimeSkeleton.LocalClockPotential
+import Omega.PhysicalSpacetimeSkeleton.LocalRedshift
 import Omega.Frontier.ConditionalSPG
 import Omega.Frontier.ConditionalArithmetic
 import Omega.Frontier.ConditionalSummary

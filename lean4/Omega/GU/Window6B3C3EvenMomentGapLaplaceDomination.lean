@@ -211,24 +211,28 @@ theorem paper_window6_b3c3_even_moment_gap_laplace_domination :
       ring
     · intro t
       exact ⟨rfl, axialLaplaceGap_nonneg t, axialLaplaceGap_eq_zero_iff t⟩
-  · refine ⟨?_, ?_, ?_, ?_⟩
-    · intro m _hm u
-      unfold c3AxisEvenMoment b3AxisEvenMoment
-      ring
-    · intro t
-      unfold c3AxisTheta b3AxisTheta axisCoshGapSum
-      ring
-    · intro t
-      have hgap : c3AxisTheta t - b3AxisTheta t = 2 * axisCoshGapSum t := by
+  · exact ⟨
+      (by
+        intro m _hm u
+        unfold c3AxisEvenMoment b3AxisEvenMoment
+        ring),
+      (by
+        intro t
         unfold c3AxisTheta b3AxisTheta axisCoshGapSum
-        ring
-      have hnonneg : 0 ≤ axisCoshGapSum t := axisCoshGapSum_nonneg t
-      linarith
-    · intro t ht
-      have hgap : c3AxisTheta t - b3AxisTheta t = 2 * axisCoshGapSum t := by
-        unfold c3AxisTheta b3AxisTheta axisCoshGapSum
-        ring
-      have hpos : 0 < axisCoshGapSum t := axisCoshGapSum_pos_of_ne_zero ht
-      linarith
+        ring),
+      (by
+        intro t
+        have hgap : c3AxisTheta t - b3AxisTheta t = 2 * axisCoshGapSum t := by
+          unfold c3AxisTheta b3AxisTheta axisCoshGapSum
+          ring
+        have hnonneg : 0 ≤ axisCoshGapSum t := axisCoshGapSum_nonneg t
+        linarith),
+      (by
+        intro t ht
+        have hgap : c3AxisTheta t - b3AxisTheta t = 2 * axisCoshGapSum t := by
+          unfold c3AxisTheta b3AxisTheta axisCoshGapSum
+          ring
+        have hpos : 0 < axisCoshGapSum t := axisCoshGapSum_pos_of_ne_zero ht
+        linarith)⟩
 
 end Omega.GU
