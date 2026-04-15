@@ -131,4 +131,27 @@ end
 
 end PointwiseInvisible
 
+/-- Concrete counterexample showing why the requested wrapper statement is unprovable from only a
+surjective `pi` and pointwise vanishing on the listed `alpha`-generators: `phi = Prod.snd` kills
+`alpha = 0`, but it is not constant on the fibers of `pi = Prod.fst`. -/
+theorem paper_recursive_addressing_prefix_site_min_visible_quotient_counterexample :
+    let pi : Nat × Nat → Nat := fun x => x.1
+    let alpha : Unit → Nat × Nat := fun _ => (0, 0)
+    (∀ i, pi (alpha i) = 0) ∧
+      (∀ i, (fun x : Nat × Nat => x.2) (alpha i) = 0) ∧
+      ¬ ∃! phiVis : Nat → Nat, (fun x : Nat × Nat => x.2) = phiVis ∘ pi := by
+  let pi : Nat × Nat → Nat := fun x => x.1
+  let alpha : Unit → Nat × Nat := fun _ => (0, 0)
+  refine ⟨?_, ?_, ?_⟩
+  · intro i
+    rfl
+  · intro i
+    rfl
+  · intro hfactor
+    rcases hfactor with ⟨phiVis, hphi, _uniq⟩
+    have h00 := congrFun hphi (0, 0)
+    have h01 := congrFun hphi (0, 1)
+    simp at h00 h01
+    omega
+
 end Omega.RecursiveAddressing

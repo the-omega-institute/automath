@@ -92,6 +92,7 @@ import Omega.Folding.EndpointUnique
 import Omega.Folding.ImageSubshiftZeta
 import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.YmConjugacyAllMge3
+import Omega.Folding.YmSofic
 import Omega.Folding.SyncDelay
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Graph.LabeledGraph
@@ -139,6 +140,7 @@ import Omega.SPG.DyadicCubicalBoundaryInjective
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.ScreenKernelAuditCost
 import Omega.SPG.ScreenAuditCostMonotoneUnitDrop
+import Omega.SPG.ScreenRankMatroidSupermodularity
 import Omega.SPG.ScreenKernelConnectedComponents
 import Omega.SPG.GodelDoublelog
 import Omega.SPG.WalshStokes
