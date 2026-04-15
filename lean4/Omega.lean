@@ -185,6 +185,7 @@ import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CurlReconstructionPublication
 import Omega.SPG.CubePoincareInverse
 import Omega.SPG.HomotopyDecomposition
+import Omega.SPG.MinkowskiReadout
 import Omega.SPG.OptimalContinuousInversePublication
 import Omega.SPG.PolycubeAdhesion
 import Omega.SPG.TotalDegreeMomentThreshold
@@ -247,6 +248,7 @@ import Omega.Topos.ComponentGerbeDecomposition
 import Omega.Topos.CechBridgeCompatibleRealizations
 import Omega.Topos.GerbeNullSemantics
 import Omega.Topos.GerbeNullSemanticsPublication
+import Omega.Topos.GlobalSectionsNeutralComponents
 import Omega.Topos.MinimalInformationCostOfStrictification
 import Omega.Topos.TerminalFibreNeutrality
 import Omega.Topos.VisibleQuotientCharacterSeparation
@@ -506,6 +508,7 @@ import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
 import Omega.CircleDimension.PoissonKLEighth
 import Omega.CircleDimension.PoissonKLEvenOrders
+import Omega.CircleDimension.PoissonSecondOrder
 import Omega.CircleDimension.PoissonDefectLadder
 import Omega.CircleDimension.PoissonDefectAmplification
 import Omega.CircleDimension.PoissonDefectStability
