@@ -424,6 +424,7 @@ import Omega.FoldResidualTime.IidBlockFactorization
 import Omega.Principles.GoldenBranchFibonacciCoprime
 import Omega.Preliminaries.EmpiricalFrequencyBounds
 import Omega.Experiments.MultiscaleResidual
+import Omega.Experiments.TVCertificateHist
 import Omega.StatisticalStability.ResidueClassification
 import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting

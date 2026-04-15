@@ -19,4 +19,12 @@ theorem paper_logic_expansion_singleton_conservativity_package
     (∀ σ ∈ ({ρ} : Set Val), satisfies σ φ) ↔ satisfies ρ φ :=
   paper_logic_expansion_singleton_conservativity_seeds satisfies ρ φ
 
+/-- Paper-facing theorem: singleton-state forcing is exactly pointwise satisfaction.
+    prop:logic-expansion-singleton-conservativity -/
+theorem paper_logic_expansion_singleton_conservativity
+    {Val Formula : Type} (satisfies : Val → Formula → Prop)
+    (ρ : Val) (φ : Formula) :
+    (∀ σ ∈ ({ρ} : Set Val), satisfies σ φ) ↔ satisfies ρ φ :=
+  paper_logic_expansion_singleton_conservativity_seeds satisfies ρ φ
+
 end Omega.LogicExpansionChain.SingletonConservativity
