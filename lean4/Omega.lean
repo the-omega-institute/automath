@@ -183,6 +183,7 @@ import Omega.SPG.CollisionProfileRestoration
 import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CurlReconstructionPublication
 import Omega.SPG.CubePoincareInverse
+import Omega.SPG.HomotopyDecomposition
 import Omega.SPG.OptimalContinuousInversePublication
 import Omega.SPG.PolycubeAdhesion
 import Omega.SPG.TotalDegreeMomentThreshold
@@ -387,6 +388,7 @@ import Omega.Zeta.OperatorFixedKernelLocalDensityObstruction
 import Omega.Zeta.CyclicLiftGcdLcm
 import Omega.Zeta.SyncCyclotomicDegreeLaw
 import Omega.Zeta.SyncCyclotomicDegreeLawPublication
+import Omega.Zeta.RootSeparation
 import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Zeta.SyncRhoM2Publication
 import Omega.Zeta.SyncKernelSpectrum
@@ -681,6 +683,7 @@ import Omega.POM.PressureConvexity
 import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.PressureSlopes
+import Omega.POM.RenyiEndpoint
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
 import Omega.Conclusion.FibonacciAnomalyBlock
