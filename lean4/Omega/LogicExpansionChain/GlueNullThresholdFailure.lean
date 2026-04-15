@@ -12,7 +12,6 @@ theorem paper_logic_expansion_glue_null_threshold_failure
     {p : State} {r : Ref}
     (hNullGlue : CompSec address F p r ∧ ¬ Sec address F p r) :
     ¬ (∀ W : CompatibleLocalFamily Obj Section,
-        W.target = address p r →
         W.compatible →
         (∀ i, W.localSec i ∈ F (W.cover i)) →
         ∃ σ, σ ∈ F W.target) := by

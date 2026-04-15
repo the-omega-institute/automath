@@ -96,6 +96,7 @@ import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.LocalRewriteLdpBarrier
 import Omega.Folding.ZeroFiberLinear
 import Omega.FoldResidualTime.Window6SecondCollisionConstant
+import Omega.FoldResidualTime.ApparentRandomnessFreezingEscort
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.VisibleValueOverflow
@@ -657,6 +658,7 @@ import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 import Omega.TypedAddressBiaxialCompletion.CausalPreorder
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive
+import Omega.PhysicalSpacetimeSkeleton.LocalSkeletonBeforeGlobalTrivialization
 import Omega.PhysicalSpacetimeSkeleton.AuditedSeedRankThree
 import Omega.PhysicalSpacetimeSkeleton.KernelizationTemplate
 import Omega.PhysicalSpacetimeSkeleton.InstantiationCriterion
