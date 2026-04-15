@@ -397,6 +397,7 @@ import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Zeta.SyncRhoM2Publication
 import Omega.Zeta.SyncKernelSpectrum
 import Omega.Zeta.CyclicFredholmRealization
+import Omega.Zeta.BlockCyclicRigidity
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -621,6 +622,7 @@ import Omega.GroupUnification.FiniteTimeLaw
 import Omega.GroupUnification.TiltDynamics
 import Omega.GroupUnification.TiltedFreeEnergy
 import Omega.GroupUnification.FreeEnergyComposition
+import Omega.GroupUnification.VarianceTransfer
 import Omega.CD.AnomalyCompressionOverhead
 import Omega.CD.PeriodicPointCount
 import Omega.CircleDimension.MultiPrimeSpectrum
@@ -692,6 +694,7 @@ import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.PressureSlopes
 import Omega.POM.RenyiEndpoint
+import Omega.POM.LambdaAlgebraic
 import Omega.POM.MaxFiberPublication
 import Omega.POM.ZeroTempConcentration
 import Omega.POM.DoubleLimit
