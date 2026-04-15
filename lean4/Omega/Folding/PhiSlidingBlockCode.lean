@@ -54,4 +54,10 @@ theorem paper_phi_m_sliding_block_code :
    slideBlockCode_shift_equivariant,
    slideBlockCode_shift_apply⟩
 
+/-- Paper-facing radius statement for `Φ_m`.
+    prop:Phi_m-radius -/
+theorem paper_phi_m_radius {A B : Type*} (m : ℕ) (f : (Fin m → A) → B) (s : ℤ → A) (t : ℤ) :
+    slideBlockCode m f s t = f (fun i => s (t + i.val)) := by
+  exact slideBlockCode_apply m f s t
+
 end Omega.Folding

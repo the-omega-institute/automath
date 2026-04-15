@@ -488,6 +488,7 @@ import Omega.POM.HighMultiplicitySparse
 import Omega.GU.MinSectorBudget
 import Omega.GU.NapSo10AnalyticMinimality
 import Omega.GU.BdryZ2JumpUniqueness
+import Omega.GU.BdryBinaryLayeringOrbitClassification
 import Omega.GU.BdryOrientationTsubsetLucasParity
 import Omega.GU.Window6DoubleLock12
 import Omega.GU.StrongLumpabilitySpectralRigidity
