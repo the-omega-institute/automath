@@ -106,6 +106,7 @@ import Omega.Folding.BlockBijectionThreshold
 import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.PhiMemoryThresholdExact
 import Omega.Folding.BlockCountsThreshold
+import Omega.Folding.LinearTimeBlockDecoding
 import Omega.Folding.YmExactSFTOrder
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
@@ -278,6 +279,7 @@ import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
 import Omega.Zeta.ClassMertensExplicit
 import Omega.Zeta.ClassMertensFourier
+import Omega.Zeta.ClassPrimitiveTrivialSplit
 import Omega.Zeta.PrimitivePeterWeylDeterminant
 import Omega.Zeta.PrimitivePeterWeylTrace
 import Omega.Zeta.QuotientFunctoriality
@@ -459,6 +461,7 @@ import Omega.CircleDimension.OperationalHalfCircleDimensionNd
 import Omega.CircleDimension.HaarPullbackUniqueness
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
+import Omega.CircleDimension.PoissonKLEighth
 import Omega.CircleDimension.PoissonDefectLadder
 import Omega.CircleDimension.PoissonDefectAmplification
 import Omega.CircleDimension.PoissonDefectStability
