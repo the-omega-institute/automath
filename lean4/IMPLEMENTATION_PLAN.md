@@ -8,15 +8,17 @@
 |---|---|
 | 总行数 | ~50,876 |
 | 定理/定义数 | ~4,439 |
-| 论文接口包装 | 788+ |
-| 文件数 | 207 |
+| 论文接口包装 | 791+ |
+| 文件数 | 210 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~12,126 |
 | 论文定理环境总数（appendix） | ~1,453 |
-| \leanverified 标注数 | 3350 |
+| \leanverified 标注数 | 3353 |
 | \leanpartial 标注数 | 49 |
-| 总标注数 | 3399 |
-| 轮次 | R783（round_count=R783）|
+| 总标注数 | 3402 |
+| 轮次 | R784（round_count=R784）|
+
+**Phase R784（本轮落地，全流程执行）**：`paper_circle_dimension_poisson_kl_eighth`（对应 `thm:poisson-kl-eighth`，CircleDimension；把 eighth-order Poisson KL expansion 的四阶/六阶/八阶显式系数 readout 压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_etds_class_primitive_trivial_split`（对应 `lem:class-primitive-trivial-split`，Zeta；把 conjugacy-class primitive decomposition 中 trivial Peter--Weyl channel 与非平凡通道余项分拆成 lemma-facing wrapper）；`paper_resolution_folding_linear_time_block_decoding`（对应 `cor:linear-time-block-decoding`，Folding；把 length-`m` 初始化与逐步右解析延拓压成 finite-block decoding corollary-facing wrapper）；本轮 `\leanverified` +3，覆盖章节为 CircleDimension / Zeta / Folding，降级项数 0，non-trivial 计数 1；文件：`lean4/Omega/CircleDimension/PoissonKLEighth.lean`、`lean4/Omega/Zeta/ClassPrimitiveTrivialSplit.lean`、`lean4/Omega/Folding/LinearTimeBlockDecoding.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_circle_dimension_poisson_kl_eighth`、`paper_etds_class_primitive_trivial_split`、`paper_resolution_folding_linear_time_block_decoding`；tex 路径：`/Users/chronoai/automath/papers/publication/2026_circle_dimension_haar_pullback_cauchy_weight_jfa/sec_entropy_asymptotics.tex`（`thm:poisson-kl-eighth`），`/Users/chronoai/automath/papers/publication/2026_dynamical_zeta_finite_part_spectral_fingerprint_etds/sec_chebotarev.tex`（`lem:class-primitive-trivial-split`），`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_reconstruction.tex`（`cor:linear-time-block-decoding`）；新增 tex theorem/corollary/lemma 环境数 0）
 
 **Phase R783（本轮落地，全流程执行）**：`paper_resolution_folding_y_m_exact_sft_order`（对应 `thm:Y-m-exact-SFT-order`，Folding；把 folded alphabet 上“`m`-step SFT 且非 `(m-1)`-step”的 exact-order readout 直接压成 theorem-facing wrapper，本轮 non-trivial 目标）；`paper_recursive_addressing_prefix_site_spectral_definability_avis`（对应 `thm:prefix-site-spectral-definability-avis`，RecursiveAddressing；把 visible quotient 的 annihilator identification 与 spectral definability criterion 合并成 proposition-facing wrapper）；`paper_conservative_extension_intrinsic_prime_decomposition`（对应 `thm:intrinsic-prime-decomposition`，Topos；把 intrinsic evaluation / hidden subgroup / visible quotient 的 `p`-primary decomposition 以及 budget multiplicative/additive readout 压成 proposition-facing wrapper，本轮 non-trivial 目标）；本轮 `\leanverified` +3，覆盖章节为 Folding / RecursiveAddressing / Topos，降级项数 0，non-trivial 计数 2；文件：`lean4/Omega/Folding/YmExactSFTOrder.lean`、`lean4/Omega/RecursiveAddressing/SpectralDefinabilityAvis.lean`、`lean4/Omega/Topos/IntrinsicPrimeDecomposition.lean`、`lean4/Omega.lean`；Lean theorem 名：`paper_resolution_folding_y_m_exact_sft_order`、`paper_recursive_addressing_prefix_site_spectral_definability_avis`、`paper_conservative_extension_intrinsic_prime_decomposition`；tex 路径：`/Users/chronoai/automath/papers/publication/submitted_2026_resolution_folding_core_symbolic_dynamics_jnt/sections/sec_rigidity_reconstruction.tex`（`thm:Y-m-exact-SFT-order`），`/Users/chronoai/automath/papers/publication/2026_recursive_addressing_prefix_sites_tac/main.tex`（`thm:prefix-site-spectral-definability-avis`），`/Users/chronoai/automath/papers/publication/2026_conservative_extension_chain_state_forcing_apal/sec_homological_visibility.tex`（`thm:intrinsic-prime-decomposition`）；新增 tex theorem/corollary/lemma 环境数 0）
 
