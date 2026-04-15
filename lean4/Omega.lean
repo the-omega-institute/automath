@@ -756,6 +756,9 @@ import Omega.GU.EllipticGateMinimalRegister
 import Omega.GU.SideInformationBitLowerBound
 import Omega.GU.FixedPrecisionExponentialMultiplicity
 import Omega.GU.IndistinguishablePairsCollisionProbability
+import Omega.FoldResidualTime.Window6FixedFreezingLaw
+import Omega.SPG.GodelAxisBoundaryInvertibility
+import Omega.GU.EllipticGatePrimeSpectrumClassification
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse
