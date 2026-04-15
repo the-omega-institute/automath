@@ -202,6 +202,7 @@ import Omega.SPG.BoundaryCycleAuditQueryLowerBound
 import Omega.SPG.F2FiberCardinality
 import Omega.SPG.CycleRankFormula
 import Omega.SPG.BoundaryCycleRankFromEntropy
+import Omega.SPG.EllipsoidFluxDecodingPerturbationStability
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicCubicalBoundaryInjective
 import Omega.SPG.RegularLanguageStokesDyadicZetaRationality
@@ -615,11 +616,13 @@ import Omega.CircleDimension.PoissonSecondOrder
 import Omega.CircleDimension.PoissonDefectLadder
 import Omega.CircleDimension.PoissonDefectAmplification
 import Omega.CircleDimension.PoissonDefectStability
+import Omega.CircleDimension.DiscreteStokesInversionHypercube
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
 import Omega.Conclusion.AlphabetThreshold
 import Omega.FoldResidualTime.IidBlockFactorization
+import Omega.FoldResidualTime.FoldKLPythagorasIProjection
 import Omega.Principles.GoldenBranchFibonacciCoprime
 import Omega.Preliminaries.EmpiricalFrequencyBounds
 import Omega.Experiments.MultiscaleResidual
