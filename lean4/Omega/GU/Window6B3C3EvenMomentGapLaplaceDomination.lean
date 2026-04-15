@@ -1,3 +1,4 @@
+import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
 import Mathlib.Tactic
 import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
@@ -118,28 +119,116 @@ lemma axialLaplaceGap_eq_zero_iff (t : ℝ × ℝ × ℝ) :
   · rintro rfl
     simp [axialLaplaceGap]
 
-/-- Paper wrapper for the even-moment gap and strict Laplace domination coming from the six
-    axial weights where the visible `B₃` and `C₃` supports differ.
+/-- The axis-only even-power contribution that distinguishes the `B₃` and `C₃`
+window-6 dictionaries. -/
+def axisEvenPowerSum (m : Nat) (u : ℝ × ℝ × ℝ) : ℝ :=
+  u.1 ^ (2 * m) + u.2.1 ^ (2 * m) + u.2.2 ^ (2 * m)
+
+/-- The six axis weights in the `B₃` normalization contribute `±u_i`. -/
+def b3AxisEvenMoment (m : Nat) (u : ℝ × ℝ × ℝ) : ℝ :=
+  2 * axisEvenPowerSum m u
+
+/-- The six axis weights in the `C₃` normalization contribute `±2u_i`. -/
+def c3AxisEvenMoment (m : Nat) (u : ℝ × ℝ × ℝ) : ℝ :=
+  2 * (2 : ℝ) ^ (2 * m) * axisEvenPowerSum m u
+
+/-- The axis-only part of the `B₃` Laplace transform. -/
+noncomputable def b3AxisTheta (t : ℝ × ℝ × ℝ) : ℝ :=
+  2 * (Real.cosh t.1 + Real.cosh t.2.1 + Real.cosh t.2.2)
+
+/-- The axis-only part of the `C₃` Laplace transform. -/
+noncomputable def c3AxisTheta (t : ℝ × ℝ × ℝ) : ℝ :=
+  2 * (Real.cosh (2 * t.1) + Real.cosh (2 * t.2.1) + Real.cosh (2 * t.2.2))
+
+/-- The coordinatewise cosh gap appearing in the Laplace domination formula. -/
+noncomputable def axisCoshGapSum (t : ℝ × ℝ × ℝ) : ℝ :=
+  (Real.cosh (2 * t.1) - Real.cosh t.1) +
+    (Real.cosh (2 * t.2.1) - Real.cosh t.2.1) +
+    (Real.cosh (2 * t.2.2) - Real.cosh t.2.2)
+
+lemma axis_cosh_gap_nonneg (x : ℝ) : 0 ≤ Real.cosh (2 * x) - Real.cosh x := by
+  have hcosh : 1 ≤ Real.cosh x := Real.one_le_cosh x
+  have hident : Real.cosh x ^ 2 - Real.sinh x ^ 2 = 1 := Real.cosh_sq_sub_sinh_sq x
+  rw [Real.cosh_two_mul]
+  nlinarith
+
+lemma axis_cosh_gap_pos {x : ℝ} (hx : x ≠ 0) : 0 < Real.cosh (2 * x) - Real.cosh x := by
+  have hcosh : 1 < Real.cosh x := (Real.one_lt_cosh).2 hx
+  have hident : Real.cosh x ^ 2 - Real.sinh x ^ 2 = 1 := Real.cosh_sq_sub_sinh_sq x
+  rw [Real.cosh_two_mul]
+  nlinarith
+
+lemma axisCoshGapSum_nonneg (t : ℝ × ℝ × ℝ) : 0 ≤ axisCoshGapSum t := by
+  unfold axisCoshGapSum
+  nlinarith [axis_cosh_gap_nonneg t.1, axis_cosh_gap_nonneg t.2.1, axis_cosh_gap_nonneg t.2.2]
+
+lemma axisCoshGapSum_pos_of_ne_zero {t : ℝ × ℝ × ℝ} (ht : t ≠ (0, 0, 0)) :
+    0 < axisCoshGapSum t := by
+  rcases t with ⟨x, y, z⟩
+  change (x, y, z) ≠ (0, 0, 0) at ht
+  have hxyz : x ≠ 0 ∨ y ≠ 0 ∨ z ≠ 0 := by
+    by_contra hxyz
+    push_neg at hxyz
+    exact ht (by ext <;> simp [hxyz.1, hxyz.2.1, hxyz.2.2])
+  rcases hxyz with hx | hy | hz
+  · unfold axisCoshGapSum
+    nlinarith [axis_cosh_gap_pos hx, axis_cosh_gap_nonneg y, axis_cosh_gap_nonneg z]
+  · unfold axisCoshGapSum
+    nlinarith [axis_cosh_gap_nonneg x, axis_cosh_gap_pos hy, axis_cosh_gap_nonneg z]
+  · unfold axisCoshGapSum
+    nlinarith [axis_cosh_gap_nonneg x, axis_cosh_gap_nonneg y, axis_cosh_gap_pos hz]
+
+/-- Paper wrappers for the even-moment gap and strict Laplace domination coming from the six
+    axial weights where the visible `B₃` and `C₃` supports differ, together with the
+    axis-only `B₃`/`C₃` comparison formulas.
     thm:window6-b3c3-even-moment-gap-laplace-domination -/
 theorem paper_window6_b3c3_even_moment_gap_laplace_domination :
-    (axialB3Support ⊆ b3VisibleSupport ∧ axialC3Support ⊆ c3VisibleSupport) ∧
-    (∀ m : Nat, 1 ≤ m → ∀ u : ℝ × ℝ × ℝ,
-      axialEvenMomentGap m u =
-        2 * (((2 : ℝ) ^ (2 * m)) - 1) * (u.1 ^ (2 * m) + u.2.1 ^ (2 * m) + u.2.2 ^ (2 * m))) ∧
-    (∀ t : ℝ × ℝ × ℝ,
-      axialLaplaceGap t =
-        2 * ((Real.cosh (2 * t.1) - Real.cosh t.1) +
-          (Real.cosh (2 * t.2.1) - Real.cosh t.2.1) +
-          (Real.cosh (2 * t.2.2) - Real.cosh t.2.2)) ∧
-      0 ≤ axialLaplaceGap t ∧
-      (axialLaplaceGap t = 0 ↔ t = (0, 0, 0))) := by
-  refine ⟨⟨axialB3Support_subset_visible, axialC3Support_subset_visible⟩, ?_, ?_⟩
-  · intro m hm u
-    let _ := hm
-    unfold axialEvenMomentGap
-    rw [even_gap_axis_formula, even_gap_axis_formula, even_gap_axis_formula]
+    (((axialB3Support ⊆ b3VisibleSupport ∧ axialC3Support ⊆ c3VisibleSupport) ∧
+        (∀ m : Nat, 1 ≤ m → ∀ u : ℝ × ℝ × ℝ,
+          axialEvenMomentGap m u =
+            2 * (((2 : ℝ) ^ (2 * m)) - 1) *
+              (u.1 ^ (2 * m) + u.2.1 ^ (2 * m) + u.2.2 ^ (2 * m))) ∧
+        (∀ t : ℝ × ℝ × ℝ,
+          axialLaplaceGap t =
+            2 * ((Real.cosh (2 * t.1) - Real.cosh t.1) +
+              (Real.cosh (2 * t.2.1) - Real.cosh t.2.1) +
+              (Real.cosh (2 * t.2.2) - Real.cosh t.2.2)) ∧
+          0 ≤ axialLaplaceGap t ∧
+          (axialLaplaceGap t = 0 ↔ t = (0, 0, 0)))) ∧
+      ((∀ m : Nat, 1 ≤ m → ∀ u : ℝ × ℝ × ℝ,
+          c3AxisEvenMoment m u - b3AxisEvenMoment m u =
+            2 * ((2 : ℝ) ^ (2 * m) - 1) * axisEvenPowerSum m u) ∧
+        (∀ t : ℝ × ℝ × ℝ,
+          c3AxisTheta t - b3AxisTheta t = 2 * axisCoshGapSum t) ∧
+        (∀ t : ℝ × ℝ × ℝ, b3AxisTheta t ≤ c3AxisTheta t) ∧
+        (∀ t : ℝ × ℝ × ℝ, t ≠ (0, 0, 0) → b3AxisTheta t < c3AxisTheta t))) := by
+  refine ⟨?_, ?_⟩
+  · refine ⟨⟨axialB3Support_subset_visible, axialC3Support_subset_visible⟩, ?_, ?_⟩
+    · intro m hm u
+      let _ := hm
+      unfold axialEvenMomentGap
+      rw [even_gap_axis_formula, even_gap_axis_formula, even_gap_axis_formula]
+      ring
+    · intro t
+      exact ⟨rfl, axialLaplaceGap_nonneg t, axialLaplaceGap_eq_zero_iff t⟩
+  · refine ⟨?_, ?_, ?_, ?_⟩
+  · intro m _hm u
+    unfold c3AxisEvenMoment b3AxisEvenMoment
     ring
   · intro t
-    exact ⟨rfl, axialLaplaceGap_nonneg t, axialLaplaceGap_eq_zero_iff t⟩
+    unfold c3AxisTheta b3AxisTheta axisCoshGapSum
+    ring
+  · intro t
+    have hgap : c3AxisTheta t - b3AxisTheta t = 2 * axisCoshGapSum t := by
+      unfold c3AxisTheta b3AxisTheta axisCoshGapSum
+      ring
+    have hnonneg : 0 ≤ axisCoshGapSum t := axisCoshGapSum_nonneg t
+    linarith
+  · intro t ht
+    have hgap : c3AxisTheta t - b3AxisTheta t = 2 * axisCoshGapSum t := by
+      unfold c3AxisTheta b3AxisTheta axisCoshGapSum
+      ring
+    have hpos : 0 < axisCoshGapSum t := axisCoshGapSum_pos_of_ne_zero ht
+    linarith
 
 end Omega.GU
