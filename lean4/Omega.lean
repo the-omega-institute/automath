@@ -56,6 +56,7 @@ import Omega.Folding.Defect
 import Omega.Folding.DiscreteStokesAuditableBound
 import Omega.Folding.DiscreteStokesDefectPublication
 import Omega.Folding.StokesDefectHaarMixing
+import Omega.Folding.StokesDefectParityPolarization
 import Omega.Folding.PiFunctorialGolden
 import Omega.Folding.NormalizeThenTruncateFunctorial
 import Omega.Folding.TailPatchIncomplete
@@ -109,6 +110,7 @@ import Omega.Folding.ZeroFiberLinear
 import Omega.FoldResidualTime.Window6SecondCollisionConstant
 import Omega.FoldResidualTime.ApparentRandomnessFreezingEscort
 import Omega.GU.Window6B3C3QuarticDefectOnedim
+import Omega.GU.Window6B3C3QuarticRankoneHarmonicDetector
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.FreeInvolutionCount
 import Omega.Folding.ModRigidityPeriodicPredicates
@@ -164,6 +166,7 @@ import Omega.Folding.ExactMarkovOrderBernoulli
 import Omega.Folding.YmConjugacyCollapse
 import Omega.Folding.ResidueMarkovOrder
 import Omega.Folding.FoldSuitePublication
+import Omega.EA.PrimeRegisterNormalFormUniqueness
 import Omega.PhysicalSpacetimeSkeleton.DerivedStressEnergyConservation
 import Omega.PhysicalSpacetimeSkeleton.AdmissibleEinsteinClosureMain
 import Omega.PhysicalSpacetimeSkeleton.AdmissibleGlobalEinsteinEquation
