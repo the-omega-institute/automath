@@ -2,12 +2,13 @@
 """Oracle Pipeline v2 — 两条管线、条件循环、每步 commit、轮次追踪。
 
 ═══════════════════════════════════════════════════════════════
-管线一: 新文章 (--new)  N1 → N2 → N3 → 自动进入管线二
+管线一: 新文章 (--new)  N0 → N1 → N2 → N3 → 自动进入管线二
 ═══════════════════════════════════════════════════════════════
+  N0: Codex 期刊选择 — 根据主题/大纲内容选最佳投稿期刊 (JSON)
   N1: Codex 深度研究 — 基于主题/大纲产出新定理+证明 → commit
   N2: Codex 组装论文骨架 — 生成完整 .tex 框架 → commit
-  N3: Codex 期刊风格初稿 — 按目标期刊风格写完整论文 → commit
-  → 自动进入 Review 管线 Stage A
+  N3: Codex 期刊风格初稿 — 按 N0 选定期刊风格写完整论文 → commit
+  → 自动进入 Review 管线 Stage F
 
 ═══════════════════════════════════════════════════════════════
 管线二: Review 已有文章 (默认)  F → A → B → C → D
@@ -99,6 +100,73 @@ _state_lock = threading.Lock()
 
 # Stage gate thresholds
 SCORE_PASS_THRESHOLD = 8
+
+# Known journal abbreviation → full name mapping
+JOURNAL_ABBREV = {
+    "jfa": "Journal of Functional Analysis",
+    "apal": "Annals of Pure and Applied Logic",
+    "etds": "Ergodic Theory and Dynamical Systems",
+    "tams": "Transactions of the American Mathematical Society",
+    "tac": "Theory and Applications of Categories",
+    "jdsgt": "Journal of Dynamics and Differential Equations",
+    "jphiscomm": "Journal of Physics Communications",
+    "jphyscomm": "Journal of Physics Communications",
+    "jst": "Journal of Spectral Theory",
+    "jems": "Journal of the European Mathematical Society",
+    "cmp": "Communications in Mathematical Physics",
+    "adv": "Advances in Mathematics",
+    "iumj": "Indiana University Mathematics Journal",
+    "imrn": "International Mathematics Research Notices",
+    "plms": "Proceedings of the London Mathematical Society",
+    "jlms": "Journal of the London Mathematical Society",
+    "crelle": "Journal für die reine und angewandte Mathematik",
+    "duke": "Duke Mathematical Journal",
+    "gafa": "Geometric and Functional Analysis",
+    "am": "Annals of Mathematics",
+    "acta": "Acta Mathematica",
+    "inventiones": "Inventiones Mathematicae",
+}
+
+
+def detect_target_journal(paper_dir: str) -> str:
+    """Auto-detect target journal from directory name or PIPELINE.md.
+
+    Priority:
+      1. PIPELINE.md explicit target journal line
+      2. Journal abbreviation in directory name
+      3. Empty string (caller should use CLI default or ask codex)
+    """
+    paper_path = Path(paper_dir)
+    name_lower = paper_path.name.lower()
+
+    # 1. Check PIPELINE.md
+    pipeline_md = paper_path / "PIPELINE.md"
+    if pipeline_md.exists():
+        try:
+            text = pipeline_md.read_text(encoding="utf-8")[:3000]
+            # Pattern: "Target: Journal Name" or "Target journal: ..."
+            m = re.search(
+                r"(?:target|venue|journal)\s*[:=]\s*(.+?)(?:\n|\(|$)",
+                text, re.IGNORECASE,
+            )
+            if m:
+                journal = m.group(1).strip().rstrip(".,;")
+                # Clean markdown bold
+                journal = re.sub(r"\*+", "", journal).strip()
+                if len(journal) > 5:
+                    return journal
+        except Exception:
+            pass
+
+    # 2. Check directory name for known abbreviations
+    for abbrev, full_name in JOURNAL_ABBREV.items():
+        # Match abbreviation at end of dir name or as a standalone segment
+        if (name_lower.endswith(f"_{abbrev}")
+            or f"_{abbrev}_" in name_lower
+            or name_lower == abbrev):
+            return full_name
+
+    return ""
 MAX_STAGE_A_ROUNDS = 5
 MAX_STAGE_B_ROUNDS = 4
 MAX_STAGE_C_ROUNDS = 4
@@ -1535,18 +1603,58 @@ def build_initial_style_prompt(paper_dir: str, target_journal: str) -> str:
     """)
 
 
+def build_journal_selection_prompt(topic: str, outline: str) -> str:
+    """N0: Select the best-fit journal based on topic/outline content."""
+    outline_section = f"\n## Outline / Notes\n{outline[:3000]}\n" if outline else ""
+    return textwrap.dedent(f"""\
+        You are a senior mathematician advising on journal selection.
+
+        ## Research Topic
+        {topic}
+        {outline_section}
+        ## Task: Select the Best Target Journal
+
+        Based on this topic and any notes provided, recommend the single
+        best-fit journal for submission. Consider:
+
+        1. Subject area — which journal's scope most precisely matches?
+        2. Depth expectation — flagship vs specialized vs letters
+        3. Typical acceptance rate and turnaround
+        4. Recent publications on similar topics
+
+        ## Output Format (MUST follow exactly)
+        ```json
+        {{
+          "recommended_journal": "Full Journal Name",
+          "fit_score": <1-10>,
+          "rationale": "2-3 sentences explaining why",
+          "alternatives": [
+            {{"name": "Journal 2", "fit_score": <1-10>, "reason": "..."}},
+            {{"name": "Journal 3", "fit_score": <1-10>, "reason": "..."}}
+          ]
+        }}
+        ```
+
+        Do NOT edit any files — only output the JSON.
+    """)
+
+
 def run_new_paper_pipeline(
     topic: str,
     *,
     outline: str = "",
     paper_name: str = "",
-    target_journal: str = "Advances in Mathematics",
+    target_journal: str = "",
     main_paper_dir: str = "",
     dry_run: bool = False,
     model: Optional[str] = None,
     oracle_timeout: int = 7200,
 ) -> tuple[bool, PaperState]:
-    """Create a new paper from scratch, then auto-enter the review pipeline."""
+    """Create a new paper from scratch, then auto-enter the review pipeline.
+
+    Flow: N0 (journal selection) → N1 (research) → N2 (scaffold) → N3 (style)
+          → auto-enter Review pipeline (F → A → B → C → D)
+    """
 
     # Generate paper directory name
     if not paper_name:
@@ -1558,7 +1666,7 @@ def run_new_paper_pipeline(
     state = PaperState(
         paper_dir=str(paper_path),
         paper_name=paper_name,
-        target_journal=target_journal,
+        target_journal=target_journal or "(pending N0 selection)",
         current_stage="N",
         started_at=datetime.now().isoformat(),
     )
@@ -1572,13 +1680,41 @@ def run_new_paper_pipeline(
     logger.info(f"{'='*60}")
     logger.info(f"{tag} New paper pipeline")
     logger.info(f"{tag} Topic: {topic}")
-    logger.info(f"{tag} Journal: {target_journal}")
     logger.info(f"{tag} Dir: {paper_path}")
     logger.info(f"{'='*60}")
 
+    # ── N0: Journal selection (if not pre-specified) ─────────────
+    if not target_journal:
+        logger.info(f"{tag} N0 — Codex journal selection")
+        prompt_n0 = build_journal_selection_prompt(topic, outline)
+        out_n0 = codex_exec(prompt_n0, work_dir=paper_path,
+                            timeout_seconds=600, model=model, dry_run=dry_run)
+        j_data = parse_json_from_output(out_n0) if not dry_run else {
+            "recommended_journal": "Ergodic Theory and Dynamical Systems",
+            "fit_score": 9,
+            "rationale": "dry run: topic matches ETDS scope",
+            "alternatives": [
+                {"name": "Advances in Mathematics", "fit_score": 6,
+                 "reason": "broader scope"},
+            ],
+        }
+        selected = j_data.get("recommended_journal", "Advances in Mathematics")
+        state.target_journal = selected
+        state.log_event("N", "codex_journal_selection",
+                        score=j_data.get("fit_score", 0),
+                        detail=json.dumps(j_data, ensure_ascii=False)[:2000])
+        save_state(state)
+        logger.info(f"{tag} N0 selected journal: {selected} "
+                    f"(fit={j_data.get('fit_score', '?')})")
+    else:
+        logger.info(f"{tag} Journal pre-specified: {target_journal}")
+        state.target_journal = target_journal
+
+    journal = state.target_journal
+
     # ── N1: Deep research ────────────────────────────────────────
-    logger.info(f"{tag} N1 — Codex deep research")
-    prompt_n1 = build_new_research_prompt(topic, outline, target_journal)
+    logger.info(f"{tag} N1 — Codex deep research (for {journal})")
+    prompt_n1 = build_new_research_prompt(topic, outline, journal)
     codex_exec(prompt_n1, work_dir=paper_path,
                timeout_seconds=3600, model=model, dry_run=dry_run)
     h = git_commit(paper_path, f"new-paper N1: deep research — {topic[:40]}",
@@ -1588,8 +1724,8 @@ def run_new_paper_pipeline(
     save_state(state)
 
     # ── N2: Scaffold ─────────────────────────────────────────────
-    logger.info(f"{tag} N2 — Codex scaffold")
-    prompt_n2 = build_scaffold_prompt(str(paper_path), target_journal)
+    logger.info(f"{tag} N2 — Codex scaffold (for {journal})")
+    prompt_n2 = build_scaffold_prompt(str(paper_path), journal)
     codex_exec(prompt_n2, work_dir=paper_path,
                timeout_seconds=1800, model=model, dry_run=dry_run)
     h = git_commit(paper_path, f"new-paper N2: scaffold structure", tag=tag)
@@ -1598,8 +1734,8 @@ def run_new_paper_pipeline(
     save_state(state)
 
     # ── N3: Initial journal style ────────────────────────────────
-    logger.info(f"{tag} N3 — Codex initial journal style")
-    prompt_n3 = build_initial_style_prompt(str(paper_path), target_journal)
+    logger.info(f"{tag} N3 — Codex initial journal style (for {journal})")
+    prompt_n3 = build_initial_style_prompt(str(paper_path), journal)
     codex_exec(prompt_n3, work_dir=paper_path,
                timeout_seconds=2400, model=model, dry_run=dry_run)
     h = git_commit(paper_path, f"new-paper N3: journal style draft", tag=tag)
@@ -1609,12 +1745,12 @@ def run_new_paper_pipeline(
 
     logger.info(f"{tag} New-paper pipeline complete → entering Review pipeline")
 
-    # Auto-enter review pipeline at Stage F (fit check first)
+    # Auto-enter review pipeline at Stage F (fit validation)
     state.current_stage = "F"
     save_state(state)
     return run_paper_pipeline(
         str(paper_path),
-        target_journal=target_journal,
+        target_journal=journal,
         main_paper_dir=main_paper_dir,
         dry_run=dry_run,
         model=model,
@@ -1658,7 +1794,14 @@ def run_paper_pipeline(
             paper_name=paper_name,
             started_at=datetime.now().isoformat(),
         )
-    state.target_journal = target_journal
+
+    # Auto-detect target journal: paper metadata > CLI arg > default
+    detected = detect_target_journal(str(paper_path))
+    if detected:
+        state.target_journal = detected
+        logger.info(f"[{paper_name}] Auto-detected journal: {detected}")
+    else:
+        state.target_journal = target_journal
     if main_paper_dir:
         mp = Path(main_paper_dir)
         if not mp.is_absolute():
