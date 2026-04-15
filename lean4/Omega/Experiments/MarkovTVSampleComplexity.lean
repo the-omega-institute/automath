@@ -93,18 +93,17 @@ theorem kappaConfidenceFromTvPackage (m : Nat) :
       mul_le_mul_of_nonneg_left hHalf hLogNonneg
     simpa [mul_assoc, mul_left_comm, mul_comm] using hMul
 
-/-- Paper-facing wrapper with the requested placeholder signature.
-    Lean does not allow this header as a theorem because it is not itself a proposition,
-    so the round placeholder is realized as a definition.
+/-- Exact paper-facing theorem wrapper for the packaged `κ_m` confidence inequality.
     cor:kappa-confidence-from-tv -/
-def paper_kappa_confidence_from_tv (m : Nat) : Prop :=
-  (∀ dtv : ℝ,
-    2 * Real.log (X.maxFiberMultiplicity m) * dtv =
-      (Real.log (X.maxFiberMultiplicity m) * (2 * dtv))) ∧
-  (∀ N delta gammaPs dtv : ℝ,
-    dtv ≤ (Nat.fib (m + 2) / 2) * markovTvEnvelopeRadius N (Nat.fib (m + 2)) delta gammaPs →
-    2 * Real.log (X.maxFiberMultiplicity m) * dtv ≤
-      Real.log (X.maxFiberMultiplicity m) * Nat.fib (m + 2) *
-        markovTvEnvelopeRadius N (Nat.fib (m + 2)) delta gammaPs)
+theorem paper_kappa_confidence_from_tv (m : Nat) :
+    (∀ dtv : ℝ,
+      2 * Real.log (X.maxFiberMultiplicity m) * dtv =
+        Real.log (X.maxFiberMultiplicity m) * (2 * dtv)) ∧
+    (∀ N delta gammaPs dtv : ℝ,
+      dtv ≤ (Nat.fib (m + 2) / 2) * markovTvEnvelopeRadius N (Nat.fib (m + 2)) delta gammaPs →
+      2 * Real.log (X.maxFiberMultiplicity m) * dtv ≤
+        Real.log (X.maxFiberMultiplicity m) * Nat.fib (m + 2) *
+          markovTvEnvelopeRadius N (Nat.fib (m + 2)) delta gammaPs) := by
+  exact kappaConfidenceFromTvPackage m
 
 end Omega.Experiments.MarkovTVSampleComplexity
