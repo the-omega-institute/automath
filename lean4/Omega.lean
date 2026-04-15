@@ -94,6 +94,7 @@ import Omega.Folding.RationalGeneratorGap
 import Omega.Folding.MetallicCompressionExtremum
 import Omega.Folding.MetallicCompressionLockingLambda2
 import Omega.Folding.MetallicParetoFrontier
+import Omega.Folding.MetallicTwoStateSFT
 import Omega.Folding.MetallicIntegerScalarizationThreshold
 import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.LocalRewriteLdpBarrier
@@ -228,6 +229,7 @@ import Omega.SPG.SquareclassChainComplex
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.BoundaryGodelMomentReadout
 import Omega.SPG.BoundaryGodelGcdLipschitzStability
+import Omega.SPG.GodelMomentRobustGcdBound
 import Omega.SPG.BoundaryGodelSequenceDeterminesClosure
 import Omega.SPG.BoundaryGodelBitcomplexityIsoperimetric
 import Omega.SPG.ScreenKernelAuditCost
@@ -757,6 +759,7 @@ import Omega.GU.Window6SingleGoodPrimeRecovery
 import Omega.GU.Window6B3SupportCount
 import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
+import Omega.GU.Window6B3C3EvenMomentGapLaplaceDomination
 import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
 import Omega.GU.Window6C3SupportCount
 import Omega.GU.FiberNonConstantNoFreeAction
