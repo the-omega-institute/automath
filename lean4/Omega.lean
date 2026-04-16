@@ -183,6 +183,7 @@ import Omega.Folding.EndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
 import Omega.Folding.ImageSubshiftZeta
 import Omega.Folding.MicrostateResidualWindowReachability
+import Omega.Folding.ConstructibilityRigidityObstruction
 import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.PhiMRightResolving
 import Omega.Folding.YmConjugacyAllMge3
@@ -260,6 +261,7 @@ import Omega.SPG.ErrorThreshold
 import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.LpSuperellipsoidBoundaryVolumeDecoding
+import Omega.SPG.KirchhoffFundamentalCutCapacityHadamard
 import Omega.SPG.LpSuperellipsoidDecodingMultiplicativeNoiseStability
 import Omega.SPG.EllipsoidBoundaryFluxReconstruction
 import Omega.SPG.WeightedBoundaryDecomposition
@@ -836,6 +838,7 @@ import Omega.TypedAddressBiaxialCompletion.PcdimModpFormula
 import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
 import Omega.TypedAddressBiaxialCompletion.ComovingPronyThreshold
+import Omega.TypedAddressBiaxialCompletion.ComovingHankel
 import Omega.TypedAddressBiaxialCompletion.VisiblePhaseLift
 import Omega.TypedAddressBiaxialCompletion.OffsliceDichotomy
 import Omega.TypedAddressBiaxialCompletion.GlobalizationFlatness
