@@ -382,7 +382,28 @@ def _codex_resolve_conflicts(
     return True
 
 
-def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> bool:
+def _append_impl_plan(round_num: int, targets: list[dict]) -> None:
+    """Append a one-liner entry to IMPLEMENTATION_PLAN.md after a successful merge.
+
+    Called under _git_lock so concurrent rounds never interleave writes.
+    Format: ``## Phase R<N>\\n<lean_name1>, <lean_name2>, ...\\n``
+    """
+    names = ", ".join(t.get("lean_name", "?") for t in targets)
+    entry = f"\n## Phase R{round_num}\n{names}\n"
+    try:
+        with open(IMPL_PLAN, "a", encoding="utf-8") as f:
+            f.write(entry)
+        logger.info(f"Appended R{round_num} entry to IMPLEMENTATION_PLAN.md")
+    except Exception as exc:
+        logger.warning(f"Could not append to IMPLEMENTATION_PLAN.md: {exc}")
+
+
+def merge_worktree_to_base(
+    wt: WorktreeInfo,
+    *,
+    model: Optional[str] = None,
+    targets: Optional[list[dict]] = None,
+) -> bool:
     """Merge the worktree branch into BASE_BRANCH and push.
 
     Strategy:
@@ -453,6 +474,8 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
                 cwd=REPO_ROOT, timeout=300,
             )
             if push.returncode == 0:
+                if targets:
+                    _append_impl_plan(wt.round_number, targets)
                 return True
 
             if attempt == 1:
@@ -860,7 +883,7 @@ def run_round_in_worktree(
         # ── Merge back ────────────────────────────────────────────
         if success and new_commits and wt and not dry_run:
             logger.info(f"[{tag}] Merging to {BASE_BRANCH}...")
-            merged = merge_worktree_to_base(wt, model=model)
+            merged = merge_worktree_to_base(wt, model=model, targets=phase_b.targets)
             if not merged:
                 logger.error(f"[{tag}] Merge failed — keeping worktree for manual resolution")
                 _save_round_log(round_num, phase_b, phase_c, new_commits, False)
