@@ -126,6 +126,7 @@ import Omega.Zeta.ResolventTraceIntegerResidueNoncancel
 import Omega.Zeta.RhoGapM12
 import Omega.Zeta.RootSeparation
 import Omega.Zeta.SmithEntropyMinDepth
+import Omega.Zeta.SL2LinearExternalCertificate
 import Omega.Zeta.SyncCyclotomicDegreeLaw
 import Omega.Zeta.SyncCyclotomicDegreeLawPublication
 import Omega.Zeta.SyncKernelMixingRate

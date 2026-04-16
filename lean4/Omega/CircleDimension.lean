@@ -39,6 +39,7 @@ import Omega.CircleDimension.FiniteLocalizationDirectsumPrimeLedgerExactSequence
 import Omega.CircleDimension.FinitePrimeSupportMultiplicativeHalfCircleDimension
 import Omega.CircleDimension.FiniteProbeExtraction
 import Omega.CircleDimension.GlobalPhaseExhaustion
+import Omega.CircleDimension.GcdimFiltrationInvariance
 import Omega.CircleDimension.GcdimTwoAxisTowerLaws
 import Omega.CircleDimension.GcdimPolynomialRing
 import Omega.CircleDimension.GcdimNoetherHilbertDimMinusOne

@@ -81,6 +81,7 @@ import Omega.Conclusion.ResonanceWindow
 import Omega.Conclusion.ReversibleAuxBitsBudget
 import Omega.Conclusion.S4BoundaryTotalTorusRankConservation
 import Omega.Conclusion.SaturationDefect
+import Omega.Conclusion.ScreenArithmeticShadowAdditiveLinearizationObstruction
 import Omega.Conclusion.ScreenAtomicValueAntitone
 import Omega.Conclusion.ScreenAuditGapSupermodularity
 import Omega.Conclusion.SecondOrderCdimSignature
