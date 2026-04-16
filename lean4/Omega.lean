@@ -97,6 +97,7 @@ import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
+import Omega.Folding.GaugeAnomalyTauIntClosed
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
 import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
 import Omega.Folding.PhiEquivariant
@@ -941,6 +942,7 @@ import Omega.GU.Window6B3C3SphericalCubatureStrength5
 import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
 import Omega.GU.Window6C3SupportCount
 import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
+import Omega.GU.BdryChiTwistedBinaryLabelExistence
 import Omega.GU.FiberNonConstantNoFreeAction
 import Omega.GU.FibTailS3Closure
 import Omega.GU.BoundaryTowerFibCount
