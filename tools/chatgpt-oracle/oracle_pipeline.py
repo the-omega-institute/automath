@@ -834,12 +834,29 @@ def compile_pdf(paper_path: Path, *, dry_run: bool = False) -> Optional[Path]:
 # ---------------------------------------------------------------------------
 
 def build_quality_review_prompt(paper_dir: str, target_journal: str,
-                                round_num: int) -> str:
-    """Stage A prompt: review existing paper quality + fix issues."""
+                                round_num: int,
+                                prior_feedback: str = "") -> str:
+    """Stage A prompt: review existing paper quality + fix issues.
+
+    prior_feedback (optional): accumulated issues/scores from previous rounds,
+    so codex doesn't repeat the same surface fixes and can address persistent
+    problems. (Borrowed from community-outreach pipeline deep_mode pattern.)
+    """
+    feedback_section = ""
+    if prior_feedback:
+        feedback_section = textwrap.dedent(f"""
+
+            ## Previous rounds' feedback (DO NOT repeat prior surface fixes)
+            The paper has been through earlier quality-review rounds. Here is
+            what reviewers flagged previously. Address issues that have NOT
+            yet been resolved, and focus on DEEPER problems:
+            {prior_feedback}
+        """)
+
     return textwrap.dedent(f"""\
         You are an editor of "{target_journal}" reviewing a submission.
         This is quality-review round {round_num} for the paper in: {paper_dir}
-
+        {feedback_section}
         ## Task: Review & Improve to Acceptance Standard
 
         Read the entire paper as a critical referee. Identify and FIX every issue
@@ -1437,11 +1454,53 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
         save_state(state)
 
         # ── A1: Codex quality review + fix ─────────────────────────
-        logger.info(f"{tag} Round {rnd}: A1 — Codex quality review")
+        # Accumulate feedback from previous rounds so codex addresses persistent
+        # issues rather than repeating surface fixes.
+        prior_feedback = ""
+        if state.history:
+            past_scores = []
+            past_issues = []
+            for h_ev in state.history[-20:]:
+                if h_ev.get("action") in ("codex_self_score",
+                                           "claude_review_score"):
+                    past_scores.append(
+                        f"R{h_ev.get('round_num')} "
+                        f"{h_ev.get('action')}: "
+                        f"{h_ev.get('score', '?')}/10"
+                    )
+                    # Try to extract issue list from detail JSON
+                    try:
+                        d = json.loads(h_ev.get("detail", "{}"))
+                        for issue in d.get("key_issues", [])[:3]:
+                            if isinstance(issue, dict):
+                                past_issues.append(
+                                    f"  - [{issue.get('type', '?')}] "
+                                    f"R{h_ev.get('round_num')}: "
+                                    f"{issue.get('issue', '')[:200]}"
+                                )
+                            else:
+                                past_issues.append(
+                                    f"  - R{h_ev.get('round_num')}: "
+                                    f"{str(issue)[:200]}"
+                                )
+                    except Exception:
+                        pass
+            if past_scores or past_issues:
+                prior_feedback = ("Score history: " + ", ".join(past_scores[-6:])
+                                  + "\n\nRecurring issues:\n"
+                                  + "\n".join(past_issues[-8:]))
+
+        # Escalate timeout if stuck in low scores (borrowed from outreach pipeline)
+        low_rounds = sum(1 for s in state.stage_a_scores if s < SCORE_PASS_THRESHOLD)
+        a1_timeout = 3600 if low_rounds >= 2 else 2400
+
+        logger.info(f"{tag} Round {rnd}: A1 — Codex quality review "
+                    f"(timeout={a1_timeout}s, prior_rounds={len(state.stage_a_scores)})")
         prompt_a1 = build_quality_review_prompt(
-            state.paper_dir, state.target_journal, rnd)
+            state.paper_dir, state.target_journal, rnd,
+            prior_feedback=prior_feedback)
         codex_exec(prompt_a1, work_dir=paper_path,
-                   timeout_seconds=2400, model=model, dry_run=dry_run)
+                   timeout_seconds=a1_timeout, model=model, dry_run=dry_run)
         h = git_commit(paper_path,
                        f"stage-A R{rnd}: codex quality review", tag=tag)
         state.log_event("A", "codex_quality_review", round_num=rnd,
