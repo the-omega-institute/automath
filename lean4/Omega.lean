@@ -81,6 +81,7 @@ import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
 import Omega.POM.ModpDifferenceBinomialBasis
+import Omega.POM.TensorFoldResultantRecursion
 import Omega.POM.OrderSpatialization
 import Omega.Folding.LocalWeightRigidityFibonacci
 import Omega.Folding.LocalWeightRigidityPublication
@@ -674,6 +675,7 @@ import Omega.EA.StableAddNormalizationRealization
 import Omega.EA.InternalProductAddsValues
 import Omega.EA.PrimeRegisterMultiplicativeNormalizationAdditiveIso
 import Omega.EA.PrimeRegisterResidualLedgerGroup
+import Omega.EA.PrimeRegisterEllipseInvertGodel
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.AddressNaturality
 import Omega.EA.StableAddFiniteResolutionCompatibility
