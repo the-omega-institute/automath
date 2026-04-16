@@ -139,6 +139,7 @@ import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.FreeInvolutionCount
 import Omega.GU.CyclotomicGcdStability
+import Omega.GU.CyclotomicSpecializationFalsifiability
 import Omega.GU.CyclotomicSpecializationRigidity
 import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
 import Omega.GU.JetAlignmentUnification
@@ -334,6 +335,7 @@ import Omega.SPG.CollisionProfileRestoration
 import Omega.SPG.BoundedTypeSturmianConstantWidthCertificate
 import Omega.Conclusion.FixedResolutionPrimeBarrierPostprocessingNeutrality
 import Omega.SPG.PrimeRegisterBudgetLowerBound
+import Omega.SPG.PrimeRegisterDistinguishableFractionVanishes
 import Omega.SPG.FixedAxisGodelOrderInformation
 import Omega.SPG.StokesGodelDimensionChain
 import Omega.SPG.CubePotentialCurl
@@ -1078,6 +1080,7 @@ import Omega.POM.RenyiEndpoint
 import Omega.POM.RqQinftyEndpoint
 import Omega.POM.LambdaAlgebraic
 import Omega.POM.CollisionKernelPublication
+import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.MomentResonance
 import Omega.POM.SymmetricCompression
 import Omega.POM.MaxFiberPublication
