@@ -1,1 +1,2 @@
 import Omega.Multiscale.SolenoidNormalizedStokesL2ScalingCriticalDegree
+import Omega.Multiscale.StokesPeriodModuleCovectorNormalization
