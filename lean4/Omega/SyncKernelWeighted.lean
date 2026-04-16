@@ -1,1 +1,2 @@
+import Omega.SyncKernelWeighted.RealInput40ResetRegenerationConstants
 import Omega.SyncKernelWeighted.WittPkSparsification

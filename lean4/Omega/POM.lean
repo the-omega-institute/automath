@@ -14,6 +14,7 @@ import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.ComplementaryGoldenBernoulliDivergence
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.DefectBand
+import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.DiagonalHighMoments
 import Omega.POM.DiagonalRateAcceptRefreshSeparationExact

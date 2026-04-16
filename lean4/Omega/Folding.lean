@@ -63,6 +63,7 @@ import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
 import Omega.Folding.FoldSuitePublication
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
+import Omega.Folding.GaugeAnomalyDensity
 import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
