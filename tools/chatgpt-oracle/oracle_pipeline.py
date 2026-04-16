@@ -376,6 +376,7 @@ class PaperState:
     stage_a_rounds: int = 0
     stage_a_scores: list[int] = field(default_factory=list)
     stage_a_passed: bool = False
+    stage_a0_done: bool = False    # Literature audit one-shot
 
     # Stage B tracking
     stage_b_rounds: int = 0
@@ -430,6 +431,7 @@ class PaperState:
             "stage_a_rounds": self.stage_a_rounds,
             "stage_a_scores": self.stage_a_scores,
             "stage_a_passed": self.stage_a_passed,
+            "stage_a0_done": self.stage_a0_done,
             "stage_b_rounds": self.stage_b_rounds,
             "stage_b_verdicts": self.stage_b_verdicts,
             "stage_b_passed": self.stage_b_passed,
@@ -477,7 +479,7 @@ def load_state(paper_name: str) -> Optional[PaperState]:
                      "current_round",
                      "stage_f_fit_score", "stage_f_original_journal",
                      "stage_f_suggested_journal", "stage_f_passed",
-                     "stage_a_rounds", "stage_a_passed",
+                     "stage_a_rounds", "stage_a_passed", "stage_a0_done",
                      "stage_b_rounds", "stage_b_passed", "stage_c_rounds",
                      "stage_c_passed", "stage_d_passed", "pdf_path",
                      "started_at", "completed_at", "error"):
@@ -491,6 +493,67 @@ def load_state(paper_name: str) -> Optional[PaperState]:
         return s
     except Exception:
         return None
+
+
+def rebuild_rounds_from_git(state: PaperState) -> None:
+    """Recover max prior round numbers from commit history.
+
+    Pipeline state files occasionally get lost (crash, branch switch, manual
+    reset) but git log always has the ground truth. Scan for commits matching
+    'stage-A R\\d+' etc and advance state counters to the observed maximum so
+    subsequent rounds don't silently repeat work already committed.
+    """
+    paper_path = Path(state.paper_dir)
+    if not paper_path.exists():
+        return
+    try:
+        rel = paper_path.relative_to(REPO_ROOT)
+    except ValueError:
+        rel = paper_path
+
+    try:
+        with _git_lock:
+            result = subprocess.run(
+                ["git", "log", "--all", "--format=%s", "--", str(rel)],
+                cwd=str(REPO_ROOT), capture_output=True, text=True,
+                timeout=30,
+            )
+    except Exception as e:
+        logger.debug(f"[{state.paper_name}] git log failed for state rebuild: {e}")
+        return
+
+    if result.returncode != 0:
+        return
+
+    max_a = state.stage_a_rounds
+    max_b = state.stage_b_rounds
+    max_c = state.stage_c_rounds
+    for line in result.stdout.splitlines():
+        m = re.search(r"stage-A\s+R(\d+)", line, re.IGNORECASE)
+        if m:
+            max_a = max(max_a, int(m.group(1)))
+        m = re.search(r"stage-B\s+R(\d+)", line, re.IGNORECASE)
+        if m:
+            max_b = max(max_b, int(m.group(1)))
+        m = re.search(r"stage-C\s+R(\d+)", line, re.IGNORECASE)
+        if m:
+            max_c = max(max_c, int(m.group(1)))
+        # Oracle review rounds (legacy format: "Oracle R14", "gate_R9")
+        m = re.search(r"(?:oracle|gate)[\s_]+R(\d+)", line, re.IGNORECASE)
+        if m:
+            max_b = max(max_b, int(m.group(1)))
+    if max_a != state.stage_a_rounds:
+        logger.info(f"[{state.paper_name}] git-rebuild: stage_a_rounds "
+                    f"{state.stage_a_rounds} → {max_a}")
+        state.stage_a_rounds = max_a
+    if max_b != state.stage_b_rounds:
+        logger.info(f"[{state.paper_name}] git-rebuild: stage_b_rounds "
+                    f"{state.stage_b_rounds} → {max_b}")
+        state.stage_b_rounds = max_b
+    if max_c != state.stage_c_rounds:
+        logger.info(f"[{state.paper_name}] git-rebuild: stage_c_rounds "
+                    f"{state.stage_c_rounds} → {max_c}")
+        state.stage_c_rounds = max_c
 
 
 # ---------------------------------------------------------------------------
@@ -580,7 +643,7 @@ def git_commit_multi(paths: list[Path], msg: str, *, tag: str = "") -> str:
 
 def oracle_submit(task_id: str, prompt: str,
                   pdf_path: Optional[Path] = None,
-                  model: str = "o3-mini-high") -> bool:
+                  model: str = "chatgpt-5.4-pro-extended") -> bool:
     payload: dict = {"task_id": task_id, "prompt": prompt, "model": model}
     if pdf_path and pdf_path.exists():
         with open(pdf_path, "rb") as f:
@@ -592,6 +655,30 @@ def oracle_submit(task_id: str, prompt: str,
     except Exception as e:
         logger.error(f"Oracle submit failed: {e}")
         return False
+
+
+def is_oracle_response_valid(response: str) -> bool:
+    """Reject extraction-failure garbage (<2KB, thinking preamble, prompt echo).
+
+    Historical Oracle userscript extraction-failure rate is ≥40%.
+    Valid referee reviews are always ≥2KB and contain structural anchors like
+    "verdict", "blocker", "revision", or a numbered issue table.
+    """
+    if not response:
+        return False
+    cleaned = response.strip()
+    if len(cleaned) < 2000:
+        return False
+    lower = cleaned.lower()
+    # Structural anchors expected in a substantive review
+    anchors = ("verdict", "revision", "blocker", "medium", "accept",
+               "reject", "issue", "referee")
+    if not any(a in lower for a in anchors):
+        return False
+    # Reject single-phrase thinking preambles like "I", "s to change..."
+    if len(cleaned.split()) < 50:
+        return False
+    return True
 
 
 def oracle_poll(task_id: str, timeout: int = 7200,
@@ -862,6 +949,75 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
 # Compile PDF
 # ---------------------------------------------------------------------------
 
+def read_compile_errors(paper_path: Path, max_chars: int = 4000) -> str:
+    """Tail of main.log focused on LaTeX error lines.
+
+    Returns up to ``max_chars`` of text centred on lines starting with '!'
+    (LaTeX fatal markers) plus the preceding 2 lines for context.
+    Empty string means either no log file or no parseable error.
+    """
+    log = paper_path / "main.log"
+    if not log.exists():
+        return ""
+    try:
+        text = log.read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        return ""
+    lines = text.splitlines()
+    err_chunks: list[str] = []
+    for i, line in enumerate(lines):
+        if line.startswith("!") or line.startswith("l."):
+            start = max(0, i - 2)
+            end = min(len(lines), i + 6)
+            err_chunks.append("\n".join(lines[start:end]))
+    if not err_chunks:
+        return "\n".join(lines[-80:])[:max_chars]
+    return "\n---\n".join(err_chunks)[:max_chars]
+
+
+def try_compile(paper_path: Path, *, dry_run: bool = False) -> bool:
+    """Best-effort compile. Returns True iff a PDF was produced."""
+    if dry_run:
+        return True
+    pdf = compile_pdf(paper_path, dry_run=False)
+    return bool(pdf and pdf.exists())
+
+
+def build_compile_fix_prompt(paper_dir: str, error_tail: str) -> str:
+    return textwrap.dedent(f"""\
+        LaTeX compilation failed for the paper in {paper_dir}.
+        The last round of edits broke the build.
+
+        Error tail from main.log (most important lines):
+        ```
+        {error_tail}
+        ```
+
+        Fix ONLY the compile errors. Do not change mathematical content.
+        After fixing, re-compile:
+          cd {paper_dir} && xelatex -interaction=nonstopmode main.tex
+    """)
+
+
+def compile_gate(paper_path: Path, *, model: Optional[str] = None,
+                 dry_run: bool = False, tag: str = "") -> bool:
+    """Compile; on failure invoke Codex once to repair; compile again.
+
+    Returns True iff the final compile succeeds. Callers may still commit
+    on failure if they prefer continuing over blocking, but the gate gives
+    them the signal to decide.
+    """
+    if try_compile(paper_path, dry_run=dry_run):
+        return True
+    err = read_compile_errors(paper_path)
+    logger.warning(f"{tag} compile failed; invoking Codex to repair "
+                   f"({len(err)} chars of errors)")
+    codex_exec(build_compile_fix_prompt(str(paper_path), err),
+               work_dir=paper_path, timeout_seconds=600,
+               model=model, dry_run=dry_run)
+    return try_compile(paper_path, dry_run=dry_run)
+
+
 def compile_pdf(paper_path: Path, *, dry_run: bool = False) -> Optional[Path]:
     if dry_run:
         return paper_path / "main.pdf"
@@ -905,6 +1061,80 @@ def compile_pdf(paper_path: Path, *, dry_run: bool = False) -> Optional[Path]:
 # ---------------------------------------------------------------------------
 # Prompt builders
 # ---------------------------------------------------------------------------
+
+def build_literature_audit_prompt(paper_dir: str, target_journal: str) -> str:
+    """A0 prompt: produce theorem-by-theorem comparison with prior work.
+
+    This is the single mechanism that forced the dynamical_zeta paper from
+    over-claimed "Theorem A/B" to honest "Supporting propositions" with
+    proper Sharp 1991 / Parry-Pollicott 1986 citations. It deserves its own
+    stage instead of being a bullet inside A1.
+    """
+    return textwrap.dedent(f"""\
+        You are a senior referee for "{target_journal}" doing a scholarly
+        positioning audit of the paper in {paper_dir}.
+
+        ## Task
+
+        Produce a file `literature_audit.md` in {paper_dir} containing a single
+        Markdown table with ONE ROW PER theorem, proposition, corollary,
+        lemma, or definition that appears in the paper's main body (skip
+        proofs-only appendices). No empty cells.
+
+        Columns:
+          label     — the \\label{{...}} of the statement
+          kind      — theorem / proposition / lemma / corollary / definition
+          class     — classical-input  /  novel-increment  /  conditional-corollary
+          closest-prior — author(year, theorem/eqn number) of the nearest known
+                          statement. Must be a real reference; if none exists,
+                          write "none known" and explain in the next column why
+                          you searched and found nothing.
+          citation-key — the bib key if already in references.bib, else
+                         propose a new key and add the entry to references.bib.
+          increment — one sentence: what does OUR statement add over the
+                      closest-prior? If class=classical-input, write
+                      "no increment; used as building block".
+          hypothesis-status — for each hypothesis used: verifiable /
+                              generically-satisfied / open. If the manuscript
+                              's disclosure of hypothesis status is inaccurate,
+                              say so.
+
+        ## Hard rules (this stage fails if any is violated)
+
+        1. Every result labelled "Theorem" in the paper that you classify as
+           `classical-input` must be demoted — edit the .tex file to rename
+           `\\begin{{theorem}}` to `\\begin{{proposition}}` and prepend the
+           title with "Supporting". Example:
+             \\begin{{theorem}}[Finite-part formula]  →
+             \\begin{{proposition}}[Supporting finite-part formula]
+
+        2. Any `novel-increment` row whose increment sentence paraphrases an
+           existing classical statement ("we generalise ...", "we extend ...")
+           without naming a concrete quantitative or qualitative gain is
+           treated as mis-classification. Re-classify as classical-input.
+
+        3. Fill bib gaps. For every `closest-prior` entry not yet in
+           references.bib, add a proper @article / @book entry with DOI or
+           arXiv number. Do not insert TODO placeholders.
+
+        4. After the table, add a subsection inside the paper's introduction
+           (new .tex content) titled
+             "Theorem-by-theorem comparison with prior work"
+           which narrates the table in 3–6 paragraphs, crediting each classical
+           input to the right author and isolating the novel increment in one
+           sentence per item.
+
+        5. Do NOT add new mathematical content in this stage. This stage is
+           pure positioning and demotion. New content belongs to A-DEEP.
+
+        ## Output
+        - Edit .tex files (demote mis-classified theorems, add the new
+          comparison subsection).
+        - Write literature_audit.md as described.
+        - Update references.bib with any newly cited prior work.
+        - Compile: cd {paper_dir} && xelatex -interaction=nonstopmode main.tex
+    """)
+
 
 def build_quality_review_prompt(paper_dir: str, target_journal: str,
                                 round_num: int,
@@ -990,6 +1220,33 @@ def build_deep_extension_prompt(paper_dir: str, target_journal: str,
         - Add missing references to references.bib.
         - Use rigorous academic language throughout.
 
+        ## Anti-drift constraints (HARD RULES)
+        These rules exist because prior rounds produced paraphrased filler
+        labelled as new content. Violating any of them makes this round a
+        no-op and wastes the budget:
+
+        1. **No synonymous restatement.** A "new" theorem obtained by renaming
+           an existing theorem, restricting it, or specialising constants is
+           NOT new. If the statement differs from an existing labelled result
+           only in wording or notation, it is forbidden.
+        2. **No intermediate-process conclusions.** Do not announce lemmas of
+           the form "we have proved that ..." that are stepping stones toward
+           a later theorem. Only the final load-bearing statement counts.
+        3. **Number and timestamp every new conclusion.** Each new theorem /
+           proposition / corollary carries a bold inline tag
+             [New-N | {datetime.now().strftime('%Y-%m-%d')}]
+           where N continues the count across the paper (and rounds — check the
+           highest existing [New-*] tag in the paper before starting). This tag
+           lives INSIDE the theorem environment, right after \\begin{{theorem}}[...].
+        4. **No self-plagiarism across papers.** Before adding a theorem, grep
+           every sibling paper in papers/publication/2026_*/*.tex. If ≥70%
+           literal overlap or the statement already exists under another label,
+           abort that theorem and choose a different extension direction.
+        5. **Rigorous academic register only.** No colloquialisms, no
+           first-person narrative ("we now show", "note that"), no filler
+           ("interestingly", "remarkably"), no hedging ("it seems", "likely").
+           Use the formal declarative voice of top-tier journal papers.
+
         ## Strategy
         Concrete ways to add depth (pick what fits the paper):
         - Generalize a restricted result to a broader setting (wider function class,
@@ -1046,6 +1303,19 @@ def build_self_score_prompt(paper_dir: str, target_journal: str) -> str:
 
         Score the paper from 1 to 10 on each dimension, then give an overall score.
 
+        ## Calibration anchor (use this distribution)
+        - A paper accepted at "{target_journal}" typically scores 8.
+        - A paper recently rejected by "{target_journal}" typically scores 5–6.
+        - A paper with correct but derivative content scores 4.
+        - Score ≥9 is reserved for results the journal would highlight.
+        Prior: P(score ≥ 8) ≤ 5%, P(score ≥ 9) ≤ 1%.
+
+        If you propose overall_score ≥ 8, you MUST name in "strengths" three
+        specific papers from "{target_journal}" in the last 24 months that you
+        believe are comparable or weaker than this submission, with a one-line
+        reason each. Unsubstantiated ≥8 scores are treated as evidence of
+        self-inflation and will be rejected by the downstream Claude reviewer.
+
         ## Scoring Dimensions
         1. **Mathematical depth & novelty** (are the results genuinely new?)
         2. **Proof completeness** (any gaps, missing steps, implicit assumptions?)
@@ -1101,15 +1371,37 @@ def build_oracle_review_prompt(target_journal: str) -> str:
     return textwrap.dedent(f"""\
         You are a referee for "{target_journal}". Review the attached paper.
 
-        Provide:
-        1. **Overall verdict**: Accept / Minor revision / Major revision / Reject
-        2. **Novelty rating** per theorem: HIGH / MEDIUM / LOW with justification
-        3. **Issue table**: ID | Section | Severity (BLOCKER/MEDIUM/LOW) | Description | Suggested fix
-        4. **Missing references**: important related work not cited
-        5. **Concrete fixes**: for each BLOCKER and MEDIUM issue, show HOW to fix
-           with mathematical content (corrected proof sketch, precise bound, etc.)
+        Start your reply with a single line exactly of the form
+          Overall verdict: <Accept|Minor revision|Major revision|Reject>
+        so the verdict can be parsed unambiguously. Then provide the full review.
 
-        Be rigorous. Focus on what needs to change, not what the paper already says.
+        1. **Overall verdict** (labelled as above)
+        2. **Novelty rating** per main theorem: HIGH / MEDIUM / LOW with a
+           one-sentence justification.
+        3. **Issue table** (Markdown table; no empty cells):
+           ID | Section | Severity (BLOCKER/MEDIUM/LOW) | Description | Suggested fix
+        4. **Proof audit**: Pick the TWO deepest theorems. Redo the key identity
+           by hand. Report any step where a suspicious identity is silently used,
+           e.g.  χ(C^{{-1}}) = χ(C)  (should be conjugate),  Tr(AB) = Tr(A)Tr(B),
+           det(A+B) = det(A)+det(B), det(exp A) = exp(det A), limit/sum exchange
+           without justification, cancellation of an operator that may be
+           non-invertible. Cite line numbers.
+        5. **Conditional hypothesis map**: List every hypothesis invoked in the
+           main theorems. For each, flag verifiable / generically satisfied /
+           open, and say whether the manuscript correctly discloses its status.
+        6. **Theorem-by-theorem comparison with last 5 years of {target_journal}**:
+           output a Markdown table with columns
+             our result | closest prior result | citation | novel increment
+           One row per main theorem.
+        7. **Missing references**: important related work not cited. Give DOI
+           or arXiv number where possible.
+        8. **Concrete fixes**: for each BLOCKER and MEDIUM issue, show HOW to
+           fix with mathematical content (corrected proof sketch, precise bound,
+           missing lemma statement, etc.).
+
+        Be rigorous. Do not hedge. Focus on what needs to change, not on what
+        the paper already says. A single wrong identity in a main theorem is a
+        BLOCKER, not a LOW.
     """)
 
 
@@ -1328,11 +1620,58 @@ def parse_oracle_issues(review_text: str) -> list[dict]:
     return issues
 
 
+_VERDICT_PATTERNS = (
+    r"minor\s+revision",
+    r"major\s+revision",
+    r"^reject(?:ion)?\s*$",
+    r"\breject\b(?!\s+(?:if|when|unless|on\s))",
+    r"\baccept(?:ed)?\b(?!ance|able)",
+)
+
+
 def extract_verdict(text: str) -> str:
-    t = text.lower()
-    for v in ["accept", "minor revision", "major revision", "reject"]:
-        if v in t:
-            return v
+    """Parse the Oracle's overall verdict.
+
+    Priority 1: an explicit label like "Overall verdict:" / "Recommendation:".
+    Priority 2: search the first and last 1500 chars only (verdict belongs to
+    the summary sections, not mid-review discussion of alternatives).
+    Priority 3: tolerate substring false positives by requiring word boundaries
+    and rejecting occurrences inside "acceptance", "unacceptable", "reject if …".
+    """
+    t = text.strip()
+
+    # Priority 1: labelled verdict line
+    label = re.search(
+        r"(?:overall\s+verdict|recommendation|decision|final\s+verdict)\s*[:\-]\s*"
+        r"(accept(?:ed)?|minor\s+revision|major\s+revision|reject(?:ion)?)",
+        t, re.IGNORECASE,
+    )
+    if label:
+        v = label.group(1).lower().strip()
+        v = re.sub(r"\s+", " ", v)
+        if v.startswith("accept"):
+            return "accept"
+        if v.startswith("minor"):
+            return "minor revision"
+        if v.startswith("major"):
+            return "major revision"
+        if v.startswith("reject"):
+            return "reject"
+
+    # Priority 2: scan head + tail where conclusions usually sit
+    head = t[:1500].lower()
+    tail = t[-1500:].lower()
+    for zone in (head, tail):
+        # Prefer strongest verdict first, then revisions, then accept, then reject
+        if re.search(r"minor\s+revision", zone):
+            return "minor revision"
+        if re.search(r"major\s+revision", zone):
+            return "major revision"
+        if re.search(r"\baccept(?:ed)?\b(?!ance|able)", zone):
+            return "accept"
+        if re.search(r"\breject(?:ion|ed)?\b(?!\s+(?:if|when|unless|on\s))",
+                     zone):
+            return "reject"
     return "unknown"
 
 
@@ -1433,6 +1772,19 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
         ],
     }
 
+    # Fail-safe: JSON parse failure must NOT trigger reroute with phantom 0.
+    # Keep the original target journal and let Stage A handle quality issues.
+    if not fit_data or fit_data.get("fit_score") is None:
+        logger.warning(f"{tag} F1 JSON parse failed (response {len(out)} chars) "
+                       f"— keeping original journal '{state.target_journal}', "
+                       f"skipping reroute gate")
+        state.stage_f_fit_score = -1
+        state.stage_f_passed = True
+        state.log_event("F", "fit_parse_failed",
+                        detail=f"raw_head={out[:500]}")
+        save_state(state)
+        return True
+
     fit_score = fit_data.get("fit_score", 0)
     state.stage_f_fit_score = fit_score
     state.log_event("F", "codex_fit_assessment", score=fit_score,
@@ -1521,6 +1873,28 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
     tag = f"[{state.paper_name}|A]"
     paper_path = Path(state.paper_dir)
 
+    # ── A0: Literature audit (one-shot, before any round) ─────────
+    # This is the highest-leverage prompt: it reclassifies over-claimed
+    # theorems as supporting propositions and produces the comparison table
+    # that earlier manual interventions found most valuable.
+    if not state.stage_a0_done:
+        logger.info(f"{tag} A0 — Literature audit + positioning")
+        prompt_a0 = build_literature_audit_prompt(
+            state.paper_dir, state.target_journal)
+        codex_exec(prompt_a0, work_dir=paper_path,
+                   timeout_seconds=3600, model=model, dry_run=dry_run)
+        compiled_a0 = compile_gate(paper_path, model=model, dry_run=dry_run,
+                                   tag=f"{tag} A0")
+        h = git_commit(paper_path,
+                       "stage-A0: literature audit + theorem demotion"
+                       + ("" if compiled_a0 else " (compile FAILED)"),
+                       tag=tag)
+        state.stage_a0_done = True
+        state.log_event("A", "literature_audit",
+                        committed=bool(h), commit_hash=h,
+                        detail=f"compiled={compiled_a0}")
+        save_state(state)
+
     for rnd in range(state.stage_a_rounds + 1, MAX_STAGE_A_ROUNDS + 1):
         state.stage_a_rounds = rnd
         state.current_round = rnd
@@ -1574,10 +1948,15 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             prior_feedback=prior_feedback)
         codex_exec(prompt_a1, work_dir=paper_path,
                    timeout_seconds=a1_timeout, model=model, dry_run=dry_run)
+        compiled_a1 = compile_gate(paper_path, model=model, dry_run=dry_run,
+                                   tag=f"{tag} A1")
         h = git_commit(paper_path,
-                       f"stage-A R{rnd}: codex quality review", tag=tag)
+                       f"stage-A R{rnd}: codex quality review"
+                       + ("" if compiled_a1 else " (compile FAILED)"),
+                       tag=tag)
         state.log_event("A", "codex_quality_review", round_num=rnd,
-                        committed=bool(h), commit_hash=h)
+                        committed=bool(h), commit_hash=h,
+                        detail=f"compiled={compiled_a1}")
         save_state(state)
 
         # ── A2: Codex journal style optimization ─────────────────
@@ -1586,10 +1965,15 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             state.paper_dir, state.target_journal, rnd)
         codex_exec(prompt_a2, work_dir=paper_path,
                    timeout_seconds=2400, model=model, dry_run=dry_run)
+        compiled_a2 = compile_gate(paper_path, model=model, dry_run=dry_run,
+                                   tag=f"{tag} A2")
         h = git_commit(paper_path,
-                       f"stage-A R{rnd}: codex journal style optimization", tag=tag)
+                       f"stage-A R{rnd}: codex journal style optimization"
+                       + ("" if compiled_a2 else " (compile FAILED)"),
+                       tag=tag)
         state.log_event("A", "codex_journal_style", round_num=rnd,
-                        committed=bool(h), commit_hash=h)
+                        committed=bool(h), commit_hash=h,
+                        detail=f"compiled={compiled_a2}")
         save_state(state)
 
         # ── A3: Codex self-score (retry if empty JSON) ──────────
@@ -1705,14 +2089,19 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 state.paper_dir, state.target_journal, prior_issues, rnd)
             codex_exec(deep_prompt, work_dir=paper_path,
                        timeout_seconds=3600, model=model, dry_run=dry_run)
+            compiled_deep = compile_gate(paper_path, model=model,
+                                         dry_run=dry_run,
+                                         tag=f"{tag} A-DEEP")
             h = git_commit(paper_path,
                            f"stage-A R{rnd}: codex DEEP RESEARCH extension "
-                           f"(was {final_score}/10)",
+                           f"(was {final_score}/10)"
+                           + ("" if compiled_deep else " (compile FAILED)"),
                            tag=tag)
             state.log_event("A", "codex_deep_extension", round_num=rnd,
                             score=final_score,
                             detail=f"Triggered by FUNDAMENTAL verdict "
-                                   f"at score {final_score}/10",
+                                   f"at score {final_score}/10; "
+                                   f"compiled={compiled_deep}",
                             committed=bool(h), commit_hash=h)
             save_state(state)
 
@@ -1777,17 +2166,29 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                         "1 | Section 3 | MEDIUM | simulated issue | fix it"
                         if rnd < 2 else "Overall verdict: Minor revision")
         else:
-            pdf_path = Path(state.pdf_path) if state.pdf_path else None
-            if not oracle_submit(task_id, prompt, pdf_path):
-                state.error = "Oracle submit failed"
-                return False
-            save_state(state)
-            response = oracle_poll(task_id, timeout=oracle_timeout)
+            # Oracle userscript has ≥40% extraction-failure rate historically.
+            # Retry until we get a substantive response or exhaust attempts.
+            response = ""
+            for attempt in range(1, 4):
+                pdf_path = Path(state.pdf_path) if state.pdf_path else None
+                attempt_task = f"{task_id}_a{attempt}"
+                logger.info(f"{tag} B2 oracle attempt {attempt}/3 "
+                            f"(task={attempt_task})")
+                if not oracle_submit(attempt_task, prompt, pdf_path):
+                    state.error = "Oracle submit failed"
+                    return False
+                save_state(state)
+                response = oracle_poll(attempt_task, timeout=oracle_timeout)
+                if is_oracle_response_valid(response):
+                    break
+                logger.warning(f"{tag} Oracle attempt {attempt} returned "
+                               f"garbage ({len(response)} chars), retrying")
+                response = ""
             if not response:
-                state.error = f"Oracle timeout B{rnd}"
+                state.error = f"Oracle failed B{rnd}: 3 garbage attempts"
                 return False
 
-        # Save oracle response
+        # Save oracle response (only substantive ones)
         done_dir = SCRIPT_DIR / "oracle" / "done"
         done_dir.mkdir(parents=True, exist_ok=True)
         (done_dir / f"{task_id}.md").write_text(response, encoding="utf-8")
@@ -1824,7 +2225,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                         committed=bool(h), commit_hash=h)
         save_state(state)
 
-        # ── B5: Claude review fixes ──────────────────────────────
+        # ── B5: Claude review fixes (independent second opinion) ──
         logger.info(f"{tag} Round {rnd}: B5 — Claude review fixes")
         claude_fix_prompt = textwrap.dedent(f"""\
             Quality check after fixing oracle-reported issues.
@@ -1843,8 +2244,8 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             If you find remaining problems, fix them directly.
             Compile: cd {state.paper_dir} && xelatex -interaction=nonstopmode main.tex
         """)
-        codex_exec(claude_fix_prompt, work_dir=paper_path,
-                   timeout_seconds=900, model=model, dry_run=dry_run)
+        claude_exec(claude_fix_prompt, work_dir=paper_path,
+                    dry_run=dry_run)
         h = git_commit(paper_path,
                        f"stage-B R{rnd}: claude review fixes", tag=tag)
         state.log_event("B", "claude_review_fixes", round_num=rnd,
@@ -2342,6 +2743,10 @@ def run_paper_pipeline(
             paper_name=paper_name,
             started_at=datetime.now().isoformat(),
         )
+
+    # Recover round counters from git log if state was reset or started fresh.
+    # Prevents redoing Codex/Oracle work already committed in prior sessions.
+    rebuild_rounds_from_git(state)
 
     # Auto-detect target journal: paper metadata > CLI arg > default
     detected = detect_target_journal(str(paper_path))
