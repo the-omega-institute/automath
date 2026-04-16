@@ -4,6 +4,7 @@ import Omega.Folding.BayesKinkGeometry
 import Omega.Folding.BernoulliHalfDefect36Explicit
 import Omega.Folding.BernoulliHalfEndpoints
 import Omega.Folding.BernoulliPBitpairLaw
+import Omega.Folding.BernoulliPRegenerationTripleJointLaw
 import Omega.Folding.BernoulliPDoobTransformClosed
 import Omega.Folding.BernoulliPEndpointExactFinite
 import Omega.Folding.BernoulliPEndpointLdpRestated

@@ -118,6 +118,7 @@ import Omega.CircleDimension.StokesFiberIntegrationDefect
 import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.StokesQPowerScalingAnomAmplification
 import Omega.CircleDimension.TensorHomExtLaws
+import Omega.CircleDimension.ToeplitzSpectralGapCarathBuffer
 import Omega.CircleDimension.TorusCollapseRelativeForms
 import Omega.CircleDimension.UnitarySliceDecidable
 import Omega.CircleDimension.WdimBettiAverageLaw
