@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         ChatGPT Oracle Bridge
+// @name         ChatGPT Oracle Bridge (macOS)
 // @namespace    omega-automath
 // @version      4.7
-// @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
+// @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review — macOS variant with long-prompt extraction support
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
 // @grant        GM_xmlhttpRequest
@@ -68,7 +68,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v4.7]</b>
+        <b>[Oracle v4.6]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -616,38 +616,26 @@
 
   function looksLikePromptEcho(text) {
     // Detect when extractResponseText returns the USER's message instead of
-    // the assistant's response.  This must NOT flag legitimate reviews that
-    // quote large portions of the paper — those are real responses.
+    // the assistant's response.  This happens when ChatGPT is still in
+    // extended-thinking mode and the only visible text is the prompt echo
+    // prefixed by "你说：" / "You said:".
     if (!sentPromptText || sentPromptText.length < 20) return false;
     const t = text.trim();
     // 1) Starts with user-message indicator → always a prompt echo
     if (/^(你说|You said)/i.test(t)) return true;
-    // 2) Strip UI chrome ("你说：", filename, "PDF") and check prompt-prefix match.
-    //    Only flag as echo if the text IS the prompt (same length), not if it merely
-    //    starts with the prompt's opening.
+    // 2) Strip UI chrome ("你说：", filename, "PDF") and check prompt match
     const stripped = t
       .replace(/^(你说|You said)[：:]?\s*/i, "")
       .replace(/^main(\.pdf)?\s*/i, "")
       .replace(/^PDF\s*/i, "")
       .trim();
     const promptStart = sentPromptText.slice(0, 80).trim();
-    if (stripped.length > 0
-        && stripped.startsWith(promptStart)
-        && stripped.length <= sentPromptText.length * 1.1) {
-      return true;
-    }
-    // 3) Very high overlap: only flag if text is essentially the prompt.
-    //    A real review of a 40KB paper may quote 30-50% of it in citations,
-    //    so 40% overlap is not enough to flag. Use 80%+ overlap AND
-    //    similar length as a stricter criterion.
-    if (t.length > 50
-        && t.length < sentPromptText.length * 1.3
-        && t.length > sentPromptText.length * 0.7) {
-      const chunks = sentPromptText.match(/.{50}/g) || [];
-      if (chunks.length > 10) {
-        const hits = chunks.filter(c => t.includes(c)).length;
-        if (hits / chunks.length > 0.8) return true;
-      }
+    if (stripped.length > 0 && stripped.startsWith(promptStart)) return true;
+    // 3) Short text with high prompt overlap (catches reformatted/truncated echo)
+    if (t.length < sentPromptText.length * 1.5 && t.length > 50) {
+      const chunks = sentPromptText.match(/.{20}/g) || [];
+      const hits = chunks.filter(c => t.includes(c)).length;
+      if (chunks.length > 0 && hits / chunks.length > 0.4) return true;
     }
     return false;
   }
@@ -693,62 +681,42 @@
   }
 
   function extractResponseText() {
-    // ═══ Strategy A: Page-minus-prompt extraction ═══
-    // For long prompts (papers, code), the response is often "prompt text +
-    // response text" in one big block. Subtract the prompt to get response.
+    // ═══ Strategy A: "Biggest text block" — DOM-structure agnostic ═══
+    // Walk all elements inside main, find the LARGEST single container
+    // whose text is NOT a prompt echo and NOT UI chrome.
+    // This works regardless of ChatGPT version because the assistant
+    // response is always the biggest text block on the page.
     const main = document.querySelector("main");
     if (!main) return "";
 
-    const fullText = (main.innerText || "").trim();
-
-    // Strategy A1: If prompt is long, find it in page and take text AFTER it.
-    // This is the most reliable strategy for paper reviews.
-    if (sentPromptText.length > 500) {
-      // Use the LAST 100 chars of the prompt as anchor (very unlikely to
-      // recur elsewhere in the response)
-      const tailAnchor = sentPromptText.slice(-100).trim();
-      let idx = fullText.lastIndexOf(tailAnchor);
-      if (idx < 0 && tailAnchor.length > 50) {
-        idx = fullText.lastIndexOf(tailAnchor.slice(-50));
-      }
-      if (idx >= 0) {
-        const endOfPrompt = idx + (idx >= 0 ? tailAnchor.length : 0);
-        const after = cleanText(fullText.slice(endOfPrompt));
-        if (after.length > 100) {
-          return after;
-        }
-      }
-    }
-
-    // Strategy A2: "Biggest text block" that isn't the prompt itself.
     // Collect candidate blocks: any div/article/section with substantial text
     const candidates = [];
     const allBlocks = main.querySelectorAll("div, article, section");
     for (const el of allBlocks) {
       const text = (el.innerText || "").trim();
       if (text.length < 200) continue;
+      // Skip if this is a parent of a bigger block we already have
+      // (we want the most specific container, not <main> itself)
       candidates.push({ el, text, len: text.length });
     }
 
-    // Sort by length descending
+    // Sort by length descending, then pick the best non-prompt block
     candidates.sort((a, b) => b.len - a.len);
 
     for (const cand of candidates) {
       const cleaned = cleanText(cand.text);
       if (cleaned.length < 200) continue;
-
-      // Skip the full-page candidate if smaller candidates exist
-      const pageLen = fullText.length;
-      if (cleaned.length > pageLen * 0.95 && candidates.length > 3) continue;
-
-      // Strong prompt-echo rejection
       if (looksLikePromptEcho(cleaned)) continue;
 
-      // Explicit prompt prefix match (very strict: only reject if
-      // candidate IS essentially the prompt, not just quotes it)
-      if (sentPromptText.length > 500) {
-        const promptStart = sentPromptText.slice(0, 200).trim();
-        if (cleaned.startsWith(promptStart) && cleaned.length <= sentPromptText.length * 1.1) {
+      // Check that this isn't just the full page (too broad)
+      // — if it's within 5% of the page length AND we have smaller candidates, skip it
+      const pageLen = (main.innerText || "").length;
+      if (cleaned.length > pageLen * 0.95 && candidates.length > 3) continue;
+
+      // Check it's not mostly the prompt
+      if (sentPromptText.length > 50) {
+        const promptStart = sentPromptText.slice(0, 60).trim();
+        if (cleaned.startsWith(promptStart) && cleaned.length < sentPromptText.length * 1.5) {
           continue;
         }
       }
@@ -1092,7 +1060,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Oracle Bridge v4.7 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`Oracle Bridge v4.6 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
     // Check if WE navigated here (not the user clicking around)
     const phase = getTaskPhase();
