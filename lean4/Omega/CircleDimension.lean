@@ -106,6 +106,7 @@ import Omega.CircleDimension.ShortExactAdditivity
 import Omega.CircleDimension.SignedCircleDimension
 import Omega.CircleDimension.SolenoidFiberTorsor
 import Omega.CircleDimension.SolenoidKernelBlindness
+import Omega.CircleDimension.SolenoidTerminalPhaseSystem
 import Omega.CircleDimension.SquarefreeMedianDistance
 import Omega.CircleDimension.SquarefreeMedianMetricEllipseRealization
 import Omega.CircleDimension.StokesExactSequenceDictionary
