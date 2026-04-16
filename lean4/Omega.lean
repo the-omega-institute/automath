@@ -91,6 +91,7 @@ import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.SpectralQuarticAutTrivial
 import Omega.Folding.BayesKinkGeometry
 import Omega.Folding.GaugeAnomalyMean
+import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
 import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
@@ -786,6 +787,7 @@ import Omega.TypedAddressBiaxialCompletion.CompletenessGapAudit
 import Omega.TypedAddressBiaxialCompletion.FrontInterface
 import Omega.TypedAddressBiaxialCompletion.Window6ExplicitFibers
 import Omega.TypedAddressBiaxialCompletion.Window6TwoSheetCharts
+import Omega.TypedAddressBiaxialCompletion.Window6AuditBudgetSplit
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
 import Omega.TypedAddressBiaxialCompletion.PcdimModpFormula
@@ -882,6 +884,7 @@ import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalFoldbin6BitflipStabilityPolynomial
 import Omega.GU.TerminalFoldbin6InformationLossConstants
 import Omega.GU.TerminalFoldbin6BoundaryPureF9Alias
+import Omega.GU.TerminalFoldbin6GeoSignAntiinvariant16
 import Omega.CircleDimension.PhaseSeparationPrecisionExponent
 import Omega.CircleDimension.PhasePrecisionTradeoffDyadic
 import Omega.CircleDimension.PhasePrecisionTradeoff
