@@ -106,6 +106,7 @@ import Omega.CircleDimension.RhodoneaSubflow
 import Omega.CircleDimension.ShiftedJensenDefectIntegralLaw
 import Omega.CircleDimension.ShortExactAdditivity
 import Omega.CircleDimension.SignedCircleDimension
+import Omega.CircleDimension.SolenoidArithmeticSingularRingTorsionKernelFormula
 import Omega.CircleDimension.SolenoidFiberTorsor
 import Omega.CircleDimension.SolenoidKernelBlindness
 import Omega.CircleDimension.SolenoidTerminalPhaseSystem

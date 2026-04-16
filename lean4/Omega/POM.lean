@@ -78,6 +78,7 @@ import Omega.POM.PressureSlopes
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.PrimitivePrimeLucas
+import Omega.POM.QstarDiscreteVariationalThreshold
 import Omega.POM.RenyiDimensionSpectrum
 import Omega.POM.RenyiEndpoint
 import Omega.POM.RenyiEntropyRate
