@@ -95,6 +95,7 @@ import Omega.Conclusion.SinglepointJetRigidity
 import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.SmithRamanujanShadowInversion
 import Omega.Conclusion.SmithRamanujanShadowSeeds
+import Omega.Conclusion.SoftcoreKroneckerSympowerDecomposition
 import Omega.Conclusion.SpectrumSignLaw
 import Omega.Conclusion.SubexponentialLedgerPhaseUniversality
 import Omega.Conclusion.SyncKernelPalindrome

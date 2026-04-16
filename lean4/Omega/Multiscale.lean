@@ -1,3 +1,4 @@
 import Omega.Multiscale.PadicHypercubeStokesHaar
+import Omega.Multiscale.RobustNormalizedStokesWithDefectBudget
 import Omega.Multiscale.SolenoidNormalizedStokesL2ScalingCriticalDegree
 import Omega.Multiscale.StokesPeriodModuleCovectorNormalization
