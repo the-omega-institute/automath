@@ -87,6 +87,7 @@ import Omega.Conclusion.S4BoundaryTotalTorusRankConservation
 import Omega.Conclusion.SaturationDefect
 import Omega.Conclusion.ScreenArithmeticShadowAdditiveLinearizationObstruction
 import Omega.Conclusion.ScreenAtomicValueAntitone
+import Omega.Conclusion.ScreenAuditMarginalDiminishingReturns
 import Omega.Conclusion.ScreenAuditGapSupermodularity
 import Omega.Conclusion.SecondOrderCdimSignature
 import Omega.Conclusion.SectionLedgerCapacityFunctional

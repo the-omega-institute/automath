@@ -136,4 +136,5 @@ import Omega.CircleDimension.TorusCollapseRelativeForms
 import Omega.CircleDimension.UnitarySliceDecidable
 import Omega.CircleDimension.UniversalSolenoidFullPrimeKernel
 import Omega.CircleDimension.WdimBettiAverageLaw
+import Omega.CircleDimension.WdimSignedCircleDimension
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
