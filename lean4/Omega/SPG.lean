@@ -147,6 +147,7 @@ import Omega.SPG.TanakaIncrement
 import Omega.SPG.TanakaStokes
 import Omega.SPG.StokesPeriodModulePathIntegralReconstruction
 import Omega.SPG.TotalDegreeMomentThreshold
+import Omega.SPG.UndecidableNoFiniteComputableCompleteInvariant
 import Omega.SPG.VolumeBoundaryScaling
 import Omega.SPG.WalshStokes
 import Omega.SPG.WeightedBoundaryDecomposition

@@ -1,6 +1,7 @@
 import Omega.GroupUnification.ChiralOrthogonalityTypeObservables
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.ExactClock
+import Omega.GroupUnification.FibTailReversibility
 import Omega.GroupUnification.FiniteTimeLaw
 import Omega.GroupUnification.FreeEnergyComposition
 import Omega.GroupUnification.GeneralNormalForm
