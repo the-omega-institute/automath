@@ -59,6 +59,7 @@ import Omega.GU.PullbackBracketFromOperatorEnvelope
 import Omega.GU.RadialQuadraticIdentifiability
 import Omega.GU.RadialQuadraticKlInfinite
 import Omega.GU.SheetflipRegisterBound
+import Omega.GU.SmScaleLiftTripleObstruction
 import Omega.GU.SideInformationBitLowerBound
 import Omega.GU.SmUpliftResidualMediatorM7
 import Omega.GU.So10TwoTorsionCentralCollapseNecessity
