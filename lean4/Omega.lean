@@ -792,6 +792,7 @@ import Omega.TypedAddressBiaxialCompletion.ClassicalContraction
 import Omega.TypedAddressBiaxialCompletion.BoundaryAddressCollision
 import Omega.TypedAddressBiaxialCompletion.BoundaryJointSufficiency
 import Omega.TypedAddressBiaxialCompletion.ComovingDefectBound
+import Omega.TypedAddressBiaxialCompletion.ComovingUniformMinimization
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.PreferredMinimalInstantiationExtraction
@@ -964,6 +965,7 @@ import Omega.GroupUnification.TwoChannelCollapse
 import Omega.GroupUnification.SpreadEquivalence
 import Omega.GroupUnification.SMSignatureCyclicDivides6
 import Omega.GroupUnification.ParryEndpointCollapse
+import Omega.GU.ParryEndpointCollapse
 import Omega.GroupUnification.ParryCommutingSquarePhi
 import Omega.GroupUnification.ChiralOrthogonalityTypeObservables
 import Omega.GroupUnification.ExactClock
@@ -1024,6 +1026,7 @@ import Omega.CircleDimension.PoissonEntropyTomography
 import Omega.CircleDimension.DoubleDiscriminant
 import Omega.CircleDimension.WdimBettiAverageLaw
 import Omega.CircleDimension.ComovingDefectDeltaBound
+import Omega.CircleDimension.AtomicDefectProny2KappaRecovery
 import Omega.CircleDimension.UnitarySliceDecidable
 import Omega.CircleDimension.PhaseRegisterCommonAssignments
 import Omega.CircleDimension.AlgebraicDegreeMinCircleRank
