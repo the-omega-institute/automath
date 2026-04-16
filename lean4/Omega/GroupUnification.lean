@@ -6,6 +6,7 @@ import Omega.GroupUnification.FreeEnergyComposition
 import Omega.GroupUnification.GeneralNormalForm
 import Omega.GroupUnification.GeneralRigidity
 import Omega.GroupUnification.Gibbs
+import Omega.GroupUnification.GutOmegaLinearAction
 import Omega.GroupUnification.HankelVandermondeDiscriminantStiffness
 import Omega.GroupUnification.MarkovZeroVariance
 import Omega.GroupUnification.NormalForm
