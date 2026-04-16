@@ -22,35 +22,38 @@ cd lean4 && lake build
 If errors, fix them (up to 3 attempts per theorem).
 If a theorem is stuck, skip it and continue with the others.
 
-## Step 3: Sync with base branch before committing
-Before making any commits, sync with the latest base to minimize merge conflicts:
+## Step 3: Rebase + commit proofs
 ```bash
 git fetch origin lean4-codex-auto-dev
 git rebase origin/lean4-codex-auto-dev
 ```
-If rebase conflicts occur on lean4/Omega.lean or IMPLEMENTATION_PLAN.md,
-resolve by keeping ALL lines from both sides (additive merge), then:
-```bash
-git add <conflicted_file>
-git rebase --continue
-```
+If rebase conflicts occur, resolve by keeping ALL lines from both sides
+(additive merge), then `git add <file>` + `git rebase --continue`.
 
-## Step 4: Git commit the proofs
+Then commit proof files only:
 ```bash
-git add lean4/Omega/ lean4/Omega.lean
+git add lean4/Omega/
 git commit -m "R<ROUND_NUM>: [brief description of what was proved]
 
 Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
 ```
 
-## Step 5: Update tracking + annotate
+## Step 4: Update tracking + annotate
+- Add import lines to lean4/Omega.lean for any new proof files
 - Update lean4/IMPLEMENTATION_PLAN.md with new round info
 - Add \leanverified{theorem_name} to the corresponding .tex files
   (find them via the paper_label, escape underscores as \_)
 
-## Step 6: Git commit registration
+## Step 5: Rebase + commit registration
 ```bash
-git add lean4/IMPLEMENTATION_PLAN.md theory/
+git fetch origin lean4-codex-auto-dev
+git rebase origin/lean4-codex-auto-dev
+```
+Resolve any conflicts the same way (keep both sides).
+
+Then commit registration:
+```bash
+git add lean4/Omega.lean lean4/IMPLEMENTATION_PLAN.md theory/
 git commit -m "Register R<ROUND_NUM>: [brief description]
 
 Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
@@ -76,10 +79,10 @@ You MUST NOT weaken or replace them. Specifically:
 
 ## Completion Contract
 - No sorry / admit / axiom; lake build must pass with zero errors
-- Must complete all 6 steps; if a theorem is stuck, skip it and continue
+- Must complete all 5 steps; if a theorem is stuck, skip it and continue
 - Tactic failure: auto-try next; compile error: auto-fix up to 3 rounds
 - Implementation changes: only in lean4/Omega/
-- Registration changes: only in IMPLEMENTATION_PLAN.md and theory/
+- Registration changes: only in Omega.lean, IMPLEMENTATION_PLAN.md, and theory/
 - Do NOT refactor or delete existing code
 - Do NOT weaken or replace existing theorem signatures (see HARD PROHIBITION above)
 - Do NOT git push

@@ -218,14 +218,25 @@ def _clone_lake_cache(wt_path: Path) -> None:
         return  # already present (shouldn't happen for a fresh worktree)
 
     start = time.monotonic()
-    # Try APFS clone first (macOS)
+    # Try APFS clone first (macOS), retry once after a brief pause
     result = run_cmd(
         ["cp", "-Rc", str(src), str(dst)],
-        timeout=300,
+        timeout=1200,
     )
     if result.returncode != 0:
+        logger.warning("APFS clone failed, retrying in 3s ...")
+        if dst.exists():
+            shutil.rmtree(dst)
+        time.sleep(3)
+        result = run_cmd(
+            ["cp", "-Rc", str(src), str(dst)],
+            timeout=1200,
+        )
+    if result.returncode != 0:
         # Fallback: regular copy
-        logger.warning("APFS clone failed, falling back to regular copy")
+        logger.warning("APFS clone retry failed, falling back to regular copy")
+        if dst.exists():
+            shutil.rmtree(dst)
         shutil.copytree(str(src), str(dst), symlinks=True)
 
     elapsed = time.monotonic() - start
@@ -281,7 +292,7 @@ def _codex_resolve_conflicts(
     wt_path: Path,
     *,
     model: Optional[str] = None,
-    timeout: int = 300,
+    timeout: int = 1200,
 ) -> bool:
     """Use codex exec to resolve rebase conflicts in a worktree.
 
@@ -636,7 +647,7 @@ def parse_phase_c_output(raw: str) -> PhaseCResult:
     result.new_commits = list(dict.fromkeys(
         h for h in commit_hashes if 7 <= len(h) <= 12
     ))[:10]
-    success_indicators = ["lake build", "commit", f"Register R"]
+    success_indicators = ["lake build", "commit", "Register R"]
     result.success = any(ind.lower() in raw.lower() for ind in success_indicators)
     return result
 
