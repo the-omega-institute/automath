@@ -5,4 +5,5 @@ import Omega.OperatorAlgebra.FoldConditionalExpectationHaar
 import Omega.OperatorAlgebra.FoldGaugeCommutantExplicit
 import Omega.OperatorAlgebra.FoldInvariantSubalgebra
 import Omega.OperatorAlgebra.FoldSupervisedMinimaxRisk
+import Omega.OperatorAlgebra.ReplicationCentralizerColoredPartitionOrbitAlgebra
 import Omega.OperatorAlgebra.FoldCleanAncillaReversibleDilation
