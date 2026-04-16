@@ -2167,17 +2167,26 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 1,
 # CLI
 # ---------------------------------------------------------------------------
 
+def _print(msg: str):
+    """Windows-safe print (handles Chinese chars in cp1252 console)."""
+    if IS_WINDOWS:
+        sys.stdout.buffer.write((msg + "\n").encode("utf-8", errors="replace"))
+        sys.stdout.buffer.flush()
+    else:
+        print(msg)
+
 def print_status():
-    print(f"Oracle Pipeline v2 — Status")
-    print(f"{'='*60}")
-    print(f"Platform:      {sys.platform}")
-    print(f"Oracle server: {'UP' if oracle_server_alive() else 'DOWN'}")
-    print(f"Codex CLI:     {CODEX_PATH}")
+    _print(f"Oracle Pipeline v2 — Status")
+    _print(f"{'='*60}")
+    _print(f"Platform:      {sys.platform}")
+    _print(f"Oracle server: {'UP' if oracle_server_alive() else 'DOWN'}")
+    _print(f"Codex CLI:     {CODEX_PATH}")
+    _print(f"Claude CLI:    {CLAUDE_PATH}")
     my = get_my_papers()
-    print(f"My papers:     {len(my)} assigned to {sys.platform}")
-    print()
+    _print(f"My papers:     {len(my)} assigned to {sys.platform}")
+    _print("")
     if not STATE_DIR.exists():
-        print("No pipeline state found.")
+        _print("No pipeline state found.")
         return
     for f in sorted(STATE_DIR.glob("*.json")):
         try:
@@ -2202,19 +2211,19 @@ def print_status():
         journal = d.get("target_journal", "?")
 
         status = "DONE" if stage == "DONE" else ("FAILED" if err else f"Stage {stage}")
-        print(f"  {name}")
-        print(f"    Status:  {status}  |  Total rounds: {total}")
-        print(f"    Journal: {journal}"
-              + (f" (rerouted from {f_orig})" if f_sugg else ""))
+        _print(f"  {name}")
+        _print(f"    Status:  {status}  |  Total rounds: {total}")
+        _print(f"    Journal: {journal}"
+               + (f" (rerouted from {f_orig})" if f_sugg else ""))
         if f_fit:
-            print(f"    Stage F: fit={f_fit}/10"
-                  + (f", suggested={f_sugg}" if f_sugg else ""))
-        print(f"    Stage A: {a_r} rounds, scores={a_scores}")
-        print(f"    Stage B: {b_r} rounds, verdicts={b_verd}")
-        print(f"    Stage C: {c_r} rounds, verdicts={c_verd}")
+            _print(f"    Stage F: fit={f_fit}/10"
+                   + (f", suggested={f_sugg}" if f_sugg else ""))
+        _print(f"    Stage A: {a_r} rounds, scores={a_scores}")
+        _print(f"    Stage B: {b_r} rounds, verdicts={b_verd}")
+        _print(f"    Stage C: {c_r} rounds, verdicts={c_verd}")
         if err:
-            print(f"    Error:   {err}")
-        print()
+            _print(f"    Error:   {err}")
+        _print("")
 
 
 def main() -> int:
