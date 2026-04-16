@@ -35,4 +35,14 @@ theorem paper_terminal_foldbin6_geo_sign_antiinvariant_16 :
       Fintype.card Window6GeoSignAntiinvariantBasis = 16 := by
   native_decide
 
+/-- Paper: `cor:terminal-foldbin6-geo-cycle-quotient-48`.
+The geometric stabilizer has cycle type `1^32 2^16`, so the quotient has `48` orbits. -/
+theorem paper_terminal_foldbin6_geo_cycle_quotient_48 :
+    window6GeoTotalFixedPoints = 32 ∧
+      window6GeoTotalTwoCycles = 16 ∧
+      window6GeoTotalFixedPoints + window6GeoTotalTwoCycles = 48 := by
+  rcases paper_terminal_foldbin6_geo_sign_antiinvariant_16 with ⟨hFixed, hTwo, _, _, _⟩
+  refine ⟨hFixed, hTwo, ?_⟩
+  omega
+
 end Omega.GU

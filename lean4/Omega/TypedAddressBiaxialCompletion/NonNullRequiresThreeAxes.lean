@@ -24,4 +24,11 @@ theorem paper_typed_address_biaxial_completion_nonnull_requires_three_axes
   exact
     ⟨h.readabilityWitness hnonnull, h.residueWitness hnonnull, h.modeWitness hnonnull⟩
 
+/-- Paper: `prop:typed-address-biaxial-completion-readability-thresholds`.
+Any non-`NULL` readout must clear all three orthogonal readability thresholds. -/
+theorem paper_typed_address_biaxial_completion_readability_thresholds
+    (h : TypedAddressThreeAxisData) :
+    h.nonNullReadout → h.visibleAxisPassed ∧ h.residueAxisPassed ∧ h.modeAxisPassed := by
+  exact paper_typed_address_biaxial_completion_nonnull_requires_three_axes h
+
 end Omega.TypedAddressBiaxialCompletion
