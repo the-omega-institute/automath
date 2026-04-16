@@ -22,6 +22,37 @@
 
 **远程分支并行记录（merge 前）**：以下 round 编号仅在 `origin/lean4-codex-auto-dev` 内部有序。
 
+**Phase R1046（本轮落地，proof / sync / registration / commit 执行）**：新增
+`paper_cdim_comoving_horizon_scan_fourier_inversion`
+（对应 `thm:cdim-comoving-horizon-scan-fourier-inversion`，CircleDimension；新建
+`ComovingHorizonScanFourierInversion.lean`，定义 chapter-local
+`ComovingHorizonScanFourierInversionData`，复用 typed-address 的
+`ComovingFourierClosedData`，把 scan profile 的可积解析正则性、显式 Fourier 指数谱公式与
+开区间可识别性压成 CircleDimension 记号下的三结论 wrapper）；新增
+`paper_discussion_horizon_measure_fold6_pushforward`
+（对应 `prop:discussion-horizon-measure-fold6-pushforward`，Discussion；新建
+`HorizonMeasureFold6Pushforward.lean`，定义 chapter-local
+`HorizonMeasureFold6PushforwardData`，把 fold-6 的有限推前概率测度、正圆测度的
+Carath\'eodory/Herglotz 正性、Toeplitz--PSD 的 Gram 矩阵后果与弱极限审计输入打包为
+paper-facing wrapper）；proof 侧执行
+`lake build Omega.CircleDimension.ComovingHorizonScanFourierInversion` 与
+`lake build Omega.Discussion.HorizonMeasureFold6Pushforward` 均通过；同步阶段执行
+`git stash push --include-untracked -m 'R1046-pre-proof-rebase' -- lean4/Omega lean4/Omega.lean`、
+`git fetch origin lean4-codex-auto-dev`、`git rebase origin/lean4-codex-auto-dev` 与
+`git stash pop`，其中目标
+`paper_bdry_orientation_cartesian_power_parity_collapse` 在 rebased upstream 基线上已存在，
+故本轮保留远端版本且未改写其签名；随后在 rebased worktree 上执行 `cd lean4 && lake build`，
+全量构建通过（`9247` jobs，仅见既有 linter warning）；文件：
+`lean4/Omega/CircleDimension/ComovingHorizonScanFourierInversion.lean`、
+`lean4/Omega/Discussion/HorizonMeasureFold6Pushforward.lean`、`lean4/Omega.lean`；Lean theorem 名：
+`paper_cdim_comoving_horizon_scan_fourier_inversion`、
+`paper_discussion_horizon_measure_fold6_pushforward`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/circle_dimension_phase_gate/subsec__circle-dimension-phase-gate-comoving-horizon-scan-tomography.tex`
+（`thm:cdim-comoving-horizon-scan-fourier-inversion`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/discussion/sec__discussion.tex`
+（`prop:discussion-horizon-measure-fold6-pushforward`）；新增 `\\leanverified` +2，覆盖章节为
+CircleDimension / Discussion，降级项数 0，non-trivial 计数 0）
+
 **Phase R1043（本轮落地，proof / sync / registration / commit 执行）**：新增
 `paper_cdim_kernel_rkhs_feature_map`
 （对应 `prop:cdim-kernel-rkhs-feature-map`，CircleDimension；新建

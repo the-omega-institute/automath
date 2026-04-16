@@ -655,6 +655,7 @@ import Omega.Zeta.BlockCyclicRigidity
 import Omega.Zeta.FiniteRankRealisation
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Discussion.ChebyshevAdams
+import Omega.Discussion.HorizonMeasureFold6Pushforward
 import Omega.Discussion.HypercubeStokesFourierBinomial
 import Omega.Discussion.HypercubePotentialCurvatureControlledStrictification
 import Omega.EA.Wedderburn
@@ -1223,10 +1224,11 @@ import Omega.Zeta.RhoGapM12
 import Omega.Zeta.ComovingEnergyDeltaBound
 import Omega.Zeta.HankelDeterminantalRadicalEqRigidity
 import Omega.Zeta.HankelFirstBlockDeterminantDiscriminantWeight
+import Omega.CircleDimension.ComovingHorizonScanFourierInversion
 import Omega.CircleDimension.ComovingHorizonScanFirstLayerExtraction
 import Omega.Zeta.FiniteDefectPoissonL2EnergyClosedForm
 import Omega.Conclusion.PrimorialMixedRadixAffine
 import Omega.CircleDimension.DefectMeasureRecursiveLayerPeeling
+import Omega.GU.BdryOrientationCartesianPowerParityCollapse
 import Omega.GU.BdryOrientationJumpclassFiberproductMultiplicativity
 import Omega.GU.BdryOrientationIteratedFiberproductParity
-import Omega.GU.BdryOrientationCartesianPowerParityCollapse
