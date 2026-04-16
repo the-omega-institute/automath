@@ -907,12 +907,16 @@ def build_self_score_prompt(paper_dir: str, target_journal: str) -> str:
           ],
           "strengths": ["strength1", "strength2", ...],
           "specific_fixes": ["fix1", "fix2", ...],
-          "prognosis_can_reach_8": "yes|no|unclear"
+          "prognosis_can_reach_8": "yes|no|unclear",
+          "suggested_journal": "Name of better-fit journal if current target is too high, or empty string"
         }}
         ```
 
         Be ruthlessly honest.
-        - prognosis_can_reach_8="no" → paper has FUNDAMENTAL flaws editing cannot fix
+        - prognosis_can_reach_8="no" → current target is the wrong venue OR the paper
+          cannot reach 8 here. In that case, fill suggested_journal with a realistic
+          alternative (e.g., specialized journal, short-note venue) where the paper
+          would fit at score 7-8 without needing NEW research.
         - prognosis_can_reach_8="yes" → issues are SURFACE, iteration can raise score
         Do NOT edit any files — only output the JSON evaluation.
     """)
@@ -1371,16 +1375,32 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                         committed=bool(h), commit_hash=h)
         save_state(state)
 
-        # ── A3: Codex self-score ─────────────────────────────────
-        logger.info(f"{tag} Round {rnd}: A3 — Codex self-score")
-        prompt_a3 = build_self_score_prompt(state.paper_dir, state.target_journal)
-        out_a3 = codex_exec(prompt_a3, work_dir=paper_path,
-                            timeout_seconds=600, model=model, dry_run=dry_run)
-        score_data = parse_json_from_output(out_a3) if not dry_run else {
-            "overall_score": 6 + rnd, "verdict": "revise" if rnd < 3 else "accept",
-            "key_issues": [f"dry run issue R{rnd}"],
-            "specific_fixes": [f"dry run fix R{rnd}"],
-        }
+        # ── A3: Codex self-score (retry if empty JSON) ──────────
+        score_data = {}
+        for attempt in range(1, 3):
+            logger.info(f"{tag} Round {rnd}: A3 — Codex self-score "
+                        f"(attempt {attempt}/2)")
+            prompt_a3 = build_self_score_prompt(
+                state.paper_dir, state.target_journal)
+            out_a3 = codex_exec(prompt_a3, work_dir=paper_path,
+                                timeout_seconds=600, model=model,
+                                dry_run=dry_run)
+            score_data = parse_json_from_output(out_a3) if not dry_run else {
+                "overall_score": 6 + rnd,
+                "verdict": "revise" if rnd < 3 else "accept",
+                "key_issues": [f"dry run issue R{rnd}"],
+                "specific_fixes": [f"dry run fix R{rnd}"],
+                "prognosis_can_reach_8": "yes",
+            }
+            # Valid if we have an overall_score and at least some content
+            if score_data.get("overall_score") is not None and score_data:
+                break
+            logger.warning(f"{tag} Codex returned empty/unparseable JSON, "
+                           f"retrying...")
+        else:
+            logger.warning(f"{tag} Codex self-score failed twice, "
+                           f"marking score as unknown (will retry next round)")
+
         score = score_data.get("overall_score", 0)
         state.stage_a_scores.append(score)
         state.log_event("A", "codex_self_score", round_num=rnd,
@@ -1390,6 +1410,12 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
 
         logger.info(f"{tag} Round {rnd}: Score = {score}/10 "
                     f"(threshold = {SCORE_PASS_THRESHOLD})")
+
+        # Skip empty-JSON rounds entirely (don't trigger early-exit on phantom 0)
+        if not score_data or score_data.get("overall_score") is None:
+            logger.warning(f"{tag} Skipping round {rnd} decision — "
+                           f"no valid self-score. Looping.")
+            continue
 
         # ── A4: Claude reviews the score/evaluation ──────────────
         logger.info(f"{tag} Round {rnd}: A4 — Claude review of score")
@@ -1412,6 +1438,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
               "adjusted_score": <1-10>,
               "agree_with_issues": true/false,
               "prognosis_can_reach_8": "yes|no|unclear",
+              "suggested_journal": "alternative venue if current target is wrong, or empty",
               "notes": "brief explanation"
             }}
             ```
@@ -1433,19 +1460,43 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
         logger.info(f"{tag} Round {rnd}: Final score = {final_score} "
                     f"(codex={score}, claude={adjusted})")
 
-        # ── Early exit: FUNDAMENTAL problems (both agree editing can't fix) ──
+        # ── Handle FUNDAMENTAL verdict: reroute to lower-tier journal ──
+        # "FUNDAMENTAL" often means "paper is fine but not deep enough for THIS journal"
+        # → don't halt; proceed to Stage B at a realistic venue to let Oracle decide.
         codex_prog = score_data.get("prognosis_can_reach_8", "unclear")
         claude_prog = claude_data.get("prognosis_can_reach_8", "unclear")
         if codex_prog == "no" and claude_prog == "no":
-            logger.warning(f"{tag} FUNDAMENTAL FLAWS — both codex and claude say "
-                           f"editing cannot reach 8. Halting Stage A.")
-            logger.warning(f"{tag} Paper flagged for human review / re-scope / archival.")
-            state.stage_a_passed = False
-            state.error = (f"Stage A halted at round {rnd}: fundamental flaws, "
-                           f"editing cannot reach threshold. "
-                           f"Final score: {final_score}/10.")
-            save_state(state)
-            return False
+            logger.warning(f"{tag} Both codex and claude say target journal "
+                           f"({state.target_journal}) is too high a bar.")
+
+            # Look for a downscope suggestion in claude_data notes or score_data
+            suggested = None
+            for d in (score_data, claude_data):
+                for key in ("suggested_journal", "recommended_journal",
+                             "alternative_journal"):
+                    if d.get(key):
+                        suggested = d[key]
+                        break
+                if suggested:
+                    break
+
+            if suggested and suggested.lower() != state.target_journal.lower():
+                logger.info(f"{tag} Downscoping target: "
+                            f"{state.target_journal} → {suggested}")
+                state.stage_f_suggested_journal = suggested
+                state.target_journal = suggested
+                save_state(state)
+                # Continue looping — now against the easier target
+                continue
+
+            # No alternative found — pass through anyway to let Stage B (Oracle)
+            # do external review. Better than silent failure.
+            if rnd >= 2:
+                logger.warning(f"{tag} No downscope suggested; passing to Stage B "
+                               f"with best score {final_score}/10 for external review.")
+                state.stage_a_passed = True
+                save_state(state)
+                return True
 
         # ── Gate: pass if ≥ threshold ────────────────────────────
         if final_score >= SCORE_PASS_THRESHOLD:
