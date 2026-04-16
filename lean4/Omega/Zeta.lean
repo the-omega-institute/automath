@@ -78,6 +78,7 @@ import Omega.Zeta.GeometricHarmonicTail
 import Omega.Zeta.GoldenRadiusVisibility
 import Omega.Zeta.GroupoidCentralRenyiShannon
 import Omega.Zeta.HankelDeterminantalRadicalEqRigidity
+import Omega.Zeta.HankelVandermondeFiniteBlaschke
 import Omega.Zeta.HankelFirstBlockDeterminantDiscriminantWeight
 import Omega.Zeta.HankelStiffnessBalance
 import Omega.Zeta.HankelVandermonde2
