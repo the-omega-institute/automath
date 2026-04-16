@@ -94,6 +94,7 @@ import Omega.Zeta.IntroFinitePart
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.JensenSoftThresholdLowerBound
 import Omega.Zeta.LengthModqChebotarev
+import Omega.Zeta.LeftCEDyadicDensity
 import Omega.Zeta.LocalInversionDelta
 import Omega.Zeta.LocalizedIntegersPrimeAxisIncrementLaw
 import Omega.Zeta.LocalizedIntegersPadicKernelRigidity

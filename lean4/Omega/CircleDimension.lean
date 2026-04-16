@@ -57,6 +57,7 @@ import Omega.CircleDimension.LocalizationUniversalProperty
 import Omega.CircleDimension.MedianStokesRigidityPotential
 import Omega.CircleDimension.MedianThetaRigidityPrimeRatio
 import Omega.CircleDimension.MinimalAuditCompletion
+import Omega.CircleDimension.MinimalRecordAxis
 import Omega.CircleDimension.MinimalLogAuditablePhaseCircles
 import Omega.CircleDimension.MobiusBipartiteColoring
 import Omega.CircleDimension.ModeGramKernel
