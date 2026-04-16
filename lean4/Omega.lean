@@ -181,6 +181,7 @@ import Omega.Folding.BernoulliPPressureQuartic
 import Omega.Folding.BernoulliPParryPressureChain
 import Omega.Folding.BernoulliPDoobTransformClosed
 import Omega.Folding.EpsilonMachineFibMobius
+import Omega.Folding.EpsilonMachineSynchronizingWord
 import Omega.Folding.EndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
 import Omega.Folding.ImageSubshiftZeta
@@ -288,6 +289,7 @@ import Omega.SPG.MainResonance
 import Omega.SPG.HolderOpenResonance
 import Omega.SPG.BoundaryRigidity
 import Omega.SPG.CubeLinftyPrimitiveExplicitMinimizer
+import Omega.SPG.CubeLinftyPrimitiveBoundaryRigidity
 import Omega.SPG.ContractionEstimate
 import Omega.SPG.ExplicitMinimizer
 import Omega.SPG.SturmianCylinderInformationTime
@@ -1078,6 +1080,7 @@ import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.Zeta.VandermondeResultantSeeds
 import Omega.GU.ZeroDefectExpRate
 import Omega.Conclusion.ZeckendorfEulerSeeds
+import Omega.Conclusion.ZeckendorfCrossResolution
 import Omega.Conclusion.IntermediateQuotientSeeds
 import Omega.Conclusion.JGEllipseConditionNumberThreshold
 import Omega.Conclusion.JGEllipseFixedEpsilonInformationBarrier

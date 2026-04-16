@@ -1,5 +1,6 @@
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Tactic
+import Omega.Folding.Fiber
 import Omega.Folding.MicrostateResidualWindowReachability
 import Omega.Folding.Rewrite
 
@@ -9,9 +10,12 @@ open scoped BigOperators
 
 /-- The Dirac mass at a stable target `x`, used to specialize the residual-window theorem. -/
 noncomputable def pointMass {m : ℕ} (x : X m) : X m → ℝ :=
-  fun y => if y = x then 1 else 0
+  by
+    classical
+    exact fun y => if y = x then 1 else 0
 
 lemma pointMass_nonneg {m : ℕ} (x : X m) : ∀ y, 0 ≤ pointMass x y := by
+  classical
   intro y
   by_cases hy : y = x <;> simp [pointMass, hy]
 
