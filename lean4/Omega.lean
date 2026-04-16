@@ -50,6 +50,7 @@ import Omega.CircleDimension.MinimalLogAuditablePhaseCircles
 import Omega.CircleDimension.MinimalAuditCompletion
 import Omega.CircleDimension.AuditedRealizationBudgetLowerBound
 import Omega.CircleDimension.AnomalyQuadraticLaw
+import Omega.CircleDimension.CertificateInverseLimitAddressing
 import Omega.CircleDimension.NonresonantLissajousNodeCount
 import Omega.Folding.ShiftDynamics
 import Omega.Folding.Rewrite
@@ -126,6 +127,7 @@ import Omega.FoldResidualTime.ApparentRandomnessFreezingEscort
 import Omega.GU.Window6B3C3QuarticDefectOnedim
 import Omega.GU.Window6B3C3EuclideanCubature
 import Omega.GU.Window6B3C3QuarticRankoneHarmonicDetector
+import Omega.GU.Window6B3C3UniqueQuarticDetector
 import Omega.GU.Window6BinfoldLastbitLecamEquivalence
 import Omega.GU.Window6TypeSuperselectionAutGamma6
 import Omega.GU.Window6AffineFiberOrbitClassification
@@ -169,6 +171,7 @@ import Omega.Folding.YmSofic
 import Omega.Folding.YmAmbiguityShellDag
 import Omega.Folding.SyncDelay
 import Omega.Folding.YmSyncTail
+import Omega.Folding.YmAmbiguityHausdorffCodim
 import Omega.Folding.YmAmbiguityShellExponentiallyThin
 import Omega.Folding.YmAmbiguityShellZetaFactorTrivial
 import Omega.Folding.TimeLayerDichotomy
