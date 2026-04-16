@@ -5,6 +5,7 @@ import Omega.Zeta.BooleanBinaryJumpKernels2AdicHalfperiod
 import Omega.Zeta.BooleanDisjointnessZetaLDLT
 import Omega.Zeta.CLTSpectral
 import Omega.Zeta.CayleyDepthIdentity
+import Omega.Zeta.CertInverseLimitCoherence
 import Omega.Zeta.ClassArtinMobiusTrace
 import Omega.Zeta.ClassFunctionAdamsMobius
 import Omega.Zeta.ClassFunctionLinearisation

@@ -1,3 +1,4 @@
 import Omega.OperatorAlgebra.FoldConditionalExpectationHaar
+import Omega.OperatorAlgebra.FoldInvariantSubalgebra
 import Omega.OperatorAlgebra.FoldSupervisedMinimaxRisk
 import Omega.OperatorAlgebra.FoldCleanAncillaReversibleDilation
