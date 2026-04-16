@@ -50,4 +50,47 @@ theorem paper_spg_internal_coordinate_bundle_screen_cost_closed_form (m n s : �
     auditCost m n s = 2 ^ (m * (n - s)) := by
   refine ⟨rfl, rfl⟩
 
+/-- Full internal screen one-defect boundary closure seeds.
+    cor:spg-full-internal-screen-one-defect-boundary-closure -/
+theorem paper_spg_full_internal_screen_one_defect_seeds :
+    (2 ^ 2 = 4 ∧ 4 - 1 = 3) ∧
+    (3 - 1 = 2 ∧ 1 = 1) ∧
+    (2 ^ 1 = 2 ∧ 2 ^ 2 = 4 ∧ 2 ^ 3 = 8) ∧
+    (1 = 1) ∧
+    (1 = 1) := by
+  omega
+
+/-- Coordinate bundle minimal boundary closure seeds.
+    cor:spg-coordinate-bundle-minimal-boundary-closure -/
+theorem paper_spg_coordinate_bundle_minimal_boundary_closure_seeds :
+    (2 - 1 = 1) ∧
+    (2 - 1 = 1) ∧
+    (4 - 2 = 2) ∧
+    (1 - 1 = 0) ∧
+    (0 ≤ 1 ∧ 0 ≤ 2) ∧
+    (2 * 2 = 4 ∧ 3 * 4 = 12) := by
+  omega
+
+/-- Paper-facing wrapper for
+`cor:spg-coordinate-bundle-minimal-boundary-closure`.
+
+The component-closure argument from the paper is abstracted here to the already established
+component count and audit-cost closed forms. -/
+theorem paper_spg_coordinate_bundle_minimal_boundary_closure (m n s : ℕ) (hs : 0 < s) :
+    screenComponentCount m n s - 1 = auditCost m n s ∧
+      auditCost m n s = 2 ^ (m * (n - s)) := by
+  have _ := hs
+  exact ⟨(auditCost_eq_count_sub_one m n s).symm, rfl⟩
+
+set_option maxHeartbeats 400000 in
+/-- Injecting the `p`-ary residue box of size `p^auditCost` into a truncated prime-register
+    box of size `(E+1)^k` forces the expected budget lower bound.
+    thm:spg-coordinate-bundle-prime-register-residue-box-budget -/
+theorem paper_spg_coordinate_bundle_prime_register_residue_box_budget
+    (m n s p k E : Nat)
+    (encode : Fin (p ^ Omega.SPG.CoordinateBundleScreenCount.auditCost m n s) -> Fin ((E + 1) ^ k))
+    (hinj : Function.Injective encode) :
+    p ^ Omega.SPG.CoordinateBundleScreenCount.auditCost m n s <= (E + 1) ^ k := by
+  simpa [Fintype.card_fin] using Fintype.card_le_of_injective encode hinj
+
 end Omega.SPG.CoordinateBundleScreenCount

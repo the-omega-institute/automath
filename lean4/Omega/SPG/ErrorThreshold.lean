@@ -152,6 +152,50 @@ theorem paper_kappa_threshold_criterion :
   ⟨fun _ _ hp hε hε1 => kappa_lt_iff_eps_lt hp hε hε1,
    fun _ _ hp hε hε1 heps => kappa_ge_of_eps_ge hp hε hε1 heps⟩
 
+/-- Sharpness of the relative-error threshold: once the threshold is met, the two adjacent
+    exponent ratios `r` and `p^2 r` admit overlapping admissible observation intervals, and
+    conversely any such overlap forces the threshold inequality.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem paper_spg_relative_error_threshold_sharpness :
+    ∀ p ε : ℝ, 1 < p → 0 < ε → ε < 1 →
+      ((p - 1) / (p + 1) ≤ ε ↔
+        ∃ r x : ℝ,
+          0 < r ∧
+          r / kappa ε ≤ x ∧ x ≤ kappa ε * r ∧
+          (p ^ 2 * r) / kappa ε ≤ x ∧ x ≤ kappa ε * (p ^ 2 * r)) := by
+  intro p ε hp hε_pos hε_lt
+  constructor
+  · intro hε
+    have hkappa : p ≤ kappa ε := kappa_ge_of_eps_ge hp hε_pos hε_lt hε
+    have hkappa_pos : 0 < kappa ε := by
+      unfold kappa
+      exact div_pos (by linarith) (by linarith)
+    have hkappa_gt_one : 1 < kappa ε := kappa_gt_one hε_pos hε_lt
+    refine ⟨1, kappa ε, by norm_num, ?_, ?_, ?_, ?_⟩
+    · rw [div_le_iff₀ hkappa_pos]
+      nlinarith
+    · simp
+    · rw [div_le_iff₀ hkappa_pos]
+      nlinarith
+    · have hp_sq_one : 1 ≤ p ^ 2 := by nlinarith
+      nlinarith [hkappa_pos.le, hp_sq_one]
+  · rintro ⟨r, x, hr_pos, hx_left, _hx_right, hx'_left, _hx'_right⟩
+    have hkappa_pos : 0 < kappa ε := by
+      unfold kappa
+      exact div_pos (by linarith) (by linarith)
+    have hsq : p ^ 2 ≤ kappa ε ^ 2 := by
+      have := le_trans hx'_left _hx_right
+      rw [div_le_iff₀ hkappa_pos] at this
+      have hr_nonneg : 0 ≤ r := hr_pos.le
+      nlinarith
+    have hp_pos : 0 < p := by linarith
+    have hkappa_ge : p ≤ kappa ε := by
+      nlinarith [hsq, hkappa_pos.le, hp_pos.le]
+    have hnot_lt : ¬ ε < (p - 1) / (p + 1) := by
+      intro hlt
+      exact not_lt_of_ge hkappa_ge ((kappa_lt_iff_eps_lt hp hε_pos hε_lt).2 hlt)
+    exact le_of_not_gt hnot_lt
+
 /-- Kappa-Fibonacci crosspoint verification.
     prop:spg-relative-error-threshold-sharpness -/
 theorem paper_kappa_fibonacci_crosspoints :

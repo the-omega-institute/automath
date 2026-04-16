@@ -61,6 +61,142 @@ S_m(a)=a\int_0^\infty u^{a-1}N_m(u)\,\dd u.
 由定理 \ref{thm:conclusion-integer-budget-curve-complete-profile}，相同的整数预算成功曲线唯一确定同一纤维多重度多重集。任何只以该多重度谱为输入的恢复量因而必然一致。证毕。
 \end{proof}
 
+\begin{theorem}[容量曲线的整 Mellin 决定性]\label{thm:conclusion-capacity-entire-mellin-determinacy}
+固定分辨率 \(m\)。设纤维大小的不同取值为
+\[
+1\le D_1<\cdots<D_r,
+\qquad
+n_i:=\#\{x\in X_m:\ d_m(x)=D_i\}.
+\]
+定义整 Mellin 生成函数
+\[
+\mathfrak Z_m(s)
+:=
+\sum_{x\in X_m}d_m(x)^s
+=
+\sum_{i=1}^{r} n_iD_i^s
+\qquad (s\in\CC).
+\]
+则连续容量曲线
+\[
+\mathcal C_m(u):=\sum_{x\in X_m}\min\bigl(d_m(x),u\bigr)
+\qquad (u\ge 0)
+\]
+唯一决定整个函数 \(\mathfrak Z_m\)。反之，\(\mathfrak Z_m\) 在任一具有聚点的子集上的取值唯一决定 \(\mathcal C_m\)。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-integer-budget-curve-complete-profile}，\(\mathcal C_m\) 唯一决定纤维多重度直方图，因而唯一决定有限指数和
+\[
+\mathfrak Z_m(s)=\sum_{i=1}^{r} n_i e^{s\log D_i}.
+\]
+
+反向设两组纤维直方图给出的整函数 \(\mathfrak Z_m,\widetilde{\mathfrak Z}_m\) 在某个具有聚点的集合 \(E\subset\CC\) 上满足
+\[
+\mathfrak Z_m(s)=\widetilde{\mathfrak Z}_m(s)
+\qquad (s\in E).
+\]
+则差函数 \(\mathfrak Z_m-\widetilde{\mathfrak Z}_m\) 是在 \(E\) 上有聚点零集的整函数，故由恒等定理知
+\[
+\mathfrak Z_m\equiv \widetilde{\mathfrak Z}_m
+\qquad \text{于 }\CC.
+\]
+特别地，对一切 \(a>0\) 都有
+\[
+\sum_{x\in X_m}d_m(x)^a
+=
+\mathfrak Z_m(a)
+=
+\widetilde{\mathfrak Z}_m(a).
+\]
+再由定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic}，全部正实阶矩唯一决定纤维直方图，从而唯一决定 \(\mathcal C_m\)。证毕。
+\end{proof}
+
+\begin{corollary}[固定分辨率下的热解析性]\label{cor:conclusion-fixed-resolution-no-thermal-singularity}
+在定理 \ref{thm:conclusion-capacity-entire-mellin-determinacy} 的记号下，定义有限尺度配分函数与压力
+\[
+Z_m(\beta):=\mathfrak Z_m(-\beta)=\sum_{x\in X_m}d_m(x)^{-\beta},
+\qquad
+P_m(\beta):=\log Z_m(\beta).
+\]
+则 \(Z_m\) 是整函数，且对每个实数 \(\beta\) 都满足
+\[
+Z_m(\beta)>0.
+\]
+因此 \(P_m\) 在实轴上实解析。特别地，固定分辨率 \(m\) 上不存在任何实轴热奇点、真实相切割或有限尺度相变；全部此类现象至多只能出现在 \(m\to\infty\) 的极限过程中。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-capacity-entire-mellin-determinacy}，
+\[
+Z_m(\beta)=\sum_{i=1}^{r} n_i e^{-\beta\log D_i}
+\]
+是有限指数和，故为整函数。若 \(\beta\in\RR\)，则每一项 \(n_i e^{-\beta\log D_i}\) 都严格为正，从而
+\[
+Z_m(\beta)>0.
+\]
+于是 \(P_m(\beta)=\log Z_m(\beta)\) 在 \(\RR\) 上可取单值实对数并成为实解析函数。证毕。
+\end{proof}
+
+\begin{theorem}[顶层纤维的 Mellin 剥离重构]\label{thm:conclusion-mellin-top-layer-peeling-reconstruction}
+在定理 \ref{thm:conclusion-capacity-entire-mellin-determinacy} 的设定下，令
+\[
+\mathfrak Z_m^{(0)}:=\mathfrak Z_m,
+\]
+并对 \(0\le j\le r-1\) 递归定义
+\[
+D_{r-j}
+:=
+\lim_{\sigma\to+\infty}\bigl(\mathfrak Z_m^{(j)}(\sigma)\bigr)^{1/\sigma},
+\qquad
+n_{r-j}
+:=
+\lim_{\sigma\to+\infty}\mathfrak Z_m^{(j)}(\sigma)D_{r-j}^{-\sigma},
+\]
+\[
+\mathfrak Z_m^{(j+1)}(s)
+:=
+\mathfrak Z_m^{(j)}(s)-n_{r-j}D_{r-j}^{\,s}.
+\]
+则该递归恰在 \(r\) 步后终止，并精确恢复全部纤维谱 \(\{(D_i,n_i)\}_{i=1}^{r}\)。因此，容量曲线经由 \(\mathfrak Z_m\) 不仅唯一确定直方图，而且允许以逐层 Laplace 剥离的显式方式恢复顶层纤维结构，而无需求助于 Hankel 行列式或 Prony 线性系统。
+\end{theorem}
+
+\begin{proof}
+对 \(j=0\)，有
+\[
+\mathfrak Z_m^{(0)}(s)=\sum_{i=1}^{r}n_iD_i^s.
+\]
+由于 \(D_r\) 是最大底数，当 \(\sigma\to+\infty\) 时，
+\[
+\mathfrak Z_m^{(0)}(\sigma)
+=
+D_r^{\sigma}\bigl(n_r+o(1)\bigr).
+\]
+故
+\[
+\lim_{\sigma\to+\infty}\bigl(\mathfrak Z_m^{(0)}(\sigma)\bigr)^{1/\sigma}=D_r,
+\qquad
+\lim_{\sigma\to+\infty}\mathfrak Z_m^{(0)}(\sigma)D_r^{-\sigma}=n_r.
+\]
+减去该顶层项后得到
+\[
+\mathfrak Z_m^{(1)}(s)=\sum_{i=1}^{r-1}n_iD_i^s.
+\]
+
+若某一步已有
+\[
+\mathfrak Z_m^{(j)}(s)=\sum_{i=1}^{r-j}n_iD_i^s,
+\]
+则同理其最大底数为 \(D_{r-j}\)，从而
+\[
+\mathfrak Z_m^{(j)}(\sigma)
+=
+D_{r-j}^{\sigma}\bigl(n_{r-j}+o(1)\bigr)
+\qquad (\sigma\to+\infty),
+\]
+于是题述两个极限分别恢复 \(D_{r-j}\) 与 \(n_{r-j}\)。减去该项后，剩余函数再次成为项数减少一的有限指数和。有限步归纳即得结论。证毕。
+\end{proof}
+
 \begin{theorem}[体量阈值与峰值阈值的分离]\label{thm:conclusion-volume-peak-threshold-separation}
 在二进折叠主线中，记
 \[

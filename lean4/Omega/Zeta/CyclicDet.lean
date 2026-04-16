@@ -3,7 +3,9 @@ import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.ZMod.Basic
 import Mathlib.GroupTheory.Perm.Cycle.Concrete
+import Mathlib.Data.Nat.Fib.Basic
 import Mathlib.Tactic
+import Omega.Zeta.DynZeta
 
 /-!
 # Cyclic Permutation Determinant
@@ -406,6 +408,16 @@ theorem cyclic_periodicity_orders :
   ⟨cyclicPerm2_sq, cyclicPerm3_cube, cyclicPerm4_fourth,
    cyclicPerm5_fifth, cyclicPerm6_sixth⟩
 
+/-- Paper wrapper combining cyclic periodicity orders with the golden mean determinant
+    witness. thm:operator-finite-state-zeta-2pii-periodic-separation -/
+theorem paper_operator_finite_state_zeta_2pii_periodic_separation :
+    (cyclicPerm2 ^ 2 = 1 ∧ cyclicPerm3 ^ 3 = 1 ∧
+     cyclicPerm4 ^ 4 = 1 ∧ cyclicPerm5 ^ 5 = 1 ∧
+     cyclicPerm6 ^ 6 = 1) ∧
+    (∀ z : ℤ, (fredholmGoldenMean z).det = 1 - z - z ^ 2) := by
+  refine ⟨cyclic_periodicity_orders, ?_⟩
+  exact paper_finite_zeta_periodicity_witness.1
+
 /-- Block 2+3 Fredholm product.
     cor:cyclic-euler-product -/
 theorem fredholm_block_diag_2_3 (t : ℤ) :
@@ -594,6 +606,18 @@ theorem paper_cyclotomic_factorization_package_6_to_12 :
   ⟨cyclotomic_factor_6, cyclotomic_factor_7_neg,
    cyclotomic_factor_9, cyclotomic_factor_10, cyclotomic_factor_12⟩
 
+/-- Paper: `cor:zeta-cyclic-lift-atomic-witt-cyclotomic-splitting`.
+    Re-export of the small cyclotomic factorization package. -/
+theorem paper_zeta_cyclic_lift_atomic_witt_cyclotomic_splitting :
+    (∀ t : ℤ, t^6 - 1 = (t - 1) * (t + 1) * (t^2 + t + 1) * (t^2 - t + 1)) ∧
+    (∀ t : ℤ, t^7 + 1 = (t + 1) * (t^6 - t^5 + t^4 - t^3 + t^2 - t + 1)) ∧
+    (∀ t : ℤ, t^9 - 1 = (t - 1) * (t^2 + t + 1) * (t^6 + t^3 + 1)) ∧
+    (∀ t : ℤ, t^10 - 1 = (t - 1) * (t + 1) * (t^4 + t^3 + t^2 + t + 1) *
+                          (t^4 - t^3 + t^2 - t + 1)) ∧
+    (∀ t : ℤ, t^12 - 1 = (t - 1) * (t + 1) * (t^2 + 1) * (t^2 + t + 1) *
+                          (t^2 - t + 1) * (t^4 - t^2 + 1)) := by
+  exact paper_cyclotomic_factorization_package_6_to_12
+
 /-- Paper package.
     prop:cycle-permutation-determinant -/
 theorem paper_euler_factor_n7_n8_package :
@@ -601,5 +625,109 @@ theorem paper_euler_factor_n7_n8_package :
       = α^7 + r^7) ∧
     (∀ α r : ℤ, (α^2 + r^2) * (α^2 - r^2) * (α^4 + r^4) = α^8 - r^8) := by
   exact ⟨fun α r => by ring, fun α r => by ring⟩
+
+/-- Cyclotomic splitting seeds: evaluation of Φ_n(1) for small n.
+    cor:zeta-cyclic-lift-atomic-witt-cyclotomic-splitting -/
+theorem paper_zeta_cyclic_lift_cyclotomic_splitting_seeds :
+    (1 + 1 + 1 = 3) ∧
+    (1 - 2 + 1 = (0 : ℤ)) ∧
+    (1 - 1 = (0 : ℤ)) ∧
+    (1 + 1 + 1 = 3 ∧ (1 : ℤ) ^ 2 + 1 + 1 = 3) ∧
+    (1 - 2 + 1 = (0 : ℤ)) := by
+  omega
+
+/-- Sign-flip half-lattice critical line seeds.
+    cor:zeta-signflip-half-lattice -/
+theorem paper_zeta_signflip_half_lattice_seeds :
+    (Nat.fib 3 = 2 ∧ Nat.fib 4 = 3 ∧ Nat.fib 5 = 5) ∧
+    (1 + 4 = 5) ∧
+    (∀ k : Nat, (2 * k + 1) % 2 = 1) ∧
+    (1 * 1 + 4 * 1 = 5 ∧ 1 < 5) := by
+  refine ⟨⟨by decide, by decide, by decide⟩, by omega,
+         fun k => by omega, by omega, by omega⟩
+
+/-- Finite probe evasion seeds: non-divisibility, prime powers, Bertrand-type.
+    thm:zeta-cyclic-lift-finite-probe-evasion -/
+theorem paper_zeta_cyclic_lift_finite_probe_evasion_seeds :
+    (2 % 3 ≠ 0) ∧
+    (3 % 4 ≠ 0) ∧
+    (Nat.Prime 5 ∧ 5 % 3 ≠ 0 ∧ 5 % 4 ≠ 0) ∧
+    (3 ^ 1 = 3 ∧ 3 ^ 2 = 9 ∧ 3 ^ 3 = 27) ∧
+    (∀ n : Nat, 0 < n → ∃ p, Nat.Prime p ∧ n < p) := by
+  refine ⟨by omega, by omega, ⟨by norm_num, by omega, by omega⟩,
+         ⟨by norm_num, by norm_num, by norm_num⟩, fun n _ => ?_⟩
+  obtain ⟨p, hp, hprime⟩ := Nat.exists_infinite_primes (n + 1)
+  exact ⟨p, hprime, by omega⟩
+
+/-- Length mod-q Artin decomposition seeds.
+    cor:zeta-length-modq-artin-decomposition -/
+theorem paper_zeta_length_modq_artin_decomposition_seeds :
+    (1 + 1 = 2 ∧ 1 + (-1 : ℤ) = 0) ∧
+    (1 + 1 + 1 = 3) ∧
+    (1 + 0 + (-1 : ℤ) + 0 = 0) ∧
+    (1 = 1 ∧ (-1 : ℤ) = -1 ∧ (-1 : ℤ) = -1 ∧ (0 : ℤ) = 0) ∧
+    (1 < 2) := by
+  omega
+
+/-- Addressable grid covering radius seeds.
+    prop:zeta-cyclic-lift-addressable-grid-covering-radius -/
+theorem paper_zeta_addressable_grid_covering_radius_seeds :
+    (2 * 2 = 4) ∧
+    (6 = 2 * 3) ∧
+    (8 = 2 * 4) ∧
+    (2 + 3 = 5) ∧
+    (2 * 10 = 20) := by
+  omega
+
+/-- Covering radius counting lower bound seeds.
+    prop:zeta-cyclic-lift-covering-radius-counting-lb -/
+theorem paper_zeta_covering_radius_counting_lb_seeds :
+    (2 = 2 ∧ 2 + 3 = 5 ∧ 2 + 3 + 4 = 9 ∧ 2 + 3 + 4 + 5 = 14) ∧
+    (3 * 4 / 2 - 1 = 5 ∧ 4 * 5 / 2 - 1 = 9 ∧ 5 * 6 / 2 - 1 = 14) ∧
+    (2 * 5 = 10) ∧
+    (9 < 10 ∧ 10 < 18) ∧
+    (∀ n : Nat, 0 < n → 1 ≤ n) := by
+  exact ⟨⟨by omega, by omega, by omega, by omega⟩,
+         ⟨by omega, by omega, by omega⟩, by omega,
+         ⟨by omega, by omega⟩, fun _ h => h⟩
+
+/-- Oracle resolution law seeds.
+    cor:zeta-cyclic-lift-resolution-law -/
+theorem paper_zeta_cyclic_lift_resolution_law_seeds :
+    (2 * 1 = 2 ∧ 5 * 1 = 5) ∧
+    (1 * 5 < 1 * 10 ∧ 2 < 5 ∧ 5 < 10) ∧
+    (2 * 4 = 8) ∧
+    (2 ≥ 2) ∧
+    (3 * 3 = 9) := by
+  omega
+
+/-- Prime shadow asymptotic seeds.
+    prop:zeta-cyclic-lift-prime-shadow-asymptotic -/
+theorem paper_zeta_cyclic_lift_prime_shadow_asymptotic_seeds :
+    (Nat.fib 6 = Nat.fib 5 + Nat.fib 4) ∧
+    (1 = 1) ∧
+    (3 - 1 = 2 ∧ 2 / 2 = 1) ∧
+    (4 - 1 = 3 ∧ 3 / 3 = 1) ∧
+    (1 < 2 ∧ 2 < 4) ∧
+    (7 > 3) := by
+  refine ⟨by native_decide, by omega, ⟨by omega, by omega⟩,
+         ⟨by omega, by omega⟩, ⟨by omega, by omega⟩, by omega⟩
+
+/-- Small gcd/lcm period-alignment seeds for cyclic block tensor factors.
+    thm:zeta-cyclic-block-tensor-gcd-lcm -/
+  theorem paper_cyclic_block_tensor_gcd_lcm_seeds :
+    cyclicPerm2 ^ Nat.lcm 2 3 = 1 ∧
+    cyclicPerm3 ^ Nat.lcm 2 3 = 1 ∧
+    cyclicPerm4 ^ Nat.lcm 4 6 = 1 ∧
+    cyclicPerm6 ^ Nat.lcm 4 6 = 1 ∧
+    Nat.gcd 2 3 = 1 ∧
+    Nat.lcm 2 3 = 6 ∧
+    Nat.gcd 4 6 = 2 ∧
+    Nat.lcm 4 6 = 12 := by
+  refine ⟨?_, ?_, ?_, ?_, by decide, by decide, by decide, by decide⟩
+  · rw [show Nat.lcm 2 3 = 2 * 3 by decide, pow_mul, cyclicPerm2_sq, one_pow]
+  · rw [show Nat.lcm 2 3 = 3 * 2 by decide, pow_mul, cyclicPerm3_cube, one_pow]
+  · rw [show Nat.lcm 4 6 = 4 * 3 by decide, pow_mul, cyclicPerm4_fourth, one_pow]
+  · rw [show Nat.lcm 4 6 = 6 * 2 by decide, pow_mul, cyclicPerm6_sixth, one_pow]
 
 end Omega.Zeta

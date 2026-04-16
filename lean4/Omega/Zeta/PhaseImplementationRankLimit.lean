@@ -43,4 +43,24 @@ theorem paper_xi_phase_implementation_rank_limit (r : ℝ)
   conv => rhs; rw [show r = r + 0 from (add_zero r).symm]
   exact tendsto_const_nhds.add hfg
 
+/-- Paper-facing seeds wrapper for the phase implementation rank limit.
+    thm:xi-phase-implementation-rank-triple-characterization -/
+theorem paper_xi_phase_implementation_rank_limit_seeds (r : ℝ)
+    (f g : ℕ → ℝ)
+    (hf : ∃ C, ∀ n, 0 ≤ f n ∧ f n ≤ C)
+    (hg : Tendsto g atTop atTop)
+    (hg_pos : ∀ᶠ n in atTop, 0 < g n) :
+    Tendsto (fun n => (r * g n + f n) / g n) atTop (𝓝 r) :=
+  paper_xi_phase_implementation_rank_limit r f g hf hg hg_pos
+
+/-- Package clone for the phase implementation rank limit.
+    thm:xi-phase-implementation-rank-triple-characterization -/
+theorem paper_xi_phase_implementation_rank_limit_package (r : ℝ)
+    (f g : ℕ → ℝ)
+    (hf : ∃ C, ∀ n, 0 ≤ f n ∧ f n ≤ C)
+    (hg : Tendsto g atTop atTop)
+    (hg_pos : ∀ᶠ n in atTop, 0 < g n) :
+    Tendsto (fun n => (r * g n + f n) / g n) atTop (𝓝 r) :=
+  paper_xi_phase_implementation_rank_limit_seeds r f g hf hg hg_pos
+
 end Omega.Zeta.PhaseImplementationRankLimit

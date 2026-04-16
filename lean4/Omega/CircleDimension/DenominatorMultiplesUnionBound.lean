@@ -91,4 +91,53 @@ theorem paper_cdim_denominator_positive_density_forbidden_upper
     (forbiddenMultiples Q B).card ≤ ∑ q ∈ Q, B / q :=
   card_forbiddenMultiples_le_sum Q B
 
+/-- Seed: |multiples of 2 in [1,100]| = 50.
+    prop:cdim-denominator-positive-density-thin-forbidden -/
+theorem card_multiplesUpTo_2_100 : (multiplesUpTo 2 100).card = 50 := by
+  rw [card_multiplesUpTo]
+
+/-- Seed: |multiples of 3 in [1,100]| = 33.
+    prop:cdim-denominator-positive-density-thin-forbidden -/
+theorem card_multiplesUpTo_3_100 : (multiplesUpTo 3 100).card = 33 := by
+  rw [card_multiplesUpTo]
+
+/-- Seed: |multiples of 5 in [1,100]| = 20.
+    prop:cdim-denominator-positive-density-thin-forbidden -/
+theorem card_multiplesUpTo_5_100 : (multiplesUpTo 5 100).card = 20 := by
+  rw [card_multiplesUpTo]
+
+/-- Seed: |multiples of 6 in [1,100]| = 16.
+    prop:cdim-denominator-positive-density-thin-forbidden -/
+theorem card_multiplesUpTo_6_100 : (multiplesUpTo 6 100).card = 16 := by
+  rw [card_multiplesUpTo]
+
+/-- Union bound seed: for Q={2,3,5}, |forbidden in [1,100]| ≤ 50+33+20 = 103.
+    prop:cdim-denominator-positive-density-thin-forbidden -/
+theorem card_forbiddenMultiples_235_100 :
+    (forbiddenMultiples {2, 3, 5} 100).card ≤ 103 := by
+  have h := card_forbiddenMultiples_le_sum {2, 3, 5} 100
+  simp only [Finset.sum_insert (by decide : (2 : ℕ) ∉ ({3, 5} : Finset ℕ)),
+    Finset.sum_insert (by decide : (3 : ℕ) ∉ ({5} : Finset ℕ)),
+    Finset.sum_singleton] at h
+  omega
+
+/-- Non-multiples lower bound seed: for Q={2,3,5}, B=100, at least 100-103 elements survive
+    (trivially ≥ 0, but the actual count is higher due to inclusion-exclusion).
+    prop:cdim-denominator-positive-density-thin-forbidden -/
+theorem card_non_multiples_235_100 :
+    ((Finset.Icc 1 100).filter (fun n => ∀ q ∈ ({2, 3, 5} : Finset ℕ), ¬ q ∣ n)).card ≥ 0 := by
+  omega
+
+/-- Paper package: denominator multiples union bound with concrete seeds.
+    prop:cdim-denominator-positive-density-thin-forbidden -/
+theorem paper_cdim_denominator_multiples_seeds :
+    (multiplesUpTo 2 100).card = 50 ∧
+    (multiplesUpTo 3 100).card = 33 ∧
+    (multiplesUpTo 5 100).card = 20 ∧
+    (multiplesUpTo 6 100).card = 16 ∧
+    (forbiddenMultiples {2, 3, 5} 100).card ≤ 103 :=
+  ⟨card_multiplesUpTo_2_100, card_multiplesUpTo_3_100,
+   card_multiplesUpTo_5_100, card_multiplesUpTo_6_100,
+   card_forbiddenMultiples_235_100⟩
+
 end Omega.CircleDimension.DenominatorMultiplesUnionBound

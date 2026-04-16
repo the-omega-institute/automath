@@ -50,4 +50,21 @@ theorem paper_spg_godel_rt_mincut_ssa_submodular
       cutWeight edges endpoints w S + cutWeight edges endpoints w T :=
   cutWeight_submodular edges endpoints w S T
 
+/-- Paper-facing seeds wrapper for the min-cut SSA algebraic core.
+    thm:spg-godel-rt-mincut-uniqueness-ssa -/
+theorem paper_spg_godel_rt_mincut_uniqueness_ssa_seeds
+    (edges : Finset (V × V)) (w : V × V → ℕ) (S T : Finset V) :
+    cutWeight edges id w (S ∪ T) + cutWeight edges id w (S ∩ T) ≤
+      cutWeight edges id w S + cutWeight edges id w T := by
+  simpa using
+    (paper_spg_godel_rt_mincut_ssa_submodular (V := V) edges id w S T)
+
+/-- Package clone for the min-cut SSA algebraic core.
+    thm:spg-godel-rt-mincut-uniqueness-ssa -/
+theorem paper_spg_godel_rt_mincut_uniqueness_ssa_package
+    (edges : Finset (V × V)) (w : V × V → ℕ) (S T : Finset V) :
+    cutWeight edges id w (S ∪ T) + cutWeight edges id w (S ∩ T) ≤
+      cutWeight edges id w S + cutWeight edges id w T :=
+  paper_spg_godel_rt_mincut_uniqueness_ssa_seeds edges w S T
+
 end Omega.SPG.CutFunctionSubmodular

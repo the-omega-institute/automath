@@ -650,4 +650,147 @@ theorem multiPrimeSpectrum_le_card (supports : Finset PrimeSupport) (J : PrimeSu
       ≤ multiPrimeSpectrum supports ∅ := multiPrimeSpectrum_anti_mono (Finset.empty_subset _)
     _ = supports.card := multiPrimeSpectrum_empty supports
 
+-- Phase R601: Möbius inversion seeds
+-- ══════════════════════════════════════════════════════════════
+
+/-- Type count for any J is at most 1 (Finset elements are distinct).
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem typeCount_le_one (supports : Finset PrimeSupport) (J : PrimeSupport) :
+    typeCount supports J ≤ 1 := by
+  unfold typeCount
+  rw [Finset.card_le_one]
+  intro a ha b hb
+  simp only [Finset.mem_filter] at ha hb
+  rw [ha.2, hb.2]
+
+/-- Type count is bounded by multi-prime spectrum for any support J.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem typeCount_le_multiPrimeSpectrum (supports : Finset PrimeSupport) (J : PrimeSupport) :
+    typeCount supports J ≤ multiPrimeSpectrum supports J := by
+  exact typeCount_le_multiPrimeSpectrum_of_subset (Finset.Subset.refl J)
+
+/-- Singleton spectrum bound: typeCount + multiPrimeSpectrum ≤ card + 1.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem typeCount_from_spectrum_singleton {supports : Finset PrimeSupport} {p : ℕ}
+    (_hp : {p} ∈ supports) :
+    typeCount supports {p} + multiPrimeSpectrum supports {p} ≤ supports.card + 1 := by
+  calc typeCount supports {p} + multiPrimeSpectrum supports {p}
+      ≤ 1 + supports.card :=
+        Nat.add_le_add (typeCount_le_one supports {p}) (multiPrimeSpectrum_le_card supports {p})
+    _ = supports.card + 1 := by omega
+
+/-- Paper seeds: Möbius inversion at small support sets.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem paper_cdim_mobius_inversion_seeds :
+    (let S : Finset PrimeSupport := {{2}}
+     multiPrimeSpectrum S ∅ = 1 ∧ multiPrimeSpectrum S {2} = 1 ∧ typeCount S {2} = 1) ∧
+    (let S : Finset PrimeSupport := {{2}, {3}}
+     multiPrimeSpectrum S ∅ = 2 ∧ multiPrimeSpectrum S {2} = 1 ∧
+     multiPrimeSpectrum S {3} = 1 ∧ multiPrimeSpectrum S {2, 3} = 0) := by
+  constructor
+  · constructor
+    · native_decide
+    constructor
+    · native_decide
+    · native_decide
+  · constructor
+    · native_decide
+    constructor
+    · native_decide
+    constructor
+    · native_decide
+    · native_decide
+
+/-- Package wrapper for the Möbius inversion localization multiset classification seeds.
+    thm:cdim-multiprime-spectrum-realizability -/
+theorem paper_cdim_mobius_inversion_package :
+    (let S : Finset PrimeSupport := {{2}}
+     multiPrimeSpectrum S ∅ = 1 ∧ multiPrimeSpectrum S {2} = 1 ∧ typeCount S {2} = 1) ∧
+    (let S : Finset PrimeSupport := {{2}, {3}}
+     multiPrimeSpectrum S ∅ = 2 ∧ multiPrimeSpectrum S {2} = 1 ∧
+     multiPrimeSpectrum S {3} = 1 ∧ multiPrimeSpectrum S {2, 3} = 0) :=
+  paper_cdim_mobius_inversion_seeds
+
+/-- Exact-support counts recover support membership.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem typeCount_eq_indicator (supports : Finset PrimeSupport) (J : PrimeSupport) :
+    typeCount supports J = if J ∈ supports then 1 else 0 := by
+  by_cases hJ : J ∈ supports
+  · have htc : typeCount supports J = 1 := by
+      unfold typeCount
+      have hEq : supports.filter (fun S => S = J) = {J} := by
+        ext x
+        constructor
+        · intro hx
+          simp only [Finset.mem_filter, Finset.mem_singleton] at hx ⊢
+          exact hx.2
+        · intro hx
+          simp only [Finset.mem_filter, Finset.mem_singleton] at hx ⊢
+          subst hx
+          exact ⟨hJ, rfl⟩
+      rw [hEq]
+      simp
+    simp [hJ, htc]
+  · unfold typeCount
+    have hEq : supports.filter (fun S => S = J) = ∅ := by
+      ext x
+      constructor
+      · intro hx
+        simp only [Finset.mem_filter] at hx
+        rcases hx with ⟨hx, rfl⟩
+        exact (hJ hx).elim
+      · intro hx
+        simp at hx
+    rw [hEq]
+    simp [hJ]
+
+/-- Multiset classification from the exact-support counts. In this finite-support model the
+    decomposition type is represented by the support multiset itself.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem paper_cdim_mobius_inversion_localization_multiset_classification
+    (supports supports' : Finset PrimeSupport) :
+    (∀ J : PrimeSupport,
+      multiPrimeSpectrum supports J =
+        Finset.sum supports (fun K => if J ⊆ K then typeCount supports K else 0)) ∧
+    (∀ J : PrimeSupport, typeCount supports J = if J ∈ supports then 1 else 0) ∧
+    ((∀ J : PrimeSupport, typeCount supports J = typeCount supports' J) → supports = supports') := by
+  refine ⟨multiPrimeSpectrum_eq_sum_typeCount supports, typeCount_eq_indicator supports, ?_⟩
+  intro hcounts
+  ext J
+  have hJ : typeCount supports J = typeCount supports' J := hcounts J
+  rw [typeCount_eq_indicator supports J, typeCount_eq_indicator supports' J] at hJ
+  by_cases hmem : J ∈ supports <;> by_cases hmem' : J ∈ supports' <;> simp [hmem, hmem'] at hJ ⊢
+
+-- Phase R603: Inclusion-exclusion seeds
+-- ══════════════════════════════════════════════════════════════
+
+/-- Spectrum of union is bounded by min of individual spectra.
+    prop:cdim-multiprime-divisible-spectrum-explicit -/
+theorem multiPrimeSpectrum_union_le (supports : Finset PrimeSupport) (J K : PrimeSupport) :
+    multiPrimeSpectrum supports (J ∪ K) ≤
+      min (multiPrimeSpectrum supports J) (multiPrimeSpectrum supports K) :=
+  Nat.le_min.mpr ⟨multiPrimeSpectrum_anti_mono Finset.subset_union_left,
+                   multiPrimeSpectrum_anti_mono Finset.subset_union_right⟩
+
+/-- Inserting a prime can only decrease the spectrum.
+    prop:cdim-multiprime-divisible-spectrum-explicit -/
+theorem multiPrimeSpectrum_insert_le (supports : Finset PrimeSupport) (J : PrimeSupport)
+    (p : ℕ) :
+    multiPrimeSpectrum supports (insert p J) ≤ multiPrimeSpectrum supports J :=
+  multiPrimeSpectrum_anti_mono (Finset.subset_insert p J)
+
+/-- Paper seeds: inclusion-exclusion at small support sets.
+    prop:cdim-multiprime-divisible-spectrum-explicit -/
+theorem paper_cdim_inclusion_exclusion_seeds :
+    (let S : Finset PrimeSupport := {{2}, {3}, {2,3}}
+     multiPrimeSpectrum S ∅ = 3 ∧
+     multiPrimeSpectrum S {2} = 2 ∧
+     multiPrimeSpectrum S {3} = 2 ∧
+     multiPrimeSpectrum S {2,3} = 1 ∧
+     typeCount S {2} = 1 ∧
+     typeCount S {3} = 1 ∧
+     typeCount S {2,3} = 1) := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide⟩
+
 end Omega.CircleDimension

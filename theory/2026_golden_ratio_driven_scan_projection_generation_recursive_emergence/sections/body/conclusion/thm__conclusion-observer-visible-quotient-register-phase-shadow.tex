@@ -74,6 +74,44 @@ a\longmapsto (\pi(a),h(a))
 给出达到等号的嵌入 \(A\hookrightarrow A_{\mathrm{vis}}\times H_\alpha\)。证毕。
 \end{proof}
 
+\begin{theorem}[Čech 障碍的终端可见商与精确隐藏荷]\label{thm:conclusion-observer-terminal-visible-quotient-exact-hidden-load}
+固定一个可核验地址 \(a\in A_{\mathrm{adm}}\)，并沿用
+\[
+H_\alpha
+:=
+\bigl\langle \alpha_{ijk}\ \bigm|\ C_{b_{ijk}}\neq\varnothing \bigr\rangle\le A,
+\qquad
+A_{\mathrm{vis}}:=A/H_\alpha
+\]
+及自然投影 \(\pi:A\twoheadrightarrow A_{\mathrm{vis}}\) 的记号。则：
+\begin{enumerate}
+  \item 对任意阿贝尔群同态 \(\phi:A\to B\)，若
+  \[
+  \phi(\alpha_{ijk})=0
+  \qquad
+  \text{对一切 }C_{b_{ijk}}\neq\varnothing,
+  \]
+  则存在唯一同态 \(\bar\phi:A_{\mathrm{vis}}\to B\) 使
+  \[
+  \phi=\bar\phi\circ\pi.
+  \]
+  \item \(\alpha\) 在 \(A_{\mathrm{vis}}\) 中逐点消失，因此相应 banded gerbe \(\mathcal G_{\bar\alpha}\) 必为中性 gerbe。
+  \item 若仅允许再引入一个有限寄存器集合 \(R\)，并要求存在集合嵌入
+  \[
+  A\hookrightarrow A_{\mathrm{vis}}\times R,
+  \]
+  以恢复原始 \(A\)-分辨率，则必有
+  \[
+  \card R\ge \card H_\alpha.
+  \]
+  并且该下界可达：存在大小恰为 \(\card H_\alpha\) 的寄存器使上述嵌入成立。
+\end{enumerate}
+因此，\(A_{\mathrm{vis}}\) 既是使点态 Čech 障碍完全消失的终端可见商，而 \(\card H_\alpha\) 又恰给出从 \(A_{\mathrm{vis}}\) 恢复原始 \(A\)-分辨率所需的精确隐藏荷。
+\end{theorem}
+\begin{proof}
+前两条正是定理 \ref{thm:conclusion-observer-initial-visible-quotient-gerbe-neutralization} 的两部分内容。第三条的下界与可达性正是定理 \ref{thm:conclusion-observer-hidden-register-sharp-capacity} 的结论。证毕。
+\end{proof}
+
 \begin{theorem}[\texorpdfstring{$\mu_2$}{mu2} 相位影子的单比特塌缩与其不完备性]\label{thm:conclusion-observer-phase-shadow-onebit-collapse-incompleteness}
 沿用上文记号，并进一步假设 \(A\) 含唯一可见二阶中心扭结
 \[
@@ -142,10 +180,126 @@ a\longmapsto (\pi(a),h(a))
 因此可以出现“phase channel 全盲而全局对象仍不存在”的严格情形，说明 \(\mu_2\)-phase 通道只看见全障碍的一个商影。证毕。
 \end{proof}
 
+\begin{corollary}[二挠 Čech 障碍的一比特最小去奇异化]\label{cor:conclusion-observer-two-torsion-onebit-minimal-desingularization}
+在定理 \ref{thm:conclusion-observer-terminal-visible-quotient-exact-hidden-load} 的设定下，若
+\[
+H_\alpha\cong \ZZ/2\ZZ,
+\]
+则：
+\begin{enumerate}
+  \item 任意恢复原始 \(A\)-分辨率的协议都至少需要一个额外二值寄存器；等价地，
+  \[
+  \log_2\card R\ge 1.
+  \]
+  \item 若该二挠障碍由取向单值化类 \(w_1=[\beta]\in H^1(\Gamma;\ZZ_2)\) 传输而来，即
+  \[
+  [\alpha_2]=\operatorname{tr}(w_1)\in H^2(\{b_i\},\ZZ_2),
+  \]
+  则与 \(w_1\) 对应的连通双覆盖
+  \[
+  \pi:\Gamma_\beta\to\Gamma
+  \]
+  是最小去奇异化：在该覆盖上，
+  \[
+  \pi^\ast([\beta])=0,
+  \qquad
+  \pi^\ast([\alpha_2])=0,
+  \]
+  并且任一使 \([\alpha_2]\) 消失的连通 \(\ZZ_2\)-覆盖都经由 \(\Gamma_\beta\) 因子化。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+第一条由定理 \ref{thm:conclusion-observer-terminal-visible-quotient-exact-hidden-load} 立即得到，因为此时 \(\card H_\alpha=2\)。
+第二条由定理 \ref{thm:xi-null-z2-cech-transfer-bockstein} 与定理 \ref{thm:xi-null-z2-doublecover-min-desingularization} 直接推出：前者把 \([\alpha_2]\) 识别为 \(w_1\) 的传输像，后者给出对应连通双覆盖上的拉回消失与最小性。证毕。
+\end{proof}
+
+\begin{theorem}[全地址协议的三轴张量预算律]\label{thm:conclusion-observer-address-protocol-three-axis-budget-law}
+在“地址先于取值”的语义下，设 \(N\) 个独立对象同时需要完成：
+\begin{enumerate}
+  \item 消除时间层统计型 \(\mathsf{NULL}\)；
+  \item 消除地址碰撞；
+  \item 保留原始 \(A\)-分辨率而不把 Čech 障碍压扁。
+\end{enumerate}
+记 \(R\) 为额外寄存器，\(n\) 为同步时间预算，\(m\) 为地址分辨率，并沿用定理 \ref{thm:spg-double-budget-address-capacity} 中的失败事件
+\[
+\mathsf{Fail}_{m,n,N}
+\]
+与碰撞量
+\[
+\mathrm{Col}_u(m).
+\]
+则有：
+\begin{enumerate}
+  \item 任意保留原始 \(A\)-分辨率的协议都必须满足
+  \[
+  \card R\ge \card H_\alpha.
+  \]
+  \item 若进一步要求总失败概率至多为 \(\eta\in(0,1)\)，则以下条件足以保证
+  \[
+  \mathbb P(\mathsf{Fail}_{m,n,N})\le \eta:
+  \]
+  \[
+  \card R\ge \card H_\alpha,
+  \qquad
+  N\,\nu_m(T_m>n)\le \eta/2,
+  \qquad
+  \binom{N}{2}\mathrm{Col}_u(m)\le \eta/2.
+  \]
+  特别地，若 \(\nu_m(T_m>n)\le C_m e^{-\varepsilon_m n}\)，则
+  \[
+  n\ge \frac{1}{\varepsilon_m}\log\frac{2C_mN}{\eta},
+  \qquad
+  \binom{N}{2}\mathrm{Col}_u(m)\le \eta/2
+  \]
+  即可推出
+  \[
+  \mathbb P(\mathsf{Fail}_{m,n,N})\le \eta.
+  \]
+  \item 这三类预算彼此正交，不能互相抵偿：增大 \(R\) 不能弥补碰撞预算不足，增大 \(m\) 不能消去非零 Čech 障碍，增大 \(n\) 亦不能把粘合障碍变为零。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一条正是定理 \ref{thm:conclusion-observer-hidden-register-sharp-capacity} 的内容。
+
+第二条由定理 \ref{thm:spg-double-budget-address-capacity} 的严格上界
+\[
+\mathbb{P}(\mathsf{Fail}_{m,n,N})
+\le
+N\,\nu_m(T_m>n)+\binom{N}{2}\mathrm{Col}_u(m)
+\]
+直接推出。若再代入指数尾界
+\[
+\nu_m(T_m>n)\le C_m e^{-\varepsilon_m n},
+\]
+则题设中的 \(n\)-阈值恰等价于 \(N\,\nu_m(T_m>n)\le \eta/2\)，故总失败概率不超过 \(\eta\)。
+
+第三条由两部分组成。一方面，\(R\) 只作用于恢复 \(A_{\mathrm{vis}}\to A\) 的隐藏分辨率，而定理 \ref{thm:spg-double-budget-address-capacity} 中的统计型 \(\mathsf{NULL}\) 与地址碰撞项完全由 \(\nu_m(T_m>n)\) 与 \(\mathrm{Col}_u(m)\) 控制，因而不能由增大 \(R\) 消去。另一方面，非平凡 Čech 粘合障碍属于系数/缺陷轴上的结构性失败；它既不会因增加同步时间 \(n\) 而改变，也不会因提高地址分辨率 \(m\) 而自动消失。再结合命题 \ref{prop:conclusion-three-end-certificate-orthogonality} 关于异轴阈值失败不可补偿的结论，即得三轴预算的正交性。证毕。
+\end{proof}
+
 \begin{conjecture}[局部证书量子化的最小完备对象是二层的]\label{conj:conclusion-observer-minimal-complete-quantization-two-layer}
 在上述语义中，局部证书系统的最小完备量子化对象并非单一 phase channel，而应为二层配对
 \[
 \bigl(A_{\mathrm{vis}},H_\alpha\bigr).
 \]
 其中 \(A_{\mathrm{vis}}=A/H_\alpha\) 控制 gerbe 的中性化、strictification 与一切 projective shadow 的可见部分；\(H_\alpha\) 则以 sharp 容量 \(\card H_\alpha\) 精确补足从 \(A_{\mathrm{vis}}\) 返回 \(A\) 所需的全部隐藏分辨率。若进一步把可见层压缩到 \(\mu_2\)-phase 阴影，则 generically 只剩 \([\alpha_2]\)，并会丢失全部落在 \(\ker\pi_2\) 内的高阶粘合障碍。
+\end{conjecture}
+
+\begin{conjecture}[全地址相图的直角临界面]\label{conj:conclusion-observer-address-phase-diagram-right-angle-frontier}
+在定理 \ref{thm:conclusion-observer-address-protocol-three-axis-budget-law} 的设定下，记
+\[
+b:=\log_2\card R,
+\qquad
+t:=\varepsilon_m n-\log N,
+\qquad
+c:=-\log\!\Bigl(\binom{N}{2}\mathrm{Col}_u(m)\Bigr).
+\]
+则全地址协议的成功/失败相边界应在渐近上分裂为三张彼此正交的标量临界面
+\[
+b=\log_2\card H_\alpha,
+\qquad
+t=O(1),
+\qquad
+c=O(1),
+\]
+并且不存在真正的混合校正项，能够把其中一张面弯折成其余两张的函数。等价地，极限相图应当是一个直角相图，而非平滑耦合曲面。
 \end{conjecture}

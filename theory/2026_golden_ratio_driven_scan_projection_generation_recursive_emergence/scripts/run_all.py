@@ -1220,6 +1220,42 @@ def build_steps() -> List[Step]:
             ],
         ),
         Step(
+            name="window6_boundary_holonomy_audit",
+            script="exp_window6_boundary_holonomy_audit.py",
+            args=[],
+            expected_outputs=[
+                "artifacts/export/window6_boundary_holonomy_audit.json",
+                "sections/generated/tab_window6_boundary_holonomy_audit.tex",
+            ],
+        ),
+        Step(
+            name="window6_prime_ledger_prefix_audit",
+            script="exp_window6_prime_ledger_prefix_audit.py",
+            args=[],
+            expected_outputs=[
+                "artifacts/export/window6_prime_ledger_prefix_audit.json",
+                "sections/generated/tab_window6_prime_ledger_prefix_audit.tex",
+            ],
+        ),
+        Step(
+            name="window6_rough_visibility_audit",
+            script="exp_window6_rough_visibility_audit.py",
+            args=[],
+            expected_outputs=[
+                "artifacts/export/window6_rough_visibility_audit.json",
+                "sections/generated/tab_window6_rough_visibility_audit.tex",
+            ],
+        ),
+        Step(
+            name="window6_block_collision_audit",
+            script="exp_window6_block_collision_audit.py",
+            args=[],
+            expected_outputs=[
+                "artifacts/export/window6_block_collision_audit.json",
+                "sections/generated/tab_window6_block_collision_audit.tex",
+            ],
+        ),
+        Step(
             name="window6_long_bloch_bielliptic_audit",
             script="exp_window6_long_bloch_bielliptic_audit.py",
             args=[],

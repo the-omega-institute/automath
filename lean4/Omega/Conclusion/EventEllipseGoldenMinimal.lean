@@ -90,4 +90,42 @@ theorem paper_event_ellipse_golden_minimal_stretch_T1 :
   refine ⟨goldenRatio_sq_mul_inv_sq, goldenRatio_sq_plus_inv_sq, ?_⟩
   rw [inv_pow, div_eq_mul_inv, inv_inv, ← pow_add]
 
+-- Phase R608: Golden ratio Fibonacci power identities
+-- ══════════════════════════════════════════════════════════════
+
+/-- φ³ = 2φ + 1.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem goldenRatio_cube : goldenRatio ^ 3 = 2 * goldenRatio + 1 := by
+  have h := goldenRatio_sq
+  nlinarith [h, sq_nonneg goldenRatio]
+
+/-- φ⁵ = 5φ + 3.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem goldenRatio_pow_five : goldenRatio ^ 5 = 5 * goldenRatio + 3 := by
+  have h := goldenRatio_sq
+  have h3 := goldenRatio_cube
+  have h5 : goldenRatio ^ 5 = goldenRatio ^ 3 * goldenRatio ^ 2 := by ring
+  nlinarith [h, h3, h5]
+
+/-- φ⁶ = 8φ + 5.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem goldenRatio_pow_six : goldenRatio ^ 6 = 8 * goldenRatio + 5 := by
+  have h := goldenRatio_sq
+  have h3 := goldenRatio_cube
+  have h6 : goldenRatio ^ 6 = (goldenRatio ^ 3) ^ 2 := by ring
+  nlinarith [h, h3, h6, sq_nonneg goldenRatio]
+
+/-- Paper package: φ^n = F(n)·φ + F(n-1) for n = 1..6.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem paper_golden_ratio_fibonacci_powers :
+    goldenRatio ^ 1 = 1 * goldenRatio + 0 ∧
+    goldenRatio ^ 2 = 1 * goldenRatio + 1 ∧
+    goldenRatio ^ 3 = 2 * goldenRatio + 1 ∧
+    goldenRatio ^ 4 = 3 * goldenRatio + 2 ∧
+    goldenRatio ^ 5 = 5 * goldenRatio + 3 ∧
+    goldenRatio ^ 6 = 8 * goldenRatio + 5 := by
+  have h := goldenRatio_sq
+  refine ⟨by ring, by linarith, goldenRatio_cube, ?_, goldenRatio_pow_five, goldenRatio_pow_six⟩
+  nlinarith [h, sq_nonneg goldenRatio]
+
 end Omega.Conclusion.EventEllipseGoldenMinimal

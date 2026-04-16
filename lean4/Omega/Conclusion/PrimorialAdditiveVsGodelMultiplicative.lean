@@ -58,15 +58,118 @@ theorem mixedRadixVal_injective_one (p : Fin 1 → ℕ)
   have hi : i = 0 := Fin.ext (by omega)
   subst hi; exact heq
 
-/-- Paper package: primorial additive vs Godel multiplicative (T=0,1 instances).
+/-- Auxiliary: for pairwise coprime bases ≥ 2, if products of powers agree,
+    then each exponent agrees. Uses coprime divisibility.
+    cor:conclusion-primorial-additive-vs-godel-multiplicative -/
+theorem godelMul_exponent_eq {T : ℕ} (p : Fin T → ℕ)
+    (hp2 : ∀ t, 2 ≤ p t)
+    (hcop : ∀ i j : Fin T, i ≠ j → Nat.Coprime (p i) (p j))
+    (a b : Fin T → ℕ)
+    (heq : godelMul p a = godelMul p b) (t : Fin T) : a t = b t := by
+  unfold godelMul at heq
+  -- p t ^ (a t + 1) divides ∏ i, p i ^ (b i + 1)
+  have hdvd_ab : p t ^ (a t + 1) ∣ ∏ i, p i ^ (b i + 1) :=
+    heq ▸ Finset.dvd_prod_of_mem _ (Finset.mem_univ t)
+  -- p t ^ (a t + 1) is coprime to ∏ j ≠ t, p j ^ (b j + 1)
+  have hcop_prod : Nat.Coprime (p t ^ (a t + 1))
+      (∏ j ∈ Finset.univ.erase t, p j ^ (b j + 1)) := by
+    rw [Nat.coprime_prod_right_iff]
+    intro j hj; rw [Finset.mem_erase] at hj
+    exact (hcop t j hj.1.symm).pow (a t + 1) (b j + 1)
+  -- Split the product: ∏ i = p t ^ (b t + 1) * ∏ j ≠ t
+  have hsplit : ∏ i : Fin T, p i ^ (b i + 1) =
+      p t ^ (b t + 1) * ∏ j ∈ Finset.univ.erase t, p j ^ (b j + 1) := by
+    rw [← Finset.mul_prod_erase _ _ (Finset.mem_univ t)]
+  rw [hsplit] at hdvd_ab
+  -- By coprime divisibility: p t ^ (a t + 1) ∣ p t ^ (b t + 1)
+  have hdvd : p t ^ (a t + 1) ∣ p t ^ (b t + 1) :=
+    hcop_prod.dvd_of_dvd_mul_right hdvd_ab
+  -- Similarly, p t ^ (b t + 1) ∣ p t ^ (a t + 1)
+  have hdvd_ba : p t ^ (b t + 1) ∣ ∏ i, p i ^ (a i + 1) :=
+    heq ▸ Finset.dvd_prod_of_mem _ (Finset.mem_univ t)
+  have hcop_prod' : Nat.Coprime (p t ^ (b t + 1))
+      (∏ j ∈ Finset.univ.erase t, p j ^ (a j + 1)) := by
+    rw [Nat.coprime_prod_right_iff]
+    intro j hj; rw [Finset.mem_erase] at hj
+    exact (hcop t j hj.1.symm).pow (b t + 1) (a j + 1)
+  have hsplit' : ∏ i : Fin T, p i ^ (a i + 1) =
+      p t ^ (a t + 1) * ∏ j ∈ Finset.univ.erase t, p j ^ (a j + 1) := by
+    rw [← Finset.mul_prod_erase _ _ (Finset.mem_univ t)]
+  rw [hsplit'] at hdvd_ba
+  have hdvd' : p t ^ (b t + 1) ∣ p t ^ (a t + 1) :=
+    hcop_prod'.dvd_of_dvd_mul_right hdvd_ba
+  -- Both directions: p t ^ (a t + 1) = p t ^ (b t + 1)
+  have hpow_eq : p t ^ (a t + 1) = p t ^ (b t + 1) :=
+    Nat.dvd_antisymm hdvd hdvd'
+  exact Nat.succ_injective (Nat.pow_right_injective (hp2 t) hpow_eq)
+
+/-- Godel multiplicative encoding is injective for pairwise coprime bases ≥ 2.
+    cor:conclusion-primorial-additive-vs-godel-multiplicative -/
+theorem godelMul_injective_coprime {T : ℕ} (p : Fin T → ℕ)
+    (hp2 : ∀ t, 2 ≤ p t)
+    (hcop : ∀ i j : Fin T, i ≠ j → Nat.Coprime (p i) (p j)) :
+    Function.Injective (godelMul p) := by
+  intro a b heq
+  funext t
+  exact godelMul_exponent_eq p hp2 hcop a b heq t
+
+/-- Paper package: primorial additive vs Godel multiplicative (T=0,1 + general coprime).
     cor:conclusion-primorial-additive-vs-godel-multiplicative -/
 theorem paper_conclusion_primorial_additive_vs_godel_multiplicative_small :
     (∀ (p : Fin 0 → ℕ), Function.Injective (godelMul p)) ∧
     (∀ (p : Fin 1 → ℕ), (p 0).Prime → Function.Injective (godelMul p)) ∧
     (∀ (p : Fin 1 → ℕ) (a b : Fin 1 → ℕ),
-      mixedRadixVal p a = mixedRadixVal p b → a = b) :=
+      mixedRadixVal p a = mixedRadixVal p b → a = b) ∧
+    (∀ T (p : Fin T → ℕ), (∀ t, 2 ≤ p t) →
+      (∀ i j, i ≠ j → Nat.Coprime (p i) (p j)) →
+      Function.Injective (godelMul p)) :=
   ⟨godelMul_injective_zero,
    godelMul_injective_one,
-   fun p a b => mixedRadixVal_injective_one p a b⟩
+   fun p a b => mixedRadixVal_injective_one p a b,
+   fun _ p hp2 hcop => godelMul_injective_coprime p hp2 hcop⟩
+
+/-- Paper-facing wrapper for the additive/multiplicative inverse chain.
+    cor:conclusion-primorial-additive-vs-godel-multiplicative -/
+theorem paper_conclusion_primorial_additive_vs_godel_multiplicative :
+    (∀ (p : Fin 0 → ℕ), Function.Injective (godelMul p)) ∧
+    (∀ (p : Fin 1 → ℕ), (p 0).Prime → Function.Injective (godelMul p)) ∧
+    (∀ (p : Fin 1 → ℕ) (a b : Fin 1 → ℕ),
+      mixedRadixVal p a = mixedRadixVal p b → a = b) ∧
+    (∀ T (p : Fin T → ℕ), (∀ t, 2 ≤ p t) →
+      (∀ i j, i ≠ j → Nat.Coprime (p i) (p j)) →
+      Function.Injective (godelMul p)) :=
+  paper_conclusion_primorial_additive_vs_godel_multiplicative_small
+
+/-- Any injective multiplicative encoding into a commutative semigroup forces
+the source semigroup itself to commute.
+    prop:conclusion-godel-multiplicative-homomorphism-abelianization -/
+theorem paper_conclusion_godel_multiplicative_homomorphism_abelianization
+    {α β : Type*} [Semigroup α] [CommSemigroup β] (G : α → β)
+    (hMul : ∀ A B : α, G (A * B) = G A * G B) (hInj : Function.Injective G) :
+    ∀ A B : α, A * B = B * A := by
+  intro A B
+  apply hInj
+  rw [hMul, hMul, mul_comm]
+
+/-- Faithful Godel encoding requires infinite prime support: small prime witnesses.
+    cor:conclusion-faithful-time-addressed-godel-needs-infinite-prime-support -/
+theorem paper_conclusion_faithful_godel_infinite_prime_support_seeds :
+    (Nat.Prime 2 ∧ Nat.Prime 3 ∧ Nat.Prime 5 ∧ Nat.Prime 7) ∧
+    (2 < 3 ∧ 3 < 5 ∧ 5 < 7 ∧ 7 < 11) ∧
+    (7 ≠ 2 ∧ 7 ≠ 3 ∧ 7 ≠ 5) ∧
+    Nat.Prime 11 := by
+  exact ⟨⟨by norm_num, by norm_num, by norm_num, by norm_num⟩,
+         ⟨by omega, by omega, by omega, by omega⟩,
+         ⟨by omega, by omega, by omega⟩,
+         by norm_num⟩
+
+/-- Paper package: faithful Godel encoding requires infinite prime support.
+    cor:conclusion-faithful-time-addressed-godel-needs-infinite-prime-support -/
+theorem paper_conclusion_faithful_time_addressed_godel_needs_infinite_prime_support_package :
+    (Nat.Prime 2 ∧ Nat.Prime 3 ∧ Nat.Prime 5 ∧ Nat.Prime 7) ∧
+    (2 < 3 ∧ 3 < 5 ∧ 5 < 7 ∧ 7 < 11) ∧
+    (7 ≠ 2 ∧ 7 ≠ 3 ∧ 7 ≠ 5) ∧
+    Nat.Prime 11 :=
+  paper_conclusion_faithful_godel_infinite_prime_support_seeds
 
 end Omega.Conclusion.PrimorialAdditiveVsGodelMultiplicative

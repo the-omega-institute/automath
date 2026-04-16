@@ -74,4 +74,34 @@ theorem paper_bdry_z2_jump_functor_skeleton :
    fun _ σ => sign_sq_eq_one σ,
    sign_neq_triv⟩
 
+/-- For `k ≥ 3`, every homomorphism `S_k → ℤˣ` is either trivial or the sign character.
+    thm:bdry-binary-jump-orientation-functor-uniqueness -/
+theorem paper_bdry_binary_jump_orientation_functor_uniqueness (k : ℕ) (hk : 3 ≤ k)
+    (φ : Equiv.Perm (Fin k) →* ℤˣ) : φ = 1 ∨ φ = Equiv.Perm.sign := by
+  by_cases hφ : φ = 1
+  · exact Or.inl hφ
+  · right
+    have hk' : 2 ≤ k := le_trans (by decide) hk
+    have hnontrivial : ∃ σ : Equiv.Perm (Fin k), φ σ ≠ 1 := by
+      by_contra h
+      apply hφ
+      ext σ
+      have hforall : ∀ τ : Equiv.Perm (Fin k), φ τ = 1 := by
+        simpa using h
+      simpa using hforall σ
+    rcases hnontrivial with ⟨σ, hσ⟩
+    have hneg : φ σ = -1 := by
+      rcases Int.units_eq_one_or (φ σ) with h1 | h1
+      · exact (hσ h1).elim
+      · exact h1
+    have hsurj : Function.Surjective φ := by
+      intro u
+      rcases Int.units_eq_one_or u with hu | hu
+      · exact ⟨1, by rw [hu]; simp⟩
+      · exact ⟨σ, by rw [hneg, hu]⟩
+    have hclass : φ = Equiv.Perm.sign := Equiv.Perm.eq_sign_of_surjective_hom hsurj
+    have hsign_nontriv : (Equiv.Perm.sign : Equiv.Perm (Fin k) →* ℤˣ) ≠ 1 := sign_neq_triv k hk'
+    have : φ ≠ 1 := by simpa [hclass] using hsign_nontriv
+    exact hclass
+
 end Omega.GU

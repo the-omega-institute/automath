@@ -189,4 +189,40 @@ theorem evenLength_sub_necklace_at_prime (v : Nat) {p : Nat} (hp : Nat.Prime p) 
       ArithmeticFunction.cardFactors_apply_prime hp, pow_one]
   rw [hμ1, hμp]; push_cast; ring
 
+-- Phase R604: Necklace correction kernel v=2 seeds
+-- ══════════════════════════════════════════════════════════════
+
+/-- Extended v=2 seeds including n=8,10,12.
+    cor:xi-time-part73c-fixed-parameter-necklace-correction -/
+theorem necklaceCorrectionKernel_v2_seeds :
+    necklaceCorrectionKernel 2 2 = 2 ∧
+    necklaceCorrectionKernel 2 4 = 2 ∧
+    necklaceCorrectionKernel 2 6 = 6 ∧
+    necklaceCorrectionKernel 2 8 = 12 ∧
+    necklaceCorrectionKernel 2 10 = 30 ∧
+    necklaceCorrectionKernel 2 12 = 54 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide⟩
+
+/-- Necklace number = kernel / v for v=2.
+    cor:xi-time-part73c-fixed-parameter-necklace-correction -/
+theorem necklaceCorrectionKernel_v2_necklace_number :
+    necklaceCorrectionKernel 2 2 / 2 = 1 ∧
+    necklaceCorrectionKernel 2 4 / 2 = 1 ∧
+    necklaceCorrectionKernel 2 6 / 2 = 3 ∧
+    necklaceCorrectionKernel 2 8 / 2 = 6 := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by native_decide⟩
+
+/-- Golden-mean necklace correction seeds: even values and odd zeros.
+    cor:xi-time-part73c-fixed-parameter-necklace-correction -/
+theorem paper_necklace_correction_golden_mean_seeds :
+    necklaceCorrectionKernel 2 2 = 2 ∧
+    necklaceCorrectionKernel 2 4 = 2 ∧
+    necklaceCorrectionKernel 2 6 = 6 ∧
+    necklaceCorrectionKernel 2 1 = 0 ∧
+    necklaceCorrectionKernel 2 3 = 0 ∧
+    necklaceCorrectionKernel 2 5 = 0 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide⟩
+
 end Omega.Zeta

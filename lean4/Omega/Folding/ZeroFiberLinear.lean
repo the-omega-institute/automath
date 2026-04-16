@@ -56,4 +56,54 @@ theorem paper_fold_zero_fiber_linear_small :
   all_goals (simp [weightSumAtMm_two, weightSumAtMm_three,
                    weightSumAtMm_four, weightSumAtMm_five])
 
+/-- Concrete m=6 case: `weightSumAtMm 6 = 3`.
+    prop:fold-zero-fiber-linear -/
+theorem weightSumAtMm_six : weightSumAtMm 6 = 3 := by native_decide
+
+/-- Concrete m=7 case: `weightSumAtMm 7 = 3`.
+    prop:fold-zero-fiber-linear -/
+theorem weightSumAtMm_seven : weightSumAtMm 7 = 3 := by native_decide
+
+/-- Concrete m=8 case: `weightSumAtMm 8 = 4`.
+    prop:fold-zero-fiber-linear -/
+theorem weightSumAtMm_eight : weightSumAtMm 8 = 4 := by native_decide
+
+/-- Step recurrence: weightSumAtMm(m+2) = weightSumAtMm(m) + 1 for m = 2..6.
+    prop:fold-zero-fiber-linear -/
+theorem weightSumAtMm_step_recurrence :
+    weightSumAtMm 4 = weightSumAtMm 2 + 1 ∧
+    weightSumAtMm 5 = weightSumAtMm 3 + 1 ∧
+    weightSumAtMm 6 = weightSumAtMm 4 + 1 ∧
+    weightSumAtMm 7 = weightSumAtMm 5 + 1 ∧
+    weightSumAtMm 8 = weightSumAtMm 6 + 1 := by
+  rw [weightSumAtMm_two, weightSumAtMm_three, weightSumAtMm_four,
+      weightSumAtMm_five, weightSumAtMm_six, weightSumAtMm_seven,
+      weightSumAtMm_eight]; decide
+
+/-- Closed form at m = 6, 7, 8: weightSumAtMm m = m / 2.
+    prop:fold-zero-fiber-linear -/
+theorem weightSumAtMm_eq_div_two_extended :
+    weightSumAtMm 6 = 6 / 2 ∧
+    weightSumAtMm 7 = 7 / 2 ∧
+    weightSumAtMm 8 = 8 / 2 := by
+  rw [weightSumAtMm_six, weightSumAtMm_seven, weightSumAtMm_eight]; decide
+
+/-- Paper package: zero-fiber linearity extended seeds m = 2..8.
+    prop:fold-zero-fiber-linear -/
+theorem paper_fold_zero_fiber_linear_extended :
+    weightSumAtMm 2 = 1 ∧ weightSumAtMm 3 = 1 ∧
+    weightSumAtMm 4 = 2 ∧ weightSumAtMm 5 = 2 ∧
+    weightSumAtMm 6 = 3 ∧ weightSumAtMm 7 = 3 ∧
+    weightSumAtMm 8 = 4 ∧
+    (weightSumAtMm 4 = weightSumAtMm 2 + 1 ∧
+     weightSumAtMm 6 = weightSumAtMm 4 + 1 ∧
+     weightSumAtMm 8 = weightSumAtMm 6 + 1) :=
+  ⟨weightSumAtMm_two, weightSumAtMm_three,
+   weightSumAtMm_four, weightSumAtMm_five,
+   weightSumAtMm_six, weightSumAtMm_seven,
+   weightSumAtMm_eight,
+   weightSumAtMm_step_recurrence.1,
+   weightSumAtMm_step_recurrence.2.2.1,
+   weightSumAtMm_step_recurrence.2.2.2.2⟩
+
 end Omega.Folding.ZeroFiberLinear

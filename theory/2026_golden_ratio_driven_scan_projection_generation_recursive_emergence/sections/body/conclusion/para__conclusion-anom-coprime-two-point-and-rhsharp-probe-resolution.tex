@@ -22,3 +22,146 @@
   在对齐情形 \(\theta\equiv 0\) 下，网格进一步退化为标准 Farey 型有理网格，从而最坏覆盖半径可达 \(\Theta(Q^{-2})\) 的改进（注 \ref{rem:zeta-cyclic-lift-aligned-farey-q2}）。
 \end{enumerate}
 
+\begin{theorem}[\texorpdfstring{$q$}{q}-放大的地址屏障]\label{thm:conclusion-rhsharp-q-amplified-address-barrier}
+设 \(M\) 为有限维矩阵，\(\lambda=\rho(M)>1\)，并假设存在 RH-sharp 模态
+\[
+\mu=\sqrt{\lambda}\,e^{i\theta}.
+\]
+对 \(q\ge 2\)，令 \(M^{\langle q\rangle}=M\otimes P_q\)，并记
+\[
+\mathcal P_q(T)
+:=
+\left\{
+t\in(T,2T]:
+\frac12+it\ \text{是}\ Z_{M^{\langle q\rangle}}\ \text{在该 RH-sharp 通道上诱导的极点}
+\right\}.
+\]
+再定义相位紧化坐标
+\[
+\widetilde u(t):=\frac12+\frac{1}{\pi}\arctan t,
+\qquad
+A_m(t):=\lfloor 2^m\widetilde u(t)\rfloor.
+\]
+则存在仅依赖于 \(\lambda\) 的常数 \(c_1,c_2>0\)，使得对一切充分大的 \(T\) 与任意 \(m\ge 1\) 都有：
+\begin{enumerate}
+  \item 极点数下界
+  \[
+  |\mathcal P_q(T)|\ge c_1\,qT.
+  \]
+  \item 存在某个地址值 \(a\in\{0,\dots,2^m-1\}\)，使
+  \[
+  \#\{t\in\mathcal P_q(T):A_m(t)=a\}
+  \ge
+  c_2\,qT\min\!\left\{1,\frac{T}{2^m}\right\}.
+  \]
+  \item 因而对任意集合 \(R\) 与任意映射 \(r:\mathcal P_q(T)\to R\)，若组合地址
+  \[
+  t\longmapsto (A_m(t),r(t))
+  \]
+  在 \(\mathcal P_q(T)\) 上为单射，则必有
+  \[
+  |R|
+  \ge
+  c_2\,qT\min\!\left\{1,\frac{T}{2^m}\right\}.
+  \]
+  特别地，在高分辨率区间 \(2^m\ge T\) 内，
+  \[
+  |R|\gtrsim \frac{qT^2}{2^m}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:zeta-cyclic-lift-dirichlet-comb}，给定 RH-sharp 模态 \(\mu\) 在循环 lift 后产生一条临界线梳齿，其虚部基频间隔为
+\[
+\Delta_q=\frac{2\pi}{q\log\lambda}.
+\]
+因此区间 \((T,2T]\) 中至少包含
+\[
+\frac{T}{\Delta_q}-O(1)
+=
+\frac{qT\log\lambda}{2\pi}-O(1)
+\]
+个该通道上的极点。取 \(T\) 充分大，即得第一条。
+
+另一方面，
+\[
+\widetilde u(2T)-\widetilde u(T)
+=
+\frac{1}{\pi}\int_T^{2T}\frac{\dd t}{1+t^2}.
+\]
+对 \(T\ge 1\)，有
+\[
+\frac{1}{5\pi T}
+\le
+\widetilde u(2T)-\widetilde u(T)
+\le
+\frac{1}{\pi T}.
+\]
+故深度 \(m\) 的 dyadic 地址盒与 \(\widetilde u((T,2T])\) 相交的个数至多为
+\[
+2+2^m\bigl(\widetilde u(2T)-\widetilde u(T)\bigr)
+\le
+C\max\!\left\{1,\frac{2^m}{T}\right\}
+\]
+其中 \(C>0\) 为绝对常数。将第一条给出的至少 \(c_1qT\) 个极点投入这些地址盒，鸽巢原理给出某个地址盒的占用数至少为
+\[
+\frac{c_1qT}{C\max\{1,2^m/T\}}
+=
+\frac{c_1}{C}\,qT\min\!\left\{1,\frac{T}{2^m}\right\}.
+\]
+取 \(c_2:=c_1/C\) 即得第二条。
+
+对该最大占用盒，若 \(t\mapsto(A_m(t),r(t))\) 为单射，则其中所有点的 \(r(t)\) 必两两不同，故 \(|R|\) 至少等于该盒的占用数。第三条遂成立；高分辨率区间 \(2^m\ge T\) 只是把 \(\min\{1,T/2^m\}\) 简化为 \(T/2^m\)。证毕。
+\end{proof}
+
+\begin{theorem}[有限临界线采样与有界相位深度的联合不完备性]\label{thm:conclusion-joint-finite-audit-incompleteness-phase-prefix-multiscale}
+保持定理 \ref{thm:conclusion-rhsharp-q-amplified-address-barrier} 的 RH-sharp 假设。
+取任意有限采样集
+\[
+S=\{s_1,\dots,s_\nu\}\subset \left\{\frac12+it:\ t\in\RR\right\},
+\]
+并固定一个 dyadic 地址深度 \(m_0\ge 1\)。
+再固定一个自对偶核 \(\Delta\)。
+再取一点 \(t_\ast\in\RR\) 使得定理 \ref{thm:conclusion-selfdual-scale-mellin-finite-codim-interpolation} 的线性无关条件对
+\[
+\Im(s_1),\dots,\Im(s_\nu),t_\ast
+\]
+成立。
+若排除平凡对齐特例 \(\theta\equiv 0\ (\mathrm{mod}\ 2\pi)\) 且 \(s_j=\frac12\) 对某个 \(j\) 同时发生，则有：
+\begin{enumerate}
+  \item 存在无穷多个 \(q\ge 2\)，使得 \(Z_{M^{\langle q\rangle}}\) 在 \(S\) 上无极点。
+  \item 存在一个实值、紧支撑、分段常数权函数 \(w\)，使
+  \[
+  \mathcal X_{\Delta,w}(s_j)=0\qquad(1\le j\le \nu),
+  \qquad
+  \mathcal X_{\Delta,w}\!\left(\frac12+it_\ast\right)=1.
+  \]
+  \item 对每个满足第一条的 \(q\)，若想在高度窗 \((T,2T]\) 上对 \(\mathcal P_q(T)\) 实现单射审计，则任何仅依赖
+  \[
+  A_{m_0}(t)=\lfloor 2^{m_0}\widetilde u(t)\rfloor
+  \]
+  与有限寄存器 \(R\) 的协议都必须满足
+  \[
+  |R|
+  \ge
+  c\,qT\min\!\left\{1,\frac{T}{2^{m_0}}\right\},
+  \]
+  其中 \(c>0\) 与 \(q,T,m_0\) 无关。
+\end{enumerate}
+因此，有限条临界线采样点与有界可见相位深度的联合审计，在族
+\[
+\{Z_{M^{\langle q\rangle}}:q\ge 2\}
+\ \cup\
+\{\mathcal X_{\Delta,w}: w\in L^1_c((0,\infty),\RR)\}
+\]
+上必不完备。
+\end{theorem}
+\begin{proof}
+第一条正是定理 \ref{thm:zeta-cyclic-lift-finite-probe-evasion} 的直接应用。
+第二条由定理 \ref{thm:conclusion-selfdual-scale-mellin-finite-codim-interpolation} 立得。
+第三条则是定理 \ref{thm:conclusion-rhsharp-q-amplified-address-barrier} 在固定深度 \(m_0\) 下的直接专门化。
+
+于是，对任意给定的有限临界线采样协议 \(S\)，总可取无穷多个 \(q\) 使 RH-sharp 梳齿在这些采样点上完全隐身；与此同时，自对偶尺度混合族内部又存在一个仍保持函数方程与临界线实值性的权函数 \(w\)，它在同一有限采样集上全部归零，却在额外一点 \(t_\ast\) 上取预设值 \(1\)。
+而若试图改用固定深度 \(m_0\) 的相位地址加有限寄存器来追踪 lift 族，则第三条强制寄存器规模随 \(qT\min\{1,T/2^{m_0}\}\) 增长。
+故“有限采样点 \(+\) 有界相位深度 \(+\) 有界寄存器”无法同时排除相位 \(q\)-覆盖导致的梳齿密化与尺度混合导致的有限余维插值自由。证毕。
+\end{proof}

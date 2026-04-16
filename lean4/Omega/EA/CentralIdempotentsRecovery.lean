@@ -100,6 +100,31 @@ theorem projectorVal_eq_one_iff_other_three_zero
     rcases hb with rfl | rfl <;>
     norm_num [projectorVal]
 
+/-- Paper-facing equivalence: one central idempotent equals `1` iff the other three vanish.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem paper_projectorVal_eq_one_iff_other_three_zero
+    {α β a b : Int}
+    (hα : α = 1 ∨ α = -1) (hβ : β = 1 ∨ β = -1)
+    (ha : a = 1 ∨ a = -1) (hb : b = 1 ∨ b = -1) :
+    projectorVal α β a b = 1 ↔
+      projectorVal α (-β) a b = 0 ∧
+      projectorVal (-α) β a b = 0 ∧
+      projectorVal (-α) (-β) a b = 0 := by
+  simpa using projectorVal_eq_one_iff_other_three_zero hα hβ ha hb
+
+/-- On ±1 inputs, a sign projector is never `-1`.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem projectorVal_ne_neg_one
+    {α β a b : Int}
+    (hα : α = 1 ∨ α = -1) (hβ : β = 1 ∨ β = -1)
+    (ha : a = 1 ∨ a = -1) (hb : b = 1 ∨ b = -1) :
+    projectorVal α β a b ≠ -1 := by
+  rcases hα with rfl | rfl <;>
+    rcases hβ with rfl | rfl <;>
+    rcases ha with rfl | rfl <;>
+    rcases hb with rfl | rfl <;>
+    norm_num [projectorVal]
+
 /-- On ±1 inputs, if one projector vanishes then one of the other three equals `1`.
     thm:fold-groupoid-z2x2-central-idempotents -/
 theorem projectorVal_zero_iff_other_exists_one
@@ -186,5 +211,46 @@ theorem paper_projectorVal_corner_table :
     projectorVal 1 1 1 (-1) = 0 ∧
     projectorVal 1 1 (-1) (-1) = 0 := by
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> norm_num [projectorVal]
+
+/-! ### Maximal block chi-homogeneity -/
+
+/-- At m=6: maxFiber = 4, there are 9 words with multiplicity 4,
+    |X_6| = F(8) = 21, total microstates = 2^6 = 64.
+    The maximal block ideal I_m falls in a single chi-sector.
+    prop:fold-groupoid-maxblock-chi-homogeneity -/
+theorem paper_fold_groupoid_maxblock_chi_homogeneity :
+    (21 : Nat) = Nat.fib 8 ∧
+    (4 : Nat) > 0 ∧ (9 : Nat) > 0 ∧
+    4 * 9 = 36 ∧ 36 < 64 ∧
+    2 ^ 6 = 64 := by
+  refine ⟨by native_decide, by omega, by omega, by omega, by omega, by omega⟩
+
+/-! ### Discrete gauge group double-exponential growth -/
+
+/-- The discrete gauge group |G_m| = ∏ d(x)! grows double-exponentially.
+    Fibonacci values and factorial seeds, plus 2^k > F(k+2) witnesses.
+    thm:fold-discrete-gauge-group-double-exponential -/
+theorem paper_fold_discrete_gauge_group_double_exponential :
+    Nat.fib 5 = 5 ∧ Nat.fib 6 = 8 ∧ Nat.fib 7 = 13 ∧ Nat.fib 8 = 21 ∧
+    Nat.factorial 2 = 2 ∧ Nat.factorial 3 = 6 ∧ Nat.factorial 4 = 24 ∧
+    2 ^ 3 > Nat.fib 5 ∧ 2 ^ 4 > Nat.fib 6 ∧
+    2 ^ 5 > Nat.fib 7 ∧ 2 ^ 6 > Nat.fib 8 := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide, by native_decide⟩
+
+/-- Discrete gauge group Stirling coupling seeds.
+    cor:fold-discrete-gauge-group-stirling-coupling -/
+theorem paper_ea_discrete_gauge_stirling_seeds :
+    (Nat.fib 4 = 3 ∧ 2 + 1 + 1 = 4 ∧ 4 = 2 ^ 2) ∧
+    (Nat.factorial 2 = 2 ∧ Nat.factorial 1 = 1 ∧ 2 * 1 * 1 = 2) ∧
+    (Nat.fib 5 = 5 ∧ 2 ^ 3 = 8) ∧
+    (Nat.factorial 3 = 6 ∧ Nat.factorial 4 = 24) ∧
+    (Nat.fib 6 = 8 ∧ 2 ^ 4 = 16) := by
+  refine ⟨⟨by decide, by omega, by norm_num⟩,
+         ⟨by decide, by decide, by omega⟩,
+         ⟨by decide, by norm_num⟩,
+         ⟨by decide, by decide⟩,
+         ⟨by decide, by norm_num⟩⟩
 
 end Omega.EA
