@@ -192,4 +192,13 @@ theorem paper_pom_fisher_zeros_arcsine_package :
     ∧ joukowskyExponent 3 = 7 :=
   paper_pom_fisher_zeros_arcsine_seeds
 
+/-- Paper-facing wrapper matching the exact theorem label.
+    thm:pom-Lk-fisher-zeros-arcsine -/
+theorem paper_pom_fisher_zeros_arcsine :
+    argDenom 1 = 6 ∧ argDenom 2 = 10 ∧ argDenom 3 = 14
+    ∧ arcsineDiscriminant 0 = 0 ∧ arcsineDiscriminant (-4) = 0
+    ∧ joukowskyExponent 1 = 3 ∧ joukowskyExponent 2 = 5
+    ∧ joukowskyExponent 3 = 7 :=
+  paper_pom_fisher_zeros_arcsine_package
+
 end Omega.POM.FisherZerosArcsineSeeds
