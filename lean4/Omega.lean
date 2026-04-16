@@ -794,6 +794,7 @@ import Omega.CircleDimension.PoissonSymmetrization
 import Omega.CircleDimension.PoissonSymmetricCase
 import Omega.CircleDimension.PoissonKLEighth
 import Omega.CircleDimension.PoissonKLEvenOrders
+import Omega.CircleDimension.PoissonKLConstantOneEighth
 import Omega.CircleDimension.PoissonKernelDerivativeL1Energy
 import Omega.CircleDimension.PoissonSecondOrder
 import Omega.CircleDimension.PoissonDefectLadder
@@ -834,6 +835,7 @@ import Omega.TypedAddressBiaxialCompletion.FrontInterface
 import Omega.TypedAddressBiaxialCompletion.Window6ExplicitFibers
 import Omega.TypedAddressBiaxialCompletion.Window6TwoSheetCharts
 import Omega.TypedAddressBiaxialCompletion.Window6AuditBudgetSplit
+import Omega.TypedAddressBiaxialCompletion.Window6AuditBoundaryCertificates
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
 import Omega.TypedAddressBiaxialCompletion.ThreeEndBudget
@@ -895,6 +897,7 @@ import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.FibCubeEccentricityCore
 import Omega.POM.FibCubeAntipodeCount
 import Omega.POM.FibCubeEdgeParity
+import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.FibCubeFrechetMedianUnique
 import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.FibCubeKPointCount
