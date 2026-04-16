@@ -1215,4 +1215,7 @@ import Omega.Zeta.CLTSpectral
 import Omega.Zeta.RhoGapM12
 import Omega.Zeta.ComovingEnergyDeltaBound
 import Omega.Zeta.HankelDeterminantalRadicalEqRigidity
+import Omega.Zeta.HankelFirstBlockDeterminantDiscriminantWeight
 import Omega.Conclusion.PrimorialMixedRadixAffine
+import Omega.CircleDimension.DefectMeasureRecursiveLayerPeeling
+import Omega.GU.BdryOrientationIteratedFiberproductParity
