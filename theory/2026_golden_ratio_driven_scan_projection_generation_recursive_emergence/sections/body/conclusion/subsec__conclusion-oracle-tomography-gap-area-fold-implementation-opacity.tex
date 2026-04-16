@@ -1,0 +1,407 @@
+\subsection{预言机层析的单曲线完备性、面积刚性与 fixed-histogram 实现不透明性}\label{subsec:conclusion-oracle-tomography-gap-area-fold-implementation-opacity}
+
+沿用定理 \ref{thm:conclusion-sample-pattern-family-closes-hot-contact-geometry}、
+定理 \ref{thm:pom-oracle-restricted-fenchel-duality-negative-temp}、
+推论 \ref{cor:pom-oracle-sigma-determines-tau-on-01}、
+推论 \ref{cor:pom-oracle-analytic-extension-all-spectrum}、
+定理 \ref{thm:pom-oracle-tomography-completeness-f-Iu-Iw}、
+定理 \ref{thm:pom-oracle-thermal-point-criteria}、
+定理 \ref{thm:pom-oracle-gap-area-law-energy}、
+定理 \ref{thm:pom-microcanonical-escort-all-renyi-collapse}、
+定义 \ref{def:pom-microcanonical-fold-class}、
+定理 \ref{thm:pom-microcanonical-fold-class-count}、
+定理 \ref{thm:pom-microcanonical-fold-entropy}、
+定理 \ref{thm:pom-microcanonical-fold-query-lower-bound}、
+定理 \ref{thm:pom-oracle-critical-budget-entropy-identity} 与
+推论 \ref{cor:pom-shannon-entropy-squeeze} 的记号。前文已经分别给出了：预言机成功/容量前沿与热相接触几何之间的严格互反、受限 Fenchel 对偶下由单条成功指数曲线恢复 \(\tau|_{[0,1]}\) 的机制、局部缺口面积的 \(L^2\)-能量表达，以及 fixed-histogram 折叠实现类的阶乘级模空间与查询下界。将这些接口继续并置，可以把 oracle tomography 与 implementation opacity 压成一条更尖锐的终端链：单曲线宏观前沿足以闭合热相计数谱、速率函数与整数阶 moment-kernel 主谱；预言机缺口面积又可精确分裂为黄金基准与斜率方差；但在同一纤维直方图之下，具体折叠实现仍保留一个 \(2^{\Theta(m2^m)}\)-级的模空间，并迫使 exact identification 维持近穷举复杂度。
+
+\begin{theorem}[单曲线谱层析完备性]\label{thm:conclusion-oracle-singlecurve-tomography-completeness}
+记
+\[
+\Sigma_{\mathrm{orc}}(a):=\Gamma_{\mathrm{orc}}(a)-\tau(1),
+\qquad
+\tau(1)=\log 2,
+\qquad
+a\in[0,\log 2].
+\]
+则单条曲线 \(\Sigma_{\mathrm{orc}}\)（等价地，\(\Gamma_{\mathrm{orc}}\)）在区间 \([0,\log 2]\) 上的取值，已经唯一决定
+\[
+\tau|_{[0,1]}.
+\]
+更精确地，若令
+\[
+\Lambda_-(\theta):=\tau(1+\theta)-\tau(1),
+\qquad
+\theta\in[-1,0],
+\]
+则成立受限 Fenchel 反演
+\[
+\Lambda_-(\theta)=\sup_{a\in[0,\log 2]}\bigl(\theta a+\Sigma_{\mathrm{orc}}(a)\bigr),
+\qquad
+\tau(q)=\log 2+\Lambda_-(q-1)
+\quad (q\in[0,1]).
+\]
+若进一步 \(\tau\) 可实解析延拓到某个连通开域 \(U\supset [0,1]\)，则 \(\Sigma_{\mathrm{orc}}\) 还唯一决定全部整数点
+\[
+P_q:=\tau(q),
+\qquad
+r_q:=e^{P_q},
+\qquad
+D_q:=\frac{q\log 2-P_q}{(q-1)\log\varphi},
+\qquad
+q\in U\cap\NN.
+\]
+因此，平均情形下的可逆前沿一旦被完整测得，便在解析延拓制度下强制锁定整数阶 moment-kernel 主谱。
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:pom-oracle-restricted-fenchel-duality-negative-temp} 已证明
+\[
+-\Sigma_{\mathrm{orc}}(a)=\sup_{\theta\in[-1,0]}\bigl(\theta a-\Lambda_-(\theta)\bigr),
+\qquad
+\Lambda_-(\theta)=\sup_{a\in[0,\log 2]}\bigl(\theta a+\Sigma_{\mathrm{orc}}(a)\bigr).
+\]
+因此 \(\Sigma_{\mathrm{orc}}\) 在 \([0,\log2]\) 上唯一决定 \(\Lambda_-\) 在 \([-1,0]\) 上的取值。推论 \ref{cor:pom-oracle-sigma-determines-tau-on-01} 随即给出
+\[
+\tau(q)=\tau(1)+\Lambda_-(q-1)=\log2+\Lambda_-(q-1),
+\qquad q\in[0,1].
+\]
+若 \(\tau\) 在连通开域 \(U\) 上解析，则由推论 \ref{cor:pom-oracle-analytic-extension-all-spectrum}，\(\tau|_{[0,1]}\) 已唯一决定 \(\tau|_U\)。于是对每个整数 \(q\in U\cap\NN\)，\(\tau(q)\)、\(e^{\tau(q)}\) 与相应的 Rényi 维数表达式都被唯一恢复。证毕。
+\end{proof}
+
+\begin{theorem}[热相的微分层析与三函数闭式重建]\label{thm:conclusion-oracle-hotphase-differential-tomography}
+对任意 \(a\in(0,\log2)\)，下列两条陈述等价：
+\begin{enumerate}
+  \item \(a\) 属于热相内点；
+  \item \(\Gamma_{\mathrm{orc}}\) 在 \(a\) 处可微，且
+  \[
+  0<\Gamma_{\mathrm{orc}}'(a)<1.
+  \]
+\end{enumerate}
+在该等价条件下，唯一共轭参数满足
+\[
+q_\ast(a)=1-\Gamma_{\mathrm{orc}}'(a),
+\]
+并且计数谱与两类大偏差率可由 \(\Gamma_{\mathrm{orc}}\) 逐点显式恢复：
+\[
+f(a)=\Gamma_{\mathrm{orc}}(a)-a,
+\qquad
+I_w(a)=\log2-\Gamma_{\mathrm{orc}}(a),
+\qquad
+I_U(a)=\log\varphi-\Gamma_{\mathrm{orc}}(a)+a.
+\]
+因此在热相内部，一条容量曲线的函数值与一阶导数已经足以恢复共轭温度、层集维数以及两类大偏差率。
+\end{theorem}
+\begin{proof}
+热相内点与 \(\Gamma_{\mathrm{orc}}\) 可微且导数落在 \((0,1)\) 的精确等价，由定理 \ref{thm:pom-oracle-thermal-point-criteria} 给出。共轭参数读出公式
+\[
+q_\ast(a)=1-\Gamma_{\mathrm{orc}}'(a)
+\]
+由推论 \ref{cor:pom-oracle-capacity-slope-readout} 给出。另一方面，定理 \ref{thm:pom-oracle-thermal-point-criteria} 还给出热相内折点唯一最优性，从而
+\[
+f(a)=\Gamma_{\mathrm{orc}}(a)-a.
+\]
+再由定理 \ref{thm:pom-oracle-tomography-completeness-f-Iu-Iw} 中
+\[
+I_U(a)=\log\varphi-f(a),
+\qquad
+I_w(a)=\log2-a-f(a),
+\]
+代入上述 \(f(a)\) 便得所示闭式。证毕。
+\end{proof}
+
+\begin{theorem}[预言机缺口的黄金基准—斜率方差恒等式]\label{thm:conclusion-oracle-gap-golden-baseline-variance}
+定义预言机缺口面积
+\[
+\mathcal A_{\mathrm{gap}}^{\mathrm{orc}}
+:=
+\int_0^{\log2}\bigl(\log2-\Gamma_{\mathrm{orc}}(a)\bigr)\,\dd a,
+\]
+并记
+\[
+\mu_\varphi:=\log2-\log\varphi.
+\]
+则有精确分解
+\[
+\mathcal A_{\mathrm{gap}}^{\mathrm{orc}}
+=
+\frac12\,\mu_\varphi^2
++
+\frac12\int_0^1\bigl(\tau'(q)-\mu_\varphi\bigr)^2\,\dd q.
+\]
+特别地，
+\[
+\mathcal A_{\mathrm{gap}}^{\mathrm{orc}}
+\ge
+\frac12(\log2-\log\varphi)^2,
+\]
+且取等当且仅当
+\[
+\tau(q)=\log\varphi+q(\log2-\log\varphi)
+\qquad (q\in[0,1]).
+\]
+因此，预言机缺口面积恰由 Zeckendorf 结构的普适基准面积与压力斜率相对于黄金基准的精确方差共同组成。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-oracle-gap-area-law-energy}，
+\[
+\mathcal A_{\mathrm{gap}}^{\mathrm{orc}}
+=
+\frac12\int_0^1\bigl(\tau'(q)\bigr)^2\,\dd q.
+\]
+另一方面，
+\[
+\int_0^1\tau'(q)\,\dd q=\tau(1)-\tau(0)=\log2-\log\varphi=\mu_\varphi.
+\]
+因此
+\[
+\int_0^1(\tau')^2
+=
+\int_0^1(\tau'-\mu_\varphi)^2
++2\mu_\varphi\int_0^1\tau'
+-\mu_\varphi^2
+=
+\int_0^1(\tau'-\mu_\varphi)^2+\mu_\varphi^2.
+\]
+乘以 \(1/2\) 即得所示分解。平方项非负，故得到下界；取等当且仅当 \(\tau'(q)=\mu_\varphi\) 几乎处处成立。由 \(\tau\) 的绝对连续性与端点条件 \(\tau(0)=\log\varphi\)、\(\tau(1)=\log2\)，这等价于 \(\tau\) 在 \([0,1]\) 上取唯一仿射式。证毕。
+\end{proof}
+
+\begin{corollary}[饱和边能量恒等式与二端层刚性]\label{cor:conclusion-oracle-gap-saturation-edge-energy}
+仍记 \(\mu_\varphi=\log2-\log\varphi\)。则有严格恒等式
+\[
+\frac12\log2\,\mu_\varphi-\mathcal A_{\mathrm{gap}}^{\mathrm{orc}}
+=
+\frac12\int_0^1\tau'(q)\bigl(\log2-\tau'(q)\bigr)\,\dd q.
+\]
+因此，\(\mathcal A_{\mathrm{gap}}^{\mathrm{orc}}\) 距其上界
+\[
+\frac12\log2(\log2-\log\varphi)
+\]
+的差额，恰等于 \(\tau'\) 对端点值 \(0\) 与 \(\log2\) 的混合能量。该差额为零当且仅当
+\[
+\tau'(q)\in\{0,\log2\}
+\quad\text{a.e. on }[0,1],
+\]
+从而 \(\tau\) 在 \([0,1]\) 上退化为二端层分段仿射型。
+\end{corollary}
+\begin{proof}
+由上一定理与 \(\int_0^1\tau'=\mu_\varphi\)，
+\[
+\frac12\log2\,\mu_\varphi-\mathcal A_{\mathrm{gap}}^{\mathrm{orc}}
+=
+\frac12\int_0^1\bigl(\log2\,\tau'(q)-(\tau'(q))^2\bigr)\,\dd q
+=
+\frac12\int_0^1\tau'(q)\bigl(\log2-\tau'(q)\bigr)\,\dd q.
+\]
+又由推论 \ref{cor:pom-pressure-derivatives-from-escort}，\(\tau'(q)\) 可写成 escort 期望的极限，因此
+\[
+0\le \tau'(q)\le \log2
+\]
+在 \([0,1]\) 上成立，故被积函数非负。差额为零当且仅当被积函数几乎处处为零，即 \(\tau'(q)\in\{0,\log2\}\) a.e.。对 \(\tau'\) 积分即得二端层分段仿射刚性。证毕。
+\end{proof}
+
+\begin{theorem}[热层上的全 Rényi 阶塌缩]\label{thm:conclusion-oracle-hotlayer-all-renyi-collapse}
+取任意热相内点 \(a\in(a_0,a_1)\)，令 \(q_\ast(a)\in(0,1)\) 满足
+\[
+\tau'(q_\ast(a))=a.
+\]
+对 \(\varepsilon>0\) 记层集
+\[
+E_m(a,\varepsilon):=\{x\in X_m:\ |Y_m(x)-a|<\varepsilon\},
+\]
+以及条件均匀分布与条件 escort 分布
+\[
+U_m^{a,\varepsilon}:=U_m(\cdot\mid E_m(a,\varepsilon)),
+\qquad
+w_{m,q_\ast(a)}^{a,\varepsilon}:=w_{m,q_\ast(a)}(\cdot\mid E_m(a,\varepsilon)).
+\]
+则对每个 Rényi 阶 \(b\in(0,\infty]\) 都有统一极限
+\[
+\lim_{\varepsilon\downarrow0}\lim_{m\to\infty}\frac1m H_b\!\bigl(U_m^{a,\varepsilon}\bigr)
+=
+\lim_{\varepsilon\downarrow0}\lim_{m\to\infty}\frac1m H_b\!\bigl(w_{m,q_\ast(a)}^{a,\varepsilon}\bigr)
+=
+f(a).
+\]
+因此，在固定纤维指数层上，所有 Rényi 阶与两类自然系综全部塌缩到同一个计数谱值 \(f(a)\)。
+\end{theorem}
+\begin{proof}
+这是定理 \ref{thm:pom-microcanonical-escort-all-renyi-collapse} 的直接结论。该定理已经同时处理了条件均匀分布与条件 escort 分布，并给出对任意 Rényi 阶 \(b\in(0,\infty]\) 的统一极限。证毕。
+\end{proof}
+
+\begin{theorem}[宏观谱完备与实现模空间不透明性]\label{thm:conclusion-oracle-macrospectrum-complete-implementation-opaque}
+固定分辨率 \(m\)，记
+\[
+\Omega_m=\{0,1\}^m,
+\qquad
+N:=|\Omega_m|=2^m,
+\qquad
+d_m:X_m\to\NN_{\ge1},
+\qquad
+w_m(x):=\frac{d_m(x)}{2^m}.
+\]
+定义 fixed-histogram realization class
+\[
+\mathrm{Fold}_m(d_m):=
+\Bigl\{
+F:\Omega_m\to X_m:\ |F^{-1}(x)|=d_m(x)\ \ \forall x\in X_m
+\Bigr\}.
+\]
+则有两条同时成立：
+\begin{enumerate}
+  \item 所有仅依赖于纤维直方图 \(d_m\) 的宏观可观测量，包括
+  \[
+  S_q(m)=\sum_{x\in X_m}d_m(x)^q,
+  \qquad
+  C_m(B)=\sum_{x\in X_m}\min(d_m(x),2^B),
+  \]
+  以及由它们构成的任意有限尺度谱指纹，在整个 \(\mathrm{Fold}_m(d_m)\) 上完全不变。
+
+  \item 实现类的基数满足精确闭式
+  \[
+  |\mathrm{Fold}_m(d_m)|=\frac{(2^m)!}{\prod_{x\in X_m}d_m(x)!},
+  \]
+  并且
+  \[
+  \log |\mathrm{Fold}_m(d_m)|
+  =
+  2^m H(w_m)+O(|X_m|\,m).
+  \]
+\end{enumerate}
+若进一步处于主稿的熵率极限制度下，即
+\[
+h_1:=\lim_{m\to\infty}\frac1m H_1(m)
+\]
+存在，则
+\[
+\log |\mathrm{Fold}_m(d_m)|=h_1\,m\,2^m+o(m2^m).
+\]
+因此，完整的宏观谱审计并不逼近具体实现，反而留下一个 \(2^{\Theta(m2^m)}\)-级别的微观模空间。
+\end{theorem}
+\begin{proof}
+第 \(1\) 条是定义层面的：\(S_q(m)\)、\(C_m(B)\) 及其任意有限组合都只通过直方图 \(d_m\) 因子化，因此在固定的 realization class \(\mathrm{Fold}_m(d_m)\) 上恒定。
+
+第 \(2\) 条的计数闭式正是定理 \ref{thm:pom-microcanonical-fold-class-count}；熵渐近式则由定理 \ref{thm:pom-microcanonical-fold-entropy} 给出。又因 \(w_m=d_m/2^m\)，故 \(H(w_m)=H_1(m)\)。在本文主线下 \(|X_m|=F_{m+2}=\Theta(\varphi^m)\)，于是误差项
+\[
+O(|X_m|\,m)=o(m2^m).
+\]
+若 \(h_1\) 极限存在，便得到
+\[
+\log |\mathrm{Fold}_m(d_m)|
+=
+2^mH_1(m)+o(m2^m)
+=
+h_1\,m\,2^m+o(m2^m).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[固定直方图下的近穷举查询下界]\label{thm:conclusion-oracle-fixedhistogram-nearexhaustive-query-lowerbound}
+仍在上述设定下，考虑 exact identification 模型：未知目标为某个
+\[
+F\in \mathrm{Fold}_m(d_m),
+\]
+算法可自适应查询若干 \(\omega\in\Omega_m\)，并获得响应 \(F(\omega)\in X_m\)。记在最坏情形下完全恢复 \(F\) 所需的最小查询次数为 \(Q_m(d_m)\)。则
+\[
+Q_m(d_m)\ge
+\left\lceil
+\frac{\log |\mathrm{Fold}_m(d_m)|}{\log |X_m|}
+\right\rceil.
+\]
+若 \(h_1=\lim_{m\to\infty}m^{-1}H_1(m)\) 存在，则进一步有
+\[
+Q_m(d_m)\ge
+\left(\frac{h_1}{\log\varphi}+o(1)\right)2^m.
+\]
+再结合
+\[
+h_2\le h_1\le \log\varphi,
+\qquad
+0\le \log\varphi-h_2\le 3.657482\times 10^{-3},
+\]
+得到显式数值下界
+\[
+Q_m(d_m)\ge \bigl(0.992399\ldots+o(1)\bigr)\,2^m.
+\]
+因此，在 fixed-histogram 先验下，exact identification 仍然需要查询渐近上不少于 \(99.2399\%\) 的全部微态点。
+\end{theorem}
+\begin{proof}
+第一个下界正是定理 \ref{thm:pom-microcanonical-fold-query-lower-bound}，只需把那里的 \(\mathfrak{Fold}_m(d_m)\) 记号改写为 \(\mathrm{Fold}_m(d_m)\)。再由上一条定理，
+\[
+\log |\mathrm{Fold}_m(d_m)|=h_1\,m\,2^m+o(m2^m),
+\]
+而
+\[
+\log|X_m|=\log F_{m+2}=m\log\varphi+o(m).
+\]
+两式相除即得
+\[
+Q_m(d_m)\ge \left(\frac{h_1}{\log\varphi}+o(1)\right)2^m.
+\]
+最后，由推论 \ref{cor:pom-shannon-entropy-squeeze}，
+\[
+h_2\le h_1\le \log\varphi,
+\qquad
+\log\varphi-h_2\le 3.657482\times10^{-3},
+\]
+故
+\[
+\frac{h_1}{\log\varphi}
+\ge
+\frac{h_2}{\log\varphi}
+\ge
+1-\frac{3.657482\times10^{-3}}{\log\varphi}
+=0.992399\ldots.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[完整谱侧信息对实现识别的无效性]\label{thm:conclusion-oracle-complete-spectral-sideinfo-nohelp}
+设算法在开始查询前，被免费赋予任意一种只通过直方图 \(d_m\) 决定的辅助数据
+\[
+J_m=\Psi(d_m).
+\]
+则上一定理中的查询下界保持不变。尤其当免费侧信息取为下列任一对象时：
+\[
+\{S_q(m)\}_{q\ge 1},
+\qquad
+\{C_m(B)\}_{B\ge 0},
+\qquad
+\text{整个有限尺度 oracle success/capacity frontier},
+\]
+仍有
+\[
+Q_m(d_m)\ge \left(\frac{h_1}{\log\varphi}+o(1)\right)2^m
+\ge
+\bigl(0.992399\ldots+o(1)\bigr)\,2^m.
+\]
+因此，完整矩谱、完整容量曲线乃至完整有限尺度热力学指纹，对 fixed-histogram 实现重构几乎不提供任何算法层面的减负。
+\end{theorem}
+\begin{proof}
+由于 \(J_m\) 只依赖于 \(d_m\)，故它在候选类 \(\mathrm{Fold}_m(d_m)\) 上为常数。也就是说，在接收 \(J_m\) 之后，算法面对的候选集合仍然是整个 \(\mathrm{Fold}_m(d_m)\)，并未被进一步切分。因此，定理 \ref{thm:conclusion-oracle-fixedhistogram-nearexhaustive-query-lowerbound} 的决策树计数论证逐字适用。
+
+对所列三类侧信息，\(\{S_q(m)\}_{q\ge1}\) 与 \(\{C_m(B)\}_{B\ge0}\) 显然都通过 \(d_m\) 因子化；而有限尺度 oracle success/capacity frontier 也只由纤维权重谱决定，因此在固定直方图类上同样恒定。故结论成立。证毕。
+\end{proof}
+
+\begin{conjecture}[近穷举刚性]\label{conj:conclusion-oracle-nearexhaustive-rigidity}
+对本文的真实 Fold 直方图序列 \(d_m\)，在“已知 \(d_m\)”的前提下，exact identification 的最小查询复杂度应满足
+\[
+Q_m(d_m)
+=
+\left(\frac{h_1}{\log\varphi}+o(1)\right)2^m.
+\]
+等价地，上一条定理给出的信息论下界应当是渐近 sharp 的；完整谱侧信息至多把穷举 \(2^m\) 个微态点的成本降低一个渐近上消失的比例。
+\end{conjecture}
+
+其直接动机来自定理 \ref{thm:conclusion-oracle-fixedhistogram-nearexhaustive-query-lowerbound} 与平凡上界
+\[
+Q_m(d_m)\le 2^m
+\]
+之间仅剩的极小相对间隙。前者已经给出
+\[
+Q_m(d_m)\ge \bigl(0.992399\ldots+o(1)\bigr)\,2^m,
+\]
+故上下界的相对差额至多为
+\[
+1-0.992399\ldots=0.007600\ldots,
+\]
+即不足 \(0.7601\%\)。这表明，fixed-histogram 先验与完整热力学侧信息很可能并未把识别问题从“近穷举”中真正解放出来；它们最多只削去一个常数极小的表面层，而没有触及主复杂度尺度。
