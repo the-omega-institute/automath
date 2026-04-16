@@ -1942,47 +1942,65 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
     logger.info(f"{tag} Fit score: {fit_score}/10 "
                 f"(threshold: {FIT_PASS_THRESHOLD})")
 
-    # ── F2: Claude review ────────────────────────────────────────
-    logger.info(f"{tag} F2 — Claude review fit assessment")
-    claude_prompt = textwrap.dedent(f"""\
-        Review this journal-fit assessment.
-        Paper: {state.paper_dir}
-        Target: {state.target_journal}
+    # ── F2: Claude review — ONLY in the ambiguous zone ────────────
+    # Skip Claude for clear cases: high fit score = trust Codex; very low fit
+    # = trust Codex's reroute suggestion. Only invoke Claude in the gray band
+    # 4 ≤ fit ≤ 6 where the journal-match call is genuinely close.
+    alts = fit_data.get("suggested_journals", [])
+    codex_top_recommendation = alts[0]["name"] if alts else state.target_journal
 
-        Codex assessment:
-        {json.dumps(fit_data, indent=2, ensure_ascii=False)[:3000]}
+    if fit_score >= 7:
+        # Clear pass — trust Codex, skip Claude entirely
+        logger.info(f"{tag} F2 skipped (fit={fit_score} ≥ 7, high-confidence pass)")
+        final_fit = fit_score
+        recommended = state.target_journal
+    elif fit_score <= 3:
+        # Clear fail — adopt Codex's top alternative, skip Claude
+        logger.info(f"{tag} F2 skipped (fit={fit_score} ≤ 3, adopting Codex's "
+                    f"top suggestion: {codex_top_recommendation})")
+        final_fit = fit_score
+        recommended = codex_top_recommendation
+    else:
+        # Ambiguous zone 4-6: Claude second opinion is load-bearing
+        logger.info(f"{tag} F2 — Claude review (ambiguous fit={fit_score})")
+        claude_prompt = textwrap.dedent(f"""\
+            Review this journal-fit assessment.
+            Paper: {state.paper_dir}
+            Target: {state.target_journal}
 
-        Questions:
-        1. Is the fit score fair?
-        2. Are the suggested alternative journals reasonable?
-        3. Which journal would you recommend?
+            Codex assessment:
+            {json.dumps(fit_data, indent=2, ensure_ascii=False)[:3000]}
 
-        Output ONLY:
-        ```json
-        {{
-          "adjusted_fit_score": <1-10>,
-          "recommended_journal": "journal name",
-          "notes": "brief explanation"
-        }}
-        ```
-    """)
-    out2 = claude_exec(claude_prompt, work_dir=paper_path, dry_run=dry_run)
-    claude_data = parse_json_from_output(out2) if not dry_run else {
-        "adjusted_fit_score": 4,
-        "recommended_journal": "Journal of Functional Analysis",
-        "notes": "dry run",
-    }
+            Questions:
+            1. Is the fit score fair?
+            2. Are the suggested alternative journals reasonable?
+            3. Which journal would you recommend?
 
-    adjusted = claude_data.get("adjusted_fit_score", fit_score)
-    recommended = claude_data.get("recommended_journal", state.target_journal)
-    final_fit = min(fit_score, adjusted)
-
-    state.log_event("F", "claude_review_fit", score=adjusted,
-                    detail=json.dumps(claude_data, ensure_ascii=False)[:10000])
-    save_state(state)
-
-    logger.info(f"{tag} Final fit: {final_fit}/10 "
-                f"(codex={fit_score}, claude={adjusted})")
+            Output ONLY:
+            ```json
+            {{
+              "adjusted_fit_score": <1-10>,
+              "recommended_journal": "journal name",
+              "notes": "brief explanation"
+            }}
+            ```
+        """)
+        out2 = claude_exec(claude_prompt, work_dir=paper_path, dry_run=dry_run)
+        claude_data = parse_json_from_output(out2) if not dry_run else {
+            "adjusted_fit_score": 4,
+            "recommended_journal": "Journal of Functional Analysis",
+            "notes": "dry run",
+        }
+        adjusted = claude_data.get("adjusted_fit_score", fit_score)
+        recommended = claude_data.get(
+            "recommended_journal", codex_top_recommendation)
+        final_fit = min(fit_score, adjusted)
+        state.log_event("F", "claude_review_fit", score=adjusted,
+                        detail=json.dumps(claude_data,
+                                          ensure_ascii=False)[:10000])
+        save_state(state)
+        logger.info(f"{tag} Final fit: {final_fit}/10 "
+                    f"(codex={fit_score}, claude={adjusted})")
 
     # ── Gate: fit ≥ threshold → keep target; else → reroute ──────
     if final_fit >= FIT_PASS_THRESHOLD:
@@ -2002,8 +2020,7 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
     logger.info(f"{tag} FIT TOO LOW ({final_fit} < {FIT_PASS_THRESHOLD}) — "
                 f"rerouting: {old} → {recommended}")
 
-    # Log the suggested alternatives
-    alts = fit_data.get("suggested_journals", [])
+    # Log the suggested alternatives (alts defined earlier at F2)
     for alt in alts[:3]:
         logger.info(f"{tag}   Alternative: {alt.get('name', '?')} "
                     f"(fit={alt.get('fit_score', '?')}): "
@@ -2190,111 +2207,117 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
 
         # ── A3: Codex self-score (retry if empty JSON) ──────────
         score_data = {}
-        for attempt in range(1, 3):
-            logger.info(f"{tag} Round {rnd}: A3 — Codex self-score "
-                        f"(attempt {attempt}/2)")
-            prompt_a3 = build_self_score_prompt(
-                state.paper_dir, state.target_journal)
-            out_a3 = codex_exec(prompt_a3, work_dir=paper_path,
-                                timeout_seconds=600, model=model,
-                                dry_run=dry_run)
-            score_data = parse_json_from_output(out_a3) if not dry_run else {
-                "overall_score": 6 + rnd,
-                "verdict": "revise" if rnd < 3 else "accept",
-                "key_issues": [f"dry run issue R{rnd}"],
-                "specific_fixes": [f"dry run fix R{rnd}"],
-                "prognosis_can_reach_8": "yes",
-            }
-            # Valid if we have an overall_score and at least some content
-            if score_data.get("overall_score") is not None and score_data:
-                break
-            logger.warning(f"{tag} Codex returned empty/unparseable JSON, "
-                           f"retrying...")
-        else:
-            logger.warning(f"{tag} Codex self-score failed twice, "
-                           f"marking score as unknown (will retry next round)")
+        # ── A3 + A4: Parallel independent dual review ───────────────
+        # Both Codex and Claude read the paper fresh and score independently.
+        # Neither sees the other's answer — that's the whole point. Running
+        # them in parallel cuts wall-time by ~40% and eliminates the 跟风
+        # failure mode where Claude just ratifies whatever Codex said.
+        logger.info(f"{tag} Round {rnd}: A3+A4 — Parallel independent dual review")
 
-        score = score_data.get("overall_score", 0)
+        def _codex_score():
+            prompt = build_self_score_prompt(
+                state.paper_dir, state.target_journal)
+            for attempt in range(1, 3):
+                out = codex_exec(prompt, work_dir=paper_path,
+                                 timeout_seconds=600, model=model,
+                                 dry_run=dry_run)
+                data = parse_json_from_output(out) if not dry_run else {
+                    "overall_score": 6 + rnd,
+                    "verdict": "revise" if rnd < 3 else "accept",
+                    "key_issues": [f"dry run codex issue R{rnd}"],
+                    "specific_fixes": [f"dry run codex fix R{rnd}"],
+                    "prognosis_can_reach_8": "yes",
+                }
+                if data.get("overall_score") is not None:
+                    return data
+                logger.warning(f"{tag} Codex self-score attempt {attempt} "
+                               f"empty/unparseable, retrying")
+            return {}
+
+        def _claude_score():
+            prompt = build_self_score_prompt(
+                state.paper_dir, state.target_journal)
+            for attempt in range(1, 3):
+                out = claude_exec(prompt, work_dir=paper_path,
+                                  dry_run=dry_run)
+                data = parse_json_from_output(out) if not dry_run else {
+                    "overall_score": 5 + rnd,
+                    "verdict": "revise" if rnd < 3 else "accept",
+                    "key_issues": [f"dry run claude issue R{rnd}"],
+                    "specific_fixes": [f"dry run claude fix R{rnd}"],
+                    "prognosis_can_reach_8": "yes",
+                }
+                if data.get("overall_score") is not None:
+                    return data
+                logger.warning(f"{tag} Claude self-score attempt {attempt} "
+                               f"empty/unparseable, retrying")
+            return {}
+
+        with ThreadPoolExecutor(max_workers=2) as ex:
+            f_codex = ex.submit(_codex_score)
+            f_claude = ex.submit(_claude_score)
+            score_data = f_codex.result()
+            claude_data = f_claude.result()
+
+        score = score_data.get("overall_score", 0) if score_data else 0
+        adjusted = claude_data.get("overall_score", 0) if claude_data else 0
+
         state.stage_a_scores.append(score)
         state.log_event("A", "codex_self_score", round_num=rnd,
                         score=score,
                         detail=json.dumps(score_data, ensure_ascii=False)[:10000])
-        save_state(state)
-
-        logger.info(f"{tag} Round {rnd}: Score = {score}/10 "
-                    f"(threshold = {SCORE_PASS_THRESHOLD})")
-
-        # Skip empty-JSON rounds entirely (don't trigger early-exit on phantom 0)
-        if not score_data or score_data.get("overall_score") is None:
-            logger.warning(f"{tag} Skipping round {rnd} decision — "
-                           f"no valid self-score. Looping.")
-            continue
-
-        # ── A4: Claude reviews the score/evaluation ──────────────
-        logger.info(f"{tag} Round {rnd}: A4 — Claude review of score")
-        claude_review_prompt = textwrap.dedent(f"""\
-            Review this Codex self-evaluation of a paper in {state.paper_dir}.
-            Target journal: {state.target_journal}
-
-            Codex evaluation:
-            {json.dumps(score_data, indent=2, ensure_ascii=False)[:3000]}
-
-            Questions:
-            1. Is the score of {score}/10 honest? Would you score higher or lower?
-            2. Are the listed issues real problems?
-            3. Can this paper reach score 8 with further editing/revision,
-               or does it have FUNDAMENTAL flaws that editing cannot fix?
-
-            Output ONLY a JSON block:
-            ```json
-            {{
-              "adjusted_score": <1-10>,
-              "agree_with_issues": true/false,
-              "prognosis_can_reach_8": "yes|no|unclear",
-              "research_directions": [
-                "concrete new theorem/extension that would raise the paper to 8+"
-              ],
-              "notes": "brief explanation"
-            }}
-            ```
-            Fill research_directions with specific ideas for NEW content that would
-            elevate the paper (wider class, quantitative refinement, converse,
-            application). The pipeline will invoke deep research on these.
-        """)
-        out_a4 = claude_exec(claude_review_prompt, work_dir=paper_path,
-                             dry_run=dry_run)
-        claude_data = parse_json_from_output(out_a4) if not dry_run else {
-            "adjusted_score": 5 + rnd, "agree_with_issues": True,
-            "prognosis_can_reach_8": "yes",
-        }
-        adjusted = claude_data.get("adjusted_score", score)
-        state.log_event("A", "claude_review_score", round_num=rnd,
+        state.log_event("A", "claude_independent_score", round_num=rnd,
                         score=adjusted,
                         detail=json.dumps(claude_data, ensure_ascii=False)[:10000])
         save_state(state)
 
-        # Use the more conservative (lower) of the two scores
-        final_score = min(score, adjusted)
+        logger.info(f"{tag} Round {rnd}: Codex={score}/10  Claude={adjusted}/10 "
+                    f"(threshold = {SCORE_PASS_THRESHOLD})")
+
+        # Skip rounds where BOTH reviewers returned empty JSON; if one is
+        # empty and the other succeeded, use the successful one as the
+        # single-side signal (min() would collapse to 0 otherwise).
+        codex_ok = bool(score_data and score_data.get("overall_score") is not None)
+        claude_ok = bool(claude_data and claude_data.get("overall_score") is not None)
+        if not codex_ok and not claude_ok:
+            logger.warning(f"{tag} Round {rnd}: both reviewers returned empty "
+                           f"JSON, skipping decision")
+            continue
+        if codex_ok and claude_ok:
+            final_score = min(score, adjusted)
+        elif codex_ok:
+            logger.warning(f"{tag} Claude score missing, using codex={score}")
+            final_score = score
+        else:
+            logger.warning(f"{tag} Codex score missing, using claude={adjusted}")
+            final_score = adjusted
+
         logger.info(f"{tag} Round {rnd}: Final score = {final_score} "
-                    f"(codex={score}, claude={adjusted})")
+                    f"(codex={score}, claude={adjusted}, min-of-both)")
 
         # ── Handle FUNDAMENTAL verdict: escalate to DEEP RESEARCH ──
         # "FUNDAMENTAL" = paper not deep enough → push deeper, don't downgrade.
-        # Invoke codex to conduct genuine new research that raises the bar.
-        codex_prog = score_data.get("prognosis_can_reach_8", "unclear")
-        claude_prog = claude_data.get("prognosis_can_reach_8", "unclear")
+        # Both reviewers must independently say "no" to avoid false escalation.
+        codex_prog = score_data.get("prognosis_can_reach_8", "unclear") if score_data else "unclear"
+        claude_prog = claude_data.get("prognosis_can_reach_8", "unclear") if claude_data else "unclear"
         if codex_prog == "no" and claude_prog == "no":
             logger.warning(f"{tag} FUNDAMENTAL depth issue flagged. "
                            f"Escalating to DEEP RESEARCH extension.")
 
-            # Collect reviewer concerns as context for the research task
+            # Collect concerns from BOTH independent reviewers. Union of
+            # issues gives A-DEEP a richer failure-mode map than any single
+            # reviewer would produce.
             prior_issues = json.dumps({
-                "codex_key_issues": score_data.get("key_issues", []),
-                "codex_specific_fixes": score_data.get("specific_fixes", []),
-                "codex_research_directions": score_data.get("research_directions", []),
-                "claude_notes": claude_data.get("notes", ""),
-                "current_score": final_score,
-            }, ensure_ascii=False, indent=2)[:3000]
+                "codex_key_issues": score_data.get("key_issues", []) if score_data else [],
+                "codex_specific_fixes": score_data.get("specific_fixes", []) if score_data else [],
+                "codex_research_directions": score_data.get("research_directions", []) if score_data else [],
+                "claude_key_issues": claude_data.get("key_issues", []) if claude_data else [],
+                "claude_specific_fixes": claude_data.get("specific_fixes", []) if claude_data else [],
+                "claude_research_directions": claude_data.get("research_directions", []) if claude_data else [],
+                "current_score_codex": score,
+                "current_score_claude": adjusted,
+                "final_score": final_score,
+            }, ensure_ascii=False, indent=2)[:5000]
 
             logger.info(f"{tag} Round {rnd}: A-DEEP — Codex deep research extension")
             deep_prompt = build_deep_extension_prompt(
