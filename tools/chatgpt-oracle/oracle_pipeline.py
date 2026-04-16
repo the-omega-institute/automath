@@ -864,6 +864,61 @@ def build_quality_review_prompt(paper_dir: str, target_journal: str,
     """)
 
 
+def build_deep_extension_prompt(paper_dir: str, target_journal: str,
+                                 prior_issues: str, round_num: int) -> str:
+    """Stage A deep-research escalation: paper too shallow → add new theorems.
+
+    Invoked when FUNDAMENTAL issues are "insufficient depth/novelty for journal".
+    Reads existing paper, conducts original research, produces NEW genuine theorems
+    that elevate the paper to the target journal's bar.
+    """
+    return textwrap.dedent(f"""\
+        You are a research mathematician whose paper has been flagged as insufficient
+        in mathematical depth for "{target_journal}". Round {round_num} deep extension.
+        Paper: {paper_dir}
+
+        ## Context: Reviewer concerns
+        {prior_issues}
+
+        ## Task: Deep Original Research to Raise the Paper's Bar
+
+        Read the ENTIRE existing paper first. Then conduct genuinely new research
+        that addresses the depth concerns. You MUST produce results at the level
+        expected by "{target_journal}".
+
+        Requirements:
+        - Find NEW striking, publishable conclusions that extend or deepen the
+          paper's framework. These must be results that would actually impress a
+          referee at "{target_journal}" — NOT reshuffling of existing content.
+        - Push until you have at least ONE genuinely non-trivial new theorem with
+          complete proof. Do not produce incremental filler.
+        - Do NOT just rewrite prose or fix typos — this step is for ADDING
+          mathematical content.
+        - Do NOT reproduce reasoning already published by others. You MAY use
+          their results as building blocks — cite them properly.
+        - Every new theorem/proposition must have a complete rigorous proof.
+        - Add missing references to references.bib.
+        - Use rigorous academic language throughout.
+
+        ## Strategy
+        Concrete ways to add depth (pick what fits the paper):
+        - Generalize a restricted result to a broader setting (wider function class,
+          higher dimension, more general spaces)
+        - Prove a converse / optimality / rigidity statement
+        - Establish quantitative refinements (sharp constants, error bounds)
+        - Connect to another area and derive applications
+        - Prove a structural classification the existing results hinted at
+        - Extend from special cases (cube/monomial/abelian) to general cases
+
+        ## Output
+        Integrate new content into the existing paper structure. Edit .tex files
+        directly. After editing, compile:
+          cd {paper_dir} && xelatex -interaction=nonstopmode main.tex
+
+        No revision artifacts, no changelogs. Write as if this was always in the paper.
+    """)
+
+
 def build_journal_style_prompt(paper_dir: str, target_journal: str,
                                 round_num: int) -> str:
     return textwrap.dedent(f"""\
@@ -911,9 +966,10 @@ def build_self_score_prompt(paper_dir: str, target_journal: str) -> str:
         ## Issue Classification
         For each key issue, classify as:
           - SURFACE: fixable by editing (wording, structure, missing cite)
-          - FUNDAMENTAL: paper-level (insufficient novelty, wrong scope for journal,
-            results are known, proofs depend on un-justified inputs, unrelated
-            pieces spliced together)
+          - FUNDAMENTAL: needs deeper research to fix — insufficient novelty for
+            the journal, results too shallow, proofs depend on un-justified inputs,
+            or pieces lack conceptual unity. These require NEW mathematical content,
+            not editing. (The pipeline will escalate to deep-research extension.)
 
         ## Output Format (MUST follow exactly)
         Output a single JSON block:
@@ -934,17 +990,19 @@ def build_self_score_prompt(paper_dir: str, target_journal: str) -> str:
           ],
           "strengths": ["strength1", "strength2", ...],
           "specific_fixes": ["fix1", "fix2", ...],
-          "prognosis_can_reach_8": "yes|no|unclear",
-          "suggested_journal": "Name of better-fit journal if current target is too high, or empty string"
+          "research_directions": [
+            "concrete new theorem/extension that would raise the paper to 8+"
+          ],
+          "prognosis_can_reach_8": "yes|no|unclear"
         }}
         ```
 
         Be ruthlessly honest.
-        - prognosis_can_reach_8="no" → current target is the wrong venue OR the paper
-          cannot reach 8 here. In that case, fill suggested_journal with a realistic
-          alternative (e.g., specialized journal, short-note venue) where the paper
-          would fit at score 7-8 without needing NEW research.
-        - prognosis_can_reach_8="yes" → issues are SURFACE, iteration can raise score
+        - prognosis_can_reach_8="yes" → SURFACE issues only, editing will fix
+        - prognosis_can_reach_8="no" → needs NEW mathematical content. Fill
+          research_directions with concrete extensions (new theorems, wider settings,
+          sharper bounds, applications, converses) that would elevate the paper.
+          The pipeline will use these to drive deep-research extension.
         Do NOT edit any files — only output the JSON evaluation.
     """)
 
@@ -1465,10 +1523,15 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
               "adjusted_score": <1-10>,
               "agree_with_issues": true/false,
               "prognosis_can_reach_8": "yes|no|unclear",
-              "suggested_journal": "alternative venue if current target is wrong, or empty",
+              "research_directions": [
+                "concrete new theorem/extension that would raise the paper to 8+"
+              ],
               "notes": "brief explanation"
             }}
             ```
+            Fill research_directions with specific ideas for NEW content that would
+            elevate the paper (wider class, quantitative refinement, converse,
+            application). The pipeline will invoke deep research on these.
         """)
         out_a4 = claude_exec(claude_review_prompt, work_dir=paper_path,
                              dry_run=dry_run)
@@ -1487,43 +1550,43 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
         logger.info(f"{tag} Round {rnd}: Final score = {final_score} "
                     f"(codex={score}, claude={adjusted})")
 
-        # ── Handle FUNDAMENTAL verdict: reroute to lower-tier journal ──
-        # "FUNDAMENTAL" often means "paper is fine but not deep enough for THIS journal"
-        # → don't halt; proceed to Stage B at a realistic venue to let Oracle decide.
+        # ── Handle FUNDAMENTAL verdict: escalate to DEEP RESEARCH ──
+        # "FUNDAMENTAL" = paper not deep enough → push deeper, don't downgrade.
+        # Invoke codex to conduct genuine new research that raises the bar.
         codex_prog = score_data.get("prognosis_can_reach_8", "unclear")
         claude_prog = claude_data.get("prognosis_can_reach_8", "unclear")
         if codex_prog == "no" and claude_prog == "no":
-            logger.warning(f"{tag} Both codex and claude say target journal "
-                           f"({state.target_journal}) is too high a bar.")
+            logger.warning(f"{tag} FUNDAMENTAL depth issue flagged. "
+                           f"Escalating to DEEP RESEARCH extension.")
 
-            # Look for a downscope suggestion in claude_data notes or score_data
-            suggested = None
-            for d in (score_data, claude_data):
-                for key in ("suggested_journal", "recommended_journal",
-                             "alternative_journal"):
-                    if d.get(key):
-                        suggested = d[key]
-                        break
-                if suggested:
-                    break
+            # Collect reviewer concerns as context for the research task
+            prior_issues = json.dumps({
+                "codex_key_issues": score_data.get("key_issues", []),
+                "codex_specific_fixes": score_data.get("specific_fixes", []),
+                "codex_research_directions": score_data.get("research_directions", []),
+                "claude_notes": claude_data.get("notes", ""),
+                "current_score": final_score,
+            }, ensure_ascii=False, indent=2)[:3000]
 
-            if suggested and suggested.lower() != state.target_journal.lower():
-                logger.info(f"{tag} Downscoping target: "
-                            f"{state.target_journal} → {suggested}")
-                state.stage_f_suggested_journal = suggested
-                state.target_journal = suggested
-                save_state(state)
-                # Continue looping — now against the easier target
-                continue
+            logger.info(f"{tag} Round {rnd}: A-DEEP — Codex deep research extension")
+            deep_prompt = build_deep_extension_prompt(
+                state.paper_dir, state.target_journal, prior_issues, rnd)
+            codex_exec(deep_prompt, work_dir=paper_path,
+                       timeout_seconds=3600, model=model, dry_run=dry_run)
+            h = git_commit(paper_path,
+                           f"stage-A R{rnd}: codex DEEP RESEARCH extension "
+                           f"(was {final_score}/10)",
+                           tag=tag)
+            state.log_event("A", "codex_deep_extension", round_num=rnd,
+                            score=final_score,
+                            detail=f"Triggered by FUNDAMENTAL verdict "
+                                   f"at score {final_score}/10",
+                            committed=bool(h), commit_hash=h)
+            save_state(state)
 
-            # No alternative found — pass through anyway to let Stage B (Oracle)
-            # do external review. Better than silent failure.
-            if rnd >= 2:
-                logger.warning(f"{tag} No downscope suggested; passing to Stage B "
-                               f"with best score {final_score}/10 for external review.")
-                state.stage_a_passed = True
-                save_state(state)
-                return True
+            logger.info(f"{tag} Deep extension complete, continuing to next round "
+                        f"for re-evaluation")
+            continue
 
         # ── Gate: pass if ≥ threshold ────────────────────────────
         if final_score >= SCORE_PASS_THRESHOLD:
