@@ -310,6 +310,216 @@ For the counting variance,
 The geometric sum evaluates to $(N(1-\lambda)-1+\lambda^N)/(1-\lambda)^2$, giving~\eqref{eq:fano-main} in the limit $N\to\infty$. The strict inequality $F<1$ follows from $a-\rho<0$ and $1-\lambda>0$.
 \end{proof}
 
+\subsection{Two-state interval classification and gap inference}
+
+\begin{proof}[Proof of \cref{thm:two-state-class-main}]
+Let
+\[
+T_0=
+\begin{pmatrix}
+u & 0\\
+v & w
+\end{pmatrix},
+\qquad
+T_1=
+\begin{pmatrix}
+0 & 1-u\\
+0 & a
+\end{pmatrix},
+\qquad
+a=1-v-w,
+\]
+and set $P=T_0+T_1=\bigl(\begin{smallmatrix}u&1-u\\ v&1-v\end{smallmatrix}\bigr)$, $e_D=(0,1)^\top$, and $\lambda=u-v$.
+
+Every click resets the next interval to the hidden state $D$. The visible record is therefore renewal, and the zero-run tail is
+\[
+\tau_k=\PP(G\ge k)=e_D^\top T_0^k\mathbf 1.
+\]
+Because $u\neq w$,
+\[
+T_0^k=
+\begin{pmatrix}
+u^k & 0\\
+v\,\dfrac{u^k-w^k}{u-w} & w^k
+\end{pmatrix},
+\]
+and hence
+\[
+\tau_k=
+v\,\frac{u^k-w^k}{u-w}+w^k
+=
+\frac{v\,u^k+(\lambda-w)w^k}{u-w},
+\]
+which is~\eqref{eq:general-tail-main}. Since $\PP(G=k)=\PP(G\ge k)-\PP(G\ge k+1)$, the gap law follows.
+
+For the hazard, write
+\[
+\tau_k=A u^k + B w^k,
+\qquad
+A=\frac{v}{u-w},
+\qquad
+B=\frac{\lambda-w}{u-w}.
+\]
+Then
+\[
+h_k
+=
+\frac{\tau_k-\tau_{k+1}}{\tau_k}
+=
+1-\frac{\tau_{k+1}}{\tau_k}.
+\]
+A direct calculation gives
+\[
+\tau_{k+1}^2-\tau_k\tau_{k+2}
+=
+-AB(u-w)^2u^kw^k
+=
+v(w-\lambda)u^kw^k.
+\]
+Therefore
+\[
+h_{k+1}-h_k
+=
+\frac{\tau_{k+1}^2-\tau_k\tau_{k+2}}{\tau_k\tau_{k+1}}
+=
+\frac{v(w-\lambda)u^kw^k}{\tau_k\tau_{k+1}},
+\]
+which is~\eqref{eq:general-hazard-diff-main}. Since $v>0$, $u^kw^k>0$, and $\tau_k>0$, the sign of $h_{k+1}-h_k$ is exactly the sign of $w-\lambda$.
+
+The stationary distribution of $P$ is
+\[
+\pi_R=\frac{v}{1-u+v},
+\qquad
+\pi_D=\frac{1-u}{1-u+v}.
+\]
+Hence the stationary click probability is
+\[
+\rho=\pi_R(1-u)+\pi_Da
+=
+\frac{(1-u)(1-w)}{1-u+v}.
+\]
+Let $q=(1-u,a)^\top=T_1\mathbf 1$. As in the proof of \cref{prop:recovery-main},
+\[
+\PP(A_0=1,A_n=1)=\rho\,e_D^\top P^{n-1}q,
+\qquad n\ge1.
+\]
+The eigenvalues of $P$ are $1$ and $\lambda$, so
+\[
+P^{n-1}q=\rho\mathbf 1+\lambda^{n-1}(q-\rho\mathbf 1).
+\]
+Evaluating at $e_D$ yields
+\[
+e_D^\top P^{n-1}q=\rho+\lambda^{n-1}(a-\rho),
+\]
+and therefore
+\[
+\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda^{n-1},
+\]
+which is~\eqref{eq:general-cov-main}.
+
+The difference between the post-refractory click probability and the stationary click probability is
+\[
+\rho-a
+=
+\frac{(1-u)(1-w)}{1-u+v}-(1-v-w)
+=
+\frac{v(w-\lambda)}{1-u+v}.
+\]
+Hence $a=\rho$ if and only if $\lambda=w$. If $\lambda=w$, then $v=u-w$ and the tail formula reduces to $\tau_k=u^k$, so
+\[
+\PP(G=k)=(1-u)u^k,
+\]
+which is the geometric zero-run law of a Bernoulli process with click probability $1-u$. Conversely, a Bernoulli process has constant hazard, and the hazard-difference formula forces $\lambda=w$. This proves the Bernoulli characterization.
+
+If $\lambda=0$, then $P=\mathbf 1\pi$ has rank one. The cylinder-factorization argument from the proof of exact $1$-dependence above therefore applies verbatim, so the visible process is exact $1$-dependent. Conversely, if the visible process is exact $1$-dependent and non-Bernoulli, then $\operatorname{Cov}(A_0,A_2)=0$ while $a-\rho\neq0$, and the covariance formula gives $\lambda=0$. This proves the characterization of the non-Bernoulli exact $1$-dependence locus.
+
+In the exponential-recovery model $(u,v,w)=(p,b,c)$, one has
+\[
+w-\lambda
+=
+c-(p-b)
+=
+-(p-c)+\frac{\kappa_{\mathrm r}(p-c)}{\kappa_{\mathrm r}-\Gamma}
+=
+\frac{\Gamma(p-c)}{\kappa_{\mathrm r}-\Gamma}.
+\]
+Because $p-c$ has the same sign as $\kappa_{\mathrm r}-\Gamma$, the final expression is strictly positive. Accordingly the model lies in the increasing-hazard sector. The identity $\lambda=0$ is exactly $p=b$, which is equivalent to \eqref{eq:gamma-c-main}.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:gap-inference-main}]
+Since $Y_1=G+1$ and \cref{prop:recovery-main} gives
+\[
+\PP_\Gamma(G=k)=
+\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}{\kappa_{\mathrm r}-\Gamma},
+\qquad k\ge0,
+\]
+the moment generating function of $Y_1$ is the sum of two geometric series:
+\[
+M_\Gamma(t)
+=
+\sum_{k\ge0}e^{t(k+1)}\PP_\Gamma(G=k)
+=
+\frac{e^t}{\kappa_{\mathrm r}-\Gamma}
+\left(
+\frac{\kappa_{\mathrm r}(1-p)}{1-pe^t}
+-
+\frac{\Gamma(1-c)}{1-ce^t}
+\right),
+\]
+valid whenever $|pe^t|<1$ and $|ce^t|<1$, that is, for $t<-\log\max\{p,c\}$. In particular, $M_\Gamma$ is finite on a neighbourhood of the origin, and $Y_1$ has moments of all orders.
+
+The identity $\mu(\Gamma)=1/\rho(\Gamma)$ follows from the renewal law. To prove strict monotonicity, write
+\[
+\rho(\Gamma)=\frac{(1-p)(1-c)}{1-p+b},
+\qquad
+b(\Gamma)=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}e^{-\Gamma(\Delta\tau-s)}\,ds.
+\]
+Differentiation gives
+\[
+b'(\Gamma)
+=
+-\int_0^{\Delta\tau}\kappa_{\mathrm r}(\Delta\tau-s)e^{-\kappa_{\mathrm r}s}e^{-\Gamma(\Delta\tau-s)}\,ds<0,
+\]
+and therefore
+\[
+\rho'(\Gamma)
+=
+\frac{(1-c)\bigl[\Delta\tau\,p\,b-(1-p)b'(\Gamma)\bigr]}{(1-p+b)^2}
+>0.
+\]
+Hence $\mu'(\Gamma)=-\rho'(\Gamma)/\rho(\Gamma)^2<0$. The map $\mu$ is therefore $C^\infty$ and strictly decreasing on $(0,\infty)$, with inverse defined on its image.
+
+The variables $(Y_j)_{j\ge1}$ are i.i.d. The classical Cram\'er theorem and the contraction principle \cite{DemboZeitouni1998} yield the good large-deviation principle for $\bar Y_m$ with rate function~\eqref{eq:gap-rate-main}, and then for $\widehat\Gamma_m=\mu^{-1}(\bar Y_m)$ with rate function~\eqref{eq:gap-rate-gamma-main}. The ordinary i.i.d.\ central limit theorem gives
+\[
+\sqrt m\,(\bar Y_m-\mu(\Gamma))
+\Longrightarrow
+\mathcal N\!\bigl(0,\sigma_Y^2(\Gamma)\bigr).
+\]
+Applying the delta method to the $C^\infty$ inverse map $\mu^{-1}$ \cite{vanDerVaart1998} yields
+\[
+\sqrt m\,(\widehat\Gamma_m-\Gamma)
+\Longrightarrow
+\mathcal N\!\left(0,\frac{\sigma_Y^2(\Gamma)}{\mu'(\Gamma)^2}\right),
+\]
+which is~\eqref{eq:gap-clt-main}.
+
+For the wrong-side error exponent, suppose first that $\Gamma>\Gamma_c$. Since $\mu$ is strictly decreasing, $\mu(\Gamma)<\mu(\Gamma_c)$ and
+\[
+\{\widehat\Gamma_m\le\Gamma_c\}
+=
+\{\bar Y_m\ge\mu(\Gamma_c)\}.
+\]
+The convex rate function $J_\Gamma$ has unique minimum at $\mu(\Gamma)$, so the infimum of $J_\Gamma$ on $[\mu(\Gamma_c),\infty)$ is attained at the boundary point $\mu(\Gamma_c)$. The large-deviation principle therefore gives
+\[
+\PP_\Gamma(\widehat\Gamma_m\le\Gamma_c)
+=
+\exp\!\bigl(-mJ_\Gamma(\mu(\Gamma_c))+o(m)\bigr)
+=
+\exp\!\bigl(-mI_\Gamma(\Gamma_c)+o(m)\bigr).
+\]
+The case $\Gamma<\Gamma_c$ is identical, with the set $(-\infty,\mu(\Gamma_c)]$ in place of $[\mu(\Gamma_c),\infty)$.
+\end{proof}
+
 \subsection{Near-horizon expansion and local inverse theorem}
 
 \begin{proof}[Proof of \cref{thm:horizon-main}]
