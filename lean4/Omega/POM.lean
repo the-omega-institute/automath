@@ -53,6 +53,7 @@ import Omega.POM.FoldInjectivizationMinsideinfo
 import Omega.POM.GibbsSelection
 import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.HankelFingerprintSeeds
+import Omega.POM.HankelSyndromeGapRankDefect
 import Omega.POM.HankelSyndromeModuleKernelEqualsMultiples
 import Omega.POM.HighMultiplicitySparse
 import Omega.POM.KCollisionRootFilter
