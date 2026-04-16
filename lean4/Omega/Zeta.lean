@@ -1,6 +1,7 @@
 import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.AbelianShadowDefect
 import Omega.Zeta.BlockCyclicRigidity
+import Omega.Zeta.BooleanBinaryJumpKernels2AdicHalfperiod
 import Omega.Zeta.BooleanDisjointnessZetaLDLT
 import Omega.Zeta.CLTSpectral
 import Omega.Zeta.CayleyDepthIdentity

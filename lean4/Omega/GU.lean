@@ -35,6 +35,7 @@ import Omega.GU.FiberNonConstantNoFreeAction
 import Omega.GU.FixedPrecisionExponentialMultiplicity
 import Omega.GU.FoldbinDegeneracySector
 import Omega.GU.FoldbinGaugeAbelian
+import Omega.GU.FoldbinUpliftUnitJumpDeltaInversion
 import Omega.GU.FreeInvolutionCount
 import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GU.JetAlignmentUnification
