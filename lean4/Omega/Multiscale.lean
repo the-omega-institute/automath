@@ -1,0 +1,1 @@
+import Omega.Multiscale.SolenoidNormalizedStokesL2ScalingCriticalDegree

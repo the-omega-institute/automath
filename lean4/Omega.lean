@@ -14,6 +14,7 @@ import Omega.Graph
 import Omega.GroupUnification
 import Omega.HighDimensionalCutProject
 import Omega.LogicExpansionChain
+import Omega.Multiscale
 import Omega.OperatorAlgebra
 import Omega.POM
 import Omega.PhysicalSpacetimeSkeleton
