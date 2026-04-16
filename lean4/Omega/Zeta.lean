@@ -82,6 +82,7 @@ import Omega.Zeta.HankelStiffnessBalance
 import Omega.Zeta.HankelVandermonde2
 import Omega.Zeta.HankelVandermonde3Recovery
 import Omega.Zeta.HankelVandermonde4
+import Omega.Zeta.HankelNullspaceTruncatedIdealStructure
 import Omega.Zeta.HankelWindowFiberDelta
 import Omega.Zeta.HankelWindowAffineFamily
 import Omega.Zeta.IdempotentFixedIndexStratification
