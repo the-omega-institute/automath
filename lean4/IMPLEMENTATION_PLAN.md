@@ -22,6 +22,43 @@
 
 **远程分支并行记录（merge 前）**：以下 round 编号仅在 `origin/lean4-codex-auto-dev` 内部有序。
 
+**Phase R1058（本轮落地，proof / registration / sync / commit 执行）**：新增
+`paper_window6_intrinsic_bracket_modp_lift_criterion`
+（对应 `thm:window6-intrinsic-bracket-modp-lift-criterion`，GU；新建
+`Window6IntrinsicBracketModpLiftCriterion.lean`，定义 chapter-local
+`Window6IntrinsicBracketModpLiftCriterionData`，把 normalized integral system、唯一
+mod-`p` 解、full-rank Jacobian 见证、verified integer witness，以及 simple-root/Hensel
+lift 与 integer-to-`p`-adic embedding injective 的 characteristic-`0` 推论打包为
+paper-facing wrapper）；新增 `paper_discussion_hszk_iff_diamond`
+（对应 `thm:discussion-hszk-iff-diamond`，Discussion；新建 `HSZKIffDiamond.lean`，定义
+chapter-local `HSZKIffDiamondData`，把 HSZK condition 与 comb diamond criterion 作为
+两个 unfolded quantifier package，并以双向 rewrite/transport 直接给出 iff wrapper）；
+新增 `paper_prime_register_godel_joukowsky_ellipse`
+（对应 `prop:prime-register-godel-joukowsky-ellipse`，EA；新建
+`PrimeRegisterGodelJoukowskyEllipse.lean`，定义 chapter-local
+`PrimeRegisterGodelJoukowskyEllipseData`，把 ellipse 对 `r ↔ r^{-1}` 的不变性、显式参数化
+给出的 semiaxes/foci 识别，以及 Gödel scale 关于 `E_r ⊙ E_s = E_{rs}` 的 monoid-hom
+性质压成 theorem-facing wrapper）；proof 侧执行
+`lake build Omega.GU.Window6IntrinsicBracketModpLiftCriterion`、
+`lake build Omega.Discussion.HSZKIffDiamond`、
+`lake build Omega.EA.PrimeRegisterGodelJoukowskyEllipse` 与
+`cd lean4 && lake build`，均通过（全量构建仅见既有 linter warning、无新的 Lean
+error）；同步阶段执行 `git fetch origin lean4-codex-auto-dev` 与
+`git rebase --autostash origin/lean4-codex-auto-dev`，autostash 自动回放且无冲突；文件：
+`lean4/Omega/GU/Window6IntrinsicBracketModpLiftCriterion.lean`、
+`lean4/Omega/Discussion/HSZKIffDiamond.lean`、
+`lean4/Omega/EA/PrimeRegisterGodelJoukowskyEllipse.lean`、`lean4/Omega.lean`；Lean theorem
+名：`paper_window6_intrinsic_bracket_modp_lift_criterion`、
+`paper_discussion_hszk_iff_diamond`、
+`paper_prime_register_godel_joukowsky_ellipse`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/subsubsec__window6_lie_bracket_continued_proof.tex`
+（`thm:window6-intrinsic-bracket-modp-lift-criterion`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/discussion/subsec__discussion-horizon-hszk-comb-sff-zeta.tex`
+（`thm:discussion-hszk-iff-diamond`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/emergent_arithmetic/subsec__emergent-arithmetic-godel-joukowsky-gate.tex`
+（`prop:prime-register-godel-joukowsky-ellipse`）；新增 `\\leanverified` +3，覆盖章节为
+GU / Discussion / EA，降级项数 0，non-trivial 计数 0）
+
 **Phase R1047（本轮落地，proof / sync / registration / commit 执行）**：新增
 `paper_cdim_readable_time_word_overlap_pd`
 （对应 `thm:cdim-readable-time-word-overlap-pd`，CircleDimension；新建

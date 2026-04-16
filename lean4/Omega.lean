@@ -659,6 +659,7 @@ import Omega.Zeta.FiniteRankRealisation
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Discussion.ChebyshevAdams
 import Omega.Discussion.HorizonMeasureFold6Pushforward
+import Omega.Discussion.HSZKIffDiamond
 import Omega.Discussion.HypercubeStokesFourierBinomial
 import Omega.Discussion.HypercubePotentialCurvatureControlledStrictification
 import Omega.EA.Wedderburn
@@ -673,6 +674,7 @@ import Omega.EA.BrauerRamificationEven
 import Omega.EA.BrauerCongruenceSieveDensity
 import Omega.EA.TimeSpaceCommuting
 import Omega.EA.JoukowskyEllipse
+import Omega.EA.PrimeRegisterGodelJoukowskyEllipse
 import Omega.EA.FibAdicTower
 import Omega.EA.PrimeRegisterLocalMoves
 import Omega.EA.MulNoNewPrimitive
@@ -1001,6 +1003,7 @@ import Omega.GU.DiscriminantWedge2Square
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.Window6SingleGoodPrimeRecovery
 import Omega.GU.Window6KirchhoffGreenPadicLiftStability
+import Omega.GU.Window6IntrinsicBracketModpLiftCriterion
 import Omega.GU.Window6B3SupportCount
 import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6VisibleCartanQuotientSyzygySplitting
