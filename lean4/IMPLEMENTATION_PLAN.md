@@ -53,6 +53,43 @@ paper-facing wrapper）；proof 侧执行
 （`prop:discussion-horizon-measure-fold6-pushforward`）；新增 `\\leanverified` +2，覆盖章节为
 CircleDimension / Discussion，降级项数 0，non-trivial 计数 0）
 
+**Phase R1048（本轮落地，proof / sync / registration / commit 执行）**：新增
+`paper_typed_address_biaxial_completion_standard_ledger`
+（对应 `prop:typed-address-biaxial-completion-standard-ledger`，
+TypedAddressBiaxialCompletion；新建 `StandardLedger.lean`，定义 chapter-local
+`StandardLedgerData` 与 `standardLedgerValue`，把标准双轴原型在 `\mathfrak N \neq 1` /
+`\mathfrak N = 1` 两种情形下的账本值统一打包为 paper-facing wrapper）；
+新增 `paper_cdim_torus_collapse_relative_forms`
+（对应 `prop:cdim-torus-collapse-relative-forms`，CircleDimension；新建
+`TorusCollapseRelativeForms.lean`，定义 chapter-local
+`TorusCollapseRelativeFormsData`，在 split Stokes exact-sequence 模型里用显式坐标相对形式与
+boundary basis cycle 构造 Kronecker pairing `\delta_{ij}`）；
+新增 `paper_window6_kirchhoff_green_padic_lift_stability`
+（对应 `thm:window6-kirchhoff-green-padic-lift-stability`，GU；新建
+`Window6KirchhoffGreenPadicLiftStability.lean`，定义 chapter-local
+`Window6KirchhoffGreenPadicLiftData`，把 `p_\star=571` 的 Smith-normal-form witness、
+cokernel 单阶稳定化与 reduced left-kernel solvability criterion 压成 theorem-facing
+wrapper）；proof 侧分别执行
+`lake build Omega.TypedAddressBiaxialCompletion.StandardLedger`、
+`lake build Omega.CircleDimension.TorusCollapseRelativeForms`、
+`lake build Omega.GU.Window6KirchhoffGreenPadicLiftStability` 全部通过，并执行
+`cd lean4 && lake build` 全量通过；proof commit 为
+`R1048: add standard ledger, torus-collapse, and Kirchhoff wrappers`；文件：
+`lean4/Omega/TypedAddressBiaxialCompletion/StandardLedger.lean`、
+`lean4/Omega/CircleDimension/TorusCollapseRelativeForms.lean`、
+`lean4/Omega/GU/Window6KirchhoffGreenPadicLiftStability.lean`、`lean4/Omega.lean`；Lean
+theorem 名：`paper_typed_address_biaxial_completion_standard_ledger`、
+`paper_cdim_torus_collapse_relative_forms`、
+`paper_window6_kirchhoff_green_padic_lift_stability`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/typed_address_biaxial_completion/subsec__typed-address-biaxial-completion-biaxial-ledger.tex`
+（`prop:typed-address-biaxial-completion-standard-ledger`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/circle_dimension_phase_gate/para__circle-dimension-phase-gate-signed-circle-dimension.tex`
+（`prop:cdim-torus-collapse-relative-forms`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/para__window6-kirchhoff-green-padic-lift-stability.tex`
+（`thm:window6-kirchhoff-green-padic-lift-stability`）；新增
+`\\leanverified` +3，覆盖章节为 TypedAddressBiaxialCompletion / CircleDimension / GU，
+降级项数 0，non-trivial 计数 0）
+
 **Phase R1043（本轮落地，proof / sync / registration / commit 执行）**：新增
 `paper_cdim_kernel_rkhs_feature_map`
 （对应 `prop:cdim-kernel-rkhs-feature-map`，CircleDimension；新建

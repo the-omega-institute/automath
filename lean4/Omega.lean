@@ -771,6 +771,7 @@ import Omega.CircleDimension.BasicComputation
 import Omega.CircleDimension.SignedCircleDimension
 import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.StokesExactSequenceDictionary
+import Omega.CircleDimension.TorusCollapseRelativeForms
 import Omega.CircleDimension.StokesFiberIntegrationDefect
 import Omega.CircleDimension.MedianStokesRigidityPotential
 import Omega.CircleDimension.MedianThetaRigidityPrimeRatio
@@ -856,6 +857,7 @@ import Omega.TypedAddressBiaxialCompletion.Window6TwoSheetCharts
 import Omega.TypedAddressBiaxialCompletion.Window6AuditBudgetSplit
 import Omega.TypedAddressBiaxialCompletion.Window6AuditBoundaryCertificates
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
+import Omega.TypedAddressBiaxialCompletion.StandardLedger
 import Omega.TypedAddressBiaxialCompletion.JensenDefectFiniteization
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
 import Omega.TypedAddressBiaxialCompletion.ThreeEndBudget
@@ -990,6 +992,7 @@ import Omega.GU.MobiusDualityUnified
 import Omega.GU.DiscriminantWedge2Square
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.Window6SingleGoodPrimeRecovery
+import Omega.GU.Window6KirchhoffGreenPadicLiftStability
 import Omega.GU.Window6B3SupportCount
 import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6VisibleCartanQuotientSyzygySplitting
