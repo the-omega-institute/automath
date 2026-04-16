@@ -1018,11 +1018,13 @@ def discover_candidates(*, model: Optional[str], dry_run: bool) -> list[dict[str
 
     merged = list(seen.values())
     scored = score_candidates_with_codex(merged, model=model, dry_run=dry_run)
-    reviewed = review_candidates_with_claude(scored, dry_run=dry_run)
+    # Bug 7 fix: removed Claude A3 review (redundant — Codex relevance score is enough
+    # for pre-filtering; B4 is the critical safety net for actual findings).
+    # Bad candidates still get filtered in Stage B via min(codex,claude) gate.
 
     final_rows: list[dict[str, Any]] = []
-    for item in reviewed:
-        final_score = min(item.get("codex_score", 0), item.get("claude_score", item.get("codex_score", 0)))
+    for item in scored:
+        final_score = item.get("codex_score", 0)
         if final_score < 7:
             continue
         final_rows.append(
@@ -1031,7 +1033,7 @@ def discover_candidates(*, model: Optional[str], dry_run: bool) -> list[dict[str
                 "url": item.get("url", f"https://github.com/{item['repo']}"),
                 "description": item.get("description", ""),
                 "codex_score": item.get("codex_score", 0),
-                "claude_score": item.get("claude_score", 0),
+                "claude_score": 0,  # not reviewed by Claude at Stage A
                 "final_score": final_score,
                 "reason": item.get("codex_reason") or item.get("claude_reason", ""),
             }
@@ -1597,77 +1599,56 @@ def run_stage_c(
     if state.stage not in {"C", "D"}:
         return state
 
-    for round_num in range(state.round + 1, MAX_DRAFT_ROUNDS + 1):
-        state.stage = "C"
-        state.round = round_num
-        state.timestamps.setdefault("stage_c_started_at", iso_now())
-        save_state(state)
-        logger.info("[%s] Stage C round %d", state.repo, round_num)
+    # Bug 7 fix: removed Claude C2 draft review (redundant — user is the final gate in Stage D).
+    # Single Codex C1 pass produces the draft; user reviews it in Stage D.
+    state.stage = "C"
+    state.round = 1
+    state.timestamps.setdefault("stage_c_started_at", iso_now())
+    save_state(state)
+    logger.info("[%s] Stage C (C1 only, user is final gate)", state.repo)
 
-        if dry_run:
-            title, body = fallback_draft(state.repo, normalize_findings(state.findings), theorem_refs)
-            review = {
-                "approved": True,
-                "overall_score": 8,
-                "title": title,
-                "body": body,
-                "notes": "dry-run approval",
-            }
-        else:
-            c1_raw = codex_exec(
-                build_stage_c1_prompt(state.repo, normalize_findings(state.findings), theorem_refs, inventory, revision_note),
-                work_dir=REPO_ROOT,
-                timeout=1200,
-                model=model,
-                dry_run=dry_run,
-            )
-            parsed_c1 = parse_json_from_output(c1_raw)
-            if isinstance(parsed_c1, dict):
-                title = str(parsed_c1.get("title", "")).strip()
-                body = sanitize_issue_text(str(parsed_c1.get("body", "")).strip())
-            else:
-                title, body = "", ""
-            if not title or not body:
-                title, body = fallback_draft(state.repo, normalize_findings(state.findings), theorem_refs)
-
-            c2_raw = claude_exec(
-                build_stage_c2_prompt(state.repo, title, body),
-                work_dir=REPO_ROOT,
-                timeout=900,
-                dry_run=dry_run,
-            )
-            parsed_c2 = parse_json_from_output(c2_raw)
-            review = parsed_c2 if isinstance(parsed_c2, dict) else {}
-
-        approved = bool(review.get("approved", False))
-        final_title = str(review.get("title") or title).strip()
-        final_body = sanitize_issue_text(str(review.get("body") or body).strip())
-        review_score = coerce_score(review.get("overall_score"), 8 if approved else 6)
-        state.draft_title = final_title
-        state.draft_body = final_body
-        state.log_event(
-            "C",
-            "draft round completed",
-            round=round_num,
-            score=review_score,
-            verdict="approved" if approved else "retry",
-            detail=detail_preview(review),
+    if dry_run:
+        title, body = fallback_draft(state.repo, normalize_findings(state.findings), theorem_refs)
+    else:
+        c1_raw = codex_exec(
+            build_stage_c1_prompt(state.repo, normalize_findings(state.findings), theorem_refs, inventory, revision_note),
+            work_dir=REPO_ROOT,
+            timeout=1200,
+            model=model,
+            dry_run=dry_run,
         )
+        parsed_c1 = parse_json_from_output(c1_raw)
+        if isinstance(parsed_c1, dict):
+            title = str(parsed_c1.get("title", "")).strip()
+            body = sanitize_issue_text(str(parsed_c1.get("body", "")).strip())
+        else:
+            title, body = "", ""
+        if not title or not body:
+            title, body = fallback_draft(state.repo, normalize_findings(state.findings), theorem_refs)
+
+    state.draft_title = title
+    state.draft_body = sanitize_issue_text(body)
+    state.log_event(
+        "C",
+        "draft created by C1 (auto-approved, user reviews in Stage D)",
+        round=1,
+        score=8,
+        verdict="advance",
+        detail=f"title={title[:120]!r} body_len={len(state.draft_body)}",
+    )
+    save_state(state)
+
+    if state.draft_title and state.draft_body:
+        state.stage = "D"
+        state.round = 0
+        state.timestamps["stage_c_completed_at"] = iso_now()
         save_state(state)
+        return state
 
-        if approved and final_title and final_body:
-            state.stage = "D"
-            state.round = 0
-            state.timestamps["stage_c_completed_at"] = iso_now()
-            state.log_event("C", "draft approved", score=review_score, verdict="advance")
-            save_state(state)
-            return state
-
-        revision_note = str(review.get("notes", "")).strip()
-
+    # C1 produced empty output — hard failure
     state.stage = "SKIPPED"
     state.timestamps["completed_at"] = iso_now()
-    state.log_event("C", "max draft rounds exhausted", verdict="skip")
+    state.log_event("C", "C1 produced empty draft", verdict="skip")
     save_state(state)
     mark_processed(state.repo, dry_run=dry_run)
     return state
