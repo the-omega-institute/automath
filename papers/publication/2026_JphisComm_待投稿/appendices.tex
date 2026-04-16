@@ -520,6 +520,138 @@ The convex rate function $J_\Gamma$ has unique minimum at $\mu(\Gamma)$, so the 
 The case $\Gamma<\Gamma_c$ is identical, with the set $(-\infty,\mu(\Gamma_c)]$ in place of $[\mu(\Gamma_c),\infty)$.
 \end{proof}
 
+\subsection{Quantitative shell control under spectral drift}
+
+\begin{proof}[Proof of \cref{thm:spectral-drift-main}]
+Write
+\[
+\sigma(r)=\log\mathcal S(r),
+\qquad
+g(r)=\log\Gamma_+(r)=2\log\lambda_c+\sigma(r)-L(r).
+\]
+By hypothesis,
+\[
+-\eta L'(r)\le \sigma'(r)\le \eta L'(r),
+\qquad r\in I.
+\]
+Hence
+\begin{equation}\label{eq:appendix-gprime-bounds}
+-(1+\eta)L'(r)\le g'(r)\le -(1-\eta)L'(r)<0,
+\qquad r\in I,
+\end{equation}
+because $L'(r)>0$ and $\eta<1$. Therefore $g$, and hence $\Gamma_+$, is strictly decreasing on $I$. This proves part~(i).
+
+For part~(ii), let $T_1,T_2\in\Gamma_+(I)$. If $T_1=T_2$, the claim is trivial. Assume $T_1>T_2$ and write $r_j=r(T_j)$. Since $\Gamma_+$ is strictly decreasing, $r_1<r_2$. Using $g(r_j)=\log T_j$ gives
+\[
+\log\frac{T_1}{T_2}
+=
+g(r_1)-g(r_2)
+=
+\int_{r_1}^{r_2}\bigl(L'(r)-\sigma'(r)\bigr)\,dr.
+\]
+The slope bound implies
+\[
+(1-\eta)L'(r)\le L'(r)-\sigma'(r)\le (1+\eta)L'(r),
+\qquad r\in[r_1,r_2].
+\]
+Integrating over $[r_1,r_2]$ yields
+\[
+(1-\eta)\bigl(L(r_2)-L(r_1)\bigr)
+\le
+\log\frac{T_1}{T_2}
+\le
+(1+\eta)\bigl(L(r_2)-L(r_1)\bigr).
+\]
+Dividing by the positive constants $1\pm\eta$ proves~\eqref{eq:threshold-comparison-main} in the case $T_1>T_2$; the general form with absolute values follows by symmetry.
+
+For part~(iii), keep the notation $T_1>T_2$ and $r_1<r_2$. The left equality in~\eqref{eq:threshold-comparison-main} is equivalent to
+\[
+\log\frac{T_1}{T_2}
+=(1-\eta)\bigl(L(r_2)-L(r_1)\bigr)
+=
+\int_{r_1}^{r_2}(1-\eta)L'(r)\,dr.
+\]
+Comparing with the identity
+\[
+\log\frac{T_1}{T_2}
+=
+\int_{r_1}^{r_2}\bigl(L'(r)-\sigma'(r)\bigr)\,dr
+\]
+shows that equality holds if and only if
+\[
+L'(r)-\sigma'(r)=(1-\eta)L'(r)
+\qquad\text{for every }r\in[r_1,r_2],
+\]
+because the continuous nonnegative function
+\[
+r\longmapsto \bigl(L'(r)-\sigma'(r)\bigr)-(1-\eta)L'(r)
+=
+\eta L'(r)-\sigma'(r)
+\]
+has zero integral only when it vanishes identically. Thus $\sigma'(r)=\eta L'(r)$ on $[r_1,r_2]$, and integration gives
+\[
+\sigma(r)=\eta L(r)+\log K
+\]
+for some $K>0$, which is equivalent to~\eqref{eq:extremal-plus-main}. The converse is immediate by substitution.
+
+The proof of the right equality is identical: equality holds if and only if
+\[
+L'(r)-\sigma'(r)=(1+\eta)L'(r)
+\qquad\text{for every }r\in[r_1,r_2],
+\]
+that is, $\sigma'(r)=-\eta L'(r)$ on $[r_1,r_2]$. Integration yields~\eqref{eq:extremal-minus-main}, and substitution again proves the converse.
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:greybody-control-main}]
+Applying \cref{thm:spectral-drift-main}(ii) with $T_1=\Gamma_\varphi$ and $T_2=\Gamma_{\mathrm{mem}}$ gives
+\[
+\frac{1}{1+\eta}\left|\log\frac{\Gamma_\varphi}{\Gamma_{\mathrm{mem}}}\right|
+\le
+\left|
+\log
+\frac{e^{\beta_\infty\Omega N(r_\varphi)}-1}
+     {e^{\beta_\infty\Omega N(r_{\mathrm{mem}})}-1}
+\right|
+\le
+\frac{1}{1-\eta}\left|\log\frac{\Gamma_\varphi}{\Gamma_{\mathrm{mem}}}\right|.
+\]
+Exponentiating yields~\eqref{eq:greybody-ratio-band-main}, because $C=\Gamma_{\mathrm{mem}}/\Gamma_\varphi$.
+
+For the displacement estimate, fix $T\in\{\Gamma_\varphi,\Gamma_{\mathrm{mem}}\}$. The inhomogeneous and homogeneous shell equations give
+\[
+T=\lambda_c^2\,
+\frac{\mathcal S_0e^{\sigma(r(T))}}{e^{\beta_\infty\Omega N(r(T))}-1}
+=
+\lambda_c^2\,
+\frac{\mathcal S_0}{e^{\beta_\infty\Omega N(r_0(T))}-1}.
+\]
+Taking logarithms yields
+\[
+L(r(T))-L(r_0(T))=\sigma(r(T)),
+\]
+and therefore
+\[
+\left|L(r(T))-L(r_0(T))\right|
+\le
+\sup_I|\sigma|
+\le
+\varepsilon.
+\]
+This proves~\eqref{eq:greybody-log-displacement-main}. By the mean-value theorem, there exists $\xi_T\in I_T$ such that
+\[
+L(r(T))-L(r_0(T))=L'(\xi_T)\bigl(r(T)-r_0(T)\bigr).
+\]
+Since $L'(\xi_T)\ge m_T>0$,
+\[
+\left|r(T)-r_0(T)\right|
+\le
+\frac{\left|L(r(T))-L(r_0(T))\right|}{m_T}
+\le
+\frac{\varepsilon}{m_T},
+\]
+which is~\eqref{eq:greybody-radius-displacement-main}.
+\end{proof}
+
 \subsection{Near-horizon expansion and local inverse theorem}
 
 \begin{proof}[Proof of \cref{thm:horizon-main}]
