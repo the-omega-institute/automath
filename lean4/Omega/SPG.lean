@@ -144,6 +144,7 @@ import Omega.SPG.SurvivorSpectrumCollision
 import Omega.SPG.SymbolicFactor
 import Omega.SPG.TanakaIncrement
 import Omega.SPG.TanakaStokes
+import Omega.SPG.StokesPeriodModulePathIntegralReconstruction
 import Omega.SPG.TotalDegreeMomentThreshold
 import Omega.SPG.VolumeBoundaryScaling
 import Omega.SPG.WalshStokes
