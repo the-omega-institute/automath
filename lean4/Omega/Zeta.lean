@@ -132,6 +132,7 @@ import Omega.Zeta.RootSeparation
 import Omega.Zeta.SmithEntropyMinDepth
 import Omega.Zeta.SL2LinearExternalCertificate
 import Omega.Zeta.SyncCyclotomicDegreeLaw
+import Omega.Zeta.SyncCyclotomicEliminationEvenness
 import Omega.Zeta.SyncCyclotomicDegreeLawPublication
 import Omega.Zeta.SyncKernelMixingRate
 import Omega.Zeta.SyncKernelPalindrome
