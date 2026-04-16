@@ -641,9 +641,12 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     out_fd, out_file = tempfile.mkstemp(suffix=".txt", prefix="codex_out_")
     os.close(out_fd)
 
+    # Use both --json (JSONL stream) and -o (last message).
+    # --json gives us all agent_message events as fallback if -o is empty.
     cmd = [
         codex_bin, "exec",
         "--dangerously-bypass-approvals-and-sandbox",
+        "--json",
         "-C", str(work_dir or REPO_ROOT), "-o", out_file,
     ]
     if model:
@@ -674,13 +677,37 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
 
     output = ""
     try:
+        # Prefer -o output (the cleanly-extracted last agent message)
         if os.path.exists(out_file) and os.path.getsize(out_file) > 0:
             with open(out_file, "r", encoding="utf-8") as f:
                 output = f.read()
         else:
-            output = (result.stdout or "") if result else ""
+            # Fallback: parse JSONL stream from stdout, concat all agent_message text
+            stdout = (result.stdout or "") if result else ""
+            messages = []
+            for line in stdout.splitlines():
+                line = line.strip()
+                if not line.startswith("{"):
+                    continue
+                try:
+                    evt = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if evt.get("type") == "item.completed":
+                    item = evt.get("item", {})
+                    if item.get("type") == "agent_message" and item.get("text"):
+                        messages.append(item["text"])
+            output = "\n\n".join(messages)
+            if not output:
+                # Last resort: raw stdout (may contain reasoning noise)
+                output = stdout
+                if not output and result and result.stderr:
+                    logger.warning(f"Codex stderr: {result.stderr[:300]}")
     finally:
-        os.unlink(out_file)
+        try:
+            os.unlink(out_file)
+        except OSError:
+            pass
     return output
 
 
