@@ -26,6 +26,7 @@ import Omega.GU.EllipticGateOuterFunctionRigidity
 import Omega.GU.EllipticGatePadicsBlindspot
 import Omega.GU.EllipticGatePrimeSpectrumClassification
 import Omega.GU.EllipticGatePrimeSpectrumRigidity
+import Omega.GU.FibPrimePGL2Order
 import Omega.GU.FibPrimePisano
 import Omega.GU.FibTailP23Orbits
 import Omega.GU.FibTailP23S3ActionOnOrbitQuotient
