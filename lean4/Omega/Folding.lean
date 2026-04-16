@@ -119,6 +119,7 @@ import Omega.Folding.MicrostateResidualWindowReachability
 import Omega.Folding.MismatchLanguage
 import Omega.Folding.MismatchLanguageIntrinsicErgodic
 import Omega.Folding.ModRigidityPeriodicPredicates
+import Omega.Folding.ModSemiringsKernelImageGcd
 import Omega.Folding.ModularTower
 import Omega.Folding.MomentBounds
 import Omega.Folding.MomentRecurrence
