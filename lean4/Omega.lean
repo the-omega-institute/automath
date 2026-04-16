@@ -74,6 +74,7 @@ import Omega.Experiments.ParryBaselineGapSturmian
 import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Experiments.MetallicMeanGoldenUniqueOptimalTVConstant
 import Omega.POM.S4Asymptotic
+import Omega.POM.S4Recurrence
 import Omega.POM.S5FieldDiscriminantMonogenic
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
@@ -813,6 +814,7 @@ import Omega.TypedAddressBiaxialCompletion.NullFiber
 import Omega.TypedAddressBiaxialCompletion.PcdimModpFormula
 import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
+import Omega.TypedAddressBiaxialCompletion.ComovingPronyThreshold
 import Omega.TypedAddressBiaxialCompletion.VisiblePhaseLift
 import Omega.TypedAddressBiaxialCompletion.OffsliceDichotomy
 import Omega.TypedAddressBiaxialCompletion.GlobalizationFlatness
@@ -1036,6 +1038,7 @@ import Omega.CircleDimension.PoissonEntropyTomography
 import Omega.CircleDimension.DoubleDiscriminant
 import Omega.CircleDimension.WdimBettiAverageLaw
 import Omega.CircleDimension.ComovingDefectDeltaBound
+import Omega.CircleDimension.AtomicDefectHankelProny
 import Omega.CircleDimension.AtomicDefectProny2KappaRecovery
 import Omega.CircleDimension.UnitarySliceDecidable
 import Omega.CircleDimension.PhaseRegisterCommonAssignments
