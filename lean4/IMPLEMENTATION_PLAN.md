@@ -22,6 +22,47 @@
 
 **远程分支并行记录（merge 前）**：以下 round 编号仅在 `origin/lean4-codex-auto-dev` 内部有序。
 
+**Phase R1043（本轮落地，proof / sync / registration / commit 执行）**：新增
+`paper_cdim_kernel_rkhs_feature_map`
+（对应 `prop:cdim-kernel-rkhs-feature-map`，CircleDimension；新建
+`KernelRKHSFeatureMap.lean`，定义 chapter-local
+`KernelRKHSFeatureMapData`，把谱核公式、显式特征映射构造、Moore--Aronszajn 的
+RKHS 完全刻画、投影范数读出与 reproducing property 压成 theorem-facing wrapper）；
+新增 `paper_fold_groupoid_aut0_rational_tail_spheres`
+（对应 `thm:fold-groupoid-aut0-rational-tail-spheres`，Folding；新建
+`RationalTailSpheres.lean`，定义 chapter-local `RationalTailSpheresData`，把 tail-count
+组合数据重索引为 `PU(d)` 的奇维球因子分解，并读出有理同伦理论、外代数上同调与奇数阶
+有理同伦秩的 theorem-facing wrapper）；新增
+`paper_xi_finite_defect_poisson_l2_energy_closed_form`
+（对应 `thm:xi-finite-defect-poisson-l2-energy-closed-form`，Zeta；新建
+`FiniteDefectPoissonL2EnergyClosedForm.lean`，定义 chapter-local
+`FiniteDefectPoissonL2EnergyClosedFormData`，把有限缺陷能量的 pairwise Poisson-kernel
+展开、shifted-kernel inner-product 公式与四个 sign choice 的收集打包为闭式能量
+wrapper）；同步阶段执行
+`git stash push --include-untracked -m 'R1043-pre-proof-rebase' -- lean4/Omega lean4/Omega.lean`、
+`git fetch origin lean4-codex-auto-dev`、`git rebase origin/lean4-codex-auto-dev` 与
+`git stash pop`，其中 `lean4/Omega.lean` 在 stash 回放时出现冲突并按 additive merge
+保留双方 import；proof 侧执行
+`lake build Omega.CircleDimension.KernelRKHSFeatureMap`、
+`lake build Omega.Folding.RationalTailSpheres`、
+`lake build Omega.Zeta.FiniteDefectPoissonL2EnergyClosedForm` 均通过；按要求执行两次
+`cd lean4 && lake build`，rebase 前后全量构建均通过；文件：
+`lean4/Omega/CircleDimension/KernelRKHSFeatureMap.lean`、
+`lean4/Omega/Folding/RationalTailSpheres.lean`、
+`lean4/Omega/Zeta/FiniteDefectPoissonL2EnergyClosedForm.lean`、
+`lean4/Omega.lean`；Lean theorem 名：
+`paper_cdim_kernel_rkhs_feature_map`、
+`paper_fold_groupoid_aut0_rational_tail_spheres`、
+`paper_xi_finite_defect_poisson_l2_energy_closed_form`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/circle_dimension_phase_gate/subsec__circle-dimension-phase-gate-poisson-cauchy-gram-kernel.tex`
+（`prop:cdim-kernel-rkhs-feature-map`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/emergent_arithmetic/subsubsec__groupoid-zeckendorf-rational-tail-parity.tex`
+（`thm:fold-groupoid-aut0-rational-tail-spheres`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/zeta_finite_part/xi/thm__xi-finite-defect-poisson-l2-energy-closed-form.tex`
+（`thm:xi-finite-defect-poisson-l2-energy-closed-form`）；新增
+`\\leanverified` +3，覆盖章节为 CircleDimension / Folding / Zeta，降级项数 0，
+non-trivial 计数 0）
+
 **Phase R1045（本轮落地，proof / sync / registration / commit 执行）**：新增
 `paper_cdim_comoving_horizon_scan_first_layer_extraction`
 （对应 `thm:cdim-comoving-horizon-scan-first-layer-extraction`，CircleDimension；新建

@@ -121,6 +121,7 @@ import Omega.Folding.YmZetaLeadingPole
 import Omega.Folding.YmZetaResidueRatio
 import Omega.Folding.YmPeriodicRigidity
 import Omega.Folding.RationalGeneratorGap
+import Omega.Folding.RationalTailSpheres
 import Omega.Folding.MetallicCompressionExtremum
 import Omega.Folding.MetallicCompressionLockingLambda2
 import Omega.Folding.MetallicParetoFrontier
@@ -793,6 +794,7 @@ import Omega.CircleDimension.ModeParityVanish
 import Omega.CircleDimension.ModeGramKernel
 import Omega.CircleDimension.ModeQuadraticIntegrals
 import Omega.CircleDimension.ModeSpaceRKHS
+import Omega.CircleDimension.KernelRKHSFeatureMap
 import Omega.CircleDimension.PrefixQuantileCRTJointModulus
 import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling
@@ -1220,6 +1222,7 @@ import Omega.Zeta.ComovingEnergyDeltaBound
 import Omega.Zeta.HankelDeterminantalRadicalEqRigidity
 import Omega.Zeta.HankelFirstBlockDeterminantDiscriminantWeight
 import Omega.CircleDimension.ComovingHorizonScanFirstLayerExtraction
+import Omega.Zeta.FiniteDefectPoissonL2EnergyClosedForm
 import Omega.Conclusion.PrimorialMixedRadixAffine
 import Omega.CircleDimension.DefectMeasureRecursiveLayerPeeling
 import Omega.GU.BdryOrientationJumpclassFiberproductMultiplicativity
