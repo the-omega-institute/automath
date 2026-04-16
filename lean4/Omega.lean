@@ -586,6 +586,7 @@ import Omega.Zeta.HankelStiffnessBalance
 import Omega.Zeta.PsiTruncationBounds
 import Omega.Zeta.JensenSoftThresholdLowerBound
 import Omega.Zeta.CayleyDepthIdentity
+import Omega.Zeta.XiSingleDefectIntegratedClosedForm
 import Omega.Zeta.CyclotomicSectorIdentity
 import Omega.Zeta.WalshParseval
 import Omega.Zeta.FiniteQuotientCardinality
@@ -925,6 +926,7 @@ import Omega.POM.ThetaGodelizationPrimeValuationIsometry
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.ToggleOrder
 import Omega.POM.ReplicaSoftcoreDet
+import Omega.POM.ReplicaSoftcoreExceptionalSecantEquation
 import Omega.POM.KCollisionRootFilter
 import Omega.POM.ReplicaBernoulliSubgraph
 import Omega.POM.FibPellQuadratic
@@ -1227,3 +1229,4 @@ import Omega.Conclusion.PrimorialMixedRadixAffine
 import Omega.CircleDimension.DefectMeasureRecursiveLayerPeeling
 import Omega.GU.BdryOrientationJumpclassFiberproductMultiplicativity
 import Omega.GU.BdryOrientationIteratedFiberproductParity
+import Omega.GU.BdryOrientationCartesianPowerParityCollapse

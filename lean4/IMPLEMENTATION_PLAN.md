@@ -63,6 +63,45 @@ wrapper）；同步阶段执行
 `\\leanverified` +3，覆盖章节为 CircleDimension / Folding / Zeta，降级项数 0，
 non-trivial 计数 0）
 
+**Phase R1041（本轮落地，proof / registration / sync / commit 执行）**：新增
+`paper_bdry_orientation_cartesian_power_parity_collapse`
+（对应 `thm:bdry-orientation-cartesian-power-parity-collapse`，GU；新建
+`BdryOrientationCartesianPowerParityCollapse.lean`，定义 chapter-local
+`OrientationTorsorClass` 与 `cartesianPowerOrientationExponent`，对笛卡尔幂指数递推
+`a_{r+1}=d a_r+d^r` 作归纳，得到闭式 `a_r=r d^{r-1}`，并把指数模 `2` 压成
+unit/base 两类取向 torsor 奇偶塌缩）；新增
+`paper_pom_replica_softcore_exceptional_secant_equation`
+（对应 `prop:pom-replica-softcore-exceptional-secant-equation`，POM；新建
+`ReplicaSoftcoreExceptionalSecantEquation.lean`，定义 chapter-local
+`ReplicaSoftcoreExceptionalSecantData`，把 rank-one resolvent witness
+`1-\frac12\sum_i w_i/(\rho-d_i)=0` 直接改写为严格割线方程
+`\sum_i w_i/(\rho-d_i)=2` 与 pole-free positivity）；新增
+`paper_xi_single_defect_integrated_closed_form`
+（对应 `prop:xi-single-defect-integrated-closed-form`，Zeta；新建
+`XiSingleDefectIntegratedClosedForm.lean`，定义
+`singleDefectSupportRadius` 与 chapter-local
+`XiSingleDefectIntegratedClosedFormData`，由中间积分公式与 endpoint saturation
+`\frac{X^2+(1-\delta)^2}{X^2+(1+\delta)^2}=\rho^2` 消去对数边界项，得到单零点积分缺陷
+的 arctan 闭式）；proof 侧执行
+`lake build Omega.GU.BdryOrientationCartesianPowerParityCollapse`、
+`lake build Omega.POM.ReplicaSoftcoreExceptionalSecantEquation` 与
+`lake build Omega.Zeta.XiSingleDefectIntegratedClosedForm` 均通过；按要求执行
+`cd lean4 && lake build`，全量构建通过（`9244` jobs，仅见既有 linter warning）；
+文件：`lean4/Omega/GU/BdryOrientationCartesianPowerParityCollapse.lean`、
+`lean4/Omega/POM/ReplicaSoftcoreExceptionalSecantEquation.lean`、
+`lean4/Omega/Zeta/XiSingleDefectIntegratedClosedForm.lean`、
+`lean4/Omega.lean`；Lean theorem 名：
+`paper_bdry_orientation_cartesian_power_parity_collapse`、
+`paper_pom_replica_softcore_exceptional_secant_equation`、
+`paper_xi_single_defect_integrated_closed_form`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/parts/thm__window6-bdry-orientation-parity-functor.tex`
+（`thm:bdry-orientation-cartesian-power-parity-collapse`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/pom/parts/subsubsec__pom-replica-softcore-fibonacci-moment-collapse.tex`
+（`prop:pom-replica-softcore-exceptional-secant-equation`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/zeta_finite_part/xi/para__xi-comoving-integrated-jensen-defect-sumrule.tex`
+（`prop:xi-single-defect-integrated-closed-form`）；新增
+`\\leanverified` +3，覆盖章节为 GU / POM / Zeta，降级项数 0，non-trivial 计数 0）
+
 **Phase R1045（本轮落地，proof / sync / registration / commit 执行）**：新增
 `paper_cdim_comoving_horizon_scan_first_layer_extraction`
 （对应 `thm:cdim-comoving-horizon-scan-first-layer-extraction`，CircleDimension；新建
