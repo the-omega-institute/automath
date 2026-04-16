@@ -749,6 +749,8 @@ def run_round_in_worktree(
     logger.info(f"{'='*60}")
 
     wt: Optional[WorktreeInfo] = None
+    new_commits: list[str] = []
+    success: bool = False
     try:
         # ── Create worktree ───────────────────────────────────────
         if not dry_run:
