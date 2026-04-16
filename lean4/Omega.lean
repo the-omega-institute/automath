@@ -98,6 +98,7 @@ import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
+import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
 import Omega.Folding.GaugeAnomalyUnitCircleRigidity
 import Omega.Folding.GaugeAnomalyTauIntClosed
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
@@ -1089,6 +1090,7 @@ import Omega.CircleDimension.AtomicDefectProny2KappaRecovery
 import Omega.CircleDimension.AtomicDefectTwoFrequency4KappaRecovery
 import Omega.CircleDimension.UnitarySliceDecidable
 import Omega.CircleDimension.PhaseRegisterCommonAssignments
+import Omega.CircleDimension.RankonePhasePrimeFiber
 import Omega.CircleDimension.HighrankPhaseRegisterMinimality
 import Omega.CircleDimension.AlgebraicDegreeMinCircleRank
 import Omega.SyncKernelWeighted.WittPkSparsification
@@ -1194,6 +1196,7 @@ import Omega.Conclusion.PrimorialMixedRadixSeeds
 import Omega.Zeta.QuotientIndexLedgerSeeds
 import Omega.POM.FisherZerosArcsineSeeds
 import Omega.POM.DiagonalHighMoments
+import Omega.POM.DiagonalRateAcceptRefreshSeparationExact
 import Omega.POM.DiagonalRateSeparationSpectralResidue
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Zeta.TorsionExactOrderLedgerSeeds
