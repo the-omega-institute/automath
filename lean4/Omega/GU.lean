@@ -5,6 +5,7 @@ import Omega.GU.BdryChiTwistedBinaryLabelExistence
 import Omega.GU.BdryOrientationCartesianPowerParityCollapse
 import Omega.GU.BdryOrientationIteratedFiberproductParity
 import Omega.GU.BdryOrientationJumpclassFiberproductMultiplicativity
+import Omega.GU.BdryOrientationWreathCharacterOddVisibility
 import Omega.GU.BdryOrientationTsubsetLucasParity
 import Omega.GU.BdrySquareIdentity
 import Omega.GU.BdryUpliftOrientationParity

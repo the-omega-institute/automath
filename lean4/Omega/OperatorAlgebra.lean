@@ -8,4 +8,5 @@ import Omega.OperatorAlgebra.FoldInvariantSubalgebra
 import Omega.OperatorAlgebra.FoldSupervisedMinimaxRisk
 import Omega.OperatorAlgebra.FoldVisiblePermutationLifts
 import Omega.OperatorAlgebra.ReplicationCentralizerColoredPartitionOrbitAlgebra
+import Omega.OperatorAlgebra.ReplicationCentralizerDimensionEgf
 import Omega.OperatorAlgebra.FoldCleanAncillaReversibleDilation
