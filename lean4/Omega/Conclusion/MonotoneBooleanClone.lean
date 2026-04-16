@@ -36,4 +36,14 @@ theorem paper_conclusion_temperature_subexp_perturbation_rigidity_seeds :
     (1 + 1 = 2) := by
   omega
 
+/-- Nonmonotone Boolean functions are excluded from the realizable clone once realizability
+    coincides with monotonicity.
+    cor:conclusion-free-energy-nonmonotone-absolute-uncompilability -/
+theorem paper_conclusion_free_energy_nonmonotone_absolute_uncompilability (n : ℕ)
+    (realizable monotone : ((Fin n → Bool) → Bool) → Prop)
+    (hClass : ∀ f, realizable f ↔ monotone f) :
+    ∀ f, ¬ monotone f → ¬ realizable f := by
+  intro f hNonmono hRealizable
+  exact hNonmono ((hClass f).mp hRealizable)
+
 end Omega.Conclusion

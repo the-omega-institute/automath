@@ -173,6 +173,7 @@ import Omega.Folding.SyncDelay
 import Omega.Folding.YmSyncTail
 import Omega.Folding.YmAmbiguityHausdorffCodim
 import Omega.Folding.YmAmbiguityShellExponentiallyThin
+import Omega.Folding.YmAmbiguityShellLowEntropy
 import Omega.Folding.YmAmbiguityShellZetaFactorTrivial
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.AlternatingSingleSymbolSynchronizing
