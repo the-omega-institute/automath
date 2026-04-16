@@ -22,6 +22,47 @@
 
 **远程分支并行记录（merge 前）**：以下 round 编号仅在 `origin/lean4-codex-auto-dev` 内部有序。
 
+**Phase R1038（本轮落地，proof / sync / registration / commit 执行）**：新增
+`paper_cdim_defect_measure_recursive_layer_peeling`
+（对应 `thm:cdim-defect-measure-recursive-layer-peeling`，CircleDimension；新建
+`DefectMeasureRecursiveLayerPeeling.lean`，定义 chapter-local
+`DefectMeasureRecursiveLayerPeelingData`，把 residual Fourier transform、decay-gap
+estimate 与 layer inversion 数据转接到既有
+`paper_typed_address_biaxial_completion_comoving_layer_peeling` 包装，从而得到有限缺陷测度递归层剥离的 theorem-facing wrapper）；
+新增 `paper_bdry_orientation_iterated_fiberproduct_parity`
+（对应 `thm:bdry-orientation-iterated-fiberproduct-parity`，GU；新建
+`BdryOrientationIteratedFiberproductParity.lean`，定义 chapter-local
+`OrientationIteratedFiberproductParityData`，以 two-factor parity 为 base case，对额外
+fiber-product 因子作归纳并打包三条奇偶推论）；
+新增 `paper_xi_hankel_first_block_determinant_discriminant_weight`
+（对应 `cor:xi-hankel-first-block-determinant-discriminant-weight`，Zeta；新建
+`HankelFirstBlockDeterminantDiscriminantWeight.lean`，定义 chapter-local
+`HankelFirstBlockDeterminantDiscriminantWeightData`，复用
+`paper_xi_hankel_determinantal_radical_eq_rigidity` 读出首 Hankel 主块行列式分解与 rank-drop
+prime obstruction）；同步阶段执行 `git stash push --include-untracked -m 'R1038-pre-rebase'
+-- lean4/Omega lean4/Omega.lean`、`git rebase origin/lean4-codex-auto-dev` 与
+`git stash pop`，其中当前分支已与远端基线对齐，无需冲突解决；proof 侧执行
+`lake build Omega.CircleDimension.DefectMeasureRecursiveLayerPeeling`、
+`lake build Omega.GU.BdryOrientationIteratedFiberproductParity` 与
+`lake build Omega.Zeta.HankelFirstBlockDeterminantDiscriminantWeight`，三者均通过；按要求执行
+`cd lean4 && lake build`，首次全量构建在 pre-rebase 树上推进到 `8390/9241`，rebased
+树上再次 replay 到 `8308/9241`，两次均仅见既有 linter warning、未暴露新的 Lean error，但当前主机会话在晚期大型模块队列前未返回最终退出码；文件：
+`lean4/Omega/CircleDimension/DefectMeasureRecursiveLayerPeeling.lean`、
+`lean4/Omega/GU/BdryOrientationIteratedFiberproductParity.lean`、
+`lean4/Omega/Zeta/HankelFirstBlockDeterminantDiscriminantWeight.lean`、
+`lean4/Omega.lean`；Lean theorem 名：
+`paper_cdim_defect_measure_recursive_layer_peeling`、
+`paper_bdry_orientation_iterated_fiberproduct_parity`、
+`paper_xi_hankel_first_block_determinant_discriminant_weight`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/circle_dimension_phase_gate/subsec__circle-dimension-phase-gate-comoving-horizon-scan-tomography.tex`
+（`thm:cdim-defect-measure-recursive-layer-peeling`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/parts/thm__window6-bdry-orientation-parity-functor.tex`
+（`thm:bdry-orientation-iterated-fiberproduct-parity`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/zeta_finite_part/xi/thm__xi-hankel-determinantal-radical-eq-rigidity.tex`
+（`cor:xi-hankel-first-block-determinant-discriminant-weight`）；新增
+`\\leanverified` +3，覆盖章节为 CircleDimension / GU / Zeta，降级项数 0，non-trivial 计数
+0）
+
 **Phase R1036（本轮落地，proof / sync / registration / commit 执行）**：新增
 `paper_typed_address_biaxial_completion_comoving_layer_peeling`
 （对应 `thm:typed-address-biaxial-completion-comoving-layer-peeling`，
