@@ -203,11 +203,21 @@ def ensure_base_branch() -> None:
 
 
 def _clone_lake_cache(wt_path: Path) -> None:
-    """Copy the .lake build cache into a new worktree using APFS clonefile.
+    """Set up the .lake directory in a new worktree.
 
-    On macOS APFS, ``cp -Rc`` creates copy-on-write clones — near-instant and
-    zero extra disk until files diverge.  Falls back to a regular copy on
-    non-APFS volumes (slower but still correct).
+    Strategy:
+    - ``packages/`` is symlinked to the main repo's copy.  External deps never
+      change between rounds, so sharing them is safe.  More importantly, lake
+      resolves artifact paths from ``Omega.setup.json`` which embeds absolute
+      paths like ``/…/lean4/.lake/packages/…``; those paths remain valid when
+      packages live at the *same* location as in the main repo.  A full copy
+      causes lake to regenerate ``Omega.setup.json`` with the new worktree
+      paths, invalidating all cached .olean references and forcing a full
+      rebuild (~30-60 min per round instead of ~5 min).
+    - ``build/`` (Omega's compiled artifacts) is APFS-cloned (copy-on-write)
+      so each worktree starts with the full incremental cache and lake only
+      recompiles the 2-3 new files added in the round.
+    - ``config/`` is APFS-cloned as well (small, round-specific lake config).
     """
     src = LEAN_ROOT / ".lake"
     dst = wt_path / "lean4" / ".lake"
@@ -218,29 +228,36 @@ def _clone_lake_cache(wt_path: Path) -> None:
         return  # already present (shouldn't happen for a fresh worktree)
 
     start = time.monotonic()
-    # Try APFS clone first (macOS), retry once after a brief pause
-    result = run_cmd(
-        ["cp", "-Rc", str(src), str(dst)],
-        timeout=1200,
-    )
-    if result.returncode != 0:
-        logger.warning("APFS clone failed, retrying in 3s ...")
-        if dst.exists():
-            shutil.rmtree(dst)
-        time.sleep(3)
-        result = run_cmd(
-            ["cp", "-Rc", str(src), str(dst)],
-            timeout=1200,
-        )
-    if result.returncode != 0:
-        # Fallback: regular copy
-        logger.warning("APFS clone retry failed, falling back to regular copy")
-        if dst.exists():
-            shutil.rmtree(dst)
-        shutil.copytree(str(src), str(dst), symlinks=True)
+    dst.mkdir(parents=True, exist_ok=True)
+
+    # 1. Symlink packages/ → main repo's packages (preserves absolute paths in
+    #    Omega.setup.json, prevents lake from invalidating the .olean cache).
+    src_pkg = src / "packages"
+    if src_pkg.exists():
+        (dst / "packages").symlink_to(src_pkg)
+
+    # 2. APFS-clone build/ and config/ (round-local, writable copies).
+    for sub in ("build", "config"):
+        src_sub = src / sub
+        dst_sub = dst / sub
+        if not src_sub.exists():
+            continue
+        result = run_cmd(["cp", "-Rc", str(src_sub), str(dst_sub)], timeout=600)
+        if result.returncode != 0:
+            logger.warning(f"APFS clone of .lake/{sub} failed, retrying...")
+            if dst_sub.exists():
+                shutil.rmtree(dst_sub, ignore_errors=True)
+            time.sleep(2)
+            result = run_cmd(["cp", "-Rc", str(src_sub), str(dst_sub)], timeout=600)
+        if result.returncode != 0:
+            logger.warning(f"APFS clone retry failed for .lake/{sub}, falling back to regular copy")
+            if dst_sub.exists():
+                shutil.rmtree(dst_sub, ignore_errors=True)
+            shutil.copytree(str(src_sub), str(dst_sub), symlinks=True)
 
     elapsed = time.monotonic() - start
-    logger.info(f"Cloned .lake cache into worktree ({elapsed:.1f}s)")
+    logger.info(f"Set up .lake in worktree ({elapsed:.1f}s): "
+                f"packages=symlink, build/config=COW-clone")
 
 
 def create_worktree(round_num: int) -> WorktreeInfo:
@@ -283,9 +300,15 @@ def remove_worktree(wt: WorktreeInfo) -> None:
         logger.info(f"Removing worktree: {wt.path}")
         run_cmd(["git", "worktree", "remove", "--force", str(wt.path)], cwd=REPO_ROOT)
         if wt.path.exists():
+            # Remove symlinks first (shutil.rmtree doesn't follow them, but the
+            # packages/ symlink target must not be deleted — only the link itself).
+            lake_dir = wt.path / "lean4" / ".lake"
+            pkg_link = lake_dir / "packages"
+            if pkg_link.is_symlink():
+                pkg_link.unlink()
             shutil.rmtree(wt.path, ignore_errors=True)
-        # Delete the branch (already merged)
-        run_cmd(["git", "branch", "-d", wt.branch], cwd=REPO_ROOT)
+        # Use -D (force-delete) so unmerged branches are cleaned up too.
+        run_cmd(["git", "branch", "-D", wt.branch], cwd=REPO_ROOT)
 
 
 def _codex_resolve_conflicts(
@@ -1142,6 +1165,22 @@ def main() -> int:
     # Ensure base branch
     if not args.dry_run:
         ensure_base_branch()
+
+    # Prune stale worktree registrations and remove orphaned physical dirs from
+    # previous sessions (rounds that were killed before cleanup ran).
+    if not args.dry_run:
+        run_cmd(["git", "worktree", "prune"], cwd=REPO_ROOT)
+        if WORKTREE_DIR.exists():
+            for entry in WORKTREE_DIR.iterdir():
+                if entry.is_dir() and entry.name.startswith("round_R"):
+                    # Only remove dirs not registered as active worktrees
+                    wt_result = run_cmd(["git", "worktree", "list", "--porcelain"], cwd=REPO_ROOT)
+                    if str(entry) not in wt_result.stdout:
+                        logger.info(f"Removing orphaned worktree dir: {entry}")
+                        pkg_link = entry / "lean4" / ".lake" / "packages"
+                        if pkg_link.is_symlink():
+                            pkg_link.unlink()
+                        shutil.rmtree(entry, ignore_errors=True)
 
     state = load_state()
     logger.info(f"Starting: R{state.round_number}, ~{state.total_theorems} theorems")
