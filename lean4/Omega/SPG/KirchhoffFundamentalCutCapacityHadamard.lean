@@ -10,7 +10,9 @@ fields record the matrix-level identifications, while the scalar fields expose t
 volume bounds used by the paper-facing wrapper. -/
 structure KirchhoffFundamentalCutCapacityData (treeRank : ℕ) where
   reducedLaplacian_eq_cutGram : Prop
+  reducedLaplacian_eq_cutGram_proof : reducedLaplacian_eq_cutGram
   cutGramDiagonal_eq_capacity : Prop
+  cutGramDiagonal_eq_capacity_proof : cutGramDiagonal_eq_capacity
   kirchhoffDeterminant : ℝ
   unitBallVolume : ℝ
   ellipsoidVolume : ℝ
@@ -44,8 +46,14 @@ theorem paper_spg_kirchhoff_fundamental_cut_capacity_hadamard
       D.unitBallVolume * (1 / Real.sqrt (∏ t, D.cutCapacity t)) ≤
         D.unitBallVolume * (1 / Real.sqrt D.kirchhoffDeterminant) := by
     exact mul_le_mul_of_nonneg_left hInv D.unitBallVolume_nonneg
-  refine ⟨D.reducedLaplacian_eq_cutGram, D.cutGramDiagonal_eq_capacity, D.hadamard_bound,
+  refine ⟨D.reducedLaplacian_eq_cutGram_proof, D.cutGramDiagonal_eq_capacity_proof, D.hadamard_bound,
     D.ellipsoidVolume_eq, ?_⟩
-  simpa [div_eq_mul_one_div, D.ellipsoidVolume_eq] using hMul
+  calc
+    D.unitBallVolume / Real.sqrt (∏ t, D.cutCapacity t)
+        = D.unitBallVolume * (1 / Real.sqrt (∏ t, D.cutCapacity t)) := by
+            rw [div_eq_mul_one_div]
+    _ ≤ D.unitBallVolume * (1 / Real.sqrt D.kirchhoffDeterminant) := hMul
+    _ = D.ellipsoidVolume := by
+          rw [div_eq_mul_one_div, D.ellipsoidVolume_eq]
 
 end Omega.SPG
