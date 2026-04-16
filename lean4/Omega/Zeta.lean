@@ -69,6 +69,7 @@ import Omega.Zeta.FiniteRankRealisation
 import Omega.Zeta.FoldbinGaugeVolumeKappaCompression
 import Omega.Zeta.FredholmDetSeeds
 import Omega.Zeta.FredholmPrimitiveClosedForm
+import Omega.Zeta.FourthRegisterDichotomy
 import Omega.Zeta.GaugeGroupTripleDecomp
 import Omega.Zeta.GeometricHarmonicTail
 import Omega.Zeta.GoldenRadiusVisibility
