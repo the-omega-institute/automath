@@ -244,6 +244,7 @@ import Omega.SPG.BoundaryDimensionUpper
 import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.DoubleBudgetPoisson
 import Omega.SPG.CapacityRegion
+import Omega.SPG.FoldInjectivizationRegisterLowerBound
 import Omega.SPG.EntropyLedger
 import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.ErrorResolventCyclotomic
@@ -263,6 +264,7 @@ import Omega.SPG.SturmianCylinderInformationTime
 import Omega.SPG.DiscreteStokesPoincarePublication
 import Omega.SPG.HypercubeNearDetailedBalancePublication
 import Omega.SPG.HypercubeGradientPublication
+import Omega.Zeta.CyclicEulerProductComplexSection
 import Omega.SPG.SurvivorSpectrumCollision
 import Omega.SPG.PressureGap
 import Omega.SPG.SurvivorPressureRecovery
