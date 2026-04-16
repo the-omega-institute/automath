@@ -731,6 +731,7 @@ import Omega.Conclusion.SpectrumSignLaw
 import Omega.Conclusion.Q13CrtPeriodCompression
 import Omega.Conclusion.CoordinateBundleDyadicBlockLaw
 import Omega.Conclusion.Window6VisibleHiddenSeparation
+import Omega.Conclusion.Window6OutputKLExactGcdChainSplitting
 import Omega.Conclusion.ImageLayerMinimalInverseMemory
 import Omega.Conclusion.ExtPiKernelPoset
 import Omega.Conclusion.FoldHilbertRecognizable
@@ -775,6 +776,7 @@ import Omega.CircleDimension.SignedCircleDimension
 import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.StokesExactSequenceDictionary
 import Omega.CircleDimension.TorusCollapseRelativeForms
+import Omega.CircleDimension.StokesQPowerScalingAnomAmplification
 import Omega.CircleDimension.StokesFiberIntegrationDefect
 import Omega.CircleDimension.MedianStokesRigidityPotential
 import Omega.CircleDimension.MedianThetaRigidityPrimeRatio
@@ -864,6 +866,7 @@ import Omega.TypedAddressBiaxialCompletion.Window6AuditBoundaryCertificates
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.StandardLedger
 import Omega.TypedAddressBiaxialCompletion.JensenDefectFiniteization
+import Omega.TypedAddressBiaxialCompletion.JensenDefectBlindspot
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
 import Omega.TypedAddressBiaxialCompletion.ThreeEndBudget
 import Omega.TypedAddressBiaxialCompletion.NullExhaustive

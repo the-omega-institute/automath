@@ -155,6 +155,47 @@ theorem 名：`paper_typed_address_biaxial_completion_standard_ledger`、
 `\\leanverified` +3，覆盖章节为 TypedAddressBiaxialCompletion / CircleDimension / GU，
 降级项数 0，non-trivial 计数 0）
 
+**Phase R1049（本轮落地，proof / sync / registration / commit 执行）**：新增
+`paper_cdim_stokes_qpower_scaling_anom_amplification`
+（对应 `prop:cdim-stokes-qpower-scaling-anom-amplification`，CircleDimension；新建
+`StokesQPowerScalingAnomAmplification.lean`，定义 chapter-local
+`stokesQPowerPullback`、`stokesRelativeBasisWeight` 与
+`stokesBoundaryAnomaly`，复用既有 `StokesExactSequenceDictionary` 的 split short exact
+model，把边界因子的 `q` 次拉回、相对基权重 `q^|I|` 与 character-pair anomaly
+amplification 对齐打包为 theorem-facing wrapper）；新增
+`paper_conclusion_window6_output_kl_exact_gcd_chain_splitting`
+（对应 `thm:conclusion-window6-output-kl-exact-gcd-chain-splitting`，Conclusion；新建
+`Window6OutputKLExactGcdChainSplitting.lean`，定义 exact-gcd 扇区质量
+`window6ExactGcdSectorMass`、可见 log-ratio 项与扇区内 blind KL 项，并将四项有限求和化简为
+可见项 `\frac{15}{16}\log(63/64)+\frac{1}{16}\log(21/16)`、blind 项
+`\frac14\log(32/27)` 及总 KL 闭式）；新增
+`paper_typed_address_biaxial_completion_jensen_defect_blindspot`
+（对应 `prop:typed-address-biaxial-completion-jensen-defect-blindspot`，
+TypedAddressBiaxialCompletion；新建 `JensenDefectBlindspot.lean`，复用
+`JensenDefectFiniteization`、`RadiusBlindspotJointDiscreteBudgetOrthogonal`、
+`ComovingHorizonScanFirstLayerExtraction`、`OffsliceDichotomy` 与
+`BoundaryAddressCollision`，把有限半径 Jensen 缺陷、blindspot/resource orthogonality、
+可审计恢复路径与固定图表地址碰撞预算见证压成 paper-level wrapper）；proof 侧执行
+`lake build Omega.CircleDimension.StokesQPowerScalingAnomAmplification`、
+`lake build Omega.Conclusion.Window6OutputKLExactGcdChainSplitting`、
+`lake build Omega.TypedAddressBiaxialCompletion.JensenDefectBlindspot` 均通过；随后执行
+`cd lean4 && lake build`，全量构建通过；文件：
+`lean4/Omega/CircleDimension/StokesQPowerScalingAnomAmplification.lean`、
+`lean4/Omega/Conclusion/Window6OutputKLExactGcdChainSplitting.lean`、
+`lean4/Omega/TypedAddressBiaxialCompletion/JensenDefectBlindspot.lean`、
+`lean4/Omega.lean`；Lean theorem 名：
+`paper_cdim_stokes_qpower_scaling_anom_amplification`、
+`paper_conclusion_window6_output_kl_exact_gcd_chain_splitting`、
+`paper_typed_address_biaxial_completion_jensen_defect_blindspot`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/circle_dimension_phase_gate/part__circle-dimension-phase-gate-stokes-relative-explicit-model.tex`
+（`prop:cdim-stokes-qpower-scaling-anom-amplification`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/conclusion/thm__conclusion-window6-output-visible-blind-splitting.tex`
+（`thm:conclusion-window6-output-kl-exact-gcd-chain-splitting`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/typed_address_biaxial_completion/subsec__typed-address-biaxial-completion-jensen-defect-repulsion-blindspot.tex`
+（`prop:typed-address-biaxial-completion-jensen-defect-blindspot`）；新增
+`\\leanverified` +3，覆盖章节为 CircleDimension / Conclusion /
+TypedAddressBiaxialCompletion，降级项数 0，non-trivial 计数 0）
+
 **Phase R1043（本轮落地，proof / sync / registration / commit 执行）**：新增
 `paper_cdim_kernel_rkhs_feature_map`
 （对应 `prop:cdim-kernel-rkhs-feature-map`，CircleDimension；新建
