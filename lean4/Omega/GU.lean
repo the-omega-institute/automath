@@ -106,6 +106,7 @@ import Omega.GU.Window6CyclicWeightThresholdRootLength
 import Omega.GU.Window6DoubleLock12
 import Omega.GU.Window6DyadicBudget
 import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
+import Omega.GU.Window6ChiralityAnchorMinimal
 import Omega.GU.Window6IntrinsicBracketModpLiftCriterion
 import Omega.GU.Window6KirchhoffGreenPadicLiftStability
 import Omega.GU.Window6ReducedLaplacianGreenSimplePole
