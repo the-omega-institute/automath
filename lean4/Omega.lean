@@ -127,6 +127,7 @@ import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.LocalRewriteLdpBarrier
 import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
+import Omega.Folding.RankEncodingReversibleLift
 import Omega.Folding.ZeroFiberLinear
 import Omega.FoldResidualTime.Window6SecondCollisionConstant
 import Omega.FoldResidualTime.ApparentRandomnessFreezingEscort
@@ -964,6 +965,7 @@ import Omega.GU.SheetflipRegisterBound
 import Omega.GU.EllipticGateMinimalRegister
 import Omega.GU.SideInformationBitLowerBound
 import Omega.GU.BetaQuantizationStep
+import Omega.GU.BetaPfExpectation
 import Omega.GU.FixedPrecisionExponentialMultiplicity
 import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GU.EllipticGatePadicsBlindspot
