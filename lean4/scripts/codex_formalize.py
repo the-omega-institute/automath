@@ -58,6 +58,9 @@ WORKTREE_DIR = REPO_ROOT / ".worktrees"
 
 BASE_BRANCH = "lean4-codex-auto-dev"
 CODEX_PATH = shutil.which("codex") or "/opt/homebrew/bin/codex"
+# Graceful stop: create this file to prevent new rounds from being dispatched.
+# Current rounds finish normally; the process exits once the pool drains.
+STOP_FILE = REPO_ROOT / ".pipeline.stop"
 
 
 def _load_prompt(name: str) -> str:
@@ -1052,6 +1055,14 @@ def main() -> int:
         help="Remove all stale formalization worktrees and exit",
     )
     parser.add_argument(
+        "--stop", action="store_true",
+        help=f"Create {STOP_FILE.name} to signal the running pipeline to drain and exit",
+    )
+    parser.add_argument(
+        "--resume", action="store_true",
+        help=f"Remove {STOP_FILE.name} so the pipeline resumes dispatching new rounds",
+    )
+    parser.add_argument(
         "--base-branch", type=str, default=BASE_BRANCH,
         help=f"Base branch name (default: {BASE_BRANCH})",
     )
@@ -1063,6 +1074,19 @@ def main() -> int:
     if args.cleanup:
         n = cleanup_all_worktrees()
         print(f"Cleaned up {n} worktree(s)")
+        return 0
+
+    # ── Graceful stop / resume ─────────────────────────────────────
+    if args.stop:
+        STOP_FILE.touch()
+        print(f"Created {STOP_FILE} — running pipeline will drain and exit after current rounds finish.")
+        return 0
+    if args.resume:
+        if STOP_FILE.exists():
+            STOP_FILE.unlink()
+            print(f"Removed {STOP_FILE} — pipeline will resume dispatching new rounds.")
+        else:
+            print(f"{STOP_FILE} did not exist (pipeline was not stopped).")
         return 0
 
     # ── Status ─────────────────────────────────────────────────────
@@ -1122,6 +1146,9 @@ def main() -> int:
             futures: dict[Future, int] = {}
 
             def _submit_next() -> None:
+                if STOP_FILE.exists():
+                    logger.info(f"Stop file detected ({STOP_FILE}), not dispatching new rounds")
+                    return
                 if state.consecutive_failures >= args.max_consecutive_failures:
                     return
                 with _round_lock:
