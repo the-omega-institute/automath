@@ -140,6 +140,17 @@ theorem paper_conclusion_primorial_additive_vs_godel_multiplicative :
       Function.Injective (godelMul p)) :=
   paper_conclusion_primorial_additive_vs_godel_multiplicative_small
 
+/-- Any injective multiplicative encoding into a commutative semigroup forces
+the source semigroup itself to commute.
+    prop:conclusion-godel-multiplicative-homomorphism-abelianization -/
+theorem paper_conclusion_godel_multiplicative_homomorphism_abelianization
+    {α β : Type*} [Semigroup α] [CommSemigroup β] (G : α → β)
+    (hMul : ∀ A B : α, G (A * B) = G A * G B) (hInj : Function.Injective G) :
+    ∀ A B : α, A * B = B * A := by
+  intro A B
+  apply hInj
+  rw [hMul, hMul, mul_comm]
+
 /-- Faithful Godel encoding requires infinite prime support: small prime witnesses.
     cor:conclusion-faithful-time-addressed-godel-needs-infinite-prime-support -/
 theorem paper_conclusion_faithful_godel_infinite_prime_support_seeds :

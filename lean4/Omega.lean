@@ -181,6 +181,7 @@ import Omega.Folding.YmSyncTail
 import Omega.Folding.YmAmbiguityHausdorffCodim
 import Omega.Folding.YmAmbiguityShellExponentiallyThin
 import Omega.Folding.YmAmbiguityShellLowEntropy
+import Omega.Folding.YmAmbiguitySpectrumLaw
 import Omega.Folding.YmAmbiguityShellZetaFactorTrivial
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.AlternatingSingleSymbolSynchronizing
@@ -964,6 +965,7 @@ import Omega.SPG.GodelAxisBoundaryInvertibility
 import Omega.GU.EllipticGatePrimeSpectrumClassification
 import Omega.GU.EllipticGatePrimeSpectrumRigidity
 import Omega.GU.EllipticGateOuterFunctionRigidity
+import Omega.GroupUnification.HankelVandermondeDiscriminantStiffness
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.TwoChannelCollapse
