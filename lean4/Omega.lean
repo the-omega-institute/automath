@@ -132,6 +132,7 @@ import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.FreeInvolutionCount
 import Omega.GU.CyclotomicSpecializationRigidity
 import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
+import Omega.GU.JetAlignmentUnification
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.VisibleValueOverflow
@@ -193,6 +194,7 @@ import Omega.EA.FiniteLedgerRecoverability
 import Omega.EA.PrimeRegisterRewriteConfluentNormalForm
 import Omega.EA.PrimeRegisterNormalFormUniqueness
 import Omega.EA.PrimeRegisterOrbitFiberCoincidence
+import Omega.EA.ZeckendorfArithComputable
 import Omega.PhysicalSpacetimeSkeleton.DerivedStressEnergyConservation
 import Omega.PhysicalSpacetimeSkeleton.AdmissibleEinsteinClosureMain
 import Omega.PhysicalSpacetimeSkeleton.AdmissibleGlobalEinsteinEquation
@@ -770,8 +772,8 @@ import Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 import Omega.TypedAddressBiaxialCompletion.CausalPreorder
 import Omega.TypedAddressBiaxialCompletion.ClassicalContraction
 import Omega.TypedAddressBiaxialCompletion.BoundaryAddressCollision
-import Omega.TypedAddressBiaxialCompletion.ComovingDefectBound
 import Omega.TypedAddressBiaxialCompletion.BoundaryJointSufficiency
+import Omega.TypedAddressBiaxialCompletion.ComovingDefectBound
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.PreferredMinimalInstantiationExtraction
