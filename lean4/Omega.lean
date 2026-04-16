@@ -1019,6 +1019,7 @@ import Omega.CircleDimension.WdimBettiAverageLaw
 import Omega.CircleDimension.ComovingDefectDeltaBound
 import Omega.CircleDimension.UnitarySliceDecidable
 import Omega.CircleDimension.PhaseRegisterCommonAssignments
+import Omega.CircleDimension.AlgebraicDegreeMinCircleRank
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.Zeta.VandermondeResultantSeeds
 import Omega.GU.ZeroDefectExpRate
@@ -1064,6 +1065,7 @@ import Omega.POM.PressureConvexity
 import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.PressureSlopes
+import Omega.POM.RqLogconvexFreeEnergyOrder
 import Omega.POM.GibbsSelection
 import Omega.POM.RenyiEntropyRate
 import Omega.POM.RenyiEndpoint
