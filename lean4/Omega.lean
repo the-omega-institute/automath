@@ -93,6 +93,7 @@ import Omega.Folding.BayesKinkGeometry
 import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
+import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
 import Omega.Folding.PhiEquivariant
 import Omega.Folding.PhiSlidingBlockCode
 import Omega.Folding.PhiEquivariantPublication
@@ -713,6 +714,7 @@ import Omega.CircleDimension.SignedCircleDimension
 import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.StokesFiberIntegrationDefect
 import Omega.CircleDimension.MedianStokesRigidityPotential
+import Omega.CircleDimension.MedianThetaRigidityPrimeRatio
 import Omega.CircleDimension.PhasePrefixOccupancyBarrier
 import Omega.CircleDimension.RegisterCircleModpFormula
 import Omega.CircleDimension.AddressLedgerJointBudgetLowerBound
@@ -878,6 +880,7 @@ import Omega.GU.Window6AdjointWeightMultiset
 import Omega.GU.TerminalFoldbin6TailCubeSection
 import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalFoldbin6BitflipStabilityPolynomial
+import Omega.GU.TerminalFoldbin6InformationLossConstants
 import Omega.GU.TerminalFoldbin6BoundaryPureF9Alias
 import Omega.CircleDimension.PhaseSeparationPrecisionExponent
 import Omega.CircleDimension.PhasePrecisionTradeoffDyadic
