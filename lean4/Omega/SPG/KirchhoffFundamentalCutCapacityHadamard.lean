@@ -56,7 +56,11 @@ theorem paper_spg_kirchhoff_fundamental_cut_capacity_hadamard
         = D.unitBallVolume * (1 / Real.sqrt (∏ t, D.cutCapacity t)) := by
             rw [div_eq_mul_one_div]
     _ ≤ D.unitBallVolume * (1 / Real.sqrt D.kirchhoffDeterminant) := hMul
+    _ = D.unitBallVolume * (Real.sqrt D.kirchhoffDeterminant)⁻¹ := by
+          rw [one_div]
+    _ = D.unitBallVolume / Real.sqrt D.kirchhoffDeterminant := by
+          rw [div_eq_mul_inv]
     _ = D.ellipsoidVolume := by
-          rw [div_eq_mul_one_div, D.ellipsoidVolume_eq]
+          rw [D.ellipsoidVolume_eq]
 
 end Omega.SPG
