@@ -69,6 +69,7 @@ import Omega.POM.OrbitProductNorm
 import Omega.POM.OrderSpatialization
 import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
 import Omega.POM.ParrySurfaceDerivative
+import Omega.POM.MaxFiberEvenChernoffExponent
 import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.PositiveNegativeMomentCoupling
 import Omega.POM.PressureConvexity
