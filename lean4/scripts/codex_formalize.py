@@ -412,9 +412,10 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
             run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=300)
 
             # 2. Fast-forward local BASE_BRANCH from origin if origin is ahead.
-            #    git fetch . src:dst is ff-only: silently no-ops if local is ahead.
+            #    git merge --ff-only works on a checked-out branch (unlike git fetch .).
+            #    Silently no-ops if local is already at or ahead of origin.
             run_cmd(
-                ["git", "fetch", ".", f"origin/{BASE_BRANCH}:{BASE_BRANCH}"],
+                ["git", "merge", "--ff-only", f"origin/{BASE_BRANCH}"],
                 cwd=REPO_ROOT, timeout=30,
             )
 
@@ -435,10 +436,11 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
                     run_cmd(["git", "rebase", "--abort"], cwd=wt.path)
                     return False
 
-            # 4. Fast-forward local BASE_BRANCH to rebased worktree tip (ff-only, safe)
+            # 4. Fast-forward local BASE_BRANCH to rebased worktree tip.
+            #    git merge --ff-only works on checked-out branches; git fetch . does not.
             wt_tip = run_cmd(["git", "rev-parse", "HEAD"], cwd=wt.path).stdout.strip()
             ff = run_cmd(
-                ["git", "fetch", ".", f"{wt_tip}:{BASE_BRANCH}"],
+                ["git", "merge", "--ff-only", wt_tip],
                 cwd=REPO_ROOT, timeout=30,
             )
             if ff.returncode != 0:
