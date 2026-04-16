@@ -385,88 +385,91 @@ def _codex_resolve_conflicts(
 def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> bool:
     """Merge the worktree branch into BASE_BRANCH and push.
 
-    Strategy: rebase the worktree branch onto the latest BASE_BRANCH *inside
-    the worktree itself*, then fast-forward the local BASE_BRANCH ref via
-    ``git update-ref``.  This never checks out BASE_BRANCH in the main repo,
-    so it works even when the main working tree is dirty.
+    Strategy:
+    1. Fetch origin so we have the latest remote state.
+    2. Fast-forward LOCAL BASE_BRANCH from origin (if origin is ahead).
+       Uses ``git fetch . origin/BASE:BASE`` which is ff-only and safe —
+       it never overwrites local-only commits that haven't been pushed yet.
+    3. Rebase the worktree branch onto the LOCAL BASE_BRANCH (not origin/).
+       This ensures any local-only commits (e.g. prompt/script edits made
+       directly on the branch without pushing first) are included in the
+       rebase base and are not lost.
+    4. Fast-forward LOCAL BASE_BRANCH to the rebased worktree tip via
+       ``git fetch . wt_tip:BASE_BRANCH`` (ff-only, never force-moves the
+       ref past local-only commits, never touches the working tree).
+    5. Push to origin.
 
-    On rebase conflict, delegates to codex exec for automatic resolution
-    (typical: parallel import additions to Omega.lean, IMPLEMENTATION_PLAN
-    header updates, .tex annotation appends).
+    The old ``git update-ref + git reset --hard HEAD`` pattern was unsafe:
+    it unconditionally moved the branch pointer to the worktree tip (which
+    was rebased on origin/, not on local commits) and then discarded any
+    local-only working-tree changes.
     """
     with _git_lock:
         logger.info(f"Merging {wt.branch} into {BASE_BRANCH}...")
 
-        # 1. Fetch latest base branch
-        run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=300)
-
-        # 2. Rebase the worktree branch onto latest base (inside the worktree)
-        rebase = run_cmd(
-            ["git", "rebase", f"origin/{BASE_BRANCH}"],
-            cwd=wt.path,
-            timeout=180,
-        )
-        if rebase.returncode != 0:
-            logger.warning(f"Rebase conflict for {wt.branch}, invoking codex to resolve...")
-            resolved = _codex_resolve_conflicts(wt.path, model=model)
-            if not resolved:
-                logger.error(f"Codex could not resolve conflicts for {wt.branch}")
-                run_cmd(["git", "rebase", "--abort"], cwd=wt.path)
-                return False
-
-        # 3. Fast-forward BASE_BRANCH ref to the rebased worktree tip
-        wt_tip = run_cmd(
-            ["git", "rev-parse", "HEAD"], cwd=wt.path
-        ).stdout.strip()
-
-        update = run_cmd(
-            ["git", "update-ref", f"refs/heads/{BASE_BRANCH}", wt_tip],
-            cwd=REPO_ROOT,
-        )
-        if update.returncode != 0:
-            logger.error(f"update-ref failed: {update.stderr[:300]}")
-            return False
-
-        # Align main working tree index + files with the new HEAD so that
-        # `git status` stays clean after the fast-forward.
-        run_cmd(["git", "reset", "--hard", "HEAD"], cwd=REPO_ROOT)
-
-        # 4. Push BASE_BRANCH
-        push = run_cmd(
-            ["git", "push", "origin", BASE_BRANCH],
-            cwd=REPO_ROOT,
-            timeout=300,
-        )
-        if push.returncode != 0:
-            # Retry: fetch + rebase again (someone else pushed meanwhile)
-            logger.warning("Push rejected, retrying after fetch + rebase...")
+        def _do_rebase_and_ff(attempt: int) -> bool:
+            # 1. Fetch latest remote state
             run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=300)
-            rebase2 = run_cmd(
-                ["git", "rebase", f"origin/{BASE_BRANCH}"], cwd=wt.path,
+
+            # 2. Fast-forward local BASE_BRANCH from origin if origin is ahead.
+            #    git fetch . src:dst is ff-only: silently no-ops if local is ahead.
+            run_cmd(
+                ["git", "fetch", ".", f"origin/{BASE_BRANCH}:{BASE_BRANCH}"],
+                cwd=REPO_ROOT, timeout=30,
+            )
+
+            # 3. Rebase worktree onto LOCAL BASE_BRANCH (includes local-only commits)
+            rebase = run_cmd(
+                ["git", "rebase", BASE_BRANCH],
+                cwd=wt.path,
                 timeout=180,
             )
-            if rebase2.returncode != 0:
-                resolved2 = _codex_resolve_conflicts(wt.path, model=model)
-                if not resolved2:
+            if rebase.returncode != 0:
+                logger.warning(
+                    f"Rebase conflict for {wt.branch} (attempt {attempt}), "
+                    "invoking codex to resolve..."
+                )
+                resolved = _codex_resolve_conflicts(wt.path, model=model)
+                if not resolved:
+                    logger.error(f"Codex could not resolve conflicts for {wt.branch}")
                     run_cmd(["git", "rebase", "--abort"], cwd=wt.path)
                     return False
-            wt_tip2 = run_cmd(
-                ["git", "rev-parse", "HEAD"], cwd=wt.path
-            ).stdout.strip()
-            run_cmd(
-                ["git", "update-ref", f"refs/heads/{BASE_BRANCH}", wt_tip2],
-                cwd=REPO_ROOT,
+
+            # 4. Fast-forward local BASE_BRANCH to rebased worktree tip (ff-only, safe)
+            wt_tip = run_cmd(["git", "rev-parse", "HEAD"], cwd=wt.path).stdout.strip()
+            ff = run_cmd(
+                ["git", "fetch", ".", f"{wt_tip}:{BASE_BRANCH}"],
+                cwd=REPO_ROOT, timeout=30,
             )
-            run_cmd(["git", "reset", "--hard", "HEAD"], cwd=REPO_ROOT)
-            push2 = run_cmd(
-                ["git", "push", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=300,
-            )
-            if push2.returncode != 0:
-                logger.error(f"Push retry failed: {push2.stderr[:300]}")
+            if ff.returncode != 0:
+                logger.error(f"ff update of {BASE_BRANCH} failed: {ff.stderr[:300]}")
                 return False
 
-        logger.info(f"Merged and pushed {wt.branch} to {BASE_BRANCH}")
-        return True
+            # 5. Push to origin
+            push = run_cmd(
+                ["git", "push", "origin", BASE_BRANCH],
+                cwd=REPO_ROOT, timeout=300,
+            )
+            if push.returncode == 0:
+                return True
+
+            if attempt == 1:
+                logger.warning("Push rejected, retrying after fetch + rebase...")
+                return False  # caller will retry
+
+            logger.error(f"Push retry failed: {push.stderr[:300]}")
+            return False
+
+        if _do_rebase_and_ff(attempt=1):
+            logger.info(f"Merged and pushed {wt.branch} to {BASE_BRANCH}")
+            return True
+
+        # Retry once (someone else pushed between our rebase and push)
+        if _do_rebase_and_ff(attempt=2):
+            logger.info(f"Merged and pushed {wt.branch} to {BASE_BRANCH}")
+            return True
+
+        return False
 
 
 def cleanup_all_worktrees() -> int:
