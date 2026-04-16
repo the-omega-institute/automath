@@ -96,6 +96,7 @@ import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
+import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
 import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
 import Omega.Folding.PhiEquivariant
 import Omega.Folding.PhiSlidingBlockCode

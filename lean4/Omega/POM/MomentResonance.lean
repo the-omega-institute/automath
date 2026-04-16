@@ -111,4 +111,34 @@ theorem paper_pom_delta_counts_constraints
         ∀ m ≥ m0, ∀ j, (∑ i, constraints j i * M m i) = 0 := by
   exact paper_pom_resonance_deficit d Delta m0 M T hInv hTail
 
+set_option maxHeartbeats 400000 in
+/-- Packaging the resonance-deficit constraint family as a syndrome map: beyond the resonance
+window the syndrome vanishes identically, so any nonzero syndrome reading is an immediate audit
+failure by contrapositive.
+    cor:pom-resonance-syndrome-audit -/
+theorem paper_pom_resonance_syndrome_audit
+    (d Delta m0 : ℕ)
+    (M : ℕ → Fin (d + Delta) → ℝ)
+    (T : Matrix (Fin (d + Delta)) (Fin (d + Delta)) ℝ)
+    (hInv : IsUnit T.det)
+    (hTail : ∀ m ≥ m0, ∀ j : Fin Delta, (T.mulVec (M m)) (Fin.natAdd d j) = 0) :
+    ∃ syndrome : (Fin (d + Delta) → ℝ) → Fin Delta → ℝ,
+      (∃ constraints : Fin Delta → Fin (d + Delta) → ℝ,
+        LinearIndependent ℝ constraints ∧
+          syndrome = fun v j => ∑ i, constraints j i * v i) ∧
+        (∀ m ≥ m0, syndrome (M m) = 0) ∧
+        ∀ m ≥ m0, syndrome (M m) ≠ 0 → False := by
+  rcases paper_pom_delta_counts_constraints d Delta m0 M T hInv hTail with
+    ⟨constraints, hlin, hzero⟩
+  let syndrome : (Fin (d + Delta) → ℝ) → Fin Delta → ℝ := fun v j => ∑ i, constraints j i * v i
+  refine ⟨syndrome, ?_, ?_, ?_⟩
+  · exact ⟨constraints, hlin, rfl⟩
+  · intro m hm
+    funext j
+    exact hzero m hm j
+  · intro m hm hneq
+    exact hneq (by
+      funext j
+      exact hzero m hm j)
+
 end Omega.POM
