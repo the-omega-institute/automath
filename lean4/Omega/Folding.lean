@@ -81,6 +81,7 @@ import Omega.Folding.GaugeAnomalyKStepInvariance
 import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
 import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
+import Omega.Folding.GaugeAnomalyLeyangBranchU1
 import Omega.Folding.GaugeAnomalyP10Degree
 import Omega.Folding.GaugeAnomalyP10Q10TschirnhausInverse
 import Omega.Folding.GaugeAnomalyQ10Tschirnhaus
