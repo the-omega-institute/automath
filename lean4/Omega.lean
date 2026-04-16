@@ -648,6 +648,7 @@ import Omega.Conclusion.RateCdimTwoCircleThreshold
 import Omega.Conclusion.AuditComplexityAreaEquivalence
 import Omega.Conclusion.BoundaryCycleRankExternalInfoLowerBound
 import Omega.Conclusion.BoundaryMixedAuditRankConservation
+import Omega.Conclusion.CausalDepthBranchBudgetOrthogonality
 import Omega.Conclusion.PcdimPropCycleRankMinimal
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
@@ -746,6 +747,7 @@ import Omega.CircleDimension.PoissonSecondOrder
 import Omega.CircleDimension.PoissonDefectLadder
 import Omega.CircleDimension.PoissonDefectAmplification
 import Omega.CircleDimension.PoissonDefectStability
+import Omega.CircleDimension.FiniteLocalizationDirectsumPrimeLedgerExactSequence
 import Omega.CircleDimension.DiscreteStokesInversionHypercube
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.ParryEndpointMassMatrix
@@ -774,6 +776,7 @@ import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.PreferredMinimalInstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.CompletenessGapAudit
+import Omega.TypedAddressBiaxialCompletion.FrontInterface
 import Omega.TypedAddressBiaxialCompletion.Window6ExplicitFibers
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
