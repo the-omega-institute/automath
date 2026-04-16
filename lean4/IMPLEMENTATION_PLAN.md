@@ -102,6 +102,28 @@ unit/base 两类取向 torsor 奇偶塌缩）；新增
 （`prop:xi-single-defect-integrated-closed-form`）；新增
 `\\leanverified` +3，覆盖章节为 GU / POM / Zeta，降级项数 0，non-trivial 计数 0）
 
+**Phase R1042（本轮落地，proof / sync / registration / commit 执行；含 1 个按重试上限跳过项）**：新增
+`paper_window6_c3_degree3_euclidean_cubature`
+（对应 `thm:window6-c3-degree3-euclidean-cubature`，GU；在
+`Window6B3C3EuclideanCubature.lean` 中沿用既有 `B₃` cubature 包装格式，复用
+`paper_window6_b3c3_adjoint_second_moment_isotropy` 的 `C₃` 分支，直接以中心对称读出
+一次/三次奇矩消失，并把径向参考测度的显式二次矩
+`(6/21)·(4/3)+(12/21)·(2/3)=16/21` 打包为 degree-`≤ 3` Euclidean cubature wrapper）；
+同步阶段先以局部 stash 保护 proof 改动，随后执行
+`git fetch origin lean4-codex-auto-dev`、`git rebase origin/lean4-codex-auto-dev` 与
+stash 回放；rebase 后发现
+`ComovingHorizonScanFirstLayerExtraction.lean` 已在基线中存在且完成注册，因此本轮未再产生
+CircleDimension 侧 diff；`paper_fold_gauge_anomaly_psd_rational`
+按有界修复轮次尝试后仍卡在有理函数代数归一化，已移除未完成草稿并按要求跳过。proof 侧执行
+`lake build Omega.GU.Window6B3C3EuclideanCubature`、
+`lake build Omega.CircleDimension.ComovingHorizonScanFirstLayerExtraction` 与
+`cd lean4 && lake build`，均通过（全量构建仅出现既有 linter warning、无新的 Lean error）；
+文件：`lean4/Omega/GU/Window6B3C3EuclideanCubature.lean`；Lean theorem 名：
+`paper_window6_c3_degree3_euclidean_cubature`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/subsubsec__window6_b3c3_cubature_harmonic_detector.tex`
+（`thm:window6-c3-degree3-euclidean-cubature`）；新增 `\\leanverified` +1，覆盖章节为
+GU，降级项数 1（`paper_fold_gauge_anomaly_psd_rational` 按重试上限跳过），non-trivial 计数 0）
+
 **Phase R1045（本轮落地，proof / sync / registration / commit 执行）**：新增
 `paper_cdim_comoving_horizon_scan_first_layer_extraction`
 （对应 `thm:cdim-comoving-horizon-scan-first-layer-extraction`，CircleDimension；新建
