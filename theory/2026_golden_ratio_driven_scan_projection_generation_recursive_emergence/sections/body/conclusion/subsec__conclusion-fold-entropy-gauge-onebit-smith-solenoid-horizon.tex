@@ -61,6 +61,63 @@ m\log 2-H(\mu_m)-1
 由于括号内仅为 \(O(m)\)，故第二式随之成立。证毕。
 \end{proof}
 
+\begin{theorem}[隐藏位预算的一纳特税律]\label{thm:conclusion-hidden-visible-budget-one-nat-tax}
+在 bin-fold 口径下，定义隐藏位预算
+\[
+h_m^{\mathrm{hid}}
+:=
+\sum_{w\in X_m}\mu_m(w)\log_2 d_m^{\mathrm{bin}}(w),
+\qquad
+\mu_m(w):=\frac{d_m^{\mathrm{bin}}(w)}{2^m},
+\]
+以及可见位预算
+\[
+h_m^{\mathrm{vis}}:=m-h_m^{\mathrm{hid}}.
+\]
+则规范体积密度满足
+\[
+g_m
+=
+(\log 2)\,h_m^{\mathrm{hid}}-1
++O\!\left(m\left(\frac{\varphi}{2}\right)^m\right),
+\]
+等价地，
+\[
+g_m
+=
+m\log 2-(\log 2)\,h_m^{\mathrm{vis}}-1
++O\!\left(m\left(\frac{\varphi}{2}\right)^m\right).
+\]
+特别地，
+\[
+g_m=(\log 2)\,h_m^{\mathrm{hid}}-1+o(1).
+\]
+因此，隐藏位预算一旦换算到自然对数单位，规范体积密度恰好比它少去一纳特；这一常数税与 \(m\) 无关，而只来自 Stirling 首项中的全局 \(-d\) 余迹。
+\end{theorem}
+\begin{proof}
+由定义，
+\[
+(\log 2)\,h_m^{\mathrm{hid}}
+=
+\sum_{w\in X_m}\mu_m(w)\log d_m^{\mathrm{bin}}(w)
+=
+\kappa_m.
+\]
+再由定理 \ref{thm:conclusion-fold-output-entropy-gauge-affine-identity}，
+\[
+g_m=\kappa_m-1+O\!\left(m\left(\frac{\varphi}{2}\right)^m\right).
+\]
+两式合并即得
+\[
+g_m=(\log 2)\,h_m^{\mathrm{hid}}-1+O\!\left(m\left(\frac{\varphi}{2}\right)^m\right).
+\]
+另一方面，由定义 \(h_m^{\mathrm{vis}}=m-h_m^{\mathrm{hid}}\)，故
+\[
+(\log 2)\,h_m^{\mathrm{hid}}=m\log 2-(\log 2)\,h_m^{\mathrm{vis}},
+\]
+代回便得第二式。最后利用 \(\varphi/2<1\)，误差项即为 \(o(1)\)。证毕。
+\end{proof}
+
 \noindent
 因此，在 bin-fold 口径下，规范体积并不是独立于输出统计的第二账本；它只是输出 Shannon 熵经由一条斜率为 \(-1\)、常数位移为 \(1\) 的仿射重标后，再附加指数小校正项所得的同一量。
 
@@ -127,6 +184,86 @@ c_\varphi:=-\frac{\log\varphi}{\varphi\sqrt5}
 
 \noindent
 这说明输出统计中仅为 \(O(1)\) 量级的常数漂移，经由规范体积的 \(2^m\)-倍放大后，会在账本体量上显影为 \(\Theta(m2^m)\) 级的指数成本。
+
+\begin{corollary}[熵常数漂移在规范体积上的 \texorpdfstring{$2^m$}{2^m} 倍放大]\label{cor:conclusion-entropy-constant-gauge-superexponential-amplification}
+若存在有界实数列 \((\delta_m)_{m\ge 1}\) 使
+\[
+H(\mu_m)=m\log\varphi+\delta_m,
+\qquad
+\delta_m=O(1),
+\]
+则
+\[
+\log|G_m^{\mathrm{bin}}|
+=
+2^m\left(
+m\log\frac{2}{\varphi}-\delta_m-1
+\right)
++o(2^m).
+\]
+更一般地，设 \(\{(\mu_m^{(i)},G_m^{(i)})\}_{m\ge 1}\)（\(i=1,2\)）为两列候选机制，满足
+\[
+H(\mu_m^{(i)})=m\log\varphi+\delta_m^{(i)},
+\qquad
+\delta_m^{(i)}=O(1),
+\]
+且
+\[
+\log|G_m^{(i)}|
+=
+2^m\left(
+m\log\frac{2}{\varphi}-\delta_m^{(i)}-1
+\right)
++o(2^m).
+\]
+若
+\[
+\delta_m^{(1)}-\delta_m^{(2)}\to c,
+\]
+则
+\[
+\log\frac{|G_m^{(1)}|}{|G_m^{(2)}|}
+=
+-c\,2^m+o(2^m).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-fold-output-entropy-gauge-affine-identity}，
+\[
+g_m
+=
+m\log 2-H(\mu_m)-1
++O\!\left(m\left(\frac{\varphi}{2}\right)^m\right).
+\]
+把
+\(
+H(\mu_m)=m\log\varphi+\delta_m
+\)
+代入，得到
+\[
+g_m
+=
+m\log\frac{2}{\varphi}-\delta_m-1
++O\!\left(m\left(\frac{\varphi}{2}\right)^m\right).
+\]
+再乘以 \(2^m\)，并注意
+\[
+2^m\cdot O\!\left(m\left(\frac{\varphi}{2}\right)^m\right)
+=
+O(m\varphi^m)
+=
+o(2^m),
+\]
+便得第一式。
+
+对两列候选机制，上述展开逐项相减即可得到
+\[
+\log|G_m^{(1)}|-\log|G_m^{(2)}|
+=
+-\bigl(\delta_m^{(1)}-\delta_m^{(2)}\bigr)2^m+o(2^m).
+\]
+令 \(m\to\infty\) 便得到最后一式。证毕。
+\end{proof}
 
 \begin{theorem}[最大纤维的非凝聚律]\label{thm:conclusion-maxfiber-noncondensation-law}
 记
@@ -349,6 +486,45 @@ K_p\bigl(k;A^{(r)}\bigr)=K_p(k;A),
 仍然保留无穷多个两两不同的 Smith 不变量系。故任何仅停留在固定有限 prime-stage 且只读取有限精度模核账本的审计，都不可能唯一恢复完整 Smith 谱。证毕。
 \end{proof}
 
+\begin{theorem}[固定温度一位热场与有限 prime-stage completion 歧义的正交非忠实性]\label{thm:conclusion-joint-thermal-smith-nonfaithfulness}
+固定有限温度集 \(Q\subset[0,\infty)\)、有限素数集 \(S\subset\PP\) 与精度上界 \(K\in\NN\)。定义联合可见证书
+\[
+\mathcal O_{Q,S,K}(m,A)
+:=
+\Bigl(
+\{D_{\mathrm{KL}}(\pi_{m,q}\Vert \pi_{m,0})\}_{q\in Q},
+\ \mathcal L_{S,K}(A)
+\Bigr),
+\]
+其中 \(\pi_{m,q}\) 取自定理 \ref{thm:conclusion-fold-onebit-information-geometry-collapse}，\(\mathcal L_{S,K}(A)\) 取自定理 \ref{thm:conclusion-truncated-smith-ledger-infinite-indistinguishability}。则有：
+\begin{enumerate}
+  \item 对任意固定 \(q\in Q\)，热侧坐标都只在 \(O(1)\) 层收敛到末位 Bernoulli 影子给出的极限常数；
+  \item 对任意一个可实现的账本值 \(\mathcal L_{S,K}\)，都存在无穷多个两两不同的 Smith 不变量系与之对应；
+  \item 因而 \(\mathcal O_{Q,S,K}\) 不可能成为忠实证书；更强地说，在保持全部热侧坐标不变的同时，其算术侧仍保留无穷多个 completion 纤维。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-fold-onebit-information-geometry-collapse}，对每个固定 \(q\in Q\)，散度
+\[
+D_{\mathrm{KL}}(\pi_{m,q}\Vert \pi_{m,0})
+\]
+都有有限极限，且该极限完全由末位两点 Bernoulli 影子 \(\beta_q\) 决定；故热侧在指数主阶上只保留一位统计影子。
+
+另一方面，定理 \ref{thm:conclusion-truncated-smith-ledger-infinite-indistinguishability} 已经说明：对任意固定的 \(S\) 与 \(K\)，每个可实现的截断账本值都对应无穷多个两两不同的 Smith 不变量系。
+
+现固定任意一个分辨率 \(m\)，并固定 bin-fold 热侧数据
+\[
+\{D_{\mathrm{KL}}(\pi_{m,q}\Vert \pi_{m,0})\}_{q\in Q}.
+\]
+再取一族满行秩整数矩阵 \(\{A^{(r)}\}_{r\ge 1}\)，使它们具有相同的 \(\mathcal L_{S,K}\) 而 Smith 不变量系两两不同。于是对所有 \(r\ge 1\) 都有
+\[
+\mathcal O_{Q,S,K}(m,A^{(r)})
+=
+\mathcal O_{Q,S,K}(m,A^{(1)}),
+\]
+但对应的完整 Smith completion 彼此不同。故该联合可见证书不可能忠实。证毕。
+\end{proof}
+
 \begin{conjecture}[Smith--solenoid 共尾正规化猜想]\label{conj:conclusion-smith-solenoid-cofinal-normalization}
 任一试图通过“模核大小--prime-register--solenoidal completion”来闭合 classical RH 的正规化方案，若其可见证书在每一阶段仍只允许
 \[
@@ -359,6 +535,24 @@ K_p\bigl(k;A^{(r)}\bigr)=K_p(k;A),
 \text{以及固定阶 divergence/escort 族},
 \]
 则该正规化必同时落入两类终端塌缩：一方面，由定理 \ref{thm:conclusion-fold-onebit-information-geometry-collapse}，固定温度信息几何在指数主阶上退化为末位一位 Bernoulli 影子；另一方面，由定理 \ref{thm:conclusion-truncated-smith-ledger-infinite-indistinguishability} 与推论 \ref{cor:conclusion-finite-prime-stage-solenoid-smith-incompleteness}，有限阶段的 Smith--solenoid 账本始终保留无穷多 completion 歧义。因而，任何真正完备的此类正规化都必须在 \((p,k)\) 双坐标上共尾化；等价地，prime-support 与 exponent-depth 不能被任何固定视界同时截断。
+\end{conjecture}
+
+\begin{conjecture}[faithful \texorpdfstring{$\pi$}{pi} 公式的 entropy--bit--solenoid 三寄存器下界]\label{conj:conclusion-pi-formula-entropy-bit-solenoid-three-register}
+任一若要 faithful 地承载 projective \(\pi\)-通道的公式、证书或正规化方案，都不能只停留于单一标量层，而至少须同时外置三类彼此正交的寄存器
+\[
+\mathfrak R_{\mathrm{const}},
+\qquad
+\mathfrak R_{\mathrm{bit}},
+\qquad
+\mathfrak R_{\mathrm{sol}}.
+\]
+其中
+\begin{enumerate}
+  \item \(\mathfrak R_{\mathrm{const}}\) 负责记录输出熵的 \(O(1)\) 常数项及其在规范体积上的 \(2^m\)-倍放大；
+  \item \(\mathfrak R_{\mathrm{bit}}\) 负责记录末位两点热场、固定温度信息几何的一位塌缩、物理温度 \(q=1\) 的唯一临界选择，以及热轴与位预算轴的最小角点；
+  \item \(\mathfrak R_{\mathrm{sol}}\) 负责记录随 prime-support 与 exponent-depth 共尾外推的 Smith--solenoid completion 账本。
+\end{enumerate}
+若缺失 \(\mathfrak R_{\mathrm{const}}\)，则无法区分由熵常数漂移诱导的 \(e^{\Theta(2^m)}\) 级规范体积裂口；若缺失 \(\mathfrak R_{\mathrm{bit}}\)，则无法命中唯一热临界点及其对应的最小反演角点；若缺失 \(\mathfrak R_{\mathrm{sol}}\)，则任何固定 prime-stage 审计都仍保留无穷 Smith completion 歧义。因而，这三条轴在 faithful \(\pi\)-公式中应当是不可互相压缩的。
 \end{conjecture}
 
 \noindent

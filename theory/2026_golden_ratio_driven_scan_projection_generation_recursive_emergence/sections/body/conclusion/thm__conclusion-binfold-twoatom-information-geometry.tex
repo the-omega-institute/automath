@@ -107,6 +107,122 @@ F_\alpha'(\varphi)
 由于 \(\alpha>1\)、\(\varphi>1\)，括号内严格为正，故 \(F_\alpha'(\varphi)>0\)，从而 \(D_{f_\alpha}^\infty\) 对 \(\varphi\) 严格单调。故单个标量 \(D_{f_\alpha}^\infty\) 唯一恢复 \(\varphi\)。其余闭式对象，如推论 \ref{cor:fold-bin-quantile-threshold-constant} 中的分位阈值与定理 \ref{thm:conclusion-foldbin-likelihood-ratio-two-atom-transfer} 中的 Rényi 极限，随后都由 \(\varphi\) 唯一确定。证毕。
 \end{proof}
 
+\begin{theorem}[两枚极限标量完全重构 bin-fold 的渐近温度学]\label{thm:conclusion-binfold-two-scalar-complete-reconstruction}
+固定 \(\alpha>1\) 与 \(q\ge 0\)。定义两枚极限标量
+\[
+A_\alpha:=\lim_{m\to\infty}D_{f_\alpha}\!\bigl(\mu_m\Vert u_m\bigr),
+\qquad
+K_q:=\lim_{m\to\infty}D_{\mathrm{KL}}\!\bigl(\pi_{m,q}\Vert \pi_{m,0}\bigr),
+\]
+其中
+\[
+f_\alpha(t)=t^\alpha-1-\alpha(t-1).
+\]
+则二元组 \((A_\alpha,K_q)\) 唯一决定下列全部数据：
+\[
+\varphi,
+\qquad
+q,
+\qquad
+\theta(q):=\frac{1}{1+\varphi^{q+1}},
+\]
+以及尺度化残差
+\[
+Z_m^{(q)}:=\left(\frac{\varphi}{2}\right)^m d_m^{\mathrm{bin}}(W_m^{(q)})
+\]
+的极限分布
+\[
+\PP\!\left(Z^{(q)}=\varphi^{-1}\right)=\theta(q),
+\qquad
+\PP\!\left(Z^{(q)}=1\right)=1-\theta(q).
+\]
+换言之，bin-fold 的渐近 escort 温度学在信息论意义上只需两枚实标量即可完全解码：一枚恢复黄金参数，另一枚恢复温度参数。
+\end{theorem}
+
+\begin{proof}
+由推论 \ref{cor:conclusion-binfold-single-scalar-recovers-golden-parameter}，固定 \(\alpha>1\) 时，
+\[
+A_\alpha
+=
+5^{-\alpha/2}\bigl(\varphi^{2\alpha-1}+\varphi^{\alpha-2}\bigr)-1
+\]
+作为 \(\varphi\) 的函数严格单调，故 \(A_\alpha\) 唯一恢复 \(\varphi\)。
+
+再记
+\[
+\theta_0:=\theta(0)=\frac{1}{1+\varphi}.
+\]
+由命题 \ref{prop:fold-bin-kl-escort-limit-constant}，
+\[
+K_q
+=
+\theta(q)\log\frac{\theta(q)}{\theta_0}
++\bigl(1-\theta(q)\bigr)\log\frac{1-\theta(q)}{1-\theta_0}.
+\]
+对固定的 \(\theta_0\in(0,1/2)\)，定义
+\[
+F_{\theta_0}(\theta)
+:=
+\theta\log\frac{\theta}{\theta_0}
++(1-\theta)\log\frac{1-\theta}{1-\theta_0}.
+\]
+则
+\[
+F_{\theta_0}'(\theta)
+=
+\log\frac{\theta(1-\theta_0)}{\theta_0(1-\theta)}.
+\]
+当 \(\theta\in(0,\theta_0)\) 时有 \(F'_{\theta_0}(\theta)<0\)，故 \(F_{\theta_0}\) 在该区间上严格递减。另一方面，
+\[
+\theta(q)=\frac{1}{1+\varphi^{q+1}}
+\]
+随 \(q\) 严格递减，且其值域正落在 \((0,\theta_0]\) 内。因此
+\[
+q\longmapsto K_q=F_{\theta_0}(\theta(q))
+\]
+严格递增，故 \(K_q\) 在已知 \(\varphi\) 后唯一恢复 \(q\)，并随之唯一恢复 \(\theta(q)\)。
+
+最后，由主稿中对固定 \(q\) 的尺度化残差两点极限律，
+\[
+Z_m^{(q)}\Rightarrow Z^{(q)},
+\qquad
+Z^{(q)}=
+\begin{cases}
+\varphi^{-1},& \text{以概率 }\theta(q),\\
+1,& \text{以概率 }1-\theta(q).
+\end{cases}
+\]
+故极限分布也由 \((A_\alpha,K_q)\) 唯一决定。证毕。
+\end{proof}
+
+\begin{corollary}[escort 渐近流形的一维 KL 完备化]\label{cor:conclusion-binfold-escort-limit-manifold-one-dimensional-kl-completion}
+bin-fold 的 escort 族 \(\{\pi_{m,q}\}_{q\ge 0}\) 在 \(m\to\infty\) 的信息几何极限中精确塌缩为一条一维 Bernoulli 曲线。更准确地，对任意 \(p,q\ge 0\)，有
+\[
+\lim_{m\to\infty}D_{\mathrm{KL}}\!\bigl(\pi_{m,q}\Vert \pi_{m,p}\bigr)
+=
+D_{\mathrm{KL}}\!\bigl(\Bern(\theta(q))\Vert \Bern(\theta(p))\bigr),
+\]
+其中
+\[
+\theta(q)=\frac{1}{1+\varphi^{q+1}}.
+\]
+并且对任意有界函数 \(F:\{1,\varphi^{-1}\}\to \RR\)，有
+\[
+\lim_{m\to\infty}\EE\!\left[F\!\left(Z_m^{(q)}\right)\right]
+=
+\bigl(1-\theta(q)\bigr)F(1)+\theta(q)F(\varphi^{-1}).
+\]
+因此，所有由尺度化残差承载的渐近可观测量都经由同一个单参数 \(\theta(q)\) 因子化；bin-fold 的 escort 极限几何中不存在第二个独立的热力学自由度。
+\end{corollary}
+
+\begin{proof}
+第一式正是主稿中固定温度 \(p,q\) 之间 escort--KL 散度极限的显式闭式。第二式则由固定 \(q\) 的尺度化残差两点极限律直接推出。由于
+\[
+q\longmapsto \theta(q)=\frac{1}{1+\varphi^{q+1}}
+\]
+严格单调，故它给出了渐近 escort 族的最小一维参数化。证毕。
+\end{proof}
+
 \begin{theorem}[上尾序统计的单跳塌缩]\label{thm:conclusion-binfold-tail-order-statistics-single-jump-collapse}
 记 \(B_m^{\mathrm{bin}}(\varepsilon)\) 为 bin-fold 纤维多重度在输出分布下的尾部分位。则存在唯一临界值
 \[
