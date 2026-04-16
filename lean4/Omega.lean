@@ -203,6 +203,7 @@ import Omega.Folding.YmSyncTail
 import Omega.Folding.YmAmbiguityHausdorffCodim
 import Omega.Folding.YmAmbiguityShellExponentiallyThin
 import Omega.Folding.YmAmbiguityShellLowEntropy
+import Omega.Folding.YmScanLengthAsymptotic
 import Omega.Folding.YmAmbiguitySpectrumLaw
 import Omega.Folding.YmAmbiguityShellZetaFactorTrivial
 import Omega.Folding.TimeLayerDichotomy
@@ -798,6 +799,7 @@ import Omega.CircleDimension.ModeGramKernel
 import Omega.CircleDimension.ModeQuadraticIntegrals
 import Omega.CircleDimension.ModeSpaceRKHS
 import Omega.CircleDimension.KernelRKHSFeatureMap
+import Omega.CircleDimension.ReadableTimeWordOverlapPD
 import Omega.CircleDimension.PrefixQuantileCRTJointModulus
 import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling

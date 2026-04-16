@@ -22,6 +22,35 @@
 
 **远程分支并行记录（merge 前）**：以下 round 编号仅在 `origin/lean4-codex-auto-dev` 内部有序。
 
+**Phase R1047（本轮落地，proof / sync / registration / commit 执行）**：新增
+`paper_cdim_readable_time_word_overlap_pd`
+（对应 `thm:cdim-readable-time-word-overlap-pd`，CircleDimension；新建
+`ReadableTimeWordOverlapPD.lean`，定义 chapter-local `ReadableTimeWordOverlapPDData`，
+把 mixed-collision kernel 的 `q = 1` 专门化、显式 `ℓ²` feature map 与 characteristic
+readout 组装成稳定可见分布上的 pullback positive-definite overlap kernel wrapper）；
+新增 `paper_Ym_scan_length_asymptotic`
+（对应 `cor:Ym-scan-length-asymptotic`，Folding；新建 `YmScanLengthAsymptotic.lean`，
+定义 chapter-local `YmScanLengthAsymptoticData`，把 sharp Perron--Frobenius tail、主项比较
+与两侧 logarithmic bounds 组合成阈值最小扫描长度的 paper-facing asymptotic wrapper）；
+同步阶段执行 `git stash push --include-untracked -m 'R1047-pre-proof-rebase'`、
+`git fetch origin lean4-codex-auto-dev`、`git rebase origin/lean4-codex-auto-dev` 与
+`git stash pop`；rebase 后发现目标一
+`paper_bdry_orientation_cartesian_power_parity_collapse` 已由基线 `Phase R1041`
+提供完整 proof，因此本轮本地 proof diff 集中于另外两个目标，而正文登记补齐三条
+`\leanverified` 标注；proof 侧执行三个目标的单文件构建与 `cd lean4 && lake build`，
+均通过（全量构建仅见既有 linter warning、无新的 Lean error）；文件：
+`lean4/Omega/CircleDimension/ReadableTimeWordOverlapPD.lean`、
+`lean4/Omega/Folding/YmScanLengthAsymptotic.lean`、`lean4/Omega.lean`；Lean theorem 名：
+`paper_bdry_orientation_cartesian_power_parity_collapse`、
+`paper_cdim_readable_time_word_overlap_pd`、`paper_Ym_scan_length_asymptotic`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/parts/thm__window6-bdry-orientation-parity-functor.tex`
+（`thm:bdry-orientation-cartesian-power-parity-collapse`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/circle_dimension_phase_gate/subsec__circle-dimension-phase-gate-hilbert-quantum-closure.tex`
+（`thm:cdim-readable-time-word-overlap-pd`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/folding/subsec__Ym-zeta-spectrum.tex`
+（`cor:Ym-scan-length-asymptotic`）；新增 `\\leanverified` +3，覆盖章节为 GU /
+CircleDimension / Folding，降级项数 0，non-trivial 计数 0）
+
 **Phase R1046（本轮落地，proof / sync / registration / commit 执行）**：新增
 `paper_cdim_comoving_horizon_scan_fourier_inversion`
 （对应 `thm:cdim-comoving-horizon-scan-fourier-inversion`，CircleDimension；新建
