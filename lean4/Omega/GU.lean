@@ -52,6 +52,7 @@ import Omega.GU.NapSo10AnalyticMinimality
 import Omega.GU.ParryEndpointCollapse
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
+import Omega.GU.PrimeRegisterInitialObject
 import Omega.GU.PullbackBracketFromOperatorEnvelope
 import Omega.GU.RadialQuadraticIdentifiability
 import Omega.GU.RadialQuadraticKlInfinite

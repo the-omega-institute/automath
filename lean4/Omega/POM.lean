@@ -86,6 +86,7 @@ import Omega.POM.PositiveNegativeMomentCoupling
 import Omega.POM.PressureConvexity
 import Omega.POM.PressureSlopes
 import Omega.POM.PrimeAxisVs2dExternalization
+import Omega.POM.BeckChevalleyDefectMultiplicative2Cocycle
 import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.PrimitivePrimeLucas
 import Omega.POM.QstarDiscreteVariationalThreshold

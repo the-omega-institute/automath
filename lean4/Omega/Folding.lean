@@ -206,4 +206,5 @@ import Omega.Folding.YmZetaResidueRatio
 import Omega.Folding.Zeckendorf
 import Omega.Folding.ZeckendorfSignature
 import Omega.Folding.ZeroBlockMinimaxAbsError
+import Omega.Folding.ZeroCosetRigidity
 import Omega.Folding.ZeroFiberLinear
