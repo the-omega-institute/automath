@@ -144,6 +144,7 @@ import Omega.GU.BetaPfExpectation
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.Window6LieEnvelopeClosure
+import Omega.GU.PullbackBracketFromOperatorEnvelope
 import Omega.GU.FreeInvolutionCount
 import Omega.GU.CyclotomicGcdStability
 import Omega.GU.CyclotomicSpecializationFalsifiability
@@ -257,6 +258,7 @@ import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.LpSuperellipsoidBoundaryVolumeDecoding
 import Omega.SPG.LpSuperellipsoidDecodingMultiplicativeNoiseStability
+import Omega.SPG.EllipsoidBoundaryFluxReconstruction
 import Omega.SPG.WeightedBoundaryDecomposition
 import Omega.SPG.WeightedBoundaryTransfer
 import Omega.SPG.WeightedBoundaryPole
