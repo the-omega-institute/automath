@@ -364,17 +364,8 @@ def _codex_resolve_conflicts(
         timeout_seconds=timeout,
     )
 
-    # Check if rebase completed
-    rebase_status = run_cmd(["git", "status", "--short"], cwd=wt_path)
-    in_rebase = run_cmd(
-        ["git", "rev-parse", "--git-path", "rebase-merge"], cwd=wt_path
-    )
-    rebase_dir = wt_path / ".git" if (wt_path / ".git").is_file() else wt_path / ".git"
-
     # Check if still in rebase state
-    still_rebasing = run_cmd(
-        ["git", "status"], cwd=wt_path
-    )
+    still_rebasing = run_cmd(["git", "status"], cwd=wt_path)
     if "rebase in progress" in still_rebasing.stdout.lower():
         logger.warning("Codex did not complete rebase, aborting")
         run_cmd(["git", "rebase", "--abort"], cwd=wt_path)
@@ -407,13 +398,13 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
         logger.info(f"Merging {wt.branch} into {BASE_BRANCH}...")
 
         # 1. Fetch latest base branch
-        run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT)
+        run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=300)
 
         # 2. Rebase the worktree branch onto latest base (inside the worktree)
         rebase = run_cmd(
             ["git", "rebase", f"origin/{BASE_BRANCH}"],
             cwd=wt.path,
-            timeout=120,
+            timeout=180,
         )
         if rebase.returncode != 0:
             logger.warning(f"Rebase conflict for {wt.branch}, invoking codex to resolve...")
@@ -444,14 +435,15 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
         push = run_cmd(
             ["git", "push", "origin", BASE_BRANCH],
             cwd=REPO_ROOT,
+            timeout=300,
         )
         if push.returncode != 0:
             # Retry: fetch + rebase again (someone else pushed meanwhile)
             logger.warning("Push rejected, retrying after fetch + rebase...")
-            run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT)
+            run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=300)
             rebase2 = run_cmd(
                 ["git", "rebase", f"origin/{BASE_BRANCH}"], cwd=wt.path,
-                timeout=120,
+                timeout=180,
             )
             if rebase2.returncode != 0:
                 resolved2 = _codex_resolve_conflicts(wt.path, model=model)
@@ -467,7 +459,7 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
             )
             run_cmd(["git", "reset", "--hard", "HEAD"], cwd=REPO_ROOT)
             push2 = run_cmd(
-                ["git", "push", "origin", BASE_BRANCH], cwd=REPO_ROOT,
+                ["git", "push", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=300,
             )
             if push2.returncode != 0:
                 logger.error(f"Push retry failed: {push2.stderr[:300]}")
@@ -487,8 +479,11 @@ def cleanup_all_worktrees() -> int:
             logger.info(f"Cleaning up {entry}")
             run_cmd(["git", "worktree", "remove", "--force", str(entry)], cwd=REPO_ROOT)
             if entry.exists():
+                pkg_link = entry / "lean4" / ".lake" / "packages"
+                if pkg_link.is_symlink():
+                    pkg_link.unlink()
                 shutil.rmtree(entry, ignore_errors=True)
-            # Try to delete branch
+            # Force-delete branch (may have unmerged commits)
             m = re.match(r"round_R(\d+)", entry.name)
             if m:
                 run_cmd(["git", "branch", "-D", f"codex-R{m.group(1)}"], cwd=REPO_ROOT)
@@ -666,12 +661,13 @@ def build_phase_c_prompt(round_num: int, targets: list[dict]) -> str:
 
 def parse_phase_c_output(raw: str) -> PhaseCResult:
     result = PhaseCResult(raw_output=raw)
-    commit_hashes = re.findall(r"[0-9a-f]{7,40}", raw)
-    result.new_commits = list(dict.fromkeys(
-        h for h in commit_hashes if 7 <= len(h) <= 12
-    ))[:10]
-    success_indicators = ["lake build", "commit", "Register R"]
-    result.success = any(ind.lower() in raw.lower() for ind in success_indicators)
+    # Extract short commit hashes (7-12 hex chars) that look like git output,
+    # e.g. lines starting with a hash: "abc1234 commit message"
+    commit_hashes = re.findall(r"(?:^|\s)([0-9a-f]{7,12})(?:\s+\w)", raw, re.MULTILINE)
+    result.new_commits = list(dict.fromkeys(commit_hashes))[:10]
+    # success = codex produced non-empty output and mentioned key actions
+    success_indicators = ["lake build", "git commit", "Register R", "git add"]
+    result.success = bool(raw) and any(ind.lower() in raw.lower() for ind in success_indicators)
     return result
 
 
@@ -701,47 +697,57 @@ def detect_signature_degradation(wt: WorktreeInfo) -> list[str]:
     if not diff_out:
         return violations  # empty diff → nothing to check
 
-    # Find blocks that add a `theorem paper_` with ONLY Prop parameters
-    # Pattern: lines starting with `+theorem paper_` whose signature uses only `Prop`
-    import re as _re
-    # Split diff into per-file chunks
-    chunks = _re.split(r'^diff --git ', diff_out, flags=_re.MULTILINE)
+    # Split diff into per-file chunks and scan only replaced (not new) theorems.
+    chunks = re.split(r'^diff --git ', diff_out, flags=re.MULTILINE)
     for chunk in chunks:
         lines = chunk.splitlines()
-        added_lines = [l[1:] for l in lines if l.startswith('+') and not l.startswith('+++')]
+        added_lines   = [l[1:] for l in lines if l.startswith('+') and not l.startswith('+++')]
         removed_lines = [l[1:] for l in lines if l.startswith('-') and not l.startswith('---')]
-        added_text = '\n'.join(added_lines)
+        added_text   = '\n'.join(added_lines)
         removed_text = '\n'.join(removed_lines)
 
-        # Find added paper_ theorems that have purely-Prop signatures
-        added_thms = _re.findall(
+        # Find paper_ theorems that appear in both added and removed sections
+        # (i.e. replacements of existing theorems, not brand-new ones).
+        added_thms = re.findall(
             r'theorem (paper_\w+)\s+(.*?)(?=\ntheorem |\nend |\Z)',
-            added_text, _re.DOTALL
+            added_text, re.DOTALL,
         )
         for thm_name, thm_body in added_thms:
-            # Check if body was also in removed (i.e. replacement, not new)
             if thm_name not in removed_text:
-                continue  # purely new theorem, not a replacement — skip
-            # Extract parameter list up to first `:=` or `by`
-            param_match = _re.match(r'(.*?)(?::=\s|:= by\b|\n\s*by\b)', thm_body, _re.DOTALL)
+                continue  # purely new theorem — not a degradation candidate
+
+            # Extract parameter list (before := or by)
+            param_match = re.match(r'(.*?)(?::=\s|:= by\b|\n\s*by\b)', thm_body, re.DOTALL)
             if not param_match:
                 continue
             params = param_match.group(1)
-            # Degrade pattern: all parameters are `(x : Prop)` or `(x y : Prop)`
-            # and no ℕ, ℝ, ℤ, List, Finset, Matrix, etc.
-            has_concrete = bool(_re.search(r':\s*(ℕ|ℝ|ℤ|ℚ|ℂ|ℕ→|ℝ→|Fin |List |Finset |Matrix |Set |Multiset )', params))
-            has_only_prop = bool(_re.search(r':\s*Prop\b', params)) and not has_concrete
-            if has_only_prop:
+
+            # Degrade pattern: parameters contain ONLY abstract Prop types and
+            # the conclusion is a trivial conjunction of those same props.
+            # Require BOTH conditions to minimise false positives.
+            concrete_types = r':\s*(ℕ|ℝ|ℤ|ℚ|ℂ|ℕ\s*→|ℝ\s*→|Fin\b|List\b|Finset\b|Matrix\b|Set\b|Multiset\b|Nat\b|Int\b|Real\b|Float\b|Array\b)'
+            has_concrete  = bool(re.search(concrete_types, params))
+            has_only_prop = bool(re.search(r':\s*Prop\b', params)) and not has_concrete
+
+            # Extract conclusion (after the last `:`)
+            conclusion_match = re.search(r':\s*([^:=]+?)\s*(?::=|$)', thm_body, re.DOTALL)
+            conclusion = conclusion_match.group(1) if conclusion_match else ""
+            # Trivial conclusion: only conjunctions/implications of plain identifiers
+            is_trivial_conclusion = bool(
+                re.fullmatch(r'[\w\s∧→¬∨⟨⟩(),\.]+', conclusion.strip())
+            ) and not re.search(r'[=≠<>≤≥∈∉]', conclusion)
+
+            if has_only_prop and is_trivial_conclusion:
                 violations.append(
-                    f"{thm_name}: signature appears degraded to pure Prop parameters "
-                    f"(replaced concrete math types with abstract Prop)"
+                    f"{thm_name}: signature replaced with trivial Prop stub "
+                    f"(all concrete types removed, conclusion is a trivial conjunction)"
                 )
     return violations
 
 
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
     """Check for new commits in the worktree. Also detects signature degradation."""
-    post = git_log_oneline(10, cwd=wt.path)
+    post = git_log_oneline(20, cwd=wt.path)
     new = [c for c in post if c not in pre_commits]
     if new:
         logger.info(f"[R{wt.round_number}] Phase D: {len(new)} new commit(s):")
@@ -841,7 +847,6 @@ def run_round_in_worktree(
         # ── Phase D: Verify ───────────────────────────────────────
         logger.info(f"[{tag}] Phase D: Verification...")
         if dry_run:
-            new_commits: list[str] = []
             success = True
         else:
             assert wt is not None
