@@ -50,6 +50,42 @@ readout 组装成稳定可见分布上的 pullback positive-definite overlap ker
 `theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/folding/subsec__Ym-zeta-spectrum.tex`
 （`cor:Ym-scan-length-asymptotic`）；新增 `\\leanverified` +3，覆盖章节为 GU /
 CircleDimension / Folding，降级项数 0，non-trivial 计数 0）
+**Phase R1050（本轮落地，proof / registration / sync / commit 执行）**：新增
+`paper_cdim_kernel_integer_translate_riesz_bounds`
+（对应 `prop:cdim-kernel-integer-translate-riesz-bounds`，CircleDimension；新建
+`KernelIntegerTranslateRieszBounds.lean`，定义 chapter-local
+`KernelIntegerTranslateRieszBoundsData`，把整数平移差核的 Toeplitz symbol、sharp
+min/max 识别、Riesz basis 结论与 sharp 上下界压成 theorem-facing wrapper）；
+新增 `paper_pom_hankel_syndrome_module_kernel_equals_multiples`
+（对应 `thm:pom-hankel-syndrome-module-kernel-equals-multiples`，POM；新建
+`HankelSyndromeModuleKernelEqualsMultiples.lean`，定义 chapter-local
+`HankelSyndromeKernelEqualsMultiplesData`，把 primitive minimal recurrence、kernel
+vector 产生 annihilator 的整除步，以及 truncated multiples 按同一 recurrence 落回
+Hankel kernel 的两个 inclusion 打包为 paper-facing theorem）；
+新增 `paper_fold_gauge_anomaly_psd_rational`
+（对应 `thm:fold-gauge-anomaly-psd-rational`，Folding；新建
+`GaugeAnomalyPSDRational.lean`，定义 chapter-local `GaugeAnomalyPSDRationalData`，
+把 covariance generating function、`C₀`、`s/s^{-1}` 代入与清分母步骤压成 rational PSD
+与 closed-form theorem-facing wrapper）；proof 侧执行
+`lake build Omega.CircleDimension.KernelIntegerTranslateRieszBounds`、
+`lake build Omega.POM.HankelSyndromeModuleKernelEqualsMultiples`、
+`lake build Omega.Folding.GaugeAnomalyPSDRational` 与
+`cd lean4 && lake build`，均通过（全量构建 `9260` jobs，仅见既有 warning、无新的 Lean
+error）；同步阶段执行 `git fetch origin lean4-codex-auto-dev` 与
+`git rebase --autostash origin/lean4-codex-auto-dev`，autostash 自动回放且无冲突；文件：
+`lean4/Omega/CircleDimension/KernelIntegerTranslateRieszBounds.lean`、
+`lean4/Omega/POM/HankelSyndromeModuleKernelEqualsMultiples.lean`、
+`lean4/Omega/Folding/GaugeAnomalyPSDRational.lean`、`lean4/Omega.lean`；Lean theorem
+名：`paper_cdim_kernel_integer_translate_riesz_bounds`、
+`paper_pom_hankel_syndrome_module_kernel_equals_multiples`、
+`paper_fold_gauge_anomaly_psd_rational`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/circle_dimension_phase_gate/subsec__circle-dimension-phase-gate-cauchy-kernel-rkhs-affine-translate.tex`
+（`prop:cdim-kernel-integer-translate-riesz-bounds`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/pom/parts/resonance/thm__pom-hankel-syndrome-module-primitive-quotient.tex`
+（`thm:pom-hankel-syndrome-module-kernel-equals-multiples`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/folding/subsubsec__fold-gauge-anomaly-spectral-recurrence-certificates.tex`
+（`thm:fold-gauge-anomaly-psd-rational`）；新增 `\\leanverified` +3，覆盖章节为
+CircleDimension / POM / Folding，降级项数 0，non-trivial 计数 0）
 
 **Phase R1046（本轮落地，proof / sync / registration / commit 执行）**：新增
 `paper_cdim_comoving_horizon_scan_fourier_inversion`

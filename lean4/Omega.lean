@@ -81,6 +81,7 @@ import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
 import Omega.POM.ModpDifferenceBinomialBasis
+import Omega.POM.HankelSyndromeModuleKernelEqualsMultiples
 import Omega.POM.TensorFoldResultantRecursion
 import Omega.POM.OrderSpatialization
 import Omega.Folding.LocalWeightRigidityFibonacci
@@ -100,6 +101,7 @@ import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
+import Omega.Folding.GaugeAnomalyPSDRational
 import Omega.Folding.GaugeAnomalyUnitCircleRigidity
 import Omega.Folding.GaugeAnomalyTauIntClosed
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
@@ -800,6 +802,7 @@ import Omega.CircleDimension.ModeQuadraticIntegrals
 import Omega.CircleDimension.ModeSpaceRKHS
 import Omega.CircleDimension.KernelRKHSFeatureMap
 import Omega.CircleDimension.ReadableTimeWordOverlapPD
+import Omega.CircleDimension.KernelIntegerTranslateRieszBounds
 import Omega.CircleDimension.PrefixQuantileCRTJointModulus
 import Omega.CircleDimension.PrecisionLedger
 import Omega.CircleDimension.PoissonLatticeSampling
