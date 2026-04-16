@@ -652,6 +652,7 @@ import Omega.Zeta.BlockCyclicRigidity
 import Omega.Zeta.FiniteRankRealisation
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Discussion.ChebyshevAdams
+import Omega.Discussion.HypercubeStokesFourierBinomial
 import Omega.Discussion.HypercubePotentialCurvatureControlledStrictification
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -861,6 +862,7 @@ import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
 import Omega.TypedAddressBiaxialCompletion.ComovingPronyThreshold
 import Omega.TypedAddressBiaxialCompletion.ComovingHankel
+import Omega.TypedAddressBiaxialCompletion.ComovingLayerPeeling
 import Omega.TypedAddressBiaxialCompletion.VisiblePhaseLift
 import Omega.TypedAddressBiaxialCompletion.OffsliceDichotomy
 import Omega.TypedAddressBiaxialCompletion.GlobalizationFlatness
@@ -1019,6 +1021,7 @@ import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GU.EllipticGatePadicsBlindspot
 import Omega.FoldResidualTime.Window6FixedFreezingLaw
 import Omega.SPG.GodelAxisBoundaryInvertibility
+import Omega.SPG.StokesGodelAlgorithmicHolographicCompleteness
 import Omega.GU.EllipticGatePrimeSpectrumClassification
 import Omega.GU.EllipticGatePrimeSpectrumRigidity
 import Omega.GU.EllipticGateOuterFunctionRigidity
