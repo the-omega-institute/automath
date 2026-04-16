@@ -1911,6 +1911,14 @@ SPG / PhysicalSpacetimeSkeleton，降级项数 1，non-trivial 计数 1；文件
 11. 计划 20-22（动力系统系列）
 12. 计划 27-30（远层探索系列）
 
+### Round R957
+
+- 已完成 `paper_typed_address_biaxial_completion_front_interface`（`prop:typed-address-biaxial-completion-front-interface`，`TypedAddressBiaxialCompletion/FrontInterface.lean`）：新建 chapter-local `FrontInterfaceData`，显式记录 `comp`、`phase`、`addr`、`Read_US`、`audit`、`spec` 六段前端接口，并把纸面命题实现为“从记录见证中按顺序抽出六段映射”的 paper-facing decomposition wrapper。
+- 已完成 `paper_cdim_finite_localization_directsum_prime_ledger_exact_sequence`（`thm:cdim-finite-localization-directsum-prime-ledger-exact-sequence`，`CircleDimension/FiniteLocalizationDirectsumPrimeLedgerExactSequence.lean`）：新建 `FiniteLocalizationPrimeLedgerData`，记录有限素数支撑上的 multiplicity profile `m_p`、离散/紧 exact-sequence 见证与 `CircleDimHomData` rank bookkeeping，并复用 `cdim_rank_nullity` 证明有限秩圆维正好等于 `r`。
+- 已完成 `paper_conclusion_causal_depth_branch_budget_orthogonality`（`thm:conclusion-causal-depth-branch-budget-orthogonality`，`Conclusion/CausalDepthBranchBudgetOrthogonality.lean`）：新建 `FiberDistinguishableWithBudget`、`fiberBranchBudget`、`ExpectationWitness` 与 `CausalDepthBranchBudgetData`，把纤维精确区分预算识别为 `Nat.clog 2`，并以逐点 ceiling bound 推出 abstract expectation sandwich。
+- 已执行 `git fetch origin lean4-codex-auto-dev` / `git rebase origin/lean4-codex-auto-dev`，本轮无人工冲突；随后在 rebased 分支上执行 `cd lean4 && timeout 300 lake build`，全量通过（9118 jobs）。
+- 文件：`lean4/Omega/TypedAddressBiaxialCompletion/FrontInterface.lean`、`lean4/Omega/CircleDimension/FiniteLocalizationDirectsumPrimeLedgerExactSequence.lean`、`lean4/Omega/Conclusion/CausalDepthBranchBudgetOrthogonality.lean`、`lean4/Omega.lean`；tex 路径：`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/typed_address_biaxial_completion/subsec__typed-address-biaxial-completion-objective-interface.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/circle_dimension_phase_gate/subsubsec__circle-dimension-phase-gate-finite-localization-ledger-gap-rigidity.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/conclusion/thm__conclusion-causal-depth-branch-budget-orthogonality.tex`。
+
 ### Round R841
 
 - 已完成 `paper_fold_fiber_count_reciprocity`（`prop:fold-fiber-count-reciprocity`，`Folding/FiberWeightCountComplement.lean`）：在既有 `weightCongruenceCount_eq_sum_ewc`、`exactWeightCount_symmetric` 与 `weightCongruenceCount_complement` 之上补出 paper-facing reciprocity package，把互易分解与反射对称性合并为单一定理接口。
