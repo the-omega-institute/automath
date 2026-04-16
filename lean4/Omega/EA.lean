@@ -12,6 +12,7 @@ import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
 import Omega.EA.FibAdicTower
+import Omega.EA.FibAdicBasic
 import Omega.EA.FibCongruence
 import Omega.EA.FibDivisibilityChain
 import Omega.EA.FiniteLedgerRecoverability

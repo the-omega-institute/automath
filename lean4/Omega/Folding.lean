@@ -106,6 +106,7 @@ import Omega.Folding.MetallicCompressionExtremum
 import Omega.Folding.MetallicCompressionLockingLambda2
 import Omega.Folding.MetallicFiniteScaleCompressionOscillation
 import Omega.Folding.MetallicIntegerScalarizationThreshold
+import Omega.Folding.MetallicLinearScalarizationThreshold
 import Omega.Folding.MetallicParetoFrontier
 import Omega.Folding.MetallicParetoScaleLaw
 import Omega.Folding.MetallicTwoStateSFT
