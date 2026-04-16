@@ -103,6 +103,7 @@ import Omega.CircleDimension.PrefixResidualRegisterCapacity
 import Omega.CircleDimension.PrimeTruncation
 import Omega.CircleDimension.RadiusBlindspotJointDiscreteBudgetOrthogonal
 import Omega.CircleDimension.RankonePhasePrimeFiber
+import Omega.CircleDimension.RankoneSolenoidHeightClassification
 import Omega.CircleDimension.ReadableTimeWordOverlapPD
 import Omega.CircleDimension.DiscreteUnitaryEvolution
 import Omega.CircleDimension.RegisterCircleModpFormula
