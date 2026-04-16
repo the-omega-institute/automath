@@ -48,6 +48,7 @@ import Omega.EA.StableAddComputable
 import Omega.EA.StableAddFiniteResolutionCompatibility
 import Omega.EA.StableAddNoWrapTruncation
 import Omega.EA.StableAddNormalizationRealization
+import Omega.EA.Sync10RegenerationCorrelationBound
 import Omega.EA.TimeSpaceCommuting
 import Omega.EA.ValInvariant
 import Omega.EA.Wedderburn

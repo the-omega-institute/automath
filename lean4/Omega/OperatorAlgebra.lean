@@ -4,6 +4,7 @@ import Omega.OperatorAlgebra.FiberReflectorDeterminantPotential
 import Omega.OperatorAlgebra.IndexGapCurvatureSecondVariation
 import Omega.OperatorAlgebra.FoldConditionalExpectationHaar
 import Omega.OperatorAlgebra.FoldGaugeCommutantExplicit
+import Omega.OperatorAlgebra.FoldGaugeTwoMode
 import Omega.OperatorAlgebra.FoldInvariantSubalgebra
 import Omega.OperatorAlgebra.FoldSupervisedMinimaxRisk
 import Omega.OperatorAlgebra.FoldVisiblePermutationLifts
