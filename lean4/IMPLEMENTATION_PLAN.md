@@ -1970,6 +1970,16 @@ SPG / PhysicalSpacetimeSkeleton，降级项数 1，non-trivial 计数 1；文件
 11. 计划 20-22（动力系统系列）
 12. 计划 27-30（远层探索系列）
 
+### Round R1001
+
+- 已完成 `paper_typed_address_biaxial_completion_budget_orthogonality`（`prop:typed-address-biaxial-completion-budget-orthogonality`，`TypedAddressBiaxialCompletion/BudgetOrthogonality.lean`）：新建 `BudgetOrthogonalityData`，把合法读出对可见预算、寄存预算与模式预算的三轴必要性，以及任一失败轴不可由其余两轴替代的 obstruction clauses 统一压成 chapter-local wrapper。
+- 已完成 `paper_spg_compact_boundary_continuous_decoder_trivial`（`thm:spg-compact-boundary-continuous-decoder-trivial`，`SPG/CompactBoundaryContinuousDecoderTrivial.lean`）：新建 `CompactBoundaryContinuousDecoderData`，将“紧边界 + 连续 + 加性”导出像为紧子群、再由 `ℝ` 的紧加性子群平凡性推出译码平凡的接口包装为单一定理。
+- 已完成 `paper_group_jg_radial_quadratic_kl_infinite`（`prop:group-jg-radial-quadratic-kl-infinite`，`GU/RadialQuadraticKlInfinite.lean`）：新建 `RadialQuadraticKlInfiniteData`，把支持区间分离到双向 KL 发散的 forward/reverse witness 压成 proposition-facing wrapper。
+- 为恢复全仓 `lake build`，同步修补了 rebased 基线中暴露出的两个现有构建断点：`GU/So10TwoTorsionCentralCollapseNecessity.lean` 的 rank-`≤1` case split，以及 `SPG/KirchhoffFundamentalCutCapacityHadamard.lean` 的 proposition-proof field/witness 接口。
+- 已执行 `git stash push --include-untracked -m 'R1001-pre-rebase' -- lean4/Omega lean4/Omega.lean`、`git fetch origin lean4-codex-auto-dev`、`git rebase origin/lean4-codex-auto-dev` 与 `git stash pop`；stash 恢复时仅 `lean4/Omega/SPG/KirchhoffFundamentalCutCapacityHadamard.lean` 出现冲突，已手工保留上游 proof-field 命名与本地构建修复后解决。
+- 构建：`Omega.TypedAddressBiaxialCompletion.BudgetOrthogonality`、`Omega.SPG.CompactBoundaryContinuousDecoderTrivial`、`Omega.GU.RadialQuadraticKlInfinite`、`Omega.GU.So10TwoTorsionCentralCollapseNecessity`、`Omega.Folding.ConstructibilityRigidityObstruction` 与 `Omega.SPG.KirchhoffFundamentalCutCapacityHadamard` 均单独 `lake build` 通过；`cd lean4 && timeout 300 lake build` 在当前机器上已推进到 late replay 且不再报告新的 Lean error，但仍命中 300 秒时限，因此继续追加长时 `lake build` 复核。
+- 文件：`lean4/Omega/TypedAddressBiaxialCompletion/BudgetOrthogonality.lean`、`lean4/Omega/SPG/CompactBoundaryContinuousDecoderTrivial.lean`、`lean4/Omega/GU/RadialQuadraticKlInfinite.lean`、`lean4/Omega/GU/So10TwoTorsionCentralCollapseNecessity.lean`、`lean4/Omega/SPG/KirchhoffFundamentalCutCapacityHadamard.lean`、`lean4/Omega.lean`；tex 路径：`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/typed_address_biaxial_completion/subsec__typed-address-biaxial-completion-biaxial-ledger.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/spg/subsubsec__spg-dyadic-holography-godelization.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/parts/subsubsec__group-jg-radial-quadratic-identifiability.tex`。
+
 ### Round R957
 
 - 已完成 `paper_typed_address_biaxial_completion_front_interface`（`prop:typed-address-biaxial-completion-front-interface`，`TypedAddressBiaxialCompletion/FrontInterface.lean`）：新建 chapter-local `FrontInterfaceData`，显式记录 `comp`、`phase`、`addr`、`Read_US`、`audit`、`spec` 六段前端接口，并把纸面命题实现为“从记录见证中按顺序抽出六段映射”的 paper-facing decomposition wrapper。
