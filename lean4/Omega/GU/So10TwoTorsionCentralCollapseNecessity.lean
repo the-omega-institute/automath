@@ -32,11 +32,11 @@ theorem paper_so10_2torsion_central_collapse_necessity
     h.no_rank3_central_2torsion ∧ h.central_rank_drop_at_least_two := by
   refine ⟨?_, ?_⟩
   · dsimp [So10TwoTorsionCentralCollapseData.no_rank3_central_2torsion]
+    have := h.connectedCentralTwoTorsionRank_le_one
     omega
   · dsimp [So10TwoTorsionCentralCollapseData.central_rank_drop_at_least_two]
     rw [h.auditCentralRank_eq_three]
-    have hbase : 3 - 1 ≥ 2 :=
-      Omega.Conclusion.CompressionLadderSpin10.so10_kernel_lower_bound
+    have := h.connectedCentralTwoTorsionRank_le_one
     omega
 
 end Omega.GU
