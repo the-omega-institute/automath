@@ -76,6 +76,7 @@ import Omega.POM.S5FieldDiscriminantMonogenic
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
+import Omega.POM.ModpDifferenceBinomialBasis
 import Omega.POM.OrderSpatialization
 import Omega.Folding.LocalWeightRigidityFibonacci
 import Omega.Folding.LocalWeightRigidityPublication
@@ -221,6 +222,7 @@ import Omega.SPG.BayesFiniteMistakesSummable
 import Omega.SPG.BoundaryDimensionAeStabilization
 import Omega.SPG.BoundaryGodelClarityExponentEquivalence
 import Omega.SPG.BoundaryCylinderGodelizationClarity
+import Omega.SPG.BoundaryExponentialResidualDof
 import Omega.SPG.Hypercube6GodelSquareclass
 import Omega.SPG.ClarityRiskThresholdDepthLaw
 import Omega.SPG.ScanErrorMeasure
@@ -767,6 +769,7 @@ import Omega.TypedAddressBiaxialCompletion.CausalPreorder
 import Omega.TypedAddressBiaxialCompletion.ClassicalContraction
 import Omega.TypedAddressBiaxialCompletion.BoundaryAddressCollision
 import Omega.TypedAddressBiaxialCompletion.ComovingDefectBound
+import Omega.TypedAddressBiaxialCompletion.BoundaryJointSufficiency
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
 import Omega.TypedAddressBiaxialCompletion.InstantiationExtraction
 import Omega.TypedAddressBiaxialCompletion.PreferredMinimalInstantiationExtraction
