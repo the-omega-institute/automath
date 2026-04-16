@@ -35,6 +35,7 @@ import Omega.SPG.Clopen
 import Omega.SPG.CoarsegrainedCutFlux
 import Omega.SPG.CollisionProfileRestoration
 import Omega.SPG.CompactBoundaryContinuousDecoderTrivial
+import Omega.SPG.ComputableSectionCannotHitTypicalFiber
 import Omega.SPG.ContractionEstimate
 import Omega.SPG.CoordinateBundleScreenClosure
 import Omega.SPG.CoordinateBundleScreenCount

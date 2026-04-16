@@ -67,6 +67,7 @@ import Omega.Folding.FoldSuitePublication
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
 import Omega.Folding.GaugeAnomalyDensity
 import Omega.Folding.GaugeAnomalyEndpointFib
+import Omega.Folding.GaugeAnomalyFiniteVarianceClosed
 import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
 import Omega.Folding.GaugeAnomalyKStepInvariance
