@@ -1995,6 +1995,15 @@ SPG / PhysicalSpacetimeSkeleton，降级项数 1，non-trivial 计数 1；文件
 - 已执行 `git fetch origin lean4-codex-auto-dev` / `git rebase origin/lean4-codex-auto-dev`，本轮无 rebase 冲突；随后在 rebased 分支上执行 `cd lean4 && timeout 300 lake build`，全量通过（9043 jobs）。
 - 文件：`lean4/Omega/GU/BernoulliZetaTower.lean`、`lean4/Omega/Conclusion/PrimorialMixedRadixAffine.lean`、`lean4/Omega/POM/ToggleOrder.lean`、`lean4/Omega.lean`；tex 路径：`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/subsubsec__bdry-tower-zeck-gut-finite-spectral-boundary-primitive-atom-part4.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/conclusion/para__conclusion-affine-normal-form-primorial-ellipse-initial-object.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/pom/parts/subsubsec__pom-fiber-toggle-orientation-sign-general-fiber.tex`。
 
+### Round R970
+
+- 已完成 `paper_parry_endpoint_collapse`（`thm:parry-endpoint-collapse`，`GU/ParryEndpointCollapse.lean`）：补上 `Omega.GU` 路径下的论文接口包装，直接复用既有 `GroupUnification` 望远镜化端点塌缩证明，使请求的 `GU` 文件与 unsuffixed 论文名一致。
+- 已完成 `paper_typed_address_biaxial_completion_comoving_uniform_minimization`（`thm:typed-address-biaxial-completion-comoving-uniform-minimization`，`TypedAddressBiaxialCompletion/ComovingUniformMinimization.lean`）：把 chapter-local 共动缺陷界在对齐图表 `x_0=\gamma` 处逐级实例化，用统一上确界假设把 `D_{n,\gamma}` 压到 `\varepsilon_n`，再重写 `\delta = 1/2-\beta` 得到每级预算的临界线逼近判别。
+- 已完成 `paper_cdim_atomic_defect_prony_2kappa_recovery`（`thm:cdim-atomic-defect-prony-2kappa-recovery`，`CircleDimension/AtomicDefectProny2KappaRecovery.lean`）：新增原子缺陷指数和采样、Vandermonde 矩阵、湮灭多项式与对数深度恢复定义，证明深度互异时 Vandermonde 行列式非零、首 `\kappa` 个样本给出唯一振幅恢复，并将 `2\kappa` 样本窗口包装成论文接口。
+- 已执行 `git fetch origin lean4-codex-auto-dev` / `git rebase origin/lean4-codex-auto-dev`；为满足 rebase 前 clean worktree 约束，先 `git stash push -u` 保存本轮改动，rebase 后 `git stash pop` 无冲突恢复。
+- 构建：目标模块 `Omega.GU.ParryEndpointCollapse`、`Omega.TypedAddressBiaxialCompletion.ComovingUniformMinimization`、`Omega.CircleDimension.AtomicDefectProny2KappaRecovery` 分别通过；`cd lean4 && timeout 300 lake build` 两次均在仓库大规模 replay 阶段超时但未产生错误；随后 `cd lean4 && lake build` 全量通过（9151 jobs）。
+- 文件：`lean4/Omega/GU/ParryEndpointCollapse.lean`、`lean4/Omega/TypedAddressBiaxialCompletion/ComovingUniformMinimization.lean`、`lean4/Omega/CircleDimension/AtomicDefectProny2KappaRecovery.lean`、`lean4/Omega.lean`；tex 路径：`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/subsec__parry-endpoint-bridge.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/typed_address_biaxial_completion/subsec__typed-address-biaxial-completion-comoving-tomography.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/circle_dimension_phase_gate/subsec__circle-dimension-phase-gate-comoving-horizon-scan-tomography.tex`。
+
 ## 6. 质量闸门
 
 - `lake build` 全量通过
