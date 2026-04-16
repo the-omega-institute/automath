@@ -77,6 +77,7 @@ import Omega.Folding.GaugeAnomalyPSDRational
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.Folding.GaugeAnomalyRootUnitSamplingThreshold
 import Omega.Folding.GaugeAnomalyS4ArtinConductor
+import Omega.Folding.GaugeAnomalySingularityLatticeNonholonomic
 import Omega.Folding.GaugeAnomalyS4PicardRank
 import Omega.Folding.GaugeAnomalyTauIntClosed
 import Omega.Folding.GaugeAnomalyTrigonalGenus

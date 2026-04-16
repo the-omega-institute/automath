@@ -132,6 +132,7 @@ import Omega.SPG.ScreenKernelTopHomologySupermodular
 import Omega.SPG.ScreenRankMatroidSupermodularity
 import Omega.SPG.SingleGateIdentifiabilityCriticalEnergy
 import Omega.SPG.SingleParamLogReadoutPigeonhole
+import Omega.SPG.SingleParameterLogReadoutVsDiagonalMultichannelBifurcation
 import Omega.SPG.SquareclassChainComplex
 import Omega.SPG.SquareclassHammingIsometry
 import Omega.SPG.StokesGodelAlgorithmicHolographicCompleteness
