@@ -2049,6 +2049,10 @@ SPG / PhysicalSpacetimeSkeleton，降级项数 1，non-trivial 计数 1；文件
 - 已执行 `git fetch origin lean4-codex-auto-dev` / `git rebase origin/lean4-codex-auto-dev`；本轮为满足 rebase 的 clean worktree 要求，先 `git stash push -u -m 'R981 pre-rebase'` 暂存修改，rebase 完成后 `git stash pop` 无冲突恢复。
 - 构建：三个目标模块单独 `lake build` 通过；随后执行 `cd lean4 && timeout 300 lake build`，全量通过（9179 jobs）。
 - 文件：`lean4/Omega/Conclusion/PrimeRegisterKStretchDensityCriterion.lean`、`lean4/Omega/Zeta/FinitePartCyclicLiftRootUnityFourierSieve.lean`、`lean4/Omega/GU/Window6LabeledSphericalDegree6HarmonicDefect.lean`、`lean4/Omega.lean`；tex 路径：`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/conclusion/para__conclusion-prime-register-fiber-normalized-half-circle-dimension.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/zeta_finite_part/finite_part/subsec__cyclic-lift-cyclotomic-microscope.tex`、`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/subsubsec__window6_b3c3_spherical_cubature_strength5.tex`。
+- 已完成 `paper_pom_path_indset_poly_closed`（`thm:pom-path-indset-poly-closed`，`POM/PathIndSetPolyClosed.lean`）：在 `pathIndSetPoly` 递推上归纳证明闭式系数公式 `(pathIndSetPoly ℓ).coeff j = \binom{ℓ+1-j}{j}`，把纤维中“恰用 `j` 次逆代换”的计数直接落到多项式系数上。
+- 已完成 `paper_typed_address_biaxial_completion_window6_audit_boundary_certificates`（`prop:typed-address-biaxial-completion-window6-audit-boundary-certificates`，`TypedAddressBiaxialCompletion/Window6AuditBoundaryCertificates.lean`）：把 window-6 boundary parity 的 rank-3 中心、rank-1 几何子群、rank-2 商与最小 torus-rank 3 打包成统一 paper-facing 证书。
+- 已完成 `paper_cdim_poisson_kl_constant_one_eighth`（`prop:cdim-poisson-kl-constant-one-eighth`，`CircleDimension/PoissonKLConstantOneEighth.lean`）：结合既有 Poisson 二阶 profile wrapper 与显式四阶系数恒等式接口，把 KL 主项常数整理为 `Var^2 / 8` 的 paper-facing 命题。
+- 构建：目标模块 `Omega.POM.PathIndSetPolyClosed`、`Omega.TypedAddressBiaxialCompletion.Window6AuditBoundaryCertificates`、`Omega.CircleDimension.PoissonKLConstantOneEighth` 分别通过；随后执行 `cd lean4 && timeout 300 lake build`，全量通过（仅保留仓库既有 warning，无新增错误）。
 
 ## 6. 质量闸门
 
