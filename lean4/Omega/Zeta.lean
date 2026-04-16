@@ -121,6 +121,7 @@ import Omega.Zeta.QuotientIndexLedgerSeeds
 import Omega.Zeta.RealArcSufficiencyUnitDisk
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Zeta.ResidueClassAsymptotics
+import Omega.Zeta.ResolventTraceIntegerResidueNoncancel
 import Omega.Zeta.RhoGapM12
 import Omega.Zeta.RootSeparation
 import Omega.Zeta.SmithEntropyMinDepth
