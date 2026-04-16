@@ -55,6 +55,7 @@ import Omega.GU.RadialQuadraticIdentifiability
 import Omega.GU.RadialQuadraticKlInfinite
 import Omega.GU.SheetflipRegisterBound
 import Omega.GU.SideInformationBitLowerBound
+import Omega.GU.SmUpliftResidualMediatorM7
 import Omega.GU.So10TwoTorsionCentralCollapseNecessity
 import Omega.GU.StrongLumpabilitySpectralFalsifier
 import Omega.GU.StrongLumpabilitySpectralRigidity
@@ -106,6 +107,7 @@ import Omega.GU.Window6DyadicBudget
 import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
 import Omega.GU.Window6IntrinsicBracketModpLiftCriterion
 import Omega.GU.Window6KirchhoffGreenPadicLiftStability
+import Omega.GU.Window6ReducedLaplacianGreenSimplePole
 import Omega.GU.Window6LabeledSphericalCubatureStrengthFive
 import Omega.GU.Window6LabeledSphericalDegree6HarmonicDefect
 import Omega.GU.Window6LieEnvelopeClosure

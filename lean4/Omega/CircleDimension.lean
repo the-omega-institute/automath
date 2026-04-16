@@ -43,6 +43,7 @@ import Omega.CircleDimension.GlobalPhaseExhaustion
 import Omega.CircleDimension.GcdimFiltrationInvariance
 import Omega.CircleDimension.GcdimTwoAxisTowerLaws
 import Omega.CircleDimension.GcdimPolynomialRing
+import Omega.CircleDimension.GcdimTwoAxisProductLaws
 import Omega.CircleDimension.GcdimNoetherHilbertDimMinusOne
 import Omega.CircleDimension.GodelPrimeBitlengthLowerBound
 import Omega.CircleDimension.GodelScalarizationBitlengthLogB
@@ -117,6 +118,7 @@ import Omega.CircleDimension.SignedCircleDimension
 import Omega.CircleDimension.SolenoidArithmeticSingularRingTorsionKernelFormula
 import Omega.CircleDimension.SolenoidFiberTorsor
 import Omega.CircleDimension.SolenoidKernelBlindness
+import Omega.CircleDimension.SolenoidRigidityRankPrimeSupport
 import Omega.CircleDimension.SolenoidTerminalPhaseSystem
 import Omega.CircleDimension.SquarefreeMedianDistance
 import Omega.CircleDimension.SquarefreeMedianMetricEllipseRealization

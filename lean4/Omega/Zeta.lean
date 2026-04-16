@@ -93,6 +93,7 @@ import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.JensenSoftThresholdLowerBound
 import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.LocalInversionDelta
+import Omega.Zeta.LocalizedIntegersPrimeAxisIncrementLaw
 import Omega.Zeta.LocalizedIntegersPadicKernelRigidity
 import Omega.Zeta.LocalizedFiniteIndexLatticeClassification
 import Omega.Zeta.LocalizedQuotientLedger

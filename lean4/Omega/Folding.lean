@@ -47,6 +47,7 @@ import Omega.Folding.ExactMarkovOrderBernoulli
 import Omega.Folding.Fiber
 import Omega.Folding.FiberArithmetic
 import Omega.Folding.FiberArithmeticProperties
+import Omega.Folding.FiberSubsetConvolution
 import Omega.Folding.FiberConvolutionKernelInvertibility
 import Omega.Folding.FiberFourierPhaseRigidity
 import Omega.Folding.FiberFusion
