@@ -1062,6 +1062,154 @@ def compile_pdf(paper_path: Path, *, dry_run: bool = False) -> Optional[Path]:
 # Prompt builders
 # ---------------------------------------------------------------------------
 
+def extract_theorem_statements(paper_path: Path) -> list[tuple[str, str]]:
+    """Extract (label, statement_text) for every theorem-like environment.
+
+    Theorem environments include theorem, proposition, lemma, corollary,
+    definition. Statement text is the raw body up to \\end{...}. Used by the
+    cross-paper dedup scan; cheap programmatic filter before invoking Codex.
+    """
+    results: list[tuple[str, str]] = []
+    pattern = re.compile(
+        r"\\begin\{(theorem|proposition|lemma|corollary|definition)\}"
+        r"(?:\[[^\]]*\])?\s*"
+        r"(?:\\label\{([^}]+)\})?"
+        r"(.*?)"
+        r"\\end\{\1\}",
+        re.DOTALL,
+    )
+    for tex in paper_path.glob("**/*.tex"):
+        try:
+            text = tex.read_text(encoding="utf-8", errors="replace")
+        except Exception:
+            continue
+        for m in pattern.finditer(text):
+            label = m.group(2) or f"unlabelled:{tex.name}:{m.start()}"
+            body = re.sub(r"\s+", " ", m.group(3)).strip()
+            if len(body) < 40:  # skip trivial/stub environments
+                continue
+            results.append((label, body))
+    return results
+
+
+def detect_cross_paper_overlaps(current_paper: Path,
+                                other_papers: list[Path],
+                                min_phrase_len: int = 60,
+                                min_shared_phrases: int = 3,
+                                ) -> list[dict]:
+    """Programmatic pre-filter: find theorem statements that share long
+    verbatim phrases with statements in sibling papers.
+
+    Returns a list of overlap records. Each record points to a local theorem
+    label plus the sibling paper and the shared phrases, so Codex can inspect
+    and either rewrite or cite the prior occurrence.
+    """
+    local_stmts = extract_theorem_statements(current_paper)
+    overlaps: list[dict] = []
+
+    for sibling in other_papers:
+        if sibling.resolve() == current_paper.resolve():
+            continue
+        sibling_stmts = extract_theorem_statements(sibling)
+        sibling_phrases: dict[str, set[str]] = {}
+        for slabel, sbody in sibling_stmts:
+            # Sliding window of long verbatim phrases
+            phrases = set()
+            for i in range(0, len(sbody) - min_phrase_len, 20):
+                phrases.add(sbody[i:i + min_phrase_len])
+            sibling_phrases[slabel] = phrases
+
+        for label, body in local_stmts:
+            for slabel, sphrases in sibling_phrases.items():
+                shared = [p for p in sphrases
+                          if p in body and not _is_boilerplate(p)]
+                if len(shared) >= min_shared_phrases:
+                    overlaps.append({
+                        "local_label": label,
+                        "sibling": sibling.name,
+                        "sibling_label": slabel,
+                        "shared_phrases": shared[:5],
+                    })
+                    break  # one match per (local, sibling) is enough
+    return overlaps
+
+
+_BOILERPLATE_MARKERS = (
+    "let $", "let \\", "suppose ", "assume ", "for every ", "for all ",
+    "there exists ", "denote by ", "write $", "set $",
+    "shift of finite type", "subshift of finite type",
+    "$\\mathbb{r}$", "$\\mathbb{c}$", "$\\mathbb{z}$", "$\\mathbb{n}$",
+    "\\begin{equation}", "\\end{equation}",
+)
+
+
+def _is_boilerplate(phrase: str) -> bool:
+    """Heuristic: a shared phrase is boilerplate if it's common math prose
+    rather than a substantive result statement. Prevents false positives on
+    routine 'Let X be a ...' openers."""
+    low = phrase.lower()
+    return any(marker in low for marker in _BOILERPLATE_MARKERS)
+
+
+def build_cross_paper_dedup_prompt(paper_dir: str,
+                                    overlaps_json: str) -> str:
+    """A_DEDUP prompt: resolve cross-paper duplication by rewriting or citing."""
+    return textwrap.dedent(f"""\
+        You are resolving cross-paper duplication in the paper at {paper_dir}.
+
+        The programmatic scan found statements that share long verbatim phrases
+        with theorems in sibling papers under papers/publication/. Each overlap
+        record gives:
+          - local_label: the label of the duplicate statement in THIS paper
+          - sibling: directory name of the sibling paper
+          - sibling_label: the label of the near-duplicate in the sibling
+          - shared_phrases: specific verbatim strings shared between the two
+
+        Overlaps (JSON):
+        ```json
+        {overlaps_json}
+        ```
+
+        ## Task for each overlap record
+
+        Open the sibling paper and read the corresponding labelled statement.
+        Then choose EXACTLY ONE of the following resolutions for the local copy:
+
+        A) **Cite and defer**: if the statement is genuinely the same result,
+           delete the local proof and rewrite the local statement as a one-line
+           citation of the sibling: "See \\cite{{sibling-bib-key}}, Theorem X".
+           This is the correct action when the two papers legitimately share
+           a common building block. Add the sibling to references.bib.
+
+        B) **Reframe with concrete increment**: if the local statement adds a
+           genuine increment (wider class, sharper constant, new application),
+           rewrite it so the increment is explicit in the statement itself
+           ("Under [extra hypothesis], ... [new bound]"), and acknowledge the
+           sibling result in a `\\begin{{remark}}` block immediately after.
+
+        C) **Delete**: if the local statement is a stealth copy with no
+           increment and the sibling is the authoritative version, delete the
+           local theorem and every reference to its label. Update the proof
+           flow if needed.
+
+        ## Hard rules
+
+        1. Option (A) is the default. Pick (B) only if you can write down the
+           specific quantitative or qualitative increment in one sentence.
+           Pick (C) only if the local statement adds nothing at all.
+        2. Do NOT produce paraphrased rewordings of the sibling statement and
+           call them new — that is exactly what this stage is preventing.
+        3. After each resolution, compile the paper and verify no dangling
+           \\ref to the deleted/renamed label remains.
+
+        ## Output
+        - Edit .tex files directly.
+        - Write `cross_paper_dedup.md` in {paper_dir} summarising each resolution
+          (local_label | sibling | chosen_action | one-line rationale).
+        - Compile: cd {paper_dir} && xelatex -interaction=nonstopmode main.tex
+    """)
+
+
 def build_literature_audit_prompt(paper_dir: str, target_journal: str) -> str:
     """A0 prompt: produce theorem-by-theorem comparison with prior work.
 
@@ -1868,6 +2016,70 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
 # STAGE A: Codex Quality Review + Journal Style (score-gated loop)
 # ═══════════════════════════════════════════════════════════════════════════
 
+def run_stage_a_dedup(state: PaperState, *, round_num: int,
+                       model: Optional[str] = None,
+                       dry_run: bool = False, tag: str = "") -> bool:
+    """Cross-paper self-plagiarism check, triggered after A-DEEP.
+
+    Runs a programmatic overlap scan across all sibling papers under
+    papers/publication/. If overlaps are found, invokes Codex once to
+    resolve each via cite/reframe/delete. Cheap filter → expensive fix,
+    so this is skipped entirely when the paper has no duplicate phrasing
+    (the common case).
+    """
+    paper_path = Path(state.paper_dir)
+    logger.info(f"{tag} A-DEDUP — Cross-paper overlap scan")
+
+    if dry_run:
+        logger.info(f"{tag} A-DEDUP [dry run] skip")
+        return True
+
+    # Collect sibling papers (everything in papers/publication/ except self
+    # and non-paper directories)
+    siblings: list[Path] = []
+    if PAPERS_PUB_DIR_CONST.exists():
+        for p in PAPERS_PUB_DIR_CONST.iterdir():
+            if not p.is_dir():
+                continue
+            if p.name.startswith("."):
+                continue
+            if p.name in ("oracle", "backflow", "strategy"):
+                continue
+            if p.resolve() == paper_path.resolve():
+                continue
+            siblings.append(p)
+
+    overlaps = detect_cross_paper_overlaps(paper_path, siblings)
+    if not overlaps:
+        logger.info(f"{tag} A-DEDUP: no overlaps found, skip")
+        state.log_event("A", "cross_paper_dedup", round_num=round_num,
+                        detail="clean: 0 overlaps")
+        save_state(state)
+        return True
+
+    logger.warning(f"{tag} A-DEDUP: found {len(overlaps)} overlap candidates, "
+                   f"invoking Codex to resolve")
+    # Truncate list to avoid prompt blow-up; worst offenders first
+    overlaps_json = json.dumps(overlaps[:15], indent=2, ensure_ascii=False)
+
+    prompt = build_cross_paper_dedup_prompt(state.paper_dir, overlaps_json)
+    codex_exec(prompt, work_dir=paper_path,
+               timeout_seconds=2400, model=model, dry_run=dry_run)
+    compiled = compile_gate(paper_path, model=model, dry_run=dry_run,
+                            tag=f"{tag} A-DEDUP")
+    h = git_commit(paper_path,
+                   f"stage-A R{round_num}: cross-paper dedup "
+                   f"({len(overlaps)} overlaps)"
+                   + ("" if compiled else " (compile FAILED)"),
+                   tag=tag)
+    state.log_event("A", "cross_paper_dedup", round_num=round_num,
+                    detail=f"{len(overlaps)} overlaps resolved; "
+                           f"compiled={compiled}",
+                    committed=bool(h), commit_hash=h)
+    save_state(state)
+    return True
+
+
 def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 model: Optional[str] = None) -> bool:
     tag = f"[{state.paper_name}|A]"
@@ -2104,6 +2316,13 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                                    f"compiled={compiled_deep}",
                             committed=bool(h), commit_hash=h)
             save_state(state)
+
+            # ── A-DEDUP: cross-paper self-plagiarism check ──────────
+            # A-DEEP may generate new theorems that duplicate content in
+            # sibling papers (we have 20+ related papers). Run cheap
+            # programmatic scan first; only invoke Codex if overlaps found.
+            run_stage_a_dedup(state, round_num=rnd, model=model,
+                              dry_run=dry_run, tag=tag)
 
             logger.info(f"{tag} Deep extension complete, continuing to next round "
                         f"for re-evaluation")
@@ -2897,6 +3116,120 @@ def _print(msg: str):
     else:
         print(msg)
 
+def print_dashboard():
+    """Compact one-line-per-paper table showing pipeline progress.
+
+    Columns: paper | stage | F | A(rounds,last-score) | B(rounds,verdict) |
+             C(rounds,verdict) | journal | error
+    Designed for a 180-char wide terminal; falls back gracefully if narrower.
+    """
+    _print("Oracle Pipeline Dashboard  "
+           f"({datetime.now().strftime('%Y-%m-%d %H:%M')})")
+    _print(f"Platform={sys.platform}  Oracle={'UP' if oracle_server_alive() else 'DOWN'}")
+    _print("")
+    header = (f"{'paper':<55}  {'stage':<6}  {'F':>4}  "
+              f"{'A':<14}  {'B':<16}  {'C':<10}  {'journal':<36}")
+    _print(header)
+    _print("-" * len(header))
+    if not STATE_DIR.exists():
+        _print("(no pipeline_state/)")
+        return
+    rows: list[tuple] = []
+    for f in sorted(STATE_DIR.glob("*.json")):
+        try:
+            with open(f, "r", encoding="utf-8") as fh:
+                d = json.load(fh)
+        except Exception:
+            continue
+        rows.append((
+            d.get("paper_name", f.stem)[:55],
+            d.get("current_stage", "?"),
+            str(d.get("stage_f_fit_score", "?")),
+            f"{d.get('stage_a_rounds', 0)}r "
+            f"last={d.get('stage_a_scores', [0])[-1] if d.get('stage_a_scores') else '-'}",
+            f"{d.get('stage_b_rounds', 0)}r "
+            f"{(d.get('stage_b_verdicts', ['-'])[-1] if d.get('stage_b_verdicts') else '-')[:10]}",
+            f"{d.get('stage_c_rounds', 0)}r "
+            f"{(d.get('stage_c_verdicts', ['-'])[-1] if d.get('stage_c_verdicts') else '-')[:5]}",
+            (d.get("target_journal", "?") or "?")[:36],
+        ))
+    for row in rows:
+        _print(f"{row[0]:<55}  {row[1]:<6}  {row[2]:>4}  "
+               f"{row[3]:<14}  {row[4]:<16}  {row[5]:<10}  {row[6]:<36}")
+    _print("")
+    _print(f"Total: {len(rows)} papers tracked")
+
+
+def print_review_index():
+    """Correlate Oracle review files with the commit that fixed each review.
+
+    For every oracle/done/*.md file, find the next Stage B commit touching
+    the corresponding paper directory and print a single linking row.
+    Helps audit whether Oracle suggestions actually land in the tree.
+    """
+    done_dir = SCRIPT_DIR / "oracle" / "done"
+    pub_done_dir = PAPERS_PUB_DIR_CONST / "oracle" / "done"
+    review_files: list[Path] = []
+    for d in (done_dir, pub_done_dir):
+        if d.exists():
+            review_files.extend(sorted(d.glob("*.md")))
+    _print(f"Oracle Review → Fix Index  ({len(review_files)} reviews)")
+    _print(f"{'='*80}")
+    if not review_files:
+        _print("(no reviews found)")
+        return
+
+    for rf in review_files:
+        try:
+            text = rf.read_text(encoding="utf-8", errors="replace")
+        except Exception:
+            continue
+        # Parse timestamp from oracle metadata
+        ts_match = re.search(
+            r'"timestamp":\s*"([^"]+)"', text[:500])
+        model_match = re.search(r'"model":\s*"([^"]+)"', text[:500])
+        timestamp = ts_match.group(1) if ts_match else "?"
+        model = model_match.group(1) if model_match else "?"
+
+        # Infer paper name from filename
+        stem = rf.stem
+        paper_key = re.sub(r"_(gate|editorial|review|R\d+|v\d+).*$", "", stem)
+
+        # Find matching stage-B commit touching any file mentioning paper_key
+        try:
+            with _git_lock:
+                after_iso = timestamp.split("T")[0] if "T" in timestamp else "2020-01-01"
+                result = subprocess.run(
+                    ["git", "log", "--all", "--format=%h %ci %s",
+                     f"--since={after_iso}",
+                     "--grep", f"stage-B",
+                     "-n", "20"],
+                    cwd=str(REPO_ROOT), capture_output=True, text=True,
+                    timeout=10,
+                )
+        except Exception:
+            result = None
+        commit_hash = "-"
+        commit_subj = "(no matching fix commit found)"
+        if result and result.returncode == 0:
+            for line in result.stdout.splitlines():
+                if paper_key.lower()[:20] in line.lower():
+                    parts = line.split(maxsplit=3)
+                    if len(parts) >= 4:
+                        commit_hash = parts[0]
+                        commit_subj = parts[3][:60]
+                        break
+
+        verdict = extract_verdict(text)
+        size = len(text)
+        valid = "OK " if is_oracle_response_valid(text) else "BAD"
+        _print(f"{rf.name[:40]:<40}  {valid}  {size:>6}B  "
+               f"{verdict[:15]:<15}  {model[:18]:<18}")
+        if valid == "OK ":
+            _print(f"    → fix commit: {commit_hash}  {commit_subj}")
+    _print("")
+
+
 def print_status():
     _print(f"Oracle Pipeline v2 — Status")
     _print(f"{'='*60}")
@@ -3002,6 +3335,10 @@ def main() -> int:
     parser.add_argument("--model", type=str, default=None)
     parser.add_argument("--oracle-timeout", type=int, default=7200)
     parser.add_argument("--status", action="store_true")
+    parser.add_argument("--dashboard", action="store_true",
+                        help="Compact per-paper progress table")
+    parser.add_argument("--review-index", action="store_true",
+                        help="Correlate Oracle reviews with fix commits")
     parser.add_argument("--reset", type=str, metavar="PAPER_NAME")
     parser.add_argument("--no-assign", action="store_true",
                         help="Ignore machine assignment, process all papers")
@@ -3009,6 +3346,14 @@ def main() -> int:
 
     if args.status:
         print_status()
+        return 0
+
+    if args.dashboard:
+        print_dashboard()
+        return 0
+
+    if args.review_index:
+        print_review_index()
         return 0
 
     if args.reset:
