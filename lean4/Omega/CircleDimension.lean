@@ -1,6 +1,7 @@
 import Omega.CircleDimension.AddressLedgerJointBudgetLowerBound
 import Omega.CircleDimension.AlgebraicDegreeMinCircleRank
 import Omega.CircleDimension.AnomalyQuadraticLaw
+import Omega.CircleDimension.AcdimPolynomialRing
 import Omega.CircleDimension.AtomicDefectHankelProny
 import Omega.CircleDimension.AtomicDefectProny2KappaRecovery
 import Omega.CircleDimension.AtomicDefectTwoFrequency4KappaRecovery

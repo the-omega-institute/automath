@@ -98,6 +98,7 @@ import Omega.GU.Window6B3C3UniqueQuarticDetector
 import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6B3SupportCount
 import Omega.GU.Window6BinfoldLastbitLecamEquivalence
+import Omega.GU.Window6ChiralCompressionHypercubeAdjacency
 import Omega.GU.Window6C3SupportCount
 import Omega.GU.Window6CyclicWeightThresholdRootLength
 import Omega.GU.Window6DoubleLock12

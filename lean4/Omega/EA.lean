@@ -50,3 +50,4 @@ import Omega.EA.ValInvariant
 import Omega.EA.Wedderburn
 import Omega.EA.ZeckendorfAddFst
 import Omega.EA.ZeckendorfArithComputable
+import Omega.EA.ZeckendorfTransversal
