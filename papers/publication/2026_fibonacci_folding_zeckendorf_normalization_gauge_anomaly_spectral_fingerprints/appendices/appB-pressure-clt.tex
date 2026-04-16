@@ -1,7 +1,7 @@
 \section{Appendix B: The reversed pair shift, its four-state Fischer cover, and bulk statistics}
 \label{app:pressure}
 
-This appendix rebuilds the state model used in Section~\ref{sec:gauge}. We work entirely in the LH convention of Section~\ref{sec:preliminaries}; the only reversal is that pair words are \emph{read from high Fibonacci weights to low Fibonacci weights}. This avoids the false bounded-cascade claim that would arise from mixing LH and MSD-first scans.
+This appendix rebuilds the state model used in Section~\ref{sec:gauge}. We work entirely in the LH convention of Section~\ref{sec:preliminaries}; the only reversal is that pair words are \emph{read from high Fibonacci weights to low Fibonacci weights}. Keeping a single convention throughout prevents confusion about scan direction and follower classes.
 
 \subsection{Reversed pair words}
 For \(\omega=(\omega_1,\dots,\omega_M)\in\Om_M\), write
@@ -38,6 +38,28 @@ Appending zeros at higher Fibonacci sites does not change the value \(N(\omega)\
 \subsection{A synchronized four-state presentation}
 Lemma~\ref{lem:zero-padding} lets us synchronize every factor by putting it after a long block of \(00\)'s. The relevant state information is therefore encoded by the factors that begin with \(00\).
 
+\begin{lemma}[Local four-bit table]\label{lem:local-four-bit}
+Let \(b_1b_2b_3b_4\in\{0,1\}^4\) be the next four microstate digits after a synchronized prefix, written in the high-to-low order in which the reversed pair word is read. Then the next five pair symbols are given by
+\[
+\begin{array}{c|c@{\qquad}c|c}
+b_1b_2b_3b_4 & \text{pair symbols} & b_1b_2b_3b_4 & \text{pair symbols} \\\hline
+0000 & 00|00|00|00|00 & 1000 & 00|11|00|00|00 \\
+0001 & 00|00|00|00|11 & 1001 & 00|11|00|00|11 \\
+0010 & 00|00|00|11|00 & 1010 & 00|11|00|11|00 \\
+0011 & 00|00|01|10|10 & 1011 & 01|10|00|10|10 \\
+0100 & 00|00|11|00|00 & 1100 & 01|10|10|00|00 \\
+0101 & 00|00|11|00|11 & 1101 & 01|10|10|00|11 \\
+0110 & 00|01|10|10|00 & 1110 & 01|10|10|11|00 \\
+0111 & 00|01|10|10|11 & 1111 & 01|10|11|10|10
+\end{array}
+\]
+In particular, the first four pair symbols after a synchronized prefix depend only on \(b_1b_2b_3b_4\).
+\end{lemma}
+
+\begin{proof}
+Because the normalization scan proceeds from high Fibonacci weights to low ones, once a pair symbol has been emitted it cannot be altered by lower-weight digits that are inspected later. Therefore the first four pair symbols after a synchronized prefix are determined entirely by the next four microstate digits \(b_1b_2b_3b_4\). There are only \(16\) such blocks, and direct normalization of each block gives the displayed table.
+\end{proof}
+
 \begin{lemma}[Length-\(3\) synchronized prefixes]\label{lem:length3}
 After padding by a block \(00^L\) with \(L\) large, the length-\(3\) factors of \(\mathcal{R}_M(\omega)\) that begin with \(00\) are exactly
 \[
@@ -53,7 +75,7 @@ After padding by a block \(00^L\) with \(L\) large, the length-\(3\) factors of 
 \end{lemma}
 
 \begin{proof}
-Once the prefixed zeros occupy the highest Fibonacci sites, the only active rewrite is \(110\to 001\) scanned from high weights to low weights. If the current synchronized state is \(00\), then either the next microstate digit is \(0\) (yielding another \(00\)), or an \(110\) block is about to fire, producing the pair symbols \(01\) or \(11\) depending on whether the carry leaves one or two zeros behind. This yields the first three words. If the synchronized state is \(01\), the next microstate digit must be \(0\) to avoid introducing a forbidden \(11\), and the unique continuation is \(10\). If the state is \(10\) or \(11\), the local pattern is one of \(100\), \(101\), or \(110\), and a single rewrite either passes a zero, resolves an \(11\), or creates the delayed carry listed in the final four words. Each of the eight words is realized by an explicit microstate block (e.g., \(00|10|10\) occurs inside \(00110\)), so the list is both necessary and sufficient.
+Projecting the table of Lemma~\ref{lem:local-four-bit} to the first three pair symbols yields exactly the eight words listed in the statement. No further word can occur, because every synchronized length-\(3\) factor is the projection of one of the \(16\) local four-bit cases.
 \end{proof}
 
 For the four two-symbol words
@@ -86,7 +108,7 @@ Starting from the prefixes listed in Lemma~\ref{lem:length3}, the only admissibl
 \end{lemma}
 
 \begin{proof}
-For each synchronized prefix from Lemma~\ref{lem:length3}, only the next two microstate bits can influence the fourth pair symbol, because the local normalization rule has length \(3\). Thus there are finitely many cases. Writing them out gives the following continuation sets:
+Projecting the table of Lemma~\ref{lem:local-four-bit} to the first four pair symbols gives exactly the \(16\) words displayed in \eqref{eq:length4-factors}. Grouping those words by their first three symbols gives the continuation sets
 \[
 \begin{array}{c|c}
 \text{synchronized prefix} & \text{admissible fourth symbols} \\\hline
@@ -100,7 +122,7 @@ For each synchronized prefix from Lemma~\ref{lem:length3}, only the next two mic
 00|11|00 & \{00,01,11\}.
 \end{array}
 \]
-These are exactly the sixteen words listed in \eqref{eq:length4-factors}. Each continuation is realized by the corresponding length-\(4\) factor from that display, so necessity and sufficiency reduce to checking that no further continuation can arise. But any additional continuation would give a new synchronized length-\(4\) factor, contradicting the complete finite case analysis above. Hence \eqref{eq:length4-factors} is exhaustive.
+This is simply a regrouping of the \(16\) local four-bit rows, so \eqref{eq:length4-factors} is exhaustive.
 \end{proof}
 
 \begin{proposition}[Deterministic update on synchronized prefixes]\label{prop:transitions}
@@ -134,14 +156,14 @@ show that \(10\) lands in the state whose next-symbol set is \(\{00,01,11\}\), n
 Because every factor of \(\mathcal{L}_{\mathrm{pair}}\) can be left-extended by arbitrarily many \(00\)'s (Lemma~\ref{lem:zero-padding}), every factor eventually enters the synchronized regime. Once synchronized, admissible extensions are governed uniquely by the table above. Therefore the displayed graph presents the whole shift \(\mathcal{P}\). It is right-resolving by construction, since each outgoing label from a fixed state is distinct.
 \end{proof}
 
-\begin{remark}[Worked transition computation]
-The state \(10\) is the only state with three outgoing transitions that do not coincide with the obvious symbol readout. This is exactly the case highlighted by the reviewer. In the synchronized language, however, there is no ambiguity: the three admissible length-\(4\) factors beginning with \(00|10\) are precisely
+\begin{remark}[Representative transition computation]
+The state \(10\) is the only state with three outgoing transitions. In the synchronized language there is nevertheless no ambiguity: the three admissible length-\(4\) factors beginning with \(00|10\) are precisely
 \[
 00|10|00|10,\qquad
 00|10|10|00,\qquad
 00|10|11|10.
 \]
-Hence \(00\) and \(11\) have the same one-step follower set \(\{10\}\), while \(10\) has the follower set \(\{00,01,11\}\). This is the formal replacement for the discarded narrative derivation.
+Hence \(00\) and \(11\) have the same one-step follower set \(\{10\}\), while \(10\) has the follower set \(\{00,01,11\}\). This is the only nontrivial state update in the synchronized presentation.
 \end{remark}
 
 \begin{remark}[Supplementary finite-state audit]
@@ -199,16 +221,20 @@ and the stationary state distribution is
 \begin{proof}[Proof of Theorem~\ref{thm:joint}]
 In the graph of Proposition~\ref{prop:transitions}, the edge labels are the pair symbols \((X_t,Y_t)\in\{0,1\}^2\). Explicitly,
 \[
-00 \xrightarrow{00} 00,\quad
-00 \xrightarrow{01} 01,\quad
-00 \xrightarrow{11} 11,\quad
-01 \xrightarrow{10} 10,
+\begin{aligned}
+00 &\xrightarrow{00} 00, &
+00 &\xrightarrow{01} 01,\\
+00 &\xrightarrow{11} 11, &
+01 &\xrightarrow{10} 10,
+\end{aligned}
 \]
 \[
-10 \xrightarrow{10} 00,\quad
-10 \xrightarrow{00} 01,\quad
-10 \xrightarrow{11} 01,\quad
-11 \xrightarrow{00} 00.
+\begin{aligned}
+10 &\xrightarrow{10} 00, &
+10 &\xrightarrow{00} 01,\\
+10 &\xrightarrow{11} 01, &
+11 &\xrightarrow{00} 00.
+\end{aligned}
 \]
 The only multiple edge is \(10\to 01\), which carries the two labels \(00\) and \(11\). Under the Parry measure, each copy receives half of the mass of that matrix entry. Therefore the label probabilities are
 \[

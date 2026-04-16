@@ -103,6 +103,20 @@ If the third label is \(000\) or \(010\), only the path through terminal vertex 
 \end{example}
 
 \subsection{The base case \(m=4\): the last remaining core ambiguities}
+For \(m=4\) the edge-label table is
+\[
+\begin{aligned}
+000&\xrightarrow{0000}000, & 000&\xrightarrow{0001}001, &
+001&\xrightarrow{0010}010, & 001&\xrightarrow{0000}011,\\
+010&\xrightarrow{0100}100, & 010&\xrightarrow{0101}101, &
+011&\xrightarrow{0001}110, & 011&\xrightarrow{0100}111,\\
+100&\xrightarrow{1000}000, & 100&\xrightarrow{1001}001, &
+101&\xrightarrow{1010}010, & 101&\xrightarrow{1000}011,\\
+110&\xrightarrow{0010}100, & 110&\xrightarrow{0000}101, &
+111&\xrightarrow{1001}110, & 111&\xrightarrow{0010}111.
+\end{aligned}
+\]
+
 \begin{lemma}[The \(m=4\) core table]\label{lem:m4-decoder}
 The only ambiguous two-label blocks in \(Y_4\) are
 \[
@@ -111,15 +125,46 @@ The only ambiguous two-label blocks in \(Y_4\) are
 \[
 (0001,0000),\quad (0001,0010),\quad (1001,0000),\quad (1001,0010).
 \]
-In every case the two possible lifts after the second label terminate at the vertices \(001\) and \(110\). The common successor label set is
+The first four pairs leave terminal vertices \(001\) and \(110\) after the second label; the next two leave \(011\) and \(101\); the last two leave \(010\) and \(100\). The corresponding successor label sets are
 \[
-\{0000,0010\},
+\mathcal{L}^+(001)=\mathcal{L}^+(110)=\{0000,0010\},
 \]
-and the third label resolves the ambiguity: \(0000\) forces the current bit \(1\), while \(0010\) forces the current bit \(0\).
+\[
+\mathcal{L}^+(011)=\{0001,0100\},\qquad
+\mathcal{L}^+(101)=\{1000,1010\},
+\]
+\[
+\mathcal{L}^+(010)=\{0100,0101\},\qquad
+\mathcal{L}^+(100)=\{1000,1001\}.
+\]
+In each case the third label determines the current appended bit.
 \end{lemma}
 
 \begin{proof}
-The length-\(4\) label table of \(G_4\) has finitely many entries, so the off-diagonal fiber-product paths of length \(2\) can be listed exhaustively. The eight pairs displayed above are exactly those paths. For each pair, the two possible lifts after the second label terminate at \(001\) and \(110\). The outgoing edges from these vertices carry the same two labels \(0000\) and \(0010\), but they append opposite current bits. Hence the third label resolves every \(m=4\) ambiguity.
+The repeated labels in the \(G_4\) table are
+\[
+0000\leftarrow\{0000,0011\},\qquad
+0001\leftarrow\{0001,0110\},
+\]
+\[
+1001\leftarrow\{1001,1110\},\qquad
+0010\leftarrow\{0010,1100\}.
+\]
+These are the only possible first edges of an off-diagonal fiber-product path. Following each pair of equal-labeled first edges by one more equal-labeled edge gives exactly the eight two-label blocks listed in the statement and no others.
+
+For the four blocks
+\[
+(0000,0001),\quad (1000,0001),\quad (0010,1001),\quad (0100,1001),
+\]
+the two lifts after the second label terminate at \(001\) and \(110\). From either state the third label is \(0000\) or \(0010\), and the appended bit is \(1\) in the first case and \(0\) in the second. For the two blocks
+\[
+(0001,0000),\qquad (1001,0000),
+\]
+the terminal states are \(011\) and \(101\), whose successor label sets are disjoint. The same is true for the terminal states \(010\) and \(100\) arising from
+\[
+(0001,0010),\qquad (1001,0010).
+\]
+Hence in all eight cases the third label determines which lift continues, and therefore determines the current appended bit.
 \end{proof}
 
 \subsection{Proof of the general decoder theorem}
