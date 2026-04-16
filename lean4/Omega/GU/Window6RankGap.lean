@@ -82,6 +82,20 @@ theorem paper_autp_center_twofiber_count_six :
     cBinFiberHist 6 2 = 8 := by
   rw [cBinFiberHist_6_2]
 
+/-- Window-6 foldbin gauge center/boundary direct-sum certificate.
+    thm:window6-foldbin-gauge-center-boundary-direct-sum -/
+theorem paper_window6_foldbin_gauge_center_boundary_direct_sum :
+    cBinFiberHist 6 2 = 8 ∧
+    cBinFiberHist 6 3 = 4 ∧
+    cBinFiberHist 6 4 = 9 ∧
+    4 + 9 = 13 ∧
+    8 + 13 = 21 ∧
+    13 = Nat.fib 7 ∧
+    Nat.factorial 2 ^ 8 * Nat.factorial 3 ^ 4 * Nat.factorial 4 ^ 9 =
+      2 ^ 8 * 6 ^ 4 * 24 ^ 9 := by
+  refine ⟨by rw [cBinFiberHist_6_2], by rw [cBinFiberHist_6_3], by rw [cBinFiberHist_6_4],
+    by omega, by omega, by native_decide, Omega.Conclusion.window6_gauge_group_factorial_factors⟩
+
 /-- Window-9 compression ratio: 2^9 / |X_9| = 512 / 89 = 5 rem 67.
     subsec:bdry-tower-zeck-gut-part1 -/
 theorem paper_window9_compression_ratio :

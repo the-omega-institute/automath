@@ -66,6 +66,7 @@ import Omega.POM.MultiplicativeChainRuleFinite
 import Omega.POM.MultiplicityFixedRExtrema
 import Omega.POM.OrbitProductNorm
 import Omega.POM.OrderSpatialization
+import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
 import Omega.POM.ParrySurfaceDerivative
 import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.PositiveNegativeMomentCoupling

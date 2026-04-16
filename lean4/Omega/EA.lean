@@ -23,6 +23,7 @@ import Omega.EA.JoukowskyEllipse
 import Omega.EA.MonoidQuotientIsN
 import Omega.EA.MulNoNewPrimitive
 import Omega.EA.PisanoPeriodSeeds
+import Omega.EA.ParallelAdditionU1Degeneracy
 import Omega.EA.PrimeLedger
 import Omega.EA.PrimeRegisterEllipseInvertGodel
 import Omega.EA.PrimeRegisterFibValuation
