@@ -78,6 +78,7 @@ import Omega.POM.S4Asymptotic
 import Omega.POM.S4Recurrence
 import Omega.POM.S5FieldDiscriminantMonogenic
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
+import Omega.POM.FiberIndependenceComplexClassification
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
 import Omega.POM.ModpDifferenceBinomialBasis
@@ -206,6 +207,7 @@ import Omega.Folding.YmAmbiguityHausdorffCodim
 import Omega.Folding.YmAmbiguityShellExponentiallyThin
 import Omega.Folding.YmAmbiguityShellLowEntropy
 import Omega.Folding.YmScanLengthAsymptotic
+import Omega.Folding.EtaMHatErgodicLimit
 import Omega.Folding.YmAmbiguitySpectrumLaw
 import Omega.Folding.YmAmbiguityShellZetaFactorTrivial
 import Omega.Folding.TimeLayerDichotomy
@@ -867,6 +869,7 @@ import Omega.TypedAddressBiaxialCompletion.Window6AuditBudgetSplit
 import Omega.TypedAddressBiaxialCompletion.Window6AuditBoundaryCertificates
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.StandardLedger
+import Omega.TypedAddressBiaxialCompletion.UnitarySliceAddressClosure
 import Omega.TypedAddressBiaxialCompletion.JensenDefectFiniteization
 import Omega.TypedAddressBiaxialCompletion.JensenDefectBlindspot
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes

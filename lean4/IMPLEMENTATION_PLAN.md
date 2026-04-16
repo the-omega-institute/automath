@@ -22,6 +22,43 @@
 
 **远程分支并行记录（merge 前）**：以下 round 编号仅在 `origin/lean4-codex-auto-dev` 内部有序。
 
+**Phase R1062（本轮落地，proof / registration / sync / commit 执行）**：新增
+`paper_pom_fiber_independence_complex_classification`
+（对应 `thm:pom-fiber-independence-complex-classification`，POM；新建
+`FiberIndependenceComplexClassification.lean`，定义 chapter-local
+`FiberIndependenceComplexClassificationData`，把路径分量的 mod-`3` 分类、坏分量导致
+join 收缩的分支，以及无坏分量时累积球面维数的分支压成纤维独立集复形“可缩 / 单球面”
+二分 wrapper）；新增
+`paper_typed_address_biaxial_completion_unitary_slice_address_closure`
+（对应 `prop:typed-address-biaxial-completion-unitary-slice-address-closure`，
+TypedAddressBiaxialCompletion；新建 `UnitarySliceAddressClosure.lean`，定义 chapter-local
+`UnitarySliceAddressClosureData`，打包 unitary-slice 地址空间、读出值域、guarded
+readout 与闭合规则并直接读出 `readUSClosed`）；新增
+`paper_eta_m_hat_ergodic_limit`
+（对应 `prop:eta_m_hat_ergodic_limit`，Folding；新建 `EtaMHatErgodicLimit.lean`，定义
+chapter-local `EtaMHatErgodicLimitData`，把同步有限状态扩张上的单点态指示函数、
+不变测度平均、几乎处处极限与 paper-facing 可观测常数识别压成 theorem-facing
+wrapper）；proof 侧执行
+`lake build Omega.POM.FiberIndependenceComplexClassification`、
+`lake build Omega.TypedAddressBiaxialCompletion.UnitarySliceAddressClosure`、
+`lake build Omega.Folding.EtaMHatErgodicLimit` 均通过；随后执行 `cd lean4 && lake build`，
+全量构建输出仅见既有 linter warning、无新的 Lean error；同步阶段执行
+`git fetch origin lean4-codex-auto-dev` 与
+`git rebase --autostash origin/lean4-codex-auto-dev`，autostash 自动回放且无冲突；文件：
+`lean4/Omega/POM/FiberIndependenceComplexClassification.lean`、
+`lean4/Omega/TypedAddressBiaxialCompletion/UnitarySliceAddressClosure.lean`、
+`lean4/Omega/Folding/EtaMHatErgodicLimit.lean`、`lean4/Omega.lean`；Lean theorem 名：
+`paper_pom_fiber_independence_complex_classification`、
+`paper_typed_address_biaxial_completion_unitary_slice_address_closure`、
+`paper_eta_m_hat_ergodic_limit`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/pom/parts/subsubsec__pom-fiber-indcomplex.tex`
+（`thm:pom-fiber-independence-complex-classification`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/typed_address_biaxial_completion/subsec__typed-address-biaxial-completion-three-axis-address-completeness.tex`
+（`prop:typed-address-biaxial-completion-unitary-slice-address-closure`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/folding/subsec__Ym-zeta-spectrum.tex`
+（`prop:eta_m_hat_ergodic_limit`）；新增 `\\leanverified` +3，覆盖章节为 POM /
+TypedAddressBiaxialCompletion / Folding，降级项数 0，non-trivial 计数 0）
+
 **Phase R1058（本轮落地，proof / registration / sync / commit 执行）**：新增
 `paper_window6_intrinsic_bracket_modp_lift_criterion`
 （对应 `thm:window6-intrinsic-bracket-modp-lift-criterion`，GU；新建
