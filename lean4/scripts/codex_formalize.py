@@ -51,12 +51,22 @@ LEAN_ROOT = SCRIPT_DIR.parent                        # lean4/
 REPO_ROOT = LEAN_ROOT.parent                         # automath/
 IMPL_PLAN = LEAN_ROOT / "IMPLEMENTATION_PLAN.md"
 OMEGA_ROOT = LEAN_ROOT / "Omega"
+PROMPTS_DIR = SCRIPT_DIR / "prompts"
 
 LOG_DIR = LEAN_ROOT / "scripts" / "logs"
 WORKTREE_DIR = REPO_ROOT / ".worktrees"
 
 BASE_BRANCH = "lean4-codex-auto-dev"
 CODEX_PATH = shutil.which("codex") or "/opt/homebrew/bin/codex"
+
+
+def _load_prompt(name: str) -> str:
+    """Load a prompt template from lean4/scripts/prompts/<name>.txt.
+
+    Templates use <PLACEHOLDER> syntax; callers substitute values with .replace().
+    Editing prompts only requires changing the .txt files, not this script.
+    """
+    return (PROMPTS_DIR / f"{name}.txt").read_text(encoding="utf-8")
 
 # Thread-safe lock for git operations on the main repo
 _git_lock = threading.Lock()
@@ -539,54 +549,12 @@ def codex_exec(
 # ---------------------------------------------------------------------------
 
 def build_phase_b_prompt(round_num: int, total_theorems: int, recent: str) -> str:
-    return textwrap.dedent(f"""\
-        You are the target-selection phase for Lean4 formalization round R{round_num}.
-
-        ## Project Layout
-        - lean4/Omega/ — Lean4 code (Omega library, depends on mathlib)
-        - theory/ — papers in LaTeX
-        - lean4/IMPLEMENTATION_PLAN.md — tracking file
-        - Current round: R{round_num}
-        - Current theorem count: ~{total_theorems}
-        - Recent commits:
-        {recent}
-
-        ## Task
-        Select 3 formalization targets for R{round_num}.
-
-        Steps:
-        1. Read lean4/IMPLEMENTATION_PLAN.md (first 120 lines) to identify the latest phase
-           and queued candidates.
-        2. Scan theory/ to find theorem environments without \\leanverified.
-        3. grep lean4/Omega/ to confirm these theorems are NOT already implemented.
-        4. Pick 3 targets:
-           - At least 1 must be medium difficulty (induction/construction, >=15 lines)
-           - Not all from the same chapter
-           - Prioritize different chapters for diversity
-
-        ## Output Format (MUST follow exactly)
-        Output a single JSON block:
-
-        ```json
-        {{
-          "targets": [
-            {{
-              "paper_label": "thm:xxx or prop:xxx or cor:xxx",
-              "lean_name": "paper_xxx_yyy",
-              "lean_signature": "theorem paper_xxx_yyy : ... := by sorry",
-              "target_file": "lean4/Omega/Module/File.lean",
-              "strategy": "Brief proof strategy",
-              "difficulty": "low/medium/high",
-              "chapter": "Folding/SPG/Zeta/etc",
-              "grep_confirmed_missing": true
-            }}
-          ]
-        }}
-        ```
-
-        You MUST grep to confirm each target does not already exist.
-        Do NOT guess mathlib API names.
-    """)
+    return (
+        _load_prompt("phase_b")
+        .replace("<ROUND_NUM>", str(round_num))
+        .replace("<TOTAL_THEOREMS>", str(total_theorems))
+        .replace("<RECENT>", recent)
+    )
 
 
 def parse_phase_b_output(raw: str) -> PhaseBResult:
@@ -640,107 +608,23 @@ def gate_check(targets: list[dict]) -> tuple[bool, str]:
 def build_phase_c_prompt(round_num: int, targets: list[dict]) -> str:
     targets_text = ""
     for i, t in enumerate(targets, 1):
-        targets_text += textwrap.dedent(f"""\
-            ### Target {i}
-            - Paper label: {t.get('paper_label', 'unknown')}
-            - Lean name: {t.get('lean_name', 'unknown')}
-            - File: {t.get('target_file', 'unknown')}
-            - Strategy: {t.get('strategy', 'unknown')}
-            - Difficulty: {t.get('difficulty', 'unknown')}
-            - Lean signature:
-            ```lean
-            {t.get('lean_signature', '-- unknown')}
-            ```
-
-        """)
-
-    return textwrap.dedent(f"""\
-        Implement Lean4 theorems + compile + commit (do NOT push). Complete in one pass.
-
-        ## Round R{round_num}
-
-        ## Targets to Implement
-        {targets_text}
-
-        ## Step 1: Implement proofs
-        For each target:
-        1. Create or edit the target file in lean4/Omega/
-        2. Write the theorem with a complete proof (NO sorry, NO admit, NO axiom)
-        3. Use lean_goal / lean_local_search / lean_multi_attempt / lean_diagnostic_messages
-           if available via MCP
-        4. If a type doesn't exist, create a minimal seed definition
-        5. native_decide ONLY for base cases (m<=2) or pure arithmetic (3+5=8)
-        6. Do NOT use maxHeartbeats > 400000
-
-        ## Step 2: Full compilation
-        ```bash
-        cd lean4 && lake build
-        ```
-        If errors, fix them (up to 3 attempts per theorem).
-        If a theorem is stuck, skip it and continue with the others.
-
-        ## Step 3: Sync with base branch before committing
-        Before making any commits, sync with the latest base to minimize merge conflicts:
-        ```bash
-        git fetch origin lean4-codex-auto-dev
-        git rebase origin/lean4-codex-auto-dev
-        ```
-        If rebase conflicts occur on lean4/Omega.lean or IMPLEMENTATION_PLAN.md,
-        resolve by keeping ALL lines from both sides (additive merge), then:
-        ```bash
-        git add <conflicted_file>
-        git rebase --continue
-        ```
-
-        ## Step 4: Git commit the proofs
-        ```bash
-        git add lean4/Omega/ lean4/Omega.lean
-        git commit -m "R{round_num}: [brief description of what was proved]
-
-        Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
-        ```
-
-        ## Step 5: Update tracking + annotate
-        - Update lean4/IMPLEMENTATION_PLAN.md with new round info
-        - Add \\leanverified{{theorem_name}} to the corresponding .tex files
-          (find them via the paper_label, escape underscores as \\_)
-
-        ## Step 6: Git commit registration
-        ```bash
-        git add lean4/IMPLEMENTATION_PLAN.md theory/
-        git commit -m "Register R{round_num}: [brief description]
-
-        Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
-        ```
-
-        ## IMPORTANT: Do NOT git push. The merge and push will be handled externally.
-
-        ## HARD PROHIBITION — Signature Integrity
-        Existing theorems already in the file have mathematically meaningful signatures.
-        You MUST NOT weaken or replace them. Specifically:
-        1. NEVER replace concrete parameter types (ℕ, ℝ, ℕ→ℕ, etc.) with abstract `Prop` variables.
-           Example of FORBIDDEN degradation:
-             -- BEFORE (correct, keep this):
-             theorem foo (n : ℕ) (h : n > 0) : ... := by ...
-             -- AFTER (FORBIDDEN, will be reverted):
-             theorem foo (p : Prop) (hp : p) : p := hp
-        2. NEVER simplify the conclusion to a trivial conjunction of the input hypotheses.
-        3. NEVER add new parameters of type `Prop` to replace concrete math objects.
-        4. If you cannot prove an existing theorem, LEAVE IT UNCHANGED (keep its current
-           proof or sorry if it already had one). Do NOT change its type signature.
-        5. New theorems you create may use abstract Prop parameters only if the paper label
-           genuinely refers to an abstract/wrapper statement.
-
-        ## Completion Contract
-        - No sorry / admit / axiom; lake build must pass with zero errors
-        - Must complete all 6 steps; if a theorem is stuck, skip it and continue
-        - Tactic failure: auto-try next; compile error: auto-fix up to 3 rounds
-        - Implementation changes: only in lean4/Omega/
-        - Registration changes: only in IMPLEMENTATION_PLAN.md and theory/
-        - Do NOT refactor or delete existing code
-        - Do NOT weaken or replace existing theorem signatures (see HARD PROHIBITION above)
-        - Do NOT git push
-    """)
+        targets_text += (
+            f"### Target {i}\n"
+            f"- Paper label: {t.get('paper_label', 'unknown')}\n"
+            f"- Lean name: {t.get('lean_name', 'unknown')}\n"
+            f"- File: {t.get('target_file', 'unknown')}\n"
+            f"- Strategy: {t.get('strategy', 'unknown')}\n"
+            f"- Difficulty: {t.get('difficulty', 'unknown')}\n"
+            f"- Lean signature:\n"
+            f"```lean\n"
+            f"{t.get('lean_signature', '-- unknown')}\n"
+            f"```\n\n"
+        )
+    return (
+        _load_prompt("phase_c")
+        .replace("<ROUND_NUM>", str(round_num))
+        .replace("<TARGETS>", targets_text)
+    )
 
 
 def parse_phase_c_output(raw: str) -> PhaseCResult:
