@@ -124,9 +124,12 @@ IS_WINDOWS = sys.platform == "win32"
 # Newer papers = more Codex work needed = Mac.
 
 MACHINE_ASSIGNMENT = {
-    # ── Windows machine (11 papers) ──────────────────────────────
-    # High review count, close to acceptance, need Oracle iterations
-    "win32": [
+    # ── Windows machine (PAUSED as of 2026-04-17) ────────────────
+    # Not processing any papers currently
+    "win32": [],
+    # ── Mac machine (claiming ALL 21 papers, Windows paused) ────
+    "darwin": [
+        # Originally Windows-assigned (11 papers, close to acceptance):
         "2026_circle_dimension_haar_pullback_cauchy_weight_jfa",
         "2026_conservative_extension_chain_state_forcing_apal",
         "2026_conservative_extension_chain_state_forcing_apal_focused",
@@ -138,10 +141,7 @@ MACHINE_ASSIGNMENT = {
         "2026_scan_projection_address_semantics_sigma_nonexpansion_etds",
         "2026_recursive_addressing_prefix_sites_tac",
         "2026_fredholm_witt_cyclic_block_spectral_rigidity_symbolic_zeta",
-    ],
-    # ── Mac machine (10 papers) ──────────────────────────────────
-    # Newer or fewer reviews, need more Codex quality rounds
-    "darwin": [
+        # Originally Mac-assigned (10 papers):
         "2026_cubical_stokes_inverse_boundary_readout_jdsgt",
         "2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints",
         "2026_fold_truncation_defect_stokes_dynamical_systems",
