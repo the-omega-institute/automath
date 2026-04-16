@@ -1,0 +1,5 @@
+| local_label | sibling | chosen_action | one-line rationale |
+| --- | --- | --- | --- |
+| `thm:ratio-main` | `submitted_2026_grg_shell_geometry_from_stationary_detector_thermality_grg` | `A) Cite and defer` | The local theorem is the same homogeneous shared-hardware shell-ratio law as the sibling's Theorem 4.28, with no additional hypothesis or sharper conclusion in this paper. |
+| `cor:spectral-transport-main` | `submitted_2026_grg_shell_geometry_from_stationary_detector_thermality_grg` | `A) Cite and defer` | The local corollary is the same shell-pair spectral-transport identity as the sibling's Corollary 4.29, and here it functions only as imported background for later discussion. |
+| `thm:two-mode-main` | `submitted_2026_grg_shell_geometry_from_stationary_detector_thermality_grg` | `A) Cite and defer` | The local theorem is the same shared-hardware two-mode local inverse criterion as the sibling's Theorem 4.30, without a new class of backgrounds, stronger stability claim, or sharper identifiability statement. |
