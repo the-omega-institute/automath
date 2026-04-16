@@ -258,6 +258,7 @@ import Omega.SPG.BoundaryGodelClarityExponentEquivalence
 import Omega.SPG.BoundaryCylinderGodelizationClarity
 import Omega.SPG.BoundaryExponentialResidualDof
 import Omega.SPG.Hypercube6GodelSquareclass
+import Omega.SPG.CompactBoundaryContinuousDecoderTrivial
 import Omega.SPG.ClarityRiskThresholdDepthLaw
 import Omega.SPG.ScanErrorMeasure
 import Omega.SPG.ErrorThreshold
@@ -824,6 +825,7 @@ import Omega.TypedAddressBiaxialCompletion.CausalPreorder
 import Omega.TypedAddressBiaxialCompletion.ClassicalContraction
 import Omega.TypedAddressBiaxialCompletion.BoundaryAddressCollision
 import Omega.TypedAddressBiaxialCompletion.BoundaryJointSufficiency
+import Omega.TypedAddressBiaxialCompletion.BudgetOrthogonality
 import Omega.TypedAddressBiaxialCompletion.ComovingDefectBound
 import Omega.TypedAddressBiaxialCompletion.ComovingUniformMinimization
 import Omega.TypedAddressBiaxialCompletion.ExplicitLifting
@@ -927,6 +929,7 @@ import Omega.POM.MaryAuxlengthSeeds
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.RadialQuadraticIdentifiability
+import Omega.GU.RadialQuadraticKlInfinite
 import Omega.GU.WeightedSubsetSumGap
 import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure

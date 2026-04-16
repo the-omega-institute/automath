@@ -42,6 +42,9 @@ theorem paper_spg_kirchhoff_fundamental_cut_capacity_hadamard
   have hInv :
       1 / Real.sqrt (∏ t, D.cutCapacity t) ≤ 1 / Real.sqrt D.kirchhoffDeterminant := by
     exact one_div_le_one_div_of_le hsqrt_det_pos hsqrt_le
+  have hInv' :
+      (Real.sqrt (∏ t, D.cutCapacity t))⁻¹ ≤ (Real.sqrt D.kirchhoffDeterminant)⁻¹ := by
+    simpa [one_div] using hInv
   have hMul :
       D.unitBallVolume * (1 / Real.sqrt (∏ t, D.cutCapacity t)) ≤
         D.unitBallVolume * (1 / Real.sqrt D.kirchhoffDeterminant) := by

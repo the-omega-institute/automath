@@ -32,11 +32,21 @@ theorem paper_so10_2torsion_central_collapse_necessity
     h.no_rank3_central_2torsion ∧ h.central_rank_drop_at_least_two := by
   refine ⟨?_, ?_⟩
   · dsimp [So10TwoTorsionCentralCollapseData.no_rank3_central_2torsion]
-    have := h.connectedCentralTwoTorsionRank_le_one
-    omega
+    have hle := h.connectedCentralTwoTorsionRank_le_one
+    set r := h.connectedCentralTwoTorsionRank with hr_eq
+    have hr : r ≤ 1 := by
+      simpa [hr_eq] using hle
+    have hnot : ¬ 3 ≤ r := by
+      interval_cases r <;> decide
+    simpa [hr_eq] using hnot
   · dsimp [So10TwoTorsionCentralCollapseData.central_rank_drop_at_least_two]
     rw [h.auditCentralRank_eq_three]
-    have := h.connectedCentralTwoTorsionRank_le_one
-    omega
+    have hle := h.connectedCentralTwoTorsionRank_le_one
+    set r := h.connectedCentralTwoTorsionRank with hr_eq
+    have hr : r ≤ 1 := by
+      simpa [hr_eq] using hle
+    have hdrop : 3 - r ≥ 2 := by
+      interval_cases r <;> decide
+    simpa [hr_eq] using hdrop
 
 end Omega.GU
