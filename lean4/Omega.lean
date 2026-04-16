@@ -153,6 +153,7 @@ import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
 import Omega.GU.TerminalWindow6PushforwardCommutantMasa
 import Omega.GU.TerminalWindowPushforwardCommutantTorus
 import Omega.GU.TerminalWindowRationalCommutantIdempotentRigidity
+import Omega.GU.TerminalWindow6PushforwardNoAlgebraicModeSelection
 import Omega.GU.TerminalWindow6PushforwardNoNonabelianCompactSymmetry
 import Omega.GU.JetAlignmentUnification
 import Omega.Folding.ModRigidityPeriodicPredicates
@@ -614,6 +615,7 @@ import Omega.Zeta.LucasBarrier
 import Omega.Zeta.NecklaceCounting
 import Omega.Zeta.BooleanDisjointnessZetaLDLT
 import Omega.Zeta.LocalizedQuotientLedger
+import Omega.Zeta.LocalizedIntegersPadicKernelRigidity
 import Omega.Zeta.CyclicEulerProduct
 import Omega.Zeta.FiniteQuotientScalarGodelLoglogOverhead
 import Omega.Zeta.PhaseCombPoleCounting
@@ -823,6 +825,7 @@ import Omega.TypedAddressBiaxialCompletion.Window6TwoSheetCharts
 import Omega.TypedAddressBiaxialCompletion.Window6AuditBudgetSplit
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
+import Omega.TypedAddressBiaxialCompletion.NullExhaustive
 import Omega.TypedAddressBiaxialCompletion.NullFiber
 import Omega.TypedAddressBiaxialCompletion.ReadableFiber
 import Omega.TypedAddressBiaxialCompletion.CompiledReadability
