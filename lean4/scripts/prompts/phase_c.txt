@@ -17,7 +17,11 @@ For each target:
 
 For each NEW file created, add its import to the chapter index file:
   lean4/Omega/<Chapter>.lean  (e.g. lean4/Omega/GU.lean for a file in lean4/Omega/GU/)
-Do NOT edit lean4/Omega.lean — it only imports the chapter index files and never changes.
+
+If the chapter itself is NEW (no lean4/Omega/<Chapter>.lean exists yet):
+  a. Create lean4/Omega/<Chapter>.lean with the single import line.
+  b. Add `import Omega.<Chapter>` to lean4/Omega.lean  ← only allowed in this case.
+  This is the ONLY situation where lean4/Omega.lean may be edited.
 
 ## Step 2: Full compilation
 ```bash
@@ -72,7 +76,8 @@ You MUST NOT weaken or replace them. Specifically:
 - Tactic failure: auto-try next; compile error: auto-fix up to 3 rounds
 - Implementation changes: only in lean4/Omega/
 - Registration changes: only in lean4/Omega/<Chapter>.lean and theory/
-- Do NOT edit lean4/Omega.lean or lean4/IMPLEMENTATION_PLAN.md
+- Do NOT edit lean4/Omega.lean unless adding a brand-new chapter (one `import` line only)
+- Do NOT edit lean4/IMPLEMENTATION_PLAN.md
 - Do NOT refactor or delete existing code
 - Do NOT weaken or replace existing theorem signatures (see HARD PROHIBITION above)
 - Do NOT git push
