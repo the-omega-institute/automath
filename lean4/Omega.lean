@@ -843,6 +843,7 @@ import Omega.Preliminaries.EmpiricalFrequencyBounds
 import Omega.Experiments.MultiscaleResidual
 import Omega.Experiments.MarkovTVSampleComplexity
 import Omega.Experiments.QminLowerboundMarkov
+import Omega.Experiments.KLFromTVQmin
 import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Experiments.TVCertificateHist
 import Omega.StatisticalStability.ResidueClassification
@@ -1194,6 +1195,7 @@ import Omega.POM.CollisionEntropyRate
 import Omega.POM.MicrocanonicalBandBounds
 import Omega.Conclusion.PrimeRegisterFiberCdimDensity
 import Omega.Conclusion.PrimeRegisterKStretchDensityCriterion
+import Omega.Conclusion.PrimeRegisterUltrametricCompletion
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
 import Omega.Conclusion.FibonacciAnomalyBlock
@@ -1234,6 +1236,7 @@ import Omega.POM.DiagonalRateSeparationSpectralResidue
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Zeta.TorsionExactOrderLedgerSeeds
 import Omega.Zeta.LogMHolomorphicVariation
+import Omega.Zeta.RealArcSufficiencyUnitDisk
 import Omega.Zeta.TwistedDeterminantRigidity
 import Omega.Zeta.TwistedDeterminantCumulants
 import Omega.Zeta.CLTSpectral

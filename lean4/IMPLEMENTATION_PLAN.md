@@ -58,6 +58,43 @@ wrapper）；proof 侧执行
 `theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/folding/subsec__Ym-zeta-spectrum.tex`
 （`prop:eta_m_hat_ergodic_limit`）；新增 `\\leanverified` +3，覆盖章节为 POM /
 TypedAddressBiaxialCompletion / Folding，降级项数 0，non-trivial 计数 0）
+**Phase R1061（本轮落地，proof / registration / sync / commit 执行）**：新增
+`paper_kl_from_tv_qmin`
+（对应 `lem:kl-from-tv-qmin`，Experiments；新建 `KLFromTVQmin.lean`，定义 chapter-local
+`KLFromTVQminData`，把 shared-support / `q_{\min}>0` 护栏、`χ²`-by-`ℓ¹` 控制、
+`D_{KL} \le \log(1+\chi^2)` 的对数比较与 `\|p-q\|_1 = 2 D_{TV}` 的改写压成
+log-bound 与 TV-quadratic-bound 的 paper-facing wrapper）；
+新增 `paper_conclusion_prime_register_ultrametric_completion`
+（对应 `thm:conclusion-prime-register-ultrametric-completion`，Conclusion；新建
+`PrimeRegisterUltrametricCompletion.lean`，定义 chapter-local
+`PrimeRegisterUltrametricCompletionData`，把 first-difference prime-register metric、
+longest-common-prefix 控制、Cauchy 列的坐标最终稳定刻画、全乘积极限构造与有限截断上的
+Gödel 兼容延拓压成 ultrametric / completion / extension 三结论 wrapper）；
+新增 `paper_real_arc_sufficiency_unit_disk`
+（对应 `prop:real-arc-sufficiency-unit-disk`，Zeta；新建
+`RealArcSufficiencyUnitDisk.lean`，定义 chapter-local
+`RealArcSufficiencyUnitDiskData`，把 `G=A_\infty+S` 的 holomorphic/meromorphic 分解、
+实弧 `(0,1)` 上的 vanishing、identity-theorem 延拓与 pole removability 打包为
+disk-identity 与 removable-poles 的 wrapper）；proof 侧执行
+`lake build Omega.Experiments.KLFromTVQmin`、
+`lake build Omega.Conclusion.PrimeRegisterUltrametricCompletion`、
+`lake build Omega.Zeta.RealArcSufficiencyUnitDisk` 均通过；随后执行
+`cd lean4 && lake build` 全量构建验证，本轮新增模块未引入新的 Lean error（构建日志仅见既有
+linter warning）；同步阶段执行 `git fetch origin lean4-codex-auto-dev` 与
+`git rebase --autostash origin/lean4-codex-auto-dev`，autostash 自动回放且无冲突；文件：
+`lean4/Omega/Experiments/KLFromTVQmin.lean`、
+`lean4/Omega/Conclusion/PrimeRegisterUltrametricCompletion.lean`、
+`lean4/Omega/Zeta/RealArcSufficiencyUnitDisk.lean`、`lean4/Omega.lean`；Lean theorem 名：
+`paper_kl_from_tv_qmin`、
+`paper_conclusion_prime_register_ultrametric_completion`、
+`paper_real_arc_sufficiency_unit_disk`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/experiments/sec__experiments.tex`
+（`lem:kl-from-tv-qmin`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/conclusion/subsec__conclusion-prime-register-semidirect-godel-geometry.tex`
+（`thm:conclusion-prime-register-ultrametric-completion`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/zeta_finite_part/operator/subsec__operator-zeta-interface.tex`
+（`prop:real-arc-sufficiency-unit-disk`）；新增 `\\leanverified` +3，覆盖章节为
+Experiments / Conclusion / Zeta，降级项数 0，non-trivial 计数 0）
 
 **Phase R1058（本轮落地，proof / registration / sync / commit 执行）**：新增
 `paper_window6_intrinsic_bracket_modp_lift_criterion`
