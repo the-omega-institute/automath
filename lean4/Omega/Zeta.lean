@@ -56,6 +56,7 @@ import Omega.Zeta.FinitePartCyclicLiftMobiusInversion
 import Omega.Zeta.FinitePartCyclicLiftReducedConstantClosed
 import Omega.Zeta.FinitePartCyclicLiftRootUnityFourierSieve
 import Omega.Zeta.FinitePartCyclicLiftSpectrumIdentifiability
+import Omega.Zeta.FinitePartCyclicLiftTorsionProduct
 import Omega.Zeta.FinitePartCyclicLiftTraceSieve
 import Omega.Zeta.FinitePartCyclicLiftZetaTorsionDeterminesSpectrum
 import Omega.Zeta.FinitePartMertensAsymptotic

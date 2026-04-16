@@ -103,6 +103,7 @@ import Omega.POM.S4Recurrence
 import Omega.POM.S5FieldDiscriminantMonogenic
 import Omega.POM.S5GaloisArithmetic
 import Omega.POM.S5TwoSubsetDegree10
+import Omega.POM.SchurTomographyInversePartitionMonomials
 import Omega.POM.SideinfoExactEntropy
 import Omega.POM.StarMomentKernelCompression
 import Omega.POM.SymmetricCompression

@@ -53,6 +53,7 @@ import Omega.CircleDimension.HypercubeDerhamLift
 import Omega.CircleDimension.KernelIntegerTranslateRieszBounds
 import Omega.CircleDimension.KernelRKHSFeatureMap
 import Omega.CircleDimension.LissajousChebyshev
+import Omega.CircleDimension.LocalizationUniversalProperty
 import Omega.CircleDimension.MedianStokesRigidityPotential
 import Omega.CircleDimension.MedianThetaRigidityPrimeRatio
 import Omega.CircleDimension.MinimalAuditCompletion
