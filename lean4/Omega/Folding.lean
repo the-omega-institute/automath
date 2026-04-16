@@ -42,6 +42,7 @@ import Omega.Folding.Entropy
 import Omega.Folding.EntropyRandomResidues
 import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Folding.EpsilonMachineInfiniteMarkovOrder
+import Omega.Folding.EpsilonMachineStationaryFibonacciTail
 import Omega.Folding.EpsilonMachineSynchronizingWord
 import Omega.Folding.EtaMHatErgodicLimit
 import Omega.Folding.ExactMarkovOrderBernoulli

@@ -69,6 +69,7 @@ import Omega.GU.TerminalFoldbin6InformationLossConstants
 import Omega.GU.TerminalFoldbin6PushforwardMarkov
 import Omega.GU.TerminalFoldbin6TailCubeSection
 import Omega.GU.TerminalFoldbin6TwoPointFiberDirectionSpectrum
+import Omega.GU.TerminalGamma6Rigidity
 import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
