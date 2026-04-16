@@ -1,5 +1,6 @@
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.A4TracePrimitiveTwoTerm
+import Omega.POM.AitkenDelta2SquareConvergence
 import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.BoundedPerturbationInvariance
 import Omega.POM.CRTSpatializationPrimeBudget

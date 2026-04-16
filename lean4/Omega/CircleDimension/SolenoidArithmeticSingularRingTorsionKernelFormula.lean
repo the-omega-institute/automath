@@ -1,31 +1,28 @@
+import Mathlib.Data.Nat.Factorization.Basic
 import Mathlib.Tactic
-import Omega.CircleDimension.CircleDim
 
 namespace Omega.CircleDimension
 
-/-- Chapter-local package for the torsion-kernel formula on an `S`-localized solenoid and its
-associated arithmetic singular ring. The fields record the localization input, the fact that the
-solenoid `[m]`-kernel only depends on the `S`-complementary part of `m`, the splitting of the
-arithmetic singular ring into a solenoid factor and a torus factor, and the two kernel-cardinality
-outputs used in the paper. -/
-structure SolenoidArithmeticSingularRingTorsionKernelData where
-  S : Finset ℕ
-  m : ℕ
-  solenoidKernelSeesSComplement : Prop
-  arithmeticSingularRingSplits : Prop
-  sigmaKernelCardinality : Prop
-  ringKernelCardinality : Prop
-  solenoidKernelSeesSComplement_h : solenoidKernelSeesSComplement
-  arithmeticSingularRingSplits_h : arithmeticSingularRingSplits
-  sigmaKernelCardinality_h : sigmaKernelCardinality
-  ringKernelCardinality_h : ringKernelCardinality
+/-- The part of `m` supported away from the finite set `S`: multiply the prime-power
+    contributions of the factorization whose prime is not in `S`. -/
+def sCoprimePart (S : Finset ℕ) (m : ℕ) : ℕ :=
+  ∏ p ∈ m.factorization.support, if p ∈ S then 1 else p ^ m.factorization p
 
-/-- The localized solenoid kernel is controlled by the `S`-complementary part of `m`, and after
-splitting the arithmetic singular ring the kernel cardinalities multiply exactly as in the paper.
+/-- The solenoid-side kernel count only sees the `Sᶜ`-part of the torsion order. -/
+def sigmaKernelCard (S : Finset ℕ) (m : ℕ) : ℕ :=
+  sCoprimePart S m
+
+/-- The arithmetic singular-ring kernel count splits into the solenoid contribution
+    and the free torus factor of rank `|S| - 1`. -/
+def ringKernelCard (S : Finset ℕ) (m : ℕ) : ℕ :=
+  sCoprimePart S m * m ^ (S.card - 1)
+
+/-- Paper-facing wrapper for the localized solenoid / singular-ring torsion-kernel formula.
     thm:cdim-solenoid-arithmetic-singular-ring-torsion-kernel-formula -/
 theorem paper_cdim_solenoid_arithmetic_singular_ring_torsion_kernel_formula
-    (D : SolenoidArithmeticSingularRingTorsionKernelData) :
-    D.sigmaKernelCardinality ∧ D.ringKernelCardinality := by
-  exact ⟨D.sigmaKernelCardinality_h, D.ringKernelCardinality_h⟩
+    (S : Finset ℕ) (m : ℕ) :
+    sigmaKernelCard S m = sCoprimePart S m ∧
+      ringKernelCard S m = sCoprimePart S m * m ^ (S.card - 1) := by
+  constructor <;> rfl
 
 end Omega.CircleDimension
