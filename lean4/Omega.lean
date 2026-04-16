@@ -101,6 +101,7 @@ import Omega.Folding.GaugeAnomalyHankelJordanCertificate
 import Omega.Folding.GaugeAnomalyTauIntClosed
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
 import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
+import Omega.Folding.GaugeAnomalyRootUnitSamplingThreshold
 import Omega.Folding.PhiEquivariant
 import Omega.Folding.PhiSlidingBlockCode
 import Omega.Folding.PhiEquivariantPublication
@@ -150,6 +151,7 @@ import Omega.GU.CyclotomicSpecializationRigidity
 import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
 import Omega.GU.TerminalWindow6PushforwardCommutantMasa
 import Omega.GU.TerminalWindowPushforwardCommutantTorus
+import Omega.GU.TerminalWindowRationalCommutantIdempotentRigidity
 import Omega.GU.TerminalWindow6PushforwardNoNonabelianCompactSymmetry
 import Omega.GU.JetAlignmentUnification
 import Omega.Folding.ModRigidityPeriodicPredicates
@@ -590,6 +592,7 @@ import Omega.Zeta.IntroCyclicReconstruction
 import Omega.Zeta.FinitePartCyclicLiftReducedConstantClosed
 import Omega.Zeta.FinitePartCyclicLiftMobiusInversion
 import Omega.Zeta.FinitePartCyclicLiftDirichletMultipleSum
+import Omega.Zeta.FinitePartCyclicLiftLimsupSpectralGap
 import Omega.Zeta.FinitePartCyclicLiftTraceSieve
 import Omega.Zeta.FinitePartCyclicLiftRootUnityFourierSieve
 import Omega.Zeta.FinitePartSingleQTorsionReconstruction
