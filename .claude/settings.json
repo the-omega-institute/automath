@@ -1,31 +1,3 @@
 {
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "jq -r '.tool_input.command' | python3 -c 'import sys,json,re; cmd=sys.stdin.read().strip(); has_lake=bool(re.search(r\"\\blake\\s+build\\b\",cmd)); m=re.search(r\"\\btimeout\\s+(\\d+)\\s+lake\\s+build\\b\",cmd); print(json.dumps({\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"BLOCKED: lake build must include timeout <= 300, e.g. cd /Users/chronoai/automath/lean4 && timeout 300 lake build\"}} if has_lake and not m else {\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"BLOCKED: lake build timeout must be <= 300 seconds.\"}} if m and int(m.group(1)) > 300 else {\"continue\": True}))'",
-            "timeout": 5,
-            "statusMessage": "Checking lake build timeout..."
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ps -eo pid,etimes,comm 2>/dev/null | awk '$3==\"lean\" && $2>300 {print $1}' | while read -r pid; do kill \"$pid\" 2>/dev/null; done; echo '{\"continue\":true}'",
-            "timeout": 5,
-            "async": true,
-            "statusMessage": "Checking for long-running lean processes..."
-          }
-        ]
-      }
-    ]
-  }
+  "hooks": {}
 }
