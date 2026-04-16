@@ -1,0 +1,308 @@
+\begin{theorem}[基环条件互信息的全局体积熵支配]\label{thm:conclusion-fundamental-cycle-cmi-dominated-by-global-tree-entropy}
+设 \(R\) 为高斯相关矩阵，\(T\) 为任意生成树。定义
+\[
+L_T(R):=
+-\log\det R+\sum_{(i,j)\in T}\log\frac{1}{1-R_{ij}^2}.
+\]
+对任意非树边 \(e=(u,v)\notin T\)，记 \(P_T(u,v)\) 为树上连接 \(u\) 与 \(v\) 的唯一路径，\(S_e:=P_T(u,v)\setminus\{u,v\}\)，并定义基环条件互信息势
+\[
+I_e:=2\,I(X_u;X_v\mid X_{S_e})
+=-\log\bigl(1-\rho_{uv\mid S_e}^2\bigr).
+\]
+则对每个非树边 \(e\notin T\) 都有
+\[
+I_e\le L_T(R).
+\]
+\end{theorem}
+\begin{proof}
+这正是结论 \ref{con:xi-det-entropy-tree-basecycle-cmi-certificate} 的内容。证毕。
+\end{proof}
+
+\begin{corollary}[单条遗漏边的条件相关幅度束缚]\label{cor:conclusion-single-omitted-edge-partial-correlation-budget}
+在定理 \ref{thm:conclusion-fundamental-cycle-cmi-dominated-by-global-tree-entropy} 的设定下，对任意非树边 \(e=(u,v)\notin T\)，都有
+\[
+\rho_{uv\mid S_e}^2\le 1-e^{-L_T(R)}.
+\]
+特别地，
+\[
+|\rho_{uv\mid S_e}|
+\le
+\sqrt{1-e^{-L_T(R)}}
+\le
+\sqrt{L_T(R)}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-fundamental-cycle-cmi-dominated-by-global-tree-entropy}，
+\[
+-\log(1-\rho_{uv\mid S_e}^2)\le L_T(R).
+\]
+指数化并整理即得
+\[
+\rho_{uv\mid S_e}^2\le 1-e^{-L_T(R)}.
+\]
+再用
+\[
+1-e^{-x}\le x\qquad (x\ge 0)
+\]
+即可得到平方根上界。证毕。
+\end{proof}
+
+\begin{corollary}[树近似的统一阈值证书]\label{cor:conclusion-tree-approximation-uniform-threshold-certificate}
+给定阈值 \(\tau\in(0,1)\)。若
+\[
+L_T(R)<-\log(1-\tau^2),
+\]
+则对所有非树边 \(e=(u,v)\notin T\) 都有
+\[
+|\rho_{uv\mid S_e}|<\tau.
+\]
+\end{corollary}
+\begin{proof}
+若存在某条非树边满足 \(|\rho_{uv\mid S_e}|\ge \tau\)，则
+\[
+I_e=-\log(1-\rho_{uv\mid S_e}^2)\ge -\log(1-\tau^2),
+\]
+这与定理 \ref{thm:conclusion-fundamental-cycle-cmi-dominated-by-global-tree-entropy} 矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[链树投影的精确体积亏损公式]\label{thm:conclusion-chain-tree-projection-exact-volume-defect-formula}
+对链树投影 \(R_{\mathrm{MC}}\)，有严格行列式恒等式
+\[
+\det R_{\mathrm{MC}}=\prod_{j=1}^{\kappa-1}\bigl(1-R_{j,j+1}^2\bigr),
+\]
+并且链环熵满足
+\[
+\mathcal L_{\mathrm{chain}}(R)
+=
+-\log\frac{\det R}{\det R_{\mathrm{MC}}}
+=
+-\log\det R+\sum_{j=1}^{\kappa-1}\log\frac{1}{1-R_{j,j+1}^2}.
+\]
+\end{theorem}
+\begin{proof}
+这是结论 \ref{con:xi-det-entropy-markov-volume-ratio} 的直接重述。证毕。
+\end{proof}
+
+\begin{corollary}[固定最近邻数据下的最大体积完成]\label{cor:conclusion-fixed-nearest-neighbor-maximal-volume-completion}
+在固定全部最近邻相关
+\[
+R_{j,j+1}\qquad (1\le j\le \kappa-1)
+\]
+的前提下，任意正定相关矩阵 \(R\) 都满足
+\[
+\det R\le \det R_{\mathrm{MC}}
+=
+\prod_{j=1}^{\kappa-1}\bigl(1-R_{j,j+1}^2\bigr).
+\]
+并且等号成立当且仅当
+\[
+\mathcal L_{\mathrm{chain}}(R)=0,
+\]
+等价地，当且仅当 \(R=R_{\mathrm{MC}}\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-chain-tree-projection-exact-volume-defect-formula}，
+\[
+\mathcal L_{\mathrm{chain}}(R)=-\log\frac{\det R}{\det R_{\mathrm{MC}}}\ge 0,
+\]
+故 \(\det R\le \det R_{\mathrm{MC}}\)。等号与 \(\mathcal L_{\mathrm{chain}}(R)=0\) 显然等价，而
+\[
+\mathcal L_{\mathrm{chain}}(R)=0\iff R=R_{\mathrm{MC}}
+\]
+则由定理 \ref{thm:conclusion-chain-markov-rigidity-fourfold-equivalence} 给出。证毕。
+\end{proof}
+
+\begin{theorem}[链环熵的二阶差分偏离闭式]\label{thm:conclusion-chain-loop-entropy-second-difference-defect-expansion}
+在相邻排序设定下，定义
+\[
+\eta_j:=R_{j-2,j}-R_{j-2,j-1}R_{j-1,j}
+\qquad (3\le j\le \kappa).
+\]
+若整体处于弱相干区，则有一致近似
+\[
+\mathcal L_{\mathrm{chain}}(R)
+=
+\sum_{j=3}^{\kappa}
+\frac{\eta_j^2}
+{(1-R_{j-2,j-1}^2)(1-R_{j-1,j}^2)}
++
+o\!\left(\sum_{j=3}^{\kappa}\eta_j^2\right).
+\]
+\end{theorem}
+\begin{proof}
+这是结论 \ref{con:xi-det-entropy-weak-coherence-chain-q4-law} 的直接表述。证毕。
+\end{proof}
+
+\begin{corollary}[链环熵的最小可见阶在弱相干标度下锁定为四]\label{cor:conclusion-chain-loop-entropy-visible-order-locked-at-four}
+在定理 \ref{thm:conclusion-chain-loop-entropy-second-difference-defect-expansion} 的设定下，若弱相干标度满足
+\[
+\eta_j(\varepsilon)=O(\varepsilon^2)
+\qquad (3\le j\le \kappa),
+\]
+并且至少存在一个 \(j\) 使
+\[
+\eta_j(\varepsilon)\not=o(\varepsilon^2),
+\]
+则
+\[
+\mathcal L_{\mathrm{chain}}(R(\varepsilon))=\Theta(\varepsilon^4).
+\]
+特别地，链环熵不存在二阶或三阶的主导项；其最小可见阶严格锁定为 \(4\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-chain-loop-entropy-second-difference-defect-expansion}，
+\[
+\mathcal L_{\mathrm{chain}}(R(\varepsilon))
+=
+\sum_{j=3}^{\kappa}
+\frac{\eta_j(\varepsilon)^2}
+{(1-R_{j-2,j-1}^2)(1-R_{j-1,j}^2)}
++
+o\!\left(\sum_{j=3}^{\kappa}\eta_j(\varepsilon)^2\right).
+\]
+由假设，
+\[
+\sum_{j=3}^{\kappa}\eta_j(\varepsilon)^2=\Theta(\varepsilon^4),
+\]
+而分母在弱相干区保持 \(1+o(1)\) 的非退化。于是
+\[
+\mathcal L_{\mathrm{chain}}(R(\varepsilon))=\Theta(\varepsilon^4).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[等距弱相干相的每步环熵指数律]\label{thm:conclusion-equispaced-weak-coherence-per-step-loop-entropy-law}
+若取等距深度
+\[
+s_j=s_0+(j-1)\Delta,
+\qquad
+\Delta\to\infty,
+\]
+并令 \(\kappa\) 同时增大，则每步链环熵满足
+\[
+\frac{1}{\kappa}\mathcal L_{\mathrm{chain}}(R)\sim \Delta^4 e^{-2\Delta}.
+\]
+\end{theorem}
+\begin{proof}
+这是结论 \ref{con:xi-det-entropy-equispaced-loop-entropy-scaling} 的直接内容。证毕。
+\end{proof}
+
+\begin{corollary}[有界总环熵强迫至少半对数间距]\label{cor:conclusion-bounded-total-loop-entropy-forces-half-log-spacing}
+在定理 \ref{thm:conclusion-equispaced-weak-coherence-per-step-loop-entropy-law} 的等距弱相干族中，若存在常数 \(C>0\) 使
+\[
+\mathcal L_{\mathrm{chain}}(R)\le C
+\]
+对充分大的 \(\kappa\) 都成立，则必有
+\[
+\Delta \ge \frac12\log \kappa + 2\log\log \kappa + O(1)
+\qquad (\kappa\to\infty).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-equispaced-weak-coherence-per-step-loop-entropy-law}，
+\[
+\mathcal L_{\mathrm{chain}}(R)\sim \kappa \Delta^4 e^{-2\Delta}.
+\]
+若其有界，则
+\[
+\kappa \Delta^4 e^{-2\Delta}\lesssim 1.
+\]
+取对数得
+\[
+2\Delta \ge \log\kappa + 4\log\Delta + O(1).
+\]
+先由此得到
+\[
+\Delta\ge \frac12\log\kappa + O(\log\log\kappa).
+\]
+再代回 \(\log\Delta=\log\log\kappa+O(1)\)，便得到
+\[
+\Delta \ge \frac12\log \kappa + 2\log\log \kappa + O(1).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[次对数间距不可能维持有限体积亏损]\label{cor:conclusion-sublog-spacing-forces-divergent-loop-entropy}
+在定理 \ref{thm:conclusion-equispaced-weak-coherence-per-step-loop-entropy-law} 的等距弱相干族中，若
+\[
+\Delta=o(\log\kappa),
+\]
+则必有
+\[
+\mathcal L_{\mathrm{chain}}(R)\to\infty.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-equispaced-weak-coherence-per-step-loop-entropy-law}，
+\[
+\mathcal L_{\mathrm{chain}}(R)\sim \kappa\Delta^4e^{-2\Delta}.
+\]
+于是
+\[
+\log \mathcal L_{\mathrm{chain}}(R)
+=
+\log\kappa+4\log\Delta-2\Delta+o(1).
+\]
+若 \(\Delta=o(\log\kappa)\)，则
+\[
+\log\kappa-2\Delta\to+\infty,
+\]
+从而右端趋于 \(+\infty\)，故 \(\mathcal L_{\mathrm{chain}}(R)\to\infty\)。证毕。
+\end{proof}
+
+\begin{theorem}[链树投影把局部条件相关统一压入单一标量预算]\label{thm:conclusion-chain-tree-single-scalar-budget-controls-local-partial-correlations}
+定义
+\[
+\mathfrak R_{\max}(R):=
+\max_{3\le j\le \kappa}\bigl|\rho_{j-2,j\mid j-1}\bigr|.
+\]
+则有 exact bound
+\[
+\mathfrak R_{\max}(R)^2\le 1-e^{-\mathcal L_{\mathrm{chain}}(R)}.
+\]
+特别地，
+\[
+\mathfrak R_{\max}(R)\le \sqrt{1-e^{-\mathcal L_{\mathrm{chain}}(R)}}\le \sqrt{\mathcal L_{\mathrm{chain}}(R)}.
+\]
+在小环熵制度下，还可写成预算尺度
+\[
+\sqrt{1-e^{-\mathcal L_{\mathrm{chain}}(R)}}=
+\sqrt{\mathcal L_{\mathrm{chain}}(R)}\,\bigl(1+o(1)\bigr).
+\]
+\end{theorem}
+\begin{proof}
+把推论 \ref{cor:conclusion-single-omitted-edge-partial-correlation-budget} 应用于链树 \(T_{\mathrm{chain}}\) 的局部二跳非树边 \((j-2,j)\)，其对应分离集正是 \(\{j-1\}\)，便得到
+\[
+\rho_{j-2,j\mid j-1}^2\le 1-e^{-\mathcal L_{\mathrm{chain}}(R)}
+\qquad (3\le j\le \kappa).
+\]
+对 \(j\) 取最大值得第一式。第二式由
+\[
+1-e^{-x}\le x
+\qquad (x\ge 0)
+\]
+得到。最后一式只需用
+\[
+1-e^{-x}=x+O(x^2)
+\qquad (x\downarrow 0)
+\]
+并取平方根。证毕。
+\end{proof}
+
+\begin{conjecture}[一般树上的基环显影加法性]\label{conj:conclusion-general-tree-fundamental-cycle-quadratic-visibility}
+对任意生成树 \(T\) 与弱相干高斯族，应存在一组规范的 fundamental-cycle defect 坐标 \(\{\eta_e\}_{e\notin T}\)，使
+\[
+L_T(R)
+=
+\sum_{e\notin T}Q_e(\eta_e)
++
+o\!\left(\sum_{e\notin T}\eta_e^2\right),
+\]
+其中每个 \(Q_e\) 都是正定二次型。特别地：
+\begin{enumerate}
+  \item 最小可见阶仍应锁定为 \(4\)；
+  \item 主导二次型族 \(\{Q_e\}\) 只依赖于树上分离集几何，而不依赖于坐标参数化。
+\end{enumerate}
+链树情形已由定理 \ref{thm:conclusion-chain-loop-entropy-second-difference-defect-expansion} 与定理 \ref{thm:conclusion-equispaced-weak-coherence-per-step-loop-entropy-law} 完全实现；而定理 \ref{thm:conclusion-fundamental-cycle-cmi-dominated-by-global-tree-entropy} 又已表明一般树上的每条非树边代价精确由条件互信息给出并受全局环熵支配。这强烈暗示链树中的“二阶差分平方和”并非特例，而是一般树上基环条件互信息的局部二次化极限。
+\end{conjecture}
