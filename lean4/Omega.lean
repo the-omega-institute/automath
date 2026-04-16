@@ -143,6 +143,8 @@ import Omega.GU.CyclotomicGcdStability
 import Omega.GU.CyclotomicSpecializationFalsifiability
 import Omega.GU.CyclotomicSpecializationRigidity
 import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
+import Omega.GU.TerminalWindow6PushforwardCommutantMasa
+import Omega.GU.TerminalWindow6PushforwardNoNonabelianCompactSymmetry
 import Omega.GU.JetAlignmentUnification
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.OverflowGapRate
