@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (macOS)
 // @namespace    omega-automath
-// @version      4.7
+// @version      4.8
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review — macOS variant with long-prompt extraction support
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -68,7 +68,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v4.7 mac]</b>
+        <b>[Oracle v4.8 mac]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -780,7 +780,7 @@
     }
 
     // ═══ Strategy C: Full-page text minus prompt (absolute fallback) ═══
-    const fullText = (main.innerText || "").trim();
+    // fullText already declared at top of function; just re-check length
     if (fullText.length < 100) return "";
 
     // Try to locate prompt in page text and take everything after it
@@ -1086,7 +1086,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Oracle Bridge v4.7 (macOS) loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`Oracle Bridge v4.8 (macOS) loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
     // Check if WE navigated here (not the user clicking around)
     const phase = getTaskPhase();
