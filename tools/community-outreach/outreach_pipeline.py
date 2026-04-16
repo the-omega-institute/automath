@@ -179,7 +179,7 @@ class RepoState:
             "action": action,
             "score": kwargs.get("score", 0),
             "verdict": kwargs.get("verdict", ""),
-            "detail": str(kwargs.get("detail", ""))[:3000],
+            "detail": str(kwargs.get("detail", ""))[:20000],  # Bug 5 fix: was 3000, too short for findings
         }
         self.action_history.append(entry)
         self.action_history = self.action_history[-30:]
@@ -340,6 +340,31 @@ def ensure_binary(path_or_name: str, label: str) -> str:
     raise RuntimeError(f"{label} CLI not found: {path_or_name}")
 
 
+def _kill_process_tree(pid: int) -> None:
+    """Bug 3 fix: forcefully kill process and all descendants.
+    Codex spawns node + codex binary + children; subprocess.run's kill may miss them."""
+    try:
+        # Try graceful first
+        os.killpg(os.getpgid(pid), 15)  # SIGTERM
+        time.sleep(2)
+        os.killpg(os.getpgid(pid), 9)  # SIGKILL
+    except (ProcessLookupError, OSError):
+        pass
+    # Also kill any orphaned codex exec children of this pid
+    try:
+        children = subprocess.run(
+            ["pgrep", "-P", str(pid)],
+            capture_output=True, text=True, timeout=5,
+        ).stdout.split()
+        for child_pid in children:
+            try:
+                os.kill(int(child_pid), 9)
+            except (ProcessLookupError, ValueError, OSError):
+                pass
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        pass
+
+
 def codex_exec(
     prompt: str,
     work_dir: Path,
@@ -370,35 +395,56 @@ def codex_exec(
 
     use_shell = IS_WINDOWS and str(codex_bin).endswith(".cmd")
     start = time.monotonic()
-    result: Optional[subprocess.CompletedProcess[str]] = None
+
+    # Bug 3 fix: use Popen + manual wait so we can force-kill the process tree on timeout.
+    # subprocess.run's timeout doesn't reliably kill node/codex children on macOS.
     try:
-        result = subprocess.run(
+        proc = subprocess.Popen(
             cmd,
-            input=prompt,
-            capture_output=True,
-            text=True,
-            timeout=timeout + 30,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             cwd=str(work_dir),
             shell=use_shell,
+            text=True,
             encoding="utf-8",
             errors="replace",
+            start_new_session=True,  # so we can killpg the whole tree
         )
+    except OSError as exc:
+        logger.error("Codex CLI failed to start: %s", exc)
+        return "(start-failed)"
+
+    try:
+        stdout, stderr = proc.communicate(input=prompt, timeout=timeout + 30)
+        rc = proc.returncode
     except subprocess.TimeoutExpired:
-        logger.warning("Codex CLI timed out after %ss", timeout)
+        logger.warning("Codex CLI timed out after %ss — force killing process tree", timeout)
+        _kill_process_tree(proc.pid)
+        try:
+            stdout, stderr = proc.communicate(timeout=10)
+        except subprocess.TimeoutExpired:
+            _kill_process_tree(proc.pid)
+            stdout, stderr = "", ""
+        rc = -1
+        elapsed = time.monotonic() - start
+        logger.info("Codex exec: %.1fs (rc=timeout)", elapsed)
         return "(timeout)"
     finally:
         elapsed = time.monotonic() - start
-        rc = result.returncode if result else "?"
-        logger.info("Codex exec: %.1fs (rc=%s)", elapsed, rc)
+        if proc.poll() is None:
+            logger.info("Codex exec: %.1fs (rc=?)", elapsed)
+        else:
+            logger.info("Codex exec: %.1fs (rc=%s)", elapsed, proc.returncode)
 
     try:
         if os.path.exists(out_file) and os.path.getsize(out_file) > 0:
             return Path(out_file).read_text(encoding="utf-8")
-        if result and result.stdout:
-            return result.stdout
-        if result and result.stderr:
-            logger.warning("Codex stderr: %s", result.stderr[:400])
-            return result.stderr
+        if stdout:
+            return stdout
+        if stderr:
+            logger.warning("Codex stderr: %s", stderr[:400])
+            return stderr
         return ""
     finally:
         with contextlib.suppress(OSError):
@@ -541,6 +587,59 @@ def coerce_score(value: Any, default: int = 0) -> int:
     except Exception:
         return default
     return max(0, min(10, score))
+
+
+_AUTOMATH_WHITELIST_CACHE: Optional[list[str]] = None
+
+
+def load_automath_theorem_whitelist() -> list[str]:
+    """Bug 4 fix: load real Automath theorem names from discovery_report.json
+    so Codex must reference actual theorems, not fabricate.
+
+    Returns a list of strings like 'Omega.Folding.Entropy:topological_entropy_eq_log_phi'
+    covering the most referenced theorems (by module)."""
+    global _AUTOMATH_WHITELIST_CACHE
+    if _AUTOMATH_WHITELIST_CACHE is not None:
+        return _AUTOMATH_WHITELIST_CACHE
+
+    report_path = REPO_ROOT / "discovery" / "discovery_report.json"
+    if not report_path.exists():
+        logger.warning("discovery_report.json not found at %s", report_path)
+        _AUTOMATH_WHITELIST_CACHE = []
+        return []
+
+    try:
+        with report_path.open(encoding="utf-8") as fh:
+            data = json.load(fh)
+    except Exception as exc:
+        logger.warning("Failed to load discovery_report.json: %s", exc)
+        _AUTOMATH_WHITELIST_CACHE = []
+        return []
+
+    discoveries = data.get("discoveries", [])
+    # Sample by module to get broad coverage (10-15 per module)
+    by_module: dict[str, list[str]] = {}
+    for d in discoveries:
+        mod = d.get("lean_module", "").split(".")
+        if len(mod) < 2:
+            continue
+        module_name = mod[1]  # e.g., "Folding"
+        name = d.get("lean_theorem", "")
+        if not name:
+            continue
+        ref = f"{d.get('lean_file', '')}:{d.get('line_number', '')} {name}"
+        by_module.setdefault(module_name, []).append(ref)
+
+    # Take top theorems per module (sorted by name for determinism)
+    whitelist: list[str] = []
+    for module, refs in sorted(by_module.items()):
+        refs_sorted = sorted(set(refs))[:10]  # 10 per module max
+        whitelist.extend(refs_sorted)
+
+    _AUTOMATH_WHITELIST_CACHE = whitelist
+    logger.info("Loaded Automath theorem whitelist: %d refs across %d modules",
+                len(whitelist), len(by_module))
+    return whitelist
 
 
 def valid_repo_slug(repo: str) -> bool:
@@ -988,7 +1087,40 @@ def build_stage_b1_prompt(repo: str, inventory: dict[str, Any]) -> str:
     )
 
 
-def build_stage_b2_prompt(repo: str, b1_data: dict[str, Any]) -> str:
+def build_stage_b2_prompt(
+    repo: str,
+    b1_data: dict[str, Any],
+    previous_rounds: Optional[list[dict[str, Any]]] = None,
+    automath_theorem_whitelist: Optional[list[str]] = None,
+) -> str:
+    """Bug 1 fix: accept previous_rounds feedback for iterative improvement.
+    Bug 4 fix: accept automath_theorem_whitelist to ground findings in real theorems."""
+    feedback_section = ""
+    if previous_rounds:
+        feedback_parts = []
+        for i, prev in enumerate(previous_rounds, 1):
+            feedback_parts.append(
+                f"Round {i} attempt (FAILED, do NOT repeat these findings):\n"
+                f"  Codex self-score: {prev.get('codex_score', 'N/A')}\n"
+                f"  Claude review score: {prev.get('claude_score', 'N/A')}\n"
+                f"  Claude feedback: {prev.get('claude_notes', 'N/A')}\n"
+                f"  Previous findings summary: {json.dumps(prev.get('findings_summary', []), ensure_ascii=False)[:1500]}"
+            )
+        feedback_section = (
+            "\n\nPREVIOUS ROUNDS FEEDBACK (learn from these failures):\n"
+            + "\n\n".join(feedback_parts)
+            + "\n\nCRITICAL: Do not repeat the same angle. Find DIFFERENT mathematical "
+            "connections. Address the specific issues raised in Claude's feedback."
+        )
+
+    whitelist_section = ""
+    if automath_theorem_whitelist:
+        whitelist_section = (
+            "\n\nAUTOMATH THEOREM WHITELIST (findings MUST reference these real theorems, "
+            "do not fabricate theorem names):\n"
+            + "\n".join(f"  - {t}" for t in automath_theorem_whitelist[:80])
+        )
+
     return textwrap.dedent(
         f"""\
         You are Stage B2 of a community outreach pipeline.
@@ -998,10 +1130,20 @@ def build_stage_b2_prompt(repo: str, b1_data: dict[str, Any]) -> str:
         Forbidden paths: {", ".join(FORBIDDEN_PATH_PATTERNS)}
 
         Stage B1 output:
-        {json.dumps(b1_data, indent=2, ensure_ascii=False)}
+        {json.dumps(b1_data, indent=2, ensure_ascii=False)}{feedback_section}{whitelist_section}
 
         Research standard (must follow verbatim):
         {RESEARCH_STANDARD_ZH}
+
+        HARD CONSTRAINTS:
+        1. Every `automath_refs` entry MUST point to a real file:line in the Automath repo.
+           Do NOT invent paths. Verify the file exists before citing it.
+        2. Theorem names in `connection` and `statement` MUST match actual Automath
+           Lean 4 theorem names (use the whitelist above if provided, or grep the repo).
+        3. Do NOT invent fictional mathematical objects like "Claudes cycle dynamics" or
+           any named entity not present in the target repo or Automath.
+        4. If you cannot find a substantive mathematical connection, return `"findings": []`
+           with `"stop_reason": "no genuine connection found"` — do NOT fabricate.
 
         Return JSON only:
         {{
@@ -1128,12 +1270,19 @@ def run_stage_b(
     if state.stage not in {"B", "NEW"}:
         return state
 
+    # Bug 4 fix: build real Automath theorem whitelist for grounding
+    automath_theorem_whitelist = load_automath_theorem_whitelist()
+
+    # Bug 1 fix: accumulate previous rounds' feedback to pass to next round
+    previous_rounds_feedback: list[dict[str, Any]] = []
+
     for round_num in range(state.round + 1, MAX_RESEARCH_ROUNDS + 1):
         state.stage = "B"
         state.round = round_num
         state.timestamps.setdefault("stage_b_started_at", iso_now())
         save_state(state)
-        logger.info("[%s] Stage B round %d", state.repo, round_num)
+        logger.info("[%s] Stage B round %d (feedback_from=%d)",
+                    state.repo, round_num, len(previous_rounds_feedback))
 
         if dry_run:
             b1_data = dry_run_b1(state.repo, inventory)
@@ -1154,7 +1303,11 @@ def run_stage_b(
                 b1_data = dry_run_b1(state.repo, inventory)
 
             b2_raw = codex_exec(
-                build_stage_b2_prompt(state.repo, b1_data),
+                build_stage_b2_prompt(
+                    state.repo, b1_data,
+                    previous_rounds=previous_rounds_feedback,
+                    automath_theorem_whitelist=automath_theorem_whitelist,
+                ),
                 work_dir=REPO_ROOT,
                 timeout=1800,
                 model=model,
@@ -1184,14 +1337,43 @@ def run_stage_b(
             parsed_b4 = parse_json_from_output(b4_raw)
             b4_data = parsed_b4 if isinstance(parsed_b4, dict) else {}
 
-        codex_score = coerce_score(b3_data.get("overall_score"), max(6, len(findings) + 5))
-        claude_score = coerce_score(b4_data.get("overall_score"), codex_score)
-        final_score = min(codex_score, claude_score)
+        # Bug 2 fix: fallback score = 0 (not 10) when Codex fails.
+        # If B3 didn't return a valid score, trust Claude's verdict alone.
+        codex_score = coerce_score(b3_data.get("overall_score"), 0)
+        claude_score = coerce_score(b4_data.get("overall_score"), 0)
+        # If both are 0 (both failed), round is invalid; treat as low score
+        if codex_score == 0 and claude_score == 0:
+            final_score = 0
+        elif codex_score == 0:
+            final_score = claude_score  # trust Claude
+        elif claude_score == 0:
+            final_score = codex_score  # trust Codex (rare; claude usually works)
+        else:
+            final_score = min(codex_score, claude_score)
 
         state.findings = findings
         state.scores.setdefault("codex", []).append(codex_score)
         state.scores.setdefault("claude", []).append(claude_score)
         state.scores.setdefault("final", []).append(final_score)
+
+        # Bug 1 fix: capture this round's feedback for next round
+        previous_rounds_feedback.append({
+            "round": round_num,
+            "codex_score": codex_score,
+            "claude_score": claude_score,
+            "claude_notes": str(b4_data.get("notes", ""))[:1000],
+            "codex_notes": str(b3_data.get("notes", ""))[:500],
+            "findings_summary": [
+                {
+                    "title": f.get("title", "")[:120],
+                    "type": f.get("type", ""),
+                    "status": f.get("status", ""),
+                    "connection": str(f.get("connection", ""))[:200],
+                }
+                for f in findings[:5]
+            ],
+        })
+
         state.log_event(
             "B",
             "research round completed",
@@ -1201,6 +1383,7 @@ def run_stage_b(
                 {
                     "codex_score": codex_score,
                     "claude_score": claude_score,
+                    "claude_notes": str(b4_data.get("notes", ""))[:500],
                     "findings": findings[:3],
                 },
                 ensure_ascii=False,
