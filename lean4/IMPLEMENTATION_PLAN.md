@@ -22,6 +22,47 @@
 
 **远程分支并行记录（merge 前）**：以下 round 编号仅在 `origin/lean4-codex-auto-dev` 内部有序。
 
+**Phase R1045（本轮落地，proof / sync / registration / commit 执行）**：新增
+`paper_cdim_comoving_horizon_scan_first_layer_extraction`
+（对应 `thm:cdim-comoving-horizon-scan-first-layer-extraction`，CircleDimension；新建
+`ComovingHorizonScanFirstLayerExtraction.lean`，定义 chapter-local
+`ComovingHorizonScanFirstLayerExtractionData`，复用 typed-address 的
+`ComovingFourierClosedData` 包装读出 Fourier 闭式、有限指数谱与区间可识别性，再把按深度分组、
+提出最浅层指数与下一深度 gap 控尾的数据组装为首层渐近分离与首层恢复的 theorem-facing
+wrapper）；新增 `paper_typed_address_biaxial_completion_comoving_fourier_closed`
+（对应 `thm:typed-address-biaxial-completion-comoving-fourier-closed`，
+TypedAddressBiaxialCompletion；新建 `ComovingFourierClosed.lean`，定义 chapter-local
+`ComovingFourierClosedData`，把 Lorentz-profile 模型、显式 Fourier 公式、正半轴有限指数谱重打包
+与开区间唯一性原则压成论文接口包装）；新增
+`paper_bdry_orientation_jumpclass_fiberproduct_multiplicativity`
+（对应 `prop:bdry-orientation-jumpclass-fiberproduct-multiplicativity`，GU；新建
+`BdryOrientationJumpclassFiberproductMultiplicativity.lean`，定义 chapter-local
+`BdryOrientationJumpclassFiberproductMultiplicativityData`，把 determinant realization、
+jumpclass 与第一 Stiefel--Whitney 类识别、tensor-product determinant formula 与 mod-2 parity
+reduction 组装成 jumpclass 乘法律及两个偶度特化结论）；同步阶段执行
+`git stash push --include-untracked -m 'R1045-pre-proof-rebase' -- lean4/Omega lean4/Omega.lean`、
+`git fetch origin lean4-codex-auto-dev`、`git rebase origin/lean4-codex-auto-dev` 与
+`git stash pop`，当前分支已与远端基线对齐且无需冲突解决；proof 侧执行
+`lake build Omega.TypedAddressBiaxialCompletion.ComovingFourierClosed`、
+`lake build Omega.CircleDimension.ComovingHorizonScanFirstLayerExtraction`、
+`lake build Omega.GU.BdryOrientationJumpclassFiberproductMultiplicativity` 均通过；按要求执行
+`cd lean4 && lake build`，全量构建通过；文件：
+`lean4/Omega/TypedAddressBiaxialCompletion/ComovingFourierClosed.lean`、
+`lean4/Omega/CircleDimension/ComovingHorizonScanFirstLayerExtraction.lean`、
+`lean4/Omega/GU/BdryOrientationJumpclassFiberproductMultiplicativity.lean`、
+`lean4/Omega.lean`；Lean theorem 名：
+`paper_typed_address_biaxial_completion_comoving_fourier_closed`、
+`paper_cdim_comoving_horizon_scan_first_layer_extraction`、
+`paper_bdry_orientation_jumpclass_fiberproduct_multiplicativity`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/typed_address_biaxial_completion/subsec__typed-address-biaxial-completion-comoving-tomography.tex`
+（`thm:typed-address-biaxial-completion-comoving-fourier-closed`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/circle_dimension_phase_gate/subsec__circle-dimension-phase-gate-comoving-horizon-scan-tomography.tex`
+（`thm:cdim-comoving-horizon-scan-first-layer-extraction`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/group_unification/parts/thm__window6-bdry-orientation-parity-functor.tex`
+（`prop:bdry-orientation-jumpclass-fiberproduct-multiplicativity`）；新增
+`\\leanverified` +3，覆盖章节为 TypedAddressBiaxialCompletion / CircleDimension / GU，
+降级项数 0，non-trivial 计数 0）
+
 **Phase R1038（本轮落地，proof / sync / registration / commit 执行）**：新增
 `paper_cdim_defect_measure_recursive_layer_peeling`
 （对应 `thm:cdim-defect-measure-recursive-layer-peeling`，CircleDimension；新建

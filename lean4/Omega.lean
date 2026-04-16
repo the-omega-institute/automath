@@ -862,6 +862,7 @@ import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
 import Omega.TypedAddressBiaxialCompletion.ComovingPronyThreshold
 import Omega.TypedAddressBiaxialCompletion.ComovingHankel
+import Omega.TypedAddressBiaxialCompletion.ComovingFourierClosed
 import Omega.TypedAddressBiaxialCompletion.ComovingLayerPeeling
 import Omega.TypedAddressBiaxialCompletion.VisiblePhaseLift
 import Omega.TypedAddressBiaxialCompletion.OffsliceDichotomy
@@ -1216,6 +1217,8 @@ import Omega.Zeta.RhoGapM12
 import Omega.Zeta.ComovingEnergyDeltaBound
 import Omega.Zeta.HankelDeterminantalRadicalEqRigidity
 import Omega.Zeta.HankelFirstBlockDeterminantDiscriminantWeight
+import Omega.CircleDimension.ComovingHorizonScanFirstLayerExtraction
 import Omega.Conclusion.PrimorialMixedRadixAffine
 import Omega.CircleDimension.DefectMeasureRecursiveLayerPeeling
+import Omega.GU.BdryOrientationJumpclassFiberproductMultiplicativity
 import Omega.GU.BdryOrientationIteratedFiberproductParity
