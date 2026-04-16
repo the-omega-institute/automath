@@ -1,3 +1,4 @@
 import Omega.SyncKernelWeighted.RealInput40ResetRegenerationConstants
+import Omega.SyncKernelWeighted.RealInput40ResetRegenerationTail
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.SyncKernelWeighted.WittFrobeniusIteratedDescent

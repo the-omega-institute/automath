@@ -97,6 +97,7 @@ import Omega.CircleDimension.PrimeTruncation
 import Omega.CircleDimension.RadiusBlindspotJointDiscreteBudgetOrthogonal
 import Omega.CircleDimension.RankonePhasePrimeFiber
 import Omega.CircleDimension.ReadableTimeWordOverlapPD
+import Omega.CircleDimension.DiscreteUnitaryEvolution
 import Omega.CircleDimension.RegisterCircleModpFormula
 import Omega.CircleDimension.ResidualCircleDim
 import Omega.CircleDimension.ResidualCircleDimLaws
