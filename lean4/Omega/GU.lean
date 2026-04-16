@@ -119,6 +119,7 @@ import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
 import Omega.GU.Window6ChiralityAnchorMinimal
 import Omega.GU.Window6IntrinsicBracketModpLiftCriterion
 import Omega.GU.Window6KirchhoffGreenPadicLiftStability
+import Omega.GU.Window6LieEnvelopeExistenceUniqueness
 import Omega.GU.Window6ReducedLaplacianGreenSimplePole
 import Omega.GU.Window6LabeledSphericalCubatureStrengthFive
 import Omega.GU.Window6LabeledSphericalDegree6HarmonicDefect
