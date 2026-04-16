@@ -22,6 +22,7 @@ import Omega.EA.InternalProductAddsValues
 import Omega.EA.JoukowskyEllipse
 import Omega.EA.MonoidQuotientIsN
 import Omega.EA.MulNoNewPrimitive
+import Omega.EA.OnlineDelayFoldSyncMealyMinimality
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.ParallelAdditionU1Degeneracy
 import Omega.EA.PrimeLedger

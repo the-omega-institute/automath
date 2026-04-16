@@ -98,6 +98,7 @@ import Omega.Folding.LocalWeightRigidity
 import Omega.Folding.LocalWeightRigidityFibonacci
 import Omega.Folding.LocalWeightRigidityPublication
 import Omega.Folding.MaxFiber
+import Omega.Folding.MaxFiberFromSecondMoment
 import Omega.Folding.MaxFiberHigh
 import Omega.Folding.MaxFiberTwoStep
 import Omega.Folding.MetallicBinetClosedForm

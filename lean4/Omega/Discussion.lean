@@ -4,3 +4,4 @@ import Omega.Discussion.HodgeStokesVarianceRigidity
 import Omega.Discussion.HorizonMeasureFold6Pushforward
 import Omega.Discussion.HypercubePotentialCurvatureControlledStrictification
 import Omega.Discussion.HypercubeStokesFourierBinomial
+import Omega.Discussion.SquierCurvatureHolonomyStokes
