@@ -139,6 +139,7 @@ import Omega.Zeta.SyncCyclotomicDegreeLawPublication
 import Omega.Zeta.SyncKernelMixingRate
 import Omega.Zeta.SyncKernelPalindrome
 import Omega.Zeta.SyncKernelSpectrum
+import Omega.Zeta.SyncRhoGapM8Diffusive
 import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Zeta.SyncRhoM2Publication
 import Omega.Zeta.TorsionExactOrderLedgerSeeds
