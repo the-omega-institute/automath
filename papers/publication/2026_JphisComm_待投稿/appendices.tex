@@ -174,7 +174,7 @@ h_{k+1}-h_k = \frac{\kappa_{\mathrm r}\Gamma(p-c)^2p^kc^k}{(\kappa_{\mathrm r}p^
 since all factors in the numerator and denominator are strictly positive for $p\neq c$ (i.e.\ $\Gamma\neq\kappa_{\mathrm r}$). Strict monotonicity excludes the possibility that the visible process is an $r$-step Markov chain for any finite $r$: if it were, $h_k$ would eventually be constant.
 \end{proof}
 
-\subsection{Covariance formula and 1-dependence}
+\subsection{Covariance formula, exact 1-dependence, and edge cases}
 
 \begin{proof}[Proof of \cref{lem:stationary-main}]
 The aggregate hidden-state matrix is
@@ -242,7 +242,13 @@ The bounds $a<\rho<1-p$ are given by \cref{lem:stationary-main}. Hence $\operato
 \end{proof}
 
 \begin{proof}[Proof of exact $1$-dependence]
-At the critical line~\eqref{eq:gamma-c-main}, $\lambda=p-b=0$, so $P=\mathbf{1}\pi$ (rank one), and hence $P^\ell=P$ for every $\ell\ge1$. Let $u$ and $v$ be visible words, with corresponding output-labelled kernel products $T_u$ and $T_v$. If the words are separated by at least one sampling step, then for some $\ell\ge1$ their joint cylinder probability is
+At the critical line~\eqref{eq:gamma-c-main}, $\lambda=p-b=0$, so $P=\mathbf{1}\pi$ (rank one), and hence $P^\ell=P$ for every $\ell\ge1$. Write $A_i^j=(A_i,\dots,A_j)$ and let $u=u_0\cdots u_r$ and $v=v_0\cdots v_s$ be visible words, with corresponding output-labelled kernel products
+\[
+T_u=T_{u_0}\cdots T_{u_r},
+\qquad
+T_v=T_{v_0}\cdots T_{v_s}.
+\]
+If the two words are separated by at least one sampling step, then for some $\ell\ge1$ their joint cylinder probability is
 \[
 \pi\,T_u\,P^\ell\,T_v\,\mathbf{1}.
 \]
@@ -255,7 +261,33 @@ Using $P^\ell=P=\mathbf{1}\pi$ gives
 (\pi\,T_u\,\mathbf{1})(\pi\,T_v\,\mathbf{1}),
 \]
 which is the product of the two marginal cylinder probabilities. By linearity, any events $B\in\sigma(A_i:i\le m)$ and $C\in\sigma(A_j:j\ge m+2)$ factorize in the same way, so the process is exact $1$-dependent.
+
+Note that the output is not a deterministic function of the hidden-state pair $(H_n,H_{n+1})$: both $T_0$ and $T_1$ have non-zero $(D,D)$ entries, so the same hidden transition $(D,D)$ can produce either visible outcome. The kernel argument above avoids that issue by working directly with output-labelled cylinders.
 \end{proof}
+
+\begin{remark}[Equal-rate limit and Lambert $W$ representation of $\Gamma_c$]\label{rem:edge-cases}
+Proposition~\ref{prop:recovery-main} is stated for $\kappa_{\mathrm r}\neq\Gamma$. In the equal-rate limit $\kappa_{\mathrm r}\to\Gamma$, the expression~\eqref{eq:gap-closed-main} is a $0/0$ form. Applying l'H\^opital's rule in $\kappa_{\mathrm r}$ gives
+\[
+g_k\big|_{\kappa_{\mathrm r}=\Gamma}
+=
+p^k\bigl[(1-p)+\Gamma\Delta\tau\bigl(k(1-p)-p\bigr)\bigr],
+\]
+and the formulas for $a$, $b$, and $\lambda$ extend continuously in the same way. The hazard remains strictly increasing by continuity of the positivity argument in \cref{app:derivations}.
+
+The critical rate $\Gamma_c$ is defined implicitly by~\eqref{eq:gamma-c-main}. Setting $s=\kappa_{\mathrm r}\Delta\tau$ and $x=\Gamma_c/\kappa_{\mathrm r}$, one rewrites that equation as $xe^{-sx}=e^{-s}$. With $u=-sx$, this becomes $ue^u=-se^{-s}$, so
+\begin{equation}\label{eq:lambert-Gc}
+\frac{\Gamma_c}{\kappa_{\mathrm r}}
+=
+-\frac{W_k(-se^{-s})}{s},
+\qquad
+k=
+\begin{cases}
+-1 & \text{if } 0<s<1, \\
+ 0 & \text{if } s>1,
+\end{cases}
+\end{equation}
+with $\Gamma_c=\kappa_{\mathrm r}$ at $s=1$. For $s<1$ the non-trivial root lies on the $W_{-1}$ branch, whereas for $s>1$ it lies on the $W_0$ branch.
+\end{remark}
 
 \subsection{Spectral density and Fano factor}
 
