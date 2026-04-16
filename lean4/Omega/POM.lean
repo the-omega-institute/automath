@@ -98,6 +98,7 @@ import Omega.POM.TensorFoldResultantRecursion
 import Omega.POM.ThetaGodelizationPrimeValuationIsometry
 import Omega.POM.ThickFiberEnvelope
 import Omega.POM.ToggleOrder
+import Omega.POM.ToggleScanLinearMaxOrbit
 import Omega.POM.ToggleScanCycleGhostMultiplicativity
 import Omega.POM.TopGapLimitConstants
 import Omega.POM.ValMonotoneBooleanNand

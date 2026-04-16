@@ -47,6 +47,7 @@ import Omega.Conclusion.KernelChainRule
 import Omega.Conclusion.KrylovLowrankRigidity
 import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.MinLatchesLogStates
+import Omega.Conclusion.MultiplicativeTropicalExactnessTriad
 import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.NoUniversalTwoAxisAuditCompletion
 import Omega.Conclusion.NonexposedPhaseIntegerDomination
