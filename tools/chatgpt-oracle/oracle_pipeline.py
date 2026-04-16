@@ -2410,6 +2410,10 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         else:
             # Oracle userscript has ≥40% extraction-failure rate historically.
             # Retry until we get a substantive response or exhaust attempts.
+            # Failed attempts are archived to oracle/bad/ for debugging but
+            # never enter the live done/ pool.
+            bad_dir = SCRIPT_DIR / "oracle" / "bad"
+            bad_dir.mkdir(parents=True, exist_ok=True)
             response = ""
             for attempt in range(1, 4):
                 pdf_path = Path(state.pdf_path) if state.pdf_path else None
@@ -2420,17 +2424,22 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     state.error = "Oracle submit failed"
                     return False
                 save_state(state)
-                response = oracle_poll(attempt_task, timeout=oracle_timeout)
-                if is_oracle_response_valid(response):
+                raw = oracle_poll(attempt_task, timeout=oracle_timeout)
+                if is_oracle_response_valid(raw):
+                    response = raw
                     break
+                # Archive the garbage response for audit
+                if raw:
+                    (bad_dir / f"{attempt_task}.md").write_text(
+                        raw, encoding="utf-8")
                 logger.warning(f"{tag} Oracle attempt {attempt} returned "
-                               f"garbage ({len(response)} chars), retrying")
-                response = ""
+                               f"garbage ({len(raw)} chars), archived to "
+                               f"oracle/bad/{attempt_task}.md, retrying")
             if not response:
                 state.error = f"Oracle failed B{rnd}: 3 garbage attempts"
                 return False
 
-        # Save oracle response (only substantive ones)
+        # Save oracle response (only substantive ones reach done/)
         done_dir = SCRIPT_DIR / "oracle" / "done"
         done_dir.mkdir(parents=True, exist_ok=True)
         (done_dir / f"{task_id}.md").write_text(response, encoding="utf-8")
