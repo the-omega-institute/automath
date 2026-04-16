@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (macOS)
 // @namespace    omega-automath
-// @version      4.8
+// @version      4.9
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review — macOS variant with long-prompt extraction support
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -68,7 +68,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v4.8 mac]</b>
+        <b>[Oracle v4.9 mac]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -691,11 +691,87 @@
     }).join("\n").trim();
   }
 
+  // Extract innerText from an element, but replace math renderings
+  // (KaTeX, MathJax, MathML) with their LaTeX source. Without this,
+  // rendered formulas get shattered into one-glyph-per-line garbage.
+  function extractTextWithMath(el) {
+    if (!el) return "";
+    const clone = el.cloneNode(true);
+
+    // Strategy 1: KaTeX — <annotation encoding="application/x-tex">LaTeX</annotation>
+    // The .katex-mathml wrapper contains the annotation; replace the
+    // enclosing .katex span with the LaTeX source.
+    for (const ann of Array.from(
+        clone.querySelectorAll('annotation[encoding="application/x-tex"]'))) {
+      const latex = (ann.textContent || "").trim();
+      if (!latex) continue;
+      // Find the outer .katex container (display or inline)
+      const katexOuter = ann.closest(".katex-display, .katex") || ann.parentElement;
+      if (katexOuter) {
+        const isDisplay = katexOuter.classList.contains("katex-display") ||
+                          (katexOuter.parentElement &&
+                           katexOuter.parentElement.classList.contains("katex-display"));
+        const wrapped = isDisplay ? `\n$$${latex}$$\n` : ` $${latex}$ `;
+        katexOuter.replaceWith(document.createTextNode(wrapped));
+      }
+    }
+
+    // Strategy 2: MathJax — <mjx-container> has child <math> with
+    // semantics > annotation[encoding="TeX"] OR mjx-assistive-mml
+    for (const mjx of Array.from(clone.querySelectorAll("mjx-container"))) {
+      let latex = "";
+      // 2a: look for MathML annotation
+      const mmlAnn = mjx.querySelector('annotation[encoding*="TeX"]');
+      if (mmlAnn) latex = (mmlAnn.textContent || "").trim();
+      // 2b: aria-label fallback
+      if (!latex) latex = mjx.getAttribute("aria-label") || "";
+      // 2c: data attribute fallback
+      if (!latex) latex = mjx.getAttribute("data-latex") || "";
+      if (latex) {
+        const isDisplay = mjx.getAttribute("display") === "true" ||
+                          mjx.getAttribute("data-display") === "block";
+        const wrapped = isDisplay ? `\n$$${latex}$$\n` : ` $${latex}$ `;
+        mjx.replaceWith(document.createTextNode(wrapped));
+      }
+    }
+
+    // Strategy 3: Generic [data-math-tex] or [data-tex] (some ChatGPT versions)
+    for (const mathEl of Array.from(
+        clone.querySelectorAll("[data-math-tex], [data-tex], [data-latex]"))) {
+      const latex = mathEl.getAttribute("data-math-tex") ||
+                    mathEl.getAttribute("data-tex") ||
+                    mathEl.getAttribute("data-latex") || "";
+      if (latex) {
+        const isBlock = mathEl.tagName.toLowerCase() === "div" ||
+                        mathEl.getAttribute("display") === "block";
+        const wrapped = isBlock ? `\n$$${latex}$$\n` : ` $${latex}$ `;
+        mathEl.replaceWith(document.createTextNode(wrapped));
+      }
+    }
+
+    // Strategy 4: Bare MathML (no KaTeX/MathJax wrapper) — fall back to
+    // dropping rendered spans and using the MathML serialization if present
+    for (const math of Array.from(clone.querySelectorAll("math"))) {
+      // If already replaced above via annotation, skip
+      if (!math.isConnected) continue;
+      const alttext = math.getAttribute("alttext") || "";
+      if (alttext) {
+        math.replaceWith(document.createTextNode(` $${alttext}$ `));
+      }
+      // Otherwise leave the math element alone — innerText will use its
+      // text content, which at least avoids the glyph-per-line issue
+      // caused by KaTeX/MathJax rendered spans.
+    }
+
+    return (clone.innerText || "").trim();
+  }
+
   function extractResponseText() {
     const main = document.querySelector("main");
     if (!main) return "";
 
-    const fullText = (main.innerText || "").trim();
+    // Use math-aware extraction so KaTeX/MathJax formulas become $..$ or $$..$$
+    const fullText = extractTextWithMath(main);
 
     // ═══ Strategy A1: Page-minus-prompt (tail-anchor) ═══
     // For long prompts (papers, code), use the LAST 100 chars of the prompt
@@ -721,7 +797,7 @@
     const candidates = [];
     const allBlocks = main.querySelectorAll("div, article, section");
     for (const el of allBlocks) {
-      const text = (el.innerText || "").trim();
+      const text = extractTextWithMath(el);
       if (text.length < 200) continue;
       candidates.push({ el, text, len: text.length });
     }
@@ -766,7 +842,7 @@
         const els = document.querySelectorAll(sel);
         if (els.length === 0) continue;
         for (let i = els.length - 1; i >= 0; i--) {
-          const text = (els[i].innerText || "").trim();
+          const text = extractTextWithMath(els[i]);
           const cleaned = cleanText(text);
           if (cleaned.length < 200) continue;
           if (looksLikePromptEcho(cleaned)) continue;
@@ -1086,7 +1162,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Oracle Bridge v4.8 (macOS) loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`Oracle Bridge v4.9 (macOS) loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
     // Check if WE navigated here (not the user clicking around)
     const phase = getTaskPhase();
