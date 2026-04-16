@@ -881,6 +881,13 @@ def build_self_score_prompt(paper_dir: str, target_journal: str) -> str:
         4. **Journal fit** (matches "{target_journal}" conventions?)
         5. **Structure & flow** (logical progression, appropriate body/appendix ratio?)
 
+        ## Issue Classification
+        For each key issue, classify as:
+          - SURFACE: fixable by editing (wording, structure, missing cite)
+          - FUNDAMENTAL: paper-level (insufficient novelty, wrong scope for journal,
+            results are known, proofs depend on un-justified inputs, unrelated
+            pieces spliced together)
+
         ## Output Format (MUST follow exactly)
         Output a single JSON block:
 
@@ -895,13 +902,18 @@ def build_self_score_prompt(paper_dir: str, target_journal: str) -> str:
           }},
           "overall_score": <1-10>,
           "verdict": "<accept|revise|reject>",
-          "key_issues": ["issue1", "issue2", ...],
+          "key_issues": [
+            {{"issue": "...", "type": "SURFACE|FUNDAMENTAL"}}
+          ],
           "strengths": ["strength1", "strength2", ...],
-          "specific_fixes": ["fix1", "fix2", ...]
+          "specific_fixes": ["fix1", "fix2", ...],
+          "prognosis_can_reach_8": "yes|no|unclear"
         }}
         ```
 
-        Be ruthlessly honest. A score of 8+ means ready for submission.
+        Be ruthlessly honest.
+        - prognosis_can_reach_8="no" → paper has FUNDAMENTAL flaws editing cannot fix
+        - prognosis_can_reach_8="yes" → issues are SURFACE, iteration can raise score
         Do NOT edit any files — only output the JSON evaluation.
     """)
 
@@ -1391,13 +1403,15 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             Questions:
             1. Is the score of {score}/10 honest? Would you score higher or lower?
             2. Are the listed issues real problems?
-            3. Are the suggested fixes actionable?
+            3. Can this paper reach score 8 with further editing/revision,
+               or does it have FUNDAMENTAL flaws that editing cannot fix?
 
             Output ONLY a JSON block:
             ```json
             {{
               "adjusted_score": <1-10>,
               "agree_with_issues": true/false,
+              "prognosis_can_reach_8": "yes|no|unclear",
               "notes": "brief explanation"
             }}
             ```
@@ -1406,6 +1420,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                              dry_run=dry_run)
         claude_data = parse_json_from_output(out_a4) if not dry_run else {
             "adjusted_score": 5 + rnd, "agree_with_issues": True,
+            "prognosis_can_reach_8": "yes",
         }
         adjusted = claude_data.get("adjusted_score", score)
         state.log_event("A", "claude_review_score", round_num=rnd,
@@ -1417,6 +1432,20 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
         final_score = min(score, adjusted)
         logger.info(f"{tag} Round {rnd}: Final score = {final_score} "
                     f"(codex={score}, claude={adjusted})")
+
+        # ── Early exit: FUNDAMENTAL problems (both agree editing can't fix) ──
+        codex_prog = score_data.get("prognosis_can_reach_8", "unclear")
+        claude_prog = claude_data.get("prognosis_can_reach_8", "unclear")
+        if codex_prog == "no" and claude_prog == "no":
+            logger.warning(f"{tag} FUNDAMENTAL FLAWS — both codex and claude say "
+                           f"editing cannot reach 8. Halting Stage A.")
+            logger.warning(f"{tag} Paper flagged for human review / re-scope / archival.")
+            state.stage_a_passed = False
+            state.error = (f"Stage A halted at round {rnd}: fundamental flaws, "
+                           f"editing cannot reach threshold. "
+                           f"Final score: {final_score}/10.")
+            save_state(state)
+            return False
 
         # ── Gate: pass if ≥ threshold ────────────────────────────
         if final_score >= SCORE_PASS_THRESHOLD:
