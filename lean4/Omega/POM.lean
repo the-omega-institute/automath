@@ -56,6 +56,7 @@ import Omega.POM.HighMultiplicitySparse
 import Omega.POM.KCollisionRootFilter
 import Omega.POM.KernelSpectrum
 import Omega.POM.LambdaAlgebraic
+import Omega.POM.LeyangLiftMobiusInvolutionFunctorial
 import Omega.POM.LeyangMonotoneCouplingPrimeRegister
 import Omega.POM.LucasPrimeCongruence
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
