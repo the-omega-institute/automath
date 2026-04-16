@@ -103,6 +103,7 @@ import Omega.Folding.MaxFiberHigh
 import Omega.Folding.MaxFiberTwoStep
 import Omega.Folding.MetallicBinetClosedForm
 import Omega.Folding.MetallicCompressionExtremum
+import Omega.Folding.MetallicLinearScalarizationThreshold
 import Omega.Folding.MetallicCompressionLockingLambda2
 import Omega.Folding.MetallicFiniteScaleCompressionOscillation
 import Omega.Folding.MetallicIntegerScalarizationThreshold
