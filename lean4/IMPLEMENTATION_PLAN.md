@@ -133,6 +133,45 @@ error）；同步阶段执行 `git fetch origin lean4-codex-auto-dev` 与
 （`prop:prime-register-godel-joukowsky-ellipse`）；新增 `\\leanverified` +3，覆盖章节为
 GU / Discussion / EA，降级项数 0，non-trivial 计数 0）
 
+**Phase R1060（本轮落地，proof / registration / sync / commit 执行）**：新增
+`paper_discussion_hodge_stokes_variance_rigidity`
+（对应 `thm:discussion-hodge-stokes-variance-rigidity`，Discussion；新建
+`HodgeStokesVarianceRigidity.lean`，定义 chapter-local
+`HodgeStokesVarianceRigidityData`，把有限维 `L²` 边空间中的 gradient/coclosed
+orthogonal splitting、exact 部分的 telescoping boundary reduction，以及由 coclosed
+part 继承的 CLT variance / LDP rate rigidity 压成 paper-facing wrapper）；
+新增 `paper_typed_address_biaxial_completion_certificate_loop`
+（对应 `thm:typed-address-biaxial-completion-certificate-loop`，
+TypedAddressBiaxialCompletion；新建 `CertificateLoop.lean`，定义 chapter-local
+`TypedAddressCertificateLoopData`，把 unitary-slice lock、Jensen defect 零极限、
+repulsion radius 趋一、Toeplitz--PSD 全阶与 cofinal 检验链打包为四段等价闭环）；
+新增 `paper_fold_gauge_anomaly_kstep_invariance`
+（对应 `thm:fold-gauge-anomaly-kstep-invariance`，Folding；新建
+`GaugeAnomalyKStepInvariance.lean`，定义 chapter-local
+`GaugeAnomalyKStepInvarianceData`，把 primitive finite-state realization、固定 `k`
+的 `O(1)` boundary correction 与 density / CLT / pressure / endpoint LDP 的
+`k`-step invariance 打包为 theorem-facing wrapper）；proof 侧执行
+`lake build Omega.Discussion.HodgeStokesVarianceRigidity`、
+`lake build Omega.TypedAddressBiaxialCompletion.CertificateLoop`、
+`lake build Omega.Folding.GaugeAnomalyKStepInvariance` 与
+`cd lean4 && lake build`，均通过（全量构建 `9269` jobs，见既有 warning / info，
+无新的 Lean error）；同步阶段执行 `git fetch origin lean4-codex-auto-dev` 与
+`git rebase --autostash origin/lean4-codex-auto-dev`，分支已 up to date 且 autostash
+自动回放无冲突；文件：
+`lean4/Omega/Discussion/HodgeStokesVarianceRigidity.lean`、
+`lean4/Omega/TypedAddressBiaxialCompletion/CertificateLoop.lean`、
+`lean4/Omega/Folding/GaugeAnomalyKStepInvariance.lean`、`lean4/Omega.lean`；Lean
+theorem 名：`paper_discussion_hodge_stokes_variance_rigidity`、
+`paper_typed_address_biaxial_completion_certificate_loop`、
+`paper_fold_gauge_anomaly_kstep_invariance`；tex 路径：
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/discussion/subsec__discussion-generalized-stokes-path-sum.tex`
+（`thm:discussion-hodge-stokes-variance-rigidity`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/typed_address_biaxial_completion/subsec__typed-address-biaxial-completion-certificate-loop-toeplitz-offline-verifier.tex`
+（`thm:typed-address-biaxial-completion-certificate-loop`），
+`theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/body/folding/subsec__folding-multiscale.tex`
+（`thm:fold-gauge-anomaly-kstep-invariance`）；新增 `\\leanverified` +3，覆盖章节为
+Discussion / TypedAddressBiaxialCompletion / Folding，降级项数 0，non-trivial 计数 0）
+
 **Phase R1047（本轮落地，proof / sync / registration / commit 执行）**：新增
 `paper_cdim_readable_time_word_overlap_pd`
 （对应 `thm:cdim-readable-time-word-overlap-pd`，CircleDimension；新建

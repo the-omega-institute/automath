@@ -103,6 +103,7 @@ import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
 import Omega.Folding.GaugeAnomalyPSDRational
+import Omega.Folding.GaugeAnomalyKStepInvariance
 import Omega.Folding.GaugeAnomalyUnitCircleRigidity
 import Omega.Folding.GaugeAnomalyTauIntClosed
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
@@ -661,6 +662,7 @@ import Omega.Zeta.FiniteRankRealisation
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Discussion.ChebyshevAdams
 import Omega.Discussion.HorizonMeasureFold6Pushforward
+import Omega.Discussion.HodgeStokesVarianceRigidity
 import Omega.Discussion.HSZKIffDiamond
 import Omega.Discussion.HypercubeStokesFourierBinomial
 import Omega.Discussion.HypercubePotentialCurvatureControlledStrictification
@@ -873,6 +875,7 @@ import Omega.TypedAddressBiaxialCompletion.StandardLedger
 import Omega.TypedAddressBiaxialCompletion.UnitarySliceAddressClosure
 import Omega.TypedAddressBiaxialCompletion.JensenDefectFiniteization
 import Omega.TypedAddressBiaxialCompletion.JensenDefectBlindspot
+import Omega.TypedAddressBiaxialCompletion.CertificateLoop
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
 import Omega.TypedAddressBiaxialCompletion.ThreeEndBudget
 import Omega.TypedAddressBiaxialCompletion.NullExhaustive
