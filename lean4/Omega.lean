@@ -139,6 +139,7 @@ import Omega.GU.Window6B3C3UniqueQuarticDetector
 import Omega.GU.Window6BinfoldLastbitLecamEquivalence
 import Omega.GU.Window6TypeSuperselectionAutGamma6
 import Omega.GU.Window6AffineFiberOrbitClassification
+import Omega.GU.BetaPfExpectation
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.Window6LieEnvelopeClosure
@@ -674,6 +675,7 @@ import Omega.Topos.LocalSectionCriterion
 import Omega.Topos.GlobalImpliesCompatibleLocal
 import Omega.HighDimensionalCutProject.IndicatorSumRewrite
 import Omega.Conclusion.AffineRegisterBudget
+import Omega.Conclusion.PhaseLedgerBudgetExactHalfspace
 import Omega.Conclusion.RateCdimTwoCircleThreshold
 import Omega.Conclusion.AuditComplexityAreaEquivalence
 import Omega.Conclusion.BoundaryCycleRankExternalInfoLowerBound
@@ -1049,6 +1051,7 @@ import Omega.CircleDimension.WdimBettiAverageLaw
 import Omega.CircleDimension.ComovingDefectDeltaBound
 import Omega.CircleDimension.AtomicDefectHankelProny
 import Omega.CircleDimension.AtomicDefectProny2KappaRecovery
+import Omega.CircleDimension.AtomicDefectTwoFrequency4KappaRecovery
 import Omega.CircleDimension.UnitarySliceDecidable
 import Omega.CircleDimension.PhaseRegisterCommonAssignments
 import Omega.CircleDimension.AlgebraicDegreeMinCircleRank

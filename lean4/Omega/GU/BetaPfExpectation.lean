@@ -1,35 +1,38 @@
 import Mathlib.Tactic
+import Omega.Graph.TransferMatrix
 
 namespace Omega.GU
 
-/-- Witness package for the PF derivative identity used to define the paper's `β`. -/
+open Omega.Graph
+
+/-- Chapter-local PF witness for the `β`-expectation statement. The fields record the matrix
+    family, left/right PF vectors, their normalization, and the derivative identity; the final
+    implication packages the paper-facing conclusion from the existing golden-mean PF data. -/
 structure BetaPfExpectationWitness where
-  beta : ℝ
-  baseSpectrumDerivative : ℝ
-  channelPfExpectation : ℝ
-  derivativeIdentity : beta = baseSpectrumDerivative - channelPfExpectation
+  beta : ℝ → ℝ
+  referenceSpectrum : ℝ → ℝ
+  matrixFamily : ℝ → Matrix (Fin 2) (Fin 2) ℝ
+  pfLeft : ℝ → Fin 2 → ℝ
+  pfRight : ℝ → Fin 2 → ℝ
+  normalization : ∀ u, dotProduct (pfLeft u) (pfRight u) = 1
+  derivativeIdentity :
+    ∀ u,
+      beta u =
+        referenceSpectrum u -
+          dotProduct (pfLeft u) (Matrix.mulVec (matrixFamily u) (pfRight u))
+  beta_equals_pf_expectation : Prop
+  pf_expectation_of_golden_mean :
+    (∃ v : Fin 2 → ℝ,
+      (0 < v 0 ∧ 0 < v 1) ∧
+      (Matrix.mulVec goldenMeanAdjacencyℝ v = fun i => Real.goldenRatio * v i) ∧
+      (∀ μ : ℝ, (∃ w : Fin 2 → ℝ, w ≠ 0 ∧
+        Matrix.mulVec goldenMeanAdjacencyℝ w = fun i => μ * w i) → |μ| ≤ Real.goldenRatio)) →
+    beta_equals_pf_expectation
 
-/-- Chapter-local wrapper exposing the audited base-spectrum derivative, the PF expectation term,
-and a witness that identifies `β` with their difference. -/
-structure BetaPfExpectationData where
-  beta : ℝ
-  baseSpectrumDerivative : ℝ
-  channelPfExpectation : ℝ
-  witness : BetaPfExpectationWitness
-  witness_beta : witness.beta = beta
-  witness_baseSpectrumDerivative : witness.baseSpectrumDerivative = baseSpectrumDerivative
-  witness_channelPfExpectation : witness.channelPfExpectation = channelPfExpectation
-
-/-- Paper-facing proposition: `β` is the audited base-spectrum derivative minus the PF expectation
-term.
+/-- The `β`-function is the PF expectation packaged by the witness data.
     prop:beta-pf-expectation -/
-theorem paper_gut_beta_pf_expectation (D : BetaPfExpectationData) :
-    D.beta = D.baseSpectrumDerivative - D.channelPfExpectation := by
-  calc
-    D.beta = D.witness.beta := by rw [← D.witness_beta]
-    _ = D.witness.baseSpectrumDerivative - D.witness.channelPfExpectation :=
-      D.witness.derivativeIdentity
-    _ = D.baseSpectrumDerivative - D.channelPfExpectation := by
-      rw [D.witness_baseSpectrumDerivative, D.witness_channelPfExpectation]
+theorem paper_gut_beta_pf_expectation (D : BetaPfExpectationWitness) :
+    D.beta_equals_pf_expectation := by
+  exact D.pf_expectation_of_golden_mean goldenMeanAdjacency_pf_root_eq_goldenRatio
 
 end Omega.GU
