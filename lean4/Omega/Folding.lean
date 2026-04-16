@@ -83,6 +83,7 @@ import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
 import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
 import Omega.Folding.GaugeAnomalyP10Degree
 import Omega.Folding.GaugeAnomalyP10Q10TschirnhausInverse
+import Omega.Folding.GaugeAnomalyQ10Tschirnhaus
 import Omega.Folding.GaugeAnomalyPSDRational
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.Folding.GaugeAnomalyRootUnitSamplingThreshold

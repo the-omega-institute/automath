@@ -109,6 +109,7 @@ import Omega.POM.SchurTomographyInversePartitionMonomials
 import Omega.POM.SideinfoExactEntropy
 import Omega.POM.StarMomentKernelCompression
 import Omega.POM.SymmetricCompression
+import Omega.POM.SufficientStatisticResidualNoninvertibility
 import Omega.POM.TauTerminalSignIndependence
 import Omega.POM.TensorFoldResultantRecursion
 import Omega.POM.ThetaGodelizationPrimeValuationIsometry
