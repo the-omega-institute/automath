@@ -73,6 +73,7 @@ import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.GaugeAnomalyFiniteVarianceClosed
 import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
+import Omega.Folding.GaugeAnomalyPressure
 import Omega.Folding.GaugeAnomalyKStepInvariance
 import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
