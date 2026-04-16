@@ -128,6 +128,7 @@ import Omega.Folding.OstrowskiMetallicTwoRuleNormalization
 import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.LocalRewriteLdpBarrier
 import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
+import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
 import Omega.Folding.RankEncodingReversibleLift
 import Omega.Folding.ZeroFiberLinear
@@ -141,6 +142,7 @@ import Omega.GU.Window6BinfoldLastbitLecamEquivalence
 import Omega.GU.Window6TypeSuperselectionAutGamma6
 import Omega.GU.Window6AffineFiberOrbitClassification
 import Omega.GU.BetaPfExpectation
+import Omega.GU.BetaDeterminantRatio
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.Window6LieEnvelopeClosure
@@ -712,6 +714,7 @@ import Omega.Conclusion.SecondOrderCdimSignature
 import Omega.Conclusion.ScreenAuditGapSupermodularity
 import Omega.Conclusion.ScreenAtomicValueAntitone
 import Omega.Conclusion.EventEllipseGoldenMinimal
+import Omega.Conclusion.GoldenBiasSecondOrderUniqueness
 import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.DiscreteKinkFanPiecewiseLinearization
