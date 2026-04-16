@@ -65,6 +65,7 @@ import Omega.Folding.FibonacciPolynomial
 import Omega.Folding.FingerprintSeparationPublication
 import Omega.Folding.Fold
 import Omega.Folding.FoldAlphaBasic
+import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm

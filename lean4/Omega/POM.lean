@@ -48,6 +48,7 @@ import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.FiberTripleMedianMajority
 import Omega.POM.FiberTwoPhaseMixing
+import Omega.POM.FiberCubicalPoincareStokesLemma
 import Omega.POM.FisherZerosArcsineSeeds
 import Omega.POM.FoldIndexSeeds
 import Omega.POM.FoldInjectivizationMinsideinfo
