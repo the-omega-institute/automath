@@ -352,6 +352,7 @@ import Omega.SPG.PolycubeAdhesion
 import Omega.SPG.TotalDegreeMomentThreshold
 import Omega.SPG.MutualInfoBoundaryFlux
 import Omega.SPG.GodelizationEntropy
+import Omega.SPG.FiniteAuditBidirectionalCertificates
 import Omega.SPG.PrefixScanErrorBoundaryDimensionUpper
 import Omega.SPG.NonuniformCylinder
 import Omega.SPG.VolumeBoundaryScaling
@@ -808,6 +809,7 @@ import Omega.TypedAddressBiaxialCompletion.Window6TwoSheetCharts
 import Omega.TypedAddressBiaxialCompletion.Window6AuditBudgetSplit
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
+import Omega.TypedAddressBiaxialCompletion.NullFiber
 import Omega.TypedAddressBiaxialCompletion.PcdimModpFormula
 import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
@@ -910,6 +912,7 @@ import Omega.CircleDimension.PhasePrecisionTradeoff
 import Omega.POM.HighMultiplicitySparse
 import Omega.GU.MinSectorBudget
 import Omega.GU.NapSo10AnalyticMinimality
+import Omega.GU.NapLocalUpliftForcesSo10
 import Omega.GU.BdryZ2JumpUniqueness
 import Omega.GU.BdryUpliftOrientationParity
 import Omega.GU.BdryBinaryLayeringOrbitClassification
