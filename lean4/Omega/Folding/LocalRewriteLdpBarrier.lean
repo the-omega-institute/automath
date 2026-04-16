@@ -97,6 +97,55 @@ theorem paper_fold_local_rewrite_saturation_step_efficiency_rigidity :
   · intro R ε T hT hε Δ hBound hAvg
     exact lowDeletionDensity_eq_zero_of_averageDeletion_eq_max hT hε Δ hBound hAvg
 
+/-- Quantitative chapter-local data for the failure of saturation: a positive density `η` of
+steps loses at least `ε` deletion efficiency, every step is bounded by `R`, and hence the average
+deletion carries the strict `R - ε * η` penalty advertised in the paper. -/
+structure SaturationFailureQuantitativeCostData where
+  T : ℕ
+  Δ : Fin T → ℝ
+  R : ℝ
+  ε : ℝ
+  η : ℝ
+  hT : 0 < T
+  hε : 0 < ε
+  hη : 0 < η
+  stepUpper : ∀ i, Δ i ≤ R
+
+namespace SaturationFailureQuantitativeCostData
+
+/-- A saturation failure is witnessed by a positive density `η` of steps whose deletion is at most
+`R - ε`. -/
+def saturationFailure (D : SaturationFailureQuantitativeCostData) : Prop :=
+  D.η ≤ lowDeletionDensity D.Δ D.R D.ε
+
+/-- The quantitative lower-bound penalty produced by saturation failure: the average deletion is
+forced below `R` by the strict denominator loss `ε * η`. -/
+def strictSuboptimalLowerBound (D : SaturationFailureQuantitativeCostData) : Prop :=
+  averageDeletion D.Δ ≤ D.R - D.ε * D.η ∧ D.R - D.ε * D.η < D.R
+
+end SaturationFailureQuantitativeCostData
+
+/-- Paper-facing quantitative cost of saturation failure: a positive density of steps deleting at
+most `R - ε` lowers the average deletion from `R` to at most `R - ε * η`, hence the denominator
+is strictly penalized.
+    cor:fold-local-rewrite-saturation-failure-quantitative-cost -/
+theorem paper_fold_local_rewrite_saturation_failure_quantitative_cost
+    (D : SaturationFailureQuantitativeCostData) :
+    D.saturationFailure -> D.strictSuboptimalLowerBound := by
+  intro hFailure
+  have havg :
+      averageDeletion D.Δ ≤ D.R - D.ε * lowDeletionDensity D.Δ D.R D.ε :=
+    averageDeletion_le_of_lowDeletionDensity (R := D.R) (ε := D.ε) D.hT D.Δ D.stepUpper
+  have hmul :
+      D.ε * D.η ≤ D.ε * lowDeletionDensity D.Δ D.R D.ε := by
+    exact mul_le_mul_of_nonneg_left hFailure (le_of_lt D.hε)
+  have hpenalty :
+      D.R - D.ε * lowDeletionDensity D.Δ D.R D.ε ≤ D.R - D.ε * D.η := by
+    linarith
+  have hstrict : D.R - D.ε * D.η < D.R := by
+    nlinarith [D.hε, D.hη]
+  exact ⟨le_trans havg hpenalty, hstrict⟩
+
 /-- Paper-facing wrapper for the local-rewrite lower-tail barrier: the pointwise inequality
     `G_m ≤ R T_m` yields the lower-tail event inclusion, the LDP upper wrapper makes the tail
     summable, and Borel-Cantelli upgrades this to an almost-sure linear lower bound.
