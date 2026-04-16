@@ -33,6 +33,7 @@ import Omega.POM.FibCubeFrechetMedianUnique
 import Omega.POM.FibCubeKPointCount
 import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.FibPellQuadratic
+import Omega.POM.FoldFactorChainEffectiveSampleSize
 import Omega.POM.FiniteStateDimensionLowerBound
 import Omega.POM.FiberIndependenceComplexClassification
 import Omega.POM.FiberMedianMajorityPrimeValuation

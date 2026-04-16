@@ -138,6 +138,7 @@ import Omega.Zeta.UnitaryDeterminantZeroUnitCircle
 import Omega.Zeta.VandermondeResultantSeeds
 import Omega.Zeta.WalshParseval
 import Omega.Zeta.XiLogDefectPotentialLinftyBoundByTotalDelta
+import Omega.Zeta.XiCauchyPoissonDensityRatioSecondOrderProfile
 import Omega.Zeta.XiSingleDefectIntegratedClosedForm
 import Omega.Zeta.XiSingleDefectThresholdPhaseTransition
 import Omega.Zeta.ZeckendorfPrimeLanguage

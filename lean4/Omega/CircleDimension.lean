@@ -15,6 +15,7 @@ import Omega.CircleDimension.CausalPreorder
 import Omega.CircleDimension.CayleyChebyshevMode
 import Omega.CircleDimension.CdimStarCompatibleFG
 import Omega.CircleDimension.CertificateInverseLimitAddressing
+import Omega.CircleDimension.CechCyclotomicQuantization
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.CoherenceTimeBarrier2Pow
 import Omega.CircleDimension.CoherenceTimeLowerBound
