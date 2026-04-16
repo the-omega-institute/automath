@@ -1084,6 +1084,7 @@ import Omega.CircleDimension.AtomicDefectProny2KappaRecovery
 import Omega.CircleDimension.AtomicDefectTwoFrequency4KappaRecovery
 import Omega.CircleDimension.UnitarySliceDecidable
 import Omega.CircleDimension.PhaseRegisterCommonAssignments
+import Omega.CircleDimension.HighrankPhaseRegisterMinimality
 import Omega.CircleDimension.AlgebraicDegreeMinCircleRank
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.Zeta.VandermondeResultantSeeds
@@ -1102,6 +1103,7 @@ import Omega.Conclusion.CofinalFixedQuotient
 import Omega.Conclusion.Window6BoundarySuperselectionC3OrbitStratification
 import Omega.POM.ZeroTemperatureTwoTermExpansion
 import Omega.SPG.DyadicFluxZetaMinkowskiPole
+import Omega.SPG.SingleGateIdentifiabilityCriticalEnergy
 import Omega.SPG.MinkowskiDimensionBoundaryFaceGrowthSandwich
 import Omega.Zeta.EnergyTailMassSeeds
 import Omega.Conclusion.WallisFactorMonoid
@@ -1187,6 +1189,7 @@ import Omega.Conclusion.PrimorialMixedRadixSeeds
 import Omega.Zeta.QuotientIndexLedgerSeeds
 import Omega.POM.FisherZerosArcsineSeeds
 import Omega.POM.DiagonalHighMoments
+import Omega.POM.DiagonalRateSeparationSpectralResidue
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Zeta.TorsionExactOrderLedgerSeeds
 import Omega.Zeta.LogMHolomorphicVariation
