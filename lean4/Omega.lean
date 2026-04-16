@@ -104,6 +104,7 @@ import Omega.Folding.GaugeAnomalyTauIntClosed
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
 import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
 import Omega.Folding.GaugeAnomalyRootUnitSamplingThreshold
+import Omega.Folding.GaugeAnomalyP10Q10TschirnhausInverse
 import Omega.Folding.PhiEquivariant
 import Omega.Folding.PhiSlidingBlockCode
 import Omega.Folding.PhiEquivariantPublication
@@ -225,6 +226,7 @@ import Omega.Folding.ExactMarkovOrderBernoulli
 import Omega.Folding.YmConjugacyCollapse
 import Omega.Folding.ResidueMarkovOrder
 import Omega.Folding.FoldSuitePublication
+import Omega.EA.ChebotarevQuotientRelativeEntropyChain
 import Omega.EA.FiniteLedgerRecoverability
 import Omega.EA.PrimeRegisterRewriteConfluentNormalForm
 import Omega.EA.PrimeRegisterNormalFormUniqueness
@@ -241,6 +243,7 @@ import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
 import Omega.Graph.PhiGraph
 import Omega.Graph.Window6TranslationQuotient
+import Omega.Zeta.XiLogDefectPotentialLinftyBoundByTotalDelta
 import Omega.Graph.LiftBound
 import Omega.SPG.Cylinder
 import Omega.SPG.PrefixMetric
