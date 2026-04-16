@@ -36,14 +36,14 @@ git rebase --autostash origin/lean4-codex-auto-dev
 If rebase conflicts occur in committed files, resolve by keeping ALL lines from
 both sides (additive merge), then `git add <file>` + `git rebase --continue`.
 
-## Step 5: Immediately update the two conflict-prone shared files, then commit
-Do this as fast as possible after the rebase to minimise the conflict window:
-- Add import lines to lean4/Omega.lean for any new proof files
-- Update lean4/IMPLEMENTATION_PLAN.md with new round info
+## Step 5: Update Omega.lean imports, then commit
+Add import lines to lean4/Omega.lean for any new proof files.
+Do NOT touch lean4/IMPLEMENTATION_PLAN.md — the \leanverified{} annotations
+in the .tex files are the authoritative record of what has been formalized.
 
 Then commit everything in one shot:
 ```bash
-git add lean4/Omega/ lean4/Omega.lean lean4/IMPLEMENTATION_PLAN.md theory/
+git add lean4/Omega/ lean4/Omega.lean theory/
 git commit -m "R<ROUND_NUM>: [brief description of what was proved and registered]
 
 Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
@@ -72,7 +72,7 @@ You MUST NOT weaken or replace them. Specifically:
 - Must complete all 5 steps; if a theorem is stuck, skip it and continue
 - Tactic failure: auto-try next; compile error: auto-fix up to 3 rounds
 - Implementation changes: only in lean4/Omega/
-- Registration changes: only in Omega.lean, IMPLEMENTATION_PLAN.md, and theory/
+- Registration changes: only in Omega.lean and theory/ (do NOT edit IMPLEMENTATION_PLAN.md)
 - Do NOT refactor or delete existing code
 - Do NOT weaken or replace existing theorem signatures (see HARD PROHIBITION above)
 - Do NOT git push
