@@ -104,6 +104,7 @@ import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.SummableNatEventuallyZero
 import Omega.Folding.PeriodicCompressionRatio
 import Omega.Folding.PeriodicCountSandwich
+import Omega.Folding.YmZetaLeadingPole
 import Omega.Folding.YmZetaResidueRatio
 import Omega.Folding.YmPeriodicRigidity
 import Omega.Folding.RationalGeneratorGap
@@ -130,6 +131,7 @@ import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.FreeInvolutionCount
+import Omega.GU.CyclotomicGcdStability
 import Omega.GU.CyclotomicSpecializationRigidity
 import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
 import Omega.GU.JetAlignmentUnification
@@ -252,6 +254,7 @@ import Omega.SPG.MainRenyi
 import Omega.SPG.MainResonance
 import Omega.SPG.HolderOpenResonance
 import Omega.SPG.BoundaryRigidity
+import Omega.SPG.CubeLinftyPrimitiveExplicitMinimizer
 import Omega.SPG.ContractionEstimate
 import Omega.SPG.ExplicitMinimizer
 import Omega.SPG.SturmianCylinderInformationTime
