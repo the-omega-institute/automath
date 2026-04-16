@@ -98,6 +98,7 @@ import Omega.Conclusion.TwoAtomScalarRecoveryAlpha2
 import Omega.Conclusion.WallisFactorMonoid
 import Omega.Conclusion.Window6BoundaryParityNotMeasurableFromF8
 import Omega.Conclusion.Window6BoundarySuperselectionC3OrbitStratification
+import Omega.Conclusion.Window6CyclicOrbitParitySuperselection
 import Omega.Conclusion.Window6Collision
 import Omega.Conclusion.Window6OutputKLExactGcdChainSplitting
 import Omega.Conclusion.Window6RepresentationZetaCountRatio

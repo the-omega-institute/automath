@@ -104,6 +104,7 @@ import Omega.Zeta.NecklaceCounting
 import Omega.Zeta.NontrivialPerronPointConvergence
 import Omega.Zeta.NontrivialPeterWeylChannelBound
 import Omega.Zeta.OperatorFixedKernelLocalDensityObstruction
+import Omega.Zeta.P7ChebotarevSplittingDensity
 import Omega.Zeta.PerronChannelContribution
 import Omega.Zeta.PhaseCombPoleCounting
 import Omega.Zeta.PhaseImplementationRankLimit
