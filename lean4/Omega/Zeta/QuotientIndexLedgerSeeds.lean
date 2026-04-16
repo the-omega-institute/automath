@@ -155,4 +155,13 @@ theorem paper_xi_localized_quotient_index_ledger_package :
     ∧ Nat.gcd 5 6 = 1 ∧ Nat.gcd 7 6 = 1 ∧ Nat.gcd 4 6 = 2 :=
   paper_xi_localized_quotient_index_ledger_seeds
 
+/-- Paper-facing wrapper for the concrete localized quotient index ledger seeds.
+    thm:xi-localized-quotient-index-ledger -/
+theorem paper_xi_localized_quotient_index_ledger :
+    12 / (2 ^ 2 * 3 ^ 1) = 1 ∧ 30 / (2 ^ 1 * 3 ^ 1) = 5
+    ∧ 7 / (2 ^ 0 * 3 ^ 0) = 7 ∧ 35 / (2 ^ 0 * 3 ^ 0) = 35
+    ∧ Nat.totient 5 = 4 ∧ Nat.totient 7 = 6 ∧ Nat.totient 35 = 24
+    ∧ Nat.gcd 5 6 = 1 ∧ Nat.gcd 7 6 = 1 ∧ Nat.gcd 4 6 = 2 :=
+  paper_xi_localized_quotient_index_ledger_seeds
+
 end Omega.Zeta.QuotientIndexLedgerSeeds

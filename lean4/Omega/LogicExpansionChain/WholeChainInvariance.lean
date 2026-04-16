@@ -39,4 +39,47 @@ theorem paper_conservative_extension_whole_chain_invariance_seeds
       intro φ m p
       exact (hstep k φ m p).trans (ih φ (forget k m) (project k m p))
 
+set_option maxHeartbeats 400000 in
+/-- Paper-facing specialization of finite-chain invariance to a single forgetful projection from a
+fiberized spacetime state back to its underlying forcing state.
+    prop:logic-expansion-spacetime-fiberization-conservative -/
+theorem paper_logic_expansion_spacetime_fiberization_conservative
+    {Formula BaseModel FiberModel BaseState FiberState : Type}
+    (forcesBase : BaseModel → BaseState → Formula → Prop)
+    (forcesFiber : FiberModel → FiberState → Formula → Prop)
+    (forget : FiberModel → BaseModel)
+    (project : FiberModel → FiberState → BaseState)
+    (hstep : ∀ (φ : Formula) (m : FiberModel) (p : FiberState),
+      forcesFiber m p φ ↔ forcesBase (forget m) (project m p) φ) :
+    ∀ (φ : Formula) (m : FiberModel) (p : FiberState),
+      forcesFiber m p φ ↔ forcesBase (forget m) (project m p) φ := by
+  intro φ m p
+  let Model : ℕ → Type := fun
+    | 0 => BaseModel
+    | _ + 1 => FiberModel
+  let State : ℕ → Type := fun
+    | 0 => BaseState
+    | _ + 1 => FiberState
+  let forces : ∀ n, Model n → State n → Formula → Prop := fun
+    | 0 => forcesBase
+    | _ + 1 => forcesFiber
+  let forgetChain : ∀ k, Model (k + 1) → Model k := fun
+    | 0 => forget
+    | _ + 1 => id
+  let projectChain : ∀ k, (x : Model (k + 1)) → State (k + 1) → State k := fun
+    | 0 => project
+    | _ + 1 => fun _ s => s
+  have hchain : ∀ k (ψ : Formula) (x : Model (k + 1)) (s : State (k + 1)),
+      forces (k + 1) x s ψ ↔
+        forces k (forgetChain k x) (projectChain k x s) ψ := by
+    intro k ψ x s
+    cases k with
+    | zero =>
+        simpa [forces, forgetChain, projectChain] using hstep ψ x s
+    | succ k =>
+        simp [forces, forgetChain, projectChain]
+  simpa [Model, State, forces, forgetChain, projectChain, iterForget, iterProject] using
+    (paper_conservative_extension_whole_chain_invariance_seeds
+      forces forgetChain projectChain hchain 1 φ m p)
+
 end Omega.LogicExpansionChain

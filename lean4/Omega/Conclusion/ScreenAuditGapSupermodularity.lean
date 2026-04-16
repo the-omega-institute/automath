@@ -136,4 +136,31 @@ theorem paper_conclusion_fixedresolution_screen_audit_gap_supermodularity_packag
   · intro s t
     exact visibilityDefect_eq_iff_modularPair r hrcard s t
 
+/-- Paper-facing wrapper for
+`thm:conclusion-screen-information-matroid-supermodularity`.
+
+The information side is packaged by the bounded monotone submodular rank function `r`,
+and the hidden-information side is its corank-style audit gap `AuditGap ρ r`. -/
+theorem paper_conclusion_screen_information_matroid_supermodularity
+    (ρ : ℕ) (r : Finset α → ℕ)
+    (hρ : ∀ s, r s ≤ ρ)
+    (hmono : ∀ {s t : Finset α}, s ⊆ t → r s ≤ r t)
+    (hsub : ∀ s t, r (s ∩ t) + r (s ∪ t) ≤ r s + r t) :
+    (∀ s t, r (s ∪ t) + r (s ∩ t) ≤ r s + r t) ∧
+      (∀ {s t : Finset α}, s ⊆ t → r s ≤ r t) ∧
+      (∀ s t, AuditGap ρ r (s ∪ t) + AuditGap ρ r (s ∩ t) ≥ AuditGap ρ r s + AuditGap ρ r t) ∧
+      (∀ {s t : Finset α}, s ⊆ t → AuditGap ρ r t ≤ AuditGap ρ r s) := by
+  refine ⟨?_, hmono, ?_, ?_⟩
+  · intro s t
+    simpa [Nat.add_comm] using hsub s t
+  · intro s t
+    have hgap := auditGap_supermodular ρ r hρ hsub s t
+    omega
+  · intro s t hst
+    dsimp [AuditGap]
+    have hs := hρ s
+    have ht := hρ t
+    have hst' := hmono hst
+    omega
+
 end Omega.Conclusion.ScreenAuditGapSupermodularity

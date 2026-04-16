@@ -59,4 +59,10 @@ theorem paper_pressure_convexity (q m : Nat) :
     momentSum (q + 1) m ^ 2 ≤ momentSum q m * momentSum (q + 2) m :=
   momentSum_sq_le_mul q m
 
+/-- Paper-facing wrapper under the exact theorem name used in the POM chapter.
+    prop:pom-pressure-convexity -/
+theorem paper_pom_pressure_convexity (q m : Nat) :
+    Omega.momentSum (q + 1) m ^ 2 ≤ Omega.momentSum q m * Omega.momentSum (q + 2) m :=
+  momentSum_sq_le_mul q m
+
 end Omega.POM.PressureConvexity

@@ -38,6 +38,39 @@ theorem weightCongruenceCount_complement (m : Nat) (hm : 2 ≤ m) (r : Nat)
     congr 1; omega
   rw [h1, h2]; ring
 
+/-- Paper-facing reciprocity package for the fold fiber count spectrum.
+    prop:fold-fiber-count-reciprocity -/
+theorem paper_fold_fiber_count_reciprocity (m : Nat) (hm : 2 ≤ m) (r : Nat)
+    (hr : r ≤ Nat.fib (m + 1) - 2) :
+    weightCongruenceCount m r =
+        exactWeightCount m r + exactWeightCount m (Nat.fib (m + 1) - 2 - r) ∧
+      weightCongruenceCount m r = weightCongruenceCount m (Nat.fib (m + 1) - 2 - r) := by
+  have hF3 : Nat.fib (m + 3) = Nat.fib (m + 1) + Nat.fib (m + 2) := Nat.fib_add_two
+  have hF1_ge2 : 2 ≤ Nat.fib (m + 1) := by
+    calc
+      Nat.fib (m + 1) ≥ Nat.fib 3 := Nat.fib_mono (by omega)
+      _ = 2 := by native_decide
+  have hr_lt : r < Nat.fib (m + 2) := by
+    have htop : Nat.fib (m + 1) - 2 < Nat.fib (m + 2) := by
+      have hfib : Nat.fib (m + 1) ≤ Nat.fib (m + 2) := Nat.fib_mono (Nat.le_succ _)
+      omega
+    exact lt_of_le_of_lt hr htop
+  have hsum := weightCongruenceCount_eq_sum_ewc m r hr_lt
+  have hsym :
+      exactWeightCount m (r + Nat.fib (m + 2)) = exactWeightCount m (Nat.fib (m + 1) - 2 - r) := by
+    have hle : r + Nat.fib (m + 2) ≤ Nat.fib (m + 3) - 2 := by
+      omega
+    rw [exactWeightCount_symmetric m (r + Nat.fib (m + 2)) hle]
+    have hsub :
+        Nat.fib (m + 3) - 2 - (r + Nat.fib (m + 2)) = Nat.fib (m + 1) - 2 - r := by
+      rw [hF3]
+      omega
+    rw [hsub]
+  refine ⟨hsum.trans ?_, ?_⟩
+  · rw [hsym]
+  symm
+  exact weightCongruenceCount_complement m hm r hr_lt hr
+
 /-- Complement preserves fiber multiplicity: d(Fold(complement w)) = d(Fold w).
     prop:fold-fiber-count-reciprocity -/
 theorem fiberMultiplicity_complement (w : Word m) :

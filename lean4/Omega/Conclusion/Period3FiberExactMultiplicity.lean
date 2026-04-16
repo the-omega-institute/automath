@@ -1,4 +1,5 @@
 import Mathlib.Tactic
+import Mathlib.Data.Fintype.Card
 
 /-!
 # Period-3 stable type: exact fiber multiplicity d_{3n}(x) = 2^n
@@ -18,6 +19,13 @@ contributes F_{3j+1} regardless of whether it is 001 or 110.
 -/
 
 namespace Omega.Conclusion.Period3FiberExactMultiplicity
+
+/-- Abstract block-choice model for the period-3 fiber `{001, 110}^n`. -/
+abbrev Period3FiberBlockChoices (n : ℕ) := Fin n → Bool
+
+/-- Projection to the middle coordinates `P_n = {2, 5, ..., 3n - 1}`.
+    In the `{001,110}` block model this simply records the block-choice bit. -/
+abbrev period3MiddleProjection (n : ℕ) : Period3FiberBlockChoices n → (Fin n → Bool) := fun ω => ω
 
 /-! ## Fibonacci seeds for 3-block weight equality -/
 
@@ -150,5 +158,26 @@ theorem paper_conclusion_period3_fiber_exact_multiplicity_package :
     3 * 1 = (3 : ℕ) ∧
     3 * 2 = (6 : ℕ) :=
   paper_conclusion_period3_fiber_exact_multiplicity_seeds
+
+/-- Paper-facing wrapper for the hypercube/VC corollary:
+    the middle-coordinate projection is bijective on the period-3 fiber model,
+    every middle-coordinate pattern is realized, the fiber has `2^n` patterns,
+    and the resulting VC lower bound is linear in `m = 3n`.
+    cor:conclusion-period3-fiber-hypercube-vc -/
+theorem paper_conclusion_period3_fiber_hypercube_vc (n : ℕ) :
+    Function.Bijective (period3MiddleProjection n) ∧
+      (∀ y : Fin n → Bool, ∃ ω : Period3FiberBlockChoices n, period3MiddleProjection n ω = y) ∧
+      Fintype.card (Fin n → Bool) = 2 ^ n ∧
+      n ≤ 3 * n := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · constructor
+    · intro ω ω' hω
+      simpa [period3MiddleProjection] using hω
+    · intro y
+      exact ⟨y, rfl⟩
+  · intro y
+    exact ⟨y, rfl⟩
+  · simp
+  · omega
 
 end Omega.Conclusion.Period3FiberExactMultiplicity

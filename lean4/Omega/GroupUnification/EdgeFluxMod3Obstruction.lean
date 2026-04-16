@@ -1,5 +1,7 @@
 import Mathlib.Tactic
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+import Mathlib.LinearAlgebra.Matrix.Dual
+import Mathlib.LinearAlgebra.Matrix.ToLinearEquiv
 import Mathlib.Data.ZMod.Basic
 
 namespace Omega.GroupUnification.EdgeFluxMod3Obstruction
@@ -70,5 +72,29 @@ theorem paper_window6_edge_flux_mod3_invariant
     push_cast
     rfl
   rw [hsplit, χ.map_add, hχ v, add_zero]
+
+/-- General determinant-mod-3 obstruction: a singular reduction admits a nonzero
+left-kernel functional annihilating every reduced image vector.
+    cor:window6-edge-flux-mod3-obstruction -/
+theorem paper_window6_edge_flux_mod3_obstruction {n : ℕ} (_hn : 0 < n)
+    (E : Matrix (Fin n) (Fin n) ℤ) (h : (3 : ℤ) ∣ E.det) :
+    ∃ χ : (Fin n → ZMod 3) →ₗ[ZMod 3] ZMod 3,
+      χ ≠ 0 ∧ ∀ v : Fin n → ℤ, χ (fun i => ((E.mulVec v i : ℤ) : ZMod 3)) = 0 := by
+  let A : Matrix (Fin n) (Fin n) (ZMod 3) := reduceMod3 E
+  have hdet : A.det = 0 := reduceMod3_det_zero_of_three_dvd E h
+  obtain ⟨w, hwne, hw⟩ := Matrix.exists_vecMul_eq_zero_iff.mpr hdet
+  refine ⟨dotProductEquiv (ZMod 3) (Fin n) w, ?_, ?_⟩
+  · intro hχ
+    have hw0 : (dotProductEquiv (ZMod 3) (Fin n)) w = (dotProductEquiv (ZMod 3) (Fin n)) 0 := by
+      simpa using hχ
+    exact hwne ((dotProductEquiv (ZMod 3) (Fin n)).injective hw0)
+  · intro v
+    have hmul :
+        (fun i => ((E.mulVec v i : ℤ) : ZMod 3)) = A *ᵥ fun i => ((v i : ℤ) : ZMod 3) := by
+      funext i
+      simpa [A, reduceMod3, Function.comp_def] using
+        (RingHom.map_mulVec (Int.castRingHom (ZMod 3)) E v i)
+    change w ⬝ᵥ (fun i => ((E.mulVec v i : ℤ) : ZMod 3)) = 0
+    rw [hmul, Matrix.dotProduct_mulVec, hw, zero_dotProduct]
 
 end Omega.GroupUnification.EdgeFluxMod3Obstruction

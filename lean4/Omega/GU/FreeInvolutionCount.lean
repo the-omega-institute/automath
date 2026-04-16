@@ -489,4 +489,15 @@ theorem paper_freeInvolutionCount_information_bounds :
     (∀ r : ℕ, freeInvolutionCount r ≤ (2 * r) ^ r) := by
   exact ⟨freeInvolutionCount_log_lower, freeInvolutionCount_le_two_r_pow⟩
 
+/-- Canonical paper wrapper for fiberwise free involution counting and entropy.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem paper_fiberwise_free_involution_matching_entropy {B : Type*} [Fintype B] (r : B → Nat) :
+    (∀ k : Nat, ¬ ∃ f : Fin (2 * k + 1) → Fin (2 * k + 1), Function.Bijective f ∧
+      (∀ x, f (f x) = x) ∧ (∀ x, f x ≠ x)) ∧
+      ((∏ b, freeInvolutionCount (r b)) = ∏ b, Nat.doubleFactorial (2 * r b - 1)) ∧
+      (∀ b, 1 ≤ r b → r b - 1 ≤ Nat.log 2 (freeInvolutionCount (r b))) := by
+  refine ⟨no_free_involution_on_odd, fiberwiseFreeInvolutionCount_total_eq_prod_doubleFactorial r, ?_⟩
+  intro b hb
+  exact freeInvolutionCount_log_lower (r b) hb
+
 end Omega.GU

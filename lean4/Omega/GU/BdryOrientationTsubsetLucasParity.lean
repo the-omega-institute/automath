@@ -97,4 +97,10 @@ theorem paper_bdry_orientation_tsubset_lucas_parity_package (a b : ℕ) :
     Odd (Nat.choose a b) ↔ ∀ i, b.testBit i → a.testBit i :=
   paper_bdry_orientation_tsubset_lucas_parity_seeds a b
 
+/-- Paper-facing corollary: Lucas parity in test-bit subset form.
+    cor:bdry-orientation-tsubset-lucas-parity -/
+theorem paper_bdry_orientation_tsubset_lucas_parity (a b : ℕ) :
+    Odd (Nat.choose a b) ↔ ∀ i, b.testBit i → a.testBit i := by
+  simpa using odd_choose_iff_testBit_subset a b
+
 end Omega.GU.BdryOrientationTsubsetLucasParity

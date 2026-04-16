@@ -77,4 +77,14 @@ theorem paper_zeckendorf_val_invariant_seeds :
   refine ⟨fun a b h => FibCongruence.value_eq h, ?_⟩
   exact ⟨fibValue, fibValue_mk, fibValue_zero, fibValue_add⟩
 
+/-- Paper-facing wrapper for the Zeckendorf value invariant statement.
+    prop:val-invariant -/
+theorem paper_zeckendorf_val_invariant :
+    (∀ a b : DigitCfg, FibCongruence a b → value a = value b) ∧
+      ∃ f : Quotient fibCongruenceSetoid → Nat,
+        (∀ a : DigitCfg, f ⟦a⟧ = value a) ∧
+          f 0 = 0 ∧
+          (∀ x y : Quotient fibCongruenceSetoid, f (x + y) = f x + f y) := by
+  exact paper_zeckendorf_val_invariant_seeds
+
 end Omega.EA

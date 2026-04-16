@@ -20,4 +20,15 @@ theorem paper_information_state_theory_monotonicity_seeds
   intro φ hφ
   simpa [stateTheory] using fun ρ hρ => (show Forces satisfies p φ from hφ) ρ (href hρ)
 
+set_option maxHeartbeats 400000 in
+/-- Paper-facing wrapper over state-theory monotonicity for the logic-expansion
+paper label.
+    cor:logic-expansion-state-theory-monotonicity -/
+theorem paper_logic_expansion_state_theory_monotonicity
+    {Context Val Formula : Type} (satisfies : Val → Formula → Prop)
+    (p q : InformationState Context Val)
+    (href : q.realizations ⊆ p.realizations) :
+    stateTheory satisfies p ⊆ stateTheory satisfies q := by
+  simpa using paper_information_state_theory_monotonicity_seeds satisfies p q href
+
 end Omega.LogicExpansionChain

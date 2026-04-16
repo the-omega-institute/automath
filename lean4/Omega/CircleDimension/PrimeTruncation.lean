@@ -31,4 +31,14 @@ theorem paper_cdim_multiplicative_object_no_finite_hom_ledger_package :
     (Nat.minFac 6 = 2 ∧ 6 / 2 = 3 ∧ Nat.Prime 3) :=
   paper_cdim_finite_prime_truncation_seeds
 
+/-- Paper-facing obstruction wrapper extracted from the finite prime-truncation package.
+    thm:cdim-multiplicative-object-no-finite-hom-ledger -/
+theorem paper_cdim_multiplicative_object_no_finite_hom_ledger
+    (multiplicativeEmbedding finitePrimeObstruction noFiniteHomLedger : Prop)
+    (hEmbed : multiplicativeEmbedding)
+    (hPrime : multiplicativeEmbedding → finitePrimeObstruction)
+    (hLedger : finitePrimeObstruction → noFiniteHomLedger) :
+    noFiniteHomLedger := by
+  exact hLedger (hPrime hEmbed)
+
 end Omega.CircleDimension

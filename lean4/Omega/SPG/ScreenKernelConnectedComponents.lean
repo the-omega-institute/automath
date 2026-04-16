@@ -91,4 +91,18 @@ theorem paper_spg_screen_kernel_connected_components_package :
     (∀ c c' : ℕ, 0 < c → 0 < c' → c' ≤ c → c' - 1 ≤ c - 1) :=
   paper_spg_screen_kernel_connected_components_seeds
 
+/-- Paper-facing relative-homology wrapper:
+    if the partial observation kernel is the relative cycle set and the relative
+    boundary set is empty (no `(n+1)`-cells), then the kernel identifies with the
+    relative top homology object.
+    thm:spg-partial-boundary-screen-kernel-relative-homology -/
+theorem paper_spg_partial_boundary_screen_kernel_relative_homology
+    {Cₙ Obs : Type*} [Zero Obs]
+    (fS : Cₙ → Obs) (relativeCycles relativeBoundaries relativeHomology : Set Cₙ)
+    (hker : { x | fS x = 0 } = relativeCycles)
+    (hboundaries : relativeBoundaries = (∅ : Set Cₙ))
+    (hhomology : relativeHomology = relativeCycles \ relativeBoundaries) :
+    { x | fS x = 0 } = relativeHomology := by
+  rw [hker, hhomology, hboundaries, Set.diff_empty]
+
 end Omega.SPG.ScreenKernelConnectedComponents

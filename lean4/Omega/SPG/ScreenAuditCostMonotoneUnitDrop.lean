@@ -63,4 +63,13 @@ theorem paper_spg_screen_audit_cost_monotone_unit_drop_package
     cost T ≤ cost S ∧ cost S ≤ cost T + (T \ S).card :=
   paper_spg_screen_audit_cost_monotone_unit_drop_seeds S T hST cost hmono hdrop
 
+/-- Unsuffixed paper-facing theorem for the screen audit cost monotonicity/unit-drop package.
+    cor:spg-screen-audit-cost-monotone-unit-drop -/
+theorem paper_spg_screen_audit_cost_monotone_unit_drop
+    {α : Type} [DecidableEq α] (S T : Finset α) (hST : S ⊆ T) (cost : Finset α → ℕ)
+    (hmono : ∀ {A B : Finset α}, A ⊆ B → cost B ≤ cost A)
+    (hdrop : ∀ {A : Finset α} {a : α}, a ∉ A → cost A ≤ cost (insert a A) + 1) :
+    cost T ≤ cost S ∧ cost S ≤ cost T + (T \ S).card :=
+  paper_spg_screen_audit_cost_monotone_unit_drop_package S T hST cost hmono hdrop
+
 end Omega.SPG.ScreenAuditCostMonotoneUnitDrop

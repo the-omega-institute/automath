@@ -38,4 +38,12 @@ theorem paper_physical_spacetime_local_space_quadratic_positive_package
     0 < dotProduct v ((A.transpose * A).mulVec v) :=
   paper_physical_spacetime_local_space_quadratic_positive_seeds A hA v hv
 
+/-- Paper-facing theorem using the canonical final name from the implementation ledger.
+    prop:physical-spacetime-local-space-quadratic-positive -/
+theorem paper_physical_spacetime_local_space_quadratic_positive
+    (A : Matrix (Fin 3) (Fin 3) ℝ) (hA : Function.Injective A.mulVec)
+    (v : Fin 3 → ℝ) (hv : v ≠ 0) :
+    0 < dotProduct v ((A.transpose * A).mulVec v) :=
+  paper_physical_spacetime_local_space_quadratic_positive_seeds A hA v hv
+
 end Omega.PhysicalSpacetimeSkeleton.LocalSpaceQuadraticPositive

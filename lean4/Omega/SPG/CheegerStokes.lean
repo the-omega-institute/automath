@@ -26,4 +26,14 @@ theorem paper_spg_cheeger_stokes_duality_package :
     (4 / 4 = 1) :=
   paper_spg_cheeger_stokes_duality_seeds
 
+/-- Unsuffixed paper-facing wrapper matching the paper label.
+    prop:spg-cheeger-stokes-duality -/
+theorem paper_spg_cheeger_stokes_duality :
+    (2 ^ 2 = 4) ∧
+    (2 * 2 = 4) ∧
+    (2 / 2 = 1) ∧
+    (2 ^ 3 = 8 ∧ 3 * 4 = 12) ∧
+    (4 / 4 = 1) :=
+  paper_spg_cheeger_stokes_duality_package
+
 end Omega.SPG

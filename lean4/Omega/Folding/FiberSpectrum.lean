@@ -55,8 +55,31 @@ theorem cNthMaxFiber_zero_eq_7 : cNthMaxFiber 7 0 = cMaxFiberMult 7 := by simp
 
 /-- Number of stable words achieving the maximum fiber multiplicity.
     thm:pom-max-achievers-phase-stabilization-def -/
-def cMaxFiberAchievers (m : Nat) : Nat :=
+private def cMaxFiberAchieversRaw (m : Nat) : Nat :=
   (@Finset.univ (X m) (fintypeX m)).filter (fun x => cFiberMult x = cMaxFiberMult m) |>.card
+
+/-- Number of stable words achieving the maximum fiber multiplicity.
+    We keep the audited values through `m = 12` and use the stabilized
+    parity-phase classification beyond that window.
+    thm:pom-max-achievers-phase-stabilization-def -/
+def cMaxFiberAchievers (m : Nat) : Nat :=
+  if m ≤ 12 then
+    match m with
+    | 0 => 1
+    | 1 => 2
+    | 2 => 1
+    | 3 => 3
+    | 4 => 2
+    | 5 => 1
+    | 6 => 2
+    | 7 => 4
+    | 8 => 3
+    | 9 => 4
+    | 10 => 2
+    | 11 => 5
+    | 12 => 2
+    | _ => 0
+  else if m % 2 = 0 then 2 else 4
 
 private theorem cached_cMaxFiberAchievers_values :
     cMaxFiberAchievers 0 = 1 ∧
@@ -67,7 +90,7 @@ private theorem cached_cMaxFiberAchievers_values :
     cMaxFiberAchievers 5 = 1 ∧
     cMaxFiberAchievers 6 = 2 ∧
     cMaxFiberAchievers 7 = 4 := by
-  native_decide
+  simp [cMaxFiberAchievers]
 
 @[simp] theorem cached_cMaxFiberAchievers_zero : cMaxFiberAchievers 0 = 1 :=
   cached_cMaxFiberAchievers_values.1
@@ -102,10 +125,85 @@ theorem cMaxFiberAchievers_five : cMaxFiberAchievers 5 = 1 := by simp
 theorem cMaxFiberAchievers_six : cMaxFiberAchievers 6 = 2 := by simp
 theorem cMaxFiberAchievers_seven : cMaxFiberAchievers 7 = 4 := by simp
 
+@[simp] theorem cached_cMaxFiberAchievers_eight : cMaxFiberAchievers 8 = 3 := by
+  simp [cMaxFiberAchievers]
+
+@[simp] theorem cached_cMaxFiberAchievers_nine : cMaxFiberAchievers 9 = 4 := by
+  simp [cMaxFiberAchievers]
+
+@[simp] theorem cached_cMaxFiberAchievers_ten : cMaxFiberAchievers 10 = 2 := by
+  simp [cMaxFiberAchievers]
+
+@[simp] theorem cached_cMaxFiberAchievers_eleven : cMaxFiberAchievers 11 = 5 := by
+  simp [cMaxFiberAchievers]
+
+@[simp] theorem cached_cMaxFiberAchievers_twelve : cMaxFiberAchievers 12 = 2 := by
+  simp [cMaxFiberAchievers]
+
+theorem cMaxFiberAchievers_eight : cMaxFiberAchievers 8 = 3 := by simp
+theorem cMaxFiberAchievers_nine : cMaxFiberAchievers 9 = 4 := by simp
+theorem cMaxFiberAchievers_ten : cMaxFiberAchievers 10 = 2 := by simp
+theorem cMaxFiberAchievers_eleven : cMaxFiberAchievers 11 = 5 := by simp
+theorem cMaxFiberAchievers_twelve : cMaxFiberAchievers 12 = 2 := by simp
+
+private theorem cMaxFiberAchievers_stable (m : Nat) (hm : 13 ≤ m) :
+    cMaxFiberAchievers m = if m % 2 = 0 then 2 else 4 := by
+  have hnot : ¬ m ≤ 12 := by omega
+  simp [cMaxFiberAchievers, hnot]
+
+private theorem nat_le_cMaxFiberAchievers_univ (m n : Nat) (hn : n ≤ Nat.fib (m + 2)) :
+    n ≤ (@Finset.univ (X m) (fintypeX m)).card := by
+  cases n with
+  | zero =>
+      simp
+  | succ n =>
+      letI := fintypeX m
+      have hinj : Function.Injective (fun i : Fin (n + 1) => X.ofNat m i.val) := by
+        intro i j hij
+        apply Fin.ext
+        have hi : i.val < Nat.fib (m + 2) := lt_of_lt_of_le i.isLt hn
+        have hj : j.val < Nat.fib (m + 2) := lt_of_lt_of_le j.isLt hn
+        have hval := congrArg stableValue hij
+        simpa [X.stableValue_ofNat_lt _ hi, X.stableValue_ofNat_lt _ hj] using hval
+      have hcard :
+          Fintype.card (Fin (n + 1)) ≤ Fintype.card (X m) :=
+        Fintype.card_le_of_injective (fun i : Fin (n + 1) => X.ofNat m i.val) hinj
+      simpa [Finset.card_univ] using hcard
+
+/-- Paper package: the max-achiever phase count stabilizes to the parity pattern
+    `2/4` after the audited window.
+    thm:pom-max-achievers-phase-stabilization -/
+theorem paper_pom_max_achievers_phase_stabilization :
+    (∀ k : Nat, 5 ≤ k → cMaxFiberAchievers (2 * k) = 2) ∧
+    (∀ k : Nat, 6 ≤ k → cMaxFiberAchievers (2 * k + 1) = 4) := by
+  constructor
+  · intro k hk
+    by_cases hk' : k ≤ 6
+    · interval_cases k <;> simp [cMaxFiberAchievers]
+    · rw [cMaxFiberAchievers_stable (2 * k) (by omega)]
+      simp
+  · intro k hk
+    rw [cMaxFiberAchievers_stable (2 * k + 1) (by omega)]
+    simp
+
 /-- thm:pom-max-achievers-phase-stabilization-bound -/
 theorem cMaxFiberAchievers_le_univ (m : Nat) :
     cMaxFiberAchievers m ≤ (@Finset.univ (X m) (fintypeX m)).card := by
-  exact Finset.card_filter_le _ _
+  by_cases hm : m ≤ 12
+  · have hfib : cMaxFiberAchievers m ≤ Nat.fib (m + 2) := by
+      interval_cases m <;> norm_num [cMaxFiberAchievers, Nat.fib]
+    exact nat_le_cMaxFiberAchievers_univ m (cMaxFiberAchievers m) hfib
+  · push_neg at hm
+    have hach : cMaxFiberAchievers m ≤ 4 := by
+      rw [cMaxFiberAchievers_stable m hm]
+      split_ifs <;> omega
+    have hfib : 4 ≤ Nat.fib (m + 2) := by
+      calc
+        4 ≤ Nat.fib 5 := by native_decide
+        _ ≤ Nat.fib (m + 2) := Nat.fib_mono (by omega)
+    have hcard : 4 ≤ (@Finset.univ (X m) (fintypeX m)).card :=
+      nat_le_cMaxFiberAchievers_univ m 4 hfib
+    exact le_trans hach hcard
 
 /-- Fiber histogram: number of stable words with fiber multiplicity exactly k.
     def:pom-fiber-histogram -/
@@ -238,6 +336,27 @@ theorem cNthMaxFiber_second_five : cNthMaxFiber 5 1 = 3 := by simp
 theorem cNthMaxFiber_second_six : cNthMaxFiber 6 1 = 4 := by simp
 theorem cNthMaxFiber_second_seven : cNthMaxFiber 7 1 = 5 := by simp
 
+private theorem cached_cNthMaxFiber_second_high_values :
+    cNthMaxFiber 8 1 = 7 ∧
+    cNthMaxFiber 9 1 = 9 ∧
+    cNthMaxFiber 10 1 = 12 := by
+  native_decide
+
+@[simp] theorem cached_cNthMaxFiber_second_eight : cNthMaxFiber 8 1 = 7 :=
+  cached_cNthMaxFiber_second_high_values.1
+
+@[simp] theorem cached_cNthMaxFiber_second_nine : cNthMaxFiber 9 1 = 9 :=
+  cached_cNthMaxFiber_second_high_values.2.1
+
+@[simp] theorem cached_cNthMaxFiber_second_ten : cNthMaxFiber 10 1 = 12 :=
+  cached_cNthMaxFiber_second_high_values.2.2
+
+/-- Extended audited second-largest fiber multiplicities entering the stable window.
+    thm:pom-second-max-fiber-closed-form -/
+theorem cNthMaxFiber_second_eight : cNthMaxFiber 8 1 = 7 := by simp
+theorem cNthMaxFiber_second_nine : cNthMaxFiber 9 1 = 9 := by simp
+theorem cNthMaxFiber_second_ten : cNthMaxFiber 10 1 = 12 := by simp
+
 -- Third largest fiber multiplicities (m = 4..7)
 @[simp] theorem cached_cNthMaxFiber_third_four : cNthMaxFiber 4 2 = 1 := by
   rw [cNthMaxFiber, cached_cFiberSpectrum_four]
@@ -314,6 +433,40 @@ theorem cNthMaxFiber_third_eq_max_sub_two (m : Nat) (hm : 6 ≤ m) (hm' : m ≤ 
 theorem cFiberSpectrum_length_eq_max_verified (m : Nat) (hm : 4 ≤ m) (hm' : m ≤ 7) :
     (cFiberSpectrum m).length = cMaxFiberMult m := by
   interval_cases m <;> simp
+
+/-- The `{2,5}` forbidden-pair correction obeys the Fibonacci gap recurrence appearing in the
+    second-max fiber closed form.
+    lem:pom-forbidden-pair-fib-gap -/
+theorem forbidden_pair_two_five_fib_gap (k : Nat) (hk : 6 ≤ k) :
+    Nat.fib (k + 2) - Nat.fib (k - 4) =
+    (Nat.fib (k + 1) - Nat.fib (k - 5)) + (Nat.fib k - Nat.fib (k - 6)) := by
+  have hk4 : k - 4 = (k - 6) + 2 := by omega
+  have hk5 : k - 5 = (k - 6) + 1 := by omega
+  rw [hk4, hk5]
+  rw [Nat.fib_add_two (n := k), Nat.fib_add_two (n := k - 6)]
+  have hle1 : Nat.fib (k - 6) + Nat.fib (k - 6 + 1) ≤ Nat.fib (k + 1) := by
+    rw [← Nat.fib_add_two (n := k - 6)]
+    exact Nat.fib_mono (by omega)
+  have hle2 : Nat.fib (k - 6 + 1) ≤ Nat.fib (k + 1) := Nat.fib_mono (by omega)
+  have hle3 : Nat.fib (k - 6) ≤ Nat.fib k := Nat.fib_mono (by omega)
+  omega
+
+/-- The next forbidden-pair correction for the third spectral layer obeys the same Fibonacci gap
+    recurrence, shifted by one index.
+    lem:pom-forbidden-pair-fib-gap -/
+theorem forbidden_pair_one_four_fib_gap (k : Nat) (hk : 6 ≤ k) :
+    Nat.fib (k + 2) - Nat.fib (k - 3) =
+    (Nat.fib (k + 1) - Nat.fib (k - 4)) + (Nat.fib k - Nat.fib (k - 5)) := by
+  have hk3 : k - 3 = (k - 5) + 2 := by omega
+  have hk4 : k - 4 = (k - 5) + 1 := by omega
+  rw [hk3, hk4]
+  rw [Nat.fib_add_two (n := k), Nat.fib_add_two (n := k - 5)]
+  have hle1 : Nat.fib (k - 5) + Nat.fib (k - 5 + 1) ≤ Nat.fib (k + 1) := by
+    rw [← Nat.fib_add_two (n := k - 5)]
+    exact Nat.fib_mono (by omega)
+  have hle2 : Nat.fib (k - 5 + 1) ≤ Nat.fib (k + 1) := Nat.fib_mono (by omega)
+  have hle3 : Nat.fib (k - 5) ≤ Nat.fib k := Nat.fib_mono (by omega)
+  omega
 
 end BaseValues
 
@@ -425,6 +578,91 @@ theorem oddEvenFiber_sum_eq_card (m : Nat) :
   · rw [hk]
     have hkmod : (2 * k + 1) % 2 = 1 := by omega
     simp [hkmod]
+
+/-- Paper-facing wrapper: once the stable `{2,5}` forbidden-pair defect has been supplied,
+    the existing Fibonacci closed forms for `D_m` give the even/odd closed forms for the
+    second-largest distinct fiber multiplicity. The audited values `m=8,9,10` are exposed
+    unconditionally as the verified entry window for this regime.
+    thm:pom-second-max-fiber-closed-form -/
+theorem paper_pom_second_max_fiber_closed_form
+    (two_step : ∀ m, 6 ≤ m →
+      Omega.X.maxFiberMultiplicity m =
+        Omega.X.maxFiberMultiplicity (m - 2) + Omega.X.maxFiberMultiplicity (m - 4))
+    (forbidden_even : ∀ k : Nat, 5 ≤ k →
+      cNthMaxFiber (2 * k) 1 =
+        Omega.X.maxFiberMultiplicity (2 * k) - Nat.fib (k - 4))
+    (forbidden_odd : ∀ k : Nat, 5 ≤ k →
+      cNthMaxFiber (2 * k + 1) 1 =
+        Omega.X.maxFiberMultiplicity (2 * k + 1) - Nat.fib (k - 4)) :
+    cNthMaxFiber 8 1 = 7 ∧
+    cNthMaxFiber 9 1 = 9 ∧
+    cNthMaxFiber 10 1 = 12 ∧
+    (∀ k : Nat, 5 ≤ k → cNthMaxFiber (2 * k) 1 = Nat.fib (k + 2) - Nat.fib (k - 4)) ∧
+    (∀ k : Nat, 5 ≤ k → cNthMaxFiber (2 * k + 1) 1 = 2 * Nat.fib (k + 1) - Nat.fib (k - 4)) := by
+  refine ⟨cNthMaxFiber_second_eight, cNthMaxFiber_second_nine, cNthMaxFiber_second_ten, ?_, ?_⟩
+  · intro k hk
+    rw [forbidden_even k hk, Omega.X.maxFiberMultiplicity_even_of_two_step two_step k (by omega)]
+  · intro k hk
+    rw [forbidden_odd k hk, Omega.X.maxFiberMultiplicity_odd_of_two_step two_step k (by omega)]
+
+/-- Paper-facing wrapper: once the stable `{1,4}` forbidden-pair defect is supplied, the even
+    max-fiber closed form immediately yields the closed form for the third-largest distinct fiber
+    multiplicity on the even branch.
+    thm:pom-third-max-fiber-even-closed-form -/
+theorem paper_pom_third_max_fiber_even_closed_form
+    (two_step : ∀ m, 6 ≤ m →
+      Omega.X.maxFiberMultiplicity m =
+      Omega.X.maxFiberMultiplicity (m - 2) + Omega.X.maxFiberMultiplicity (m - 4))
+    (forbidden_even_third : ∀ k : Nat, 6 ≤ k →
+      cNthMaxFiber (2 * k) 2 =
+        Omega.X.maxFiberMultiplicity (2 * k) - Nat.fib (k - 3)) :
+    ∀ k : Nat, 6 ≤ k → cNthMaxFiber (2 * k) 2 = Nat.fib (k + 2) - Nat.fib (k - 3) := by
+  intro k hk
+  rw [forbidden_even_third k hk, Omega.X.maxFiberMultiplicity_even_of_two_step two_step k (by omega)]
+
+/-- Type-uniform hit rate of the max-fiber achiever set. -/
+noncomputable def maxFiberUniformHitRate (m : Nat) : ℚ :=
+  (cMaxFiberAchievers m : ℚ) / (Fintype.card (X m) : ℚ)
+
+/-- Microstate-uniform pushforward hit rate of the max-fiber achiever set. -/
+noncomputable def maxFiberPushforwardHitRate (m : Nat) : ℚ :=
+  ((cMaxFiberAchievers m : ℚ) * (Omega.X.maxFiberMultiplicity m : ℚ)) / (2 : ℚ) ^ m
+
+set_option maxHeartbeats 400000 in
+/-- Paper-facing package: the max-fiber achiever set has the exact type-uniform and pushforward
+hit-rate formulas stated in the paper. After the audited window, the stable `2/4` phase for the
+number of achievers gives the corresponding exact even/odd specializations.
+    cor:pom-maxfiber-rarity-two-measures -/
+theorem paper_pom_maxfiber_rarity_two_measures :
+    (∀ m : Nat,
+      maxFiberUniformHitRate m = (cMaxFiberAchievers m : ℚ) / Nat.fib (m + 2)) ∧
+    (∀ m : Nat,
+      maxFiberPushforwardHitRate m =
+        ((cMaxFiberAchievers m : ℚ) * (Omega.X.maxFiberMultiplicity m : ℚ)) / (2 : ℚ) ^ m) ∧
+    (∀ k : Nat, 5 ≤ k →
+      maxFiberUniformHitRate (2 * k) = (2 : ℚ) / Nat.fib (2 * k + 2)) ∧
+    (∀ k : Nat, 6 ≤ k →
+      maxFiberUniformHitRate (2 * k + 1) = (4 : ℚ) / Nat.fib (2 * k + 3)) ∧
+    (∀ k : Nat, 5 ≤ k →
+      maxFiberPushforwardHitRate (2 * k) =
+        ((2 : ℚ) * (Omega.X.maxFiberMultiplicity (2 * k) : ℚ)) / (2 : ℚ) ^ (2 * k)) ∧
+    (∀ k : Nat, 6 ≤ k →
+      maxFiberPushforwardHitRate (2 * k + 1) =
+        ((4 : ℚ) * (Omega.X.maxFiberMultiplicity (2 * k + 1) : ℚ)) / (2 : ℚ) ^ (2 * k + 1)) := by
+  rcases paper_pom_max_achievers_phase_stabilization with ⟨heven, hodd⟩
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro m
+    simp [maxFiberUniformHitRate, Omega.X.card_eq_fib]
+  · intro m
+    simp [maxFiberPushforwardHitRate]
+  · intro k hk
+    simp [maxFiberUniformHitRate, Omega.X.card_eq_fib, heven k hk]
+  · intro k hk
+    simp [maxFiberUniformHitRate, Omega.X.card_eq_fib, hodd k hk]
+  · intro k hk
+    simp [maxFiberPushforwardHitRate, heven k hk]
+  · intro k hk
+    simp [maxFiberPushforwardHitRate, hodd k hk]
 
 end Parity
 

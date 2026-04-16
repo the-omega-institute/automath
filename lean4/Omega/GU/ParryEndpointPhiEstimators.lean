@@ -43,4 +43,17 @@ theorem paper_parry_endpoint_phi_estimators_package
   paper_parry_endpoint_phi_estimators_seeds phiVal base M00 M01 M11 Fm Fm1 Fm2 hphi hbase hFm
     hFm1 hFm2 h00 h01 h11
 
+/-- Paper-facing corollary name for the endpoint `φ` estimators. -/
+theorem paper_parry_endpoint_phi_estimators
+    (phiVal base M00 M01 M11 Fm Fm1 Fm2 : ℚ)
+    (hphi : phiVal ≠ 0) (hbase : base ≠ 0)
+    (hFm : Fm ≠ 0) (hFm1 : Fm1 ≠ 0) (hFm2 : Fm2 ≠ 0)
+    (h00 : M00 = base * Fm)
+    (h01 : M01 = base * Fm1 / phiVal)
+    (h11 : M11 = base * Fm2 / (phiVal * phiVal)) :
+    phiEstimator00_01 M00 M01 Fm Fm1 = phiVal ∧
+      phiEstimator01_11 M01 M11 Fm1 Fm2 = phiVal :=
+  paper_parry_endpoint_phi_estimators_package phiVal base M00 M01 M11 Fm Fm1 Fm2 hphi hbase hFm
+    hFm1 hFm2 h00 h01 h11
+
 end Omega.GU.ParryEndpointPhiEstimators

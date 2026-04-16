@@ -50,10 +50,26 @@ theorem paper_conclusion_pisano1_positive_sea_seeds :
 
 /-- Package wrapper for the Pisano-1 positive sea seeds.
     cor:conclusion-pisano1-positive-sea-exponential-dominance -/
+theorem paper_conclusion_pisano1_positive_sea_exponential_dominance :
+    Nat.fib 8 % 3 = Nat.fib 0 % 3 ∧
+    (∀ n : Nat, n = 0 ∨ n = 1 ∨ n ≥ 2) ∧
+    (∀ r : Nat, r ≥ 3 → r * (r - 1) ≥ 2 * r) := by
+  exact paper_conclusion_pisano1_positive_sea_seeds
+
+/-- Package wrapper for the Pisano-1 positive sea seeds.
+    cor:conclusion-pisano1-positive-sea-exponential-dominance -/
 theorem paper_conclusion_pisano1_positive_sea_package :
     Nat.fib 8 % 3 = Nat.fib 0 % 3 ∧
     (∀ n : Nat, n = 0 ∨ n = 1 ∨ n ≥ 2) ∧
     (∀ r : Nat, r ≥ 3 → r * (r - 1) ≥ 2 * r) :=
-  paper_conclusion_pisano1_positive_sea_seeds
+  paper_conclusion_pisano1_positive_sea_exponential_dominance
+
+/-- Paper: `thm:conclusion-pisano1-threephase-sign-sea-law`.
+    The theorem label uses the same verified Pisano-mod-3 seed package. -/
+theorem paper_conclusion_pisano1_threephase_sign_sea_law :
+    Nat.fib 8 % 3 = Nat.fib 0 % 3 ∧
+    (∀ n : Nat, n = 0 ∨ n = 1 ∨ n ≥ 2) ∧
+    (∀ r : Nat, r ≥ 3 → r * (r - 1) ≥ 2 * r) :=
+  paper_conclusion_pisano1_positive_sea_package
 
 end Omega.Conclusion

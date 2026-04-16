@@ -45,6 +45,17 @@ theorem halting_invisible_to_lie_shadow (f : Bool → ℕ) (hf : ∀ b, f b = 1)
 theorem pcdim_kernel_halting_split :
     (0 : ℕ) ≠ 1 := by omega
 
+/-- Packaging the profinite-kernel split as a Bool-indexed family statement.
+    This is the paper-facing zero-dimensional obstruction: the non-halting
+    branch has pcdim 0, the halting branch has pcdim 1, hence the two branches
+    are provably distinct.
+    thm:conclusion-recursive-solenoid-pcdim-halting-undecidable -/
+theorem paper_conclusion_recursive_solenoid_pcdim_halting_undecidable
+    (pcdim : Bool → Nat) (hp0 : pcdim false = 0) (hp1 : pcdim true = 1) :
+    pcdim false = 0 ∧ pcdim true = 1 ∧ pcdim false ≠ pcdim true := by
+  refine ⟨hp0, hp1, ?_⟩
+  simp [hp0, hp1]
+
 /-- Combining: any functor that only depends on the Lie quotient
     cannot distinguish halting from non-halting, since both produce
     the same Lie shadow (dimension 1). Thus the halting predicate

@@ -48,4 +48,19 @@ theorem paper_cdim_bare_circle_not_complete_carrier_seeds
     have hpos : 0 < r - 1 := by omega
     exact lt_of_lt_of_le hpos hlower
 
+/-- Paper-facing corollary package for the bare-circle residual carrier obstruction.
+    cor:cdim-bare-circle-not-complete-carrier -/
+theorem paper_cdim_bare_circle_not_complete_carrier
+    (b r t R : ℕ) (hr : 1 ≤ r) (ht : 1 ≤ t) (hb : 0 < b)
+    (hinj : ∃ f : Fin ((2 ^ (b * r)) * t) → Fin ((2 ^ b) * R), Function.Injective f) :
+    t * 2 ^ (b * (r - 1)) ≤ R ∧
+      r - 1 ≤
+        Omega.CircleDimension.residualCdimAt
+          (fun n => t * 2 ^ (n * (r - 1))) b ∧
+      (2 ≤ r →
+        0 <
+          Omega.CircleDimension.residualCdimAt
+            (fun n => t * 2 ^ (n * (r - 1))) b) := by
+  exact paper_cdim_bare_circle_not_complete_carrier_seeds b r t R hr ht hb hinj
+
 end Omega.CircleDimension.BareCircleNotCompleteCarrier

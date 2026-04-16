@@ -77,4 +77,23 @@ theorem paper_parry_endpoint_mass_matrix_package [DecidableEq α] [DecidableEq �
   paper_parry_endpoint_mass_matrix_seeds words start finish pm fiberCard endpointWeight ell r
     stationary normalizer decay i j hcard hconst hweight hstationary hr_nonzero
 
+/-- Unsuffixed paper-facing wrapper matching the paper label.
+    prop:parry-endpoint-mass-matrix -/
+theorem paper_parry_endpoint_mass_matrix [DecidableEq α] [DecidableEq ι]
+    (words : Finset α) (start finish : α → ι) (pm : α → ℚ)
+    (fiberCard : ι → ι → ℕ) (endpointWeight : ι → ι → ℚ)
+    (ell r stationary : ι → ℚ)
+    (normalizer decay : ℚ) (i j : ι)
+    (hcard : (endpointFiber words start finish i j).card = fiberCard i j)
+    (hconst : ∀ u ∈ endpointFiber words start finish i j, pm u = endpointWeight i j)
+    (hweight : endpointWeight i j = (ell i * r j / normalizer) * decay)
+    (hstationary : stationary i = ell i * r i / normalizer)
+    (hr_nonzero : r i ≠ 0) :
+    endpointMass words start finish pm i j =
+        (fiberCard i j : ℚ) * ((ell i * r j / normalizer) * decay) ∧
+      endpointMass words start finish pm i j =
+        (fiberCard i j : ℚ) * (stationary i * (r j / r i) * decay) :=
+  paper_parry_endpoint_mass_matrix_package words start finish pm fiberCard endpointWeight ell r
+    stationary normalizer decay i j hcard hconst hweight hstationary hr_nonzero
+
 end Omega.GU.ParryEndpointMassMatrix
