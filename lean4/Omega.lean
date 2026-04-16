@@ -123,6 +123,7 @@ import Omega.Folding.MetallicIntegerScalarizationThreshold
 import Omega.Folding.OstrowskiMetallicTwoRuleNormalization
 import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.LocalRewriteLdpBarrier
+import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
 import Omega.Folding.ZeroFiberLinear
 import Omega.FoldResidualTime.Window6SecondCollisionConstant
@@ -755,6 +756,7 @@ import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonCardinalReconstruction
 import Omega.CircleDimension.PoissonCauchyFiniteLaurentModes
 import Omega.CircleDimension.PoissonCentralTwoChannel
+import Omega.CircleDimension.PoissonCentralTwoChannelLocalUniqueness
 import Omega.CircleDimension.PoissonCentralTwoChannelReconstruction
 import Omega.CircleDimension.PoissonCauchyMomentInversionByPhaseModes
 import Omega.CircleDimension.PoissonChannelRKHS
@@ -926,6 +928,7 @@ import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6VisibleCartanQuotientSyzygySplitting
 import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
 import Omega.GU.Window6B3C3EvenMomentGapLaplaceDomination
+import Omega.GU.Window6LabeledSphericalCubatureStrengthFive
 import Omega.GU.Window6B3C3SphericalCubatureStrength5
 import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
 import Omega.GU.Window6C3SupportCount
