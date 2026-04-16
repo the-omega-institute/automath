@@ -613,6 +613,21 @@ theorem fib_shift4 (n : Nat) (hn : 1 ≤ n) :
   have h4 := Nat.fib_add_two (n := j + 3)
   linarith
 
+/-- The four entrywise identities of the Fibonacci tail-matrix law
+`G_{m+4} = G_m Q^4`. prop:resolution-shift4-fib-matrix-law -/
+theorem paper_resolution_shift4_fib_matrix_law (m : ℕ) (hm : 2 ≤ m) :
+    Nat.fib (m + 7) = 5 * Nat.fib (m + 3) + 3 * Nat.fib (m + 2) ∧
+      Nat.fib (m + 6) = 3 * Nat.fib (m + 3) + 2 * Nat.fib (m + 2) ∧
+      Nat.fib (m + 8) = 5 * Nat.fib (m + 4) + 3 * Nat.fib (m + 3) ∧
+      Nat.fib (m + 7) = 3 * Nat.fib (m + 4) + 2 * Nat.fib (m + 3) := by
+  have hm3 : 1 ≤ m + 3 := by omega
+  have hm4 : 1 ≤ m + 4 := by omega
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · simpa [show m + 3 - 1 = m + 2 by omega, Nat.add_assoc] using fib_shift4 (m + 3) hm3
+  · simpa [show m + 3 - 1 = m + 2 by omega, Nat.add_assoc] using fib_shift3 (m + 3) hm3
+  · simpa [show m + 4 - 1 = m + 3 by omega, Nat.add_assoc] using fib_shift4 (m + 4) hm4
+  · simpa [show m + 4 - 1 = m + 3 by omega, Nat.add_assoc] using fib_shift3 (m + 4) hm4
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R36: Zeckendorf no-carry additivity (concrete instances)
 -- ══════════════════════════════════════════════════════════════

@@ -46,4 +46,16 @@ theorem paper_conclusion_free_energy_nonmonotone_absolute_uncompilability (n : �
   intro f hNonmono hRealizable
   exact hNonmono ((hClass f).mp hRealizable)
 
+/-- Free-energy gates coincide exactly with the monotone Boolean clone once the two paper-facing
+directions are packaged.
+    thm:conclusion-free-energy-gates-equal-monotone-boolean-clone -/
+theorem paper_conclusion_free_energy_gates_equal_monotone_boolean_clone (n : ℕ)
+    (realizable monotone : ((Fin n → Bool) → Bool) → Prop)
+    (hEmbed : ∀ f, monotone f → realizable f) (hObstruct : ∀ f, realizable f → monotone f) :
+    ∀ f, realizable f ↔ monotone f := by
+  intro f
+  constructor
+  · exact hObstruct f
+  · exact hEmbed f
+
 end Omega.Conclusion

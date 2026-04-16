@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.Data.Nat.Fib.Basic
+import Omega.Folding.FiberWeightCount
 
 namespace Omega.Folding.ZeroFiberLinear
 
@@ -105,5 +106,20 @@ theorem paper_fold_zero_fiber_linear_extended :
    weightSumAtMm_step_recurrence.1,
    weightSumAtMm_step_recurrence.2.2.1,
    weightSumAtMm_step_recurrence.2.2.2.2⟩
+
+/-- `weightSumAtMm` is exactly the exact-weight count at the Fibonacci threshold. -/
+theorem weightSumAtMm_eq_exactWeightCount (m : Nat) :
+    weightSumAtMm m = Omega.exactWeightCount m (Nat.fib (m + 2)) := by
+  unfold weightSumAtMm Omega.exactWeightCount
+  congr 1
+  ext w
+  simp [Omega.weight_eq_fib_ite_sum]
+
+/-- Paper package: the zero fiber has size `1 + ⌊m / 2⌋` for all `m ≥ 2`.
+    prop:fold-zero-fiber-linear -/
+theorem paper_fold_zero_fiber_linear (m : Nat) (hm : 2 ≤ m) :
+    1 + Omega.Folding.ZeroFiberLinear.weightSumAtMm m = 1 + m / 2 := by
+  have hm' : 2 ≤ m := hm
+  rw [weightSumAtMm_eq_exactWeightCount, Omega.exactWeightCount_fib_closed]
 
 end Omega.Folding.ZeroFiberLinear

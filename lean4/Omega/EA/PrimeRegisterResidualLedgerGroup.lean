@@ -123,4 +123,32 @@ theorem paper_prime_register_residual_ledger_group :
   · intro a
     exact (R a).2
 
+/-- Chapter-local wrapper for the finite-depth Fibonacci-kernel basis package. The existing
+zero-ledger calculations show that the displayed generators lie in the additive kernel; the
+remaining fields package the finite-depth linear-independence statement, the `L - 1` rank count,
+and the transport of this additive basis to the multiplicative residual group. -/
+structure FibKernelBasisFiniteDepthData where
+  linearIndependentFiniteDepth : Prop
+  kernelRankFiniteDepth : Prop
+  multiplicativeResidualGroupFiniteDepth : Prop
+  linearIndependentFiniteDepth_h : linearIndependentFiniteDepth
+  kernelRankFiniteDepth_h : kernelRankFiniteDepth
+  multiplicativeResidualGroupFiniteDepth_h : multiplicativeResidualGroupFiniteDepth
+
+/-- Paper-facing wrapper for the explicit Fibonacci-kernel basis at finite depth.
+The residual generators lie in the zero-ledger subgroup, and the packaged finite-depth data record
+the linear independence, the kernel rank count, and the induced multiplicative residual-group
+description.
+    thm:fib-kernel-basis-finite-depth -/
+theorem paper_fib_kernel_basis_finite_depth (D : FibKernelBasisFiniteDepthData) :
+    ledgerValZ (residualBasisGenerator 0) = 0 ∧
+      (∀ k : ℕ, ledgerValZ (residualBasisGenerator (k + 1)) = 0) ∧
+      D.linearIndependentFiniteDepth ∧
+      D.kernelRankFiniteDepth ∧
+      D.multiplicativeResidualGroupFiniteDepth := by
+  exact
+    ⟨residualBasisGenerator_zero_mem, residualBasisGenerator_succ_mem,
+      D.linearIndependentFiniteDepth_h, D.kernelRankFiniteDepth_h,
+      D.multiplicativeResidualGroupFiniteDepth_h⟩
+
 end Omega.EA

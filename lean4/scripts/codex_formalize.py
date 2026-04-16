@@ -203,11 +203,21 @@ def ensure_base_branch() -> None:
 
 
 def _clone_lake_cache(wt_path: Path) -> None:
-    """Copy the .lake build cache into a new worktree using APFS clonefile.
+    """Set up the .lake directory in a new worktree.
 
-    On macOS APFS, ``cp -Rc`` creates copy-on-write clones — near-instant and
-    zero extra disk until files diverge.  Falls back to a regular copy on
-    non-APFS volumes (slower but still correct).
+    Strategy:
+    - ``packages/`` is symlinked to the main repo's copy.  External deps never
+      change between rounds, so sharing them is safe.  More importantly, lake
+      resolves artifact paths from ``Omega.setup.json`` which embeds absolute
+      paths like ``/…/lean4/.lake/packages/…``; those paths remain valid when
+      packages live at the *same* location as in the main repo.  A full copy
+      causes lake to regenerate ``Omega.setup.json`` with the new worktree
+      paths, invalidating all cached .olean references and forcing a full
+      rebuild (~30-60 min per round instead of ~5 min).
+    - ``build/`` (Omega's compiled artifacts) is APFS-cloned (copy-on-write)
+      so each worktree starts with the full incremental cache and lake only
+      recompiles the 2-3 new files added in the round.
+    - ``config/`` is APFS-cloned as well (small, round-specific lake config).
     """
     src = LEAN_ROOT / ".lake"
     dst = wt_path / "lean4" / ".lake"
@@ -218,18 +228,36 @@ def _clone_lake_cache(wt_path: Path) -> None:
         return  # already present (shouldn't happen for a fresh worktree)
 
     start = time.monotonic()
-    # Try APFS clone first (macOS)
-    result = run_cmd(
-        ["cp", "-Rc", str(src), str(dst)],
-        timeout=300,
-    )
-    if result.returncode != 0:
-        # Fallback: regular copy
-        logger.warning("APFS clone failed, falling back to regular copy")
-        shutil.copytree(str(src), str(dst), symlinks=True)
+    dst.mkdir(parents=True, exist_ok=True)
+
+    # 1. Symlink packages/ → main repo's packages (preserves absolute paths in
+    #    Omega.setup.json, prevents lake from invalidating the .olean cache).
+    src_pkg = src / "packages"
+    if src_pkg.exists():
+        (dst / "packages").symlink_to(src_pkg)
+
+    # 2. APFS-clone build/ and config/ (round-local, writable copies).
+    for sub in ("build", "config"):
+        src_sub = src / sub
+        dst_sub = dst / sub
+        if not src_sub.exists():
+            continue
+        result = run_cmd(["cp", "-Rc", str(src_sub), str(dst_sub)], timeout=600)
+        if result.returncode != 0:
+            logger.warning(f"APFS clone of .lake/{sub} failed, retrying...")
+            if dst_sub.exists():
+                shutil.rmtree(dst_sub, ignore_errors=True)
+            time.sleep(2)
+            result = run_cmd(["cp", "-Rc", str(src_sub), str(dst_sub)], timeout=600)
+        if result.returncode != 0:
+            logger.warning(f"APFS clone retry failed for .lake/{sub}, falling back to regular copy")
+            if dst_sub.exists():
+                shutil.rmtree(dst_sub, ignore_errors=True)
+            shutil.copytree(str(src_sub), str(dst_sub), symlinks=True)
 
     elapsed = time.monotonic() - start
-    logger.info(f"Cloned .lake cache into worktree ({elapsed:.1f}s)")
+    logger.info(f"Set up .lake in worktree ({elapsed:.1f}s): "
+                f"packages=symlink, build/config=COW-clone")
 
 
 def create_worktree(round_num: int) -> WorktreeInfo:
@@ -272,16 +300,22 @@ def remove_worktree(wt: WorktreeInfo) -> None:
         logger.info(f"Removing worktree: {wt.path}")
         run_cmd(["git", "worktree", "remove", "--force", str(wt.path)], cwd=REPO_ROOT)
         if wt.path.exists():
+            # Remove symlinks first (shutil.rmtree doesn't follow them, but the
+            # packages/ symlink target must not be deleted — only the link itself).
+            lake_dir = wt.path / "lean4" / ".lake"
+            pkg_link = lake_dir / "packages"
+            if pkg_link.is_symlink():
+                pkg_link.unlink()
             shutil.rmtree(wt.path, ignore_errors=True)
-        # Delete the branch (already merged)
-        run_cmd(["git", "branch", "-d", wt.branch], cwd=REPO_ROOT)
+        # Use -D (force-delete) so unmerged branches are cleaned up too.
+        run_cmd(["git", "branch", "-D", wt.branch], cwd=REPO_ROOT)
 
 
 def _codex_resolve_conflicts(
     wt_path: Path,
     *,
     model: Optional[str] = None,
-    timeout: int = 300,
+    timeout: int = 1200,
 ) -> bool:
     """Use codex exec to resolve rebase conflicts in a worktree.
 
@@ -330,17 +364,8 @@ def _codex_resolve_conflicts(
         timeout_seconds=timeout,
     )
 
-    # Check if rebase completed
-    rebase_status = run_cmd(["git", "status", "--short"], cwd=wt_path)
-    in_rebase = run_cmd(
-        ["git", "rev-parse", "--git-path", "rebase-merge"], cwd=wt_path
-    )
-    rebase_dir = wt_path / ".git" if (wt_path / ".git").is_file() else wt_path / ".git"
-
     # Check if still in rebase state
-    still_rebasing = run_cmd(
-        ["git", "status"], cwd=wt_path
-    )
+    still_rebasing = run_cmd(["git", "status"], cwd=wt_path)
     if "rebase in progress" in still_rebasing.stdout.lower():
         logger.warning("Codex did not complete rebase, aborting")
         run_cmd(["git", "rebase", "--abort"], cwd=wt_path)
@@ -360,87 +385,93 @@ def _codex_resolve_conflicts(
 def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> bool:
     """Merge the worktree branch into BASE_BRANCH and push.
 
-    Strategy: rebase the worktree branch onto the latest BASE_BRANCH *inside
-    the worktree itself*, then fast-forward the local BASE_BRANCH ref via
-    ``git update-ref``.  This never checks out BASE_BRANCH in the main repo,
-    so it works even when the main working tree is dirty.
+    Strategy:
+    1. Fetch origin so we have the latest remote state.
+    2. Fast-forward LOCAL BASE_BRANCH from origin (if origin is ahead).
+       Uses ``git fetch . origin/BASE:BASE`` which is ff-only and safe —
+       it never overwrites local-only commits that haven't been pushed yet.
+    3. Rebase the worktree branch onto the LOCAL BASE_BRANCH (not origin/).
+       This ensures any local-only commits (e.g. prompt/script edits made
+       directly on the branch without pushing first) are included in the
+       rebase base and are not lost.
+    4. Fast-forward LOCAL BASE_BRANCH to the rebased worktree tip via
+       ``git fetch . wt_tip:BASE_BRANCH`` (ff-only, never force-moves the
+       ref past local-only commits, never touches the working tree).
+    5. Push to origin.
 
-    On rebase conflict, delegates to codex exec for automatic resolution
-    (typical: parallel import additions to Omega.lean, IMPLEMENTATION_PLAN
-    header updates, .tex annotation appends).
+    The old ``git update-ref + git reset --hard HEAD`` pattern was unsafe:
+    it unconditionally moved the branch pointer to the worktree tip (which
+    was rebased on origin/, not on local commits) and then discarded any
+    local-only working-tree changes.
     """
     with _git_lock:
         logger.info(f"Merging {wt.branch} into {BASE_BRANCH}...")
 
-        # 1. Fetch latest base branch
-        run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT)
+        def _do_rebase_and_ff(attempt: int) -> bool:
+            # 1. Fetch latest remote state
+            run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=300)
 
-        # 2. Rebase the worktree branch onto latest base (inside the worktree)
-        rebase = run_cmd(
-            ["git", "rebase", f"origin/{BASE_BRANCH}"],
-            cwd=wt.path,
-            timeout=120,
-        )
-        if rebase.returncode != 0:
-            logger.warning(f"Rebase conflict for {wt.branch}, invoking codex to resolve...")
-            resolved = _codex_resolve_conflicts(wt.path, model=model)
-            if not resolved:
-                logger.error(f"Codex could not resolve conflicts for {wt.branch}")
-                run_cmd(["git", "rebase", "--abort"], cwd=wt.path)
-                return False
-
-        # 3. Fast-forward BASE_BRANCH ref to the rebased worktree tip
-        wt_tip = run_cmd(
-            ["git", "rev-parse", "HEAD"], cwd=wt.path
-        ).stdout.strip()
-
-        update = run_cmd(
-            ["git", "update-ref", f"refs/heads/{BASE_BRANCH}", wt_tip],
-            cwd=REPO_ROOT,
-        )
-        if update.returncode != 0:
-            logger.error(f"update-ref failed: {update.stderr[:300]}")
-            return False
-
-        # Align main working tree index + files with the new HEAD so that
-        # `git status` stays clean after the fast-forward.
-        run_cmd(["git", "reset", "--hard", "HEAD"], cwd=REPO_ROOT)
-
-        # 4. Push BASE_BRANCH
-        push = run_cmd(
-            ["git", "push", "origin", BASE_BRANCH],
-            cwd=REPO_ROOT,
-        )
-        if push.returncode != 0:
-            # Retry: fetch + rebase again (someone else pushed meanwhile)
-            logger.warning("Push rejected, retrying after fetch + rebase...")
-            run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT)
-            rebase2 = run_cmd(
-                ["git", "rebase", f"origin/{BASE_BRANCH}"], cwd=wt.path,
-                timeout=120,
+            # 2. Fast-forward local BASE_BRANCH from origin if origin is ahead.
+            #    git merge --ff-only works on a checked-out branch (unlike git fetch .).
+            #    Silently no-ops if local is already at or ahead of origin.
+            run_cmd(
+                ["git", "merge", "--ff-only", f"origin/{BASE_BRANCH}"],
+                cwd=REPO_ROOT, timeout=30,
             )
-            if rebase2.returncode != 0:
-                resolved2 = _codex_resolve_conflicts(wt.path, model=model)
-                if not resolved2:
+
+            # 3. Rebase worktree onto LOCAL BASE_BRANCH (includes local-only commits)
+            rebase = run_cmd(
+                ["git", "rebase", BASE_BRANCH],
+                cwd=wt.path,
+                timeout=180,
+            )
+            if rebase.returncode != 0:
+                logger.warning(
+                    f"Rebase conflict for {wt.branch} (attempt {attempt}), "
+                    "invoking codex to resolve..."
+                )
+                resolved = _codex_resolve_conflicts(wt.path, model=model)
+                if not resolved:
+                    logger.error(f"Codex could not resolve conflicts for {wt.branch}")
                     run_cmd(["git", "rebase", "--abort"], cwd=wt.path)
                     return False
-            wt_tip2 = run_cmd(
-                ["git", "rev-parse", "HEAD"], cwd=wt.path
-            ).stdout.strip()
-            run_cmd(
-                ["git", "update-ref", f"refs/heads/{BASE_BRANCH}", wt_tip2],
-                cwd=REPO_ROOT,
+
+            # 4. Fast-forward local BASE_BRANCH to rebased worktree tip.
+            #    git merge --ff-only works on checked-out branches; git fetch . does not.
+            wt_tip = run_cmd(["git", "rev-parse", "HEAD"], cwd=wt.path).stdout.strip()
+            ff = run_cmd(
+                ["git", "merge", "--ff-only", wt_tip],
+                cwd=REPO_ROOT, timeout=30,
             )
-            run_cmd(["git", "reset", "--hard", "HEAD"], cwd=REPO_ROOT)
-            push2 = run_cmd(
-                ["git", "push", "origin", BASE_BRANCH], cwd=REPO_ROOT,
-            )
-            if push2.returncode != 0:
-                logger.error(f"Push retry failed: {push2.stderr[:300]}")
+            if ff.returncode != 0:
+                logger.error(f"ff update of {BASE_BRANCH} failed: {ff.stderr[:300]}")
                 return False
 
-        logger.info(f"Merged and pushed {wt.branch} to {BASE_BRANCH}")
-        return True
+            # 5. Push to origin
+            push = run_cmd(
+                ["git", "push", "origin", BASE_BRANCH],
+                cwd=REPO_ROOT, timeout=300,
+            )
+            if push.returncode == 0:
+                return True
+
+            if attempt == 1:
+                logger.warning("Push rejected, retrying after fetch + rebase...")
+                return False  # caller will retry
+
+            logger.error(f"Push retry failed: {push.stderr[:300]}")
+            return False
+
+        if _do_rebase_and_ff(attempt=1):
+            logger.info(f"Merged and pushed {wt.branch} to {BASE_BRANCH}")
+            return True
+
+        # Retry once (someone else pushed between our rebase and push)
+        if _do_rebase_and_ff(attempt=2):
+            logger.info(f"Merged and pushed {wt.branch} to {BASE_BRANCH}")
+            return True
+
+        return False
 
 
 def cleanup_all_worktrees() -> int:
@@ -453,8 +484,11 @@ def cleanup_all_worktrees() -> int:
             logger.info(f"Cleaning up {entry}")
             run_cmd(["git", "worktree", "remove", "--force", str(entry)], cwd=REPO_ROOT)
             if entry.exists():
+                pkg_link = entry / "lean4" / ".lake" / "packages"
+                if pkg_link.is_symlink():
+                    pkg_link.unlink()
                 shutil.rmtree(entry, ignore_errors=True)
-            # Try to delete branch
+            # Force-delete branch (may have unmerged commits)
             m = re.match(r"round_R(\d+)", entry.name)
             if m:
                 run_cmd(["git", "branch", "-D", f"codex-R{m.group(1)}"], cwd=REPO_ROOT)
@@ -632,12 +666,13 @@ def build_phase_c_prompt(round_num: int, targets: list[dict]) -> str:
 
 def parse_phase_c_output(raw: str) -> PhaseCResult:
     result = PhaseCResult(raw_output=raw)
-    commit_hashes = re.findall(r"[0-9a-f]{7,40}", raw)
-    result.new_commits = list(dict.fromkeys(
-        h for h in commit_hashes if 7 <= len(h) <= 12
-    ))[:10]
-    success_indicators = ["lake build", "commit", f"Register R"]
-    result.success = any(ind.lower() in raw.lower() for ind in success_indicators)
+    # Extract short commit hashes (7-12 hex chars) that look like git output,
+    # e.g. lines starting with a hash: "abc1234 commit message"
+    commit_hashes = re.findall(r"(?:^|\s)([0-9a-f]{7,12})(?:\s+\w)", raw, re.MULTILINE)
+    result.new_commits = list(dict.fromkeys(commit_hashes))[:10]
+    # success = codex produced non-empty output and mentioned key actions
+    success_indicators = ["lake build", "git commit", "git add", "autostash"]
+    result.success = bool(raw) and any(ind.lower() in raw.lower() for ind in success_indicators)
     return result
 
 
@@ -667,47 +702,57 @@ def detect_signature_degradation(wt: WorktreeInfo) -> list[str]:
     if not diff_out:
         return violations  # empty diff → nothing to check
 
-    # Find blocks that add a `theorem paper_` with ONLY Prop parameters
-    # Pattern: lines starting with `+theorem paper_` whose signature uses only `Prop`
-    import re as _re
-    # Split diff into per-file chunks
-    chunks = _re.split(r'^diff --git ', diff_out, flags=_re.MULTILINE)
+    # Split diff into per-file chunks and scan only replaced (not new) theorems.
+    chunks = re.split(r'^diff --git ', diff_out, flags=re.MULTILINE)
     for chunk in chunks:
         lines = chunk.splitlines()
-        added_lines = [l[1:] for l in lines if l.startswith('+') and not l.startswith('+++')]
+        added_lines   = [l[1:] for l in lines if l.startswith('+') and not l.startswith('+++')]
         removed_lines = [l[1:] for l in lines if l.startswith('-') and not l.startswith('---')]
-        added_text = '\n'.join(added_lines)
+        added_text   = '\n'.join(added_lines)
         removed_text = '\n'.join(removed_lines)
 
-        # Find added paper_ theorems that have purely-Prop signatures
-        added_thms = _re.findall(
+        # Find paper_ theorems that appear in both added and removed sections
+        # (i.e. replacements of existing theorems, not brand-new ones).
+        added_thms = re.findall(
             r'theorem (paper_\w+)\s+(.*?)(?=\ntheorem |\nend |\Z)',
-            added_text, _re.DOTALL
+            added_text, re.DOTALL,
         )
         for thm_name, thm_body in added_thms:
-            # Check if body was also in removed (i.e. replacement, not new)
             if thm_name not in removed_text:
-                continue  # purely new theorem, not a replacement — skip
-            # Extract parameter list up to first `:=` or `by`
-            param_match = _re.match(r'(.*?)(?::=\s|:= by\b|\n\s*by\b)', thm_body, _re.DOTALL)
+                continue  # purely new theorem — not a degradation candidate
+
+            # Extract parameter list (before := or by)
+            param_match = re.match(r'(.*?)(?::=\s|:= by\b|\n\s*by\b)', thm_body, re.DOTALL)
             if not param_match:
                 continue
             params = param_match.group(1)
-            # Degrade pattern: all parameters are `(x : Prop)` or `(x y : Prop)`
-            # and no ℕ, ℝ, ℤ, List, Finset, Matrix, etc.
-            has_concrete = bool(_re.search(r':\s*(ℕ|ℝ|ℤ|ℚ|ℂ|ℕ→|ℝ→|Fin |List |Finset |Matrix |Set |Multiset )', params))
-            has_only_prop = bool(_re.search(r':\s*Prop\b', params)) and not has_concrete
-            if has_only_prop:
+
+            # Degrade pattern: parameters contain ONLY abstract Prop types and
+            # the conclusion is a trivial conjunction of those same props.
+            # Require BOTH conditions to minimise false positives.
+            concrete_types = r':\s*(ℕ|ℝ|ℤ|ℚ|ℂ|ℕ\s*→|ℝ\s*→|Fin\b|List\b|Finset\b|Matrix\b|Set\b|Multiset\b|Nat\b|Int\b|Real\b|Float\b|Array\b)'
+            has_concrete  = bool(re.search(concrete_types, params))
+            has_only_prop = bool(re.search(r':\s*Prop\b', params)) and not has_concrete
+
+            # Extract conclusion (after the last `:`)
+            conclusion_match = re.search(r':\s*([^:=]+?)\s*(?::=|$)', thm_body, re.DOTALL)
+            conclusion = conclusion_match.group(1) if conclusion_match else ""
+            # Trivial conclusion: only conjunctions/implications of plain identifiers
+            is_trivial_conclusion = bool(
+                re.fullmatch(r'[\w\s∧→¬∨⟨⟩(),\.]+', conclusion.strip())
+            ) and not re.search(r'[=≠<>≤≥∈∉]', conclusion)
+
+            if has_only_prop and is_trivial_conclusion:
                 violations.append(
-                    f"{thm_name}: signature appears degraded to pure Prop parameters "
-                    f"(replaced concrete math types with abstract Prop)"
+                    f"{thm_name}: signature replaced with trivial Prop stub "
+                    f"(all concrete types removed, conclusion is a trivial conjunction)"
                 )
     return violations
 
 
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
     """Check for new commits in the worktree. Also detects signature degradation."""
-    post = git_log_oneline(10, cwd=wt.path)
+    post = git_log_oneline(20, cwd=wt.path)
     new = [c for c in post if c not in pre_commits]
     if new:
         logger.info(f"[R{wt.round_number}] Phase D: {len(new)} new commit(s):")
@@ -749,6 +794,8 @@ def run_round_in_worktree(
     logger.info(f"{'='*60}")
 
     wt: Optional[WorktreeInfo] = None
+    new_commits: list[str] = []
+    success: bool = False
     try:
         # ── Create worktree ───────────────────────────────────────
         if not dry_run:
@@ -805,7 +852,6 @@ def run_round_in_worktree(
         # ── Phase D: Verify ───────────────────────────────────────
         logger.info(f"[{tag}] Phase D: Verification...")
         if dry_run:
-            new_commits: list[str] = []
             success = True
         else:
             assert wt is not None
@@ -1129,6 +1175,22 @@ def main() -> int:
     # Ensure base branch
     if not args.dry_run:
         ensure_base_branch()
+
+    # Prune stale worktree registrations and remove orphaned physical dirs from
+    # previous sessions (rounds that were killed before cleanup ran).
+    if not args.dry_run:
+        run_cmd(["git", "worktree", "prune"], cwd=REPO_ROOT)
+        if WORKTREE_DIR.exists():
+            for entry in WORKTREE_DIR.iterdir():
+                if entry.is_dir() and entry.name.startswith("round_R"):
+                    # Only remove dirs not registered as active worktrees
+                    wt_result = run_cmd(["git", "worktree", "list", "--porcelain"], cwd=REPO_ROOT)
+                    if str(entry) not in wt_result.stdout:
+                        logger.info(f"Removing orphaned worktree dir: {entry}")
+                        pkg_link = entry / "lean4" / ".lake" / "packages"
+                        if pkg_link.is_symlink():
+                            pkg_link.unlink()
+                        shutil.rmtree(entry, ignore_errors=True)
 
     state = load_state()
     logger.info(f"Starting: R{state.round_number}, ~{state.total_theorems} theorems")
