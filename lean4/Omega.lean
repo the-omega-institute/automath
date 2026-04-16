@@ -590,6 +590,7 @@ import Omega.Zeta.FinitePartCyclicLiftReducedConstantClosed
 import Omega.Zeta.FinitePartCyclicLiftMobiusInversion
 import Omega.Zeta.FinitePartCyclicLiftDirichletMultipleSum
 import Omega.Zeta.FinitePartCyclicLiftTraceSieve
+import Omega.Zeta.FinitePartCyclicLiftRootUnityFourierSieve
 import Omega.Zeta.FinitePartSingleQTorsionReconstruction
 import Omega.Zeta.FinitePartCyclicLiftZetaTorsionDeterminesSpectrum
 import Omega.Zeta.FinitePartSingleLayerSquareRootTest
@@ -943,6 +944,7 @@ import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
 import Omega.GU.Window6B3C3EvenMomentGapLaplaceDomination
 import Omega.GU.Window6LabeledSphericalCubatureStrengthFive
 import Omega.GU.Window6B3C3SphericalCubatureStrength5
+import Omega.GU.Window6LabeledSphericalDegree6HarmonicDefect
 import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
 import Omega.GU.Window6C3SupportCount
 import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
@@ -1114,6 +1116,7 @@ import Omega.POM.VisibleThickTail
 import Omega.POM.CollisionEntropyRate
 import Omega.POM.MicrocanonicalBandBounds
 import Omega.Conclusion.PrimeRegisterFiberCdimDensity
+import Omega.Conclusion.PrimeRegisterKStretchDensityCriterion
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.POM.LucasPrimeCongruence
 import Omega.Conclusion.FibonacciAnomalyBlock
