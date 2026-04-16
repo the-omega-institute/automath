@@ -77,4 +77,18 @@ theorem paper_terminal_foldbin6_bitflip_stability_polynomial :
     · simp [terminalFoldbin6BitflipInstability, terminalFoldbin6BitflipStability]
       ring_nf
 
+/-- Paper-facing extraction of the shellwise stability coefficients `A_k`.
+    cor:terminal-foldbin6-bitflip-stability-Ak -/
+theorem paper_terminal_foldbin6_bitflip_stability_Ak :
+    Omega.GU.terminalFoldbin6StabilityCoeff 0 = 1 ∧
+    Omega.GU.terminalFoldbin6StabilityCoeff 1 = 0 ∧
+    Omega.GU.terminalFoldbin6StabilityCoeff 2 = 1 / 30 ∧
+    Omega.GU.terminalFoldbin6StabilityCoeff 3 = 1 / 40 ∧
+    Omega.GU.terminalFoldbin6StabilityCoeff 4 = 7 / 120 ∧
+    Omega.GU.terminalFoldbin6StabilityCoeff 5 = 1 / 16 ∧
+    Omega.GU.terminalFoldbin6StabilityCoeff 6 = 1 / 16 := by
+  rcases paper_terminal_foldbin6_bitflip_stability_polynomial with
+    ⟨_, _, _, _, _, _, _, _, h0, h1, h2, h3, h4, h5, h6, _⟩
+  exact ⟨h0, h1, h2, h3, h4, h5, h6⟩
+
 end Omega.GU

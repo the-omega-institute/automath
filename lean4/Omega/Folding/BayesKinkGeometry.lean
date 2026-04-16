@@ -12,6 +12,11 @@ theorem gStar_half : gStar (1/2) = 4/9 := by
   unfold gStar
   norm_num
 
+/-- Paper-facing density closed form at the symmetric point.
+    prop:fold-gauge-anomaly-density-49 -/
+theorem paper_fold_gauge_anomaly_density_49 : Omega.Folding.gStar (1 / 2 : Rat) = 4 / 9 := by
+  exact gStar_half
+
 /-- Numerator polynomial of the derivative `g_*'(p)`.
     prop:fold-gauge-anomaly-bernoulli-p-kink-unique-max -/
 def qPoly (p : ℚ) : ℚ := p^4 - 3*p^3 + 3*p^2 + p - 1
