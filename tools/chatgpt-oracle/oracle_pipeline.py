@@ -408,7 +408,7 @@ class PaperState:
             action=action,
             score=kwargs.get("score", 0),
             verdict=kwargs.get("verdict", ""),
-            detail=kwargs.get("detail", "")[:2000],
+            detail=kwargs.get("detail", "")[:20000],
             committed=kwargs.get("committed", False),
             commit_hash=kwargs.get("commit_hash", ""),
         )
@@ -620,6 +620,41 @@ def oracle_poll(task_id: str, timeout: int = 7200,
 # Codex exec
 # ---------------------------------------------------------------------------
 
+def _kill_process_tree(pid: int) -> None:
+    """Forcefully kill process and all descendants.
+
+    Codex spawns node + codex binary + children; subprocess.run's kill misses them,
+    leaving orphans that consume resources and can corrupt state. Borrowed from
+    outreach_pipeline.py Bug 3 fix (commit 1cab05f6).
+    """
+    if IS_WINDOWS:
+        try:
+            subprocess.run(["taskkill", "/F", "/T", "/PID", str(pid)],
+                           capture_output=True, timeout=10)
+        except Exception:
+            pass
+        return
+    try:
+        os.killpg(os.getpgid(pid), 15)  # SIGTERM
+        time.sleep(2)
+        os.killpg(os.getpgid(pid), 9)   # SIGKILL
+    except (ProcessLookupError, OSError):
+        pass
+    # Also kill orphaned children via pgrep
+    try:
+        children = subprocess.run(
+            ["pgrep", "-P", str(pid)],
+            capture_output=True, text=True, timeout=5,
+        ).stdout.split()
+        for child_pid in children:
+            try:
+                os.kill(int(child_pid), 9)
+            except (ProcessLookupError, ValueError, OSError):
+                pass
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        pass
+
+
 def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
                timeout_seconds: int = 1800, model: Optional[str] = None,
                dry_run: bool = False) -> str:
@@ -656,24 +691,62 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     # Windows: .cmd wrappers need shell=True
     use_shell = IS_WINDOWS and str(codex_bin).endswith(".cmd")
 
+    # Use Popen + start_new_session so we can kill the entire process tree on
+    # timeout (codex spawns node + codex binary + children; subprocess.run's
+    # kill misses them). Borrowed from outreach_pipeline.py Bug 3 fix.
     start = time.monotonic()
     result = None
+    popen_kwargs: dict = dict(
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        cwd=str(work_dir or REPO_ROOT),
+        shell=use_shell,
+        encoding="utf-8", errors="replace",
+    )
+    if not IS_WINDOWS:
+        popen_kwargs["start_new_session"] = True
+
+    class _Result:
+        def __init__(self, stdout="", stderr="", returncode=0):
+            self.stdout = stdout
+            self.stderr = stderr
+            self.returncode = returncode
+
     try:
         with open(prompt_file, "r", encoding="utf-8") as pf:
-            result = subprocess.run(
-                cmd, stdin=pf, capture_output=True, text=True,
-                timeout=timeout_seconds + 30,
-                cwd=str(work_dir or REPO_ROOT),
-                shell=use_shell,
-                encoding="utf-8", errors="replace",
-            )
-    except subprocess.TimeoutExpired:
-        return "(timeout)"
+            prompt_text = pf.read()
+        proc = subprocess.Popen(cmd, **popen_kwargs)
+        try:
+            stdout, stderr = proc.communicate(input=prompt_text,
+                                               timeout=timeout_seconds + 30)
+            result = _Result(stdout, stderr, proc.returncode)
+        except subprocess.TimeoutExpired:
+            logger.warning(f"Codex timed out after {timeout_seconds}s, "
+                           f"killing process tree (pid={proc.pid})")
+            _kill_process_tree(proc.pid)
+            try:
+                stdout, stderr = proc.communicate(timeout=10)
+            except subprocess.TimeoutExpired:
+                stdout, stderr = "", ""
+            result = _Result(stdout, stderr, -9)
+    except OSError as exc:
+        logger.error(f"Codex failed to start: {exc}")
+        os.unlink(prompt_file)
+        try:
+            os.unlink(out_file)
+        except OSError:
+            pass
+        return "(start-failed)"
     finally:
         elapsed = time.monotonic() - start
         rc = result.returncode if result else "?"
         logger.info(f"Codex exec: {elapsed:.1f}s (rc={rc})")
-        os.unlink(prompt_file)
+        try:
+            os.unlink(prompt_file)
+        except OSError:
+            pass
 
     output = ""
     try:
@@ -1363,7 +1436,7 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
     fit_score = fit_data.get("fit_score", 0)
     state.stage_f_fit_score = fit_score
     state.log_event("F", "codex_fit_assessment", score=fit_score,
-                    detail=json.dumps(fit_data, ensure_ascii=False)[:2000])
+                    detail=json.dumps(fit_data, ensure_ascii=False)[:10000])
     save_state(state)
 
     logger.info(f"{tag} Fit score: {fit_score}/10 "
@@ -1405,7 +1478,7 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
     final_fit = min(fit_score, adjusted)
 
     state.log_event("F", "claude_review_fit", score=adjusted,
-                    detail=json.dumps(claude_data, ensure_ascii=False)[:2000])
+                    detail=json.dumps(claude_data, ensure_ascii=False)[:10000])
     save_state(state)
 
     logger.info(f"{tag} Final fit: {final_fit}/10 "
@@ -1549,7 +1622,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
         state.stage_a_scores.append(score)
         state.log_event("A", "codex_self_score", round_num=rnd,
                         score=score,
-                        detail=json.dumps(score_data, ensure_ascii=False)[:2000])
+                        detail=json.dumps(score_data, ensure_ascii=False)[:10000])
         save_state(state)
 
         logger.info(f"{tag} Round {rnd}: Score = {score}/10 "
@@ -1601,7 +1674,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
         adjusted = claude_data.get("adjusted_score", score)
         state.log_event("A", "claude_review_score", round_num=rnd,
                         score=adjusted,
-                        detail=json.dumps(claude_data, ensure_ascii=False)[:2000])
+                        detail=json.dumps(claude_data, ensure_ascii=False)[:10000])
         save_state(state)
 
         # Use the more conservative (lower) of the two scores
@@ -1818,7 +1891,7 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
         state.stage_c_verdicts.append(verdict)
         state.log_event("C", "claude_independent_review", round_num=rnd,
                         verdict=verdict,
-                        detail=json.dumps(review_data, ensure_ascii=False)[:2000])
+                        detail=json.dumps(review_data, ensure_ascii=False)[:10000])
         save_state(state)
 
         logger.info(f"{tag} Round {rnd}: Claude verdict = {verdict}, "
@@ -1928,7 +2001,7 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
         "approved": True, "approved_items": list(range(len(items))),
     }
     state.log_event("D", "claude_review_backflow",
-                    detail=json.dumps(approval, ensure_ascii=False)[:2000])
+                    detail=json.dumps(approval, ensure_ascii=False)[:10000])
     save_state(state)
 
     if not approval.get("approved", False):
@@ -2177,7 +2250,7 @@ def run_new_paper_pipeline(
         state.target_journal = selected
         state.log_event("N", "codex_journal_selection",
                         score=j_data.get("fit_score", 0),
-                        detail=json.dumps(j_data, ensure_ascii=False)[:2000])
+                        detail=json.dumps(j_data, ensure_ascii=False)[:10000])
         save_state(state)
         logger.info(f"{tag} N0 selected journal: {selected} "
                     f"(fit={j_data.get('fit_score', '?')})")
