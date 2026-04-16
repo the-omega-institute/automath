@@ -110,6 +110,7 @@ import Omega.GU.Window6LabeledSphericalCubatureStrengthFive
 import Omega.GU.Window6LabeledSphericalDegree6HarmonicDefect
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.Window6NonlumpableBySpectrum
+import Omega.GU.Window6ResponseKernelMod23
 import Omega.GU.Window6RankGap
 import Omega.GU.Window6SingleGoodPrimeRecovery
 import Omega.GU.Window6TypeSuperselectionAutGamma6
