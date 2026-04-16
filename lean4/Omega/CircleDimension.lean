@@ -130,5 +130,6 @@ import Omega.CircleDimension.TensorHomExtLaws
 import Omega.CircleDimension.ToeplitzSpectralGapCarathBuffer
 import Omega.CircleDimension.TorusCollapseRelativeForms
 import Omega.CircleDimension.UnitarySliceDecidable
+import Omega.CircleDimension.UniversalSolenoidFullPrimeKernel
 import Omega.CircleDimension.WdimBettiAverageLaw
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
