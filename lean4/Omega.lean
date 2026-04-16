@@ -73,6 +73,7 @@ import Omega.Folding.HankelSpectrum
 import Omega.Experiments.ParryBaselineGapSturmian
 import Omega.Experiments.RotationMicrostateKLCertificate
 import Omega.Experiments.MetallicMeanGoldenUniqueOptimalTVConstant
+import Omega.POM.DoubleLimit
 import Omega.POM.S4Asymptotic
 import Omega.POM.S4Recurrence
 import Omega.POM.S5FieldDiscriminantMonogenic
@@ -147,6 +148,7 @@ import Omega.GU.CyclotomicSpecializationFalsifiability
 import Omega.GU.CyclotomicSpecializationRigidity
 import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
 import Omega.GU.TerminalWindow6PushforwardCommutantMasa
+import Omega.GU.TerminalWindowPushforwardCommutantTorus
 import Omega.GU.TerminalWindow6PushforwardNoNonabelianCompactSymmetry
 import Omega.GU.JetAlignmentUnification
 import Omega.Folding.ModRigidityPeriodicPredicates
@@ -813,6 +815,7 @@ import Omega.TypedAddressBiaxialCompletion.Window6AuditBudgetSplit
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
 import Omega.TypedAddressBiaxialCompletion.NullFiber
+import Omega.TypedAddressBiaxialCompletion.ReadableFiber
 import Omega.TypedAddressBiaxialCompletion.PcdimModpFormula
 import Omega.TypedAddressBiaxialCompletion.ResourceQuasidistance
 import Omega.TypedAddressBiaxialCompletion.MultiscaleThreshold
