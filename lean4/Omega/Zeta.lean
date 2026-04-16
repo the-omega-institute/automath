@@ -61,6 +61,7 @@ import Omega.Zeta.FinitePartSingleQTorsionReconstruction
 import Omega.Zeta.FiniteQuotientCardinality
 import Omega.Zeta.FiniteQuotientScalarGodelLoglogOverhead
 import Omega.Zeta.FiniteRankRealisation
+import Omega.Zeta.FoldbinGaugeVolumeKappaCompression
 import Omega.Zeta.FredholmDetSeeds
 import Omega.Zeta.FredholmPrimitiveClosedForm
 import Omega.Zeta.GaugeGroupTripleDecomp
