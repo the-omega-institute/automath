@@ -87,6 +87,7 @@ import Omega.GU.Window6AffineFiberOrbitClassification
 import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
 import Omega.GU.Window6B3C3AdjointCharacterQuarticInvariant
 import Omega.GU.Window6B3C3EuclideanCubature
+import Omega.GU.Window6B3C3Degree4RelationSpaceSaturation
 import Omega.GU.Window6B3C3EvenMomentGapLaplaceDomination
 import Omega.GU.Window6B3C3QuarticDefectOnedim
 import Omega.GU.Window6B3C3QuarticRankoneHarmonicDetector

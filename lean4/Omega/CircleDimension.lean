@@ -38,6 +38,7 @@ import Omega.CircleDimension.FiniteProbeExtraction
 import Omega.CircleDimension.GlobalPhaseExhaustion
 import Omega.CircleDimension.GcdimTwoAxisTowerLaws
 import Omega.CircleDimension.GcdimPolynomialRing
+import Omega.CircleDimension.GcdimNoetherHilbertDimMinusOne
 import Omega.CircleDimension.GodelPrimeBitlengthLowerBound
 import Omega.CircleDimension.GodelScalarizationBitlengthLogB
 import Omega.CircleDimension.HaarPullbackUniqueness
