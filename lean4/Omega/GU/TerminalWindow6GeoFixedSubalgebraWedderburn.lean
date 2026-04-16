@@ -54,6 +54,14 @@ def window6GeoFixedConnectedAutPU3Factors : Nat :=
 def window6GeoFixedConnectedAutPU4Factors : Nat :=
   window6GeoFixedM4Blocks
 
+/-- The semisimple Lie-algebra target keeps exactly the non-scalar fixed blocks. -/
+def window6GeoLocalSemisimpleBlockSizes (c : Window6GeoOrbitChargeClass) : List Nat :=
+  (window6GeoLocalFixedBlockSizes c).filter fun n => 1 < n
+
+/-- A nontrivial two-cycle block contributes the residual `u(1)` compression channel. -/
+def window6GeoLocalCentralU1Rank (c : Window6GeoOrbitChargeClass) : Nat :=
+  if c.twoCycles = 0 then 0 else 1
+
 /-- Paper wrapper for the explicit Wedderburn counts of the `σ_geo`-fixed window-6 algebra.
     thm:terminal-window6-geo-fixed-subalgebra-wedderburn -/
 theorem paper_terminal_window6_geo_fixed_subalgebra_wedderburn :
@@ -62,6 +70,27 @@ theorem paper_terminal_window6_geo_fixed_subalgebra_wedderburn :
       window6GeoFixedConnectedAutPU2Factors = 12 ∧
       window6GeoFixedConnectedAutPU3Factors = 6 ∧
       window6GeoFixedConnectedAutPU4Factors = 2 := by
+  native_decide
+
+set_option maxHeartbeats 400000 in
+/-- Paper-facing wrapper for the local symmetry-compression patterns forced by the audited
+window-`6` orbit-charge histogram: the fixed algebra block decomposition
+`M_(f+p)(ℂ) ⊕ M_p(ℂ)` compresses the semisimple Lie part to the non-scalar blocks, with one
+residual `u(1)` channel whenever a two-cycle block is present.
+    cor:terminal-window6-geo-orbit-charge-symmetry-compression -/
+theorem paper_terminal_window6_geo_orbit_charge_symmetry_compression :
+    ⟨2, 1, 4⟩ ∈ window6GeoOrbitChargeHistogram ∧
+      window6GeoLocalFixedBlockSizes ⟨2, 1, 4⟩ = [3, 1] ∧
+      window6GeoLocalSemisimpleBlockSizes ⟨2, 1, 4⟩ = [3] ∧
+      window6GeoLocalCentralU1Rank ⟨2, 1, 4⟩ = 1 ∧
+      ⟨0, 2, 3⟩ ∈ window6GeoOrbitChargeHistogram ∧
+      window6GeoLocalFixedBlockSizes ⟨0, 2, 3⟩ = [2, 2] ∧
+      window6GeoLocalSemisimpleBlockSizes ⟨0, 2, 3⟩ = [2, 2] ∧
+      window6GeoLocalCentralU1Rank ⟨0, 2, 3⟩ = 1 ∧
+      ⟨1, 1, 2⟩ ∈ window6GeoOrbitChargeHistogram ∧
+      window6GeoLocalFixedBlockSizes ⟨1, 1, 2⟩ = [2, 1] ∧
+      window6GeoLocalSemisimpleBlockSizes ⟨1, 1, 2⟩ = [2] ∧
+      window6GeoLocalCentralU1Rank ⟨1, 1, 2⟩ = 1 := by
   native_decide
 
 end Omega.GU

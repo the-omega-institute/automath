@@ -28,6 +28,7 @@ import Omega.CircleDimension.DenominatorMultiplesUnionBound
 import Omega.CircleDimension.DiscreteStokesInversionHypercube
 import Omega.CircleDimension.DoubleDiscriminant
 import Omega.CircleDimension.DyadicKernelCube
+import Omega.CircleDimension.EndpointTristateSet
 import Omega.CircleDimension.FiberPhaseQuantization
 import Omega.CircleDimension.FibonacciPrimitivePrimeBinaryLock
 import Omega.CircleDimension.FiniteExtensionAxiomaticUniqueness
