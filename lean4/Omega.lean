@@ -783,6 +783,7 @@ import Omega.TypedAddressBiaxialCompletion.PreferredMinimalInstantiationExtracti
 import Omega.TypedAddressBiaxialCompletion.CompletenessGapAudit
 import Omega.TypedAddressBiaxialCompletion.FrontInterface
 import Omega.TypedAddressBiaxialCompletion.Window6ExplicitFibers
+import Omega.TypedAddressBiaxialCompletion.Window6TwoSheetCharts
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
 import Omega.TypedAddressBiaxialCompletion.PcdimModpFormula
@@ -1054,6 +1055,7 @@ import Omega.POM.PressureSlopes
 import Omega.POM.GibbsSelection
 import Omega.POM.RenyiEntropyRate
 import Omega.POM.RenyiEndpoint
+import Omega.POM.RqQinftyEndpoint
 import Omega.POM.LambdaAlgebraic
 import Omega.POM.CollisionKernelPublication
 import Omega.POM.MomentResonance
