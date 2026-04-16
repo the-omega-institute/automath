@@ -183,6 +183,7 @@ import Omega.Folding.BernoulliPPressureQuartic
 import Omega.Folding.BernoulliPParryPressureChain
 import Omega.Folding.BernoulliPDoobTransformClosed
 import Omega.Folding.EpsilonMachineFibMobius
+import Omega.Folding.EpsilonMachineInfiniteMarkovOrder
 import Omega.Folding.EpsilonMachineSynchronizingWord
 import Omega.Folding.EndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
@@ -317,6 +318,7 @@ import Omega.SPG.CoordinateBundleScreenCount
 import Omega.SPG.CoordinateBundleScreenClosure
 import Omega.SPG.AxialScreenAreaLawAuditCost
 import Omega.SPG.ProuhetThueMorsePowerSum
+import Omega.SPG.StokesGodelEllipsoidMinSpacingSingleGate
 import Omega.SPG.SingleParamLogReadoutPigeonhole
 import Omega.SPG.BoundaryCycleAuditQueryLowerBound
 import Omega.SPG.BoundaryAffineFiberCycleRank
