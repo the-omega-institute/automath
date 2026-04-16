@@ -674,7 +674,7 @@ def build_phase_c_prompt(round_num: int, targets: list[dict]) -> str:
 
         ## Step 2: Full compilation
         ```bash
-        cd lean4 && timeout 300 lake build
+        cd lean4 && lake build
         ```
         If errors, fix them (up to 3 attempts per theorem).
         If a theorem is stuck, skip it and continue with the others.
