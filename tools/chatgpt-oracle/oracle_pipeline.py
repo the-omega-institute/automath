@@ -768,17 +768,32 @@ def compile_pdf(paper_path: Path, *, dry_run: bool = False) -> Optional[Path]:
     main_tex = paper_path / "main.tex"
     if not main_tex.exists():
         return None
-    # Auto-detect compiler: xelatex for CJK/fontspec, pdflatex otherwise
+
+    # Prefer tectonic (self-contained, auto-downloads packages, no bibtex loop)
+    tectonic = shutil.which("tectonic")
+    if tectonic:
+        run_cmd([tectonic, "--keep-logs", "-Z", "continue-on-errors",
+                 "main.tex"], cwd=paper_path, timeout=300)
+        pdf = paper_path / "main.pdf"
+        if pdf.exists():
+            return pdf
+
+    # Fallback: traditional xelatex/pdflatex pipeline
     content = main_tex.read_text(encoding="utf-8", errors="replace")
-    compiler = ("xelatex" if any(k in content for k in ("xeCJK", "ctex", "fontspec"))
-                else "pdflatex")
+    compiler_name = ("xelatex" if any(k in content for k in ("xeCJK", "ctex", "fontspec"))
+                     else "pdflatex")
+    compiler = shutil.which(compiler_name)
+    if not compiler:
+        logger.warning(f"No LaTeX compiler found ({compiler_name} missing, "
+                       f"tectonic missing) — skip PDF")
+        return None
+
     for _ in range(2):
         run_cmd([compiler, "-interaction=nonstopmode", "-halt-on-error",
                  "main.tex"], cwd=paper_path, timeout=120)
-    # Also check references_local.bib (some papers use that name)
     has_bib = ((paper_path / "references.bib").exists()
                or (paper_path / "references_local.bib").exists())
-    if has_bib:
+    if has_bib and shutil.which("bibtex"):
         run_cmd(["bibtex", "main"], cwd=paper_path, timeout=60)
         for _ in range(2):
             run_cmd([compiler, "-interaction=nonstopmode", "-halt-on-error",
