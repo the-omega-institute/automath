@@ -7,6 +7,7 @@ import Omega.EA.BrauerRamificationEven
 import Omega.EA.BrauerXorLaw
 import Omega.EA.CentralIdempotentsRecovery
 import Omega.EA.ChebotarevQuotientRelativeEntropyChain
+import Omega.EA.ChebotarevVisibleHiddenCharacterEnergy
 import Omega.EA.ChiRigidityShadow
 import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
