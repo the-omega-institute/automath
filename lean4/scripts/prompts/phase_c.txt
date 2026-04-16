@@ -22,39 +22,29 @@ cd lean4 && lake build
 If errors, fix them (up to 3 attempts per theorem).
 If a theorem is stuck, skip it and continue with the others.
 
-## Step 3: Rebase + commit proofs
+## Step 3: Annotate .tex files (do this BEFORE rebase)
+Add \leanverified{theorem_name} to the corresponding .tex files in theory/.
+(find them via the paper_label, escape underscores as \_)
+These files never conflict between rounds, so it is safe to edit them before rebasing.
+
+## Step 4: Rebase (lean4/Omega/ and theory/ changes are stashed automatically)
 ```bash
 git fetch origin lean4-codex-auto-dev
-git rebase origin/lean4-codex-auto-dev
+git rebase --autostash origin/lean4-codex-auto-dev
 ```
-If rebase conflicts occur, resolve by keeping ALL lines from both sides
-(additive merge), then `git add <file>` + `git rebase --continue`.
+`--autostash` stashes all working-tree changes, rebases, then pops them back.
+If rebase conflicts occur in committed files, resolve by keeping ALL lines from
+both sides (additive merge), then `git add <file>` + `git rebase --continue`.
 
-Then commit proof files only:
-```bash
-git add lean4/Omega/
-git commit -m "R<ROUND_NUM>: [brief description of what was proved]
-
-Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
-```
-
-## Step 4: Update tracking + annotate
+## Step 5: Immediately update the two conflict-prone shared files, then commit
+Do this as fast as possible after the rebase to minimise the conflict window:
 - Add import lines to lean4/Omega.lean for any new proof files
 - Update lean4/IMPLEMENTATION_PLAN.md with new round info
-- Add \leanverified{theorem_name} to the corresponding .tex files
-  (find them via the paper_label, escape underscores as \_)
 
-## Step 5: Rebase + commit registration
+Then commit everything in one shot:
 ```bash
-git fetch origin lean4-codex-auto-dev
-git rebase origin/lean4-codex-auto-dev
-```
-Resolve any conflicts the same way (keep both sides).
-
-Then commit registration:
-```bash
-git add lean4/Omega.lean lean4/IMPLEMENTATION_PLAN.md theory/
-git commit -m "Register R<ROUND_NUM>: [brief description]
+git add lean4/Omega/ lean4/Omega.lean lean4/IMPLEMENTATION_PLAN.md theory/
+git commit -m "R<ROUND_NUM>: [brief description of what was proved and registered]
 
 Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
 ```

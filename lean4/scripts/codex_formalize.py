@@ -666,7 +666,7 @@ def parse_phase_c_output(raw: str) -> PhaseCResult:
     commit_hashes = re.findall(r"(?:^|\s)([0-9a-f]{7,12})(?:\s+\w)", raw, re.MULTILINE)
     result.new_commits = list(dict.fromkeys(commit_hashes))[:10]
     # success = codex produced non-empty output and mentioned key actions
-    success_indicators = ["lake build", "git commit", "Register R", "git add"]
+    success_indicators = ["lake build", "git commit", "git add", "autostash"]
     result.success = bool(raw) and any(ind.lower() in raw.lower() for ind in success_indicators)
     return result
 
