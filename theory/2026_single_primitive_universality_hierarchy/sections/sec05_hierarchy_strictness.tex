@@ -1,43 +1,69 @@
 % ══════════════════════════════════════════════════════════
-\section{Strictness of the Hierarchy}\label{sec:strictness}
+\section{Structural Relations Between the Levels}
+  \label{sec:strictness}
 % ══════════════════════════════════════════════════════════
 
-We now show that the three levels form a strict chain
-$\text{L0} \subsetneq \text{L1} \subsetneq \text{L2}$.
+We analyze the relationships between the three levels.
+Rather than claiming a strict class chain
+$\text{L0} \subsetneq \text{L1} \subsetneq \text{L2}$,
+we establish the directional, conditional relations that
+are actually supported by our arguments:
+L0 and L1 are incomparable as classes, but compatible pairs
+admit a compilation from L0 to L1
+(\Cref{prop:L1-compiles-L0}); L1 and L2 coincide on generic
+clauses (a)--(b) of~\Cref{def:cert-univ}, while clause~(c)
+imposes genuinely new structure witnessed in the SPG setting
+(\Cref{prop:L2-generic-vs-structural}).
 
-% ── 5.1  L1 subsumes L0 ──────────────────────────────────
-\subsection{Protocol universality subsumes expression
-  universality}\label{ssec:L1-geq-L0}
+% ── 5.1  L1 hosts L0 under compatibility ─────────────────
+\subsection{Compilation of expression-universal syntax into
+  protocol systems}\label{ssec:L1-geq-L0}
 
 \begin{proposition}[Semantic compilation of expression terms into
   compatible protocol systems]\label{prop:L1-compiles-L0}
 Let $(\sigma, c_{0})$ be expression-universal
 for~$\mathcal{F}$, with grammar
-$S \to c_{0} \mid x_{i} \mid \sigma(S,S)$, and let
-$(D', \mathrm{NF}', \{\Phi'_{\ell}\})$ be a protocol-universal
-system whose domain~$D'$ admits a computable evaluation map
-$\mathrm{eval} \colon T \to D'$, where $T$ is the free
-binary-tree algebra over the grammar.  Then the composition
+$S \to c_{0} \mid x_{i} \mid \sigma(S,S)$ and free binary-tree
+algebra~$T$.  Let $(D', \mathrm{NF}', \{\Phi'_{\ell}\})$ be a
+protocol-universal system.  Suppose there exists a computable
+evaluation map $\mathrm{eval} \colon T \to D'$ that is
+\emph{semantically compatible}, i.e.\ satisfies
+\begin{equation}\label{eq:semantic-compatibility}
+  t_{1} \sim t_{2} \;\Longleftrightarrow\;
+  \mathrm{NF}'(\mathrm{eval}(t_{1})) =
+  \mathrm{NF}'(\mathrm{eval}(t_{2}))
+\end{equation}
+for all $t_{1}, t_{2} \in T$, where $\sim$ denotes semantic
+equivalence of expression trees.  Then the induced map
 \[
   \llbracket \cdot \rrbracket_{\mathrm{NF}'}
     \;:=\; \mathrm{NF}' \circ \mathrm{eval}
-    \;\colon\; T \;\longrightarrow\; D'
+    \;\colon\; T/\!\sim \;\longrightarrow\; D'
 \]
-factors through the semantic equivalence $\sim$ on~$T$ and
-induces an injection $T/\!\sim\; \hookrightarrow D'$.
-Equivalence testing for $T/\!\sim$ is then decidable via the
-word problem in~$D'$.
+is an injection, and equivalence testing for $T/\!\sim$ reduces
+to the (decidable) word problem in~$D'$.
 \end{proposition}
 
-\begin{remark}
-\Cref{prop:L1-compiles-L0} is strictly weaker than an embedding
-of~$T$ itself (distinct trees may share a value).  It also
-requires a compatible evaluator~$\mathrm{eval}$ to exist---not
-every protocol-universal system admits one for an arbitrary
-expression grammar.  What it asserts is the \emph{possibility}
-of compiling expression-universal syntax into a protocol-universal
-system whenever the semantic target is addressable, which is the
-L1-to-L0 relation relevant in practice.
+\begin{remark}[Scope of \Cref{prop:L1-compiles-L0}]
+This proposition is a \emph{conditional} compilation statement,
+not an unconditional class inclusion.  Its hypotheses are
+strong:
+\begin{enumerate}[label=(\roman*)]
+\item The protocol system must admit a computable
+  evaluator~$\mathrm{eval}$ adapted to the expression grammar.
+\item The compatibility condition~\eqref{eq:semantic-compatibility}
+  must hold, effectively requiring $D'$ to be rich enough to
+  separate all semantically distinct expression classes.
+\end{enumerate}
+For expression-universal systems with undecidable equivalence
+(such as EML over a sufficiently rich analytic domain),
+no such $(D', \mathrm{eval})$ pair can exist, since~(ii) would
+contradict the undecidability.  We therefore do \emph{not} claim
+an unconditional class inclusion $\mathrm{L0} \subseteq \mathrm{L1}$.
+What the hierarchy records is a directional strengthening:
+when compilation is possible, L1 provides strictly more structure
+than L0 (decidable canonical forms); when compilation is
+impossible, L0 and L1 are simply incomparable as classes.
 \end{remark}
 
 % ── 5.2  L0 does not imply L1 ────────────────────────────
@@ -86,72 +112,86 @@ to the system.
 \end{proof}
 
 \begin{corollary}\label{cor:strict-L0-L1}
-The inclusion $\mathrm{L0} \subsetneq \mathrm{L1}$ is strict.
+L0 and L1 are incomparable as classes: there exist
+expression-universal systems (e.g., EML) that are not
+protocol-universal, and conversely the protocol-universality
+property is not entailed by expression-universality.
+For pairs where semantic compilation in the sense of
+\Cref{prop:L1-compiles-L0} is available, L1 strictly
+strengthens L0 by adding a decidable word problem.
 \end{corollary}
 
-% ── 5.3  L2 strictly extends L1 ──────────────────────────
-\subsection{Certificate universality strictly extends protocol
-  universality}\label{ssec:L2-strict}
+% ── 5.3  L2 imposes non-trivial structure beyond L1 ──────
+\subsection{Certificate universality as a non-trivial
+  structural refinement of protocol universality}
+  \label{ssec:L2-strict}
 
-\begin{proposition}[L1 $\subsetneq$ L2]\label{prop:L2-strict}
-Not every protocol-universal system is certificate-universal.
-The separation is witnessed by clause~(c) of
-\Cref{def:cert-univ}: finite-state kernel computability.
+\begin{proposition}[Generic vs.\ structural clauses in L2]
+\label{prop:L2-generic-vs-structural}
+For any protocol-universal system with finite fiber partitions
+at every resolution, clauses~(a) and~(b) of
+\Cref{def:cert-univ}---Hankel positive semi-definiteness and
+finite Prony reconstructibility---are automatic.  In contrast,
+clause~(c)---the existence of a finite-state matrix transfer
+operator of dimension polynomial in~$q$ computing the full
+moment sequence $(S_{q}(m))_{q \ge 0}$ at each resolution~$m$
+---is a non-trivial structural condition that the scan--projection
+fold system satisfies by \Cref{thm:star-kernel} but which is
+not entailed by protocol universality alone.
 \end{proposition}
 
 \begin{proof}
-We construct a protocol-universal system whose fiber-moment
-sequence is not computable by any finite-state transfer
-operator of dimension polynomial in~$q$.
+\emph{(a)} For any finite multiset $\{d_{m}(x)\}$ of non-negative
+real numbers,
+\[
+  \sum_{i,j} c_{i}\, c_{j}\, S_{i+j}(m)
+    = \sum_{i,j} c_{i}\, c_{j}
+      \sum_{x} d_{m}(x)^{i+j}
+    = \sum_{x}\Bigl(\sum_{i} c_{i}\, d_{m}(x)^{i}\Bigr)^{2}
+    \ge 0,
+\]
+so the Hankel matrix $[S_{i+j}(m)]$ is positive semi-definite.
 
-\emph{Construction.}
-Fix a total computable function $h \colon \NN \to \NN$ whose
-graph is undecidable at polynomial-size certificates---for
-example, $h(n) = $ the busy-beaver step-count $\mathrm{BB}(n)$,
-or any function not dominated by any polynomial-space-computable
-function.
-Let $A_{h}$ be the free monoid on a single generator~$a$,
-and define the normalization $\mathrm{NF}_{h} \colon \{0,1\}^{*}
-\to A_{h}$ by $\mathrm{NF}_{h}(w) := a^{h(|w|)}$.  This is
-computable, hence $(\{0,1\}^{*}, \mathrm{NF}_{h})$ is
-protocol-universal in the sense of~\Cref{def:prot-univ}
-(decidable word problem via evaluation of~$h$).
+\emph{(b)} The measure
+$\nu_{m} := \sum_{x} \delta_{d_{m}(x)}$ has finite support of
+size at most $|X_{m}|$; its moments determine $\nu_{m}$ uniquely
+by the classical finite Hamburger moment theorem, and
+$2 r_{m}$ moments suffice for Prony reconstruction where
+$r_{m}$ is the number of distinct fiber sizes.
 
-\emph{Failure of clause (c).}
-The fiber sizes are $d_{m}(a^{h(n)}) = \#\{w : |w|=n,\,
-\mathrm{NF}_{h}(w)=a^{h(n)}\} = 2^{n}\,[h(n)=h(n)]$ for $m=n$.
-The $q$-fold collision moments satisfy
-$S_{q}(m) = 2^{mq}$ for $m = n$,
-whereas the characteristic polynomial of any
-finite-state transfer operator computing $(S_{q}(m))_{q}$
-would force the sequence $(\log_{2} S_{q}(m)/q)_{m}$ to be
-ultimately periodic modulo rational scaling
-(by the Skolem--Mahler--Lech theorem for linear recurrences);
-but the dependence of $m$ on $h$ can be chosen to violate this.
-Hence no polynomial-dimensional transfer operator exists.
-
-\emph{SPG satisfies clause (c).}
-By \Cref{thm:star-kernel}, the scan--projection fold system
-admits the star moment-kernel compression
-$A^{(q)}|_{\Sym^{q-1}(V)}$ with polynomial dimension
-$\binom{k+q-2}{q-1}$, so clause~(c) holds.  Hence SPG sits in
-L2 while $(\{0,1\}^{*}, \mathrm{NF}_{h})$ sits only in L1.
+\emph{(c), structural content.}
+The scan--projection fold system satisfies clause~(c) by the
+star moment-kernel theorem: $A^{(q)}|_{\Sym^{q-1}(V)}$ has
+dimension $\binom{k+q-2}{q-1}$, polynomial in~$q$ for fixed
+state-space dimension~$k$ (\Cref{thm:star-kernel}).  This is
+a consequence of the specific transfer-matrix structure
+$A^{(q)} = \sum_{\alpha} B_{\alpha}^{\otimes(q-1)}$ arising
+from the Fold rewrite system, not a formal consequence of the
+definition of protocol universality.
 \end{proof}
 
+\begin{remark}[On strictness as class containment]
+\label{rem:L1-L2-strictness-open}
+A demonstration that L1 is strictly weaker than L2 as a class
+of systems would require exhibiting a protocol-universal
+system in which no polynomial-dimensional transfer operator
+computes the fiber moments.  Constructing such a system within
+the precise formalism of \Cref{def:prot-univ}---including the
+required generating operation~$\sigma$ and readout
+functors---appears to be non-trivial, and we leave it as an
+open question.  What \Cref{prop:L2-generic-vs-structural}
+establishes is the weaker but still meaningful claim:
+clause~(c) of L2 carries non-trivial structural content beyond
+what protocol universality alone supplies, witnessed by the
+explicit transfer-matrix compression in the SPG setting.
+\end{remark}
+
 \begin{remark}\label{rem:hankel-psd-generic}
-Hankel positive semi-definiteness of
-$[S_{i+j}(m)]$ is a \emph{generic} consequence of having
-a finite fiber partition with non-negative sizes:
-$\sum_{i,j} c_{i}\, c_{j}\, S_{i+j}
-= \sum_{x}(\sum_{i} c_{i}\, d_{m}(x)^{i})^{2} \ge 0$.
-Prony reconstruction from $2r_{m}$~moments is likewise
-automatic once the Hankel rank is finite.
-Clauses~(a) and~(b) of \Cref{def:cert-univ} are thus
-universal across protocol-universal systems with finite fibers.
-The substantive content of L2, and the correct separating
-axis from L1, is clause~(c): the existence of a
-finite-state matrix transfer operator of polynomial dimension
-in~$q$ that computes the full moment sequence.
+The takeaway for the hierarchy table
+(\Cref{tab:properties}): Hankel PSD and finite spectral
+reconstruction are generic, while the polynomial-dimension
+transfer-operator structure is the distinctive content of
+certificate universality in the SPG setting.
 \end{remark}
 
 % ── 5.4  Summary ─────────────────────────────────────────
@@ -162,7 +202,9 @@ in~$q$ that computes the full moment sequence.
 \caption{Properties at each level.  \checkmark\ =
   present; $\times$ = absent or undecidable;
   $\checkmark^{*}$ = generic (holds for any finite fiber
-  partition, not specific to the system).}
+  partition, not specific to the system);
+  $?$ = not entailed by the definition but we are unaware of a
+  counterexample (\Cref{rem:L1-L2-strictness-open}).}
 \label{tab:properties}
 \begin{tabular}{@{}lccc@{}}
 \toprule
@@ -174,7 +216,8 @@ Canonical normal form & $\times$  & \checkmark & \checkmark \\
 Decidable word problem & $\times$ & \checkmark & \checkmark \\
 Operations internal  & $\times$   & \checkmark & \checkmark \\
 PSD moment kernel (generic)  & $\times$ & \checkmark$^{*}$ & \checkmark \\
-Finite-state moment kernel   & $\times$ & $\times$   & \checkmark \\
+Finite-state moment kernel (poly.\ dim.)
+                              & $\times$ & $?$   & \checkmark \\
 Finite spectral certificate  & $\times$ & \checkmark$^{*}$ & \checkmark \\
 \bottomrule
 \end{tabular}
