@@ -711,6 +711,56 @@ theorem paper_cdim_mobius_inversion_package :
      multiPrimeSpectrum S {3} = 1 ∧ multiPrimeSpectrum S {2, 3} = 0) :=
   paper_cdim_mobius_inversion_seeds
 
+/-- Exact-support counts recover support membership.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem typeCount_eq_indicator (supports : Finset PrimeSupport) (J : PrimeSupport) :
+    typeCount supports J = if J ∈ supports then 1 else 0 := by
+  by_cases hJ : J ∈ supports
+  · have htc : typeCount supports J = 1 := by
+      unfold typeCount
+      have hEq : supports.filter (fun S => S = J) = {J} := by
+        ext x
+        constructor
+        · intro hx
+          simp only [Finset.mem_filter, Finset.mem_singleton] at hx ⊢
+          exact hx.2
+        · intro hx
+          simp only [Finset.mem_filter, Finset.mem_singleton] at hx ⊢
+          subst hx
+          exact ⟨hJ, rfl⟩
+      rw [hEq]
+      simp
+    simp [hJ, htc]
+  · unfold typeCount
+    have hEq : supports.filter (fun S => S = J) = ∅ := by
+      ext x
+      constructor
+      · intro hx
+        simp only [Finset.mem_filter] at hx
+        rcases hx with ⟨hx, rfl⟩
+        exact (hJ hx).elim
+      · intro hx
+        simp at hx
+    rw [hEq]
+    simp [hJ]
+
+/-- Multiset classification from the exact-support counts. In this finite-support model the
+    decomposition type is represented by the support multiset itself.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem paper_cdim_mobius_inversion_localization_multiset_classification
+    (supports supports' : Finset PrimeSupport) :
+    (∀ J : PrimeSupport,
+      multiPrimeSpectrum supports J =
+        Finset.sum supports (fun K => if J ⊆ K then typeCount supports K else 0)) ∧
+    (∀ J : PrimeSupport, typeCount supports J = if J ∈ supports then 1 else 0) ∧
+    ((∀ J : PrimeSupport, typeCount supports J = typeCount supports' J) → supports = supports') := by
+  refine ⟨multiPrimeSpectrum_eq_sum_typeCount supports, typeCount_eq_indicator supports, ?_⟩
+  intro hcounts
+  ext J
+  have hJ : typeCount supports J = typeCount supports' J := hcounts J
+  rw [typeCount_eq_indicator supports J, typeCount_eq_indicator supports' J] at hJ
+  by_cases hmem : J ∈ supports <;> by_cases hmem' : J ∈ supports' <;> simp [hmem, hmem'] at hJ ⊢
+
 -- Phase R603: Inclusion-exclusion seeds
 -- ══════════════════════════════════════════════════════════════
 
