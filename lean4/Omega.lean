@@ -761,6 +761,7 @@ import Omega.CircleDimension.MedianThetaRigidityPrimeRatio
 import Omega.CircleDimension.PhasePrefixOccupancyBarrier
 import Omega.CircleDimension.RegisterCircleModpFormula
 import Omega.CircleDimension.AddressLedgerJointBudgetLowerBound
+import Omega.CircleDimension.RadiusBlindspotJointDiscreteBudgetOrthogonal
 import Omega.CircleDimension.ShortExactAdditivity
 import Omega.CircleDimension.FiniteExtensionAxiomaticUniqueness
 import Omega.SPG.TanakaStokes
@@ -835,6 +836,7 @@ import Omega.TypedAddressBiaxialCompletion.Window6TwoSheetCharts
 import Omega.TypedAddressBiaxialCompletion.Window6AuditBudgetSplit
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
+import Omega.TypedAddressBiaxialCompletion.ThreeEndBudget
 import Omega.TypedAddressBiaxialCompletion.NullExhaustive
 import Omega.TypedAddressBiaxialCompletion.NullFiber
 import Omega.TypedAddressBiaxialCompletion.ReadableFiber
@@ -886,6 +888,7 @@ import Omega.POM.LeyangMonotoneCouplingPrimeRegister
 import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.MicrocanonicalAdaptiveNoGain
+import Omega.POM.MicrocanonicalCountSufficientStatisticPosteriorUniform
 import Omega.POM.DoubleTransversalNormalForm
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantEllipseLedger
