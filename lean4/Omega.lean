@@ -125,6 +125,7 @@ import Omega.Folding.MetallicTwoStateSFT
 import Omega.Folding.MetallicBinetClosedForm
 import Omega.Folding.MetallicFiniteScaleCompressionOscillation
 import Omega.Folding.MetallicIntegerScalarizationThreshold
+import Omega.Folding.MetallicParetoScaleLaw
 import Omega.Folding.OstrowskiMetallicTwoRuleNormalization
 import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.LocalRewriteLdpBarrier
@@ -749,6 +750,7 @@ import Omega.Conclusion.SyncKernelPalindrome
 import Omega.Conclusion.GodelLeyangIFS
 import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.MonotoneBooleanClone
+import Omega.Conclusion.NoUniversalTwoAxisAuditCompletion
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Conclusion.BoundaryStokesObservationMinimalDimension
 import Omega.Conclusion.FoldbinGroupoidTracialSimplex
@@ -839,6 +841,7 @@ import Omega.TypedAddressBiaxialCompletion.Window6TwoSheetCharts
 import Omega.TypedAddressBiaxialCompletion.Window6AuditBudgetSplit
 import Omega.TypedAddressBiaxialCompletion.Window6AuditBoundaryCertificates
 import Omega.TypedAddressBiaxialCompletion.PhaseLedgerTemplate
+import Omega.TypedAddressBiaxialCompletion.JensenDefectFiniteization
 import Omega.TypedAddressBiaxialCompletion.NonNullRequiresThreeAxes
 import Omega.TypedAddressBiaxialCompletion.ThreeEndBudget
 import Omega.TypedAddressBiaxialCompletion.NullExhaustive
