@@ -4,6 +4,7 @@ import Omega.POM.AitkenDelta2SquareConvergence
 import Omega.POM.CapacityCollisionDataProcessing
 import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.BoundedPerturbationInvariance
+import Omega.POM.BbitOracleCapacityClosedForm
 import Omega.POM.CRTSpatializationPrimeBudget
 import Omega.POM.CatalanMoments
 import Omega.POM.CentralizerDetMod5

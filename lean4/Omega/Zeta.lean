@@ -149,6 +149,7 @@ import Omega.Zeta.VandermondeResultantSeeds
 import Omega.Zeta.WalshParseval
 import Omega.Zeta.XiLogDefectPotentialLinftyBoundByTotalDelta
 import Omega.Zeta.XiCauchyPoissonDensityRatioSecondOrderProfile
+import Omega.Zeta.XiCauchyPoissonSecondOrderShapeLimitNodeRigidity
 import Omega.Zeta.XiRealInput40LogMInftyTruncationBound
 import Omega.Zeta.XiSingleDefectIntegratedClosedForm
 import Omega.Zeta.XiSingleDefectThresholdPhaseTransition
