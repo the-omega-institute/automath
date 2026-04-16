@@ -52,6 +52,7 @@ import Omega.CircleDimension.AuditedRealizationBudgetLowerBound
 import Omega.CircleDimension.AnomalyQuadraticLaw
 import Omega.CircleDimension.CertificateInverseLimitAddressing
 import Omega.CircleDimension.NonresonantLissajousNodeCount
+import Omega.CircleDimension.ShiftedJensenDefectIntegralLaw
 import Omega.Folding.ShiftDynamics
 import Omega.Folding.Rewrite
 import Omega.Folding.Defect
@@ -1036,6 +1037,7 @@ import Omega.Conclusion.RealInput40UVAtomCore
 import Omega.Conclusion.SmithRamanujanShadowSeeds
 import Omega.Conclusion.SmithRamanujanShadowInversion
 import Omega.Conclusion.CofinalFixedQuotient
+import Omega.Conclusion.Window6BoundarySuperselectionC3OrbitStratification
 import Omega.POM.ZeroTemperatureTwoTermExpansion
 import Omega.SPG.DyadicFluxZetaMinkowskiPole
 import Omega.SPG.MinkowskiDimensionBoundaryFaceGrowthSandwich
@@ -1128,4 +1130,5 @@ import Omega.Zeta.TwistedDeterminantCumulants
 import Omega.Zeta.CLTSpectral
 import Omega.Zeta.RhoGapM12
 import Omega.Zeta.ComovingEnergyDeltaBound
+import Omega.Zeta.HankelDeterminantalRadicalEqRigidity
 import Omega.Conclusion.PrimorialMixedRadixAffine
