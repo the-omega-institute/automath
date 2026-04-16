@@ -98,6 +98,7 @@ import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
+import Omega.Folding.GaugeAnomalyUnitCircleRigidity
 import Omega.Folding.GaugeAnomalyTauIntClosed
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
 import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
@@ -143,6 +144,7 @@ import Omega.GU.Window6TypeSuperselectionAutGamma6
 import Omega.GU.Window6AffineFiberOrbitClassification
 import Omega.GU.BetaPfExpectation
 import Omega.GU.BetaDeterminantRatio
+import Omega.GU.So10TwoTorsionCentralCollapseNecessity
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.Window6LieEnvelopeClosure
@@ -266,6 +268,7 @@ import Omega.SPG.LpSuperellipsoidDecodingMultiplicativeNoiseStability
 import Omega.SPG.EllipsoidBoundaryFluxReconstruction
 import Omega.SPG.WeightedBoundaryDecomposition
 import Omega.SPG.WeightedBoundaryTransfer
+import Omega.SPG.WeightedL1TorusStableLengthGodel
 import Omega.SPG.WeightedBoundaryPole
 import Omega.SPG.BoundaryDimensionUpper
 import Omega.SPG.DoubleBudgetAddressCapacity
