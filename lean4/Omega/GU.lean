@@ -71,6 +71,7 @@ import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
+import Omega.GU.TerminalWindow6PushforwardCharpolyGalois
 import Omega.GU.TerminalWindow6PushforwardCommutantMasa
 import Omega.GU.TerminalWindow6PushforwardCommutantMasa
 import Omega.GU.TerminalWindow6PushforwardNoAlgebraicModeSelection

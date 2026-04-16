@@ -1,4 +1,5 @@
 import Omega.Discussion.ChebyshevAdams
+import Omega.Discussion.FiberStokesWatataniNormalization
 import Omega.Discussion.HSZKIffDiamond
 import Omega.Discussion.HodgeStokesVarianceRigidity
 import Omega.Discussion.HorizonMeasureFold6Pushforward
