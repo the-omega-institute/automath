@@ -23,6 +23,7 @@ import Omega.Folding.BernoulliPJordanResonance
 import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPParryPressureChain
 import Omega.Folding.BernoulliPRegenerationPGF
+import Omega.Folding.BernoulliPRegenerationLengthPGFRecurrenceTail
 import Omega.Folding.BernoulliPPressureQuartic
 import Omega.Folding.BernoulliPDensityUnimodal
 import Omega.Folding.BernoulliPSpecializeHalf
