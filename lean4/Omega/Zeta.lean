@@ -18,6 +18,7 @@ import Omega.Zeta.ClassMertensFourier
 import Omega.Zeta.ClassPrimitiveDecomposition
 import Omega.Zeta.ClassPrimitiveTrivialSplit
 import Omega.Zeta.ComovingEnergyDeltaBound
+import Omega.Zeta.ComovingHorizonScanPoissonKLCovarianceTensor
 import Omega.Zeta.CriticalCircleStateDimensionLB
 import Omega.Zeta.CriticalLineGapEntropyRateZero
 import Omega.Zeta.CriticalLinePaircorrPurePoint
