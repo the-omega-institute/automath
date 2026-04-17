@@ -60,9 +60,19 @@ $D_{n\to m}$ as the xor sum of the projected adjacent defects along the whole
 resolution band.  As consequences we obtain a cocycle identity, quantitative
 coupling and Hamming bounds, an exact formula
 $\lfloor 2^{m+1}/3\rfloor/2^{m+1}$ for the one-step defect probability under
-the uniform raw-word law, an exact recursion for the full defect distribution,
-and a simple criterion for eventual compatibility of folded prefixes of an
-infinite binary sequence.
+the uniform raw-word law, and an exact collapse theorem for the full global
+defect law: after the raw word is split into a lower $m$-digit block and an
+upper tail, the entire multiscale defect is obtained by feeding a recursively
+defined one-bit tail state into the adjacent defect at level $m+1\to m$.  Under
+the uniform raw-word law this yields a factorization of the full defect
+distribution and the exact formula
+\[
+\PP_{\Unif_n}[D_{n\to m}\ne 0]
+=
+\frac{(2^{n-m}-(-1)^{n-m})\lfloor 2^{m+1}/3\rfloor}{3\cdot 2^n}.
+\]
+The final section gives a criterion for eventual compatibility of folded
+prefixes of an infinite binary sequence.
 \end{abstract}
 
 \maketitle
@@ -119,10 +129,31 @@ $C_m=2^{m-2}+C_{m-2}$ for $m\ge 3$, whence
 =
 \frac{\lfloor 2^{m+1}/3\rfloor}{2^{m+1}}.
 \]
-We also record an exact recursion for the full defect law
-$\mu_{n,m}(v)=2^{-n}\#\{\omega\in\Omega_n:D_{n\to m}(\omega)=v\}$ and an
-inverse-limit criterion characterizing when the folded prefixes of an infinite
-raw sequence eventually stabilize into a compatible family.
+The full law turns out to admit a substantially sharper description.  If
+$\omega=(p,q)\in\Omega_m\times\Omega_{n-m}$ is split into its lower $m$-digit
+prefix and upper tail, Theorem~\ref{thm:tail-collapse} defines a recursively
+determined tail bit $\beta(q)\in\{0,1\}$ and proves
+\[
+D_{n\to m}(p,q)=\kappa_{m+1\to m}(p,\beta(q)).
+\]
+Thus every multiscale defect is already an adjacent defect, and the entire tail
+enters only through a one-bit activation state.  Under the uniform raw-word law
+the nonzero part of the full vector law is exactly a scalar multiple of the
+adjacent one-step law; the scalar factor is
+\[
+\rho_\ell=\frac{2^\ell-(-1)^\ell}{3\cdot 2^\ell},
+\qquad
+\ell=n-m.
+\]
+In particular,
+\[
+\PP_{\Unif_n}[D_{n\to m}\ne 0]
+=
+\rho_{n-m}\,\frac{\lfloor 2^{m+1}/3\rfloor}{2^m}.
+\]
+An inverse-limit criterion characterizing when the folded prefixes of an
+infinite raw sequence eventually stabilize into a compatible family is also
+obtained.
 
 Classical background on Zeckendorf representations is contained in
 \cite{Lekkerkerker1952,Zeckendorf1972,Fraenkel1985}.  Automata-theoretic
@@ -143,7 +174,8 @@ The paper is organized as follows.  Section~\ref{sec:adjacent} introduces the
 finite-window Fold map and proves the threshold theorem for the adjacent
 defect.  Section~\ref{sec:telescoping} derives the telescoping formula, the
 cocycle relation, and general coupling bounds.  Section~\ref{sec:uniform}
-treats uniform counts and exact finite-$n$ enumeration.  Section~\ref{sec:lifts}
+treats uniform counts, exact finite-$n$ enumeration, and the collapse theorem
+for the full defect law under the uniform measure.  Section~\ref{sec:lifts}
 turns to eventual compatibility along infinite raw sequences.  Appendix~A
 collects the routine finite-window facts used in the main text, and
 Appendix~B records supplementary examples and exact small-scale values.
@@ -830,12 +862,316 @@ choices $b\in\{0,1\}$.  Counting the pairs $(p,b)$ producing a prescribed
 vector $v$ gives the formula.
 \end{proof}
 
+\begin{lemma}
+\label{lem:zero-barrier}
+Let $m\ge 1$, let $p\in\Omega_m$, and let $b\in\{0,1\}$.  Then
+\[
+\tau_{m+1\to m}\bigl(\kappa_{m+2\to m+1}(p,0,b)\bigr)=0.
+\]
+\end{lemma}
+
+\begin{proof}
+If $b=0$, Theorem~\ref{thm:adjacent-threshold} gives
+$\kappa_{m+2\to m+1}(p,0,0)=0$.
+
+If $b=1$, write
+\[
+s:=N(p,0)=N(p).
+\]
+Since the $(m+1)$-st digit of $(p,0)$ is zero,
+\[
+s\le \sum_{k=1}^m F_{k+1}=F_{m+2}-2<F_{m+2}.
+\]
+Theorem~\ref{thm:adjacent-threshold} at level $m+2\to m+1$ therefore gives
+$\kappa_{m+2\to m+1}(p,0,1)=0$.
+\end{proof}
+
+\begin{lemma}
+\label{lem:double-one-reduction}
+Let $m\ge 1$, let $p\in\Omega_m$, and let $b\in\{0,1\}$.  Then
+\[
+\tau_{m+2\to m}\bigl(\kappa_{m+3\to m+2}(p,1,1,b)\bigr)
+=
+\kappa_{m+1\to m}(p,b).
+\]
+\end{lemma}
+
+\begin{proof}
+If $b=0$, both sides vanish by Theorem~\ref{thm:adjacent-threshold}.
+
+Assume $b=1$ and write
+\[
+s:=N(p).
+\]
+Since $p\in\Omega_m$,
+\[
+0\le s\le F_{m+3}-2.
+\]
+At level $m+3\to m+2$, the prefix $(p,1,1)$ has value
+\[
+N(p,1,1)=s+F_{m+2}+F_{m+3}=s+F_{m+4}.
+\]
+Theorem~\ref{thm:adjacent-threshold} therefore yields
+\[
+\tau_{m+2\to m}\bigl(\kappa_{m+3\to m+2}(p,1,1,1)\bigr)
+=
+\pi_{\infty\to m}(Z(s))
+\oplus
+\pi_{\infty\to m}(Z(s+F_{m+2})).
+\]
+
+If $s<F_{m+1}$, then $s+F_{m+2}<F_{m+3}$ and the Zeckendorf expansion of
+$s+F_{m+2}$ is obtained by inserting a single $1$ in position $m+1$ above
+$Z(s)$.  Hence
+\[
+\pi_{\infty\to m}(Z(s+F_{m+2}))=\pi_{\infty\to m}(Z(s)),
+\]
+so the left-hand side is zero.  Theorem~\ref{thm:adjacent-threshold} gives
+$\kappa_{m+1\to m}(p,1)=0$ in the same range.
+
+Assume now that $s\ge F_{m+1}$.  Since $s<F_{m+3}$,
+\[
+0\le s-F_{m+1}<F_{m+2},
+\]
+and
+\[
+s+F_{m+2}=F_{m+3}+(s-F_{m+1}).
+\]
+Thus the first $m$ digits of $Z(s+F_{m+2})$ are exactly those of
+$Z(s-F_{m+1})$, so
+\[
+\pi_{\infty\to m}(Z(s+F_{m+2}))
+=
+\pi_{\infty\to m}(Z(s-F_{m+1})).
+\]
+Also,
+\[
+\pi_{\infty\to m}(Z(s))
+=
+\pi_{\infty\to m}(Z(s\bmod F_{m+2}))
+\]
+because $s<F_{m+3}$.  Theorem~\ref{thm:adjacent-threshold} at level
+$m+1\to m$ therefore gives
+\[
+\pi_{\infty\to m}(Z(s))
+\oplus
+\pi_{\infty\to m}(Z(s+F_{m+2}))
+=
+\kappa_{m+1\to m}(p,1).
+\]
+This proves the claim.
+\end{proof}
+
+\begin{theorem}[Collapse of the multiscale defect law]\textbf{[New-1 | 2026-04-17]}
+\label{thm:tail-collapse}
+Fix $n>m$ and write $\ell:=n-m$.  Define
+\[
+\beta:\bigsqcup_{r\ge 0}\Omega_r\longrightarrow\{0,1\}
+\]
+by the recursion
+\[
+\beta(\varnothing)=0,
+\qquad
+\beta(0\alpha)=0,
+\qquad
+\beta(10\alpha)=1,
+\qquad
+\beta(11\alpha)=\beta(\alpha).
+\]
+Then for every $p\in\Omega_m$ and every $q\in\Omega_\ell$,
+\[
+D_{n\to m}(p,q)=\kappa_{m+1\to m}(p,\beta(q)).
+\]
+For $v\in\{0,1\}^m$, set
+\[
+\lambda_m(v):=2^{-m}\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)=v\},
+\]
+and for $\ell\ge 0$ set
+\[
+\rho_\ell:=2^{-\ell}\#\{q\in\Omega_\ell:\ \beta(q)=1\}.
+\]
+Then
+\[
+\mu_{n,m}(v)=
+\begin{cases}
+(1-\rho_\ell)+\rho_\ell\lambda_m(0),& v=0,\\[4pt]
+\rho_\ell\lambda_m(v),& v\ne 0.
+\end{cases}
+\]
+Moreover,
+\[
+\rho_\ell=\frac{2^\ell-(-1)^\ell}{3\cdot 2^\ell}
+\qquad (\ell\ge 0),
+\]
+and therefore
+\[
+\PP_{\Unif_n}[D_{n\to m}\ne 0]
+=
+\rho_{n-m}\,\frac{\lfloor 2^{m+1}/3\rfloor}{2^m}
+=
+\frac{(2^{n-m}-(-1)^{n-m})\lfloor 2^{m+1}/3\rfloor}{3\cdot 2^n}.
+\]
+\end{theorem}
+
+\begin{proof}
+For $r\ge 0$, for $p\in\Omega_m$, and for $q\in\Omega_r$, write
+\[
+E_r(p,q):=D_{m+r\to m}(p,q).
+\]
+The identity
+\[
+E_r(p,q)=\kappa_{m+1\to m}(p,\beta(q))
+\]
+is established by induction on $r$.
+
+For $r=0$, one has $q=\varnothing$, $E_0(p,\varnothing)=0$, and
+$\beta(\varnothing)=0$.
+
+Assume $r\ge 1$ and that the claim holds for shorter tails.
+
+If $q=0\alpha$, then Proposition~\ref{prop:cocycle} with the intermediate scale
+$m+1$ gives
+\[
+E_r(p,0\alpha)
+=
+D_{m+1\to m}(p,0)
+\oplus
+\tau_{m+1\to m}(D_{m+r\to m+1}(p,0,\alpha)).
+\]
+The first term is zero.  The induction hypothesis at level $m+1$ gives
+\[
+D_{m+r\to m+1}(p,0,\alpha)
+=
+\kappa_{m+2\to m+1}(p,0,\beta(\alpha)).
+\]
+Lemma~\ref{lem:zero-barrier} then implies $E_r(p,0\alpha)=0$, which equals
+$\kappa_{m+1\to m}(p,\beta(0\alpha))$.
+
+If $q=10\alpha$, then Proposition~\ref{prop:cocycle} with the intermediate
+scale $m+2$ gives
+\[
+E_r(p,10\alpha)
+=
+D_{m+2\to m}(p,1,0)
+\oplus
+\tau_{m+2\to m}(D_{m+r\to m+2}(p,1,0,\alpha)).
+\]
+Since
+\[
+N(p,1,0)=N(p,1),
+\]
+the first term is exactly $\kappa_{m+1\to m}(p,1)$.  The induction hypothesis
+at level $m+2$ yields
+\[
+D_{m+r\to m+2}(p,1,0,\alpha)
+=
+\kappa_{m+3\to m+2}(p,1,0,\beta(\alpha)),
+\]
+and Lemma~\ref{lem:zero-barrier}, applied with the $(m+1)$-digit prefix
+$(p,1)$, shows that its projection to level $m$ is zero.  Hence
+\[
+E_r(p,10\alpha)=\kappa_{m+1\to m}(p,1)
+=
+\kappa_{m+1\to m}(p,\beta(10\alpha)).
+\]
+
+If $q=11\alpha$, then Proposition~\ref{prop:cocycle} with the intermediate
+scale $m+2$ gives
+\[
+E_r(p,11\alpha)
+=
+D_{m+2\to m}(p,1,1)
+\oplus
+\tau_{m+2\to m}(D_{m+r\to m+2}(p,1,1,\alpha)).
+\]
+Now
+\[
+N(p,1,1)=N(p)+F_{m+2}+F_{m+3}=N(p)+F_{m+4}.
+\]
+Since $N(p)<F_{m+3}$, the Zeckendorf expansion of $N(p,1,1)$ is obtained by
+placing an isolated digit $1$ in position $m+3$ above $Z(N(p))$.  Therefore
+\[
+D_{m+2\to m}(p,1,1)=0.
+\]
+The induction hypothesis at level $m+2$ gives
+\[
+D_{m+r\to m+2}(p,1,1,\alpha)
+=
+\kappa_{m+3\to m+2}(p,1,1,\beta(\alpha)).
+\]
+Lemma~\ref{lem:double-one-reduction} then yields
+\[
+E_r(p,11\alpha)
+=
+\kappa_{m+1\to m}(p,\beta(\alpha))
+=
+\kappa_{m+1\to m}(p,\beta(11\alpha)).
+\]
+This completes the induction.
+
+Set
+\[
+B_\ell:=\#\{q\in\Omega_\ell:\ \beta(q)=1\}.
+\]
+The defining recursion for $\beta$ gives
+\[
+B_0=0,
+\qquad
+B_1=1,
+\qquad
+B_\ell=2^{\ell-2}+B_{\ell-2}\quad (\ell\ge 2),
+\]
+because
+\[
+\Omega_\ell=(0\Omega_{\ell-1})\sqcup(10\Omega_{\ell-2})\sqcup(11\Omega_{\ell-2})
+\]
+is a disjoint union.  The closed form
+\[
+B_\ell=\frac{2^\ell-(-1)^\ell}{3}
+\]
+follows by induction, and therefore
+\[
+\rho_\ell=\frac{B_\ell}{2^\ell}
+=
+\frac{2^\ell-(-1)^\ell}{3\cdot 2^\ell}.
+\]
+
+If $v\ne 0$, the established identity shows that
+$D_{n\to m}(p,q)=v$ holds if and only if $\beta(q)=1$ and
+$\kappa_{m+1\to m}(p,1)=v$.  Hence
+\[
+\mu_{n,m}(v)=\rho_\ell\lambda_m(v)
+\qquad (v\ne 0).
+\]
+The formula at $v=0$ follows from the decomposition into the cases
+$\beta(q)=0$ and $\beta(q)=1$.
+
+Finally,
+\[
+\PP_{\Unif_n}[D_{n\to m}\ne 0]
+=
+\rho_\ell\sum_{v\ne 0}\lambda_m(v).
+\]
+By Theorem~\ref{thm:explicit-count},
+\[
+\sum_{v\ne 0}\lambda_m(v)
+=
+2^{-m}\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)\ne 0\}
+=
+\frac{\lfloor 2^{m+1}/3\rfloor}{2^m}.
+\]
+Substituting the formula for $\rho_\ell$ proves the last identity.
+\end{proof}
+
 \begin{remark}
 \label{rem:scalar-recursion-failure}
 The recursion in Proposition~\ref{prop:vector-recursion} is exact, but it does
-not close on the scalar event $\{D_{n\to m}\ne 0\}$ alone.  Appendix~\ref{app:supplementary}
-records explicit examples and small values illustrating the resulting
-cancellations.
+not close on the scalar event $\{D_{n\to m}\ne 0\}$ after the upper tail is
+completely marginalized.  Theorem~\ref{thm:tail-collapse} shows that adjoining
+the single tail bit $\beta$ is sufficient: the full vector law then collapses
+to the adjacent one-step law, and the scalar event acquires an exact closed
+form.  Appendix~\ref{app:supplementary} records explicit small-scale
+cancellations before this reduction is imposed.
 \end{remark}
 
 \section{Compatible Lifts}
