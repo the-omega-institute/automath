@@ -28,7 +28,7 @@ The two words \(v0\) and \(v1\) have values differing by \(\Fib_{m+1}\). On the 
 \[
 \sum_{k=1}^m \Fib_{k+1}=\Fib_{m+3}-2<\Fib_{m+3},
 \]
-so the full Zeckendorf normalization of any length-\(m\) word can have at most one nonzero digit beyond the first \(m\) coordinates, namely a possible \(1\) in position \(m+1\). Consequently, if two length-\(m\) words have the same fold label, then their values differ by a multiple of \(\Fib_{m+2}\). Since
+so the full Zeckendorf normalization of any length-\(m\) word can have no nonzero digit in position \(m+2\) or beyond. Thus the tail beyond the first \(m\) coordinates is either empty or consists of a single \(1\) in position \(m+1\). Consequently, if two length-\(m\) words have the same fold label, then their values differ by either \(0\) or \(\Fib_{m+2}\). Since
 \[
 0<\Fib_{m+1}<\Fib_{m+2},
 \]
@@ -51,7 +51,9 @@ Every ambiguous two-label block reduces, after finitely many deletions of passiv
 \end{lemma}
 
 \begin{proof}
-Each deletion shortens the window size by \(1\), so the process terminates. By construction, the resulting witness has no passive coordinates and is therefore an ambiguous core. Since the deleted coordinates agree in both lifts and contribute the same symbols to every later label, reattaching them does not change the set of admissible third labels and does not alter the decoded appended bit.
+Each deletion shortens the window size by \(1\), so the process terminates after finitely many steps. By construction, the resulting witness still consists of two distinct lifts of the same two-label block and has no passive coordinates; it is therefore an ambiguous core.
+
+For the second claim, let \(c\) be one deleted coordinate. By passivity, removing \(c\) leaves two distinct lifts of the same two-label block, so \(c\) does not affect which third labels can continue either lift. Reattaching \(c\) inserts the same local symbols into both lifts at the same position, hence it preserves the set of admissible third labels and the appended bit selected by that third label. Iterating over all deleted coordinates shows that reattachment preserves third-label resolution.
 \end{proof}
 
 \begin{lemma}[Core length bound]\label{lem:core-length}
@@ -169,7 +171,9 @@ Hence in all eight cases the third label determines which lift continues, and th
 
 \subsection{Proof of the general decoder theorem}
 \begin{proof}[Detailed proof of Theorem~\ref{thm:core-resolution}]
-By Lemma~\ref{lem:stripping}, every ambiguous two-label block reduces to an ambiguous core. By Lemma~\ref{lem:core-length}, every such core has length \(3\) or \(4\). The complete length-\(3\) and length-\(4\) core lists are given by Lemmas~\ref{lem:m3-decoder} and \ref{lem:m4-decoder}. In every listed case the third label determines the current bit. Reattaching the stripped passive coordinates preserves that resolution by Lemma~\ref{lem:stripping}. Therefore every admissible three-label block in \(Y_m\) determines a unique current bit, which is exactly the statement of Theorem~\ref{thm:core-resolution}.
+By Lemma~\ref{lem:stripping}, every ambiguous two-label block reduces to an ambiguous core. By Lemma~\ref{lem:core-length}, every such core has length \(3\) or \(4\). The complete length-\(3\) and length-\(4\) core lists are given by Lemmas~\ref{lem:m3-decoder} and \ref{lem:m4-decoder}. In every listed case the third label determines the current bit.
+
+Define \(\psi_m(y_{t-2},y_{t-1},y_t)\) as follows: strip the ambiguous pair \((y_{t-2},y_{t-1})\) to its core, apply the appropriate \(m=3\) or \(m=4\) table to the third label \(y_t\), and then reattach the stripped coordinates. Lemma~\ref{lem:stripping} shows that this prescription is independent of the stripping sequence, because reattachment preserves third-label resolution. Hence every admissible three-label block in \(Y_m\) determines a unique current bit, which is exactly the statement of Theorem~\ref{thm:core-resolution}.
 \end{proof}
 
 \subsection{The degenerate case \texorpdfstring{$m=2$}{m = 2}}
