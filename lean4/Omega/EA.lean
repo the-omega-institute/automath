@@ -30,6 +30,7 @@ import Omega.EA.MonoidQuotientIsN
 import Omega.EA.MulNoNewPrimitive
 import Omega.EA.MultiscaleRoughReadoutContinuity
 import Omega.EA.MultiplicativeEnergyCompilable
+import Omega.EA.OnlineDelayFold
 import Omega.EA.OnlineDelayFoldSyncMealyMinimality
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.ParallelAdditionU1Degeneracy
