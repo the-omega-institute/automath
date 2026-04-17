@@ -15,6 +15,7 @@ import Omega.POM.CentralizerFPdim
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.CollisionEntropyRate
 import Omega.POM.CollisionAQFibonacciBFPrimitivePrimeDivisor
+import Omega.POM.CoprimeLedgerPrimorialOptimality
 import Omega.POM.CompleteHomogeneousLinearRecurrence
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.CollisionKernelPublication

@@ -90,6 +90,7 @@ import Omega.Conclusion.QuadraticFieldRamification
 import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.RateCdimTwoCircleThreshold
 import Omega.Conclusion.RegisterUltrametricLipschitzAndGodelNoRealExtension
+import Omega.Conclusion.RealInput40ZeroTempQuarticConstantUnification
 import Omega.Conclusion.RealInput40UVAtomCore
 import Omega.Conclusion.RealInput40OutputPotentialSpectralCollisions
 import Omega.Conclusion.RealInput40UVPressureSilentPhase
