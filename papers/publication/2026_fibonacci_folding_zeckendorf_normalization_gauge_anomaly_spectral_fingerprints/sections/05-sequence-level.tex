@@ -32,11 +32,35 @@ and label the directed edge \(v\to v'\) by
 Denote the resulting labeled graph by \(G_m\). Let \(\Sigma_m\) be its edge shift and \(\Lambda_m:\Sigma_m\to X_m^{\ZZ}\) the label map. By construction \(\Lambda_m(\Sigma_m)=Y_m\), so \(Y_m\) is sofic.
 \end{proof}
 
+\subsection{A finite-core criterion}
+
+The decoder argument also has a structural form independent of the specific Fibonacci core tables. The only input is the rewrite span.
+
+\begin{theorem}[Finite-core criterion for local invertibility]\textbf{[New-6 | 2026-04-17]}\label{thm:finite-core-criterion}
+Let \((\mathsf N_m)_{m\ge1}\) be a zero-synchronized span-\(r\) local normalizer, and let \(\Phi_m\) be the associated window code. Fix \(m\ge r\). Then every ambiguous two-label block in the image shift of \(\Phi_m\) strips to an ambiguous core of length at most \(r+1\). If every ambiguous core of length at most \(r+1\) is resolved by one further label, then \(\Phi_m\) is a topological conjugacy onto its image, with inverse given by a decoder on admissible three-label blocks.
+\end{theorem}
+
+\begin{proof}
+Consider an ambiguous two-label block in the off-diagonal fiber product of the graph presentation from \Cref{prop:sofic}. A coordinate can affect the first label only if it belongs to the support of a local rewrite contributing to the first window. Since the rewrite span is \(r\), that support is contained in an interval of length \(r\). The second label is computed from the next window, so the corresponding active support is another interval of length \(r\), shifted by one coordinate. The union of these two supports therefore has length at most \(r+1\). Any coordinate outside that union is passive: deleting it leaves two distinct lifts of the same two-label block. Repeating the deletion process yields an ambiguous core of length at most \(r+1\).
+
+Assume now that every ambiguous core of length at most \(r+1\) is resolved by one further label. Stripping any ambiguous witness to its core and then reattaching the passive coordinates preserves that one-step resolution, because reattachment inserts the same frozen coordinates in both competing lifts. Hence every admissible three-label block determines the current appended microstate bit. Let
+\[
+\psi_m:\mathcal B_3(Y_m)\to\{0,1\}
+\]
+denote this decoder, where \(Y_m=\Phi_m(\{0,1\}^{\ZZ})\). Define
+\[
+(\Psi_m(y))_t:=\psi_m(y_{t-2},y_{t-1},y_t).
+\]
+If \(y=\Phi_m(\eta)\), then each triple \((y_{t-2},y_{t-1},y_t)\) comes from three consecutive edges in the presentation of \(Y_m\), so the decoder recovers \(\eta_t\). Thus \(\Psi_m\circ\Phi_m=\mathrm{id}\).
+
+Conversely, fix \(y\in Y_m\). Every lift path of \(y\) has the same current appended bit at time \(t\), because any two competing lifts would determine the same value through the decoder. Therefore every lift path of \(y\) has the same appended-bit sequence \(\Psi_m(y)\). The corresponding vertex sequence is forced by these bits, so the edge labels along that path are exactly those of \(\Phi_m(\Psi_m(y))\). Hence \(\Phi_m(\Psi_m(y))=y\), and \(\Phi_m\) is a conjugacy onto its image.
+\end{proof}
+
 \subsection{Local decoding}
 
 The invertibility question is naturally phrased in the fiber product of \(G_m\). A two-label block \((y_{t-1},y_t)\in X_m^2\) is called \emph{ambiguous} if it admits two distinct lifts in \(G_m\), or equivalently if it labels an off-diagonal path of length \(2\) in the fiber product \(\widehat G_m\).
 
-Some coordinates of an ambiguous block are passive in the sense that deleting them leaves the ambiguity unchanged. Removing all such coordinates produces a minimal witness, which we call an \emph{ambiguous core}. Appendix~\ref{app:sofic} contains the fiber-product bookkeeping. The point needed here is that the local relation \(110\leftrightarrow 001\) has span \(3\), so the active part of a minimal witness can occupy at most four consecutive coordinates.
+Some coordinates of an ambiguous block are passive in the sense of \Cref{thm:finite-core-criterion}: deleting them leaves the ambiguity unchanged. Removing all such coordinates produces a minimal witness, which will be called an \emph{ambiguous core}. For the Zeckendorf fold the rewrite span is \(3\), so every ambiguous core has length at most \(4\).
 
 \begin{theorem}\label{thm:core-resolution}
 Fix \(m\ge 3\). Every ambiguous two-label block in \(Y_m\) strips to one of the following minimal cores.
@@ -63,7 +87,7 @@ where \(\mathcal{B}_3(Y_m)\) denotes the set of admissible three-label blocks in
 \end{theorem}
 
 \begin{proof}
-Appendix~\ref{app:sofic} formulates the stripping operation on off-diagonal fiber-product paths and proves that every ambiguous witness reduces to a core of length at most \(4\). It is therefore enough to classify the core tables for \(m=3\) and \(m=4\).
+By \Cref{lem:fib-span3,thm:finite-core-criterion}, every ambiguous witness reduces to a core of length at most \(4\). It is therefore enough to classify the core tables for \(m=3\) and \(m=4\).
 
 For length \(3\), the only ambiguous two-label blocks are
 \[
@@ -91,7 +115,7 @@ leave terminal vertices \(011\) and \(101\), whose successor label sets \(\{0001
 \]
 leave terminal vertices \(010\) and \(100\), whose successor label sets \(\{0100,0101\}\) and \(\{1000,1001\}\) are again disjoint. Thus in every length-\(4\) core the third label determines the correct lift, and hence the current appended bit.
 
-Every ambiguous two-label block strips to one of these cores, and reattaching passive coordinates does not alter third-label resolution. This defines the decoder \(\psi_m\) on all admissible three-label blocks in \(Y_m\).
+Every ambiguous two-label block strips to one of these cores, and reattaching passive coordinates does not alter third-label resolution by \Cref{thm:finite-core-criterion}. This defines the decoder \(\psi_m\) on all admissible three-label blocks in \(Y_m\).
 \end{proof}
 
 \begin{remark}
@@ -110,31 +134,7 @@ For \(m\ge 3\), the sliding block code \(\Phi_m:\{0,1\}^{\ZZ}\to Y_m\) is a topo
 \end{theorem}
 
 \begin{proof}
-Define
-\[
-(\Psi_m(y))_t:=\psi_m(y_{t-2},y_{t-1},y_t),\qquad y\in Y_m,
-\]
-where \(\psi_m\) is the decoder from Theorem~\ref{thm:core-resolution}. If \(y=\Phi_m(\eta)\), then each triple \((y_{t-2},y_{t-1},y_t)\) arises from three consecutive edges of \(G_m\), so Theorem~\ref{thm:core-resolution} gives
-\[
-(\Psi_m(\Phi_m(\eta)))_t=\eta_t
-\qquad\text{for every }t\in\ZZ.
-\]
-Hence \(\Psi_m\circ\Phi_m=\mathrm{id}_{\{0,1\}^{\ZZ}}\).
-
-Conversely, fix \(y\in Y_m\). By definition of \(Y_m\), there exists at least one lift path in \(G_m\) with label sequence \(y\). Reading from that path the appended bits \(b_t\), Theorem~\ref{thm:core-resolution} shows that
-\[
-b_t=\psi_m(y_{t-2},y_{t-1},y_t)=(\Psi_m(y))_t
-\qquad\text{for every }t\in\ZZ.
-\]
-Thus every lift path of \(y\) has the same appended-bit sequence \(\Psi_m(y)\). The corresponding vertex sequence is then forced, because the vertex at time \(t\) is the \((m-1)\)-block
-\[
-v_t=\bigl((\Psi_m(y))_{t-m+1},\dots,(\Psi_m(y))_{t-1}\bigr).
-\]
-The edge from \(v_t\) to \(v_{t+1}\) is labeled by
-\[
-\Fold_m\bigl((\Psi_m(y))_{t-m+1}\cdots (\Psi_m(y))_t\bigr),
-\]
-which is exactly \(y_t\). Therefore \(\Phi_m(\Psi_m(y))=y\), and \(\Phi_m\) is bijective with sliding block inverse \(\Psi_m\).
+Theorem~\ref{thm:core-resolution} verifies the one-step resolution hypothesis of \Cref{thm:finite-core-criterion} for the Zeckendorf fold. The conclusion of that theorem therefore gives the desired sliding block inverse \(\Psi_m\) and proves that \(\Phi_m\) is a topological conjugacy.
 \end{proof}
 
 \begin{proposition}\label{thm:m2}
