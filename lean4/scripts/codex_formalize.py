@@ -501,7 +501,7 @@ def _codex_resolve_conflicts(
     return True
 
 
-def merge_lake_cache_back(wt: WorktreeInfo) -> None:
+def merge_lake_cache_back(wt: WorktreeInfo, new_commits: list[str]) -> None:
     """After a successful merge, propagate the worktree's freshly-built .olean
     artifacts back into the main repo's .lake/build/ so that the next round's
     worktree (which COW-clones this cache) starts warm for the files added in
@@ -524,16 +524,22 @@ def merge_lake_cache_back(wt: WorktreeInfo) -> None:
     if not src_root.exists():
         return
 
+    # new_commits entries look like "<sha> <subject>"; pull out the SHA.
+    shas = [c.split(None, 1)[0] for c in new_commits if c.strip()]
+    if not shas:
+        return
+
+    # Resolve .lean files touched by exactly these commits (merge invariant).
     try:
         r = run_cmd(
-            ["git", "diff", f"origin/{BASE_BRANCH}...HEAD", "--name-only",
-             "--diff-filter=AM", "--", "lean4/Omega/"],
+            ["git", "show", "--name-only", "--pretty=format:",
+             "--diff-filter=AM", *shas],
             cwd=wt.path,
         )
-        changed = [
+        changed = sorted({
             l.strip() for l in (r.stdout or "").splitlines()
-            if l.strip().endswith(".lean")
-        ]
+            if l.strip().endswith(".lean") and l.strip().startswith("lean4/Omega/")
+        })
     except Exception:
         return
 
@@ -1168,7 +1174,7 @@ def run_round_in_worktree(
             # Propagate freshly-built .olean artifacts back to main's cache so the
             # next round's worktree starts warm for the files added in this round.
             try:
-                merge_lake_cache_back(wt)
+                merge_lake_cache_back(wt, new_commits)
             except Exception as exc:
                 logger.warning(f"[{tag}] Lake cache merge-back raised: {exc}")
         elif success and dry_run:
