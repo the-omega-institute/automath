@@ -173,4 +173,12 @@ theorem paper_endpoint_mod4_channel_decomposition (M : ℕ) (g : ℤ → ℚ) :
     rw [← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
   exact hsplit.trans hgrouped
 
+/-- If the endpoint observable vanishes at `0`, the odd channel disappears from the endpoint
+decomposition, leaving only the two even residue classes modulo `4`.
+    cor:endpoint-odd-channel-vanish -/
+theorem paper_endpoint_odd_channel_vanish (M : ℕ) (g : ℤ → ℚ) (hg0 : g 0 = 0) :
+    endpointTruncatedPowOperator M g =
+      endpointZeroModFourHarmonic M * g 2 + endpointTwoModFourHarmonic M * g (-2) := by
+  simpa [hg0] using paper_endpoint_mod4_channel_decomposition M g
+
 end Omega.CircleDimension

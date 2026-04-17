@@ -118,6 +118,7 @@ import Omega.SPG.PrefixScanErrorTanakaRepresentation
 import Omega.SPG.PressureGap
 import Omega.SPG.PrimeRegisterBudgetLowerBound
 import Omega.SPG.PrimeRegisterDistinguishableFractionVanishes
+import Omega.SPG.ProfiniteTorusExtensionStokesModuleClassification
 import Omega.SPG.ProuhetThueMorsePowerSum
 import Omega.SPG.QuasistationaryAmbiguityAmplitudes
 import Omega.SPG.RandomBulkBoundarySaturation
