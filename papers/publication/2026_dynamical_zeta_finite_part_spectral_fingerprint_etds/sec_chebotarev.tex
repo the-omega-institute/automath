@@ -1561,9 +1561,9 @@ primitive matrix \(A\), let \(\varphi:X_A^+\to\RR\) be a real
 H\"older potential, and write \(P:=P(\varphi)\) for its topological
 pressure. Let \(\tau:X_A^+\to G\) be a locally constant cocycle into a
 finite group. Fix \(\alpha\in(0,1]\) such that \(\varphi\in C^\alpha\).
-We record the corresponding H\"older statement for completeness.
-Unlike the finite-state discussion above, we do not pursue a separate
-secondary-term theory in this setting.
+The same determinant formalism yields both Perron-point constants and,
+above the square-root barrier, explicit spectral-window corrections
+coming from the twisted Ruelle spectrum.
 For \(\varrho\in\Irr(G)\), the twisted Ruelle operator on
 \(C^\alpha(X_A^+,V_\varrho)\) is
 \[
@@ -1842,6 +1842,286 @@ For \(\varrho\in\Irr(G)\), write
   \(\chi_\sigma(C)\), summing over conjugacy classes, and invoking
   character orthogonality yields
   \eqref{eq:holder-transfer-fourier}.
+\end{proof}
+
+The next theorem isolates the higher spectral windows of the twisted
+Ruelle operators in the same manner as
+\Cref{thm:class-mertens-secondary-term} does in the finite-state
+setting.
+
+\begin{theorem}[H\"older spectral-window expansion above the square-root barrier]\textbf{[New-3 | 2026-04-17]}
+  \label{thm:holder-transfer-spectral-window}
+  Assume that
+  \[
+    \eta_\varphi
+    :=
+    \max_{\varrho\neq\mathbf 1}\rho(\mathscr L_{\varphi,\varrho})
+    <e^P.
+  \]
+  Let
+  \[
+    r_{\mathrm{ess}}^\ast
+    :=
+    \max_{\varrho\in\Irr(G)}
+      r_{\mathrm{ess}}(\mathscr L_{\varphi,\varrho}),
+  \]
+  and fix \(R\) such that
+  \[
+    \max\{r_{\mathrm{ess}}^\ast,e^{P/2}\}<R<e^P,
+  \]
+  with the additional property that no eigenvalue of any
+  \(\mathscr L_{\varphi,\varrho}\) has modulus \(R\).
+  For the trivial channel set
+  \[
+    \mathcal E_{\mathbf 1}(R)
+    :=
+    \{\beta\in\spec(\mathscr L_{\varphi,\mathbf 1}):R<|\beta|<e^P\},
+  \]
+  and for every non-trivial \(\varrho\in\Irr(G)\) set
+  \[
+    \mathcal E_\varrho(R)
+    :=
+    \{\beta\in\spec(\mathscr L_{\varphi,\varrho}):|\beta|>R\}.
+  \]
+  For \(\beta\in\mathcal E_\varrho(R)\), let
+  \(\mathscr P_{\varrho,\beta}\) be the corresponding Riesz projector,
+  and define, for each conjugacy class \(C\subset G\),
+  \begin{equation}\label{eq:holder-transfer-spectral-window-profile}
+    \mathfrak s_{C,\varphi,R}(n)
+    :=
+    \frac{|C|}{|G|}
+    \left(
+      \sum_{\beta\in\mathcal E_{\mathbf 1}(R)}
+        \Tr\bigl(\mathscr L_{\varphi,\mathbf 1}^n
+          \mathscr P_{\mathbf 1,\beta}\bigr)
+      +
+      \sum_{\varrho\neq\mathbf 1}\chi_\varrho(C^{-1})
+        \sum_{\beta\in\mathcal E_\varrho(R)}
+          \Tr\bigl(\mathscr L_{\varphi,\varrho}^n
+            \mathscr P_{\varrho,\beta}\bigr)
+    \right).
+  \end{equation}
+  Then there exists \(\Gamma_{\varphi,R}\in(0,R)\) such that, for every
+  conjugacy class \(C\subset G\),
+  \begin{equation}\label{eq:holder-transfer-spectral-window-pointwise}
+    p_{n,C}(\varphi)
+    =
+    \frac{|C|}{|G|}\frac{e^{Pn}}{n}
+    +\frac{\mathfrak s_{C,\varphi,R}(n)}{n}
+    +O\!\left(\frac{\Gamma_{\varphi,R}^n}{n}\right).
+  \end{equation}
+  Moreover, the series
+  \begin{equation}\label{eq:holder-transfer-spectral-window-tail}
+    \mathfrak T_{C,\varphi,R}(N)
+    :=
+    \sum_{n>N}
+      \frac{\mathfrak s_{C,\varphi,R}(n)}{n\,e^{Pn}}
+  \end{equation}
+  converges absolutely, and
+  \begin{equation}\label{eq:holder-transfer-spectral-window-harmonic}
+    \sum_{n\le N}e^{-Pn}p_{n,C}(\varphi)
+    =
+    \frac{|C|}{|G|}H_N
+    +\mathcal M_C(\varphi)-\frac{|C|}{|G|}\gamma
+    -\mathfrak T_{C,\varphi,R}(N)
+    +O\!\left(\frac{(\Gamma_{\varphi,R}e^{-P})^N}{N}\right).
+  \end{equation}
+  For every \(\varrho\in\Irr(G)\) and every
+  \(\beta\in\mathcal E_\varrho(R)\),
+  \[
+    \Tr\bigl(\mathscr L_{\varphi,\varrho}^n\mathscr P_{\varrho,\beta}\bigr)
+    =m_\varrho(\beta)\beta^n,
+  \]
+  where \(m_\varrho(\beta)\) denotes the algebraic multiplicity of
+  \(\beta\).
+\end{theorem}
+
+\begin{proof}
+  Standard dynamical determinant theory for H\"older Ruelle operators
+  on mixing shifts of finite type implies that, for every
+  \(\varrho\in\Irr(G)\), the determinant
+  \[
+    D_\varrho(z)
+    :=
+    \exp\!\bigl(-\mathcal L_{\chi_\varrho,\varphi}(z)\bigr)
+  \]
+  extends holomorphically to the disc
+  \(|z|<r_{\mathrm{ess}}(\mathscr L_{\varphi,\varrho})^{-1}\), and that
+  its zeros there are precisely the reciprocals of the eigenvalues of
+  \(\mathscr L_{\varphi,\varrho}\), counted with algebraic multiplicity;
+  see
+  \cite{Ruelle1978Thermodynamic,Baladi2000PositiveTransfer,%
+  Baladi2018ZetaDeterminants,AdachiSunada1987TwistedPerronFrobenius}.
+  Since \(R>r_{\mathrm{ess}}^\ast\), each set
+  \(\mathcal E_\varrho(R)\) is finite. The absence of eigenvalues on
+  the circle \(|z|=R\), together with the fact that isolated
+  eigenvalues can accumulate only at the essential spectrum, therefore
+  permits the choice of a number
+  \[
+    \Gamma_{\varphi,R}\in(\max\{r_{\mathrm{ess}}^\ast,e^{P/2}\},R)
+  \]
+  such that no eigenvalue of any \(\mathscr L_{\varphi,\varrho}\) has
+  modulus in the interval \([\Gamma_{\varphi,R},R]\).
+
+  For each \(\varrho\in\Irr(G)\), determinant factorisation on the disc
+  \(|z|<\Gamma_{\varphi,R}^{-1}\) gives
+  \[
+    \mathcal L_{\chi_\varrho,\varphi}(z)
+    =
+    \delta_{\varrho,\mathbf 1}\log(1-e^Pz)^{-1}
+    +
+    \sum_{\beta\in\mathcal E_\varrho(R)}
+      m_\varrho(\beta)\log(1-\beta z)^{-1}
+    +H_{\varrho,R}(z),
+  \]
+  where \(H_{\varrho,R}\) is holomorphic on
+  \(|z|<\Gamma_{\varphi,R}^{-1}\); for the trivial channel,
+  \(e^P\notin\mathcal E_{\mathbf 1}(R)\) by definition. Writing
+  \[
+    H_{\varrho,R}(z)=\sum_{n\ge 1}\frac{h_{\varrho,R}(n)}{n}z^n,
+  \]
+  Cauchy's estimates yield \(h_{\varrho,R}(n)=O(\Gamma_{\varphi,R}^n)\),
+  uniformly in \(\varrho\), because \(\Irr(G)\) is finite. Comparing
+  coefficients therefore gives
+  \begin{equation}\label{eq:holder-transfer-spectral-window-traces}
+    T_{\chi_\varrho,\varphi,n}
+    =
+    \delta_{\varrho,\mathbf 1}e^{Pn}
+    +
+    \sum_{\beta\in\mathcal E_\varrho(R)}
+      m_\varrho(\beta)\beta^n
+    +O(\Gamma_{\varphi,R}^n).
+  \end{equation}
+  If \(\mathscr P_{\varrho,\beta}\) is the Riesz projector for
+  \(\beta\), then the restriction of \(\mathscr L_{\varphi,\varrho}\)
+  to the finite-dimensional space
+  \(\mathscr P_{\varrho,\beta}C^\alpha(X_A^+,V_\varrho)\) has the form
+  \(\beta I+N\), with \(N\) nilpotent. Consequently,
+  \[
+    \Tr\bigl(\mathscr L_{\varphi,\varrho}^n\mathscr P_{\varrho,\beta}\bigr)
+    =
+    \Tr\bigl((\beta I+N)^n\bigr)
+    =m_\varrho(\beta)\beta^n.
+  \]
+
+  Coefficient extraction in
+  \eqref{eq:holder-transfer-adams-mobius}, applied to
+  \(\phi=\chi_\varrho\) and the Adams decomposition
+  \eqref{eq:adams-character-decomposition}, yields
+  \[
+    \pi_{n,\varrho}(\varphi)
+    =
+    \frac{1}{n}\sum_{m\mid n}\mu(m)
+      \sum_{\sigma\in\Irr(G)}
+        a_{\varrho,\sigma}^{(m)}T_{\chi_\sigma,\varphi,n/m}.
+  \]
+  For the trivial representation, the divisor \(m=1\) contributes
+  \[
+    \frac{e^{Pn}}{n}
+    +\frac{1}{n}
+      \sum_{\beta\in\mathcal E_{\mathbf 1}(R)}
+        m_{\mathbf 1}(\beta)\beta^n
+    +O\!\left(\frac{\Gamma_{\varphi,R}^n}{n}\right)
+  \]
+  by \eqref{eq:holder-transfer-spectral-window-traces}. For \(m>1\),
+  \Cref{lem:adams-coefficients-bounded} and the uniform estimate
+  \(T_{\chi_\sigma,\varphi,\ell}=O(e^{P\ell})\) from the proof of
+  \Cref{thm:holder-transfer-perron-point} give
+  \[
+    \frac{1}{n}
+    \sum_{\substack{m\mid n\\ m>1}}
+      \left|
+        \sum_{\sigma\in\Irr(G)}
+          a_{\mathbf 1,\sigma}^{(m)}
+          T_{\chi_\sigma,\varphi,n/m}
+      \right|
+    =
+    O\!\left(\frac{e^{Pn/2}}{n}\right)
+    =
+    O\!\left(\frac{\Gamma_{\varphi,R}^n}{n}\right),
+  \]
+  because \(\Gamma_{\varphi,R}>e^{P/2}\). Hence
+  \begin{equation}\label{eq:holder-transfer-spectral-window-trivial}
+    p_n(\varphi)
+    =
+    \frac{e^{Pn}}{n}
+    +\frac{1}{n}
+      \sum_{\beta\in\mathcal E_{\mathbf 1}(R)}
+        m_{\mathbf 1}(\beta)\beta^n
+    +O\!\left(\frac{\Gamma_{\varphi,R}^n}{n}\right).
+  \end{equation}
+
+  For a fixed non-trivial \(\varrho\), the divisor \(m=1\) contributes
+  \[
+    \frac{1}{n}
+      \sum_{\beta\in\mathcal E_\varrho(R)}
+        m_\varrho(\beta)\beta^n
+    +O\!\left(\frac{\Gamma_{\varphi,R}^n}{n}\right),
+  \]
+  again by \eqref{eq:holder-transfer-spectral-window-traces}, while the
+  divisors \(m>1\) satisfy the same
+  \(O(\Gamma_{\varphi,R}^n/n)\) bound as above. Therefore
+  \begin{equation}\label{eq:holder-transfer-spectral-window-nontrivial}
+    \pi_{n,\varrho}(\varphi)
+    =
+    \frac{1}{n}
+      \sum_{\beta\in\mathcal E_\varrho(R)}
+        m_\varrho(\beta)\beta^n
+    +O\!\left(\frac{\Gamma_{\varphi,R}^n}{n}\right)
+    \qquad (\varrho\neq\mathbf 1).
+  \end{equation}
+
+  The weighted class decomposition
+  \[
+    p_{n,C}(\varphi)
+    =
+    \frac{|C|}{|G|}
+      \sum_{\varrho\in\Irr(G)}
+        \chi_\varrho(C^{-1})\pi_{n,\varrho}(\varphi)
+  \]
+  now yields \eqref{eq:holder-transfer-spectral-window-pointwise} after
+  substituting
+  \eqref{eq:holder-transfer-spectral-window-trivial} and
+  \eqref{eq:holder-transfer-spectral-window-nontrivial}. The error term
+  is uniform in \(C\) because the set of conjugacy classes is finite and
+  \(|\chi_\varrho(C^{-1})|\le \dim\varrho\).
+
+  Dividing \eqref{eq:holder-transfer-spectral-window-pointwise} by
+  \(e^{Pn}\) gives
+  \[
+    e^{-Pn}p_{n,C}(\varphi)
+    =
+    \frac{|C|}{|G|}\frac{1}{n}
+    +\frac{\mathfrak s_{C,\varphi,R}(n)}{n\,e^{Pn}}
+    +O\!\left(\frac{(\Gamma_{\varphi,R}e^{-P})^n}{n}\right).
+  \]
+  Since every \(\beta\in\mathcal E_\varrho(R)\) satisfies
+  \(|\beta|<e^P\), the series
+  \eqref{eq:holder-transfer-spectral-window-tail} converges absolutely.
+  Summing the preceding estimate over \(n>N\) and applying
+  \Cref{lem:geometric-harmonic-tail} gives
+  \[
+    \sum_{n>N}
+      \left(
+        e^{-Pn}p_{n,C}(\varphi)
+        -\frac{|C|}{|G|}\frac{1}{n}
+      \right)
+    =
+    \mathfrak T_{C,\varphi,R}(N)
+    +O\!\left(\frac{(\Gamma_{\varphi,R}e^{-P})^N}{N}\right).
+  \]
+  By \Cref{thm:holder-transfer-perron-point},
+  \[
+    \mathcal M_C(\varphi)-\frac{|C|}{|G|}\gamma
+    =
+    \sum_{n\ge 1}
+      \left(
+        e^{-Pn}p_{n,C}(\varphi)
+        -\frac{|C|}{|G|}\frac{1}{n}
+      \right).
+  \]
+  Subtracting the tail beyond \(N\) proves
+  \eqref{eq:holder-transfer-spectral-window-harmonic}.
 \end{proof}
 
 \begin{theorem}[Pressure-boundary rigidity for twisted Ruelle operators]
