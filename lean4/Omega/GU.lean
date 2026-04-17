@@ -130,6 +130,7 @@ import Omega.GU.Window6LieEnvelopeExistenceUniqueness
 import Omega.GU.Window6Center2RankExcludesSimpleGroups
 import Omega.GU.Window6ReducedLaplacianGreenSimplePole
 import Omega.GU.Window6LabeledSphericalCubatureStrengthFive
+import Omega.GU.Window6LabeledSphericalDegree5CubatureCube
 import Omega.GU.Window6LabeledSphericalDegree6HarmonicDefect
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.Window6NonlumpableBySpectrum
