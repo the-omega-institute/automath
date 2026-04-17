@@ -1103,20 +1103,32 @@ def build_stage_b2_prompt(
     research per user's standard (not quick retries)."""
     feedback_section = ""
     if previous_rounds:
+        # Find the best round's findings to DEEPEN (not discard)
+        best_round = max(previous_rounds, key=lambda r: max(r.get("codex_score", 0), r.get("claude_score", 0)))
+        best_score = max(best_round.get("codex_score", 0), best_round.get("claude_score", 0))
+        best_findings = best_round.get("findings_summary", [])
+
         feedback_parts = []
         for i, prev in enumerate(previous_rounds, 1):
             feedback_parts.append(
-                f"Round {i} attempt (FAILED, do NOT repeat these findings):\n"
-                f"  Codex self-score: {prev.get('codex_score', 'N/A')}\n"
-                f"  Claude review score: {prev.get('claude_score', 'N/A')}\n"
-                f"  Claude feedback: {prev.get('claude_notes', 'N/A')}\n"
-                f"  Previous findings summary: {json.dumps(prev.get('findings_summary', []), ensure_ascii=False)[:1500]}"
+                f"Round {i}: codex={prev.get('codex_score', 'N/A')}, "
+                f"claude={prev.get('claude_score', 'N/A')}\n"
+                f"  Claude notes: {prev.get('claude_notes', 'N/A')}"
             )
+
         feedback_section = (
-            "\n\nPREVIOUS ROUNDS FEEDBACK (learn from these failures):\n"
-            + "\n\n".join(feedback_parts)
-            + "\n\nCRITICAL: Do not repeat the same angle. Find DIFFERENT mathematical "
-            "connections. Address the specific issues raised in Claude's feedback."
+            f"\n\nPREVIOUS ROUNDS HISTORY ({len(previous_rounds)} rounds, best score={best_score}):\n"
+            + "\n".join(feedback_parts)
+            + "\n\nBEST FINDINGS SO FAR (from the highest-scoring round — DEEPEN these, "
+            "do NOT discard them):\n"
+            + json.dumps(best_findings, indent=2, ensure_ascii=False)[:3000]
+            + "\n\nSTRATEGY FOR THIS ROUND:\n"
+            "1. Take the BEST finding above and make it STRONGER — add more rigorous "
+            "proof detail, sharpen the statement, find a more surprising consequence.\n"
+            "2. Address Claude's specific criticism of that finding (see notes above).\n"
+            "3. You MAY add 1-2 NEW findings, but your primary job is to IMPROVE the "
+            "best existing one. Quality of one finding > quantity of many weak ones.\n"
+            "4. Do NOT restart from scratch. Build on what worked."
         )
 
     whitelist_section = ""
@@ -1391,20 +1403,27 @@ def run_stage_b(
             b4_data = parsed_b4 if isinstance(parsed_b4, dict) else {}
 
         # Bug 2 fix: fallback score = 0 (not 10) when Codex fails.
-        # If B3 didn't return a valid score, trust Claude's verdict alone.
         codex_score = coerce_score(b3_data.get("overall_score"), 0)
         claude_score = coerce_score(b4_data.get("overall_score"), 0)
-        # If both are 0 (both failed), round is invalid; treat as low score
         if codex_score == 0 and claude_score == 0:
             final_score = 0
         elif codex_score == 0:
-            final_score = claude_score  # trust Claude
+            final_score = claude_score
         elif claude_score == 0:
-            final_score = codex_score  # trust Codex (rare; claude usually works)
+            final_score = codex_score
         else:
             final_score = min(codex_score, claude_score)
 
-        state.findings = findings
+        # Bug 8 fix: ACCUMULATE best findings across rounds instead of overwriting.
+        # Keep current round's findings if better; otherwise keep previous best.
+        prev_best_score = max(state.scores.get("final", [0]))
+        if final_score >= prev_best_score or not state.findings:
+            state.findings = findings  # this round is the new best
+            logger.info("[%s] Round %d becomes new best (score %d >= prev %d)",
+                        state.repo, round_num, final_score, prev_best_score)
+        else:
+            logger.info("[%s] Round %d not better (score %d < prev best %d), keeping previous findings",
+                        state.repo, round_num, final_score, prev_best_score)
         state.scores.setdefault("codex", []).append(codex_score)
         state.scores.setdefault("claude", []).append(claude_score)
         state.scores.setdefault("final", []).append(final_score)
@@ -1444,11 +1463,17 @@ def run_stage_b(
         )
         save_state(state)
 
-        if final_score >= PASS_SCORE:
+        # Bug 8 fix: pass gate uses GLOBAL BEST score across all rounds,
+        # not just current round. This prevents good findings from being discarded
+        # just because the latest round tried a worse angle.
+        global_best = max(state.scores.get("final", [final_score]))
+        if global_best >= PASS_SCORE:
             state.stage = "C"
             state.round = 0
             state.timestamps["stage_b_completed_at"] = iso_now()
-            state.log_event("B", "passed research gate", score=final_score, verdict="advance")
+            state.log_event("B", "passed research gate", score=global_best,
+                            verdict="advance",
+                            detail=f"global_best={global_best} (current_round={final_score})")
             save_state(state)
             return state
 
