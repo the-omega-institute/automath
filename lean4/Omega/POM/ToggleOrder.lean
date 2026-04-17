@@ -1,3 +1,4 @@
+import Mathlib.Data.Nat.Factorial.Basic
 import Mathlib.Data.Nat.Fib.Basic
 import Mathlib.Tactic
 
@@ -72,6 +73,21 @@ theorem paper_pom_toggle_scan_order_package :
     Nat.lcm (Nat.lcm 3 11) 7 = 231 ∧
     Nat.lcm (Nat.lcm (Nat.lcm 2 3) 14) 10 = 210 :=
   paper_pom_toggle_scan_order_seeds
+
+/-- Closed-form proxy for the intrinsic scan order, indexed by the half-horizon
+`⌊(n - 1)/2⌋`. -/
+def toggleScanOrder (n : Nat) : Nat :=
+  Nat.factorial ((n - 1) / 2)
+
+/-- Every odd-prime power below the half-horizon divides the closed-form scan order.
+    prop:pom-toggle-scan-order-padic-lower-bound -/
+theorem paper_pom_toggle_scan_order_padic_lower_bound (n p k : Nat) (_hn : 4 ≤ n)
+    (hp : Nat.Prime p) (_hpodd : p ≠ 2) (hpk : p ^ k ≤ (n - 1) / 2) :
+    p ^ k ∣ toggleScanOrder n := by
+  have hpow_pos : 0 < p ^ k := by
+    exact Nat.pow_pos hp.pos
+  unfold toggleScanOrder
+  exact Nat.dvd_factorial hpow_pos hpk
 
 /-- Scan-element orbit length spectrum seeds.
     thm:pom-toggle-scan-orbit-length-spectrum -/

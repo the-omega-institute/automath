@@ -96,6 +96,7 @@ import Omega.Folding.GaugeAnomalyFiniteVarianceClosed
 import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
 import Omega.Folding.GaugeAnomalyPressure
+import Omega.Folding.GaugeAnomalyRateCurveParam
 import Omega.Folding.GaugeAnomalyDiscriminantFactorization
 import Omega.Folding.GaugeAnomalyLdpRate
 import Omega.Folding.GaugeAnomalyPressureCumulants5
