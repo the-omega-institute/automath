@@ -2363,8 +2363,9 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                     f"looping (round {rnd}/{MAX_STAGE_A_ROUNDS})")
 
     # Max rounds exhausted — proceed anyway with warning
+    best = max(state.stage_a_scores) if state.stage_a_scores else 0
     logger.warning(f"{tag} Max {MAX_STAGE_A_ROUNDS} rounds exhausted, "
-                   f"proceeding with best score {max(state.stage_a_scores)}")
+                   f"proceeding with best score {best}")
     state.stage_a_passed = True  # forced pass
     save_state(state)
     return True
@@ -2397,7 +2398,9 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         save_state(state)
 
         # ── B2: Oracle editorial review (EVENT WAIT) ─────────────
-        task_id = f"review_{state.paper_name}_B{rnd}_{int(time.time())}"
+        # Sanitize paper_name to ASCII for URL safety (中文 in task_id breaks polling)
+        safe_name = re.sub(r"[^a-zA-Z0-9_-]", "_", state.paper_name)[:80]
+        task_id = f"review_{safe_name}_B{rnd}_{int(time.time())}"
         prompt = (build_oracle_review_prompt(state.target_journal) if rnd == 1
                   else build_oracle_re_review_prompt(state.target_journal))
 
