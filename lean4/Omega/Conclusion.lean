@@ -46,6 +46,7 @@ import Omega.Conclusion.HiddenFaceBudgetSharpThresholdClassification
 import Omega.Conclusion.HypercubePhase
 import Omega.Conclusion.ImageLayerMinimalInverseMemory
 import Omega.Conclusion.IntermediateQuotientSeeds
+import Omega.Conclusion.InverseLimitAddressFinitePrefixDeterminacy
 import Omega.Conclusion.JGEllipseConditionNumberThreshold
 import Omega.Conclusion.JGEllipseFixedEpsilonInformationBarrier
 import Omega.Conclusion.JGEllipsePackingSqrtLaw
