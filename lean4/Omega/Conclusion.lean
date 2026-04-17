@@ -45,6 +45,7 @@ import Omega.Conclusion.HiddenFaceBudgetSharpThresholdClassification
 import Omega.Conclusion.HypercubePhase
 import Omega.Conclusion.ImageLayerMinimalInverseMemory
 import Omega.Conclusion.IntermediateQuotientSeeds
+import Omega.Conclusion.InverseLimitAddressFinitePrefixDeterminacy
 import Omega.Conclusion.JGEllipseConditionNumberThreshold
 import Omega.Conclusion.JGEllipseFixedEpsilonInformationBarrier
 import Omega.Conclusion.JGEllipsePackingSqrtLaw
@@ -66,6 +67,7 @@ import Omega.Conclusion.Pisano1PositiveSea
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.PrimeRegisterFiberCdimDensity
 import Omega.Conclusion.PrimeRegisterKStretchDensityCriterion
+import Omega.Conclusion.PrimeRegisterUltrametricCompletion
 import Omega.Conclusion.PrimorialAdditiveVsGodelMultiplicative
 import Omega.Conclusion.PrimorialBodycodePoleResidueInversion
 import Omega.Conclusion.PrimorialEllipseUniqueFactorization

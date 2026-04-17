@@ -1,3 +1,4 @@
+import Omega.Experiments.KLFromTVQmin
 import Omega.Experiments.MarkovTVSampleComplexity
 import Omega.Experiments.MetallicMeanGoldenUniqueOptimalTVConstant
 import Omega.Experiments.MultiscaleResidual
