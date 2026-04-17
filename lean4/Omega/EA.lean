@@ -33,6 +33,7 @@ import Omega.EA.MultiplicativeEnergyCompilable
 import Omega.EA.OnlineDelayFoldSyncMealyMinimality
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.ParallelAdditionU1Degeneracy
+import Omega.EA.PrimitiveMinimalSuccessor
 import Omega.EA.PrimeLedger
 import Omega.EA.PrimeRegisterFibValuation
 import Omega.EA.PrimeRegisterLocalMoves
