@@ -189,6 +189,7 @@ import Omega.Zeta.XiCauchyPoissonSecondOrderShapeLimitNodeRigidity
 import Omega.Zeta.XiAddressPrimeLedgerJointBudget
 import Omega.Zeta.XiBasepointScanAnchorDetCauchyVandermonde
 import Omega.Zeta.PickPoissonCrossEnergyHorizontalSeparation
+import Omega.Zeta.XiPickPoissonNearCollisionCertificate
 import Omega.Zeta.XiRealInput40LogMInftyTruncationBound
 import Omega.Zeta.XiZGPrefixRecursionMonotoneTailCertificate
 import Omega.Zeta.XiPronyMomentMapJacobianDelta4
