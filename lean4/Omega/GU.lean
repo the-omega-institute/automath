@@ -44,6 +44,7 @@ import Omega.GU.FreeInvolutionCount
 import Omega.GU.HolomorphicMomentRigidity
 import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GU.JetAlignmentUnification
+import Omega.GU.JGBinomialFilteringFourierExtraction
 import Omega.GU.JoukowskyAreaPreservingCayley
 import Omega.GU.JoukowskyEllipticTwoScaleStokesMean
 import Omega.GU.JoukowskyGodelLeadingCoeffRigidity

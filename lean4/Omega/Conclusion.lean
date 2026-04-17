@@ -67,6 +67,7 @@ import Omega.Conclusion.NumberFieldSignatureFromTwoCdims
 import Omega.Conclusion.ParetoColdendCurvaturePole
 import Omega.Conclusion.PcdimPropCycleRankMinimal
 import Omega.Conclusion.Period3FiberExactMultiplicity
+import Omega.Conclusion.PartialScreenTraceCutSpaceIdentification
 import Omega.Conclusion.PhaseBudgetBinaryQuantization
 import Omega.Conclusion.PhaseLedgerBudgetExactHalfspace
 import Omega.Conclusion.Pisano1PositiveSea
