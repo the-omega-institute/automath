@@ -81,6 +81,7 @@ import Omega.SPG.GodelBoundaryDecodingRelativeErrorThreshold
 import Omega.SPG.GodelDoublelog
 import Omega.SPG.GodelDoublelogMinkowski
 import Omega.SPG.GodelPrimeDensityHolographyCLT
+import Omega.SPG.GodelPrimeRatioDensity
 import Omega.SPG.GodelStokesDistanceDimensionStability
 import Omega.SPG.GodelizationEntropy
 import Omega.SPG.HolderOpenResonance

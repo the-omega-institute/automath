@@ -79,6 +79,7 @@ import Omega.POM.ModpDifferenceBinomialBasis
 import Omega.POM.MomentMinreal
 import Omega.POM.MomentResonance
 import Omega.POM.MultiplicativeChainRuleFinite
+import Omega.POM.MultiplicityCompositionPartition
 import Omega.POM.MultiplicityFixedRExtrema
 import Omega.POM.OrbitProductNorm
 import Omega.POM.OrderSpatialization
