@@ -1,5 +1,6 @@
 import Omega.Multiscale.PadicHypercubeStokesHaar
 import Omega.Multiscale.RobustNormalizedStokesWithDefectBudget
+import Omega.Multiscale.SolenoidCylindricalPLDuality
 import Omega.Multiscale.SolenoidShiftInvariance
 import Omega.Multiscale.SolenoidStokesEquilibriumMarkovContraction
 import Omega.Multiscale.StokesPeriodModuleCovectorNormalization

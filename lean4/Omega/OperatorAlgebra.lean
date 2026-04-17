@@ -1,5 +1,6 @@
 import Omega.OperatorAlgebra.CylinderMarginalization
 import Omega.OperatorAlgebra.FiberReflectorDeterminantPotential
+import Omega.OperatorAlgebra.HiddenbitSheetSubgroupoidIndex
 import Omega.OperatorAlgebra.IndexGapCurvatureSecondVariation
 import Omega.OperatorAlgebra.FoldConditionalExpectationHaar
 import Omega.OperatorAlgebra.FoldGaugeCommutantExplicit
