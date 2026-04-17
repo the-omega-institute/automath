@@ -147,6 +147,7 @@ import Omega.CircleDimension.StokesRelativeC1FramedLineBundles
 import Omega.CircleDimension.TensorHomExtLaws
 import Omega.CircleDimension.TensorHomProductLawRestated
 import Omega.CircleDimension.ToeplitzSpectralGapCarathBuffer
+import Omega.CircleDimension.ToeplitzMinrankFalsifierFactorization
 import Omega.CircleDimension.TorusCollapseRelativeForms
 import Omega.CircleDimension.UnitarySliceDecidable
 import Omega.CircleDimension.UniversalSolenoidFullPrimeKernel
