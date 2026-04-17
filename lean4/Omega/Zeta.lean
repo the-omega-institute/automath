@@ -102,6 +102,7 @@ import Omega.Zeta.IntroFiniteGroup
 import Omega.Zeta.IntroFinitePart
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.JensenSoftThresholdLowerBound
+import Omega.Zeta.JensenQuadraticResolutionBarrier
 import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.LeftCEDyadicDensity
 import Omega.Zeta.LocalInversionDelta
