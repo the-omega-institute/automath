@@ -2,6 +2,7 @@ import Omega.GU.AnomalyLedgerNoMultiplicative
 import Omega.GU.BdryBinaryLayeringOrbitClassification
 import Omega.GU.BdryEquivariantRegisterMinDegreeChoose
 import Omega.GU.BdryChiTwistedBinaryLabelExistence
+import Omega.GU.BdrySymmetricGroupSignTwistedLabelD2
 import Omega.GU.BdryOrientationCartesianPowerParityCollapse
 import Omega.GU.BdryOrientationIteratedFiberproductParity
 import Omega.GU.BdryOrientationJumpclassFiberproductMultiplicativity

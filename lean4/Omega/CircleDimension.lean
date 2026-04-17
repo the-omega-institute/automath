@@ -64,6 +64,7 @@ import Omega.CircleDimension.MedianStokesRigidityPotential
 import Omega.CircleDimension.MedianMinPrimeSpectrumCubeDimension
 import Omega.CircleDimension.MedianThetaRigidityPrimeRatio
 import Omega.CircleDimension.MinimalAuditCompletion
+import Omega.CircleDimension.MonotoneIsolationUniqueZero
 import Omega.CircleDimension.MinimalRecordAxis
 import Omega.CircleDimension.MinimalLogAuditablePhaseCircles
 import Omega.CircleDimension.MobiusBipartiteColoring
