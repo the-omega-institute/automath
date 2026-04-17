@@ -94,6 +94,7 @@ import Omega.GU.GodelLorentzAlgebraization
 import Omega.GU.TerminalWindow6PushforwardCharpolyGalois
 import Omega.GU.TerminalWindow6PushforwardCommutantMasa
 import Omega.GU.TerminalWindow6PushforwardCommutantMasa
+import Omega.GU.Window6NoEquivariantComplexOrSymplecticPolarization
 import Omega.GU.TerminalWindow6PushforwardNoAlgebraicModeSelection
 import Omega.GU.TerminalWindow6PushforwardNoNonabelianCompactSymmetry
 import Omega.GU.TerminalWindow5Window7FullSymmetricSpectrum
