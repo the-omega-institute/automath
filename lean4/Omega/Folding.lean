@@ -184,6 +184,7 @@ import Omega.Folding.StokesDefectParityPolarization
 import Omega.Folding.SummableDefectsEventualCompatibility
 import Omega.Folding.SummableNatEventuallyZero
 import Omega.Folding.SyncDelay
+import Omega.Folding.FoldBinEscortLastbit
 import Omega.Folding.TailPatchIncomplete
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.TranslationEquationOrbitSolutionSpace
