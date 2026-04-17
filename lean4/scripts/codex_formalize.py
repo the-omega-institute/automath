@@ -156,6 +156,123 @@ def git_log_oneline(n: int = 5, *, cwd: Optional[Path] = None) -> list[str]:
     return [l.strip() for l in result.stdout.strip().splitlines() if l.strip()]
 
 
+# ---------------------------------------------------------------------------
+# Memory-pressure guard (macOS)
+#
+# Motivation: parallel `codex exec` + `lake build` can saturate the unified
+# memory on M-series Macs. If WindowServer is starved for >168s the kernel
+# watchdog panics (AppleARMWatchdogTimer → userspace watchdog timeout). We
+# gate each worker dispatch on macOS memory-pressure indicators so the
+# pipeline backs off before the system does.
+# ---------------------------------------------------------------------------
+
+# kern.memorystatus_vm_pressure_level mapping (XNU):
+#   1 = NORMAL, 2 = WARN, 4 = URGENT, 8 = CRITICAL
+_MEM_LEVEL_BY_NAME = {"normal": 1, "warn": 2, "urgent": 4, "critical": 8}
+
+# Populated by main() from CLI flags.
+_MEM_GUARD_CFG: dict = {
+    "enabled": sys.platform == "darwin",
+    "level_threshold": 2,      # block when kern.memorystatus_vm_pressure_level >= this
+    "swap_ceiling_gb": 16.0,   # block when used swap exceeds this
+    "poll_seconds": 30,
+    "max_wait_seconds": 1800,
+}
+_mem_guard_lock = threading.Lock()  # serialize waits so we don't spam logs
+
+
+def _macos_pressure_level() -> int:
+    if sys.platform != "darwin":
+        return 0
+    try:
+        r = subprocess.run(
+            ["sysctl", "-n", "kern.memorystatus_vm_pressure_level"],
+            capture_output=True, text=True, timeout=5,
+            stdin=subprocess.DEVNULL,
+        )
+        return int((r.stdout or "0").strip() or "0")
+    except Exception:
+        return 0
+
+
+_SWAP_RE = re.compile(r"used\s*=\s*([\d.]+)([MG])", re.IGNORECASE)
+
+
+def _macos_swap_used_gb() -> float:
+    if sys.platform != "darwin":
+        return 0.0
+    try:
+        r = subprocess.run(
+            ["sysctl", "-n", "vm.swapusage"],
+            capture_output=True, text=True, timeout=5,
+            stdin=subprocess.DEVNULL,
+        )
+        m = _SWAP_RE.search(r.stdout or "")
+        if not m:
+            return 0.0
+        val = float(m.group(1))
+        return val / 1024.0 if m.group(2).upper() == "M" else val
+    except Exception:
+        return 0.0
+
+
+def memory_pressure_snapshot() -> tuple[int, float]:
+    """Return (pressure_level, swap_used_gb). level=0 if unsupported."""
+    return _macos_pressure_level(), _macos_swap_used_gb()
+
+
+def memory_pressure_wait(context: str = "") -> bool:
+    """Block until macOS memory pressure is below the configured threshold.
+
+    Returns True if pressure is OK (or guard is disabled / unsupported).
+    Returns False if max_wait timed out — caller should proceed with a warning
+    rather than deadlock the pipeline.
+    """
+    cfg = _MEM_GUARD_CFG
+    if not cfg["enabled"]:
+        return True
+
+    lvl_thresh = int(cfg["level_threshold"])
+    swap_cap = float(cfg["swap_ceiling_gb"])
+    poll = int(cfg["poll_seconds"])
+    max_wait = int(cfg["max_wait_seconds"])
+
+    # Fast path: no pressure, no waiting.
+    lvl, swap = memory_pressure_snapshot()
+    if (lvl == 0 or lvl < lvl_thresh) and swap < swap_cap:
+        return True
+
+    # Serialize the wait so parallel callers don't spam identical log lines.
+    with _mem_guard_lock:
+        start = time.time()
+        warned = False
+        while True:
+            lvl, swap = memory_pressure_snapshot()
+            under_level = lvl == 0 or lvl < lvl_thresh
+            under_swap = swap < swap_cap
+            if under_level and under_swap:
+                if warned:
+                    logger.info(
+                        f"[mem-guard] pressure cleared (level={lvl}, swap={swap:.1f}GB)"
+                        + (f" — resuming {context}" if context else "")
+                    )
+                return True
+            elapsed = int(time.time() - start)
+            if elapsed >= max_wait:
+                logger.warning(
+                    f"[mem-guard] timeout after {elapsed}s "
+                    f"(level={lvl}, swap={swap:.1f}GB) — proceeding anyway"
+                    + (f" with {context}" if context else "")
+                )
+                return False
+            logger.warning(
+                f"[mem-guard] pressure elevated (level={lvl}, swap={swap:.1f}GB) — "
+                f"pausing {context or 'dispatch'}, retry in {poll}s (waited {elapsed}s)"
+            )
+            warned = True
+            time.sleep(poll)
+
+
 def read_impl_plan_header(lines: int = 30, *, repo: Optional[Path] = None) -> str:
     plan = (repo or REPO_ROOT) / "lean4" / "IMPLEMENTATION_PLAN.md"
     if not plan.exists():
@@ -991,6 +1108,7 @@ def run_parallel_batch(
     with ThreadPoolExecutor(max_workers=parallel, thread_name_prefix="worker") as pool:
         futures: dict[Future, int] = {}
         for rn in round_nums:
+            memory_pressure_wait(context=f"dispatch R{rn}")
             fut = pool.submit(
                 run_round_in_worktree,
                 rn, total_theorems, recent,
@@ -1112,9 +1230,56 @@ def main() -> int:
         "--base-branch", type=str, default=BASE_BRANCH,
         help=f"Base branch name (default: {BASE_BRANCH})",
     )
+    parser.add_argument(
+        "--mem-guard", dest="mem_guard", action="store_true", default=None,
+        help="Enable macOS memory-pressure guard (default: on for darwin)",
+    )
+    parser.add_argument(
+        "--no-mem-guard", dest="mem_guard", action="store_false",
+        help="Disable macOS memory-pressure guard",
+    )
+    parser.add_argument(
+        "--mem-threshold", type=str, default="warn",
+        choices=list(_MEM_LEVEL_BY_NAME.keys()),
+        help="Pause dispatch when kern.memorystatus_vm_pressure_level >= this "
+             "(default: warn)",
+    )
+    parser.add_argument(
+        "--mem-swap-ceiling-gb", type=float, default=16.0,
+        help="Pause dispatch when used swap exceeds this many GB (default: 16)",
+    )
+    parser.add_argument(
+        "--mem-poll", type=int, default=30,
+        help="Memory-guard poll interval in seconds (default: 30)",
+    )
+    parser.add_argument(
+        "--mem-max-wait", type=int, default=1800,
+        help="Memory-guard max wait before proceeding anyway, in seconds (default: 1800)",
+    )
     args = parser.parse_args()
 
     BASE_BRANCH = args.base_branch
+
+    # ── Memory-pressure guard config ──────────────────────────────
+    _MEM_GUARD_CFG["enabled"] = (
+        sys.platform == "darwin" if args.mem_guard is None else bool(args.mem_guard)
+    )
+    _MEM_GUARD_CFG["level_threshold"] = _MEM_LEVEL_BY_NAME[args.mem_threshold]
+    _MEM_GUARD_CFG["swap_ceiling_gb"] = float(args.mem_swap_ceiling_gb)
+    _MEM_GUARD_CFG["poll_seconds"] = int(args.mem_poll)
+    _MEM_GUARD_CFG["max_wait_seconds"] = int(args.mem_max_wait)
+    if _MEM_GUARD_CFG["enabled"]:
+        lvl, swap = memory_pressure_snapshot()
+        logger.info(
+            f"Memory guard: ON (threshold={args.mem_threshold} "
+            f"[level≥{_MEM_GUARD_CFG['level_threshold']}], "
+            f"swap≤{_MEM_GUARD_CFG['swap_ceiling_gb']:.1f}GB, "
+            f"poll={_MEM_GUARD_CFG['poll_seconds']}s, "
+            f"max_wait={_MEM_GUARD_CFG['max_wait_seconds']}s) | "
+            f"current: level={lvl}, swap={swap:.1f}GB"
+        )
+    else:
+        logger.info("Memory guard: OFF")
 
     # ── Cleanup ────────────────────────────────────────────────────
     if args.cleanup:
@@ -1216,6 +1381,7 @@ def main() -> int:
                 with _round_lock:
                     rn = state.round_number
                     state.round_number += 1
+                memory_pressure_wait(context=f"dispatch R{rn}")
                 fut = pool.submit(
                     run_round_in_worktree,
                     rn, state.total_theorems, state.recent_commits,
