@@ -114,6 +114,7 @@ import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.PrimitivePrimeLucas
 import Omega.POM.ProjectiveOperatorDegeneratesToMomentKernel
 import Omega.POM.QstarDiscreteVariationalThreshold
+import Omega.POM.RankoneFusionDefectFiniteBasis
 import Omega.POM.RenyiDimensionSpectrum
 import Omega.POM.RenyiEndpoint
 import Omega.POM.RenyiEntropyRate

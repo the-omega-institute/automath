@@ -45,4 +45,19 @@ theorem paper_fold_bernoulli_p_autocovariance_generating_rational
   have hHalf : D.halfSpecializationFactored := D.deriveHalfSpecializationFactored hRat
   exact ⟨hRat, D.deriveHalfSpecializationDoublePole hHalf⟩
 
+/-- Closed-form Bernoulli-`p` covariance data force the order-`3` recurrence, hence the
+Hankel-rank and rational-generating-function conclusions.
+    prop:fold-gauge-anomaly-bernoulli-p-covariance-recurrence -/
+theorem paper_fold_gauge_anomaly_bernoulli_p_covariance_recurrence
+    (closedFormPackage recurrenceOrderThree hankelRankAtMostThree rationalGeneratingFunction :
+      Prop)
+    (hRec : closedFormPackage -> recurrenceOrderThree)
+    (hHankel : recurrenceOrderThree -> hankelRankAtMostThree)
+    (hGF : recurrenceOrderThree -> rationalGeneratingFunction) :
+    closedFormPackage ->
+      And recurrenceOrderThree (And hankelRankAtMostThree rationalGeneratingFunction) := by
+  intro hClosed
+  have hRecurrence : recurrenceOrderThree := hRec hClosed
+  exact ⟨hRecurrence, hHankel hRecurrence, hGF hRecurrence⟩
+
 end Omega.Folding
