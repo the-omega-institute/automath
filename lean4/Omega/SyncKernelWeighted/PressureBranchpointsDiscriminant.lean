@@ -31,6 +31,18 @@ private theorem pressure_branchpoint_factorization (u : ℚ) :
   dsimp [pressureBranchpointDiscriminant, pressureBranchpointPalindromicFactor]
   ring
 
+/-- The palindromic branch-point factor depends only on the inversion-invariant
+`u + u⁻¹` after factoring out `u^5`.
+    cor:pressure-discriminant-invariant-reduction -/
+theorem paper_pressure_discriminant_invariant_reduction :
+    ∀ u : ℚ, u ≠ 0 →
+      pressureBranchpointPalindromicFactor u =
+        u ^ 5 * ((u + u⁻¹) ^ 5 + 2 * (u + u⁻¹) ^ 4 - (u + u⁻¹) ^ 2 + (u + u⁻¹) + 3) := by
+  intro u hu
+  dsimp [pressureBranchpointPalindromicFactor]
+  field_simp [hu]
+  ring
+
 /-- The explicit discriminant factorization and the corresponding branch-point criterion.
     prop:pressure-branchpoints-discriminant -/
 theorem paper_pressure_branchpoints_discriminant :
