@@ -29,6 +29,7 @@ import Omega.Folding.BernoulliPDensityUnimodal
 import Omega.Folding.BernoulliPSpecializeHalf
 import Omega.Folding.BernoulliPhiHalfRatioLimits
 import Omega.Folding.BinFold
+import Omega.Folding.BinFoldGaugeDecomposition
 import Omega.Folding.BinMinsectorLastbit1SectionUnique
 import Omega.Folding.BitRecoveryFromLocalCongruenceData
 import Omega.Folding.BinFoldMinsectorLastbitSectionUnique
