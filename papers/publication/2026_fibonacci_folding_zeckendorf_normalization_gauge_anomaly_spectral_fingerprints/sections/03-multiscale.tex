@@ -1,35 +1,33 @@
-\section{Folding and compatible restriction}
+\section{Folding across scales}
 \label{sec:multiscale}
 
 \subsection{A rewriting description of \texorpdfstring{\(\Fold_m\)}{Fold\_m}}
 
-The fold can be computed by a local rewriting procedure for Zeckendorf normalization. Since the literature and the appendices use both LH and MSD-first orderings, we first record the translation between them.
+A convenient realization of \(\Fold_m\) uses the local rewriting rule for Zeckendorf normalization. In most-significant-digit-first order the rule is
+\[
+011\to 100,
+\]
+whereas in the low-to-high convention of Section~\ref{sec:preliminaries} it becomes
+\[
+110\to 001.
+\]
+We record the translation once, as the appendices use both conventions.
 
 \begin{lemma}[Convention translation]\label{lem:convention}
-Let \(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\) be written in LH order, so that position \(k\) carries weight \(\Fib_{k+1}\), and let \(\omega^\sharp=(\omega_m,\dots,\omega_1)\) be the same word written in MSD-first order. Then:
+Let \(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\) be written in low-to-high order, and let \(\omega^\sharp=(\omega_m,\dots,\omega_1)\) be the same word in most-significant-digit-first order. Then:
 \begin{enumerate}
-\item[(i)] The local MSD-first rule \(011\to 100\) applied at positions \((k,k+1,k+2)\) corresponds, after reversal, to the LH rule \(110\to 001\) applied at positions \((m-k-1,m-k,m-k+1)\).
-\item[(ii)] After adjoining a leading zero in MSD-first order, scanning left to right and repeatedly applying \(011\to 100\) is equivalent to scanning the LH word from high weights to low weights and repeatedly applying \(110\to 001\).
-\item[(iii)] In either convention, each rewrite preserves the Fibonacci value \(N(\omega)\) and strictly decreases the number of \(1\)s. The unique normal form is the Zeckendorf representation of \(N(\omega)\).
+\item[(i)] The rule \(011\to 100\) in most-significant-digit-first order corresponds, after reversal, to the rule \(110\to 001\) in low-to-high order.
+\item[(ii)] Prefixing a zero and scanning left to right in most-significant-digit-first order is equivalent to scanning the low-to-high word from high weights to low weights.
+\item[(iii)] Each rewrite preserves the Fibonacci value and strictly decreases the number of \(1\)s. The unique normal form is the Zeckendorf representation of the same integer.
 \end{enumerate}
 \end{lemma}
 
 \begin{proof}
-Part (i) is immediate from reversal: \((a,b,c)\mapsto(c,b,a)\), so \(011\to 100\) becomes \(110\to 001\). Part (ii) follows because left-to-right scanning in MSD-first order is the same as scanning the LH word from the highest-weight position toward the lowest. For part (iii), the identity \(\Fib_k+\Fib_{k+1}=\Fib_{k+2}\) shows that each rewrite preserves the represented value, while the number of \(1\)s drops by one. Termination and uniqueness of the normal form are proved in Appendix~\ref{app:rewriting}.
+Part (i) is immediate from reversal. Part (ii) is just the corresponding statement about scan direction. For part (iii), the identity \(\Fib_k+\Fib_{k+1}=\Fib_{k+2}\) shows that each rewrite preserves the represented value, while the number of \(1\)s drops by one. Termination and uniqueness of the normal form are proved in Appendix~\ref{app:rewriting}.
 \end{proof}
 
-Thus one may work either with the MSD-first rule
-\[
-011\to 100
-\]
-or, in the window convention of \eqref{eq:Nomega}, with the LH rule
-\[
-110\to 001.
-\]
-Both realize the same normalization procedure; see \cite{Frougny1992,FrougnySolomyak1996,FrougnySakarovitch1998,Frougny1999,ShallitShan2023}.
-
-\begin{proposition}[Well-definedness, idempotence, surjectivity]\label{prop:idempotent}
-For each \(m\ge 1\), the fold \(\Fold_m:\Om_m\to X_m\) is well defined, idempotent, and surjective:
+\begin{proposition}[Basic properties of the fold]\label{prop:idempotent}
+For each \(m\ge 1\), the map \(\Fold_m:\Om_m\to X_m\) is well defined, idempotent, and surjective:
 \[
 \Fold_m\circ \Fold_m=\Fold_m,
 \qquad
@@ -38,9 +36,9 @@ For each \(m\ge 1\), the fold \(\Fold_m:\Om_m\to X_m\) is well defined, idempote
 \end{proposition}
 
 \begin{proof}
-Appendix~\ref{app:rewriting} shows that the rewriting system terminates and is confluent. Hence every \(\omega\in\Om_m\) has a unique normal form with the same Fibonacci value, and by definition this normal form is \(\Fold_m(\omega)\). This proves well-definedness.
+Appendix~\ref{app:rewriting} shows that the rewriting system terminates and is confluent. Hence every \(\omega\in\Om_m\) has a unique normal form with the same Fibonacci value, and by definition this normal form is \(\Fold_m(\omega)\). This proves that \(\Fold_m\) is well defined.
 
-If \(x\in X_m\), then \(x\) already contains no adjacent \(1\)s and therefore is its own Zeckendorf normal form. Hence \(\Fold_m(x)=x\). Applying this to \(x=\Fold_m(\omega)\in X_m\) gives idempotence, while the same fixed-point property shows that every \(x\in X_m\) lies in the image.
+If \(x\in X_m\), then \(x\) already contains no adjacent \(1\)s and is therefore its own Zeckendorf normal form. Hence \(\Fold_m(x)=x\). Applying this to \(x=\Fold_m(\omega)\in X_m\) gives idempotence, and the same fixed-point property shows that every \(x\in X_m\) lies in the image.
 \end{proof}
 
 \subsection{Restriction on the stable side}
@@ -51,11 +49,7 @@ For \(m_2\ge m_1\), define
 \qquad
 \proj_{m_2\to m_1}(x_1\cdots x_{m_2}):=x_1\cdots x_{m_1}.
 \]
-Then \((X_m,\proj_{m_2\to m_1})\) is an inverse system, and the inverse limit
-\[
-X_\infty:=\varprojlim_m X_m
-\]
-is naturally the one-sided golden-mean shift; see \cite[Chapter~1]{LindMarcus1995} or \cite[Chapter~1]{Kitchens1998}.
+Then \((X_m,\proj_{m_2\to m_1})\) is an inverse system, and its inverse limit is naturally the one-sided golden-mean shift; see \cite[Chapter~1]{LindMarcus1995} or \cite[Chapter~1]{Kitchens1998}.
 
 \subsection{Compatible restriction on microstates}
 
@@ -64,14 +58,14 @@ Let
 \naive_{m+1\to m}:\Om_{m+1}\to\Om_m,\qquad
 \naive_{m+1\to m}(\omega_1\cdots\omega_{m+1}):=\omega_1\cdots\omega_m,
 \]
-be the naive truncation. The stable inverse system suggests looking for a map on microstates for which folding commutes with restriction, namely
+be naive truncation. We seek a map on microstates for which folding commutes with restriction:
 \begin{equation}\label{eq:commuting}
 \Fold_m\circ \aware_{m+1\to m}
 \;=\;
 \proj_{m+1\to m}\circ \Fold_{m+1}.
 \end{equation}
 
-\begin{definition}[Fold-aware restriction]\label{def:fold-aware}
+\begin{definition}[Compatible restriction]\label{def:fold-aware}
 For \(\omega\in\Om_{m+1}\), define
 \begin{equation}\label{eq:re-def}
 \aware_{m+1\to m}(\omega):=\proj_{m+1\to m}\!\bigl(\Fold_{m+1}(\omega)\bigr)\in X_m\subset\Om_m.
@@ -83,7 +77,7 @@ The map \(\aware_{m+1\to m}\) satisfies \eqref{eq:commuting}. Moreover, it is th
 \end{lemma}
 
 \begin{proof}
-Since \(\Fold_{m+1}(\omega)\in X_{m+1}\), its truncation belongs to \(X_m\) and is therefore fixed by \(\Fold_m\). It follows that
+Since \(\Fold_{m+1}(\omega)\in X_{m+1}\), its truncation belongs to \(X_m\) and is fixed by \(\Fold_m\). Therefore
 \[
 \Fold_m(\aware_{m+1\to m}(\omega))
 =
@@ -91,24 +85,8 @@ Since \(\Fold_{m+1}(\omega)\in X_{m+1}\), its truncation belongs to \(X_m\) and 
 =
 \proj_{m+1\to m}(\Fold_{m+1}(\omega)),
 \]
-which is exactly \eqref{eq:commuting}. If \(T:\Om_{m+1}\to X_m\) also satisfies \eqref{eq:commuting}, then \(\Fold_m\) acts as the identity on \(T(\omega)\), so \eqref{eq:commuting} forces
+which is exactly \eqref{eq:commuting}. If \(T:\Om_{m+1}\to X_m\) also satisfies \eqref{eq:commuting}, then \(\Fold_m\) acts as the identity on \(T(\omega)\), so
 \[
 T(\omega)=\proj_{m+1\to m}(\Fold_{m+1}(\omega))=\aware_{m+1\to m}(\omega).
 \]
 \end{proof}
-
-\begin{example}[A compatible restriction at \(m=4\)]\label{ex:aware4}
-Take \(\omega=11011\in\Om_5\), the word from Example~\ref{ex:worst4}. Since \(N(\omega)=16=\Fib_7+\Fib_4\), one has
-\[
-\Fold_5(\omega)=00100.
-\]
-Hence
-\[
-\aware_{5\to 4}(\omega)=0010.
-\]
-By contrast,
-\[
-\naive_{5\to 4}(\omega)=1101.
-\]
-This is the first nontrivial instance in which compatibility with folding forces a complete change in the visible \(4\)-window.
-\end{example}

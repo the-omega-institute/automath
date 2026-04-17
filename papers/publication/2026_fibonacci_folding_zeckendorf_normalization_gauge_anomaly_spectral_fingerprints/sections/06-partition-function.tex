@@ -1,35 +1,32 @@
-\section{Weighted fibers, transfer matrices, and entropy}
+\section{Weighted fibers and thermodynamic formalism}
 \label{sec:partition}
 
-The four-state presentation from Section~\ref{sec:gauge} also provides an efficient transfer-matrix description of fold fibers. Most formulas in this section are consequences of that explicit matrix family. We keep in the body only the ingredients needed for the asymptotic statements and for the variational interpretation, and we leave the linear-representation and discriminant calculations to Appendix~\ref{app:recurrence}.
+The four-state presentation from Section~\ref{sec:gauge} also yields a transfer-matrix description of the fibers of \(\Fold_m\). We keep in the main text the consequences needed for asymptotics and for the variational interpretation, and leave the linear-algebraic eliminations to Appendix~\ref{app:recurrence}.
 
-\subsection{Weighted fiber counts}
-For \(x\in X_m\), define the fold-fiber multiplicity
+\subsection{Weighted fibers}
+
+For \(x\in X_m\), define the fiber multiplicity
 \[
 d_m(x):=\#\Fold_m^{-1}(x).
 \]
-We introduce the weighted partition function
+The corresponding weighted partition function is
 \begin{equation}\label{eq:Zm}
-Z_m(y):=\sum_{x\in X_m} y^{\abs{x}_1}\, d_m(x),
+Z_m(y):=\sum_{x\in X_m} y^{\abs{x}_1}\, d_m(x).
 \end{equation}
-and the associated generating function
-\[
-Z(t;y):=\sum_{m\ge 0} Z_m(y)\,t^m.
-\]
 Equivalently,
 \[
 Z_m(y)=\sum_{\omega\in\Om_m} y^{\abs{\Fold_m(\omega)}_1},
 \]
-so \(Z_m(y)\) is the moment generating polynomial of the output Hamming weight under the uniform measure on \(\Om_m\).
-We use the convention \(Z_0(y)=1\), corresponding to the empty word.
+so \(Z_m(y)\) is the moment generating polynomial of the output Hamming weight under the uniform measure on \(\Om_m\). We write
+\[
+Z(t;y):=\sum_{m\ge 0} Z_m(y)\,t^m,
+\qquad
+Z_0(y)=1.
+\]
 
-\subsection{The weighted automaton}
-The four-state synchronized graph from Appendix~\ref{app:pressure} may be read as a weighted automaton. Each state \(s\in\{00,01,10,11\}\) records the two trailing symbols of the reversed pair process \((X_t,Y_t)\); the outgoing edges from \(s\) encode the admissible appended microstate bits together with their normalized outputs. Weighting each edge by \(y^{Y}\), where \(Y\) is the second component of the corresponding label, therefore records the contribution of that transition to the generating function of \(\abs{\Fold_m(\omega)}_1\). This is the standard transfer-matrix set-up for weighted numeration problems \cite{GrabnerKirschenhoferTichy2002,DumontSidorovThomas1999}.
+\subsection{Transfer matrix}
 
-The synchronized presentation always starts in state \(00\), because padding by high-weight zeros forces the fold to begin with two stable zeros (Lemma~\ref{lem:zero-padding}). Since the weighted language recognized by this finite graph is rational, \(Z(t;y)\) admits a four-dimensional linear representation. Appendix~\ref{app:recurrence} computes a convenient terminal vector \(\beta(y)\) for that representation.
-
-\subsection{Boundary vectors}
-With \(\alpha\) encoding the initial state \(00\) and \(\beta(y)\) the terminal vector of this linear representation, the partition function admits the explicit boundary-vector form
+Reading the four-state graph of Appendix~\ref{app:pressure} as a weighted automaton, one assigns to an edge labeled by \((X,Y)\in\{0,1\}^2\) the weight \(y^Y\). This records the contribution of that transition to \(\abs{\Fold_m(\omega)}_1\). The presentation starts in state \(00\), because padding by high-weight zeros forces the fold to begin with two stable zeros (Lemma~\ref{lem:zero-padding}). The weighted language is therefore described by a four-dimensional linear representation:
 \begin{equation}\label{eq:boundary-vector}
 Z_m(y)=\alpha^{\mathsf T} M(y)^m \beta(y),
 \end{equation}
@@ -58,9 +55,10 @@ M(y)=
 1&0&0&0
 \end{pmatrix}.
 \end{equation}
-Appendix~\ref{app:recurrence} derives \(\beta(y)\) by solving the linear-representation equations against the directly enumerated initial polynomials \(Z_0,\dots,Z_3\). Although \(\beta(y)\) is rational, the product \(\alpha^{\mathsf T}M(y)^m\beta(y)\) is a polynomial in \(y\); the apparent poles at \(y=0\) and \(y=-1\) cancel identically.
+Appendix~\ref{app:recurrence} derives \(\beta(y)\) from the initial values \(Z_0,\dots,Z_3\). Although \(\beta(y)\) is rational, the product \(\alpha^{\mathsf T}M(y)^m\beta(y)\) is a polynomial in \(y\); the apparent poles at \(y=0\) and \(y=-1\) cancel identically.
 
-\subsection{A quartic recurrence}
+\subsection{Recurrence and exceptional parameters}
+
 \begin{proposition}[Fourth-order recurrence]\label{prop:recurrence}
 The sequence \((Z_m(y))_{m\ge 0}\) satisfies
 \begin{equation}\label{eq:Zm-rec}
@@ -74,54 +72,44 @@ Z_1(y)=1+y,\qquad
 Z_2(y)=2+2y,\qquad
 Z_3(y)=2+5y+y^2.
 \]
-Equivalently, \(Z(t;y)\) is rational:
+Equivalently,
 \begin{equation}\label{eq:Zty}
 Z(t;y)=\frac{N(t;y)}{D(t;y)},
 \end{equation}
-where the denominator is
+where
 \begin{equation}\label{eq:Dty}
 D(t;y)=1-t-(2y+1)t^2+t^3+y(y+1)t^4
 \end{equation}
-and the numerator is
+and
 \begin{equation}\label{eq:Nty}
 N(t;y)=(1+ty)(1-yt^2).
 \end{equation}
-Equivalently, the characteristic polynomial of the transfer matrix may be taken as
+The characteristic polynomial of \(M(y)\) is
 \begin{equation}\label{eq:Pi}
 \Pi(\lambda,y)=\lambda^4-\lambda^3-(2y+1)\lambda^2+\lambda+y(y+1).
 \end{equation}
 \end{proposition}
 
 \begin{proof}
-Appendix~\ref{app:recurrence} derives the linear-representation identity \eqref{eq:boundary-vector} from the synchronized weighted automaton. Once \eqref{eq:boundary-vector} is available, a direct determinant computation gives
+Appendix~\ref{app:recurrence} derives \eqref{eq:boundary-vector}. A direct determinant computation gives
 \[
 \det(\lambda I-M(y))=\Pi(\lambda,y),
 \]
-hence \eqref{eq:Zm-rec} by Cayley--Hamilton. Summing the recurrence against \(t^m\) and using the initial values yields \eqref{eq:Zty}--\eqref{eq:Nty}. One verifies the numerator by checking that \(Z(t;y)\cdot D(t;y)=(1+ty)(1-yt^2)\) using \(Z_0,\dots,Z_3\).
+hence \eqref{eq:Zm-rec} by Cayley--Hamilton. Summing the recurrence against \(t^m\) and using the initial values yields \eqref{eq:Zty}--\eqref{eq:Nty}.
 \end{proof}
 
-\subsection{Exceptional parameters}
-The explicit numerator~\eqref{eq:Nty} identifies the values of \(y\) for which the effective recurrence order drops.
-
 \begin{corollary}[Exceptional locus]\label{thm:hankel}
-The generating function \(Z(t;y)=N(t;y)/D(t;y)\) with \(N\) and \(D\) as in \eqref{eq:Nty}--\eqref{eq:Dty} has the following exceptional behavior:
+The rational function \(Z(t;y)=N(t;y)/D(t;y)\) has the following exceptional behavior.
 \begin{enumerate}
-\item At \(y=0\): the leading coefficient \(y(y+1)\) of \(D\) vanishes, so \(D(t;0)=(1-t)^2(1+t)\) has degree \(3\) and \(N(t;0)=1\). The effective recurrence order drops to \(3\).
-\item At \(y=1\): \(N(t;1)=-(t-1)(t+1)^2\) and \(D(t;1)=(t-1)(t+1)^2(2t-1)\). All three common factors cancel, giving \(Z(t;1)=1/(1-2t)\), consistent with \(Z_m(1)=2^m\). The effective recurrence order drops to \(1\).
-\item For all \(y\in\CC\setminus\{0,1\}\), the numerator and denominator share no common factor, and the effective recurrence order (equivalently, the Hankel rank of the sequence \((Z_m(y))_{m\ge 0}\)) is exactly \(4\).
+\item At \(y=0\), the leading coefficient \(y(y+1)\) of \(D\) vanishes, so \(D(t;0)=(1-t)^2(1+t)\) has degree \(3\) and \(N(t;0)=1\). The effective recurrence order drops to \(3\).
+\item At \(y=1\), one has \(N(t;1)=-(t-1)(t+1)^2\) and \(D(t;1)=(t-1)(t+1)^2(2t-1)\). After cancellation, \(Z(t;1)=1/(1-2t)\), consistently with \(Z_m(1)=2^m\). The effective recurrence order drops to \(1\).
+\item For all \(y\in\CC\setminus\{0,1\}\), the numerator and denominator are coprime, and the effective recurrence order is exactly \(4\).
 \end{enumerate}
 \end{corollary}
 
 \begin{proof}
-Parts (1) and (2) are verified by direct factorization. For part (3), compute the resultant of \(N(t;y)\) and \(D(t;y)\) with respect to \(t\); this is a polynomial in \(y\) whose only roots are \(y=0\) and \(y=1\). Hence for \(y\notin\{0,1\}\) there is no common root in \(t\), and the rational function is in lowest terms with denominator degree \(4\).
+The first two assertions follow by direct factorization. For the third, compute the resultant of \(N(t;y)\) and \(D(t;y)\) with respect to \(t\); its only roots in \(y\) are \(0\) and \(1\). Hence for \(y\notin\{0,1\}\) the rational function is in lowest terms with denominator degree \(4\).
 \end{proof}
-
-\subsection{Discriminant and spectral degeneracy}
-For \(y>0\), the free energy (pressure)
-\[
-f(y):=\lim_{m\to\infty}\frac{1}{m}\log Z_m(y)
-\]
-is well-defined and equals \(\log\lambda_\star(y)\), where \(\lambda_\star(y)\) is the dominant (Perron) root of \(\Pi(\lambda,y)\). Spectral degeneracies of \(\Pi\) arise at parameter values where the discriminant vanishes; whether such a degeneracy actually affects \(f(y)\) depends on whether the colliding roots are dominant.
 
 \begin{proposition}[Discriminant factorization]\label{prop:discriminant}
 The discriminant of \(\Pi(\lambda,y)\) with respect to \(\lambda\) factors as
@@ -129,30 +117,35 @@ The discriminant of \(\Pi(\lambda,y)\) with respect to \(\lambda\) factors as
 \Disc_{\lambda}\,\Pi(\lambda,y)
 =-y(y-1)\bigl(256y^3+411y^2+165y+32\bigr).
 \end{equation}
-The zero set consists of \(y=0\), \(y=1\), and the roots of the cubic \(q(y):=256y^3+411y^2+165y+32\). The cubic has a unique negative real root
+The cubic factor has a unique negative real root
 \[
 y_{\mathrm{c}}\approx -1.13445.
 \]
-At each of these parameter values, \(\Pi(\lambda,y)\) has a repeated root.
+Thus the repeated-root locus consists of \(y=0\), \(y=1\), and the roots of \(256y^3+411y^2+165y+32\).
 \end{proposition}
 
 \begin{proof}
-Appendix~\ref{app:recurrence} computes \(\Disc_\lambda \Pi(\lambda,y)\) explicitly and factors the result, giving \eqref{eq:disc}. Since \(q(-2)=-702<0\) and \(q(-1)=22>0\), the intermediate value theorem gives at least one root in \((-2,-1)\). The derivative is \(q'(y)=768y^2+822y+165\), whose real roots are
+Appendix~\ref{app:recurrence} computes and factors the discriminant, giving \eqref{eq:disc}. Let
 \[
-y=\frac{-137\pm 3\sqrt{521}}{256}\approx\{-0.268,\,-0.803\}.
+q(y):=256y^3+411y^2+165y+32.
 \]
-Both roots lie in \((-1,0)\), so \(q'(y)>0\) for all \(y\le -1\). Hence \(q\) is strictly increasing on \((-\infty,-1]\), which means \(q\) has exactly one root in \((-2,-1)\), namely \(y_{\mathrm{c}}\). The other discriminant zeros are \(y=0\) and \(y=1\). At each of these values, \(\Pi(\lambda,y)\) has a repeated root.
+Since \(q(-2)=-702<0\) and \(q(-1)=22>0\), there is a root in \((-2,-1)\). Moreover,
+\[
+q'(y)=768y^2+822y+165
+\]
+has both real roots in \((-1,0)\), so \(q'(y)>0\) for \(y\le -1\). Hence \(q\) is strictly increasing on \((-\infty,-1]\), and the root in \((-2,-1)\) is unique.
 \end{proof}
 
-\begin{remark}[Dominant-sheet status]\label{rem:dominant}
-For \(y>0\), the Perron--Frobenius theorem guarantees that the dominant root \(\lambda_\star(y)\) is simple, real, and positive. The discriminant zeros at \(y=0\) and \(y=1\) are the only ones on the non-negative real axis. At \(y=0\), \(\Pi(\lambda,0)=\lambda(\lambda-1)^2(\lambda+1)\): the repeated root is \(\lambda=1\), which is dominant but this is a boundary case (\(Z_m(0)\) grows polynomially, not exponentially). At \(y=1\), \(\Pi(\lambda,1)=(\lambda-2)(\lambda-1)(\lambda+1)^2\): the repeated root is \(\lambda=-1\), which is subdominant (dominated by \(\lambda=2\)). Hence for all \(y>0\), the dominant root is simple and the free energy \(f(y)=\log\lambda_\star(y)\) is real-analytic.
-
-The cubic root \(y_{\mathrm{c}}\approx -1.13445\) lies on the negative real axis, where \(Z_m(y)\) involves sign-alternating terms and \(f(y)\) is not directly interpretable as a thermodynamic pressure. At \(y_{\mathrm{c}}\), the repeated root of \(\Pi\) is near \(\lambda\approx -0.273\) while the dominant roots are a complex-conjugate pair of modulus \(\approx 1.43\), so the repeated root is subdominant. We do not pursue the negative-\(y\) analysis further.
-\end{remark}
+For \(y>0\), Perron--Frobenius implies that the dominant root \(\lambda_\star(y)\) of \(\Pi(\lambda,y)\) is real, positive, and simple. The only nonnegative discriminant zeros are \(0\) and \(1\); at \(y=1\) the repeated root is subdominant, while \(y=0\) is a boundary point. Thus the free energy
+\[
+f(y):=\lim_{m\to\infty}\frac1m\log Z_m(y)=\log \lambda_\star(y)
+\]
+is real-analytic on \((0,\infty)\).
 
 \subsection{Output-weight statistics}
 \label{subsec:weight-stats}
-Let \(u_{\Om_m}\) be the uniform measure on \(\Om_m\), and let \(w_m:=\Fold_m\push u_{\Om_m}\) be its pushforward to \(X_m\). For \(X\sim w_m\), set \(H_m:=\abs{X}_1\).
+
+Let \(u_{\Om_m}\) be the uniform measure on \(\Om_m\), and let \(w_m:=\Fold_m\push u_{\Om_m}\) be its pushforward to \(X_m\). For \(X\sim w_m\), write \(H_m:=\abs{X}_1\).
 
 \begin{corollary}[LLN/CLT/LDP for \(\abs{X}_1\) under \(w_m\)]\label{thm:weight-stats}
 Under \(w_m\),
@@ -167,7 +160,7 @@ I(a):=\sup_{\theta\in\RR}\bigl(\theta a-\Lambda_Y(\theta)\bigr),
 \qquad
 \Lambda_Y(\theta):=\log \rho\!\bigl(M(e^\theta)\bigr)-\log 2,
 \]
-where \(\rho(\cdot)\) denotes the Perron root of the matrix from Proposition~\ref{prop:recurrence}.
+where \(\rho(\cdot)\) denotes the Perron root.
 \end{corollary}
 
 \begin{proof}
@@ -179,7 +172,7 @@ Since \(w_m=\Fold_m\push u_{\Om_m}\),
 =
 2^{-m}Z_m(e^\theta).
 \]
-By Proposition~\ref{prop:recurrence}, the sequence \(Z_m(e^\theta)\) is governed by the transfer matrix \(M(e^\theta)\), so Perron--Frobenius theory gives the scaled cumulant generating function
+By Proposition~\ref{prop:recurrence}, \(Z_m(e^\theta)\) is governed by the transfer matrix \(M(e^\theta)\), so Perron--Frobenius theory gives
 \[
 \lim_{m\to\infty}\frac{1}{m}\log \EE_{w_m}[e^{\theta H_m}]
 =
@@ -187,20 +180,21 @@ By Proposition~\ref{prop:recurrence}, the sequence \(Z_m(e^\theta)\) is governed
 =
 \Lambda_Y(\theta).
 \]
-The function \(\Lambda_Y\) is real-analytic near \(0\). Differentiating the Perron root at \(\theta=0\) (Appendix~\ref{app:recurrence}) gives
+The function \(\Lambda_Y\) is real-analytic near \(0\). Differentiating the Perron root at \(\theta=0\) in Appendix~\ref{app:recurrence} gives
 \[
 \Lambda_Y'(0)=\frac{5}{18},
 \qquad
 \Lambda_Y''(0)=\frac{67}{972}.
 \]
-Therefore the convergence in probability and the central limit theorem follow from the usual analytic-perturbation argument for finite-state transfer matrices; see \cite[Chapter~4]{ParryPollicott1990} or \cite[Chapter~6]{Ruelle2004}. Since \(\theta\mapsto M(e^\theta)\) is an analytic primitive matrix family for every \(\theta\in\RR\), the function \(\Lambda_Y\) is finite and differentiable on all of \(\RR\). The hypotheses of the G\"artner--Ellis theorem are therefore satisfied without boundary issues; see \cite[Theorem~2.3.6]{DemboZeitouni1998}. This yields the stated large deviation principle with rate function \(I\).
+The convergence in probability and the central limit theorem therefore follow from the standard perturbative theory for primitive matrix families \cite[Chapter~4]{ParryPollicott1990}, \cite[Chapter~6]{Ruelle2004}. Since \(\theta\mapsto M(e^\theta)\) is analytic for all \(\theta\in\RR\), the G\"artner--Ellis theorem applies and yields the stated large deviation principle \cite[Theorem~2.3.6]{DemboZeitouni1998}.
 \end{proof}
 
 \subsection{A microcanonical entropy profile}
 \label{subsec:microcanonical}
-Let \(\mathcal{P}\subset(\{00,01,10,11\})^{\ZZ}\) be the pair shift from Appendix~\ref{app:pressure}. For \(p=(p_t)_{t\in\ZZ}\in\mathcal{P}\), write
+
+Let \(\mathcal{P}\subset(\{00,01,10,11\})^{\ZZ}\) be the pair shift from Appendix~\ref{app:pressure}. For \(p=(p_t)_{t\in\ZZ}\in\mathcal{P}\), let
 \[
-\upsilon(p):=\text{the second coordinate of }p_0\in\{00,01,10,11\}.
+\upsilon(p):=\text{the second coordinate of }p_0.
 \]
 Thus \(\upsilon\) is the locally constant observable whose Birkhoff average is the output density. For \(a\in[0,\frac12]\), define
 \[
@@ -214,7 +208,7 @@ h_\mu(\shift):
 \right\}.
 \]
 
-\begin{theorem}[Microcanonical entropy profile for the output density]\label{thm:microcanonical-output}
+\begin{theorem}[Microcanonical entropy profile]\label{thm:microcanonical-output}
 The attainable set of output densities is the full interval \([0,\frac12]\). For every \(\theta\in\RR\),
 \begin{equation}\label{eq:microcanonical-legendre}
 \log \rho\!\bigl(M(e^\theta)\bigr)
@@ -225,7 +219,7 @@ The function \(a\mapsto \mathfrak h(a)\) is real-analytic and strictly concave o
 \[
 \mathfrak h\!\left(\frac{5}{18}\right)=\log 2.
 \]
-Moreover, the large-deviation rate function \(I\) from Corollary~\ref{thm:weight-stats} satisfies
+Moreover, the rate function from Corollary~\ref{thm:weight-stats} satisfies
 \[
 I(a)=\log 2-\mathfrak h(a)\qquad\left(0\le a\le \frac12\right),
 \]
@@ -244,9 +238,9 @@ has output density \(0\), while the \(2\)-cycle
 \[
 00\xrightarrow{11}11\xrightarrow{00}00
 \]
-has output density \(1/2\). Convex combinations of these two invariant measures therefore realize every density in \([0,\frac12]\), so this interval is exactly the attainable set.
+has output density \(1/2\). Convex combinations of these two invariant measures therefore realize every density in \([0,\frac12]\).
 
-Appendix~\ref{app:pressure} gives a synchronized right-resolving presentation of the sofic shift \(\mathcal P\), and \(\upsilon\) is a locally constant potential on \(\mathcal P\). Weighting each edge of that presentation by \(e^{\theta\upsilon}\) gives precisely the matrix \(M(e^\theta)\) from \eqref{eq:My}. Hence the topological pressure of \(\theta\upsilon\) is
+Appendix~\ref{app:pressure} gives a synchronized right-resolving presentation of \(\mathcal P\), and \(\upsilon\) is a locally constant potential on this sofic shift. Weighting each edge by \(e^{\theta\upsilon}\) yields exactly the matrix \(M(e^\theta)\), so the topological pressure of \(\theta\upsilon\) is
 \[
 P(\theta):=P_{\mathcal P}(\theta\upsilon)=\log \rho\!\bigl(M(e^\theta)\bigr);
 \]
@@ -256,37 +250,21 @@ P(\theta)
 =
 \sup_{\mu}\left(h_\mu(\shift)+\theta\int \upsilon\,d\mu\right),
 \]
-where the supremum runs over all \(\shift\)-invariant Borel probability measures on \(\mathcal P\). Grouping the measures by the value of \(\int \upsilon\,d\mu\) gives
-\[
-P(\theta)
-=
-\sup_{0\le a\le 1/2}\bigl(\mathfrak h(a)+\theta a\bigr),
-\]
-which is \eqref{eq:microcanonical-legendre}.
+where the supremum is over all \(\shift\)-invariant Borel probability measures on \(\mathcal P\). Grouping the measures by the value of \(\int \upsilon\,d\mu\) gives \eqref{eq:microcanonical-legendre}.
 
-The function \(P\) is real-analytic because \(M(e^\theta)\) is an analytic primitive matrix family. It is strictly convex: the observable \(\upsilon\) is not cohomologous to a constant, since its average is \(0\) on the fixed point above and \(1/2\) on the displayed \(2\)-cycle. Standard equilibrium-state theory for mixing sofic shifts therefore gives \(P''(\theta)>0\) for every \(\theta\in\RR\); see \cite[Chapter~4]{ParryPollicott1990} or \cite[Chapter~9]{Walters1982}.
+The function \(P\) is real-analytic because \(M(e^\theta)\) is an analytic primitive matrix family. It is strictly convex, since \(\upsilon\) is not cohomologous to a constant: its average is \(0\) on the fixed point above and \(1/2\) on the displayed \(2\)-cycle. Standard equilibrium-state theory for mixing sofic shifts therefore gives \(P''(\theta)>0\) for every \(\theta\in\RR\).
 
-For \(\theta\le 0\), one has \(0\le \upsilon\le 1\), hence
-\[
-0\le P(\theta)\le P(0)=\log 2.
-\]
-For \(\theta\ge 0\), every length-\(n\) pair block is determined by its \(n\) microstate digits, hence there are at most \(2^n\) such blocks, and its output coordinates contain at most \(\lceil n/2\rceil\) ones. Therefore the partition sum defining pressure is at most \(2^n e^{\theta\lceil n/2\rceil}\), which yields
+For \(\theta\le 0\), one has \(0\le \upsilon\le 1\), hence \(0\le P(\theta)\le P(0)=\log 2\). For \(\theta\ge 0\), every length-\(n\) pair block is determined by its \(n\) microstate digits, so there are at most \(2^n\) such blocks, and the corresponding output has at most \(\lceil n/2\rceil\) ones. Hence the partition sum defining pressure is at most \(2^n e^{\theta\lceil n/2\rceil}\), which yields
 \[
 P(\theta)\le \log 2+\frac{\theta}{2}.
 \]
-The \(2\)-cycle with density \(1/2\) gives the lower bound \(P(\theta)\ge \theta/2\) for \(\theta\ge0\). Consequently,
-\[
-\lim_{\theta\to-\infty}\frac{P(\theta)}{\theta}=0,
-\qquad
-\lim_{\theta\to+\infty}\frac{P(\theta)}{\theta}=\frac12.
-\]
-Since \(P\) is convex and differentiable, these asymptotic slopes imply
+The \(2\)-cycle above gives the lower bound \(P(\theta)\ge \theta/2\) for \(\theta\ge0\). Therefore
 \[
 \lim_{\theta\to-\infty}P'(\theta)=0,
 \qquad
 \lim_{\theta\to+\infty}P'(\theta)=\frac12.
 \]
-Therefore the derivative range of \(P\) is \((0,\frac12)\). Legendre--Fenchel duality then shows that \(\mathfrak h\) is real-analytic and strictly concave on \((0,\frac12)\), with
+Legendre--Fenchel duality then shows that \(\mathfrak h\) is real-analytic and strictly concave on \((0,\frac12)\), with
 \[
 \mathfrak h(a)=\inf_{\theta\in\RR}\bigl(P(\theta)-\theta a\bigr).
 \]
@@ -298,23 +276,15 @@ P'(0)=\Lambda_Y'(0)=\frac{5}{18}
 \]
 by Appendix~\ref{app:pressure}. Hence the unique maximizer of \(\mathfrak h\) is \(a=5/18\), and its value is \(\log 2\).
 
-Finally, Corollary~\ref{thm:weight-stats} gives
+Finally,
 \[
 I(a)=\sup_{\theta\in\RR}\bigl(\theta a-\Lambda_Y(\theta)\bigr)
 =
 \sup_{\theta\in\RR}\bigl(\theta a-P(\theta)+\log 2\bigr).
 \]
-For \(0\le a\le 1/2\), the dual formula for \(\mathfrak h\) yields
-\[
-I(a)=\log 2-\mathfrak h(a).
-\]
-If \(a>1/2\), then every \(x\in X_m\) satisfies \(\abs{x}_1\le m/2\), so the probabilities in Corollary~\ref{thm:weight-stats} vanish identically on any neighborhood of \(a\). Thus \(I(a)=+\infty\) on \((1/2,1]\).
+For \(0\le a\le 1/2\), the dual formula for \(\mathfrak h\) yields \(I(a)=\log 2-\mathfrak h(a)\). If \(a>1/2\), then every \(x\in X_m\) satisfies \(\abs{x}_1\le m/2\), so the probabilities in Corollary~\ref{thm:weight-stats} vanish identically on a neighborhood of \(a\). Thus \(I(a)=+\infty\) on \((1/2,1]\).
 \end{proof}
 
-\begin{remark}
-Theorem~\ref{thm:microcanonical-output} recasts the transfer-matrix pressure from Proposition~\ref{prop:recurrence} as a canonical free energy on the pair shift. The weighted partition function is therefore governed by an actual microcanonical entropy profile and not only through its recurrence data.
-\end{remark}
+Theorem~\ref{thm:microcanonical-output} shows that the weighted theory is not merely a recurrence calculation: the same transfer matrix that governs \(Z_m(y)\) also realizes a genuine entropy maximization problem on the pair shift.
 
-\begin{remark}[Comparison with interval-based Zeckendorf statistics]\label{rem:zeck-comparison}
-The probabilistic Zeckendorf literature \cite{KologluKoppMillerWang2011,MillerWang2012,BowerInsoftLiMillerTosteson2015} studies the distribution of summand counts and gap lengths in the Zeckendorf decomposition of a random integer drawn uniformly from \([1,\Fib_n]\). The density of summands in that setting converges to \(1/(\varphi^2+1)\approx 0.2764\), where \(\varphi=(1+\sqrt{5})/2\). In our setting, the fold-pushforward measure \(w_m\) averages uniformly over all \(2^m\) microstate words; the resulting output-weight density is \(5/18\approx 0.2778\). The two constants are close but distinct, reflecting fundamentally different averaging measures: one is uniform over integers in an interval, the other is uniform over binary words of fixed length. The variance constants likewise differ: \(67/972\approx 0.0689\) here versus a different expression in the interval-based setting. Both the constants and the CLT/LDP follow from finite-state transfer-matrix machinery; the difference lies in the choice of initial/boundary conditions.
-\end{remark}
+For comparison, interval-based Zeckendorf statistics \cite{KologluKoppMillerWang2011,MillerWang2012,BowerInsoftLiMillerTosteson2015} study the decomposition of a uniformly chosen integer in \([1,\Fib_n]\). In that model the summand density converges to \(1/(\varphi^2+1)\approx 0.2764\), whereas the fold-pushforward measure \(w_m\) yields the density \(5/18\approx 0.2778\). The similarity of the constants is accidental: the underlying sampling measures are different.

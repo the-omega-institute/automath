@@ -1,42 +1,30 @@
 \section{Finite windows and Fibonacci normalization}
 \label{sec:preliminaries}
 
-\subsection{Microstate and stable words}
-
-For an integer \(m\ge 1\), let
+For \(m\ge 1\), let
 \[
 \Om_m:=\{0,1\}^m
 \]
-be the set of binary words of length \(m\). We think of \(\Om_m\) as the space of microstates visible in a window of size \(m\). The corresponding stable words are
+be the set of binary words of length \(m\), and let
 \[
-X_m:=\{x\in\{0,1\}^m:\text{$x$ contains no occurrence of \(11\)}\},
+X_m:=\{x\in\{0,1\}^m:\text{$x$ contains no occurrence of \(11\)}\}
 \]
-that is, the length-\(m\) blocks of the golden-mean shift.
+be the corresponding length-\(m\) language of the golden-mean shift.
 
-\subsection{Conventions}
-\label{subsec:notation-guide}
-
-Two orderings of the same finite word will appear repeatedly. Since the appendices use both, we record the translation once and for all.
-
-\begin{center}
-\begin{tabular}{|p{0.23\linewidth}|p{0.69\linewidth}|}
-\hline
-Object & Meaning \\ \hline
-\(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\) & The \emph{low-to-high} (LH) ordering used in Sections~\ref{sec:preliminaries}--\ref{sec:partition}. Position \(k\) carries weight \(\Fib_{k+1}\). \\ \hline
-\(\omega^\sharp=(\omega_m,\dots,\omega_1)\) & The same word written in \emph{most-significant-digit-first} order. Appendix~\ref{app:rewriting} uses this convention throughout. \\ \hline
-\(\proj_m\) & Truncation to the first \(m\) LH digits, that is, to the \(m\) lowest-weight coordinates. \\ \hline
-\(\Fold_m(\omega)\) & Fibonacci evaluation, Zeckendorf normalization, and truncation back to the first \(m\) LH digits. \\ \hline
-\(\aware_{m+1\to m}\) & The compatible restriction characterized by \(\Fold_m\circ \aware_{m+1\to m}=\proj_{m+1\to m}\circ \Fold_{m+1}\). \\ \hline
-Carry slot & An auxiliary zero at the high-weight end used when a local rewrite needs one more site. In MSD-first order this is a leading zero; in LH order it is a trailing zero. \\ \hline
-\end{tabular}
-\end{center}
-
-The reversal map
+Throughout the main text we write words in low-to-high order,
+\[
+\omega=(\omega_1,\dots,\omega_m),
+\]
+so that coordinate \(k\) carries weight \(\Fib_{k+1}\). When it is convenient to scan from high weights to low weights we use the reversed word
+\[
+\omega^\sharp=(\omega_m,\dots,\omega_1).
+\]
+Appendix~\ref{app:rewriting} is written in this most-significant-digit-first convention; elsewhere we keep the low-to-high ordering. The reversal map
 \[
 \rev_m:\Om_m\to\Om_m,\qquad
 \rev_m(\omega_1,\dots,\omega_m):=(\omega_m,\dots,\omega_1),
 \]
-passes between these two orderings. Apart from Appendix~\ref{app:rewriting}, which uses MSD-first notation because it is convenient for the rewriting rule, we keep the LH convention throughout.
+passes between the two.
 
 \subsection{Fibonacci evaluation}
 
@@ -44,29 +32,24 @@ Let \((\Fib_k)_{k\ge 0}\) be the Fibonacci sequence with \(\Fib_0=0\), \(\Fib_1=
 \begin{equation}\label{eq:Nomega}
 N(\omega):=\sum_{k=1}^m \omega_k\,\Fib_{k+1}.
 \end{equation}
-
-\begin{remark}[Weight convention and indexing]\label{rem:conventions}
-We choose the convention that position \(k\) carries weight \(\Fib_{k+1}\). Thus the first two positions have weights \(\Fib_2=1\) and \(\Fib_3=2\). This differs by a shift from some common numeration conventions; compare, for example, \cite{Fraenkel1985,Frougny1988,Frougny1992,FrougnyConfluent1992,FrougnySolomyak1996,Berstel1985,AlloucheShallit2003}. The choice is convenient for finite windows because the visible coordinates are indexed from low weight to high weight.
-\end{remark}
+Thus the first two visible coordinates carry weights \(\Fib_2=1\) and \(\Fib_3=2\). This indexing differs slightly from some common numeration conventions \cite{Fraenkel1985,Frougny1988,Frougny1992,FrougnyConfluent1992,FrougnySolomyak1996,Berstel1985,AlloucheShallit2003}, but it is convenient for finite windows because coordinates are numbered from low weight to high weight.
 
 \subsection{Zeckendorf normalization}
 
-Zeckendorf's theorem asserts that every \(N\in\NN\) has a unique representation as a sum of non-consecutive Fibonacci numbers \(\Fib_{k+1}\) (\(k\ge 1\)); see \cite{Lekkerkerker1952,Zeckendorf1972,Fraenkel1985}. Equivalently, there is a unique binary sequence \(z=(z_k)_{k\ge 1}\in\{0,1\}^{\NN}\) such that
+Zeckendorf's theorem asserts that every \(N\in\NN\) admits a unique representation
 \begin{equation}\label{eq:zeck}
-z_kz_{k+1}=0\quad\text{for all }k\ge 1,
+N=\sum_{k\ge 1} z_k\Fib_{k+1},
 \qquad
-N=\sum_{k\ge 1} z_k\Fib_{k+1}.
+z_kz_{k+1}=0\quad\text{for all }k\ge 1,
 \end{equation}
-We write \(Z(N)=z\) for this normalized digit sequence.
-
-Let
+with \(z_k\in\{0,1\}\); see \cite{Lekkerkerker1952,Zeckendorf1972,Fraenkel1985}. We write \(Z(N)=z\) for this normalized digit sequence, and
 \[
 \proj_m:\{0,1\}^{\NN}\to\{0,1\}^m,\qquad
-\proj_m(z)=(z_1,\dots,z_m),
+\proj_m(z)=(z_1,\dots,z_m)
 \]
-denote truncation to the first \(m\) digits.
+for truncation to the first \(m\) low-weight digits.
 
-\subsection{The fold}
+\subsection{The finite-window fold}
 
 \begin{definition}[Window-level fold]\label{def:fold}
 For \(m\ge 1\), define
@@ -76,56 +59,4 @@ For \(m\ge 1\), define
 \end{equation}
 \end{definition}
 
-In other words, \(\Fold_m\) replaces a possibly non-normal Fibonacci digit string by the Zeckendorf digits of the same value and then forgets everything beyond the visible window. Stable words are fixed points of this operation: if \(x\in X_m\), then \(\Fold_m(x)=x\).
-
-\begin{example}[A short fold computation]\label{ex:fold4}
-Let \(\omega=1110\in\Om_4\). Then
-\[
-N(\omega)=\Fib_2+\Fib_3+\Fib_4=1+2+3=6.
-\]
-Since
-\[
-6=\Fib_5+\Fib_2=5+1,
-\]
-we have
-\[
-Z(6)=(1,0,0,1,0,\dots),
-\qquad
-\Fold_4(1110)=1001.
-\]
-Even this small example shows the two basic features of folding: adjacent \(1\)s disappear, and weight may move to a higher Fibonacci site.
-\end{example}
-
-\begin{example}[Running example: raw word, normalized word, pair process, and decoder]\label{ex:running}
-Consider the length-\(5\) word
-\[
-\omega=11011.
-\]
-Its Fibonacci value is
-\[
-N(\omega)=\Fib_2+\Fib_3+\Fib_5+\Fib_6=1+2+5+8=16,
-\]
-so
-\[
-\Fold_5(\omega)=00100.
-\]
-If one reads the pair \((\omega,\Fold_5(\omega))\) from high Fibonacci weights to low ones, the corresponding reversed pair word is
-\[
-\mathcal{R}_5(\omega)=10|10|01|10|10.
-\]
-The same example will reappear in Section~\ref{sec:sequence}. Its three overlapping \(3\)-windows are
-\[
-110,\qquad 101,\qquad 011,
-\]
-and their folds are
-\[
-\Fold_3(110)=001,\qquad
-\Fold_3(101)=101,\qquad
-\Fold_3(011)=000.
-\]
-In the graph from Section~\ref{sec:sequence}, these labels form the path
-\[
-11 \xrightarrow{001} 10 \xrightarrow{101} 01 \xrightarrow{000} 11,
-\]
-so the three-label decoder recovers the appended bit \(1\) on the last edge.
-\end{example}
+Thus \(\Fold_m\) normalizes the Fibonacci value represented by \(\omega\) and then discards the part of the normalized word lying beyond the visible window. If \(x\in X_m\), then \(x\) is already in Zeckendorf form and therefore \(\Fold_m(x)=x\).
