@@ -22,6 +22,7 @@ import Omega.POM
 import Omega.PhysicalSpacetimeSkeleton
 import Omega.Preliminaries
 import Omega.Principles
+import Omega.RatioResultant
 import Omega.RecursiveAddressing
 import Omega.SPG
 import Omega.StatisticalStability
