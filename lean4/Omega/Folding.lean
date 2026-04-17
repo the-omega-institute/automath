@@ -185,6 +185,7 @@ import Omega.Folding.SecondMaxFiberGapConstant
 import Omega.Folding.ShiftDynamics
 import Omega.Folding.SignedFibonacciGapShift
 import Omega.Folding.SpectralQuarticAutTrivial
+import Omega.Folding.SecondCharacterReflectionAnnihilation
 import Omega.Folding.StableSyntax
 import Omega.Folding.StableSyntaxCounting
 import Omega.Folding.StableSyntaxEntropyLogqdim
