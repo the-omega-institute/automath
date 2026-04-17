@@ -20,6 +20,7 @@ import Omega.GroupUnification.ParryRigidity
 import Omega.GroupUnification.SMSignatureCyclicDivides6
 import Omega.GroupUnification.SecondOrder
 import Omega.GroupUnification.SpreadEquivalence
+import Omega.GroupUnification.TerminalWindow6FoldGaugeAutOutStructure
 import Omega.GroupUnification.TiltDynamics
 import Omega.GroupUnification.TiltedFreeEnergy
 import Omega.GroupUnification.TiltedLDP

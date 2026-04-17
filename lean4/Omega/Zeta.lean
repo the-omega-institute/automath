@@ -160,6 +160,7 @@ import Omega.Zeta.SL2LinearExternalCertificate
 import Omega.Zeta.SyncCyclotomicDegreeLaw
 import Omega.Zeta.SyncCyclotomicEliminationEvenness
 import Omega.Zeta.SyncBivariateEulerProduct
+import Omega.Zeta.SyncActionGap
 import Omega.Zeta.SyncCyclotomicDegreeLawPublication
 import Omega.Zeta.SyncKernelMixingRate
 import Omega.Zeta.SyncKernelResetWordWaitingTimeGeneralIid
