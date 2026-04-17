@@ -95,6 +95,7 @@ import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
 import Omega.POM.ParrySurfaceDerivative
 import Omega.POM.MaxFiberEvenChernoffExponent
 import Omega.POM.PathIndSetPolyClosed
+import Omega.POM.TimeReversalFixedpointRatioDecay
 import Omega.POM.TimeReversalSymmetricIndsetPolynomial
 import Omega.POM.PressureReflectionInequality
 import Omega.POM.PositiveNegativeMomentCoupling
