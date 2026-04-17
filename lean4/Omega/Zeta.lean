@@ -173,6 +173,7 @@ import Omega.Zeta.XiCauchyPoissonDensityRatioSecondOrderProfile
 import Omega.Zeta.XiCauchyPoissonSecondOrderShapeLimitNodeRigidity
 import Omega.Zeta.XiRealInput40LogMInftyTruncationBound
 import Omega.Zeta.XiZGPrefixRecursionMonotoneTailCertificate
+import Omega.Zeta.XiPronyMomentMapJacobianDelta4
 import Omega.Zeta.XiSingleDefectIntegratedClosedForm
 import Omega.Zeta.XiSingleDefectThresholdPhaseTransition
 import Omega.Zeta.ZeckendorfPrimeLanguage

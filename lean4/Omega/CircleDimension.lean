@@ -47,6 +47,7 @@ import Omega.CircleDimension.GcdimFiltrationInvariance
 import Omega.CircleDimension.GcdimTwoAxisTowerLaws
 import Omega.CircleDimension.GcdimPolynomialRing
 import Omega.CircleDimension.GcdimTwoAxisProductLaws
+import Omega.CircleDimension.GcdimTwoAxisFiniteness
 import Omega.CircleDimension.GcdimNoetherHilbertDimMinusOne
 import Omega.CircleDimension.GodelPrimeBitlengthLowerBound
 import Omega.CircleDimension.GodelScalarizationBitlengthLogB

@@ -44,6 +44,7 @@ import Omega.GU.FreeInvolutionCount
 import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GU.JetAlignmentUnification
 import Omega.GU.JoukowskyAreaPreservingCayley
+import Omega.GU.JoukowskyGodelPullbackFactorization
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.M11Z34CyclotomicRepresentationRigidity
 import Omega.GU.MinSectorBudget
