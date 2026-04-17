@@ -138,6 +138,7 @@ import Omega.Conclusion.Window6LowOrderTensorVacuum
 import Omega.Conclusion.Window6BoundaryConductorTwoZetaFlatness
 import Omega.Conclusion.Window6RepresentationZetaCountRatio
 import Omega.Conclusion.Window6ResidualBudget
+import Omega.Conclusion.Window6BinarySuffixCylinderTrichotomy
 import Omega.Conclusion.Window6OrdinaryBinaryStrictMajorization
 import Omega.Conclusion.Window6SizebiasEscortAmplification
 import Omega.Conclusion.Window6ThreeMomentSpectrumInversion
