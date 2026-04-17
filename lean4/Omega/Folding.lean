@@ -216,6 +216,7 @@ import Omega.Folding.TailPatchIncomplete
 import Omega.Folding.TranslationKernelFourierSgM
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.TranslationEquationOrbitSolutionSpace
+import Omega.Folding.GaugeAnomalyCumulant3
 import Omega.Folding.UniformSynchronizingLength
 import Omega.Folding.UnseenModesSpanZm
 import Omega.Folding.Value
