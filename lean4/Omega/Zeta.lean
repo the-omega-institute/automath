@@ -155,6 +155,7 @@ import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Zeta.SyncRhoM2Publication
 import Omega.Zeta.TorsionExactOrderLedgerSeeds
 import Omega.Zeta.ToeplitzDeterminantSignRigidity
+import Omega.Zeta.ToeplitzNegativeInertiaAllowedPerturbRadius
 import Omega.Zeta.TwistedDeterminantCumulants
 import Omega.Zeta.TwistedDeterminantRigidity
 import Omega.Zeta.ToeplitzNegativeInertiaSpectralGapStability
