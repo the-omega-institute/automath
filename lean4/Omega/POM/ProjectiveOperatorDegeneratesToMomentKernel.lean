@@ -51,12 +51,21 @@ theorem projectiveOperator_eq_matrixAction (B : κ → Matrix (Fin q) (Fin q) �
   rw [Finset.sum_comm]
   simp [Finset.sum_mul]
 
+/-- Paper-facing invariant-homogeneous proposition: the projective operator preserves the
+homogeneous subspace because it is realized by the summed matrix action.
+    prop:pom-projective-operator-invariant-homogeneous -/
+theorem paper_pom_projective_operator_invariant_homogeneous
+    {κ : Type*} [Fintype κ] {q : ℕ}
+    (B : κ → Matrix (Fin q) (Fin q) ℝ) (p : Fin q → ℝ) :
+    homogeneousInvariant B p := by
+  exact projectiveOperator_eq_matrixAction B p
+
 /-- Paper theorem: the degree-`q` projective operator acts on the homogeneous subspace through the
 moment-kernel matrix, so the matrix representation and the packaged spectral-radius seed agree. -/
 theorem paper_pom_projective_operator_degenerates_to_moment_kernel
     (B : κ → Matrix (Fin q) (Fin q) ℝ) (p : Fin q → ℝ) :
     homogeneousInvariant B p ∧
       matrixRepresentationIsMomentKernel B ∧ spectralRadiusMatches B := by
-  exact ⟨projectiveOperator_eq_matrixAction B p, rfl, rfl⟩
+  exact ⟨paper_pom_projective_operator_invariant_homogeneous B p, rfl, rfl⟩
 
 end Omega.POM
