@@ -152,6 +152,7 @@ import Omega.POM.S5FieldDiscriminantMonogenic
 import Omega.POM.S5GaloisArithmetic
 import Omega.POM.SufficientStatisticResidualNoninvertibility
 import Omega.POM.S5TwoSubsetDegree10
+import Omega.POM.SchurPlancherelEnergyIdentity
 import Omega.POM.SchurTomographyInversePartitionMonomials
 import Omega.POM.SideinfoExactEntropy
 import Omega.POM.StarMomentKernelCompression
