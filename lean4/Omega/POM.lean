@@ -115,6 +115,7 @@ import Omega.POM.S4Asymptotic
 import Omega.POM.S4Recurrence
 import Omega.POM.S5FieldDiscriminantMonogenic
 import Omega.POM.S5GaloisArithmetic
+import Omega.POM.SufficientStatisticResidualNoninvertibility
 import Omega.POM.S5TwoSubsetDegree10
 import Omega.POM.SchurTomographyInversePartitionMonomials
 import Omega.POM.SideinfoExactEntropy
