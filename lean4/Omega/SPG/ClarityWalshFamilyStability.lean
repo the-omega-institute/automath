@@ -24,4 +24,16 @@ theorem paper_spg_clarity_walsh_family_stability {ι : Type} [DecidableEq ι]
     _ = I.card * eps ^ 2 := by
       simp [nsmul_eq_mul]
 
+/-- Singleton-index specialization of the Walsh-family stability estimate.
+    cor:spg-clarity-walsh-spectral-stability -/
+theorem paper_spg_clarity_walsh_spectral_stability {ι : Type} [DecidableEq ι]
+    (i : ι) (a : ι → ℝ) (eps : ℝ) (heps : 0 ≤ eps) (ha : |a i| ≤ eps) :
+    Finset.sum ({i} : Finset ι) (fun j => |a j| ^ 2) ≤ eps ^ 2 := by
+  simpa using
+    paper_spg_clarity_walsh_family_stability ({i} : Finset ι) a eps heps
+      (by
+        intro j hj
+        have hji : j = i := by simpa using hj
+        simpa [hji] using ha)
+
 end Omega.SPG

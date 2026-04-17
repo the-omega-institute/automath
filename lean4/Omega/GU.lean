@@ -150,6 +150,7 @@ import Omega.GU.Window6LabeledSphericalDegree5CubatureCube
 import Omega.GU.Window6LabeledSphericalDegree6HarmonicDefect
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.Window6NonlumpableBySpectrum
+import Omega.GU.Window6NoEquivariantComplexOrSymplecticPolarization
 import Omega.GU.Window6LowrankNeedsObservableCompression
 import Omega.GU.Window6ResponseKernelMod23
 import Omega.GU.Window6RankGap
