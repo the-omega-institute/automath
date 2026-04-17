@@ -78,6 +78,7 @@ import Omega.Conclusion.PrimeRegisterKStretchDensityCriterion
 import Omega.Conclusion.PrimorialAdditiveVsGodelMultiplicative
 import Omega.Conclusion.PrimorialBodycodePoleResidueInversion
 import Omega.Conclusion.PrimorialEllipseUniqueFactorization
+import Omega.Conclusion.PrimorialPrefixArithmeticMatrixCriterion
 import Omega.Conclusion.PoissonCauchyMomentTomography
 import Omega.Conclusion.PrimorialMixedRadixAffine
 import Omega.Conclusion.PrimorialMixedRadixSeeds
