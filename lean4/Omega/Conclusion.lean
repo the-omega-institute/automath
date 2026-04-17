@@ -39,6 +39,7 @@ import Omega.Conclusion.FibonacciAnomalyBlock
 import Omega.Conclusion.FibonacciDistortionThreshold
 import Omega.Conclusion.FixedResolutionAxialScreenCorankAreaLaw
 import Omega.Conclusion.FixedResolutionPrimeBarrierPostprocessingNeutrality
+import Omega.Conclusion.FoldSinglepairVisibleObstructions
 import Omega.Conclusion.FoldHilbertRecognizable
 import Omega.Conclusion.FoldbinGroupoidTracialSimplex
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
