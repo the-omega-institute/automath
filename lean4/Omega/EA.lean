@@ -49,6 +49,7 @@ import Omega.EA.StableAddFiniteResolutionCompatibility
 import Omega.EA.StableAddNoWrapTruncation
 import Omega.EA.StableAddNormalizationRealization
 import Omega.EA.TimeSpaceCommuting
+import Omega.EA.SyncKernelResetWords
 import Omega.EA.ValInvariant
 import Omega.EA.Wedderburn
 import Omega.EA.ZeckendorfAddFst
