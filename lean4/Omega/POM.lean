@@ -99,6 +99,7 @@ import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantAreaFiberMultinomial
 import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.PrimitivePrimeLucas
+import Omega.POM.ProjectiveOperatorDegeneratesToMomentKernel
 import Omega.POM.QstarDiscreteVariationalThreshold
 import Omega.POM.RenyiDimensionSpectrum
 import Omega.POM.RenyiEndpoint
