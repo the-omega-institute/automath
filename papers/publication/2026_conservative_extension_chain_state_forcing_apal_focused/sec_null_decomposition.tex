@@ -1,14 +1,14 @@
 \section{Local Objects and Gluing Failure}\label{sec:null-decomposition}
 
-We now pass from admissible references to local objects. An admitted reference need not determine a global object, but it may still admit local witnesses and compatible local families. The distinction between these possibilities is the source of the gluing phenomena studied in this section. The companion paper treats the same local-object framework on meet-semilattice sites; in the present focused version the core reference-class, realization-prestack, and readout notions are restated explicitly for the broader preorder-pretopology setting used below.
+We now pass from admissible references to local objects. Even for an admitted reference, global realization may fail in several distinct ways: there may be no local sections at all, there may be local sections that do not agree, or compatible local sections may fail to glue. This section sets up the corresponding predicates, relates them to sheafification, and identifies visible classes with connected components of a chosen realization stack.
 
 \subsection{Refinement axioms}\label{sec:refinement-axioms}
 
-The local-object layer interacts with state refinement through the following standing axioms. Whenever $q\le p$ we fix the variance convention
+The local-object layer is required to behave functorially under refinement. Whenever $q\le p$ we fix the variance convention
 \[
 p\longrightarrow q,
 \]
-meaning that every object defined at the coarser state $p$ pulls back functorially to $q$. All structural maps below are natural in chains of refinements. The axioms are used explicitly in \Cref{prop:typed-readout-persistence,thm:null-classification-under-refinement} and implicitly wherever refinement stability of visible classes is invoked.
+meaning that objects defined at the coarser state $p$ pull back to $q$. The structural maps below are assumed to be natural in chains of refinements.
 
 \begin{definition}[Refinement axioms for the local-object layer]\label{def:refinement-axioms}
 Let $q\le p$ be a refinement of information states. The local-object layer satisfies:
@@ -59,7 +59,7 @@ defined on the admitted references $r:\mathsf{Ref}_s$ at $p$. The element $[r]_p
 \end{definition}
 
 \begin{definition}[Local reference frame]\label{def:local-reference-frame}
-For the chain-state forcing arguments of this paper, we work with a preorder of admitted reference classes equipped with pullback-stable covering families, extending the meet-semilattice site used in \cite[Definition~4.3]{MaZhang2026ConditionalGluingFailure}. Thus a \emph{local reference frame} is a triple
+A \emph{local reference frame} is a triple
 \[
 \mathcal{B}_{p,s}=\bigl(\mathcal{R}_s(p),\sqsubseteq_{p,s},\Cov_{p,s}\bigr),
 \]
@@ -88,10 +88,6 @@ then
 \end{enumerate}
 \end{definition}
 
-\begin{remark}
-\cite[Definition~4.3]{MaZhang2026ConditionalGluingFailure} treats the meet-semilattice specialization. The present paper keeps the broader preorder-pretopology input because the later refinement arguments use pullback-stable covers, not binary meets.
-\end{remark}
-
 \begin{proposition}[The cover relation defines a Grothendieck pretopology]\label{prop:local-reference-pretopology}
 Let $\mathcal{B}_{p,s}$ be the preorder category whose objects are the admitted reference classes in $\mathcal{R}_s(p)$ and whose morphisms are the refinement arrows
 \[
@@ -106,7 +102,7 @@ Then the covering families $\Cov_{p,s}$ form a Grothendieck pretopology on $\mat
 See Appendix~\ref{app:deferred-proofs}.
 \end{proof}
 
-Accordingly, we use the same symbol $\mathcal{B}_{p,s}$ for the resulting preorder category in the presheaf and sheaf constructions below.
+Henceforth the same symbol $\mathcal{B}_{p,s}$ denotes the corresponding preorder category.
 
 \begin{definition}[Local object functor]\label{def:local-object-functor}
 A \emph{local object functor} on $(p,s)$ is a contravariant functor
@@ -120,7 +116,7 @@ If $b\sqsubseteq_{p,s} a$, the induced restriction map is denoted by
 \end{definition}
 
 \begin{definition}[Three existence levels]\label{def:existence-levels}
-On the broader preorder-pretopology frames of \Cref{def:local-reference-frame}, let $r:\mathsf{Ref}_s$ and assume $M,p\Vdash \Adm_s(r)$. Write $a=[r]_p$.
+Let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$.
 \begin{enumerate}[label=(\roman*),nosep]
 \item $M,p\Vdash \LocSec_s(r)$ if there exists a cover $\{a_i\to a\}_{i\in I}\in\Cov_{p,s}(a)$ such that $F_{p,s}(a_i)\neq\varnothing$ for every $i\in I$.
 \item $M,p\Vdash \CompSec_s(r)$ if there exist a cover $\{a_i\to a\}_{i\in I}$ and sections $\sigma_i\in F_{p,s}(a_i)$ such that for every common refinement $c\sqsubseteq_{p,s} a_i,a_j$,
@@ -131,12 +127,8 @@ On the broader preorder-pretopology frames of \Cref{def:local-reference-frame}, 
 \end{enumerate}
 \end{definition}
 
-\begin{remark}
-\cite[Definition~4.5]{MaZhang2026ConditionalGluingFailure} formulates the same three predicates on a meet-semilattice site by checking agreement on pairwise meets. Here the compatibility clause is stated on the broader preorder-pretopology setup via common refinements.
-\end{remark}
-
 \begin{proposition}[Global sections yield compatible local sections]\label{prop:global-implies-compatible-local}
-In the preorder-pretopology setting of \Cref{def:local-reference-frame}, if $M,p\Vdash \Sec_s(r)$, then
+If $M,p\Vdash \Sec_s(r)$, then
 \[
 M,p\Vdash \CompSec_s(r)
 \qquad\text{and}\qquad
@@ -147,10 +139,6 @@ M,p\Vdash \LocSec_s(r).
 \begin{proof}
 See Appendix~\ref{app:deferred-proofs}.
 \end{proof}
-
-\begin{remark}
-\cite[Proposition~4.6]{MaZhang2026ConditionalGluingFailure} proves the meet-semilattice special case. The present form uses only the identity cover from \Cref{def:local-reference-frame}, so the implication persists on the broader preorder-pretopology setup.
-\end{remark}
 
 \begin{example}[Toy behaviors of $\LocSec$, $\CompSec$, and $\Sec$]\label{ex:toy-loc-comp-sec}
 Let $p$ be a state with one referenceable sort $s$ and a local reference frame generated by a root $a$, two refinements $u,v\sqsubseteq_{p,s} a$ that cover $a$, and their common refinement $w\sqsubseteq_{p,s} u,v$. Define three references $r_{\mathrm{loc}}, r_{\mathrm{cmp}}, r_{\mathrm{glue}}$ that share this frame but differ in their presheaves:
@@ -167,12 +155,12 @@ Then local witnesses exist but are incompatible on $w$, so $\LocSec_s(r_{\mathrm
 \item $F_{p,s}^{\mathrm{glue}}(u)=F_{p,s}^{\mathrm{glue}}(v)=F_{p,s}^{\mathrm{glue}}(w)=\{*\}$ while $F_{p,s}^{\mathrm{glue}}(a)=\varnothing$.
 Then both $\LocSec_s(r_{\mathrm{glue}})$ and $\CompSec_s(r_{\mathrm{glue}})$ hold, but $\Sec_s(r_{\mathrm{glue}})$ fails.
 \end{itemize}
-This toy picture isolates the three semantic levels before any gerbe machinery is invoked: absence may arise from missing local sections, incompatible local sections, or genuine gluing failure.
+The example distinguishes the three forms of failure that will be used throughout: absence of local sections, incompatibility of local sections, and failure of gluing.
 \end{example}
 
 \subsection{Sheafification and gluing failure}
 
-By \Cref{prop:local-reference-pretopology}, for fixed $(p,s)$ the local reference frame of \Cref{def:local-reference-frame} determines a site
+By \Cref{prop:local-reference-pretopology}, for fixed $(p,s)$ the local reference frame determines a site
 \[
 \mathcal{C}_{p,s}:=(\mathcal{B}_{p,s},\Cov_{p,s}),
 \]
@@ -187,7 +175,7 @@ a_{p,s}:\mathbf{PSh}(\mathcal{B}_{p,s})\to\mathbf{Sh}(\mathcal{C}_{p,s})
 for the associated sheafification functor.
 
 \begin{proposition}[Sheafification characterizes compatible local sectionability]\label{thm:sheafification-characterization}
-On the broader preorder site supplied by \Cref{prop:local-reference-pretopology}, let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. Then
+Let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. Then
 \[
 M,p\Vdash \CompSec_s(r)
 \quad\Longleftrightarrow\quad
@@ -199,12 +187,8 @@ M,p\Vdash \CompSec_s(r)
 See Appendix~\ref{app:deferred-proofs}.
 \end{proof}
 
-\begin{remark}\label{rem:sheafification-standard}
-\cite[Proposition~4.7]{MaZhang2026ConditionalGluingFailure} gives the meet-semilattice-site version. The present paper uses the same standard sheaf-theoretic argument on the broader preorder site produced by \Cref{prop:local-reference-pretopology}.
-\end{remark}
-
 \begin{corollary}[Sheaf condition at a reference]\label{cor:sheaf-local-to-global}
-On the same broader preorder site, if $F_{p,s}$ is already a sheaf at $a=[r]_p$, then
+If $F_{p,s}$ is already a sheaf at $a=[r]_p$, then
 \[
 M,p\Vdash \CompSec_s(r)
 \quad\Longleftrightarrow\quad
@@ -216,12 +200,8 @@ M,p\Vdash \Sec_s(r).
 If $F_{p,s}$ is already a sheaf at $a$, then the unit $F_{p,s}\to a_{p,s}F_{p,s}$ is an isomorphism at $a$. The claim therefore follows from \Cref{thm:sheafification-characterization}.
 \end{proof}
 
-\begin{remark}
-\cite[Corollary~4.8]{MaZhang2026ConditionalGluingFailure} records the meet-semilattice specialization. Here the same consequence is used on the preorder site of \Cref{prop:local-reference-pretopology}.
-\end{remark}
-
 \begin{corollary}[Sheafification removes gluing failure]\label{cor:sheafification-removes-glue}
-On the same broader preorder site, let $\Sec_s^{\sharp}(r)$ denote global sectionability computed with the sheafified local object functor $a_{p,s}F_{p,s}$. Then
+Let $\Sec_s^{\sharp}(r)$ denote global sectionability computed with the sheafified local object functor $a_{p,s}F_{p,s}$. Then
 \[
 M,p\Vdash \CompSec_s(r)
 \quad\Longleftrightarrow\quad
@@ -234,13 +214,9 @@ In particular, no admitted reference remains in gluing failure after sheafificat
 This is \Cref{thm:sheafification-characterization} rewritten for the sheaf $a_{p,s}F_{p,s}$. Once the presheaf has been replaced by a sheaf, compatible local existence and global existence coincide.
 \end{proof}
 
-\begin{remark}
-\cite[Corollary~4.9]{MaZhang2026ConditionalGluingFailure} treats the meet-semilattice case. The present form keeps the same conclusion on the broader preorder site supplied by \Cref{prop:local-reference-pretopology}.
-\end{remark}
-
 \subsection{Realization prestacks and connected components}
 
-The presheaf $F_{p,s}$ records only isomorphism classes of local realizations. To recover gerbes and cohomology one needs a groupoid-valued lift whose connected components give back $F_{p,s}$ after sheafification. Once an abelian band has been fixed, split lifts always exist; the substantive issue is whether a chosen lift is globally conservative at the terminal fibre and compatible with the later branchwise obstruction theory.
+The presheaf $F_{p,s}$ remembers only isomorphism classes of local realizations. To recover gerbes and obstruction classes we therefore pass to a groupoid-valued lift whose sheaf of connected components is the sheafification of $F_{p,s}$. Split lifts always exist once an abelian band has been fixed; the issue is to choose one that behaves correctly at the terminal fibre.
 
 \begin{definition}[Realization prestack and stackification]\label{def:realization-prestack}
 Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, and write
@@ -319,7 +295,7 @@ for every $U$, giving condition \textup{(i)} of \Cref{def:realization-prestack}.
 \end{proof}
 
 \begin{remark}[Why the separated case is singled out]\label{rem:separatedness-needed}
-The split construction shows that bare existence of some banded lift is not the issue. What matters later is the choice of a lift whose stackification still reflects the intended global semantics at $a$. Separatedness enters only in concrete verifications and finite-presentation criteria, not in the abstract existence of a split prestack.
+The split construction shows that the existence of a banded lift is formal. The substantive issue is the choice of a lift whose stackification remains faithful to the intended global semantics at $a$. Separatedness enters only in concrete verifications and finite-presentation arguments.
 \end{remark}
 
 \begin{proposition}[Components of the stackification]\label{prop:stackification-components}
@@ -376,43 +352,37 @@ F_{p,s}(a)\neq\varnothing
 If $(\mathfrak P_r)_a\neq\varnothing$, choose $y\in (\mathfrak P_r)_a$. Then $\iota_r(y)\in \mathfrak L_r(a)$, so $\mathfrak L_r(a)\neq\varnothing$. Conversely, if $x\in \mathfrak L_r(a)$, essential surjectivity of $(\iota_r)_a$ yields $y\in (\mathfrak P_r)_a$ with $\iota_r(y)\cong x$, so $(\mathfrak P_r)_a\neq\varnothing$.
 \end{proof}
 
-\begin{remark}[What remains conditional]\label{rem:gluing-sensitive-lifts}
-\Cref{prop:split-realization-prestack} provides a split lift for every local object functor and fixed band. The later obstruction theory needs more: a chosen lift whose stackification is globally conservative at $a$ and whose component gerbes admit the cohomological description used below. Accordingly, the branch obstruction classes of \Cref{sec:gerbe-obstruction} are attached to such a chosen lift and its band; no general existence theorem for such lifts is proved here.
+\begin{remark}[On the choice of lift]\label{rem:gluing-sensitive-lifts}
+\Cref{prop:split-realization-prestack} yields a split lift for every local object functor and fixed band. The obstruction theory developed later is relative to a chosen lift that is globally conservative at $a$ and admits the branchwise cohomological description used in \Cref{sec:gerbe-obstruction}.
 \end{remark}
 
-\subsection{Assumptions on the chosen-lift formalism}\label{subsec:scope-chosen-lift}
+\subsection{Chosen-lift hypotheses}\label{subsec:scope-chosen-lift}
 
-For later use we collect the verifications that enter the branch-obstruction analysis.
-
-Given an admitted reference $r:\mathsf{Ref}_s$, the chosen-lift formalism applies once the following steps have been carried out.
+For later use we isolate the verifications that enter the branch-obstruction analysis. Let $r:\mathsf{Ref}_s$ be admitted at $p$. The chosen-lift formalism applies once the following conditions have been checked.
 \begin{enumerate}[label=(\arabic*),nosep]
-\item (\emph{Local separatedness, when needed}) Check any separatedness required by the chosen example or by the finite-presentation criteria used later; the abstract split prestack of \Cref{prop:split-realization-prestack} itself exists without this assumption.
+\item (\emph{Local separatedness, when needed}) Verify any separatedness required by the example at hand or by the finite-presentation criteria used later.
 \item (\emph{Chosen lift}) Choose a realization prestack $\mathfrak P_r$ whose stackification $\mathfrak L_r$ is globally conservative at $a$ (\Cref{def:global-conservativity}).
 \item (\emph{Finite presentation}) Produce a finite cover $\mathcal U$ with finite nerve $N(\mathcal U)$ and trivialize the band on $\mathcal U$ so that \Cref{def:finite-nerve-presentation} applies.
-\item (\emph{Branch hypotheses}) When branch constancy or visibility invariance is needed, verify the bijectivity condition of \Cref{def:branch-constancy} on the chosen cover.
+\item (\emph{Branch hypotheses}) When branch constancy or visibility invariance is needed, verify the bijectivity condition of \Cref{def:branch-constancy}.
 \end{enumerate}
-Section~\ref{sec:homological-visibility} turns such a presentation into concrete homological data.
+Section~\ref{sec:homological-visibility} turns such a package into explicit homological data.
 
-The torus-type construction proved later in \Cref{ex:end-to-end} supplies an explicit instance of this scheme. There the local object functor is separated because every proper intersection carries a singleton fibre; the chosen prestack is globally conservative at the terminal fibre because both terminal fibres are empty; the band is constant on a finite good cover, so a finite nerve presentation exists; and the unique visible branch restricts to the unique connected component on every simplex, so branch constancy holds. The example is an existence verification of the hypothesis chain, not a general construction theorem for such lifts.
+The torus-type construction in \Cref{ex:end-to-end} furnishes a concrete instance of this scheme. There the local object functor is separated, the chosen prestack is globally conservative at the terminal fibre, the band is constant on a finite good cover, and the unique visible branch restricts to the unique connected component on every simplex.
 
-A similar pattern appears for finitely generated Kripke frames with Beth semantics \cite{Beth1956,Kripke1965}. If $r$ records admissible partial sections of a predicate, then the associated local object functor is a presheaf on the Alexandrov site of the frame and is separated by monotonicity. Promoting local sections to slice groupoids with identity automorphisms gives a realization prestack that is globally conservative at the limit node, finite antichain covers yield finite nerves, and the finiteness of the maximal nodes forces bijectivity on connected components. Thus the same hypotheses arise in a standard semantic example unrelated to contextuality.
+A similar pattern appears for finitely generated Kripke frames with Beth semantics \cite{Beth1956,Kripke1965}. If $r$ records admissible partial sections of a predicate, the associated local object functor is a presheaf on the Alexandrov site of the frame and is separated by monotonicity. Promoting local sections to slice groupoids with identity automorphisms gives a realization prestack that is globally conservative at the limit node, finite antichain covers yield finite nerves, and the finiteness of the maximal nodes yields branch constancy.
 
 \subsection{Visible value classes and typed readouts}
 
 \begin{definition}[Visible value classes]\label{def:visible-value-classes}
-On the broader preorder-pretopology frames of \Cref{def:local-reference-frame}, let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. A \emph{visible presentation} of a value at $r$ is a compatible local family
+Let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. A \emph{visible presentation} of a value at $r$ is a compatible local family
 \[
 \bigl(\{a_i\to a\}_{i\in I},(\sigma_i)_{i\in I}\bigr)
 \]
 as in \Cref{def:existence-levels}(ii). Two visible presentations are called \emph{value-equivalent} if after passage to a common refinement of their covers, the restricted local sections agree pointwise. A \emph{visible value class} is an equivalence class of visible presentations. The set of visible value classes of $r$ at $p$ is denoted by $\Vis_{p,s}(r)$.
 \end{definition}
 
-\begin{remark}
-\cite[Definition~4.19]{MaZhang2026ConditionalGluingFailure} formulates the same quotient on a meet-semilattice site. Here the equivalence relation is stated on the broader preorder-pretopology setup via common refinements.
-\end{remark}
-
 \begin{proposition}[Visible value classes as global connected components]\label{thm:visible-value-components}
-On the broader preorder site supplied by \Cref{prop:local-reference-pretopology}, assume that $r$ admits a realization prestack in the sense of \Cref{def:realization-prestack}. Then
+Assume that $r$ admits a realization prestack in the sense of \Cref{def:realization-prestack}. Then
 \[
 \Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a)\cong \pi_0(\mathfrak L_r)(a).
 \]
@@ -421,10 +391,6 @@ On the broader preorder site supplied by \Cref{prop:local-reference-pretopology}
 \begin{proof}
 See Appendix~\ref{app:deferred-proofs}.
 \end{proof}
-
-\begin{remark}
-\cite[Proposition~4.20]{MaZhang2026ConditionalGluingFailure} gives the meet-semilattice-site version. The present paper uses the same common-refinement sheafification argument on the broader preorder site of \Cref{prop:local-reference-pretopology}.
-\end{remark}
 
 \begin{definition}[Typed readout]\label{def:typed-readout}
 For a reference $r:\mathsf{Ref}_s$ at a state $p$, define the \emph{typed readout}
@@ -640,9 +606,7 @@ and identify the three reference classes with $a_{\mathrm{loc}},a_{\mathrm{cmp}}
 
 \subsection{Forcing necessity of the enrichment}
 
-The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. The following result makes this precise: the gluing predicates introduced at the local-object layer cannot be reduced to the lower layers.
-
-We first isolate the three language layers used in the separation argument and reformulate the local-object predicates in a one-variable, constant-free manner.
+The three null modes already show that information-state forcing separates cases that pointwise semantics does not register. The next theorem makes this precise: the gluing predicates introduced at the local-object layer are not reducible to the lower language. We first isolate the language layers used in the argument and recast the predicates in a one-variable, constant-free setting.
 
 \begin{definition}[Lower and enriched one-variable languages]\label{def:lower-enriched-languages}
 Fix a referenceable sort $s\in S_{\mathrm{ref}}$.
@@ -805,5 +769,5 @@ M,\rho_d\models\theta(x).
 \]
 Hence no lower-language formula separates $a$ from $b$, and no lower-language formula separates $c$ from $d$.
 
-If some $\mathcal L_1$-formula defined $\Sec_s(x)$ throughout all $\mathcal L_2$-expansions, it would separate $a$ from $b$, contradicting the previous paragraph. The same contradiction with $c$ and $d$ rules out definability of $\CompSec_s(x)$. Finally, $\Null^{\mathrm{glue}}_s(x)$ holds at $p_b$ but fails at $p_a$, so it too cannot be defined by any $\mathcal L_1$-formula.
+Thus no $\mathcal L_1$-formula separates $a$ from $b$, and none separates $c$ from $d$. This rules out definability of $\Sec_s(x)$ and $\CompSec_s(x)$. Since $\Null^{\mathrm{glue}}_s(x)$ holds at $p_b$ but fails at $p_a$, the same argument excludes definability of $\Null^{\mathrm{glue}}_s(x)$.
 \end{proof}
