@@ -49,7 +49,6 @@ import Omega.Zeta.ETDSZeckendorfRegularPowerlaw
 import Omega.Zeta.EnergyTailMassSeeds
 import Omega.Zeta.EvenLengthCorrection
 import Omega.Zeta.FiniteDefectPoissonL2EnergyClosedForm
-import Omega.Zeta.FiniteDefectPotentialRationalization
 import Omega.Zeta.FinitePartCyclicLiftDirichletMultipleSum
 import Omega.Zeta.FinitePartCyclicLiftLimsupSpectralGap
 import Omega.Zeta.FinitePartCyclicLiftMobiusInversion

@@ -10,7 +10,6 @@ import Omega.Folding.BernoulliPRegenerationTripleJointLaw
 import Omega.Folding.BernoulliPDoobTransformClosed
 import Omega.Folding.BernoulliPEndpointExactFinite
 import Omega.Folding.BernoulliPEndpointLdpRestated
-import Omega.Folding.BernoulliPFibonacciLowDefectShadow
 import Omega.Folding.BernoulliPGammaMax
 import Omega.Folding.BernoulliPJordanResonance
 import Omega.Folding.BernoulliPOutputDensity
@@ -50,7 +49,6 @@ import Omega.Folding.ExactMarkovOrderBernoulli
 import Omega.Folding.Fiber
 import Omega.Folding.FiberArithmetic
 import Omega.Folding.FiberArithmeticProperties
-import Omega.Folding.FiberSubsetConvolution
 import Omega.Folding.FiberConvolutionKernelInvertibility
 import Omega.Folding.FiberFourierPhaseRigidity
 import Omega.Folding.FiberFusion
@@ -85,8 +83,6 @@ import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
 import Omega.Folding.GaugeAnomalyLeyangBranchU1
 import Omega.Folding.GaugeAnomalyP10Degree
 import Omega.Folding.GaugeAnomalyP10Q10TschirnhausInverse
-import Omega.Folding.GaugeAnomalyQ10Tschirnhaus
-import Omega.Folding.GaugeAnomalyPSDRational
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.Folding.GaugeAnomalyRootUnitSamplingThreshold
 import Omega.Folding.GaugeAnomalyS4ArtinConductor
@@ -181,7 +177,6 @@ import Omega.Folding.SummableNatEventuallyZero
 import Omega.Folding.SyncDelay
 import Omega.Folding.TailPatchIncomplete
 import Omega.Folding.TimeLayerDichotomy
-import Omega.Folding.TranslationKernelFourierSgM
 import Omega.Folding.TranslationEquationOrbitSolutionSpace
 import Omega.Folding.UniformSynchronizingLength
 import Omega.Folding.Value

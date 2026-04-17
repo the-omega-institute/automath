@@ -52,7 +52,6 @@ import Omega.CircleDimension.GodelScalarizationBitlengthLogB
 import Omega.CircleDimension.HaarPullbackUniqueness
 import Omega.CircleDimension.HighrankPhaseRegisterMinimality
 import Omega.CircleDimension.HypercubeDerhamLift
-import Omega.CircleDimension.KernelIntegerTranslateRieszBounds
 import Omega.CircleDimension.KernelRKHSFeatureMap
 import Omega.CircleDimension.LissajousChebyshev
 import Omega.CircleDimension.LocalizationUniversalProperty

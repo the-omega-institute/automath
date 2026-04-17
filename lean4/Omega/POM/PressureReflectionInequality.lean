@@ -4,19 +4,6 @@ namespace Omega.POM
 
 open Finset
 
-/-- Chapter-local package for the pressure reflection inequality. The data record the
-finite-volume Cauchy--Schwarz inequality, the equality characterization by proportionality,
-and the resulting pressure reflection bound on the limsup exponents. -/
-structure PressureReflectionInequalityData where
-  finiteVolumeReflection : Prop
-  equalityCharacterization : Prop
-  tauReflection : Prop
-  finiteVolumeReflection_h : finiteVolumeReflection
-  deriveEqualityCharacterization :
-    finiteVolumeReflection → equalityCharacterization
-  deriveTauReflection :
-    finiteVolumeReflection → equalityCharacterization → tauReflection
-
 set_option maxHeartbeats 400000 in
 /-- Pressure reflection inequality on a finite support: positive and negative real-power moments
 pair by Cauchy-Schwarz to dominate the square of the ambient cardinality.
@@ -41,18 +28,5 @@ theorem paper_pom_pressure_reflection_inequality
             exact Real.rpow_add hdx s (-s))
   simpa [pow_two, Finset.sum_const, Finset.card_univ]
     using hcs
-
-/-- Package wrapper for the pressure reflection data record:
-apply Cauchy--Schwarz at finite volume, characterize equality by proportionality,
-and pass to the Fibonacci growth-rate limsup bound.
-    prop:pom-pressure-reflection-inequality -/
-theorem paper_pom_pressure_reflection_inequality_package
-    (D : PressureReflectionInequalityData) :
-    D.finiteVolumeReflection ∧ D.equalityCharacterization ∧ D.tauReflection := by
-  have hEq : D.equalityCharacterization :=
-    D.deriveEqualityCharacterization D.finiteVolumeReflection_h
-  have hTau : D.tauReflection :=
-    D.deriveTauReflection D.finiteVolumeReflection_h hEq
-  exact ⟨D.finiteVolumeReflection_h, hEq, hTau⟩
 
 end Omega.POM

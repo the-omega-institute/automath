@@ -9,4 +9,3 @@ import Omega.Discussion.HypercubeSpectralTailFromFlux
 import Omega.Discussion.HypercubeStokesFourierBinomial
 import Omega.Discussion.SquierZeroCurvatureStrictification
 import Omega.Discussion.SquierCurvatureHolonomyStokes
-import Omega.Discussion.WdimFiniteIndexStability

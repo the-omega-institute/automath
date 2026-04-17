@@ -30,9 +30,7 @@ import Omega.EA.OnlineDelayFoldSyncMealyMinimality
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.ParallelAdditionU1Degeneracy
 import Omega.EA.PrimeLedger
-import Omega.EA.PrimeRegisterEllipseInvertGodel
 import Omega.EA.PrimeRegisterFibValuation
-import Omega.EA.PrimeRegisterGodelJoukowskyEllipse
 import Omega.EA.PrimeRegisterLocalMoves
 import Omega.EA.PrimeRegisterMultiplicativeNormalizationAdditiveIso
 import Omega.EA.PrimeRegisterNormalFormUniqueness
@@ -49,7 +47,6 @@ import Omega.EA.StableAddComputable
 import Omega.EA.StableAddFiniteResolutionCompatibility
 import Omega.EA.StableAddNoWrapTruncation
 import Omega.EA.StableAddNormalizationRealization
-import Omega.EA.Sync10RegenerationCorrelationBound
 import Omega.EA.TimeSpaceCommuting
 import Omega.EA.ValInvariant
 import Omega.EA.Wedderburn
