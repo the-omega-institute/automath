@@ -89,6 +89,7 @@ import Omega.Zeta.HankelVandermonde3Recovery
 import Omega.Zeta.HankelVandermonde4
 import Omega.Zeta.HankelVsPronySquareGap
 import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
+import Omega.Zeta.XiFiberSpectrumHankelConductorPronyPadic
 import Omega.Zeta.HankelNullspaceTruncatedIdealStructure
 import Omega.Zeta.HankelWindowFiberDelta
 import Omega.Zeta.HankelWindowAffineFamily

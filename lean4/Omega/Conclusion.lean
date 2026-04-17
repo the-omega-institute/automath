@@ -54,6 +54,7 @@ import Omega.Conclusion.JGEllipsePackingSqrtLaw
 import Omega.Conclusion.KernelChainRule
 import Omega.Conclusion.LocalizedKernelInclusionExclusionMobius
 import Omega.Conclusion.KrylovLowrankRigidity
+import Omega.Conclusion.LeyangOffdiagonalTranspositionQuotient
 import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.MinLatchesLogStates
 import Omega.Conclusion.MultiplicativeTropicalExactnessTriad
