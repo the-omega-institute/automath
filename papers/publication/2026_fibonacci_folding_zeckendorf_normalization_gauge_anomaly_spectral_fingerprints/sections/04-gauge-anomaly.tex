@@ -45,11 +45,15 @@ The identity \(\Fib_{k+1}+\Fib_{k+2}=\Fib_{k+3}\) shows that each block \(110\) 
 \qquad
 \Fold_L\bigl((110)^n0\bigr)=(001)^n0.
 \]
-In the remaining case,
+In the remaining case \(L=3n+2\), so the terminal block \(11\) occupies the LH positions \(L-1\) and \(L\) and contributes
 \[
-(110)^n11
+\Fib_L+\Fib_{L+1}=\Fib_{L+2},
 \]
-has the same value as \((001)^n00\) on the first \(L\) coordinates together with one extra \(1\) at position \(L+1\), because the terminal block \(11\) contributes \(\Fib_{L+1}+\Fib_{L+2}=\Fib_{L+3}\). Hence the first \(L\) digits of \(\Fold_L((110)^n11)\) are \((001)^n00\).
+which is exactly the weight of a single \(1\) at the new position \(L+1\). Hence
+\[
+N\bigl((110)^n11\bigr)=N\bigl((001)^n00\bigr)+\Fib_{L+2},
+\]
+so the first \(L\) digits of \(\Fold_L((110)^n11)\) are \((001)^n00\).
 
 Now delete the last coordinate. When \(r=0\), the naive truncation is \((110)^{n-1}11\) and the fold-aware truncation is \((001)^{n-1}00\); when \(r=1\), they are \((110)^n\) and \((001)^n\); when \(r=2\), they are \((110)^n1\) and \((001)^n0\). In each case the two length-\(m\) words are coordinatewise complementary. Therefore every coordinate contributes \(1\) to the Hamming distance, so \(G_m(\omega^\star)=m\).
 \end{proof}
@@ -95,7 +99,7 @@ Thus \(G_4(\omega^\star)=4\), with disagreement at every site.
 \label{subsec:joint-law}
 To state the limiting statistical results precisely, we pass from finite windows to the stationary bulk model. Let \(\eta=(\eta_t)_{t\in\ZZ}\) be a bi-infinite Bernoulli-\(\frac12\) sequence, and let \((X_t,Y_t)_{t\in\ZZ}\) be the sitewise microstate/stable-digit process whose finite factors are encoded by the reversed pair shift of Appendix~\ref{app:pressure}. Thus \(X_t=\eta_t\), while \(Y_t\) is the stable digit at site \(t\) in the bulk limit. By construction, \((X_t,Y_t)\) is stationary. We refer to its law as the \emph{bulk law}.
 
-The next theorem is the formal core of the four-state model. It isolates the exact point at which the bulk pair process becomes finite-state: the interior language of reversed pair factors is \emph{exactly} the label language of a four-state right Fischer cover.
+The next theorem is the formal core of the four-state model. It isolates the exact point at which the bulk pair process becomes finite-state: the interior language of reversed pair factors is \emph{exactly} the label language of a four-state synchronized right-resolving presentation.
 
 \begin{theorem}[Interior language theorem for reversed pair factors]\label{thm:pair-language}
 Let \(G_{\mathrm{pair}}\) be the labeled graph with state set \(\mathcal{S}=\{00,01,10,11\}\) and edges
@@ -131,13 +135,13 @@ Conversely, every edge of \(G_{\mathrm{pair}}\) is realized by one of the synchr
 Finally, Lemma~\ref{lem:zero-padding} allows us to increase the initial high-weight padding arbitrarily, so the realized path label can be placed at arbitrary distance from the boundary. This proves both directions.
 \end{proof}
 
-Standard path-counting for primitive right-resolving presentations therefore implies that the bulk law is the local weak limit of the uniform measures on \(\Om_M\): if \(\omega^{(M)}\) is uniform on \(\Om_M\) and \(k_M\to\infty\) with \(M-k_M\to\infty\), then
+Since the first coordinate of each pair symbol is the microstate digit itself, the map \(\omega\mapsto \mathcal{R}_M(\omega)\) is injective, so the uniform measure on \(\Om_M\) is exactly the uniform measure on admissible reversed pair words of length \(M\). Proposition~\ref{prop:bulk-limit} therefore implies that the bulk law is the local weak limit of the uniform measures on \(\Om_M\): if \(\omega^{(M)}\) is uniform on \(\Om_M\) and \(k_M\to\infty\) with \(M-k_M\to\infty\), then
 \[
 \bigl(\omega^{(M)}_{k_M},(\Fold_M(\omega^{(M)}))_{k_M}\bigr)
 \Rightarrow
 (X_0,Y_0);
 \]
-see \cite[Chapter~8]{LindMarcus1995} and \cite[Chapter~2]{Kitchens1998}.
+see \cite[Section~8.4]{LindMarcus1995} and \cite[Chapter~2]{Kitchens1998}.
 
 \begin{theorem}[Exact bulk joint law]\label{thm:joint}
 Under the bulk law, the one-site joint distribution of \((X_0,Y_0)\) is
@@ -157,7 +161,7 @@ Consequently,
 \end{theorem}
 
 \begin{proof}
-By Theorem~\ref{thm:pair-language}, the graph \(G_{\mathrm{pair}}\) is the right Fischer cover of the interior reversed-pair language. In the state order \((00,01,10,11)\), its adjacency matrix is
+By Theorem~\ref{thm:pair-language}, the graph \(G_{\mathrm{pair}}\) is a primitive right-resolving presentation of the interior reversed-pair language. In the state order \((00,01,10,11)\), its adjacency matrix is
 \[
 A=\begin{pmatrix}
 1&1&0&1\\
@@ -194,7 +198,7 @@ which is exactly the stated table. The two displayed marginals follow by summati
 \end{proof}
 
 \begin{remark}[Comparison with earlier hidden-Markov models]
-The two-sided normalization transducers studied by Alexander--Zagier, Sidorov--Vershik, Kempton, and Bezhaeva--Oseledets \cite{AlexanderZagier1991,SidorovVershik1998,Kempton2014,BezhaevaOseledets2007,BezhaevaOseledets2010} also produce the marginal density \(\PP(Y_0=1)=5/18\). Our four-state graph should not be read as a replacement for those classical models of the normalized-digit process. It is a synchronized presentation for the \emph{pair} observable \((X_t,Y_t)\), and therefore for the restriction discrepancy \(X_t\oplus Y_t\). The agreement of the \(Y\)-marginal is a consistency check with the earlier Erd\H{o}s-measure literature.
+The two-sided normalization transducers studied by Alexander--Zagier, Sidorov--Vershik, Kempton, and Bezhaeva--Oseledets \cite{AlexanderZagier1991,SidorovVershik1998,KemptonDigits2014,BezhaevaOseledets2007,BezhaevaOseledets2010} also produce the marginal density \(\PP(Y_0=1)=5/18\). Our four-state graph is not a replacement for those classical models of the normalized-digit process. It is a synchronized presentation for the \emph{pair} observable \((X_t,Y_t)\), and therefore for the restriction discrepancy \(X_t\oplus Y_t\). The agreement of the \(Y\)-marginal confirms compatibility with the earlier Erd\H{o}s-measure literature.
 \end{remark}
 
 \subsection{Law of large numbers and central limit theorem}
@@ -216,13 +220,13 @@ and
 \end{corollary}
 
 \begin{proof}
-Appendix~\ref{app:pressure} realizes \(\Delta_t\) as a bounded observable of an irreducible, aperiodic, finite-state Markov chain (equivalently, of the edge chain of the four-state Fischer cover). The almost-sure law of large numbers is therefore the ergodic theorem for finite-state Markov chains \cite[Section~4]{Billingsley1961}. The central limit theorem follows from the standard Markov-chain CLT, for instance in Gordin's martingale-coboundary form \cite{Gordin1969}; see also \cite[Chapter~4]{ParryPollicott1990}. The asymptotic variance is the second derivative at \(0\) of the logarithmic pressure of the tilted matrix \(A_\theta\) computed in Appendix~\ref{app:pressure}, namely
+Appendix~\ref{app:pressure} realizes \(\Delta_t\) as a bounded observable of an irreducible, aperiodic, finite-state Markov chain, namely the edge chain of the four-state synchronized presentation. The almost-sure law of large numbers is therefore the ergodic theorem for finite-state Markov chains \cite[Section~4]{Billingsley1961}. The central limit theorem follows from the standard Markov-chain CLT, for instance in Gordin's martingale-coboundary form \cite{Gordin1969}; see also \cite[Chapter~4]{ParryPollicott1990}. The asymptotic variance is the second derivative at \(0\) of the logarithmic pressure of the tilted matrix \(A_\theta\) computed in Appendix~\ref{app:pressure}, namely
 \[
 \Lambda''(0)=\frac{118}{243}.
 \]
 \end{proof}
 \begin{remark}
-The LLN and CLT are routine consequences of the four-state Markov structure established in Theorem~\ref{thm:joint} and Appendix~\ref{app:pressure}; the model-specific content is the anomaly density $4/9$ and the variance constant $118/243$.
+The LLN and CLT are standard consequences of the four-state Markov structure established in Theorem~\ref{thm:joint} and Appendix~\ref{app:pressure}; the model-specific content is the anomaly density \(4/9\) and the variance constant \(118/243\).
 \end{remark}
 
 \begin{remark}[Finite-window interpretation]
@@ -233,14 +237,14 @@ The process \((X_t,Y_t)\) is the bulk limit of the uniform measures on finite wi
 \label{subsec:spectrum}
 Let \((\Delta_t)_{t\in\ZZ}\) be the stationary bulk discrepancy process.
 
-\begin{theorem}[Autocovariance and power spectral density]\label{thm:spectrum}
+\begin{theorem}[Autocovariance and spectrum]\label{thm:spectrum}
 The autocovariances \(c_j:=\Cov(\Delta_0,\Delta_j)\) satisfy
 \[
-\begin{aligned}
-c_0&=\frac{20}{81},\\
-c_j&=2^{-j}\!\left(\frac{1}{8}+(-1)^j\!\left(\frac{7}{648}+\frac{j}{108}\right)\right),\\
-&\hspace{5.8cm} (j\ge 1).
-\end{aligned}
+c_0=\frac{20}{81},
+\]
+and, for \(j\ge1\),
+\[
+c_j=2^{-j}\!\left(\frac{1}{8}+(-1)^j\!\left(\frac{7}{648}+\frac{j}{108}\right)\right).
 \]
 The two-sided power spectral density
 \[

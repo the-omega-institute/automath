@@ -1,7 +1,7 @@
 \section{Weighted partition functions: a fourth-order minimal recurrence, discriminant factorization, and output-weight statistics}
 \label{sec:partition}
 
-The finite-state input for this section has already been fixed in Section~\ref{sec:gauge}. What remains is largely transfer-matrix bookkeeping. We keep the main structural formulas in the body because they organize the output-weight statistics used later, but the derivational algebra is routine and is deferred to Appendix~\ref{app:recurrence}.
+The finite-state input for this section has already been fixed in Section~\ref{sec:gauge}. Once that presentation is available, the remaining arguments reduce to explicit transfer-matrix calculations. We keep the main structural formulas in the body because they organize the output-weight statistics used later, while Appendix~\ref{app:recurrence} contains the corresponding linear-representation and discriminant calculations.
 
 \subsection{Fold fibers and a weighted partition function}
 For \(x\in X_m\), define the fold-fiber multiplicity
@@ -21,14 +21,15 @@ Equivalently,
 Z_m(y)=\sum_{\omega\in\Om_m} y^{\abs{\Fold_m(\omega)}_1},
 \]
 so \(Z_m(y)\) is the moment generating polynomial of the output Hamming weight under the uniform measure on \(\Om_m\).
+We use the convention \(Z_0(y)=1\), corresponding to the empty word.
 
 \subsection{Weighted automaton and state interpretation}
 The four-state synchronized graph from Appendix~\ref{app:pressure} may be read as a weighted automaton. Each state \(s\in\{00,01,10,11\}\) records the two trailing symbols of the reversed pair process \((X_t,Y_t)\); the outgoing edges from \(s\) encode the admissible appended microstate bits together with their normalized outputs. Weighting each edge by \(y^{Y}\), where \(Y\) is the second component of the corresponding label, therefore records the contribution of that transition to the generating function of \(\abs{\Fold_m(\omega)}_1\). This is the standard transfer-matrix set-up used in weighted numeration problems \cite{GrabnerKirschenhoferTichy2002,DumontSidorovThomas1999}.
 
-The synchronized presentation always starts in state \(00\), because padding by high-weight zeros forces the fold to begin with two stable zeros (Lemma~\ref{lem:zero-padding}). After \(m\) steps the automaton is in some terminal state \(s\). To forget that state we append the unique completion associated with \(s\): if \(s=00\) there is nothing to add, whereas if \(s\in\{01,10,11\}\) one must resolve the pending carry by running the normalization transducer through the short follower set displayed in Appendix~\ref{app:pressure}. These completions contribute rational functions in \(y\); collecting them into a column vector defines the terminal weights \(\beta(y)\) used below.
+The synchronized presentation always starts in state \(00\), because padding by high-weight zeros forces the fold to begin with two stable zeros (Lemma~\ref{lem:zero-padding}). Since the weighted language recognized by this finite graph is rational, \(Z(t;y)\) admits a four-dimensional linear representation. Appendix~\ref{app:recurrence} computes a convenient terminal vector \(\beta(y)\) for that representation.
 
 \subsection{Boundary-vector form}
-With \(\alpha\) encoding the initial state \(00\) and \(\beta(y)\) encoding the completion weights, the partition function admits the explicit boundary-vector form
+With \(\alpha\) encoding the initial state \(00\) and \(\beta(y)\) the terminal vector of this linear representation, the partition function admits the explicit boundary-vector form
 \begin{equation}\label{eq:boundary-vector}
 Z_m(y)=\alpha^{\mathsf T} M(y)^m \beta(y),
 \end{equation}
@@ -57,7 +58,7 @@ M(y)=
 1&0&0&0
 \end{pmatrix}.
 \end{equation}
-The entries of \(\beta(y)\) are obtained by summing the geometric series of completions determined by the follower sets of Proposition~\ref{prop:transitions}---for instance, the tail after state \(01\) alternates deterministically and contributes \(1/(1+y)\), while the tails after states \(10\) and \(11\) resolve a pending \(1\) in one or two steps. Although \(\beta(y)\) is rational, the product \(\alpha^{\mathsf T}M(y)^m\beta(y)\) is a polynomial in \(y\); the apparent poles at \(y=0\) and \(y=-1\) cancel identically.
+Appendix~\ref{app:recurrence} derives \(\beta(y)\) by solving the linear-representation equations against the directly enumerated initial polynomials \(Z_0,\dots,Z_3\). Although \(\beta(y)\) is rational, the product \(\alpha^{\mathsf T}M(y)^m\beta(y)\) is a polynomial in \(y\); the apparent poles at \(y=0\) and \(y=-1\) cancel identically.
 
 \subsection{A fourth-order minimal recurrence}
 \begin{proposition}[Fourth-order recurrence]\label{prop:recurrence}
@@ -92,22 +93,11 @@ Equivalently, the characteristic polynomial of the transfer matrix may be taken 
 \end{proposition}
 
 \begin{proof}
-Appendix~\ref{app:recurrence} records the weighted transfer matrix \(M(y)\) from \eqref{eq:My}. The explicit boundary vectors \eqref{eq:boundary-data} are chosen so that
-\[
-\alpha^{\mathsf T}M(y)^m\beta(y)=Z_m(y)\qquad (m=0,1,2,3),
-\]
-that is,
-\[
-\alpha^{\mathsf T}\beta(y)=1,\qquad
-\alpha^{\mathsf T}M(y)\beta(y)=1+y,\qquad
-\alpha^{\mathsf T}M(y)^2\beta(y)=2+2y,\qquad
-\alpha^{\mathsf T}M(y)^3\beta(y)=2+5y+y^2.
-\]
-Since every scalar sequence extracted from a fixed transfer matrix satisfies the characteristic recurrence of that matrix, \eqref{eq:boundary-vector} holds for all \(m\ge0\). A direct determinant computation gives
+Appendix~\ref{app:recurrence} derives the linear-representation identity \eqref{eq:boundary-vector} from the synchronized weighted automaton. Once \eqref{eq:boundary-vector} is available, a direct determinant computation gives
 \[
 \det(\lambda I-M(y))=\Pi(\lambda,y),
 \]
-hence \eqref{eq:Zm-rec} by Cayley--Hamilton. Summing the recurrence against \(t^m\) and solving for \(Z(t;y)\) yields \eqref{eq:Zty}--\eqref{eq:Nty}. One verifies the numerator by checking that \(Z(t;y)\cdot D(t;y)=(1+ty)(1-yt^2)\) using the four initial values above.
+hence \eqref{eq:Zm-rec} by Cayley--Hamilton. Summing the recurrence against \(t^m\) and using the initial values yields \eqref{eq:Zty}--\eqref{eq:Nty}. One verifies the numerator by checking that \(Z(t;y)\cdot D(t;y)=(1+ty)(1-yt^2)\) using \(Z_0,\dots,Z_3\).
 \end{proof}
 
 \subsection{Explicit generating function and exceptional locus}
@@ -203,7 +193,7 @@ The function \(\Lambda_Y\) is real-analytic near \(0\). Differentiating the Perr
 \qquad
 \Lambda_Y''(0)=\frac{67}{972}.
 \]
-Therefore the convergence in probability and the central limit theorem follow from the usual analytic-perturbation argument for finite-state transfer matrices; see \cite[Chapter~4]{ParryPollicott1990} or \cite[Chapter~6]{Ruelle2004}. Since \(\Lambda_Y\) is finite on all of \(\RR\), the G\"artner--Ellis theorem yields the stated large deviation principle with rate function \(I\).
+Therefore the convergence in probability and the central limit theorem follow from the usual analytic-perturbation argument for finite-state transfer matrices; see \cite[Chapter~4]{ParryPollicott1990} or \cite[Chapter~6]{Ruelle2004}. Since \(\theta\mapsto M(e^\theta)\) is analytic and strictly positive for every \(\theta\in\RR\), the function \(\Lambda_Y\) is finite and differentiable on all of \(\RR\). The G\"artner--Ellis theorem therefore yields the stated large deviation principle with rate function \(I\).
 \end{proof}
 
 \begin{remark}[Comparison with interval-based Zeckendorf statistics]\label{rem:zeck-comparison}
