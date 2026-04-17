@@ -34,4 +34,22 @@ theorem paper_fold_bernoulli_p_endpoint_exact_finite
   intro k r hr
   interval_cases r <;> simp [fullMismatchResidueValue, hFull0, hFull1, hFull2]
 
+/-- Zero-mismatch specialization isolating the dominant `lambdaPlus` term and bounding the
+    `lambdaMinus` remainder exactly.
+    thm:fold-bernoulli-p-zero-mismatch-exact-tail -/
+theorem paper_fold_bernoulli_p_zero_mismatch_exact_tail
+    (zeroMismatch : ℕ → ℚ) (lambdaPlus lambdaMinus CPlus CMinus A : ℚ)
+    (hZero : ∀ m,
+      zeroMismatch m = zeroMismatchClosedForm CPlus CMinus lambdaPlus lambdaMinus m)
+    (hTail : ∀ m, |CMinus * lambdaMinus ^ m| <= A * |lambdaMinus| ^ m) :
+    (∀ m, zeroMismatch m = zeroMismatchClosedForm CPlus CMinus lambdaPlus lambdaMinus m) ∧
+      (∀ m, |zeroMismatch m - CPlus * lambdaPlus ^ m| <= A * |lambdaMinus| ^ m) := by
+  refine ⟨hZero, ?_⟩
+  intro m
+  have hrewrite : zeroMismatch m - CPlus * lambdaPlus ^ m = CMinus * lambdaMinus ^ m := by
+    rw [hZero m, zeroMismatchClosedForm]
+    ring
+  rw [hrewrite]
+  exact hTail m
+
 end Omega.Folding

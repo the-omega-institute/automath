@@ -107,4 +107,13 @@ theorem paper_conclusion_realinput40_uv_atomcore_package :
     (∀ logM logM_core vz2 : ℝ, logM = logM_core + vz2 →
       logM - logM_core = vz2) := paper_conclusion_realinput40_uv_atomcore_seeds
 
+/-- Paper-facing wrapper for the atom-dominant parity trace law and strict spectral gap.
+    thm:conclusion-realinput40-uv-atom-dominant-trace-law -/
+theorem paper_conclusion_realinput40_uv_atom_dominant_trace_law
+    (n : ℕ) (ρ Λ₂ : ℝ) (hρ : 0 < ρ) (hΛ : Λ₂ < ρ) :
+    ((Even n → (1 : ℤ) ^ n + (-1) ^ n = 2) ∧
+      (Odd n → (1 : ℤ) ^ n + (-1) ^ n = 0) ∧
+      0 < 1 - Λ₂ / ρ) := by
+  refine ⟨even_sign_sum n, odd_sign_sum n, spectral_gap_pos ρ Λ₂ hρ hΛ⟩
+
 end Omega.Conclusion.RealInput40UVAtomCore

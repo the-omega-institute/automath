@@ -1,39 +1,62 @@
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
+import Mathlib.Data.Real.Basic
 import Mathlib.Tactic
-import Omega.CircleDimension.KernelRKHSFeatureMap
-import Omega.CircleDimension.PoissonLatticeSampling
 
 namespace Omega.CircleDimension
 
-/-- Chapter-local wrapper for the integer-translate Riesz package attached to the difference
-kernel `K(a,b) = 2 / (4 + (a - b)^2)`. The fields record that the Toeplitz symbol has been
-assembled from the RKHS feature-map and lattice-sampling interfaces, that its sharp minimum and
-maximum have been identified, and that these extrema have been converted into the Riesz basis and
-the optimal frame bounds. -/
-structure KernelIntegerTranslateRieszBoundsData where
-  toeplitzSymbolComputed : Prop
-  sharpMinValueIdentified : Prop
-  sharpMaxValueIdentified : Prop
-  rieszBasis : Prop
-  sharpLowerBound : Prop
-  sharpUpperBound : Prop
-  toeplitzSymbolComputed_h : toeplitzSymbolComputed
-  deriveSharpMinValue : toeplitzSymbolComputed → sharpMinValueIdentified
-  deriveSharpMaxValue : toeplitzSymbolComputed → sharpMaxValueIdentified
-  deriveRieszBasis :
-    sharpMinValueIdentified → sharpMaxValueIdentified → rieszBasis
-  deriveSharpLowerBound : sharpMinValueIdentified → sharpLowerBound
-  deriveSharpUpperBound : sharpMaxValueIdentified → sharpUpperBound
+/-- Closed-form symbol of the integer-translate Gram convolution for the Cauchy kernel
+`K(a, b) = 2 / (4 + (a - b)^2)`. -/
+noncomputable def kernelIntegerTranslateSymbol (θ : ℝ) : ℝ :=
+  Real.pi * Real.cosh (2 * (Real.pi - |θ|)) / Real.sinh (2 * Real.pi)
 
-set_option maxHeartbeats 400000 in
-/-- Paper-facing wrapper for the sharp Riesz bounds of the integer translates of the
-CircleDimension kernel `K(a,b) = 2 / (4 + (a - b)^2)`.
+/-- Sharp lower Riesz bound coming from the minimum of the symbol on `[-π, π]`. -/
+noncomputable def kernelIntegerTranslateLowerBound : ℝ :=
+  Real.pi / Real.sinh (2 * Real.pi)
+
+/-- Sharp upper Riesz bound coming from the maximum of the symbol on `[-π, π]`. -/
+noncomputable def kernelIntegerTranslateUpperBound : ℝ :=
+  Real.pi * Real.cosh (2 * Real.pi) / Real.sinh (2 * Real.pi)
+
+/-- Paper-facing exact Riesz bounds for the integer translates of the CircleDimension kernel:
+the closed-form symbol stays between its endpoint values on `[-π, π]`, and the endpoints realize
+the sharp lower/upper bounds.
     prop:cdim-kernel-integer-translate-riesz-bounds -/
-theorem paper_cdim_kernel_integer_translate_riesz_bounds
-    (D : KernelIntegerTranslateRieszBoundsData) :
-    D.rieszBasis ∧ D.sharpLowerBound ∧ D.sharpUpperBound := by
-  have hMin : D.sharpMinValueIdentified := D.deriveSharpMinValue D.toeplitzSymbolComputed_h
-  have hMax : D.sharpMaxValueIdentified := D.deriveSharpMaxValue D.toeplitzSymbolComputed_h
-  exact ⟨D.deriveRieszBasis hMin hMax, D.deriveSharpLowerBound hMin,
-    D.deriveSharpUpperBound hMax⟩
+theorem paper_cdim_kernel_integer_translate_riesz_bounds :
+    (∀ θ ∈ Set.Icc (-Real.pi) Real.pi,
+      kernelIntegerTranslateLowerBound ≤ kernelIntegerTranslateSymbol θ ∧
+        kernelIntegerTranslateSymbol θ ≤ kernelIntegerTranslateUpperBound) ∧
+      kernelIntegerTranslateSymbol Real.pi = kernelIntegerTranslateLowerBound ∧
+      kernelIntegerTranslateSymbol 0 = kernelIntegerTranslateUpperBound := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro θ hθ
+    rcases hθ with ⟨hθ_left, hθ_right⟩
+    have habs : |θ| ≤ Real.pi := by
+      rw [abs_le]
+      constructor
+      · linarith
+      · linarith
+    have hsub_nonneg : 0 ≤ Real.pi - |θ| := sub_nonneg.mpr habs
+    have hsub_le : Real.pi - |θ| ≤ Real.pi := by
+      nlinarith [abs_nonneg θ]
+    have hdouble_nonneg : 0 ≤ 2 * (Real.pi - |θ|) := by nlinarith
+    have hdouble_le : 2 * (Real.pi - |θ|) ≤ 2 * Real.pi := by nlinarith
+    have hcosh_upper : Real.cosh (2 * (Real.pi - |θ|)) ≤ Real.cosh (2 * Real.pi) := by
+      apply (Real.cosh_le_cosh).2
+      simpa [abs_of_nonneg hdouble_nonneg, abs_of_nonneg (show 0 ≤ 2 * Real.pi by positivity)] using
+        hdouble_le
+    have hsinh_pos : 0 < Real.sinh (2 * Real.pi) := by
+      simpa using (Real.sinh_pos_iff.mpr (by positivity : 0 < 2 * Real.pi))
+    have hlower_num : Real.pi ≤ Real.pi * Real.cosh (2 * (Real.pi - |θ|)) := by
+      have hcosh_lower : 1 ≤ Real.cosh (2 * (Real.pi - |θ|)) := Real.one_le_cosh _
+      nlinarith [Real.pi_pos, hcosh_lower]
+    have hupper_num :
+        Real.pi * Real.cosh (2 * (Real.pi - |θ|)) ≤ Real.pi * Real.cosh (2 * Real.pi) := by
+      nlinarith [Real.pi_pos, hcosh_upper]
+    constructor
+    · exact div_le_div_of_nonneg_right hlower_num hsinh_pos.le
+    · exact div_le_div_of_nonneg_right hupper_num hsinh_pos.le
+  · simpa [kernelIntegerTranslateSymbol, kernelIntegerTranslateLowerBound,
+      abs_of_nonneg (le_of_lt Real.pi_pos)]
+  · simp [kernelIntegerTranslateSymbol, kernelIntegerTranslateUpperBound]
 
 end Omega.CircleDimension

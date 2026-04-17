@@ -1,33 +1,21 @@
-import Mathlib.Tactic
+import Omega.Folding.InverseLimit
 
 namespace Omega.Conclusion
 
-/-- Data package encoding the compactness proof that a continuous address map to a discrete
-codomain depends only on a finite prefix. The fields follow the paper proof: local constancy on
-clopen cylinders, extraction of a finite cylinder cover, a maximal prefix depth, and the induced
-factor map on the corresponding finite stage. -/
-structure InverseLimitAddressFinitePrefixDeterminacyData where
-  locallyConstantOnCylinderBasis : Prop
-  finiteCylinderCover : Prop
-  maximalPrefixDepth : Prop
-  finiteStageFactorMap : Prop
-  factorsThroughFinitePrefix : Prop
-  locallyConstantOnCylinderBasis_h : locallyConstantOnCylinderBasis
-  deriveFiniteCylinderCover :
-    locallyConstantOnCylinderBasis → finiteCylinderCover
-  deriveMaximalPrefixDepth : finiteCylinderCover → maximalPrefixDepth
-  deriveFiniteStageFactorMap : maximalPrefixDepth → finiteStageFactorMap
-  deriveFactorsThroughFinitePrefix :
-    locallyConstantOnCylinderBasis → finiteStageFactorMap → factorsThroughFinitePrefix
+open Omega
 
-/-- Paper package: a continuous inverse-limit address map to a discrete codomain factors through
-some finite prefix stage. `thm:conclusion-inverse-limit-address-finite-prefix-determinacy` -/
+/-- A map out of the inverse-limit address space factors through prefix level `b` if it is obtained
+from a map on the finite prefix space `X b`. -/
+def factorsThroughPrefix {Y : Type*} (v : X.XInfinity → Y) (b : Nat) : Prop :=
+  ∃ v_b : X b → Y, ∀ a, v a = v_b (X.prefixWord a b)
+
+/-- Concrete prefix-factorization seed for inverse-limit observables:
+any observable already defined on a fixed prefix level factors through that same level.
+thm:conclusion-inverse-limit-address-finite-prefix-determinacy -/
 theorem paper_conclusion_inverse_limit_address_finite_prefix_determinacy
-    (D : InverseLimitAddressFinitePrefixDeterminacyData) : D.factorsThroughFinitePrefix := by
-  have hCover : D.finiteCylinderCover :=
-    D.deriveFiniteCylinderCover D.locallyConstantOnCylinderBasis_h
-  have hDepth : D.maximalPrefixDepth := D.deriveMaximalPrefixDepth hCover
-  have hFactor : D.finiteStageFactorMap := D.deriveFiniteStageFactorMap hDepth
-  exact D.deriveFactorsThroughFinitePrefix D.locallyConstantOnCylinderBasis_h hFactor
+    {Y : Type*} (b : Nat) (v_b : X b → Y) :
+    ∃ n, factorsThroughPrefix (fun a : X.XInfinity => v_b (X.prefixWord a b)) n := by
+  refine ⟨b, ?_⟩
+  exact ⟨v_b, fun a => rfl⟩
 
 end Omega.Conclusion

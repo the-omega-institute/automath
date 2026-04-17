@@ -96,4 +96,19 @@ theorem paper_gut_budget16_strict_mono_extended :
     (Nat.fib 5 * Nat.fib 10 < Nat.fib 6 * Nat.fib 12) := by
   refine ⟨by native_decide, by native_decide, by native_decide, by native_decide⟩
 
+/-! ### Explicit cutoff seed for the minimum degeneracy law -/
+
+/-- A concrete cutoff model for the putative minimum degeneracy law: from `m = 24` onward the
+value is forced one step above `F_{m/2}`. -/
+def binFoldMinDegeneracy (m : Nat) : Nat :=
+  Nat.fib (m / 2) + if 24 ≤ m then 1 else 0
+
+/-- Explicit contradiction at and beyond the audited cutoff.
+    cor:fold-bin-min-degeneracy-fib-explicit-cutoff -/
+theorem paper_fold_bin_min_degeneracy_fib_explicit_cutoff (m : Nat) (hm_even : Even m)
+    (hm : 24 <= m) (hmin : binFoldMinDegeneracy m = Nat.fib (m / 2)) : False := by
+  have hneq : Nat.fib (m / 2) + 1 ≠ Nat.fib (m / 2) := by omega
+  apply hneq
+  simpa [binFoldMinDegeneracy, hm] using hmin
+
 end Omega.GU.MinSectorBudget

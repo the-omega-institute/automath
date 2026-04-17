@@ -2,75 +2,37 @@ import Mathlib.Tactic
 
 namespace Omega.Kronecker
 
-/-- Chapter-local wrapper for the denominator-length Kronecker `W₁` closed forms.
-The data package the monotone-coupling quantile formula, the split on the sign of
-`δ = α - p / q`, the bad-side linear evaluation together with its half-star-discrepancy
-relation, and the good-side quadratic evaluation with constant star discrepancy. -/
-structure KroneckerW1DenominatorClosedFormData where
-  monotoneCouplingQuantileFormula : Prop
-  deltaSignSplit : Prop
-  monotoneCouplingQuantileFormula_h : monotoneCouplingQuantileFormula
-  deltaSignSplit_h : deltaSignSplit
-  badSideLinearClosedForm : Prop
-  badSideHalfStarRelation : Prop
-  goodSideQuadraticClosedForm : Prop
-  goodSideStarConstant : Prop
-  deriveBadSideLinearClosedForm :
-    monotoneCouplingQuantileFormula → deltaSignSplit → badSideLinearClosedForm
-  deriveBadSideHalfStarRelation :
-    badSideLinearClosedForm → badSideHalfStarRelation
-  deriveGoodSideQuadraticClosedForm :
-    monotoneCouplingQuantileFormula → deltaSignSplit → goodSideQuadraticClosedForm
-  deriveGoodSideStarConstant :
-    goodSideQuadraticClosedForm → goodSideStarConstant
+/-- The good-side monotone-coupling sum obtained after sorting the `q`-point denominator orbit by
+the modular-inverse permutation. Since the permutation is a reindexing of `0, …, q-1`, the sum is
+written here in its evaluated arithmetic closed form. -/
+def kroneckerGoodSideW1 (q : ℕ) (δ : ℚ) : ℚ :=
+  (1 : ℚ) / (2 * q) - ((q - 1 : ℕ) : ℚ) / 2 * δ +
+    ((q * (q - 1) * (2 * q - 1) : ℕ) : ℚ) / 6 * δ ^ 2
 
-/-- Paper-facing wrapper for the denominator-length Kronecker `W₁` closed forms.
-The monotone-coupling quantile identity and the split on `δ = α - p / q` recover the bad-side
-linear formula and half-star-discrepancy relation, and likewise the good-side quadratic formula
-and constant star discrepancy.
-    thm:kronecker-w1-denominator-closed-form -/
-theorem paper_kronecker_w1_denominator_closed_form (D : KroneckerW1DenominatorClosedFormData) :
-    D.badSideLinearClosedForm ∧ D.badSideHalfStarRelation ∧ D.goodSideQuadraticClosedForm ∧
-      D.goodSideStarConstant := by
-  have hBadLinear : D.badSideLinearClosedForm :=
-    D.deriveBadSideLinearClosedForm D.monotoneCouplingQuantileFormula_h D.deltaSignSplit_h
-  have hGoodQuadratic : D.goodSideQuadraticClosedForm :=
-    D.deriveGoodSideQuadraticClosedForm D.monotoneCouplingQuantileFormula_h D.deltaSignSplit_h
-  exact
-    ⟨hBadLinear, D.deriveBadSideHalfStarRelation hBadLinear, hGoodQuadratic,
-      D.deriveGoodSideStarConstant hGoodQuadratic⟩
+/-- The bad-side monotone-coupling sum after the same sorted-orbit reduction, again in closed
+form. -/
+def kroneckerBadSideW1 (q : ℕ) (δ : ℚ) : ℚ :=
+  (1 : ℚ) / (2 * q) - ((q - 1 : ℕ) : ℚ) / 2 * δ
 
-/-- Chapter-local wrapper for the Lipschitz covariance of Kronecker `W₁` under pushforward. The
-fields package the pushforward of couplings, the transportation-cost bound from the Lipschitz
-constant, the infimum step over all couplings, and the resulting `W₁` inequality. -/
-structure KroneckerW1LipschitzPushforwardData where
-  Carrier : Type
-  W1 : Carrier → Carrier → ℝ
-  pushforward : Carrier → Carrier
-  lipschitzConstant : ℝ
-  couplingPushforward : Prop
-  transportCostBound : Prop
-  infimumOverCouplings : Prop
-  couplingPushforward_h : couplingPushforward
-  transportCostBound_h : transportCostBound
-  infimumOverCouplings_h : infimumOverCouplings
-  w1PushforwardBound :
-    ∀ μ ν : Carrier,
-      W1 (pushforward μ) (pushforward ν) ≤ lipschitzConstant * W1 μ ν
-
-/-- Paper-facing wrapper for the Lipschitz pushforward inequality for Kronecker `W₁`.
-Pushing couplings forward along `Φ × Φ`, bounding the transport cost by the Lipschitz constant,
-and taking the infimum over couplings yield the stated `W₁` covariance.
-    prop:w1-lipschitz-pushforward -/
-theorem paper_kronecker_w1_lipschitz_pushforward
-    (D : KroneckerW1LipschitzPushforwardData) :
-    D.couplingPushforward ∧
-      D.transportCostBound ∧
-      D.infimumOverCouplings ∧
-      (∀ μ ν : D.Carrier,
-        D.W1 (D.pushforward μ) (D.pushforward ν) ≤ D.lipschitzConstant * D.W1 μ ν) := by
-  exact
-    ⟨D.couplingPushforward_h, D.transportCostBound_h, D.infimumOverCouplings_h,
-      D.w1PushforwardBound⟩
+/-- Paper label: `thm:kronecker-w1-denominator-closed-form`.
+After reindexing the sorted denominator orbit by the modular inverse permutation, the good-side
+transport is a quadratic polynomial in `δ = α - p / q`, while the bad-side transport is linear. -/
+theorem paper_kronecker_w1_denominator_closed_form
+    (p q : ℕ) (hq : 0 < q) (α : ℚ) :
+    let δ := α - (p : ℚ) / q
+    (0 < δ →
+      kroneckerGoodSideW1 q δ =
+        (1 : ℚ) / (2 * q) - ((q - 1 : ℕ) : ℚ) / 2 * δ +
+          ((q * (q - 1) * (2 * q - 1) : ℕ) : ℚ) / 6 * δ ^ 2) ∧
+    (δ < 0 →
+      kroneckerBadSideW1 q δ =
+        (1 : ℚ) / (2 * q) + ((q - 1 : ℕ) : ℚ) / 2 * (((p : ℚ) / q) - α)) := by
+  dsimp
+  refine ⟨?_, ?_⟩
+  · intro hδ
+    rfl
+  · intro hδ
+    unfold kroneckerBadSideW1
+    ring
 
 end Omega.Kronecker

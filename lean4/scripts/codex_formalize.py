@@ -75,6 +75,8 @@ def _load_prompt(name: str) -> str:
 _git_lock = threading.Lock()
 # Lock for round number allocation
 _round_lock = threading.Lock()
+# Lock serializing .lake/build merges back to the main repo
+_lake_merge_lock = threading.Lock()
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -154,6 +156,123 @@ def run_cmd(
 def git_log_oneline(n: int = 5, *, cwd: Optional[Path] = None) -> list[str]:
     result = run_cmd(["git", "log", "--oneline", f"-{n}"], cwd=cwd or REPO_ROOT)
     return [l.strip() for l in result.stdout.strip().splitlines() if l.strip()]
+
+
+# ---------------------------------------------------------------------------
+# Memory-pressure guard (macOS)
+#
+# Motivation: parallel `codex exec` + `lake build` can saturate the unified
+# memory on M-series Macs. If WindowServer is starved for >168s the kernel
+# watchdog panics (AppleARMWatchdogTimer → userspace watchdog timeout). We
+# gate each worker dispatch on macOS memory-pressure indicators so the
+# pipeline backs off before the system does.
+# ---------------------------------------------------------------------------
+
+# kern.memorystatus_vm_pressure_level mapping (XNU):
+#   1 = NORMAL, 2 = WARN, 4 = URGENT, 8 = CRITICAL
+_MEM_LEVEL_BY_NAME = {"normal": 1, "warn": 2, "urgent": 4, "critical": 8}
+
+# Populated by main() from CLI flags.
+_MEM_GUARD_CFG: dict = {
+    "enabled": sys.platform == "darwin",
+    "level_threshold": 2,      # block when kern.memorystatus_vm_pressure_level >= this
+    "swap_ceiling_gb": 16.0,   # block when used swap exceeds this
+    "poll_seconds": 30,
+    "max_wait_seconds": 1800,
+}
+_mem_guard_lock = threading.Lock()  # serialize waits so we don't spam logs
+
+
+def _macos_pressure_level() -> int:
+    if sys.platform != "darwin":
+        return 0
+    try:
+        r = subprocess.run(
+            ["sysctl", "-n", "kern.memorystatus_vm_pressure_level"],
+            capture_output=True, text=True, timeout=5,
+            stdin=subprocess.DEVNULL,
+        )
+        return int((r.stdout or "0").strip() or "0")
+    except Exception:
+        return 0
+
+
+_SWAP_RE = re.compile(r"used\s*=\s*([\d.]+)([MG])", re.IGNORECASE)
+
+
+def _macos_swap_used_gb() -> float:
+    if sys.platform != "darwin":
+        return 0.0
+    try:
+        r = subprocess.run(
+            ["sysctl", "-n", "vm.swapusage"],
+            capture_output=True, text=True, timeout=5,
+            stdin=subprocess.DEVNULL,
+        )
+        m = _SWAP_RE.search(r.stdout or "")
+        if not m:
+            return 0.0
+        val = float(m.group(1))
+        return val / 1024.0 if m.group(2).upper() == "M" else val
+    except Exception:
+        return 0.0
+
+
+def memory_pressure_snapshot() -> tuple[int, float]:
+    """Return (pressure_level, swap_used_gb). level=0 if unsupported."""
+    return _macos_pressure_level(), _macos_swap_used_gb()
+
+
+def memory_pressure_wait(context: str = "") -> bool:
+    """Block until macOS memory pressure is below the configured threshold.
+
+    Returns True if pressure is OK (or guard is disabled / unsupported).
+    Returns False if max_wait timed out — caller should proceed with a warning
+    rather than deadlock the pipeline.
+    """
+    cfg = _MEM_GUARD_CFG
+    if not cfg["enabled"]:
+        return True
+
+    lvl_thresh = int(cfg["level_threshold"])
+    swap_cap = float(cfg["swap_ceiling_gb"])
+    poll = int(cfg["poll_seconds"])
+    max_wait = int(cfg["max_wait_seconds"])
+
+    # Fast path: no pressure, no waiting.
+    lvl, swap = memory_pressure_snapshot()
+    if (lvl == 0 or lvl < lvl_thresh) and swap < swap_cap:
+        return True
+
+    # Serialize the wait so parallel callers don't spam identical log lines.
+    with _mem_guard_lock:
+        start = time.time()
+        warned = False
+        while True:
+            lvl, swap = memory_pressure_snapshot()
+            under_level = lvl == 0 or lvl < lvl_thresh
+            under_swap = swap < swap_cap
+            if under_level and under_swap:
+                if warned:
+                    logger.info(
+                        f"[mem-guard] pressure cleared (level={lvl}, swap={swap:.1f}GB)"
+                        + (f" — resuming {context}" if context else "")
+                    )
+                return True
+            elapsed = int(time.time() - start)
+            if elapsed >= max_wait:
+                logger.warning(
+                    f"[mem-guard] timeout after {elapsed}s "
+                    f"(level={lvl}, swap={swap:.1f}GB) — proceeding anyway"
+                    + (f" with {context}" if context else "")
+                )
+                return False
+            logger.warning(
+                f"[mem-guard] pressure elevated (level={lvl}, swap={swap:.1f}GB) — "
+                f"pausing {context or 'dispatch'}, retry in {poll}s (waited {elapsed}s)"
+            )
+            warned = True
+            time.sleep(poll)
 
 
 def read_impl_plan_header(lines: int = 30, *, repo: Optional[Path] = None) -> str:
@@ -380,6 +499,88 @@ def _codex_resolve_conflicts(
 
     logger.info("Codex resolved all conflicts successfully")
     return True
+
+
+def merge_lake_cache_back(wt: WorktreeInfo, new_commits: list[str]) -> None:
+    """After a successful merge, propagate the worktree's freshly-built .olean
+    artifacts back into the main repo's .lake/build/ so that the next round's
+    worktree (which COW-clones this cache) starts warm for the files added in
+    this round.
+
+    Only copies artifacts whose source .lean was ADDED or MODIFIED in this
+    round (surgical, O(new files)). For each source `lean4/Omega/<mod>.lean`,
+    propagates its lib/ (.olean/.ilean/.hash/.trace) and ir/ (.c/.hash/.setup.json)
+    artifacts. Destination files that already exist are not overwritten
+    (safe against concurrent merges — main's pre-existing artifact is by
+    construction compatible with the branch tip).
+    """
+    # Extensions produced per .lean source. Not all are always present
+    # (e.g. .trace for freshly-rebuilt, .setup.json only when lake regenerates).
+    LIB_EXTS = (".olean", ".olean.hash", ".ilean", ".ilean.hash", ".trace")
+    IR_EXTS = (".c", ".c.hash", ".setup.json")
+
+    src_root = wt.path / "lean4" / ".lake" / "build"
+    dst_root = LEAN_ROOT / ".lake" / "build"
+    if not src_root.exists():
+        return
+
+    # new_commits entries look like "<sha> <subject>"; pull out the SHA.
+    shas = [c.split(None, 1)[0] for c in new_commits if c.strip()]
+    if not shas:
+        return
+
+    # Resolve .lean files touched by exactly these commits (merge invariant).
+    try:
+        r = run_cmd(
+            ["git", "show", "--name-only", "--pretty=format:",
+             "--diff-filter=AM", *shas],
+            cwd=wt.path,
+        )
+        changed = sorted({
+            l.strip() for l in (r.stdout or "").splitlines()
+            if l.strip().endswith(".lean") and l.strip().startswith("lean4/Omega/")
+        })
+    except Exception:
+        return
+
+    if not changed:
+        return
+
+    with _lake_merge_lock:
+        start = time.monotonic()
+        copied = 0
+        for rel in changed:
+            # "lean4/Omega/X/Y.lean" -> "Omega/X/Y"
+            mod = rel[len("lean4/"):-len(".lean")]
+            for sub, exts in (("lib/lean", LIB_EXTS), ("ir", IR_EXTS)):
+                for ext in exts:
+                    src = src_root / sub / f"{mod}{ext}"
+                    if not src.is_file():
+                        continue
+                    dst = dst_root / sub / f"{mod}{ext}"
+                    if dst.exists():
+                        continue
+                    dst.parent.mkdir(parents=True, exist_ok=True)
+                    try:
+                        # APFS copy-on-write when possible.
+                        subprocess.run(
+                            ["cp", "-c", str(src), str(dst)],
+                            check=True, stdin=subprocess.DEVNULL,
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                            timeout=30,
+                        )
+                        copied += 1
+                    except Exception:
+                        try:
+                            shutil.copy2(src, dst)
+                            copied += 1
+                        except Exception:
+                            pass
+        elapsed = time.monotonic() - start
+        logger.info(
+            f"[R{wt.round_number}] Lake cache merged back: "
+            f"{copied} artifact(s) from {len(changed)} source(s) ({elapsed:.2f}s)"
+        )
 
 
 def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> bool:
@@ -750,15 +951,107 @@ def detect_signature_degradation(wt: WorktreeInfo) -> list[str]:
     return violations
 
 
+# ---------------------------------------------------------------------------
+# Abstract-Prop shell pattern detector
+#
+# Detects the R1100+ codex-first anti-pattern of producing fake formalizations
+# by wrapping the paper claim in a `structure …Data where` with abstract Prop
+# fields, then "proving" `paper_*` theorems as tautologies on those fields.
+# See phase_c.txt HARD PROHIBITION for the full forbidden pattern.
+# ---------------------------------------------------------------------------
+
+_STRUCT_DATA_RE = re.compile(r"^structure\s+(\w+Data)\s+where\s*$", re.MULTILINE)
+_SHELL_THM_RE = re.compile(
+    r"^theorem\s+(paper_\w+)\s*((?:\([^)]*\)\s*)*)\s*:",
+    re.MULTILINE,
+)
+
+
+def _file_is_shell_new(text: str) -> Optional[str]:
+    """Return a violation description if `text` (a .lean file) contains the
+    abstract-Prop-Data shell anti-pattern; otherwise None."""
+    # 1. Find at least one `structure …Data where` with bare `Prop` fields.
+    for sm in _STRUCT_DATA_RE.finditer(text):
+        struct_name = sm.group(1)
+        body_start = sm.end()
+        tail = re.search(r"^\S", text[body_start:], re.MULTILINE)
+        body = text[body_start:body_start + tail.start()] if tail else text[body_start:]
+        prop_fields: set[str] = set()
+        has_hyp_or_derive = False
+        has_concrete_field = False
+        for ln in body.splitlines():
+            if not ln.strip():
+                continue
+            m_prop = re.match(r"^  (\w+)\s*:\s*Prop\s*$", ln)
+            if m_prop:
+                prop_fields.add(m_prop.group(1))
+                continue
+            m_any = re.match(r"^  (\w+)\s*:\s*(.+)$", ln)
+            if m_any:
+                fname, ftype = m_any.group(1), m_any.group(2).strip()
+                if fname.endswith("_h") and ftype in prop_fields:
+                    has_hyp_or_derive = True
+                elif fname.startswith("derive") and "→" in ftype:
+                    has_hyp_or_derive = True
+                else:
+                    has_concrete_field = True
+        # Pure shell: ≥2 bare Prop fields, at least one hyp/derive, no concrete field
+        if len(prop_fields) >= 2 and has_hyp_or_derive and not has_concrete_field:
+            # 2. Find a paper_* theorem that takes (D : struct_name) as parameter.
+            for tm in _SHELL_THM_RE.finditer(text):
+                header = tm.group(2) or ""
+                if re.search(rf"\(\s*\w+\s*:\s*{re.escape(struct_name)}\s*\)", header):
+                    return (
+                        f"structure {struct_name} has {len(prop_fields)} abstract Prop fields "
+                        f"wrapped by theorem {tm.group(1)}; see phase_c.txt HARD PROHIBITION"
+                    )
+    return None
+
+
+def detect_shell_pattern(wt: WorktreeInfo) -> list[str]:
+    """Scan .lean files NEWLY added in this round for the abstract-Prop shell pattern."""
+    violations: list[str] = []
+    try:
+        # Get newly-added files in this round vs. base branch.
+        result = run_cmd(
+            ["git", "diff", "--name-status", f"origin/{BASE_BRANCH}...HEAD"],
+            cwd=wt.path,
+        )
+        lines = (result.stdout or "").splitlines()
+    except Exception:
+        return violations  # can't check, allow through
+
+    new_files: list[str] = []
+    for ln in lines:
+        parts = ln.split("\t")
+        if len(parts) < 2:
+            continue
+        status, path = parts[0], parts[-1]
+        if status.startswith("A") and path.startswith("lean4/Omega/") and path.endswith(".lean"):
+            new_files.append(path)
+
+    for rel in new_files:
+        p = wt.path / rel
+        try:
+            text = p.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        v = _file_is_shell_new(text)
+        if v:
+            violations.append(f"{rel}: {v}")
+    return violations
+
+
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
-    """Check for new commits in the worktree. Also detects signature degradation."""
+    """Check for new commits in the worktree. Also rejects signature degradation
+    and new abstract-Prop shell files."""
     post = git_log_oneline(20, cwd=wt.path)
     new = [c for c in post if c not in pre_commits]
     if new:
         logger.info(f"[R{wt.round_number}] Phase D: {len(new)} new commit(s):")
         for c in new:
             logger.info(f"  {c}")
-        # Check for signature degradation
+        # Gate 1: signature degradation on existing theorems
         violations = detect_signature_degradation(wt)
         if violations:
             for v in violations:
@@ -767,6 +1060,18 @@ def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[b
                 f"[R{wt.round_number}] Rejecting round: {len(violations)} theorem(s) had "
                 f"signatures replaced with trivial Prop stubs. "
                 f"Fix: keep original signature and leave proof as-is if stuck."
+            )
+            return False, new
+        # Gate 2: new abstract-Prop shell files
+        shell_violations = detect_shell_pattern(wt)
+        if shell_violations:
+            for v in shell_violations:
+                logger.error(f"[R{wt.round_number}] SHELL PATTERN: {v}")
+            logger.error(
+                f"[R{wt.round_number}] Rejecting round: {len(shell_violations)} new file(s) "
+                f"introduced the abstract-Prop Data shell anti-pattern. "
+                f"Fix: state paper_* theorems about concrete objects; use sorry + "
+                f"\\leanpartial{{…}}{{reason}} if proof is incomplete."
             )
             return False, new
         return True, new
@@ -866,6 +1171,12 @@ def run_round_in_worktree(
                 _save_round_log(round_num, phase_b, phase_c, new_commits, False)
                 return False, round_num, new_commits
             logger.info(f"[{tag}] SUCCESS: merged {len(new_commits)} commit(s) to {BASE_BRANCH}")
+            # Propagate freshly-built .olean artifacts back to main's cache so the
+            # next round's worktree starts warm for the files added in this round.
+            try:
+                merge_lake_cache_back(wt, new_commits)
+            except Exception as exc:
+                logger.warning(f"[{tag}] Lake cache merge-back raised: {exc}")
         elif success and dry_run:
             logger.info(f"[{tag}] [DRY RUN] Would merge to {BASE_BRANCH}")
 
@@ -991,6 +1302,7 @@ def run_parallel_batch(
     with ThreadPoolExecutor(max_workers=parallel, thread_name_prefix="worker") as pool:
         futures: dict[Future, int] = {}
         for rn in round_nums:
+            memory_pressure_wait(context=f"dispatch R{rn}")
             fut = pool.submit(
                 run_round_in_worktree,
                 rn, total_theorems, recent,
@@ -1112,9 +1424,56 @@ def main() -> int:
         "--base-branch", type=str, default=BASE_BRANCH,
         help=f"Base branch name (default: {BASE_BRANCH})",
     )
+    parser.add_argument(
+        "--mem-guard", dest="mem_guard", action="store_true", default=None,
+        help="Enable macOS memory-pressure guard (default: on for darwin)",
+    )
+    parser.add_argument(
+        "--no-mem-guard", dest="mem_guard", action="store_false",
+        help="Disable macOS memory-pressure guard",
+    )
+    parser.add_argument(
+        "--mem-threshold", type=str, default="warn",
+        choices=list(_MEM_LEVEL_BY_NAME.keys()),
+        help="Pause dispatch when kern.memorystatus_vm_pressure_level >= this "
+             "(default: warn)",
+    )
+    parser.add_argument(
+        "--mem-swap-ceiling-gb", type=float, default=16.0,
+        help="Pause dispatch when used swap exceeds this many GB (default: 16)",
+    )
+    parser.add_argument(
+        "--mem-poll", type=int, default=30,
+        help="Memory-guard poll interval in seconds (default: 30)",
+    )
+    parser.add_argument(
+        "--mem-max-wait", type=int, default=1800,
+        help="Memory-guard max wait before proceeding anyway, in seconds (default: 1800)",
+    )
     args = parser.parse_args()
 
     BASE_BRANCH = args.base_branch
+
+    # ── Memory-pressure guard config ──────────────────────────────
+    _MEM_GUARD_CFG["enabled"] = (
+        sys.platform == "darwin" if args.mem_guard is None else bool(args.mem_guard)
+    )
+    _MEM_GUARD_CFG["level_threshold"] = _MEM_LEVEL_BY_NAME[args.mem_threshold]
+    _MEM_GUARD_CFG["swap_ceiling_gb"] = float(args.mem_swap_ceiling_gb)
+    _MEM_GUARD_CFG["poll_seconds"] = int(args.mem_poll)
+    _MEM_GUARD_CFG["max_wait_seconds"] = int(args.mem_max_wait)
+    if _MEM_GUARD_CFG["enabled"]:
+        lvl, swap = memory_pressure_snapshot()
+        logger.info(
+            f"Memory guard: ON (threshold={args.mem_threshold} "
+            f"[level≥{_MEM_GUARD_CFG['level_threshold']}], "
+            f"swap≤{_MEM_GUARD_CFG['swap_ceiling_gb']:.1f}GB, "
+            f"poll={_MEM_GUARD_CFG['poll_seconds']}s, "
+            f"max_wait={_MEM_GUARD_CFG['max_wait_seconds']}s) | "
+            f"current: level={lvl}, swap={swap:.1f}GB"
+        )
+    else:
+        logger.info("Memory guard: OFF")
 
     # ── Cleanup ────────────────────────────────────────────────────
     if args.cleanup:
@@ -1216,6 +1575,7 @@ def main() -> int:
                 with _round_lock:
                     rn = state.round_number
                     state.round_number += 1
+                memory_pressure_wait(context=f"dispatch R{rn}")
                 fut = pool.submit(
                     run_round_in_worktree,
                     rn, state.total_theorems, state.recent_commits,

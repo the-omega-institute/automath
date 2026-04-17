@@ -112,4 +112,13 @@ theorem paper_spg_fiber_walsh_l1_area_lower_bound
     simp [spgBoundaryArea, spgCrossingEdgeCount, Finset.mul_sum]
   simpa [ge_iff_le] using hhalf.trans_eq hrewrite
 
+/-- Clearing the `1/2` normalization from the SPG area-vs-bias bound.
+    cor:fold-hypercube-cutedges-bias-l1 -/
+theorem paper_fold_hypercube_cutedges_bias_l1
+    (n : ℕ) (X : Type) [Fintype X] (f : Omega.Word n → X) :
+    2 * spgBoundaryArea (n := n) (X := X) f ≥
+      ∑ i : Fin n, ∑ x : X, |spgFiberBias (n := n) (X := X) f i x| := by
+  have h := paper_spg_fiber_walsh_l1_area_lower_bound n X f
+  nlinarith
+
 end Omega.SPG

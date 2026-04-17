@@ -136,4 +136,13 @@ theorem paper_cdim_poisson_second_order_edgeworth_benchmark
   · intro hZero
     linarith
 
+/-- Paper: `prop:cdim-poisson-kl-sixth-order-coefficient-negative`. -/
+theorem paper_cdim_poisson_kl_sixth_order_coefficient_negative {sigma mu3 mu4 : Real}
+    (hsigma : 0 < sigma) (hcs : mu3 ^ 2 <= sigma ^ 2 * (mu4 - sigma ^ 4)) :
+    sigma ^ 6 + 6 * mu3 ^ 2 - 8 * sigma ^ 2 * mu4 <= -7 * sigma ^ 6 - 2 * mu3 ^ 2 := by
+  have hsigma_six_nonneg : 0 <= sigma ^ 6 := by positivity
+  have hbound : mu3 ^ 2 + sigma ^ 6 <= sigma ^ 2 * mu4 := by
+    nlinarith [hcs]
+  nlinarith [hbound, hsigma_six_nonneg]
+
 end Omega.CircleDimension

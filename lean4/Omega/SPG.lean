@@ -58,6 +58,7 @@ import Omega.SPG.DyadicCubicalBoundaryInjective
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicFiniteMomentCompleteness
 import Omega.SPG.DyadicFluxZetaMinkowskiPole
+import Omega.SPG.DyadicPolyclubeDiscreteIsoperimetry
 import Omega.SPG.DyadicOuterApproxStokesGainMinkowskiReadout
 import Omega.SPG.DyadicTopInversionBound
 import Omega.SPG.EllipsoidBoundaryFluxReconstruction
@@ -68,8 +69,10 @@ import Omega.SPG.ErrorThreshold
 import Omega.SPG.ExactScreenMinimaAreMatroidBases
 import Omega.SPG.ExplicitMinimizer
 import Omega.SPG.F2FiberCardinality
+import Omega.SPG.CoarsegrainingL2DistinguishabilityArea
 import Omega.SPG.FiberWalshL1AreaLowerBound
 import Omega.SPG.FiniteAuditBidirectionalCertificates
+import Omega.SPG.FiniteAuditNpCompleteBarrier
 import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.FixedAxisGodelOrderInformation
 import Omega.SPG.FoldInjectivizationRegisterLowerBound
@@ -80,6 +83,7 @@ import Omega.SPG.GodelBoundaryDecodingRelativeErrorThreshold
 import Omega.SPG.GodelDoublelog
 import Omega.SPG.GodelDoublelogMinkowski
 import Omega.SPG.GodelPrimeDensityHolographyCLT
+import Omega.SPG.GodelPrimeRatioDensity
 import Omega.SPG.GodelStokesDistanceDimensionStability
 import Omega.SPG.GodelizationEntropy
 import Omega.SPG.HolderOpenResonance
@@ -116,6 +120,9 @@ import Omega.SPG.PrefixScanErrorTanakaRepresentation
 import Omega.SPG.PressureGap
 import Omega.SPG.PrimeRegisterBudgetLowerBound
 import Omega.SPG.PrimeRegisterDistinguishableFractionVanishes
+import Omega.SPG.PolytimeCertificateSynthesisImpliesPEqualsNP
+import Omega.SPG.PolytimeCompleteInvariantImpliesPEqualsNP
+import Omega.SPG.ProfiniteTorusExtensionStokesModuleClassification
 import Omega.SPG.ProuhetThueMorsePowerSum
 import Omega.SPG.QuasistationaryAmbiguityAmplitudes
 import Omega.SPG.RandomBulkBoundarySaturation
@@ -150,8 +157,10 @@ import Omega.SPG.StokesPeriodModulePathIntegralReconstruction
 import Omega.SPG.TotalDegreeMomentThreshold
 import Omega.SPG.UndecidableNoFiniteComputableCompleteInvariant
 import Omega.SPG.VolumeBoundaryScaling
+import Omega.SPG.WalshDiscreteStokesHolography
 import Omega.SPG.WalshStokes
 import Omega.SPG.WeightedBoundaryDecomposition
 import Omega.SPG.WeightedBoundaryPole
+import Omega.SPG.WeightedDiscreteFluxIdentity
 import Omega.SPG.WeightedBoundaryTransfer
 import Omega.SPG.WeightedL1TorusStableLengthGodel

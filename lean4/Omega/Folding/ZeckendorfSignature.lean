@@ -124,6 +124,15 @@ theorem zeckendorf_no_carry_sm_triple :
     Nat.fib 2 + Nat.fib 4 + Nat.fib 6 = 12 ∧
     Nat.fib 2 = 1 ∧ Nat.fib 4 = 3 ∧ Nat.fib 6 = 8 := by native_decide
 
+/-- If two Zeckendorf index lists concatenate without introducing adjacency, then the Zeckendorf
+representation of the sum is the concatenation itself.
+    thm:zeckendorf-no-carry-additivity -/
+theorem paper_zeckendorf_no_carry_additivity (s t : List Nat) (_hs : s.IsZeckendorfRep)
+    (_ht : t.IsZeckendorfRep) (hgap : (s ++ t).IsZeckendorfRep) :
+    Nat.zeckendorf (((s.map Nat.fib).sum) + ((t.map Nat.fib).sum)) = s ++ t := by
+  simpa [List.map_append, List.sum_append, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using
+    (Nat.zeckendorf_sum_fib hgap)
+
 /-- SO(10) triple: F(4) + F(6) + F(9) = 45.
     thm:zeckendorf-no-carry-so10-triple -/
 theorem zeckendorf_no_carry_so10_triple :

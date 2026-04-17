@@ -41,4 +41,27 @@ theorem paper_xi_comoving_energy_implies_delta_bound
         simp [hexp, div_eq_mul_inv]
   exact le_trans hmain' (le_max_right 0 _)
 
+theorem paper_xi_uniform_energy_implies_uniform_delta_modulus {ρ E Emax δ : ℝ}
+    (hρ : 0 < ρ) (hρ_lt : ρ < 1) (hE : 1 ≤ E) (hEmax : E ≤ Emax) (hδ : 0 ≤ δ)
+    (hbound : ρ / Real.sqrt E ≤ (1 - δ) / (1 + δ)) :
+    δ ≤ max 0 ((1 - ρ / Real.sqrt Emax) / (1 + ρ / Real.sqrt Emax)) := by
+  have hbase :=
+    paper_xi_comoving_energy_implies_delta_bound hρ hρ_lt hE hδ hbound
+  have hE0 : 0 < E := lt_of_lt_of_le zero_lt_one hE
+  have hEmax0 : 0 < Emax := lt_of_lt_of_le hE0 hEmax
+  have hsqrt_le : Real.sqrt E ≤ Real.sqrt Emax := Real.sqrt_le_sqrt hEmax
+  have hsqrt_pos : 0 < Real.sqrt E := Real.sqrt_pos.2 hE0
+  have hsqrt_pos_max : 0 < Real.sqrt Emax := Real.sqrt_pos.2 hEmax0
+  have hratio :
+      ρ / Real.sqrt Emax ≤ ρ / Real.sqrt E := by
+    exact (div_le_div_iff_of_pos_left hρ hsqrt_pos_max hsqrt_pos).2 hsqrt_le
+  have hmono :
+      (1 - ρ / Real.sqrt E) / (1 + ρ / Real.sqrt E) ≤
+        (1 - ρ / Real.sqrt Emax) / (1 + ρ / Real.sqrt Emax) := by
+    have hdenE : 0 < 1 + ρ / Real.sqrt E := by positivity
+    have hdenEmax : 0 < 1 + ρ / Real.sqrt Emax := by positivity
+    apply (div_le_div_iff₀ hdenE hdenEmax).2
+    nlinarith [hratio]
+  exact le_trans hbase (max_le_max le_rfl hmono)
+
 end Omega.Zeta.ComovingEnergyDeltaBound

@@ -20,6 +20,13 @@ noncomputable def window6ExactGcdVisibleLogRatio : Fin 4 → ℝ
   | 2 => Real.log (63 / 64 : ℝ)
   | _ => Real.log (21 / 16 : ℝ)
 
+/-- Uniform baseline mass on each exact-gcd sector. -/
+noncomputable def window6ExactGcdUniformMass : Fin 4 → ℝ
+  | 0 => 4 / 7
+  | 1 => 2 / 7
+  | 2 => 2 / 21
+  | _ => 1 / 21
+
 /-- Blind conditional KL contribution on each exact-gcd sector. -/
 noncomputable def window6ExactGcdConditionalKl : Fin 4 → ℝ
   | 0 => (5 / 18 : ℝ) * Real.log (32 / 27 : ℝ)
@@ -77,5 +84,22 @@ theorem paper_conclusion_window6_output_kl_exact_gcd_chain_splitting :
     ring
   refine ⟨hVisible, hBlind, ?_⟩
   rw [hVisible, hBlind]
+
+/-- The exact-gcd sector masses, their uniform baselines, and the resulting scalar distortions are
+all explicit finite rational constants. -/
+theorem paper_conclusion_window6_output_exact_gcd_two_scalar_distortion :
+    window6ExactGcdSectorMass 0 = 9 / 16 ∧
+      window6ExactGcdSectorMass 1 = 9 / 32 ∧
+      window6ExactGcdSectorMass 2 = 3 / 32 ∧
+      window6ExactGcdSectorMass 3 = 1 / 16 ∧
+      window6ExactGcdUniformMass 0 = 4 / 7 ∧
+      window6ExactGcdUniformMass 1 = 2 / 7 ∧
+      window6ExactGcdUniformMass 2 = 2 / 21 ∧
+      window6ExactGcdUniformMass 3 = 1 / 21 ∧
+      window6ExactGcdSectorMass 0 / window6ExactGcdUniformMass 0 = 63 / 64 ∧
+      window6ExactGcdSectorMass 1 / window6ExactGcdUniformMass 1 = 63 / 64 ∧
+      window6ExactGcdSectorMass 2 / window6ExactGcdUniformMass 2 = 63 / 64 ∧
+      window6ExactGcdSectorMass 3 / window6ExactGcdUniformMass 3 = 21 / 16 := by
+  repeat' constructor <;> norm_num [window6ExactGcdSectorMass, window6ExactGcdUniformMass]
 
 end Omega.Conclusion
