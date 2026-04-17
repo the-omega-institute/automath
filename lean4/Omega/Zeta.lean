@@ -63,6 +63,7 @@ import Omega.Zeta.FinitePartCyclicLiftCyclotomicDivisorMobius
 import Omega.Zeta.FinitePartCyclicLiftReducedConstantClosed
 import Omega.Zeta.FinitePartCyclicLiftRootUnityFourierSieve
 import Omega.Zeta.FinitePartCyclicLiftSpectrumIdentifiability
+import Omega.Zeta.FinitePartCyclotomicAtomsCompleteCoordinate
 import Omega.Zeta.FinitePartCyclicLiftTorsionProduct
 import Omega.Zeta.FinitePartCyclicLiftTraceSieve
 import Omega.Zeta.FinitePartCyclicLiftZetaTorsionDeterminesSpectrum
