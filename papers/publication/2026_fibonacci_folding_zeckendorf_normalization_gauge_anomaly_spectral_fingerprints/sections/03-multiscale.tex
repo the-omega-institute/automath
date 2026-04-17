@@ -1,9 +1,7 @@
-\section{Folding across scales}
+\section{Compatible restriction across scales}
 \label{sec:multiscale}
 
-\subsection{A rewriting description of \texorpdfstring{\(\Fold_m\)}{Fold\_m}}
-
-A convenient realization of \(\Fold_m\) uses the local rewriting rule for Zeckendorf normalization. In most-significant-digit-first order the rule is
+The finite-window fold admits a simple local description. In most-significant-digit-first order the Zeckendorf rewriting rule is
 \[
 011\to 100,
 \]
@@ -11,9 +9,9 @@ whereas in the low-to-high convention of Section~\ref{sec:preliminaries} it beco
 \[
 110\to 001.
 \]
-We record the translation once, as the appendices use both conventions.
+We record the translation once, since the main text and the appendices use both conventions.
 
-\begin{lemma}[Convention translation]\label{lem:convention}
+\begin{lemma}\label{lem:convention}
 Let \(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\) be written in low-to-high order, and let \(\omega^\sharp=(\omega_m,\dots,\omega_1)\) be the same word in most-significant-digit-first order. Then:
 \begin{enumerate}
 \item[(i)] The rule \(011\to 100\) in most-significant-digit-first order corresponds, after reversal, to the rule \(110\to 001\) in low-to-high order.
@@ -26,7 +24,7 @@ Let \(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\) be written in low-to-high order
 Part (i) is immediate from reversal. Part (ii) is just the corresponding statement about scan direction. For part (iii), the identity \(\Fib_k+\Fib_{k+1}=\Fib_{k+2}\) shows that each rewrite preserves the represented value, while the number of \(1\)s drops by one. Termination and uniqueness of the normal form are proved in Appendix~\ref{app:rewriting}.
 \end{proof}
 
-\begin{proposition}[Basic properties of the fold]\label{prop:idempotent}
+\begin{proposition}\label{prop:idempotent}
 For each \(m\ge 1\), the map \(\Fold_m:\Om_m\to X_m\) is well defined, idempotent, and surjective:
 \[
 \Fold_m\circ \Fold_m=\Fold_m,
@@ -41,8 +39,6 @@ Appendix~\ref{app:rewriting} shows that the rewriting system terminates and is c
 If \(x\in X_m\), then \(x\) already contains no adjacent \(1\)s and is therefore its own Zeckendorf normal form. Hence \(\Fold_m(x)=x\). Applying this to \(x=\Fold_m(\omega)\in X_m\) gives idempotence, and the same fixed-point property shows that every \(x\in X_m\) lies in the image.
 \end{proof}
 
-\subsection{Restriction on the stable side}
-
 For \(m_2\ge m_1\), define
 \[
 \proj_{m_2\to m_1}:X_{m_2}\to X_{m_1},
@@ -51,28 +47,27 @@ For \(m_2\ge m_1\), define
 \]
 Then \((X_m,\proj_{m_2\to m_1})\) is an inverse system, and its inverse limit is naturally the one-sided golden-mean shift; see \cite[Chapter~1]{LindMarcus1995} or \cite[Chapter~1]{Kitchens1998}.
 
-\subsection{Compatible restriction on microstates}
-
-Let
+On the microstate side there is also the naive truncation
 \[
 \naive_{m+1\to m}:\Om_{m+1}\to\Om_m,\qquad
-\naive_{m+1\to m}(\omega_1\cdots\omega_{m+1}):=\omega_1\cdots\omega_m,
+\naive_{m+1\to m}(\omega_1\cdots\omega_{m+1})=\omega_1\cdots\omega_m.
 \]
-be naive truncation. We seek a map on microstates for which folding commutes with restriction:
+The problem is to find a restriction map on microstates for which folding commutes with restriction:
 \begin{equation}\label{eq:commuting}
 \Fold_m\circ \aware_{m+1\to m}
 \;=\;
 \proj_{m+1\to m}\circ \Fold_{m+1}.
 \end{equation}
+The natural candidate is obtained by restricting on the stable side after folding.
 
-\begin{definition}[Compatible restriction]\label{def:fold-aware}
+\begin{definition}\label{def:fold-aware}
 For \(\omega\in\Om_{m+1}\), define
 \begin{equation}\label{eq:re-def}
 \aware_{m+1\to m}(\omega):=\proj_{m+1\to m}\!\bigl(\Fold_{m+1}(\omega)\bigr)\in X_m\subset\Om_m.
 \end{equation}
 \end{definition}
 
-\begin{lemma}[Strict commutation]\label{lem:strict-commute}
+\begin{lemma}\label{lem:strict-commute}
 The map \(\aware_{m+1\to m}\) satisfies \eqref{eq:commuting}. Moreover, it is the unique map \(\Om_{m+1}\to X_m\) with this property.
 \end{lemma}
 
