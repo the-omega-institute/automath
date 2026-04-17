@@ -1,6 +1,6 @@
 \section{Local Objects and Gluing Failure}\label{sec:null-decomposition}
 
-We now pass from admissible references to local objects. An admitted reference need not determine a global object, but it may still admit local witnesses and compatible local families. The distinction between these possibilities is the source of the gluing phenomena studied in this section.
+We now pass from admissible references to local objects. An admitted reference need not determine a global object, but it may still admit local witnesses and compatible local families. The distinction between these possibilities is the source of the gluing phenomena studied in this section. The companion paper treats the same local-object framework on meet-semilattice sites; in the present focused version the core reference-class, realization-prestack, and readout notions are restated explicitly for the broader preorder-pretopology setting used below.
 
 \subsection{Refinement axioms}\label{sec:refinement-axioms}
 
@@ -47,7 +47,15 @@ S_{\mathrm{ref}}\subseteq S.
 For each $s\in S_{\mathrm{ref}}$, the language contains a reference sort $\mathsf{Ref}_s$ and an admissibility predicate $\Adm_s(\cdot)$.
 
 \begin{definition}[Reference classes]\label{def:reference-classes}
-We use the reference-class notation $r\equiv_p r'$, $[r]_p$, and $\mathcal{R}_s(p)$ from \cite[Definition~4.2]{MaZhang2026ConditionalGluingFailure}.
+For each state $p$ and each referenceable sort $s$, fix a set
+\[
+\mathcal R_s(p)
+\]
+and a surjective assignment
+\[
+r\longmapsto [r]_p\in \mathcal R_s(p)
+\]
+defined on the admitted references $r:\mathsf{Ref}_s$ at $p$. The element $[r]_p$ is called the \emph{reference class} of $r$ at $p$. The local reference frame and its slice site are built on these classes.
 \end{definition}
 
 \begin{definition}[Local reference frame]\label{def:local-reference-frame}
@@ -232,34 +240,144 @@ This is \Cref{thm:sheafification-characterization} rewritten for the sheaf $a_{p
 
 \subsection{Realization prestacks and connected components}
 
-The presheaf $F_{p,s}$ records only the isomorphism classes of local realizations. To pass from compatible local families to gerbes and cohomology, one works with a chosen groupoid-valued lift whose connected components recover $F_{p,s}$ after sheafification. The canonical split construction needed for the separated case singled out below is deferred to \cite[Proposition~4.11]{MaZhang2026ConditionalGluingFailure}. The substantive issue for the later semantics is therefore not bare existence but whether one has chosen a lift whose stackification still reflects the intended gluing semantics at the terminal fibre.
+The presheaf $F_{p,s}$ records only isomorphism classes of local realizations. To recover gerbes and cohomology one needs a groupoid-valued lift whose connected components give back $F_{p,s}$ after sheafification. Once an abelian band has been fixed, split lifts always exist; the substantive issue is whether a chosen lift is globally conservative at the terminal fibre and compatible with the later branchwise obstruction theory.
 
 \begin{definition}[Realization prestack and stackification]\label{def:realization-prestack}
-We use the notions and notation of realization prestack $\mathfrak P_r\to\mathcal C_a$ and stackification $\mathfrak L_r:=a(\mathfrak P_r)$ from \cite[Definition~4.10]{MaZhang2026ConditionalGluingFailure}.
+Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, and write
+\[
+a=[r]_p,
+\qquad
+\mathcal C_a:=\mathcal C_{p,s}/a.
+\]
+A \emph{realization prestack} for $r$ at $p$ is a category fibred in groupoids
+\[
+\mathfrak P_r\to \mathcal C_a
+\]
+such that:
+\begin{enumerate}[label=(\roman*),nosep]
+\item the pre-stackification connected-component presheaf is the restriction of the local object functor,
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)\cong F_{p,s}|_{\mathcal C_a};
+\]
+\item for every object $U$ of $\mathcal C_a$ and every $x\in \mathfrak P_r(U)$, the automorphism sheaf
+\[
+\underline{\mathrm{Aut}}(x)
+\]
+on $\mathcal C_a/U$ is functorially identified with the restriction of a fixed abelian sheaf $\Band$ on $\mathcal C_a$.
+\end{enumerate}
+Write
+\[
+\mathfrak L_r:=a(\mathfrak P_r)
+\]
+for the stackification of $\mathfrak P_r$ in groupoids \cite[Tag~02ZP]{StacksProject}.
 \end{definition}
 
 \begin{proposition}[Canonical split realization prestack]\label{prop:split-realization-prestack}
-See \cite[Proposition~4.11]{MaZhang2026ConditionalGluingFailure} for the canonical split realization prestack; in particular, the separated case singled out below admits such a lift.
+Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, write
+\[
+a=[r]_p,
+\qquad
+\mathcal C_a:=\mathcal C_{p,s}/a,
+\]
+and let $\Band$ be any abelian sheaf on $\mathcal C_a$. Then there exists a realization prestack
+\[
+\mathfrak P_r^{\mathrm{split}}\to \mathcal C_a
+\]
+with band $\Band$ such that
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r^{\mathrm{split}})
+\cong
+F_{p,s}|_{\mathcal C_a}.
+\]
+Explicitly, for each object $U$ of $\mathcal C_a$, the fibre
+\[
+\mathfrak P_r^{\mathrm{split}}(U)
+\]
+has object set $F_{p,s}(U)$, every object $\sigma$ has automorphism group
+\[
+\mathrm{Aut}_{\mathfrak P_r^{\mathrm{split}}(U)}(\sigma)=\Band(U),
+\]
+and there are no morphisms between distinct objects.
 \end{proposition}
 
+\begin{proof}
+For a morphism $f:V\to U$ in $\mathcal C_a$, define pullback on objects by
+\[
+f^*(\sigma):=\res_V^U(\sigma)\in F_{p,s}(V)
+\]
+and on automorphisms by the sheaf restriction
+\[
+f^*:\Band(U)\to \Band(V).
+\]
+This gives a pseudofunctor $\mathcal C_a^{op}\to \mathbf{Grpd}$ and hence a category fibred in groupoids over $\mathcal C_a$. For any two objects $\sigma,\tau\in \mathfrak P_r^{\mathrm{split}}(U)$, the isomorphism presheaf on $\mathcal C_a/U$ is either $\Band|_U$ or the empty presheaf. Since $\Band$ is a sheaf and the empty presheaf is also a sheaf, $\mathfrak P_r^{\mathrm{split}}$ is a prestack.
+
+By construction, two objects of $\mathfrak P_r^{\mathrm{split}}(U)$ are isomorphic if and only if they are equal as elements of $F_{p,s}(U)$. Therefore
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r^{\mathrm{split}})(U)\cong F_{p,s}(U)
+\]
+for every $U$, giving condition \textup{(i)} of \Cref{def:realization-prestack}. Condition \textup{(ii)} holds because the automorphism sheaf of every object $\sigma$ is exactly $\Band|_U$.
+\end{proof}
+
 \begin{remark}[Why the separated case is singled out]\label{rem:separatedness-needed}
-The general split construction is deferred to \cite[Proposition~4.11]{MaZhang2026ConditionalGluingFailure}. The separatedness hypothesis remains in the present paper only because the later checklist and worked examples verify that special case directly.
+The split construction shows that bare existence of some banded lift is not the issue. What matters later is the choice of a lift whose stackification still reflects the intended global semantics at $a$. Separatedness enters only in concrete verifications and finite-presentation criteria, not in the abstract existence of a split prestack.
 \end{remark}
 
 \begin{proposition}[Components of the stackification]\label{prop:stackification-components}
-See \cite[Proposition~4.12]{MaZhang2026ConditionalGluingFailure}.
+In the setting of \Cref{def:realization-prestack}, there is a canonical isomorphism of sheaves on $\mathcal C_a$:
+\[
+\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a}.
+\]
 \end{proposition}
 
+\begin{proof}
+By stackification, the morphism presheaves of $\mathfrak P_r$ are sheafified and every object of $\mathfrak L_r$ is locally in the essential image of $\mathfrak P_r\to \mathfrak L_r$ \cite[Tag~02ZP]{StacksProject}. Passing to isomorphism classes therefore shows that $\pi_0(\mathfrak L_r)$ is the sheafification of $\pi_0^{\mathrm{pre}}(\mathfrak P_r)$. Since stacks in setoids are precisely sheaves of sets \cite[Tag~042Y]{StacksProject}, we obtain
+\[
+\pi_0(\mathfrak L_r)\cong a_{p,s}\bigl(\pi_0^{\mathrm{pre}}(\mathfrak P_r)\bigr).
+\]
+Using \Cref{def:realization-prestack}(i), this becomes
+\[
+\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a}.
+\qedhere
+\]
+\end{proof}
+
 \begin{definition}[Global conservativity at the terminal fibre]\label{def:global-conservativity}
-We use the terminal-fibre global conservativity condition from \cite[Definition~4.13]{MaZhang2026ConditionalGluingFailure}.
+In the setting of \Cref{def:realization-prestack}, let
+\[
+\iota_r:\mathfrak P_r\to \mathfrak L_r:=a(\mathfrak P_r)
+\]
+be the stackification morphism. We say that $\mathfrak P_r$ is \emph{globally conservative at $a$} if the induced functor on the terminal fibre
+\[
+(\iota_r)_a:(\mathfrak P_r)_a\to (\mathfrak L_r)_a
+\]
+is essentially surjective.
 \end{definition}
 
 \begin{proposition}[No new global objects at $a$]\label{prop:no-new-global-objects}
-See \cite[Proposition~4.14]{MaZhang2026ConditionalGluingFailure}.
+Assume global conservativity at $a$ in the sense of \Cref{def:global-conservativity}. Then
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+\mathfrak L_r(a)\neq\varnothing.
+\]
 \end{proposition}
 
+\begin{proof}
+By \Cref{def:existence-levels} and \Cref{def:realization-prestack}(i),
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+F_{p,s}(a)\neq\varnothing
+\quad\Longleftrightarrow\quad
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)(a)\neq\varnothing
+\quad\Longleftrightarrow\quad
+(\mathfrak P_r)_a\neq\varnothing.
+\]
+If $(\mathfrak P_r)_a\neq\varnothing$, choose $y\in (\mathfrak P_r)_a$. Then $\iota_r(y)\in \mathfrak L_r(a)$, so $\mathfrak L_r(a)\neq\varnothing$. Conversely, if $x\in \mathfrak L_r(a)$, essential surjectivity of $(\iota_r)_a$ yields $y\in (\mathfrak P_r)_a$ with $\iota_r(y)\cong x$, so $(\mathfrak P_r)_a\neq\varnothing$.
+\end{proof}
+
 \begin{remark}[What remains conditional]\label{rem:gluing-sensitive-lifts}
-\Cref{prop:split-realization-prestack} provides a split lift for every separated presheaf $F_{p,s}|_{\mathcal C_a}$ and fixed band. The later obstruction theory needs more: a lift whose stackification is globally conservative at $a$ and whose component gerbes admit the cohomological description used below. Accordingly, the branch obstruction classes of \Cref{sec:gerbe-obstruction} are attached to such a chosen lift and its band.
+\Cref{prop:split-realization-prestack} provides a split lift for every local object functor and fixed band. The later obstruction theory needs more: a chosen lift whose stackification is globally conservative at $a$ and whose component gerbes admit the cohomological description used below. Accordingly, the branch obstruction classes of \Cref{sec:gerbe-obstruction} are attached to such a chosen lift and its band; no general existence theorem for such lifts is proved here.
 \end{remark}
 
 \subsection{Assumptions on the chosen-lift formalism}\label{subsec:scope-chosen-lift}
@@ -268,14 +386,14 @@ For later use we collect the verifications that enter the branch-obstruction ana
 
 Given an admitted reference $r:\mathsf{Ref}_s$, the chosen-lift formalism applies once the following steps have been carried out.
 \begin{enumerate}[label=(\arabic*),nosep]
-\item (\emph{Separated presheaf}) Check that $F_{p,s}|_{\mathcal C_a}$ is separated on the slice site of a reference class $a=[r]_p$ so that the split prestack of \Cref{prop:split-realization-prestack} exists.
-\item (\emph{Gluing-sensitive lift}) Choose a realization prestack $\mathfrak P_r$ whose stackification $\mathfrak L_r$ is globally conservative at $a$ (\Cref{def:global-conservativity}).
+\item (\emph{Local separatedness, when needed}) Check any separatedness required by the chosen example or by the finite-presentation criteria used later; the abstract split prestack of \Cref{prop:split-realization-prestack} itself exists without this assumption.
+\item (\emph{Chosen lift}) Choose a realization prestack $\mathfrak P_r$ whose stackification $\mathfrak L_r$ is globally conservative at $a$ (\Cref{def:global-conservativity}).
 \item (\emph{Finite presentation}) Produce a finite cover $\mathcal U$ with finite nerve $N(\mathcal U)$ and trivialize the band on $\mathcal U$ so that \Cref{def:finite-nerve-presentation} applies.
 \item (\emph{Branch hypotheses}) When branch constancy or visibility invariance is needed, verify the bijectivity condition of \Cref{def:branch-constancy} on the chosen cover.
 \end{enumerate}
 Section~\ref{sec:homological-visibility} turns such a presentation into concrete homological data.
 
-The torus-type construction proved later in \Cref{ex:end-to-end} supplies an explicit instance of this scheme. There the local object functor is separated because every proper intersection carries a singleton fibre; the chosen gluing-sensitive prestack is globally conservative at the terminal fibre because both terminal fibres are empty; the band is constant on a finite good cover, so a finite nerve presentation exists; and the unique visible branch restricts to the unique connected component on every simplex, so branch constancy holds.
+The torus-type construction proved later in \Cref{ex:end-to-end} supplies an explicit instance of this scheme. There the local object functor is separated because every proper intersection carries a singleton fibre; the chosen prestack is globally conservative at the terminal fibre because both terminal fibres are empty; the band is constant on a finite good cover, so a finite nerve presentation exists; and the unique visible branch restricts to the unique connected component on every simplex, so branch constancy holds. The example is an existence verification of the hypothesis chain, not a general construction theorem for such lifts.
 
 A similar pattern appears for finitely generated Kripke frames with Beth semantics \cite{Beth1956,Kripke1965}. If $r$ records admissible partial sections of a predicate, then the associated local object functor is a presheaf on the Alexandrov site of the frame and is separated by monotonicity. Promoting local sections to slice groupoids with identity automorphisms gives a realization prestack that is globally conservative at the limit node, finite antichain covers yield finite nerves, and the finiteness of the maximal nodes forces bijectivity on connected components. Thus the same hypotheses arise in a standard semantic example unrelated to contextuality.
 
@@ -309,17 +427,28 @@ See Appendix~\ref{app:deferred-proofs}.
 \end{remark}
 
 \begin{definition}[Typed readout]\label{def:typed-readout}
-We use the typed readout $\Read_{p,s}(r)$ from \cite[Definition~4.21]{MaZhang2026ConditionalGluingFailure}.
+For a reference $r:\mathsf{Ref}_s$ at a state $p$, define the \emph{typed readout}
+\[
+\Read_{p,s}(r)
+\]
+by the following cases:
+\[
+\Read_{p,s}(r)=
+\begin{cases}
+\text{undefined}, & M,p\nVdash \Adm_s(r),\\[0.5ex]
+\Null, & M,p\Vdash \Adm_s(r)\ \text{and}\ \Vis_{p,s}(r)=\varnothing,\\[0.5ex]
+v, & \Vis_{p,s}(r)=\{v\},\\[0.5ex]
+\text{undefined}, & |\Vis_{p,s}(r)|>1.
+\end{cases}
+\]
 \end{definition}
 
 \begin{proposition}[Address before value]\label{prop:address-before-value}
 If
 \[
-\Read_{p,s}(r)=v
-\qquad\text{with}\qquad
-v\neq \Null,
+\Read_{p,s}(r)=v,
 \]
-then
+for some visible value class $v$, then
 \[
 M,p\Vdash \Adm_s(r)
 \qquad\text{and}\qquad
@@ -351,18 +480,16 @@ Immediate from \Cref{def:typed-readout}.
 \begin{proposition}[Refinement stability of defined readouts]\label{prop:typed-readout-persistence}
 Let $q\le p$, and suppose
 \[
-\Read_{p,s}(r)=v
-\qquad\text{with}\qquad
-v\neq \Null.
+\Read_{p,s}(r)=v,
 \]
-Then
+for some visible value class $v$. Then
 \[
 \Read_{q,s}(r)=v.
 \]
 \end{proposition}
 
 \begin{proof}
-Since $v\neq\Null$, the readout at $p$ is represented by a unique visible value class. By the refinement axioms \ref{ax:section-restriction} and \ref{ax:vis-stability} (\Cref{def:refinement-axioms}), compatible local families pull back functorially from $p$ to $q$ and the induced map $\Vis_{p\to q}$ sends a singleton of visible classes to a singleton. Hence the same class $v$ remains the unique visible class at $q$, so \Cref{def:typed-readout} gives $\Read_{q,s}(r)=v$.
+By \Cref{def:typed-readout}, the displayed equality means that $\Vis_{p,s}(r)=\{v\}$. By the refinement axioms \ref{ax:section-restriction} and \ref{ax:vis-stability} (\Cref{def:refinement-axioms}), compatible local families pull back functorially from $p$ to $q$ and the induced map $\Vis_{p\to q}$ sends a singleton of visible classes to a singleton. Hence the same class $v$ remains the unique visible class at $q$, so \Cref{def:typed-readout} gives $\Read_{q,s}(r)=v$.
 \end{proof}
 
 \subsection{Structural absence}
