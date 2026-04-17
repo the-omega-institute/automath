@@ -118,6 +118,7 @@ import Omega.POM.ReplicaSoftcoreExceptionalSecantEquation
 import Omega.POM.PressureReflectionInequality
 import Omega.POM.ResidueRefinementJensen
 import Omega.POM.RqLogconvexFreeEnergyOrder
+import Omega.POM.RqUniversalBounds
 import Omega.POM.RqQinftyEndpoint
 import Omega.POM.S4Asymptotic
 import Omega.POM.S4Recurrence
