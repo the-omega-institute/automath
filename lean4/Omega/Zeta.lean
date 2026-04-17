@@ -84,6 +84,7 @@ import Omega.Zeta.HankelDeterminantalRadicalEqRigidity
 import Omega.Zeta.HankelVandermondeFiniteBlaschke
 import Omega.Zeta.HankelFirstBlockDeterminantDiscriminantWeight
 import Omega.Zeta.HankelStiffnessBalance
+import Omega.Zeta.HankelMaximalMinorSyndromeNormalFormUniqueness
 import Omega.Zeta.HankelVandermonde2
 import Omega.Zeta.HankelVandermonde3Recovery
 import Omega.Zeta.HankelVandermonde4

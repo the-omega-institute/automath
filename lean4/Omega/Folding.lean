@@ -84,6 +84,7 @@ import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldSuitePublication
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
 import Omega.Folding.GaugeAnomalyHankelAudit
+import Omega.Folding.GaugeAnomalyJordanFingerprint
 import Omega.Folding.GaugeAnomalyDensity
 import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.GaugeAnomalyFiniteVarianceClosed
