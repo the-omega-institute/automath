@@ -210,6 +210,7 @@ import Omega.Zeta.XiZGPrefixRecursionMonotoneTailCertificate
 import Omega.Zeta.XiPronyMomentMapJacobianDelta4
 import Omega.Zeta.XiPomMinrealVsSpectralBudgetSeparation
 import Omega.Zeta.XiSmithLossMinimalBranchRegister
+import Omega.Zeta.SmithPrefixSufficiency
 import Omega.Zeta.XiBulkEntropyStrictConvexity
 import Omega.Zeta.XiTimePart50dcProjectivePressurePerronLogconvex
 import Omega.Zeta.LayeredPrimesliceLocalAlphabetFibermax
