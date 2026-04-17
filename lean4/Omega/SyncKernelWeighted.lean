@@ -8,5 +8,6 @@ import Omega.SyncKernelWeighted.RealInput40ResetRegenerationConstants
 import Omega.SyncKernelWeighted.RealInput40ResetRegenerationTail
 import Omega.SyncKernelWeighted.RateCurveDualityReduction
 import Omega.SyncKernelWeighted.UnitarySliceHalfPhaseLocking
+import Omega.SyncKernelWeighted.WeightedUnitRootFinite
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.SyncKernelWeighted.WittFrobeniusIteratedDescent
