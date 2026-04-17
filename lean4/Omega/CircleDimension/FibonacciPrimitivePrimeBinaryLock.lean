@@ -1,7 +1,38 @@
 import Mathlib.Tactic
+import Mathlib.Data.Nat.Fib.Basic
 import Mathlib.Data.ZMod.Basic
 
 namespace Omega.CircleDimension.FibonacciPrimitivePrimeBinaryLock
+
+/-- The least positive Fibonacci index at which the prime witness `p` appears. -/
+def FibonacciRankOfApparition (p r : ℕ) : Prop :=
+  0 < r ∧ p ∣ Nat.fib r ∧ ∀ n : ℕ, 0 < n → n < r → ¬ p ∣ Nat.fib n
+
+/-- `p` is primitive at the dyadic Fibonacci level `2^k`. -/
+def FibonacciDyadicPrimitivePrime (p k : ℕ) : Prop :=
+  p ∣ Nat.fib (2 ^ k) ∧ ∀ j : ℕ, j < k → ¬ p ∣ Nat.fib (2 ^ j)
+
+/-- A dyadic primitive Fibonacci prime has dyadic rank of apparition, hence the Lucas-style
+    congruence already locks `p` into the `2^k`-adic class indexed by the sign `s`.
+    thm:cdim-fibonacci-primitive-prime-2adic-congruence -/
+theorem paper_cdim_fibonacci_primitive_prime_2adic_congruence
+    {p k r : ℕ} {s : ℤ}
+    (hrank : FibonacciRankOfApparition p r)
+    (hprimitive : FibonacciDyadicPrimitivePrime p k)
+    (hrank_pow : ∃ j ≤ k, r = 2 ^ j)
+    (hlucas : ((r : ℤ) ∣ (p : ℤ) - s)) :
+    r = 2 ^ k ∧ (2 : ℤ)^k ∣ (p : ℤ) - s := by
+  rcases hrank_pow with ⟨j, hjk, rfl⟩
+  have hpFib : p ∣ Nat.fib (2 ^ j) := by
+    simpa using hrank.2.1
+  have hj_not_lt : ¬ j < k := by
+    intro hjlt
+    exact (hprimitive.2 j hjlt) hpFib
+  have hj : j = k := by omega
+  subst hj
+  constructor
+  · rfl
+  · simpa using hlucas
 
 /-- Binary prefix lock: split by sign `s ∈ {1, -1}`.
     cor:cdim-fibonacci-primitive-prime-binary-prefix-lock -/
