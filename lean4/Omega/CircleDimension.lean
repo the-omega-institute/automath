@@ -145,3 +145,4 @@ import Omega.CircleDimension.WdimSignedCircleDimension
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
 import Omega.CircleDimension.ZnProcyclicAndMinGenerators
 import Omega.CircleDimension.KernelAffineCompositionNorm
+import Omega.CircleDimension.PoissonBivariateSecondOrderCancellationRealizable

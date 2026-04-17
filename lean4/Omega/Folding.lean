@@ -195,6 +195,7 @@ import Omega.Folding.TailPatchIncomplete
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.TranslationEquationOrbitSolutionSpace
 import Omega.Folding.UniformSynchronizingLength
+import Omega.Folding.UnseenModesSpanZm
 import Omega.Folding.Value
 import Omega.Folding.VisibleValueOverflow
 import Omega.Folding.Weight
