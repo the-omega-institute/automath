@@ -160,6 +160,35 @@ show that \(10\) lands in the state whose next-symbol set is \(\{00,01,11\}\), n
 Because every factor of \(\mathcal{L}_{\mathrm{pair}}\) can be left-extended by arbitrarily many \(00\)'s (Lemma~\ref{lem:zero-padding}), every factor eventually enters the synchronized regime. Once synchronized, admissible extensions are governed uniquely by the table above. Therefore the displayed graph presents the whole shift \(\mathcal{P}\). It is right-resolving by construction, since each outgoing label from a fixed state is distinct.
 \end{proof}
 
+\begin{proposition}[Synchronized path lifting]\label{prop:sync-language}
+Fix \(s\in\mathcal{S}\) and \(n\ge 1\). Let \(a_1,\dots,a_n\) be pair symbols in \(\{00,01,10,11\}\). Then the following are equivalent.
+\begin{enumerate}
+\item[(i)] \(00|s|a_1|\cdots|a_n\in \mathcal{L}_{\mathrm{pair}}\).
+\item[(ii)] There exists a path
+\[
+s=s_0\xrightarrow{a_1}s_1\xrightarrow{a_2}\cdots\xrightarrow{a_n}s_n
+\]
+in the four-state graph of Proposition~\ref{prop:transitions}.
+\end{enumerate}
+In particular, the finite words that occur after a synchronized prefix are exactly the path labels of the four-state graph.
+\end{proposition}
+
+\begin{proof}
+We argue by induction on \(n\). When \(n=1\), the claim is exactly Proposition~\ref{prop:transitions}. Assume \(n\ge2\).
+
+Suppose first that \(00|s|a_1|\cdots|a_n\in\mathcal{L}_{\mathrm{pair}}\). By Proposition~\ref{prop:transitions}, the prefix \(00|s|a_1\) determines a unique successor state \(s_1\) with \(s\xrightarrow{a_1}s_1\). The suffix \(00|s_1|a_2|\cdots|a_n\) is again a synchronized factor, so the induction hypothesis yields a path
+\[
+s_1\xrightarrow{a_2}\cdots\xrightarrow{a_n}s_n.
+\]
+Prepending the first step gives the required path from \(s\).
+
+Conversely, suppose that
+\[
+s=s_0\xrightarrow{a_1}s_1\xrightarrow{a_2}\cdots\xrightarrow{a_n}s_n
+\]
+is a path in the graph. Proposition~\ref{prop:transitions} realizes the first step by a synchronized factor \(00|s|a_1\). The induction hypothesis realizes the tail \(a_2\cdots a_n\) after the synchronized state \(s_1\). Concatenating these synchronized extensions gives a realization of \(00|s|a_1|\cdots|a_n\) in \(\mathcal{L}_{\mathrm{pair}}\).
+\end{proof}
+
 \begin{remark}[Representative transition computation]
 The state \(10\) is the only state with three outgoing transitions. In the synchronized language there is nevertheless no ambiguity: the three admissible length-\(4\) factors beginning with \(00|10\) are precisely
 \[
@@ -188,7 +217,7 @@ Let \(\omega^{(M)}\) be uniform on \(\Om_M\), and let \(\mathcal{R}_M(\omega^{(M
 \end{proposition}
 
 \begin{proof}
-By Proposition~\ref{prop:transitions}, the interior factors of \(\mathcal{R}_M(\omega)\) are exactly the finite label words of a primitive synchronized right-resolving graph. Because the first coordinate of each pair symbol is the microstate digit itself, the map \(\omega\mapsto \mathcal{R}_M(\omega)\) is injective, so the uniform measure on \(\Om_M\) is the uniform measure on admissible reversed-pair words of length \(M\). Standard results on uniform word measures for primitive sofic shifts then imply that centered factors converge to the Parry measure carried by the synchronized presentation; see \cite[Section~8.4]{LindMarcus1995} and \cite[Chapter~2]{Kitchens1998}.
+By Lemma~\ref{lem:zero-padding} and Proposition~\ref{prop:sync-language}, the interior factors of \(\mathcal{R}_M(\omega)\) are exactly the finite label words of a primitive synchronized right-resolving graph. Because the first coordinate of each pair symbol is the microstate digit itself, the map \(\omega\mapsto \mathcal{R}_M(\omega)\) is injective, so the uniform measure on \(\Om_M\) is the uniform measure on admissible reversed-pair words of length \(M\). Standard results on uniform word measures for primitive sofic shifts then imply that centered factors converge to the Parry measure carried by the synchronized presentation; see \cite[Section~8.4]{LindMarcus1995} and \cite[Chapter~2]{Kitchens1998}.
 \end{proof}
 
 The Perron eigenvalue of \(A\) is \(2\). A convenient right/left eigenvector pair is
