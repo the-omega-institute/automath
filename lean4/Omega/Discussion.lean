@@ -11,3 +11,4 @@ import Omega.Discussion.HypercubeStokesFourierBinomial
 import Omega.Discussion.LedgerResidualMutualinfoFactorization
 import Omega.Discussion.SquierZeroCurvatureStrictification
 import Omega.Discussion.SquierCurvatureHolonomyStokes
+import Omega.Discussion.WdimFiniteIndexStability
