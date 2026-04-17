@@ -867,15 +867,107 @@ def detect_signature_degradation(wt: WorktreeInfo) -> list[str]:
     return violations
 
 
+# ---------------------------------------------------------------------------
+# Abstract-Prop shell pattern detector
+#
+# Detects the R1100+ codex-first anti-pattern of producing fake formalizations
+# by wrapping the paper claim in a `structure …Data where` with abstract Prop
+# fields, then "proving" `paper_*` theorems as tautologies on those fields.
+# See phase_c.txt HARD PROHIBITION for the full forbidden pattern.
+# ---------------------------------------------------------------------------
+
+_STRUCT_DATA_RE = re.compile(r"^structure\s+(\w+Data)\s+where\s*$", re.MULTILINE)
+_SHELL_THM_RE = re.compile(
+    r"^theorem\s+(paper_\w+)\s*((?:\([^)]*\)\s*)*)\s*:",
+    re.MULTILINE,
+)
+
+
+def _file_is_shell_new(text: str) -> Optional[str]:
+    """Return a violation description if `text` (a .lean file) contains the
+    abstract-Prop-Data shell anti-pattern; otherwise None."""
+    # 1. Find at least one `structure …Data where` with bare `Prop` fields.
+    for sm in _STRUCT_DATA_RE.finditer(text):
+        struct_name = sm.group(1)
+        body_start = sm.end()
+        tail = re.search(r"^\S", text[body_start:], re.MULTILINE)
+        body = text[body_start:body_start + tail.start()] if tail else text[body_start:]
+        prop_fields: set[str] = set()
+        has_hyp_or_derive = False
+        has_concrete_field = False
+        for ln in body.splitlines():
+            if not ln.strip():
+                continue
+            m_prop = re.match(r"^  (\w+)\s*:\s*Prop\s*$", ln)
+            if m_prop:
+                prop_fields.add(m_prop.group(1))
+                continue
+            m_any = re.match(r"^  (\w+)\s*:\s*(.+)$", ln)
+            if m_any:
+                fname, ftype = m_any.group(1), m_any.group(2).strip()
+                if fname.endswith("_h") and ftype in prop_fields:
+                    has_hyp_or_derive = True
+                elif fname.startswith("derive") and "→" in ftype:
+                    has_hyp_or_derive = True
+                else:
+                    has_concrete_field = True
+        # Pure shell: ≥2 bare Prop fields, at least one hyp/derive, no concrete field
+        if len(prop_fields) >= 2 and has_hyp_or_derive and not has_concrete_field:
+            # 2. Find a paper_* theorem that takes (D : struct_name) as parameter.
+            for tm in _SHELL_THM_RE.finditer(text):
+                header = tm.group(2) or ""
+                if re.search(rf"\(\s*\w+\s*:\s*{re.escape(struct_name)}\s*\)", header):
+                    return (
+                        f"structure {struct_name} has {len(prop_fields)} abstract Prop fields "
+                        f"wrapped by theorem {tm.group(1)}; see phase_c.txt HARD PROHIBITION"
+                    )
+    return None
+
+
+def detect_shell_pattern(wt: WorktreeInfo) -> list[str]:
+    """Scan .lean files NEWLY added in this round for the abstract-Prop shell pattern."""
+    violations: list[str] = []
+    try:
+        # Get newly-added files in this round vs. base branch.
+        result = run_cmd(
+            ["git", "diff", "--name-status", f"origin/{BASE_BRANCH}...HEAD"],
+            cwd=wt.path,
+        )
+        lines = (result.stdout or "").splitlines()
+    except Exception:
+        return violations  # can't check, allow through
+
+    new_files: list[str] = []
+    for ln in lines:
+        parts = ln.split("\t")
+        if len(parts) < 2:
+            continue
+        status, path = parts[0], parts[-1]
+        if status.startswith("A") and path.startswith("lean4/Omega/") and path.endswith(".lean"):
+            new_files.append(path)
+
+    for rel in new_files:
+        p = wt.path / rel
+        try:
+            text = p.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        v = _file_is_shell_new(text)
+        if v:
+            violations.append(f"{rel}: {v}")
+    return violations
+
+
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
-    """Check for new commits in the worktree. Also detects signature degradation."""
+    """Check for new commits in the worktree. Also rejects signature degradation
+    and new abstract-Prop shell files."""
     post = git_log_oneline(20, cwd=wt.path)
     new = [c for c in post if c not in pre_commits]
     if new:
         logger.info(f"[R{wt.round_number}] Phase D: {len(new)} new commit(s):")
         for c in new:
             logger.info(f"  {c}")
-        # Check for signature degradation
+        # Gate 1: signature degradation on existing theorems
         violations = detect_signature_degradation(wt)
         if violations:
             for v in violations:
@@ -884,6 +976,18 @@ def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[b
                 f"[R{wt.round_number}] Rejecting round: {len(violations)} theorem(s) had "
                 f"signatures replaced with trivial Prop stubs. "
                 f"Fix: keep original signature and leave proof as-is if stuck."
+            )
+            return False, new
+        # Gate 2: new abstract-Prop shell files
+        shell_violations = detect_shell_pattern(wt)
+        if shell_violations:
+            for v in shell_violations:
+                logger.error(f"[R{wt.round_number}] SHELL PATTERN: {v}")
+            logger.error(
+                f"[R{wt.round_number}] Rejecting round: {len(shell_violations)} new file(s) "
+                f"introduced the abstract-Prop Data shell anti-pattern. "
+                f"Fix: state paper_* theorems about concrete objects; use sorry + "
+                f"\\leanpartial{{…}}{{reason}} if proof is incomplete."
             )
             return False, new
         return True, new

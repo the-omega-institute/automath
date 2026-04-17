@@ -67,8 +67,49 @@ You MUST NOT weaken or replace them. Specifically:
 3. NEVER add new parameters of type `Prop` to replace concrete math objects.
 4. If you cannot prove an existing theorem, LEAVE IT UNCHANGED (keep its current
    proof or sorry if it already had one). Do NOT change its type signature.
-5. New theorems you create may use abstract Prop parameters only if the paper label
-   genuinely refers to an abstract/wrapper statement.
+
+## HARD PROHIBITION — Abstract-Prop Data Shell (auto-detected, round rejected)
+The pipeline will auto-reject any round that introduces the following anti-pattern.
+Do NOT create a new `structure <Name>Data where` that packages the paper's claim as
+abstract Prop fields and then "proves" a `paper_*` theorem by combining those
+assumptions. This is a fake proof: the fields are universal type variables, so
+`Name := { everything := True, ... }` trivially satisfies the structure and
+the "theorem" becomes a tautology.
+
+FORBIDDEN example (will be rejected):
+
+    structure FooData where
+      claimA : Prop                       -- FORBIDDEN: abstract Prop field
+      claimB : Prop                       -- FORBIDDEN: abstract Prop field
+      conclusionX : Prop                  -- FORBIDDEN: abstract Prop field
+      claimA_h : claimA                   -- FORBIDDEN: bare assumption
+      claimB_h : claimB                   -- FORBIDDEN: bare assumption
+      deriveConclusionX :                 -- FORBIDDEN: abstract implication
+        claimA → claimB → conclusionX
+    theorem paper_foo (D : FooData) :
+        D.conclusionX := by
+      exact D.deriveConclusionX D.claimA_h D.claimB_h
+
+REQUIRED instead: the `paper_*` theorem must state a proposition about CONCRETE
+objects, and its proof must discharge that proposition directly (via real tactics
+and real mathlib lemmas) or via lemmas proven earlier IN THE SAME FILE.
+
+    theorem paper_foo (n : ℕ) (hn : 2 ≤ n) :
+        realConcreteClaim n := by
+      rw [realConcreteDefinition]
+      ... real tactics ...
+
+Rules applied to every new file:
+- `paper_*` theorems MUST NOT take a parameter of type `...Data`.
+- `paper_*` conclusions MUST reference at least one concrete identifier (a def,
+  a numeric literal, a mathlib structure — NOT just `D.xxx` projections).
+- If you cannot close the proof, use `sorry` and mark `\leanpartial{…}{reason}`
+  instead of fabricating a shell structure. A sorry with a real signature is
+  HONEST and passes; a shell theorem is DISHONEST and will be auto-rejected.
+
+Existing hybrid files that still contain a historical shell structure are
+tolerated by the scanner, but NEW shell structures in a round's diff cause
+the entire round to be rejected (commits not merged to the base branch).
 
 ## Completion Contract
 - No sorry / admit / axiom; lake build must pass with zero errors
