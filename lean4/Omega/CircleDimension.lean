@@ -74,6 +74,7 @@ import Omega.CircleDimension.ModeQuadraticIntegrals
 import Omega.CircleDimension.ModeSpaceRKHS
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.NonresonantLissajousNodeCount
+import Omega.CircleDimension.NullWitnessNonsubstitutable
 import Omega.CircleDimension.OperationalHalfCircleDimensionNat
 import Omega.CircleDimension.OperationalHalfCircleDimensionNd
 import Omega.CircleDimension.OddDivisibilityTowerHolographicSeparation
