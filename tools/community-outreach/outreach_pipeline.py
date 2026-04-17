@@ -1416,7 +1416,7 @@ def run_stage_b(
 
         # Bug 8 fix: ACCUMULATE best findings across rounds instead of overwriting.
         # Keep current round's findings if better; otherwise keep previous best.
-        prev_best_score = max(state.scores.get("final", [0]))
+        prev_best_score = max(state.scores.get("final", []) or [0])
         if final_score >= prev_best_score or not state.findings:
             state.findings = findings  # this round is the new best
             logger.info("[%s] Round %d becomes new best (score %d >= prev %d)",
@@ -1466,7 +1466,7 @@ def run_stage_b(
         # Bug 8 fix: pass gate uses GLOBAL BEST score across all rounds,
         # not just current round. This prevents good findings from being discarded
         # just because the latest round tried a worse angle.
-        global_best = max(state.scores.get("final", [final_score]))
+        global_best = max(state.scores.get("final", []) or [final_score])
         if global_best >= PASS_SCORE:
             state.stage = "C"
             state.round = 0
