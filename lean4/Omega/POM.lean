@@ -106,6 +106,7 @@ import Omega.POM.MomentDimCollapse
 import Omega.POM.MomentResonance
 import Omega.POM.MultiplicativeChainRuleFinite
 import Omega.POM.MultiplicityCompositionPartition
+import Omega.POM.MultiplicityCompositionMod3Sparsity
 import Omega.POM.MultiplicityFixedRExtrema
 import Omega.POM.OrbitProductNorm
 import Omega.POM.OrderSpatialization

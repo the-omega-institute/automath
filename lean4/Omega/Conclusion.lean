@@ -63,6 +63,7 @@ import Omega.Conclusion.LkKolmogorovSharpOneOverK
 import Omega.Conclusion.LocalizedSolenoidCoprimeArtinMazurCompleteness
 import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.MinLatchesLogStates
+import Omega.Conclusion.MaxfiberEntropyGaugeFourmodeRigidity
 import Omega.Conclusion.MultiplicativeTropicalExactnessTriad
 import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.NoUniversalTwoAxisAuditCompletion

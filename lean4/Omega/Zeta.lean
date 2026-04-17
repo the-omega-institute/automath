@@ -207,6 +207,7 @@ import Omega.Zeta.XiPomMinrealVsSpectralBudgetSeparation
 import Omega.Zeta.XiSmithLossMinimalBranchRegister
 import Omega.Zeta.LayeredPrimesliceLocalAlphabetFibermax
 import Omega.Zeta.XiEntropyGapExponentialSuppressionNonzeroFingerprint
+import Omega.Zeta.XiEndpointDefectH12EnergyPoissonL2Dissipation
 import Omega.Zeta.XiSingleDefectIntegratedClosedForm
 import Omega.Zeta.XiSingleDefectThresholdPhaseTransition
 import Omega.Zeta.XiCRTMultistageAxisAllocationAdditiveControl
