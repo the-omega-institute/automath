@@ -21,6 +21,7 @@ import Omega.Folding.BernoulliPRegenerationPGF
 import Omega.Folding.BernoulliPPressureQuartic
 import Omega.Folding.BernoulliPhiHalfRatioLimits
 import Omega.Folding.BinFold
+import Omega.Folding.BinMinsectorLastbit1SectionUnique
 import Omega.Folding.BitRecoveryFromLocalCongruenceData
 import Omega.Folding.BinFoldMinsectorLastbitSectionUnique
 import Omega.Folding.BlockBijectionThreshold
