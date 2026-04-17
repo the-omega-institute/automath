@@ -112,6 +112,7 @@ import Omega.CircleDimension.PrefixQuantileCRTJointModulus
 import Omega.CircleDimension.PrefixResidualRegisterCapacity
 import Omega.CircleDimension.PrimeTruncation
 import Omega.CircleDimension.RadiusBlindspotJointDiscreteBudgetOrthogonal
+import Omega.CircleDimension.RadialFibrationTransgression
 import Omega.CircleDimension.RankonePhasePrimeFiber
 import Omega.CircleDimension.RankoneSolenoidHeightClassification
 import Omega.CircleDimension.ReadableTimeWordOverlapPD

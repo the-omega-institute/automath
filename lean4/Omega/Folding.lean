@@ -45,6 +45,7 @@ import Omega.Folding.ConsistentFiberHausdorffPrefixCount
 import Omega.Folding.CongruenceRigidityPublication
 import Omega.Folding.ConstructibilityRigidityObstruction
 import Omega.Folding.Defect
+import Omega.Folding.DerivedAffineReciprocity
 import Omega.Folding.DiscreteStokesAuditableBound
 import Omega.Folding.DiscreteStokesDefectPublication
 import Omega.Folding.EWTTelescope
