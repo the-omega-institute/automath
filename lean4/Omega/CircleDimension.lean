@@ -140,6 +140,7 @@ import Omega.CircleDimension.ToeplitzSpectralGapCarathBuffer
 import Omega.CircleDimension.TorusCollapseRelativeForms
 import Omega.CircleDimension.UnitarySliceDecidable
 import Omega.CircleDimension.UniversalSolenoidFullPrimeKernel
+import Omega.CircleDimension.VisiblePhaseResidualTriviality
 import Omega.CircleDimension.WdimBettiAverageLaw
 import Omega.CircleDimension.WdimSignedCircleDimension
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement

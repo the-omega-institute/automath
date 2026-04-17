@@ -145,6 +145,7 @@ import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.Window6NonlumpableBySpectrum
 import Omega.GU.Window6ResponseKernelMod23
 import Omega.GU.Window6RankGap
+import Omega.GU.Window6SaturationMaxfiberCanonicalXL
 import Omega.GU.Window6SingleGoodPrimeRecovery
 import Omega.GU.Window6TypeSuperselectionAutGamma6
 import Omega.GU.Window6VisibleCartanQuotientSyzygySplitting
