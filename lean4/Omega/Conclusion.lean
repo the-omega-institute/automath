@@ -130,6 +130,7 @@ import Omega.Conclusion.Window6CyclicOrbitParitySuperselection
 import Omega.Conclusion.Window6Collision
 import Omega.Conclusion.Window6OutputKLExactGcdChainSplitting
 import Omega.Conclusion.Window6LowOrderTensorVacuum
+import Omega.Conclusion.Window6BoundaryConductorTwoZetaFlatness
 import Omega.Conclusion.Window6RepresentationZetaCountRatio
 import Omega.Conclusion.Window6ResidualBudget
 import Omega.Conclusion.Window6SizebiasEscortAmplification

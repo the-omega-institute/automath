@@ -202,6 +202,7 @@ import Omega.Zeta.XiRealInput40LogMInftyTruncationBound
 import Omega.Zeta.XiZGPrefixRecursionMonotoneTailCertificate
 import Omega.Zeta.XiPronyMomentMapJacobianDelta4
 import Omega.Zeta.XiPomMinrealVsSpectralBudgetSeparation
+import Omega.Zeta.XiSmithLossMinimalBranchRegister
 import Omega.Zeta.LayeredPrimesliceLocalAlphabetFibermax
 import Omega.Zeta.XiEntropyGapExponentialSuppressionNonzeroFingerprint
 import Omega.Zeta.XiSingleDefectIntegratedClosedForm

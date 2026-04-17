@@ -54,6 +54,7 @@ import Omega.GU.JoukowskyGodelPullbackFactorization
 import Omega.GU.LeyangMahlerFreeEnergy
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.M11Z34CyclotomicRepresentationRigidity
+import Omega.GU.M11DeltaClosureUniqueMinimalSO10
 import Omega.GU.MinSectorBudget
 import Omega.GU.MobiusDualityUnified
 import Omega.GU.NapLocalUpliftForcesSo10
