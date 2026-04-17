@@ -107,6 +107,7 @@ import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.WedderburnBernoulliZeta
 import Omega.GU.WeightedSubsetSumGap
 import Omega.GU.Window6AdjointWeightMultiset
+import Omega.GU.Window6AbelianizedParityChargeRootCartanSplitting
 import Omega.GU.Window6AffineFiberOrbitClassification
 import Omega.GU.Window6BoundaryDyadicDirectionFlag
 import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy

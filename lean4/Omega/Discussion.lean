@@ -12,6 +12,7 @@ import Omega.Discussion.HypercubePotentialCurvatureControlledStrictification
 import Omega.Discussion.HypercubeSpectralTailFromFlux
 import Omega.Discussion.HypercubeStokesFourierBinomial
 import Omega.Discussion.LedgerResidualMutualinfoFactorization
+import Omega.Discussion.NoHairIffZk
 import Omega.Discussion.SquierZeroCurvatureStrictification
 import Omega.Discussion.SquierCurvatureHolonomyStokes
 import Omega.Discussion.ToeplitzNegativeAtomThreshold
