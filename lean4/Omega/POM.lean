@@ -12,6 +12,7 @@ import Omega.POM.CentralizerDetMod5
 import Omega.POM.CentralizerFPdim
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.CollisionEntropyRate
+import Omega.POM.CollisionAQFibonacciBFPrimitivePrimeDivisor
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.CollisionKernelPublication
 import Omega.POM.CollisionStrengthened

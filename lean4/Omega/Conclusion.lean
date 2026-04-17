@@ -17,6 +17,7 @@ import Omega.Conclusion.CapacityFiniteCompleteness
 import Omega.Conclusion.CapacityRamanujanPlateauLaw
 import Omega.Conclusion.CausalDepthBranchBudgetOrthogonality
 import Omega.Conclusion.CdimFiniteQuotientGrowth
+import Omega.Conclusion.CyclotomicPrimeModulusExceptionalSupportFiniteness
 import Omega.Conclusion.CdimKernelRegisterLowerBound
 import Omega.Conclusion.CofinalFixedQuotient
 import Omega.Conclusion.CollisionMomentMoritaDefectFusion
