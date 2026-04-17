@@ -85,6 +85,7 @@ import Omega.Conclusion.QuadraticFieldRamification
 import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.RateCdimTwoCircleThreshold
 import Omega.Conclusion.RealInput40UVAtomCore
+import Omega.Conclusion.RealInput40UVPressureSilentPhase
 import Omega.Conclusion.RecursiveSolenoidLieShadow
 import Omega.Conclusion.ResonanceWindow
 import Omega.Conclusion.ReadusNullTrichotomyNormalForm
