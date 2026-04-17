@@ -1,4 +1,5 @@
 import Omega.POM.AdjacentPressureConvexity
+import Omega.POM.A4LinearObservableTwoTermOscillation
 import Omega.POM.A4TracePrimitiveTwoTerm
 import Omega.POM.AitkenDelta2SquareConvergence
 import Omega.POM.CapacityCollisionDataProcessing

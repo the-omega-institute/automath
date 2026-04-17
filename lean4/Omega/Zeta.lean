@@ -201,6 +201,7 @@ import Omega.Zeta.XiPomMinrealVsSpectralBudgetSeparation
 import Omega.Zeta.LayeredPrimesliceLocalAlphabetFibermax
 import Omega.Zeta.XiSingleDefectIntegratedClosedForm
 import Omega.Zeta.XiSingleDefectThresholdPhaseTransition
+import Omega.Zeta.XiCRTMultistageAxisAllocationAdditiveControl
 import Omega.Zeta.XiCRTInvisibilityMarginalPrimeSpectrum
 import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.ZeckendorfPrimesNotSofic
