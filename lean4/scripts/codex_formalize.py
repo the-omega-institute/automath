@@ -75,6 +75,8 @@ def _load_prompt(name: str) -> str:
 _git_lock = threading.Lock()
 # Lock for round number allocation
 _round_lock = threading.Lock()
+# Lock serializing .lake/build merges back to the main repo
+_lake_merge_lock = threading.Lock()
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -497,6 +499,82 @@ def _codex_resolve_conflicts(
 
     logger.info("Codex resolved all conflicts successfully")
     return True
+
+
+def merge_lake_cache_back(wt: WorktreeInfo) -> None:
+    """After a successful merge, propagate the worktree's freshly-built .olean
+    artifacts back into the main repo's .lake/build/ so that the next round's
+    worktree (which COW-clones this cache) starts warm for the files added in
+    this round.
+
+    Only copies artifacts whose source .lean was ADDED or MODIFIED in this
+    round (surgical, O(new files)). For each source `lean4/Omega/<mod>.lean`,
+    propagates its lib/ (.olean/.ilean/.hash/.trace) and ir/ (.c/.hash/.setup.json)
+    artifacts. Destination files that already exist are not overwritten
+    (safe against concurrent merges — main's pre-existing artifact is by
+    construction compatible with the branch tip).
+    """
+    # Extensions produced per .lean source. Not all are always present
+    # (e.g. .trace for freshly-rebuilt, .setup.json only when lake regenerates).
+    LIB_EXTS = (".olean", ".olean.hash", ".ilean", ".ilean.hash", ".trace")
+    IR_EXTS = (".c", ".c.hash", ".setup.json")
+
+    src_root = wt.path / "lean4" / ".lake" / "build"
+    dst_root = LEAN_ROOT / ".lake" / "build"
+    if not src_root.exists():
+        return
+
+    try:
+        r = run_cmd(
+            ["git", "diff", f"origin/{BASE_BRANCH}...HEAD", "--name-only",
+             "--diff-filter=AM", "--", "lean4/Omega/"],
+            cwd=wt.path,
+        )
+        changed = [
+            l.strip() for l in (r.stdout or "").splitlines()
+            if l.strip().endswith(".lean")
+        ]
+    except Exception:
+        return
+
+    if not changed:
+        return
+
+    with _lake_merge_lock:
+        start = time.monotonic()
+        copied = 0
+        for rel in changed:
+            # "lean4/Omega/X/Y.lean" -> "Omega/X/Y"
+            mod = rel[len("lean4/"):-len(".lean")]
+            for sub, exts in (("lib/lean", LIB_EXTS), ("ir", IR_EXTS)):
+                for ext in exts:
+                    src = src_root / sub / f"{mod}{ext}"
+                    if not src.is_file():
+                        continue
+                    dst = dst_root / sub / f"{mod}{ext}"
+                    if dst.exists():
+                        continue
+                    dst.parent.mkdir(parents=True, exist_ok=True)
+                    try:
+                        # APFS copy-on-write when possible.
+                        subprocess.run(
+                            ["cp", "-c", str(src), str(dst)],
+                            check=True, stdin=subprocess.DEVNULL,
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                            timeout=30,
+                        )
+                        copied += 1
+                    except Exception:
+                        try:
+                            shutil.copy2(src, dst)
+                            copied += 1
+                        except Exception:
+                            pass
+        elapsed = time.monotonic() - start
+        logger.info(
+            f"[R{wt.round_number}] Lake cache merged back: "
+            f"{copied} artifact(s) from {len(changed)} source(s) ({elapsed:.2f}s)"
+        )
 
 
 def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> bool:
@@ -1087,6 +1165,12 @@ def run_round_in_worktree(
                 _save_round_log(round_num, phase_b, phase_c, new_commits, False)
                 return False, round_num, new_commits
             logger.info(f"[{tag}] SUCCESS: merged {len(new_commits)} commit(s) to {BASE_BRANCH}")
+            # Propagate freshly-built .olean artifacts back to main's cache so the
+            # next round's worktree starts warm for the files added in this round.
+            try:
+                merge_lake_cache_back(wt)
+            except Exception as exc:
+                logger.warning(f"[{tag}] Lake cache merge-back raised: {exc}")
         elif success and dry_run:
             logger.info(f"[{tag}] [DRY RUN] Would merge to {BASE_BRANCH}")
 
