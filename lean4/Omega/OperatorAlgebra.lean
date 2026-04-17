@@ -8,6 +8,7 @@ import Omega.OperatorAlgebra.FoldGaugeCommutantExplicit
 import Omega.OperatorAlgebra.FoldInfoNCEBayesOpt
 import Omega.OperatorAlgebra.FoldGaugeTwoMode
 import Omega.OperatorAlgebra.FoldInvariantSubalgebra
+import Omega.OperatorAlgebra.FoldUniformLiftNllDecomposition
 import Omega.OperatorAlgebra.FoldSupervisedMinimaxRisk
 import Omega.OperatorAlgebra.FoldVisiblePermutationLifts
 import Omega.OperatorAlgebra.ReplicationCentralizerColoredPartitionOrbitAlgebra

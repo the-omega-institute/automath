@@ -71,6 +71,7 @@ import Omega.POM.MassSplittingMomentRoot
 import Omega.POM.MaxFiberPublication
 import Omega.POM.MaxMassDispersionBound
 import Omega.POM.MicrocanonicalAdaptiveNoGain
+import Omega.POM.MicrocanonicalCoverTimeMean
 import Omega.POM.MicrocanonicalCoverTimeTailInclusionExclusion
 import Omega.POM.MicrocanonicalBandBounds
 import Omega.POM.MicrocanonicalFoldClassCount
