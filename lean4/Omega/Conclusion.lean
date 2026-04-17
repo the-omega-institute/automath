@@ -108,6 +108,7 @@ import Omega.Conclusion.SinglepointJetRigidity
 import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.SmithRamanujanShadowInversion
 import Omega.Conclusion.SmithRamanujanShadowSeeds
+import Omega.Conclusion.SoftcoreExceptionalMomentsCombinatorialClosedForm
 import Omega.Conclusion.SoftcoreKroneckerSympowerDecomposition
 import Omega.Conclusion.SoftcoreWeightMatrixExplicitInverse
 import Omega.Conclusion.SpectrumSignLaw
