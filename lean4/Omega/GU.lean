@@ -98,6 +98,7 @@ import Omega.GU.WedderburnBernoulliZeta
 import Omega.GU.WeightedSubsetSumGap
 import Omega.GU.Window6AdjointWeightMultiset
 import Omega.GU.Window6AffineFiberOrbitClassification
+import Omega.GU.Window6BoundaryDyadicDirectionFlag
 import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
 import Omega.GU.Window6B3C3AdjointCharacterQuarticInvariant
 import Omega.GU.Window6B3C3EuclideanCubature

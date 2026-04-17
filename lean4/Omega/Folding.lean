@@ -74,6 +74,7 @@ import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
+import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldSuitePublication
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
 import Omega.Folding.GaugeAnomalyDensity
