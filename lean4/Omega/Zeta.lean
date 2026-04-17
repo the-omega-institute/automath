@@ -162,6 +162,7 @@ import Omega.Zeta.SyncCyclotomicEliminationEvenness
 import Omega.Zeta.SyncBivariateEulerProduct
 import Omega.Zeta.SyncCyclotomicDegreeLawPublication
 import Omega.Zeta.SyncKernelMixingRate
+import Omega.Zeta.SyncKernelResetWordWaitingTimeGeneralIid
 import Omega.Zeta.SyncKernelResetTimeUnboundedUnderSmallQ
 import Omega.Zeta.SyncKernelPalindrome
 import Omega.Zeta.SyncKernelSpectrum
