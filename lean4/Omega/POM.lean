@@ -34,6 +34,7 @@ import Omega.POM.FenceRiccatiError
 import Omega.POM.FibCubeAntipodeCount
 import Omega.POM.FibCubeEccentricityCore
 import Omega.POM.FibCubeEdgeParity
+import Omega.POM.FibCubeFVectorClosed
 import Omega.POM.FibCubeFrechetMedianUnique
 import Omega.POM.FibCubeGrayHamilton
 import Omega.POM.FibCubeKPointCount
