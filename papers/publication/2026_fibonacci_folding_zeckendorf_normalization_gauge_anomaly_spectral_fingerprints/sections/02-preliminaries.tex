@@ -1,31 +1,33 @@
-\section{Preliminaries: window spaces, Fibonacci evaluation, and Zeckendorf normalization}
+\section{Finite windows and Fibonacci normalization}
 \label{sec:preliminaries}
 
-\subsection{Microstate windows and the golden-mean language}
+\subsection{Microstate and stable words}
+
 For an integer \(m\ge 1\), let
 \[
-\Om_m := \set{0,1}^m
+\Om_m:=\{0,1\}^m
 \]
-be the microstate space of binary words of length \(m\). We also consider the \emph{stable} subset
+be the set of binary words of length \(m\). We think of \(\Om_m\) as the space of microstates visible in a window of size \(m\). The corresponding stable words are
 \[
-X_m := \set{x\in \set{0,1}^m : \text{$x$ contains no occurrence of the block \(11\)}},
+X_m:=\{x\in\{0,1\}^m:\text{$x$ contains no occurrence of \(11\)}\},
 \]
-the length-\(m\) blocks of the golden-mean shift.
+that is, the length-\(m\) blocks of the golden-mean shift.
 
-\subsection{Notation guide and convention map}
+\subsection{Conventions}
 \label{subsec:notation-guide}
-Two orderings of the same finite word appear in the manuscript. We record them once here and keep each appendix in a single convention.
+
+Two orderings of the same finite word will appear repeatedly. Since the appendices use both, we record the translation once and for all.
 
 \begin{center}
 \begin{tabular}{|p{0.23\linewidth}|p{0.69\linewidth}|}
 \hline
 Object & Meaning \\ \hline
-\(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\) & The \emph{low-to-high} (LH) word used in Sections~\ref{sec:preliminaries}--\ref{sec:partition}. Position \(k\) carries weight \(\Fib_{k+1}\). \\ \hline
-\(\omega^\sharp=(\omega_m,\dots,\omega_1)\) & The same word written in \emph{most-significant-digit-first} (MSD-first) order. Appendix~\ref{app:rewriting} uses this convention exclusively. \\ \hline
-\(\proj_m\) & Truncation to the first \(m\) LH digits, i.e.\ to the \(m\) lowest-weight coordinates. \\ \hline
-\(\Fold_m(\omega)\) & Fibonacci evaluation, Zeckendorf normalization, then truncation to the first \(m\) LH digits. \\ \hline
-\(\aware_{m+1\to m}\) & Fold-aware restriction determined by \(\Fold_m\circ \aware_{m+1\to m}=\proj_{m+1\to m}\circ \Fold_{m+1}\). \\ \hline
-Carry slot & An auxiliary zero at the high-weight end used when a local rewrite needs one more site. In MSD-first order this is the leading zero of Appendix~\ref{app:rewriting}; in LH order it is a trailing zero. \\ \hline
+\(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\) & The \emph{low-to-high} (LH) ordering used in Sections~\ref{sec:preliminaries}--\ref{sec:partition}. Position \(k\) carries weight \(\Fib_{k+1}\). \\ \hline
+\(\omega^\sharp=(\omega_m,\dots,\omega_1)\) & The same word written in \emph{most-significant-digit-first} order. Appendix~\ref{app:rewriting} uses this convention throughout. \\ \hline
+\(\proj_m\) & Truncation to the first \(m\) LH digits, that is, to the \(m\) lowest-weight coordinates. \\ \hline
+\(\Fold_m(\omega)\) & Fibonacci evaluation, Zeckendorf normalization, and truncation back to the first \(m\) LH digits. \\ \hline
+\(\aware_{m+1\to m}\) & The compatible restriction characterized by \(\Fold_m\circ \aware_{m+1\to m}=\proj_{m+1\to m}\circ \Fold_{m+1}\). \\ \hline
+Carry slot & An auxiliary zero at the high-weight end used when a local rewrite needs one more site. In MSD-first order this is a leading zero; in LH order it is a trailing zero. \\ \hline
 \end{tabular}
 \end{center}
 
@@ -34,59 +36,68 @@ The reversal map
 \rev_m:\Om_m\to\Om_m,\qquad
 \rev_m(\omega_1,\dots,\omega_m):=(\omega_m,\dots,\omega_1),
 \]
-implements the passage between the two orderings. Appendix~\ref{app:pressure} will stay in LH convention and read the pair process from high weight to low weight, so no further convention changes occur there.
+passes between these two orderings. Apart from Appendix~\ref{app:rewriting}, which uses MSD-first notation because it is convenient for the rewriting rule, we keep the LH convention throughout.
 
 \subsection{Fibonacci evaluation}
-Let \((\Fib_k)_{k\ge 0}\) be the Fibonacci sequence with \(\Fib_0=0\), \(\Fib_1=1\), and \(\Fib_{k+2}=\Fib_{k+1}+\Fib_k\). For \(\omega=(\omega_1,\dots,\omega_m)\in \Om_m\), define the Fibonacci-weighted evaluation
+
+Let \((\Fib_k)_{k\ge 0}\) be the Fibonacci sequence with \(\Fib_0=0\), \(\Fib_1=1\), and \(\Fib_{k+2}=\Fib_{k+1}+\Fib_k\). For \(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\), define
 \begin{equation}\label{eq:Nomega}
-N(\omega) := \sum_{k=1}^m \omega_k \,\Fib_{k+1}.
+N(\omega):=\sum_{k=1}^m \omega_k\,\Fib_{k+1}.
 \end{equation}
 
 \begin{remark}[Weight convention and indexing]\label{rem:conventions}
-We adopt the convention that position \(k\) carries weight \(\Fib_{k+1}\). Thus position \(1\) has weight \(\Fib_2=1\) and position \(2\) has weight \(\Fib_3=2\). This is shifted by one from some common numeration conventions; see, for example,
-\cite{Fraenkel1985,Frougny1988,Frougny1992,FrougnyConfluent1992,FrougnySolomyak1996,Berstel1985,AlloucheShallit2003}.
-We call this the \emph{low-to-high} (LH) convention because position \(1\) carries the lowest weight. The classical numeration-theoretic convention writes the most significant digit first (MSD-first); see Section~\ref{sec:multiscale} for a precise translation between the two. Both conventions appear in this paper, but each appendix now stays in one convention only: Appendix~\ref{app:rewriting} is MSD-first, while Appendix~\ref{app:pressure} and Appendix~\ref{app:sofic} are LH throughout.
+We choose the convention that position \(k\) carries weight \(\Fib_{k+1}\). Thus the first two positions have weights \(\Fib_2=1\) and \(\Fib_3=2\). This differs by a shift from some common numeration conventions; compare, for example, \cite{Fraenkel1985,Frougny1988,Frougny1992,FrougnyConfluent1992,FrougnySolomyak1996,Berstel1985,AlloucheShallit2003}. The choice is convenient for finite windows because the visible coordinates are indexed from low weight to high weight.
 \end{remark}
 
-\subsection{Zeckendorf normalization and truncation}
-Zeckendorf's theorem states that every \(N\in \NN\) admits a unique representation as a sum of non-consecutive Fibonacci numbers \(\Fib_{k+1}\) (\(k\ge 1\)); see \cite{Lekkerkerker1952,Zeckendorf1972,Fraenkel1985}. Equivalently, there exists a unique binary sequence \(z=(z_k)_{k\ge 1}\in \set{0,1}^{\NN}\) such that
+\subsection{Zeckendorf normalization}
+
+Zeckendorf's theorem asserts that every \(N\in\NN\) has a unique representation as a sum of non-consecutive Fibonacci numbers \(\Fib_{k+1}\) (\(k\ge 1\)); see \cite{Lekkerkerker1952,Zeckendorf1972,Fraenkel1985}. Equivalently, there is a unique binary sequence \(z=(z_k)_{k\ge 1}\in\{0,1\}^{\NN}\) such that
 \begin{equation}\label{eq:zeck}
-z_k z_{k+1}=0\quad\text{for all }k\ge 1,
+z_kz_{k+1}=0\quad\text{for all }k\ge 1,
 \qquad
-N=\sum_{k\ge 1} z_k \Fib_{k+1}.
+N=\sum_{k\ge 1} z_k\Fib_{k+1}.
 \end{equation}
-We denote this digit map by \(Z:\NN\to \set{0,1}^{\NN}\), \(Z(N)=z\).
+We write \(Z(N)=z\) for this normalized digit sequence.
 
-Let \(\proj_m:\set{0,1}^{\NN}\to \set{0,1}^m\) be truncation to the first \(m\) digits,
-\(\proj_m(z)=(z_1,\dots,z_m)\).
+Let
+\[
+\proj_m:\{0,1\}^{\NN}\to\{0,1\}^m,\qquad
+\proj_m(z)=(z_1,\dots,z_m),
+\]
+denote truncation to the first \(m\) digits.
 
-\subsection{The folding map}
+\subsection{The fold}
+
 \begin{definition}[Window-level fold]\label{def:fold}
-For \(m\ge 1\), define the folding map
+For \(m\ge 1\), define
 \begin{equation}\label{eq:fold}
-\Fold_m(\omega) := \proj_m\!\left(Z\!\left(N(\omega)\right)\right)\in X_m,\qquad \omega\in \Om_m.
+\Fold_m(\omega):=\proj_m\!\left(Z\!\left(N(\omega)\right)\right)\in X_m,
+\qquad \omega\in\Om_m.
 \end{equation}
 \end{definition}
 
-Numerically, the fold replaces a possibly non-Zeckendorf Fibonacci digit string by the unique Zeckendorf digit string with the same value.
-At the language level, it projects onto the golden-mean constraint. Note that \(X_m\subset \Om_m\) consists precisely of fixed points: if \(x\in X_m\) then \(\Fold_m(x)=x\).
+In other words, \(\Fold_m\) replaces a possibly non-normal Fibonacci digit string by the Zeckendorf digits of the same value and then forgets everything beyond the visible window. Stable words are fixed points of this operation: if \(x\in X_m\), then \(\Fold_m(x)=x\).
 
 \begin{example}[A short fold computation]\label{ex:fold4}
 Let \(\omega=1110\in\Om_4\). Then
 \[
 N(\omega)=\Fib_2+\Fib_3+\Fib_4=1+2+3=6.
 \]
-The Zeckendorf expansion of \(6\) is \(\Fib_5+\Fib_2=5+1\), so
+Since
+\[
+6=\Fib_5+\Fib_2=5+1,
+\]
+we have
 \[
 Z(6)=(1,0,0,1,0,\dots),
 \qquad
 \Fold_4(1110)=1001.
 \]
-This small example already shows the two basic effects of folding: adjacent \(1\)s are eliminated, and mass can move to a higher Fibonacci site.
+Even this small example shows the two basic features of folding: adjacent \(1\)s disappear, and weight may move to a higher Fibonacci site.
 \end{example}
 
 \begin{example}[Running example: raw word, normalized word, pair process, and decoder]\label{ex:running}
-Take the length-\(5\) microstate word
+Consider the length-\(5\) word
 \[
 \omega=11011.
 \]
@@ -98,11 +109,11 @@ so
 \[
 \Fold_5(\omega)=00100.
 \]
-Reading the pair \((\omega,\Fold_5(\omega))\) from high Fibonacci weights to low ones therefore gives the reversed pair word
+If one reads the pair \((\omega,\Fold_5(\omega))\) from high Fibonacci weights to low ones, the corresponding reversed pair word is
 \[
 \mathcal{R}_5(\omega)=10|10|01|10|10.
 \]
-The same block also illustrates the sequence-level decoder. Its three overlapping \(3\)-windows are
+The same example will reappear in Section~\ref{sec:sequence}. Its three overlapping \(3\)-windows are
 \[
 110,\qquad 101,\qquad 011,
 \]
@@ -112,9 +123,9 @@ and their folds are
 \Fold_3(101)=101,\qquad
 \Fold_3(011)=000.
 \]
-In the \(m=3\) graph of Section~\ref{sec:sequence}, these labels form the path
+In the graph from Section~\ref{sec:sequence}, these labels form the path
 \[
 11 \xrightarrow{001} 10 \xrightarrow{101} 01 \xrightarrow{000} 11,
 \]
-so the three-label decoder recovers the current appended bit \(1\) on the last edge. We will return to this example when discussing the pair process and the inverse code.
+so the three-label decoder recovers the appended bit \(1\) on the last edge.
 \end{example}
