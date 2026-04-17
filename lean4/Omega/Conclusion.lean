@@ -23,6 +23,7 @@ import Omega.Conclusion.CollisionMomentMoritaDefectFusion
 import Omega.Conclusion.CompressionLadderSpin10
 import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.CoordinateBundleDyadicBlockLaw
+import Omega.Conclusion.ThreeEndCertificateOrthogonality
 import Omega.Conclusion.CycleRankSaturation
 import Omega.Conclusion.DiscreteKinkFanPiecewiseLinearization
 import Omega.Conclusion.DisjointnessPowerWordDecomposition

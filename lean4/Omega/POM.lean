@@ -43,6 +43,7 @@ import Omega.POM.FiniteStateDimensionLowerBound
 import Omega.POM.FiberIndependenceComplexClassification
 import Omega.POM.FiberMedianMajorityPrimeValuation
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
+import Omega.POM.BCPontryaginDualClassification
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.FiberTripleMedianMajority
