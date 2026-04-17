@@ -13,6 +13,7 @@ import Omega.GroupUnification.GeneralNormalForm
 import Omega.GroupUnification.GeneralRigidity
 import Omega.GroupUnification.Gibbs
 import Omega.GroupUnification.GroupJGFoldSquarefreeExternalization
+import Omega.GroupUnification.GroupJGHolographicCoefficientRecovery
 import Omega.GroupUnification.GroupJGPrimeRegisterInitialObject
 import Omega.GroupUnification.GroupTwoScaleHolographicRecoveryRadialSeparation
 import Omega.GroupUnification.GutOmegaLinearAction
