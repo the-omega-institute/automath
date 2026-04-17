@@ -72,6 +72,7 @@ import Omega.SPG.F2FiberCardinality
 import Omega.SPG.CoarsegrainingL2DistinguishabilityArea
 import Omega.SPG.FiberWalshL1AreaLowerBound
 import Omega.SPG.FiniteAuditBidirectionalCertificates
+import Omega.SPG.FiniteAuditNpCompleteBarrier
 import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.FixedAxisGodelOrderInformation
 import Omega.SPG.FoldInjectivizationRegisterLowerBound
