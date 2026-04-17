@@ -90,6 +90,7 @@ import Omega.GU.TerminalFoldbin6TwoPointFiberDirectionSpectrum
 import Omega.GU.TerminalGamma6Rigidity
 import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
+import Omega.GU.TerminalWindow6LocalUpliftAdmissibility
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
 import Omega.GU.GodelLorentzAlgebraization

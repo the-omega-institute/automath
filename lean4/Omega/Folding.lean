@@ -150,6 +150,7 @@ import Omega.Folding.MetallicLinearScalarizationThreshold
 import Omega.Folding.MetallicParetoFrontier
 import Omega.Folding.MetallicParetoScaleLaw
 import Omega.Folding.MetallicTwoStateSFT
+import Omega.Folding.MaxFiberHolographicDepthAmplification
 import Omega.Folding.MicrostateResidualWindowReachability
 import Omega.Folding.MismatchLanguage
 import Omega.Folding.MismatchLanguageIntrinsicErgodic
