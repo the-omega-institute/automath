@@ -1,4 +1,5 @@
 import Omega.Folding.AlternatingSingleSymbolSynchronizing
+import Omega.Folding.AllOnesReductionLength
 import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.YmAmbiguityMainSingularityStar
 import Omega.Folding.BayesKinkGeometry
@@ -106,6 +107,7 @@ import Omega.Folding.GmFischerCover
 import Omega.Folding.HammingDist
 import Omega.Folding.HankelSpectrum
 import Omega.Folding.HigherBlockIdentification
+import Omega.Folding.KilloPrimeRegisterIdempotentArithmetization
 import Omega.Folding.HolographicRateConservation
 import Omega.Folding.ImageSubshiftZeta
 import Omega.Folding.InverseLimit
