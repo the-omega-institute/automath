@@ -65,4 +65,68 @@ theorem paper_xi_adams_fiber_mobius_inversion (m f : ℕ → ℤ) (a : ℕ) :
     intro u hu0 hu
     simpa [s, oddDivisors_eq_divisors_of_odd hu] using h' u hu0 hu
 
+/-- Concrete package for recovering the even-order exact masses on a fixed `2^(a+1)` layer from
+the endpoint masses along the odd fiber. -/
+structure AdamsEvenOrderAtomicSpectrumData where
+  m : ℕ → ℤ
+  f : ℕ → ℤ
+  a : ℕ
+  endpointDecomposition :
+    ∀ u > 0, Odd u →
+      Finset.sum (oddDivisors u) (fun v => adamsExactOrderMass f (a + 1) v) =
+        adamsEndpointProbeMass m (a + 1) u
+
+/-- Möbius recovery of the exact-order masses on the even layer `2^(a+1)`. -/
+def AdamsEvenOrderAtomicSpectrumData.recoveredLayer
+    (D : AdamsEvenOrderAtomicSpectrumData) (u : ℕ) : ℤ :=
+  Finset.sum u.divisorsAntidiagonal
+    (fun x => (μ x.1 : ℤ) * adamsEndpointProbeMass D.m (D.a + 1) x.2)
+
+/-- The odd-fiber masses on the fixed even layer are determined by the endpoint sequence. -/
+def AdamsEvenOrderAtomicSpectrumData.layersDetermined
+    (D : AdamsEvenOrderAtomicSpectrumData) : Prop :=
+  ∀ u > 0, Odd u → adamsExactOrderMass D.f (D.a + 1) u = D.recoveredLayer u
+
+/-- The even-order atomic masses on the layer `2^(a+1)` are determined by the same Möbius
+recovery formula. -/
+def AdamsEvenOrderAtomicSpectrumData.evenOrderAtomsDetermined
+    (D : AdamsEvenOrderAtomicSpectrumData) : Prop :=
+  ∀ u > 0, Odd u → D.f (2 ^ (D.a + 1) * u) = D.recoveredLayer u
+
+/-- The recovered even-layer sequence vanishes exactly when the even-order atoms on that layer
+vanish. -/
+def AdamsEvenOrderAtomicSpectrumData.vanishingIffNoEvenOrderAtoms
+    (D : AdamsEvenOrderAtomicSpectrumData) : Prop :=
+  (∀ u > 0, Odd u → D.recoveredLayer u = 0) ↔
+    (∀ u > 0, Odd u → D.f (2 ^ (D.a + 1) * u) = 0)
+
+/-- On each fixed even layer `2^(a+1)`, Möbius inversion recovers the exact-order masses from the
+endpoint sequence, so the even-order atomic spectrum on that layer is uniquely determined; in
+particular the recovered sequence is identically zero exactly when there are no even-order atoms
+there.
+    cor:xi-adams-even-order-atomic-spectrum-determined -/
+theorem paper_xi_adams_even_order_atomic_spectrum_determined
+    (D : AdamsEvenOrderAtomicSpectrumData) :
+    D.layersDetermined ∧ D.evenOrderAtomsDetermined ∧ D.vanishingIffNoEvenOrderAtoms := by
+  have hRecovery :
+      ∀ u > 0, Odd u → D.recoveredLayer u = adamsExactOrderMass D.f (D.a + 1) u :=
+    (paper_xi_adams_fiber_mobius_inversion D.m D.f (D.a + 1)).mp D.endpointDecomposition
+  refine ⟨?_, ?_, ?_⟩
+  · intro u hu0 hu
+    exact (hRecovery u hu0 hu).symm
+  · intro u hu0 hu
+    simpa [AdamsEvenOrderAtomicSpectrumData.recoveredLayer, adamsExactOrderMass] using
+      (hRecovery u hu0 hu).symm
+  · constructor
+    · intro hZero u hu0 hu
+      have hLayerZero : adamsExactOrderMass D.f (D.a + 1) u = 0 := by
+        rw [← hRecovery u hu0 hu]
+        exact hZero u hu0 hu
+      simpa [adamsExactOrderMass] using hLayerZero
+    · intro hNoAtoms u hu0 hu
+      have hLayerZero : adamsExactOrderMass D.f (D.a + 1) u = 0 := by
+        simpa [adamsExactOrderMass] using hNoAtoms u hu0 hu
+      rw [hRecovery u hu0 hu]
+      exact hLayerZero
+
 end Omega.Zeta

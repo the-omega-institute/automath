@@ -28,6 +28,7 @@ import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.DiagonalHighMoments
 import Omega.POM.DiagonalRateKeepResampleChannel
+import Omega.POM.DiagonalRateAcceptRefreshSSTStrong
 import Omega.POM.DiagonalRateAcceptRefreshSeparationExact
 import Omega.POM.DiagonalRateAcceptRefreshSSTPGF
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete
