@@ -12,3 +12,4 @@ import Omega.SyncKernelWeighted.UnitarySliceHalfPhaseLocking
 import Omega.SyncKernelWeighted.WeightedUnitRootFinite
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.SyncKernelWeighted.WittFrobeniusIteratedDescent
+import Omega.SyncKernelWeighted.ZeroInjectionValuePreserving
