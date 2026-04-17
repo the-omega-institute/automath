@@ -86,6 +86,7 @@ import Omega.GU.TerminalFoldbin6OffsetsReturnTimes
 import Omega.GU.TerminalFoldbin6PushforwardMarkov
 import Omega.GU.TerminalFoldbin6StrongLumpabilityBinaryWitness
 import Omega.GU.TerminalKmDepthRescaling
+import Omega.GU.TerminalOstrowskiZeckendorfBinfold
 import Omega.GU.TerminalFoldbin6StrongLumpabilityFails
 import Omega.GU.TerminalResetEventsSturmian
 import Omega.GU.TerminalSuccUniqueBranchMerge
