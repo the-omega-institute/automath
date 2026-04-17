@@ -2,6 +2,7 @@ import Omega.Discussion.ChebyshevAdams
 import Omega.Discussion.CubicalStokesElimination2Cycle
 import Omega.Discussion.DimensionalNullTrigger
 import Omega.Discussion.FiberStokesWatataniNormalization
+import Omega.Discussion.GcEquivalenceCharacterization
 import Omega.Discussion.HSZKIffDiamond
 import Omega.Discussion.HodgeStokesVarianceRigidity
 import Omega.Discussion.HorizonMeasureFold6Pushforward
