@@ -14,6 +14,7 @@ import Omega.GroupUnification.GeneralRigidity
 import Omega.GroupUnification.Gibbs
 import Omega.GroupUnification.GroupJGFoldSquarefreeExternalization
 import Omega.GroupUnification.GroupJGPrimeRegisterInitialObject
+import Omega.GroupUnification.GroupTwoScaleHolographicRecoveryRadialSeparation
 import Omega.GroupUnification.GutOmegaLinearAction
 import Omega.GroupUnification.HankelVandermondeDiscriminantStiffness
 import Omega.GroupUnification.MarkovZeroVariance
@@ -35,3 +36,4 @@ import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.UniversalQuadraticCoefficient
 import Omega.GroupUnification.VarianceTransfer
 import Omega.GroupUnification.Window6Delta34GeneratesSquares
+import Omega.GroupUnification.Window6DirectionSpectrumLinearKernelObstruction
