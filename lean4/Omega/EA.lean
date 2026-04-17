@@ -53,6 +53,7 @@ import Omega.EA.StableAddFiniteResolutionCompatibility
 import Omega.EA.StableAddNoWrapTruncation
 import Omega.EA.StableAddNormalizationRealization
 import Omega.EA.Sync10UniformInputOutput
+import Omega.EA.Sync10UniformOutputCorr
 import Omega.EA.Sync10UniformStationary
 import Omega.EA.Sync10Regeneration
 import Omega.EA.SyncKernelMealyMinimality
