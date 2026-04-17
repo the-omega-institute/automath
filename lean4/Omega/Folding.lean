@@ -17,6 +17,7 @@ import Omega.Folding.BernoulliPEndpointExactFinite
 import Omega.Folding.BernoulliPEndpointLdpRestated
 import Omega.Folding.BernoulliPGammaMax
 import Omega.Folding.BernoulliPJordanCriticalScaling
+import Omega.Folding.BernoulliPOutputMismatchEliminationCurve
 import Omega.Folding.BernoulliPJordanResonance
 import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPParryPressureChain
