@@ -58,6 +58,7 @@ import Omega.POM.BCPontryaginDualClassification
 import Omega.POM.FiberReflector
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.FiberStokesEulerBoundaryObservability
+import Omega.POM.FiberWalshHardcoreStokesSign
 import Omega.POM.FiberWalshSignatureRademacher
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.FiberTripleMedianMajority
