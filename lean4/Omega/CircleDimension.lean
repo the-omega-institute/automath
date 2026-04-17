@@ -133,6 +133,7 @@ import Omega.CircleDimension.StokesFiberIntegrationDefect
 import Omega.CircleDimension.StokesHalfFaceCount
 import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.StokesQPowerScalingAnomAmplification
+import Omega.CircleDimension.StokesRelativeC1FramedLineBundles
 import Omega.CircleDimension.TensorHomExtLaws
 import Omega.CircleDimension.ToeplitzSpectralGapCarathBuffer
 import Omega.CircleDimension.TorusCollapseRelativeForms
