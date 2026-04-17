@@ -56,6 +56,7 @@ import Omega.CircleDimension.KernelRKHSFeatureMap
 import Omega.CircleDimension.LissajousChebyshev
 import Omega.CircleDimension.LocalizationUniversalProperty
 import Omega.CircleDimension.MedianStokesRigidityPotential
+import Omega.CircleDimension.MedianMinPrimeSpectrumCubeDimension
 import Omega.CircleDimension.MedianThetaRigidityPrimeRatio
 import Omega.CircleDimension.MinimalAuditCompletion
 import Omega.CircleDimension.MinimalRecordAxis

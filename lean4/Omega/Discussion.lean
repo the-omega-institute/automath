@@ -8,5 +8,6 @@ import Omega.Discussion.HorizonMeasureFold6Pushforward
 import Omega.Discussion.HypercubePotentialCurvatureControlledStrictification
 import Omega.Discussion.HypercubeSpectralTailFromFlux
 import Omega.Discussion.HypercubeStokesFourierBinomial
+import Omega.Discussion.LedgerResidualMutualinfoFactorization
 import Omega.Discussion.SquierZeroCurvatureStrictification
 import Omega.Discussion.SquierCurvatureHolonomyStokes
