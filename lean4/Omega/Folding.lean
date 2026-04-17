@@ -69,6 +69,7 @@ import Omega.Folding.Fiber
 import Omega.Folding.FiberArithmetic
 import Omega.Folding.FiberArithmeticProperties
 import Omega.Folding.FiberConvolutionKernelInvertibility
+import Omega.Folding.FiberSingleCoordinateMinimalAugmentation
 import Omega.Folding.FiberFourierPhaseRigidity
 import Omega.Folding.FiberFusion
 import Omega.Folding.FiberRankUnrankLinear

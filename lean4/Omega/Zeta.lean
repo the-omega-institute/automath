@@ -197,6 +197,7 @@ import Omega.Zeta.VandermondeResultantSeeds
 import Omega.Zeta.WalshParseval
 import Omega.Zeta.XiLogDefectPotentialLinftyBoundByTotalDelta
 import Omega.Zeta.XiLogDefectGammaTranslationL1Lipschitz
+import Omega.Zeta.XiHellingerToeplitzDense2xLaw
 import Omega.Zeta.XiLimitDefectPotentialL1Sumrule
 import Omega.Zeta.XiCauchyPoissonDensityRatioSecondOrderProfile
 import Omega.Zeta.XiCauchyPoissonSecondOrderShapeLimitNodeRigidity
