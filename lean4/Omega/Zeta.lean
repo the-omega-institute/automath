@@ -211,6 +211,7 @@ import Omega.Zeta.XiPronyMomentMapJacobianDelta4
 import Omega.Zeta.XiPomMinrealVsSpectralBudgetSeparation
 import Omega.Zeta.XiSmithLossMinimalBranchRegister
 import Omega.Zeta.XiBulkEntropyStrictConvexity
+import Omega.Zeta.XiTimePart50dcProjectivePressurePerronLogconvex
 import Omega.Zeta.LayeredPrimesliceLocalAlphabetFibermax
 import Omega.Zeta.XiEntropyGapExponentialSuppressionNonzeroFingerprint
 import Omega.Zeta.XiEndpointDefectH12EnergyPoissonL2Dissipation

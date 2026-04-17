@@ -7,6 +7,7 @@ import Omega.GU.BdrySymmetricGroupSignTwistedLabelD2
 import Omega.GU.BdryOrientationCartesianPowerParityCollapse
 import Omega.GU.BdryOrientationIteratedFiberproductParity
 import Omega.GU.BdryOrientationJumpclassFiberproductMultiplicativity
+import Omega.GU.BdryOrientationBlockDecompositionOddVisibility
 import Omega.GU.BdryOrientationTsubsetLucasParity
 import Omega.GU.BdrySquareIdentity
 import Omega.GU.BdryUpliftOrientationParity
