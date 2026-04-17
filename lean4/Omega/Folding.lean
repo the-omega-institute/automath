@@ -21,6 +21,7 @@ import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPParryPressureChain
 import Omega.Folding.BernoulliPRegenerationPGF
 import Omega.Folding.BernoulliPPressureQuartic
+import Omega.Folding.BernoulliPSpecializeHalf
 import Omega.Folding.BernoulliPhiHalfRatioLimits
 import Omega.Folding.BinFold
 import Omega.Folding.BinMinsectorLastbit1SectionUnique
