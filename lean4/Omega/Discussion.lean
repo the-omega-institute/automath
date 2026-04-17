@@ -13,6 +13,7 @@ import Omega.Discussion.HypercubePotentialCurvatureControlledStrictification
 import Omega.Discussion.HypercubeSpectralTailFromFlux
 import Omega.Discussion.HypercubeStokesFourierBinomial
 import Omega.Discussion.LedgerResidualMutualinfoFactorization
+import Omega.Discussion.LambdaEquivariantPrimitive
 import Omega.Discussion.NoHairIffZk
 import Omega.Discussion.NullGatedDotproductAddressability
 import Omega.Discussion.SquierZeroCurvatureStrictification

@@ -207,6 +207,7 @@ import Omega.Folding.SummableDefectsEventualCompatibility
 import Omega.Folding.SummableNatEventuallyZero
 import Omega.Folding.SyncDelay
 import Omega.Folding.FoldBinEscortLastbit
+import Omega.Folding.FoldSpectrumFactorization
 import Omega.Folding.TailPatchIncomplete
 import Omega.Folding.TranslationKernelFourierSgM
 import Omega.Folding.TimeLayerDichotomy

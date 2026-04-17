@@ -96,6 +96,7 @@ import Omega.POM.MicrocanonicalCountSufficientStatisticPosteriorUniform
 import Omega.POM.Mod2DifferenceBinomialBasis
 import Omega.POM.ModpDifferenceBinomialBasis
 import Omega.POM.MomentMinreal
+import Omega.POM.MomentDimCollapse
 import Omega.POM.MomentResonance
 import Omega.POM.MultiplicativeChainRuleFinite
 import Omega.POM.MultiplicityCompositionPartition
