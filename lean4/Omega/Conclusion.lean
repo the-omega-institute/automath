@@ -60,6 +60,7 @@ import Omega.Conclusion.KrylovLowrankRigidity
 import Omega.Conclusion.LeyangOffdiagonalTranspositionQuotient
 import Omega.Conclusion.LeyangDeltaSecondMomentCollision
 import Omega.Conclusion.LkKolmogorovSharpOneOverK
+import Omega.Conclusion.LocalizedSolenoidCoprimeArtinMazurCompleteness
 import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.MinLatchesLogStates
 import Omega.Conclusion.MultiplicativeTropicalExactnessTriad

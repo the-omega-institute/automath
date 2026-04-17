@@ -1,4 +1,5 @@
 import Omega.TypedAddressBiaxialCompletion.BoundaryAddressCollision
+import Omega.TypedAddressBiaxialCompletion.BiaxialNonsubstitutable
 import Omega.TypedAddressBiaxialCompletion.BoundaryBlindspot
 import Omega.TypedAddressBiaxialCompletion.BoundaryEndpointHeat
 import Omega.TypedAddressBiaxialCompletion.EndpointHeatKernelComplement

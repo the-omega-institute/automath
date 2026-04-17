@@ -157,6 +157,7 @@ import Omega.Zeta.RealInput40RotationPolytopeShear
 import Omega.Zeta.RegularPrefixfreeKraftRational
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Zeta.ResidueClassAsymptotics
+import Omega.Zeta.ResidueRingExplicitErrorBound
 import Omega.Zeta.ResolventTraceIntegerResidueNoncancel
 import Omega.Zeta.RecursiveZeroShadowingExplicit
 import Omega.Zeta.RhoGapM12
