@@ -112,6 +112,7 @@ import Omega.Folding.InverseLimitTopology
 import Omega.Folding.LengthMBlockUniqueLift
 import Omega.Folding.LinearTimeBlockDecoding
 import Omega.Folding.LocalComplexityScaleCoincidence
+import Omega.Folding.LoglossContextGap
 import Omega.Folding.LocalRewriteLdpBarrier
 import Omega.Folding.LocalWeightRigidity
 import Omega.Folding.LocalWeightRigidityFibonacci

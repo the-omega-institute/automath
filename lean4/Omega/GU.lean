@@ -88,6 +88,7 @@ import Omega.GU.TerminalWindow5Window7FullSymmetricSpectrum
 import Omega.GU.TerminalWindow6Sl2zHyperbolicFromTailTriple
 import Omega.GU.TerminalWindowPushforwardCommutantTorus
 import Omega.GU.TerminalWindowRationalCommutantIdempotentRigidity
+import Omega.GU.TimeUnitLogphiProtocol
 import Omega.GU.ThreefoldRigidity
 import Omega.GU.U1ThroatIdentity
 import Omega.GU.U1ThroatIdentityFixedPoint
