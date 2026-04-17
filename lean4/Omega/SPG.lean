@@ -155,5 +155,6 @@ import Omega.SPG.VolumeBoundaryScaling
 import Omega.SPG.WalshStokes
 import Omega.SPG.WeightedBoundaryDecomposition
 import Omega.SPG.WeightedBoundaryPole
+import Omega.SPG.WeightedDiscreteFluxIdentity
 import Omega.SPG.WeightedBoundaryTransfer
 import Omega.SPG.WeightedL1TorusStableLengthGodel
