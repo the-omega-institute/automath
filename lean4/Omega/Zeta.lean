@@ -137,6 +137,7 @@ import Omega.Zeta.QuotientIndexLedgerSeeds
 import Omega.Zeta.RealArcSufficiencyUnitDisk
 import Omega.Zeta.Arity335EpsEffInversion
 import Omega.Zeta.RealInput40RotationPolytopeShear
+import Omega.Zeta.RegularPrefixfreeKraftRational
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Zeta.ResidueClassAsymptotics
 import Omega.Zeta.ResolventTraceIntegerResidueNoncancel
