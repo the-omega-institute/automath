@@ -50,6 +50,7 @@ import Omega.GU.JoukowskyAreaPreservingCayley
 import Omega.GU.JoukowskyEllipticTwoScaleStokesMean
 import Omega.GU.JoukowskyGodelLeadingCoeffRigidity
 import Omega.GU.JoukowskyGodelPullbackFactorization
+import Omega.GU.LeyangMahlerFreeEnergy
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.M11Z34CyclotomicRepresentationRigidity
 import Omega.GU.MinSectorBudget

@@ -87,6 +87,7 @@ import Omega.POM.MaxAtomicWeightParitySecondOrder
 import Omega.POM.MaxMassDispersionBound
 import Omega.POM.MicrocanonicalAdaptiveNoGain
 import Omega.POM.MicrocanonicalCoverTimeMean
+import Omega.POM.MicrocanonicalCoverTimeStrategyInvariance
 import Omega.POM.MicrocanonicalCoverTimeTailInclusionExclusion
 import Omega.POM.MicrocanonicalBandBounds
 import Omega.POM.MicrocanonicalFoldClassCount
