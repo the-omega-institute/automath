@@ -139,6 +139,7 @@ import Omega.POM.ToggleOrder
 import Omega.POM.ToggleScanLinearMaxOrbit
 import Omega.POM.ToggleScanCycleGhostMultiplicativity
 import Omega.POM.TopGapLimitConstants
+import Omega.POM.ToggleOrbitCountFiniteLowlevelInversion
 import Omega.POM.UniformLiftKLIsometryUniqueness
 import Omega.POM.ValMonotoneBooleanNand
 import Omega.POM.VisibleThickTail

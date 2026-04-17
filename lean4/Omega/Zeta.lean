@@ -189,5 +189,6 @@ import Omega.Zeta.XiPronyMomentMapJacobianDelta4
 import Omega.Zeta.XiPomMinrealVsSpectralBudgetSeparation
 import Omega.Zeta.XiSingleDefectIntegratedClosedForm
 import Omega.Zeta.XiSingleDefectThresholdPhaseTransition
+import Omega.Zeta.XiCRTInvisibilityMarginalPrimeSpectrum
 import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.ZeckendorfPrimesNotSofic
