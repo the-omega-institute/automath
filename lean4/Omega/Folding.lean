@@ -173,6 +173,7 @@ import Omega.Folding.NaturalStateComplexityGap
 import Omega.Folding.NormalizeThenTruncateFunctorial
 import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.OstrowskiQuadraticIrrationalPressureMatrixAlgebraicity
+import Omega.Folding.OstrowskiMetallicTruncationMismatchLimit
 import Omega.Folding.OstrowskiMetallicTwoRuleNormalization
 import Omega.Folding.OverflowGapRate
 import Omega.Folding.OracleCapacityVariationalProjection
