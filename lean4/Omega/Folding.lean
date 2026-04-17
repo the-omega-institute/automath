@@ -8,6 +8,7 @@ import Omega.Folding.BernoulliPBitpairLaw
 import Omega.Folding.BernoulliPAutocovarianceGeneratingRational
 import Omega.Folding.BernoulliPHalfFibonacciLowDefectShadow
 import Omega.Folding.BernoulliPMismatchStrictThirdOrderMarkov
+import Omega.Folding.BernoulliPRegenerationBivariatePGF
 import Omega.Folding.BernoulliPRegenerationTripleJointLaw
 import Omega.Folding.BernoulliPDoobTransformClosed
 import Omega.Folding.BernoulliPEndpointExactFinite
