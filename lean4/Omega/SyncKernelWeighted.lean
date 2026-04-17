@@ -1,7 +1,5 @@
 import Omega.SyncKernelWeighted.MobiusErrorPropagation
 import Omega.SyncKernelWeighted.RealInput40ArityChargeDensityBound
-import Omega.SyncKernelWeighted.RealInput40ResetRegenerationConstants
 import Omega.SyncKernelWeighted.RealInput40ResetRegenerationTail
-import Omega.SyncKernelWeighted.Sync10UniformStationary
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.SyncKernelWeighted.WittFrobeniusIteratedDescent

@@ -5,7 +5,6 @@ import Omega.GU.BdryChiTwistedBinaryLabelExistence
 import Omega.GU.BdryOrientationCartesianPowerParityCollapse
 import Omega.GU.BdryOrientationIteratedFiberproductParity
 import Omega.GU.BdryOrientationJumpclassFiberproductMultiplicativity
-import Omega.GU.BdryOrientationWreathCharacterOddVisibility
 import Omega.GU.BdryOrientationTsubsetLucasParity
 import Omega.GU.BdrySquareIdentity
 import Omega.GU.BdryUpliftOrientationParity
@@ -44,9 +43,6 @@ import Omega.GU.GapDirichletContinuedFraction
 import Omega.GU.FreeInvolutionCount
 import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GU.JetAlignmentUnification
-import Omega.GU.JGHolomorphicMomentRigidity
-import Omega.GU.JoukowskyGodelBinomialFilteringFourierExtraction
-import Omega.GU.JoukowskyGodelPullbackFactorization
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.M11Z34CyclotomicRepresentationRigidity
 import Omega.GU.MinSectorBudget
@@ -56,7 +52,6 @@ import Omega.GU.NapSo10AnalyticMinimality
 import Omega.GU.ParryEndpointCollapse
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
-import Omega.GU.PrimeRegisterInitialObject
 import Omega.GU.PullbackBracketFromOperatorEnvelope
 import Omega.GU.RadialQuadraticIdentifiability
 import Omega.GU.RadialQuadraticKlInfinite
@@ -109,7 +104,6 @@ import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
 import Omega.GU.Window6B3C3UniqueQuarticDetector
 import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6B3SupportCount
-import Omega.GU.Window6BdrySheetParityNonfunctorialExtension
 import Omega.GU.Window6BinfoldLastbitLecamEquivalence
 import Omega.GU.Window6ChiralCompressionHypercubeAdjacency
 import Omega.GU.Window6C3SupportCount
@@ -126,7 +120,6 @@ import Omega.GU.Window6LabeledSphericalCubatureStrengthFive
 import Omega.GU.Window6LabeledSphericalDegree6HarmonicDefect
 import Omega.GU.Window6LieEnvelopeClosure
 import Omega.GU.Window6NonlumpableBySpectrum
-import Omega.GU.Window6P6CompactnessPrinciple
 import Omega.GU.Window6ResponseKernelMod23
 import Omega.GU.Window6RankGap
 import Omega.GU.Window6SingleGoodPrimeRecovery

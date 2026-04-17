@@ -108,7 +108,6 @@ import Omega.SPG.NoiseBudgetRecovery
 import Omega.SPG.NonuniformCylinder
 import Omega.SPG.OptimalContinuousInversePublication
 import Omega.SPG.PartialBoundaryGodelAuditOptimal
-import Omega.SPG.PolytimeCompleteInvariantBarrier
 import Omega.SPG.PolycubeAdhesion
 import Omega.SPG.PolycubeIsoperimetryUpper
 import Omega.SPG.PrefixBallCylinder
