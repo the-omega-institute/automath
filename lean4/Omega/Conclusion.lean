@@ -127,6 +127,7 @@ import Omega.Conclusion.Window6RepresentationZetaCountRatio
 import Omega.Conclusion.Window6ResidualBudget
 import Omega.Conclusion.Window6SizebiasEscortAmplification
 import Omega.Conclusion.Window6ThreeMomentSpectrumInversion
+import Omega.Conclusion.Window6ThreeTemperatureHiddenCoolingSpectralHolography
 import Omega.Conclusion.Window6VisibleHiddenSeparation
 import Omega.Conclusion.ZGDensityExactInhomogeneousMarkov
 import Omega.Conclusion.ZeckendorfCrossResolution
