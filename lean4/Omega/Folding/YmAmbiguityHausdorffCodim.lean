@@ -25,4 +25,12 @@ theorem paper_Ym_amb_hausdorff_codim (ρAmb εm dimH codim : ℝ) (hρ : 0 < ρA
     field_simp [hlog2]
     ring
 
+/-- Paper-facing restatement of the entropy-gap Hausdorff-codimension formulas.
+    cor:Ym-amb-codim-from-entropy-gap -/
+theorem paper_Ym_amb_codim_from_entropy_gap (ρAmb εm dimH codim : ℝ) (hρ : 0 < ρAmb)
+    (hρlt : ρAmb < 2) (hdim : dimH = Real.log ρAmb / Real.log 2)
+    (hε : εm = Real.log 2 - Real.log ρAmb) (hcodim : codim = 1 - dimH) :
+    dimH = 1 - εm / Real.log 2 ∧ codim = εm / Real.log 2 := by
+  simpa using paper_Ym_amb_hausdorff_codim ρAmb εm dimH codim hρ hρlt hdim hε hcodim
+
 end Omega.Folding
