@@ -5,6 +5,7 @@ import Omega.Discussion.CubicalStokesElimination2Cycle
 import Omega.Discussion.DimensionalNullTrigger
 import Omega.Discussion.EpsZkCmiRiskImprovementBound
 import Omega.Discussion.FiberStokesWatataniNormalization
+import Omega.Discussion.FoldRepresentationQCollisionLowerBound
 import Omega.Discussion.GcEquivalenceCharacterization
 import Omega.Discussion.HSZKIffDiamond
 import Omega.Discussion.HodgeStokesVarianceRigidity
