@@ -134,3 +134,4 @@ import Omega.POM.VisibleThickTail
 import Omega.POM.WitnessExtractionOptimalSuccess
 import Omega.POM.ZeroTempConcentration
 import Omega.POM.ZeroTemperatureTwoTermExpansion
+import Omega.POM.SpectralGapTime
