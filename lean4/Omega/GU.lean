@@ -118,6 +118,7 @@ import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
 import Omega.GU.Window6B3C3UniqueQuarticDetector
 import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6BoundaryDyadicDirectionFlag
+import Omega.GU.Window6PushEnvelopeCertificateUpgrade
 import Omega.GU.Window6BdrySheetParityNonfunctorialExtension
 import Omega.GU.Window6B3SupportCount
 import Omega.GU.Window6BinfoldKLLimitConstant
