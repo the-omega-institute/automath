@@ -30,6 +30,7 @@ import Omega.Folding.CollisionDecomp
 import Omega.Folding.CollisionKernel
 import Omega.Folding.CollisionZeta
 import Omega.Folding.CollisionZetaOperator
+import Omega.Folding.ConsistentFiberHausdorffPrefixCount
 import Omega.Folding.CongruenceRigidityPublication
 import Omega.Folding.ConstructibilityRigidityObstruction
 import Omega.Folding.Defect
