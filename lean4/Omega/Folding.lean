@@ -200,6 +200,7 @@ import Omega.Folding.SummableNatEventuallyZero
 import Omega.Folding.SyncDelay
 import Omega.Folding.FoldBinEscortLastbit
 import Omega.Folding.TailPatchIncomplete
+import Omega.Folding.TranslationKernelFourierSgM
 import Omega.Folding.TimeLayerDichotomy
 import Omega.Folding.TranslationEquationOrbitSolutionSpace
 import Omega.Folding.UniformSynchronizingLength
