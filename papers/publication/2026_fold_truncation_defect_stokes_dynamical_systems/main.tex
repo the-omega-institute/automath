@@ -123,9 +123,11 @@ it takes values in $(\ZZ/2\ZZ)^m$ and cannot be recovered from a scalar carry
 length or from the individual digit densities considered in the references
 above.  Proposition-level evidence for that distinction appears already in
 Examples~\ref{ex:carry-without-defect} and~\ref{ex:defect-without-carry}, which
-exhibit a nonzero carry with no truncation defect and vice versa.
+show that a nontrivial normalization cascade may leave the truncation defect
+zero, while a nonzero global defect may occur even when the top adjacent
+indicator vanishes.
 
-The point of this paper is therefore narrow and fully deterministic:
+The logical structure of the paper is therefore entirely deterministic:
 \[
 \begin{aligned}
 \text{naive truncation}
@@ -140,10 +142,9 @@ The point of this paper is therefore narrow and fully deterministic:
 \text{explicit bounds and compatibility criteria}.
 \end{aligned}
 \]
-Sections~4--6 are therefore recorded as a short compendium of deterministic
-consequences: each statement is a remark-level corollary of the threshold and
-count inputs, included only so that the telescoping dictionary is available in
-one place.
+Sections~4--6 record the consequences needed later: quantitative coupling
+bounds, the cocycle identity, exact finite-$n$ enumeration, and the eventual
+compatibility criterion for inverse limits.
 
 We use only minimal background on Zeckendorf normalization and symbolic
 systems; see
@@ -231,7 +232,7 @@ Zeckendorf addition automata \cite{AhlbachUsatineFrougnyPippenger2013,Frougny199
 \addlinespace
 Ostrowski/Fibonacci automata \cite{HieronymiTerry2018,ShallitShan2024} &
   decidability and structure of Fibonacci representations &
-  exact inverse-limit compatibility criterion in terms of the carry-threshold \\
+  exact inverse-limit compatibility criterion in terms of the threshold criterion \\
 \bottomrule
 \end{tabular}
 \caption{Positioning relative to earlier scalar observables.  The present note
@@ -249,14 +250,14 @@ later consequences are formal once that observable is defined.
 
 Two short computations make the distinction precise.
 
-\begin{example}[Carry propagation without a truncation defect]
+\begin{example}[Normalization cascade without a truncation defect]
 \label{ex:carry-without-defect}
 Take $m=4$, $p=1100$, and append $b=1$.  Normalizing the raw word
-$(p,b)=11001$ produces $\Fold_5(11001)=00101$, so the standard successor/carry
-observable registers a nontrivial propagation.  Nevertheless
+$(p,b)=11001$ produces $\Fold_5(11001)=00101$, so the normalization does
+involve a nontrivial carry cascade across several positions.  Nevertheless
 $\Fold_4(p)=0010$ and $\pi_{5\to 4}(\Fold_5(11001))=0010$, hence
-$\kappa_{5\to 4}(p,1)=0$.  A genuine carry event can therefore leave the
-adjacent truncation defect unchanged.
+$\kappa_{5\to 4}(p,1)=0$.  Thus a visible normalization cascade does not by
+itself force an adjacent truncation defect.
 \end{example}
 
 \begin{example}[Nonzero defect without a top-level carry indicator]
@@ -844,14 +845,16 @@ Substituting this into the induction hypothesis proves the displayed formula at
 $j+1$.  Setting $j=n$ and using $\Delta_n(\omega)=0$ yields the proposition.
 \end{proof}
 
-\begin{remark}[Interpretation as a telescoping cocycle sum]
-The quantity
-$D_{n\to m}(\omega)$ is a boundary-level discrepancy between two routes from
-resolution $n$ to resolution $m$, while the adjacent defects
+\begin{remark}[Interpretation of the Stokes analogy]
+The quantity $D_{n\to m}(\omega)$ is a boundary-level discrepancy between two
+routes from resolution $n$ to resolution $m$, while the adjacent defects
 $\kappa_{j+1\to j}$ are the interior contributions picked up one scale at a
 time.  Proposition~\ref{thm:fold-discrete-stokes-defect} is therefore a finite
 telescoping identity, or equivalently a cocycle decomposition along the
-resolution tower.
+resolution tower.  The word ``Stokes'' in the title is meant only in this
+bookkeeping sense: the proposition expresses a boundary defect as the xor-sum
+of interior increments, and no differential-geometric structure is being
+asserted.
 \end{remark}
 
 \begin{example}[A worked telescoping computation at $n=3$, $m=1$]
@@ -942,11 +945,14 @@ and therefore
 \[
 \PP_\mu[D_{n\to m}\neq 0]
 \le
+\min\!\left\{
+1,\;
 \sum_{j=m}^{n-1}
 \PP_\mu\!\left[
 \,\omega_{j+1}=1,\;
 N(r_{n\to j}(\omega))\ge F_{j+1}
-\right].
+\right]
+\right\}.
 \]
 For any bounded $f:X_m\to\RR$, the duality characterization of total variation
 gives
@@ -982,8 +988,8 @@ $\kappa_{j+1\to j}(r_{n\to j+1}(\omega))$ is nonzero.  Writing
 $r_{n\to j+1}(\omega)=(r_{n\to j}(\omega),\omega_{j+1})$ and applying
 Proposition~\ref{prop:adjacent-defect-threshold}, this can happen only when
 $\omega_{j+1}=1$ and $N(r_{n\to j}(\omega))\ge F_{j+1}$.  The event inclusion
-follows, and the bound on $\PP_\mu[D_{n\to m}\neq 0]$ is the union bound.  The
-test-function estimate follows from the duality bound
+follows.  The displayed estimate is the union bound, capped trivially by $1$.
+The test-function estimate follows from the duality bound
 $|Ef(X)-Ef(Y)|\le 2\|f\|_\infty\,\PP_\mu[X\neq Y]$.
 \end{proof}
 
@@ -1050,9 +1056,12 @@ Let $\mathsf{Unif}_n$ be the uniform law on $\Omega_n$.  Then
 \[
 \PP_{\mathsf{Unif}_n}[D_{n\to m}\neq 0]
 \le
+\min\!\left\{
+1,\;
 \sum_{j=m}^{n-1}
 2^{-(j+1)}
-\sum_{t\ge F_{j+1}} A_j(t).
+\sum_{t\ge F_{j+1}} A_j(t)
+\right\}.
 \]
 \end{remark}
 
@@ -1068,7 +1077,8 @@ K_{j+1\to j}(r_{n\to j+1}(\omega))=1
 \PP_{\mathsf{Unif}_{j+1}}[K_{j+1\to j}=1].
 \]
 Proposition~\ref{prop:uniform-adjacent-defect-counts} gives the explicit value
-of this probability, and summing over $j$ proves the claim.
+of this probability, and summing over $j$ proves the claim.  The additional
+minimum by $1$ is automatic because the left-hand side is a probability.
 \end{proof}
 
 \begin{theorem}[Explicit defect count under the uniform law]
@@ -1100,14 +1110,17 @@ and the global coupling bound becomes
 \[
 \PP_{\mathsf{Unif}_n}[D_{n\to m}\neq 0]
 \le
+\min\!\left\{
+1,\;
 \sum_{j=m}^{n-1}
-\frac{\lfloor 2^{j+1}/3\rfloor}{2^{j+1}}.
+\frac{\lfloor 2^{j+1}/3\rfloor}{2^{j+1}}
+\right\}.
 \]
 \end{theorem}
 
 \begin{proof}
 \textit{Recurrence.}  We derive $C_m=2^{m-2}+C_{m-2}$ for $m\ge 3$ by
-conditioning on the last two coordinates $(\alpha_{m-1},\alpha_m)$.
+conditioning on the two highest coordinates $(\alpha_{m-1},\alpha_m)$.
 
 If $\alpha_m=1$, then $N(\alpha)\ge F_{m+1}$, so $N(\alpha)<F_{m+1}$ is
 impossible; no such word contributes to $C_m$.
@@ -1147,16 +1160,17 @@ To verify $2^m-C_m=\lfloor 2^{m+1}/3\rfloor$: for $m=2r$,
 $(2^{2r+1}-2)/3=\lfloor 2^{2r+1}/3\rfloor$; for $m=2r+1$,
 $(2^{2r+2}-1)/3=\lfloor 2^{2r+2}/3\rfloor$.
 
-The global bound follows from the union bound in
-Remark~\ref{rem:fold-discrete-stokes-auditable-bound}.
+The global bound follows from
+Remark~\ref{rem:uniform-global-defect-bound}.
 \end{proof}
 
 \begin{remark}
 Theorem~\ref{thm:fold-defect-count-explicit} gives the precise probability that
 a single adjacent step produces a defect under the uniform raw-word law.  The
 fraction $\lfloor 2^{m+1}/3\rfloor/2^{m+1}$ converges to $1/3$ as
-$m\to\infty$, reflecting the fact that roughly one-third of all $(m+1)$-bit
-words trigger a carry across the threshold $F_{m+1}$.
+$m\to\infty$, reflecting that asymptotically one-third of all $(m+1)$-bit
+words fall on the threshold-crossing side of
+Proposition~\ref{prop:adjacent-defect-threshold}.
 \end{remark}
 
 \subsection{Hamming--Lipschitz Budget}
@@ -1489,9 +1503,27 @@ Conversely, assume that $\delta_m=0$ for all $m\ge M$.  Then
 x_m=\pi_{m+1\to m}(x_{m+1})
 \qquad\text{for every }m\ge M,
 \]
-so $(x_m)_{m\ge M}$ is a compatible family of admissible prefixes.  Therefore
-there exists a unique $x^\infty\in\Xinf$ with
-$\pi_{\infty\to m}(x^\infty)=x_m$ for all $m\ge M$.
+so $(x_m)_{m\ge M}$ is a compatible family of admissible prefixes.  For each
+coordinate $i\ge 1$, choose any $j\ge \max\{M,i\}$ and define
+\[
+x^\infty_i:=(x_j)_i.
+\]
+This is well defined because whenever $j'\ge j\ge \max\{M,i\}$, repeated use of
+$x_\ell=\pi_{\ell+1\to \ell}(x_{\ell+1})$ for $M\le \ell<j'$ gives
+\[
+\pi_{j'\to j}(x_{j'})=x_j,
+\]
+hence $(x_{j'})_i=(x_j)_i$.  Therefore $x^\infty:=(x^\infty_i)_{i\ge 1}$ is a
+binary sequence with
+\[
+\pi_{\infty\to m}(x^\infty)=x_m
+\qquad (m\ge M).
+\]
+Since every adjacent pair $(x^\infty_i,x^\infty_{i+1})$ occurs in the
+admissible prefix $x_j\in X_j$ for each $j\ge \max\{M,i+1\}$, we also have
+$x^\infty\in\Xinf$.  Uniqueness is immediate: any other
+$y^\infty\in\Xinf$ with the same prefixes satisfies
+$y^\infty_i=(x_{\max\{M,i\}})_i=x^\infty_i$ for every $i\ge 1$.
 \end{proof}
 
 \begin{remark}[Explicit Fold-specific compatibility criterion]
@@ -1547,10 +1579,11 @@ routes are explicitly
 $\pi_{\infty\to m}(Z(s\bmod F_{m+2}))$ and
 $\pi_{\infty\to m}(Z(s-F_{m+1}))$, and a local defect occurs exactly when
 appending the final bit $1$ pushes the prefix value across the Fibonacci level
-$F_{m+1}$.  This carry-threshold criterion is a local fact peculiar to Fibonacci
-numeration; it has a precise analogue in the carry-propagation literature
-\cite{BertheFrougnyRigoSakarovitch2020} but the xor-valued defect observable
-and the non-commutativity it encodes are new.
+$F_{m+1}$.  This threshold-crossing criterion is local to Fibonacci numeration.
+It should be compared with the carry-propagation analyses in
+\cite{BertheFrougnyRigoSakarovitch2020}, but the xor-valued defect observable
+and the non-commutativity it encodes are different from the scalar successor
+statistics treated there.
 
 Theorem~\ref{thm:fold-defect-count-explicit} converts the threshold into an
 exact closed-form count: the number of below-threshold words in $\Omega_m$
@@ -1565,7 +1598,7 @@ and tables show.
 Proposition~\ref{prop:fold-naive-prefix-lift} and
 Remark~\ref{rem:summable-defects-eventual-compatibility} give the exact
 finite-to-infinite compatibility criterion, restated in terms of the same
-carry-threshold condition: the sequence of folded prefixes converges in the
+threshold condition: the sequence of folded prefixes converges in the
 inverse limit exactly when, for all large $m$, either the $(m+1)$-th bit of
 the raw sequence is $0$ or the truncated prefix value falls below $F_{m+1}$.
 
