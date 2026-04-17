@@ -72,6 +72,7 @@ import Omega.POM.MaxMassDispersionBound
 import Omega.POM.MicrocanonicalAdaptiveNoGain
 import Omega.POM.MicrocanonicalCoverTimeTailInclusionExclusion
 import Omega.POM.MicrocanonicalBandBounds
+import Omega.POM.MicrocanonicalFoldClassCount
 import Omega.POM.MicrocanonicalCountSufficientStatisticPosteriorUniform
 import Omega.POM.ModpDifferenceBinomialBasis
 import Omega.POM.MomentMinreal
