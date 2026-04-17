@@ -1,5 +1,6 @@
 import Omega.Multiscale.PadicHypercubeStokesHaar
 import Omega.Multiscale.NormalizedIntegrationL1DefectInverseTower
+import Omega.Multiscale.NormalizedBCStokesFiberedInverseTower
 import Omega.Multiscale.RobustNormalizedStokesWithDefectBudget
 import Omega.Multiscale.SolenoidCylindricalPLDuality
 import Omega.Multiscale.SolenoidShiftInvariance
