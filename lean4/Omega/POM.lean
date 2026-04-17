@@ -96,6 +96,7 @@ import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.PressureReflectionInequality
 import Omega.POM.PositiveNegativeMomentCoupling
 import Omega.POM.PressureConvexity
+import Omega.POM.ProjectivePressureZeroNormalization
 import Omega.POM.PressureSlopes
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantAreaFiberMultinomial

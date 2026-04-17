@@ -149,6 +149,7 @@ import Omega.Folding.NormalizeThenTruncateFunctorial
 import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.OstrowskiMetallicTwoRuleNormalization
 import Omega.Folding.OverflowGapRate
+import Omega.Folding.OracleCapacityVariationalProjection
 import Omega.Folding.PeriodicCompressionRatio
 import Omega.Folding.PeriodicCountSandwich
 import Omega.Folding.PhiConjugacyThreshold

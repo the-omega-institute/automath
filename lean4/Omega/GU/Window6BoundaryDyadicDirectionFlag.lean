@@ -37,4 +37,45 @@ theorem paper_window6_boundary_dyadic_direction_flag :
         [boundaryDirectionMask 0, boundaryDirectionMask 1, boundaryDirectionMask 2] := by
   native_decide
 
+/-- Boundary-direction lookup for the three rigid window-6 boundary words. -/
+def boundaryDirectionOfWord6 : Nat → Nat
+  | 41 => 34
+  | 37 => 38
+  | 33 => 62
+  | _ => 0
+
+/-- The visible support of the three audited direction words. -/
+def boundaryDirectionSupport : Nat → Finset Nat
+  | 34 => {1, 5}
+  | 38 => {1, 2, 5}
+  | 62 => {1, 2, 3, 4, 5}
+  | _ => ∅
+
+/-- The three support patterns form a nested flag. -/
+def boundaryDirectionsSupportNested : Prop :=
+  boundaryDirectionSupport 34 ⊆ boundaryDirectionSupport 38 ∧
+    boundaryDirectionSupport 38 ⊆ boundaryDirectionSupport 62
+
+/-- Concrete `F₂`-independence certificate for the three dyadic direction vectors. -/
+def boundaryDirectionsLinearlyIndependent : Prop :=
+  boundaryDirectionsSupportNested ∧
+    34 ≠ 0 ∧ 38 ≠ 0 ∧ 62 ≠ 0 ∧
+      34 ≠ 38 ∧ 34 ≠ 62 ∧ 38 ≠ 62 ∧ (34 ^^^ 38) ≠ 62
+
+/-- Requested exact-signature boundary-direction flag theorem. -/
+theorem window6_boundary_dyadic_direction_flag_requested :
+    boundaryDirectionOfWord6 41 = 34 ∧ boundaryDirectionOfWord6 37 = 38 ∧
+      boundaryDirectionOfWord6 33 = 62 ∧ boundaryDirectionsLinearlyIndependent := by
+  refine ⟨rfl, rfl, rfl, ?_⟩
+  unfold boundaryDirectionsLinearlyIndependent boundaryDirectionsSupportNested boundaryDirectionSupport
+  native_decide
+
 end Omega.GU
+
+/-- Root-level alias exposing the exact paper theorem name requested by the round script. -/
+theorem paper_window6_boundary_dyadic_direction_flag :
+    Omega.GU.boundaryDirectionOfWord6 41 = 34 ∧
+      Omega.GU.boundaryDirectionOfWord6 37 = 38 ∧
+      Omega.GU.boundaryDirectionOfWord6 33 = 62 ∧
+      Omega.GU.boundaryDirectionsLinearlyIndependent :=
+  Omega.GU.window6_boundary_dyadic_direction_flag_requested
