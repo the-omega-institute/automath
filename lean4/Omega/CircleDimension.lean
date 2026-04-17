@@ -76,6 +76,7 @@ import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.NonresonantLissajousNodeCount
 import Omega.CircleDimension.OperationalHalfCircleDimensionNat
 import Omega.CircleDimension.OperationalHalfCircleDimensionNd
+import Omega.CircleDimension.OddDivisibilityTowerHolographicSeparation
 import Omega.CircleDimension.OrthogonalAmalgamatedWdim
 import Omega.CircleDimension.PhasePrecisionTradeoff
 import Omega.CircleDimension.PhasePrecisionTradeoffDyadic

@@ -145,6 +145,7 @@ import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
 import Omega.GU.Window6FoldbinGaugeLowDegreeHomology
 import Omega.GU.Window6ChiralityAnchorMinimal
 import Omega.GU.Window6C6OrbitB3RootIntersectionRigidity
+import Omega.GU.Window6FiberEdgeCouplingDet
 import Omega.GU.Window6IntrinsicBracketModpLiftCriterion
 import Omega.GU.Window6IntrinsicBracketFiniteIntegerReduction
 import Omega.GU.Window6KirchhoffGreenPadicLiftStability
