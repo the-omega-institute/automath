@@ -5,6 +5,7 @@ import Omega.GroupUnification.ExactClock
 import Omega.GroupUnification.FibTailReversibility
 import Omega.GroupUnification.FiniteTimeLaw
 import Omega.GroupUnification.FreeEnergyComposition
+import Omega.GroupUnification.FoldbinEquitableLumpabilitySpectralRigidity
 import Omega.GroupUnification.GeneralNormalForm
 import Omega.GroupUnification.GeneralRigidity
 import Omega.GroupUnification.Gibbs
