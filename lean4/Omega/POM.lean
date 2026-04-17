@@ -97,6 +97,7 @@ import Omega.POM.MultiplicityCompositionPartition
 import Omega.POM.MultiplicityFixedRExtrema
 import Omega.POM.OrbitProductNorm
 import Omega.POM.OrderSpatialization
+import Omega.POM.OracleBitLowerBoundSubexpMom
 import Omega.POM.OracleRenyiPressureFailureBound
 import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
 import Omega.POM.ParrySurfaceDerivative
