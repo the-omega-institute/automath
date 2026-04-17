@@ -12,6 +12,7 @@ import Omega.CircleDimension.BareCircleNotCompleteCarrier
 import Omega.CircleDimension.BasicComputation
 import Omega.CircleDimension.BiphaseFiber
 import Omega.CircleDimension.BorelHomomorphismNoncollapse
+import Omega.CircleDimension.BornPairing
 import Omega.CircleDimension.BudgetCompleteness
 import Omega.CircleDimension.CausalPreorder
 import Omega.CircleDimension.CayleyChebyshevMode
