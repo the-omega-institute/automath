@@ -63,6 +63,7 @@ import Omega.POM.FiberCubicalPoincareStokesLemma
 import Omega.POM.FisherZerosArcsineSeeds
 import Omega.POM.FoldIndexSeeds
 import Omega.POM.FoldInjectivizationMinsideinfo
+import Omega.POM.FixedQFrozenUniversalReversibleThreshold
 import Omega.POM.GibbsSelection
 import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.HankelFingerprintSeeds
