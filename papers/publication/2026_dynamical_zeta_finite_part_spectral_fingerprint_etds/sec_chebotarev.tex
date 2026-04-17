@@ -126,16 +126,27 @@ Since \(\phi\) is bounded and \(p_n(A)\ll \lambda^n/n\), the series
   side. Therefore \(\alpha\in\spec(\widetilde A)\), and consequently
   \(\rho(A_\sigma)\le \rho(\widetilde A)\).
 
-  To compute \(\rho(\widetilde A)\), observe that admissible
-  length-\(n\) paths in the skew product are in bijection with pairs
+  To compute \(\rho(\widetilde A)\), let
+  \(N_n(B):=\mathbf 1^{\mathsf T}B^n\mathbf 1\), the number of
+  admissible length-\(n\) paths in the graph with adjacency matrix
+  \(B\). Choosing the initial group element gives a bijection between
+  admissible length-\(n\) paths in the extension and pairs
   \((g,\gamma)\), where \(g\in G\) and \(\gamma\) is an admissible
-  length-\(n\) path in the base graph: once \(g\) and \(\gamma\) are
-  fixed, the lift is unique. Thus the number of admissible
-  length-\(n\) paths in the extension is exactly \(|G|\) times the
-  corresponding number in the base. The two shifts therefore have the
-  same topological entropy. For a finite directed graph, that entropy is
-  the logarithm of the spectral radius of its adjacency matrix, hence
-  \(\rho(\widetilde A)=\rho(A)=\lambda\).
+  length-\(n\) path in the base graph. Hence
+  \(N_n(\widetilde A)=|G|\,N_n(A)\) for every \(n\ge 1\).
+
+  For any \(d\times d\) non-negative matrix \(B\), one has
+  \[
+    \|B^n\|_1\le N_n(B)\le d\,\|B^n\|_1,
+  \]
+  so Gelfand's formula implies
+  \[
+    \rho(B)=\lim_{n\to\infty}N_n(B)^{1/n}.
+  \]
+  Applying this to \(A\) and \(\widetilde A\) yields
+  \[
+    \rho(\widetilde A)=\rho(A)=\lambda.
+  \]
 \end{proof}
 
 \noindent
@@ -322,104 +333,37 @@ Adams--M\"obius inversion.
 \label{subsec:dictionary-twisted-L}
 
 The formalism of this section is closely related to the twisted
-\(L\)-function and twisted Perron--Frobenius framework introduced by
-Adachi--Sunada \cite{AdachiSunada1987TwistedPerronFrobenius} and
-Sunada \cite{Sunada1989DynamicalLFunctions}, the Chebotarev-type
-orbit counting of Parry--Pollicott
-\cite{ParryPollicott1986Chebotarev}, and the graph-covering zeta
-theory of Kotani--Sunada and Stark--Terras
-\cite{KotaniSunada2000ZetaFiniteGraphs,%
-StarkTerras1996ZetaGraphCoverings,%
-StarkTerras2000ZetaGraphCoveringsII,%
-TerrasStark2007ZetaGraphCoveringsIII}.
-To locate the exact increment of the present paper, we provide a
-theorem-by-theorem comparison.
+\(L\)-function and twisted Perron--Frobenius framework of
+Adachi--Sunada and Sunada, the Chebotarev-type orbit counting of
+Parry--Pollicott, and the graph-covering zeta theory of
+Kotani--Sunada and Stark--Terras
+\cite{AdachiSunada1987TwistedPerronFrobenius,Sunada1989DynamicalLFunctions,ParryPollicott1986Chebotarev,KotaniSunada2000ZetaFiniteGraphs,StarkTerras1996ZetaGraphCoverings,StarkTerras2000ZetaGraphCoveringsII,TerrasStark2007ZetaGraphCoveringsIII}.
+The determinant factorisation of
+\Cref{prop:kernel-peter-weyl-block-diagonalisation}, the
+class-function linearisation of
+\Cref{thm:class-function-linearisation}, and the leading asymptotic
+\(p_{n,C}\sim(|C|/|G|)\lambda^n/n\) all belong to this classical
+twisted-\(L\)-function and Chebotarev framework. They are used here as
+input in exactly the form needed for primitive orbit calculations.
 
-\medskip
-\noindent\textbf{Theorem-by-theorem comparison.}
+What is not supplied by the classical periodic theory is a primitive
+irreducible channel extracted directly from the twisted determinant
+logarithms. Bare M\"obius inversion of a single logarithm
+\(\log\det(I-zA_\varrho)^{-1}\) leaves the higher-power terms
+\(\chi_\varrho(g^r)\) coming from repeated orbit labels. This is the
+obstruction isolated in \Cref{prop:naive-mobius-contamination}. The new
+ingredient is therefore \Cref{cor:class-function-adams-mobius}: the
+Adams operations \(\psi^m\) on class functions remove the higher-power
+contamination and produce the primitive determinant formulas of
+\Cref{cor:primitive-peter-weyl-determinant,cor:primitive-peter-weyl-trace}.
 
-\begin{enumerate}[label=(\roman*)]
-\item \textbf{Peter--Weyl determinant factorisation
-  (\Cref{prop:kernel-peter-weyl-block-diagonalisation}).}
-  Known input gives the identity
-  \[
-    \det(I-z\widetilde A)
-    =\prod_\varrho\det(I-zA_\varrho)^{\dim\varrho}.
-  \]
-  This is the finite-state specialisation of the factorisation established by
-  Adachi--Sunada \cite[Theorem~1.1]{AdachiSunada1987TwistedPerronFrobenius}
-  for the twisted Perron--Frobenius operator acting on sections of a
-  flat bundle over a Riemannian manifold. In the SFT setting, the same
-  factorisation appears in Parry--Pollicott
-  \cite[\S3]{ParryPollicott1986Chebotarev} and, for finite homogeneous
-  extensions, in Noorani--Parry
-  \cite{NooraniParry1992ChebotarevShifts}. On the graph side, the
-  corresponding covering-zeta factorizations are developed in
-  \cite{KotaniSunada2000ZetaFiniteGraphs,%
-  StarkTerras1996ZetaGraphCoverings,%
-  StarkTerras2000ZetaGraphCoveringsII,%
-  TerrasStark2007ZetaGraphCoveringsIII}. This part of our paper is
-  therefore classical input.
-
-\item \textbf{Class-function linearisation
-  (\Cref{thm:class-function-linearisation}).}
-  Known input also gives the identity
-  \(\mathcal L_\phi(z)
-  =\sum_\varrho\widehat\phi(\varrho)\log\det(I-zA_\varrho)^{-1}\).
-  This is the logarithmic version of the Adachi--Sunada twisted
-  \(L\)-function \cite[Theorem~2.3]{AdachiSunada1987TwistedPerronFrobenius}.
-  In the notation of Sunada \cite{Sunada1989DynamicalLFunctions},
-  this corresponds to the factorisation of the dynamical \(L\)-function
-  \(L(z,\varrho)\) into a product over the spectrum of the twisted
-  operator. The content here is classical; we record it only to fix
-  notation for the primitive formulas that follow.
-
-\item \textbf{Chebotarev equidistribution
-  (\Cref{thm:class-mertens-explicit}, leading term).}
-  Known input further gives the asymptotic
-  \(p_{n,C}\sim(|C|/|G|)\lambda^n/n\). This is the SFT version of the
-  Chebotarev density theorem for Axiom~A systems proved by
-  Parry--Pollicott \cite[Theorem~1]{ParryPollicott1986Chebotarev}
-  and carried out for finite homogeneous SFT extensions by
-  Noorani--Parry \cite[Theorem~1]{NooraniParry1992ChebotarevShifts}.
-  The leading asymptotic in \Cref{thm:class-mertens-explicit} is
-  therefore known.
-
-\item \textbf{Adams--M\"obius primitive inversion
-  (\Cref{cor:class-function-adams-mobius,cor:primitive-peter-weyl-determinant}).}
-  The missing step begins here. The Adams operation
-  \(\psi^m\) on class functions converts the \(m\)-fold repetition
-  of an orbit into evaluation of the class function at the \(m\)-th
-  power. Standard periodic determinant factorisation plus direct
-  trace-level M\"obius inversion yields only the contaminated transform
-  \(\mathcal N_\varrho\) of
-  \Cref{prop:naive-mobius-contamination}, not the primitive channel
-  \(\Pi_\varrho\): higher powers \(\chi_\varrho(g^r)\) for \(r\ge 2\)
-  remain in the coefficients. The Adams--M\"obius formula
-  \(\Pi_\phi(z)=\sum_{m\ge 1}(\mu(m)/m)\mathcal L_{\psi^m\phi}(z^m)\)
-  is precisely the correction that removes this contamination. It
-  operates on the character-ring level and thereby linearises the
-  primitive inversion into a sum of twisted determinant logarithms.
-  This formula does not appear in
-  \cite{AdachiSunada1987TwistedPerronFrobenius,%
-  Sunada1989DynamicalLFunctions,%
-  ParryPollicott1986Chebotarev,%
-  NooraniParry1992ChebotarevShifts,%
-  StarkTerras1996ZetaGraphCoverings,%
-  StarkTerras2000ZetaGraphCoveringsII,%
-  TerrasStark2007ZetaGraphCoveringsIII}.
-
-\item \textbf{Class Mertens constants and Fourier reconstruction
-  (\Cref{thm:class-mertens-explicit} constant term,
-  \Cref{thm:class-mertens-fourier}).}
-  Our contribution at the Perron point is then the constant-term
-  packaging
-  \(\mathcal M_C(A)\) and the recovery of the non-trivial twisted
-  primitive values \(\Pi_\varrho(\lambda^{-1})\) by non-abelian Fourier
-  inversion. The leading asymptotic remains classical; what is new is
-  the explicit determinant/class-function packaging of the constant term
-  under the extra hypothesis \(\eta<\lambda\).
-\end{enumerate}
+Once the primitive channels are available, the Perron-point statements
+of \Cref{thm:class-mertens-explicit,thm:class-mertens-fourier} become
+conditional corollaries under the explicit hypothesis \(\eta<\lambda\).
+Accordingly, the novelty of the present section lies in the primitive
+Adams--M\"obius calculus and its determinant packaging, whereas the
+periodic determinant identities and the leading Chebotarev asymptotics
+are treated throughout as established background.
 
 \subsection{Primitive Peter--Weyl series}
 
@@ -972,10 +916,28 @@ the trivial Perron-channel contribution.
   \(a_{\varrho,\mathbf 1}^{(1)}=0\) because
   \(\psi^1\chi_\varrho=\chi_\varrho\) is itself non-trivial. Hence the
   \(m=1\) term in \eqref{eq:primitive-peter-weyl-determinant} involves
-  only non-trivial \(\sigma\), while for \(m\ge 2\) the point
-  \(\lambda^{-m}\) lies strictly inside the Perron disc. Therefore
-  \eqref{eq:primitive-peter-weyl-determinant} may be evaluated at
-  \(z=\lambda^{-1}\), yielding \eqref{eq:class-mertens-determinant}.
+  only non-trivial \(\sigma\). By
+  \Cref{prop:twisted-spectral-radius-bound} and the hypothesis
+  \(\eta<\lambda\), each such \(A_\sigma\) satisfies
+  \(\rho(A_\sigma)\le \eta<\lambda\), so
+  \(\log\det(I-zA_\sigma)^{-1}\) is holomorphic at \(z=\lambda^{-1}\).
+  For \(m\ge 2\), the point \(\lambda^{-m}\) lies strictly inside the
+  Perron disc for every twisted determinant logarithm. Moreover, there
+  is a constant \(K\) such that
+  \(\abs{\Tr(A_\sigma^n)}\le K\lambda^n\) for all
+  \(\sigma\in\Irr(G)\) and \(n\ge 1\), and therefore
+  \[
+    \abs{\log\det(I-\lambda^{-m}A_\sigma)^{-1}}
+    \le
+    K\sum_{n\ge 1}\frac{\lambda^{-(m-1)n}}{n}
+    =O(\lambda^{1-m})
+    \qquad (m\ge 2),
+  \]
+  uniformly in \(\sigma\). Together with the finiteness of \(\Irr(G)\)
+  and \Cref{lem:adams-coefficients-bounded}, this proves the absolute
+  convergence of \eqref{eq:class-mertens-determinant}. Evaluating
+  \eqref{eq:primitive-peter-weyl-determinant} at \(z=\lambda^{-1}\)
+  yields \eqref{eq:class-mertens-determinant}.
 \end{proof}
 
 \begin{remark}[Reality of the class constants]
@@ -1233,4 +1195,3 @@ below starts from an explicitly defined class function.
   primitive values \(\Pi_\varrho(\lambda^{-1})\) by non-abelian Fourier
   inversion.
 \end{remark}
-

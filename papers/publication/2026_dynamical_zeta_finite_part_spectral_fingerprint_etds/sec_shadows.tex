@@ -212,26 +212,26 @@ In the basis
 the standard representation matrices of the generators appearing in
 \eqref{eq:s3-example-edge-labels} are
 \begin{equation}\label{eq:s3-standard-representation-matrices}
-  \rho((12))
-  =
-  \begin{pmatrix}
-    -1 & 0 \\
-    0 & 1
-  \end{pmatrix},
-  \qquad
-  \rho((23))
-  =
-  \begin{pmatrix}
-    \frac12 & \frac32 \\
-    \frac12 & -\frac12
-  \end{pmatrix},
-  \qquad
-  \rho((123))
-  =
-  \begin{pmatrix}
-    -\frac12 & -\frac32 \\
-    \frac12 & -\frac12
-  \end{pmatrix}.
+  \begin{aligned}
+    \rho((12))
+    &=
+    \begin{pmatrix}
+      -1 & 0 \\
+      0 & 1
+    \end{pmatrix}, \\
+    \rho((23))
+    &=
+    \begin{pmatrix}
+      \frac12 & \frac32 \\
+      \frac12 & -\frac12
+    \end{pmatrix}, \\
+    \rho((123))
+    &=
+    \begin{pmatrix}
+      -\frac12 & -\frac32 \\
+      \frac12 & -\frac12
+    \end{pmatrix}.
+  \end{aligned}
 \end{equation}
 
 \begin{proposition}[Twisted channels for the \(S_3\)-example]
@@ -362,9 +362,12 @@ the standard representation matrices of the generators appearing in
   Since \(\Tr(A^n)=2^n\), \(\Tr(A_\varepsilon^n)=0\), and
   \(\Tr(A_\rho^n)=(-1)^n\), the logarithmic channels are
   \[
-    \mathcal L_\varepsilon(z)=\log\det(I-zA_\varepsilon)^{-1}=0,
-    \qquad
-    \mathcal L_\rho(z)=\log\det(I-zA_\rho)^{-1}=-\log(1+z).
+    \begin{aligned}
+      \mathcal L_\varepsilon(z)
+      &=\log\det(I-zA_\varepsilon)^{-1}=0, \\
+      \mathcal L_\rho(z)
+      &=\log\det(I-zA_\rho)^{-1}=-\log(1+z).
+    \end{aligned}
   \]
   The class-counting formula from
   \Cref{prop:class-indicator-expansion} gives
@@ -444,8 +447,25 @@ the standard representation matrices of the generators appearing in
 \begin{proof}
   Since \(\varepsilon\) is quadratic and
   \(\mathcal L_\varepsilon(z)=0\), \Cref{thm:quadratic-adams-obstruction}
-  gives \eqref{eq:s3-example-pi-eps}. Evaluating the absolutely
-  convergent series at \(z=1/2\) yields
+  gives \eqref{eq:s3-example-pi-eps}. For \(0\le x\le 1/2\),
+  \[
+    \log(1-x)^{-1}\le \frac{x}{1-x}\le 2x.
+  \]
+  Hence, if \(R\ge 1\), the tail of \eqref{eq:s3-example-pi-eps} at
+  \(z=1/2\) satisfies
+  \[
+    \left|
+      \Pi_\varepsilon(1/2)
+      +\frac12\sum_{\substack{1\le r\le R\\ r\ \mathrm{odd}}}
+        \frac{\mu(r)}{r}\log(1-2^{1-2r})^{-1}
+    \right|
+    \le
+    \sum_{r>R}\frac{2^{1-2r}}{r}
+    \le
+    \frac{8}{3(R+1)}\,4^{-(R+1)}
+  \]
+  by \Cref{lem:geometric-harmonic-tail}. Taking \(R=25\) makes the tail
+  \(<10^{-16}\), which justifies the decimal expansion in
   \eqref{eq:s3-example-pi-eps-value}.
 
   For \(\rho\), one computes the Adams powers from the character table
@@ -474,7 +494,24 @@ the standard representation matrices of the generators appearing in
   \Cref{cor:primitive-peter-weyl-determinant}, and using
   \eqref{eq:s3-example-logarithms}, yields
   \eqref{eq:s3-example-pi-rho} and \eqref{eq:s3-example-alpha-beta}.
-  Evaluating the resulting series at \(z=1/2\) gives
+  For \(m\ge 2\), one has
+  \[
+    \log(1-2^{1-m})^{-1}\le 2^{2-m},
+    \qquad
+    \log(1+2^{-m})\le 2^{-m},
+  \]
+  while \(\alpha(m)\le 2\) and \(\beta(m)\le 1\). Therefore, if
+  \(S_M\) denotes the \(M\)th partial sum on the right-hand side of
+  \eqref{eq:s3-example-pi-rho} at \(z=1/2\), then for \(M\ge 2\),
+  \[
+    \begin{aligned}
+      \abs{\Pi_\rho(1/2)-S_M}
+      &\le 9\sum_{m>M}\frac{2^{-m}}{m} \\
+      &\le \frac{18}{M+1}\,2^{-(M+1)}.
+    \end{aligned}
+  \]
+  by \Cref{lem:geometric-harmonic-tail}. Taking \(M=50\) makes the tail
+  \(<10^{-15}\), which justifies
   \eqref{eq:s3-example-pi-rho-value}.
 \end{proof}
 
@@ -567,25 +604,6 @@ the standard representation matrices of the generators appearing in
   four times stronger than the one-dimensional component.
 \end{corollary}
 
-\begin{center}
-\footnotesize
-\begin{tabular}{@{}p{0.16\textwidth}p{0.32\textwidth}p{0.36\textwidth}@{}}
-\toprule
-Channel / observable & Periodic-level behaviour & Primitive-level value \\
-\midrule
-\(\varepsilon\) &
-\(\mathcal L_\varepsilon(z)=0\) &
-\(\Pi_\varepsilon(1/2)=-0.3410778944748505\ldots\) \\
-\(\rho\) &
-\(\mathcal L_\rho(z)=-\log(1+z)\) &
-\(\Pi_\rho(1/2)=-0.7183512780565332\ldots\) \\
-\(T\) &
-\(a_{n,T}=2^{n-1}\) for all \(n\) &
-\(\Delta_T(A)=0.1705389472374253\ldots\) \\
-\bottomrule
-\end{tabular}
-\end{center}
-
 \begin{proof}
   Expanding \(\log(1-2z^{2r})^{-1}=\sum_{k\ge 1}2^k z^{2rk}/k\) in
   \eqref{eq:s3-example-pi-eps} and reading off the coefficient of
@@ -629,4 +647,3 @@ Channel / observable & Periodic-level behaviour & Primitive-level value \\
   is precisely the Adams obstruction isolated in
   \Cref{thm:quadratic-adams-obstruction}.
 \end{remark}
-
