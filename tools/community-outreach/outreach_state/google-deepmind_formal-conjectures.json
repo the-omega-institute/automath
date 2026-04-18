@@ -1,0 +1,106 @@
+{
+  "repo": "google-deepmind/formal-conjectures",
+  "stage": "B",
+  "round": 2,
+  "scores": {
+    "codex": [
+      2
+    ],
+    "claude": [
+      1
+    ],
+    "final": [
+      1
+    ]
+  },
+  "findings": [
+    {
+      "title": "Uniform anomaly recurrence for Zeckendorf stabilization",
+      "type": "conjecture",
+      "status": "conjectured",
+      "target_need": "issue #3734 (opened 2026-04-15): formalize problems from the Open Problem Garden; the maintainers are explicitly asking for new external source pipelines.",
+      "what_they_gain": "A paper-backed benchmark candidate in the same explicit sequence-conjecture style already used in `FormalConjectures/OEIS/6697.lean`, but with a finite-state transducer description, exact initial values, and a conditional closed form. This is immediately useful as a `FormalConjectures/Paper` entry because the statement is crisp even though the proof remains open.",
+      "statement": "Let `S_m := sum_{omega in {0,1}^{m+1}} G_m(omega)`, where `G_m` is the truncation-stabilization anomaly of Fibonacci/Zeckendorf normalization. The paper conjectures that for every `m >= 6`, `S_m = 3 S_{m-1} + S_{m-2} - 7 S_{m-3} + 4 S_{m-5}`, with initial values `S_1 = 1`, `S_2 = 4`, `S_3 = 14`, `S_4 = 41`, `S_5 = 109`; consequently `E_unif[G_m] = (4/9) m - 29/54 + O(2^{-m})`.",
+      "proof_sketch": "The paper reduces local normalization to a three-state transducer and reports zero-residual agreement with the order-five recurrence through `m = 22`; the obstruction is not discovery of the recurrence but a rigorous transfer-matrix control of boundary effects. On the Automath side, the finite-resolution fold apparatus is already auditable: `binFold6_edge_separation`, `binFold6_mult_three_exists`, `binFold6_no_uniform_fibers`, and `window8_collision_dimension` show that nontrivial fold statistics are already kernel-checked at small scales. For the target repo, that means the open statement can be introduced first, with exact low-resolution tests added immediately.",
+      "lean_refs": [
+        "FormalConjectures/OEIS/6697.lean:97",
+        "FormalConjectures/Paper/ClaudesCycles.lean:83"
+      ],
+      "automath_refs": [
+        "papers/publication/submitted_2026_fibonacci_stabilization_sharp_threshold_conjugacy_nonlinearity/sections_jpa/A4_gauge_anomaly.tex:103",
+        "papers/publication/submitted_2026_fibonacci_stabilization_sharp_threshold_conjugacy_nonlinearity/sections_jpa/A4_gauge_anomaly.tex:146",
+        "papers/publication/submitted_2026_fibonacci_stabilization_sharp_threshold_conjugacy_nonlinearity/sections_jpa/A4_gauge_anomaly.tex:182",
+        "lean4/Omega/Folding/BinFold.lean:143",
+        "lean4/Omega/Folding/BinFold.lean:153",
+        "lean4/Omega/Folding/BinFold.lean:161",
+        "lean4/Omega/Folding/BinFold.lean:165"
+      ],
+      "novelty_risk": "Moderate: the conjecture is explicitly stated in Automath and appears absent from the target repo, but its folding primitives are specialized and would need careful target-side exposition."
+    },
+    {
+      "title": "Spike-flat asymptotic for fold collision profiles",
+      "type": "conjecture",
+      "status": "conjectured",
+      "target_need": "README.md:58-66: the project explicitly wants short illuminating solved variants and test statements near open conjectures, while reusable fully proved infrastructure should live in `FormalConjecturesForMathlib`.",
+      "what_they_gain": "A second paper-backed open benchmark whose asymptotic statement is genuinely nontrivial, yet whose low-resolution certificates are already formalized. This gives the maintainers exactly the pattern they say they want: an open `Paper/` theorem accompanied by short proved tests and infrastructure in `FormalConjecturesForMathlib`.",
+      "statement": "If `d_m(r)` denotes the fold multiplicity profile and `D_m` the maximal fiber size, then the umbrella paper conjectures that the collision probability satisfies `Col_m = 2^(-2m) * (D_m^2 + (2^m - D_m)^2 / (F_{m+2} - 1)) * (1 + o(1))` as `m -> infinity`; equivalently, one maximal fiber asymptotically carries the entire second-order excess while the remaining profile becomes flat at collision scale.",
+      "proof_sketch": "The conjecture is stated explicitly in the umbrella appendix. Its finite audit trail is already substantial: `window8_histogram_fiber_sum` and `window8_collision_dimension` compute exact second moments at `m = 8`, while `binFold6_mult_three_exists` and `binFold6_no_uniform_fibers` prove that nonuniform multiplicity is already forced at `m = 6`. For the target repository, these finite lemmas are exactly the kind of short, illuminating certificates the README asks contributors to provide before leaving the asymptotic theorem open.",
+      "lean_refs": [
+        "FormalConjectures/Paper/ClaudesCycles.lean:83",
+        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:356"
+      ],
+      "automath_refs": [
+        "theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/appendix/fold_multiplicity/subsec__fold-collision-convex-lower-bounds-and-spike-flat-conjecture.tex:89",
+        "theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/appendix/fold_multiplicity/subsec__fold-collision-convex-lower-bounds-and-spike-flat-conjecture.tex:99",
+        "lean4/Omega/Folding/BinFold.lean:139",
+        "lean4/Omega/Folding/BinFold.lean:143",
+        "lean4/Omega/Folding/BinFold.lean:161",
+        "lean4/Omega/Folding/BinFold.lean:165"
+      ],
+      "novelty_risk": "Moderate-to-high: the asymptotic is explicit and apparently unpublished outside Automath, but the ambient notation is specialized and would require disciplined normalization choices in `formal-conjectures`."
+    },
+    {
+      "title": "Finite-state lift and clopen prefix package for symbolic benchmarks",
+      "type": "proposition",
+      "status": "proved",
+      "target_need": "issue #3697 (opened 2026-04-05): periodicity of finite octal games; the issue itself says the missing prerequisites are an `octalGame` definition, an impartiality lemma, and a Grundy-sequence wrapper.",
+      "what_they_gain": "A ready-made `FormalConjecturesForMathlib` support package: generic state-count control for deterministic lifts, an explicit binary sofic graph with exact cardinalities, and clopen-cylinder lemmas for prefix-defined events. This directly lowers the prerequisite burden for symbolic-dynamics, automata, and computability-flavored conjectures.",
+      "statement": "For any finite deterministic binary-labelled system, the number of labelled lifts of a word is bounded by the number of states. In the explicit graph `Phi_m`, the state set has cardinality `2^(m-1)` and every vertex has outdegree `2`. Moreover, any event defined by finitely many prefixes is clopen in the product topology.",
+      "proof_sketch": "The counting statement follows by injecting each labelled path into its initial state via `labeledPath_initial_injective`, then applying `labeledPath_card_le_state_card`. The concrete graph package is provided by `phiState_card` and `phiGraph_outdegree_two`. The topological half is supplied by `isOpen_fromWordSet` and `isClopen_fromWordSet`, which turn prefix-coded subsets into auditable clopen events. In the target repo, these are precisely the reusable preliminaries that prevent each new symbolic benchmark from reimplementing its own finite-state and prefix-topology toolkit.",
+      "lean_refs": [
+        "FormalConjectures/OEIS/6697.lean:89",
+        "FormalConjecturesForMathlib/Computability/TuringMachine/BusyBeavers.lean:26",
+        "FormalConjecturesForMathlib/Topology/GDelta.lean:24"
+      ],
+      "automath_refs": [
+        "lean4/Omega/Graph/LiftBound.lean:12",
+        "lean4/Omega/Graph/LiftBound.lean:27",
+        "lean4/Omega/Graph/PhiGraph.lean:12",
+        "lean4/Omega/Graph/PhiGraph.lean:28",
+        "lean4/Omega/SPG/Clopen.lean:11",
+        "lean4/Omega/SPG/Clopen.lean:19"
+      ],
+      "novelty_risk": "Low: the entire package is already formally proved in Automath; the only material question is whether the target maintainers prefer these abstractions verbatim or after mild namespace generalization."
+    }
+  ],
+  "draft_title": "",
+  "draft_body": "",
+  "action_history": [
+    {
+      "timestamp": "2026-04-18T17:53:02+08:00",
+      "stage": "B",
+      "round": 1,
+      "action": "research round completed",
+      "score": 1,
+      "verdict": "",
+      "detail": "{\"codex_score\": 2, \"claude_score\": 1, \"claude_notes\": \"Local math checks out — conjectures exist in TeX, Lean proofs compile. But the target repo refs (issues #3734/#3697, ClaudesCycles.lean:83) are unverified and smell hallucinated. More fundamentally: google-deepmind/formal-conjectures wants formalized statements of *known important* open problems, not niche conjectures from unpublished internal drafts. A DeepMind maintainer would say 'interesting but who are you and why should we host your private conjectures?' The clopen/finite-state package dup\", \"findings\": [{\"title\": \"Uniform anomaly recurrence for Zeckendorf stabilization\", \"type\": \"conjecture\", \"status\": \"conjectured\", \"target_need\": \"issue #3734 (opened 2026-04-15): formalize problems from the Open Problem Garden; the maintainers are explicitly asking for new external source pipelines.\", \"what_they_gain\": \"A paper-backed benchmark candidate in the same explicit sequence-conjecture style already used in `FormalConjectures/OEIS/6697.lean`, but with a finite-state transducer description, exact initial values, and a conditional closed form. This is immediately useful as a `FormalConjectures/Paper` entry because the statement is crisp even though the proof remains open.\", \"statement\": \"Let `S_m := sum_{omega in {0,1}^{m+1}} G_m(omega)`, where `G_m` is the truncation-stabilization anomaly of Fibonacci/Zeckendorf normalization. The paper conjectures that for every `m >= 6`, `S_m = 3 S_{m-1} + S_{m-2} - 7 S_{m-3} + 4 S_{m-5}`, with initial values `S_1 = 1`, `S_2 = 4`, `S_3 = 14`, `S_4 = 41`, `S_5 = 109`; consequently `E_unif[G_m] = (4/9) m - 29/54 + O(2^{-m})`.\", \"proof_sketch\": \"The paper reduces local normalization to a three-state transducer and reports zero-residual agreement with the order-five recurrence through `m = 22`; the obstruction is not discovery of the recurrence but a rigorous transfer-matrix control of boundary effects. On the Automath side, the finite-resolution fold apparatus is already auditable: `binFold6_edge_separation`, `binFold6_mult_three_exists`, `binFold6_no_uniform_fibers`, and `window8_collision_dimension` show that nontrivial fold statistics are already kernel-checked at small scales. For the target repo, that means the open statement can be introduced first, with exact low-resolution tests added immediately.\", \"lean_refs\": [\"FormalConjectures/OEIS/6697.lean:97\", \"FormalConjectures/Paper/ClaudesCycles.lean:83\"], \"automath_refs\": [\"papers/publication/submitted_2026_fibonacci_stabilization_sharp_threshold_conjugacy_nonlinearity/sections_jpa/A4_gauge_anomaly.tex:103\", \"papers/publication/submitted_2026_fibonacci_stabilization_sharp_threshold_conjugacy_nonlinearity/sections_jpa/A4_gauge_anomaly.tex:146\", \"papers/publication/submitted_2026_fibonacci_stabilization_sharp_threshold_conjugacy_nonlinearity/sections_jpa/A4_gauge_anomaly.tex:182\", \"lean4/Omega/Folding/BinFold.lean:143\", \"lean4/Omega/Folding/BinFold.lean:153\", \"lean4/Omega/Folding/BinFold.lean:161\", \"lean4/Omega/Folding/BinFold.lean:165\"], \"novelty_risk\": \"Moderate: the conjecture is explicitly stated in Automath and appears absent from the target repo, but its folding primitives are specialized and would need careful target-side exposition.\"}, {\"title\": \"Spike-flat asymptotic for fold collision profiles\", \"type\": \"conjecture\", \"status\": \"conjectured\", \"target_need\": \"README.md:58-66: the project explicitly wants short illuminating solved variants and test statements near open conjectures, while reusable fully proved infrastructure should live in `FormalConjecturesForMathlib`.\", \"what_they_gain\": \"A second paper-backed open benchmark whose asymptotic statement is genuinely nontrivial, yet whose low-resolution certificates are already formalized. This gives the maintainers exactly the pattern they say they want: an open `Paper/` theorem accompanied by short proved tests and infrastructure in `FormalConjecturesForMathlib`.\", \"statement\": \"If `d_m(r)` denotes the fold multiplicity profile and `D_m` the maximal fiber size, then the umbrella paper conjectures that the collision probability satisfies `Col_m = 2^(-2m) * (D_m^2 + (2^m - D_m)^2 / (F_{m+2} - 1)) * (1 + o(1))` as `m -> infinity`; equivalently, one maximal fiber asymptotically carries the entire second-order excess while the remaining profile becomes flat at collision scale.\", \"proof_sketch\": \"The conjecture is stated explicitly in the umbrella appendix. Its finite audit trail is already substantial: `window8_histogram_fiber_sum` and `window8_collision_dimension` compute exact second moments at `m = 8`, while `binFold6_mult_three_exists` and `binFold6_no_uniform_fibers` prove that nonuniform multiplicity is already forced at `m = 6`. For the target repository, these finite lemmas are exactly the kind of short, illuminating certificates the README asks contributors to provide before leaving the asymptotic theorem open.\", \"lean_refs\": [\"FormalConjectures/Paper/ClaudesCycles.lean:83\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:356\"], \"automath_refs\": [\"theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/appendix/fold_multiplicity/subsec__fold-collision-convex-lower-bounds-and-spike-flat-conjecture.tex:89\", \"theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/appendix/fold_multiplicity/subsec__fold-collision-convex-lower-bounds-and-spike-flat-conjecture.tex:99\", \"lean4/Omega/Folding/BinFold.lean:139\", \"lean4/Omega/Folding/BinFold.lean:143\", \"lean4/Omega/Folding/BinFold.lean:161\", \"lean4/Omega/Folding/BinFold.lean:165\"], \"novelty_risk\": \"Moderate-to-high: the asymptotic is explicit and apparently unpublished outside Automath, but the ambient notation is specialized and would require disciplined normalization choices in `formal-conjectures`.\"}, {\"title\": \"Finite-state lift and clopen prefix package for symbolic benchmarks\", \"type\": \"proposition\", \"status\": \"proved\", \"target_need\": \"issue #3697 (opened 2026-04-05): periodicity of finite octal games; the issue itself says the missing prerequisites are an `octalGame` definition, an impartiality lemma, and a Grundy-sequence wrapper.\", \"what_they_gain\": \"A ready-made `FormalConjecturesForMathlib` support package: generic state-count control for deterministic lifts, an explicit binary sofic graph with exact cardinalities, and clopen-cylinder lemmas for prefix-defined events. This directly lowers the prerequisite burden for symbolic-dynamics, automata, and computability-flavored conjectures.\", \"statement\": \"For any finite deterministic binary-labelled system, the number of labelled lifts of a word is bounded by the number of states. In the explicit graph `Phi_m`, the state set has cardinality `2^(m-1)` and every vertex has outdegree `2`. Moreover, any event defined by finitely many prefixes is clopen in the product topology.\", \"proof_sketch\": \"The counting statement follows by injecting each labelled path into its initial state via `labeledPath_initial_injective`, then applying `labeledPath_card_le_state_card`. The concrete graph package is provided by `phiState_card` and `phiGraph_outdegree_two`. The topological half is supplied by `isOpen_fromWordSet` and `isClopen_fromWordSet`, which turn prefix-coded subsets into auditable clopen events. In the target repo, these are precisely the reusable preliminaries that prevent each new symbolic benchmark from reimplementing its own finite-state and prefix-topology toolkit.\", \"lean_refs\": [\"FormalConjectures/OEIS/6697.lean:89\", \"FormalConjecturesForMathlib/Computability/TuringMachine/BusyBeavers.lean:26\", \"FormalConjecturesForMathlib/Topology/GDelta.lean:24\"], \"automath_refs\": [\"lean4/Omega/Graph/LiftBound.lean:12\", \"lean4/Omega/Graph/LiftBound.lean:27\", \"lean4/Omega/Graph/PhiGraph.lean:12\", \"lean4/Omega/Graph/PhiGraph.lean:28\", \"lean4/Omega/SPG/Clopen.lean:11\", \"lean4/Omega/SPG/Clopen.lean:19\"], \"novelty_risk\": \"Low: the entire package is already formally proved in Automath; the only material question is whether the target maintainers prefer these abstractions verbatim or after mild namespace generalization.\"}]}"
+    }
+  ],
+  "timestamps": {
+    "created_at": "2026-04-18T17:34:30+08:00",
+    "updated_at": "2026-04-18T17:53:02+08:00",
+    "stage_b_started_at": "2026-04-18T17:34:31+08:00"
+  },
+  "submission_url": "",
+  "error": ""
+}

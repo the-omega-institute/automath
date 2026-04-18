@@ -585,6 +585,38 @@ def _balanced_json_slice(text: str, start: int) -> Optional[str]:
     return None
 
 
+def auto_commit_push(repo: str, stage: str, round_num: int, score: int, *, dry_run: bool = False) -> None:
+    """Auto-commit state files + push after each round.
+    Safe in worktree isolation — no branch conflicts.
+    Makes progress visible in PR (like lean4-codex-auto-dev PR #37)."""
+    if dry_run:
+        return
+    state_dir = str(STATE_DIR)
+    msg = f"outreach {repo}: Stage {stage} R{round_num} (score={score})"
+    try:
+        subprocess.run(
+            ["git", "add", state_dir],
+            cwd=str(REPO_ROOT), capture_output=True, timeout=30,
+        )
+        result = subprocess.run(
+            ["git", "commit", "-m", msg, "--allow-empty"],
+            cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=30,
+        )
+        if result.returncode == 0:
+            push = subprocess.run(
+                ["git", "push", "origin", "HEAD"],
+                cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=60,
+            )
+            if push.returncode == 0:
+                logger.info("Auto-committed+pushed: %s", msg)
+            else:
+                logger.warning("Push failed: %s", push.stderr[:200])
+        else:
+            logger.debug("Nothing to commit (no state changes)")
+    except Exception as exc:
+        logger.warning("Auto-commit failed: %s", exc)
+
+
 def coerce_score(value: Any, default: int = 0) -> int:
     try:
         score = int(round(float(value)))
@@ -1550,6 +1582,7 @@ def run_stage_b(
             ),
         )
         save_state(state)
+        auto_commit_push(state.repo, "B", round_num, final_score, dry_run=dry_run)
 
         # Bug 8 fix: pass gate uses GLOBAL BEST score across all rounds,
         # not just current round. This prevents good findings from being discarded
@@ -1573,13 +1606,16 @@ def run_stage_b(
             state.timestamps["completed_at"] = iso_now()
             state.log_event("B", "skipped after low-score streak", score=final_score, verdict="skip")
             save_state(state)
+            auto_commit_push(state.repo, "B", round_num, final_score, dry_run=dry_run)
             mark_processed(state.repo, dry_run=dry_run)
             return state
 
     state.stage = "SKIPPED"
     state.timestamps["completed_at"] = iso_now()
-    state.log_event("B", "max research rounds exhausted", score=state.scores["final"][-1] if state.scores["final"] else 0)
+    last_score = state.scores["final"][-1] if state.scores["final"] else 0
+    state.log_event("B", "max research rounds exhausted", score=last_score)
     save_state(state)
+    auto_commit_push(state.repo, "B-exhausted", MAX_RESEARCH_ROUNDS, last_score, dry_run=dry_run)
     mark_processed(state.repo, dry_run=dry_run)
     return state
 
@@ -1756,6 +1792,7 @@ def run_stage_c(
         state.round = 0
         state.timestamps["stage_c_completed_at"] = iso_now()
         save_state(state)
+        auto_commit_push(state.repo, "C", 1, 8, dry_run=dry_run)
         return state
 
     # C1 produced empty output — hard failure
@@ -1822,6 +1859,7 @@ def run_stage_d(state: RepoState, *, dry_run: bool) -> tuple[RepoState, str]:
             state.timestamps["completed_at"] = iso_now()
             state.log_event("D", "issue submitted", verdict="approve", detail=url)
             save_state(state)
+            auto_commit_push(state.repo, "D", 0, 10, dry_run=dry_run)
             mark_processed(state.repo, dry_run=dry_run)
             return state, ""
         if action == "revise":
