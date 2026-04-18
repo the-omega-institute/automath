@@ -23,6 +23,7 @@ import Omega.CircleDimension.DerivedCofinalPrimeSupportUnboundedLedgerRank
 import Omega.CircleDimension.DerivedChainArithmeticMedianUniqueMinimizer
 import Omega.CircleDimension.CdimStarCompatibleFG
 import Omega.CircleDimension.Cdim1DivisibleImpliesQ
+import Omega.CircleDimension.Cdim2MinKernelDim
 import Omega.CircleDimension.CertificateInverseLimitAddressing
 import Omega.CircleDimension.CechCyclotomicQuantization
 import Omega.CircleDimension.CircleDim

@@ -100,6 +100,7 @@ import Omega.GU.TerminalSuccUniqueBranchMerge
 import Omega.GU.TerminalFoldbin6TailCubeSection
 import Omega.GU.TerminalFoldbin6TwoPointFiberDirectionSpectrum
 import Omega.GU.TerminalGamma6Rigidity
+import Omega.GU.TerminalTimeFactorMetallicUnique
 import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
 import Omega.GU.TerminalWindow6LocalUpliftAdmissibility

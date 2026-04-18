@@ -6,6 +6,7 @@ import Omega.Discussion.CharacterIndexHolonomy
 import Omega.Discussion.CrossingWindingBlaschkeIndex
 import Omega.Discussion.CubicalStokesElimination2Cycle
 import Omega.Discussion.DimensionalNullTrigger
+import Omega.Discussion.EulerFactorBasepointOrbit
 import Omega.Discussion.EpsZkCmiRiskImprovementBound
 import Omega.Discussion.FiberStokesWatataniNormalization
 import Omega.Discussion.FoldRepresentationQCollisionLowerBound
