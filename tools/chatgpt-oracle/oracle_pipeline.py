@@ -45,8 +45,9 @@
     D1: Codex 检查回流候选 → 返回 backflow items
     D2: Claude review 回流方案
     Gate: approved → D3
-    D3: 修改主论文 → commit
-    D4: Claude 验证 → commit
+    D3: Codex 修改主论文 → commit
+    D4: Codex 验证 → commit
+    D5: Claude 审阅回流质量 → 不满意则 Codex 补充修改 → commit
 
 Usage:
   # Review 已有文章:
@@ -2827,6 +2828,70 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
     state.log_event("D", "claude_verify_main",
                     committed=bool(h), commit_hash=h)
     save_state(state)
+
+    # ── D5: Claude quality review of backflow changes ──────────
+    logger.info(f"{tag} D5 — Claude review backflow quality")
+    d5_prompt = textwrap.dedent(f"""\
+        Independent quality review of backflow changes to the main paper.
+        Main paper: {state.main_paper_dir}
+        Sub-paper source: {state.paper_dir}
+
+        Recent backflow applied {len(approved_items)} items. Review:
+
+        1. Does each backflow item integrate naturally? (no abrupt insertions)
+        2. Are new theorems/references mathematically correct?
+        3. Is there any broken cross-referencing?
+        4. Does the main paper's narrative flow still make sense?
+        5. Any content that should NOT have been added?
+
+        ## Output Format (MUST follow exactly)
+        ```json
+        {{
+          "quality_verdict": "<good|needs_fixes>",
+          "issues": ["issue1", "issue2", ...],
+          "notes": "summary"
+        }}
+        ```
+
+        quality_verdict = "good" means backflow is clean, no further action.
+        quality_verdict = "needs_fixes" means list specific issues to address.
+        Do NOT edit files — only output the JSON review.
+    """)
+    out_d5 = claude_exec(d5_prompt, work_dir=main_path, dry_run=dry_run)
+    d5_data = parse_json_from_output(out_d5) if not dry_run else {
+        "quality_verdict": "good", "issues": [], "notes": "dry run",
+    }
+    d5_verdict = d5_data.get("quality_verdict", "good")
+    d5_issues = d5_data.get("issues", [])
+    state.log_event("D", "claude_review_backflow_quality",
+                    verdict=d5_verdict,
+                    detail=json.dumps(d5_data, ensure_ascii=False)[:10000])
+    save_state(state)
+
+    if d5_verdict == "needs_fixes" and d5_issues:
+        logger.info(f"{tag} D5 found {len(d5_issues)} issues — Codex fixing")
+        issues_text = "\n".join(f"  {i+1}. {iss}" for i, iss in enumerate(d5_issues))
+        fix_prompt = textwrap.dedent(f"""\
+            Fix issues found by Claude's quality review of backflow changes.
+            Main paper: {state.main_paper_dir}
+
+            ## Issues
+            {issues_text}
+
+            Fix each issue directly in the .tex files.
+            Compile: cd {state.main_paper_dir} && xelatex -interaction=nonstopmode main.tex
+        """)
+        codex_exec(fix_prompt, work_dir=main_path,
+                   timeout_seconds=900, model=model, dry_run=dry_run)
+        h = git_commit(main_path,
+                       f"stage-D5: fix {len(d5_issues)} backflow quality issues",
+                       tag=tag)
+        state.log_event("D", "codex_fix_backflow_quality",
+                        committed=bool(h), commit_hash=h)
+        save_state(state)
+        logger.info(f"{tag} D5 fixes applied")
+    else:
+        logger.info(f"{tag} D5: backflow quality OK")
 
     state.stage_d_passed = True
     save_state(state)
