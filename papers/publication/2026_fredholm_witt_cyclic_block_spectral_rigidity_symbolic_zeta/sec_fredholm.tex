@@ -652,3 +652,557 @@ The corresponding statement without a normality assumption is as follows.
   complete determinant-constrained Jordan geometry away from \(0\),
   while the quasinilpotent sector remains completely free.
 \end{remark}
+
+\section{Regularized determinants in Schatten classes}
+\label{sec:schatten}
+
+Fix an integer \(p\ge 2\). For a compact operator \(T\), let
+\(s_k(T)\) denote its singular values. The Schatten class
+\(\mathcal S_p(H)\) consists of those compact operators for which
+\[
+  \|T\|_p^p:=\sum_k s_k(T)^p<\infty.
+\]
+For \(T\in \mathcal S_p(H)\), set
+\[
+  Z_{p,T}(z):=\det\nolimits_p(I-zT)^{-1}.
+\]
+By the regularized determinant theory
+\cite[Chapter~9]{Simon2005TraceIdeals}, \(Z_{p,T}\) is entire, its
+reciprocal vanishes precisely at the reciprocals of the non-zero
+eigenvalues of \(T\), counted with algebraic multiplicity, and
+\begin{equation}\label{eq:regularized-log-series}
+  Z_{p,T}(z)
+  =\exp\!\left(\sum_{q\ge p}\frac{\Tr(T^q)}{q}z^q\right)
+\end{equation}
+for \(\abs{z}<\|T\|^{-1}\).
+
+For \(n\ge 1\) and \(\beta\in \CC\setminus\{0\}\), define
+\begin{equation}\label{eq:regularized-euler-factor}
+  \mathcal E_{p,n,\beta}(z)
+  :=(1-\beta z^n)^{-1}
+    \exp\!\left(
+      -\sum_{\ell=1}^{\lfloor (p-1)/n\rfloor}
+        \frac{\beta^\ell z^{n\ell}}{\ell}\right).
+\end{equation}
+
+\begin{theorem}[Regularized cyclic-block realization in \(\mathcal S_p\)]
+  \textbf{[New-1 | 2026-04-18]}
+  \label{thm:schatten-regularized}
+  Let
+  \(
+    \mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}
+  \)
+  be a countable family with
+  \[
+    n_j,m_j\in\NN,
+    \qquad
+    \beta_j\in\CC\setminus\{0\},
+  \]
+  and assume that
+  \[
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}<\infty.
+  \]
+  Choose \(\alpha_j\in\CC\) such that \(\alpha_j^{n_j}=\beta_j\), and
+  set
+  \[
+    H_{\mathcal D}
+    :=\bigoplus_{j\in J}\bigl(\CC^{n_j}\otimes\CC^{m_j}\bigr),
+    \qquad
+    L_{\mathcal D}
+    :=\bigoplus_{j\in J}\bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr).
+  \]
+  Then \(L_{\mathcal D}\in \mathcal S_p(H_{\mathcal D})\), and
+  \[
+    Z_{p,L_{\mathcal D}}(z)
+    =\prod_{j\in J}\mathcal E_{p,n_j,\beta_j}(z)^{m_j}
+  \]
+  locally uniformly on \(\CC\).
+
+  Moreover, if \(L\in \mathcal S_p(H)\) is normal, then the following
+  are equivalent:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item
+      \[
+        Z_{p,L}(z)
+        =\prod_{j\in J}\mathcal E_{p,n_j,\beta_j}(z)^{m_j}
+      \]
+      in a neighborhood of \(z=0\).
+    \item There exist a Hilbert space \(H_0\) and a unitary operator
+      \(U:H\to H_0\oplus H_{\mathcal D}\) such that
+      \[
+        ULU^{-1}=0_{H_0}\oplus L_{\mathcal D}.
+      \]
+  \end{enumerate}
+  In particular, every normal realization satisfies
+  \[
+    \|L\|_p^p=\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+
+  If \(T\in \mathcal S_p(H)\) satisfies
+  \[
+    Z_{p,T}(z)
+    =\prod_{j\in J}\mathcal E_{p,n_j,\beta_j}(z)^{m_j}
+  \]
+  near \(z=0\), then
+  \[
+    \|T\|_p^p\ge \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+  Equality holds if and only if \(T\) is normal. Equivalently,
+  equality holds if and only if there exist a Hilbert space \(H_0\) and
+  a unitary operator \(U:H\to H_0\oplus H_{\mathcal D}\) such that
+  \[
+    UTU^{-1}=0_{H_0}\oplus L_{\mathcal D}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Each block \(C(n_j,\alpha_j)\otimes I_{m_j}\) has singular value
+  \(\abs{\alpha_j}\) with multiplicity \(m_jn_j\). Therefore
+  \[
+    \|L_{\mathcal D}\|_p^p
+    =\sum_{j\in J}m_jn_j\abs{\alpha_j}^p
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}
+    <\infty,
+  \]
+  so \(L_{\mathcal D}\in \mathcal S_p(H_{\mathcal D})\). Since
+  \(m_jn_j\ge 1\) for every \(j\), the same summability implies
+  \(
+    \sup_j\abs{\alpha_j}<\infty
+  \).
+
+  For each \(j\), set
+  \(
+    B_j:=C(n_j,\alpha_j)\otimes I_{m_j}
+  \).
+  If \(q\ge 1\), then
+  \[
+    \Tr(B_j^q)
+    =
+    \begin{cases}
+      m_jn_j\,\beta_j^{q/n_j}, & n_j\mid q,\\
+      0, & n_j\nmid q,
+    \end{cases}
+  \]
+  because the eigenvalues of \(C(n_j,\alpha_j)\) are
+  \(\alpha_j\omega\), \(\omega^{n_j}=1\). Hence, for
+  \(\abs{z}<\abs{\alpha_j}^{-1}\),
+  \begin{align*}
+    \log Z_{p,B_j}(z)
+    &=\sum_{q\ge p}\frac{\Tr(B_j^q)}{q}z^q \\
+    &=m_j\sum_{\ell\ge \lceil p/n_j\rceil}
+      \frac{\beta_j^\ell z^{n_j\ell}}{\ell}
+     =\log\!\bigl(\mathcal E_{p,n_j,\beta_j}(z)^{m_j}\bigr),
+  \end{align*}
+  where \eqref{eq:regularized-euler-factor} is used in the last step.
+  Therefore
+  \[
+    Z_{p,B_j}(z)=\mathcal E_{p,n_j,\beta_j}(z)^{m_j}
+  \]
+  as entire functions.
+
+  Let
+  \[
+    L_{\mathcal D}^{(N)}
+    :=\bigoplus_{j\le N}\bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr).
+  \]
+  Then
+  \[
+    \|L_{\mathcal D}-L_{\mathcal D}^{(N)}\|_p^p
+    =\sum_{j>N}m_jn_j\abs{\beta_j}^{p/n_j}\to 0.
+  \]
+  By the continuity of the regularized determinant on \(\mathcal S_p\)
+  \cite[Chapter~9]{Simon2005TraceIdeals},
+  \[
+    Z_{p,L_{\mathcal D}^{(N)}}\longrightarrow Z_{p,L_{\mathcal D}}
+  \]
+  locally uniformly on \(\CC\). Since
+  \[
+    Z_{p,L_{\mathcal D}^{(N)}}(z)
+    =\prod_{j\le N}\mathcal E_{p,n_j,\beta_j}(z)^{m_j},
+  \]
+  passage to the limit yields
+  \[
+    Z_{p,L_{\mathcal D}}(z)
+    =\prod_{j\in J}\mathcal E_{p,n_j,\beta_j}(z)^{m_j}
+  \]
+  locally uniformly on \(\CC\).
+
+  The implication \textup{(ii)}\(\Rightarrow\)\textup{(i)} is immediate.
+  Suppose now that \textup{(i)} holds. The first part of the theorem
+  provides an operator \(L_{\mathcal D}\in\mathcal S_p\) with the same
+  regularized determinant germ, so
+  \[
+    \det\nolimits_p(I-zL)=\det\nolimits_p(I-zL_{\mathcal D})
+  \]
+  as entire functions. By the regularized determinant theory cited
+  above, the zeros of \(\det_p(I-zT)\) are precisely the reciprocals of
+  the non-zero eigenvalues of \(T\), counted with algebraic
+  multiplicity. Therefore \(L\) and \(L_{\mathcal D}\) have the same
+  non-zero spectrum with multiplicity.
+
+  Since \(L\) is compact and normal, the spectral theorem gives an
+  orthogonal decomposition
+  \[
+    H=\ker L\oplus\bigoplus_{\lambda\in\spec(L)\setminus\{0\}}E_\lambda,
+    \qquad
+    L|_{E_\lambda}=\lambda I.
+  \]
+  For each non-zero eigenvalue \(\lambda\), let
+  \[
+    J_\lambda
+    :=\bigl\{j\in J:\lambda=\alpha_j\omega
+      \text{ for some }\omega^{n_j}=1\bigr\}.
+  \]
+  Since the multiplicity of \(\lambda\) is finite,
+  \[
+    \dim E_\lambda=\sum_{j\in J_\lambda}m_j.
+  \]
+  Choose an orthogonal decomposition
+  \[
+    E_\lambda=\bigoplus_{j\in J_\lambda}E_{\lambda,j},
+    \qquad
+    \dim E_{\lambda,j}=m_j.
+  \]
+  For each \(j\), set
+  \[
+    H_j:=\bigoplus_{\omega^{n_j}=1}E_{\alpha_j\omega,j}.
+  \]
+  Then \(H_j\) is reducing for \(L\), the subspaces \(H_j\) are
+  pairwise orthogonal, and \(L|_{H_j}\) is unitarily equivalent to
+  \[
+    \bigoplus_{\omega^{n_j}=1}\alpha_j\omega\,I_{m_j}
+    \cong C(n_j,\alpha_j)\otimes I_{m_j}.
+  \]
+  Consequently \(L\) is unitarily equivalent to
+  \(0_{\ker L}\oplus L_{\mathcal D}\), which proves \textup{(ii)}. The
+  formula for \(\|L\|_p^p\) is immediate from the first part of the
+  proof.
+
+  Let \(T\in \mathcal S_p(H)\) satisfy
+  \[
+    Z_{p,T}(z)
+    =\prod_{j\in J}\mathcal E_{p,n_j,\beta_j}(z)^{m_j}
+  \]
+  near \(z=0\). Then \(T\) and \(L_{\mathcal D}\) have the same
+  non-zero eigenvalues with algebraic multiplicity, so
+  \[
+    \sum_k\abs{\lambda_k(T)}^p
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+
+  Choose an orthonormal basis in which the compact operator \(T\) is
+  upper triangular, with diagonal entries \(\lambda_k(T)\) repeated
+  according to algebraic multiplicity \cite{Ringrose1971}. Let \(D\) be
+  the diagonal operator with diagonal entries \(\lambda_k(T)\). Then
+  \[
+    \|D\|_p^p=\sum_k\abs{\lambda_k(T)}^p.
+  \]
+  For \(n\ge 1\), let \(W_n\) be the diagonal unitary determined by
+  \(W_ne_n=-e_n\) and \(W_ne_m=e_m\) for \(m\ne n\). Set
+  \[
+    T_0:=T,
+    \qquad
+    T_n:=\frac{T_{n-1}+W_nT_{n-1}W_n}{2}
+    \qquad (n\ge 1).
+  \]
+  Since \(T_{n-1}\mapsto W_nT_{n-1}W_n\) is an isometry of
+  \(\mathcal S_p\),
+  \[
+    \|T_n\|_p\le \|T_{n-1}\|_p
+    \qquad (n\ge 1).
+  \]
+  The operator \(T_n\) is still upper triangular, has the same diagonal
+  as \(T\), and all off-diagonal entries in the first \(n\) rows and
+  columns vanish. If \(Q_n\) denotes the orthogonal projection onto
+  \(\overline{\operatorname{span}}\{e_k:k>n\}\), then
+  \[
+    T_n-D=Q_n(T-D)Q_n.
+  \]
+  Since \(T-D\in \mathcal S_p(H)\), it follows that
+  \(
+    \|Q_n(T-D)Q_n\|_p\to 0
+  \),
+  and hence \(T_n\to D\) in \(\mathcal S_p(H)\). Therefore
+  \[
+    \|D\|_p\le \|T\|_p,
+  \]
+  which gives
+  \[
+    \|T\|_p^p
+    \ge \sum_k\abs{\lambda_k(T)}^p
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+
+  Assume now that equality holds. Then
+  \[
+    \|T\|_p=\|D\|_p=\lim_{n\to\infty}\|T_n\|_p.
+  \]
+  Since the sequence \(\|T_n\|_p\) is decreasing, one has
+  \(
+    \|T_n\|_p=\|T_{n-1}\|_p
+  \)
+  for every \(n\ge 1\). Because \(1<p<\infty\), the Banach space
+  \(\mathcal S_p(H)\) is strictly convex. The identity
+  \[
+    T_n=\frac{T_{n-1}+W_nT_{n-1}W_n}{2},
+    \qquad
+    \|T_n\|_p=\|T_{n-1}\|_p,
+  \]
+  therefore forces
+  \(
+    T_{n-1}=W_nT_{n-1}W_n
+  \).
+  Consequently \(T_n=T_{n-1}\) for every \(n\), and induction gives
+  \(T_n=T\) for all \(n\). Passing to the limit shows that \(T=D\), so
+  \(T\) is diagonal in the triangularizing basis and hence normal. The
+  converse characterization follows from the equivalence
+  \textup{(i)}\(\Leftrightarrow\)\textup{(ii)} already proved.
+\end{proof}
+
+\begin{corollary}[Determinant extraction of the spectral \(p\)-mass]
+  \textbf{[New-2 | 2026-04-18]}
+  \label{cor:schatten-mass}
+  Let \(p\ge 2\) and \(T\in \mathcal S_p(H)\). Then
+  \[
+    \sum_{\lambda\in\spec(T)\setminus\{0\}}m_a(\lambda)\abs{\lambda}^p
+    =p^2\int_0^\infty \frac{1}{r^{p+1}}
+      \left(
+        \frac{1}{2\pi}\int_0^{2\pi}
+          \log\abs{\det\nolimits_p(I-re^{it}T)}\,\dd t
+      \right)\dd r.
+  \]
+  In the setting of \Cref{thm:schatten-regularized},
+  \[
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}
+    =p^2\int_0^\infty \frac{1}{r^{p+1}}
+      \left(
+        \frac{1}{2\pi}\int_0^{2\pi}
+          \log\abs{\det\nolimits_p(I-re^{it}L_{\mathcal D})}\,\dd t
+      \right)\dd r.
+  \]
+\end{corollary}
+
+\begin{proof}
+  Set \(D_{p,T}(z):=\det_p(I-zT)\). Since \(D_{p,T}(0)=1\), Jensen's
+  formula yields
+  \[
+    \frac{1}{2\pi}\int_0^{2\pi}\log\abs{D_{p,T}(re^{it})}\,\dd t
+    =\sum_{\lambda\in\spec(T)\setminus\{0\}}
+      m_a(\lambda)\log^+(r\abs{\lambda}),
+  \]
+  where \(\log^+x:=\max\{\log x,0\}\). The summands are non-negative, so
+  Tonelli's theorem gives
+  \begin{align*}
+    &p^2\int_0^\infty \frac{1}{r^{p+1}}
+      \left(
+        \frac{1}{2\pi}\int_0^{2\pi}
+          \log\abs{D_{p,T}(re^{it})}\,\dd t
+      \right)\dd r \\
+    &\qquad
+      =\sum_{\lambda\in\spec(T)\setminus\{0\}}m_a(\lambda)
+        p^2\int_0^\infty r^{-p-1}\log^+(r\abs{\lambda})\,\dd r.
+  \end{align*}
+  For \(a>0\),
+  \[
+    p^2\int_0^\infty r^{-p-1}\log^+(ra)\,\dd r
+    =p^2a^p\int_1^\infty u^{-p-1}\log u\,\dd u
+    =a^p.
+  \]
+  This proves the first identity.
+
+  Apply the first identity to \(T=L_{\mathcal D}\) and use
+  \Cref{thm:schatten-regularized}, which gives
+  \[
+    \sum_{\lambda\in\spec(L_{\mathcal D})\setminus\{0\}}
+      m_a(\lambda)\abs{\lambda}^p
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+\end{proof}
+
+\begin{theorem}[Jordan profiles for regularized determinants]
+  \textbf{[New-3 | 2026-04-18]}
+  \label{thm:schatten-jordan}
+  Fix an integer \(p\ge 2\), and let
+  \(
+    \mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}
+  \)
+  satisfy
+  \[
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}<\infty.
+  \]
+  Let \(L_{\mathcal D}\) be the associated block-cyclic model, set
+  \[
+    \Lambda_{\mathcal D}:=\spec(L_{\mathcal D})\setminus\{0\},
+  \]
+  and let \(a_{\mathcal D}(\lambda)\) denote the algebraic multiplicity
+  of \(\lambda\in\Lambda_{\mathcal D}\). For each
+  \(\lambda\in\Lambda_{\mathcal D}\), let
+  \[
+    \pi_\lambda=(r_{\lambda,1},\dots,r_{\lambda,\ell_\lambda})
+  \]
+  be a finite tuple of positive integers. Then the following are
+  equivalent:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item There exists \(T\in \mathcal S_p(H)\) such that
+      \[
+        Z_{p,T}(z)
+        =\prod_{j\in J}\mathcal E_{p,n_j,\beta_j}(z)^{m_j}
+      \]
+      near \(z=0\), and for every \(\lambda\in\Lambda_{\mathcal D}\)
+      the restriction of \(T\) to the generalized eigenspace at
+      \(\lambda\) has Jordan block sizes exactly \(\pi_\lambda\).
+    \item For every \(\lambda\in\Lambda_{\mathcal D}\),
+      \[
+        a_{\mathcal D}(\lambda)
+        =\sum_{q=1}^{\ell_\lambda}r_{\lambda,q}.
+      \]
+  \end{enumerate}
+  If these conditions hold, then
+  \[
+    \inf\Bigl\{\|T\|_p^p:T\text{ satisfies \textup{(i)}}\Bigr\}
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+  This infimum is attained if and only if
+  \(r_{\lambda,q}=1\) for every \(\lambda\in\Lambda_{\mathcal D}\) and
+  every \(1\le q\le \ell_\lambda\).
+\end{theorem}
+
+\begin{proof}
+  Assume \textup{(i)}. By \Cref{thm:schatten-regularized}, the
+  non-zero spectrum of \(T\), counted with algebraic multiplicity,
+  agrees with that of \(L_{\mathcal D}\). Hence the algebraic
+  multiplicity of each \(\lambda\in\Lambda_{\mathcal D}\) is
+  \(a_{\mathcal D}(\lambda)\). On the finite-dimensional generalized
+  eigenspace at \(\lambda\), the sum of the Jordan block sizes is
+  exactly the algebraic multiplicity. Therefore \textup{(ii)} holds.
+
+  Assume now that \textup{(ii)} holds. Let \(N_r\) denote the nilpotent
+  Jordan block of size \(r\), with ones on the superdiagonal and zeros
+  elsewhere. Since
+  \[
+    \sum_{\lambda\in\Lambda_{\mathcal D}}
+      a_{\mathcal D}(\lambda)\abs{\lambda}^p
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}
+    <\infty,
+  \]
+  the set
+  \[
+    \mathcal B
+    :=\{(\lambda,q):\lambda\in\Lambda_{\mathcal D},
+      \ 1\le q\le \ell_\lambda\}
+  \]
+  is countable. Fix \(\varepsilon>0\), and choose numbers
+  \(\delta_{\lambda,q}>0\) such that
+  \[
+    \sum_{(\lambda,q)\in\mathcal B}\delta_{\lambda,q}<\varepsilon.
+  \]
+  For each \((\lambda,q)\in\mathcal B\), continuity of the Schatten
+  \(p\)-norm on the finite-dimensional matrix algebra
+  \(M_{r_{\lambda,q}}(\CC)\) yields a number \(t_{\lambda,q}\ge 0\)
+  such that \(t_{\lambda,q}>0\) whenever \(r_{\lambda,q}\ge 2\), and
+  \[
+    \left\|\lambda I_{r_{\lambda,q}}
+      +t_{\lambda,q}N_{r_{\lambda,q}}\right\|_p^p
+    \le r_{\lambda,q}\abs{\lambda}^p+\delta_{\lambda,q}.
+  \]
+  Set
+  \[
+    B_{\lambda,q}
+    :=\lambda I_{r_{\lambda,q}}+t_{\lambda,q}N_{r_{\lambda,q}}.
+  \]
+  If \(r_{\lambda,q}\ge 2\), then \(B_{\lambda,q}\) is similar to the
+  Jordan block \(J_{r_{\lambda,q}}(\lambda)=\lambda I_{r_{\lambda,q}}
+  +N_{r_{\lambda,q}}\), because
+  \[
+    D_t^{-1}J_r(\lambda)D_t=\lambda I_r+tN_r,
+    \qquad
+    D_t:=\operatorname{diag}(1,t,\dots,t^{r-1}),
+  \]
+  for every \(t>0\). If \(r_{\lambda,q}=1\), then \(B_{\lambda,q}\) is
+  the \(1\times 1\) Jordan block \((\lambda)\).
+
+  Define
+  \[
+    H_\varepsilon
+    :=\bigoplus_{(\lambda,q)\in\mathcal B}\CC^{r_{\lambda,q}},
+    \qquad
+    T_\varepsilon
+    :=\bigoplus_{(\lambda,q)\in\mathcal B}B_{\lambda,q}.
+  \]
+  The estimate above and \textup{(ii)} give
+  \begin{align*}
+    \|T_\varepsilon\|_p^p
+    &\le \sum_{(\lambda,q)\in\mathcal B}
+      \left(r_{\lambda,q}\abs{\lambda}^p+\delta_{\lambda,q}\right) \\
+    &= \sum_{\lambda\in \Lambda_{\mathcal D}}
+      a_{\mathcal D}(\lambda)\abs{\lambda}^p
+      +\sum_{(\lambda,q)\in\mathcal B}\delta_{\lambda,q} \\
+    &< \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}+\varepsilon.
+  \end{align*}
+  Hence \(T_\varepsilon\in \mathcal S_p(H_\varepsilon)\). By
+  construction, for each \(\lambda\in \Lambda_{\mathcal D}\) the
+  generalized eigenspace of \(T_\varepsilon\) at \(\lambda\) is the
+  direct sum of the blocks \(B_{\lambda,q}\), so the Jordan block sizes
+  are exactly \(\pi_\lambda\).
+
+  For every \(m\ge p\),
+  \[
+    \Tr(B_{\lambda,q}^m)=r_{\lambda,q}\lambda^m,
+  \]
+  because \(B_{\lambda,q}\) is upper triangular with constant diagonal
+  \(\lambda\). Since \(\sup_{\lambda\in\Lambda_{\mathcal D}}\abs{\lambda}
+  <\infty\) and
+  \[
+    \sum_{\lambda\in\Lambda_{\mathcal D}}
+      a_{\mathcal D}(\lambda)\abs{\lambda}^p<\infty,
+  \]
+  the series
+  \(
+    \sum_{\lambda\in\Lambda_{\mathcal D}}a_{\mathcal D}(\lambda)\lambda^m
+  \)
+  converges absolutely for every \(m\ge p\). Therefore
+  \[
+    \Tr(T_\varepsilon^m)
+    =\sum_{(\lambda,q)\in\mathcal B}r_{\lambda,q}\lambda^m
+    =\sum_{\lambda\in\Lambda_{\mathcal D}}
+      a_{\mathcal D}(\lambda)\lambda^m
+    =\Tr(L_{\mathcal D}^m)
+    \qquad (m\ge p).
+  \]
+  The local expansion \eqref{eq:regularized-log-series} now gives
+  \[
+    Z_{p,T_\varepsilon}(z)
+    =Z_{p,L_{\mathcal D}}(z)
+  \]
+  near \(z=0\). The product formula from
+  \Cref{thm:schatten-regularized} therefore yields
+  \[
+    Z_{p,T_\varepsilon}(z)
+    =\prod_{j\in J}\mathcal E_{p,n_j,\beta_j}(z)^{m_j}
+  \]
+  near \(z=0\). This proves \textup{(i)}.
+
+  The construction above gives, for every \(\varepsilon>0\), an operator
+  \(T_\varepsilon\) satisfying \textup{(i)} and
+  \[
+    \|T_\varepsilon\|_p^p
+    <\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}+\varepsilon.
+  \]
+  On the other hand, every operator satisfying \textup{(i)} obeys the
+  lower bound from \Cref{thm:schatten-regularized}. Consequently,
+  \[
+    \inf\Bigl\{\|T\|_p^p:T\text{ satisfies \textup{(i)}}\Bigr\}
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+
+  If \(r_{\lambda,q}=1\) for every \(\lambda\) and \(q\), then
+  \(L_{\mathcal D}\) itself satisfies \textup{(i)} and attains the
+  infimum by \Cref{thm:schatten-regularized}. Conversely, assume that
+  the infimum is attained by some operator \(T\) satisfying
+  \textup{(i)}. Then \(\|T\|_p^p\) equals the lower bound from
+  \Cref{thm:schatten-regularized}, so \(T\) is normal. For each
+  \(\lambda\in \Lambda_{\mathcal D}\), the restriction of \(T\) to the
+  generalized eigenspace at \(\lambda\) is a finite-dimensional normal
+  operator with the single eigenvalue \(\lambda\), hence equals
+  \(\lambda I\). Therefore every Jordan block has size \(1\).
+\end{proof}
