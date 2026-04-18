@@ -207,6 +207,7 @@ import Omega.Zeta.XiBasepointScanAnchorDetCauchyVandermonde
 import Omega.Zeta.PickPoissonCrossEnergyHorizontalSeparation
 import Omega.Zeta.XiPickPoissonNearCollisionCertificate
 import Omega.Zeta.XiRealInput40LogMInftyTruncationBound
+import Omega.Zeta.XiZGCountingPowerSavingError
 import Omega.Zeta.XiZGPrefixRecursionMonotoneTailCertificate
 import Omega.Zeta.XiPronyMomentMapJacobianDelta4
 import Omega.Zeta.XiPomMinrealVsSpectralBudgetSeparation
