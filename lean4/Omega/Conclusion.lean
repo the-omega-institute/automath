@@ -115,6 +115,7 @@ import Omega.Conclusion.ScreenAuditGapSupermodularity
 import Omega.Conclusion.SecondOrderCdimSignature
 import Omega.Conclusion.SectionLedgerCapacityFunctional
 import Omega.Conclusion.SectionLedgerKL
+import Omega.Conclusion.ShiftCommutingAlgorithmsPolynomial
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Conclusion.SinglepointJetRigidity
 import Omega.Conclusion.SmithPrefixBudget

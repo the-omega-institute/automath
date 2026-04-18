@@ -1,4 +1,5 @@
 import Omega.OperatorAlgebra.CylinderMarginalization
+import Omega.OperatorAlgebra.FoldQuantumChannelChoiCapacity
 import Omega.OperatorAlgebra.FiberReflectorDeterminantPotential
 import Omega.OperatorAlgebra.HiddenbitSheetSubgroupoidIndex
 import Omega.OperatorAlgebra.IndexGapCurvatureSecondVariation

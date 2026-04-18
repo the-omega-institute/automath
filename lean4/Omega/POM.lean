@@ -183,6 +183,7 @@ import Omega.POM.ToggleOrbitCountFiniteLowlevelInversion
 import Omega.POM.UniformLiftKLIsometryUniqueness
 import Omega.POM.UniformFiberSamplingRandomnessOptimality
 import Omega.POM.ValMonotoneBooleanNand
+import Omega.POM.ValueLayerRewritingTerminating
 import Omega.POM.VisibleThickTail
 import Omega.POM.WitnessExtractionOptimalSuccess
 import Omega.POM.ZeroTempConcentration
