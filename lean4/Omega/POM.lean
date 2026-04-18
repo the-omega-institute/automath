@@ -35,6 +35,7 @@ import Omega.POM.DiagonalRateKeepResampleChannel
 import Omega.POM.DiagonalRateAcceptRefreshSSTStrong
 import Omega.POM.DiagonalRateAcceptRefreshSeparationExact
 import Omega.POM.DiagonalRateAcceptRefreshSSTPGF
+import Omega.POM.DiagonalRateSeparationPGFRational
 import Omega.POM.DiagonalRateRefreshHittingTimePGFClosed
 import Omega.POM.DiagonalRateAbsorbingMeanHitTime
 import Omega.POM.DiagonalRateRefreshWeightedCayleyPrufer

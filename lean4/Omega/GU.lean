@@ -85,6 +85,7 @@ import Omega.GU.SwapInvolutionDiagonal
 import Omega.GU.TerminalFoldbin6BitflipStabilityPolynomial
 import Omega.GU.TerminalFoldbin6FiberHammingThreeValued
 import Omega.GU.TerminalFoldbin6FiberHammingMinDistanceHistogram
+import Omega.GU.TerminalFoldbin6MinimalMarkovClosureGap
 import Omega.GU.TerminalFoldbin6BoundaryPureF9Alias
 import Omega.GU.TerminalFoldbin6BdryUniqueGeoSelectedAxis
 import Omega.GU.TerminalFoldbin6GeoSignAntiinvariant16
