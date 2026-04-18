@@ -30,6 +30,12 @@ theorem crossing_iff_critical_line_zero (θ : ℤ) :
     unitarySliceCrossing θ ↔ criticalLineZeroEvent θ := by
   rfl
 
+/-- Paper-facing single-point crossing reformulation of the critical-line event.
+    thm:discussion-critical-line-single-point-crossing -/
+theorem paper_discussion_critical_line_single_point_crossing (θ : ℤ) :
+    unitarySliceCrossing θ ↔ criticalLineZeroEvent θ := by
+  simpa using crossing_iff_critical_line_zero θ
+
 theorem winding_eq_blaschke (κ : ℤ) :
     windingIndex κ = blaschkeDegree κ := by
   rfl

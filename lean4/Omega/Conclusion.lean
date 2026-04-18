@@ -155,6 +155,7 @@ import Omega.Conclusion.TentKernelLocalInvertibility
 import Omega.Conclusion.TimeReversalOrbitParity
 import Omega.Conclusion.TwoIncommensurableBasesDestroyVerticalLattice
 import Omega.Conclusion.TwoAtomScalarRecoveryAlpha2
+import Omega.Conclusion.VisibleJointHorizonSharp2d
 import Omega.Conclusion.WallisFactorMonoid
 import Omega.Conclusion.Window6BoundaryParityNotMeasurableFromF8
 import Omega.Conclusion.Window6BoundaryF8F9ChannelOrthogonality
