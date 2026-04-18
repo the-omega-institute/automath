@@ -1,4 +1,5 @@
 import Omega.Graph.LabeledGraph
+import Omega.Graph.CoarsegrainingCycleRankDecomposition
 import Omega.Graph.LiftBound
 import Omega.Graph.PhiGraph
 import Omega.Graph.Sofic
