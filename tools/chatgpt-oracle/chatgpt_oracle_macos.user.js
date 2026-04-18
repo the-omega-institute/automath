@@ -845,6 +845,15 @@
         }
       }
 
+      // Helper: strip ChatGPT thinking preamble from extracted text
+      function stripThinkingPreamble(t) {
+        return t
+          .replace(/^ChatGPT said:\s*/i, "")
+          .replace(/^I'm (?:checking|looking|searching|thinking|analyzing)[^.]*\.\s*/i, "")
+          .replace(/^Thought for \d+[sm]\s*\d*[sm]?\s*/i, "")
+          .trim();
+      }
+
       // Fallback: get all text from shadow, stripped of CSS/JS
       const shadowText = shadowInnerText(el.shadowRoot);
       if (shadowText.length < 500) continue;
@@ -854,14 +863,14 @@
         const tail = sentPromptText.slice(-80).trim();
         const idx = shadowText.lastIndexOf(tail);
         if (idx >= 0) {
-          const after = cleanText(shadowText.slice(idx + tail.length));
+          const after = stripThinkingPreamble(cleanText(shadowText.slice(idx + tail.length)));
           if (after.length > 100) return after;
         }
       }
 
       // Last resort: take second 60% (prompt first, response second)
       const halfPoint = Math.floor(shadowText.length * 0.4);
-      const secondHalf = cleanText(shadowText.slice(halfPoint));
+      const secondHalf = stripThinkingPreamble(cleanText(shadowText.slice(halfPoint)));
       if (secondHalf.length > 200 && !looksLikePromptEcho(secondHalf)) {
         return secondHalf;
       }
