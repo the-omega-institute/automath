@@ -6,6 +6,7 @@ import Omega.OperatorAlgebra.IndexGapCurvatureSecondVariation
 import Omega.OperatorAlgebra.LyapunovSpectralRadiusCertificate
 import Omega.OperatorAlgebra.FoldReynoldsRiskConvex
 import Omega.OperatorAlgebra.FoldConditionalExpectation
+import Omega.OperatorAlgebra.FoldConditionalExpectationSingularSpectrum
 import Omega.OperatorAlgebra.FoldConditionalExpectationHaar
 import Omega.OperatorAlgebra.FoldGaugeCommutantExplicit
 import Omega.OperatorAlgebra.FoldGaugeGroupStructure
