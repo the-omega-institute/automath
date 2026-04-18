@@ -78,6 +78,7 @@ import Omega.Zeta.FinitePartCyclicLiftTraceSieve
 import Omega.Zeta.FinitePartDirichletCharacterInversionPrime
 import Omega.Zeta.FinitePartCyclicLiftZetaTorsionDeterminesSpectrum
 import Omega.Zeta.FinitePartExpFinDoubleThresholdSeparation
+import Omega.Zeta.FinitePartLogMPrimitiveOrbitClosedForm
 import Omega.Zeta.FinitePartLogMRelativeScaleTransfer
 import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.FinitePartNyquistParsevalAliasing
