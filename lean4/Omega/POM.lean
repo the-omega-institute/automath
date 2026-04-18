@@ -84,6 +84,7 @@ import Omega.POM.HighMultiplicitySparse
 import Omega.POM.KCollisionRootFilter
 import Omega.POM.KernelSpectrum
 import Omega.POM.KLPythagorasTower
+import Omega.POM.LkChebyshevCharpoly
 import Omega.POM.LambdaAlgebraic
 import Omega.POM.LeyangLiftMobiusInvolutionFunctorial
 import Omega.POM.LeyangMonotoneCouplingPrimeRegister
