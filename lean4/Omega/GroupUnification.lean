@@ -1,4 +1,5 @@
 import Omega.GroupUnification.ChiralOrthogonalityTypeObservables
+import Omega.GroupUnification.BdrySheetParityDiagonal
 import Omega.GroupUnification.BdryOrientationParityUplift
 import Omega.GroupUnification.BdryOrientationLocalSystemAlternatingReduction
 import Omega.GroupUnification.AuditFiniteDecidabilitySturmFiniteLayer

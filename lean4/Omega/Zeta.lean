@@ -230,6 +230,7 @@ import Omega.Zeta.TwistedDeterminantCumulants
 import Omega.Zeta.TwistedDeterminantRigidity
 import Omega.Zeta.ToeplitzNegativeInertiaSpectralGapStability
 import Omega.Zeta.TorsionTableGaloisCovariance
+import Omega.Zeta.TorsionTableGaloisCertificate
 import Omega.Zeta.UnweightedQuarticIdeal
 import Omega.Zeta.UnitaryDeterminantZeroUnitCircle
 import Omega.Zeta.VandermondeResultantSeeds
