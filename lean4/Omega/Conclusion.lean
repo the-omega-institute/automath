@@ -38,6 +38,7 @@ import Omega.Conclusion.EventEllipseGoldenMinimal
 import Omega.Conclusion.ExtPiKernelPoset
 import Omega.Conclusion.FibadicLcmFiltrationLaw
 import Omega.Conclusion.FibadicPrimitiveCentralIdempotents
+import Omega.Conclusion.ExclusionRadiusTailAffineRecovery
 import Omega.Conclusion.FiniteFieldJordanExponentPeriodBound
 import Omega.Conclusion.FibonacciAnomalyBlock
 import Omega.Conclusion.FibonacciDistortionThreshold

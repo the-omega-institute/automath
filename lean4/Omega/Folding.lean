@@ -120,6 +120,7 @@ import Omega.Folding.GaugeAnomalyHankelAudit
 import Omega.Folding.GaugeAnomalyCumulantsNotPrecursive
 import Omega.Folding.GaugeAnomalyJordanFingerprint
 import Omega.Folding.GaugeAnomalyDensity
+import Omega.Folding.GaugeAnomalyBernoulliPKappa4AndKappa3Signflip
 import Omega.Folding.GodelDensityEstimatorDeterministicMeanApprox
 import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.GaugeAnomalyFiniteVarianceClosed
