@@ -806,14 +806,28 @@
     for (const el of document.querySelectorAll("*")) {
       if (!el.shadowRoot) continue;
 
-      // Helper: get clean text from shadow element (strip style/script)
+      // Helper: get clean text from shadow element (skip style/script content)
       function shadowInnerText(root) {
-        const clone = root.cloneNode(true);
-        // Remove style and script tags that pollute textContent
-        for (const tag of Array.from(clone.querySelectorAll("style, script, link"))) {
-          tag.remove();
+        // Can't clone ShadowRoot — walk children and collect text, skipping style/script
+        let text = "";
+        function walk(node) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            text += node.textContent;
+            return;
+          }
+          if (node.nodeType !== Node.ELEMENT_NODE) return;
+          const tag = node.tagName?.toLowerCase();
+          if (tag === "style" || tag === "script" || tag === "link") return;
+          for (const child of node.childNodes) walk(child);
+          // Add newline after block elements
+          if (/^(div|p|h[1-6]|li|br|article|section|blockquote|pre|tr)$/.test(tag)) {
+            text += "\n";
+          }
         }
-        return (clone.innerText || clone.textContent || "").trim();
+        if (root.childNodes) {
+          for (const child of root.childNodes) walk(child);
+        }
+        return text.trim();
       }
 
       // Find assistant messages inside shadow DOM
