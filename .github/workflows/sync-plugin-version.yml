@@ -1,0 +1,68 @@
+name: Sync plugin version
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+    paths:
+      - "prompts/omega-skill/**"
+      - ".claude-plugin/marketplace.json"
+      - "!prompts/omega-skill/.claude-plugin/plugin.json"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-plugin-version-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute calver and bump plugin.json
+        id: bump
+        env:
+          PLUGIN_JSON: prompts/omega-skill/.claude-plugin/plugin.json
+        run: |
+          set -euo pipefail
+          today="$(date -u +'%Y.%m.%d')"
+          # Count today's commits that touched the plugin tree to derive the patch number.
+          since_iso="$(date -u +'%Y-%m-%dT00:00:00Z')"
+          n="$(git log --since="$since_iso" --pretty=format:'%H' -- prompts/omega-skill | wc -l | tr -d ' ')"
+          new_version="${today}.${n}"
+          current="$(python3 -c "import json,sys; print(json.load(open('$PLUGIN_JSON'))['version'])")"
+          echo "current=$current"
+          echo "new=$new_version"
+          if [ "$current" = "$new_version" ]; then
+            echo "no_change=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          python3 - <<PY
+          import json, pathlib
+          p = pathlib.Path("$PLUGIN_JSON")
+          data = json.loads(p.read_text())
+          data["version"] = "$new_version"
+          p.write_text(json.dumps(data, indent=2) + "\n")
+          PY
+          echo "no_change=false" >> "$GITHUB_OUTPUT"
+          echo "version=$new_version" >> "$GITHUB_OUTPUT"
+
+      - name: Commit version bump
+        if: steps.bump.outputs.no_change == 'false'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prompts/omega-skill/.claude-plugin/plugin.json
+          git commit -m "chore(omega-skill): bump plugin version to ${{ steps.bump.outputs.version }}"
+          git push origin HEAD:${{ github.ref_name }}
