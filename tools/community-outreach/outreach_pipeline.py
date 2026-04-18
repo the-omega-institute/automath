@@ -2052,12 +2052,73 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--discover", action="store_true", help="Run Stage A discovery and process the resulting candidates")
     parser.add_argument("--repo", action="append", default=[], help="Target repository in owner/name form; repeatable")
+    parser.add_argument("--todo", action="store_true", help="Claim and process next TODO item from TODO.md")
     parser.add_argument("--status", action="store_true", help="Show persisted state")
     parser.add_argument("--skip-to", choices=["B", "C", "D"], default="", help="Override the starting stage for --repo targets")
     parser.add_argument("--parallel", "-p", type=int, default=1, help="Number of repositories to process in parallel")
     parser.add_argument("--dry-run", action="store_true", help="Do not call external services or submit issues")
     parser.add_argument("--model", default=None, help="Override Codex model")
     return parser.parse_args()
+
+
+TODO_FILE = SCRIPT_DIR / "TODO.md"
+
+
+def parse_todo() -> list[dict[str, str]]:
+    """Parse TODO.md, return list of unclaimed items with id, repo, task description."""
+    if not TODO_FILE.exists():
+        return []
+    items: list[dict[str, str]] = []
+    for line in TODO_FILE.read_text(encoding="utf-8").splitlines():
+        # Match: - [ ] **FC-01**: description
+        m = re.match(r"^- \[ \] \*\*(\w+-\d+)\*\*:\s*(.*)", line)
+        if not m:
+            continue
+        item_id = m.group(1)
+        desc = m.group(2).strip()
+        # Extract repo from context (section headers above)
+        # FC = formal-conjectures, EQ = equational_theories, FB = FormalBook, etc.
+        repo_map = {
+            "FC": "google-deepmind/formal-conjectures",
+            "EQ": "teorth/equational_theories",
+            "FB": "mo271/FormalBook",
+            "RH": "math-inc/RiemannHypothesisCurves",
+            "ZU": "",  # Zulip, no repo
+        }
+        prefix = item_id.split("-")[0]
+        repo = repo_map.get(prefix, "")
+        if repo:
+            items.append({"id": item_id, "repo": repo, "task": desc})
+    return items
+
+
+def claim_todo(item_id: str) -> None:
+    """Mark a TODO item as CLAIMED in TODO.md."""
+    if not TODO_FILE.exists():
+        return
+    content = TODO_FILE.read_text(encoding="utf-8")
+    old = f"- [ ] **{item_id}**:"
+    new = f"- [~] **{item_id}** (CLAIMED):"
+    if old in content:
+        TODO_FILE.write_text(content.replace(old, new, 1), encoding="utf-8")
+        logger.info("Claimed TODO item: %s", item_id)
+
+
+def complete_todo(item_id: str, result: str = "DONE") -> None:
+    """Mark a TODO item as DONE or SKIP in TODO.md."""
+    if not TODO_FILE.exists():
+        return
+    content = TODO_FILE.read_text(encoding="utf-8")
+    # Match both unclaimed and claimed states
+    for pattern in [f"- [~] **{item_id}** (CLAIMED):", f"- [ ] **{item_id}**:"]:
+        if pattern in content:
+            if result == "DONE":
+                content = content.replace(pattern, f"- [x] **{item_id}** (DONE):", 1)
+            else:
+                content = content.replace(pattern, f"- [-] **{item_id}** (SKIP):", 1)
+            TODO_FILE.write_text(content, encoding="utf-8")
+            logger.info("Marked TODO %s as %s", item_id, result)
+            return
 
 
 def main() -> int:
@@ -2068,6 +2129,19 @@ def main() -> int:
         return 0
 
     repos: list[str] = []
+    todo_item: Optional[dict[str, str]] = None
+
+    if args.todo:
+        items = parse_todo()
+        if not items:
+            print("No TODO items available.", file=sys.stderr)
+            return 0
+        todo_item = items[0]
+        claim_todo(todo_item["id"])
+        repos.append(todo_item["repo"])
+        logger.info("Claimed TODO: %s → %s (%s)", todo_item["id"], todo_item["repo"], todo_item["task"][:80])
+        auto_commit_push(todo_item["repo"], "TODO", 0, 0, dry_run=args.dry_run)
+
     if args.discover:
         candidates = discover_candidates(model=args.model, dry_run=args.dry_run)
         repos.extend(item["repo"] for item in candidates)
@@ -2108,6 +2182,21 @@ def main() -> int:
         len(skipped),
         len(failed),
     )
+
+    # Update TODO status if running in --todo mode
+    if todo_item:
+        if done:
+            complete_todo(todo_item["id"], "DONE")
+        elif skipped:
+            complete_todo(todo_item["id"], "SKIP")
+        auto_commit_push(
+            todo_item.get("repo", "TODO"),
+            "TODO-complete",
+            0,
+            max((s.scores.get("final", []) or [0])[-1] for s in states) if states else 0,
+            dry_run=args.dry_run,
+        )
+
     return 1 if failed else 0
 
 
