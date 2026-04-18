@@ -55,6 +55,7 @@ import Omega.Folding.CollisionConditionalHammingMgf
 import Omega.Folding.CollisionKernel
 import Omega.Folding.CollisionZeta
 import Omega.Folding.CollisionZetaOperator
+import Omega.Folding.CoarsegrainingNaturalityRayleighStokes
 import Omega.Folding.ConsistentFiberHausdorffPrefixCount
 import Omega.Folding.CongruenceRigidityPublication
 import Omega.Folding.CurvatureTranslationDihedral
@@ -90,6 +91,7 @@ import Omega.Folding.FiberRankUnrankLinear
 import Omega.Folding.FiberRing
 import Omega.Folding.FiberSpectrum
 import Omega.Folding.FiberSplit
+import Omega.Folding.FixedFiberLedgerComplexity
 import Omega.Folding.FiberTruncatedMomentCompleteInversion
 import Omega.Folding.FiberWeightCount
 import Omega.Folding.FiberWeightCountComplement
