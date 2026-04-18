@@ -51,6 +51,7 @@ import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GU.JetAlignmentUnification
 import Omega.GU.JGBinomialFilteringFourierExtraction
 import Omega.GU.JGLeyangDoubleResultant
+import Omega.GU.GodelEllipsoidVolume
 import Omega.GU.JoukowskyAreaPreservingCayley
 import Omega.GU.JoukowskyEllipticTwoScaleStokesMean
 import Omega.GU.JoukowskyGodelLeadingCoeffRigidity
