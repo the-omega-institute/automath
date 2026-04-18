@@ -67,6 +67,20 @@ is the adjacent defect law with top digit fixed to $1$.  In particular,
 =
 \frac{(2^{n-m}-(-1)^{n-m})\lfloor 2^{m+1}/3\rfloor}{3\cdot 2^n}.
 \]
+The adjacent law itself is supported on the explicit chain
+\[
+v_{m,1}=0^{m-1}1,
+\qquad
+v_{m,r}=0^{m-r}10 1^{r-2}\quad (2\le r\le m),
+\]
+with weights
+\[
+\lambda_m(v_{m,r})
+=
+\frac{2^{m-r+1}-(-1)^{m-r+1}}{3\cdot 2^m}.
+\]
+Conditioned on a nonzero defect, the depth parameter therefore converges to the
+geometric law $2^{-r}$ as $m\to\infty$.
 The tail bit is the parity of the initial run of $1$'s in the upper block and
 is the minimal exact tail statistic for the full defect family.  The same
 description yields an explicit stationary one-step Markov analogue, again as a
@@ -150,6 +164,29 @@ with an explicit oscillatory error of order $2^{-\ell}$.  The exact
 distributional formulas are therefore consequences of a deterministic collapse,
 not of independent probabilistic arguments.
 
+A complementary structural theorem determines $\lambda_m$ itself.  The nonzero
+adjacent defect vectors are exactly the words
+\[
+v_{m,1}=0^{m-1}1,
+\qquad
+v_{m,r}=0^{m-r}10 1^{r-2}\quad (2\le r\le m),
+\]
+written in the low-order-first convention of the paper.  The corresponding
+prefix-value classes are the Fibonacci intervals
+\[
+I_{m,r}
+=
+[F_{m+3}-F_{m-r+3},\,F_{m+3}-F_{m-r+2}-1],
+\]
+and the exact weights are
+\[
+\lambda_m(v_{m,r})
+=
+\frac{2^{m-r+1}-(-1)^{m-r+1}}{3\cdot 2^m}.
+\]
+Thus the vector-valued law is supported on an explicit carry-depth chain, and
+the nonzero depth has a geometric scaling limit.
+
 The tail bit also has an intrinsic interpretation.  Section~\ref{sec:markov}
 shows that $\beta(q)$ is the parity of the initial run of $1$'s in the tail
 and proves that no strictly coarser tail statistic determines the entire
@@ -166,21 +203,27 @@ background may be found in
 
 Classical background on Zeckendorf expansions goes back to
 \cite{Lekkerkerker1952,Zeckendorf1972,Carlitz1968,CarlitzScovHoggatt1972,%
-Fraenkel1985}.  Automata-theoretic normalization in Fibonacci numeration was
-developed in
-\cite{Frougny1991,Frougny1992,FrougnySolomyak1996,FrougnySakarovitch1999,%
-Frougny1999,FrougnyS2010,ShallitShan2024}, and finite-state or rational-series
-methods for related observables may be compared with
-\cite{BerstelReutenauer2011}.  Successor carries and other scalar statistics
-have been studied in
+Fraenkel1985}.  Automata-theoretic normalization in Fibonacci numeration and
+in related order-two or confluent linear numeration systems was developed in
+\cite{Frougny1988,Frougny1991,FrougnyConfluent1992,Frougny1992,%
+FrougnySolomyak1996,FrougnySakarovitch1999,Frougny1999,FrougnyS2010,%
+ShallitShan2024}, and finite-state or rational-series methods for related
+observables may be compared with \cite{BerstelReutenauer2011}.  Successor
+carries and other scalar statistics have been studied in
 \cite{Frougny1996Successor,Frougny1997Sequential,AhlbachUsatineFrougnyPippenger2013,%
 BertheFrougnyRigoSakarovitch2020}, while probabilistic and combinatorial
 questions for Zeckendorf expansions appear in
 \cite{KologluKoppMillerWang2011,DrmotaSteiner2002,Steiner2005,MillerWang2012,%
-Griffiths2010,Hosten2024,BaratGrabner2014}.  For the symbolic-dynamical
-viewpoint we use only standard material on the golden-mean shift and inverse
-limits \cite{LindMarcus1995,Kitchens1998}.  The observable considered here is
-of a different type: it is a vector-valued defect comparing the two
+Griffiths2010,Hosten2024,BaratGrabner2014}.  The observable treated here is
+not the scalar carry length of a successor map and not a transducer output read
+in isolation: it compares two finite-window normalization routes on the same
+word.  Theorem~\ref{thm:adjacent-spectrum} shows that this vector defect is
+supported on an explicit carry-depth chain, which is a rigidity statement of a
+different type from the scalar propagation formulas in the successor-carry
+literature.  For the symbolic-dynamical viewpoint we use only standard
+material on the golden-mean shift and inverse limits
+\cite{LindMarcus1995,Kitchens1998}.  The observable considered here is of a
+different type: it is a vector-valued defect comparing the two
 normalization/truncation routes above, and its exact law is not determined by
 the top adjacent event alone; see the appendix for small examples.
 
@@ -708,6 +751,186 @@ there are $2^m-C_m$ defect-producing words in $\Omega_{m+1}$.  Dividing by
 $2^{m+1}$ gives the probability formula.
 \end{proof}
 
+For $v\in\{0,1\}^m$, define
+\[
+\lambda_m(v):=2^{-m}\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)=v\}.
+\]
+
+\begin{theorem}[Complete adjacent defect spectrum]\textbf{[New-1 | 2026-04-18]}
+\label{thm:adjacent-spectrum}
+For $m\ge 1$ and $1\le r\le m$, let
+\[
+I_{m,r}
+:=
+[F_{m+3}-F_{m-r+3},\,F_{m+3}-F_{m-r+2}-1].
+\]
+Let $v_{m,1}=0^{m-1}1$, and for $2\le r\le m$ let
+\[
+v_{m,r}:=0^{m-r}10 1^{r-2}
+\]
+in the low-order-first notation of the paper.  If $p\in\Omega_m$ and
+$s:=N(p)$, then
+\[
+\kappa_{m+1\to m}(p,1)=v_{m,r}
+\quad\Longleftrightarrow\quad
+s\in I_{m,r}.
+\]
+Consequently
+\[
+\{\kappa_{m+1\to m}(p,1):\ p\in\Omega_m,\ \kappa_{m+1\to m}(p,1)\ne 0\}
+=
+\{v_{m,1},\dots,v_{m,m}\},
+\]
+and
+\[
+\lambda_m(v_{m,r})
+=
+\frac{2^{m-r+1}-(-1)^{m-r+1}}{3\cdot 2^m}
+\qquad (1\le r\le m).
+\]
+\end{theorem}
+
+\begin{proof}
+The intervals $I_{m,r}$ are disjoint, their lengths are
+\[
+\lvert I_{m,r}\rvert=F_{m-r+1},
+\]
+and their union is exactly $[F_{m+1},F_{m+3}-2]$.
+
+If $r=1$, then every $s\in I_{m,1}$ has the form $s=F_{m+1}+u$ with
+$0\le u<F_m$.  Since $u<F_m$, the Zeckendorf expansion of $s$ is obtained by
+placing a single digit $1$ in position $m$ above $Z(u)$.  Hence
+\[
+\pi_{\infty\to m}(Z(s))
+=
+\pi_{\infty\to m}(Z(u))\oplus v_{m,1},
+\qquad
+\pi_{\infty\to m}(Z(s-F_{m+1}))
+=
+\pi_{\infty\to m}(Z(u)),
+\]
+and Theorem~\ref{thm:adjacent-threshold} gives
+\[
+\kappa_{m+1\to m}(p,1)=v_{m,1}.
+\]
+
+Fix $r\ge 2$ and write
+\[
+s=F_{m+3}-F_{m-r+3}+u,
+\qquad
+0\le u<F_{m-r+1}.
+\]
+Set
+\[
+A_{m,r}:=F_{m+1}-F_{m-r+3},
+\qquad
+B_{m,r}:=F_{m+2}-F_{m-r+3}.
+\]
+Then
+\[
+s\bmod F_{m+2}=A_{m,r}+u,
+\qquad
+s-F_{m+1}=B_{m,r}+u.
+\]
+
+If $r=2q$, repeated use of $F_{j+1}-F_{j-1}=F_j$ gives
+\[
+A_{m,2q}
+=
+\sum_{j=0}^{q-2}F_{m-2j},
+\qquad
+B_{m,2q}
+=
+\sum_{j=0}^{q-2}F_{m+1-2j}+F_{m-2q+2}.
+\]
+If $r=2q+1$, the same identity gives
+\[
+A_{m,2q+1}
+=
+\sum_{j=0}^{q-2}F_{m-2j}+F_{m-2q+1},
+\qquad
+B_{m,2q+1}
+=
+\sum_{j=0}^{q-1}F_{m+1-2j}.
+\]
+Since $u<F_{m-r+1}$, the support of $Z(u)$ is contained in positions
+$1,\dots,m-r$.  Therefore the first $m$ digits of $Z(A_{m,r}+u)$ and
+$Z(B_{m,r}+u)$ are obtained by placing the same lower block $Z(u)$ beneath the
+fixed Zeckendorf heads encoded by the displayed sums.  If $r=2q$, those heads
+occupy the positions
+\[
+\{m-1,m-3,\dots,m-2q+3\}
+\quad\text{and}\quad
+\{m,m-2,\dots,m-2q+4,m-2q+1\},
+\]
+whereas if $r=2q+1$, they occupy the positions
+\[
+\{m-1,m-3,\dots,m-2q+3,m-2q\}
+\quad\text{and}\quad
+\{m,m-2,\dots,m-2q+2\}.
+\]
+In both cases the xor of the two fixed heads is
+$v_{m,r}=0^{m-r}10 1^{r-2}$.  Hence
+\[
+\pi_{\infty\to m}(Z(s\bmod F_{m+2}))
+\oplus
+\pi_{\infty\to m}(Z(s-F_{m+1}))
+=
+v_{m,r},
+\]
+and Theorem~\ref{thm:adjacent-threshold} yields
+\[
+\kappa_{m+1\to m}(p,1)=v_{m,r}.
+\]
+Since Theorem~\ref{thm:adjacent-threshold} also shows that the adjacent defect
+is nonzero exactly on $[F_{m+1},F_{m+3}-2]$, the classification by the
+intervals $I_{m,r}$ is complete.
+
+For $1\le r\le m$, let
+\[
+M_{m,r}
+:=
+\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)=v_{m,r}\}.
+\]
+If $r\ge 2$, then $I_{m,r}\subset[F_{m+2},F_{m+3}-2]$, so every
+$p\in\Omega_m$ with $N(p)\in I_{m,r}$ has top digit $p_m=1$.  Writing
+$p=(u,1)$ with $u\in\Omega_{m-1}$ and using
+\[
+I_{m,r}=F_{m+1}+I_{m-1,r-1},
+\]
+one obtains a bijection between the words counted by $M_{m,r}$ and those
+counted by $M_{m-1,r-1}$.  Thus
+\[
+M_{m,r}=M_{m-1,r-1}
+\qquad (2\le r\le m).
+\]
+By Proposition~\ref{thm:explicit-count},
+\[
+\sum_{r=1}^m M_{m,r}
+=
+\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)\ne 0\}
+=
+\left\lfloor\frac{2^{m+1}}{3}\right\rfloor.
+\]
+Therefore
+\[
+M_{m,1}
+=
+\left\lfloor\frac{2^{m+1}}{3}\right\rfloor
+-
+\left\lfloor\frac{2^m}{3}\right\rfloor
+=
+\frac{2^m-(-1)^m}{3},
+\]
+and repeated use of the recursion gives
+\[
+M_{m,r}=M_{m-r+1,1}
+=
+\frac{2^{m-r+1}-(-1)^{m-r+1}}{3}.
+\]
+Dividing by $2^m$ proves the formula for $\lambda_m(v_{m,r})$.
+\end{proof}
+
 For $n>m$ and $v\in\{0,1\}^m$, define
 \[
 \mu_{n,m}(v):=2^{-n}\#\{\omega\in\Omega_n:\ D_{n\to m}(\omega)=v\}.
@@ -841,11 +1064,7 @@ Then for every $p\in\Omega_m$ and every $q\in\Omega_\ell$,
 \[
 D_{n\to m}(p,q)=\kappa_{m+1\to m}(p,\beta(q)).
 \]
-For $v\in\{0,1\}^m$, set
-\[
-\lambda_m(v):=2^{-m}\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)=v\},
-\]
-and for $\ell\ge 0$ set
+For $\ell\ge 0$ set
 \[
 \rho_\ell:=2^{-\ell}\#\{q\in\Omega_\ell:\ \beta(q)=1\}.
 \]
@@ -1032,6 +1251,54 @@ By Proposition~\ref{thm:explicit-count},
 \frac{\lfloor 2^{m+1}/3\rfloor}{2^m}.
 \]
 Substituting the formula for $\rho_\ell$ proves the last identity.
+\end{proof}
+
+\begin{corollary}[Explicit defect-depth law]\textbf{[New-2 | 2026-04-18]}
+\label{cor:explicit-depth-law}
+For $n>m$ and $1\le r\le m$,
+\[
+\mu_{n,m}(v_{m,r})
+=
+\frac{(2^{n-m}-(-1)^{n-m})(2^{m-r+1}-(-1)^{m-r+1})}{9\cdot 2^n}.
+\]
+If $R_{n,m}\in\{0,1,\dots,m\}$ is defined by $R_{n,m}=0$ on $\{D_{n\to m}=0\}$
+and by $D_{n\to m}=v_{m,R_{n,m}}$ on $\{D_{n\to m}\ne 0\}$, then
+\[
+\PP_{\Unif_n}[R_{n,m}=r\mid D_{n\to m}\ne 0]
+=
+\frac{2^{m-r+1}-(-1)^{m-r+1}}{3\lfloor 2^{m+1}/3\rfloor}
+\qquad (1\le r\le m).
+\]
+For each fixed $r\ge 1$,
+\[
+\PP_{\Unif_n}[R_{n,m}=r\mid D_{n\to m}\ne 0]
+\xrightarrow[m\to\infty]{}
+2^{-r},
+\]
+uniformly in the tail length $n-m\ge 1$.
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:tail-collapse} gives
+\[
+\mu_{n,m}(v)=\rho_{n-m}\lambda_m(v)
+\qquad (v\ne 0).
+\]
+Combining this with Theorem~\ref{thm:adjacent-spectrum} yields the explicit
+formula for $\mu_{n,m}(v_{m,r})$.  Dividing by
+\[
+\PP_{\Unif_n}[D_{n\to m}\ne 0]
+=
+\rho_{n-m}\frac{\lfloor 2^{m+1}/3\rfloor}{2^m}
+\]
+gives the conditional law of $R_{n,m}$.  For fixed $r$,
+\[
+\frac{2^{m-r+1}-(-1)^{m-r+1}}{3\lfloor 2^{m+1}/3\rfloor}
+\longrightarrow
+2^{-r},
+\]
+and the expression is independent of $n$, so the convergence is uniform in the
+tail length.
 \end{proof}
 
 \begin{remark}
@@ -1372,9 +1639,17 @@ d_{\mathrm{TV}}(P_{m,\ell},\nu_{m,P})
 \frac{\pi_1}{1+p_{11}}\,p_{11}^{\ell}.
 \]
 If $p_{01}=p_{11}=u$, then the chain is i.i.d.\ Bernoulli$(u)$, so
-$\rho_\ell^{(0)}=\rho_\ell^{(1)}$ and, at $u=\frac12$, the measures
-$\lambda_{m,0}$ and $\lambda_{m,1}$ both coincide with the uniform-law measure
-$\lambda_m$.  This recovers Theorem~\ref{thm:tail-collapse}.
+$\rho_\ell^{(0)}=\rho_\ell^{(1)}$.  At $u=\frac12$ one has
+$\pi_0=\pi_1=\frac12$, and the stationary average of the conditional adjacent
+laws recovers the uniform adjacent law:
+\[
+\frac12\lambda_{m,0}+\frac12\lambda_{m,1}=\lambda_m.
+\]
+Hence the first displayed formula for the defect law reduces to
+\[
+(1-\rho_\ell)\delta_0+\rho_\ell\lambda_m,
+\]
+which is exactly Theorem~\ref{thm:tail-collapse}.
 \end{proof}
 
 \appendix
