@@ -139,6 +139,7 @@ import Omega.Zeta.LocalizedIntegersConnectedRationalBlindness
 import Omega.Zeta.LocalizedIntegersCrossHomClassification
 import Omega.Zeta.LocalizedFiniteIndexLatticeClassification
 import Omega.Zeta.LocalizedFiniteIndexLatticeGcdLcmMobius
+import Omega.Zeta.LocalizedFinitePrimeAuditCylinderFactorization
 import Omega.Zeta.LocalizedSolenoidNonzeroEndomorphismDegreeSemigroup
 import Omega.Zeta.LocalizedQuotientLedger
 import Omega.Zeta.LogMHolomorphicVariation

@@ -107,6 +107,7 @@ import Omega.POM.MacropriorFiberwiseReversibleCapacity
 import Omega.POM.MaryAuxlength
 import Omega.POM.MaryAuxlengthSeeds
 import Omega.POM.MassSplittingMomentRoot
+import Omega.POM.MaxentLift
 import Omega.POM.MaxchainsEqualsLinext
 import Omega.POM.MaxFiberPublication
 import Omega.POM.MaxAtomicWeightParitySecondOrder

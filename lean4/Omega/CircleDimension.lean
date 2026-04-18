@@ -10,6 +10,7 @@ import Omega.CircleDimension.AuditedRealizationBudgetLowerBound
 import Omega.CircleDimension.AxiomaticRigidity
 import Omega.CircleDimension.BareCircleNotCompleteCarrier
 import Omega.CircleDimension.BasicComputation
+import Omega.CircleDimension.BasepointScanFiniteRankRKHS
 import Omega.CircleDimension.BiphaseFiber
 import Omega.CircleDimension.BorelHomomorphismNoncollapse
 import Omega.CircleDimension.BornPairing
