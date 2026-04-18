@@ -10,6 +10,7 @@ import Omega.Discussion.EulerFactorBasepointOrbit
 import Omega.Discussion.EpsZkCmiRiskImprovementBound
 import Omega.Discussion.FiberStokesWatataniNormalization
 import Omega.Discussion.FoldRepresentationQCollisionLowerBound
+import Omega.Discussion.FramepotentialSffToHszk
 import Omega.Discussion.GcEquivalenceCharacterization
 import Omega.Discussion.HSZKIffDiamond
 import Omega.Discussion.HodgeStokesVarianceRigidity

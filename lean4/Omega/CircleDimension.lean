@@ -18,6 +18,7 @@ import Omega.CircleDimension.BornPairing
 import Omega.CircleDimension.BudgetCompleteness
 import Omega.CircleDimension.CausalPreorder
 import Omega.CircleDimension.CayleyChebyshevMode
+import Omega.CircleDimension.CayleyPoissonWindowIdentity
 import Omega.CircleDimension.DerivedCoprimeLissajousChebyshevEliminationNodes
 import Omega.CircleDimension.DerivedCofinalPrimeSupportUnboundedLedgerRank
 import Omega.CircleDimension.DerivedChainArithmeticMedianUniqueMinimizer
