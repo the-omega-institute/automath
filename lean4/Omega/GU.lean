@@ -182,6 +182,7 @@ import Omega.GU.Window6KirchhoffGreenPadicLiftStability
 import Omega.GU.Window6LieEnvelopeExistenceUniqueness
 import Omega.GU.Window6Center2RankExcludesSimpleGroups
 import Omega.GU.Window6ReducedLaplacianGreenSimplePole
+import Omega.GU.Window6GreenKernelPstarValuationOne
 import Omega.GU.Window6BdryUpliftResidueStratification
 import Omega.GU.Window6LabeledSphericalCubatureStrengthFive
 import Omega.GU.Window6LabeledSphericalDegree5CubatureCube
