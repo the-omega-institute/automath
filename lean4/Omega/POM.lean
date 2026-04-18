@@ -6,6 +6,7 @@ import Omega.POM.CapacityCollisionDataProcessing
 import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.MomentHankel
 import Omega.POM.BoundedPerturbationInvariance
+import Omega.POM.BeckChevalleyAmgmDefectIdentity
 import Omega.POM.BooleanCircuitProjectionBudget
 import Omega.POM.BbitOracleCapacityClosedForm
 import Omega.POM.CRTSpatializationPrimeBudget
