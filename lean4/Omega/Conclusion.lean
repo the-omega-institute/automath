@@ -13,6 +13,7 @@ import Omega.Conclusion.BoundaryGaugeLiftingSharedCycleRankEntropy
 import Omega.Conclusion.BoundaryMixedAuditRankConservation
 import Omega.Conclusion.BoundaryParityAnomalyGap
 import Omega.Conclusion.BoundaryParityBlindFiltration
+import Omega.Conclusion.BoundaryParityLieRepairTwoBits
 import Omega.Conclusion.BoundaryPinningMemoryGap
 import Omega.Conclusion.BoundaryStokesObservationMinimalDimension
 import Omega.Conclusion.BoundedSliceFamilyEquivalenceUndecidable
