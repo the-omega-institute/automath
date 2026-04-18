@@ -133,6 +133,7 @@ import Omega.Conclusion.SubexponentialLedgerPhaseUniversality
 import Omega.Conclusion.SyncKernelPalindrome
 import Omega.Conclusion.TentKernelLocalInvertibility
 import Omega.Conclusion.TimeReversalOrbitParity
+import Omega.Conclusion.TwoIncommensurableBasesDestroyVerticalLattice
 import Omega.Conclusion.TwoAtomScalarRecoveryAlpha2
 import Omega.Conclusion.WallisFactorMonoid
 import Omega.Conclusion.Window6BoundaryParityNotMeasurableFromF8
