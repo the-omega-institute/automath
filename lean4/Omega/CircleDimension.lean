@@ -19,6 +19,7 @@ import Omega.CircleDimension.CayleyChebyshevMode
 import Omega.CircleDimension.DerivedCoprimeLissajousChebyshevEliminationNodes
 import Omega.CircleDimension.DerivedCofinalPrimeSupportUnboundedLedgerRank
 import Omega.CircleDimension.CdimStarCompatibleFG
+import Omega.CircleDimension.Cdim1DivisibleImpliesQ
 import Omega.CircleDimension.CertificateInverseLimitAddressing
 import Omega.CircleDimension.CechCyclotomicQuantization
 import Omega.CircleDimension.CircleDim
