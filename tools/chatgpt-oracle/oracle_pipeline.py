@@ -1110,6 +1110,57 @@ def compile_pdf(paper_path: Path, *, dry_run: bool = False) -> Optional[Path]:
 # Prompt builders
 # ---------------------------------------------------------------------------
 
+def verify_substantive_change(paper_path: Path,
+                               pre_theorems: list[tuple[str, str]],
+                               min_new_theorems: int = 1,
+                               min_new_content_chars: int = 500,
+                               ) -> tuple[bool, str]:
+    """Anti-fake gate: verify A-DEEP actually added substantive new content.
+
+    Compares theorem count and total content length before vs after codex edit.
+    Returns (passed, reason).
+
+    Catches the pattern where codex claims to add "deep research" but actually
+    only rephrases existing text, reorganizes sections, or adds filler prose.
+    Borrowed concept from codex_formalize.py anti-cheat gate (e7bfb0fa).
+    """
+    post_theorems = extract_theorem_statements(paper_path)
+
+    pre_labels = {label for label, _ in pre_theorems}
+    post_labels = {label for label, _ in post_theorems}
+    new_labels = post_labels - pre_labels
+
+    pre_content_len = sum(len(body) for _, body in pre_theorems)
+    post_content_len = sum(len(body) for _, body in post_theorems)
+    content_delta = post_content_len - pre_content_len
+
+    # Also check raw .tex line count delta
+    total_lines = 0
+    for tex in paper_path.glob("**/*.tex"):
+        try:
+            total_lines += len(tex.read_text(encoding="utf-8",
+                                              errors="replace").splitlines())
+        except Exception:
+            pass
+
+    if len(new_labels) >= min_new_theorems and content_delta >= min_new_content_chars:
+        return True, (f"Added {len(new_labels)} new theorem(s): "
+                      f"{', '.join(sorted(new_labels)[:5])}; "
+                      f"+{content_delta} chars content")
+
+    if len(new_labels) == 0 and content_delta < min_new_content_chars:
+        return False, (f"FAKE EXTENSION: no new theorems added, "
+                       f"content delta only +{content_delta} chars "
+                       f"(threshold: {min_new_content_chars}). "
+                       f"Codex likely rephrased without adding substance.")
+
+    if len(new_labels) == 0 and content_delta >= min_new_content_chars:
+        return True, (f"No new labels but +{content_delta} chars content "
+                      f"(existing theorems expanded)")
+
+    return True, (f"{len(new_labels)} new labels, +{content_delta} chars")
+
+
 def extract_theorem_statements(paper_path: Path) -> list[tuple[str, str]]:
     """Extract (label, statement_text) for every theorem-like environment.
 
@@ -2368,6 +2419,10 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             }, ensure_ascii=False, indent=2)[:5000]
 
             logger.info(f"{tag} Round {rnd}: A-DEEP — Codex deep research extension")
+
+            # Snapshot theorems BEFORE deep extension (for anti-fake gate)
+            pre_theorems = extract_theorem_statements(paper_path)
+
             deep_prompt = build_deep_extension_prompt(
                 state.paper_dir, state.target_journal, prior_issues, rnd)
             codex_exec(deep_prompt, work_dir=paper_path,
@@ -2375,6 +2430,24 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             compiled_deep = compile_gate(paper_path, model=model,
                                          dry_run=dry_run,
                                          tag=f"{tag} A-DEEP")
+
+            # Anti-fake gate: verify A-DEEP actually added substance
+            if not dry_run:
+                substantive, reason = verify_substantive_change(
+                    paper_path, pre_theorems)
+                if not substantive:
+                    logger.warning(f"{tag} ANTI-FAKE: {reason}")
+                    logger.warning(f"{tag} Reverting codex deep extension — "
+                                   f"no real content added")
+                    # Revert the fake changes
+                    run_cmd(["git", "checkout", "--", str(paper_path)])
+                    state.log_event("A", "anti_fake_revert", round_num=rnd,
+                                    detail=reason)
+                    save_state(state)
+                    continue
+                else:
+                    logger.info(f"{tag} Anti-fake: PASS — {reason}")
+
             h = git_commit(paper_path,
                            f"stage-A R{rnd}: codex DEEP RESEARCH extension "
                            f"(was {final_score}/10)"
