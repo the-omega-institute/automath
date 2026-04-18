@@ -30,6 +30,7 @@ import Omega.Conclusion.CompleteStrictificationDualCriterion
 import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.DiscreteCertificateFrontGeneralizedInverse
 import Omega.Conclusion.AlgorithmPrimeShiftEquivalence
+import Omega.Conclusion.AffineLeftDivisibilityCriterion
 import Omega.Conclusion.AdelicStokesH1RecoversCdimPrimeProfile
 import Omega.Conclusion.CoordinateBundleDyadicBlockLaw
 import Omega.Conclusion.ThreeEndCertificateOrthogonality
