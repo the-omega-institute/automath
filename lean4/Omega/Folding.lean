@@ -111,6 +111,7 @@ import Omega.Folding.FiberBiasFrequencyTransportIdentity
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
 import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldPressureFreezingThreshold
+import Omega.Folding.FiberEvenModulusMinimalDefectParityCharacter
 import Omega.Folding.IntermediateQuotientsBellProductDoubleExponential
 import Omega.Folding.FoldSuitePublication
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
