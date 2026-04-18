@@ -802,43 +802,54 @@
   function extractResponseText() {
     // ═══ Strategy S0: Shadow DOM extraction (ChatGPT 5.4 Pro) ═══
     // ChatGPT 5.4 Pro renders conversation inside a shadow root.
-    // Standard querySelector can't reach inside. Find the shadow host
-    // and extract text from there.
+    // Standard querySelector can't reach inside.
     for (const el of document.querySelectorAll("*")) {
-      if (el.shadowRoot) {
-        const shadowText = (el.shadowRoot.textContent || "").trim();
-        if (shadowText.length > 500) {
-          // Find assistant messages inside shadow DOM
-          const assistantEls = el.shadowRoot.querySelectorAll(
-            "[data-message-author-role='assistant'], " +
-            "div[class*='markdown'], div[class*='prose'], " +
-            "article, [class*='agent-turn']"
-          );
-          if (assistantEls.length > 0) {
-            // Take the last (most recent) assistant message
-            const lastAssistant = assistantEls[assistantEls.length - 1];
-            const text = cleanText((lastAssistant.innerText || lastAssistant.textContent || "").trim());
-            if (text.length > 100 && !looksLikePromptEcho(text)) {
-              return text;
-            }
-          }
-          // Fallback: extract from shadow root directly, try to separate
-          // prompt from response using the sent prompt text
-          if (sentPromptText.length > 50) {
-            const tail = sentPromptText.slice(-80).trim();
-            const idx = shadowText.lastIndexOf(tail);
-            if (idx >= 0) {
-              const after = cleanText(shadowText.slice(idx + tail.length));
-              if (after.length > 100) return after;
-            }
-          }
-          // Last resort: take the second half of shadow text (prompt is first, response is second)
-          const halfPoint = Math.floor(shadowText.length * 0.4);
-          const secondHalf = cleanText(shadowText.slice(halfPoint));
-          if (secondHalf.length > 200 && !looksLikePromptEcho(secondHalf)) {
-            return secondHalf;
-          }
+      if (!el.shadowRoot) continue;
+
+      // Helper: get clean text from shadow element (strip style/script)
+      function shadowInnerText(root) {
+        const clone = root.cloneNode(true);
+        // Remove style and script tags that pollute textContent
+        for (const tag of Array.from(clone.querySelectorAll("style, script, link"))) {
+          tag.remove();
         }
+        return (clone.innerText || clone.textContent || "").trim();
+      }
+
+      // Find assistant messages inside shadow DOM
+      const assistantEls = el.shadowRoot.querySelectorAll(
+        "[data-message-author-role='assistant'], " +
+        "div[class*='markdown'], div[class*='prose'], " +
+        "article, [class*='agent-turn']"
+      );
+      if (assistantEls.length > 0) {
+        // Take the last (most recent) assistant message
+        const lastAssistant = assistantEls[assistantEls.length - 1];
+        const text = cleanText(shadowInnerText(lastAssistant));
+        if (text.length > 100 && !looksLikePromptEcho(text)) {
+          return text;
+        }
+      }
+
+      // Fallback: get all text from shadow, stripped of CSS/JS
+      const shadowText = shadowInnerText(el.shadowRoot);
+      if (shadowText.length < 500) continue;
+
+      // Try tail-anchor split
+      if (sentPromptText.length > 50) {
+        const tail = sentPromptText.slice(-80).trim();
+        const idx = shadowText.lastIndexOf(tail);
+        if (idx >= 0) {
+          const after = cleanText(shadowText.slice(idx + tail.length));
+          if (after.length > 100) return after;
+        }
+      }
+
+      // Last resort: take second 60% (prompt first, response second)
+      const halfPoint = Math.floor(shadowText.length * 0.4);
+      const secondHalf = cleanText(shadowText.slice(halfPoint));
+      if (secondHalf.length > 200 && !looksLikePromptEcho(secondHalf)) {
+        return secondHalf;
       }
     }
 
