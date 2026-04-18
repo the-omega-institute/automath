@@ -54,4 +54,14 @@ theorem paper_m11_z34_commutant_u1_16
   have hCommutant : realCommutantIsC16 := hReal hPlanes
   exact ⟨hCommutant, hUnitary hCommutant⟩
 
+/-- Paper-facing wrapper for the cyclotomic decomposition of `\QQ[\ZZ_{34}]`.
+    prop:m11-qz34-cyclotomic-decomposition -/
+theorem paper_m11_qz34_cyclotomic_decomposition
+    (crtDecomposition zeta34EqZeta17 cyclotomicDegree16 : Prop)
+    (hCRT : crtDecomposition)
+    (hZeta : zeta34EqZeta17)
+    (hDegree : cyclotomicDegree16) :
+    crtDecomposition ∧ zeta34EqZeta17 ∧ cyclotomicDegree16 := by
+  exact ⟨hCRT, hZeta, hDegree⟩
+
 end Omega.GU

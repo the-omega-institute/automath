@@ -161,6 +161,7 @@ import Omega.CircleDimension.StokesHalfFaceCount
 import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.StokesQPowerScalingAnomAmplification
 import Omega.CircleDimension.StokesRelativeC1FramedLineBundles
+import Omega.CircleDimension.StokesUniversalObstructionLattice
 import Omega.CircleDimension.TensorHomExtLaws
 import Omega.CircleDimension.TensorHomProductLawRestated
 import Omega.CircleDimension.TimeShiftPreservesOverlap
