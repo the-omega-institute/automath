@@ -121,6 +121,7 @@ import Omega.Conclusion.RealInput40UVPressureSilentPhase
 import Omega.Conclusion.RecursiveSolenoidLieShadow
 import Omega.Conclusion.ResonanceWindow
 import Omega.Conclusion.ReadusNullTrichotomyNormalForm
+import Omega.Conclusion.AdelicHausdorffDimensionCdimPcdim
 import Omega.Conclusion.ReversibleAuxBitsBudget
 import Omega.Conclusion.S4BoundaryTotalTorusRankConservation
 import Omega.Conclusion.SaturationDefect
