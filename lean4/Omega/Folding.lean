@@ -88,6 +88,7 @@ import Omega.Folding.Fold
 import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy
 import Omega.Folding.FoldZeroUncertainty
 import Omega.Folding.FoldAlphaBasic
+import Omega.Folding.FoldCongruenceModSemirings
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
 import Omega.Folding.FoldOrderIndependent

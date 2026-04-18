@@ -36,6 +36,7 @@ import Omega.CircleDimension.DiscreteStokesInversionHypercube
 import Omega.CircleDimension.DoubleDiscriminant
 import Omega.CircleDimension.DyadicKernelCube
 import Omega.CircleDimension.EndpointTristateSet
+import Omega.CircleDimension.EndpointFourChannelChi4
 import Omega.CircleDimension.FiberPhaseQuantization
 import Omega.CircleDimension.FibonacciPrimitivePrimeBinaryLock
 import Omega.CircleDimension.FiniteExtensionAxiomaticUniqueness
