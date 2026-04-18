@@ -123,6 +123,7 @@ import Omega.Folding.GaugeAnomalyRateCurveParam
 import Omega.Folding.GaugeAnomalyDiscriminantFactorization
 import Omega.Folding.GaugeAnomalyLdpRate
 import Omega.Folding.GaugeAnomalyPressureCumulants5
+import Omega.Folding.GaugeAnomalyParryKlRate
 import Omega.Folding.GaugeAnomalyKStepInvariance
 import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
