@@ -151,6 +151,7 @@ import Omega.Zeta.PrimeLanguagesEulerProductNaturalBoundary
 import Omega.Zeta.PrimeLanguagesIntroDensity
 import Omega.Zeta.PrimeLanguagesZeckendorfPrimeLanguageNotRegular
 import Omega.Zeta.PrimeLanguagesZeckendorfRegularPowerlaw
+import Omega.Zeta.PrimeRegisterIdempotentExactCount
 import Omega.Zeta.PrimeRegisterSemigroupAutomorphismRigidity
 import Omega.Zeta.PrimitiveOrbitAsymptotic
 import Omega.Zeta.PrimitivePeterWeylDeterminant

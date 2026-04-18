@@ -25,6 +25,7 @@ import Omega.GroupUnification.NormalForm
 import Omega.GroupUnification.ParryCommutingSquarePhi
 import Omega.GroupUnification.ParryEndpointCollapse
 import Omega.GroupUnification.ParryRigidity
+import Omega.GroupUnification.PatiSalamGlobalFormRigidity
 import Omega.GroupUnification.SMSignatureCyclicDivides6
 import Omega.GroupUnification.SecondOrder
 import Omega.GroupUnification.SpreadEquivalence

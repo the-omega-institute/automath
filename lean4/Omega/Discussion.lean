@@ -10,6 +10,7 @@ import Omega.Discussion.GcEquivalenceCharacterization
 import Omega.Discussion.HSZKIffDiamond
 import Omega.Discussion.HodgeStokesVarianceRigidity
 import Omega.Discussion.HorizonMeasureFold6Pushforward
+import Omega.Discussion.HSZKHolevo
 import Omega.Discussion.HypercubePotentialCurvatureControlledStrictification
 import Omega.Discussion.HypercubeSpectralTailFromFlux
 import Omega.Discussion.HypercubeStokesFourierBinomial
