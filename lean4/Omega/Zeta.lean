@@ -178,6 +178,7 @@ import Omega.Zeta.RecursiveZeroShadowingExplicit
 import Omega.Zeta.RhoGapM12
 import Omega.Zeta.RootSeparation
 import Omega.Zeta.SmithEntropyMinDepth
+import Omega.Zeta.SingleScaleDirichletLattice
 import Omega.Zeta.SL2LinearExternalCertificate
 import Omega.Zeta.SyncCyclotomicDegreeLaw
 import Omega.Zeta.SyncCyclotomicEliminationEvenness
