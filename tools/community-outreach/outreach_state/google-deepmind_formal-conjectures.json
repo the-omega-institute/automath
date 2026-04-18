@@ -5,87 +5,43 @@
   "scores": {
     "codex": [
       7,
-      1
+      1,
+      5
     ],
     "claude": [
       3,
-      0
+      0,
+      3
     ],
     "final": [
       3,
-      1
+      1,
+      3
     ]
   },
   "findings": [
     {
-      "title": "Perfect-matching count package for monochromatic quantum graphs",
-      "type": "theorem",
-      "status": "proved",
-      "target_need": "reusable perfect-matching counting lemmas for files built around weighted perfect-matching sums",
-      "what_they_gain": "A compact follow-up to `Paper/MonochromaticQuantumGraph.lean` that adds exact odd/even obstruction lemmas and reusable perfect-matching counts, while keeping the full proof in Automath and linking it back with `formal_proof using lean4`.",
-      "statement": "For a finite-to-one map `p : E -> B`, `no_free_involution_on_odd` rules out any fiberwise fixed-point-free involution as soon as one fiber has odd cardinality. When every fiber has size `2 r_b`, the Automath counting theorem `freeInvolutionCount_formula` gives the single-fiber factor `(2 r_b)! / (2^r_b * r_b!)`, i.e. the classical number of perfect matchings on a `2 r_b`-point set; the paper-level theorem promotes this to the product formula over all fibers.",
-      "proof_sketch": "Identify a fixed-point-free involution on a fiber with a perfect matching on that fiber. Odd fibers cannot admit such a matching. For `2r` points, order the points and quotient by `r!` pair permutations and `2^r` swaps inside pairs. Fiber independence yields the total product count.",
-      "lean_refs": [
-        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:157",
-        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:187",
-        "FormalConjectures/Util/Attributes/Basic.lean:58"
-      ],
-      "automath_refs": [
-        "papers/publication/2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge/source/thm__fiberwise_free_involution_matching_entropy.tex:1",
-        "papers/publication/2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge/source/thm__fiberwise_free_involution_matching_entropy.tex:10",
-        "papers/publication/2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge/source/thm__fiberwise_free_involution_matching_entropy.tex:73",
-        "lean4/Omega/GU/FreeInvolutionCount.lean:12",
-        "lean4/Omega/GU/FreeInvolutionCount.lean:33"
-      ],
-      "novelty_risk": "Low mathematical novelty; the gift is direct reuse inside an existing perfect-matching formalization rather than a new theorem."
-    },
-    {
-      "title": "Finite-state lift bound for Zeckendorf graph benchmarks",
+      "title": "Odd-double-factorial normalization obstruction for symmetric monochromatic quantum graphs",
       "type": "proposition",
       "status": "proved",
-      "target_need": "finite-state automata or subword-complexity benchmarks with explicit graph certificates",
-      "what_they_gain": "A paper-backed AMS 68 benchmark family that fits the repo's external-proof workflow, analogous in spirit to `OEIS/6697.lean` but with explicit state-graph and ambiguity-control lemmas.",
-      "statement": "For the labeled graph `G_m` attached to finite-window Zeckendorf normalization, `phiState_card` gives `|V_m| = 2^(m-1)`, `phiGraph_outdegree_two` gives outdegree `2` at every state, and `labeledPath_card_le_state_card` shows that the number of deterministic lifts of any observed word is at most `|V_m|`.",
-      "proof_sketch": "The states are `(m-1)`-bit words. Appending `0` or `1` produces the two outgoing edges. A labeled path is determined by its initial state, so the lift set injects into the state set. The bound is therefore immediate once the graph presentation is fixed.",
+      "target_need": "MonochromaticQuantumGraph presently jumps from explicit existence witnesses and nonnegative-real no-go theorems to open integer/trinary no-solution families, but lacks arithmetic obstruction lemmas for structured ansatze.",
+      "what_they_gain": "A concrete benchmark proposition for `FormalConjectures/Paper/MonochromaticQuantumGraph.lean` that prunes the entire color-symmetric integer and trinary search sector before any exhaustive search or SAT encoding. It gives exact first obstructions `3 c^2 = 1` at `N=4` and `15 c^3 = 1` at `N=6`, so those ansatze are impossible over `ℤ` and hence over `{-1,0,1}`.",
+      "statement": "Fix `r >= 2` and `D >= 1`. Let `W : WeightsN (2*r) D ℤ` satisfy a monochromatic symmetric ansatz: there exists `c : ℤ` such that `W (mkEdge u v i i) = c` for every monochromatic edge and `W (mkEdge u v i j) = 0` whenever `i != j`. Then for every constant coloring `ι : V (2*r) -> Fin D`, one has `pmSumN (2*r) D W ι = freeInvolutionCount r * c^r`. Consequently `EqSystemN (2*r) D W` would force `freeInvolutionCount r * c^r = 1`, which is impossible in `ℤ` for every `r >= 2`. In particular the `N=4` and `N=6` integer/trinary conjectures already exclude this full symmetric sector.",
+      "proof_sketch": "In the target file, `pmSumN` is the recursive sum over perfect matchings of the complete graph on `N` vertices. Under a constant coloring, every matching uses exactly `r` monochromatic edges, and under the stated ansatz each summand is therefore exactly `c^r`. The only remaining datum is the number of perfect matchings of `K_{2r}`. Identifying a perfect matching with a fixed-point-free involution on a `2r`-element set converts this count to Automath's `freeInvolutionCount r`; the exact normalization is supplied by `freeInvolutionCount_formula`, with initial values from `freeInvolutionCount_small`. Thus `pmSumN = freeInvolutionCount r * c^r`. Imposing `EqSystemN` on constant colorings forces that product to equal `1`. Since `freeInvolutionCount 2 = 3` and `freeInvolutionCount 3 = 15`, the first nontrivial cases already give `3 c^2 = 1` and `15 c^3 = 1`, impossible over integers. The odd-vertex analogue vanishes because `no_free_involution_on_odd` rules out perfect matchings on odd cardinalities.",
       "lean_refs": [
-        "FormalConjectures/OEIS/6697.lean:79",
-        "FormalConjectures/OEIS/6697.lean:117",
-        "FormalConjectures/OEIS/6697.lean:120",
-        "FormalConjectures/Util/Attributes/Basic.lean:58"
+        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:183",
+        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:191",
+        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:328",
+        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:612",
+        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:690"
       ],
       "automath_refs": [
-        "papers/publication/2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints/appendices/appC-sofic-conjugacy.tex:7",
-        "papers/publication/2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints/appendices/appC-sofic-conjugacy.tex:19",
-        "papers/publication/2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints/appendices/appC-sofic-conjugacy.tex:23",
-        "lean4/Omega/Graph/PhiGraph.lean:12",
-        "lean4/Omega/Graph/PhiGraph.lean:28",
-        "lean4/Omega/Graph/LiftBound.lean:27"
+        "lean4/Omega/GU/FreeInvolutionCount.lean:8",
+        "lean4/Omega/GU/FreeInvolutionCount.lean:12",
+        "lean4/Omega/GU/FreeInvolutionCount.lean:33",
+        "lean4/Omega/GU/FreeInvolutionCount.lean:93"
       ],
-      "novelty_risk": "Moderate; the finite-state model is source-backed and niche enough to be useful, but the target repo may prefer a smaller declarative slice than the full Automath graph package."
-    },
-    {
-      "title": "Fibonacci-cube exact slice and face laws",
-      "type": "theorem",
-      "status": "proved",
-      "target_need": "hypercube-derived graph families with exact closed formulas, not just isolated small examples",
-      "what_they_gain": "A ready graph-combinatorics benchmark family that complements the repo's `Q3` and sensitivity files with exact closed formulas, while keeping long proofs outside the target repo via `formal_proof using lean4`.",
-      "statement": "For the Fibonacci cube on binary words of length `n` with no adjacent `1`s, `coordOneCount_eq_fib_prod` gives the exact size of the `i`-th coordinate-one slice as `Fib(i+1) * Fib(n-i)`. The low-dimensional face numbers satisfy `fibcubeFVector_two_strict_mono` and `fibcubeFVector_three_recurrence`, while the edge counts satisfy the two-sided estimates `fibcubeEdgeCount_ge_fib` and `fibcubeEdgeCount_double_bound`.",
-      "proof_sketch": "Decompose admissible words by local suffix patterns and use the Fibonacci recursion for no-adjacent-1 languages. Coordinate-one slices split into independent left and right admissible subwords, yielding the exact product formula. Face and edge formulas then follow from the same recurrence plus symmetry.",
-      "lean_refs": [
-        "FormalConjectures/ErdosProblems/567.lean:57",
-        "FormalConjectures/Paper/StrongSensitivityConjecture.lean:104",
-        "FormalConjectures/Util/Attributes/Basic.lean:58"
-      ],
-      "automath_refs": [
-        "papers/publication/2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints/sections/01-introduction.tex:16",
-        "papers/publication/2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints/sections/09-discussion.tex:4",
-        "lean4/Omega/Combinatorics/FibonacciCube.lean:1163",
-        "lean4/Omega/Combinatorics/FibonacciCube.lean:1219",
-        "lean4/Omega/Combinatorics/FibonacciCube.lean:1237",
-        "lean4/Omega/Combinatorics/FibonacciCube.lean:1259",
-        "lean4/Omega/Combinatorics/FibonacciCube.lean:1276"
-      ],
-      "novelty_risk": "Low-to-medium; Fibonacci cubes are classical, but the target repo currently lacks this kind of exact hypercube-derived benchmark family."
+      "novelty_risk": "Low for the counting ingredient, medium for the repository-level claim: the obstruction is classical once the symmetry ansatz is written down, but that ansatz-specific consequence does not appear to be stated in either codebase."
     }
   ],
   "draft_title": "",
@@ -108,11 +64,20 @@
       "score": 1,
       "verdict": "",
       "detail": "{\"codex_score\": 1, \"claude_score\": 0, \"claude_notes\": \"Completely fabricated connection. The cited Lean refs (Hilbert Problem 5 theorems about Lie group structure) have zero relation to 'finite-state recurrence' or 'Automath encoding'. The automath_refs cite only README.md:1, which is not a theorem. The DeepMind maintainers would immediately see this as incoherent — it would damage credibility rather than build a relationship. Codex self-score of 1 is already generous; this is a 0 across all dimensions.\", \"findings\": [{\"title\": \"google-deepmind/formal-conjectures finite-state recurrence bridge\", \"type\": \"theorem\", \"status\": \"proved\", \"statement\": \"A recurrence-compatible invariant from the target repo can be transferred to an Automath encoding.\", \"connection\": \"This gives a concrete theorem-shaped bridge instead of a generic collaboration pitch.\", \"proof_sketch\": \"Track the target invariant through the Lean definitions, then reinterpret it as an Automath transition statistic.\", \"lean_refs\": [\"FormalConjectures/HilbertProblems/5.lean:52 theorem admitsLieGroupStructure_of_lieGroup\", \"FormalConjectures/HilbertProblems/5.lean:59 theorem locallyCompact_of_admitsLieGroupStructure\"], \"automath_refs\": [\"README.md:1\"], \"novelty_risk\": \"Needs literature check against existing published recurrence-transfer results.\"}]}"
+    },
+    {
+      "timestamp": "2026-04-19T00:03:53+08:00",
+      "stage": "B",
+      "round": 3,
+      "action": "research round completed",
+      "score": 3,
+      "verdict": "",
+      "detail": "{\"codex_score\": 5, \"claude_score\": 3, \"claude_notes\": \"The math is sound—(2r-1)!!·c^r=1 is indeed impossible over ℤ for r≥2—but this is a trivial observation about the most restrictive possible ansatz. Anyone working on MonochromaticQuantumGraph would dismiss the uniform-symmetric sector in seconds without needing a formal lemma. The DeepMind team is collecting hard open conjectures, not obvious no-go lemmas for toy cases. Contributing this risks looking patronizing rather than helpful. The Codex self-score of 5 is generous; even it acknowledged 'lo\", \"findings\": [{\"title\": \"Odd-double-factorial normalization obstruction for symmetric monochromatic quantum graphs\", \"type\": \"proposition\", \"status\": \"proved\", \"target_need\": \"MonochromaticQuantumGraph presently jumps from explicit existence witnesses and nonnegative-real no-go theorems to open integer/trinary no-solution families, but lacks arithmetic obstruction lemmas for structured ansatze.\", \"what_they_gain\": \"A concrete benchmark proposition for `FormalConjectures/Paper/MonochromaticQuantumGraph.lean` that prunes the entire color-symmetric integer and trinary search sector before any exhaustive search or SAT encoding. It gives exact first obstructions `3 c^2 = 1` at `N=4` and `15 c^3 = 1` at `N=6`, so those ansatze are impossible over `ℤ` and hence over `{-1,0,1}`.\", \"statement\": \"Fix `r >= 2` and `D >= 1`. Let `W : WeightsN (2*r) D ℤ` satisfy a monochromatic symmetric ansatz: there exists `c : ℤ` such that `W (mkEdge u v i i) = c` for every monochromatic edge and `W (mkEdge u v i j) = 0` whenever `i != j`. Then for every constant coloring `ι : V (2*r) -> Fin D`, one has `pmSumN (2*r) D W ι = freeInvolutionCount r * c^r`. Consequently `EqSystemN (2*r) D W` would force `freeInvolutionCount r * c^r = 1`, which is impossible in `ℤ` for every `r >= 2`. In particular the `N=4` and `N=6` integer/trinary conjectures already exclude this full symmetric sector.\", \"proof_sketch\": \"In the target file, `pmSumN` is the recursive sum over perfect matchings of the complete graph on `N` vertices. Under a constant coloring, every matching uses exactly `r` monochromatic edges, and under the stated ansatz each summand is therefore exactly `c^r`. The only remaining datum is the number of perfect matchings of `K_{2r}`. Identifying a perfect matching with a fixed-point-free involution on a `2r`-element set converts this count to Automath's `freeInvolutionCount r`; the exact normalization is supplied by `freeInvolutionCount_formula`, with initial values from `freeInvolutionCount_small`. Thus `pmSumN = freeInvolutionCount r * c^r`. Imposing `EqSystemN` on constant colorings forces that product to equal `1`. Since `freeInvolutionCount 2 = 3` and `freeInvolutionCount 3 = 15`, the first nontrivial cases already give `3 c^2 = 1` and `15 c^3 = 1`, impossible over integers. The odd-vertex analogue vanishes because `no_free_involution_on_odd` rules out perfect matchings on odd cardinalities.\", \"lean_refs\": [\"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:183\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:191\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:328\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:612\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:690\"], \"automath_refs\": [\"lean4/Omega/GU/FreeInvolutionCount.lean:8\", \"lean4/Omega/GU/FreeInvolutionCount.lean:12\", \"lean4/Omega/GU/FreeInvolutionCount.lean:33\", \"lean4/Omega/GU/FreeInvolutionCount.lean:93\"], \"novelty_risk\": \"Low for the counting ingredient, medium for the repository-level claim: the obstruction is classical once the symmetry ansatz is written down, but that ansatz-specific consequence does not appear to be stated in either codebase.\"}]}"
     }
   ],
   "timestamps": {
     "created_at": "2026-04-18T17:55:14+08:00",
-    "updated_at": "2026-04-18T18:46:47+08:00",
+    "updated_at": "2026-04-19T00:03:53+08:00",
     "stage_b_started_at": "2026-04-18T17:55:15+08:00"
   },
   "submission_url": "",
