@@ -30,7 +30,7 @@
 \DeclareMathOperator{\Fold}{Fold}
 \DeclareMathOperator{\Law}{Law}
 
-\title[Finite-window truncation defects for Zeckendorf normalization]{Finite-window truncation defects for Zeckendorf normalization}
+\title[Truncation defects in finite-window Zeckendorf normalization]{Truncation defects in finite-window Zeckendorf normalization}
 \author{Haobo Ma}
 \address{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981}
 \email{auric@aelf.io}
@@ -45,19 +45,16 @@
 \begin{document}
 \begin{abstract}
 For $m\ge 1$, let $\Fold_m$ map a binary word of length $m$ to the first $m$
-digits of the Zeckendorf expansion of its Fibonacci value.  If $m\le n$ and
-$\omega\in\Omega_n$, we compare $\Fold_m(r_{n\to m}(\omega))$ with
-$\pi_{n\to m}(\Fold_n(\omega))$; their xor difference $D_{n\to m}$ measures
-the failure of finite-window normalization to commute with truncation.  We
-prove that the adjacent defect at level $m+1\to m$ is nonzero exactly when the
-appended digit is $1$ and the prefix value is at least $F_{m+1}$.  This
-threshold description yields a telescoping expansion of $D_{n\to m}$ across
-scales.
-
-Under the uniform law on raw words, the full defect admits a one-bit tail
-reduction: if $\omega=(p,q)\in\Omega_m\times\Omega_{n-m}$, then
-$D_{n\to m}(p,q)=\kappa_{m+1\to m}(p,\beta(q))$ for an explicitly defined tail
-state $\beta(q)\in\{0,1\}$.  Consequently
+digits of the Zeckendorf expansion of its Fibonacci value.  For $n\ge m$ we
+compare $\Fold_m(r_{n\to m}(\omega))$ with $\pi_{n\to m}(\Fold_n(\omega))$
+and write $D_{n\to m}$ for the resulting truncation defect.  We prove that the
+adjacent defect at scale $m+1\to m$ is nonzero exactly when the appended digit
+is $1$ and the prefix value is at least $F_{m+1}$; this yields a telescoping
+formula expressing $D_{n\to m}$ as the xor-sum of the projected adjacent
+defects.  The main deterministic result is a one-bit tail collapse: if
+$\omega=(p,q)\in\Omega_m\times\Omega_{n-m}$, then
+$D_{n\to m}(p,q)=\kappa_{m+1\to m}(p,\beta(q))$ for an explicit bit
+$\beta(q)\in\{0,1\}$.  Consequently
 \[
 \mu_{n,m}=(1-\rho_{n-m})\delta_0+\rho_{n-m}\lambda_m,
 \qquad
@@ -70,41 +67,35 @@ is the adjacent defect law with top digit fixed to $1$.  In particular,
 =
 \frac{(2^{n-m}-(-1)^{n-m})\lfloor 2^{m+1}/3\rfloor}{3\cdot 2^n}.
 \]
-For fixed $m$, the defect law converges exactly to
-$\frac23\delta_0+\frac13\lambda_m$ as $n-m\to\infty$.  The tail state is the
-parity of the initial run of $1$'s in the upper block and is the minimal exact
-tail statistic for the full defect family.  This finite-state description also
-yields an explicit stationary one-step Markov analogue: for a transition
-matrix $P=(p_{ab})_{a,b\in\{0,1\}}$, the defect law is again a two-component
-mixture, now with exact coefficients
-$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$, and converges
-exponentially to an explicit limiting law.  The results therefore give a
-complete finite-scale description of this observable in the uniform and
-stationary one-step Markov settings treated here.
+The tail bit is the parity of the initial run of $1$'s in the upper block and
+is the minimal exact tail statistic for the full defect family.  The same
+description yields an explicit stationary one-step Markov analogue, again as a
+two-component mixture, now with coefficients
+$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$, and hence with
+exponential convergence to the limiting law.
 \end{abstract}
 
 \maketitle
 
 \section{Introduction}
 
-Finite normalization in Fibonacci numeration is local in definition but not in
-its interaction with truncation.  For each $m\ge 1$ we consider the map
+Let
 \[
 \Fold_m:\Omega_m=\{0,1\}^m\longrightarrow X_m,
 \]
-which evaluates a binary word in the Fibonacci basis, replaces it by its
-Zeckendorf expansion, and keeps the first $m$ digits.  Here $X_m$ denotes the
-set of admissible words of length $m$, namely those with no adjacent $1$'s.
-If $m\le n$ and $\omega\in\Omega_n$, there are then two natural ways to
-produce an admissible word of length $m$:
+where $\Fold_m$ evaluates a binary word in the Fibonacci basis, replaces it by
+its Zeckendorf expansion, and keeps the first $m$ digits.  Here $X_m$ denotes
+the set of admissible words of length $m$, namely those with no adjacent
+$1$'s.  If $m\le n$ and $\omega\in\Omega_n$, there are two natural ways to
+produce an admissible word of length $m$,
 \[
 \Fold_m(r_{n\to m}(\omega))
 \qquad\text{and}\qquad
 \pi_{n\to m}(\Fold_n(\omega)).
 \]
-The first truncates the raw word and folds only the lower-resolution window;
-the second folds at the top scale and then projects.  They need not agree.  We
-write
+The first truncates the raw word and normalizes only the lower window, whereas
+the second normalizes at the top scale and then projects.  These two
+procedures need not agree.  We therefore write
 \[
 D_{n\to m}(\omega)
 :=
@@ -114,30 +105,28 @@ D_{n\to m}(\omega)
 \in \{0,1\}^m
 \]
 for the resulting defect vector.  The purpose of the paper is to describe this
-observable exactly at finite scale.  The arithmetic input is concentrated in an
-adjacent threshold theorem, and the later distributional statements are
-obtained from a deterministic collapse of the upper tail to a single bit.
+observable exactly at finite scale.
 
-The first point is that a new defect can only be created at a genuine
-threshold.  If $\eta=(p,b)\in\Omega_{m+1}$ and $s=N(p)$, then
-Theorem~\ref{thm:adjacent-threshold} shows that the adjacent defect
-$\kappa_{m+1\to m}(\eta)$ is nonzero if and only if $b=1$ and
-$s\ge F_{m+1}$.  Thus an adjacent defect appears precisely when the added top
-digit pushes the prefix across the next Zeckendorf threshold.  Once this is
-known, the global defect can be recovered from its one-step pieces:
-Section~\ref{sec:telescoping} proves a telescoping identity and the associated
-cocycle formula, which isolate the scales at which noncommutation is created.
+The starting point is an exact one-step criterion.  If
+$\eta=(p,b)\in\Omega_{m+1}$ and $s=N(p)$, then
+Theorem~\ref{thm:adjacent-threshold} shows that
+\[
+K_{m+1\to m}(p,b)=b\,\mathbf{1}_{\{s\ge F_{m+1}\}}.
+\]
+Thus a new defect is created only when the appended digit is $1$ and the lower
+block already lies beyond the threshold $F_{m+1}$.  This is the only
+arithmetic input needed for the multiscale analysis.  Once it is available,
+the global defect is recovered by the telescoping identity of
+Section~\ref{sec:telescoping} and the associated cocycle formula.
 
-The deterministic core of the paper is that this apparently multiscale
-observable collapses to a one-bit tail state.  If
-$\omega=(p,q)\in\Omega_m\times\Omega_{n-m}$ is split into its lower
-$m$-digit prefix and upper tail, Theorem~\ref{thm:tail-collapse} produces a
+The main theorem says that the entire upper block can be compressed to a single
+bit.  If $\omega=(p,q)\in\Omega_m\times\Omega_{n-m}$ is split into its lower
+$m$-digit prefix and upper tail, Theorem~\ref{thm:tail-collapse} constructs a
 recursively defined bit $\beta(q)\in\{0,1\}$ such that
 \[
 D_{n\to m}(p,q)=\kappa_{m+1\to m}(p,\beta(q)).
 \]
-Thus the full defect is already controlled by the adjacent observable together
-with a single tail state.  In particular, the law of $D_{n\to m}$ is the
+In particular, the law of $D_{n\to m}$ under the uniform measure is the
 mixture $(1-\rho_{n-m})\delta_0+\rho_{n-m}\lambda_m$, where $\lambda_m$ is the
 adjacent law with the top digit fixed to $1$ and
 \[
@@ -152,71 +141,65 @@ Equivalently,
 \rho_{n-m}\,\frac{\lfloor 2^{m+1}/3\rfloor}{2^m},
 \]
 and Proposition~\ref{thm:explicit-count} identifies the adjacent factor on the
-right-hand side.  For fixed $m$, one obtains the exact limiting law
+right-hand side.  For fixed $m$, this yields the exact limiting law
 \[
 \frac23\delta_0+\frac13\lambda_m
 \qquad (\ell\to\infty),
 \]
-with an explicit oscillatory error of order $2^{-\ell}$.
-The later exact laws are consequences of this deterministic reduction rather
-than separate sources of arithmetic.
+with an explicit oscillatory error of order $2^{-\ell}$.  The exact
+distributional formulas are therefore consequences of a deterministic collapse,
+not of independent probabilistic arguments.
 
-The collapse factor has a converse interpretation.  Section~\ref{sec:markov}
-identifies $\beta(q)$ with the parity of the initial run of $1$'s in the tail
-and proves that no strictly coarser tail statistic can determine the entire
-family of defects $D_{n\to m}$ exactly.  This finite-state minimality
-statement is included to identify the exact information retained by the
-collapse theorem; it is not intended as a general minimization theory for
-numeration systems.  At the finite-state level it is naturally related to
-Myhill--Nerode minimization \cite{Myhill1957,Nerode1958}.  The same
-identification yields an exact stationary one-step Markov extension: for a
-Markov law with transition matrix $P=(p_{ab})$ and positive stationary masses,
-the defect law at tail length $\ell$ remains a two-component mixture after
-conditioning on the boundary digit $\omega_m$, with coefficients
-$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$, and therefore converges exponentially
-in $\ell$.  No claim is made here for higher-order dependence or for more
-general linear-recurrence numeration systems.  Standard Markov-chain notation
-and background may be found in
+The tail bit also has an intrinsic interpretation.  Section~\ref{sec:markov}
+shows that $\beta(q)$ is the parity of the initial run of $1$'s in the tail
+and proves that no strictly coarser tail statistic determines the entire
+family of defects $D_{n\to m}$ exactly.  This minimality statement is
+finite-state in spirit and may be compared with Myhill--Nerode minimization
+\cite{Myhill1957,Nerode1958}.  The same identification yields an exact
+stationary one-step Markov extension: after conditioning on the boundary digit
+$\omega_m$, the defect law is again a two-component mixture, now with
+coefficient $p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$, and
+hence converges exponentially.  We do not pursue higher-order dependence or
+other linear-recurrence numeration systems here.  Standard Markov-chain
+background may be found in
 \cite{Parry1964,Norris1997,LevinPeresWilmer2009MarkovMixing}.
 
-Classical background on Zeckendorf representations may be found in
+Classical background on Zeckendorf expansions goes back to
 \cite{Lekkerkerker1952,Zeckendorf1972,Carlitz1968,CarlitzScovHoggatt1972,%
-Fraenkel1985}.  Automata-theoretic normalization and conversion in Fibonacci
-numeration go back to
+Fraenkel1985}.  Automata-theoretic normalization in Fibonacci numeration was
+developed in
 \cite{Frougny1991,Frougny1992,FrougnySolomyak1996,FrougnySakarovitch1999,%
-Frougny1999,FrougnyS2010,ShallitShan2024}.  Finite-state and rational-series
-background for such observables may be compared with
-\cite{BerstelReutenauer2011}.  Successor carries and related
-scalar observables are studied in
+Frougny1999,FrougnyS2010,ShallitShan2024}, and finite-state or rational-series
+methods for related observables may be compared with
+\cite{BerstelReutenauer2011}.  Successor carries and other scalar statistics
+have been studied in
 \cite{Frougny1996Successor,Frougny1997Sequential,AhlbachUsatineFrougnyPippenger2013,%
 BertheFrougnyRigoSakarovitch2020}, while probabilistic and combinatorial
-statistics for Zeckendorf expansions appear in
+questions for Zeckendorf expansions appear in
 \cite{KologluKoppMillerWang2011,DrmotaSteiner2002,Steiner2005,MillerWang2012,%
-Griffiths2010,Hosten2024,BaratGrabner2014}.  Symbolic-dynamics background for
-the golden-mean shift and inverse-limit compatibility is standard
-\cite{LindMarcus1995,Kitchens1998}.  The observable studied here is of a
-different nature from the scalar carry statistics appearing in the cited
-literature: it is a vector-valued defect comparing the two
+Griffiths2010,Hosten2024,BaratGrabner2014}.  For the symbolic-dynamical
+viewpoint we use only standard material on the golden-mean shift and inverse
+limits \cite{LindMarcus1995,Kitchens1998}.  The observable considered here is
+of a different type: it is a vector-valued defect comparing the two
 normalization/truncation routes above, and its exact law is not determined by
-the top adjacent event alone; see the appendix for small examples.  The
-emphasis of the paper is therefore on an exact finite-scale analysis of this
-particular truncation defect, rather than on a general theory of carries,
-ergodic averages, or linear-recurrence numeration systems.
+the top adjacent event alone; see the appendix for small examples.
 
 The paper is organized as follows.  Section~\ref{sec:adjacent} introduces the
 finite-window Fold map, records the elementary normalization facts needed later
 on, and proves the threshold theorem for the adjacent defect.
 Section~\ref{sec:telescoping} derives the telescoping and cocycle identities.
 Section~\ref{sec:uniform} proves the collapse theorem and the exact uniform-law
-distribution.  Section~\ref{sec:markov} proves the rigidity of the tail factor
-and extends the defect law to stationary one-step Markov inputs.  The appendix
-collects supplementary examples and exact small-scale values.
+distribution.  Section~\ref{sec:markov} identifies the tail bit, proves its
+minimality as an exact factor, and extends the defect law to stationary
+one-step Markov inputs.  The appendix collects examples and exact small-scale
+values.
 
-\section{Finite-window Normalization and the Adjacent Defect}
+\section{Finite-window normalization and adjacent defects}
 \label{sec:adjacent}
 
-Throughout, digits are indexed from the low-order end: position $k$ carries
-Fibonacci weight $F_{k+1}$, where $F_1=F_2=1$ and
+We begin by fixing notation and recording the elementary normalization facts
+used throughout.  Digits are indexed from the low-order end: position $k$
+carries Fibonacci weight $F_{k+1}$, where $F_1=F_2=1$ and
 $F_{j+2}=F_{j+1}+F_j$.  Thus $N(10)=F_2=1$ and $N(01)=F_3=2$, and the prefix
 map $r_{n\to m}$ keeps the first $m$ low-order digits.
 
@@ -255,8 +238,7 @@ and, on the ambient cube,
 \]
 We use $\tau_{n\to m}$ only for defect vectors in the ambient cube.
 
-The following elementary facts about finite-window normalization will be used
-repeatedly.
+The following elementary facts will be used repeatedly.
 
 \begin{lemma}
 \label{lem:max-prefix-value}
@@ -473,8 +455,12 @@ $s\bmod F_{m+2}=t=s-F_{m+1}$, which is impossible because
 $0<F_{m+1}<F_{m+2}$.  Hence the defect is nonzero.
 \end{proof}
 
-\section{Telescoping and Cocycle Identities}
+\section{Telescoping and cocycle identities}
 \label{sec:telescoping}
+
+We now pass from the adjacent defect to the full defect.  The point of this
+section is formal: once the one-step defect is fixed, the global defect is
+obtained by iterating truncation and projection identities.
 
 \begin{definition}
 \label{def:global-defect}
@@ -498,12 +484,11 @@ For $v\in\{0,1\}^m$, write
 \lvert v\rvert_0:=\#\{i:\ v_i\ne 0\}.
 \]
 
-No new arithmetic enters in this section.  Once
-Theorem~\ref{thm:adjacent-threshold} is available, the identities below are
-formal consequences of composing successive truncation and projection maps.
-They are recorded because they isolate the scales at which noncommutation can
-be created and provide the bookkeeping needed in
-Section~\ref{sec:uniform}.
+No new arithmetic enters here.  Once
+Theorem~\ref{thm:adjacent-threshold} is available, the identities below follow
+by composing successive truncation and projection maps.  We record them
+because they isolate the scales at which noncommutation is created and provide
+the bookkeeping needed in Section~\ref{sec:uniform}.
 
 For fixed $n>m$ and $\omega\in\Omega_n$, set
 \[
@@ -640,13 +625,12 @@ The Hamming estimate follows from
 and the fact that prefix projection cannot increase Hamming weight.
 \end{proof}
 
-\section{Tail Collapse and the Uniform Law}
+\section{Tail collapse and the uniform law}
 \label{sec:uniform}
 
-We now specialize to the uniform law on raw words.  The main point of the
-section is that the full defect law is governed by a single recursively
-defined tail bit.  We begin with the exact one-step count because it enters the
-final mixture formula.
+We now specialize to the uniform law on raw words.  The key point is that the
+upper block contributes only through a recursively defined bit.  We begin with
+the one-step count that enters the final mixture formula.
 
 \begin{proposition}[Exact one-step defect count]
 \label{thm:explicit-count}
@@ -729,9 +713,9 @@ For $n>m$ and $v\in\{0,1\}^m$, define
 \mu_{n,m}(v):=2^{-n}\#\{\omega\in\Omega_n:\ D_{n\to m}(\omega)=v\}.
 \]
 Thus $\mu_{n,m}$ is the exact defect law under the uniform raw-word measure.
-Theorem~\ref{thm:tail-collapse} resolves the defect law exactly by showing that
-a single recursively defined tail bit is sufficient to recover the full
-distribution after the upper block has been marginalized.
+Theorem~\ref{thm:tail-collapse} shows that, after the upper block has been
+marginalized, a single recursively defined tail bit is sufficient to recover
+the full distribution.
 
 \begin{lemma}
 \label{lem:zero-barrier}
@@ -833,7 +817,7 @@ $m+1\to m$ therefore gives
 This proves the claim.
 \end{proof}
 
-\begin{theorem}[Collapse of the multiscale defect law]
+\begin{theorem}[Tail collapse]
 \label{thm:tail-collapse}
 Fix $n>m$ and write $\ell:=n-m$.  Define
 \[
@@ -1086,17 +1070,15 @@ because
 by Proposition~\ref{thm:explicit-count}.
 \end{remark}
 
-\section{Rigidity and Stationary Markov Inputs}
+\section{The tail bit and stationary Markov inputs}
 \label{sec:markov}
 
-The results of this section should be read as consequences of the collapse
-theorem.  First we identify the tail bit explicitly as the parity of the
-initial run of $1$'s, which pins down the exact tail information retained by
-the defect.  This yields a minimality statement, and because that parity has a
-closed form under one-step Markov sampling, it also yields an exact stationary
-Markov analogue of the uniform-law mixture.
+We first identify the tail bit explicitly and deduce its minimality as an
+exact factor for the family of defects.  Once this is done, the stationary
+one-step Markov law follows from a direct computation of the parity of the
+initial run of $1$'s.
 
-\begin{theorem}[Minimality of the tail bit]
+\begin{theorem}[Identification and minimality of the tail bit]
 \label{thm:tail-rigidity}
 For a finite word $q=q_1\cdots q_r$, let
 \[
@@ -1199,7 +1181,7 @@ The identity $\beta=\psi\circ\gamma$ is immediate from the definition of
 $\psi$, and uniqueness holds on the image of $\gamma$.
 \end{proof}
 
-The minimality theorem converts the deterministic collapse into an exact
+The preceding theorem converts the deterministic collapse into an exact
 non-uniform law for one-step Markov inputs.  The only tail information that
 survives is the parity of the initial run of $1$'s, and that parity has a
 closed form under Markov sampling.
@@ -1397,13 +1379,13 @@ $\lambda_m$.  This recovers Theorem~\ref{thm:tail-collapse}.
 
 \appendix
 
-\section{Examples and Small Values}
+\section{Examples and small values}
 \label{app:supplementary}
 
-We collect here two small examples and a table of exact values that complement
-the main text.  They illustrate in particular that the defect observable is
-not captured by the usual scalar indicators associated with normalization or
-with the top adjacent step.
+We collect here two small examples and a table of exact values that are not
+used in the proofs but help separate the present defect from the scalar
+indicators naturally associated with normalization and with the top adjacent
+step.
 
 \begin{example}[Normalization cascade without a truncation defect]
 \label{ex:cascade-without-defect}
