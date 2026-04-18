@@ -1,4 +1,8 @@
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Data.Fintype.Basic
 import Mathlib.Tactic
+
+open scoped BigOperators
 
 namespace Omega.OperatorAlgebra
 
@@ -38,6 +42,47 @@ theorem paper_op_algebra_cylinder_marginalization (D : CylinderMarginalizationDa
   have hMarg : D.marginalizationIdentity :=
     D.deriveMarginalizationIdentity hSplit
   exact ⟨hMarg, D.deriveKolmogorovConsistency hMarg⟩
+
+/-- Concrete finite data for pushforwarding a mass function along a fold map and reading the result
+on each visible coordinate as the sum of the source masses over the corresponding fiber. -/
+structure FoldPushforwardFiberSumData where
+  Ω : Type
+  X : Type
+  instDecEqΩ : DecidableEq Ω
+  instFintypeΩ : Fintype Ω
+  instDecEqX : DecidableEq X
+  fold : Ω → X
+  mass : Ω → ℚ
+
+attribute [instance] FoldPushforwardFiberSumData.instDecEqΩ
+attribute [instance] FoldPushforwardFiberSumData.instFintypeΩ
+attribute [instance] FoldPushforwardFiberSumData.instDecEqX
+
+namespace FoldPushforwardFiberSumData
+
+/-- The finite source fiber over a visible state `x`. -/
+def fiber (D : FoldPushforwardFiberSumData) (x : D.X) : Finset D.Ω :=
+  Finset.univ.filter fun a => D.fold a = x
+
+/-- The pushforward mass of `x`, defined by summing the source masses over its fold fiber. -/
+def pushforwardMass (D : FoldPushforwardFiberSumData) (x : D.X) : ℚ :=
+  Finset.sum (D.fiber x) D.mass
+
+/-- Coordinate form of the finite pushforward identity. -/
+def pushforwardFiberSum (D : FoldPushforwardFiberSumData) : Prop :=
+  ∀ x : D.X, D.pushforwardMass x = Finset.sum (D.fiber x) D.mass
+
+end FoldPushforwardFiberSumData
+
+open FoldPushforwardFiberSumData
+
+/-- Paper-facing fold-pushforward fiber-sum identity.
+    cor:op-algebra-fold-pushforward-fiber-sum -/
+theorem paper_op_algebra_fold_pushforward_fiber_sum (D : FoldPushforwardFiberSumData) :
+    D.pushforwardFiberSum := by
+  change ∀ x : D.X, D.pushforwardMass x = Finset.sum (D.fiber x) D.mass
+  intro x
+  rfl
 
 /-- Recursive product of time-slice projectors along a cylinder word. -/
 def cylinderWordValue {ι : Type*} (sliceProjector : ι → ℝ) : List ι → ℝ
