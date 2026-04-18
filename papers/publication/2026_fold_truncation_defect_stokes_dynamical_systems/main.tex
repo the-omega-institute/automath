@@ -65,7 +65,10 @@ nonzero defect, the corresponding depth therefore converges to the geometric
 law $2^{-r}$.  We also identify $\beta(q)$ with the parity of the initial run
 of $1$'s in $q$, prove that this is the minimal exact tail statistic for the
 entire defect family, and derive the corresponding stationary one-step Markov
-extension.
+extension.  In the Markov setting the adjacent spectrum can also be determined
+exactly: conditioned on a nonzero defect, the finite-window depth law is
+independent of the tail length and converges, as the window grows, to the
+geometric law $p_{10}p_{11}^{r-1}$.
 \end{abstract}
 
 \maketitle
@@ -155,8 +158,12 @@ Myhill--Nerode minimization \cite{Myhill1957,Nerode1958}.  The same
 identification yields an exact stationary one-step Markov extension: after
 conditioning on the boundary digit $\omega_m$, the defect law is again a
 two-component mixture, now with coefficient
-$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$, and therefore
-converges exponentially.
+$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$.  The conditional
+adjacent laws may also be resolved explicitly: the boundary state $0$
+contributes only depth $1$, the boundary state $1$ contributes the entire chain
+$\{v_{m,r}\}_{r=1}^m$, and after conditioning on a nonzero defect the resulting
+depth law is independent of the tail length and tends to the geometric law
+$p_{10}p_{11}^{r-1}$ as $m\to\infty$.
 
 \subsection{Context}
 
@@ -202,8 +209,9 @@ Section~\ref{sec:adjacent} develops the finite-window Fold map and proves the
 threshold criterion for the adjacent defect.  Section~\ref{sec:telescoping}
 derives the telescoping and cocycle formulas.  Section~\ref{sec:uniform}
 determines the adjacent law and the exact defect distribution under the
-uniform measure.  Section~\ref{sec:markov} identifies the tail factor and
-extends the argument to stationary one-step Markov inputs.  Small-scale
+uniform measure.  Section~\ref{sec:markov} identifies the tail factor, extends
+the argument to stationary one-step Markov inputs, and computes the exact
+Markov depth spectrum together with its conditioned geometric limit.  Small-scale
 examples are incorporated into the main text, where they help isolate
 phenomena that are invisible at the level of scalar defect indicators.
 
@@ -1739,6 +1747,447 @@ Hence the first displayed formula for the defect law reduces to
 (1-\rho_\ell)\delta_0+\rho_\ell\lambda_m,
 \]
 which is exactly Theorem~\ref{thm:tail-collapse}.
+\end{proof}
+
+\subsection{Exact Markov spectrum and conditioned depth}
+
+The stationary mixture of Theorem~\ref{thm:markov-defect-law} leaves the
+adjacent laws $\lambda_{m,a}$ implicit.  The next theorem determines them
+exactly and shows that, after conditioning on a nonzero defect, the depth law
+is independent of the tail length.
+
+\begin{theorem}[Exact Markov spectrum and conditioned defect depth]\textbf{[New-4 | 2026-04-18]}
+\label{thm:markov-spectrum}
+Keep the notation of Theorem~\ref{thm:markov-defect-law}.  Define
+\[
+A_0:=\pi_1,
+\qquad
+A_{j+1}:=\pi_1p_{10}p_{00}+p_{01}p_{10}A_j
+\qquad (j\ge 0).
+\]
+Then
+\[
+A_j
+=
+\frac{\pi_1p_{10}p_{00}}{1-p_{01}p_{10}}
++
+\frac{\pi_1p_{11}}{1-p_{01}p_{10}}(p_{01}p_{10})^j
+\qquad (j\ge 0).
+\]
+For $m\ge 1$, $a\in\{0,1\}$, and $1\le r\le m$, set
+\[
+\Lambda_{m,a}(r):=\lambda_{m,a}(v_{m,r}),
+\]
+where $\lambda_{m,a}$ is the conditional adjacent law from
+Theorem~\ref{thm:markov-defect-law}.  Then
+\[
+\Lambda_{m,0}(r)=0
+\qquad (2\le r\le m),
+\]
+\[
+\Lambda_{m,0}(1)
+=
+\frac{p_{10}}{\pi_0}
+\bigl(
+\pi_1-A_{\lfloor (m-1)/2\rfloor}
+\bigr),
+\]
+\[
+\Lambda_{m,1}(1)
+=
+\frac{A_{\lfloor m/2\rfloor}}{\pi_1},
+\]
+and, for $2\le r\le m$,
+\[
+\Lambda_{m,1}(r)
+=
+\frac{p_{11}^{r-2}}{\pi_1}
+\Bigl(
+p_{01}p_{10}\bigl(\pi_1-A_{\lfloor (m-r)/2\rfloor}\bigr)
++
+p_{11}A_{\lfloor (m-r+1)/2\rfloor}
+\Bigr).
+\]
+In particular,
+\[
+\sum_{r=1}^m\Lambda_{m,1}(r)=1.
+\]
+
+Let $R_{n,m}$ be the defect-depth variable from
+Corollary~\ref{cor:explicit-depth-law}.  If $\ell\ge 1$ and $n:=m+\ell$, then
+\[
+\PP_P\!\left[
+R_{n,m}=1
+\ \middle|\
+D_{n\to m}(r_{\infty\to n}(\omega^\infty))\ne 0
+\right]
+=
+\frac{p_{10}\Lambda_{m,0}(1)+p_{11}\Lambda_{m,1}(1)}
+{p_{10}\Lambda_{m,0}(1)+p_{11}},
+\]
+and, for $2\le r\le m$,
+\[
+\PP_P\!\left[
+R_{n,m}=r
+\ \middle|\
+D_{n\to m}(r_{\infty\to n}(\omega^\infty))\ne 0
+\right]
+=
+\frac{p_{11}\Lambda_{m,1}(r)}
+{p_{10}\Lambda_{m,0}(1)+p_{11}}.
+\]
+Hence the conditioned depth law is independent of the tail length $\ell$.
+Moreover, for each fixed $r\ge 1$,
+\[
+\Lambda_{m,0}(1)\xrightarrow[m\to\infty]{}
+\frac{p_{01}p_{11}}{1-p_{01}p_{10}},
+\]
+\[
+\Lambda_{m,1}(1)\xrightarrow[m\to\infty]{}
+\frac{p_{10}p_{00}}{1-p_{01}p_{10}},
+\qquad
+\Lambda_{m,1}(r)\xrightarrow[m\to\infty]{}
+\frac{p_{10}p_{11}^{r-1}}{1-p_{01}p_{10}}
+\quad (r\ge 2),
+\]
+and therefore
+\[
+\PP_P\!\left[
+R_{m+\ell,m}=r
+\ \middle|\
+D_{m+\ell\to m}(r_{\infty\to m+\ell}(\omega^\infty))\ne 0
+\right]
+\xrightarrow[m\to\infty]{}
+p_{10}p_{11}^{r-1}
+\]
+uniformly in $\ell\ge 1$.
+\end{theorem}
+
+\begin{proof}
+For $m\ge 1$, let
+\[
+\mathcal{T}_m
+:=
+\{\alpha\in\Omega_m:\ N(\alpha)<F_{m+1}\},
+\qquad
+T_m:=\PP_P[r_{\infty\to m}(\omega^\infty)\in\mathcal{T}_m].
+\]
+The proof of Proposition~\ref{thm:explicit-count} is purely combinatorial and
+therefore yields, for $m\ge 3$,
+\[
+\mathcal{T}_m=\Omega_{m-2}00\sqcup \mathcal{T}_{m-2}10.
+\]
+Since $\PP_P[\omega_{m-1}=0,\omega_m=0]=\pi_0p_{00}$ by stationarity and every
+word in $\mathcal{T}_{m-2}$ ends with $0$, this gives
+\[
+T_m=\pi_0p_{00}+p_{01}p_{10}T_{m-2}
+\qquad (m\ge 3).
+\]
+Also,
+\[
+T_1=T_2=\pi_0,
+\]
+because $\mathcal{T}_1=\{0\}$ and $\mathcal{T}_2=\{00,10\}$ are exactly the
+length-$1$ and length-$2$ words whose top digit is $0$.  It follows by
+induction that
+\[
+T_{2j-1}=T_{2j}
+\qquad (j\ge 1).
+\]
+Write this common value as $\Theta_j$.  Then
+\[
+\Theta_1=\pi_0,
+\qquad
+\Theta_{j+1}=\pi_0p_{00}+p_{01}p_{10}\Theta_j
+\qquad (j\ge 1).
+\]
+For $j\ge 1$ define
+\[
+A_j:=p_{01}\Theta_j.
+\]
+Using $\pi_0p_{01}=\pi_1p_{10}$, one obtains
+\[
+A_{j+1}=\pi_1p_{10}p_{00}+p_{01}p_{10}A_j
+\qquad (j\ge 1),
+\]
+and the same identity holds at $j=0$ because
+\[
+A_1=p_{01}\Theta_1=p_{01}\pi_0=\pi_1p_{10}
+=\pi_1p_{10}p_{00}+p_{01}p_{10}A_0.
+\]
+Hence the displayed affine recursion for $(A_j)_{j\ge 0}$ is valid.  Solving
+it gives the closed form
+\[
+A_j
+=
+\frac{\pi_1p_{10}p_{00}}{1-p_{01}p_{10}}
++
+\left(
+\pi_1-\frac{\pi_1p_{10}p_{00}}{1-p_{01}p_{10}}
+\right)
+(p_{01}p_{10})^j,
+\]
+which simplifies to the stated formula because
+\[
+\pi_1-\frac{\pi_1p_{10}p_{00}}{1-p_{01}p_{10}}
+=
+\frac{\pi_1p_{11}}{1-p_{01}p_{10}}.
+\]
+
+For $m\ge 1$ and $1\le r\le m$, let
+\[
+\mathcal{S}_{m,r}
+:=
+\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)=v_{m,r}\}.
+\]
+The interval description in Theorem~\ref{thm:adjacent-spectrum} implies
+\[
+\mathcal{S}_{1,1}=\{1\},
+\]
+and, for $m\ge 2$,
+\[
+\mathcal{S}_{m,1}
+=
+\mathcal{T}_{m-1}1
+\sqcup
+\mathcal{T}_{m-2}^{\,c}10.
+\]
+Indeed, the first component corresponds to the case $p_m=1$ and
+$N(p_1,\dots,p_{m-1})<F_m$, while the second corresponds to the case $p_m=0$,
+$p_{m-1}=1$, and $N(p_1,\dots,p_{m-2})\ge F_{m-1}$.
+
+The two components of $\mathcal{S}_{m,1}$ have distinct top digits.  For the
+words with top digit $1$,
+\[
+\PP_P[r_{\infty\to m}(\omega^\infty)\in \mathcal{T}_{m-1}1]
+=
+\begin{cases}
+\pi_1,& m=1,\\[4pt]
+p_{01}T_{m-1},& m\ge 2,
+\end{cases}
+\]
+hence
+\[
+\PP_P[r_{\infty\to m}(\omega^\infty)\in \mathcal{T}_{m-1}1]
+=
+A_{\lfloor m/2\rfloor}
+\qquad (m\ge 1).
+\]
+For the words with top digit $0$, note that the total probability of a length
+$m-1$ prefix whose top digit is $1$ equals $\pi_1$.  Among those prefixes, the
+subset $\mathcal{T}_{m-2}1$ has probability
+$A_{\lfloor (m-1)/2\rfloor}$.  Therefore
+\[
+\PP_P[r_{\infty\to m}(\omega^\infty)\in \mathcal{T}_{m-2}^{\,c}10]
+=
+p_{10}\bigl(\pi_1-A_{\lfloor (m-1)/2\rfloor}\bigr).
+\]
+Dividing by $\pi_0$ or $\pi_1$ yields
+\[
+\Lambda_{m,0}(1)
+=
+\frac{p_{10}}{\pi_0}
+\bigl(
+\pi_1-A_{\lfloor (m-1)/2\rfloor}
+\bigr),
+\qquad
+\Lambda_{m,1}(1)
+=
+\frac{A_{\lfloor m/2\rfloor}}{\pi_1}.
+\]
+The equality $\Lambda_{m,0}(r)=0$ for $r\ge 2$ follows from
+Theorem~\ref{thm:adjacent-spectrum}, because every interval $I_{m,r}$ with
+$r\ge 2$ lies in $[F_{m+2},F_{m+3}-2]$ and therefore requires the top digit
+$p_m$ to be $1$.
+
+For $2\le r\le m$, repeated use of
+\[
+I_{j,s}=F_{j+1}+I_{j-1,s-1}
+\qquad (2\le s\le j)
+\]
+from Theorem~\ref{thm:adjacent-spectrum} gives
+\[
+\mathcal{S}_{m,r}=\mathcal{S}_{m-r+1,1}1^{r-1}.
+\]
+Set $k:=m-r+1$.  The decomposition of $\mathcal{S}_{k,1}$ above therefore
+gives
+\[
+\mathcal{S}_{m,r}
+=
+\mathcal{T}_{k-1}1^r
+\sqcup
+\mathcal{T}_{k-2}^{\,c}10\,1^{r-1}.
+\]
+The first cylinder has probability
+\[
+p_{11}^{r-1}A_{\lfloor k/2\rfloor},
+\]
+and the second has probability
+\[
+p_{01}p_{10}p_{11}^{r-2}
+\bigl(
+\pi_1-A_{\lfloor (k-1)/2\rfloor}
+\bigr).
+\]
+Every word in $\mathcal{S}_{m,r}$ ends with the digit $1$, so dividing by
+$\pi_1$ yields
+\[
+\Lambda_{m,1}(r)
+=
+\frac{p_{11}^{r-2}}{\pi_1}
+\Bigl(
+p_{01}p_{10}\bigl(\pi_1-A_{\lfloor (m-r)/2\rfloor}\bigr)
++
+p_{11}A_{\lfloor (m-r+1)/2\rfloor}
+\Bigr),
+\]
+which is the stated formula.  If $\omega_m=1$, then
+$N(r_{\infty\to m}(\omega^\infty))\ge F_{m+1}$, so
+Theorem~\ref{thm:adjacent-threshold} implies
+$\kappa_{m+1\to m}(r_{\infty\to m}(\omega^\infty),1)\ne 0$.  Hence
+\[
+\sum_{r=1}^m\Lambda_{m,1}(r)=1.
+\]
+
+Fix $\ell\ge 1$ and set $n:=m+\ell$.  Theorem~\ref{thm:markov-defect-law}
+gives
+\[
+\PP_P[D_{n\to m}=v_{m,r}]
+=
+\pi_0\rho_\ell^{(0)}\Lambda_{m,0}(r)
++
+\pi_1\rho_\ell^{(1)}\Lambda_{m,1}(r).
+\]
+For $\ell\ge 1$,
+\[
+\rho_\ell^{(0)}
+=
+\frac{p_{01}(1-(-p_{11})^\ell)}{1+p_{11}},
+\qquad
+\rho_\ell^{(1)}
+=
+\frac{p_{11}(1-(-p_{11})^\ell)}{1+p_{11}}.
+\]
+Using $\pi_0p_{01}=\pi_1p_{10}$ and $\Lambda_{m,0}(r)=0$ for $r\ge 2$, one
+obtains
+\[
+\PP_P[D_{n\to m}=v_{m,1}]
+=
+\frac{\pi_1(1-(-p_{11})^\ell)}{1+p_{11}}
+\bigl(
+p_{10}\Lambda_{m,0}(1)+p_{11}\Lambda_{m,1}(1)
+\bigr),
+\]
+\[
+\PP_P[D_{n\to m}=v_{m,r}]
+=
+\frac{\pi_1(1-(-p_{11})^\ell)}{1+p_{11}}
+p_{11}\Lambda_{m,1}(r)
+\qquad (2\le r\le m).
+\]
+Summing over $r$ and using $\sum_{r=1}^m\Lambda_{m,1}(r)=1$ gives
+\[
+\PP_P[D_{n\to m}\ne 0]
+=
+\frac{\pi_1(1-(-p_{11})^\ell)}{1+p_{11}}
+\bigl(
+p_{10}\Lambda_{m,0}(1)+p_{11}
+\bigr).
+\]
+Dividing the preceding identities by this common factor proves the displayed
+formulas for the conditioned depth law and shows that the result is independent
+of $\ell$.
+
+Since $p_{01}p_{10}<1$, the closed form for $A_j$ yields
+\[
+A_j\xrightarrow[j\to\infty]{}
+A_\infty
+:=
+\frac{\pi_1p_{10}p_{00}}{1-p_{01}p_{10}}.
+\]
+Hence
+\[
+\Lambda_{m,1}(1)
+=
+\frac{A_{\lfloor m/2\rfloor}}{\pi_1}
+\xrightarrow[m\to\infty]{}
+\frac{p_{10}p_{00}}{1-p_{01}p_{10}}.
+\]
+Also,
+\[
+\pi_1-A_\infty
+=
+\frac{\pi_1p_{11}}{1-p_{01}p_{10}},
+\]
+so
+\[
+\Lambda_{m,0}(1)
+=
+\frac{p_{10}}{\pi_0}
+\bigl(
+\pi_1-A_{\lfloor (m-1)/2\rfloor}
+\bigr)
+\xrightarrow[m\to\infty]{}
+\frac{p_{10}\pi_1}{\pi_0}\,
+\frac{p_{11}}{1-p_{01}p_{10}}
+=
+\frac{p_{01}p_{11}}{1-p_{01}p_{10}}.
+\]
+For fixed $r\ge 2$, both indices in the formula for $\Lambda_{m,1}(r)$ tend to
+$+\infty$ with $m$, hence
+\[
+\Lambda_{m,1}(r)
+\xrightarrow[m\to\infty]{}
+\frac{p_{11}^{r-2}}{\pi_1}
+\bigl(
+p_{01}p_{10}(\pi_1-A_\infty)+p_{11}A_\infty
+\bigr).
+\]
+Using the two identities above,
+\[
+p_{01}p_{10}(\pi_1-A_\infty)+p_{11}A_\infty
+=
+\frac{\pi_1p_{10}p_{11}}{1-p_{01}p_{10}},
+\]
+and therefore
+\[
+\Lambda_{m,1}(r)
+\xrightarrow[m\to\infty]{}
+\frac{p_{10}p_{11}^{r-1}}{1-p_{01}p_{10}}.
+\]
+
+Finally,
+\[
+p_{10}\Lambda_{m,0}(1)+p_{11}
+\xrightarrow[m\to\infty]{}
+\frac{p_{10}p_{01}p_{11}}{1-p_{01}p_{10}}+p_{11}
+=
+\frac{p_{11}}{1-p_{01}p_{10}}.
+\]
+The limit for $r=1$ is therefore
+\[
+\frac{
+\dfrac{p_{10}p_{01}p_{11}}{1-p_{01}p_{10}}
++
+\dfrac{p_{11}p_{10}p_{00}}{1-p_{01}p_{10}}
+}{
+\dfrac{p_{11}}{1-p_{01}p_{10}}
+}
+=
+p_{10},
+\]
+while for $r\ge 2$ the limit is
+\[
+\frac{
+\dfrac{p_{11}p_{10}p_{11}^{r-1}}{1-p_{01}p_{10}}
+}{
+\dfrac{p_{11}}{1-p_{01}p_{10}}
+}
+=
+p_{10}p_{11}^{r-1}.
+\]
+Because the conditioned depth law is exactly independent of $\ell$, the
+convergence is uniform in $\ell\ge 1$.
 \end{proof}
 
 \bibliographystyle{plain}
