@@ -961,7 +961,7 @@
       if (elapsed - lastLogTime >= 120) {
         lastLogTime = elapsed;
         log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}, url=${window.location.href.slice(-30)}`);
-        // DOM debug: log what selectors match, and biggest text blocks
+        // DOM debug: comprehensive search for where content lives
         const dbg = [];
         for (const s of ["main", "[data-message-author-role]", "[data-message-author-role='assistant']", "article", "[data-testid*='conversation-turn']", "div[class*='markdown']", "div[class*='prose']", "[class*='agent-turn']", "[role='presentation']", "[class*='conversation']", "[class*='thread']"]) {
           const els = document.querySelectorAll(s);
@@ -970,7 +970,41 @@
             dbg.push(`${s}:${els.length}(max=${maxLen})`);
           }
         }
-        log(`DOM debug: ${dbg.join(", ") || "NO MATCHES — ChatGPT DOM structure unknown"}`);
+        log(`DOM debug: ${dbg.join(", ") || "NO MATCHES"}`);
+
+        // Deep scan: check shadow DOM, iframes, and all large text nodes
+        let shadowCount = 0, iframeCount = 0, biggestText = 0;
+        document.querySelectorAll("*").forEach(el => {
+          if (el.shadowRoot) {
+            shadowCount++;
+            const sText = (el.shadowRoot.textContent || "").length;
+            if (sText > biggestText) biggestText = sText;
+          }
+        });
+        const iframes = document.querySelectorAll("iframe");
+        iframeCount = iframes.length;
+        let iframeBiggest = 0;
+        iframes.forEach(f => {
+          try {
+            const len = (f.contentDocument?.body?.innerText || "").length;
+            if (len > iframeBiggest) iframeBiggest = len;
+          } catch(e) { /* cross-origin */ }
+        });
+
+        // Check body total text vs main text
+        const bodyLen = (document.body?.innerText || "").length;
+
+        // Find the single biggest div by innerText
+        let bigDiv = 0, bigDivTag = "";
+        document.querySelectorAll("div").forEach(d => {
+          const len = (d.innerText || "").length;
+          if (len > bigDiv) {
+            bigDiv = len;
+            bigDivTag = d.className?.slice(0, 50) || d.id || "anon";
+          }
+        });
+
+        log(`DEEP: body=${bodyLen}, biggestDiv=${bigDiv}(${bigDivTag}), shadows=${shadowCount}(max=${biggestText}), iframes=${iframeCount}(max=${iframeBiggest})`);
       }
 
       // Only count extracted text that's meaningful
