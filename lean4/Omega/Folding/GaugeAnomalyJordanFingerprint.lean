@@ -171,4 +171,11 @@ theorem paper_fold_gauge_anomaly_jordan_fingerprint :
       minusHalfGeneralizedVector_not_eigenLine, minusHalfEigenspace_line,
       minusHalfGeneralizedEigenspace_span⟩
 
+/-- Paper-facing wrapper for the untwisted operator `A₀`: its spectrum has the explicit factorized
+fingerprint and `-1/2` supports the unique size-`2` Jordan block.
+    thm:fold-gauge-anomaly-A0-jordan -/
+theorem paper_fold_gauge_anomaly_a0_jordan :
+    gaugeAnomalyJordanSpectrumFingerprint ∧ gaugeAnomalyJordanBlockAtMinusHalf := by
+  exact paper_fold_gauge_anomaly_jordan_fingerprint
+
 end Omega.Folding
