@@ -74,6 +74,7 @@ import Omega.Folding.Fiber
 import Omega.Folding.FiberArithmetic
 import Omega.Folding.FiberArithmeticProperties
 import Omega.Folding.FiberConvolutionKernelInvertibility
+import Omega.Folding.FiberConvolutionKernelZeroSpectrum
 import Omega.Folding.FiberSubsetConvolution
 import Omega.Folding.FiberSingleCoordinateAffineDifference
 import Omega.Folding.FiberSingleCoordinateMinimalAugmentation

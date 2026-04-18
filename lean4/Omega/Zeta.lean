@@ -58,6 +58,7 @@ import Omega.Zeta.ETDSZeckendorfRegularPowerlaw
 import Omega.Zeta.EnergyTailMassSeeds
 import Omega.Zeta.EvenLengthCorrection
 import Omega.Zeta.FiniteDefectPoissonL2EnergyClosedForm
+import Omega.Zeta.FiniteDefectPoissonL2EnergyTailMass
 import Omega.Zeta.FiniteDefectCompleteReconstruction
 import Omega.Zeta.FinitePartCyclicLiftDirichletMultipleSum
 import Omega.Zeta.FinitePartCyclicLiftLimsupSpectralGap
