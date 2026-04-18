@@ -1,1 +1,2 @@
 import Omega.RatioResultant.RatioResultantDiscRigidity
+import Omega.RatioResultant.RatioResultantChebyshevParity
