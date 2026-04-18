@@ -10,6 +10,7 @@ import Omega.GroupUnification.FibTailReversibility
 import Omega.GroupUnification.FiniteTimeLaw
 import Omega.GroupUnification.FreeEnergyComposition
 import Omega.GroupUnification.FoldbinEquitableLumpabilitySpectralRigidity
+import Omega.GroupUnification.Foldbin6GeoStabilizerZ2
 import Omega.GroupUnification.GeneralNormalForm
 import Omega.GroupUnification.GeneralRigidity
 import Omega.GroupUnification.Gibbs

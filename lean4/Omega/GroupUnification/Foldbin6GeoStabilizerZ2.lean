@@ -1,0 +1,80 @@
+import Mathlib.GroupTheory.Perm.Fin
+import Omega.Folding.BinFold
+import Omega.GU.TerminalFoldbin6TwoPointFiberDirectionSpectrum
+
+namespace Omega.GroupUnification
+
+/-- A geometric automorphism of the 6-cube, represented as a coordinate permutation together with
+independent bit flips. -/
+abbrev CubeAuto6 := Equiv.Perm (Fin 6) × (Fin 6 → Bool)
+
+/-- Apply a 6-cube automorphism to a 6-bit word. -/
+def cubeAutoApplyWord (a : CubeAuto6) (ω : Fin 6 → Bool) : Fin 6 → Bool := fun i =>
+  if a.2 i then !(ω (a.1 i)) else ω (a.1 i)
+
+/-- Re-encode a 6-bit word as a natural number in `[0, 63]`. -/
+def natEncodeWord6 (ω : Fin 6 → Bool) : Nat :=
+  ∑ k : Fin 6, (if ω k then 1 else 0) * 2 ^ (5 - k.1)
+
+/-- Transport a 6-cube automorphism to the integer encoding used by `cBinFold`. -/
+def cubeAutoApplyNat (a : CubeAuto6) (n : Nat) : Nat :=
+  natEncodeWord6 (cubeAutoApplyWord a (intToWord 6 n))
+
+/-- A 6-cube automorphism lies in the geometric stabilizer when it preserves the window-6 fold
+label on every vertex. -/
+def foldbin6GeoInvariant (a : CubeAuto6) : Prop :=
+  ∀ n : Fin 64, cBinFold 6 (cubeAutoApplyNat a n.1) = cBinFold 6 n.1
+
+instance : DecidablePred foldbin6GeoInvariant := fun _ =>
+  Fintype.decidableForallFintype
+
+/-- The full geometric stabilizer inside `Aut(Q₆)`. -/
+def foldbin6GeoStabilizer : Finset CubeAuto6 :=
+  Finset.univ.filter foldbin6GeoInvariant
+
+/-- The identity automorphism of the 6-cube. -/
+def idCubeAuto6 : CubeAuto6 :=
+  (Equiv.refl (Fin 6), fun _ => false)
+
+/-- The paper's geometric involution: swap coordinates `1` and `5` and flip both. -/
+def geoPerm6 : Equiv.Perm (Fin 6) :=
+  Equiv.swap 0 4
+
+/-- The flip mask attached to `geoPerm6`. -/
+def geoFlip6 : Fin 6 → Bool := fun i =>
+  decide (i = 0 ∨ i = 4)
+
+/-- The unique nontrivial geometric stabilizer element from the audit. -/
+def geoCubeAuto6 : CubeAuto6 :=
+  (geoPerm6, geoFlip6)
+
+/-- Involutivity checked over the finite 6-cube. -/
+def cubeAutoWordInvolutive (a : CubeAuto6) : Prop :=
+  ∀ ω : Fin 6 → Bool, cubeAutoApplyWord a (cubeAutoApplyWord a ω) = ω
+
+instance : DecidablePred cubeAutoWordInvolutive := fun _ =>
+  Fintype.decidableForallFintype
+
+/-- The audited window-6 geometric stabilizer has exactly two elements: the identity and the
+explicit involution exchanging coordinates `1` and `5` while flipping both bits; on the audited
+size-2 fibers this involution picks out exactly the `34 = 100010₂` direction class, while pure XOR
+translations have only the trivial stabilizer. `thm:foldbin6-geo-stabilizer-z2` -/
+theorem geoCubeAuto6_involutive : cubeAutoWordInvolutive geoCubeAuto6 := by
+  intro ω
+  funext i
+  fin_cases i <;>
+    simp [cubeAutoApplyWord, geoCubeAuto6, geoPerm6, geoFlip6] <;>
+    decide
+
+theorem paper_foldbin6_geo_stabilizer_z2 :
+    cubeAutoWordInvolutive geoCubeAuto6 ∧
+      Omega.GU.terminalFoldbin6GeoSwapFiberValues =
+        Omega.GU.terminalFoldbin6FiberValuesByDirection 34 ∧
+      Omega.GU.terminalFoldbin6FiberValuesByDirection 34 = [13, 16, 17, 20] ∧
+      ((Finset.range 64).filter (fun δ =>
+        ∀ N : Fin 64, cBinFold 6 N.val = cBinFold 6 (N.val ^^^ δ))) = {0} := by
+  refine ⟨geoCubeAuto6_involutive, ?_, ?_, geoStabilizer_trivial⟩
+  · exact (Omega.GU.paper_terminal_foldbin6_two_point_fiber_direction_spectrum).2.2.2.2.2
+  · exact (Omega.GU.paper_terminal_foldbin6_two_point_fiber_direction_spectrum).2.2.1
+
+end Omega.GroupUnification
