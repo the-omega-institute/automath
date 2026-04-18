@@ -77,4 +77,26 @@ theorem paper_dispersion_combined_lower_bound_seed :
     linarith
   field_simp
 
+/-- The paper-facing dispersion bound: the reciprocal-sum lower bound implies the stated upper
+bound on the maximal mass after clearing denominators and rearranging.
+    cor:pom-max-mass-upper-bound-by-dispersion -/
+theorem paper_pom_max_mass_upper_bound_by_dispersion (n : ℕ) (D wmax : ℝ) (hn : 2 ≤ n)
+    (hD : 0 < D) (hwmax : 0 < wmax) (hwmax1 : wmax < 1)
+    (hlower : (1 / wmax + (↑n - 1) ^ 2 / (1 - wmax)) / ((↑n : ℝ) ^ 2) ≤ D) :
+    wmax ≤ 1 - (↑n - 1) ^ 2 / (((↑n : ℝ) ^ 2) * D) := by
+  have hn2 : (0 : ℝ) < (↑n : ℝ) ^ 2 := by positivity
+  have h1w : 0 < 1 - wmax := by linarith
+  have hsum :
+      1 / wmax + (↑n - 1) ^ 2 / (1 - wmax) ≤ D * (↑n : ℝ) ^ 2 := by
+    rw [div_le_iff₀ hn2] at hlower
+    simpa [mul_comm, mul_left_comm, mul_assoc] using hlower
+  have hterm :
+      (↑n - 1) ^ 2 / (1 - wmax) ≤ D * (↑n : ℝ) ^ 2 := by
+    have hnonneg : 0 ≤ 1 / wmax := by positivity
+    linarith
+  have hbound : (↑n - 1) ^ 2 ≤ D * ((↑n : ℝ) ^ 2 * (1 - wmax)) := by
+    rw [div_le_iff₀ h1w] at hterm
+    nlinarith [hterm]
+  exact paper_max_mass_rearrangement n D wmax hn hD hwmax hwmax1 hbound
+
 end Omega.POM

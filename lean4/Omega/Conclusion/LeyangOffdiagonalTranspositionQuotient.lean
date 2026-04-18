@@ -100,4 +100,17 @@ theorem paper_conclusion_leyang_offdiagonal_transposition_quotient :
     have h' := congrArg (fun τ : Equiv.Perm (Fin 4) => τ 2) h
     simp [offDiagonalTransposition] at h'
 
+/-- The boundary second-moment identity determines the point count and therefore the Frobenius
+trace of `D`.
+    cor:conclusion-leyang-boundary-second-moment-trace-readout -/
+theorem paper_conclusion_leyang_boundary_second_moment_trace_readout (p aE Mp ram : ℤ) :
+    ∃! data : ℤ × ℤ, Mp = data.1 - ram + aE ∧ data.2 = p + 1 - data.1 := by
+  refine ⟨(Mp + ram - aE, p + 1 - (Mp + ram - aE)), ?_, ?_⟩
+  · constructor <;> ring
+  · intro data hdata
+    rcases hdata with ⟨hMp, htrace⟩
+    apply Prod.ext
+    · linarith
+    · linarith
+
 end Omega.Conclusion
