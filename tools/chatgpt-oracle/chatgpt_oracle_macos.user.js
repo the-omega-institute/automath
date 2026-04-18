@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (macOS)
 // @namespace    omega-automath
-// @version      4.11
+// @version      4.12
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review — macOS variant with long-prompt extraction support
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -770,13 +770,33 @@
     return (clone.innerText || "").trim();
   }
 
-  function isSSRGarbage(text) {
-    // Reject responses that are SSR bootstrap scripts, not real ChatGPT output.
-    // These appear when the page hasn't hydrated yet.
-    // ONLY match the exact SSR pattern — do NOT use heuristics like jsRatio
-    // (short math responses with {} get false-positived).
+  function stripSSRGarbage(text) {
+    // Remove SSR bootstrap script fragments from extracted text instead of
+    // rejecting the entire response. Real ChatGPT replies can get mixed with
+    // SSR remnants in the same DOM extraction pass.
+    if (!text) return text;
+    // Remove known SSR script patterns
+    let cleaned = text
+      .replace(/I?window\.__oai_logHTML\?[^)]*\)\s*/g, "")
+      .replace(/window\.__oai_SSR_HTML\s*=\s*window\.__oai_SSR_HTML\s*\|\|\s*Date\.now\(\)\s*;?\s*/g, "")
+      .replace(/requestAnimationFrame\(\(function\(\)\{[^}]*\}\)\)\s*/g, "")
+      .replace(/window\.__oai_logTTI\?[^)]*\)\s*/g, "")
+      .replace(/window\.__oai_SSR_TTI\s*=\s*window\.__oai_SSR_TTI\s*\|\|\s*Date\.now\(\)\s*;?\s*/g, "")
+      .replace(/ChatGPT said:/g, "")
+      .trim();
+    return cleaned;
+  }
+
+  function isSSROnly(text) {
+    // Returns true ONLY if the text is ENTIRELY SSR garbage with no real content.
     if (!text || text.length < 10) return false;
-    return SSR_GARBAGE_RE.test(text);
+    const stripped = stripSSRGarbage(text);
+    // After stripping SSR, filter chrome lines too
+    const lines = stripped.split("\n").filter(l => {
+      const t = l.trim();
+      return t.length > 0 && !isChromeLine(t);
+    });
+    return lines.join("").trim().length < 20;
   }
 
   function extractResponseText() {
@@ -932,7 +952,7 @@
     while (Date.now() - startTime < MAX_WAIT) {
       await sleep(STABLE_INTERVAL);
 
-      const responseText = extractResponseText();
+      let responseText = extractResponseText();
       const generating = isStillGenerating();
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const mainLen = (document.querySelector("main")?.innerText || "").length;
@@ -964,14 +984,19 @@
           continue;
         }
 
-        // CRITICAL: reject SSR/hydration garbage (page not rendered yet)
-        if (isSSRGarbage(responseText)) {
-          if (stableCount === 0) {
-            log(`SSR garbage detected (${responseText.length} chars) — page still hydrating, waiting`);
+        // Strip SSR/hydration fragments from response (they can mix with real text)
+        if (SSR_GARBAGE_RE.test(responseText)) {
+          responseText = stripSSRGarbage(responseText);
+          // If NOTHING remains after stripping, page is still hydrating
+          if (isSSROnly(responseText)) {
+            if (stableCount === 0) {
+              log(`SSR-only content (${responseText.length} chars) — page still hydrating, waiting`);
+            }
+            stableCount = 0;
+            lastText = "";
+            continue;
           }
-          stableCount = 0;
-          lastText = "";
-          continue;
+          log(`Stripped SSR fragments, ${responseText.length} chars remain`);
         }
 
         if (responseText === lastText) {
