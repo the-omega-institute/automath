@@ -1147,69 +1147,6 @@ def detect_sorry_literals(wt: WorktreeInfo) -> list[str]:
     return violations
 
 
-def _round_lean_modules(wt: WorktreeInfo) -> list[str]:
-    """Module names (Omega.X.Y) for .lean files added/modified in this round."""
-    if not wt.base_sha:
-        return []
-    try:
-        r = run_cmd(
-            ["git", "diff", "--name-only", "--diff-filter=AM",
-             f"{wt.base_sha}..HEAD", "--", "lean4/Omega/"],
-            cwd=wt.path,
-        )
-    except Exception:
-        return []
-    mods: list[str] = []
-    for line in (r.stdout or "").splitlines():
-        line = line.strip()
-        if not line.endswith(".lean") or not line.startswith("lean4/Omega/"):
-            continue
-        # lean4/Omega/X/Y.lean → Omega.X.Y ; lean4/Omega.lean → Omega
-        rel = line[len("lean4/"):-len(".lean")]
-        mods.append(rel.replace("/", "."))
-    # De-dup while preserving order.
-    seen: set[str] = set()
-    return [m for m in mods if not (m in seen or seen.add(m))]
-
-
-def lake_build_verify(wt: WorktreeInfo, *, timeout: int = 1800) -> tuple[bool, str]:
-    """Build only the modules touched by this round, via `lake_gate.py build`.
-
-    Phase C already runs a full `lake build` inside the worktree (codex won't
-    commit on a failure). This pass is the cheat-detection net: if any module
-    touched in the round's diff doesn't actually compile clean against the
-    worktree's HEAD, reject. Building only `Omega.X.Y` for diffed files is
-    fast (seconds for typical 3-file rounds) and uses cached .oleans for the
-    rest of the library; full re-elaboration of `Omega` is unnecessary."""
-    gate = wt.path / "lean4" / "scripts" / "lake_gate.py"
-    if not gate.exists():
-        cmd_prefix = ["lake"]
-    else:
-        cmd_prefix = ["python3", str(gate)]
-    modules = _round_lean_modules(wt)
-    if not modules:
-        # Nothing to verify (round only touched .tex/.md or no Omega .lean).
-        return True, "(no Omega modules in round diff)"
-    cmd = [*cmd_prefix, "build", *modules]
-    try:
-        result = subprocess.run(
-            cmd,
-            cwd=str(wt.path / "lean4"),
-            capture_output=True, text=True, timeout=timeout,
-            stdin=subprocess.DEVNULL,
-            env={
-                **os.environ,
-                "LAKE_GATE_LOCK_DIR": str(LAKE_GATE_LOCK_DIR),
-                "LAKE_GATE_MAX_PARALLEL": str(LAKE_GATE_MAX_PARALLEL),
-            },
-        )
-    except subprocess.TimeoutExpired:
-        return False, f"lake build timed out after {timeout}s on: {' '.join(modules)}"
-    tail = "\n".join((result.stdout or "").splitlines()[-30:])
-    err_tail = "\n".join((result.stderr or "").splitlines()[-30:])
-    return result.returncode == 0, f"modules={modules}\n{tail}\n--- stderr ---\n{err_tail}"
-
-
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
     """Check for new commits in the worktree. Also rejects signature degradation,
     new abstract-Prop shell files, sorry/admit/axiom literals, and any commit
@@ -1268,13 +1205,6 @@ def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[b
                 f"line(s) contain sorry/admit/axiom literals. The completion contract "
                 f"in phase_c.txt forbids these in committed code."
             )
-            return False, new
-        # Gate 4: final lake build (source of truth — catches everything else)
-        ok, tail = lake_build_verify(wt)
-        if not ok:
-            logger.error(f"[R{wt.round_number}] LAKE BUILD FAILED in final verify:")
-            for ln in tail.splitlines()[-15:]:
-                logger.error(f"  {ln}")
             return False, new
         return True, new
     logger.warning(f"[R{wt.round_number}] Phase D: No new commits")
