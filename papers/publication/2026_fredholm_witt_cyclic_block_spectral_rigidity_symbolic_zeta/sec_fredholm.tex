@@ -899,66 +899,219 @@ For \(n\ge 1\) and \(\beta\in \CC\setminus\{0\}\), define
   \[
     \|D\|_p^p=\sum_k\abs{\lambda_k(T)}^p.
   \]
-  For \(n\ge 1\), let \(W_n\) be the diagonal unitary determined by
-  \(W_ne_n=-e_n\) and \(W_ne_m=e_m\) for \(m\ne n\). Set
+  By \Cref{thm:schatten-quantitative-stability},
   \[
-    T_0:=T,
-    \qquad
-    T_n:=\frac{T_{n-1}+W_nT_{n-1}W_n}{2}
-    \qquad (n\ge 1).
+    \|T\|_p^p
+    \ge \|D\|_p^p+\|T-D\|_p^p
+    \ge \|D\|_p^p,
   \]
-  Since \(T_{n-1}\mapsto W_nT_{n-1}W_n\) is an isometry of
-  \(\mathcal S_p\),
-  \[
-    \|T_n\|_p\le \|T_{n-1}\|_p
-    \qquad (n\ge 1).
-  \]
-  The operator \(T_n\) is still upper triangular, has the same diagonal
-  as \(T\), and all off-diagonal entries in the first \(n\) rows and
-  columns vanish. If \(Q_n\) denotes the orthogonal projection onto
-  \(\overline{\operatorname{span}}\{e_k:k>n\}\), then
-  \[
-    T_n-D=Q_n(T-D)Q_n.
-  \]
-  Since \(T-D\in \mathcal S_p(H)\), it follows that
-  \(
-    \|Q_n(T-D)Q_n\|_p\to 0
-  \),
-  and hence \(T_n\to D\) in \(\mathcal S_p(H)\). Therefore
-  \[
-    \|D\|_p\le \|T\|_p,
-  \]
-  which gives
+  and therefore
   \[
     \|T\|_p^p
     \ge \sum_k\abs{\lambda_k(T)}^p
     =\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
   \]
+  If equality holds, then \(\|T-D\|_p=0\), so \(T=D\) is normal. The
+  converse characterization follows from the equivalence
+  \textup{(i)}\(\Leftrightarrow\)\textup{(ii)} already proved.
+\end{proof}
 
-  Assume now that equality holds. Then
+The equality case above admits a quantitative strengthening that
+controls the full Schatten distance to the normal orbit.
+
+\begin{theorem}[Quantitative Schatten stability]
+  \label{thm:schatten-quantitative-stability}
+  \textbf{[New-1 | 2026-04-18]}
+  Fix an integer \(p\ge 2\), let \(T\in \mathcal S_p(H)\), and choose
+  an orthonormal basis \((e_k)_{k\ge 1}\) in which \(T\) is upper
+  triangular, with diagonal entries \(\lambda_k(T)\) repeated according
+  to algebraic multiplicity. Let \(D\) be the diagonal operator
+  determined by
   \[
-    \|T\|_p=\|D\|_p=\lim_{n\to\infty}\|T_n\|_p.
+    De_k=\lambda_k(T)e_k
+    \qquad (k\ge 1).
   \]
-  Since the sequence \(\|T_n\|_p\) is decreasing, one has
-  \(
-    \|T_n\|_p=\|T_{n-1}\|_p
-  \)
-  for every \(n\ge 1\). Because \(1<p<\infty\), the Banach space
-  \(\mathcal S_p(H)\) is strictly convex. The identity
+  Then \(D\in \mathcal S_p(H)\), \(T-D\in \mathcal S_p(H)\), and
+  \[
+    \|T-D\|_p^p
+    \le \|T\|_p^p-\|D\|_p^p
+    =\|T\|_p^p-\sum_k\abs{\lambda_k(T)}^p.
+  \]
+  If \(p=2\), then
+  \[
+    \|T-D\|_2^2
+    =\|T\|_2^2-\|D\|_2^2
+    =\|T\|_2^2-\sum_k\abs{\lambda_k(T)}^2.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Simon's eigenvalue-singular-value inequality
+  \cite[Theorem~1.15]{Simon2005TraceIdeals} gives
+  \[
+    \sum_k\abs{\lambda_k(T)}^p\le \|T\|_p^p,
+  \]
+  so \(D\in \mathcal S_p(H)\). Set
+  \[
+    K:=T-D\in \mathcal S_p(H).
+  \]
+  The operator \(K\) is strictly upper triangular in the chosen basis.
+
+  For \(n\ge 1\), let \(P_n\) be the orthogonal projection onto
+  \(\CC e_n\), and let \(Q_n\) be the orthogonal projection onto
+  \(\overline{\operatorname{span}}\{e_k:k>n\}\). Define
+  \[
+    R_n:=P_nKQ_n.
+  \]
+  Since \(K\) is strictly upper triangular,
+  \[
+    K=\sum_{n\ge 1}R_n
+  \]
+  in the strong operator topology. Moreover,
+  \[
+    R_nR_m^*=0
+    \qquad (n\ne m),
+  \]
+  because the ranges of the operators \(R_n\) are pairwise orthogonal.
+  Consequently,
+  \[
+    KK^*=\sum_{n\ge 1}R_nR_n^*
+  \]
+  with orthogonal positive summands, and therefore
+  \[
+    (KK^*)^{p/2}=\sum_{n\ge 1}(R_nR_n^*)^{p/2}.
+  \]
+  Taking traces yields
+  \begin{equation}\label{eq:schatten-row-sum}
+    \|K\|_p^p
+    =\sum_{n\ge 1}\|R_n\|_p^p.
+  \end{equation}
+
+  For \(n\ge 1\), let \(W_n\) be the diagonal unitary determined by
+  \[
+    W_ne_n=-e_n,
+    \qquad
+    W_ne_m=e_m
+    \qquad (m\ne n).
+  \]
+  Set
+  \[
+    T_0:=T,
+    \qquad
+    T_n:=D+Q_nKQ_n
+    \qquad (n\ge 1).
+  \]
+  Since \(K\) is strictly upper triangular,
+  \[
+    T_{n-1}=D+R_n+Q_nKQ_n.
+  \]
+  The unitary \(W_n\) fixes \(D\) and \(Q_nKQ_n\), while
+  \(W_nR_nW_n=-R_n\). Hence
   \[
     T_n=\frac{T_{n-1}+W_nT_{n-1}W_n}{2},
     \qquad
-    \|T_n\|_p=\|T_{n-1}\|_p,
+    R_n=\frac{T_{n-1}-W_nT_{n-1}W_n}{2}.
   \]
-  therefore forces
+  The Clarkson--McCarthy inequality for Schatten classes
+  \cite{BallCarlenLieb1994} therefore gives
+  \[
+    \|T_n\|_p^p+\|R_n\|_p^p\le \|T_{n-1}\|_p^p
+    \qquad (n\ge 1).
+  \]
+  Summation over \(1\le n\le N\) yields
+  \begin{equation}\label{eq:schatten-stability-telescope}
+    \sum_{n=1}^N\|R_n\|_p^p
+    \le \|T\|_p^p-\|T_N\|_p^p.
+  \end{equation}
+
+  Since \(K\in \mathcal S_p(H)\),
+  \[
+    T_N-D=Q_NKQ_N\longrightarrow 0
+  \]
+  in \(\mathcal S_p(H)\). Thus \(T_N\to D\) in \(\mathcal S_p(H)\), and
+  passing to the limit in \eqref{eq:schatten-stability-telescope},
+  followed by \eqref{eq:schatten-row-sum}, gives
+  \[
+    \|T-D\|_p^p
+    =\sum_{n\ge 1}\|R_n\|_p^p
+    \le \|T\|_p^p-\|D\|_p^p.
+  \]
+
+  If \(p=2\), then the diagonal operator \(D\) and the strictly upper
+  triangular operator \(K\) are orthogonal in the Hilbert--Schmidt inner
+  product. Therefore
+  \[
+    \|T\|_2^2=\|D\|_2^2+\|K\|_2^2,
+  \]
+  which is the stated identity.
+\end{proof}
+
+\begin{corollary}[Coercive rigidity in a determinant class]
+  \label{cor:schatten-coercive-rigidity}
+  \textbf{[New-2 | 2026-04-18]}
+  Fix an integer \(p\ge 2\) and Euler data
   \(
-    T_{n-1}=W_nT_{n-1}W_n
-  \).
-  Consequently \(T_n=T_{n-1}\) for every \(n\), and induction gives
-  \(T_n=T\) for all \(n\). Passing to the limit shows that \(T=D\), so
-  \(T\) is diagonal in the triangularizing basis and hence normal. The
-  converse characterization follows from the equivalence
-  \textup{(i)}\(\Leftrightarrow\)\textup{(ii)} already proved.
+    \mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}
+  \)
+  satisfying
+  \[
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}<\infty.
+  \]
+  For a Hilbert space \(H\), define
+  \[
+    \mathfrak N_{\mathcal D}(H)
+    :=\left\{
+      N\in \mathcal S_p(H):
+      N\text{ is normal and }
+      Z_{p,N}(z)
+      =\prod_{j\in J}\mathcal E_{p,n_j,\beta_j}(z)^{m_j}
+      \text{ near }z=0
+    \right\}.
+  \]
+  If \(T\in \mathcal S_p(H)\) satisfies
+  \[
+    Z_{p,T}(z)
+    =\prod_{j\in J}\mathcal E_{p,n_j,\beta_j}(z)^{m_j}
+  \]
+  near \(z=0\), then \(\mathfrak N_{\mathcal D}(H)\neq\varnothing\) and
+  \[
+    \inf_{N\in \mathfrak N_{\mathcal D}(H)}\|T-N\|_p^p
+    \le \|T\|_p^p-\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+  Consequently, if \((T_r)_{r\ge 1}\subset \mathcal S_p(H)\) all satisfy
+  the same determinant identity and
+  \[
+    \|T_r\|_p^p
+    \longrightarrow \sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j},
+  \]
+  then there exist \(N_r\in \mathfrak N_{\mathcal D}(H)\) such that
+  \[
+    \|T_r-N_r\|_p\to 0.
+  \]
+\end{corollary}
+
+\begin{proof}
+  Let \(L_{\mathcal D}\) be the block-cyclic model from
+  \Cref{thm:schatten-regularized}. Choose an orthonormal basis in which
+  \(T\) is upper triangular, with diagonal entries \(\lambda_k(T)\)
+  repeated according to algebraic multiplicity, and let \(D\) be the
+  diagonal operator with those entries. By
+  \Cref{thm:schatten-regularized}, \(T\) and \(L_{\mathcal D}\) have the
+  same non-zero spectrum with multiplicity. Since \(D\) is normal and
+  has the same non-zero spectral data, the normal-classification
+  argument in the proof of \Cref{thm:schatten-regularized} shows that
+  \(D\) is unitarily equivalent to \(0\oplus L_{\mathcal D}\). Hence
+  \(D\in \mathfrak N_{\mathcal D}(H)\), and
+  \[
+    \|D\|_p^p=\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+  The estimate from \Cref{thm:schatten-quantitative-stability} now gives
+  \[
+    \inf_{N\in \mathfrak N_{\mathcal D}(H)}\|T-N\|_p^p
+    \le \|T-D\|_p^p
+    \le \|T\|_p^p-\sum_{j\in J}m_jn_j\abs{\beta_j}^{p/n_j}.
+  \]
+  Applying this estimate to each \(T_r\) gives the final assertion.
 \end{proof}
 
 \begin{corollary}[Jensen formula for the spectral \(p\)-mass]
