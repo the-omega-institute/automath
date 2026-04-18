@@ -12,6 +12,7 @@ import Omega.Folding.BernoulliPAutocovarianceGeneratingRational
 import Omega.Folding.BernoulliPHalfFibonacciLowDefectShadow
 import Omega.Folding.BernoulliPMismatchStrictThirdOrderMarkov
 import Omega.Folding.BernoulliPMismatchEntropyRate
+import Omega.Folding.BernoulliPRegenerationConditionalLengthShiftedNB
 import Omega.Folding.BernoulliPRegenerationBivariatePGF
 import Omega.Folding.BernoulliPRegenerationTripleJointLaw
 import Omega.Folding.BernoulliPDoobTransformClosed

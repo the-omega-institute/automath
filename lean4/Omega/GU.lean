@@ -54,6 +54,7 @@ import Omega.GU.JGLeyangDoubleResultant
 import Omega.GU.JoukowskyAreaPreservingCayley
 import Omega.GU.JoukowskyEllipticTwoScaleStokesMean
 import Omega.GU.JoukowskyGodelLeadingCoeffRigidity
+import Omega.GU.JoukowskyGodelMonicBoundaryReadout
 import Omega.GU.JoukowskyGodelPullbackFactorization
 import Omega.GU.LeyangMahlerFreeEnergy
 import Omega.GU.LeyangHolographicN2
