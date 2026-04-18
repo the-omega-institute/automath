@@ -29,9 +29,10 @@
 - [ ] **FB-01**: Issue #118 Ch8 misformalisations。检查 Automath 的 Lean 4 证明技术能否修复。
 - [ ] **FB-02**: Issue #131 Ch20 Inequalities。检查 Automath 的 moment bounds (`MomentBounds.lean`) 是否有相关不等式。
 
-### math-inc/RiemannHypothesisCurves (50★)
+### math-inc/OpenGauss (1176★) + RiemannHypothesisCurves (50★)
 
-- [ ] **RH-01**: 方法论交流。他们用 Gauss agent 做自动形式化，我们用 Oracle pipeline。在 issue 里分享 pipeline 经验。
+- [ ] **MI-01**: OpenGauss (1176★) 是 Math Inc 的自动形式化 agent，"beating Aristotle"。方法论互补：他们做自动形式化（LaTeX→Lean），我们做自动发现（seed→theorems）。在 OpenGauss issue 里提出合作方向：用 Automath 的 discovery_report.json 作为 OpenGauss 的 benchmark corpus。
+- [ ] **RH-01**: RiemannHypothesisCurves (50★) 方法论交流。他们用 Gauss agent 做自动形式化，我们用 Oracle pipeline。在 issue 里分享 pipeline 经验。
 
 ### Zulip 社区
 
