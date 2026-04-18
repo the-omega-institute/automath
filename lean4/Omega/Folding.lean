@@ -40,6 +40,7 @@ import Omega.Folding.BinFoldGaugeM6
 import Omega.Folding.BinMinsectorLastbit1SectionUnique
 import Omega.Folding.BitRecoveryFromLocalCongruenceData
 import Omega.Folding.BinFoldMinsectorLastbitSectionUnique
+import Omega.Folding.BlockReservoirEncoding
 import Omega.Folding.BlockBijectionThreshold
 import Omega.Folding.BlockCountsThreshold
 import Omega.Folding.BoundaryLayer
@@ -208,6 +209,7 @@ import Omega.Folding.MomentSum
 import Omega.Folding.MomentTriple
 import Omega.Folding.NaivePrefixLift
 import Omega.Folding.NaturalStateComplexityGap
+import Omega.Folding.NormalizationComplexity
 import Omega.Folding.NormalizeThenTruncateFunctorial
 import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.OstrowskiQuadraticIrrationalPressureMatrixAlgebraicity
