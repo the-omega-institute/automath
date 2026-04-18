@@ -1,99 +1,22 @@
-\section{Fredholm Zeta Functions and Cyclic-Block Realisations}
-\label{sec:fredholm}
+\section{Cyclic-block normal realizations}\label{sec:fredholm}
 
-\noindent
-Throughout this section and for \(T\in\sone(H)\) we write
+For a trace-class operator \(T\) we write
 \[
-  Z_T(z):=\det(I-zT)^{-1},
-\]
-the Fredholm zeta function of \(T\).
-
-\subsection{A classical determinant-Euler-product identity}
-
-Let \(H\) be a complex Hilbert space and let \(T\in \sone(H)\) be a
-trace-class operator. Define
-\[
-  a_n(T):=\Tr(T^n),
-  \qquad
-  p_n(T):=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(T)
-  \qquad (n\ge 1).
-\]
-
-\begin{proposition}[Fredholm zeta function and Euler product]
-  \label{thm:fredholm-witt-bridge}
-  The following is a direct consequence of the classical Fredholm
-  determinant identity; we record it here to fix notation and to make
-  the Euler-product structure explicit. For every trace-class operator
-  \(T\) and every \(\abs{z}<\min(1,\norm{T}^{-1})\),
-  \[
-    Z_T(z)
-    =\exp\!\left(\sum_{n\ge 1}\frac{a_n(T)}{n}z^n\right)
-    =\prod_{n\ge 1}(1-z^n)^{-p_n(T)},
-  \]
-  where
-  \(
-    (1-z^m)^{-p_m(T)}
-    :=\exp\!\bigl(-p_m(T)\log(1-z^m)\bigr)
-  \)
-  and \(\log(1-z^m)\) denotes the principal branch on \(\abs{z}<1\).
-  This identity holds as an equality of holomorphic germs at \(z=0\);
-  equivalently, it is an identity of formal power series. Since the
-  exponents \(p_n(T)\) are in general not integers, the Euler product
-  is understood through this exponential branch convention and should
-  not be extended beyond the common disc of convergence without an
-  explicit branch choice.
-\end{proposition}
-
-\begin{proof}
-  The Fredholm zeta identity
-  \[
-    Z_T(z)
-    =\exp\!\left(\sum_{n\ge 1}\frac{\Tr(T^n)}{n}z^n\right)
-  \]
-  is classical for trace-class operators; see Grothendieck
-  \cite{Grothendieck1956} and \cite[Chapter~3]{Simon2005TraceIdeals}.
-  By definition of \(p_n(T)\), M\"obius inversion gives
-  \[
-    a_n(T)=\sum_{d\mid n}d\,p_d(T).
-  \]
-  Hence
-  \begin{align*}
-    \sum_{n\ge 1}\frac{a_n(T)}{n}z^n
-    &=\sum_{n\ge 1}\sum_{d\mid n}\frac{d\,p_d(T)}{n}z^n \\
-    &=\sum_{m\ge 1}\sum_{r\ge 1}\frac{p_m(T)}{r}z^{mr}
-      =-\sum_{m\ge 1}p_m(T)\log(1-z^m).
-  \end{align*}
-  Here \(\log(1-z^m)\) is the principal branch, which is single-valued
-  for \(\abs{z^m}<1\), i.e.\ for \(\abs{z}<1\). Together with the
-  convergence of the trace series for \(\abs{z}<\norm{T}^{-1}\), the
-  calculation is valid for \(\abs{z}<\min(1,\norm{T}^{-1})\).
-  Exponentiating gives the Euler product in the stated branch
-  convention.
-\end{proof}
-
-\begin{remark}[Euler coordinates beyond the finite-state setting]
-  \label{rem:witt-audit-constraints}
-  \Cref{thm:fredholm-witt-bridge} is purely operator-theoretic. In
-  contrast with \Cref{prop:prelim-trace-primitive}, the coordinates
-  \(p_n(T)\) need not be integers and need not be non-negative. Thus
-  trace-class realisability is strictly broader than finite-state
-  realisability.
-\end{remark}
-
-\subsection{A converse normal realisation by cyclic blocks}
-
-From this point on we use the determinant-intrinsic count
-\[
-  N(T):=\sum_{\lambda\in\spec(T)\setminus\{0\}} m_a(\lambda)
+  N(T):=\sum_{\lambda\in\spec(T)\setminus\{0\}}m_a(\lambda)
   \in \NN\cup\{\infty\},
 \]
 where \(m_a(\lambda)\) denotes the algebraic multiplicity of the
-eigenvalue \(\lambda\). For compact normal \(L\), the quantity \(N(L)\)
-is the rank of the support projection \(\mathbf 1_{(0,\infty)}(|L|)\),
-equivalently \(\dim\overline{\mathrm{ran}(L)}\).
+eigenvalue \(\lambda\). If \(L\) is compact and normal, then
+\[
+  N(L)
+  =\operatorname{rank}\mathbf 1_{(0,\infty)}(|L|)
+  =\dim\overline{\operatorname{ran}(L)}.
+\]
+Thus \(N(L)\) is the rank of the support projection rather than the
+dimension of the possibly non-closed range itself.
 
-For \(n\ge 1\), let \(\Pi_n\) denote the cyclic permutation matrix on
-\(\CC^n\). For \(\alpha\in\CC\) define the cyclic block
+For \(n\ge 1\), let \(\Pi_n\) be the cyclic permutation matrix on
+\(\CC^n\), and for \(\alpha\in\CC\) define
 \[
   C(n,\alpha):=\alpha\Pi_n.
 \]
@@ -102,20 +25,27 @@ has
 \begin{equation}\label{eq:cycle-block-det}
   \det(I-zC(n,\alpha))=1-\alpha^n z^n.
 \end{equation}
+The next theorem shows that these cyclic blocks are exactly the normal
+trace-class building blocks compatible with a prescribed Euler product.
 
 \begin{theorem}[Cyclic-block characterization]
   \label{thm:cyclic-fredholm-realisation}
-  Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) be a countable
-  family with
+  Let
+  \(
+    \mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}
+  \)
+  be a countable family with
   \[
-    n_j,m_j\in\NN,\qquad
+    n_j,m_j\in\NN,
+    \qquad
     \beta_j\in\CC\setminus\{0\},
   \]
   and assume that
   \[
     \sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}<\infty.
   \]
-  Choose \(\alpha_j\in\CC\) with \(\alpha_j^{n_j}=\beta_j\), and set
+  Choose \(\alpha_j\in\CC\) such that \(\alpha_j^{n_j}=\beta_j\), and
+  set
   \[
     H_{\mathcal D}
     :=\bigoplus_{j\in J}\bigl(\CC^{n_j}\otimes\CC^{m_j}\bigr),
@@ -128,159 +58,142 @@ has
     Z_{L_{\mathcal D}}(z)
     =\prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}
   \]
-  for every \(\abs{z}<\norm{L_{\mathcal D}}^{-1}\). Since
-  \(\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}<\infty\) and
-  \(m_jn_j\ge 1\), the sequence
-  \(\bigl(\abs{\beta_j}^{1/n_j}\bigr)_{j\in J}\) is bounded. Writing
+  as an identity of holomorphic germs at \(z=0\). In particular, if
   \[
-    r_{\mathcal D}:=\sup_{j\in J}\abs{\beta_j}^{1/n_j}<\infty,
+    r_{\mathcal D}:=\sup_{j\in J}\abs{\beta_j}^{1/n_j},
   \]
-  the identity holds in particular for \(\abs{z}<r_{\mathcal D}^{-1}\).
+  then \(r_{\mathcal D}<\infty\) and the identity holds for
+  \(\abs{z}<r_{\mathcal D}^{-1}\).
 
-  Moreover, for a normal trace-class operator \(L\in \sone(H)\), the
-  following are equivalent:
+  Moreover, if \(L\in \sone(H)\) is normal, then the following are
+  equivalent:
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item
       \[
         Z_L(z)
         =\prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}
       \]
-      in a neighbourhood of \(z=0\).
+      in a neighborhood of \(z=0\).
     \item There exist a Hilbert space \(H_0\) and a unitary operator
       \(U:H\to H_0\oplus H_{\mathcal D}\) such that
       \[
         ULU^{-1}=0_{H_0}\oplus L_{\mathcal D}.
       \]
   \end{enumerate}
-  In particular every trace-class normal realization satisfies
+  In particular, every normal realization satisfies
   \[
-    N(L)=\sum_{j\in J}m_j n_j,
+    N(L)=\sum_{j\in J}m_jn_j,
     \qquad
-    \|L\|_1=\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j},
+    \|L\|_1=\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}.
   \]
-  so each factor \((1-\beta_j z^{n_j})^{-m_j}\) forces exactly
-  \(m_jn_j\) non-zero eigenvalues. For compact normal \(L\), the first
-  equality is equivalent to
-  \(
-    \dim\overline{\mathrm{ran}(L)}=\sum_{j\in J}m_j n_j
-  \).
-  These quantities are attached to the chosen Euler data
-  \(\mathcal D\); the determinant-intrinsic version is separated out in
-  \Cref{prop:fredholm-factorisation-rigidity,cor:determinant-intrinsic-normal-data}.
 \end{theorem}
-
-The proof combines Simon's zero-description theorem
-\cite[Theorem~3.7]{Simon2005TraceIdeals}, the spectral theorem for
-compact normal operators \cite{Conway1990Course}, and the discrete
-Fourier diagonalization of the cyclic permutation matrix \(\Pi_n\).
 
 \begin{proof}
   Each block \(C(n_j,\alpha_j)\otimes I_{m_j}\) has singular value
-  \(\abs{\alpha_j}\) with multiplicity \(m_j n_j\). Therefore
+  \(\abs{\alpha_j}\) with multiplicity \(m_jn_j\). Therefore
   \[
-    \norm{L_{\mathcal D}}_1
-    =\sum_{j\in J}m_j n_j\abs{\alpha_j}
-    =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}
+    \|L_{\mathcal D}\|_1
+    =\sum_{j\in J}m_jn_j\abs{\alpha_j}
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}
     <\infty,
   \]
-  so \(L_{\mathcal D}\) is trace-class. For each \(j\), determinants
-  multiply over tensor products and \eqref{eq:cycle-block-det} gives
+  so \(L_{\mathcal D}\) is trace class. Since \(m_jn_j\ge 1\) for every
+  \(j\), the same summability implies
+  \(
+    r_{\mathcal D}<\infty
+  \).
+
+  For each \(j\), \eqref{eq:cycle-block-det} gives
   \[
     \det\!\bigl(I-z(C(n_j,\alpha_j)\otimes I_{m_j})\bigr)
     =\det(I-zC(n_j,\alpha_j))^{m_j}
     =(1-\beta_j z^{n_j})^{m_j}.
   \]
-  To pass from finite direct sums to the countable direct sum, define
-  the finite-rank truncations
+  Let
   \[
-    L_{\mathcal D}^{(N)}:=\bigoplus_{j\le N}
-      \bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr).
+    L_{\mathcal D}^{(N)}
+    :=\bigoplus_{j\le N}\bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr).
   \]
   Then
   \[
-    \norm{L_{\mathcal D}-L_{\mathcal D}^{(N)}}_1
-    =\sum_{j>N}m_j n_j\abs{\beta_j}^{1/n_j}\to 0
-    \qquad (N\to\infty).
+    \|L_{\mathcal D}-L_{\mathcal D}^{(N)}\|_1
+    =\sum_{j>N}m_jn_j\abs{\beta_j}^{1/n_j}\to 0.
   \]
-  By trace-norm continuity of the Fredholm determinant
+  By the trace-norm continuity of the Fredholm determinant
   \cite[Theorem~3.4]{Simon2005TraceIdeals},
   \[
-    \abs{\det(I+K)-\det(I+L)}
-    \le\norm{K-L}_1\exp\!\bigl(1+\norm{K}_1+\norm{L}_1\bigr),
+    \det(I-zL_{\mathcal D})
+    =\lim_{N\to\infty}\det(I-zL_{\mathcal D}^{(N)})
   \]
-  it follows that, locally uniformly in \(z\),
-  \[
-    \det\!\bigl(I-zL_{\mathcal D}\bigr)
-    =\lim_{N\to\infty}
-    \det\!\bigl(I-zL_{\mathcal D}^{(N)}\bigr).
-  \]
-  Since each finite truncation satisfies
+  locally uniformly in \(z\). Since
   \[
     Z_{L_{\mathcal D}^{(N)}}(z)
     =\prod_{j\le N}(1-\beta_j z^{n_j})^{-m_j},
   \]
-  passing to the limit gives the infinite product identity
+  passage to the limit yields
   \[
     Z_{L_{\mathcal D}}(z)
-    =\prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}.
+    =\prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}
   \]
-  The operator norm satisfies
+  as a germ at \(0\). The operator norm satisfies
   \[
-    \norm{L_{\mathcal D}}
+    \|L_{\mathcal D}\|
     =\sup_{j\in J}\abs{\alpha_j}
     =\sup_{j\in J}\abs{\beta_j}^{1/n_j}
-    =r_{\mathcal D}.
+    =r_{\mathcal D},
   \]
+  so the identity is valid in particular for \(\abs{z}<r_{\mathcal D}^{-1}\).
 
-  The implication \textup{(ii)}\(\Rightarrow\)\textup{(i)} is immediate
-  from the direct-sum formula above. Conversely, assume \textup{(i)}.
-  The first part of the theorem constructs \(L_{\mathcal D}\) with the
-  same Fredholm determinant near \(0\), so
+  The implication \textup{(ii)}\(\Rightarrow\)\textup{(i)} is immediate.
+  Conversely, assume \textup{(i)}. The first part of the theorem
+  furnishes a normal operator \(L_{\mathcal D}\) with the same Fredholm
+  zeta germ, and hence
   \[
     \det(I-zL)=\det(I-zL_{\mathcal D})
   \]
-  as holomorphic germs at the origin. Both sides are entire, hence
-  identical on \(\CC\). By \cite[Theorem~3.7]{Simon2005TraceIdeals},
-  the zeros of the Fredholm determinant are precisely the reciprocals
-  of the non-zero eigenvalues, counted with algebraic multiplicity.
-  Therefore \(L\) and \(L_{\mathcal D}\) have the same non-zero
-  spectrum with multiplicity.
+  as entire functions. By \cite[Theorem~3.7]{Simon2005TraceIdeals}, the
+  zeros of \(\det(I-zT)\) are precisely the reciprocals of the non-zero
+  eigenvalues of \(T\), counted with algebraic multiplicity. Therefore
+  \(L\) and \(L_{\mathcal D}\) have the same non-zero spectrum with
+  multiplicity.
 
-  The operator \(L_{\mathcal D}\) is normal, and for each \(j\) its
-  non-zero eigenvalues are the numbers
+  The operator \(L_{\mathcal D}\) is normal, and its non-zero
+  eigenvalues are the numbers
   \[
-    \alpha_j\omega,\qquad \omega^{n_j}=1,
+    \alpha_j\omega,
+    \qquad
+    \omega^{n_j}=1,
   \]
-  each with multiplicity \(m_j\). Since \(L\) is normal, the spectral
-  theorem for compact normal operators \cite{Conway1990Course} gives an
+  each occurring with multiplicity \(m_j\). Since \(L\) is compact and
+  normal, the spectral theorem \cite{Conway1990Course} gives an
   orthogonal decomposition
   \[
     H=\ker L\oplus\bigoplus_{\lambda\in\spec(L)\setminus\{0\}}E_\lambda,
+    \qquad
+    L|_{E_\lambda}=\lambda I.
   \]
-  where \(L|_{E_\lambda}=\lambda I\). For each non-zero eigenvalue
-  \(\lambda\), let
+  For each non-zero eigenvalue \(\lambda\), let
   \[
-    J_\lambda:=\bigl\{j\in J:\lambda=\alpha_j\omega
+    J_\lambda
+    :=\bigl\{j\in J:\lambda=\alpha_j\omega
       \text{ for some }\omega^{n_j}=1\bigr\}.
   \]
-  Since \(L_{\mathcal D}\) is trace-class, the multiplicity of
-  \(\lambda\) is finite, so \(J_\lambda\) is finite and
+  Since the multiplicity of \(\lambda\) is finite,
   \[
-    \dim E_\lambda
-    =\sum_{j\in J_\lambda} m_j .
+    \dim E_\lambda=\sum_{j\in J_\lambda}m_j.
   \]
   Choose an orthogonal decomposition
   \[
-    E_\lambda=\bigoplus_{j\in J_\lambda} E_{\lambda,j},
+    E_\lambda=\bigoplus_{j\in J_\lambda}E_{\lambda,j},
     \qquad
-    \dim E_{\lambda,j}=m_j .
+    \dim E_{\lambda,j}=m_j.
   \]
   For each \(j\), set
   \[
     H_j:=\bigoplus_{\omega^{n_j}=1}E_{\alpha_j\omega,j}.
   \]
-  Then \(H_j\) is reducing for \(L\), pairwise orthogonal in \(j\), and
-  \(L|_{H_j}\) is unitarily equivalent to
+  Then \(H_j\) is reducing for \(L\), the subspaces \(H_j\) are pairwise
+  orthogonal, and \(L|_{H_j}\) is unitarily equivalent to
   \[
     \bigoplus_{\omega^{n_j}=1}\alpha_j\omega\,I_{m_j}.
   \]
@@ -291,178 +204,140 @@ Fourier diagonalization of the cyclic permutation matrix \(\Pi_n\).
     \cong C(n_j,\alpha_j)\otimes I_{m_j}.
   \]
   Hence \(L\) is unitarily equivalent to
-  \(0_{\ker L}\oplus L_{\mathcal D}\), proving \textup{(ii)}. Each
-  \(j\)th block contributes exactly \(m_jn_j\) non-zero eigenvalues, so
-  \(N(L)=\sum_j m_jn_j\). The trace norm identity follows from the
-  first part of the proof and unitary invariance of \(\|\cdot\|_1\).
+  \(
+    0_{\ker L}\oplus L_{\mathcal D}
+  \),
+  which proves \textup{(ii)}. The formulas for \(N(L)\) and \(\|L\|_1\)
+  are now immediate from the first part of the proof.
 \end{proof}
 
-\begin{remark}[Worked example: overlapping eigenvalues from distinct Euler factors]
-  \label{rem:overlapping-eigenvalues}
-  Consider two Euler factors that contribute the same eigenvalue. Take
-  \(\mathcal D=\{(2,\alpha_1^2,1),(1,\alpha_2,1)\}\) with
-  \(\alpha_1=\alpha_2=:\alpha\ne 0\). Factor~1 contributes eigenvalues
-  \(\alpha\) and \(-\alpha\) (the two square roots of
-  \(\alpha_1^2=\alpha^2\)), each with multiplicity~\(1\). Factor~2
-  contributes the single eigenvalue \(\alpha_2=\alpha\) with
-  multiplicity~\(1\). Hence \(\alpha\) appears with total
-  multiplicity~\(2\) and \(-\alpha\) appears with multiplicity~\(1\).
-
-  Now let \(L\) be any normal trace-class operator with this Fredholm
-  determinant. By the spectral theorem, the eigenspace \(E_\alpha\) has
-  dimension~\(2\) and \(E_{-\alpha}\) has dimension~\(1\). The necessity
-  proof splits \(E_\alpha\) into two orthogonal pieces: a
-  one-dimensional piece assigned to factor~1 and a one-dimensional piece
-  assigned to factor~2. Regrouping by factor index gives:
-  \begin{itemize}
-    \item Factor~1 owns a two-dimensional reducing subspace spanned by
-      its share of \(E_\alpha\) (dimension~\(1\)) and all of
-      \(E_{-\alpha}\) (dimension~\(1\)). The DFT on \(\CC^2\)
-      identifies this with \(C(2,\alpha)\).
-    \item Factor~2 owns a one-dimensional reducing subspace (the
-      remaining share of \(E_\alpha\)), which is \(C(1,\alpha)\).
-  \end{itemize}
-  This decomposition is unique up to the choice of orthonormal basis
-  within the shared eigenspace \(E_\alpha\). The contributions
-  \(m_1n_1=2\) and \(m_2n_2=1\) to \(N(L)\) are forced; no normal
-  realisation can use fewer non-zero eigenvalues.
-\end{remark}
-
-\begin{definition}[Block-cyclic normal realisation]
+\begin{definition}[Block-cyclic normal realization]
   \label{def:block-cyclic-normal-realisation}
   A normal operator \(L\in \sone(H)\) satisfying
   \Cref{thm:cyclic-fredholm-realisation}\textup{(ii)} is called a
-  block-cyclic normal realisation of the Euler data
+  \emph{block-cyclic normal realization} of the Euler data
   \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\).
 \end{definition}
 
-\begin{corollary}[Prescribed-data spectral count and trace norm in the normal class]
+\begin{corollary}[Prescribed spectral count and trace norm]
   \label{thm:block-cyclic-rigidity}
-  Every block-cyclic normal realisation \(L\) of \(\mathcal D\) in the
-  sense of \Cref{def:block-cyclic-normal-realisation} satisfies
+  Every block-cyclic normal realization \(L\) of \(\mathcal D\) satisfies
   \[
-    N(L)=\sum_{j\in J}m_j n_j,
+    N(L)=\sum_{j\in J}m_jn_j,
     \qquad
-    \|L\|_1
-    =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}.
+    \|L\|_1=\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}.
   \]
-  For compact normal \(L\), equivalently,
+  If \(L\) is compact and normal, this is equivalent to
   \[
-    \dim\overline{\mathrm{ran}}(L)=\sum_{j\in J}m_j n_j.
+    \dim\overline{\operatorname{ran}(L)}=\sum_{j\in J}m_jn_j.
   \]
-  Consequently the summability condition in
-  \Cref{thm:cyclic-fredholm-realisation} is both necessary and
-  sufficient for normal trace-class realisability, and for a single
-  factor \((1-\beta z^n)^{-m}\) no normal trace-class realisation can
-  have fewer than \(mn\) non-zero eigenvalues.
+  Consequently, the summability condition in
+  \Cref{thm:cyclic-fredholm-realisation} is necessary and sufficient for
+  normal trace-class realizability, and a single factor
+  \((1-\beta z^n)^{-m}\) forces exactly \(mn\) non-zero eigenvalues.
 \end{corollary}
 
 \begin{proof}
   By definition, \(L\) is unitarily equivalent to
   \(0_{H_0}\oplus L_{\mathcal D}\) for some Hilbert space \(H_0\). Each
-  block \(C(n_j,\alpha_j)\otimes I_{m_j}\) contributes \(m_jn_j\)
-  non-zero eigenvalues counted with algebraic multiplicity, so
-  \[
-    N(L)=N(L_{\mathcal D})=\sum_{j\in J}m_j n_j.
-  \]
-  Since \(L\) is compact and normal, this is equivalent to
-  \[
-    \dim\overline{\mathrm{ran}}(L)=\sum_{j\in J}m_j n_j.
-  \]
-  The singular values of \(C(n_j,\alpha_j)\otimes I_{m_j}\) are all
-  equal to \(\abs{\alpha_j}=\abs{\beta_j}^{1/n_j}\), each with
-  multiplicity \(m_j n_j\). Therefore
-  \[
-    \|L\|_1
-    =\|L_{\mathcal D}\|_1
-    =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}.
-  \]
-  The final statement is the single-factor specialization.
+  block contributes \(m_jn_j\) non-zero eigenvalues and trace norm
+  \(m_jn_j\abs{\beta_j}^{1/n_j}\), so the stated formulas follow. The
+  compact-normal interpretation of \(N(L)\) was noted at the beginning
+  of the section.
 \end{proof}
 
-\begin{remark}[Sharpness of the summability condition]
-  \label{rem:summability-sharpness}
-  \Cref{thm:cyclic-fredholm-realisation,thm:block-cyclic-rigidity}
-  show that
-  \[
-    \sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}<\infty
-  \]
-  is exactly the criterion for normal trace-class realisability of the
-  prescribed Euler data. Within the normal category, the summability
-  hypothesis is both necessary and sufficient. Whether the same Euler
-  product can admit a non-normal trace-class realisation under strictly
-  weaker hypotheses, or with different Jordan geometry, is not
-  addressed in this paper.
+\begin{remark}[Choice of roots]
+  \label{rem:choice-of-roots}
+  Replacing \(\alpha_j\) by another \(n_j\)th root of \(\beta_j\) merely
+  rotates the same regular \(n_j\)-gon of eigenvalues. Hence the block
+  \(C(n_j,\alpha_j)\otimes I_{m_j}\) is determined only up to unitary
+  equivalence, which is all that is needed in
+  \Cref{thm:cyclic-fredholm-realisation}.
 \end{remark}
 
-\begin{remark}[Choice of roots]\label{rem:choice-of-roots}
-  Replacing \(\alpha_j\) by another \(n_j\)th root of \(\beta_j\)
-  merely rotates the same regular \(n_j\)-gon of eigenvalues. Hence the
-  corresponding blocks \(C(n_j,\alpha_j)\otimes I_{m_j}\) are unitarily
-  equivalent. The determinant data determine the block only up to this
-  harmless relabelling and the addition of zero summands.
-\end{remark}
+\section{Spectral rigidity and trace-norm minimality}
+\label{sec:rigidity}
 
-\begin{proposition}[Fredholm factorisation rigidity]
+We now turn from the normal classification to consequences that depend
+only on the Fredholm determinant. Once a single admissible block-cyclic
+model is available, Simon's description of the zeros of
+\(\det(I-zT)\) forces the non-zero spectrum of every trace-class
+realization.
+
+\begin{proposition}[Fredholm factorization rigidity]
   \label{prop:fredholm-factorisation-rigidity}
   \begin{enumerate}[label=\textup{(\alph*)}]
     \item Let
-      \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) and
-      \(\mathcal D'=\{(n'_\ell,\beta'_\ell,m'_\ell)\}_{\ell\in L}\)
-      satisfy the summability condition of
-      \Cref{thm:cyclic-fredholm-realisation}. If their Euler products
-      agree as holomorphic germs at \(z=0\), then the cyclic-block
-      models \(L_{\mathcal D}\) and \(L_{\mathcal D'}\) have the same
-      non-zero eigenvalue multiset (with algebraic multiplicity). In
-      particular,
       \[
-        \sum_jm_jn_j=\sum_\ell m'_\ell n'_\ell,
+        \mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J},
         \qquad
-        \sum_jm_jn_j\abs{\beta_j}^{1/n_j}
-        =\sum_\ell m'_\ell n'_\ell\abs{\beta'_\ell}^{1/n'_\ell},
+        \mathcal D'=\{(n'_\ell,\beta'_\ell,m'_\ell)\}_{\ell\in L},
       \]
-      so the values of \(N(L)\) and \(\|L\|_1\) for any normal
-      realisation \(L\) are intrinsic to the Fredholm zeta germ.
-    \item Let \(T_1,T_2\in\sone(H)\). If \(Z_{T_1}(z)=Z_{T_2}(z)\) in a
-      neighbourhood of \(z=0\), then \(T_1\) and \(T_2\) have the same
-      non-zero spectrum with algebraic multiplicity. Consequently
-      \(\Tr(T_1^n)=\Tr(T_2^n)\) and \(p_n(T_1)=p_n(T_2)\) for every
-      \(n\ge 1\).
+      and assume that both data sets satisfy the summability condition
+      of \Cref{thm:cyclic-fredholm-realisation}. If the corresponding
+      Euler products agree as holomorphic germs at \(z=0\), then the
+      block-cyclic models attached to \(\mathcal D\) and
+      \(\mathcal D'\) have the same non-zero eigenvalue multiset,
+      counted with algebraic multiplicity.
+      In particular,
+      \[
+        \sum_{j\in J}m_jn_j=\sum_{\ell\in L}m'_\ell n'_\ell,
+      \]
+      and the corresponding trace-norm sums
+      \[
+        \sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j},
+        \qquad
+        \sum_{\ell\in L}m'_\ell n'_\ell\abs{\beta'_\ell}^{1/n'_\ell},
+      \]
+      are equal.
+    \item Let \(T_1,T_2\in \sone(H)\). If
+      \(
+        Z_{T_1}(z)=Z_{T_2}(z)
+      \)
+      in a neighborhood of \(z=0\), then \(T_1\) and \(T_2\) have the
+      same non-zero spectrum with algebraic multiplicity. Consequently,
+      \[
+        \Tr(T_1^n)=\Tr(T_2^n),
+        \qquad
+        p_n(T_1)=p_n(T_2)
+        \qquad (n\ge 1).
+      \]
   \end{enumerate}
 \end{proposition}
 
 \begin{proof}
-  For (a), \Cref{thm:cyclic-fredholm-realisation} produces normal
-  trace-class models \(L_{\mathcal D}\) and \(L_{\mathcal D'}\) whose
-  Fredholm zeta functions equal the respective Euler products. Taking
-  reciprocals shows that the entire determinants
-  \(z\mapsto\det(I-zL_{\mathcal D})\) and
-  \(z\mapsto\det(I-zL_{\mathcal D'})\) coincide near \(0\), hence on all
-  of \(\CC\) by the identity theorem. Simon's zero-description theorem
-  \cite[Theorem~3.7]{Simon2005TraceIdeals} identifies the zeros of these
-  entire functions with the reciprocals of the non-zero eigenvalues,
-  counted with algebraic multiplicity, so the eigenvalue multisets agree.
-  The formulas for \(N(L)\) and \(\|L\|_1\) follow by summing the common
-  multiset of eigenvalues.
+  For \textup{(a)}, \Cref{thm:cyclic-fredholm-realisation} produces
+  normal models \(L_{\mathcal D}\) and \(L_{\mathcal D'}\) with the
+  prescribed Euler products as Fredholm zeta germs. Taking reciprocals,
+  the entire functions
+  \[
+    z\mapsto \det(I-zL_{\mathcal D}),
+    \qquad
+    z\mapsto \det(I-zL_{\mathcal D'})
+  \]
+  agree near \(0\), hence everywhere. Simon's theorem
+  \cite[Theorem~3.7]{Simon2005TraceIdeals} identifies their zeros with
+  the reciprocals of the non-zero eigenvalues, counted with algebraic
+  multiplicity. This gives the equality of eigenvalue multisets and,
+  after summing moduli and multiplicities, the two displayed identities.
 
-  For (b), equality of Fredholm zeta functions implies equality of the
-  corresponding entire determinants for small \(z\), hence on all of
-  \(\CC\). The same zero-description theorem therefore gives identical
-  non-zero spectra with multiplicity. Expanding
-  \(\log Z_{T_i}(z)=\sum_{n\ge 1}\Tr(T_i^n)z^n/n\) shows that the trace
-  sequences and the M\"obius-inverted coordinates \(p_n(T_i)\) coincide.
+  For \textup{(b)}, the same argument applied directly to \(T_1\) and
+  \(T_2\) yields equality of the non-zero spectra with multiplicity.
+  Comparing the logarithmic expansions of \(Z_{T_1}\) and \(Z_{T_2}\)
+  then shows that the trace sequences agree, and hence so do the
+  M\"obius-inverted coordinates.
 \end{proof}
 
 \begin{corollary}[Determinant-intrinsic spectral count and trace norm in the normal class]
   \label{cor:determinant-intrinsic-normal-data}
-  Let \(f\) be a holomorphic germ at \(0\) that admits an Euler
+  Let \(f\) be a holomorphic germ at \(0\) admitting an Euler
   factorization
   \[
     f(z)=\prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}
   \]
   satisfying the summability condition of
-  \Cref{thm:cyclic-fredholm-realisation}. If \(L\in\sone(H)\) is
-  normal and
+  \Cref{thm:cyclic-fredholm-realisation}. If \(L\in\sone(H)\) is normal
+  and
   \[
     Z_L(z)=f(z)
   \]
@@ -470,89 +345,71 @@ Fourier diagonalization of the cyclic permutation matrix \(\Pi_n\).
   \[
     N(L)=\sum_{j\in J}m_jn_j,
     \qquad
-    \|L\|_1=\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j},
+    \|L\|_1=\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}.
   \]
-  and for compact normal \(L\) this is equivalent to
+  For compact normal \(L\), this is equivalent to
   \[
-    \dim\overline{\mathrm{ran}}(L)=\sum_{j\in J}m_jn_j.
+    \dim\overline{\operatorname{ran}(L)}=\sum_{j\in J}m_jn_j.
   \]
-  The right-hand side is independent of the chosen Euler factorization
-  of \(f\).
+  The right-hand sides depend only on the Fredholm zeta germ \(f\), not
+  on the chosen Euler factorization.
 \end{corollary}
 
 \begin{proof}
-  Apply \Cref{thm:cyclic-fredholm-realisation,thm:block-cyclic-rigidity}
-  to one Euler data set \(\mathcal D\) for \(f\), then use
-  \Cref{prop:fredholm-factorisation-rigidity} to see that the two sums
-  depend only on the determinant germ.
+  Apply \Cref{thm:block-cyclic-rigidity} to one admissible Euler
+  factorization of \(f\), and then use
+  \Cref{prop:fredholm-factorisation-rigidity}\textup{(a)}.
 \end{proof}
 
-The next supporting statement is not an additional normal-form theorem: once
-\Cref{thm:cyclic-fredholm-realisation} supplies one model for the given
-Euler product, Simon's zero description immediately propagates the same
-eigenvalue data to every trace-class realisation.
-\begin{proposition}[Supporting determinant-imposed eigenvalue multiset for general trace-class operators]
+The next statement records the corresponding consequence without any
+normality assumption.
+
+\begin{proposition}[Determinant-imposed eigenvalue multiset for trace-class realizations]
   \label{thm:general-support-optimality}
-  Let \(T\in\sone(H)\) be any trace-class operator (not necessarily
-  normal) with
+  Let \(T\in \sone(H)\) satisfy
   \[
     Z_T(z)
     =\prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}
   \]
   near \(z=0\), where the Euler data satisfy the summability condition
-  of \Cref{thm:cyclic-fredholm-realisation}. Then the non-zero
-  spectrum of \(T\) (with algebraic multiplicity) is the multiset
+  of \Cref{thm:cyclic-fredholm-realisation}. Then the non-zero spectrum
+  of \(T\), counted with algebraic multiplicity, is
   \[
-    \biguplus_{j\in J}
-      \bigl\{\alpha_j\omega:\omega^{n_j}=1\bigr\}^{m_j},
+    \biguplus_{j\in J}\bigl\{\alpha_j\omega:\omega^{n_j}=1\bigr\}^{m_j},
+    \qquad
+    \alpha_j^{n_j}=\beta_j.
   \]
-  and in particular
+  In particular,
   \[
     N(T)=\sum_{j\in J}m_jn_j.
   \]
-  Thus every trace-class realisation of this Fredholm zeta function has
-  exactly \(\sum_j m_jn_j\) non-zero eigenvalues counted with algebraic
-  multiplicity.
 \end{proposition}
 
 \begin{proof}
-  Let \(L_{\mathcal D}\) be the normal model for the given Euler data.
-  Then \(Z_T(z)=Z_{L_{\mathcal D}}(z)\) near \(0\), so
-  \Cref{prop:fredholm-factorisation-rigidity}\textup{(b)} applied to
-  \(T\) and \(L_{\mathcal D}\) gives identical non-zero spectra and the
-  stated count for \(N(T)\).
+  Let \(L_{\mathcal D}\) be the block-cyclic model associated with the
+  given Euler data. Then
+  \(Z_T(z)=Z_{L_{\mathcal D}}(z)\) near \(0\), so
+  \Cref{prop:fredholm-factorisation-rigidity}\textup{(b)} shows that
+  \(T\) and \(L_{\mathcal D}\) have the same non-zero eigenvalues with
+  algebraic multiplicity. The description of the spectrum of
+  \(L_{\mathcal D}\) is immediate from the definition of the cyclic
+  blocks.
 \end{proof}
 
-\begin{remark}[Normal versus non-normal]
-  \label{rem:normal-vs-nonnormal}
-  \Cref{thm:general-support-optimality} shows that the spectral
-  content---eigenvalue multiset, the count \(N(T)\), and hence the
-  minimal number of non-zero eigenvalues---is the same for every
-  trace-class realisation, whether normal or not. What distinguishes
-  the normal category is the structural rigidity of
-  \Cref{thm:cyclic-fredholm-realisation}: a normal realisation is
-  forced to decompose into cyclic blocks and is determined up to
-  unitary equivalence and a zero summand. A non-normal operator with
-  the same Fredholm zeta function has the same eigenvalues but may have
-  non-trivial Jordan structure; in particular, its \emph{geometric}
-  multiplicities may differ from the algebraic ones.
-\end{remark}
-
-\begin{theorem}[Trace-norm minimality for a prescribed Fredholm zeta function]
+\begin{theorem}[Trace-norm minimality]
   \label{thm:trace-norm-minimality}
-  Let \(T\in\sone(H)\) satisfy
+  Let \(T\in \sone(H)\) satisfy
   \[
     Z_T(z)=\prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}
   \]
   near \(z=0\), where the Euler data obey the summability condition of
   \Cref{thm:cyclic-fredholm-realisation}. Then
   \[
-    \|T\|_1
-    \ge \sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j},
+    \|T\|_1\ge \sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}.
   \]
-  with equality if and only if \(T\) is normal; equivalently, if and
-  only if there exist a Hilbert space \(H_0\) and a unitary operator
-  \(U:H\to H_0\oplus H_{\mathcal D}\) such that
+  Equality holds if and only if \(T\) is normal. Equivalently, equality
+  holds if and only if there exist a Hilbert space \(H_0\) and a unitary
+  operator \(U:H\to H_0\oplus H_{\mathcal D}\) such that
   \[
     UTU^{-1}=0_{H_0}\oplus L_{\mathcal D},
   \]
@@ -561,43 +418,40 @@ eigenvalue data to every trace-class realisation.
 \end{theorem}
 
 \begin{proof}
-  Let \(L_{\mathcal D}\) be the block-cyclic normal model produced by
-  \Cref{thm:cyclic-fredholm-realisation} for the same Euler data.
-  By \Cref{prop:fredholm-factorisation-rigidity}\textup{(b)},
+  Let \(L_{\mathcal D}\) be the block-cyclic model associated with the
+  given Euler data. By
+  \Cref{prop:fredholm-factorisation-rigidity}\textup{(b)},
   \(T\) and \(L_{\mathcal D}\) have the same non-zero eigenvalues with
-  algebraic multiplicity; their moduli sum to
-  \(
-    \sum_{j}m_jn_j\abs{\beta_j}^{1/n_j}
-  \).
+  algebraic multiplicity. Hence
+  \[
+    \sum_k\abs{\lambda_k(T)}
+    =\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}
+    =\|L_{\mathcal D}\|_1.
+  \]
   Simon's eigenvalue-singular-value inequality
-  \cite[Theorem~1.15]{Simon2005TraceIdeals} gives
-  \(
-    \sum_k\abs{\lambda_k(T)}\le \|T\|_1
-  \).
-  Therefore
+  \cite[Theorem~1.15]{Simon2005TraceIdeals} yields
+  \[
+    \sum_k\abs{\lambda_k(T)}\le \|T\|_1,
+  \]
+  and therefore
   \[
     \|T\|_1
-    \ge \sum_k\abs{\lambda_k(T)}
-    =\sum_j m_jn_j\abs{\beta_j}^{1/n_j}
-    =\|L_{\mathcal D}\|_1,
+    \ge \sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}.
   \]
-  and \(L_{\mathcal D}\), hence every zero-summand enlargement
-  \(0_{H_0}\oplus L_{\mathcal D}\) with arbitrary \(H_0\), certainly
-  attains equality.
+  Since \(L_{\mathcal D}\) is normal, equality is attained by
+  \(L_{\mathcal D}\), and hence also by every enlargement
+  \(0_{H_0}\oplus L_{\mathcal D}\).
 
-  It remains to analyse the equality case. Assume
-  \(
-    \|T\|_1=\sum_k\abs{\lambda_k(T)}
-  \).
-  Choose an orthonormal basis giving the standard Schur
-  upper-triangular form of the compact operator \(T\), with diagonal
-  entries \(\lambda_k(T)\) repeated according to algebraic
-  multiplicity. Let \(D\) be the diagonal unitary with diagonal entries
+  Assume now that equality holds. Choose an orthonormal basis in which
+  the compact operator \(T\) is upper triangular, with diagonal entries
+  \(\lambda_k(T)\) repeated according to algebraic multiplicity. Let
+  \(D\) be the diagonal unitary with diagonal entries
   \[
     d_k=
     \begin{cases}
-      \overline{\lambda_k(T)}/\abs{\lambda_k(T)},& \lambda_k(T)\ne 0,\\
-      1,& \lambda_k(T)=0.
+      \overline{\lambda_k(T)}/\abs{\lambda_k(T)},
+        & \lambda_k(T)\ne 0,\\
+      1, & \lambda_k(T)=0.
     \end{cases}
   \]
   Then \(DT\) is upper triangular and
@@ -608,12 +462,11 @@ eigenvalue data to every trace-class realisation.
   \[
     0
     =\Tr|T|-\Re\Tr(DT)
-    =\Tr\!\bigl(
-      |T|^{1/2}(I-\Re(DV))|T|^{1/2}\bigr).
+    =\Tr\!\bigl(|T|^{1/2}(I-\Re(DV))|T|^{1/2}\bigr).
   \]
   The operator inside the trace is positive, hence vanishes. Thus
-  \(\Re(DV)=I\) on \(\overline{\mathrm{ran}(|T|)}\). For
-  \(h\in\overline{\mathrm{ran}(|T|)}\),
+  \(\Re(DV)=I\) on \(\overline{\operatorname{ran}(|T|)}\). For
+  \(h\in\overline{\operatorname{ran}(|T|)}\),
   \[
     \|h-DVh\|^2
     =\|h\|^2+\|DVh\|^2-2\Re\langle DVh,h\rangle
@@ -625,13 +478,13 @@ eigenvalue data to every trace-class realisation.
   \]
   is positive. A positive upper-triangular operator is diagonal, hence
   \(DT\), and therefore \(T\), is diagonal in this basis. In
-  particular \(T\) is normal. The normal-form clause now follows from
-  \Cref{thm:cyclic-fredholm-realisation}.
+  particular \(T\) is normal. The converse characterization now follows
+  from \Cref{thm:cyclic-fredholm-realisation}.
 \end{proof}
 
 \begin{corollary}[Symbolic-dynamical trace-norm rigidity]
   \label{cor:symbolic-trace-norm}
-  Let \(A\) be a complex \(d\times d\) matrix and let \(T\in\sone(H)\)
+  Let \(A\) be a complex \(d\times d\) matrix and let \(T\in \sone(H)\)
   satisfy
   \[
     Z_T(z)=\det(I-zA)^{-1}
@@ -639,10 +492,10 @@ eigenvalue data to every trace-class realisation.
   near \(z=0\). Denote the non-zero eigenvalues of \(A\) by
   \(\{\lambda_i\}_{i=1}^M\), listed with algebraic multiplicity. Then
   \[
-    \|T\|_1\ge \sum_{i=1}^M \abs{\lambda_i},
+    \|T\|_1\ge \sum_{i=1}^M\abs{\lambda_i},
   \]
-  with equality if and only if there exist a Hilbert space \(H_0\) and
-  a unitary operator
+  and equality holds if and only if there exist a Hilbert space \(H_0\)
+  and a unitary operator
   \[
     U:H\to H_0\oplus \CC^M
   \]
@@ -650,54 +503,43 @@ eigenvalue data to every trace-class realisation.
   \[
     UTU^{-1}=0_{H_0}\oplus\bigoplus_{i=1}^M C(1,\lambda_i).
   \]
-  Consequently the trace-norm minimisers among all trace-class
-  realisations of the dynamical zeta function \(\det(I-zA)^{-1}\) are
-  exactly these normal models; by
-  \Cref{prop:prelim-trace-primitive}, this applies in particular to the
-  zeta functions of primitive subshifts of finite type.
+  In particular, this applies to the zeta functions of primitive
+  subshifts of finite type via
+  \Cref{prop:prelim-trace-primitive}.
 \end{corollary}
 
 \begin{proof}
-  Apply \Cref{thm:cyclic-fredholm-realisation} to the Euler data
-  \(\mathcal D=\{(1,\lambda_i,1)\}_{i=1}^M\) to obtain a block-cyclic
-  normal realisation \(L_{\mathcal D}\) with
-  \(Z_{L_{\mathcal D}}(z)=\det(I-zA)^{-1}\). The inequality and its
-  rigidity clause now follow from \Cref{thm:trace-norm-minimality}
-  applied to \(T\) and \(L_{\mathcal D}\).
+  Apply \Cref{thm:trace-norm-minimality} to the Euler data
+  \(
+    \mathcal D=\{(1,\lambda_i,1)\}_{i=1}^M
+  \).
 \end{proof}
 
-\begin{corollary}[Finite Euler products give finite-rank normal models]
+\begin{corollary}[Finite Euler products and finite-rank normal models]
   \label{cor:finite-rank-realisation}
   If \(J\) is finite in \Cref{thm:cyclic-fredholm-realisation}, then
-  \(L_{\mathcal D}\) is finite-rank. As an immediate specialisation,
-  every finite Euler product
+  \(L_{\mathcal D}\) is finite rank. In particular, every finite Euler
+  product
   \[
     \prod_{j=1}^N(1-\beta_j z^{n_j})^{-m_j}
   \]
-  admits a finite-rank normal Fredholm realisation whose non-zero rank is
-  exactly \(\sum_{j=1}^N m_j n_j\).
+  admits a finite-rank normal Fredholm realization whose non-zero rank
+  is exactly \(\sum_{j=1}^N m_jn_j\).
 \end{corollary}
 
-\subsection{Spectral rigidity}
-
-\Cref{prop:fredholm-factorisation-rigidity}\textup{(b)} encapsulates the
-spectral rigidity implicit in Fredholm determinants; for later reference
-we spell out one concrete consequence.
-
-\begin{corollary}[Realisability versus rigidity]
+\begin{corollary}[Realizability versus rigidity]
   \label{cor:realisability-vs-rigidity}
   Let \(A\) be a finite matrix and let \(T\in \sone(H)\) satisfy
   \[
     \det(I-zT)=\det(I-zA).
   \]
-  Then \(T\) and \(A\) have the same non-zero eigenvalues with
-  algebraic multiplicity. Thus cyclic-block constructions may enlarge
-  the ambient operator category, but they do not create spectral
-  freedom once the determinant is prescribed.
+  Then \(T\) and \(A\) have the same non-zero eigenvalues with algebraic
+  multiplicity. Thus enlarging the ambient operator class does not
+  create additional spectral freedom once the determinant is fixed.
 \end{corollary}
 
 \begin{proof}
-  Equality of determinants implies \(Z_T(z)=Z_A(z)\) near \(0\), so
-  \Cref{prop:fredholm-factorisation-rigidity}\textup{(b)} gives the
-  conclusion.
+  Equality of determinants implies \(Z_T(z)=Z_A(z)\) near \(0\), so the
+  conclusion follows from
+  \Cref{prop:fredholm-factorisation-rigidity}\textup{(b)}.
 \end{proof}
