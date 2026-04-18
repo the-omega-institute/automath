@@ -1056,9 +1056,79 @@ def detect_shell_pattern(wt: WorktreeInfo) -> list[str]:
     return violations
 
 
+_SORRY_LITERAL_RE = re.compile(
+    r"(?<![A-Za-z_])(?:sorry|admit)(?![A-Za-z_])"
+)
+_AXIOM_DECL_RE = re.compile(r"^\s*axiom\s+\w", re.MULTILINE)
+
+
+def detect_sorry_literals(wt: WorktreeInfo) -> list[str]:
+    """Reject any new commit that introduces a literal `sorry`/`admit`/`axiom`
+    in lean4/Omega/. This catches the codex anti-pattern of hiding `sorry` as
+    a function argument (e.g. `simp [(sorry foo)]`) which lake build only emits
+    as a warning, not an error — i.e. the round would otherwise sneak through."""
+    violations: list[str] = []
+    try:
+        result = run_cmd(
+            ["git", "diff", f"origin/{BASE_BRANCH}...HEAD",
+             "--diff-filter=AM", "--", "lean4/Omega/"],
+            cwd=wt.path,
+        )
+    except Exception:
+        return violations
+    diff_out = result.stdout or ""
+    if not diff_out:
+        return violations
+    current_file: Optional[str] = None
+    for line in diff_out.splitlines():
+        if line.startswith("+++ b/"):
+            current_file = line[len("+++ b/"):]
+            continue
+        if not line.startswith("+") or line.startswith("+++"):
+            continue
+        added = line[1:]
+        if _SORRY_LITERAL_RE.search(added) or _AXIOM_DECL_RE.match(added):
+            # Skip pure comments — codex sometimes mentions sorry in narrative.
+            stripped = added.lstrip()
+            if stripped.startswith("--") or stripped.startswith("/-"):
+                continue
+            violations.append(f"{current_file}: + {added.strip()[:140]}")
+    return violations
+
+
+def lake_build_verify(wt: WorktreeInfo, *, timeout: int = 1800) -> tuple[bool, str]:
+    """Run a final `lake_gate.py build` inside the worktree as the source of
+    truth. The gate caps host-wide concurrent lake invocations, so this is
+    safe even with many rounds in flight."""
+    gate = wt.path / "lean4" / "scripts" / "lake_gate.py"
+    if not gate.exists():
+        # Older worktree without the gate — fall through to a plain build.
+        cmd = ["lake", "build"]
+    else:
+        cmd = ["python3", str(gate), "build"]
+    try:
+        result = subprocess.run(
+            cmd,
+            cwd=str(wt.path / "lean4"),
+            capture_output=True, text=True, timeout=timeout,
+            stdin=subprocess.DEVNULL,
+            env={
+                **os.environ,
+                "LAKE_GATE_LOCK_DIR": str(LAKE_GATE_LOCK_DIR),
+                "LAKE_GATE_MAX_PARALLEL": str(LAKE_GATE_MAX_PARALLEL),
+            },
+        )
+    except subprocess.TimeoutExpired:
+        return False, f"lake build timed out after {timeout}s"
+    tail = "\n".join((result.stdout or "").splitlines()[-30:])
+    err_tail = "\n".join((result.stderr or "").splitlines()[-30:])
+    return result.returncode == 0, f"{tail}\n--- stderr ---\n{err_tail}"
+
+
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
-    """Check for new commits in the worktree. Also rejects signature degradation
-    and new abstract-Prop shell files."""
+    """Check for new commits in the worktree. Also rejects signature degradation,
+    new abstract-Prop shell files, sorry/admit/axiom literals, and any commit
+    whose final lake build does not pass."""
     post = git_log_oneline(20, cwd=wt.path)
     new = [c for c in post if c not in pre_commits]
     if new:
@@ -1087,6 +1157,24 @@ def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[b
                 f"Fix: state paper_* theorems about concrete objects; use sorry + "
                 f"\\leanpartial{{…}}{{reason}} if proof is incomplete."
             )
+            return False, new
+        # Gate 3: sorry/admit/axiom literals in newly-added or modified lines
+        sorry_violations = detect_sorry_literals(wt)
+        if sorry_violations:
+            for v in sorry_violations[:10]:
+                logger.error(f"[R{wt.round_number}] SORRY LITERAL: {v}")
+            logger.error(
+                f"[R{wt.round_number}] Rejecting round: {len(sorry_violations)} added "
+                f"line(s) contain sorry/admit/axiom literals. The completion contract "
+                f"in phase_c.txt forbids these in committed code."
+            )
+            return False, new
+        # Gate 4: final lake build (source of truth — catches everything else)
+        ok, tail = lake_build_verify(wt)
+        if not ok:
+            logger.error(f"[R{wt.round_number}] LAKE BUILD FAILED in final verify:")
+            for ln in tail.splitlines()[-15:]:
+                logger.error(f"  {ln}")
             return False, new
         return True, new
     logger.warning(f"[R{wt.round_number}] Phase D: No new commits")
