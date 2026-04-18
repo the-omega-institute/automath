@@ -17,6 +17,7 @@ import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
 import Omega.EA.DynamicPrimeRegisterConcatenation
 import Omega.EA.DynamicPrimeRegisterBitlength
+import Omega.EA.DirectedRewriteTermination
 import Omega.EA.FibAdicTower
 import Omega.EA.FibAdicBasic
 import Omega.EA.FibCongruence
