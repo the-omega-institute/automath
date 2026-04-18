@@ -101,6 +101,7 @@ import Omega.Conclusion.RegisterUltrametricLipschitzAndGodelNoRealExtension
 import Omega.Conclusion.RealInput40ZeroTempQuarticConstantUnification
 import Omega.Conclusion.RealInput40UVAtomCore
 import Omega.Conclusion.RealInput40OutputPotentialSpectralCollisions
+import Omega.Conclusion.RealInput40SingularRingNodeSplitting
 import Omega.Conclusion.RealInput40UVPressureSilentPhase
 import Omega.Conclusion.RecursiveSolenoidLieShadow
 import Omega.Conclusion.ResonanceWindow
