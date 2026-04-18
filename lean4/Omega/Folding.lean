@@ -101,6 +101,7 @@ import Omega.Folding.FoldCongruenceModSemirings
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinTwoStateAsymptotic
+import Omega.Folding.FractranFoldCompiler
 import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.FiberBiasFrequencyTransportIdentity
@@ -110,6 +111,7 @@ import Omega.Folding.FoldPressureFreezingThreshold
 import Omega.Folding.IntermediateQuotientsBellProductDoubleExponential
 import Omega.Folding.FoldSuitePublication
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
+import Omega.Folding.GaugeAnomalyAutocovClosed
 import Omega.Folding.GaugeAnomalyCovGenfun
 import Omega.Folding.GaugeAnomalyHankelAudit
 import Omega.Folding.GaugeAnomalyJordanFingerprint

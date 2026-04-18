@@ -89,6 +89,7 @@ import Omega.POM.HankelInversePropagationLinearOrbits
 import Omega.POM.HankelDeterminantGeometricLaw
 import Omega.POM.HankelFinitePoleSpectralGap
 import Omega.POM.HankelNFShiftInvarianceAndPropagation
+import Omega.POM.HankelSyndromeInversionUnique
 import Omega.POM.HankelSyndromeGapRankDefect
 import Omega.POM.HankelSyndromeModuleKernelEqualsMultiples
 import Omega.POM.HighMultiplicitySparse
