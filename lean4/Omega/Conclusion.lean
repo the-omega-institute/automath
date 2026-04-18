@@ -24,6 +24,7 @@ import Omega.Conclusion.CdimKernelRegisterLowerBound
 import Omega.Conclusion.CofinalFixedQuotient
 import Omega.Conclusion.CollisionMomentMoritaDefectFusion
 import Omega.Conclusion.CompressionLadderSpin10
+import Omega.Conclusion.CompleteStrictificationDualCriterion
 import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.DiscreteCertificateFrontGeneralizedInverse
 import Omega.Conclusion.CoordinateBundleDyadicBlockLaw

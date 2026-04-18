@@ -1,4 +1,5 @@
 import Omega.Discussion.ChebyshevAdams
+import Omega.Discussion.BridgeParadigmNonlocalDoublelimitFredholm
 import Omega.Discussion.CharacterIndexHolonomy
 import Omega.Discussion.CrossingWindingBlaschkeIndex
 import Omega.Discussion.CubicalStokesElimination2Cycle
