@@ -32,6 +32,7 @@ import Omega.Zeta.CyclicDetectionBoundary
 import Omega.Zeta.CyclicEulerSpectralRigidity
 import Omega.Zeta.CyclicEulerProduct
 import Omega.Zeta.CyclicEulerProductComplexSection
+import Omega.Zeta.CyclicEulerSchattenInvariants
 import Omega.Zeta.CyclicFredholmRealization
 import Omega.Zeta.CyclicLiftGcdLcm
 import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters

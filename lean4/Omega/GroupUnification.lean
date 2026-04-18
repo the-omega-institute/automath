@@ -47,5 +47,6 @@ import Omega.GroupUnification.UnificationFunctionalCancellation
 import Omega.GroupUnification.UniversalQuadraticCoefficient
 import Omega.GroupUnification.VarianceTransfer
 import Omega.GroupUnification.Window6SplitExtremalDistanceBridge
+import Omega.GroupUnification.Window6FiberAffineGeometry
 import Omega.GroupUnification.Window6Delta34GeneratesSquares
 import Omega.GroupUnification.Window6DirectionSpectrumLinearKernelObstruction
