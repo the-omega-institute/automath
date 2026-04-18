@@ -15,6 +15,8 @@ import Omega.GroupUnification.GeneralNormalForm
 import Omega.GroupUnification.GeneralRigidity
 import Omega.GroupUnification.Gibbs
 import Omega.GroupUnification.GroupJGFoldSquarefreeExternalization
+import Omega.GroupUnification.GroupJGFoldPrimeEllipseTriple
+import Omega.GroupUnification.GroupJGGodelNormLogScaleDrift
 import Omega.GroupUnification.GroupJGEllipsePrimeHomomorphism
 import Omega.GroupUnification.GroupJGHolographicCoefficientRecovery
 import Omega.GroupUnification.GroupJGPrimeRegisterInitialObject
