@@ -9,7 +9,7 @@
 
 ### google-deepmind/formal-conjectures (926★, 872 issues)
 
-- [ ] **FC-01**: ams-40 (序列/级数) = 0 issues。提交 Fibonacci 增长、S₂ 递推、Hankel 行列式序列的猜想声明。搜索 `lean4/Omega/Folding/MomentSum.lean` `MomentRecurrence.lean` `HankelSpectrum.lean`。目标：3-5 个 Lean 4 conjecture statements PR。
+- [-] **FC-01** (SKIP): ams-40 (序列/级数) = 0 issues。提交 Fibonacci 增长、S₂ 递推、Hankel 行列式序列的猜想声明。搜索 `lean4/Omega/Folding/MomentSum.lean` `MomentRecurrence.lean` `HankelSpectrum.lean`。目标：3-5 个 Lean 4 conjecture statements PR。
 - [ ] **FC-02**: ams-37 (动力系统) = 2 issues。提交 golden-mean shift 熵、Sturmian 刚性、逃逸率猜想。搜索 `lean4/Omega/Folding/Entropy.lean` `ShiftDynamics.lean`。现有 issues #2153 (Sofic) #2152 (Gottschalk) 我们的 sofic shift 直接相关。
 - [ ] **FC-03**: ams-28 (测度/积分) = 1 issue。提交 Parry 测度、遍历猜想。搜索主论文 `theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/` 的 ergodic 部分。
 - [ ] **FC-04**: ams-11 (数论) = 1 issue。提交 Zeckendorf 唯一性推广猜想、Fibonacci 素数模猜想。搜索 `lean4/Omega/Folding/FiberRing.lean` `Zeckendorf.lean`。

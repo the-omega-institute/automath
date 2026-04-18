@@ -1097,6 +1097,63 @@ def discover_candidates(*, model: Optional[str], dry_run: bool) -> list[dict[str
 # ---------------------------------------------------------------------------
 
 
+def build_stage_b0_plan_prompt(
+    repo: str,
+    inventory: dict[str, Any],
+    todo_task: str = "",
+    previous_rounds: Optional[list[dict[str, Any]]] = None,
+    theorem_refs: Optional[list[str]] = None,
+) -> str:
+    """B0: Claude produces a concrete, narrow task spec for Codex.
+    This is the step that was missing — Claude reads target format + Automath assets
+    and tells Codex EXACTLY what to produce."""
+    prev_section = ""
+    if previous_rounds:
+        best = max(previous_rounds, key=lambda r: max(r.get("codex_score", 0), r.get("claude_score", 0)))
+        prev_section = (
+            f"\n\nPrevious attempt scored {max(best.get('codex_score',0), best.get('claude_score',0))}/10."
+            f"\nClaude feedback: {best.get('claude_notes', 'none')}"
+            f"\nAdjust the task to address this feedback."
+        )
+
+    todo_section = f"\n\nTODO item context: {todo_task}" if todo_task else ""
+    refs_section = ""
+    if theorem_refs:
+        refs_section = "\n\nAutomath theorem refs (sample):\n" + "\n".join(f"  - {r}" for r in theorem_refs[:15])
+
+    return textwrap.dedent(
+        f"""\
+        You are the PLANNING step (B0) of a community outreach pipeline.
+        Your job: produce a CONCRETE, NARROW task specification for Codex.
+
+        Target repository: {repo}
+        Target repo inventory: {json.dumps(inventory, indent=2, ensure_ascii=False)[:2000]}
+        {todo_section}{prev_section}{refs_section}
+
+        INSTRUCTIONS:
+        1. What FORMAT does the target repo expect for contributions?
+           (Lean file? Issue? PR? Data file? Check their CONTRIBUTING.md)
+        2. What SPECIFIC Automath source files contain relevant content?
+           (Name exact files in lean4/Omega/ or theory/)
+        3. What EXACTLY should Codex produce?
+           (Not "find connections" — but "write file X in format Y using theorems from Z")
+
+        Return JSON only:
+        {{
+          "codex_task": "One paragraph: exactly what Codex should do, specific enough
+                        that an engineer could do it without asking questions",
+          "target_format": "Lean file|GitHub issue|PR with code|data contribution",
+          "target_format_example": "path or URL to an example file in the target repo",
+          "source_files": ["lean4/Omega/path/File.lean", ...],
+          "output_type": "Lean 4 file|issue body markdown|PR diff",
+          "output_path": "where to write the output (if file)",
+          "key_theorems": ["theorem_name_1", "theorem_name_2"],
+          "what_target_gains": "one sentence: what the target repo author gets from this"
+        }}
+        """
+    )
+
+
 def build_stage_b1_prompt(repo: str, inventory: dict[str, Any]) -> str:
     return textwrap.dedent(
         f"""\
@@ -1131,6 +1188,7 @@ def build_stage_b2_prompt(
     previous_rounds: Optional[list[dict[str, Any]]] = None,
     automath_theorem_whitelist: Optional[list[str]] = None,
     deep_mode: bool = False,
+    claude_plan: Optional[dict[str, Any]] = None,
 ) -> str:
     """Bug 1 fix: accept previous_rounds feedback for iterative improvement.
     Bug 4 fix: accept automath_theorem_whitelist to ground findings in real theorems.
@@ -1219,6 +1277,16 @@ def build_stage_b2_prompt(
 
         Stage B1 output:
         {json.dumps(b1_data, indent=2, ensure_ascii=False)}{feedback_section}{whitelist_section}{deep_section}
+
+        ═══════════════════════════════════════════════════════════════
+        CLAUDE'S PLAN (B0) — YOUR CONCRETE TASK
+        ═══════════════════════════════════════════════════════════════
+        {json.dumps(claude_plan or {}, indent=2, ensure_ascii=False)}
+
+        FOLLOW THE PLAN ABOVE. Do exactly what "codex_task" says.
+        Read the files listed in "source_files".
+        Produce the output described in "output_type".
+        If the plan says to write a file, write it to "output_path".
 
         ═══════════════════════════════════════════════════════════════
         STEP 1 (MANDATORY): UNDERSTAND WHAT THE TARGET REPO NEEDS
@@ -1427,6 +1495,7 @@ def run_stage_b(
     theorem_refs: list[str],
     model: Optional[str],
     dry_run: bool,
+    todo_item: Optional[dict[str, str]] = None,
 ) -> RepoState:
     if state.stage not in {"B", "NEW"}:
         return state
@@ -1462,6 +1531,37 @@ def run_stage_b(
             b3_data = {"overall_score": 9, "decision": "advance", "notes": "dry-run score"}
             b4_data = {"overall_score": 8, "verdict": "pass", "notes": "dry-run review"}
         else:
+            # ─── B0: Claude plans the concrete task for Codex ─────────
+            # This is the key insight: Claude reads the target repo format +
+            # Automath assets and produces a SPECIFIC task spec.
+            # Without this, Codex gets "find connections" → garbage.
+            # With this, Codex gets "write file X in format Y using Z" → quality.
+            todo_task = ""
+            if todo_item:
+                todo_task = todo_item.get("task", "")
+            b0_raw = claude_exec(
+                build_stage_b0_plan_prompt(
+                    state.repo, inventory, todo_task,
+                    previous_rounds=previous_rounds_feedback,
+                    theorem_refs=theorem_refs,
+                ),
+                work_dir=REPO_ROOT,
+                timeout=300,
+                dry_run=dry_run,
+            )
+            parsed_b0 = parse_json_from_output(b0_raw)
+            b0_plan = parsed_b0 if isinstance(parsed_b0, dict) else {}
+            if not b0_plan:
+                b0_plan = {
+                    "codex_task": f"Read {state.repo} and find how Automath can help",
+                    "target_format": "GitHub issue",
+                    "source_files": theorem_refs[:5],
+                    "output_type": "findings JSON",
+                }
+            logger.info("[%s] B0 Claude plan: %s", state.repo,
+                        str(b0_plan.get("codex_task", ""))[:120])
+
+            # ─── B1: Codex reads target repo (unchanged) ──────────────
             b1_raw = codex_exec(
                 build_stage_b1_prompt(state.repo, inventory),
                 work_dir=REPO_ROOT,
@@ -1474,12 +1574,14 @@ def run_stage_b(
             if not b1_data:
                 b1_data = dry_run_b1(state.repo, inventory)
 
+            # ─── B2: Codex executes Claude's specific plan ────────────
             b2_raw = codex_exec(
                 build_stage_b2_prompt(
                     state.repo, b1_data,
                     previous_rounds=previous_rounds_feedback,
                     automath_theorem_whitelist=automath_theorem_whitelist,
                     deep_mode=deep_mode,
+                    claude_plan=b0_plan,
                 ),
                 work_dir=REPO_ROOT,
                 timeout=b2_timeout,
@@ -1914,6 +2016,7 @@ def process_repo_to_stage_d(
                     theorem_refs=theorem_refs,
                     model=model,
                     dry_run=dry_run,
+                    todo_item=todo_item,
                 )
 
             if state.stage == "C":
