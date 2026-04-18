@@ -1994,6 +1994,7 @@ def process_repo_to_stage_d(
     skip_to: str,
     model: Optional[str],
     dry_run: bool,
+    todo_item: Optional[dict[str, str]] = None,
 ) -> RepoState:
     if not valid_repo_slug(repo):
         state = RepoState(repo=repo, stage="ERROR", error="Invalid repo slug")
@@ -2070,6 +2071,7 @@ def process_repositories(
     skip_to: str,
     model: Optional[str],
     dry_run: bool,
+    todo_item: Optional[dict[str, str]] = None,
 ) -> list[RepoState]:
     unique_repos = []
     seen = set()
@@ -2086,7 +2088,7 @@ def process_repositories(
     worker_count = max(1, parallel)
     if worker_count == 1:
         for repo in unique_repos:
-            states.append(process_repo_to_stage_d(repo, skip_to=skip_to, model=model, dry_run=dry_run))
+            states.append(process_repo_to_stage_d(repo, skip_to=skip_to, model=model, dry_run=dry_run, todo_item=todo_item))
     else:
         with ThreadPoolExecutor(max_workers=worker_count) as executor:
             future_map = {
@@ -2265,6 +2267,7 @@ def main() -> int:
         skip_to=args.skip_to,
         model=args.model,
         dry_run=args.dry_run,
+        todo_item=todo_item,
     )
 
     if not args.dry_run:
