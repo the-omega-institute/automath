@@ -166,6 +166,7 @@ import Omega.Zeta.RealArcSufficiencyUnitDisk
 import Omega.Zeta.Arity335EpsEffInversion
 import Omega.Zeta.Arity335CharacterEnergy
 import Omega.Zeta.RealInput40RotationPolytopeShear
+import Omega.Zeta.RealInput40TrivMechSplit
 import Omega.Zeta.RegularPrefixfreeKraftRational
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Zeta.ResidueClassAsymptotics
