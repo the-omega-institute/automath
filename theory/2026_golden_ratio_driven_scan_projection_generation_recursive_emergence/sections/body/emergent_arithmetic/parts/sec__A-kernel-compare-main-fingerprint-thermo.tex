@@ -349,4 +349,197 @@ B_n(u)=\frac{\lambda_1(u)^n}{n}+O\!\left(\frac{|\lambda_2(u)|^n}{n}\right)\qquad
 因此 \(\lambda_K(u)\) 与谱隙比 \( |\lambda_2(u)|/\lambda_1(u)\) 构成核的素数热力学指纹。
 \end{theorem}
 
-这条主项说明，primitive 分层谱的主增长率由 Perron 根控制，而误差指数由谱隙控制；热力学主项、primitive 轨道增长与误差衰减因此不再是分离对象，而是同一谱结构的三个面向。更完整的脚本复现、状态机构图与数值输出见附录 \ref{app:sync-kernel-A-compare} 以及附录中的表 \ref{tab:parallel-addition-kernels-weighted-primitive}、表 \ref{tab:parallel-addition-kernels-zeta-series}。下面转向有限群标签方向，把这一热力学主链按同余类进一步细化。
+这条主项说明，primitive 分层谱的主增长率由 Perron 根控制，而误差指数由谱隙控制；热力学主项、primitive 轨道增长与误差衰减因此不再是分离对象，而是同一谱结构的三个面向。更完整的脚本复现、状态机构图与数值输出见附录 \ref{app:sync-kernel-A-compare} 以及附录中的表 \ref{tab:parallel-addition-kernels-weighted-primitive}、表 \ref{tab:parallel-addition-kernels-zeta-series}。在进入有限群标签层之前，还可把上述热力学链进一步压缩为若干综合结论。
+\paragraph{三层闭链的综合压缩}
+前述端点、primitive 与压力结论还可以再压缩为一条闭合的分类链：carry-free 骨架决定零温语法，第一 primitive 活动层给出最短可分分歧，而压力曲线与 prime-orbit 主项则把这一分歧继续延伸到固定温度的热力学层。对本文三核，这条闭链恰好分裂为三个彼此不等价的谱型。
+
+\begin{theorem}[全局 carry-free 谱型的严格三分]\label{thm:kernel-global-carryfree-spectral-trichotomy}
+记 \(A_{K,0}^{\mathrm{flow}}\) 与 \(A_{K,0}^{\mathrm{glob}}\) 分别为单流与全局块级的 carry-free 骨架矩阵。则
+\[
+\det(I-zA_{K_9,0}^{\mathrm{glob}})=1-2401z,\qquad
+\det(I-zA_{K_{13},0}^{\mathrm{glob}})=1-9z,
+\]
+\[
+\det(I-zA_{K_{21},0}^{\mathrm{glob}})=(1+z)^2(1-3z+z^2).
+\]
+因此 \(K_9\) 与 \(K_{13}\) 的全局 carry-free \(\zeta\)-函数均为单主极点型，而 \(K_{21}\) 是唯一在 \(z=-1\) 处出现二重单位圆共振极点的核。换言之，\(K_{21}\) 的零温骨架并非单纯的低熵 full shift，而额外携带一个严格不可消去的 parity resonance 支。
+\end{theorem}
+\begin{proof}
+单流 carry-free 骨架由定理 \ref{thm:carry-free-zeta-trichotomy} 给出：
+\[
+K_9:\ 1-7z,\qquad K_{13}:\ 1-3z,\qquad K_{21}:\ 1-z-z^2.
+\]
+再由推论 \ref{cor:global-assembly-zeta} 的张量积装配，立即得到全局块级行列式恰为
+\[
+1-2401z,\qquad 1-9z,\qquad (1+z)^2(1-3z+z^2).
+\]
+前两者只有单主极点；第三式在 \(z=-1\) 处具有二重零点，从而对应二重单位圆共振极点。证毕。
+\end{proof}
+
+\begin{theorem}[全局 carry-free primitive 谱的 Lucas--parity 分解]\label{thm:kernel-global-carryfree-primitive-parity}
+记
+\[
+p_{K,n}^{\mathrm{cf,glob}}:=p_n(A_{K,0}^{\mathrm{glob}})
+\]
+为全局块级 carry-free primitive 轨道数。则
+\[
+p_{K_9,n}^{\mathrm{cf,glob}}
+=\frac{1}{n}\sum_{d\mid n}\mu(d)\,2401^{\,n/d},
+\qquad
+p_{K_{13},n}^{\mathrm{cf,glob}}
+=\frac{1}{n}\sum_{d\mid n}\mu(d)\,9^{\,n/d},
+\]
+而
+\[
+p_{K_{21},n}^{\mathrm{cf,glob}}
+=\frac{1}{n}\sum_{d\mid n}\mu(d)\Bigl(L_{2n/d}+2(-1)^{n/d}\Bigr),
+\]
+其中 \(L_m\) 为 Lucas 数。特别地，\(K_{21}\) 是唯一一个其全局 carry-free primitive 谱显式包含奇偶扭结项 \(2(-1)^n\) 的核。
+\end{theorem}
+\begin{proof}
+由定义，
+\(
+p_{K,n}^{\mathrm{cf,glob}}=\frac{1}{n}\sum_{d\mid n}\mu(d)\Tr((A_{K,0}^{\mathrm{glob}})^{n/d}).
+\)
+对 \(K_9\) 与 \(K_{13}\)，定理 \ref{thm:kernel-global-carryfree-spectral-trichotomy} 已给出其全局 carry-free 行列式为单极点型，故
+\[
+\Tr((A_{K_9,0}^{\mathrm{glob}})^n)=2401^n,\qquad
+\Tr((A_{K_{13},0}^{\mathrm{glob}})^n)=9^n,
+\]
+代回 Möbius 反演即得前两式。
+
+对 \(K_{21}\)，由
+\[
+\det(I-zA_{K_{21},0}^{\mathrm{glob}})=(1+z)^2(1-3z+z^2)
+\]
+可知特征值为
+\(
+\varphi^2,\ \varphi^{-2},\ -1,\ -1
+\)。
+因此
+\[
+\Tr((A_{K_{21},0}^{\mathrm{glob}})^n)
+=\varphi^{2n}+\varphi^{-2n}+2(-1)^n
+=L_{2n}+2(-1)^n,
+\]
+再作 Möbius 反演即得所述公式。证毕。
+\end{proof}
+
+\begin{theorem}[零温基态的两类普适行为]\label{thm:kernel-ground-state-universality-classes}
+在局部常势 \(\phi_\beta=-\beta\kappa\) 下，令 \(\mu_{\beta,K}\) 为单流 Gibbs 平衡态。则当 \(\beta\to+\infty\) 时，
+\[
+K_9:\ \mu_{\beta,K_9}\Longrightarrow \mu_{0,9},
+\qquad
+K_{13}:\ \mu_{\beta,K_{13}}\Longrightarrow \mu_{0,13},
+\qquad
+K_{21}:\ \mu_{\beta,K_{21}}\Longrightarrow \mu_{0,21},
+\]
+其中极限测度分别支撑在 \(7\)-全移位、\(3\)-全移位与黄金均值移位的 Parry 测度上。特别地，
+\[
+\mu_{0,21}(1)=\frac{1}{\varphi+2}.
+\]
+因此三核在零温处恰分成两类基态普适行为：\(K_9\) 与 \(K_{13}\) 属于 Bernoulli 基态类，而 \(K_{21}\) 属于 Zeckendorf 型禁词基态类。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:kernel-zero-temp}，任意零温极限都支撑在 carry-free 子图生成的有限并 SFT 上；若该子图只有唯一的本质强连通分量，则极限测度就是该分量的 Parry 测度。再由定理 \ref{thm:carry-free-zeta-trichotomy}，三核的 carry-free 骨架分别是 \(7\)-全移位、\(3\)-全移位与黄金均值移位。于是前两者给出 Bernoulli 基态，后者给出 Zeckendorf 型禁词基态。对 \(K_{21}\) 的显式边缘密度则由推论 \ref{cor:kernel-21-ground-state} 给出。证毕。
+\end{proof}
+
+\begin{theorem}[单点 Bernoulli 普适类的唯一性]\label{thm:kernel-one-site-bernoulli-class}
+称单流核 \(K\) 属于单点 Bernoulli 普适类，若存在非负整数 \(A,B\) 使
+\[
+B_{K,1}(u)=A+Bu,\qquad
+\det(I-zA_{K,0})=1-Az,\qquad
+\lambda_K(1)=A+B.
+\]
+则在 \(\{K_9,K_{13},K_{21}\}\) 中，仅 \(K_9\) 属于该类。更具体地，对 \(K_9\) 有
+\[
+\lambda_9(u)=7+14u,\qquad
+P_9(\theta)=\log(7+14e^\theta),
+\]
+\[
+P_9'(\theta)=\frac{2e^\theta}{1+2e^\theta},
+\qquad
+P_9''(\theta)=\frac{2e^\theta}{(1+2e^\theta)^2},
+\]
+并且对任意 \(\theta_0=\log u_0\) 与
+\(
+\alpha_0=\frac{2e^{\theta_0}}{1+2e^{\theta_0}}
+\)，其经验 carry 密度 \(\bar\kappa_n=S_n/n\) 的大偏差率函数为
+\[
+I_{\theta_0}(\alpha)
+=\alpha\log\frac{\alpha}{\alpha_0}
++(1-\alpha)\log\frac{1-\alpha}{1-\alpha_0},
+\qquad \alpha\in[0,1].
+\]
+从而 \(K_9\) 的零温骨架、压力曲线、CLT/LDP 与加权 primitive 主项全部退化为单点 Bernoulli 气体的闭式热力学。
+\end{theorem}
+\begin{proof}
+由上文显式公式，
+\[
+B_{9,1}(u)=7+14u,\qquad
+\det(I-zA_{9,0})=1-7z,\qquad
+\lambda_9(1)=21,
+\]
+故 \(K_9\) 在定义中取 \(A=7,B=14\) 即满足条件。对 \(K_{13}\)，已有
+\[
+B_{13,1}(u)=3+2u+2u^2+6u^3,
+\]
+它不是一次多项式，故不可能属于该类。对 \(K_{21}\)，虽然
+\(
+B_{21,1}(u)=1+4u
+\)
+是一阶，但其 carry-free 骨架满足
+\[
+\det(I-zA_{21,0})=1-z-z^2,
+\]
+并非单极点型 \(1-Az\)，故亦不属于该类。
+
+对 \(K_9\) 的压力、导数与率函数闭式则正是推论 \ref{cor:k9-integrable-pressure-ldp} 的内容；再结合
+\[
+B_{9,n}(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\bigl(7+14u^d\bigr)^{n/d},
+\]
+即可见其 primitive 层同样由同一 Bernoulli 参数完全控制。证毕。
+\end{proof}
+
+\begin{corollary}[三核的最小热力学签名]\label{cor:kernel-minimal-thermo-signature-three}
+定义单流三元组
+\[
+\mathfrak F_K^{\min}
+:=
+\Bigl(
+\det(I-zA_{K,0}),
+\ B_{K,1}(u),
+\ \lambda_K(1)
+\Bigr).
+\]
+则在本文三核族上，映射 \(K\mapsto\mathfrak F_K^{\min}\) 为单射，且
+\[
+\mathfrak F_{K_9}^{\min}=(1-7z,\ 7+14u,\ 21),
+\]
+\[
+\mathfrak F_{K_{13}}^{\min}=(1-3z,\ 3+2u+2u^2+6u^3,\ 13),
+\]
+\[
+\mathfrak F_{K_{21}}^{\min}=(1-z-z^2,\ 1+4u,\ 5).
+\]
+因此，这一三元组已经足以分离三核在骨架层、第一 primitive 活动层与无偏端点复杂度层上的全部差异，并由上述诸定理恢复其零温基态类型、奇偶共振是否出现以及单点 Bernoulli 退化是否成立。
+\end{corollary}
+\begin{proof}
+三组数据直接由本节已给出的单流 carry-free 行列式、第一层 primitive 多项式与端点值 \(\lambda_K(1)\) 读出，且彼此两两不同。前两个分量分别锁定骨架语法与最短 primitive 活动层，第三个分量固定无偏端点复杂度；于是由定理 \ref{thm:kernel-global-carryfree-spectral-trichotomy}、定理 \ref{thm:kernel-ground-state-universality-classes} 与定理 \ref{thm:kernel-one-site-bernoulli-class}，该三元组已经足以恢复本文三核族中的全部普适类分裂。证毕。
+\end{proof}
+
+\begin{conjecture}[有限状态值保持重写核的最小热力学签名]\label{conj:kernel-minimal-thermo-signature}
+在与本文三核同类的有限状态值保持重写核中，三元组
+\[
+\mathfrak F_K^{\min}
+=
+\Bigl(
+\det(I-zA_{K,0}),
+\ B_{K,1}(u),
+\ \lambda_K(1)
+\Bigr)
+\]
+应构成一套极小热力学签名。更具体地说，若两核具有相同的 \(\mathfrak F_K^{\min}\)，则它们应在零温基态类型、carry-free primitive 主谱的第一非平凡扭结层、局域一阶 carry susceptibility 以及固定温度下的 prime-orbit 主增长率上保持一致。
+\end{conjecture}
+
+以上闭链把三核在骨架层、活动层与压力层的分化压缩为一个统一的热力学图景。下面转向有限群标签方向，把这一热力学主链按同余类进一步细化。
