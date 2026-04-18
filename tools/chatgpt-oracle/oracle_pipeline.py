@@ -684,24 +684,34 @@ def is_oracle_response_valid(response: str) -> bool:
 
 def oracle_poll(task_id: str, timeout: int = 7200,
                 poll_interval: int = 30) -> str:
-    """EVENT WAIT — blocks until oracle responds."""
-    logger.info(f"EVENT WAIT: oracle {task_id} (max {timeout}s)")
+    """EVENT WAIT — blocks until oracle responds.
+
+    Registers with oracle_wait_enter/exit so the rolling dispatcher
+    knows how many workers are I/O-blocked (not consuming CPU).
+    """
+    oracle_wait_enter()
+    logger.info(f"EVENT WAIT: oracle {task_id} (max {timeout}s, "
+                f"oracle_waiters={get_oracle_wait_count()})")
     start = time.time()
-    while time.time() - start < timeout:
-        try:
-            data = http_get(f"{ORACLE_SERVER}/result/{task_id}", timeout=10)
-            if data.get("status") == "completed":
-                r = data.get("response", "")
-                logger.info(f"Oracle response: {task_id} ({len(r)} chars, "
-                            f"{int(time.time()-start)}s)")
-                return r
-        except Exception:
-            pass
-        elapsed = int(time.time() - start)
-        if elapsed > 0 and elapsed % 60 == 0:
-            logger.info(f"  Waiting for {task_id}... ({elapsed}s)")
-        time.sleep(poll_interval)
-    return ""
+    try:
+        while time.time() - start < timeout:
+            try:
+                data = http_get(f"{ORACLE_SERVER}/result/{task_id}", timeout=10)
+                if data.get("status") == "completed":
+                    r = data.get("response", "")
+                    logger.info(f"Oracle response: {task_id} ({len(r)} chars, "
+                                f"{int(time.time()-start)}s)")
+                    return r
+            except Exception:
+                pass
+            elapsed = int(time.time() - start)
+            if elapsed > 0 and elapsed % 60 == 0:
+                logger.info(f"  Waiting for {task_id}... ({elapsed}s, "
+                            f"oracle_waiters={get_oracle_wait_count()})")
+            time.sleep(poll_interval)
+        return ""
+    finally:
+        oracle_wait_exit()
 
 
 # ---------------------------------------------------------------------------
@@ -3281,12 +3291,68 @@ def discover_papers(paper_dirs: Optional[list[str]] = None,
     return papers
 
 
-def run_rolling(paper_dirs: list[str], *, parallel: int = 1,
+def _auto_parallel() -> int:
+    """Auto-detect optimal parallelism based on system resources.
+
+    Strategy: Oracle wait is I/O-bound (HTTP poll), Codex/Claude is CPU-bound.
+    We want enough workers so that Oracle-blocked threads don't idle the CPU.
+
+    Rule of thumb:
+      - CPU cores / 2 for Codex compute headroom
+      - +2 for Oracle I/O overlap (browser can only do 1 at a time, but
+        we queue multiple and poll concurrently)
+      - Cap at 6 to avoid git contention and memory pressure
+      - Min 2 (always want at least some overlap)
+    """
+    try:
+        cores = os.cpu_count() or 4
+    except Exception:
+        cores = 4
+    computed = max(2, min(6, cores // 2 + 2))
+    return computed
+
+
+# Track how many workers are currently blocked on Oracle I/O
+_oracle_wait_count = 0
+_oracle_wait_lock = threading.Lock()
+
+
+def oracle_wait_enter():
+    global _oracle_wait_count
+    with _oracle_wait_lock:
+        _oracle_wait_count += 1
+
+
+def oracle_wait_exit():
+    global _oracle_wait_count
+    with _oracle_wait_lock:
+        _oracle_wait_count = max(0, _oracle_wait_count - 1)
+
+
+def get_oracle_wait_count() -> int:
+    with _oracle_wait_lock:
+        return _oracle_wait_count
+
+
+def run_rolling(paper_dirs: list[str], *, parallel: int = 0,
                 continuous: bool = False, **kwargs) -> tuple[int, int]:
+    """Rolling pipeline with adaptive concurrency.
+
+    parallel=0 (default): auto-detect from CPU cores
+    parallel=N: use exactly N workers
+
+    When workers block on Oracle I/O, the pool still has capacity for
+    other papers to do Codex/Claude compute work. The pool size is set
+    high enough to keep CPUs busy even when multiple workers are polling.
+    """
+    if parallel <= 0:
+        parallel = _auto_parallel()
+
     succeeded = failed = 0
     queue = list(paper_dirs)
 
-    logger.info(f"Rolling pipeline: {len(queue)} papers, {parallel} workers")
+    logger.info(f"Rolling pipeline: {len(queue)} papers, {parallel} workers "
+                f"(auto={parallel == _auto_parallel()})")
 
     with ThreadPoolExecutor(max_workers=parallel,
                             thread_name_prefix="paper") as pool:
@@ -3298,7 +3364,9 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 1,
             d = queue.pop(0)
             fut = pool.submit(run_paper_pipeline, d, **kwargs)
             futures[fut] = d
-            logger.info(f"Dispatched: {Path(d).name}")
+            logger.info(f"Dispatched: {Path(d).name} "
+                        f"(active={len(futures)}, oracle_wait={get_oracle_wait_count()}, "
+                        f"queue={len(queue)})")
 
         for _ in range(min(parallel, len(queue))):
             _submit()
@@ -3321,7 +3389,7 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 1,
                     failed += 1
                     logger.error(f"[{name}] EXCEPTION: {exc}")
 
-                # Push after each paper completes (keeps PR up to date)
+                # Push after each paper completes
                 with _git_lock:
                     push = run_cmd(["git", "push", "origin",
                                     "dev-automation-integration"], timeout=60)
@@ -3558,7 +3626,8 @@ def main() -> int:
                         default="Advances in Mathematics")
     parser.add_argument("--main-paper", type=str, default="",
                         help="Main paper dir for Stage D backflow")
-    parser.add_argument("--parallel", "-p", type=int, default=1)
+    parser.add_argument("--parallel", "-p", type=int, default=0,
+                        help="Worker count (0=auto-detect from CPU cores)")
     parser.add_argument("--continuous", action="store_true")
     parser.add_argument("--skip-to", type=str, default="",
                         choices=["F", "A", "B", "C", "D"])
