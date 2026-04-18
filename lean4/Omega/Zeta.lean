@@ -121,6 +121,7 @@ import Omega.Zeta.XiHankelDetScalingCovariance
 import Omega.Zeta.XiExceptionalIntegerModelMqInverseClosedForm
 import Omega.Zeta.XiFiberSpectrumHankelConductorPronyPadic
 import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
+import Omega.Zeta.XiFoldLocalInformationDensityFirstOrderDiscreteLaw
 import Omega.Zeta.XiFoldCongruenceUnitalAutomorphismRigidity
 import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge
 import Omega.Zeta.XiReverseKLSingleFrequencyLegendreFenchelClosed
