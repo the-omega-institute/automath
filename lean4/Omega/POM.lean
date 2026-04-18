@@ -187,6 +187,7 @@ import Omega.POM.ReplicaSoftcoreDet
 import Omega.POM.ReplicaSoftcoreExceptionalSecantEquation
 import Omega.POM.PressureReflectionInequality
 import Omega.POM.ResidueRefinementJensen
+import Omega.POM.SecondOrderCollisionCommonBottleneck
 import Omega.POM.RqLogconvexFreeEnergyOrder
 import Omega.POM.RqUniversalBounds
 import Omega.POM.RqQinftyEndpoint

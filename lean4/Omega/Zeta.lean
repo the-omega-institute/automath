@@ -260,6 +260,7 @@ import Omega.Zeta.XiPickPoissonAnchoredTransverseSeparationInversion
 import Omega.Zeta.XiPickPoissonSchurFluxClosedForm
 import Omega.Zeta.XiJensenDefectPowerPullbackInvariance
 import Omega.Zeta.XiTerminalZmEllipticWeightTriplingRamificationCount
+import Omega.Zeta.XiSingularRingEllipseWallcrossingAtomicMeasure
 import Omega.Zeta.XiRealInput40LogMInftyTruncationBound
 import Omega.Zeta.XiJensenSingleRadiusBandExclusion
 import Omega.Zeta.XiZGCountingPowerSavingError

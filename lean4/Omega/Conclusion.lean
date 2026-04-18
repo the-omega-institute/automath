@@ -57,6 +57,7 @@ import Omega.Conclusion.FoldHilbertRecognizable
 import Omega.Conclusion.FoldZeroDivisorLatticeInvolutionWitness
 import Omega.Conclusion.FoldbinGroupoidTracialSimplex
 import Omega.Conclusion.FoldWalshGramSimplexSignatureSection
+import Omega.Conclusion.FoldWalshTotalChargeParsevalDegeneracy
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Conclusion.GeometricUpliftFourFourCollapse
 import Omega.Conclusion.GodelLeyangIFS
