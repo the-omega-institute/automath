@@ -6,6 +6,7 @@ import Omega.CircleDimension.AcdimPolynomialRing
 import Omega.CircleDimension.AtomicDefectHankelProny
 import Omega.CircleDimension.AtomicDefectProny2KappaRecovery
 import Omega.CircleDimension.AtomicDefectTwoFrequency4KappaRecovery
+import Omega.CircleDimension.AuditStableDepthLimit
 import Omega.CircleDimension.AuditedRealizationBudgetLowerBound
 import Omega.CircleDimension.AxiomaticRigidity
 import Omega.CircleDimension.BareCircleNotCompleteCarrier

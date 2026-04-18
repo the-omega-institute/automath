@@ -108,6 +108,7 @@ import Omega.Zeta.HankelVandermonde3Recovery
 import Omega.Zeta.HankelVandermonde4
 import Omega.Zeta.HankelVsPronySquareGap
 import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
+import Omega.Zeta.XiHankelDetScalingCovariance
 import Omega.Zeta.XiFiberSpectrumHankelConductorPronyPadic
 import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
 import Omega.Zeta.XiSelfdualSingleProbeDeterminesToeplitzMoments

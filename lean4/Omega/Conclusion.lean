@@ -42,6 +42,7 @@ import Omega.Conclusion.FiniteFieldJordanExponentPeriodBound
 import Omega.Conclusion.FibonacciAnomalyBlock
 import Omega.Conclusion.FibonacciDistortionThreshold
 import Omega.Conclusion.FixedResolutionAxialScreenCorankAreaLaw
+import Omega.Conclusion.FixedResolutionHologramExactErrorRadius
 import Omega.Conclusion.FixedResolutionPrimeBarrierPostprocessingNeutrality
 import Omega.Conclusion.FoldSinglepairVisibleObstructions
 import Omega.Conclusion.FoldHilbertRecognizable
