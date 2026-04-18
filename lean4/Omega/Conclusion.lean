@@ -47,6 +47,7 @@ import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Conclusion.GeometricUpliftFourFourCollapse
 import Omega.Conclusion.GodelLeyangIFS
 import Omega.Conclusion.GoldenBiasSecondOrderUniqueness
+import Omega.Conclusion.GoldenSprtDeltaClosure
 import Omega.Conclusion.HaltingTimeExternalBudgetExact
 import Omega.Conclusion.HiddenFaceBudgetSharpThresholdClassification
 import Omega.Conclusion.HypercubePhase

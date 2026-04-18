@@ -229,3 +229,4 @@ import Omega.Zeta.XiCRTMultistageAxisAllocationAdditiveControl
 import Omega.Zeta.XiCRTInvisibilityMarginalPrimeSpectrum
 import Omega.Zeta.ZeckendorfPrimeLanguage
 import Omega.Zeta.ZeckendorfPrimesNotSofic
+import Omega.Zeta.OutputPotentialZeroTempSquareRootCriticalLaw
