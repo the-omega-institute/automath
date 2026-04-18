@@ -190,6 +190,7 @@ import Omega.POM.S5TwoSubsetDegree10
 import Omega.POM.SchurPlancherelEnergyIdentity
 import Omega.POM.SchurTomographyInversePartitionMonomials
 import Omega.POM.SideinfoExactEntropy
+import Omega.POM.SoftOrderFixedTempNondefinability
 import Omega.POM.StarMomentKernelCompression
 import Omega.POM.SymmetricCompression
 import Omega.POM.TauTerminalSignIndependence

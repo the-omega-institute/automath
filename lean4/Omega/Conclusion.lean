@@ -12,6 +12,7 @@ import Omega.Conclusion.BoundaryParityAnomalyGap
 import Omega.Conclusion.BoundaryParityBlindFiltration
 import Omega.Conclusion.BoundaryPinningMemoryGap
 import Omega.Conclusion.BoundaryStokesObservationMinimalDimension
+import Omega.Conclusion.BoundedSliceFamilyEquivalenceUndecidable
 import Omega.Conclusion.BudgetCurveExactTailDifferenceReconstruction
 import Omega.Conclusion.BlockConstraintInformationCollapse
 import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
