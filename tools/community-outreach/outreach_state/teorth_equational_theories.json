@@ -3,17 +3,126 @@
   "stage": "B",
   "round": 1,
   "scores": {
-    "codex": [],
-    "claude": [],
-    "final": []
+    "codex": [
+      5
+    ],
+    "claude": [
+      2
+    ],
+    "final": [
+      2
+    ]
   },
-  "findings": [],
+  "findings": [
+    {
+      "title": "Canonical Certificate Normal Form For Implicit Edges",
+      "type": "proposition",
+      "status": "proved",
+      "target_need": "issue #343: export low-level proofs / derivation chains for implicit implications and anti-implications, suitable for non-Lean consumers",
+      "what_they_gain": "A concrete Lean architecture for replacing opaque implicit closure edges by small local proof objects with explicit validity predicates, soundness lemmas, and a canonical zero-obstruction branch. This is exactly the missing layer between EquationalResult metadata and Closure.list_outcomes.",
+      "statement": "Automath proves that scan-error claims can be represented by certificates whose validity predicates are definitionally the claimed quantities; ScanErrorCertificate.sound and PrefixScanErrorCertificate.sound recover the certified values from validity, while ObservableZeroScanCertificate.canonical supplies a canonical zero-error certificate for every observable event.",
+      "proof_sketch": "The chain is explicit in the source. ObservableZeroScanCertificate.Valid and PrefixScanErrorCertificate.Valid define the certificate semantics; ScanErrorCertificate.sound, ObservableZeroScanCertificate.sound, and PrefixScanErrorCertificate.sound are the local soundness lemmas; ObservableZeroScanCertificate.canonical normalizes the zero-error branch without search. Transferred to ETP, one obtains a defensible export design in which explicit theorem edges become leaf certificates and transitive / dual closure becomes certificate composition rather than an opaque matrix post-processing step.",
+      "lean_refs": [
+        "equational_theories/EquationalResult.lean:37",
+        "equational_theories/Closure.lean:327",
+        "equational_theories/Closure.lean:346"
+      ],
+      "automath_refs": [
+        "lean4/Omega/Frontier/Certificates.lean:100 (ScanErrorCertificate.sound)",
+        "lean4/Omega/Frontier/Certificates.lean:111 (ObservableZeroScanCertificate.Valid)",
+        "lean4/Omega/Frontier/Certificates.lean:115 (ObservableZeroScanCertificate.sound)",
+        "lean4/Omega/Frontier/Certificates.lean:120 (ObservableZeroScanCertificate.canonical)",
+        "lean4/Omega/Frontier/Certificates.lean:135 (PrefixScanErrorCertificate.Valid)",
+        "lean4/Omega/Frontier/Certificates.lean:138 (PrefixScanErrorCertificate.sound)"
+      ],
+      "novelty_risk": "Low: the Automath theorems are exact; only the reuse of the certificate pattern for ETP implication edges is an inferred transfer."
+    },
+    {
+      "title": "Deterministic Planner Paths Are State-Bounded",
+      "type": "theorem",
+      "status": "proved",
+      "target_need": "issue #725: unify the finite magma refutation planner with transitive-closure and duality computation, ideally inside Lean",
+      "what_they_gain": "A provable search-width cap for any deterministic planner compiled to a labeled transition system, together with an exact benchmark family for regression tests and explorer statistics.",
+      "statement": "In any deterministic labeled graph, a labeled path is determined by its initial vertex, so the number of lifts of a fixed word is at most the number of states. In the explicit Phi-family, the audit graph has 2^(m-1) states, 2^m edges, and uniform outdegree 2.",
+      "proof_sketch": "Use before, after, AcceptsSeq, and AcceptsWord to encode word acceptance. Then labeledPath_initial_injective shows that a lift is uniquely determined by its initial state, and labeledPath_card_le_state_card gives the cardinality bound. The exact calibration family is provided by phiState_card, phiEdge_card, and phiGraph_outdegree_two. Inference from these sources: once the ETP planner or explorer is rendered as a deterministic dual-aware automaton, one gets an immediate a priori cap on per-word search multiplicity and a clean family of exact sanity checks.",
+      "lean_refs": [
+        "equational_theories/Closure.lean:216",
+        "equational_theories/Closure.lean:327",
+        "README.md:31"
+      ],
+      "automath_refs": [
+        "lean4/Omega/Graph/LabeledGraph.lean:13 (before)",
+        "lean4/Omega/Graph/LabeledGraph.lean:17 (after)",
+        "lean4/Omega/Graph/LabeledGraph.lean:25 (AcceptsSeq)",
+        "lean4/Omega/Graph/LabeledGraph.lean:31 (AcceptsWord)",
+        "lean4/Omega/Graph/LiftBound.lean:12 (labeledPath_initial_injective)",
+        "lean4/Omega/Graph/LiftBound.lean:27 (labeledPath_card_le_state_card)",
+        "lean4/Omega/Graph/PhiGraph.lean:12 (phiState_card)",
+        "lean4/Omega/Graph/PhiGraph.lean:18 (phiEdge_card)",
+        "lean4/Omega/Graph/PhiGraph.lean:28 (phiGraph_outdegree_two)"
+      ],
+      "novelty_risk": "Low-medium: the finite-state bound is classical, but the transfer to a dual-aware ETP planner is concrete and useful."
+    },
+    {
+      "title": "Orthogonal Projector Calculus For The Natural Central-Groupoid Proof",
+      "type": "proposition",
+      "status": "proved",
+      "target_need": "issue #352: formalize Knuth's Theorem 5.9, i.e. Equation 26302 characterizing natural central groupoids",
+      "what_they_gain": "A ready-made Lean micro-calculus for the proof stage where elements must be split into idempotent sectors and uniqueness of the active sector must be forced, reducing the amount of ad hoc case analysis needed in the Equation 26302 argument.",
+      "statement": "Automath proves that under involutive ±1 hypotheses the four projectors epp, epn, enp, enn are idempotent, sum to 1, are orthogonal, and exactly one projector is active on a given sign pattern.",
+      "proof_sketch": "epp_idempotent gives idempotence, central_idempotents_sum_one gives completeness, and central_idempotents_orthogonal gives orthogonality. The recovery layer then turns the same algebra into an explicit case-split mechanism through projectorVal_partition_of_signs and projectorVal_case_split. This is not Theorem 5.9 itself, but it is a precise Lean gadget for the blueprint step where Equation 26302 is used to manufacture idempotent factors and argue canonical decomposition.",
+      "lean_refs": [
+        "equational_theories/CentralGroupoids.lean:1",
+        "blueprint/src/chapter/implications.tex:188",
+        "blueprint/src/chapter/implications.tex:220"
+      ],
+      "automath_refs": [
+        "lean4/Omega/EA/CentralIdempotents.lean:21 (epp_idempotent)",
+        "lean4/Omega/EA/CentralIdempotents.lean:29 (central_idempotents_sum_one)",
+        "lean4/Omega/EA/CentralIdempotents.lean:36 (central_idempotents_orthogonal)",
+        "lean4/Omega/EA/CentralIdempotentsRecovery.lean:10 (projectorVal_partition_of_signs)",
+        "lean4/Omega/EA/CentralIdempotentsRecovery.lean:34 (projectorVal_case_split)"
+      ],
+      "novelty_risk": "Medium: the projector algebra itself is classical; the claim here is usefulness as a proof-compression gadget for the natural central-groupoid formalization."
+    },
+    {
+      "title": "Coprime-Annihilator Collapse For Linear-Magma Search",
+      "type": "corollary",
+      "status": "proved",
+      "target_need": "issues #418 and #364: obtain rigorous arithmetic pruning for linear-magma implication searches, rather than brute-force field scanning alone",
+      "what_they_gain": "A Lean-certified arithmetic pre-filter for linear counterexample searches: many candidate fields or coefficient tuples can be discarded before any resultant computation or exhaustive scan, because nontrivial witnesses must survive common divisibility constraints.",
+      "statement": "In an additive commutative group, if q1 • a = 0 and q2 • a = 0 with gcd(q1,q2)=1, then a = 0; and if a has minimal order n, then q • a = 0 holds exactly when n divides q. Hence any linear-magma law whose evaluation reduces to scalar annihilator constraints can only support nontrivial witnesses along common torsion divisibility classes.",
+      "proof_sketch": "The exact Automath chain is coprime_smul_eq_zero_of_both, anom_oracle_collapse, and smul_eq_zero_iff_order_dvd. The first kills coprime annihilator pairs, the second compresses infinitely many annihilator constraints to a coprime pair, and the third converts vanishing into order divisibility. Inference from these sources: when ETP linear models x ◇ y = a*x + b*y are translated into coefficient equations on an additive carrier, one obtains a rigorous arithmetic pruning principle before any finite-field enumeration.",
+      "lean_refs": [
+        "equational_theories/LinearOps.lean:8",
+        "equational_theories/LinearOps.lean:63",
+        "paper/constructions.tex:65",
+        "paper/constructions.tex:73"
+      ],
+      "automath_refs": [
+        "lean4/Omega/Core/CoprimeSMul.lean:16 (coprime_smul_eq_zero_of_both)",
+        "lean4/Omega/Core/CoprimeSMul.lean:45 (anom_oracle_collapse)",
+        "lean4/Omega/Core/CoprimeSMul.lean:61 (smul_eq_zero_iff_order_dvd)"
+      ],
+      "novelty_risk": "Medium: the underlying lemmas are exact, but their deployment as a linear-magma pruning engine is an inferred application rather than an existing Automath formalization."
+    }
+  ],
   "draft_title": "",
   "draft_body": "",
-  "action_history": [],
+  "action_history": [
+    {
+      "timestamp": "2026-04-19T00:26:33+08:00",
+      "stage": "B",
+      "round": 1,
+      "action": "research round completed",
+      "score": 2,
+      "verdict": "",
+      "detail": "{\"codex_score\": 5, \"claude_score\": 2, \"claude_notes\": \"Every finding follows the same pattern: take a correct but generic Automath lemma (scan-error certificates, deterministic-automaton path bounds, ±1 projector idempotents, coprime annihilators in abelian groups) and claim it 'transfers' to a specific ETP issue via loose analogy. None of these actually compile against the target repo's types. A scan-error certificate is not an EquationalResult implication certificate; a labeled-graph lift bound doesn't plug into their closure computation; the proj\", \"findings\": [{\"title\": \"Canonical Certificate Normal Form For Implicit Edges\", \"type\": \"proposition\", \"status\": \"proved\", \"target_need\": \"issue #343: export low-level proofs / derivation chains for implicit implications and anti-implications, suitable for non-Lean consumers\", \"what_they_gain\": \"A concrete Lean architecture for replacing opaque implicit closure edges by small local proof objects with explicit validity predicates, soundness lemmas, and a canonical zero-obstruction branch. This is exactly the missing layer between EquationalResult metadata and Closure.list_outcomes.\", \"statement\": \"Automath proves that scan-error claims can be represented by certificates whose validity predicates are definitionally the claimed quantities; ScanErrorCertificate.sound and PrefixScanErrorCertificate.sound recover the certified values from validity, while ObservableZeroScanCertificate.canonical supplies a canonical zero-error certificate for every observable event.\", \"proof_sketch\": \"The chain is explicit in the source. ObservableZeroScanCertificate.Valid and PrefixScanErrorCertificate.Valid define the certificate semantics; ScanErrorCertificate.sound, ObservableZeroScanCertificate.sound, and PrefixScanErrorCertificate.sound are the local soundness lemmas; ObservableZeroScanCertificate.canonical normalizes the zero-error branch without search. Transferred to ETP, one obtains a defensible export design in which explicit theorem edges become leaf certificates and transitive / dual closure becomes certificate composition rather than an opaque matrix post-processing step.\", \"lean_refs\": [\"equational_theories/EquationalResult.lean:37\", \"equational_theories/Closure.lean:327\", \"equational_theories/Closure.lean:346\"], \"automath_refs\": [\"lean4/Omega/Frontier/Certificates.lean:100 (ScanErrorCertificate.sound)\", \"lean4/Omega/Frontier/Certificates.lean:111 (ObservableZeroScanCertificate.Valid)\", \"lean4/Omega/Frontier/Certificates.lean:115 (ObservableZeroScanCertificate.sound)\", \"lean4/Omega/Frontier/Certificates.lean:120 (ObservableZeroScanCertificate.canonical)\", \"lean4/Omega/Frontier/Certificates.lean:135 (PrefixScanErrorCertificate.Valid)\", \"lean4/Omega/Frontier/Certificates.lean:138 (PrefixScanErrorCertificate.sound)\"], \"novelty_risk\": \"Low: the Automath theorems are exact; only the reuse of the certificate pattern for ETP implication edges is an inferred transfer.\"}, {\"title\": \"Deterministic Planner Paths Are State-Bounded\", \"type\": \"theorem\", \"status\": \"proved\", \"target_need\": \"issue #725: unify the finite magma refutation planner with transitive-closure and duality computation, ideally inside Lean\", \"what_they_gain\": \"A provable search-width cap for any deterministic planner compiled to a labeled transition system, together with an exact benchmark family for regression tests and explorer statistics.\", \"statement\": \"In any deterministic labeled graph, a labeled path is determined by its initial vertex, so the number of lifts of a fixed word is at most the number of states. In the explicit Phi-family, the audit graph has 2^(m-1) states, 2^m edges, and uniform outdegree 2.\", \"proof_sketch\": \"Use before, after, AcceptsSeq, and AcceptsWord to encode word acceptance. Then labeledPath_initial_injective shows that a lift is uniquely determined by its initial state, and labeledPath_card_le_state_card gives the cardinality bound. The exact calibration family is provided by phiState_card, phiEdge_card, and phiGraph_outdegree_two. Inference from these sources: once the ETP planner or explorer is rendered as a deterministic dual-aware automaton, one gets an immediate a priori cap on per-word search multiplicity and a clean family of exact sanity checks.\", \"lean_refs\": [\"equational_theories/Closure.lean:216\", \"equational_theories/Closure.lean:327\", \"README.md:31\"], \"automath_refs\": [\"lean4/Omega/Graph/LabeledGraph.lean:13 (before)\", \"lean4/Omega/Graph/LabeledGraph.lean:17 (after)\", \"lean4/Omega/Graph/LabeledGraph.lean:25 (AcceptsSeq)\", \"lean4/Omega/Graph/LabeledGraph.lean:31 (AcceptsWord)\", \"lean4/Omega/Graph/LiftBound.lean:12 (labeledPath_initial_injective)\", \"lean4/Omega/Graph/LiftBound.lean:27 (labeledPath_card_le_state_card)\", \"lean4/Omega/Graph/PhiGraph.lean:12 (phiState_card)\", \"lean4/Omega/Graph/PhiGraph.lean:18 (phiEdge_card)\", \"lean4/Omega/Graph/PhiGraph.lean:28 (phiGraph_outdegree_two)\"], \"novelty_risk\": \"Low-medium: the finite-state bound is classical, but the transfer to a dual-aware ETP planner is concrete and useful.\"}, {\"title\": \"Orthogonal Projector Calculus For The Natural Central-Groupoid Proof\", \"type\": \"proposition\", \"status\": \"proved\", \"target_need\": \"issue #352: formalize Knuth's Theorem 5.9, i.e. Equation 26302 characterizing natural central groupoids\", \"what_they_gain\": \"A ready-made Lean micro-calculus for the proof stage where elements must be split into idempotent sectors and uniqueness of the active sector must be forced, reducing the amount of ad hoc case analysis needed in the Equation 26302 argument.\", \"statement\": \"Automath proves that under involutive ±1 hypotheses the four projectors epp, epn, enp, enn are idempotent, sum to 1, are orthogonal, and exactly one projector is active on a given sign pattern.\", \"proof_sketch\": \"epp_idempotent gives idempotence, central_idempotents_sum_one gives completeness, and central_idempotents_orthogonal gives orthogonality. The recovery layer then turns the same algebra into an explicit case-split mechanism through projectorVal_partition_of_signs and projectorVal_case_split. This is not Theorem 5.9 itself, but it is a precise Lean gadget for the blueprint step where Equation 26302 is used to manufacture idempotent factors and argue canonical decomposition.\", \"lean_refs\": [\"equational_theories/CentralGroupoids.lean:1\", \"blueprint/src/chapter/implications.tex:188\", \"blueprint/src/chapter/implications.tex:220\"], \"automath_refs\": [\"lean4/Omega/EA/CentralIdempotents.lean:21 (epp_idempotent)\", \"lean4/Omega/EA/CentralIdempotents.lean:29 (central_idempotents_sum_one)\", \"lean4/Omega/EA/CentralIdempotents.lean:36 (central_idempotents_orthogonal)\", \"lean4/Omega/EA/CentralIdempotentsRecovery.lean:10 (projectorVal_partition_of_signs)\", \"lean4/Omega/EA/CentralIdempotentsRecovery.lean:34 (projectorVal_case_split)\"], \"novelty_risk\": \"Medium: the projector algebra itself is classical; the claim here is usefulness as a proof-compression gadget for the natural central-groupoid formalization.\"}]}"
+    }
+  ],
   "timestamps": {
     "created_at": "2026-04-19T00:07:06+08:00",
-    "updated_at": "2026-04-19T00:07:15+08:00",
+    "updated_at": "2026-04-19T00:26:33+08:00",
     "stage_b_started_at": "2026-04-19T00:07:15+08:00"
   },
   "submission_url": "",
