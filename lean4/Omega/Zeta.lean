@@ -127,6 +127,7 @@ import Omega.Zeta.LocalInversionDelta
 import Omega.Zeta.LocalizedIntegersPrimeAxisIncrementLaw
 import Omega.Zeta.LocalizedIntegersPadicKernelRigidity
 import Omega.Zeta.LocalizedIntegersConnectedRationalBlindness
+import Omega.Zeta.LocalizedIntegersCrossHomClassification
 import Omega.Zeta.LocalizedFiniteIndexLatticeClassification
 import Omega.Zeta.LocalizedSolenoidNonzeroEndomorphismDegreeSemigroup
 import Omega.Zeta.LocalizedQuotientLedger
