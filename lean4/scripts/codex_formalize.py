@@ -133,6 +133,7 @@ class WorktreeInfo:
     path: Path
     branch: str
     round_number: int
+    base_sha: str = ""  # HEAD at worktree creation; ground truth for "new" commits
 
 
 # ---------------------------------------------------------------------------
@@ -415,7 +416,10 @@ def create_worktree(round_num: int) -> WorktreeInfo:
     # Clone .lake cache outside the git lock (can run in parallel)
     _clone_lake_cache(wt_path)
 
-    return WorktreeInfo(path=wt_path, branch=branch, round_number=round_num)
+    base_sha = run_cmd(["git", "rev-parse", "HEAD"], cwd=wt_path).stdout.strip()
+    return WorktreeInfo(
+        path=wt_path, branch=branch, round_number=round_num, base_sha=base_sha,
+    )
 
 
 def remove_worktree(wt: WorktreeInfo) -> None:
@@ -1128,9 +1132,24 @@ def lake_build_verify(wt: WorktreeInfo, *, timeout: int = 1800) -> tuple[bool, s
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
     """Check for new commits in the worktree. Also rejects signature degradation,
     new abstract-Prop shell files, sorry/admit/axiom literals, and any commit
-    whose final lake build does not pass."""
-    post = git_log_oneline(20, cwd=wt.path)
-    new = [c for c in post if c not in pre_commits]
+    whose final lake build does not pass.
+
+    Ground truth for "new commits" is `git log <base_sha>..HEAD` where base_sha
+    is the worktree HEAD captured at creation. This is robust to codex doing
+    `git fetch + rebase` inside the worktree (which moves HEAD past commits
+    that already exist on origin); a window-based comparison against
+    `pre_commits` mistakenly counted those as new in earlier versions.
+    """
+    if wt.base_sha:
+        result = run_cmd(
+            ["git", "log", "--oneline", f"{wt.base_sha}..HEAD"],
+            cwd=wt.path,
+        )
+        new = [l.strip() for l in result.stdout.splitlines() if l.strip()]
+    else:
+        # Backward-compat fallback for worktrees created before base_sha existed.
+        post = git_log_oneline(40, cwd=wt.path)
+        new = [c for c in post if c not in pre_commits]
     if new:
         logger.info(f"[R{wt.round_number}] Phase D: {len(new)} new commit(s):")
         for c in new:
