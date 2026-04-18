@@ -100,6 +100,7 @@ import Omega.Conclusion.PhaseLedgerBudgetExactHalfspace
 import Omega.Conclusion.Pisano1PositiveSea
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.PrimeCharacterEnergyCenteredVariance
+import Omega.Conclusion.PrimeAdjunctionExactMultiplicativeBudget
 import Omega.Conclusion.PrimeRegisterFiberCdimDensity
 import Omega.Conclusion.PrimeRegisterKStretchDensityCriterion
 import Omega.Conclusion.PrimorialAdditiveVsGodelMultiplicative
