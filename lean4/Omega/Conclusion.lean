@@ -61,6 +61,7 @@ import Omega.Conclusion.JGEllipseConditionNumberThreshold
 import Omega.Conclusion.JGEllipseFixedEpsilonInformationBarrier
 import Omega.Conclusion.JGEllipsePackingSqrtLaw
 import Omega.Conclusion.KernelChainRule
+import Omega.Conclusion.KirchhoffGreenDeterminantIdentity
 import Omega.Conclusion.LocalizedKernelInclusionExclusionMobius
 import Omega.Conclusion.KrylovLowrankRigidity
 import Omega.Conclusion.LeyangOffdiagonalTranspositionQuotient

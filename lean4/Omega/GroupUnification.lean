@@ -22,6 +22,7 @@ import Omega.GroupUnification.GroupTwoScaleHolographicRecoveryRadialSeparation
 import Omega.GroupUnification.GutOmegaLinearAction
 import Omega.GroupUnification.HankelVandermondeDiscriminantStiffness
 import Omega.GroupUnification.MarkovZeroVariance
+import Omega.GroupUnification.MinTotalGodelCostPrimorial
 import Omega.GroupUnification.NormalForm
 import Omega.GroupUnification.ParryCommutingSquarePhi
 import Omega.GroupUnification.ParryEndpointCollapse

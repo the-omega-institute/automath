@@ -68,6 +68,7 @@ import Omega.POM.FiberStokesEulerBoundaryObservability
 import Omega.POM.FiberWalshHardcoreStokesSign
 import Omega.POM.FiberWalshMod2RigidityExtremal
 import Omega.POM.FiberWalshSignatureRademacher
+import Omega.POM.FiberWalshStokesBoundaryTomographyReconstruction
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.FiberTripleMedianMajority
 import Omega.POM.FiberTwoPhaseMixing
