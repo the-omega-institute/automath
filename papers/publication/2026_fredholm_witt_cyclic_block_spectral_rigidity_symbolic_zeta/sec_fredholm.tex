@@ -30,13 +30,18 @@ trace-class operator. Define
     =\exp\!\left(\sum_{n\ge 1}\frac{a_n(T)}{n}z^n\right)
     =\prod_{n\ge 1}(1-z^n)^{-p_n(T)},
   \]
-  where \(\log(1-z^m)\) denotes the principal branch on \(\abs{z}<1\).
+  where
+  \(
+    (1-z^m)^{-p_m(T)}
+    :=\exp\!\bigl(-p_m(T)\log(1-z^m)\bigr)
+  \)
+  and \(\log(1-z^m)\) denotes the principal branch on \(\abs{z}<1\).
   This identity holds as an equality of holomorphic germs at \(z=0\);
-  equivalently, it is an identity of formal power series. The
-  exponents \(p_n(T)\) are in general not integers, so the Euler
-  product on the right is not a finite collection of zero-free factors,
-  and the expression should not be extended beyond the common disc of
-  convergence without an explicit branch choice.
+  equivalently, it is an identity of formal power series. Since the
+  exponents \(p_n(T)\) are in general not integers, the Euler product
+  is understood through this exponential branch convention and should
+  not be extended beyond the common disc of convergence without an
+  explicit branch choice.
 \end{proposition}
 
 \begin{proof}
@@ -62,7 +67,8 @@ trace-class operator. Define
   for \(\abs{z^m}<1\), i.e.\ for \(\abs{z}<1\). Together with the
   convergence of the trace series for \(\abs{z}<\norm{T}^{-1}\), the
   calculation is valid for \(\abs{z}<\min(1,\norm{T}^{-1})\).
-  Exponentiating gives the Euler product.
+  Exponentiating gives the Euler product in the stated branch
+  convention.
 \end{proof}
 
 \begin{remark}[Euler coordinates beyond the finite-state setting]
@@ -251,12 +257,29 @@ Fourier diagonalization of the cyclic permutation matrix \(\Pi_n\).
   \[
     H=\ker L\oplus\bigoplus_{\lambda\in\spec(L)\setminus\{0\}}E_\lambda,
   \]
-  where \(L|_{E_\lambda}=\lambda I\). If the same eigenvalue \(\lambda\)
-  is contributed by several indices \(j\), its eigenspace \(E_\lambda\)
-  has dimension equal to the sum of the corresponding multiplicities.
-  Choose an orthogonal decomposition of each \(E_\lambda\) into pieces
-  with these multiplicities and then regroup those pieces by the index
-  \(j\). This produces reducing subspaces \(H_j\subset H\) such that
+  where \(L|_{E_\lambda}=\lambda I\). For each non-zero eigenvalue
+  \(\lambda\), let
+  \[
+    J_\lambda:=\bigl\{j\in J:\lambda=\alpha_j\omega
+      \text{ for some }\omega^{n_j}=1\bigr\}.
+  \]
+  Since \(L_{\mathcal D}\) is trace-class, the multiplicity of
+  \(\lambda\) is finite, so \(J_\lambda\) is finite and
+  \[
+    \dim E_\lambda
+    =\sum_{j\in J_\lambda} m_j .
+  \]
+  Choose an orthogonal decomposition
+  \[
+    E_\lambda=\bigoplus_{j\in J_\lambda} E_{\lambda,j},
+    \qquad
+    \dim E_{\lambda,j}=m_j .
+  \]
+  For each \(j\), set
+  \[
+    H_j:=\bigoplus_{\omega^{n_j}=1}E_{\alpha_j\omega,j}.
+  \]
+  Then \(H_j\) is reducing for \(L\), pairwise orthogonal in \(j\), and
   \(L|_{H_j}\) is unitarily equivalent to
   \[
     \bigoplus_{\omega^{n_j}=1}\alpha_j\omega\,I_{m_j}.
@@ -398,7 +421,8 @@ Fourier diagonalization of the cyclic permutation matrix \(\Pi_n\).
         \sum_jm_jn_j\abs{\beta_j}^{1/n_j}
         =\sum_\ell m'_\ell n'_\ell\abs{\beta'_\ell}^{1/n'_\ell},
       \]
-      so \(N(L)\) and \(\|L\|_1\) are intrinsic to the Fredholm zeta germ.
+      so the values of \(N(L)\) and \(\|L\|_1\) for any normal
+      realisation \(L\) are intrinsic to the Fredholm zeta germ.
     \item Let \(T_1,T_2\in\sone(H)\). If \(Z_{T_1}(z)=Z_{T_2}(z)\) in a
       neighbourhood of \(z=0\), then \(T_1\) and \(T_2\) have the same
       non-zero spectrum with algebraic multiplicity. Consequently
@@ -526,8 +550,13 @@ eigenvalue data to every trace-class realisation.
     \|T\|_1
     \ge \sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j},
   \]
-  with equality if and only if \(T\) is normal and unitarily equivalent
-  to the block-cyclic model \(L_{\mathcal D}\) of
+  with equality if and only if \(T\) is normal; equivalently, if and
+  only if there exist a Hilbert space \(H_0\) and a unitary operator
+  \(U:H\to H_0\oplus H_{\mathcal D}\) such that
+  \[
+    UTU^{-1}=0_{H_0}\oplus L_{\mathcal D},
+  \]
+  where \(L_{\mathcal D}\) is the block-cyclic model of
   \Cref{thm:cyclic-fredholm-realisation}.
 \end{theorem}
 
@@ -544,20 +573,60 @@ eigenvalue data to every trace-class realisation.
   \cite[Theorem~1.15]{Simon2005TraceIdeals} gives
   \(
     \sum_k\abs{\lambda_k(T)}\le \|T\|_1
-  \)
-  with equality exactly for normal operators whose eigenvectors form an
-  orthonormal basis. Therefore
+  \).
+  Therefore
   \[
     \|T\|_1
     \ge \sum_k\abs{\lambda_k(T)}
     =\sum_j m_jn_j\abs{\beta_j}^{1/n_j}
     =\|L_{\mathcal D}\|_1,
   \]
-  and equality holds precisely when \(T\) is normal with an orthonormal
-  eigenbasis, in which case \Cref{thm:cyclic-fredholm-realisation}
-  forces \(T\) to be unitarily equivalent to
-  \(0_{H_0}\oplus L_{\mathcal D}\). Removing the zero summand yields the
-  stated equivalence.
+  and \(L_{\mathcal D}\), hence every zero-summand enlargement
+  \(0_{H_0}\oplus L_{\mathcal D}\) with arbitrary \(H_0\), certainly
+  attains equality.
+
+  It remains to analyse the equality case. Assume
+  \(
+    \|T\|_1=\sum_k\abs{\lambda_k(T)}
+  \).
+  Choose an orthonormal basis giving the standard Schur
+  upper-triangular form of the compact operator \(T\), with diagonal
+  entries \(\lambda_k(T)\) repeated according to algebraic
+  multiplicity. Let \(D\) be the diagonal unitary with diagonal entries
+  \[
+    d_k=
+    \begin{cases}
+      \overline{\lambda_k(T)}/\abs{\lambda_k(T)},& \lambda_k(T)\ne 0,\\
+      1,& \lambda_k(T)=0.
+    \end{cases}
+  \]
+  Then \(DT\) is upper triangular and
+  \[
+    \Tr(DT)=\sum_k\abs{\lambda_k(T)}=\|T\|_1.
+  \]
+  Write the polar decomposition \(T=V|T|\). Since \(\|DV\|\le 1\),
+  \[
+    0
+    =\Tr|T|-\Re\Tr(DT)
+    =\Tr\!\bigl(
+      |T|^{1/2}(I-\Re(DV))|T|^{1/2}\bigr).
+  \]
+  The operator inside the trace is positive, hence vanishes. Thus
+  \(\Re(DV)=I\) on \(\overline{\mathrm{ran}(|T|)}\). For
+  \(h\in\overline{\mathrm{ran}(|T|)}\),
+  \[
+    \|h-DVh\|^2
+    =\|h\|^2+\|DVh\|^2-2\Re\langle DVh,h\rangle
+    \le 2\|h\|^2-2\|h\|^2=0,
+  \]
+  so \(DVh=h\). Therefore
+  \[
+    DT=DV|T|=|T|
+  \]
+  is positive. A positive upper-triangular operator is diagonal, hence
+  \(DT\), and therefore \(T\), is diagonal in this basis. In
+  particular \(T\) is normal. The normal-form clause now follows from
+  \Cref{thm:cyclic-fredholm-realisation}.
 \end{proof}
 
 \begin{corollary}[Symbolic-dynamical trace-norm rigidity]
@@ -572,17 +641,20 @@ eigenvalue data to every trace-class realisation.
   \[
     \|T\|_1\ge \sum_{i=1}^M \abs{\lambda_i},
   \]
-  with equality if and only if \(T\) is normal and unitarily equivalent
-  to the block-cyclic model
-  \(
-    \bigoplus_{i=1}^M C(1,\lambda_i)
-  \)
-  delivered by \Cref{thm:cyclic-fredholm-realisation}. Consequently the
-  cyclic-block normal model is the unique trace-norm minimiser among all
-  trace-class realisations of the dynamical zeta function
-  \(\det(I-zA)^{-1}\); by \Cref{prop:prelim-trace-primitive}, this
-  applies in particular to the zeta functions of primitive subshifts of
-  finite type.
+  with equality if and only if there exist a Hilbert space \(H_0\) and
+  a unitary operator
+  \[
+    U:H\to H_0\oplus \CC^M
+  \]
+  such that
+  \[
+    UTU^{-1}=0_{H_0}\oplus\bigoplus_{i=1}^M C(1,\lambda_i).
+  \]
+  Consequently the trace-norm minimisers among all trace-class
+  realisations of the dynamical zeta function \(\det(I-zA)^{-1}\) are
+  exactly these normal models; by
+  \Cref{prop:prelim-trace-primitive}, this applies in particular to the
+  zeta functions of primitive subshifts of finite type.
 \end{corollary}
 
 \begin{proof}
@@ -614,7 +686,7 @@ we spell out one concrete consequence.
 
 \begin{corollary}[Realisability versus rigidity]
   \label{cor:realisability-vs-rigidity}
-  Let \(A\) be a finite matrix and let \(T\in \sone\) satisfy
+  Let \(A\) be a finite matrix and let \(T\in \sone(H)\) satisfy
   \[
     \det(I-zT)=\det(I-zA).
   \]
