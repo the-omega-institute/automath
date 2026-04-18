@@ -25,8 +25,13 @@ If the chapter itself is NEW (no lean4/Omega/<Chapter>.lean exists yet):
 
 ## Step 2: Full compilation
 ```bash
-cd lean4 && lake build
+cd lean4 && python3 scripts/lake_gate.py build
 ```
+`lake_gate.py` enforces a host-wide cap on concurrent `lake` invocations
+(LAKE_GATE_MAX_PARALLEL, set by the orchestrator). Use it for ALL `lake`
+calls in this round — single-module builds too, e.g.
+`python3 scripts/lake_gate.py build Omega.X.Y`. Do NOT invoke `lake` directly.
+
 If errors, fix them (up to 3 attempts per theorem).
 If a theorem is stuck, skip it and continue with the others.
 
@@ -112,7 +117,7 @@ tolerated by the scanner, but NEW shell structures in a round's diff cause
 the entire round to be rejected (commits not merged to the base branch).
 
 ## Completion Contract
-- No sorry / admit / axiom; lake build must pass with zero errors
+- No sorry / admit / axiom; `python3 scripts/lake_gate.py build` must pass with zero errors
 - Must complete all 5 steps; if a theorem is stuck, skip it and continue
 - Tactic failure: auto-try next; compile error: auto-fix up to 3 rounds
 - Implementation changes: only in lean4/Omega/

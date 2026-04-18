@@ -58,6 +58,11 @@ WORKTREE_DIR = REPO_ROOT / ".worktrees"
 
 BASE_BRANCH = "lean4-codex-auto-dev"
 CODEX_PATH = shutil.which("codex") or "/opt/homebrew/bin/codex"
+# Lake-gate config exported to every codex child so they all coordinate on
+# the same lock dir / slot count. Defaults below are conservative for a
+# 16 GB M-series Mac. Override via CLI flags (--lake-parallel, --lake-lock-dir).
+LAKE_GATE_LOCK_DIR = REPO_ROOT / ".worktrees" / ".lake-gate"
+LAKE_GATE_MAX_PARALLEL = 1
 # Graceful stop: create this file to prevent new rounds from being dispatched.
 # Current rounds finish normally; the process exits once the pool drains.
 STOP_FILE = REPO_ROOT / ".pipeline.stop"
@@ -752,11 +757,20 @@ def codex_exec(
     start = time.monotonic()
     result = None
 
+    # Inherit env, but always export the lake_gate config so every codex
+    # invocation sees the same shared lock dir and concurrency cap. Without
+    # this the gate inside the worktree falls back to its default of 1 slot
+    # in $TMPDIR — usually fine, but explicit is safer when callers override.
+    child_env = os.environ.copy()
+    child_env.setdefault("LAKE_GATE_LOCK_DIR", str(LAKE_GATE_LOCK_DIR))
+    child_env.setdefault("LAKE_GATE_MAX_PARALLEL", str(LAKE_GATE_MAX_PARALLEL))
+
     try:
         with open(prompt_file, "r", encoding="utf-8") as pf:
             result = subprocess.run(
                 cmd, stdin=pf, capture_output=True, text=True,
                 timeout=timeout_seconds + 30, cwd=target_dir,
+                env=child_env,
             )
     except subprocess.TimeoutExpired:
         logger.warning(f"Codex exec timed out after {timeout_seconds}s")
@@ -1368,7 +1382,7 @@ def run_round_serial(
 # ---------------------------------------------------------------------------
 
 def main() -> int:
-    global BASE_BRANCH
+    global BASE_BRANCH, LAKE_GATE_LOCK_DIR, LAKE_GATE_MAX_PARALLEL
 
     parser = argparse.ArgumentParser(
         description="Lean4 Codex-First formalization with worktree parallelism",
@@ -1450,7 +1464,30 @@ def main() -> int:
         "--mem-max-wait", type=int, default=1800,
         help="Memory-guard max wait before proceeding anyway, in seconds (default: 1800)",
     )
+    parser.add_argument(
+        "--lake-parallel", type=int, default=None,
+        help="Concurrent `lake` cap exported to codex children via "
+             "LAKE_GATE_MAX_PARALLEL. Defaults to max(1, --parallel // 2) so "
+             "lake never runs in more workers than half the round count.",
+    )
+    parser.add_argument(
+        "--lake-lock-dir", type=str, default=None,
+        help=f"Shared lock directory for lake_gate.py "
+             f"(default: {LAKE_GATE_LOCK_DIR}).",
+    )
     args = parser.parse_args()
+
+    if args.lake_lock_dir:
+        LAKE_GATE_LOCK_DIR = Path(args.lake_lock_dir)
+    LAKE_GATE_LOCK_DIR.mkdir(parents=True, exist_ok=True)
+    if args.lake_parallel is not None:
+        LAKE_GATE_MAX_PARALLEL = max(1, args.lake_parallel)
+    else:
+        LAKE_GATE_MAX_PARALLEL = max(1, args.parallel // 2)
+    logger.info(
+        f"Lake gate: max_parallel={LAKE_GATE_MAX_PARALLEL}, "
+        f"lock_dir={LAKE_GATE_LOCK_DIR}"
+    )
 
     BASE_BRANCH = args.base_branch
 
