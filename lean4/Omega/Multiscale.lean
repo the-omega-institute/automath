@@ -7,6 +7,7 @@ import Omega.Multiscale.SolenoidCylindricalPLDuality
 import Omega.Multiscale.SolenoidNormalizedStokesL2ScalingCriticalDegree
 import Omega.Multiscale.SolenoidShiftInvariance
 import Omega.Multiscale.SolenoidStokesEquilibriumMarkovContraction
+import Omega.Multiscale.SolenoidStokesMarkovVarianceDissipation
 import Omega.Multiscale.StokesDirichletEnergyMultiscaleApprox
 import Omega.Multiscale.StokesPeriodModuleCovectorNormalization
 import Omega.Multiscale.ToralSolenoidCechH1DirectLimit
