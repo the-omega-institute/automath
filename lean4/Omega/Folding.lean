@@ -86,6 +86,7 @@ import Omega.Folding.FiberSubsetConvolution
 import Omega.Folding.FiberSingleCoordinateAffineDifference
 import Omega.Folding.FiberSingleCoordinateMinimalAugmentation
 import Omega.Folding.FiberFourierPhaseRigidity
+import Omega.Folding.FiberGaugeVolumeChainFactorization
 import Omega.Folding.FiberFusion
 import Omega.Folding.FiberRankUnrankLinear
 import Omega.Folding.FiberRing

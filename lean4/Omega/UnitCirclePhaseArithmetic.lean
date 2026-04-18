@@ -1,3 +1,4 @@
+import Omega.UnitCirclePhaseArithmetic.FibUnitCircleUpliftIdentity
 import Omega.UnitCirclePhaseArithmetic.FibUpliftCoordinateGateRigidity
 import Omega.UnitCirclePhaseArithmetic.LeyangRationalRoseTorusProjection
 import Omega.UnitCirclePhaseArithmetic.LeyangRationalRoseFiniteAmbiguity
