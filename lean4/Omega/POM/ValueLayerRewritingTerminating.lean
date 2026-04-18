@@ -34,6 +34,22 @@ terminal occurrence. -/
 def normalize (w : ValProjectionWord) : ValProjectionWord :=
   atomsWord (atoms w) ++ if hasNormProj w then [projNorm] else []
 
+@[simp] lemma atoms_append (u v : ValProjectionWord) :
+    atoms (u ++ v) = atoms u ++ atoms v := by
+  induction u with
+  | nil =>
+      rfl
+  | cons t u ih =>
+      cases t <;> simp [atoms, ih]
+
+@[simp] lemma hasNormProj_append (u v : ValProjectionWord) :
+    hasNormProj (u ++ v) = (hasNormProj u || hasNormProj v) := by
+  induction u with
+  | nil =>
+      rfl
+  | cons t u ih =>
+      cases t <;> simp [hasNormProj, ih]
+
 /-- Count the number of `PROJ_NORM` tokens. -/
 def normProjCount : ValProjectionWord → ℕ
   | [] => 0
@@ -65,6 +81,24 @@ lemma RewritesToStar.trans {u v w : ValProjectionWord} :
       exact hvw
   | tail hstep hstar ih =>
       exact RewritesToStar.tail hstep (ih hvw)
+
+lemma RewriteStep.normalize_eq {u v : ValProjectionWord} (h : RewriteStep u v) :
+    normalize u = normalize v := by
+  cases h with
+  | RZ u v =>
+      cases hu : hasNormProj u <;>
+        simp [normalize, atoms, hasNormProj, atoms_append, hasNormProj_append, hu]
+  | RNF u v n =>
+      cases hu : hasNormProj u <;>
+        simp [normalize, atoms, hasNormProj, atoms_append, hasNormProj_append, hu]
+
+lemma RewritesToStar.normalize_eq {u v : ValProjectionWord} (h : RewritesToStar u v) :
+    normalize u = normalize v := by
+  induction h with
+  | refl _ =>
+      rfl
+  | tail hstep hstar ih =>
+      rw [RewriteStep.normalize_eq hstep, ih]
 
 lemma RewriteStep.cons_atom {u v : ValProjectionWord} (a : ℕ) :
     RewriteStep u v → RewriteStep (atom a :: u) (atom a :: v) := by
@@ -185,5 +219,16 @@ theorem paper_pom_rewriting_terminating (w : ValProjectionWord) :
     ∃ w' : ValProjectionWord, IsNormalForm w' ∧ RewritesToStar w w' ∧ normProjCount w' ≤ 1 := by
   refine ⟨normalize w, normalize_isNormalForm w, rewritesToNormalize w,
     normProjCount_normalize_le_one w⟩
+
+/-- Any reduction reaches the same canonical normal form, so the terminating value-layer rewrite
+system is confluent through `normalize`. `thm:pom-rewrite-termination-confluence` -/
+theorem paper_pom_rewrite_termination_confluence (w : ValProjectionWord) :
+    (∃ w', IsNormalForm w' ∧ RewritesToStar w w') ∧
+      (∀ u v, RewritesToStar w u → RewritesToStar w v → normalize u = normalize v) := by
+  refine ⟨⟨normalize w, normalize_isNormalForm w, rewritesToNormalize w⟩, ?_⟩
+  intro u v hu hv
+  calc
+    normalize u = normalize w := (RewritesToStar.normalize_eq hu).symm
+    _ = normalize v := RewritesToStar.normalize_eq hv
 
 end Omega.POM
