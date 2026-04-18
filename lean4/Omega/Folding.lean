@@ -82,6 +82,7 @@ import Omega.Folding.FiberSplit
 import Omega.Folding.FiberTruncatedMomentCompleteInversion
 import Omega.Folding.FiberWeightCount
 import Omega.Folding.FiberWeightCountComplement
+import Omega.Folding.FibKernelBasisFiniteDepth
 import Omega.Folding.FibonacciField
 import Omega.Folding.FibonacciPolynomial
 import Omega.Folding.FingerprintSeparationPublication

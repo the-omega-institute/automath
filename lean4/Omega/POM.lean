@@ -25,6 +25,7 @@ import Omega.POM.ComplementaryGoldenBernoulliDivergence
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.DefectBand
 import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
+import Omega.POM.DerivedFoldGoldenRationalPowerUnitObstruction
 import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.DiagonalHighMoments
 import Omega.POM.DiagonalRateKeepResampleChannel
@@ -136,6 +137,7 @@ import Omega.POM.PositiveNegativeMomentCoupling
 import Omega.POM.PressureConvexity
 import Omega.POM.ProjectivePressureZeroNormalization
 import Omega.POM.ProjectivePressureHolderLogconvex
+import Omega.POM.ProjectivePressureDiscreteFlatnessForcesAffine
 import Omega.POM.ProjectionAsPartitionPrimeRegister
 import Omega.POM.PressureSlopes
 import Omega.POM.PrimeAxisVs2dExternalization
