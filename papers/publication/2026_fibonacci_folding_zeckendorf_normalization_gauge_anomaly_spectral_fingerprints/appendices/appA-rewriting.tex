@@ -1,37 +1,36 @@
-\section{Appendix A: Termination and confluence of the fold normalization}
+\section{Termination and confluence of the normalization procedure}
 \label{app:rewriting}
 
-We briefly record a verifiable normalization procedure realizing Zeckendorf form. Consider a binary Fibonacci digit string written in MSD-first convention. After prefixing a leading zero, repeatedly apply the local rewrite
+For completeness we record the short rewriting argument used implicitly in the main text. This appendix works in most-significant-digit-first notation. Starting from a binary Fibonacci digit string, prefix a leading zero and repeatedly apply the local rule
 \[
-011 \to 100
+011\to 100
 \]
-whenever it occurs, scanning left-to-right and continuing until no occurrence remains. In the low-to-high window convention used in the body of the paper, this is the equivalent rule \(110\to001\).
+while scanning from left to right. In the LH convention of the main text, this is the same as the rule \(110\to 001\) acting from high weights to low weights.
 
-\begin{proposition}[Termination]\label{prop:termination}
+\begin{proposition}\label{prop:termination}
 Every rewrite sequence terminates after finitely many steps.
 \end{proposition}
 
 \begin{proof}
-Each application of \(011\to 100\) strictly decreases the number of \(1\)s by one, hence termination follows.
+Each application of \(011\to 100\) lowers the number of \(1\)s by one. Hence no infinite rewrite sequence exists.
 \end{proof}
 
-\begin{proposition}[Confluence and uniqueness of normal form]\label{prop:confluence}
-The rewriting system is confluent: every input string rewrites to a unique normal form. This normal form contains no block \(11\) and equals the Zeckendorf representation of the same Fibonacci value.
+\begin{proposition}\label{prop:confluence}
+The rewriting system is confluent: every input word rewrites to a unique normal form. This normal form contains no block \(11\) and coincides with the Zeckendorf representation of the same Fibonacci value.
 \end{proposition}
 
 \begin{proof}
-Each rewrite preserves Fibonacci value. Indeed, if the block \(011\) occupies positions \(k,k+1,k+2\) in MSD-first convention, then
+Each rewrite preserves Fibonacci value. Indeed, if the block \(011\) occupies positions \(k,k+1,k+2\) in MSD-first order, then
 \[
 \Fib_{k+2}+\Fib_{k+1}=\Fib_{k+3},
 \]
-so replacing \(011\) by \(100\) leaves the represented integer unchanged.
+so replacing \(011\) by \(100\) does not change the represented integer.
 
-To prove confluence, it is enough to prove local confluence because termination is already known from Proposition~\ref{prop:termination}. The rule \(011\to 100\) has no nontrivial critical overlaps: two occurrences of \(011\) are either disjoint or identical. Hence if two rewrites start from the same word, they commute when they are distinct, and there is nothing to check when they coincide. Therefore the system is locally confluent, and Newman's lemma gives global confluence.
+Since termination is already known, it is enough to prove local confluence. The rule \(011\to 100\) has no nontrivial critical overlap: two occurrences of \(011\) are either disjoint or identical. Distinct rewrites therefore commute, and identical rewrites clearly lead to the same result. By Newman's lemma for terminating rewrite systems \cite[Section~2.4]{BaaderNipkow1998}, the system is globally confluent.
 
-Let \(w^\sharp\) be the unique normal form. Since it is irreducible, the prefixed word \(0w^\sharp\) contains no occurrence of \(011\). Any occurrence of \(11\) in \(w^\sharp\) would then be preceded either by the prefixed \(0\) or by an internal \(0\), producing an occurrence of \(011\) in \(0w^\sharp\). Hence \(w^\sharp\) contains no block \(11\).
+Let \(w^\sharp\) be the unique irreducible word obtained from the input. The prefixed word \(0w^\sharp\) contains no occurrence of \(011\). If \(w^\sharp\) contained a block \(11\), then the symbol immediately to its left in \(0w^\sharp\) would be \(0\), and \(0w^\sharp\) would contain an occurrence of \(011\), contrary to irreducibility. Thus \(w^\sharp\) has no adjacent \(1\)s.
 
-Finally, \(w^\sharp\) has the same Fibonacci value as the initial word, and it has no adjacent \(1\)s. By Zeckendorf uniqueness \cite{Lekkerkerker1952,Zeckendorf1972}, there is exactly one binary Fibonacci expansion with that property. Therefore \(w^\sharp\) is precisely the Zeckendorf representation of the input value.
+Finally, \(w^\sharp\) has the same Fibonacci value as the initial word and no adjacent \(1\)s. By the uniqueness statement in Zeckendorf's theorem \cite{Lekkerkerker1952,Zeckendorf1972}, it must be the Zeckendorf representation of that value.
 \end{proof}
 
-Together, Propositions~\ref{prop:termination}--\ref{prop:confluence} imply that the window-level fold \(\Fold_m\) is well-defined. Idempotence follows since any already-normal form is fixed by the rewrite, and surjectivity follows because every stable word \(x\in X_m\) is a fixed point: \(\Fold_m(x)=x\).
-
+Together, Propositions~\ref{prop:termination} and \ref{prop:confluence} justify the use of \(\Fold_m\) in the main text: the normalization procedure terminates, produces a unique output, and fixes every already stable word.

@@ -1,62 +1,62 @@
-\section{Gauge anomaly: worst cases, limit laws, and spectral formulas}
+\section{The pair shift and the restriction discrepancy}
 \label{sec:gauge}
 
-\subsection{Definition}
-Consider the scale change \(m+1\to m\). For \(\omega\in \Om_{m+1}\), define the \emph{gauge anomaly} as the Hamming distance between naive truncation and fold-aware restriction:
-\begin{equation}\label{eq:gauge-anomaly}
-G_m(\omega)
-:=
-\Hamming{\naive_{m+1\to m}(\omega)\oplus \aware_{m+1\to m}(\omega)}.
-\end{equation}
-Equivalently, if
+We now compare naive truncation with the compatible restriction from Section~\ref{sec:multiscale}. For \(\omega\in\Om_{m+1}\), set
 \[
 \Delta^{(m)}(\omega)
 :=
-\naive_{m+1\to m}(\omega)\oplus \aware_{m+1\to m}(\omega)\in \set{0,1}^m,
+\naive_{m+1\to m}(\omega)\oplus \aware_{m+1\to m}(\omega)\in \{0,1\}^m
 \]
-then \(G_m(\omega)=\sum_{k=1}^m \Delta^{(m)}_k(\omega)\).
+and define the \emph{restriction discrepancy}
+\begin{equation}\label{eq:gauge-anomaly}
+G_m(\omega):=\Hamming{\Delta^{(m)}(\omega)}.
+\end{equation}
+Thus \(G_m(\omega)\) counts the visible sites at which naive truncation fails to agree with the restriction dictated by normalization.
 
-\subsection{Worst-case extensive deviation and non-patchability}
-\begin{proposition}[Extensive worst case]\label{prop:worst}
-For every \(m\ge 1\) there exists an explicit microstate \(\omega^\star\in \Om_{m+1}\) such that
+\subsection{Extremal disagreement}
+
+\begin{proposition}\label{prop:worst}
+For every \(m\ge 1\) there exists an explicit word \(\omega^\star\in \Om_{m+1}\) such that
 \[
 G_m(\omega^\star)=m.
 \]
-\end{proposition}
-
-\begin{remark}[An explicit worst-case family]\label{rem:explicit-worst}
-Let \(L=m+1\) and write \(L=3n+r\) with \(r\in\{0,1,2\}\). Define a length-\(L\) word \(\omega^\star\) by
+One may take
 \[
 \omega^\star=
 \begin{cases}
-(110)^n, & r=0,\\
-(110)^n0, & r=1,\\
-(110)^n11, & r=2,
+(110)^n, & m+1=3n,\\
+(110)^n0, & m+1=3n+1,\\
+(110)^n11, & m+1=3n+2.
 \end{cases}
 \]
-where concatenation is in the window order \((\omega_1,\dots,\omega_{m+1})\).
-\end{remark}
+\end{proposition}
 
 \begin{proof}
-The identity \(\Fib_{k+1}+\Fib_{k+2}=\Fib_{k+3}\) shows that each block \(110\) may be replaced, independently of the neighboring blocks, by \(001\) without changing Fibonacci value. Therefore
+Write \(L=m+1\). The identity \(\Fib_{k+1}+\Fib_{k+2}=\Fib_{k+3}\) shows that each block \(110\) may be replaced by \(001\) without changing Fibonacci value. Repeating this blockwise gives
 \[
 \Fold_L\bigl((110)^n\bigr)=(001)^n,
 \qquad
 \Fold_L\bigl((110)^n0\bigr)=(001)^n0.
 \]
-In the remaining case,
-\[
-(110)^n11
-\]
-has the same value as \((001)^n00\) on the first \(L\) coordinates together with one extra \(1\) at position \(L+1\), because the terminal block \(11\) contributes \(\Fib_{L+1}+\Fib_{L+2}=\Fib_{L+3}\). Hence the first \(L\) digits of \(\Fold_L((110)^n11)\) are \((001)^n00\).
+Indeed, the words on the right already lie in \(X_L\), so uniqueness of the Zeckendorf normal form identifies them as the folds.
 
-Now delete the last coordinate. When \(r=0\), the naive truncation is \((110)^{n-1}11\) and the fold-aware truncation is \((001)^{n-1}00\); when \(r=1\), they are \((110)^n\) and \((001)^n\); when \(r=2\), they are \((110)^n1\) and \((001)^n0\). In each case the two length-\(m\) words are coordinatewise complementary. Therefore every coordinate contributes \(1\) to the Hamming distance, so \(G_m(\omega^\star)=m\).
+In the remaining case \(L=3n+2\), the terminal block \(11\) occupies positions \(L-1\) and \(L\) and contributes
+\[
+\Fib_L+\Fib_{L+1}=\Fib_{L+2},
+\]
+which is exactly the weight of a single \(1\) at the new position \(L+1\). Hence
+\[
+N\bigl((110)^n11\bigr)=N\bigl((001)^n00\bigr)+\Fib_{L+2},
+\]
+and the first \(L\) digits of \(\Fold_L((110)^n11)\) are \((001)^n00\).
+
+Deleting the last coordinate therefore gives the following pairs of length-\(m\) words. When \(L=3n\), one gets \((110)^{n-1}11\) and \((001)^{n-1}00\); when \(L=3n+1\), one gets \((110)^n\) and \((001)^n\); when \(L=3n+2\), one gets \((110)^n1\) and \((001)^n0\). In every case the two words are coordinatewise complementary, so \(G_m(\omega^\star)=m\).
 \end{proof}
 
-\begin{proposition}[No bounded tail patch]\label{prop:tail-patch}
+\begin{proposition}\label{prop:tail-patch}
 Fix \(\ell\ge 1\). There is no family of maps
 \[
-P_{m,\ell}:\set{0,1}^{\ell+1}\to \set{0,1}^{\ell}
+P_{m,\ell}:\{0,1\}^{\ell+1}\to \{0,1\}^{\ell}
 \]
 such that, for all sufficiently large \(m\) and all \(\omega\in \Om_{m+1}\),
 \begin{equation}\label{eq:tail-patch-form}
@@ -65,26 +65,113 @@ such that, for all sufficiently large \(m\) and all \(\omega\in \Om_{m+1}\),
 \omega_1\cdots \omega_{m-\ell}\,
 P_{m,\ell}(\omega_{m-\ell+1}\cdots \omega_{m+1}).
 \end{equation}
-In particular, the anomaly cannot be uniformly removed by modifying only a bounded tail of the naive truncation.
 \end{proposition}
 
 \begin{proof}
-Assume that \eqref{eq:tail-patch-form} holds for some fixed \(\ell\) and all sufficiently large \(m\). Choose \(m>\ell\) in that range and let \(\omega^\star\) be the word from Proposition~\ref{prop:worst}. Since \(G_m(\omega^\star)=m\), the words \(\naive_{m+1\to m}(\omega^\star)\) and \(\aware_{m+1\to m}(\omega^\star)\) differ at every coordinate. In particular, their first \(m-\ell\) coordinates differ.
+Assume that \eqref{eq:tail-patch-form} holds for some fixed \(\ell\) and all sufficiently large \(m\). Choose such an \(m\) with \(m>\ell\), and let \(\omega^\star\) be the word from Proposition~\ref{prop:worst}. Since \(G_m(\omega^\star)=m\), the words \(\naive_{m+1\to m}(\omega^\star)\) and \(\aware_{m+1\to m}(\omega^\star)\) differ at every coordinate, in particular on the first \(m-\ell\) sites.
 
-But the right-hand side of \eqref{eq:tail-patch-form} leaves those first \(m-\ell\) coordinates unchanged: it agrees with \(\omega^\star_1\cdots \omega^\star_{m-\ell}\) there and only modifies the last \(\ell\) positions. This contradicts the previous paragraph. Hence no such bounded tail patch exists.
+The right-hand side of \eqref{eq:tail-patch-form}, however, leaves those first \(m-\ell\) coordinates unchanged and modifies only the last \(\ell\) positions. This contradiction proves the claim.
 \end{proof}
 
-\subsection{Bulk stationary model and the exact joint law}
-\label{subsec:joint-law}
-To state the limiting statistical results precisely, we pass from finite windows to the stationary bulk model. Let \(\eta=(\eta_t)_{t\in\ZZ}\) be a bi-infinite Bernoulli-\(\frac12\) sequence, and let \((X_t,Y_t)_{t\in\ZZ}\) be the input/output pair process produced by the boundary-state normalization transducer of Appendix~\ref{app:pressure}. Thus \(X_t=\eta_t\), while \(Y_t\) is the stable digit emitted at site \(t\). By construction, \((X_t,Y_t)\) is stationary. We refer to its law as the \emph{bulk law}. Standard path-counting for primitive right-resolving presentations implies that this bulk law is the local weak limit of the uniform measures on \(\Om_M\): if \(\omega^{(M)}\) is uniform on \(\Om_M\) and \(k_M\to\infty\) with \(M-k_M\to\infty\), then
-\[
-\bigl(\omega^{(M)}_{k_M},(\Fold_M(\omega^{(M)}))_{k_M}\bigr)
-\Rightarrow
-(X_0,Y_0);
-\]
-see \cite[Chapter~8]{LindMarcus1995} and \cite[Chapter~2]{Kitchens1998}.
+These two propositions show that the failure of commutation is not a boundary effect. We now turn to its bulk description.
 
-\begin{theorem}[Exact bulk joint law]\label{thm:joint}
+\subsection{A structural criterion for synchronized pair shifts}
+
+The local mechanism behind the Fibonacci pair graph is not specific to the rule \(011\to100\). The only ingredients needed for the pair construction are a bounded rewrite span and a synchronized zero background.
+
+\begin{definition}\label{def:span-r-normalizer}
+Fix \(r\ge 2\). A family of finite-window normalization maps
+\[
+\mathsf N_m:\{0,1\}^m\to X_m
+\qquad (m\ge 1)
+\]
+is called a \emph{zero-synchronized span-\(r\) local normalizer} if, in most-significant-digit-first order, the maps \(\mathsf N_m\) are produced by a terminating confluent left-to-right scan whose local rewrites have support of size at most \(r\), with the following two properties.
+\begin{enumerate}
+\item[(i)] The all-zero word is stable, and padding by high-order zeros does not alter the visible normalized output.
+\item[(ii)] After a prefix has been processed, every later rewrite can intersect that prefix only in its final \(r-1\) coordinates.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}\label{lem:fib-span3}
+The Zeckendorf fold from \Cref{def:fold} is a zero-synchronized span-\(3\) local normalizer.
+\end{lemma}
+
+\begin{proof}
+Appendix~\ref{app:rewriting} realizes Zeckendorf normalization in most-significant-digit-first order by the single rewrite \(011\to100\). Its support has size \(3\), the all-zero word is fixed, and \Cref{lem:zero-padding} gives the high-side zero-padding property. Once a scan step has moved strictly past a coordinate, a later occurrence of \(011\) can meet that processed prefix only inside its final two positions, because every rewrite is supported on three consecutive sites.
+\end{proof}
+
+\begin{theorem}[Pair theorem for span-\(r\) local normalizers]\textbf{[New-4 | 2026-04-17]}\label{thm:span-r-pair}
+Let \((\mathsf N_m)_{m\ge1}\) be a zero-synchronized span-\(r\) local normalizer, and let \(\mathcal P_{\mathsf N}\) be the bi-infinite shift generated by its reversed pair words. Then any two synchronized pair prefixes with the same terminal block of \(r-1\) pair symbols have the same follower set in \(\mathcal P_{\mathsf N}\). Consequently \(\mathcal P_{\mathsf N}\) is a synchronized sofic shift presented by the follower graph of synchronized \((r-1)\)-blocks. In the binary case this yields a right-resolving presentation with at most \(4^{r-1}\) states. If that presentation is primitive, centered finite-volume factors converge to its Parry measure.
+\end{theorem}
+
+\begin{proof}
+Let \(u\) and \(v\) be synchronized pair prefixes with the same terminal block \(b\) of \(r-1\) pair symbols. A continuation is obtained by appending further raw digits to the underlying input word and continuing the left-to-right normalization scan. By \Cref{def:span-r-normalizer}(ii), every future rewrite can intersect the already processed part only inside the terminal window represented by \(b\); the earlier part of the prefix is already frozen. Since the processed configurations encoded by \(u\) and \(v\) coincide on that terminal window, the admissible next rewrites, and hence the admissible next pair symbols, are identical after \(u\) and after \(v\). Repeating the same argument after one further extension proves inductively that \(u\) and \(v\) have exactly the same continuation words. Thus the follower set of a synchronized prefix depends only on its terminal \((r-1)\)-block.
+
+There are finitely many binary blocks of length \(r-1\), so the synchronized follower graph is finite. By construction it is right-resolving, and every interior factor may be shifted after an arbitrarily long synchronized block of \(00\)'s because of \Cref{def:span-r-normalizer}(i). Hence the graph presents the whole interior pair language. If the graph is primitive, standard convergence of centered finite-volume word measures for primitive synchronized sofic shifts identifies the bulk limit with the Parry measure of that presentation; compare \cite[Section~8.4]{LindMarcus1995} and \cite[Chapter~2]{Kitchens1998}.
+\end{proof}
+
+\begin{corollary}[Canonical origin of the four-state graph]\textbf{[New-5 | 2026-04-17]}\label{cor:fib-pair-criterion}
+For Zeckendorf normalization, the interior reversed pair language is presented by the follower graph of synchronized two-blocks. Exactly four follower classes occur, represented by
+\[
+00|00,\qquad 00|01,\qquad 00|10,\qquad 00|11,
+\]
+and the resulting right-resolving graph is \(G_{\mathrm{pair}}\).
+\end{corollary}
+
+\begin{proof}
+\Cref{lem:fib-span3,thm:span-r-pair} reduce the Fibonacci case to synchronized blocks of length \(2\). Appendix~\ref{app:pressure} computes the synchronized length-\(3\) factors beginning with \(00\) and their one-step follower sets:
+\[
+E(00|00)=\{00,01,11\},\quad
+E(00|01)=\{10\},\quad
+E(00|10)=\{00,10,11\},\quad
+E(00|11)=\{00\}.
+\]
+These four follower sets are pairwise distinct. Proposition~\ref{prop:transitions} identifies the corresponding state updates, and the resulting follower graph is exactly the labeled graph \(G_{\mathrm{pair}}\).
+\end{proof}
+
+\subsection{The bulk pair process}
+\label{subsec:joint-law}
+
+Let \(\eta=(\eta_t)_{t\in\ZZ}\) be a bi-infinite Bernoulli-\(\frac12\) sequence. Let \((X_t,Y_t)_{t\in\ZZ}\) be the raw/normalized pair process encoded by the reversed pair shift of Appendix~\ref{app:pressure}. Thus \(X_t=\eta_t\), while \(Y_t\) is the normalized digit seen at the same site in the bulk limit. We refer to the law of this stationary process as the \emph{bulk law}.
+
+Theorem~\ref{thm:pair-language} is the explicit Fibonacci specialization of \Cref{thm:span-r-pair,cor:fib-pair-criterion}. Once the four-state presentation has been identified, the later formulas follow from standard Parry-measure and transfer-matrix calculations.
+
+\begin{theorem}\label{thm:pair-language}
+Let \(G_{\mathrm{pair}}\) be the labeled graph with state set \(\mathcal{S}=\{00,01,10,11\}\) and edges
+\[
+00 \xrightarrow{00} 00,\quad
+00 \xrightarrow{01} 01,\quad
+00 \xrightarrow{11} 11,\quad
+01 \xrightarrow{10} 10,
+\]
+\[
+10 \xrightarrow{10} 00,\quad
+10 \xrightarrow{00} 01,\quad
+10 \xrightarrow{11} 01,\quad
+11 \xrightarrow{00} 00.
+\]
+For a finite word \(w\in(\{00,01,10,11\})^\ell\), the following are equivalent.
+\begin{enumerate}
+\item[(i)] \(w\) occurs as an interior factor of some reversed pair word \(\mathcal{R}_M(\omega)\).
+\item[(ii)] \(w\) is the label of a path in \(G_{\mathrm{pair}}\).
+\end{enumerate}
+Moreover, every path label in \(G_{\mathrm{pair}}\) is realized at arbitrarily large distance from the boundary by a reversed pair word \(\mathcal{R}_M(\omega)\).
+\end{theorem}
+
+\begin{proof}
+By \Cref{cor:fib-pair-criterion}, synchronized interior factors are exactly the
+path labels of \(G_{\mathrm{pair}}\). Lemma~\ref{lem:zero-padding} shifts any
+interior factor behind an arbitrarily long synchronized prefix \(00^L\), and
+Proposition~\ref{prop:sync-language} in Appendix~\ref{app:pressure}
+constructs a synchronized realization for every path label. Therefore a finite
+word occurs as an interior factor if and only if it is a path label in
+\(G_{\mathrm{pair}}\), and every such label is realized arbitrarily far from
+the boundary.
+\end{proof}
+
+Since the first coordinate of each pair symbol is the microstate digit itself, the map \(\omega\mapsto \mathcal{R}_M(\omega)\) is injective, and the uniform measure on \(\Om_M\) is exactly the uniform measure on admissible reversed pair words of length \(M\). Proposition~\ref{prop:bulk-limit} therefore identifies the bulk law as the local weak limit of the uniform measures on \(\Om_M\).
+
+\begin{theorem}\label{thm:joint}
 Under the bulk law, the one-site joint distribution of \((X_0,Y_0)\) is
 \[
 \begin{array}{c|cc}
@@ -102,81 +189,70 @@ Consequently,
 \end{theorem}
 
 \begin{proof}
-Appendix~\ref{app:pressure} derives the four-state boundary transducer associated with the local rewrite \(011\to 100\). In the state order \((00,01,10,11)\), its adjacency matrix is
+By Theorem~\ref{thm:pair-language}, the graph \(G_{\mathrm{pair}}\) is a primitive right-resolving presentation of the interior reversed-pair language. In the state order \((00,01,10,11)\), its adjacency matrix is
 \[
 A=\begin{pmatrix}
 1&1&0&1\\
 0&0&1&0\\
 1&2&0&0\\
 1&0&0&0
-\end{pmatrix},
+\end{pmatrix}.
 \]
-and the edges are labeled by \((X_t,Y_t)\in\{0,1\}^2\) as follows:
-\[
-00 \xrightarrow{00} 00,\quad
-00 \xrightarrow{01} 01,\quad
-00 \xrightarrow{11} 11,\quad
-01 \xrightarrow{10} 10,
-\]
-\[
-10 \xrightarrow{10} 00,\quad
-10 \xrightarrow{00} 01,\quad
-10 \xrightarrow{11} 01,\quad
-11 \xrightarrow{00} 00.
-\]
-The graph is primitive, so its bulk measure is the Parry measure \cite{Parry1964,ParryPollicott1990,Ruelle2004}. Appendix~\ref{app:pressure} computes the Perron eigenvalue \(\lambda=2\), right/left eigenvectors \(r=(2,1,2,1)^{\mathsf T}\) and \(\ell=(2,2,1,1)^{\mathsf T}\), and the stationary state distribution
+The graph is primitive, so its bulk measure is the Parry measure \cite{Parry1964,ParryPollicott1990,Ruelle2004}. Appendix~\ref{app:pressure} computes the Perron eigenvalue \(\lambda=2\), right and left eigenvectors \(r=(2,1,2,1)^{\mathsf T}\) and \(\ell=(2,2,1,1)^{\mathsf T}\), and the stationary state distribution
 \[
 \pi=\frac{1}{9}(4,2,2,1).
 \]
-The probability of a labeled edge \(i\to j\) is \(\pi_iP_{ij}/A_{ij}\), where \(P\) is the Parry transition matrix and the multiplicity-\(2\) edge \(10\to 01\) is split uniformly between the labels \(00\) and \(11\). Summing the corresponding edge probabilities over the four labels gives
+The probability of a labeled edge \(i\to j\) is \(\pi_iP_{ij}/A_{ij}\), where \(P\) is the Parry transition matrix and the multiplicity-\(2\) edge \(10\to 01\) is split uniformly between the labels \(00\) and \(11\). Summing over the four labels gives
 \[
 \PP(00)=\frac{7}{18},\qquad
 \PP(01)=\frac{1}{9},\qquad
 \PP(10)=\frac{1}{3},\qquad
 \PP(11)=\frac{1}{6},
 \]
-which is exactly the stated table. The two displayed marginals follow by summation.
+which is the stated table.
 \end{proof}
 
-\subsection{Law of large numbers and central limit theorem}
+The marginal identity \(\PP(Y_0=1)=5/18\) agrees with the classical value for the normalized Fibonacci digit process obtained in \cite{AlexanderZagier1991,SidorovVershik1998,KemptonDigits2014,BezhaevaOseledets2007,BezhaevaOseledets2010}. What is specific here is that the four-state presentation encodes the pair observable \((X_t,Y_t)\), and hence the discrepancy process \(X_t\oplus Y_t\).
+
+\subsection{Limit theorems}
 \label{subsec:lln-clt}
-Let \(\Delta_t:=X_t\oplus Y_t\) be the stationary discrepancy indicator process in the bulk. For \(n\ge 1\), set
+
+Let \(\Delta_t:=X_t\oplus Y_t\), and for \(n\ge 1\) set
 \[
 S_n:=\sum_{t=1}^n \Delta_t.
 \]
 
-\begin{theorem}[LLN and CLT for anomaly density]\label{thm:llnclt}
+\begin{corollary}\label{thm:llnclt}
 Under the bulk law,
 \[
 \frac{S_n}{n}\xrightarrow{\ \mathrm{a.s.}\ }\frac{4}{9},
 \]
 and
 \[
-\frac{S_n-\frac{4}{9}n}{\sqrt n}\ \Rightarrow\ \mathcal{N}\!\left(0,\frac{118}{243}\right).
+\frac{S_n-\frac{4}{9}n}{\sqrt n}\Rightarrow \mathcal{N}\!\left(0,\frac{118}{243}\right).
 \]
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
-Appendix~\ref{app:pressure} realizes \(\Delta_t\) as a bounded observable of an irreducible, aperiodic, finite-state Markov chain (equivalently, of the edge chain of the four-state presentation). The almost-sure law of large numbers is therefore the ergodic theorem for finite-state Markov chains \cite[Section~4]{Billingsley1961}. The central limit theorem follows from the standard Markov-chain CLT, for instance in Gordin's martingale-coboundary form \cite{Gordin1969}; see also \cite[Chapter~4]{ParryPollicott1990}. The asymptotic variance is the second derivative at \(0\) of the logarithmic pressure of the tilted matrix \(A_\theta\) computed in Appendix~\ref{app:pressure}, namely
+Appendix~\ref{app:pressure} realizes \(\Delta_t\) as a bounded observable of an irreducible, aperiodic, finite-state Markov chain, namely the edge chain of the four-state presentation. The almost-sure law of large numbers is therefore the ergodic theorem for finite-state Markov chains \cite[Section~4]{Billingsley1961}. The central limit theorem follows from the standard Markov-chain CLT, for instance in Gordin's martingale-coboundary form \cite{Gordin1969}; see also \cite[Chapter~4]{ParryPollicott1990}. The asymptotic variance is the second derivative at \(0\) of the logarithmic pressure of the tilted matrix \(A_\theta\) computed in Appendix~\ref{app:pressure}, namely
 \[
 \Lambda''(0)=\frac{118}{243}.
 \]
 \end{proof}
 
-\begin{remark}[Finite-window interpretation]
-The process \((X_t,Y_t)\) is the bulk limit of the uniform measures on finite windows. Consequently, the constants in Theorems~\ref{thm:joint} and \ref{thm:llnclt} govern the interior statistics of the finite-window anomaly \(G_m\); boundary effects contribute only \(O(1)\) sites and do not alter the limiting density or variance.
-\end{remark}
+Because \((X_t,Y_t)\) is the bulk limit of uniformly chosen finite windows, the constants in Theorem~\ref{thm:joint} and Corollary~\ref{thm:llnclt} govern the interior statistics of \(G_m\): boundary sites contribute only \(O(1)\) terms and do not affect the limiting density or variance.
 
-\subsection{Closed-form autocovariance and rational power spectrum}
+\subsection{Autocovariances and spectrum}
 \label{subsec:spectrum}
-Let \((\Delta_t)_{t\in\ZZ}\) be the stationary bulk discrepancy process.
 
-\begin{theorem}[Autocovariance and power spectral density]\label{thm:spectrum}
+\begin{theorem}\label{thm:spectrum}
 The autocovariances \(c_j:=\Cov(\Delta_0,\Delta_j)\) satisfy
 \[
 c_0=\frac{20}{81},
-\qquad
-c_j = 2^{-j}\!\left(\frac{1}{8}+(-1)^j\!\left(\frac{7}{648}+\frac{j}{108}\right)\right)\quad (j\ge 1).
+\]
+and, for \(j\ge 1\),
+\[
+c_j=2^{-j}\!\left(\frac{1}{8}+(-1)^j\!\left(\frac{7}{648}+\frac{j}{108}\right)\right).
 \]
 The two-sided power spectral density
 \[
@@ -191,9 +267,9 @@ S(\omega)
 \]
 In particular,
 \[
-S(0)=\sum_{j\in\ZZ}c_j=\frac{118}{243},
+S(0)=\sum_{j\in\ZZ} c_j=\frac{118}{243},
 \]
-in agreement with Theorem~\ref{thm:llnclt}.
+in agreement with Corollary~\ref{thm:llnclt}.
 \end{theorem}
 
 \begin{proof}
@@ -201,13 +277,5 @@ Appendix~\ref{app:pressure} expresses the covariances as
 \[
 c_j=qP^{j-1}h-\left(\frac49\right)^2\qquad (j\ge1),
 \]
-for explicit vectors \(q\) and \(h\) attached to the Parry transition matrix \(P\). Because \(P\) is similar to \(A/2\), its nontrivial spectral modes are \(1/2\) and \(-1/2\), with a double root at \(-1/2\). Hence \(c_j\) is a linear combination of \(2^{-j}\), \((-2)^{-j}\), and \(j(-2)^{-j}\), and matching the first three values yields the displayed formula. The series is absolutely summable, so the power spectral density is obtained by summing the resulting cosine series. Appendix~\ref{app:pressure} performs that sum explicitly and obtains the stated rational function. Evaluating at \(\omega=0\) gives \(S(0)=118/243\).
+for explicit vectors \(q\) and \(h\) attached to the Parry transition matrix \(P\). Because \(P\) is similar to \(A/2\), its nontrivial spectral modes are \(1/2\) and \(-1/2\), with a double root at \(-1/2\). Hence \(c_j\) is a linear combination of \(2^{-j}\), \((-2)^{-j}\), and \(j(-2)^{-j}\), and matching the first three values yields the displayed formula. The series is absolutely summable, so the power spectral density is obtained by summing the resulting cosine series. Appendix~\ref{app:pressure} performs that sum explicitly and obtains the stated rational function.
 \end{proof}
-
-\begin{remark}[Internal consistency]
-The identity
-\[
-S(0)=c_0+2\sum_{j\ge 1} c_j
-\]
-is the Green--Kubo/Wiener--Khinchin consistency relation linking the CLT variance, the covariance sum, and the power spectrum. The formulas above therefore provide three equivalent descriptions of the same second-order statistic.
-\end{remark}

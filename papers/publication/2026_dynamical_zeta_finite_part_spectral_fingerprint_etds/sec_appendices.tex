@@ -1,741 +1,350 @@
-\section{Holomorphic variation and effective truncation}
-\label{app:variation}
+\section{Auxiliary cyclic formulas and cyclic detection}
+\label{app:supplementary}
 
-This appendix records holomorphic variation of the Perron-pole finite part and an explicit truncation estimate.
+This appendix collects the auxiliary results used in
+\Cref{sec:finite-part,sec:shadows}. The first subsection concerns
+cyclic lifts, and the second records the orthogonal decomposition
+underlying cyclic detection.
 
-\begin{theorem}[Reduced-determinant gradient formula]
-  \label{thm:finite-part-reduced-determinant-group-inverse-gradient}
-  Let \(\theta\mapsto A_\theta\) be a holomorphic family of primitive
-  matrices near \(\theta_0\), and assume that
-  \(\lambda(\theta):=\rho(A_\theta)\) stays simple. Choose left and
-  right Perron vectors \(\ell_\theta,r_\theta\) normalised by
-  \(\ell_\theta^{\mathsf T}r_\theta=1\), let
-  \(P_\theta:=r_\theta\ell_\theta^{\mathsf T}\), and set
-  \[
-    B_\theta:=I-\frac{A_\theta}{\lambda(\theta)},
-    \qquad
-    R_\theta:=B_\theta^{\#},
-  \]
-  where \(B_\theta^{\#}\) is the group inverse, characterised by
-  \[
-    B_\theta R_\theta=R_\theta B_\theta=I-P_\theta,
-    \qquad
-    R_\theta P_\theta=P_\theta R_\theta=0.
-  \]
-  Then
-  \[
-    \partial_\theta\log C(A_\theta)
-    =\Tr\!\left(
-      R_\theta\left(
-        \frac{\partial_\theta A_\theta}{\lambda(\theta)}
-        -\frac{\partial_\theta\lambda(\theta)}{\lambda(\theta)^2}
-         A_\theta\right)\right),
-  \]
-  with
-  \[
-    \partial_\theta\lambda(\theta)
-    =\ell_\theta^{\mathsf T}(\partial_\theta A_\theta)r_\theta.
-  \]
-\end{theorem}
+\subsection{Auxiliary cyclic-lift formulas}
 
-\begin{proof}
-  Since the Perron eigenvalue is simple, \(B_\theta\) has a simple zero
-  eigenvalue and all other eigenvalues are non-zero; hence the group
-  inverse \(R_\theta\) exists. On the invariant complement
-  \((I-P_\theta)\CC^d\), the reduced determinant is the ordinary
-  determinant of \(B_\theta\), so the usual logarithmic derivative gives
+\begin{proposition}[Multiple-sum expansion for cyclic lifts]
+  \label{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}
+  For every \(q\ge 1\),
   \[
-    \partial_\theta \log\det\nolimits'(B_\theta)
-    =\Tr(R_\theta\,\partial_\theta B_\theta).
+    \Psi_q(A)=\sum_{m\ge 1}\frac{u_{qm}(A)}{m},
   \]
-  Using \(\log C(A_\theta)=-\log\det\nolimits'(B_\theta)\) from
-  \Cref{prop:finite-part-residue-reduced-determinant} and
+  and therefore
   \[
-    \partial_\theta B_\theta
-    =-\frac{\partial_\theta A_\theta}{\lambda(\theta)}
-      +\frac{\partial_\theta\lambda(\theta)}{\lambda(\theta)^2}A_\theta
-  \]
-  gives the first formula. The derivative of the Perron root is the
-  standard perturbation identity
-  \[
-    \partial_\theta\lambda(\theta)
-    =\ell_\theta^{\mathsf T}(\partial_\theta A_\theta)r_\theta.
-  \]
-  Compare Kato's analytic perturbation theory for simple isolated
-  eigenvalues \cite{Kato1995Perturbation}.
-\end{proof}
-
-\subsection{Holomorphic variation and effective truncation}
-
-\begin{theorem}[Holomorphic variation formula]
-  \label{thm:logM-holomorphic-variation}
-  Let \(\theta\mapsto A_\theta\) be a holomorphic family of primitive
-  matrices near \(\theta_0\), and assume that
-  \(\lambda(\theta):=\rho(A_\theta)\) stays simple. Then
-  \(\theta\mapsto\FP(A_\theta)\) is holomorphic near \(\theta_0\) and
-  \[
-    \frac{\dd}{\dd\theta}\FP(A_\theta)
-    =\frac{\dd}{\dd\theta}\log C(A_\theta)
-     +\sum_{k\ge 2}\frac{\mu(k)}{k}
-      \frac{\dd}{\dd\theta}
-      \log\det(I-\lambda(\theta)^{-k}A_\theta)^{-1}.
-  \]
-  Moreover, for every fixed \(z\) with \(|z|<\lambda(\theta)^{-1}\),
-  \[
-    \partial_\theta\log\det(I-zA_\theta)^{-1}
-    =\Tr\!\bigl((I-zA_\theta)^{-1}z\,\partial_\theta A_\theta\bigr).
-  \]
-\end{theorem}
-
-\begin{proof}
-  Apply \Cref{thm:finite-part-primitive-closed-form} to each \(A_\theta\).
-  Because \(|\lambda(\theta)^{-k}|<\lambda(\theta)^{-1}\) uniformly for
-  \(k\ge 2\) near \(\theta_0\), the sum of holomorphic terms converges
-  locally uniformly. Hence \(\FP(A_\theta)\) is holomorphic and may
-  be differentiated term by term. The first derivative formula uses
-  \Cref{thm:finite-part-reduced-determinant-group-inverse-gradient} for
-  the \(C(A_\theta)\)-term.
-
-  For the resolvent identity, apply Jacobi's formula in finite
-  dimensions:
-  \[
-    \partial_\theta \log\det(I-zA_\theta)
-    =
-    \Tr\!\bigl((I-zA_\theta)^{-1}(-z\,\partial_\theta A_\theta)\bigr).
-  \]
-  Multiplying by \(-1\) gives the stated derivative formula for
-  \(\log\det(I-zA_\theta)^{-1}\).
-\end{proof}
-
-\begin{theorem}[Truncation bound]
-  \label{thm:logM-truncation-bound}
-  Let \(A\) be a primitive non-negative \(d\times d\) matrix with
-  Perron root \(\lambda>1\), and define
-  \[
-    \FP_K(A)
-    :=\log C(A)
-      +\sum_{n\le K}p_n(A)
-       \bigl(\lambda^{-n}+\log(1-\lambda^{-n})\bigr).
-  \]
-  Then
-  \[
-    \abs{\FP(A)-\FP_K(A)}
-    \le
-    \frac{d\,\lambda^{-(K+1)}}{(K+1)(1-\lambda^{-1})^2}.
-  \]
-\end{theorem}
-
-\begin{proof}
-  By \Cref{thm:finite-part-primitive-closed-form},
-  \[
-    \abs{\FP(A)-\FP_K(A)}
-    \le \sum_{n>K} p_n(A)\psi(\lambda^{-n}).
-  \]
-  Since
-  \[
-    \psi(x)=-x-\log(1-x)\le \sum_{m\ge 2}x^m=\frac{x^2}{1-x},
-  \]
-  and
-  \[
-    p_n(A)\le \frac{\Tr(A^n)}{n}\le \frac{d\,\lambda^n}{n},
-  \]
-  one obtains
-  \[
-    p_n(A)\psi(\lambda^{-n})
-    \le \frac{d}{n}\frac{\lambda^{-n}}{1-\lambda^{-n}}
-    \le \frac{d}{n}\frac{\lambda^{-n}}{1-\lambda^{-1}}.
-  \]
-  Summing over \(n>K\) gives
-  \[
-    \abs{\FP(A)-\FP_K(A)}
-    \le \frac{d}{1-\lambda^{-1}}
-      \sum_{n>K}\frac{\lambda^{-n}}{n}
-    \le
-    \frac{d\,\lambda^{-(K+1)}}{(K+1)(1-\lambda^{-1})^2}.
-  \]
-\end{proof}
-
-\section{Arithmetic consequences of root-of-unity sampling}
-\label{app:arithmetic}
-
-This appendix gathers the arithmetic consequences of the cyclic reconstruction theorem.
-
-\subsection{Discrete sampling at roots of unity}
-
-Define
-\[
-  g_A(\theta):=-\log F_A(e^{i\theta})
-  =\sum_{n\ge 1}\frac{u_n(A)}{n}e^{in\theta},
-  \qquad \theta\in\RR.
-\]
-The logarithm is well defined because \(|\mu_j|<\lambda\) implies that
-\(F_A\) has no zero on the unit circle.
-
-\begin{theorem}[Parseval identity and aliasing formula]
-  \label{thm:finite-part-nyquist-parseval-aliasing}
-  One has
-  \[
-    \frac{1}{2\pi}\int_0^{2\pi}|g_A(\theta)|^2\,\dd\theta
-    =\sum_{n\ge 1}\frac{|u_n(A)|^2}{n^2}.
-  \]
-  Moreover, for every integer \(q\ge 1\),
-  \[
-    \frac{1}{q}\sum_{j=0}^{q-1}
-      \left|g_A\!\left(\frac{2\pi j}{q}\right)\right|^2
-    =
-    \sum_{n\ge 1}\frac{|u_n(A)|^2}{n^2}
-    +\sum_{\ell\ne 0}\sum_{n\ge 1}
-      \frac{u_n(A)\overline{u_{n+\ell q}(A)}}{n(n+\ell q)}.
-  \]
-\end{theorem}
-
-\begin{proof}
-  The first identity is the ordinary Parseval formula for the Fourier
-  series of \(g_A\). For the discrete identity, expand the square and
-  average over the \(q\)-th roots of unity:
-  \[
-    \frac{1}{q}\sum_{j=0}^{q-1}
-      e^{2\pi i (n-n')j/q}
-    =\mathbf 1_{\{n\equiv n'\,(\mathrm{mod}\ q)\}}.
-  \]
-  Writing \(n'=n+\ell q\) yields the stated aliasing formula.
-\end{proof}
-
-\begin{corollary}[Exponential bound for the sampling error]
-  \label{cor:finite-part-nyquist-error-exp}
-  There exists a constant \(K=K(A)>0\) such that, for every \(q\ge 1\),
-  \[
-    \left|
-      \frac{1}{q}\sum_{j=0}^{q-1}
-        \left|g_A\!\left(\frac{2\pi j}{q}\right)\right|^2
-      -\sum_{n\ge 1}\frac{|u_n(A)|^2}{n^2}
-    \right|
-    \le K\,\Lambda_{\mathrm{rel}}(A)^q.
-  \]
-\end{corollary}
-
-\begin{proof}
-  Since \(|u_n(A)|\le (d-1)\Lambda_{\mathrm{rel}}(A)^n\),
-  \[
-    \sum_{\ell\ne 0}\sum_{n\ge 1}
-      \left|
-        \frac{u_n(A)\overline{u_{n+\ell q}(A)}}{n(n+\ell q)}
-      \right|
-    \ll
-    \sum_{\ell\ne 0}\sum_{n\ge 1}
-      \frac{\Lambda_{\mathrm{rel}}(A)^{2n+|\ell|q}}{n^2}
-    \ll \Lambda_{\mathrm{rel}}(A)^q.
-  \]
-  The bound follows from
-  \Cref{thm:finite-part-nyquist-parseval-aliasing}.
-\end{proof}
-
-\subsection{Dirichlet characters and residue classes}
-
-We use only the standard orthogonality relations for Dirichlet
-characters on \((\ZZ/q\ZZ)^\times\); see, for example,
-\cite{Apostol1976AnalyticNumberTheory,Davenport2000MultiplicativeNumberTheory}.
-
-\begin{proposition}[Gauss expansion for character sums at roots of unity]
-  \label{prop:finite-part-dirichlet-torsion-gauss-expansion}
-  Let \(\chi\) be a Dirichlet character modulo \(q\), and let
-  \[
-    \tau(\chi):=\sum_{a\bmod q}\chi(a)\,\omega_q^a
-  \]
-  be the standard Gauss sum. For \(q=p\) prime and \(\chi\) non-trivial,
-  define the twisted Gauss sum
-  \[
-    \tau_p(\chi,n)
-    :=\sum_{a\in(\ZZ/p\ZZ)^\times}\chi(a)\,\omega_p^{an}
-    \qquad (p\nmid n).
-  \]
-  Then
-  \[
-    \tau_p(\chi,n)=\overline{\chi(n)}\,\tau(\chi),
-  \]
-  and consequently
-  \[
-    \mathcal L_A(\chi;p)
-    :=\sum_{n\ge 1}\frac{u_n(A)}{n}\,\tau_p(\chi,n)
-    =\tau(\chi)
-      \sum_{\substack{n\ge 1\\ p\nmid n}}
-        \frac{u_n(A)\,\overline{\chi(n)}}{n}.
-  \]
-\end{proposition}
-
-\begin{proof}
-  Since \(F_A(t)=\prod_{j=2}^d(1-(\mu_j/\lambda)t)\) and
-  \(|\mu_j|<\lambda\), the series
-  \[
-    -\log F_A(t)=\sum_{n\ge 1}\frac{u_n(A)}{n}t^n
-  \]
-  converges absolutely for \(|t|=1\). The terms with \(p\mid n\) contribute
-  zero to \(\mathcal L_A(\chi;p)\) because \(\chi\) is non-trivial.
-
-  For \(p\nmid n\), set \(b=an\); as \(a\) ranges over \((\ZZ/p\ZZ)^\times\)
-  so does \(b\). Since \(\chi(a)=\chi(bn^{-1})=\chi(b)\chi(n)^{-1}=\chi(b)\overline{\chi(n)}\)
-  (the character values are roots of unity),
-  \[
-    \tau_p(\chi,n)
-    =\overline{\chi(n)}\sum_{b\bmod p}\chi(b)\,\omega_p^b
-    =\overline{\chi(n)}\,\tau(\chi).
-  \]
-  Substituting yields \(\mathcal L_A(\chi;p)=\tau(\chi)\sum_{p\nmid n}u_n(A)\overline{\chi(n)}/n\).
-\end{proof}
-
-\begin{remark}
-  The quantities \(\mathcal L_A(\chi;q)\) package the values of
-  \(F_A\) at primitive \(q\)-th roots of unity into Dirichlet-character
-  components. They give an alternative set of coordinates for the same
-  spectral data encoded by the cyclic-lift constants \(\Psi_q(A)\).
-\end{remark}
-
-\begin{theorem}[Character inversion for prime moduli]
-  \label{thm:finite-part-dirichlet-character-inversion-prime}
-  Let \(p\ge 3\) be prime, and for each residue class
-  \(r\in(\ZZ/p\ZZ)^\times\) define the slice potential
-  \[
-    V_{p,r}(A):=\sum_{m\ge 0}\frac{u_{r+mp}(A)}{r+mp}.
-  \]
-  Let \(\widehat{U(p)}\) be the full character group of
-  \(U(p)=(\ZZ/p\ZZ)^\times\). For \(\chi\in\widehat{U(p)}\), set
-  \[
-    \mathscr A_p(\chi):=
-    \begin{cases}
-      \mathcal L_A(\chi;p)/\tau(\chi),
-        & \chi\neq \chi_0,\\[6pt]
-      \log C(A)-\Psi_p(A)/p,
-        & \chi=\chi_0.
-    \end{cases}
-  \]
-  Then
-  \[
-    \mathscr A_p(\chi)
-    =\sum_{r\in U(p)}V_{p,r}(A)\,\overline{\chi(r)}
-    \qquad (\chi\in\widehat{U(p)}),
-  \]
-  and hence
-  \[
-    V_{p,r_0}(A)
-    =\frac{1}{p-1}\sum_{\chi\in\widehat{U(p)}}
-      \mathscr A_p(\chi)\,\chi(r_0)
-    \qquad (r_0\in U(p)),
-  \]
-  because
-  \[
-    \frac{1}{p-1}\sum_\chi \overline{\chi(r)}\,\chi(r_0)=\delta_{r,r_0}.
-  \]
-  Consequently, the finite data
-  \[
-    \bigl\{\mathcal L_A(\chi;p)\bigr\}_{\chi\in\widehat{U(p)}}
-    \cup \{C(A),\,C(A^{\langle p\rangle})\}
-  \]
-  uniquely determine all residue-class slice potentials
-  \(\{V_{p,r}(A)\}_{r\in U(p)}\).
-\end{theorem}
-
-\begin{proof}
-  For \(\chi\neq \chi_0\),
-  \Cref{prop:finite-part-dirichlet-torsion-gauss-expansion} gives
-  \[
-    \mathscr A_p(\chi)
-    =\sum_{\substack{n\ge 1\\ p\nmid n}}
-      \frac{u_n(A)\,\overline{\chi(n)}}{n}.
-  \]
-  Grouping by residue class modulo \(p\) yields
-  \[
-    \mathscr A_p(\chi)
-    =\sum_{r\in U(p)}\overline{\chi(r)}
-      \sum_{m\ge 0}\frac{u_{r+mp}(A)}{r+mp}
-    =\sum_{r\in U(p)}V_{p,r}(A)\,\overline{\chi(r)}.
-  \]
-  For the trivial character,
-  \[
-    \sum_{r\in U(p)}V_{p,r}(A)
-    =\sum_{\substack{n\ge 1\\ p\nmid n}}\frac{u_n(A)}{n}
-    =\sum_{n\ge 1}\frac{u_n(A)}{n}
-      -\sum_{m\ge 1}\frac{u_{pm}(A)}{pm}
-    =\log C(A)-\frac{\Psi_p(A)}{p},
-  \]
-  where the last identity uses
-  \(-\log F_A(1)=\log C(A)\) and
-  \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}. Thus the
-  Fourier transform of \(r\mapsto V_{p,r}(A)\) over \(U(p)\) is exactly
-  \(\mathscr A_p(\chi)\), and the standard inversion
-  \(\frac{1}{p-1}\sum_\chi\overline{\chi(r)}\chi(r_0)=\delta_{r,r_0}\) gives
-  the formula for \(V_{p,r_0}(A)\).
-\end{proof}
-
-\begin{corollary}[A growth criterion for the square-root bound]
-  \label{cor:finite-part-near-rh-q-axis-envelope}
-  The following are equivalent:
-  \begin{enumerate}[label=\textup{(\roman*)}]
-    \item \(\Lambda_{\mathrm{rel}}(A)\le \lambda^{-1/2}\).
-    \item There exists \(K>0\) such that
-    \[
-      |\Psi_q(A)|\le K\,\lambda^{-q/2}
-      \qquad (q\ge 1).
-    \]
-  \end{enumerate}
-  If \(\Lambda_{\mathrm{rel}}(A)>\lambda^{-1/2}\), then for every
-  \(\varepsilon\in(0,\Lambda_{\mathrm{rel}}(A))\) there exist infinitely
-  many \(q\) such that
-  \[
-    |\Psi_q(A)|\ge \varepsilon^q.
-  \]
-\end{corollary}
-
-\begin{proof}
-  If \(\Lambda_{\mathrm{rel}}(A)\le \lambda^{-1/2}\), then
-  \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum} gives
-  \[
-    |\Psi_q(A)|
-    \le \sum_{m\ge 1}\frac{(d-1)\Lambda_{\mathrm{rel}}(A)^{qm}}{m}
-    \le \frac{d-1}{1-\lambda^{-1/2}}\,\lambda^{-q/2}.
-  \]
-  Conversely, if such a bound holds, then
-  \[
-    \limsup_{q\to\infty}|\Psi_q(A)|^{1/q}\le \lambda^{-1/2},
-  \]
-  and \Cref{thm:finite-part-cyclic-lift-spectrum-identifiability} yields
-  \(\Lambda_{\mathrm{rel}}(A)\le \lambda^{-1/2}\). The final statement
-  is the contrapositive form of the same growth formula.
-\end{proof}
-
-\begin{theorem}[Boundary multiplicities from Cesaro averages]
-  \label{thm:finite-part-boundary-multiplicity-qaxis-energy}
-  Let
-  \[
-    \Lambda:=\Lambda_{\mathrm{rel}}(A)\in(0,1),
-    \qquad
-    \mathcal E_\Lambda
-    :=\left\{\frac{\mu_j}{\lambda}:\ 2\le j\le d,\
-      \left|\frac{\mu_j}{\lambda}\right|=\Lambda\right\}.
-  \]
-  Write the elements of \(\mathcal E_\Lambda\) as
-  \(\Lambda\eta_1,\dots,\Lambda\eta_r\), counted with algebraic
-  multiplicity, where \(|\eta_k|=1\). For \(\zeta\in\TT\), let
-  \(m(\zeta)\) denote the multiplicity of \(\zeta\) among the
-  \(\eta_k\). Then
-  \[
-    \lim_{N\to\infty}\frac{1}{N}\sum_{q=1}^{N}
-      \frac{|u_q(A)|^2}{\Lambda^{2q}}
-    =\sum_{\zeta\in\TT}m(\zeta)^2.
-  \]
-  Moreover,
-  \[
-    \lim_{N\to\infty}\frac{1}{N}\sum_{q=1}^{N}
-      \frac{|\Psi_q(A)|^2}{\Lambda^{2q}}
-    =\sum_{\zeta\in\TT}m(\zeta)^2.
-  \]
-  In particular, if the boundary angles are pairwise distinct, then the
-  common limit is exactly \(r\); in general it lies between \(r\) and
-  \(r^2\).
-\end{theorem}
-
-\begin{proof}
-  Since the boundary spectrum consists of the points
-  \(\Lambda\eta_1,\dots,\Lambda\eta_r\), there exists
-  \(\Lambda'<\Lambda\) such that
-  \[
-    u_q(A)=\Lambda^q\sum_{k=1}^r\eta_k^q+O((\Lambda')^q)
+    \Psi_q(A)=u_q(A)+O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right)
     \qquad (q\to\infty).
   \]
-  Therefore
-  \[
-    \frac{|u_q(A)|^2}{\Lambda^{2q}}
-    =\left|\sum_{k=1}^r\eta_k^q\right|^2
-      +O\!\left(\left(\frac{\Lambda'}{\Lambda}\right)^q\right),
-  \]
-  and the error disappears after Cesaro averaging. Expanding the square
-  gives
-  \[
-    \left|\sum_{k=1}^r\eta_k^q\right|^2
-    =\sum_{i,j=1}^r(\eta_i\overline{\eta_j})^q.
-  \]
-  The Cesaro mean of \(\xi^q\) is \(1\) when \(\xi=1\) and \(0\)
-  otherwise, so the limit equals the number of pairs \((i,j)\) such
-  that \(\eta_i=\eta_j\), namely \(\sum_{\zeta}m(\zeta)^2\).
-
-  Finally, \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}
-  gives the explicit remainder bound
+  More precisely,
   \[
     \abs{\Psi_q(A)-u_q(A)}
     \le
-    \frac{d-1}{2(1-\Lambda)}\Lambda^{2q}.
+    \frac{d-1}{2(1-\Lambda_{\mathrm{rel}}(A))}
+    \Lambda_{\mathrm{rel}}(A)^{2q}.
   \]
-  Since \(\abs{u_q(A)}\le (d-1)\Lambda^q\), one also has
-  \[
-    \abs{\Psi_q(A)}\le
-    \left(d-1+\frac{d-1}{2(1-\Lambda)}\right)\Lambda^q
-    \qquad (q\ge 1).
-  \]
-  Therefore
-  \[
-    \frac{\abs{|\Psi_q(A)|^2-|u_q(A)|^2}}{\Lambda^{2q}}
-    \le
-    \frac{\abs{\Psi_q(A)-u_q(A)}\bigl(\abs{\Psi_q(A)}+\abs{u_q(A)}\bigr)}
-         {\Lambda^{2q}}
-    =O(\Lambda^q)\to 0
-  \]
-  after Cesaro averaging. The final bounds are immediate from
-  \(r=\sum_\zeta m(\zeta)\le \sum_\zeta m(\zeta)^2\le r^2\).
-\end{proof}
-
-\subsection{Algebraic properties of one root-of-unity layer}
-
-\begin{proposition}[Galois covariance of root-of-unity values]
-  \label{prop:finite-part-torsion-table-galois-covariance}
-  Let \(q\ge 2\), let \(\omega_q=e^{2\pi i/q}\), and for
-  \(h\in(\ZZ/q\ZZ)^\times\) let
-  \(\sigma_h\in\Gal(\QQ(\omega_q)/\QQ)\) be defined by
-  \(\sigma_h(\omega_q)=\omega_q^h\). Then for every polynomial
-  \(F\in\QQ[t]\) and every integer \(j\),
-  \[
-    \sigma_h\!\bigl(F(\omega_q^j)\bigr)=F(\omega_q^{hj}).
-  \]
-  In particular, the values
-  \(\{F_A(\omega_q^j)\}_{j=0}^{q-1}\) is Galois covariant.
 \end{proposition}
 
 \begin{proof}
-  Writing \(F(t)=\sum_{n\ge 0}a_nt^n\) with \(a_n\in\QQ\), one has
+  By \Cref{thm:finite-part-cyclic-lift-reduced-constant-closed},
   \[
-    \sigma_h\!\bigl(F(\omega_q^j)\bigr)
-    =\sum_{n\ge 0}a_n\,\sigma_h(\omega_q)^{jn}
-    =\sum_{n\ge 0}a_n\,\omega_q^{hjn}
-    =F(\omega_q^{hj}).
+    \Psi_q(A)
+    =-\sum_{j=2}^d\log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
+  \]
+  Expanding \(-\log(1-x)=\sum_{m\ge 1}x^m/m\) and exchanging the finite
+  sum over \(j\) with the absolutely convergent series over \(m\) gives
+  the first identity. The remainder estimate follows from
+  \[
+    |u_{qm}(A)|\le (d-1)\Lambda_{\mathrm{rel}}(A)^{qm}.
+  \]
+  Indeed,
+  \[
+    \begin{aligned}
+      \abs{\Psi_q(A)-u_q(A)}
+      &\le
+      \sum_{m\ge 2}\frac{\abs{u_{qm}(A)}}{m} \\
+      &\le
+      \frac{d-1}{2}\sum_{m\ge 2}\Lambda_{\mathrm{rel}}(A)^{qm} \\
+      &\le
+      \frac{d-1}{2(1-\Lambda_{\mathrm{rel}}(A))}
+      \Lambda_{\mathrm{rel}}(A)^{2q}.
+    \end{aligned}
   \]
 \end{proof}
 
-\begin{corollary}[A rationality criterion from one root-of-unity layer]
-  \label{cor:finite-part-torsion-table-galois-certificate}
-  Let \(\{y_j\}_{j=0}^{q-1}\subset\QQ(\omega_q)\) satisfy
+\begin{proposition}[M\"obius inversion on multiples]
+  \label{prop:finite-part-cyclic-lift-mobius-inversion}
+  For every \(n\ge 1\),
   \[
-    \sigma_h(y_j)=y_{hj}
+    \frac{u_n(A)}{n}
+    =\sum_{m\ge 1}\frac{\mu(m)}{mn}\,\Psi_{mn}(A).
+  \]
+\end{proposition}
+
+\begin{proof}
+  Set \(b_n:=u_n(A)/n\). Then
+  \[
+    \frac{\Psi_q(A)}{q}
+    =\sum_{m\ge 1}b_{qm}
+  \]
+  by \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}. Since
+  \[
+    \sum_{s\ge 1}\abs{b_{ns}}
+    \le \frac{d-1}{n}\sum_{s\ge 1}\Lambda_{\mathrm{rel}}(A)^{ns}
+    <\infty,
+  \]
+  the rearrangement below is justified by absolute convergence:
+  \begin{align*}
+    \sum_{m\ge 1}\frac{\mu(m)}{mn}\Psi_{mn}(A)
+    &=
+    \sum_{m\ge 1}\mu(m)\sum_{r\ge 1}b_{mnr} \\
+    &=
+    \sum_{s\ge 1}b_{ns}\sum_{m\mid s}\mu(m)
+    =b_n,
+  \end{align*}
+  since \(\sum_{m\mid s}\mu(m)=0\) unless \(s=1\).
+\end{proof}
+
+\begin{lemma}[Limsup of a finite exponential sum]
+  \label{lem:finite-part-exponential-sum-limsup}
+  Let
+  \[
+    f_q=\sum_{j=1}^r c_j\alpha_j^q
+    \qquad (q\ge 1),
+  \]
+  where \(c_j\in\CC\setminus\{0\}\) and \(\alpha_j\in\CC\). Then
+  \[
+    \limsup_{q\to\infty}\abs{f_q}^{1/q}
+    =\max_{1\le j\le r}\abs{\alpha_j}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Set \(R:=\max_j\abs{\alpha_j}\). The upper bound
+  \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\le R\) is immediate from
+  \(\abs{f_q}\le (\sum_j\abs{c_j})R^q\).
+
+  For the reverse inequality, collect equal frequencies on the boundary
+  circle and write
+  \[
+    f_q
+    =R^q\bigl(g_q+O(\vartheta^q)\bigr),
     \qquad
-    \bigl(h\in(\ZZ/q\ZZ)^\times,\ 0\le j\le q-1\bigr).
+    g_q:=\sum_{k=1}^s d_k\beta_k^q,
   \]
-  Define
+  where \(\vartheta\in[0,1)\), the numbers \(\beta_1,\dots,\beta_s\in\TT\)
+  are pairwise distinct, and \(d_k\neq 0\). Then
   \[
-    a_n:=\frac{1}{q}\sum_{j=0}^{q-1}y_j\,\omega_q^{-jn}
-    \qquad (0\le n\le q-1).
+    \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
+    =\sum_{k,\ell=1}^s d_k\overline{d_\ell}\,
+      \frac{1}{N}\sum_{q=1}^N(\beta_k\overline{\beta_\ell})^q.
   \]
-  Then \(a_n\in\QQ\) for every \(n\). Consequently, if \(q\ge d\), then
-  any admissible collection of root-of-unity values passing the
-  covariance test reconstructs,
-  via discrete Fourier inversion, a polynomial
-  \(F(t)=\sum_{n=0}^{d-1}a_nt^n\) with rational coefficients.
+  As \(N\to\infty\), the inner Ces\`aro average tends to \(1\) when
+  \(k=\ell\) and to \(0\) otherwise. Hence
+  \[
+    \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
+    \longrightarrow
+    \sum_{k=1}^s\abs{d_k}^2>0.
+  \]
+  Therefore \(\limsup_{q\to\infty}\abs{g_q}>0\), so there exist
+  \(c>0\) and infinitely many \(q\) such that \(\abs{g_q}\ge c\). Along
+  that subsequence,
+  \[
+    \abs{f_q}\ge \frac{c}{2}R^q
+  \]
+  for all sufficiently large \(q\), because \(\vartheta^q\to 0\). This
+  yields
+  \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\ge R\), completing the proof.
+\end{proof}
+
+\begin{proposition}[Reconstruction from one root-of-unity layer]
+  \label{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction}
+  Write
+  \[
+    F_A(t)=\sum_{n=0}^{d-1}a_n t^n
+    \qquad\text{with } a_0=1.
+  \]
+  If \(q\ge d\), then the values
+  \(\{F_A(\omega_q^j)\}_{0\le j\le q-1}\) determine every coefficient
+  \(a_n\). More precisely,
+  \[
+    a_n=\frac{1}{q}\sum_{j=0}^{q-1}
+      F_A(\omega_q^j)\omega_q^{-jn}
+    \qquad (0\le n\le d-1).
+  \]
+\end{proposition}
+
+\begin{proof}
+  The polynomial identity
+  \[
+    F_A(\omega_q^j)=\sum_{n=0}^{d-1}a_n\omega_q^{jn}
+  \]
+  holds for \(0\le j\le q-1\). Averaging against
+  \(\omega_q^{-jm}\) and using discrete orthogonality gives
+  \[
+    \frac{1}{q}\sum_{j=0}^{q-1}
+      F_A(\omega_q^j)\omega_q^{-jm}
+    =
+    \sum_{n=0}^{d-1}a_n
+      \frac{1}{q}\sum_{j=0}^{q-1}\omega_q^{j(n-m)}.
+  \]
+  Since \(q\ge d\), the inner sum equals \(1\) when \(n=m\) and \(0\)
+  otherwise.
+\end{proof}
+
+\begin{corollary}[Root-of-unity values of \(\zeta_A\) determine the
+  reduced spectrum]
+  \label{cor:finite-part-cyclic-lift-zeta-torsion-determines-spectrum}
+  For \(1\le j\le q-1\),
+  \[
+    F_A(\omega_q^j)
+    =\frac{\det(I-(\omega_q^j/\lambda)A)}{1-\omega_q^j}
+    =\frac{1}{1-\omega_q^j}\,
+      \zeta_A(\omega_q^j/\lambda)^{-1},
+  \]
+  while
+  \[
+    F_A(1)=\det\nolimits'(I-A/\lambda)=C(A)^{-1}.
+  \]
+  Consequently, if \(q\ge d\), then the data
+  \[
+    \Bigl(C(A),\ \{\zeta_A(\omega_q^j/\lambda)\}_{j=1}^{q-1}\Bigr)
+  \]
+  determine the non-Perron spectrum of \(A\) with multiplicity.
 \end{corollary}
 
 \begin{proof}
-  For \(h\in(\ZZ/q\ZZ)^\times\),
-  \[
-    \sigma_h(a_n)
-    =\frac{1}{q}\sum_{j=0}^{q-1}\sigma_h(y_j)\,
-      \sigma_h(\omega_q)^{-jn}
-    =\frac{1}{q}\sum_{j=0}^{q-1}y_{hj}\,\omega_q^{-hjn}.
-  \]
-  Since multiplication by \(h\) permutes \(\ZZ/q\ZZ\), relabelling
-  \(j'=hj\) gives \(\sigma_h(a_n)=a_n\). Thus \(a_n\) is fixed by the
-  full Galois group and therefore lies in \(\QQ\).
+  The displayed identities are immediate from the definitions of
+  \(F_A\), \(\zeta_A\), and \(C(A)\). The reconstruction statement
+  follows from
+  \Cref{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction}.
 \end{proof}
 
-\begin{theorem}[A finite criterion for the square-root bound]
-  \label{thm:finite-part-single-layer-torsion-near-rh}
-  Let \(q\ge d\). From the values on one root-of-unity layer
-  \[
-    \{F_A(\omega_q^j)\}_{j=0}^{q-1},
-  \]
-  equivalently from
-  \[
-    \Bigl(C(A),\{\zeta_A(\omega_q^j/\lambda)\}_{j=1}^{q-1}\Bigr),
-  \]
-  one can decide in finitely many algebraic steps whether
-  \(\Lambda_{\mathrm{rel}}(A)\le \lambda^{-1/2}\). More precisely, the
-  following are equivalent:
-  \begin{enumerate}[label=\textup{(\roman*)}]
-    \item \(\Lambda_{\mathrm{rel}}(A)\le \lambda^{-1/2}\).
-    \item The polynomial reconstructed by
-    \Cref{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction}
-    has all reciprocal zeros \(\mu_j/\lambda\) in the closed disc of
-    radius \(\lambda^{-1/2}\).
-    \item The exponential sum \(u_n(A)\) satisfies
-    \[
-      \limsup_{n\to\infty}|u_n(A)|^{1/n}\le \lambda^{-1/2}.
-    \]
-  \end{enumerate}
-\leanverified{paper_etds_finite_part_single_layer_torsion_near_rh}
-\end{theorem}
+\subsection{Orthogonal decomposition and cyclic detection}
 
-\begin{proof}
-  The equivalence of (i) and (ii) is a restatement of the definition of
-  \(\Lambda_{\mathrm{rel}}(A)\) once \(F_A\) has been reconstructed from
-  these values. Since
+\begin{proposition}[Orthogonal decomposition]
+  \label{thm:abelian-shadow-defect}
+  Equip the class functions on \(G\) with the inner product
   \[
-    u_n(A)=\sum_{j=2}^d\left(\frac{\mu_j}{\lambda}\right)^n
+    \langle F,H\rangle_G
+    :=
+    \sum_{C\subset G}\frac{|C|}{|G|}F(C)\overline{H(C)}.
   \]
-  is a finite exponential sum, its exponential growth rate is exactly
-  the maximal modulus of the frequencies \(\mu_j/\lambda\), which gives the
-  equivalence of (ii) and (iii). Finite-step decidability follows
-  because \Cref{thm:finite-part-cyclic-lift-spectrum-identifiability}
-  recovers the reduced spectral polynomial, hence the relevant root
-  moduli, from finitely many algebraic operations.
-\end{proof}
-
-\subsection{A Dirichlet series for the cyclic-lift discrepancy}
-
-\begin{theorem}[A Dirichlet generating series for the cyclic-lift discrepancy]
-  \label{thm:finite-part-cyclic-lift-polylog-dirichlet-xi}
-  Define the discrepancy sequence by
-  \[
-    \mathcal E_q(A):=\Psi_q(A)-\log C(A)
-    =-\sum_{j=2}^d
-      \log\!\left(
-        \frac{1-(\mu_j/\lambda)^q}{1-\mu_j/\lambda}
-      \right),
-  \]
-  and for \(\Re(s)>1\) set
-  \[
-    \Xi_A(s):=\sum_{q\ge 1}\frac{\mathcal E_q(A)}{q^s}.
-  \]
-  Then
-  \[
-    \Xi_A(s)
-    =\sum_{j=2}^d\sum_{m\ge 1}\frac{1}{m}
-      \left(
-        \Li_s\!\left(\left(\frac{\mu_j}{\lambda}\right)^m\right)
-        -\zeta(s)\left(\frac{\mu_j}{\lambda}\right)^m
-      \right),
-  \]
-  with absolute convergence for \(\Re(s)>1\). Moreover,
-  \(\Xi_A(s)\) has at most a simple pole at \(s=1\), and
-  \[
-    \Res_{s=1}\Xi_A(s)=-\log C(A).
-  \]
-\end{theorem}
-
-\begin{proof}
-  Since \(|\mu_j|<\lambda\),
-  \[
-    -\log\!\left(
-      \frac{1-(\mu_j/\lambda)^q}{1-\mu_j/\lambda}
-    \right)
-    =\sum_{m\ge 1}\frac{1}{m}
-      \left(
-        \left(\frac{\mu_j}{\lambda}\right)^{qm}
-        -\left(\frac{\mu_j}{\lambda}\right)^m
-      \right),
-  \]
-  and the double series is absolutely convergent. Summing over \(q\)
-  with weight \(q^{-s}\) and exchanging the order of summation yields
-  the stated formula, since
-  \[
-    \sum_{q\ge 1}\frac{z^q}{q^s}=\Li_s(z),
+  With respect to this inner product,
+  \(\mathcal B_A^{\mathrm{ab}}\) and \(\mathcal B_A^{\mathrm{na}}\)
+  are orthogonal, and
+  \begin{equation}\label{eq:abelian-shadow-defect-energy}
+    \norm{\mathcal B_A^{\mathrm{ab}}}_G^2
+    =
+    \sum_{\substack{\chi\in\Irr(G)\\ \dim\chi=1,\ \chi\neq \mathbf 1}}
+      \abs{\Pi_\chi(\lambda^{-1})}^2,
     \qquad
-    \sum_{q\ge 1}\frac{1}{q^s}=\zeta(s).
-  \]
-  For fixed \(z\) with \(|z|<1\), \(\Li_s(z)\) is entire in \(s\), so
-  the only possible pole comes from \(\zeta(s)\), with residue \(1\) at
-  \(s=1\). Hence
-  \[
-    \Res_{s=1}\Xi_A(s)
-    =-\sum_{j=2}^d\sum_{m\ge 1}
-      \frac{1}{m}\left(\frac{\mu_j}{\lambda}\right)^m
-    =\sum_{j=2}^d\log\!\left(1-\frac{\mu_j}{\lambda}\right)
-    =-\log C(A).
-  \]
-\end{proof}
-
-\section{Asymptotic families, square-root bounds, and rigidity statements}
-\label{app:rigidity}
-
-This appendix records rigidity statements for growing families of
-primitive matrices. The arguments are elementary consequences of the
-explicit formulas proved earlier, but one may compare the broader
-perturbative framework in \cite{Kato1995Perturbation}.
-
-\subsection{Rigidity for growing families}
-
-\begin{proposition}[Bounds for the reduced determinant under the square-root bound]
-  \label{prop:finite-part-residue-constant-rh-squeeze}
-  Assume that \(\Lambda_{\mathrm{rel}}(A)\le \lambda^{-1/2}\). Then
-  \[
-    (1+\lambda^{-1/2})^{-(d-1)}
-    \le C(A)\le
-    (1-\lambda^{-1/2})^{-(d-1)}.
-  \]
-  In particular, if \(\lambda\ge 4\), then
-  \[
-    |\log C(A)|\le 2(d-1)\lambda^{-1/2}.
-  \]
+    \norm{\mathcal B_A^{\mathrm{na}}}_G^2
+    =
+    \sum_{\substack{\varrho\in\Irr(G)\\ \dim\varrho>1}}
+      \abs{\Pi_\varrho(\lambda^{-1})}^2.
+  \end{equation}
+  Moreover, the following are equivalent:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item \(\mathcal B_A\) factors through the abelianisation
+      \(q_{\mathrm{ab}}:G\twoheadrightarrow G_{\mathrm{ab}}\);
+    \item \(\mathcal B_A^{\mathrm{na}}\equiv 0\);
+    \item \(\Pi_\varrho(\lambda^{-1})=0\) for every
+      \(\varrho\in\Irr(G)\) with \(\dim\varrho>1\).
+  \end{enumerate}
 \end{proposition}
 
 \begin{proof}
-  By \Cref{eq:reduced-det-constant},
-  \[
-    C(A)^{-1}
-    =\prod_{j=2}^d\left(1-\frac{\mu_j}{\lambda}\right).
-  \]
-  Since the non-real eigenvalues occur in conjugate pairs and
-  \(|\mu_j|/\lambda\le \lambda^{-1/2}\), one has
-  \[
-    1-\lambda^{-1/2}
-    \le \left|1-\frac{\mu_j}{\lambda}\right|
-    \le 1+\lambda^{-1/2}
-  \]
-  for every \(j\ge 2\). Multiplying these bounds gives the two-sided
-  estimate for \(C(A)\). If \(\lambda\ge 4\), then
-  \(\lambda^{-1/2}\le 1/2\), so
-  \[
-    \log(1-\lambda^{-1/2})^{-1}\le 2\lambda^{-1/2},
-    \qquad
-    \log(1+\lambda^{-1/2})\le \lambda^{-1/2},
-  \]
-  and the logarithmic bound follows.
+  The orthogonality of the irreducible characters in the class-function
+  inner product immediately implies that the one-dimensional and
+  higher-dimensional parts of the expansion
+  \eqref{eq:abelian-shadow-defect-sum} are orthogonal, and gives
+  \eqref{eq:abelian-shadow-defect-energy}.
+
+  If \(\mathcal B_A\) factors through \(G_{\mathrm{ab}}\), then it
+  belongs to the subspace spanned by the pullbacks of the irreducible
+  characters of \(G_{\mathrm{ab}}\), that is, by the one-dimensional
+  characters of \(G\). Hence all higher-dimensional Fourier coefficients
+  in \eqref{eq:normalised-primitive-class-profile} vanish, which proves
+  \((i)\Rightarrow(iii)\). The implication \((iii)\Rightarrow(ii)\) is
+  immediate from \eqref{eq:abelian-shadow-defect}. Finally,
+  \((ii)\Rightarrow(i)\) because a class function whose irreducible
+  expansion involves only one-dimensional characters factors through the
+  abelianisation.
 \end{proof}
 
-\begin{theorem}[Linear growth of the reduced determinant]
-  \label{thm:finite-part-residue-drift-trichotomy}
-  Let \(\{A_q\}_{q\ge 1}\) be primitive non-negative matrices with
-  Perron roots \(\lambda_q>1\), dimensions \(d_q\), and reduced
-  determinants \(C_q:=C(A_q)\). Assume that for some \(c>1\),
+For later use, write \(\mathscr C_{\mathrm{cyc}}(G)\) for the linear
+span of the pullbacks \(q^\ast f\), where \(q:G\twoheadrightarrow \ZZ/m\ZZ\)
+ranges over all cyclic quotients and \(f\) ranges over the class
+functions on \(\ZZ/m\ZZ\).
+
+\begin{lemma}[Cyclic quotients and one-dimensional characters]
+  \label{lem:cyclic-quotients-one-dimensional-characters}
+  One has
   \[
-    \lambda_q\ge c^q
+    \mathscr C_{\mathrm{cyc}}(G)
+    =
+    \operatorname{span}\{\chi\in\Irr(G):\dim\chi=1\}.
   \]
-  for all sufficiently large \(q\), and that
-  \[
-    \log d_q=o(q).
-  \]
-  If the square-root bound holds for all sufficiently large \(q\), then
-  \[
-    |\log C_q|=o(q).
-  \]
-  Consequently, if
-  \[
-    \liminf_{q\to\infty}\frac{|\log C_q|}{q}>0,
-  \]
-  then at least one of the following must occur:
-  \begin{enumerate}[label=\textup{(\roman*)}]
-    \item the square-root bound fails for infinitely many \(q\);
-    \item \(\limsup_{q\to\infty}\log d_q/q>0\).
-  \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
-  By \Cref{prop:finite-part-residue-constant-rh-squeeze}, the
-  square-root bound
-  implies
+  Let \(q:G\twoheadrightarrow \ZZ/m\ZZ\) be a cyclic quotient and let
+  \(f\) be a class function on \(\ZZ/m\ZZ\). Since \(\ZZ/m\ZZ\) is
+  abelian, its irreducible characters form a basis of its class
+  functions, so
   \[
-    |\log C_q|
-    \le 2(d_q-1)\lambda_q^{-1/2}
-    \le 2d_q\,c^{-q/2}
+    f=\sum_{\psi\in\widehat{\ZZ/m\ZZ}}\widehat f(\psi)\psi.
   \]
-  for all sufficiently large \(q\). Since \(\log d_q=o(q)\), the right
-  side equals
+  Pulling back gives
   \[
-    \exp\!\left(o(q)-\frac{q}{2}\log c+O(1)\right),
+    q^\ast f
+    =
+    \sum_{\psi\in\widehat{\ZZ/m\ZZ}}
+      \widehat f(\psi)(\psi\circ q),
   \]
-  hence in particular \(o(q)\). This proves the first claim. The final
-  alternative is its contrapositive.
+  and each \(\psi\circ q\) is a one-dimensional character of \(G\).
+  Hence
+  \[
+    \mathscr C_{\mathrm{cyc}}(G)
+    \subset
+    \operatorname{span}\{\chi\in\Irr(G):\dim\chi=1\}.
+  \]
+
+  Conversely, let \(\chi\in\Irr(G)\) be one-dimensional. Its image
+  \(\chi(G)\subset\CC^\times\) is a finite subgroup of the multiplicative
+  group of complex numbers, hence cyclic. Let
+  \(q_\chi:G\twoheadrightarrow \chi(G)\) be the induced quotient map,
+  and let \(\iota_\chi:\chi(G)\hookrightarrow \CC^\times\) be the
+  tautological character. Then
+  \[
+    \chi=q_\chi^\ast\iota_\chi,
+  \]
+  so \(\chi\in\mathscr C_{\mathrm{cyc}}(G)\). This proves the reverse
+  inclusion.
+\end{proof}
+
+\begin{proposition}[Exact boundary of cyclic detection]
+  \label{thm:cyclic-detection-boundary}
+  One has
+  \[
+    \mathscr C_{\mathrm{cyc}}(G)
+    =
+    \operatorname{span}\{\chi\in\Irr(G):\dim\chi=1\}.
+  \]
+  If \(P_{\mathrm{cyc}}\) denotes the orthogonal projection onto
+  \(\mathscr C_{\mathrm{cyc}}(G)\), then
+  \[
+    P_{\mathrm{cyc}}\mathcal B_A=\mathcal B_A^{\mathrm{ab}},
+    \qquad
+    (I-P_{\mathrm{cyc}})\mathcal B_A=\mathcal B_A^{\mathrm{na}}.
+  \]
+  Equivalently, for every cyclic quotient \(q:G\twoheadrightarrow \ZZ/m\ZZ\)
+  and every class function \(f\) on \(\ZZ/m\ZZ\),
+  \[
+    \langle \mathcal B_A^{\mathrm{na}},q^\ast f\rangle_G=0.
+  \]
+  In particular, the full primitive class profile is generated by
+  cyclic quotient data if and only if
+  \(\mathcal B_A^{\mathrm{na}}\equiv 0\).
+\end{proposition}
+
+\begin{proof}
+  Set
+  \[
+    V_{\mathrm{ab}}(G)
+    :=
+    \operatorname{span}\{\chi\in\Irr(G):\dim\chi=1\}.
+  \]
+  \Cref{lem:cyclic-quotients-one-dimensional-characters} gives
+  \(\mathscr C_{\mathrm{cyc}}(G)=V_{\mathrm{ab}}(G)\).
+  \Cref{thm:abelian-shadow-defect} identifies
+  \(\mathcal B_A^{\mathrm{ab}}\) and \(\mathcal B_A^{\mathrm{na}}\) as
+  the orthogonal projections of \(\mathcal B_A\) onto the
+  one-dimensional and higher-dimensional Peter--Weyl sectors. Since the
+  first sector is exactly \(\mathscr C_{\mathrm{cyc}}(G)\), the
+  projection identities and orthogonality follow immediately.
 \end{proof}

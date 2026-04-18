@@ -1,5 +1,11 @@
-\section{Zeckendorf Syntax and Sofic Obstructions}
+\section{Context: Zeckendorf Growth}
 \label{sec:zeckendorf}
+
+This section specialises the density dichotomy to Zeckendorf words. We
+record only the minimal classical facts needed later---in particular the
+Zeckendorf growth law---and then combine them with prime-counting
+estimates to obtain the quantitative obstructions promised in
+\Cref{sec:automata}.
 
 Let
 \[
@@ -7,20 +13,34 @@ Let
   :=\{x_1\cdots x_m\in\{0,1\}^\ast:
       x_ix_{i+1}\neq 11,\ x_m=1\}
 \]
-be the language of canonical Zeckendorf words. For
-\(w=x_1\cdots x_m\in\mathcal Z\), define
+be the language of canonical Zeckendorf words. We write these words
+least-significant digit first: for \(w=x_1\cdots x_m\in\mathcal Z\),
 \[
   \val(w):=\sum_{k=1}^m x_kF_{k+1},
 \]
 where \(F_0=0\), \(F_1=1\), \(F_{n+2}=F_{n+1}+F_n\), and
-\(\varphi=(1+\sqrt5)/2\). The map \(w\mapsto\val(w)\) is a bijection
-from \(\mathcal Z\) onto \(\NN_{\ge 1}\) \cite{Zeckendorf1972}.
+\(\varphi=(1+\sqrt5)/2\). Thus \(x_m=1\) marks the most significant
+nonzero digit. The map \(w\mapsto\val(w)\) is a bijection from
+\(\mathcal Z\) onto \(\NN_{\ge 1}\) \cite{Zeckendorf1972}.
 Consequently \(\mathcal Z\cap\{0,1\}^{\le m}\) parametrises the
 interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
-\([F_{m+1},F_{m+2})\).
+\([F_{m+1},F_{m+2})\). Equivalently,
+\(\abs{\mathcal Z_m}=F_m\) for every \(m\ge 1\).
+We write
+\[
+  \mathcal Z_m:=\{w\in\mathcal Z:\abs{w}=m\}
+  \qquad\text{and}\qquad
+  \mathcal P_m^{(\mathrm Z)}
+  :=\{w\in\mathcal Z_m:\val(w)\text{ is prime}\},
+\]
+and set
+\[
+  \mathcal P_{\mathcal Z}
+  :=\bigcup_{m\ge 1}\mathcal P_m^{(\mathrm Z)}.
+\]
 
-\begin{theorem}[Regular Zeckendorf languages have power-law growth]
-  \label{thm:zeckendorf-regular-powerlaw}
+\begin{proposition}[Known growth law for regular Zeckendorf languages]
+  \label{prop:zeckendorf-regular-powerlaw}
   Let \(L\subseteq\mathcal Z\) be regular. Choose a DFA recognizing
   \(L\), delete states that are not reachable from the initial state or
   cannot reach an accepting state, and let \(\rho\) be the maximal
@@ -40,105 +60,27 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
     \end{cases}
     \qquad (T\to\infty).
   \]
-\leanverified{paper_prime_languages_zeckendorf_regular_powerlaw}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
-  If \(L=\emptyset\), then \(N_L(T)=0\) for all \(T\), and the theorem
-  holds trivially with \(\alpha=0\). Assume henceforth that
-  \(L\neq\emptyset\).
-
-  Let
+  This is the Zeckendorf specialization of the general growth theorem
+  for \(S\)-recognizable sets in \cite[Theorem~7]{CharlierRampersad2011};
+  see also \cite{LecomteRigo2001}. In the present numeration system the
+  ambient counting function satisfies
   \[
-    a_m:=\#\{w\in L:\abs{w}=m\},
-    \qquad
-    A_n:=\sum_{m\le n}a_m.
+    \#(\mathcal Z\cap\{0,1\}^{\le m})
+    =F_{m+2}-1
+    =\varphi^{m+o(m)},
   \]
-  Since \(L\) is regular, there is a DFA for \(L\). After deleting
-  states that are unreachable from the initial state or from which no
-  accepting state is reachable, we obtain a trim automaton with
-  transfer matrix \(B\) such that \(a_m=u^{\mathsf T}B^m v\). Because
-  \(L\neq\emptyset\), the trim automaton has at least one path to an
-  accepting state, so the definition of \(\rho\) is meaningful.
-
-  Let \(\rho\) be the maximum spectral radius of a strongly connected
-  component of this trim automaton.
-
-  \textit{Upper bound.} Standard Jordan-form bounds for
-  powers of a finite matrix give constants \(C>0\) and \(d\ge 0\) such
-  that
+  The trimmed automaton for \(L\) contributes the exponential factor
+  \(\max(1,\rho)\). Substituting these two growth parameters into the
+  theorem of Charlier and Rampersad yields exactly the displayed
+  asymptotic
   \[
-    a_m\le C m^d\max(1,\rho)^m
-    \qquad (m\ge 1).
+    N_L(T)=T^{\alpha+o(1)}
   \]
-  Summing over \(m\le n\) yields
-  \[
-    A_n\le C' n^{d+1}\max(1,\rho)^n
-  \]
-  for some \(C'>0\).
-
-  \textit{Lower bound and the inequality \(\rho\le\varphi\).}
-  If \(\rho>1\), choose a reachable, co-reachable strongly connected
-  component \(C\) of spectral radius \(\rho\). Let \(d_C\) be the
-  period of \(C\). By Perron--Frobenius theory for irreducible
-  non-negative matrices, there exist states \(i,j\in C\), a residue
-  class \(r\bmod d_C\), and a constant \(c>0\) such that
-  \[
-    (B_C^{r+k d_C})_{ij}\ge c\,\rho^{r+k d_C}
-  \]
-  for all sufficiently large \(k\). Fix paths of lengths \(\ell_1\) and
-  \(\ell_2\) from the initial state to \(i\) and from \(j\) to an
-  accepting state. Then
-  \[
-    a_{\ell_1+\ell_2+r+k d_C}\ge c\,\rho^{r+k d_C}
-  \]
-  for all large \(k\), so
-  \[
-    \limsup_{m\to\infty}a_m^{1/m}\ge\rho.
-  \]
-  On the other hand, since words of length exactly \(m\) in
-  \(\mathcal Z\) parametrize \([F_{m+1},F_{m+2})\), there are
-  exactly \(F_{m+2}-F_{m+1}=F_m\) such words, so
-  \(a_m\le\abs{\mathcal Z\cap\{0,1\}^m}=F_m=\varphi^{m+o(m)}\), which gives
-  \[
-    \limsup_{m\to\infty}a_m^{1/m}\le\varphi.
-  \]
-  Hence \(\rho\le\varphi\).
-
-  Since every sufficiently large integer \(n\) lies
-  within \(O(1)\) of some value in the arithmetic progression
-  \(\ell_1+\ell_2+r+kd_C\), the monotonicity of \(A_n\) gives
-  \[
-    A_n\ge c'\rho^n
-  \]
-  for all large \(n\), with \(c'>0\). Combined with the upper bound
-  above, this implies
-  \[
-    A_n=\rho^{n+o(n)}.
-  \]
-
-  If \(\rho\le 1\), then the upper bound gives
-  \(A_n\le C'n^{d+1}\), so \(A_n=\exp(o(n))\), and \(\rho\le\varphi\)
-  holds trivially.
-
-  \textit{Conversion to \(N_L(T)\).}
-  If \(F_{n+1}\le T<F_{n+2}\), then every Zeckendorf word of value at
-  most \(T\) has length at most \(n\), while every word of length at
-  most \(n-1\) has value at most \(T\). Therefore
-  \[
-    A_{n-1}\le N_L(T)\le A_n.
-  \]
-  Since \(n=(\log T)/(\log\varphi)+O(1)\), the case \(\rho>1\) gives
-  \[
-    N_L(T)
-    =\exp\!\left(
-      \frac{\log\rho}{\log\varphi}\log T+o(\log T)
-    \right)
-    =T^{\alpha+o(1)}
-  \]
-  with \(\alpha:=\log\rho/\log\varphi\in(0,1]\). If \(\rho\le 1\),
-  then \(N_L(T)\le A_n=\exp(o(n))=\exp(o(\log T))=T^{o(1)}\), so the
-  same conclusion holds with \(\alpha=0\).
+  with \(\alpha=0\) when \(\rho\le 1\) and
+  \(\alpha=\log \rho/\log \varphi\) when \(\rho>1\).
 \end{proof}
 
 \begin{remark}\label{rem:zeckendorf-examples}
@@ -161,8 +103,140 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
   setting the regular syntax of admissible expansions replaces
   \(\mathcal Z\), and the dominant exponential growth constant of the
   numeration system replaces \(\varphi\); see
-  \cite{Frougny1992,BruyereHansel1997}.
+  \cite{Frougny1992,BruyereHansel1997,LecomteRigo2001}.
 \end{remark}
+
+\begin{lemma}[Prime counts in Zeckendorf slices]
+  \label{lem:zeck-prime-count}
+  There exist constants \(A_{\mathrm Z},B_{\mathrm Z}>0\) such that for
+  all sufficiently large \(m\),
+  \[
+    A_{\mathrm Z}\,\frac{\varphi^m}{m}
+    \le \abs{\mathcal P_m^{(\mathrm Z)}}
+    \le B_{\mathrm Z}\,\frac{\varphi^m}{m}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Every word in \(\mathcal Z_m\) represents an integer in
+  \([F_{m+1},F_{m+2})\), so
+  \(\abs{\mathcal P_m^{(\mathrm Z)}}=\pi(F_{m+2})-\pi(F_{m+1})\), where
+  \(\pi\) is the prime-counting function. The prime number theorem with
+  a first-order error term
+  \cite[Chapter~22]{HardyWright2008} gives
+  \(\pi(x)=x/\log x+O(x/\log^2 x)\). Hence
+  \[
+    \pi(F_{m+2})-\pi(F_{m+1})
+    =\frac{F_{m+2}}{\log F_{m+2}}-\frac{F_{m+1}}{\log F_{m+1}}
+     +O\!\left(\frac{F_{m+2}}{\log^2 F_{m+2}}\right).
+  \]
+  Since \(F_{m+1}/F_{m+2}\to\varphi^{-1}<1\) and
+  \(\log F_{m+1}=m\log\varphi+O(1)=\log F_{m+2}+O(1)\), the quantity in
+  parentheses
+  \[
+    1-\frac{F_{m+1}}{F_{m+2}}
+      \frac{\log F_{m+2}}{\log F_{m+1}}
+  \]
+  stays bounded between two positive constants for all large \(m\).
+  Moreover \(F_{m+2}=\Theta(\varphi^m)\) and
+  \(\log F_{m+2}=m\log\varphi+O(1)\), while the error term
+  \(O(F_{m+2}/\log^2 F_{m+2})\) is \(o(\varphi^m/m)\). The displayed
+  expression is therefore comparable to \(\varphi^m/m\), yielding
+  constants \(A_{\mathrm Z},B_{\mathrm Z}>0\) with the stated property.
+\end{proof}
+
+For a deterministic automaton \(\mathcal A\) over the Zeckendorf digit
+alphabet, write
+\[
+  a_m^{(\mathrm Z)}(\mathcal A)
+  :=\abs{L(\mathcal A)\cap\mathcal Z_m}.
+\]
+
+\begin{corollary}[Zeckendorf symmetric-difference obstruction]
+  \label{cor:zeck-symmetric-diff}
+  Let \(\mathcal A\) be a deterministic automaton over the Zeckendorf
+  alphabet. Then there exists \(c_{\mathcal A,\varphi}>0\) such that
+  \[
+    \abs{(L(\mathcal A)\cap\mathcal Z_m)
+         \triangle\mathcal P_m^{(\mathrm Z)}}
+    \ge c_{\mathcal A,\varphi}\,\frac{\varphi^m}{m}
+  \]
+  for all sufficiently large \(m\). If
+  \(a_m^{(\mathrm Z)}(\mathcal A)\) lies in the positive-density
+  alternative of \Cref{thm:parry-density}, then along the corresponding
+  arithmetic progression of lengths one has the stronger bound
+  \(\abs{(L(\mathcal A)\cap\mathcal Z_m)\triangle\mathcal P_m^{(\mathrm Z)}}
+  \gg \varphi^m\).
+\end{corollary}
+
+\begin{proof}
+  Apply \Cref{thm:parry-density} with \(\mathcal N=\mathcal Z\). Thus
+  \[
+    \frac{a_m^{(\mathrm Z)}(\mathcal A)}{F_m}
+    =c_{m\bmod p}+O(\theta^m)
+  \]
+  for some integers \(p\ge 1\), \(\theta\in(0,1)\), and constants
+  \(c_0,\dots,c_{p-1}\ge 0\). Treat each residue class separately.
+
+  If \(c_r=0\), then along \(m=pk+r\) we have
+  \(a_m^{(\mathrm Z)}(\mathcal A)=O(\theta^k\varphi^{pk+r})\). By
+  \Cref{lem:zeck-prime-count},
+  \(\abs{\mathcal P_m^{(\mathrm Z)}}\asymp \varphi^{pk+r}/(pk+r)\). For
+  \(k\) large enough the difference is therefore bounded below by
+  \(\tfrac{1}{2}A_{\mathrm Z}\varphi^{pk+r}/(pk+r)\).
+
+  If \(c_r>0\), then along \(m=pk+r\) we have
+  \(a_m^{(\mathrm Z)}(\mathcal A)\ge \tfrac{1}{2}c_r F_{pk+r}\). Since
+  \(F_m\asymp \varphi^m\) and \(\abs{\mathcal P_m^{(\mathrm Z)}}\ll
+  \varphi^m/m\), the symmetric difference is \(\gg \varphi^{pk+r}\) on
+  that progression.
+
+  Taking the minimum of the finitely many lower bounds obtained over all
+  residue classes produces \(c_{\mathcal A,\varphi}>0\) with the stated
+  properties.
+\end{proof}
+
+Define recall and precision for Zeckendorf slices by
+\[
+  \mathrm{Rec}_m^{(\mathrm Z)}
+  :=\frac{\abs{L(\mathcal A)\cap\mathcal P_m^{(\mathrm Z)}}}
+          {\abs{\mathcal P_m^{(\mathrm Z)}}},
+  \qquad
+  \mathrm{Prec}_m^{(\mathrm Z)}
+  :=\frac{\abs{L(\mathcal A)\cap\mathcal P_m^{(\mathrm Z)}}}
+          {a_m^{(\mathrm Z)}(\mathcal A)}
+\]
+whenever both \(\abs{\mathcal P_m^{(\mathrm Z)}}>0\) and
+\(a_m^{(\mathrm Z)}(\mathcal A)>0\).
+
+\begin{corollary}[No simultaneous recall and precision in Zeckendorf]
+  \label{cor:zeck-recall-precision}
+  Every deterministic automaton \(\mathcal A\) over the Zeckendorf
+  alphabet satisfies one of the following:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item \(\mathrm{Rec}_m^{(\mathrm Z)}\) decays exponentially along
+    every residue class of lengths.
+    \item Along some arithmetic progression one has
+    \(\mathrm{Prec}_m^{(\mathrm Z)}\le C_{\mathcal A,\varphi}/m\) for a
+    constant depending only on \(\mathcal A\).
+  \end{enumerate}
+  Consequently no fixed DFA has both recall and precision bounded below
+  on infinitely many Zeckendorf lengths.
+\end{corollary}
+
+\begin{proof}
+  Apply the density dichotomy \Cref{thm:parry-density} with
+  \(\mathcal N=\mathcal Z\) and argue as in the proof of
+  \Cref{cor:dfa-prime-recall-precision}, using
+  \Cref{lem:zeck-prime-count}. When \(c_r=0\) the numerator of
+  \(\mathrm{Rec}_m^{(\mathrm Z)}\) is exponentially small relative to
+  \(\abs{\mathcal P_m^{(\mathrm Z)}}\asymp \varphi^m/m\), so recall
+  decays exponentially. When \(c_r>0\),
+  \(a_m^{(\mathrm Z)}(\mathcal A)\gg \varphi^m\) along that progression,
+  whereas the numerator is \(O(\varphi^m/m)\), yielding
+  \(\mathrm{Prec}_m^{(\mathrm Z)}\le C_{\mathcal A,\varphi}/m\). The
+  final statement follows as in the base-\(b\) case.
+\end{proof}
 
 \begin{corollary}[Prime Zeckendorf language is not regular]
   \label{cor:zeckendorf-prime-language-not-regular}
@@ -174,12 +248,11 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
   where \(\mathrm{Zeck}(n)\) denotes the canonical Zeckendorf
   representation of \(n\). Then \(\mathcal P_{\mathcal Z}\) is not a
   regular language.
-\leanverified{paper_prime_languages_zeckendorf_prime_language_not_regular}
 \end{corollary}
 
 \begin{proof}
   If \(\mathcal P_{\mathcal Z}\) were regular, then
-  \Cref{thm:zeckendorf-regular-powerlaw} would give
+  \Cref{prop:zeckendorf-regular-powerlaw} would give
   \[
     \pi(T)=N_{\mathcal P_{\mathcal Z}}(T)=T^{\alpha+o(1)}
   \]
@@ -188,173 +261,30 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
   \(\pi(T)/T^\alpha\to\infty\), while \(\pi(T)/T\to 0\).
 \end{proof}
 
-\begin{proposition}[Sofic word counts are exponential polynomials]
-  \label{prop:sofic-counts-exponential-polynomial}
-  Let \(X\) be a sofic shift, and let \(a_m(X)\) denote the number of
-  admissible words of length \(m\). Then
+\begin{remark}[Easy sofic corollary]
+  \label{rem:zeckendorf-primes-not-sofic}
+  The preceding non-regularity statement immediately excludes eventual
+  sofic realization of the prime Zeckendorf length slices. We record
+  only the short argument.
+  Let \(\mathcal B_m(X)\) denote the admissible words of length
+  \(m\) in a sofic shift \(X\). If
+  \(\mathcal B_m(X)=\mathcal P_m^{(\mathrm Z)}\) for all \(m\ge N\),
+  then
   \[
-    a_m(X)=\sum_{j=1}^J Q_j(m)\lambda_j^m
+    \mathcal B(X)\triangle\mathcal P_{\mathcal Z}\subseteq \{0,1\}^{<N},
   \]
-  for some complex numbers \(\lambda_j\) and some polynomials \(Q_j\).
-  Equivalently, the sequence \(a_m(X)\) satisfies a linear recurrence.
-\end{proposition}
+  a finite set. Since \(\mathcal B(X)\) is regular
+  (\cite[Theorem~3.2.1]{LindMarcus1995}; see also
+  \cite[Chapter~4]{PerrinPin2004}), this would make
+  \(\mathcal P_{\mathcal Z}\) a finite symmetric difference away from a
+  regular language, hence regular itself, contradicting
+  \Cref{cor:zeckendorf-prime-language-not-regular}.
+\end{remark}
 
-\begin{proof}
-  By definition, a sofic shift \(X\) is the image of a shift of finite
-  type under a one-block factor map. A classical theorem (see
-  \cite[Theorem~3.2.1]{LindMarcus1995}) then implies that the block
-  language \(\mathcal B(X)=\{w\in\Sigma^\ast:w\text{ appears in }X\}\)
-  is regular. Let \(\mathcal A=(Q,\Sigma,\delta,q_0,F)\) be a complete
-  DFA recognizing \(\mathcal B(X)\), with \emph{multiplicity matrix}
-  \(B\in\ZZ_{\ge 0}^{Q\times Q}\) defined by
-  \[
-    B_{q,q'}:=\#\{a\in\Sigma:\delta(q,a)=q'\}.
-  \]
-  For a complete DFA, each row of \(B\) sums to \(\abs{\Sigma}\). The
-  entry \(B_{q,q'}\) counts the number of symbols carrying state \(q\)
-  to state \(q'\), so the \((i,j)\)-entry of \(B^m\) equals the number
-  of words of length \(m\) that send state \(i\) to state \(j\). Hence
-  \(a_m(X)=u^{\mathsf T}B^m v\), where \(u\) is the indicator of
-  \(q_0\) and \(v\) is the indicator of \(F\). The Jordan normal form
-  of \(B\) yields the displayed expansion into polynomial-exponential
-  terms; see \cite[Theorem~III.4.1]{BerstelReutenauer2011} or
-  \cite[Chapter~V]{FlajoletSedgewick2009}.
-\end{proof}
 
-\begin{lemma}[Residue-class asymptotics for non-negative exponential polynomials]
-  \label{lem:residue-class-asymptotics}
-  Let
-  \[
-    a_m=\sum_{j=1}^J Q_j(m)\lambda_j^m,
-  \]
-  where \(Q_j\in\CC[x]\), \(\lambda_j\in\CC\), and \(a_m\ge 0\) for all
-  sufficiently large \(m\). Set
-  \[
-    \Lambda:=\max_{1\le j\le J}\abs{\lambda_j}.
-  \]
-  Assume that \(\lambda_j/\Lambda\) is a root of unity whenever
-  \(\abs{\lambda_j}=\Lambda\). Then there exist an integer \(q\ge 1\)
-  and a constant \(\eta\in(0,1)\) such that for every residue class
-  \(r\bmod q\) one has
-  \[
-    a_{qk+r}
-    =\Lambda^{qk+r}\bigl(P_r(k)+O(\eta^k)\bigr),
-  \]
-  where \(P_r\in\CC[k]\) is a polynomial. If \(P_r\not\equiv 0\), then
-  \(P_r\) has positive leading coefficient, and hence
-  \[
-    a_{qk+r}
-    =c_r k^{d_r}\Lambda^{qk+r}(1+o(1))
-  \]
-  for some \(c_r>0\) and \(d_r\in\ZZ_{\ge 0}\).
-\leanverified{paper_prime_languages_residue_class_asymptotics}
-\end{lemma}
 
-\begin{proof}
-  If \(\Lambda=0\), then \(a_m=0\) for all sufficiently large \(m\), and
-  the claim is trivial. Assume \(\Lambda>0\), and let
-  \[
-    D:=\{j: \abs{\lambda_j}=\Lambda\}.
-  \]
-  Choose \(q\) so that \((\lambda_j/\Lambda)^q=1\) for every \(j\in D\).
-  Also choose \(\delta>0\) such that \(\abs{\lambda_j}\le \Lambda-\delta\)
-  for every \(j\notin D\), and set
-  \[
-    \eta:=\left(\frac{\Lambda-\delta}{\Lambda}\right)^q\in(0,1).
-  \]
 
-  Fix \(r\in\{0,\dots,q-1\}\). For \(m=qk+r\),
-  \[
-    a_{qk+r}
-    =\sum_{j\in D}Q_j(qk+r)\lambda_j^{qk+r}
-     +O\bigl((\Lambda-\delta)^{qk+r}\bigr).
-  \]
-  Since \(\lambda_j=\Lambda\zeta_j\) with \(\zeta_j^q=1\) for \(j\in D\),
-  this becomes
-  \[
-    a_{qk+r}
-    =\Lambda^{qk+r}
-      \left(
-        \sum_{j\in D}\zeta_j^r Q_j(qk+r)
-      \right)
-      +O\bigl(\Lambda^{qk+r}\eta^k\bigr).
-  \]
-  The bracket is a polynomial in \(k\); call it \(P_r(k)\). This gives
-  the first assertion.
 
-  Suppose \(P_r\not\equiv 0\), and let \(d_r:=\deg P_r\). Then
-  \[
-    P_r(k)=\gamma_r k^{d_r}+O(k^{d_r-1})
-  \]
-  with \(\gamma_r\neq 0\). Because \(a_{qk+r}\) is real and
-  non-negative for all sufficiently large \(k\), the polynomial
-  \(P_r(k)\) must be real-valued on all sufficiently large integers.
-  Hence \(\gamma_r\in\RR\), and \(\gamma_r\) cannot be negative, since
-  otherwise the main term would force \(a_{qk+r}<0\) for all large
-  \(k\). Therefore \(\gamma_r>0\), and
-  \[
-    a_{qk+r}
-    =\gamma_r k^{d_r}\Lambda^{qk+r}(1+o(1)).
-  \]
-  Writing \(c_r:=\gamma_r\) proves the final claim.
-\end{proof}
 
-\begin{theorem}[Prime Zeckendorf slices are not sofic]
-  \label{thm:zeckendorf-primes-not-sofic}
-  Let
-  \[
-    \mathcal P_m^{(\mathrm Z)}
-    :=\{w\in\mathcal Z:\abs{w}=m,\ \val(w)\text{ prime}\}.
-  \]
-  Then there is no sofic shift \(X\) over \(\{0,1\}\) such that
-  \[
-    \mathcal B_m(X)=\mathcal P_m^{(\mathrm Z)}
-  \]
-  for all sufficiently large \(m\), where \(\mathcal B_m(X)\) denotes
-  the admissible words of length \(m\) in \(X\).
-\leanverified{paper_prime_languages_zeckendorf_primes_not_sofic}
-\end{theorem}
 
-\begin{proof}
-  Since words of length exactly \(m\) in \(\mathcal Z\) parametrise
-  \([F_{m+1},F_{m+2})\), one has
-  \[
-    \abs{\mathcal P_m^{(\mathrm Z)}}
-    =\pi(F_{m+2}-1)-\pi(F_{m+1}-1).
-  \]
-  By the prime number theorem \cite{HardyWright2008}, and because
-  \(F_{m+2}/F_{m+1}\to\varphi>1\), this gives
-  \[
-    \abs{\mathcal P_m^{(\mathrm Z)}}\asymp\frac{\varphi^m}{m}.
-  \]
-  If a sofic shift \(X\) satisfied
-  \(\mathcal B_m(X)=\mathcal P_m^{(\mathrm Z)}\) for all sufficiently
-  large \(m\), then \Cref{prop:sofic-counts-exponential-polynomial}
-  would imply that \(\abs{\mathcal P_m^{(\mathrm Z)}}\) is eventually an
-  exponential polynomial \(\sum_jQ_j(m)\lambda_j^m\). Let
-  \(\Lambda:=\max_j\abs{\lambda_j}\). For the non-negative matrix
-  underlying the proof of
-  \Cref{prop:sofic-counts-exponential-polynomial}, every eigenvalue of
-  modulus \(\Lambda\) is of the form \(\Lambda\omega\) with \(\omega\) a
-  root of unity. Thus
-  \Cref{lem:residue-class-asymptotics} applies. Since
-  \(\abs{\mathcal P_m^{(\mathrm Z)}}\asymp\varphi^m/m\) and is positive
-  for all sufficiently large \(m\), every residue subsequence modulo
-  the period \(q\) furnished by
-  \Cref{lem:residue-class-asymptotics} must be non-zero and have the
-  same exponential rate. Therefore \(\Lambda=\varphi\), and for every
-  residue class \(r\bmod q\) one has
-  \[
-    \abs{\mathcal P_{qk+r}^{(\mathrm Z)}}
-    =c_r k^{d_r}\varphi^{qk+r}(1+o(1))
-  \]
-  with \(c_r>0\) and \(d_r\ge 0\). On the other hand, the prime number
-  theorem gives
-  \[
-    \abs{\mathcal P_{qk+r}^{(\mathrm Z)}}
-    \asymp\frac{\varphi^{qk+r}}{k}
-  \]
-  along the same residue class. The factor \(k^{-1}\) is incompatible
-  with \(k^{d_r}\) for any integer \(d_r\ge 0\). This contradiction
-  proves the claim.
-\end{proof}
+

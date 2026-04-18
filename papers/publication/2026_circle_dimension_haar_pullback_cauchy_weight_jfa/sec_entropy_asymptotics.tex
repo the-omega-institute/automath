@@ -1,45 +1,16 @@
 % sec_entropy_asymptotics.tex -- Poisson smoothing and entropy asymptotics
-\section{Poisson Smoothing and Entropy Asymptotics}%
-\label{sec:precision-potential}
+\section{Poisson smoothing and entropy asymptotics}%
+\label{sec:precision-potential}\label{sec:entropy-asymptotics}
 
-\paragraph{Assumption and dependency map.}
-Throughout this section we write
-$\Delta:=\gamma-\bar\gamma$ and
+Throughout this section we write $\Delta:=\gamma-\bar\gamma$ and
 $\mu_n:=\int_{\RR}\Delta^n\,\dd\nu(\gamma)$ whenever the corresponding
-moment exists.  For ease of reference, the moment hypotheses and logical
-dependencies are as follows.
-{\renewcommand{\arraystretch}{1.15}
-\begin{center}
-\small
-\begin{tabular}{p{0.31\textwidth}p{0.23\textwidth}p{0.34\textwidth}}
-\textbf{Result} & \textbf{Moment input} & \textbf{Main ingredients} \\
-Proposition~\ref{thm:poisson-second-order}
-& mean, variance, finite centred fourth moment
-& direct Taylor expansion of $R_\varepsilon$ \\
-Theorem~\ref{thm:poisson-kl-even-orders}
-& finite centred $(2N+1)$st absolute moment
-& Proposition~\ref{prop:cayley-mode-remainder} and
-Lemma~\ref{lem:mode-parity-vanish} \\
-Theorem~\ref{thm:poisson-kl-eighth}
-& mean, variance, finite centred seventh absolute moment
-& Proposition~\ref{prop:cayley-mode-remainder},
-Lemma~\ref{lem:mode-parity-vanish}, and
-Appendix~\ref{app:entropy-integrals} \\
-Theorems~\ref{thm:poisson-defect-ladder}
-and~\ref{thm:poisson-defect-amplification}
-& mean, variance, finite centred seventh absolute moment
-& the explicit coefficients from
-Theorem~\ref{thm:poisson-kl-eighth} \\
-Theorem~\ref{thm:poisson-defect-stability}
-& mean, variance, finite centred fourth moment
-& the formula for $\Delta_6(\nu)$ from
-Theorem~\ref{thm:poisson-defect-amplification}
-\end{tabular}
-\end{center}}
-In particular, the appendix enters only in the explicit evaluation of the
-$t^{-6}$ and $t^{-8}$ coefficients in
-Theorem~\ref{thm:poisson-kl-eighth}; the later defect identities are
-algebraic consequences of those coefficients.
+moment exists.  After the rescaling $x=\bar\gamma+ty$, the comparison
+between $P_t*\nu$ and the translated profile $P_t(\cdot-\bar\gamma)$ is
+reduced to the rational kernel $R_\varepsilon(y)$.  In Cayley
+coordinates this kernel has a finite Fourier expansion, and this is the
+mechanism behind the even parity of the entropy asymptotics.  The
+explicit weighted integrals needed for the coefficients of orders
+$t^{-6}$ and $t^{-8}$ are collected in the appendix.
 
 \subsection{Entropy in Cayley coordinates}
 
@@ -53,7 +24,7 @@ equivalently,
 \mathcal P(x)=\log\pi+\log(1+x^{2}).
 \end{equation}
 
-\begin{theorem}[Entropy identity in Cayley coordinates]%
+\begin{proposition}%
 \label{thm:precision-ledger}
 Let $X$ be a real-valued random variable with density $f_X$ such that
 $h_{\mathrm{diff}}(X)>-\infty$ and $\EE[\mathcal P(X)]<\infty$.  Set
@@ -62,30 +33,31 @@ $U:=\upsilon(X)\in\UU$.  Then
 h_{\mathrm{diff}}(X)
 =h_{\mathrm{diff}}(U)+\EE[\mathcal P(X)].
 \end{equation}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 The density of $U$ is
 \[
 f_U(u)=f_X(\tan(\pi u))\,\pi(1+\tan^2(\pi u)).
 \]
-The standard change-of-variables formula for differential entropy gives
+The standard change-of-variables formula for differential entropy
+\cite[Chapter~9]{CoverThomas2006} gives
 \[
 h_{\mathrm{diff}}(X)
 =h_{\mathrm{diff}}(U)+\EE\!\left[\log\frac{1}{\abs{\upsilon'(X)}}\right]
 =h_{\mathrm{diff}}(U)+\EE[\mathcal P(X)].
 \]
 \end{proof}
-\leanverified{paper_circle_dimension_precision_ledger}
 
-\subsection{Poisson smoothing}
+\subsection{The Poisson semigroup}
 
-For $t>0$ and $x\in\RR$ define
+We first fix the normalization of the Poisson kernel used throughout the
+paper.  For $t>0$ and $x\in\RR$ define
 \begin{equation}\label{eq:poisson-kernel}
 P_t(x):=\frac{1}{\pi}\frac{t}{x^{2}+t^{2}}.
 \end{equation}
 
-\begin{proposition}[Basic identities for the Poisson kernels]%
+\begin{proposition}%
 \label{prop:poisson-identities}
 For $s,t>0$ one has
 \begin{equation}\label{eq:poisson-basic}
@@ -111,7 +83,7 @@ $\widehat{P_t}(\xi)=e^{-t\abs{\xi}}$.  The convolution law follows by
 multiplying Fourier transforms.
 \end{proof}
 
-\begin{proposition}[Standard facts on the Poisson semigroup]%
+\begin{proposition}%
 \label{thm:poisson-semigroup-law}
 For $1\le p\le\infty$ and $t>0$ define
 $T_t f:=P_t*f$.  Then:
@@ -138,16 +110,14 @@ in the Fourier representation.
 \end{proof}
 
 \begin{remark}
-The preceding proposition is standard and is included only to fix the
-normalization of the Poisson kernel and of the generator $-|D|$ used in
-the sequel.
+These facts are standard; we record them only to fix the normalization
+of the Poisson kernel and of the generator $-|D|$ used below.
 \end{remark}
 
 \subsection{Large-time comparison with a translated Poisson profile}
 
-\begin{proposition}[Second-order approximation]%
+\begin{proposition}%
 \label{thm:poisson-second-order}
-\leanverified{paper_circle_dimension_poisson_second_order}
 Let $\nu$ be a probability measure on~$\RR$ with mean
 \[
 \bar\gamma:=\int_{\RR}\gamma\dd\nu(\gamma),
@@ -156,7 +126,7 @@ variance
 \[
 \sigma^{2}:=\int_{\RR}(\gamma-\bar\gamma)^{2}\dd\nu(\gamma),
 \]
-and finite centred fourth moment.  Define
+and finite centered fourth moment.  Define
 \[
 h_t:=P_t*\nu,
 \qquad
@@ -270,7 +240,7 @@ R_\varepsilon(y)=\sum_{n=0}^{\infty}u_n(y)\varepsilon^n,
 |\varepsilon|<\sqrt{1+y^2}.
 \end{equation}
 
-\begin{theorem}[Cayley--Chebyshev mode formula]%
+\begin{theorem}%
 \label{thm:cayley-chebyshev-mode}
 Let $U_n$ denote the Chebyshev polynomials of the second kind.  If
 $y=\tan\theta$ with $\theta\in(-\pi/2,\pi/2)$, then for every $n\ge 0$,
@@ -300,7 +270,6 @@ u_{2m+1}(\tan\theta)
 =(-1)^m 2^{-2m}
 \sum_{j=0}^{2m}\binom{2m}{j}\sin(2(j+1)\theta).
 \end{equation}
-\leanverified{paper_circle_dimension_cayley_chebyshev_mode}
 \end{theorem}
 
 \begin{proof}
@@ -313,7 +282,9 @@ The generating function
 \[
 \sum_{n=0}^{\infty}U_n(x)r^n=\frac{1}{1-2xr+r^2}
 \]
-therefore yields \eqref{eq:cayley-chebyshev-mode} with
+for Chebyshev polynomials of the second kind
+\cite[Chapter~5]{MasonHandscomb2002} therefore yields
+\eqref{eq:cayley-chebyshev-mode} with
 $x=\sin\theta$ and $r=\varepsilon\cos\theta$.  Since
 \[
 U_n(\sin\theta)
@@ -339,7 +310,7 @@ Taking real and imaginary parts after the binomial expansion gives
 \eqref{eq:cayley-mode-odd-fourier}.
 \end{proof}
 
-\begin{proposition}[Finite mode truncations]%
+\begin{proposition}%
 \label{prop:cayley-mode-remainder}
 For every integer $N\ge 0$ there exists a rational function
 $v_N:\RR^2\to\RR$, bounded on~$\RR^2$, such that
@@ -369,7 +340,7 @@ is positive on $\RR^2$ and the numerator has lower degree than the
 denominator, $v_N$ is bounded on~$\RR^2$.
 \end{proof}
 
-For later use we record the first modes explicitly:
+For reference, the first modes are
 \begin{equation}\label{eq:cayley-first-modes}
 u_2(y)=\frac{3y^2-1}{(1+y^2)^2},
 \qquad
@@ -383,7 +354,7 @@ u_5(y)=\frac{6y^5-20y^3+6y}{(1+y^2)^5},
 u_6(y)=\frac{7y^6-35y^4+21y^2-1}{(1+y^2)^6}.
 \end{equation}
 
-\begin{lemma}[Mode parity cancellation]\label{lem:mode-parity-vanish}
+\begin{lemma}\label{lem:mode-parity-vanish}
 For integers $n_1,\dots,n_k\ge 1$ let
 \[
 I_{n_1,\dots,n_k}:=
@@ -398,14 +369,13 @@ From \eqref{eq:cayley-mode-parity}, $u_n(-y)=(-1)^n u_n(y)$ for every
 $n\ge1$, while $(1+y^2)^{-1}$ is even.  Hence the integrand is odd if
 $n_1+\cdots+n_k$ is odd, so the integral vanishes.
 \end{proof}
-\leanverified{paper_circle_dimension_mode_parity_vanish}
 
 \subsection{Entropy asymptotics and rigidity}
 
-\begin{theorem}[Odd orders vanish in the entropy expansion]%
+\begin{theorem}%
 \label{thm:poisson-kl-even-orders}
 Let $N\ge 2$ and let $\nu$ be a probability measure on~$\RR$ with mean
-$\bar\gamma$ and finite centred $(2N+1)$st absolute moment.  Set
+$\bar\gamma$ and finite centered $(2N+1)$st absolute moment.  Set
 \[
 \Delta:=\gamma-\bar\gamma,
 \qquad
@@ -432,31 +402,56 @@ With $x=\bar\gamma+ty$ one has
 \delta_t(x):=\frac{h_t(x)}{g_t(x)}-1
 =\int_{\RR}\bigl(R_{\Delta/t}(y)-1\bigr)\dd\nu(\gamma).
 \]
-Applying Proposition~\ref{prop:cayley-mode-remainder} with $N=2N$ gives
+Applying Proposition~\ref{prop:cayley-mode-remainder} with truncation
+order $M:=2N$ gives
 \[
 \delta_t(\bar\gamma+ty)
 =\sum_{n=2}^{2N}\frac{\mu_n}{t^n}u_n(y)+O(t^{-(2N+1)})
 \]
-uniformly in $y\in\RR$.  Since $\|\delta_t\|_{L^\infty}=O(t^{-2})$ and
+uniformly in $y\in\RR$.  Equivalently,
+\[
+\delta_t(\bar\gamma+ty)
+=\sum_{n=2}^{2N}\frac{\mu_n}{t^n}u_n(y)+r_t(y),
+\qquad
+\sup_{y\in\RR}|r_t(y)|\le Ct^{-(2N+1)}.
+\]
+Since each mode $u_n$ is bounded and $\omega$ is a probability measure,
+all finite products of the $u_n$ are $\omega$-integrable.  Moreover,
+$\|\delta_t\|_{L^\infty}=O(t^{-2})$, so for large~$t$ one has
+$\|\delta_t\|_{L^\infty}\le 1/2$.  Using
 \[
 \Phi(z):=(1+z)\log(1+z)-z
 =\sum_{k=2}^{\infty}\frac{(-1)^k}{k(k-1)}z^k
 \qquad(|z|<1),
 \]
-one may truncate the power series at order~$N$ and write
+the Taylor remainder of~$\Phi$ satisfies
 \[
 \Phi(\delta_t)
 =\sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}\delta_t^k+O(t^{-2N-2})
 \]
-uniformly in $y$.  Expanding each finite power $\delta_t^k$ with the
-uniform remainder above yields an asymptotic expansion of the form
+uniformly in~$y$.  For each fixed $k\in\{2,\dots,N\}$, expanding
+\[
+\Bigl(\sum_{n=2}^{2N}t^{-n}\mu_nu_n(y)+r_t(y)\Bigr)^k
+\]
+shows that
+\[
+\delta_t(\bar\gamma+ty)^k
+=\sum_{m=2k}^{2N}\frac{1}{t^m}
+\sum_{\substack{n_1,\dots,n_k\ge 2\\n_1+\cdots+n_k=m}}
+\mu_{n_1}\cdots\mu_{n_k}\,u_{n_1}(y)\cdots u_{n_k}(y)
++O(t^{-(2N+1)})
+\]
+uniformly in~$y$: every omitted term either contains at least one factor
+$r_t$ or has total degree strictly larger than~$2N$.  Integrating against
+$\omega(\dd y)=\pi^{-1}(1+y^2)^{-1}\dd y$ therefore preserves the same
+remainder order, and yields
 \[
 D_{\mathrm{KL}}(h_t\|g_t)
 =\int_{\RR}\frac{\Phi(\delta_t(\bar\gamma+ty))}{\pi(1+y^2)}\dd y
 \]
 \[
 =\sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}
-\sum_{m\ge 2k}\frac{1}{t^m}
+\sum_{m=2k}^{2N}\frac{1}{t^m}
 \sum_{\substack{n_1,\dots,n_k\ge 2\\n_1+\cdots+n_k=m}}
 \mu_{n_1}\cdots\mu_{n_k}\,I_{n_1,\dots,n_k}
 +o(t^{-2N}),
@@ -469,12 +464,11 @@ vanish, so only even powers remain.  Reindexing $m=2r$ gives
 \]
 which is \eqref{eq:poisson-kl-even-orders}.
 \end{proof}
-\leanverified{paper_circle_dimension_poisson_kl_even_orders}
 
-\begin{theorem}[Eighth-order entropy expansion]%
+\begin{theorem}%
 \label{thm:poisson-kl-eighth}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
-variance $\sigma^2>0$, and finite centred seventh absolute moment.  Then,
+variance $\sigma^2>0$, and finite centered seventh absolute moment.  Then,
 as $t\to\infty$,
 \begin{equation}\label{eq:poisson-kl-eighth}
 \begin{split}
@@ -503,6 +497,8 @@ $N=6$ gives
 +O(t^{-7})
 \]
 uniformly in $y\in\RR$.  Since $\delta_t=O(t^{-2})$, one has
+only the quadratic, cubic, and quartic terms of $\Phi$ contribute
+through order~$t^{-8}$; hence
 \[
 \Phi(\delta_t)
 =\frac12\delta_t^2-\frac16\delta_t^3+\frac1{12}\delta_t^4+O(t^{-10}).
@@ -531,13 +527,14 @@ Up to order $t^{-8}$ one therefore has
 -\frac{\frac12 a_2^2a_4+\frac12 a_2a_3^2}{t^8}
 +O(t^{-9}),
 \]
-By Lemma~\ref{lem:mode-parity-vanish}, the odd $t^{-5}$ and $t^{-7}$ terms in the first two expansions integrate to zero against $\pi^{-1}(1+y^2)^{-1}\dd y$.
 \[
 \frac1{12}\delta_t^4
 =\frac{a_2^4}{12t^8}+O(t^{-9}).
 \]
-After integration against $\pi^{-1}(1+y^2)^{-1}\dd y$, the weighted
-identities from Appendix~\ref{app:entropy-integrals} give
+By Lemma~\ref{lem:mode-parity-vanish}, the odd $t^{-5}$ and $t^{-7}$
+terms in the first two expansions integrate to zero against
+$\pi^{-1}(1+y^2)^{-1}\dd y$.  The weighted identities collected in
+Appendix~\ref{app:entropy-integrals} therefore give
 \[
 \frac12\int_{\RR}\frac{u_2(y)^2}{\pi(1+y^2)}\dd y=\frac18,
 \]
@@ -558,17 +555,13 @@ and
 +\frac1{12}\sigma^8u_2^4}{\pi(1+y^2)}\dd y
 &=\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2}{256}.
 \end{align*}
-This proves \eqref{eq:poisson-kl-eighth}.  The coefficient of order
-$t^{-6}$ is the first coefficient beyond the variance term furnished by
-Theorem~\ref{thm:poisson-kl-even-orders}; the order-$t^{-8}$ term is the
-next level in the same expansion.
+This proves \eqref{eq:poisson-kl-eighth}.
 \end{proof}
-\leanverified{paper_circle_dimension_poisson_kl_eighth}
 
-\begin{theorem}[A two-level defect ladder]%
+\begin{theorem}%
 \label{thm:poisson-defect-ladder}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
-variance $\sigma^2>0$, and finite centred seventh absolute moment.  Define
+variance $\sigma^2>0$, and finite centered seventh absolute moment.  Define
 \begin{align*}
 C_6&:=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}, \\
 C_8&:=
@@ -578,8 +571,7 @@ C_8&:=
 Let $X:=(\gamma-\bar\gamma)/\sigma$ on the probability space
 $(\RR,\nu)$, set
 \[
-\beta_n:=\EE[X^n],\qquad n\in\NN,\ n\ge1,\qquad
-\beta_3:=\EE[X^3],
+\beta_n:=\EE[X^n]\qquad(n\ge1),
 \qquad
 Q_2:=X^2-1-\beta_3X,
 \]
@@ -612,10 +604,10 @@ and equality holds if and only if
 \nu=\frac12\delta_{\bar\gamma+\sigma}
 +\frac12\delta_{\bar\gamma-\sigma}.
 \]
-The identity \eqref{eq:defect-c6} recovers the classical Pearson
-moment relation, while \eqref{eq:defect-c8} is the first genuinely new
-higher-order component.
-\leanverified{paper_circle_dimension_poisson_defect_ladder}
+The identity \eqref{eq:defect-c6} rewrites the Pearson inequality
+$\beta_4\ge 1+\beta_3^2$ in the present normalization, while
+\eqref{eq:defect-c8} gives the corresponding eighth-order coefficient
+decomposition in the same defect variables.
 \end{theorem}
 
 \begin{proof}
@@ -655,7 +647,13 @@ then a direct substitution gives
 P_8
 =23+20\kappa^2+16\beta_3^2\kappa+64\kappa+2\beta_3^4+13\beta_3^2+6\beta_3L+12M.
 \]
-On the other hand,
+Moreover,
+\[
+\EE[XQ_2]=0,\qquad
+\EE[X^2Q_2]=\kappa,\qquad
+\EE[X^2Q_2^2]=\kappa+\beta_3L+M.
+\]
+Expanding $Q_3^2$ and using these identities gives
 \[
 \|Q_3\|_{L^2(\nu)}^2
 =M+\frac{\beta_3}{2}L+\kappa-\kappa^2+\frac{\beta_3^2}{16}\kappa.
@@ -676,9 +674,9 @@ that $X=\pm 1$ with equal weights.  Thus
 The converse is immediate.
 \end{proof}
 
-\begin{theorem}[Defect amplification]\label{thm:poisson-defect-amplification}
+\begin{theorem}\label{thm:poisson-defect-amplification}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
-variance $\sigma^2>0$, and finite centred seventh absolute moment.  Define
+variance $\sigma^2>0$, and finite centered seventh absolute moment.  Define
 \[
 \Delta_6(\nu):=-\frac{7}{64}\sigma^6-C_6,
 \qquad
@@ -716,7 +714,6 @@ and equality holds if and only if
 \nu=\frac12\delta_{\bar\gamma+\sigma}
 +\frac12\delta_{\bar\gamma-\sigma}.
 \]
-\leanverified{paper_circle_dimension_poisson_defect_amplification}
 \end{theorem}
 
 \begin{proof}
@@ -753,11 +750,11 @@ that $X=\pm 1$ with equal weights, which is exactly the stated
 two-point law.  The converse is immediate.
 \end{proof}
 
-\begin{theorem}[Quantitative rigidity towards the symmetric two-point law]%
+\begin{theorem}%
 \label{thm:poisson-defect-stability}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
-variance $\sigma^2>0$, and finite centred fourth moment.  Let
-$\nu_c$ be the centred law of $\Delta=\gamma-\bar\gamma$ and set
+variance $\sigma^2>0$, and finite centered fourth moment.  Let
+$\nu_c$ be the centered law of $\Delta=\gamma-\bar\gamma$ and set
 \[
 \rho_\sigma:=\frac12(\delta_{-\sigma}+\delta_\sigma).
 \]
@@ -773,7 +770,6 @@ In particular, for fixed $\sigma$,
 W_2(\nu_c,\rho_\sigma)=O\!\bigl(\Delta_6(\nu)^{1/4}\bigr)
 \qquad\text{as }\Delta_6(\nu)\downarrow 0.
 \]
-\leanverified{paper_circle_dimension_poisson_defect_stability}
 \end{theorem}
 
 \begin{proof}
@@ -813,6 +809,8 @@ $\mathcal L(Y)$ and $\mathcal L(Z)$ are supported on $\{-1,1\}$,
 \[
 W_2(\mathcal L(Y),\mathcal L(Z))^2=2|\EE[Y]|.
 \]
+Indeed, if $p:=\nu(X\ge 0)$, then $\EE[Y]=2p-1$ and the optimal coupling
+transports mass $|p-\tfrac12|=|\EE[Y]|/2$ across distance~$2$.
 Thus
 \[
 W_2(\mathcal L(Y),\mathcal L(Z))

@@ -1,21 +1,28 @@
-\section{Deterministic Automata and Binary Primes}
+\section{Deterministic Automata and Base-\texorpdfstring{$b$}{b} Primes}
 \label{sec:automata}
 
+Throughout this section, fix an integer \(b\ge 2\) and write
+\(\Sigma_b:=\{0,1,\dots,b-1\}\).
+
 \begin{definition}\label{def:dfa}
-Let \(\Sigma=\{0,1\}\). A complete deterministic finite automaton is a
-tuple \(\mathcal A=(Q,\Sigma,\delta,q_0,F)\), where \(Q\) is a finite
-state set, \(q_0\in Q\) is the initial state, \(F\subseteq Q\) is the
-set of accepting states, and
+A complete deterministic finite automaton over \(\Sigma_b\) is a tuple
+\(\mathcal A=(Q,\Sigma_b,\delta,q_0,F)\), where \(Q\) is a finite state
+set, \(q_0\in Q\) is the initial state, \(F\subseteq Q\) is the set of
+accepting states, and
 \[
-  \delta:Q\times\Sigma\to Q
+  \delta:Q\times\Sigma_b\to Q
 \]
 is a total transition map.
 \end{definition}
 
+Completeness is only a convenient normalization here: adjoining a sink
+state completes any DFA without changing its language. The substantive
+restriction throughout is determinism.
+
 For \(m\ge 0\), write
 \[
   a_m(\mathcal A)
-  :=\#\{w\in\Sigma^m:\mathcal A\text{ accepts }w\}.
+  :=\#\{w\in\Sigma_b^m:\mathcal A\text{ accepts }w\}.
 \]
 
 \begin{theorem}[Density dichotomy for DFA languages]
@@ -23,38 +30,40 @@ For \(m\ge 0\), write
   There exist an integer \(p\ge 1\), non-negative constants
   \(c_0,\dots,c_{p-1}\), and \(\theta\in(0,1)\) such that
   \[
-    \frac{a_m(\mathcal A)}{2^m}=c_{m\bmod p}+O(\theta^m)
+    \frac{a_m(\mathcal A)}{b^m}=c_{m\bmod p}+O(\theta^m)
     \qquad (m\to\infty).
   \]
   Consequently exactly one of the following alternatives holds:
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item There exists \(\eta\in(0,1)\) such that
-    \(a_m(\mathcal A)=O((2\eta)^m)\).
+    \(a_m(\mathcal A)=O((b\eta)^m)\).
     \item There exists a residue class \(r\bmod p\) and a constant
     \(c>0\) such that
     \[
-      \frac{a_{r+kp}(\mathcal A)}{2^{r+kp}}\ge c
+      \frac{a_{r+kp}(\mathcal A)}{b^{r+kp}}\ge c
       \qquad\text{for all sufficiently large }k.
     \]
   \end{enumerate}
   In particular, no DFA language can satisfy
   \[
-    a_m(\mathcal A)/2^m\asymp m^{-\alpha}
+    a_m(\mathcal A)/b^m\asymp m^{-\alpha}
   \]
   for any \(\alpha>0\).
-\leanverified{paper_prime_languages_dfa_density_dichotomy_seeds}
 \end{theorem}
 
 \begin{proof}
-  Let \(T_0,T_1\in\{0,1\}^{Q\times Q}\) be the transition matrices for
-  the input symbols \(0\) and \(1\), and let \(B:=T_0+T_1\). Since the
-  automaton is complete and deterministic, every row sum of \(B\) is
-  equal to \(2\). If \(u\) is the indicator vector of the initial state
-  and \(v\) is the indicator of the accepting set, then
+  For each digit \(d\in\Sigma_b\), let \(T_d\in\{0,1\}^{Q\times Q}\) be
+  the transition matrix for \(d\), and let
+  \[
+    B:=\sum_{d\in\Sigma_b}T_d.
+  \]
+  Since the automaton is complete and deterministic, every row sum of
+  \(B\) is equal to \(b\). If \(u\) is the indicator vector of the
+  initial state and \(v\) is the indicator of the accepting set, then
   \[
     a_m(\mathcal A)=u^{\mathsf T}B^m v.
   \]
-  Set \(P:=B/2\). Then \(P\) is a stochastic matrix on the finite set
+  Set \(P:=B/b\). Then \(P\) is a stochastic matrix on the finite set
   \(Q\). After permuting states, write \(P\) in block upper-triangular
   form with one transient block and recurrent-class blocks
   \(P_1,\dots,P_s\), where each \(P_i\) is an irreducible stochastic
@@ -103,114 +112,189 @@ For \(m\ge 0\), write
   The limit exists by the preceding expansion, and \(c_r\ge 0\) because
   every term \(u^{\mathsf T}P^{kp+r}v\) is non-negative. Thus
   \[
-    \frac{a_m(\mathcal A)}{2^m}
+    \frac{a_m(\mathcal A)}{b^m}
     =u^{\mathsf T}P^m v
     =c_{m\bmod p}+O(\theta^m),
   \]
   as claimed.
 
   If every \(c_r\) vanishes, then
-  \(a_m(\mathcal A)/2^m=O(\theta^m)\), which is alternative
+  \(a_m(\mathcal A)/b^m=O(\theta^m)\), which is alternative
   \textup{(i)}. Otherwise some \(c_r\) is strictly positive, and along
   the corresponding residue class the density has a positive lower
   bound, which is alternative \textup{(ii)}.
 \end{proof}
 
-For each \(m\ge 1\), let \(\mathcal P_m^{(2)}\) be the set of binary
-words of length \(m\) whose first digit is \(1\) and whose binary value
-is prime. Let \(p_m^{(2)}:=\abs{\mathcal P_m^{(2)}}\). By the prime
-number theorem \cite{HardyWright2008},
+This density dichotomy is classical; compare
+\cite{Berstel1973,BodirskyGaertnerVonOertzenSchwinghammer2004,Bell2020UpperDensity,Koga2019Density}.
+We keep the short proof because the residue-class constants are used in
+the prime corollaries below.
+
+\begin{remark}\label{rem:dfa-density-sharpness}
+  Both alternatives occur already for elementary regular languages. The
+  language \(\Sigma_b^\ast 0\) of words ending in \(0\) has density
+  \(1/b\) in every positive length, so it lies in
+  alternative~\textup{(ii)}. By contrast, the language \(0^\ast 1\)
+  satisfies \(\#(0^\ast 1\cap\Sigma_b^m)=1\) for every \(m\ge 1\), so
+  it lies in alternative~\textup{(i)}.
+\end{remark}
+
+For base-\(b\) expansions we use the standard most-significant-digit
+first convention: a word \(d_1\cdots d_m\in\Sigma_b^m\) represents the
+integer \(\sum_{j=1}^m d_j b^{m-j}\). For each \(m\ge 1\), let
+\(\mathcal P_m^{(b)}\) be the set of base-\(b\) words of length \(m\)
+whose first digit is nonzero and whose value is prime. Let
+\(p_m^{(b)}:=\abs{\mathcal P_m^{(b)}}\). By the prime number theorem
+\cite{HardyWright2008},
 \[
-  p_m^{(2)}
-  =\pi(2^m)-\pi(2^{m-1})
-  \asymp \frac{2^m}{m}.
+  p_m^{(b)}
+  =\pi(b^m)-\pi(b^{m-1})
+  \asymp \frac{b^m}{m}.
 \]
-The condition that the first digit be \(1\) excludes leading zeros. One
-may equivalently compare a DFA language first with
-\(\{1\}\{0,1\}^{m-1}\); in particular, the scale
-\(\abs{\mathcal P_m^{(2)}}\asymp 2^m/m\) is unchanged because every
-prime in \([2^{m-1},2^m)\) already has binary length \(m\).
+The condition that the first digit be nonzero excludes leading zeros.
+One may equivalently compare a DFA language against
+\(\{1,\dots,b-1\}\Sigma_b^{m-1}\); in particular, the scale
+\(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\) is unchanged because every
+prime in \([b^{m-1},b^m)\) already has base-\(b\) length \(m\).
 
-\begin{corollary}[Symmetric-difference lower bound for binary primes]
-  \label{cor:dfa-prime-symmetric-diff}
-  Let \(L(\mathcal A)\subseteq\{0,1\}^\ast\) be recognised by a fixed
-  DFA \(\mathcal A\), and let
-  \[
-    L_m:=L(\mathcal A)\cap\{0,1\}^m.
-  \]
-  Then there exists \(c>0\) such that
-  \[
-    \abs{L_m\triangle \mathcal P_m^{(2)}}
-    \ge c\,\frac{2^m}{m}
-  \]
-  for all sufficiently large \(m\). If \(L_m\) falls in the
-  positive-density alternative of \Cref{thm:dfa-density-dichotomy},
-  then along an infinite arithmetic progression of lengths one has the
-  stronger bound
-  \[
-    \abs{L_m\triangle \mathcal P_m^{(2)}}\gg 2^m.
-  \]
-\leanverified{paper_prime_languages_dfa_prime_symmetric_diff_seeds}
-\end{corollary}
+We first establish the quantitative obstruction that drives both
+corollaries below.
 
-\begin{proof}
-  If \(L_m\) is exponentially sparse, then
-  \(\abs{L_m}=o(2^m/m)\), while
-  \(\abs{\mathcal P_m^{(2)}}\asymp 2^m/m\). Hence
+\begin{proposition}[Quantitative recall/precision obstruction]
+  \label{prop:dfa-quantitative-obstruction}
+  Set
   \[
-    \abs{L_m\triangle \mathcal P_m^{(2)}}
-    \ge \abs{\mathcal P_m^{(2)}}-\abs{L_m}
-    \gg \frac{2^m}{m}.
+    a_m(\mathcal A):=\abs{L(\mathcal A)\cap\Sigma_b^m},
   \]
-  If \(L_m\) has positive density along an arithmetic progression of
-  lengths, then \(\abs{L_m}\gg 2^m\) there, whereas
-  \(\abs{\mathcal P_m^{(2)}}\asymp 2^m/m\). Thus
-  \[
-    \abs{L_m\triangle \mathcal P_m^{(2)}}
-    \ge \abs{L_m}-\abs{\mathcal P_m^{(2)}}
-    \gg 2^m
-  \]
-  on that progression.
-\end{proof}
-
-\begin{proposition}\label{prop:dfa-quantitative-obstruction}
-  Let \(L_m:=L(\mathcal A)\cap\{0,1\}^m\). Suppose that there exist
-  \(\delta>0\) and infinitely many integers \(m\) such that
-  \[
-    \mathrm{Rec}_m\ge \delta,
-    \qquad
-    \mathrm{Prec}_m\ge \delta,
-  \]
-  where
+  and define
   \[
     \mathrm{Rec}_m
-    :=\frac{\abs{L_m\cap\mathcal P_m^{(2)}}}{\abs{\mathcal P_m^{(2)}}},
+    :=\frac{\abs{L(\mathcal A)\cap\mathcal P_m^{(b)}}}{\abs{\mathcal P_m^{(b)}}},
     \qquad
     \mathrm{Prec}_m
-    :=\frac{\abs{L_m\cap\mathcal P_m^{(2)}}}{\abs{L_m}}.
+    :=\frac{\abs{L(\mathcal A)\cap\mathcal P_m^{(b)}}}{a_m(\mathcal A)}
   \]
-  Then on those lengths,
+  whenever \(a_m(\mathcal A)>0\). Suppose that there exist \(\delta>0\)
+  and infinitely many integers \(m\) such that
+  \(\mathrm{Rec}_m\ge \delta\) and \(\mathrm{Prec}_m\ge \delta\). Then
+  on those lengths,
   \[
-    \delta\,\abs{\mathcal P_m^{(2)}}
-    \le \abs{L_m\cap\mathcal P_m^{(2)}}
-    \le \abs{L_m}
-    \le \delta^{-1}\abs{L_m\cap\mathcal P_m^{(2)}}
-    \le \delta^{-1}\abs{\mathcal P_m^{(2)}}.
+    \delta\,\abs{\mathcal P_m^{(b)}}
+    \le \abs{L(\mathcal A)\cap\mathcal P_m^{(b)}}
+    \le a_m(\mathcal A)
+    \le \delta^{-1}\abs{L(\mathcal A)\cap\mathcal P_m^{(b)}}
+    \le \delta^{-1}\abs{\mathcal P_m^{(b)}}.
   \]
-\leanverified{paper_prime_languages_dfa_quantitative_obstruction_seeds}
-  In particular, \(\abs{L_m}\asymp 2^m/m\) along infinitely many
+  In particular, \(a_m(\mathcal A)\asymp b^m/m\) along infinitely many
   lengths, contradicting \Cref{thm:dfa-density-dichotomy}.
 \end{proposition}
 
 \begin{proof}
   The lower bound follows from
-  \(\abs{L_m\cap\mathcal P_m^{(2)}}=\mathrm{Rec}_m\,\abs{\mathcal P_m^{(2)}}\ge\delta\,\abs{\mathcal P_m^{(2)}}\),
+  \[
+    \abs{L(\mathcal A)\cap\mathcal P_m^{(b)}}
+    =\mathrm{Rec}_m\,\abs{\mathcal P_m^{(b)}}
+    \ge \delta\,\abs{\mathcal P_m^{(b)}},
+  \]
   and the upper bound follows from
-  \(\abs{L_m}=\abs{L_m\cap\mathcal P_m^{(2)}}/\mathrm{Prec}_m\le\delta^{-1}\abs{L_m\cap\mathcal P_m^{(2)}}\le\delta^{-1}\abs{\mathcal P_m^{(2)}}\).
-  Since \(\abs{\mathcal P_m^{(2)}}\asymp 2^m/m\), the displayed chain
-  gives \(\abs{L_m}\asymp 2^m/m\) on an infinite set of lengths. This
-  is impossible by \Cref{thm:dfa-density-dichotomy}.
+  \[
+    a_m(\mathcal A)
+    =\frac{\abs{L(\mathcal A)\cap\mathcal P_m^{(b)}}}{\mathrm{Prec}_m}
+    \le \delta^{-1}\abs{L(\mathcal A)\cap\mathcal P_m^{(b)}}
+    \le \delta^{-1}\abs{\mathcal P_m^{(b)}}.
+  \]
+  Since \(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\), the displayed chain
+  gives \(a_m(\mathcal A)\asymp b^m/m\) on an infinite set of lengths.
+  This is impossible by \Cref{thm:dfa-density-dichotomy}.
 \end{proof}
+
+\begin{corollary}[Symmetric-difference lower bound for base-\(b\) primes]
+  \label{cor:dfa-prime-symmetric-diff}
+  Let \(L(\mathcal A)\subseteq\Sigma_b^\ast\) be recognised by a fixed
+  DFA \(\mathcal A\). Then there exists \(c_{\mathcal A,b}>0\) such that
+  \[
+    \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle \mathcal P_m^{(b)}}
+    \ge c_{\mathcal A,b}\,\frac{b^m}{m}
+  \]
+  for all sufficiently large \(m\). If \(a_m(\mathcal A)/b^m\) lies in
+  the positive-density alternative of \Cref{thm:dfa-density-dichotomy},
+  then along an infinite arithmetic progression of lengths one has the
+  stronger bound
+  \[
+    \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle \mathcal P_m^{(b)}}\gg b^m.
+  \]
+\end{corollary}
+
+\begin{proof}
+  Let \(p\ge 1\), \(c_0,\dots,c_{p-1}\ge 0\), and \(\theta\in(0,1)\) be
+  as in \Cref{thm:dfa-density-dichotomy}. Replacing \(\theta\) by
+  \(\theta^p\) if necessary, we may write for each residue class
+  \(r\bmod p\)
+  \[
+    \frac{a_{pk+r}(\mathcal A)}{b^{pk+r}}=c_r+O(\theta^k)
+    \qquad (k\to\infty).
+  \]
+  Fix constants \(A,B>0\) such that
+  \[
+    A\,\frac{b^m}{m}\le \abs{\mathcal P_m^{(b)}}\le B\,\frac{b^m}{m}
+  \]
+  for all sufficiently large \(m\).
+
+  We now treat each residue class separately.
+
+  If \(c_r=0\), then
+  \[
+    a_{pk+r}(\mathcal A)=O(\theta^k b^{pk+r})=o\!\left(\frac{b^{pk+r}}{pk+r}\right).
+  \]
+  Hence there exists \(k_r\) such that for all \(k\ge k_r\),
+  \[
+    a_{pk+r}(\mathcal A)
+    \le \frac{A}{2}\,\frac{b^{pk+r}}{pk+r}.
+  \]
+  For those \(k\),
+  \[
+    \abs{(L(\mathcal A)\cap\Sigma_b^{pk+r})\triangle \mathcal P_{pk+r}^{(b)}}
+    \ge \abs{\mathcal P_{pk+r}^{(b)}}-a_{pk+r}(\mathcal A)
+    \ge \frac{A}{2}\,\frac{b^{pk+r}}{pk+r}.
+  \]
+
+  If \(c_r>0\), then there exists \(k_r\) such that for all \(k\ge k_r\),
+  \[
+    a_{pk+r}(\mathcal A)\ge \frac{c_r}{2}\,b^{pk+r}.
+  \]
+  Enlarging \(k_r\) if necessary, we may also ensure that
+  \(B/(pk+r)\le c_r/4\). Then for all such \(k\),
+  \[
+    \abs{(L(\mathcal A)\cap\Sigma_b^{pk+r})\triangle \mathcal P_{pk+r}^{(b)}}
+    \ge a_{pk+r}(\mathcal A)-\abs{\mathcal P_{pk+r}^{(b)}}
+    \ge \frac{c_r}{4}\,b^{pk+r}.
+  \]
+
+  Since there are only finitely many residue classes, taking the minimum
+  of \(A/2\) and the finitely many numbers \(c_r/4\) arising in the
+  case \(c_r>0\) yields a constant \(c_{\mathcal A,b}>0\) such that
+  \[
+    \abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle \mathcal P_m^{(b)}}
+    \ge c_{\mathcal A,b}\,\frac{b^m}{m}
+  \]
+  for all sufficiently large \(m\). If \(a_m(\mathcal A)/b^m\) falls in
+  the positive-density alternative of \Cref{thm:dfa-density-dichotomy},
+  then some residue class has \(c_r>0\), and along that infinite
+  arithmetic progression the stronger bound
+  \(\abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle \mathcal P_m^{(b)}}\gg b^m\)
+  holds.
+\end{proof}
+
+\begin{remark}[Sharpness of the lower bounds]\label{rem:prime-diff-sharp}
+  The two scales in \Cref{cor:dfa-prime-symmetric-diff} are optimal up
+  to the implicit constants. If \(L=\emptyset\), then
+  \(\abs{(L(\mathcal A)\cap\Sigma_b^m)\triangle\mathcal P_m^{(b)}}=\abs{\mathcal P_m^{(b)}}\asymp
+  b^m/m\). On the other hand, for the positive-density language
+  \(\Sigma_b^\ast0\) the symmetric difference with
+  \(\mathcal P_m^{(b)}\) is \(\asymp b^m\) along every residue class,
+  so the strengthened \(\Omega(b^m)\) conclusion on arithmetic
+  progressions cannot be improved.
+\end{remark}
 
 \begin{corollary}[No simultaneous recall and precision for fixed DFA]
   \label{cor:dfa-prime-recall-precision}
@@ -219,30 +303,302 @@ prime in \([2^{m-1},2^m)\) already has binary length \(m\).
   the following:
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item \(\mathrm{Rec}_m\to 0\) exponentially fast.
-    \item \(\mathrm{Prec}_m\to 0\) along an infinite arithmetic
-    progression of lengths.
+    \item \(\mathrm{Prec}_m\le C_{\mathcal A,b}/m\) along an infinite
+    arithmetic progression of lengths that depends only on
+    \(\mathcal A\) and \(b\).
   \end{enumerate}
   In particular, no fixed DFA has both recall and precision bounded
   away from zero for infinitely many lengths.
-\leanverified{paper_prime_languages_dfa_prime_recall_precision}
 \end{corollary}
 
 \begin{proof}
-  In the sparse case of \Cref{thm:dfa-density-dichotomy},
+  Apply \Cref{thm:dfa-density-dichotomy}. Thus there exist an integer
+  \(p\ge 1\), constants \(c_0,\dots,c_{p-1}\ge 0\), and
+  \(\theta\in(0,1)\) such that
+  \[
+    \frac{a_m(\mathcal A)}{b^m}=c_{m\bmod p}+O(\theta^m).
+  \]
+  Fix a constant \(B_b>0\) such that
+  \(\abs{\mathcal P_m^{(b)}}\le B_b b^m/m\) for all sufficiently large
+  \(m\).
+  We treat each residue class \(r\bmod p\) separately by considering the
+  two cases \(c_r=0\) and \(c_r>0\).
+
+  \textit{Case \(c_r=0\).}
+  Along the subsequence \(m\equiv r\pmod{p}\), we have
+  \(a_m(\mathcal A)=O(\theta^m b^m)\). Since
+  \(\abs{\mathcal P_m^{(b)}}\asymp b^m/m\),
   \[
     \mathrm{Rec}_m
-    \le \frac{\abs{L_m}}{\abs{\mathcal P_m^{(2)}}}
-    \ll \eta^m m
+    \le \frac{a_m(\mathcal A)}{\abs{\mathcal P_m^{(b)}}}
+    \ll \theta^m\cdot m.
   \]
-  for some \(\eta\in(0,1)\), hence \(\mathrm{Rec}_m\to 0\)
-  exponentially. In the positive-density case,
+  Because \(m\theta^m=O(\theta_r^m)\) for some \(\theta_r\in(0,1)\),
+  recall decays exponentially along this residue class.
+
+  \textit{Case \(c_r>0\).}
+  Along \(m\equiv r\pmod{p}\) with \(m\) large enough, we have
+  \(a_m(\mathcal A)\ge \tfrac{1}{2}c_r b^m\). Using the bound for
+  \(\abs{\mathcal P_m^{(b)}}\),
   \[
     \mathrm{Prec}_m
-    \le \frac{\abs{\mathcal P_m^{(2)}}}{\abs{L_m}}
-    \ll \frac{1}{m}
+    \le \frac{\abs{\mathcal P_m^{(b)}}}{a_m(\mathcal A)}
+    \le \frac{2B_b}{c_r}\cdot\frac{1}{m}.
   \]
-  along the relevant arithmetic progression. If both recall and
-  precision were bounded below by some \(\delta>0\) for infinitely many
-  lengths, then \Cref{prop:dfa-quantitative-obstruction} would
-  contradict \Cref{thm:dfa-density-dichotomy}.
+  Hence precision decays at the rate \(O(1/m)\) along this
+  arithmetic progression, so we may take
+  \(C_{\mathcal A,b}=2B_b/c_r\) for that subsequence.
+
+  Every residue class \(r\bmod p\) falls into one of these two cases.
+  If all residue classes have \(c_r=0\), then
+  \(\mathrm{Rec}_m\to 0\) exponentially for every \(m\), giving
+  alternative~\textup{(i)}. Otherwise, at least one residue class has
+  \(c_r>0\), and \(\mathrm{Prec}_m\le C_{\mathcal A,b}/m\) along that
+  infinite arithmetic progression, giving alternative~\textup{(ii)}.
+
+  If both recall and precision were bounded below by some
+  \(\delta>0\) for infinitely many lengths, then
+  \Cref{prop:dfa-quantitative-obstruction} would force
+  \(a_m(\mathcal A)\asymp b^m/m\) along an infinite set of lengths. But the
+  per-residue analysis above shows that on each residue class either
+  \(a_m(\mathcal A)\) is exponentially sparse or \(a_m(\mathcal A)\gg b^m\), and
+  neither is compatible with \(a_m(\mathcal A)\asymp b^m/m\).
 \end{proof}
+
+\subsection{Relative density for trim strongly connected presentations}
+
+No additional numeration-system formalism is needed for the next
+theorem beyond a trim deterministic automaton
+\(\mathcal N=(Q_N,\Sigma,\delta_N,q_N,F_N)\) whose underlying directed
+graph is strongly connected. In the applications below \(\mathcal N\)
+is the canonical presentation of a regular numeration system. Write
+\[
+  \mathcal N_m:=L(\mathcal N)\cap\Sigma^m,
+  \qquad
+  z_m:=\abs{\mathcal N_m}.
+\]
+Let \(B_N\) be the adjacency matrix of \(\mathcal N\), let
+\(\lambda:=\rho(B_N)>1\) be its spectral radius, and let \(d_N\ge 1\)
+be the period of \(B_N\).
+
+\begin{lemma}[Periodic growth of trim presentations]
+  \label{lem:trim-density}
+  With the notation above there exist \(d_N\) non-negative constants
+  \(d_0,\dots,d_{d_N-1}\), at least one of which is positive, and
+  \(\theta_N\in(0,1)\) such that
+  \[
+    z_m=\lambda^m\bigl(d_{m\bmod d_N}+O(\theta_N^m)\bigr)
+    \qquad (m\to\infty).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since \(\mathcal N\) is trim and strongly connected, \(B_N\) is an
+  irreducible non-negative matrix. The periodic Perron--Frobenius
+  theorem therefore gives
+  \[
+    B_N^m
+    =\lambda^m\Bigl(\sum_{\ell=0}^{d_N-1}\omega_{d_N}^{\ell m}E_\ell+R_m\Bigr),
+    \qquad \|R_m\|\le C\theta_N^m
+  \]
+  for some spectral projectors \(E_\ell\), constant \(C>0\), and
+  \(\theta_N\in(0,1)\), where \(\omega_{d_N}:=e^{2\pi i/d_N}\).
+  For \(0\le r<d_N\) set
+  \[
+    S_r:=\sum_{\ell=0}^{d_N-1}\omega_{d_N}^{\ell r}E_\ell
+        =\lim_{k\to\infty}\lambda^{-(kd_N+r)}B_N^{kd_N+r}.
+  \]
+  Each matrix in the limit is non-negative, so every entry of \(S_r\) is
+  non-negative. Grouping the expansion by the residue class of \(m\)
+  yields
+  \[
+    B_N^m=\lambda^m\bigl(S_{m\bmod d_N}+E_m\bigr),
+    \qquad \|E_m\|\le C\theta_N^m.
+  \]
+  Let \(u_N\) and \(v_N\) be the indicator vectors of the initial and
+  accepting states, respectively, and define
+  \[
+    d_r:=u_N^{\mathsf T}S_r v_N\ge 0.
+  \]
+  Whenever the residue class \(r\bmod d_N\) contains words of
+  arbitrarily large length, some entry of \(S_r\) is positive, hence
+  \(d_r>0\). Substituting into the expansion gives
+  \[
+    z_m=u_N^{\mathsf T}B_N^m v_N
+    =\lambda^m\bigl(d_{m\bmod d_N}+O(\theta_N^m)\bigr).
+  \]
+\end{proof}
+
+For any deterministic automaton \(\mathcal A\) over \(\Sigma\) we write
+\[
+  a_m(\mathcal A,\mathcal N)
+  :=\abs{L(\mathcal A)\cap\mathcal N_m}.
+\]
+
+\begin{theorem}[Relative density for a trim strongly connected presentation]
+  \label{thm:parry-density}
+  Let \(\mathcal N\) and \(\lambda\) be as above, and let
+  \(\mathcal A\) be a deterministic automaton over \(\Sigma\). Then
+  there exist an integer \(p\ge 1\), non-negative constants
+  \(c_0,\dots,c_{p-1}\), and \(\theta\in(0,1)\) such that for all
+  sufficiently large \(m\) with \(z_m>0\),
+  \[
+    \frac{a_m(\mathcal A,\mathcal N)}{z_m}
+    =c_{m\bmod p}+O(\theta^m).
+  \]
+  In particular, either the ratio
+  \(a_m(\mathcal A,\mathcal N)/z_m\) decays exponentially fast, or else
+  it stays bounded below by a positive constant along an arithmetic
+  progression of lengths that contains infinitely many indices with
+  \(z_m>0\).
+\end{theorem}
+
+\begin{proof}
+  Let \(h\in\RR_{>0}^{Q_N}\) be a Perron--Frobenius right eigenvector of
+  \(B_N\), so \(B_Nh=\lambda h\), and set
+  \(D:=\operatorname{diag}(h)\). Then
+  \[
+    P_N:=\lambda^{-1}D^{-1}B_ND
+  \]
+  is stochastic, because the \(q\)-th row sum is
+  \[
+    \frac{1}{\lambda h_q}\sum_{q'\in Q_N}(B_N)_{qq'}h_{q'}
+    =\frac{(B_Nh)_q}{\lambda h_q}
+    =1.
+  \]
+
+  Form the synchronous product automaton \(\mathcal B=\mathcal N\times\mathcal A\)
+  and trim it by deleting states that are unreachable from the initial
+  pair or cannot reach an accepting pair. Let \(Q'\) be the state set
+  of the resulting product \(\mathcal B'\), let \(B'\) be its adjacency
+  matrix, and let \(u'\) and \(v'\) be the indicator vectors of its
+  initial and accepting states. Trimming does not change the
+  intersection counts, so
+  \[
+    a_m(\mathcal A,\mathcal N)=u'^{\mathsf T}B'^m v'.
+  \]
+
+  Let \(\pi\colon Q'\to Q_N\) forget the \(\mathcal A\)-coordinate.
+  Define \(\widetilde h_x:=h_{\pi(x)}\) for \(x\in Q'\), put
+  \(\widetilde D:=\operatorname{diag}(\widetilde h)\), and set
+  \[
+    P':=\lambda^{-1}\widetilde D^{-1}B'\widetilde D.
+  \]
+  For a state \(x=(q,s)\in Q'\),
+  \[
+    \sum_{y\in Q'}P'_{xy}
+    =\frac{1}{\lambda h_q}\sum_{y\in Q'}B'_{xy}h_{\pi(y)}.
+  \]
+  Because \(\mathcal A\) is deterministic, each letter available from
+  \(q\) in \(\mathcal N\) contributes to at most one outgoing edge from
+  \(x\) in the product automaton, and trimming can only delete such
+  edges. Hence
+  \[
+    \sum_{y\in Q'}B'_{xy}h_{\pi(y)}
+    \le \sum_{\substack{q\xrightarrow{a}q'\\ \text{in }\mathcal N}} h_{q'}
+    =(B_Nh)_q
+    =\lambda h_q,
+  \]
+  so every row sum of \(P'\) is at most \(1\). Thus \(P'\) is
+  substochastic.
+
+  Adjoin a cemetery state \(\partial\) and define
+  \[
+    \widehat P:=
+    \begin{pmatrix}
+      P' & \mathbf{1}-P'\mathbf{1}\\
+      0 & 1
+    \end{pmatrix},
+  \]
+  which is stochastic. Since \(\partial\) is absorbing, one has
+  \((\widehat P^m)_{xy}=(P'^m)_{xy}\) for all \(x,y\in Q'\). Applying
+  the same transient/recurrent decomposition as in the proof of
+  \Cref{thm:dfa-density-dichotomy} to \(\widehat P\), and then
+  restricting back to \(Q'\), yields an integer \(p'\ge 1\),
+  non-negative matrices \(S_0,\dots,S_{p'-1}\), and \(\eta\in(0,1)\)
+  such that
+  \[
+    P'^m=S_{m\bmod p'}+E_m,
+    \qquad
+    \|E_m\|\le C\eta^m.
+  \]
+  The matrices \(S_r\) collect the contributions of recurrent classes
+  of \(\widehat P\) contained entirely in \(Q'\); if no such recurrent
+  class exists, then every \(S_r\) is zero.
+
+  Since \(B'^m=\lambda^m\widetilde DP'^m\widetilde D^{-1}\), we obtain
+  \[
+    a_m(\mathcal A,\mathcal N)
+    =\lambda^m\widetilde u^{\mathsf T}P'^m\widetilde v,
+    \qquad
+    \widetilde u:=\widetilde D u',
+    \quad
+    \widetilde v:=\widetilde D^{-1}v'.
+  \]
+  Therefore
+  \[
+    a_m(\mathcal A,\mathcal N)
+    =\lambda^m\bigl(e_{m\bmod p'}+O(\eta^m)\bigr),
+    \qquad
+    e_r:=\widetilde u^{\mathsf T}S_r\widetilde v\ge 0.
+  \]
+
+  Now combine this with \Cref{lem:trim-density}. After replacing \(p'\)
+  by a common multiple \(p\) of \(p'\) and \(d_N\), and regrouping the
+  residue classes, there exist non-negative constants
+  \(e_0,\dots,e_{p-1}\), \(d_0,\dots,d_{p-1}\), and \(\theta\in(0,1)\)
+  such that
+  \[
+    a_m(\mathcal A,\mathcal N)
+    =\lambda^m\bigl(e_{m\bmod p}+O(\theta^m)\bigr),
+    \qquad
+    z_m=\lambda^m\bigl(d_{m\bmod p}+O(\theta^m)\bigr).
+  \]
+  If \(z_m>0\) for infinitely many \(m\equiv r\pmod p\), then
+  \Cref{lem:trim-density} gives \(d_r>0\). Along every such residue
+  class,
+  \[
+    \frac{a_m(\mathcal A,\mathcal N)}{z_m}
+    =\frac{e_r+O(\theta^m)}{d_r+O(\theta^m)}
+    =\frac{e_r}{d_r}+O(\theta^m).
+  \]
+  Setting \(c_r:=e_r/d_r\) on residue classes with \(d_r>0\) proves the
+  stated expansion for all sufficiently large \(m\) with \(z_m>0\).
+
+  Finally, if every relevant \(e_r\) vanishes, then
+  \(a_m(\mathcal A,\mathcal N)=O((\lambda\theta)^m)\) on every residue
+  class with \(z_m>0\), so the ratio decays exponentially. Otherwise
+  some relevant \(e_r\) is positive, and along the corresponding
+  arithmetic progression the ratio stays bounded below by a positive
+  constant.
+\end{proof}
+
+\begin{remark}
+  When \(\mathcal N\) is the trim strongly connected presentation of a
+  Parry numeration system or of the Zeckendorf language, the parameter
+  \(\lambda\) is the dominant root of the corresponding linear
+  recurrence. Thus \Cref{thm:parry-density} applies verbatim to
+  canonical numeration systems generated by linear recurrences, and the
+  base-\(b\) case is recovered by setting \(\mathcal N=\Sigma_b^\ast\)
+  with \(\lambda=b\). We do not claim an extension to presentations
+  with multiple strongly connected components; see
+  \cite{CharlierRampersadRigoWaxweiler2010} for examples where this
+  phenomenon genuinely occurs.
+\end{remark}
+
+\begin{remark}[Relation to conditional-density literature]
+  Classical treatments of densities of rational languages already appear
+  in Hansel and Perrin~\cite{HanselPerrin1989} and in the conditional
+  and relative-density analyses of Kozik~\cite{Kozik2005Conditional},
+  Koga \cite{Koga2019Density}, Montoya \cite{Montoya2025Relative}, and
+  Berth\'e--Goulet-Ouellet--Perrin \cite{BertheGouletPerrin2025}.
+  \Cref{thm:dfa-density-dichotomy,thm:parry-density} should therefore be
+  read as background statements for the trim, strongly connected
+  deterministic setting used later, not as new density theorems. The
+  new contributions of this section are the quantitative prime
+  obstructions recorded in
+  \Cref{cor:dfa-prime-symmetric-diff,cor:dfa-prime-recall-precision}.
+\end{remark}
+
+
+

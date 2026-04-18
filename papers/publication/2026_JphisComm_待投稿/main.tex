@@ -1,0 +1,1121 @@
+
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\graphicspath{{generated/}}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\crefname{theorem}{theorem}{theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+\crefname{proposition}{proposition}{propositions}
+\Crefname{proposition}{Proposition}{Propositions}
+\crefname{corollary}{corollary}{corollaries}
+\Crefname{corollary}{Corollary}{Corollaries}
+\crefname{lemma}{lemma}{lemmas}
+\Crefname{lemma}{Lemma}{Lemmas}
+\crefname{remark}{remark}{remarks}
+\Crefname{remark}{Remark}{Remarks}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{xcolor}
+% \usepackage{orcidlink}
+
+\hypersetup{colorlinks=true,citecolor=blue!60!black,linkcolor=blue!60!black,urlcolor=blue!60!black}
+\setstretch{1.03}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{1.5em}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection.}{0.5em}{}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\Var}{\mathrm{Var}}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Record-level thresholds for sampled Unruh--DeWitt counting in static KMS spacetimes\par}
+\vspace{1.1em}
+{\large Haobo Ma\textsuperscript{1} and Wenlin Zhang\textsuperscript{2,$\ast$}}\par
+\vspace{0.3em}
+{\small \textsuperscript{1}AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981}\par
+{\small \textsuperscript{2}National University of Singapore, Singapore}\par
+{\small \href{mailto:auric@aelf.io}{auric@aelf.io}; \href{mailto:e1327962@u.nus.edu}{e1327962@u.nus.edu}}\par
+{\small $\ast$\,Corresponding author}\par
+\end{center}
+
+\begin{abstract}
+We study a phenomenological sampled counter driven by the stationary excitation rate of an Unruh--DeWitt detector on a static worldline in a static KMS state. The detector theory fixes only the local input rate, while dead time, recovery and interval readout are treated as external counter dynamics. With one deterministic blank interval after each click, the sampled record is a Markov chain on the golden-mean shift and reaches the Parry measure at a unique threshold fixed by the golden ratio. With exponential recovery, the sampled record becomes a full-support binary renewal process. In that regime we obtain the zero-run distribution, prove that the click hazard is strictly increasing, derive closed expressions for the covariance and low-frequency noise, and identify the unique threshold at which the record is exactly $1$-dependent. A general renewal result further shows that exact $m$-dependence is equivalent to a rational inter-click law of degree $m+1$. These record-level thresholds can then be combined with the standard static-KMS response law to define detector-dependent loci in static spacetimes. In the homogeneous spectral-weight approximation, a shared-hardware ratio law follows, three threshold loci from a single detector head determine the otherwise unknown response amplitude, and Schwarzschild inversion can be written in amplitude-free form. Beyond that approximation, exact shell transport survives precisely for Tolman-power spectral weights $\mathcal S_x(\Omega)=K(e^{\beta_\infty N(x)\Omega}-1)^\alpha$ with $\alpha<1$, while controlled logarithmic drift gives quantitative bounds on shell displacement in the general case.
+\end{abstract}
+
+\noindent\textbf{Keywords:} Unruh--DeWitt detector, static KMS state, renewal process, symbolic dynamics, counting statistics
+
+\section{Introduction}
+
+Transition rates, detailed balance and Tolman scaling are the standard observables in Unruh--DeWitt (UDW) detector theory \cite{Unruh1976,DeWitt1979,BirDav1982,Takagi1986,CrispinoHiguchiMatsas2008,LoukoSatz2006,LoukoSatz2008}. If the detector output is sampled interval by interval, however, the resulting click record carries more information than the mean excitation rate alone. Dead time and finite recovery alter the admissible words, the waiting-time statistics, the covariance profile and the residual counting noise. It is then natural to ask whether a stationary detector response picks out distinguished rates that are visible only at the level of the sampled record.
+
+In this paper we address that question with a deliberately phenomenological construction. The UDW detector supplies a stationary excitation input rate, while dead time, recovery and interval readout are assigned to an external sampled counter. We do not attempt a microscopic derivation of these counter kernels from a repeated-measurement model of the underlying two-level system. Rather, the aim is to analyse what follows once the local rate is fixed. The discussion therefore sits at the interface between stationary detector theory \cite{LoukoSatz2006,LoukoSatz2008,Fewster2020,PranziniEtAl2024,PranziniKeskiVakkuri2025AQFT,PoloGomezEtAl2022,TjoaEtAl2023click,FewsterJuarezLouko2016,GarayMartinMartinezRamon2016} and classical counting theory with dead time, renewal structure and waiting-time observables \cite{Muller1973,CantorTeich1975,CarmichaelWaiting1989,KimbleAntibunching1977,Brandes2008,BrudererEtAl2014,AaronsonGilatKeaneDeValk1989,Janson1984,Cinlar1975}.
+
+Two record-level thresholds emerge. For deterministic one-step blanking, the sampled output is a Markov chain on the golden-mean shift and reaches the Parry measure at a unique threshold. For exponential recovery, the sampled output is a binary renewal process with explicit zero-run, hazard, covariance and low-frequency-noise formulae, together with a unique exact $1$-dependence threshold. The two thresholds are qualitatively different from the usual thermal criteria: detailed balance constrains the ratio $\Gamma_-/\Gamma_+$, whereas the present thresholds are statements about word statistics and dependence in the sampled record. In particular, finite recovery retains a strictly increasing hazard at every positive sampling interval, so neither a Bernoulli law nor the Parry law is attained even though adjacent clicks are quadratically suppressed as $\Delta\tau\downarrow0$.
+
+Once these threshold conditions are inserted into the standard static-KMS response law, they define detector-dependent loci in static spacetimes. In the homogeneous spectral-weight approximation one obtains a simple shared-hardware ratio law and explicit inversion formulas in Schwarzschild. A second exact tier survives beyond homogeneity: if the spectral weight is a Tolman-power profile $\mathcal S_x(\Omega)=K(e^{\beta_\infty N(x)\Omega}-1)^\alpha$ with $\alpha<1$, the shell map is affine in the logarithmic threshold variable and the three-threshold Schwarzschild inverse persists after an explicit threshold renormalization. Outside that exact class, one can still quantify how spatial drift of the spectral weight displaces the loci. In black-hole settings this distinction matters because the neglected $x$-dependence of $\mathcal S_x(\Omega)$ is tied to greybody filtering and mode propagation \cite{Page1976Emission,ArbeyCalzaPerez2025}; accordingly, the homogeneous approximation is used here only as a controlled idealization within a fixed detector model, not as a general statement about local thermal equilibrium in curved spacetime \cite{BuchholzSchlemmer2007,Solveen2012,GranseePinamontiVerch2017}.
+
+The paper is organized as follows. \Cref{sec:operational,sec:records} introduce the sampled-counter model and derive the record-level thresholds together with the finite-record diagnostics needed later. \Cref{sec:kms-shells,sec:inverse} combine those thresholds with a static-KMS response law, derive the corresponding shell equations, and analyse shell comparison and inversion. Appendices~\ref{app:state-diagram}--\ref{app:monte} collect the broader structural results, the interval instrument, the technical derivations and the simulation protocol, while additional algebra is relegated to the Supplementary Material.
+
+\section{Sampled-counter model}\label{sec:operational}
+
+We consider a two-level Unruh--DeWitt detector sampled at proper-time intervals of length $\Delta\tau$ along a stationary worldline. The observed output is a stationary binary process
+\[
+A_0,A_1,A_2,\dots \in \{0,1\},
+\]
+where $A_n=1$ denotes a click in the $n$th sampling interval. Compressing the record to the empirical click frequency retains only the one-point observable
+\[
+\widehat\rho_N=\frac{1}{N}\sum_{n=0}^{N-1}A_n.
+\]
+The full record is richer than this mean alone. The observables of interest here are the support of the stationary law, the distribution of zero-runs between clicks, the click hazard after $k$ zeros, the low-lag covariance profile and the residual counting noise after coarse graining. If a click is followed by $G$ consecutive zeros before the next click, then $G$ is the \emph{zero-run length}, and its hazard $h_k$ is the conditional probability that the next click occurs after exactly $k$ zeros since the previous one. In the ideal mode the \emph{Parry-law benchmark} means that the stationary record coincides with the Parry measure on the golden-mean grammar. In the recovery mode \emph{exact $1$-dependence} means that blocks of samples separated by one intervening sample are independent. These are the two record-level conditions that will later be lifted to shell equations.
+
+The two operating regimes considered below are summarized schematically in \cref{fig:scheme}. The ideal mode imposes a hard symbolic grammar, whereas finite recovery produces a full-support renewal law. The associated thresholds are therefore of different character: one is grammar based and the other is dependence based.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw, rounded corners=4pt, align=center, fill=blue!4, minimum width=4.4cm, minimum height=1.5cm},
+  widebox/.style={draw, rounded corners=4pt, align=center, fill=green!6, minimum width=6.3cm, minimum height=1.55cm},
+  outbox/.style={draw, rounded corners=4pt, align=center, fill=orange!8, minimum width=3.2cm, minimum height=1.15cm},
+  arr/.style={-Latex, thick}
+]
+\node[box] (ideal) at (0,1.8) {Ideal one-step dead time\\[2pt] golden-mean grammar\\[2pt] Parry-law benchmark at $\Gamma_+\Delta\tau=\log\varphi$};
+\node[box] (finite) at (6.2,1.8) {Finite recovery\\[2pt] renewal law with increasing hazard\\[2pt] exact $1$-dependence at $\Gamma_+=\Gamma_c$};
+\node[widebox] (kms) at (3.1,-0.2) {Static KMS response\\[2pt] $\displaystyle \Gamma_+(x,\Omega)=\lambda_c^2\,
+\frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1}$};
+\node[outbox] (phi) at (0,-2.1) {$\Sigma_{\varphi}$\\ exact-clock shell};
+\node[outbox] (mem) at (6.2,-2.1) {$\Sigma_{\mathrm{mem}}$\\ memory shell};
+\draw[arr] (ideal.south) -- ($(kms.north west)+(0.8,0)$);
+\draw[arr] (finite.south) -- ($(kms.north east)+(-0.8,0)$);
+\draw[arr] ($(kms.south west)+(1.0,0)$) -- (phi.north);
+\draw[arr] ($(kms.south east)+(-1.0,0)$) -- (mem.north);
+\end{tikzpicture}
+\caption{Schematic summary of the two sampled-counter regimes and the corresponding shell construction. In the ideal mode the distinguished threshold is fixed by the Parry measure on the golden-mean grammar. In the recovery mode it is fixed by exact $1$-dependence of the renewal record. After substitution into the static-KMS response law, both thresholds define codimension-one loci under the usual nondegeneracy condition.}
+\label{fig:scheme}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Record-level observables separating the two sampled-counter regimes.}
+\label{tab:signatures}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.23\textwidth} >{\raggedright\arraybackslash}p{0.23\textwidth} >{\raggedright\arraybackslash}p{0.21\textwidth}}
+\toprule
+Regime & Output law & Distinguished threshold & Finite-record signature \\
+\midrule
+Ideal dead time & Markov chain on the golden-mean shift; $11$ forbidden & $\Gamma_+\Delta\tau=\log\varphi$ & No consecutive clicks; Parry benchmark at threshold \\
+Finite recovery & Full-support renewal process with infinite symbolic memory & $\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ & Exact $1$-dependence at threshold; covariance sign-pattern transition; sub-Poisson counting \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Record-level thresholds}\label{sec:records}
+
+\subsection{Sampled counter}\label{subsec:phenom-model}
+The detector model consists of a sampled counter with two hidden states, $R$ (ready) and $D$ (refractory), together with an interval click register. At the beginning of each interval $[n\Delta\tau,(n+1)\Delta\tau]$ the register is reset to $0$. If the counter is ready, an excitation supplied by the stationary UDW rate $\Gamma_+\equiv\Gamma$ flips the register irreversibly to $1$ during that interval. If the counter begins in $D$, it may recover to $R$ at rate $\kappa_{\mathrm r}$ and then click later in the same interval. At the end of the interval only the register is read out:
+\[
+A_n=
+\begin{cases}
+1,&\text{the interval register fired},\\
+0,&\text{the interval register remained silent}.
+\end{cases}
+\]
+Thus $A_n$ is not a projective measurement of the detector's internal two-level system. It is the output of an interval instrument in which the hidden counter state and the visible register are kept separate; Appendix~\ref{app:gkls} records one consistent matrix realization. Throughout the paper, the hidden states $R$ and $D$ should therefore be read as counter states. We do not claim that a repeatedly measured UDW detector with active reset and recovery realizes these exact kernels without further microscopic derivation.
+
+The post-readout update is equally important. If $A_n=1$, the next interval starts in the refractory state $D$. If $A_n=0$, the hidden end-of-interval state is carried into the next interval without further reset. This carryover rule generates the serial dependence of the observed record. In particular, it makes click times regeneration points in the recovery mode, which is the source of the renewal structure used below.
+
+Concretely, the detector dynamics within a single interval $[0,\Delta\tau]$ are as follows (see also the state diagram in \cref{app:state-diagram}):
+\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.0em,itemsep=0.2em]
+\item If the detector begins the interval in state $R$ (ready): during $[0,\Delta\tau]$ it may be excited at rate $\Gamma$. If excited, the interval ends in state $D$ and registers a click ($A_n=1$). If not excited, the interval ends in state $R$ and registers no click ($A_n=0$).
+\item If the detector begins the interval in state $D$ (refractory): it first recovers to $R$ at rate $\kappa_{\mathrm r}$. If recovery occurs at time $s\in[0,\Delta\tau]$, the detector is then ready for the remaining subinterval $[s,\Delta\tau]$ and may be excited at rate $\Gamma$. If excited after recovery, the interval ends in $D$ with a click. If not excited after recovery, or if recovery does not occur during the interval, the hidden state at the end of the interval is determined by whether recovery happened.
+\end{enumerate}
+The output-labelled kernels $T_0$ and $T_1$ used below are obtained by integrating these continuous-time dynamics over $[0,\Delta\tau]$. The structural point to keep in view is simple: every click forces the next interval to start in $D$, so the observed click times are regeneration points of the hidden process.
+
+The kernels $T_0$ and $T_1$ define a \emph{phenomenological counter model} driven by the stationary UDW excitation rate $\Gamma_+$, in the spirit of classical dead-time counting models \cite{Muller1973,CantorTeich1975,CarmichaelWaiting1989,KimbleAntibunching1977}. The separation between detector physics and counter electronics is intentional: in \cref{sec:kms-shells,sec:inverse} static-KMS response theory supplies the input rate $\Gamma_+(x,\Omega)$, while dead time, recovery and interval readout belong to the counter model. No small-parameter assumption is imposed on $\kappa_{\mathrm r}\Delta\tau$; the interval probabilities are integrated exactly for all positive $\kappa_{\mathrm r}\Delta\tau$ and $\Gamma_+\Delta\tau$. Appendix~\ref{app:gkls} records one explicit interval instrument realizing these kernels and thereby establishes internal consistency of the counter dynamics, not a microscopic derivation from repeated UDW measurements.
+
+\subsection{Ideal blanking and the Parry benchmark}
+
+The ideal mode is defined by one deterministic blank interval after each click: once the detector fires, it is held in the refractory state $D$ for the whole next sampling step and is returned to the ready state $R$ only at the start of the following interval. In particular, $A_{n+1}=0$ whenever $A_n=1$. This is not the limit $\kappa_{\mathrm r}\to0$ of the exponential-recovery model, which would instead trap the detector in the refractory state after the first click. Writing
+\begin{equation}\label{eq:p-beta-main}
+p_\beta=e^{-\Gamma_+\Delta\tau}, \qquad q_\beta=1-p_\beta,
+\end{equation}
+the sampled output is the stationary Markov chain on the golden-mean shift with transition matrix
+\begin{equation}\label{eq:golden-mean-main}
+P_\beta=
+\begin{pmatrix}
+ p_\beta & 1-p_\beta \\
+ 1 & 0
+\end{pmatrix}.
+\end{equation}
+The reference law on that shift is the Parry measure, namely the unique measure of maximal entropy compatible with the grammar $11\notin\operatorname{supp}\mu$ \cite{Parry1964,LindMarcus1995}.
+
+\begin{proposition}\label{prop:ideal-main}
+For the ideal dead-time detector, the sampled output realizes the Parry-law benchmark if and only if
+\begin{equation}\label{eq:parry-threshold-main}
+p_\beta=\varphi^{-1}
+\quad\Longleftrightarrow\quad
+\Gamma_+\Delta\tau=\log\varphi,
+\end{equation}
+where $\varphi=(1+\sqrt5)/2$ is the golden ratio. This threshold defines the exact-clock selector.
+\end{proposition}
+
+Proposition~\ref{prop:ideal-main} gives the unique sampled rate for which the dead-time record realizes the maximum-entropy law compatible with the forbidden word $11$. A short derivation is recorded in the Supplementary Material. After substitution of the KMS rate, this becomes the exact-clock shell condition.
+
+The Parry benchmark is distinct from both detailed balance and detector-state thermalization. Detailed balance constrains the ratio $\Gamma_-/\Gamma_+$ \cite{Unruh1976,BirDav1982}, while weak-coupling Gibbs thermalization concerns the asymptotic detector state \cite{GarayMartinMartinezRamon2016}. Here the statement is instead about the full word distribution of the sampled record.
+
+\subsection{Exponential recovery and exact \texorpdfstring{$1$}{1}-dependence}
+
+We now replace deterministic blanking by exponential recovery at rate $\kappa_{\mathrm r}>0$. Throughout this section, and later when no ambiguity arises, we write $\Gamma\equiv\Gamma_+$ for the excitation rate. Define
+\begin{equation}\label{eq:p-c-main}
+p=e^{-\Gamma\Delta\tau}, \qquad c=e^{-\kappa_{\mathrm r}\Delta\tau},
+\end{equation}
+and
+\begin{equation}\label{eq:a-b-main}
+a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds,
+\qquad
+b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}e^{-\Gamma(\Delta\tau-s)}\,ds.
+\end{equation}
+When $\kappa_{\mathrm r}\neq\Gamma$, these integrals evaluate to
+$a=[\kappa_{\mathrm r}(1-p)-\Gamma(1-c)]/(\kappa_{\mathrm r}-\Gamma)$
+and
+$b=\kappa_{\mathrm r}(p-c)/(\kappa_{\mathrm r}-\Gamma)$.
+Because every observed click resets the next interval to the refractory state, the visible record is renewal and the zero-run lengths are i.i.d. The same reset structure also makes the exact $1$-dependence threshold transparent: it occurs when the non-trivial eigenvalue of the hidden two-state transition matrix vanishes, so that dependence beyond one step disappears.
+
+\begin{proposition}\label{prop:recovery-main}
+For the finite-recovery detector, the zero-run length $G$ between successive clicks has law
+\begin{equation}\label{eq:gap-main}
+\PP(G=k)=g_k=e_D^{\top}T_0^kT_1\mathbf 1,
+\qquad k\ge0,
+\end{equation}
+with
+\begin{equation}\label{eq:t0-t1-main}
+T_0=
+\begin{pmatrix}
+ p & 0 \\
+ b & c
+\end{pmatrix},
+\qquad
+T_1=
+\begin{pmatrix}
+ 0 & 1-p \\
+ 0 & a
+\end{pmatrix}.
+\end{equation}
+If $\kappa_{\mathrm r}\neq\Gamma$, then
+\begin{equation}\label{eq:gap-closed-main}
+g_k=
+\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}{\kappa_{\mathrm r}-\Gamma},
+\end{equation}
+and the click hazard after $k$ zeros is
+\begin{equation}\label{eq:hazard-main}
+h_k=
+\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}
+     {\kappa_{\mathrm r}p^k-\Gamma c^k},
+\qquad k\ge0.
+\end{equation}
+The hazard is strictly increasing, so the visible process is not an $r$-step Markov chain for any finite $r$.
+
+Let $\rho=\PP(A_0=1)$ and
+\begin{equation}\label{eq:lambda-main}
+\lambda=
+\frac{\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}\Delta\tau}-\Gamma e^{-\Gamma\Delta\tau}}
+{\kappa_{\mathrm r}-\Gamma}.
+\end{equation}
+Then
+\begin{equation}\label{eq:cov-main}
+\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda^{n-1},\qquad n\ge1.
+\end{equation}
+Consequently there is a unique critical rate $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)>0$ determined by
+\begin{equation}\label{eq:gamma-c-main}
+\Delta\tau=
+\frac{\log\kappa_{\mathrm r}-\log\Gamma_c}{\kappa_{\mathrm r}-\Gamma_c},
+\end{equation}
+such that the sampled record is exact $1$-dependent at $\Gamma=\Gamma_c$. Below $\Gamma_c$ all covariances are negative; above $\Gamma_c$ they alternate in sign.
+\end{proposition}
+
+\begin{lemma}\label{lem:stationary-main}
+For the finite-recovery detector, the stationary hidden-state distribution of $P=T_0+T_1$ is
+\begin{equation}\label{eq:stationary-main}
+\pi_R=\frac{b}{1-p+b},
+\qquad
+\pi_D=\frac{1-p}{1-p+b}.
+\end{equation}
+The stationary click rate is therefore
+\begin{equation}\label{eq:rho-main}
+\rho=\PP(A_0=1)=\pi_R(1-p)+\pi_D a=\frac{(1-p)(1-c)}{1-p+b},
+\end{equation}
+and it satisfies
+\begin{equation}\label{eq:rho-bounds-main}
+a<\rho<1-p.
+\end{equation}
+\end{lemma}
+
+The derivations of \cref{prop:recovery-main,lem:stationary-main}, including the closed zero-run law, the hazard monotonicity, the covariance formula and the kernel factorization at the critical line, are collected in Appendix~\ref{app:derivations}; further intermediate steps are recorded in the Supplementary Material.
+
+The recovery threshold is therefore different in character from the Parry threshold. A Bernoulli benchmark on the full two-shift would require constant hazard, so the Parry law is excluded throughout the recovery regime. \Cref{fig:hazard-cov} shows both the strictly increasing hazard and the covariance sign change across $\Gamma_c$.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1, horizontal sep=1.5cm},
+  width=0.44\textwidth,
+  height=0.30\textwidth,
+  tick label style={font=\footnotesize},
+  label style={font=\footnotesize},
+  legend style={font=\footnotesize, draw=none, fill=none},
+  every axis plot/.append style={line width=0.95pt},
+  xmin=0
+]
+\nextgroupplot[
+  xlabel={$k$},
+  ylabel={$h_k$},
+  ymin=0.12,
+  ymax=0.64,
+  xtick={0,2,4,6,8},
+  legend pos=south east
+]
+\addplot[color=blue!70!black, mark=*] coordinates {(0,0.1525) (1,0.2629) (2,0.2904) (3,0.2986) (4,0.3011) (5,0.3019) (6,0.3022) (7,0.3023) (8,0.3023)};
+\addplot[color=orange!80!black, mark=square*] coordinates {(0,0.2420) (1,0.3995) (2,0.4408) (3,0.4554) (4,0.4612) (5,0.4635) (6,0.4645) (7,0.4649) (8,0.4650)};
+\addplot[color=red!75!black, mark=triangle*] coordinates {(0,0.3331) (1,0.5221) (2,0.5727) (3,0.5939) (4,0.6044) (5,0.6099) (6,0.6130) (7,0.6147) (8,0.6157)};
+\legend{$\Gamma=1.2$,$\Gamma=\Gamma_c$,$\Gamma=3.2$}
+
+\nextgroupplot[
+  xlabel={$n$},
+  ylabel={$\operatorname{Cov}(A_0,A_n)/|\operatorname{Cov}(A_0,A_1)|$},
+  ymin=-1.05,
+  ymax=0.10,
+  xtick={1,2,3,4,5,6,7,8},
+  legend pos=north east
+]
+\addplot[color=blue!70!black, mark=*] coordinates {(1,-1.0000) (2,-0.0733) (3,-0.0054) (4,-0.0004) (5,0.0000) (6,0.0000) (7,0.0000) (8,0.0000)};
+\addplot[color=orange!80!black, mark=square*] coordinates {(1,-1.0000) (2,0.0000) (3,0.0000) (4,0.0000) (5,0.0000) (6,0.0000) (7,0.0000) (8,0.0000)};
+\addplot[color=red!75!black, mark=triangle*] coordinates {(1,-1.0000) (2,0.0609) (3,-0.0037) (4,0.0002) (5,0.0000) (6,0.0000) (7,0.0000) (8,0.0000)};
+\legend{$\Gamma=1.2$,$\Gamma=\Gamma_c$,$\Gamma=3.2$}
+\end{groupplot}
+\end{tikzpicture}
+\caption{Record-level signatures of the finite-recovery detector with $\kappa_{\mathrm r}=5$, $\Delta\tau=0.3$ (so $\Gamma_c\approx2.09$). (a)~Click hazard $h_k$ after $k$ consecutive zeros. All three curves are strictly increasing, confirming infinite symbolic memory. (b)~Normalized lag-$n$ covariance. Below $\Gamma_c$ all covariances are negative; at $\Gamma_c$ only the lag-$1$ covariance is nonzero; above $\Gamma_c$ the signs alternate.}
+\label{fig:hazard-cov}
+\end{figure}
+
+\begin{corollary}\label{cor:no-exact-main}
+No finite-recovery detector with positive parameters $(\Gamma,\kappa_{\mathrm r},\Delta\tau)$ realizes the Parry-law benchmark within the full-support renewal class.
+\end{corollary}
+
+A short discussion of the equal-rate limit together with an explicit Lambert $W$ representation of $\Gamma_c$ is recorded in Appendix~\ref{app:derivations}.
+
+\subsection{Structural extensions}
+
+Two further results clarify how special the recovery model is. First, one can place the exponential-recovery counter inside a broader three-parameter family of two-state sampled instruments with the same ready-state/refractory-state architecture and the same post-click reset rule. In that larger class, renewal structure and exact $1$-dependence are consequences of the reset architecture itself, whereas Bernoulli reduction and the direction of hazard drift depend on the balance between the two hidden-state sectors. Appendix~\ref{app:structural-results} gives the full statement. In particular, the exponential-recovery model lies entirely in the increasing-hazard sector and reaches exact $1$-dependence only at the rank-one condition defining $\Gamma_c$; see \cref{thm:two-state-class-main}.
+
+Second, one may ask how exact $1$-dependence fits into the wider class of stationary binary renewal records. \Cref{thm:renewal-md-main}, stated in Appendix~\ref{app:renewal-hierarchy-app}, identifies exact $m$-dependence with a rational inter-click generating function of degree $m+1$. For the present detector architecture this explains why the transition used later is already exhausted at $m=1$: higher exact dependence orders would require inter-click laws beyond the two-mode form generated by the sampled two-state counter.
+
+\subsection{Soft approach to the ideal grammar}
+
+Corollary~\ref{cor:no-exact-main} is an exact obstruction, but the recovery record still approaches the ideal grammar in a controlled short-sampling regime.
+
+\begin{proposition}\label{prop:soft-main}
+In the finite-recovery model,
+\begin{equation}\label{eq:soft-main}
+\PP(A_{n+1}=1\mid A_n=1)=a
+=\frac12\,\kappa_{\mathrm r}\Gamma(\Delta\tau)^2+O((\Delta\tau)^3)
+\qquad (\Delta\tau\downarrow0).
+\end{equation}
+For a fixed window length $m\ge2$, let
+\[
+V_m=\{(a_0,\dots,a_{m-1})\in\{0,1\}^m:\exists\,k\le m-2,\ a_ka_{k+1}=11\}.
+\]
+Then
+\begin{equation}\label{eq:window-main}
+\PP\!\bigl((A_0,\dots,A_{m-1})\in V_m\bigr)
+\le
+\frac12\,\kappa_{\mathrm r}\Gamma(\Delta\tau)^2\,(m-1)
++O\!\bigl(m(\Delta\tau)^3\bigr).
+\end{equation}
+Thus, for every fixed $m$, the finite-recovery record concentrates on the golden-mean admissible set as $\Delta\tau\downarrow0$.
+\end{proposition}
+
+Proposition~\ref{prop:soft-main} shows that the ideal grammar remains a meaningful short-sampling limit. At fixed finite window length, inadmissible words become quadratically rare, but the Parry benchmark is still excluded at every positive sampling interval because the hazard retains memory of the zero-run length.
+
+\subsection{Spectral density and antibunching}
+
+The renewal structure also makes the low-frequency counting noise accessible in closed form. Define the spectral density
+\[
+f(\theta)=\rho(1-\rho)+2\sum_{n\ge1}\operatorname{Cov}(A_0,A_n)\cos(n\theta),
+\qquad \theta\in[-\pi,\pi].
+\]
+Since the covariance sequence is explicit, both the spectral density and the Fano factor can be computed exactly. This is useful because finite recovery suppresses immediate reclicks but does not, a priori, rule out enhanced low-frequency noise.
+
+\begin{proposition}\label{prop:spectrum-main}
+For the stationary finite-recovery record,
+\begin{equation}\label{eq:spectrum-main}
+f(\theta)=
+\rho(1-\rho)
++
+2\rho(a-\rho)\,
+\frac{\cos\theta-\lambda}{1-2\lambda\cos\theta+\lambda^2},
+\end{equation}
+and $f$ is strictly increasing on $[0,\pi]$. If
+\[
+N_N=\sum_{n=0}^{N-1}A_n,
+\]
+then
+\begin{equation}\label{eq:fano-main}
+\lim_{N\to\infty}\frac{\Var(N_N)}{\EE N_N}
+=
+1-\rho+\frac{2(a-\rho)}{1-\lambda}
+<1.
+\end{equation}
+Hence the finite-recovery record is strictly sub-Poissonian throughout the parameter range.
+\end{proposition}
+
+The recovery regime is therefore characterized by more than the sign of a single covariance: the lag-sign pattern changes at exact $1$-dependence, while the whole renewal class remains antibunched and low-frequency suppressed. \Cref{fig:spectrum-fano} displays both quantities across the parameter range.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1, horizontal sep=1.5cm},
+  width=0.44\textwidth,
+  height=0.30\textwidth,
+  tick label style={font=\footnotesize},
+  label style={font=\footnotesize},
+  legend style={font=\footnotesize, draw=none, fill=none},
+  every axis plot/.append style={line width=0.95pt},
+  xmin=0
+]
+\nextgroupplot[
+  xlabel={$\theta$},
+  ylabel={$f(\theta)$},
+  ymin=0.12,
+  ymax=0.38,
+  xtick={0,1.5708,3.1416},
+  xticklabels={$0$,$\pi/2$,$\pi$},
+  legend pos=north west
+]
+\addplot[color=blue!70!black] coordinates {(0.0000,0.1275) (0.2618,0.1295) (0.5236,0.1353) (0.7854,0.1441) (1.0472,0.1546) (1.3090,0.1658) (1.5708,0.1766) (1.8326,0.1865) (2.0944,0.1949) (2.3562,0.2016) (2.6180,0.2065) (2.8798,0.2094) (3.1416,0.2104)};
+\addplot[color=orange!80!black] coordinates {(0.0000,0.1442) (0.2618,0.1471) (0.5236,0.1556) (0.7854,0.1692) (1.0472,0.1867) (1.3090,0.2071) (1.5708,0.2288) (1.8326,0.2504) (2.0944,0.2703) (2.3562,0.2874) (2.6180,0.3004) (2.8798,0.3086) (3.1416,0.3114)};
+\addplot[color=red!75!black] coordinates {(0.0000,0.1466) (0.2618,0.1495) (0.5236,0.1580) (0.7854,0.1720) (1.0472,0.1910) (1.3090,0.2144) (1.5708,0.2413) (1.8326,0.2700) (2.0944,0.2986) (2.3562,0.3248) (2.6180,0.3461) (2.8798,0.3599) (3.1416,0.3647)};
+\legend{$\Gamma\Delta\tau=0.3$,$\Gamma\Delta\tau=0.6$,$\Gamma\Delta\tau=1.0$}
+
+\nextgroupplot[
+  xlabel={$\Gamma\Delta\tau$},
+  ylabel={$F$},
+  ymin=0.20,
+  ymax=1.02,
+  xtick={0,0.5,1.0,1.5,2.0},
+  legend pos=north east
+]
+\addplot[dashed, black] coordinates {(0.1,1.0) (2.0,1.0)};
+\addplot[color=blue!70!black] coordinates {(0.100,0.6661) (0.200,0.5170) (0.300,0.4464) (0.400,0.4131) (0.501,0.3988) (0.600,0.3948) (0.700,0.3963) (0.800,0.4008) (0.900,0.4069) (1.000,0.4139) (1.100,0.4212) (1.200,0.4285) (1.300,0.4357) (1.400,0.4427) (1.500,0.4494) (1.600,0.4557) (1.700,0.4618) (1.800,0.4675) (1.900,0.4729) (2.000,0.4780)};
+\addplot[color=orange!80!black] coordinates {(0.100,0.7643) (0.200,0.6172) (0.300,0.5216) (0.400,0.4576) (0.500,0.4139) (0.600,0.3836) (0.700,0.3623) (0.800,0.3474) (0.900,0.3370) (1.001,0.3297) (1.100,0.3248) (1.200,0.3217) (1.300,0.3197) (1.400,0.3187) (1.500,0.3184) (1.600,0.3186) (1.700,0.3191) (1.800,0.3200) (1.900,0.3210) (2.000,0.3222)};
+\addplot[color=red!75!black] coordinates {(0.100,0.8061) (0.200,0.6709) (0.300,0.5739) (0.400,0.5027) (0.500,0.4494) (0.600,0.4088) (0.700,0.3775) (0.800,0.3530) (0.900,0.3338) (1.000,0.3184) (1.100,0.3060) (1.200,0.2960) (1.300,0.2879) (1.400,0.2812) (1.501,0.2757) (1.600,0.2712) (1.700,0.2673) (1.800,0.2641) (1.900,0.2614) (2.000,0.2591)};
+\legend{Poisson level,$\kappa_{\mathrm r}\Delta\tau=0.5$,$\kappa_{\mathrm r}\Delta\tau=1.0$,$\kappa_{\mathrm r}\Delta\tau=1.5$}
+\end{groupplot}
+\end{tikzpicture}
+\caption{Antibunching signatures in the recovery model. (a)~Spectral density $f(\theta)$ for $\kappa_{\mathrm r}=5$, $\Delta\tau=0.3$, and several values of $\Gamma\Delta\tau$. Every curve is strictly increasing on $[0,\pi]$, confirming low-frequency suppression. (b)~Asymptotic Fano factor $F$ as a function of $\Gamma\Delta\tau$ for several values of $\kappa_{\mathrm r}\Delta\tau$. The Poisson level $F=1$ (dashed) is never reached: the finite-recovery record is strictly sub-Poissonian throughout the parameter range.}
+\label{fig:spectrum-fano}
+\end{figure}
+
+\subsection{Finite-record inference}\label{subsec:finite-sample}
+Finite records suggest practical diagnostics for both thresholds. For a binary record $(A_n)_{n=0}^{N-1}$, set
+\[
+\widehat{h}_k=
+\frac{\#\{\text{runs of exactly }k\text{ zeros}\}}
+     {\#\{\text{runs of at least }k\text{ zeros}\}},
+\]
+\[
+\widehat{\gamma}_n=
+\frac{1}{N-n}\sum_k A_kA_{k+n}-\widehat\rho^2,
+\qquad
+\widehat F=
+\frac{\widehat{\Var}(N_B)}{\widehat{\mathbb E}N_B},
+\]
+where $\widehat h_k$ is the empirical hazard, $\widehat\gamma_n$ the empirical lag-$n$ covariance, and $\widehat F$ the block Fano factor for block size $B$. By renewal and ergodic arguments, all three converge almost surely to their population values.
+
+Appendix~\ref{app:monte} records the simulation protocol used for the numerical statements quoted below, including the seeded pseudorandom sampler, the inverse-CDF construction for zero-run lengths, the block sizes, the burn-in, and the number of replicated records at each parameter point.
+
+For the memory shell, the most immediate indicator is the sign of $\widehat\gamma_2$, which changes at $\Gamma_c$. We use this only as a finite-sample heuristic. For $\kappa_{\mathrm r}=5$ and $\Delta\tau=0.3$ (so $\Gamma_c\approx2.09$), Monte Carlo records generated directly from the analytic law show that the sign test is reliable well away from the threshold and noticeably weaker near it: at $\Gamma=1.5\Gamma_c$ the agreement rate is about $81\%$ for $N_{\mathrm{samp}}=5\times10^3$ and $99.7\%$ for $N_{\mathrm{samp}}=5\times10^4$, whereas at $\Gamma=1.1\Gamma_c$ it drops to about $57\%$ and $72\%$ for the same record lengths. For this reason the end-to-end shell estimation experiment in \cref{subsec:noisy-inverse} uses the benchmark equations for $\widehat p$ and $\widehat\rho$ rather than a bare covariance-sign test.
+
+For the exact-clock shell, the natural record-level diagnostic is
+\[
+\widehat p=\frac{\#\{(A_n,A_{n+1})=(0,0)\}}{\#\{A_n=0\}},
+\]
+which targets the benchmark condition $\widehat p\approx\varphi^{-1}$ in the ideal-blanking mode.
+
+The renewal regime also admits a theorem-level rate-identification statement because the complete inter-click intervals are i.i.d. Let
+\[
+Y_j=G_j+1,\qquad j\ge1,
+\]
+denote the successive inter-click intervals extracted from the binary record. These variables are directly observable once the record has been segmented into complete zero-runs.
+
+\begin{theorem}\label{thm:gap-inference-main}
+Fix $(\Gamma,\kappa_{\mathrm r},\Delta\tau)$ in the finite-recovery detector. Let
+\[
+\bar Y_m=\frac{1}{m}\sum_{j=1}^m Y_j
+\]
+be the empirical mean of $m$ complete inter-click intervals. Then the following statements hold.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item The moment generating function of $Y_1$ is
+\begin{equation}\label{eq:gap-mgf-main}
+M_\Gamma(t)=\EE_\Gamma e^{tY_1}
+=
+\frac{e^t}{\kappa_{\mathrm r}-\Gamma}
+\left(
+\frac{\kappa_{\mathrm r}(1-p)}{1-pe^t}
+-
+\frac{\Gamma(1-c)}{1-ce^t}
+\right),
+\qquad
+t<-\log\max\{p,c\}.
+\end{equation}
+If
+\[
+\mu(\Gamma)=\EE_\Gamma Y_1=\frac{1}{\rho(\Gamma)},
+\qquad
+\sigma_Y^2(\Gamma)=\Var_\Gamma(Y_1),
+\]
+then $\mu$ is $C^\infty$ and strictly decreasing on $(0,\infty)$.
+\item The estimator
+\[
+\widehat\Gamma_m=\mu^{-1}(\bar Y_m)
+\]
+is well defined with probability tending to one and satisfies
+\begin{equation}\label{eq:gap-clt-main}
+\sqrt m\,(\widehat\Gamma_m-\Gamma)
+\Longrightarrow
+\mathcal N\!\left(0,\frac{\sigma_Y^2(\Gamma)}{\mu'(\Gamma)^2}\right).
+\end{equation}
+\item The empirical means $\bar Y_m$ satisfy a good large-deviation principle with rate function
+\begin{equation}\label{eq:gap-rate-main}
+J_\Gamma(y)=\sup_{t<-\log\max\{p,c\}}
+\bigl\{ty-\log M_\Gamma(t)\bigr\},
+\end{equation}
+and the estimator $\widehat\Gamma_m$ satisfies the contracted large-deviation principle with rate function
+\begin{equation}\label{eq:gap-rate-gamma-main}
+I_\Gamma(x)=J_\Gamma(\mu(x)).
+\end{equation}
+\item If $\Gamma\neq\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$, then the shell-side classifier $\widehat\Gamma_m\lessgtr\Gamma_c$ has exponentially small wrong-side probability:
+\begin{equation}\label{eq:gap-error-main}
+\PP_\Gamma(\widehat\Gamma_m\le\Gamma_c)
+=
+\exp\!\bigl(-mI_\Gamma(\Gamma_c)+o(m)\bigr)
+\qquad (\Gamma>\Gamma_c),
+\end{equation}
+\begin{equation}\label{eq:gap-error-below-main}
+\PP_\Gamma(\widehat\Gamma_m\ge\Gamma_c)
+=
+\exp\!\bigl(-mI_\Gamma(\Gamma_c)+o(m)\bigr)
+\qquad (\Gamma<\Gamma_c).
+\end{equation}
+\end{enumerate}
+\end{theorem}
+
+Theorem~\ref{thm:gap-inference-main} turns the renewal law into a finite-record rate-identification statement for the memory shell. At any fixed spacetime point off $\Sigma_{\mathrm{mem}}$, the wrong-side classification probability decays exponentially in the number of observed complete gaps. The proof is given in Appendix~\ref{app:derivations}.
+
+\section{Static-KMS shell equations}\label{sec:kms-shells}
+
+We now combine the record-level thresholds with a standard static-KMS response model. From this point onward the stochastic analysis enters only through the constants $\log\varphi$ and $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. The shell statements in this section, and the inverse statements in \cref{sec:inverse}, are therefore conditional consequences of the phenomenological counter model together with the response law \eqref{eq:kms-rate-main}; they are not intended as a microscopic repeated-measurement theory of the UDW detector itself.
+
+Let $N(x)$ be the lapse function of a static spacetime and assume the field is in a global $\beta_\infty$-KMS state for Killing time. Along a static worldline at position $x$, Tolman scaling gives \cite{Tolman1930}
+\begin{equation}\label{eq:tolman-main}
+\beta_{\mathrm{loc}}(x)=\beta_\infty N(x).
+\end{equation}
+At weak coupling, the excitation rate of a detector with energy gap $\Omega$ takes the Planck form
+\begin{equation}\label{eq:kms-rate-main}
+\Gamma_+(x,\Omega)=
+\lambda_c^2\,
+\frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1},
+\end{equation}
+where
+\[
+\mathcal S_x(\Omega)=\frac{1}{\pi}\,\mathrm{Im}\,\mathcal W_x(\Omega+i0^+)
+\]
+is the local commutator spectral weight along the static worldline, written in terms of the Fourier transform $\mathcal W_x$ of the restricted Wightman function. We assume $\mathcal S_x(\Omega)>0$ for $\Omega>0$ in the KMS settings under consideration \cite{KayWald1991}. The homogeneous regime used below is the simplifying case in which the spatial variation of $\mathcal S_x(\Omega)$ is negligible across the region of interest.
+
+\begin{proposition}[Conditional shell equations]\label{thm:shells-general-main}
+Fix a detector design $(\Omega,\lambda_c,\Delta\tau,\kappa_{\mathrm r})$ in a static KMS background with $\mathcal S_x(\Omega)>0$ and lapse $N(x)>0$ everywhere in the region of interest.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item The ideal dead-time detector realizes the Parry-law benchmark exactly on the locus
+\begin{equation}\label{eq:shell-phi-general-main}
+\Sigma_{\varphi}=
+\left\{x:
+\frac{\lambda_c^2\mathcal S_x(\Omega)\Delta\tau}{e^{\beta_\infty N(x)\Omega}-1}=\log\varphi
+\right\}.
+\end{equation}
+This is the exact-clock locus. It is a smooth codimension-one hypersurface wherever the gradient of $x\mapsto\lambda_c^2\mathcal S_x(\Omega)\Delta\tau/(e^{\beta_\infty N(x)\Omega}-1)$ is nonvanishing; otherwise it may fail to be a manifold and we refer to it as the exact-clock locus.
+
+\item The finite-recovery detector reaches the memory-transition point exactly on the locus
+\begin{equation}\label{eq:shell-mem-general-main}
+\Sigma_{\mathrm{mem}}=
+\left\{x:
+\frac{\lambda_c^2\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1}
+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)
+\right\}.
+\end{equation}
+This is the memory-transition locus. It is a smooth codimension-one hypersurface under the analogous nonvanishing-gradient condition. On $\Sigma_{\mathrm{mem}}$, the sampled record is exact $1$-dependent.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+The ideal benchmark condition is $\Gamma_+(x,\Omega)\Delta\tau=\log\varphi$, while the recovery benchmark condition is $\Gamma_+(x,\Omega)=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. Substituting the static-KMS response law \eqref{eq:kms-rate-main} into these two threshold equations gives \eqref{eq:shell-phi-general-main} and \eqref{eq:shell-mem-general-main}. The regularity statements are the standard implicit-function conclusion at points where the relevant defining gradient is nonzero.
+\end{proof}
+
+\begin{remark}[Shell existence, uniqueness, and multiplicity]\label{rem:shell-existence}
+The loci $\Sigma_\varphi$ and $\Sigma_{\mathrm{mem}}$ may be empty or disconnected when $\mathcal S_x(\Omega)$ varies with position. Regularity holds wherever the corresponding defining function has non-vanishing gradient. In the homogeneous regime $\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$ the shell equations reduce to monotone functions of the lapse alone, so each shell is a lapse level set under the usual condition $dN\neq0$. Outside that regime, the exact comparison between the two shells is provided by the spectral-transport identity of \cref{cor:spectral-transport-main}.
+\end{remark}
+
+\begin{corollary}\label{cor:homogeneous-main}
+Assume that $\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$ on the region under study. Then both shells are pure lapse level sets. Their associated local inverse temperatures are
+\begin{equation}\label{eq:betaphi-betamem-main}
+\beta_{\varphi}=
+\frac{1}{\Omega}
+\log\!\left(1+\frac{\lambda_c^2\mathcal S(\Omega)\Delta\tau}{\log\varphi}\right),
+\qquad
+\beta_{\mathrm{mem}}=
+\frac{1}{\Omega}
+\log\!\left(1+\frac{\lambda_c^2\mathcal S(\Omega)}
+{\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}\right),
+\end{equation}
+so that
+\begin{equation}\label{eq:lapse-level-main}
+\Sigma_{\varphi}=\{x:\beta_{\mathrm{loc}}(x)=\beta_{\varphi}\},
+\qquad
+\Sigma_{\mathrm{mem}}=\{x:\beta_{\mathrm{loc}}(x)=\beta_{\mathrm{mem}}\}.
+\end{equation}
+\end{corollary}
+
+In the homogeneous regime, the exact-clock shell is selected by a grammar law and the memory shell by a dependence law, even though both are built from the same local response scale. \Cref{fig:shell-radii} illustrates the corresponding lapse values and proper-distance ratio in Schwarzschild.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1, horizontal sep=1.5cm},
+  width=0.44\textwidth,
+  height=0.30\textwidth,
+  tick label style={font=\footnotesize},
+  label style={font=\footnotesize},
+  legend style={font=\footnotesize, draw=none, fill=none},
+  every axis plot/.append style={line width=0.95pt},
+  xmin=0.15,
+  xmax=4.0
+]
+\nextgroupplot[
+  xlabel={$\kappa_{\mathrm r}\Delta\tau$},
+  ylabel={$N$},
+  ymin=0,
+  ymax=0.26,
+  legend pos=north west
+]
+\addplot[color=blue!70!black] coordinates {(0.25,0.015025) (0.50,0.027658) (0.75,0.038558) (1.00,0.048144) (1.25,0.056697) (1.50,0.064420) (1.75,0.071460) (2.00,0.077927) (2.50,0.089470) (3.00,0.099548) (3.50,0.108493) (4.00,0.116533)};
+\addplot[color=orange!80!black] coordinates {(0.25,0.003018) (0.50,0.008581) (0.75,0.016521) (1.00,0.026776) (1.25,0.039187) (1.50,0.053502) (1.75,0.069411) (2.00,0.086588) (2.50,0.123589) (3.00,0.162646) (3.50,0.202626) (4.00,0.242932)};
+\legend{$N_\varphi$,$N_{\mathrm{mem}}$}
+
+\nextgroupplot[
+  xlabel={$\kappa_{\mathrm r}\Delta\tau$},
+  ylabel={$\ell_\varphi/\ell_{\mathrm{mem}}$},
+  ymin=0.4,
+  ymax=5.2,
+  legend pos=north east
+]
+\addplot[color=blue!70!black] coordinates {(0.25,4.978345) (0.50,3.224523) (0.75,2.335776) (1.00,1.799963) (1.25,1.448461) (1.50,1.205102) (1.75,1.029719) (2.00,0.899108) (2.50,0.720381) (3.00,0.605203) (3.50,0.524766) (4.00,0.464775)};
+\addplot[dashed,color=black] coordinates {(0.25,5.375311) (0.50,3.650017) (0.75,2.701930) (1.00,2.078087) (1.25,1.632934) (1.50,1.300430) (1.75,1.044817) (2.00,0.844484) (2.50,0.557734) (3.00,0.371065) (3.50,0.247403) (4.00,0.164812)};
+\legend{Exact ratio,Leading-order prediction}
+\end{groupplot}
+\end{tikzpicture}
+\caption{Shell geometry in Schwarzschild under the homogeneous spectral-weight regime ($r_{\mathrm s}=2M=1$, $\beta_\infty=4\pi$, $\Omega=1$, $\lambda_c^2\mathcal S=2$, $\kappa_{\mathrm r}=5$). (a)~Lapse values $N_\varphi$ (exact-clock) and $N_{\mathrm{mem}}$ (memory) as functions of $\kappa_{\mathrm r}\Delta\tau$. The shell ordering reverses near $\kappa_{\mathrm r}\Delta\tau\approx1.8$, in agreement with \Cref{prop:order-main}: for faster sampling the memory shell lies closer to the horizon, whereas for slower sampling the exact-clock shell does. (b)~Proper-distance ratio $\ell_\varphi/\ell_{\mathrm{mem}}$ (solid) compared with the leading-order prediction of \Cref{thm:horizon-main} (dashed). The ratio diverges as $\kappa_{\mathrm r}\Delta\tau\to0$, confirming the hierarchy law~\eqref{eq:fast-ratio-main}.}
+\label{fig:shell-radii}
+\end{figure}
+
+\begin{proposition}\label{prop:order-main}
+Assume the homogeneous spectral-weight regime and define
+\[
+\Gamma_{\varphi}=\frac{\log\varphi}{\Delta\tau}.
+\]
+Let $N_{\varphi}$ and $N_{\mathrm{mem}}$ denote the lapse values of $\Sigma_{\varphi}$ and $\Sigma_{\mathrm{mem}}$. Then
+\begin{equation}\label{eq:order-main}
+N_{\varphi}<N_{\mathrm{mem}}
+\iff
+\Gamma_{\varphi}>\Gamma_c(\kappa_{\mathrm r},\Delta\tau),
+\end{equation}
+with equality if and only if $\Gamma_{\varphi}=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. Thus the shell ordering is detector controlled.
+\end{proposition}
+
+\section{Shell comparison and inversion}\label{sec:inverse}
+
+We now compare the two shell loci produced by a single detector design operated in two readout modes. Within a fixed response model this leads to simple ratio and inversion formulae, although the comparison remains tied to the common detector hardware rather than to a detector-independent notion of shell pair. The shell-pair identities needed below were established in the companion shell-geometry paper \cite{MaZhang2026ShellGeometry}, so we record them here only as cited inputs before deriving the stability and inversion consequences used in this paper.
+
+\subsection{Shared-hardware two-mode protocol}\label{subsec:two-mode}
+To make this comparison operational, we fix a detector head with gap $\Omega$, coupling constant $\lambda_c$, spectral weight $\mathcal S_x(\Omega)$ and sampling step $\Delta\tau$, and vary only the readout rule. In mode A, every click is followed by one deterministic blank interval of length $\Delta\tau$. This realizes the one-step dead-time model of \cref{sec:operational} with transition matrix~\eqref{eq:golden-mean-main} and selects the Parry benchmark at $\Gamma_+\Delta\tau=\log\varphi$; the corresponding target rate is therefore $\Gamma_\varphi=\log\varphi/\Delta\tau$. In mode B, the blanking gate is removed and the same detector runs with exponential recovery rate $\kappa_{\mathrm r}$, as in the finite-recovery model of \cref{sec:operational}. The resulting record is a renewal process with hazard~\eqref{eq:hazard-main}, and exact $1$-dependence occurs at $\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
+
+Because the detector head is unchanged, both modes share the same response amplitude $\lambda_c^2\mathcal S_x(\Omega)$. This common factor is what allows the shell-ratio law to remove the otherwise unknown amplitude in the homogeneous regime.
+
+\subsection{Ratio law and spectral transport}
+
+The cleanest shell-pair observable arises when both shells are generated by the same hardware operated in the two-mode protocol of \cref{subsec:two-mode}. Dividing the two shell equations removes the common response amplitude $\lambda_c^2$. In the homogeneous idealization, one is left with a pure lapse relation.
+
+\begin{proposition}[Shared-hardware ratio law]\label{thm:ratio-main}
+\leavevmode
+
+See \cite[Theorem~4.28; Corollary~4.29]{MaZhang2026ShellGeometry}.
+\end{proposition}
+
+Thus the unknown common response amplitude cancels exactly in the homogeneous regime, although the resulting constant still depends on the sampling design through $\Delta\tau$ and $\kappa_{\mathrm r}$.
+
+\begin{corollary}\label{cor:spectral-transport-main}
+\leavevmode
+
+See \cite[Corollary~4.29]{MaZhang2026ShellGeometry}.
+\end{corollary}
+
+\begin{proposition}\label{prop:spectral-stability}
+Assume the two-mode protocol and suppose that on the region of interest $\mathcal S_x(\Omega)=\mathcal S(\Omega)(1+\varepsilon(x))$ with $|\varepsilon(x)|\le\varepsilon_0<1$. Let $R$ denote the shell-ratio observable governed by \cref{cor:spectral-transport-main} and let $C=\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)/\log\varphi$. Then
+\[
+C\,\frac{1-\varepsilon_0}{1+\varepsilon_0}
+\le
+R
+\le
+C\,\frac{1+\varepsilon_0}{1-\varepsilon_0}.
+\]
+\end{proposition}
+
+This is an immediate consequence of \cref{cor:spectral-transport-main} and the bounds $-\varepsilon_0\le \varepsilon(x)\le\varepsilon_0$. A uniform spectral inhomogeneity of size $\varepsilon_0$ therefore perturbs the homogeneous ratio by at most the multiplicative factor $\frac{1+\varepsilon_0}{1-\varepsilon_0}$.
+
+Pointwise ratio control does not by itself locate the displaced shells. In static spherical settings one can nevertheless recover that information when the logarithmic spectral drift is subordinate to the Tolman drift. The next theorem gives a quantitative comparison principle for this regime.
+
+\begin{theorem}\label{thm:spectral-drift-main}
+Assume a static spherically symmetric KMS background on a radial interval $I=[r_-,r_+]$, with lapse $N\in C^1(I)$ satisfying $N'(r)>0$. Fix detector parameters $(\beta_\infty,\Omega,\lambda_c)$ and define
+\[
+L(r)=\log\!\bigl(e^{\beta_\infty\Omega N(r)}-1\bigr),
+\qquad
+\Gamma_+(r)=\lambda_c^2\,
+\frac{\mathcal S(r)}{e^{\beta_\infty\Omega N(r)}-1},
+\]
+where $\mathcal S(r)=\mathcal S_{x(r)}(\Omega)$ is positive and belongs to $C^1(I)$. Suppose that for some $\eta\in[0,1)$,
+\begin{equation}\label{eq:log-slope-control-main}
+\left|\frac{d}{dr}\log\mathcal S(r)\right|
+\le
+\eta\,L'(r),
+\qquad r\in I.
+\end{equation}
+Then the following statements hold.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item The map $r\mapsto\Gamma_+(r)$ is strictly decreasing on $I$. Consequently every threshold $T$ in the image $\Gamma_+(I)$ is realized at a unique radius $r(T)\in I$.
+\item For any thresholds $T_1,T_2\in\Gamma_+(I)$,
+\begin{equation}\label{eq:threshold-comparison-main}
+\frac{1}{1+\eta}\left|\log\frac{T_1}{T_2}\right|
+\le
+\left|L(r(T_1))-L(r(T_2))\right|
+\le
+\frac{1}{1-\eta}\left|\log\frac{T_1}{T_2}\right|.
+\end{equation}
+\item Let $I_{12}$ denote the closed interval with endpoints $r(T_1)$ and $r(T_2)$, and assume $T_1\neq T_2$. The left equality in~\eqref{eq:threshold-comparison-main} holds if and only if
+\begin{equation}\label{eq:extremal-plus-main}
+\mathcal S(r)=K\bigl(e^{\beta_\infty\Omega N(r)}-1\bigr)^{\eta}
+\qquad\text{for all }r\in I_{12}
+\end{equation}
+for some constant $K>0$. The right equality in~\eqref{eq:threshold-comparison-main} holds if and only if
+\begin{equation}\label{eq:extremal-minus-main}
+\mathcal S(r)=K\bigl(e^{\beta_\infty\Omega N(r)}-1\bigr)^{-\eta}
+\qquad\text{for all }r\in I_{12}
+\end{equation}
+for some constant $K>0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{corollary}\label{cor:greybody-control-main}
+Assume the hypotheses of \cref{thm:spectral-drift-main}. Suppose that the two record thresholds
+\[
+\Gamma_\varphi=\frac{\log\varphi}{\Delta\tau},
+\qquad
+\Gamma_{\mathrm{mem}}=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)
+\]
+belong to $\Gamma_+(I)$, and write
+\[
+r_\varphi=r(\Gamma_\varphi),
+\qquad
+r_{\mathrm{mem}}=r(\Gamma_{\mathrm{mem}}),
+\qquad
+C=\frac{\Delta\tau\,\Gamma_{\mathrm{mem}}}{\log\varphi}.
+\]
+Then
+\begin{equation}\label{eq:greybody-ratio-band-main}
+\min\!\left\{C^{1/(1-\eta)},\,C^{1/(1+\eta)}\right\}
+\le
+\frac{e^{\beta_\infty\Omega N(r_\varphi)}-1}
+     {e^{\beta_\infty\Omega N(r_{\mathrm{mem}})}-1}
+\le
+\max\!\left\{C^{1/(1-\eta)},\,C^{1/(1+\eta)}\right\}.
+\end{equation}
+If, in addition, $\mathcal S(r)=\mathcal S_0e^{\sigma(r)}$ on $I$ with $\sup_I|\sigma|\le\varepsilon$, and if for $T\in\{\Gamma_\varphi,\Gamma_{\mathrm{mem}}\}$ the homogeneous reference shell $r_0(T)\in I$ is defined by
+\[
+\lambda_c^2\,
+\frac{\mathcal S_0}{e^{\beta_\infty\Omega N(r_0(T))}-1}
+=
+T,
+\]
+then
+\begin{equation}\label{eq:greybody-log-displacement-main}
+\left|L(r(T))-L(r_0(T))\right|\le\varepsilon.
+\end{equation}
+Moreover, if
+\[
+m_T:=\inf_{r\in I_T}L'(r)>0,
+\]
+where $I_T$ is the closed interval with endpoints $r(T)$ and $r_0(T)$, then
+\begin{equation}\label{eq:greybody-radius-displacement-main}
+\left|r(T)-r_0(T)\right|\le\frac{\varepsilon}{m_T}.
+\end{equation}
+\end{corollary}
+
+The logarithmic drift theorem identifies the extremizers of the two-threshold comparison bound. The next result characterizes the maximal non-homogeneous class in which exact shell transport survives at every threshold.
+
+\subsection{Exact Tolman-power transport}
+
+\begin{theorem}[Exact non-homogeneous shell transport and rigidity]\textbf{[New-2 | 2026-04-17]}\label{thm:tolman-power-main}
+Assume a static spherically symmetric KMS background on a radial interval $I=[r_-,r_+]$, with lapse $N\in C^1(I)$ satisfying $N'(r)>0$. Fix detector parameters $(\beta_\infty,\Omega,\lambda_c)$ and define
+\[
+L(r)=\log\!\bigl(e^{\beta_\infty\Omega N(r)}-1\bigr),
+\qquad
+\Gamma_+(r)=\lambda_c^2\,
+\frac{\mathcal S(r)}{e^{\beta_\infty\Omega N(r)}-1},
+\]
+where $\mathcal S(r)=\mathcal S_{x(r)}(\Omega)$ is positive and belongs to $C^1(I)$. Assume that $r\mapsto\Gamma_+(r)$ is strictly decreasing on $I$, and let $r(T)$ denote the inverse threshold map on $\Gamma_+(I)$. Then the following statements are equivalent.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item There exist constants $A>0$ and $\alpha<1$ such that
+\begin{equation}\label{eq:tolman-power-main}
+\Gamma_+(r)=A\,e^{-(1-\alpha)L(r)}
+\qquad\text{for every }r\in I,
+\end{equation}
+equivalently,
+\[
+\mathcal S(r)=\frac{A}{\lambda_c^2}\bigl(e^{\beta_\infty\Omega N(r)}-1\bigr)^\alpha
+\qquad\text{for every }r\in I.
+\]
+\item There exist constants $u\in\RR$ and $q>0$ such that
+\begin{equation}\label{eq:tolman-affine-main}
+L(r(T))=u-q\log T
+\qquad\text{for every }T\in\Gamma_+(I).
+\end{equation}
+\item For every triple of distinct thresholds $T_1,T_2,T_3\in\Gamma_+(I)$,
+\begin{equation}\label{eq:tolman-crossratio-main}
+\frac{L(r(T_2))-L(r(T_1))}{L(r(T_3))-L(r(T_1))}
+=
+\frac{\log T_1-\log T_2}{\log T_1-\log T_3}.
+\end{equation}
+\end{enumerate}
+When these conditions hold,
+\begin{equation}\label{eq:tolman-ratio-main}
+q=\frac{1}{1-\alpha},
+\qquad
+u=\frac{\log A}{1-\alpha},
+\qquad
+\frac{e^{\beta_\infty\Omega N(r(T_1))}-1}
+     {e^{\beta_\infty\Omega N(r(T_2))}-1}
+=
+\left(\frac{T_2}{T_1}\right)^{1/(1-\alpha)}
+\end{equation}
+for all thresholds $T_1,T_2\in\Gamma_+(I)$. If, in addition, the spacetime is Schwarzschild and $\alpha$ is known, then any three thresholds $T_1>T_2>T_3$ generated by a single detector head at shell radii $r_1<r_2<r_3$ determine $A$, $\beta_\infty$, and $M$ uniquely. Equivalently, the amplitude-free three-threshold inversion of \cref{thm:three-threshold-main} applies to the renormalized thresholds $T_i^{1/(1-\alpha)}$.
+\end{theorem}
+
+The homogeneous regime is the case $\alpha=0$ of \cref{thm:tolman-power-main}. The equality cases in \cref{thm:spectral-drift-main}(iii) correspond to $\alpha=\pm\eta$ on the interval between the two shell radii, so \cref{thm:tolman-power-main} identifies those extremizers as the unique globally exact non-homogeneous shell profiles.
+
+The proofs of \cref{thm:spectral-drift-main,cor:greybody-control-main,thm:tolman-power-main} are recorded in Appendix~\ref{app:derivations}.
+
+\subsection{Near-horizon asymptotics}
+
+The shell-pair ratio takes a particularly simple form near a nonextremal Hartle--Hawking horizon.
+
+\begin{proposition}[Near-horizon shell asymptotics]\label{thm:horizon-main}
+Assume the shared-hardware two-mode protocol and the homogeneous spectral-weight regime $\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$. Suppose, in addition, that the static region ends at a nonextremal Hartle--Hawking horizon, so that $\beta_\infty=2\pi/\kappa_{\mathrm H}$ and
+\begin{equation}\label{eq:horizon-main}
+N(\ell)=\kappa_{\mathrm H}\ell+O(\ell^3)
+\end{equation}
+as the proper distance $\ell\downarrow0$ from the horizon. Then the shell distances satisfy
+\begin{equation}\label{eq:ell-ratio-main}
+\frac{\ell_{\varphi}}{\ell_{\mathrm{mem}}}
+=
+\frac{\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\log\varphi}
+\Bigl(1+O(\ell_{\varphi}+\ell_{\mathrm{mem}})\Bigr).
+\end{equation}
+In Schwarzschild, if $A_H=16\pi M^2$ is the horizon area and $A_{\varphi}$ and $A_{\mathrm{mem}}$ are the areas of the shell spheres, then
+\begin{equation}\label{eq:area-ratio-main}
+\frac{A_{\varphi}-A_H}{A_{\mathrm{mem}}-A_H}
+=
+\left[
+\frac{\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\log\varphi}
+\right]^2
+\Bigl(1+O(\ell_{\varphi}+\ell_{\mathrm{mem}})\Bigr).
+\end{equation}
+\end{proposition}
+
+The derivation is a straightforward near-horizon expansion of the lapse combined with the shell-ratio law, and we record the details in Appendix~\ref{app:derivations}. Proposition~\ref{thm:horizon-main} therefore gives a leading-order relation between two detector-defined stretched-horizon distances in the shared-hardware homogeneous model. One shell is defined by the Parry benchmark and the other by exact $1$-dependence, but their near-horizon separation is controlled at leading order by a ratio independent of the common response amplitude.
+
+A particularly informative regime is the fast-sampling limit. Let $s=\kappa_{\mathrm r}\Delta\tau\downarrow0$ and $L=\log(1/s)$. Then
+\begin{equation}\label{eq:fast-sampling-main}
+\Gamma_c(\kappa_{\mathrm r},\Delta\tau)
+=
+\frac{L+\log L+o(1)}{\Delta\tau},
+\end{equation}
+so that
+\begin{equation}\label{eq:fast-ratio-main}
+\frac{\ell_{\mathrm{mem}}}{\ell_{\varphi}}
+\sim
+\frac{\log\varphi}{L+\log L}
+\longrightarrow0.
+\end{equation}
+Thus the memory-transition shell approaches the horizon parametrically faster than the exact-clock shell. The shell pair therefore exhibits a parametric hierarchy of stretched-horizon scales within the model.
+
+\subsection{Static spherical inversion}
+
+The shell pair also carries direct inverse information in static spherical settings under the homogeneous approximation $\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$. In realistic black-hole detector problems greybody factors and mode sums make the response weight position dependent, so the formulas in this subsection and in \cref{subsec:worked-example} are exact only within that approximation. \Cref{subsec:nonhomogeneous} returns to the general case.
+
+\begin{proposition}\label{prop:schw-main}
+Assume the homogeneous spectral-weight regime and define the detector constants
+\begin{equation}\label{eq:beta-constants-main}
+\beta_{\varphi}(D)=
+\frac{1}{\Omega}
+\log\!\left(1+\frac{\lambda_c^2\mathcal S(\Omega)\Delta\tau}{\log\varphi}\right),
+\qquad
+\beta_{\mathrm{mem}}(D)=
+\frac{1}{\Omega}
+\log\!\left(1+\frac{\lambda_c^2\mathcal S(\Omega)}
+{\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}\right).
+\end{equation}
+If the two shells generated by the same detector design occur at distinct radii $r_{\varphi}\neq r_{\mathrm{mem}}$ in Schwarzschild, then
+\begin{equation}\label{eq:beta-infty-main}
+\beta_\infty^2=
+\frac{\beta_{\varphi}(D)^2r_{\varphi}-\beta_{\mathrm{mem}}(D)^2r_{\mathrm{mem}}}
+{r_{\varphi}-r_{\mathrm{mem}}},
+\end{equation}
+and
+\begin{equation}\label{eq:mass-main}
+M=
+\frac{r_{\varphi}r_{\mathrm{mem}}\bigl(\beta_{\varphi}(D)^2-\beta_{\mathrm{mem}}(D)^2\bigr)}
+{2\bigl(\beta_{\varphi}(D)^2r_{\varphi}-\beta_{\mathrm{mem}}(D)^2r_{\mathrm{mem}}\bigr)}.
+\end{equation}
+\end{proposition}
+
+Proposition~\ref{prop:schw-main} is an exact algebraic statement within the homogeneous model. It does not remove detector dependence, but it does show that two record-defined shell locations determine the global redshift scale once the detector design is fixed.
+
+\begin{remark}[Jacobian conditioning and error propagation]\label{rem:jacobian-main}
+For a mode $D=(\Omega,\lambda_c,\Delta\tau,\kappa_{\mathrm r})$, write
+\[
+C(D):=
+\frac{\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\log\varphi}.
+\]
+In this local two-mode criterion, a basic degeneracy occurs when the two operating modes satisfy $C(D_1)=C(D_2)$. Since $C(D)$ depends only on $(\Delta\tau,\kappa_{\mathrm r})$, this is a codimension-one condition in the mode parameter space and is generically avoided by choosing modes with distinct sampling intervals.
+
+For the single-mode Schwarzschild inverse of \cref{prop:schw-main}, the system is linear in $(u,v)=(\beta_\infty^2,\,2M\beta_\infty^2)$ with coefficient matrix $A=\bigl(\begin{smallmatrix}r_\varphi & -1\\ r_{\mathrm{mem}} & -1\end{smallmatrix}\bigr)$ and $\det A=-(r_\varphi-r_{\mathrm{mem}})$. The condition number is $\kappa(A)=\|A\|\|A^{-1}\|$, which diverges as the shells approach each other. For the worked example of \cref{tab:worked} with mode~$D_1$, $\kappa(A)\approx111$: this is moderate conditioning. A first-order error propagation gives: a $1\%$ relative error on the shell radii $(r_\varphi,r_{\mathrm{mem}})$ produces a ${\sim}38\%$ relative error on $\beta_\infty^2$ but only a ${\sim}1.2\%$ relative error on $M$. The mass is well conditioned because it involves the ratio $r_\varphi r_{\mathrm{mem}}/(r_\varphi-r_{\mathrm{mem}})$, which is less sensitive to correlated perturbations of the two radii. Improving the conditioning requires wider shell separation, which can be achieved by increasing the product $\kappa_{\mathrm r}\Delta\tau$ (pushing the memory shell farther from the exact-clock shell).
+\end{remark}
+
+\subsection{Amplitude-free three-threshold inversion}\label{subsec:three-threshold}
+
+The homogeneous shell equations admit an exact removal of the unknown common response amplitude once three threshold shells generated by the same detector head are available. The threshold constants need not come from a single readout family: any three operating modes with the same gap $\Omega$ and the same homogeneous response amplitude $A=\lambda_c^2\mathcal S(\Omega)$ are admissible. This includes, for example, one ideal mode together with two recovery modes, or three ideal modes with distinct sampling intervals.
+
+\begin{theorem}[Amplitude-free three-threshold inversion]\label{thm:three-threshold-main}
+Assume the homogeneous spectral-weight regime at fixed detector gap $\Omega>0$ in Schwarzschild, but do not assume the common response amplitude
+\[
+A=\lambda_c^2\mathcal S(\Omega)
+\]
+known. Let
+\[
+T_1>T_2>T_3>0
+\]
+be three benchmark rates generated by three operating modes of the same detector head, and let
+\[
+r_1<r_2<r_3
+\]
+be the corresponding shell radii. Define
+\[
+L_i(A)=\log\!\left(1+\frac{A}{T_i}\right),
+\qquad
+\eta=
+\frac{r_1^{-1}-r_2^{-1}}{r_1^{-1}-r_3^{-1}}
+=
+\frac{r_3(r_2-r_1)}{r_2(r_3-r_1)},
+\]
+and
+\[
+\Xi(A)=
+\frac{L_2(A)^2-L_1(A)^2}{L_3(A)^2-L_1(A)^2},
+\qquad A>0.
+\]
+Then the following statements hold.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item The map $\Xi:(0,\infty)\to\RR$ is $C^\infty$ and strictly increasing, with endpoint limits
+\begin{equation}\label{eq:Xi-limits-main}
+\Xi(0^+)=
+\frac{T_2^{-2}-T_1^{-2}}{T_3^{-2}-T_1^{-2}},
+\qquad
+\Xi(\infty)=
+\frac{\log(T_1/T_2)}{\log(T_1/T_3)}.
+\end{equation}
+\item The shell triple is compatible with the homogeneous Schwarzschild model if and only if
+\begin{equation}\label{eq:Xi-compatibility-main}
+\eta\in
+\left(
+\frac{T_2^{-2}-T_1^{-2}}{T_3^{-2}-T_1^{-2}},
+\frac{\log(T_1/T_2)}{\log(T_1/T_3)}
+\right).
+\end{equation}
+In that case there exists a unique amplitude $A_\ast>0$ such that
+\begin{equation}\label{eq:Xi-eq-main}
+\Xi(A_\ast)=\eta.
+\end{equation}
+\item For this unique amplitude, the geometric parameters are uniquely determined by
+\begin{equation}\label{eq:beta-infty-three-main}
+\beta_\infty^2=
+\frac{r_iL_j(A_\ast)^2-r_jL_i(A_\ast)^2}
+{\Omega^2(r_i-r_j)},
+\end{equation}
+\begin{equation}\label{eq:mass-three-main}
+M=
+\frac{r_ir_j\bigl(L_i(A_\ast)^2-L_j(A_\ast)^2\bigr)}
+{2\bigl(r_iL_j(A_\ast)^2-r_jL_i(A_\ast)^2\bigr)},
+\end{equation}
+for any pair $1\le i<j\le3$. Consequently the shell triple determines $(A,\beta_\infty,M)$ uniquely.
+\end{enumerate}
+\end{theorem}
+
+Theorem~\ref{thm:three-threshold-main} removes the common amplitude calibration that enters \cref{prop:schw-main}. The inverse remains conditional on the homogeneous response model, but within that model the common factor $A=\lambda_c^2\mathcal S(\Omega)$ becomes an output of the shell data rather than an external input.
+
+\begin{corollary}[Local stability of the three-threshold inverse]\label{cor:three-threshold-stability-main}
+Assume the hypotheses of \cref{thm:three-threshold-main}, and let $A_\ast$ be the unique solution of \eqref{eq:Xi-eq-main}. Fix a compact interval $I_A\Subset(0,\infty)$ with $A_\ast\in I_A$, and define
+\[
+m_A:=\inf_{A\in I_A}\Xi'(A)>0.
+\]
+Then there exists a neighborhood $U$ of $(r_1,r_2,r_3)$ in the ordered region
+\[
+\mathcal O=\{(\rho_1,\rho_2,\rho_3):0<\rho_1<\rho_2<\rho_3\}
+\]
+and a constant $C_U>0$ such that, for every perturbed shell triple $\widehat r=(\widehat r_1,\widehat r_2,\widehat r_3)\in U$ whose induced value $\widehat\eta$ lies in $\Xi(I_A)$, the reconstructed parameters satisfy
+\begin{equation}\label{eq:amp-stability-main}
+|\widehat A-A_\ast|
+\le
+\frac{|\widehat\eta-\eta|}{m_A},
+\end{equation}
+\begin{equation}\label{eq:geom-stability-main}
+|\widehat\beta_\infty^2-\beta_\infty^2|
++
+|\widehat M-M|
+\le
+C_U\max_{1\le i\le3}|\widehat r_i-r_i|.
+\end{equation}
+\end{corollary}
+
+\subsection{Schwarzschild worked example}\label{subsec:worked-example}
+
+\Cref{tab:worked} gives a simple algebraic check within the homogeneous Schwarzschild model with $r_{\mathrm s}=2M=1$ (so $\beta_\infty=4\pi$), $\Omega=1$, and $\lambda_c^2\mathcal S=2$. The two detector modes $D_1=(\Omega,\lambda_c,0.5,\,8.0)$ and $D_2=(\Omega,\lambda_c,1.2,\,3.0)$ have distinct products $\kappa_{\mathrm r}\Delta\tau$ and therefore distinct shell-ratio constants, which is the simplest generic mechanism avoiding the basic Jacobian degeneracy discussed in \cref{rem:jacobian-main}. For each mode, $\Gamma_c$ is obtained from~\eqref{eq:gamma-c-main} and cross-checked against the Lambert $W$ expression~\eqref{eq:lambert-Gc}; the shell radii follow from \cref{cor:homogeneous-main}. Applying \cref{prop:schw-main} to the $D_1$ shell pair then recovers $\beta_\infty$ and $M$ exactly within that fixed model.
+
+\input{generated/tab_worked_example}
+
+\subsection{Shell estimation from finite records}\label{subsec:noisy-inverse}
+
+The algebraic inversion of \cref{prop:schw-main} becomes operational only after the shell radii have themselves been estimated from records. We therefore complement the algebraic formulas with an end-to-end pipeline in the homogeneous Schwarzschild model. Using the mode-$D_1$ design of \cref{tab:worked}, we simulated records at five radii around $r_\varphi$ and five radii around $r_{\mathrm{mem}}$, each of length $N_{\mathrm{samp}}=1.2\times10^5$ sampled intervals after a burn-in of $5\times10^3$ intervals; Appendix~\ref{app:monte} gives the algorithm.
+
+For the exact-clock shell we estimated
+\[
+\widehat p(r)=\frac{\#\{(A_n,A_{n+1})=(0,0)\}}{\#\{A_n=0\}}
+\]
+in the ideal-blanking mode and linearly interpolated the zero of $\widehat p(r)-\varphi^{-1}$. For the memory shell we used the finite-recovery mode, estimated the empirical click fraction $\widehat\rho(r)$, and then solved the explicit renewal-rate equation $\rho(\Gamma)=\widehat\rho(r)$ with $\rho(\Gamma)$ given by \eqref{eq:rho-main}; this yields a monotone estimator $\widehat\Gamma(r)$ of the local input rate. The shell estimator $\widehat r_{\mathrm{mem}}$ was then obtained by interpolating the zero of $\widehat\Gamma(r)-\Gamma_c$. This rate-matching step uses the full renewal model and is markedly more stable in finite data than a raw sign test on $\widehat\gamma_2$.
+
+Across $120$ independent Monte Carlo replicates, all of which bracketed both shell roots, we obtained $\widehat r_\varphi/r_{\mathrm s}=1.008077\pm0.000047$ and $\widehat r_{\mathrm{mem}}/r_{\mathrm s}=1.045097\pm0.000304$, to be compared with the exact shell locations $1.008069$ and $1.045109$, together with $\widehat M=0.500006\pm0.000044$ and $\widehat\beta_\infty^2=158.00\pm1.27$, to be compared with the exact values $M=0.5$ and $\beta_\infty^2=157.9137$. This is an internal Monte Carlo check of the record-to-shell-to-inverse pipeline within the homogeneous model. It does not amount to a CLT or an optimality theory for the shell estimators, but it does show that, once the response model is fixed, the finite-record benchmark equations recover the shell pair accurately enough for the inverse formulas to behave as anticipated by the conditioning analysis of \cref{rem:jacobian-main}.
+
+\subsection{Spectral-weight inhomogeneity}\label{subsec:nonhomogeneous}
+
+The homogeneous regime $\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$ is an idealization. In a realistic Schwarzschild detector problem the response weight is position dependent because of greybody factors, mode sums and detector-profile effects \cite{Page1976Emission,ArbeyCalzaPerez2025}. Theorem~\ref{thm:tolman-power-main} isolates the exact non-homogeneous class for which the shell map remains algebraically rigid. The linear family used below lies outside that class and therefore probes the genuinely off-rigidity regime in which only the comparison and displacement bounds of \cref{thm:spectral-drift-main,cor:greybody-control-main} remain available. For the illustrative family
+\[
+\mathcal S_x(\Omega)=\mathcal S(\Omega)\bigl(1+\alpha(r(x)/r_H-1)\bigr),
+\]
+with $\alpha>0$ parametrizing a linear greybody enhancement away from the horizon, the mode-$D_1$ Schwarzschild example satisfies~\eqref{eq:log-slope-control-main} on the interval between the homogeneous shell radii with
+\[
+\eta\le1.66\times10^{-2}.
+\]
+Consequently~\eqref{eq:greybody-ratio-band-main} yields
+\[
+0.15989
+\le
+\frac{e^{\beta_\infty\Omega N(r_\varphi^{(\alpha)})}-1}
+     {e^{\beta_\infty\Omega N(r_{\mathrm{mem}}^{(\alpha)})}-1}
+\le
+0.16972,
+\]
+whereas the exact nonlinear shell pair gives
+\[
+\frac{e^{\beta_\infty\Omega N(r_\varphi^{(\alpha)})}-1}
+     {e^{\beta_\infty\Omega N(r_{\mathrm{mem}}^{(\alpha)})}-1}
+\approx0.16177.
+\]
+The spectral-weight ratio between the exact-clock and memory-transition shells is
+\[
+\frac{\mathcal S_{x_\varphi}(\Omega)}{\mathcal S_{x_{\mathrm{mem}}}(\Omega)}
+=
+\frac{1+\alpha(r_\varphi/r_H-1)}{1+\alpha(r_{\mathrm{mem}}/r_H-1)}
+=
+\frac{1+0.5\times0.008069}{1+0.5\times0.045109}
+\approx0.982,
+\]
+so the spectral-transport factor acquires a multiplier $\approx0.982$ relative to the homogeneous shell-ratio constant $0.1648$ for mode~$D_1$. The displacement bound~\eqref{eq:greybody-radius-displacement-main} gives
+\[
+|r_\varphi^{(\alpha)}-r_\varphi^{(0)}|
+\le
+3.97\times10^{-5},
+\qquad
+|r_{\mathrm{mem}}^{(\alpha)}-r_{\mathrm{mem}}^{(0)}|
+\le
+7.68\times10^{-4},
+\]
+while direct solution of the deformed shell equations gives
+\[
+|r_\varphi^{(\alpha)}-r_\varphi^{(0)}|
+\approx
+3.96\times10^{-5},
+\qquad
+|r_{\mathrm{mem}}^{(\alpha)}-r_{\mathrm{mem}}^{(0)}|
+\approx
+7.63\times10^{-4}.
+\]
+Thus the linear greybody deformation leaves the exact-clock shell nearly fixed while producing an order-of-magnitude larger outward shift of the memory shell.
+
+\section{Conclusions}\label{sec:discussion}
+
+We have studied a phenomenological sampled-counter model driven by a stationary Unruh--DeWitt response and identified two record-level thresholds with distinct physical interpretations. Deterministic one-step blanking selects a grammar-based threshold at which the sampled record reaches the Parry measure on the golden-mean shift. Exponential recovery instead produces a renewal process with explicit zero-run, hazard, covariance and low-frequency-noise formulae, together with a unique exact $1$-dependence threshold. The wider structural results collected in the appendix show that this memory transition is tied to the reset architecture and that, within the renewal class, it occupies the first non-Bernoulli level of a finite-dependence hierarchy.
+
+The shell and inverse formulas in the second half of the paper are conditional consequences of inserting those threshold constants into a static-KMS response law. Within the homogeneous spectral-weight approximation they yield a shared-hardware ratio law, a two-shell Schwarzschild inverse when the common response amplitude is known, and a three-threshold inverse when it is not. Beyond homogeneity, exact shell transport persists precisely for the Tolman-power class, for which the logarithmic shell map is rigidly affine in the threshold variable and the three-threshold inverse survives after threshold renormalization. Outside that class, controlled spectral drift still gives quantitative comparison and displacement bounds. Throughout, the stochastic counter model and the detector response model are kept separate. No microscopic repeated-measurement derivation of the counter dynamics is claimed.
+
+%%% APPENDICES %%%
+\appendix
+\input{appendices.tex}
+
+\input{references.tex}
+
+\end{document}

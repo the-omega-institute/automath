@@ -1,60 +1,146 @@
-\section{Sequence-level folding: sliding block codes, sofic models, and a conjugacy threshold}
+\section{The induced sliding block code}
 \label{sec:sequence}
 
-\subsection{A sliding block folding code and its image}
-Let \(\eta=(\eta_t)_{t\in \ZZ}\in \set{0,1}^{\ZZ}\) be a two-sided microstate sequence. Fix \(m\ge 1\) and define the length-\(m\) sliding block folding code
+For each \(m\ge 1\), the window fold induces a sliding block code on the full two-sided shift:
 \begin{equation}\label{eq:Phi}
 (\Phi_m(\eta))_t
 :=
-\Fold_m(\eta_{t-m+1}\cdots \eta_t)\in X_m,
-\qquad t\in \ZZ.
+\Fold_m(\eta_{t-m+1}\cdots \eta_t),
+\qquad \eta\in\{0,1\}^{\ZZ},\ t\in\ZZ.
 \end{equation}
-The image shift is
+Its image shift is
 \[
-Y_m := \Phi_m(\set{0,1}^{\ZZ})\subset X_m^{\ZZ},
+Y_m:=\Phi_m(\{0,1\}^{\ZZ})\subset X_m^{\ZZ},
 \]
-equipped with the left shift on the \(X_m\)-alphabet.
+equipped with the left shift on the \(X_m\)-alphabet. The natural question is whether the microstate sequence can be recovered locally from the sequence of folded windows.
 
-\subsection{An explicit sofic presentation}
-\begin{proposition}[Sofic model]\label{prop:sofic}
+\subsection{A graph presentation}
+
+\begin{proposition}\label{prop:sofic}
 For each \(m\ge 1\), the image shift \(Y_m\) is sofic and admits an explicit labeled-graph presentation.
 \end{proposition}
 
-\begin{proof}[Construction]
-Let \(V_m:=\set{0,1}^{m-1}\). For each \(v\in V_m\) and \(b\in \set{0,1}\), define the successor vertex \(v'\) by shifting and appending \(b\),
+\begin{proof}
+Let \(V_m:=\{0,1\}^{m-1}\). For \(v\in V_m\) and \(b\in \{0,1\}\), define the successor vertex \(v'\) by shifting and appending \(b\),
 \[
-v'= \text{suffix}_{m-1}(vb),
+v'=\text{suffix}_{m-1}(vb),
 \]
 and label the directed edge \(v\to v'\) by
 \[
 \lambda_m(vb):=\Fold_m(vb)\in X_m.
 \]
-Let \(\Sigma_m\) be the edge shift of this finite directed graph and let \(\Lambda_m:\Sigma_m\to X_m^{\ZZ}\) be the label map. By construction, \(\Lambda_m(\Sigma_m)=Y_m\), hence \(Y_m\) is sofic.
+Denote the resulting labeled graph by \(G_m\). Let \(\Sigma_m\) be its edge shift and \(\Lambda_m:\Sigma_m\to X_m^{\ZZ}\) the label map. By construction \(\Lambda_m(\Sigma_m)=Y_m\), so \(Y_m\) is sofic.
 \end{proof}
 
-\subsection{A conjugacy threshold at \texorpdfstring{$m\ge 3$}{m >= 3}}
-\begin{theorem}[Conjugacy for \(m \ge 3\)]\label{thm:conjugacy}
-For \(m\ge 3\), the sliding block code \(\Phi_m:\set{0,1}^{\ZZ}\to Y_m\) is a topological conjugacy: there exists a sliding block inverse \(\Psi_m:Y_m\to \set{0,1}^{\ZZ}\) such that
+\subsection{A finite-core criterion}
+
+The decoder argument also has a structural form independent of the specific Fibonacci core tables. The only input is the rewrite span.
+
+\begin{theorem}[Finite-core criterion for local invertibility]\textbf{[New-6 | 2026-04-17]}\label{thm:finite-core-criterion}
+Let \((\mathsf N_m)_{m\ge1}\) be a zero-synchronized span-\(r\) local normalizer, and let \(\Phi_m\) be the associated window code. Fix \(m\ge r\). Then every ambiguous two-label block in the image shift of \(\Phi_m\) strips to an ambiguous core of length at most \(r+1\). If every ambiguous core of length at most \(r+1\) is resolved by one further label, then \(\Phi_m\) is a topological conjugacy onto its image, with inverse given by a decoder on admissible three-label blocks.
+\end{theorem}
+
+\begin{proof}
+Consider an ambiguous two-label block in the off-diagonal fiber product of the graph presentation from \Cref{prop:sofic}. A coordinate can affect the first label only if it belongs to the support of a local rewrite contributing to the first window. Since the rewrite span is \(r\), that support is contained in an interval of length \(r\). The second label is computed from the next window, so the corresponding active support is another interval of length \(r\), shifted by one coordinate. The union of these two supports therefore has length at most \(r+1\). Any coordinate outside that union is passive: deleting it leaves two distinct lifts of the same two-label block. Repeating the deletion process yields an ambiguous core of length at most \(r+1\).
+
+Assume now that every ambiguous core of length at most \(r+1\) is resolved by one further label. Stripping any ambiguous witness to its core and then reattaching the passive coordinates preserves that one-step resolution, because reattachment inserts the same frozen coordinates in both competing lifts. Hence every admissible three-label block determines the current appended microstate bit. Let
 \[
-\Psi_m\circ \Phi_m=\mathrm{id}_{\set{0,1}^{\ZZ}},
+\psi_m:\mathcal B_3(Y_m)\to\{0,1\}
+\]
+denote this decoder, where \(Y_m=\Phi_m(\{0,1\}^{\ZZ})\). Define
+\[
+(\Psi_m(y))_t:=\psi_m(y_{t-2},y_{t-1},y_t).
+\]
+If \(y=\Phi_m(\eta)\), then each triple \((y_{t-2},y_{t-1},y_t)\) comes from three consecutive edges in the presentation of \(Y_m\), so the decoder recovers \(\eta_t\). Thus \(\Psi_m\circ\Phi_m=\mathrm{id}\).
+
+Conversely, fix \(y\in Y_m\). Every lift path of \(y\) has the same current appended bit at time \(t\), because any two competing lifts would determine the same value through the decoder. Therefore every lift path of \(y\) has the same appended-bit sequence \(\Psi_m(y)\). The corresponding vertex sequence is forced by these bits, so the edge labels along that path are exactly those of \(\Phi_m(\Psi_m(y))\). Hence \(\Phi_m(\Psi_m(y))=y\), and \(\Phi_m\) is a conjugacy onto its image.
+\end{proof}
+
+\subsection{Local decoding}
+
+The invertibility question is naturally phrased in the fiber product of \(G_m\). A two-label block \((y_{t-1},y_t)\in X_m^2\) is called \emph{ambiguous} if it admits two distinct lifts in \(G_m\), or equivalently if it labels an off-diagonal path of length \(2\) in the fiber product \(\widehat G_m\).
+
+Some coordinates of an ambiguous block are passive in the sense of \Cref{thm:finite-core-criterion}: deleting them leaves the ambiguity unchanged. Removing all such coordinates produces a minimal witness, which will be called an \emph{ambiguous core}. For the Zeckendorf fold the rewrite span is \(3\), so every ambiguous core has length at most \(4\).
+
+\begin{theorem}\label{thm:core-resolution}
+Fix \(m\ge 3\). Every ambiguous two-label block in \(Y_m\) strips to one of the following minimal cores.
+\begin{enumerate}
+\item[(a)] Two length-\(3\) cores:
+\[
+(000,001),\qquad (100,001).
+\]
+\item[(b)] Eight length-\(4\) cores:
+\[
+(0000,0001),\quad (1000,0001),\quad (0010,1001),\quad (0100,1001),
+\]
+\[
+(0001,0000),\quad (0001,0010),\quad (1001,0000),\quad (1001,0010).
+\]
+\end{enumerate}
+No minimal ambiguous core has length at least \(5\). In every listed case, the third label \(y_t\) determines the current appended microstate bit uniquely. Consequently there is a well-defined decoder
+\[
+\psi_m:\mathcal{B}_3(Y_m)\to\{0,1\},
+\qquad
+\eta_t=\psi_m(y_{t-2},y_{t-1},y_t),
+\]
+where \(\mathcal{B}_3(Y_m)\) denotes the set of admissible three-label blocks in \(Y_m\).
+\end{theorem}
+
+\begin{proof}
+By \Cref{lem:fib-span3,thm:finite-core-criterion}, every ambiguous witness reduces to a core of length at most \(4\). It is therefore enough to classify the core tables for \(m=3\) and \(m=4\).
+
+For length \(3\), the only ambiguous two-label blocks are
+\[
+(000,001)\quad\text{and}\quad (100,001).
+\]
+After the second label, the competing lifts terminate at the vertices \(01\) and \(10\). Their successor label sets are
+\[
+\mathcal{L}^+(01)=\{000,010\},
+\qquad
+\mathcal{L}^+(10)=\{100,101\},
+\]
+which are disjoint. Hence the third label resolves the ambiguity.
+
+For length \(4\), Appendix~\ref{app:sofic} shows that the only ambiguous cores are the eight listed in part (b). They fall into three patterns. The four cores
+\[
+(0000,0001),\quad (1000,0001),\quad (0010,1001),\quad (0100,1001)
+\]
+leave terminal vertices \(001\) and \(110\) after the second label. Both vertices have successor label set \(\{0000,0010\}\), and in both states the label \(0000\) is produced by appended bit \(1\) while the label \(0010\) is produced by appended bit \(0\). The two cores
+\[
+(0001,0000),\qquad (1001,0000)
+\]
+leave terminal vertices \(011\) and \(101\), whose successor label sets \(\{0001,0100\}\) and \(\{1000,1010\}\) are disjoint. Finally, the two cores
+\[
+(0001,0010),\qquad (1001,0010)
+\]
+leave terminal vertices \(010\) and \(100\), whose successor label sets \(\{0100,0101\}\) and \(\{1000,1001\}\) are again disjoint. Thus in every length-\(4\) core the third label determines the correct lift, and hence the current appended bit.
+
+Every ambiguous two-label block strips to one of these cores, and reattaching passive coordinates does not alter third-label resolution by \Cref{thm:finite-core-criterion}. This defines the decoder \(\psi_m\) on all admissible three-label blocks in \(Y_m\).
+\end{proof}
+
+\begin{remark}
+The exhaustive calculations occur only in the \(m=3\) and \(m=4\) core tables. Larger windows do not produce new local ambiguities, because the stripping argument reduces everything to these two cases.
+\end{remark}
+
+\subsection{The threshold \texorpdfstring{\(m\ge 3\)}{m >= 3}}
+
+\begin{theorem}\label{thm:conjugacy}
+For \(m\ge 3\), the sliding block code \(\Phi_m:\{0,1\}^{\ZZ}\to Y_m\) is a topological conjugacy: there exists a sliding block inverse \(\Psi_m:Y_m\to \{0,1\}^{\ZZ}\) such that
+\[
+\Psi_m\circ \Phi_m=\mathrm{id}_{\{0,1\}^{\ZZ}},
 \qquad
 \Phi_m\circ \Psi_m=\mathrm{id}_{Y_m}.
 \]
 \end{theorem}
 
 \begin{proof}
-Appendix~\ref{app:sofic} proves that the labeled graph of Proposition~\ref{prop:sofic} is right-resolving and that its fiber product has no off-diagonal bi-infinite path when \(m\ge 3\). Equivalently, the label map from the edge shift of \(G_m\) to \(Y_m\) is injective on bi-infinite paths; see \cite[Chapter~8]{LindMarcus1995} for the standard fiber-product criterion. Since the edge shift of \(G_m\) is canonically conjugate to \(\{0,1\}^{\ZZ}\) by reading the appended bit on each edge, \(\Phi_m\) is a bijective continuous shift-commuting map onto \(Y_m\). Its inverse is therefore continuous, shift-commuting, and hence a sliding block code by the Curtis--Hedlund--Lyndon theorem \cite[Chapter~1]{LindMarcus1995}.
+Theorem~\ref{thm:core-resolution} verifies the one-step resolution hypothesis of \Cref{thm:finite-core-criterion} for the Zeckendorf fold. The conclusion of that theorem therefore gives the desired sliding block inverse \(\Psi_m\) and proves that \(\Phi_m\) is a topological conjugacy.
 \end{proof}
 
-\begin{theorem}[The degenerate case \(m=2\)]\label{thm:m2}
+\begin{proposition}\label{thm:m2}
 When \(m=2\), the only failure of injectivity is that the two fixed microstate sequences \(0^\ZZ\) and \(1^\ZZ\) have the same image \((00)^\ZZ\). Away from this pair, \(\Phi_2\) is injective.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
-Appendix~\ref{app:sofic} identifies the only off-diagonal cycles in the fiber product for \(m=2\): they are the two ordered lifts of the constant label sequence \((00)^\ZZ\), corresponding to the two preimages \(0^\ZZ\) and \(1^\ZZ\). Every other label sequence contains \(01\) or \(10\), and these labels determine the adjacent microstate bits uniquely, so the resulting path lifts uniquely.
+Appendix~\ref{app:sofic} identifies the only off-diagonal bi-infinite cycle in the fiber product for \(m=2\): it is the constant label sequence \((00)^\ZZ\), lifted once by \(0^\ZZ\) and once by \(1^\ZZ\). Every other label sequence contains \(01\) or \(10\), and those labels determine the adjacent microstate bits uniquely. Hence \((00)^\ZZ\) is the unique non-injective fiber.
 \end{proof}
-
-\begin{remark}
-Appendix~\ref{app:sofic} supplies the structural proofs and works out the explicit decoder for \(m=3\). The decoder has anticipation \(1\): the decoded bit at site \(t\) requires the label at site \(t+1\) as a look-ahead. Specifically, two consecutive labels are not always sufficient to determine the current vertex (and hence the current microstate bit), because the label \(000\) is shared by two edges in \(G_3\) that lead to distinct vertices, producing ambiguous two-label blocks \((000,001)\) and \((100,001)\). A single additional label resolves these ambiguities, since the successor outgoing label sets of the two candidate vertices are disjoint. This gives a window of length four for the decoder, not two (\(m-1\)). The Curtis--Hedlund--Lyndon theorem guarantees that a sliding block inverse exists for any window size; the fiber-product analysis determines the precise synchronization structure.
-\end{remark}
-

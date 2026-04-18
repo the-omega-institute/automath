@@ -1,47 +1,226 @@
-\section{Appendix B: Boundary states, transfer matrices, and bulk statistics}
+\section{The reversed pair shift and bulk statistics}
 \label{app:pressure}
 
-This appendix records the finite-state calculations behind Section~\ref{sec:gauge}. The underlying point is that the local rewrite
-\[
-011\to 100
-\]
-has range \(3\), so after a prefix has been normalized only a two-digit interface with the unread suffix remains relevant.
+This appendix constructs the four-state presentation used in Section~\ref{sec:gauge}. We keep the low-to-high convention of Section~\ref{sec:preliminaries}, but pair words are read from high Fibonacci weights to low Fibonacci weights. This is the natural orientation for the synchronized construction.
 
-\subsection{The four boundary states}
-Write the normalization in MSD-first convention and process the input from left to right. After the prefix through site \(t-1\) has been normalized, the only information that can interact with the next unread digit \(X_t\) is the final two digits of the normalized prefix. We therefore encode the interface by one of the four words
+\subsection{Reversed pair words}
+For \(\omega=(\omega_1,\dots,\omega_M)\in\Om_M\), write
 \[
-\mathcal S=\{00,01,10,11\}.
+z=\Fold_M(\omega)=(z_1,\dots,z_M)\in X_M.
 \]
-Appending \(X_t\), normalizing the resulting three-digit interface by repeated use of \(011\to100\), emitting the leftmost normalized digit \(Y_t\), and retaining the final two digits gives exactly the transitions
+Define the \emph{reversed pair word}
+\begin{equation}\label{eq:reversed-pair}
+\mathcal{R}_M(\omega)
+:=
+\bigl((\omega_M,z_M),(\omega_{M-1},z_{M-1}),\dots,(\omega_1,z_1)\bigr)
+\in (\{0,1\}^2)^M.
+\end{equation}
+We abbreviate a pair symbol \((x,y)\in\{0,1\}^2\) by the two-character word \(xy\in\{00,01,10,11\}\).
+
+Let \(\mathcal{L}_{\mathrm{pair}}\) be the set of all finite factors of all reversed pair words \(\mathcal{R}_M(\omega)\), \(M\ge 1\). The corresponding bi-infinite subshift is denoted
 \[
-00 \xrightarrow{00} 00,\qquad
-00 \xrightarrow{01} 01,\qquad
-00 \xrightarrow{11} 11,
+\mathcal{P}\subset (\{00,01,10,11\})^{\ZZ}.
 \]
+Its coordinate process is exactly the bulk pair process \((X_t,Y_t)\) of Section~\ref{sec:gauge}, but read from high weights to low weights.
+
+\begin{lemma}[High-side zero padding]\label{lem:zero-padding}
+If \(\omega\in\Om_M\) and \(L\ge 1\), then the LH word
 \[
-01 \xrightarrow{10} 10,
+\omega 0^L:=(\omega_1,\dots,\omega_M,\underbrace{0,\dots,0}_{L\text{ times}})\in\Om_{M+L}
 \]
+has
 \[
-10 \xrightarrow{10} 00,\qquad
-10 \xrightarrow{00} 01,\qquad
-10 \xrightarrow{11} 01,
+\Fold_{M+L}(\omega 0^L)=(\Fold_M(\omega),0,\dots,0)
 \]
+on the first \(M\) coordinates. Consequently every factor in \(\mathcal{L}_{\mathrm{pair}}\) may be preceded by arbitrarily many symbols \(00\).
+\end{lemma}
+
+\begin{proof}
+Appending zeros at higher Fibonacci sites does not change the value \(N(\omega)\), hence it does not change the first \(M\) digits of the Zeckendorf normalization. Reading the resulting pair word from high to low contributes \(L\) leading symbols \(00\), so any existing factor can be shifted arbitrarily far to the right inside a longer word and preceded by an arbitrarily long block of \(00\)'s.
+\end{proof}
+
+\subsection{A synchronized four-state presentation}
+Lemma~\ref{lem:zero-padding} lets us synchronize every factor by putting it after a long block of \(00\)'s. The relevant state information is therefore encoded by the factors that begin with \(00\).
+
+\begin{lemma}[Local four-bit table]\label{lem:local-four-bit}
+Let \(b_1b_2b_3b_4\in\{0,1\}^4\) be the next four microstate digits after a synchronized prefix, written in the high-to-low order in which the reversed pair word is read. Then the next five pair symbols are given by
 \[
-11 \xrightarrow{00} 00.
+\begin{array}{c|c@{\qquad}c|c}
+b_1b_2b_3b_4 & \text{pair symbols} & b_1b_2b_3b_4 & \text{pair symbols} \\\hline
+0000 & 00|00|00|00|00 & 1000 & 00|11|00|00|00 \\
+0001 & 00|00|00|00|11 & 1001 & 00|11|00|00|11 \\
+0010 & 00|00|00|11|00 & 1010 & 00|11|00|11|00 \\
+0011 & 00|00|01|10|10 & 1011 & 01|10|00|10|10 \\
+0100 & 00|00|11|00|00 & 1100 & 01|10|10|00|00 \\
+0101 & 00|00|11|00|11 & 1101 & 01|10|10|00|11 \\
+0110 & 00|01|10|10|00 & 1110 & 01|10|10|11|00 \\
+0111 & 00|01|10|10|11 & 1111 & 01|10|11|10|10
+\end{array}
 \]
-The edge label is the pair \((X_t,Y_t)\in\{0,1\}^2\). Forgetting the labels and counting multiplicities yields the adjacency matrix
+In particular, the first four pair symbols after a synchronized prefix depend only on \(b_1b_2b_3b_4\).
+\end{lemma}
+
+\begin{proof}
+Because the normalization scan proceeds from high Fibonacci weights to low ones, once a pair symbol has been emitted it cannot be altered by lower-weight digits that are inspected later. Therefore the first four pair symbols after a synchronized prefix are determined entirely by the next four microstate digits \(b_1b_2b_3b_4\). There are only \(16\) such blocks, and direct normalization of each block gives the displayed table.
+\end{proof}
+
+\begin{lemma}[Length-\(3\) synchronized prefixes]\label{lem:length3}
+After padding by a block \(00^L\) with \(L\) large, the length-\(3\) factors of \(\mathcal{R}_M(\omega)\) that begin with \(00\) are exactly
 \[
-A=\begin{pmatrix}
+00|00|00,\quad
+00|00|01,\quad
+00|00|11,\quad
+00|01|10,\quad
+00|10|00,\quad
+00|10|10,\quad
+00|10|11,\quad
+00|11|00.
+\]
+\end{lemma}
+
+\begin{proof}
+Projecting the table of Lemma~\ref{lem:local-four-bit} to the first three pair symbols yields exactly the eight words listed in the statement. No further word can occur, because every synchronized length-\(3\) factor is the projection of one of the \(16\) local four-bit cases.
+\end{proof}
+
+For the four two-symbol words
+\[
+00|00,\qquad 00|01,\qquad 00|10,\qquad 00|11,
+\]
+define their one-step follower sets
+\[
+E(00|00)=\{00,01,11\},\quad
+E(00|01)=\{10\},\quad
+E(00|10)=\{00,10,11\},\quad
+E(00|11)=\{00\}.
+\]
+These four follower sets are distinct, so we use the second symbol as the state name and write the states as
+\[
+\mathcal{S}:=\{00,01,10,11\}.
+\]
+
+The synchronized transition table is extracted from the length-\(4\) factors in \(\mathcal{L}_{\mathrm{pair}}\) that begin with \(00\). A direct enumeration of the \(16\) admissible factors is
+\begin{align}
+&00|00|00|00,\quad 00|00|00|01,\quad 00|00|00|11,\quad 00|00|01|10,\nonumber\\
+&00|00|11|00,\quad 00|01|10|00,\quad 00|01|10|10,\quad 00|01|10|11,\label{eq:length4-factors}\\
+&00|10|00|10,\quad 00|10|10|00,\quad 00|10|10|01,\quad 00|10|10|11,\nonumber\\
+&00|10|11|10,\quad 00|11|00|00,\quad 00|11|00|01,\quad 00|11|00|11.\nonumber
+\end{align}
+The rightmost symbol in each line is exactly the admissible one-step continuation of the synchronized three-symbol prefix on its left.
+
+\begin{lemma}[Classification of synchronized length-\(4\) factors]\label{lem:length4}
+Starting from the prefixes listed in Lemma~\ref{lem:length3}, the only admissible continuations are those displayed in \eqref{eq:length4-factors}. Each factor in the list arises from a microstate block, and no other continuation is compatible with the local rewrite \(110\to 001\).
+\end{lemma}
+
+\begin{proof}
+Projecting the table of Lemma~\ref{lem:local-four-bit} to the first four pair symbols gives exactly the \(16\) words displayed in \eqref{eq:length4-factors}. Grouping those words by their first three symbols gives the continuation sets
+\[
+\begin{array}{c|c}
+\text{synchronized prefix} & \text{admissible fourth symbols} \\\hline
+00|00|00 & \{00,01,11\} \\
+00|00|01 & \{10\} \\
+00|00|11 & \{00\} \\
+00|01|10 & \{00,10,11\} \\
+00|10|00 & \{10\} \\
+00|10|10 & \{00,01,11\} \\
+00|10|11 & \{10\} \\
+00|11|00 & \{00,01,11\}.
+\end{array}
+\]
+This is simply a regrouping of the \(16\) local four-bit rows, so \eqref{eq:length4-factors} is exhaustive.
+\end{proof}
+
+\begin{proposition}[Deterministic update on synchronized prefixes]\label{prop:transitions}
+Let \(s\in\mathcal{S}\). For a synchronized prefix ending in the representative word \(00|s\), the admissible next pair symbols and the resulting synchronized state are:
+\begin{align*}
+00 &\xrightarrow{00} 00, &\qquad
+00 &\xrightarrow{01} 01, &\qquad
+00 &\xrightarrow{11} 11,\\
+01 &\xrightarrow{10} 10,\\
+10 &\xrightarrow{10} 00, &\qquad
+10 &\xrightarrow{00} 01, &\qquad
+10 &\xrightarrow{11} 01,\\
+11 &\xrightarrow{00} 00.
+\end{align*}
+Equivalently, \(\mathcal{P}\) admits the four-state synchronized right-resolving presentation displayed above.
+\end{proposition}
+
+\begin{proof}
+The one-step follower sets were listed just before the proposition, so it remains only to identify the target state after each admissible symbol. This is read off from \eqref{eq:length4-factors}.
+
+For example, after the synchronized prefix \(00|10\) the admissible next symbols are \(00,10,11\). The factors
+\[
+00|10|00|10,\qquad 00|10|11|10
+\]
+show that both \(00\) and \(11\) land in the state whose next-symbol set is \(\{10\}\), namely state \(01\); the factors
+\[
+00|10|10|00,\qquad 00|10|10|01,\qquad 00|10|10|11
+\]
+show that \(10\) lands in the state whose next-symbol set is \(\{00,01,11\}\), namely state \(00\). The other rows are read in the same way from the corresponding factors in \eqref{eq:length4-factors}.
+
+Because every factor of \(\mathcal{L}_{\mathrm{pair}}\) can be left-extended by arbitrarily many \(00\)'s (Lemma~\ref{lem:zero-padding}), every factor eventually enters the synchronized regime. Once synchronized, admissible extensions are governed uniquely by the table above. Therefore the displayed graph presents the whole shift \(\mathcal{P}\). It is right-resolving by construction, since each outgoing label from a fixed state is distinct.
+\end{proof}
+
+\begin{proposition}[Synchronized path lifting]\label{prop:sync-language}
+Fix \(s\in\mathcal{S}\) and \(n\ge 1\). Let \(a_1,\dots,a_n\) be pair symbols in \(\{00,01,10,11\}\). Then the following are equivalent.
+\begin{enumerate}
+\item[(i)] \(00|s|a_1|\cdots|a_n\in \mathcal{L}_{\mathrm{pair}}\).
+\item[(ii)] There exists a path
+\[
+s=s_0\xrightarrow{a_1}s_1\xrightarrow{a_2}\cdots\xrightarrow{a_n}s_n
+\]
+in the four-state graph of Proposition~\ref{prop:transitions}.
+\end{enumerate}
+In particular, the finite words that occur after a synchronized prefix are exactly the path labels of the four-state graph.
+\end{proposition}
+
+\begin{proof}
+We argue by induction on \(n\). When \(n=1\), the claim is exactly Proposition~\ref{prop:transitions}. Assume \(n\ge2\).
+
+Suppose first that \(00|s|a_1|\cdots|a_n\in\mathcal{L}_{\mathrm{pair}}\). By Proposition~\ref{prop:transitions}, the prefix \(00|s|a_1\) determines a unique successor state \(s_1\) with \(s\xrightarrow{a_1}s_1\). The suffix \(00|s_1|a_2|\cdots|a_n\) is again a synchronized factor, so the induction hypothesis yields a path
+\[
+s_1\xrightarrow{a_2}\cdots\xrightarrow{a_n}s_n.
+\]
+Prepending the first step gives the required path from \(s\).
+
+Conversely, suppose that
+\[
+s=s_0\xrightarrow{a_1}s_1\xrightarrow{a_2}\cdots\xrightarrow{a_n}s_n
+\]
+is a path in the graph. Proposition~\ref{prop:transitions} realizes the first step by a synchronized factor \(00|s|a_1\). The induction hypothesis realizes the tail \(a_2\cdots a_n\) after the synchronized state \(s_1\). Concatenating these synchronized extensions gives a realization of \(00|s|a_1|\cdots|a_n\) in \(\mathcal{L}_{\mathrm{pair}}\).
+\end{proof}
+
+\begin{remark}[Representative transition computation]
+The state \(10\) is the only state with three outgoing transitions. In the synchronized language there is nevertheless no ambiguity: the three admissible length-\(4\) factors beginning with \(00|10\) are precisely
+\[
+00|10|00|10,\qquad
+00|10|10|00,\qquad
+00|10|11|10.
+\]
+Hence \(00\) and \(11\) have the same one-step follower set \(\{10\}\), while \(10\) has the follower set \(\{00,01,11\}\). This is the only nontrivial state update in the synchronized presentation.
+\end{remark}
+
+\subsection{Adjacency matrix and bulk Parry measure}
+In the state order \((00,01,10,11)\), the adjacency matrix of Proposition~\ref{prop:transitions} is
+\[
+A=
+\begin{pmatrix}
 1&1&0&1\\
 0&0&1&0\\
 1&2&0&0\\
 1&0&0&0
-\end{pmatrix},
+\end{pmatrix}.
 \]
-in the state order \((00,01,10,11)\).
+The graph is primitive: for instance, every state reaches \(00\), and from \(00\) one reaches every state in at most two further steps.
 
-\subsection{Parry measure and the bulk law}
-The matrix \(A\) is primitive. Its Perron eigenvalue is \(2\), with one convenient right/left eigenvector pair
+\begin{proposition}[Finite volume to bulk]\label{prop:bulk-limit}
+Let \(\omega^{(M)}\) be uniform on \(\Om_M\), and let \(\mathcal{R}_M(\omega^{(M)})\) be the reversed pair word \eqref{eq:reversed-pair}. If \(i_M\to\infty\) and \(M-i_M\to\infty\), then every fixed-length factor centered at \(i_M\) converges in law to the Parry measure of the graph above.
+\end{proposition}
+
+\begin{proof}
+By Lemma~\ref{lem:zero-padding} and Proposition~\ref{prop:sync-language}, the interior factors of \(\mathcal{R}_M(\omega)\) are exactly the finite label words of a primitive synchronized right-resolving graph. Because the first coordinate of each pair symbol is the microstate digit itself, the map \(\omega\mapsto \mathcal{R}_M(\omega)\) is injective, so the uniform measure on \(\Om_M\) is the uniform measure on admissible reversed-pair words of length \(M\). Standard results on uniform word measures for primitive sofic shifts then imply that centered factors converge to the Parry measure carried by the synchronized presentation; see \cite[Section~8.4]{LindMarcus1995} and \cite[Chapter~2]{Kitchens1998}.
+\end{proof}
+
+The Perron eigenvalue of \(A\) is \(2\). A convenient right/left eigenvector pair is
 \[
 r=(2,1,2,1)^{\mathsf T},
 \qquad
@@ -67,18 +246,59 @@ and the stationary state distribution is
 \frac19(4,2,2,1).
 \]
 
-Because the presentation is right-resolving, uniform finite words converge locally in the bulk to the Parry measure on this edge shift \cite{Parry1964}; see \cite[Section~8.4]{LindMarcus1995} and \cite[Chapter~8]{Walters1982}. The probability of a specific edge \(i\to j\) is
+\subsection{One-site law}
+\begin{proof}[Proof of Theorem~\ref{thm:joint}]
+In the graph of Proposition~\ref{prop:transitions}, the edge labels are the pair symbols \((X_t,Y_t)\in\{0,1\}^2\). Explicitly,
 \[
-\PP(i\to j)=\frac{\pi_iP_{ij}}{A_{ij}}.
+\begin{aligned}
+00 &\xrightarrow{00} 00, &
+00 &\xrightarrow{01} 01,\\
+00 &\xrightarrow{11} 11, &
+01 &\xrightarrow{10} 10,
+\end{aligned}
 \]
-Summing these edge probabilities over equal labels gives
 \[
-\PP(00)=\frac{7}{18},\qquad
-\PP(01)=\frac{1}{9},\qquad
-\PP(10)=\frac{1}{3},\qquad
-\PP(11)=\frac{1}{6},
+\begin{aligned}
+10 &\xrightarrow{10} 00, &
+10 &\xrightarrow{00} 01,\\
+10 &\xrightarrow{11} 01, &
+11 &\xrightarrow{00} 00.
+\end{aligned}
 \]
-which is the table in Theorem~\ref{thm:joint}.
+For an edge \(i\to j\), the Parry edge measure is
+\[
+\PP(i\to j)=\pi_i\frac{r_j}{2r_i}.
+\]
+The only multiple edge is \(10\to 01\), which carries the two labels \(00\) and \(11\), so each copy receives half of that mass. Using
+\[
+\pi=\frac19(4,2,2,1),
+\qquad
+r=(2,1,2,1)^{\mathsf T},
+\]
+one obtains
+\[
+\PP(01)=\pi_{00}\frac{r_{01}}{2r_{00}}=\frac49\cdot\frac14=\frac19,
+\]
+\[
+\PP(10)=\pi_{01}\cdot 1+\pi_{10}\frac{r_{00}}{2r_{10}}
+=\frac29+\frac19=\frac13,
+\]
+\[
+\PP(11)=\pi_{00}\frac{r_{11}}{2r_{00}}+\frac12\pi_{10}\frac{r_{01}}{2r_{10}}
+=\frac19+\frac1{18}=\frac16,
+\]
+and therefore
+\[
+\PP(00)=1-\PP(01)-\PP(10)-\PP(11)=\frac{7}{18}.
+\]
+This is exactly the table in Theorem~\ref{thm:joint}. The marginals
+\[
+\PP(X_0\neq Y_0)=\frac49,
+\qquad
+\PP(Y_0=1)=\frac{5}{18}
+\]
+follow by summation.
+\end{proof}
 
 \subsection{Tilted matrices and cumulants}
 For the discrepancy observable \(\Delta_t=X_t\oplus Y_t\), only the labels \(01\) and \(10\) contribute. The tilted adjacency matrix is therefore
@@ -91,7 +311,7 @@ e^\theta &2&0&0\\
 1&0&0&0
 \end{pmatrix}.
 \]
-Write \(z=e^\theta\) and let \(\rho_\Delta(\theta)\) be its Perron root. A direct determinant computation gives
+Write \(z=e^\theta\), and let \(\rho_\Delta(\theta)\) be the Perron root. Then
 \[
 F_\Delta(\lambda,z)
 :=
@@ -103,11 +323,12 @@ Since \(F_\Delta(2,1)=0\), implicit differentiation of
 \[
 F_\Delta(\rho_\Delta(\theta),e^\theta)=0
 \]
-at \(\theta=0\) yields
+at \(\theta=0\) gives
 \[
-F_{\Delta,\lambda}(2,1)=9,\qquad F_{\Delta,z}(2,1)=-8,
+F_{\Delta,\lambda}(2,1)=9,\qquad
+F_{\Delta,z}(2,1)=-8,
 \]
-so \(\rho_\Delta'(0)=8/9\). A second differentiation gives
+so \(\rho_\Delta'(0)=8/9\). A second differentiation yields
 \[
 F_{\Delta,\lambda\lambda}(2,1)=30,\qquad
 F_{\Delta,\lambda z}(2,1)=-9,\qquad
@@ -119,35 +340,36 @@ hence \(\rho_\Delta''(0)=332/243\). Therefore
 \]
 satisfies
 \[
-\Lambda_\Delta'(0)=\frac{\rho_\Delta'(0)}{2}=\frac49,
+\Lambda_\Delta'(0)=\frac49,
 \qquad
-\Lambda_\Delta''(0)=\frac{\rho_\Delta''(0)}{2}-\left(\frac{\rho_\Delta'(0)}{2}\right)^2=\frac{118}{243}.
+\Lambda_\Delta''(0)=\frac{118}{243}.
 \]
-These are the mean discrepancy density and the CLT variance in Theorem~\ref{thm:llnclt}.
+These are the mean discrepancy density and asymptotic variance used in Corollary~\ref{thm:llnclt}.
 
 For the output-weight observable \(Y_t\), the labels with \(Y_t=1\) are \(01\) and \(11\). Weighting each such edge by \(e^\theta\) gives
 \[
-B_\theta=
+M(e^\theta)=
 \begin{pmatrix}
 1& e^\theta &0& e^\theta\\
 0&0&1&0\\
 1&1+e^\theta&0&0\\
 1&0&0&0
-\end{pmatrix}.
+\end{pmatrix},
 \]
-This is exactly the matrix \(M(e^\theta)\) from Appendix~\ref{app:recurrence}. Its characteristic polynomial is
+the weighted matrix used in Section~\ref{sec:partition}. Its characteristic polynomial is
 \[
 F_Y(\lambda,z)
 :=
-\det(\lambda I-B_\theta)
+\det(\lambda I-M(z))
 =
 \lambda^4-\lambda^3-(2z+1)\lambda^2+\lambda+z(z+1).
 \]
-With \(F_Y(2,1)=0\), implicit differentiation of \(F_Y(\rho_Y(\theta),e^\theta)=0\) gives
+Since \(F_Y(2,1)=0\), implicit differentiation of \(F_Y(\rho_Y(\theta),e^\theta)=0\) gives
 \[
-F_{Y,\lambda}(2,1)=9,\qquad F_{Y,z}(2,1)=-5,
+F_{Y,\lambda}(2,1)=9,\qquad
+F_{Y,z}(2,1)=-5,
 \]
-so \(\rho_Y'(0)=5/9\). Differentiating once more and using
+so \(\rho_Y'(0)=5/9\). Differentiating again and using
 \[
 F_{Y,\lambda\lambda}(2,1)=30,\qquad
 F_{Y,\lambda z}(2,1)=-8,\qquad
@@ -161,9 +383,8 @@ satisfies
 \[
 \Lambda_Y'(0)=\frac{5}{18},
 \qquad
-\Lambda_Y''(0)=\frac{67}{972},
+\Lambda_Y''(0)=\frac{67}{972}.
 \]
-which are the constants in Theorem~\ref{thm:weight-stats}.
 
 \subsection{Autocovariances and power spectrum}
 For the vertex chain with transition matrix \(P\), the discrepancy observable depends only on the current transition:
@@ -197,48 +418,43 @@ Then
 \qquad
 \EE[\Delta_0\Delta_j]=qP^{j-1}h\qquad (j\ge1).
 \]
-Since \(P=\tfrac12 D^{-1}AD\) with \(D=\mathrm{diag}(2,1,2,1)\), \(P\) is similar to \(A/2\). Therefore its characteristic polynomial is
+Because \(P=\tfrac12 D^{-1}AD\) with \(D=\mathrm{diag}(2,1,2,1)\), \(P\) is similar to \(A/2\). Therefore its characteristic polynomial is
 \[
 (\lambda-1)\left(\lambda-\frac12\right)\left(\lambda+\frac12\right)^2.
 \]
-The covariance sequence \(c_j=\Cov(\Delta_0,\Delta_j)\) is stationary, so the \(\lambda=1\) mode cancels, and for \(j\ge1\) it must have the form
+The stationary covariance sequence \(c_j=\Cov(\Delta_0,\Delta_j)\) therefore has the form
 \[
-c_j=2^{-j}\bigl(a+(-1)^j(b+cj)\bigr)
+c_j=2^{-j}\bigl(a+(-1)^j(b+cj)\bigr)\qquad (j\ge1).
 \]
-for suitable constants \(a,b,c\). Direct computation from the formula \(c_j=qP^{j-1}h-(4/9)^2\) gives
+Direct evaluation of \(qP^{j-1}h-(4/9)^2\) at \(j=1,2,3\) gives
 \[
 c_1=\frac{17}{324},\qquad
 c_2=\frac{25}{648},\qquad
-c_3=\frac{7}{648}.
+c_3=\frac{7}{648},
 \]
-Solving the resulting linear system yields
+from which
 \[
-a=\frac18,\qquad b=\frac{7}{648},\qquad c=\frac{1}{108},
+a=\frac18,\qquad
+b=\frac{7}{648},\qquad
+c=\frac{1}{108}.
 \]
-and therefore
+Hence
 \[
-c_j = 2^{-j}\!\left(\frac{1}{8}+(-1)^j\!\left(\frac{7}{648}+\frac{j}{108}\right)\right)\qquad (j\ge1).
+c_j = 2^{-j}\!\left(\frac{1}{8}+(-1)^j\!\left(\frac{7}{648}+\frac{j}{108}\right)\right)\qquad (j\ge1),
 \]
-Since \(\Delta_0\in\{0,1\}\) with mean \(4/9\),
+while
 \[
 c_0=\Var(\Delta_0)=\frac49\left(1-\frac49\right)=\frac{20}{81}.
 \]
-
-Because \(\sum_{j\in\ZZ}\abs{c_j}<\infty\), the power spectral density is
+Substituting these values into
 \[
-S(\omega)=c_0+2\sum_{j\ge1}c_j\cos(j\omega).
+S(\omega)=c_0+2\sum_{j\ge1}c_j\cos(j\omega)
 \]
-Substituting the closed form for \(c_j\), summing the geometric series
-\[
-\sum_{j\ge1}\left(\frac{e^{i\omega}}{2}\right)^j,
-\qquad
-\sum_{j\ge1}j\left(-\frac{e^{i\omega}}{2}\right)^j,
-\]
-and taking real parts gives
+and summing the resulting geometric series yields
 \[
 S(\omega)
 =
 \frac{2\bigl(32\cos^3\omega+12\cos^2\omega-116\cos\omega-105\bigr)}
 {9\,(4\cos\omega-5)\,(4\cos\omega+5)^2}.
 \]
-At \(\omega=0\) this simplifies to \(S(0)=118/243\), in agreement with \(\Lambda_\Delta''(0)\).
+At \(\omega=0\) this gives \(S(0)=118/243\), in agreement with the CLT variance.

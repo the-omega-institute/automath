@@ -1,20 +1,24 @@
 \documentclass[reqno]{amsart}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+\fi
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{amscd}
 \usepackage{mathrsfs}
 \usepackage{enumitem}
+\usepackage{booktabs}
 \usepackage[numbers]{natbib}
-\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue,urlcolor=blue]{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
 \usepackage{geometry}
 \geometry{margin=1.15in}
 \raggedbottom
 \hypersetup{
-  pdftitle={Gluing Failure, Visible Quotients, and Pure-Ext Blind Spots},
-  pdfkeywords={information states, team semantics, sheafification, gerbes, visible quotient, contextuality}
+  pdftitle={Gluing failure, visible quotients, and pure-Ext blindness in state forcing},
+  pdfkeywords={information states, team semantics, gluing failure, gerbes, contextuality}
 }
 
 \newtheorem{theorem}{Theorem}[section]
@@ -46,7 +50,6 @@
 \newcommand{\Act}{\mathsf{Act}}
 \newcommand{\Ch}{\mathsf{Ch}}
 \newcommand{\res}{\mathrm{res}}
-\newcommand{\Read}{\mathrm{Read}}
 \newcommand{\Vis}{\mathrm{Vis}}
 \newcommand{\Ob}{\mathrm{Ob}}
 \newcommand{\Band}{\mathscr{A}}
@@ -54,17 +57,26 @@
 \newcommand{\Sh}{\mathbf{Sh}}
 \newcommand{\Psh}{\mathbf{PSh}}
 \newcommand{\KRed}{\mathsf{K}}
+\newcommand{\leanverified}[1]{}
 
-\title[Gluing Failure, Visible Quotients, and Pure-Ext Blind Spots]{Gluing Failure, Visible Quotients, and Pure-Ext Blind Spots}
-\author{Anonymous}
+\title[Gluing failure and visible quotients]{Gluing failure, visible quotients, and pure-Ext blindness in state forcing}
+\author{Haobo Ma}
+\address[Haobo Ma]{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981}
+\email[Haobo Ma]{auric@aelf.io}
+
+\author{Wenlin Zhang}
+\address[Wenlin Zhang]{National University of Singapore, Singapore}
+\email[Wenlin Zhang]{e1327962@u.nus.edu}
 
 \begin{document}
 
 \begin{abstract}
-We study gluing failure for references evaluated at information states in a focused note that starts from a chosen local-object layer and a chosen gluing-sensitive realization prestack, rather than from a canonical obstruction theory on a bare set-valued presheaf. Our three main contributions are these. First, on lower-layer formulas state forcing coincides with a flat team semantics on nonempty teams of assignments, and we prove that compatible local sectionability and gluing-level absence are not definable without the local-object enrichment. Second, once a gluing-sensitive realization prestack with fixed abelian band has been chosen, compatible local presentations of a reference define visible branches, and we show that these are exactly the global connected components of the realization stack; under a global conservativity hypothesis, gluing failure occurs precisely when visible branches exist but all component gerbes of those branches are non-neutral. Third, for a finite abelian branch obstruction $\omega$ arising from such a chosen realization prestack on a finite \v{C}ech nerve, the intrinsic visible quotient is $\operatorname{coker}(\mathrm{ev}_{\omega})$, where $\mathrm{ev}_{\omega}:H_2(N(\mathcal U),\mathbb Z)\to A$ is the homological evaluation map arising from the universal coefficient theorem. Equivalently, this quotient is detected exactly by the class-admissible character channels. In the unique-branch support-presheaf setting, the theory recovers the Abramsky--Brandenburger no-global-section picture and identifies the cohomologically blind residue as the pure $\operatorname{Ext}$-part. Two worked finite examples isolate the visible and blind extremes.
+We study local-to-global failure for references interpreted at information states. The basic forcing semantics is flat team semantics on nonempty teams; admissibility, local sectionability, and gluing appear only after passing to an enriched local-object layer. We prove that compatible local sectionability is equivalent to nonemptiness of the sheafification and that, over singleton states and within the comparison class of arbitrary parameter-indexed local-object expansions, the predicates $\CompSec$, $\Sec$, and $\Null^{\mathrm{glue}}$ are not definable in the lower forcing language.
+
+We then fix a realization prestack with abelian band. Visible value classes are the connected components of the associated realization stack. Assuming global conservativity at the terminal fibre, gluing failure is equivalent to the existence of a visible branch with non-neutral component gerbe. Under branch constancy, branch selectors are equivalent to neutrality of all visible branches. For a finite abelian branch obstruction presented on a finite \v{C}ech nerve, we define the presentation-relative visible quotient $A_{\mathrm{vis}}^{\omega}:=\operatorname{coker}(\mathrm{ev}_{\omega})$ and show that it is exactly the quotient detected by the class-admissible characters. This quotient is invariant under equivalence of chosen lifts, change of band trivialization, and $H_2$-surjective refinement. In the free-$H_1$ regime it becomes the initial coefficient quotient that neutralizes the corresponding branch gerbe, and gluing failure is equivalent to strict collapse of the visible quotient on every visible branch. A Mayer--Vietoris argument identifies the hidden subgroup and shows that filtrations by $H_2$-trivial pieces leave at most a pure-$\operatorname{Ext}$ residue. If every chosen branch presentation has vanishing $H^2$, then compatible local sectionability implies global sectionability. In the unique-branch support-presheaf case, gluing failure is therefore equivalent to $A_{\mathrm{vis}}^{\omega}\neq A$, giving a converse-complete visible-quotient criterion under the chosen lift hypotheses.
 \end{abstract}
 
-\keywords{information states, team semantics, gluing failure, gerbes, visible quotient, contextuality}
+\keywords{information states, team semantics, gluing failure, gerbes, contextuality}
 \subjclass[2020]{03B45, 03F55, 03G30, 18F20}
 
 \maketitle
@@ -76,6 +88,7 @@ We study gluing failure for references evaluated at information states in a focu
 \input{sec_gerbe_obstruction}
 \input{sec_homological_visibility}
 \input{sec_conclusion}
+\input{sec_appendix}
 
 \bibliographystyle{plainnat}
 \bibliography{references}

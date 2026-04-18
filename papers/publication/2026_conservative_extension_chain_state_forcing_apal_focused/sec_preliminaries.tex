@@ -1,13 +1,13 @@
-\section{Lower-Layer Semantics and Conservative Extension}\label{sec:preliminaries}
+\section{Conservative extensions}\label{sec:preliminaries}
 
-The later sections use only one abstract idea: a higher semantic layer may add coordinates or structure without changing the behavior of formulas already present below. The definitions in this section isolate that invariance principle and nothing more.
+We begin with the abstract notion of conservative extension used throughout the paper. Its role is to separate the lower forcing language from the enriched language of local objects without changing the meaning of formulas already present at the lower level.
 
 \begin{definition}[Logic layer]\label{def:logic-layer}
 A \emph{logic layer} is a tuple
 \[
 \mathbb{L}=(\Sigma,\mathrm{Form},\Mod,\St,\Vdash,\models),
 \]
-where $\Sigma$ is a signature, $\mathrm{Form}$ is the class of well-formed $\Sigma$-formulas, $\Mod$ is a class of admissible models, $\St$ assigns to every $M\in\Mod$ a nonempty set $\St(M)$ of states, $\Vdash$ is a forcing relation on model-state pairs, and $\models$ is the induced consequence relation defined by
+where $\Sigma$ is a signature, $\mathrm{Form}$ is the class of well-formed $\Sigma$-formulas, $\Mod$ is a class of admissible models, $\St$ assigns to each $M\in\Mod$ a nonempty set $\St(M)$ of states, $\Vdash$ is a forcing relation on model-state pairs, and $\models$ is the induced consequence relation
 \[
 \Gamma\models\varphi
 \quad:\Longleftrightarrow\quad
@@ -16,7 +16,7 @@ where $\Sigma$ is a signature, $\mathrm{Form}$ is the class of well-formed $\Sig
 \]
 \end{definition}
 
-The forcing relation is the primitive semantic notion. Consequence is derived from uniform preservation of forcing across all admissible models and states.
+Thus forcing is taken as primitive, while consequence is induced by quantifying over models and states.
 
 \begin{definition}[Conservative extension]\label{def:conservative-extension}
 Let
@@ -42,7 +42,7 @@ U_{n,m}(M),\pi^M_{n,m}(p)\Vdash_m \varphi.
 \end{equation}
 \end{definition}
 
-Thus a higher layer may add expressive power, state coordinates, or geometric constraints, but it may not alter the forcing behavior of formulas that already belonged to a lower layer.
+In particular, a conservative extension may enlarge both the language and the state space, but formulas from the lower layer retain their original forcing behaviour after the additional structure is forgotten.
 
 \begin{proposition}[Composition of conservative extensions]\label{prop:conservative-composition}
 If $\mathbb{L}_\ell\preceq\mathbb{L}_m$ and $\mathbb{L}_m\preceq\mathbb{L}_n$, then $\mathbb{L}_\ell\preceq\mathbb{L}_n$.
@@ -50,26 +50,7 @@ If $\mathbb{L}_\ell\preceq\mathbb{L}_m$ and $\mathbb{L}_m\preceq\mathbb{L}_n$, t
 \end{proposition}
 
 \begin{proof}
-Compose the language embeddings and forgetful functors:
-\[
-e_{\ell,n}:=e_{m,n}\circ e_{\ell,m},
-\qquad
-U_{n,\ell}:=U_{m,\ell}\circ U_{n,m}.
-\]
-For every $M\in\Mod_n$, define
-\[
-\pi^M_{n,\ell}:=
-\pi^{\,U_{n,m}(M)}_{m,\ell}\circ \pi^M_{n,m}.
-\]
-If $\varphi\in\mathrm{Form}_\ell$ and $p\in\St_n(M)$, then
-\[
-M,p\Vdash_n\varphi
-\Longleftrightarrow
-U_{n,m}(M),\pi^M_{n,m}(p)\Vdash_m\varphi
-\Longleftrightarrow
-U_{n,\ell}(M),\pi^M_{n,\ell}(p)\Vdash_\ell\varphi,
-\]
-by two applications of \Cref{def:conservative-extension}. This is exactly the required conservativity condition.
+See Appendix~\ref{app:deferred-proofs}.
 \end{proof}
 
 \begin{corollary}[Finite-chain invariance]\label{cor:whole-chain-invariance}
@@ -77,26 +58,12 @@ If
 \[
 \mathbb{L}_0\preceq\mathbb{L}_1\preceq\cdots\preceq\mathbb{L}_n,
 \]
-then every formula belonging to any lower layer keeps the same forcing behavior when interpreted in any later layer and projected back down.
+then every formula belonging to a lower layer has the same forcing behaviour in every later layer after projection.
 \leanverified{paper_conservative_extension_whole_chain_invariance_seeds}
 \end{corollary}
 
 \begin{proof}
-Apply \Cref{prop:conservative-composition} repeatedly along the chain.
+Iterate \Cref{prop:conservative-composition} along the chain.
 \end{proof}
 
-The constructions used later fit into the finite chain
-\[
-\mathbb{L}_0
-\preceq
-\mathbb{L}_1
-\preceq
-\mathbb{L}_2
-\preceq
-\mathbb{L}_3
-\preceq
-\mathbb{L}_4.
-\]
-Here $\mathbb{L}_0$ is the underlying pointwise semantics, $\mathbb{L}_1$ is the information-state forcing layer, $\mathbb{L}_2$ adds local references and local objects, $\mathbb{L}_3$ adds structural absence and gluing-obstruction data, and $\mathbb{L}_4$ adds refinement dynamics. By \Cref{cor:whole-chain-invariance}, the passage up the chain is cumulative rather than revisionary: each later layer preserves the forcing behavior already fixed below.
-
-This four-layer chain is the complete formal setting of the present paper. Standard site-theoretic, descent-theoretic, and homological inputs are cited at the points where they are used.
+In the present setting, the singleton embedding $i_M:\Val_M(\Gamma)\to \St(M)$ from \Cref{def:singleton-embedding} identifies ordinary satisfaction with forcing at singleton states by \Cref{prop:singleton-conservativity}. This passage is not itself conservative in the above sense, since an arbitrary information state does not project to a single valuation. The genuinely conservative step is the passage from the lower forcing language $\mathbb{L}_1$ to the enriched local-object language $\mathbb{L}_2$. By \Cref{cor:whole-chain-invariance}, the higher layer adds expressive resources without altering the forcing behaviour of lower-layer formulas.

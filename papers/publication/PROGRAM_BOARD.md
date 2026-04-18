@@ -28,10 +28,11 @@ Root dispatch table for the publication workspace. See `AUTOMATION.md` for the f
 | Self-Dual Sync (cyclotomic twists) | IMRN | P2 | Verification scripts needed |
 | Prime Languages (sofic obstructions) | Monatshefte Math. | P2 | 12+ uncited bib entries |
 
-### Wave 4 — Untracked (10 papers, need triage)
+### Wave 4 — Untracked (11 papers, need triage)
 
 | Dir | Has main.tex | Has PIPELINE.md | Notes |
 |---|---|---|---|
+| `single_primitive_universality_hierarchy` | Y | N | New: 3-level hierarchy (L0/L1/L2) vs EML. 3 rounds Oracle review, major revision stage. Target: short note venue (Proc. AMS / Bull. LMS) |
 | `apal_focused` | Y | N | Variant of APAL — merge or archive? |
 | `cubical_stokes_...jdsgt` | Y | N | Needs P0 intake |
 | `fibonacci_folding_...` | Y | N | Needs P0 intake |

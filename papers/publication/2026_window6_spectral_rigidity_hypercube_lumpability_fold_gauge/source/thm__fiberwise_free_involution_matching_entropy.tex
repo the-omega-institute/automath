@@ -1,0 +1,113 @@
+\begin{theorem}[Counting fiberwise free involutions and a lower bound on external information: matching entropy]\label{thm:fiberwise-free-involution-matching-entropy}
+Let \(p:E\twoheadrightarrow B\) be a finite-to-one map, and write \(E_b:=p^{-1}(b)\) and \(d_b:=|E_b|\).
+Call a map \(\tau:E\to E\) a \emph{fiberwise free involution} if
+\[
+\tau^2=\mathrm{id},\qquad p\circ\tau=p,\qquad \text{and}\qquad \tau|_{E_b}\ \text{has no fixed points}\ \ (\forall b\in B).
+\]
+Let \(\mathrm{Inv}_{\mathrm{free}}(p)\) denote the set of all such involutions.
+Then:
+\begin{enumerate}
+  \item \textbf{(Odd obstruction)} If \(d_b\) is odd for some \(b\in B\), then \(\mathrm{Inv}_{\mathrm{free}}(p)=\varnothing\).
+  \item \textbf{(Exact count)} If every \(d_b\) is even, say \(d_b=2r_b\), then
+  \[
+  \#\mathrm{Inv}_{\mathrm{free}}(p)
+  =\prod_{b\in B}\frac{(2r_b)!}{2^{r_b}\,r_b!}
+  =\prod_{b\in B}(2r_b-1)!!.
+  \]
+  \item \textbf{(Lower bound on external information)} Any deterministic protocol that specifies a fiberwise free involution without changing \(p\) must use at least
+  \[
+  \mathsf I_{\min}\ \ge\ \log_2\#\mathrm{Inv}_{\mathrm{free}}(p)
+  =\sum_{b\in B}\log_2\!\bigl((2r_b-1)!!\bigr)
+  \]
+  bits of externally variable information.
+\end{enumerate}
+\leanpartial{no\_free\_involution\_on\_odd}{Formalized item (1), the odd-cardinality obstruction; the full fiberwise product count and information lower bound in items (2) and (3) are not yet fully formalized.}
+\leanpartial{freeInvolutionCount\_formula}{Formalized the single-fiber counting factor \((2r)!/(2^r r!)\) in item (2); the promotion to the total product count remains incomplete.}
+\leanverified{freeInvolutionCount\_succ}
+\leanverified{freeInvolutionCount\_eq\_prod\_odds}
+\leanverified{freeInvolutionCount\_eq\_doubleFactorial}
+\leanverified{fiberwiseFreeInvolutionCount\_total\_eq\_prod\_doubleFactorial}
+\leanverified{fiberwiseFreeInvolutionCount\_total\_formula}
+\leanverified{freeInvolutionCount\_pos}
+\leanverified{freeInvolutionCount\_strict\_mono}
+\leanverified{free\_involution\_exists\_even}
+\leanpartial{freeInvolutionCount\_small}{Only the small cases \(r=1,2,3\) have been separately formalized.}
+\leanverified{paper\_freeInvolutionCount\_values\_and\_formula}
+\leanverified{freeInvolutionCount\_ge\_factorial}
+\leanverified{freeInvolutionCount\_odd}
+\leanverified{freeInvolutionCount\_dvd\_three}
+\leanverified{freeInvolutionCount\_dvd\_fifteen}
+\leanverified{freeInvolutionCount\_le\_factorial\_div}
+\leanverified{paper\_gu\_involution\_divisibility\_package}
+\leanverified{freeInvolutionCount\_ratio}
+\leanverified{freeInvolutionCount\_ratio\_increasing}
+\leanverified{freeInvolutionCount\_log\_convex}
+\leanverified{freeInvolutionCount\_strict\_log\_convex}
+\leanverified{paper\_freeInvolutionCount\_log\_convexity\_package}
+\leanverified{freeInvolutionCount\_dvd\_seven}
+\leanverified{freeInvolutionCount\_dvd\_105}
+\leanverified{paper\_freeInvolutionCount\_dvd\_extended}
+\leanverified{freeInvolutionCount\_dvd\_nine}
+\leanverified{freeInvolutionCount\_dvd\_945}
+\leanverified{paper\_freeInvolutionCount\_dvd\_hierarchy}
+\leanverified{freeInvolutionCount\_four}
+\leanverified{freeInvolutionCount\_five}
+\leanverified{freeInvolutionCount\_six}
+\leanverified{freeInvolutionCount\_seven}
+\leanverified{freeInvolutionCount\_sq\_le\_mul}
+\leanverified{freeInvolutionCount\_eight}
+\leanverified{freeInvolutionCount\_nine}
+\leanverified{freeInvolutionCount\_ge\_two\_pow}
+\leanverified{freeInvolutionCount\_log\_lower}
+\leanverified{paper\_freeInvolutionCount\_information\_bounds}
+\leanverified{freeInvolutionCount\_ten}
+\leanverified{freeInvolutionCount\_eleven}
+\leanverified{paper\_freeInvolutionCount\_r10\_r11\_extended}
+\end{theorem}
+\begin{proof}
+For each \(b\in B\), the restriction \(\tau_b:=\tau|_{E_b}\) is a fixed-point-free involution on the finite set \(E_b\).
+Equivalently, \(\tau_b\) is a partition of \(E_b\) into unordered pairs, namely a perfect matching.
+\par
+If \(|E_b|\) is odd, then no perfect matching exists on \(E_b\), so statement (1) follows.
+\par
+If \(|E_b|=2r_b\), then the number of perfect matchings is the classical count
+\[
+\frac{(2r_b)!}{2^{r_b}\,r_b!}=(2r_b-1)!!,
+\]
+obtained by ordering the \(2r_b\) elements and then dividing by the redundancy coming from swapping the two elements inside each pair and permuting the pairs themselves.
+Since the fibers are independent, the total number of fiberwise free involutions is the product of these factors, which proves (2).
+\par
+For (3), suppose an external register or certificate can assume only \(\mathcal R\) distinct states across all admissible inputs.
+Then it can distinguish at most \(|\mathcal R|\) different choices.
+To specify deterministically one element among \(\#\mathrm{Inv}_{\mathrm{free}}(p)\) possible involutions, one must have \(|\mathcal R|\ge \#\mathrm{Inv}_{\mathrm{free}}(p)\).
+Taking binary logarithms yields \(\mathsf I_{\min}\ge \log_2\#\mathrm{Inv}_{\mathrm{free}}(p)\). \qedhere
+\end{proof}
+
+\begin{corollary}[Binary jumps and \(2\)-torsion in the center of the gauge group]\label{cor:autp-center-z2-by-twofibers}
+Let \(p:E\twoheadrightarrow B\) be as in Theorem \ref{thm:fiberwise-free-involution-matching-entropy}, and let
+\[
+\Aut(p):=\{g\in\Sym(E):\ p\circ g=p\}\ \cong\ \prod_{b\in B} S_{d_b}
+\]
+be its gauge group of fiberwise permutations.
+Set \(N_2:=\#\{b\in B:\ d_b=2\}\).
+Then
+\[
+Z(\Aut(p))\ \cong\ (\ZZ_2)^{N_2},
+\]
+generated by the transpositions on the two-point fibers.
+More concretely, central involutions of \(\Aut(p)\) are in bijection with subsets of the two-point fibers: on each chosen two-point fiber one applies the unique transposition, and on every other fiber one acts trivially.
+In particular, a central fiberwise free involution exists if and only if every fiber has cardinality \(2\); in that case it is unique.
+\leanverified{paper\_autp\_center\_twofiber\_count\_six}
+\end{corollary}
+\begin{proof}
+From the product decomposition \(\Aut(p)\cong \prod_b S_{d_b}\) we obtain
+\(
+Z(\Aut(p))\cong\prod_b Z(S_{d_b})
+\).
+Now \(Z(S_1)=\{e\}\), \(Z(S_2)=S_2\cong\ZZ_2\), and \(Z(S_d)=\{e\}\) for \(d\ge 3\).
+Thus the center is contributed precisely by the fibers of size \(2\), proving the displayed isomorphism.
+Therefore a central involution is specified by deciding, independently for each two-point fiber, whether to use the identity or the unique transposition on that fiber, while every other fiber contributes only the identity.
+If \(\tau\) is moreover fiberwise free, then \(\tau_b\) must be fixed-point-free on every fiber.
+The only central element of \(S_{d_b}\) with this property occurs when \(d_b=2\), where the unique nontrivial central element is the transposition.
+Hence a central fiberwise free involution exists exactly when \(d_b=2\) for every \(b\in B\), and in that case the transposition on each fiber is forced, so the involution is unique. \qedhere
+\end{proof}

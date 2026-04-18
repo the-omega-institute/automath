@@ -72,11 +72,25 @@ class OracleHandler(BaseHTTPRequestHandler):
                 self._send_json({"status": "idle"})
 
         elif self.path == "/status":
-            self._send_json({
-                "queue_length": len(task_queue),
-                "pending": pending_task["task_id"] if pending_task else None,
-                "completed": len(results),
-            })
+            # Optional ?agent_id= filter
+            from urllib.parse import urlparse, parse_qs
+            qs = parse_qs(urlparse(self.path).query)
+            aid = qs.get("agent_id", [None])[0]
+            if aid:
+                filtered_q = sum(1 for t in task_queue if t.get("agent_id") == aid)
+                filtered_r = sum(1 for r in results.values() if r.get("agent_id") == aid)
+                self._send_json({
+                    "queue_length": filtered_q,
+                    "pending": pending_task["task_id"] if pending_task and pending_task.get("agent_id") == aid else None,
+                    "completed": filtered_r,
+                    "agent_id": aid,
+                })
+            else:
+                self._send_json({
+                    "queue_length": len(task_queue),
+                    "pending": pending_task["task_id"] if pending_task else None,
+                    "completed": len(results),
+                })
 
         elif self.path.startswith("/result/"):
             task_id = self.path.split("/result/")[1]
@@ -102,11 +116,14 @@ class OracleHandler(BaseHTTPRequestHandler):
 
         if self.path == "/submit":
             # Agent submits a new task
+            # agent_id isolates results so multiple agents don't collide
+            agent_id = data.get("agent_id", "default")
             task_id = data.get("task_id", f"task_{int(time.time())}")
             task = {
                 "task_id": task_id,
+                "agent_id": agent_id,
                 "prompt": data.get("prompt", ""),
-                "model": data.get("model", "o3-mini-high"),
+                "model": data.get("model", "chatgpt-5.4-pro"),
                 "status": "queued",
             }
 
@@ -150,7 +167,7 @@ class OracleHandler(BaseHTTPRequestHandler):
             out_file = done_dir / f"{task_id}.md"
             metadata = {
                 "timestamp": datetime.now().isoformat(),
-                "model": data.get("model", "o3-mini-high"),
+                "model": data.get("model", "chatgpt-5.4-pro"),
                 "response_length": len(response),
             }
             out_file.write_text(
@@ -177,7 +194,7 @@ class OracleHandler(BaseHTTPRequestHandler):
 
 
 def submit_task(prompt: str, pdf_path: Path | None = None,
-                task_id: str | None = None, model: str = "o3-mini-high"):
+                task_id: str | None = None, model: str = "chatgpt-5.4-pro"):
     """Submit a task to the server (called by agents)."""
     import urllib.request
 
