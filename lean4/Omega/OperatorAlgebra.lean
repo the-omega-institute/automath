@@ -9,6 +9,7 @@ import Omega.OperatorAlgebra.FoldConditionalExpectation
 import Omega.OperatorAlgebra.FoldConditionalExpectationHaar
 import Omega.OperatorAlgebra.FoldGaugeCommutantExplicit
 import Omega.OperatorAlgebra.FoldGaugeGroupStructure
+import Omega.OperatorAlgebra.FoldGaugeOrbitClassificationQtuple
 import Omega.OperatorAlgebra.FoldInfoNCEBayesOpt
 import Omega.OperatorAlgebra.FoldInfoNCEFiniteKMomentFormula
 import Omega.OperatorAlgebra.FoldBayesPosteriorCollapse

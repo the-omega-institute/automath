@@ -140,6 +140,7 @@ import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
 import Omega.POM.AdditiveFoldCollisionConvolutionFourier
 import Omega.POM.OrthotopeSurfaceVolumeVariance
 import Omega.POM.ParrySurfaceDerivative
+import Omega.POM.PwNoncommutativeStokes
 import Omega.POM.PerronLandauerLimitLaw
 import Omega.POM.MaxFiberEvenChernoffExponent
 import Omega.POM.PathIndSetPolyClosed

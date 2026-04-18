@@ -114,6 +114,7 @@ import Omega.Zeta.XiHankelDetScalingCovariance
 import Omega.Zeta.XiExceptionalIntegerModelMqInverseClosedForm
 import Omega.Zeta.XiFiberSpectrumHankelConductorPronyPadic
 import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
+import Omega.Zeta.XiEndpointFirstNPlusOneProbesSharpToeplitzRecovery
 import Omega.Zeta.XiSelfdualSingleProbeDeterminesToeplitzMoments
 import Omega.Zeta.HankelNullspaceTruncatedIdealStructure
 import Omega.Zeta.HankelWindowFiberDelta
