@@ -128,6 +128,7 @@ import Omega.CircleDimension.PrefixPrimeLedgerConservation
 import Omega.CircleDimension.PrefixQuantileCRTJointModulus
 import Omega.CircleDimension.PrefixResidualRegisterCapacity
 import Omega.CircleDimension.PrimeTruncation
+import Omega.CircleDimension.ProjectiveStateOrganization
 import Omega.CircleDimension.RadiusBlindspotJointDiscreteBudgetOrthogonal
 import Omega.CircleDimension.RadialFibrationTransgression
 import Omega.CircleDimension.RankonePhasePrimeFiber
