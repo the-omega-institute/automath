@@ -181,6 +181,7 @@ import Omega.Zeta.SyncCyclotomicDegreeLaw
 import Omega.Zeta.SyncCyclotomicEliminationEvenness
 import Omega.Zeta.SyncBivariateEulerProduct
 import Omega.Zeta.SyncHatdeltaCurveDoubleCoverBranchGenus6
+import Omega.Zeta.SyncHatdeltaCurveQuotientPlaneQuarticGenus3
 import Omega.Zeta.SyncActionGap
 import Omega.Zeta.SyncCyclotomicDegreeLawPublication
 import Omega.Zeta.SyncKernelMixingRate

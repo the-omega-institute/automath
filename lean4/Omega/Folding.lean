@@ -106,6 +106,7 @@ import Omega.Folding.FoldPressureFreezingThreshold
 import Omega.Folding.IntermediateQuotientsBellProductDoubleExponential
 import Omega.Folding.FoldSuitePublication
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
+import Omega.Folding.GaugeAnomalyCovGenfun
 import Omega.Folding.GaugeAnomalyHankelAudit
 import Omega.Folding.GaugeAnomalyJordanFingerprint
 import Omega.Folding.GaugeAnomalyDensity
