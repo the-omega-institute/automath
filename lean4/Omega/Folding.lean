@@ -54,6 +54,7 @@ import Omega.Folding.CurvatureTranslationDihedral
 import Omega.Folding.ConstructibilityRigidityObstruction
 import Omega.Folding.ComplementPhaseLockingFixedpoints
 import Omega.Folding.Defect
+import Omega.Folding.DerivedCenteredOddMomentsVanish
 import Omega.Folding.DerivedAffineReciprocity
 import Omega.Folding.DiscreteStokesAuditableBound
 import Omega.Folding.DiscreteStokesDefectPublication
@@ -223,6 +224,7 @@ import Omega.Folding.SummableDefectsEventualCompatibility
 import Omega.Folding.SummableNatEventuallyZero
 import Omega.Folding.SyncDelay
 import Omega.Folding.FoldBinEscortLastbit
+import Omega.Folding.FoldBinLastbitSufficientTV
 import Omega.Folding.HypercubeBiasEllipsoidGodelLength
 import Omega.Folding.FoldSpectrumFactorization
 import Omega.Folding.TailPatchIncomplete
