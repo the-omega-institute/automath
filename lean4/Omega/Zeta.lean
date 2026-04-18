@@ -242,6 +242,7 @@ import Omega.Zeta.XiBasepointScanAnchorDetCauchyVandermonde
 import Omega.Zeta.PickPoissonCrossEnergyHorizontalSeparation
 import Omega.Zeta.XiPickPoissonNearCollisionCertificate
 import Omega.Zeta.XiPickPoissonAnchoredTransverseSeparationInversion
+import Omega.Zeta.XiPickPoissonSchurFluxClosedForm
 import Omega.Zeta.XiJensenDefectPowerPullbackInvariance
 import Omega.Zeta.XiTerminalZmEllipticWeightTriplingRamificationCount
 import Omega.Zeta.XiRealInput40LogMInftyTruncationBound

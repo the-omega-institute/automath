@@ -65,6 +65,7 @@ import Omega.POM.FiniteStateDimensionLowerBound
 import Omega.POM.FiberIndependenceComplexClassification
 import Omega.POM.FiberMedianMajorityPrimeValuation
 import Omega.POM.FiberLedgerPrefixSideinfoLength
+import Omega.POM.FiberPosteriorEquivalenceActivityField
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberLeyangKlBernoulliDecomposition
 import Omega.POM.FiberRewritePoissonBinomial
