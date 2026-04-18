@@ -62,6 +62,75 @@ theorem paper_fold_fiber_parity_energy_simplex_pairwise_independence_except_term
     · simp [foldFiberParityPairCovariance, hterm, foldFiberParityTerminalPairRaw_eq_one]
     · simp [foldFiberParityPairCovariance, hterm]
 
+/-- Concrete slice/collision bookkeeping for the parity-energy decomposition. -/
+structure FoldFiberSliceCollisionData where
+  R : Type
+  instDecEqR : DecidableEq R
+  instFintypeR : Fintype R
+  μ : R → ℚ
+  ν : R → ℚ
+
+attribute [instance] FoldFiberSliceCollisionData.instDecEqR
+attribute [instance] FoldFiberSliceCollisionData.instFintypeR
+
+namespace FoldFiberSliceCollisionData
+
+/-- The `0`-slice law `μ - ν`. -/
+def sliceZero (D : FoldFiberSliceCollisionData) (r : D.R) : ℚ :=
+  D.μ r - D.ν r
+
+/-- The `1`-slice law `μ + ν`. -/
+def sliceOne (D : FoldFiberSliceCollisionData) (r : D.R) : ℚ :=
+  D.μ r + D.ν r
+
+/-- The quadratic bias energy `∑ ν(r)^2`. -/
+def biasEnergy (D : FoldFiberSliceCollisionData) : ℚ :=
+  ∑ r, (D.ν r) ^ 2
+
+/-- The `0`-slice collision probability `∑ (μ - ν)^2`. -/
+def sliceCollisionZero (D : FoldFiberSliceCollisionData) : ℚ :=
+  ∑ r, (D.sliceZero r) ^ 2
+
+/-- The `1`-slice collision probability `∑ (μ + ν)^2`. -/
+def sliceCollisionOne (D : FoldFiberSliceCollisionData) : ℚ :=
+  ∑ r, (D.sliceOne r) ^ 2
+
+/-- The ambient collision probability `∑ μ(r)^2`. -/
+def collisionProbability (D : FoldFiberSliceCollisionData) : ℚ :=
+  ∑ r, (D.μ r) ^ 2
+
+end FoldFiberSliceCollisionData
+
+open FoldFiberSliceCollisionData
+
+/-- Adding the two slice-collision laws cancels the cross term, leaving twice the ambient
+collision probability plus twice the bias energy.
+    cor:fold-fiber-slice-collision-decomposition -/
+theorem paper_fold_fiber_slice_collision_decomposition (D : FoldFiberSliceCollisionData) :
+    D.biasEnergy = (D.sliceCollisionZero + D.sliceCollisionOne) / 2 - D.collisionProbability := by
+  unfold FoldFiberSliceCollisionData.biasEnergy FoldFiberSliceCollisionData.sliceCollisionZero
+    FoldFiberSliceCollisionData.sliceCollisionOne FoldFiberSliceCollisionData.collisionProbability
+    FoldFiberSliceCollisionData.sliceZero FoldFiberSliceCollisionData.sliceOne
+  calc
+    ∑ r, (D.ν r) ^ 2
+        = ((∑ r, (D.μ r - D.ν r) ^ 2) + ∑ r, (D.μ r + D.ν r) ^ 2) / 2 -
+            ∑ r, (D.μ r) ^ 2 := by
+              have hExpand :
+                  (∑ r, (D.μ r - D.ν r) ^ 2) + ∑ r, (D.μ r + D.ν r) ^ 2 =
+                    2 * ∑ r, (D.μ r) ^ 2 + 2 * ∑ r, (D.ν r) ^ 2 := by
+                calc
+                  (∑ r, (D.μ r - D.ν r) ^ 2) + ∑ r, (D.μ r + D.ν r) ^ 2
+                      = ∑ r, ((D.μ r - D.ν r) ^ 2 + (D.μ r + D.ν r) ^ 2) := by
+                          rw [← Finset.sum_add_distrib]
+                  _ = ∑ r, (2 * (D.μ r) ^ 2 + 2 * (D.ν r) ^ 2) := by
+                        refine Finset.sum_congr rfl ?_
+                        intro r _hr
+                        ring
+                  _ = 2 * ∑ r, (D.μ r) ^ 2 + 2 * ∑ r, (D.ν r) ^ 2 := by
+                        rw [Finset.mul_sum, Finset.mul_sum, Finset.sum_add_distrib]
+              rw [hExpand]
+              ring
+
 end
 
 end Omega.Folding
