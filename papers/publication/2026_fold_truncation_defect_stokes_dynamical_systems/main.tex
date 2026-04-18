@@ -72,8 +72,15 @@ is the adjacent defect law with top digit fixed to $1$.  In particular,
 \]
 For fixed $m$, the defect law converges exactly to
 $\frac23\delta_0+\frac13\lambda_m$ as $n-m\to\infty$.  We also obtain
-comparison bounds and an inverse-limit criterion for eventual compatibility of
-the folded prefixes of an infinite raw sequence.
+comparison bounds.  The tail factor is shown to be rigid: its equivalence
+classes are exactly the parity classes of the initial run of $1$'s, so it is
+the unique minimal exact tail statistic controlling the full defect.
+Consequently the defect law extends from the uniform model to stationary
+irreducible one-step Markov inputs.  For a transition matrix
+$P=(p_{ab})_{a,b\in\{0,1\}}$,
+the Markov defect law is again a two-component mixture, now with exact
+coefficients $p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$ and
+converges exponentially to an explicit limiting law.
 \end{abstract}
 
 \maketitle
@@ -120,8 +127,8 @@ known, the global defect can be recovered from its one-step pieces:
 Section~\ref{sec:telescoping} proves a telescoping identity and the associated
 cocycle formula, which isolate the scales at which noncommutation is created.
 
-The main result is that, under the uniform raw-word law, this apparently
-multiscale observable collapses to a one-bit tail state.  If
+The deterministic core of the paper is that this apparently multiscale
+observable collapses to a one-bit tail state.  If
 $\omega=(p,q)\in\Omega_m\times\Omega_{n-m}$ is split into its lower
 $m$-digit prefix and upper tail, Theorem~\ref{thm:tail-collapse} produces a
 recursively defined bit $\beta(q)\in\{0,1\}$ such that
@@ -151,12 +158,29 @@ right-hand side.  For fixed $m$, one obtains the exact limiting law
 \]
 with an explicit oscillatory error of order $2^{-\ell}$.
 
+The collapse factor has a converse interpretation.  Section~\ref{sec:markov}
+identifies $\beta(q)$ with the parity of the initial run of $1$'s in the tail
+and proves that this bit is the unique minimal exact tail statistic for the
+entire family of defects $D_{n\to m}$.  Thus the collapse is intrinsic to the
+normalization-truncation interaction and not an artefact of uniform averaging.
+At the finite-state level this is a tail-equivalence minimality statement in
+the spirit of Myhill--Nerode minimization \cite{Myhill1957,Nerode1958}.
+The same rigidity yields an exact stationary Markov extension: for a one-step
+Markov law with transition matrix $P=(p_{ab})$ and positive stationary masses,
+the defect law at tail length $\ell$ remains a two-component mixture after
+conditioning on the boundary digit $\omega_m$, with coefficients
+$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$, and therefore converges exponentially
+in $\ell$.  Standard Markov-chain notation and background may be found in
+\cite{Parry1964,Norris1997,LevinPeresWilmer2009MarkovMixing}.
+
 Classical background on Zeckendorf representations may be found in
 \cite{Lekkerkerker1952,Zeckendorf1972,Carlitz1968,CarlitzScovHoggatt1972,%
 Fraenkel1985}.  Automata-theoretic normalization and conversion in Fibonacci
 numeration go back to
 \cite{Frougny1991,Frougny1992,FrougnySolomyak1996,FrougnySakarovitch1999,%
-Frougny1999,FrougnyS2010,ShallitShan2024}.  Successor carries and related
+Frougny1999,FrougnyS2010,ShallitShan2024}.  Finite-state and rational-series
+background for such observables may be compared with
+\cite{BerstelReutenauer2011}.  Successor carries and related
 scalar observables are studied in
 \cite{Frougny1996Successor,Frougny1997Sequential,AhlbachUsatineFrougnyPippenger2013,%
 BertheFrougnyRigoSakarovitch2020}, while probabilistic and combinatorial
@@ -176,11 +200,10 @@ The paper is organized as follows.  Section~\ref{sec:adjacent} introduces the
 finite-window Fold map, records the elementary normalization facts needed later
 on, and proves the threshold theorem for the adjacent defect.
 Section~\ref{sec:telescoping} derives the telescoping and cocycle identities.
-Section~\ref{sec:uniform} treats the uniform raw-word law and proves the
-collapse theorem for the full defect distribution.
-Section~\ref{sec:lifts} gives an eventual compatibility criterion for folded
-prefixes of an infinite raw sequence.  The appendix collects supplementary
-examples and exact small-scale values.
+Section~\ref{sec:uniform} proves the collapse theorem and the exact uniform-law
+distribution.  Section~\ref{sec:markov} proves the rigidity of the tail factor
+and extends the defect law to stationary one-step Markov inputs.  The appendix
+collects supplementary examples and exact small-scale values.
 
 \section{Finite-window Normalization and the Adjacent Defect}
 \label{sec:adjacent}
@@ -741,7 +764,7 @@ For the second, use Proposition~\ref{thm:telescoping},
 and the fact that prefix projection cannot increase Hamming weight.
 \end{proof}
 
-\section{Uniform Law and Tail Collapse}
+\section{Tail Collapse and the Uniform Law}
 \label{sec:uniform}
 
 We now specialize to the uniform law on raw words.  After a simple counting
@@ -1062,6 +1085,8 @@ by the recursion
 \[
 \beta(\varnothing)=0,
 \qquad
+\beta(1)=1,
+\qquad
 \beta(0\alpha)=0,
 \qquad
 \beta(10\alpha)=1,
@@ -1122,6 +1147,14 @@ For $r=0$, one has $q=\varnothing$, $E_0(p,\varnothing)=0$, and
 $\beta(\varnothing)=0$.
 
 Assume $r\ge 1$ and that the claim holds for shorter tails.
+
+If $q=1$, then
+\[
+E_1(p,1)=D_{m+1\to m}(p,1)=\kappa_{m+1\to m}(p,1)
+=
+\kappa_{m+1\to m}(p,\beta(1)).
+\]
+This settles the length-one tail.
 
 If $q=0\alpha$, then Proposition~\ref{prop:cocycle} with the intermediate scale
 $m+1$ gives
@@ -1293,115 +1326,307 @@ because
 by Proposition~\ref{thm:explicit-count}.
 \end{remark}
 
-\section{Compatible Lifts}
-\label{sec:lifts}
+\section{Rigidity and Stationary Markov Inputs}
+\label{sec:markov}
 
-We close by recording an inverse-limit criterion for the eventual
-compatibility of folded prefixes along an infinite raw sequence.
+The collapse theorem is deterministic and therefore suggests a classification
+problem: which tail statistics can control the entire defect family
+$D_{n\to m}$ exactly?  The answer is rigid.  The recursively defined bit
+$\beta$ is exactly the parity of the initial run of $1$'s in the tail, and no
+strictly coarser statistic can determine all truncation defects.
 
-Let
+\begin{theorem}[Rigidity of the tail statistic]\textbf{[New-4 | 2026-04-18]}
+\label{thm:tail-rigidity}
+For a finite word $q=q_1\cdots q_r$, let
 \[
-\Xinf:=\{x=(x_1,x_2,\dots)\in\{0,1\}^{\NN}:\ x_ix_{i+1}=0\text{ for all }i\ge 1\}
+\iota(q):=\max\{s\in\{0,\dots,r\}:\ q_1=\cdots=q_s=1\}
 \]
-be the one-sided golden-mean shift.  For a raw sequence
-$\omega^\infty=(\omega_1,\omega_2,\dots)\in\{0,1\}^{\NN}$, write
+be the length of its initial run of $1$'s, with $\iota(\varnothing):=0$.
+Then
 \[
-r_{\infty\to m}(\omega^\infty):=(\omega_1,\dots,\omega_m)\in\Omega_m.
+\beta(q)\equiv \iota(q)\pmod 2
+\qquad
+\text{for every finite tail word }q.
 \]
-
-\begin{proposition}[Eventual compatibility]
-\label{prop:eventual-compatibility}
-Let $\omega^\infty\in\{0,1\}^{\NN}$ and define
+Define an equivalence relation on the disjoint union
+$\bigsqcup_{r\ge 0}\Omega_r$ by
 \[
-x_m:=\Fold_m(r_{\infty\to m}(\omega^\infty))\in X_m.
-\]
-For each $m\ge 1$, set
-\[
-\delta_m:=x_m\oplus \pi_{m+1\to m}(x_{m+1})\in\{0,1\}^m.
+q\sim q'
+\quad\Longleftrightarrow\quad
+D_{m+|q|\to m}(p,q)=D_{m+|q'|\to m}(p,q')
+\text{ for every }m\ge 1\text{ and }p\in\Omega_m.
 \]
 Then
 \[
-\delta_m=\kappa_{m+1\to m}(r_{\infty\to m+1}(\omega^\infty)).
+q\sim q'
+\quad\Longleftrightarrow\quad
+\beta(q)=\beta(q').
 \]
-Fix $M\ge 1$.  There exists $x^\infty\in\Xinf$ with
+Consequently, if $S$ is any set, if
+$\gamma:\bigsqcup_{r\ge 0}\Omega_r\to S$, and if for each $m\ge 1$ there is a
+map $G_m:\Omega_m\times S\to\{0,1\}^m$ such that
 \[
-\pi_{\infty\to m}(x^\infty)=x_m
-\qquad\text{for all }m\ge M
+D_{m+r\to m}(p,q)=G_m(p,\gamma(q))
+\qquad
+(r\ge 0,\ p\in\Omega_m,\ q\in\Omega_r),
 \]
-if and only if
+then there exists a unique map
 \[
-\delta_m=0
-\qquad\text{for all }m\ge M.
+\psi:\gamma\!\left(\bigsqcup_{r\ge 0}\Omega_r\right)\to\{0,1\}
 \]
-When these equivalent conditions hold, the lift $x^\infty$ is unique.
-\end{proposition}
+satisfying
+\[
+\beta=\psi\circ\gamma.
+\]
+In particular, every exact tail factor for the full defect has at least two
+states, and the factor furnished by Theorem~\ref{thm:tail-collapse} is minimal
+up to relabeling of $\{0,1\}$.
+\end{theorem}
 
 \begin{proof}
-If such an $x^\infty$ exists, then for every $m\ge M$,
-\[
-\pi_{m+1\to m}(x_{m+1})
-=
-\pi_{m+1\to m}(\pi_{\infty\to m+1}(x^\infty))
-=
-\pi_{\infty\to m}(x^\infty)
-=
-x_m,
-\]
-so $\delta_m=0$.
+If $q=\varnothing$, then $\beta(q)=0$ and $\iota(q)=0$.  Assume that $q$ is
+nonempty.
 
-Conversely, assume that $\delta_m=0$ for all $m\ge M$.  Then
+If $\iota(q)=0$, then $q=0\alpha$ for some $\alpha$, so $\beta(q)=0$ by
+definition.  If $\iota(q)=2t+1$ is odd, then either $q=1^{2t+1}$ or
+$q=1^{2t+1}0\alpha$.  Repeated use of the rule $\beta(11\alpha)=\beta(\alpha)$
+reduces both words to the case $\beta(1)=1$, so $\beta(q)=1$.  If
+$\iota(q)=2t$ is positive and even, then either $q=1^{2t}$ or
+$q=1^{2t}0\alpha$.  The same reduction gives
+$\beta(q)=\beta(\varnothing)=0$.  Hence $\beta(q)\equiv\iota(q)\pmod 2$.
+
+If $\beta(q)=\beta(q')$, Theorem~\ref{thm:tail-collapse} yields
 \[
-x_m=\pi_{m+1\to m}(x_{m+1})
-\qquad\text{for every }m\ge M,
+D_{m+|q|\to m}(p,q)
+=
+\kappa_{m+1\to m}(p,\beta(q))
+=
+\kappa_{m+1\to m}(p,\beta(q'))
+=
+D_{m+|q'|\to m}(p,q')
 \]
-so the family $(x_m)_{m\ge M}$ is compatible.  For each $i\ge 1$, choose any
-$j\ge \max\{M,i\}$ and set
+for every $m$ and $p$, so $q\sim q'$.
+
+Conversely, assume $\beta(q)\ne\beta(q')$.  Set $m:=1$ and $p:=1$.  Then
+Theorem~\ref{thm:tail-collapse} gives
 \[
-x^\infty_i:=(x_j)_i.
+D_{1+|q|\to 1}(1,q)=\kappa_{2\to 1}(1,\beta(q)),
+\qquad
+D_{1+|q'|\to 1}(1,q')=\kappa_{2\to 1}(1,\beta(q')).
 \]
-This is well defined because compatibility implies
-$\pi_{j'\to j}(x_{j'})=x_j$ whenever $j'\ge j\ge M$.  Hence
+Also,
 \[
-\pi_{\infty\to m}(x^\infty)=x_m
-\qquad (m\ge M).
+\kappa_{2\to 1}(1,0)=0,
+\qquad
+\kappa_{2\to 1}(1,1)=1,
 \]
-Since every adjacent pair $(x^\infty_i,x^\infty_{i+1})$ appears in some
-admissible prefix $x_j\in X_j$, we have $x^\infty\in\Xinf$.  Uniqueness
-follows at once from the compatibility of the prefixes.
+because $\Fold_1(1)=1$ and $\Fold_2(11)=00$.  Therefore the two defects are
+different, so $q\nsim q'$.
+
+For the factorization claim, define
+\[
+\psi:\gamma\!\left(\bigsqcup_{r\ge 0}\Omega_r\right)\to\{0,1\}
+\]
+by choosing $q$ with $\gamma(q)=s$ and setting $\psi(s):=\beta(q)$.  This is
+well defined because
+$\gamma(q)=\gamma(q')$ implies
+\[
+D_{m+|q|\to m}(p,q)=G_m(p,\gamma(q))=G_m(p,\gamma(q'))=D_{m+|q'|\to m}(p,q')
+\]
+for every $m$ and $p$, hence $q\sim q'$ and therefore $\beta(q)=\beta(q')$.
+The identity $\beta=\psi\circ\gamma$ is immediate from the definition of
+$\psi$, and uniqueness holds on the image of $\gamma$.
 \end{proof}
 
-\begin{corollary}
-\label{cor:summable-defects}
-In the setting of Proposition~\ref{prop:eventual-compatibility}, the following
-conditions are equivalent:
-\begin{enumerate}[label=\textup{(\roman*)}]
-\item $\sum_{m\ge 1}\lvert \delta_m\rvert_0<\infty$;
-\item $\delta_m=0$ for all sufficiently large $m$;
-\item there exists $M\ge 1$ such that for every $m\ge M$,
+The rigidity theorem converts the deterministic collapse into an exact
+non-uniform law for one-step Markov inputs.  The only tail information that
+survives is the parity of the initial run of $1$'s, and that parity has a
+closed form under Markov sampling.
+
+\begin{theorem}[Stationary Markov defect law]\textbf{[New-5 | 2026-04-18]}
+\label{thm:markov-defect-law}
+Let $\PP_P$ be the stationary irreducible one-step Markov measure on
+$\{0,1\}^{\NN}$ with transition matrix
 \[
-\omega^\infty_{m+1}=0
-\qquad\text{or}\qquad
-N(r_{\infty\to m}(\omega^\infty))<F_{m+1}.
+P=(p_{ab})_{a,b\in\{0,1\}}
 \]
-\end{enumerate}
-When these conditions hold, there exists a unique $x^\infty\in\Xinf$ such that
+and stationary distribution $\pi=(\pi_0,\pi_1)$.  Let
+$\omega^\infty=(\omega_1,\omega_2,\dots)$ denote the coordinate process, and
+for $m\ge 1$ write
 \[
-\pi_{\infty\to m}(x^\infty)=x_m
-\qquad\text{for all sufficiently large }m.
+r_{\infty\to m}(\omega^\infty):=(\omega_1,\dots,\omega_m)\in\Omega_m.
 \]
-\end{corollary}
+Fix $m\ge 1$ and $\ell\ge 0$, and set $n:=m+\ell$.  For $a\in\{0,1\}$ define
+probability measures on $\{0,1\}^m$ by
+\[
+\lambda_{m,a}(v)
+:=
+\PP_P\!\left[
+\kappa_{m+1\to m}(r_{\infty\to m}(\omega^\infty),1)=v
+\ \middle|\
+\omega_m=a
+\right],
+\]
+and define
+\[
+\rho_\ell^{(a)}
+:=
+\PP_P\!\left[
+\beta(\omega_{m+1}\cdots\omega_{m+\ell})=1
+\ \middle|\
+\omega_m=a
+\right].
+\]
+Then
+\[
+\Law_{\PP_P}\!\bigl(D_{n\to m}(r_{\infty\to n}(\omega^\infty))\bigr)
+=
+\sum_{a=0}^1
+\pi_a\bigl((1-\rho_\ell^{(a)})\delta_0+\rho_\ell^{(a)}\lambda_{m,a}\bigr),
+\]
+and
+\[
+\rho_0^{(a)}=0,
+\qquad
+\rho_\ell^{(a)}
+=
+\frac{p_{a1}(1-(-p_{11})^\ell)}{1+p_{11}}
+\qquad (\ell\ge 1).
+\]
+Consequently
+\[
+\PP_P\!\bigl[D_{n\to m}(r_{\infty\to n}(\omega^\infty))\ne 0\bigr]
+=
+\sum_{a=0}^1
+\pi_a\,\rho_\ell^{(a)}\bigl(1-\lambda_{m,a}(0)\bigr),
+\]
+the defect law converges as $\ell\to\infty$ to
+\[
+\nu_{m,P}
+:=
+\sum_{a=0}^1
+\pi_a\left(
+\left(1-\frac{p_{a1}}{1+p_{11}}\right)\delta_0
+\;+\;
+\frac{p_{a1}}{1+p_{11}}\lambda_{m,a}
+\right),
+\]
+and
+\[
+d_{\mathrm{TV}}
+\!\left(
+\Law_{\PP_P}\!\bigl(D_{m+\ell\to m}(r_{\infty\to m+\ell}(\omega^\infty))\bigr),
+\nu_{m,P}
+\right)
+\le
+\frac{\pi_1}{1+p_{11}}\,p_{11}^{\ell}.
+\]
+If $p_{01}=p_{11}=u$, then
+\[
+\rho_\ell^{(0)}=\rho_\ell^{(1)}
+=
+\frac{u(1-(-u)^\ell)}{1+u},
+\]
+and the uniform law is recovered at $u=\frac12$.
+\end{theorem}
 
 \begin{proof}
-The equivalence of \textup{(i)} and \textup{(ii)} is immediate because each
-$\lvert \delta_m\rvert_0$ is a nonnegative integer.
-
-For \textup{(ii)}$\Leftrightarrow$\textup{(iii)}, use
+Set
 \[
-\delta_m=\kappa_{m+1\to m}(r_{\infty\to m+1}(\omega^\infty))
+P_{m,\ell}
+:=
+\Law_{\PP_P}\!\bigl(D_{m+\ell\to m}(r_{\infty\to m+\ell}(\omega^\infty))\bigr).
 \]
-and apply Theorem~\ref{thm:adjacent-threshold}.
+Fix $p\in\Omega_m$ and write $a:=p_m$.  By the Markov property, conditioned on
+$r_{\infty\to m}(\omega^\infty)=p$, the future block
+$q:=(\omega_{m+1},\dots,\omega_{m+\ell})$ is independent of the past and is
+distributed as a length-$\ell$ Markov chain started from state $a$.
+Theorem~\ref{thm:tail-collapse} therefore gives
+\[
+\Law_{\PP_P}\!\bigl(D_{m+\ell\to m}(p,q)\,\big|\,r_{\infty\to m}(\omega^\infty)=p\bigr)
+=
+(1-\rho_\ell^{(a)})\delta_0+\rho_\ell^{(a)}\delta_{\kappa_{m+1\to m}(p,1)}.
+\]
+Conditioning further on $\omega_m=a$ and averaging over prefixes with last
+digit $a$ yields
+\[
+\Law_{\PP_P}\!\bigl(
+D_{m+\ell\to m}(r_{\infty\to m+\ell}(\omega^\infty))
+\ \big|\ \omega_m=a
+\bigr)
+=
+(1-\rho_\ell^{(a)})\delta_0+\rho_\ell^{(a)}\lambda_{m,a}.
+\]
+Since $\PP_P[\omega_m=a]=\pi_a$ by stationarity, averaging over $a$ proves the
+first displayed formula for $P_{m,\ell}$.  The formula for the nonzero defect
+probability is immediate.
 
-The final assertion is exactly Proposition~\ref{prop:eventual-compatibility}.
+Theorem~\ref{thm:tail-rigidity} identifies $\beta(q)$ with the parity of the
+initial run of $1$'s.  Under the Markov law started from state $a$, the event
+$\{\beta(q)=1\}$ is therefore the disjoint union of the cylinder events
+corresponding to odd initial run lengths.  For $\ell=0$, this probability is
+zero.  For $\ell\ge 1$, write $\ell=2r$ or $\ell=2r+1$.
+
+If $\ell=2r$, then an odd initial run has length $2j+1$ for some
+$0\le j\le r-1$, so
+\[
+\rho_{2r}^{(a)}
+=
+\sum_{j=0}^{r-1} p_{a1}p_{11}^{2j}(1-p_{11})
+=
+\frac{p_{a1}(1-p_{11}^{2r})}{1+p_{11}}
+=
+\frac{p_{a1}(1-(-p_{11})^{2r})}{1+p_{11}}.
+\]
+If $\ell=2r+1$, then either the odd initial run has length $2j+1$ with
+$0\le j\le r-1$ and is followed by $0$, or the entire block is $1^{2r+1}$.
+Hence
+\[
+\rho_{2r+1}^{(a)}
+=
+\sum_{j=0}^{r-1} p_{a1}p_{11}^{2j}(1-p_{11})
++ p_{a1}p_{11}^{2r}
+=
+\frac{p_{a1}(1+p_{11}^{2r+1})}{1+p_{11}}
+=
+\frac{p_{a1}(1-(-p_{11})^{2r+1})}{1+p_{11}}.
+\]
+This proves the closed form for $\rho_\ell^{(a)}$.
+
+Let
+\[
+\rho_\infty^{(a)}:=\frac{p_{a1}}{1+p_{11}}.
+\]
+Since the chain is irreducible, one has $p_{11}<1$.  Therefore
+\[
+\nu_{m,P}
+=
+\sum_{a=0}^1
+\pi_a\bigl((1-\rho_\infty^{(a)})\delta_0+\rho_\infty^{(a)}\lambda_{m,a}\bigr),
+\]
+so
+\[
+P_{m,\ell}-\nu_{m,P}
+=
+\sum_{a=0}^1
+\pi_a\bigl(\rho_\ell^{(a)}-\rho_\infty^{(a)}\bigr)(\lambda_{m,a}-\delta_0).
+\]
+Since $d_{\mathrm{TV}}(\lambda_{m,a},\delta_0)\le 1$,
+\[
+d_{\mathrm{TV}}(P_{m,\ell},\nu_{m,P})
+\le
+\sum_{a=0}^1 \pi_a\bigl|\rho_\ell^{(a)}-\rho_\infty^{(a)}\bigr|
+=
+\frac{p_{11}^{\ell}}{1+p_{11}}
+\sum_{a=0}^1 \pi_a p_{a1}.
+\]
+Stationarity gives $\pi_0p_{01}+\pi_1p_{11}=\pi_1$, hence
+\[
+d_{\mathrm{TV}}(P_{m,\ell},\nu_{m,P})
+\le
+\frac{\pi_1}{1+p_{11}}\,p_{11}^{\ell}.
+\]
+The Bernoulli specialization is the case $p_{01}=p_{11}=u$.
 \end{proof}
 
 \appendix
