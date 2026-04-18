@@ -216,6 +216,7 @@ import Omega.Folding.MismatchLanguage
 import Omega.Folding.MismatchLanguageIntrinsicErgodic
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.ModSemiringsKernelImageGcd
+import Omega.Folding.ModSemiringsAnnihilatorValuationLattice
 import Omega.Folding.ModSemiringsEndomorphismsIdempotents
 import Omega.Folding.ModularTower
 import Omega.Folding.MomentBounds
