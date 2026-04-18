@@ -50,14 +50,21 @@ PROCESSED_FILE = STATE_DIR / "processed.json"
 AUTOMATH_REPO_URL = "https://github.com/the-omega-institute/automath"
 AUTOMATH_TRAILER = "**Repo:** https://github.com/the-omega-institute/automath"
 
+# Priority targets: high-value repos with real communities and explicit needs.
+# These are checked FIRST before running discovery queries.
+PRIORITY_REPOS = [
+    "teorth/equational_theories",       # Tao's project, 512 stars, 30 open issues, CONTRIBUTING.md
+    "google-deepmind/formal-conjectures",  # DeepMind, 755 stars, explicit contribution paths
+]
+
 DISCOVERY_QUERIES = [
-    '"Lean 4" fibonacci pushed:>=RECENT stars:<500 archived:false',
-    '"Lean 4" "golden ratio" pushed:>=RECENT stars:<500 archived:false',
-    '"Lean 4" "symbolic dynamics" pushed:>=RECENT stars:<500 archived:false',
-    '"Lean 4" zeckendorf pushed:>=RECENT stars:<500 archived:false',
-    '"Lean 4" equational pushed:>=RECENT stars:<500 archived:false',
-    '"Lean 4" "formal verification" pushed:>=RECENT stars:<500 archived:false',
-    '"Lean 4" "AI theorem proving" pushed:>=RECENT stars:<500 archived:false',
+    # Focus on repos with actual community (stars >= 5) and recent activity
+    '"Lean 4" fibonacci pushed:>=RECENT stars:>=5 archived:false',
+    '"Lean 4" "number theory" pushed:>=RECENT stars:>=5 archived:false',
+    '"Lean 4" "symbolic dynamics" pushed:>=RECENT stars:>=3 archived:false',
+    '"Lean 4" equational pushed:>=RECENT stars:>=3 archived:false',
+    '"Lean 4" "formal verification" "conjecture" pushed:>=RECENT stars:>=10 archived:false',
+    'Lean mathlib "open problem" pushed:>=RECENT stars:>=5 archived:false',
 ]
 
 RESEARCH_STANDARD_ZH = """继续深入研究, 结合项目论文PDF分析, 找一些能够惊艳到你的深刻结论链条(禁止同义表述).
@@ -1179,35 +1186,86 @@ def build_stage_b2_prompt(
         Stage B1 output:
         {json.dumps(b1_data, indent=2, ensure_ascii=False)}{feedback_section}{whitelist_section}{deep_section}
 
+        ═══════════════════════════════════════════════════════════════
+        STEP 1 (MANDATORY): UNDERSTAND WHAT THE TARGET REPO NEEDS
+        ═══════════════════════════════════════════════════════════════
+
+        Before looking at Automath, read the TARGET repo thoroughly:
+
+        1. Read README.md — find "Future Work", "TODO", "Limitations",
+           "Open Problems", "Help Wanted", "Contributing" sections.
+        2. Read open issues: `gh api repos/{repo}/issues?state=open`
+        3. Read the paper (if any) — find "Discussion", "Future Directions",
+           "Open Questions" sections.
+        4. Read CONTRIBUTING.md if it exists.
+
+        Write down: what does THIS repo's author actually want help with?
+        What are they stuck on? What would make their project better?
+        What would they be grateful to receive?
+
+        ═══════════════════════════════════════════════════════════════
+        STEP 2: CHECK IF AUTOMATH CAN SOLVE THEIR NEEDS
+        ═══════════════════════════════════════════════════════════════
+
+        Now check Automath's 98 theorems against the needs from Step 1:
+
+        - Does Automath have a PROVED result that directly answers one of
+          their open questions?
+        - Does Automath have a construction (ring, field, CRT decomposition,
+          entropy proof) that their project could USE as a concrete example?
+        - Does Automath have a Lean 4 proof technique that would help them
+          formalize something they haven't managed to formalize?
+
+        The contribution must be USEFUL TO THEM, not just mathematically
+        interesting to us.
+
+        ═══════════════════════════════════════════════════════════════
+        STEP 3: FORMULATE FINDINGS AS GIFTS, NOT SHOWCASES
+        ═══════════════════════════════════════════════════════════════
+
+        Each finding should answer: "What does the target repo author
+        gain from knowing this?" If the answer is "nothing concrete"
+        or "they'd say 'interesting but so what?'", it's not a finding.
+
+        Good: "Your issue #N asks for X. Automath's theorem Y gives you X
+              for the special case Z, with a Lean 4 proof at file:line."
+        Bad:  "Automath's theorem Y is related to your theorem X."
+
         Research standard (must follow verbatim):
         {RESEARCH_STANDARD_ZH}
 
         HARD CONSTRAINTS:
         1. Every `automath_refs` entry MUST point to a real file:line in the Automath repo.
            Do NOT invent paths. Verify the file exists before citing it.
-        2. Theorem names in `connection` and `statement` MUST match actual Automath
-           Lean 4 theorem names (use the whitelist above if provided, or grep the repo).
-        3. Do NOT invent fictional mathematical objects like "Claudes cycle dynamics" or
-           any named entity not present in the target repo or Automath.
-        4. If you cannot find a substantive mathematical connection, return `"findings": []`
-           with `"stop_reason": "no genuine connection found"` — do NOT fabricate.
+        2. Theorem names MUST match actual Lean 4 theorem names from the whitelist.
+        3. Do NOT invent fictional mathematical objects.
+        4. If the target repo has no needs Automath can help with, return
+           `"findings": []` with `"stop_reason"` explaining why.
+        5. Every finding MUST include `"target_need"` — what specific need
+           of the target repo this finding addresses.
 
         Return JSON only:
         {{
+          "target_needs_analysis": {{
+            "open_issues": ["issue #N: description"],
+            "future_work": ["item from README/paper"],
+            "missing_examples": ["what concrete examples they lack"],
+            "formalization_gaps": ["what they want to formalize but haven't"]
+          }},
           "findings": [
             {{
               "title": "succinct result title",
               "type": "theorem|corollary|conjecture|proposition",
               "status": "proved|conjectured|untested",
+              "target_need": "which specific need from target_needs_analysis this addresses",
+              "what_they_gain": "concrete benefit to the target repo author",
               "statement": "mathematical statement",
-              "connection": "why this matters for both repos",
               "proof_sketch": "high-level proof sketch or validation path",
-              "lean_refs": ["file:line"],
-              "automath_refs": ["path:line"],
+              "lean_refs": ["target repo file:line"],
+              "automath_refs": ["automath path:line"],
               "novelty_risk": "short note"
             }}
           ],
-          "novelty_notes": "what appears publishable and why",
           "stop_reason": "why this round can stop"
         }}
         """
@@ -1242,11 +1300,20 @@ def build_stage_b3_prompt(repo: str, findings: list[Any]) -> str:
 def build_stage_b4_prompt(repo: str, findings: list[Any], codex_score_data: dict[str, Any]) -> str:
     return textwrap.dedent(
         f"""\
-        You are Stage B4 of a community outreach pipeline.
+        You are Stage B4 (Claude final review) of a community outreach pipeline.
 
-        Independently review the research findings below for repository {repo}.
-        Be strict about mathematical correctness, novelty, and whether an issue
-        based on these findings would look like a real technical contribution.
+        Review the findings below for repository {repo}.
+        Score on THREE dimensions equally weighted:
+
+        1. CORRECTNESS: Is the math right? Do the cited theorems exist?
+        2. USEFULNESS TO TARGET: Would the target repo's author actually benefit
+           from this? Does it solve a real need they have (open issue, future work,
+           missing example)? Or would they say "interesting but so what?"
+        3. QUALITY OF GIFT: Is this something the author couldn't easily find
+           themselves? Does it save them real work?
+
+        A finding that is mathematically correct but useless to the target = low score.
+        A finding that directly solves their open issue #N with a Lean proof = high score.
 
         Findings:
         {json.dumps(findings, indent=2, ensure_ascii=False)}
@@ -1258,9 +1325,10 @@ def build_stage_b4_prompt(repo: str, findings: list[Any], codex_score_data: dict
         {{
           "overall_score": 1,
           "correctness": 1,
-          "novelty": 1,
+          "usefulness_to_target": 1,
+          "gift_quality": 1,
           "verdict": "pass|retry|skip",
-          "notes": "short review note"
+          "notes": "short review note focusing on: would the target author be grateful?"
         }}
         """
     )
