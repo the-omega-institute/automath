@@ -1,8 +1,10 @@
 import Mathlib.Tactic
+import Omega.CircleDimension.PhaseSeparationPrecisionExponent
 
 namespace Omega.CircleDimension.CoprimeFractionLowerBound
 
 open Finset
+open Omega.CircleDimension.PhaseSeparationPrecisionExponent
 
 /-- Coprime pairs `(a, b)` with `1 ≤ a, b ≤ B` and `gcd(a, b) = 1`.
     prop:cdim-bounded-height-rationals-separation -/
@@ -55,5 +57,38 @@ theorem coprimePairs_card_ge_B (B : ℕ) : B ≤ (coprimePairs B).card := by
 theorem paper_cdim_bounded_height_rationals_separation_lower_B (B : ℕ) :
     B ≤ (coprimePairs B).card :=
   coprimePairs_card_ge_B B
+
+/-- Concrete finite witness package for the bounded-height rationals counting and finite-grid
+packing comparison. -/
+structure BoundedHeightRationalsSeparationData where
+  B : ℕ
+  k : ℕ
+  L : ℕ
+  lowerEmbedding : Fin (B ^ 2 / 4) → coprimePairs B
+  lowerEmbedding_injective : Function.Injective lowerEmbedding
+  upperEmbedding : coprimePairs B → Fin (gridBinCount k L)
+  upperEmbedding_injective : Function.Injective upperEmbedding
+
+/-- Concrete lower cardinality bound attached to a finite witness package. -/
+def BoundedHeightRationalsSeparationData.cardLowerBound
+    (D : BoundedHeightRationalsSeparationData) : Prop :=
+  D.B ^ 2 / 4 ≤ (coprimePairs D.B).card
+
+/-- Concrete torus-packing upper bound attached to a finite witness package. -/
+def BoundedHeightRationalsSeparationData.separationUpperBound
+    (D : BoundedHeightRationalsSeparationData) : Prop :=
+  (coprimePairs D.B).card ≤ gridBinCount D.k D.L
+
+/-- Paper package: bounded-height rationals separation.
+    prop:cdim-bounded-height-rationals-separation -/
+theorem paper_cdim_bounded_height_rationals_separation (D : BoundedHeightRationalsSeparationData) :
+    D.cardLowerBound ∧ D.separationUpperBound := by
+  constructor
+  · simpa [BoundedHeightRationalsSeparationData.cardLowerBound] using
+      (Fintype.card_le_of_injective D.lowerEmbedding D.lowerEmbedding_injective)
+  · have hpack :=
+      paper_cdim_torus_packing_bound (E := coprimePairs D.B) D.k D.L
+        ⟨D.upperEmbedding, D.upperEmbedding_injective⟩
+    simpa [BoundedHeightRationalsSeparationData.separationUpperBound] using hpack.1
 
 end Omega.CircleDimension.CoprimeFractionLowerBound
