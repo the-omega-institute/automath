@@ -78,6 +78,7 @@ import Omega.SPG.FixedAxisGodelOrderInformation
 import Omega.SPG.FoldInjectivizationRegisterLowerBound
 import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.GaugeVolumeAreaComplementarity
+import Omega.SPG.GraphEnergyEllipsoidGodelCodelengthDual
 import Omega.SPG.GodelAxisBoundaryInvertibility
 import Omega.SPG.GodelBoundaryDecodingRelativeErrorThreshold
 import Omega.SPG.GodelDoublelog
