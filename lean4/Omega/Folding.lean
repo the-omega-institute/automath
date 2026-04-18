@@ -102,6 +102,7 @@ import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.FoldCongruenceModSemirings
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldBinDigitDP
+import Omega.Folding.FoldHypercubeFibonacciGodelRadiusCount
 import Omega.Folding.FoldBinTwoStateAsymptotic
 import Omega.Folding.FractranFoldCompiler
 import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
