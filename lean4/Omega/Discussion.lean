@@ -4,6 +4,7 @@ import Omega.Discussion.AddressInvariantNoBayesLearningVisibleLayer
 import Omega.Discussion.BridgeParadigmNonlocalDoublelimitFredholm
 import Omega.Discussion.CharacterIndexHolonomy
 import Omega.Discussion.CrossingWindingBlaschkeIndex
+import Omega.Discussion.CmvStabilizationCore
 import Omega.Discussion.CubicalStokesElimination2Cycle
 import Omega.Discussion.DimensionalNullTrigger
 import Omega.Discussion.EulerFactorBasepointOrbit

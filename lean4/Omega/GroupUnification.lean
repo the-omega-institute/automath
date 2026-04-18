@@ -55,3 +55,4 @@ import Omega.GroupUnification.Window6SplitExtremalDistanceBridge
 import Omega.GroupUnification.Window6FiberAffineGeometry
 import Omega.GroupUnification.Window6Delta34GeneratesSquares
 import Omega.GroupUnification.Window6DirectionSpectrumLinearKernelObstruction
+import Omega.GroupUnification.Window6WeylSymmetryGraphAnnihilation
