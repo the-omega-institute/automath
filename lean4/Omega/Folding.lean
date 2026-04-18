@@ -129,6 +129,7 @@ import Omega.Folding.FoldSuitePublication
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
 import Omega.Folding.GaugeAnomalyAutocovClosed
 import Omega.Folding.GaugeAnomalyCovGenfun
+import Omega.Folding.GaugeAnomalyHankelRank3
 import Omega.Folding.GaugeAnomalyHankelAudit
 import Omega.Folding.GaugeAnomalyCumulantsNotPrecursive
 import Omega.Folding.GaugeAnomalyJordanFingerprint
