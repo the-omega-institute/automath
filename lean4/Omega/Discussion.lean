@@ -1,5 +1,6 @@
 import Omega.Discussion.ChebyshevAdams
 import Omega.Discussion.AuditClosureZx
+import Omega.Discussion.AddressInvariantNoBayesLearningVisibleLayer
 import Omega.Discussion.BridgeParadigmNonlocalDoublelimitFredholm
 import Omega.Discussion.CharacterIndexHolonomy
 import Omega.Discussion.CrossingWindingBlaschkeIndex
