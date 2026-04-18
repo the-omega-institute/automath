@@ -59,6 +59,7 @@ import Omega.CircleDimension.GlobalPhaseExhaustion
 import Omega.CircleDimension.GcdimFiltrationInvariance
 import Omega.CircleDimension.GcdimTwoAxisTowerLaws
 import Omega.CircleDimension.GcdimPolynomialRing
+import Omega.CircleDimension.GcdimZalphaDichotomy
 import Omega.CircleDimension.GcdimTwoAxisProductLaws
 import Omega.CircleDimension.GcdimTwoAxisFiniteness
 import Omega.CircleDimension.GcdimNoetherHilbertDimMinusOne
