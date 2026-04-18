@@ -82,6 +82,7 @@ import Omega.POM.GibbsSelection
 import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.HankelFingerprintSeeds
 import Omega.POM.HankelInversePropagationLinearOrbits
+import Omega.POM.HankelDeterminantGeometricLaw
 import Omega.POM.HankelFinitePoleSpectralGap
 import Omega.POM.HankelSyndromeGapRankDefect
 import Omega.POM.HankelSyndromeModuleKernelEqualsMultiples
