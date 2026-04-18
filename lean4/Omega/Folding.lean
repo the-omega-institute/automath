@@ -171,6 +171,7 @@ import Omega.Folding.GaugeAnomalyTauIntClosed
 import Omega.Folding.GaugeAnomalyTrigonalGenus
 import Omega.Folding.GaugeAnomalyUnitCircleRigidity
 import Omega.Folding.GaugeAnomalyVarianceFiniteWindowClosed
+import Omega.Folding.HammingLipschitzBudget
 import Omega.Folding.LayerwiseAuditablePrimorialNecessity
 import Omega.Folding.LiftWreathDecomposition
 import Omega.Folding.GmFischerCover
