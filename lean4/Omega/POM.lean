@@ -139,6 +139,7 @@ import Omega.POM.PositiveNegativeMomentCoupling
 import Omega.POM.PressureConvexity
 import Omega.POM.ProjectivePressureZeroNormalization
 import Omega.POM.ProjectivePressureHolderLogconvex
+import Omega.POM.ProjectivePressureDiscreteLegendreEnvelope
 import Omega.POM.ProjectivePressureDiscreteFlatnessForcesAffine
 import Omega.POM.ProjectionAsPartitionPrimeRegister
 import Omega.POM.PressureSlopes

@@ -1,6 +1,7 @@
 import Omega.SyncKernelWeighted.MobiusErrorPropagation
 import Omega.SyncKernelWeighted.PressureBranchpointsDiscriminant
 import Omega.SyncKernelWeighted.IharaWittPrimitiveSpectrum
+import Omega.SyncKernelWeighted.IharaArtinFactorization
 import Omega.SyncKernelWeighted.ChebyshevDworkCongruenceChain
 import Omega.SyncKernelWeighted.RealInput40ArityChargeCoboundary
 import Omega.SyncKernelWeighted.RealInput40ArityChargeDensityBound
