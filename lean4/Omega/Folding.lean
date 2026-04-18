@@ -96,6 +96,7 @@ import Omega.Folding.FoldZeroUncertainty
 import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.FoldCongruenceModSemirings
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
+import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinTwoStateAsymptotic
 import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
 import Omega.Folding.FoldOrderIndependent
