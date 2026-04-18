@@ -53,6 +53,7 @@ import Omega.Conclusion.FoldWalshGramSimplexSignatureSection
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Conclusion.GeometricUpliftFourFourCollapse
 import Omega.Conclusion.GodelLeyangIFS
+import Omega.Conclusion.GodelVsMinimalGap
 import Omega.Conclusion.GoldenBiasSecondOrderUniqueness
 import Omega.Conclusion.GoldenSprtDeltaClosure
 import Omega.Conclusion.HaltingTimeExternalBudgetExact

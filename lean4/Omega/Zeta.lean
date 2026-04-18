@@ -4,6 +4,7 @@ import Omega.Zeta.AbelianShadowDefect
 import Omega.Zeta.AdamsBinomialProbeFourierDiagonalization
 import Omega.Zeta.AdamsBinomialProbeKernelToeplitzPsdEquivalence
 import Omega.Zeta.AdamsFiberMobiusInversion
+import Omega.Zeta.AutomaticDirichletMoment
 import Omega.Zeta.BlockCyclicRigidity
 import Omega.Zeta.BooleanBinaryJumpKernels2AdicHalfperiod
 import Omega.Zeta.BooleanDisjointnessZetaLDLT
