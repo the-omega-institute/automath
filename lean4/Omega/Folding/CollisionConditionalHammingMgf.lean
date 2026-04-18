@@ -111,6 +111,82 @@ theorem paper_fold_collision_conditional_hamming_mgf (u : ℝ) :
     ring
   · exact hroot.trans hsubset.symm
 
+/-- First-coordinate mismatch indicator on the two-bit seed. -/
+def seedFirstCoordinateMismatch (p : (Bool × Bool) × (Bool × Bool)) : ℝ :=
+  if p.1.1 = p.2.1 then 0 else 1
+
+/-- Second-coordinate mismatch indicator on the two-bit seed. -/
+def seedSecondCoordinateMismatch (p : (Bool × Bool) × (Bool × Bool)) : ℝ :=
+  if p.1.2 = p.2.2 then 0 else 1
+
+/-- Conditional expectation over the parity-collision event for the uniform two-bit seed. -/
+def seedConditionalExpectation (f : (Bool × Bool) × (Bool × Bool) → ℝ) : ℝ :=
+  (1 / 8 : ℝ) *
+    Finset.sum (twoBitWords.product twoBitWords) (fun p => if seedCollision p.1 p.2 then f p else 0)
+
+/-- Conditional first moment of the first mismatch coordinate. -/
+def seedConditionalFirstCoordinateMean : ℝ :=
+  seedConditionalExpectation seedFirstCoordinateMismatch
+
+/-- Conditional first moment of the second mismatch coordinate. -/
+def seedConditionalSecondCoordinateMean : ℝ :=
+  seedConditionalExpectation seedSecondCoordinateMismatch
+
+/-- Conditional joint second moment of the two mismatch coordinates. -/
+def seedConditionalCoordinateJointSecondMoment : ℝ :=
+  seedConditionalExpectation (fun p => seedFirstCoordinateMismatch p * seedSecondCoordinateMismatch p)
+
+/-- Conditional covariance of the two coordinate mismatch indicators. -/
+def seedConditionalCoordinateCovariance : ℝ :=
+  seedConditionalCoordinateJointSecondMoment -
+    seedConditionalFirstCoordinateMean * seedConditionalSecondCoordinateMean
+
+/-- Conditional first moment of the total Hamming distance. -/
+def seedConditionalHammingMean : ℝ :=
+  seedConditionalExpectation (fun p => seedHammingDist p.1 p.2)
+
+/-- Conditional second moment of the total Hamming distance. -/
+def seedConditionalHammingSecondMoment : ℝ :=
+  seedConditionalExpectation (fun p => (seedHammingDist p.1 p.2 : ℝ) ^ (2 : ℕ))
+
+/-- Conditional variance of the total Hamming distance. -/
+def seedConditionalHammingVariance : ℝ :=
+  seedConditionalHammingSecondMoment - seedConditionalHammingMean ^ (2 : ℕ)
+
+/-- In the two-bit parity-collision seed, the coordinate mismatch indicators have covariance
+`1/4`, and the total Hamming distance has conditional variance `1`.
+    prop:fold-collision-conditional-hamming-covariance -/
+theorem paper_fold_collision_conditional_hamming_covariance :
+    seedConditionalCoordinateCovariance = (1 / 4 : ℝ) ∧
+      seedConditionalHammingVariance = (1 : ℝ) := by
+  have hFirst : seedConditionalFirstCoordinateMean = (1 / 2 : ℝ) := by
+    rw [seedConditionalFirstCoordinateMean, seedConditionalExpectation, twoBitPairs_enum]
+    simp [seedCollision, seedHammingDist, seedFirstCoordinateMismatch]
+    ring
+  have hSecond : seedConditionalSecondCoordinateMean = (1 / 2 : ℝ) := by
+    rw [seedConditionalSecondCoordinateMean, seedConditionalExpectation, twoBitPairs_enum]
+    simp [seedCollision, seedHammingDist, seedSecondCoordinateMismatch]
+    ring
+  have hJoint : seedConditionalCoordinateJointSecondMoment = (1 / 2 : ℝ) := by
+    rw [seedConditionalCoordinateJointSecondMoment, seedConditionalExpectation, twoBitPairs_enum]
+    simp [seedCollision, seedHammingDist, seedFirstCoordinateMismatch, seedSecondCoordinateMismatch]
+    ring
+  have hHammingMean : seedConditionalHammingMean = (1 : ℝ) := by
+    rw [seedConditionalHammingMean, seedConditionalExpectation, twoBitPairs_enum]
+    simp [seedCollision, seedHammingDist]
+    ring
+  have hHammingSecond : seedConditionalHammingSecondMoment = (2 : ℝ) := by
+    rw [seedConditionalHammingSecondMoment, seedConditionalExpectation, twoBitPairs_enum]
+    simp [seedCollision, seedHammingDist]
+    ring
+  refine ⟨?_, ?_⟩
+  · unfold seedConditionalCoordinateCovariance
+    rw [hJoint, hFirst, hSecond]
+    norm_num
+  · unfold seedConditionalHammingVariance
+    rw [hHammingSecond, hHammingMean]
+    norm_num
+
 end
 
 end Omega.Folding

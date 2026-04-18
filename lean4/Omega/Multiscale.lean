@@ -9,3 +9,4 @@ import Omega.Multiscale.SolenoidShiftInvariance
 import Omega.Multiscale.SolenoidStokesEquilibriumMarkovContraction
 import Omega.Multiscale.StokesDirichletEnergyMultiscaleApprox
 import Omega.Multiscale.StokesPeriodModuleCovectorNormalization
+import Omega.Multiscale.ToralSolenoidCechH1DirectLimit

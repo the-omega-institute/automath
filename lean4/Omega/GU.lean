@@ -150,6 +150,7 @@ import Omega.GU.Window6CyclicWeightThresholdRootLength
 import Omega.GU.Window6DoubleLock12
 import Omega.GU.Window6DyadicBudget
 import Omega.GU.Window6EdgeFluxCriticalGroupCyclic
+import Omega.GU.Window6EdgeFluxSmithNonsimple
 import Omega.GU.Window6EdgeFluxMaxEntropyKernelUniqueness
 import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
 import Omega.GU.Window6FoldbinGaugeLowDegreeHomology
