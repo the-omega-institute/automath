@@ -1204,17 +1204,41 @@ def build_stage_b2_prompt(
         What would they be grateful to receive?
 
         ═══════════════════════════════════════════════════════════════
-        STEP 2: CHECK IF AUTOMATH CAN SOLVE THEIR NEEDS
+        STEP 2: MINE AUTOMATH'S FULL ARSENAL (papers + Lean 4 + latest)
         ═══════════════════════════════════════════════════════════════
 
-        Now check Automath's 98 theorems against the needs from Step 1:
+        Automath is NOT just 98 theorems. It is a research program with
+        34 papers, 10,500+ Lean 4 theorems, and active development.
+        You MUST go beyond the whitelist and dig into the actual sources:
 
-        - Does Automath have a PROVED result that directly answers one of
-          their open questions?
-        - Does Automath have a construction (ring, field, CRT decomposition,
-          entropy proof) that their project could USE as a concrete example?
-        - Does Automath have a Lean 4 proof technique that would help them
-          formalize something they haven't managed to formalize?
+        A) READ THE PAPERS (theory/2026_*/ and papers/publication/2026_*/):
+           - Each paper has main.tex + sections/**/*.tex
+           - Read the "Open Questions", "Conjectures", "Future Work" sections
+           - These contain unpublished conjectures that are perfect for
+             formal-conjectures PRs or teorth issues
+           - List of paper directories to scan:
+             `find theory/ papers/publication/ -name "main.tex" -maxdepth 3`
+
+        B) READ THE LATEST LEAN 4 PROOFS (lean4/Omega/):
+           - `lean4/Omega/Folding/` — 47 files, fold operators, fiber spectra
+           - `lean4/Omega/Frontier/` — conditional arithmetic, boundary results
+           - `lean4/Omega/Zeta/` — zeta functions, cyclotomic determinants
+           - `lean4/Omega/Conclusion/` — frontier theorems, newest results
+           - `lean4/Omega/Discussion/` — bridge theorems, cross-domain
+           - grep for `sorry` — these are open formalizations we could offer
+           - grep for `conjecture` or `Conjecture` — stated but unproved
+
+        C) CHECK THE MAIN PAPER for the latest state:
+           `theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/`
+           This is the umbrella paper. Its appendix contains the newest results
+           that may not yet be in individual paper repos.
+
+        D) Match needs from Step 1 against ALL of the above:
+           - Does a paper's conjecture answer their open issue?
+           - Does a Lean 4 proof provide the example they need?
+           - Does a `sorry` in our code align with their open problem?
+           - Can we offer to formalize one of THEIR conjectures using OUR
+             Lean 4 infrastructure?
 
         The contribution must be USEFUL TO THEM, not just mathematically
         interesting to us.
