@@ -119,6 +119,7 @@ import Omega.Zeta.HankelVandermonde4
 import Omega.Zeta.HankelVsPronySquareGap
 import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
 import Omega.Zeta.XiHankelDetScalingCovariance
+import Omega.Zeta.ShiftInvariantSaturatedLatticePrincipalIdeal
 import Omega.Zeta.XiExceptionalIntegerModelMqInverseClosedForm
 import Omega.Zeta.XiFiberSpectrumHankelConductorPronyPadic
 import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
