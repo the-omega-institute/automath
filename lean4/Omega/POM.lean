@@ -68,6 +68,7 @@ import Omega.POM.FiberLeyangKlBernoulliDecomposition
 import Omega.POM.FiberRewritePoissonBinomial
 import Omega.POM.BCPontryaginDualClassification
 import Omega.POM.FiberReflector
+import Omega.POM.FiberSpectrumStieltjesRigidityDeterminantSchatten
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.FiberStokesEulerBoundaryObservability
 import Omega.POM.FiberCategoricalSymmetryFibonacciFusion
