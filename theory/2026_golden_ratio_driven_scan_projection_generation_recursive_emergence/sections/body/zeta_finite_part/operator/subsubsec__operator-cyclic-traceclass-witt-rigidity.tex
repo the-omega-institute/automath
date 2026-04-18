@@ -1,62 +1,268 @@
 \subsubsection{谱刚性与 Big-Witt 编译闭包：原子 Euler 数据的实现不变性、\texorpdfstring{$\gcd/\mathrm{lcm}$}{gcd/lcm} 乘法与 \texorpdfstring{$p$}{p}-典型伸缩}\label{subsec:operator-cyclic-traceclass-witt-rigidity}
-小节 \ref{subsec:cyclic-traceclass-lift} 与推论 \ref{cor:cyclic-euler-product-complex-section} 给出：对满足迹类可执行性（\(\ell^1\)）条件的原子 Euler 乘积，存在显式循环块直和算子 \(L_{\mathcal D}\) 使其 Fredholm \(\zeta\)-接口严格复原该乘积。
-本段记录三个互补的结构性后果：
-(i) 任意实现的\emph{非零谱多重集}由 Euler 因子刚性强迫；
-(ii) 循环块在张量积下封闭，并以 \(\gcd/\mathrm{lcm}\) 的离散组合律实现 Big-Witt 乘法；
-(iii) 在 \(p\)-幂长度族上可实现 Frobenius/Verschiebung 伸缩，给出 Dwork 型同余的谱实现模板。
+小节 \ref{subsec:cyclic-traceclass-lift}、推论 \ref{cor:cyclic-euler-product-complex-section} 与定理 \ref{thm:cyclic-fredholm-realisation} 给出：对满足迹类可执行性（\(\ell^1\)）条件的原子 Euler 乘积，存在显式循环块直和算子 \(L_{\mathcal D}\) 使其 Fredholm \(\zeta\)-接口严格复原该乘积；而在正规实现子类中，这一模型在添零直和意义下已被完全分类。
+本段记录四个互补的结构性后果：
+(i) 任意迹类实现的\emph{非零谱多重集}由 determinant 精确强迫；
+(ii) 循环块正规模型在相同 determinant 约束下极小化一切 Ky Fan 预算，并因而极小化所有酉不变范数；
+(iii) 循环块在张量积下封闭，并以 \(\gcd/\mathrm{lcm}\) 的离散组合律实现 Big-Witt 乘法；
+(iv) 在 \(p\)-幂长度族上可实现 Frobenius/Verschiebung 伸缩，给出 Dwork 型同余的谱实现模板。
 
-\begin{proposition}[原子 Euler 乘积的谱刚性：任意 Fredholm 实现的谱多重集被零点集合强迫]\label{prop:cyclic-euler-spectral-rigidity}
-设 \(\mathcal D=\{(\beta_j,n_j,m_j)\}_{j\in J}\subset \CC\times\NN_{\ge 1}\times\NN\) 为一族原子数据，并定义 Euler 型乘积
+\begin{proposition}[Fredholm 因式分解刚性：行列式约束强制精确非零谱]\label{prop:cyclic-euler-spectral-rigidity}\label{prop:fredholm-factorisation-rigidity}
+设
 \[
-\zeta_{\mathcal D}(r):=\prod_{j\in J}\bigl(1-\beta_j r^{n_j}\bigr)^{-m_j}.
+\mathcal D=\{(\beta_j,n_j,m_j)\}_{j\in J},
+\qquad
+\mathcal D'=\{(\beta'_\ell,n'_\ell,m'_\ell)\}_{\ell\in L},
 \]
-设 \(L\in\mathcal{S}_1\) 为某个迹类算子，且存在 \(r_0>0\) 使得在 \(|r|<r_0\) 上成立
+为两组复权原子数据，满足
 \[
-\det(I-rL)^{-1}=\zeta_{\mathcal D}(r).
+\mathcal D,\mathcal D'
+\subset (\CC\setminus\{0\})\times \NN_{\ge 1}\times \NN,
+\qquad
+\sum_{j\in J}m_jn_j|\beta_j|^{1/n_j}<\infty,
+\qquad
+\sum_{\ell\in L}m'_\ell n'_\ell|\beta'_\ell|^{1/n'_\ell}<\infty.
 \]
-则 \(L\) 的非零特征值多重集（按代数重数计）被 \(\zeta_{\mathcal D}\) 的零点结构强迫如下：
-对每个 \(j\)，任选 \(\alpha_j\in\CC\) 满足 \(\alpha_j^{n_j}=\beta_j\)，则集合
-\[
-\{\alpha_j\omega:\ \omega^{n_j}=1\}
-\]
-中的每个元素都必须作为 \(L\) 的非零特征值出现，其代数重数至少为 \(m_j\)。
-特别地，
-\[
-\mathrm{rank}(L)\ \ge\ \sum_{j\in J}m_jn_j,
-\]
-并且当 \(J\) 有限时，\(L\) 的非零谱只包含有限多个点；因此其对应的非零谱 Riesz 投影之像空间为有限维，维数至少为 \(\sum_{j}m_jn_j\)。
-特别地，存在一个有限秩实现（例如循环块直和实现）达到该最小非零谱维数。
-若进一步假设不同原子不发生根集合重合（即上述根集合两两不交），则 \(L\) 的非零谱恰等于这些根的并（按重数计）。
+\begin{enumerate}
+  \item 若相应 Euler 乘积
+  \[
+  \prod_{j\in J}\bigl(1-\beta_j r^{n_j}\bigr)^{-m_j},
+  \qquad
+  \prod_{\ell\in L}\bigl(1-\beta'_\ell r^{n'_\ell}\bigr)^{-m'_\ell}
+  \]
+  在 \(r=0\) 的某个邻域内相等，则两组数据所对应的循环块正规模型具有完全相同的非零特征值多重集（按代数重数计）。特别地，
+  \[
+  \sum_{j\in J}m_jn_j=\sum_{\ell\in L}m'_\ell n'_\ell,
+  \qquad
+  \sum_{j\in J}m_jn_j|\beta_j|^{1/n_j}
+  =
+  \sum_{\ell\in L}m'_\ell n'_\ell|\beta'_\ell|^{1/n'_\ell}.
+  \]
+  \item 更一般地，若 \(T_1,T_2\in\mathcal{S}_1\) 满足
+  \[
+  \det(I-rT_1)^{-1}=\det(I-rT_2)^{-1}
+  \]
+  在 \(r=0\) 的某个邻域内成立，则 \(T_1,T_2\) 的非零谱多重集（按代数重数计）完全一致。因而
+  \[
+  \Tr(T_1^n)=\Tr(T_2^n),
+  \qquad
+  p_n(T_1)=p_n(T_2)
+  \qquad (n\ge 1).
+  \]
+\end{enumerate}
 \end{proposition}
 
-\begin{proof}[证明要点]
-对迹类算子 \(L\)，Fredholm 行列式满足标准谱因子分解：其零点恰位于 \(r=\lambda^{-1}\)（\(\lambda\) 为 \(L\) 的非零特征值），且零点重数等于对应特征值的代数重数。
-另一方面，
-\(
-\prod_{j}(1-\beta_j r^{n_j})^{m_j}
-\)
-的零点集合由各因子 \(1-\beta_j r^{n_j}\) 的零点给出：取任意 \(\alpha_j^{n_j}=\beta_j\)，则零点为 \(r=(\alpha_j\omega)^{-1}\)（\(\omega^{n_j}=1\)），并且每个零点的重数至少为 \(m_j\)；根集合不重合时重数恰为 \(m_j\)。
-比较两边行列式的零点与重数即得谱刚性陈述。
-秩下界来自“非零谱广义特征空间的维数下界 \(\ge\) 非零谱代数重数之和”。
-当 \(J\) 有限时，行列式右端为多项式，因此 \(L\) 的非零谱点数有限，从而非零谱 Riesz 投影像空间有限维；
-而循环块直和实现给出一个达到该最小非零谱维数的显式有限秩模型。证毕。
+\begin{proof}
+对 \textup{(1)}，由定理 \ref{thm:cyclic-fredholm-realisation}，两组数据分别给出正规循环块模型 \(L_{\mathcal D}\) 与 \(L_{\mathcal D'}\)，并满足相应 Euler 乘积的 Fredholm 行列式 germ。取倒数后，
+\[
+\det(I-rL_{\mathcal D})=\det(I-rL_{\mathcal D'})
+\]
+在 \(r=0\) 邻域内成立，从而作为整函数恒等。由 \cite[Theorem~3.7]{Simon2005TraceIdeals}，\(\det(I-rT)\) 的零点恰为 \(T\) 的非零特征值倒数，且零点重数等于代数重数。故 \(L_{\mathcal D}\) 与 \(L_{\mathcal D'}\) 具有完全相同的非零谱多重集；两条显示公式随之立即得到。
+
+对 \textup{(2)}，把上述论证直接应用于 \(T_1,T_2\) 即得其非零谱多重集完全相同。再比较
+\[
+\log\det(I-rT_i)^{-1}
+=\sum_{n\ge 1}\frac{\Tr(T_i^n)}{n}r^n
+\qquad (i=1,2)
+\]
+的系数，即得迹序列相同；再经 Möbius 反演便有 \(p_n(T_1)=p_n(T_2)\)。证毕。
 \end{proof}
 
-\begin{corollary}[Schatten--\texorpdfstring{$p$}{p} 范数的原子闭式与实现不变性（正规实现）]\label{cor:cyclic-euler-schatten-invariants}
-在命题 \ref{prop:cyclic-euler-spectral-rigidity} 的“根集合不重合”口径下，设 \(L\) 为一个\emph{正规}迹类实现（例如 \(L=L_{\mathcal D}\) 的循环块直和实现）。
-则对任意 \(p>0\)，其 Schatten--\(p\)（准）范数满足实现不变的闭式
+\begin{corollary}[行列式约束下的精确非零谱]\label{thm:general-support-optimality}
+设 \(T\in\mathcal{S}_1(H)\) 满足
 \[
-\|L\|_{S_p}^{p}
-=\sum_{\lambda\in\mathrm{Spec}(L)\setminus\{0\}}|\lambda|^{p}
-=\sum_{j\in J} m_j n_j\,|\beta_j|^{p/n_j}.
+\det(I-rT)^{-1}
+=\prod_{j\in J}\bigl(1-\beta_j r^{n_j}\bigr)^{-m_j}
 \]
-因此 \(\{\|L\|_{S_p}\}_{p>0}\) 构成对原子 Euler 数据的可计算谱指纹族。
+在 \(r=0\) 的某个邻域内成立，其中
+\[
+\mathcal D=\{(\beta_j,n_j,m_j)\}_{j\in J}
+\subset (\CC\setminus\{0\})\times \NN_{\ge 1}\times \NN,
+\qquad
+\sum_{j\in J}m_jn_j|\beta_j|^{1/n_j}<\infty.
+\]
+任选 \(\alpha_j\in\CC\) 使 \(\alpha_j^{n_j}=\beta_j\)。则 \(T\) 的非零谱多重集（按代数重数计）恰为
+\[
+\biguplus_{j\in J}\bigl\{\alpha_j\omega:\omega^{n_j}=1\bigr\}^{m_j}.
+\]
+特别地，其非零谱总代数重数为
+\[
+\sum_{j\in J}m_jn_j.
+\]
 \end{corollary}
 
 \begin{proof}
-对正规算子，奇异值即为特征值模长（按重数计）。
-由命题 \ref{prop:cyclic-euler-spectral-rigidity} 的谱刚性与“根集合不重合”假设，\(L\) 的非零特征值由各 \(j\) 贡献 \(n_j\) 个模长皆为 \(|\beta_j|^{1/n_j}\) 的点，每点代数重数为 \(m_j\)。
-故 \(\|L\|_{S_p}^p\) 等于把 \(|\beta_j|^{p/n_j}\) 以重数 \(m_jn_j\) 求和，得到所示闭式。证毕。
+设 \(L_{\mathcal D}\) 为定理 \ref{thm:cyclic-fredholm-realisation} 所给的循环块正规模型。由命题 \ref{prop:fredholm-factorisation-rigidity}\textup{(2)}，\(T\) 与 \(L_{\mathcal D}\) 具有完全相同的非零谱多重集；而 \(L_{\mathcal D}\) 的非零谱正是各个循环块的单位根轨道并置。证毕。
+\end{proof}
+
+\begin{corollary}[Schatten--\texorpdfstring{$p$}{p} 范数的原子闭式与实现不变性（正规实现）]\label{cor:cyclic-euler-schatten-invariants}
+设
+\[
+\mathcal D=\{(\beta_j,n_j,m_j)\}_{j\in J}
+\subset (\CC\setminus\{0\})\times \NN_{\ge 1}\times \NN
+\]
+满足
+\[
+\sum_{j\in J}m_jn_j|\beta_j|^{1/n_j}<\infty,
+\]
+并设 \(L\) 为对应 Euler 乘积的一个\emph{正规}迹类实现（例如 \(L=L_{\mathcal D}\) 的循环块直和实现）。则对任意 \(p>0\)，其 Schatten--\(p\)（准）范数满足无条件闭式
+\[
+\|L\|_{S_p}^{p}
+=\sum_{j\in J} m_j n_j\,|\beta_j|^{p/n_j}.
+\]
+因此 \(\{\|L\|_{S_p}\}_{p>0}\) 构成对原子 Euler 数据的可计算谱指纹族，即使不同原子贡献的单位根轨道发生重合也不例外。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:cyclic-fredholm-realisation}，任意正规实现都与某个 \(0\oplus L_{\mathcal D}\) 酉等价；等价地，由推论 \ref{thm:general-support-optimality}，其非零特征值多重集正是
+\(
+\biguplus_j\{\alpha_j\omega:\omega^{n_j}=1\}^{m_j}
+\)。
+对正规算子，奇异值恰为特征值模长（按重数计），而每个 \(j\) 恰贡献 \(m_jn_j\) 个模长 \(|\beta_j|^{1/n_j}\) 的非零特征值。故
+\[
+\|L\|_{S_p}^{p}
+=\sum_{j\in J} m_j n_j\,|\beta_j|^{p/n_j}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[行列式约束下的 Ky Fan 优势与酉不变范数极小性]\label{thm:kyfan-dominance}
+设 \(T\in\mathcal{S}_1(H)\) 满足
+\[
+\det(I-rT)^{-1}
+=\prod_{j\in J}\bigl(1-\beta_j r^{n_j}\bigr)^{-m_j}
+\]
+在 \(r=0\) 的某个邻域内成立，其中
+\[
+\mathcal D=\{(\beta_j,n_j,m_j)\}_{j\in J}
+\subset (\CC\setminus\{0\})\times \NN_{\ge 1}\times \NN
+\]
+满足
+\[
+\sum_{j\in J}m_jn_j|\beta_j|^{1/n_j}<\infty.
+\]
+令 \(L_{\mathcal D}\) 为定理 \ref{thm:cyclic-fredholm-realisation} 的循环块正规模型，并记奇异值按非增序排为
+\[
+s_1(T)\ge s_2(T)\ge \cdots,
+\qquad
+s_1(L_{\mathcal D})\ge s_2(L_{\mathcal D})\ge \cdots.
+\]
+则对任意 \(N\ge 1\)，都有
+\[
+\sum_{k=1}^{N}s_k(L_{\mathcal D})
+\le
+\sum_{k=1}^{N}s_k(T).
+\]
+因此，在所有具有同一 Fredholm determinant 的迹类实现中，\(L_{\mathcal D}\) 同时最小化一切 Ky Fan 范数；进而由 Ky Fan dominance 原理，凡在 \(L_{\mathcal D}\) 上有限的酉不变范数 \(\nu\) 都满足
+\[
+\nu(L_{\mathcal D})\le \nu(T).
+\]
+\end{theorem}
+
+\begin{proof}
+由推论 \ref{thm:general-support-optimality}，\(T\) 与 \(L_{\mathcal D}\) 具有完全相同的非零特征值多重集。将这些非零特征值按模长非增序记为
+\[
+\lambda_1,\lambda_2,\dots.
+\]
+由于 \(L_{\mathcal D}\) 正规，其奇异值恰为这些特征值的模长：
+\[
+s_k(L_{\mathcal D})=|\lambda_k|
+\qquad (k\ge 1).
+\]
+经典的 Ky Fan 特征值--奇异值不等式给出
+\[
+\sum_{k=1}^{N}|\lambda_k|
+\le
+\sum_{k=1}^{N}s_k(T)
+\qquad (N\ge 1),
+\]
+与上一式合并便得所述 Ky Fan 优势。最后一段关于任意酉不变范数的结论，是 Ky Fan dominance 原理对上述偏和不等式的直接推论。证毕。
+\end{proof}
+
+\begin{theorem}[迹范数极小性与正规刻画]\label{thm:trace-norm-minimality}
+设 \(T\in\mathcal{S}_1(H)\) 满足
+\[
+\det(I-rT)^{-1}
+=\prod_{j\in J}\bigl(1-\beta_j r^{n_j}\bigr)^{-m_j}
+\]
+在 \(r=0\) 的某个邻域内成立，其中
+\[
+\mathcal D=\{(\beta_j,n_j,m_j)\}_{j\in J}
+\subset (\CC\setminus\{0\})\times \NN_{\ge 1}\times \NN
+\]
+满足
+\[
+\sum_{j\in J}m_jn_j|\beta_j|^{1/n_j}<\infty.
+\]
+则
+\[
+\|T\|_1
+\ge
+\sum_{j\in J}m_jn_j|\beta_j|^{1/n_j}.
+\]
+等号成立当且仅当 \(T\) 正规。等价地，等号成立当且仅当存在 Hilbert 空间 \(H_0\) 与酉算子 \(U:H\to H_0\oplus H_{\mathcal D}\)，使
+\[
+UTU^{-1}=0_{H_0}\oplus L_{\mathcal D},
+\]
+其中 \(L_{\mathcal D}\) 是定理 \ref{thm:cyclic-fredholm-realisation} 的循环块正规模型。
+\end{theorem}
+
+\begin{proof}
+令 \(L_{\mathcal D}\) 为定理 \ref{thm:cyclic-fredholm-realisation} 所给的循环块正规模型。由定理 \ref{thm:kyfan-dominance} 对 \(N\to\infty\) 取极限，得到
+\[
+\|L_{\mathcal D}\|_1\le \|T\|_1.
+\]
+再由定理 \ref{thm:cyclic-fredholm-realisation} 对正规模型的迹范数公式，
+\[
+\|L_{\mathcal D}\|_1
+=\sum_{j\in J}m_jn_j|\beta_j|^{1/n_j},
+\]
+于是得出所述下界。
+
+若 \(T\) 正规，则由定理 \ref{thm:cyclic-fredholm-realisation}，\(T\) 与某个 \(0_{H_0}\oplus L_{\mathcal D}\) 酉等价，故显然取到等号。反过来设 \(\|T\|_1=\|L_{\mathcal D}\|_1\)。将 \(T\) 的非零特征值按代数重数重复并按模长非增序记为
+\[
+\lambda_1(T),\lambda_2(T),\dots.
+\]
+由推论 \ref{thm:general-support-optimality}，
+\[
+\sum_k|\lambda_k(T)|
+=\sum_{j\in J}m_jn_j|\beta_j|^{1/n_j}
+=\|T\|_1.
+\]
+
+取一组将紧算子 \(T\) 上三角化的正交基，使 \(T\) 的对角元恰为 \(\lambda_k(T)\)（按代数重数重复）。定义对角酉算子 \(D\) 的对角元为
+\[
+d_k=
+\begin{cases}
+\overline{\lambda_k(T)}/|\lambda_k(T)|,
+& \lambda_k(T)\neq 0,\\
+1,& \lambda_k(T)=0.
+\end{cases}
+\]
+则 \(DT\) 仍为上三角，且
+\[
+\Tr(DT)=\sum_k|\lambda_k(T)|=\|T\|_1.
+\]
+把 \(T\) 写成极分解 \(T=V|T|\)。由于 \(\|DV\|\le 1\)，有
+\[
+0
+=\Tr|T|-\Re\Tr(DT)
+=\Tr\!\bigl(|T|^{1/2}(I-\Re(DV))|T|^{1/2}\bigr).
+\]
+括号中的算子是正的，故必为零。于是对任意
+\(
+h\in\overline{\operatorname{ran}(|T|)}
+\)
+都有 \(\Re\langle DVh,h\rangle=\|h\|^2\)，从而
+\[
+\|h-DVh\|^2
+=\|h\|^2+\|DVh\|^2-2\Re\langle DVh,h\rangle
+\le 2\|h\|^2-2\|h\|^2=0.
+\]
+故 \(DVh=h\)，于是
+\[
+DT=DV|T|=|T|
+\]
+为正算子。正的上三角算子只能是对角算子，因此 \(DT\) 为对角算子，进而 \(T\) 也在该基下对角化，故 \(T\) 正规。最后一条等价表述再由定理 \ref{thm:cyclic-fredholm-realisation} 立即得到。证毕。
 \end{proof}
 
 \begin{proposition}[循环块张量积的分解定理：\texorpdfstring{$\gcd/\mathrm{lcm}$}{gcd/lcm} 控制的 Witt 乘法实现]\label{prop:cyclic-block-tensor-gcd-lcm}
