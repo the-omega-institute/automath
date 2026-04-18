@@ -68,7 +68,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v4.9 mac]</b>
+        <b>[Oracle v4.12 mac]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -957,19 +957,20 @@
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const mainLen = (document.querySelector("main")?.innerText || "").length;
 
-      // Periodic status log (every 5 min)
-      if (elapsed - lastLogTime >= 300) {
+      // Periodic status log (every 2 min)
+      if (elapsed - lastLogTime >= 120) {
         lastLogTime = elapsed;
         log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}, url=${window.location.href.slice(-30)}`);
-        // One-time DOM debug: log what selectors match
-        if (elapsed <= 300) {
-          const dbg = [];
-          for (const s of ["[data-message-author-role]", "article", "[data-testid*='conversation-turn']", "div[class*='markdown']", "div[class*='prose']", "[class*='agent-turn']"]) {
-            const n = document.querySelectorAll(s).length;
-            if (n > 0) dbg.push(`${s}:${n}`);
+        // DOM debug: log what selectors match, and biggest text blocks
+        const dbg = [];
+        for (const s of ["main", "[data-message-author-role]", "[data-message-author-role='assistant']", "article", "[data-testid*='conversation-turn']", "div[class*='markdown']", "div[class*='prose']", "[class*='agent-turn']", "[role='presentation']", "[class*='conversation']", "[class*='thread']"]) {
+          const els = document.querySelectorAll(s);
+          if (els.length > 0) {
+            const maxLen = Math.max(...Array.from(els).map(e => (e.innerText||"").length));
+            dbg.push(`${s}:${els.length}(max=${maxLen})`);
           }
-          log(`DOM debug: ${dbg.join(", ") || "no matches"}`);
         }
+        log(`DOM debug: ${dbg.join(", ") || "NO MATCHES — ChatGPT DOM structure unknown"}`);
       }
 
       // Only count extracted text that's meaningful
@@ -1208,7 +1209,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Oracle Bridge v4.9 (macOS) loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`Oracle Bridge v4.12 (macOS) loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
     // Check if WE navigated here (not the user clicking around)
     const phase = getTaskPhase();
