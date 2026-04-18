@@ -373,70 +373,64 @@ def codex_exec(
     model: Optional[str] = None,
     dry_run: bool = False,
 ) -> str:
+    """Borrowed from lean4-codex-auto-dev pipeline (PR #37):
+    1. Prompt via temp file + shell arg (not stdin pipe) — prevents Codex hang
+    2. Shell `timeout` for reliable kill — rc=124 on timeout
+    3. `</dev/null` closes stdin — prevents "Reading additional input..." hang
+    """
     if dry_run:
         logger.info("[DRY RUN] codex exec in %s", work_dir)
         logger.info("[DRY RUN] prompt preview: %s", prompt[:220].replace("\n", " "))
         return "(dry run)"
 
     codex_bin = ensure_binary(CODEX_PATH, "codex")
+
     out_fd, out_file = tempfile.mkstemp(prefix="codex_out_", suffix=".txt")
     os.close(out_fd)
-    cmd = [
-        codex_bin,
-        "exec",
-        "--dangerously-bypass-approvals-and-sandbox",
-        "-C",
-        str(work_dir),
-        "-o",
-        out_file,
-    ]
-    if model:
-        cmd.extend(["-m", model])
-    cmd.append("-")
+    prompt_fd, prompt_file = tempfile.mkstemp(prefix="codex_prompt_", suffix=".txt")
+    os.close(prompt_fd)
+    Path(prompt_file).write_text(prompt, encoding="utf-8")
 
-    use_shell = IS_WINDOWS and str(codex_bin).endswith(".cmd")
+    model_flag = f" -m {model}" if model else ""
+    # Shell command: timeout + codex reads prompt from $(cat file) + stdin closed
+    shell_cmd = (
+        f'timeout {timeout} "{codex_bin}" exec'
+        f" --dangerously-bypass-approvals-and-sandbox"
+        f' -C "{work_dir}"'
+        f' -o "{out_file}"'
+        f"{model_flag}"
+        f' "$(cat \'{prompt_file}\')" </dev/null'
+    )
+
     start = time.monotonic()
-
-    # Bug 3 fix: use Popen + manual wait so we can force-kill the process tree on timeout.
-    # subprocess.run's timeout doesn't reliably kill node/codex children on macOS.
     try:
-        proc = subprocess.Popen(
-            cmd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd=str(work_dir),
-            shell=use_shell,
+        result = subprocess.run(
+            ["bash", "-c", shell_cmd],
+            capture_output=True,
             text=True,
+            timeout=timeout + 60,  # Python backup (shell timeout should fire first)
             encoding="utf-8",
             errors="replace",
-            start_new_session=True,  # so we can killpg the whole tree
         )
-    except OSError as exc:
-        logger.error("Codex CLI failed to start: %s", exc)
-        return "(start-failed)"
-
-    try:
-        stdout, stderr = proc.communicate(input=prompt, timeout=timeout + 30)
-        rc = proc.returncode
+        rc = result.returncode
+        stdout = result.stdout or ""
+        stderr = result.stderr or ""
     except subprocess.TimeoutExpired:
-        logger.warning("Codex CLI timed out after %ss — force killing process tree", timeout)
-        _kill_process_tree(proc.pid)
-        try:
-            stdout, stderr = proc.communicate(timeout=10)
-        except subprocess.TimeoutExpired:
-            _kill_process_tree(proc.pid)
-            stdout, stderr = "", ""
+        logger.warning("Codex: Python backup timeout after %ss", timeout + 60)
         rc = -1
-        elapsed = time.monotonic() - start
-        logger.info("Codex exec: %.1fs (rc=timeout)", elapsed)
-        return "(timeout)"
+        stdout, stderr = "", ""
     finally:
         elapsed = time.monotonic() - start
-        if proc.poll() is None:
-            logger.info("Codex exec: %.1fs (rc=?)", elapsed)
-        else:
-            logger.info("Codex exec: %.1fs (rc=%s)", elapsed, proc.returncode)
+        if rc == 124:
+            logger.warning("Codex: shell timeout after %ss", timeout)
+        logger.info("Codex exec: %.1fs (rc=%s)", elapsed, rc if rc != 124 else "timeout")
+        with contextlib.suppress(OSError):
+            os.unlink(prompt_file)
+
+    if rc == 124 or rc == -1:
+        with contextlib.suppress(OSError):
+            os.unlink(out_file)
+        return "(timeout)"
 
     try:
         if os.path.exists(out_file) and os.path.getsize(out_file) > 0:
