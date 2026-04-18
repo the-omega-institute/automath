@@ -47,6 +47,7 @@ import Omega.GU.FoldbinGaugeAbelian
 import Omega.GU.FoldbinUpliftUnitJumpDeltaInversion
 import Omega.GU.GapDirichletContinuedFraction
 import Omega.GU.FreeInvolutionCount
+import Omega.GU.GroupJGTwoPrimeEulerPhaseInjective
 import Omega.GU.HolomorphicMomentRigidity
 import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GU.JetAlignmentUnification
