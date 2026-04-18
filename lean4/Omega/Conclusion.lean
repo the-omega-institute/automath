@@ -37,6 +37,7 @@ import Omega.Conclusion.DiscreteKinkFanPiecewiseLinearization
 import Omega.Conclusion.DisjointnessPowerWordDecomposition
 import Omega.Conclusion.EndpointStatisticsVsTimeAddressLedgerSplitting
 import Omega.Conclusion.EventEllipseGoldenMinimal
+import Omega.Conclusion.EllipticLosslessLift
 import Omega.Conclusion.ExtPiKernelPoset
 import Omega.Conclusion.FibadicLcmFiltrationLaw
 import Omega.Conclusion.FibadicPrimitiveCentralIdempotents
