@@ -151,6 +151,7 @@ import Omega.GU.Window6B3C3TriaxialSelectionIdealFactorization
 import Omega.GU.Window6B3C3UniqueQuarticDetector
 import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6BoundaryDyadicDirectionFlag
+import Omega.GU.Window6FamilyProjectionSphericalHeckeTwoModes
 import Omega.GU.Window6FamilyProjectionWequivariantUniqueness
 import Omega.GU.Window6GoldenS3C2C6PhaseSource
 import Omega.GU.Window6GoldenCubicAuditFieldDegree6
