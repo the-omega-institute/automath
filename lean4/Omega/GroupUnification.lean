@@ -6,6 +6,7 @@ import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.EquivariantZ2LayerliftWreathRigidity
 import Omega.GroupUnification.ExactClock
 import Omega.GroupUnification.FibLieResonanceGlobalClassification
+import Omega.GroupUnification.FibLieResonanceScarcity
 import Omega.GroupUnification.FibTailReversibility
 import Omega.GroupUnification.FiniteTimeLaw
 import Omega.GroupUnification.FreeEnergyComposition
