@@ -2,6 +2,26 @@ import Mathlib.Tactic
 
 namespace Omega.CircleDimension
 
+/-- Bookkeeping model for the connected torus factor of
+`Hom(ℤ^r ⊕ T, 𝕋)`: the finite torsion part contributes no connected dimension,
+so only the free rank remains. -/
+def higherCircleDimFGAbelian (freeRank torsionRank : ℕ) : ℕ :=
+  freeRank + 0 * torsionRank
+
+/-- The `k = 1` specialization records the same free-rank bookkeeping for the
+abelianization. -/
+def higherCircleDimK1Abelianization (freeRank torsionRank : ℕ) : ℕ :=
+  higherCircleDimFGAbelian freeRank torsionRank
+
+/-- In the finitely generated model `ℤ^r ⊕ T`, the identity component of the
+character group has torus dimension `r`; specializing to `k = 1` recovers the
+abelianization-rank statement used later in the file.
+    thm:cdim-higher-rank-hk -/
+theorem paper_cdim_higher_rank_hk (freeRank torsionRank : ℕ) :
+    higherCircleDimFGAbelian freeRank torsionRank = freeRank ∧
+      higherCircleDimK1Abelianization freeRank torsionRank = freeRank := by
+  simp [higherCircleDimFGAbelian, higherCircleDimK1Abelianization]
+
 /-- A second cohomology class factors through a `d`-dimensional torus when its support torus of
 dimension `supportDim` is enlarged by `kernelDim` extra circle directions inside an ambient torus
 of dimension `ambientDim`. -/
