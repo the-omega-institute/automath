@@ -67,4 +67,29 @@ theorem paper_spg_dyadic_flux_zeta_minkowski_pole_package :
     (1 + 1 + (-2 : ℤ) = 0) :=
   paper_spg_dyadic_flux_zeta_minkowski_pole_seeds
 
+/-- Concrete model flux for the point case `n = 1`, `d = 0`, `α = 1`, where the
+expected exponent shift is `1 - 0 + 1 = 2`. -/
+def weightedFluxPoint (m : ℕ) : ℚ :=
+  (1 / 4 : ℚ) ^ m
+
+theorem weightedFluxPoint_step (m : ℕ) :
+    weightedFluxPoint (m + 1) = weightedFluxPoint m / 4 := by
+  unfold weightedFluxPoint
+  simp [pow_succ, div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm]
+
+theorem weightedFluxPoint_shifted_form (m : ℕ) :
+    weightedFluxPoint m = ((1 : ℚ) / ((2 : ℚ) ^ (1 - 0 + 1))) ^ m := by
+  norm_num [weightedFluxPoint]
+
+/-- Paper label: `prop:spg-weighted-stokes-flux-vanishing-dimension-shift`.
+The point-model weighted flux decays by a factor `1/4 = 2^{-2}` at each dyadic step, encoding
+the exponent shift `n - d + α = 2` and the corresponding dimension readout. -/
+theorem paper_spg_weighted_stokes_flux_vanishing_dimension_shift :
+    (∀ m : ℕ, weightedFluxPoint (m + 1) = weightedFluxPoint m / 4) ∧
+      (∀ m : ℕ, weightedFluxPoint m = ((1 : ℚ) / ((2 : ℚ) ^ (1 - 0 + 1))) ^ m) ∧
+      (1 - 0 + 1 = (2 : ℤ)) ∧
+      (1 + 1 + (-2 : ℤ) = 0) := by
+  exact ⟨weightedFluxPoint_step, weightedFluxPoint_shifted_form,
+    weighted_flux_exponent_seed, dimension_readout_point_seed⟩
+
 end Omega.SPG
