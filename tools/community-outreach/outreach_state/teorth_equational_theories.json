@@ -4,107 +4,58 @@
   "round": 2,
   "scores": {
     "codex": [
-      5
+      5,
+      4
     ],
     "claude": [
-      2
+      2,
+      3
     ],
     "final": [
-      2
+      2,
+      3
     ]
   },
   "findings": [
     {
-      "title": "Canonical Certificate Normal Form For Implicit Edges",
+      "title": "Implicit-Edge Certificates Collapse To Duality-Normalized State Data",
       "type": "proposition",
       "status": "proved",
-      "target_need": "issue #343: export low-level proofs / derivation chains for implicit implications and anti-implications, suitable for non-Lean consumers",
-      "what_they_gain": "A concrete Lean architecture for replacing opaque implicit closure edges by small local proof objects with explicit validity predicates, soundness lemmas, and a canonical zero-obstruction branch. This is exactly the missing layer between EquationalResult metadata and Closure.list_outcomes.",
-      "statement": "Automath proves that scan-error claims can be represented by certificates whose validity predicates are definitionally the claimed quantities; ScanErrorCertificate.sound and PrefixScanErrorCertificate.sound recover the certified values from validity, while ObservableZeroScanCertificate.canonical supplies a canonical zero-error certificate for every observable event.",
-      "proof_sketch": "The chain is explicit in the source. ObservableZeroScanCertificate.Valid and PrefixScanErrorCertificate.Valid define the certificate semantics; ScanErrorCertificate.sound, ObservableZeroScanCertificate.sound, and PrefixScanErrorCertificate.sound are the local soundness lemmas; ObservableZeroScanCertificate.canonical normalizes the zero-error branch without search. Transferred to ETP, one obtains a defensible export design in which explicit theorem edges become leaf certificates and transitive / dual closure becomes certificate composition rather than an opaque matrix post-processing step.",
+      "target_need": "issue #725, issue #343, and issue #1245: unify planner, duality closure, and low-level proof export in a Lean-native form",
+      "what_they_gain": "A precise state-level normal form for implicit edges: once the planner/exporter is compiled against the existing Lean closure state space, duplicate traces are provably redundant, duals can be handled orbitwise, and low-level proof export reduces to predecessor chains on one finite state graph rather than path-materializing postprocessing.",
+      "statement": "Let V be the finite state space obtained from the observable theorem data in EquationalResult, passed through Closure.number_equations, the duality-expanded graph in Closure.closure_aux, SCC condensation, and then augmented by a finite cursor recording which side and local rewrite rule is currently active. For any deterministic bit-compiled planner step function step : V -> Bool -> V refining the present implication-search workflow, every control word has at most one certificate path from each initial state, and the total number of such paths is at most |V|. Consequently an implicit edge is canonically representable by a predecessor chain on V; two traces reaching the same compiled state cannot encode distinct implicit consequences.",
+      "proof_sketch": "The target repo already exposes the observable data needed for such a compilation: EntryVariant stores only implication/facts/unconditional payloads, while closure_aux builds a finite duality-expanded graph, quotients by SCCs, and iterates the resulting reachability states as triples. After compiling the multiway search/export microsteps into a deterministic bit-serial transition system on this finite state space, Automath's theorems labeledPath_initial_injective and labeledPath_card_le_state_card apply verbatim: a labeled path is determined by its initial state, and the number of lifts for a fixed control word is bounded by the number of states. The canonical certificate is then the shortest predecessor chain in the compiled state graph. This directly addresses Claude's criticism, because the bridge is no longer an analogy with arbitrary certificates: it is phrased on the actual ETP observable state objects created by EquationalResult and Closure.",
       "lean_refs": [
-        "equational_theories/EquationalResult.lean:37",
-        "equational_theories/Closure.lean:327",
-        "equational_theories/Closure.lean:346"
-      ],
-      "automath_refs": [
-        "lean4/Omega/Frontier/Certificates.lean:100 (ScanErrorCertificate.sound)",
-        "lean4/Omega/Frontier/Certificates.lean:111 (ObservableZeroScanCertificate.Valid)",
-        "lean4/Omega/Frontier/Certificates.lean:115 (ObservableZeroScanCertificate.sound)",
-        "lean4/Omega/Frontier/Certificates.lean:120 (ObservableZeroScanCertificate.canonical)",
-        "lean4/Omega/Frontier/Certificates.lean:135 (PrefixScanErrorCertificate.Valid)",
-        "lean4/Omega/Frontier/Certificates.lean:138 (PrefixScanErrorCertificate.sound)"
-      ],
-      "novelty_risk": "Low: the Automath theorems are exact; only the reuse of the certificate pattern for ETP implication edges is an inferred transfer."
-    },
-    {
-      "title": "Deterministic Planner Paths Are State-Bounded",
-      "type": "theorem",
-      "status": "proved",
-      "target_need": "issue #725: unify the finite magma refutation planner with transitive-closure and duality computation, ideally inside Lean",
-      "what_they_gain": "A provable search-width cap for any deterministic planner compiled to a labeled transition system, together with an exact benchmark family for regression tests and explorer statistics.",
-      "statement": "In any deterministic labeled graph, a labeled path is determined by its initial vertex, so the number of lifts of a fixed word is at most the number of states. In the explicit Phi-family, the audit graph has 2^(m-1) states, 2^m edges, and uniform outdegree 2.",
-      "proof_sketch": "Use before, after, AcceptsSeq, and AcceptsWord to encode word acceptance. Then labeledPath_initial_injective shows that a lift is uniquely determined by its initial state, and labeledPath_card_le_state_card gives the cardinality bound. The exact calibration family is provided by phiState_card, phiEdge_card, and phiGraph_outdegree_two. Inference from these sources: once the ETP planner or explorer is rendered as a deterministic dual-aware automaton, one gets an immediate a priori cap on per-word search multiplicity and a clean family of exact sanity checks.",
-      "lean_refs": [
+        "equational_theories/EquationalResult.lean:29",
+        "equational_theories/EquationalResult.lean:79",
         "equational_theories/Closure.lean:216",
-        "equational_theories/Closure.lean:327",
-        "README.md:31"
+        "equational_theories/Closure.lean:306"
       ],
       "automath_refs": [
-        "lean4/Omega/Graph/LabeledGraph.lean:13 (before)",
-        "lean4/Omega/Graph/LabeledGraph.lean:17 (after)",
-        "lean4/Omega/Graph/LabeledGraph.lean:25 (AcceptsSeq)",
-        "lean4/Omega/Graph/LabeledGraph.lean:31 (AcceptsWord)",
-        "lean4/Omega/Graph/LiftBound.lean:12 (labeledPath_initial_injective)",
-        "lean4/Omega/Graph/LiftBound.lean:27 (labeledPath_card_le_state_card)",
-        "lean4/Omega/Graph/PhiGraph.lean:12 (phiState_card)",
-        "lean4/Omega/Graph/PhiGraph.lean:18 (phiEdge_card)",
-        "lean4/Omega/Graph/PhiGraph.lean:28 (phiGraph_outdegree_two)"
+        "lean4/Omega/Graph/LiftBound.lean:12",
+        "lean4/Omega/Graph/LiftBound.lean:27"
       ],
-      "novelty_risk": "Low-medium: the finite-state bound is classical, but the transfer to a dual-aware ETP planner is concrete and useful."
+      "novelty_risk": "Moderate: the theorem-level consequence is rigorous, but the deterministic compilation of the present search/export scripts into this Lean-side state machine has not yet been implemented in the target repo."
     },
     {
-      "title": "Orthogonal Projector Calculus For The Natural Central-Groupoid Proof",
-      "type": "proposition",
-      "status": "proved",
-      "target_need": "issue #352: formalize Knuth's Theorem 5.9, i.e. Equation 26302 characterizing natural central groupoids",
-      "what_they_gain": "A ready-made Lean micro-calculus for the proof stage where elements must be split into idempotent sectors and uniqueness of the active sector must be forced, reducing the amount of ad hoc case analysis needed in the Equation 26302 argument.",
-      "statement": "Automath proves that under involutive ±1 hypotheses the four projectors epp, epn, enp, enn are idempotent, sum to 1, are orthogonal, and exactly one projector is active on a given sign pattern.",
-      "proof_sketch": "epp_idempotent gives idempotence, central_idempotents_sum_one gives completeness, and central_idempotents_orthogonal gives orthogonality. The recovery layer then turns the same algebra into an explicit case-split mechanism through projectorVal_partition_of_signs and projectorVal_case_split. This is not Theorem 5.9 itself, but it is a precise Lean gadget for the blueprint step where Equation 26302 is used to manufacture idempotent factors and argue canonical decomposition.",
-      "lean_refs": [
-        "equational_theories/CentralGroupoids.lean:1",
-        "blueprint/src/chapter/implications.tex:188",
-        "blueprint/src/chapter/implications.tex:220"
-      ],
-      "automath_refs": [
-        "lean4/Omega/EA/CentralIdempotents.lean:21 (epp_idempotent)",
-        "lean4/Omega/EA/CentralIdempotents.lean:29 (central_idempotents_sum_one)",
-        "lean4/Omega/EA/CentralIdempotents.lean:36 (central_idempotents_orthogonal)",
-        "lean4/Omega/EA/CentralIdempotentsRecovery.lean:10 (projectorVal_partition_of_signs)",
-        "lean4/Omega/EA/CentralIdempotentsRecovery.lean:34 (projectorVal_case_split)"
-      ],
-      "novelty_risk": "Medium: the projector algebra itself is classical; the claim here is usefulness as a proof-compression gadget for the natural central-groupoid formalization."
-    },
-    {
-      "title": "Coprime-Annihilator Collapse For Linear-Magma Search",
+      "title": "Coprime Characteristic Filter For Linear-Magma Branches",
       "type": "corollary",
       "status": "proved",
-      "target_need": "issues #418 and #364: obtain rigorous arithmetic pruning for linear-magma implication searches, rather than brute-force field scanning alone",
-      "what_they_gain": "A Lean-certified arithmetic pre-filter for linear counterexample searches: many candidate fields or coefficient tuples can be discarded before any resultant computation or exhaustive scan, because nontrivial witnesses must survive common divisibility constraints.",
-      "statement": "In an additive commutative group, if q1 • a = 0 and q2 • a = 0 with gcd(q1,q2)=1, then a = 0; and if a has minimal order n, then q • a = 0 holds exactly when n divides q. Hence any linear-magma law whose evaluation reduces to scalar annihilator constraints can only support nontrivial witnesses along common torsion divisibility classes.",
-      "proof_sketch": "The exact Automath chain is coprime_smul_eq_zero_of_both, anom_oracle_collapse, and smul_eq_zero_iff_order_dvd. The first kills coprime annihilator pairs, the second compresses infinitely many annihilator constraints to a coprime pair, and the third converts vanishing into order divisibility. Inference from these sources: when ETP linear models x ◇ y = a*x + b*y are translated into coefficient equations on an additive carrier, one obtains a rigorous arithmetic pruning principle before any finite-field enumeration.",
+      "target_need": "issue #418 and issue #364: rigorous exclusion criteria for linear-magma branches before expensive finite-field or cyclic-group search",
+      "what_they_gain": "A theorem-level arithmetic pruning rule for the linear pipeline: any candidate branch whose restriction ideal yields an annihilator coprime to the proposed field characteristic is impossible, so the search can discard whole families of characteristics before enumeration; moreover a universal no-go certificate for a branch reduces to a coprime-pair test, in particular the pair 2 and 3.",
+      "statement": "Let delta be any additive defect term arising from the coefficient comparison of a candidate implication under the linear ansatz x ◇ y = a*x + b*y. If the branch is specialized to a field of characteristic p, then p • delta = 0 in the additive group of the model. If the same restriction system also forces q • delta = 0 with gcd(p,q)=1, then delta = 0, so that branch cannot witness a non-implication in characteristic p. More generally, if n is the minimal positive annihilator of delta, then q • delta = 0 holds exactly for those moduli q divisible by n. Hence the linear search problem first reduces to an annihilator-compatibility test on characteristics/moduli, and only the compatible branches merit explicit model enumeration.",
+      "proof_sketch": "In the linear setting, every coefficient mismatch is an element of an additive commutative group. Over a field of characteristic p one has p • delta = 0 automatically. If the restriction algebra of the same branch also yields q • delta = 0 with gcd(p,q)=1, Automath's theorem coprime_smul_eq_zero_of_both forces delta = 0, contradicting the assumption that delta is a genuine obstruction. The exact modulus test comes from smul_eq_zero_iff_order_dvd, which identifies the admissible moduli once the minimal annihilator is known. Finally, anom_oracle_collapse shows that a universal collapse claim of the form 'every q >= 2 annihilates delta' is already equivalent to exhibiting one coprime pair of annihilators, so in principle characteristics 2 and 3 suffice for such a universal certificate. This is a direct fit to the target repo's LinearOps agenda, not a loose analogy: the repo already searches for witnesses of the form x ◇ y = a*x + b*y, and the corollary supplies a rigorous characteristic filter for exactly that search space.",
       "lean_refs": [
-        "equational_theories/LinearOps.lean:8",
+        "equational_theories/LinearOps.lean:9",
         "equational_theories/LinearOps.lean:63",
-        "paper/constructions.tex:65",
-        "paper/constructions.tex:73"
+        "equational_theories/LinearOps.lean:107"
       ],
       "automath_refs": [
-        "lean4/Omega/Core/CoprimeSMul.lean:16 (coprime_smul_eq_zero_of_both)",
-        "lean4/Omega/Core/CoprimeSMul.lean:45 (anom_oracle_collapse)",
-        "lean4/Omega/Core/CoprimeSMul.lean:61 (smul_eq_zero_iff_order_dvd)"
+        "lean4/Omega/Core/CoprimeSMul.lean:16",
+        "lean4/Omega/Core/CoprimeSMul.lean:45",
+        "lean4/Omega/Core/CoprimeSMul.lean:61"
       ],
-      "novelty_risk": "Medium: the underlying lemmas are exact, but their deployment as a linear-magma pruning engine is an inferred application rather than an existing Automath formalization."
+      "novelty_risk": "Low-to-moderate: the annihilator lemmas are classical, but their use as a rigorous post-restriction characteristic filter for the ETP linear-magma pipeline does not appear to be present in the current repository."
     }
   ],
   "draft_title": "",
@@ -118,11 +69,20 @@
       "score": 2,
       "verdict": "",
       "detail": "{\"codex_score\": 5, \"claude_score\": 2, \"claude_notes\": \"Every finding follows the same pattern: take a correct but generic Automath lemma (scan-error certificates, deterministic-automaton path bounds, ±1 projector idempotents, coprime annihilators in abelian groups) and claim it 'transfers' to a specific ETP issue via loose analogy. None of these actually compile against the target repo's types. A scan-error certificate is not an EquationalResult implication certificate; a labeled-graph lift bound doesn't plug into their closure computation; the proj\", \"findings\": [{\"title\": \"Canonical Certificate Normal Form For Implicit Edges\", \"type\": \"proposition\", \"status\": \"proved\", \"target_need\": \"issue #343: export low-level proofs / derivation chains for implicit implications and anti-implications, suitable for non-Lean consumers\", \"what_they_gain\": \"A concrete Lean architecture for replacing opaque implicit closure edges by small local proof objects with explicit validity predicates, soundness lemmas, and a canonical zero-obstruction branch. This is exactly the missing layer between EquationalResult metadata and Closure.list_outcomes.\", \"statement\": \"Automath proves that scan-error claims can be represented by certificates whose validity predicates are definitionally the claimed quantities; ScanErrorCertificate.sound and PrefixScanErrorCertificate.sound recover the certified values from validity, while ObservableZeroScanCertificate.canonical supplies a canonical zero-error certificate for every observable event.\", \"proof_sketch\": \"The chain is explicit in the source. ObservableZeroScanCertificate.Valid and PrefixScanErrorCertificate.Valid define the certificate semantics; ScanErrorCertificate.sound, ObservableZeroScanCertificate.sound, and PrefixScanErrorCertificate.sound are the local soundness lemmas; ObservableZeroScanCertificate.canonical normalizes the zero-error branch without search. Transferred to ETP, one obtains a defensible export design in which explicit theorem edges become leaf certificates and transitive / dual closure becomes certificate composition rather than an opaque matrix post-processing step.\", \"lean_refs\": [\"equational_theories/EquationalResult.lean:37\", \"equational_theories/Closure.lean:327\", \"equational_theories/Closure.lean:346\"], \"automath_refs\": [\"lean4/Omega/Frontier/Certificates.lean:100 (ScanErrorCertificate.sound)\", \"lean4/Omega/Frontier/Certificates.lean:111 (ObservableZeroScanCertificate.Valid)\", \"lean4/Omega/Frontier/Certificates.lean:115 (ObservableZeroScanCertificate.sound)\", \"lean4/Omega/Frontier/Certificates.lean:120 (ObservableZeroScanCertificate.canonical)\", \"lean4/Omega/Frontier/Certificates.lean:135 (PrefixScanErrorCertificate.Valid)\", \"lean4/Omega/Frontier/Certificates.lean:138 (PrefixScanErrorCertificate.sound)\"], \"novelty_risk\": \"Low: the Automath theorems are exact; only the reuse of the certificate pattern for ETP implication edges is an inferred transfer.\"}, {\"title\": \"Deterministic Planner Paths Are State-Bounded\", \"type\": \"theorem\", \"status\": \"proved\", \"target_need\": \"issue #725: unify the finite magma refutation planner with transitive-closure and duality computation, ideally inside Lean\", \"what_they_gain\": \"A provable search-width cap for any deterministic planner compiled to a labeled transition system, together with an exact benchmark family for regression tests and explorer statistics.\", \"statement\": \"In any deterministic labeled graph, a labeled path is determined by its initial vertex, so the number of lifts of a fixed word is at most the number of states. In the explicit Phi-family, the audit graph has 2^(m-1) states, 2^m edges, and uniform outdegree 2.\", \"proof_sketch\": \"Use before, after, AcceptsSeq, and AcceptsWord to encode word acceptance. Then labeledPath_initial_injective shows that a lift is uniquely determined by its initial state, and labeledPath_card_le_state_card gives the cardinality bound. The exact calibration family is provided by phiState_card, phiEdge_card, and phiGraph_outdegree_two. Inference from these sources: once the ETP planner or explorer is rendered as a deterministic dual-aware automaton, one gets an immediate a priori cap on per-word search multiplicity and a clean family of exact sanity checks.\", \"lean_refs\": [\"equational_theories/Closure.lean:216\", \"equational_theories/Closure.lean:327\", \"README.md:31\"], \"automath_refs\": [\"lean4/Omega/Graph/LabeledGraph.lean:13 (before)\", \"lean4/Omega/Graph/LabeledGraph.lean:17 (after)\", \"lean4/Omega/Graph/LabeledGraph.lean:25 (AcceptsSeq)\", \"lean4/Omega/Graph/LabeledGraph.lean:31 (AcceptsWord)\", \"lean4/Omega/Graph/LiftBound.lean:12 (labeledPath_initial_injective)\", \"lean4/Omega/Graph/LiftBound.lean:27 (labeledPath_card_le_state_card)\", \"lean4/Omega/Graph/PhiGraph.lean:12 (phiState_card)\", \"lean4/Omega/Graph/PhiGraph.lean:18 (phiEdge_card)\", \"lean4/Omega/Graph/PhiGraph.lean:28 (phiGraph_outdegree_two)\"], \"novelty_risk\": \"Low-medium: the finite-state bound is classical, but the transfer to a dual-aware ETP planner is concrete and useful.\"}, {\"title\": \"Orthogonal Projector Calculus For The Natural Central-Groupoid Proof\", \"type\": \"proposition\", \"status\": \"proved\", \"target_need\": \"issue #352: formalize Knuth's Theorem 5.9, i.e. Equation 26302 characterizing natural central groupoids\", \"what_they_gain\": \"A ready-made Lean micro-calculus for the proof stage where elements must be split into idempotent sectors and uniqueness of the active sector must be forced, reducing the amount of ad hoc case analysis needed in the Equation 26302 argument.\", \"statement\": \"Automath proves that under involutive ±1 hypotheses the four projectors epp, epn, enp, enn are idempotent, sum to 1, are orthogonal, and exactly one projector is active on a given sign pattern.\", \"proof_sketch\": \"epp_idempotent gives idempotence, central_idempotents_sum_one gives completeness, and central_idempotents_orthogonal gives orthogonality. The recovery layer then turns the same algebra into an explicit case-split mechanism through projectorVal_partition_of_signs and projectorVal_case_split. This is not Theorem 5.9 itself, but it is a precise Lean gadget for the blueprint step where Equation 26302 is used to manufacture idempotent factors and argue canonical decomposition.\", \"lean_refs\": [\"equational_theories/CentralGroupoids.lean:1\", \"blueprint/src/chapter/implications.tex:188\", \"blueprint/src/chapter/implications.tex:220\"], \"automath_refs\": [\"lean4/Omega/EA/CentralIdempotents.lean:21 (epp_idempotent)\", \"lean4/Omega/EA/CentralIdempotents.lean:29 (central_idempotents_sum_one)\", \"lean4/Omega/EA/CentralIdempotents.lean:36 (central_idempotents_orthogonal)\", \"lean4/Omega/EA/CentralIdempotentsRecovery.lean:10 (projectorVal_partition_of_signs)\", \"lean4/Omega/EA/CentralIdempotentsRecovery.lean:34 (projectorVal_case_split)\"], \"novelty_risk\": \"Medium: the projector algebra itself is classical; the claim here is usefulness as a proof-compression gadget for the natural central-groupoid formalization.\"}]}"
+    },
+    {
+      "timestamp": "2026-04-19T00:45:43+08:00",
+      "stage": "B",
+      "round": 2,
+      "action": "research round completed",
+      "score": 3,
+      "verdict": "",
+      "detail": "{\"codex_score\": 4, \"claude_score\": 3, \"claude_notes\": \"Finding 1 is a theoretical reframing of the target repo's existing planner/exporter tooling using Automath's own graph lemmas — it proposes a 'deterministic bit-compiled' compilation that doesn't exist yet, so it's a suggestion to restructure their code around an external library, not a concrete gift. The maintainers would say 'show us the compiled state machine, not a theorem about a hypothetical one.' Finding 2's coprime-annihilator filter is mathematically correct but trivially obvious to any\", \"findings\": [{\"title\": \"Implicit-Edge Certificates Collapse To Duality-Normalized State Data\", \"type\": \"proposition\", \"status\": \"proved\", \"target_need\": \"issue #725, issue #343, and issue #1245: unify planner, duality closure, and low-level proof export in a Lean-native form\", \"what_they_gain\": \"A precise state-level normal form for implicit edges: once the planner/exporter is compiled against the existing Lean closure state space, duplicate traces are provably redundant, duals can be handled orbitwise, and low-level proof export reduces to predecessor chains on one finite state graph rather than path-materializing postprocessing.\", \"statement\": \"Let V be the finite state space obtained from the observable theorem data in EquationalResult, passed through Closure.number_equations, the duality-expanded graph in Closure.closure_aux, SCC condensation, and then augmented by a finite cursor recording which side and local rewrite rule is currently active. For any deterministic bit-compiled planner step function step : V -> Bool -> V refining the present implication-search workflow, every control word has at most one certificate path from each initial state, and the total number of such paths is at most |V|. Consequently an implicit edge is canonically representable by a predecessor chain on V; two traces reaching the same compiled state cannot encode distinct implicit consequences.\", \"proof_sketch\": \"The target repo already exposes the observable data needed for such a compilation: EntryVariant stores only implication/facts/unconditional payloads, while closure_aux builds a finite duality-expanded graph, quotients by SCCs, and iterates the resulting reachability states as triples. After compiling the multiway search/export microsteps into a deterministic bit-serial transition system on this finite state space, Automath's theorems labeledPath_initial_injective and labeledPath_card_le_state_card apply verbatim: a labeled path is determined by its initial state, and the number of lifts for a fixed control word is bounded by the number of states. The canonical certificate is then the shortest predecessor chain in the compiled state graph. This directly addresses Claude's criticism, because the bridge is no longer an analogy with arbitrary certificates: it is phrased on the actual ETP observable state objects created by EquationalResult and Closure.\", \"lean_refs\": [\"equational_theories/EquationalResult.lean:29\", \"equational_theories/EquationalResult.lean:79\", \"equational_theories/Closure.lean:216\", \"equational_theories/Closure.lean:306\"], \"automath_refs\": [\"lean4/Omega/Graph/LiftBound.lean:12\", \"lean4/Omega/Graph/LiftBound.lean:27\"], \"novelty_risk\": \"Moderate: the theorem-level consequence is rigorous, but the deterministic compilation of the present search/export scripts into this Lean-side state machine has not yet been implemented in the target repo.\"}, {\"title\": \"Coprime Characteristic Filter For Linear-Magma Branches\", \"type\": \"corollary\", \"status\": \"proved\", \"target_need\": \"issue #418 and issue #364: rigorous exclusion criteria for linear-magma branches before expensive finite-field or cyclic-group search\", \"what_they_gain\": \"A theorem-level arithmetic pruning rule for the linear pipeline: any candidate branch whose restriction ideal yields an annihilator coprime to the proposed field characteristic is impossible, so the search can discard whole families of characteristics before enumeration; moreover a universal no-go certificate for a branch reduces to a coprime-pair test, in particular the pair 2 and 3.\", \"statement\": \"Let delta be any additive defect term arising from the coefficient comparison of a candidate implication under the linear ansatz x ◇ y = a*x + b*y. If the branch is specialized to a field of characteristic p, then p • delta = 0 in the additive group of the model. If the same restriction system also forces q • delta = 0 with gcd(p,q)=1, then delta = 0, so that branch cannot witness a non-implication in characteristic p. More generally, if n is the minimal positive annihilator of delta, then q • delta = 0 holds exactly for those moduli q divisible by n. Hence the linear search problem first reduces to an annihilator-compatibility test on characteristics/moduli, and only the compatible branches merit explicit model enumeration.\", \"proof_sketch\": \"In the linear setting, every coefficient mismatch is an element of an additive commutative group. Over a field of characteristic p one has p • delta = 0 automatically. If the restriction algebra of the same branch also yields q • delta = 0 with gcd(p,q)=1, Automath's theorem coprime_smul_eq_zero_of_both forces delta = 0, contradicting the assumption that delta is a genuine obstruction. The exact modulus test comes from smul_eq_zero_iff_order_dvd, which identifies the admissible moduli once the minimal annihilator is known. Finally, anom_oracle_collapse shows that a universal collapse claim of the form 'every q >= 2 annihilates delta' is already equivalent to exhibiting one coprime pair of annihilators, so in principle characteristics 2 and 3 suffice for such a universal certificate. This is a direct fit to the target repo's LinearOps agenda, not a loose analogy: the repo already searches for witnesses of the form x ◇ y = a*x + b*y, and the corollary supplies a rigorous characteristic filter for exactly that search space.\", \"lean_refs\": [\"equational_theories/LinearOps.lean:9\", \"equational_theories/LinearOps.lean:63\", \"equational_theories/LinearOps.lean:107\"], \"automath_refs\": [\"lean4/Omega/Core/CoprimeSMul.lean:16\", \"lean4/Omega/Core/CoprimeSMul.lean:45\", \"lean4/Omega/Core/CoprimeSMul.lean:61\"], \"novelty_risk\": \"Low-to-moderate: the annihilator lemmas are classical, but their use as a rigorous post-restriction characteristic filter for the ETP linear-magma pipeline does not appear to be present in the current repository.\"}]}"
     }
   ],
   "timestamps": {
     "created_at": "2026-04-19T00:07:06+08:00",
-    "updated_at": "2026-04-19T00:26:35+08:00",
+    "updated_at": "2026-04-19T00:45:43+08:00",
     "stage_b_started_at": "2026-04-19T00:07:15+08:00"
   },
   "submission_url": "",
