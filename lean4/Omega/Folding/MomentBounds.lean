@@ -860,6 +860,21 @@ theorem momentSum_two_ge_spike_flat (m : Nat) :
     simp [momentSum]] at hCS
   linarith [Nat.mul_comm (momentSum 2 m) (Nat.fib (m + 2))]
 
+/-- Concrete convex lower-bound package at collision level `m`: the second moment dominates the
+spike-flat extremal lower bound, the maximal fiber dominates the average fiber size, and the
+second moment dominates the squared maximal fiber. -/
+def foldCollisionConvexLowerBounds (m : Nat) : Prop :=
+  momentSum 2 m * Nat.fib (m + 2) ≥ (2 ^ m) ^ 2 ∧
+    X.maxFiberMultiplicity m * Nat.fib (m + 2) ≥ 2 ^ m ∧
+    X.maxFiberMultiplicity m ^ 2 ≤ momentSum 2 m
+
+/-- Collision convexity lower bounds: the second moment satisfies the spike-flat lower bound, and
+the maximal fiber sits between the average-fiber and second-moment controls.
+    thm:fold-collision-convex-lower-bounds -/
+theorem paper_fold_collision_convex_lower_bounds (m : Nat) : foldCollisionConvexLowerBounds m := by
+  exact ⟨momentSum_two_ge_spike_flat m, maxFiberMultiplicity_ge_avg m,
+    maxFiberMultiplicity_sq_le_momentSum m⟩
+
 /-- S_3(m) < S_3(m+1) for all m.
     prop:pom-s3-recurrence -/
 theorem momentSum_three_strict_mono_all (m : Nat) :

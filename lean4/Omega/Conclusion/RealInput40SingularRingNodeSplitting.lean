@@ -1,4 +1,4 @@
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Analysis.SpecialFunctions.Sqrt
 import Mathlib.Tactic
 
 namespace Omega.Conclusion
@@ -43,6 +43,22 @@ noncomputable def realInput40NodeQuadraticCoeff (s : ℝ) : ℝ :=
 /-- Cubic branch coefficient determined by cancelling the quartic term. -/
 noncomputable def realInput40NodeCubicCoeff (s : ℝ) : ℝ :=
   64969 / 20000 + s * 51245797 * Real.sqrt 89 / 158420000
+
+/-- Linearized local branch through the singular node in the shifted coordinate `U = u - 1`. -/
+noncomputable def realInput40NodeLinearBranch (s U : ℝ) : ℝ :=
+  -1 + realInput40NodeSlope s * U
+
+/-- Linearized eigenvalue branch `λ = 1 / z` attached to the local node branch. -/
+noncomputable def realInput40NodeEigenvalueBranch (s U : ℝ) : ℝ :=
+  1 / realInput40NodeLinearBranch s U
+
+/-- Explicit ring branch on the unit circle. -/
+noncomputable def realInput40ExplicitRingBranch (u : ℝ) : ℝ :=
+  -Real.sqrt u
+
+/-- Explicit eigenvalue branch corresponding to `z(u) = -√u`. -/
+noncomputable def realInput40ExplicitRingEigenvalue (u : ℝ) : ℝ :=
+  1 / realInput40ExplicitRingBranch u
 
 /-- Coefficient of `U^2` after substituting `Z = α U + β U^2 + γ U^3`. -/
 def realInput40NodeBranchCoeff2 (α : ℝ) : ℝ :=
@@ -124,6 +140,41 @@ end RealInput40SingularRingNodeSplittingData
 
 open RealInput40SingularRingNodeSplittingData
 
+lemma realInput40NodeEigenvalueBranch_hasDerivAt (s : ℝ) :
+    HasDerivAt (realInput40NodeEigenvalueBranch s) (-realInput40NodeSlope s) 0 := by
+  have hLinear :
+      HasDerivAt (fun U : ℝ => -1 + realInput40NodeSlope s * U) (realInput40NodeSlope s) 0 := by
+    convert (hasDerivAt_const (x := 0) (-1)).add
+      ((hasDerivAt_id 0).const_mul (realInput40NodeSlope s)) using 1
+    ring
+  have hValue : (-1 + realInput40NodeSlope s * (0 : ℝ)) ≠ 0 := by norm_num
+  have hInv :
+      HasDerivAt (fun U : ℝ => (-1 + realInput40NodeSlope s * U)⁻¹) (-realInput40NodeSlope s) 0 := by
+    convert (hLinear.inv hValue) using 1
+    ring
+  unfold realInput40NodeEigenvalueBranch realInput40NodeLinearBranch
+  simpa [one_div] using hInv
+
+lemma realInput40ExplicitRingBranch_hasDerivAt :
+    HasDerivAt realInput40ExplicitRingBranch (-(1 / 2)) 1 := by
+  have hSqrt : HasDerivAt (fun u : ℝ => Real.sqrt u) (1 / (2 * Real.sqrt 1)) 1 :=
+    Real.hasDerivAt_sqrt (by norm_num)
+  simpa [realInput40ExplicitRingBranch] using hSqrt.neg
+
+namespace RealInput40SingularRingNodeSplittingData
+
+/-- First-order eigenvalue drifts at the singular ring node: the two linearized analytic branches
+coming from the tangent cone have slopes `-(17 ± √89) / 20` in the shifted coordinate `U = u - 1`,
+while the explicit unit-ring branch `z(u) = -√u` has first-order drift `-1/2` at `u = 1`. -/
+def eigenvalueDriftStatement (_D : RealInput40SingularRingNodeSplittingData) : Prop :=
+  HasDerivAt (realInput40NodeEigenvalueBranch 1) (-realInput40NodeSlope 1) 0 ∧
+    HasDerivAt (realInput40NodeEigenvalueBranch (-1)) (-realInput40NodeSlope (-1)) 0 ∧
+    HasDerivAt realInput40ExplicitRingBranch (-(1 / 2)) 1 ∧
+    -realInput40NodeSlope 1 = -(17 + Real.sqrt 89) / 20 ∧
+    -realInput40NodeSlope (-1) = -(17 - Real.sqrt 89) / 20
+
+end RealInput40SingularRingNodeSplittingData
+
 /-- Concrete singular-ring node-splitting package for the audited real-input-40 collision
 polynomial.
     thm:real-input-40-singular-ring-node-splitting -/
@@ -145,5 +196,17 @@ theorem paper_real_input_40_singular_ring_node_splitting
     have h' : Real.sqrt 89 = -Real.sqrt 89 := by
       simpa [realInput40NodeSlope] using h
     exact hslope h'
+
+/-- First-order eigenvalue drifts at the real-input-40 singular ring node.
+    cor:real-input-40-singular-ring-eigenvalue-drift -/
+theorem paper_real_input_40_singular_ring_eigenvalue_drift
+    (D : RealInput40SingularRingNodeSplittingData) : D.eigenvalueDriftStatement := by
+  refine ⟨realInput40NodeEigenvalueBranch_hasDerivAt 1,
+    realInput40NodeEigenvalueBranch_hasDerivAt (-1), realInput40ExplicitRingBranch_hasDerivAt,
+    ?_, ?_⟩
+  · unfold realInput40NodeSlope
+    ring
+  · unfold realInput40NodeSlope
+    ring
 
 end Omega.Conclusion
