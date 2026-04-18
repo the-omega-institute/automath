@@ -116,6 +116,7 @@ import Omega.POM.OracleBitLowerBoundSubexpMom
 import Omega.POM.OracleCriticalQuadraticMarginalLaw
 import Omega.POM.OracleRenyiPressureFailureBound
 import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
+import Omega.POM.AdditiveFoldCollisionConvolutionFourier
 import Omega.POM.ParrySurfaceDerivative
 import Omega.POM.MaxFiberEvenChernoffExponent
 import Omega.POM.PathIndSetPolyClosed

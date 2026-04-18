@@ -42,6 +42,7 @@ import Omega.Folding.CandidateSetMonotone
 import Omega.Folding.CarryDefect
 import Omega.Folding.CircleDimension
 import Omega.Folding.CollisionDecomp
+import Omega.Folding.CollisionConditionalHammingMgf
 import Omega.Folding.CollisionKernel
 import Omega.Folding.CollisionZeta
 import Omega.Folding.CollisionZetaOperator
