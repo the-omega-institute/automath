@@ -250,6 +250,7 @@ import Omega.Zeta.XiJensenSingleRadiusBandExclusion
 import Omega.Zeta.XiZGCountingPowerSavingError
 import Omega.Zeta.XiZGPrefixRecursionMonotoneTailCertificate
 import Omega.Zeta.XiPronyMomentMapJacobianDelta4
+import Omega.Zeta.XiNonarchimedeanPronyHenselNewtonInversion
 import Omega.Zeta.XiPomMinrealVsSpectralBudgetSeparation
 import Omega.Zeta.XiSmithLossMinimalBranchRegister
 import Omega.Zeta.SmithPrefixSufficiency
