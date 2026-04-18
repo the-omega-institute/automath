@@ -4,55 +4,44 @@
   "round": 2,
   "scores": {
     "codex": [
-      4
+      4,
+      5
     ],
     "claude": [
-      2
+      2,
+      3
     ],
     "final": [
-      2
+      2,
+      3
     ]
   },
   "findings": [
     {
-      "title": "Closed-Form Support Size for `pmSumN`",
-      "type": "corollary",
-      "status": "untested",
-      "target_need": "Formalization gap: `FormalConjectures/Paper/MonochromaticQuantumGraph.lean` defines `pmSumN` recursively but does not expose a closed-form count of the perfect matchings it sums over.",
-      "what_they_gain": "A reusable combinatorial certificate for the quantum-graph sector: it turns the recursive evaluator into a quantified benchmark, so the maintainers can state exactly how large each matching expansion is before attempting witness proofs or no-solution arguments.",
-      "statement": "Under the standard bijection between perfect matchings of the complete graph on `2r` vertices and fixed-point-free involutions of `Fin (2*r)`, the support size of `pmSumN (2*r) D W ι` is `(2*r)! / (2^r * r!)`.",
-      "proof_sketch": "Interpret each perfect matching as the involution swapping the two endpoints in every matched edge. Then invoke `freeInvolutionCount_formula`; this yields the classical closed form. This bridge from `pmSumN` to involutions is an inference from the two codebases, not a theorem already packaged in either one.",
-      "lean_refs": [
-        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:139",
-        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:183",
-        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:420"
-      ],
-      "automath_refs": [
-        "lean4/Omega/GU/FreeInvolutionCount.lean:33 freeInvolutionCount_formula",
-        "lean4/Omega/GU/FreeInvolutionCount.lean:93 freeInvolutionCount_small"
-      ],
-      "novelty_risk": "Low mathematically; the novelty is the repo-specific Lean bridge from `pmSumN` to the free-involution counting package."
-    },
-    {
-      "title": "Exact Matching Benchmarks at the Current Quantum-Graph Frontier",
+      "title": "Perfect-Matching Entropy Barrier for `pmSumN` Benchmarks",
       "type": "proposition",
       "status": "untested",
-      "target_need": "Missing examples: the current `N = 4, 6` witness cases and the next open `N = 8, 10, 12` cases in `MonochromaticQuantumGraph` lack an explicit combinatorial term-count benchmark.",
-      "what_they_gain": "Immediate sanity checks for the existing heartbeat-heavy witness proofs, plus a hard lower bound on the raw combinatorial search space for the open `N = 8, 10, 12` cases. Concretely, it explains why brute-force reasoning degrades sharply after the current solved witness sizes.",
-      "statement": "The underlying complete graphs in `MonochromaticQuantumGraph` have exactly `3, 15, 105, 945, 10395` perfect matchings for `N = 4, 6, 8, 10, 12`, respectively.",
-      "proof_sketch": "Apply the previous closed form with `r = 2, 3, 4, 5, 6`. The values `3` and `15` are already certified by `freeInvolutionCount_small`; the values `105`, `945`, and `10395` follow by arithmetic specialization of `freeInvolutionCount_formula`.",
+      "target_need": "README demand for basic API around bespoke definitions, instantiated by `pmSumN` in `MonochromaticQuantumGraph`, together with the live proof-scale pressure visible in open MonochromaticQuantumGraph PRs and PR #3663 ('avoid increasing limits').",
+      "what_they_gain": "An exact combinatorial-complexity certificate for the whole `MonochromaticQuantumGraph` benchmark ladder. It explains why the current constructive sanity proofs stop at `N=6`, why the active frontier cases are being formalized one theorem at a time, and why future benchmark certificates should compress symmetry rather than naively expand all perfect matchings.",
+      "statement": "Let `pmSumN N D W ι` be the perfect-matching expansion from `FormalConjectures/Paper/MonochromaticQuantumGraph.lean`. The number of monomial branches in this expansion depends only on `N`: it is `0` for odd `N=2k+1`, and for even `N=2r` it is exactly `(2r)! / (2^r r!) = (2r-1)!!`. Hence the existing solved witness regimes in the target file sit at branch counts `3` (`N=4`) and `15` (`N=6`), while the first open frontier regimes already sit at `105` (`N=8`), `945` (`N=10`), `10395` (`N=12`), `135135` (`N=14`), and `2027025` (`N=16`). Consequently any deterministic branch-selection certificate for the `pmSumN` expansion must carry at least `⌈log2((2r)!/(2^r r!))⌉` bits of external choice; at the current frontier this yields lower bounds `7, 10, 14, 18, 21` bits for `N=8,10,12,14,16` respectively.",
+      "proof_sketch": "The recursive definition of `pmSumListAux` pairs the first vertex with one later vertex and thereby enumerates perfect matchings of the ordered vertex list. A perfect matching on a `2r`-element set is equivalent to a fixed-point-free involution on that set. The Automath theorem `no_free_involution_on_odd` supplies the odd-cardinality obstruction, and `freeInvolutionCount_formula` gives the exact even-cardinality count `(2r)!/(2^r r!)`; `freeInvolutionCount_small` matches the target repo's currently solved small cases. Specializing the closed form yields the exact frontier counts above. The bit lower bound is the pigeonhole lower bound for deterministic selection among that many branches. This directly matches the target file's own note that the present witness proofs are computation-heavy, and it explains the open-PR pattern in which single quantum-graph benchmark theorems are being added under explicit limit pressure rather than by a uniform exhaustive method.",
       "lean_refs": [
+        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:42",
+        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:151",
+        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:183",
+        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:199",
         "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:216",
         "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:292",
         "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:420",
-        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:436",
-        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:500"
+        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:492",
+        "FormalConjectures/Paper/MonochromaticQuantumGraph.lean:516"
       ],
       "automath_refs": [
-        "lean4/Omega/GU/FreeInvolutionCount.lean:33 freeInvolutionCount_formula",
-        "lean4/Omega/GU/FreeInvolutionCount.lean:93 freeInvolutionCount_small"
+        "lean4/Omega/GU/FreeInvolutionCount.lean:12",
+        "lean4/Omega/GU/FreeInvolutionCount.lean:33",
+        "lean4/Omega/GU/FreeInvolutionCount.lean:93"
       ],
-      "novelty_risk": "Low; the counts are classical, but the payoff is concrete benchmarking of this specific file's proof and search regime."
+      "novelty_risk": "The raw matching-count formula is classical; the nontrivial and repository-specific part is identifying it as the exact scaling invariant of `pmSumN` and converting it into a benchmark-design and certificate-complexity constraint for the target repo's current MonochromaticQuantumGraph frontier."
     }
   ],
   "draft_title": "",
@@ -66,11 +55,20 @@
       "score": 2,
       "verdict": "",
       "detail": "{\"codex_score\": 4, \"claude_score\": 2, \"claude_notes\": \"The math is correct but elementary — (2r-1)!! perfect matchings of K_{2r} is textbook combinatorics that any DeepMind researcher touching this file already knows. google-deepmind/formal-conjectures is a conjecture benchmark repo, not a project actively proving quantum graph theorems; they formalize open problems for others to attack. There is no open issue requesting this, no stated gap, and the 'support size of pmSumN' framing is technically wrong (pmSumN is a scalar sum, not a set). The target\", \"findings\": [{\"title\": \"Closed-Form Support Size for `pmSumN`\", \"type\": \"corollary\", \"status\": \"untested\", \"target_need\": \"Formalization gap: `FormalConjectures/Paper/MonochromaticQuantumGraph.lean` defines `pmSumN` recursively but does not expose a closed-form count of the perfect matchings it sums over.\", \"what_they_gain\": \"A reusable combinatorial certificate for the quantum-graph sector: it turns the recursive evaluator into a quantified benchmark, so the maintainers can state exactly how large each matching expansion is before attempting witness proofs or no-solution arguments.\", \"statement\": \"Under the standard bijection between perfect matchings of the complete graph on `2r` vertices and fixed-point-free involutions of `Fin (2*r)`, the support size of `pmSumN (2*r) D W ι` is `(2*r)! / (2^r * r!)`.\", \"proof_sketch\": \"Interpret each perfect matching as the involution swapping the two endpoints in every matched edge. Then invoke `freeInvolutionCount_formula`; this yields the classical closed form. This bridge from `pmSumN` to involutions is an inference from the two codebases, not a theorem already packaged in either one.\", \"lean_refs\": [\"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:139\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:183\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:420\"], \"automath_refs\": [\"lean4/Omega/GU/FreeInvolutionCount.lean:33 freeInvolutionCount_formula\", \"lean4/Omega/GU/FreeInvolutionCount.lean:93 freeInvolutionCount_small\"], \"novelty_risk\": \"Low mathematically; the novelty is the repo-specific Lean bridge from `pmSumN` to the free-involution counting package.\"}, {\"title\": \"Exact Matching Benchmarks at the Current Quantum-Graph Frontier\", \"type\": \"proposition\", \"status\": \"untested\", \"target_need\": \"Missing examples: the current `N = 4, 6` witness cases and the next open `N = 8, 10, 12` cases in `MonochromaticQuantumGraph` lack an explicit combinatorial term-count benchmark.\", \"what_they_gain\": \"Immediate sanity checks for the existing heartbeat-heavy witness proofs, plus a hard lower bound on the raw combinatorial search space for the open `N = 8, 10, 12` cases. Concretely, it explains why brute-force reasoning degrades sharply after the current solved witness sizes.\", \"statement\": \"The underlying complete graphs in `MonochromaticQuantumGraph` have exactly `3, 15, 105, 945, 10395` perfect matchings for `N = 4, 6, 8, 10, 12`, respectively.\", \"proof_sketch\": \"Apply the previous closed form with `r = 2, 3, 4, 5, 6`. The values `3` and `15` are already certified by `freeInvolutionCount_small`; the values `105`, `945`, and `10395` follow by arithmetic specialization of `freeInvolutionCount_formula`.\", \"lean_refs\": [\"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:216\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:292\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:420\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:436\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:500\"], \"automath_refs\": [\"lean4/Omega/GU/FreeInvolutionCount.lean:33 freeInvolutionCount_formula\", \"lean4/Omega/GU/FreeInvolutionCount.lean:93 freeInvolutionCount_small\"], \"novelty_risk\": \"Low; the counts are classical, but the payoff is concrete benchmarking of this specific file's proof and search regime.\"}]}"
+    },
+    {
+      "timestamp": "2026-04-19T00:42:14+08:00",
+      "stage": "B",
+      "round": 2,
+      "action": "research round completed",
+      "score": 3,
+      "verdict": "",
+      "detail": "{\"codex_score\": 5, \"claude_score\": 3, \"claude_notes\": \"The math is correct but trivial: (2r-1)!! for perfect matchings is undergraduate combinatorics. DeepMind researchers working on formal conjectures already know why their benchmarks scale — telling them the double factorial formula dressed up as an 'entropy barrier' would likely elicit 'yes, we know.' It doesn't solve any open issue, doesn't provide a usable Lean proof they lack, and the 'compress symmetry' advice is too vague to be actionable. The Codex self-score of novelty=3 was already genero\", \"findings\": [{\"title\": \"Perfect-Matching Entropy Barrier for `pmSumN` Benchmarks\", \"type\": \"proposition\", \"status\": \"untested\", \"target_need\": \"README demand for basic API around bespoke definitions, instantiated by `pmSumN` in `MonochromaticQuantumGraph`, together with the live proof-scale pressure visible in open MonochromaticQuantumGraph PRs and PR #3663 ('avoid increasing limits').\", \"what_they_gain\": \"An exact combinatorial-complexity certificate for the whole `MonochromaticQuantumGraph` benchmark ladder. It explains why the current constructive sanity proofs stop at `N=6`, why the active frontier cases are being formalized one theorem at a time, and why future benchmark certificates should compress symmetry rather than naively expand all perfect matchings.\", \"statement\": \"Let `pmSumN N D W ι` be the perfect-matching expansion from `FormalConjectures/Paper/MonochromaticQuantumGraph.lean`. The number of monomial branches in this expansion depends only on `N`: it is `0` for odd `N=2k+1`, and for even `N=2r` it is exactly `(2r)! / (2^r r!) = (2r-1)!!`. Hence the existing solved witness regimes in the target file sit at branch counts `3` (`N=4`) and `15` (`N=6`), while the first open frontier regimes already sit at `105` (`N=8`), `945` (`N=10`), `10395` (`N=12`), `135135` (`N=14`), and `2027025` (`N=16`). Consequently any deterministic branch-selection certificate for the `pmSumN` expansion must carry at least `⌈log2((2r)!/(2^r r!))⌉` bits of external choice; at the current frontier this yields lower bounds `7, 10, 14, 18, 21` bits for `N=8,10,12,14,16` respectively.\", \"proof_sketch\": \"The recursive definition of `pmSumListAux` pairs the first vertex with one later vertex and thereby enumerates perfect matchings of the ordered vertex list. A perfect matching on a `2r`-element set is equivalent to a fixed-point-free involution on that set. The Automath theorem `no_free_involution_on_odd` supplies the odd-cardinality obstruction, and `freeInvolutionCount_formula` gives the exact even-cardinality count `(2r)!/(2^r r!)`; `freeInvolutionCount_small` matches the target repo's currently solved small cases. Specializing the closed form yields the exact frontier counts above. The bit lower bound is the pigeonhole lower bound for deterministic selection among that many branches. This directly matches the target file's own note that the present witness proofs are computation-heavy, and it explains the open-PR pattern in which single quantum-graph benchmark theorems are being added under explicit limit pressure rather than by a uniform exhaustive method.\", \"lean_refs\": [\"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:42\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:151\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:183\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:199\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:216\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:292\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:420\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:492\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:516\"], \"automath_refs\": [\"lean4/Omega/GU/FreeInvolutionCount.lean:12\", \"lean4/Omega/GU/FreeInvolutionCount.lean:33\", \"lean4/Omega/GU/FreeInvolutionCount.lean:93\"], \"novelty_risk\": \"The raw matching-count formula is classical; the nontrivial and repository-specific part is identifying it as the exact scaling invariant of `pmSumN` and converting it into a benchmark-design and certificate-complexity constraint for the target repo's current MonochromaticQuantumGraph frontier.\"}]}"
     }
   ],
   "timestamps": {
     "created_at": "2026-04-19T00:07:06+08:00",
-    "updated_at": "2026-04-19T00:26:09+08:00",
+    "updated_at": "2026-04-19T00:42:14+08:00",
     "stage_b_started_at": "2026-04-19T00:07:07+08:00"
   },
   "submission_url": "",
