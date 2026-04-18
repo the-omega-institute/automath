@@ -36,6 +36,7 @@ import Omega.Zeta.CyclicEulerProductComplexSection
 import Omega.Zeta.CyclicEulerSchattenInvariants
 import Omega.Zeta.CyclicFredholmRealization
 import Omega.Zeta.CyclicLiftGcdLcm
+import Omega.Zeta.CyclicLiftFiniteProbeEvasion
 import Omega.Zeta.CyclicQuotientsOneDimensionalCharacters
 import Omega.Zeta.CyclicTruncationBounds
 import Omega.Zeta.CyclotomicSectorIdentity

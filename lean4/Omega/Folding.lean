@@ -37,6 +37,7 @@ import Omega.Folding.BinFold
 import Omega.Folding.BinFoldGaugeDensityTwoScale
 import Omega.Folding.BinFoldGaugeDecomposition
 import Omega.Folding.BinFoldGaugeM6
+import Omega.Folding.FoldBinMaxFiberExponent
 import Omega.Folding.BinMinsectorLastbit1SectionUnique
 import Omega.Folding.BitRecoveryFromLocalCongruenceData
 import Omega.Folding.BinFoldMinsectorLastbitSectionUnique

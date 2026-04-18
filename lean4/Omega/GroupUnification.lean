@@ -40,6 +40,7 @@ import Omega.GroupUnification.SpreadEquivalence
 import Omega.GroupUnification.TerminalWindow6FoldGaugeAutOutStructure
 import Omega.GroupUnification.TerminalWindow6MixingTimeTranscendence
 import Omega.GroupUnification.TerminalWindow6OneEightTwelveSplit
+import Omega.GroupUnification.TerminalFamilyUpliftLock
 import Omega.GroupUnification.TiltDynamics
 import Omega.GroupUnification.TiltedFreeEnergy
 import Omega.GroupUnification.TiltedLDP
