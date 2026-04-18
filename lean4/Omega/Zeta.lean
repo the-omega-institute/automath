@@ -194,6 +194,7 @@ import Omega.Zeta.Arity335CharacterEnergy
 import Omega.Zeta.AtomicWittIntoTC1
 import Omega.Zeta.RealInput40RotationPolytopeShear
 import Omega.Zeta.RealInput40TrivMechSplit
+import Omega.Zeta.OffcriticalEndpointResolutionLowerBound
 import Omega.Zeta.RegularPrefixfreeKraftRational
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Zeta.ResidueClassAsymptotics

@@ -69,6 +69,7 @@ import Omega.EA.Sync10ResetWaitingTime
 import Omega.EA.Sync10UniformStationary
 import Omega.EA.Sync10Regeneration
 import Omega.EA.SyncKernelMealyMinimality
+import Omega.EA.RoughVisibleDifferenceQuotientCertificate
 import Omega.EA.TimeSpaceCommuting
 import Omega.EA.SyncKernelResetWords
 import Omega.EA.ValInvariant
