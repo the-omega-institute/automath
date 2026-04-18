@@ -399,9 +399,11 @@ def codex_exec(
     Path(prompt_file).write_text(prompt, encoding="utf-8")
 
     model_flag = f" -m {model}" if model else ""
+    # macOS has gtimeout (from coreutils), Linux has timeout
+    timeout_bin = "gtimeout" if shutil.which("gtimeout") else "timeout"
     # Shell command: timeout + codex reads prompt from $(cat file) + stdin closed
     shell_cmd = (
-        f'timeout {timeout} "{codex_bin}" exec'
+        f'{timeout_bin} {timeout} "{codex_bin}" exec'
         f" --dangerously-bypass-approvals-and-sandbox"
         f' -C "{work_dir}"'
         f' -o "{out_file}"'
