@@ -1113,37 +1113,125 @@ _SORRY_LITERAL_RE = re.compile(
 _AXIOM_DECL_RE = re.compile(r"^\s*axiom\s+\w", re.MULTILINE)
 
 
-def detect_sorry_literals(wt: WorktreeInfo) -> list[str]:
-    """Reject any new commit that introduces a literal `sorry`/`admit`/`axiom`
-    in lean4/Omega/. This catches the codex anti-pattern of hiding `sorry` as
-    a function argument (e.g. `simp [(sorry foo)]`) which lake build only emits
-    as a warning, not an error — i.e. the round would otherwise sneak through."""
-    violations: list[str] = []
+def _strip_lean_comments(src: str) -> str:
+    """Replace Lean comment contents with spaces so line numbers stay stable.
+
+    Handles `-- line comments` and `/- block -/` (nested). Needed because
+    docstring prose often contains English words like "admit" which otherwise
+    trigger the sorry/admit scanner."""
+    n = len(src)
+    out: list[str] = []
+    i = 0
+    while i < n:
+        c = src[i]
+        c2 = src[i:i+2]
+        if c2 == "--":
+            j = src.find("\n", i)
+            if j == -1:
+                j = n
+            out.append(" " * (j - i))
+            i = j
+        elif c2 == "/-":
+            depth = 1
+            i += 2
+            out.append("  ")
+            while i < n and depth > 0:
+                cc = src[i:i+2]
+                if cc == "/-":
+                    depth += 1
+                    out.append("  ")
+                    i += 2
+                elif cc == "-/":
+                    depth -= 1
+                    out.append("  ")
+                    i += 2
+                else:
+                    ch = src[i]
+                    out.append(ch if ch == "\n" else " ")
+                    i += 1
+        else:
+            out.append(c)
+            i += 1
+    return "".join(out)
+
+
+def _lines_added_in_round(wt: WorktreeInfo, rel_path: str) -> set[int]:
+    """Line numbers (1-indexed, of the HEAD version) that this round added to
+    `rel_path`."""
     try:
-        result = run_cmd(
-            ["git", "diff", f"origin/{BASE_BRANCH}...HEAD",
-             "--diff-filter=AM", "--", "lean4/Omega/"],
+        r = run_cmd(
+            ["git", "diff", "--unified=0", f"{wt.base_sha}..HEAD", "--", rel_path],
+            cwd=wt.path,
+        )
+    except Exception:
+        return set()
+    added: set[int] = set()
+    # Hunk header: @@ -old +new,count @@
+    hunk_re = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@")
+    current_new: Optional[int] = None
+    remaining: int = 0
+    for line in (r.stdout or "").splitlines():
+        m = hunk_re.match(line)
+        if m:
+            current_new = int(m.group(1))
+            remaining = int(m.group(2) or "1")
+            continue
+        if current_new is None:
+            continue
+        if line.startswith("+") and not line.startswith("+++"):
+            added.add(current_new)
+            current_new += 1
+            remaining -= 1
+        elif line.startswith("-") and not line.startswith("---"):
+            # deletion doesn't advance the new-file pointer
+            pass
+        else:
+            current_new += 1 if remaining else 0
+    return added
+
+
+def detect_sorry_literals(wt: WorktreeInfo) -> list[str]:
+    """Reject any round that introduces a literal `sorry`/`admit`/`axiom` in
+    actual Lean code (not comments/docstrings) in files under lean4/Omega/.
+
+    Implementation: for each .lean file the round added or modified, strip
+    `--` line comments and `/- -/` block comments (preserving line numbers),
+    scan the result for sorry/admit/axiom tokens, and only flag matches whose
+    line is among the lines this round added. This avoids false positives
+    from English prose in docstrings that happens to contain the word
+    "admit"."""
+    violations: list[str] = []
+    if not wt.base_sha:
+        return violations
+    try:
+        r = run_cmd(
+            ["git", "diff", "--name-only", "--diff-filter=AM",
+             f"{wt.base_sha}..HEAD", "--", "lean4/Omega/"],
             cwd=wt.path,
         )
     except Exception:
         return violations
-    diff_out = result.stdout or ""
-    if not diff_out:
-        return violations
-    current_file: Optional[str] = None
-    for line in diff_out.splitlines():
-        if line.startswith("+++ b/"):
-            current_file = line[len("+++ b/"):]
+    files = [l.strip() for l in (r.stdout or "").splitlines()
+             if l.strip().endswith(".lean")]
+    for rel in files:
+        try:
+            src = (wt.path / rel).read_text(encoding="utf-8")
+        except Exception:
             continue
-        if not line.startswith("+") or line.startswith("+++"):
+        stripped = _strip_lean_comments(src)
+        added_lines = _lines_added_in_round(wt, rel)
+        if not added_lines:
             continue
-        added = line[1:]
-        if _SORRY_LITERAL_RE.search(added) or _AXIOM_DECL_RE.match(added):
-            # Skip pure comments — codex sometimes mentions sorry in narrative.
-            stripped = added.lstrip()
-            if stripped.startswith("--") or stripped.startswith("/-"):
-                continue
-            violations.append(f"{current_file}: + {added.strip()[:140]}")
+        for m in _SORRY_LITERAL_RE.finditer(stripped):
+            line_no = stripped.count("\n", 0, m.start()) + 1
+            if line_no in added_lines:
+                ctx = src.splitlines()[line_no - 1].strip()[:140]
+                violations.append(f"{rel}:{line_no}: {m.group()} — {ctx}")
+        for m in _AXIOM_DECL_RE.finditer(stripped):
+            line_no = stripped.count("\n", 0, m.start()) + 1
+            if line_no in added_lines:
+                ctx = src.splitlines()[line_no - 1].strip()[:140]
+                violations.append(f"{rel}:{line_no}: axiom — {ctx}")
     return violations
 
 
