@@ -707,6 +707,50 @@ def oracle_poll(task_id: str, timeout: int = 7200,
 # Codex exec
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Memory-pressure guard (macOS) — borrowed from codex_formalize.py
+# ---------------------------------------------------------------------------
+
+def _macos_pressure_level() -> int:
+    """Return macOS memory-pressure level: 1=NORMAL, 2=WARN, 4=URGENT, 8=CRITICAL."""
+    if sys.platform != "darwin":
+        return 0
+    try:
+        r = subprocess.run(
+            ["sysctl", "-n", "kern.memorystatus_vm_pressure_level"],
+            capture_output=True, text=True, timeout=5,
+            stdin=subprocess.DEVNULL,
+        )
+        return int((r.stdout or "0").strip() or "0")
+    except Exception:
+        return 0
+
+
+def wait_for_memory(tag: str = "", threshold: int = 2,
+                    poll: int = 30, max_wait: int = 600) -> None:
+    """Block until macOS memory pressure drops below threshold.
+
+    Only active on macOS. Prevents OOM when parallel codex + claude
+    processes saturate unified memory on M-series Macs.
+    """
+    if sys.platform != "darwin":
+        return
+    waited = 0
+    while waited < max_wait:
+        level = _macos_pressure_level()
+        if level < threshold:
+            return
+        level_name = {1: "NORMAL", 2: "WARN", 4: "URGENT", 8: "CRITICAL"}.get(
+            level, f"UNKNOWN({level})")
+        if waited == 0:
+            logger.warning(f"{tag} Memory pressure {level_name} >= threshold, "
+                           f"waiting before next codex/claude call...")
+        time.sleep(poll)
+        waited += poll
+    logger.warning(f"{tag} Memory pressure wait timed out after {max_wait}s, "
+                   f"proceeding anyway")
+
+
 def _kill_process_tree(pid: int) -> None:
     """Forcefully kill process and all descendants.
 
@@ -748,6 +792,8 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     if dry_run:
         logger.info(f"[DRY RUN] codex exec:\n{prompt[:200]}...")
         return "(dry run)"
+
+    wait_for_memory(tag="[codex]")
 
     codex_bin = CODEX_PATH if Path(CODEX_PATH).exists() else shutil.which("codex")
     if not codex_bin:
@@ -907,6 +953,8 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
     if dry_run:
         logger.info(f"[DRY RUN] claude_exec:\n{prompt[:200]}...")
         return "(dry run)"
+
+    wait_for_memory(tag="[claude]")
 
     claude_bin = CLAUDE_PATH
     if not Path(claude_bin).exists() and not shutil.which(claude_bin):
