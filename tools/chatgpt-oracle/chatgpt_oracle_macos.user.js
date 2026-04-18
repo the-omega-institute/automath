@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (macOS)
 // @namespace    omega-automath
-// @version      4.10
+// @version      4.11
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review — macOS variant with long-prompt extraction support
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -773,12 +773,10 @@
   function isSSRGarbage(text) {
     // Reject responses that are SSR bootstrap scripts, not real ChatGPT output.
     // These appear when the page hasn't hydrated yet.
+    // ONLY match the exact SSR pattern — do NOT use heuristics like jsRatio
+    // (short math responses with {} get false-positived).
     if (!text || text.length < 10) return false;
-    if (SSR_GARBAGE_RE.test(text)) return true;
-    // Also reject if >50% of text is JS-like (no spaces between words)
-    const jsRatio = (text.match(/[{}();=]/g) || []).length / text.length;
-    if (jsRatio > 0.05 && text.length < 1000) return true;
-    return false;
+    return SSR_GARBAGE_RE.test(text);
   }
 
   function extractResponseText() {
