@@ -30,5 +30,6 @@ import Omega.Discussion.SquierZeroCurvatureStrictification
 import Omega.Discussion.SquierCurvatureHolonomyStokes
 import Omega.Discussion.ToeplitzNegativeAtomThreshold
 import Omega.Discussion.TraceclassFredholmEulerSurjection
+import Omega.Discussion.TwoDesignDecouplingHSZK
 import Omega.Discussion.UniqueContinuousTransversal
 import Omega.Discussion.WdimFiniteIndexStability

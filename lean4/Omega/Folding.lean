@@ -225,6 +225,7 @@ import Omega.Folding.NormalizationComplexity
 import Omega.Folding.NormalizeThenTruncateFunctorial
 import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.OstrowskiQuadraticIrrationalPressureMatrixAlgebraicity
+import Omega.Folding.OstrowskiMetallicPropagationTailVariance
 import Omega.Folding.OstrowskiMetallicTruncationMismatchLimit
 import Omega.Folding.OstrowskiMetallicTwoRuleNormalization
 import Omega.Folding.OverflowGapRate
