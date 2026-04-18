@@ -181,4 +181,15 @@ theorem paper_endpoint_odd_channel_vanish (M : ℕ) (g : ℤ → ℚ) (hg0 : g 0
       endpointZeroModFourHarmonic M * g 2 + endpointTwoModFourHarmonic M * g (-2) := by
   simpa [hg0] using paper_endpoint_mod4_channel_decomposition M g
 
+/-- Paper-facing residue-class compression of the endpoint values `chebyAdams d 0`: odd `d`
+contribute `0`, multiples of `4` contribute `2`, and the remaining even class contributes `-2`.
+    cor:endpoint-tristate-compression -/
+theorem paper_endpoint_tristate_compression (d : ℕ) (hd : 1 ≤ d) :
+    (d % 2 = 1 → Omega.Discussion.chebyAdams d 0 = 0) ∧
+      (d % 4 = 0 → Omega.Discussion.chebyAdams d 0 = 2) ∧
+      (d % 4 = 2 → Omega.Discussion.chebyAdams d 0 = -2) := by
+  let _ := hd
+  refine ⟨chebyAdams_at_zero_of_odd d, chebyAdams_at_zero_of_mod4_zero d,
+    chebyAdams_at_zero_of_mod4_two d⟩
+
 end Omega.CircleDimension
