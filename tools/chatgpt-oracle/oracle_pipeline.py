@@ -3255,6 +3255,16 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 1,
                 except Exception as exc:
                     failed += 1
                     logger.error(f"[{name}] EXCEPTION: {exc}")
+
+                # Push after each paper completes (keeps PR up to date)
+                with _git_lock:
+                    push = run_cmd(["git", "push", "origin",
+                                    "dev-automation-integration"], timeout=60)
+                    if push.returncode == 0:
+                        logger.info(f"Git push OK after {name}")
+                    else:
+                        logger.warning(f"Git push failed after {name}")
+
                 _submit()
 
     return succeeded, failed
@@ -3548,6 +3558,17 @@ def main() -> int:
             oracle_timeout=args.oracle_timeout,
         )
         return 0 if ok else 1
+
+    # ── Pre-flight: sync with remote ───────────────────────────
+    if not args.dry_run:
+        logger.info("Pre-flight: git pull origin dev-automation-integration")
+        sync = run_cmd(["git", "pull", "--rebase", "origin",
+                        "dev-automation-integration"], timeout=60)
+        if sync.returncode != 0:
+            logger.warning(f"Git pull failed (rc={sync.returncode}), "
+                           f"continuing with local state")
+        else:
+            logger.info("Git sync OK")
 
     # ── Review mode ────────────────────────────────────────────
     paper_dirs = args.paper or (
