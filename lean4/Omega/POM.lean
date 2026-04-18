@@ -39,6 +39,7 @@ import Omega.POM.DiagonalRateRefreshHittingTimePGFClosed
 import Omega.POM.DiagonalRateRefreshWeightedCayleyPrufer
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete
 import Omega.POM.DiagonalRateSeparationSpectralResidue
+import Omega.POM.DiagonalRateRefreshRegenerationIidExpansion
 import Omega.POM.DoubleLimit
 import Omega.POM.DoubleLimit
 import Omega.POM.DoubleTransversalNormalForm
