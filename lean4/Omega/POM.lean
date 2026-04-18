@@ -192,6 +192,7 @@ import Omega.POM.ValMonotoneBooleanNand
 import Omega.POM.ValueLayerRewritingTerminating
 import Omega.POM.VisibleThickTail
 import Omega.POM.WitnessExtractionOptimalSuccess
+import Omega.POM.MinEntropyRate
 import Omega.POM.ZeroTempConcentration
 import Omega.POM.ZeroTemperatureTwoTermExpansion
 import Omega.POM.ZetaEqualsOrderPoly
