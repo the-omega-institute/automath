@@ -7,18 +7,21 @@
       4,
       5,
       4,
-      1
+      1,
+      2
     ],
     "claude": [
       2,
       3,
       2,
+      1,
       1
     ],
     "final": [
       2,
       3,
       2,
+      1,
       1
     ]
   },
@@ -88,11 +91,20 @@
       "score": 1,
       "verdict": "",
       "detail": "{\"codex_score\": 1, \"claude_score\": 1, \"claude_notes\": \"The finding is incoherent: it claims a 'finite-state recurrence bridge' but cites Hilbert's 5th problem theorems about Lie group structure, which have nothing to do with finite-state recurrence or Automath encodings. The automath_refs point only to README.md line 1, which is not a meaningful reference. The DeepMind formal-conjectures maintainers would immediately see the mismatch and dismiss this. Codex self-score of 1 is accurate — this would damage credibility rather than build it.\", \"findings\": [{\"title\": \"google-deepmind/formal-conjectures finite-state recurrence bridge\", \"type\": \"theorem\", \"status\": \"proved\", \"statement\": \"A recurrence-compatible invariant from the target repo can be transferred to an Automath encoding.\", \"connection\": \"This gives a concrete theorem-shaped bridge instead of a generic collaboration pitch.\", \"proof_sketch\": \"Track the target invariant through the Lean definitions, then reinterpret it as an Automath transition statistic.\", \"lean_refs\": [\"FormalConjectures/HilbertProblems/5.lean:52 theorem admitsLieGroupStructure_of_lieGroup\", \"FormalConjectures/HilbertProblems/5.lean:59 theorem locallyCompact_of_admitsLieGroupStructure\"], \"automath_refs\": [\"README.md:1\"], \"novelty_risk\": \"Needs literature check against existing published recurrence-transfer results.\"}]}"
+    },
+    {
+      "timestamp": "2026-04-19T01:38:54+08:00",
+      "stage": "B",
+      "round": 5,
+      "action": "research round completed",
+      "score": 1,
+      "verdict": "",
+      "detail": "{\"codex_score\": 2, \"claude_score\": 1, \"claude_notes\": \"Finding 2 is mathematically incorrect (fib(2)=1 breaks the 'both factors >1' claim, so prime interior slices DO exist at n=4,i=1). Finding 1 is correct but is a textbook sanity check for their definition — formal-conjectures wants help with open conjectures (the sorry blocks), not definition-testing normalization lemmas. Neither finding solves an actual need the target authors have. The target repo is a conjecture collection; gifts should either resolve sorry-gated conjectures, provide alternati\", \"findings\": [{\"title\": \"Exact Free-Involution Normalization for `pmSumN` at Unit Weights\", \"type\": \"proposition\", \"status\": \"untested\", \"target_need\": \"A closed-form sanity theorem for `pmSumN` in `FormalConjectures/Paper/MonochromaticQuantumGraph.lean`; the file currently defines the recursive perfect-matching sum and then jumps almost immediately to a large block of `answer(sorry)` nonexistence conjectures.\", \"what_they_gain\": \"A canonical regression oracle for the precise recursion they are using. This is materially useful because the README explicitly values short illuminating proofs that test definitions, and every future argument about `eqSystem6_no_solution_d6` and its relatives depends on `pmSumN` having the intended semantics.\", \"statement\": \"Let `W1 : WeightsN N D ℕ` be the constant-one weight function. Then `pmSumN N D W1 ι` is independent of `D` and of the coloring `ι`. More precisely, for odd `N = 2k+1` one has `pmSumN (2k+1) D W1 ι = 0`, while for even `N = 2r` one has `pmSumN (2r) D W1 ι = freeInvolutionCount r = (2r)! / (2^r r!)`. In particular, the target definition `pmSumN` really enumerates perfect matchings of the ordered vertex list, and for `N = 6` the all-ones specialization should evaluate to `15`.\", \"proof_sketch\": \"The target-side task is to prove that each recursive branch of `pmSumListAux` corresponds bijectively to pairing the first unused vertex with one later vertex and recursing on the remaining set; this is exactly the standard recursive construction of fixed-point-free involutions. Once that bridge is formalized, the odd case is discharged by `no_free_involution_on_odd`, the even count is identified by `freeInvolutionCount_formula`, and the low-dimensional anchor `N = 6` is supplied by `freeInvolutionCount_small`.\", \"lean_refs\": [\"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:157\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:183\", \"FormalConjectures/Paper/MonochromaticQuantumGraph.lean:403\"], \"automath_refs\": [\"lean4/Omega/GU/FreeInvolutionCount.lean:12\", \"lean4/Omega/GU/FreeInvolutionCount.lean:33\", \"lean4/Omega/GU/FreeInvolutionCount.lean:93\"], \"novelty_risk\": \"The counting itself is classical; the real value is not new combinatorics but a precise normalization theorem for the target repo’s own `pmSumN` recursion.\"}, {\"title\": \"Boundary-Slice Rigidity for the Fibonacci Prime Benchmark\", \"type\": \"corollary\", \"status\": \"proved\", \"target_need\": \"A graph/combinatorial reformulation of `FormalConjectures/Wikipedia/FibonacciPrimes.lean`; the file currently contains only number-theoretic phrasings.\", \"what_they_gain\": \"A new benchmark variant with a short proof and a different mathematical surface form: the existing number-theoretic conjecture becomes a statement about prime cardinalities of coordinate slices in Fibonacci cubes. This matches the repo’s goal of clarifying conjectures by alternative precise formalizations without importing long proofs.\", \"statement\": \"For every `n > 0`, the boundary coordinate-one slice of the Fibonacci cube has cardinality `Nat.fib n`. Consequently `fib_primes_infinite.variant` is equivalent to the assertion that infinitely many Fibonacci cubes have a prime boundary coordinate-one slice. More sharply, if `n ≥ 4` and `i : Fin n` is interior (`0 < i.val < n - 1`), then the slice count `coordOneCount n i` is composite, because `coordOneCount n i = Nat.fib (i.val + 1) * Nat.fib (n - i.val)` with both factors greater than `1`. Hence prime coordinate-one slices, when they occur, are forced to the two boundary coordinates.\", \"proof_sketch\": \"Instantiate `coordOneCount_eq_fib_prod` at the boundary index `i = 0` (or symmetrically `i = n-1`) to obtain `coordOneCount n i = Nat.fib n`. For an interior index, the same theorem gives a nontrivial factorization into two positive Fibonacci numbers. Therefore the open target statement about infinitely many prime Fibonacci numbers is exactly the statement that prime coordinate-one slices occur infinitely often, and all such prime slices are boundary phenomena.\", \"lean_refs\": [\"FormalConjectures/Wikipedia/FibonacciPrimes.lean:33\", \"FormalConjectures/Wikipedia/FibonacciPrimes.lean:40\"], \"automath_refs\": [\"lean4/Omega/Combinatorics/FibonacciCube.lean:1163\"], \"novelty_risk\": \"Likely folklore once one notices the boundary specialization of `coordOneCount_eq_fib_prod`; the contribution is benchmark repackaging rather than a difficult new theorem.\"}]}"
     }
   ],
   "timestamps": {
     "created_at": "2026-04-19T00:07:06+08:00",
-    "updated_at": "2026-04-19T01:23:42+08:00",
+    "updated_at": "2026-04-19T01:38:54+08:00",
     "stage_b_started_at": "2026-04-19T00:07:07+08:00"
   },
   "submission_url": "",
