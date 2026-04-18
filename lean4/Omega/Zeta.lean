@@ -219,6 +219,7 @@ import Omega.Zeta.XiSmithLossMinimalBranchRegister
 import Omega.Zeta.SmithPrefixSufficiency
 import Omega.Zeta.XiGramDetNearestNeighborProductUpperBound
 import Omega.Zeta.XiBulkEntropyStrictConvexity
+import Omega.Zeta.XiPoissonSecondOrderTwoCosineChannels
 import Omega.Zeta.XiTimePart50dcProjectivePressurePerronLogconvex
 import Omega.Zeta.LayeredPrimesliceLocalAlphabetFibermax
 import Omega.Zeta.XiEntropyGapExponentialSuppressionNonzeroFingerprint
