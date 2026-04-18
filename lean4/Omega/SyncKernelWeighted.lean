@@ -18,6 +18,7 @@ import Omega.SyncKernelWeighted.RateCurveCenterSliceAudit
 import Omega.SyncKernelWeighted.RateCenterUniqueReal
 import Omega.SyncKernelWeighted.UnitarySliceHalfPhaseLocking
 import Omega.SyncKernelWeighted.WeightedUnitRootFinite
+import Omega.SyncKernelWeighted.WeightedNewmanThreshold
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.SyncKernelWeighted.WittFrobeniusIteratedDescent
 import Omega.SyncKernelWeighted.ZeroInjectionValuePreserving

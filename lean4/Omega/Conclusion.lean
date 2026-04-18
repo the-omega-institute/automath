@@ -117,6 +117,7 @@ import Omega.Conclusion.ScreenAtomicValueAntitone
 import Omega.Conclusion.ScreenAuditMarginalDiminishingReturns
 import Omega.Conclusion.ScreenAuditGapSupermodularity
 import Omega.Conclusion.SecondOrderCdimSignature
+import Omega.Conclusion.SemanticEquivalenceUndecidable
 import Omega.Conclusion.SectionLedgerCapacityFunctional
 import Omega.Conclusion.SectionLedgerKL
 import Omega.Conclusion.ShiftCommutingAlgorithmsPolynomial
