@@ -83,6 +83,53 @@ _round_lock = threading.Lock()
 # Lock serializing .lake/build merges back to the main repo
 _lake_merge_lock = threading.Lock()
 
+# In-memory dedup of in-flight target IDs across parallel rounds.
+# Phase B selects targets concurrently and can pick the same paper (same
+# lean_name / paper_label) in two worktrees; the second one wastes a Phase C
+# and produces a merge conflict. We register each round's target IDs after
+# Phase B and drop any that overlap with another live round; if too few
+# remain we fail the round before Phase C. Entries are removed in
+# `run_round_in_worktree`'s finally block, so the set only ever holds IDs
+# of rounds currently in flight (~= --parallel size).
+_active_targets_lock = threading.Lock()
+_active_targets: dict[int, set[str]] = {}
+
+
+def _target_id(t: dict) -> str:
+    """Stable cross-round identifier for a target."""
+    return (t.get("lean_name") or t.get("paper_label") or "").strip()
+
+
+def claim_targets(round_num: int, targets: list[dict]) -> tuple[list[dict], list[str]]:
+    """Filter `targets` against in-flight target IDs from other rounds.
+    Returns (kept, dropped_ids). Registers the kept IDs under `round_num`."""
+    kept: list[dict] = []
+    dropped: list[str] = []
+    with _active_targets_lock:
+        taken: set[str] = set()
+        for s in _active_targets.values():
+            taken |= s
+        keep_ids: set[str] = set()
+        for t in targets:
+            tid = _target_id(t)
+            if not tid:
+                # Unkeyable target — keep but don't register; can't dedup.
+                kept.append(t)
+                continue
+            if tid in taken or tid in keep_ids:
+                dropped.append(tid)
+                continue
+            keep_ids.add(tid)
+            kept.append(t)
+        if keep_ids:
+            _active_targets[round_num] = keep_ids
+    return kept, dropped
+
+
+def release_targets(round_num: int) -> None:
+    with _active_targets_lock:
+        _active_targets.pop(round_num, None)
+
 # ---------------------------------------------------------------------------
 # Logging
 # ---------------------------------------------------------------------------
@@ -1256,6 +1303,19 @@ def run_round_in_worktree(
             logger.info(f"  Target {i}: {t.get('lean_name', '?')} "
                          f"({t.get('difficulty', '?')}, {t.get('chapter', '?')})")
 
+        # ── Dedup: drop targets already claimed by another in-flight round ─
+        kept, dropped = claim_targets(round_num, phase_b.targets)
+        if dropped:
+            logger.warning(
+                f"[{tag}] Dedup: dropping {len(dropped)} target(s) already in flight: "
+                f"{', '.join(dropped)}"
+            )
+        if not kept:
+            logger.error(f"[{tag}] All targets duplicated by other rounds; aborting")
+            _save_round_log(round_num, phase_b, PhaseCResult(), [], False)
+            return False, round_num, []
+        phase_b.targets = kept
+
         # ── Gate ──────────────────────────────────────────────────
         gate_ok, gate_msg = gate_check(phase_b.targets)
         if not gate_ok:
@@ -1315,6 +1375,9 @@ def run_round_in_worktree(
         return False, round_num, []
 
     finally:
+        # Always release the round's claim on its target IDs so other rounds
+        # can pick them up if this one fails.
+        release_targets(round_num)
         # Cleanup worktree on success or non-merge-conflict failure
         if wt and not dry_run:
             try:
