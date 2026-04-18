@@ -210,6 +210,7 @@ import Omega.Zeta.XiCauchyPoissonSecondOrderShapeLimitNodeRigidity
 import Omega.Zeta.XiAddressPrimeLedgerJointBudget
 import Omega.Zeta.XiDefectEntropyPeakCompressibilityExtremal
 import Omega.Zeta.XiHankelNormalformCRTAdelicMultiplicity
+import Omega.Zeta.XiEllipseWallcrossingUnitStaircaseUniversality
 import Omega.Zeta.XiBasepointScanAnchorDetCauchyVandermonde
 import Omega.Zeta.PickPoissonCrossEnergyHorizontalSeparation
 import Omega.Zeta.XiPickPoissonNearCollisionCertificate

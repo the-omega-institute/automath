@@ -79,6 +79,7 @@ import Omega.POM.FixedQFrozenUniversalReversibleThreshold
 import Omega.POM.GibbsSelection
 import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.HankelFingerprintSeeds
+import Omega.POM.HankelInversePropagationLinearOrbits
 import Omega.POM.HankelSyndromeGapRankDefect
 import Omega.POM.HankelSyndromeModuleKernelEqualsMultiples
 import Omega.POM.HighMultiplicitySparse
