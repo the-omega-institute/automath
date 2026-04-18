@@ -168,6 +168,7 @@ import Omega.Folding.MetallicIntegerScalarizationThreshold
 import Omega.Folding.MetallicLinearScalarizationThreshold
 import Omega.Folding.MetallicParetoFrontier
 import Omega.Folding.MetallicParetoScaleLaw
+import Omega.Folding.MetallicSampleThreshold
 import Omega.Folding.MetallicTwoStateSFT
 import Omega.Folding.MaxFiberHolographicDepthAmplification
 import Omega.Folding.MicrostateResidualWindowReachability

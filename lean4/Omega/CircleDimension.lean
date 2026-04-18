@@ -164,6 +164,7 @@ import Omega.CircleDimension.WdimSignedCircleDimension
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
 import Omega.CircleDimension.ZnProcyclicAndMinGenerators
 import Omega.CircleDimension.KernelAffineCompositionNorm
+import Omega.CircleDimension.KernelStripExtensionEval
 import Omega.CircleDimension.KernelGramConvolutionSpectrum
 import Omega.CircleDimension.KernelIntegerSamplingDualKernel
 import Omega.CircleDimension.KernelIntegerTranslateRieszBounds
