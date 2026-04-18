@@ -26,6 +26,7 @@ import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.ComplementaryGoldenBernoulliDivergence
 import Omega.POM.CoarsegrainingMajorizationSchur
 import Omega.POM.CouplingExpectationBound
+import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.DeltaqGoldenEnvelope
 import Omega.POM.DefectBand
 import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
@@ -72,6 +73,7 @@ import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberLeyangKlBernoulliDecomposition
 import Omega.POM.FiberRewritePoissonBinomial
 import Omega.POM.BCPontryaginDualClassification
+import Omega.POM.BCVisibleQuotientEventualStability
 import Omega.POM.FiberReflector
 import Omega.POM.FiberSpectrumStieltjesRigidityDeterminantSchatten
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
