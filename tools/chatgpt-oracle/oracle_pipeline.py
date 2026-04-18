@@ -727,7 +727,7 @@ def _macos_pressure_level() -> int:
         return 0
 
 
-def wait_for_memory(tag: str = "", threshold: int = 2,
+def wait_for_memory(tag: str = "", threshold: int = 4,
                     poll: int = 30, max_wait: int = 600) -> None:
     """Block until macOS memory pressure drops below threshold.
 
