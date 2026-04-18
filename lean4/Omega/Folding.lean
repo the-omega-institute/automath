@@ -139,6 +139,7 @@ import Omega.Folding.GaugeAnomalyEdgeworth1
 import Omega.Folding.GaugeAnomalyP10Degree
 import Omega.Folding.GaugeAnomalyP10DisjointSqrt5
 import Omega.Folding.GaugeAnomalyP10Q10TschirnhausInverse
+import Omega.Folding.GaugeAnomalyQ10UniqueQuadraticSubfield
 import Omega.Folding.GaugeAnomalyQ10Tschirnhaus
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.Folding.GaugeAnomalyRootUnitSamplingThreshold
