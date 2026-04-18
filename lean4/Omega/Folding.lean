@@ -114,6 +114,7 @@ import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
 import Omega.Folding.GaugeAnomalyAutocovClosed
 import Omega.Folding.GaugeAnomalyCovGenfun
 import Omega.Folding.GaugeAnomalyHankelAudit
+import Omega.Folding.GaugeAnomalyCumulantsNotPrecursive
 import Omega.Folding.GaugeAnomalyJordanFingerprint
 import Omega.Folding.GaugeAnomalyDensity
 import Omega.Folding.GodelDensityEstimatorDeterministicMeanApprox

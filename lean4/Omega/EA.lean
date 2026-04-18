@@ -41,6 +41,7 @@ import Omega.EA.PrimitiveMinimalSuccessor
 import Omega.EA.PrimeLedger
 import Omega.EA.PrimeRegisterFibValuation
 import Omega.EA.PrimeRegisterExternalLedgerOrbitInvariance
+import Omega.EA.PrimeRegisterEllipseInvertGodel
 import Omega.EA.PrimeRegisterLocalMoves
 import Omega.EA.PrimeRegisterMultiplicativeNormalizationAdditiveIso
 import Omega.EA.PrimeRegisterNormalFormUniqueness
