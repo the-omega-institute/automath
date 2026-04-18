@@ -28,6 +28,7 @@ import Omega.Conclusion.CompressionLadderSpin10
 import Omega.Conclusion.CompleteStrictificationDualCriterion
 import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.DiscreteCertificateFrontGeneralizedInverse
+import Omega.Conclusion.AlgorithmPrimeShiftEquivalence
 import Omega.Conclusion.CoordinateBundleDyadicBlockLaw
 import Omega.Conclusion.ThreeEndCertificateOrthogonality
 import Omega.Conclusion.CycleRankSaturation
