@@ -298,3 +298,4 @@ import Omega.Folding.ZeroCosetRigidity
 import Omega.Folding.ZeroFiberLinear
 import Omega.Folding.ZeroBlockMemoryDepth
 import Omega.Folding.HypercubeStokesPlancherelBoundaryEnergy
+import Omega.Folding.HiddenBitDecoupling
