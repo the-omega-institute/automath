@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (macOS)
 // @namespace    omega-automath
-// @version      4.9
+// @version      4.10
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review — macOS variant with long-prompt extraction support
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -676,7 +676,11 @@
     /^(登录|Log in|注册|Sign up)/,
     /^(我们使用\s*cookie|We use cookies|管理\s*Cookie|Manage Cookies)/,
     /^(拒绝非必要|Reject non-essential|接受所有|Accept all)/,
+    /^See Cookie Preferences/,
   ];
+
+  // SSR/hydration garbage patterns — page not fully rendered yet
+  const SSR_GARBAGE_RE = /window\.__oai_log|window\.__oai_SSR|requestAnimationFrame/;
 
   function isChromeLine(t) {
     if (!t || t.length > 200) return false;
@@ -764,6 +768,17 @@
     }
 
     return (clone.innerText || "").trim();
+  }
+
+  function isSSRGarbage(text) {
+    // Reject responses that are SSR bootstrap scripts, not real ChatGPT output.
+    // These appear when the page hasn't hydrated yet.
+    if (!text || text.length < 10) return false;
+    if (SSR_GARBAGE_RE.test(text)) return true;
+    // Also reject if >50% of text is JS-like (no spaces between words)
+    const jsRatio = (text.match(/[{}();=]/g) || []).length / text.length;
+    if (jsRatio > 0.05 && text.length < 1000) return true;
+    return false;
   }
 
   function extractResponseText() {
@@ -942,11 +957,19 @@
       // Only count extracted text that's meaningful
       if (responseText.length >= 5) {
         // CRITICAL: never accept a prompt echo as a response.
-        // This happens when ChatGPT is in extended thinking and only
-        // the user's message ("你说：...") is visible on the page.
         if (looksLikePromptEcho(responseText)) {
           if (stableCount === 0) {
             log(`Prompt echo detected (${responseText.length} chars) — waiting for real response`);
+          }
+          stableCount = 0;
+          lastText = "";
+          continue;
+        }
+
+        // CRITICAL: reject SSR/hydration garbage (page not rendered yet)
+        if (isSSRGarbage(responseText)) {
+          if (stableCount === 0) {
+            log(`SSR garbage detected (${responseText.length} chars) — page still hydrating, waiting`);
           }
           stableCount = 0;
           lastText = "";
