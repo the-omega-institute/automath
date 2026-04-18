@@ -34,4 +34,10 @@ theorem paper_real_input_40_rotation_polytope_shear
     h.deriveSupportFunctionPullback h.averageVectorShearRelation_h h.supportFunctionDotRewrite_h
   exact ⟨hRot, hSupport⟩
 
+/-- Paper-facing projection of the rotation-set component of the shear package.
+    `cor:chi-twist-dimension-reduction` -/
+theorem paper_chi_twist_dimension_reduction (D : RealInput40RotationPolytopeShearData) :
+    D.rot_chi = D.shear_image_rot_e := by
+  exact (paper_real_input_40_rotation_polytope_shear D).1
+
 end Omega.Zeta

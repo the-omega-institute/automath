@@ -49,6 +49,7 @@ import Omega.CircleDimension.EndpointTristateSet
 import Omega.CircleDimension.EndpointFourChannelChi4
 import Omega.CircleDimension.FiberPhaseQuantization
 import Omega.CircleDimension.FibonacciPrimitivePrimeBinaryLock
+import Omega.CircleDimension.Fibonacci2PowerAdicUnitInfinite
 import Omega.CircleDimension.FiniteExtensionAxiomaticUniqueness
 import Omega.CircleDimension.FiniteFiberAuditExponent
 import Omega.CircleDimension.FiniteFiberMinPrimeRegisterAxes
