@@ -145,6 +145,7 @@ import Omega.CircleDimension.SquarefreeMedianDistance
 import Omega.CircleDimension.SquarefreeMedianMetricEllipseRealization
 import Omega.CircleDimension.StokesExactSequenceDictionary
 import Omega.CircleDimension.StokesFiberIntegrationDefect
+import Omega.CircleDimension.SymmetricTruncationTailIdentity
 import Omega.CircleDimension.StokesHalfFaceCount
 import Omega.CircleDimension.StokesHomologyExactSplitting
 import Omega.CircleDimension.StokesQPowerScalingAnomAmplification

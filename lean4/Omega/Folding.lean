@@ -112,6 +112,7 @@ import Omega.Folding.GaugeAnomalyCovGenfun
 import Omega.Folding.GaugeAnomalyHankelAudit
 import Omega.Folding.GaugeAnomalyJordanFingerprint
 import Omega.Folding.GaugeAnomalyDensity
+import Omega.Folding.GodelDensityEstimatorDeterministicMeanApprox
 import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.GaugeAnomalyFiniteVarianceClosed
 import Omega.Folding.GaugeAnomalyGcDefectMustCross

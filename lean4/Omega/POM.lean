@@ -23,6 +23,7 @@ import Omega.POM.CollisionStrengthened
 import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.ComplementaryGoldenBernoulliDivergence
 import Omega.POM.CouplingExpectationBound
+import Omega.POM.DeltaqGoldenEnvelope
 import Omega.POM.DefectBand
 import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DerivedFoldGoldenRationalPowerUnitObstruction
