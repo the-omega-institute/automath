@@ -132,6 +132,7 @@ import Omega.POM.MomentMinreal
 import Omega.POM.MomentDimCollapse
 import Omega.POM.MomentOddLagNeutrality
 import Omega.POM.MomentResonance
+import Omega.POM.MinKernelProjectionAndInversion
 import Omega.POM.MultiplicativeChainRuleFinite
 import Omega.POM.MultiplicityCompositionPartition
 import Omega.POM.MultiplicityCompositionMod3Sparsity

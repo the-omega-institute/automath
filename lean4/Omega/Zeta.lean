@@ -47,6 +47,7 @@ import Omega.Zeta.DFAPrimeSymmetricDiffETDS
 import Omega.Zeta.DFAPrimeSymmetricDiffLowerBound
 import Omega.Zeta.DFAQuantitativeObstruction
 import Omega.Zeta.Degree11GenericGaloisS11
+import Omega.Zeta.DerivedLeyangBranchsetAdjacencySpectrumHeatTrace
 import Omega.Zeta.DenominatorAxisDirectLimitSolenoid
 import Omega.Zeta.DynZeta
 import Omega.Zeta.ETDSDFADensityDichotomy
