@@ -57,4 +57,10 @@ theorem paper_window6_patisalam_global_form_rigidity (D : PatiSalamGlobalFormRig
     D.noNontrivialFiniteCentralQuotient ∧ D.globalFormIsSU4xSU2xSU2 := by
   exact ⟨D.noNontrivialFiniteCentralQuotient_holds, D.globalFormIsSU4xSU2xSU2_holds⟩
 
+/-- The global-form conclusion of the Pati-Salam rigidity audit.
+    cor:window6-levi-rigidity-pati-salam-isogeny -/
+theorem paper_window6_levi_rigidity_pati_salam_isogeny (D : PatiSalamGlobalFormRigidityData) :
+    D.globalFormIsSU4xSU2xSU2 := by
+  exact (paper_window6_patisalam_global_form_rigidity D).2
+
 end Omega.GroupUnification

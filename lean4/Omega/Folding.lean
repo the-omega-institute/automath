@@ -281,4 +281,5 @@ import Omega.Folding.ZeckendorfSignature
 import Omega.Folding.ZeroBlockMinimaxAbsError
 import Omega.Folding.ZeroCosetRigidity
 import Omega.Folding.ZeroFiberLinear
+import Omega.Folding.ZeroBlockMemoryDepth
 import Omega.Folding.HypercubeStokesPlancherelBoundaryEnergy

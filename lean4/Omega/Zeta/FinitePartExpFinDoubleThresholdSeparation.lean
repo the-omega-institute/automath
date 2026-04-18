@@ -23,4 +23,13 @@ theorem paper_finite_part_exp_fin_double_threshold_separation
   · exact h.noncollinear_of_directions
   · exact h.directions_of_noncollinear
 
+/-- Forward paper-facing design principle extracted from the double-threshold separation
+equivalence.
+    cor:finite-part-double-threshold-design-principle -/
+theorem paper_finite_part_double_threshold_design_principle
+    (h : FinitePartDoubleThresholdSeparationData) :
+    h.gradientsNoncollinear → h.separableDirections := by
+  intro hgrad
+  exact (paper_finite_part_exp_fin_double_threshold_separation h).2 hgrad
+
 end Omega.Zeta
