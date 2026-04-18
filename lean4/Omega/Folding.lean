@@ -143,6 +143,7 @@ import Omega.Folding.GaugeAnomalyFiniteVarianceClosed
 import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
 import Omega.Folding.GaugeAnomalySpectralResidualLaw
+import Omega.Folding.GaugeAnomalyFiniteStateMinimaxAbsError
 import Omega.Folding.GaugeAnomalyPressure
 import Omega.Folding.GaugeAnomalyRateCurveParam
 import Omega.Folding.GaugeAnomalyDiscriminantFactorization

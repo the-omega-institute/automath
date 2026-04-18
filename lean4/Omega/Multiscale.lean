@@ -15,3 +15,4 @@ import Omega.Multiscale.SolenoidStokesMarkovVarianceDissipation
 import Omega.Multiscale.StokesDirichletEnergyMultiscaleApprox
 import Omega.Multiscale.StokesPeriodModuleCovectorNormalization
 import Omega.Multiscale.ToralSolenoidCechH1DirectLimit
+import Omega.Multiscale.SolenoidStokesRadonMeasureRealization
