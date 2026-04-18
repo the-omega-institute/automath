@@ -53,6 +53,7 @@ import Omega.Conclusion.GodelLeyangIFS
 import Omega.Conclusion.GoldenBiasSecondOrderUniqueness
 import Omega.Conclusion.GoldenSprtDeltaClosure
 import Omega.Conclusion.HaltingTimeExternalBudgetExact
+import Omega.Conclusion.ExternalBudgetTensorEntropyRate
 import Omega.Conclusion.HiddenFaceBudgetSharpThresholdClassification
 import Omega.Conclusion.HypercubePhase
 import Omega.Conclusion.ImageLayerMinimalInverseMemory

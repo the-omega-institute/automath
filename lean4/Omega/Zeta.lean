@@ -221,6 +221,7 @@ import Omega.Zeta.XiCauchyPoissonSecondOrderShapeLimitNodeRigidity
 import Omega.Zeta.XiAddressPrimeLedgerJointBudget
 import Omega.Zeta.XiLeyangThreeLeadingZerosExtrapolateUcN6
 import Omega.Zeta.XiDefectEntropyPeakCompressibilityExtremal
+import Omega.Zeta.XiSecularFamilyFullSymmetricGalois
 import Omega.Zeta.XiEndpointPsiPoissonMonopoleAsymptotic
 import Omega.Zeta.XiHankelNormalformCRTAdelicMultiplicity
 import Omega.Zeta.XiTerminalZmLanguageMinimaxLogloss
