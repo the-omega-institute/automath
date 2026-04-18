@@ -1,3 +1,4 @@
 import Omega.RatioResultant.RatioResultantDiscRigidity
 import Omega.RatioResultant.RatioResultantChebyshevParity
 import Omega.RatioResultant.RatioFieldSplitting
+import Omega.RatioResultant.RatioFieldFullSymmetric

@@ -95,6 +95,7 @@ import Omega.Folding.FibonacciPolynomial
 import Omega.Folding.FingerprintSeparationPublication
 import Omega.Folding.Fold
 import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy
+import Omega.Folding.FoldFiberParityEnergySimplex
 import Omega.Folding.FoldZeroUncertainty
 import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.FoldCongruenceModSemirings
