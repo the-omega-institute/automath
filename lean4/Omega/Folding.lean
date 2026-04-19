@@ -120,6 +120,7 @@ import Omega.Folding.FractranFoldCompiler
 import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.FiberBiasFrequencyTransportIdentity
+import Omega.Folding.FiberBiasEnergyErasureIdentity
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
 import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldPressureFreezingThreshold

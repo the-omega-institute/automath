@@ -1,5 +1,6 @@
 import Omega.Multiscale.PadicHypercubeStokesHaar
 import Omega.Multiscale.NormalizedIntegrationL1DefectInverseTower
+import Omega.Multiscale.NormalizedStokesTraceL1Completion
 import Omega.Multiscale.NormalizedStokesFiniteCoverInverseTower
 import Omega.Multiscale.NormalizedBCStokesFiberedInverseTower
 import Omega.Multiscale.CoveringTowerGodelBoundaryNormalizedStokes
