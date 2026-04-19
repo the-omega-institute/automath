@@ -163,6 +163,7 @@ import Omega.Zeta.XiEndpointJensenDefectH12GramKernel
 import Omega.Zeta.EndpointHeatProbeAdamsTwistRoots
 import Omega.Zeta.EndpointHeatProbeSpectralMarginLowerBound
 import Omega.Zeta.XiJDiscriminantElliptic2TorsionMobius
+import Omega.Zeta.XiJDiscriminantMobiusRigidityCovariance
 import Omega.Zeta.XiJSexticEllipticLattesTMap
 import Omega.Zeta.XiSelfdualSingleProbeDeterminesToeplitzMoments
 import Omega.Zeta.XiExceptionalSecularGenericFullSymmetric
@@ -320,6 +321,7 @@ import Omega.Zeta.XiPickPoissonDeterminantSeparationSufficient
 import Omega.Zeta.XiPickPoissonAnchoredTransverseSeparationInversion
 import Omega.Zeta.XiPickPoissonAnchoredGramRigidityReconstruction
 import Omega.Zeta.XiPickPoissonSchurFluxClosedForm
+import Omega.Zeta.XiPickPoissonSchurOneStepCollapse
 import Omega.Zeta.XiPickPoissonPrincipalMinorsPartition
 import Omega.Zeta.XiJensenDefectPowerPullbackInvariance
 import Omega.Zeta.XiTerminalZmEllipticWeightTriplingRamificationCount
