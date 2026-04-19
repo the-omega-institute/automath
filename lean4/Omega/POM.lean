@@ -220,6 +220,8 @@ import Omega.POM.PressureSlopes
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantAreaFiberMultinomial
 import Omega.POM.PrimeDeterminantEllipseLedger
+import Omega.POM.ReversibleExternalResidualKolmogorovLowerBound
+import Omega.POM.ReplicaSoftcoreTemperatureFreeEnergyPhaseTransition
 import Omega.POM.ValPolynomialSemantics
 import Omega.POM.PrimitivePrimeLucas
 import Omega.POM.ProjectiveOperatorDegeneratesToMomentKernel
