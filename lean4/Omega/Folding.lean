@@ -131,6 +131,7 @@ import Omega.Folding.FoldBinTwoStateAsymptotic
 import Omega.Folding.FoldBinFDivergenceCollapse
 import Omega.Folding.FractranFoldCompiler
 import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
+import Omega.Folding.FoldRewriteNewman
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.FoldSpectrumZeroCriterion
 import Omega.Folding.FiberBiasFrequencyTransportIdentity
