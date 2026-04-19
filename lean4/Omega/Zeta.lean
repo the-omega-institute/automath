@@ -153,6 +153,7 @@ import Omega.Zeta.XiGramshiftIllconditioningForcedByToeplitzMargin
 import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge
 import Omega.Zeta.XiShadowSpectrumDeterminantRatioAtZero
 import Omega.Zeta.XiReverseKLSingleFrequencyExactMinimizer
+import Omega.Zeta.XiReverseKLFourierGapPositiveKernelEnergy
 import Omega.Zeta.XiReverseKLSingleFrequencyRigidityEquivalences
 import Omega.Zeta.XiReverseKLSingleFrequencyLegendreFenchelClosed
 import Omega.Zeta.XiEndpointRecursiveRescalingTwoTerm
