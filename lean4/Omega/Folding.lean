@@ -76,6 +76,7 @@ import Omega.Folding.EndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
 import Omega.Folding.Entropy
 import Omega.Folding.EntropyRandomResidues
+import Omega.Folding.MultinomialVpCarrySignature
 import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Folding.EpsilonMachineInfiniteMarkovOrder
 import Omega.Folding.EpsilonMachineStationaryFibonacciTail
