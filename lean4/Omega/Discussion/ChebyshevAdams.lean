@@ -230,6 +230,44 @@ theorem chebyAdams_at_zero_values :
     chebyAdams 2 0 = -2 ∧ chebyAdams 3 0 = 0 := by
   refine ⟨rfl, rfl, ?_, ?_⟩ <;> simp [chebyAdams]
 
+/-- Reduction of the `S = 0` specialization to the residue class modulo `4`. -/
+private theorem chebyAdams_at_zero_mod4 (m : ℕ) :
+    chebyAdams m 0 = chebyAdams (m % 4) 0 := by
+  have hperiod : ∀ r q : ℕ, chebyAdams (r + 4 * q) 0 = chebyAdams r 0 := by
+    intro r q
+    induction q with
+    | zero =>
+      simp
+    | succ q ih =>
+      rw [show r + 4 * (q + 1) = (r + 4 * q) + 4 by omega]
+      rw [chebyAdams_at_zero_period4, ih]
+  simpa [Nat.mod_add_div, Nat.mul_comm] using hperiod (m % 4) (m / 4)
+
+/-- Endpoint half-angle residue at `w = -1`: `C_m(0)` takes values in `{0, ±2}` and is
+determined by `m mod 4`.
+    prop:half-angle-z4-residue -/
+theorem paper_half_angle_z4_residue (m : ℕ) :
+    (chebyAdams m 0 = 0 ∨ chebyAdams m 0 = -2 ∨ chebyAdams m 0 = 2) ∧
+      chebyAdams m 0 =
+        match m % 4 with
+        | 0 => 2
+        | 1 => 0
+        | 2 => -2
+        | _ => 0 := by
+  rcases chebyAdams_at_zero_values with ⟨h0, h1, h2, h3⟩
+  have hmod := chebyAdams_at_zero_mod4 m
+  have hm : m % 4 = 0 ∨ m % 4 = 1 ∨ m % 4 = 2 ∨ m % 4 = 3 := by
+    omega
+  rcases hm with hm0 | hm1 | hm2 | hm3
+  · rw [hm0] at hmod
+    exact ⟨Or.inr (Or.inr (hmod.trans h0)), by simpa [hm0] using hmod.trans h0⟩
+  · rw [hm1] at hmod
+    exact ⟨Or.inl (hmod.trans h1), by simpa [hm1] using hmod.trans h1⟩
+  · rw [hm2] at hmod
+    exact ⟨Or.inr (Or.inl (hmod.trans h2)), by simpa [hm2] using hmod.trans h2⟩
+  · rw [hm3] at hmod
+    exact ⟨Or.inl (hmod.trans h3), by simpa [hm3] using hmod.trans h3⟩
+
 /-- Complete special-value package. thm:discussion-chebyshev-witt-equivariance -/
 theorem paper_chebyAdams_special_values_complete :
     (∀ n, chebyAdams n 2 = 2) ∧

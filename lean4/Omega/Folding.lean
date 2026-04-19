@@ -76,6 +76,7 @@ import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Folding.EpsilonMachineInfiniteMarkovOrder
 import Omega.Folding.EpsilonMachineStationaryFibonacciTail
 import Omega.Folding.EpsilonMachineSynchronizingWord
+import Omega.Folding.EpsilonMachineZeroRunLength
 import Omega.Folding.EtaMHatErgodicLimit
 import Omega.Folding.ExactMarkovOrderBernoulli
 import Omega.Folding.Fiber

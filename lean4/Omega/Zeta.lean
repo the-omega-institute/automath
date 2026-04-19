@@ -268,6 +268,7 @@ import Omega.Zeta.XiTerminalZmLanguageMinimaxLogloss
 import Omega.Zeta.XiLeyangMplus1PointExtrapolateOptimal
 import Omega.Zeta.XiEllipseWallcrossingUnitStaircaseUniversality
 import Omega.Zeta.XiBasepointScanAnchorDetCauchyVandermonde
+import Omega.Zeta.XiCarathPickKernelNormalizationRigidity
 import Omega.Zeta.PickPoissonCrossEnergyHorizontalSeparation
 import Omega.Zeta.XiPickPoissonNearCollisionCertificate
 import Omega.Zeta.XiPickPoissonAnchoredTransverseSeparationInversion
