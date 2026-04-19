@@ -149,6 +149,7 @@ import Omega.GU.WeightedSubsetSumGap
 import Omega.GU.Window6AdjointWeightMultiset
 import Omega.GU.Window6Affine2FlatRootSliceSelection
 import Omega.GU.Window6AffineCompletionVolume4x23
+import Omega.GU.Window6ZetaCumulantLocalizationVsGreenKernelPrime571
 import Omega.GU.Window6AbelianizedParityChargeRootCartanSplitting
 import Omega.GU.Window6AffineFiberOrbitClassification
 import Omega.GU.Window6BoundaryCentralChargeUniqueAmongAuditedLifts
