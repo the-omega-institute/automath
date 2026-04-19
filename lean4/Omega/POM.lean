@@ -139,6 +139,7 @@ import Omega.POM.LambdaAlgebraic
 import Omega.POM.LeyangLiftMobiusInvolutionFunctorial
 import Omega.POM.LeyangMonotoneCouplingPrimeRegister
 import Omega.POM.LucasPrimeCongruence
+import Omega.POM.LucasSquare
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
 import Omega.POM.MaryAuxlength
 import Omega.POM.MaryAuxlengthSeeds

@@ -210,6 +210,7 @@ import Omega.GU.Window6EdgeFluxSmithNonsimple
 import Omega.GU.Window6EdgeFluxMaxEntropyKernelUniqueness
 import Omega.GU.Window6EdgeFluxFullMatrixSaturation
 import Omega.GU.Window6EdgeFluxNoInvariantBinaryProduct
+import Omega.GU.Window6EdgeFluxNoInvariantBilinearForm
 import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
 import Omega.GU.Window6FoldbinGaugeLowDegreeHomology
 import Omega.GU.Window6Foldbin6FiberDifferenceSpectrum
