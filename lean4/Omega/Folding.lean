@@ -30,6 +30,7 @@ import Omega.Folding.BernoulliPOutputMismatchEliminationCurve
 import Omega.Folding.BernoulliPJordanResonance
 import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPParryPressureChain
+import Omega.Folding.BernoulliPSpectrum
 import Omega.Folding.BernoulliPPressureCycleEquation
 import Omega.Folding.BernoulliPRegenerationPGF
 import Omega.Folding.BernoulliPRegenerationLengthPGFRecurrenceTail
