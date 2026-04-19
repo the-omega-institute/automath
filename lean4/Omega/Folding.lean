@@ -155,6 +155,7 @@ import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldFibonacciFrequencyFourierSpikeClosedForm
 import Omega.Folding.FoldPressureFreezingThreshold
 import Omega.Folding.FoldGaugeAnomalyP10P9LinearDisjointness
+import Omega.Folding.HaltingLeyangHolographicEncoding
 import Omega.Folding.FoldLogMultiplicityPressureDerivative
 import Omega.Folding.FiberEvenModulusMinimalDefectParityCharacter
 import Omega.Folding.IntermediateQuotientsBellProductDoubleExponential
@@ -216,6 +217,7 @@ import Omega.Folding.GaugeAnomalyS4ArtinConductor
 import Omega.Folding.GaugeAnomalySingularityLatticeNonholonomic
 import Omega.Folding.GaugeAnomalyS4PicardRank
 import Omega.Folding.GaugeAnomalySecondFactorialFiniteClosed
+import Omega.Folding.GaugePressureResolventDiscIdentity
 import Omega.Folding.GaugeAnomalyTauIntClosed
 import Omega.Folding.GaugeAnomalyTrigonalGenus
 import Omega.Folding.GaugeAnomalyUnitCircleRigidity
