@@ -67,6 +67,7 @@ import Omega.EA.StableAddNormalizationRealization
 import Omega.EA.Sync10UniformInputOutput
 import Omega.EA.Sync10UniformOutputCorr
 import Omega.EA.Sync10ResetDepthSpectrum
+import Omega.EA.Sync10ResetDepthDiameter
 import Omega.EA.Sync10MemoryHorizonInputStatistics
 import Omega.EA.Sync10ResetWaitingTime
 import Omega.EA.Sync10UniformStationary

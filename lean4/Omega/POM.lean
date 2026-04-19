@@ -219,6 +219,7 @@ import Omega.POM.ResonanceS13TwoPrimeCertificateQ16Q17
 import Omega.POM.SecondOrderCollisionCommonBottleneck
 import Omega.POM.RqLogconvexFreeEnergyOrder
 import Omega.POM.RqUniversalBounds
+import Omega.POM.ShannonEntropySqueeze
 import Omega.POM.RqQinftyEndpoint
 import Omega.POM.S4Asymptotic
 import Omega.POM.S4Recurrence
