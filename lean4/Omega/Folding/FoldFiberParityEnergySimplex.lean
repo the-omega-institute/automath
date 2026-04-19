@@ -377,6 +377,21 @@ theorem paper_fold_fiber_slice_collision_decomposition (D : FoldFiberSliceCollis
               rw [hExpand]
               ring
 
+/-- Normalizing the slice-collision decomposition by the ambient collision probability expresses
+the bias energy as a relative parity-collision correction, and the shifted normalization takes the
+affine form `(1 / 2) * (1 + β / p)`.
+    cor:fold-fiber-collision-parity-correlation -/
+theorem paper_fold_fiber_collision_parity_correlation (D : FoldFiberSliceCollisionData)
+    (hcol : D.collisionProbability ≠ 0) :
+    D.biasEnergy / D.collisionProbability =
+        (((D.sliceCollisionZero + D.sliceCollisionOne) / 2 - D.collisionProbability) /
+          D.collisionProbability) ∧
+      (D.collisionProbability + D.biasEnergy) / (2 * D.collisionProbability) =
+        (1 / 2 : ℚ) * (1 + D.biasEnergy / D.collisionProbability) := by
+  constructor
+  · rw [paper_fold_fiber_slice_collision_decomposition]
+  · field_simp [hcol]
+
 end
 
 end Omega.Folding
