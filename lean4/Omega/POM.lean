@@ -69,6 +69,7 @@ import Omega.POM.FibCubeGrayHamilton
 import Omega.POM.FibCubeKPointCount
 import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.FibPellQuadratic
+import Omega.POM.FibPellRecoverKFromUnitError
 import Omega.POM.FractranTwoPrimeDenominatorDfaCompile
 import Omega.POM.FractranPrimecoreFinitePartialFunctionCategory
 import Omega.POM.FractranPermutationEmbeddingLength
