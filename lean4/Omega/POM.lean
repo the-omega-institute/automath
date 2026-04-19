@@ -157,6 +157,7 @@ import Omega.POM.OrderSpatialization
 import Omega.POM.OracleBitLowerBoundSubexpMom
 import Omega.POM.OracleCapacityStieltjesInversionMellin
 import Omega.POM.OracleCriticalQuadraticMarginalLaw
+import Omega.POM.OracleFailureExponentFromRenyiSpectrum
 import Omega.POM.OracleRenyiPressureFailureBound
 import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
 import Omega.POM.AdditiveFoldCollisionConvolutionFourier

@@ -135,6 +135,7 @@ import Omega.Folding.FiberEvenModulusMinimalDefectParityCharacter
 import Omega.Folding.IntermediateQuotientsBellProductDoubleExponential
 import Omega.Folding.FoldSuitePublication
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
+import Omega.Folding.GaugeAnomalyClt
 import Omega.Folding.GaugeAnomalyAutocovClosed
 import Omega.Folding.GaugeAnomalyCovGenfun
 import Omega.Folding.GaugeAnomalyCovClosed
