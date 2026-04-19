@@ -64,6 +64,7 @@ import Omega.Zeta.ETDSFiniteZetaImaginaryPeriodicity
 import Omega.Zeta.ETDSZeckendorfPrimeLanguageNotRegular
 import Omega.Zeta.ETDSZeckendorfPrimesNotSofic
 import Omega.Zeta.ETDSZeckendorfRegularPowerlaw
+import Omega.Zeta.ZeckendorfRegularValuationPowerlaw
 import Omega.Zeta.EnergyTailMassSeeds
 import Omega.Zeta.EvenLengthCorrection
 import Omega.Zeta.FiniteDefectPoissonL2EnergyClosedForm
