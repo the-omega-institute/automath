@@ -27,6 +27,7 @@ import Omega.POM.CompleteHomogeneousLinearRecurrence
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.CollisionKernelPublication
 import Omega.POM.CollisionStrengthened
+import Omega.POM.CollisionSpectrumPhiOnesidedApproximation
 import Omega.POM.FoldColGapExpUpper
 import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.ComplementaryGoldenBernoulliDivergence

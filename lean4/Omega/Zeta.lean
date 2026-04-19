@@ -162,6 +162,7 @@ import Omega.Zeta.XiEndpointFirstNPlusOneProbesSharpToeplitzRecovery
 import Omega.Zeta.XiEndpointJensenDefectH12GramKernel
 import Omega.Zeta.EndpointHeatProbeAdamsTwistRoots
 import Omega.Zeta.EndpointHeatProbeSpectralMarginLowerBound
+import Omega.Zeta.XiEndpointHeatProbeCyclotomicTargetExtraction
 import Omega.Zeta.XiJDiscriminantElliptic2TorsionMobius
 import Omega.Zeta.XiJDiscriminantMobiusRigidityCovariance
 import Omega.Zeta.XiJSexticEllipticLattesTMap
