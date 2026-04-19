@@ -142,6 +142,7 @@ import Omega.Zeta.XiCdimLambdaClosedForm
 import Omega.Zeta.XiCauchyPoissonDerivativeEnergyClosedForm
 import Omega.Zeta.XiFoldLocalInformationDensityFirstOrderDiscreteLaw
 import Omega.Zeta.XiFoldCongruenceUnitalAutomorphismRigidity
+import Omega.Zeta.XiToeplitzNegativeMarginVandermonde4Lowerbound
 import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge
 import Omega.Zeta.XiShadowSpectrumDeterminantRatioAtZero
 import Omega.Zeta.XiReverseKLSingleFrequencyExactMinimizer
