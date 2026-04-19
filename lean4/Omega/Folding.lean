@@ -208,6 +208,7 @@ import Omega.Folding.HammingDist
 import Omega.Folding.HankelSpectrum
 import Omega.Folding.HigherBlockIdentification
 import Omega.Folding.KilloPrimeRegisterIdempotentArithmetization
+import Omega.Folding.KilloFoldBinEscortRenyiLogisticGeometry
 import Omega.Folding.HolographicRateConservation
 import Omega.Folding.ImageSubshiftZeta
 import Omega.Folding.InverseLimit

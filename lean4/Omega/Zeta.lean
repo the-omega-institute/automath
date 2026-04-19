@@ -238,6 +238,7 @@ import Omega.Zeta.ResidueRingExplicitErrorBound
 import Omega.Zeta.ResolventTraceIntegerResidueNoncancel
 import Omega.Zeta.RecursiveZeroShadowingExplicit
 import Omega.Zeta.RhoGapM12
+import Omega.Zeta.XiAdamsNormRadiusSimilarityLaw
 import Omega.Zeta.RootSeparation
 import Omega.Zeta.SmithEntropyMinDepth
 import Omega.Zeta.SmithEntropyInvertsVpInvariants
