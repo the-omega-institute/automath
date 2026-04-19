@@ -247,6 +247,7 @@ import Omega.POM.ToggleOrbitCountBellProduct
 import Omega.POM.ToggleScanCycleConvolution
 import Omega.POM.ToggleScanLinearMaxOrbit
 import Omega.POM.ToggleScanCycleGhostMultiplicativity
+import Omega.POM.ToggleScanSignGeneralFiber
 import Omega.POM.TopGapLimitConstants
 import Omega.POM.ToggleOrbitCountFiniteLowlevelInversion
 import Omega.POM.KLDefectIdentity
