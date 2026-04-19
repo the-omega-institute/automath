@@ -2,6 +2,7 @@ import Omega.OperatorAlgebra.CylinderMarginalization
 import Omega.OperatorAlgebra.FoldQuantumChannelChoiCapacity
 import Omega.OperatorAlgebra.FiberReflectorDeterminantPotential
 import Omega.OperatorAlgebra.HiddenbitSheetSubgroupoidIndex
+import Omega.OperatorAlgebra.IndexSubmultiplicativityCommutingSquare
 import Omega.OperatorAlgebra.IndexGapCurvatureSecondVariation
 import Omega.OperatorAlgebra.LyapunovSpectralRadiusCertificate
 import Omega.OperatorAlgebra.FoldReynoldsRiskConvex
