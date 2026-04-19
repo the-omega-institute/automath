@@ -126,6 +126,7 @@ import Omega.Conclusion.Pisano1PositiveSea
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.PrimeCharacterEnergyCenteredVariance
 import Omega.Conclusion.PrimeAdjunctionExactMultiplicativeBudget
+import Omega.Conclusion.PowerDivergenceSecondorderRecurrence
 import Omega.Conclusion.PrimeRegisterFixed2adicAmbientVsFiniteLedger
 import Omega.Conclusion.PrimeRegisterFiberCdimDensity
 import Omega.Conclusion.PrimeRegisterKStretchDensityCriterion

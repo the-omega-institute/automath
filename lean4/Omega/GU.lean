@@ -69,6 +69,7 @@ import Omega.GU.GodelConditionNumberIdentity
 import Omega.GU.GutHalfScaleZeroBlockCoversStableSpace
 import Omega.GU.JoukowskyAreaPreservingCayley
 import Omega.GU.JoukowskyEllipticTwoScaleStokesMean
+import Omega.GU.GroupJGEllipticTwoScaleMahlerMultiplicative
 import Omega.GU.JoukowskyGodelLeadingCoeffRigidity
 import Omega.GU.JoukowskyGodelMonicBoundaryReadout
 import Omega.GU.JoukowskyGodelPullbackFactorization
