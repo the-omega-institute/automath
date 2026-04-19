@@ -186,6 +186,7 @@ import Omega.POM.PerronLandauerLimitLaw
 import Omega.POM.MaxFiberEvenChernoffExponent
 import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.TimeReversalFixedpointRatioDecay
+import Omega.POM.ToyRh2TorsionSource
 import Omega.POM.Sync10CollisionTwoFixedpoints
 import Omega.POM.TimeReversalSymmetricIndsetPolynomial
 import Omega.POM.PressureReflectionInequality

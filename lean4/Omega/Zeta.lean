@@ -144,6 +144,7 @@ import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
 import Omega.Zeta.XiCdimLambdaClosedForm
 import Omega.Zeta.XiCauchyPoissonDerivativeEnergyClosedForm
 import Omega.Zeta.XiFoldLocalInformationDensityFirstOrderDiscreteLaw
+import Omega.Zeta.XiCenterSixfoldKappaNodeInversionBlowup
 import Omega.Zeta.XiFoldCongruenceUnitalAutomorphismRigidity
 import Omega.Zeta.XiToeplitzNegativeMarginVandermonde4Lowerbound
 import Omega.Zeta.XiGramshiftIllconditioningForcedByToeplitzMargin

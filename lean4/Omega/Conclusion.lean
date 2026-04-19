@@ -166,6 +166,7 @@ import Omega.Conclusion.SectionLedgerKL
 import Omega.Conclusion.SinglephasePrecisionExponentEqualsCdim
 import Omega.Conclusion.ShiftCommutingAlgorithmsPolynomial
 import Omega.Conclusion.ShiftedHankelPrecision
+import Omega.Conclusion.SmithNormalizedKernelPositiveFiniteEulerCorrection
 import Omega.Conclusion.SinglepointJetRigidity
 import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.SmithRamanujanShadowInversion
