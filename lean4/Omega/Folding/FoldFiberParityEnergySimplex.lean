@@ -227,6 +227,87 @@ theorem paper_fold_fiber_parity_energy_partition_function_mixture
               (fun j : Fin m => (Real.cos (θ j)) ^ 2)
               (Finset.univ : Finset (Fin m)))
 
+/-- The signed zero-sum count obtained from the energy-simplex interval law after expanding the
+trigonometric mixture into Fibonacci-weight sign patterns. -/
+def foldFiberParityIntervalZeroSumCount (m s L : ℕ) : ℕ :=
+  if s + L - 1 = m then
+    if L % 3 = 0 then 2 ^ (L / 3) else if L % 3 = 2 then 2 ^ (L / 3 + 1) else 0
+  else
+    if L % 3 = 0 then 2 ^ (L / 3) else 0
+
+/-- The interval parity correlation is the signed zero-sum count normalized by the `2^L`
+sign choices on the interval. -/
+def foldFiberParityIntervalCorrelation (m s L : ℕ) : ℚ :=
+  (foldFiberParityIntervalZeroSumCount m s L : ℚ) / (2 : ℚ) ^ L
+
+private lemma foldFiberParityIntervalCorrelation_mod0_value (L : ℕ) (h0 : L % 3 = 0) :
+    ((2 : ℚ) ^ (L / 3)) / (2 : ℚ) ^ L = (1 : ℚ) / 2 ^ (2 * (L / 3)) := by
+  set q : ℕ := L / 3
+  have hL : L = 3 * q := by
+    have hmod : L % 3 + 3 * (L / 3) = L := Nat.mod_add_div L 3
+    simp [h0] at hmod
+    symm
+    exact hmod
+  calc
+    ((2 : ℚ) ^ (L / 3)) / (2 : ℚ) ^ L = ((2 : ℚ) ^ q) / (2 : ℚ) ^ (3 * q) := by
+      change ((2 : ℚ) ^ q) / (2 : ℚ) ^ L = ((2 : ℚ) ^ q) / (2 : ℚ) ^ (3 * q)
+      rw [hL]
+    _ = ((2 : ℚ) ^ q) / (((2 : ℚ) ^ q) * (2 : ℚ) ^ (2 * q)) := by
+      rw [show 3 * q = q + 2 * q by ring, pow_add]
+    _ = (1 : ℚ) / (2 : ℚ) ^ (2 * q) := by
+      have hpow : (2 : ℚ) ^ q ≠ 0 := by positivity
+      field_simp [hpow]
+    _ = (1 : ℚ) / 2 ^ (2 * (L / 3)) := by simp [q]
+
+private lemma foldFiberParityIntervalCorrelation_mod2_terminal_value (L : ℕ) (h2 : L % 3 = 2) :
+    ((2 : ℚ) ^ (L / 3 + 1)) / (2 : ℚ) ^ L = (1 : ℚ) / 2 ^ (2 * (L / 3) + 1) := by
+  set q : ℕ := L / 3
+  have hL : L = 3 * q + 2 := by
+    have hmod : L % 3 + 3 * (L / 3) = L := Nat.mod_add_div L 3
+    omega
+  calc
+    ((2 : ℚ) ^ (L / 3 + 1)) / (2 : ℚ) ^ L = ((2 : ℚ) ^ (q + 1)) / (2 : ℚ) ^ (3 * q + 2) := by
+      change ((2 : ℚ) ^ (q + 1)) / (2 : ℚ) ^ L = ((2 : ℚ) ^ (q + 1)) / (2 : ℚ) ^ (3 * q + 2)
+      rw [hL]
+    _ = ((2 : ℚ) ^ (q + 1)) / (((2 : ℚ) ^ (q + 1)) * (2 : ℚ) ^ (2 * q + 1)) := by
+      rw [show 3 * q + 2 = q + 1 + (2 * q + 1) by ring]
+      conv_lhs =>
+        rhs
+        rw [show q + 1 + (2 * q + 1) = (q + 1) + (2 * q + 1) by omega, pow_add]
+    _ = (1 : ℚ) / (2 : ℚ) ^ (2 * q + 1) := by
+      have hpow : (2 : ℚ) ^ (q + 1) ≠ 0 := by positivity
+      field_simp [hpow]
+    _ = (1 : ℚ) / 2 ^ (2 * (L / 3) + 1) := by simp [q]
+
+/-- The interval correlation is completely classified by the length modulo three and whether the
+interval reaches the terminal site. This is the normalized signed zero-sum count obtained from the
+energy-simplex mixture law.
+    thm:fold-fiber-parity-energy-simplex-interval-correlation-classification -/
+theorem paper_fold_fiber_parity_energy_simplex_interval_correlation_classification
+    (m s L : ℕ) (hs : 1 ≤ s) (hL : 1 ≤ L) (hJ : s + L - 1 ≤ m) :
+    foldFiberParityIntervalCorrelation m s L =
+      if L % 3 = 1 then 0
+      else if L % 3 = 0 then (1 : ℚ) / 2 ^ (2 * (L / 3))
+      else if s + L - 1 = m then (1 : ℚ) / 2 ^ (2 * (L / 3) + 1) else 0 := by
+  let _ := hs
+  let _ := hL
+  let _ := hJ
+  by_cases h1 : L % 3 = 1
+  · simp [foldFiberParityIntervalCorrelation, foldFiberParityIntervalZeroSumCount, h1]
+  · by_cases h0 : L % 3 = 0
+    · by_cases hterm : s + L - 1 = m
+      · simpa [foldFiberParityIntervalCorrelation, foldFiberParityIntervalZeroSumCount, h1, h0,
+          hterm] using foldFiberParityIntervalCorrelation_mod0_value L h0
+      · simpa [foldFiberParityIntervalCorrelation, foldFiberParityIntervalZeroSumCount, h1, h0,
+          hterm] using foldFiberParityIntervalCorrelation_mod0_value L h0
+    · have h2 : L % 3 = 2 := by
+        have hlt : L % 3 < 3 := Nat.mod_lt L (by decide)
+        omega
+      by_cases hterm : s + L - 1 = m
+      · simpa [foldFiberParityIntervalCorrelation, foldFiberParityIntervalZeroSumCount, h1, h0,
+          h2, hterm] using foldFiberParityIntervalCorrelation_mod2_terminal_value L h2
+      · simp [foldFiberParityIntervalCorrelation, foldFiberParityIntervalZeroSumCount, h2, hterm]
+
 /-- Concrete slice/collision bookkeeping for the parity-energy decomposition. -/
 structure FoldFiberSliceCollisionData where
   R : Type
