@@ -132,6 +132,7 @@ import Omega.Zeta.XiWindow6TailSemigroupTwoGeneratorNormalForm
 import Omega.Zeta.XiWindow6TailSemigroupAperyThresholds
 import Omega.Zeta.XiFiberSpectrumHankelConductorPronyPadic
 import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
+import Omega.Zeta.XiCdimLambdaClosedForm
 import Omega.Zeta.XiFoldLocalInformationDensityFirstOrderDiscreteLaw
 import Omega.Zeta.XiFoldCongruenceUnitalAutomorphismRigidity
 import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge
