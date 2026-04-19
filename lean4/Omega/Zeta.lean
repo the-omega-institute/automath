@@ -22,6 +22,7 @@ import Omega.Zeta.ClassMertensExplicit
 import Omega.Zeta.ClassMertensFourier
 import Omega.Zeta.ClassPrimitiveDecomposition
 import Omega.Zeta.ClassPrimitiveTrivialSplit
+import Omega.Zeta.CompletionEndpointJetDiffusion
 import Omega.Zeta.ComovingEnergyDeltaBound
 import Omega.Zeta.ComovingHorizonScanPoissonKLCovarianceTensor
 import Omega.Zeta.CriticalCircleStateDimensionLB
