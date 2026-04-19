@@ -125,6 +125,7 @@ import Omega.Folding.FoldBinOracleLinearThresholdExponent
 import Omega.Folding.Window6VariableLengthExactInversionRateGap
 import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinMinsectorComplementMaxfiber
+import Omega.Folding.FoldBinPhiIdentifiablePowerDivergence
 import Omega.Folding.FoldBinRenyiDivergenceLimit
 import Omega.Folding.FoldInfoNCELossSpectrumIdentifiability
 import Omega.Folding.FoldHypercubeFibonacciGodelRadiusCount
