@@ -191,6 +191,7 @@ import Omega.CircleDimension.ToeplitzSpectralGapCarathBuffer
 import Omega.CircleDimension.ToeplitzMinrankFalsifierFactorization
 import Omega.CircleDimension.TorusCollapseRelativeForms
 import Omega.CircleDimension.UnitarySliceDecidable
+import Omega.CircleDimension.UnitarySelfAdjointLog
 import Omega.CircleDimension.UniversalSolenoidFactorization
 import Omega.CircleDimension.UniversalSolenoidFullPrimeKernel
 import Omega.CircleDimension.VisiblePhaseResidualTriviality
