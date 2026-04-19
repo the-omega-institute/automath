@@ -108,6 +108,7 @@ import Omega.GU.TerminalFoldbin6Histogram64To21
 import Omega.GU.TerminalFoldbin6InformationLossConstants
 import Omega.GU.TerminalFoldbin6CubeEdgeSeparation
 import Omega.GU.TerminalFoldbin6NoLinearKernel
+import Omega.GU.TerminalCutProjectToFoldHist
 import Omega.GU.TerminalFoldbin6MinReturnDelay
 import Omega.GU.TerminalFoldbin6NoTypeRelabelingByGeo
 import Omega.GU.TerminalFoldbin6OffsetsReturnTimes
