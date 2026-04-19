@@ -9,6 +9,7 @@ import Omega.EA.CentralIdempotentsRecovery
 import Omega.EA.CarryFreeZetaTrichotomy
 import Omega.EA.ChebotarevQuotientRelativeEntropyChain
 import Omega.EA.ChebotarevDominantChannelPoleOrder
+import Omega.EA.ChebotarevFourier
 import Omega.EA.ChebotarevMobiusAdams
 import Omega.EA.ChebotarevStatisticalConvergence
 import Omega.EA.ChebotarevSecondMainTermWitness
