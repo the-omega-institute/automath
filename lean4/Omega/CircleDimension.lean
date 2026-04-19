@@ -187,3 +187,4 @@ import Omega.CircleDimension.KernelIntegerSamplingDualKernel
 import Omega.CircleDimension.KernelIntegerTranslateRieszBounds
 import Omega.CircleDimension.PoissonBivariateSecondOrderCancellationRealizable
 import Omega.CircleDimension.LeyangSixthNormIdentity3Torsion
+import Omega.CircleDimension.LeyangOrthogonalDualImaginaryProjection

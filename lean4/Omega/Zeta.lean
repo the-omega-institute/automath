@@ -13,6 +13,7 @@ import Omega.Zeta.CLTSpectral
 import Omega.Zeta.PickPoissonCharpolyCoefficients
 import Omega.Zeta.Conclusion63CLTSpectral
 import Omega.Zeta.CayleyDepthIdentity
+import Omega.Zeta.AppOffcriticalRadiusCompression
 import Omega.Zeta.CertInverseLimitCoherence
 import Omega.Zeta.ClassArtinMobiusTrace
 import Omega.Zeta.ClassFunctionAdamsMobius

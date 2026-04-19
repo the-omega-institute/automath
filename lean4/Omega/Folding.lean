@@ -112,6 +112,7 @@ import Omega.Folding.FoldZeroUncertainty
 import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.FoldCongruenceModSemirings
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
+import Omega.Folding.FoldBinOracleLinearThresholdExponent
 import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinRenyiDivergenceLimit
 import Omega.Folding.FoldHypercubeFibonacciGodelRadiusCount
