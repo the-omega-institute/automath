@@ -145,6 +145,7 @@ import Omega.POM.MicrocanonicalFoldClassCount
 import Omega.POM.MicrocanonicalCountSufficientStatisticPosteriorUniform
 import Omega.POM.MicrocanonicalInformationIdentity
 import Omega.POM.Mod2DifferenceBinomialBasis
+import Omega.POM.Mod2ShadowEventualPeriodBound
 import Omega.POM.ModpDifferenceBinomialBasis
 import Omega.POM.MomentMinreal
 import Omega.POM.MomqPermutationSymmetry

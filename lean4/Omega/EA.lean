@@ -8,6 +8,7 @@ import Omega.EA.BrauerXorLaw
 import Omega.EA.CentralIdempotentsRecovery
 import Omega.EA.ChebotarevQuotientRelativeEntropyChain
 import Omega.EA.ChebotarevDominantChannelPoleOrder
+import Omega.EA.ChebotarevMobiusAdams
 import Omega.EA.ChebotarevStatisticalConvergence
 import Omega.EA.ChebotarevSecondMainTermWitness
 import Omega.EA.ChebotarevVisibleHiddenCharacterEnergy
