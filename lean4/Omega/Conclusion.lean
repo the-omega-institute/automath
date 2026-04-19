@@ -73,6 +73,7 @@ import Omega.Conclusion.FoldWalshTotalChargeParsevalDegeneracy
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Conclusion.GeometricUpliftFourFourCollapse
 import Omega.Conclusion.GodelLeyangIFS
+import Omega.Conclusion.GodelIntegerizationPrimeShiftPolynomial
 import Omega.Conclusion.GodelVsMinimalGap
 import Omega.Conclusion.GoldenBiasSecondOrderUniqueness
 import Omega.Conclusion.GoldenSprtDeltaClosure
