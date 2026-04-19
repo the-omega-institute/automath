@@ -185,6 +185,7 @@ import Omega.GU.Window6B3C3HilbertTwinsDegree4Interpolation
 import Omega.GU.Window6BinfoldKLLimitConstant
 import Omega.GU.Window6BinfoldLastbitLecamEquivalence
 import Omega.GU.Window6ChiralCompressionHypercubeAdjacency
+import Omega.GU.Window6ChiralExteriorAlgebraDegreeOperator
 import Omega.GU.Window6ChiralSectorQ4Spectrum
 import Omega.GU.Window6C3SupportCount
 import Omega.GU.Window6CyclicWeightThresholdRootLength

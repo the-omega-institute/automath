@@ -20,6 +20,7 @@ import Omega.OperatorAlgebra.FoldInvariantSubalgebra
 import Omega.OperatorAlgebra.FoldUniformLiftNllDecomposition
 import Omega.OperatorAlgebra.FoldSupervisedMinimaxRisk
 import Omega.OperatorAlgebra.FoldVisiblePermutationLifts
+import Omega.OperatorAlgebra.FoldLiftGlobalSignFactorization
 import Omega.OperatorAlgebra.FoldLiftNoiseFoldReversibility
 import Omega.OperatorAlgebra.FoldOptimalMarkovizationCmi
 import Omega.OperatorAlgebra.FoldFiberNormalizerWreath
