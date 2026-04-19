@@ -114,6 +114,7 @@ import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.HankelFingerprintSeeds
 import Omega.POM.HankelInversePropagationLinearOrbits
 import Omega.POM.HankelDeterminantGeometricLaw
+import Omega.POM.HankelBadPrimesTwoDeterminants
 import Omega.POM.HankelFinitePoleSpectralGap
 import Omega.POM.HankelMinimalRecurrenceInversionFormula
 import Omega.POM.HankelNFShiftInvarianceAndPropagation
