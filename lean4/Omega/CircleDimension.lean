@@ -41,6 +41,7 @@ import Omega.CircleDimension.CoherenceTimeLowerBound
 import Omega.CircleDimension.ComovingDefectDeltaBound
 import Omega.CircleDimension.ComovingHorizonScanFirstLayerExtraction
 import Omega.CircleDimension.ComovingHorizonScanFourierInversion
+import Omega.CircleDimension.CommutativeVisibleAlgebra
 import Omega.CircleDimension.CoprimeFractionLowerBound
 import Omega.CircleDimension.DefectMeasureRecursiveLayerPeeling
 import Omega.CircleDimension.DenominatorGrowthFiniteS

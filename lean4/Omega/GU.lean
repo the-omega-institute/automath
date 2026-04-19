@@ -154,6 +154,7 @@ import Omega.GU.ThreefoldRigidityClosureSmSo10
 import Omega.GU.U1ThroatIdentity
 import Omega.GU.U1ThroatIdentityFixedPoint
 import Omega.GU.UnitgroupZ2CharacterCount
+import Omega.GU.UpliftFiberSignDimensionReduction
 import Omega.GU.WedderburnBernoulliZeta
 import Omega.GU.WeightedSubsetSumGap
 import Omega.GU.Window6AdjointWeightMultiset
