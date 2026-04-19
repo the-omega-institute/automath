@@ -35,6 +35,7 @@ import Omega.CircleDimension.CertificateInverseLimitAddressing
 import Omega.CircleDimension.CechCyclotomicQuantization
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.CirclePowerNoContinuousSection
+import Omega.CircleDimension.ComputablePrefixNonidentifiability
 import Omega.CircleDimension.ComputablePrefixNonidentifiabilityMultiplicity
 import Omega.CircleDimension.CoherenceTimeBarrier2Pow
 import Omega.CircleDimension.CoherenceTimeLowerBound

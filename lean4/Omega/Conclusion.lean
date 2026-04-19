@@ -164,6 +164,7 @@ import Omega.Conclusion.ScreenAtomicValueAntitone
 import Omega.Conclusion.ScreenAuditMarginalDiminishingReturns
 import Omega.Conclusion.ScreenAuditGapSupermodularity
 import Omega.Conclusion.ScreenKolmogorovDeficitExactSplitting
+import Omega.Conclusion.ScreenMaxConditionalComplexityEqualsRank
 import Omega.Conclusion.SecondOrderCdimSignature
 import Omega.Conclusion.SemanticEquivalenceUndecidable
 import Omega.Conclusion.SectionLedgerCapacityFunctional
