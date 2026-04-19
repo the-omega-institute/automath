@@ -180,6 +180,7 @@ import Omega.Zeta.MellinUnitarySlice
 import Omega.Zeta.MinimalAuditChainPrimeSupport
 import Omega.Zeta.NecklaceCorrection
 import Omega.Zeta.NecklaceCounting
+import Omega.Zeta.Near1KappaInftyC1StrictIneq
 import Omega.Zeta.NontrivialPerronPointConvergence
 import Omega.Zeta.NontrivialPeterWeylChannelBound
 import Omega.Zeta.NyquistProportionStability

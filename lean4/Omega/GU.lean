@@ -5,6 +5,7 @@ import Omega.GU.BdryFoldGaugeSignAbelianization
 import Omega.GU.BdryChiTwistedBinaryLabelExistence
 import Omega.GU.BdrySymmetricGroupSignTwistedLabelD2
 import Omega.GU.BdryOrientationCartesianPowerParityCollapse
+import Omega.GU.BdryOrientationCartesianProductExponentLaw
 import Omega.GU.BdryOrientationIteratedFiberproductParity
 import Omega.GU.BdryOrientationJumpclassFiberproductMultiplicativity
 import Omega.GU.BdryOrientationBlockDecompositionOddVisibility
