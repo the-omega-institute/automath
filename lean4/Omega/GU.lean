@@ -125,6 +125,7 @@ import Omega.GU.TerminalGamma6CanonicalAddressing
 import Omega.GU.TerminalGamma6NoContinuousNonabelianSymmetry
 import Omega.GU.TerminalGamma6MultiplicityRigidity
 import Omega.GU.TerminalGamma6Rigidity
+import Omega.GU.TerminalFoldbinSaturationDiophantine
 import Omega.GU.TerminalTimeFactorMetallicUnique
 import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes

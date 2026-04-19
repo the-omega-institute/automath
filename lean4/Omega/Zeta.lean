@@ -75,6 +75,7 @@ import Omega.Zeta.EvenLengthCorrection
 import Omega.Zeta.FiniteDefectPoissonL2EnergyClosedForm
 import Omega.Zeta.FiniteDefectPoissonL2EnergyTailMass
 import Omega.Zeta.FiniteDefectCompleteReconstruction
+import Omega.Zeta.FinitePartChannelEliminationLCM
 import Omega.Zeta.FinitePartCyclicLiftDirichletMultipleSum
 import Omega.Zeta.FinitePartCyclicLiftLimsupSpectralGap
 import Omega.Zeta.FinitePartCyclicLiftMobiusInversion

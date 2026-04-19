@@ -18,6 +18,7 @@ import Omega.Discussion.FramepotentialSffToHszk
 import Omega.Discussion.WindowQuotientSemiringRigidity
 import Omega.Discussion.ZetaSpectralHSZK
 import Omega.Discussion.GcEquivalenceCharacterization
+import Omega.Discussion.HankelSyntaxIndependentRigidity
 import Omega.Discussion.HSZKIffDiamond
 import Omega.Discussion.HodgeStokesVarianceRigidity
 import Omega.Discussion.HorizonMeasureFold6Pushforward
