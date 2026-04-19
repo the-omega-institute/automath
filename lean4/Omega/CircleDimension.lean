@@ -141,6 +141,7 @@ import Omega.CircleDimension.RadialFibrationTransgression
 import Omega.CircleDimension.RankonePhasePrimeFiber
 import Omega.CircleDimension.RankoneSolenoidHeightClassification
 import Omega.CircleDimension.ReadableTimeWordOverlapPD
+import Omega.CircleDimension.ReadableTimeWordVisibleDistribution
 import Omega.CircleDimension.DiscreteUnitaryEvolution
 import Omega.CircleDimension.RegisterCircleModpFormula
 import Omega.CircleDimension.ResidualEntropyLowerBound
