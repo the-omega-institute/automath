@@ -160,6 +160,7 @@ import Omega.Folding.GodelDensityEstimatorDeterministicMeanApprox
 import Omega.Folding.GodelFiniteDictionaryBitlength
 import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.GaugeAnomalyFiniteVarianceClosed
+import Omega.Folding.GaugeAnomalyGcDefectSign
 import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
 import Omega.Folding.GaugeAnomalySpectralResidualLaw
