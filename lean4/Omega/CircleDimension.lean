@@ -101,6 +101,7 @@ import Omega.CircleDimension.NullWitnessNonsubstitutable
 import Omega.CircleDimension.OperationalHalfCircleDimensionNat
 import Omega.CircleDimension.OperationalHalfCircleDimensionNd
 import Omega.CircleDimension.OddDivisibilityTowerHolographicSeparation
+import Omega.CircleDimension.OptimalDepthScaleModulus
 import Omega.CircleDimension.OrthogonalAmalgamatedWdim
 import Omega.CircleDimension.PhasePrecisionTradeoff
 import Omega.CircleDimension.PhasePrecisionTradeoffDyadic
