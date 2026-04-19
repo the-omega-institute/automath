@@ -217,6 +217,7 @@ import Omega.POM.RqUniversalBounds
 import Omega.POM.RqQinftyEndpoint
 import Omega.POM.S4Asymptotic
 import Omega.POM.S4Recurrence
+import Omega.POM.S5Recurrence
 import Omega.POM.S5FieldDiscriminantMonogenic
 import Omega.POM.A4tUnitCircleSpectrumClassification
 import Omega.POM.A4TNewmanOcticFieldArithmetic

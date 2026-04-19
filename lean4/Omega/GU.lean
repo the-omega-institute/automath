@@ -149,6 +149,7 @@ import Omega.GU.TerminalWindowPushforwardCommutantTorus
 import Omega.GU.TerminalWindowRationalCommutantIdempotentRigidity
 import Omega.GU.TimeUnitLogphiProtocol
 import Omega.GU.ThreefoldRigidity
+import Omega.GU.ThreefoldRigidityClosureSmSo10
 import Omega.GU.U1ThroatIdentity
 import Omega.GU.U1ThroatIdentityFixedPoint
 import Omega.GU.UnitgroupZ2CharacterCount
