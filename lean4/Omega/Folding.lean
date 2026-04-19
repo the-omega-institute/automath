@@ -105,6 +105,7 @@ import Omega.Folding.FiberSpectrum
 import Omega.Folding.FiberSplit
 import Omega.Folding.FixedFiberLedgerComplexity
 import Omega.Folding.FiberTruncatedMomentCompleteInversion
+import Omega.Folding.OracleCapacityTailMoments
 import Omega.Folding.FiberWeightCount
 import Omega.Folding.FiberWeightCountComplement
 import Omega.Folding.FibKernelBasisFiniteDepth
