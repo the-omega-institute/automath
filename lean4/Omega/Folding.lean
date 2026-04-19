@@ -111,6 +111,7 @@ import Omega.Folding.Fold
 import Omega.Folding.FoldComplexity
 import Omega.Folding.FoldHypercubeFibonacciEpsEntropyUpper
 import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy
+import Omega.Folding.FoldMultiplicityEnergy
 import Omega.Folding.FoldFiberParityEnergySimplex
 import Omega.Folding.FoldZeroUncertainty
 import Omega.Folding.FoldZeroDivisorTripleReduction

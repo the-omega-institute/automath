@@ -1,3 +1,4 @@
+import Omega.UnitCirclePhaseArithmetic.ChebyshevAdamsFullyRational
 import Omega.UnitCirclePhaseArithmetic.FibUnitCircleUpliftIdentity
 import Omega.UnitCirclePhaseArithmetic.EndpointDirichletSymbolWeights
 import Omega.UnitCirclePhaseArithmetic.FibUpliftCoordinateGateRigidity
