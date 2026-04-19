@@ -245,6 +245,7 @@ import Omega.Folding.MicrostateResidualWindowReachability
 import Omega.Folding.MismatchLanguage
 import Omega.Folding.MismatchLanguageIntrinsicErgodic
 import Omega.Folding.ModRigidityPeriodicPredicates
+import Omega.Folding.ModSemiringsCrtOrthogonalFrame
 import Omega.Folding.ModSemiringsKernelImageGcd
 import Omega.Folding.ModSemiringsAnnihilatorValuationLattice
 import Omega.Folding.ModSemiringsEndomorphismsIdempotents

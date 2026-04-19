@@ -214,6 +214,7 @@ import Omega.POM.ReplicaSoftcoreExceptionalSecantEquation
 import Omega.POM.ReplicaSoftcoreWordTraceCycleGF
 import Omega.POM.PressureReflectionInequality
 import Omega.POM.ResidueRefinementJensen
+import Omega.POM.ResonanceS13TwoPrimeCertificateQ16Q17
 import Omega.POM.SecondOrderCollisionCommonBottleneck
 import Omega.POM.RqLogconvexFreeEnergyOrder
 import Omega.POM.RqUniversalBounds

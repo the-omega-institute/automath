@@ -151,6 +151,7 @@ import Omega.Zeta.XiReverseKLSingleFrequencyLegendreFenchelClosed
 import Omega.Zeta.ChiEventClockHittingTimeCertificate
 import Omega.Zeta.Window6MicrostateBiasedFiberlawHerglotzClosedform
 import Omega.Zeta.XiEndpointFirstNPlusOneProbesSharpToeplitzRecovery
+import Omega.Zeta.XiEndpointJensenDefectH12GramKernel
 import Omega.Zeta.EndpointHeatProbeAdamsTwistRoots
 import Omega.Zeta.XiJDiscriminantElliptic2TorsionMobius
 import Omega.Zeta.XiJSexticEllipticLattesTMap
