@@ -111,6 +111,7 @@ import Omega.Folding.FoldComplexity
 import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy
 import Omega.Folding.FoldFiberParityEnergySimplex
 import Omega.Folding.FoldZeroUncertainty
+import Omega.Folding.FoldZeroDivisorTripleReduction
 import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.FoldCongruenceModSemirings
 import Omega.Folding.FoldIntermediateSemiringsDivisorLattice
