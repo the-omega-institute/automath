@@ -122,6 +122,7 @@ import Omega.CircleDimension.PoissonCentralSliceKernel
 import Omega.CircleDimension.PoissonCentralTwoChannelLocalUniqueness
 import Omega.CircleDimension.PoissonCentralTwoChannelReconstruction
 import Omega.CircleDimension.PoissonChannelRKHS
+import Omega.CircleDimension.PoissonVarianceMonotoneLowerBound
 import Omega.CircleDimension.PoissonDefectAmplification
 import Omega.CircleDimension.PoissonDefectLadder
 import Omega.CircleDimension.PoissonDefectStability

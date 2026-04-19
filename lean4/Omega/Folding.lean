@@ -169,6 +169,7 @@ import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.GaugeAnomalyFiniteVarianceClosed
 import Omega.Folding.GaugeAnomalyGcDefectSign
 import Omega.Folding.GaugeAnomalyGcDefectMustCross
+import Omega.Folding.GaugeAnomalyGcDefectFarfieldExpansion
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
 import Omega.Folding.GaugeAnomalySpectralResidualLaw
 import Omega.Folding.GaugeAnomalyFiniteStateMinimaxAbsError

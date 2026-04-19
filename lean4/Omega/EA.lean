@@ -6,6 +6,7 @@ import Omega.EA.BrauerCongruenceSieveDensity
 import Omega.EA.BrauerRamificationEven
 import Omega.EA.BrauerXorLaw
 import Omega.EA.CentralIdempotentsRecovery
+import Omega.EA.CarryFreeZetaTrichotomy
 import Omega.EA.ChebotarevQuotientRelativeEntropyChain
 import Omega.EA.ChebotarevDominantChannelPoleOrder
 import Omega.EA.ChebotarevMobiusAdams
