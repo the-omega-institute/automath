@@ -52,4 +52,41 @@ theorem paper_leyang_j_explicit_inversion (t : ℂ) (ht : t ≠ 0) :
     rw [hsq]
     ring
 
+/-- Eliminating `u` between the Lee--Yang phase coordinates `J(u)` and `J(cu)` gives a quadratic
+correspondence in `t'`, whose discriminant factors through the Lee--Yang branch term `4t + 1`. -/
+theorem paper_leyang_phase_translation_correspondence_discriminant
+    (c u : ℂ) (hc0 : c ≠ 0) (hu0 : u ≠ 0) (hu1 : 1 + u ≠ 0) (hcu1 : 1 + c * u ≠ 0) :
+    let t : ℂ := -u / (1 + u) ^ 2
+    let t' : ℂ := -(c * u) / (1 + c * u) ^ 2
+    let a : ℂ := (t * (c - 1) ^ 2 - c) ^ 2
+    let b : ℂ := -c * t * (2 * c ^ 2 * t + c ^ 2 - 4 * c * t + 2 * t + 1)
+    let d : ℂ := c ^ 2 * t ^ 2
+    a * t' ^ 2 + b * t' + d = 0 ∧ b ^ 2 - 4 * a * d = c ^ 2 * t ^ 2 * (c ^ 2 - 1) ^ 2 * (4 * t + 1) := by
+  dsimp
+  have ha :
+      (-u / (1 + u) ^ 2 * (c - 1) ^ 2 - c) =
+        -((c + u) * (1 + c * u) / (1 + u) ^ 2) := by
+    field_simp [hu1]
+    ring
+  have hb :
+      -c * (-u / (1 + u) ^ 2) *
+          (2 * c ^ 2 * (-u / (1 + u) ^ 2) + c ^ 2 - 4 * c * (-u / (1 + u) ^ 2) +
+            2 * (-u / (1 + u) ^ 2) + 1) =
+        c * u * (c ^ 2 * u ^ 2 + c ^ 2 + 4 * c * u + u ^ 2 + 1) / (1 + u) ^ 4 := by
+    field_simp [hu1]
+    ring
+  have hd :
+      c ^ 2 * (-u / (1 + u) ^ 2) ^ 2 = c ^ 2 * u ^ 2 / (1 + u) ^ 4 := by
+    field_simp [hu1]
+  have hbranch : 4 * (-u / (1 + u) ^ 2) + 1 = (u - 1) ^ 2 / (1 + u) ^ 2 := by
+    field_simp [hu1]
+    ring
+  refine ⟨?_, ?_⟩
+  · rw [ha, hb, hd]
+    field_simp [hc0, hu0, hu1, hcu1]
+    ring
+  · rw [ha, hb, hd, hbranch]
+    field_simp [hc0, hu0, hu1, hcu1]
+    ring
+
 end Omega.UnitCirclePhaseArithmetic
