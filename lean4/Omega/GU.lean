@@ -109,6 +109,7 @@ import Omega.GU.TerminalFoldbin6OffsetsReturnTimes
 import Omega.GU.TerminalFoldbin6OnebitErrorDetecting
 import Omega.GU.TerminalFoldbin6PushforwardMarkov
 import Omega.GU.Window6P6CompactnessPrinciple
+import Omega.GU.Window6P6ToeplitzCertificateChain
 import Omega.GU.TerminalFoldbin6StrongLumpabilityBinaryWitness
 import Omega.GU.TerminalKmDepthRescaling
 import Omega.GU.TerminalOstrowskiZeckendorfBinfold

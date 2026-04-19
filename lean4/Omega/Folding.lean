@@ -134,6 +134,7 @@ import Omega.Folding.FiberBiasFrequencyTransportIdentity
 import Omega.Folding.FiberBiasEnergyErasureIdentity
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
 import Omega.Folding.FoldResonanceDocagne
+import Omega.Folding.FoldFibonacciFrequencyFourierSpikeClosedForm
 import Omega.Folding.FoldPressureFreezingThreshold
 import Omega.Folding.FoldGaugeAnomalyP10P9LinearDisjointness
 import Omega.Folding.FoldLogMultiplicityPressureDerivative
