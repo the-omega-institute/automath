@@ -196,6 +196,7 @@ import Omega.POM.ReplicaBernoulliSubgraph
 import Omega.POM.ReplicaSoftcoreBinomialKernelInverse
 import Omega.POM.ReplicaSoftcoreDet
 import Omega.POM.ReplicaSoftcoreExceptionalSecantEquation
+import Omega.POM.ReplicaSoftcoreWordTraceCycleGF
 import Omega.POM.PressureReflectionInequality
 import Omega.POM.ResidueRefinementJensen
 import Omega.POM.SecondOrderCollisionCommonBottleneck
