@@ -60,6 +60,7 @@ import Omega.Zeta.Degree11GenericGaloisS11
 import Omega.Zeta.DiscLedgerAxisDepthSmith
 import Omega.Zeta.DerivedLeyangBranchsetAdjacencySpectrumHeatTrace
 import Omega.Zeta.DerivedLeyangBranchsetIharaZeta
+import Omega.Zeta.DerivedHankelFiniteJetBadPrimeClosure
 import Omega.Zeta.DenominatorAxisDirectLimitSolenoid
 import Omega.Zeta.DynZeta
 import Omega.Zeta.DerivedMinimalCyclicAuditAxisZhatPrimeUnlocking

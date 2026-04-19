@@ -41,6 +41,7 @@ import Omega.POM.DeltaqSpectralDimensionIdentity
 import Omega.POM.DefectBand
 import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DerivedFoldGoldenRationalPowerUnitObstruction
+import Omega.POM.DerivedFiberIndcomplexAlternatingWittenParity
 import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.DiagonalHighMoments
 import Omega.POM.DiagonalRateKeepResampleChannel
