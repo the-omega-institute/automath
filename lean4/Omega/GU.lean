@@ -69,6 +69,7 @@ import Omega.GU.LeyangMahlerFreeEnergy
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.LogCmStableInverseExponentialSeparation
 import Omega.GU.M11Z34CyclotomicRepresentationRigidity
+import Omega.GU.M11Z34RealIrrepDecomposition
 import Omega.GU.M11DeltaClosureUniqueMinimalSO10
 import Omega.GU.MinSectorBudget
 import Omega.GU.MobiusDualityUnified

@@ -34,6 +34,7 @@ import Omega.OperatorAlgebra.ReplicationCentralizerDimensionEgf
 import Omega.OperatorAlgebra.FoldOrbitMgfFiberFactorization
 import Omega.OperatorAlgebra.FoldCleanAncillaReversibleDilation
 import Omega.OperatorAlgebra.FoldGaugeMiBound
+import Omega.OperatorAlgebra.FoldGaugeReynolds
 import Omega.OperatorAlgebra.Z2x2WalshHadamardSectorTrace
 import Omega.OperatorAlgebra.JonesScalarEqualsExpMinusGap
 import Omega.OperatorAlgebra.HSPPeriodTrace
