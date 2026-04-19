@@ -2,6 +2,7 @@ import Omega.Zeta.AbelFinitePartMobiusZeta
 import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.AbelianShadowDefect
 import Omega.Zeta.AdamsBinomialProbeFourierDiagonalization
+import Omega.Zeta.AdamsBinomialProbeDiscreteInversionEquispacedGrid
 import Omega.Zeta.AdamsBinomialProbeLazyWalkHeatKernel
 import Omega.Zeta.AdamsBinomialProbeKernelToeplitzPsdEquivalence
 import Omega.Zeta.AdamsFiberMobiusInversion
