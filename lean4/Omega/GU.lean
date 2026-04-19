@@ -99,6 +99,7 @@ import Omega.GU.TerminalFoldbin6InformationLossConstants
 import Omega.GU.TerminalFoldbin6MinReturnDelay
 import Omega.GU.TerminalFoldbin6NoTypeRelabelingByGeo
 import Omega.GU.TerminalFoldbin6OffsetsReturnTimes
+import Omega.GU.TerminalFoldbin6OnebitErrorDetecting
 import Omega.GU.TerminalFoldbin6PushforwardMarkov
 import Omega.GU.TerminalFoldbin6StrongLumpabilityBinaryWitness
 import Omega.GU.TerminalKmDepthRescaling
@@ -180,6 +181,7 @@ import Omega.GU.Window6EdgeFluxSmithNonsimple
 import Omega.GU.Window6EdgeFluxMaxEntropyKernelUniqueness
 import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
 import Omega.GU.Window6FoldbinGaugeLowDegreeHomology
+import Omega.GU.Window6Foldbin6FiberDifferenceSpectrum
 import Omega.GU.Window6ChiralityAnchorMinimal
 import Omega.GU.Window6C6OrbitB3RootIntersectionRigidity
 import Omega.GU.Window6FiberEdgeCouplingDet
