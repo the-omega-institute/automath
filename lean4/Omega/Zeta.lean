@@ -139,6 +139,7 @@ import Omega.Zeta.XiOffsetNullTypeSafety
 import Omega.Zeta.XiFiberSpectrumHankelConductorPronyPadic
 import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
 import Omega.Zeta.XiCdimLambdaClosedForm
+import Omega.Zeta.XiCauchyPoissonDerivativeEnergyClosedForm
 import Omega.Zeta.XiFoldLocalInformationDensityFirstOrderDiscreteLaw
 import Omega.Zeta.XiFoldCongruenceUnitalAutomorphismRigidity
 import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge

@@ -56,6 +56,7 @@ import Omega.POM.DoubleLimit
 import Omega.POM.DoubleLimit
 import Omega.POM.DoubleTransversalNormalForm
 import Omega.POM.EscortMaxfiberTvBound
+import Omega.POM.EllipsoidIsoperimetricVariance
 import Omega.POM.FenceRiccatiError
 import Omega.POM.FibCubeAntipodeCount
 import Omega.POM.FiberConstantDelayTraversal
