@@ -27,6 +27,7 @@ import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
 import Omega.Conclusion.CapacityFiniteCompleteness
 import Omega.Conclusion.CapacityRamanujanPlateauLaw
 import Omega.Conclusion.CausalDepthBranchBudgetOrthogonality
+import Omega.Conclusion.CarryZeroTempSupportCollapse
 import Omega.Conclusion.CdimFiniteQuotientGrowth
 import Omega.Conclusion.CyclotomicPrimeModulusExceptionalSupportFiniteness
 import Omega.Conclusion.CdimArbitraryProfiniteKernel

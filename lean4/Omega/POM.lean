@@ -2,6 +2,7 @@ import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.A4LinearObservableTwoTermOscillation
 import Omega.POM.A4TracePrimitiveTwoTerm
 import Omega.POM.AitkenDelta2SquareConvergence
+import Omega.POM.BayesInfonceSecondCollisionDominance
 import Omega.POM.CapacityCollisionDataProcessing
 import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.AnomSingleMomentCompleteEquivalence
