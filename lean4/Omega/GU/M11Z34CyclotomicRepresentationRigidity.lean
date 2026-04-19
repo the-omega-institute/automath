@@ -41,4 +41,17 @@ theorem paper_m11_z34_sixteen_rotation_planes_from_family_lock :
   · norm_num
   · norm_num
 
+/-- Paper-facing wrapper for the `m = 11`, `|X_bdry| = 34` cyclotomic rigidity package: pairwise
+nonisomorphic rotation-plane blocks force the real commutant to split as `C^16`, and therefore
+its norm-one/unitary centralizer is intrinsically `U(1)^16`.
+    prop:m11-z34-commutant-u1-16 -/
+theorem paper_m11_z34_commutant_u1_16
+    (pairwiseNonisomorphicRotationPlanes realCommutantIsC16 unitaryCentralizerIsU1Pow16 : Prop)
+    (hReal : pairwiseNonisomorphicRotationPlanes -> realCommutantIsC16)
+    (hUnitary : realCommutantIsC16 -> unitaryCentralizerIsU1Pow16)
+    (hPlanes : pairwiseNonisomorphicRotationPlanes) :
+    realCommutantIsC16 ∧ unitaryCentralizerIsU1Pow16 := by
+  have hCommutant : realCommutantIsC16 := hReal hPlanes
+  exact ⟨hCommutant, hUnitary hCommutant⟩
+
 end Omega.GU

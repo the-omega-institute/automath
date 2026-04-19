@@ -97,4 +97,119 @@ theorem paper_pom_gauge_curvature_shadow_bound (Ω : Finset α) (hΩ : 0 < Ω.ca
       2 * M * probability Ω (fun ω => X ω ≠ Y ω) :=
   coupling_expectation_bound Ω hΩ f M hM hf X Y
 
+/-- Indicator of a finite subset of the state space. -/
+noncomputable def setIndicator (A : Finset β) (b : β) : ℝ :=
+  if b ∈ A then 1 else 0
+
+/-- Event gap for a candidate subset used to test total variation. -/
+noncomputable def eventGap [Fintype β] (Ω : Finset α) (X Y : α → β) (A : Finset β) : ℝ :=
+  |expectation Ω (fun ω => setIndicator A (X ω)) -
+      expectation Ω (fun ω => setIndicator A (Y ω))|
+
+/-- Finite-state total variation between the pushforwards of `X` and `Y`, written as the maximum
+test-set gap over all subsets of the state space. -/
+noncomputable def pushforwardTvDistance [Fintype β] (Ω : Finset α) (X Y : α → β) : ℝ :=
+  (((Finset.univ : Finset β).powerset).sup' (by simp) fun A : Finset β => eventGap Ω X Y A)
+
+/-- Data for the optimality statement: a finite state space together with a witness subset whose
+gap saturates the coupling error. -/
+structure CurvatureTvOptimalData where
+  α : Type*
+  β : Type*
+  instFintypeβ : Fintype β
+  instDecEqβ : DecidableEq β
+  Ω : Finset α
+  hΩ : 0 < Ω.card
+  X : α → β
+  Y : α → β
+  witnessSet : Finset β
+  witnessRealizesError :
+    eventGap Ω X Y witnessSet = probability Ω (fun ω => X ω ≠ Y ω)
+
+attribute [instance] CurvatureTvOptimalData.instFintypeβ
+attribute [instance] CurvatureTvOptimalData.instDecEqβ
+
+/-- The curvature error is the disagreement probability of the coupled variables. -/
+noncomputable def CurvatureTvOptimalData.curvatureError (D : CurvatureTvOptimalData) : ℝ :=
+  probability D.Ω (fun ω => D.X ω ≠ D.Y ω)
+
+/-- Total variation of the two pushforwards. -/
+noncomputable def CurvatureTvOptimalData.tvDistance (D : CurvatureTvOptimalData) : ℝ :=
+  pushforwardTvDistance D.Ω D.X D.Y
+
+/-- The coupling error bounds the pushforward total variation. -/
+def CurvatureTvOptimalData.tvDistanceLeCurvatureError (D : CurvatureTvOptimalData) : Prop :=
+  D.tvDistance ≤ D.curvatureError
+
+/-- The witness subset saturates the coupling bound, so the constant is optimal. -/
+def CurvatureTvOptimalData.boundSharp (D : CurvatureTvOptimalData) : Prop :=
+  D.tvDistance = D.curvatureError
+
+theorem indicator_gap_pointwise_le_neIndicator [Fintype β] (A : Finset β) (X Y : α → β)
+    (ω : α) :
+    |setIndicator A (X ω) - setIndicator A (Y ω)| ≤ neIndicator X Y ω := by
+  unfold setIndicator neIndicator
+  by_cases hxy : X ω = Y ω
+  · simp [hxy]
+  · by_cases hx : X ω ∈ A <;> by_cases hy : Y ω ∈ A <;> simp [hxy, hx, hy]
+
+theorem eventGap_le_curvatureError [Fintype β] (Ω : Finset α) (hΩ : 0 < Ω.card)
+    (X Y : α → β) (A : Finset β) :
+    eventGap Ω X Y A ≤ probability Ω (fun ω => X ω ≠ Y ω) := by
+  unfold eventGap
+  have h1 := abs_expectation_sub_le Ω
+    (fun ω => setIndicator A (X ω)) (fun ω => setIndicator A (Y ω))
+  have hcard_pos : (0 : ℝ) < (Ω.card : ℝ) := by
+    exact_mod_cast hΩ
+  have h2 : expectation Ω (fun ω => |setIndicator A (X ω) - setIndicator A (Y ω)|) ≤
+      expectation Ω (neIndicator X Y) := by
+    unfold expectation
+    apply div_le_div_of_nonneg_right _ hcard_pos.le
+    apply Finset.sum_le_sum
+    intro ω _
+    exact indicator_gap_pointwise_le_neIndicator A X Y ω
+  have h3 : expectation Ω (neIndicator X Y) =
+      probability Ω (fun ω => X ω ≠ Y ω) :=
+    (probability_eq_expectation_neIndicator Ω X Y).symm
+  linarith
+
+theorem pushforwardTvDistance_le_curvatureError [Fintype β] (Ω : Finset α) (hΩ : 0 < Ω.card)
+    (X Y : α → β) :
+    pushforwardTvDistance Ω X Y ≤ probability Ω (fun ω => X ω ≠ Y ω) := by
+  simpa [pushforwardTvDistance] using
+    (Finset.sup'_le (s := ((Finset.univ : Finset β).powerset)) (H := by simp)
+      (f := fun A : Finset β => eventGap Ω X Y A)
+      (a := probability Ω (fun ω => X ω ≠ Y ω))
+      (by
+        intro A hA
+        exact eventGap_le_curvatureError Ω hΩ X Y A))
+
+theorem eventGap_le_pushforwardTvDistance [Fintype β] (Ω : Finset α) (X Y : α → β)
+    (A : Finset β) :
+    eventGap Ω X Y A ≤ pushforwardTvDistance Ω X Y := by
+  have hA : A ∈ (Finset.univ : Finset β).powerset := by
+    rw [Finset.mem_powerset]
+    intro b hb
+    simp
+  simpa [pushforwardTvDistance] using
+    (Finset.le_sup' (s := ((Finset.univ : Finset β).powerset))
+      (f := fun B : Finset β => eventGap Ω X Y B) hA)
+
+/-- The coupling inequality bounds the pushforward total variation by the curvature error, and an
+explicit witness subset shows that this constant is sharp.
+    prop:pom-curvature-tv-optimal -/
+theorem paper_pom_curvature_tv_optimal (D : CurvatureTvOptimalData) :
+    D.tvDistanceLeCurvatureError ∧ D.boundSharp := by
+  constructor
+  · dsimp [CurvatureTvOptimalData.tvDistanceLeCurvatureError,
+      CurvatureTvOptimalData.tvDistance, CurvatureTvOptimalData.curvatureError]
+    exact pushforwardTvDistance_le_curvatureError D.Ω D.hΩ D.X D.Y
+  · dsimp [CurvatureTvOptimalData.boundSharp]
+    apply le_antisymm
+    · dsimp [CurvatureTvOptimalData.tvDistance, CurvatureTvOptimalData.curvatureError]
+      exact pushforwardTvDistance_le_curvatureError D.Ω D.hΩ D.X D.Y
+    · dsimp [CurvatureTvOptimalData.curvatureError, CurvatureTvOptimalData.tvDistance]
+      simpa [D.witnessRealizesError] using
+        (eventGap_le_pushforwardTvDistance D.Ω D.X D.Y D.witnessSet)
+
 end Omega.POM.CouplingExpectationBound

@@ -236,6 +236,14 @@ theorem fiberMultiplicity_complementAction (x : X m) (hm : 2 ≤ m) :
   rw [complementAction_eq_Fold_complement w hm]
   exact fiberMultiplicity_complement w
 
+/-- Paper-facing complement duality package: complement commutes with `Fold`, and the induced
+    involution preserves fiber multiplicity.
+    prop:fold-complement-duality -/
+theorem paper_fold_complement_duality (m : Nat) (hm : 2 <= m) (w : Word m) (x : X m) :
+    complementAction (Fold w) = Fold (complement w) ∧
+      X.fiberMultiplicity (complementAction x) = X.fiberMultiplicity x := by
+  exact ⟨complementAction_eq_Fold_complement w hm, fiberMultiplicity_complementAction x hm⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R57: Fiber multiplicity complement parity
 -- ══════════════════════════════════════════════════════════════

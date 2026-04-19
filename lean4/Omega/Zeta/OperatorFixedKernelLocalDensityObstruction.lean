@@ -35,4 +35,15 @@ theorem paper_operator_fixed_kernel_local_density_obstruction_seeds
       exact div_pos hΔ (show (0 : ℝ) < (B : ℝ) from by exact_mod_cast hB)
     exact ⟨hmean, const_pos_not_tendsto_zero hmean⟩
 
+/-- Paper-facing wrapper promoting the seed theorem to the published proposition.
+    prop:operator-fixed-kernel-local-density-obstruction -/
+theorem paper_operator_fixed_kernel_local_density_obstruction
+    {B : ℕ} (hB : 0 < B) (g : ℕ → ℝ) (hperiodic : ∀ n, g (n + B) = g n)
+    {Δ : ℝ} (hΔ : 0 < Δ) :
+    ∃ gaps : Finset ℝ,
+      (∀ n, g n ∈ gaps) ∧
+      (let meanGap : ℝ := Δ / (B : ℝ); 0 < meanGap ∧
+        ¬ Tendsto (fun _ : ℕ => meanGap) atTop (𝓝 0)) := by
+  simpa using paper_operator_fixed_kernel_local_density_obstruction_seeds hB g hperiodic hΔ
+
 end Omega.Zeta

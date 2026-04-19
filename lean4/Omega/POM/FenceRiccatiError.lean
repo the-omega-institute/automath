@@ -184,6 +184,58 @@ theorem riccati_error_lt_geom (k : Nat) :
     linarith [pow_pos phiInvSq_pos (2 * k + 1)]
   exact div_lt_self hnum_pos h1
 
+private theorem qT1_succ_diff_by_fenceDet (k : Nat) :
+    qT1 (k + 1) - qT1 (k + 2) =
+      1 / ((fenceDet (k + 1) : ℝ) * fenceDet (k + 2)) := by
+  have hk1_nat : 0 < fenceDet (k + 1) := by
+    have hpos := fenceDet_pos (k + 1)
+    omega
+  have hk2_nat : 0 < fenceDet (k + 2) := by
+    have hpos := fenceDet_pos (k + 2)
+    omega
+  have hk1_ne : (fenceDet (k + 1) : ℝ) ≠ 0 := by
+    exact_mod_cast Nat.ne_of_gt hk1_nat
+  have hk2_ne : (fenceDet (k + 2) : ℝ) ≠ 0 := by
+    exact_mod_cast Nat.ne_of_gt hk2_nat
+  have hcass_nat := fenceDet_cassini (k + 1) (by omega)
+  have hcass :
+      (fenceDet (k + 2) : ℝ) * fenceDet k = fenceDet (k + 1) ^ 2 + 1 := by
+    exact_mod_cast hcass_nat
+  calc
+    qT1 (k + 1) - qT1 (k + 2)
+        = (fenceDet k : ℝ) / fenceDet (k + 1) - (fenceDet (k + 1) : ℝ) / fenceDet (k + 2) := by
+            rw [qT1_eq_fenceDet_ratio k, qT1_eq_fenceDet_ratio (k + 1)]
+    _ = 1 / ((fenceDet (k + 1) : ℝ) * fenceDet (k + 2)) := by
+          field_simp [hk1_ne, hk2_ne]
+          nlinarith [hcass]
+
+/-- Determinantal Riccati package at `t = 1`: exact determinant ratio, Cassini-Pell one-step
+error formula, strict monotonicity, and the closed-form remainder.
+    cor:pom-Lk-riccati-error-by-determinants -/
+theorem paper_pom_Lk_riccati_error_by_determinants (k : Nat) :
+    qT1 (k + 1) = (fenceDet k : ℝ) / fenceDet (k + 1) ∧
+    qT1 (k + 1) - qT1 (k + 2) =
+      1 / ((fenceDet (k + 1) : ℝ) * fenceDet (k + 2)) ∧
+    0 < qT1 (k + 1) - qT1 (k + 2) ∧
+    qT1 (k + 1) - phiInvSq =
+      (1 - phiInvSq ^ 2) * phiInvSq ^ (2 * (k + 1)) /
+        (1 + phiInvSq ^ (2 * (k + 1) + 1)) ∧
+    0 < qT1 (k + 1) - phiInvSq := by
+  refine ⟨qT1_eq_fenceDet_ratio k, qT1_succ_diff_by_fenceDet k, ?_, ?_, ?_⟩
+  · have hk1_nat : 0 < fenceDet (k + 1) := by
+      have hpos := fenceDet_pos (k + 1)
+      omega
+    have hk2_nat : 0 < fenceDet (k + 2) := by
+      have hpos := fenceDet_pos (k + 2)
+      omega
+    have hden_pos :
+        0 < ((fenceDet (k + 1) : ℝ) * fenceDet (k + 2)) := by
+      positivity
+    rw [qT1_succ_diff_by_fenceDet]
+    exact one_div_pos.mpr hden_pos
+  · simpa using paper_pom_Lk_t1_error_closed_form (k + 1)
+  · simpa using riccati_error_pos (k + 1)
+
 /-- Packaged boundary recursion, odd-Fibonacci ratio, and positive Riccati error facts.
     prop:pom-Lk-boundary-riccati-recursion -/
 theorem paper_pom_Lk_boundary_riccati_recursion_package (k : Nat) :

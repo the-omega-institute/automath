@@ -1,4 +1,4 @@
-import Mathlib.Tactic
+import Mathlib
 
 /-!
 # Rényi dimension spectrum of the projected output measure
@@ -23,6 +23,17 @@ of an integer-coefficient characteristic polynomial, so h_q is transcendental
 -/
 
 namespace Omega.POM.RenyiDimensionSpectrum
+
+open Filter
+
+/-- The normalized q-Rényi entropy rate sequence `m ↦ H_q(m) / m`. -/
+noncomputable def pomRenyiEntropyRateSequence (Hq : ℕ → ℝ) (m : ℕ) : ℝ :=
+  Hq m / (m : ℝ)
+
+/-- The geometric q-Rényi dimension approximation at resolution `m` for the fold scale
+`ε_m = φ^{-m}`. -/
+noncomputable def pomRenyiDimensionApprox (q : ℝ) (Hq : ℕ → ℝ) (m : ℕ) : ℝ :=
+  pomRenyiEntropyRateSequence Hq m * (((q - 1) * Real.log Real.goldenRatio)⁻¹)
 
 /-! ## Geometric scale exponent arithmetic -/
 
@@ -148,5 +159,36 @@ theorem paper_pom_renyi_dimension_spectrum_package :
     (1 : ℤ) + (-5) + 6 + (-1) = 1 ∧
     (1 : ℤ) + (-2) + (-11) + (-8) + (-20) + 10 = -30 :=
   paper_pom_renyi_dimension_spectrum_seeds
+
+set_option maxHeartbeats 400000 in
+/-- Paper-facing geometric Rényi dimension spectrum wrapper: the finite-scale identity is built
+into `pomRenyiDimensionApprox`, and any entropy-rate limit transfers to the dimension spectrum
+with the expected closed form. `prop:pom-renyi-dimension-spectrum` -/
+theorem paper_pom_renyi_dimension_spectrum
+    (q hq : ℝ) (Hq : ℕ → ℝ)
+    (hq_ne : q ≠ 1)
+    (hlog_ne : Real.log Real.goldenRatio ≠ 0)
+    (hLimit : Tendsto (pomRenyiEntropyRateSequence Hq) atTop (nhds hq)) :
+    (∀ m : ℕ,
+      pomRenyiDimensionApprox q Hq m =
+        pomRenyiEntropyRateSequence Hq m / ((q - 1) * Real.log Real.goldenRatio)) ∧
+    ((q - 1) * Real.log Real.goldenRatio ≠ 0) ∧
+    ∃ Dq : ℝ,
+      Tendsto (pomRenyiDimensionApprox q Hq) atTop (nhds Dq) ∧
+        Dq = hq / ((q - 1) * Real.log Real.goldenRatio) := by
+  have hdenom_ne : (q - 1) * Real.log Real.goldenRatio ≠ 0 := by
+    exact mul_ne_zero (sub_ne_zero.mpr hq_ne) hlog_ne
+  have hScaled :
+      Tendsto (pomRenyiDimensionApprox q Hq) atTop
+        (nhds (((q - 1) * Real.log Real.goldenRatio)⁻¹ * hq)) := by
+    convert hLimit.mul_const (((q - 1) * Real.log Real.goldenRatio)⁻¹) using 1
+    · ext m
+      simp [pomRenyiDimensionApprox, pomRenyiEntropyRateSequence, div_eq_mul_inv, mul_assoc,
+        mul_left_comm, mul_comm]
+  refine ⟨?_, hdenom_ne, ?_⟩
+  · intro m
+    rw [pomRenyiDimensionApprox, div_eq_mul_inv]
+  · refine ⟨hq / ((q - 1) * Real.log Real.goldenRatio), ?_, rfl⟩
+    simpa [div_eq_mul_inv, mul_comm] using hScaled
 
 end Omega.POM.RenyiDimensionSpectrum

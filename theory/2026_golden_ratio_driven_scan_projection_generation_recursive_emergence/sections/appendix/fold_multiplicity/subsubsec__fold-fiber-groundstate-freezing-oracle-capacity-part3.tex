@@ -1,0 +1,325 @@
+\paragraph{容量主序、全预算极值与冻结后的信息分裂}
+
+\begin{theorem}[连续容量曲线的离散势反演]\label{thm:fold-capacity-discrete-potential-histogram}
+固定分辨率 \(m\)，并沿用定义 \ref{def:fold-capacity-tail} 的尾计数函数
+\[
+N_m(t):=\#\{x\in X_m:\ d_m(x)\ge t\},
+\qquad
+\mathcal C_m^{\mathrm{cont}}(T):=\sum_{x\in X_m}\min(d_m(x),T).
+\]
+再定义纤维直方图
+\[
+h_m(k):=\#\{x\in X_m:\ d_m(x)=k\}
+\qquad(k\in\NN_{\ge 1}).
+\]
+则对任意整数 \(k\ge 1\) 都有严格恒等式
+\[
+N_m(k)=\mathcal C_m^{\mathrm{cont}}(k)-\mathcal C_m^{\mathrm{cont}}(k-1),
+\]
+\[
+h_m(k)=N_m(k)-N_m(k+1)
+=2\mathcal C_m^{\mathrm{cont}}(k)-\mathcal C_m^{\mathrm{cont}}(k-1)-\mathcal C_m^{\mathrm{cont}}(k+1).
+\]
+因此，连续容量曲线不仅给出逐阈值可逆容量，而且作为一个离散势函数，其一阶差分恢复尾计数，其二阶差分恢复精确纤维直方图。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-capacity-tail-equivalence}，
+\[
+\mathcal C_m^{\mathrm{cont}}(T)=\int_0^T N_m(t)\,\dd t.
+\]
+对整数 \(k\ge 1\) 有
+\[
+\mathcal C_m^{\mathrm{cont}}(k)-\mathcal C_m^{\mathrm{cont}}(k-1)
+=\int_{k-1}^{k}N_m(t)\,\dd t.
+\]
+由于 \(d_m(x)\in\NN_{\ge 1}\)，当 \(t\in(k-1,k]\) 时，
+\[
+\mathbf 1_{\{d_m(x)\ge t\}}=\mathbf 1_{\{d_m(x)\ge k\}},
+\]
+故 \(N_m(t)\equiv N_m(k)\) 在区间 \((k-1,k]\) 上恒定，从而第一式成立。
+
+再由
+\[
+h_m(k)=N_m(k)-N_m(k+1)
+\]
+立得第二式。证毕。
+\end{proof}
+
+\begin{theorem}[全预算容量序与主序等价]\label{thm:fold-capacity-order-majorization-equivalence}
+设
+\[
+\mathbf d=(d_1,\dots,d_N),\qquad
+\mathbf e=(e_1,\dots,e_N)\in\NN_{\ge 1}^N,
+\]
+并满足
+\[
+\sum_{i=1}^{N}d_i=\sum_{i=1}^{N}e_i=M.
+\]
+定义对应的连续容量曲线
+\[
+\mathcal C_{\mathbf d}(T):=\sum_{i=1}^{N}\min(d_i,T),
+\qquad
+\mathcal C_{\mathbf e}(T):=\sum_{i=1}^{N}\min(e_i,T),
+\qquad T\ge 0.
+\]
+则下列两条件等价：
+\begin{enumerate}
+  \item \(\mathcal C_{\mathbf d}(T)\le \mathcal C_{\mathbf e}(T)\) 对所有 \(T\ge 0\) 成立；
+  \item \(\mathbf d^\downarrow\succ \mathbf e^\downarrow\)。
+\end{enumerate}
+亦即，在固定总质量下，连续容量曲线上的全预算逐点比较恰与 Hardy--Littlewood--Pólya 主序完全等价。
+\end{theorem}
+\begin{proof}
+定义容量缺口
+\[
+\mathcal R_{\mathbf d}(T):=M-\mathcal C_{\mathbf d}(T)=\sum_{i=1}^{N}(d_i-T)_+,
+\]
+\[
+\mathcal R_{\mathbf e}(T):=M-\mathcal C_{\mathbf e}(T)=\sum_{i=1}^{N}(e_i-T)_+.
+\]
+在固定总和的条件下，Hardy--Littlewood--Pólya 主序的阈值尾和表征给出
+\[
+\mathbf d^\downarrow\succ \mathbf e^\downarrow
+\quad\Longleftrightarrow\quad
+\sum_{i=1}^{N}(d_i-T)_+\ge \sum_{i=1}^{N}(e_i-T)_+
+\qquad(\forall\,T\ge 0).
+\]
+也即
+\[
+\mathbf d^\downarrow\succ \mathbf e^\downarrow
+\quad\Longleftrightarrow\quad
+\mathcal R_{\mathbf d}(T)\ge \mathcal R_{\mathbf e}(T)
+\qquad(\forall\,T\ge 0).
+\]
+再利用
+\[
+\mathcal C_{\mathbf d}(T)=M-\mathcal R_{\mathbf d}(T),
+\qquad
+\mathcal C_{\mathbf e}(T)=M-\mathcal R_{\mathbf e}(T),
+\]
+便得到所需等价。证毕。
+\end{proof}
+
+\begin{theorem}[固定长度与总质量下的全预算极值谱]\label{thm:fold-capacity-global-extremizers-fixed-mass}
+固定正整数
+\[
+N,\qquad M\ge N,
+\]
+并在所有满足
+\[
+\mathbf d=(d_1,\dots,d_N)\in\NN_{\ge 1}^N,
+\qquad
+\sum_{i=1}^{N}d_i=M
+\]
+的降序谱向量上考虑连续容量曲线
+\[
+\mathcal C_{\mathbf d}(T):=\sum_{i=1}^{N}\min(d_i,T).
+\]
+写
+\[
+M=qN+r,\qquad 0\le r<N.
+\]
+则存在两个唯一的全预算极值谱：
+\begin{enumerate}
+  \item 在所有 \(T\ge 0\) 上同时最大化 \(\mathcal C_{\mathbf d}(T)\) 的唯一降序谱为
+  \[
+  \mathbf d^{\mathrm{bal}}
+  :=
+  (\underbrace{q+1,\dots,q+1}_{r},
+  \underbrace{q,\dots,q}_{N-r}),
+  \]
+  且
+  \[
+  \mathcal C_{\mathbf d^{\mathrm{bal}}}(T)
+  =
+  r\min(q+1,T)+(N-r)\min(q,T).
+  \]
+  \item 在所有 \(T\ge 0\) 上同时最小化 \(\mathcal C_{\mathbf d}(T)\) 的唯一降序谱为
+  \[
+  \mathbf d^{\mathrm{sp}}
+  :=
+  (M-N+1,1,\dots,1),
+  \]
+  且
+  \[
+  \mathcal C_{\mathbf d^{\mathrm{sp}}}(T)
+  =
+  (N-1)\min(1,T)+\min(M-N+1,T).
+  \]
+\end{enumerate}
+因此，预言机容量曲线在固定 \((N,M)\) 下并非一般的多目标极值问题，而具有全预算逐点唯一的最均衡谱与最尖峰谱。
+\end{theorem}
+\begin{proof}
+记任意降序谱 \(\mathbf d^\downarrow=(d_1,\dots,d_N)\) 的前缀和为
+\[
+s_j(\mathbf d):=\sum_{i=1}^{j}d_i,\qquad 1\le j\le N.
+\]
+
+先证尖峰谱。对任意 \(1\le j\le N\)，由于其余 \(N-j\) 个坐标都至少为 \(1\)，有
+\[
+s_j(\mathbf d)\le M-(N-j)=s_j(\mathbf d^{\mathrm{sp}}).
+\]
+故 \(\mathbf d^{\mathrm{sp}}\succ \mathbf d\) 对所有允许谱成立。
+
+再证均衡谱。需证任意允许谱都主化 \(\mathbf d^{\mathrm{bal}}\)。
+若不然，则存在 \(1\le j\le N\) 使
+\[
+s_j(\mathbf d)\le jq+\min(r,j)-1.
+\]
+又因 \(\mathbf d\) 为降序，故
+\[
+d_j\le \left\lfloor \frac{s_j(\mathbf d)}{j}\right\rfloor\le q,
+\]
+从而所有余下坐标都不超过 \(q\)。于是
+\[
+M=\sum_{i=1}^{N}d_i
+\le s_j(\mathbf d)+(N-j)q
+\le qN+\min(r,j)-1
+<qN+r=M,
+\]
+矛盾。故对所有 \(j\) 都有
+\[
+s_j(\mathbf d)\ge jq+\min(r,j)=s_j(\mathbf d^{\mathrm{bal}}),
+\]
+即 \(\mathbf d\succ \mathbf d^{\mathrm{bal}}\)。
+
+由定理 \ref{thm:fold-capacity-order-majorization-equivalence}，
+\[
+\mathcal C_{\mathbf d^{\mathrm{sp}}}(T)\le \mathcal C_{\mathbf d}(T)\le \mathcal C_{\mathbf d^{\mathrm{bal}}}(T)
+\qquad(\forall\,T\ge 0).
+\]
+显式公式由定义直接代入即得。
+
+最后说明唯一性。若某个降序谱 \(\mathbf d\) 在所有 \(T\) 上与 \(\mathbf d^{\mathrm{bal}}\) 的容量曲线完全相同，则由定理 \ref{thm:fold-capacity-order-majorization-equivalence} 可知 \(\mathbf d\succ \mathbf d^{\mathrm{bal}}\) 且 \(\mathbf d^{\mathrm{bal}}\succ \mathbf d\)，从而两者相同；尖峰谱同理。证毕。
+\end{proof}
+
+\begin{theorem}[冻结相中的 Mellin--Stieltjes 信息分裂]\label{thm:fold-frozen-mellin-stieltjes-bifurcation}
+沿用定理 \ref{thm:fold-pressure-freezing-threshold} 的记号，并设
+\[
+a_{\mathrm c}=\frac{\log\varphi-g_*}{\alpha_*-\alpha_*^{(2)}}<\infty.
+\]
+则对任意整数 \(a>a_{\mathrm c}\)，都有
+\[
+P_a=a\alpha_*+g_*,
+\qquad
+S_a(m)=K_mM_m^a\bigl(1+o(1)\bigr),
+\]
+其中
+\[
+\pi_{m,a}(x):=\frac{d_m(x)^a}{S_a(m)}
+\]
+为相应的 escort 分布，并且
+\[
+\max_{x\in X_m}\pi_{m,a}(x)
+=\frac{M_m^a}{S_a(m)}
+=\frac{1}{K_m}\bigl(1+o(1)\bigr)
+=\exp(-g_*m+o(m)).
+\]
+从而
+\[
+h_\infty(a):=\lim_{m\to\infty}\frac{1}{m}
+\Bigl(-\log\max_{x\in X_m}\pi_{m,a}(x)\Bigr)=g_*.
+\]
+
+另一方面，对每个固定分辨率 \(m\)，连续容量曲线 \(\mathcal C_m^{\mathrm{cont}}\) 由定理 \ref{thm:fold-capacity-discrete-potential-histogram} 仍可精确恢复全部直方图 \(\{h_m(k)\}_{k\ge 1}\)。
+因此，在冻结相内，高阶 Mellin 尾仅保留二维仿射数据 \((\alpha_*,g_*)\)，而 Stieltjes 侧的连续容量曲线仍保持完整的有限层纤维几何。
+\end{theorem}
+\begin{proof}
+第一式正是定理 \ref{thm:fold-pressure-freezing-threshold}。
+再由
+\[
+S_a(m)=K_mM_m^a+\sum_{d_m(x)<M_m}d_m(x)^a
+\]
+及
+\[
+\sum_{d_m(x)<M_m}d_m(x)^a
+\le |X_m|(M_m^{(2)})^a
+=K_mM_m^a\exp\!\bigl(-\Delta(a)m+o(m)\bigr),
+\]
+其中
+\[
+\Delta(a)=a(\alpha_*-\alpha_*^{(2)})-(\log\varphi-g_*)>0,
+\]
+得到
+\[
+S_a(m)=K_mM_m^a\bigl(1+o(1)\bigr).
+\]
+故
+\[
+\max_{x\in X_m}\pi_{m,a}(x)=\frac{M_m^a}{S_a(m)}=\frac{1}{K_m}\bigl(1+o(1)\bigr).
+\]
+再利用
+\[
+K_m=\exp(g_*m+o(m))
+\]
+即得
+\[
+\max_{x\in X_m}\pi_{m,a}(x)=\exp(-g_*m+o(m)),
+\]
+从而 \(h_\infty(a)=g_*\)。
+
+容量侧的结论则直接来自定理 \ref{thm:fold-capacity-discrete-potential-histogram}。证毕。
+\end{proof}
+
+\begin{corollary}[次最大恢复窗与基态指数简并的并存]\label{cor:fold-submaximal-recovery-window-groundstate-degeneracy}
+沿用上述记号，并进一步假设
+\[
+\alpha_*+g_*<\log 2.
+\]
+则对任意
+\[
+\beta\in\left(\frac{\alpha_*^{(2)}}{\log 2},\,\frac{\alpha_*}{\log 2}\right)
+\]
+及
+\[
+B_m:=\lfloor \beta m\rfloor,
+\]
+都有
+\[
+\mathrm{Succ}_m(B_m)\longrightarrow 1.
+\]
+与此同时，对任意整数 \(a>a_{\mathrm c}\)，都有
+\[
+\max_{x\in X_m}\pi_{m,a}(x)=\exp(-g_*m+o(m)),
+\qquad
+h_\infty(a)=g_*.
+\]
+若 \(g_*>0\)，则这表明：几乎全微态可逆恢复与基态的指数简并可以严格并存，二者分别由次大纤维指数 \(\alpha_*^{(2)}\) 与基态复杂度指数 \(g_*\) 控制。
+\end{corollary}
+\begin{proof}
+由
+\[
+\beta\log 2\in(\alpha_*^{(2)},\alpha_*),
+\]
+可知对充分大的 \(m\) 有
+\[
+M_m^{(2)}<2^{B_m}<M_m.
+\]
+于是由定理 \ref{thm:fold-oracle-capacity-closed-form}，
+\[
+\mathcal C_m(B_m)
+=\sum_{x:\,d_m(x)<M_m}d_m(x)+K_m2^{B_m}
+=2^m-K_m(M_m-2^{B_m}),
+\]
+从而
+\[
+1-\mathrm{Succ}_m(B_m)
+=\frac{K_m(M_m-2^{B_m})}{2^m}
+=\frac{K_mM_m}{2^m}\left(1-\frac{2^{B_m}}{M_m}\right).
+\]
+由于 \(\beta\log 2<\alpha_*\)，有 \(2^{B_m}/M_m\to 0\)；
+再由
+\[
+\frac{K_mM_m}{2^m}
+=\exp\!\bigl((\alpha_*+g_*-\log 2)m+o(m)\bigr)
+\]
+与假设 \(\alpha_*+g_*<\log 2\)，得到
+\[
+1-\mathrm{Succ}_m(B_m)\to 0,
+\]
+即 \(\mathrm{Succ}_m(B_m)\to 1\)。
+
+另一方面，escort 侧的结论正是定理 \ref{thm:fold-frozen-mellin-stieltjes-bifurcation}。证毕。
+\end{proof}
+
+\endinput

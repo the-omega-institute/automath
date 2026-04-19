@@ -75,6 +75,8 @@ def _load_prompt(name: str) -> str:
 _git_lock = threading.Lock()
 # Lock for round number allocation
 _round_lock = threading.Lock()
+# Lock serializing .lake/build merges back to the main repo
+_lake_merge_lock = threading.Lock()
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -156,6 +158,123 @@ def git_log_oneline(n: int = 5, *, cwd: Optional[Path] = None) -> list[str]:
     return [l.strip() for l in result.stdout.strip().splitlines() if l.strip()]
 
 
+# ---------------------------------------------------------------------------
+# Memory-pressure guard (macOS)
+#
+# Motivation: parallel `codex exec` + `lake build` can saturate the unified
+# memory on M-series Macs. If WindowServer is starved for >168s the kernel
+# watchdog panics (AppleARMWatchdogTimer → userspace watchdog timeout). We
+# gate each worker dispatch on macOS memory-pressure indicators so the
+# pipeline backs off before the system does.
+# ---------------------------------------------------------------------------
+
+# kern.memorystatus_vm_pressure_level mapping (XNU):
+#   1 = NORMAL, 2 = WARN, 4 = URGENT, 8 = CRITICAL
+_MEM_LEVEL_BY_NAME = {"normal": 1, "warn": 2, "urgent": 4, "critical": 8}
+
+# Populated by main() from CLI flags.
+_MEM_GUARD_CFG: dict = {
+    "enabled": sys.platform == "darwin",
+    "level_threshold": 2,      # block when kern.memorystatus_vm_pressure_level >= this
+    "swap_ceiling_gb": 16.0,   # block when used swap exceeds this
+    "poll_seconds": 30,
+    "max_wait_seconds": 1800,
+}
+_mem_guard_lock = threading.Lock()  # serialize waits so we don't spam logs
+
+
+def _macos_pressure_level() -> int:
+    if sys.platform != "darwin":
+        return 0
+    try:
+        r = subprocess.run(
+            ["sysctl", "-n", "kern.memorystatus_vm_pressure_level"],
+            capture_output=True, text=True, timeout=5,
+            stdin=subprocess.DEVNULL,
+        )
+        return int((r.stdout or "0").strip() or "0")
+    except Exception:
+        return 0
+
+
+_SWAP_RE = re.compile(r"used\s*=\s*([\d.]+)([MG])", re.IGNORECASE)
+
+
+def _macos_swap_used_gb() -> float:
+    if sys.platform != "darwin":
+        return 0.0
+    try:
+        r = subprocess.run(
+            ["sysctl", "-n", "vm.swapusage"],
+            capture_output=True, text=True, timeout=5,
+            stdin=subprocess.DEVNULL,
+        )
+        m = _SWAP_RE.search(r.stdout or "")
+        if not m:
+            return 0.0
+        val = float(m.group(1))
+        return val / 1024.0 if m.group(2).upper() == "M" else val
+    except Exception:
+        return 0.0
+
+
+def memory_pressure_snapshot() -> tuple[int, float]:
+    """Return (pressure_level, swap_used_gb). level=0 if unsupported."""
+    return _macos_pressure_level(), _macos_swap_used_gb()
+
+
+def memory_pressure_wait(context: str = "") -> bool:
+    """Block until macOS memory pressure is below the configured threshold.
+
+    Returns True if pressure is OK (or guard is disabled / unsupported).
+    Returns False if max_wait timed out — caller should proceed with a warning
+    rather than deadlock the pipeline.
+    """
+    cfg = _MEM_GUARD_CFG
+    if not cfg["enabled"]:
+        return True
+
+    lvl_thresh = int(cfg["level_threshold"])
+    swap_cap = float(cfg["swap_ceiling_gb"])
+    poll = int(cfg["poll_seconds"])
+    max_wait = int(cfg["max_wait_seconds"])
+
+    # Fast path: no pressure, no waiting.
+    lvl, swap = memory_pressure_snapshot()
+    if (lvl == 0 or lvl < lvl_thresh) and swap < swap_cap:
+        return True
+
+    # Serialize the wait so parallel callers don't spam identical log lines.
+    with _mem_guard_lock:
+        start = time.time()
+        warned = False
+        while True:
+            lvl, swap = memory_pressure_snapshot()
+            under_level = lvl == 0 or lvl < lvl_thresh
+            under_swap = swap < swap_cap
+            if under_level and under_swap:
+                if warned:
+                    logger.info(
+                        f"[mem-guard] pressure cleared (level={lvl}, swap={swap:.1f}GB)"
+                        + (f" — resuming {context}" if context else "")
+                    )
+                return True
+            elapsed = int(time.time() - start)
+            if elapsed >= max_wait:
+                logger.warning(
+                    f"[mem-guard] timeout after {elapsed}s "
+                    f"(level={lvl}, swap={swap:.1f}GB) — proceeding anyway"
+                    + (f" with {context}" if context else "")
+                )
+                return False
+            logger.warning(
+                f"[mem-guard] pressure elevated (level={lvl}, swap={swap:.1f}GB) — "
+                f"pausing {context or 'dispatch'}, retry in {poll}s (waited {elapsed}s)"
+            )
+            warned = True
+            time.sleep(poll)
+
+
 def read_impl_plan_header(lines: int = 30, *, repo: Optional[Path] = None) -> str:
     plan = (repo or REPO_ROOT) / "lean4" / "IMPLEMENTATION_PLAN.md"
     if not plan.exists():
@@ -203,11 +322,21 @@ def ensure_base_branch() -> None:
 
 
 def _clone_lake_cache(wt_path: Path) -> None:
-    """Copy the .lake build cache into a new worktree using APFS clonefile.
+    """Set up the .lake directory in a new worktree.
 
-    On macOS APFS, ``cp -Rc`` creates copy-on-write clones — near-instant and
-    zero extra disk until files diverge.  Falls back to a regular copy on
-    non-APFS volumes (slower but still correct).
+    Strategy:
+    - ``packages/`` is symlinked to the main repo's copy.  External deps never
+      change between rounds, so sharing them is safe.  More importantly, lake
+      resolves artifact paths from ``Omega.setup.json`` which embeds absolute
+      paths like ``/…/lean4/.lake/packages/…``; those paths remain valid when
+      packages live at the *same* location as in the main repo.  A full copy
+      causes lake to regenerate ``Omega.setup.json`` with the new worktree
+      paths, invalidating all cached .olean references and forcing a full
+      rebuild (~30-60 min per round instead of ~5 min).
+    - ``build/`` (Omega's compiled artifacts) is APFS-cloned (copy-on-write)
+      so each worktree starts with the full incremental cache and lake only
+      recompiles the 2-3 new files added in the round.
+    - ``config/`` is APFS-cloned as well (small, round-specific lake config).
     """
     src = LEAN_ROOT / ".lake"
     dst = wt_path / "lean4" / ".lake"
@@ -218,18 +347,36 @@ def _clone_lake_cache(wt_path: Path) -> None:
         return  # already present (shouldn't happen for a fresh worktree)
 
     start = time.monotonic()
-    # Try APFS clone first (macOS)
-    result = run_cmd(
-        ["cp", "-Rc", str(src), str(dst)],
-        timeout=300,
-    )
-    if result.returncode != 0:
-        # Fallback: regular copy
-        logger.warning("APFS clone failed, falling back to regular copy")
-        shutil.copytree(str(src), str(dst), symlinks=True)
+    dst.mkdir(parents=True, exist_ok=True)
+
+    # 1. Symlink packages/ → main repo's packages (preserves absolute paths in
+    #    Omega.setup.json, prevents lake from invalidating the .olean cache).
+    src_pkg = src / "packages"
+    if src_pkg.exists():
+        (dst / "packages").symlink_to(src_pkg)
+
+    # 2. APFS-clone build/ and config/ (round-local, writable copies).
+    for sub in ("build", "config"):
+        src_sub = src / sub
+        dst_sub = dst / sub
+        if not src_sub.exists():
+            continue
+        result = run_cmd(["cp", "-Rc", str(src_sub), str(dst_sub)], timeout=600)
+        if result.returncode != 0:
+            logger.warning(f"APFS clone of .lake/{sub} failed, retrying...")
+            if dst_sub.exists():
+                shutil.rmtree(dst_sub, ignore_errors=True)
+            time.sleep(2)
+            result = run_cmd(["cp", "-Rc", str(src_sub), str(dst_sub)], timeout=600)
+        if result.returncode != 0:
+            logger.warning(f"APFS clone retry failed for .lake/{sub}, falling back to regular copy")
+            if dst_sub.exists():
+                shutil.rmtree(dst_sub, ignore_errors=True)
+            shutil.copytree(str(src_sub), str(dst_sub), symlinks=True)
 
     elapsed = time.monotonic() - start
-    logger.info(f"Cloned .lake cache into worktree ({elapsed:.1f}s)")
+    logger.info(f"Set up .lake in worktree ({elapsed:.1f}s): "
+                f"packages=symlink, build/config=COW-clone")
 
 
 def create_worktree(round_num: int) -> WorktreeInfo:
@@ -272,16 +419,22 @@ def remove_worktree(wt: WorktreeInfo) -> None:
         logger.info(f"Removing worktree: {wt.path}")
         run_cmd(["git", "worktree", "remove", "--force", str(wt.path)], cwd=REPO_ROOT)
         if wt.path.exists():
+            # Remove symlinks first (shutil.rmtree doesn't follow them, but the
+            # packages/ symlink target must not be deleted — only the link itself).
+            lake_dir = wt.path / "lean4" / ".lake"
+            pkg_link = lake_dir / "packages"
+            if pkg_link.is_symlink():
+                pkg_link.unlink()
             shutil.rmtree(wt.path, ignore_errors=True)
-        # Delete the branch (already merged)
-        run_cmd(["git", "branch", "-d", wt.branch], cwd=REPO_ROOT)
+        # Use -D (force-delete) so unmerged branches are cleaned up too.
+        run_cmd(["git", "branch", "-D", wt.branch], cwd=REPO_ROOT)
 
 
 def _codex_resolve_conflicts(
     wt_path: Path,
     *,
     model: Optional[str] = None,
-    timeout: int = 300,
+    timeout: int = 1200,
 ) -> bool:
     """Use codex exec to resolve rebase conflicts in a worktree.
 
@@ -330,17 +483,8 @@ def _codex_resolve_conflicts(
         timeout_seconds=timeout,
     )
 
-    # Check if rebase completed
-    rebase_status = run_cmd(["git", "status", "--short"], cwd=wt_path)
-    in_rebase = run_cmd(
-        ["git", "rev-parse", "--git-path", "rebase-merge"], cwd=wt_path
-    )
-    rebase_dir = wt_path / ".git" if (wt_path / ".git").is_file() else wt_path / ".git"
-
     # Check if still in rebase state
-    still_rebasing = run_cmd(
-        ["git", "status"], cwd=wt_path
-    )
+    still_rebasing = run_cmd(["git", "status"], cwd=wt_path)
     if "rebase in progress" in still_rebasing.stdout.lower():
         logger.warning("Codex did not complete rebase, aborting")
         run_cmd(["git", "rebase", "--abort"], cwd=wt_path)
@@ -357,90 +501,178 @@ def _codex_resolve_conflicts(
     return True
 
 
+def merge_lake_cache_back(wt: WorktreeInfo, new_commits: list[str]) -> None:
+    """After a successful merge, propagate the worktree's freshly-built .olean
+    artifacts back into the main repo's .lake/build/ so that the next round's
+    worktree (which COW-clones this cache) starts warm for the files added in
+    this round.
+
+    Only copies artifacts whose source .lean was ADDED or MODIFIED in this
+    round (surgical, O(new files)). For each source `lean4/Omega/<mod>.lean`,
+    propagates its lib/ (.olean/.ilean/.hash/.trace) and ir/ (.c/.hash/.setup.json)
+    artifacts. Destination files that already exist are not overwritten
+    (safe against concurrent merges — main's pre-existing artifact is by
+    construction compatible with the branch tip).
+    """
+    # Extensions produced per .lean source. Not all are always present
+    # (e.g. .trace for freshly-rebuilt, .setup.json only when lake regenerates).
+    LIB_EXTS = (".olean", ".olean.hash", ".ilean", ".ilean.hash", ".trace")
+    IR_EXTS = (".c", ".c.hash", ".setup.json")
+
+    src_root = wt.path / "lean4" / ".lake" / "build"
+    dst_root = LEAN_ROOT / ".lake" / "build"
+    if not src_root.exists():
+        return
+
+    # new_commits entries look like "<sha> <subject>"; pull out the SHA.
+    shas = [c.split(None, 1)[0] for c in new_commits if c.strip()]
+    if not shas:
+        return
+
+    # Resolve .lean files touched by exactly these commits (merge invariant).
+    try:
+        r = run_cmd(
+            ["git", "show", "--name-only", "--pretty=format:",
+             "--diff-filter=AM", *shas],
+            cwd=wt.path,
+        )
+        changed = sorted({
+            l.strip() for l in (r.stdout or "").splitlines()
+            if l.strip().endswith(".lean") and l.strip().startswith("lean4/Omega/")
+        })
+    except Exception:
+        return
+
+    if not changed:
+        return
+
+    with _lake_merge_lock:
+        start = time.monotonic()
+        copied = 0
+        for rel in changed:
+            # "lean4/Omega/X/Y.lean" -> "Omega/X/Y"
+            mod = rel[len("lean4/"):-len(".lean")]
+            for sub, exts in (("lib/lean", LIB_EXTS), ("ir", IR_EXTS)):
+                for ext in exts:
+                    src = src_root / sub / f"{mod}{ext}"
+                    if not src.is_file():
+                        continue
+                    dst = dst_root / sub / f"{mod}{ext}"
+                    if dst.exists():
+                        continue
+                    dst.parent.mkdir(parents=True, exist_ok=True)
+                    try:
+                        # APFS copy-on-write when possible.
+                        subprocess.run(
+                            ["cp", "-c", str(src), str(dst)],
+                            check=True, stdin=subprocess.DEVNULL,
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                            timeout=30,
+                        )
+                        copied += 1
+                    except Exception:
+                        try:
+                            shutil.copy2(src, dst)
+                            copied += 1
+                        except Exception:
+                            pass
+        elapsed = time.monotonic() - start
+        logger.info(
+            f"[R{wt.round_number}] Lake cache merged back: "
+            f"{copied} artifact(s) from {len(changed)} source(s) ({elapsed:.2f}s)"
+        )
+
+
 def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> bool:
     """Merge the worktree branch into BASE_BRANCH and push.
 
-    Strategy: rebase the worktree branch onto the latest BASE_BRANCH *inside
-    the worktree itself*, then fast-forward the local BASE_BRANCH ref via
-    ``git update-ref``.  This never checks out BASE_BRANCH in the main repo,
-    so it works even when the main working tree is dirty.
+    Strategy:
+    1. Fetch origin so we have the latest remote state.
+    2. Fast-forward LOCAL BASE_BRANCH from origin (if origin is ahead).
+       Uses ``git fetch . origin/BASE:BASE`` which is ff-only and safe —
+       it never overwrites local-only commits that haven't been pushed yet.
+    3. Rebase the worktree branch onto the LOCAL BASE_BRANCH (not origin/).
+       This ensures any local-only commits (e.g. prompt/script edits made
+       directly on the branch without pushing first) are included in the
+       rebase base and are not lost.
+    4. Fast-forward LOCAL BASE_BRANCH to the rebased worktree tip via
+       ``git fetch . wt_tip:BASE_BRANCH`` (ff-only, never force-moves the
+       ref past local-only commits, never touches the working tree).
+    5. Push to origin.
 
-    On rebase conflict, delegates to codex exec for automatic resolution
-    (typical: parallel import additions to Omega.lean, IMPLEMENTATION_PLAN
-    header updates, .tex annotation appends).
+    The old ``git update-ref + git reset --hard HEAD`` pattern was unsafe:
+    it unconditionally moved the branch pointer to the worktree tip (which
+    was rebased on origin/, not on local commits) and then discarded any
+    local-only working-tree changes.
     """
     with _git_lock:
         logger.info(f"Merging {wt.branch} into {BASE_BRANCH}...")
 
-        # 1. Fetch latest base branch
-        run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT)
+        def _do_rebase_and_ff(attempt: int) -> bool:
+            # 1. Fetch latest remote state
+            run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=300)
 
-        # 2. Rebase the worktree branch onto latest base (inside the worktree)
-        rebase = run_cmd(
-            ["git", "rebase", f"origin/{BASE_BRANCH}"],
-            cwd=wt.path,
-            timeout=120,
-        )
-        if rebase.returncode != 0:
-            logger.warning(f"Rebase conflict for {wt.branch}, invoking codex to resolve...")
-            resolved = _codex_resolve_conflicts(wt.path, model=model)
-            if not resolved:
-                logger.error(f"Codex could not resolve conflicts for {wt.branch}")
-                run_cmd(["git", "rebase", "--abort"], cwd=wt.path)
-                return False
-
-        # 3. Fast-forward BASE_BRANCH ref to the rebased worktree tip
-        wt_tip = run_cmd(
-            ["git", "rev-parse", "HEAD"], cwd=wt.path
-        ).stdout.strip()
-
-        update = run_cmd(
-            ["git", "update-ref", f"refs/heads/{BASE_BRANCH}", wt_tip],
-            cwd=REPO_ROOT,
-        )
-        if update.returncode != 0:
-            logger.error(f"update-ref failed: {update.stderr[:300]}")
-            return False
-
-        # Align main working tree index + files with the new HEAD so that
-        # `git status` stays clean after the fast-forward.
-        run_cmd(["git", "reset", "--hard", "HEAD"], cwd=REPO_ROOT)
-
-        # 4. Push BASE_BRANCH
-        push = run_cmd(
-            ["git", "push", "origin", BASE_BRANCH],
-            cwd=REPO_ROOT,
-        )
-        if push.returncode != 0:
-            # Retry: fetch + rebase again (someone else pushed meanwhile)
-            logger.warning("Push rejected, retrying after fetch + rebase...")
-            run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT)
-            rebase2 = run_cmd(
-                ["git", "rebase", f"origin/{BASE_BRANCH}"], cwd=wt.path,
-                timeout=120,
+            # 2. Fast-forward local BASE_BRANCH from origin if origin is ahead.
+            #    git merge --ff-only works on a checked-out branch (unlike git fetch .).
+            #    Silently no-ops if local is already at or ahead of origin.
+            run_cmd(
+                ["git", "merge", "--ff-only", f"origin/{BASE_BRANCH}"],
+                cwd=REPO_ROOT, timeout=30,
             )
-            if rebase2.returncode != 0:
-                resolved2 = _codex_resolve_conflicts(wt.path, model=model)
-                if not resolved2:
+
+            # 3. Rebase worktree onto LOCAL BASE_BRANCH (includes local-only commits)
+            rebase = run_cmd(
+                ["git", "rebase", BASE_BRANCH],
+                cwd=wt.path,
+                timeout=180,
+            )
+            if rebase.returncode != 0:
+                logger.warning(
+                    f"Rebase conflict for {wt.branch} (attempt {attempt}), "
+                    "invoking codex to resolve..."
+                )
+                resolved = _codex_resolve_conflicts(wt.path, model=model)
+                if not resolved:
+                    logger.error(f"Codex could not resolve conflicts for {wt.branch}")
                     run_cmd(["git", "rebase", "--abort"], cwd=wt.path)
                     return False
-            wt_tip2 = run_cmd(
-                ["git", "rev-parse", "HEAD"], cwd=wt.path
-            ).stdout.strip()
-            run_cmd(
-                ["git", "update-ref", f"refs/heads/{BASE_BRANCH}", wt_tip2],
-                cwd=REPO_ROOT,
+
+            # 4. Fast-forward local BASE_BRANCH to rebased worktree tip.
+            #    git merge --ff-only works on checked-out branches; git fetch . does not.
+            wt_tip = run_cmd(["git", "rev-parse", "HEAD"], cwd=wt.path).stdout.strip()
+            ff = run_cmd(
+                ["git", "merge", "--ff-only", wt_tip],
+                cwd=REPO_ROOT, timeout=30,
             )
-            run_cmd(["git", "reset", "--hard", "HEAD"], cwd=REPO_ROOT)
-            push2 = run_cmd(
-                ["git", "push", "origin", BASE_BRANCH], cwd=REPO_ROOT,
-            )
-            if push2.returncode != 0:
-                logger.error(f"Push retry failed: {push2.stderr[:300]}")
+            if ff.returncode != 0:
+                logger.error(f"ff update of {BASE_BRANCH} failed: {ff.stderr[:300]}")
                 return False
 
-        logger.info(f"Merged and pushed {wt.branch} to {BASE_BRANCH}")
-        return True
+            # 5. Push to origin
+            push = run_cmd(
+                ["git", "push", "origin", BASE_BRANCH],
+                cwd=REPO_ROOT, timeout=300,
+            )
+            if push.returncode == 0:
+                return True
+
+            if attempt == 1:
+                logger.warning("Push rejected, retrying after fetch + rebase...")
+                return False  # caller will retry
+
+            logger.error(f"Push retry failed: {push.stderr[:300]}")
+            return False
+
+        if _do_rebase_and_ff(attempt=1):
+            logger.info(f"Merged and pushed {wt.branch} to {BASE_BRANCH}")
+            return True
+
+        # Retry once (someone else pushed between our rebase and push)
+        if _do_rebase_and_ff(attempt=2):
+            logger.info(f"Merged and pushed {wt.branch} to {BASE_BRANCH}")
+            return True
+
+        return False
 
 
 def cleanup_all_worktrees() -> int:
@@ -453,8 +685,11 @@ def cleanup_all_worktrees() -> int:
             logger.info(f"Cleaning up {entry}")
             run_cmd(["git", "worktree", "remove", "--force", str(entry)], cwd=REPO_ROOT)
             if entry.exists():
+                pkg_link = entry / "lean4" / ".lake" / "packages"
+                if pkg_link.is_symlink():
+                    pkg_link.unlink()
                 shutil.rmtree(entry, ignore_errors=True)
-            # Try to delete branch
+            # Force-delete branch (may have unmerged commits)
             m = re.match(r"round_R(\d+)", entry.name)
             if m:
                 run_cmd(["git", "branch", "-D", f"codex-R{m.group(1)}"], cwd=REPO_ROOT)
@@ -632,12 +867,13 @@ def build_phase_c_prompt(round_num: int, targets: list[dict]) -> str:
 
 def parse_phase_c_output(raw: str) -> PhaseCResult:
     result = PhaseCResult(raw_output=raw)
-    commit_hashes = re.findall(r"[0-9a-f]{7,40}", raw)
-    result.new_commits = list(dict.fromkeys(
-        h for h in commit_hashes if 7 <= len(h) <= 12
-    ))[:10]
-    success_indicators = ["lake build", "commit", f"Register R"]
-    result.success = any(ind.lower() in raw.lower() for ind in success_indicators)
+    # Extract short commit hashes (7-12 hex chars) that look like git output,
+    # e.g. lines starting with a hash: "abc1234 commit message"
+    commit_hashes = re.findall(r"(?:^|\s)([0-9a-f]{7,12})(?:\s+\w)", raw, re.MULTILINE)
+    result.new_commits = list(dict.fromkeys(commit_hashes))[:10]
+    # success = codex produced non-empty output and mentioned key actions
+    success_indicators = ["lake build", "git commit", "git add", "autostash"]
+    result.success = bool(raw) and any(ind.lower() in raw.lower() for ind in success_indicators)
     return result
 
 
@@ -667,53 +903,155 @@ def detect_signature_degradation(wt: WorktreeInfo) -> list[str]:
     if not diff_out:
         return violations  # empty diff → nothing to check
 
-    # Find blocks that add a `theorem paper_` with ONLY Prop parameters
-    # Pattern: lines starting with `+theorem paper_` whose signature uses only `Prop`
-    import re as _re
-    # Split diff into per-file chunks
-    chunks = _re.split(r'^diff --git ', diff_out, flags=_re.MULTILINE)
+    # Split diff into per-file chunks and scan only replaced (not new) theorems.
+    chunks = re.split(r'^diff --git ', diff_out, flags=re.MULTILINE)
     for chunk in chunks:
         lines = chunk.splitlines()
-        added_lines = [l[1:] for l in lines if l.startswith('+') and not l.startswith('+++')]
+        added_lines   = [l[1:] for l in lines if l.startswith('+') and not l.startswith('+++')]
         removed_lines = [l[1:] for l in lines if l.startswith('-') and not l.startswith('---')]
-        added_text = '\n'.join(added_lines)
+        added_text   = '\n'.join(added_lines)
         removed_text = '\n'.join(removed_lines)
 
-        # Find added paper_ theorems that have purely-Prop signatures
-        added_thms = _re.findall(
+        # Find paper_ theorems that appear in both added and removed sections
+        # (i.e. replacements of existing theorems, not brand-new ones).
+        added_thms = re.findall(
             r'theorem (paper_\w+)\s+(.*?)(?=\ntheorem |\nend |\Z)',
-            added_text, _re.DOTALL
+            added_text, re.DOTALL,
         )
         for thm_name, thm_body in added_thms:
-            # Check if body was also in removed (i.e. replacement, not new)
             if thm_name not in removed_text:
-                continue  # purely new theorem, not a replacement — skip
-            # Extract parameter list up to first `:=` or `by`
-            param_match = _re.match(r'(.*?)(?::=\s|:= by\b|\n\s*by\b)', thm_body, _re.DOTALL)
+                continue  # purely new theorem — not a degradation candidate
+
+            # Extract parameter list (before := or by)
+            param_match = re.match(r'(.*?)(?::=\s|:= by\b|\n\s*by\b)', thm_body, re.DOTALL)
             if not param_match:
                 continue
             params = param_match.group(1)
-            # Degrade pattern: all parameters are `(x : Prop)` or `(x y : Prop)`
-            # and no ℕ, ℝ, ℤ, List, Finset, Matrix, etc.
-            has_concrete = bool(_re.search(r':\s*(ℕ|ℝ|ℤ|ℚ|ℂ|ℕ→|ℝ→|Fin |List |Finset |Matrix |Set |Multiset )', params))
-            has_only_prop = bool(_re.search(r':\s*Prop\b', params)) and not has_concrete
-            if has_only_prop:
+
+            # Degrade pattern: parameters contain ONLY abstract Prop types and
+            # the conclusion is a trivial conjunction of those same props.
+            # Require BOTH conditions to minimise false positives.
+            concrete_types = r':\s*(ℕ|ℝ|ℤ|ℚ|ℂ|ℕ\s*→|ℝ\s*→|Fin\b|List\b|Finset\b|Matrix\b|Set\b|Multiset\b|Nat\b|Int\b|Real\b|Float\b|Array\b)'
+            has_concrete  = bool(re.search(concrete_types, params))
+            has_only_prop = bool(re.search(r':\s*Prop\b', params)) and not has_concrete
+
+            # Extract conclusion (after the last `:`)
+            conclusion_match = re.search(r':\s*([^:=]+?)\s*(?::=|$)', thm_body, re.DOTALL)
+            conclusion = conclusion_match.group(1) if conclusion_match else ""
+            # Trivial conclusion: only conjunctions/implications of plain identifiers
+            is_trivial_conclusion = bool(
+                re.fullmatch(r'[\w\s∧→¬∨⟨⟩(),\.]+', conclusion.strip())
+            ) and not re.search(r'[=≠<>≤≥∈∉]', conclusion)
+
+            if has_only_prop and is_trivial_conclusion:
                 violations.append(
-                    f"{thm_name}: signature appears degraded to pure Prop parameters "
-                    f"(replaced concrete math types with abstract Prop)"
+                    f"{thm_name}: signature replaced with trivial Prop stub "
+                    f"(all concrete types removed, conclusion is a trivial conjunction)"
                 )
     return violations
 
 
+# ---------------------------------------------------------------------------
+# Abstract-Prop shell pattern detector
+#
+# Detects the R1100+ codex-first anti-pattern of producing fake formalizations
+# by wrapping the paper claim in a `structure …Data where` with abstract Prop
+# fields, then "proving" `paper_*` theorems as tautologies on those fields.
+# See phase_c.txt HARD PROHIBITION for the full forbidden pattern.
+# ---------------------------------------------------------------------------
+
+_STRUCT_DATA_RE = re.compile(r"^structure\s+(\w+Data)\s+where\s*$", re.MULTILINE)
+_SHELL_THM_RE = re.compile(
+    r"^theorem\s+(paper_\w+)\s*((?:\([^)]*\)\s*)*)\s*:",
+    re.MULTILINE,
+)
+
+
+def _file_is_shell_new(text: str) -> Optional[str]:
+    """Return a violation description if `text` (a .lean file) contains the
+    abstract-Prop-Data shell anti-pattern; otherwise None."""
+    # 1. Find at least one `structure …Data where` with bare `Prop` fields.
+    for sm in _STRUCT_DATA_RE.finditer(text):
+        struct_name = sm.group(1)
+        body_start = sm.end()
+        tail = re.search(r"^\S", text[body_start:], re.MULTILINE)
+        body = text[body_start:body_start + tail.start()] if tail else text[body_start:]
+        prop_fields: set[str] = set()
+        has_hyp_or_derive = False
+        has_concrete_field = False
+        for ln in body.splitlines():
+            if not ln.strip():
+                continue
+            m_prop = re.match(r"^  (\w+)\s*:\s*Prop\s*$", ln)
+            if m_prop:
+                prop_fields.add(m_prop.group(1))
+                continue
+            m_any = re.match(r"^  (\w+)\s*:\s*(.+)$", ln)
+            if m_any:
+                fname, ftype = m_any.group(1), m_any.group(2).strip()
+                if fname.endswith("_h") and ftype in prop_fields:
+                    has_hyp_or_derive = True
+                elif fname.startswith("derive") and "→" in ftype:
+                    has_hyp_or_derive = True
+                else:
+                    has_concrete_field = True
+        # Pure shell: ≥2 bare Prop fields, at least one hyp/derive, no concrete field
+        if len(prop_fields) >= 2 and has_hyp_or_derive and not has_concrete_field:
+            # 2. Find a paper_* theorem that takes (D : struct_name) as parameter.
+            for tm in _SHELL_THM_RE.finditer(text):
+                header = tm.group(2) or ""
+                if re.search(rf"\(\s*\w+\s*:\s*{re.escape(struct_name)}\s*\)", header):
+                    return (
+                        f"structure {struct_name} has {len(prop_fields)} abstract Prop fields "
+                        f"wrapped by theorem {tm.group(1)}; see phase_c.txt HARD PROHIBITION"
+                    )
+    return None
+
+
+def detect_shell_pattern(wt: WorktreeInfo) -> list[str]:
+    """Scan .lean files NEWLY added in this round for the abstract-Prop shell pattern."""
+    violations: list[str] = []
+    try:
+        # Get newly-added files in this round vs. base branch.
+        result = run_cmd(
+            ["git", "diff", "--name-status", f"origin/{BASE_BRANCH}...HEAD"],
+            cwd=wt.path,
+        )
+        lines = (result.stdout or "").splitlines()
+    except Exception:
+        return violations  # can't check, allow through
+
+    new_files: list[str] = []
+    for ln in lines:
+        parts = ln.split("\t")
+        if len(parts) < 2:
+            continue
+        status, path = parts[0], parts[-1]
+        if status.startswith("A") and path.startswith("lean4/Omega/") and path.endswith(".lean"):
+            new_files.append(path)
+
+    for rel in new_files:
+        p = wt.path / rel
+        try:
+            text = p.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        v = _file_is_shell_new(text)
+        if v:
+            violations.append(f"{rel}: {v}")
+    return violations
+
+
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
-    """Check for new commits in the worktree. Also detects signature degradation."""
-    post = git_log_oneline(10, cwd=wt.path)
+    """Check for new commits in the worktree. Also rejects signature degradation
+    and new abstract-Prop shell files."""
+    post = git_log_oneline(20, cwd=wt.path)
     new = [c for c in post if c not in pre_commits]
     if new:
         logger.info(f"[R{wt.round_number}] Phase D: {len(new)} new commit(s):")
         for c in new:
             logger.info(f"  {c}")
-        # Check for signature degradation
+        # Gate 1: signature degradation on existing theorems
         violations = detect_signature_degradation(wt)
         if violations:
             for v in violations:
@@ -722,6 +1060,18 @@ def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[b
                 f"[R{wt.round_number}] Rejecting round: {len(violations)} theorem(s) had "
                 f"signatures replaced with trivial Prop stubs. "
                 f"Fix: keep original signature and leave proof as-is if stuck."
+            )
+            return False, new
+        # Gate 2: new abstract-Prop shell files
+        shell_violations = detect_shell_pattern(wt)
+        if shell_violations:
+            for v in shell_violations:
+                logger.error(f"[R{wt.round_number}] SHELL PATTERN: {v}")
+            logger.error(
+                f"[R{wt.round_number}] Rejecting round: {len(shell_violations)} new file(s) "
+                f"introduced the abstract-Prop Data shell anti-pattern. "
+                f"Fix: state paper_* theorems about concrete objects; use sorry + "
+                f"\\leanpartial{{…}}{{reason}} if proof is incomplete."
             )
             return False, new
         return True, new
@@ -749,6 +1099,8 @@ def run_round_in_worktree(
     logger.info(f"{'='*60}")
 
     wt: Optional[WorktreeInfo] = None
+    new_commits: list[str] = []
+    success: bool = False
     try:
         # ── Create worktree ───────────────────────────────────────
         if not dry_run:
@@ -805,7 +1157,6 @@ def run_round_in_worktree(
         # ── Phase D: Verify ───────────────────────────────────────
         logger.info(f"[{tag}] Phase D: Verification...")
         if dry_run:
-            new_commits: list[str] = []
             success = True
         else:
             assert wt is not None
@@ -820,6 +1171,12 @@ def run_round_in_worktree(
                 _save_round_log(round_num, phase_b, phase_c, new_commits, False)
                 return False, round_num, new_commits
             logger.info(f"[{tag}] SUCCESS: merged {len(new_commits)} commit(s) to {BASE_BRANCH}")
+            # Propagate freshly-built .olean artifacts back to main's cache so the
+            # next round's worktree starts warm for the files added in this round.
+            try:
+                merge_lake_cache_back(wt, new_commits)
+            except Exception as exc:
+                logger.warning(f"[{tag}] Lake cache merge-back raised: {exc}")
         elif success and dry_run:
             logger.info(f"[{tag}] [DRY RUN] Would merge to {BASE_BRANCH}")
 
@@ -945,6 +1302,7 @@ def run_parallel_batch(
     with ThreadPoolExecutor(max_workers=parallel, thread_name_prefix="worker") as pool:
         futures: dict[Future, int] = {}
         for rn in round_nums:
+            memory_pressure_wait(context=f"dispatch R{rn}")
             fut = pool.submit(
                 run_round_in_worktree,
                 rn, total_theorems, recent,
@@ -1066,9 +1424,56 @@ def main() -> int:
         "--base-branch", type=str, default=BASE_BRANCH,
         help=f"Base branch name (default: {BASE_BRANCH})",
     )
+    parser.add_argument(
+        "--mem-guard", dest="mem_guard", action="store_true", default=None,
+        help="Enable macOS memory-pressure guard (default: on for darwin)",
+    )
+    parser.add_argument(
+        "--no-mem-guard", dest="mem_guard", action="store_false",
+        help="Disable macOS memory-pressure guard",
+    )
+    parser.add_argument(
+        "--mem-threshold", type=str, default="warn",
+        choices=list(_MEM_LEVEL_BY_NAME.keys()),
+        help="Pause dispatch when kern.memorystatus_vm_pressure_level >= this "
+             "(default: warn)",
+    )
+    parser.add_argument(
+        "--mem-swap-ceiling-gb", type=float, default=16.0,
+        help="Pause dispatch when used swap exceeds this many GB (default: 16)",
+    )
+    parser.add_argument(
+        "--mem-poll", type=int, default=30,
+        help="Memory-guard poll interval in seconds (default: 30)",
+    )
+    parser.add_argument(
+        "--mem-max-wait", type=int, default=1800,
+        help="Memory-guard max wait before proceeding anyway, in seconds (default: 1800)",
+    )
     args = parser.parse_args()
 
     BASE_BRANCH = args.base_branch
+
+    # ── Memory-pressure guard config ──────────────────────────────
+    _MEM_GUARD_CFG["enabled"] = (
+        sys.platform == "darwin" if args.mem_guard is None else bool(args.mem_guard)
+    )
+    _MEM_GUARD_CFG["level_threshold"] = _MEM_LEVEL_BY_NAME[args.mem_threshold]
+    _MEM_GUARD_CFG["swap_ceiling_gb"] = float(args.mem_swap_ceiling_gb)
+    _MEM_GUARD_CFG["poll_seconds"] = int(args.mem_poll)
+    _MEM_GUARD_CFG["max_wait_seconds"] = int(args.mem_max_wait)
+    if _MEM_GUARD_CFG["enabled"]:
+        lvl, swap = memory_pressure_snapshot()
+        logger.info(
+            f"Memory guard: ON (threshold={args.mem_threshold} "
+            f"[level≥{_MEM_GUARD_CFG['level_threshold']}], "
+            f"swap≤{_MEM_GUARD_CFG['swap_ceiling_gb']:.1f}GB, "
+            f"poll={_MEM_GUARD_CFG['poll_seconds']}s, "
+            f"max_wait={_MEM_GUARD_CFG['max_wait_seconds']}s) | "
+            f"current: level={lvl}, swap={swap:.1f}GB"
+        )
+    else:
+        logger.info("Memory guard: OFF")
 
     # ── Cleanup ────────────────────────────────────────────────────
     if args.cleanup:
@@ -1130,6 +1535,22 @@ def main() -> int:
     if not args.dry_run:
         ensure_base_branch()
 
+    # Prune stale worktree registrations and remove orphaned physical dirs from
+    # previous sessions (rounds that were killed before cleanup ran).
+    if not args.dry_run:
+        run_cmd(["git", "worktree", "prune"], cwd=REPO_ROOT)
+        if WORKTREE_DIR.exists():
+            for entry in WORKTREE_DIR.iterdir():
+                if entry.is_dir() and entry.name.startswith("round_R"):
+                    # Only remove dirs not registered as active worktrees
+                    wt_result = run_cmd(["git", "worktree", "list", "--porcelain"], cwd=REPO_ROOT)
+                    if str(entry) not in wt_result.stdout:
+                        logger.info(f"Removing orphaned worktree dir: {entry}")
+                        pkg_link = entry / "lean4" / ".lake" / "packages"
+                        if pkg_link.is_symlink():
+                            pkg_link.unlink()
+                        shutil.rmtree(entry, ignore_errors=True)
+
     state = load_state()
     logger.info(f"Starting: R{state.round_number}, ~{state.total_theorems} theorems")
 
@@ -1154,6 +1575,7 @@ def main() -> int:
                 with _round_lock:
                     rn = state.round_number
                     state.round_number += 1
+                memory_pressure_wait(context=f"dispatch R{rn}")
                 fut = pool.submit(
                     run_round_in_worktree,
                     rn, state.total_theorems, state.recent_commits,

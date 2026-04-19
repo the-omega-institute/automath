@@ -124,6 +124,15 @@ theorem zeckendorf_no_carry_sm_triple :
     Nat.fib 2 + Nat.fib 4 + Nat.fib 6 = 12 ∧
     Nat.fib 2 = 1 ∧ Nat.fib 4 = 3 ∧ Nat.fib 6 = 8 := by native_decide
 
+/-- If two Zeckendorf index lists concatenate without introducing adjacency, then the Zeckendorf
+representation of the sum is the concatenation itself.
+    thm:zeckendorf-no-carry-additivity -/
+theorem paper_zeckendorf_no_carry_additivity (s t : List Nat) (_hs : s.IsZeckendorfRep)
+    (_ht : t.IsZeckendorfRep) (hgap : (s ++ t).IsZeckendorfRep) :
+    Nat.zeckendorf (((s.map Nat.fib).sum) + ((t.map Nat.fib).sum)) = s ++ t := by
+  simpa [List.map_append, List.sum_append, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using
+    (Nat.zeckendorf_sum_fib hgap)
+
 /-- SO(10) triple: F(4) + F(6) + F(9) = 45.
     thm:zeckendorf-no-carry-so10-triple -/
 theorem zeckendorf_no_carry_so10_triple :
@@ -612,6 +621,21 @@ theorem fib_shift4 (n : Nat) (hn : 1 ≤ n) :
   have h3 := Nat.fib_add_two (n := j + 2)
   have h4 := Nat.fib_add_two (n := j + 3)
   linarith
+
+/-- The four entrywise identities of the Fibonacci tail-matrix law
+`G_{m+4} = G_m Q^4`. prop:resolution-shift4-fib-matrix-law -/
+theorem paper_resolution_shift4_fib_matrix_law (m : ℕ) (hm : 2 ≤ m) :
+    Nat.fib (m + 7) = 5 * Nat.fib (m + 3) + 3 * Nat.fib (m + 2) ∧
+      Nat.fib (m + 6) = 3 * Nat.fib (m + 3) + 2 * Nat.fib (m + 2) ∧
+      Nat.fib (m + 8) = 5 * Nat.fib (m + 4) + 3 * Nat.fib (m + 3) ∧
+      Nat.fib (m + 7) = 3 * Nat.fib (m + 4) + 2 * Nat.fib (m + 3) := by
+  have hm3 : 1 ≤ m + 3 := by omega
+  have hm4 : 1 ≤ m + 4 := by omega
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · simpa [show m + 3 - 1 = m + 2 by omega, Nat.add_assoc] using fib_shift4 (m + 3) hm3
+  · simpa [show m + 3 - 1 = m + 2 by omega, Nat.add_assoc] using fib_shift3 (m + 3) hm3
+  · simpa [show m + 4 - 1 = m + 3 by omega, Nat.add_assoc] using fib_shift4 (m + 4) hm4
+  · simpa [show m + 4 - 1 = m + 3 by omega, Nat.add_assoc] using fib_shift3 (m + 4) hm4
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R36: Zeckendorf no-carry additivity (concrete instances)

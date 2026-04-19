@@ -7,13 +7,21 @@ Implement Lean4 theorems + compile + commit (do NOT push). Complete in one pass.
 
 ## Step 1: Implement proofs
 For each target:
-1. Create or edit the target file in lean4/Omega/
+1. Create or edit the target file in lean4/Omega/<Chapter>/File.lean
 2. Write the theorem with a complete proof (NO sorry, NO admit, NO axiom)
 3. Use lean_goal / lean_local_search / lean_multi_attempt / lean_diagnostic_messages
    if available via MCP
 4. If a type doesn't exist, create a minimal seed definition
 5. native_decide ONLY for base cases (m<=2) or pure arithmetic (3+5=8)
 6. Do NOT use maxHeartbeats > 400000
+
+For each NEW file created, add its import to the chapter index file:
+  lean4/Omega/<Chapter>.lean  (e.g. lean4/Omega/GU.lean for a file in lean4/Omega/GU/)
+
+If the chapter itself is NEW (no lean4/Omega/<Chapter>.lean exists yet):
+  a. Create lean4/Omega/<Chapter>.lean with the single import line.
+  b. Add `import Omega.<Chapter>` to lean4/Omega.lean  ← only allowed in this case.
+  This is the ONLY situation where lean4/Omega.lean may be edited.
 
 ## Step 2: Full compilation
 ```bash
@@ -22,36 +30,24 @@ cd lean4 && lake build
 If errors, fix them (up to 3 attempts per theorem).
 If a theorem is stuck, skip it and continue with the others.
 
-## Step 3: Sync with base branch before committing
-Before making any commits, sync with the latest base to minimize merge conflicts:
+## Step 3: Annotate .tex files (do this BEFORE rebase)
+Add \leanverified{theorem_name} to the corresponding .tex files in theory/.
+(find them via the paper_label, escape underscores as \_)
+These files never conflict between rounds, so it is safe to edit them before rebasing.
+
+## Step 4: Rebase
 ```bash
 git fetch origin lean4-codex-auto-dev
-git rebase origin/lean4-codex-auto-dev
+git rebase --autostash origin/lean4-codex-auto-dev
 ```
-If rebase conflicts occur on lean4/Omega.lean or IMPLEMENTATION_PLAN.md,
-resolve by keeping ALL lines from both sides (additive merge), then:
+`--autostash` stashes all working-tree changes, rebases, then pops them back.
+If rebase conflicts occur in committed files, resolve by keeping ALL lines from
+both sides (additive merge), then `git add <file>` + `git rebase --continue`.
+
+## Step 5: Single combined commit
 ```bash
-git add <conflicted_file>
-git rebase --continue
-```
-
-## Step 4: Git commit the proofs
-```bash
-git add lean4/Omega/ lean4/Omega.lean
-git commit -m "R<ROUND_NUM>: [brief description of what was proved]
-
-Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
-```
-
-## Step 5: Update tracking + annotate
-- Update lean4/IMPLEMENTATION_PLAN.md with new round info
-- Add \leanverified{theorem_name} to the corresponding .tex files
-  (find them via the paper_label, escape underscores as \_)
-
-## Step 6: Git commit registration
-```bash
-git add lean4/IMPLEMENTATION_PLAN.md theory/
-git commit -m "Register R<ROUND_NUM>: [brief description]
+git add lean4/Omega/ theory/
+git commit -m "R<ROUND_NUM>: [brief description of what was proved and registered]
 
 Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
 ```
@@ -71,15 +67,58 @@ You MUST NOT weaken or replace them. Specifically:
 3. NEVER add new parameters of type `Prop` to replace concrete math objects.
 4. If you cannot prove an existing theorem, LEAVE IT UNCHANGED (keep its current
    proof or sorry if it already had one). Do NOT change its type signature.
-5. New theorems you create may use abstract Prop parameters only if the paper label
-   genuinely refers to an abstract/wrapper statement.
+
+## HARD PROHIBITION — Abstract-Prop Data Shell (auto-detected, round rejected)
+The pipeline will auto-reject any round that introduces the following anti-pattern.
+Do NOT create a new `structure <Name>Data where` that packages the paper's claim as
+abstract Prop fields and then "proves" a `paper_*` theorem by combining those
+assumptions. This is a fake proof: the fields are universal type variables, so
+`Name := { everything := True, ... }` trivially satisfies the structure and
+the "theorem" becomes a tautology.
+
+FORBIDDEN example (will be rejected):
+
+    structure FooData where
+      claimA : Prop                       -- FORBIDDEN: abstract Prop field
+      claimB : Prop                       -- FORBIDDEN: abstract Prop field
+      conclusionX : Prop                  -- FORBIDDEN: abstract Prop field
+      claimA_h : claimA                   -- FORBIDDEN: bare assumption
+      claimB_h : claimB                   -- FORBIDDEN: bare assumption
+      deriveConclusionX :                 -- FORBIDDEN: abstract implication
+        claimA → claimB → conclusionX
+    theorem paper_foo (D : FooData) :
+        D.conclusionX := by
+      exact D.deriveConclusionX D.claimA_h D.claimB_h
+
+REQUIRED instead: the `paper_*` theorem must state a proposition about CONCRETE
+objects, and its proof must discharge that proposition directly (via real tactics
+and real mathlib lemmas) or via lemmas proven earlier IN THE SAME FILE.
+
+    theorem paper_foo (n : ℕ) (hn : 2 ≤ n) :
+        realConcreteClaim n := by
+      rw [realConcreteDefinition]
+      ... real tactics ...
+
+Rules applied to every new file:
+- `paper_*` theorems MUST NOT take a parameter of type `...Data`.
+- `paper_*` conclusions MUST reference at least one concrete identifier (a def,
+  a numeric literal, a mathlib structure — NOT just `D.xxx` projections).
+- If you cannot close the proof, use `sorry` and mark `\leanpartial{…}{reason}`
+  instead of fabricating a shell structure. A sorry with a real signature is
+  HONEST and passes; a shell theorem is DISHONEST and will be auto-rejected.
+
+Existing hybrid files that still contain a historical shell structure are
+tolerated by the scanner, but NEW shell structures in a round's diff cause
+the entire round to be rejected (commits not merged to the base branch).
 
 ## Completion Contract
 - No sorry / admit / axiom; lake build must pass with zero errors
-- Must complete all 6 steps; if a theorem is stuck, skip it and continue
+- Must complete all 5 steps; if a theorem is stuck, skip it and continue
 - Tactic failure: auto-try next; compile error: auto-fix up to 3 rounds
 - Implementation changes: only in lean4/Omega/
-- Registration changes: only in IMPLEMENTATION_PLAN.md and theory/
+- Registration changes: only in lean4/Omega/<Chapter>.lean and theory/
+- Do NOT edit lean4/Omega.lean unless adding a brand-new chapter (one `import` line only)
+- Do NOT edit lean4/IMPLEMENTATION_PLAN.md
 - Do NOT refactor or delete existing code
 - Do NOT weaken or replace existing theorem signatures (see HARD PROHIBITION above)
 - Do NOT git push

@@ -220,4 +220,17 @@ end
 
 end X
 
+/-- Top-level alias for the finite Zeckendorf value map. -/
+abbrev stableValueFin (x : X m) : Fin (Nat.fib (m + 2)) :=
+  X.stableValueFin x
+
+/-- The stable Zeckendorf value map is a bijection onto `Fin (F_{m+2})`, with `ofNat`
+    providing the in-range inverse on values. -/
+theorem paper_zeckendorf_range_bijection (m : Nat) :
+    Function.Bijective (Omega.stableValueFin (m := m)) ∧
+      (forall n : Nat, n < Nat.fib (m + 2) -> Omega.stableValue (Omega.X.ofNat m n) = n) := by
+  refine ⟨X.stableValueFin_bijective m, ?_⟩
+  intro n hn
+  exact X.stableValue_ofNat_lt (m := m) n hn
+
 end Omega
