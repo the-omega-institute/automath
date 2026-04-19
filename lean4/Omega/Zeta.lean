@@ -129,6 +129,7 @@ import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
 import Omega.Zeta.XiFoldLocalInformationDensityFirstOrderDiscreteLaw
 import Omega.Zeta.XiFoldCongruenceUnitalAutomorphismRigidity
 import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge
+import Omega.Zeta.XiShadowSpectrumDeterminantRatioAtZero
 import Omega.Zeta.XiReverseKLSingleFrequencyExactMinimizer
 import Omega.Zeta.XiReverseKLSingleFrequencyLegendreFenchelClosed
 import Omega.Zeta.ChiEventClockHittingTimeCertificate

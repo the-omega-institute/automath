@@ -217,6 +217,7 @@ import Omega.POM.ThetaGodelizationPrimeValuationIsometry
 import Omega.POM.ThickFiberEnvelope
 import Omega.POM.ToggleOrder
 import Omega.POM.ToggleOrbitCountBellProduct
+import Omega.POM.ToggleScanCycleConvolution
 import Omega.POM.ToggleScanLinearMaxOrbit
 import Omega.POM.ToggleScanCycleGhostMultiplicativity
 import Omega.POM.TopGapLimitConstants
