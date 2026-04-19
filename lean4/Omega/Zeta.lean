@@ -134,6 +134,7 @@ import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
 import Omega.Zeta.XiHankelDetScalingCovariance
 import Omega.Zeta.ShiftInvariantSaturatedLatticePrincipalIdeal
 import Omega.Zeta.XiExceptionalIntegerModelMqInverseClosedForm
+import Omega.Zeta.XiFinitePrimeSupportHalfdimensionGapFormula
 import Omega.Zeta.XiWindow6TailSemigroupTwoGeneratorNormalForm
 import Omega.Zeta.XiWindow6TailSemigroupAperyThresholds
 import Omega.Zeta.XiWindow6TailSemigroupFrobeniusThreshold

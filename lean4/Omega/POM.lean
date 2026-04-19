@@ -8,6 +8,7 @@ import Omega.POM.AnomSingleMomentCompleteEquivalence
 import Omega.POM.MomentHankel
 import Omega.POM.BoundedPerturbationInvariance
 import Omega.POM.BeckChevalleyAmgmDefectIdentity
+import Omega.POM.BCHighOrderLedgerDecomposition
 import Omega.POM.BCDiscreteJacobianStrictification
 import Omega.POM.BCInformationStokesCoboundary
 import Omega.POM.BooleanCircuitProjectionBudget
