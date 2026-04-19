@@ -114,6 +114,7 @@ import Omega.GU.TerminalWindow6LocalUpliftAdmissibility
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
 import Omega.GU.GodelLorentzAlgebraization
+import Omega.GU.GroupJGBoundaryPrimorialEllipseBound
 import Omega.GU.TerminalWindow6PushforwardCharpolyGalois
 import Omega.GU.TerminalWindow6PushforwardSingleGaloisOrbit
 import Omega.GU.TerminalWindow6PushforwardCommutantMasa

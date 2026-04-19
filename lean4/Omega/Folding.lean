@@ -118,6 +118,7 @@ import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinRenyiDivergenceLimit
 import Omega.Folding.FoldHypercubeFibonacciGodelRadiusCount
 import Omega.Folding.FoldBinTwoStateAsymptotic
+import Omega.Folding.FoldBinFDivergenceCollapse
 import Omega.Folding.FractranFoldCompiler
 import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
 import Omega.Folding.FoldOrderIndependent
