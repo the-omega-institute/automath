@@ -14,6 +14,7 @@ import Omega.POM.CRTSpatializationPrimeBudget
 import Omega.POM.CatalanMoments
 import Omega.POM.CentralizerDetMod5
 import Omega.POM.CentralizerFPdim
+import Omega.POM.CharpolyModpA2Embedding
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.CollisionEntropyRate
 import Omega.POM.CollisionAQFibonacciBFPrimitivePrimeDivisor

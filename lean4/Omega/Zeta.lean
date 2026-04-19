@@ -132,6 +132,7 @@ import Omega.Zeta.Window6MicrostateBiasedFiberlawHerglotzClosedform
 import Omega.Zeta.XiEndpointFirstNPlusOneProbesSharpToeplitzRecovery
 import Omega.Zeta.XiSelfdualSingleProbeDeterminesToeplitzMoments
 import Omega.Zeta.XiExceptionalSecularGenericFullSymmetric
+import Omega.Zeta.XiSecularSpecializationInfinitelyManyFullSymmetric
 import Omega.Zeta.HankelNullspaceTruncatedIdealStructure
 import Omega.Zeta.HankelWindowFiberDelta
 import Omega.Zeta.HankelWindowAffineFamily
