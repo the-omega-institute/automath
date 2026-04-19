@@ -87,6 +87,7 @@ import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.FiberStokesEulerBoundaryObservability
 import Omega.POM.FiberCategoricalSymmetryFibonacciFusion
 import Omega.POM.FiberBirkhoffFenceIdealLattice
+import Omega.POM.FenceIntervalClosure
 import Omega.POM.FiberDispersionIndex
 import Omega.POM.FiberWalshHardcoreStokesSign
 import Omega.POM.FiberWalshMod2RigidityExtremal
