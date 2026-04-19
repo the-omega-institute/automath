@@ -191,6 +191,7 @@ import Omega.GU.Window6EdgeFluxArithmeticProtocolInvariant
 import Omega.GU.Window6EdgeFluxSmithNonsimple
 import Omega.GU.Window6EdgeFluxMaxEntropyKernelUniqueness
 import Omega.GU.Window6EdgeFluxFullMatrixSaturation
+import Omega.GU.Window6EdgeFluxNoInvariantBinaryProduct
 import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
 import Omega.GU.Window6FoldbinGaugeLowDegreeHomology
 import Omega.GU.Window6Foldbin6FiberDifferenceSpectrum
@@ -204,6 +205,7 @@ import Omega.GU.Window6BracketUniquenessMixedCertificateReduction
 import Omega.GU.Window6KirchhoffGreenPadicLiftStability
 import Omega.GU.Window6LieEnvelopeExistenceUniqueness
 import Omega.GU.Window6Center2RankExcludesSimpleGroups
+import Omega.GU.Window6LocalDeterminantVsCoarseGreenOddPrimes
 import Omega.GU.Window6ReducedLaplacianGreenSimplePole
 import Omega.GU.Window6GreenKernelPstarValuationOne
 import Omega.GU.Window6BdryUpliftResidueStratification
