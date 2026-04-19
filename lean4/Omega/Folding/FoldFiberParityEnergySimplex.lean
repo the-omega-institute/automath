@@ -11,7 +11,7 @@ noncomputable section
 def foldFiberParityEnergySimplexSeed (m : ℕ) : FoldFiberParityBiasRieszParsevalEnergyData where
   modulus := m + 1
   dimension := m
-  coordinateCharacter := fun _ _ => 0
+  coordinateCharacter := fun _ _ => Complex.I
 
 /-- Every single-site parity marginal in the simplex model is Bernoulli `1/2`. -/
 def foldFiberParitySingleSiteMass (_m _i : ℕ) (_b : Bool) : ℚ :=
@@ -44,6 +44,103 @@ lemma foldFiberParityTerminalPairRaw_eq_one (m : ℕ) :
   unfold foldFiberParityTerminalPairRaw
   rw [show (Nat.fib (m + 2) : ℤ) = Nat.fib (m + 1) + Nat.fib m by exact_mod_cast hFib]
   ring
+
+private lemma walsh_factor_sq_norm {m : ℕ} (I : Finset (Fin m)) (j : Fin m) :
+    ‖1 + ((((if j ∈ I then (-1 : ℝ) else 1 : ℝ)) : ℂ) * Complex.I)‖ ^ 2 = 2 := by
+  rw [Complex.sq_norm]
+  by_cases hj : j ∈ I <;> norm_num [hj, Complex.normSq_apply]
+
+private lemma walsh_product_sq_norm {m : ℕ} (I : Finset (Fin m)) :
+    ‖∏ j : Fin m, (1 + ((((if j ∈ I then (-1 : ℝ) else 1 : ℝ)) : ℂ) * Complex.I))‖ ^ 2 =
+      (2 : ℝ) ^ m := by
+  let φ : ℂ →* ℝ :=
+    { toFun := Complex.normSq
+      map_one' := by simp
+      map_mul' := Complex.normSq_mul }
+  rw [Complex.sq_norm]
+  calc
+    Complex.normSq (∏ j : Fin m, (1 + ((((if j ∈ I then (-1 : ℝ) else 1 : ℝ)) : ℂ) * Complex.I)))
+        = ∏ j : Fin m, Complex.normSq (1 +
+            ((((if j ∈ I then (-1 : ℝ) else 1 : ℝ)) : ℂ) * Complex.I)) := by
+            simpa [φ] using
+              (Finset.map_prod φ
+                (fun j : Fin m => 1 + ((((if j ∈ I then (-1 : ℝ) else 1 : ℝ)) : ℂ) * Complex.I))
+                Finset.univ)
+    _ = ∏ _j : Fin m, (2 : ℝ) := by
+          refine Finset.prod_congr rfl ?_
+          intro j _
+          rw [Complex.normSq_eq_norm_sq]
+          exact walsh_factor_sq_norm I j
+    _ = (2 : ℝ) ^ m := by simp
+
+private lemma walsh_transform_sq_norm {m : ℕ} (I : Finset (Fin m)) :
+    ‖((2 : ℂ) ^ m)⁻¹ *
+        ∏ j : Fin m, (1 + ((((if j ∈ I then (-1 : ℝ) else 1 : ℝ)) : ℂ) * Complex.I))‖ ^ 2 =
+      ((2 : ℝ) ^ m)⁻¹ := by
+  have hprod := walsh_product_sq_norm I
+  have hpow :
+      Complex.normSq ((2 : ℂ) ^ m) = ((2 : ℝ) ^ m) ^ 2 := by
+    rw [Complex.normSq_eq_norm_sq, Complex.norm_pow, Complex.norm_two]
+  have htwo : (2 : ℝ) ^ m ≠ 0 := by
+    exact pow_ne_zero _ (by norm_num)
+  rw [Complex.sq_norm, Complex.normSq_mul, Complex.normSq_inv, hpow, Complex.normSq_eq_norm_sq,
+    hprod, pow_two]
+  field_simp [htwo]
+
+private lemma parsevalEnergy_walshSigns_eq {m : ℕ} (I : Finset (Fin m)) :
+    (foldFiberParityEnergySimplexSeed m).parsevalEnergy
+      ((foldFiberParityEnergySimplexSeed m).walshSigns I) = ((2 : ℝ) ^ m)⁻¹ := by
+  simp [FoldFiberParityBiasRieszParsevalEnergyData.parsevalEnergy,
+    FoldFiberParityBiasRieszParsevalEnergyData.fourierTransform,
+    FoldFiberParityBiasRieszParsevalEnergyData.walshSigns, foldFiberParityEnergySimplexSeed,
+    Finset.sum_const, nsmul_eq_mul, Finset.card_range]
+  have hprod :
+      (∏ b : Fin m, ‖1 + ((((if b ∈ I then (-1 : ℝ) else 1 : ℝ)) : ℂ) * Complex.I)‖) ^ 2 =
+        (2 : ℝ) ^ m := by
+    simpa [Complex.norm_prod] using walsh_product_sq_norm I
+  have hm : (m + 1 : ℝ) ≠ 0 := by positivity
+  have htwo : (2 : ℝ) ^ m ≠ 0 := by
+    exact pow_ne_zero _ (by norm_num)
+  have hcore :
+      (((2 : ℝ) ^ m)⁻¹ *
+          ∏ b : Fin m, ‖1 + ((((if b ∈ I then (-1 : ℝ) else 1 : ℝ)) : ℂ) * Complex.I)‖) ^ 2 =
+        ((2 : ℝ) ^ m)⁻¹ := by
+    rw [mul_pow, hprod]
+    field_simp [htwo]
+  rw [hcore]
+  show ((↑m + 1 : ℝ)⁻¹) * ((↑m + 1 : ℝ) * ((2 : ℝ) ^ m)⁻¹) = ((2 : ℝ) ^ m)⁻¹
+  calc
+    ((↑m + 1 : ℝ)⁻¹) * ((↑m + 1 : ℝ) * ((2 : ℝ) ^ m)⁻¹)
+        = (((↑m + 1 : ℝ)⁻¹) * (↑m + 1 : ℝ)) * ((2 : ℝ) ^ m)⁻¹ := by ring
+    _ = ((2 : ℝ) ^ m)⁻¹ := by simp [hm]
+
+/-- Summing the Walsh/Parseval energies over the full powerset of parity sign patterns gives the
+unit simplex mass.
+    cor:fold-fiber-parity-energy-simplex -/
+theorem paper_fold_fiber_parity_energy_simplex (m : ℕ) :
+    let D := foldFiberParityEnergySimplexSeed m;
+    Finset.sum ((Finset.univ : Finset (Fin D.dimension)).powerset)
+      (fun I => D.parsevalEnergy (D.walshSigns I)) = 1 := by
+  classical
+  change Finset.sum ((Finset.univ : Finset (Fin m)).powerset)
+      (fun I =>
+        (foldFiberParityEnergySimplexSeed m).parsevalEnergy
+          ((foldFiberParityEnergySimplexSeed m).walshSigns I)) = 1
+  calc
+    Finset.sum ((Finset.univ : Finset (Fin m)).powerset) (fun I =>
+        (foldFiberParityEnergySimplexSeed m).parsevalEnergy
+          ((foldFiberParityEnergySimplexSeed m).walshSigns I))
+        = Finset.sum ((Finset.univ : Finset (Fin m)).powerset) (fun _I => ((2 : ℝ) ^ m)⁻¹) := by
+            refine Finset.sum_congr rfl ?_
+            intro I hI
+            exact parsevalEnergy_walshSigns_eq I
+    _ = (((Finset.univ : Finset (Fin m)).powerset.card : ℝ)) * ((2 : ℝ) ^ m)⁻¹ := by
+          rw [Finset.sum_const, nsmul_eq_mul]
+    _ = ((2 : ℝ) ^ m) * ((2 : ℝ) ^ m)⁻¹ := by
+          rw [Finset.card_powerset, Finset.card_univ, Nat.cast_pow]
+          norm_num
+    _ = 1 := by
+          exact mul_inv_cancel₀ (pow_ne_zero _ (by norm_num))
 
 /-- Build the energy-simplex mixture law from the parity-bias/Parseval package, isolate the single
 site marginal `1/2`, and use the Fibonacci recurrence to normalize the exceptional terminal pair.

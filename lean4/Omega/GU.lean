@@ -162,6 +162,7 @@ import Omega.GU.Window6GoldenCubicAuditFieldDegree6
 import Omega.GU.Window6PushEnvelopeCertificateUpgrade
 import Omega.GU.Window6BdrySheetParityNonfunctorialExtension
 import Omega.GU.Window6B3SupportCount
+import Omega.GU.Window6B3C3HilbertTwinsDegree4Interpolation
 import Omega.GU.Window6BinfoldKLLimitConstant
 import Omega.GU.Window6BinfoldLastbitLecamEquivalence
 import Omega.GU.Window6ChiralCompressionHypercubeAdjacency
