@@ -98,6 +98,7 @@ import Omega.Zeta.FinitePartExpFinDoubleThresholdSeparation
 import Omega.Zeta.FinitePartLogMPrimitiveOrbitClosedForm
 import Omega.Zeta.FinitePartLogMRelativeScaleTransfer
 import Omega.Zeta.FinitePartMertensAsymptotic
+import Omega.Zeta.FinitePartNyquistErrorExp
 import Omega.Zeta.FinitePartNyquistParsevalAliasing
 import Omega.Zeta.FinitePartSingleLayerSquareRootTest
 import Omega.Zeta.FinitePrimeSupportThreewayCdimSplit
