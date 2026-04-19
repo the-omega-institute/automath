@@ -157,6 +157,7 @@ import Omega.Folding.GaugeAnomalySpectralResidualLaw
 import Omega.Folding.GaugeAnomalyFiniteStateMinimaxAbsError
 import Omega.Folding.GaugeAnomalyPressure
 import Omega.Folding.GaugeAnomalyRateCurveParam
+import Omega.Folding.GaugeAnomalyRateCurveIndexIdealFormula
 import Omega.Folding.GaugeAnomalyDiscriminantFactorization
 import Omega.Folding.GaugeAnomalyLdpRate
 import Omega.Folding.GaugeAnomalyPressureCumulants5
