@@ -134,6 +134,7 @@ import Omega.Zeta.ShiftInvariantSaturatedLatticePrincipalIdeal
 import Omega.Zeta.XiExceptionalIntegerModelMqInverseClosedForm
 import Omega.Zeta.XiWindow6TailSemigroupTwoGeneratorNormalForm
 import Omega.Zeta.XiWindow6TailSemigroupAperyThresholds
+import Omega.Zeta.XiWindow6TailSemigroupFrobeniusThreshold
 import Omega.Zeta.XiOffsetNullTypeSafety
 import Omega.Zeta.XiFiberSpectrumHankelConductorPronyPadic
 import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
