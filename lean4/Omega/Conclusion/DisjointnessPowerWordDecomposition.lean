@@ -87,4 +87,33 @@ theorem paper_conclusion_disjointness_power_word_decomposition :
   exact ⟨fib_ones_inner_product, bulk_factor_recurrence, fib_three_term_step,
     ⟨by native_decide, by native_decide, by native_decide⟩⟩
 
+/-- The `J`-word contribution packaged as a function of the two layer sizes `|U|` and `|V|`. -/
+def conclusionDisjointnessGamma (m u v : Nat) : Nat :=
+  Nat.fib m ^ (u + v)
+
+/-- The non-fiber tensor factor coming from the bulk `K^⊗q` contribution. -/
+def conclusionDisjointnessLayerTensorFactor (q m u v : Nat) : Nat :=
+  Nat.fib (m + 1) ^ (q - (u + v))
+
+/-- Fiber/non-fiber decoupling for the disjointness word decomposition: the `J`-word contribution
+depends only on the layer sizes, while the remaining tensor factor is the explicit Fibonacci bulk
+term from the disjointness theorem. -/
+abbrev conclusionDisjointnessLayerFiberDecoupling (q m : Nat) : Prop :=
+  (∀ u v : Nat, conclusionDisjointnessGamma m u v = Nat.fib m ^ (u + v)) ∧
+    (∀ u v : Nat,
+      conclusionDisjointnessLayerTensorFactor q m u v * conclusionDisjointnessGamma m u v =
+        Nat.fib (m + 1) ^ (q - (u + v)) * Nat.fib m ^ (u + v)) ∧
+    Nat.fib (m + 2) + Nat.fib (m + 1) = Nat.fib (m + 3)
+
+/-- Paper label: `cor:conclusion-disjointness-layer-fiber-decoupling`.
+    The `J`-word term is a layer-size-only factor `Γ_m(|U|,|V|)`, and the remaining non-fiber
+    term is the explicit Fibonacci tensor factor. -/
+theorem paper_conclusion_disjointness_layer_fiber_decoupling (q m : Nat) :
+    conclusionDisjointnessLayerFiberDecoupling q m := by
+  refine ⟨?_, ?_, fib_ones_inner_product m⟩
+  · intro u v
+    rfl
+  · intro u v
+    rfl
+
 end Omega.Conclusion

@@ -319,6 +319,7 @@ import Omega.Zeta.XiEndpointPsiPoissonMonopoleAsymptotic
 import Omega.Zeta.XiHankelNormalformCRTAdelicMultiplicity
 import Omega.Zeta.XiTerminalZmLanguageMinimaxLogloss
 import Omega.Zeta.XiReplicaSoftcoreReciprocalMomentQRecurrence
+import Omega.Zeta.XiBqPowerEntrywiseFibonacciBinomial
 import Omega.Zeta.XiLeyangMplus1PointExtrapolateOptimal
 import Omega.Zeta.XiEllipseWallcrossingUnitStaircaseUniversality
 import Omega.Zeta.XiBasepointScanAnchorDetCauchyVandermonde
