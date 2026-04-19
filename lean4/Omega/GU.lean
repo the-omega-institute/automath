@@ -32,6 +32,7 @@ import Omega.GU.CyclotomicSpecializationFalsifiability
 import Omega.GU.CyclotomicSpecializationRigidity
 import Omega.GU.DiscriminantWedge2Square
 import Omega.GU.DiscriminantSquareclass
+import Omega.GU.Double12ConstraintsUniqueIntersectionM6
 import Omega.GU.AltCriterionStability
 import Omega.GU.EllipticGateMinimalRegister
 import Omega.GU.EllipticGateOuterFunctionRigidity

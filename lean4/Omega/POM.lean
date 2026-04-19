@@ -136,6 +136,7 @@ import Omega.POM.MaxFiberPublication
 import Omega.POM.MaxAtomicWeightParitySecondOrder
 import Omega.POM.MaxMassDispersionBound
 import Omega.POM.MinkowskiBudgetBarrier
+import Omega.POM.MultiAxisNear1Density
 import Omega.POM.MicrocanonicalAdaptiveNoGain
 import Omega.POM.MicrocanonicalCoverTimeMean
 import Omega.POM.MicrocanonicalCoverTimeStrategyInvariance

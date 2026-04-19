@@ -217,6 +217,7 @@ import Omega.Zeta.PsiTruncationBounds
 import Omega.Zeta.QuotientFunctoriality
 import Omega.Zeta.QuotientIndexLedgerSeeds
 import Omega.Zeta.RealArcSufficiencyUnitDisk
+import Omega.Zeta.RealInput40GeodesicDet
 import Omega.Zeta.Arity335EpsEffInversion
 import Omega.Zeta.Arity335CharacterEnergy
 import Omega.Zeta.Arity335MarginalInvertChi
