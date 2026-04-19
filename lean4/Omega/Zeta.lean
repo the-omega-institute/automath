@@ -206,6 +206,7 @@ import Omega.Zeta.Arity335CharacterEnergy
 import Omega.Zeta.AtomicWittIntoTC1
 import Omega.Zeta.RealInput40RotationPolytopeShear
 import Omega.Zeta.XiTerminalZmDeltaNodeTangentParityLaw
+import Omega.Zeta.XiTimePart63cTrivialAlternatingSignReciprocalDuality
 import Omega.Zeta.RealInput40TrivMechSplit
 import Omega.Zeta.OffcriticalEndpointResolutionLowerBound
 import Omega.Zeta.RegularPrefixfreeKraftRational
