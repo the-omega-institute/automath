@@ -88,6 +88,7 @@ import Omega.POM.FiberPosteriorEquivalenceActivityField
 import Omega.POM.FiberParityMod3
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberLeyangKlBernoulliDecomposition
+import Omega.POM.FiberBiasedBernoulliPushforwardHardcore
 import Omega.POM.FiberRewritePoissonBinomial
 import Omega.POM.BCPontryaginDualClassification
 import Omega.POM.BCVisibleQuotientEventualStability
