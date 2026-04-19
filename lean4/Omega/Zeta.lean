@@ -239,6 +239,7 @@ import Omega.Zeta.SyncRhoM2Publication
 import Omega.Zeta.TerminalZmTranslationTBranchDiscriminantC3U1Positivity
 import Omega.Zeta.TorsionExactOrderLedgerSeeds
 import Omega.Zeta.ToeplitzDeterminantSignRigidity
+import Omega.Zeta.ToeplitzPsdCofinalSparsificationHereditary
 import Omega.Zeta.ToeplitzPsdCoherenceHorizonThreshold
 import Omega.Zeta.ToeplitzNegativeInertiaAllowedPerturbRadius
 import Omega.Zeta.ToeplitzNegativeSpectrumProductDetHankelSquare

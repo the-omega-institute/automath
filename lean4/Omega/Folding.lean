@@ -117,6 +117,7 @@ import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldBinOracleLinearThresholdExponent
 import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinRenyiDivergenceLimit
+import Omega.Folding.FoldInfoNCELossSpectrumIdentifiability
 import Omega.Folding.FoldHypercubeFibonacciGodelRadiusCount
 import Omega.Folding.FoldBinTwoStateAsymptotic
 import Omega.Folding.FoldBinFDivergenceCollapse
