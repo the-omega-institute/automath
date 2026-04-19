@@ -151,6 +151,7 @@ import Omega.Folding.GaugeAnomalyLdpRate
 import Omega.Folding.GaugeAnomalyPressureCumulants5
 import Omega.Folding.GaugeAnomalyParryKlRate
 import Omega.Folding.GaugeAnomalyP10LeyangClassFunctionTensorIndependence
+import Omega.Folding.GaugeAnomalyP10LeyangChebotarevProductLaw
 import Omega.Folding.GaugeAnomalyKStepInvariance
 import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
