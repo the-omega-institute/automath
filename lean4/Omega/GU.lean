@@ -64,6 +64,7 @@ import Omega.GU.JGLeyangDoubleResultant
 import Omega.GU.JGLeyangSingleScaleReconstruction
 import Omega.GU.GodelEllipsoidVolume
 import Omega.GU.JGEllipseAreaEllipsoidGap
+import Omega.GU.GodelConditionNumberIdentity
 import Omega.GU.GutHalfScaleZeroBlockCoversStableSpace
 import Omega.GU.JoukowskyAreaPreservingCayley
 import Omega.GU.JoukowskyEllipticTwoScaleStokesMean

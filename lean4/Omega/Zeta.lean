@@ -201,6 +201,7 @@ import Omega.Zeta.LocalizedFiniteIndexLatticeGcdLcmMobius
 import Omega.Zeta.LocalizedFinitePrimeAuditCylinderFactorization
 import Omega.Zeta.LocalizedSolenoidNonzeroEndomorphismDegreeSemigroup
 import Omega.Zeta.LocalizedQuotientLedger
+import Omega.Zeta.LocalizedDirectsumMatrixIsomorphismCriterion
 import Omega.Zeta.LogMHolomorphicVariation
 import Omega.Zeta.LucasBarrier
 import Omega.Zeta.MellinUnitarySlice
