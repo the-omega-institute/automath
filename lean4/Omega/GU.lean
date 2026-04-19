@@ -136,6 +136,7 @@ import Omega.GU.TerminalTimeFactorMetallicUnique
 import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
 import Omega.GU.TerminalWindow6LocalUpliftAdmissibility
+import Omega.GU.Window6LocalGeometryZeroAnomalyFamilyUniqueIntersection
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
 import Omega.GU.GodelLorentzAlgebraization
