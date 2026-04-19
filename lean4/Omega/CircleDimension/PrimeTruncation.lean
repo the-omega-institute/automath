@@ -1,4 +1,4 @@
-import Mathlib.Tactic
+import Mathlib
 
 /-!
 # Finite prime truncation homomorphism dimension seed values
@@ -8,6 +8,17 @@ used in the circle-dimension prime truncation functor.
 -/
 
 namespace Omega.CircleDimension
+
+/-- Positive natural numbers, viewed as the reduced multiplicative monoid of the UFD `ℕ`. -/
+abbrev ReducedNatMonoid := ℕ+
+
+/-- The prime-valuation ledger of a positive natural number. -/
+def natPrimeLedger (n : ReducedNatMonoid) : ℕ →₀ ℕ :=
+  n.1.factorization
+
+/-- The integer-valued lift of the prime ledger, matching the Grothendieck-group coordinates. -/
+noncomputable def natPrimeLedgerLift (n : ReducedNatMonoid) : ℕ →₀ ℤ :=
+  (natPrimeLedger n).mapRange Int.ofNat (by simp)
 
 /-- Finite prime truncation seeds: primes, coprimality, products, and minFac.
     cor:cdim-finite-prime-truncation-hom-half-circle -/
@@ -40,5 +51,40 @@ theorem paper_cdim_multiplicative_object_no_finite_hom_ledger
     (hLedger : finitePrimeObstruction → noFiniteHomLedger) :
     noFiniteHomLedger := by
   exact hLedger (hPrime hEmbed)
+
+/-- The reduced multiplicative monoid of the UFD `ℕ` embeds in the finitely supported
+prime-valuation ledger, its integer lift stays injective, and no finite prime set captures all
+prime directions.
+    thm:prime-ledger-non-finitizable-ufd -/
+theorem paper_prime_ledger_non_finitizable_ufd :
+    Function.Injective natPrimeLedger ∧
+      Function.Injective natPrimeLedgerLift ∧
+      ∀ S : Finset ℕ, ∃ p : ℕ, Nat.Prime p ∧ p ∉ S ∧ ¬ p.factorization.support ⊆ S := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro a b h
+    apply Subtype.ext
+    apply Nat.eq_of_factorization_eq a.ne_zero b.ne_zero
+    intro p
+    simpa [natPrimeLedger] using congrArg (fun f : ℕ →₀ ℕ => f p) h
+  · intro a b h
+    apply Subtype.ext
+    apply Nat.eq_of_factorization_eq a.ne_zero b.ne_zero
+    intro p
+    have hp : Int.ofNat (natPrimeLedger a p) = Int.ofNat (natPrimeLedger b p) := by
+      simpa [natPrimeLedgerLift, natPrimeLedger] using congrArg (fun f : ℕ →₀ ℤ => f p) h
+    exact Int.ofNat.inj hp
+  · intro S
+    rcases Nat.exists_infinite_primes (S.sup id + 1) with ⟨p, hpge, hp⟩
+    have hp_not_mem : p ∉ S := by
+      intro hpS
+      have hp_le : p ≤ S.sup id := by
+        simpa using (Finset.le_sup hpS : id p ≤ S.sup id)
+      omega
+    refine ⟨p, hp, hp_not_mem, ?_⟩
+    · have hsupport : p.factorization.support = {p} := by
+        simpa [hp.factorization] using Finsupp.support_single_ne_zero p one_ne_zero
+      rw [hsupport]
+      intro hsubset
+      exact hp_not_mem (hsubset (by simp))
 
 end Omega.CircleDimension
