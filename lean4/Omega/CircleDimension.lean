@@ -1,4 +1,5 @@
 import Omega.CircleDimension.AFEPosteriorSigmaConstraint
+import Omega.CircleDimension.AFEContractionAttractor
 import Omega.CircleDimension.AddressLedgerJointBudgetLowerBound
 import Omega.CircleDimension.AlgebraicDegreeMinCircleRank
 import Omega.CircleDimension.AnomalyQuadraticLaw
