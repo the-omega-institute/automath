@@ -35,6 +35,7 @@ import Omega.OperatorAlgebra.FoldOrbitMgfFiberFactorization
 import Omega.OperatorAlgebra.FoldOrbitTouchardLoworder
 import Omega.OperatorAlgebra.FoldCleanAncillaReversibleDilation
 import Omega.OperatorAlgebra.FoldGaugeMiBound
+import Omega.OperatorAlgebra.FoldOptimalDelinkingCurve
 import Omega.OperatorAlgebra.FoldGaugeReynolds
 import Omega.OperatorAlgebra.Z2x2WalshHadamardSectorTrace
 import Omega.OperatorAlgebra.JonesScalarEqualsExpMinusGap

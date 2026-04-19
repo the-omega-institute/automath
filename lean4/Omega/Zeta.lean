@@ -172,6 +172,7 @@ import Omega.Zeta.LocalizedIntegersPadicKernelRigidity
 import Omega.Zeta.LocalizedIntegersTensorUnionLaw
 import Omega.Zeta.LocalizedIntegersConnectedRationalBlindness
 import Omega.Zeta.LocalizedIntegersCrossHomClassification
+import Omega.Zeta.LocalizedIntegersEndomorphismAutomorphismExplicit
 import Omega.Zeta.LocalizedHomAutCompleteClassification
 import Omega.Zeta.LocalizedFiniteIndexLatticeClassification
 import Omega.Zeta.LocalizedFiniteIndexLatticeGcdLcmMobius
