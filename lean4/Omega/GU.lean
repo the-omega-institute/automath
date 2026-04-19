@@ -110,6 +110,7 @@ import Omega.GU.TerminalResetEventsSturmian
 import Omega.GU.TerminalSuccUniqueBranchMerge
 import Omega.GU.TerminalFoldbin6TailCubeSection
 import Omega.GU.TerminalFoldbin6TwoPointFiberDirectionSpectrum
+import Omega.GU.TerminalGamma6DiameterSimpleSpectrum
 import Omega.GU.TerminalGamma6MultiplicityRigidity
 import Omega.GU.TerminalGamma6Rigidity
 import Omega.GU.TerminalTimeFactorMetallicUnique
