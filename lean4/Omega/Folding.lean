@@ -140,6 +140,7 @@ import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.FoldSpectrumZeroCriterion
 import Omega.Folding.FiberBiasFrequencyTransportIdentity
 import Omega.Folding.FiberBiasEnergyErasureIdentity
+import Omega.Folding.FiberBiasEnergyDecisionTheoretic
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
 import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldFibonacciFrequencyFourierSpikeClosedForm
@@ -186,6 +187,7 @@ import Omega.Folding.GaugeAnomalyP10LeyangChebotarevProductLaw
 import Omega.Folding.GaugeAnomalyKStepInvariance
 import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
+import Omega.Folding.GaugeAnomalyGfRationalIntegralRecurrence
 import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
 import Omega.Folding.GaugeAnomalyLeyangBranchU1
 import Omega.Folding.GaugeAnomalyEdgeworth1
