@@ -114,6 +114,7 @@ import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.NoUniversalTwoAxisAuditCompletion
 import Omega.Conclusion.NonexposedPhaseIntegerDomination
 import Omega.Conclusion.NumberFieldSignatureFromTwoCdims
+import Omega.Conclusion.OnedimMaxCoefficientEntropyProfile
 import Omega.Conclusion.ParetoColdendCurvaturePole
 import Omega.Conclusion.PcdimPropCycleRankMinimal
 import Omega.Conclusion.Period3FiberExactMultiplicity
