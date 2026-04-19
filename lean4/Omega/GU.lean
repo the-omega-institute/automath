@@ -147,6 +147,7 @@ import Omega.GU.TerminalWindow6PushforwardNoNonabelianCompactSymmetry
 import Omega.GU.TerminalWindow5Window7FullSymmetricSpectrum
 import Omega.GU.TerminalCrossScaleBinaryChiralitySymmetryBreaking
 import Omega.GU.TerminalWindow6Sl2zHyperbolicFromTailTriple
+import Omega.GU.Window6Prime23SpectralResponse
 import Omega.GU.TerminalWindowPushforwardCommutantTorus
 import Omega.GU.TerminalWindowRationalCommutantIdempotentRigidity
 import Omega.GU.TimeUnitLogphiProtocol

@@ -30,6 +30,7 @@ import Omega.Discussion.LedgerResidualMutualinfoFactorization
 import Omega.Discussion.LambdaEquivariantPrimitive
 import Omega.Discussion.NoHairIffZk
 import Omega.Discussion.NullGatedDotproductAddressability
+import Omega.Discussion.RecyclingResiduals
 import Omega.Discussion.SquierZeroCurvatureStrictification
 import Omega.Discussion.SquierCurvatureHolonomyStokes
 import Omega.Discussion.ToeplitzNegativeAtomThreshold
