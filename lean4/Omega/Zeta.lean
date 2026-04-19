@@ -52,6 +52,7 @@ import Omega.Zeta.DFAPrimeRecallPrecisionETDS
 import Omega.Zeta.DFAPrimeSymmetricDiff
 import Omega.Zeta.DFAPrimeSymmetricDiffETDS
 import Omega.Zeta.DFAPrimeSymmetricDiffLowerBound
+import Omega.Zeta.SmithLinearSolvabilityConstantFibers
 import Omega.Zeta.DFAQuantitativeObstruction
 import Omega.Zeta.Degree11GenericGaloisS11
 import Omega.Zeta.DiscLedgerAxisDepthSmith

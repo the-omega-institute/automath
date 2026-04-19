@@ -140,6 +140,7 @@ import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
 import Omega.Folding.FoldRewriteNewman
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.FoldSpectrumZeroCriterion
+import Omega.Folding.HypercubeKraftGodelSideinfoLowerBound
 import Omega.Folding.FiberBiasFrequencyTransportIdentity
 import Omega.Folding.FiberBiasEnergyErasureIdentity
 import Omega.Folding.FiberBiasEnergyDecisionTheoretic
