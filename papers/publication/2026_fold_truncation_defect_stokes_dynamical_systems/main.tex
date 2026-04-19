@@ -44,58 +44,50 @@
 
 \begin{document}
 \begin{abstract}
-For $m\ge 1$, let $\Fold_m$ map a binary word of length $m$ to the first $m$
-digits of the Zeckendorf expansion of its Fibonacci value.  For $n\ge m$ we
-compare $\Fold_m(r_{n\to m}(\omega))$ with $\pi_{n\to m}(\Fold_n(\omega))$
-and write $D_{n\to m}$ for the resulting truncation defect.  We prove that the
-adjacent defect at scale $m+1\to m$ is nonzero exactly when the appended digit
-is $1$ and the prefix value is at least $F_{m+1}$; this yields a telescoping
-formula expressing $D_{n\to m}$ as the xor-sum of the projected adjacent
-defects.  The main deterministic result is a one-bit tail collapse: if
+For $m\ge 1$, let $\Fold_m$ send a binary word of length $m$ to the first $m$
+digits of the Zeckendorf expansion of its Fibonacci value, and let
+$D_{n\to m}=\Fold_m\circ r_{n\to m}\oplus \pi_{n\to m}\circ \Fold_n$ be the
+defect measuring the failure of finite-window normalization to commute with
+truncation.  We prove that the adjacent defect at scale $m+1\to m$ is nonzero
+if and only if the appended digit is $1$ and the lower block has Fibonacci
+value at least $F_{m+1}$.  This yields a telescoping formula for $D_{n\to m}$
+and, more importantly, a one-bit reduction of the whole upper tail: if
 $\omega=(p,q)\in\Omega_m\times\Omega_{n-m}$, then
 $D_{n\to m}(p,q)=\kappa_{m+1\to m}(p,\beta(q))$ for an explicit bit
-$\beta(q)\in\{0,1\}$.  Consequently
-\[
-\mu_{n,m}=(1-\rho_{n-m})\delta_0+\rho_{n-m}\lambda_m,
-\qquad
-\rho_\ell=\frac{2^\ell-(-1)^\ell}{3\cdot 2^\ell},
-\]
-where $\mu_{n,m}$ is the law of $D_{n\to m}$ under $\Unif_n$ and $\lambda_m$
-is the adjacent defect law with top digit fixed to $1$.  In particular,
-\[
-\PP_{\Unif_n}[D_{n\to m}\ne 0]
-=
-\frac{(2^{n-m}-(-1)^{n-m})\lfloor 2^{m+1}/3\rfloor}{3\cdot 2^n}.
-\]
-The tail bit is the parity of the initial run of $1$'s in the upper block and
-is the minimal exact tail statistic for the full defect family.  The same
-description yields an explicit stationary one-step Markov analogue, again as a
-two-component mixture, now with coefficients
-$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$, and hence with
-exponential convergence to the limiting law.
+$\beta(q)\in\{0,1\}$.  Consequently the uniform defect law is
+$\mu_{n,m}=(1-\rho_{n-m})\delta_0+\rho_{n-m}\lambda_m$, where
+$\rho_\ell=(2^\ell-(-1)^\ell)/(3\cdot 2^\ell)$ and $\lambda_m$ is the adjacent
+law with the top digit fixed to $1$.  We determine $\lambda_m$ completely: its
+nonzero support is the chain $v_{m,1}=0^{m-1}1$,
+$v_{m,r}=0^{m-r}10 1^{r-2}$ $(2\le r\le m)$, and
+$\lambda_m(v_{m,r})=(2^{m-r+1}-(-1)^{m-r+1})/(3\cdot 2^m)$.  Conditioned on a
+nonzero defect, the corresponding depth therefore converges to the geometric
+law $2^{-r}$.  We also identify $\beta(q)$ with the parity of the initial run
+of $1$'s in $q$, prove that this is the minimal exact tail statistic for the
+entire defect family, and derive the corresponding stationary one-step Markov
+extension.  In the Markov setting the adjacent spectrum can also be determined
+exactly: conditioned on a nonzero defect, the finite-window depth law is
+independent of the tail length and converges, as the window grows, to the
+geometric law $p_{10}p_{11}^{r-1}$.
 \end{abstract}
 
 \maketitle
 
 \section{Introduction}
 
-Let
+\subsection{Main results}
+
+For $m\ge 1$, let
 \[
-\Fold_m:\Omega_m=\{0,1\}^m\longrightarrow X_m,
+\Fold_m:\Omega_m=\{0,1\}^m\longrightarrow X_m
 \]
-where $\Fold_m$ evaluates a binary word in the Fibonacci basis, replaces it by
-its Zeckendorf expansion, and keeps the first $m$ digits.  Here $X_m$ denotes
-the set of admissible words of length $m$, namely those with no adjacent
-$1$'s.  If $m\le n$ and $\omega\in\Omega_n$, there are two natural ways to
-produce an admissible word of length $m$,
-\[
-\Fold_m(r_{n\to m}(\omega))
-\qquad\text{and}\qquad
-\pi_{n\to m}(\Fold_n(\omega)).
-\]
-The first truncates the raw word and normalizes only the lower window, whereas
-the second normalizes at the top scale and then projects.  These two
-procedures need not agree.  We therefore write
+be the map that evaluates a binary word in the Fibonacci basis, replaces it by
+the Zeckendorf expansion of the same value, and retains the first $m$ digits.
+Here $X_m$ denotes the set of admissible words of length $m$, namely those
+with no adjacent $1$'s.  If $m\le n$ and $\omega\in\Omega_n$, one may either
+truncate first and normalize on the lower window, or normalize at level $n$
+and then project to level $m$.  These two procedures need not agree, and we
+write
 \[
 D_{n\to m}(\omega)
 :=
@@ -104,104 +96,135 @@ D_{n\to m}(\omega)
 \pi_{n\to m}(\Fold_n(\omega))
 \in \{0,1\}^m
 \]
-for the resulting defect vector.  The purpose of the paper is to describe this
-observable exactly at finite scale.
+for the resulting defect vector.  The object of the paper is to determine this
+observable exactly.
 
-The starting point is an exact one-step criterion.  If
+The first theorem isolates the creation of a defect at a single scale.  If
 $\eta=(p,b)\in\Omega_{m+1}$ and $s=N(p)$, then
 Theorem~\ref{thm:adjacent-threshold} shows that
 \[
-K_{m+1\to m}(p,b)=b\,\mathbf{1}_{\{s\ge F_{m+1}\}}.
+K_{m+1\to m}(\eta)=b\,\mathbf{1}_{\{s\ge F_{m+1}\}}.
 \]
-Thus a new defect is created only when the appended digit is $1$ and the lower
-block already lies beyond the threshold $F_{m+1}$.  This is the only
-arithmetic input needed for the multiscale analysis.  Once it is available,
-the global defect is recovered by the telescoping identity of
-Section~\ref{sec:telescoping} and the associated cocycle formula.
+Thus a new defect appears precisely when the appended digit is $1$ and the
+lower block has already crossed the threshold $F_{m+1}$.  Once this one-step
+criterion is available, the full defect follows from the telescoping formula
+of Proposition~\ref{thm:telescoping} and the cocycle identity of
+Proposition~\ref{prop:cocycle}.
 
-The main theorem says that the entire upper block can be compressed to a single
-bit.  If $\omega=(p,q)\in\Omega_m\times\Omega_{n-m}$ is split into its lower
-$m$-digit prefix and upper tail, Theorem~\ref{thm:tail-collapse} constructs a
-recursively defined bit $\beta(q)\in\{0,1\}$ such that
+The main structural point is that the entire upper block retains only one bit
+of information.  Theorem~\ref{thm:tail-collapse} constructs a recursively
+defined map $\beta:\bigsqcup_{r\ge 0}\Omega_r\to\{0,1\}$ such that for every
+decomposition $\omega=(p,q)\in\Omega_m\times\Omega_{n-m}$,
 \[
 D_{n\to m}(p,q)=\kappa_{m+1\to m}(p,\beta(q)).
 \]
-In particular, the law of $D_{n\to m}$ under the uniform measure is the
-mixture $(1-\rho_{n-m})\delta_0+\rho_{n-m}\lambda_m$, where $\lambda_m$ is the
-adjacent law with the top digit fixed to $1$ and
+Consequently the uniform defect law is a two-component mixture,
 \[
-\rho_\ell=\frac{2^\ell-(-1)^\ell}{3\cdot 2^\ell}
-=
-\frac13-\frac{(-1)^\ell}{3\cdot 2^\ell}.
+\mu_{n,m}=(1-\rho_{n-m})\delta_0+\rho_{n-m}\lambda_m,
+\qquad
+\rho_\ell=\frac{2^\ell-(-1)^\ell}{3\cdot 2^\ell},
 \]
-Equivalently,
-\[
-\PP_{\Unif_n}[D_{n\to m}\ne 0]
-=
-\rho_{n-m}\,\frac{\lfloor 2^{m+1}/3\rfloor}{2^m},
-\]
-and Proposition~\ref{thm:explicit-count} identifies the adjacent factor on the
-right-hand side.  For fixed $m$, this yields the exact limiting law
+where $\lambda_m$ is the adjacent law with top digit fixed to $1$.  For fixed
+$m$, this gives the exact limiting law
 \[
 \frac23\delta_0+\frac13\lambda_m
 \qquad (\ell\to\infty),
 \]
-with an explicit oscillatory error of order $2^{-\ell}$.  The exact
-distributional formulas are therefore consequences of a deterministic collapse,
-not of independent probabilistic arguments.
+with an oscillatory error of order $2^{-\ell}$.
 
-The tail bit also has an intrinsic interpretation.  Section~\ref{sec:markov}
-shows that $\beta(q)$ is the parity of the initial run of $1$'s in the tail
-and proves that no strictly coarser tail statistic determines the entire
-family of defects $D_{n\to m}$ exactly.  This minimality statement is
-finite-state in spirit and may be compared with Myhill--Nerode minimization
-\cite{Myhill1957,Nerode1958}.  The same identification yields an exact
-stationary one-step Markov extension: after conditioning on the boundary digit
-$\omega_m$, the defect law is again a two-component mixture, now with
-coefficient $p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$, and
-hence converges exponentially.  We do not pursue higher-order dependence or
-other linear-recurrence numeration systems here.  Standard Markov-chain
-background may be found in
-\cite{Parry1964,Norris1997,LevinPeresWilmer2009MarkovMixing}.
+The adjacent law itself admits a complete description.  By
+Theorem~\ref{thm:adjacent-spectrum}, its nonzero support is the chain
+\[
+v_{m,1}=0^{m-1}1,
+\qquad
+v_{m,r}=0^{m-r}10 1^{r-2}\quad (2\le r\le m),
+\]
+and the corresponding weights are
+\[
+\lambda_m(v_{m,r})
+=
+\frac{2^{m-r+1}-(-1)^{m-r+1}}{3\cdot 2^m}.
+\]
+Hence the vector-valued law is supported on an explicit carry-depth chain, and
+the depth conditioned on $D_{n\to m}\neq 0$ converges to the geometric law
+$2^{-r}$ as $m\to\infty$.
+
+The bit $\beta(q)$ has a direct dynamical meaning.  Theorem~\ref{thm:tail-rigidity}
+identifies it with the parity of the initial run of $1$'s in the tail and
+shows that no strictly coarser tail statistic determines the entire family of
+defects exactly.  In that sense $\beta$ is the minimal exact tail factor for
+the full defect family, a finite-state feature that may be compared with
+Myhill--Nerode minimization \cite{Myhill1957,Nerode1958}.  The same
+identification yields an exact stationary one-step Markov extension: after
+conditioning on the boundary digit $\omega_m$, the defect law is again a
+two-component mixture, now with coefficient
+$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$.  The conditional
+adjacent laws may also be resolved explicitly: the boundary state $0$
+contributes only depth $1$, the boundary state $1$ contributes the entire chain
+$\{v_{m,r}\}_{r=1}^m$, and after conditioning on a nonzero defect the resulting
+depth law is independent of the tail length and tends to the geometric law
+$p_{10}p_{11}^{r-1}$ as $m\to\infty$.
+
+\subsection{Context}
 
 Classical background on Zeckendorf expansions goes back to
 \cite{Lekkerkerker1952,Zeckendorf1972,Carlitz1968,CarlitzScovHoggatt1972,%
-Fraenkel1985}.  Automata-theoretic normalization in Fibonacci numeration was
+Fraenkel1985}.
+
+Automata-theoretic normalization in Fibonacci numeration, and
+more generally in order-two or confluent linear numeration systems, was
 developed in
-\cite{Frougny1991,Frougny1992,FrougnySolomyak1996,FrougnySakarovitch1999,%
-Frougny1999,FrougnyS2010,ShallitShan2024}, and finite-state or rational-series
-methods for related observables may be compared with
-\cite{BerstelReutenauer2011}.  Successor carries and other scalar statistics
-have been studied in
-\cite{Frougny1996Successor,Frougny1997Sequential,AhlbachUsatineFrougnyPippenger2013,%
-BertheFrougnyRigoSakarovitch2020}, while probabilistic and combinatorial
-questions for Zeckendorf expansions appear in
-\cite{KologluKoppMillerWang2011,DrmotaSteiner2002,Steiner2005,MillerWang2012,%
-Griffiths2010,Hosten2024,BaratGrabner2014}.  For the symbolic-dynamical
-viewpoint we use only standard material on the golden-mean shift and inverse
-limits \cite{LindMarcus1995,Kitchens1998}.  The observable considered here is
-of a different type: it is a vector-valued defect comparing the two
-normalization/truncation routes above, and its exact law is not determined by
-the top adjacent event alone; see the appendix for small examples.
+\cite{Frougny1988,Frougny1991,FrougnyConfluent1992,Frougny1992,%
+FrougnySolomyak1996}
+and
+\cite{FrougnySakarovitch1999,Frougny1999,FrougnyS2010,LabbeLepsova2023,%
+ShallitShan2024,MarquesTrojovsky2025}; see also
+\cite{BerstelReutenauer2011} for related finite-state and rational-series
+methods.
 
-The paper is organized as follows.  Section~\ref{sec:adjacent} introduces the
-finite-window Fold map, records the elementary normalization facts needed later
-on, and proves the threshold theorem for the adjacent defect.
-Section~\ref{sec:telescoping} derives the telescoping and cocycle identities.
-Section~\ref{sec:uniform} proves the collapse theorem and the exact uniform-law
-distribution.  Section~\ref{sec:markov} identifies the tail bit, proves its
-minimality as an exact factor, and extends the defect law to stationary
-one-step Markov inputs.  The appendix collects examples and exact small-scale
-values.
+Scalar carry statistics and successor dynamics have been studied in
+\cite{Frougny1996Successor,Frougny1997Sequential,%
+AhlbachUsatineFrougnyPippenger2013,BertheFrougnyRigoSakarovitch2020}, while
+probabilistic and combinatorial questions for Zeckendorf expansions appear in
+\cite{KologluKoppMillerWang2011,DrmotaSteiner2002,Steiner2005,MillerWang2012}
+and
+\cite{Griffiths2010,BaratGrabner2014,Dekking2021,Hosten2024}.  For the
+symbolic-dynamical background used here we appeal only to standard references
+on the golden-mean shift and inverse limits \cite{LindMarcus1995,Kitchens1998};
+for Markov chains we use
+\cite{Parry1964,Norris1997,LevinPeresWilmer2009MarkovMixing}.
 
-\section{Finite-window normalization and adjacent defects}
+The defect studied here is of a different nature from the scalar carry
+statistics that arise in the successor literature and from the output of a
+normalization transducer viewed in isolation.  It records the vector
+discrepancy between two finite-window routes to the same admissible block.
+Our results are therefore entirely finite-scale and exact: within the
+Fibonacci setting we obtain closed formulas for the adjacent threshold, the
+telescoping decomposition, the full adjacent spectrum, the one-bit tail
+factor, and the resulting uniform and stationary Markov laws.
+
+\subsection{Organization}
+
+Section~\ref{sec:adjacent} develops the finite-window Fold map and proves the
+threshold criterion for the adjacent defect.  Section~\ref{sec:telescoping}
+derives the telescoping and cocycle formulas.  Section~\ref{sec:uniform}
+determines the adjacent law and the exact defect distribution under the
+uniform measure.  Section~\ref{sec:markov} identifies the tail factor, extends
+the argument to stationary one-step Markov inputs, and computes the exact
+Markov depth spectrum together with its conditioned geometric limit.  Small-scale
+examples are incorporated into the main text, where they help isolate
+phenomena that are invisible at the level of scalar defect indicators.
+
+\section{Finite-window normalization}
 \label{sec:adjacent}
 
-We begin by fixing notation and recording the elementary normalization facts
+We begin by fixing notation and collecting the elementary normalization facts
 used throughout.  Digits are indexed from the low-order end: position $k$
 carries Fibonacci weight $F_{k+1}$, where $F_1=F_2=1$ and
 $F_{j+2}=F_{j+1}+F_j$.  Thus $N(10)=F_2=1$ and $N(01)=F_3=2$, and the prefix
 map $r_{n\to m}$ keeps the first $m$ low-order digits.
+
+\subsection{The finite-window Fold map}
 
 For $m\ge 1$ set
 \[
@@ -345,6 +368,14 @@ $N(11)$ begins with $00$.  Hence
 Thus truncation does not commute with normalization.
 \end{example}
 
+\subsection{Adjacent defects}
+
+\noindent
+The first nontrivial case is the adjacent step $m+1\to m$.  The point is that
+the indicator of the adjacent defect is governed by a single Fibonacci
+threshold, while the defect vector itself remains sensitive to the precise
+position of the prefix value within the threshold range.
+
 \begin{definition}
 \label{def:adjacent-defect}
 For $m\ge 1$ and $\eta\in\Omega_{m+1}$, the adjacent defect is
@@ -455,12 +486,26 @@ $s\bmod F_{m+2}=t=s-F_{m+1}$, which is impossible because
 $0<F_{m+1}<F_{m+2}$.  Hence the defect is nonzero.
 \end{proof}
 
-\section{Telescoping and cocycle identities}
+\begin{example}[Normalization cascade without a truncation defect]
+\label{ex:cascade-without-defect}
+Take $m=4$, $p=1100$, and append $b=1$.  Normalizing the raw word $(p,1)=11001$
+produces $\Fold_5(11001)=00101$, so a nontrivial carry cascade does occur.
+Nevertheless
+\[
+\Fold_4(p)=0010
+\qquad\text{and}\qquad
+\pi_{5\to 4}(\Fold_5(11001))=0010,
+\]
+hence $\kappa_{5\to 4}(p,1)=0$.  In particular, the existence of a
+normalization cascade does not by itself force a truncation defect.
+\end{example}
+
+\section{Telescoping and cocycle formulas}
 \label{sec:telescoping}
 
-We now pass from the adjacent defect to the full defect.  The point of this
-section is formal: once the one-step defect is fixed, the global defect is
-obtained by iterating truncation and projection identities.
+We now pass from the adjacent defect to the full defect.  The argument in this
+section is purely formal: once the one-step defect is understood, the global
+defect is recovered by iterating the truncation and projection maps.
 
 \begin{definition}
 \label{def:global-defect}
@@ -483,12 +528,6 @@ For $v\in\{0,1\}^m$, write
 \[
 \lvert v\rvert_0:=\#\{i:\ v_i\ne 0\}.
 \]
-
-No new arithmetic enters here.  Once
-Theorem~\ref{thm:adjacent-threshold} is available, the identities below follow
-by composing successive truncation and projection maps.  We record them
-because they isolate the scales at which noncommutation is created and provide
-the bookkeeping needed in Section~\ref{sec:uniform}.
 
 For fixed $n>m$ and $\omega\in\Omega_n$, set
 \[
@@ -625,12 +664,26 @@ The Hamming estimate follows from
 and the fact that prefix projection cannot increase Hamming weight.
 \end{proof}
 
-\section{Tail collapse and the uniform law}
+\begin{example}[A lower-level defect with trivial top indicator]
+\label{ex:defect-without-top-indicator}
+Let $n=4$, $m=2$, and $\omega=0110$.  Direct computation gives
+\[
+D_{4\to 2}(\omega)=(0,1)\ne 0,
+\]
+whereas the top adjacent indicator satisfies
+\[
+K_{4\to 3}(\omega)=0.
+\]
+Thus the global defect can be created strictly below the top scale.
+\end{example}
+
+\section{The adjacent law and uniform inputs}
 \label{sec:uniform}
 
-We now specialize to the uniform law on raw words.  The key point is that the
-upper block contributes only through a recursively defined bit.  We begin with
-the one-step count that enters the final mixture formula.
+We next turn to exact distributional questions under the uniform law on raw
+words.  The first step is to describe the adjacent law itself.
+
+\subsection{The adjacent law}
 
 \begin{proposition}[Exact one-step defect count]
 \label{thm:explicit-count}
@@ -707,6 +760,225 @@ $K_{m+1\to m}(\alpha,b)=1$ exactly when $b=1$ and $N(\alpha)\ge F_{m+1}$, so
 there are $2^m-C_m$ defect-producing words in $\Omega_{m+1}$.  Dividing by
 $2^{m+1}$ gives the probability formula.
 \end{proof}
+
+For $v\in\{0,1\}^m$, define
+\[
+\lambda_m(v):=2^{-m}\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)=v\}.
+\]
+
+\begin{theorem}[Complete adjacent defect spectrum]
+\label{thm:adjacent-spectrum}
+For $m\ge 1$ and $1\le r\le m$, let
+\[
+I_{m,r}
+:=
+[F_{m+3}-F_{m-r+3},\,F_{m+3}-F_{m-r+2}-1].
+\]
+Let $v_{m,1}=0^{m-1}1$, and for $2\le r\le m$ let
+\[
+v_{m,r}:=0^{m-r}10 1^{r-2}
+\]
+in the low-order-first notation of the paper.  If $p\in\Omega_m$ and
+$s:=N(p)$, then
+\[
+\kappa_{m+1\to m}(p,1)=v_{m,r}
+\quad\Longleftrightarrow\quad
+s\in I_{m,r}.
+\]
+Consequently
+\[
+\{\kappa_{m+1\to m}(p,1):\ p\in\Omega_m,\ \kappa_{m+1\to m}(p,1)\ne 0\}
+=
+\{v_{m,1},\dots,v_{m,m}\},
+\]
+and
+\[
+\lambda_m(v_{m,r})
+=
+\frac{2^{m-r+1}-(-1)^{m-r+1}}{3\cdot 2^m}
+\qquad (1\le r\le m).
+\]
+\end{theorem}
+
+\begin{proof}
+The intervals $I_{m,r}$ are disjoint, their lengths are
+\[
+\lvert I_{m,r}\rvert=F_{m-r+1},
+\]
+and their union is exactly $[F_{m+1},F_{m+3}-2]$.  Indeed, the right endpoint
+of $I_{m,r}$ is one less than the left endpoint of $I_{m,r+1}$, so the
+intervals partition the whole threshold range on which
+Theorem~\ref{thm:adjacent-threshold} allows a nonzero defect.
+
+If $r=1$, then every $s\in I_{m,1}$ has the form $s=F_{m+1}+u$ with
+$0\le u<F_m$.  Since $u<F_m$, the Zeckendorf expansion of $s$ is obtained by
+placing a single digit $1$ in position $m$ above $Z(u)$.  Hence
+\[
+\pi_{\infty\to m}(Z(s))
+=
+\pi_{\infty\to m}(Z(u))\oplus v_{m,1},
+\qquad
+\pi_{\infty\to m}(Z(s-F_{m+1}))
+=
+\pi_{\infty\to m}(Z(u)),
+\]
+and Theorem~\ref{thm:adjacent-threshold} gives
+\[
+\kappa_{m+1\to m}(p,1)=v_{m,1}.
+\]
+
+Fix $r\ge 2$ and write
+\[
+s=F_{m+3}-F_{m-r+3}+u,
+\qquad
+0\le u<F_{m-r+1}.
+\]
+Set
+\[
+A_{m,r}:=F_{m+1}-F_{m-r+3},
+\qquad
+B_{m,r}:=F_{m+2}-F_{m-r+3}.
+\]
+Then
+\[
+s\bmod F_{m+2}=A_{m,r}+u,
+\qquad
+s-F_{m+1}=B_{m,r}+u.
+\]
+
+If $r=2q$, repeated use of $F_{j+1}-F_{j-1}=F_j$ gives
+\[
+A_{m,2q}
+=
+\sum_{j=0}^{q-2}F_{m-2j},
+\qquad
+B_{m,2q}
+=
+\sum_{j=0}^{q-2}F_{m+1-2j}+F_{m-2q+2}.
+\]
+If $r=2q+1$, the same identity gives
+\[
+A_{m,2q+1}
+=
+\sum_{j=0}^{q-2}F_{m-2j}+F_{m-2q+1},
+\qquad
+B_{m,2q+1}
+=
+\sum_{j=0}^{q-1}F_{m+1-2j}.
+\]
+Since $u<F_{m-r+1}$, the support of $Z(u)$ is contained in positions
+$1,\dots,m-r$.  Therefore the first $m$ digits of $Z(A_{m,r}+u)$ and
+$Z(B_{m,r}+u)$ are obtained by placing the same lower block $Z(u)$ beneath the
+fixed Zeckendorf heads encoded by the displayed sums.  If $r=2q$, those heads
+occupy the positions
+\[
+\{m-1,m-3,\dots,m-2q+3\}
+\quad\text{and}\quad
+\{m,m-2,\dots,m-2q+4,m-2q+1\},
+\]
+whereas if $r=2q+1$, they occupy the positions
+\[
+\{m-1,m-3,\dots,m-2q+3,m-2q\}
+\quad\text{and}\quad
+\{m,m-2,\dots,m-2q+2\}.
+\]
+In both cases the xor of the two fixed heads is
+$v_{m,r}=0^{m-r}10 1^{r-2}$.  Hence
+\[
+\pi_{\infty\to m}(Z(s\bmod F_{m+2}))
+\oplus
+\pi_{\infty\to m}(Z(s-F_{m+1}))
+=
+v_{m,r},
+\]
+and Theorem~\ref{thm:adjacent-threshold} yields
+\[
+\kappa_{m+1\to m}(p,1)=v_{m,r}.
+\]
+Since Theorem~\ref{thm:adjacent-threshold} also shows that the adjacent defect
+is nonzero exactly on $[F_{m+1},F_{m+3}-2]$, the classification by the
+intervals $I_{m,r}$ is complete.
+
+For $1\le r\le m$, let
+\[
+M_{m,r}
+:=
+\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)=v_{m,r}\}.
+\]
+If $r\ge 2$, then $I_{m,r}\subset[F_{m+2},F_{m+3}-2]$, so every
+$p\in\Omega_m$ with $N(p)\in I_{m,r}$ has top digit $p_m=1$.  Writing
+$p=(u,1)$ with $u\in\Omega_{m-1}$ and using
+\[
+I_{m,r}=F_{m+1}+I_{m-1,r-1},
+\]
+one obtains a bijection between the words counted by $M_{m,r}$ and those
+counted by $M_{m-1,r-1}$.  Thus
+\[
+M_{m,r}=M_{m-1,r-1}
+\qquad (2\le r\le m).
+\]
+By Proposition~\ref{thm:explicit-count},
+\[
+\sum_{r=1}^m M_{m,r}
+=
+\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)\ne 0\}
+=
+\left\lfloor\frac{2^{m+1}}{3}\right\rfloor.
+\]
+Therefore
+\[
+M_{m,1}
+=
+\left\lfloor\frac{2^{m+1}}{3}\right\rfloor
+-
+\left\lfloor\frac{2^m}{3}\right\rfloor
+=
+\frac{2^m-(-1)^m}{3},
+\]
+and repeated use of the recursion gives
+\[
+M_{m,r}=M_{m-r+1,1}
+=
+\frac{2^{m-r+1}-(-1)^{m-r+1}}{3}.
+\]
+Dividing by $2^m$ proves the formula for $\lambda_m(v_{m,r})$.
+\end{proof}
+
+\begin{example}
+\label{ex:adjacent-spectrum-m4}
+For $m=4$ the interval decomposition is
+\[
+I_{4,1}=[5,7],
+\qquad
+I_{4,2}=[8,9],
+\qquad
+I_{4,3}=\{10\},
+\qquad
+I_{4,4}=\{11\}.
+\]
+Hence the nonzero adjacent defects are
+\[
+v_{4,1}=0001,
+\qquad
+v_{4,2}=0010,
+\qquad
+v_{4,3}=0101,
+\qquad
+v_{4,4}=1011,
+\]
+and their weights are
+\[
+\lambda_4(0001)=\frac{5}{16},
+\qquad
+\lambda_4(0010)=\frac{3}{16},
+\qquad
+\lambda_4(0101)=\lambda_4(1011)=\frac{1}{16}.
+\]
+This is the first scale at which the entire carry-depth chain
+$\{v_{m,r}\}_{r=1}^m$ is visible.
+\end{example}
+
+\subsection{Tail collapse and exact distribution}
 
 For $n>m$ and $v\in\{0,1\}^m$, define
 \[
@@ -841,11 +1113,7 @@ Then for every $p\in\Omega_m$ and every $q\in\Omega_\ell$,
 \[
 D_{n\to m}(p,q)=\kappa_{m+1\to m}(p,\beta(q)).
 \]
-For $v\in\{0,1\}^m$, set
-\[
-\lambda_m(v):=2^{-m}\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)=v\},
-\]
-and for $\ell\ge 0$ set
+For $\ell\ge 0$ set
 \[
 \rho_\ell:=2^{-\ell}\#\{q\in\Omega_\ell:\ \beta(q)=1\}.
 \]
@@ -1034,6 +1302,54 @@ By Proposition~\ref{thm:explicit-count},
 Substituting the formula for $\rho_\ell$ proves the last identity.
 \end{proof}
 
+\begin{corollary}[Explicit defect-depth law]
+\label{cor:explicit-depth-law}
+For $n>m$ and $1\le r\le m$,
+\[
+\mu_{n,m}(v_{m,r})
+=
+\frac{(2^{n-m}-(-1)^{n-m})(2^{m-r+1}-(-1)^{m-r+1})}{9\cdot 2^n}.
+\]
+If $R_{n,m}\in\{0,1,\dots,m\}$ is defined by $R_{n,m}=0$ on $\{D_{n\to m}=0\}$
+and by $D_{n\to m}=v_{m,R_{n,m}}$ on $\{D_{n\to m}\ne 0\}$, then
+\[
+\PP_{\Unif_n}[R_{n,m}=r\mid D_{n\to m}\ne 0]
+=
+\frac{2^{m-r+1}-(-1)^{m-r+1}}{3\lfloor 2^{m+1}/3\rfloor}
+\qquad (1\le r\le m).
+\]
+For each fixed $r\ge 1$,
+\[
+\PP_{\Unif_n}[R_{n,m}=r\mid D_{n\to m}\ne 0]
+\xrightarrow[m\to\infty]{}
+2^{-r},
+\]
+uniformly in the tail length $n-m\ge 1$.
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:tail-collapse} gives
+\[
+\mu_{n,m}(v)=\rho_{n-m}\lambda_m(v)
+\qquad (v\ne 0).
+\]
+Combining this with Theorem~\ref{thm:adjacent-spectrum} yields the explicit
+formula for $\mu_{n,m}(v_{m,r})$.  Dividing by
+\[
+\PP_{\Unif_n}[D_{n\to m}\ne 0]
+=
+\rho_{n-m}\frac{\lfloor 2^{m+1}/3\rfloor}{2^m}
+\]
+gives the conditional law of $R_{n,m}$.  For fixed $r$,
+\[
+\frac{2^{m-r+1}-(-1)^{m-r+1}}{3\lfloor 2^{m+1}/3\rfloor}
+\longrightarrow
+2^{-r},
+\]
+and the expression is independent of $n$, so the convergence is uniform in the
+tail length.
+\end{proof}
+
 \begin{remark}
 \label{rem:limit-law}
 For fixed $m$, the preceding theorem gives the exact asymptotic law along
@@ -1070,13 +1386,59 @@ because
 by Proposition~\ref{thm:explicit-count}.
 \end{remark}
 
-\section{The tail bit and stationary Markov inputs}
+\subsection{Small-scale values}
+
+\begin{remark}
+\label{rem:small-values}
+The exact probabilities $P_{n,m}:=\PP_{\Unif_n}[D_{n\to m}\ne 0]$ obtained by
+direct enumeration for $n\le 5$ are listed in Table~\ref{tab:small-values}.
+In particular,
+\[
+P_{2,1}=\frac14,
+\qquad
+P_{3,1}=\frac18,
+\qquad
+P_{4,1}=\frac{3}{16},
+\]
+so the scalar probabilities are not monotone in $n$ at fixed $m$.  Combined
+with Example~\ref{ex:defect-without-top-indicator}, this shows that the full
+defect law cannot be recovered from the scalar event $\{D_{n\to m}\ne 0\}$
+alone.
+\end{remark}
+
+\begin{table}[t]
+\centering
+\small
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{ccc}
+\toprule
+$(n,m)$ & $\#\{\omega:\ D_{n\to m}\ne 0\}$ & $P_{n,m}$ \\
+\midrule
+$(2,1)$ & $1$ & $1/4$ \\
+$(3,1)$ & $1$ & $1/8$ \\
+$(3,2)$ & $2$ & $1/4$ \\
+$(4,1)$ & $3$ & $3/16$ \\
+$(4,2)$ & $2$ & $1/8$ \\
+$(4,3)$ & $5$ & $5/16$ \\
+$(5,1)$ & $5$ & $5/32$ \\
+$(5,2)$ & $6$ & $3/16$ \\
+$(5,3)$ & $5$ & $5/32$ \\
+$(5,4)$ & $10$ & $5/16$ \\
+\bottomrule
+\end{tabular}
+\caption{Exact small-scale defect probabilities under the uniform raw-word law.}
+\label{tab:small-values}
+\end{table}
+
+\section{Tail parity and Markov inputs}
 \label{sec:markov}
 
-We first identify the tail bit explicitly and deduce its minimality as an
-exact factor for the family of defects.  Once this is done, the stationary
-one-step Markov law follows from a direct computation of the parity of the
-initial run of $1$'s.
+We now identify the tail bit explicitly and deduce that it is the coarsest
+exact tail statistic for the family of defects.  The stationary one-step
+Markov law then follows from the same deterministic reduction together with a
+direct computation of the parity of the initial run of $1$'s.
+
+\subsection{Parity of the initial run}
 
 \begin{theorem}[Identification and minimality of the tail bit]
 \label{thm:tail-rigidity}
@@ -1181,10 +1543,12 @@ The identity $\beta=\psi\circ\gamma$ is immediate from the definition of
 $\psi$, and uniqueness holds on the image of $\gamma$.
 \end{proof}
 
-The preceding theorem converts the deterministic collapse into an exact
-non-uniform law for one-step Markov inputs.  The only tail information that
-survives is the parity of the initial run of $1$'s, and that parity has a
-closed form under Markov sampling.
+\subsection{Stationary Markov inputs}
+
+Theorem~\ref{thm:tail-rigidity} converts the deterministic collapse into an
+exact non-uniform law for one-step Markov inputs.  The only tail information
+that survives is the parity of the initial run of $1$'s, and that parity has
+a closed form under Markov sampling.
 
 \begin{theorem}[Stationary one-step Markov extension]
 \label{thm:markov-defect-law}
@@ -1372,88 +1736,463 @@ d_{\mathrm{TV}}(P_{m,\ell},\nu_{m,P})
 \frac{\pi_1}{1+p_{11}}\,p_{11}^{\ell}.
 \]
 If $p_{01}=p_{11}=u$, then the chain is i.i.d.\ Bernoulli$(u)$, so
-$\rho_\ell^{(0)}=\rho_\ell^{(1)}$ and, at $u=\frac12$, the measures
-$\lambda_{m,0}$ and $\lambda_{m,1}$ both coincide with the uniform-law measure
-$\lambda_m$.  This recovers Theorem~\ref{thm:tail-collapse}.
+$\rho_\ell^{(0)}=\rho_\ell^{(1)}$.  At $u=\frac12$ one has
+$\pi_0=\pi_1=\frac12$, and the stationary average of the conditional adjacent
+laws recovers the uniform adjacent law:
+\[
+\frac12\lambda_{m,0}+\frac12\lambda_{m,1}=\lambda_m.
+\]
+Hence the first displayed formula for the defect law reduces to
+\[
+(1-\rho_\ell)\delta_0+\rho_\ell\lambda_m,
+\]
+which is exactly Theorem~\ref{thm:tail-collapse}.
 \end{proof}
 
-\appendix
+\subsection{Exact Markov spectrum and conditioned depth}
 
-\section{Examples and small values}
-\label{app:supplementary}
+The stationary mixture of Theorem~\ref{thm:markov-defect-law} leaves the
+adjacent laws $\lambda_{m,a}$ implicit.  The next theorem determines them
+exactly and shows that, after conditioning on a nonzero defect, the depth law
+is independent of the tail length.
 
-We collect here two small examples and a table of exact values that are not
-used in the proofs but help separate the present defect from the scalar
-indicators naturally associated with normalization and with the top adjacent
-step.
-
-\begin{example}[Normalization cascade without a truncation defect]
-\label{ex:cascade-without-defect}
-Take $m=4$, $p=1100$, and append $b=1$.  Normalizing the raw word
-$(p,1)=11001$ produces $\Fold_5(11001)=00101$, so the normalization does
-involve a nontrivial carry cascade.  Nevertheless
+\begin{theorem}[Exact Markov spectrum and conditioned defect depth]
+\label{thm:markov-spectrum}
+Keep the notation of Theorem~\ref{thm:markov-defect-law}.  Define
 \[
-\Fold_4(p)=0010
-\qquad\text{and}\qquad
-\pi_{5\to 4}(\Fold_5(11001))=0010,
+A_0:=\pi_1,
+\qquad
+A_{j+1}:=\pi_1p_{10}p_{00}+p_{01}p_{10}A_j
+\qquad (j\ge 0).
 \]
-hence $\kappa_{5\to 4}(p,1)=0$.
-\end{example}
-
-\begin{example}[A lower-level defect with trivial top indicator]
-\label{ex:defect-without-top-indicator}
-Let $n=4$, $m=2$, and $\omega=0110$.  Direct computation gives
+Then
 \[
-D_{4\to 2}(\omega)=(0,1)\ne 0,
+A_j
+=
+\frac{\pi_1p_{10}p_{00}}{1-p_{01}p_{10}}
++
+\frac{\pi_1p_{11}}{1-p_{01}p_{10}}(p_{01}p_{10})^j
+\qquad (j\ge 0).
 \]
-while the top adjacent indicator satisfies
+For $m\ge 1$, $a\in\{0,1\}$, and $1\le r\le m$, set
 \[
-K_{4\to 3}(\omega)=0.
+\Lambda_{m,a}(r):=\lambda_{m,a}(v_{m,r}),
 \]
-Thus the global defect may be created strictly below the top scale.
-\end{example}
-
-\begin{remark}
-\label{rem:small-values}
-The exact probabilities $P_{n,m}:=\PP_{\Unif_n}[D_{n\to m}\ne 0]$ obtained by
-direct enumeration for $n\le 5$ are listed in Table~\ref{tab:small-values}.
+where $\lambda_{m,a}$ is the conditional adjacent law from
+Theorem~\ref{thm:markov-defect-law}.  Then
+\[
+\Lambda_{m,0}(r)=0
+\qquad (2\le r\le m),
+\]
+\[
+\Lambda_{m,0}(1)
+=
+\frac{p_{10}}{\pi_0}
+\bigl(
+\pi_1-A_{\lfloor (m-1)/2\rfloor}
+\bigr),
+\]
+\[
+\Lambda_{m,1}(1)
+=
+\frac{A_{\lfloor m/2\rfloor}}{\pi_1},
+\]
+and, for $2\le r\le m$,
+\[
+\Lambda_{m,1}(r)
+=
+\frac{p_{11}^{r-2}}{\pi_1}
+\Bigl(
+p_{01}p_{10}\bigl(\pi_1-A_{\lfloor (m-r)/2\rfloor}\bigr)
++
+p_{11}A_{\lfloor (m-r+1)/2\rfloor}
+\Bigr).
+\]
 In particular,
 \[
-P_{2,1}=\frac14,
-\qquad
-P_{3,1}=\frac18,
-\qquad
-P_{4,1}=\frac{3}{16},
+\sum_{r=1}^m\Lambda_{m,1}(r)=1.
 \]
-so the scalar probabilities are not monotone in $n$ at fixed $m$.  Combined
-with Example~\ref{ex:defect-without-top-indicator}, this is enough to see that
-the full defect law cannot be recovered from the scalar event
-$\{D_{n\to m}\ne 0\}$ alone.
-\end{remark}
 
-\begin{table}[t]
-\centering
-\small
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{ccc}
-\toprule
-$(n,m)$ & $\#\{\omega:\ D_{n\to m}(\omega)\ne 0\}$ & $P_{n,m}$ \\
-\midrule
-$(2,1)$ & $1$ & $1/4$ \\
-$(3,1)$ & $1$ & $1/8$ \\
-$(3,2)$ & $2$ & $1/4$ \\
-$(4,1)$ & $3$ & $3/16$ \\
-$(4,2)$ & $2$ & $1/8$ \\
-$(4,3)$ & $5$ & $5/16$ \\
-$(5,1)$ & $5$ & $5/32$ \\
-$(5,2)$ & $6$ & $3/16$ \\
-$(5,3)$ & $5$ & $5/32$ \\
-$(5,4)$ & $10$ & $5/16$ \\
-\bottomrule
-\end{tabular}
-\caption{Exact small-scale defect probabilities under the uniform raw-word law.}
-\label{tab:small-values}
-\end{table}
+Let $R_{n,m}$ be the defect-depth variable from
+Corollary~\ref{cor:explicit-depth-law}.  If $\ell\ge 1$ and $n:=m+\ell$, then
+\[
+\PP_P\!\left[
+R_{n,m}=1
+\ \middle|\
+D_{n\to m}(r_{\infty\to n}(\omega^\infty))\ne 0
+\right]
+=
+\frac{p_{10}\Lambda_{m,0}(1)+p_{11}\Lambda_{m,1}(1)}
+{p_{10}\Lambda_{m,0}(1)+p_{11}},
+\]
+and, for $2\le r\le m$,
+\[
+\PP_P\!\left[
+R_{n,m}=r
+\ \middle|\
+D_{n\to m}(r_{\infty\to n}(\omega^\infty))\ne 0
+\right]
+=
+\frac{p_{11}\Lambda_{m,1}(r)}
+{p_{10}\Lambda_{m,0}(1)+p_{11}}.
+\]
+Hence the conditioned depth law is independent of the tail length $\ell$.
+Moreover, for each fixed $r\ge 1$,
+\[
+\Lambda_{m,0}(1)\xrightarrow[m\to\infty]{}
+\frac{p_{01}p_{11}}{1-p_{01}p_{10}},
+\]
+\[
+\Lambda_{m,1}(1)\xrightarrow[m\to\infty]{}
+\frac{p_{10}p_{00}}{1-p_{01}p_{10}},
+\qquad
+\Lambda_{m,1}(r)\xrightarrow[m\to\infty]{}
+\frac{p_{10}p_{11}^{r-1}}{1-p_{01}p_{10}}
+\quad (r\ge 2),
+\]
+and therefore
+\[
+\PP_P\!\left[
+R_{m+\ell,m}=r
+\ \middle|\
+D_{m+\ell\to m}(r_{\infty\to m+\ell}(\omega^\infty))\ne 0
+\right]
+\xrightarrow[m\to\infty]{}
+p_{10}p_{11}^{r-1}
+\]
+uniformly in $\ell\ge 1$.
+\end{theorem}
+
+\begin{proof}
+For $m\ge 1$, let
+\[
+\mathcal{T}_m
+:=
+\{\alpha\in\Omega_m:\ N(\alpha)<F_{m+1}\},
+\qquad
+T_m:=\PP_P[r_{\infty\to m}(\omega^\infty)\in\mathcal{T}_m].
+\]
+The proof of Proposition~\ref{thm:explicit-count} is purely combinatorial and
+therefore yields, for $m\ge 3$,
+\[
+\mathcal{T}_m=\Omega_{m-2}00\sqcup \mathcal{T}_{m-2}10.
+\]
+Since $\PP_P[\omega_{m-1}=0,\omega_m=0]=\pi_0p_{00}$ by stationarity and every
+word in $\mathcal{T}_{m-2}$ ends with $0$, this gives
+\[
+T_m=\pi_0p_{00}+p_{01}p_{10}T_{m-2}
+\qquad (m\ge 3).
+\]
+Also,
+\[
+T_1=T_2=\pi_0,
+\]
+because $\mathcal{T}_1=\{0\}$ and $\mathcal{T}_2=\{00,10\}$ are exactly the
+length-$1$ and length-$2$ words whose top digit is $0$.  It follows by
+induction that
+\[
+T_{2j-1}=T_{2j}
+\qquad (j\ge 1).
+\]
+Write this common value as $\Theta_j$.  Then
+\[
+\Theta_1=\pi_0,
+\qquad
+\Theta_{j+1}=\pi_0p_{00}+p_{01}p_{10}\Theta_j
+\qquad (j\ge 1).
+\]
+For $j\ge 1$ define
+\[
+A_j:=p_{01}\Theta_j.
+\]
+Using $\pi_0p_{01}=\pi_1p_{10}$, one obtains
+\[
+A_{j+1}=\pi_1p_{10}p_{00}+p_{01}p_{10}A_j
+\qquad (j\ge 1),
+\]
+and the same identity holds at $j=0$ because
+\[
+A_1=p_{01}\Theta_1=p_{01}\pi_0=\pi_1p_{10}
+=\pi_1p_{10}p_{00}+p_{01}p_{10}A_0.
+\]
+Hence the displayed affine recursion for $(A_j)_{j\ge 0}$ is valid.  Solving
+it gives the closed form
+\[
+A_j
+=
+\frac{\pi_1p_{10}p_{00}}{1-p_{01}p_{10}}
++
+\left(
+\pi_1-\frac{\pi_1p_{10}p_{00}}{1-p_{01}p_{10}}
+\right)
+(p_{01}p_{10})^j,
+\]
+which simplifies to the stated formula because
+\[
+\pi_1-\frac{\pi_1p_{10}p_{00}}{1-p_{01}p_{10}}
+=
+\frac{\pi_1p_{11}}{1-p_{01}p_{10}}.
+\]
+
+For $m\ge 1$ and $1\le r\le m$, let
+\[
+\mathcal{S}_{m,r}
+:=
+\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)=v_{m,r}\}.
+\]
+The interval description in Theorem~\ref{thm:adjacent-spectrum} implies
+\[
+\mathcal{S}_{1,1}=\{1\},
+\]
+and, for $m\ge 2$,
+\[
+\mathcal{S}_{m,1}
+=
+\mathcal{T}_{m-1}1
+\sqcup
+\mathcal{T}_{m-2}^{\,c}10.
+\]
+Indeed, the first component corresponds to the case $p_m=1$ and
+$N(p_1,\dots,p_{m-1})<F_m$, while the second corresponds to the case $p_m=0$,
+$p_{m-1}=1$, and $N(p_1,\dots,p_{m-2})\ge F_{m-1}$.
+
+The two components of $\mathcal{S}_{m,1}$ have distinct top digits.  For the
+words with top digit $1$,
+\[
+\PP_P[r_{\infty\to m}(\omega^\infty)\in \mathcal{T}_{m-1}1]
+=
+\begin{cases}
+\pi_1,& m=1,\\[4pt]
+p_{01}T_{m-1},& m\ge 2,
+\end{cases}
+\]
+hence
+\[
+\PP_P[r_{\infty\to m}(\omega^\infty)\in \mathcal{T}_{m-1}1]
+=
+A_{\lfloor m/2\rfloor}
+\qquad (m\ge 1).
+\]
+For the words with top digit $0$, note that the total probability of a length
+$m-1$ prefix whose top digit is $1$ equals $\pi_1$.  Among those prefixes, the
+subset $\mathcal{T}_{m-2}1$ has probability
+$A_{\lfloor (m-1)/2\rfloor}$.  Therefore
+\[
+\PP_P[r_{\infty\to m}(\omega^\infty)\in \mathcal{T}_{m-2}^{\,c}10]
+=
+p_{10}\bigl(\pi_1-A_{\lfloor (m-1)/2\rfloor}\bigr).
+\]
+Dividing by $\pi_0$ or $\pi_1$ yields
+\[
+\Lambda_{m,0}(1)
+=
+\frac{p_{10}}{\pi_0}
+\bigl(
+\pi_1-A_{\lfloor (m-1)/2\rfloor}
+\bigr),
+\qquad
+\Lambda_{m,1}(1)
+=
+\frac{A_{\lfloor m/2\rfloor}}{\pi_1}.
+\]
+The equality $\Lambda_{m,0}(r)=0$ for $r\ge 2$ follows from
+Theorem~\ref{thm:adjacent-spectrum}, because every interval $I_{m,r}$ with
+$r\ge 2$ lies in $[F_{m+2},F_{m+3}-2]$ and therefore requires the top digit
+$p_m$ to be $1$.
+
+For $2\le r\le m$, repeated use of
+\[
+I_{j,s}=F_{j+1}+I_{j-1,s-1}
+\qquad (2\le s\le j)
+\]
+from Theorem~\ref{thm:adjacent-spectrum} gives
+\[
+\mathcal{S}_{m,r}=\mathcal{S}_{m-r+1,1}1^{r-1}.
+\]
+Set $k:=m-r+1$.  The decomposition of $\mathcal{S}_{k,1}$ above therefore
+gives
+\[
+\mathcal{S}_{m,r}
+=
+\mathcal{T}_{k-1}1^r
+\sqcup
+\mathcal{T}_{k-2}^{\,c}10\,1^{r-1}.
+\]
+The first cylinder has probability
+\[
+p_{11}^{r-1}A_{\lfloor k/2\rfloor},
+\]
+and the second has probability
+\[
+p_{01}p_{10}p_{11}^{r-2}
+\bigl(
+\pi_1-A_{\lfloor (k-1)/2\rfloor}
+\bigr).
+\]
+Every word in $\mathcal{S}_{m,r}$ ends with the digit $1$, so dividing by
+$\pi_1$ yields
+\[
+\Lambda_{m,1}(r)
+=
+\frac{p_{11}^{r-2}}{\pi_1}
+\Bigl(
+p_{01}p_{10}\bigl(\pi_1-A_{\lfloor (m-r)/2\rfloor}\bigr)
++
+p_{11}A_{\lfloor (m-r+1)/2\rfloor}
+\Bigr),
+\]
+which is the stated formula.  If $\omega_m=1$, then
+$N(r_{\infty\to m}(\omega^\infty))\ge F_{m+1}$, so
+Theorem~\ref{thm:adjacent-threshold} implies
+$\kappa_{m+1\to m}(r_{\infty\to m}(\omega^\infty),1)\ne 0$.  Hence
+\[
+\sum_{r=1}^m\Lambda_{m,1}(r)=1.
+\]
+
+Fix $\ell\ge 1$ and set $n:=m+\ell$.  Theorem~\ref{thm:markov-defect-law}
+gives
+\[
+\PP_P[D_{n\to m}=v_{m,r}]
+=
+\pi_0\rho_\ell^{(0)}\Lambda_{m,0}(r)
++
+\pi_1\rho_\ell^{(1)}\Lambda_{m,1}(r).
+\]
+For $\ell\ge 1$,
+\[
+\rho_\ell^{(0)}
+=
+\frac{p_{01}(1-(-p_{11})^\ell)}{1+p_{11}},
+\qquad
+\rho_\ell^{(1)}
+=
+\frac{p_{11}(1-(-p_{11})^\ell)}{1+p_{11}}.
+\]
+Using $\pi_0p_{01}=\pi_1p_{10}$ and $\Lambda_{m,0}(r)=0$ for $r\ge 2$, one
+obtains
+\[
+\PP_P[D_{n\to m}=v_{m,1}]
+=
+\frac{\pi_1(1-(-p_{11})^\ell)}{1+p_{11}}
+\bigl(
+p_{10}\Lambda_{m,0}(1)+p_{11}\Lambda_{m,1}(1)
+\bigr),
+\]
+\[
+\PP_P[D_{n\to m}=v_{m,r}]
+=
+\frac{\pi_1(1-(-p_{11})^\ell)}{1+p_{11}}
+p_{11}\Lambda_{m,1}(r)
+\qquad (2\le r\le m).
+\]
+Summing over $r$ and using $\sum_{r=1}^m\Lambda_{m,1}(r)=1$ gives
+\[
+\PP_P[D_{n\to m}\ne 0]
+=
+\frac{\pi_1(1-(-p_{11})^\ell)}{1+p_{11}}
+\bigl(
+p_{10}\Lambda_{m,0}(1)+p_{11}
+\bigr).
+\]
+Dividing the preceding identities by this common factor proves the displayed
+formulas for the conditioned depth law and shows that the result is independent
+of $\ell$.
+
+Since $p_{01}p_{10}<1$, the closed form for $A_j$ yields
+\[
+A_j\xrightarrow[j\to\infty]{}
+A_\infty
+:=
+\frac{\pi_1p_{10}p_{00}}{1-p_{01}p_{10}}.
+\]
+Hence
+\[
+\Lambda_{m,1}(1)
+=
+\frac{A_{\lfloor m/2\rfloor}}{\pi_1}
+\xrightarrow[m\to\infty]{}
+\frac{p_{10}p_{00}}{1-p_{01}p_{10}}.
+\]
+Also,
+\[
+\pi_1-A_\infty
+=
+\frac{\pi_1p_{11}}{1-p_{01}p_{10}},
+\]
+so
+\[
+\Lambda_{m,0}(1)
+=
+\frac{p_{10}}{\pi_0}
+\bigl(
+\pi_1-A_{\lfloor (m-1)/2\rfloor}
+\bigr)
+\xrightarrow[m\to\infty]{}
+\frac{p_{10}\pi_1}{\pi_0}\,
+\frac{p_{11}}{1-p_{01}p_{10}}
+=
+\frac{p_{01}p_{11}}{1-p_{01}p_{10}}.
+\]
+For fixed $r\ge 2$, both indices in the formula for $\Lambda_{m,1}(r)$ tend to
+$+\infty$ with $m$, hence
+\[
+\Lambda_{m,1}(r)
+\xrightarrow[m\to\infty]{}
+\frac{p_{11}^{r-2}}{\pi_1}
+\bigl(
+p_{01}p_{10}(\pi_1-A_\infty)+p_{11}A_\infty
+\bigr).
+\]
+Using the two identities above,
+\[
+p_{01}p_{10}(\pi_1-A_\infty)+p_{11}A_\infty
+=
+\frac{\pi_1p_{10}p_{11}}{1-p_{01}p_{10}},
+\]
+and therefore
+\[
+\Lambda_{m,1}(r)
+\xrightarrow[m\to\infty]{}
+\frac{p_{10}p_{11}^{r-1}}{1-p_{01}p_{10}}.
+\]
+
+Finally,
+\[
+p_{10}\Lambda_{m,0}(1)+p_{11}
+\xrightarrow[m\to\infty]{}
+\frac{p_{10}p_{01}p_{11}}{1-p_{01}p_{10}}+p_{11}
+=
+\frac{p_{11}}{1-p_{01}p_{10}}.
+\]
+The limit for $r=1$ is therefore
+\[
+\frac{
+\dfrac{p_{10}p_{01}p_{11}}{1-p_{01}p_{10}}
++
+\dfrac{p_{11}p_{10}p_{00}}{1-p_{01}p_{10}}
+}{
+\dfrac{p_{11}}{1-p_{01}p_{10}}
+}
+=
+p_{10},
+\]
+while for $r\ge 2$ the limit is
+\[
+\frac{
+\dfrac{p_{11}p_{10}p_{11}^{r-1}}{1-p_{01}p_{10}}
+}{
+\dfrac{p_{11}}{1-p_{01}p_{10}}
+}
+=
+p_{10}p_{11}^{r-1}.
+\]
+Because the conditioned depth law is exactly independent of $\ell$, the
+convergence is uniform in $\ell\ge 1$.
+\end{proof}
+
+\section*{Acknowledgments}
+
+The authors have no acknowledgments to declare.
 
 \bibliographystyle{plain}
 \bibliography{references}
