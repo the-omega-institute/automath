@@ -7,6 +7,7 @@ import Omega.Discussion.CrossingWindingBlaschkeIndex
 import Omega.Discussion.CmvStabilizationCore
 import Omega.Discussion.CubicalStokesElimination2Cycle
 import Omega.Discussion.DimensionalNullTrigger
+import Omega.Discussion.EndpointDiscreteVsContinuous
 import Omega.Discussion.EulerFactorBasepointOrbit
 import Omega.Discussion.EpsZkCmiRiskImprovementBound
 import Omega.Discussion.FiberStokesWatataniNormalization
