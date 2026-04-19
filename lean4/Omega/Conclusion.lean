@@ -222,6 +222,7 @@ import Omega.Conclusion.Window6VisibleHiddenSeparation
 import Omega.Conclusion.ZGDensityExactInhomogeneousMarkov
 import Omega.Conclusion.ZGDivisibilitySeriesHardcoreCylinderMass
 import Omega.Conclusion.ZeckendorfCrossResolution
+import Omega.Conclusion.ZeckendorfEulerReindexing
 import Omega.Conclusion.ZeckendorfEulerSeeds
 import Omega.Conclusion.ZeckendorfEulerPoissonBoundary
 import Omega.Conclusion.ZeckendorfResetBoundedCLTAbsent

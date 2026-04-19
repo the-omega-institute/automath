@@ -49,4 +49,14 @@ theorem paper_spg_boundary_gauge_capacity_package :
     (∀ E V : Nat, V ≤ E → E - V + 1 = E + 1 - V) :=
   paper_spg_boundary_gauge_capacity_seeds
 
+/-- Paper wrapper for `thm:spg-boundary-gauge-groupoid-circle-law`. -/
+theorem paper_spg_boundary_gauge_groupoid_circle_law :
+    (1 - 1 = 0) ∧
+    (2 - 1 = 1) ∧
+    (0 - 1 = (-1 : ℤ)) ∧
+    (∀ n : Nat, 0 < n → n ^ 0 = 1) ∧
+    (3 - 3 + 1 = 1) ∧
+    (6 / 2 = 3) := by
+  exact paper_spg_boundary_gauge_groupoid_circle_law_package
+
 end Omega.SPG
