@@ -155,6 +155,7 @@ import Omega.Conclusion.SoftcoreExceptionalMomentsCombinatorialClosedForm
 import Omega.Conclusion.SoftcoreKroneckerSympowerDecomposition
 import Omega.Conclusion.SoftcoreWeightMatrixExplicitInverse
 import Omega.Conclusion.SpectrumSignLaw
+import Omega.Conclusion.CoarsegrainingStokesBeckChevalley
 import Omega.Conclusion.StokesSteinWeightedGraphMinflow
 import Omega.Conclusion.SquarefreeRTLaminarNesting
 import Omega.Conclusion.SubexponentialLedgerPhaseUniversality
