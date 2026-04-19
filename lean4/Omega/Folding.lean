@@ -167,6 +167,7 @@ import Omega.Folding.GaugeAnomalyOneBlockThreePeriodLaw
 import Omega.Folding.GaugeAnomalyBernoulliPKappa4AndKappa3Signflip
 import Omega.Folding.GaugeAnomalyBranchRadiusCumulantGrowth
 import Omega.Folding.GodelDensityEstimatorDeterministicMeanApprox
+import Omega.Folding.GodelDensityEstimatorCltEfficient
 import Omega.Folding.GodelFiniteDictionaryBitlength
 import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.GaugeAnomalyFiniteVarianceClosed

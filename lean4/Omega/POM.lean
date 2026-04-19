@@ -173,6 +173,7 @@ import Omega.POM.MomentMod3TwoPhase
 import Omega.POM.MinKernelProjectionAndInversion
 import Omega.POM.MultiplicativeChainRuleFinite
 import Omega.POM.MultiplicityCompositionPartition
+import Omega.POM.MultiplicityCompositionMomentHierarchyRationalGrowth
 import Omega.POM.MultiplicityCompositionExactConditionalIid
 import Omega.POM.MultiplicityCompositionMod3Sparsity
 import Omega.POM.MultiplicityBinetTwoParameterNormalForm
