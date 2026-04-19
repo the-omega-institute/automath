@@ -20,6 +20,7 @@ import Omega.Folding.BernoulliPRegenerationConditionalLengthShiftedNB
 import Omega.Folding.BernoulliPRegenerationBivariatePGF
 import Omega.Folding.BernoulliPRegenerationTripleJointLaw
 import Omega.Folding.BernoulliPCycleTiltSecondMomentsClosed
+import Omega.Folding.BernoulliPCumulantDenominatorLaw
 import Omega.Folding.BernoulliPDoobTransformClosed
 import Omega.Folding.BernoulliPEndpointExactFinite
 import Omega.Folding.BernoulliPEndpointLdpRestated
