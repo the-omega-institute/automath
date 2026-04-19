@@ -1,5 +1,7 @@
 import Mathlib.Data.Fintype.Card
 import Omega.Core.Fib
+import Omega.POM.KLDefectIdentity
+import Omega.POM.MaxentLift
 import Mathlib.Tactic
 
 namespace Omega
@@ -112,6 +114,124 @@ theorem paper_fold_fibre_star_exp_lb :
       Fintype.card_le_of_injective (foldFibreStarLift n) (foldFibreStarLift_injective n)
     _ = foldFibreStarMultiplicity n := by
       simpa [foldFibreStarMultiplicity] using (Fintype.card_coe (foldFibreStarFiber n))
+
+/-- The one-point macrostate used to package the ledger identity for the fixed target fiber. -/
+abbrev FoldFibreStarLedgerMacrostate := PUnit
+
+/-- Fiber degree of the ledger model: the single macrostate has `2^n` microstates. -/
+def foldFibreStarLedgerDegree (n : ℕ) : FoldFibreStarLedgerMacrostate → ℕ :=
+  fun _ => 2 ^ n
+
+/-- Dirac macro-distribution at the unique target macrostate. -/
+def foldFibreStarLedgerMacroDist (n : ℕ) : FoldFibreStarLedgerMacrostate → ℝ :=
+  fun _ => 1
+
+/-- The uniform lift over the one-point macrostate with `2^n` microstates. -/
+noncomputable def foldFibreStarLedgerMicroDist (n : ℕ) :
+    Omega.POM.FiberMicrostate (foldFibreStarLedgerDegree n) → ℝ :=
+  Omega.POM.fiberUniformLift (foldFibreStarLedgerDegree n) (foldFibreStarLedgerMacroDist n)
+
+lemma foldFibreStarImage_card (n : ℕ) :
+    (Finset.univ.image (foldFibreStarEncode (n := n))).card = 2 ^ n := by
+  classical
+  rw [Finset.card_image_of_injective]
+  · simp [FoldFibreStarBitstring, Fintype.card_bool, Fintype.card_fin]
+  · exact foldFibreStarEncode_injective n
+
+lemma foldFibreStar_log_two_pow (n : ℕ) :
+    Real.log ((2 ^ n : ℕ) : ℝ) = n * Real.log 2 := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      have hx : ((2 ^ n : ℕ) : ℝ) ≠ 0 := by positivity
+      have hy : (2 : ℝ) ≠ 0 := by norm_num
+      rw [pow_succ, Nat.cast_mul, Nat.cast_ofNat, Real.log_mul hx hy]
+      rw [ih]
+      calc
+        (n : ℝ) * Real.log 2 + Real.log 2 = (((n : ℝ) + 1) * Real.log 2) := by ring
+        _ = Real.log 2 * (((n : ℝ) + 1)) := by ring
+        _ = Real.log 2 * (↑(n + 1)) := by norm_num
+        _ = ↑(n + 1) * Real.log 2 := by ring
+
+private lemma foldFibreStarLedgerDegree_pos (n : ℕ) (x : FoldFibreStarLedgerMacrostate) :
+    0 < foldFibreStarLedgerDegree n x := by
+  simp [foldFibreStarLedgerDegree]
+
+private lemma foldFibreStarLedgerMarginal (n : ℕ) (x : FoldFibreStarLedgerMacrostate) :
+    Omega.POM.fiberMarginal (foldFibreStarLedgerDegree n) (foldFibreStarLedgerMicroDist n) x =
+      foldFibreStarLedgerMacroDist n x := by
+  have hd : 0 < foldFibreStarLedgerDegree n x := foldFibreStarLedgerDegree_pos n x
+  have hd0 : ((foldFibreStarLedgerDegree n x : ℕ) : ℝ) ≠ 0 := by
+    exact_mod_cast Nat.ne_of_gt hd
+  calc
+    Omega.POM.fiberMarginal (foldFibreStarLedgerDegree n) (foldFibreStarLedgerMicroDist n) x
+        = ∑ _i : Fin (foldFibreStarLedgerDegree n x),
+            (foldFibreStarLedgerMacroDist n x : ℝ) / foldFibreStarLedgerDegree n x := by
+              simp [Omega.POM.fiberMarginal, foldFibreStarLedgerMicroDist, Omega.POM.fiberUniformLift]
+    _ = ((foldFibreStarLedgerDegree n x : ℕ) : ℝ) *
+          ((foldFibreStarLedgerMacroDist n x : ℝ) / foldFibreStarLedgerDegree n x) := by
+            simp
+    _ = foldFibreStarLedgerMacroDist n x := by
+          field_simp [hd0]
+
+private lemma foldFibreStarLedgerMicroNonneg (n : ℕ) :
+    ∀ a, 0 ≤ foldFibreStarLedgerMicroDist n a := by
+  intro a
+  simp [foldFibreStarLedgerMicroDist, foldFibreStarLedgerMacroDist, Omega.POM.fiberUniformLift]
+
+private lemma foldFibreStarLedgerMacroNonneg (n : ℕ) :
+    ∀ x, 0 ≤ foldFibreStarLedgerMacroDist n x := by
+  intro x
+  simp [foldFibreStarLedgerMacroDist]
+
+private lemma foldFibreStarLedgerMicroSum (n : ℕ) :
+    Finset.univ.sum (foldFibreStarLedgerMicroDist n) = 1 := by
+  rw [Fintype.sum_sigma]
+  simpa [Omega.POM.fiberMarginal] using foldFibreStarLedgerMarginal n PUnit.unit
+
+private lemma foldFibreStarLedgerEntropy (n : ℕ) :
+    Omega.POM.liftEntropy (foldFibreStarLedgerDegree n) (foldFibreStarLedgerMicroDist n) =
+      Real.log ((2 ^ n : ℕ) : ℝ) := by
+  have hmaxent :=
+    Omega.POM.paper_pom_maxent_lift
+      (foldFibreStarLedgerDegree n) (foldFibreStarLedgerDegree_pos n) (foldFibreStarLedgerMacroDist n)
+      (foldFibreStarLedgerMicroDist n) (by intro x i j; rfl) (foldFibreStarLedgerMarginal n)
+  rcases hmaxent with ⟨_, hEntropy⟩
+  simpa [foldFibreStarLedgerMacroDist, foldFibreStarLedgerDegree] using hEntropy
+
+private lemma foldFibreStarLedgerKlZero (n : ℕ) :
+    Omega.POM.klDiv (foldFibreStarLedgerMicroDist n)
+      (Omega.POM.fiberUniformLift (foldFibreStarLedgerDegree n) (foldFibreStarLedgerMacroDist n)) = 0 := by
+  have hkl :=
+    Omega.POM.paper_pom_kl_defect_identity
+      (foldFibreStarLedgerDegree n) (foldFibreStarLedgerDegree_pos n) (foldFibreStarLedgerMacroDist n)
+      (foldFibreStarLedgerMicroDist n) (foldFibreStarLedgerMarginal n) (foldFibreStarLedgerMicroNonneg n)
+      (foldFibreStarLedgerMacroNonneg n) (foldFibreStarLedgerMicroSum n)
+  simpa [foldFibreStarLedgerMicroDist] using hkl
+
+/-- The explicit `100/011` encoder has zero macro entropy at the common target macrostate, linear
+source entropy `n log 2`, and the corresponding finite-fiber ledger identity closes with zero KL
+defect on the uniform lift.
+    prop:fold-fiber-ledger-zero-macro-linear-micro -/
+theorem paper_fold_fiber_ledger_zero_macro_linear_micro (n : ℕ) :
+    (∀ w : FoldFibreStarBitstring n,
+      foldFibreStarWeight (foldFibreStarEncode w) = foldFibreStarTargetWeight n) ∧
+    Real.negMulLog (foldFibreStarLedgerMacroDist n PUnit.unit) = 0 ∧
+    Real.log (((Finset.univ.image (foldFibreStarEncode (n := n))).card : ℝ)) = n * Real.log 2 ∧
+    Omega.POM.liftEntropy (foldFibreStarLedgerDegree n) (foldFibreStarLedgerMicroDist n) =
+      n * Real.log 2 ∧
+    Omega.POM.liftEntropy (foldFibreStarLedgerDegree n) (foldFibreStarLedgerMicroDist n) =
+      Real.log ((foldFibreStarLedgerDegree n PUnit.unit : ℕ) : ℝ) -
+        Omega.POM.klDiv (foldFibreStarLedgerMicroDist n)
+          (Omega.POM.fiberUniformLift (foldFibreStarLedgerDegree n) (foldFibreStarLedgerMacroDist n)) ∧
+    2 ^ n ≤ foldFibreStarMultiplicity n := by
+  refine ⟨foldFibreStarEncode_weight, ?_, ?_, ?_, ?_, paper_fold_fibre_star_exp_lb n⟩
+  · simp [foldFibreStarLedgerMacroDist]
+  · rw [foldFibreStarImage_card, foldFibreStar_log_two_pow]
+  · rw [foldFibreStarLedgerEntropy, foldFibreStar_log_two_pow]
+  · rw [foldFibreStarLedgerEntropy, foldFibreStarLedgerKlZero]
+    simp [foldFibreStarLedgerDegree]
 
 end
 

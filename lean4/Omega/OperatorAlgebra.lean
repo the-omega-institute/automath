@@ -13,6 +13,7 @@ import Omega.OperatorAlgebra.FoldGaugeCommutantExplicit
 import Omega.OperatorAlgebra.FoldGaugeGroupStructure
 import Omega.OperatorAlgebra.FoldGaugeOrbitClassificationQtuple
 import Omega.OperatorAlgebra.FoldInfoNCEBayesOpt
+import Omega.OperatorAlgebra.FoldInfoNCEMILimit
 import Omega.OperatorAlgebra.FoldCoarsegrainingQCollisionTwoSided
 import Omega.OperatorAlgebra.FoldInfoNCEFiniteKMomentFormula
 import Omega.OperatorAlgebra.FoldBayesPosteriorCollapse
