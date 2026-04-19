@@ -135,6 +135,7 @@ import Omega.Zeta.HankelVandermonde3Recovery
 import Omega.Zeta.HankelVandermonde4
 import Omega.Zeta.HankelVsPronySquareGap
 import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
+import Omega.Zeta.XiBulkRenormalizedConstantAnomalyGap
 import Omega.Zeta.XiHankelDetScalingCovariance
 import Omega.Zeta.XiHankelHsEnergyClosedFormMassEnergy
 import Omega.Zeta.ShiftInvariantSaturatedLatticePrincipalIdeal
