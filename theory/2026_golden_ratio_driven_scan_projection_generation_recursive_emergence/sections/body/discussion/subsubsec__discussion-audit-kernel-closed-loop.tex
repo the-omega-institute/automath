@@ -71,6 +71,81 @@ Z_m=(\varphi/2)^m d^{\mathrm{bin}}_m(W_m)
 更强地，若两条实现路径产生的 \(S_q,S'_q\) 具有同一 Hankel 秩 \(d\)，则只要它们在长度为 \(2d\) 的连续窗口上相等，即共享同一 \(\mathrm{HANKELNF}_q\)，从而对所有 \(m\ge 2\) 完全一致（命题 \ref{prop:pom-moment-finite-sampling-decidable}；并见定理 \ref{thm:dephys-hankel-finite-audit} 的协议化表述）。
 因此“机制同一性”的可计算判等可被压缩为有限样本的硬接口：一旦 \(d\) 与 \(\ell_q\) 作为证书被输出，核验只需检查 \(2d\) 个整数样本。
 
+与此相对，外部表达层上的统一只是一种较弱的压缩。Odrzywo{\l}ek 的单二元算子 EML 结果表明，标准初等函数可由
+\[
+\mathrm{eml}(x,y)=\exp(x)-\log(y)
+\]
+与常数 \(1\) 生成，并因而落入统一的二叉语法族 \cite{Odrzywolek2026SingleBinaryOperator}。本文的审计链则要求更强：一旦外部表达被压入有限窗口、最小实现与可见商半环，真正被固定的是内部动力学而非语法树本身。
+
+\begin{theorem}[Hankel 证书的语法无关刚性]\label{thm:discussion-hankel-syntax-independent-rigidity}
+固定 \(q\ge 2\)，记 \(d_q\) 为碰撞矩序列 \(m\mapsto S_q(m)\) 的 Hankel 秩，\(\ell_q\) 为定义 \ref{def:pom-hankel-normal-form} 中的最小可逆偏移。
+设两条实现路径产生两条 \(q\)-moment 序列 \(S_q,S'_q\)，并且二者的 Hankel 秩同为 \(d_q\)。
+若
+\[
+S_q(m)=S'_q(m)
+\qquad
+(m=\ell_q+2,\ell_q+3,\dots,\ell_q+2d_q+1),
+\]
+则对一切 \(m\ge 2\) 都有
+\[
+S_q(m)=S'_q(m).
+\]
+特别地，任意外部表达系统，只要其审计输出在该长度 \(2d_q\) 的窗口上通过核验，便被强制收束到同一最小动力学。
+\end{theorem}
+\begin{proof}
+由定义 \ref{def:pom-hankel-normal-form}，长度为 \(2d_q\) 的连续窗口
+\[
+S_q(\ell_q+2),\dots,S_q(\ell_q+2d_q+1)
+\]
+唯一决定 Hankel 见证块
+\[
+H_0^{(\ell_q)},\qquad H_1^{(\ell_q)},
+\]
+从而唯一决定转移矩阵
+\[
+A_q=\bigl(H_0^{(\ell_q)}\bigr)^{-1}H_1^{(\ell_q)}
+\]
+及相应的 \(\mathrm{HANKELNF}_q\)。因此两条序列共享同一 Hankel-正规形。
+命题 \ref{prop:pom-moment-finite-sampling-decidable} 遂给出它们在所有 \(m\ge 2\) 上完全一致。
+此外，定理 \ref{thm:pom-hankel-nf-shift-invariance-and-power-propagation} 表明，只要偏移对应可逆见证块，上述转移矩阵与偏移选择无关，故该结论确为证书层而非具体窗口位置的刚性。证毕。
+\end{proof}
+
+\begin{proposition}[有限窗口商半环的规约自由平凡性]\label{prop:discussion-window-quotient-semiring-rigidity}
+记
+\[
+Q_m:=\Omega_m/\!\equiv_m.
+\]
+则其幺半环自同构群平凡：
+\[
+\operatorname{Aut}_{\mathrm{unital\; semiring}}(Q_m)=\{\mathrm{id}\}.
+\]
+因而，任何保持 \(0,1,+,\times\) 的窗口级精确编译，都不存在非平凡的语义规约自由。
+\end{proposition}
+\begin{proof}
+这正是定理 \ref{thm:fold-mod-semirings-unital-automorphism-rigidity} 的内容。证毕。
+\end{proof}
+
+\begin{conjecture}[良素上的最小实现非负提升]\label{conj:discussion-good-prime-minimal-realization-lift}
+固定 \(q\ge 2\)，设 \(d_q\) 为 \(S_q\) 的 Hankel 秩，\(A_q^{\min}\in M_{d_q}(\QQ)\) 为命题 \ref{prop:pom-hankel-realization-protocol} 给出的最小实现矩阵。
+则存在有限坏素集合 \(\mathcal B_q\)，使得对每个 \(p\notin\mathcal B_q\)，都存在
+\[
+P_p\in \GL_{d_q}(\ZZ_p)
+\]
+与 primitive 非负整数矩阵
+\[
+A_{q,p}^{+}\in M_{d_q}(\ZZ_{\ge 0})
+\]
+满足
+\[
+P_p^{-1}A_q^{\min}P_p=A_{q,p}^{+}
+\qquad\text{在 }M_{d_q}(\ZZ_p)\text{ 中成立}.
+\]
+并且 \(A_{q,p}^{+}\) 的特征多项式仍等于 \(S_q\) 的最小递推多项式，从而 Archimedean Perron 根读出与 \(r_q\) 相容。
+\end{conjecture}
+
+这条猜想把猜想 \ref{conj:pom-minimal-hankel-kernelization} 从单一整数基变换提升到良素族上的统一可见性。
+若其成立，则可审计的最小实现不仅在实谱侧有统一 Perron 根 \(r_q\)，也会在几乎所有 \(p\)-进完成上同时显现为同维 primitive 非负核，从而把“最小 Hankel 证书”与“有限状态组合解释”真正压成同一对象。
+
 \paragraph{算术刚性与共振：\texorpdfstring{$p$}{p}-进跳变、NullMode 与整除商分解证书}
 Hankel 见证块行列式不仅提供秩下界（定理 \ref{thm:pom-moment-hankel}），也携带不可伪造的算术刚性指纹。
 例如 \(p=5\) 的刚性指数在 \(k=5\) 处首次出现高赋值跳变（注 \ref{rem:pom-hankel-stiffness-p5}），给出一个完全内部的可复核算术阈值。
@@ -106,3 +181,4 @@ A^{(j)}(\lambda)=Q^{(j)}(\lambda)P_q(\lambda)
   \item 低频结构量 \(\mathcal{E}_1\) 与 small-angle 二次律类诊断字段（片段 \ref{tab:real_input_40_arity_dirichlet_mertens_335_N2_summary}）。
 \end{itemize}
 因此，本文的“先审计、后解释”可被实现为一种完全实现中立的核验协议：在固定读出与基线口径下，任何替代实现若声称同机制，必须复现同一组证书字段；否则可在不进入内部机制细节的前提下被离线地、机器可检地拒绝。
+从这一角度看，表达统一与审计统一属于两种不同层级：前者只要求把公式压入共同语法，后者还要求把完成对象压入整除偏序上的逆极限（定理 \ref{thm:conclusion-fibadic-natural-depth-chain-obstruction}），并把长程动力学与短程语义分别压入 Hankel-正规形与平凡自同构的有限窗口商半环。

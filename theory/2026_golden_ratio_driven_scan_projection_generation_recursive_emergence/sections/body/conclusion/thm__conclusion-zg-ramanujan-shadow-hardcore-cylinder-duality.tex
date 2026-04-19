@@ -181,6 +181,50 @@ E_\sigma\cap\{X_1=\eta_1,\dots,X_N=\eta_N\}
 再与 \(\mathbf 1_{E_\sigma\cap A_{d_{S_1(\eta)}}}\) 相乘并取期望，便得到所述公式。证毕。
 \end{proof}
 
+\begin{theorem}[有限 Ramanujan 阴影对有限深度 Markov 协议的完备性]\label{thm:conclusion-zg-finite-shadow-determines-truncated-markov-protocol}
+对固定 \(\sigma>1\)，记
+\[
+\nu_{\mathrm{ZG},\sigma}(\,\cdot\,):=\PP_\sigma(\,\cdot\mid E_\sigma),
+\qquad
+P_N:=\prod_{i=1}^{N}p_i,
+\qquad
+\mathcal R_N(\sigma):=\{\mathcal R_q^{\mathrm{ZG}}(\sigma):q\mid P_N\}.
+\]
+则 \(\mathcal R_N(\sigma)\) 唯一决定 \(\nu_{\mathrm{ZG},\sigma}\) 在前 \(N\) 个 prime-index 位上的全部 admissible cylinder 概率。因而，它也唯一决定该有限深度截断的非齐次一阶 Markov 协议，即
+\[
+\pi_k^{(\sigma)}:=\nu_{\mathrm{ZG},\sigma}(X_k^{(\sigma)}=1)
+\qquad (1\le k\le N),
+\]
+\[
+q_k^{(\sigma)}:=\nu_{\mathrm{ZG},\sigma}(X_{k+1}^{(\sigma)}=1\mid X_k^{(\sigma)}=0)
+\qquad (1\le k<N).
+\]
+换言之，有限 primorial 阶段的 Ramanujan 阴影不仅恢复有限前缀的概率律，也恢复同一深度上的完整 Markov 传递协议。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-zg-finite-primorial-shadow-cylinder-recovery}，
+\(\mathcal R_N(\sigma)\) 已唯一决定前 \(N\) 个 prime-index 位上的全部 admissible cylinder 概率。特别地，它决定所有长度 \(1\) 与长度 \(2\) 的 cylinder 概率。
+
+于是对 \(1\le k\le N\)，边际量
+\[
+\pi_k^{(\sigma)}=\nu_{\mathrm{ZG},\sigma}(X_k^{(\sigma)}=1)
+\]
+由长度 \(1\) 的 cylinder 概率唯一给出；而对 \(1\le k<N\)，由于
+\[
+\nu_{\mathrm{ZG},\sigma}(X_k^{(\sigma)}=0)>0,
+\]
+条件概率
+\[
+q_k^{(\sigma)}
+=
+\frac{\nu_{\mathrm{ZG},\sigma}(X_k^{(\sigma)}=0,\ X_{k+1}^{(\sigma)}=1)}
+{\nu_{\mathrm{ZG},\sigma}(X_k^{(\sigma)}=0)}
+\]
+由相应的长度 \(2\) 与长度 \(1\) 概率唯一恢复。
+
+再结合定理 \ref{thm:conclusion-zg-density-exact-inhomogeneous-markov} 所给出的一阶 Markov 结构，便知这些长度 \(1\) 与长度 \(2\) 数据恰是深度 \(N\) 截断协议的全部局部参数。证毕。
+\end{proof}
+
 \begin{theorem}[prime shadow 与 pair shadow 的精确相关律]\label{thm:conclusion-zg-prime-pair-shadow-correlation-law}
 定义条件占据量
 \[
@@ -306,6 +350,115 @@ D_{\mathrm{ZG}}(\sigma)-p_iD_{p_i}(\sigma)-p_jD_{p_j}(\sigma)+p_ip_jD_{p_ip_j}(\
 \forall\, i<j.
 \]
 取 \(j=i+1\)，左端因硬核约束恒等于 \(0\)，而右端严格为正，矛盾。故所述乘法性不可能成立。最后一句正是同一定理给出的显式相关差。证毕。
+\end{proof}
+
+\begin{corollary}[有限层析完备性与 Euler 可分性的严格分离]\label{cor:conclusion-zg-finite-shadow-completeness-does-not-imply-euler-factorization}
+对每个固定 \(N\)，有限阴影族
+\[
+\mathcal R_N(\sigma)=\{\mathcal R_q^{\mathrm{ZG}}(\sigma):q\mid P_N\}
+\]
+确实给出前 \(N\) 个 prime-index 位的完整有限层析；但归一化 Ramanujan 阴影
+\[
+\mathfrak a_q(\sigma):=\frac{\mathcal R_q^{\mathrm{ZG}}(\sigma)}{D_{\mathrm{ZG}}(\sigma)}
+\]
+在平方自由导子上仍不满足 Euler 型乘法性。更精确地，对任意相邻素数 \(p_i,p_{i+1}\)，都有严格偏差
+\[
+\mathfrak a_{p_ip_{i+1}}(\sigma)-\mathfrak a_{p_i}(\sigma)\mathfrak a_{p_{i+1}}(\sigma)
+=
+-p_ip_{i+1}\pi_i(\sigma)\pi_{i+1}(\sigma)<0.
+\]
+因此，有限完备性与 Euler 可分性在此是两件彼此独立的结构事实：前者成立，并不推出后者。
+\end{corollary}
+\begin{proof}
+有限层析完备性正是定理
+\ref{thm:conclusion-zg-finite-shadow-determines-truncated-markov-protocol}
+的结论。另一方面，由定理
+\ref{thm:conclusion-zg-shadow-nonmultiplicativity-nearest-neighbor}
+与定理
+\ref{thm:conclusion-zg-prime-pair-shadow-correlation-law}
+可知，对相邻素数对 \(p_i,p_{i+1}\)，归一化阴影的乘法缺陷严格等于最近邻负相关项
+\[
+-p_ip_{i+1}\pi_i(\sigma)\pi_{i+1}(\sigma),
+\]
+因而不可能消失。故有限前缀统计的完全可恢复性并不会提升为全局 Euler 可分性。证毕。
+\end{proof}
+
+\begin{theorem}[prime-hard-core Dirichlet 级数的 Euler--memory 秩恰为二]\label{thm:conclusion-zg-euler-memory-rank-two}
+定义 \(D_{\mathrm{ZG}}(\sigma)\) 的 Euler--memory 秩为最小整数 \(d\)，使得存在向量
+\[
+u,v\in\CC^d
+\]
+与一族只依赖单个素数 \(p_k\) 的矩阵
+\[
+M_{p_k}(\sigma)\in M_d(\CC)
+\]
+满足
+\[
+D_{\mathrm{ZG}}(\sigma)
+=
+\lim_{N\to\infty}
+u^\ast
+\Bigl(\prod_{k=1}^{N}M_{p_k}(\sigma)\Bigr)
+v
+\qquad
+(\Re(\sigma)>1).
+\]
+则
+\[
+\operatorname{mem}_{\mathrm{Euler}}\!\bigl(D_{\mathrm{ZG}}\bigr)=2.
+\]
+换言之，prime-hard-core 最近邻约束既不可能压缩为标量 Euler 语义，也不需要高于二态的局部记忆：二维 transfer 记忆恰为最小值。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-zg-zeta-factorization}，\(D_{\mathrm{ZG}}(\sigma)\) 已具有显式二维 transfer 表示
+\[
+D_{\mathrm{ZG}}(\sigma)
+=
+\lim_{N\to\infty}
+\mathbf 1^\top
+\Biggl(
+\prod_{k=1}^{N}
+\begin{pmatrix}
+1&1\\
+p_k^{-\sigma}&0
+\end{pmatrix}
+\Biggr)
+\binom10.
+\]
+故
+\[
+\operatorname{mem}_{\mathrm{Euler}}\!\bigl(D_{\mathrm{ZG}}\bigr)\le 2.
+\]
+
+反设其 Euler--memory 秩等于 \(1\)。则存在标量局部因子 \(a_{p_k}(\sigma)\) 使
+\[
+D_{\mathrm{ZG}}(\sigma)=\prod_{k\ge 1}a_{p_k}(\sigma).
+\]
+将其按平方自由 monomial 展开，便得到 \(\mathbf 1_{\mathrm{ZG}}(n)\) 对互素乘法是可乘的；特别地，若 \(m,n\in\mathrm{ZG}\) 且 \((m,n)=1\)，则必须有
+\[
+\mathbf 1_{\mathrm{ZG}}(mn)=\mathbf 1_{\mathrm{ZG}}(m)\mathbf 1_{\mathrm{ZG}}(n).
+\]
+然而
+\[
+2\in \mathrm{ZG},
+\qquad
+3\in \mathrm{ZG},
+\qquad
+6\notin \mathrm{ZG},
+\]
+因为 \(2\) 与 \(3\) 为相邻素数，违反 hard-core 禁邻条件。于是
+\[
+\mathbf 1_{\mathrm{ZG}}(6)\neq \mathbf 1_{\mathrm{ZG}}(2)\mathbf 1_{\mathrm{ZG}}(3),
+\]
+矛盾。故标量 Euler 语义不可能成立，从而
+\[
+\operatorname{mem}_{\mathrm{Euler}}\!\bigl(D_{\mathrm{ZG}}\bigr)\neq 1.
+\]
+结合上界，便得到
+\[
+\operatorname{mem}_{\mathrm{Euler}}\!\bigl(D_{\mathrm{ZG}}\bigr)=2.
+\]
+证毕。
 \end{proof}
 
 \begin{conjecture}[Ramanujan 阴影对非齐次 Markov 包与局部维数包的完备性]\label{conj:conclusion-zg-ramanujan-shadow-markov-dimension-completeness}
