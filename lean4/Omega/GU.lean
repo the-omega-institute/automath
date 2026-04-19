@@ -230,3 +230,4 @@ import Omega.GU.Window6Z2Z3ToZ6Readout
 import Omega.GU.Z6CenterQuotient
 import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.ZeroDefectExpRate
+import Omega.GU.TriInterfaceDiscreteConvexArithmetic
