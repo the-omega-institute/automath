@@ -82,6 +82,7 @@ import Omega.POM.FiniteStateDimensionLowerBound
 import Omega.POM.FiberIndependenceComplexClassification
 import Omega.POM.FiberMedianMajorityPrimeValuation
 import Omega.POM.FiberLedgerPrefixSideinfoLength
+import Omega.POM.FiberParityHomotopyEquivalence
 import Omega.POM.FiberPosteriorEquivalenceActivityField
 import Omega.POM.FiberParityMod3
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes

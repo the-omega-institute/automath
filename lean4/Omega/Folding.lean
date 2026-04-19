@@ -87,6 +87,7 @@ import Omega.Folding.FiberArithmetic
 import Omega.Folding.FiberArithmeticProperties
 import Omega.Folding.FiberConvolutionKernelInvertibility
 import Omega.Folding.FiberConvolutionInvertibilityDivisibility
+import Omega.Folding.FiberConditionalReconstructionOddModulus
 import Omega.Folding.FiberConvolutionKernelZeroSpectrum
 import Omega.Folding.FiberIdentifiableSigmaAlgebraMaximal
 import Omega.Folding.FiberSubsetConvolution
