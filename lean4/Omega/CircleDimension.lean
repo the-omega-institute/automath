@@ -147,6 +147,7 @@ import Omega.CircleDimension.PrimeTruncation
 import Omega.CircleDimension.ProjectiveStateOrganization
 import Omega.CircleDimension.RadiusBlindspotJointDiscreteBudgetOrthogonal
 import Omega.CircleDimension.RadialFibrationTransgression
+import Omega.CircleDimension.QuantumEventProjections
 import Omega.CircleDimension.RankonePhasePrimeFiber
 import Omega.CircleDimension.RankoneSolenoidHeightClassification
 import Omega.CircleDimension.ReadableTimeWordOverlapPD
