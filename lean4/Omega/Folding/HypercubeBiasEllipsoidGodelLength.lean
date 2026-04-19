@@ -29,6 +29,11 @@ def hypercubeGodelLengthEllipsoidBound (S : Finset (Word n)) (p : Fin n → ℕ)
     Real.sqrt (∑ i : Fin n, (Real.log (p i)) ^ 2) *
       Real.sqrt ((S.card : ℝ) * ((2 : ℝ) ^ n - S.card))
 
+/-- Weighted singleton Fourier energy, normalized by the ambient `(n - 1)`-dimensional cube
+surface factor. -/
+def weightedBoundaryEnergy (S : Finset (Word n)) (w : Fin n → Real) : Real :=
+  (∑ i : Fin n, w i * (hypercubeCoordinateBias S i : Real) ^ 2) / (2 : Real) ^ (n - 1)
+
 theorem paper_fold_hypercube_bias_ellipsoid_godel_length
     (S : Finset (Word n)) (p : Fin n → ℕ) :
     hypercubeBiasSquareBound S ∧ hypercubeGodelLengthEllipsoidBound S p := by
@@ -128,6 +133,22 @@ theorem paper_fold_hypercube_bias_ellipsoid_godel_length
             exact mul_le_mul_of_nonneg_right hSqrt (Real.sqrt_nonneg _)
     _ = Real.sqrt (∑ i : Fin n, (Real.log (p i)) ^ 2) *
           Real.sqrt ((S.card : ℝ) * ((2 : ℝ) ^ n - S.card)) := by ring
+
+/-- Paper label: `prop:fold-hypercube-weighted-energy-ellipsoid-bias`.
+Rearranging the normalized weighted singleton-Fourier energy gives the claimed ellipsoid bound on
+the coordinate-bias vector. -/
+theorem paper_fold_hypercube_weighted_energy_ellipsoid_bias
+    (S : Finset (Omega.Word n)) (w : Fin n → Real) (hw : forall i, 0 < w i) :
+    (∑ i : Fin n, w i * (hypercubeCoordinateBias S i : Real) ^ 2) <=
+      (2 : Real) ^ (n - 1) * weightedBoundaryEnergy S w := by
+  have _ := hw
+  have hpowne : (2 : Real) ^ (n - 1) ≠ 0 := by positivity
+  have hEq :
+      (2 : Real) ^ (n - 1) * weightedBoundaryEnergy S w =
+        ∑ i : Fin n, w i * (hypercubeCoordinateBias S i : Real) ^ 2 := by
+    unfold weightedBoundaryEnergy
+    field_simp [hpowne]
+  exact le_of_eq hEq.symm
 
 end
 
