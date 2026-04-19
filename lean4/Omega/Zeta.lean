@@ -86,6 +86,7 @@ import Omega.Zeta.FinitePartCyclicLiftTorsionProduct
 import Omega.Zeta.FinitePartDirichletTorsionGaussExpansion
 import Omega.Zeta.FinitePartCyclicLiftTraceSieve
 import Omega.Zeta.FinitePartDirichletCharacterInversionPrime
+import Omega.Zeta.FinitePartDirichletVanishingCyclotomicSymmetry
 import Omega.Zeta.FinitePartResidueDriftTrichotomy
 import Omega.Zeta.FinitePartCyclicLiftZetaTorsionDeterminesSpectrum
 import Omega.Zeta.FinitePartExpFinDoubleThresholdSeparation
