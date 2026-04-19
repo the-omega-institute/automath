@@ -1,9 +1,11 @@
+import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Tactic
 import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy
 
 namespace Omega.Folding
 
 open FoldFiberParityBiasRieszParsevalEnergyData
+open scoped BigOperators
 
 noncomputable section
 
@@ -158,6 +160,72 @@ theorem paper_fold_fiber_parity_energy_simplex_pairwise_independence_except_term
     by_cases hterm : (i, j) = (m - 2, m - 1)
     · simp [foldFiberParityPairCovariance, hterm, foldFiberParityTerminalPairRaw_eq_one]
     · simp [foldFiberParityPairCovariance, hterm]
+
+/-- The subset energy entering the parity partition function. -/
+def foldFiberParityPartitionEnergy {m : ℕ} (θ : Fin m → ℝ) (I : Finset (Fin m)) : ℝ :=
+  (∏ j ∈ I, (Real.sin (θ j)) ^ 2) *
+    ∏ j ∈ (Finset.univ : Finset (Fin m)) \ I, (Real.cos (θ j)) ^ 2
+
+/-- The mixed Bernoulli weight obtained by biasing membership in `I` with the fugacity `z`. -/
+def foldFiberParityMixtureTerm {m : ℕ} (θ : Fin m → ℝ) (z : ℝ) (I : Finset (Fin m)) : ℝ :=
+  (∏ j ∈ I, z * (Real.sin (θ j)) ^ 2) *
+    ∏ j ∈ (Finset.univ : Finset (Fin m)) \ I, (Real.cos (θ j)) ^ 2
+
+/-- The parity-energy partition function obtained by summing `z ^ |I| E_{m,I}` over the powerset. -/
+def foldFiberParityPartitionFunction {m : ℕ} (θ : Fin m → ℝ) (z : ℝ) : ℝ :=
+  Finset.sum ((Finset.univ : Finset (Fin m)).powerset)
+    (fun I => z ^ I.card * foldFiberParityPartitionEnergy θ I)
+
+private lemma foldFiberParity_weightedEnergy_eq_mixtureTerm {m : ℕ} (θ : Fin m → ℝ)
+    (z : ℝ) (I : Finset (Fin m)) :
+    z ^ I.card * foldFiberParityPartitionEnergy θ I = foldFiberParityMixtureTerm θ z I := by
+  calc
+    z ^ I.card * foldFiberParityPartitionEnergy θ I
+        = (∏ j ∈ I, z) *
+            ((∏ j ∈ I, (Real.sin (θ j)) ^ 2) *
+              ∏ j ∈ (Finset.univ : Finset (Fin m)) \ I, (Real.cos (θ j)) ^ 2) := by
+              simp [foldFiberParityPartitionEnergy]
+    _ = ((∏ j ∈ I, z) * ∏ j ∈ I, (Real.sin (θ j)) ^ 2) *
+          ∏ j ∈ (Finset.univ : Finset (Fin m)) \ I, (Real.cos (θ j)) ^ 2 := by
+            ac_rfl
+    _ = (∏ j ∈ I, z * (Real.sin (θ j)) ^ 2) *
+          ∏ j ∈ (Finset.univ : Finset (Fin m)) \ I, (Real.cos (θ j)) ^ 2 := by
+            rw [← Finset.prod_mul_distrib]
+    _ = foldFiberParityMixtureTerm θ z I := by
+          rfl
+
+/-- Summing the weighted parity energies over the powerset gives the expected finite product, and
+the same identity can be read as a mixed Bernoulli product law on subsets.
+    prop:fold-fiber-parity-energy-partition-function-mixture -/
+theorem paper_fold_fiber_parity_energy_partition_function_mixture
+    (m : ℕ) (θ : Fin m → ℝ) (z : ℝ) :
+    foldFiberParityPartitionFunction θ z =
+      ∏ j : Fin m, ((Real.cos (θ j)) ^ 2 + z * (Real.sin (θ j)) ^ 2) ∧
+    foldFiberParityPartitionFunction θ z =
+      Finset.sum ((Finset.univ : Finset (Fin m)).powerset)
+        (fun I => foldFiberParityMixtureTerm θ z I) := by
+  have hMixture :
+      foldFiberParityPartitionFunction θ z =
+        Finset.sum ((Finset.univ : Finset (Fin m)).powerset)
+          (fun I => foldFiberParityMixtureTerm θ z I) := by
+    unfold foldFiberParityPartitionFunction
+    refine Finset.sum_congr rfl ?_
+    intro I hI
+    exact foldFiberParity_weightedEnergy_eq_mixtureTerm θ z I
+  refine ⟨?_, hMixture⟩
+  calc
+    foldFiberParityPartitionFunction θ z
+        = Finset.sum ((Finset.univ : Finset (Fin m)).powerset)
+            (fun I => foldFiberParityMixtureTerm θ z I) :=
+            hMixture
+    _ = ∏ j : Fin m, ((Real.cos (θ j)) ^ 2 + z * (Real.sin (θ j)) ^ 2) := by
+          symm
+          simpa [foldFiberParityMixtureTerm, add_comm, add_left_comm, add_assoc, mul_comm,
+            mul_left_comm, mul_assoc] using
+            (Finset.prod_add
+              (fun j : Fin m => z * (Real.sin (θ j)) ^ 2)
+              (fun j : Fin m => (Real.cos (θ j)) ^ 2)
+              (Finset.univ : Finset (Fin m)))
 
 /-- Concrete slice/collision bookkeeping for the parity-energy decomposition. -/
 structure FoldFiberSliceCollisionData where
