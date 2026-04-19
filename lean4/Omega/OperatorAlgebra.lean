@@ -12,6 +12,7 @@ import Omega.OperatorAlgebra.FoldConditionalExpectationSingularSpectrum
 import Omega.OperatorAlgebra.FoldConditionalExpectationHaar
 import Omega.OperatorAlgebra.FoldGaugeCommutantExplicit
 import Omega.OperatorAlgebra.FoldGaugeGroupStructure
+import Omega.OperatorAlgebra.FoldGaugeNonabelianSpectrumRigidity
 import Omega.OperatorAlgebra.FoldGaugeOrbitClassificationQtuple
 import Omega.OperatorAlgebra.FoldInfoNCEBayesOpt
 import Omega.OperatorAlgebra.FoldInfoNCEMILimit
