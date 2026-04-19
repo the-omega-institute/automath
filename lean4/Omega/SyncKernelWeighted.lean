@@ -1,5 +1,6 @@
 import Omega.SyncKernelWeighted.MobiusErrorPropagation
 import Omega.SyncKernelWeighted.PressureBranchpointsDiscriminant
+import Omega.SyncKernelWeighted.PressureAnalyticRadius
 import Omega.SyncKernelWeighted.IharaWittPrimitiveSpectrum
 import Omega.SyncKernelWeighted.IharaMertensConstant
 import Omega.SyncKernelWeighted.IharaArtinFactorization

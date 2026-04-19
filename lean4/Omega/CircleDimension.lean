@@ -112,6 +112,7 @@ import Omega.CircleDimension.PhaseSpectrumLimit
 import Omega.CircleDimension.PhaseSpectrumMonoid
 import Omega.CircleDimension.PhaseSpectrumQuotient
 import Omega.CircleDimension.PhaseSpectrumReconstruction
+import Omega.CircleDimension.PrimeLedgerCompleteReconstruction
 import Omega.CircleDimension.PoissonCardinalReconstruction
 import Omega.CircleDimension.PoissonCauchyFiniteLaurentModes
 import Omega.CircleDimension.PoissonCauchyMomentInversionByPhaseModes
