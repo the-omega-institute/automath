@@ -188,6 +188,7 @@ import Omega.GU.Window6Center2RankExcludesSimpleGroups
 import Omega.GU.Window6ReducedLaplacianGreenSimplePole
 import Omega.GU.Window6GreenKernelPstarValuationOne
 import Omega.GU.Window6BdryUpliftResidueStratification
+import Omega.GU.Window6ThreePointWeightResidueFiltration
 import Omega.GU.Window6LabeledSphericalCubatureStrengthFive
 import Omega.GU.Window6LabeledSphericalDegree5CubatureCube
 import Omega.GU.Window6LabeledSphericalDegree6HarmonicDefect
