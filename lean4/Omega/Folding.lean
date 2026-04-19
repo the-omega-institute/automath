@@ -144,6 +144,7 @@ import Omega.Folding.GaugeAnomalyCumulantsNotPrecursive
 import Omega.Folding.GaugeAnomalyJordanFingerprint
 import Omega.Folding.GaugeAnomalyDensity
 import Omega.Folding.GaugeAnomalyBernoulliPKappa4AndKappa3Signflip
+import Omega.Folding.GaugeAnomalyBranchRadiusCumulantGrowth
 import Omega.Folding.GodelDensityEstimatorDeterministicMeanApprox
 import Omega.Folding.GodelFiniteDictionaryBitlength
 import Omega.Folding.GaugeAnomalyEndpointFib
