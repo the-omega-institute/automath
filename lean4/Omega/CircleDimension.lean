@@ -73,6 +73,7 @@ import Omega.CircleDimension.GodelScalarizationBitlengthLogB
 import Omega.CircleDimension.HaarPullbackUniqueness
 import Omega.CircleDimension.HilbertCarrier
 import Omega.CircleDimension.HighrankPhaseRegisterMinimality
+import Omega.CircleDimension.HorizonCarathSchurEquivalence
 import Omega.CircleDimension.HypercubeDerhamLift
 import Omega.CircleDimension.KernelRKHSFeatureMap
 import Omega.CircleDimension.LissajousChebyshev
