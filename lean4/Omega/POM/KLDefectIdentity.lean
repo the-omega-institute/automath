@@ -90,6 +90,61 @@ theorem paper_pom_kl_defect_identity {X : Type*} [Fintype X] [DecidableEq X] (d 
     _ = -liftEntropy d mu + liftEntropy d (fiberUniformLift d pi) := by rw [hnegEntropy, hcross]
     _ = liftEntropy d (fiberUniformLift d pi) - liftEntropy d mu := by ring
 
+/-- Paper-facing ledger bound: among all lifts with the same marginal, the fiber-uniform lift
+attains the entropy upper bound, and equality forces fiberwise uniformity.
+    cor:pom-kl-ledger-bound -/
+theorem paper_pom_kl_ledger_bound {X : Type*} [Fintype X] [DecidableEq X] (d : X → ℕ)
+    (hd : ∀ x, 0 < d x) (pi : X → ℝ) (mu : FiberMicrostate d → ℝ)
+    (hmu_marginal : ∀ x, fiberMarginal d mu x = pi x) (hmu_nonneg : ∀ a, 0 ≤ mu a)
+    (hpi_nonneg : ∀ x, 0 ≤ pi x) (hmu_sum : Finset.univ.sum mu = 1)
+    (hkl_nonneg : 0 ≤ klDiv mu (fiberUniformLift d pi))
+    (hkl_zero_iff : klDiv mu (fiberUniformLift d pi) = 0 ↔ mu = fiberUniformLift d pi) :
+    liftEntropy d mu ≤
+        (∑ x : X, Real.negMulLog (pi x)) + ∑ x : X, pi x * Real.log (d x) ∧
+      (liftEntropy d mu =
+          (∑ x : X, Real.negMulLog (pi x)) + ∑ x : X, pi x * Real.log (d x) ↔
+        FiberwiseUniform d mu) := by
+  have hledger := paper_pom_kl_defect_identity d hd pi mu hmu_marginal hmu_nonneg hpi_nonneg hmu_sum
+  have hUniformMarginal : ∀ x, fiberMarginal d (fiberUniformLift d pi) x = pi x := by
+    intro x
+    have hd0 : (d x : ℝ) ≠ 0 := by
+      exact_mod_cast (Nat.ne_of_gt (hd x))
+    calc
+      fiberMarginal d (fiberUniformLift d pi) x = ∑ _i : Fin (d x), pi x / d x := by
+        simp [fiberMarginal, fiberUniformLift]
+      _ = (d x : ℝ) * (pi x / d x) := by simp
+      _ = pi x := by
+        field_simp [hd0]
+  have hUniformEntropy :
+      liftEntropy d (fiberUniformLift d pi) =
+        (∑ x : X, Real.negMulLog (pi x)) + ∑ x : X, pi x * Real.log (d x) := by
+    exact
+      (paper_pom_maxent_lift d hd pi (fiberUniformLift d pi)
+        (by intro x i j; rfl) hUniformMarginal).2
+  have hUpper : liftEntropy d mu ≤ liftEntropy d (fiberUniformLift d pi) := by
+    have hgap_nonneg : 0 ≤ liftEntropy d (fiberUniformLift d pi) - liftEntropy d mu := by
+      rw [← hledger]
+      exact hkl_nonneg
+    linarith
+  refine ⟨by simpa [hUniformEntropy] using hUpper, ?_⟩
+  constructor
+  · intro hEq
+    have hLiftEq : liftEntropy d mu = liftEntropy d (fiberUniformLift d pi) := by
+      calc
+        liftEntropy d mu =
+            (∑ x : X, Real.negMulLog (pi x)) + ∑ x : X, pi x * Real.log (d x) := hEq
+        _ = liftEntropy d (fiberUniformLift d pi) := hUniformEntropy.symm
+    have hkl_zero : klDiv mu (fiberUniformLift d pi) = 0 := by
+      rw [hledger, hLiftEq]
+      ring
+    have hmu_eq : mu = fiberUniformLift d pi := hkl_zero_iff.mp hkl_zero
+    intro x i j
+    simpa [hmu_eq, fiberUniformLift]
+  · intro hFiberwise
+    have hmu_eq : mu = fiberUniformLift d pi :=
+      (paper_pom_maxent_lift d hd pi mu hFiberwise hmu_marginal).1
+    rw [hmu_eq, hUniformEntropy]
+
 end
 
 end Omega.POM
