@@ -158,6 +158,8 @@ import Omega.POM.MinKernelProjectionAndInversion
 import Omega.POM.MultiplicativeChainRuleFinite
 import Omega.POM.MultiplicityCompositionPartition
 import Omega.POM.MultiplicityCompositionMod3Sparsity
+import Omega.POM.MultiplicityBinetTwoParameterNormalForm
+import Omega.POM.MultiplicityFixedLREnvelope
 import Omega.POM.MultiplicityFixedRExtrema
 import Omega.POM.OrbitProductNorm
 import Omega.POM.OnlineMultiplicativePrimeSupportLB
