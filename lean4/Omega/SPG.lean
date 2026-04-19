@@ -94,6 +94,7 @@ import Omega.SPG.HomotopyDecomposition
 import Omega.SPG.Hypercube6GodelSquareclass
 import Omega.SPG.HypercubeWeightedWalshStokes
 import Omega.SPG.HypercubeCycleLatticeDirectsumCounting
+import Omega.SPG.HypercubeCycleLatticeDirectsumMdl
 import Omega.SPG.HypercubeGodelFluxMultiplicativeVolume
 import Omega.SPG.HypercubeGradientConsistency
 import Omega.SPG.HypercubeGradientPublication
