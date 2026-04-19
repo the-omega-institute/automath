@@ -214,6 +214,7 @@ import Omega.GU.Window6FoldbinGlobalEvenParityOrientationTorsor
 import Omega.GU.Window6FoldbinGaugeLowDegreeHomology
 import Omega.GU.Window6Foldbin6FiberDifferenceSpectrum
 import Omega.GU.Window6ChiralityAnchorMinimal
+import Omega.GU.Window6BracketCertificateReduction
 import Omega.GU.Window6C6OrbitB3RootIntersectionRigidity
 import Omega.GU.Window6FiberEdgeCouplingDet
 import Omega.GU.Window6FiberEdgeCouplingPadicWindow
