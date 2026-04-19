@@ -85,6 +85,7 @@ import Omega.CircleDimension.LocalizedGsEmbeddingOrder
 import Omega.CircleDimension.LocalizationUniversalProperty
 import Omega.CircleDimension.BudgetFailureSeparation
 import Omega.CircleDimension.MedianStokesRigidityPotential
+import Omega.CircleDimension.MedianGodelDistanceMedianClosedForm
 import Omega.CircleDimension.MedianMinPrimeSpectrumCubeDimension
 import Omega.CircleDimension.MedianThetaRigidityPrimeRatio
 import Omega.CircleDimension.MinimalAuditCompletion

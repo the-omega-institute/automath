@@ -36,6 +36,7 @@ import Omega.POM.CoarsegrainingMajorizationSchur
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.DeltaqGoldenEnvelope
+import Omega.POM.DeltaqSpectralDimensionIdentity
 import Omega.POM.DefectBand
 import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DerivedFoldGoldenRationalPowerUnitObstruction
