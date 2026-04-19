@@ -17,6 +17,10 @@ lemma tauMap_mul (m n : ℕ) : tauMap (m * n) = tauMap m ∘ tauMap n := by
   funext x
   simp [tauMap, Function.comp, Nat.mul_assoc]
 
+theorem paper_chebyshev_adams_rational_semigroup (m n : ℕ) :
+    tauMap (m * n) = tauMap m ∘ tauMap n := by
+  simpa using tauMap_mul m n
+
 theorem tauMap_injective : Function.Injective tauMap := by
   intro d e h
   have h1 := congrArg (fun f => f 1) h

@@ -239,6 +239,7 @@ import Omega.Zeta.TorsionExactOrderLedgerSeeds
 import Omega.Zeta.ToeplitzDeterminantSignRigidity
 import Omega.Zeta.ToeplitzPsdCoherenceHorizonThreshold
 import Omega.Zeta.ToeplitzNegativeInertiaAllowedPerturbRadius
+import Omega.Zeta.ToeplitzNegativeSpectrumProductDetHankelSquare
 import Omega.Zeta.ToeplitzNegativeSubspacePreservationThreshold
 import Omega.Zeta.TwistedDeterminantCumulants
 import Omega.Zeta.TwistedDeterminantRigidity
