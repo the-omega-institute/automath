@@ -36,4 +36,5 @@ import Omega.SyncKernelWeighted.CarryFreeCoreBlock
 import Omega.SyncKernelWeighted.PressureUnitRootModulusThreshold
 import Omega.SyncKernelWeighted.ZeroInjectionValuePreserving
 import Omega.SyncKernelWeighted.MuPochhammerNecklaceDirichletPolylog
+import Omega.SyncKernelWeighted.WittRenormMonoid
 import Omega.SyncKernelWeighted.WeightedNewmanQGaloisS37

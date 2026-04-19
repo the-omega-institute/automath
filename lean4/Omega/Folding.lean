@@ -109,6 +109,7 @@ import Omega.Folding.FibonacciField
 import Omega.Folding.FibonacciPolynomial
 import Omega.Folding.FingerprintSeparationPublication
 import Omega.Folding.Fold
+import Omega.Folding.KilloFoldbin6FullCenter
 import Omega.Folding.FoldComplexity
 import Omega.Folding.FoldHypercubeFibonacciEpsEntropyUpper
 import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy

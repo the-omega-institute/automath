@@ -16,6 +16,7 @@ import Omega.OperatorAlgebra.FoldGaugeOrbitClassificationQtuple
 import Omega.OperatorAlgebra.FoldInfoNCEBayesOpt
 import Omega.OperatorAlgebra.FoldInfoNCEMILimit
 import Omega.OperatorAlgebra.FoldCoarsegrainingQCollisionTwoSided
+import Omega.OperatorAlgebra.CircuitCollisionMomentCamouflageMaxfiber
 import Omega.OperatorAlgebra.FoldInfoNCEFiniteKMomentFormula
 import Omega.OperatorAlgebra.FoldBayesPosteriorCollapse
 import Omega.OperatorAlgebra.FoldGaugeTwoMode
