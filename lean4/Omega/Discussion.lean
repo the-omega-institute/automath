@@ -15,6 +15,7 @@ import Omega.Discussion.FiberStokesWatataniNormalization
 import Omega.Discussion.FoldIntrinsicQCollisionThreshold
 import Omega.Discussion.FoldRepresentationQCollisionLowerBound
 import Omega.Discussion.FramepotentialSffToHszk
+import Omega.Discussion.WindowQuotientSemiringRigidity
 import Omega.Discussion.ZetaSpectralHSZK
 import Omega.Discussion.GcEquivalenceCharacterization
 import Omega.Discussion.HSZKIffDiamond
