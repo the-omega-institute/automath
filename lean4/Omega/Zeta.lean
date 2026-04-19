@@ -219,6 +219,7 @@ import Omega.Zeta.PrimitivePeterWeylDeterminant
 import Omega.Zeta.PrimitivePeterWeylTrace
 import Omega.Zeta.PsiTruncationBounds
 import Omega.Zeta.QuotientFunctoriality
+import Omega.Zeta.ContractiveBoundaryZero
 import Omega.Zeta.QuotientIndexLedgerSeeds
 import Omega.Zeta.RealArcSufficiencyUnitDisk
 import Omega.Zeta.RealInput40GeodesicDet
