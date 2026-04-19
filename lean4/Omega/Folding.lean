@@ -122,6 +122,7 @@ import Omega.Folding.FoldCongruenceModSemirings
 import Omega.Folding.FoldIntermediateSemiringsDivisorLattice
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldBinOracleLinearThresholdExponent
+import Omega.Folding.Window6VariableLengthExactInversionRateGap
 import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinMinsectorComplementMaxfiber
 import Omega.Folding.FoldBinRenyiDivergenceLimit

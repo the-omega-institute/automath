@@ -74,6 +74,7 @@ import Omega.POM.FractranPermutationEmbeddingLength
 import Omega.POM.FractranSoftFirstfitFixedTempExponentialCollapse
 import Omega.POM.FoldFactorChainEffectiveSampleSize
 import Omega.POM.FoldFactorChainDerivedInvariants
+import Omega.POM.FoldInversionZeroRateStrongConverse
 import Omega.POM.FiniteStateDimensionLowerBound
 import Omega.POM.FiberIndependenceComplexClassification
 import Omega.POM.FiberMedianMajorityPrimeValuation
