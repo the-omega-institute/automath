@@ -53,4 +53,11 @@ theorem paper_group_jg_prime_register_ellipse_closure (t : ℝ) (ht : t ≠ 0) :
       simpa [joukowskyEllipseLayer] using hu
     exact Real.sinh_eq_zero.mp hsinh
 
+/-- The degenerate normalized Joukowsky layer lies in the closure of the two-prime register
+ellipse family.
+    cor:group-jg-prime-register-degenerate-approx -/
+theorem paper_group_jg_prime_register_degenerate_approx (t : ℝ) (ht : t ≠ 0) :
+    primeRegisterDegenerateLayerInClosure t := by
+  exact (paper_group_jg_prime_register_ellipse_closure t ht).2.1
+
 end Omega.GU

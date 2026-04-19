@@ -784,6 +784,13 @@ theorem restrict_ringHom_exists_iff (d e : Nat) (hd : 3 ≤ d) (_he : 3 ≤ e) :
     have hdvd_fib : Nat.fib d ∣ Nat.fib e := Nat.fib_dvd d e hde
     exact ⟨ZMod.castHom hdvd_fib (ZMod (Nat.fib d)), map_one _⟩
 
+/-- Paper-facing divisibility rigidity for finite-resolution morphisms: unit-preserving reduction
+maps exist exactly along divisibility relations between the Fibonacci moduli.
+    thm:finite-resolution-morphism-divisibility-rigidity -/
+theorem paper_finite_resolution_morphism_divisibility_rigidity (d e : Nat) (hd : 3 ≤ d)
+    (he : 3 ≤ e) : (∃ f : ZMod (Nat.fib e) →+* ZMod (Nat.fib d), f 1 = 1) ↔ d ∣ e := by
+  exact restrict_ringHom_exists_iff d e hd he
+
 /-- Carry in stable addition: the quotient (sv(x)+sv(y))/F_{m+2} is at most 1.
     Since sv(x) < F and sv(y) < F, their sum < 2F, so the quotient is 0 or 1.
     thm:pom-stable-addition-carry-defect -/
