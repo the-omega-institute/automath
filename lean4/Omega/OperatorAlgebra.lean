@@ -22,6 +22,7 @@ import Omega.OperatorAlgebra.FoldSupervisedMinimaxRisk
 import Omega.OperatorAlgebra.FoldVisiblePermutationLifts
 import Omega.OperatorAlgebra.FoldLiftNoiseFoldReversibility
 import Omega.OperatorAlgebra.FoldOptimalMarkovizationCmi
+import Omega.OperatorAlgebra.FoldFiberNormalizerWreath
 import Omega.OperatorAlgebra.FoldGroupoidMatrixUnitAutNormalizer
 import Omega.OperatorAlgebra.FoldQuotientUniversal
 import Omega.OperatorAlgebra.FoldRandomLabelerOneShotGeneralization

@@ -68,6 +68,7 @@ import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.FibPellQuadratic
 import Omega.POM.FractranTwoPrimeDenominatorDfaCompile
 import Omega.POM.FractranPermutationEmbeddingLength
+import Omega.POM.FractranSoftFirstfitFixedTempExponentialCollapse
 import Omega.POM.FoldFactorChainEffectiveSampleSize
 import Omega.POM.FoldFactorChainDerivedInvariants
 import Omega.POM.FiniteStateDimensionLowerBound
