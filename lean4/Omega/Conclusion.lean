@@ -93,6 +93,7 @@ import Omega.Conclusion.LocalizedKernelInclusionExclusionMobius
 import Omega.Conclusion.KrylovLowrankRigidity
 import Omega.Conclusion.LeyangOffdiagonalTranspositionQuotient
 import Omega.Conclusion.LeyangDeltaSecondMomentCollision
+import Omega.Conclusion.LeyangS5TwoChannelMinimalCompleteness
 import Omega.Conclusion.LkKolmogorovSharpOneOverK
 import Omega.Conclusion.LucasCharpShiftedHankelGeometricRatio
 import Omega.Conclusion.LocalizedSolenoidCoprimeArtinMazurCompleteness

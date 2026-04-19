@@ -42,3 +42,4 @@ import Omega.OperatorAlgebra.Z2x2WalshHadamardSectorTrace
 import Omega.OperatorAlgebra.JonesScalarEqualsExpMinusGap
 import Omega.OperatorAlgebra.HSPPeriodTrace
 import Omega.OperatorAlgebra.FoldJonesBasicConstructionDirectsum
+import Omega.OperatorAlgebra.FoldJonesCommutatorRank2Spectrum
