@@ -242,6 +242,7 @@ import Omega.Folding.MomentTriple
 import Omega.Folding.NaivePrefixLift
 import Omega.Folding.NaturalStateComplexityGap
 import Omega.Folding.NormalizationComplexity
+import Omega.Folding.StableArithmeticComplexity
 import Omega.Folding.NormalizeThenTruncateFunctorial
 import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.OstrowskiQuadraticIrrationalPressureMatrixAlgebraicity

@@ -53,6 +53,7 @@ import Omega.GU.GapDirichletContinuedFraction
 import Omega.GU.FreeInvolutionCount
 import Omega.GU.GroupJGTwoPrimeEulerPhaseInjective
 import Omega.GU.GroupJGPrimeRegisterPhaseBohrDense
+import Omega.GU.GroupJGPrimeRegisterPhaseScanDense
 import Omega.GU.HolomorphicMomentRigidity
 import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GU.JetAlignmentUnification
