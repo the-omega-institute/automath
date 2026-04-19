@@ -147,6 +147,7 @@ import Omega.Folding.HypercubeKraftGodelSideinfoLowerBound
 import Omega.Folding.FiberBiasFrequencyTransportIdentity
 import Omega.Folding.FiberBiasEnergyErasureIdentity
 import Omega.Folding.FiberBiasEnergyDecisionTheoretic
+import Omega.Folding.FiberCollisionHammingSimilarityBiasEnergyIdentity
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
 import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldFibonacciFrequencyFourierSpikeClosedForm
