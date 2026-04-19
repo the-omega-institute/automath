@@ -188,6 +188,7 @@ import Omega.Folding.GaugeAnomalyLeyangBranchU1
 import Omega.Folding.GaugeAnomalyEdgeworth1
 import Omega.Folding.GaugeAnomalyP10Degree
 import Omega.Folding.FoldGaugeAnomalyP10LeyangLinearDisjointness
+import Omega.Folding.ModSemiringsIdempotentsCrtBoolean
 import Omega.Folding.GaugeAnomalyP10DisjointSqrt5
 import Omega.Folding.GaugeAnomalyP10Q10TschirnhausInverse
 import Omega.Folding.GaugeAnomalyQ10UniqueQuadraticSubfield
