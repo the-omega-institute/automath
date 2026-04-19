@@ -152,6 +152,7 @@ import Omega.POM.OrbitProductNorm
 import Omega.POM.OnlineMultiplicativePrimeSupportLB
 import Omega.POM.OrderSpatialization
 import Omega.POM.OracleBitLowerBoundSubexpMom
+import Omega.POM.OracleCapacityStieltjesInversionMellin
 import Omega.POM.OracleCriticalQuadraticMarginalLaw
 import Omega.POM.OracleRenyiPressureFailureBound
 import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
