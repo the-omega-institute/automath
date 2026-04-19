@@ -30,6 +30,7 @@ import Omega.Conclusion.CyclotomicPrimeModulusExceptionalSupportFiniteness
 import Omega.Conclusion.CdimArbitraryProfiniteKernel
 import Omega.Conclusion.CdimKernelRegisterLowerBound
 import Omega.Conclusion.CofinalFixedQuotient
+import Omega.Conclusion.CofinalSparsificationSemanticCompleteness
 import Omega.Conclusion.CollisionMomentMoritaDefectFusion
 import Omega.Conclusion.CompressionLadderSpin10
 import Omega.Conclusion.CompleteStrictificationDualCriterion
