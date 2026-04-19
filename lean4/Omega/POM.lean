@@ -1,5 +1,6 @@
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.A4LinearObservableTwoTermOscillation
+import Omega.POM.A4TCharpolyRationalReducibility
 import Omega.POM.A4TEvenSpectrumGammaInversion
 import Omega.POM.A4TracePrimitiveTwoTerm
 import Omega.POM.AitkenDelta2SquareConvergence
