@@ -70,6 +70,7 @@ import Omega.Folding.ComplementPhaseLockingFixedpoints
 import Omega.Folding.Defect
 import Omega.Folding.DerivedCenteredOddMomentsVanish
 import Omega.Folding.DerivedAffineReciprocity
+import Omega.Folding.DerivedFoldExactInversionDyadicThreshold
 import Omega.Folding.DerivedFoldTopTwoSameSlope
 import Omega.Folding.DiscreteStokesAuditableBound
 import Omega.Folding.DiscreteStokesDefectPublication
@@ -189,6 +190,7 @@ import Omega.Folding.GaugeAnomalyRateCurveParam
 import Omega.Folding.GaugeAnomalyRateCurveIndexIdealFormula
 import Omega.Folding.GaugeAnomalyPsdRational
 import Omega.Folding.GaugeAnomalyBranchpointRationalReduction
+import Omega.Folding.GaugeAnomalyBranchPointClassification
 import Omega.Folding.GaugeAnomalyDiscriminantFactorization
 import Omega.Folding.GaugeAnomalySpectralQuarticJacobianEndomorphism
 import Omega.Folding.GaugeAnomalyLdpRate
