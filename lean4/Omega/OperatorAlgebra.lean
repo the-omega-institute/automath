@@ -45,6 +45,7 @@ import Omega.OperatorAlgebra.FoldGaugeMiBound
 import Omega.OperatorAlgebra.FoldOptimalDelinkingCurve
 import Omega.OperatorAlgebra.MultiRoundStrongConverseLinearLeakage
 import Omega.OperatorAlgebra.FoldGaugeReynolds
+import Omega.OperatorAlgebra.FoldChannelChoiRankEqualsS2General
 import Omega.OperatorAlgebra.Z2x2WalshHadamardSectorTrace
 import Omega.OperatorAlgebra.JonesScalarEqualsExpMinusGap
 import Omega.OperatorAlgebra.HSPPeriodTrace

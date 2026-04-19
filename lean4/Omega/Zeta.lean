@@ -343,6 +343,7 @@ import Omega.Zeta.XiPronyMomentMapJacobianDelta4
 import Omega.Zeta.XiNonarchimedeanPronyHenselNewtonInversion
 import Omega.Zeta.XiPomMinrealVsSpectralBudgetSeparation
 import Omega.Zeta.XiSmithLossMinimalBranchRegister
+import Omega.Zeta.KilloSmithLossSpectrum
 import Omega.Zeta.SmithPrefixSufficiency
 import Omega.Zeta.XiGramDetNearestNeighborProductUpperBound
 import Omega.Zeta.XiBulkEntropyStrictConvexity
