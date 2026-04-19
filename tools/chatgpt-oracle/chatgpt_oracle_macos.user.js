@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (macOS)
 // @namespace    omega-automath
-// @version      4.10
+// @version      4.12
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review — macOS variant with long-prompt extraction support
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -68,7 +68,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v4.9 mac]</b>
+        <b>[Oracle v4.12 mac]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -770,18 +770,112 @@
     return (clone.innerText || "").trim();
   }
 
-  function isSSRGarbage(text) {
-    // Reject responses that are SSR bootstrap scripts, not real ChatGPT output.
-    // These appear when the page hasn't hydrated yet.
+  function stripSSRGarbage(text) {
+    // Remove SSR bootstrap script fragments from extracted text instead of
+    // rejecting the entire response. Real ChatGPT replies can get mixed with
+    // SSR remnants in the same DOM extraction pass.
+    if (!text) return text;
+    // Remove known SSR script patterns
+    let cleaned = text
+      .replace(/I?window\.__oai_logHTML\?[^)]*\)\s*/g, "")
+      .replace(/window\.__oai_SSR_HTML\s*=\s*window\.__oai_SSR_HTML\s*\|\|\s*Date\.now\(\)\s*;?\s*/g, "")
+      .replace(/requestAnimationFrame\(\(function\(\)\{[^}]*\}\)\)\s*/g, "")
+      .replace(/window\.__oai_logTTI\?[^)]*\)\s*/g, "")
+      .replace(/window\.__oai_SSR_TTI\s*=\s*window\.__oai_SSR_TTI\s*\|\|\s*Date\.now\(\)\s*;?\s*/g, "")
+      .replace(/ChatGPT said:/g, "")
+      .trim();
+    return cleaned;
+  }
+
+  function isSSROnly(text) {
+    // Returns true ONLY if the text is ENTIRELY SSR garbage with no real content.
     if (!text || text.length < 10) return false;
-    if (SSR_GARBAGE_RE.test(text)) return true;
-    // Also reject if >50% of text is JS-like (no spaces between words)
-    const jsRatio = (text.match(/[{}();=]/g) || []).length / text.length;
-    if (jsRatio > 0.05 && text.length < 1000) return true;
-    return false;
+    const stripped = stripSSRGarbage(text);
+    // After stripping SSR, filter chrome lines too
+    const lines = stripped.split("\n").filter(l => {
+      const t = l.trim();
+      return t.length > 0 && !isChromeLine(t);
+    });
+    return lines.join("").trim().length < 20;
   }
 
   function extractResponseText() {
+    // ═══ Strategy S0: Shadow DOM extraction (ChatGPT 5.4 Pro) ═══
+    // ChatGPT 5.4 Pro renders conversation inside a shadow root.
+    // Standard querySelector can't reach inside.
+    for (const el of document.querySelectorAll("*")) {
+      if (!el.shadowRoot) continue;
+
+      // Helper: get clean text from shadow element (skip style/script content)
+      function shadowInnerText(root) {
+        // Can't clone ShadowRoot — walk children and collect text, skipping style/script
+        let text = "";
+        function walk(node) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            text += node.textContent;
+            return;
+          }
+          if (node.nodeType !== Node.ELEMENT_NODE) return;
+          const tag = node.tagName?.toLowerCase();
+          if (tag === "style" || tag === "script" || tag === "link") return;
+          for (const child of node.childNodes) walk(child);
+          // Add newline after block elements
+          if (/^(div|p|h[1-6]|li|br|article|section|blockquote|pre|tr)$/.test(tag)) {
+            text += "\n";
+          }
+        }
+        if (root.childNodes) {
+          for (const child of root.childNodes) walk(child);
+        }
+        return text.trim();
+      }
+
+      // Find assistant messages inside shadow DOM
+      const assistantEls = el.shadowRoot.querySelectorAll(
+        "[data-message-author-role='assistant'], " +
+        "div[class*='markdown'], div[class*='prose'], " +
+        "article, [class*='agent-turn']"
+      );
+      if (assistantEls.length > 0) {
+        // Take the last (most recent) assistant message
+        const lastAssistant = assistantEls[assistantEls.length - 1];
+        const text = cleanText(shadowInnerText(lastAssistant));
+        if (text.length > 100 && !looksLikePromptEcho(text)) {
+          return text;
+        }
+      }
+
+      // Helper: strip ChatGPT thinking preamble from extracted text
+      function stripThinkingPreamble(t) {
+        return t
+          .replace(/^ChatGPT said:\s*/i, "")
+          .replace(/^I'm (?:checking|looking|searching|thinking|analyzing)[^.]*\.\s*/i, "")
+          .replace(/^Thought for \d+[sm]\s*\d*[sm]?\s*/i, "")
+          .trim();
+      }
+
+      // Fallback: get all text from shadow, stripped of CSS/JS
+      const shadowText = shadowInnerText(el.shadowRoot);
+      if (shadowText.length < 500) continue;
+
+      // Try tail-anchor split
+      if (sentPromptText.length > 50) {
+        const tail = sentPromptText.slice(-80).trim();
+        const idx = shadowText.lastIndexOf(tail);
+        if (idx >= 0) {
+          const after = stripThinkingPreamble(cleanText(shadowText.slice(idx + tail.length)));
+          if (after.length > 100) return after;
+        }
+      }
+
+      // Last resort: take second 60% (prompt first, response second)
+      const halfPoint = Math.floor(shadowText.length * 0.4);
+      const secondHalf = stripThinkingPreamble(cleanText(shadowText.slice(halfPoint)));
+      if (secondHalf.length > 200 && !looksLikePromptEcho(secondHalf)) {
+        return secondHalf;
+      }
+    }
+
     const main = document.querySelector("main");
     if (!main) return "";
 
@@ -934,24 +1028,59 @@
     while (Date.now() - startTime < MAX_WAIT) {
       await sleep(STABLE_INTERVAL);
 
-      const responseText = extractResponseText();
+      let responseText = extractResponseText();
       const generating = isStillGenerating();
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const mainLen = (document.querySelector("main")?.innerText || "").length;
 
-      // Periodic status log (every 5 min)
-      if (elapsed - lastLogTime >= 300) {
+      // Periodic status log (every 2 min)
+      if (elapsed - lastLogTime >= 120) {
         lastLogTime = elapsed;
         log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}, url=${window.location.href.slice(-30)}`);
-        // One-time DOM debug: log what selectors match
-        if (elapsed <= 300) {
-          const dbg = [];
-          for (const s of ["[data-message-author-role]", "article", "[data-testid*='conversation-turn']", "div[class*='markdown']", "div[class*='prose']", "[class*='agent-turn']"]) {
-            const n = document.querySelectorAll(s).length;
-            if (n > 0) dbg.push(`${s}:${n}`);
+        // DOM debug: comprehensive search for where content lives
+        const dbg = [];
+        for (const s of ["main", "[data-message-author-role]", "[data-message-author-role='assistant']", "article", "[data-testid*='conversation-turn']", "div[class*='markdown']", "div[class*='prose']", "[class*='agent-turn']", "[role='presentation']", "[class*='conversation']", "[class*='thread']"]) {
+          const els = document.querySelectorAll(s);
+          if (els.length > 0) {
+            const maxLen = Math.max(...Array.from(els).map(e => (e.innerText||"").length));
+            dbg.push(`${s}:${els.length}(max=${maxLen})`);
           }
-          log(`DOM debug: ${dbg.join(", ") || "no matches"}`);
         }
+        log(`DOM debug: ${dbg.join(", ") || "NO MATCHES"}`);
+
+        // Deep scan: check shadow DOM, iframes, and all large text nodes
+        let shadowCount = 0, iframeCount = 0, biggestText = 0;
+        document.querySelectorAll("*").forEach(el => {
+          if (el.shadowRoot) {
+            shadowCount++;
+            const sText = (el.shadowRoot.textContent || "").length;
+            if (sText > biggestText) biggestText = sText;
+          }
+        });
+        const iframes = document.querySelectorAll("iframe");
+        iframeCount = iframes.length;
+        let iframeBiggest = 0;
+        iframes.forEach(f => {
+          try {
+            const len = (f.contentDocument?.body?.innerText || "").length;
+            if (len > iframeBiggest) iframeBiggest = len;
+          } catch(e) { /* cross-origin */ }
+        });
+
+        // Check body total text vs main text
+        const bodyLen = (document.body?.innerText || "").length;
+
+        // Find the single biggest div by innerText
+        let bigDiv = 0, bigDivTag = "";
+        document.querySelectorAll("div").forEach(d => {
+          const len = (d.innerText || "").length;
+          if (len > bigDiv) {
+            bigDiv = len;
+            bigDivTag = d.className?.slice(0, 50) || d.id || "anon";
+          }
+        });
+
+        log(`DEEP: body=${bodyLen}, biggestDiv=${bigDiv}(${bigDivTag}), shadows=${shadowCount}(max=${biggestText}), iframes=${iframeCount}(max=${iframeBiggest})`);
       }
 
       // Only count extracted text that's meaningful
@@ -966,14 +1095,19 @@
           continue;
         }
 
-        // CRITICAL: reject SSR/hydration garbage (page not rendered yet)
-        if (isSSRGarbage(responseText)) {
-          if (stableCount === 0) {
-            log(`SSR garbage detected (${responseText.length} chars) — page still hydrating, waiting`);
+        // Strip SSR/hydration fragments from response (they can mix with real text)
+        if (SSR_GARBAGE_RE.test(responseText)) {
+          responseText = stripSSRGarbage(responseText);
+          // If NOTHING remains after stripping, page is still hydrating
+          if (isSSROnly(responseText)) {
+            if (stableCount === 0) {
+              log(`SSR-only content (${responseText.length} chars) — page still hydrating, waiting`);
+            }
+            stableCount = 0;
+            lastText = "";
+            continue;
           }
-          stableCount = 0;
-          lastText = "";
-          continue;
+          log(`Stripped SSR fragments, ${responseText.length} chars remain`);
         }
 
         if (responseText === lastText) {
@@ -1185,7 +1319,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Oracle Bridge v4.9 (macOS) loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`Oracle Bridge v4.12 (macOS) loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
     // Check if WE navigated here (not the user clicking around)
     const phase = getTaskPhase();
