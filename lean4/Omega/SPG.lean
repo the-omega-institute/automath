@@ -2,6 +2,7 @@ import Omega.SPG.AxialScreenAreaLawAuditCost
 import Omega.SPG.BasicProperties
 import Omega.SPG.BayesFiniteMistakesSummable
 import Omega.SPG.BoundaryAffineFiberCycleRank
+import Omega.SPG.BoundaryMultigraphH1Cdim
 import Omega.SPG.BoundaryCycleAuditQueryLowerBound
 import Omega.SPG.BoundaryCycleRankFromEntropy
 import Omega.SPG.BoundaryCylinderGodelizationClarity
