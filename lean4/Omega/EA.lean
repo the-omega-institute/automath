@@ -28,6 +28,7 @@ import Omega.EA.FoldAsSection
 import Omega.EA.FoldAsSectionCorollary
 import Omega.EA.GodelLogBusemann
 import Omega.EA.GroupoidZeckendorfSmoothProjectionNogo
+import Omega.EA.GroupoidZeckendorfVisibleHolderNondifferentiability
 import Omega.EA.InternalProductAddsValues
 import Omega.EA.JoukowskyEllipse
 import Omega.EA.KernelEquilibriumPF

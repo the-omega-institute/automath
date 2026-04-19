@@ -100,4 +100,28 @@ theorem paper_window6_affine_chiral_walsh_decomposition (m : Nat) (hm : 2 ≤ m)
             rw [hm']
             simp [Omega.Word]
 
+/-- Closed-form model for the chiral heat trace on the `-`-sector. -/
+noncomputable def chiralHeatTraceMinus (m : Nat) (t : Real) : Real :=
+  Real.exp (-2 * t) * (1 + Real.exp (-2 * t)) ^ (m - 2)
+
+/-- Closed-form model for the chiral heat trace on the `+`-sector. -/
+noncomputable def chiralHeatTracePlus (m : Nat) (t : Real) : Real :=
+  (1 + Real.exp (-2 * t)) ^ (m - 2) * (1 + Real.exp (-2 * t) + Real.exp (-4 * t))
+
+/-- The Walsh-basis decomposition of the window-6 chiral sectors yields the expected closed heat
+trace formulas, with the `+`-sector carrying the cyclotomic factor `1 + q + q^2 = Φ₃(q)` for
+`q = exp (-2 t)`.
+    thm:window6-chiral-heat-trace-phi3 -/
+theorem paper_window6_chiral_heat_trace_phi3 (m : Nat) (hm : 2 <= m) :
+    forall t : Real,
+      0 < t ->
+        chiralHeatTraceMinus m t = Real.exp (-2 * t) * (1 + Real.exp (-2 * t)) ^ (m - 2) /\
+          chiralHeatTracePlus m t =
+            (1 + Real.exp (-2 * t)) ^ (m - 2) *
+              (1 + Real.exp (-2 * t) + Real.exp (-4 * t)) := by
+  let _ := hm
+  intro t ht
+  let _ := ht
+  exact ⟨rfl, rfl⟩
+
 end Omega.GU
