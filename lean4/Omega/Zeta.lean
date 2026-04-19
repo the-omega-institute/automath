@@ -83,6 +83,7 @@ import Omega.Zeta.FinitePartCyclicLiftRootUnityFourierSieve
 import Omega.Zeta.FinitePartCyclicLiftSpectrumIdentifiability
 import Omega.Zeta.FinitePartCyclotomicAtomsCompleteCoordinate
 import Omega.Zeta.FinitePartCyclotomicAtomsHomotopyAdditive
+import Omega.Zeta.FinitePartCyclotomicAtomPrimitiveTorsionAverage
 import Omega.Zeta.FinitePartCyclicLiftTorsionProduct
 import Omega.Zeta.FinitePartDirichletTorsionGaussExpansion
 import Omega.Zeta.FinitePartCyclicLiftTraceSieve

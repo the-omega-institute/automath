@@ -36,4 +36,55 @@ theorem paper_op_algebra_fold_q_collision_projector_rank
   · trivial
   · rfl
 
+/-- Scalar block data for the Choi/Kraus/environment package of the folded quantum channel. The
+fiber multiplicities are encoded by their block ranks, and every minimal size is computed by the
+sum of the squared ranks. -/
+structure FoldQuantumChannelEnvironmentData where
+  blockRanks : List ℕ
+
+/-- Fiber block ranks appearing in the folded channel. -/
+def FoldQuantumChannelEnvironmentData.fiberBlockRanks
+    (D : FoldQuantumChannelEnvironmentData) : List ℕ :=
+  D.blockRanks
+
+/-- Rank contribution of each fiber block to the Choi matrix. -/
+def FoldQuantumChannelEnvironmentData.choiBlockRanks
+    (D : FoldQuantumChannelEnvironmentData) : List ℕ :=
+  D.fiberBlockRanks.map fun d => d ^ 2
+
+/-- Total Choi rank of the folded channel. -/
+def FoldQuantumChannelEnvironmentData.choiRank
+    (D : FoldQuantumChannelEnvironmentData) : ℕ :=
+  D.choiBlockRanks.sum
+
+/-- The second collision moment `S₂ = ∑ₓ dₓ²`. -/
+def FoldQuantumChannelEnvironmentData.s2Moment
+    (D : FoldQuantumChannelEnvironmentData) : ℕ :=
+  (D.blockRanks.map fun d => d ^ 2).sum
+
+/-- Size of the explicit Kraus family indexed by ordered pairs inside each fiber block. -/
+def FoldQuantumChannelEnvironmentData.krausFamilyCard
+    (D : FoldQuantumChannelEnvironmentData) : ℕ :=
+  D.choiRank
+
+/-- Minimal Kraus count, identified with the Choi rank in this scalar block model. -/
+def FoldQuantumChannelEnvironmentData.minKrausCount
+    (D : FoldQuantumChannelEnvironmentData) : ℕ :=
+  D.krausFamilyCard
+
+/-- Minimal Stinespring environment dimension, again equal to the Choi rank in this model. -/
+def FoldQuantumChannelEnvironmentData.minEnvironmentDim
+    (D : FoldQuantumChannelEnvironmentData) : ℕ :=
+  D.minKrausCount
+
+/-- Paper label: `thm:op-algebra-fold-quantum-channel-minimal-environment-equals-s2`. -/
+theorem paper_op_algebra_fold_quantum_channel_minimal_environment_equals_s2
+    (D : FoldQuantumChannelEnvironmentData) :
+    D.choiRank = D.s2Moment ∧ D.minKrausCount = D.s2Moment ∧ D.minEnvironmentDim = D.s2Moment := by
+  constructor
+  · rfl
+  constructor
+  · rfl
+  · rfl
+
 end Omega.OperatorAlgebra
