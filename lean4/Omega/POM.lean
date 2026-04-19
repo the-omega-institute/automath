@@ -4,6 +4,7 @@ import Omega.POM.A4TracePrimitiveTwoTerm
 import Omega.POM.AitkenDelta2SquareConvergence
 import Omega.POM.CapacityCollisionDataProcessing
 import Omega.POM.BlockConsistencyRateBlockReduction
+import Omega.POM.AnomSingleMomentCompleteEquivalence
 import Omega.POM.MomentHankel
 import Omega.POM.BoundedPerturbationInvariance
 import Omega.POM.BeckChevalleyAmgmDefectIdentity

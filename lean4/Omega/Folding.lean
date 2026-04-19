@@ -113,6 +113,7 @@ import Omega.Folding.FoldFiberParityEnergySimplex
 import Omega.Folding.FoldZeroUncertainty
 import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.FoldCongruenceModSemirings
+import Omega.Folding.FoldIntermediateSemiringsDivisorLattice
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldBinOracleLinearThresholdExponent
 import Omega.Folding.FoldBinDigitDP
@@ -284,6 +285,7 @@ import Omega.Folding.SyncDelay
 import Omega.Folding.FoldBinEscortLastbit
 import Omega.Folding.FoldBinLastbitSufficientTV
 import Omega.Folding.HypercubeBiasEllipsoidGodelLength
+import Omega.Folding.FoldHypercubeGodelLengthEnergyUpperbound
 import Omega.Folding.FoldSpectrumFactorization
 import Omega.Folding.TailPatchIncomplete
 import Omega.Folding.TranslationKernelFourierSgM
