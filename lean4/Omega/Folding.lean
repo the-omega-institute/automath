@@ -169,6 +169,7 @@ import Omega.Folding.GaugeAnomalyRateCurveParam
 import Omega.Folding.GaugeAnomalyRateCurveIndexIdealFormula
 import Omega.Folding.GaugeAnomalyPsdRational
 import Omega.Folding.GaugeAnomalyDiscriminantFactorization
+import Omega.Folding.GaugeAnomalySpectralQuarticJacobianEndomorphism
 import Omega.Folding.GaugeAnomalyLdpRate
 import Omega.Folding.GaugeAnomalyPressureCumulants5
 import Omega.Folding.GaugeAnomalyParryKlRate
