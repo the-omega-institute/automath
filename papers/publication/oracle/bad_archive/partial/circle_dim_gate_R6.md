@@ -1,3 +1,0 @@
-<!-- oracle metadata: {"timestamp": "2026-04-07T06:23:41.661174", "model": "o3-mini-high", "response_length": 302} -->
-
-I’ve completed a first pass through the main results. Clear blockers are emerging: sign inconsistencies in the moment-defect formulas, misuse of a symmetry identity for characteristic functions, and RKHS/sampling claims that may reduce to classical Paley-Wiener/Hardy theory without proper positioning.

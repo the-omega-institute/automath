@@ -1,3 +1,0 @@
-<!-- oracle metadata: {"timestamp": "2026-04-08T18:25:42.916292", "model": "chatgpt-5.4-pro-extended", "response_length": 292} -->
-
-I’m reviewing the paper with an editor/referee lens, checking the theorem chain, dependencies, computational claims, and editorial issues that affect publishability. I’ll return a firm recommendation, theorem-by-theorem novelty ratings, and a concrete issue table focused on what must change.

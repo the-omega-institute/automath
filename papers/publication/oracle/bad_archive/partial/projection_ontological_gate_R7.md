@@ -1,3 +1,0 @@
-<!-- oracle metadata: {"timestamp": "2026-04-12T00:46:45.758196", "model": "chatgpt-5.4-pro-extended", "response_length": 333} -->
-
-I’ve now isolated the main theorem chain and am testing whether the appendices and computational support meet publication standards, especially where results are described as audited rather than fully reproducible. At this stage, the arithmetic Section 7 looks like a likely blocker because the evidentiary standard appears too weak.
