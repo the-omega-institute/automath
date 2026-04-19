@@ -151,6 +151,7 @@ import Omega.CircleDimension.RankoneSolenoidHeightClassification
 import Omega.CircleDimension.ReadableTimeWordOverlapPD
 import Omega.CircleDimension.ReadableTimeWordVisibleDistribution
 import Omega.CircleDimension.DiscreteUnitaryEvolution
+import Omega.CircleDimension.DyadicPrefixAuditExact
 import Omega.CircleDimension.RegisterCircleModpFormula
 import Omega.CircleDimension.ResidualEntropyLowerBound
 import Omega.CircleDimension.ResidualCircleDim

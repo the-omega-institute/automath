@@ -24,6 +24,7 @@ import Omega.GU.BinMinSectorCollisionDivergence
 import Omega.GU.BoundaryDelta34TripleIdentity
 import Omega.GU.BoundaryTowerMinimalResonanceTripleSM
 import Omega.GU.BoundaryTowerFibCount
+import Omega.GU.BinfoldAffinePressureSingleSlope
 import Omega.GU.BulkResonanceDeficit
 import Omega.GU.CongruenceM6IdempotentsFour
 import Omega.GU.CongruenceM6IdempotentsFourRegistered
