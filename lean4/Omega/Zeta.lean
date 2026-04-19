@@ -210,6 +210,7 @@ import Omega.Zeta.QuotientIndexLedgerSeeds
 import Omega.Zeta.RealArcSufficiencyUnitDisk
 import Omega.Zeta.Arity335EpsEffInversion
 import Omega.Zeta.Arity335CharacterEnergy
+import Omega.Zeta.Arity335MarginalInvertChi
 import Omega.Zeta.AtomicWittIntoTC1
 import Omega.Zeta.RealInput40RotationPolytopeShear
 import Omega.Zeta.XiTerminalZmDeltaNodeTangentParityLaw

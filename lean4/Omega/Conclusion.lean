@@ -48,6 +48,7 @@ import Omega.Conclusion.DiagonalRateOptimalCouplingPrincipalMinorInverse
 import Omega.Conclusion.EndpointStatisticsVsTimeAddressLedgerSplitting
 import Omega.Conclusion.EventEllipseGoldenMinimal
 import Omega.Conclusion.EllipticLosslessLift
+import Omega.Conclusion.EllipticT5UniqueQuadraticSubfield
 import Omega.Conclusion.ExtPiKernelPoset
 import Omega.Conclusion.FibadicLcmFiltrationLaw
 import Omega.Conclusion.FibadicPrimitiveCentralIdempotents
