@@ -59,6 +59,7 @@ import Omega.GU.GodelEllipsoidVolume
 import Omega.GU.GodelLorentzAlgebraization
 import Omega.GU.HeckeE4ThreePrimeRefutation
 import Omega.GU.GroupJGBoundaryPrimorialEllipseBound
+import Omega.GU.GroupJGDyadicBoundaryGodelEllipseIllconditioning
 import Omega.GU.GroupJGEllipticTwoScaleMahlerMultiplicative
 import Omega.GU.GroupJGCapacityModulusKoenigs
 import Omega.GU.GroupJGPrimeRegisterEllipseClosure
