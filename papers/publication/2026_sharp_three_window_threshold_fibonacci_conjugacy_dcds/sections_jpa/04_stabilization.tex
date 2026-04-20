@@ -13,7 +13,7 @@ X_m := \Bigl\{x=(x_1,\dots,x_m)\in\{0,1\}^m : x_i x_{i+1}=0\ \text{for all }1\le
 \]
 \end{definition}
 
-\begin{definition}[Fibonacci valuation]
+\begin{definition}[Fibonacci valuation]\label{def:valuation}
 For $\omega=(\omega_1,\dots,\omega_m)\in\{0,1\}^m$, define
 \[
 \Val_m(\omega):=\sum_{k=1}^m \omega_k F_{k+1}.
@@ -64,7 +64,7 @@ where the residue is taken in $\{0,1,\dots,F_{m+2}-1\}$.
 The map $\Fold_m$ is the unique finite-window canonicalization compatible with Fibonacci numeration: compute the raw Fibonacci-weighted value $\Val_m(\omega)$, reduce it modulo $F_{m+2}$, and write the residue in its unique length-$m$ Zeckendorf form. Local carry rewrites such as $11\mapsto 100$ are one implementation of this residue-class stabilization.
 \end{remark}
 
-\begin{theorem}[Basic properties of $\Fold_m$]\label{thm:fold-suite}
+\begin{proposition}[Supporting basic properties of $\Fold_m$]\label{thm:fold-suite}
 \leanverified{paper_fibonacci_stabilization_fold_suite}
 For every $m\ge 1$, the stabilization map $\Fold_m:\{0,1\}^m\to X_m$ satisfies:
 \begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
@@ -82,7 +82,7 @@ For every $m\ge 1$, the stabilization map $\Fold_m:\{0,1\}^m\to X_m$ satisfies:
   d_m(x):=|\mathcal{F}_m(x)|.
   \]
 \end{enumerate}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 (i) follows from Proposition~\ref{prop:finite-window-range}, which gives a unique admissible representative for each residue class modulo $F_{m+2}$.
@@ -96,7 +96,7 @@ For every $m\ge 1$, the stabilization map $\Fold_m:\{0,1\}^m\to X_m$ satisfies:
 
 \subsection{Residue fibers and Fourier formula}\label{sec:stab:fiber}
 
-\begin{theorem}[Exact residue characterization of fibers]\label{thm:fiber-residue}
+\begin{proposition}[Supporting exact residue characterization of fibers]\label{thm:fiber-residue}
 Let $x\in X_m$ and write
 \[
 r_x:=\Val_m(x)\in\{0,\dots,F_{m+2}-1\}.
@@ -117,7 +117,7 @@ d_m(x)
 \sum_{k=1}^m \omega_k F_{k+1}\equiv r_x \pmod{F_{m+2}}
 \Bigr\}.
 \]
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 By definition,
@@ -172,7 +172,7 @@ Consequently,
 \end{theorem}
 
 \begin{proof}
-By Theorem~\ref{thm:fiber-residue},
+By Proposition~\ref{thm:fiber-residue},
 \[
 d_m(x)
 =
@@ -219,8 +219,12 @@ Theorem~\ref{thm:fiber-dft} makes $d_m(x)$ an explicit arithmetic object: fiber 
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{figures_jpa/fig_fiber_distribution.pdf}
-\caption{Fiber-size distributions for the stabilization map $\Fold_m$ at window lengths $m=5,8,12$, obtained by exact enumeration over all $2^m$ binary words. Each bar gives the number of residue classes in $X_m$ whose fiber has a given size $d_m(x)$. The distributions are highly non-uniform. They encode the combinatorial content of the coarse-graining: both the entropy ledger of Theorem~\ref{thm:kl-ledger} and the collision probability of Proposition~\ref{prop:uniform-collision} are determined by this fiber spectrum.}
+\IfFileExists{figures_jpa/fig_fiber_distribution.pdf}{%
+  \includegraphics[width=\textwidth]{figures_jpa/fig_fiber_distribution.pdf}%
+}{%
+  \fbox{\rule{0pt}{0.32\textwidth}\rule{0.96\textwidth}{0pt}}%
+}
+\caption{Fiber-size distributions for the stabilization map $\Fold_m$ at window lengths $m=5,8,12$, obtained by exact enumeration over all $2^m$ binary words. Each bar gives the number of residue classes in $X_m$ whose fiber has a given size $d_m(x)$. The distributions are highly non-uniform. They encode the combinatorial content of the coarse-graining: both the entropy ledger of Proposition~\ref{thm:kl-ledger} and the collision probability of Proposition~\ref{prop:uniform-collision} are determined by this fiber spectrum.}
 \label{fig:fiber-distribution}
 \end{figure}
 
@@ -341,7 +345,7 @@ Since consecutive Fibonacci numbers are coprime, $\gcd(F_{m+1},F_{m+2})=1$, so m
 &=
 d_m^\sharp\bigl(\pi_m(r)\bigr),
 \end{align*}
-where the third equality uses that $\tau_m$ is a bijection and the last equality is Theorem~\ref{thm:fiber-residue} written in residue coordinates. This proves the theorem.
+where the third equality uses that $\tau_m$ is a bijection and the last equality is Proposition~\ref{thm:fiber-residue} written in residue coordinates. This proves the theorem.
 \end{proof}
 
 \begin{corollary}[Transfer of multiset-based statistics]\label{cor:affine-transfer-stats}
