@@ -162,6 +162,7 @@ import Omega.CircleDimension.PoissonDefectLadder
 import Omega.CircleDimension.PoissonDefectStability
 import Omega.CircleDimension.PoissonEntropyTomography
 import Omega.CircleDimension.PoissonKLConstantOneEighth
+import Omega.CircleDimension.PoissonKLDissipationSeventhOrderCorrection
 import Omega.CircleDimension.PoissonKLEighth
 import Omega.CircleDimension.PoissonKLEvenOrders
 import Omega.CircleDimension.PoissonKernelDerivativeL1Energy
