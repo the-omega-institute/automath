@@ -186,6 +186,7 @@ import Omega.GU.Window6ZetaCumulantLocalizationVsGreenKernelPrime571
 import Omega.GU.Window6AbelianizedParityChargeRootCartanSplitting
 import Omega.GU.Window6AffineFiberOrbitClassification
 import Omega.GU.Window6BoundaryCentralChargeUniqueAmongAuditedLifts
+import Omega.GU.Window6BoundaryCenterDirectionRealization
 import Omega.GU.Window6BoundaryDyadicDirectionFlag
 import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
 import Omega.GU.Window6B3C3AdjointCharacterQuarticInvariant
@@ -248,6 +249,7 @@ import Omega.GU.Window6Center2RankExcludesSimpleGroups
 import Omega.GU.Window6LocalDeterminantVsCoarseGreenOddPrimes
 import Omega.GU.Window6ReducedLaplacianGreenSimplePole
 import Omega.GU.Window6GreenKernelPstarValuationOne
+import Omega.GU.Window6HeavyFiberNoMaxDistance
 import Omega.GU.Window6BdryUpliftResidueStratification
 import Omega.GU.Window6VisibleQuarticShellIsotropization
 import Omega.GU.Window6VisibleMatroidMinorCensus

@@ -194,6 +194,7 @@ import Omega.Folding.GaugeAnomalyBernoulliPKappa4AndKappa3Signflip
 import Omega.Folding.GaugeAnomalyBranchRadiusCumulantGrowth
 import Omega.Folding.GodelDensityEstimatorDeterministicMeanApprox
 import Omega.Folding.GodelDensityEstimatorCltEfficient
+import Omega.Folding.GodelDensityEstimatorOptimalThresholdTest
 import Omega.Folding.GodelFiniteDictionaryBitlength
 import Omega.Folding.FoldSigmaPhiDiverges
 import Omega.Folding.GaugeAnomalyEndpointFib
