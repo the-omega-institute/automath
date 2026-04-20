@@ -45,6 +45,7 @@ import Omega.Conclusion.CdimArbitraryProfiniteKernel
 import Omega.Conclusion.CdimFiniteQuotientGrowth
 import Omega.Conclusion.CdimRankShortExactAdditivity
 import Omega.Conclusion.CdimKernelRegisterLowerBound
+import Omega.Conclusion.CircleDimensionPrimeLedgerStrictOrthogonality
 import Omega.Conclusion.CoarsegrainingStokesBeckChevalley
 import Omega.Conclusion.CofinalFixedQuotient
 import Omega.Conclusion.CofinalSparsificationSemanticCompleteness
@@ -168,6 +169,7 @@ import Omega.Conclusion.ObserverHolonomyExactCohomologicalSplitting
 import Omega.Conclusion.OddtailFiniteDepthScalarPadeJacobiRigidity
 import Omega.Conclusion.OddMaxfiberHiddenbitTristateCrystal
 import Omega.Conclusion.OnedimMaxCoefficientEntropyProfile
+import Omega.Conclusion.ParityShadowConstantMemoryCollapse
 import Omega.Conclusion.ParetoColdendCurvaturePole
 import Omega.Conclusion.PartialScreenTraceCutSpaceIdentification
 import Omega.Conclusion.PartitionPrimesliceDivisibilityValuationPaircount
