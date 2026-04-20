@@ -159,6 +159,7 @@ import Omega.Folding.FoldPressureFreezingThreshold
 import Omega.Folding.FoldGaugeAnomalyP10P9LinearDisjointness
 import Omega.Folding.HaltingLeyangHolographicEncoding
 import Omega.Folding.FoldLogMultiplicityPressureDerivative
+import Omega.Folding.FoldPairedStepDirichletCharacterIdentity
 import Omega.Folding.FiberEvenModulusMinimalDefectParityCharacter
 import Omega.Folding.IntermediateQuotientsBellProductDoubleExponential
 import Omega.Folding.FoldSuitePublication
