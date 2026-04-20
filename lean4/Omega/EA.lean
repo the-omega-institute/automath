@@ -38,6 +38,7 @@ import Omega.EA.GroupoidZeckendorfSmoothProjectionNogo
 import Omega.EA.GroupoidZeckendorfVisibleHolderNondifferentiability
 import Omega.EA.InternalProductAddsValues
 import Omega.EA.JoukowskyEllipse
+import Omega.EA.KernelCltLdp
 import Omega.EA.KernelEquilibriumPF
 import Omega.EA.KernelPressureEndpoints
 import Omega.EA.KernelWeightedPrimeOrbit

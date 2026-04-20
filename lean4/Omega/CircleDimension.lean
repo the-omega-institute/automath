@@ -178,6 +178,7 @@ import Omega.CircleDimension.PrimeTruncation
 import Omega.CircleDimension.PrimitiveEndpointTristateDegeneration
 import Omega.CircleDimension.ProjectiveStateOrganization
 import Omega.CircleDimension.QuantumEventProjections
+import Omega.CircleDimension.QuantumChannels
 import Omega.CircleDimension.RadialFibrationTransgression
 import Omega.CircleDimension.RadiusBlindspotJointDiscreteBudgetOrthogonal
 import Omega.CircleDimension.RankonePhasePrimeFiber
