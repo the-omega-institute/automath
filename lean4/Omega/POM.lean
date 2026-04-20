@@ -227,6 +227,7 @@ import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.ReversibleExternalResidualKolmogorovLowerBound
 import Omega.POM.ReplicaSoftcoreTemperatureFreeEnergyPhaseTransition
 import Omega.POM.ValPolynomialSemantics
+import Omega.POM.ValExtensionalEquivalenceDecidable
 import Omega.POM.PrimitivePrimeLucas
 import Omega.POM.ProjectiveOperatorDegeneratesToMomentKernel
 import Omega.POM.QstarDiscreteVariationalThreshold
@@ -261,6 +262,7 @@ import Omega.POM.SchurPlancherelEnergyIdentity
 import Omega.POM.SchurTomographyInversePartitionMonomials
 import Omega.POM.SideinfoExactEntropy
 import Omega.POM.SoftOrderFixedTempNondefinability
+import Omega.POM.FirstfitExtensionalUndecidable
 import Omega.POM.StarMomentKernelCompression
 import Omega.POM.SymmetricCompression
 import Omega.POM.TauTerminalSignIndependence
