@@ -183,6 +183,7 @@ import Omega.Folding.HaltingLeyangHolographicEncoding
 import Omega.Folding.FoldLogMultiplicityPressureDerivative
 import Omega.Folding.FoldPairedStepDirichletCharacterIdentity
 import Omega.Folding.FiberEvenModulusMinimalDefectParityCharacter
+import Omega.Folding.HypercubeGodelStokesFluxBias
 import Omega.Folding.IntermediateQuotientsBellProductDoubleExponential
 import Omega.Folding.FoldSuitePublication
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
