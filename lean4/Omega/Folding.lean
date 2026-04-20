@@ -251,6 +251,7 @@ import Omega.Folding.GaugeAnomalyOneBlockThreePeriodLaw
 import Omega.Folding.GaugeAnomalyP10Degree
 import Omega.Folding.GaugeAnomalyP10DisjointSqrt5
 import Omega.Folding.GaugeAnomalyP10LeyangChebotarevProductLaw
+import Omega.Folding.FoldGaugeAnomalyP10HChebotarevProductLaw
 import Omega.Folding.GaugeAnomalyP10LeyangClassFunctionTensorIndependence
 import Omega.Folding.GaugeAnomalyP10Q10TschirnhausInverse
 import Omega.Folding.FoldGaugeAnomalyFieldEqualityUMuB
