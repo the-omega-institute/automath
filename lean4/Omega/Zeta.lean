@@ -250,6 +250,7 @@ import Omega.Zeta.QuotientFunctoriality
 import Omega.Zeta.QuotientIndexLedgerSeeds
 import Omega.Zeta.RealArcSufficiencyUnitDisk
 import Omega.Zeta.RealInput40GeodesicDet
+import Omega.Zeta.RealInput40GeodesicEntropy
 import Omega.Zeta.RealInput40GeodesicMertens
 import Omega.Zeta.RealInput40RotationPolytope6V
 import Omega.Zeta.RealInput40RotationPolytopeShear
