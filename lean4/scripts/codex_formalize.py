@@ -1825,12 +1825,29 @@ def main() -> int:
         with ThreadPoolExecutor(max_workers=args.parallel, thread_name_prefix="worker") as pool:
             futures: dict[Future, int] = {}
 
+            # Cooldown after consecutive_failures hits the threshold: pause
+            # dispatch for this many seconds, then reset the counter and
+            # resume. The pipeline never exits on consecutive failures —
+            # only graceful stop via STOP_FILE or external SIGTERM.
+            cooldown_seconds = max(60, int(args.max_consecutive_failures) * 60)
+
+            def _maybe_cooldown() -> None:
+                if state.consecutive_failures < args.max_consecutive_failures:
+                    return
+                logger.warning(
+                    f"[cooldown] {state.consecutive_failures} consecutive failures — "
+                    f"sleeping {cooldown_seconds}s before resuming dispatch"
+                )
+                time.sleep(cooldown_seconds)
+                state.consecutive_failures = 0
+                save_state(state)
+                logger.info("[cooldown] resumed; consecutive_failures reset to 0")
+
             def _submit_next() -> None:
                 if STOP_FILE.exists():
                     logger.info(f"Stop file detected ({STOP_FILE}), not dispatching new rounds")
                     return
-                if state.consecutive_failures >= args.max_consecutive_failures:
-                    return
+                _maybe_cooldown()
                 with _round_lock:
                     rn = state.round_number
                     state.round_number += 1
@@ -1851,11 +1868,9 @@ def main() -> int:
                 _submit_next()
 
             while futures:
-                if state.consecutive_failures >= args.max_consecutive_failures:
-                    logger.error(
-                        f"Stopping: {state.consecutive_failures} consecutive failures"
-                    )
-                    break
+                if STOP_FILE.exists():
+                    logger.info(f"Stop file detected; draining {len(futures)} in-flight workers")
+                    # Don't break — finish in-flight, then the pool drains naturally.
                 done, _ = wait(futures, return_when=FIRST_COMPLETED)
                 for fut in done:
                     rn = futures.pop(fut)
@@ -1876,8 +1891,10 @@ def main() -> int:
                     state.total_theorems = count_lean_theorems()
                     state.recent_commits = git_log_oneline(5)
                     save_state(state)
-                    # Immediately launch a replacement worker
-                    _submit_next()
+                    # Immediately launch a replacement worker (will cooldown
+                    # if too many consecutive failures, then resume).
+                    if not STOP_FILE.exists():
+                        _submit_next()
 
     else:
         # ── Batch mode (non-continuous) ────────────────────────────────────────────
