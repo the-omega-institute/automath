@@ -176,6 +176,7 @@ import Omega.POM.Mod2ShadowEventualPeriodBound
 import Omega.POM.ModpDifferenceBinomialBasis
 import Omega.POM.MomentMinreal
 import Omega.POM.MomqPermutationSymmetry
+import Omega.POM.MomqTensorKernelNoncommutativeFibonacciPowers
 import Omega.POM.MomentDimCollapse
 import Omega.POM.MomentKernelExists
 import Omega.POM.MomentOddLagNeutrality

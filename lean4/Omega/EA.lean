@@ -29,6 +29,7 @@ import Omega.EA.FibDivisibilityChain
 import Omega.EA.FiniteLedgerRecoverability
 import Omega.EA.FoldAsSection
 import Omega.EA.FoldAsSectionCorollary
+import Omega.EA.FoldGroupoidAutChiSemidirectClassification
 import Omega.EA.GodelLogBusemann
 import Omega.EA.GlobalAssemblyZeta
 import Omega.EA.GroupoidZeckendorfSmoothProjectionNogo

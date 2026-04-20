@@ -88,6 +88,7 @@ import Omega.Conclusion.HiddenFaceBudgetSharpThresholdClassification
 import Omega.Conclusion.HypercubePhase
 import Omega.Conclusion.HypercubePhaseGridDense
 import Omega.Conclusion.ImageLayerMinimalInverseMemory
+import Omega.Conclusion.IndexTorsionTimeLowerBound
 import Omega.Conclusion.IntermediateQuotientSeeds
 import Omega.Conclusion.InverseLimitAddressFinitePrefixDeterminacy
 import Omega.Conclusion.FoldMultiscaleCarryDefect
