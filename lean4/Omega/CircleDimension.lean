@@ -112,6 +112,7 @@ import Omega.CircleDimension.KernelEnergyLaguerreParseval
 import Omega.CircleDimension.KernelGramConvolutionSpectrum
 import Omega.CircleDimension.KernelIntegerSamplingDualKernel
 import Omega.CircleDimension.KernelIntegerTranslateRieszBounds
+import Omega.CircleDimension.KernelMercerRationalBasis
 import Omega.CircleDimension.KernelOddGramV2Determinant
 import Omega.CircleDimension.KernelRKHSFeatureMap
 import Omega.CircleDimension.KernelStripExtensionEval

@@ -10,6 +10,7 @@ import Omega.EA.CentralIdempotents
 import Omega.EA.CentralIdempotentsRecovery
 import Omega.EA.ChebotarevDominantChannelPoleOrder
 import Omega.EA.ChebotarevFourier
+import Omega.EA.ChebotarevL2Monotone
 import Omega.EA.ChebotarevMobiusAdams
 import Omega.EA.ChebotarevPlancherelNonabelian
 import Omega.EA.ChebotarevPlancherelEnergy
