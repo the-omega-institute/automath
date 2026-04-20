@@ -154,6 +154,7 @@ import Omega.Folding.FoldInfoNCELossSpectrumIdentifiability
 import Omega.Folding.FoldHypercubeFibonacciGodelRadiusCount
 import Omega.Folding.FoldBinTwoStateAsymptotic
 import Omega.Folding.FoldBinFDivergenceCollapse
+import Omega.Folding.FoldBinM6FiberHist
 import Omega.Folding.FractranFoldCompiler
 import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
 import Omega.Folding.FoldRewriteNewman

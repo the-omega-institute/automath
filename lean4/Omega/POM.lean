@@ -94,6 +94,7 @@ import Omega.POM.FoldFactorChainDerivedInvariants
 import Omega.POM.FoldInversionZeroRateStrongConverse
 import Omega.POM.FiniteStateDimensionLowerBound
 import Omega.POM.FiberIndependenceComplexClassification
+import Omega.POM.FiberContractibilitySphereParityByWalsh
 import Omega.POM.FiberMedianMajorityPrimeValuation
 import Omega.POM.FiberLedgerPrefixSideinfoLength
 import Omega.POM.FiberParityHomotopyEquivalence
