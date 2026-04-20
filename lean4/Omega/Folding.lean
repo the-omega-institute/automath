@@ -183,6 +183,7 @@ import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldRewriteNewman
 import Omega.Folding.FoldSigmaPhiDiverges
 import Omega.Folding.FoldSpectrumFactorization
+import Omega.Folding.FoldSpectrumNontrivialBound
 import Omega.Folding.FoldSpectrumZeroCriterion
 import Omega.Folding.FoldSuitePublication
 import Omega.Folding.FoldTimeRegisterErrorFiberThreshold

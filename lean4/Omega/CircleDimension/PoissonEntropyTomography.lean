@@ -52,6 +52,14 @@ theorem paper_cdim_poisson_kl_two_term_sharp_package :
     (5 + 72 = 77) :=
   paper_cdim_poisson_kl_two_term_sharp_seeds
 
+/-- Paper: `thm:cdim-poisson-kl-two-term-sharp-moment-polynomial`. -/
+theorem paper_cdim_poisson_kl_two_term_sharp_moment_polynomial
+    {C4 C6 sigma mu3 mu4 : ℝ}
+    (hC4 : 8 * C4 = sigma ^ 4)
+    (hC6 : 64 * C6 = sigma ^ 6 - 8 * sigma ^ 2 * mu4 + 6 * mu3 ^ 2) :
+    C4 = sigma ^ 4 / 8 ∧ C6 = (sigma ^ 6 - 8 * sigma ^ 2 * mu4 + 6 * mu3 ^ 2) / 64 := by
+  constructor <;> linarith
+
 /-- Lp sharp constants seeds.
     thm:cdim-poisson-cauchy-lp-sharp-constants-restated -/
 theorem paper_cdim_poisson_cauchy_lp_sharp_constants_seeds :
