@@ -100,6 +100,7 @@ import Omega.CircleDimension.GodelScalarizationBitlengthLogB
 import Omega.CircleDimension.HaarPullbackUniqueness
 import Omega.CircleDimension.HighrankPhaseRegisterMinimality
 import Omega.CircleDimension.HilbertCarrier
+import Omega.CircleDimension.HilbertQuantumMainClosure
 import Omega.CircleDimension.HorizonCarathSchurEquivalence
 import Omega.CircleDimension.HypercubeDerhamLift
 import Omega.CircleDimension.KernelAffineCompositionNorm
