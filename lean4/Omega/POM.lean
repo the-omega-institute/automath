@@ -193,6 +193,7 @@ import Omega.POM.MaxFiberPublication
 import Omega.POM.MaxMassDispersionBound
 import Omega.POM.MaxchainsEqualsLinext
 import Omega.POM.MaxentLift
+import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensorRecursion
 import Omega.POM.MicrocanonicalAdaptiveNoGain
 import Omega.POM.MicrocanonicalBandBounds
 import Omega.POM.MicrocanonicalCountSufficientStatisticPosteriorUniform
