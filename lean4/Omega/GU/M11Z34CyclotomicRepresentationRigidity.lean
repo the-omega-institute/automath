@@ -64,4 +64,16 @@ theorem paper_m11_qz34_cyclotomic_decomposition
     crtDecomposition ∧ zeta34EqZeta17 ∧ cyclotomicDegree16 := by
   exact ⟨hCRT, hZeta, hDegree⟩
 
+/-- Paper-facing corollary: `Nat.totient 17 = 16` packages the intrinsic `C16` Galois action on
+each rational cyclotomic layer for `\QQ[\ZZ_{34}]`.
+    cor:m11-qz34-galois-c16 -/
+theorem paper_m11_qz34_galois_c16
+    (galoisGroupC16 rationalLayerCarriesC16 : Prop)
+    (hGalois : Nat.totient 17 = 16 → galoisGroupC16)
+    (hAction : galoisGroupC16 → rationalLayerCarriesC16) :
+    Nat.totient 17 = 16 ∧ galoisGroupC16 ∧ rationalLayerCarriesC16 := by
+  have hTotient : Nat.totient 17 = 16 := by native_decide
+  have hC16 : galoisGroupC16 := hGalois hTotient
+  exact ⟨hTotient, hC16, hAction hC16⟩
+
 end Omega.GU
