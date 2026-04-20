@@ -76,6 +76,7 @@ import Omega.GU.JoukowskyGodelLeadingCoeffRigidity
 import Omega.GU.JoukowskyGodelMonicBoundaryReadout
 import Omega.GU.JoukowskyGodelPullbackFactorization
 import Omega.GU.LeyangMahlerFreeEnergy
+import Omega.GU.LeyangEllipseDoublingShift
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.LogCmStableInverseExponentialSeparation
 import Omega.GU.M11Z34AugmentationIdealUnique
