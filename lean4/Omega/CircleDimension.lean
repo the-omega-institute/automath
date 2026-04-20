@@ -90,6 +90,7 @@ import Omega.CircleDimension.HypercubeDerhamLift
 import Omega.CircleDimension.KernelRKHSFeatureMap
 import Omega.CircleDimension.LissajousChebyshev
 import Omega.CircleDimension.LocalizedGsEmbeddingOrder
+import Omega.CircleDimension.LocalizedGsDualCompleteClassification
 import Omega.CircleDimension.LocalizationUniversalProperty
 import Omega.CircleDimension.BudgetFailureSeparation
 import Omega.CircleDimension.MedianStokesRigidityPotential

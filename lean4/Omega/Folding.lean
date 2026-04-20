@@ -214,6 +214,7 @@ import Omega.Folding.GaugeAnomalyGcDefectFarfieldExpansion
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
 import Omega.Folding.GaugeAnomalySpectralResidualLaw
 import Omega.Folding.GaugeAnomalyFiniteStateMinimaxAbsError
+import Omega.Folding.GaugeAnomalyGSupportSofic
 import Omega.Folding.GaugeAnomalyPressure
 import Omega.Folding.GaugeAnomalyRateCurveParam
 import Omega.Folding.GaugeAnomalyRateCurveIndexIdealFormula

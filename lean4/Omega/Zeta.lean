@@ -290,6 +290,7 @@ import Omega.Zeta.Arity335MarginalInvertCollision
 import Omega.Zeta.Arity335MarginalInvertChi
 import Omega.Zeta.AtomicWittIntoTC1
 import Omega.Zeta.RealInput40RotationPolytopeShear
+import Omega.Zeta.RealInput40RotationPolytope6V
 import Omega.Zeta.XiTerminalZmDeltaNodeTangentParityLaw
 import Omega.Zeta.XiTerminalReplicaSoftcoreQGenfuncRationalPartition
 import Omega.Zeta.XiTimePart63cTrivialAlternatingSignReciprocalDuality
