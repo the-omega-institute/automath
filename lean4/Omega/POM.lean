@@ -224,6 +224,7 @@ import Omega.POM.ProjectionAsPartitionPrimeRegister
 import Omega.POM.PressureSlopes
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantAreaFiberMultinomial
+import Omega.POM.PrimeDeterminant2x2FreeEncoding
 import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.ReversibleExternalResidualKolmogorovLowerBound
 import Omega.POM.ReplicaSoftcoreTemperatureFreeEnergyPhaseTransition
