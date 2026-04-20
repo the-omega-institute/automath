@@ -243,3 +243,4 @@ import Omega.Conclusion.ZeckendorfEulerSeeds
 import Omega.Conclusion.ZeckendorfEulerPoissonBoundary
 import Omega.Conclusion.ZeckendorfResetBoundedCLTAbsent
 import Omega.Conclusion.EndpointHorizonArcsineKLClosedForm
+import Omega.Conclusion.OddtailFiniteDepthScalarPadeJacobiRigidity

@@ -191,6 +191,7 @@ import Omega.POM.MultiplicityCompositionMod3Sparsity
 import Omega.POM.MultiplicityBinetTwoParameterNormalForm
 import Omega.POM.MultiplicityFixedLREnvelope
 import Omega.POM.MultiplicityFixedRExtrema
+import Omega.POM.NewmanCriticalAlgebraicEliminationSturm
 import Omega.POM.OrbitProductNorm
 import Omega.POM.OnlineMultiplicativePrimeSupportLB
 import Omega.POM.OrderSpatialization
