@@ -44,6 +44,7 @@ import Omega.EA.GroupoidZeckendorfSmoothProjectionNogo
 import Omega.EA.GroupoidZeckendorfVisibleHolderNondifferentiability
 import Omega.EA.InternalProductAddsValues
 import Omega.EA.JoukowskyEllipse
+import Omega.EA.KernelChebotarevExp
 import Omega.EA.KernelCltLdp
 import Omega.EA.KernelEquilibriumPF
 import Omega.EA.KernelGlobalCarryfreeSpectralTrichotomy
@@ -61,6 +62,7 @@ import Omega.EA.ParallelAdditionU1Degeneracy
 import Omega.EA.ParAddGlobalLiftEndpoints
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.PrimeLedger
+import Omega.EA.PrimeRegisterBrauerSeveriBrauerSplitting
 import Omega.EA.PrimeRegisterEllipseInvertGodel
 import Omega.EA.PrimeRegisterExternalLedgerOrbitInvariance
 import Omega.EA.PrimeRegisterFibValuation
