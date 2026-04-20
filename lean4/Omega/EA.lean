@@ -40,6 +40,7 @@ import Omega.EA.InternalProductAddsValues
 import Omega.EA.JoukowskyEllipse
 import Omega.EA.KernelEquilibriumPF
 import Omega.EA.KernelPressureEndpoints
+import Omega.EA.KernelWeightedPrimeOrbit
 import Omega.EA.KernelZeroTemp
 import Omega.EA.MonoidQuotientIsN
 import Omega.EA.MulNoNewPrimitive
