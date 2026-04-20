@@ -135,6 +135,7 @@ import Omega.POM.FractranPermutationEmbeddingLength
 import Omega.POM.FractranPrimecoreFinitePartialFunctionCategory
 import Omega.POM.FractranSoftFirstfitFixedTempExponentialCollapse
 import Omega.POM.FractranTwoPrimeDenominatorDfaCompile
+import Omega.POM.GaugeNatural
 import Omega.POM.GibbsSelection
 import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.GoldenBiasVarianceEqualsBias
