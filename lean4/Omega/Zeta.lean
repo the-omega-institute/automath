@@ -15,6 +15,7 @@ import Omega.Zeta.BooleanTwoLayerSmithNormalForm
 import Omega.Zeta.BooleanDisjointnessZetaLDLT
 import Omega.Zeta.CLTSpectral
 import Omega.Zeta.PickPoissonCharpolyCoefficients
+import Omega.Zeta.PickPoissonEnergyStabilityAwayFromCollision
 import Omega.Zeta.Conclusion63CLTSpectral
 import Omega.Zeta.CayleyDepthIdentity
 import Omega.Zeta.XiCayleyJoukowskyHarmonicMeasureEllipse
