@@ -205,6 +205,7 @@ import Omega.CircleDimension.VisibleStateProjectivization
 import Omega.CircleDimension.WdimBettiAverageLaw
 import Omega.CircleDimension.WdimSignedCircleDimension
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
+import Omega.CircleDimension.ZeroDimensionFinitePhaseImplementationBudget
 import Omega.CircleDimension.ZnProcyclicAndMinGenerators
 import Omega.CircleDimension.KernelAffineCompositionNorm
 import Omega.CircleDimension.KernelStripExtensionEval

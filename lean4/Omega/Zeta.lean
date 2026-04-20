@@ -33,6 +33,7 @@ import Omega.Zeta.CompletionEndpointJetDiffusion
 import Omega.Zeta.ComovingEnergyDeltaBound
 import Omega.Zeta.ComovingHorizonScanPoissonKLCovarianceTensor
 import Omega.Zeta.CriticalCircleStateDimensionLB
+import Omega.Zeta.CriticalCircleDensityCalibration
 import Omega.Zeta.CriticalLineGapEntropyRateZero
 import Omega.Zeta.CriticalLinePaircorrPurePoint
 import Omega.Zeta.CyclicBlockTensorDeterminant

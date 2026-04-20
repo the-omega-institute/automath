@@ -83,6 +83,7 @@ import Omega.Folding.EntropyRandomResidues
 import Omega.Folding.MultinomialVpCarrySignature
 import Omega.Folding.EpsilonMachineFibMobius
 import Omega.Folding.EpsilonMachineInfiniteMarkovOrder
+import Omega.Folding.EpsilonMachineStrictlySoficInfiniteMemory
 import Omega.Folding.EpsilonMachineStationaryFibonacciTail
 import Omega.Folding.EpsilonMachineSynchronizingWord
 import Omega.Folding.EpsilonMachineZeroRunLength
