@@ -126,6 +126,7 @@ import Omega.Folding.FoldHypercubeFibonacciEpsEntropyUpper
 import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy
 import Omega.Folding.FiberBiasEnergyGroupringConstantTerm
 import Omega.Folding.FoldMultiplicityEnergy
+import Omega.Folding.FoldCollisionSpectrum
 import Omega.Folding.FoldMultiplicityGroupAlgebra
 import Omega.Folding.FoldFiberParityEnergySimplex
 import Omega.Folding.FoldZeroUncertainty
@@ -138,6 +139,7 @@ import Omega.Folding.FoldBinOracleLinearThresholdExponent
 import Omega.Folding.Window6VariableLengthExactInversionRateGap
 import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinMinsectorComplementMaxfiber
+import Omega.Folding.FoldMaxFiberFourier
 import Omega.Folding.FoldBinPhiIdentifiablePowerDivergence
 import Omega.Folding.FoldBinRenyiDivergenceLimit
 import Omega.Folding.FoldInfoNCELossSpectrumIdentifiability
