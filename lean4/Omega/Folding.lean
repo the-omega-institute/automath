@@ -192,6 +192,7 @@ import Omega.Folding.FoldRewriteNewman
 import Omega.Folding.FoldSigmaPhiDiverges
 import Omega.Folding.FoldSpectrumFactorization
 import Omega.Folding.FoldSpectrumNontrivialBound
+import Omega.Folding.FoldEvenOddBalance
 import Omega.Folding.FoldSpectrumParityZero
 import Omega.Folding.FoldSpectrumZeroCriterion
 import Omega.Folding.FoldSuitePublication
