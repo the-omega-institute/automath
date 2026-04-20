@@ -1661,6 +1661,112 @@ def run_round_serial(
 
 BUILDER_LOG_DIR = LOG_DIR / "builder"
 BROKEN_SHAS_FILE = BUILDER_LOG_DIR / "broken_shas.txt"
+# Dedicated worktree for the builder thread. Keeping it separate from
+# REPO_ROOT stops the race where a worker's `merge_worktree_to_base`
+# ff-updates the main checkout's working tree mid-`lake build`, which
+# had been leaving the main .lake/build with stale/mixed .oleans.
+BUILDER_WORKTREE = WORKTREE_DIR / "_builder"
+BUILDER_BRANCH = "_builder_tmp"
+# Lock serializing any write to the main REPO_ROOT/.lake/build so that
+# round worktree creation (_clone_lake_cache) and builder olean sync
+# don't observe each other mid-update.
+_main_cache_lock = threading.Lock()
+
+
+def _ensure_builder_worktree() -> Path:
+    """Create the builder worktree on first use, COW-cloning packages/build
+    from REPO_ROOT so lake starts warm. Safe to call repeatedly."""
+    WORKTREE_DIR.mkdir(parents=True, exist_ok=True)
+    if BUILDER_WORKTREE.exists() and (BUILDER_WORKTREE / "lean4").exists():
+        return BUILDER_WORKTREE
+    with _git_lock:
+        # Clean any half-created state.
+        run_cmd(["git", "worktree", "remove", "--force", str(BUILDER_WORKTREE)],
+                cwd=REPO_ROOT)
+        if BUILDER_WORKTREE.exists():
+            shutil.rmtree(BUILDER_WORKTREE, ignore_errors=True)
+        run_cmd(["git", "branch", "-D", BUILDER_BRANCH], cwd=REPO_ROOT)
+        r = run_cmd(
+            ["git", "worktree", "add", "-B", BUILDER_BRANCH,
+             str(BUILDER_WORKTREE), BASE_BRANCH],
+            cwd=REPO_ROOT,
+        )
+        if r.returncode != 0:
+            raise RuntimeError(f"builder worktree add failed: {r.stderr}")
+    _clone_lake_cache(BUILDER_WORKTREE)
+    logger.info(f"[builder] worktree ready at {BUILDER_WORKTREE}")
+    return BUILDER_WORKTREE
+
+
+def _builder_checkout(sha: str) -> None:
+    """Move the builder worktree's branch pointer to `sha` without touching
+    any other git state. Done under _git_lock because workers run git ops
+    on the same repo."""
+    with _git_lock:
+        run_cmd(["git", "fetch", "origin", BASE_BRANCH],
+                cwd=BUILDER_WORKTREE, timeout=60)
+        # reset --hard is safer than merge --ff-only here: we want the
+        # worktree to match the requested sha exactly, and we own this branch.
+        run_cmd(["git", "reset", "--hard", sha],
+                cwd=BUILDER_WORKTREE, timeout=60)
+
+
+def _sync_omega_cache_to_main() -> None:
+    """After a successful lake build in BUILDER_WORKTREE, copy freshly-built
+    Omega .oleans back to REPO_ROOT/lean4/.lake/build so that round worker
+    worktrees (which COW this cache on creation) pick up the latest olean
+    set. mathlib/Cli/etc under .lake/packages are untouched."""
+    src_root = BUILDER_WORKTREE / "lean4" / ".lake" / "build"
+    dst_root = LEAN_ROOT / ".lake" / "build"
+    if not src_root.exists():
+        return
+    with _main_cache_lock:
+        t0 = time.monotonic()
+        copied = 0
+        # Atomic-ish replace: rename dir → new side-by-side, then swap.
+        for sub in ("lib/lean/Omega", "ir/Omega"):
+            src = src_root / sub
+            dst = dst_root / sub
+            if not src.exists():
+                continue
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            tmp = dst.with_name(dst.name + f".new_{os.getpid()}")
+            try:
+                if tmp.exists():
+                    shutil.rmtree(tmp, ignore_errors=True)
+                # APFS copy-on-write when possible.
+                r = subprocess.run(
+                    ["cp", "-Rc", str(src), str(tmp)],
+                    timeout=600, check=False, stdin=subprocess.DEVNULL,
+                )
+                if r.returncode != 0:
+                    shutil.rmtree(tmp, ignore_errors=True)
+                    continue
+                if dst.exists():
+                    old = dst.with_name(dst.name + f".old_{os.getpid()}")
+                    dst.rename(old)
+                    tmp.rename(dst)
+                    shutil.rmtree(old, ignore_errors=True)
+                else:
+                    tmp.rename(dst)
+                copied += 1
+            except Exception as exc:
+                logger.warning(f"[builder] sync {sub} failed: {exc}")
+                shutil.rmtree(tmp, ignore_errors=True)
+        # Root-level Omega artifacts (Omega.olean and friends).
+        for name in ("Omega.olean", "Omega.olean.hash",
+                     "Omega.ilean", "Omega.ilean.hash"):
+            src_file = src_root / "lib" / "lean" / name
+            dst_file = dst_root / "lib" / "lean" / name
+            if src_file.exists():
+                try:
+                    shutil.copy2(src_file, dst_file)
+                    copied += 1
+                except Exception:
+                    pass
+        elapsed = time.monotonic() - t0
+        logger.info(f"[builder] synced {copied} Omega cache item(s) "
+                    f"to main checkout ({elapsed:.1f}s)")
 
 
 def _read_broken_shas() -> set[str]:
@@ -1806,12 +1912,19 @@ def _builder_attempt_fix(sha: str, build_log: Path, max_attempts: int) -> bool:
 
 def _builder_loop(poll_seconds: float, max_fix_attempts: int) -> None:
     """Single-consumer loop. Blocks on `_build_cv` for a new SHA request,
-    runs `lake build` in REPO_ROOT/lean4, and on failure spawns a codex
-    fix round. When many build requests arrive during a build, only the
-    newest SHA is processed on the next iteration."""
+    runs `lake build` in BUILDER_WORKTREE (separate from REPO_ROOT so that
+    worker merges don't ff the builder's working tree mid-build), and on
+    success syncs the fresh Omega .oleans back to REPO_ROOT/.lake/build
+    for round worker worktrees to COW. On failure spawns a codex fix. When
+    multiple SHAs queue up during a build, only the latest is processed."""
     global _build_request
     logger.info(f"[builder] started (poll={poll_seconds}s, max_fix={max_fix_attempts})")
     BUILDER_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        _ensure_builder_worktree()
+    except Exception as exc:
+        logger.error(f"[builder] cannot initialize builder worktree: {exc}")
+        return
     last_built: Optional[str] = None
     while not _builder_stop.is_set():
         with _build_cv:
@@ -1827,22 +1940,21 @@ def _builder_loop(poll_seconds: float, max_fix_attempts: int) -> None:
             logger.info(f"[builder] {sha[:8]} already recorded broken; skipping")
             last_built = sha
             continue
-        logger.info(f"[builder] building {sha[:8]} in main checkout")
-        # Fast-forward main checkout to this sha so lake builds that tip.
+        logger.info(f"[builder] building {sha[:8]} in builder worktree")
         try:
-            with _git_lock:
-                run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=60)
-                run_cmd(["git", "checkout", BASE_BRANCH], cwd=REPO_ROOT, timeout=60)
-                run_cmd(["git", "merge", "--ff-only", f"origin/{BASE_BRANCH}"],
-                        cwd=REPO_ROOT, timeout=60)
+            _builder_checkout(sha)
         except Exception as exc:
-            logger.error(f"[builder] ff main failed: {exc}")
+            logger.error(f"[builder] checkout {sha[:8]} failed: {exc}")
             continue
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
         build_log = BUILDER_LOG_DIR / f"build_{sha[:8]}_{ts}.txt"
-        ok, tail = _builder_lake_build(LEAN_ROOT, build_log)
+        ok, tail = _builder_lake_build(BUILDER_WORKTREE / "lean4", build_log)
         if ok:
             logger.info(f"[builder] PASS {sha[:8]} (log={build_log.name})")
+            try:
+                _sync_omega_cache_to_main()
+            except Exception as exc:
+                logger.warning(f"[builder] cache sync failed: {exc}")
             last_built = sha
             continue
         logger.error(f"[builder] FAIL {sha[:8]} (log={build_log.name})")
