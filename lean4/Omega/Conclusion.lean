@@ -88,6 +88,7 @@ import Omega.Conclusion.FixedTempSoftOrderProbabilisticFiniteStateDecidable
 import Omega.Conclusion.FoldHilbertRecognizable
 import Omega.Conclusion.FoldMultiscaleCarryDefect
 import Omega.Conclusion.FoldOutputEntropyGaugeAffineIdentity
+import Omega.Conclusion.FoldGaugeEntropyDensityExactConstant
 import Omega.Conclusion.FoldSinglepairVisibleObstructions
 import Omega.Conclusion.FoldWalshGramSimplexSignatureSection
 import Omega.Conclusion.FoldWalshTotalChargeParsevalDegeneracy

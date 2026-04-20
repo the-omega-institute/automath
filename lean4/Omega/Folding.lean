@@ -63,6 +63,7 @@ import Omega.Folding.CarryDefect
 import Omega.Folding.CircleDimension
 import Omega.Folding.CoarsegrainingNaturalityRayleighStokes
 import Omega.Folding.CollisionConditionalHammingMgf
+import Omega.Folding.ComponentResiduePressurePadicSaturation
 import Omega.Folding.CollisionDecomp
 import Omega.Folding.CollisionKernel
 import Omega.Folding.CollisionZeta
