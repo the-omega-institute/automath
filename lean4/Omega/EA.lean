@@ -48,6 +48,7 @@ import Omega.EA.MultiscaleRoughReadoutContinuity
 import Omega.EA.OnlineDelayFold
 import Omega.EA.OnlineDelayFoldSyncMealyMinimality
 import Omega.EA.ParallelAdditionU1Degeneracy
+import Omega.EA.ParAddGlobalLiftEndpoints
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.PrimeLedger
 import Omega.EA.PrimeRegisterEllipseInvertGodel

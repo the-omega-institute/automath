@@ -67,6 +67,7 @@ import Omega.CircleDimension.EndpointTristateSet
 import Omega.CircleDimension.Entanglement
 import Omega.CircleDimension.FiberPhaseQuantization
 import Omega.CircleDimension.Fibonacci2PowerAdicUnitInfinite
+import Omega.CircleDimension.Elliptic2PowerTowerFinitePrimeObservationIndistinguishable
 import Omega.CircleDimension.FibonacciPrimitivePrimeBinaryLock
 import Omega.CircleDimension.FiniteExtensionAxiomaticUniqueness
 import Omega.CircleDimension.FiniteFiberAuditExponent
