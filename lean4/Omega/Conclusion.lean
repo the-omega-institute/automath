@@ -97,6 +97,7 @@ import Omega.Conclusion.KernelChainRule
 import Omega.Conclusion.KirchhoffGreenDeterminantIdentity
 import Omega.Conclusion.LocalizedKernelInclusionExclusionMobius
 import Omega.Conclusion.LocalizedGroupsMayerVietoris
+import Omega.Conclusion.FiniteLocalizationSixfoldRigidity
 import Omega.Conclusion.KrylovLowrankRigidity
 import Omega.Conclusion.LeyangOffdiagonalTranspositionQuotient
 import Omega.Conclusion.LeyangDeltaSecondMomentCollision
