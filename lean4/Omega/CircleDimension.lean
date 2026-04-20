@@ -185,6 +185,7 @@ import Omega.CircleDimension.SolenoidArithmeticSingularRingTorsionKernelFormula
 import Omega.CircleDimension.SolenoidFiberTorsor
 import Omega.CircleDimension.SolenoidKernelBlindness
 import Omega.CircleDimension.SolenoidKernelProductZp
+import Omega.CircleDimension.SolenoidOverTMorphismClassification
 import Omega.CircleDimension.SolenoidRigidityRankPrimeSupport
 import Omega.CircleDimension.SolenoidTerminalPhaseSystem
 import Omega.CircleDimension.SquarefreeMedianDistance
