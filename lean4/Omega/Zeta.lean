@@ -207,6 +207,7 @@ import Omega.Zeta.JensenQuadraticResolutionBarrier
 import Omega.Zeta.LayeredExternalizationAverageShannonBudget
 import Omega.Zeta.NullZ2SpectralSplittingDoublecover
 import Omega.Zeta.LengthModqChebotarev
+import Omega.Zeta.OperatorResolventTraceSpectralFlowQuantization
 import Omega.Zeta.Window6RenyiDivergenceParityChargeRedundancy
 import Omega.Zeta.LeftCEDyadicDensity
 import Omega.Zeta.LocalInversionDelta

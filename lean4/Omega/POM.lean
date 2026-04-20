@@ -216,6 +216,7 @@ import Omega.POM.TimeReversalSymmetricIndsetPolynomial
 import Omega.POM.PressureReflectionInequality
 import Omega.POM.PositiveNegativeMomentCoupling
 import Omega.POM.PressureConvexity
+import Omega.POM.RankoneFusionDefectFibonacciRigidity
 import Omega.POM.ProjectivePressureZeroNormalization
 import Omega.POM.ProjectivePressureHolderLogconvex
 import Omega.POM.ProjectivePressureDiscreteLegendreEnvelope
