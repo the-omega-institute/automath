@@ -213,6 +213,7 @@ import Omega.POM.MultiplicityFixedLREnvelope
 import Omega.POM.MultiplicityFixedRExtrema
 import Omega.POM.NewmanCriticalAlgebraicEliminationSturm
 import Omega.POM.OnlineMultiplicativePrimeSupportLB
+import Omega.POM.OrderPolytopeVolumeLinext
 import Omega.POM.OracleBitLowerBoundSubexpMom
 import Omega.POM.OracleCapacityStieltjesInversionMellin
 import Omega.POM.OracleCriticalQuadraticMarginalLaw

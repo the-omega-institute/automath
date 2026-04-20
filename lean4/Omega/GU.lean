@@ -218,6 +218,7 @@ import Omega.GU.Window6EdgeFluxCoarseMarkovGalois
 import Omega.GU.Window6EdgeFluxCommutantRigidity
 import Omega.GU.Window6EdgeFluxCriticalGroupCyclic
 import Omega.GU.Window6EdgeFluxFullMatrixSaturation
+import Omega.GU.Window6ExactProjectorSynthesis
 import Omega.GU.Window6EdgeFluxMaxEntropyKernelUniqueness
 import Omega.GU.Window6EdgeFluxNoInvariantBilinearForm
 import Omega.GU.Window6EdgeFluxNoInvariantBinaryProduct
