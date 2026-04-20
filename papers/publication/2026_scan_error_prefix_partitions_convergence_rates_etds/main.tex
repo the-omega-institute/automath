@@ -1,6 +1,10 @@
-\documentclass[11pt,letterpaper]{article}
+\IfFileExists{etds.cls}{%
+  \documentclass{etds}%
+}{%
+  \documentclass[11pt,letterpaper]{article}%
+}
 
-\usepackage[margin=1in]{geometry}
+\IfFileExists{etds.cls}{}{\usepackage[margin=1in]{geometry}}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{array}
 \usepackage{booktabs}
@@ -25,6 +29,7 @@
 \newcommand{\PP}{\mathbb{P}}
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\ind}{\mathbf{1}}
+\newcommand{\leanverified}[1]{}
 \DeclareMathOperator{\sgn}{sgn}
 
 % Notation: \mathsf{P} denotes a measurable event (subset of the probability
@@ -33,8 +38,8 @@
 % use \mathsf{P} throughout.
 
 \title{Scan Error Profiles on Prefix Partitions and Boundary-Controlled Convergence Rates}
-\author{Haobo Ma\\{\small CHRONOAI PTE. LTD., Singapore}}
-\date{\today}
+\author{Haobo Ma\\{\small Research Department, CHRONOAI PTE.\ LTD., Singapore}\\{\small\texttt{haobo@chronoai.co}}}
+\date{}
 
 \begin{document}
 \maketitle
@@ -57,7 +62,13 @@ for an explicit event $\mathsf{E}$ on the golden-mean shift with its Parry
 measure, where $\varphi=(1+\sqrt{5})/2$ and the boundary dimension is $d=1/2$.
 \end{abstract}
 
-\tableofcontents
+\noindent\textbf{AMS 2020 Mathematics Subject Classification.}
+Primary 37B10; Secondary 60G42, 28A80, 62C20.
+
+\medskip
+\noindent\textbf{Keywords.}
+prefix filtrations; scan error; boundary cylinders; symbolic dynamics;
+golden-mean shift; convergence rates.
 
 \section{Introduction}
 \label{sec:intro}
@@ -464,91 +475,100 @@ $c_-\varphi^{-m}\le\mu([a])\le c_+\varphi^{-m}$ for explicit constants
 $c_-,c_+>0$ determined by the left eigenvector of $A$ \cite{Parry1964}.
 
 \paragraph{The event $\mathsf{E}$.}
-Define
+Let $Y\subset X$ be the closed set
 \[
-\mathsf{E}:=\{x\in X:s_{2k}(x)=0\text{ for all }k\ge 0\},
+Y:=\{x\in X:x_{2j}=0\text{ for all }j\ge 0,\quad
+x_{2j+1}x_{2j+3}\ne 11\text{ for all }j\ge 0\}.
 \]
-the event that every even-position symbol is $0$.  This event is in
-$\mathcal{F}_\infty$ but is not in $\mathcal{F}_m$ for any finite $m$, since
-it constrains symbols at positions $0,2,4,\ldots$ without bound.  By
-the golden-mean transition structure, admissible words of even length
-$m=2k$ satisfying $a_0=a_2=\cdots=a_{2k-2}=0$ always have $a_1,a_3,\ldots,a_{2k-1}$
-free subject to admissibility constraints between consecutive pairs.
+Thus the even coordinates are fixed to $0$, and the odd-coordinate
+subsequence is itself golden-mean admissible.  A finite word $a$ is called
+$Y$-admissible if $[a]\cap Y\ne\varnothing$.
+
+For $x\notin Y$, let $\rho(x)$ be the first prefix length at which the
+observed word is no longer $Y$-admissible.  At this first exit there is a
+unique newly visible obstruction: either an even coordinate is $1$, or two
+consecutive odd coordinates in the induced odd subsequence are both $1$.
+Define $\mathsf{E}$ to be the event that the first obstruction is the
+even-coordinate obstruction, and include the null set $Y$ in $\mathsf{E}$.
+The set $Y$ has Parry measure zero: from any $Y$-admissible prefix there is a
+uniformly positive probability of leaving the $Y$-language within the next
+five symbols, and iteration over disjoint five-symbol windows gives
+$\mu(Y)=0$.
+The event is in $\mathcal{F}_\infty$ and is not decided by any finite
+prefix, since every $Y$-admissible prefix has continuations with either type
+of first obstruction.
 
 \paragraph{Boundary count.}
-A cylinder $[a]\in\mathcal{C}_m$ for $m=2k$ lies in $\partial_m\mathsf{E}$
-if and only if $[a]$ is consistent with $\mathsf{E}$ (i.e., $a_0=a_2=\cdots=a_{2k-2}=0$)
-and also has extensions not in $\mathsf{E}$ (i.e., extensions with $a_{2k}=1$,
-which is admissible whenever $a_{2k-1}=0$).  Precisely:
-\[
-\partial_{2k}\mathsf{E}
-=\{[a]:a_0=a_2=\cdots=a_{2k-2}=0,\quad a_{2k-1}=0,\quad
-\text{and }a\text{ is admissible}\}.
-\]
-The condition $a_{2k-1}=0$ is needed because if $a_{2k-1}=1$ then the only
-admissible extension is $a_{2k}=0$, which is already in $\mathsf{E}$, and
-there is no extension $a_{2k}=1$ (as $11$ is forbidden); such cylinders
-therefore lie entirely inside $\mathsf{E}$ at the next level and contribute no
-boundary.  The number of such words is the number of admissible length-$2k$
-words with even positions fixed to $0$ and last symbol $a_{2k-1}=0$.
+A length-$m$ cylinder is a boundary cylinder for $\mathsf{E}$ if and only if
+its defining word is $Y$-admissible.  If the word has already left the
+$Y$-language, the first obstruction type has already been observed and every
+extension is classified the same way.  If the word is still $Y$-admissible,
+there are continuations whose first obstruction is an even $1$ and
+continuations whose first obstruction is an odd-subsequence word $11$.
 
-Counting by induction: let $b_k$ denote the number of admissible length-$k$
-words $(a_1,a_3,\ldots,a_{2k-1})$ of odd-position letters such that the full
-interleaved word $(0,a_1,0,a_3,\ldots,0,a_{2k-1})$ is admissible and
-$a_{2k-1}=0$.  Since $0a_j0a_{j+1}$ is admissible for any $a_j,a_{j+1}$ with
-$a_j a_{j+1}$ admissible in the golden-mean shift (because $0$ followed by
-anything is admissible), the count $b_k$ satisfies the same Fibonacci
-recurrence as the golden-mean shift itself:
+Let $b_k$ be the number of golden-mean admissible words of length $k$ on the
+odd-coordinate alphabet.  The initial values are $b_0=1$ and $b_1=2$.  For
+$k\ge 2$, split such words according to their last symbol: words ending in
+$0$ are obtained by appending $0$ to any word of length $k-1$, while words
+ending in $1$ are obtained by appending $01$ to any word of length $k-2$.
+Hence
 \[
-b_k=b_{k-1}+b_{k-2},\qquad b_1=1,\quad b_2=2,
+b_k=b_{k-1}+b_{k-2},\qquad b_0=1,\quad b_1=2,
 \]
-giving $b_k=F_{k+1}$.  Thus
+so $b_k=F_{k+2}$ for the convention $F_0=0,F_1=1$.  Since the even
+coordinates in a $Y$-admissible prefix are forced to be zero,
 \[
-N_{2k}(\partial\mathsf{E})=F_{k+1}\sim\frac{\varphi^k}{\sqrt5}=\frac{\varphi^{m/2}}{\sqrt5}.
+N_{2k}(\partial\mathsf{E})=N_{2k+1}(\partial\mathsf{E})=b_k=F_{k+2}
+\sim\frac{\varphi^{k+2}}{\sqrt5}.
 \]
-For odd $m=2k+1$, every admissible word $a$ of length $2k+1$ with
-$a_0=a_2=\cdots=a_{2k}=0$ lies entirely in $\mathsf{E}$ at the next level
-(since the next even-position constraint is already satisfied), so
-$N_{2k+1}(\partial\mathsf{E})=0$.  Therefore
+Therefore
 \[
 \overline{\dim}_B(\partial\mathsf{E})
 =\limsup_{m\to\infty}\frac{\log N_m(\partial\mathsf{E})}{m\log\varphi}
-=\lim_{k\to\infty}\frac{\log(\varphi^k/\sqrt5)}{2k\log\varphi}
+=\lim_{k\to\infty}\frac{\log F_{k+2}}{2k\log\varphi}
 =\frac{1}{2}.
 \]
 
 \paragraph{Thickness verification.}
-For any $[a]\in\partial_{2k}\mathsf{E}$, the Parry measure has the Gibbs
-property: the cylinder $[a]$ splits over the next symbol $a_{2k}\in\{0,1\}$
-with transition probabilities bounded away from $0$ uniformly over all
-admissible $[a]$.  Concretely, since $a_{2k-1}=0$, both extensions
-$[a0]$ and $[a1]$ are admissible, and the Parry-measure transition
-probabilities from state $0$ are $\PP_\mu(a_{2k}=0\mid a_{2k-1}=0)=\varphi^{-1}$
-and $\PP_\mu(a_{2k}=1\mid a_{2k-1}=0)=\varphi^{-2}$.  In particular,
-$\mu([a0]),\mu([a1])>0$.  Now $\mathsf{E}$ constrains $a_{2k}=0$; the
-extension $[a1]$ is outside $\mathsf{E}$.  Therefore for any
-$[a]\in\partial_{2k}\mathsf{E}$,
+The Parry transition probabilities are
 \[
-\mu(\mathsf{E}\mid[a])\ge\mu(\text{next even position is }0\mid[a])
-\ge\varphi^{-1}>0
+\PP_\mu(0\mid 0)=\varphi^{-1},\qquad
+\PP_\mu(1\mid 0)=\varphi^{-2},\qquad
+\PP_\mu(0\mid 1)=1.
 \]
-and $\mu(\mathsf{E}^c\mid[a])\ge\varphi^{-2}>0$ similarly.  Hence the thickness
-condition holds with $\theta=\varphi^{-2}\approx 0.382$.
+Let $p_*:=\varphi^{-2}$ be the smallest positive transition probability.
+From any $Y$-admissible prefix one can force a first even-coordinate
+obstruction by appending an admissible word of length at most five: if the
+next even site can be assigned $1$, do so; otherwise first append zeros until
+the preceding symbol is $0$, then assign $1$ to the next even site.  Similarly,
+one can force a first odd-subsequence obstruction by keeping all intervening
+even sites equal to $0$ and appending odd symbols so that either the most
+recent odd $1$ is followed by another odd $1$, or, if the most recent odd
+symbol is $0$ or absent, the next two odd symbols are $11$; this also takes at
+most five further symbols.
+Both constructions avoid the opposite obstruction before the intended one.
+Thus each boundary cylinder contains a subcylinder of $\mathsf{E}$ and a
+subcylinder of $\mathsf{E}^c$ with conditional Parry mass at least
+$p_*^5=\varphi^{-10}$.  Hence
+\[
+\min\{\mu(\mathsf{E}\mid[a]),1-\mu(\mathsf{E}\mid[a])\}
+\ge\varphi^{-10}
+\qquad([a]\in\partial_m\mathsf{E}),
+\]
+so the thickness condition holds uniformly.
 
 \paragraph{Rate conclusion.}
 Theorem~\ref{thm:volume-boundary-scaling} with $d=1/2$ and
-$\lambda_{\mathrm{cyl}}=\varphi$ gives, for all large even $m=2k$,
+$\lambda_{\mathrm{cyl}}=\varphi$ gives, for all large $m$,
 \[
 \theta c_-\,\varphi^{-m/2+O(1)}
 \le\varepsilon_m(\mathsf{E};\mu)
 \le\frac{c_+}{2}\,\varphi^{-m/2+O(1)},
 \]
-so $\varepsilon_m(\mathsf{E};\mu)\asymp\varphi^{-m/2}$.  For odd $m$, the
-boundary is empty and $\varepsilon_m$ is controlled by the previous even level.
-More precisely, there exist explicit constants $C_1=\theta c_->0$ and
-$C_2=c_+/2<\infty$ such that
+so $\varepsilon_m(\mathsf{E};\mu)\asymp\varphi^{-m/2}$.  More precisely, there
+exist constants $C_1,C_2>0$ such that for all sufficiently large $m$,
 \[
-C_1\varphi^{-m/2}\le\varepsilon_{2\lfloor m/2\rfloor}(\mathsf{E};\mu)\le C_2\varphi^{-m/2}.
+C_1\varphi^{-m/2}\le\varepsilon_m(\mathsf{E};\mu)\le C_2\varphi^{-m/2}.
 \]
 \end{example}
 
@@ -605,6 +625,10 @@ dynamical framing motivates the cylinder structure but is not invoked in any
 argument.  Adding results that essentially use invariance---for example,
 equivariance of boundary growth under $T$, or Rohlin tower constructions---is
 an open direction.
+
+\section*{Acknowledgements}
+
+The author acknowledges institutional support from CHRONOAI PTE.\ LTD.
 
 \bibliographystyle{plain}
 \bibliography{references}

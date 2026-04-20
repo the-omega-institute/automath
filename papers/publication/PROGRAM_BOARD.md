@@ -34,7 +34,7 @@
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | J. Spectral Theory | P5 done | — |
 | `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | P3 返工 | — |
 | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | IMRN | C-DONE (Claude: submit, 1 rounds) | — |
-| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | B-DONE (Oracle: reject, 4 rounds (max)) | — |
+| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | C-DONE (Claude: submit, 2 rounds) | — |
 | `2026_detector_shells_click_record_kms_jphyscomm` | J. Math. Phys. | C-DONE (Claude: submit, 2 rounds) | GRG desk reject→JPhysComm desk reject 03-23→JMP | fallback: CQG (IF 3.6), Ann. Phys. (IF 3.0) |
 
 | `2026_single_primitive_universality_hierarchy` | Proc. AMS | P0 | — |

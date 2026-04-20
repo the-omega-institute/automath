@@ -152,6 +152,8 @@ MACHINE_ASSIGNMENT = {
         "2026_joukowsky_elliptic_godel_lorentz_mahler_capacity",
         "2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge",
         "2026_zeckendorf_stable_arithmetic_fibonacci_congruence_online",
+        "2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds",
+        "2026_folded_histograms_sampling_certificates_parry_mismatch_etds",
     ],
 }
 
@@ -674,16 +676,15 @@ _ARTIFACT_PATTERNS = (
 
 def _add_paper_only(paper_path: Path) -> None:
     """git add only .tex .bib .sty files under paper_path. Skip artifacts."""
-    run_cmd(["git", "add", "--", str(paper_path / "*.tex"),
-             str(paper_path / "**/*.tex"),
-             str(paper_path / "*.bib"),
-             str(paper_path / "**/*.bib"),
-             str(paper_path / "*.sty")])
-    # Unstage any artifacts that might have slipped in
-    for pattern in _ARTIFACT_PATTERNS:
-        run_cmd(["git", "reset", "HEAD", "--",
-                 str(paper_path / pattern),
-                 str(paper_path / "**" / pattern)])
+    import glob as _glob
+    files: list[str] = []
+    for ext in ("*.tex", "**/*.tex", "*.bib", "**/*.bib", "*.sty"):
+        files.extend(str(f) for f in paper_path.glob(ext))
+    # Filter out artifacts
+    artifact_names = set(_ARTIFACT_PATTERNS)
+    files = [f for f in files if Path(f).name not in artifact_names]
+    if files:
+        run_cmd(["git", "add", "--"] + files)
 
 
 def _diff_summary(paper_path: Path) -> str:
