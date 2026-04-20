@@ -143,6 +143,7 @@ import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
 import Omega.Zeta.XiBulkRenormalizedConstantAnomalyGap
 import Omega.Zeta.XiHankelDetScalingCovariance
 import Omega.Zeta.XiHankelHsEnergyClosedFormMassEnergy
+import Omega.Zeta.XiHankelSigminLowerboundVandermondeSeparation
 import Omega.Zeta.ShiftInvariantSaturatedLatticePrincipalIdeal
 import Omega.Zeta.XiExceptionalIntegerModelMqInverseClosedForm
 import Omega.Zeta.XiFinitePrimeSupportHalfdimensionGapFormula

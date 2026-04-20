@@ -273,6 +273,7 @@ import Omega.POM.S5FieldDiscriminantMonogenic
 import Omega.POM.A4tUnitCircleSpectrumClassification
 import Omega.POM.A4TNewmanOcticFieldArithmetic
 import Omega.POM.S5GaloisArithmetic
+import Omega.POM.S5OrderedRatioDegree20
 import Omega.POM.SufficientStatisticResidualNoninvertibility
 import Omega.POM.S5TwoSubsetDegree10
 import Omega.POM.SchurPlancherelEnergyIdentity
