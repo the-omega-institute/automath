@@ -14,6 +14,7 @@ import Omega.OperatorAlgebra.FoldConditionalExpectationHaar
 import Omega.OperatorAlgebra.FoldConditionalExpectationSingularSpectrum
 import Omega.OperatorAlgebra.FoldConditionalExpectationSpectrumHistogram
 import Omega.OperatorAlgebra.FoldEquivalenceAutSemidir
+import Omega.OperatorAlgebra.FoldFiberFixedpointsCenter
 import Omega.OperatorAlgebra.FoldFiberNormalizerWreath
 import Omega.OperatorAlgebra.FoldGaugeAbK0Mod2
 import Omega.OperatorAlgebra.FoldGaugeCommutantExplicit
