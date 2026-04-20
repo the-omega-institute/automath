@@ -107,6 +107,7 @@ import Omega.CircleDimension.ModeParityVanish
 import Omega.CircleDimension.ModeQuadraticIntegrals
 import Omega.CircleDimension.ModeSpaceRKHS
 import Omega.CircleDimension.MultiPrimeSpectrum
+import Omega.CircleDimension.NonnullSectionCriterion
 import Omega.CircleDimension.NonresonantLissajousNodeCount
 import Omega.CircleDimension.NullWitnessNonsubstitutable
 import Omega.CircleDimension.OperationalHalfCircleDimensionNat
