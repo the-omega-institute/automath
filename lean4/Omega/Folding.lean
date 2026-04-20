@@ -100,6 +100,7 @@ import Omega.Folding.FiberConvolutionInvertibilityDivisibility
 import Omega.Folding.FiberConditionalReconstructionOddModulus
 import Omega.Folding.FiberConvolutionKernelZeroSpectrum
 import Omega.Folding.FiberIdentifiableSigmaAlgebraMaximal
+import Omega.Folding.FiberHausdorffDimensionCylinderCount
 import Omega.Folding.FiberSubsetConvolution
 import Omega.Folding.FiberSingleCoordinateAffineDifference
 import Omega.Folding.FiberSingleCoordinateMinimalAugmentation
