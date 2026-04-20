@@ -154,6 +154,7 @@ import Omega.Folding.FiberCollisionHammingSimilarityBiasEnergyIdentity
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
 import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldFibonacciFrequencyFourierSpikeClosedForm
+import Omega.Folding.FoldPressureExactFreezingGapThreshold
 import Omega.Folding.FoldPressureFreezingThreshold
 import Omega.Folding.FoldGaugeAnomalyP10P9LinearDisjointness
 import Omega.Folding.HaltingLeyangHolographicEncoding

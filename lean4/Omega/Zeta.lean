@@ -237,6 +237,7 @@ import Omega.Zeta.P7ChebotarevSplittingDensity
 import Omega.Zeta.PerronChannelContribution
 import Omega.Zeta.PhaseCombPoleCounting
 import Omega.Zeta.PhaseImplementationRankLimit
+import Omega.Zeta.PrimeSupportKernelGaloisCorrespondence
 import Omega.Zeta.PrimeLanguagesDFAPrimeRecallPrecision
 import Omega.Zeta.PrimeLanguagesEulerProductNaturalBoundary
 import Omega.Zeta.PrimeLanguagesIntroDensity

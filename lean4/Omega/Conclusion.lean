@@ -180,6 +180,7 @@ import Omega.Conclusion.SectionLedgerKL
 import Omega.Conclusion.SinglephasePrecisionExponentEqualsCdim
 import Omega.Conclusion.StableSuccessorFaithfulSemigroup
 import Omega.Conclusion.ShiftCommutingAlgorithmsPolynomial
+import Omega.Conclusion.LogpWeightedTailOperatorNorm
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Conclusion.SmithNormalizedKernelPositiveFiniteEulerCorrection
 import Omega.Conclusion.SinglepointJetRigidity
