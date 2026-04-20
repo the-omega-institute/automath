@@ -306,6 +306,7 @@ import Omega.Zeta.XiAdamsNormHolomorphic
 import Omega.Zeta.XiAdamsNormRadiusSimilarityLaw
 import Omega.Zeta.XiAddressDefectLaw
 import Omega.Zeta.XiAddressPrimeLedgerJointBudget
+import Omega.Zeta.XiPrimeAxisTensorizedReplayComposition
 import Omega.Zeta.XiBasepointScanAnchorDetCauchyVandermonde
 import Omega.Zeta.XiBasepointScanCauchyStableConvolution
 import Omega.Zeta.XiBasepointScanKernelCompletenessFullRank
