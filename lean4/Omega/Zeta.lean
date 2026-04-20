@@ -196,6 +196,7 @@ import Omega.Zeta.HankelBadPrimeSelectionProbability
 import Omega.Zeta.HankelShortPrimeAvoidsBadset
 import Omega.Zeta.XiPwTypeSafetyNull
 import Omega.Zeta.IdempotentFixedIndexStratification
+import Omega.Zeta.XiChainIdempotentStarSaturationComparableGcd
 import Omega.Zeta.IntroAnalytic
 import Omega.Zeta.IntroBinaryPrecision
 import Omega.Zeta.IntroBinaryPrimes
