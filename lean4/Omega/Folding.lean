@@ -138,6 +138,7 @@ import Omega.Folding.FixedFiberLedgerComplexity
 import Omega.Folding.FixedFiberLipschitzOptimization
 import Omega.Folding.Fold
 import Omega.Folding.FoldAlphaBasic
+import Omega.Folding.KilloChainInteriorGodelGcdLcm
 import Omega.Folding.OracleCapacityTailEquivalence
 import Omega.Folding.FoldBoundaryStokesTorsorH1H1
 import Omega.Folding.FoldCapacityDiscretePotentialHistogram
