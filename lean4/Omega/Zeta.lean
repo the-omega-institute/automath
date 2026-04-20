@@ -385,7 +385,6 @@ import Omega.Zeta.SmithPrefixSufficiency
 import Omega.Zeta.XiGramDetNearestNeighborProductUpperBound
 import Omega.Zeta.XiBulkEntropyStrictConvexity
 import Omega.Zeta.XiPoissonSecondOrderTwoCosineChannels
-import Omega.Zeta.DerivedProjectivePressureLogconvexConvexHull
 import Omega.Zeta.XiTimePart50dcProjectivePressurePerronLogconvex
 import Omega.Zeta.LayeredPrimesliceLocalAlphabetFibermax
 import Omega.Zeta.XiNaturalExtensionH153MinimalFiniteAlphabet
@@ -403,7 +402,6 @@ import Omega.Zeta.OutputPotentialZeroTempSquareRootCriticalLaw
 import Omega.Zeta.OperatorSingularBoundaryFixedpointEulerLeyang
 import Omega.Zeta.XiReverseKLSingleFrequencyEntropyBudgetSup
 import Omega.Zeta.XiMomentRatioIdentifiesAmin
-import Omega.Zeta.HankelMinimalRecurrenceGoodPrimePreservation
 import Omega.Zeta.XiFixedFreezingEscortBoundedObservableCollapse
 import Omega.Zeta.XiFixedFreezingEscortGroundstateTvIdentity
 import Omega.Zeta.XiFixedFreezingRenyiCriticalOrderThreshold
