@@ -63,6 +63,7 @@ import Omega.EA.PrimeRegisterExternalLedgerOrbitInvariance
 import Omega.EA.PrimeRegisterFibValuation
 import Omega.EA.PrimeRegisterInternalVsPulledBackProduct
 import Omega.EA.PrimeRegisterJoukowskyCauchyRigidity
+import Omega.EA.PrimeRegisterJoukowskyAnalyticMoments
 import Omega.EA.PrimeRegisterLocalMoves
 import Omega.EA.PrimeRegisterMonoidRealization
 import Omega.EA.PrimeRegisterMultiplicativeNormalizationAdditiveIso
