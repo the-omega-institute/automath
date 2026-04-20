@@ -82,6 +82,7 @@ import Omega.GU.LeyangHolographicN2
 import Omega.GU.LeyangMahlerFreeEnergy
 import Omega.GU.LogCmStableInverseExponentialSeparation
 import Omega.GU.M11DeltaClosureUniqueMinimalSO10
+import Omega.GU.M11Canonical16ComplexModuleDetOne
 import Omega.GU.M11DihedralLiftDiracDoubling
 import Omega.GU.M11Z34AugmentationIdealUnique
 import Omega.GU.M11Z34CyclotomicRepresentationRigidity
