@@ -10,6 +10,7 @@ import Omega.Folding.BernoulliHalfLowTempCubicActivation
 import Omega.Folding.BernoulliHalfEndpoints
 import Omega.Folding.BernoulliPBitpairLaw
 import Omega.Folding.BernoulliPAutocovarianceGeneratingRational
+import Omega.Folding.BernoulliPLdp
 import Omega.Folding.BernoulliPLdpCompressedCubicParametrization
 import Omega.Folding.BernoulliPCovarianceExplicitEvenOdd
 import Omega.Folding.BernoulliPHalfFibonacciLowDefectShadow

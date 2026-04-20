@@ -169,6 +169,7 @@ import Omega.POM.MicrocanonicalTwoTemperatureKktPowerLaw
 import Omega.POM.MicrocanonicalUniversalSection
 import Omega.POM.MicrocanonicalCountSufficientStatisticPosteriorUniform
 import Omega.POM.MicrocanonicalInformationIdentity
+import Omega.POM.MicrocanonicalInformationLinearLaw
 import Omega.POM.Mod2DifferenceBinomialBasis
 import Omega.POM.Mod2ShadowEventualPeriodBound
 import Omega.POM.ModpDifferenceBinomialBasis
