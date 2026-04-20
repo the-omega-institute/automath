@@ -66,6 +66,7 @@ import Omega.CircleDimension.DerivedRationalRoseOriginFiberNumeratorRigidity
 import Omega.CircleDimension.DiscreteStokesInversionHypercube
 import Omega.CircleDimension.DiscreteUnitaryEvolution
 import Omega.CircleDimension.DoubleDiscriminant
+import Omega.CircleDimension.ConclusionXiDyadicShellZeroLattice
 import Omega.CircleDimension.DyadicCofinalSparsification
 import Omega.CircleDimension.DyadicHolonomyCurvatureLimit
 import Omega.CircleDimension.DyadicKernelCube

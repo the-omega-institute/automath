@@ -156,6 +156,7 @@ import Omega.Conclusion.MinRegisterHalting
 import Omega.Conclusion.MinimalStateComplexityHalting
 import Omega.Conclusion.MixedHiddenStateFiniteAbelianClassification
 import Omega.Conclusion.MixedCollisionOverlapMultisetRigidity
+import Omega.Conclusion.MetallicIntegerBinaryCollapse
 import Omega.Conclusion.Mod2EPlusOnePowerPeriod
 import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.MultiplicativeTropicalExactnessTriad
