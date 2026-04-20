@@ -140,6 +140,7 @@ import Omega.Folding.Fold
 import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.OracleCapacityTailEquivalence
 import Omega.Folding.FoldBoundaryStokesTorsorH1H1
+import Omega.Folding.FoldCapacityDiscretePotentialHistogram
 import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinChi2Col
 import Omega.Folding.FoldBinGaugeBernoulliExtractionOperator

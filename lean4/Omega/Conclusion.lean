@@ -36,6 +36,7 @@ import Omega.Conclusion.CanonicalFixedpointPrimitiveMobius
 import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
 import Omega.Conclusion.CanonicalSliceExactFixedpointCount
 import Omega.Conclusion.CapacityFiniteCompleteness
+import Omega.Conclusion.FiniteFiberNaturalExtensionRightShiftInsertion
 import Omega.Conclusion.CapacityMajorizationSchurHardness
 import Omega.Conclusion.CapacityRamanujanPlateauLaw
 import Omega.Conclusion.CertificateFrontConcavePolygonalKinkSupport
