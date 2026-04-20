@@ -186,6 +186,7 @@ import Omega.GU.Window6AdjointWeightMultiset
 import Omega.GU.Window6Affine2FlatRootSliceSelection
 import Omega.GU.Window6AffineCompletionVolume4x23
 import Omega.GU.Window6AffineFiberOrbitClassification
+import Omega.GU.Window6AuditedTripleConjunctionOnlyM6
 import Omega.GU.Window6B3C3AdjointCharacterQuarticInvariant
 import Omega.GU.Window6B3C3AdjointSecondMomentIsotropy
 import Omega.GU.Window6B3C3Degree4RelationSpaceSaturation
