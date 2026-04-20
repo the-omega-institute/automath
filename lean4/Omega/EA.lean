@@ -47,6 +47,7 @@ import Omega.EA.KernelWeightedPrimeOrbit
 import Omega.EA.KernelZeroTemp
 import Omega.EA.MonoidQuotientIsN
 import Omega.EA.MulNoNewPrimitive
+import Omega.EA.MinStateSpecFlow
 import Omega.EA.MultiplicativeEnergyCompilable
 import Omega.EA.MultiscaleRoughReadoutContinuity
 import Omega.EA.OnlineDelayFold
