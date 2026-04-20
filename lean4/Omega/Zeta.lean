@@ -109,6 +109,7 @@ import Omega.Zeta.FinitePartCyclicLiftTorsionProduct
 import Omega.Zeta.FinitePartCyclicLiftTraceSieve
 import Omega.Zeta.FinitePartCyclicLiftZetaTorsionDeterminesSpectrum
 import Omega.Zeta.FinitePartCyclotomicAtomPrimitiveTorsionAverage
+import Omega.Zeta.FinitePartCyclotomicAtomRamanujanProjection
 import Omega.Zeta.FinitePartCyclotomicAtomsCompleteCoordinate
 import Omega.Zeta.FinitePartCyclotomicAtomsHomotopyAdditive
 import Omega.Zeta.FinitePartDirichletCharacterInversionPrime

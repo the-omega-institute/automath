@@ -65,6 +65,7 @@ import Omega.POM.DiagonalRateRankOneRefreshDeterminantCollapse
 import Omega.POM.DiagonalRateKeepResampleChannel
 import Omega.POM.DiagonalRateRefreshHittingTimePGFClosed
 import Omega.POM.DiagonalRateRefreshRegenerationIidExpansion
+import Omega.POM.DiagonalSubleadingTopDegeneracy
 import Omega.POM.DiagonalRateRefreshWeightedCayleyPrufer
 import Omega.POM.DiagonalRateScalarCollapse
 import Omega.POM.DiagonalRateSeparationPGFRational

@@ -235,6 +235,7 @@ import Omega.CircleDimension.UniversalSolenoidFactorization
 import Omega.CircleDimension.UniversalSolenoidFullPrimeKernel
 import Omega.CircleDimension.VisiblePhaseResidualTriviality
 import Omega.CircleDimension.VisibleStateProjectivization
+import Omega.CircleDimension.WavefunctionAsCoordinate
 import Omega.CircleDimension.WdimBettiAverageLaw
 import Omega.CircleDimension.WdimSignedCircleDimension
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
