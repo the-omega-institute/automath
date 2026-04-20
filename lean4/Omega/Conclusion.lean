@@ -199,6 +199,7 @@ import Omega.Conclusion.PrimeCharacterEnergyCenteredVariance
 import Omega.Conclusion.PrimeFlatteningSupportGcdClassification
 import Omega.Conclusion.PrimeRegisterEllipseCompleteEquivalence
 import Omega.Conclusion.PrimeRegisterFiniteSupportInvertibility
+import Omega.Conclusion.PrimeRegisterProductCompletionInvertibility
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.PrimeShiftPhaseVisibleTwoGenerator
 import Omega.Conclusion.PrimeRegisterUltrametricCompletion
@@ -244,6 +245,7 @@ import Omega.Conclusion.SaturationDefect
 import Omega.Conclusion.ScreenArithmeticShadowAdditiveLinearizationObstruction
 import Omega.Conclusion.ScreenAtomicValueAntitone
 import Omega.Conclusion.ScreenAuditGapSupermodularity
+import Omega.Conclusion.ScreenGraphicMatroidCorankSupermodularity
 import Omega.Conclusion.ScreenAuditMarginalDiminishingReturns
 import Omega.Conclusion.ScreenExactizationIndependentKernel
 import Omega.Conclusion.ScreenKolmogorovDeficitExactSplitting
