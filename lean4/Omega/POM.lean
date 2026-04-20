@@ -226,6 +226,7 @@ import Omega.POM.PressureConvexity
 import Omega.POM.RankoneFusionDefectFibonacciRigidity
 import Omega.POM.ProjectivePressureZeroNormalization
 import Omega.POM.ToggleOrbitCountCommutantIdentity
+import Omega.POM.ToggleCoxeterRelationsPath
 import Omega.POM.ProjectivePressureHolderLogconvex
 import Omega.POM.ProjectivePressureDiscreteLegendreEnvelope
 import Omega.POM.ProjectivePressureDiscreteConvexitySlopes

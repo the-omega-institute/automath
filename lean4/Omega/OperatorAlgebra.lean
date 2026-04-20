@@ -13,6 +13,7 @@ import Omega.OperatorAlgebra.FoldConditionalExpectationSpectrumHistogram
 import Omega.OperatorAlgebra.FoldConditionalExpectationHaar
 import Omega.OperatorAlgebra.FoldGaugeCommutantExplicit
 import Omega.OperatorAlgebra.FoldGaugeGroupStructure
+import Omega.OperatorAlgebra.FoldGroupOrders
 import Omega.OperatorAlgebra.FoldGaugeAbK0Mod2
 import Omega.OperatorAlgebra.FoldGaugeNonabelianSpectrumRigidity
 import Omega.OperatorAlgebra.FoldGaugeOrbitClassificationQtuple

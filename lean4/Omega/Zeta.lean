@@ -373,6 +373,7 @@ import Omega.Zeta.XiBulkEntropyStrictConvexity
 import Omega.Zeta.XiPoissonSecondOrderTwoCosineChannels
 import Omega.Zeta.XiTimePart50dcProjectivePressurePerronLogconvex
 import Omega.Zeta.LayeredPrimesliceLocalAlphabetFibermax
+import Omega.Zeta.XiNaturalExtensionH153MinimalFiniteAlphabet
 import Omega.Zeta.XiEntropyGapExponentialSuppressionNonzeroFingerprint
 import Omega.Zeta.XiEndpointDefectH12EnergyPoissonL2Dissipation
 import Omega.Zeta.XiEndpointPoissonWeightScaling
