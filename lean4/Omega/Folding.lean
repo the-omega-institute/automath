@@ -194,6 +194,7 @@ import Omega.Folding.FoldPairedStepDirichletCharacterIdentity
 import Omega.Folding.FoldPressureExactFreezingGapThreshold
 import Omega.Folding.FoldPressureFreezingThreshold
 import Omega.Folding.FoldPrimeCertificateVsItGapDiverges
+import Omega.Folding.FoldZeroWindow6DensitySharpExponent
 import Omega.Folding.FoldZeroHalfIndexMultiple6
 import Omega.Folding.FoldZeroDyadicTowerDisjointFibonacciCosets
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
