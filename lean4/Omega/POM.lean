@@ -106,6 +106,7 @@ import Omega.POM.FiberMedianMajorityPrimeValuation
 import Omega.POM.FiberParityHomotopyEquivalence
 import Omega.POM.FiberParityMod3
 import Omega.POM.FiberPosteriorEquivalenceActivityField
+import Omega.POM.FiberReconstructionAutGroup
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberReflector
 import Omega.POM.FiberRewritePoissonBinomial

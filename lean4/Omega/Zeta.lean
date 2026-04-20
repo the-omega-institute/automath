@@ -35,6 +35,7 @@ import Omega.Zeta.ComovingEnergyDeltaBound
 import Omega.Zeta.ComovingHorizonScanPoissonKLCovarianceTensor
 import Omega.Zeta.CompletionEndpointJetDiffusion
 import Omega.Zeta.Conclusion62MellinRational
+import Omega.Zeta.Conclusion65ExpSumsUniformLDP
 import Omega.Zeta.Conclusion63CLTSpectral
 import Omega.Zeta.ContractiveBoundaryZero
 import Omega.Zeta.CriticalCircleDensityCalibration
@@ -205,6 +206,7 @@ import Omega.Zeta.NullZ2SpectralSplittingDoublecover
 import Omega.Zeta.NyquistProportionStability
 import Omega.Zeta.OffcriticalEndpointResolutionLowerBound
 import Omega.Zeta.OperatorFixedKernelLocalDensityObstruction
+import Omega.Zeta.OperatorLocalLeyangSelfreciprocalUnitcircle
 import Omega.Zeta.OperatorResolventTraceSpectralFlowQuantization
 import Omega.Zeta.OperatorSingularBoundaryFixedpointEulerLeyang
 import Omega.Zeta.OutputPotentialZeroTempSquareRootCriticalLaw
