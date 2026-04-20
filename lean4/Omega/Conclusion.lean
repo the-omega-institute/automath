@@ -264,6 +264,7 @@ import Omega.Conclusion.SelfdualScaleMellinDoesNotForceVerticalPeriodicity
 import Omega.Conclusion.SemanticEquivalenceUndecidable
 import Omega.Conclusion.FoldFiberHardcoreAnnealedConservation
 import Omega.Conclusion.MultishiftCommutingAlgorithmsPolynomial
+import Omega.Conclusion.MultishiftRandomWalkProfile
 import Omega.Conclusion.ShiftCommutingAlgorithmsPolynomial
 import Omega.Conclusion.ShiftedHankelPrecision
 import Omega.Conclusion.SingleRenyiRigidityForCoarsening
