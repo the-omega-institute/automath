@@ -171,6 +171,7 @@ import Omega.CircleDimension.PoissonChannelRKHS
 import Omega.CircleDimension.PoissonDefectAmplification
 import Omega.CircleDimension.PoissonDefectLadder
 import Omega.CircleDimension.PoissonDefectStability
+import Omega.CircleDimension.PoissonDensityLinftyUniversalConstant
 import Omega.CircleDimension.PoissonEntropyTomography
 import Omega.CircleDimension.PoissonKLConstantOneEighth
 import Omega.CircleDimension.PoissonKLDissipationSeventhOrderCorrection
