@@ -38,6 +38,7 @@ import Omega.POM.PrimitiveDirichletBranchLatticeEssentialPrimeSpectrum
 import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.ComplementaryGoldenBernoulliDivergence
 import Omega.POM.CoarsegrainingMajorizationSchur
+import Omega.POM.InvertWFromHomogeneousCurve
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.DeltaqGoldenEnvelope

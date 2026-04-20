@@ -174,6 +174,7 @@ import Omega.GU.ThreefoldRigidity
 import Omega.GU.ThreefoldRigidityClosureSmSo10
 import Omega.GU.U1ThroatIdentity
 import Omega.GU.U1ThroatIdentityFixedPoint
+import Omega.GU.U1FourBlockSpectrumSignature
 import Omega.GU.UnitgroupZ2CharacterCount
 import Omega.GU.UpliftFiberSignDimensionReduction
 import Omega.GU.WedderburnBernoulliZeta
