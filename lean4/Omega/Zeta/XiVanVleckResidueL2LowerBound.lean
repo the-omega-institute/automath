@@ -91,7 +91,8 @@ end XiVanVleckResidueL2LowerBoundData
 open XiVanVleckResidueL2LowerBoundData
 
 /-- Paper label: `thm:xi-vanvleck-residue-l2-lower-bound`. -/
-theorem paper_xi_vanvleck_residue_l2_lower_bound (D : XiVanVleckResidueL2LowerBoundData) :
+theorem paper_xi_vanvleck_residue_l2_lower_bound_one_pole
+    (D : XiVanVleckResidueL2LowerBoundData) :
     D.energyLowerBound ∧ D.uniqueMinimizerFormula := by
   exact ⟨D.energyLowerBound_true, D.uniqueMinimizerFormula_true⟩
 
