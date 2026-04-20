@@ -431,6 +431,7 @@ import Omega.Zeta.XiTerminalZmLeyangEllipticStructure
 import Omega.Zeta.XiTerminalZmLeyangP3Minimal27
 import Omega.Zeta.XiTerminalZmLanguageMinimaxLogloss
 import Omega.Zeta.XiTimeFiberMinimalDimension
+import Omega.Zeta.XiTimeLowerBoundFromMaxFiber
 import Omega.Zeta.XiTimePart50dcProjectivePressurePerronLogconvex
 import Omega.Zeta.XiTimePart51AADerivedCrossFibGcdFormula
 import Omega.Zeta.XiTimePart63cSchurCauchyMasterKernel

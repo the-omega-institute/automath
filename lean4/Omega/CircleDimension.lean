@@ -182,6 +182,7 @@ import Omega.CircleDimension.PrimeLedgerCompleteReconstruction
 import Omega.CircleDimension.PrimeTruncation
 import Omega.CircleDimension.PrimitiveEndpointTristateDegeneration
 import Omega.CircleDimension.ProjectiveStateOrganization
+import Omega.CircleDimension.PureStatesRankOne
 import Omega.CircleDimension.QuantumEventProjections
 import Omega.CircleDimension.QuantumChannels
 import Omega.CircleDimension.RadialFibrationTransgression
