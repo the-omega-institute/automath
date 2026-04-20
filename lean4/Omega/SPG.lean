@@ -82,6 +82,7 @@ import Omega.SPG.GaugeVolumeAreaComplementarity
 import Omega.SPG.GraphEnergyEllipsoidGodelCodelengthDual
 import Omega.SPG.GraphEnergyShellLatticeCounting
 import Omega.SPG.GraphCycleLatticeLeyangPhasePolynomial
+import Omega.SPG.GraphCycleLatticeDeterminantPrimeSupport
 import Omega.SPG.GraphCycleLatticeWeightedDiscriminant
 import Omega.SPG.GodelAxisBoundaryInvertibility
 import Omega.SPG.GodelBoundaryDecodingRelativeErrorThreshold

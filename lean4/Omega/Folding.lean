@@ -119,6 +119,7 @@ import Omega.Folding.FingerprintSeparationPublication
 import Omega.Folding.Fold
 import Omega.Folding.KilloFoldbin6FullCenter
 import Omega.Folding.KilloFoldRenyi2UniformityGap
+import Omega.Folding.KilloFoldBinEscortOnebitFisher
 import Omega.Folding.FoldComplexity
 import Omega.Folding.FoldHypercubeFibonacciEpsEntropyUpper
 import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy
