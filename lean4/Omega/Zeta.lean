@@ -67,6 +67,7 @@ import Omega.Zeta.DerivedHankelFiniteJetBadPrimeClosure
 import Omega.Zeta.DenominatorAxisDirectLimitSolenoid
 import Omega.Zeta.DynZeta
 import Omega.Zeta.DerivedMinimalCyclicAuditAxisZhatPrimeUnlocking
+import Omega.Zeta.DerivedFixedFreezingRenyiSurface
 import Omega.Zeta.ETDSDFADensityDichotomy
 import Omega.Zeta.ETDSEulerProductNaturalBoundary
 import Omega.Zeta.ETDSFinitePartGapPositive
