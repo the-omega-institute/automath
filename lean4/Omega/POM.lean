@@ -349,6 +349,7 @@ import Omega.POM.UniformLiftKLIsometryUniqueness
 import Omega.POM.ValExtensionalEquivalenceDecidable
 import Omega.POM.ValMonotoneBooleanNand
 import Omega.POM.ValPolynomialSemantics
+import Omega.POM.RewriteNormalformMinimalAudit
 import Omega.POM.ValueLayerRewritingTerminating
 import Omega.POM.VisibleThickTail
 import Omega.POM.WitnessExtractionOptimalSuccess

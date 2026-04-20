@@ -296,6 +296,7 @@ import Omega.Zeta.ToeplitzNegativeSpectrumProductDetHankelSquare
 import Omega.Zeta.ToeplitzNegativeSpectrumUpperboundByHankelSingular
 import Omega.Zeta.ToeplitzNegativeSubspacePreservationThreshold
 import Omega.Zeta.ToeplitzPsdCofinalSparsificationHereditary
+import Omega.Zeta.ToeplitzVisibilityComplexityAnomaly
 import Omega.Zeta.ToeplitzPsdCoherenceHorizonThreshold
 import Omega.Zeta.TorsionExactOrderLedgerSeeds
 import Omega.Zeta.TorsionTableGaloisCertificate
