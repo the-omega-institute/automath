@@ -1423,37 +1423,53 @@ def run_round_in_worktree(
             assert wt is not None
             # Full gated `lake build` now runs here (out-of-band from codex),
             # so codex's Phase C no longer waits on the host-wide lake gate.
-            logger.info(f"[{tag}] Phase D: running gated `lake build` in worktree")
+            # Full stdout/stderr is persisted to logs/lake/R<n>_<ts>.out.txt
+            # for post-mortem on cache hits, build time, etc.
+            lake_log_dir = LOG_DIR / "lake"
+            lake_log_dir.mkdir(parents=True, exist_ok=True)
+            lb_ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            lake_log_file = lake_log_dir / f"R{round_num}_{lb_ts}.out.txt"
+            logger.info(f"[{tag}] Phase D: running gated `lake build` (log={lake_log_file.name})")
             lb_start = time.monotonic()
+            lb_ok = False
+            lb_tail = ""
             try:
-                lb = subprocess.run(
-                    ["python3", str(wt.path / "lean4" / "scripts" / "lake_gate.py"),
-                     "build"],
-                    cwd=str(wt.path / "lean4"),
-                    capture_output=True, text=True, timeout=3600,
-                    stdin=subprocess.DEVNULL,
-                    env={
-                        **os.environ,
-                        "LAKE_GATE_LOCK_DIR": str(LAKE_GATE_LOCK_DIR),
-                        "LAKE_GATE_MAX_PARALLEL": str(LAKE_GATE_MAX_PARALLEL),
-                    },
-                )
+                with open(lake_log_file, "w", encoding="utf-8") as lf:
+                    lb = subprocess.run(
+                        ["python3", str(wt.path / "lean4" / "scripts" / "lake_gate.py"),
+                         "build"],
+                        cwd=str(wt.path / "lean4"),
+                        stdout=lf, stderr=subprocess.STDOUT,
+                        timeout=3600,
+                        stdin=subprocess.DEVNULL,
+                        env={
+                            **os.environ,
+                            "LAKE_GATE_LOCK_DIR": str(LAKE_GATE_LOCK_DIR),
+                            "LAKE_GATE_MAX_PARALLEL": str(LAKE_GATE_MAX_PARALLEL),
+                        },
+                    )
                 lb_ok = lb.returncode == 0
-                lb_tail = "\n".join(
-                    ((lb.stdout or "") + (lb.stderr or "")).splitlines()[-20:]
-                )
+                try:
+                    with open(lake_log_file, "r", encoding="utf-8") as lf:
+                        lb_tail = "\n".join(lf.read().splitlines()[-20:])
+                except Exception:
+                    lb_tail = "(log read failed)"
             except subprocess.TimeoutExpired:
                 lb_ok = False
                 lb_tail = "(lake build timed out after 3600s)"
             lb_elapsed = time.monotonic() - lb_start
             if not lb_ok:
                 logger.error(
-                    f"[{tag}] Phase D: lake build FAILED in {lb_elapsed:.1f}s:\n"
+                    f"[{tag}] Phase D: lake build FAILED in {lb_elapsed:.1f}s "
+                    f"(full log: {lake_log_file}):\n"
                     + "\n".join(f"  {l}" for l in lb_tail.splitlines()[-10:])
                 )
                 _save_round_log(round_num, phase_b, phase_c, [], False)
                 return False, round_num, []
-            logger.info(f"[{tag}] Phase D: lake build passed in {lb_elapsed:.1f}s")
+            logger.info(
+                f"[{tag}] Phase D: lake build passed in {lb_elapsed:.1f}s "
+                f"(log: {lake_log_file.name})"
+            )
             success, new_commits = verify_worktree_commits(wt, pre_commits)
 
         # ── Merge back ────────────────────────────────────────────
