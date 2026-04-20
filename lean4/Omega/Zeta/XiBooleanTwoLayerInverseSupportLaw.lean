@@ -104,7 +104,7 @@ lemma booleanTwoLayerCover_card (q : ℕ) :
 /-- Paper label: `thm:xi-boolean-two-layer-inverse-support-law`. This finite-set model records
 the support law for the Boolean two-layer inverse/adjugate entries together with the exact support
 count `3^q + 1`. -/
-theorem paper_xi_boolean_two_layer_inverse_support_law (q : Nat) (hq : 2 ≤ q) (a b : ℤ) :
+theorem paper_xi_boolean_two_layer_inverse_support_entry_law (q : Nat) (hq : 2 ≤ q) (a b : ℤ) :
     (∀ U V : Finset (Fin q),
       booleanTwoLayerInverseEntry q a b U V =
         if U = ∅ ∧ V = ∅ then
