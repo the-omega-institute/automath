@@ -66,6 +66,7 @@ import Omega.Zeta.DFAQuantitativeObstruction
 import Omega.Zeta.Degree11GenericGaloisS11
 import Omega.Zeta.DenominatorAxisDirectLimitSolenoid
 import Omega.Zeta.DephysicalizedHorizonQuotientDataStructure
+import Omega.Zeta.DetVpControlsRankDrop
 import Omega.Zeta.DerivedFixedFreezingRenyiSurface
 import Omega.Zeta.DerivedHankelFiniteJetBadPrimeClosure
 import Omega.Zeta.DerivedLeyangBranchsetAdjacencySpectrumHeatTrace

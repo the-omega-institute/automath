@@ -131,6 +131,7 @@ import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldBinFDivergenceCollapse
 import Omega.Folding.FoldBinLastbitSufficientTV
 import Omega.Folding.FoldBinM6FiberHist
+import Omega.Folding.FoldbinGroupoidAut0ThirdCohomologyRank
 import Omega.Folding.FoldBinMaxFiberExponent
 import Omega.Folding.FoldBinMinsectorComplementMaxfiber
 import Omega.Folding.FoldBinOracleLinearThresholdExponent
