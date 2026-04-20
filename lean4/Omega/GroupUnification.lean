@@ -1,5 +1,6 @@
 import Omega.GroupUnification.ChiralOrthogonalityTypeObservables
 import Omega.GroupUnification.BdrySheetParityDiagonal
+import Omega.GroupUnification.BdryS3ToS2BreakingByGeoAxis
 import Omega.GroupUnification.BdryThreeLayerSymmetricBinaryLiftWreathQuotient
 import Omega.GroupUnification.BdryOrientationFunctorSymmetricMonoidalKoszul
 import Omega.GroupUnification.BdryOrientationParityUplift

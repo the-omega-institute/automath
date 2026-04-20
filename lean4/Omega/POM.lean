@@ -172,6 +172,7 @@ import Omega.POM.MicrocanonicalCoverTimeStrategyInvariance
 import Omega.POM.MicrocanonicalCoverTimeTailInclusionExclusion
 import Omega.POM.MicrocanonicalBandBounds
 import Omega.POM.MicrocanonicalFoldClassCount
+import Omega.POM.MicrocanonicalInformationDoob
 import Omega.POM.MicrocanonicalTwoTemperatureKktPowerLaw
 import Omega.POM.MicrocanonicalUniversalSection
 import Omega.POM.MicrocanonicalCountSufficientStatisticPosteriorUniform
