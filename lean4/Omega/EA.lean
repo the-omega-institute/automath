@@ -29,6 +29,7 @@ import Omega.EA.FibAdicTower
 import Omega.EA.FibCongruence
 import Omega.EA.FibDivisibilityChain
 import Omega.EA.FiniteLedgerRecoverability
+import Omega.EA.FoldWindow6CenterThreeObservablesDimensionDefect
 import Omega.EA.FoldAsSection
 import Omega.EA.FoldAsSectionCorollary
 import Omega.EA.FoldGroupoidAFInductiveLimitHolographicTrace
