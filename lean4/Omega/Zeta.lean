@@ -258,6 +258,8 @@ import Omega.Zeta.RealInput40RotationPolytopeShear
 import Omega.Zeta.RealInput40TrivMechSplit
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Zeta.RecursiveZeroShadowingExplicit
+import Omega.Zeta.RsLocalZeroCertification
+import Omega.Zeta.MultiscaleDriftSummabilityLimit
 import Omega.Zeta.RegularPrefixfreeKraftRational
 import Omega.Zeta.ResidueClassAsymptotics
 import Omega.Zeta.ResidueRingExplicitErrorBound

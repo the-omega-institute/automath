@@ -38,6 +38,7 @@ import Omega.OperatorAlgebra.FoldInvariantSubalgebra
 import Omega.OperatorAlgebra.FoldJonesBasicConstructionDirectsum
 import Omega.OperatorAlgebra.FoldJonesCommutatorRank2Spectrum
 import Omega.OperatorAlgebra.FoldLiftGlobalSignFactorization
+import Omega.OperatorAlgebra.FoldAlternatingLiftCounting
 import Omega.OperatorAlgebra.FoldLiftNoiseFoldReversibility
 import Omega.OperatorAlgebra.FoldOptimalDelinkingCurve
 import Omega.OperatorAlgebra.FoldOptimalMarkovizationCmi
