@@ -19,6 +19,7 @@ import Omega.Folding.BernoulliPDoobTransformClosed
 import Omega.Folding.BernoulliPEndpointExactFinite
 import Omega.Folding.BernoulliPEndpointLdp
 import Omega.Folding.BernoulliPEndpointLdpRestated
+import Omega.Folding.BernoulliPFiniteTimeMgfPfPrefactor
 import Omega.Folding.BernoulliPFiniteTimeMismatchRationalRecurrence
 import Omega.Folding.BernoulliPFiniteTimePmf2dRecurrence
 import Omega.Folding.BernoulliPFullAutocovarianceJordan
