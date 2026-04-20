@@ -140,6 +140,7 @@ import Omega.POM.HankelSyndromeGapRankDefect
 import Omega.POM.HankelSyndromeModuleKernelEqualsMultiples
 import Omega.POM.HighMultiplicitySparse
 import Omega.POM.IndependenceDpRadius2
+import Omega.POM.InverseLimitNaturality
 import Omega.POM.KCollisionRootFilter
 import Omega.POM.KernelSpectrum
 import Omega.POM.KLPythagorasTower
