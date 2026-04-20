@@ -166,6 +166,7 @@ import Omega.Conclusion.PrimeRegisterL1LipschitzIsometry
 import Omega.Conclusion.PrimeAdjunctionExactMultiplicativeBudget
 import Omega.Conclusion.PrimeCharacterEnergyCenteredVariance
 import Omega.Conclusion.PrimeRegister
+import Omega.Conclusion.PrimeRegisterUltrametricCompletion
 import Omega.Conclusion.PrimeRegisterFiberCdimDensity
 import Omega.Conclusion.PrimeRegisterFixed2adicAmbientVsFiniteLedger
 import Omega.Conclusion.PrimeRegisterKStretchDensityCriterion

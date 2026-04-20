@@ -19,6 +19,7 @@ import Omega.POM.BCVisibleQuotientEventualStability
 import Omega.POM.BayesInfonceSecondCollisionDominance
 import Omega.POM.BbitOracleCapacityClosedForm
 import Omega.POM.BeckChevalleyAmgmDefectIdentity
+import Omega.POM.BivariateSystemIdentificationFiniteWindow
 import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.BooleanCircuitProjectionBudget
 import Omega.POM.BoundedPerturbationInvariance
