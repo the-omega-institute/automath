@@ -213,6 +213,7 @@ import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.TimeReversalFixedpointRatioDecay
 import Omega.POM.TowerDefectCovarianceLaw
 import Omega.POM.ToyRh2TorsionSource
+import Omega.POM.ToggleGroupPathFullSymmetric
 import Omega.POM.Sync10CollisionTwoFixedpoints
 import Omega.POM.TimeReversalSymmetricIndsetPolynomial
 import Omega.POM.PressureReflectionInequality
