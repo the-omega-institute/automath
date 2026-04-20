@@ -191,6 +191,7 @@ import Omega.Folding.FractranFoldCompiler
 import Omega.Folding.GaugeAnomalyAutocovClosed
 import Omega.Folding.GaugeAnomalyBernoulliPKappa4AndKappa3Signflip
 import Omega.Folding.GaugeAnomalyBranchPointClassification
+import Omega.Folding.GaugeAnomalyBranchpointMuReductionEt
 import Omega.Folding.GaugeAnomalyBranchRadiusCumulantGrowth
 import Omega.Folding.GaugeAnomalyBranchpointRationalReduction
 import Omega.Folding.GaugeAnomalyClt

@@ -106,6 +106,7 @@ import Omega.POM.FiberFullPosteriorUniformizationProductSource
 import Omega.POM.FiberIndependenceComplexClassification
 import Omega.POM.FiberLedgerPrefixSideinfoLength
 import Omega.POM.FiberLeyangKlBernoulliDecomposition
+import Omega.POM.FiberMultiplicityMatrixProduct
 import Omega.POM.FiberMedianMajorityPrimeValuation
 import Omega.POM.FiberParityHomotopyEquivalence
 import Omega.POM.FiberParityMod3

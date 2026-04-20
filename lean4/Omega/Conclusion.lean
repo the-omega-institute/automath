@@ -168,6 +168,7 @@ import Omega.Conclusion.PowerDivergenceSecondorderRecurrence
 import Omega.Conclusion.PrimeRegisterL1LipschitzIsometry
 import Omega.Conclusion.PrimeAdjunctionExactMultiplicativeBudget
 import Omega.Conclusion.PrimeCharacterEnergyCenteredVariance
+import Omega.Conclusion.PrimeRegisterEllipseCompleteEquivalence
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.PrimeRegisterUltrametricCompletion
 import Omega.Conclusion.PrimeRegisterFiberCdimDensity
