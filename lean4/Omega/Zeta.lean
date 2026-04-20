@@ -202,6 +202,7 @@ import Omega.Zeta.IntroFiniteGroup
 import Omega.Zeta.IntroFinitePart
 import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.JensenSoftThresholdLowerBound
+import Omega.Zeta.JensenEndpointAngleWindowRigidity
 import Omega.Zeta.JensenQuadraticResolutionBarrier
 import Omega.Zeta.LayeredExternalizationAverageShannonBudget
 import Omega.Zeta.NullZ2SpectralSplittingDoublecover
