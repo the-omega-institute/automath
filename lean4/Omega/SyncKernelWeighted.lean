@@ -12,6 +12,7 @@ import Omega.SyncKernelWeighted.IharaCyclotomicFactorClassification
 import Omega.SyncKernelWeighted.IharaChebotarevGrhCriterion
 import Omega.SyncKernelWeighted.IharaMertensConstant
 import Omega.SyncKernelWeighted.IharaWittPrimitiveSpectrum
+import Omega.SyncKernelWeighted.KernelHardyRealEven
 import Omega.SyncKernelWeighted.MobiusErrorPropagation
 import Omega.SyncKernelWeighted.MuPochhammerNecklaceDirichletPolylog
 import Omega.SyncKernelWeighted.PressureAnalyticRadius

@@ -1,4 +1,5 @@
 import Omega.OperatorAlgebra.CircuitCollisionMomentCamouflageMaxfiber
+import Omega.OperatorAlgebra.CircuitNoninjectiveNPComplete
 import Omega.OperatorAlgebra.CylinderMarginalization
 import Omega.OperatorAlgebra.FiberDeterminantSignCapacityParity
 import Omega.OperatorAlgebra.FiberReflectorDeterminantPotential

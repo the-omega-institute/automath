@@ -162,6 +162,7 @@ import Omega.GU.TerminalWindow5Window7FullSymmetricSpectrum
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
 import Omega.GU.TerminalWindow6LocalUpliftAdmissibility
+import Omega.GU.TerminalWindow6Q6RootFieldPrimitiveNonsolvable
 import Omega.GU.Window6LocalUpliftForcesCyclotomic17
 import Omega.GU.TerminalWindow6PushforwardCharpolyGalois
 import Omega.GU.TerminalWindow6PushforwardCommutantMasa
