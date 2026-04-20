@@ -170,6 +170,7 @@ import Omega.Folding.FoldBinOracleLinearThresholdExponent
 import Omega.Folding.FoldBinPhiIdentifiablePowerDivergence
 import Omega.Folding.FoldBinRenyiDivergenceLimit
 import Omega.Folding.FoldBinRenyiRateCollapse
+import Omega.Folding.BinFoldKLConstant
 import Omega.Folding.FoldBinTwoPointLimitLaw
 import Omega.Folding.FoldBinTwoStateAsymptotic
 import Omega.Folding.FoldCollisionSpectrum
