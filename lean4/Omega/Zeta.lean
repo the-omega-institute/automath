@@ -422,6 +422,7 @@ import Omega.Zeta.XiTerminalZmDeltaS5TameCollisionEtaleQuotientNodeLaw
 import Omega.Zeta.XiTerminalZmEllipticFiberCountMeanTrace
 import Omega.Zeta.XiTerminalZmEllipticWeightTriplingRamificationCount
 import Omega.Zeta.XiTerminalZmKappaSquareCubicFieldS3
+import Omega.Zeta.XiTerminalZmLeyangEllipticStructure
 import Omega.Zeta.XiTerminalZmLanguageMinimaxLogloss
 import Omega.Zeta.XiTimeFiberMinimalDimension
 import Omega.Zeta.XiTimePart50dcProjectivePressurePerronLogconvex
