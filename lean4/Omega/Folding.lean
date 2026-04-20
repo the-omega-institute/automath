@@ -227,6 +227,7 @@ import Omega.Folding.GaugeAnomalyBranchPointClassification
 import Omega.Folding.GaugeAnomalyBranchpointMuReductionEt
 import Omega.Folding.GaugeAnomalyBranchRadiusCumulantGrowth
 import Omega.Folding.GaugeAnomalyBranchpointRationalReduction
+import Omega.Folding.GaugeAnomalyBranchCurveXYExplicit
 import Omega.Folding.GaugeAnomalyClt
 import Omega.Folding.GaugeAnomalyCovClosed
 import Omega.Folding.GaugeAnomalyCovGenfun

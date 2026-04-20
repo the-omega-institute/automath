@@ -280,6 +280,7 @@ import Omega.GU.Window6NonlumpableBySpectrum
 import Omega.GU.Window6P6CompactnessPrinciple
 import Omega.GU.Window6P6ToeplitzCertificateChain
 import Omega.GU.Window6Prime23SpectralResponse
+import Omega.GU.Window6ThreeFamilyZeroAnom
 import Omega.GU.Window6PushEnvelopeCertificateUpgrade
 import Omega.GU.Window6RankGap
 import Omega.GU.Window6ReducedLaplacianGreenSimplePole
