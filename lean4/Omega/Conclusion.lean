@@ -184,6 +184,7 @@ import Omega.Conclusion.PrimeRegisterL1LipschitzIsometry
 import Omega.Conclusion.PrimeAdjunctionExactMultiplicativeBudget
 import Omega.Conclusion.PrimeCharacterEnergyCenteredVariance
 import Omega.Conclusion.PrimeRegisterEllipseCompleteEquivalence
+import Omega.Conclusion.PrimeRegisterFiniteSupportInvertibility
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.PrimeRegisterUltrametricCompletion
 import Omega.Conclusion.PrimeRegisterFiberCdimDensity
@@ -254,6 +255,7 @@ import Omega.Conclusion.SquarefreeRTLaminarNesting
 import Omega.Conclusion.StableSuccessorFaithfulSemigroup
 import Omega.Conclusion.StableSuccessorOrbitNormalForm
 import Omega.Conclusion.StokesEnergyDyadicMartingale
+import Omega.Conclusion.StokesEnergyGeneralDegreeCascade
 import Omega.Conclusion.StokesSteinWeightedGraphMinflow
 import Omega.Conclusion.SubexponentialLedgerPhaseUniversality
 import Omega.Conclusion.SyncKernelPalindrome
