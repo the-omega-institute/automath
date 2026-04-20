@@ -42,4 +42,14 @@ theorem paper_window6_affine_2flat_root_slice_selection :
   rcases paper_window6_affine_fiber_orbit_classification with ⟨_, _, hPlane, _, _, _⟩
   refine ⟨hPlane, ?_, rfl, rfl, ?_, ?_, ?_, ?_⟩ <;> decide
 
+/-- Paper label: `prop:window6-z0-root-slice-chiral-cut`.
+The six visible `z = 0` roots split into the affine-selected chiral slice and its complementary
+mirror slice. -/
+theorem paper_window6_z0_root_slice_chiral_cut :
+    let selected : Finset (ℤ × ℤ × ℤ) := {(1, 1, 0), (1, -1, 0), (0, -1, 0)}
+    let ambient : Finset (ℤ × ℤ × ℤ) :=
+      {(1, 1, 0), (1, -1, 0), (-1, 1, 0), (-1, -1, 0), (0, 1, 0), (0, -1, 0)}
+    ambient \ selected = {(-1, 1, 0), (-1, -1, 0), (0, 1, 0)} := by
+  decide
+
 end Omega.GU
