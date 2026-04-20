@@ -57,6 +57,7 @@ import Omega.GU.GapDirichletContinuedFraction
 import Omega.GU.GodelConditionNumberIdentity
 import Omega.GU.GodelEllipsoidVolume
 import Omega.GU.GodelLorentzAlgebraization
+import Omega.GU.GutLeyangRhFieldDecoupling
 import Omega.GU.HeckeE4ThreePrimeRefutation
 import Omega.GU.GroupJGBoundaryPrimorialEllipseBound
 import Omega.GU.GroupJGDyadicBoundaryGodelEllipseIllconditioning
