@@ -51,6 +51,7 @@ import Omega.Zeta.CyclicEulerProduct
 import Omega.Zeta.CyclicEulerProductComplexSection
 import Omega.Zeta.CyclicEulerSchattenInvariants
 import Omega.Zeta.CyclicEulerSpectralRigidity
+import Omega.Zeta.CyclicFredholmWitt
 import Omega.Zeta.CyclicFredholmRealization
 import Omega.Zeta.CyclicLiftFiniteProbeEvasion
 import Omega.Zeta.CyclicLiftGcdLcm
