@@ -141,6 +141,7 @@ import Omega.POM.FractranSoftFirstfitFixedTempExponentialCollapse
 import Omega.POM.FractranTwoPrimeDenominatorDfaCompile
 import Omega.POM.GaugeNatural
 import Omega.POM.GibbsSelection
+import Omega.POM.GodelAxisVarianceNoGap
 import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.GoldenBiasVarianceEqualsBias
 import Omega.POM.GoldenCouplingUniqueness
