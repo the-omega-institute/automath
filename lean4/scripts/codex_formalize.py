@@ -1463,12 +1463,9 @@ def run_round_in_worktree(
                     request_build(new_tip)
             except Exception as exc:
                 logger.warning(f"[{tag}] request_build failed: {exc}")
-            # Propagate freshly-built .olean artifacts back to main's cache so the
-            # next round's worktree starts warm for the files added in this round.
-            try:
-                merge_lake_cache_back(wt, new_commits)
-            except Exception as exc:
-                logger.warning(f"[{tag}] Lake cache merge-back raised: {exc}")
+            # No more merge_lake_cache_back: workers don't run lake build under
+            # 方案 B, so copying worker-worktree .oleans back would only risk
+            # polluting the main checkout cache that the builder thread owns.
         elif success and dry_run:
             logger.info(f"[{tag}] [DRY RUN] Would merge to {BASE_BRANCH}")
 
