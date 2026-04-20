@@ -24,6 +24,7 @@ import Omega.Conclusion.BlockConstraintInformationCollapse
 import Omega.Conclusion.BinfoldExactInversionUpperEndpointFreezingSlope
 import Omega.Conclusion.BinfoldCollisionScaleForcesMaxfiberDivergence
 import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
+import Omega.Conclusion.CapacityMajorizationSchurHardness
 import Omega.Conclusion.CapacityFiniteCompleteness
 import Omega.Conclusion.CapacityRamanujanPlateauLaw
 import Omega.Conclusion.CausalDepthBranchBudgetOrthogonality
