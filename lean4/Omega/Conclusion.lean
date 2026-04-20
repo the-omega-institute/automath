@@ -167,6 +167,7 @@ import Omega.Conclusion.MetallicIntegerBinaryCollapse
 import Omega.Conclusion.Mod2EPlusOnePowerPeriod
 import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.MultiplicativeTropicalExactnessTriad
+import Omega.Conclusion.NaturalExtensionLstepMinimalAlphabetSubmultiplicative
 import Omega.Conclusion.NoFiniteResonanceClosure
 import Omega.Conclusion.NoUniversalTwoAxisAuditCompletion
 import Omega.Conclusion.NonexposedPhaseIntegerDomination
@@ -257,6 +258,7 @@ import Omega.Conclusion.SinglepointJetRigidity
 import Omega.Conclusion.SixfoldZeroJointbudgetOrthogonality
 import Omega.Conclusion.SmithNormalizedKernelPositiveFiniteEulerCorrection
 import Omega.Conclusion.SmithPrefixBudget
+import Omega.Conclusion.SmithPKernelSpectrumDiscreteConcaveCharacterization
 import Omega.Conclusion.SmithRamanujanShadowInversion
 import Omega.Conclusion.SmithRamanujanShadowSeeds
 import Omega.Conclusion.SoftcoreExceptionalMomentsCombinatorialClosedForm
