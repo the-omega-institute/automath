@@ -240,6 +240,7 @@ import Omega.Conclusion.ResonanceWindow
 import Omega.Conclusion.ResonanceWindowMod2BinomialCollapse
 import Omega.Conclusion.ResonanceWindowMod2TailJetCompleteness
 import Omega.Conclusion.ReversibleAuxBitsBudget
+import Omega.Conclusion.ReverseKLSingleFrequencyExclusivity
 import Omega.Conclusion.S4BoundaryTotalTorusRankConservation
 import Omega.Conclusion.SaturationDefect
 import Omega.Conclusion.ScreenArithmeticShadowAdditiveLinearizationObstruction
