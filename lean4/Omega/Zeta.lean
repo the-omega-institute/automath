@@ -150,6 +150,7 @@ import Omega.Zeta.XiMarkovDerivativeDeterminantBadPrime
 import Omega.Zeta.XiOffsetNullTypeSafety
 import Omega.Zeta.XiFiberSpectrumHankelConductorPronyPadic
 import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
+import Omega.Zeta.FoldInversionStrongConverseSideinfo
 import Omega.Zeta.XiCdimLambdaClosedForm
 import Omega.Zeta.XiCauchyPoissonDerivativeEnergyClosedForm
 import Omega.Zeta.XiFoldLocalInformationDensityFirstOrderDiscreteLaw
