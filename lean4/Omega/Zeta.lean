@@ -305,6 +305,7 @@ import Omega.Zeta.Window6BingaugeCompleteGroupDissection
 import Omega.Zeta.Window6MicrostateBiasedFiberlawHerglotzClosedform
 import Omega.Zeta.Window6RenyiDivergenceParityChargeRedundancy
 import Omega.Zeta.XiAdamsNormHolomorphic
+import Omega.Zeta.XiAdamsNormFixedRadiusJensenCertificate
 import Omega.Zeta.XiAdamsNormRadiusSimilarityLaw
 import Omega.Zeta.XiAddressDefectLaw
 import Omega.Zeta.XiAddressPrimeLedgerJointBudget
