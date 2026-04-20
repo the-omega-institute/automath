@@ -129,11 +129,13 @@ import Omega.Folding.Fold
 import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.FoldBoundaryStokesTorsorH1H1
 import Omega.Folding.FoldBinDigitDP
+import Omega.Folding.FoldBinChi2Col
 import Omega.Folding.FoldBinGaugeBernoulliExtractionOperator
 import Omega.Folding.FoldBinGaugeConstantZetaEvenRecoveryLimit
 import Omega.Folding.FoldBinEscortLastbit
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldBinFDivergenceCollapse
+import Omega.Folding.FoldBinFiberTail
 import Omega.Folding.FoldBinLastbitSufficientTV
 import Omega.Folding.FoldBinM6FiberHist
 import Omega.Folding.FoldbinGroupoidAut0ThirdCohomologyRank
