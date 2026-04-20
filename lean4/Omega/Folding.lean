@@ -131,6 +131,7 @@ import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy
 import Omega.Folding.FiberBiasEnergyGroupringConstantTerm
 import Omega.Folding.FoldMultiplicityEnergy
 import Omega.Folding.FoldCollisionSpectrum
+import Omega.Folding.FoldCollisionZeroReduction
 import Omega.Folding.FoldMultiplicityGroupAlgebra
 import Omega.Folding.FoldFiberParityEnergySimplex
 import Omega.Folding.FoldZeroUncertainty

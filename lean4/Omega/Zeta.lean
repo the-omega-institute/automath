@@ -400,4 +400,5 @@ import Omega.Zeta.XiReverseKLSingleFrequencyEntropyBudgetSup
 import Omega.Zeta.XiMomentRatioIdentifiesAmin
 import Omega.Zeta.XiFixedFreezingEscortBoundedObservableCollapse
 import Omega.Zeta.XiFixedFreezingEscortGroundstateTvIdentity
+import Omega.Zeta.XiFixedFreezingRenyiCriticalOrderThreshold
 import Omega.Zeta.XiSingleIntegerCoordinateNoExactAdditiveLedger
