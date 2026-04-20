@@ -293,6 +293,7 @@ import Omega.Zeta.XiAdamsNormRadiusSimilarityLaw
 import Omega.Zeta.XiAddressDefectLaw
 import Omega.Zeta.XiAddressPrimeLedgerJointBudget
 import Omega.Zeta.XiBasepointScanAnchorDetCauchyVandermonde
+import Omega.Zeta.XiBasepointScanKernelCompletenessFullRank
 import Omega.Zeta.XiBqPowerEntrywiseFibonacciBinomial
 import Omega.Zeta.XiBulkEntropyStrictConvexity
 import Omega.Zeta.XiBulkRenormalizedConstantAnomalyGap

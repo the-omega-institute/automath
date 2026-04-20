@@ -156,6 +156,7 @@ import Omega.Conclusion.Pisano1PositiveSea
 import Omega.Conclusion.PoissonCauchyMomentTomography
 import Omega.Conclusion.PoissonCauchyRenyiSixthNegativeMonotone
 import Omega.Conclusion.PowerDivergenceSecondorderRecurrence
+import Omega.Conclusion.PrimeRegisterL1LipschitzIsometry
 import Omega.Conclusion.PrimeAdjunctionExactMultiplicativeBudget
 import Omega.Conclusion.PrimeCharacterEnergyCenteredVariance
 import Omega.Conclusion.PrimeRegister
