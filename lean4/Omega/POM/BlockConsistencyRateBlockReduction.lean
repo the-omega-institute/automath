@@ -95,6 +95,79 @@ theorem paper_pom_block_consistency_rate_refinement_monotone
   unfold blockConsistencyRate diagonalConsistencyRate
   rw [sum_blockWeight_eq_sum, sum_blockWeight_eq_sum]
 
+/-- A concrete nontrivial partition of `Fin 4` into two blocks. -/
+def schurWitnessPartition (x : Fin 4) : Fin 2 :=
+  if x.1 < 2 then 0 else 1
+
+/-- The cross-block swap exchanging one coordinate from each block. -/
+def schurWitnessSwap : Equiv.Perm (Fin 4) :=
+  Equiv.swap 1 2
+
+/-- Permute a weight function by relabeling coordinates. -/
+def permuteWeight {α : Type*} (σ : Equiv.Perm α) (w : α → ℝ) : α → ℝ :=
+  fun x => w (σ x)
+
+/-- A concrete positive interior weight whose block-collapse changes under the cross-block swap. -/
+def schurWitnessWeight : Fin 4 → ℝ
+  | 0 => 4
+  | 1 => 2
+  | 2 => 1
+  | _ => 1
+
+/-- A block-level rate that reads only the leading block mass. -/
+def leadingBlockRate (W : Fin 2 → ℝ) (δ : ℝ) : ℝ :=
+  W 0 - δ
+
+/-- Pull back the leading-block rate along the concrete partition. -/
+def pulledLeadingBlockRate (δ : ℝ) (w : Fin 4 → ℝ) : ℝ :=
+  leadingBlockRate (blockWeight schurWitnessPartition w) δ
+
+/-- Any Schur-concave functional must in particular be constant on permutation orbits. -/
+def schurConcaveNecessarySymmetry (f : (Fin 4 → ℝ) → ℝ) : Prop :=
+  ∀ w : Fin 4 → ℝ, ∀ σ : Equiv.Perm (Fin 4), f (permuteWeight σ w) = f w
+
+private lemma schurWitness_leading_mass :
+    blockWeight schurWitnessPartition schurWitnessWeight 0 = 6 := by
+  simp [blockWeight, schurWitnessPartition, schurWitnessWeight, Fin.sum_univ_four]
+  norm_num
+
+private lemma schurWitnessSwap_leading_mass :
+    blockWeight schurWitnessPartition (permuteWeight schurWitnessSwap schurWitnessWeight) 0 = 5 := by
+  have h0 : (Equiv.swap 1 2 : Equiv.Perm (Fin 4)) 0 = 0 := by decide
+  have h1 : (Equiv.swap 1 2 : Equiv.Perm (Fin 4)) 1 = 2 := by decide
+  simp [blockWeight, schurWitnessPartition, permuteWeight, schurWitnessSwap,
+    schurWitnessWeight, Fin.sum_univ_four, h0, h1]
+  norm_num
+
+private lemma pulledLeadingBlockRate_swap_ne (δ : ℝ) :
+    pulledLeadingBlockRate δ (permuteWeight schurWitnessSwap schurWitnessWeight) ≠
+      pulledLeadingBlockRate δ schurWitnessWeight := by
+  have hswap :
+      pulledLeadingBlockRate δ (permuteWeight schurWitnessSwap schurWitnessWeight) = 5 - δ := by
+    simp [pulledLeadingBlockRate, leadingBlockRate, schurWitnessSwap_leading_mass]
+  have hid : pulledLeadingBlockRate δ schurWitnessWeight = 6 - δ := by
+    simp [pulledLeadingBlockRate, leadingBlockRate, schurWitness_leading_mass]
+  rw [hswap, hid]
+  linarith
+
+/-- Concrete two-block obstruction: the block-reduced rate equals the block law, but a cross-block
+permutation changes the collapsed block distribution, so the pullback cannot satisfy the symmetry
+that Schur concavity would force.
+    thm:pom-block-consistency-rate-schur-concavity-impossible -/
+theorem paper_pom_block_consistency_rate_schur_concavity_impossible (δ : ℝ) :
+    blockConsistencyRate schurWitnessPartition schurWitnessWeight δ =
+      diagonalConsistencyRate (blockWeight schurWitnessPartition schurWitnessWeight) δ ∧
+    pulledLeadingBlockRate δ (permuteWeight schurWitnessSwap schurWitnessWeight) ≠
+      pulledLeadingBlockRate δ schurWitnessWeight ∧
+    ¬ schurConcaveNecessarySymmetry (pulledLeadingBlockRate δ) := by
+  refine ⟨?_, ?_, ?_⟩
+  · exact
+      (paper_pom_block_consistency_rate_block_reduction
+        (π := schurWitnessPartition) (w := schurWitnessWeight) (δ := δ)).1
+  · exact pulledLeadingBlockRate_swap_ne δ
+  · intro hsymm
+    exact pulledLeadingBlockRate_swap_ne δ (hsymm schurWitnessWeight schurWitnessSwap)
+
 end BlockReduction
 
 end Omega.POM
