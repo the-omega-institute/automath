@@ -99,6 +99,7 @@ import Omega.Folding.FiberIdentifiableSigmaAlgebraMaximal
 import Omega.Folding.FiberSubsetConvolution
 import Omega.Folding.FiberSingleCoordinateAffineDifference
 import Omega.Folding.FiberSingleCoordinateMinimalAugmentation
+import Omega.Folding.FiberSingleCoordinateFibonacciGcdFreedom
 import Omega.Folding.FiberFourierPhaseRigidity
 import Omega.Folding.FiberGaugeVolumeChainFactorization
 import Omega.Folding.FiberFusion

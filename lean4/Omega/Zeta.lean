@@ -380,3 +380,4 @@ import Omega.Zeta.OutputPotentialZeroTempSquareRootCriticalLaw
 import Omega.Zeta.OperatorSingularBoundaryFixedpointEulerLeyang
 import Omega.Zeta.XiReverseKLSingleFrequencyEntropyBudgetSup
 import Omega.Zeta.XiMomentRatioIdentifiesAmin
+import Omega.Zeta.XiFixedFreezingEscortGroundstateTvIdentity
