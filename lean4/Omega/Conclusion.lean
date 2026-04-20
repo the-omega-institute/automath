@@ -93,6 +93,7 @@ import Omega.Conclusion.FrozenEscortTvRigidity
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Conclusion.GeometricUpliftFourFourCollapse
 import Omega.Conclusion.GodelIntegerizationPrimeShiftPolynomial
+import Omega.Conclusion.GodelAffineEllipseEquationIdentifiability
 import Omega.Conclusion.GodelLeyangIFS
 import Omega.Conclusion.GodelVsMinimalGap
 import Omega.Conclusion.GoldenAlternatingConstantsRecoverPhi
@@ -224,6 +225,7 @@ import Omega.Conclusion.SoftcoreWeightMatrixExplicitInverse
 import Omega.Conclusion.SpectrumSignLaw
 import Omega.Conclusion.SquarefreeRTLaminarNesting
 import Omega.Conclusion.StableSuccessorFaithfulSemigroup
+import Omega.Conclusion.StableSuccessorOrbitNormalForm
 import Omega.Conclusion.StokesEnergyDyadicMartingale
 import Omega.Conclusion.StokesSteinWeightedGraphMinflow
 import Omega.Conclusion.SubexponentialLedgerPhaseUniversality
