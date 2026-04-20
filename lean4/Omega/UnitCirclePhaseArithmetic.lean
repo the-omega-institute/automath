@@ -18,3 +18,4 @@ import Omega.UnitCirclePhaseArithmetic.UnitarySliceTauPrimeNormalForm
 import Omega.UnitCirclePhaseArithmetic.UnitaryTwoIntegerClosure
 import Omega.UnitCirclePhaseArithmetic.PhaseDepthSpectrumL
 import Omega.UnitCirclePhaseArithmetic.DualBoundaryNormalForm
+import Omega.UnitCirclePhaseArithmetic.LeyangLissajousChebyshevResultant

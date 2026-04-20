@@ -238,6 +238,7 @@ import Omega.Folding.GaugePressureResolventDiscIdentity
 import Omega.Folding.GaugeAnomalyTauIntClosed
 import Omega.Folding.GaugeAnomalyTrigonalGenus
 import Omega.Folding.GaugeAnomalyUnitCircleRigidity
+import Omega.Folding.KilloFoldBinNormalizedGaugeDeficiency
 import Omega.Folding.GaugeAnomalyVarianceFiniteWindowClosed
 import Omega.Folding.HammingLipschitzBudget
 import Omega.Folding.LayerwiseAuditablePrimorialNecessity
