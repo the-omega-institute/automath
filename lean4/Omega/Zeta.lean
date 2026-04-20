@@ -379,6 +379,7 @@ import Omega.Zeta.XiJensenDefectPowerPullbackInvariance
 import Omega.Zeta.XiJensenSingleRadiusBandExclusion
 import Omega.Zeta.XiLatticeDeheightizedVisibility
 import Omega.Zeta.XiLeyangMplus1PointExtrapolateOptimal
+import Omega.Zeta.XiLeyangEdDiscTildehVsH
 import Omega.Zeta.XiLeyangThreeLeadingZerosExtrapolateUcN6
 import Omega.Zeta.XiLeyangTwoLeadingZerosExtrapolateUc
 import Omega.Zeta.XiHypercubeLeyangAffineOrbifoldTwoLayer

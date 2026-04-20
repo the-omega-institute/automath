@@ -6,6 +6,7 @@ import Omega.Conclusion.AffineLeftDivisibilityCriterion
 import Omega.Conclusion.AffineNormalFormSemidirect
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.AlgorithmPrimeShiftEquivalence
+import Omega.Conclusion.AmbiguityShellJordanChainGraphLift
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.AuditComplexityAreaEquivalence

@@ -289,6 +289,7 @@ import Omega.POM.ReplicaSoftcoreTemperatureFreeEnergyPhaseTransition
 import Omega.POM.ReplicaSoftcoreWordTraceCycleGF
 import Omega.POM.ResidueRefinementJensen
 import Omega.POM.ResonanceMod6PeriodQ13Q15
+import Omega.POM.ResonanceNewmanNotInSingleRootFieldsQ9Q13
 import Omega.POM.ResonanceMod2FiniteBitAutomaticity
 import Omega.POM.ResonanceS13TwoPrimeCertificateQ16Q17
 import Omega.POM.ResonanceTwoCycleRatio
