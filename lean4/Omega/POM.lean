@@ -50,6 +50,7 @@ import Omega.POM.DeltaqGoldenEnvelope
 import Omega.POM.DeltaqGLambdaIdentity
 import Omega.POM.DeltaqSpectralDimensionIdentity
 import Omega.POM.DerivedAuditedEvenMinsectorTopologicalPhase
+import Omega.POM.DerivedFiberIndependencePolynomialMinusOneTrichotomy
 import Omega.POM.DerivedFiberIndcomplexAlternatingWittenParity
 import Omega.POM.DerivedFoldGoldenRationalPowerUnitObstruction
 import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
@@ -108,6 +109,7 @@ import Omega.POM.FiberContractibilitySphereParityByWalsh
 import Omega.POM.FiberCubicalPoincareStokesLemma
 import Omega.POM.FiberDispersionIndex
 import Omega.POM.FiberFullPosteriorUniformizationProductSource
+import Omega.POM.FiberIndexFiniteMPlateau
 import Omega.POM.FiberIndependenceComplexClassification
 import Omega.POM.FiberLedgerPrefixSideinfoLength
 import Omega.POM.FiberLeyangKlBernoulliDecomposition
