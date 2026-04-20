@@ -36,6 +36,7 @@ import Omega.Conclusion.CanonicalSliceExactFixedpointCount
 import Omega.Conclusion.CapacityFiniteCompleteness
 import Omega.Conclusion.CapacityMajorizationSchurHardness
 import Omega.Conclusion.CapacityRamanujanPlateauLaw
+import Omega.Conclusion.CertificateFrontConcavePolygonalKinkSupport
 import Omega.Conclusion.CarryZeroTempSupportCollapse
 import Omega.Conclusion.CausalDepthBranchBudgetOrthogonality
 import Omega.Conclusion.CdimArbitraryProfiniteKernel
@@ -52,6 +53,7 @@ import Omega.Conclusion.ComovingDefectFixedRadialWindowNonhiding
 import Omega.Conclusion.ComovingEndpointAddressBudgetPhaseTransition
 import Omega.Conclusion.CompressionLadderSpin10
 import Omega.Conclusion.ConnectedToDiscreteConstant
+import Omega.Conclusion.ContinuousLegendreEulerFenchelContact
 import Omega.Conclusion.CoordinateBundleDyadicBlockLaw
 import Omega.Conclusion.CycleRankSaturation
 import Omega.Conclusion.CyclotomicPrimeModulusExceptionalSupportFiniteness

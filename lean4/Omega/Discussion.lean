@@ -38,6 +38,7 @@ import Omega.Discussion.TwoDesignDecouplingHSZK
 import Omega.Discussion.UniqueContinuousTransversal
 import Omega.Discussion.WdimFiniteIndexStability
 import Omega.Discussion.WindowQuotientSemiringRigidity
+import Omega.Discussion.ZeckendorfCongruenceAddressRigidity
 import Omega.Discussion.ZetaSpectralHSZK
 import Omega.Discussion.ZkAreaLawGamma2Delta
 import Omega.Discussion.ZkVsThouless
