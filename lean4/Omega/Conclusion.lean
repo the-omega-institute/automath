@@ -208,6 +208,7 @@ import Omega.Conclusion.PrimorialBodycodePoleResidueInversion
 import Omega.Conclusion.PrimorialEllipseUniqueFactorization
 import Omega.Conclusion.PrimorialMixedRadixAffine
 import Omega.Conclusion.PrimorialMixedRadixSeeds
+import Omega.Conclusion.PrimitiveMinimalCarrierQuotient
 import Omega.Conclusion.PrimitiveCosetFourierFilter
 import Omega.Conclusion.PrimorialPrefixArithmeticMatrixCriterion
 import Omega.Conclusion.PushforwardFullMatrix
