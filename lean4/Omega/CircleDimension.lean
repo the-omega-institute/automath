@@ -31,6 +31,7 @@ import Omega.CircleDimension.CayleyWindowMassConservation
 import Omega.CircleDimension.Cdim1DivisibleImpliesQ
 import Omega.CircleDimension.Cdim2MinKernelDim
 import Omega.CircleDimension.CdimStarCompatibleFG
+import Omega.CircleDimension.StarPrimeCoordinateOrthogonality
 import Omega.CircleDimension.CechCyclotomicQuantization
 import Omega.CircleDimension.CertificateInverseLimitAddressing
 import Omega.CircleDimension.ClosedLoopUnitaryHorizonRepulsionToeplitz

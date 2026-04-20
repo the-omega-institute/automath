@@ -357,6 +357,7 @@ import Omega.Zeta.XiDefectEntropyPeakCompressibilityExtremal
 import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
 import Omega.Zeta.XiEllipseWallcrossingUnitStaircaseUniversality
 import Omega.Zeta.XiEndpointAbsorptionKernelRepresentation
+import Omega.Zeta.XiEndpointAbsorptionCoefficient
 import Omega.Zeta.XiEndpointDefectH12EnergyPoissonL2Dissipation
 import Omega.Zeta.XiEndpointDefectEnergyKlBridgeExplicit
 import Omega.Zeta.XiEdInftyFiberHalvingTangentIntegral

@@ -79,6 +79,7 @@ import Omega.POM.DiagonalRateSeparationPGFRational
 import Omega.POM.DiagonalRateSeparationSpectralResidue
 import Omega.POM.DiagonalRateTensorUpperBound
 import Omega.POM.DiagonalRateUniformSynergyInequality
+import Omega.POM.DiagonalCollapseQuadraticFreeEnergy
 import Omega.POM.DoubleLimit
 import Omega.POM.DoubleTransversalNormalForm
 import Omega.POM.EllipsoidIsoperimetricVariance
