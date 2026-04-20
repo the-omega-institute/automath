@@ -98,6 +98,7 @@ import Omega.Zeta.FinitePartChannelEliminationLCM
 import Omega.Zeta.FinitePartCyclicLiftCyclotomicDivisorMobius
 import Omega.Zeta.FinitePartCyclicLiftDirichletMultipleSum
 import Omega.Zeta.FinitePartCyclicLiftLimsupSpectralGap
+import Omega.Zeta.FinitePartCyclicConstantDeterminesPrimeOrbits
 import Omega.Zeta.FinitePartCyclicLiftMobiusInversion
 import Omega.Zeta.FinitePartCyclicLiftPolylogDirichletXi
 import Omega.Zeta.FinitePartCyclicLiftReducedConstantClosed

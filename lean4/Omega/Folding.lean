@@ -224,6 +224,7 @@ import Omega.Folding.GaugeAnomalyP10DisjointSqrt5
 import Omega.Folding.GaugeAnomalyP10LeyangChebotarevProductLaw
 import Omega.Folding.GaugeAnomalyP10LeyangClassFunctionTensorIndependence
 import Omega.Folding.GaugeAnomalyP10Q10TschirnhausInverse
+import Omega.Folding.FoldGaugeAnomalyFieldEqualityUMuB
 import Omega.Folding.GaugeAnomalyParryKlRate
 import Omega.Folding.GaugeAnomalyPressure
 import Omega.Folding.GaugeAnomalyPressureCumulants5
