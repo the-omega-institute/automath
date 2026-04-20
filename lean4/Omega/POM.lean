@@ -117,6 +117,7 @@ import Omega.POM.FiberSpectrumPronyHankelRank
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
 import Omega.POM.FiberSpectrumStieltjesRigidityDeterminantSchatten
 import Omega.POM.FiberStokesEulerBoundaryObservability
+import Omega.POM.FiberSignedIndexMod3
 import Omega.POM.FiberTripleMedianMajority
 import Omega.POM.FiberTwoPhaseMixing
 import Omega.POM.FiberWalshHardcoreStokesSign
