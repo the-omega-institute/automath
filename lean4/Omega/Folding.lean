@@ -126,6 +126,7 @@ import Omega.Folding.FixedFiberLipschitzOptimization
 import Omega.Folding.Fold
 import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.FoldBinDigitDP
+import Omega.Folding.FoldBinGaugeBernoulliExtractionOperator
 import Omega.Folding.FoldBinEscortLastbit
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldBinFDivergenceCollapse

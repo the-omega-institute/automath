@@ -343,6 +343,7 @@ import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge
 import Omega.Zeta.XiHankelDetScalingCovariance
 import Omega.Zeta.XiHankelHsEnergyClosedFormMassEnergy
 import Omega.Zeta.XiHankelNormalformCRTAdelicMultiplicity
+import Omega.Zeta.XiFixedArityDyadicMultiplicityPresburgerInP
 import Omega.Zeta.XiHankelSigminLowerboundVandermondeSeparation
 import Omega.Zeta.XiHellingerToeplitzDense2xLaw
 import Omega.Zeta.XiImplCoding
