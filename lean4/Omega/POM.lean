@@ -284,6 +284,7 @@ import Omega.POM.S5GaloisArithmetic
 import Omega.POM.S5OrderedRatioDegree20
 import Omega.POM.SufficientStatisticResidualNoninvertibility
 import Omega.POM.S5TwoSubsetDegree10
+import Omega.POM.S2Plancherel
 import Omega.POM.SchurPlancherelEnergyIdentity
 import Omega.POM.SchurTomographyInversePartitionMonomials
 import Omega.POM.SideinfoExactEntropy
