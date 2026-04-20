@@ -332,3 +332,4 @@ import Omega.Conclusion.ZeckendorfEulerReindexing
 import Omega.Conclusion.ZeckendorfEulerSeeds
 import Omega.Conclusion.ZeckendorfResetBoundedCLTAbsent
 import Omega.Conclusion.ZnToCircleInjectiveDenseSeeds
+import Omega.Conclusion.TwoGroupPostnikovStrictification

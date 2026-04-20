@@ -360,3 +360,4 @@ import Omega.POM.ZeroTempConcentration
 import Omega.POM.ZeroTemperatureGapDivisibilityRaySum
 import Omega.POM.ZeroTemperatureTwoTermExpansion
 import Omega.POM.ZetaEqualsOrderPoly
+import Omega.POM.DiagonalRateSchurConcavity
