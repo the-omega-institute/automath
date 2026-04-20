@@ -372,6 +372,7 @@ import Omega.Zeta.XiGramshiftIllconditioningForcedByToeplitzMargin
 import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge
 import Omega.Zeta.XiHankelDetScalingCovariance
 import Omega.Zeta.XiHankelHsEnergyClosedFormMassEnergy
+import Omega.Zeta.XiHankelIntegralityPreservedUnderUnimodularConjugacy
 import Omega.Zeta.XiTimePart70cKlGapControlsMaxfiberExcess
 import Omega.Zeta.XiHankelNormalformCRTAdelicMultiplicity
 import Omega.Zeta.XiFixedArityDyadicMultiplicityPresburgerInP
