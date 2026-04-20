@@ -232,6 +232,7 @@ import Omega.POM.NewmanCriticalAlgebraicEliminationSturm
 import Omega.POM.OnlineMultiplicativePrimeSupportLB
 import Omega.POM.OrderPolytopeVolumeLinext
 import Omega.POM.OracleBitLowerBoundSubexpMom
+import Omega.POM.OracleCapacityBimeasureIdentity
 import Omega.POM.OracleCapacityStieltjesInversionMellin
 import Omega.POM.OracleCriticalQuadraticMarginalLaw
 import Omega.POM.OracleFailureExponentFromRenyiSpectrum

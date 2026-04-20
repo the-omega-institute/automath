@@ -258,6 +258,7 @@ import Omega.Zeta.ShiftInvariantSaturatedLatticePrincipalIdeal
 import Omega.Zeta.SingleScaleDirichletLattice
 import Omega.Zeta.SmithEntropyInvertsVpInvariants
 import Omega.Zeta.SmithEntropyMinDepth
+import Omega.Zeta.XiSmithLossDiscreteCurvatureAtoms
 import Omega.Zeta.SmithLinearSolvabilityConstantFibers
 import Omega.Zeta.SmithPadicLossSpectrumClassification
 import Omega.Zeta.SmithPrefixSufficiency
