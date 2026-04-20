@@ -87,6 +87,7 @@ import Omega.GU.M11Z34AugmentationIdealUnique
 import Omega.GU.M11Z34CyclotomicRepresentationRigidity
 import Omega.GU.M11Z34RealIrrepDecomposition
 import Omega.GU.M11Z34RotationPartComplexStructure
+import Omega.GU.M11Z34UpliftIntrinsicSU16
 import Omega.GU.MinSectorBudget
 import Omega.GU.MobiusDualityUnified
 import Omega.GU.NapLocalUpliftForcesSo10
