@@ -54,6 +54,7 @@ import Omega.POM.DerivedFoldGoldenRationalPowerUnitObstruction
 import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DiagonalHighMoments
 import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
+import Omega.POM.DiagonalRateAbsorbingDFR
 import Omega.POM.DiagonalRateAbsorbingMeanHitTime
 import Omega.POM.DiagonalRateAcceptRefreshSSTPGF
 import Omega.POM.DiagonalRateAcceptRefreshSSTStrong

@@ -211,6 +211,7 @@ import Omega.Folding.GaugeAnomalyGfRationalIntegralRecurrence
 import Omega.Folding.GaugeAnomalyHankelAudit
 import Omega.Folding.GaugeAnomalyHankelJordanCertificate
 import Omega.Folding.GaugeAnomalyHankelRank3
+import Omega.Folding.GaugeAnomalyHRencontresFixedPointDensity
 import Omega.Folding.GaugeAnomalyJordanFingerprint
 import Omega.Folding.GaugeAnomalyKStepInvariance
 import Omega.Folding.GaugeAnomalyLdpRate
