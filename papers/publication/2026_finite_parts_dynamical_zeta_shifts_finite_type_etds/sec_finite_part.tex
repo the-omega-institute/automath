@@ -1,0 +1,525 @@
+\section{Finite parts at the Perron pole and cyclic reconstruction}
+\label{sec:finite-part}
+
+Throughout this section, \(A\) denotes a primitive non-negative matrix
+with Perron root \(\lambda>1\). No further symbolic-dynamical input is
+used: the arguments depend only on the primitive matrix formalism, the
+Perron pole, and the non-Perron spectrum.
+
+\medskip\noindent\textbf{Logarithm convention.}
+All logarithms in this section are taken in the principal branch
+\(\Log\) on \(\CC\setminus(-\infty,0]\). Since the non-Perron
+eigenvalues satisfy \(|\mu_j|<\lambda\), each factor
+\(1-(\mu_j/\lambda)^q\) has positive real part for all \(q\ge 1\), so
+\(\Log(1-(\mu_j/\lambda)^q)\) is unambiguous. Likewise, the reduced
+spectral polynomial satisfies \(F_A(e^{i\theta})\ne 0\) for all
+\(\theta\in\RR\) (since \(|\mu_j|<\lambda\) implies \(|\mu_j/\lambda|<1\)),
+so \(\Log F_A(e^{i\theta})\) is well defined and
+\(-\Log F_A(e^{i\theta})=\sum_{n\ge 1}u_n(A)e^{in\theta}/n\) is the
+Fourier series of a continuous function on the torus. All subsequent
+power series and determinant logarithms use this branch consistently.
+
+\subsection{Finite parts and reduced determinants}
+
+\begin{theorem}[Primitive-orbit closed form for the finite part]
+  \label{thm:finite-part-primitive-closed-form}
+  The finite-part constant \(\FP(A)\) exists and satisfies
+  \[
+    \FP(A)
+    =\log C(A)+\sum_{k\ge 2}\frac{\mu(k)}{k}
+      \log\det(I-\lambda^{-k}A)^{-1}.
+  \]
+  Equivalently,
+  \[
+    \FP(A)
+    =\log C(A)
+      +\sum_{n\ge 1}p_n(A)
+        \bigl(\lambda^{-n}+\log(1-\lambda^{-n})\bigr).
+  \]
+\leanverified{paper_etds_finite_part_primitive_closed_form}
+\end{theorem}
+
+\begin{proof}
+  We separate the argument into two steps.
+
+  First, the Euler product and M\"obius inversion identify the Abel
+  generating series with a determinant expression. By
+  \Cref{prop:prelim-trace-primitive}, for \(|z|<\lambda^{-1}\),
+  \[
+    \log\det(I-zA)^{-1}
+    =\sum_{m\ge 1}\frac{\Tr(A^m)}{m}z^m.
+  \]
+  Hence, for \(0\le r<1\),
+  \begin{align*}
+    \sum_{k\ge 1}\frac{\mu(k)}{k}
+      \log\det(I-\lambda^{-k}r^kA)^{-1}
+    &=
+    \sum_{k\ge 1}\frac{\mu(k)}{k}
+      \sum_{m\ge 1}\frac{\Tr(A^m)}{m}\lambda^{-km}r^{km} \\
+    &=
+    \sum_{n\ge 1}\frac{(\lambda^{-1}r)^n}{n}
+      \sum_{k\mid n}\mu(k)\Tr(A^{n/k}) \\
+    &=
+    \sum_{n\ge 1}p_n(A)\lambda^{-n}r^n
+    =P_A(r),
+  \end{align*}
+  where the last identity is \eqref{eq:primitive-mobius}.
+
+  Second, we pass to the finite part at \(r\uparrow 1\). The \(k=1\)
+  term has asymptotic
+  \[
+    \log\det(I-\lambda^{-1}rA)^{-1}
+    =-\log(1-r)+\log C(A)+o(1),
+    \qquad r\uparrow 1,
+  \]
+  because the Perron pole is simple. Every term with \(k\ge 2\)
+  converges absolutely at \(r=1\), so
+  \[
+    \FP(A)
+    =\lim_{r\uparrow 1}\bigl(P_A(r)+\log(1-r)\bigr)
+    =\log C(A)+\sum_{k\ge 2}\frac{\mu(k)}{k}
+      \log\det(I-\lambda^{-k}A)^{-1}.
+  \]
+
+  For the primitive-orbit form, use again
+  \Cref{prop:prelim-trace-primitive}:
+  \[
+    \log\det(I-zA)^{-1}
+    =-\sum_{n\ge 1}p_n(A)\log(1-z^n).
+  \]
+  Substituting \(z=\lambda^{-k}\), summing over \(k\ge 2\), and
+  exchanging the two absolutely convergent sums gives
+  \[
+    \sum_{k\ge 2}\frac{\mu(k)}{k}\log\det(I-\lambda^{-k}A)^{-1}
+    =
+    -\sum_{n\ge 1}p_n(A)
+      \sum_{k\ge 2}\frac{\mu(k)}{k}\log(1-\lambda^{-nk}).
+  \]
+  For \(|x|<1\), absolute convergence permits the coefficientwise
+  calculation
+  \[
+    \sum_{k\ge 1}\frac{\mu(k)}{k}\log(1-x^k)
+    =-\sum_{k\ge 1}\frac{\mu(k)}{k}\sum_{r\ge 1}\frac{x^{kr}}{r}
+    =-\sum_{n\ge 1}\frac{x^n}{n}\sum_{k\mid n}\mu(k)
+    =-x,
+  \]
+  because \(\sum_{k\mid n}\mu(k)=0\) unless \(n=1\). Hence
+  \[
+    \sum_{k\ge 2}\frac{\mu(k)}{k}\log(1-x^k)=-x-\log(1-x).
+  \]
+  Taking \(x=\lambda^{-n}\) yields the second formula.
+\end{proof}
+
+\begin{proposition}[Reduced determinant identity]
+  \label{prop:finite-part-residue-reduced-determinant}
+  Let \(\mu_2,\dots,\mu_d\) be the non-Perron eigenvalues of \(A\). Then
+  \[
+    C(A)
+    =\prod_{j=2}^d\left(1-\frac{\mu_j}{\lambda}\right)^{-1}
+    =\det\nolimits'(I-A/\lambda)^{-1}.
+  \]
+\end{proposition}
+
+\begin{proof}
+  Factor
+  \[
+    \det(I-zA)
+    =(1-\lambda z)\prod_{j=2}^d(1-\mu_j z).
+  \]
+  Multiplying by \(1-\lambda z\) and letting \(z\to\lambda^{-1}\) gives
+  the claim.
+\end{proof}
+
+\begin{corollary}[Orbit-Mertens asymptotic]
+  \label{cor:finite-part-mertens-asymptotic}
+  For every primitive matrix \(A\),
+  \[
+    \sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    =\log N+\mathcal M(A)+o(1)
+    \qquad (N\to\infty),
+  \]
+  where \(\mathcal M(A)=\gamma+\FP(A)\).
+\leanverified{paper_etds_finite_part_mertens_asymptotic}
+\end{corollary}
+
+\begin{proof}
+  By \Cref{lem:primitive-orbit-asymptotic},
+  \[
+    \sum_{n\ge 1}\left|\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right|
+    <\infty.
+  \]
+  Hence
+  \[
+    \sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    =
+    \sum_{n\le N}\frac{1}{n}
+    +\sum_{n\ge 1}
+      \left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+    +o(1).
+  \]
+  The convergent correction term equals \(\FP(A)\), while
+  \(\sum_{n\le N}1/n=\log N+\gamma+o(1)\).
+\end{proof}
+
+\subsection{Cyclic lifts and reduced spectral reconstruction}
+
+Let
+\[
+  \Lambda_{\mathrm{rel}}(A):=\Lambda(A)/\lambda\in[0,1)
+\]
+and
+\[
+  u_n(A):=\sum_{j=2}^d\left(\frac{\mu_j}{\lambda}\right)^n
+  \qquad (n\ge 1).
+\]
+
+\begin{theorem}[A formula for the reduced determinants of cyclic lifts]
+  \label{thm:finite-part-cyclic-lift-reduced-constant-closed}
+  For every \(q\ge 1\),
+  \[
+    C(A^{\langle q\rangle})
+    =\frac{1}{q}\prod_{j=2}^d
+      \left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right)^{-1}.
+  \]
+  Equivalently,
+  \[
+    \Psi_q(A):=\log q+\log C(A^{\langle q\rangle})
+    =-\sum_{j=2}^d
+      \log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
+  \]
+\leanverified{paper_etds_finite_part_cyclic_lift_reduced_constant_closed}
+\end{theorem}
+
+\begin{proof}
+  The spectrum of \(A^{\langle q\rangle}=A\otimes P_q\) is
+  \[
+    \{\mu\,\omega_q^k:\mu\in\spec(A),\ 0\le k\le q-1\}.
+  \]
+  Applying \Cref{prop:finite-part-residue-reduced-determinant} to
+  \(A^{\langle q\rangle}\) yields
+  \[
+    C(A^{\langle q\rangle})
+    =\prod_{k=1}^{q-1}(1-\omega_q^k)^{-1}
+      \prod_{j=2}^d\prod_{k=0}^{q-1}
+        \left(1-\frac{\mu_j}{\lambda}\omega_q^k\right)^{-1}.
+  \]
+  The first product equals \(1/q\), while
+  \[
+    \prod_{k=0}^{q-1}(1-x\omega_q^k)=1-x^q.
+  \]
+  Substituting \(x=\mu_j/\lambda\) proves the claim.
+\end{proof}
+
+\begin{proposition}[Multiple-sum expansion for cyclic lifts]
+  \label{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}
+  For every \(q\ge 1\),
+  \[
+    \Psi_q(A)=\sum_{m\ge 1}\frac{u_{qm}(A)}{m},
+  \]
+  and therefore
+  \[
+    \Psi_q(A)=u_q(A)+O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right)
+    \qquad (q\to\infty).
+  \]
+  More precisely,
+  \[
+    \abs{\Psi_q(A)-u_q(A)}
+    \le
+    \frac{d-1}{2(1-\Lambda_{\mathrm{rel}}(A))}
+    \Lambda_{\mathrm{rel}}(A)^{2q}.
+  \]
+\end{proposition}
+
+\begin{proof}
+  By \Cref{thm:finite-part-cyclic-lift-reduced-constant-closed},
+  \[
+    \Psi_q(A)
+    =-\sum_{j=2}^d\log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
+  \]
+  Expanding \(-\log(1-x)=\sum_{m\ge 1}x^m/m\) and exchanging the finite
+  sum over \(j\) with the absolutely convergent series over \(m\) gives
+  the first identity. The remainder estimate follows from
+  \[
+    |u_{qm}(A)|\le (d-1)\Lambda_{\mathrm{rel}}(A)^{qm}.
+  \]
+  Indeed,
+  \[
+    \abs{\Psi_q(A)-u_q(A)}
+    \le
+    \sum_{m\ge 2}\frac{\abs{u_{qm}(A)}}{m}
+    \le
+    \frac{d-1}{2}\sum_{m\ge 2}\Lambda_{\mathrm{rel}}(A)^{qm}
+    \le
+    \frac{d-1}{2(1-\Lambda_{\mathrm{rel}}(A))}
+    \Lambda_{\mathrm{rel}}(A)^{2q}.
+  \]
+\end{proof}
+
+\begin{proposition}[M\"obius inversion on multiples]
+  \label{prop:finite-part-cyclic-lift-mobius-inversion}
+  For every \(n\ge 1\),
+  \[
+    \frac{u_n(A)}{n}
+    =\sum_{m\ge 1}\frac{\mu(m)}{mn}\,\Psi_{mn}(A).
+  \]
+\end{proposition}
+
+\begin{proof}
+  Set \(b_n:=u_n(A)/n\). Then
+  \[
+    \frac{\Psi_q(A)}{q}
+    =\sum_{m\ge 1}b_{qm}
+  \]
+  by \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}. Hence
+  \begin{align*}
+    \sum_{m\ge 1}\frac{\mu(m)}{mn}\Psi_{mn}(A)
+    &=
+    \sum_{m\ge 1}\mu(m)\sum_{r\ge 1}b_{mnr} \\
+    &=
+    \sum_{s\ge 1}b_{ns}\sum_{m\mid s}\mu(m)
+    =b_n,
+  \end{align*}
+  since \(\sum_{m\mid s}\mu(m)=0\) unless \(s=1\).
+\end{proof}
+
+\begin{lemma}[Limsup of a finite exponential sum]
+  \label{lem:finite-part-exponential-sum-limsup}
+  Let
+  \[
+    f_q=\sum_{j=1}^r c_j\alpha_j^q
+    \qquad (q\ge 1),
+  \]
+  where \(c_j\in\CC\setminus\{0\}\) and \(\alpha_j\in\CC\). Then
+  \[
+    \limsup_{q\to\infty}\abs{f_q}^{1/q}
+    =\max_{1\le j\le r}\abs{\alpha_j}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Set \(R:=\max_j\abs{\alpha_j}\). The upper bound
+  \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\le R\) is immediate from
+  \(\abs{f_q}\le (\sum_j\abs{c_j})R^q\).
+
+  For the reverse inequality, collect equal frequencies on the boundary
+  circle and write
+  \[
+    f_q
+    =R^q\bigl(g_q+O(\vartheta^q)\bigr),
+    \qquad
+    g_q:=\sum_{k=1}^s d_k\beta_k^q,
+  \]
+  where \(\vartheta\in[0,1)\), the numbers \(\beta_1,\dots,\beta_s\in\TT\)
+  are pairwise distinct, and \(d_k\neq 0\). Then
+  \[
+    \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
+    =\sum_{k,\ell=1}^s d_k\overline{d_\ell}\,
+      \frac{1}{N}\sum_{q=1}^N(\beta_k\overline{\beta_\ell})^q.
+  \]
+  As \(N\to\infty\), the inner Ces\`aro average tends to \(1\) when
+  \(k=\ell\) and to \(0\) otherwise. Hence
+  \[
+    \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
+    \longrightarrow
+    \sum_{k=1}^s\abs{d_k}^2>0.
+  \]
+  Therefore \(\limsup_{q\to\infty}\abs{g_q}>0\), so there exist
+  \(c>0\) and infinitely many \(q\) such that \(\abs{g_q}\ge c\). Along
+  that subsequence,
+  \[
+    \abs{f_q}\ge \frac{c}{2}R^q
+  \]
+  for all sufficiently large \(q\), because \(\vartheta^q\to 0\). This
+  yields
+  \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\ge R\), completing the proof.
+\end{proof}
+
+\begin{theorem}[Determination of the reduced spectrum from cyclic lifts]
+  \label{thm:finite-part-cyclic-lift-spectrum-identifiability}
+  The sequence \(\{\Psi_q(A)\}_{q\ge 1}\), equivalently
+  \(\{C(A^{\langle q\rangle})\}_{q\ge 1}\), determines the reduced
+  spectral polynomial \(F_A\) and hence the non-Perron spectrum of
+  \(A\) with algebraic multiplicity. Moreover,
+  \[
+    \limsup_{q\to\infty}\abs{\Psi_q(A)}^{1/q}
+    =\Lambda_{\mathrm{rel}}(A).
+  \]
+\leanverified{paper_etds_finite_part_cyclic_lift_spectrum_identifiability}
+\end{theorem}
+
+\begin{proof}
+  By \Cref{prop:finite-part-cyclic-lift-mobius-inversion}, the cyclic
+  data determine every power sum \(u_n(A)\). Since
+  \[
+    F_A(t)=\prod_{j=2}^d\left(1-\frac{\mu_j}{\lambda}t\right)
+  \]
+  has known degree \(d-1\), Newton's identities recover its
+  coefficients from the first \(d-1\) power sums, and hence from the
+  full sequence \(\{u_n(A)\}_{n\ge 1}\). This reconstructs the
+  non-Perron spectrum with algebraic multiplicity.
+
+  For the exponential growth rate,
+  \(u_q(A)=\sum_{j=2}^d(\mu_j/\lambda)^q\), so
+  \Cref{lem:finite-part-exponential-sum-limsup} gives
+  \[
+    \limsup_{q\to\infty}\abs{u_q(A)}^{1/q}
+    =\Lambda_{\mathrm{rel}}(A).
+  \]
+  The explicit remainder bound from
+  \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum} shows that
+  \[
+    \Psi_q(A)-u_q(A)
+    =O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right).
+  \]
+  If \(\Lambda_{\mathrm{rel}}(A)=0\), then both sequences are
+  eventually zero. Otherwise the error term has strictly smaller
+  exponential rate than \(u_q(A)\), so
+  \[
+    \limsup_{q\to\infty}\abs{\Psi_q(A)}^{1/q}
+    =\Lambda_{\mathrm{rel}}(A).
+  \]
+\end{proof}
+
+\subsection{One large root-of-unity layer}
+
+\begin{theorem}[Reconstruction from one root-of-unity layer]
+  \label{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction}
+  Write
+  \[
+    F_A(t)=\sum_{n=0}^{d-1}a_n t^n
+    \qquad\text{with } a_0=1.
+  \]
+  If \(q\ge d\), then the values
+  \(\{F_A(\omega_q^j)\}_{0\le j\le q-1}\) determine every coefficient
+  \(a_n\). More precisely,
+  \[
+    a_n=\frac{1}{q}\sum_{j=0}^{q-1}
+      F_A(\omega_q^j)\omega_q^{-jn}
+    \qquad (0\le n\le d-1).
+  \]
+\leanverified{paper_etds_finite_part_single_q_torsion_reconstruction}
+\end{theorem}
+
+\begin{proof}
+  The polynomial identity
+  \[
+    F_A(\omega_q^j)=\sum_{n=0}^{d-1}a_n\omega_q^{jn}
+  \]
+  holds for \(0\le j\le q-1\). Averaging against
+  \(\omega_q^{-jm}\) and using discrete orthogonality gives
+  \[
+    \frac{1}{q}\sum_{j=0}^{q-1}
+      F_A(\omega_q^j)\omega_q^{-jm}
+    =
+    \sum_{n=0}^{d-1}a_n
+      \frac{1}{q}\sum_{j=0}^{q-1}\omega_q^{j(n-m)}.
+  \]
+  Since \(q\ge d\), the inner sum equals \(1\) when \(n=m\) and \(0\)
+  otherwise.
+\end{proof}
+
+\begin{corollary}[Root-of-unity values of \(\zeta_A\) determine the
+  reduced spectrum]
+  \label{cor:finite-part-cyclic-lift-zeta-torsion-determines-spectrum}
+  For \(1\le j\le q-1\),
+  \[
+    F_A(\omega_q^j)
+    =\frac{\det(I-(\omega_q^j/\lambda)A)}{1-\omega_q^j}
+    =\frac{1}{1-\omega_q^j}\,
+      \zeta_A(\omega_q^j/\lambda)^{-1},
+  \]
+  while
+  \[
+    F_A(1)=\det\nolimits'(I-A/\lambda)=C(A)^{-1}.
+  \]
+  Consequently, if \(q\ge d\), then the data
+  \[
+    \Bigl(C(A),\ \{\zeta_A(\omega_q^j/\lambda)\}_{j=1}^{q-1}\Bigr)
+  \]
+  determine the non-Perron spectrum of \(A\) with multiplicity.
+\leanverified{paper_etds_finite_part_cyclic_lift_zeta_torsion_determines_spectrum}
+\end{corollary}
+
+\begin{proof}
+  The displayed identities are immediate from the definitions of
+  \(F_A\), \(\zeta_A\), and \(C(A)\). The reconstruction statement
+  follows from
+  \Cref{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction}.
+\end{proof}
+
+\begin{remark}[A cyclic reconstruction toy example]
+  \label{rem:finite-part-fibonacci-example}
+  Let
+  \[
+    A=\begin{pmatrix}
+      1 & 1 \\
+      1 & 0
+    \end{pmatrix}.
+  \]
+  Then \(d=2\), the Perron root is
+  \(\lambda=(1+\sqrt5)/2\), the non-Perron eigenvalue is
+  \(\mu=-\lambda^{-1}\), and
+  \[
+    F_A(t)=1+\lambda^{-2}t.
+  \]
+  Since \(q=2\ge d\), the single layer \(\{F_A(1),F_A(-1)\}\) already
+  reconstructs \(F_A\):
+  \[
+    F_A(1)=1+\lambda^{-2},
+    \qquad
+    F_A(-1)=1-\lambda^{-2},
+  \]
+  so discrete Fourier inversion gives
+  \[
+    a_0=\frac{F_A(1)+F_A(-1)}{2}=1,
+    \qquad
+    a_1=\frac{F_A(1)-F_A(-1)}{2}=\lambda^{-2}.
+  \]
+  Thus one order-\(2\) root-of-unity layer already recovers the reduced
+  polynomial and hence the non-Perron eigenvalue \(\mu=-\lambda^{-1}\).
+\end{remark}
+
+\subsection{Selected consequences}
+
+\begin{corollary}[Finite square-root test from one root-of-unity layer]
+  \label{cor:finite-part-single-layer-square-root-test}
+  Let \(q\ge d\). Then the single root-of-unity layer
+  \(\{F_A(\omega_q^j)\}_{0\le j\le q-1}\), equivalently the data
+  \[
+    \Bigl(C(A),\{\zeta_A(\omega_q^j/\lambda)\}_{j=1}^{q-1}\Bigr),
+  \]
+  determines whether the square-root bound \(\Lambda(A)\le \lambda^{1/2}\)
+  holds.
+\leanverified{paper_etds_finite_part_single_layer_square_root_test}
+\end{corollary}
+
+\begin{proof}
+  By \Cref{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction},
+  the given data determine \(F_A\), hence the reciprocal roots
+  \(\mu_j/\lambda\). The square-root bound is equivalent to
+  \(\max_{j\ge 2}|\mu_j/\lambda|\le \lambda^{-1/2}\).
+\end{proof}
+
+\begin{corollary}[Positivity of the primitive gap]
+  \label{cor:finite-part-gap-positive}
+  Define
+  \[
+    \mathrm{Gap}(A):=\log C(A)-\FP(A).
+  \]
+  Then
+  \[
+    \mathrm{Gap}(A)
+    =\sum_{n\ge 1}p_n(A)\psi(\lambda^{-n}),
+    \qquad
+    \psi(x):=-x-\log(1-x)=\sum_{m\ge 2}\frac{x^m}{m},
+  \]
+  and in particular \(\mathrm{Gap}(A)>0\).
+\leanverified{paper_etds_finite_part_gap_positive_corollary}
+\end{corollary}
+
+\begin{proof}
+  This is a rearrangement of
+  \Cref{thm:finite-part-primitive-closed-form}. Since \(\psi(x)>0\) for
+  \(0<x<1\), every term in the series is positive.
+\leanverified{paper_etds_finite_part_gap_positive}
+\end{proof}

@@ -1,274 +1,292 @@
-# P4 Editorial Review -- 2026-04-04
+# Gate 3 Editorial Review (P4): First Independent Assessment
 
-**Manuscript:** Gluing Failure, Visible Quotients, and Pure-Ext Blind Spots
+**Paper:** Gluing Failure, Visible Quotients, and Pure-Ext Blind Spots
 **Target journal:** Annals of Pure and Applied Logic (APAL)
-**Review type:** Gate 3 independent editorial review (first review)
-**Reviewer model:** Claude Opus 4.6
+**Date:** 2026-04-04
+**Reviewer:** Claude (Gate 3 / P4 editorial review, first round)
+**Sibling paper:** `2026_conservative_extension_chain_state_forcing_apal` (received MINOR_REVISION at Gate 3)
 
 ---
 
-## 1. Decision
+## I. Decision
 
-**MAJOR_REVISION**
+$$
+\boxed{\text{MAJOR\_REVISION}}
+$$
 
----
-
-## 2. Main Mathematical Blockers
-
-### 2.1. BLOCKER -- Six missing bibliography entries break compilation
-
-The following citation keys appear in the compiled (included) .tex files but are absent from `references.bib`:
-
-| Key | Used in |
-|-----|---------|
-| `Hatcher2002` | sec_homological_visibility (6 occurrences) |
-| `Weibel1994` | sec_homological_visibility |
-| `DummitFoote2004` | sec_homological_visibility (2 occurrences) |
-| `Giraud1971` | sec_gerbe_obstruction (2 occurrences) |
-| `Johnstone2002` | sec_null_decomposition |
-| `StacksProject` | sec_null_decomposition, sec_gerbe_obstruction (7+ occurrences) |
-
-The paper cannot compile with bibtex. Every reference to the universal coefficient theorem, banded gerbe classification, Pontryagin duality, and the Stacks Project is broken. This is a hard compilation blocker.
-
-**Fix:** Add the six missing bib entries to `references.bib`. All are standard references and the entries are straightforward.
-
-### 2.2. BLOCKER -- Four orphaned .tex files never input in main.tex
-
-The directory contains four substantial .tex files that are NOT `\input` in `main.tex`:
-
-| File | Content | Lines |
-|------|---------|-------|
-| `sec_multiaxis_refinement.tex` | Refinement dynamics, axis support, branch visibility monotonicity | 260 |
-| `sec_conservativity.tex` | Concrete realization, semantic fidelity | 94 |
-| `sec_observer_spacetime.tex` | Observer fibers, spacetime localization, coupled states | 179 |
-| `sec_appendix.tex` | Finite-state complexity upper bounds | 30 |
-
-The problem is threefold:
-
-(a) **The cover letter claims the paper "omits the multi-branch budget calculus, refinement dynamics, and complexity appendix"** and the submission checklist states "No refinement-dynamics or complexity appendix remains in the APAL-focused version." Yet the files remain in the directory, which will confuse any editor or copyeditor.
-
-(b) **`sec_multiaxis_refinement.tex` contains `thm:branch-visibility-monotonicity` (Refinement monotonicity of branch visibility)** which has a substantive mathematical claim about how the visible quotient transforms under refinement. This result is arguably more interesting than some of what is currently included (e.g., the typed readout material), and its absence weakens the paper's contribution.
-
-(c) **`sec_appendix.tex` references `\Cref{def:axis-support,def:axis-indispensability}` from `sec_multiaxis_refinement.tex`** -- these are only defined in the non-included file. If anyone tries to add the appendix back, it will break.
-
-**Fix:** Either (i) delete the four files from the submission directory entirely, or (ii) decide which additional content to include and update `main.tex` accordingly. The current state -- files present but not compiled -- is not acceptable for submission.
-
-### 2.3. MEDIUM -- Theorem 4.29 (pointwise irreducibility) proof relies on an informal automorphism argument
-
-The proof of Theorem 4.29 constructs a model automorphism $\alpha$ that swaps $r_1^M$ and $r_2^M$ while preserving each realization $\rho \in R_p$. The claim that such an automorphism exists is stated by fiat: "Choose the $\mathrm{Form}_1$-reduct of $M$ so that there is an automorphism..." This is logically valid (it is a constructive existence argument), but:
-
-- The "model" is entirely ad hoc. The signature $\Sigma$ has not been specified. The proof does not verify that the chosen $M$ actually satisfies the axioms of any particular theory.
-- The phrase "which preserves each realization $\rho \in R_p$" needs unpacking. If $R_p$ is a set of valuations in $M$, an automorphism of $M$ does not preserve valuations -- it permutes them. What is meant is that the induced permutation of $\Val_M(\Gamma_p)$ maps $R_p$ to itself. This should be stated precisely.
-- The restriction in (i) that $\varphi(x)$ "containing no occurrence of the distinguished constants $r_1, r_2$ other than the substituted variable" is syntactically awkward. $r_1$ and $r_2$ are reference terms, not constants in a first-order signature in the usual sense. The paper should clarify whether $r_1, r_2$ are in the signature or are interpreted terms.
-
-**Fix:** (a) State precisely: "the underlying sort domains are $D_s^M = \{0, 1\}$ with $r_1^M = 0$, $r_2^M = 1$, and $\alpha$ is the swap automorphism." (b) Clarify that $\alpha$ acts on $R_p$ by fixing it setwise. (c) Clarify the syntactic status of $r_1, r_2$.
-
-### 2.4. MEDIUM -- Theorem 4.35 (gerbe-null-semantics) contains an unjustified cofinal-family hypothesis
-
-The final clause of Theorem 4.35 states: "If, in addition, the chosen cofinal family of gerbe-adapted covers computes derived cohomology in degree 2..." This is a nontrivial hypothesis that is never verified for any example. Neither the $S^2$-type nor the $\mathbb{R}P^2$-type example in Section 4.8 checks this condition. The paper should either:
-
-(a) verify the hypothesis for the two worked examples (this is straightforward: for finite good covers of $S^2$ and finite triangulations of $\mathbb{R}P^2$, Cech and derived cohomology agree), or
-(b) state explicitly that the examples work with Cech cohomology alone and note where the derived comparison is needed.
-
-**Fix:** Add a one-sentence justification in each example, or add a remark after Theorem 4.35.
-
-### 2.5. MEDIUM -- The "four-layer chain" is claimed but only two layers are substantively used
-
-Section 2 (sec_preliminaries) defines a chain $\mathbb{L}_0 \preceq \mathbb{L}_1 \preceq \mathbb{L}_2 \preceq \mathbb{L}_3 \preceq \mathbb{L}_4$ and says $\mathbb{L}_3$ "adds structural absence and gluing-obstruction data" while $\mathbb{L}_4$ "adds refinement dynamics." But:
-
-- $\mathbb{L}_0$ and $\mathbb{L}_1$ are defined in Section 3.
-- $\mathbb{L}_2$ is the local-object layer of Section 4.
-- $\mathbb{L}_3$ and $\mathbb{L}_4$ are never formally defined anywhere in the included files.
-
-The paper therefore promises a four-layer chain but delivers only two layers ($\mathbb{L}_0/\mathbb{L}_1$ and $\mathbb{L}_2$). The $\mathbb{L}_3$ and $\mathbb{L}_4$ definitions are presumably in the non-included files. This creates a dangling forward reference.
-
-**Fix:** Either (a) remove the mention of $\mathbb{L}_3$ and $\mathbb{L}_4$ from Section 2, calling it a "two-layer" or "three-layer" paper, or (b) include the definitions of $\mathbb{L}_3$ and $\mathbb{L}_4$ even if the detailed development is omitted.
-
-### 2.6. MEDIUM -- Standing refinement hypothesis in Section 4 is never formally stated
-
-Section 4 opens with: "Throughout the section we assume that refinement acts conservatively on the local structures: if $q \le p$, then admitted references, covers, and compatible local families at $q$ restrict functorially to those at $p$, and a visible value class already uniquely determined at $p$ is not split by further refinement."
-
-This is used critically in the proof of Proposition 4.20 (typed-readout persistence). However:
-- This is an assumption on the model, not on the formalism. It should be stated as a formal definition or hypothesis, not as prose at the start of a section.
-- The non-splitting condition is strong: it says sheafification of $F_{p,s}$ commutes with refinement transitions. This deserves a name and a label.
-
-**Fix:** Introduce a numbered definition or hypothesis for this standing assumption, and reference it explicitly in proofs that depend on it.
-
-### 2.7. MINOR -- Theorem 4.39 proof: the claim that $\eta_{\mathbb{T}}$ is an isomorphism needs the full UCT exact sequence, not just injectivity
-
-The proof correctly argues that $\operatorname{Ext}^1(H_1, \mathbb{T}) = 0$ because $\mathbb{T}$ is divisible. It then says "Thus $\eta_{\mathbb{T}}$ is an isomorphism by Definition 4.36." The reference should be to the UCT exact sequence itself (which is stated in Definition 4.36), not to the definition. The logic is: the UCT gives a short exact sequence, the left term vanishes, hence the right map is an isomorphism. This is correct but the reference is misleading.
-
-**Fix:** Replace "by Definition 4.36" with "by the universal coefficient exact sequence stated in Definition 4.36."
+**Rationale:** The mathematical content is sound and matches (indeed, is a strict subset of) the sibling paper that received MINOR_REVISION. However, the "_focused" version has severe bibliographic and structural defects that make the current PDF unsubmittable. Seven out of sixteen cited bibliography keys are missing from `references.bib`, producing "[?]" placeholders throughout the compiled PDF. The build log confirms 104 undefined-reference warnings and the PDF was never re-run to resolve cross-references. Additionally, four orphan `.tex` files litter the submission directory, the submission checklist contains false claims, and the "focused narrowing" from the sibling paper was done incompletely -- resulting in a paper that is neither self-contained nor properly compiled. These are fixable but collectively constitute a MAJOR_REVISION because they render the paper non-reviewable in its current state.
 
 ---
 
-## 3. Editorial Blockers
+## II. Main Mathematical Blockers
 
-### 3.1. BLOCKER -- Abstract contains author-defined macros
+### II.1. Are theorems correctly stated with all hypotheses?
 
-The abstract uses the notation $\operatorname{coker}(\mathrm{ev}_{\omega})$, $H_2(N(\mathcal{U}), \mathbb{Z})$, and $\operatorname{Ext}$, which are all standard LaTeX. This is fine. However, the abstract also uses the term "\v{C}ech nerve" which renders correctly but is not plain ASCII -- the submission checklist says "Abstract contains no citations and no author-defined macros." This is actually satisfied. No blocker here on second inspection.
+**Yes, with one caveat.** The theorem statements in this "_focused" version are identical or nearly identical to those in the sibling paper, which was assessed as mathematically sound. Each theorem either explicitly lists its hypotheses or refers back to a definition/assumption by label. The main conditional structure (global conservativity, gluing-sensitive lift, cofinal gerbe-adapted covers) is properly managed through explicit definitions (def:global-conservativity, def:cech-gluing-obstruction, rem:gluing-sensitive-lifts).
 
-### 3.2. BLOCKER -- The paper compiles to 20 pages but contains no bibliography
+**Caveat (same as sibling):** Theorem (thm:pointwise-irreducibility) concludes with "In particular, the predicates CompSec, Sec, Null^glue are not definable in the information-state forcing language without the local-object enrichment." The proof establishes this only for formulas in the restricted Form_1 class via Padoa's automorphism method. The conclusion should be qualified. This was already flagged in the sibling review and remains unfixed here.
 
-Due to the six missing bib entries, the compiled PDF (main.pdf, 454 KB) will have unresolved citation markers throughout. The aux file confirms all citations are undefined. The paper is not submittable in this state.
+### II.2. Are proofs complete or do they rely on unstated assumptions?
 
-**Fix:** Add the missing bib entries and recompile (pdflatex -> bibtex -> pdflatex -> pdflatex).
+**Proofs are complete** for the material included. No proof invokes a result that is not either proved in the paper or cited with a specific reference. The dependency chain is:
 
-### 3.3. MEDIUM -- Section structure is flat: everything is Section 4 with subsections
+- Theorem A: thm:sheafification-characterization relies on Mac Lane-Moerdijk III.2 and Johnstone B2.2. thm:pointwise-irreducibility is self-contained with an explicit model construction.
+- Theorem B: thm:component-gerbe-decomposition relies on the Stacks Project definition of gerbe (Tag 06NY). thm:cech-bridge-compatible-realizations uses standard banded gerbe theory (Giraud Ch. IV). thm:gerbe-null-semantics chains earlier results together correctly.
+- Theorem C: thm:intrinsic-visible-quotient uses the universal coefficient exact sequence (Hatcher 3.1), divisibility of the circle (Weibel 2.3), and Pontryagin duality for finite abelian groups (Dummit-Foote 5, 12). All steps are explicit.
 
-The paper has sections 1 (Introduction), 2 (Preliminaries), 3 (Information States), 4 (Local Objects...), 5 (Conclusion). But Section 4 contains 9 subsections (4.1--4.9) running from page 5 to page 19. This is structurally unbalanced. For APAL, this is acceptable but not ideal. The gerbe obstruction material (4.7) and the homological visibility material (4.8--4.9) are conceptually distinct from the local objects / structural absence material (4.1--4.6). Promoting them to top-level sections would improve navigability.
+**However, citations to 7 of these sources are broken** (see Blocker B1 below).
 
-**Fix:** Consider promoting subsections 4.7 and 4.8--4.9 to top-level sections (Sections 5 and 6, with Conclusion becoming Section 7).
+### II.3. Is the main theorem genuinely new, or a repackaging of known results?
 
-### 3.4. MEDIUM -- Introduction road-map references non-existent sections
+**The core contribution (Theorem C) is genuinely original.** The application of the universal coefficient exact sequence to decompose a gerbe obstruction class into an $H_2$-visible part (detected by characters) and a pure Ext-blind residual, yielding the intrinsic visible quotient $A_{\mathrm{vis}}^\omega = \operatorname{coker}(\mathrm{ev}_\omega)$, is new. The identification of Caru-type blind cases as pure Ext-residuals is a clean new result.
 
-The introduction states: "Section [sec:gerbe-obstruction] gives the branch-gerbe semantics of gluing failure. Section [sec:homological-visibility] develops the intrinsic visible quotient..."
+Theorems A and B are less novel individually. The sheafification characterization repackages a known fact. The component gerbe decomposition applies standard Giraud theory in a new semantic context. The undefinability result is a clean application of the automorphism method. Their value lies in the framing: they establish the semantic setting in which Theorem C becomes meaningful.
 
-These labels resolve to subsections 4.7 and 4.8 respectively. In the compiled PDF, the Cref output will say "Subsection 4.7" and "Subsection 4.8" rather than "Section 5" etc. This is not wrong, but the introduction says "sections" while they are subsections. Either the introduction text should say "subsection" or (preferred) the sections should be promoted.
-
-**Fix:** Align the introduction language with the actual document structure.
-
-### 3.5. MEDIUM -- No \author{} block
-
-The `\author{}` field in main.tex is empty. The submission checklist notes this ("Replace the empty `\author{}` block..."). For APAL, author information is required at submission unless under double-blind review, which APAL does not use.
-
-**Fix:** Fill in author information before submission.
-
-### 3.6. MINOR -- Cover letter mentions "complexity appendix" being omitted, but sec_appendix.tex is present
-
-The cover letter says "The present version omits the multi-branch budget calculus, refinement dynamics, and complexity appendix in order to keep the main theorem package focused." But `sec_appendix.tex` is physically present in the directory. While it is not compiled, its presence contradicts the claim.
-
-**Fix:** Remove the file from the submission directory or include it.
-
-### 3.7. MINOR -- MSC codes
-
-The MSC codes are 03B45 (modal logic), 03F55 (intuitionistic mathematics), 03G30 (categorical logic, topos), 18F20 (presheaves and sheaves). These are reasonable for APAL. However, 18G50 (homological algebra -- non-abelian) might also be appropriate given the gerbe content.
+The two worked examples ($S^2$-type nerve with nontrivial visible quotient, $\mathbb{R}P^2$-type nerve with complete character-blindness) effectively demonstrate both extremes.
 
 ---
 
-## 4. Specific Cut/Merge/Rewrite Recommendations
+## III. Editorial Blockers
 
-### R1. [BLOCKER] references.bib -- Add missing entries
+### B1. BLOCKER: Seven missing bibliography entries
 
-**Location:** `references.bib`
-**Problem:** Six cited works have no bib entry.
-**Fix:** Add entries for Hatcher (Algebraic Topology, 2002), Weibel (Homological Algebra, 1994), Dummit-Foote (Abstract Algebra, 2004), Giraud (Cohomologie non abelienne, 1971), Johnstone (Sketches of an Elephant, 2002), and the Stacks Project. Standard bibliographic data is readily available.
+**Severity: BLOCKER -- the paper cannot be submitted in this state.**
 
-### R2. [BLOCKER] Directory cleanup -- Remove or include orphaned .tex files
+The following citation keys appear in the .tex files but have no corresponding entries in `references.bib`:
 
-**Location:** `sec_multiaxis_refinement.tex`, `sec_conservativity.tex`, `sec_observer_spacetime.tex`, `sec_appendix.tex`
-**Problem:** Files present in directory but not compiled; confusing for editor/copyeditor.
-**Fix:** Delete from submission directory. If any content should be retained, add `\input{}` to `main.tex`.
+| Citation key | Used in | Content |
+|---|---|---|
+| `StacksProject` | sec_null_decomposition (lines 169, 231), sec_gerbe_obstruction (lines 46, 112, 122, 220) | Stacks Project (Tags 02ZP, 042Y, 06NY, Sec. 11) |
+| `Hatcher2002` | sec_homological_visibility (lines 38, 310, 334, 342) | Hatcher, Algebraic Topology |
+| `Weibel1994` | sec_homological_visibility (line 97) | Weibel, Homological Algebra |
+| `DummitFoote2004` | sec_homological_visibility (lines 113, 152) | Dummit-Foote, Abstract Algebra |
+| `Giraud1971` | sec_gerbe_obstruction (lines 122, 220) | Giraud, Cohomologie non abelienne |
+| `Johnstone2002` | sec_null_decomposition (line 104) | Johnstone, Sketches of an Elephant |
+| `BerghSchnurer2021` | sec_multiaxis_refinement (line 183) | Bergh-Schnurer (pullback of gerbes) |
 
-### R3. [MEDIUM] sec_preliminaries.tex lines 86--100 -- Remove or justify $\mathbb{L}_3, \mathbb{L}_4$ forward references
+The build log confirms 28 "Citation ... undefined" warnings. The resulting PDF shows "[?]" at every occurrence. This is the single most critical defect.
 
-**Location:** `sec_preliminaries.tex`, lines 86--100
-**Problem:** $\mathbb{L}_3$ and $\mathbb{L}_4$ are described but never formally defined in the compiled paper.
-**Fix:** Rewrite as a two-layer or three-layer chain: $\mathbb{L}_0 \preceq \mathbb{L}_1 \preceq \mathbb{L}_2$, where $\mathbb{L}_0$ is pointwise, $\mathbb{L}_1$ is information-state forcing, and $\mathbb{L}_2$ is the local-object enrichment. Mention that further layers (structural absence, refinement dynamics) can be added conservatively, but do not name or number them as definite parts of "the complete setting of the present paper."
+**Note on BerghSchnurer2021:** This citation appears only in `sec_multiaxis_refinement.tex`, which is NOT compiled in the focused version (not in main.tex). So it is a ghost citation in an orphan file and can be ignored -- but only if the orphan files are cleaned up (see B3).
 
-### R4. [MEDIUM] sec_null_decomposition.tex line 5 -- Formalize the standing refinement hypothesis
+**Fix:** Add the 6 missing entries (excluding BerghSchnurer2021) to `references.bib`. The sibling paper's `references.bib` likely already contains some of them. Then rebuild with the full pdflatex->bibtex->pdflatex->pdflatex cycle.
 
-**Location:** `sec_null_decomposition.tex`, lines 4--6
-**Problem:** Critical assumption stated only in prose.
-**Fix:** Introduce a numbered hypothesis/definition (e.g., Definition 4.X "Refinement-stable local object system") and reference it by label in Proposition 4.20 and anywhere else it is used.
+### B2. BLOCKER: PDF not properly compiled (104 undefined warnings)
 
-### R5. [MEDIUM] sec_null_decomposition.tex, Theorem 4.29 proof -- Tighten the automorphism argument
+**Severity: BLOCKER.**
 
-**Location:** `sec_null_decomposition.tex`, lines 541--575
-**Problem:** Model construction is informal; syntactic status of $r_1, r_2$ unclear; "preserves each realization" is imprecise.
-**Fix:** Specify a concrete finite model (e.g., $D_s^M = \{0,1\}$), state that $\alpha$ fixes $R_p$ setwise, and clarify that $r_1, r_2$ are constants in the expanded signature.
+The build log shows "There were undefined references" and "Label(s) may have changed. Rerun to get cross-references right." The PDF was generated from a single pdflatex pass without bibtex and without re-running. As a result:
 
-### R6. [MEDIUM] sec_gerbe_obstruction.tex + sec_homological_visibility.tex -- Verify cofinal-family hypothesis in examples
+- All `\cite` commands show as "[?]" in the PDF
+- All `\Cref` commands show as "??" on the first pass (some may resolve on re-run, but many citations will remain broken until bibtex is run)
 
-**Location:** Examples 4.47 and 4.48 in `sec_homological_visibility.tex`
-**Problem:** The examples use the final clause of Theorem 4.35 without verifying its cofinal-family hypothesis.
-**Fix:** Add one sentence to each example noting that for finite good covers of $S^2$ (resp. finite triangulations of $\mathbb{R}P^2$), Cech cohomology agrees with derived cohomology, so the hypothesis is satisfied.
+The README claims "pdflatex -> bibtex -> pdflatex -> pdflatex" was executed, but the log contradicts this: the bibliography was never generated because the .bib file is incomplete.
 
-### R7. [MEDIUM] Overall structure -- Promote subsections to sections
+**Fix:** After fixing B1, run the full build cycle: `pdflatex main && bibtex main && pdflatex main && pdflatex main`.
 
-**Location:** `main.tex`, `sec_gerbe_obstruction.tex`, `sec_homological_visibility.tex`
-**Problem:** Section 4 is disproportionately long (15 pages, 9 subsections).
-**Fix:** Promote sec_gerbe_obstruction (currently 4.7) to Section 5, sec_homological_visibility (currently 4.8--4.9) to Section 6, and Conclusion to Section 7. Change `\subsection` to `\section` in the two files and update the introduction's road-map.
+### B3. MEDIUM: Orphan files in submission directory
 
-### R8. [MINOR] sec_homological_visibility.tex line 97 -- Fix reference target in proof
+**Severity: MEDIUM.**
 
-**Location:** `sec_homological_visibility.tex`, line 97
-**Problem:** "by Definition 4.36" should be "by the universal coefficient exact sequence (Definition 4.36)."
-**Fix:** Reword as suggested.
+Four `.tex` files exist in the directory but are NOT `\input`-ed in `main.tex`:
 
-### R9. [MINOR] Bibliography scope -- Consider additional references
+| File | Contains | Status |
+|---|---|---|
+| `sec_appendix.tex` | Finite-state complexity upper bounds | Orphan; references labels from sec_multiaxis_refinement.tex |
+| `sec_multiaxis_refinement.tex` | Refinement dynamics, support, value-preserving rewrites | Orphan; contains `BerghSchnurer2021` citation |
+| `sec_observer_spacetime.tex` | Observer-indexed state systems | Orphan |
+| `sec_conservativity.tex` | Concrete realizations and semantic fidelity | Orphan |
 
-**Location:** `references.bib`
-**Problem:** The bibliography is thin (currently 8 entries in bib, should be ~14 after fixes). For a paper touching team semantics, sheaf theory, gerbes, contextuality, and homological algebra, the reference list is narrow. Missing from the conversation:
-- V\"a\"an\"anen (Dependence Logic, 2007) -- foundational for team semantics.
-- Abramsky et al. (Contextuality, Cohomology and Paradox, 2015) -- the cohomological refinement.
-- Brion (Gerbes on classifying stacks, etc.) or Breen (On the classification of 2-gerbes) -- standard gerbe references.
-**Fix:** Add 3--5 additional standard references to demonstrate awareness of the relevant literature.
+The submission checklist explicitly states: "No refinement-dynamics or complexity appendix remains in the APAL-focused version." This is true of the compiled PDF but false of the file directory. If submitted to APAL, these files would confuse editors.
 
----
+**Fix:** Move orphan files to a `_not_submitted/` subdirectory or delete them. If any content from them is needed (e.g., the appendix), add the corresponding `\input` to `main.tex`.
 
-## 5. Comparison with Prior Stage Notes
+### B4. MEDIUM: Submission checklist contains false/stale claims
 
-### 5.1. Review notes (review_notes.txt, dated 2026-03-23)
+The submission checklist says:
+- "Theorem 4.26 (component gerbe decomposition)" -- but in this version, the theorem numbering is different (it will be numbered within Section 4, subsection 4.7)
+- "Theorem 4.28 (gerbe-null-semantics)" -- same issue
+- "No refinement-dynamics or complexity appendix remains" -- orphan files still present (see B3)
 
-The review_notes document 8 revision points. Status:
-
-| # | Issue | Status |
-|---|-------|--------|
-| 1 | Theorem 4.26 correctness (unconditional decomposition) | **RESOLVED** -- now Corollary 4.33 under branch constancy. |
-| 2 | Theorem 4.28 (gerbe-null-semantics) missing justification | **RESOLVED** -- global conservativity (Def 4.12) and Prop 4.13 added. |
-| 3 | Forcing necessity theorem needed | **RESOLVED** -- Theorem 4.29 added. (But proof needs tightening; see 2.3 above.) |
-| 4 | Connection to contextuality | **RESOLVED** -- Theorem 4.49 and Remark 4.50 added. |
-| 5 | Remove "larger architecture" language | **RESOLVED** -- no traces found. |
-| 6 | Complexity to appendix | **PARTIALLY RESOLVED** -- file exists as sec_appendix.tex but is NOT input in main.tex. The appendix is effectively removed but the file lingers. |
-| 7 | Split large file | **RESOLVED** -- sec_null_decomposition split into three files. |
-| 8 | Update abstract/intro/conclusion | **RESOLVED** -- all updated. |
-
-### 5.2. New issues introduced by revision
-
-1. The bibliography was not updated to include the references needed by the new homological-visibility section (Hatcher, Weibel, Dummit-Foote, Giraud, Johnstone, Stacks Project). This is the main new blocker.
-2. The orphaned .tex files (multiaxis, conservativity, observer-spacetime, appendix) create confusion about what is and is not part of the paper.
-3. The $\mathbb{L}_3/\mathbb{L}_4$ forward reference in sec_preliminaries is a residue from the longer manuscript that was not cleaned up.
+**Fix:** Update the submission checklist to reflect the actual numbering after a clean compile, and note that the orphan files should be excluded from submission.
 
 ---
 
-## 6. APAL Fit Assessment
+## IV. Specific Cut/Merge/Rewrite Recommendations
 
-**Scope:** The paper sits at the intersection of information-state semantics (team/inquisitive logic), sheaf theory on sites, and cohomological obstruction theory. All three are within APAL's scope. The connection to sheaf-theoretic contextuality (Abramsky-Brandenburger) is relevant given recent APAL publications by Albert-Gradel (2022) and Ciardelli-Grilletti (2022).
+### IV.1. BLOCKER: Fix bibliography
 
-**Novelty:** The main genuinely new result is the identification of the intrinsic visible quotient $A_{\mathrm{vis}}^{\omega} = \operatorname{coker}(\mathrm{ev}_{\omega})$ and the characterization of character-blind obstructions as pure Ext-type. This is a clean, nontrivial observation. The forcing-necessity theorem (Theorem 4.29) is straightforward but useful. The branch-gerbe semantics (Section 4.7) is a competent application of standard stack/gerbe theory to the information-state setting. Overall novelty is moderate -- the paper applies known algebraic machinery in a new logical context rather than developing fundamentally new techniques.
+- **Location:** `references.bib`
+- **Problem:** 6 missing entries (StacksProject, Hatcher2002, Weibel1994, DummitFoote2004, Giraud1971, Johnstone2002) cause every citation in the PDF to render as "[?]".
+- **Fix:** Add the following entries (format to match existing style):
 
-**Depth:** The homological results (Section 4.8) are the deepest part. The universal-coefficient decomposition is standard, but its semantic interpretation as visible/blind decomposition is new. The rest is definitional development of moderate depth.
+```
+@misc{StacksProject,
+  author = {The Stacks Project Authors},
+  title  = {The Stacks Project},
+  url    = {https://stacks.math.columbia.edu},
+  year   = {2024}
+}
 
-**Writing quality:** High. The paper is clearly written, definitions are precise, proofs are complete (modulo the issues flagged above), and the exposition is systematic. The avoidance of hand-waving is notable.
+@book{Hatcher2002,
+  author    = {Allen Hatcher},
+  title     = {Algebraic Topology},
+  publisher = {Cambridge University Press},
+  year      = {2002}
+}
 
-**Length:** At 20 pages (compiled), the paper is appropriate for APAL.
+@book{Weibel1994,
+  author    = {Charles A. Weibel},
+  title     = {An Introduction to Homological Algebra},
+  publisher = {Cambridge University Press},
+  year      = {1994}
+}
 
-**Overall APAL fit:** Good, contingent on fixing the blockers.
+@book{DummitFoote2004,
+  author    = {David S. Dummit and Richard M. Foote},
+  title     = {Abstract Algebra},
+  edition   = {3rd},
+  publisher = {Wiley},
+  year      = {2004}
+}
+
+@book{Giraud1971,
+  author    = {Jean Giraud},
+  title     = {Cohomologie non ab\'elienne},
+  publisher = {Springer},
+  series    = {Grundlehren der mathematischen Wissenschaften},
+  volume    = {179},
+  year      = {1971}
+}
+
+@book{Johnstone2002,
+  author    = {Peter T. Johnstone},
+  title     = {Sketches of an Elephant: A Topos Theory Compendium},
+  publisher = {Oxford University Press},
+  year      = {2002}
+}
+```
+
+### IV.2. MEDIUM: Qualify the undefinability conclusion
+
+- **Location:** sec_null_decomposition.tex, Theorem (thm:pointwise-irreducibility), final paragraph (lines 530-538)
+- **Problem:** The "In particular" clause asserts unrestricted non-definability, but the proof establishes it only for automorphism-invariant Form_1-formulas. This was flagged in the sibling paper's review and remains unfixed.
+- **Fix:** Rewrite the "In particular" to read: "In particular, no formula of the information-state forcing language that is invariant under Form_1-automorphisms and uses none of the local-object predicates can define CompSec, Sec, or Null^glue." Alternatively, add a remark noting that this is the standard Padoa-method-based notion of non-definability.
+
+### IV.3. MINOR: Expand the UCT identification step
+
+- **Location:** sec_homological_visibility.tex, Theorem (thm:intrinsic-visible-quotient) proof, around line 97
+- **Problem:** The step "$\eta_{\mathbb{T}}$ is an isomorphism by [def:finite-nerve-presentation]" compresses two claims: (a) $\operatorname{Ext}^1(H_1, \mathbb{T}) = 0$ because $\mathbb{T}$ is divisible, and (b) therefore $\eta_{\mathbb{T}}$ is injective. The text does cite Weibel for (a), but the logical step from (a) to "isomorphism" needs one more sentence noting that the UCT sequence for $\mathbb{T}$ then collapses to a short exact sequence with trivial left term.
+- **Fix:** Add after "Weibel1994": "The universal coefficient sequence for coefficients in $\mathbb{T}$ therefore has vanishing left term, so $\eta_{\mathbb{T}}$ is an isomorphism."
+
+### IV.4. MINOR: Section 4 is very long (all technical content in one section)
+
+- **Location:** Section 4 spans pages 5-19 (out of 20) and contains 8 subsections with all three main theorems.
+- **Problem:** APAL readers expect a more balanced sectional structure. A single section containing all the main results makes navigation harder.
+- **Fix (optional):** Consider promoting sec_gerbe_obstruction and sec_homological_visibility from `\subsection` to `\section`, yielding Sections 4 (Local Objects), 5 (Gerbe Obstruction), 6 (Homological Visibility), 7 (Conclusion). This would better match the three-theorem structure announced in the introduction.
+
+### IV.5. MINOR: Clean up orphan files
+
+- **Location:** Submission directory root
+- **Problem:** sec_appendix.tex, sec_multiaxis_refinement.tex, sec_observer_spacetime.tex, sec_conservativity.tex are present but not compiled.
+- **Fix:** Move to a `_drafts/` or `_not_submitted/` subdirectory, or delete.
+
+### IV.6. MINOR: Abstract does not mention "team semantics" first-class
+
+- **Location:** main.tex, abstract (line 64)
+- **Problem:** The abstract mentions "flat team-style semantics" but the keyword list uses "team semantics" without the modifier. The abstract could better signal the connection for APAL readers in team/inquisitive semantics.
+- **Fix:** No action strictly needed, but consider aligning the abstract wording with the keywords.
+
+### IV.7. MINOR: Introduction forward references use \Cref labels that differ from section titles
+
+- **Location:** sec_introduction.tex, line 35
+- **Problem:** The introduction says "Section [sec:null-decomposition] develops local objects, sheafification, visible value classes, and the forcing-necessity theorem." But sec_null_decomposition also includes the gerbe obstruction and homological visibility subsections (because they are \subsections). A reader might not expect those to be under that section label.
+- **Fix:** If the section structure remains as-is, update the roadmap paragraph to mention that the gerbe and homological visibility material also lives in Section 4 as subsections.
 
 ---
 
-## 7. Summary of Issues by Severity
+## V. Comparison with Sibling Paper and Prior Reviews
 
-### BLOCKER (must fix before submission)
-1. Six missing bibliography entries (R1)
-2. Four orphaned .tex files in directory (R2)
+### V.1. Relationship to sibling paper
 
-### MEDIUM (should fix before submission)
-3. $\mathbb{L}_3/\mathbb{L}_4$ forward references to undefined layers (R3)
-4. Standing refinement hypothesis not formalized (R4)
-5. Theorem 4.29 proof needs tightening (R5)
-6. Cofinal-family hypothesis unverified in examples (R6)
-7. Structural imbalance: Section 4 too long (R7)
-8. Empty \author{} block (3.5)
-9. Introduction road-map says "section" for subsections (3.4)
+The "_focused" version is a strict subset of the sibling `2026_conservative_extension_chain_state_forcing_apal`. The following sections from the sibling are excluded:
 
-### MINOR (nice to fix)
-10. Proof reference wording in Theorem 4.39 (R8)
-11. Thin bibliography (R9)
-12. Cover letter / directory inconsistency (3.6)
-13. Possible additional MSC code (3.7)
+- sec_branch_aggregation (multi-branch comparison, budget calculus)
+- sec_multiaxis_refinement (refinement dynamics, support)
+- sec_appendix (complexity bounds)
+
+The remaining material is essentially identical. The introduction and conclusion have been lightly edited to remove references to the omitted material. The abstract is narrower and uses a different title ("Gluing Failure, Visible Quotients, and Pure-Ext Blind Spots" vs "Homological Visibility of Gluing Obstructions in a State-Forcing Semantics").
+
+### V.2. Prior reviews
+
+The sibling paper received two reviews:
+1. **ChatGPT oracle (o3-mini-high):** REJECT, with 5 blockers and 7 medium issues.
+2. **Claude Gate 3 review (P4_EDITORIAL_REVIEW_2026-04-03):** MINOR_REVISION.
+
+The Claude review found that the ChatGPT REJECT was driven primarily by a false positive (B1: phantom unresolved references that did not actually exist in the sibling's compiled tex). The sibling paper's bibliography was complete.
+
+### V.3. Issues from prior reviews that are resolved in this version
+
+- The sibling review's recommendation to "tighten Section 5" (refinement dynamics) is addressed by removing that section entirely.
+- The recommendation to cut the branch aggregation and complexity material is likewise addressed.
+- The paper's scope is narrower and more focused, as recommended.
+
+### V.4. Issues from prior reviews that REMAIN UNRESOLVED
+
+1. **Undefinability qualification (M3 from oracle, item 1 from Claude):** The "In particular" clause in thm:pointwise-irreducibility is still overstated. Not fixed.
+2. **UCT expansion (M6 from oracle, item 2 from Claude):** The compressed proof step in thm:intrinsic-visible-quotient is still compressed. Not fixed.
+3. **$H_\alpha$ vs $K_\omega$ motivation (M5 from oracle, item 3 from Claude):** This is partially addressed by the focused version's removal of the strict visible quotient material, which eliminates the $H_\alpha$ concept entirely. The focused version only uses $K_\omega$, so the distinction no longer needs to be motivated. **Resolved by omission.**
+4. **Cech-simplicial identification remark (item 5 from Claude):** Not added. Still relevant.
+5. **Instantiate one conservative-extension pair (item 6 from Claude):** Not done.
+6. **Contextuality comparison scope (item 7 from Claude):** The focused version retains the contextuality comparison theorem at the same level of conditionality. Not changed.
+
+### V.5. NEW issues introduced by the focused narrowing
+
+1. **BLOCKER: 7 missing bibliography entries.** The sibling paper had a complete bibliography with 15 entries. The focused version's `references.bib` retains only 9 entries, dropping 6 that are still cited. This is the single most damaging defect.
+2. **Orphan files.** The focused version leaves 4 files in the directory that are not compiled but reference labels in each other. These would confuse reviewers.
+3. **Build not re-run.** The PDF was generated without bibtex, so all citations show as "[?]".
 
 ---
 
-**Verdict: MAJOR_REVISION.** The paper has genuine mathematical content and is well-written, but cannot be submitted with a broken bibliography. The orphaned files, undefined layer references, and structural issues require coordinated attention. After fixing the two blockers and addressing the medium issues, the paper should be ready for a MINOR_REVISION or ACCEPT assessment.
+## VI. Journal Fit Assessment (APAL)
+
+**Subject fit: GOOD.** The paper sits at the intersection of forcing semantics (03B45, 03F55), sheaf-theoretic algebra (18F20), and categorical logic (03G30). APAL publishes in all these areas. The connection to team/inquisitive semantics and to sheaf-theoretic contextuality gives two additional hooks for the APAL audience.
+
+**Technical level: APPROPRIATE.** The paper uses standard tools (sites, sheafification, stacks, gerbes, UCT) but in a novel combination. The proofs are accessible to algebraically literate logicians.
+
+**Length: FINE.** The compiled PDF is 20 pages. With the focused scope, this is well within APAL norms.
+
+**Bibliography quality (once fixed):** The 15-16 references are appropriate. The core sources (Mac Lane-Moerdijk, Giraud, Hatcher, Stacks Project, Abramsky-Brandenburger, Caru) are the right ones. One might add SGA 4 for sheafification, but Mac Lane-Moerdijk and Johnstone already suffice.
+
+---
+
+## VII. Issue Summary Table
+
+| ID | Severity | Section | Description |
+|----|----------|---------|-------------|
+| B1 | BLOCKER | references.bib | 7 cited keys missing from bibliography; all citations in PDF show as "[?]" |
+| B2 | BLOCKER | build system | PDF not properly compiled; 104 undefined-reference warnings; bibtex never run |
+| B3 | MEDIUM | directory | 4 orphan .tex files not compiled but present in submission directory |
+| B4 | MEDIUM | submission_checklist.md | Stale theorem numbers, false claim about absent files |
+| M1 | MEDIUM | thm:pointwise-irreducibility | Undefinability conclusion overstated (Padoa method only) |
+| M2 | MINOR | thm:intrinsic-visible-quotient proof | UCT isomorphism step compressed |
+| M3 | MINOR | document structure | Section 4 contains all 3 main theorems in 8 subsections spanning 14 pages |
+| M4 | MINOR | def:finite-nerve-presentation | Cech-simplicial identification stated without explicit justification remark |
+| M5 | MINOR | thm:unique-branch-contextuality-comparison | Parts (i)-(iii) are restatements; could be corollary |
+| M6 | MINOR | sec_introduction.tex line 35 | Roadmap paragraph does not mention gerbe/homological subsections explicitly |
+
+---
+
+## VIII. Verdict and Path Forward
+
+**Decision: MAJOR_REVISION.**
+
+The mathematical content is sound and, in isolation, would merit MINOR_REVISION (consistent with the sibling paper's assessment). However, the bibliographic and build defects (B1, B2) are disqualifying: they produce a PDF that is literally unreadable in its citation apparatus. These are not hard fixes -- adding 6 bib entries and re-running the build is a 30-minute task -- but until they are done, the paper cannot be submitted.
+
+**Minimum required for re-assessment:**
+1. Add the 6 missing bibliography entries to `references.bib`.
+2. Rebuild with full `pdflatex -> bibtex -> pdflatex -> pdflatex` cycle.
+3. Remove or sequester the 4 orphan .tex files.
+4. Update the submission checklist.
+5. Qualify the undefinability conclusion (M1).
+
+**After these fixes, the paper should re-enter at Gate 3 for a second-pass review. If the build is clean and the bibliography is complete, the expected outcome is MINOR_REVISION or ACCEPT.**

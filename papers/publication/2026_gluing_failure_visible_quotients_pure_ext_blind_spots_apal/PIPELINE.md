@@ -1,4 +1,4 @@
-# Pipeline: gluing_failure_visible
+# Pipeline: conservative_extension_chain
 
 ### Backflow to Core
 

@@ -1,6 +1,8 @@
 \section{Homological Evaluation, Visible Quotients, and Pure-Ext Blindness}\label{sec:homological-visibility}
 
-To isolate the part of a branch obstruction that belongs to the cohomology class itself, we make the homological evaluation map primary. The visible quotient is defined from this map and only afterwards recovered through class-admissible character channels. Independence of band trivialization is proved; independence of cover refinement holds under a surjectivity condition on homology refinement maps (\Cref{prop:visible-quotient-invariance}).
+To isolate the part of a branch obstruction that belongs to the cohomology class itself, we make the homological evaluation map primary. The intrinsic quotient will be defined from this map and only afterwards recovered through class-admissible character channels.
+
+Here ``intrinsic'' means intrinsic to the chosen branch obstruction class $\omega$ once a branch gerbe and a finite nerve presentation have been fixed. It does not mean intrinsic to the underlying set-valued local object functor before such a realization-theoretic choice has been made.
 
 \begin{definition}[Finite nerve presentation of the obstruction class]\label{def:finite-nerve-presentation}
 Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, write $a=[r]_p$, and assume:
@@ -15,87 +17,43 @@ A \emph{finite nerve presentation} of the branch obstruction class consists of:
 \[
 \mathcal U=\{a_i\to a\}_{i\in I},
 \]
-whose Cech nerve $N(\mathcal U)$ is finite;
+whose \v{C}ech nerve $N(\mathcal U)$ is finite;
 \item a trivialization of the band on $\mathcal U$, so that the band may be viewed as a constant coefficient finite abelian group $A$ on $N(\mathcal U)$;
 \item the induced obstruction class
 \[
 \omega\in H^2(N(\mathcal U),A),
 \]
-obtained by identifying Cech cochains on $\mathcal U$ with simplicial cochains on the finite nerve and writing
+obtained by identifying \v{C}ech cochains on $\mathcal U$ with simplicial cochains on the finite nerve and writing
 \[
 \omega:=\omega_v
 \]
 for the chosen visible branch.
 \end{enumerate}
+For the finite covers considered below, this is the standard identification of \v{C}ech cochains on $\mathcal U$ with simplicial cochains on the nerve $N(\mathcal U)$.
 Write
 \[
 \eta_A:H^2(N(\mathcal U),A)\longrightarrow \mathrm{Hom}(H_2(N(\mathcal U),\mathbb Z),A)
 \]
-for the natural map in the universal coefficient exact sequence
+for the map in the universal coefficient exact sequence
 \[
 0\to \operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),A)\to H^2(N(\mathcal U),A)\xrightarrow{\eta_A}\mathrm{Hom}(H_2(N(\mathcal U),\mathbb Z),A)\to 0
 \]
-\cite[Sec.~3.1]{Hatcher2002}. Define the \emph{homological evaluation map} to be the concrete homomorphism
+\cite[Sec.~3.1]{Hatcher2002}, and define the \emph{homological evaluation map}
 \[
-\mathrm{ev}_{\omega}:H_2(N(\mathcal U),\mathbb Z)\longrightarrow A,\qquad
-h\longmapsto \eta_A(\omega)(h).
+\mathrm{ev}_{\omega}:=\eta_A(\omega).
 \]
-Thus $\mathrm{ev}_{\omega}=\eta_A(\omega)\in\mathrm{Hom}(H_2(N(\mathcal U),\mathbb Z),A)$.
 \end{definition}
 
 \begin{definition}[Intrinsic visible quotient]\label{def:intrinsic-visible-quotient}
 In the setting of \Cref{def:finite-nerve-presentation}, define the \emph{intrinsic hidden subgroup}
 \[
-K_{\omega}:=\mathrm{ev}_{\omega}\bigl(H_2(N(\mathcal U),\mathbb Z)\bigr)=\mathrm{Im}(\mathrm{ev}_{\omega})\leq A
+K_{\omega}:=\mathrm{Im}(\mathrm{ev}_{\omega})
 \]
-and the associated \emph{presentation-relative visible quotient}
+and the associated \emph{intrinsic visible quotient}
 \[
 A_{\mathrm{vis}}^{\omega}:=\operatorname{coker}(\mathrm{ev}_{\omega})=A/K_{\omega}.
 \]
-\Cref{prop:visible-quotient-invariance} below shows that $A_{\mathrm{vis}}^{\omega}$ is independent of the chosen band trivialization, and that cover refinement changes $A_{\mathrm{vis}}^{\omega}$ in a controlled way; an additional surjectivity hypothesis yields full invariance and justifies calling the quotient \emph{intrinsic}.
 \end{definition}
-
-\begin{lemma}[Finite abelian duality]\label{lem:finite-abelian-duality}
-Let $A$ be a finite abelian group and $H\leq A$ a subgroup. Then
-\[
-H=\bigcap_{\chi\in H^{\perp}}\ker\chi,
-\]
-where $H^{\perp}:=\{\chi\in\widehat{A}\mid \chi(h)=1\ \forall h\in H\}$ and $\widehat{A}:=\mathrm{Hom}(A,\mathbb T)$.
-\leanverified{paper_gluing_failure_finite_abelian_duality}
-\end{lemma}
-
-\begin{proof}
-This is standard Pontryagin duality for finite abelian groups \cite[Chaps.~5,~12]{DummitFoote2004}. Each $\chi\in H^{\perp}$ factors through $A/H$, so $H\subseteq\bigcap_{\chi\in H^{\perp}}\ker\chi$. For the reverse inclusion, if $a\notin H$, then the quotient $A/H$ is a nontrivial finite abelian group containing the nonzero element $\bar a$, and finite abelian duality for $A/H$ supplies a character $\bar\chi:A/H\to\mathbb T$ with $\bar\chi(\bar a)\neq 1$. The composition $\chi:=\bar\chi\circ\pi_H:A\to\mathbb T$ lies in $H^{\perp}$ but satisfies $\chi(a)=\bar\chi(\bar a)\neq 1$, so $a\notin\bigcap_{\chi\in H^{\perp}}\ker\chi$.
-\end{proof}
-
-\begin{proposition}[Invariance of the visible quotient]\label{prop:visible-quotient-invariance}
-In the setting of \Cref{def:finite-nerve-presentation}:
-\begin{enumerate}[label=(\roman*),nosep]
-\item \emph{Change of band trivialization.} If $u:A\xrightarrow{\sim}A'$ is an isomorphism of band groups and $\omega':=u_*(\omega)\in H^2(N(\mathcal U),A')$ is the pushed-forward class, then $\mathrm{ev}_{\omega'}=u\circ\mathrm{ev}_{\omega}$, $K_{\omega'}=u(K_{\omega})$, and there is a canonical isomorphism $A'/K_{\omega'}\cong A/K_{\omega}$. In particular, $A_{\mathrm{vis}}^{\omega'}$ is canonically isomorphic to $A_{\mathrm{vis}}^{\omega}$.
-
-\item \emph{Cover refinement.} If $\mathcal V=\{b_j\to a\}_{j\in J}$ is a refinement of $\mathcal U$ via an index map $\lambda:J\to I$ and $\omega':=r_{\mathcal V\mathcal U}(\omega)\in H^2(N(\mathcal V),A)$ is the pulled-back class, then $\mathrm{ev}_{\omega'}=\mathrm{ev}_{\omega}\circ f^*$ where $f^*:H_2(N(\mathcal V),\mathbb Z)\to H_2(N(\mathcal U),\mathbb Z)$ is induced by the refinement map $f:N(\mathcal V)\to N(\mathcal U)$. Consequently, $K_{\omega'}\subseteq K_{\omega}$ and there is a surjection $A_{\mathrm{vis}}^{\omega}\twoheadrightarrow A_{\mathrm{vis}}^{\omega'}$.
-
-If moreover $f^*:H_2(N(\mathcal V),\mathbb Z)\to H_2(N(\mathcal U),\mathbb Z)$ is surjective (which holds, for instance, when $\mathcal V$ is a barycentric subdivision of $\mathcal U$), then $K_{\omega'}=K_{\omega}$ and $A_{\mathrm{vis}}^{\omega'}\cong A_{\mathrm{vis}}^{\omega}$.
-\end{enumerate}
-\end{proposition}
-
-\begin{proof}
-For \textup{(i)}, naturality of the universal coefficient sequence under the coefficient map $u:A\to A'$ gives a commutative diagram
-\[
-\begin{CD}
-H^2(N(\mathcal U),A) @>\eta_A>> \mathrm{Hom}(H_2(N(\mathcal U),\mathbb Z),A) \\
-@Vu_*VV @VV(u\circ-)V \\
-H^2(N(\mathcal U),A') @>\eta_{A'}>> \mathrm{Hom}(H_2(N(\mathcal U),\mathbb Z),A').
-\end{CD}
-\]
-Hence $\eta_{A'}(u_*\omega)=u\circ\eta_A(\omega)$, i.e., $\mathrm{ev}_{\omega'}=u\circ\mathrm{ev}_{\omega}$. Since $u$ is an isomorphism, $K_{\omega'}=u(K_{\omega})$ and the isomorphism $u:A\to A'$ induces $A/K_{\omega}\cong A'/K_{\omega'}$.
-
-For \textup{(ii)}, the refinement map $f:N(\mathcal V)\to N(\mathcal U)$ (sending simplex $(b_{j_0},\ldots,b_{j_n})$ to $(a_{\lambda(j_0)},\ldots,a_{\lambda(j_n)})$) induces $f^*:H^2(N(\mathcal U),A)\to H^2(N(\mathcal V),A)$ and $f_*=f^*:H_2(N(\mathcal V),\mathbb Z)\to H_2(N(\mathcal U),\mathbb Z)$ in homology. Naturality of $\eta_A$ with respect to simplicial maps gives
-\[
-\eta_A(f^*\omega)=\eta_A(\omega)\circ f_*,
-\]
-i.e., $\mathrm{ev}_{\omega'}(h)=\mathrm{ev}_{\omega}(f_*(h))$ for $h\in H_2(N(\mathcal V),\mathbb Z)$. Thus $K_{\omega'}=\mathrm{ev}_{\omega'}(H_2(N(\mathcal V),\mathbb Z))=\mathrm{ev}_{\omega}(f_*(H_2(N(\mathcal V),\mathbb Z)))\subseteq K_{\omega}$, giving the surjection $A/K_{\omega}\twoheadrightarrow A/K_{\omega'}$. If $f_*$ is surjective on $H_2$, then $f_*(H_2(N(\mathcal V),\mathbb Z))=H_2(N(\mathcal U),\mathbb Z)$, so $K_{\omega'}=K_{\omega}$.
-\end{proof}
 
 \begin{definition}[Class-admissible characters]\label{def:class-admissible-character}
 In the setting of \Cref{def:finite-nerve-presentation}, let
@@ -124,7 +82,7 @@ K_{\omega}
 \qquad
 A_{\mathrm{vis}}^{\omega}\cong A\Big/\!\bigcap_{\chi\in X_{\omega}}\ker\chi.
 \]
-\leanverified{paper_gluing_failure_intrinsic_visible_quotient}
+\leanverified{paper_conservative_extension_intrinsic_visible_quotient_focused}
 \end{theorem}
 
 \begin{proof}
@@ -140,7 +98,7 @@ Since $\mathbb T$ is divisible and hence injective in $\mathbf{Ab}$, one has
 \[
 \operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),\mathbb T)=0
 \]
-\cite[Sec.~2.3]{Weibel1994}. Thus $\eta_{\mathbb T}$ is an isomorphism by the universal coefficient exact sequence stated in \Cref{def:finite-nerve-presentation}. Therefore
+\cite[Sec.~2.3]{Weibel1994}. The universal coefficient sequence with coefficients in $\mathbb T$ therefore has vanishing left term, so $\eta_{\mathbb T}$ is an isomorphism. Therefore
 \[
 \chi_*(\omega)=0
 \Longleftrightarrow
@@ -152,11 +110,11 @@ Since $\mathbb T$ is divisible and hence injective in $\mathbf{Ab}$, one has
 \]
 This proves the first displayed identity, and the second is simply the definition of the annihilator of a subgroup of $A$.
 
-Let $H:=K_{\omega}=\mathrm{Im}(\mathrm{ev}_{\omega})\le A$. By the first part of the proof, $X_{\omega}=\mathrm{Ann}(H)=H^{\perp}$. \Cref{lem:finite-abelian-duality} gives
+Let $H:=K_{\omega}=\mathrm{Im}(\mathrm{ev}_{\omega})\le A$. By the first part of the proof, $X_{\omega}=\mathrm{Ann}(H)$. Finite abelian duality implies
 \[
-\bigcap_{\chi\in H^{\perp}}\ker\chi=H.
+\bigcap_{\chi\in \mathrm{Ann}(H)}\ker\chi=H
 \]
-Hence
+\cite[Chaps.~5, 12]{DummitFoote2004}. Hence
 \[
 K_{\omega}
 =
@@ -174,6 +132,7 @@ A\Big/\!\bigcap_{\chi\in X_{\omega}}\ker\chi.
 \end{proof}
 
 \begin{corollary}[Character detection of the intrinsic visible quotient]\label{cor:intrinsic-character-detection}
+\leanverified{paper_conservative_extension_intrinsic_character_detection_focused}
 The quotient map
 \[
 \pi_{\omega}:A\twoheadrightarrow A_{\mathrm{vis}}^{\omega}
@@ -188,7 +147,6 @@ For elements $x,y\in A$, one has
 \quad\Longleftrightarrow\quad
 \chi(x)=\chi(y)\ \text{for every class-admissible }\chi.
 \]
-\leanverified{paper_gluing_failure_intrinsic_character_detection}
 \end{corollary}
 
 \begin{proof}
@@ -199,7 +157,7 @@ X_{\omega}=\mathrm{Ann}(K_{\omega})=K_{\omega}^{\perp}.
 Characters of $A_{\mathrm{vis}}^{\omega}=A/K_{\omega}$ are exactly the characters of $A$ that kill $K_{\omega}$, so precomposition with $\pi_{\omega}$ identifies $\widehat{A_{\mathrm{vis}}^{\omega}}$ with $X_{\omega}$. The separation statement follows from finite abelian duality applied to the finite group $A_{\mathrm{vis}}^{\omega}$ \cite[Chap.~5]{DummitFoote2004}.
 \end{proof}
 
-\begin{proposition}[Initiality among pure-extension quotients]\label{thm:intrinsic-pure-ext-initiality}
+\begin{theorem}[Initiality among pure-extension quotients]\label{thm:intrinsic-pure-ext-initiality}
 Let
 \[
 q:A\twoheadrightarrow B
@@ -219,10 +177,15 @@ be a surjective homomorphism onto a finite abelian group $B$. In the setting of 
 \]
 \end{enumerate}
 Hence $A_{\mathrm{vis}}^{\omega}$ is the initial coefficient quotient through which the $H_2$-visible part of the obstruction disappears, leaving only a pure $\operatorname{Ext}$-type remnant.
-\end{proposition}
+\leanverified{paper_gluing_failure_intrinsic_pure_ext_initiality}
+\end{theorem}
 
 \begin{proof}
-The equivalence of \textup{(i)} and \textup{(ii)} is exactly the universal coefficient sequence for $B$ \cite[Sec.~3.1]{Hatcher2002}. Naturality gives
+The universal coefficient sequence with coefficients in $B$ is
+\[
+0\to \operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),B)\to H^2(N(\mathcal U),B)\xrightarrow{\eta_B}\mathrm{Hom}(H_2(N(\mathcal U),\mathbb Z),B)\to 0
+\]
+\cite[Sec.~3.1]{Hatcher2002}. Exactness identifies the displayed $\operatorname{Ext}^1$ subgroup with $\ker(\eta_B)$, so \textup{(i)} is equivalent to \textup{(ii)}. Naturality in the coefficient homomorphism $q:A\to B$ gives
 \[
 \eta_B(q_*(\omega))=q\circ \eta_A(\omega)=q\circ \mathrm{ev}_{\omega},
 \]
@@ -234,6 +197,7 @@ By the universal property of the quotient by $K_{\omega}$, this is equivalent to
 \end{proof}
 
 \begin{corollary}[Class-trivializing initiality when $H_1$ vanishes]\label{cor:h1-vanishing-class-trivializing}
+\leanverified{paper_conservative_extension_h1_vanishing_class_trivializing_focused}
 Assume
 \[
 H_1(N(\mathcal U),\mathbb Z)=0.
@@ -246,8 +210,7 @@ Then, for every surjective homomorphism $q:A\twoheadrightarrow B$, the following
 \pi_{\omega}:A\twoheadrightarrow A_{\mathrm{vis}}^{\omega}.
 \]
 \end{enumerate}
-Hence, when $H_1(N(\mathcal U),\mathbb Z)=0$, the visible quotient $A_{\mathrm{vis}}^\omega$ is initial among coefficient quotients that annihilate the obstruction class itself.
-\leanverified{paper_gluing_failure_h1_vanishing_class_trivializing}
+Hence, when $H_1(N(\mathcal U),\mathbb Z)=0$, the intrinsic visible quotient is initial among coefficient quotients that annihilate the obstruction class itself.
 \end{corollary}
 
 \begin{proof}
@@ -273,11 +236,11 @@ In the setting of \Cref{def:finite-nerve-presentation}, the following are equiva
 \operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),A)\subseteq H^2(N(\mathcal U),A).
 \]
 \end{enumerate}
-If these conditions hold and $\omega\neq 0$, then the chosen branch gerbe $\mathfrak G_v$ is non-neutral, while every character of $A$ is class-admissible for that branch. In particular, if $|\Vis_{p,s}(r)|=1$, then
+If these conditions hold and $\omega\neq 0$, then the chosen branch gerbe $\mathfrak G_v$ is non-neutral, while every character of $A$ is class-admissible for that branch. In particular, if $|\Vis_{p,s}(r)|=1$ and the chosen realization prestack is globally conservative at $a$, then
 \[
 M,p\Vdash \Null^{\mathrm{glue}}_s(r).
 \]
-\leanverified{paper_gluing_failure_character_blind_obstructions}
+\leanverified{paper_conservative_extension_character_blind_obstructions_focused}
 \end{theorem}
 
 \begin{proof}
@@ -293,7 +256,7 @@ On the other hand, $\mathrm{ev}_{\omega}=0$ implies
 \chi\circ \mathrm{ev}_{\omega}=0
 \]
 for every $\chi\in\widehat A$, so \Cref{thm:intrinsic-visible-quotient} shows that every character is class-admissible.
-Since a finite nerve presentation chooses a visible branch, $\Vis_{p,s}(r)\neq\varnothing$. If moreover $|\Vis_{p,s}(r)|=1$, then \Cref{thm:sheafification-characterization,thm:visible-value-components} gives $M,p\Vdash \CompSec_s(r)$. Let $v$ be the unique visible branch. We already know that $\mathfrak G_v$ is non-neutral. If $M,p\Vdash \Sec_s(r)$, then by \Cref{def:existence-levels} one has $F_{p,s}(a)\neq\varnothing$, so \Cref{def:realization-prestack}(i) yields an object of $(\mathfrak P_r)_a$, hence also an object of $\mathfrak L_r(a)$. Because $v$ is the only visible branch, every object of $\mathfrak L_r(a)$ belongs to $\mathfrak G_v(a)$, contradicting the non-neutrality of $\mathfrak G_v$. Therefore $M,p\nVdash \Sec_s(r)$, and since $r$ is admitted by hypothesis, we conclude
+If, in addition, $|\Vis_{p,s}(r)|=1$ and the chosen realization prestack is globally conservative at $a$, then this unique visible branch exists and its component gerbe is non-neutral. The branched gerbe semantics of \Cref{thm:gerbe-null-semantics} therefore gives
 \[
 M,p\Vdash \Null^{\mathrm{glue}}_s(r).
 \]
@@ -313,7 +276,7 @@ K_{\omega}=0,
 A_{\mathrm{vis}}^{\omega}=A.
 \]
 Every nonzero branch obstruction class on such a nerve is therefore character-blind.
-\leanverified{paper_gluing_failure_h2_vanishing_blindness}
+\leanverified{paper_conservative_extension_h2_vanishing_blindness_focused}
 \end{corollary}
 
 \begin{proof}
@@ -325,14 +288,14 @@ so $\mathrm{ev}_{\omega}=0$ for every $\omega$. Apply \Cref{thm:character-blind-
 \end{proof}
 
 \begin{corollary}[No character-blind obstructions when $H_1$ is free]\label{cor:h1-free-no-blindness}
+\leanverified{paper_conservative_extension_h1_free_no_blindness_focused}
 Assume that $H_1(N(\mathcal U),\mathbb Z)$ is free abelian. Then
 \[
 K_{\omega}=0
 \quad\Longleftrightarrow\quad
 \omega=0.
 \]
-Equivalently, every nonzero branch obstruction class has a nontrivial $H_2$-visible part. In particular, if $|\Vis_{p,s}(r)|=1$, every nontrivial gluing obstruction on such a nerve produces a proper visible quotient $A_{\mathrm{vis}}^\omega\subsetneq A$.
-\leanverified{paper_gluing_failure_h1_free_no_blindness}
+Equivalently, every nonzero branch obstruction class has a nontrivial $H_2$-visible part. In particular, if $|\Vis_{p,s}(r)|=1$, every nontrivial gluing obstruction on such a nerve produces a proper intrinsic visible quotient.
 \end{corollary}
 
 \begin{proof}
@@ -350,6 +313,8 @@ K_{\omega}=0
 \]
 Injectivity of $\eta_A$ therefore gives $K_{\omega}=0$ if and only if $\omega=0$. If $\omega\neq 0$, then $K_{\omega}\neq 0$, so $A_{\mathrm{vis}}^{\omega}=A/K_{\omega}$ is a proper quotient of the finite group $A$.
 \end{proof}
+
+The following examples are stated at the level of finite nerve presentations of chosen branch gerbes. In particular, the cocycles come from gerbe data on the nerve rather than from arbitrarily declared comparison elements.
 
 \begin{example}[A visible quotient on an $S^2$-type nerve]\label{ex:s2-visible-quotient}
 Let $\mathcal U$ be a finite good cover of $S^2$ with nerve $N(\mathcal U)$, and let
@@ -372,7 +337,7 @@ K_{\omega}=\langle 2\rangle=\{0,2\},
 \qquad
 A_{\mathrm{vis}}^{\omega}\cong (\mathbb Z/4\mathbb Z)/\langle 2\rangle\cong \mathbb Z/2\mathbb Z.
 \]
-Thus the obstruction is nontrivial, but only its parity quotient is intrinsically visible. For a finite good cover of $S^2$, the nerve theorem identifies $N(\mathcal U)$ with a finite simplicial model of $S^2$, so simplicial, \v{C}ech, and derived cohomology agree on this cover; hence the cofinal-family hypothesis of \Cref{thm:gerbe-null-semantics} is satisfied. If $\omega$ is the unique visible branch obstruction of the reference under consideration and the chosen realization prestack is globally conservative at $a$, then \Cref{thm:gerbe-null-semantics} yields a genuine gluing-level absence with a nontrivial visible quotient.
+Thus the obstruction is nontrivial, but only its parity quotient is intrinsically visible. If $\omega$ is the unique visible branch obstruction of the reference under consideration and the chosen realization prestack is globally conservative at the terminal fibre, then \Cref{thm:gerbe-null-semantics} yields a genuine gluing-level absence with a nontrivial visible quotient.
 \end{example}
 
 \begin{example}[A character-blind obstruction on an $\mathbb{R}P^2$-type nerve]\label{ex:rp2-character-blind}
@@ -402,7 +367,7 @@ K_{\omega}=0,
 \qquad
 A_{\mathrm{vis}}^{\omega}=A,
 \]
-by \Cref{thm:character-blind-obstructions}. Thus no class-level quotient collapse occurs at all, yet the obstruction class is nonzero. Hence this branch is completely character-blind. For a finite triangulation of $\mathbb{R}P^2$, the nerve is already a finite simplicial complex, so simplicial, \v{C}ech, and derived cohomology with constant coefficients agree; thus the cofinal-family hypothesis of \Cref{thm:gerbe-null-semantics} is again satisfied. If it is the unique visible branch of the admitted reference under consideration and the chosen realization prestack is globally conservative at $a$, then \Cref{thm:gerbe-null-semantics} yields a genuine gluing-level absence that is invisible to every character channel.
+by \Cref{thm:character-blind-obstructions}. Thus no class-level quotient collapse occurs at all, yet the obstruction class is nonzero. Hence this branch is completely character-blind. If it is the unique visible branch of the admitted reference under consideration and the chosen realization prestack is globally conservative at the terminal fibre, then \Cref{thm:gerbe-null-semantics} yields a genuine gluing-level absence that is invisible to every character channel.
 \end{example}
 
 
@@ -410,13 +375,19 @@ by \Cref{thm:character-blind-obstructions}. Thus no class-level quotient collaps
 
 The unique-branch case $|\Vis_{p,s}(r)|=1$ deserves separate attention because it connects the present theory to the sheaf-theoretic analysis of contextuality. The comparison can be stated formally once the local object functor is specialized to the support presheaf of an Abramsky--Brandenburger measurement scenario.
 
-\begin{theorem}[Unique-branch comparison with the no-global-section picture: discrete-stack part]\label{thm:unique-branch-contextuality-comparison}
+\begin{theorem}[Unique-branch comparison with the no-global-section picture]\label{thm:unique-branch-contextuality-comparison}
 Let $r:\mathsf{Ref}_s$ be admitted at $p$, write $a=[r]_p$, and assume:
 \begin{enumerate}[label=(\roman*),nosep]
 \item the slice site $\mathcal C_a$ is the measurement-cover site of a finite Abramsky--Brandenburger scenario, and the local object functor $F_{p,s}|_{\mathcal C_a}$ is identified with the support presheaf $S_e$ of an empirical model $e$ \cite{AbramskyBrandenburger2011};
-\item $|\Vis_{p,s}(r)|=1$, with unique visible branch $v$.
+\item $r$ is equipped with a chosen realization prestack that is globally conservative at $a$ in the sense of \Cref{def:global-conservativity};
+\item $|\Vis_{p,s}(r)|=1$, with unique visible branch $v$;
+\item the branch obstruction class
+\[
+\omega:=\omega_v
+\]
+attached to that chosen realization prestack admits a finite nerve presentation with band $A$.
 \end{enumerate}
-Define the \emph{discrete realization prestack} $\mathfrak P_r^{\mathrm{disc}}$ by setting $\mathfrak P_r^{\mathrm{disc}}(U)$ to be the discrete groupoid on $S_e(U)$ for each $U\in\mathcal C_a$. Then $\mathfrak P_r^{\mathrm{disc}}$ is a realization prestack with $\pi_0^{\mathrm{pre}}(\mathfrak P_r^{\mathrm{disc}})=S_e$, and its stackification $\mathfrak L_r^{\mathrm{disc}}$ is the discrete stack on $aS_e$. The terminal-fiber map is essentially surjective because the discrete stack introduces no new isomorphism classes, so $\mathfrak P_r^{\mathrm{disc}}$ is gluing-sensitive at $a$. In this discrete-stack setting:
+Then:
 \begin{enumerate}[label=(\roman*),nosep]
 \item
 \[
@@ -434,31 +405,15 @@ S_e\ \text{has a global section};
 \[
 M,p\Vdash \Null^{\mathrm{glue}}_s(r)
 \quad\Longleftrightarrow\quad
-S_e\ \text{has a compatible family but no global section}.
+S_e\ \text{has a compatible family but no global section};
 \]
-\end{enumerate}
-\leanverified{paper_gluing_failure_unique_branch_contextuality_comparison}
-\end{theorem}
-
-\begin{proof}
-The discrete groupoid has only identity morphisms, so two objects are isomorphic if and only if they are equal. Thus $\pi_0^{\mathrm{pre}}(\mathfrak P_r^{\mathrm{disc}})(U)=S_e(U)$ and the stackification $\mathfrak L_r^{\mathrm{disc}}$ is the sheafification of $S_e$ viewed as a discrete stack. The terminal-fiber map $(\mathfrak P_r^{\mathrm{disc}})_a\to(\mathfrak L_r^{\mathrm{disc}})_a$ sends each element of $S_e(a)$ to the corresponding global object, and since no new isomorphism classes are created by sheafification of a discrete presheaf of sets, this map is essentially surjective.
-
-Under the identification $F_{p,s}|_{\mathcal C_a}\cong S_e$, a compatible family in $S_e$ is exactly a compatible local family as in \Cref{def:existence-levels}(ii), and a global section of $S_e$ is an element of $F_{p,s}(a)$. Statements \textup{(i)} through \textup{(iii)} then follow directly from \Cref{thm:sheafification-characterization} and the definition of $\Null^{\mathrm{glue}}_s$.
-\end{proof}
-
-\begin{theorem}[Unique-branch comparison: banded-gerbe part]\label{thm:unique-branch-banded-gerbe}
-In the setting of \Cref{thm:unique-branch-contextuality-comparison}, assume additionally:
-\begin{enumerate}[label=(\roman*),nosep]
-\item $r$ admits a gluing-sensitive realization prestack $\mathfrak P_r$ (in the sense of \Cref{def:gluing-sensitive}) whose associated band $\Band$ has a finite abelian trivialization $\Band\cong\underline{A}$ on a gerbe-adapted covering family of $a$;
-\item the branch obstruction class $\omega:=\omega_v$ admits a finite nerve presentation with band $A$ as in \Cref{def:finite-nerve-presentation}.
-\end{enumerate}
-Then:
-\begin{enumerate}[label=(\roman*),nosep]
 \item
 \[
-A_{\mathrm{vis}}^{\omega}=A/K_{\omega}=\operatorname{coker}(\mathrm{ev}_{\omega}),
+A_{\mathrm{vis}}^{\omega}
+=
+\operatorname{coker}(\mathrm{ev}_{\omega}),
 \]
-and this quotient is exactly the quotient of $A$ detected by the class-admissible characters (\Cref{thm:intrinsic-visible-quotient});
+and this quotient is exactly the quotient of $A$ detected by the class-admissible characters;
 \item if $\omega\neq 0$, then
 \[
 A_{\mathrm{vis}}^{\omega}=A
@@ -468,14 +423,16 @@ K_{\omega}=0
 \omega\in \operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),A).
 \]
 Hence the no-global-section obstruction can remain nontrivial while being invisible to every admissible character channel precisely when the surviving class is pure $\operatorname{Ext}$-type.
+\leanverified{paper_conservative_extension_unique_branch_contextuality_comparison_focused}
 \end{enumerate}
-\leanverified{paper_gluing_failure_unique_branch_banded_gerbe}
 \end{theorem}
 
 \begin{proof}
-By \Cref{def:intrinsic-visible-quotient}, the visible quotient is $\operatorname{coker}(\mathrm{ev}_{\omega})=A/K_{\omega}$. \Cref{cor:intrinsic-character-detection} identifies this with the quotient detected by class-admissible characters. Statement \textup{(ii)} is exactly \Cref{thm:character-blind-obstructions} applied to the unique visible branch.
+Under the identification $F_{p,s}|_{\mathcal C_a}\cong S_e$, a compatible family in the support presheaf is exactly a compatible local family in the sense of \Cref{def:existence-levels}(ii), and a global section of $S_e$ is exactly an element of $F_{p,s}(a)$. This proves \textup{(i)} and \textup{(ii)}.
+
+Statement \textup{(iii)} is then just the definition of $\Null^{\mathrm{glue}}_s(r)$. By \Cref{def:intrinsic-visible-quotient}, the intrinsic visible quotient is $\operatorname{coker}(\mathrm{ev}_{\omega})$, and \Cref{cor:intrinsic-character-detection} identifies that quotient with the one detected by the class-admissible characters. Finally, \textup{(v)} is exactly \Cref{thm:character-blind-obstructions} rewritten for the unique branch $\omega$.
 \end{proof}
 
 \begin{remark}[Car\`u-type blind cases as pure $\operatorname{Ext}$-residuals]\label{rem:caru-ext-residual}
-\Cref{thm:unique-branch-banded-gerbe}(ii) turns the comparison with \cite{Caru2017} into a theorem: the failure of cohomological completeness in the unique-branch case is not an external phenomenon but exactly the case in which the surviving obstruction class lies entirely in the $\operatorname{Ext}$-summand of the universal coefficient sequence. The separation between the discrete-stack part (\Cref{thm:unique-branch-contextuality-comparison}) and the banded-gerbe part (\Cref{thm:unique-branch-banded-gerbe}) makes explicit which conclusions require only the support-presheaf identification and which additionally require a banded lift with finite abelian obstruction.
+\Cref{thm:unique-branch-contextuality-comparison}(v) turns the comparison with \cite{Caru2017} into a theorem: the failure of cohomological completeness in the unique-branch case is not an external phenomenon but exactly the case in which the surviving obstruction class lies entirely in the $\operatorname{Ext}$-summand of the universal coefficient sequence.
 \end{remark}
