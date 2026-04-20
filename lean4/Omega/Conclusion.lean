@@ -47,6 +47,7 @@ import Omega.Conclusion.CollisionMomentMinrecHaltingTime
 import Omega.Conclusion.CollisionMomentMoritaDefectFusion
 import Omega.Conclusion.CompleteStrictificationDualCriterion
 import Omega.Conclusion.ComovingDefectFixedRadialWindowNonhiding
+import Omega.Conclusion.ComovingEndpointAddressBudgetPhaseTransition
 import Omega.Conclusion.CompressionLadderSpin10
 import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.CoordinateBundleDyadicBlockLaw

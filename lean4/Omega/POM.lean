@@ -259,6 +259,7 @@ import Omega.POM.RCRTEpsilon
 import Omega.POM.RankoneFusionDefectFibonacciRigidity
 import Omega.POM.RankoneFusionDefectFiniteBasis
 import Omega.POM.RemainderBitsAllRenyiCompressionLaw
+import Omega.POM.Renyi2NearUniform
 import Omega.POM.RenyiDimensionSpectrum
 import Omega.POM.RenyiEndpoint
 import Omega.POM.RenyiEntropyRate
