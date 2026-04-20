@@ -462,6 +462,7 @@ import Omega.Zeta.XiToeplitzNegativeMarginVandermonde4Lowerbound
 import Omega.Zeta.XiTripleConsistencyAudit
 import Omega.Zeta.XiUniqueContinuousTransverseRegister
 import Omega.Zeta.XiVisibleArithmeticUnitIdempotentCount
+import Omega.Zeta.XiWindow6C3QuadraticEnergyEquipartition
 import Omega.Zeta.XiWindow6TailSemigroupAperyThresholds
 import Omega.Zeta.XiWindow6TailSemigroupFrobeniusThreshold
 import Omega.Zeta.XiWindow6TailSemigroupTwoGeneratorNormalForm
