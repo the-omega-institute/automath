@@ -94,6 +94,7 @@ import Omega.Folding.ExactMarkovOrderBernoulli
 import Omega.Folding.Fiber
 import Omega.Folding.FiberArithmetic
 import Omega.Folding.FiberArithmeticProperties
+import Omega.Folding.TypicalFiberPolynomialSmoothness
 import Omega.Folding.FiberConvolutionKernelInvertibility
 import Omega.Folding.FiberConvolutionInvertibilityDivisibility
 import Omega.Folding.FiberConditionalReconstructionOddModulus

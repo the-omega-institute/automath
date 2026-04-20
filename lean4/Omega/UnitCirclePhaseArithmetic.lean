@@ -19,3 +19,4 @@ import Omega.UnitCirclePhaseArithmetic.UnitaryTwoIntegerClosure
 import Omega.UnitCirclePhaseArithmetic.PhaseDepthSpectrumL
 import Omega.UnitCirclePhaseArithmetic.DualBoundaryNormalForm
 import Omega.UnitCirclePhaseArithmetic.LeyangLissajousChebyshevResultant
+import Omega.UnitCirclePhaseArithmetic.EndpointZetaLChi4SymbolPair

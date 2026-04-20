@@ -200,6 +200,7 @@ import Omega.Zeta.XiEndpointHeatProbeCyclotomicTargetExtraction
 import Omega.Zeta.XiJDiscriminantElliptic2TorsionMobius
 import Omega.Zeta.XiJDiscriminantMobiusRigidityCovariance
 import Omega.Zeta.XiJSexticEllipticLattesTMap
+import Omega.Zeta.XiUniqueContinuousTransverseRegister
 import Omega.Zeta.XiSelfdualSingleProbeDeterminesToeplitzMoments
 import Omega.Zeta.XiExceptionalSecularGenericFullSymmetric
 import Omega.Zeta.XiSecularSpecializationInfinitelyManyFullSymmetric
