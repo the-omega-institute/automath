@@ -86,6 +86,7 @@ import Omega.GU.LogCmNoFixedLinearRecurrence
 import Omega.GU.LogCmStableInverseExponentialSeparation
 import Omega.GU.M11DeltaClosureUniqueMinimalSO10
 import Omega.GU.M11Canonical16ComplexModuleDetOne
+import Omega.GU.M11DetLineTrivialC1Zero
 import Omega.GU.M11DihedralLiftDiracDoubling
 import Omega.GU.M11IntrinsicChiralityForcesColorLayer
 import Omega.GU.M11Z34AugmentationIdealUnique
