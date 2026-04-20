@@ -56,6 +56,7 @@ import Omega.SPG.DiscreteStokesPoincarePublication
 import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.DoubleBudgetPoisson
 import Omega.SPG.DyadicBoundaryImageLDPC
+import Omega.SPG.DyadicBoundaryCodeCentralBinomialWall
 import Omega.SPG.DyadicBoundaryImageMinDistance
 import Omega.SPG.DyadicBoundarySyndromeFillability
 import Omega.SPG.DyadicCubicalBoundaryInjective
