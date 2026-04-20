@@ -30,6 +30,7 @@ import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.CollisionKernelPublication
 import Omega.POM.CollisionStrengthened
 import Omega.POM.CollisionSpectrumPhiOnesidedApproximation
+import Omega.POM.P2FrobeniusParitySieve
 import Omega.POM.FoldColGapExpUpper
 import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.ComplementaryGoldenBernoulliDivergence
