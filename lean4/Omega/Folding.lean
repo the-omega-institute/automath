@@ -201,6 +201,7 @@ import Omega.Folding.GaugeAnomalyOneBlockThreePeriodLaw
 import Omega.Folding.GaugeAnomalyBernoulliPKappa4AndKappa3Signflip
 import Omega.Folding.GaugeAnomalyBranchRadiusCumulantGrowth
 import Omega.Folding.GodelDensityEstimatorDeterministicMeanApprox
+import Omega.Folding.GodelDensityEstimatorCramerLdp
 import Omega.Folding.GodelDensityEstimatorCltEfficient
 import Omega.Folding.GodelDensityEstimatorLil
 import Omega.Folding.GodelDensityEstimatorOptimalThresholdTest

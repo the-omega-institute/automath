@@ -179,6 +179,7 @@ import Omega.Zeta.XiTimeFiberMinimalDimension
 import Omega.Zeta.XiTerminalZmKappaSquareCubicFieldS3
 import Omega.Zeta.XiToeplitzNegativeMarginVandermonde4Lowerbound
 import Omega.Zeta.XiImplCoding
+import Omega.Zeta.XiNullCompleteTrichotomyOffline
 import Omega.Zeta.ToeplitzNegativeSpectrumUpperboundByHankelSingular
 import Omega.Zeta.XiGramshiftIllconditioningForcedByToeplitzMargin
 import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge
