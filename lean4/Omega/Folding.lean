@@ -142,6 +142,7 @@ import Omega.Folding.FixedFiberLipschitzOptimization
 import Omega.Folding.Fold
 import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.KilloEllipseDiagonalPrimeRegisterEquivalence
+import Omega.Folding.KilloFoldZeroSpectrumAffineCongruence
 import Omega.Folding.KilloChainInteriorGodelGcdLcm
 import Omega.Folding.OracleCapacityTailEquivalence
 import Omega.Folding.FoldBoundaryStokesTorsorH1H1

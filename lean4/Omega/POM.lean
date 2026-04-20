@@ -152,6 +152,7 @@ import Omega.POM.FractranTwoPrimeDenominatorDfaCompile
 import Omega.POM.GaugeNatural
 import Omega.POM.GibbsSelection
 import Omega.POM.GodelAxisVarianceNoGap
+import Omega.POM.GreenKernelEntries
 import Omega.POM.GodelOrthotopeArithmeticIsoperimetricGap
 import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.GoldenBiasVarianceEqualsBias
