@@ -142,6 +142,7 @@ import Omega.Conclusion.PhaseChannelCrowdingLowerBound
 import Omega.Conclusion.PhaseLedgerBudgetExactHalfspace
 import Omega.Conclusion.Pisano1PositiveSea
 import Omega.Conclusion.MinimalStateComplexityHalting
+import Omega.Conclusion.MinRegisterHalting
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.PrimeCharacterEnergyCenteredVariance
 import Omega.Conclusion.PrimeAdjunctionExactMultiplicativeBudget
