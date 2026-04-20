@@ -97,6 +97,7 @@ import Omega.GU.M11Z34RotationPartComplexStructure
 import Omega.GU.M11Z34Unique33Module
 import Omega.GU.M11Z34UpliftIntrinsicSU16
 import Omega.GU.MinSectorBudget
+import Omega.GU.ModpIndependenceLift
 import Omega.GU.MobiusDualityUnified
 import Omega.GU.NapLocalUpliftForcesSo10
 import Omega.GU.NapSo10AnalyticMinimality

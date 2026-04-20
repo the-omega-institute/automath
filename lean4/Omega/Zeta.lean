@@ -33,6 +33,7 @@ import Omega.Zeta.CLTSpectral
 import Omega.Zeta.CayleyDepthIdentity
 import Omega.Zeta.CertInverseLimitCoherence
 import Omega.Zeta.ChiEventClockHittingTimeCertificate
+import Omega.Zeta.ChiDegree7Interface
 import Omega.Zeta.ClassArtinMobiusTrace
 import Omega.Zeta.ClassFunctionAdamsMobius
 import Omega.Zeta.ClassFunctionLinearisation
