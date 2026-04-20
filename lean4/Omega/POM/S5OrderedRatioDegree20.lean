@@ -55,4 +55,11 @@ theorem paper_pom_s5_ordered_ratio_degree20 (D : S5OrderedRatioDegree20Data) :
   · exact ⟨hs5, by omega⟩
   · exact ⟨hstab, horbit⟩
 
+/-- Paper label: `thm:pom-p7-ordered-root-ratio-s5-ordered-pairs`.
+This is the paper-facing wrapper around the concrete degree-20 ordered-pair seed package. -/
+theorem paper_pom_p7_ordered_root_ratio_s5_ordered_pairs (D : S5OrderedRatioDegree20Data) :
+    D.degreeTwentyOrbit ∧ D.resultantFactorization ∧ D.irreducibleWitness ∧
+      D.faithfulOrderedPairAction :=
+  paper_pom_s5_ordered_ratio_degree20 D
+
 end Omega.POM

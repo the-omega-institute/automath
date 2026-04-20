@@ -362,6 +362,7 @@ import Omega.Zeta.XiLatticeDeheightizedVisibility
 import Omega.Zeta.XiLeyangMplus1PointExtrapolateOptimal
 import Omega.Zeta.XiLeyangThreeLeadingZerosExtrapolateUcN6
 import Omega.Zeta.XiLeyangTwoLeadingZerosExtrapolateUc
+import Omega.Zeta.XiHypercubeLeyangAffineOrbifoldTwoLayer
 import Omega.Zeta.XiLimitDefectPotentialL1Sumrule
 import Omega.Zeta.XiLogDefectGammaTranslationL1Lipschitz
 import Omega.Zeta.XiLogDefectPotentialLinftyBoundByTotalDelta
