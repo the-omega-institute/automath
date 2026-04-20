@@ -85,6 +85,7 @@ import Omega.EA.TimeSpaceCommuting
 import Omega.EA.SyncKernelResetWords
 import Omega.EA.ValInvariant
 import Omega.EA.Wedderburn
+import Omega.EA.Z2x2JointSpectralMeasure
 import Omega.EA.ZeckendorfAddFst
 import Omega.EA.ZeckendorfArithComputable
 import Omega.EA.ZeckendorfTransversal
