@@ -198,6 +198,7 @@ import Omega.Conclusion.PrimeFlatteningSupportGcdClassification
 import Omega.Conclusion.PrimeRegisterEllipseCompleteEquivalence
 import Omega.Conclusion.PrimeRegisterFiniteSupportInvertibility
 import Omega.Conclusion.PrimeRegister
+import Omega.Conclusion.PrimeShiftPhaseVisibleTwoGenerator
 import Omega.Conclusion.PrimeRegisterUltrametricCompletion
 import Omega.Conclusion.PrimeRegisterFiberCdimDensity
 import Omega.Conclusion.PrimeRegisterFixed2adicAmbientVsFiniteLedger
