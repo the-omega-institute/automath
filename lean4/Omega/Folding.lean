@@ -191,6 +191,7 @@ import Omega.Folding.GaugeAnomalyBranchRadiusCumulantGrowth
 import Omega.Folding.GodelDensityEstimatorDeterministicMeanApprox
 import Omega.Folding.GodelDensityEstimatorCltEfficient
 import Omega.Folding.GodelFiniteDictionaryBitlength
+import Omega.Folding.FoldSigmaPhiDiverges
 import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.GaugeAnomalyFiniteVarianceClosed
 import Omega.Folding.GaugeAnomalyGcDefectSign

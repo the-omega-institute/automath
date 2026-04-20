@@ -219,6 +219,7 @@ import Omega.POM.PerronLandauerLimitLaw
 import Omega.POM.MaxFiberEvenChernoffExponent
 import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.TimeReversalFixedpointRatioDecay
+import Omega.POM.LowTemperatureDifferenceCertificates
 import Omega.POM.TowerDefectCovarianceLaw
 import Omega.POM.ToyRh2TorsionSource
 import Omega.POM.ToggleGroupPathFullSymmetric

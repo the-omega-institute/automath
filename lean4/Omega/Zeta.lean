@@ -220,6 +220,7 @@ import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.JensenSoftThresholdLowerBound
 import Omega.Zeta.JensenEndpointAngleWindowRigidity
 import Omega.Zeta.JensenQuadraticResolutionBarrier
+import Omega.Zeta.XiOptimalRecoveryTimeEqualsConditionalEntropy
 import Omega.Zeta.LayeredExternalizationAverageShannonBudget
 import Omega.Zeta.NullZ2SpectralSplittingDoublecover
 import Omega.Zeta.LengthModqChebotarev
