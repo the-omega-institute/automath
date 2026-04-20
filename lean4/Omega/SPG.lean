@@ -97,6 +97,7 @@ import Omega.SPG.GraphEnergyShellLatticeCounting
 import Omega.SPG.HolderOpenResonance
 import Omega.SPG.HomotopyDecomposition
 import Omega.SPG.Hypercube6GodelSquareclass
+import Omega.SPG.HypercubeCycleLatticeGodelEllipsoidCounting
 import Omega.SPG.HypercubeCycleLatticeDirectsumCounting
 import Omega.SPG.HypercubeCycleLatticeDirectsumMdl
 import Omega.SPG.HypercubeGodelFluxMultiplicativeVolume
