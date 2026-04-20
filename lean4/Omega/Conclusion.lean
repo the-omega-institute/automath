@@ -114,6 +114,7 @@ import Omega.Conclusion.FundamentalCutHadamardRigidity
 import Omega.Conclusion.GeometricUpliftFourFourCollapse
 import Omega.Conclusion.GodelIntegerizationPrimeShiftPolynomial
 import Omega.Conclusion.GodelAffineEllipseEquationIdentifiability
+import Omega.Conclusion.GodelSemidirectTwoadicAffineization
 import Omega.Conclusion.GodelLeyangIFS
 import Omega.Conclusion.GodelVsMinimalGap
 import Omega.Conclusion.GoldenAlternatingConstantsRecoverPhi

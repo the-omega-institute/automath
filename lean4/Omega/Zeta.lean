@@ -344,6 +344,7 @@ import Omega.Zeta.XiCauchyPoissonDerivativeEnergyClosedForm
 import Omega.Zeta.XiCauchyPoissonSecondOrderShapeLimitNodeRigidity
 import Omega.Zeta.XiCayleyJoukowskyHarmonicMeasureEllipse
 import Omega.Zeta.XiCdimLambdaClosedForm
+import Omega.Zeta.XiCdimLocalizationSolenoidNoNontrivialTorusInput
 import Omega.Zeta.XiCenterSixfoldKappaNodeInversionBlowup
 import Omega.Zeta.XiChainIdempotentStarSaturationComparableGcd
 import Omega.Zeta.XiCriticalLineHorizonCircle

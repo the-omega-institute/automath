@@ -142,6 +142,7 @@ import Omega.CircleDimension.ModeQuadraticIntegrals
 import Omega.CircleDimension.ModeSpaceRKHS
 import Omega.CircleDimension.MonotoneIsolationUniqueZero
 import Omega.CircleDimension.MultiPrimeSpectrum
+import Omega.CircleDimension.NoGlobalMultiplicativeLinearizationIntoFiniteLocalizationLedger
 import Omega.CircleDimension.NonnullSectionCriterion
 import Omega.CircleDimension.NonresonantLissajousNodeCount
 import Omega.CircleDimension.NullWitnessNonsubstitutable
