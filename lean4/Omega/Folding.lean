@@ -148,6 +148,7 @@ import Omega.Folding.Window6VariableLengthExactInversionRateGap
 import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinMinsectorComplementMaxfiber
 import Omega.Folding.FoldMaxFiberFourier
+import Omega.Folding.MaxFiberTwoResonanceBiasStrengthening
 import Omega.Folding.FoldInfoNCEAlphaLogClosedForm
 import Omega.Folding.FoldBinPhiIdentifiablePowerDivergence
 import Omega.Folding.FoldBinRenyiDivergenceLimit
