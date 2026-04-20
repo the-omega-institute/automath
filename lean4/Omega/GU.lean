@@ -207,6 +207,7 @@ import Omega.GU.Window6B3C3UniqueQuarticDetector
 import Omega.GU.Window6B3C3VisibleSupportThreeLeviPlanes
 import Omega.GU.Window6B3SupportCount
 import Omega.GU.Window6B3SupportVanishingIdealHilbert
+import Omega.GU.Window6C3SupportVanishingIdealHilbert
 import Omega.GU.Window6BdrySheetParityNonfunctorialExtension
 import Omega.GU.Window6BdryUpliftResidueStratification
 import Omega.GU.Window6BinfoldKLLimitConstant

@@ -57,6 +57,7 @@ import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DiagonalHighMoments
 import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
 import Omega.POM.DiagonalRateAbsorbingDFR
+import Omega.POM.DiagonalRateAbsorbingLaguerreInterlacing
 import Omega.POM.DiagonalRateAbsorbingMeanHitTime
 import Omega.POM.DiagonalRateAcceptRefreshHaltingState
 import Omega.POM.DiagonalRateAcceptRefreshSSTPGF
