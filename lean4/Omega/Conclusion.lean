@@ -179,6 +179,7 @@ import Omega.Conclusion.ParetoColdendCurvaturePole
 import Omega.Conclusion.PartialScreenTraceCutSpaceIdentification
 import Omega.Conclusion.PartitionPrimesliceDivisibilityValuationPaircount
 import Omega.Conclusion.PartitionSquarefreeZeroTempGibbsCollapse
+import Omega.Conclusion.PhaseSamplingGrowthExponentRank
 import Omega.Conclusion.PcdimPropCycleRankMinimal
 import Omega.Conclusion.Period3FiberExactMultiplicity
 import Omega.Conclusion.PhaseBudgetBinaryQuantization
