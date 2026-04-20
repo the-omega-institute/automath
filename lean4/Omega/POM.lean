@@ -156,6 +156,7 @@ import Omega.POM.LambdaAlgebraic
 import Omega.POM.LeyangLiftMobiusInvolutionFunctorial
 import Omega.POM.LeyangMonotoneCouplingPrimeRegister
 import Omega.POM.LucasPrimeCongruence
+import Omega.POM.LucasNuPCriterion
 import Omega.POM.LucasSquare
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
 import Omega.POM.MaryAuxlength
@@ -225,6 +226,7 @@ import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.TimeReversalFixedpointRatioDecay
 import Omega.POM.LowTemperatureDifferenceCertificates
 import Omega.POM.TowerDefectCovarianceLaw
+import Omega.POM.ToyRh
 import Omega.POM.ToyRh2TorsionSource
 import Omega.POM.ToggleGroupPathFullSymmetric
 import Omega.POM.Sync10CollisionTwoFixedpoints
