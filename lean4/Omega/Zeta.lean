@@ -126,6 +126,7 @@ import Omega.Zeta.FredholmDetSeeds
 import Omega.Zeta.FredholmPrimitiveClosedForm
 import Omega.Zeta.FourthRegisterDichotomy
 import Omega.Zeta.GaugeGroupTripleDecomp
+import Omega.Zeta.GodelTateAddressPrimitivePeriodicCount
 import Omega.Zeta.GeometricHarmonicTail
 import Omega.Zeta.GoldenRadiusVisibility
 import Omega.Zeta.GroupoidCentralRenyiShannon

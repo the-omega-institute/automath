@@ -145,6 +145,7 @@ import Omega.GU.TerminalFoldbinSaturationDiophantine
 import Omega.GU.TerminalTimeFactorMetallicUnique
 import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
+import Omega.GU.TerminalFoldbin8Histogram256To55
 import Omega.GU.TerminalWindow6LocalUpliftAdmissibility
 import Omega.GU.Window6LocalGeometryZeroAnomalyFamilyUniqueIntersection
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
