@@ -118,6 +118,7 @@ import Omega.Folding.FiberEvenModulusMinimalDefectParityCharacter
 import Omega.Folding.FiberEntropySaturation
 import Omega.Folding.FiberFourierPhaseRigidity
 import Omega.Folding.FiberFusion
+import Omega.Folding.FiberGaugeVolumeDoublingV2DigitSum
 import Omega.Folding.FiberGaugeVolumeChainFactorization
 import Omega.Folding.FiberHausdorffDimensionCylinderCount
 import Omega.Folding.FiberIdentifiableSigmaAlgebraMaximal
@@ -293,6 +294,7 @@ import Omega.Folding.GodelDensityEstimatorCramerLdp
 import Omega.Folding.GodelDensityEstimatorDeterministicMeanApprox
 import Omega.Folding.GodelDensityEstimatorLil
 import Omega.Folding.GodelDensityEstimatorOptimalThresholdTest
+import Omega.Folding.GodelCoprimeInflation
 import Omega.Folding.GodelFiniteDictionaryBitlength
 import Omega.Folding.GraphCycleLatticeThetaModularInversion
 import Omega.Folding.HaltingLeyangHolographicEncoding
