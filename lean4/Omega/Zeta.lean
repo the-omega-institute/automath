@@ -409,3 +409,4 @@ import Omega.Zeta.XiFixedFreezingEscortBoundedObservableCollapse
 import Omega.Zeta.XiFixedFreezingEscortGroundstateTvIdentity
 import Omega.Zeta.XiFixedFreezingRenyiCriticalOrderThreshold
 import Omega.Zeta.XiSingleIntegerCoordinateNoExactAdditiveLedger
+import Omega.Zeta.Window6BingaugeCompleteGroupDissection
