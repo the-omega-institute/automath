@@ -759,6 +759,9 @@ def cleanup_all_worktrees() -> int:
 # Codex CLI invocation
 # ---------------------------------------------------------------------------
 
+CODEX_LOG_DIR = LOG_DIR / "codex"
+
+
 def codex_exec(
     prompt: str,
     *,
@@ -767,8 +770,13 @@ def codex_exec(
     output_file: Optional[Path] = None,
     model: Optional[str] = None,
     dry_run: bool = False,
+    log_tag: Optional[str] = None,
 ) -> str:
-    """Call `codex exec` with the given prompt, targeting work_dir."""
+    """Call `codex exec` with the given prompt, targeting work_dir.
+
+    If `log_tag` is provided (e.g. "R1325_phaseC"), persists prompt + stdout
+    to `LOG_DIR/codex/<tag>_<timestamp>.{prompt,out}.txt` for post-mortem.
+    Otherwise uses tmp files and discards them after the call."""
     if dry_run:
         logger.info(f"[DRY RUN] codex exec (cwd={work_dir}):\n"
                      f"{prompt[:400]}{'...' if len(prompt) > 400 else ''}")
@@ -779,19 +787,30 @@ def codex_exec(
         raise FileNotFoundError("Codex CLI not found")
 
     target_dir = str(work_dir or REPO_ROOT)
-
-    # Write prompt to temp file
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".txt", prefix="codex_prompt_",
-        delete=False, encoding="utf-8",
-    ) as f:
-        f.write(prompt)
-        prompt_file = f.name
+    persist = log_tag is not None
+    if persist:
+        CODEX_LOG_DIR.mkdir(parents=True, exist_ok=True)
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        prompt_file = str(CODEX_LOG_DIR / f"{log_tag}_{ts}.prompt.txt")
+        with open(prompt_file, "w", encoding="utf-8") as f:
+            f.write(prompt)
+    else:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".txt", prefix="codex_prompt_",
+            delete=False, encoding="utf-8",
+        ) as f:
+            f.write(prompt)
+            prompt_file = f.name
 
     out_file = str(output_file) if output_file else None
     if out_file is None:
-        out_fd, out_file = tempfile.mkstemp(suffix=".txt", prefix="codex_out_")
-        os.close(out_fd)
+        if persist:
+            out_file = str(CODEX_LOG_DIR / f"{log_tag}_{ts}.out.txt")
+            # Ensure file exists so codex can `-o` to it.
+            open(out_file, "w").close()
+        else:
+            out_fd, out_file = tempfile.mkstemp(suffix=".txt", prefix="codex_out_")
+            os.close(out_fd)
 
     cmd = [
         "timeout", str(timeout_seconds),
@@ -829,8 +848,10 @@ def codex_exec(
     finally:
         elapsed = time.monotonic() - start
         rc = result.returncode if result else "?"
-        logger.info(f"Codex exec completed in {elapsed:.1f}s (rc={rc})")
-        os.unlink(prompt_file)
+        suffix = f" log={log_tag}" if persist else ""
+        logger.info(f"Codex exec completed in {elapsed:.1f}s (rc={rc}){suffix}")
+        if not persist:
+            os.unlink(prompt_file)
 
     # Read output
     output = ""
@@ -840,8 +861,13 @@ def codex_exec(
                 output = f.read()
         else:
             output = result.stdout or ""
+            # If we used the persistent path but codex wrote nothing to -o,
+            # still capture stdout so the post-mortem isn't empty.
+            if persist and output:
+                with open(out_file, "w", encoding="utf-8") as f:
+                    f.write(output)
     finally:
-        if output_file is None:
+        if output_file is None and not persist:
             os.unlink(out_file)
 
     return output
@@ -1341,6 +1367,7 @@ def run_round_in_worktree(
             timeout_seconds=phase_b_timeout,
             model=model,
             dry_run=dry_run,
+            log_tag=f"R{round_num}_phaseB",
         )
         phase_b = parse_phase_b_output(phase_b_raw)
 
@@ -1384,6 +1411,7 @@ def run_round_in_worktree(
             timeout_seconds=phase_c_timeout,
             model=model,
             dry_run=dry_run,
+            log_tag=f"R{round_num}_phaseC",
         )
         phase_c = parse_phase_c_output(phase_c_raw)
 
