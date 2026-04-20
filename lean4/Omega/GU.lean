@@ -266,6 +266,7 @@ import Omega.GU.Window6LieEnvelopeExistenceUniqueness
 import Omega.GU.Window6LieEnvelopeSL21
 import Omega.GU.Window6LieModpDimensionUpperbound
 import Omega.GU.Window6LieEnvelopeSO21FromCommutators
+import Omega.GU.Window6LieSymmetric
 import Omega.GU.Window6LieTraceless
 import Omega.GU.Window6LocalDeterminantVsCoarseGreenOddPrimes
 import Omega.GU.Window6LocalGeometryZeroAnomalyFamilyUniqueIntersection
