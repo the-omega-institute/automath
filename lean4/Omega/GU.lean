@@ -271,6 +271,7 @@ import Omega.GU.Window6TypeSuperselectionAutGamma6
 import Omega.GU.Window6MinimalMarkovObstructionPureF8Tail
 import Omega.GU.Window6DeltaLockUniqueThreeFamilies
 import Omega.GU.Window6VisibleCartanQuotientSyzygySplitting
+import Omega.GU.Window6WeylFamilyEquipotential
 import Omega.GU.Window6Z2Z3ToZ6Readout
 import Omega.GU.Z6CenterQuotient
 import Omega.GU.ZeckendorfCountClosure

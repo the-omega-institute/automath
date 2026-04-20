@@ -55,6 +55,7 @@ import Omega.CircleDimension.DenominatorMultiplesUnionBound
 import Omega.CircleDimension.DiscreteStokesInversionHypercube
 import Omega.CircleDimension.DoubleDiscriminant
 import Omega.CircleDimension.DyadicKernelCube
+import Omega.CircleDimension.DyadicCofinalSparsification
 import Omega.CircleDimension.DyadicHolonomyCurvatureLimit
 import Omega.CircleDimension.EndpointTristateSet
 import Omega.CircleDimension.PrimitiveEndpointTristateDegeneration
