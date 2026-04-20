@@ -1,4 +1,8 @@
 import Omega.Kronecker.MetallicGap
+import Omega.Kronecker.GoldenConvergentErrorClosed
 import Omega.Kronecker.W1DenominatorClosedForm
+import Omega.Kronecker.W1FibonacciLimits
 import Omega.Kronecker.W1LipschitzPushforward
 import Omega.Kronecker.W1LipschitzReadout
+import Omega.Kronecker.W1TwoSidedInterpretation
+import Omega.Kronecker.W1RightShiftedMinimizer

@@ -4,6 +4,7 @@ import Mathlib.Tactic
 namespace Omega.Folding
 
 open Matrix
+open scoped BigOperators
 
 /-- The Parry-normalized `4 × 4` gauge-anomaly kernel in the state order `(a,b,c,d)`. -/
 def gaugeAnomalyJordanParryKernel : Matrix (Fin 4) (Fin 4) ℚ :=
@@ -160,6 +161,22 @@ private theorem gaugeAnomalyJordanSpectralMatrixIdentity :
             (1 / 8 : ℚ) • (1 : Matrix (Fin 4) (Fin 4) ℚ) := by
   native_decide
 
+/-- Paper-facing wrapper exposing the explicit Parry kernel, its row-stochasticity, and the
+stationarity of the closed-form distribution `π = (4/9, 2/9, 2/9, 1/9)`. -/
+theorem paper_fold_gauge_anomaly_parry_kernel :
+    let π : Fin 4 → ℚ := ![(4 / 9 : ℚ), (2 / 9 : ℚ), (2 / 9 : ℚ), (1 / 9 : ℚ)];
+    gaugeAnomalyJordanParryKernel =
+        !![(1 / 2 : ℚ), (1 / 4 : ℚ), 0, (1 / 4 : ℚ); 0, 0, 1, 0; (1 / 2 : ℚ), (1 / 2 : ℚ), 0, 0;
+          1, 0, 0, 0] ∧
+      (∀ i, (∑ j, gaugeAnomalyJordanParryKernel i j) = 1) ∧
+      (∀ j, (∑ i, π i * gaugeAnomalyJordanParryKernel i j) = π j) := by
+  dsimp
+  refine ⟨rfl, ?_, ?_⟩
+  · intro i
+    fin_cases i <;> simp [gaugeAnomalyJordanParryKernel, Fin.sum_univ_four] <;> norm_num
+  · intro j
+    fin_cases j <;> simp [gaugeAnomalyJordanParryKernel, Fin.sum_univ_four] <;> ring
+
 /-- The gauge-anomaly Parry kernel has the explicit spectral factorization
 `(μ - 1)(μ - 1/2)(μ + 1/2)^2`, and `-1/2` carries a size-`2` Jordan block.
     thm:fold-gauge-anomaly-jordan-fingerprint -/
@@ -170,5 +187,12 @@ theorem paper_fold_gauge_anomaly_jordan_fingerprint :
   · refine ⟨minusHalfEigenvector_kernel, minusHalfGeneralizedVector_chain,
       minusHalfGeneralizedVector_not_eigenLine, minusHalfEigenspace_line,
       minusHalfGeneralizedEigenspace_span⟩
+
+/-- Paper-facing wrapper for the untwisted operator `A₀`: its spectrum has the explicit factorized
+fingerprint and `-1/2` supports the unique size-`2` Jordan block.
+    thm:fold-gauge-anomaly-A0-jordan -/
+theorem paper_fold_gauge_anomaly_a0_jordan :
+    gaugeAnomalyJordanSpectrumFingerprint ∧ gaugeAnomalyJordanBlockAtMinusHalf := by
+  exact paper_fold_gauge_anomaly_jordan_fingerprint
 
 end Omega.Folding

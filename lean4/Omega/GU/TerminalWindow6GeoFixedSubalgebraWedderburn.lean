@@ -93,4 +93,18 @@ theorem paper_terminal_window6_geo_orbit_charge_symmetry_compression :
       window6GeoLocalCentralU1Rank ⟨1, 1, 2⟩ = 1 := by
   native_decide
 
+/-- Paper wrapper for the exact orbit-charge census attached to the geometric window-`6`
+stabilizer.
+    cor:terminal-foldbin6-geo-orbit-charge -/
+theorem paper_terminal_foldbin6_geo_orbit_charge :
+    window6GeoOrbitChargeHistogram =
+      [{ fixedPoints := 0, twoCycles := 1, multiplicity := 4 },
+        { fixedPoints := 2, twoCycles := 0, multiplicity := 4 },
+        { fixedPoints := 1, twoCycles := 1, multiplicity := 2 },
+        { fixedPoints := 3, twoCycles := 0, multiplicity := 2 },
+        { fixedPoints := 0, twoCycles := 2, multiplicity := 3 },
+        { fixedPoints := 2, twoCycles := 1, multiplicity := 4 },
+        { fixedPoints := 4, twoCycles := 0, multiplicity := 2 }] := by
+  rfl
+
 end Omega.GU

@@ -233,6 +233,46 @@ theorem sideInfo_length_lower_bound_binary_specialized (m : Nat) (hm : 1 ≤ m) 
     Nat.log 2 (Nat.fib (m + 2)) ≤ m := by
   simpa using godelLift_binary_width_upper m hm
 
+private theorem wordsUpToLength_le_pow_succ (M L : ℕ) (hM : 2 ≤ M) :
+    Finset.sum (Finset.range (L + 1)) (fun i => M ^ i) ≤ M ^ (L + 1) := by
+  induction L with
+  | zero =>
+      simpa using le_trans (by decide : 1 ≤ 2) hM
+  | succ L ih =>
+      calc
+        Finset.sum (Finset.range (L + 2)) (fun i => M ^ i) =
+            Finset.sum (Finset.range (L + 1)) (fun i => M ^ i) + M ^ (L + 1) := by
+          rw [Finset.sum_range_succ]
+        _ ≤ M ^ (L + 1) + M ^ (L + 1) := by
+          exact Nat.add_le_add ih le_rfl
+        _ = 2 * M ^ (L + 1) := by ring
+        _ ≤ M * M ^ (L + 1) := by
+          exact Nat.mul_le_mul_right (M ^ (L + 1)) hM
+        _ = M ^ (L + 2) := by
+          symm
+          rw [Nat.pow_succ']
+
+/-- A finite `M`-ary side channel of length at most `L` cannot injectively encode more than
+    `M^(L+1)` residual fiber choices after quotienting by the primary fold state.
+    thm:conclusion-side-info-length-lower-bound -/
+theorem paper_conclusion_side_info_length_lower_bound (m M L : ℕ) (hM : 2 ≤ M)
+    (encode :
+      Fin (2 ^ m) ↪
+        Fin (Nat.fib (m + 2)) × Fin (Finset.sum (Finset.range (L + 1)) (fun i => M ^ i))) :
+    Nat.clog M (2 ^ m / Nat.fib (m + 2)) ≤ L + 1 := by
+  have hcard := Fintype.card_le_of_injective encode encode.injective
+  simp [Fintype.card_fin, Fintype.card_prod] at hcard
+  have hFib : 0 < Nat.fib (m + 2) := Nat.fib_pos.mpr (by omega)
+  have hquot :
+      2 ^ m / Nat.fib (m + 2) ≤ Finset.sum (Finset.range (L + 1)) (fun i => M ^ i) := by
+    have hdiv := Nat.div_le_div_right (c := Nat.fib (m + 2)) hcard
+    simpa [Nat.mul_comm, Nat.mul_div_right _ hFib] using hdiv
+  have hpow :
+      2 ^ m / Nat.fib (m + 2) ≤ M ^ (L + 1) :=
+    le_trans hquot (wordsUpToLength_le_pow_succ M L hM)
+  have hM' : 1 < M := by omega
+  exact (Nat.clog_le_iff_le_pow hM').2 hpow
+
 private theorem fib_lower_bound (m : Nat) (_hm : 2 ≤ m) :
     2 ^ (m / 2) ≤ Nat.fib (m + 2) := by
   have h1 : Nat.fib 2 = 1 := by native_decide

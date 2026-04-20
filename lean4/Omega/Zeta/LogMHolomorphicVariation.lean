@@ -60,4 +60,17 @@ theorem paper_finite_part_logM_truncation_explicit_bound
     D.deriveExplicitTruncationBound D.logZetaEigenvalueFactorization_h hLogBound
       hTailComparison hGeometricTail⟩
 
+set_option maxHeartbeats 400000 in
+/-- Chapter-local wrapper packaging termwise holomorphicity of the `log M` series with the
+    log-zeta trace-derivative identity.
+    thm:finite-part-logM-holomorphic-variation -/
+theorem paper_finite_part_logM_holomorphic_variation
+    (termwiseDifferentiation logZetaTraceDerivative holomorphicVariation : Prop)
+    (hTermwise : termwiseDifferentiation)
+    (hTrace : logZetaTraceDerivative)
+    (hHolomorphic :
+      termwiseDifferentiation → logZetaTraceDerivative → holomorphicVariation) :
+    termwiseDifferentiation ∧ logZetaTraceDerivative ∧ holomorphicVariation := by
+  exact ⟨hTermwise, hTrace, hHolomorphic hTermwise hTrace⟩
+
 end Omega.Zeta

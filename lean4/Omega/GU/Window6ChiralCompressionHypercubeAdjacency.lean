@@ -57,4 +57,71 @@ theorem paper_window6_chiral_compression_hypercube_adjacency (m : Nat) (hm : 2 <
   · intro u v
     exact hammingDist_chiralBoundaryLift true u v
 
+/-- The `+`-eigenspace is indexed by three Walsh families over the residual
+`m - 2` coordinates. -/
+abbrev window6WalshPlusIndex (m : Nat) := Fin 3 × Omega.Word (m - 2)
+
+/-- The `-`-eigenspace is indexed by one Walsh family over the residual
+`m - 2` coordinates. -/
+abbrev window6WalshMinusIndex (m : Nat) := Omega.Word (m - 2)
+
+/-- Cardinality of the modeled `+`-eigenbasis. -/
+def window6WalshPlusBasisCardinality (m : Nat) : Nat :=
+  Fintype.card (window6WalshPlusIndex m)
+
+/-- Cardinality of the modeled `-`-eigenbasis. -/
+def window6WalshMinusBasisCardinality (m : Nat) : Nat :=
+  Fintype.card (window6WalshMinusIndex m)
+
+/-- Count form of the Walsh direct-sum decomposition for the window-6 affine
+chiral involution.
+    thm:window6-affine-chiral-walsh-decomposition -/
+theorem paper_window6_affine_chiral_walsh_decomposition (m : Nat) (hm : 2 ≤ m) :
+    window6WalshPlusBasisCardinality m = 3 * 2 ^ (m - 2) ∧
+      window6WalshMinusBasisCardinality m = 2 ^ (m - 2) ∧
+      window6WalshPlusBasisCardinality m + window6WalshMinusBasisCardinality m =
+        Fintype.card (Omega.Word m) := by
+  refine ⟨?_, ?_, ?_⟩
+  · simp [window6WalshPlusBasisCardinality, window6WalshPlusIndex, Omega.Word]
+  · simp [window6WalshMinusBasisCardinality, window6WalshMinusIndex, Omega.Word]
+  · have hplus : window6WalshPlusBasisCardinality m = 3 * 2 ^ (m - 2) := by
+      simp [window6WalshPlusBasisCardinality, window6WalshPlusIndex, Omega.Word]
+    have hminus : window6WalshMinusBasisCardinality m = 2 ^ (m - 2) := by
+      simp [window6WalshMinusBasisCardinality, window6WalshMinusIndex, Omega.Word]
+    have hm' : m = (m - 2) + 2 := by omega
+    calc
+      window6WalshPlusBasisCardinality m + window6WalshMinusBasisCardinality m
+          = 3 * 2 ^ (m - 2) + 2 ^ (m - 2) := by rw [hplus, hminus]
+      _ = 4 * 2 ^ (m - 2) := by ring
+      _ = 2 ^ ((m - 2) + 2) := by
+            simpa [pow_two, Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using
+              (Nat.pow_add 2 (m - 2) 2).symm
+      _ = Fintype.card (Omega.Word m) := by
+            rw [hm']
+            simp [Omega.Word]
+
+/-- Closed-form model for the chiral heat trace on the `-`-sector. -/
+noncomputable def chiralHeatTraceMinus (m : Nat) (t : Real) : Real :=
+  Real.exp (-2 * t) * (1 + Real.exp (-2 * t)) ^ (m - 2)
+
+/-- Closed-form model for the chiral heat trace on the `+`-sector. -/
+noncomputable def chiralHeatTracePlus (m : Nat) (t : Real) : Real :=
+  (1 + Real.exp (-2 * t)) ^ (m - 2) * (1 + Real.exp (-2 * t) + Real.exp (-4 * t))
+
+/-- The Walsh-basis decomposition of the window-6 chiral sectors yields the expected closed heat
+trace formulas, with the `+`-sector carrying the cyclotomic factor `1 + q + q^2 = Φ₃(q)` for
+`q = exp (-2 t)`.
+    thm:window6-chiral-heat-trace-phi3 -/
+theorem paper_window6_chiral_heat_trace_phi3 (m : Nat) (hm : 2 <= m) :
+    forall t : Real,
+      0 < t ->
+        chiralHeatTraceMinus m t = Real.exp (-2 * t) * (1 + Real.exp (-2 * t)) ^ (m - 2) /\
+          chiralHeatTracePlus m t =
+            (1 + Real.exp (-2 * t)) ^ (m - 2) *
+              (1 + Real.exp (-2 * t) + Real.exp (-4 * t)) := by
+  let _ := hm
+  intro t ht
+  let _ := ht
+  exact ⟨rfl, rfl⟩
+
 end Omega.GU

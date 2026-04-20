@@ -58,6 +58,11 @@ WORKTREE_DIR = REPO_ROOT / ".worktrees"
 
 BASE_BRANCH = "lean4-codex-auto-dev"
 CODEX_PATH = shutil.which("codex") or "/opt/homebrew/bin/codex"
+# Lake-gate config exported to every codex child so they all coordinate on
+# the same lock dir / slot count. Defaults below are conservative for a
+# 16 GB M-series Mac. Override via CLI flags (--lake-parallel, --lake-lock-dir).
+LAKE_GATE_LOCK_DIR = REPO_ROOT / ".worktrees" / ".lake-gate"
+LAKE_GATE_MAX_PARALLEL = 1
 # Graceful stop: create this file to prevent new rounds from being dispatched.
 # Current rounds finish normally; the process exits once the pool drains.
 STOP_FILE = REPO_ROOT / ".pipeline.stop"
@@ -77,6 +82,53 @@ _git_lock = threading.Lock()
 _round_lock = threading.Lock()
 # Lock serializing .lake/build merges back to the main repo
 _lake_merge_lock = threading.Lock()
+
+# In-memory dedup of in-flight target IDs across parallel rounds.
+# Phase B selects targets concurrently and can pick the same paper (same
+# lean_name / paper_label) in two worktrees; the second one wastes a Phase C
+# and produces a merge conflict. We register each round's target IDs after
+# Phase B and drop any that overlap with another live round; if too few
+# remain we fail the round before Phase C. Entries are removed in
+# `run_round_in_worktree`'s finally block, so the set only ever holds IDs
+# of rounds currently in flight (~= --parallel size).
+_active_targets_lock = threading.Lock()
+_active_targets: dict[int, set[str]] = {}
+
+
+def _target_id(t: dict) -> str:
+    """Stable cross-round identifier for a target."""
+    return (t.get("lean_name") or t.get("paper_label") or "").strip()
+
+
+def claim_targets(round_num: int, targets: list[dict]) -> tuple[list[dict], list[str]]:
+    """Filter `targets` against in-flight target IDs from other rounds.
+    Returns (kept, dropped_ids). Registers the kept IDs under `round_num`."""
+    kept: list[dict] = []
+    dropped: list[str] = []
+    with _active_targets_lock:
+        taken: set[str] = set()
+        for s in _active_targets.values():
+            taken |= s
+        keep_ids: set[str] = set()
+        for t in targets:
+            tid = _target_id(t)
+            if not tid:
+                # Unkeyable target — keep but don't register; can't dedup.
+                kept.append(t)
+                continue
+            if tid in taken or tid in keep_ids:
+                dropped.append(tid)
+                continue
+            keep_ids.add(tid)
+            kept.append(t)
+        if keep_ids:
+            _active_targets[round_num] = keep_ids
+    return kept, dropped
+
+
+def release_targets(round_num: int) -> None:
+    with _active_targets_lock:
+        _active_targets.pop(round_num, None)
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -128,6 +180,7 @@ class WorktreeInfo:
     path: Path
     branch: str
     round_number: int
+    base_sha: str = ""  # HEAD at worktree creation; ground truth for "new" commits
 
 
 # ---------------------------------------------------------------------------
@@ -410,7 +463,10 @@ def create_worktree(round_num: int) -> WorktreeInfo:
     # Clone .lake cache outside the git lock (can run in parallel)
     _clone_lake_cache(wt_path)
 
-    return WorktreeInfo(path=wt_path, branch=branch, round_number=round_num)
+    base_sha = run_cmd(["git", "rev-parse", "HEAD"], cwd=wt_path).stdout.strip()
+    return WorktreeInfo(
+        path=wt_path, branch=branch, round_number=round_num, base_sha=base_sha,
+    )
 
 
 def remove_worktree(wt: WorktreeInfo) -> None:
@@ -703,6 +759,9 @@ def cleanup_all_worktrees() -> int:
 # Codex CLI invocation
 # ---------------------------------------------------------------------------
 
+CODEX_LOG_DIR = LOG_DIR / "codex"
+
+
 def codex_exec(
     prompt: str,
     *,
@@ -711,8 +770,13 @@ def codex_exec(
     output_file: Optional[Path] = None,
     model: Optional[str] = None,
     dry_run: bool = False,
+    log_tag: Optional[str] = None,
 ) -> str:
-    """Call `codex exec` with the given prompt, targeting work_dir."""
+    """Call `codex exec` with the given prompt, targeting work_dir.
+
+    If `log_tag` is provided (e.g. "R1325_phaseC"), persists prompt + stdout
+    to `LOG_DIR/codex/<tag>_<timestamp>.{prompt,out}.txt` for post-mortem.
+    Otherwise uses tmp files and discards them after the call."""
     if dry_run:
         logger.info(f"[DRY RUN] codex exec (cwd={work_dir}):\n"
                      f"{prompt[:400]}{'...' if len(prompt) > 400 else ''}")
@@ -723,19 +787,30 @@ def codex_exec(
         raise FileNotFoundError("Codex CLI not found")
 
     target_dir = str(work_dir or REPO_ROOT)
-
-    # Write prompt to temp file
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".txt", prefix="codex_prompt_",
-        delete=False, encoding="utf-8",
-    ) as f:
-        f.write(prompt)
-        prompt_file = f.name
+    persist = log_tag is not None
+    if persist:
+        CODEX_LOG_DIR.mkdir(parents=True, exist_ok=True)
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        prompt_file = str(CODEX_LOG_DIR / f"{log_tag}_{ts}.prompt.txt")
+        with open(prompt_file, "w", encoding="utf-8") as f:
+            f.write(prompt)
+    else:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".txt", prefix="codex_prompt_",
+            delete=False, encoding="utf-8",
+        ) as f:
+            f.write(prompt)
+            prompt_file = f.name
 
     out_file = str(output_file) if output_file else None
     if out_file is None:
-        out_fd, out_file = tempfile.mkstemp(suffix=".txt", prefix="codex_out_")
-        os.close(out_fd)
+        if persist:
+            out_file = str(CODEX_LOG_DIR / f"{log_tag}_{ts}.out.txt")
+            # Ensure file exists so codex can `-o` to it.
+            open(out_file, "w").close()
+        else:
+            out_fd, out_file = tempfile.mkstemp(suffix=".txt", prefix="codex_out_")
+            os.close(out_fd)
 
     cmd = [
         "timeout", str(timeout_seconds),
@@ -752,11 +827,20 @@ def codex_exec(
     start = time.monotonic()
     result = None
 
+    # Inherit env, but always export the lake_gate config so every codex
+    # invocation sees the same shared lock dir and concurrency cap. Without
+    # this the gate inside the worktree falls back to its default of 1 slot
+    # in $TMPDIR — usually fine, but explicit is safer when callers override.
+    child_env = os.environ.copy()
+    child_env.setdefault("LAKE_GATE_LOCK_DIR", str(LAKE_GATE_LOCK_DIR))
+    child_env.setdefault("LAKE_GATE_MAX_PARALLEL", str(LAKE_GATE_MAX_PARALLEL))
+
     try:
         with open(prompt_file, "r", encoding="utf-8") as pf:
             result = subprocess.run(
                 cmd, stdin=pf, capture_output=True, text=True,
                 timeout=timeout_seconds + 30, cwd=target_dir,
+                env=child_env,
             )
     except subprocess.TimeoutExpired:
         logger.warning(f"Codex exec timed out after {timeout_seconds}s")
@@ -764,8 +848,10 @@ def codex_exec(
     finally:
         elapsed = time.monotonic() - start
         rc = result.returncode if result else "?"
-        logger.info(f"Codex exec completed in {elapsed:.1f}s (rc={rc})")
-        os.unlink(prompt_file)
+        suffix = f" log={log_tag}" if persist else ""
+        logger.info(f"Codex exec completed in {elapsed:.1f}s (rc={rc}){suffix}")
+        if not persist:
+            os.unlink(prompt_file)
 
     # Read output
     output = ""
@@ -775,8 +861,13 @@ def codex_exec(
                 output = f.read()
         else:
             output = result.stdout or ""
+            # If we used the persistent path but codex wrote nothing to -o,
+            # still capture stdout so the post-mortem isn't empty.
+            if persist and output:
+                with open(out_file, "w", encoding="utf-8") as f:
+                    f.write(output)
     finally:
-        if output_file is None:
+        if output_file is None and not persist:
             os.unlink(out_file)
 
     return output
@@ -1042,11 +1133,155 @@ def detect_shell_pattern(wt: WorktreeInfo) -> list[str]:
     return violations
 
 
+_SORRY_LITERAL_RE = re.compile(
+    r"(?<![A-Za-z_])(?:sorry|admit)(?![A-Za-z_])"
+)
+_AXIOM_DECL_RE = re.compile(r"^\s*axiom\s+\w", re.MULTILINE)
+
+
+def _strip_lean_comments(src: str) -> str:
+    """Replace Lean comment contents with spaces so line numbers stay stable.
+
+    Handles `-- line comments` and `/- block -/` (nested). Needed because
+    docstring prose often contains English words like "admit" which otherwise
+    trigger the sorry/admit scanner."""
+    n = len(src)
+    out: list[str] = []
+    i = 0
+    while i < n:
+        c = src[i]
+        c2 = src[i:i+2]
+        if c2 == "--":
+            j = src.find("\n", i)
+            if j == -1:
+                j = n
+            out.append(" " * (j - i))
+            i = j
+        elif c2 == "/-":
+            depth = 1
+            i += 2
+            out.append("  ")
+            while i < n and depth > 0:
+                cc = src[i:i+2]
+                if cc == "/-":
+                    depth += 1
+                    out.append("  ")
+                    i += 2
+                elif cc == "-/":
+                    depth -= 1
+                    out.append("  ")
+                    i += 2
+                else:
+                    ch = src[i]
+                    out.append(ch if ch == "\n" else " ")
+                    i += 1
+        else:
+            out.append(c)
+            i += 1
+    return "".join(out)
+
+
+def _lines_added_in_round(wt: WorktreeInfo, rel_path: str) -> set[int]:
+    """Line numbers (1-indexed, of the HEAD version) that this round added to
+    `rel_path`."""
+    try:
+        r = run_cmd(
+            ["git", "diff", "--unified=0", f"{wt.base_sha}..HEAD", "--", rel_path],
+            cwd=wt.path,
+        )
+    except Exception:
+        return set()
+    added: set[int] = set()
+    # Hunk header: @@ -old +new,count @@
+    hunk_re = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@")
+    current_new: Optional[int] = None
+    remaining: int = 0
+    for line in (r.stdout or "").splitlines():
+        m = hunk_re.match(line)
+        if m:
+            current_new = int(m.group(1))
+            remaining = int(m.group(2) or "1")
+            continue
+        if current_new is None:
+            continue
+        if line.startswith("+") and not line.startswith("+++"):
+            added.add(current_new)
+            current_new += 1
+            remaining -= 1
+        elif line.startswith("-") and not line.startswith("---"):
+            # deletion doesn't advance the new-file pointer
+            pass
+        else:
+            current_new += 1 if remaining else 0
+    return added
+
+
+def detect_sorry_literals(wt: WorktreeInfo) -> list[str]:
+    """Reject any round that introduces a literal `sorry`/`admit`/`axiom` in
+    actual Lean code (not comments/docstrings) in files under lean4/Omega/.
+
+    Implementation: for each .lean file the round added or modified, strip
+    `--` line comments and `/- -/` block comments (preserving line numbers),
+    scan the result for sorry/admit/axiom tokens, and only flag matches whose
+    line is among the lines this round added. This avoids false positives
+    from English prose in docstrings that happens to contain the word
+    "admit"."""
+    violations: list[str] = []
+    if not wt.base_sha:
+        return violations
+    try:
+        r = run_cmd(
+            ["git", "diff", "--name-only", "--diff-filter=AM",
+             f"{wt.base_sha}..HEAD", "--", "lean4/Omega/"],
+            cwd=wt.path,
+        )
+    except Exception:
+        return violations
+    files = [l.strip() for l in (r.stdout or "").splitlines()
+             if l.strip().endswith(".lean")]
+    for rel in files:
+        try:
+            src = (wt.path / rel).read_text(encoding="utf-8")
+        except Exception:
+            continue
+        stripped = _strip_lean_comments(src)
+        added_lines = _lines_added_in_round(wt, rel)
+        if not added_lines:
+            continue
+        for m in _SORRY_LITERAL_RE.finditer(stripped):
+            line_no = stripped.count("\n", 0, m.start()) + 1
+            if line_no in added_lines:
+                ctx = src.splitlines()[line_no - 1].strip()[:140]
+                violations.append(f"{rel}:{line_no}: {m.group()} — {ctx}")
+        for m in _AXIOM_DECL_RE.finditer(stripped):
+            line_no = stripped.count("\n", 0, m.start()) + 1
+            if line_no in added_lines:
+                ctx = src.splitlines()[line_no - 1].strip()[:140]
+                violations.append(f"{rel}:{line_no}: axiom — {ctx}")
+    return violations
+
+
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
-    """Check for new commits in the worktree. Also rejects signature degradation
-    and new abstract-Prop shell files."""
-    post = git_log_oneline(20, cwd=wt.path)
-    new = [c for c in post if c not in pre_commits]
+    """Check for new commits in the worktree. Also rejects signature degradation,
+    new abstract-Prop shell files, sorry/admit/axiom literals, and any commit
+    whose final lake build does not pass.
+
+    Ground truth for "new commits" is `git log <base_sha>..HEAD` where base_sha
+    is the worktree HEAD captured at creation. This is robust to codex doing
+    `git fetch + rebase` inside the worktree (which moves HEAD past commits
+    that already exist on origin); a window-based comparison against
+    `pre_commits` mistakenly counted those as new in earlier versions.
+    """
+    if wt.base_sha:
+        result = run_cmd(
+            ["git", "log", "--oneline", f"{wt.base_sha}..HEAD"],
+            cwd=wt.path,
+        )
+        new = [l.strip() for l in result.stdout.splitlines() if l.strip()]
+    else:
+        # Backward-compat fallback for worktrees created before base_sha existed.
+        post = git_log_oneline(40, cwd=wt.path)
+        new = [c for c in post if c not in pre_commits]
     if new:
         logger.info(f"[R{wt.round_number}] Phase D: {len(new)} new commit(s):")
         for c in new:
@@ -1072,6 +1307,17 @@ def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[b
                 f"introduced the abstract-Prop Data shell anti-pattern. "
                 f"Fix: state paper_* theorems about concrete objects; use sorry + "
                 f"\\leanpartial{{…}}{{reason}} if proof is incomplete."
+            )
+            return False, new
+        # Gate 3: sorry/admit/axiom literals in newly-added or modified lines
+        sorry_violations = detect_sorry_literals(wt)
+        if sorry_violations:
+            for v in sorry_violations[:10]:
+                logger.error(f"[R{wt.round_number}] SORRY LITERAL: {v}")
+            logger.error(
+                f"[R{wt.round_number}] Rejecting round: {len(sorry_violations)} added "
+                f"line(s) contain sorry/admit/axiom literals. The completion contract "
+                f"in phase_c.txt forbids these in committed code."
             )
             return False, new
         return True, new
@@ -1121,6 +1367,7 @@ def run_round_in_worktree(
             timeout_seconds=phase_b_timeout,
             model=model,
             dry_run=dry_run,
+            log_tag=f"R{round_num}_phaseB",
         )
         phase_b = parse_phase_b_output(phase_b_raw)
 
@@ -1134,6 +1381,19 @@ def run_round_in_worktree(
         for i, t in enumerate(phase_b.targets, 1):
             logger.info(f"  Target {i}: {t.get('lean_name', '?')} "
                          f"({t.get('difficulty', '?')}, {t.get('chapter', '?')})")
+
+        # ── Dedup: drop targets already claimed by another in-flight round ─
+        kept, dropped = claim_targets(round_num, phase_b.targets)
+        if dropped:
+            logger.warning(
+                f"[{tag}] Dedup: dropping {len(dropped)} target(s) already in flight: "
+                f"{', '.join(dropped)}"
+            )
+        if not kept:
+            logger.error(f"[{tag}] All targets duplicated by other rounds; aborting")
+            _save_round_log(round_num, phase_b, PhaseCResult(), [], False)
+            return False, round_num, []
+        phase_b.targets = kept
 
         # ── Gate ──────────────────────────────────────────────────
         gate_ok, gate_msg = gate_check(phase_b.targets)
@@ -1151,6 +1411,7 @@ def run_round_in_worktree(
             timeout_seconds=phase_c_timeout,
             model=model,
             dry_run=dry_run,
+            log_tag=f"R{round_num}_phaseC",
         )
         phase_c = parse_phase_c_output(phase_c_raw)
 
@@ -1194,6 +1455,9 @@ def run_round_in_worktree(
         return False, round_num, []
 
     finally:
+        # Always release the round's claim on its target IDs so other rounds
+        # can pick them up if this one fails.
+        release_targets(round_num)
         # Cleanup worktree on success or non-merge-conflict failure
         if wt and not dry_run:
             try:
@@ -1368,7 +1632,7 @@ def run_round_serial(
 # ---------------------------------------------------------------------------
 
 def main() -> int:
-    global BASE_BRANCH
+    global BASE_BRANCH, LAKE_GATE_LOCK_DIR, LAKE_GATE_MAX_PARALLEL
 
     parser = argparse.ArgumentParser(
         description="Lean4 Codex-First formalization with worktree parallelism",
@@ -1450,7 +1714,30 @@ def main() -> int:
         "--mem-max-wait", type=int, default=1800,
         help="Memory-guard max wait before proceeding anyway, in seconds (default: 1800)",
     )
+    parser.add_argument(
+        "--lake-parallel", type=int, default=None,
+        help="Concurrent `lake` cap exported to codex children via "
+             "LAKE_GATE_MAX_PARALLEL. Defaults to max(1, --parallel // 2) so "
+             "lake never runs in more workers than half the round count.",
+    )
+    parser.add_argument(
+        "--lake-lock-dir", type=str, default=None,
+        help=f"Shared lock directory for lake_gate.py "
+             f"(default: {LAKE_GATE_LOCK_DIR}).",
+    )
     args = parser.parse_args()
+
+    if args.lake_lock_dir:
+        LAKE_GATE_LOCK_DIR = Path(args.lake_lock_dir)
+    LAKE_GATE_LOCK_DIR.mkdir(parents=True, exist_ok=True)
+    if args.lake_parallel is not None:
+        LAKE_GATE_MAX_PARALLEL = max(1, args.lake_parallel)
+    else:
+        LAKE_GATE_MAX_PARALLEL = max(1, args.parallel // 2)
+    logger.info(
+        f"Lake gate: max_parallel={LAKE_GATE_MAX_PARALLEL}, "
+        f"lock_dir={LAKE_GATE_LOCK_DIR}"
+    )
 
     BASE_BRANCH = args.base_branch
 
@@ -1566,12 +1853,29 @@ def main() -> int:
         with ThreadPoolExecutor(max_workers=args.parallel, thread_name_prefix="worker") as pool:
             futures: dict[Future, int] = {}
 
+            # Cooldown after consecutive_failures hits the threshold: pause
+            # dispatch for this many seconds, then reset the counter and
+            # resume. The pipeline never exits on consecutive failures —
+            # only graceful stop via STOP_FILE or external SIGTERM.
+            cooldown_seconds = max(60, int(args.max_consecutive_failures) * 60)
+
+            def _maybe_cooldown() -> None:
+                if state.consecutive_failures < args.max_consecutive_failures:
+                    return
+                logger.warning(
+                    f"[cooldown] {state.consecutive_failures} consecutive failures — "
+                    f"sleeping {cooldown_seconds}s before resuming dispatch"
+                )
+                time.sleep(cooldown_seconds)
+                state.consecutive_failures = 0
+                save_state(state)
+                logger.info("[cooldown] resumed; consecutive_failures reset to 0")
+
             def _submit_next() -> None:
                 if STOP_FILE.exists():
                     logger.info(f"Stop file detected ({STOP_FILE}), not dispatching new rounds")
                     return
-                if state.consecutive_failures >= args.max_consecutive_failures:
-                    return
+                _maybe_cooldown()
                 with _round_lock:
                     rn = state.round_number
                     state.round_number += 1
@@ -1592,11 +1896,9 @@ def main() -> int:
                 _submit_next()
 
             while futures:
-                if state.consecutive_failures >= args.max_consecutive_failures:
-                    logger.error(
-                        f"Stopping: {state.consecutive_failures} consecutive failures"
-                    )
-                    break
+                if STOP_FILE.exists():
+                    logger.info(f"Stop file detected; draining {len(futures)} in-flight workers")
+                    # Don't break — finish in-flight, then the pool drains naturally.
                 done, _ = wait(futures, return_when=FIRST_COMPLETED)
                 for fut in done:
                     rn = futures.pop(fut)
@@ -1617,8 +1919,10 @@ def main() -> int:
                     state.total_theorems = count_lean_theorems()
                     state.recent_commits = git_log_oneline(5)
                     save_state(state)
-                    # Immediately launch a replacement worker
-                    _submit_next()
+                    # Immediately launch a replacement worker (will cooldown
+                    # if too many consecutive failures, then resume).
+                    if not STOP_FILE.exists():
+                        _submit_next()
 
     else:
         # ── Batch mode (non-continuous) ────────────────────────────────────────────

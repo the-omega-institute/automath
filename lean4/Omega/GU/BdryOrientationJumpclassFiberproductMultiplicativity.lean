@@ -39,4 +39,9 @@ theorem paper_bdry_orientation_jumpclass_fiberproduct_multiplicativity
   have hLeftEven : D.leftEvenSpecialization := D.specializeLeftEven hFormula
   exact ⟨hFormula, hLeftEven, D.deriveDoubleEvenVanishing hFormula hLeftEven⟩
 
+theorem paper_bdry_orientation_torsor_determinant_realization_jumpclass
+    (D : BdryOrientationJumpclassFiberproductMultiplicativityData) :
+    D.determinantRealization ∧ D.jumpclassAsStiefelWhitney := by
+  exact ⟨D.determinantRealization_h, D.jumpclassAsStiefelWhitney_h⟩
+
 end Omega.GU

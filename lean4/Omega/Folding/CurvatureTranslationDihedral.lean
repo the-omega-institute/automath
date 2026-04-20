@@ -91,4 +91,56 @@ theorem paper_fold_curvature_dihedral_action (m : Nat) (hm : 2 ≤ m) :
       (X.stableValue_stableSucc_iterate (X.stableZero (m := m)) s.1 hm1)
   exact hr.symm.trans (hval.trans hs)
 
+/-- The translation orbit through `stableZero` runs through the whole stable space exactly once.
+    thm:fold-curvature-translation-full-cycle -/
+theorem paper_fold_curvature_translation_full_cycle (m : Nat) :
+    Function.Bijective (curvatureTranslationSection (m := m)) := by
+  cases m with
+  | zero =>
+      refine ⟨?_, ?_⟩
+      · intro r s _
+        apply Fin.ext
+        have hfib : Nat.fib (0 + 2) = 1 := by native_decide
+        have hr0 : r.1 = 0 := by omega
+        have hs0 : s.1 = 0 := by omega
+        exact hr0.trans hs0.symm
+      · intro x
+        refine ⟨0, ?_⟩
+        apply X.eq_of_stableValue_eq
+        have hxlt : stableValue x < Nat.fib (0 + 2) := stableValue_lt_fib x
+        have hx0 : stableValue x = 0 := by
+          have hfib : Nat.fib (0 + 2) = 1 := by native_decide
+          omega
+        simpa [curvatureTranslationSection, curvatureTranslation, X.stableValue_stableZero] using
+          hx0.symm
+  | succ n =>
+      have hm1 : 1 ≤ n + 1 := by omega
+      refine ⟨?_, ?_⟩
+      · intro r s hrs
+        apply Fin.ext
+        have hval := congrArg stableValue hrs
+        have hr :
+            stableValue (curvatureTranslationSection (m := n + 1) r) = r.1 := by
+          simpa [curvatureTranslationSection, curvatureTranslation, X.stableValue_stableZero,
+            Nat.zero_add, Nat.mod_eq_of_lt r.2] using
+            (X.stableValue_stableSucc_iterate (X.stableZero (m := n + 1)) r.1 hm1)
+        have hs :
+            stableValue (curvatureTranslationSection (m := n + 1) s) = s.1 := by
+          simpa [curvatureTranslationSection, curvatureTranslation, X.stableValue_stableZero,
+            Nat.zero_add, Nat.mod_eq_of_lt s.2] using
+            (X.stableValue_stableSucc_iterate (X.stableZero (m := n + 1)) s.1 hm1)
+        exact hr.symm.trans (hval.trans hs)
+      · intro x
+        refine ⟨X.stableValueFin x, ?_⟩
+        apply X.eq_of_stableValue_eq
+        have hsection :
+            stableValue
+                (curvatureTranslationSection (m := n + 1) (X.stableValueFin x)) =
+              (X.stableValueFin x).1 := by
+          simpa [curvatureTranslationSection, curvatureTranslation, X.stableValue_stableZero,
+            Nat.zero_add, Nat.mod_eq_of_lt (X.stableValueFin x).2] using
+            (X.stableValue_stableSucc_iterate (X.stableZero (m := n + 1))
+              (X.stableValueFin x).1 hm1)
+        simpa [X.stableValueFin] using hsection
+
 end Omega

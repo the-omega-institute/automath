@@ -65,5 +65,23 @@ theorem paper_pom_multiplicity_composition_part_count_bivariate_gf :
   · unfold pomCompositionCgfLimit pomCompositionDominantRoot
     rw [show (1 : ℝ) ^ (2 : Nat) + 4 * (1 : ℝ) = 5 by norm_num, pomGoldenRoot]
 
+/-- Rational specialization of the Fibonacci composition-partition package. Besides the
+recurrence/generating-function data, we record the first nontrivial partition value at `y = 1`
+and the resulting rational generating function at `(x,y) = (1,1)`. -/
+abbrev pomMultiplicityCompositionPartitionRational : Prop :=
+  pomMultiplicityCompositionPartCountBivariateGF ∧
+    pomCompositionPartition 1 4 = 5 ∧
+    pomCompositionBivariateGF 1 1 = -1
+
+/-- Paper label: `prop:pom-multiplicity-composition-partition-rational`.
+    The Fibonacci-weighted composition-partition model has the expected rational generating
+    function, and at `y = 1` its fourth partition value is `5` while the specialization of the
+    bivariate kernel at `(1,1)` is `-1`. -/
+theorem paper_pom_multiplicity_composition_partition_rational :
+    pomMultiplicityCompositionPartitionRational := by
+  refine ⟨paper_pom_multiplicity_composition_part_count_bivariate_gf, ?_, ?_⟩
+  · norm_num [pomCompositionPartition]
+  · norm_num [pomCompositionBivariateGF]
+
 end
 end Omega.POM

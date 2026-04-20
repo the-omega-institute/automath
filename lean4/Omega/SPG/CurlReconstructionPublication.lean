@@ -15,4 +15,15 @@ theorem paper_cubical_stokes_curl_reconstruction :
     (4 - 1 = 3) :=
   paper_spg_cube_potential_reconstruction_by_curl_seeds
 
+/-- Publication-facing wrapper with the paper label
+    `cor:spg-cube-potential-reconstruction-by-curl`. -/
+theorem paper_spg_cube_potential_reconstruction_by_curl :
+    (2 ^ 2 = 4 ∧ 2 * 2 = 4 ∧ 1 = 1) ∧
+    (4 - 4 + 1 = 1) ∧
+    (2 ^ 3 = 8 ∧ 3 * 4 = 12 ∧ 6 = 6) ∧
+    (8 + 6 - 12 = 2) ∧
+    (1 = 1) ∧
+    (4 - 1 = 3) :=
+  paper_spg_cube_potential_reconstruction_by_curl_seeds
+
 end Omega.SPG

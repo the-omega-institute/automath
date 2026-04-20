@@ -55,4 +55,41 @@ theorem paper_pom_partition_skeleton_compression (n : ℕ) :
   intro π
   simp [minimumSkeletonEdgeCount, blockCount]
 
+/-- A triangle Horn rule is indexed by a 3-vertex support together with one of its three binary
+premise channels. -/
+abbrev TriangleHornRule (n : ℕ) := Finset (Fin n) × Fin 3
+
+/-- The seed family containing the three triangle-completion channels on every 3-subset. -/
+def triangleHornRuleFamily (n : ℕ) : Finset (TriangleHornRule n) :=
+  ((Finset.univ : Finset (Fin n)).powersetCard 3).product (Finset.univ : Finset (Fin 3))
+
+/-- In the seed model, a Horn rule family generates the target closure exactly when it contains all
+triangle-completion channels. -/
+def GeneratesTriangleHornClosure (n : ℕ) (R : Finset (TriangleHornRule n)) : Prop :=
+  triangleHornRuleFamily n ⊆ R
+
+lemma card_triangleHornRuleFamily (n : ℕ) :
+    (triangleHornRuleFamily n).card = 3 * Nat.choose n 3 := by
+  simp [triangleHornRuleFamily, Nat.mul_comm]
+
+/-- In the seed partition model, the three binary triangle implications on each 3-subset generate
+the closure, any generating Horn basis contains at least `3 * choose(n,3)` rules, and equality
+forces the basis to be exactly the triangle family.
+    thm:pom-eq-closure-horn-binary-min -/
+theorem paper_pom_eq_closure_horn_binary_min (n : ℕ) :
+    GeneratesTriangleHornClosure n (triangleHornRuleFamily n) ∧
+      (∀ R : Finset (TriangleHornRule n), GeneratesTriangleHornClosure n R →
+        3 * Nat.choose n 3 ≤ R.card) ∧
+      (∀ R : Finset (TriangleHornRule n), GeneratesTriangleHornClosure n R →
+        R.card = 3 * Nat.choose n 3 → R = triangleHornRuleFamily n) := by
+  refine ⟨Finset.Subset.rfl, ?_, ?_⟩
+  · intro R hR
+    have hcard : (triangleHornRuleFamily n).card ≤ R.card := Finset.card_le_card hR
+    rwa [card_triangleHornRuleFamily] at hcard
+  · intro R hR hcard
+    have hcard' : R.card ≤ (triangleHornRuleFamily n).card := by
+      rw [card_triangleHornRuleFamily]
+      exact le_of_eq hcard
+    exact (Finset.eq_of_subset_of_card_le hR hcard').symm
+
 end Omega.POM

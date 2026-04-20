@@ -40,4 +40,11 @@ theorem paper_operator_critical_line_gap_entropy_rate_zero_seeds
   intro n
   simpa using periodic_eq_mod g hperiodic n
 
+/-- Paper-facing wrapper: the periodic block seed already packages the entropy-rate-zero claim.
+    prop:operator-critical-line-gap-entropy-rate-zero -/
+theorem paper_operator_critical_line_gap_entropy_rate_zero
+    {B : ℕ} (hB : 0 < B) (g : ℕ → ℝ) (hperiodic : ∀ n, g (n + B) = g n) :
+    ∃ block : Fin B → ℝ, ∀ n, g n = block ⟨n % B, Nat.mod_lt n hB⟩ := by
+  exact paper_operator_critical_line_gap_entropy_rate_zero_seeds hB g hperiodic
+
 end Omega.Zeta

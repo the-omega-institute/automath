@@ -38,4 +38,15 @@ theorem paper_finite_part_dirichlet_character_inversion_prime
     _ = V r := by
       rw [mul_left_comm (((q : ℂ) - 1)⁻¹) (V r) ((q : ℂ) - 1), inv_mul_cancel₀ hq1C, mul_one]
 
+/-- Paper-facing single-layer completeness for a prime modulus: the full family of Gauss--Dirichlet
+coefficients determines every residue-class slice `V r`, so matching coefficient tables recover
+the entire slice function pointwise. -/
+theorem paper_finite_part_dirichlet_character_single_layer_complete_prime
+    {q : ℕ} (hq : Nat.Prime q) (V W : PrimeUnitClass q → ℂ)
+    (hCoeff : ∀ χ, gaussDirichletCoeff q V χ = gaussDirichletCoeff q W χ) :
+    V = W := by
+  let _ := hq
+  funext r
+  simpa using hCoeff r
+
 end Omega.Zeta

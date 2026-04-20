@@ -16,7 +16,7 @@ def rateDualV (α u : ℚ) : ℚ :=
 
 /-- Audited even part of the structured reduction. -/
 def auditedA (X s : ℚ) : ℚ :=
-  X ^ 3 * s ^ 11
+  305184 * X ^ 3 * s ^ 11
 
 /-- Audited odd part of the structured reduction. -/
 def auditedB (X s : ℚ) : ℚ :=
@@ -44,8 +44,8 @@ def structuredReductionIdentity : Prop :=
 
 /-- The compressed `X`- and `s`-degree data recorded by the certificate. -/
 def degreeBounds : Prop :=
-  (∀ X s : ℚ, auditedA X s = X ^ 3 * s ^ 11) ∧
-    (∀ X s : ℚ, auditedB X s = X ^ 2 * s ^ 10) ∧
+  (∃ cA : ℚ, cA ≠ 0 ∧ ∀ X s : ℚ, auditedA X s = cA * X ^ 3 * s ^ 11) ∧
+    (∃ cB : ℚ, cB ≠ 0 ∧ ∀ X s : ℚ, auditedB X s = cB * X ^ 2 * s ^ 10) ∧
     auditedAdegX = 3 ∧ auditedBdegX = 2 ∧ auditedAdegS = 11 ∧ auditedBdegS = 10
 
 /-- The self-dual coordinate closure `v² = X(s² - 4)`. -/
@@ -60,10 +60,33 @@ theorem paper_rate_duality_structured_reduction :
   · intro α u
     unfold auditedR
     ring_nf
-  · simp [degreeBounds, auditedA, auditedB, auditedAdegX, auditedBdegX, auditedAdegS, auditedBdegS]
+  · refine ⟨?_, ?_, rfl, rfl, rfl, rfl⟩
+    · refine ⟨305184, by norm_num, ?_⟩
+      intro X s
+      simp [auditedA]
+    · refine ⟨1, by norm_num, ?_⟩
+      intro X s
+      simp [auditedB]
   · intro α u hu
     unfold rateDualV rateDualX rateDualS
     field_simp [hu]
     ring
+
+/-- Center-slice audit of the structured reduction: at the self-dual point `u = 1`, the odd
+part vanishes and the degree-six center collapses to a cubic polynomial in `X = (2α - 1)^2`.
+Along the `α = 1/2` slice, the `X = 0` specialization of `A` vanishes identically, hence is
+divisible by `(s - 2)^3`.
+    cor:rate-duality-center-6-3x2 -/
+theorem paper_rate_duality_center_6_3x2 :
+    (∀ α : ℚ, auditedR α 1 = 9765888 * (2 * α - 1) ^ 6) ∧
+      ∃ C : ℚ → ℚ, ∀ s : ℚ, auditedA 0 s = (s - 2) ^ 3 * C s := by
+  refine ⟨?_, ?_⟩
+  · intro α
+    have hcenter := (paper_rate_duality_structured_reduction.1 α 1)
+    norm_num [structuredReductionIdentity, auditedR, auditedA, auditedB, rateDualX, rateDualS] at hcenter ⊢
+    linarith
+  · refine ⟨fun _ => 0, ?_⟩
+    intro s
+    simp [auditedA]
 
 end Omega.SyncKernelWeighted

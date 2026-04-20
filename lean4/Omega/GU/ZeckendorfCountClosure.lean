@@ -114,6 +114,18 @@ theorem sm_minimal_triple_selection_law :
     rcases hk₁ with rfl | rfl <;> rcases hk₂ with rfl | rfl | rfl <;>
       rcases hk₃ with rfl | rfl | rfl | rfl <;> simp_all [Nat.fib]
 
+/-- Paper-facing alias for the unique minimal even Zeckendorf-valid triple with boundary sum 12.
+    cor:sm-minimal-triple-selection-law -/
+theorem paper_sm_minimal_triple_selection_law :
+    (Nat.fib 2 + Nat.fib 4 + Nat.fib 6 = 12) ∧
+    (∀ m₁ m₂ m₃ : ℕ,
+      2 ≤ m₁ → Even m₁ → 2 ≤ m₂ → Even m₂ → 2 ≤ m₃ → Even m₃ →
+      m₁ < m₂ → m₂ < m₃ →
+      Nat.fib (m₁ - 2) + Nat.fib (m₂ - 2) + Nat.fib (m₃ - 2) = 12 →
+      m₂ - m₁ ≥ 2 → m₃ - m₂ ≥ 2 →
+      (m₁, m₂, m₃) = (4, 6, 8)) := by
+  simpa using sm_minimal_triple_selection_law
+
 /-- Standard Model signature strict union decomposition.
     cor:sm-signature-strict-union -/
 theorem paper_gu_sm_signature_union :
@@ -174,5 +186,22 @@ theorem paper_extended_lie_fibonacci_full_package :
     (Nat.fib 8 = 21 ∧ Nat.fib 9 = 34 ∧ Nat.fib 10 = 55 ∧
      Nat.fib 11 = 89 ∧ Nat.fib 13 = 233) := by
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- Paper-facing wrapper for the window-6 tail three-branch alignment: the three admissible
+tail scales are exactly `{21, 34, 55} = {F₈, F₉, F₁₀}`, and these are the top Zeckendorf
+Fibonacci terms of `SU(5)`, `SO(10)`, and `E₆`.
+    thm:terminal-window6-tail-three-branch -/
+theorem paper_terminal_window6_tail_three_branch :
+    ({Nat.fib 8, Nat.fib 9, Nat.fib 10} : Finset Nat) = ({21, 34, 55} : Finset Nat) ∧
+      24 = Nat.fib 8 + Nat.fib 4 ∧
+      45 = Nat.fib 9 + Nat.fib 6 + Nat.fib 4 ∧
+      78 = Nat.fib 10 + Nat.fib 8 + Nat.fib 3 ∧
+      Nat.fib 8 = 21 ∧
+      Nat.fib 9 = 34 ∧
+      Nat.fib 10 = 55 := by
+  rcases fold6_tail_offsets with ⟨h8, h9, h10⟩
+  rcases gut_top_fibonacci_terms with ⟨hSu5, hSo10, hE6⟩
+  refine ⟨?_, hSu5, hSo10, hE6, h8, h9, h10⟩
+  simp [h8, h9, h10]
 
 end Omega.GU

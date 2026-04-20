@@ -65,4 +65,14 @@ theorem paper_conclusion_window6_cyclic_orbit_parity_sixteenfold
     ⟨window6_orbit_parity_sector_card, h.cubicProjectorWitness, h.boundaryParityWitness,
       h.commutingWitness, h.orthogonalityWitness, h.identityWitness⟩
 
+/-- The cubic short-root projector takes the expected `0/1` values, and its complement sums to
+the identity on each orbit bit. -/
+theorem paper_conclusion_window6_cyclic_cubic_weyl_projector :
+    cubicShortRootProjector true = 1 ∧
+      cubicShortRootProjector false = 0 ∧
+        (∀ b : Window6ShortRootOrbit, cubicShortRootProjector b + (1 - cubicShortRootProjector b) = 1) := by
+  refine ⟨rfl, rfl, ?_⟩
+  intro b
+  cases b <;> norm_num [cubicShortRootProjector]
+
 end Omega.Conclusion

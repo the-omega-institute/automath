@@ -45,8 +45,9 @@
     D1: Codex 检查回流候选 → 返回 backflow items
     D2: Claude review 回流方案
     Gate: approved → D3
-    D3: 修改主论文 → commit
-    D4: Claude 验证 → commit
+    D3: Codex 修改主论文 → commit
+    D4: Codex 验证 → commit
+    D5: Claude 审阅回流质量 → 不满意则 Codex 补充修改 → commit
 
 Usage:
   # Review 已有文章:
@@ -245,7 +246,71 @@ def _load_board_journals() -> dict[str, str]:
     return result
 
 
-# Cache board journals at module load
+# ── PROGRAM_BOARD.md full-table parser ────────────────────────────────
+# The board is the single source of truth for paper status and journal
+# targets.  discover_papers() uses it to skip submitted/published papers
+# and to refuse unregistered papers.
+
+_board_entries: Optional[dict[str, dict]] = None
+
+
+def _load_board_entries() -> dict[str, dict]:
+    """Parse PROGRAM_BOARD.md status table.
+
+    Expected row format (backtick-wrapped dir name):
+      | `dir_name` | journal | status | reroute |
+
+    Returns {dir_name: {"journal": str, "status": str, "reroute": str}}.
+    """
+    result: dict[str, dict] = {}
+    if not PROGRAM_BOARD.exists():
+        return result
+    try:
+        text = PROGRAM_BOARD.read_text(encoding="utf-8")
+    except Exception:
+        return result
+
+    for m in re.finditer(
+        r"\|\s*`([^`]+)`\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|",
+        text,
+    ):
+        dir_name = m.group(1).strip()
+        journal = m.group(2).strip()
+        status = m.group(3).strip()
+        reroute = m.group(4).strip()
+        result[dir_name] = {
+            "journal": journal,
+            "status": status,
+            "reroute": reroute,
+        }
+    return result
+
+
+def _get_board_entries() -> dict[str, dict]:
+    global _board_entries
+    if _board_entries is None:
+        _board_entries = _load_board_entries()
+    return _board_entries
+
+
+def _invalidate_board_cache() -> None:
+    """Invalidate cached board entries (call after updating the file)."""
+    global _board_entries, _board_journals
+    _board_entries = None
+    _board_journals = None
+
+
+def _board_skip(status: str) -> bool:
+    """Return True if this paper should be skipped by the pipeline."""
+    s = status.strip()
+    for prefix in ("已投", "已接收", "接收", "已发表", "拒稿", "骨架", "归档",
+                    "待分诊"):
+        if s.startswith(prefix):
+            return True
+    return False
+
+
+# Cache board journals at module load (derived from board entries)
 _board_journals: Optional[dict[str, str]] = None
 
 
@@ -260,21 +325,29 @@ def detect_target_journal(paper_dir: str) -> str:
     """Auto-detect target journal for a paper.
 
     Priority:
-      1. PROGRAM_BOARD.md (authoritative pub plan)
-      2. Paper's own PIPELINE.md
-      3. Journal abbreviation in directory name
-      4. Empty string → Stage F will select via codex
+      1. PROGRAM_BOARD.md exact dir-name match (authoritative)
+      2. PROGRAM_BOARD.md keyword match (legacy compat)
+      3. Paper's own PIPELINE.md
+      4. Journal abbreviation in directory name
+      5. Empty string → Stage F will select via codex
     """
     paper_path = Path(paper_dir)
     name_lower = paper_path.name.lower()
 
-    # 1. Check PROGRAM_BOARD.md
+    # 1. PROGRAM_BOARD exact match on dir name
+    entries = _get_board_entries()
+    entry = entries.get(paper_path.name)
+    if entry and entry["journal"] and entry["journal"] != "—":
+        journal = entry["journal"]
+        return _BOARD_JOURNAL_EXPAND.get(journal.lower(), journal)
+
+    # 2. PROGRAM_BOARD keyword match (legacy)
     board = _get_board_journals()
     for key, journal in board.items():
         if key in name_lower:
             return journal
 
-    # 2. Check paper's own PIPELINE.md
+    # 3. Check paper's own PIPELINE.md
     pipeline_md = paper_path / "PIPELINE.md"
     if pipeline_md.exists():
         try:
@@ -291,7 +364,7 @@ def detect_target_journal(paper_dir: str) -> str:
         except Exception:
             pass
 
-    # 3. Check directory name for known abbreviations
+    # 4. Check directory name for known abbreviations
     for abbrev, full_name in JOURNAL_ABBREV.items():
         if (name_lower.endswith(f"_{abbrev}")
             or f"_{abbrev}_" in name_lower
@@ -593,16 +666,70 @@ def oracle_server_alive() -> bool:
         return False
 
 
-def git_commit(paper_path: Path, msg: str, *, tag: str = "") -> str:
-    """Stage changes under paper_path, commit, return hash. Thread-safe."""
+# Files that are pipeline artifacts, NOT paper content. Never commit these.
+_ARTIFACT_PATTERNS = (
+    "literature_audit.md", "cross_paper_dedup.md", "temp_patch.txt",
+    ".pipeline.stop",
+)
+
+
+def _add_paper_only(paper_path: Path) -> None:
+    """git add only .tex .bib .sty files under paper_path. Skip artifacts."""
+    run_cmd(["git", "add", "--", str(paper_path / "*.tex"),
+             str(paper_path / "**/*.tex"),
+             str(paper_path / "*.bib"),
+             str(paper_path / "**/*.bib"),
+             str(paper_path / "*.sty")])
+    # Unstage any artifacts that might have slipped in
+    for pattern in _ARTIFACT_PATTERNS:
+        run_cmd(["git", "reset", "HEAD", "--",
+                 str(paper_path / pattern),
+                 str(paper_path / "**" / pattern)])
+
+
+def _diff_summary(paper_path: Path) -> str:
+    """One-line summary of what changed: files modified, lines added/removed."""
+    result = run_cmd(["git", "diff", "--cached", "--stat", str(paper_path)])
+    lines = result.stdout.strip().splitlines()
+    if not lines:
+        return ""
+    # Last line is like " 5 files changed, 120 insertions(+), 30 deletions(-)"
+    summary = lines[-1].strip() if lines else ""
+    # Also list changed .tex filenames (short)
+    changed = [l.split("|")[0].strip().split("/")[-1]
+               for l in lines[:-1] if "|" in l and ".tex" in l]
+    if changed:
+        return f"{', '.join(changed[:4])}; {summary}"
+    return summary
+
+
+def git_stage(paper_path: Path, *, tag: str = "") -> bool:
+    """Stage .tex/.bib changes under paper_path (no commit, no artifacts)."""
     with _git_lock:
-        status = run_cmd(["git", "status", "--porcelain", str(paper_path)])
-        if not status.stdout.strip():
-            logger.info(f"{tag} No changes to commit")
+        _add_paper_only(paper_path)
+        staged = run_cmd(["git", "diff", "--cached", "--name-only",
+                          str(paper_path)])
+        return bool(staged.stdout.strip())
+
+
+def git_commit(paper_path: Path, msg: str, *, tag: str = "") -> str:
+    """Commit .tex/.bib changes under paper_path. No artifacts. Thread-safe.
+
+    Commit message includes a diff summary showing what actually changed.
+    """
+    with _git_lock:
+        _add_paper_only(paper_path)
+        staged = run_cmd(["git", "diff", "--cached", "--name-only",
+                          str(paper_path)])
+        if not staged.stdout.strip():
+            logger.info(f"{tag} No paper changes to commit")
             return ""
-        run_cmd(["git", "add", str(paper_path)])
+        paper_short = paper_path.name.replace("2026_", "")[:40]
+        diff_info = _diff_summary(paper_path)
+        body = f"Changes: {diff_info}" if diff_info else ""
         full_msg = (
-            f"{msg}\n\n"
+            f"[{paper_short}] {msg}\n\n"
+            f"{body}\n\n"
             f"Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
         )
         result = run_cmd(["git", "commit", "-m", full_msg])
@@ -683,24 +810,34 @@ def is_oracle_response_valid(response: str) -> bool:
 
 def oracle_poll(task_id: str, timeout: int = 7200,
                 poll_interval: int = 30) -> str:
-    """EVENT WAIT — blocks until oracle responds."""
-    logger.info(f"EVENT WAIT: oracle {task_id} (max {timeout}s)")
+    """EVENT WAIT — blocks until oracle responds.
+
+    Registers with oracle_wait_enter/exit so the rolling dispatcher
+    knows how many workers are I/O-blocked (not consuming CPU).
+    """
+    oracle_wait_enter()
+    logger.info(f"EVENT WAIT: oracle {task_id} (max {timeout}s, "
+                f"oracle_waiters={get_oracle_wait_count()})")
     start = time.time()
-    while time.time() - start < timeout:
-        try:
-            data = http_get(f"{ORACLE_SERVER}/result/{task_id}", timeout=10)
-            if data.get("status") == "completed":
-                r = data.get("response", "")
-                logger.info(f"Oracle response: {task_id} ({len(r)} chars, "
-                            f"{int(time.time()-start)}s)")
-                return r
-        except Exception:
-            pass
-        elapsed = int(time.time() - start)
-        if elapsed > 0 and elapsed % 60 == 0:
-            logger.info(f"  Waiting for {task_id}... ({elapsed}s)")
-        time.sleep(poll_interval)
-    return ""
+    try:
+        while time.time() - start < timeout:
+            try:
+                data = http_get(f"{ORACLE_SERVER}/result/{task_id}", timeout=10)
+                if data.get("status") == "completed":
+                    r = data.get("response", "")
+                    logger.info(f"Oracle response: {task_id} ({len(r)} chars, "
+                                f"{int(time.time()-start)}s)")
+                    return r
+            except Exception:
+                pass
+            elapsed = int(time.time() - start)
+            if elapsed > 0 and elapsed % 60 == 0:
+                logger.info(f"  Waiting for {task_id}... ({elapsed}s, "
+                            f"oracle_waiters={get_oracle_wait_count()})")
+            time.sleep(poll_interval)
+        return ""
+    finally:
+        oracle_wait_exit()
 
 
 # ---------------------------------------------------------------------------
@@ -726,7 +863,7 @@ def _macos_pressure_level() -> int:
         return 0
 
 
-def wait_for_memory(tag: str = "", threshold: int = 2,
+def wait_for_memory(tag: str = "", threshold: int = 4,
                     poll: int = 30, max_wait: int = 600) -> None:
     """Block until macOS memory pressure drops below threshold.
 
@@ -1109,6 +1246,102 @@ def compile_pdf(paper_path: Path, *, dry_run: bool = False) -> Optional[Path]:
 # ---------------------------------------------------------------------------
 # Prompt builders
 # ---------------------------------------------------------------------------
+
+def summarize_content_changes(paper_path: Path,
+                               pre_theorems: list[tuple[str, str]]
+                               ) -> str:
+    """Generate a human-readable summary of what mathematical content changed.
+
+    Returns a string like:
+      "added Theorem: Doob transform (thm:poisson-doob); corrected Lemma 3.2 proof;
+       expanded sec_introduction (+120 lines); 3 new references"
+    """
+    post_theorems = extract_theorem_statements(paper_path)
+    pre_labels = {label for label, _ in pre_theorems}
+    post_labels = {label for label, _ in post_theorems}
+
+    new_labels = sorted(post_labels - pre_labels)
+    removed_labels = sorted(pre_labels - post_labels)
+
+    parts = []
+
+    # New theorems
+    for label in new_labels[:5]:
+        # Clean up label for readability
+        short = label.replace("thm:", "").replace("prop:", "").replace(
+            "cor:", "").replace("lem:", "").replace("def:", "")
+        short = short.replace("_", " ").replace("-", " ")[:60]
+        parts.append(f"added {short}")
+
+    # Removed/renamed theorems
+    if removed_labels:
+        parts.append(f"removed/renamed {len(removed_labels)} theorem(s)")
+
+    # Count new references
+    try:
+        bib_files = list(paper_path.glob("*.bib")) + list(paper_path.glob("**/*.bib"))
+        new_refs = 0
+        for bib in bib_files:
+            result = run_cmd(["git", "diff", "--cached", "--", str(bib)])
+            if result.stdout:
+                new_refs += result.stdout.count("+@")
+        if new_refs > 0:
+            parts.append(f"{new_refs} new references")
+    except Exception:
+        pass
+
+    if not parts:
+        # Fallback: just count line changes
+        pre_len = sum(len(body) for _, body in pre_theorems)
+        post_len = sum(len(body) for _, body in post_theorems)
+        delta = post_len - pre_len
+        if delta > 0:
+            parts.append(f"expanded proofs (+{delta} chars)")
+        elif delta < 0:
+            parts.append(f"tightened proofs ({delta} chars)")
+        else:
+            parts.append("style/formatting improvements")
+
+    return "; ".join(parts)
+
+
+def update_program_board(paper_name: str, stage: str, detail: str) -> None:
+    """Update PROGRAM_BOARD.md status column for a paper in-place.
+
+    Finds the row whose backtick-wrapped dir name matches paper_name
+    and overwrites the status cell.  Thread-safe via _git_lock.
+    """
+    if not PROGRAM_BOARD.exists():
+        return
+    new_status = f"{stage} ({detail})" if detail else stage
+    try:
+        with _git_lock:
+            text = PROGRAM_BOARD.read_text(encoding="utf-8")
+            lines = text.split("\n")
+            updated = False
+            needle = f"`{paper_name}`"
+            for i, line in enumerate(lines):
+                if needle not in line:
+                    continue
+                parts = line.split("|")
+                # Expected: ['', ' `dir` ', ' journal ', ' status ', ' reroute ', '']
+                if len(parts) >= 5:
+                    parts[3] = f" {new_status} "
+                    lines[i] = "|".join(parts)
+                    updated = True
+                break
+            if updated:
+                PROGRAM_BOARD.write_text("\n".join(lines), encoding="utf-8")
+                run_cmd(["git", "add", str(PROGRAM_BOARD)])
+                _invalidate_board_cache()
+                logger.info(f"PROGRAM_BOARD updated: {paper_name} ��� {new_status}")
+            else:
+                logger.warning(
+                    f"Paper {paper_name} not found in PROGRAM_BOARD.md — "
+                    f"add a row to track it")
+    except Exception as e:
+        logger.warning(f"Failed to update PROGRAM_BOARD: {e}")
+
 
 def verify_substantive_change(paper_path: Path,
                                pre_theorems: list[tuple[str, str]],
@@ -2183,15 +2416,11 @@ def run_stage_a_dedup(state: PaperState, *, round_num: int,
                timeout_seconds=2400, model=model, dry_run=dry_run)
     compiled = compile_gate(paper_path, model=model, dry_run=dry_run,
                             tag=f"{tag} A-DEDUP")
-    h = git_commit(paper_path,
-                   f"stage-A R{round_num}: cross-paper dedup "
-                   f"({len(overlaps)} overlaps)"
-                   + ("" if compiled else " (compile FAILED)"),
-                   tag=tag)
+    git_stage(paper_path, tag=tag)  # A-DEDUP intermediate
     state.log_event("A", "cross_paper_dedup", round_num=round_num,
                     detail=f"{len(overlaps)} overlaps resolved; "
                            f"compiled={compiled}",
-                    committed=bool(h), commit_hash=h)
+                    committed=False, commit_hash="")
     save_state(state)
     return True
 
@@ -2200,6 +2429,9 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 model: Optional[str] = None) -> bool:
     tag = f"[{state.paper_name}|A]"
     paper_path = Path(state.paper_dir)
+
+    # Snapshot theorems at Stage A start for content change summary
+    _stage_a_pre_theorems = extract_theorem_statements(paper_path)
 
     # ── A0: Literature audit (one-shot, before any round) ─────────
     # This is the highest-leverage prompt: it reclassifies over-claimed
@@ -2278,10 +2510,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                    timeout_seconds=a1_timeout, model=model, dry_run=dry_run)
         compiled_a1 = compile_gate(paper_path, model=model, dry_run=dry_run,
                                    tag=f"{tag} A1")
-        h = git_commit(paper_path,
-                       f"stage-A R{rnd}: codex quality review"
-                       + ("" if compiled_a1 else " (compile FAILED)"),
-                       tag=tag)
+        git_stage(paper_path, tag=tag)  # A1 intermediate
         state.log_event("A", "codex_quality_review", round_num=rnd,
                         committed=bool(h), commit_hash=h,
                         detail=f"compiled={compiled_a1}")
@@ -2295,10 +2524,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                    timeout_seconds=2400, model=model, dry_run=dry_run)
         compiled_a2 = compile_gate(paper_path, model=model, dry_run=dry_run,
                                    tag=f"{tag} A2")
-        h = git_commit(paper_path,
-                       f"stage-A R{rnd}: codex journal style optimization"
-                       + ("" if compiled_a2 else " (compile FAILED)"),
-                       tag=tag)
+        git_stage(paper_path, tag=tag)  # A2 intermediate optimization"
         state.log_event("A", "codex_journal_style", round_num=rnd,
                         committed=bool(h), commit_hash=h,
                         detail=f"compiled={compiled_a2}")
@@ -2448,17 +2674,13 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 else:
                     logger.info(f"{tag} Anti-fake: PASS — {reason}")
 
-            h = git_commit(paper_path,
-                           f"stage-A R{rnd}: codex DEEP RESEARCH extension "
-                           f"(was {final_score}/10)"
-                           + ("" if compiled_deep else " (compile FAILED)"),
-                           tag=tag)
+            git_stage(paper_path, tag=tag)  # A-DEEP intermediate
             state.log_event("A", "codex_deep_extension", round_num=rnd,
                             score=final_score,
                             detail=f"Triggered by FUNDAMENTAL verdict "
                                    f"at score {final_score}/10; "
                                    f"compiled={compiled_deep}",
-                            committed=bool(h), commit_hash=h)
+                            committed=False, commit_hash="")
             save_state(state)
 
             # ── A-DEDUP: cross-paper self-plagiarism check ──────────
@@ -2476,6 +2698,13 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
         if final_score >= SCORE_PASS_THRESHOLD:
             logger.info(f"{tag} STAGE A PASSED at round {rnd} "
                         f"(score {final_score} >= {SCORE_PASS_THRESHOLD})")
+            content_summary = summarize_content_changes(
+                paper_path, _stage_a_pre_theorems)
+            git_commit(paper_path,
+                       f"Stage A ({final_score}/10, {rnd}R): "
+                       f"{content_summary}", tag=tag)
+            update_program_board(state.paper_name, "A-DONE",
+                                 f"score {final_score}/10, {rnd} rounds")
             state.stage_a_passed = True
             save_state(state)
             return True
@@ -2487,6 +2716,13 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
     best = max(state.stage_a_scores) if state.stage_a_scores else 0
     logger.warning(f"{tag} Max {MAX_STAGE_A_ROUNDS} rounds exhausted, "
                    f"proceeding with best score {best}")
+    content_summary = summarize_content_changes(
+        paper_path, _stage_a_pre_theorems)
+    git_commit(paper_path,
+               f"Stage A ({best}/10, {MAX_STAGE_A_ROUNDS}R max): "
+               f"{content_summary}", tag=tag)
+    update_program_board(state.paper_name, "A-DONE",
+                         f"best {best}/10, {MAX_STAGE_A_ROUNDS} rounds (max)")
     state.stage_a_passed = True  # forced pass
     save_state(state)
     return True
@@ -2512,10 +2748,9 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         pdf = compile_pdf(paper_path, dry_run=dry_run)
         if pdf:
             state.pdf_path = str(pdf)
-        h = git_commit(paper_path,
-                       f"stage-B R{rnd}: compile PDF", tag=tag)
+        git_stage(paper_path, tag=tag)  # B1 intermediate, tag=tag)
         state.log_event("B", "compile_pdf", round_num=rnd,
-                        committed=bool(h), commit_hash=h)
+                        committed=False, commit_hash="")
         save_state(state)
 
         # ── B2: Oracle editorial review (EVENT WAIT) ─────────────
@@ -2583,6 +2818,11 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         # ── Gate: accept or minor revision → Stage C ────────────
         if verdict in ("accept", "minor revision"):
             logger.info(f"{tag} STAGE B PASSED at round {rnd}: {verdict.upper()}")
+            git_commit(paper_path,
+                       f"Stage B ({verdict}, {rnd}R): "
+                       f"Oracle review passed", tag=tag)
+            update_program_board(state.paper_name, "B-DONE",
+                                 f"Oracle: {verdict}, {rnd} rounds")
             state.stage_b_passed = True
             save_state(state)
             return True
@@ -2594,10 +2834,9 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             state.paper_dir, issues_text, rnd)
         codex_exec(fix_prompt, work_dir=paper_path,
                    timeout_seconds=1800, model=model, dry_run=dry_run)
-        h = git_commit(paper_path,
-                       f"stage-B R{rnd}: codex fix oracle issues", tag=tag)
+        git_stage(paper_path, tag=tag)  # B4 intermediate issues", tag=tag)
         state.log_event("B", "codex_fix", round_num=rnd,
-                        committed=bool(h), commit_hash=h)
+                        committed=False, commit_hash="")
         save_state(state)
 
         # ── B5: Claude review fixes (independent second opinion) ──
@@ -2621,18 +2860,22 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         """)
         claude_exec(claude_fix_prompt, work_dir=paper_path,
                     dry_run=dry_run)
-        h = git_commit(paper_path,
-                       f"stage-B R{rnd}: claude review fixes", tag=tag)
+        git_stage(paper_path, tag=tag)  # B5 intermediate fixes", tag=tag)
         state.log_event("B", "claude_review_fixes", round_num=rnd,
-                        committed=bool(h), commit_hash=h)
+                        committed=False, commit_hash="")
         save_state(state)
 
         logger.info(f"{tag} Round {rnd}/{MAX_STAGE_B_ROUNDS} complete, "
                     f"looping for re-review")
 
+    last_v = state.stage_b_verdicts[-1] if state.stage_b_verdicts else "?"
     logger.warning(f"{tag} Max {MAX_STAGE_B_ROUNDS} rounds exhausted, "
-                   f"proceeding with last verdict: "
-                   f"{state.stage_b_verdicts[-1] if state.stage_b_verdicts else '?'}")
+                   f"proceeding with last verdict: {last_v}")
+    git_commit(paper_path,
+               f"Stage B ({last_v}, {MAX_STAGE_B_ROUNDS}R max): "
+               f"Oracle fixes applied", tag=tag)
+    update_program_board(state.paper_name, "B-DONE",
+                         f"Oracle: {last_v}, {MAX_STAGE_B_ROUNDS} rounds (max)")
     state.stage_b_passed = True
     save_state(state)
     return True
@@ -2676,6 +2919,11 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
         # ── Gate: submit → Stage D ───────────────────────────────
         if verdict == "submit" or not issues:
             logger.info(f"{tag} STAGE C PASSED at round {rnd}: READY TO SUBMIT")
+            git_commit(paper_path,
+                       f"Stage C (submit, {rnd}R): "
+                       f"Claude approved for submission", tag=tag)
+            update_program_board(state.paper_name, "C-DONE",
+                                 f"Claude: submit, {rnd} rounds")
             state.stage_c_passed = True
             save_state(state)
             return True
@@ -2686,16 +2934,20 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
             state.paper_dir, issues, rnd)
         codex_exec(fix_prompt, work_dir=paper_path,
                    timeout_seconds=1800, model=model, dry_run=dry_run)
-        h = git_commit(paper_path,
-                       f"stage-C R{rnd}: codex fix claude issues", tag=tag)
+        git_stage(paper_path, tag=tag)  # C2 intermediate claude issues", tag=tag)
         state.log_event("C", "codex_fix_claude", round_num=rnd,
-                        committed=bool(h), commit_hash=h)
+                        committed=False, commit_hash="")
         save_state(state)
 
         logger.info(f"{tag} Round {rnd}/{MAX_STAGE_C_ROUNDS} complete, "
                     f"looping for re-review")
 
     logger.warning(f"{tag} Max {MAX_STAGE_C_ROUNDS} rounds exhausted")
+    git_commit(paper_path,
+               f"Stage C ({MAX_STAGE_C_ROUNDS}R max): "
+               f"Claude review exhausted", tag=tag)
+    update_program_board(state.paper_name, "C-DONE",
+                         f"{MAX_STAGE_C_ROUNDS} rounds (max)")
     state.stage_c_passed = True
     save_state(state)
     return True
@@ -2801,7 +3053,7 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
         f"stage-D: backflow {len(approved_items)} items to main paper",
         tag=tag)
     state.log_event("D", "apply_backflow",
-                    committed=bool(h), commit_hash=h)
+                    committed=False, commit_hash="")
     save_state(state)
 
     # ── D4: Claude verification ──────────────────────────────────
@@ -2825,8 +3077,72 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
                    f"stage-D: claude verify main paper after backflow",
                    tag=tag)
     state.log_event("D", "claude_verify_main",
-                    committed=bool(h), commit_hash=h)
+                    committed=False, commit_hash="")
     save_state(state)
+
+    # ── D5: Claude quality review of backflow changes ──────────
+    logger.info(f"{tag} D5 — Claude review backflow quality")
+    d5_prompt = textwrap.dedent(f"""\
+        Independent quality review of backflow changes to the main paper.
+        Main paper: {state.main_paper_dir}
+        Sub-paper source: {state.paper_dir}
+
+        Recent backflow applied {len(approved_items)} items. Review:
+
+        1. Does each backflow item integrate naturally? (no abrupt insertions)
+        2. Are new theorems/references mathematically correct?
+        3. Is there any broken cross-referencing?
+        4. Does the main paper's narrative flow still make sense?
+        5. Any content that should NOT have been added?
+
+        ## Output Format (MUST follow exactly)
+        ```json
+        {{
+          "quality_verdict": "<good|needs_fixes>",
+          "issues": ["issue1", "issue2", ...],
+          "notes": "summary"
+        }}
+        ```
+
+        quality_verdict = "good" means backflow is clean, no further action.
+        quality_verdict = "needs_fixes" means list specific issues to address.
+        Do NOT edit files — only output the JSON review.
+    """)
+    out_d5 = claude_exec(d5_prompt, work_dir=main_path, dry_run=dry_run)
+    d5_data = parse_json_from_output(out_d5) if not dry_run else {
+        "quality_verdict": "good", "issues": [], "notes": "dry run",
+    }
+    d5_verdict = d5_data.get("quality_verdict", "good")
+    d5_issues = d5_data.get("issues", [])
+    state.log_event("D", "claude_review_backflow_quality",
+                    verdict=d5_verdict,
+                    detail=json.dumps(d5_data, ensure_ascii=False)[:10000])
+    save_state(state)
+
+    if d5_verdict == "needs_fixes" and d5_issues:
+        logger.info(f"{tag} D5 found {len(d5_issues)} issues — Codex fixing")
+        issues_text = "\n".join(f"  {i+1}. {iss}" for i, iss in enumerate(d5_issues))
+        fix_prompt = textwrap.dedent(f"""\
+            Fix issues found by Claude's quality review of backflow changes.
+            Main paper: {state.main_paper_dir}
+
+            ## Issues
+            {issues_text}
+
+            Fix each issue directly in the .tex files.
+            Compile: cd {state.main_paper_dir} && xelatex -interaction=nonstopmode main.tex
+        """)
+        codex_exec(fix_prompt, work_dir=main_path,
+                   timeout_seconds=900, model=model, dry_run=dry_run)
+        h = git_commit(main_path,
+                       f"stage-D5: fix {len(d5_issues)} backflow quality issues",
+                       tag=tag)
+        state.log_event("D", "codex_fix_backflow_quality",
+                        committed=False, commit_hash="")
+        save_state(state)
+        logger.info(f"{tag} D5 fixes applied")
+    else:
+        logger.info(f"{tag} D5: backflow quality OK")
 
     state.stage_d_passed = True
     save_state(state)
@@ -2839,15 +3155,42 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
 # ═══════════════════════════════════════════════════════════════════════════
 
 def build_new_research_prompt(topic: str, outline: str,
-                               target_journal: str) -> str:
-    """N1: Deep original research on a topic."""
-    outline_section = f"\n## Outline provided\n{outline}\n" if outline else ""
+                               target_journal: str,
+                               main_paper_dir: str = "") -> str:
+    """N1: Deep original research grounded in the main paper.
+
+    Reads the main paper (theory/2026_golden_ratio_...) to find
+    existing results that connect to the new topic, then extends
+    them into a new coherent paper.
+    """
+    outline_section = f"\n## Outline / Notes\n{outline}\n" if outline else ""
+
+    main_paper_section = ""
+    if main_paper_dir:
+        main_paper_section = textwrap.dedent(f"""
+
+        ## Source: Main Paper
+        The main paper is at: {main_paper_dir}
+
+        READ the main paper's .tex files thoroughly. Your new paper must:
+        1. Build on existing results from the main paper — cite them, extend them,
+           derive consequences, or apply them to new settings
+        2. NOT duplicate content that already exists in the main paper
+        3. Be self-contained (reader shouldn't need the main paper to understand)
+        4. Identify which main-paper theorems/definitions are prerequisites and
+           state them as "imported results" in your preliminaries section
+
+        The goal is to produce a paper that EXTENDS the main paper's framework
+        into the direction specified by the topic below, discovering genuinely
+        new results along the way.
+        """)
+
     return textwrap.dedent(f"""\
         You are a mathematical researcher preparing a paper for "{target_journal}".
 
         ## Topic
         {topic}
-        {outline_section}
+        {outline_section}{main_paper_section}
         ## Task: Deep Original Research
 
         Conduct deep research on this topic. Produce:
@@ -2857,10 +3200,12 @@ def build_new_research_prompt(topic: str, outline: str,
         4. Connections to existing literature (cite properly)
 
         Requirements:
-        - Find genuinely striking, publishable conclusions. Push until you reach
-          results with real publication value — do not produce incremental filler.
-        - Do NOT reproduce reasoning already published by others. You MAY use
-          others' results as building blocks — cite them properly.
+        - Find genuinely striking, publishable conclusions that extend the
+          framework. Push until you reach results with real publication value
+          — do not produce incremental filler.
+        - Do NOT reproduce reasoning already published by others or already
+          in the main paper. You MAY use existing results as building blocks
+          — cite them properly.
         - Do NOT include intermediate-process conclusions; only final results.
         - Use rigorous academic language. No colloquialisms.
         - Add all references to references.bib.
@@ -3036,15 +3381,103 @@ def run_new_paper_pipeline(
 
     journal = state.target_journal
 
-    # ── N1: Deep research ────────────────────────────────────────
+    # ── NS: Claude scope definition ─────────────────────────────
+    # Claude reads main paper + topic/outline, defines precise scope:
+    # what to include, what to exclude, how to cut from main paper,
+    # what existing results to build on, target contribution.
+    logger.info(f"{tag} NS — Claude scope definition")
+    scope_prompt = textwrap.dedent(f"""\
+        You are defining the precise scope for a new mathematical paper.
+
+        ## New idea / topic
+        {topic}
+
+        {"## Notes / outline" + chr(10) + outline if outline else ""}
+
+        ## Target journal
+        {journal}
+
+        ## Main paper (read ALL .tex files)
+        {state.main_paper_dir}
+
+        ## Task: Define Paper Scope
+
+        Read the main paper thoroughly. Then define the scope for this new
+        paper by answering each question precisely:
+
+        1. **Core contribution**: What is the ONE central new result this
+           paper will prove? State it as a precise theorem statement.
+
+        2. **Imported results**: Which existing theorems/definitions from
+           the main paper are prerequisites? List them by label/name.
+
+        3. **Scope boundary — INCLUDE**: What sections/topics belong in
+           this paper? Be specific (e.g., "Sections 3.1-3.4 of the main
+           paper's folding chapter, extended with new convergence results").
+
+        4. **Scope boundary — EXCLUDE**: What must NOT be in this paper?
+           (e.g., "All zeta-function material", "Physical applications",
+           "Anything from the logic expansion chain").
+
+        5. **Cut strategy**: How does this paper relate to the main paper?
+           - Extract + extend (take existing material, add new results)
+           - New direction (minimal overlap, new theorems grounded in main paper's definitions)
+           - Bridge (connect two existing parts of the main paper)
+
+        6. **Target length**: Estimate page count appropriate for {journal}.
+
+        7. **Key differentiation**: In one sentence, why would a referee
+           at {journal} accept this over existing literature?
+
+        ## Output Format (MUST follow exactly)
+        ```json
+        {{
+          "core_theorem": "precise statement of the main new result",
+          "imported_results": ["thm:xxx", "def:yyy", ...],
+          "include_topics": ["topic1", "topic2", ...],
+          "exclude_topics": ["topic1", "topic2", ...],
+          "cut_strategy": "extract_extend|new_direction|bridge",
+          "target_pages": <number>,
+          "differentiation": "one sentence",
+          "suggested_title": "paper title"
+        }}
+        ```
+    """)
+    scope_out = claude_exec(scope_prompt, work_dir=Path(state.main_paper_dir)
+                            if state.main_paper_dir else paper_path,
+                            dry_run=dry_run)
+    scope_data = parse_json_from_output(scope_out) if not dry_run else {
+        "core_theorem": "dry run theorem",
+        "imported_results": [],
+        "include_topics": ["dry run topic"],
+        "exclude_topics": [],
+        "cut_strategy": "new_direction",
+        "target_pages": 25,
+        "differentiation": "dry run",
+        "suggested_title": f"On {topic}",
+    }
+    state.log_event("N", "claude_scope_definition",
+                    detail=json.dumps(scope_data, ensure_ascii=False)[:10000])
+    save_state(state)
+
+    # Pass scope constraints to N1
+    scope_constraints = json.dumps(scope_data, indent=2, ensure_ascii=False)[:5000]
+    logger.info(f"{tag} NS scope: {scope_data.get('cut_strategy', '?')}, "
+                f"~{scope_data.get('target_pages', '?')} pages, "
+                f"core: {str(scope_data.get('core_theorem', ''))[:80]}")
+
+    # ── N1: Deep research (guided by Claude's scope) ─────────────
     logger.info(f"{tag} N1 — Codex deep research (for {journal})")
-    prompt_n1 = build_new_research_prompt(topic, outline, journal)
+    prompt_n1 = build_new_research_prompt(topic, outline, journal,
+                                          main_paper_dir=state.main_paper_dir)
+    # Append Claude's scope constraints to guide codex
+    prompt_n1 += f"\n\n## Scope (defined by independent Claude review)\n{scope_constraints}\n"
     codex_exec(prompt_n1, work_dir=paper_path,
                timeout_seconds=3600, model=model, dry_run=dry_run)
-    h = git_commit(paper_path, f"new-paper N1: deep research — {topic[:40]}",
-                   tag=tag)
+    git_stage(paper_path, tag=tag)  # N1 intermediate
+    h = ""  #
     state.log_event("N", "codex_deep_research",
-                    committed=bool(h), commit_hash=h)
+                    committed=False, commit_hash="")
     save_state(state)
 
     # ── N2: Scaffold ─────────────────────────────────────────────
@@ -3052,9 +3485,10 @@ def run_new_paper_pipeline(
     prompt_n2 = build_scaffold_prompt(str(paper_path), journal)
     codex_exec(prompt_n2, work_dir=paper_path,
                timeout_seconds=1800, model=model, dry_run=dry_run)
-    h = git_commit(paper_path, f"new-paper N2: scaffold structure", tag=tag)
+    git_stage(paper_path, tag=tag)  # N2 intermediate
+    h = ""
     state.log_event("N", "codex_scaffold",
-                    committed=bool(h), commit_hash=h)
+                    committed=False, commit_hash="")
     save_state(state)
 
     # ── N3: Initial journal style ────────────────────────────────
@@ -3062,9 +3496,9 @@ def run_new_paper_pipeline(
     prompt_n3 = build_initial_style_prompt(str(paper_path), journal)
     codex_exec(prompt_n3, work_dir=paper_path,
                timeout_seconds=2400, model=model, dry_run=dry_run)
-    h = git_commit(paper_path, f"new-paper N3: journal style draft", tag=tag)
+    h = git_commit(paper_path, f"new-paper: {topic[:40]} (research+scaffold+style)", tag=tag)
     state.log_event("N", "codex_initial_style",
-                    committed=bool(h), commit_hash=h)
+                    committed=False, commit_hash="")
     save_state(state)
 
     logger.info(f"{tag} New-paper pipeline complete → entering Review pipeline")
@@ -3194,34 +3628,119 @@ def discover_papers(paper_dirs: Optional[list[str]] = None,
                     *, respect_assignment: bool = True) -> list[str]:
     """Discover papers to process.
 
-    If respect_assignment=True (default with --all), only return papers
-    assigned to this machine to avoid git conflicts with the other machine.
+    Filtering chain (all must pass):
+      1. PROGRAM_BOARD.md status — skip 已投/已发表/骨架/待分诊
+      2. PROGRAM_BOARD.md registration — skip unregistered (warn)
+      3. Machine assignment — only this machine's papers (if respect_assignment)
     """
     if paper_dirs:
         return paper_dirs
 
+    board = _get_board_entries()
     my_papers = get_my_papers() if respect_assignment else []
     papers = []
+    skipped_status = []
+    skipped_unreg = []
+
     for base in (PAPERS_PUB_DIR, THEORY_DIR):
         if base.exists():
             for d in sorted(base.iterdir()):
-                if d.is_dir() and (d / "main.tex").exists():
-                    if my_papers and d.name not in my_papers:
-                        continue
-                    papers.append(str(d))
+                if not d.is_dir() or not (d / "main.tex").exists():
+                    continue
 
+                # 1. Board status filter
+                entry = board.get(d.name)
+                if entry and _board_skip(entry["status"]):
+                    skipped_status.append(
+                        f"  {d.name}: {entry['status']}")
+                    continue
+
+                # 2. Board registration filter
+                if board and entry is None:
+                    skipped_unreg.append(d.name)
+                    continue
+
+                # 3. Machine assignment filter
+                if my_papers and d.name not in my_papers:
+                    continue
+
+                papers.append(str(d))
+
+    if skipped_status:
+        logger.info(f"Board status filter skipped {len(skipped_status)} papers:\n"
+                    + "\n".join(skipped_status))
+    if skipped_unreg:
+        logger.warning(
+            f"Unregistered in PROGRAM_BOARD.md (skipped, add row to process):\n"
+            + "\n".join(f"  {n}" for n in skipped_unreg))
     if my_papers:
         logger.info(f"Machine filter ({sys.platform}): "
-                    f"{len(papers)}/{len(my_papers)} papers matched")
+                    f"{len(papers)} papers to process")
     return papers
 
 
-def run_rolling(paper_dirs: list[str], *, parallel: int = 1,
+def _auto_parallel() -> int:
+    """Auto-detect optimal parallelism based on system resources.
+
+    Strategy: Oracle wait is I/O-bound (HTTP poll), Codex/Claude is CPU-bound.
+    We want enough workers so that Oracle-blocked threads don't idle the CPU.
+
+    Rule of thumb:
+      - CPU cores / 2 for Codex compute headroom
+      - +2 for Oracle I/O overlap (browser can only do 1 at a time, but
+        we queue multiple and poll concurrently)
+      - Cap at 6 to avoid git contention and memory pressure
+      - Min 2 (always want at least some overlap)
+    """
+    try:
+        cores = os.cpu_count() or 4
+    except Exception:
+        cores = 4
+    computed = max(2, min(6, cores // 2 + 2))
+    return computed
+
+
+# Track how many workers are currently blocked on Oracle I/O
+_oracle_wait_count = 0
+_oracle_wait_lock = threading.Lock()
+
+
+def oracle_wait_enter():
+    global _oracle_wait_count
+    with _oracle_wait_lock:
+        _oracle_wait_count += 1
+
+
+def oracle_wait_exit():
+    global _oracle_wait_count
+    with _oracle_wait_lock:
+        _oracle_wait_count = max(0, _oracle_wait_count - 1)
+
+
+def get_oracle_wait_count() -> int:
+    with _oracle_wait_lock:
+        return _oracle_wait_count
+
+
+def run_rolling(paper_dirs: list[str], *, parallel: int = 0,
                 continuous: bool = False, **kwargs) -> tuple[int, int]:
+    """Rolling pipeline with adaptive concurrency.
+
+    parallel=0 (default): auto-detect from CPU cores
+    parallel=N: use exactly N workers
+
+    When workers block on Oracle I/O, the pool still has capacity for
+    other papers to do Codex/Claude compute work. The pool size is set
+    high enough to keep CPUs busy even when multiple workers are polling.
+    """
+    if parallel <= 0:
+        parallel = _auto_parallel()
+
     succeeded = failed = 0
     queue = list(paper_dirs)
 
-    logger.info(f"Rolling pipeline: {len(queue)} papers, {parallel} workers")
+    logger.info(f"Rolling pipeline: {len(queue)} papers, {parallel} workers "
+                f"(auto={parallel == _auto_parallel()})")
 
     with ThreadPoolExecutor(max_workers=parallel,
                             thread_name_prefix="paper") as pool:
@@ -3233,7 +3752,9 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 1,
             d = queue.pop(0)
             fut = pool.submit(run_paper_pipeline, d, **kwargs)
             futures[fut] = d
-            logger.info(f"Dispatched: {Path(d).name}")
+            logger.info(f"Dispatched: {Path(d).name} "
+                        f"(active={len(futures)}, oracle_wait={get_oracle_wait_count()}, "
+                        f"queue={len(queue)})")
 
         for _ in range(min(parallel, len(queue))):
             _submit()
@@ -3255,6 +3776,16 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 1,
                 except Exception as exc:
                     failed += 1
                     logger.error(f"[{name}] EXCEPTION: {exc}")
+
+                # Push after each paper completes
+                with _git_lock:
+                    push = run_cmd(["git", "push", "origin",
+                                    "dev-automation-integration"], timeout=60)
+                    if push.returncode == 0:
+                        logger.info(f"Git push OK after {name}")
+                    else:
+                        logger.warning(f"Git push failed after {name}")
+
                 _submit()
 
     return succeeded, failed
@@ -3483,7 +4014,8 @@ def main() -> int:
                         default="Advances in Mathematics")
     parser.add_argument("--main-paper", type=str, default="",
                         help="Main paper dir for Stage D backflow")
-    parser.add_argument("--parallel", "-p", type=int, default=1)
+    parser.add_argument("--parallel", "-p", type=int, default=0,
+                        help="Worker count (0=auto-detect from CPU cores)")
     parser.add_argument("--continuous", action="store_true")
     parser.add_argument("--skip-to", type=str, default="",
                         choices=["F", "A", "B", "C", "D"])
@@ -3548,6 +4080,17 @@ def main() -> int:
             oracle_timeout=args.oracle_timeout,
         )
         return 0 if ok else 1
+
+    # ── Pre-flight: sync with remote ───────────────────────────
+    if not args.dry_run:
+        logger.info("Pre-flight: git pull origin dev-automation-integration")
+        sync = run_cmd(["git", "pull", "--rebase", "origin",
+                        "dev-automation-integration"], timeout=60)
+        if sync.returncode != 0:
+            logger.warning(f"Git pull failed (rc={sync.returncode}), "
+                           f"continuing with local state")
+        else:
+            logger.info("Git sync OK")
 
     # ── Review mode ────────────────────────────────────────────
     paper_dirs = args.paper or (

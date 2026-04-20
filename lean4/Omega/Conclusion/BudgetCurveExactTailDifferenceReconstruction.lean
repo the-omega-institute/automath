@@ -103,4 +103,25 @@ theorem paper_conclusion_budget_curve_mellin_renyi_factorization_layer
       (paper_conclusion_budget_curve_exact_tail_difference_reconstruction_seeds
         (α := α) d k k hk1 hk1).2.2 d' hcurve
 
+theorem paper_conclusion_capacity_exponent_universal_fold_angle
+    (gStar alphaStar beta : ℝ) :
+    let betaC := alphaStar / Real.log 2
+    let lowerGamma := gStar + min alphaStar (beta * Real.log 2)
+    (beta ≤ betaC → lowerGamma = gStar + beta * Real.log 2) ∧
+      (betaC ≤ beta → lowerGamma = gStar + alphaStar) := by
+  dsimp
+  have hlog2 : 0 < Real.log 2 := by
+    exact Real.log_pos (by norm_num : (1 : ℝ) < 2)
+  constructor
+  · intro hbeta
+    have hmin : beta * Real.log 2 ≤ alphaStar := by
+      have hmul := mul_le_mul_of_nonneg_right hbeta hlog2.le
+      simpa [div_eq_mul_inv, hlog2.ne'] using hmul
+    rw [min_eq_right hmin]
+  · intro hbeta
+    have hmin : alphaStar ≤ beta * Real.log 2 := by
+      have hmul := mul_le_mul_of_nonneg_right hbeta hlog2.le
+      simpa [div_eq_mul_inv, hlog2.ne'] using hmul
+    rw [min_eq_left hmin]
+
 end Omega.Conclusion.BudgetCurveExactTailDifferenceReconstruction

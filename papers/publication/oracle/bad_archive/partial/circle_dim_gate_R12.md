@@ -1,3 +1,0 @@
-<!-- oracle metadata: {"timestamp": "2026-04-13T21:25:45.955364", "model": "chatgpt-5.4-pro-extended", "response_length": 325} -->
-
-I’ve narrowed the critical check to the main expansion, the defect identities, and the moment assumptions, since those look most likely to determine whether there is a real blocker. I’m also testing whether the appendix and RKHS material genuinely supports the results or mainly overstates novelty and adds unnecessary noise.
