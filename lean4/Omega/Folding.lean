@@ -135,6 +135,7 @@ import Omega.Folding.FoldCollisionSpectrum
 import Omega.Folding.FoldCollisionZeroReduction
 import Omega.Folding.FoldMultiplicityGroupAlgebra
 import Omega.Folding.FoldFiberParityEnergySimplex
+import Omega.Folding.FoldFiberLevelLogspace
 import Omega.Folding.FoldZeroUncertainty
 import Omega.Folding.FoldZeroDivisorTripleReduction
 import Omega.Folding.FoldAlphaBasic
@@ -253,6 +254,7 @@ import Omega.Folding.GmFischerCover
 import Omega.Folding.HammingDist
 import Omega.Folding.HankelSpectrum
 import Omega.Folding.HigherBlockIdentification
+import Omega.Folding.KilloLayeredPrimeSlicesFiniteDepth
 import Omega.Folding.KilloPrimeRegisterIdempotentArithmetization
 import Omega.Folding.KilloFoldBinEscortRenyiLogisticGeometry
 import Omega.Folding.KilloFoldBinEscortRenyiEntropy
