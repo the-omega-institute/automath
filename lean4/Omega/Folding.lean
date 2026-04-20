@@ -18,6 +18,7 @@ import Omega.Folding.BernoulliPEndpointExactFinite
 import Omega.Folding.BernoulliPEndpointLdp
 import Omega.Folding.BernoulliPEndpointLdpRestated
 import Omega.Folding.BernoulliPFiniteTimeMismatchRationalRecurrence
+import Omega.Folding.BernoulliPFiniteTimePmf2dRecurrence
 import Omega.Folding.BernoulliPFullAutocovarianceJordan
 import Omega.Folding.BernoulliPGammaMax
 import Omega.Folding.BernoulliPHalfFibonacciLowDefectShadow

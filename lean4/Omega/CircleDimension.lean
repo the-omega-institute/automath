@@ -170,6 +170,7 @@ import Omega.CircleDimension.PoissonDefectStability
 import Omega.CircleDimension.PoissonEntropyTomography
 import Omega.CircleDimension.PoissonKLConstantOneEighth
 import Omega.CircleDimension.PoissonKLDissipationSeventhOrderCorrection
+import Omega.CircleDimension.PoissonKLMomentMatchingLeadingTerm
 import Omega.CircleDimension.PoissonNormalizedKLEventualMonotone
 import Omega.CircleDimension.PoissonKLEighth
 import Omega.CircleDimension.PoissonKLEvenOrders

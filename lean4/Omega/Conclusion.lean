@@ -65,6 +65,7 @@ import Omega.Conclusion.DiscreteCertificateFrontGeneralizedInverse
 import Omega.Conclusion.DiscreteKinkFanPiecewiseLinearization
 import Omega.Conclusion.DiscreteKinkMassHatKernelCurvature
 import Omega.Conclusion.DisjointnessPowerWordDecomposition
+import Omega.Conclusion.DyadicBoundaryCodeExactUniqueDecodingRadius
 import Omega.Conclusion.EllipticLosslessLift
 import Omega.Conclusion.EllipticT5UniqueQuadraticSubfield
 import Omega.Conclusion.EndpointHorizonArcsineKLClosedForm
