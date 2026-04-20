@@ -205,6 +205,7 @@ import Omega.GU.Window6GoldenS3C2C6PhaseSource
 import Omega.GU.Window6GoldenCubicAuditFieldDegree6
 import Omega.GU.Window6LieEnvelopeSL21
 import Omega.GU.Window6LieEnvelopeSO21FromCommutators
+import Omega.GU.Window6EdgeFluxCommutantRigidity
 import Omega.GU.Window6PushEnvelopeCertificateUpgrade
 import Omega.GU.Window6BdrySheetParityNonfunctorialExtension
 import Omega.GU.Window6B3SupportCount
