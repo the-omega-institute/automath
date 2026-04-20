@@ -216,6 +216,7 @@ import Omega.Conclusion.StokesSteinWeightedGraphMinflow
 import Omega.Conclusion.StokesEnergyDyadicMartingale
 import Omega.Conclusion.SquarefreeRTLaminarNesting
 import Omega.Conclusion.SubexponentialLedgerPhaseUniversality
+import Omega.Conclusion.EscortDecisionThermalCodimensionGap
 import Omega.Conclusion.SyncKernelPalindrome
 import Omega.Conclusion.UcdimZr
 import Omega.Conclusion.WeightedSyncCompletedTraceEven

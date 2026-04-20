@@ -45,6 +45,7 @@ import Omega.OperatorAlgebra.ReplicationCentralizerDimensionEgf
 import Omega.OperatorAlgebra.FoldOrbitMgfFiberFactorization
 import Omega.OperatorAlgebra.FoldOrbitTouchardLoworder
 import Omega.OperatorAlgebra.FoldCleanAncillaReversibleDilation
+import Omega.OperatorAlgebra.FoldEquivalenceAutSemidir
 import Omega.OperatorAlgebra.FoldGaugeMiBound
 import Omega.OperatorAlgebra.FoldOptimalDelinkingCurve
 import Omega.OperatorAlgebra.MultiRoundStrongConverseLinearLeakage
