@@ -209,6 +209,7 @@ import Omega.POM.MicrocanonicalTwoTemperatureKktPowerLaw
 import Omega.POM.MicrocanonicalUniversalSection
 import Omega.POM.MinEntropyRate
 import Omega.POM.MinKernelProjectionAndInversion
+import Omega.POM.HermiteConstantCharacterization
 import Omega.POM.MinkowskiBudgetBarrier
 import Omega.POM.Mod2DifferenceBinomialBasis
 import Omega.POM.Mod2ShadowEventualPeriodBound

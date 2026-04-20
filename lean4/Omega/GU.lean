@@ -82,6 +82,7 @@ import Omega.GU.JoukowskyGodelPullbackFactorization
 import Omega.GU.LeyangEllipseDoublingShift
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.LeyangMahlerFreeEnergy
+import Omega.GU.LogCmNoFixedLinearRecurrence
 import Omega.GU.LogCmStableInverseExponentialSeparation
 import Omega.GU.M11DeltaClosureUniqueMinimalSO10
 import Omega.GU.M11Canonical16ComplexModuleDetOne
