@@ -20,6 +20,7 @@ import Omega.Zeta.Conclusion63CLTSpectral
 import Omega.Zeta.CayleyDepthIdentity
 import Omega.Zeta.XiCayleyJoukowskyHarmonicMeasureEllipse
 import Omega.Zeta.XiCriticalLineHorizonCircle
+import Omega.Zeta.XiTimePart63cSchurCauchyMasterKernel
 import Omega.Zeta.AppOffcriticalRadiusCompression
 import Omega.Zeta.CertInverseLimitCoherence
 import Omega.Zeta.ClassArtinMobiusTrace
