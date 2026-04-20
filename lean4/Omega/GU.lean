@@ -143,6 +143,7 @@ import Omega.GU.TerminalHypercubeAffineInvolutionFixedpointGaussStokes
 import Omega.GU.TerminalKmDepthRescaling
 import Omega.GU.TerminalOstrowskiZeckendorfBinfold
 import Omega.GU.TerminalResetEventsSturmian
+import Omega.GU.TerminalRotationWindowPrototype
 import Omega.GU.TerminalSuccUniqueBranchMerge
 import Omega.GU.TerminalTimeFactorMetallicUnique
 import Omega.GU.TerminalTimeProtocolGoldenBranch

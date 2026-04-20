@@ -78,6 +78,7 @@ import Omega.EA.StableAddNoWrapTruncation
 import Omega.EA.StableAddNormalizationRealization
 import Omega.EA.Sync10MemoryHorizonInputStatistics
 import Omega.EA.Sync10Regeneration
+import Omega.EA.Sync10RegenerationCorrelationBound
 import Omega.EA.Sync10ResetDepthDiameter
 import Omega.EA.Sync10ResetDepthSpectrum
 import Omega.EA.Sync10ResetWaitingTime
