@@ -1,3 +1,0 @@
-<!-- oracle metadata: {"timestamp": "2026-04-07T19:42:42.958017", "model": "chatgpt-5.4-pro-extended", "response_length": 305} -->
-
-One concrete blocker is now clear: several determinant-variation statements in Section 4 fail as written unless the distinguished eigenvalue is assumed to satisfy essentially |λ| > 1. I’m checking whether this defect stays confined to the perturbative section or also affects the main realization theorem.
