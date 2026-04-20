@@ -47,6 +47,7 @@ import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.DefectBand
 import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.DeltaqGoldenEnvelope
+import Omega.POM.DeltaqGLambdaIdentity
 import Omega.POM.DeltaqSpectralDimensionIdentity
 import Omega.POM.DerivedAuditedEvenMinsectorTopologicalPhase
 import Omega.POM.DerivedFiberIndcomplexAlternatingWittenParity
