@@ -7,6 +7,7 @@ import Omega.SyncKernelWeighted.CompletedPrimitivePrimePowerDifferenceQuotient
 import Omega.SyncKernelWeighted.GallavottiCohen
 import Omega.SyncKernelWeighted.GallavottiCohenSlopeInvolution
 import Omega.SyncKernelWeighted.IharaArtinFactorization
+import Omega.SyncKernelWeighted.IharaChebotarevExp
 import Omega.SyncKernelWeighted.IharaCyclotomicFactorClassification
 import Omega.SyncKernelWeighted.IharaChebotarevGrhCriterion
 import Omega.SyncKernelWeighted.IharaMertensConstant

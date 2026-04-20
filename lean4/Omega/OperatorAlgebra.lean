@@ -5,6 +5,7 @@ import Omega.OperatorAlgebra.FiberReflectorDeterminantPotential
 import Omega.OperatorAlgebra.FiberSpectrumDeterminantPartition
 import Omega.OperatorAlgebra.FoldBayesPosteriorCollapse
 import Omega.OperatorAlgebra.FoldCenterExpectationIndexCollision2
+import Omega.OperatorAlgebra.FoldCapacityCurveCompleteInvariant
 import Omega.OperatorAlgebra.FoldChannelChoiRankEqualsS2General
 import Omega.OperatorAlgebra.FoldCleanAncillaReversibleDilation
 import Omega.OperatorAlgebra.FoldCleanAncillaBudgetDecomposition
@@ -18,6 +19,7 @@ import Omega.OperatorAlgebra.FoldFiberFixedpointsCenter
 import Omega.OperatorAlgebra.FoldFiberNormalizerWreath
 import Omega.OperatorAlgebra.FoldGaugeAbK0Mod2
 import Omega.OperatorAlgebra.FoldGaugeCommutantExplicit
+import Omega.OperatorAlgebra.FoldGaugeLogVolumeStieltjes
 import Omega.OperatorAlgebra.FoldGaugeGroupStructure
 import Omega.OperatorAlgebra.FoldGaugeMiBound
 import Omega.OperatorAlgebra.FoldGaugeNonabelianSpectrumRigidity
