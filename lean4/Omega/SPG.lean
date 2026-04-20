@@ -106,6 +106,7 @@ import Omega.SPG.HypercubeGodelFluxMultiplicativeVolume
 import Omega.SPG.HypercubeGradientConsistency
 import Omega.SPG.HypercubeGradientPublication
 import Omega.SPG.HypercubeNearDetailedBalancePublication
+import Omega.SPG.HypercubeWalshStokesEnergyCutoffReconstruction
 import Omega.SPG.HypercubeWeightedStokesSobolevEnergySpectrum
 import Omega.SPG.HypercubeWeightedWalshStokes
 import Omega.SPG.IntegerBulkDecodeOrCycleCertificate
