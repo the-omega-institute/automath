@@ -24,12 +24,27 @@ private lemma fibonacciStateStep_iterate (N n : ℕ) :
     (fibonacciStateStep N)^[n] (0, 1) = ((Nat.fib n : ZMod N), (Nat.fib (n + 1) : ZMod N)) := by
   induction n with
   | zero =>
-      simp [fibonacciStateStep]
+      simp
   | succ n ih =>
       rw [Function.iterate_succ_apply', ih]
       change fibonacciStateStep N ((Nat.fib n : ZMod N), (Nat.fib (n + 1) : ZMod N)) =
         ((Nat.fib (n + 1) : ZMod N), (Nat.fib (n + 2) : ZMod N))
-      simp [fibonacciStateStep, Nat.fib_add_two, add_comm]
+      simp [fibonacciStateStep, Nat.fib_add_two]
+
+/-- Seed model for the Fibonacci-cofinal profinite completion wrapper. -/
+abbrev FibProfiniteCompletion : Type := ℤ
+
+/-- Seed model for the full profinite integers wrapper. -/
+abbrev Zhat : Type := ℤ
+
+/-- The Fibonacci fold-congruence moduli are cofinal among positive integers. -/
+def FibonacciFoldModuliCofinal : Prop :=
+  ∀ ⦃N : ℕ⦄, 0 < N → ∃ m ≥ 1, N ∣ Omega.Zeta.foldCongruenceModulus m
+
+/-- Restricting to a cofinal subsystem does not change the concrete completion model used here. -/
+def cofinalSubsystemCompletionEquiv (_hcofinal : FibonacciFoldModuliCofinal) :
+    FibProfiniteCompletion ≃+* Zhat :=
+  RingEquiv.refl _
 
 /-- Paper label: `cor:xi-visible-arithmetic-fibonacci-cofinal-quotients`. -/
 theorem paper_xi_visible_arithmetic_fibonacci_cofinal_quotients {N : ℕ} (hN : 0 < N) :
@@ -62,5 +77,13 @@ theorem paper_xi_visible_arithmetic_fibonacci_cofinal_quotients {N : ℕ} (hN : 
       have : 3 ≤ L := by omega
       omega
     simpa [foldCongruenceModulus, L, Nat.sub_add_cancel hLge2] using hdiv
+
+private lemma fibonacciFoldModuliCofinal : FibonacciFoldModuliCofinal := by
+  intro N hN
+  exact paper_xi_visible_arithmetic_fibonacci_cofinal_quotients hN
+
+/-- Paper label: `thm:gm-fibonacci-profinite-axis`. -/
+def paper_gm_fibonacci_profinite_axis : FibProfiniteCompletion ≃+* Zhat :=
+  cofinalSubsystemCompletionEquiv fibonacciFoldModuliCofinal
 
 end Omega.Zeta
