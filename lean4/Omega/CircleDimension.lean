@@ -38,6 +38,7 @@ import Omega.CircleDimension.CoherenceTimeBarrier2Pow
 import Omega.CircleDimension.CoherenceTimeLowerBound
 import Omega.CircleDimension.CommutativeVisibleAlgebra
 import Omega.CircleDimension.ContinuousSpectrumRepresentation
+import Omega.CircleDimension.CoordinateRepresentation
 import Omega.CircleDimension.ComovingDefectDeltaBound
 import Omega.CircleDimension.ComovingHorizonScanFirstLayerExtraction
 import Omega.CircleDimension.ComovingHorizonScanFourierInversion
