@@ -231,6 +231,7 @@ import Omega.Folding.GaugeAnomalyBranchCurveXYExplicit
 import Omega.Folding.GaugeAnomalyClt
 import Omega.Folding.GaugeAnomalyCovClosed
 import Omega.Folding.GaugeAnomalyCovGenfun
+import Omega.Folding.GaugeAnomalyCovarianceDistributionMoment
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
 import Omega.Folding.GaugeAnomalyVarianceHankelRigidity
 import Omega.Folding.GaugeAnomalyCumulant3
