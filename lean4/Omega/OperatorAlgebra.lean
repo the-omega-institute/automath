@@ -40,6 +40,7 @@ import Omega.OperatorAlgebra.FoldOrbitMgfFiberFactorization
 import Omega.OperatorAlgebra.FoldOrbitSpectrumIdentifiabilityHistogram
 import Omega.OperatorAlgebra.FoldOrbitStieltjesHankelLogconvex
 import Omega.OperatorAlgebra.FoldOrbitTouchardLoworder
+import Omega.OperatorAlgebra.FoldPushforwardLift
 import Omega.OperatorAlgebra.FoldQuantumChannelChoiCapacity
 import Omega.OperatorAlgebra.FoldQuantumChannelChoiRenyiMutualInformation
 import Omega.OperatorAlgebra.FoldQuotientUniversal
