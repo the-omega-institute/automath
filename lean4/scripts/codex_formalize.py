@@ -1872,6 +1872,13 @@ def main() -> int:
                         shutil.rmtree(entry, ignore_errors=True)
 
     state = load_state()
+    # consecutive_failures is a runtime signal for mid-session backoff;
+    # a fresh session starts the counter at 0. Otherwise a previously-killed
+    # pipeline makes the new pipeline cooldown immediately on boot.
+    if state.consecutive_failures:
+        logger.info(f"Resetting consecutive_failures={state.consecutive_failures} on session start")
+        state.consecutive_failures = 0
+        save_state(state)
     logger.info(f"Starting: R{state.round_number}, ~{state.total_theorems} theorems")
 
     total_succeeded = 0
