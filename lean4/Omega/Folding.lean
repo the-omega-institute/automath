@@ -15,6 +15,7 @@ import Omega.Folding.BernoulliPCycleTiltSecondMomentsClosed
 import Omega.Folding.BernoulliPDensityUnimodal
 import Omega.Folding.BernoulliPDoobTransformClosed
 import Omega.Folding.BernoulliPEndpointExactFinite
+import Omega.Folding.BernoulliPEndpointLdp
 import Omega.Folding.BernoulliPEndpointLdpRestated
 import Omega.Folding.BernoulliPFiniteTimeMismatchRationalRecurrence
 import Omega.Folding.BernoulliPFullAutocovarianceJordan

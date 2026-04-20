@@ -167,6 +167,7 @@ import Omega.CircleDimension.PoissonKLDissipationSeventhOrderCorrection
 import Omega.CircleDimension.PoissonNormalizedKLEventualMonotone
 import Omega.CircleDimension.PoissonKLEighth
 import Omega.CircleDimension.PoissonKLEvenOrders
+import Omega.CircleDimension.PoissonKolmogorovUniversalLimit
 import Omega.CircleDimension.PoissonKernelDerivativeL1Energy
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonSecondOrder
