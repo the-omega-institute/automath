@@ -46,6 +46,7 @@ import Omega.Folding.BinFoldGaugeDecomposition
 import Omega.Folding.BinFoldGaugeDensityTwoScale
 import Omega.Folding.BinFoldGaugeM6
 import Omega.Folding.BinFoldMinsectorLastbitSectionUnique
+import Omega.Folding.BinGaugeVolume
 import Omega.Folding.BinGaugeVolumeStirlingSecondOrder
 import Omega.Folding.BinMinsectorLastbit1SectionUnique
 import Omega.Folding.BitRecoveryFromLocalCongruenceData

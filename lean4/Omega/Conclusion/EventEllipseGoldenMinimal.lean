@@ -1,3 +1,4 @@
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Tactic
 import Mathlib.NumberTheory.Real.GoldenRatio
 
@@ -171,5 +172,38 @@ theorem paper_conclusion_event_ellipse_golden_minimal_stretch (a : List ℕ)
         exact False.elim (hneq heq)
       · intro hall'
         exact False.elim (hall hall')
+
+/-- Rephrasing the golden minimal-stretch bound as a hyperbolic translation-length lower bound via
+the standard `2 log ρ` formula. Equality is inherited from the all-ones characterization.
+    cor:conclusion-event-hyperbolic-translation-golden-minimal -/
+theorem paper_conclusion_event_hyperbolic_translation_golden_minimal (a : List ℕ)
+    (ha : ∀ n ∈ a, 1 ≤ n) :
+    let τ := 2 * Real.log (goldenStretchCond₂ (eventWordMatrix a))
+    τ ≥ 2 * Real.log (Real.goldenRatio ^ (4 * a.length)) ∧
+      (τ = 2 * Real.log (Real.goldenRatio ^ (4 * a.length)) ↔ ∀ n ∈ a, n = 1) := by
+  let x := goldenStretchCond₂ (eventWordMatrix a)
+  let y := Real.goldenRatio ^ (4 * a.length)
+  have hstretch := paper_conclusion_event_ellipse_golden_minimal_stretch a ha
+  have hge : y ≤ x := by
+    simpa [x, y] using hstretch.1
+  have heq : x = y ↔ ∀ n ∈ a, n = 1 := by
+    simpa [x, y] using hstretch.2
+  have hy_pos : 0 < y := by
+    dsimp [y]
+    positivity
+  have hx_pos : 0 < x := lt_of_lt_of_le hy_pos hge
+  have hlog : Real.log y ≤ Real.log x := Real.log_le_log hy_pos hge
+  constructor
+  · linarith
+  · constructor
+    · intro hτ
+      have hlog_eq : Real.log x = Real.log y := by linarith
+      have hxy : x = y := by
+        apply_fun Real.exp at hlog_eq
+        simpa [Real.exp_log hx_pos, Real.exp_log hy_pos] using hlog_eq
+      exact heq.mp hxy
+    · intro hall
+      have hxy : x = y := heq.mpr hall
+      simp [x, y, hxy]
 
 end Omega.Conclusion.EventEllipseGoldenMinimal
