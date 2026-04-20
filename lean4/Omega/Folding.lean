@@ -317,6 +317,7 @@ import Omega.Folding.HiddenBitDecoupling
 import Omega.Folding.HigherBlockIdentification
 import Omega.Folding.HolographicRateConservation
 import Omega.Folding.HypercubeBiasEllipsoidGodelLength
+import Omega.Folding.HypercubeGodelEllipsoidVolumeEnergyRigidity
 import Omega.Folding.HypercubeGodelStokesFluxBias
 import Omega.Folding.HypercubeKraftGodelSideinfoLowerBound
 import Omega.Folding.HypercubeStokesPlancherelBoundaryEnergy
