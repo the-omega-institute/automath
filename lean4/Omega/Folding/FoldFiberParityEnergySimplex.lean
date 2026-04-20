@@ -315,6 +315,20 @@ theorem paper_fold_fiber_parity_energy_simplex_interval_correlation_classificati
           h2, hterm] using foldFiberParityIntervalCorrelation_mod2_terminal_value L h2
       · simp [foldFiberParityIntervalCorrelation, foldFiberParityIntervalZeroSumCount, h2, hterm]
 
+/-- Specializing the interval-correlation classification to the full interval `[1, m]` leaves only
+the three residue classes of `m mod 3`, with the terminal branch automatically active.
+    cor:fold-fiber-parity-energy-simplex-global-parity-mod3 -/
+theorem paper_fold_fiber_parity_energy_simplex_global_parity_mod3 (m : ℕ) (hm : 1 ≤ m) :
+    foldFiberParityIntervalCorrelation m 1 m =
+      if m % 3 = 1 then 0
+      else if m % 3 = 0 then (1 : ℚ) / 2 ^ (2 * (m / 3))
+      else (1 : ℚ) / 2 ^ (2 * (m / 3) + 1) := by
+  have hJ : 1 + m - 1 ≤ m := by omega
+  have hterm : 1 + m - 1 = m := by omega
+  simpa [hterm] using
+    paper_fold_fiber_parity_energy_simplex_interval_correlation_classification m 1 m
+      (by decide) hm hJ
+
 /-- Concrete slice/collision bookkeeping for the parity-energy decomposition. -/
 structure FoldFiberSliceCollisionData where
   R : Type

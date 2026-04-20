@@ -212,6 +212,7 @@ import Omega.Folding.FoldSpectrumNontrivialBound
 import Omega.Folding.FoldEvenOddBalance
 import Omega.Folding.FoldSpectrumParityZero
 import Omega.Folding.FoldSpectrumZeroCriterion
+import Omega.Folding.FoldSpectrumZeroInvolution
 import Omega.Folding.FoldSuitePublication
 import Omega.Folding.FoldTimeRegisterErrorFiberThreshold
 import Omega.Folding.FoldZeroDivisorTripleReduction

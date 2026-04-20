@@ -332,6 +332,7 @@ import Omega.Zeta.XiBqPowerEntrywiseFibonacciBinomial
 import Omega.Zeta.XiBulkEntropyStrictConvexity
 import Omega.Zeta.XiBulkRenormalizedConstantAnomalyGap
 import Omega.Zeta.XiCRTInvisibilityMarginalPrimeSpectrum
+import Omega.Zeta.XiCRTIndistinguishablePair
 import Omega.Zeta.XiCRTMultistageAxisAllocationAdditiveControl
 import Omega.Zeta.XiCarathPickKernelNormalizationRigidity
 import Omega.Zeta.XiCauchyPoissonDensityRatioSecondOrderProfile
