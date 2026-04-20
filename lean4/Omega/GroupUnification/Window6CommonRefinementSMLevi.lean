@@ -66,4 +66,14 @@ theorem paper_window6_common_refinement_sm_levi :
   · norm_num [window6LightSectorLeviDim]
   · norm_num [window6SMLeviDim]
 
+/-- Paper-facing residual Standard-Model package extracted from the common-refinement audit.
+    cor:window6-levi-rigidity-sm-residual -/
+theorem paper_window6_levi_rigidity_sm_residual :
+    window6CommonRefinementPatiSalamData.globalFormIsSU4xSU2xSU2 ∧
+      window6LightSectorLeviDim = 9 ∧
+      window6SMLeviDim = 15 := by
+  rcases paper_window6_common_refinement_sm_levi with
+    ⟨_, _, _, hglobal, hlight, _, hsm⟩
+  exact ⟨hglobal, hlight, hsm⟩
+
 end Omega.GroupUnification
