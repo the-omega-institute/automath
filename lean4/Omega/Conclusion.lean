@@ -135,6 +135,7 @@ import Omega.Conclusion.LucasNormalizedHankelDiscreteCurvature
 import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.MaxentropyGapEqualsLogMaxfiber
 import Omega.Conclusion.MaxfiberEntropyGaugeFourmodeRigidity
+import Omega.Conclusion.MaxfiberHiddenbitBalancedBayesWall
 import Omega.Conclusion.MinLatchesLogStates
 import Omega.Conclusion.MinRegisterHalting
 import Omega.Conclusion.MinimalStateComplexityHalting

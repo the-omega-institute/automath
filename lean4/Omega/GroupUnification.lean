@@ -15,6 +15,7 @@ import Omega.GroupUnification.FibLieResonanceScarcity
 import Omega.GroupUnification.FibTailReversibility
 import Omega.GroupUnification.FiniteTimeLaw
 import Omega.GroupUnification.Foldbin6GeoMask34Part1
+import Omega.GroupUnification.FoldbinCenter2TorsionDimensionObstructionM2
 import Omega.GroupUnification.Foldbin6GeoStabilizerZ2
 import Omega.GroupUnification.FoldbinEquitableLumpabilitySpectralRigidity
 import Omega.GroupUnification.FreeEnergyComposition
