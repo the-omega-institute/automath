@@ -7,17 +7,17 @@ open scoped BigOperators
 
 noncomputable section
 
-/-- The first-coordinate marginal of a `(3,3,5)` tensor. -/
-def arity335FirstMarginal (C : Fin 3 → Fin 3 → Fin 5 → Complex) (a : Fin 3) : Complex :=
+/-- The first-coordinate marginal of a `(3,3,5)` tensor used in the chi inversion proof. -/
+def arity335ChiFirstMarginal (C : Fin 3 → Fin 3 → Fin 5 → Complex) (a : Fin 3) : Complex :=
   ∑ b, ∑ c, C a b c
 
 /-- Mean of the first-coordinate marginal. -/
 def arity335FirstMarginalMean (C : Fin 3 → Fin 3 → Fin 5 → Complex) : Complex :=
-  (∑ a, arity335FirstMarginal C a) / 3
+  (∑ a, arity335ChiFirstMarginal C a) / 3
 
 /-- Centered first-coordinate marginal. -/
 def arity335FirstMarginalCentered (C : Fin 3 → Fin 3 → Fin 5 → Complex) (a : Fin 3) : Complex :=
-  arity335FirstMarginal C a - arity335FirstMarginalMean C
+  arity335ChiFirstMarginal C a - arity335FirstMarginalMean C
 
 /-- The explicit `Fin 3` character basis used for inversion. -/
 def arity335Chi (j a : Fin 3) : Complex :=
