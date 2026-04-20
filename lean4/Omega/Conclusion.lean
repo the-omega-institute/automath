@@ -92,6 +92,7 @@ import Omega.Conclusion.HaltingTimeExternalBudgetExact
 import Omega.Conclusion.ExternalBudgetTensorEntropyRate
 import Omega.Conclusion.HiddenFaceBudgetSharpThresholdClassification
 import Omega.Conclusion.SixfoldZeroJointbudgetOrthogonality
+import Omega.Conclusion.HankelFiniteModSinglevaluedizationShortestLockingThreshold
 import Omega.Conclusion.HypercubePhase
 import Omega.Conclusion.HypercubePhaseGridDense
 import Omega.Conclusion.ImageLayerMinimalInverseMemory
@@ -127,6 +128,7 @@ import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Conclusion.NoUniversalTwoAxisAuditCompletion
 import Omega.Conclusion.NonexposedPhaseIntegerDomination
 import Omega.Conclusion.NumberFieldSignatureFromTwoCdims
+import Omega.Conclusion.ObserverHolonomyExactCohomologicalSplitting
 import Omega.Conclusion.OnedimMaxCoefficientEntropyProfile
 import Omega.Conclusion.ParetoColdendCurvaturePole
 import Omega.Conclusion.PcdimPropCycleRankMinimal
