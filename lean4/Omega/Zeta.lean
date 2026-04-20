@@ -167,7 +167,6 @@ import Omega.Zeta.XiCauchyPoissonDerivativeEnergyClosedForm
 import Omega.Zeta.XiFoldLocalInformationDensityFirstOrderDiscreteLaw
 import Omega.Zeta.XiCenterSixfoldKappaNodeInversionBlowup
 import Omega.Zeta.XiFoldCongruenceUnitalAutomorphismRigidity
-import Omega.Zeta.XiVisibleArithmeticUnitIdempotentCount
 import Omega.Zeta.XiFoldbinDyadicCapacityCriticalWindowLimit
 import Omega.Zeta.XiAddressDefectLaw
 import Omega.Zeta.XiTripleConsistencyAudit
@@ -190,7 +189,6 @@ import Omega.Zeta.XiReverseKLSingleFrequencySharpFenchelInequality
 import Omega.Zeta.XiEndpointRecursiveRescalingTwoTerm
 import Omega.Zeta.XiEndpointHeatProbeRstarRegularVariationTail
 import Omega.Zeta.XiTerminalZmDeltaS5TameCollisionEtaleQuotientNodeLaw
-import Omega.Zeta.XiTerminalZmDeltaS5IntermediateQuotientCollisionNodalCount
 import Omega.Zeta.XiTerminalZmEllipticFiberCountMeanTrace
 import Omega.Zeta.XiLeyangTwoLeadingZerosExtrapolateUc
 import Omega.Zeta.ChiEventClockHittingTimeCertificate
