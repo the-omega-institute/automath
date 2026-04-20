@@ -102,6 +102,7 @@ import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.FibPellQuadratic
 import Omega.POM.FibPellRecoverKFromUnitError
 import Omega.POM.FiberBiasedBernoulliPushforwardHardcore
+import Omega.POM.FiberBiasedPosteriorPoissonBinomial
 import Omega.POM.FiberBirkhoffFenceIdealLattice
 import Omega.POM.FiberBooleanIntervalSingleParameterAudit
 import Omega.POM.FiberCategoricalSymmetryFibonacciFusion
