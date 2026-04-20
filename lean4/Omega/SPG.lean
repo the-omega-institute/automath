@@ -24,6 +24,7 @@ import Omega.SPG.BoundaryGodelVolumeUpperbound
 import Omega.SPG.BoundaryGodelizationHolographicDictionary
 import Omega.SPG.BoundaryL1BiasMonotone
 import Omega.SPG.BoundaryMultigraphH1Cdim
+import Omega.SPG.BoundaryMultigraphEffectiveResistanceMinEnergy
 import Omega.SPG.BoundaryRigidity
 import Omega.SPG.BoundedTypeSturmianConstantWidthCertificate
 import Omega.SPG.BulkBoundaryGodelDimensionSandwich

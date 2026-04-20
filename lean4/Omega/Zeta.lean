@@ -399,6 +399,7 @@ import Omega.Zeta.XiReverseKLCyclicEnergyEquivalence
 import Omega.Zeta.XiReverseKLCyclicKLDecomposition
 import Omega.Zeta.XiReverseKLGapBayesDecomposition
 import Omega.Zeta.XiReverseKLFourierGapPositiveKernelEnergy
+import Omega.Zeta.XiReverseKLGapMeanPinsker
 import Omega.Zeta.XiReverseKLPoissonGapFourierBilateral
 import Omega.Zeta.XiReverseKLSingleFrequencyEntropyBudgetSup
 import Omega.Zeta.XiReverseKLSingleFrequencyExactMinimizer
