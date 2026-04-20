@@ -45,6 +45,7 @@ import Omega.Folding.BernoulliPhiHalfRatioLimits
 import Omega.Folding.BinFold
 import Omega.Folding.BinFoldGaugeDecomposition
 import Omega.Folding.BinFoldGaugeDensityTwoScale
+import Omega.Folding.BinFoldGaugeSign
 import Omega.Folding.BinFoldGaugeM6
 import Omega.Folding.BinFoldMinsectorLastbitSectionUnique
 import Omega.Folding.BinGaugeVolume
@@ -77,6 +78,7 @@ import Omega.Folding.Defect
 import Omega.Folding.DerivedAffineReciprocity
 import Omega.Folding.DerivedCenteredOddMomentsVanish
 import Omega.Folding.DerivedFoldExactInversionDyadicThreshold
+import Omega.Folding.DerivedFoldMultiplicityConvexOrderExtremal
 import Omega.Folding.DerivedFoldTopTwoSameSlope
 import Omega.Folding.DiscreteStokesAuditableBound
 import Omega.Folding.DiscreteStokesDefectPublication
