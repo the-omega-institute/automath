@@ -173,6 +173,7 @@ import Omega.Zeta.XiTripleConsistencyAudit
 import Omega.Zeta.XiTimePart9gCanonicalSubmonoidFreeMonoid
 import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
 import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage
+import Omega.Zeta.XiTimeFiberMinimalDimension
 import Omega.Zeta.XiTerminalZmKappaSquareCubicFieldS3
 import Omega.Zeta.XiToeplitzNegativeMarginVandermonde4Lowerbound
 import Omega.Zeta.XiImplCoding
