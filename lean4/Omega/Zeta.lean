@@ -196,6 +196,7 @@ import Omega.Zeta.LocalizedHomAutCompleteClassification
 import Omega.Zeta.LocalizedIntegersConnectedRationalBlindness
 import Omega.Zeta.LocalizedIntegersCrossHomClassification
 import Omega.Zeta.LocalizedIntegersEndomorphismAutomorphismExplicit
+import Omega.Zeta.LocalizedUnitAutomorphismGroupClassification
 import Omega.Zeta.LocalizedIntegersPadicKernelRigidity
 import Omega.Zeta.LocalizedIntegersPrimeAxisIncrementLaw
 import Omega.Zeta.LocalizedIntegersTensorUnionLaw
