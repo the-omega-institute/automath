@@ -11,6 +11,7 @@ import Omega.EA.CentralIdempotentsRecovery
 import Omega.EA.ChebotarevDominantChannelPoleOrder
 import Omega.EA.ChebotarevFourier
 import Omega.EA.ChebotarevMobiusAdams
+import Omega.EA.ChebotarevPlancherelEnergy
 import Omega.EA.ChebotarevQuotientRelativeEntropyChain
 import Omega.EA.ChebotarevSecondMainTermWitness
 import Omega.EA.ChebotarevStatisticalConvergence

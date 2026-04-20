@@ -36,6 +36,7 @@ import Omega.Folding.BernoulliPPressureCycleEquation
 import Omega.Folding.BernoulliPPressureQuartic
 import Omega.Folding.BernoulliPRegenerationBivariatePGF
 import Omega.Folding.BernoulliPRegenerationConditionalLengthShiftedNB
+import Omega.Folding.BernoulliPRenewalDeterminantFactorization
 import Omega.Folding.BernoulliPRegenerationLengthPGFRecurrenceTail
 import Omega.Folding.BernoulliPRegenerationPGF
 import Omega.Folding.BernoulliPRegenerationTripleJointLaw
