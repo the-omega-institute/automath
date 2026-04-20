@@ -103,6 +103,7 @@ import Omega.GU.RadialQuadraticExtremeConcentration
 import Omega.GU.RadialQuadraticIdentifiability
 import Omega.GU.RadialQuadraticKlInfinite
 import Omega.GU.RealInputLength2PrimitiveAtom
+import Omega.GU.RealInputPrimitive2AtomCongruenceLocalization
 import Omega.GU.SheetflipRegisterBound
 import Omega.GU.SideInformationBitLowerBound
 import Omega.GU.SmScaleLiftTripleObstruction

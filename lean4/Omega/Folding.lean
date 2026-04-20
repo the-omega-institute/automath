@@ -174,6 +174,7 @@ import Omega.Folding.FoldPressureExactFreezingGapThreshold
 import Omega.Folding.FoldPressureFreezingThreshold
 import Omega.Folding.FoldPrimeCertificateVsItGapDiverges
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
+import Omega.Folding.ResidualCompletionFiniteDepth
 import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldRewriteNewman
 import Omega.Folding.FoldSigmaPhiDiverges
