@@ -114,6 +114,18 @@ theorem sm_minimal_triple_selection_law :
     rcases hk₁ with rfl | rfl <;> rcases hk₂ with rfl | rfl | rfl <;>
       rcases hk₃ with rfl | rfl | rfl | rfl <;> simp_all [Nat.fib]
 
+/-- Paper-facing alias for the unique minimal even Zeckendorf-valid triple with boundary sum 12.
+    cor:sm-minimal-triple-selection-law -/
+theorem paper_sm_minimal_triple_selection_law :
+    (Nat.fib 2 + Nat.fib 4 + Nat.fib 6 = 12) ∧
+    (∀ m₁ m₂ m₃ : ℕ,
+      2 ≤ m₁ → Even m₁ → 2 ≤ m₂ → Even m₂ → 2 ≤ m₃ → Even m₃ →
+      m₁ < m₂ → m₂ < m₃ →
+      Nat.fib (m₁ - 2) + Nat.fib (m₂ - 2) + Nat.fib (m₃ - 2) = 12 →
+      m₂ - m₁ ≥ 2 → m₃ - m₂ ≥ 2 →
+      (m₁, m₂, m₃) = (4, 6, 8)) := by
+  simpa using sm_minimal_triple_selection_law
+
 /-- Standard Model signature strict union decomposition.
     cor:sm-signature-strict-union -/
 theorem paper_gu_sm_signature_union :

@@ -79,4 +79,12 @@ theorem paper_fold_gauge_anomaly_var_finite_closed (m : ℕ) :
   rw [pow_succ, hhalf, hpow]
   ring_nf
 
+/-- Paper-facing alias for the finite variance closed form.
+    thm:fold-gauge-anomaly-finite-var-closed -/
+theorem paper_fold_gauge_anomaly_finite_var_closed (m : ℕ) :
+    gaugeAnomalyFiniteVariance m =
+      (118 / 243 : ℚ) * m - 40 / 81 +
+        ((243 : ℚ) - (-1 : ℚ) ^ m * (2 * m + 3)) / (486 * 2 ^ m) := by
+  simpa using paper_fold_gauge_anomaly_var_finite_closed m
+
 end Omega.Folding
