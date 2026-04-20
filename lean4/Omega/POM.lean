@@ -237,6 +237,7 @@ import Omega.POM.ProjectiveOperatorDegeneratesToMomentKernel
 import Omega.POM.QstarDiscreteVariationalThreshold
 import Omega.POM.RankoneFusionDefectFiniteBasis
 import Omega.POM.RenyiDimensionSpectrum
+import Omega.POM.RenyiHalfHellingerTensorAdditivity
 import Omega.POM.RenyiEndpoint
 import Omega.POM.RenyiEntropyRate
 import Omega.POM.ReplicaBernoulliSubgraph

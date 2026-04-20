@@ -105,6 +105,7 @@ import Omega.Conclusion.LeyangFiveHypercubePartitionSplitting
 import Omega.Conclusion.LeyangS5TwoChannelMinimalCompleteness
 import Omega.Conclusion.LkKolmogorovSharpOneOverK
 import Omega.Conclusion.LucasCharpShiftedHankelGeometricRatio
+import Omega.Conclusion.LucasNormalizedHankelDiscreteCurvature
 import Omega.Conclusion.LocalizedSolenoidCoprimeArtinMazurCompleteness
 import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.MinLatchesLogStates
