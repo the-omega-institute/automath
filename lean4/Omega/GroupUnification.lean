@@ -22,6 +22,7 @@ import Omega.GroupUnification.FreeEnergyComposition
 import Omega.GroupUnification.GeneralNormalForm
 import Omega.GroupUnification.GeneralRigidity
 import Omega.GroupUnification.Gibbs
+import Omega.GroupUnification.GutGaugeRenyiConservation
 import Omega.GroupUnification.GroupComplexTimeCoherenceRadius
 import Omega.GroupUnification.GroupJGAlgebraicScaleFiber2Power
 import Omega.GroupUnification.GroupJGDiscriminantFactorization
