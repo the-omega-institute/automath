@@ -147,6 +147,7 @@ import Omega.Folding.FoldMaxFiberFourier
 import Omega.Folding.FoldBinPhiIdentifiablePowerDivergence
 import Omega.Folding.FoldBinRenyiDivergenceLimit
 import Omega.Folding.FoldBinRenyiRateCollapse
+import Omega.Folding.FoldHypercubeGreenInversionUniqueReconstruction
 import Omega.Folding.FoldInfoNCELossSpectrumIdentifiability
 import Omega.Folding.FoldHypercubeFibonacciGodelRadiusCount
 import Omega.Folding.FoldBinTwoStateAsymptotic
