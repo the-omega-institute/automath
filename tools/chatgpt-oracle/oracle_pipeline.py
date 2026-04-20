@@ -2756,8 +2756,8 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         # Sanitize paper_name to ASCII for URL safety (中文 in task_id breaks polling)
         safe_name = re.sub(r"[^a-zA-Z0-9_-]", "_", state.paper_name)[:80]
         task_id = f"review_{safe_name}_B{rnd}_{int(time.time())}"
-        prompt = (build_oracle_review_prompt(state.target_journal) if rnd == 1
-                  else build_oracle_re_review_prompt(state.target_journal))
+        # Always use first-review prompt: Oracle has no history across rounds
+        prompt = build_oracle_review_prompt(state.target_journal)
 
         logger.info(f"{tag} Round {rnd}: B2 — Oracle review")
 

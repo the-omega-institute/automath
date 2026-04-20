@@ -36,7 +36,7 @@
 | `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | P3 返工 | — |
 | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | IMRN | C-DONE (Claude: submit, 1 rounds) | — |
 | `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | P1 | — |
-| `2026_detector_shells_click_record_kms_jphyscomm` | J. Phys. Comm. | P0 | — |
+| `2026_detector_shells_click_record_kms_jphyscomm` | J. Phys. Comm. | B-DONE (Oracle: ?, 4 rounds (max)) | — |
 
 | `2026_single_primitive_universality_hierarchy` | Proc. AMS | P0 | — |
 | `2026_chebotarev_quotient_entropy_fold_groupoid_rigidity` | — | 待分诊 | — |
