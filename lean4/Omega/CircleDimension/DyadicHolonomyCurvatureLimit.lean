@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 
+
 namespace Omega.CircleDimension
 
 /-- Paper-facing wrapper for the dyadic Stokes reconstruction corollary: the normalized holonomy

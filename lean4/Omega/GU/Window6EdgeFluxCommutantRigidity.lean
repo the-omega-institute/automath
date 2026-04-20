@@ -2,6 +2,7 @@ import Mathlib.Data.Matrix.Basis
 import Mathlib.Tactic
 import Omega.GU.Window6EdgeFluxFullMatrixSaturation
 
+
 namespace Omega.GU
 
 open Matrix

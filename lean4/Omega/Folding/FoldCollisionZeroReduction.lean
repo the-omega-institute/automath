@@ -1,5 +1,6 @@
 import Omega.Folding.FoldCollisionSpectrum
 
+
 namespace Omega.Folding
 
 /-- Paper-facing zero-reduction bound in the concrete fold-collision model: once the zero set
