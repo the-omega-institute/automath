@@ -100,6 +100,7 @@ import Omega.CircleDimension.HilbertCarrier
 import Omega.CircleDimension.HorizonCarathSchurEquivalence
 import Omega.CircleDimension.HypercubeDerhamLift
 import Omega.CircleDimension.KernelAffineCompositionNorm
+import Omega.CircleDimension.KernelEnergyLaguerreParseval
 import Omega.CircleDimension.KernelGramConvolutionSpectrum
 import Omega.CircleDimension.KernelIntegerSamplingDualKernel
 import Omega.CircleDimension.KernelIntegerTranslateRieszBounds

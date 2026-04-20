@@ -216,6 +216,7 @@ import Omega.Folding.GaugeAnomalyDensity
 import Omega.Folding.GaugeAnomalyDiscriminantFactorization
 import Omega.Folding.GaugeAnomalyEdgeworth1
 import Omega.Folding.GaugeAnomalyEndpointFib
+import Omega.Folding.GaugeAnomalyEpsilonMachineEntropyRateComplexity
 import Omega.Folding.GaugeAnomalyFiniteStateMinimaxAbsError
 import Omega.Folding.GaugeAnomalyFiniteVarianceClosed
 import Omega.Folding.GaugeAnomalyGSupportSofic
