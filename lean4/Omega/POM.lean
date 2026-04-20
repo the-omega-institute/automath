@@ -281,6 +281,7 @@ import Omega.POM.PrimitiveDirichletBranchLatticeEssentialPrimeSpectrum
 import Omega.POM.PrimitivePrimeLucas
 import Omega.POM.ProjectionAsPartitionPrimeRegister
 import Omega.POM.ProjectiveOperatorDegeneratesToMomentKernel
+import Omega.POM.ProjectivePathAtomicPronyRank
 import Omega.POM.ProjectivePressureDiscreteConvexitySlopes
 import Omega.POM.ProjectivePressureDiscreteFlatnessForcesAffine
 import Omega.POM.ProjectivePressureDiscreteLegendreEnvelope

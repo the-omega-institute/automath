@@ -337,6 +337,7 @@ import Omega.Folding.KilloFoldBinNormalizedGaugeDeficiency
 import Omega.Folding.KilloFoldCarryDefectCocycleNonsplit
 import Omega.Folding.KilloFoldRenyi2UniformityGap
 import Omega.Folding.KilloFoldbin6FullCenter
+import Omega.Folding.KilloLeyangBranchGraphFullSpectrum
 import Omega.Folding.KilloLayeredPrimeSlicesFiniteDepth
 import Omega.Folding.KilloNaturalExtensionBranchRegister
 import Omega.Folding.KilloPrimeRegisterIdempotentArithmetization
