@@ -158,6 +158,7 @@ import Omega.GU.TerminalRotationWindowPrototype
 import Omega.GU.TerminalSuccUniqueBranchMerge
 import Omega.GU.TerminalTimeFactorMetallicUnique
 import Omega.GU.TerminalTimeProtocolGoldenBranch
+import Omega.GU.BdryDelta34UniversalIcosahedralLocalUplift
 import Omega.GU.TerminalWindow5Window7FullSymmetricSpectrum
 import Omega.GU.TerminalWindow6GeoFixedSubalgebraWedderburn
 import Omega.GU.TerminalWindow6GeoGaugeCentralizerClass
