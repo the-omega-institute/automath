@@ -39,6 +39,7 @@ import Omega.POM.CollisionStrengthened
 import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.ComplementaryGoldenBernoulliDivergence
 import Omega.POM.CompleteHomogeneousLinearRecurrence
+import Omega.POM.Congruence2dLockingCfinite
 import Omega.POM.CoprimeLedgerPrimorialOptimality
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.CovarianceLaplacianPdetClosedForm
@@ -262,6 +263,7 @@ import Omega.POM.ReplicaSoftcoreExceptionalSecantEquation
 import Omega.POM.ReplicaSoftcoreTemperatureFreeEnergyPhaseTransition
 import Omega.POM.ReplicaSoftcoreWordTraceCycleGF
 import Omega.POM.ResidueRefinementJensen
+import Omega.POM.ResonanceMod6PeriodQ13Q15
 import Omega.POM.ResonanceMod2FiniteBitAutomaticity
 import Omega.POM.ResonanceS13TwoPrimeCertificateQ16Q17
 import Omega.POM.ResonanceTwoCycleRatio

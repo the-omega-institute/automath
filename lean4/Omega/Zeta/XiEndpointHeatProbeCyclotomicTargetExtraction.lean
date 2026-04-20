@@ -151,6 +151,42 @@ theorem paper_xi_endpoint_heat_probe_cyclotomic_target_extraction
   rw [hfun]
   exact hlimit
 
+/-- The normalized tail from cyclotomic target extraction is exactly the constant residual mass
+sequence. `thm:xi-endpoint-heat-probe-complement-radius-from-scalar-flow` -/
+theorem paper_xi_endpoint_heat_probe_complement_radius_from_scalar_flow
+    (S : Finset (Units Complex)) (μ : Units Complex → ℝ) (d : ℕ) (ω : Units Complex)
+    (hμ : ∀ z, 0 ≤ μ z) :
+    Tendsto
+      (fun N : ℕ =>
+        (xiEndpointHeatProbeCyclotomicMass S μ N d ω -
+            xiEndpointHeatProbeCyclotomicTargetMass S μ d ω) /
+          ((1 / 2 : ℝ) ^ N))
+      atTop (nhds (xiEndpointHeatProbeCyclotomicResidualMass S μ d ω)) := by
+  have hfun :
+      (fun N : ℕ =>
+        (xiEndpointHeatProbeCyclotomicMass S μ N d ω -
+            xiEndpointHeatProbeCyclotomicTargetMass S μ d ω) /
+          ((1 / 2 : ℝ) ^ N)) =
+        fun _ => xiEndpointHeatProbeCyclotomicResidualMass S μ d ω := by
+    funext N
+    have hdecomp := ((paper_xi_endpoint_heat_probe_cyclotomic_target_extraction
+      S μ d ω hμ).1 N).2.2
+    have hpow_ne : ((1 / 2 : ℝ) ^ N) ≠ 0 := by
+      positivity
+    calc
+      (xiEndpointHeatProbeCyclotomicMass S μ N d ω -
+          xiEndpointHeatProbeCyclotomicTargetMass S μ d ω) /
+          ((1 / 2 : ℝ) ^ N)
+          =
+        (((1 / 2 : ℝ) ^ N) * xiEndpointHeatProbeCyclotomicResidualMass S μ d ω) /
+          ((1 / 2 : ℝ) ^ N) := by
+            rw [hdecomp]
+            ring
+      _ = xiEndpointHeatProbeCyclotomicResidualMass S μ d ω := by
+        field_simp [hpow_ne]
+  rw [hfun]
+  exact tendsto_const_nhds
+
 end
 
 end Omega.Zeta
