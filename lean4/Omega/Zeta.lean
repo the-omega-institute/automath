@@ -311,6 +311,7 @@ import Omega.Zeta.XiPrimeAxisTensorizedReplayComposition
 import Omega.Zeta.XiBasepointScanAnchorDetCauchyVandermonde
 import Omega.Zeta.XiBasepointScanCauchyStableConvolution
 import Omega.Zeta.XiBasepointScanKernelCompletenessFullRank
+import Omega.Zeta.XiBasepointScanRationalHerglotzPoleTomography
 import Omega.Zeta.XiBqPowerEntrywiseFibonacciBinomial
 import Omega.Zeta.XiBulkEntropyStrictConvexity
 import Omega.Zeta.XiBulkRenormalizedConstantAnomalyGap

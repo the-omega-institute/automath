@@ -68,4 +68,36 @@ theorem paper_window6_edge_flux_no_invariant_binary_product
     linarith
   simpa using this
 
+/-- Any nonzero bilinear bracket on the `21`-dimensional carrier that is equivariant for the full
+window-`6` edge-flux dynamics is ruled out by the no-invariant-binary-product theorem. This is the
+formal contradiction underlying the paper's Spin(7)/`so(7)` dynamic anomaly corollary.
+    cor:window6-spin7-bracket-dynamic-anomaly -/
+theorem paper_window6_spin7_bracket_dynamic_anomaly
+    (generators : Fin 6 → Matrix (Fin 21) (Fin 21) Real)
+    (bracket : Window6EdgeFluxCarrier → Window6EdgeFluxCarrier → Window6EdgeFluxCarrier)
+    (hLie : Window6LieEnvelopeIsSl21 generators)
+    (hAddLeft : ∀ x₁ x₂ y, bracket (x₁ + x₂) y = bracket x₁ y + bracket x₂ y)
+    (hSmulLeft : ∀ (a : Real) x y, bracket (a • x) y = a • bracket x y)
+    (hAddRight : ∀ x y₁ y₂, bracket x (y₁ + y₂) = bracket x y₁ + bracket x y₂)
+    (hSmulRight : ∀ (a : Real) x y, bracket x (a • y) = a • bracket x y)
+    (hEquivariant :
+      ∀ A, A ∈ window6EdgeFluxClosure generators →
+        ∀ x y, bracket (window6EdgeFluxAction A x) (window6EdgeFluxAction A y) =
+          window6EdgeFluxAction A (bracket x y))
+    (hNonabelian : ∃ x y, bracket x y ≠ 0) :
+    False := by
+  let D : Window6EdgeFluxDynamicsData := {
+    generators := generators
+    product := bracket
+    lieEnvelopeIsSl21 := hLie
+    add_left := hAddLeft
+    smul_left := hSmulLeft
+    add_right := hAddRight
+    smul_right := hSmulRight
+    closureEquivariant := hEquivariant
+  }
+  have hzero : D.noInvariantBinaryProduct := paper_window6_edge_flux_no_invariant_binary_product D
+  rcases hNonabelian with ⟨x, y, hxy⟩
+  exact hxy (hzero x y)
+
 end Omega.GU
