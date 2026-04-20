@@ -52,3 +52,4 @@ import Omega.SyncKernelWeighted.VectorPotentialPhiMinusLdpParam
 import Omega.SyncKernelWeighted.WittRenormMonoid
 import Omega.SyncKernelWeighted.WeightedNewmanQGaloisS37
 import Omega.SyncKernelWeighted.RealInput40AtomicWittDirichletComb
+import Omega.SyncKernelWeighted.TraceCentralMomentsZero
