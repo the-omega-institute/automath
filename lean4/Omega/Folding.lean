@@ -33,6 +33,7 @@ import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPParryPressureChain
 import Omega.Folding.BernoulliPSpectrum
 import Omega.Folding.BernoulliPPressureCycleEquation
+import Omega.Folding.BernoulliPLaws
 import Omega.Folding.BernoulliPRegenerationPGF
 import Omega.Folding.BernoulliPRegenerationLengthPGFRecurrenceTail
 import Omega.Folding.BernoulliPPressureQuartic

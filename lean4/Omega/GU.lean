@@ -94,6 +94,7 @@ import Omega.GU.Window6RootDictionaryPullbackBracket
 import Omega.GU.RadialQuadraticIdentifiability
 import Omega.GU.RadialQuadraticExtremeConcentration
 import Omega.GU.RadialQuadraticKlInfinite
+import Omega.GU.RealInputLength2PrimitiveAtom
 import Omega.GU.SheetflipRegisterBound
 import Omega.GU.SmScaleLiftTripleObstruction
 import Omega.GU.SideInformationBitLowerBound
