@@ -210,6 +210,7 @@ import Omega.CircleDimension.RegisterCircleModpFormula
 import Omega.CircleDimension.ResidualCircleDim
 import Omega.CircleDimension.ResidualCircleDimLaws
 import Omega.CircleDimension.ResidualEntropyLowerBound
+import Omega.CircleDimension.RestrictedPrimeRegisterGodelBilogbOverhead
 import Omega.CircleDimension.ResidualQuotientProbe
 import Omega.CircleDimension.RhodoneaSubflow
 import Omega.CircleDimension.RiemannSiegelGabckeBitGain

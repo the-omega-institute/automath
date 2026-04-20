@@ -24,6 +24,7 @@ import Omega.Folding.BernoulliPFiniteTimePmf2dRecurrence
 import Omega.Folding.BernoulliPFullAutocovarianceJordan
 import Omega.Folding.BernoulliPGammaMax
 import Omega.Folding.BernoulliPHalfFibonacciLowDefectShadow
+import Omega.Folding.BernoulliPHalfMaxDefectDegreeLeadingPeriod3
 import Omega.Folding.BernoulliPBayesPhaseTransition
 import Omega.Folding.BernoulliPJordanCriticalScaling
 import Omega.Folding.BernoulliPJordanResonance

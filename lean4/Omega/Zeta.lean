@@ -22,6 +22,7 @@ import Omega.Zeta.BlockCyclicRigidity
 import Omega.Zeta.BooleanBinaryJumpKernels2AdicHalfperiod
 import Omega.Zeta.BooleanBinaryJumpKernelsTensorSpectrum
 import Omega.Zeta.BooleanDisjointnessZetaLDLT
+import Omega.Zeta.BooleanTwoLayerInverseSupportLaw
 import Omega.Zeta.BooleanTwoLayerOrderIdealPrincipalMinor
 import Omega.Zeta.BooleanTwoLayerSmithNormalForm
 import Omega.Zeta.CLTSpectral
