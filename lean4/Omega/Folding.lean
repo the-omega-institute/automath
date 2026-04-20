@@ -130,6 +130,7 @@ import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.FoldBoundaryStokesTorsorH1H1
 import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinGaugeBernoulliExtractionOperator
+import Omega.Folding.FoldBinGaugeConstantZetaEvenRecoveryLimit
 import Omega.Folding.FoldBinEscortLastbit
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldBinFDivergenceCollapse
