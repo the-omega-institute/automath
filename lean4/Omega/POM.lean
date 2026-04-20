@@ -166,6 +166,7 @@ import Omega.POM.KernelSpectrum
 import Omega.POM.LambdaAlgebraic
 import Omega.POM.LeyangLiftMobiusInvolutionFunctorial
 import Omega.POM.LeyangMonotoneCouplingPrimeRegister
+import Omega.POM.LkArcsineLaw
 import Omega.POM.LkChebyshevCharpoly
 import Omega.POM.LowTemperatureDifferenceCertificates
 import Omega.POM.LucasNuPCriterion
