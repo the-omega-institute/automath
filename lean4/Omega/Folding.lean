@@ -219,6 +219,7 @@ import Omega.Folding.GaugeAnomalyClt
 import Omega.Folding.GaugeAnomalyCovClosed
 import Omega.Folding.GaugeAnomalyCovGenfun
 import Omega.Folding.GaugeAnomalyCovarianceRecurrenceIntegersHankelRank3
+import Omega.Folding.GaugeAnomalyVarianceHankelRigidity
 import Omega.Folding.GaugeAnomalyCumulant3
 import Omega.Folding.GaugeAnomalyCumulantsInfiniteSignFlips
 import Omega.Folding.GaugeAnomalyCumulantsNotPrecursive
