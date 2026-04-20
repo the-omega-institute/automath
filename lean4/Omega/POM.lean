@@ -148,6 +148,7 @@ import Omega.POM.FoldInjectivizationMinsideinfo
 import Omega.POM.FoldInversionZeroRateStrongConverse
 import Omega.POM.FractranPermutationEmbeddingLength
 import Omega.POM.FractranFiniteUpdateTableOneStep
+import Omega.POM.FractranFirstfitSerialDepth
 import Omega.POM.FractranPrimecoreFinitePartialFunctionCategory
 import Omega.POM.FractranSoftFirstfitFixedTempExponentialCollapse
 import Omega.POM.FractranTwoPrimeDenominatorDfaCompile
