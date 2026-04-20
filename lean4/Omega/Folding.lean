@@ -157,6 +157,7 @@ import Omega.Folding.FoldBinEscortLastbit
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldBinFDivergenceCollapse
 import Omega.Folding.FoldBinFiberTail
+import Omega.Folding.FoldbinSaturationSectorThreshold
 import Omega.Folding.FoldBinLastbitSufficientTV
 import Omega.Folding.FoldBinM6FiberHist
 import Omega.Folding.FoldbinGroupoidAut0ThirdCohomologyRank

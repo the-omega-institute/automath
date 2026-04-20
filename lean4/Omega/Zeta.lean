@@ -22,6 +22,7 @@ import Omega.Zeta.AutomaticDirichletMoment
 import Omega.Zeta.BlockCyclicRigidity
 import Omega.Zeta.BooleanBinaryJumpKernels2AdicHalfperiod
 import Omega.Zeta.BooleanBinaryJumpKernelsTensorSpectrum
+import Omega.Zeta.BooleanTwoLayerCokerAndModmKernelCount
 import Omega.Zeta.BooleanDisjointnessZetaLDLT
 import Omega.Zeta.BooleanTwoLayerMobiusDiophantineCriterion
 import Omega.Zeta.BooleanTwoLayerInverseSupportLaw
