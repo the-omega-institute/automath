@@ -167,6 +167,7 @@ import Omega.POM.InverseLimitNaturality
 import Omega.POM.InvertWFromHomogeneousCurve
 import Omega.POM.KCollisionRootFilter
 import Omega.POM.KLDefectIdentity
+import Omega.POM.KappaKlDecomposition
 import Omega.POM.KLPythagorasTower
 import Omega.POM.KLPythagorasUniform
 import Omega.POM.KernelSpectrum

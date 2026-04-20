@@ -104,6 +104,7 @@ import Omega.Folding.FiberConvolutionInvertibilityDivisibility
 import Omega.Folding.FiberConvolutionKernelInvertibility
 import Omega.Folding.FiberConvolutionKernelZeroSpectrum
 import Omega.Folding.FiberEvenModulusMinimalDefectParityCharacter
+import Omega.Folding.FiberEntropySaturation
 import Omega.Folding.FiberFourierPhaseRigidity
 import Omega.Folding.FiberFusion
 import Omega.Folding.FiberGaugeVolumeChainFactorization
