@@ -164,6 +164,7 @@ import Omega.Folding.FiberBiasEnergyErasureIdentity
 import Omega.Folding.FiberBiasEnergyDecisionTheoretic
 import Omega.Folding.FiberCollisionHammingSimilarityBiasEnergyIdentity
 import Omega.Folding.FoldPrimeRegisterBitlengthOmegaMlogm
+import Omega.Folding.FoldPrimeCertificateVsItGapDiverges
 import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldFibonacciFrequencyFourierSpikeClosedForm
 import Omega.Folding.FoldPressureExactFreezingGapThreshold

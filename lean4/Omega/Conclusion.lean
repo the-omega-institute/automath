@@ -159,6 +159,7 @@ import Omega.Conclusion.QuadraticFieldRamification
 import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.RanktwoSmithBlindclassBooleanPrimeblockTorsor
 import Omega.Conclusion.RankoneCauchyOrthogonality
+import Omega.Conclusion.RankoneResultantDiscriminantClosedForm
 import Omega.Conclusion.RateCdimTwoCircleThreshold
 import Omega.Conclusion.RegisterUltrametricLipschitzAndGodelNoRealExtension
 import Omega.Conclusion.RealInput40LocalCramerRightTailMoreCostly
