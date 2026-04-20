@@ -95,6 +95,7 @@ import Omega.POM.FibCubeFVectorClosed
 import Omega.POM.FibCubeFrechetMedianUnique
 import Omega.POM.FibCubeGrayHamilton
 import Omega.POM.FibCubeKPointCount
+import Omega.POM.FibCubeMarginalBoundaryLayer
 import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.FibPellQuadratic
 import Omega.POM.FibPellRecoverKFromUnitError
@@ -251,6 +252,7 @@ import Omega.POM.OrbitProductNorm
 import Omega.POM.OrderSpatialization
 import Omega.POM.OrthotopeSurfaceVolumeVariance
 import Omega.POM.P2FrobeniusParitySieve
+import Omega.POM.ParryTwoPointAlternating
 import Omega.POM.ParrySurfaceDerivative
 import Omega.POM.PartitionMobiusEventInversion
 import Omega.POM.PathIndSetPolyClosed
