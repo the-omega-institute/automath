@@ -53,3 +53,4 @@ import Omega.SyncKernelWeighted.WittRenormMonoid
 import Omega.SyncKernelWeighted.WeightedNewmanQGaloisS37
 import Omega.SyncKernelWeighted.RealInput40AtomicWittDirichletComb
 import Omega.SyncKernelWeighted.TraceCentralMomentsZero
+import Omega.SyncKernelWeighted.RealInputDigitwiseSumLayer

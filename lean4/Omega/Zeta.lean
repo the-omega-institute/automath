@@ -213,6 +213,7 @@ import Omega.Zeta.HankelNullspaceTruncatedIdealStructure
 import Omega.Zeta.HankelWindowFiberDelta
 import Omega.Zeta.HankelWindowAffineFamily
 import Omega.Zeta.HankelBadPrimeSelectionProbability
+import Omega.Zeta.XiRandomPrimeSingleRoundAuditFalseAccept
 import Omega.Zeta.HankelShortPrimeAvoidsBadset
 import Omega.Zeta.XiPwTypeSafetyNull
 import Omega.Zeta.IdempotentFixedIndexStratification

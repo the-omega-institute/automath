@@ -52,6 +52,7 @@ import Omega.Conclusion.AlgorithmPrimeShiftEquivalence
 import Omega.Conclusion.AffineLeftDivisibilityCriterion
 import Omega.Conclusion.AdelicStokesH1RecoversCdimPrimeProfile
 import Omega.Conclusion.CoordinateBundleDyadicBlockLaw
+import Omega.Conclusion.DiscreteKinkMassHatKernelCurvature
 import Omega.Conclusion.ThreeEndCertificateOrthogonality
 import Omega.Conclusion.ThreeEndCertificateJointSufficiencyMinimality
 import Omega.Conclusion.CycleRankSaturation
