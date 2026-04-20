@@ -58,6 +58,7 @@ import Omega.EA.PrimeRegisterMultiplicativeNormalizationAdditiveIso
 import Omega.EA.PrimeRegisterNormalFormUniqueness
 import Omega.EA.PrimeRegisterOrbitFiberCoincidence
 import Omega.EA.PrimeRegisterResidualLedgerGroup
+import Omega.EA.ProjectionWordRewrite
 import Omega.EA.PrimeRegisterRewriteConfluentNormalForm
 import Omega.EA.ProjectionWordNormalForm
 import Omega.EA.RewriteConfluence
