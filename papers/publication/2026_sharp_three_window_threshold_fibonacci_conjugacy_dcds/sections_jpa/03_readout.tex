@@ -1,10 +1,10 @@
-\section{Symbolic setup and support inflation}\label{sec:readout}
+\section{Symbolic preliminaries and full support}\label{sec:readout}
 
-The theorem-level results concern a local Fibonacci folding on the full cube and its overlap dynamics. This section records only the symbolic input imported from the source layer: the Sturmian benchmark fixes the admissible grammar, and strictly positive local noise explains why the local problem must be posed on all of $\{0,1\}^m$ rather than only on admissible words.
+We begin with the symbolic input used later.  The Sturmian rotation model fixes the golden-mean grammar, while a strictly positive local channel explains why the finite-window map must be considered on the whole cube $\{0,1\}^m$.
 
 \subsection{Coding map and induced law}\label{sec:readout:maps}
 
-At the symbolic layer we only need a measurable coding map from the source dynamics into a finite alphabet. The detailed detector parameters are suppressed here; they matter only through the induced symbolic law.
+Only the induced symbolic law is needed in the sequel, so the source dynamics enters through a measurable finite-alphabet coding.
 
 \begin{definition}[Finite-alphabet readout]\label{def:readout}
 Fix a measurable map $R:H\to\mathcal{A}$ into a finite alphabet $\mathcal{A}$. Given a scan sequence $(h_t)_{t\in\NN}\subset H$ (typically $h_t=h_0+t\alpha$), the \emph{readout process} is the symbolic sequence
@@ -44,9 +44,9 @@ By $T$-invariance of $\mu$, this equals
 so $\nu_R$ is shift-invariant. Ergodicity is preserved under factors \cite{Walters1982}.
 \end{proof}
 
-\subsection{The Fibonacci/Sturmian benchmark}\label{sec:readout:sturmian}
+\subsection{The Fibonacci/Sturmian model}\label{sec:readout:sturmian}
 
-When the scan dynamics is an irrational circle rotation and the readout is a two-interval coding, the resulting symbolic process is Sturmian \cite{MorseHedlund1940,Lothaire2002,Queffelec2010}. This benchmark is singled out by its minimal complexity among aperiodic binary codings and by the fact that, in the golden regime, it lands naturally in the grammar used later for stabilization.
+When the scan dynamics is an irrational circle rotation and the readout is a two-interval coding, the resulting symbolic process is Sturmian \cite{MorseHedlund1940,Lothaire2002,Queffelec2010}. This model is singled out by its minimal complexity among aperiodic binary codings and by the fact that, in the golden regime, it lands naturally in the grammar used later for stabilization.
 
 \begin{proposition}[Rotation-to-grammar bridge in the golden regime]\label{prop:sturmian-no11}
 Let $T:\TT^1\to\TT^1$ be the rotation $T(\theta)=\theta+\alpha\pmod{1}$ and take the readout
@@ -60,16 +60,16 @@ If $\alpha\ge \tfrac12$, then the induced symbolic process $A_t:=R(T^t\theta_0)$
 If $A_t=1$, then $\theta_t:=T^t\theta_0\in[0,1-\alpha)$, so $\theta_{t+1}=\theta_t+\alpha\in[\alpha,1)$. When $\alpha\ge\tfrac12$ the intervals $[0,1-\alpha)$ and $[\alpha,1)$ are disjoint, so $A_{t+1}=0$.
 \end{proof}
 
-\begin{remark}[Role of the Sturmian benchmark]
-Proposition~\ref{prop:sturmian-no11} shows that a noiseless Fibonacci source lands inside the admissible language~$X_m$. Combined with Proposition~\ref{thm:fold-suite}(ii), this means that local stabilization is trivial on the benchmark source itself: $\Fold_m$ acts as the identity on every observed word. The benchmark is retained because it canonically supplies the grammar used by stabilization and because its linear word complexity drives the total-variation bound of Section~\ref{sec:fp:tv}.
+\begin{remark}[The Sturmian model]
+Proposition~\ref{prop:sturmian-no11} shows that a noiseless Fibonacci source lands inside the admissible language~$X_m$. Combined with Proposition~\ref{thm:fold-suite}(ii), this means that local stabilization acts as the identity on the source itself. The model is retained because it supplies the grammar used by stabilization and because its linear word complexity drives the total-variation bound of Section~\ref{sec:fp:tv}.
 \end{remark}
 
 \subsection{Support inflation to the full cube}\label{sec:readout:noise}
 
-The noiseless Fibonacci benchmark itself does not populate the ambient cube. The next theorem explains why the local stabilization problem must nevertheless be posed on all of $\{0,1\}^m$ once the readout layer contains any strictly positive local uncertainty.
+The noiseless Fibonacci source does not populate the full cube.  The next result records the elementary reason why the full cube nevertheless appears after a nondegenerate finite readout.
 
-\begin{proposition}[Supporting non-degenerate local noise fills the ambient cube]\label{thm:noise-full-support}
-Let $B=(B_t)_{t\in\NN}$ be the ideal Fibonacci/Sturmian benchmark process from Proposition~\ref{prop:sturmian-no11}, taken under its stationary rotation law. Let $A=(A_t)_{t\in\NN}$ be obtained from $B$ through a strictly positive local binary channel $Q=(Q_{ba})_{a,b\in\{0,1\}}$ in the sense that, conditional on any raw block $b_0\cdots b_{m-1}$,
+\begin{proposition}[Positive local noise gives full support]\label{thm:noise-full-support}
+Let $B=(B_t)_{t\in\NN}$ be the ideal Fibonacci/Sturmian process from Proposition~\ref{prop:sturmian-no11}, taken under its stationary rotation law. Let $A=(A_t)_{t\in\NN}$ be obtained from $B$ through a strictly positive local binary channel $Q=(Q_{ba})_{a,b\in\{0,1\}}$ in the sense that, conditional on any raw block $b_0\cdots b_{m-1}$,
 \[
 \PP(A_0\cdots A_{m-1}=a_0\cdots a_{m-1}\mid B_0\cdots B_{m-1}=b_0\cdots b_{m-1})
 =
@@ -79,11 +79,11 @@ and assume $Q_{ba}>0$ for all $a,b\in\{0,1\}$. Then for every $m\ge 1$ and every
 \[
 \PP(A_0\cdots A_{m-1}=\omega)>0.
 \]
-In particular, the observable support of the noisy length-$m$ measurement law is the full ambient cube $\{0,1\}^m$.
+In particular, the support of the noisy length-$m$ output law is the full ambient cube $\{0,1\}^m$.
 \end{proposition}
 
 \begin{proof}
-Fix $m\ge 1$ and $\omega\in\{0,1\}^m$. The depth-$m$ Sturmian partition from Section~\ref{sec:readout:empirical} has nonempty atoms, so there exists at least one word $x=x_0\cdots x_{m-1}$ in the support of $B_0\cdots B_{m-1}$ with
+Fix $m\ge 1$ and $\omega\in\{0,1\}^m$. The stationary Sturmian block law has at least one length-$m$ word in its support, so there exists a word $x=x_0\cdots x_{m-1}$ with
 \[
 \PP(B_0\cdots B_{m-1}=x)>0.
 \]
@@ -96,8 +96,8 @@ Conditioning on that event gives
 and the right-hand side is strictly positive because every channel entry is positive.
 \end{proof}
 
-\begin{proposition}[Detector realization of strict positivity]\label{prop:detector-realization}
-Let $B=(B_t)_{t\in\NN}$ be the ideal Fibonacci/Sturmian benchmark process. Fix an interaction radius $L\ge 0$, coefficients $\rho_{-L},\dots,\rho_L\ge 0$ with $\sum_{j=-L}^L\rho_j>0$, a threshold $\tau\in\RR$, and i.i.d.\ detector noises $(\xi_t)_{t\in\NN}$ independent of $B$, whose common law has a density that is strictly positive on $\RR$. Define the finite-resolution detector signal and binary output by
+\begin{proposition}[Finite-radius detector realization of full support]\label{prop:detector-realization}
+Let $B=(B_t)_{t\in\mathbb Z}$ be the stationary two-sided version of the ideal Fibonacci/Sturmian process. Fix an interaction radius $L\ge 0$, coefficients $\rho_{-L},\dots,\rho_L\ge 0$ with $\sum_{j=-L}^L\rho_j>0$, a threshold $\tau\in\RR$, and i.i.d.\ detector noises $(\xi_t)_{t\in\mathbb Z}$ independent of $B$, whose common law has a density that is strictly positive on $\RR$. Define the finite-resolution signal and binary output by
 \[
 S_t:=\sum_{j=-L}^L \rho_j B_{t+j},
 \qquad
@@ -113,7 +113,7 @@ Then, conditional on any neighborhood block $b_{-L}\cdots b_{m-1+L}\in\{0,1\}^{m
 \prod_{t=0}^{m-1} p_t(b)^{a_t}(1-p_t(b))^{1-a_t}.
 \end{aligned}
 \end{equation*}
-for some probabilities $p_t(b)\in(0,1)$. In particular the detector induces a strictly positive local binary channel in the sense of Proposition~\ref{thm:noise-full-support}, so every word $\omega\in\{0,1\}^m$ has positive probability under the measured output process.
+for some probabilities $p_t(b)\in(0,1)$. Consequently every word $\omega\in\{0,1\}^m$ has positive probability under the measured output process.
 \end{proposition}
 
 \begin{proof}
@@ -131,19 +131,19 @@ Now fix $\omega\in\{0,1\}^m$. Choose any neighborhood block $b$ with
 \[
 \PP(B_{-L}\cdots B_{m-1+L}=b)>0;
 \]
-such a block exists because the support of the benchmark process is nonempty. Conditioning on that event and using the product formula yields
+such a block exists because the support of the source process is nonempty. Conditioning on that event and using the product formula yields
 \[
 \PP(A_0\cdots A_{m-1}=\omega)
 \ge
 \PP(B_{-L}\cdots B_{m-1+L}=b)\prod_{t=0}^{m-1} p_t(b)^{\omega_t}(1-p_t(b))^{1-\omega_t}>0.
 \]
-Thus the detector realization induces a strictly positive local binary channel and fills the ambient cube.
+Thus the finite-radius detector fills the ambient cube. When $L=0$ this is exactly the one-symbol strictly positive channel of Proposition~\ref{thm:noise-full-support}; for $L>0$ it is the finite-neighborhood analogue, and the preceding conditioning argument supplies the required support conclusion directly.
 \end{proof}
 
-\begin{remark}[Why the ambient extension is physically forced]
-Proposition~\ref{thm:noise-full-support} upgrades the motivational role of the ambient binary extension to an observable-support statement, and Proposition~\ref{prop:detector-realization} realizes its hypothesis with a concrete finite-resolution detector. Once the readout layer has nonzero local uncertainty, the experimental length-$m$ support leaves the Sturmian language and fills the full cube. The stabilization problem is therefore naturally posed on $\{0,1\}^m$ in the presence of finite-resolution readout noise.
+\begin{remark}
+Proposition~\ref{thm:noise-full-support} gives the support statement for a memoryless strictly positive channel, and Proposition~\ref{prop:detector-realization} gives the corresponding finite-radius version.  Thus, once the readout layer has nonzero local uncertainty, length-$m$ words need not remain in the Sturmian language.
 \end{remark}
 
-\subsection{Empirical block laws for the benchmark}\label{sec:readout:empirical}
+\subsection{Empirical block laws for the model}\label{sec:readout:empirical}
 
-For each depth $m$, the induced law $\nu_R$ determines a raw-word marginal on $\{0,1\}^m$. In the irrational-rotation benchmark, these marginals arise from the partition of $\TT^1$ into nonempty depth-$m$ Sturmian atoms, whose number is at most $m+1$. This linear complexity is the only source-specific input needed in Section~\ref{sec:fp:tv}.
+For each depth $m$, the induced law $\nu_R$ determines a raw-word marginal on $\{0,1\}^m$. In the irrational-rotation model, these marginals arise from the partition of $\TT^1$ into nonempty depth-$m$ Sturmian atoms, whose number is at most $m+1$. This linear complexity is the only source-specific input needed in Section~\ref{sec:fp:tv}.

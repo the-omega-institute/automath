@@ -1,6 +1,5 @@
-\documentclass[11pt,a4paper]{amsart}
+\documentclass{amsart}
 
-% ── Packages ──────────────────────────────────────────────
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \IfFileExists{stmaryrd.sty}{%
   \usepackage{stmaryrd}%
@@ -8,20 +7,11 @@
   \newcommand{\llbracket}{\mathopen{[\![}}%
   \newcommand{\rrbracket}{\mathclose{]\!]}}%
 }
-\usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 \usepackage{cleveref}
-\usepackage{booktabs}
-\usepackage{enumitem}
-\IfFileExists{biblatex.sty}{%
-  \usepackage[backend=biber,style=alphabetic,maxbibnames=9]{biblatex}%
-  \addbibresource{references.bib}%
-  \newcommand{\printreferences}{\printbibliography}%
-}{%
-  \newcommand{\printreferences}{\bibliographystyle{alpha}\bibliography{references}}%
-}
+\newcommand{\printreferences}{\bibliographystyle{amsplain}\bibliography{references}}
+\emergencystretch=2em
 
-% ── Theorem environments ──────────────────────────────────
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -31,9 +21,10 @@
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 
-% ── Operators ─────────────────────────────────────────────
 \DeclareMathOperator{\eml}{eml}
 \DeclareMathOperator{\Fold}{Fold}
 \DeclareMathOperator{\Val}{Val}
@@ -45,46 +36,50 @@
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\CC}{\mathbb{C}}
 \newcommand{\one}{\mathbf{1}}
+\newcommand{\dom}{\operatorname{dom}}
 
-% ── Title ─────────────────────────────────────────────────
-\title{Beyond Expression Collapse:\\
-  A Three-Level Hierarchy of Single-Primitive Universality}
+\title[A Single-Primitive Universality Hierarchy]
+{A Three-Level Hierarchy for Single-Primitive Universality}
 
-\author{The Omega Institute}
-\date{\today}
+\author[The Omega Institute]{The Omega Institute}
+\date{}
+\subjclass[2020]{Primary 03D35; Secondary 11B39, 68Q42, 47A57}
+\keywords{single primitive, Zeckendorf representation, canonical forms,
+moment problem, Richardson theorem}
 
 \begin{document}
 \begin{abstract}
-A recent result of Odrzywołek shows that every elementary function
-on a scientific calculator can be reconstructed from a single binary
-operator $\eml(x,y)=e^{x}-\ln y$ and the constant~$1$.
-We situate this \emph{expression universality} as the bottom level
-of a three-level hierarchy.
-At the \emph{protocol level}, we show that integer arithmetic
-itself---addition and multiplication---is not primitive but emerges
-from a single scan--projection protocol with Zeckendorf fold
-normalization: the unique operation is function composition~$\circ$,
-read at two categorical levels.
-At the \emph{certificate level}, the same fold structure yields
-collision-moment sequences whose Hankel matrices are positive
-semi-definite, giving a finite, auditable spectral fingerprint for
-each resolution layer.
-We prove the hierarchy is strict: protocol universality implies
-expression universality but not conversely, and the separation
-is witnessed by decidability of the canonical-form word problem---
-a property that holds in the protocol setting but fails generically
-for expression trees.
+We distinguish three kinds of data that are often conflated under
+the phrase single-primitive universality.  Expression universality
+requires only that a prescribed family of functions have terms over
+one operation; Odrzywo{\l}ek's operator
+\(\eml(x,y)=e^x-\operatorname{Log}y\) is the model example.
+Protocol universality adds computable normal forms and readouts.
+For Fibonacci words, Zeckendorf normalization and two levels of
+composition recover addition and multiplication on \(\NN\), and a
+level-zero rigidity theorem shows that the second composition level
+is forced for multiplicative readout on a free monogenic orbit.
+Finite certificate data are then attached to normalization fibers:
+collision moments form positive Hankel matrices, and finite initial
+segments recover the fiber-size spectrum by Prony reconstruction.
+These bare finite-fiber certificates are formal; the substantive
+strengthening is finite-state transfer computation.  We prove that
+a computable finite-fiber enlargement with the same Zeckendorf
+normal forms and readouts need not admit any fixed finite-state
+transfer realization.
+At the expression level, Richardson's theorem rules out a
+computable canonical form for analytic equivalence in the full
+elementary EML language.  Thus a one-node expression grammar does
+not by itself supply a decidable protocol.
 \end{abstract}
 
 \maketitle
-\tableofcontents
 
 \input{sections/sec01_introduction}
 \input{sections/sec02_expression_universality}
 \input{sections/sec03_protocol_universality}
 \input{sections/sec04_certificate_universality}
 \input{sections/sec05_hierarchy_strictness}
-\input{sections/sec07_derived_consequences}
 \input{sections/sec06_discussion}
 
 \printreferences

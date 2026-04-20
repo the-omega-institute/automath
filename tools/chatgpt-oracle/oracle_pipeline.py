@@ -374,7 +374,7 @@ def detect_target_journal(paper_dir: str) -> str:
 
     return ""
 MAX_STAGE_A_ROUNDS = 5
-MAX_STAGE_B_ROUNDS = 4
+MAX_STAGE_B_ROUNDS = 99  # No practical limit — must pass Oracle gate
 MAX_STAGE_C_ROUNDS = 4
 
 # ---------------------------------------------------------------------------
@@ -2869,16 +2869,12 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     f"looping for re-review")
 
     last_v = state.stage_b_verdicts[-1] if state.stage_b_verdicts else "?"
-    logger.warning(f"{tag} Max {MAX_STAGE_B_ROUNDS} rounds exhausted, "
-                   f"proceeding with last verdict: {last_v}")
-    git_commit(paper_path,
-               f"Stage B ({last_v}, {MAX_STAGE_B_ROUNDS}R max): "
-               f"Oracle fixes applied", tag=tag)
-    update_program_board(state.paper_name, "B-DONE",
-                         f"Oracle: {last_v}, {MAX_STAGE_B_ROUNDS} rounds (max)")
-    state.stage_b_passed = True
+    logger.error(f"{tag} {MAX_STAGE_B_ROUNDS} rounds without Oracle acceptance "
+                 f"(last verdict: {last_v}). Halting — needs human review.")
+    update_program_board(state.paper_name, "B-STUCK",
+                         f"Oracle: {last_v}, {state.stage_b_rounds} rounds — needs human review")
     save_state(state)
-    return True
+    return False
 
 
 # ═══════════════════════════════════════════════════════════════════════════

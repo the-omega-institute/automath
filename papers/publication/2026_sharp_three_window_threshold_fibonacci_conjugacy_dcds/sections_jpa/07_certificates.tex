@@ -1,10 +1,16 @@
-\section{Quantitative consequences in the Sturmian benchmark}\label{sec:fp:tv}
+\section{Sturmian discrepancy estimates}\label{sec:fp:tv}
 
-Once the finite-memory conjugacy is in place, the benchmark rotation model supplies deterministic quantitative bounds. The point of this section is not to re-establish the threshold theorem, but to measure how orbit discrepancy and boundary blur perturb the transported observables in the specific Sturmian source law.
+The rotation model gives deterministic estimates for the finite-window laws considered above.  This section combines standard discrepancy bounds with the deterministic pushforward under $\Phi_{m,n}$.
 
 \subsection{Stabilized block laws from discrepancy}
 
-Fix a stabilization aperture $m$ and a stabilized block length $n\ge 1$. For the orbit segment $\{x_0+t\alpha\}_{t=0}^{N-1}$ under the standard two-interval rotation coding, let $\hat{\mu}_{m+n-1,N}$ denote the empirical distribution of the resulting raw words of length $m+n-1$, and let $\mu_{m+n-1}$ be the corresponding limiting raw-word distribution given by Lebesgue measure on the depth-$(m+n-1)$ Sturmian atoms. Define the empirical stabilized $n$-block law and its limit by
+Fix a stabilization aperture $m$ and a stabilized block length $n\ge 1$. In this section $\Phi_{m,n}$ denotes the finite-block sliding map
+\[
+\Phi_{m,n}(a_0\ldots a_{m+n-2})
+:=
+\bigl(\Fold_m(a_t\ldots a_{t+m-1})\bigr)_{t=0}^{n-1}.
+\]
+For the orbit segment $\{x_0+t\alpha\}_{t=0}^{N-1}$ under the standard two-interval rotation coding, let $\hat{\mu}_{m+n-1,N}$ denote the empirical distribution of the resulting raw words of length $m+n-1$, and let $\mu_{m+n-1}$ be the corresponding limiting raw-word distribution given by Lebesgue measure on the depth-$(m+n-1)$ Sturmian atoms. Define the empirical stabilized $n$-block law and its limit by
 \[
 \hat{\eta}_{m,n,N}:=(\Phi_{m,n})_*\hat{\mu}_{m+n-1,N},
 \qquad
@@ -16,6 +22,11 @@ For $n=1$ these are exactly the empirical folded histogram and its limit:
 \qquad
 \eta_{m,1}=\pi_m^{\mathrm{fold}}.
 \]
+Let
+\[
+\mathcal Y_{m,n}:=\Phi_{m,n}(\{0,1\}^{m+n-1})
+\]
+denote the finite support of these stabilized $n$-block laws.
 
 \begin{theorem}[Stabilized block law from discrepancy]\label{thm:tv-certificate}
 In the rotation readout model with slope $\alpha$, initial phase $x_0$, and empirical stabilized $n$-block law $\hat{\eta}_{m,n,N}$, one has
@@ -61,10 +72,10 @@ which proves \eqref{eq:tv-certificate}.
 \end{proof}
 
 \begin{corollary}[Bound for bounded stabilized-block observables]\label{cor:observable-certificate}
-Let $G:Y_m^n\to\RR$ be any bounded observable. Then
+Let $G:\mathcal Y_{m,n}\to\RR$ be any bounded observable. Then
 \begin{equation}\label{eq:observable-certificate}
 \Bigl|
-\sum_{y\in Y_m^n}G(y)\bigl(\hat{\eta}_{m,n,N}(y)-\eta_{m,n}(y)\bigr)
+\sum_{y\in \mathcal Y_{m,n}}G(y)\bigl(\hat{\eta}_{m,n,N}(y)-\eta_{m,n}(y)\bigr)
 \Bigr|
 \le
 2\|G\|_\infty D_{\TV}\bigl(\hat{\eta}_{m,n,N},\eta_{m,n}\bigr)
@@ -78,11 +89,11 @@ For the signed measure
 \[
 \rho:=\hat{\eta}_{m,n,N}-\eta_{m,n}
 \]
-on the finite set $Y_m^n$ one has
+on the finite set $\mathcal Y_{m,n}$ one has
 \[
-\Bigl|\sum_{y\in Y_m^n}G(y)\rho(y)\Bigr|
+\Bigl|\sum_{y\in \mathcal Y_{m,n}}G(y)\rho(y)\Bigr|
 \le
-\|G\|_\infty \sum_{y\in Y_m^n}|\rho(y)|
+\|G\|_\infty \sum_{y\in \mathcal Y_{m,n}}|\rho(y)|
 \le
 2\|G\|_\infty D_{\TV}\bigl(\hat{\eta}_{m,n,N},\eta_{m,n}\bigr),
 \]
@@ -153,9 +164,9 @@ D_{\TV}\bigl(\eta_{m,n}^{(\rho)},\eta_{m,n}^{(0)}\bigr).
 The first term is bounded by Theorem~\ref{thm:tv-certificate}, and the second by Proposition~\ref{prop:boundary-layer}.
 \end{proof}
 
-\subsection{Operational recovery of finite-range observables}
+\subsection{Recovery of finite-range observables}
 
-\begin{theorem}[Operational recovery of finite-range observables from stabilized readout]\label{thm:operational-observable-recovery}
+\begin{theorem}[Recovery of finite-range observables from stabilized blocks]\label{thm:operational-observable-recovery}
 Assume $m\ge 3$ and let $g:\{0,1\}^r\to\RR$ be a bounded local observable of range $r\ge 1$. Define the transported observable on stabilized blocks of length $r+m-1$ by
 \[
 \widetilde g(y_t,\dots,y_{t+r+m-2})
@@ -175,7 +186,7 @@ Then:
   \Bigl|
   \frac1N\sum_{t=0}^{N-1} &g(A_t,\dots,A_{t+r-1})
   -
-  \sum_{y\in Y_m^{r+m-1}}\widetilde g(y)\eta_{m,r+m-1}(y)
+  \sum_{y\in \mathcal Y_{m,r+m-1}}\widetilde g(y)\eta_{m,r+m-1}(y)
   \Bigr|
   \\
   &\le
@@ -188,7 +199,7 @@ Then:
   \Bigl|
   \frac1N\sum_{t=0}^{N-1} &g(A_t^{(\rho)},\dots,A_{t+r-1}^{(\rho)})
   -
-  \sum_{y\in Y_m^{r+m-1}}\widetilde g(y)\eta_{m,r+m-1}^{(0)}(y)
+  \sum_{y\in \mathcal Y_{m,r+m-1}}\widetilde g(y)\eta_{m,r+m-1}^{(0)}(y)
   \Bigr|
   \\
   &\le
@@ -199,12 +210,12 @@ Then:
 \end{theorem}
 
 \begin{proof}
-Item~(i) is a direct substitution of the local inverse from Theorem~\ref{thm:two-sided-conjugacy}(ii). For item~(ii), set $n:=r+m-1$ and define $G:=\widetilde g$ on $Y_m^n$. The empirical average of $g$ along the raw trajectory agrees with the empirical average of $G$ under the stabilized $n$-block law by item~(i), so Corollary~\ref{cor:observable-certificate} gives
+Item~(i) is a direct substitution of the local inverse from Theorem~\ref{thm:two-sided-conjugacy}(ii). For item~(ii), set $n:=r+m-1$ and define $G:=\widetilde g$ on $\mathcal Y_{m,n}$. The empirical average of $g$ along the raw trajectory agrees with the empirical average of $G$ under the stabilized $n$-block law by item~(i), so Corollary~\ref{cor:observable-certificate} gives
 \[
 \Bigl|
 \frac1N\sum_{t=0}^{N-1} g(A_t,\dots,A_{t+r-1})
 -
-\sum_{y\in Y_m^n}G(y)\eta_{m,n}(y)
+\sum_{y\in \mathcal Y_{m,n}}G(y)\eta_{m,n}(y)
 \Bigr|
 \le
 2(m+n)\|G\|_\infty D_N^*(\alpha;x_0).
@@ -217,7 +228,7 @@ For item~(iii), item~(i) again identifies the raw empirical average with the emp
 \Bigl|
 \frac1N\sum_{t=0}^{N-1} &g(A_t^{(\rho)},\dots,A_{t+r-1}^{(\rho)})
 -
-\sum_{y\in Y_m^n}G(y)\eta_{m,n}^{(0)}(y)
+\sum_{y\in \mathcal Y_{m,n}}G(y)\eta_{m,n}^{(0)}(y)
 \Bigr|
 \\
 &\le
@@ -227,7 +238,7 @@ For item~(iii), item~(i) again identifies the raw empirical average with the emp
 which reduces to the stated formula after substituting $n=r+m-1$.
 \end{proof}
 
-\begin{corollary}[Prototype measurement Hamiltonians]\label{cor:prototype-hamiltonians}
+\begin{corollary}[Occupation and nearest-neighbor estimates]\label{cor:prototype-hamiltonians}
 Assume $m\ge 3$, let
 \[
 N_N(A):=\sum_{t=0}^{N-1}A_t,
@@ -269,12 +280,12 @@ Apply Theorem~\ref{thm:operational-observable-recovery} with $g(a_0):=a_0$ for o
 \end{proof}
 
 \begin{corollary}[Bounded-type slopes]\label{cor:tv-bounded-type}
-Assume that the rotation slope $\alpha$ has bounded partial quotients. Then there exists a constant $C_\alpha>0$, depending only on the continued-fraction data of $\alpha$, such that for every bounded local observable $g:\{0,1\}^r\to\RR$ and every $N\ge 2$,
+Assume $m\ge 3$ and that the rotation slope $\alpha$ has bounded partial quotients. Then there exists a constant $C_\alpha>0$, depending only on the continued-fraction data of $\alpha$, such that for every bounded local observable $g:\{0,1\}^r\to\RR$ and every $N\ge 2$,
 \[
 \Bigl|
 \frac1N\sum_{t=0}^{N-1} g(A_t,\dots,A_{t+r-1})
 -
-\sum_{y\in Y_m^{r+m-1}}\widetilde g(y)\eta_{m,r+m-1}(y)
+\sum_{y\in \mathcal Y_{m,r+m-1}}\widetilde g(y)\eta_{m,r+m-1}(y)
 \Bigr|
 \le
 2(r+2m-1)\|g\|_\infty C_\alpha\frac{\log N}{N}.
@@ -290,6 +301,5 @@ uniformly in the initial phase $x_0$ \cite{KuipersNiederreiter1974,DrmotaTichy19
 \end{proof}
 
 \begin{remark}
-Theorem~\ref{thm:operational-observable-recovery} and Corollary~\ref{cor:resolution-certificate} quantify the benchmark source law after the conjugacy has already been established. Above threshold, stabilization contributes no new loss mechanism; the only explicit finite-sample error terms are orbit discrepancy and boundary-layer blur.
+Theorem~\ref{thm:operational-observable-recovery} and Corollary~\ref{cor:resolution-certificate} quantify the rotation source law after the conjugacy has been established.  The explicit finite-sample error terms are the orbit discrepancy and the boundary-layer mass.
 \end{remark}
-

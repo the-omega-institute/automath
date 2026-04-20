@@ -1,224 +1,235 @@
-% ══════════════════════════════════════════════════════════
-\section{Structural Relations Between the Levels}
-  \label{sec:strictness}
-% ══════════════════════════════════════════════════════════
+\section{Relations among the three levels}
+\label{sec:strictness}
 
-We analyze the relationships between the three levels.
-Rather than claiming a strict class chain
-$\text{L0} \subsetneq \text{L1} \subsetneq \text{L2}$,
-we establish the directional, conditional relations that
-are actually supported by our arguments:
-L0 and L1 are incomparable as classes, but compatible pairs
-admit a compilation from L0 to L1
-(\Cref{prop:L1-compiles-L0}); L1 and L2 coincide on generic
-clauses (a)--(b) of~\Cref{def:cert-univ}, while clause~(c)
-imposes genuinely new structure witnessed in the SPG setting
-(\Cref{prop:L2-generic-vs-structural}).
+The terminology above compares structures, not classes of
+functions.  The useful facts are the conditional compilation
+statement below, the Richardson obstruction for EML, and the
+distinction between formal finite-fiber certificates and
+finite-state transfer certificates.
 
-% ── 5.1  L1 hosts L0 under compatibility ─────────────────
-\subsection{Compilation of expression-universal syntax into
-  protocol systems}\label{ssec:L1-geq-L0}
+\subsection{Compatible compilation}
+\label{ssec:L1-geq-L0}
 
-\begin{proposition}[Semantic compilation of expression terms into
-  compatible protocol systems]\label{prop:L1-compiles-L0}
-Let $(\sigma, c_{0})$ be expression-universal
-for~$\mathcal{F}$, with grammar
-$S \to c_{0} \mid x_{i} \mid \sigma(S,S)$ and free binary-tree
-algebra~$T$.  Let $(D', \mathrm{NF}', \{\Phi'_{\ell}\})$ be a
-protocol-universal system.  Suppose there exists a computable
-evaluation map $\mathrm{eval} \colon T \to D'$ that is
-\emph{semantically compatible}, i.e.\ satisfies
+\begin{proposition}[Semantic compilation into a protocol]
+\label{prop:L1-compiles-L0}
+Let \((\sigma,c_0)\) be expression-universal for a family
+\(\mathcal F\).  Let \(T\) be the corresponding admissible term
+algebra, and let \(\sim\) denote semantic equivalence of terms on
+their specified domains.  Suppose
+\((D',\mathrm{NF}',\{\Phi'_\ell\})\) is a protocol-universal
+system and that there is a computable map
+\(\mathrm{eval}\colon T\to D'\) such that, for all
+\(t_1,t_2\in T\),
 \begin{equation}\label{eq:semantic-compatibility}
-  t_{1} \sim t_{2} \;\Longleftrightarrow\;
-  \mathrm{NF}'(\mathrm{eval}(t_{1})) =
-  \mathrm{NF}'(\mathrm{eval}(t_{2}))
+  t_1\sim t_2
+  \quad\Longleftrightarrow\quad
+  \mathrm{NF}'(\mathrm{eval}(t_1))
+  =\mathrm{NF}'(\mathrm{eval}(t_2)).
 \end{equation}
-for all $t_{1}, t_{2} \in T$, where $\sim$ denotes semantic
-equivalence of expression trees.  Then the induced map
-\[
-  \llbracket \cdot \rrbracket_{\mathrm{NF}'}
-    \;:=\; \mathrm{NF}' \circ \mathrm{eval}
-    \;\colon\; T/\!\sim \;\longrightarrow\; D'
-\]
-is an injection, and equivalence testing for $T/\!\sim$ reduces
-to the (decidable) word problem in~$D'$.
+Then \(\mathrm{NF}'\circ\mathrm{eval}\) descends to an injection
+\(T/{\sim}\to D'\), and equivalence of expression terms is
+decidable by the word problem in the protocol.
 \end{proposition}
 
-\begin{remark}[Scope of \Cref{prop:L1-compiles-L0}]
-This proposition is a \emph{conditional} compilation statement,
-not an unconditional class inclusion.  Its hypotheses are
-strong:
-\begin{enumerate}[label=(\roman*)]
-\item The protocol system must admit a computable
-  evaluator~$\mathrm{eval}$ adapted to the expression grammar.
-\item The compatibility condition~\eqref{eq:semantic-compatibility}
-  must hold, effectively requiring $D'$ to be rich enough to
-  separate all semantically distinct expression classes.
-\end{enumerate}
-For expression-universal systems with undecidable equivalence
-(such as EML over a sufficiently rich analytic domain),
-no such $(D', \mathrm{eval})$ pair can exist, since~(ii) would
-contradict the undecidability.  We therefore do \emph{not} claim
-an unconditional class inclusion $\mathrm{L0} \subseteq \mathrm{L1}$.
-What the hierarchy records is a directional strengthening:
-when compilation is possible, L1 provides strictly more structure
-than L0 (decidable canonical forms); when compilation is
-impossible, L0 and L1 are simply incomparable as classes.
+\begin{proof}
+The condition \eqref{eq:semantic-compatibility} says exactly that
+\(\mathrm{NF}'\circ\mathrm{eval}\) is constant on each
+\(\sim\)-class and separates distinct \(\sim\)-classes.  It
+therefore induces an injective map on \(T/{\sim}\).  To decide
+whether \(t_1\sim t_2\), compute the two normal forms in \(D'\) and
+use the decidable equality of protocol normal forms.
+\end{proof}
+
+\begin{remark}\label{rem:compile-scope}
+This is a compatibility statement, not an embedding theorem for all
+expression-universal grammars.  The hypothesis is precisely the
+missing canonical-form information.  When equivalence in the
+expression language is undecidable, no computable evaluator
+satisfying \eqref{eq:semantic-compatibility} can exist into a
+protocol with decidable equality.
 \end{remark}
 
-% ── 5.2  L0 does not imply L1 ────────────────────────────
-\subsection{Expression universality does not imply protocol
-  universality}\label{ssec:L0-not-L1}
+\subsection{The Richardson obstruction}
+\label{ssec:L0-not-L1}
 
-\begin{theorem}[Separation: L0 $\not\Rightarrow$ L1]
+\begin{theorem}[Expression universality does not give normal forms]
 \label{thm:separation}
-The EML system $(\eml, 1)$ is expression-universal for
-$\mathcal{B}_{36}$ but is not protocol-universal in the sense of
-\Cref{def:prot-univ}.  The obstruction is twofold:
-\begin{enumerate}[label=(\roman*)]
-\item \textbf{No intrinsic normal form.}
-  The equivalence problem for EML trees---given trees $t_{1}, t_{2}$,
-  decide whether $\llbracket t_{1} \rrbracket =
-  \llbracket t_{2} \rrbracket$ as functions on~$\RR$---is
-  undecidable in general.
-\item \textbf{Operations remain external.}
-  The grammar $S \to 1 \mid \eml(S,S)$ generates representations
-  but does not internalize the operations of function composition
-  or function application; these require an external evaluator.
-\end{enumerate}
+The EML system \((\eml,1)\) is expression-universal for
+\(\mathcal B_{36}\).  Nevertheless, the real elementary EML
+fragment obtained by translating Richardson expressions has no
+computable normal form \(\mathrm{NF}\) satisfying
+\[
+  \mathrm{NF}(t_1)=\mathrm{NF}(t_2)
+  \quad\Longleftrightarrow\quad
+  t_1 \text{ and } t_2
+  \text{ define the same elementary function}
+\]
+for all translated terms, with equality understood on their common
+real domains of definition.
 \end{theorem}
 
 \begin{proof}
-(i) Richardson~\cite{Richardson1968} proves that the equivalence
-problem for expressions built from $\exp, \ln, \sin, +, \times,
-\circ$ and rational constants is undecidable.
-Since EML over~$\CC$ (with the principal branch of~$\ln$) can
-represent $\exp$, $\ln$, and all arithmetic operations
-(\Cref{thm:eml-universality}), and since $\sin$ is expressible
-from $\exp$ and the imaginary unit~$i$ (itself an EML term),
-Richardson's language reduces computably to the EML term language.
-Hence the equivalence problem for EML trees is undecidable.
-Since protocol universality requires decidable word problems
-(\Cref{def:prot-univ}), EML fails to satisfy it.
+Richardson proved that the identity problem for real elementary
+expressions is undecidable in a language generated by rational
+constants, a real variable, arithmetic operations, composition, and
+elementary functions including exponential, logarithmic,
+trigonometric, and absolute-value operations
+\cite{Richardson1968}.  Odrzywo{\l}ek's construction gives
+explicit EML terms for the corresponding scientific-calculator
+operations, including arithmetic, \(\exp\), \(\operatorname{Log}\),
+square root, and trigonometric functions \cite{Odrzywolek2026}.
+On real inputs, the principal square root gives the absolute value
+occurring in Richardson's language by \(|x|=\sqrt{x^2}\).
 
-(ii) is definitional: the grammar~\eqref{eq:eml-grammar}
-specifies term formation, not an operational semantics.
-Tree composition (grafting) and evaluation (reduction) are
-meta-level operations with no representation as EML terms
-themselves.  By contrast, in the SPG protocol, composition~$\circ$
-is the primitive (\Cref{thm:two-level}), and evaluation is
-fold normalization followed by valuation readout---both internal
-to the system.
+Thus each Richardson expression can be translated effectively into
+an admissible EML term by replacing each primitive operation by
+the corresponding cited EML expression.  The replacements agree
+with the primitive real operations on their principal real domains,
+and composition preserves the common domain and value of the
+Richardson expression.  If the asserted normal form existed, then
+for a Richardson expression \(E\) one could translate \(E\) and the
+zero expression into EML terms and compare their normal forms.  This
+would decide whether \(E\) is identically zero in Richardson's
+sense, contradicting Richardson's theorem.  Hence the expression
+grammar, although universal in the sense of \Cref{def:expr-univ},
+cannot by itself supply the decidable canonical-form component of
+\Cref{def:prot-univ}.
 \end{proof}
 
 \begin{corollary}\label{cor:strict-L0-L1}
-L0 and L1 are incomparable as classes: there exist
-expression-universal systems (e.g., EML) that are not
-protocol-universal, and conversely the protocol-universality
-property is not entailed by expression-universality.
-For pairs where semantic compilation in the sense of
-\Cref{prop:L1-compiles-L0} is available, L1 strictly
-strengthens L0 by adding a decidable word problem.
+Expression universality does not imply protocol universality in
+general.
 \end{corollary}
 
-% ── 5.3  L2 imposes non-trivial structure beyond L1 ──────
-\subsection{Certificate universality as a non-trivial
-  structural refinement of protocol universality}
-  \label{ssec:L2-strict}
+\begin{proof}
+The EML grammar is expression-universal by
+\Cref{thm:eml-universality}, while \Cref{thm:separation} rules out
+the required decidable normal forms for the full elementary
+fragment.
+\end{proof}
 
-\begin{proposition}[Generic vs.\ structural clauses in L2]
+\subsection{Certificate data}
+\label{ssec:L2-strict}
+
+\begin{proposition}[Generic and additional certificate clauses]
 \label{prop:L2-generic-vs-structural}
-For any protocol-universal system with finite fiber partitions
-at every resolution, clauses~(a) and~(b) of
-\Cref{def:cert-univ}---Hankel positive semi-definiteness and
-finite Prony reconstructibility---are automatic.  In contrast,
-clause~(c)---the existence of a finite-state matrix transfer
-operator of dimension polynomial in~$q$ computing the full
-moment sequence $(S_{q}(m))_{q \ge 0}$ at each resolution~$m$
----is a non-trivial structural condition that the scan--projection
-fold system satisfies by \Cref{thm:star-kernel} but which is
-not entailed by protocol universality alone.
+For any protocol system whose normalization map has finite fibers
+at each resolution, the Hankel positivity and finite spectral
+reconstruction clauses in \Cref{def:cert-univ} follow from the
+fiber sizes alone.  Finite-state certificate universality is an
+additional transfer-operator hypothesis of the kind described in
+\Cref{thm:star-kernel}.
 \end{proposition}
 
 \begin{proof}
-\emph{(a)} For any finite multiset $\{d_{m}(x)\}$ of non-negative
-real numbers,
+Let \(d_m(x)\) be the finite fiber sizes and set
 \[
-  \sum_{i,j} c_{i}\, c_{j}\, S_{i+j}(m)
-    = \sum_{i,j} c_{i}\, c_{j}
-      \sum_{x} d_{m}(x)^{i+j}
-    = \sum_{x}\Bigl(\sum_{i} c_{i}\, d_{m}(x)^{i}\Bigr)^{2}
-    \ge 0,
+  S_q(m)=\sum_x d_m(x)^q .
 \]
-so the Hankel matrix $[S_{i+j}(m)]$ is positive semi-definite.
-
-\emph{(b)} The measure
-$\nu_{m} := \sum_{x} \delta_{d_{m}(x)}$ has finite support of
-size at most $|X_{m}|$; its moments determine $\nu_{m}$ uniquely
-by the classical finite Hamburger moment theorem, and
-$2 r_{m}$ moments suffice for Prony reconstruction where
-$r_{m}$ is the number of distinct fiber sizes.
-
-\emph{(c), structural content.}
-The scan--projection fold system satisfies clause~(c) by the
-star moment-kernel statement: $A^{(q)}|_{\Sym^{q-1}(V)}$ has
-dimension $\binom{k+q-2}{q-1}$, polynomial in~$q$ for fixed
-state-space dimension~$k$ (\Cref{thm:star-kernel}).  This is
-a consequence of the specific transfer-matrix structure
-$A^{(q)} = \sum_{\alpha} B_{\alpha}^{\otimes(q-1)}$ arising
-from the Fold rewrite system, not a formal consequence of the
-definition of protocol universality.
+For every finitely supported coefficient vector \((c_i)\),
+\[
+  \sum_{i,j}c_i c_j S_{i+j}(m)
+  =\sum_x\Bigl(\sum_i c_i d_m(x)^i\Bigr)^2\ge0,
+\]
+which is Hankel positivity.  Since
+\(\sum_x\delta_{d_m(x)}\) has finite support, its support points
+and multiplicities are recovered from finitely many moments by the
+Prony argument of \Cref{thm:prony}.  Neither argument constructs a
+finite-state transfer operator.  That operator is extra structure;
+when it has the tensor form of \Cref{thm:star-kernel}, it admits
+the stated symmetric compression.
 \end{proof}
 
-\begin{remark}[On strictness as class containment]
-\label{rem:L1-L2-strictness-open}
-A demonstration that L1 is strictly weaker than L2 as a class
-of systems would require exhibiting a protocol-universal
-system in which no polynomial-dimensional transfer operator
-computes the fiber moments.  Constructing such a system within
-the precise formalism of \Cref{def:prot-univ}---including the
-required generating operation~$\sigma$ and readout
-functors---appears to be non-trivial, and we leave it as an
-open question.  What \Cref{prop:L2-generic-vs-structural}
-establishes is the weaker but still meaningful claim:
-clause~(c) of L2 carries non-trivial structural content beyond
-what protocol universality alone supplies, witnessed by the
-explicit transfer-matrix compression in the SPG setting.
-\end{remark}
+A finite-fiber enlargement below is meant only at the presentation
+level: the finite sets that map to normal forms are replaced by
+computable finite covers of the same normal-form sets, while the
+normal forms, valuation, and readout operations are kept fixed.
+Thus the enlargement changes the certificate fibers but not the
+arithmetic protocol on normal forms.
+
+\begin{theorem}[Strictness of finite-state certificates]
+\label{thm:finite-state-strictness}
+Let \(a_m\ge1\) be any computable integer sequence.  There is a
+computable finite-fiber enlargement of the finite presentation
+sets in the Zeckendorf protocol with
+exactly the same normal forms and arithmetic readouts as in
+\Cref{thm:semiring,thm:two-level}, hence with the same
+protocol-universality for \(\{+,\times\}\), whose enlarged second
+collision moment is
+\[
+  S_2^\sharp(m)=(a_m+1)^2+F_{m+2}-1 .
+\]
+Consequently finite Hankel--Prony certificates impose no
+finite-state growth law on the resolution parameter.  In
+particular, choosing \(a_m=m!\) gives a certificate-universal
+finite-fiber enlargement that is not finite-state
+certificate-universal in the sense of \Cref{def:cert-univ}: already
+its second collision moment admits no representation
+\[
+  S_2^\sharp(m)=u^{\mathsf T}A^m v\qquad(m\ge1)
+\]
+with \(A\) a fixed finite matrix and \(u,v\) fixed finite vectors.
+\end{theorem}
+
+\begin{proof}
+For each \(m\ge1\), let \(z_m\in X_m\) be the all-zero normal form.
+Define the enlarged resolution set
+\[
+  \Omega_m^\sharp
+  =
+  X_m\sqcup\bigl(\{z_m\}\times\{1,\ldots,a_m\}\bigr)
+\]
+and the normalization map
+\[
+  \Fold_m^\sharp(x)=x\quad(x\in X_m),\qquad
+  \Fold_m^\sharp(z_m,j)=z_m .
+\]
+This construction is computable in \(m\): membership in
+\(\Omega_m^\sharp\) and the map \(\Fold_m^\sharp\) are decidable
+because the sequence \(a_m\) is computable.  Every fiber is finite.
+The stable normal-form space
+\(X_{\infty}^{\mathrm{fin}}\), the valuation map, and the
+readouts \(\oplus,\otimes\) are inherited unchanged.  Hence the
+protocol-universality statement for addition and multiplication is
+identical to the one in \Cref{thm:semiring,thm:two-level}.
+Certificate-universality follows from
+\Cref{prop:L2-generic-vs-structural}.
+
+The enlarged fiber sizes are
+\[
+  d_m^\sharp(z_m)=a_m+1,\qquad
+  d_m^\sharp(x)=1\quad(x\in X_m,\ x\ne z_m).
+\]
+Since \(|X_m|=F_{m+2}\),
+\begin{equation}\label{eq:inflated-second-moment}
+  S_2^\sharp(m)=(a_m+1)^2+F_{m+2}-1 .
+\end{equation}
+This proves the asserted arbitrary computable one-spike
+realization.
+
+For the asserted obstruction, specialize to \(a_m=m!\).  If the
+enlargement were finite-state certificate-universal, then the case
+\(q=2\) in \Cref{def:cert-univ} would give a representation of the
+following form.  Suppose that
+\(S_2^\sharp(m)=u^{\mathsf T}A^m v\) for a fixed finite matrix
+\(A\) and fixed vectors \(u,v\).  For any
+submultiplicative matrix norm there are constants \(C>0\) and
+\(R>0\) such that
+\[
+  |u^{\mathsf T}A^m v|\le C R^m\qquad(m\ge1).
+\]
+Equation \eqref{eq:inflated-second-moment} contradicts this bound,
+because \((m!)^2/R^m\to\infty\) for every fixed \(R\).  Therefore no
+fixed finite-dimensional transfer-matrix realization exists for
+the second moment.  In particular, finite Hankel--Prony
+certificates are strictly weaker than the finite-state transfer
+property.
+\end{proof}
 
 \begin{remark}\label{rem:hankel-psd-generic}
-The takeaway for the hierarchy table
-(\Cref{tab:properties}): Hankel PSD and finite spectral
-reconstruction are generic, while the polynomial-dimension
-transfer-operator structure is the distinctive content of
-certificate universality in the SPG setting.
+The certificate level therefore has two parts.  Finite Hankel
+positivity and Prony reconstruction are formal consequences of a
+finite fiber partition.  Polynomial-size finite-state computation
+of the same moments is a stronger property and must be proved from
+the particular transfer representation at hand.
 \end{remark}
-
-% ── 5.4  Summary ─────────────────────────────────────────
-\subsection{Summary}
-
-\begin{table}[ht]
-\centering\small
-\caption{Properties at each level.  \checkmark\ =
-  present; $\times$ = absent or undecidable;
-  $\checkmark^{*}$ = generic (holds for any finite fiber
-  partition, not specific to the system);
-  $?$ = not entailed by the definition but we are unaware of a
-  counterexample (\Cref{rem:L1-L2-strictness-open}).}
-\label{tab:properties}
-\begin{tabular}{@{}lccc@{}}
-\toprule
-Property & L0 (Expr.) & L1 (Protocol) & L2 (Certificate) \\
-\midrule
-Single primitive     & \checkmark & \checkmark & \checkmark \\
-Tree grammar         & \checkmark & \checkmark & \checkmark \\
-Canonical normal form & $\times$  & \checkmark & \checkmark \\
-Decidable word problem & $\times$ & \checkmark & \checkmark \\
-Operations internal  & $\times$   & \checkmark & \checkmark \\
-PSD moment kernel (generic)  & $\times$ & \checkmark$^{*}$ & \checkmark \\
-Finite-state moment kernel (poly.\ dim.)
-                              & $\times$ & $?$   & \checkmark \\
-Finite spectral certificate  & $\times$ & \checkmark$^{*}$ & \checkmark \\
-\bottomrule
-\end{tabular}
-\end{table}
