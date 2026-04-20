@@ -160,6 +160,7 @@ import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
 import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage
 import Omega.Zeta.XiTerminalZmKappaSquareCubicFieldS3
 import Omega.Zeta.XiToeplitzNegativeMarginVandermonde4Lowerbound
+import Omega.Zeta.XiImplCoding
 import Omega.Zeta.ToeplitzNegativeSpectrumUpperboundByHankelSingular
 import Omega.Zeta.XiGramshiftIllconditioningForcedByToeplitzMargin
 import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge

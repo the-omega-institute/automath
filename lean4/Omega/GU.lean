@@ -161,6 +161,8 @@ import Omega.GU.TerminalWindow6Sl2zHyperbolicFromTailTriple
 import Omega.GU.Window6Prime23SpectralResponse
 import Omega.GU.TerminalWindowPushforwardCommutantTorus
 import Omega.GU.TerminalWindowRationalCommutantIdempotentRigidity
+import Omega.GU.Terminal6DReachableMeanConvexBody
+import Omega.GU.TerminalTimeProtocolGoldenBranch
 import Omega.GU.TimeUnitLogphiProtocol
 import Omega.GU.ThreefoldRigidity
 import Omega.GU.ThreefoldRigidityClosureSmSo10
