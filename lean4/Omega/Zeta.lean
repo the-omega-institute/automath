@@ -313,6 +313,7 @@ import Omega.Zeta.XiCenterSixfoldKappaNodeInversionBlowup
 import Omega.Zeta.XiChainIdempotentStarSaturationComparableGcd
 import Omega.Zeta.XiCriticalLineHorizonCircle
 import Omega.Zeta.XiCriticalLineUniqueLowComplexitySlice
+import Omega.Zeta.XiComovingDefectLatticeCertificateBandExclusion
 import Omega.Zeta.XiDefectEntropyPeakCompressibilityExtremal
 import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
 import Omega.Zeta.XiEllipseWallcrossingUnitStaircaseUniversality

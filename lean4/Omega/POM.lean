@@ -190,6 +190,7 @@ import Omega.POM.MicrocanonicalFoldClassCount
 import Omega.POM.MicrocanonicalInformationDoob
 import Omega.POM.MicrocanonicalInformationIdentity
 import Omega.POM.MicrocanonicalInformationLinearLaw
+import Omega.POM.MicrocanonicalPosteriorModuliCLT
 import Omega.POM.MicrocanonicalTwoTemperatureKktPowerLaw
 import Omega.POM.MicrocanonicalUniversalSection
 import Omega.POM.MinEntropyRate

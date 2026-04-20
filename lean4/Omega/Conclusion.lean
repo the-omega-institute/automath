@@ -186,6 +186,7 @@ import Omega.Conclusion.RateCdimTwoCircleThreshold
 import Omega.Conclusion.ReadusNullTrichotomyNormalForm
 import Omega.Conclusion.RealInput40LocalCramerRightTailMoreCostly
 import Omega.Conclusion.RealInput40OutputPotentialSpectralCollisions
+import Omega.Conclusion.RealInput40GeodesicMertensAbsolutelySummable
 import Omega.Conclusion.RealInput40SingularRingNodeSplitting
 import Omega.Conclusion.RealInput40UVAtomCore
 import Omega.Conclusion.RealInput40UVPressureSilentPhase
