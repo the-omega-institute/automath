@@ -167,6 +167,7 @@ import Omega.Zeta.XiCauchyPoissonDerivativeEnergyClosedForm
 import Omega.Zeta.XiFoldLocalInformationDensityFirstOrderDiscreteLaw
 import Omega.Zeta.XiCenterSixfoldKappaNodeInversionBlowup
 import Omega.Zeta.XiFoldCongruenceUnitalAutomorphismRigidity
+import Omega.Zeta.XiVisibleArithmeticUnitIdempotentCount
 import Omega.Zeta.XiFoldbinDyadicCapacityCriticalWindowLimit
 import Omega.Zeta.XiAddressDefectLaw
 import Omega.Zeta.XiTripleConsistencyAudit
