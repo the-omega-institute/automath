@@ -278,6 +278,7 @@ import Omega.POM.RenyiDimensionSpectrum
 import Omega.POM.RenyiEndpoint
 import Omega.POM.RenyiEntropyRate
 import Omega.POM.RenyiHalfHellingerTensorAdditivity
+import Omega.POM.SmallDistortionConstantTensorMultiplicative
 import Omega.POM.ReplicaBernoulliSubgraph
 import Omega.POM.ReplicaSoftcoreBinomialKernelInverse
 import Omega.POM.ReplicaSoftcoreDet
