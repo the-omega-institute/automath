@@ -208,6 +208,7 @@ import Omega.Conclusion.SpectrumSignLaw
 import Omega.Conclusion.SingleRenyiRigidityForCoarsening
 import Omega.Conclusion.CoarsegrainingStokesBeckChevalley
 import Omega.Conclusion.StokesSteinWeightedGraphMinflow
+import Omega.Conclusion.StokesEnergyDyadicMartingale
 import Omega.Conclusion.SquarefreeRTLaminarNesting
 import Omega.Conclusion.SubexponentialLedgerPhaseUniversality
 import Omega.Conclusion.SyncKernelPalindrome

@@ -97,6 +97,7 @@ import Omega.CircleDimension.MinimalAuditCompletion
 import Omega.CircleDimension.MonotoneIsolationUniqueZero
 import Omega.CircleDimension.MinimalRecordAxis
 import Omega.CircleDimension.MinimalLogAuditablePhaseCircles
+import Omega.CircleDimension.MobiusCayleyArctanRigidity
 import Omega.CircleDimension.MobiusBipartiteColoring
 import Omega.CircleDimension.ModeGramKernel
 import Omega.CircleDimension.ModeParityVanish
