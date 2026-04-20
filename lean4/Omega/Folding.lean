@@ -154,6 +154,7 @@ import Omega.Folding.FoldBinRenyiRateCollapse
 import Omega.Folding.FoldHypercubeGreenInversionUniqueReconstruction
 import Omega.Folding.FoldInfoNCELossSpectrumIdentifiability
 import Omega.Folding.FoldHypercubeFibonacciGodelRadiusCount
+import Omega.Folding.FoldBinTwoPointLimitLaw
 import Omega.Folding.FoldBinTwoStateAsymptotic
 import Omega.Folding.FoldBinFDivergenceCollapse
 import Omega.Folding.FoldBinM6FiberHist
