@@ -189,6 +189,7 @@ import Omega.Folding.FoldRewriteNewman
 import Omega.Folding.FoldSigmaPhiDiverges
 import Omega.Folding.FoldSpectrumFactorization
 import Omega.Folding.FoldSpectrumNontrivialBound
+import Omega.Folding.FoldSpectrumParityZero
 import Omega.Folding.FoldSpectrumZeroCriterion
 import Omega.Folding.FoldSuitePublication
 import Omega.Folding.FoldTimeRegisterErrorFiberThreshold
@@ -295,6 +296,7 @@ import Omega.Folding.KilloFoldCarryDefectCocycleNonsplit
 import Omega.Folding.KilloFoldRenyi2UniformityGap
 import Omega.Folding.KilloFoldbin6FullCenter
 import Omega.Folding.KilloLayeredPrimeSlicesFiniteDepth
+import Omega.Folding.KilloNaturalExtensionBranchRegister
 import Omega.Folding.KilloPrimeRegisterIdempotentArithmetization
 import Omega.Folding.LayerwiseAuditablePrimorialNecessity
 import Omega.Folding.LengthMBlockUniqueLift
