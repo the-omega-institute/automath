@@ -89,6 +89,7 @@ import Omega.GU.ParryEndpointCollapse
 import Omega.GU.ParryEndpointMassMatrix
 import Omega.GU.ParryEndpointPhiEstimators
 import Omega.GU.PullbackBracketFromOperatorEnvelope
+import Omega.GU.Window6RootDictionaryPullbackBracket
 import Omega.GU.RadialQuadraticIdentifiability
 import Omega.GU.RadialQuadraticExtremeConcentration
 import Omega.GU.RadialQuadraticKlInfinite
