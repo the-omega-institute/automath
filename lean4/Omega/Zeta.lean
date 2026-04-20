@@ -268,6 +268,7 @@ import Omega.Zeta.RealInput40RotationPolytope6V
 import Omega.Zeta.RealInput40RotationPolytopeShear
 import Omega.Zeta.RealInput40TrivMechSplit
 import Omega.Zeta.RealisabilityVsRigidity
+import Omega.Zeta.ReciprocalPlusKernelRhImpliesToyRh
 import Omega.Zeta.RecursiveZeroShadowingExplicit
 import Omega.Zeta.RsLocalZeroCertification
 import Omega.Zeta.MultiscaleDriftSummabilityLimit
