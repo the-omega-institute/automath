@@ -451,6 +451,7 @@ import Omega.Zeta.XiTimePart63cTrivialAlternatingSignReciprocalDuality
 import Omega.Zeta.XiTimePart9gCanonicalSubmonoidFreeMonoid
 import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
 import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage
+import Omega.Zeta.XiVanVleckResidueL2LowerBound
 import Omega.Zeta.XiToeplitzNegativeMarginVandermonde4Lowerbound
 import Omega.Zeta.XiTripleConsistencyAudit
 import Omega.Zeta.XiUniqueContinuousTransverseRegister
