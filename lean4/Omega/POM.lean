@@ -9,6 +9,7 @@ import Omega.POM.BayesInfonceSecondCollisionDominance
 import Omega.POM.CapacityCollisionDataProcessing
 import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.AnomSingleMomentCompleteEquivalence
+import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.MomentHankel
 import Omega.POM.BoundedPerturbationInvariance
 import Omega.POM.BeckChevalleyAmgmDefectIdentity

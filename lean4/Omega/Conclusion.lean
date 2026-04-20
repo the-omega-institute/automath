@@ -4,6 +4,7 @@ import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.AuditComplexityAreaEquivalence
+import Omega.Conclusion.FreeEnergyGatesMonotonicityObstruction
 import Omega.Conclusion.F2BinomialBasisFromDeltaNilpotent
 import Omega.Conclusion.Mod2EPlusOnePowerPeriod
 import Omega.Conclusion.Boundary1FormCutDeterminantSplitting
