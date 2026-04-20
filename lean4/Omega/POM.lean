@@ -12,6 +12,7 @@ import Omega.POM.AitkenDelta2SquareConvergence
 import Omega.POM.AnomSingleMomentCompleteEquivalence
 import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.BCDiscreteJacobianStrictification
+import Omega.POM.BCQuotientUniversal
 import Omega.POM.BCHighOrderLedgerDecomposition
 import Omega.POM.BCInformationStokesCoboundary
 import Omega.POM.BCPontryaginDualClassification
