@@ -78,6 +78,7 @@ import Omega.GU.LeyangHolographicN2
 import Omega.GU.LogCmStableInverseExponentialSeparation
 import Omega.GU.M11Z34AugmentationIdealUnique
 import Omega.GU.M11Z34CyclotomicRepresentationRigidity
+import Omega.GU.M11DihedralLiftDiracDoubling
 import Omega.GU.M11Z34RealIrrepDecomposition
 import Omega.GU.M11DeltaClosureUniqueMinimalSO10
 import Omega.GU.MinSectorBudget
@@ -238,6 +239,7 @@ import Omega.GU.Window6BdryUpliftResidueStratification
 import Omega.GU.Window6VisibleQuarticShellIsotropization
 import Omega.GU.Window6ThreePointWeightResidueFiltration
 import Omega.GU.Window6LabeledSphericalCubatureStrengthFive
+import Omega.GU.Window6LeyangP6UnitaryToeplitz
 import Omega.GU.Window6LabeledSphericalDegree5CubatureCube
 import Omega.GU.Window6LabeledSphericalDegree6HarmonicDefect
 import Omega.GU.Window6LieEnvelopeClosure
