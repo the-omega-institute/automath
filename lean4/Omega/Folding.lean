@@ -164,6 +164,7 @@ import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy
 import Omega.Folding.FoldFiberParityEnergySimplex
 import Omega.Folding.FoldFibonacciFrequencyFourierSpikeClosedForm
 import Omega.Folding.FoldFourierPhaseLockingByComplement
+import Omega.Folding.FoldGaugeAnomalyP10HLinearDisjointness
 import Omega.Folding.FoldGaugeAnomalyP10LeyangLinearDisjointness
 import Omega.Folding.FoldGaugeAnomalyP10P9LinearDisjointness
 import Omega.Folding.FoldHypercubeFibonacciEpsEntropyUpper
