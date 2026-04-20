@@ -250,6 +250,7 @@ import Omega.Conclusion.VisibleJointHorizonSharp2d
 import Omega.Conclusion.WallisFactorMonoid
 import Omega.Conclusion.WeightedSyncCompletedTraceEven
 import Omega.Conclusion.Window10TrisectorResourceOrthogonality
+import Omega.Conclusion.SingularRingEndpointPreimageTower
 import Omega.Conclusion.Window6BinarySuffixCylinderTrichotomy
 import Omega.Conclusion.Window6BoundaryConductorTwoZetaFlatness
 import Omega.Conclusion.Window6BoundaryF8F9ChannelOrthogonality

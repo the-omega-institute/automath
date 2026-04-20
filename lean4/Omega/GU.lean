@@ -273,6 +273,7 @@ import Omega.GU.Window6ResponseKernelMod23
 import Omega.GU.Window6RootDictionaryPullbackBracket
 import Omega.GU.Window6SaturationMaxfiberCanonicalXL
 import Omega.GU.Window6SingleGoodPrimeRecovery
+import Omega.GU.Window6SMUniquenessFromZeckendorfUnderCompactness
 import Omega.GU.Window6SyzygyGramSpectrumDiscriminant
 import Omega.GU.Window6ThreePointWeightResidueFiltration
 import Omega.GU.Window6TypeSuperselectionAutGamma6

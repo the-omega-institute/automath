@@ -404,6 +404,7 @@ import Omega.Zeta.XiShadowSpectrumDeterminantRatioAtZero
 import Omega.Zeta.XiSingleDefectIntegratedClosedForm
 import Omega.Zeta.XiSingleDefectThresholdPhaseTransition
 import Omega.Zeta.XiSingleIntegerCoordinateNoExactAdditiveLedger
+import Omega.Zeta.RealInput40RotationSetChiNuQuad
 import Omega.Zeta.XiSingularRingEllipseWallcrossingAtomicMeasure
 import Omega.Zeta.XiSmithLossMinimalBranchRegister
 import Omega.Zeta.XiSquarefreePrimeSupportMinGrowth
