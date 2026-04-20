@@ -139,6 +139,7 @@ import Omega.Conclusion.LeyangS5TwoChannelMinimalCompleteness
 import Omega.Conclusion.LinearExternalizationLiminf
 import Omega.Conclusion.LkKolmogorovSharpOneOverK
 import Omega.Conclusion.LocalizedGroupsMayerVietoris
+import Omega.Conclusion.LocalizedGroupsAutAndFiniteKernels
 import Omega.Conclusion.LocalizedPairwiseUnionWedgeBilinearization
 import Omega.Conclusion.LocalizedKernelInclusionExclusionMobius
 import Omega.Conclusion.OrderParameterUnboundednessTuringCompleteness

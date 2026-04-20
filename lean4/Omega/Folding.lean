@@ -12,6 +12,7 @@ import Omega.Folding.BernoulliPCovariancePartialFractions
 import Omega.Folding.BernoulliPCovarianceExplicitEvenOdd
 import Omega.Folding.BernoulliPCumulantDenominatorLaw
 import Omega.Folding.BernoulliPCycleTiltGeometricClosure
+import Omega.Folding.BernoulliPCycleMismatchLawTail
 import Omega.Folding.BernoulliPCycleTiltSecondMomentsClosed
 import Omega.Folding.BernoulliPDensityUnimodal
 import Omega.Folding.BernoulliPDoobTransformClosed
