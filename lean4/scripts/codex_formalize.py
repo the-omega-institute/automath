@@ -83,6 +83,24 @@ _round_lock = threading.Lock()
 # Lock serializing .lake/build merges back to the main repo
 _lake_merge_lock = threading.Lock()
 
+# Single-slot build request for the background builder (multi-producer,
+# single-consumer, collapsing). Each worker that merges a round calls
+# `request_build(sha)`. The builder consumes only the latest SHA — if
+# multiple commits land while the builder is busy, only the newest tip
+# is built; intermediate SHAs are skipped.
+_build_cv = threading.Condition()
+_build_request: Optional[str] = None
+_builder_stop = threading.Event()
+
+
+def request_build(sha: str) -> None:
+    """Producer: signal that `sha` is a new build candidate. Overwrites
+    any pending (unbuild) request — the builder will pick the latest."""
+    global _build_request
+    with _build_cv:
+        _build_request = sha
+        _build_cv.notify()
+
 # In-memory dedup of in-flight target IDs across parallel rounds.
 # Phase B selects targets concurrently and can pick the same paper (same
 # lean_name / paper_label) in two worktrees; the second one wastes a Phase C
@@ -1436,6 +1454,15 @@ def run_round_in_worktree(
                 _save_round_log(round_num, phase_b, phase_c, new_commits, False)
                 return False, round_num, new_commits
             logger.info(f"[{tag}] SUCCESS: merged {len(new_commits)} commit(s) to {BASE_BRANCH}")
+            # Offer the new tip to the builder (collapsing: it will pick
+            # up only the latest if multiple rounds land in parallel).
+            try:
+                new_tip = run_cmd(["git", "rev-parse", BASE_BRANCH],
+                                  cwd=REPO_ROOT).stdout.strip()
+                if new_tip:
+                    request_build(new_tip)
+            except Exception as exc:
+                logger.warning(f"[{tag}] request_build failed: {exc}")
             # Propagate freshly-built .olean artifacts back to main's cache so the
             # next round's worktree starts warm for the files added in this round.
             try:
@@ -1632,6 +1659,207 @@ def run_round_serial(
 
 
 # ---------------------------------------------------------------------------
+# Background builder (single consumer for the _build_request slot)
+# ---------------------------------------------------------------------------
+
+BUILDER_LOG_DIR = LOG_DIR / "builder"
+BROKEN_SHAS_FILE = BUILDER_LOG_DIR / "broken_shas.txt"
+
+
+def _read_broken_shas() -> set[str]:
+    if not BROKEN_SHAS_FILE.exists():
+        return set()
+    try:
+        return set(l.split("\t", 1)[0].strip()
+                   for l in BROKEN_SHAS_FILE.read_text().splitlines() if l.strip())
+    except Exception:
+        return set()
+
+
+def _record_broken_sha(sha: str, log_name: str) -> None:
+    BUILDER_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(BROKEN_SHAS_FILE, "a", encoding="utf-8") as f:
+        f.write(f"{sha}\t{ts}\t{log_name}\n")
+
+
+def _builder_lake_build(cwd: Path, log_file: Path, timeout: int = 7200) -> tuple[bool, str]:
+    log_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(log_file, "w", encoding="utf-8") as lf:
+        lf.write(f"# lake build at {datetime.now().isoformat()} cwd={cwd}\n\n")
+        lf.flush()
+        try:
+            r = subprocess.run(
+                ["lake", "build"], cwd=str(cwd),
+                stdout=lf, stderr=subprocess.STDOUT,
+                timeout=timeout, stdin=subprocess.DEVNULL,
+            )
+            ok = r.returncode == 0
+        except subprocess.TimeoutExpired:
+            lf.write("\n# TIMEOUT\n")
+            ok = False
+    try:
+        tail = "\n".join(log_file.read_text(encoding="utf-8").splitlines()[-30:])
+    except Exception:
+        tail = ""
+    return ok, tail
+
+
+def _builder_make_fix_worktree(sha: str) -> WorktreeInfo:
+    """Create a `fix-<sha8>` worktree at `sha`, with .lake cache cloned."""
+    WORKTREE_DIR.mkdir(parents=True, exist_ok=True)
+    short = sha[:8]
+    branch = f"fix-{short}"
+    wt_path = WORKTREE_DIR / f"fix_{short}"
+    with _git_lock:
+        if wt_path.exists():
+            run_cmd(["git", "worktree", "remove", "--force", str(wt_path)],
+                    cwd=REPO_ROOT)
+            if wt_path.exists():
+                shutil.rmtree(wt_path, ignore_errors=True)
+        run_cmd(["git", "branch", "-D", branch], cwd=REPO_ROOT)
+        r = run_cmd(["git", "worktree", "add", "-b", branch, str(wt_path), sha],
+                    cwd=REPO_ROOT)
+        if r.returncode != 0:
+            raise RuntimeError(f"worktree add failed: {r.stderr}")
+    _clone_lake_cache(wt_path)
+    base_sha = run_cmd(["git", "rev-parse", "HEAD"], cwd=wt_path).stdout.strip()
+    return WorktreeInfo(path=wt_path, branch=branch, round_number=-1, base_sha=base_sha)
+
+
+def _builder_codex_fix(wt: WorktreeInfo, build_log: Path,
+                       *, timeout: int = 3600) -> bool:
+    """Invoke codex with the build log tail to produce a fix commit. Returns
+    True if codex produced a new commit on the fix branch."""
+    try:
+        log_text = build_log.read_text(encoding="utf-8")
+    except Exception:
+        log_text = "(log unreadable)"
+    log_tail = "\n".join(log_text.splitlines()[-200:])
+    prompt = textwrap.dedent(f"""\
+        Lean4 `lake build` is failing on branch `{BASE_BRANCH}`. Fix it.
+
+        ## Rules
+        - You are on fix branch `{wt.branch}` at the broken tip.
+        - Edit only inside lean4/Omega/.
+        - No new sorry/admit/axiom. No native_decide on large enumerations.
+        - Keep the patch minimal: change only what's needed to unstick build.
+        - Use per-file `lake env lean Omega/<X>/<Y>.lean` to confirm edits.
+          Do NOT run full `lake build` — the orchestrator re-verifies.
+        - After fix: `git add lean4/Omega/` + `git commit` + push to
+          `{BASE_BRANCH}`:
+            git push origin HEAD:{BASE_BRANCH}
+          If push rejected, rebase onto `origin/{BASE_BRANCH}`, re-verify
+          with `lake env lean <file>`, push again.
+
+        ## Build log tail (last 200 lines)
+        ```
+        {log_tail}
+        ```
+    """)
+    out = codex_exec(
+        prompt, work_dir=wt.path, timeout_seconds=timeout,
+        log_tag=f"fix_{wt.branch}",
+    )
+    # Success = new commit on this branch vs the base sha at creation
+    try:
+        head = run_cmd(["git", "rev-parse", "HEAD"], cwd=wt.path).stdout.strip()
+    except Exception:
+        head = ""
+    if head and head != wt.base_sha:
+        logger.info(f"[builder] codex fix produced commit {head[:8]}")
+        return True
+    logger.warning("[builder] codex fix produced no new commit")
+    return False
+
+
+def _builder_attempt_fix(sha: str, build_log: Path, max_attempts: int) -> bool:
+    for i in range(1, max_attempts + 1):
+        logger.info(f"[builder] fix attempt {i}/{max_attempts} for {sha[:8]}")
+        try:
+            wt = _builder_make_fix_worktree(sha)
+        except Exception as exc:
+            logger.error(f"[builder] fix worktree creation failed: {exc}")
+            return False
+        try:
+            if not _builder_codex_fix(wt, build_log):
+                continue
+            vlog = BUILDER_LOG_DIR / f"fix_verify_{wt.branch}_{i}.txt"
+            ok, tail = _builder_lake_build(wt.path / "lean4", vlog)
+            if ok:
+                logger.info(f"[builder] fix {wt.branch} verified (log={vlog.name})")
+                return True
+            logger.warning(f"[builder] fix {wt.branch} still failing (log={vlog.name})")
+        finally:
+            try:
+                with _git_lock:
+                    run_cmd(["git", "worktree", "remove", "--force", str(wt.path)],
+                            cwd=REPO_ROOT)
+                    pkg = wt.path / "lean4" / ".lake" / "packages"
+                    if pkg.is_symlink():
+                        try: pkg.unlink()
+                        except Exception: pass
+                    if wt.path.exists():
+                        shutil.rmtree(wt.path, ignore_errors=True)
+                    run_cmd(["git", "branch", "-D", wt.branch], cwd=REPO_ROOT)
+            except Exception:
+                pass
+    return False
+
+
+def _builder_loop(poll_seconds: float, max_fix_attempts: int) -> None:
+    """Single-consumer loop. Blocks on `_build_cv` for a new SHA request,
+    runs `lake build` in REPO_ROOT/lean4, and on failure spawns a codex
+    fix round. When many build requests arrive during a build, only the
+    newest SHA is processed on the next iteration."""
+    global _build_request
+    logger.info(f"[builder] started (poll={poll_seconds}s, max_fix={max_fix_attempts})")
+    BUILDER_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    last_built: Optional[str] = None
+    while not _builder_stop.is_set():
+        with _build_cv:
+            while _build_request is None and not _builder_stop.is_set():
+                _build_cv.wait(timeout=poll_seconds)
+            if _builder_stop.is_set():
+                break
+            sha = _build_request
+            _build_request = None
+        if sha is None or sha == last_built:
+            continue
+        if sha in _read_broken_shas():
+            logger.info(f"[builder] {sha[:8]} already recorded broken; skipping")
+            last_built = sha
+            continue
+        logger.info(f"[builder] building {sha[:8]} in main checkout")
+        # Fast-forward main checkout to this sha so lake builds that tip.
+        try:
+            with _git_lock:
+                run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=60)
+                run_cmd(["git", "checkout", BASE_BRANCH], cwd=REPO_ROOT, timeout=60)
+                run_cmd(["git", "merge", "--ff-only", f"origin/{BASE_BRANCH}"],
+                        cwd=REPO_ROOT, timeout=60)
+        except Exception as exc:
+            logger.error(f"[builder] ff main failed: {exc}")
+            continue
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        build_log = BUILDER_LOG_DIR / f"build_{sha[:8]}_{ts}.txt"
+        ok, tail = _builder_lake_build(LEAN_ROOT, build_log)
+        if ok:
+            logger.info(f"[builder] PASS {sha[:8]} (log={build_log.name})")
+            last_built = sha
+            continue
+        logger.error(f"[builder] FAIL {sha[:8]} (log={build_log.name})")
+        for ln in tail.splitlines()[-10:]:
+            logger.error(f"  {ln}")
+        if _builder_attempt_fix(sha, build_log, max_fix_attempts):
+            last_built = None     # fix pushed new tip; next loop picks it up
+        else:
+            _record_broken_sha(sha, build_log.name)
+            last_built = sha
+    logger.info("[builder] stopped")
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
@@ -1717,6 +1945,20 @@ def main() -> int:
     parser.add_argument(
         "--mem-max-wait", type=int, default=1800,
         help="Memory-guard max wait before proceeding anyway, in seconds (default: 1800)",
+    )
+    parser.add_argument(
+        "--no-builder", action="store_true",
+        help="Disable the in-process bg_builder thread that watches the base "
+             "branch, runs full lake build on new tips, and auto-dispatches "
+             "codex repair rounds on failure.",
+    )
+    parser.add_argument(
+        "--builder-poll", type=float, default=60.0,
+        help="bg_builder: seconds between origin fetches (default 60)",
+    )
+    parser.add_argument(
+        "--builder-max-fix", type=int, default=3,
+        help="bg_builder: max codex repair attempts per broken SHA (default 3)",
     )
     parser.add_argument(
         "--lake-parallel", type=int, default=None,
@@ -1851,6 +2093,19 @@ def main() -> int:
         state.consecutive_failures = 0
         save_state(state)
     logger.info(f"Starting: R{state.round_number}, ~{state.total_theorems} theorems")
+
+    # ── Background builder consumer ─────────────────────────────────────
+    # Worker threads are producers (call `request_build(sha)` on successful
+    # merge). The builder thread is the single consumer. Multiple requests
+    # collapse to "latest-wins" — intermediate SHAs are skipped.
+    if not args.no_builder and not args.dry_run:
+        builder_t = threading.Thread(
+            target=_builder_loop,
+            args=(args.builder_poll, args.builder_max_fix),
+            daemon=True,
+            name="builder",
+        )
+        builder_t.start()
 
     total_succeeded = 0
     total_failed = 0
