@@ -141,6 +141,7 @@ import Omega.Folding.FixedFiberLedgerComplexity
 import Omega.Folding.FixedFiberLipschitzOptimization
 import Omega.Folding.Fold
 import Omega.Folding.FoldAlphaBasic
+import Omega.Folding.KilloFoldApproxAddressFanoLowerBound
 import Omega.Folding.KilloEllipseDiagonalPrimeRegisterEquivalence
 import Omega.Folding.KilloFoldZeroSpectrumAffineCongruence
 import Omega.Folding.KilloChainInteriorGodelGcdLcm
