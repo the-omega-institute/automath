@@ -201,6 +201,7 @@ import Omega.Folding.GaugeAnomalyFiniteStateMinimaxAbsError
 import Omega.Folding.GaugeAnomalyFiniteVarianceClosed
 import Omega.Folding.GaugeAnomalyGSupportSofic
 import Omega.Folding.GaugeAnomalyGcDefectFarfieldExpansion
+import Omega.Folding.GaugeAnomalyGcDefectGoldenNeutral
 import Omega.Folding.GaugeAnomalyGcDefectMustCross
 import Omega.Folding.GaugeAnomalyGcDefectSign
 import Omega.Folding.GaugeAnomalyGfRationalIntegralRecurrence
