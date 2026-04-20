@@ -39,6 +39,13 @@ def foldFiberParityTerminalPairCovarianceLaw (m : ℕ) : Prop :=
     ∀ i j, i < j → j < m →
       foldFiberParityPairCovariance m i j = if (i, j) = (m - 2, m - 1) then 1 / 8 else 0
 
+/-- In the mixed Bernoulli interpretation of the parity-energy simplex, every single-site
+membership marginal is exactly Bernoulli `1/2`.
+    prop:fold-fiber-parity-energy-simplex-unbiased-marginal -/
+theorem paper_fold_fiber_parity_energy_simplex_unbiased_marginal (m i : Nat) (hm : 1 <= m)
+    (hi : i < m) : foldFiberParitySingleSiteMass m i true = 1 / 2 := by
+  simp [foldFiberParitySingleSiteMass]
+
 lemma foldFiberParityTerminalPairRaw_eq_one (m : ℕ) :
     foldFiberParityTerminalPairRaw m = 1 := by
   have hFib : Nat.fib (m + 2) = Nat.fib (m + 1) + Nat.fib m := by

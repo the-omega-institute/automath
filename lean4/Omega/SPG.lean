@@ -80,6 +80,7 @@ import Omega.SPG.FoldInjectivizationRegisterLowerBound
 import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.GaugeVolumeAreaComplementarity
 import Omega.SPG.GraphEnergyEllipsoidGodelCodelengthDual
+import Omega.SPG.GraphEnergyShellLatticeCounting
 import Omega.SPG.GraphCycleLatticeLeyangPhasePolynomial
 import Omega.SPG.GraphCycleLatticeWeightedDiscriminant
 import Omega.SPG.GodelAxisBoundaryInvertibility
