@@ -273,6 +273,7 @@ import Omega.Folding.GodelDensityEstimatorOptimalThresholdTest
 import Omega.Folding.GodelFiniteDictionaryBitlength
 import Omega.Folding.GraphCycleLatticeThetaModularInversion
 import Omega.Folding.HaltingLeyangHolographicEncoding
+import Omega.Folding.HaltingLeyangW1Barrier
 import Omega.Folding.HammingDist
 import Omega.Folding.HammingLipschitzBudget
 import Omega.Folding.HankelSpectrum

@@ -1,5 +1,6 @@
 import Omega.UnitCirclePhaseArithmetic.ChebyshevAdamsFullyRational
 import Omega.UnitCirclePhaseArithmetic.ComovingHorizonLocalization
+import Omega.UnitCirclePhaseArithmetic.CompletePhaseReadability
 import Omega.UnitCirclePhaseArithmetic.DirichletDoubleDepthTranslation
 import Omega.UnitCirclePhaseArithmetic.DualBoundaryNormalForm
 import Omega.UnitCirclePhaseArithmetic.EndpointArcsineDuality
