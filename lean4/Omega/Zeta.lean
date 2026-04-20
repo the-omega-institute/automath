@@ -185,6 +185,7 @@ import Omega.Zeta.ChiEventClockHittingTimeCertificate
 import Omega.Zeta.Window6MicrostateBiasedFiberlawHerglotzClosedform
 import Omega.Zeta.XiEndpointFirstNPlusOneProbesSharpToeplitzRecovery
 import Omega.Zeta.XiEndpointJensenDefectH12GramKernel
+import Omega.Zeta.XiEndpointPsiPoissonShiftLoewnerMonotone
 import Omega.Zeta.EndpointHeatProbeAdamsTwistRoots
 import Omega.Zeta.EndpointHeatProbeSpectralMarginLowerBound
 import Omega.Zeta.XiEndpointHeatProbeCyclotomicTargetExtraction

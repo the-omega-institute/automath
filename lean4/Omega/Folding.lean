@@ -103,6 +103,7 @@ import Omega.Folding.FiberSingleCoordinateAffineDifference
 import Omega.Folding.FiberSingleCoordinateMinimalAugmentation
 import Omega.Folding.FiberSingleCoordinateFibonacciGcdFreedom
 import Omega.Folding.FiberFourierPhaseRigidity
+import Omega.Folding.FoldFourierPhaseLockingByComplement
 import Omega.Folding.FiberGaugeVolumeChainFactorization
 import Omega.Folding.FiberFusion
 import Omega.Folding.FiberRankUnrankLinear
