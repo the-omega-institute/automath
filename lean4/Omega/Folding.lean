@@ -400,3 +400,4 @@ import Omega.Folding.ZeroBlockMemoryDepth
 import Omega.Folding.HypercubeStokesPlancherelBoundaryEnergy
 import Omega.Folding.HiddenBitDecoupling
 import Omega.Folding.KilloFoldCarryDefectCocycleNonsplit
+import Omega.Folding.FiberHausdorffDimensionCylinderCount

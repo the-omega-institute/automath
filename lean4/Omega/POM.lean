@@ -320,3 +320,4 @@ import Omega.POM.ZeroTemperatureTwoTermExpansion
 import Omega.POM.ZetaEqualsOrderPoly
 import Omega.POM.SpectralGapTime
 import Omega.POM.DerivedAuditedEvenMinsectorTopologicalPhase
+import Omega.POM.ResonanceMod2FiniteBitAutomaticity
