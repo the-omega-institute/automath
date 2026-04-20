@@ -81,6 +81,7 @@ import Omega.GU.LeyangHolographicN2
 import Omega.GU.LogCmStableInverseExponentialSeparation
 import Omega.GU.M11Z34AugmentationIdealUnique
 import Omega.GU.M11Z34CyclotomicRepresentationRigidity
+import Omega.GU.M11Z34RotationPartComplexStructure
 import Omega.GU.M11DihedralLiftDiracDoubling
 import Omega.GU.M11Z34RealIrrepDecomposition
 import Omega.GU.M11DeltaClosureUniqueMinimalSO10
