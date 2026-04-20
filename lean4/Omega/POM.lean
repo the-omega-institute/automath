@@ -161,6 +161,7 @@ import Omega.POM.HankelShortIntegerCertificate
 import Omega.POM.HankelSyndromeGapRankDefect
 import Omega.POM.HankelSyndromeInversionUnique
 import Omega.POM.HankelSyndromeModuleKernelEqualsMultiples
+import Omega.POM.HalfOrderPressureExtremeLowerBoundSqrtFreezing
 import Omega.POM.HighMultiplicitySparse
 import Omega.POM.IndependenceDpRadius2
 import Omega.POM.InverseLimitNaturality

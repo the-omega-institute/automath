@@ -96,6 +96,7 @@ import Omega.Conclusion.FoldbinGroupoidTracialSimplex
 import Omega.Conclusion.FreeEnergyGatesMonotonicityObstruction
 import Omega.Conclusion.FrozenEscortTvRigidity
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
+import Omega.Conclusion.FundamentalCutHadamardRigidity
 import Omega.Conclusion.GeometricUpliftFourFourCollapse
 import Omega.Conclusion.GodelIntegerizationPrimeShiftPolynomial
 import Omega.Conclusion.GodelAffineEllipseEquationIdentifiability
