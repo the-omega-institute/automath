@@ -297,7 +297,9 @@ import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.ModSemiringsCrtOrthogonalFrame
 import Omega.Folding.ModSemiringsKernelImageGcd
 import Omega.Folding.ModSemiringsAnnihilatorValuationLattice
+import Omega.Folding.ModSemiringsSquarefreeNilpotentBranch
 import Omega.Folding.ModSemiringsEndomorphismsIdempotents
+import Omega.Folding.ModSemiringsUnitalAutomorphismRigidity
 import Omega.Folding.ModularTower
 import Omega.Folding.MomentBounds
 import Omega.Folding.MomentRecurrence

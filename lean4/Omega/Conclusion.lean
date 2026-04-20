@@ -125,6 +125,7 @@ import Omega.Conclusion.MaxentropyGapEqualsLogMaxfiber
 import Omega.Conclusion.MixedHiddenStateFiniteAbelianClassification
 import Omega.Conclusion.MultiplicativeTropicalExactnessTriad
 import Omega.Conclusion.MonotoneBooleanClone
+import Omega.Conclusion.NoFiniteResonanceClosure
 import Omega.Conclusion.NoUniversalTwoAxisAuditCompletion
 import Omega.Conclusion.NonexposedPhaseIntegerDomination
 import Omega.Conclusion.NumberFieldSignatureFromTwoCdims
