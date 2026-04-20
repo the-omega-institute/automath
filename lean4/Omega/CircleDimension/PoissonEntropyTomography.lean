@@ -60,6 +60,30 @@ theorem paper_cdim_poisson_kl_two_term_sharp_moment_polynomial
     C4 = sigma ^ 4 / 8 ∧ C6 = (sigma ^ 6 - 8 * sigma ^ 2 * mu4 + 6 * mu3 ^ 2) / 64 := by
   constructor <;> linarith
 
+/-- Paper: `prop:cdim-poisson-kl-sixth-order-correction`. -/
+theorem paper_cdim_poisson_kl_sixth_order_correction
+    {A4 A5 A6 sigma mu3 mu4 : ℝ}
+    (hA4 : 8 * A4 = sigma ^ 4)
+    (hA5 : A5 = 0)
+    (hA6 : 64 * A6 = sigma ^ 6 + 6 * mu3 ^ 2 - 8 * sigma ^ 2 * mu4) :
+    A4 = sigma ^ 4 / 8 ∧
+      A5 = 0 ∧
+      A6 = (sigma ^ 6 + 6 * mu3 ^ 2 - 8 * sigma ^ 2 * mu4) / 64 := by
+  constructor
+  · linarith
+  constructor
+  · exact hA5
+  · linarith
+
+/-- Paper: `prop:cdim-poisson-fdiv-sixth-order-correction`. -/
+theorem paper_cdim_poisson_fdiv_sixth_order_correction
+    {A4 A6 f2 f3 sigma mu3 mu4 : ℝ}
+    (hA4 : 8 * A4 = f2 * sigma ^ 4)
+    (hA6 : 64 * A6 = 6 * f2 * mu3 ^ 2 - 8 * f2 * sigma ^ 2 * mu4 - f3 * sigma ^ 6) :
+    A4 = f2 * sigma ^ 4 / 8 ∧
+      A6 = (6 * f2 * mu3 ^ 2 - 8 * f2 * sigma ^ 2 * mu4 - f3 * sigma ^ 6) / 64 := by
+  constructor <;> linarith
+
 /-- Lp sharp constants seeds.
     thm:cdim-poisson-cauchy-lp-sharp-constants-restated -/
 theorem paper_cdim_poisson_cauchy_lp_sharp_constants_seeds :

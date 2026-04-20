@@ -268,6 +268,7 @@ import Omega.Folding.GaugeAnomalySingularityLatticeNonholonomic
 import Omega.Folding.GaugeAnomalySpectralQuarticJacobianEndomorphism
 import Omega.Folding.GaugeAnomalySpectralResidualLaw
 import Omega.Folding.GaugeAnomalyTauIntClosed
+import Omega.Folding.GaugeAnomalyTrigonalDiscUFactorization
 import Omega.Folding.GaugeAnomalyTrigonalGenus
 import Omega.Folding.GaugeAnomalyUnitCircleRigidity
 import Omega.Folding.GaugeAnomalyVarianceFiniteWindowClosed
