@@ -4113,10 +4113,25 @@ def main() -> int:
         ok, st = run_paper_pipeline(paper_dirs[0], **kwargs)
         return 0 if ok else 1
 
-    s, f = run_rolling(paper_dirs, parallel=args.parallel,
-                       continuous=args.continuous, **kwargs)
-    logger.info(f"Done: {s} succeeded, {f} failed")
-    return 0 if s > 0 or args.dry_run else 1
+    if args.continuous:
+        cycle = 0
+        while True:
+            cycle += 1
+            logger.info(f"=== Continuous cycle {cycle} ===")
+            # Re-discover papers each cycle (picks up new P0 entries)
+            paper_dirs = discover_papers(respect_assignment=not args.no_assign)
+            if not paper_dirs:
+                logger.info("No papers to process, sleeping 300s...")
+                time.sleep(300)
+                continue
+            s, f = run_rolling(paper_dirs, parallel=args.parallel, **kwargs)
+            logger.info(f"Cycle {cycle} done: {s} succeeded, {f} failed")
+            logger.info("Sleeping 300s before next cycle...")
+            time.sleep(300)
+    else:
+        s, f = run_rolling(paper_dirs, parallel=args.parallel, **kwargs)
+        logger.info(f"Done: {s} succeeded, {f} failed")
+        return 0 if s > 0 or args.dry_run else 1
 
 
 if __name__ == "__main__":
