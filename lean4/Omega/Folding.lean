@@ -20,6 +20,7 @@ import Omega.Folding.BernoulliPFiniteTimeMismatchRationalRecurrence
 import Omega.Folding.BernoulliPFullAutocovarianceJordan
 import Omega.Folding.BernoulliPGammaMax
 import Omega.Folding.BernoulliPHalfFibonacciLowDefectShadow
+import Omega.Folding.BernoulliPBayesPhaseTransition
 import Omega.Folding.BernoulliPJordanCriticalScaling
 import Omega.Folding.BernoulliPJordanResonance
 import Omega.Folding.BernoulliPLaws
