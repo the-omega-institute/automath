@@ -59,6 +59,7 @@ import Omega.POM.DiagonalRateAcceptRefreshSSTStrong
 import Omega.POM.DiagonalRateAcceptRefreshSeparationExact
 import Omega.POM.DiagonalRateBinaryClosedForm
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete
+import Omega.POM.DiagonalRateRankOneRefreshDeterminantCollapse
 import Omega.POM.DiagonalRateKeepResampleChannel
 import Omega.POM.DiagonalRateRefreshHittingTimePGFClosed
 import Omega.POM.DiagonalRateRefreshRegenerationIidExpansion
