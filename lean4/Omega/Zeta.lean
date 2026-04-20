@@ -379,6 +379,7 @@ import Omega.Zeta.XiReplicaSoftcoreReciprocalMomentQRecurrence
 import Omega.Zeta.XiReverseKLCyclicEnergyEquivalence
 import Omega.Zeta.XiReverseKLCyclicKLDecomposition
 import Omega.Zeta.XiReverseKLFourierGapPositiveKernelEnergy
+import Omega.Zeta.XiReverseKLPoissonGapFourierBilateral
 import Omega.Zeta.XiReverseKLSingleFrequencyEntropyBudgetSup
 import Omega.Zeta.XiReverseKLSingleFrequencyExactMinimizer
 import Omega.Zeta.XiReverseKLSingleFrequencyLegendreFenchelClosed

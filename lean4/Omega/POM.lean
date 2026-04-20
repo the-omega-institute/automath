@@ -283,6 +283,7 @@ import Omega.POM.S5TwoSubsetDegree10
 import Omega.POM.SchurPlancherelEnergyIdentity
 import Omega.POM.SchurTomographyInversePartitionMonomials
 import Omega.POM.SecondOrderCollisionCommonBottleneck
+import Omega.POM.SecondOrderCollisionMinimaxErrSupportBound
 import Omega.POM.ShannonEntropySqueeze
 import Omega.POM.SideinfoExactEntropy
 import Omega.POM.SoftOrderFixedTempNondefinability
