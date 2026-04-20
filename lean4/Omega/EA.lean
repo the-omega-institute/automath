@@ -44,6 +44,7 @@ import Omega.EA.InternalProductAddsValues
 import Omega.EA.JoukowskyEllipse
 import Omega.EA.KernelCltLdp
 import Omega.EA.KernelEquilibriumPF
+import Omega.EA.KernelGlobalCarryfreeSpectralTrichotomy
 import Omega.EA.KernelPressureEndpoints
 import Omega.EA.KernelWeightedPrimeOrbit
 import Omega.EA.KernelZeroTemp
