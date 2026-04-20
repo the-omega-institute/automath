@@ -17,17 +17,16 @@
 
 | 目录 | 目标期刊 | 状态 | 改投记录 |
 |------|---------|------|---------|
-| `submitted_2026_finite_window_rigidity_fibonacci_numeration_fq` | Fibonacci Q. | 拒稿 04-20, 转投 FQ | ETDS→JNT→FQ |
-| `submitted_2026_folded_histograms_sampling_certificates_parry_mismatch_siads` | SIADS | 已投 04-07 | — |
+| `submitted_2026_finite_window_rigidity_fibonacci_numeration_fq` | Fibonacci Q. | 拒稿 04-20, 转投 FQ | ETDS→JNT→FQ | JNT editor 推荐 FQ; fallback: JSC (IF 1.1) |
+| `2026_folded_histograms_sampling_certificates_parry_mismatch_etds` | ETDS | P0 (SIADS reject: scope/缺应用) | SIADS→ETDS | fallback: Israel J. Math (IF 1.0), DCDS-A (IF 1.1) |
 | `submitted_2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | ETDS | 已投 04-07 | — |
 | `submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita` | RAIRO-ITA | 已投 04-07 | — |
-| `submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj` | Ramanujan J. | 拒稿 04-20, 转投 RJ | RNT→RJ |
-| `submitted_2026_sharp_three_window_threshold_fibonacci_conjugacy_nonlinearity` | Nonlinearity | 已投 04-07 | — |
-| `submitted_2026_tilt_dynamics_cylinder_information_parry_measure_qtds` | QTDS | 已投 04-07 | — |
+| `submitted_2026_upper_fibers_witness_covers_fibonacci_apparition_rj` | Ramanujan J. | 拒稿 04-20, 转投 RJ | RNT→RJ | 两位 editor 均推荐 FQ; fallback: FQ, Bull. Malaysian (IF 1.2) |
+| `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | P0 (Nonlinearity desk reject 03-24) | Nonlinearity→DCDS-A | fallback: J. Diff. Eqs. Apps. (IF 1.1), Dynamical Systems |
+| `submitted_2026_tilt_dynamics_cylinder_information_parry_measure_qtds` | J. Theoret. Probab. | 已投, peer review 中 (7 reviewers invited) | QTDS→JTP | 标题改为 "Exponential Tilting and Information Fluctuations for One-Step Markov Measures on Shifts of Finite Type" |
 | `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` | JNT | 已投 04-07 | — |
-| `submitted_2026_shell_geometry_detector_thermality_kms_grg` | GRG | 已投 04-07 | — |
-| `2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams` | Trans. AMS | P7 可投 | — |
-| `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | ETDS | P7 待投 | — |
+| `2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams` | Trans. AMS | C-DONE (Claude: submit, 2 rounds) | — |
+| `2026_finite_observation_escape_rates_cyclotomic_resonances_etds` | ETDS | C-DONE (Claude: submit, 2 rounds) | — |
 | `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | C-DONE (Claude: submit, 3 rounds) | — |
 | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | APAL | C-DONE (Claude: submit, 1 rounds) | — |
 | `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA | C-DONE (Claude: submit, 3 rounds) | — |
@@ -35,8 +34,8 @@
 | `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | J. Spectral Theory | P5 done | — |
 | `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | P3 返工 | — |
 | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | IMRN | C-DONE (Claude: submit, 1 rounds) | — |
-| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | P1 | — |
-| `2026_detector_shells_click_record_kms_jphyscomm` | J. Phys. Comm. | B-DONE (Oracle: ?, 4 rounds (max)) | — |
+| `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | B-DONE (Oracle: reject, 4 rounds (max)) | — |
+| `2026_detector_shells_click_record_kms_jphyscomm` | J. Math. Phys. | C-DONE (Claude: submit, 2 rounds) | GRG desk reject→JPhysComm desk reject 03-23→JMP | fallback: CQG (IF 3.6), Ann. Phys. (IF 3.0) |
 
 | `2026_single_primitive_universality_hierarchy` | Proc. AMS | P0 | — |
 | `2026_chebotarev_quotient_entropy_fold_groupoid_rigidity` | — | 待分诊 | — |
