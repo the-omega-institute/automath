@@ -2,14 +2,24 @@
 
 % ── Packages ──────────────────────────────────────────────
 \usepackage{amsmath,amssymb,amsthm,mathtools}
+\IfFileExists{stmaryrd.sty}{%
+  \usepackage{stmaryrd}%
+}{%
+  \newcommand{\llbracket}{\mathopen{[\![}}%
+  \newcommand{\rrbracket}{\mathclose{]\!]}}%
+}
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 \usepackage{cleveref}
 \usepackage{booktabs}
 \usepackage{enumitem}
-\usepackage{tikz-cd}
-\usepackage[backend=biber,style=alphabetic,maxbibnames=9]{biblatex}
-\addbibresource{references.bib}
+\IfFileExists{biblatex.sty}{%
+  \usepackage[backend=biber,style=alphabetic,maxbibnames=9]{biblatex}%
+  \addbibresource{references.bib}%
+  \newcommand{\printreferences}{\printbibliography}%
+}{%
+  \newcommand{\printreferences}{\bibliographystyle{alpha}\bibliography{references}}%
+}
 
 % ── Theorem environments ──────────────────────────────────
 \theoremstyle{plain}
@@ -77,6 +87,6 @@ for expression trees.
 \input{sections/sec07_derived_consequences}
 \input{sections/sec06_discussion}
 
-\printbibliography
+\printreferences
 
 \end{document}
