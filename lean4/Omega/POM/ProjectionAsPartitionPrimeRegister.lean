@@ -248,4 +248,20 @@ theorem paper_pom_orthogonal_idempotent_delete_primes (D : OrthogonalPrimeRegist
   intro n
   rfl
 
+/-- The seed partition code is injective, meet is edge-set intersection, and join is closure of the
+edge-set union.  Decoding is the identity because the closure-fixed-point viewpoint is already
+built into `Partition n = Finset (Fin n × Fin n)`.
+    thm:pom-partition-prime-closure-model -/
+theorem paper_pom_partition_prime_closure_model (n : ℕ) :
+    ∃ code : Partition n → Finset (Fin n × Fin n), Function.Injective code ∧
+      (∀ π σ : Partition n, code (partitionMeet π σ) = code π ∩ code σ) ∧
+      (∀ π σ : Partition n, code (partitionJoin π σ) = edgeClosure n (code π ∪ code σ)) := by
+  refine ⟨edgeSet, ?_, ?_, ?_⟩
+  · intro π σ h
+    simpa using h
+  · intro π σ
+    rfl
+  · intro π σ
+    rfl
+
 end Omega.POM

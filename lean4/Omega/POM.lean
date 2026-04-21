@@ -327,6 +327,7 @@ import Omega.POM.PrimitiveDirichletNonAlgebraicNonDfinite
 import Omega.POM.PrimitivePrimeLucas
 import Omega.POM.ProjectionBudget
 import Omega.POM.ProjectionAsPartitionPrimeRegister
+import Omega.POM.ProjectionAsPartitionPrimeRegisterOneRound
 import Omega.POM.ProjectionAsPartitionPrimeRegisterWidthDepth
 import Omega.POM.ProjectiveOperatorDegeneratesToMomentKernel
 import Omega.POM.ProjectivePathAtomicPronyRank
