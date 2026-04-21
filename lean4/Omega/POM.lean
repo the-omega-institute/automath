@@ -72,7 +72,9 @@ import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.CycleLatticeThetaPoissonDuality
 import Omega.POM.DefectBand
 import Omega.POM.DelayMin
+import Omega.POM.DerivedFiberDeterminantExtremalEnvelope
 import Omega.POM.DerivedFiberSingleStieltjesHistogramRecovery
+import Omega.POM.ClosurePartitionToFullRecoveryCurve
 import Omega.POM.EhrhartEqualsOrderpolyShift
 import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.DeltaqMeanSquareRhCriterion
