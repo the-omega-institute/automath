@@ -217,6 +217,7 @@ import Omega.Folding.FoldBinMinsectorComplementMaxfiber
 import Omega.Folding.FoldBinOracleCriticalProfile
 import Omega.Folding.FoldBinOracleLinearThresholdExponent
 import Omega.Folding.FoldBinPhiIdentifiablePowerDivergence
+import Omega.Folding.FoldBinQuantileThresholdConstant
 import Omega.Folding.FoldBinRenyiDivergenceLimit
 import Omega.Folding.FoldBinRenyiRateCollapse
 import Omega.Folding.BinFoldKLConstant
