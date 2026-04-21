@@ -280,6 +280,7 @@ import Omega.Conclusion.ScreenKolmogorovDeficitExactSplitting
 import Omega.Conclusion.ScreenMaxConditionalComplexityEqualsRank
 import Omega.Conclusion.ScreenRealizabilityCycleSpaceObstruction
 import Omega.Conclusion.SecondOrderCdimSignature
+import Omega.Conclusion.StokesEnergyH1SecondOrder
 import Omega.Conclusion.SectionLedgerCapacityFunctional
 import Omega.Conclusion.SectionLedgerKL
 import Omega.Conclusion.SelfdualScaleMellinDoesNotForceVerticalPeriodicity
