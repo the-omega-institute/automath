@@ -216,6 +216,7 @@ import Omega.Folding.FoldBinM6FiberHist
 import Omega.Folding.FoldbinGroupoidAut0ThirdCohomologyRank
 import Omega.Folding.FoldBinMaxFiberExponent
 import Omega.Folding.FoldBinMinsectorComplementMaxfiber
+import Omega.Folding.FoldBinMinsectorDensityPhiMinus2
 import Omega.Folding.FoldBinOracleCriticalProfile
 import Omega.Folding.FoldBinOracleLinearThresholdExponent
 import Omega.Folding.FoldBinPhiIdentifiablePowerDivergence

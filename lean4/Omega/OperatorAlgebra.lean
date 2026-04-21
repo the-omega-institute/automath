@@ -10,6 +10,7 @@ import Omega.OperatorAlgebra.DerivedCoarseningGenusSignLaw
 import Omega.OperatorAlgebra.FiberDeterminantSignCapacityParity
 import Omega.OperatorAlgebra.FiberReflectorDeterminantPotential
 import Omega.OperatorAlgebra.FiberSpectrumDeterminantPartition
+import Omega.OperatorAlgebra.FkdetChiSectorFactorization
 import Omega.OperatorAlgebra.FkdetProperties
 import Omega.OperatorAlgebra.FoldBayesPosteriorCollapse
 import Omega.OperatorAlgebra.FoldBasicConstructionPairGroupoid
