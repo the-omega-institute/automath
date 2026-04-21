@@ -45,6 +45,7 @@ import Omega.Folding.BernoulliPParryPressureChain
 import Omega.Folding.BernoulliPPressureCycleEquation
 import Omega.Folding.BernoulliPPressureQuartic
 import Omega.Folding.FoldBernoulliPPressureDiscriminantDegree11
+import Omega.Folding.FoldBernoulliPPressureCycleTrigonalCurveBranch
 import Omega.Folding.FoldGaugeAnomalyGodelEllipsoidVolume
 import Omega.Folding.BernoulliPRegenerationBivariatePGF
 import Omega.Folding.BernoulliPRegenerationConditionalLengthShiftedNB

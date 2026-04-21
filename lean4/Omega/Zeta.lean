@@ -29,6 +29,7 @@ import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
+import Omega.Zeta.XiExtremeResonancePositivity
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiDefectDensityConeChoquetExtreme
