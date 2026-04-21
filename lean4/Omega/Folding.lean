@@ -213,6 +213,7 @@ import Omega.Folding.FoldbinSaturationSectorThreshold
 import Omega.Folding.FoldBinLastbitSufficientTV
 import Omega.Folding.FoldTvLowerBoundFromFourierSpike
 import Omega.Folding.FoldBinM6FiberHist
+import Omega.Folding.FoldbinGroupoidAut0NoUniversalLieLimit
 import Omega.Folding.FoldbinGroupoidAut0ThirdCohomologyRank
 import Omega.Folding.FoldBinMaxFiberExponent
 import Omega.Folding.FoldBinMinsectorComplementMaxfiber

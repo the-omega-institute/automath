@@ -364,6 +364,7 @@ import Omega.Zeta.RealInput40ZetaUvCoreZpmoneResonanceSurfaces
 import Omega.Zeta.RealInput40TrivMechSplit
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Zeta.ReciprocalPlusKernelRhImpliesToyRh
+import Omega.Zeta.XiMultiscaleConsistencyImpliesRH
 import Omega.Zeta.RecursiveZeroShadowingExplicit
 import Omega.Zeta.RsLocalZeroCertification
 import Omega.Zeta.MultiscaleDriftSummabilityLimit
