@@ -200,6 +200,7 @@ import Omega.Folding.FoldBinFDivergenceCollapse
 import Omega.Folding.FoldBinFiberTail
 import Omega.Folding.FoldbinSaturationSectorThreshold
 import Omega.Folding.FoldBinLastbitSufficientTV
+import Omega.Folding.FoldTvLowerBoundFromFourierSpike
 import Omega.Folding.FoldBinM6FiberHist
 import Omega.Folding.FoldbinGroupoidAut0ThirdCohomologyRank
 import Omega.Folding.FoldBinMaxFiberExponent
