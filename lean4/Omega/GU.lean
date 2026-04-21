@@ -49,6 +49,7 @@ import Omega.GU.FibTailP23S3ActionOnOrbitQuotient
 import Omega.GU.FibTailS3Closure
 import Omega.GU.FiberDefectCollinearity
 import Omega.GU.FiberNonConstantNoFreeAction
+import Omega.GU.FiniteDimLieClosureTermination
 import Omega.GU.FixedPrecisionExponentialMultiplicity
 import Omega.GU.FoldbinDegeneracySector
 import Omega.GU.FoldBinMinDegeneracyFibAudited
