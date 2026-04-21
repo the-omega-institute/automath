@@ -196,6 +196,7 @@ import Omega.CircleDimension.PoissonKernelDerivativeL1Energy
 import Omega.CircleDimension.PoissonL1SecondOrderConstant
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonSecondOrder
+import Omega.CircleDimension.PoissonThirdMomentResidualL1Sharp
 import Omega.CircleDimension.PoissonSymmetricCase
 import Omega.CircleDimension.PoissonSymmetrization
 import Omega.CircleDimension.PoissonVarianceMonotoneLowerBound
