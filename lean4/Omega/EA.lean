@@ -76,6 +76,7 @@ import Omega.EA.ParallelAdditionU1Degeneracy
 import Omega.EA.ParAddGlobalLiftEndpoints
 import Omega.EA.PisanoPeriodSeeds
 import Omega.EA.PrimeLedger
+import Omega.EA.PrimeRegisterBrauerQuadraticSplitting
 import Omega.EA.PrimeRegisterBrauerSeveriBrauerSplitting
 import Omega.EA.PrimeRegisterEllipseInvertGodel
 import Omega.EA.PrimeRegisterExternalLedgerOrbitInvariance
