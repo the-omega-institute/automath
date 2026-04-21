@@ -74,6 +74,7 @@ import Omega.Zeta.XiTimePart9wBasicRootUnityErrorExponentToOne
 import Omega.Zeta.XiTimePart9saUniformBaselineFixedBinaryExperiment
 import Omega.Zeta.XiTimePart9tTopGapAffineCapacitySegment
 import Omega.Zeta.XiTimePart70aUniformAverageLogdegTwoState
+import Omega.Zeta.XiTimePart70daWindow6AbstractOrbittypeMinimalC12
 import Omega.Zeta.XiTimePart9gaCrossResolutionAffineRigidity
 import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne
 import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
@@ -167,6 +168,7 @@ import Omega.Zeta.DerivedLeyangBranchsetAdjacencySpectrumHeatTrace
 import Omega.Zeta.DerivedLeyangArtinMazurZeta
 import Omega.Zeta.DerivedLeyangBranchsetIharaZeta
 import Omega.Zeta.DerivedLeyangProfiniteRigidity
+import Omega.Zeta.DerivedPickPoissonClusteredQuadraticCoerciveLowerBound
 import Omega.Zeta.DerivedMinimalCyclicAuditAxisZhatPrimeUnlocking
 import Omega.Zeta.DerivedWindow6GaugeVolumeDefectIdentity
 import Omega.Zeta.DerivedProjectivePressureLogconvexConvexHull
