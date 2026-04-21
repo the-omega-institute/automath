@@ -125,3 +125,4 @@ import Omega.SyncKernelWeighted.WittRootOfUnityCommonPadicLimit
 import Omega.SyncKernelWeighted.WittRenormMonoid
 import Omega.SyncKernelWeighted.ZeroInjectionValuePreserving
 import Omega.SyncKernelWeighted.TracePalindrome
+import Omega.SyncKernelWeighted.EvenEdgeworthC4
