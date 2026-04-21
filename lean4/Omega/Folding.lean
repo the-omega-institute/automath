@@ -232,6 +232,7 @@ import Omega.Folding.FoldMultiplicityGroupAlgebraSelfReciprocal
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.FoldPairedStepDirichletCharacterIdentity
 import Omega.Folding.FoldPressureExactFreezingGapThreshold
+import Omega.Folding.FoldPressureGroundstateBounds
 import Omega.Folding.FoldPressureFreezingThreshold
 import Omega.Folding.FoldPrimeCertificateVsItGapDiverges
 import Omega.Folding.FoldZeroWindow6DensitySharpExponent

@@ -64,6 +64,7 @@ import Omega.SyncKernelWeighted.RealInput40ResetRegenerationTail
 import Omega.SyncKernelWeighted.RealInput40ZeroTempGroundSftParryClosedForm
 import Omega.SyncKernelWeighted.RealInputDigitwiseSumLayer
 import Omega.SyncKernelWeighted.SchurChannelPressureGC
+import Omega.SyncKernelWeighted.SelfDualNormalForm1pmu
 import Omega.SyncKernelWeighted.TraceCentralMomentsZero
 import Omega.SyncKernelWeighted.TraceOddVanish
 import Omega.SyncKernelWeighted.UnitarySliceHalfPhaseLocking
