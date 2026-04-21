@@ -346,6 +346,7 @@ import Omega.POM.OrderSpatialization
 import Omega.POM.OrthotopeSurfaceVolumeVariance
 import Omega.POM.P2FrobeniusParitySieve
 import Omega.POM.ParryTwoPointAlternating
+import Omega.POM.TimeCorrGap
 import Omega.POM.ParrySurfaceDerivative
 import Omega.POM.ParryComplexityDetector
 import Omega.POM.PartitionMobiusEventInversion

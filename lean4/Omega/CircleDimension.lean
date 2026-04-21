@@ -212,6 +212,7 @@ import Omega.CircleDimension.PoissonDefectLadder
 import Omega.CircleDimension.PoissonDefectStability
 import Omega.CircleDimension.PoissonDefectProfileBivariateKLConstant
 import Omega.CircleDimension.PoissonDensityLinftyUniversalConstant
+import Omega.CircleDimension.PoissonDensityLpSharpConstants
 import Omega.CircleDimension.PoissonEntropyTomography
 import Omega.CircleDimension.PoissonTvFourthOrderCorrection
 import Omega.CircleDimension.PoissonTwoDivergenceMomentTomography

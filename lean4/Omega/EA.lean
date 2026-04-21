@@ -40,6 +40,7 @@ import Omega.EA.FoldAsSectionCorollary
 import Omega.EA.FoldGroupoidAFInductiveLimitHolographicTrace
 import Omega.EA.FoldGroupoidAut0ComplementFixedSubgroup
 import Omega.EA.FoldGroupoidAut0RationalCohomology
+import Omega.EA.FoldTailTopologicalReadout
 import Omega.EA.KernelPeterWeylBlockDiagonalization
 import Omega.EA.FoldDiscreteToContinuousGaugeEmbedding
 import Omega.EA.FoldGroupoidAutChiSemidirectClassification
