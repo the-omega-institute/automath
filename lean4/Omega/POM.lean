@@ -198,6 +198,7 @@ import Omega.POM.VisibilityToErrorTwoSided
 import Omega.POM.FoldColGapExpUpper
 import Omega.POM.FoldFactorChainDerivedInvariants
 import Omega.POM.FoldFactorChainEffectiveSampleSize
+import Omega.POM.FoldFactorChainGapLsi
 import Omega.POM.FoldFactorChainMixingTimeBound
 import Omega.POM.FoldIndexSeeds
 import Omega.POM.FoldInjectivizationMinsideinfo

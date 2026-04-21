@@ -47,6 +47,7 @@ import Omega.CircleDimension.StarTorsionFiberInvariance
 import Omega.CircleDimension.CechCyclotomicQuantization
 import Omega.CircleDimension.ZetaEulerPole
 import Omega.CircleDimension.ZetaTauberAsymptotic
+import Omega.CircleDimension.ZhatZTerminalResidueAxis
 import Omega.CircleDimension.CertificateInverseLimitAddressing
 import Omega.CircleDimension.ClosedLoopUnitaryHorizonRepulsionToeplitz
 import Omega.CircleDimension.CircleDim
