@@ -227,6 +227,7 @@ import Omega.CircleDimension.PrefixQuantileCRTJointModulus
 import Omega.CircleDimension.PrefixResidualRegisterCapacity
 import Omega.CircleDimension.PrimeLedgerCompleteReconstruction
 import Omega.CircleDimension.PrimeTruncation
+import Omega.CircleDimension.ProfinitePrimeRegisterEmbeddingCollapse
 import Omega.CircleDimension.PrimitiveEndpointTristateDegeneration
 import Omega.CircleDimension.ProjectiveStateOrganization
 import Omega.CircleDimension.PureStatesRankOne

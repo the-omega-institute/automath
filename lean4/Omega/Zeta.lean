@@ -578,6 +578,7 @@ import Omega.Zeta.XiTimePart9gCanonicalSubmonoidFreeMonoid
 import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
 import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage
 import Omega.Zeta.XiTimePart9zhDyadicBulkLinearDepthVsPrimeLedger
+import Omega.Zeta.XiToeplitzDetVerblunsky
 import Omega.Zeta.XiMittagLefflerUniversalKfoldJordanCollision
 import Omega.Zeta.XiVanVleckResidueL2LowerBound
 import Omega.Zeta.XiToeplitzNegativeMarginVandermonde4Lowerbound
