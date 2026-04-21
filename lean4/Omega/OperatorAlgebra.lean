@@ -12,6 +12,7 @@ import Omega.OperatorAlgebra.FkdetProperties
 import Omega.OperatorAlgebra.FoldBayesPosteriorCollapse
 import Omega.OperatorAlgebra.FoldBasicConstructionPairGroupoid
 import Omega.OperatorAlgebra.BlockFoldsatTraceCriterion
+import Omega.OperatorAlgebra.BlockFoldsatWatataniDenominatorClearing
 import Omega.OperatorAlgebra.FoldCenterExpectationIndexCollision2
 import Omega.OperatorAlgebra.FoldCapacityCurveCompleteInvariant
 import Omega.OperatorAlgebra.FoldCapacityKinksEqualSpectrumLevels
@@ -101,6 +102,7 @@ import Omega.OperatorAlgebra.JonesScalarEqualsExpMinusGap
 import Omega.OperatorAlgebra.LapseTimeGaugeInvariance
 import Omega.OperatorAlgebra.LyapunovSpectralRadiusCertificate
 import Omega.OperatorAlgebra.MultiRoundStrongConverseLinearLeakage
+import Omega.OperatorAlgebra.NpWatataniIndexSupportCharacterization
 import Omega.OperatorAlgebra.OracleProjectionVariationalCapacity
 import Omega.OperatorAlgebra.PimsnerPopaWitnessBound
 import Omega.OperatorAlgebra.BayesInverseZK
