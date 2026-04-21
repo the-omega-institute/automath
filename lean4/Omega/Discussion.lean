@@ -11,6 +11,7 @@ import Omega.Discussion.DimensionalNullTrigger
 import Omega.Discussion.EndpointDiscreteVsContinuous
 import Omega.Discussion.EpsZkCmiRiskImprovementBound
 import Omega.Discussion.EulerFactorBasepointOrbit
+import Omega.Discussion.FoldOccupancyTQMoment
 import Omega.Discussion.FiberStokesWatataniNormalization
 import Omega.Discussion.FoldIntrinsicQCollisionThreshold
 import Omega.Discussion.FoldRepresentationQCollisionLowerBound
