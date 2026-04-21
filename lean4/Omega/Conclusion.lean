@@ -238,6 +238,7 @@ import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.RankoneCauchyOrthogonality
 import Omega.Conclusion.RankoneResultantDiscriminantClosedForm
 import Omega.Conclusion.RanktwoSmithBlindclassBooleanPrimeblockTorsor
+import Omega.Conclusion.SmithTorsionVolumeFromLocalResidues
 import Omega.Conclusion.RateCdimTwoCircleThreshold
 import Omega.Conclusion.ReadusNullTrichotomyNormalForm
 import Omega.Conclusion.UnifiedOfflineVerifierSynthesisBarrier
