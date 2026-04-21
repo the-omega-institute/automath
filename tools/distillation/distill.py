@@ -1657,16 +1657,17 @@ def _review_writebacks(
 
 
 def _find_insert_position(text: str) -> int:
-    """Find the insertion point immediately after the last theorem-like block."""
+    """Find the insertion point: before \\endinput if present, else after last claim block."""
+    endinput = text.find("\\endinput")
+    # Always insert before \endinput when present
+    if endinput >= 0:
+        return endinput
     matches = list(CLAIM_BLOCK_RE.finditer(text))
     if matches:
         end = matches[-1].end()
         while end < len(text) and text[end] in " \t\r\n":
             end += 1
         return end
-    endinput = text.find("\\endinput")
-    if endinput >= 0:
-        return endinput
     return len(text)
 
 
