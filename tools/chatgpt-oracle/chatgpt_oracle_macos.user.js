@@ -113,7 +113,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v5.0 ${agentLabel}]</b>
+        <b>[Oracle v5.2 ${agentLabel}]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
