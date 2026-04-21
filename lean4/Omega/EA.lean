@@ -38,6 +38,7 @@ import Omega.EA.FoldAsSection
 import Omega.EA.FoldAsSectionCorollary
 import Omega.EA.FoldGroupoidAFInductiveLimitHolographicTrace
 import Omega.EA.KernelPeterWeylBlockDiagonalization
+import Omega.EA.FoldDiscreteToContinuousGaugeEmbedding
 import Omega.EA.FoldGroupoidAutChiSemidirectClassification
 import Omega.EA.FoldGroupoidAutSemidirectPi0
 import Omega.EA.FoldMaxDataProcessingSaturationChi
