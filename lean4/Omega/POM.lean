@@ -58,6 +58,7 @@ import Omega.POM.DeltaqGoldenEnvelope
 import Omega.POM.DeltaqGLambdaIdentity
 import Omega.POM.DeltaqSpectralDimensionIdentity
 import Omega.POM.DerivedAuditedEvenMinsectorTopologicalPhase
+import Omega.POM.DerivedSchurDirichletRamanujanParseval
 import Omega.POM.DerivedFiberIndependencePolynomialMinusOneTrichotomy
 import Omega.POM.DerivedFiberIndcomplexAlternatingWittenParity
 import Omega.POM.DerivedFoldGoldenRationalPowerUnitObstruction
@@ -277,6 +278,7 @@ import Omega.POM.MomentOddLagNeutrality
 import Omega.POM.MomentResonance
 import Omega.POM.MomqPermutationSymmetry
 import Omega.POM.MomqTensorKernelNoncommutativeFibonacciPowers
+import Omega.POM.MultiwellLowTemperatureExpansionIdentifiability
 import Omega.POM.MultiAxisMixingBudgetBarrier
 import Omega.POM.MultiAxisNear1Density
 import Omega.POM.MultiplicativeChainRuleFinite
