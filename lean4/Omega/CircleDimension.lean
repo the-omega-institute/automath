@@ -219,6 +219,7 @@ import Omega.CircleDimension.PoissonKLEvenOrders
 import Omega.CircleDimension.PoissonKLQuadraticFormSpectral
 import Omega.CircleDimension.PoissonKolmogorovUniversalLimit
 import Omega.CircleDimension.PoissonKernelDerivativeL1Energy
+import Omega.CircleDimension.PoissonSobolevEnergySharpLimit
 import Omega.CircleDimension.PoissonConstantsSharpness
 import Omega.CircleDimension.PoissonL1SecondOrderConstant
 import Omega.CircleDimension.PoissonLatticeSampling

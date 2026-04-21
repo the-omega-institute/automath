@@ -355,7 +355,9 @@ import Omega.Zeta.SyncActionGap
 import Omega.Zeta.SyncBivariateEulerProduct
 import Omega.Zeta.SyncCyclotomicDegreeLaw
 import Omega.Zeta.SyncCyclotomicDegreeLawPublication
+import Omega.Zeta.SyncCyclotomicEliminationLeadingCoefficientNorm
 import Omega.Zeta.SyncCyclotomicEliminationEvenness
+import Omega.Zeta.SyncCyclotomicEliminationRootSIntegrality
 import Omega.Zeta.SyncHatdeltaCurveDoubleCoverBranchGenus6
 import Omega.Zeta.SyncHatdeltaCurveQuotientPlaneQuarticGenus3
 import Omega.Zeta.SyncKernelMixingRate
