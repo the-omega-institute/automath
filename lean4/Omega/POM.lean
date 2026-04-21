@@ -386,6 +386,7 @@ import Omega.POM.TimeCorrGap
 import Omega.POM.ParrySurfaceDerivative
 import Omega.POM.ParryComplexityDetector
 import Omega.POM.PartitionMobiusEventInversion
+import Omega.POM.PartitionMonomialsSymmetricPowerRealizationBound
 import Omega.POM.PartitionPressureKnapsack
 import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.HardcorePathMarginalClosedForm
