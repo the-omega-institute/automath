@@ -343,6 +343,8 @@ import Omega.Zeta.XiBasepointScanKernelCompletenessFullRank
 import Omega.Zeta.XiBasepointScanRationalHerglotzPoleTomography
 import Omega.Zeta.XiBqPowerEntrywiseFibonacciBinomial
 import Omega.Zeta.XiBulkEntropyStrictConvexity
+import Omega.Zeta.XiBulkBoundaryHolographicGapDissipation
+import Omega.Zeta.XiBulkEntropyRGStaircase
 import Omega.Zeta.XiBulkRenormalizedConstantAnomalyGap
 import Omega.Zeta.XiCRTInvisibilityMarginalPrimeSpectrum
 import Omega.Zeta.XiCRTIndistinguishablePair

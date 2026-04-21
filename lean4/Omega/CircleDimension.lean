@@ -23,6 +23,7 @@ import Omega.CircleDimension.BornPairing
 import Omega.CircleDimension.BudgetCompleteness
 import Omega.CircleDimension.BudgetFailureSeparation
 import Omega.CircleDimension.CauchyKernelDerivativeGramClosedForm
+import Omega.CircleDimension.CauchyKernelHigherOrderFisherEnergy
 import Omega.CircleDimension.CauchyDerivativeGramExponentialKernel
 import Omega.CircleDimension.CausalPreorder
 import Omega.CircleDimension.CayleyChebyshevMode
