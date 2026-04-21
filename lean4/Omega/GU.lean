@@ -15,6 +15,7 @@ import Omega.GU.BdryOrientationWreathCharacterOddVisibility
 import Omega.GU.BdrySheetParityDiscreteBreaking
 import Omega.GU.BdrySquareIdentity
 import Omega.GU.BdrySymmetricGroupSignTwistedLabelD2
+import Omega.GU.BdryThreeAxisUniqueSymmetricCentralInvariant
 import Omega.GU.BdryUpliftOrientationParity
 import Omega.GU.BdryZ2JumpUniqueness
 import Omega.GU.BernoulliZetaTower

@@ -277,6 +277,7 @@ import Omega.CircleDimension.SymmetricTruncationZeroFlow
 import Omega.CircleDimension.SymmetricTruncationMultiplicativeRecursionGenerator
 import Omega.CircleDimension.LocalEuclideanSectorPositive
 import Omega.CircleDimension.LocalSchrodingerSector
+import Omega.CircleDimension.JensenDefectLogDerivative
 import Omega.CircleDimension.ShiftedJensenDefectIntegralLaw
 import Omega.CircleDimension.ShortExactAdditivity
 import Omega.CircleDimension.SignedCircleDimension
