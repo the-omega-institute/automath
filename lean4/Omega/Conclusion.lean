@@ -10,6 +10,7 @@ import Omega.Conclusion.AmbiguityShellJordanChainGraphLift
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.AuditComplexityAreaEquivalence
+import Omega.Conclusion.AutComponents
 import Omega.Conclusion.BinfoldCollisionScaleForcesMaxfiberDivergence
 import Omega.Conclusion.BinfoldCriticalCapacityThreephaseLaw
 import Omega.Conclusion.BinfoldExactInversionUpperEndpointFreezingSlope
