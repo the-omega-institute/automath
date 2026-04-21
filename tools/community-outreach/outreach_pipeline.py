@@ -238,12 +238,28 @@ def iso_now() -> str:
 
 
 def repo_slug(repo: str) -> str:
-    return repo.replace("/", "_")
+    """Convert 'owner/name' or 'owner/name#123' to a filesystem-safe slug.
+    Issue number creates isolated context: owner_name_123."""
+    return repo.replace("/", "_").replace("#", "_")
+
+
+def repo_base(repo: str) -> str:
+    """Extract the base repo 'owner/name' from 'owner/name#123'."""
+    return repo.split("#")[0]
+
+
+def repo_issue(repo: str) -> Optional[int]:
+    """Extract issue number from 'owner/name#123', or None."""
+    if "#" in repo:
+        try:
+            return int(repo.split("#")[1])
+        except (ValueError, IndexError):
+            pass
+    return None
 
 
 def state_file(repo: str) -> Path:
-    owner, name = repo.split("/", 1)
-    return STATE_DIR / f"{owner}_{name}.json"
+    return STATE_DIR / f"{repo_slug(repo)}.json"
 
 
 def save_state(state: RepoState) -> None:
@@ -1007,7 +1023,8 @@ def load_automath_theorem_whitelist() -> list[str]:
 
 
 def valid_repo_slug(repo: str) -> bool:
-    return bool(re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repo.strip()))
+    # Accept "owner/name" or "owner/name#123"
+    return bool(re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(#\d+)?", repo.strip()))
 
 
 def sanitize_issue_text(text: str) -> str:
@@ -1042,11 +1059,12 @@ def repo_checkout(repo: str, *, dry_run: bool) -> Optional[Path]:
         yield None
         return
 
+    base = repo_base(repo)
     temp_dir = Path(tempfile.mkdtemp(prefix=f"outreach_{repo_slug(repo)}_"))
-    clone_dir = temp_dir / repo.split("/", 1)[1]
+    clone_dir = temp_dir / base.split("/", 1)[1]
     try:
         result = run_cmd(
-            ["git", "clone", "--depth", "1", f"https://github.com/{repo}.git", str(clone_dir)],
+            ["git", "clone", "--depth", "1", f"https://github.com/{base}.git", str(clone_dir)],
             cwd=temp_dir,
             timeout=1200,
         )
@@ -1462,7 +1480,7 @@ def build_content_plan(
                 else:
                     target_context += f"\n\n--- {f.name} ---\n{content[:2000]}"
 
-    # If we have target-specific docs, use them as the codex_task
+    # If we have target-specific docs (issue briefs, prior research), use them
     if target_context:
         plan = {
             "codex_task": (
@@ -1476,14 +1494,57 @@ def build_content_plan(
             "target_format_example": "README.md",
             "output_type": "findings JSON",
             "output_path": str(target_dir / "research.md"),
-            "content_list": [],  # empty = Codex does research, not formatting
+            "content_list": [],
             "what_target_gains": "answers to their specific open questions",
             "backflow": {"enabled": True, "description": "new computation results"},
+            "mode": "directed",
         }
         logger.info("[%s] B0 plan from target docs (%d chars context)", repo, len(target_context))
         return plan
 
-    # FALLBACK: generic plan from Lean file scanning
+    # DISCOVERY MODE: no target docs → scan the repo for contribution opportunities.
+    # Read their README, CONTRIBUTING, recent PRs, code structure.
+    # Find where OUR results add value, not where THEIR gaps are.
+    base = repo_base(repo)
+    plan = {
+        "codex_task": (
+            f"DISCOVERY MODE for {base}.\n\n"
+            f"You are looking for ways the Omega project (https://github.com/the-omega-institute/automath) "
+            f"can make SUBSTANTIVE contributions to {base}. Not bug fixes, not doc edits, not filling "
+            f"their known gaps. We want to ADD something they don't have — computed results, mathematical "
+            f"connections, data, proofs, or tools that come from our x²=x+1 framework.\n\n"
+            f"STEP 1: Understand their project deeply.\n"
+            f"- `gh api repos/{base}/contents/README.md --jq '.content' | base64 -d`\n"
+            f"- `gh api repos/{base}/contents/CONTRIBUTING.md --jq '.content' | base64 -d` (if exists)\n"
+            f"- `gh pr list --repo {base} --state merged --limit 10 --json number,title,author`\n"
+            f"- `gh issue list --repo {base} --state open --limit 20 --json number,title,labels`\n"
+            f"- Browse their code structure and Lean modules\n\n"
+            f"STEP 2: Understand OUR project.\n"
+            f"- Read our paper: `head -100 theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.tex`\n"
+            f"- Our Lean modules: `ls lean4/Omega/Folding/ lean4/Omega/POM/ lean4/Omega/Frontier/`\n"
+            f"- Our scripts: `ls theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/scripts/equational_theory/`\n"
+            f"- Our theorem count: 10,500+ verified Lean 4 theorems from x²=x+1\n\n"
+            f"STEP 3: Find where our work adds value to theirs.\n"
+            f"- What mathematical structures do we both care about?\n"
+            f"- Where do our computed results answer their open questions?\n"
+            f"- What can we PR that showcases Omega while being genuinely useful?\n"
+            f"- Think: data contributions, new computational results, mathematical bridges\n"
+            f"- NOT: fixing their typos, filling their sorries, reviewing their PRs\n\n"
+            f"Be specific. Name files, functions, theorem names, issue numbers."
+        ),
+        "target_format": "GitHub PR or issue",
+        "target_format_example": "README.md CONTRIBUTING.md",
+        "output_type": "findings JSON",
+        "output_path": str(target_dir / "research.md"),
+        "content_list": [],
+        "what_target_gains": "new mathematical results from the Omega framework",
+        "backflow": {"enabled": True, "description": "discoveries from target scanning"},
+        "mode": "discovery",
+    }
+    logger.info("[%s] B0 plan: DISCOVERY MODE (no target docs)", repo)
+    return plan
+
+    # FALLBACK: generic plan from Lean file scanning (only if discovery mode is disabled)
     # Read Conjectures.lean for open conjectures
     conjectures_file = REPO_ROOT / "lean4" / "Omega" / "Frontier" / "Conjectures.lean"
     open_conjectures: list[dict[str, Any]] = []
@@ -1814,21 +1875,65 @@ def build_stage_b2_prompt(
             """
         )
 
-    # R1 BRIDGE-FINDING PATH: first round, read both sides and find connections
+    # R1 PATH: discovery or directed bridge-finding
     if claude_plan and claude_plan.get("codex_task"):
+        base = repo_base(repo)
+        mode = claude_plan.get("mode", "directed")
+
+        # DISCOVERY MODE: scan repo for contribution opportunities
+        if mode == "discovery":
+            existing_block = ""
+            if existing_research:
+                existing_block = f"\nEXISTING RESEARCH (BUILD ON THIS):\n{existing_research[:4000]}\n"
+            return textwrap.dedent(
+                f"""\
+                {claude_plan.get('codex_task', '')}
+                {existing_block}
+                Return JSON:
+                {{
+                  "target_summary": "what {base} does and what they need",
+                  "contribution_opportunities": [
+                    {{
+                      "title": "what we can contribute",
+                      "type": "data_pr|script_pr|computation|mathematical_result|tooling",
+                      "their_gap": "what they're missing or what would help them",
+                      "our_asset": "what Omega result or tool fills this gap",
+                      "deliverable": "concrete: file path, PR description, data format",
+                      "effort": "low|medium|high",
+                      "impact": "how this makes Omega visible while helping them"
+                    }}
+                  ],
+                  "findings": [
+                    {{
+                      "title": "mathematical connection found",
+                      "type": "theorem|computation|data|conjecture",
+                      "status": "proved|computed|proposed",
+                      "their_side": "what they have",
+                      "our_side": "what we have",
+                      "bridge": "the connection",
+                      "target_need": "how this helps THEM",
+                      "automath_refs": ["lean4/Omega/path:line"]
+                    }}
+                  ],
+                  "recommended_first_action": "what to do first (be specific)"
+                }}
+                """
+            )
+
+        # DIRECTED MODE: bridge-finding for a specific issue/task
         return textwrap.dedent(
             f"""\
             You are a mathematical research analyst. Your job is to find deep
             connections between two projects, like a researcher writing a bridge paper.
 
-            TARGET: {repo}
+            TARGET: {base}
             TASK: {claude_plan.get('codex_task', '')}
             {"" if not existing_research else chr(10) + "═══════════════════════════════════════════════════════════════" + chr(10) + "EXISTING RESEARCH (from previous runs — BUILD ON THIS, don't discard):" + chr(10) + "═══════════════════════════════════════════════════════════════" + chr(10) + existing_research[:4000] + chr(10) + chr(10) + "Keep the findings above. You may ADD new ones but do NOT remove existing." + chr(10)}
             ═══════════════════════════════════════════════════════════════
             STEP 1: DEEP-READ THE TARGET
             ═══════════════════════════════════════════════════════════════
             Read the target project thoroughly:
-            - `gh api repos/{repo}/contents/README.md --jq '.content' | base64 -d`
+            - `gh api repos/{base}/contents/README.md --jq '.content' | base64 -d`
             - Browse their code, issues, papers
             - Understand what THEY are working on, what problems THEY face
 
@@ -3106,6 +3211,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--discover", action="store_true", help="Run Stage A discovery and process the resulting candidates")
     parser.add_argument("--repo", action="append", default=[], help="Target repository in owner/name form; repeatable")
+    parser.add_argument("--issue", action="append", default=[], type=int, help="Issue number per --repo (same order); isolates state/context per issue")
     parser.add_argument("--todo", action="store_true", help="Claim and process next TODO item from TODO.md")
     parser.add_argument("--status", action="store_true", help="Show persisted state")
     parser.add_argument("--skip-to", choices=["B", "C", "D"], default="", help="Override the starting stage for --repo targets")
@@ -3199,7 +3305,16 @@ def main() -> int:
     if args.discover:
         candidates = discover_candidates(model=args.model, dry_run=args.dry_run)
         repos.extend(item["repo"] for item in candidates)
-    repos.extend(args.repo)
+    # Pair --repo with --issue: if --issue is given, each repo gets an issue number.
+    # Issue number is embedded in the repo identifier as "owner/name#123" so that
+    # repo_slug() produces "owner_name_123" — isolated state and target dirs per issue.
+    issue_map = dict(zip(args.repo, args.issue)) if args.issue else {}
+    for repo in args.repo:
+        issue_num = issue_map.get(repo)
+        if issue_num:
+            repos.append(f"{repo}#{issue_num}")
+        else:
+            repos.append(repo)
 
     if not repos:
         print("Specify --discover, --repo, or --status.", file=sys.stderr)
