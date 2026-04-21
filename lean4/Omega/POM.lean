@@ -122,6 +122,7 @@ import Omega.POM.FiberLedgerPrefixSideinfoLength
 import Omega.POM.FiberLeyangKlBernoulliDecomposition
 import Omega.POM.FiberMultiplicityMatrixProduct
 import Omega.POM.FiberMedianMajorityPrimeValuation
+import Omega.POM.FiberMultivariateHolographicConservation
 import Omega.POM.FiberParityHomotopyEquivalence
 import Omega.POM.FiberParityMod3
 import Omega.POM.FiberPosteriorEquivalenceActivityField

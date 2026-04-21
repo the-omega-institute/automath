@@ -20,6 +20,7 @@ import Omega.Zeta.AtomicWittIntoTC1
 import Omega.Zeta.XiAtomicCenteredResidueSimplex
 import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
+import Omega.Zeta.XiLimitDefectPotentialRationalization
 import Omega.Zeta.AuditedEvenFirstCapacityKinkFibonacciJump
 import Omega.Zeta.AutomaticDirichletMoment
 import Omega.Zeta.BlockCyclicRigidity
