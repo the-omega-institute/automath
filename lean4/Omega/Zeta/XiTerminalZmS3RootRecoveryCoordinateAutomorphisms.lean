@@ -143,4 +143,96 @@ theorem paper_xi_terminal_zm_s3_root_recovery_coordinate_automorphisms
   exact ⟨⟨hz₂, hz₃⟩, xiTerminalZm_sigma_cube, xiTerminalZm_iota_square,
     xiTerminalZm_iota_sigma_square, xiTerminalZm_generatesS3⟩
 
+/-- Labels for the three roots of the cubic resolvent. -/
+inductive XiTerminalZmS3RootIndex
+  | one
+  | two
+  | three
+  deriving DecidableEq, Repr
+
+/-- The displayed ordering of the three roots. -/
+def xiTerminalZmS3RootValue (z1 z2 z3 : ℚ) : XiTerminalZmS3RootIndex → ℚ
+  | .one => z1
+  | .two => z2
+  | .three => z3
+
+/-- The 3-cycle acting on the ordered roots. -/
+def xiTerminalZmS3SigmaIndex : XiTerminalZmS3RootIndex → XiTerminalZmS3RootIndex
+  | .one => .two
+  | .two => .three
+  | .three => .one
+
+/-- The involution swapping the two conjugate branches. -/
+def xiTerminalZmS3IotaIndex : XiTerminalZmS3RootIndex → XiTerminalZmS3RootIndex
+  | .one => .one
+  | .two => .three
+  | .three => .two
+
+/-- The coordinate formula for the `σ`-image of the distinguished root. -/
+def xiTerminalZmS3SigmaCoordinate (y z w dRdz : ℚ) : ℚ :=
+  -((1 + 2 * y) + z) / 2 + w / (2 * dRdz)
+
+/-- The coordinate formula for the conjugate branch. -/
+def xiTerminalZmS3IotaCoordinate (y z w dRdz : ℚ) : ℚ :=
+  -((1 + 2 * y) + z) / 2 - w / (2 * dRdz)
+
+/-- `σ` cycles the three ordered roots. -/
+def xiTerminalZmS3SigmaPermutesRoots (z1 z2 z3 : ℚ) : Prop :=
+  xiTerminalZmS3RootValue z1 z2 z3 (xiTerminalZmS3SigmaIndex .one) = z2 ∧
+    xiTerminalZmS3RootValue z1 z2 z3 (xiTerminalZmS3SigmaIndex .two) = z3 ∧
+    xiTerminalZmS3RootValue z1 z2 z3 (xiTerminalZmS3SigmaIndex .three) = z1
+
+/-- `ι` swaps the two conjugate roots. -/
+def xiTerminalZmS3IotaSwapsConjugates (z1 z2 z3 : ℚ) : Prop :=
+  xiTerminalZmS3RootValue z1 z2 z3 (xiTerminalZmS3IotaIndex .two) = z3 ∧
+    xiTerminalZmS3RootValue z1 z2 z3 (xiTerminalZmS3IotaIndex .three) = z2
+
+/-- The index maps satisfy the standard `S₃` relations. -/
+def xiTerminalZmS3GeneratesS3 : Prop :=
+  (∀ i, xiTerminalZmS3SigmaIndex (xiTerminalZmS3SigmaIndex (xiTerminalZmS3SigmaIndex i)) = i) ∧
+    (∀ i, xiTerminalZmS3IotaIndex (xiTerminalZmS3IotaIndex i) = i) ∧
+    (∀ i,
+      xiTerminalZmS3IotaIndex
+          (xiTerminalZmS3SigmaIndex
+            (xiTerminalZmS3IotaIndex (xiTerminalZmS3SigmaIndex i))) = i)
+
+lemma xi_terminal_zm_s3_generates_s3 : xiTerminalZmS3GeneratesS3 := by
+  refine ⟨?_, ?_, ?_⟩ <;> intro i <;> cases i <;> rfl
+
+/-- Indexed companion to the paper theorem above: the same root-recovery formulas packaged through
+explicit root labels and index-level `S₃` relations. -/
+theorem paper_xi_terminal_zm_s3_root_recovery_coordinate_automorphisms_indexed
+    {y z1 z2 z3 w dRdz : ℚ} (hdRdz : dRdz ≠ 0)
+    (hsum : z2 + z3 = -((1 + 2 * y) + z1)) (hdiff : z2 - z3 = w / dRdz) :
+    z2 = -((1 + 2 * y) + z1) / 2 + w / (2 * dRdz) ∧
+      z3 = -((1 + 2 * y) + z1) / 2 - w / (2 * dRdz) ∧
+      xiTerminalZmS3SigmaPermutesRoots z1 z2 z3 ∧
+      xiTerminalZmS3IotaSwapsConjugates z1 z2 z3 ∧
+      xiTerminalZmS3GeneratesS3 := by
+  have hz2 :
+      z2 = -((1 + 2 * y) + z1) / 2 + w / (2 * dRdz) := by
+    calc
+      z2 = ((z2 + z3) + (z2 - z3)) / 2 := by ring
+      _ = (-((1 + 2 * y) + z1) + w / dRdz) / 2 := by rw [hsum, hdiff]
+      _ = -((1 + 2 * y) + z1) / 2 + (w / dRdz) / 2 := by ring
+      _ = -((1 + 2 * y) + z1) / 2 + w / (2 * dRdz) := by
+        field_simp [hdRdz]
+  have hz3 :
+      z3 = -((1 + 2 * y) + z1) / 2 - w / (2 * dRdz) := by
+    calc
+      z3 = ((z2 + z3) - (z2 - z3)) / 2 := by ring
+      _ = (-((1 + 2 * y) + z1) - w / dRdz) / 2 := by rw [hsum, hdiff]
+      _ = -((1 + 2 * y) + z1) / 2 - (w / dRdz) / 2 := by ring
+      _ = -((1 + 2 * y) + z1) / 2 - w / (2 * dRdz) := by
+        field_simp [hdRdz]
+  exact
+    ⟨hz2, hz3,
+      by
+        simp [xiTerminalZmS3SigmaPermutesRoots, xiTerminalZmS3RootValue,
+          xiTerminalZmS3SigmaIndex],
+      by
+        simp [xiTerminalZmS3IotaSwapsConjugates, xiTerminalZmS3RootValue,
+          xiTerminalZmS3IotaIndex],
+      xi_terminal_zm_s3_generates_s3⟩
+
 end Omega.Zeta
