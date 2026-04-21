@@ -152,6 +152,7 @@ import Omega.POM.FibCubeFrechetMedianUnique
 import Omega.POM.FibCubeGrayHamilton
 import Omega.POM.FibCubeKPointCount
 import Omega.POM.FibCubeMarginalBoundaryLayer
+import Omega.POM.FiniteAuditNFAnom
 import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.FibPellQuadratic
 import Omega.POM.FibPellRecoverKFromUnitError
