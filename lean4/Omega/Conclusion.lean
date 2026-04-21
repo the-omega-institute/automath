@@ -311,6 +311,7 @@ import Omega.Conclusion.SoftcoreKroneckerSympowerDecomposition
 import Omega.Conclusion.SympowerExplicitCriticalOrder
 import Omega.Conclusion.SoftcoreWeightMatrixExplicitInverse
 import Omega.Conclusion.SpectrumSignLaw
+import Omega.Conclusion.SquarefreeMultiplicativeHolographyLogGap
 import Omega.Conclusion.SquarefreeRTLaminarNesting
 import Omega.Conclusion.StableSuccessorFaithfulSemigroup
 import Omega.Conclusion.SingularRingFaithfulSemigroup

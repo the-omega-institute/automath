@@ -350,6 +350,7 @@ import Omega.POM.ReversibleExternalResidualKolmogorovLowerBound
 import Omega.POM.RqLogconvexFreeEnergyOrder
 import Omega.POM.RqQinftyEndpoint
 import Omega.POM.RqUniversalBounds
+import Omega.POM.FiberIndsetFactorization
 import Omega.POM.S2Plancherel
 import Omega.POM.S4Asymptotic
 import Omega.POM.S4Recurrence

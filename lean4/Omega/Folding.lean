@@ -396,6 +396,7 @@ import Omega.Folding.MetallicSampleThreshold
 import Omega.Folding.MetallicTwoStateSFT
 import Omega.Folding.MicrostateResidualWindowReachability
 import Omega.Folding.MismatchLanguage
+import Omega.Folding.MismatchPrimorialGrowth
 import Omega.Folding.MismatchLanguageIntrinsicErgodic
 import Omega.Folding.ModRigidityPeriodicPredicates
 import Omega.Folding.ModSemiringsAnnihilatorValuationLattice
