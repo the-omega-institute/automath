@@ -281,7 +281,7 @@ def codex_exec(
         cmd.extend(["-m", model])
     cmd.append("-")
 
-    use_shell = IS_WINDOWS and str(codex_bin).endswith(".cmd")
+    use_shell = IS_WINDOWS and str(codex_bin).lower().endswith(".cmd")
     popen_kwargs: dict[str, Any] = {
         "stdin": subprocess.PIPE,
         "stdout": subprocess.PIPE,
@@ -394,7 +394,7 @@ def claude_exec(
         return codex_exec(prompt, work_dir=target_dir, dry_run=dry_run)
 
     cmd = [str(claude_bin), "-p", "--dangerously-skip-permissions"]
-    use_shell = IS_WINDOWS and str(claude_bin).endswith(".cmd")
+    use_shell = IS_WINDOWS and str(claude_bin).lower().endswith(".cmd")
     start = time.monotonic()
     result: Optional[subprocess.CompletedProcess[str]] = None
     # Strip CLAUDECODE env var to allow nested Claude CLI invocation
