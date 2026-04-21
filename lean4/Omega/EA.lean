@@ -24,6 +24,7 @@ import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
 import Omega.EA.CrtFactorization
 import Omega.EA.Conclusion72EnergyComplementarity
+import Omega.EA.SumproductExponentialLaw
 import Omega.EA.DeterministicRoughVisibleQuantity
 import Omega.EA.DirectedRewriteTermination
 import Omega.EA.DynamicPrimeRegisterBitlength
@@ -68,6 +69,7 @@ import Omega.EA.Kernel21GroundState
 import Omega.EA.KernelOneSiteBernoulliClass
 import Omega.EA.K9IntegrablePressureLdp
 import Omega.EA.KernelPressureEndpoints
+import Omega.EA.KernelMinimalThermoSignatureThree
 import Omega.EA.KernelRHSqrtError
 import Omega.EA.KernelWeightedPrimeOrbit
 import Omega.EA.KernelZeroTemp
