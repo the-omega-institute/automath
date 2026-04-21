@@ -282,6 +282,7 @@ import Omega.Zeta.PickPoissonCharpolyCoefficients
 import Omega.Zeta.PickPoissonCrossEnergyHorizontalSeparation
 import Omega.Zeta.PickPoissonEnergyStabilityAwayFromCollision
 import Omega.Zeta.PickPoissonInversePrincipalMinorsJacobi
+import Omega.Zeta.ReciprocalSpectrumFunctionalEquation
 import Omega.Zeta.PoissonEnergySingle
 import Omega.Zeta.PoissonEnergySingleRecovery
 import Omega.Zeta.PrimeLanguagesDFAPrimeRecallPrecision
