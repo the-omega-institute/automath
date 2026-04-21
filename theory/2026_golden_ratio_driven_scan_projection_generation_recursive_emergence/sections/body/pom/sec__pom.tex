@@ -90,55 +90,133 @@
 \input{parts/subsec__pom-pw-tannaka-krein-reconstruction}
 
 % --- Distillation writeback ---
-\begin{definition}[近极值纤维与有限测试 Frostman 骨架]\label{def:distill-pom-near-extremal-frostman-skeleton}
-\textbf{依赖状态：construction.}
-给定有限折叠 \(F:\Omega\twoheadrightarrow X\)，令
-\[
-d(x):=|F^{-1}(x)|,\qquad \Lambda:=\max_{x\in X}\log d(x).
-\]
-对有理数 \(\epsilon\ge0\) 定义近极值集合
-\[
-E(\epsilon):=\{x\in X:\log d(x)\ge \Lambda-\epsilon\}.
-\]
-若 \(q\ge2\) 为整数，则在 \(E(\epsilon)\) 上定义 escort 概率
-\[
-\nu_q(A):=
-\frac{\sum_{x\in A\cap E(\epsilon)}d(x)^q}
-{\sum_{y\in E(\epsilon)}d(y)^q}
-\qquad(A\subseteq X).
-\]
-再给定有限投影词映射 \(\pi:X\to\mathcal P\) 与复杂度函数 \(\rho:\mathcal P\to\mathbb N\)。
-对整数 \(R\ge0\)、有理数 \(C\ge1\) 与 \(\theta\in(0,1]\cap\mathbb Q\)，称该折叠属于有限测试 Frostman 骨架
-\[
-\mathsf{Sk}^{\rm frost}_m(C,\theta,R)
-\]
-若对每个非空 \(T\subseteq\mathcal P\) 且 \(\min_{P\in T}\rho(P)>R\)，均有
-\[
-\nu_q(\pi^{-1}(T))\le C\left(\frac{|T|}{|\mathcal P|}\right)^\theta.
-\]
-这里的下标 \(m\) 只记录所处分辨率；该条件是有限测试条件，而非未经证明的全 Frostman 正则性。
-\end{definition}
-
-\begin{proposition}[最坏纤维反例的 escort--Frostman--slab 三分]\label{prop:distill-pom-fiber-spectrum-trichotomy}
+\begin{proposition}[Sticky 纤维的矩核冻结判据]\label{prop:distill-pom-sticky-moment-freezing}
 \textbf{依赖状态：rigidity.}
-设 \(\mathcal C\) 为一类有限折叠 \((F,\pi,\rho)\)，并设 \(\mathcal Q\) 是其上的闭包谓词。
-称 \(F\in\mathcal C\) 为反例，若 \(\mathcal Q(F)\) 不成立。
-固定有理 \(0<\delta<1\)。
-称反例为 sticky，若 \(\max_{x\in E(\epsilon)}\nu_q(\{x\})\ge1-\delta\)；称其为 slab，若存在 \(P\in\mathcal P\) 使 \(\rho(P)\le R\) 且 \(\nu_q(\pi^{-1}(P))\ge\delta\)。
-
-假设存在规范化算子 \(N\) 与坏度函数 \(\mathcal B:\mathcal C\to\eta\mathbb Z_{\ge0}\)（\(\eta>0\)），满足：每当反例 \(F\) 既非 sticky，亦非 slab，且 \(F\notin\mathsf{Sk}^{\rm frost}_m(C,\theta,R)\) 时，\(N(F)\in\mathcal C\) 仍为反例，并且
+在定义~\ref{def:distill-pom-near-extremal-frostman-skeleton}的记号下，固定有理数 \(\epsilon\ge0\)、整数 \(q\ge2\)，并令 \(E=E(\epsilon)\ne\varnothing\)。对 \(r\in\{q,q+1,2q\}\) 置
 \[
-\mathcal B(N(F))\le\mathcal B(F)-\eta.
+Z_r(E):=\sum_{x\in E}d(x)^r,\qquad
+p_x:=\nu_q(\{x\})={d(x)^q\over Z_q(E)}.
 \]
-则任一 \(\mathcal B\)-极小反例必属于以下三类之一：sticky、slab 或 \(\mathsf{Sk}^{\rm frost}_m(C,\theta,R)\)。
-更一般地，任何不进入三类骨架的反例链在每次规范化后坏度严格下降。
+定义有限矩核碰撞量、escort 熵与一步压力斜率为
+\[
+\mathsf C_q(E):=\sum_{x\in E}p_x^2={Z_{2q}(E)\over Z_q(E)^2},\qquad
+\mathsf H_q(E):=-\sum_{x\in E}p_x\log p_x,
+\]
+\[
+\Delta_q(E):=\log Z_{q+1}(E)-\log Z_q(E)=\log\Bigl(\sum_{x\in E}p_xd(x)\Bigr).
+\]
+令 \(h(t):=-t\log t-(1-t)\log(1-t)\)，并约定 \(0\log0=0\)。若 \(0<\delta\le1/2\) 且 \(F\) 在 \((\epsilon,q,\delta)\) 处为 sticky，即存在 \(x_*\in E\) 使 \(p_{x_*}\ge1-\delta\)，则
+\[
+\mathsf C_q(E)\ge(1-\delta)^2,\qquad
+\mathsf H_q(E)\le h(\delta)+\delta\log\max\{1,|E|-1\},
+\]
+并且
+\[
+\Lambda-\epsilon+\log(1-\delta)\le \Delta_q(E)\le \Lambda.
+\]
+反过来，若有限有理数 \(\mathsf C_q(E)\ge1-\delta\)，则 \(F\) 在 \((\epsilon,q,\delta)\) 处为 sticky。因此 sticky 纤维强制进入一个由 \(Z_q(E)\) 与 \(Z_{2q}(E)\) 精确检测的有限冻结相。
 \end{proposition}
 \begin{proof}
-取 \(\mathcal B\)-极小反例 \(F\)。
-若 \(F\) 不属于 sticky、slab 或 \(\mathsf{Sk}^{\rm frost}_m(C,\theta,R)\)，则按假设 \(N(F)\) 仍是反例，且坏度严格小于 \(F\)。
-这与 \(F\) 的极小性矛盾。
-故极小反例必须落入三分骨架之一。
-一般链的断言直接来自同一不等式：只要尚未进入三类骨架，规范化就把 \(\mathcal B\) 至少降低 \(\eta\)。证毕。
+取 \(x_*\in E\) 使 \(p_{x_*}\ge1-\delta\)。碰撞量满足
+\[
+\mathsf C_q(E)=\sum_{x\in E}p_x^2\ge p_{x_*}^2\ge(1-\delta)^2.
+\]
+若 \(|E|=1\)，熵估计显然成立。设 \(|E|=n\ge2\)，令 \(u=1-p_{x_*}\le\delta\)。在固定剩余质量 \(u\) 时，剩余 \(n-1\) 个原子的熵由均匀分布取最大值，故
+\[
+\mathsf H_q(E)\le h(u)+u\log(n-1).
+\]
+因 \(0\le u\le\delta\le1/2\)，函数 \(u\mapsto h(u)+u\log(n-1)\) 在该区间单调不降，于是得到所需熵界。
+
+又因为 \(x\in E\) 蕴含 \(\Lambda-\epsilon\le\log d(x)\le\Lambda\)，所以
+\[
+\sum_{x\in E}p_xd(x)\le e^\Lambda,\qquad
+\sum_{x\in E}p_xd(x)\ge p_{x_*}d(x_*)\ge(1-\delta)e^{\Lambda-\epsilon}.
+\]
+取对数即得 \(\Delta_q(E)\) 的上下界。最后，任意概率向量满足
+\[
+\sum_xp_x^2\le (\max_xp_x)\sum_xp_x=\max_xp_x.
+\]
+若 \(\mathsf C_q(E)\ge1-\delta\)，则 \(\max_xp_x\ge1-\delta\)，这正是 sticky 条件。证毕。
+\end{proof}
+
+\begin{theorem}[近极值纤维的多尺度 sticky--改进替代]\label{thm:distill-pom-near-extremal-multiscale-improvement}
+\textbf{依赖状态：closure.}
+取有限尺度区间 \(I=\{m_0,m_0+1,\ldots,m_1\}\)。对每个 \(m\in I\)，设
+\[
+F_m:\Omega_m\twoheadrightarrow X_m
+\]
+为有限折叠，并定义
+\[
+d_m(x):=|F_m^{-1}(x)|,\qquad
+\Lambda_m:=\max_{x\in X_m}\log d_m(x),\qquad
+E_m(\epsilon):=\{x\in X_m:\log d_m(x)\ge\Lambda_m-\epsilon\}.
+\]
+固定 \(\epsilon\ge0\)、整数 \(q\ge2\) 与 \(0<\delta<1/2\)，并假设每个 \(E_m(\epsilon)\) 非空。令
+\[
+\nu_{m,q}(A):={\sum_{x\in A\cap E_m(\epsilon)}d_m(x)^q\over
+\sum_{y\in E_m(\epsilon)}d_m(y)^q}
+\qquad(A\subseteq E_m(\epsilon)).
+\]
+进一步假设存在祖先映射
+\[
+\alpha_m:E_{m+1}(\epsilon)\longrightarrow E_m(\epsilon)\qquad(m_0\le m<m_1)
+\]
+满足精确 escort 相容性
+\[
+(\alpha_m)_*\nu_{m+1,q}=\nu_{m,q}.
+\]
+定义第 \(m\) 层的碰撞、可见度与容量为
+\[
+\mathsf{Col}_m(q,\epsilon):=\sum_{x\in E_m(\epsilon)}\nu_{m,q}(\{x\})^2,\qquad
+\mathsf{Vis}_m(q,\epsilon):=-\log\mathsf{Col}_m(q,\epsilon),
+\]
+\[
+\mathsf{Cap}_m(\epsilon):=\log |E_m(\epsilon)|.
+\]
+则以下至少一项成立：
+\begin{enumerate}
+\item 存在相容链 \((x_m)_{m\in I}\)，满足 \(x_m\in E_m(\epsilon)\)、\(\alpha_m(x_{m+1})=x_m\)，且
+\[
+\nu_{m,q}(\{x_m\})\ge1-\delta\qquad(m\in I),
+\]
+即近极值纤维族为多尺度 sticky；
+\item 存在某个尺度 \(m\in I\) 触发严格的有限 visibility--collision--capacity 改进：
+\[
+\mathsf{Col}_m(q,\epsilon)\le1-\delta,\qquad
+-\log(1-\delta)\le\mathsf{Vis}_m(q,\epsilon)\le\mathsf{Cap}_m(\epsilon).
+\]
+\end{enumerate}
+换言之，若近极值质量不能沿祖先映射压缩成一条 sticky 链，则某一尺度的碰撞核必然脱离一原子冻结，产生定量正的可见度下界。
+\end{theorem}
+\begin{proof}
+若存在 \(m\in I\) 使 \(\mathsf{Col}_m(q,\epsilon)\le1-\delta\)，则
+\[
+\mathsf{Vis}_m(q,\epsilon)=-\log\mathsf{Col}_m(q,\epsilon)\ge -\log(1-\delta)>0.
+\]
+另一方面，对概率向量 \((\nu_{m,q}(\{x\}))_{x\in E_m(\epsilon)}\)，Cauchy 不等式给出
+\[
+1=\Bigl(\sum_x\nu_{m,q}(\{x\})\Bigr)^2
+\le |E_m(\epsilon)|\sum_x\nu_{m,q}(\{x\})^2
+=|E_m(\epsilon)|\mathsf{Col}_m(q,\epsilon),
+\]
+故 \(\mathsf{Vis}_m(q,\epsilon)\le\log|E_m(\epsilon)|=\mathsf{Cap}_m(\epsilon)\)。于是第二项成立。
+
+现在假设第二项不成立。则每个尺度均满足
+\[
+\mathsf{Col}_m(q,\epsilon)>1-\delta.
+\]
+任意概率向量 \((p_x)\) 都有 \(\sum_xp_x^2\le\max_xp_x\)，故对每个 \(m\) 存在 \(x_m\in E_m(\epsilon)\) 使
+\[
+\nu_{m,q}(\{x_m\})>1-\delta.
+\]
+由于 \(\delta<1/2\)，这样的 \(x_m\) 唯一：两个不同原子若都具有质量 \(>1-\delta\)，总质量将大于 \(2(1-\delta)>1\)。
+
+对 \(m<m_1\)，escort 相容性给出
+\[
+\nu_{m,q}(\{\alpha_m(x_{m+1})\})
+\ge \nu_{m+1,q}(\{x_{m+1}\})>1-\delta.
+\]
+由第 \(m\) 层大原子的唯一性，必有 \(\alpha_m(x_{m+1})=x_m\)。因此 \((x_m)_{m\in I}\) 是相容 sticky 链，第一项成立。证毕。
 \end{proof}
 
 % --- End distillation writeback ---
