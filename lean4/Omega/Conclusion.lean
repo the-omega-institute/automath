@@ -66,6 +66,7 @@ import Omega.Conclusion.CoarseGrainingConsumesVisibleWalshEnergy
 import Omega.Conclusion.CoarsegrainingStokesBeckChevalley
 import Omega.Conclusion.CofinalFixedQuotient
 import Omega.Conclusion.CofinalSparsificationSemanticCompleteness
+import Omega.Conclusion.CollisionGenfuncRadiusHalting
 import Omega.Conclusion.CollisionMomentMinrecHaltingTime
 import Omega.Conclusion.CollisionMomentMoritaDefectFusion
 import Omega.Conclusion.CollisionMomentStieltjesHankelPositivity
