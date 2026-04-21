@@ -1,3 +1,4 @@
 import Omega.RootUnitCharacterPressureTensor.GaugePressureGenericGaloisS4
+import Omega.RootUnitCharacterPressureTensor.GaugePressureResolventCoverGenus4
 import Omega.RootUnitCharacterPressureTensor.GaugePressureTiltDerivative
 import Omega.RootUnitCharacterPressureTensor.GaugePressureQuartic
