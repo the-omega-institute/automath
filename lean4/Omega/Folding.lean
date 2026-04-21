@@ -57,6 +57,7 @@ import Omega.Folding.BinFoldGaugeDecomposition
 import Omega.Folding.BinFoldGaugeDensityTwoScale
 import Omega.Folding.BinFoldGaugeSign
 import Omega.Folding.BinFoldGaugeM6
+import Omega.Folding.BinFoldStableTypeCoordinateAlgebraFibonacciSplitting
 import Omega.Folding.BinFoldMinsectorLastbitSectionUnique
 import Omega.Folding.BinGaugeVolume
 import Omega.Folding.BinGaugeVolumeStirlingSecondOrder
