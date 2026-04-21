@@ -86,43 +86,112 @@ a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}})
 正交三分律与不可替代性（定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable}；定理 \ref{thm:cdim-budget-failure-separation}）正是该闭环的类型化表达。
 
 % --- Distillation writeback ---
-\begin{proposition}[Čech 见证向 Hard 见证的线性预算下界]\label{prop:distill-cdim-cech-hard-linear-budget}
-\textbf{依赖状态：obstruction.}
-设 \(\mathcal U_0,\dots,\mathcal U_{k-1}\) 为有限前缀站点，\(\mathcal A_i\) 为 \(\mathcal U_i\) 上的阿贝尔群层，并令
+% --- Distillation writeback: Wang--Zahl finite-test Frostman/slab dichotomy ---
+\begin{definition}[有限测试 Frostman 骨架与 slab 归一化资料]\label{def:distill-cdim-frostman-slab-data}
+\textbf{依赖状态：construction.}
+固定分辨率 \(m\)。令 \(\mathcal A_m\) 为已经通过本节 unitary-slice 预过滤的有限地址族。令 \(Q_m\) 为有限投影词测试族；每个 \(q\in Q_m\) 是映射
 \[
-[\alpha_i]\in \check H^2(\mathcal U_i,\mathcal A_i)
+q:\mathcal A_m\longrightarrow \Pi_q
 \]
-为第 \(i\) 层 \(\mathrm{Cech}\)-型 \(\mathsf{NULL}\) 见证的障碍类。
-假设存在有限生成阿贝尔群 \(M\) 与账本同态
+到某个有限集合 \(\Pi_q\)。对非空 \(E\subset\mathcal A_m\)，定义本段局部使用的投影词复杂度
 \[
-\lambda_i:\check H^2(\mathcal U_i,\mathcal A_i)\longrightarrow M
+\dim_{Q_m}(E):=\sum_{q\in Q_m}\bigl(|q(E)|-1\bigr)\in\mathbb Z_{\ge 0}.
 \]
-使得
+给定有理数 \(0<\eta<1\)，称 \(E\) 满足有限测试 Frostman 非集中，记作
 \[
-\lambda_0([\alpha_0]),\dots,\lambda_{k-1}([\alpha_{k-1}])
+E\in\mathsf{Sk}^{\rm frost}_m(\eta;Q_m),
 \]
-在 \(M\otimes_{\mathbb Z}\mathbb Q\) 中线性无关。
+若对所有 \(q\in Q_m\) 与 \(y\in\Pi_q\) 均有
+\[
+|E\cap q^{-1}(y)|\le \eta |E|.
+\]
+若相反存在 \((q,y)\) 使 \(|E\cap q^{-1}(y)|>\eta |E|\)，则称
+\[
+E_{q,y}:=E\cap q^{-1}(y)
+\]
+为 \(E\) 的 \(q\)-slab。
 
-若某一外置方案只允许 \(b\) 个直接和自由寄存器，即其可取消障碍的账本像包含在某个同态
+令 \(\mathsf{Bad}^{\varepsilon}_m(E)\) 表示 \(E\) 对当前 \(\mathsf{NULL}\) 闭包审计命题构成 \(\varepsilon\)-近极值反例。称 \(Q_m\) 配备了针对 \(\mathsf{Bad}^{\varepsilon}_m\) 的 slab 归一化资料，若对每个 slab \(E_{q,y}\) 给定有限像
 \[
-\chi:\mathbb Z^b\longrightarrow M
+N_{q,y}(E_{q,y})=:E'\subset\mathcal A_m
 \]
-的像中，则该方案同时取消全部 \([\alpha_i]\) 的必要条件是
+以及截面 \(\iota_{q,y}:E'\to E_{q,y}\)，满足 \(N_{q,y}\circ\iota_{q,y}=\mathrm{id}_{E'}\)，并满足下列四项：
+\begin{enumerate}
+  \item \textbf{重入：} \(E'\) 仍属于同一个 unitary-slice 审计接口，且 \(\mathrm{Out},\mathrm{Cech},\mathrm{Hard}\) 三类失败见证在 \(E'\) 上有定义。
+  \item \textbf{见证拉回：} \(E'\) 上任一有限失败见证可沿 \(\iota_{q,y}\) 拉回为原族 \(E\) 上同类型的有限失败见证；若 \(E'\) 给出非 \(\mathsf{NULL}\) 地址证书，则其与 \(\iota_{q,y}\) 复合给出 \(E\) 的局部地址证书。
+  \item \textbf{复杂度单调：} 对所有 \(r\in Q_m\) 有 \(|r(E')|\le |r(E_{q,y})|\le |r(E)|\)，并且若 \(|q(E)|>1\)，则
+  \[
+  \dim_{Q_m}(E')\le \dim_{Q_m}(E)-1.
+  \]
+  \item \textbf{反例局部性：} 若 \(\mathsf{Bad}^{\varepsilon}_m(E)\) 且 \(E_{q,y}\) 为 slab，则 \(\mathsf{Bad}^{\varepsilon}_m(E')\)。
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[最小近极值反例的 Frostman--slab 二分]\label{thm:distill-cdim-frostman-slab-minimal-counterexample}
+\textbf{依赖状态：closure.}
+沿定义 \ref{def:distill-cdim-frostman-slab-data}，并假设 slab 归一化资料存在。令 \(B\subset\mathcal A_m\) 为非空有限族，满足 \(\mathsf{Bad}^{\varepsilon}_m(B)\)，且在所有可由 \(B\) 经过有限次 slab 归一化得到并仍满足 \(\mathsf{Bad}^{\varepsilon}_m\) 的族中，\(B\) 对字典序
 \[
-b\ge k.
+(\dim_{Q_m}(E),|E|)
 \]
-因此，当可用直接和寄存器预算 \(b<k\) 时，持续存在的 \(k\) 个相互独立 Čech 障碍不能被解释为非 \(\mathsf{NULL}\) 地址；它们必被编译为 \(\mathrm{Hard}\) 型预算不足见证。
+最小。则必有以下二者之一：
+\begin{enumerate}
+  \item \(B\in\mathsf{Sk}^{\rm frost}_m(\eta;Q_m)\)；
+  \item 存在 \(q\in Q_m\) 使 \(|q(B)|=1\)。此时 \(B\) 已塌缩到一个投影词 slab 终端扇区，且该扇区上的任意有限见证均可由定义 \ref{def:distill-cdim-frostman-slab-data} 的拉回机制提升为原地址族的有限见证。
+\end{enumerate}
+更一般地，从任意 \(\mathsf{Bad}^{\varepsilon}_m(B_0)\) 出发，反复选择非 Frostman 的 slab 并归一化；每一次非终端归一化都使 \(\dim_{Q_m}\) 严格下降。因此该过程在至多 \(\dim_{Q_m}(B_0)\) 次非终端步骤后，到达有限测试 Frostman 骨架或某个投影词 slab 终端扇区。
+\end{theorem}
+\begin{proof}
+若 \(B\in\mathsf{Sk}^{\rm frost}_m(\eta;Q_m)\)，则为第一种情形。否则，按定义存在 \(q\in Q_m\) 与 \(y\in\Pi_q\)，使
+\[
+B_{q,y}=B\cap q^{-1}(y),\qquad |B_{q,y}|>\eta |B|.
+\]
+令 \(B':=N_{q,y}(B_{q,y})\)。由反例局部性，\(\mathsf{Bad}^{\varepsilon}_m(B')\) 仍成立；由重入条件，\(B'\) 与 \(B\) 属于同一审计接口，所以可与 \(B\) 在相同的最小性序中比较。
+
+若 \(|q(B)|>1\)，复杂度单调给出
+\[
+\dim_{Q_m}(B')\le \dim_{Q_m}(B)-1,
+\]
+这与 \(B\) 在可达反例族中的最小性矛盾。因此在非 Frostman 情形下只能有 \(|q(B)|=1\)，即第二种终端 slab 情形。
+
+对一般初始族 \(B_0\)，只要当前族既非有限测试 Frostman 又非终端 slab，就可选取一个 slab 并归一化；上述复杂度单调使非负整数 \(\dim_{Q_m}\) 严格下降。故非终端步骤数至多为初始复杂度。若过程中产生失败见证或非 \(\mathsf{NULL}\) 地址证书，见证拉回条件保证它可逐层提升到原族；若没有提前停止，则有限下降必在 Frostman 骨架或终端 slab 处停止。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+% --- Distillation writeback: slab rank certificate ---
+\begin{proposition}[slab 低复杂度的投影词维数与 Hankel 秩证书]\label{prop:distill-cdim-slab-hankel-rank-certificate}
+\textbf{依赖状态：rigidity.}
+沿定义 \ref{def:distill-cdim-frostman-slab-data}。对 \(E\subset\mathcal A_m\) 与 \(q\in Q_m\)，记
+\[
+d_q(E):=|q(E)|.
+\]
+则 \(d_q(E)\le D\) 是有限投影词子范畴维数证书：证书只需列出不超过 \(D\) 个元素组成的集合 \(S\subset\Pi_q\)，并逐项核验 \(q(E)\subset S\)。
+
+进一步，设该地址族 \(E\) 具有有限 Markov 表示：存在有限标记图 \((\Gamma_E,\widetilde\ell_E)\)、一个有限闭路审计族 \(\mathcal C_E\)、以及满射 \(\rho:\mathcal C_E\twoheadrightarrow E\)，使得 \(q(\rho(\gamma))\) 由闭路 \(\gamma\) 的投影词标记决定。令 \(K\subset\mathbb R\) 为子域，并给定单射 \(\beta:q(E)\to K\) 与正权 \(a_x\in K_{>0}\)（\(x\in E\)）。定义
+\[
+h_r:=\sum_{x\in E}a_x\beta(q(x))^r\qquad(r\ge 0),
+\qquad
+H_D(E,q):=(h_{i+j})_{0\le i,j\le D}.
+\]
+则对每个整数 \(D\ge 1\)，
+\[
+d_q(E)\le D
+\quad\Longleftrightarrow\quad
+\operatorname{rank}_K H_D(E,q)\le D.
+\]
+若 \(E\) 来自标记时间 \(\zeta\) 的有限系数窗口，则这些矩 \(h_0,\dots,h_{2D}\) 可由命题 \ref{prop:distill-xi-sector-marked-hankel-detector} 的标记迹系数读出。因此，投影词 slab 塌缩既可由 \(d_q(E)\) 的有限枚举证明，也可由精确 Hankel 秩下降证明。
 \end{proposition}
 \begin{proof}
-若外置方案能同时取消全部障碍，则对每个 \(i\) 都有
+第一项是有限集合核验：给定 \(S\)，逐个 \(x\in E\) 计算 \(q(x)\) 并检查其属于 \(S\)，即可证明 \(|q(E)|\le |S|\le D\)。反向若 \(d_q(E)\le D\)，取 \(S=q(E)\) 即得证书。
+
+对 Hankel 判别，将 \(E\) 按 \(q\)-值分组。因 \(\beta\) 在 \(q(E)\) 上单射，\(\beta(q(E))\) 的不同取值数正好为 \(d_q(E)\)。每个取值 \(\lambda\) 的聚合权重为
 \[
-\lambda_i([\alpha_i])\in\mathrm{im}(\chi).
+A_\lambda:=\sum_{x\in E,\ \beta(q(x))=\lambda}a_x,
 \]
-张量 \(\mathbb Q\) 后，\(\mathrm{im}(\chi\otimes\mathbb Q)\) 是 \(M\otimes\mathbb Q\) 的子空间，维数不超过 \(b\)。
-但该子空间包含 \(k\) 个线性无关向量 \(\lambda_i([\alpha_i])\otimes1\)，故其维数至少为 \(k\)。
-于是 \(b\ge k\)。
-当 \(b<k\) 时，直接和寄存器的自由预算不足以吸收这些二阶粘合障碍；按照本节的三类失败标签，只能转化为硬阈值资源不足见证。证毕。
+且由 \(a_x>0\) 得 \(A_\lambda>0\)。于是 \(h_r=\sum_\lambda A_\lambda\lambda^r\)，这正是命题 \ref{prop:distill-xi-sector-marked-hankel-detector} 的 Hankel 型矩序列。该命题给出 \(\operatorname{rank}_K H_D(E,q)\le D\) 当且仅当不同 \(\lambda\) 的个数至多为 \(D\)，即 \(d_q(E)\le D\)。若闭路审计族 \(\mathcal C_E\) 由标记时间 \(\zeta\) 的有限系数窗口切出，则同一命题的迹系数公式给出所需矩的有限读出。证毕。
 \end{proof}
+
+% --- End distillation writeback ---
 
 % --- End distillation writeback ---
 

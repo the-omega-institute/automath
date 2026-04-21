@@ -482,56 +482,76 @@ m_\star(\rho;r_\star)
 \end{proposition}
 
 % --- Distillation writeback ---
-\begin{proposition}[谱序列再入与直接和寄存器预算下界]\label{prop:distill-xi-filtered-reentry-budget}
-\textbf{依赖状态：obstruction.}
-设 \((C_i^{p,q},\delta_i,\partial_i)\)（\(0\le i<k\)）为第一象限双复形，系数均为阿贝尔群，且每个总次数上的群有限生成。
-以列次数给总复形 \(\mathrm{Tot}(C_i)\) 赋滤过
+% --- Distillation writeback: Wang--Zahl non-concentration/slab detector ---
+\begin{definition}[投影词标记的时间 \(\zeta\)-读出]\label{def:distill-xi-sector-marked-time-zeta}
+\textbf{依赖状态：construction.}
+设 \((\Gamma,\widetilde\ell)\) 为定理 \ref{thm:xi-time-zeta-identifiability-markov-cohomology} 中的有限标记图协议，其中 \(\Gamma=(V,E)\)，且 \(\widetilde\ell:E\to\mathbb Z\) 为时间余圈在边上的取值。令 \(\mathcal P\) 为有限投影词字母集，并令
 \[
-F^a\mathrm{Tot}^n(C_i):=\bigoplus_{p\ge a,\ p+q=n} C_i^{p,q}.
+\sigma:E\longrightarrow \mathcal P
 \]
-假设每一步局部化--规范化再入由滤过链映射
+为投影词标记。对 \(s>0\) 与形式变量 \(u=(u_p)_{p\in\mathcal P}\)，定义标记加权邻接矩阵
 \[
-\Phi_i:\mathrm{Tot}(C_i)\longrightarrow \mathrm{Tot}(C_{i+1})
+(A_{s,u})_{v,w}:=\sum_{e:v\to w}\exp(-s\widetilde\ell(e))u_{\sigma(e)}.
 \]
-给出，且 \(\Phi_i\) 由双复形的双次数 \((0,0)\) 映射诱导；所有用于比较不同规范化代表的链同伦 \(H_i\) 均满足 \(H_i(F^a)\subseteq F^a\)。
-则 \(\Phi_i\) 自然诱导谱序列映射
+定义投影词标记时间行列式
 \[
-E_r^{p,q}(C_i)\longrightarrow E_r^{p,q}(C_{i+1})\qquad(r\ge 1),
+\mathcal Z_{\sigma}(s,z,u):=\det(I-zA_{s,u}),
 \]
-并把定理 \ref{thm:xi-scale-time-bicomplex-obstruction} 中的二阶障碍类从 \(E_2^{2,0}(C_i)\)  functorially 送入 \(E_2^{2,0}(C_{i+1})\)。
+并令
+\[
+\Theta_{\sigma}(s,z,u):=z\frac{\partial}{\partial z}\log \mathcal Z_{\sigma}(s,z,u)^{-1}
+=\sum_{n\ge 1}C_n(s,u)z^n
+\]
+作为 \(z=0\) 处的形式幂级数。
+\end{definition}
 
-进一步，设存在一个有限生成阿贝尔群 \(M\) 与同态
+\begin{proposition}[标记 \(\zeta\) 的迹系数与 Hankel 型 slab 判别]\label{prop:distill-xi-sector-marked-hankel-detector}
+\textbf{依赖状态：rigidity.}
+沿定义 \ref{def:distill-xi-sector-marked-time-zeta}。令 \(\mathrm{Per}_n(\Gamma)\) 表示长度为 \(n\) 的有基闭路 \(\gamma=e_1\cdots e_n\) 的集合，并记
 \[
-\lambda_i:E_2^{2,0}(C_i)\longrightarrow M
+W_s(\gamma):=\exp\Bigl(-s\sum_{j=1}^n\widetilde\ell(e_j)\Bigr),\qquad
+u_{\sigma}(\gamma):=\prod_{j=1}^n u_{\sigma(e_j)}.
 \]
-记录每层障碍在共同账本中的像。
-令 \(o_i\in E_2^{2,0}(C_i)\) 为第 \(i\) 层障碍，若子群
+则对每个 \(n\ge 1\) 有精确迹读出
 \[
-L:=\langle \lambda_0(o_0),\dots,\lambda_{k-1}(o_{k-1})\rangle\subseteq M
+C_n(s,u)=\sum_{\gamma\in\mathrm{Per}_n(\Gamma)}W_s(\gamma)\nu_{\sigma}(\gamma).
 \]
-的自由秩为 \(r\)，则任何以直接和阿贝尔寄存器
+此外，令 \(K\subset\mathbb R\) 为子域，\(\mathcal C\subset\bigcup_n\mathrm{Per}_n(\Gamma)\) 为有限审计闭路族，给定正权 \(a_\gamma\in K_{>0}\) 与 sector 观测量 \(\beta:\mathcal C\to K\)。设
 \[
-A=A_1\oplus\cdots\oplus A_b
+h_r:=\sum_{\gamma\in\mathcal C}a_\gamma\beta(\gamma)^r\qquad(r\ge 0),
+\qquad
+H_R:=(h_{i+j})_{0\le i,j\le R}.
 \]
-外置并同时杀掉这些障碍的方案，若其账本作用通过某个同态 \(\chi:A\to M\) 且满足 \(L\subseteq\mathrm{im}(\chi)\)，必有
+若 \(\lambda_1,\dots,\lambda_d\) 是 \(\beta(\mathcal C)\) 的不同取值，则对任意 \(R\ge d-1\)，
 \[
-\mathrm{rank}_{\mathbb Z}A\ge r.
+\operatorname{rank}_K H_R=d.
 \]
-特别地，若沿 \(k\) 个再入层产生的账本像具有自由秩 \(\ge ck\)（\(c>0\)），则直接和寄存器预算必须线性增长。
+特别地，对任意整数 \(D\ge 1\)，\(\operatorname{rank}_K H_D\le D\) 当且仅当 \(\mathcal C\) 在 \(\beta\)-投影下只使用至多 \(D\) 个 sector 值。若 \(\mathcal C\) 由有限个 \(C_n(s,u)\) 的单项系数精确切出，则核验 \(\operatorname{rank}H_D\le D\) 只需要从 \(\Theta_\sigma\) 中读出 \(h_0,\dots,h_{2D}\) 的对应有限系数。
 \end{proposition}
 \begin{proof}
-滤过链映射给出谱序列映射是标准构造；双次数 \((0,0)\) 与滤过度零同伦保证该映射不改变列滤过阶数，因而二阶页上的 \((2,0)\) 类可被逐层传送。
-这给出了障碍类的 functorial 再入。
-
-对预算下界，将 \(A\) 与 \(M\) 分别张量 \(\mathbb Q\)。
-因为 \(L\subseteq\mathrm{im}(\chi)\)，所以
+形式恒等式
 \[
-L\otimes\mathbb Q\subseteq \mathrm{im}(\chi\otimes\mathbb Q).
+\log\det(I-zA_{s,u})^{-1}=\sum_{n\ge 1}\frac{z^n}{n}\operatorname{tr}(A_{s,u}^n)
 \]
-左边维数为 \(r\)，而右边维数不超过 \(\dim_{\mathbb Q}(A\otimes\mathbb Q)=\mathrm{rank}_{\mathbb Z}A\)。
-故 \(\mathrm{rank}_{\mathbb Z}A\ge r\)。
-若 \(r\ge ck\)，即得线性预算下界。证毕。
+给出
+\[
+\Theta_\sigma(s,z,u)=\sum_{n\ge 1}z^n\operatorname{tr}(A_{s,u}^n).
+\]
+展开矩阵乘积 \(\operatorname{tr}(A_{s,u}^n)\) 时，恰好枚举长度为 \(n\) 的有基闭路；每条闭路贡献边权乘积 \(W_s(\gamma)\) 与投影词单项式 \(\nu_\sigma(\gamma)\)，故得到第一式。
+
+对 Hankel 断言，将 \(\mathcal C\) 按 \(\beta\) 的取值分组，并令
+\[
+A_j:=\sum_{\beta(\gamma)=\lambda_j}a_\gamma\quad(1\le j\le d).
+\]
+由于 \(a_\gamma>0\)，有 \(A_j>0\)。于是
+\[
+h_{i+j}=\sum_{r=1}^d A_r\lambda_r^{i+j},\qquad
+H_R=V_R\operatorname{diag}(A_1,\dots,A_d)V_R^{\mathsf T},
+\]
+其中 \((V_R)_{i,r}=\lambda_r^i\)（\(0\le i\le R\)）。当 \(R\ge d-1\) 时，Vandermonde 矩阵 \(V_R\) 列满秩，且对角矩阵可逆，故 \(\operatorname{rank}_K H_R=d\)。取 \(R=D\) 即得 sector 数与 Hankel 秩的等价。最后一项仅是定义 \(H_D\) 需要的矩 \(h_0,\dots,h_{2D}\) 的有限系数抽取。证毕。
 \end{proof}
+
+% --- End distillation writeback ---
 
 % --- End distillation writeback ---
 
