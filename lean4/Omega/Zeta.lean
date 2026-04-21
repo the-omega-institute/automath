@@ -177,6 +177,7 @@ import Omega.Zeta.DerivedWindow6GaugeVolumeDefectIdentity
 import Omega.Zeta.DerivedProjectivePressureLogconvexConvexHull
 import Omega.Zeta.DerivedWindow6BoundaryParityDirectFactorRefinement
 import Omega.Zeta.DerivedZGHardcoreFactorization
+import Omega.Zeta.DerivedZGSquarefreeConditionalLogdensityHardcore
 import Omega.Zeta.DerivedZGNoScalarEulerProduct
 import Omega.Zeta.DiscLedgerAxisDepthSmith
 import Omega.Zeta.DynZeta
