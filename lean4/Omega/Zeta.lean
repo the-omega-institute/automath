@@ -575,6 +575,7 @@ import Omega.Zeta.XiTerminalZmPiRationalRootSpecializationEllipticImage
 import Omega.Zeta.XiTerminalZmLeyangP3Minimal27
 import Omega.Zeta.XiTerminalZmLanguageMinimaxLogloss
 import Omega.Zeta.XiTerminalZmS3RootRecoveryCoordinateAutomorphisms
+import Omega.Zeta.XiTerminalZmS3EndoscopicPrymA2Coxeter
 import Omega.Zeta.XiTerminalZmS4PrymTorusRankLayering
 import Omega.Zeta.VanvleckResidueL2LowerBound
 import Omega.Zeta.XiTimeFiberMinimalDimension
