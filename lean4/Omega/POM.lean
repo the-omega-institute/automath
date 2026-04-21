@@ -29,6 +29,7 @@ import Omega.POM.BooleanCircuitProjectionBudget
 import Omega.POM.BoundedPerturbationInvariance
 import Omega.POM.CRTSpatializationPrimeBudget
 import Omega.POM.CapacityCollisionDataProcessing
+import Omega.POM.CapacityPointwiseMinimalMajorization
 import Omega.POM.CatalanMoments
 import Omega.POM.CentralizerDetMod5
 import Omega.POM.CentralizerFPdim
