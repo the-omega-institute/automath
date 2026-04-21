@@ -49,6 +49,7 @@ import Omega.Zeta.XiBooleanTwoLayerInverseSupportLaw
 import Omega.Zeta.XiReverseKLRadiusRenormalizationCyclicSymmetrization
 import Omega.Zeta.BooleanTwoLayerOrderIdealPrincipalMinor
 import Omega.Zeta.BooleanTwoLayerSmithNormalForm
+import Omega.Zeta.BooleanTwoLayerSymmetricQuotientSmith
 import Omega.Zeta.CLTSpectral
 import Omega.Zeta.CayleyDepthIdentity
 import Omega.Zeta.CertInverseLimitCoherence
