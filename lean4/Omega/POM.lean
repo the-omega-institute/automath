@@ -33,6 +33,7 @@ import Omega.POM.CentralizerFPdim
 import Omega.POM.CentralizerSemiringFibonacciFusion
 import Omega.POM.CharpolyModpA2Embedding
 import Omega.POM.CoarsegrainingMajorizationSchur
+import Omega.POM.BinaryCoarsegrainingConcavePairingExtremes
 import Omega.POM.CollisionAQFibonacciBFPrimitivePrimeDivisor
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.CollisionEntropyRate

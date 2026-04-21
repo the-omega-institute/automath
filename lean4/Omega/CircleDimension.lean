@@ -255,6 +255,7 @@ import Omega.CircleDimension.RiemannSiegelGabckeRecursionsAlmostCommute
 import Omega.CircleDimension.S4V4PrymA2PolarizedIsogenyRigidity
 import Omega.CircleDimension.SymmetricTruncationZeroFlow
 import Omega.CircleDimension.LocalEuclideanSectorPositive
+import Omega.CircleDimension.LocalSchrodingerSector
 import Omega.CircleDimension.ShiftedJensenDefectIntegralLaw
 import Omega.CircleDimension.ShortExactAdditivity
 import Omega.CircleDimension.SignedCircleDimension
