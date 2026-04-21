@@ -20,6 +20,7 @@ import Omega.SyncKernelWeighted.IharaChebotarevGrhCriterion
 import Omega.SyncKernelWeighted.HutchinsonUnbiasedMfree
 import Omega.SyncKernelWeighted.IharaMertensConstant
 import Omega.SyncKernelWeighted.IharaWittPrimitiveSpectrum
+import Omega.SyncKernelWeighted.K21C1Sqrt5
 import Omega.SyncKernelWeighted.KernelHardyRealEven
 import Omega.SyncKernelWeighted.KernelXiFunctionalEquation
 import Omega.SyncKernelWeighted.KernelSelfDualCharacter
