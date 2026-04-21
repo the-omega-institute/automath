@@ -310,6 +310,7 @@ import Omega.Zeta.QuotientFunctoriality
 import Omega.Zeta.QuotientIndexLedgerSeeds
 import Omega.Zeta.RealArcSufficiencyUnitDisk
 import Omega.Zeta.RealInput40BacktrackingCumulants
+import Omega.Zeta.RealInput40Arity2dRigidityN2
 import Omega.Zeta.RealInput40BartholdiEscapeInitialForms
 import Omega.Zeta.RealInput40GeodesicDet
 import Omega.Zeta.RealInput40GeodesicEntropy
