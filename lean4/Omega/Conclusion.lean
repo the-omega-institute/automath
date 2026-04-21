@@ -356,6 +356,7 @@ import Omega.Conclusion.RecursiveSolenoidLieShadow
 import Omega.Conclusion.RegisterUltrametricLipschitzAndGodelNoRealExtension
 import Omega.Conclusion.RejectNullFiniteNormalForm
 import Omega.Conclusion.RemainderBitsEuclidDefectExact
+import Omega.Conclusion.ResidueSliceSingleOrbitDoubleSliceRigidity
 import Omega.Conclusion.ResonanceWindow
 import Omega.Conclusion.ResonanceWindowMod2BinomialCollapse
 import Omega.Conclusion.ResonanceWindowMod2TailJetCompleteness

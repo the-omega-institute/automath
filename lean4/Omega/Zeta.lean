@@ -170,6 +170,7 @@ import Omega.Zeta.DerivedLeyangBranchsetIharaZeta
 import Omega.Zeta.DerivedLeyangProfiniteRigidity
 import Omega.Zeta.DerivedPickPoissonClusteredQuadraticCoerciveLowerBound
 import Omega.Zeta.DerivedMinimalCyclicAuditAxisZhatPrimeUnlocking
+import Omega.Zeta.DerivedPrimePowerDworkFrobeniusTower
 import Omega.Zeta.DerivedWindow6GaugeVolumeDefectIdentity
 import Omega.Zeta.DerivedProjectivePressureLogconvexConvexHull
 import Omega.Zeta.DerivedWindow6BoundaryParityDirectFactorRefinement
@@ -471,6 +472,7 @@ import Omega.Zeta.XiBasepointScanFullRankWeightGaugeInvariance
 import Omega.Zeta.XiBasepointScanCauchyStableConvolution
 import Omega.Zeta.XiBasepointScanKernelCompletenessFullRank
 import Omega.Zeta.XiBasepointScanRationalHerglotzPoleTomography
+import Omega.Zeta.XiBinomialToeplitzDominantPoleResponse
 import Omega.Zeta.XiBqPowerEntrywiseFibonacciBinomial
 import Omega.Zeta.XiBulkEntropyStrictConvexity
 import Omega.Zeta.XiBulkBoundaryHolographicGapDissipation
