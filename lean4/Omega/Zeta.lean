@@ -62,6 +62,7 @@ import Omega.Zeta.BdryFreeInvolutionOddFiberObstructionMinCover
 import Omega.Zeta.XiTimePart62aZGSimplePoleDensityResidue
 import Omega.Zeta.XiTimePart62dgcZGMatrixEulerNoScalarProduct
 import Omega.Zeta.XiTimePart62debbFiniteCircleSolenoidDualLedgerObstruction
+import Omega.Zeta.XiTimePart71ZeroCosetFiniteIntersectionPairwiseCompatibility
 import Omega.Zeta.AuditedEvenFirstCapacityKinkFibonacciJump
 import Omega.Zeta.AutomaticDirichletMoment
 import Omega.Zeta.BlockCyclicRigidity

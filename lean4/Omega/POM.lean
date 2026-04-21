@@ -56,6 +56,7 @@ import Omega.POM.ComplementaryGoldenBernoulliDivergence
 import Omega.POM.CompleteHomogeneousLinearRecurrence
 import Omega.POM.ConclusionGoldenSprtEsscherBoundarySymmetry
 import Omega.POM.SprtSymmetricThresholdMeanTime
+import Omega.POM.StiffZeroHankelGoodReductionDimStability
 import Omega.POM.Congruence2dLockingCfinite
 import Omega.POM.CoprimeLedgerPrimorialOptimality
 import Omega.POM.CrossqGMonotone
