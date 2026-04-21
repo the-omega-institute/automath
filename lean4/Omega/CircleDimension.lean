@@ -37,6 +37,7 @@ import Omega.CircleDimension.Cdim1DivisibleImpliesQ
 import Omega.CircleDimension.Cdim2MinKernelDim
 import Omega.CircleDimension.CdimAnomalyAffineRegularForm
 import Omega.CircleDimension.AnomalyFunctorialSplittingObstructionRge2Tor
+import Omega.CircleDimension.CdimAnomalySplittingPrimeSupport
 import Omega.CircleDimension.AnomalyRank2FullTorsionTranslation
 import Omega.CircleDimension.CdimAnomalyTwistLedgerBilinearCoupling
 import Omega.CircleDimension.CdimStarCompatibleFG
