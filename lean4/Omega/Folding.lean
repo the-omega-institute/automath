@@ -126,6 +126,7 @@ import Omega.Folding.FiberGaugeVolumeDoublingV2DigitSum
 import Omega.Folding.FiberGaugeVolumeChainFactorization
 import Omega.Folding.FiberHausdorffDimensionCylinderCount
 import Omega.Folding.FiberIdentifiableSigmaAlgebraMaximal
+import Omega.Folding.FiberOrbitRecurrenceAlternatingSum
 import Omega.Folding.FiberRankUnrankLinear
 import Omega.Folding.FiberRing
 import Omega.Folding.FiberSingleCoordinateAffineDifference
