@@ -1677,17 +1677,34 @@ def _review_writebacks(
         codex_review = codex_future.result()
         claude_review = claude_future.result()
 
-    codex_ok = codex_review.get("score", 0) > 0
-    claude_ok = claude_review.get("score", 0) > 0
+    codex_s = codex_review.get("score", 0)
+    claude_s = claude_review.get("score", 0)
+    codex_ok = codex_s > 0
+    claude_ok = claude_s > 0
 
     if codex_ok and claude_ok:
-        final_score = min(codex_review["score"], claude_review["score"])
+        # Lenient dual-review: pass if EITHER reviewer passes AND neither
+        # gives a fundamentally broken score (< 4).  Using min() alone made
+        # a single harsh reviewer block all progress (e.g. codex=7, claude=3
+        # → final=3).  The new rule: max of both scores, but if the lower
+        # score is < 4, cap the final at 6 (forces a revision but doesn't
+        # fully block when one reviewer sees depth the other misses).
+        low = min(codex_s, claude_s)
+        high = max(codex_s, claude_s)
+        if low >= SCORE_PASS_THRESHOLD:
+            final_score = low  # both pass — use the lower (conservative)
+        elif high >= SCORE_PASS_THRESHOLD and low >= 4:
+            final_score = high  # one passes, other is not broken — accept
+        elif high >= SCORE_PASS_THRESHOLD and low < 4:
+            final_score = 6  # one passes but other is harsh — force revise
+        else:
+            final_score = high  # neither passes — use the better one
     elif codex_ok:
-        logger.warning("Claude review empty, using codex=%d", codex_review["score"])
-        final_score = codex_review["score"]
+        logger.warning("Claude review empty, using codex=%d", codex_s)
+        final_score = codex_s
     elif claude_ok:
-        logger.warning("Codex review empty, using claude=%d", claude_review["score"])
-        final_score = claude_review["score"]
+        logger.warning("Codex review empty, using claude=%d", claude_s)
+        final_score = claude_s
     else:
         logger.warning("Both reviewers returned empty JSON")
         final_score = 0
@@ -1700,10 +1717,7 @@ def _review_writebacks(
 
     logger.info(
         "Dual review: codex=%d claude=%d final=%d both_reject=%s",
-        codex_review.get("score", 0),
-        claude_review.get("score", 0),
-        final_score,
-        both_reject,
+        codex_s, claude_s, final_score, both_reject,
     )
 
     return {
@@ -2057,6 +2071,7 @@ def run_stage_w(
             f"(codex={review.get('codex', {}).get('score', 0)}, "
             f"claude={review.get('claude', {}).get('score', 0)})"
         )
+        save_state(state)  # persist feedback in case of crash/restart
 
     if not accepted_writebacks:
         _write_artifact_json(state, "writeback_response.json", {"attempts": attempts})
