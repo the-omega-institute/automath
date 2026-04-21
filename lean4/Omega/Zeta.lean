@@ -114,6 +114,7 @@ import Omega.Zeta.EvenLengthCorrection
 import Omega.Zeta.FiniteDefectCompleteReconstruction
 import Omega.Zeta.FiniteDefectPoissonL2EnergyClosedForm
 import Omega.Zeta.FiniteDefectPoissonL2EnergyTailMass
+import Omega.Zeta.FiniteDeterminantArithmeticLattice
 import Omega.Zeta.FiniteKernelLatticeObstruction
 import Omega.Zeta.FinitePartBoundaryMultiplicityQaxisEnergy
 import Omega.Zeta.FinitePartChannelEliminationLCM
