@@ -163,6 +163,7 @@ import Omega.Zeta.DerivedHankelSamplingBadprimeEntropyUnified
 import Omega.Zeta.DerivedLeyangBranchsetAdjacencySpectrumHeatTrace
 import Omega.Zeta.DerivedLeyangArtinMazurZeta
 import Omega.Zeta.DerivedLeyangBranchsetIharaZeta
+import Omega.Zeta.DerivedLeyangProfiniteRigidity
 import Omega.Zeta.DerivedMinimalCyclicAuditAxisZhatPrimeUnlocking
 import Omega.Zeta.DerivedWindow6GaugeVolumeDefectIdentity
 import Omega.Zeta.DerivedProjectivePressureLogconvexConvexHull

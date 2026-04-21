@@ -54,6 +54,7 @@ import Omega.GU.FiniteDimLieClosureTermination
 import Omega.GU.FixedPrecisionExponentialMultiplicity
 import Omega.GU.FoldbinDegeneracySector
 import Omega.GU.FoldBinMinDegeneracyFibAudited
+import Omega.GU.FoldBinMinDegeneracyFibNonpersistent
 import Omega.GU.FoldbinGaugeAbelian
 import Omega.GU.FoldbinUpliftUnitJumpDeltaInversion
 import Omega.GU.FreeInvolutionCount
