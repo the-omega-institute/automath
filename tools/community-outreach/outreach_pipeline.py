@@ -889,6 +889,37 @@ def backflow_to_main_paper(
                 gen_result.get("tex_path", "N/A"),
                 gen_result.get("bridge_doc_path", "N/A"),
                 str(main_tex_path))
+
+    # Commit ONLY paper-side files (theory/). Never commit outreach intermediates.
+    if not dry_run:
+        try:
+            # Explicitly add only the backflow outputs
+            paths_to_add = [
+                str(MAIN_PAPER_DIR / "sections" / section_type / section_dir),
+                str(BRIDGES_DIR),
+                str(main_tex_path),
+            ]
+            # If scripts were copied to paper, add those too
+            scripts_copied = gen_result.get("scripts_copied_to_paper", [])
+            if scripts_copied:
+                paths_to_add.append(str(MAIN_PAPER_DIR / "scripts"))
+            for p in paths_to_add:
+                subprocess.run(
+                    ["git", "add", p],
+                    cwd=str(REPO_ROOT), capture_output=True, timeout=30,
+                )
+            msg = f"backflow: {state.repo} → {section_type}/{section_dir}"
+            result = subprocess.run(
+                ["git", "commit", "-m", msg],
+                cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=30,
+            )
+            if result.returncode == 0:
+                logger.info("[%s] Backflow committed: %s", state.repo, msg)
+            else:
+                logger.debug("[%s] Backflow: nothing to commit", state.repo)
+        except Exception as exc:
+            logger.warning("[%s] Backflow commit failed: %s", state.repo, exc)
+
     return placement
 
 
