@@ -35,6 +35,7 @@ import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiSingleBaseDealiasingCountableException
 import Omega.Zeta.XiGridScanDiophantineDealiasingStability
+import Omega.Zeta.XiEndpointHeatProbeAdamsTwistSpectralGapExpBound
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
 import Omega.Zeta.XiExtremeResonancePositivity
 import Omega.Zeta.XiExtremeResonanceCriterion
@@ -42,6 +43,7 @@ import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiDefectDensityConeChoquetExtreme
 import Omega.Zeta.XiDefectEntropyHeightBudgetVarianceGap
+import Omega.Zeta.XiSymqRankoneCouplingTPower
 import Omega.Zeta.XiMonotoneIdempotentSkeletonGcdLcmSparsity
 import Omega.Zeta.XiScanTailRatioPeeling
 import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
