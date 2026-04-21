@@ -79,5 +79,6 @@ import Omega.SyncKernelWeighted.WittMinus1PadicDerivativeResidues
 import Omega.SyncKernelWeighted.WittDepthEulerProduct
 import Omega.SyncKernelWeighted.WittNecklaceDivisibility
 import Omega.SyncKernelWeighted.WittPkSparsification
+import Omega.SyncKernelWeighted.WittRootOfUnityCommonPadicLimit
 import Omega.SyncKernelWeighted.WittRenormMonoid
 import Omega.SyncKernelWeighted.ZeroInjectionValuePreserving
