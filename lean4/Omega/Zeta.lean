@@ -626,6 +626,7 @@ import Omega.Zeta.XiTimePart63cSchurCauchyMasterKernel
 import Omega.Zeta.XiTimePart63cWindow6SchurPacketLockedByCharpoly
 import Omega.Zeta.XiHorizonConservativeRealization
 import Omega.Zeta.XiVerblunskyFromLocalJet
+import Omega.Zeta.XiLocalJetDeterminesFiniteCMVAndToeplitzCertificate
 import Omega.Zeta.XiTimePart63cTrivialAlternatingSignReciprocalDuality
 import Omega.Zeta.XiTimePart9odEscortTvCollapseBlockUniform
 import Omega.Zeta.XiTimePart9odEscortTvCollapseExactBlockWeights
