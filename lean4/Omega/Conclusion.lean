@@ -34,6 +34,7 @@ import Omega.Conclusion.BoundaryParityBlindFiltration
 import Omega.Conclusion.BoundaryParityLieRepairTwoBits
 import Omega.Conclusion.BoundaryPinningMemoryGap
 import Omega.Conclusion.BoundaryStokesObservationMinimalDimension
+import Omega.Conclusion.BoundaryStokesStrictLinearHolography
 import Omega.Conclusion.BoundedSliceFamilyEquivalenceUndecidable
 import Omega.Conclusion.BudgetCurveExactTailDifferenceReconstruction
 import Omega.Conclusion.BudgetSqrtObservableNormUndecidable

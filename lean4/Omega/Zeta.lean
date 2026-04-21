@@ -392,6 +392,7 @@ import Omega.Zeta.XiEndpointFirstNPlusOneProbesSharpToeplitzRecovery
 import Omega.Zeta.XiEndpointHeatProbeCyclotomicTargetExtraction
 import Omega.Zeta.XiEndpointHeatProbeRstarRegularVariationTail
 import Omega.Zeta.XiEndpointJetOrthogonalDecoupling
+import Omega.Zeta.XiEndpointAbsorptionAdamsRescaling
 import Omega.Zeta.XiEndpointJuliaIndicatorEqualsAbsorption
 import Omega.Zeta.XiEndpointJensenDefectH12GramKernel
 import Omega.Zeta.XiEndpointPoissonWeightScaling

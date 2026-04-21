@@ -142,6 +142,7 @@ import Omega.CircleDimension.MinimalRecordAxis
 import Omega.CircleDimension.MixedLocalizationPkGrowthInversion
 import Omega.CircleDimension.MobiusBipartiteColoring
 import Omega.CircleDimension.MobiusCayleyArctanRigidity
+import Omega.CircleDimension.MultiliftInterferenceCorrection
 import Omega.CircleDimension.ModeGramKernel
 import Omega.CircleDimension.ModeParityVanish
 import Omega.CircleDimension.ModeQuadraticIntegrals
