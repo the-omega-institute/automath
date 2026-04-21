@@ -50,6 +50,7 @@ import Omega.GU.FiberDefectCollinearity
 import Omega.GU.FiberNonConstantNoFreeAction
 import Omega.GU.FixedPrecisionExponentialMultiplicity
 import Omega.GU.FoldbinDegeneracySector
+import Omega.GU.FoldBinMinDegeneracyFibAudited
 import Omega.GU.FoldbinGaugeAbelian
 import Omega.GU.FoldbinUpliftUnitJumpDeltaInversion
 import Omega.GU.FreeInvolutionCount
