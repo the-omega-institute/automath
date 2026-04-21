@@ -19,6 +19,7 @@ import Omega.SyncKernelWeighted.HutchinsonUnbiasedMfree
 import Omega.SyncKernelWeighted.IharaMertensConstant
 import Omega.SyncKernelWeighted.IharaWittPrimitiveSpectrum
 import Omega.SyncKernelWeighted.KernelHardyRealEven
+import Omega.SyncKernelWeighted.KernelSelfDualCharacter
 import Omega.SyncKernelWeighted.KernelSelfDualCharacterSchur
 import Omega.SyncKernelWeighted.KoenigsLinearizationWittDilation
 import Omega.SyncKernelWeighted.LambdaEndpointsMonotoneUplift

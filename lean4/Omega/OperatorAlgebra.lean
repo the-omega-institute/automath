@@ -29,6 +29,7 @@ import Omega.OperatorAlgebra.FoldFiberFixedpointsCenter
 import Omega.OperatorAlgebra.FoldEmEffectiveSupportSchatten
 import Omega.OperatorAlgebra.FoldFiberMultiplicityTraceMoments
 import Omega.OperatorAlgebra.FoldFiberNormalizerWreath
+import Omega.OperatorAlgebra.FoldWreathAbelianizationCharacters
 import Omega.OperatorAlgebra.FoldGaugeAbK0Mod2
 import Omega.OperatorAlgebra.FoldGaugeCommutantExplicit
 import Omega.OperatorAlgebra.FoldGaugeLogVolumeStieltjes

@@ -209,6 +209,7 @@ import Omega.Zeta.HankelFinitefieldRandomCompletionNondegenerate
 import Omega.Zeta.XiHankelFinitefieldDeterministicCompletion
 import Omega.Zeta.XiHankelNormalformHpDiscreteConcaveInvert
 import Omega.Zeta.XiHellingerHankelConstantRationality
+import Omega.Zeta.XiHellingerKernelFourierSech2
 import Omega.Zeta.HankelFirstBlockDeterminantDiscriminantWeight
 import Omega.Zeta.HankelMaximalMinorSyndromeNormalFormUniqueness
 import Omega.Zeta.HankelMinimalRecurrenceGoodPrimePreservation
