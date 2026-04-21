@@ -109,6 +109,7 @@ import Omega.Conclusion.FibonacciAnomalyBlock
 import Omega.Conclusion.FibonacciDistortionThreshold
 import Omega.Conclusion.FiniteFieldJordanExponentPeriodBound
 import Omega.Conclusion.FiniteLocalizationSixfoldRigidity
+import Omega.Conclusion.FiberToggleBooleanSpectrumPolynomial
 import Omega.Conclusion.FixedResolutionAxialScreenCorankAreaLaw
 import Omega.Conclusion.WatataniScreenCompletionFunctorIndependence
 import Omega.Conclusion.Window6SMLockingTripleConsistency
