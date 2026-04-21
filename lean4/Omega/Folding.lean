@@ -89,6 +89,7 @@ import Omega.Folding.Defect
 import Omega.Folding.DerivedAffineReciprocity
 import Omega.Folding.DerivedCenteredOddMomentsVanish
 import Omega.Folding.DerivedBinfoldAverageLogPotentialConstant
+import Omega.Folding.DerivedBinfoldMinsectorChi2TwoBlockBound
 import Omega.Folding.DerivedFoldExactInversionDyadicThreshold
 import Omega.Folding.DerivedFoldMultiplicityZerofiberEnvelope
 import Omega.Folding.DerivedFoldMultiplicityConvexOrderExtremal
