@@ -38,6 +38,7 @@ import Omega.OperatorAlgebra.FoldGaugeNonabelianSpectrumRigidity
 import Omega.OperatorAlgebra.FoldGaugeOrbitClassificationQtuple
 import Omega.OperatorAlgebra.FoldGaugeReynolds
 import Omega.OperatorAlgebra.FoldGaugeTwoMode
+import Omega.OperatorAlgebra.FoldGlobalSignUniqueDecomposition
 import Omega.OperatorAlgebra.FoldGroupOrders
 import Omega.OperatorAlgebra.FoldGroupoidMatrixUnitAutNormalizer
 import Omega.OperatorAlgebra.FoldInfoNCEBayesOpt

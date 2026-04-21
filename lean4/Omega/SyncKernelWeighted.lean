@@ -24,6 +24,7 @@ import Omega.SyncKernelWeighted.KoenigsLinearizationWittDilation
 import Omega.SyncKernelWeighted.LambdaEndpointsMonotoneUplift
 import Omega.SyncKernelWeighted.MobiusErrorPropagation
 import Omega.SyncKernelWeighted.MuPochhammerNecklaceDirichletPolylog
+import Omega.SyncKernelWeighted.OnlineDelayFromPlocal
 import Omega.SyncKernelWeighted.PressureAnalyticRadius
 import Omega.SyncKernelWeighted.PressureBranchpointsDiscriminant
 import Omega.SyncKernelWeighted.PressureTaylorRemainderCauchy
@@ -87,6 +88,7 @@ import Omega.SyncKernelWeighted.WittFrobeniusIteratedDescent
 import Omega.SyncKernelWeighted.WittMinus1PadicDerivativeResidues
 import Omega.SyncKernelWeighted.WittDepthEulerProduct
 import Omega.SyncKernelWeighted.WittCyclotomicInvisibility
+import Omega.SyncKernelWeighted.WittDworkCongruence
 import Omega.SyncKernelWeighted.WittNecklaceDivisibility
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.SyncKernelWeighted.WittThetaDerivativeFilter
