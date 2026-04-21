@@ -540,6 +540,7 @@ import Omega.Zeta.XiHolographyCoherenceSeparation
 import Omega.Zeta.XiJDiscriminantElliptic2TorsionMobius
 import Omega.Zeta.XiEllipticTorsionStokesWeilPairing
 import Omega.Zeta.XiJDiscriminantMobiusRigidityCovariance
+import Omega.Zeta.XiJensenDefectHatKernelSecondDifference
 import Omega.Zeta.XiJSexticEllipticLattesTMap
 import Omega.Zeta.XiJensenDefectPowerPullbackInvariance
 import Omega.Zeta.XiJensenSingleRadiusBandExclusion
