@@ -179,6 +179,7 @@ import Omega.CircleDimension.PhaseSpectrumMonoid
 import Omega.CircleDimension.PhaseSpectrumQuotient
 import Omega.CircleDimension.PhaseSpectrumReconstruction
 import Omega.CircleDimension.PoissonBivariateSecondOrderCancellationRealizable
+import Omega.CircleDimension.PoissonBivariateFdivFourthOrderComplexM2
 import Omega.CircleDimension.PoissonBivariateSecondOrderNormalForm
 import Omega.CircleDimension.PoissonBivariateFdivFourthOrderConstant
 import Omega.CircleDimension.PoissonCardinalReconstruction
@@ -207,6 +208,7 @@ import Omega.CircleDimension.PoissonKLEvenOrders
 import Omega.CircleDimension.PoissonKLQuadraticFormSpectral
 import Omega.CircleDimension.PoissonKolmogorovUniversalLimit
 import Omega.CircleDimension.PoissonKernelDerivativeL1Energy
+import Omega.CircleDimension.PoissonConstantsSharpness
 import Omega.CircleDimension.PoissonL1SecondOrderConstant
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonSecondOrder
