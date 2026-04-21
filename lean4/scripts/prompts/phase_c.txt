@@ -116,6 +116,19 @@ Rules applied to every new file:
 - If you cannot close the proof, use `sorry` and mark `\leanpartial{…}{reason}`
   instead of fabricating a shell structure. A sorry with a real signature is
   HONEST and passes; a shell theorem is DISHONEST and will be auto-rejected.
+  The `reason` text is injected verbatim into LaTeX. It MUST be LaTeX-safe:
+    * NEVER use Markdown backticks (e.g. do NOT write `` `paper_*` ``).
+      To quote an identifier, use \texttt{...} with underscores escaped as \_
+      (e.g. `\texttt{paper\_foo}`).
+    * Escape every LaTeX special character in prose: `_` → `\_`, `$` → `\$`,
+      `%` → `\%`, `&` → `\&`, `#` → `\#`, `^` → `\^{}`, `~` → `\~{}`,
+      `{` → `\{`, `}` → `\}`, `\` → `\textbackslash{}`.
+    * Do NOT insert raw code blocks, `<...>` placeholders, or unescaped
+      identifiers containing underscores. Plain natural-language English or
+      Chinese is fine; any code-like token must be wrapped in \texttt{...}
+      with its specials escaped.
+    * Keep the reason to one short sentence; it is a margin note, not a
+      dissertation.
 
 Existing hybrid files that still contain a historical shell structure are
 tolerated by the scanner, but NEW shell structures in a round's diff cause
