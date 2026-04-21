@@ -28,6 +28,7 @@ import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
+import Omega.Zeta.XiSingleBaseDealiasingCountableException
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
 import Omega.Zeta.XiExtremeResonancePositivity
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale

@@ -68,6 +68,7 @@ import Omega.Conclusion.CdimRankShortExactAdditivity
 import Omega.Conclusion.CdimKernelRegisterLowerBound
 import Omega.Conclusion.CircleDimensionPrimeLedgerStrictOrthogonality
 import Omega.Conclusion.CoarseGrainingConsumesVisibleWalshEnergy
+import Omega.Conclusion.VisibleWalshLowOrderBarcode
 import Omega.Conclusion.CoarsegrainingEnergyInfimum
 import Omega.Conclusion.CoarsegrainingStokesBeckChevalley
 import Omega.Conclusion.CofinalFixedQuotient
