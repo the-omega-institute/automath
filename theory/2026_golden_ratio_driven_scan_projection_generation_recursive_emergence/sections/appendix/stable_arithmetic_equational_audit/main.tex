@@ -1,0 +1,408 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+
+\section{Stable Arithmetic Equational Spectra and Affine-Linear Audit}\label{app:stable-arithmetic-equational-audit}
+
+This appendix records the certificate boundary for the stable arithmetic
+operations when they are viewed as finite magmas in the Equational Theories
+Project database.  Let
+\[
+    \mathcal E=\{E_1,\ldots,E_{4694}\}
+\]
+denote the current order-four ETP equation list at commit
+\[
+    \texttt{b99c0e486501e5b0690ef3fe5250d3aa57e63478}.
+\]
+The positive result is a clean affine-linear transport theorem and a complete
+computed spectrum audit.  The negative result is equally important: neither
+the stable arithmetic spectra nor the full Fibonacci affine-linear family meet
+any of the current dashboard unknowns.  Thus this appendix is an audit and
+reproducibility record, not a claim of a new ETP dashboard resolution.
+
+\subsection{Transport and coefficient criteria}
+
+For a magma term \(t\) in the variables
+\[
+    x,y,z,w,u,v,
+\]
+write \(\nu(t)\in\NN^6\) for its variable multiplicity vector.  If a binary
+operation is affine-linear over \(\ZZ/n\ZZ\),
+\[
+    x\diamond y=ax+by,
+\]
+then every term \(t\) evaluates to a linear form
+\[
+    t=\sum_i \lambda_i(t;n,a,b)x_i
+\]
+with coefficients in \(\ZZ/n\ZZ\), obtained by the recursion
+\[
+    \lambda(u\diamond v;n,a,b)
+       =a\,\lambda(u;n,a,b)+b\,\lambda(v;n,a,b).
+\]
+
+\begin{lemma}[Affine-linear coefficient criterion]\label{lem:stable-audit-affine-coefficient-criterion}
+For the affine-linear magma \(x\diamond y=ax+by\) on \(\ZZ/n\ZZ\), an ETP
+equation \(s=t\) holds for all assignments if and only if
+\[
+    \lambda(s;n,a,b)=\lambda(t;n,a,b)
+        \quad\text{in }(\ZZ/n\ZZ)^6.
+\]
+\end{lemma}
+
+\begin{proof}
+The difference \(s-t\) is a linear form in the six independent input variables
+over \(\ZZ/n\ZZ\).  If all coefficient differences vanish, the equation holds
+for every assignment.  Conversely, if the \(i\)-th coefficient difference is
+nonzero, evaluating at \(x_i=1\) and all other variables \(0\) separates the two
+sides.
+\end{proof}
+
+\begin{lemma}[Stable-value affine transfer]\label{lem:stable-audit-stable-value-affine-transfer}
+Let \(X_m\) be the stable fiber and let
+\[
+    X_m\simeq \ZZ/F_{m+2}\ZZ
+\]
+be the stable-value ring equivalence.  For every affine-linear operation
+\[
+    x\diamond y=ax+by
+\]
+on \(X_m\), satisfaction of any affine magma equation is equivalent to
+satisfaction of the transported equation on \(\ZZ/F_{m+2}\ZZ\) with the same
+coefficient formula.
+\leanverified{stableValueRingEquiv\_preserves\_magma\_satisfaction}
+\end{lemma}
+
+\begin{proof}
+The stable-value map is a ring equivalence and hence preserves addition,
+multiplication, and scalar multiplication by stable coefficients.  Induction on
+the local binary term syntax gives equality between evaluation in \(X_m\) and
+evaluation after transport to \(\ZZ/F_{m+2}\ZZ\).  Injectivity of the
+equivalence gives the equivalence of equation satisfaction.  The statement is
+formalized as
+\[
+    \texttt{\detokenize{lean4/Omega/Folding/FiberRing.lean:216}}.
+\]
+\end{proof}
+
+The two stable arithmetic operations over a prime field are the special cases
+\[
+    \mathrm{stableAdd}(x,y)=x+y,\qquad
+    \mathrm{stableMul}(x,y)=xy.
+\]
+For \(\mathrm{stableAdd}\), the law \(s=t\) holds over \(\FF_p\) exactly when
+\[
+    \nu(s)\equiv \nu(t)\pmod p.
+\]
+For \(\mathrm{stableMul}\), the term \(t\) evaluates to the monomial
+\[
+    \prod_i x_i^{\nu_i(t)}.
+\]
+Thus \(s=t\) holds over \(\FF_p\) if and only if the two support sets agree and
+all positive exponents are congruent modulo \(p-1\).  The criteria above were
+verified computationally against exhaustive assignment evaluation for
+\(\operatorname{Fin}(2)\) and \(\operatorname{Fin}(3)\) (see
+\texttt{\detokenize{scripts/equational_theory/}}).
+
+\subsection{Stable arithmetic spectra}
+
+\begin{theorem}[Stable arithmetic ETP spectra]\label{thm:stable-audit-stable-arithmetic-spectra}
+For the prime Fibonacci moduli \(2,3,5,13,89\), the ETP spectra of
+\(\mathrm{stableAdd}\) and \(\mathrm{stableMul}\) are the spectra shown in
+Table \ref{tab:stable-audit-stable-spectra}.  The generated union contains
+\[
+    3,157,020
+\]
+ordered anti-implications, of which
+\[
+    2,912,508
+\]
+are not covered by the current \(\texttt{full\_entries.json}\) finite
+\(\texttt{Facts}\) entries.
+\end{theorem}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\caption{Stable arithmetic spectra in the current ETP equation list.  The last
+column counts ordered satisfied/refuted pairs not already covered by current
+\(\texttt{full\_entries.json}\) \(\texttt{Facts}\) entries.}
+\label{tab:stable-audit-stable-spectra}
+\begin{tabular}{c r r r r r}
+\toprule
+operation & \(p\) & satisfied & refuted & anti-implications & not covered\\
+\midrule
+\(\mathrm{stableAdd}\) & 2  & 663 & 4031 & 2672553 & 2492999\\
+\(\mathrm{stableMul}\) & 2  & 164 & 4530 & 742920  & 668079\\
+\(\mathrm{stableAdd}\) & 3  & 60  & 4634 & 278040  & 249114\\
+\(\mathrm{stableMul}\) & 3  & 93  & 4601 & 427893  & 386077\\
+\(\mathrm{stableAdd}\) & 5  & 32  & 4662 & 149184  & 131647\\
+\(\mathrm{stableMul}\) & 5  & 46  & 4648 & 213808  & 193915\\
+\(\mathrm{stableAdd}\) & 13 & 32  & 4662 & 149184  & 131647\\
+\(\mathrm{stableMul}\) & 13 & 32  & 4662 & 149184  & 131647\\
+\(\mathrm{stableAdd}\) & 89 & 32  & 4662 & 149184  & 131647\\
+\(\mathrm{stableMul}\) & 89 & 32  & 4662 & 149184  & 131647\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{proof}
+The addition rows apply the congruence criterion
+\(\nu(s)\equiv\nu(t)\pmod p\).  The multiplication rows apply the support and
+positive-exponent congruence criterion modulo \(p-1\).  Each row then gives a
+truth vector on the \(4694\) equations; the number of ordered
+anti-implications is the product of the satisfied and refuted counts for that
+row, and the union counts are obtained by bitset union across all rows.  The
+computation is verified computationally (see
+\texttt{\detokenize{scripts/equational_theory/}}), specifically by
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_arithmetic_facts.py}}
+\]
+and the certificate
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_arithmetic_facts.json}}.
+\]
+The accompanying ETP Lean file
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_arithmetic_facts.lean}}
+\]
+contains the six non-duplicative \(\operatorname{Fin}(2)\),
+\(\operatorname{Fin}(3)\), and \(\operatorname{Fin}(5)\) finite
+\(\texttt{Facts}\) certificates and compiles with \(\texttt{decideFin!}\).
+\end{proof}
+
+\begin{corollary}[Dashboard disjointness of the stable spectra]\label{cor:stable-audit-stable-dashboard-disjoint}
+The stable arithmetic anti-implication union has zero intersection with the
+current dashboard unknowns.  In particular, the \(2,912,508\) anti-implications
+not covered by current \(\texttt{full\_entries.json}\) resolve
+\[
+    0
+\]
+of the \(498\) current dashboard unknown ordered pairs.
+\end{corollary}
+
+\begin{proof}
+The dashboard audit parses \(\texttt{home\_page/fme/unknowns.json}\), extracts
+the \(498\) ordered pairs whose two sides are ETP equations, and intersects
+those pairs with the generated stable arithmetic union and with the subunion
+not covered by current finite \(\texttt{Facts}\) entries.  Both intersections
+are empty.  This is verified computationally (see
+\texttt{\detokenize{scripts/equational_theory/}}), by
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_dashboard_unknowns.py}}
+\]
+and its JSON certificate
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_dashboard_unknowns.json}}.
+\]
+\end{proof}
+
+\subsection{Prime stabilization and the abelian-group shadow}
+
+Let \(\mathcal B\subset\mathcal E\) be the set of balanced equations
+\(\nu(s)=\nu(t)\).  In the current ETP equation list this set is
+\[
+\begin{aligned}
+\mathcal B=\{&
+1,43,4283,4290,4320,4358,4362,4364,4369,4380,4396,4398,\\
+&4405,4433,4435,4442,4473,4480,4482,4512,4515,4525,\\
+&4531,4541,4544,4598,4605,4635,4673,4677,4679,4684\}.
+\end{aligned}
+\]
+
+\begin{theorem}[Prime stabilization with the \(p=5\) multiplication exception]\label{thm:stable-audit-prime-stabilization}
+The operation \(\mathrm{stableAdd}\) satisfies exactly the \(32\) equations in
+\(\mathcal B\) for every prime \(p\geq 5\).  The operation
+\(\mathrm{stableMul}\) satisfies exactly \(\mathcal B\) for every prime
+\(p\geq 7\), but not for \(p=5\).  Over \(\operatorname{Fin}(5)\),
+\(\mathrm{stableMul}\) satisfies \(46\) equations, including the non-balanced
+equation
+\[
+    E_{411}:\qquad x=x\diamond(x\diamond(x\diamond(x\diamond x))).
+\]
+\end{theorem}
+
+\begin{proof}
+For addition, satisfaction is the congruence
+\(\nu(s)\equiv\nu(t)\pmod p\).  The largest absolute variable-multiplicity
+difference occurring in the ETP database is \(5\).  Hence for \(p>5\) the
+congruence forces equality.  The remaining prime \(p=5\) is checked directly:
+no non-balanced difference vector has every coordinate divisible by \(5\).
+
+For multiplication, satisfaction requires equal supports and equality of all
+positive exponent differences modulo \(p-1\).  When the supports agree, the
+largest absolute positive exponent difference in the ETP database is \(4\).
+Thus \(p-1\geq 6\) forces exponent equality, and all primes \(p\geq 7\) give
+exactly \(\mathcal B\).  At \(p=5\), exponent differences divisible by \(4\)
+produce extra laws.  In particular \(E_{411}\) holds because \(x^5=x\) for all
+\(x\in\FF_5\).  The computation is verified computationally (see
+\texttt{\detokenize{scripts/equational_theory/}}), by
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_prime_stabilization.py}}
+\]
+and
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_prime_stabilization.json}}.
+\]
+\end{proof}
+
+\begin{theorem}[Abelian-group identity classification]\label{thm:stable-audit-abelian-group-classification}
+The set \(\mathcal B\) is exactly the set of ETP equations valid in every
+abelian group under the interpretation
+\[
+    x\diamond y=x+y.
+\]
+Moreover, cyclic addition on \(\ZZ/4\ZZ\) satisfies \(116\) ETP equations,
+namely the \(32\) equations in \(\mathcal B\) together with \(84\) torsion
+identities, while cyclic addition on \(\ZZ/6\ZZ\) satisfies exactly the
+\(32\) equations in \(\mathcal B\).
+\end{theorem}
+
+\begin{proof}
+In an abelian group, every positive binary term evaluates to the sum of its
+variables with natural-number multiplicities.  If \(\nu(s)=\nu(t)\), then
+associativity and commutativity rewrite both terms to the same formal sum, so
+the equation is valid in every abelian group.  If the multiplicity vectors
+differ in the coordinate of a variable \(v\), the infinite cyclic group
+\(\ZZ\) separates the equation by assigning \(v=1\) and all other variables
+\(0\).  Therefore the universally valid equations are exactly the balanced
+ones.  The extraction of the \(32\)-equation set and the finite cyclic checks
+are verified computationally (see
+\texttt{\detokenize{scripts/equational_theory/}}), by
+\[
+    \texttt{\detokenize{scripts/equational_theory/abelian_group_identity_check.py}}
+\]
+and
+\[
+    \texttt{\detokenize{scripts/equational_theory/abelian_group_identity_check.json}}.
+\]
+\end{proof}
+
+\begin{remark}[Interpretation of the stable-addition stabilization]\label{rem:stable-audit-abelian-shadow}
+The \(32\)-equation stabilization for \(\mathrm{stableAdd}\) is the standard
+abelian-group identity criterion restricted to the finite ETP equation list,
+together with the finite \(p=5\) torsion check in Theorem
+\ref{thm:stable-audit-prime-stabilization}.  It is therefore a useful
+consistency audit of the stable arithmetic interface, not a new universal
+algebra theorem.
+\end{remark}
+
+\subsection{Full Fibonacci affine-linear dashboard closure}
+
+\begin{theorem}[Fibonacci affine-linear dashboard closure]\label{thm:stable-audit-affine-fibonacci-dashboard-closure}
+Let
+\[
+    N=\{2,3,5,8,13,21,34,55,89,144\}.
+\]
+For every \(n\in N\) and every pair \(a,b\in\ZZ/n\ZZ\), the affine-linear magma
+\[
+    x\diamond y=ax+by
+\]
+on \(\ZZ/n\ZZ\) resolves no current dashboard unknown.  Equivalently, after
+checking all
+\[
+    \sum_{n\in N}n^2=33550
+\]
+parameter triples \((n,a,b)\), the intersection with the \(498\) current
+dashboard unknown ordered pairs is empty.
+\end{theorem}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{8pt}
+\caption{Full Fibonacci affine-linear dashboard audit.  Each row checks all
+\((a,b)\in(\ZZ/n\ZZ)^2\) against the current dashboard unknown pairs.}
+\label{tab:stable-audit-affine-fibonacci-dashboard}
+\begin{tabular}{r r r r}
+\toprule
+\(n\) & parameter pairs & spectra with dashboard hits & resolved dashboard pairs\\
+\midrule
+2   & 4     & 0 & 0\\
+3   & 9     & 0 & 0\\
+5   & 25    & 0 & 0\\
+8   & 64    & 0 & 0\\
+13  & 169   & 0 & 0\\
+21  & 441   & 0 & 0\\
+34  & 1156  & 0 & 0\\
+55  & 3025  & 0 & 0\\
+89  & 7921  & 0 & 0\\
+144 & 20736 & 0 & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{proof}
+By Lemma \ref{lem:stable-audit-affine-coefficient-criterion}, each equation is
+decided by equality of two coefficient vectors modulo \(n\).  The scan applies
+this criterion to the \(223\) distinct equation numbers appearing in the
+\(498\) dashboard unknown ordered pairs and records whether a spectrum has an
+antecedent true and consequent false for any unknown pair.  Table
+\ref{tab:stable-audit-affine-fibonacci-dashboard} shows that no such spectrum
+exists.  The coefficient-vector criterion was cross-checked by exhaustive
+assignment evaluation for every parameter pair over \(\ZZ/2\ZZ\) and
+\(\ZZ/3\ZZ\).  The computation is verified computationally (see
+\texttt{\detokenize{scripts/equational_theory/}}), by
+\[
+    \texttt{\detokenize{scripts/equational_theory/affine_fibonacci_dashboard_scan.py}}
+\]
+and
+\[
+    \texttt{\detokenize{scripts/equational_theory/affine_fibonacci_dashboard_scan.json}}.
+\]
+\end{proof}
+
+\subsection{Prime-field saturation redundancy}
+
+\begin{proposition}[Redundancy of the older prime-field linear audit]\label{prop:stable-audit-prime-field-redundancy}
+In the at-most-two-variable ETP sublist, the older prime-field linear scan
+contains \(810\) equations and produces \(608948\) separated ordered pairs
+after scanning primes through \(31\); the cumulative set is already saturated
+by \(p=13\).  As anti-implication data, this scan is redundant with the
+existing \texttt{\detokenize{_364}} prime-field baseline.
+\end{proposition}
+
+\begin{proof}
+The recomputation uses the same coefficient-vector linearization as Lemma
+\ref{lem:stable-audit-affine-coefficient-criterion}, restricted to ETP
+equations involving at most two variables and to prime fields \(p\leq 31\).
+The cumulative counts are
+\[
+\begin{array}{c|rrrrrrrrrrr}
+p&2&3&5&7&11&13&17&19&23&29&31\\
+\hline
+\text{new}&439263&90422&56259&20008&2612&384&0&0&0&0&0\\
+\text{cum.}&439263&529685&585944&605952&608564&608948&
+608948&608948&608948&608948&608948.
+\end{array}
+\]
+The \texttt{\detokenize{_364}} baseline uses all \(4694\) equations and prime fields through
+\(199\), so every pair from the older at-most-two-variable, \(p\leq 31\) scan
+is included by scope and prime-range inclusion.  The recomputation also checks
+that the \(17588\) \(\ZZ/144\ZZ\) witnesses new after the
+prime-fields-plus-\(\ZZ/8\ZZ\) baseline have zero overlap with the older scan.
+This audit is verified computationally (see
+\texttt{\detokenize{scripts/equational_theory/}}), by
+\[
+    \texttt{\detokenize{scripts/equational_theory/compare_prime_saturation_to_364.py}}
+\]
+and
+\[
+    \texttt{\detokenize{scripts/equational_theory/prime_saturation_vs_364.json}}.
+\]
+\end{proof}
+
+\begin{remark}[Certificate boundary]\label{rem:stable-audit-certificate-boundary}
+The Automath/Omega Lean contribution in this appendix is the stable-value
+transport theorem of Lemma \ref{lem:stable-audit-stable-value-affine-transfer}.
+The ETP indexed spectra, \(\texttt{Facts}\) lists, dashboard intersections,
+prime-stabilization finite checks, and prime-field redundancy audit are finite
+computational certificates.  They are included with this paper for
+reproducibility under
+\[
+    \texttt{\detokenize{scripts/equational_theory/}}.
+\]
+\end{remark}
+
+\end{document}
