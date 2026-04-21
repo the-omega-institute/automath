@@ -22,6 +22,7 @@ import Omega.POM.BCUniformLiftPseudofunctor
 import Omega.POM.BCPontryaginDualClassification
 import Omega.POM.BCVisibleQuotientEventualStability
 import Omega.POM.BayesInfonceSecondCollisionDominance
+import Omega.POM.BayesErrorExplicitSharpAsymptotic
 import Omega.POM.BbitOracleCapacityClosedForm
 import Omega.POM.BeckChevalleyAmgmDefectIdentity
 import Omega.POM.BivariateSystemIdentificationFiniteWindow
@@ -345,6 +346,7 @@ import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.HardcorePathMarginalClosedForm
 import Omega.POM.PellConeAutomorphism
 import Omega.POM.PerronLandauerLimitLaw
+import Omega.POM.PhiLogisticPosteriorGrid
 import Omega.POM.PositiveNegativeMomentCoupling
 import Omega.POM.PressureConvexity
 import Omega.POM.PressureReflectionInequality
