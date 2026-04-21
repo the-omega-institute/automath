@@ -57,6 +57,7 @@ import Omega.POM.Congruence2dLockingCfinite
 import Omega.POM.CoprimeLedgerPrimorialOptimality
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.CovarianceLaplacianPdetClosedForm
+import Omega.POM.CycleLatticeThetaPoissonDuality
 import Omega.POM.DefectBand
 import Omega.POM.DelayMin
 import Omega.POM.EhrhartEqualsOrderpolyShift

@@ -269,6 +269,7 @@ import Omega.Zeta.LocalizedIntegersEndomorphismAutomorphismExplicit
 import Omega.Zeta.LocalizedUnitAutomorphismGroupClassification
 import Omega.Zeta.LocalizedIntegersPadicKernelRigidity
 import Omega.Zeta.LocalizedIntegersPrimeAxisIncrementLaw
+import Omega.Zeta.LocalizedSolenoidEndomorphismRing
 import Omega.Zeta.LocalizedIntegersTensorUnionLaw
 import Omega.Zeta.LocalizedQuotientLedger
 import Omega.Zeta.LocalizedQuotientTorsionZetaEulerProduct
