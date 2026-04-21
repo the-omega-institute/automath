@@ -81,6 +81,7 @@ import Omega.SPG.FiniteAuditBidirectionalCertificates
 import Omega.SPG.FiniteAuditNpCompleteBarrier
 import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.FixedAxisGodelOrderInformation
+import Omega.SPG.FullInternalScreenOneDefectBoundaryClosure
 import Omega.SPG.FoldInjectivizationRegisterLowerBound
 import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.GaugeVolumeAreaComplementarity
