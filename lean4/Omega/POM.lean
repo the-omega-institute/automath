@@ -257,6 +257,7 @@ import Omega.POM.LucasNuPCriterion
 import Omega.POM.LucasPrimeCongruence
 import Omega.POM.LucasSquare
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
+import Omega.POM.MicrocanonicalQueryDistortionStrongConversePlane
 import Omega.POM.MaryAuxlength
 import Omega.POM.MaryAuxlengthSeeds
 import Omega.POM.MacroMomentVsMicroPrimeRegisterCertificateSeparation
