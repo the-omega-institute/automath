@@ -185,6 +185,7 @@ import Omega.Folding.FoldBinEscortEscortKl
 import Omega.Folding.FoldBinGaugeBernoulliExtractionOperator
 import Omega.Folding.FoldBinGaugeConstantZetaEvenRecoveryLimit
 import Omega.Folding.FoldBinEscortLastbit
+import Omega.Folding.FoldBinEscortTwoScaleResidual
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
 import Omega.Folding.FoldBinFDivergenceCollapse
 import Omega.Folding.FoldBinFiberTail

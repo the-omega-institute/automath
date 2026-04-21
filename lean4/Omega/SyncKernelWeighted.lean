@@ -72,6 +72,7 @@ import Omega.SyncKernelWeighted.SelfDualNormalForm1pmu
 import Omega.SyncKernelWeighted.TraceCentralMomentsZero
 import Omega.SyncKernelWeighted.TraceOddVanish
 import Omega.SyncKernelWeighted.SyncKernel3DHessianInverseExact
+import Omega.SyncKernelWeighted.SyncKernel2DExactDecouple
 import Omega.SyncKernelWeighted.UnitarySliceHalfPhaseLocking
 import Omega.SyncKernelWeighted.VectorPotentialPhiMinusLdpParam
 import Omega.SyncKernelWeighted.WeightedNewmanQGaloisS37
