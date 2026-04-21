@@ -169,6 +169,7 @@ import Omega.Conclusion.FreeEnergyGatesMonotonicityObstruction
 import Omega.Conclusion.FreeEnergyMonotoneHaltingFormulaNonapproximable
 import Omega.Conclusion.FrozenEscortTvRigidity
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
+import Omega.Conclusion.FiniteRankLedgerTelescopingLaw
 import Omega.Conclusion.FundamentalCutHadamardRigidity
 import Omega.Conclusion.GeometricUpliftFourFourCollapse
 import Omega.Conclusion.GodelIntegerizationPrimeShiftPolynomial

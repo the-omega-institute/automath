@@ -18,6 +18,7 @@ import Omega.POM.BCDiscreteJacobianStrictification
 import Omega.POM.BCDiscreteStokes
 import Omega.POM.BCQuotientUniversal
 import Omega.POM.BCHighOrderLedgerDecomposition
+import Omega.POM.BqTraceLucas
 import Omega.POM.BCInformationStokesCoboundary
 import Omega.POM.BCUniformLiftPseudofunctor
 import Omega.POM.BCPontryaginDualClassification
