@@ -3,6 +3,7 @@ import Omega.SyncKernelWeighted.CarryFreeCoreBlock
 import Omega.SyncKernelWeighted.CarryFreeLeakage
 import Omega.SyncKernelWeighted.CarryFreeSkeletonThree
 import Omega.SyncKernelWeighted.C1CutFlux
+import Omega.SyncKernelWeighted.NoKappa1InCore
 import Omega.SyncKernelWeighted.ChebyshevDworkCongruenceChain
 import Omega.SyncKernelWeighted.ChebyshevFrobeniusPDerivationIntegrality
 import Omega.SyncKernelWeighted.CharacterPhaseCyclotomicElimination

@@ -530,6 +530,7 @@ import Omega.Zeta.XiReverseKLFourierGapPositiveKernelEnergy
 import Omega.Zeta.XiReverseKLGapW2ToDelta
 import Omega.Zeta.XiReverseKLFenchelPoissonDuality
 import Omega.Zeta.XiReverseKLGapMeanPinsker
+import Omega.Zeta.XiReverseKLPadicEntropyCascade
 import Omega.Zeta.XiReverseKLPoissonGapFourierBilateral
 import Omega.Zeta.XiReverseKLSingleFrequencyEntropyBudgetSup
 import Omega.Zeta.XiReverseKLSingleFrequencyExactMinimizer
