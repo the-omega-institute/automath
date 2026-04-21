@@ -370,6 +370,7 @@ import Omega.Folding.GaugeAnomalyPsdRational
 import Omega.Folding.GaugeAnomalyQ10Tschirnhaus
 import Omega.Folding.GaugeAnomalyQ10UniqueQuadraticSubfield
 import Omega.Folding.GaugeAnomalyQ19
+import Omega.Folding.GaugeAnomalyQ19GaloisS19
 import Omega.Folding.GaugeAnomalyRateCurveFunctionFieldIdentity
 import Omega.Folding.GaugeAnomalyRateCurveIndexIdealFormula
 import Omega.Folding.GaugeAnomalyRateCurveParam
