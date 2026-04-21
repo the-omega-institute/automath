@@ -630,6 +630,7 @@ import Omega.Zeta.XiTimePart51AADerivedCrossFibGcdFormula
 import Omega.Zeta.XiTimePart9gZGPrimorialFibonacciAffineRecursion
 import Omega.Zeta.XiTimePart62debbFinitePrimeSupportLocalizedAxisThreshold
 import Omega.Zeta.XiTimePart54abEscortShannonClosedForm
+import Omega.Zeta.XiTimePart65hPressureGapRayPotential
 import Omega.Zeta.XiTimePart63cSchurCauchyMasterKernel
 import Omega.Zeta.XiTimePart64baFoldMultiplicityMajorizationBalancing
 import Omega.Zeta.XiDyadicZeroTracking
@@ -644,6 +645,7 @@ import Omega.Zeta.XiTimePart9sbEscortChernoffSaddle
 import Omega.Zeta.XiTimePart9gCanonicalSubmonoidFreeMonoid
 import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
 import Omega.Zeta.XiTimePart9zbkPadeJacobiIdentity
+import Omega.Zeta.XiTimePart9zbgFoldpiFiniteRankMomentExhaustion
 import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage
 import Omega.Zeta.XiTimePart9zhDyadicBulkLinearDepthVsPrimeLedger
 import Omega.Zeta.XiToeplitzDetVerblunsky

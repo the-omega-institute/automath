@@ -300,6 +300,7 @@ import Omega.POM.MinEntropyRate
 import Omega.POM.MinKernelProjectionAndInversion
 import Omega.POM.HermiteConstantCharacterization
 import Omega.POM.MinkowskiBudgetBarrier
+import Omega.POM.MultiplicityCompositionMod3ZeroOneDefectSharp
 import Omega.POM.Mod2DifferenceBinomialBasis
 import Omega.POM.Mod2ShadowEventualPeriodBound
 import Omega.POM.ModpDifferenceBinomialBasis
