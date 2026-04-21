@@ -400,6 +400,7 @@ import Omega.Zeta.XiCarathPickKernelNormalizationRigidity
 import Omega.Zeta.XiCauchyPoissonDensityRatioSecondOrderProfile
 import Omega.Zeta.XiCauchyPoissonDerivativeEnergyClosedForm
 import Omega.Zeta.XiCauchyPoissonSecondOrderShapeLimitNodeRigidity
+import Omega.Zeta.CayleyTimefiberPoissonCollapse
 import Omega.Zeta.XiCayleyJoukowskyHarmonicMeasureEllipse
 import Omega.Zeta.XiCdimLambdaClosedForm
 import Omega.Zeta.XiCdimLocalizationQuotientSolenoidSurjections
@@ -564,6 +565,7 @@ import Omega.Zeta.XiTerminalZmS3RootRecoveryCoordinateAutomorphisms
 import Omega.Zeta.XiTerminalZmS4PrymTorusRankLayering
 import Omega.Zeta.VanvleckResidueL2LowerBound
 import Omega.Zeta.XiTimeFiberMinimalDimension
+import Omega.Zeta.TimefiberRandomAffineLyapunovCauchyUnique
 import Omega.Zeta.XiTimeLowerBoundFromMaxFiber
 import Omega.Zeta.XiTimePart50dcProjectivePressurePerronLogconvex
 import Omega.Zeta.XiTimePart51AADerivedCrossFibGcdFormula

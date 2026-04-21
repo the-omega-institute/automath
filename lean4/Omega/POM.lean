@@ -207,6 +207,7 @@ import Omega.POM.HighMultiplicitySparse
 import Omega.POM.IndependenceDpRadius2
 import Omega.POM.IndMatrixGrammar
 import Omega.POM.IndFactorization
+import Omega.POM.InfoncePartitionOptimalClosedForm
 import Omega.POM.InfoNCERemainderBitsSecondOrderRenormalization
 import Omega.POM.IndsetPowerHomDisj
 import Omega.POM.InverseLimitNaturality
