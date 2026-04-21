@@ -48,6 +48,7 @@ import Omega.POM.CoprimeLedgerPrimorialOptimality
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.DefectBand
+import Omega.POM.DelayMin
 import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.DeltaqGoldenEnvelope
 import Omega.POM.DeltaqGLambdaIdentity

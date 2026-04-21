@@ -23,6 +23,7 @@ import Omega.Zeta.XiExtensionPreservingInitialObject
 import Omega.Zeta.XiAtomicCenteredResidueSimplex
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
+import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
 import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
