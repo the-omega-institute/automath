@@ -811,6 +811,48 @@ def backflow_to_main_paper(
     if not isinstance(gen_result, dict):
         gen_result = {}
 
+    # Step 4: Wire the new section into the paper's main.tex
+    section_type = placement.get("placement", "appendix")
+    section_dir = placement.get("section_dir", slug)
+    insert_after = placement.get("insert_after", "")
+    main_tex_path = MAIN_PAPER_DIR / "sections" / section_type / "main.tex"
+    subfile_line = f"\\subfile{{{section_dir}/main}}"
+
+    if main_tex_path.exists():
+        main_tex = main_tex_path.read_text(encoding="utf-8")
+        if subfile_line not in main_tex:
+            # Insert after the specified section, or before \end{document}
+            if insert_after:
+                anchor = f"\\subfile{{{insert_after}/main}}"
+                if anchor in main_tex:
+                    main_tex = main_tex.replace(
+                        anchor,
+                        f"{anchor}\n{subfile_line}",
+                    )
+                    main_tex_path.write_text(main_tex, encoding="utf-8")
+                    logger.info("[%s] Backflow: inserted %s after %s in %s/main.tex",
+                                state.repo, section_dir, insert_after, section_type)
+                else:
+                    # Anchor not found, insert before \end{document}
+                    main_tex = main_tex.replace(
+                        "\\end{document}",
+                        f"{subfile_line}\n\\end{{document}}",
+                    )
+                    main_tex_path.write_text(main_tex, encoding="utf-8")
+                    logger.info("[%s] Backflow: appended %s before \\end{document} in %s/main.tex",
+                                state.repo, section_dir, section_type)
+            else:
+                main_tex = main_tex.replace(
+                    "\\end{document}",
+                    f"{subfile_line}\n\\end{{document}}",
+                )
+                main_tex_path.write_text(main_tex, encoding="utf-8")
+                logger.info("[%s] Backflow: appended %s to %s/main.tex",
+                            state.repo, section_dir, section_type)
+        else:
+            logger.info("[%s] Backflow: %s already in %s/main.tex, skipping",
+                        state.repo, section_dir, section_type)
+
     # Record backflow
     placement["gen_result"] = gen_result
     state.log_event("B", "backflow completed", detail=json.dumps({
@@ -818,13 +860,15 @@ def backflow_to_main_paper(
         "section_dir": placement.get("section_dir"),
         "tex_path": gen_result.get("tex_path", ""),
         "bridge_doc_path": gen_result.get("bridge_doc_path", ""),
+        "wired_into_main_tex": str(main_tex_path),
     }, ensure_ascii=False))
 
-    logger.info("[%s] Backflow done: %s/%s → tex=%s bridge=%s",
+    logger.info("[%s] Backflow done: %s/%s → tex=%s bridge=%s wired=%s",
                 state.repo,
                 placement.get("placement"), placement.get("section_dir"),
                 gen_result.get("tex_path", "N/A"),
-                gen_result.get("bridge_doc_path", "N/A"))
+                gen_result.get("bridge_doc_path", "N/A"),
+                str(main_tex_path))
     return placement
 
 
