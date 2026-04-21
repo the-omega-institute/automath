@@ -51,6 +51,7 @@ import Omega.EA.KernelChebotarevExp
 import Omega.EA.KernelCltLdp
 import Omega.EA.KernelEquilibriumPF
 import Omega.EA.KernelGlobalCarryfreeSpectralTrichotomy
+import Omega.EA.KernelGroundStateUniversalityClasses
 import Omega.EA.KernelPressureEndpoints
 import Omega.EA.KernelRHSqrtError
 import Omega.EA.KernelWeightedPrimeOrbit

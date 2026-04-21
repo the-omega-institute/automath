@@ -280,6 +280,7 @@ import Omega.POM.PrimeDeterminant2x2FreeEncoding
 import Omega.POM.PrimeDeterminantAreaFiberMultinomial
 import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.PrimitiveDirichletBranchLatticeEssentialPrimeSpectrum
+import Omega.POM.PrimitiveDirichletNonAlgebraicNonDfinite
 import Omega.POM.PrimitivePrimeLucas
 import Omega.POM.ProjectionAsPartitionPrimeRegister
 import Omega.POM.ProjectiveOperatorDegeneratesToMomentKernel

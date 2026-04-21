@@ -31,6 +31,7 @@ import Omega.Folding.BernoulliPJordanCriticalScaling
 import Omega.Folding.BernoulliPJordanResonance
 import Omega.Folding.BernoulliPLaws
 import Omega.Folding.BernoulliPLdp
+import Omega.Folding.BernoulliPLocalLdpPrefactor
 import Omega.Folding.BernoulliPLdpCompressedCubicParametrization
 import Omega.Folding.BernoulliPMismatchEntropyRate
 import Omega.Folding.BernoulliPMismatchStrictThirdOrderMarkov
