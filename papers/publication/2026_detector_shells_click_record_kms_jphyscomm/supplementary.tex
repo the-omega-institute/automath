@@ -1,4 +1,8 @@
 
+\ifdefined\SUPPLEMENTARYAPPENDIX
+\section*{Supplementary derivations}
+\addcontentsline{toc}{section}{Supplementary derivations}
+\else
 \documentclass[11pt]{article}
 \usepackage[a4paper,margin=1in]{geometry}
 \usepackage[T1]{fontenc}
@@ -41,10 +45,11 @@
 \vspace{0.5em}
 {\large for ``Two detector-defined shells from stationary Unruh--DeWitt click records in static KMS spacetimes''}\par
 \end{center}
+\fi
 
-This Supplementary Material records the derivations supporting the main text. In addition to the shell equations and inverse formulas, we include the explicit proofs of the soft-dead-time limit and the sub-Poisson counting law for the finite-recovery renewal process.
+These derivations support the main text. In addition to the shell equations and inverse formulas, we include the explicit proofs of the soft-dead-time limit and the sub-Poisson counting law for the finite-recovery renewal process.
 
-\section{Ideal dead time and the Parry threshold}
+\section{Ideal dead time and the Parry threshold}\label{sec:supp-ideal}
 
 \begin{proposition}\label{prop:supp-ideal-markov}
 In the ideal one-step dead-time detector, the sampled output is a stationary Markov chain on the golden-mean shift with transition matrix
@@ -225,6 +230,25 @@ e_D^\top P^{n-1}u=\rho+\lambda^{n-1}(a-\rho),
 which proves \cref{eq:supp-cov}. The inequality $a<\rho<1-p$ follows because $\rho$ is a strict convex combination of $a$ and the ready-state click probability $1-p$. Solving $\lambda=0$ gives \cref{eq:supp-critical}.
 \end{proof}
 
+\begin{lemma}[Kernel factorization at the critical line]\label{lem:supp-1dep-factorization}
+At the critical line \cref{eq:supp-critical}, let $\pi$ be the stationary row distribution of $P=T_0+T_1$. Then $P=\mathbf 1\pi$. Consequently, for finite words $u$ and $v$ supported respectively on a past block ending at time $0$ and a future block beginning at time $2$,
+\[
+\PP(A_{-m}^0=u,\ A_2^{2+\ell}=v)
+=\PP(A_{-m}^0=u)\PP(A_2^{2+\ell}=v).
+\]
+\end{lemma}
+
+\begin{proof}
+At the critical line, the hidden-state transition matrix has rank one because its nontrivial eigenvalue vanishes, so $P=\mathbf 1\pi$. The labelled-kernel probability of the two words, with the output at time $1$ unobserved, is
+\[
+\PP(A_{-m}^0=u,\ A_2^{2+\ell}=v)
+=\pi T_u P T_v\mathbf 1
+=\pi T_u\mathbf 1\,\pi T_v\mathbf 1
+=\PP(A_{-m}^0=u)\PP(A_2^{2+\ell}=v),
+\]
+where $T_u$ and $T_v$ are the corresponding products of output-labelled kernels.
+\end{proof}
+
 \begin{corollary}\label{cor:supp-1dep}
 At the critical line \cref{eq:supp-critical}, the stationary finite-recovery output is exact $1$-dependent:
 \[
@@ -233,7 +257,7 @@ At the critical line \cref{eq:supp-critical}, the stationary finite-recovery out
 \end{corollary}
 
 \begin{proof}
-At the critical line, the hidden-state transition matrix has rank one because its nontrivial eigenvalue vanishes, so $P=\mathbf 1\pi$. Insert this factor between any cylinder event depending on the past and any cylinder event depending on the future beginning at time $2$. The factorization through $\mathbf 1\pi$ decouples the hidden state at the separating step and yields independence.
+Cylinder events generate the two sigma algebras, and \cref{lem:supp-1dep-factorization} factorizes all such cylinders. This yields independence.
 \end{proof}
 
 \begin{corollary}\label{cor:supp-no-exact}
@@ -434,7 +458,23 @@ which inserted into the homogeneous ratio law yields the proper-distance relatio
 \Bigl(1+O(\rho_{\varphi}+\rho_{\mathrm{mem}})\Bigr).
 \end{equation}
 
-In Schwarzschild,
+For Schwarzschild, write $r_H=2M$ and $h=r-r_H$. The Gaussian normal distance from the horizon satisfies
+\[
+\rho=\int_{r_H}^{r_H+h}\frac{dr}{\sqrt{1-r_H/r}}
+=2\sqrt{r_Hh}+O(h^{3/2}),
+\]
+so
+\begin{equation}\label{eq:supp-schwarz-rho}
+h=\frac{\rho^2}{4r_H}+O(\rho^4).
+\end{equation}
+The area excess of the areal sphere is therefore
+\begin{equation}\label{eq:supp-area-excess}
+A-A_H=4\pi\bigl((r_H+h)^2-r_H^2\bigr)
+=2\pi\rho^2+O(\rho^4).
+\end{equation}
+Combining \cref{eq:supp-rho-ratio,eq:supp-area-excess} gives the Schwarzschild area-excess ratio in the main text.
+
+For the inverse formulas in Schwarzschild,
 \[
 N(r)=\sqrt{1-\frac{2M}{r}},
 \]
@@ -468,6 +508,25 @@ The defining equation for $\Gamma_c$ is equivalent to
 \[
 s=\frac{\log x}{x-1}.
 \]
+For $x\neq1$, this is the same as
+\[
+\log x=s(x-1),
+\qquad
+x e^{-sx}=e^{-s}.
+\]
+Hence
+\[
+\Gamma_c(\kappa_{\mathrm r},\Delta\tau)
+=-\frac{1}{\Delta\tau}\,
+W_k\!\left(-\kappa_{\mathrm r}\Delta\tau\,e^{-\kappa_{\mathrm r}\Delta\tau}\right),
+\qquad
+k=
+\begin{cases}
+-1, & 0<s<1,\\
+0, & s>1.
+\end{cases}
+\]
+The other real branch gives the removable root $x=1$, which is a solution of the multiplied equation for all $s$ but solves the original quotient equation only at $s=1$. At $s=1$, both real branches meet and $\Gamma_c=\kappa_{\mathrm r}$.
 As $s\downarrow0$, writing $L=\log(1/s)$ and $x=(L+u)/s$ yields $u=\log(L+u)+s$, hence $u=\log L+o(1)$. Therefore
 \begin{equation}\label{eq:supp-fast-gammac}
 \Gamma_c(\kappa_{\mathrm r},\Delta\tau)
@@ -478,6 +537,9 @@ L=\log\frac{1}{\kappa_{\mathrm r}\Delta\tau},
 \end{equation}
 which is the fast-sampling asymptotic used in the main text.
 
+\ifdefined\SUPPLEMENTARYAPPENDIX
+\else
 \input{references.tex}
 
 \end{document}
+\fi

@@ -1,13 +1,8 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (macOS)
 // @namespace    omega-automath
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-// @version      4.6
-// @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
-========
 // @version      5.0
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
 // @grant        GM_xmlhttpRequest
@@ -1016,18 +1011,6 @@
       "div[class*='prose']",
       "div.markdown",
       "[class*='agent-turn']",
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-      "[class*='message']",
-      // 2026 newer layouts
-      "[class*='response']",
-      "[class*='assistant']",
-      "[class*='answer']",
-      "[role='article']",
-      "[role='log'] > div",
-      "[class*='chat-message']",
-      "[class*='turn']",
-========
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
     ];
 
     for (const sel of s0Selectors) {
@@ -1048,59 +1031,9 @@
       } catch {}
     }
 
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-    // ═══ Strategy 1: Nuclear fallback — walk ALL elements, find biggest text block ═══
-    // If no selector matched, scan the page for the largest text block that
-    // isn't our prompt. This handles unknown DOM structures.
-    try {
-      const candidates = [];
-      // Walk all elements with substantial text content
-      const allEls = document.querySelectorAll("main *");
-      for (const el of allEls) {
-        // Skip tiny elements, scripts, styles
-        if (["SCRIPT", "STYLE", "NOSCRIPT", "INPUT", "TEXTAREA", "BUTTON", "SVG", "PATH"].includes(el.tagName)) continue;
-        // Only consider leaf-ish elements (no child block elements, or markdown containers)
-        const text = (el.innerText || "").trim();
-        if (text.length < 200) continue;
-        if (looksLikePromptEcho(text)) continue;
-        // Avoid selecting the entire main container (too broad)
-        if (el.tagName === "MAIN") continue;
-        // Score by text length but prefer elements deeper in the DOM
-        const depth = getDepth(el);
-        candidates.push({ el, text, len: text.length, depth });
-      }
-
-      if (candidates.length > 0) {
-        // Prefer deep elements with substantial text (likely the response container)
-        // Sort by: has review-like content > length > depth
-        candidates.sort((a, b) => {
-          // Prefer texts that look like reviews (contain "##", "BLOCKER", "theorem", etc.)
-          const aReview = /#{1,3}\s|BLOCKER|MEDIUM|theorem|proof|Theorem|Proof|Accept|Reject|revision/i.test(a.text) ? 1 : 0;
-          const bReview = /#{1,3}\s|BLOCKER|MEDIUM|theorem|proof|Theorem|Proof|Accept|Reject|revision/i.test(b.text) ? 1 : 0;
-          if (bReview !== aReview) return bReview - aReview;
-          return b.len - a.len;
-        });
-
-        const best = candidates[0];
-        if (best.len > 200) {
-          log(`Nuclear fallback: found ${best.len} chars via DOM walk (tag=${best.el.tagName}, depth=${best.depth})`);
-          return cleanChromeLines(best.text);
-        }
-      }
-    } catch (e) {
-      log(`Nuclear fallback error: ${e.message}`);
-    }
-
-    // ═══ Strategy 2: grab all text from main, then post-process ═══
-    const main = document.querySelector("main");
-    if (!main) return "";
-    const fullText = (main.innerText || "").trim();
-    if (fullText.length < 10) return "";
-========
     // ═══ Strategy C: Full-page text minus prompt (absolute fallback) ═══
     // fullText already declared at top of function; just re-check length
     if (fullText.length < 100) return "";
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
 
     // Try to locate prompt in page text and take everything after it
     if (sentPromptText.length > 30) {
@@ -1134,23 +1067,6 @@
       }
     }
 
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-    // Step 3: Clean and return
-    const cleaned = cleanChromeLines(responseText);
-
-    // Step 4: Final check — don't return text that IS the prompt
-    if (cleaned.length > 5) {
-      if (looksLikePromptEcho(cleaned)) return "";
-      // Legacy backup
-      const promptStart = sentPromptText.slice(0, 40).trim();
-      if (promptStart && cleaned.startsWith(promptStart) && cleaned.length < sentPromptText.length * 1.2) {
-        return "";
-      }
-      return cleaned;
-    }
-
-========
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
     return "";
   }
 
@@ -1193,18 +1109,6 @@
       document.querySelector("[class*='result-streaming']") ||
       document.querySelector("[class*='streaming']") ||
       document.querySelector("[class*='thinking']") ||
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-      document.querySelector("[class*='progress']") ||
-      // 2026 newer indicators
-      document.querySelector("[class*='generating']") ||
-      document.querySelector("[class*='loading']") ||
-      document.querySelector("[class*='typing']") ||
-      document.querySelector("[aria-busy='true']") ||
-      document.querySelector("[data-testid='stop-button']") ||
-      document.querySelector("button[aria-label*='stop' i]") ||
-      document.querySelector("button[aria-label*='Stop' i]")
-    );
-========
       document.querySelector("[class*='progress']")
     ) return true;
 
@@ -1225,7 +1129,6 @@
           && text.length < 3000) return true;
     }
     return false;
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
   }
 
   async function waitForResponse() {
@@ -1248,33 +1151,6 @@
       if (elapsed - lastLogTime >= 120) {
         lastLogTime = elapsed;
         log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}, url=${window.location.href.slice(-30)}`);
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-        // DOM debug: log what selectors match (first 2 checks)
-        if (elapsed <= 600) {
-          const dbg = [];
-          for (const s of [
-            "[data-message-author-role]", "article",
-            "[data-testid*='conversation-turn']", "div[class*='markdown']",
-            "div[class*='prose']", "[class*='agent-turn']",
-            "[class*='response']", "[class*='assistant']",
-            "[class*='message']", "[class*='turn']",
-            "[role='article']", "[role='log']",
-            "[aria-busy]",
-          ]) {
-            const n = document.querySelectorAll(s).length;
-            if (n > 0) dbg.push(`${s}:${n}`);
-          }
-          log(`DOM debug: ${dbg.join(", ") || "no matches"}`);
-
-          // Log the main element's direct children structure
-          const mainEl = document.querySelector("main");
-          if (mainEl) {
-            const childTags = Array.from(mainEl.children).map(c =>
-              `${c.tagName}${c.className ? "." + c.className.split(" ")[0].slice(0, 20) : ""}(${(c.innerText || "").length}ch)`
-            ).slice(0, 8);
-            log(`Main children: ${childTags.join(", ")}`);
-          }
-========
         // DOM debug: comprehensive search for where content lives
         const dbg = [];
         for (const s of ["main", "[data-message-author-role]", "[data-message-author-role='assistant']", "article", "[data-testid*='conversation-turn']", "div[class*='markdown']", "div[class*='prose']", "[class*='agent-turn']", "[role='presentation']", "[class*='conversation']", "[class*='thread']"]) {
@@ -1283,7 +1159,6 @@
             const maxLen = Math.max(...Array.from(els).map(e => (e.innerText||"").length));
             dbg.push(`${s}:${els.length}(max=${maxLen})`);
           }
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
         }
         log(`DOM debug: ${dbg.join(", ") || "NO MATCHES"}`);
 
@@ -1351,30 +1226,6 @@
 
         if (responseText === lastText) {
           stableCount++;
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-          // Return when stable AND either not generating, or stable for long
-          // enough that "thinking" indicator is likely stale (ChatGPT 5.4
-          // keeps [class*='thinking'] present even after output completes).
-          // Short responses (<2000 chars) need more stability checks — ChatGPT 5.4
-          // often emits a brief "thinking" text before extended processing,
-          // which looks stable but is just the preamble to the real response.
-          // Minimum response length for paper reviews — a valid editorial review
-          // is always >1000 chars.  Responses shorter than this are ChatGPT's
-          // "thinking aloud" preamble, not the actual review.
-          const MIN_REVIEW_LENGTH = 1000;
-          const tooShort = responseText.length < MIN_REVIEW_LENGTH;
-
-          const minChecks = responseText.length < 2000 ? STABLE_CHECKS * 3 : STABLE_CHECKS;
-          const stableEnough = stableCount >= minChecks && !generating;
-          const stableOverride = stableCount >= minChecks + 2;
-
-          if (tooShort) {
-            // Never accept a <1000 char response as final — keep waiting
-            if (stableCount % 5 === 0 && stableCount > 0) {
-              log(`Short response (${responseText.length} chars) — waiting for real review (${stableCount * STABLE_INTERVAL / 1000}s)`);
-            }
-          } else if (stableEnough || stableOverride) {
-========
           // Determine minimum stability checks based on response size.
           // Large responses (>=2000 chars) are almost certainly real — 3 checks.
           // Medium (200-2000) — 5 checks (guard against thinking preamble).
@@ -1393,7 +1244,6 @@
           // (ChatGPT 5.4 sometimes keeps stale [class*='thinking'])
           const stableOverride = stableCount >= minChecks + 3;
           if (stableEnough || stableOverride) {
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
             log(`Response complete: ${responseText.length} chars (stable ${stableCount * STABLE_INTERVAL / 1000}s, gen=${generating})`);
             return responseText;
           }
@@ -1585,12 +1435,8 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-    log(`Oracle Bridge v4.6 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
-========
     const agentLabel = AGENT_ID.replace("oracle_", "#");
     log(`Oracle Bridge v5.0 agent ${agentLabel} — ${active ? "ACTIVE" : "PAUSED"}`);
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
 
     // Check if WE navigated here (not the user clicking around)
     const phase = getTaskPhase();
