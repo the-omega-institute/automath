@@ -93,6 +93,7 @@ import Omega.Folding.DerivedCenteredOddMomentsVanish
 import Omega.Folding.DerivedBinfoldAverageLogPotentialConstant
 import Omega.Folding.DerivedBinfoldMinsectorChi2TwoBlockBound
 import Omega.Folding.DerivedFoldExactInversionDyadicThreshold
+import Omega.Folding.DerivedFoldMultiplicityCapacityRenyiEnvelope
 import Omega.Folding.DerivedFoldMultiplicityZerofiberEnvelope
 import Omega.Folding.DerivedFoldMultiplicityConvexOrderExtremal
 import Omega.Folding.DerivedFoldTopTwoSameSlope
@@ -211,6 +212,7 @@ import Omega.Folding.FoldCollisionSandwich
 import Omega.Folding.FoldCollisionZeroReduction
 import Omega.Folding.FoldComplexity
 import Omega.Folding.FoldCongruenceModSemirings
+import Omega.Folding.FoldCriticalResonanceGap
 import Omega.Folding.FoldFiberLevelLogspace
 import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy
 import Omega.Folding.FoldFiberParityEnergySimplex
