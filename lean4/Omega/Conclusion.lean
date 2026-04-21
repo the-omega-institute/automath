@@ -85,6 +85,7 @@ import Omega.Conclusion.CompressionLadderSpin10
 import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.ContinuousLegendreEulerFenchelContact
 import Omega.Conclusion.ContinuousPressureFrontDominatesDiscreteCertificate
+import Omega.Conclusion.CRTLinearBudgetImpossibility
 import Omega.Conclusion.CriticalKernelPdetUniformMinimizer
 import Omega.Conclusion.CriticalKernelSeparationCommonRecurrence
 import Omega.Conclusion.CoordinateBundleDyadicBlockLaw

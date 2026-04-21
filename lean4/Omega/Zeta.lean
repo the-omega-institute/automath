@@ -523,6 +523,7 @@ import Omega.Zeta.XiLeyangMplus1PointExtrapolateOptimal
 import Omega.Zeta.XiLeyangEdDiscTildehVsH
 import Omega.Zeta.XiLeyangSquareRootCollisionLeadingZerosN2
 import Omega.Zeta.XiLeyangTwoScaleCrossratioInvariant
+import Omega.Zeta.XiLeyangTwoScaleCrossratioSlopeExponent
 import Omega.Zeta.XiLeyangThreeLeadingZerosExtrapolateUcN6
 import Omega.Zeta.XiLeyangTwoLeadingZerosExtrapolateUc
 import Omega.Zeta.XiHypercubeLeyangAffineOrbifoldTwoLayer
