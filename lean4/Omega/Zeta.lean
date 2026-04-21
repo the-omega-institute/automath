@@ -518,6 +518,7 @@ import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage
 import Omega.Zeta.XiMittagLefflerUniversalKfoldJordanCollision
 import Omega.Zeta.XiVanVleckResidueL2LowerBound
 import Omega.Zeta.XiToeplitzNegativeMarginVandermonde4Lowerbound
+import Omega.Zeta.XiToeplitzNegativeBlockMarginCertificate
 import Omega.Zeta.XiTripleConsistencyAudit
 import Omega.Zeta.XiUniqueContinuousTransverseRegister
 import Omega.Zeta.XiVisibleArithmeticUnitIdempotentCount
