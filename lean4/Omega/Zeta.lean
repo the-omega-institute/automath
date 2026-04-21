@@ -483,6 +483,7 @@ import Omega.Zeta.XiFoldCongruenceUnitalAutomorphismRigidity
 import Omega.Zeta.XiRminIsZhat
 import Omega.Zeta.XiVisibleArithmeticFibonacciAdicProfiniteCoincidence
 import Omega.Zeta.XiVisibleArithmeticFibonacciCofinalQuotients
+import Omega.Zeta.XiFoldbinUniformLayerDegeneracyTwoAtomLaw
 import Omega.Zeta.XiFoldLocalInformationDensityFirstOrderDiscreteLaw
 import Omega.Zeta.XiFoldResonanceLadderLogarithmicAuditability
 import Omega.Zeta.XiFoldbinDyadicCapacityCriticalWindowLimit
