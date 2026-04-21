@@ -199,6 +199,7 @@ import Omega.Folding.KilloPrimeRegisterChainIdempotentBooleanRank
 import Omega.Folding.OracleCapacityTailEquivalence
 import Omega.Folding.OracleCapacityPigeonholeBound
 import Omega.Folding.OracleCapacityClosedForm
+import Omega.Folding.OracleCapacityVanishingUnderTypicalExponentialFibers
 import Omega.Folding.OracleCapacitySlopeJumpsDetermineHistogram
 import Omega.Folding.FoldBoundaryStokesTorsorH1H1
 import Omega.Folding.FoldCapacityGlobalExtremizersFixedMass
