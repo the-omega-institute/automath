@@ -306,6 +306,7 @@ import Omega.Conclusion.SoftcoreWeightMatrixExplicitInverse
 import Omega.Conclusion.SpectrumSignLaw
 import Omega.Conclusion.SquarefreeRTLaminarNesting
 import Omega.Conclusion.StableSuccessorFaithfulSemigroup
+import Omega.Conclusion.SingularRingFaithfulSemigroup
 import Omega.Conclusion.StableSuccessorOrbitNormalForm
 import Omega.Conclusion.StokesEnergyDyadicMartingale
 import Omega.Conclusion.StokesEnergyHilbertProjection
