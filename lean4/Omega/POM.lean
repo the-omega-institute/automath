@@ -230,6 +230,7 @@ import Omega.POM.PrimeTraceShiftFreeMonoid
 import Omega.POM.FractranFiniteUpdateTableOneStep
 import Omega.POM.FractranFirstfitTotalSerialDepth
 import Omega.POM.FractranFirstfitSerialDepth
+import Omega.POM.FractranSoftFirstfitAnnealedBudget
 import Omega.POM.FractranCommutativeVsAlgorithmicExternalization
 import Omega.POM.FractranPrimeTranslation
 import Omega.POM.FractranPrimecoreFinitePartialFunctionCategory
@@ -249,6 +250,7 @@ import Omega.POM.HankelExteriorPowerPropagation
 import Omega.POM.HankelFingerprintSeeds
 import Omega.POM.HankelFinitePoleSpectralGap
 import Omega.POM.HankelInversePropagationLinearOrbits
+import Omega.POM.HankelSyndromeDivisibilityReversalLcm
 import Omega.POM.HankelMinimalRecurrenceInversionFormula
 import Omega.POM.HankelNFShiftInvarianceAndPropagation
 import Omega.POM.HankelShortIntegerCertificate
