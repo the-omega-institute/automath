@@ -386,6 +386,7 @@ import Omega.Zeta.XiBasepointScanRationalHerglotzPoleTomography
 import Omega.Zeta.XiBqPowerEntrywiseFibonacciBinomial
 import Omega.Zeta.XiBulkEntropyStrictConvexity
 import Omega.Zeta.XiBulkBoundaryHolographicGapDissipation
+import Omega.Zeta.XiBulkCurvatureLogisticKernelDecomposition
 import Omega.Zeta.XiBulkEntropyRGStaircase
 import Omega.Zeta.XiBulkRenormalizedConstantAnomalyGap
 import Omega.Zeta.XiCRTInvisibilityMarginalPrimeSpectrum
@@ -398,6 +399,7 @@ import Omega.Zeta.XiCauchyPoissonSecondOrderShapeLimitNodeRigidity
 import Omega.Zeta.XiCayleyJoukowskyHarmonicMeasureEllipse
 import Omega.Zeta.XiCdimLambdaClosedForm
 import Omega.Zeta.XiCdimLocalizationQuotientSolenoidSurjections
+import Omega.Zeta.XiCdimLocalizationSolenoidNotSubgroupOrQuotientOfFiniteTorus
 import Omega.Zeta.XiCdimLocalizationSolenoidNoNontrivialTorusInput
 import Omega.Zeta.XiCenterSixfoldKappaNodeInversionBlowup
 import Omega.Zeta.XiChainIdempotentStarSaturationComparableGcd
