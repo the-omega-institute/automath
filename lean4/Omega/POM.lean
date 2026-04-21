@@ -243,6 +243,7 @@ import Omega.POM.MultiplicityBinetTwoParameterNormalForm
 import Omega.POM.MultiplicityCompositionExactConditionalIid
 import Omega.POM.MultiplicityCompositionMod3Sparsity
 import Omega.POM.MultiplicityCompositionMomentHierarchyRationalGrowth
+import Omega.POM.MultiplicityCompositionPartCountCLT
 import Omega.POM.MultiplicityCompositionPartition
 import Omega.POM.MultiplicityFixedLREnvelope
 import Omega.POM.MultiplicityFixedRExtrema
