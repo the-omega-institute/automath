@@ -86,6 +86,7 @@ import Omega.Zeta.DephysicalizedHorizonQuotientDataStructure
 import Omega.Zeta.DetVpControlsRankDrop
 import Omega.Zeta.DerivedFixedFreezingRenyiSurface
 import Omega.Zeta.DerivedHankelFiniteJetBadPrimeClosure
+import Omega.Zeta.DerivedHankelArithmeticAmbiguityLocalizesBadPrimes
 import Omega.Zeta.DerivedLeyangBranchsetAdjacencySpectrumHeatTrace
 import Omega.Zeta.DerivedLeyangArtinMazurZeta
 import Omega.Zeta.DerivedLeyangBranchsetIharaZeta
@@ -165,6 +166,7 @@ import Omega.Zeta.HankelBadPrimeSelectionProbability
 import Omega.Zeta.HankelDeterminantalRadicalEqRigidity
 import Omega.Zeta.HankelDiscriminantUnavoidableBadPrimes
 import Omega.Zeta.HankelFinitefieldRandomCompletionNondegenerate
+import Omega.Zeta.XiHankelFinitefieldDeterministicCompletion
 import Omega.Zeta.HankelFirstBlockDeterminantDiscriminantWeight
 import Omega.Zeta.HankelMaximalMinorSyndromeNormalFormUniqueness
 import Omega.Zeta.HankelMinimalRecurrenceGoodPrimePreservation
