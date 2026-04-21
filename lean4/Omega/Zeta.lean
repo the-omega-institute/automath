@@ -470,6 +470,7 @@ import Omega.Zeta.XiLeyangTwoLeadingZerosExtrapolateUc
 import Omega.Zeta.XiHypercubeLeyangAffineOrbifoldTwoLayer
 import Omega.Zeta.XiLimitDefectPotentialL1Sumrule
 import Omega.Zeta.XiLogDefectGammaTranslationL1Lipschitz
+import Omega.Zeta.XiLogDefectVsQuadraticLoadTwoSided
 import Omega.Zeta.XiLogDefectPotentialLinftyBoundByTotalDelta
 import Omega.Zeta.XiLogisticDivergenceDictionary
 import Omega.Zeta.XiMarkovDerivativeDeterminantBadPrime
@@ -526,6 +527,7 @@ import Omega.Zeta.XiSmithLossMinimalBranchRegister
 import Omega.Zeta.XiCofinalPrimeExhaustion
 import Omega.Zeta.XiSquarefreePrimeSupportMinGrowth
 import Omega.Zeta.XiTerminalHankelModpiNoninvertibilityFiber
+import Omega.Zeta.XiTerminalHankelStandardFormPadicLoss
 import Omega.Zeta.XiTerminalReplicaSoftcoreQGenfuncRationalPartition
 import Omega.Zeta.XiTerminalZmDeltaCa5CollisionNodeSplittingLegendre
 import Omega.Zeta.XiTerminalZmDeltaCa5DiscriminantFactorizationSemistablePrimes
