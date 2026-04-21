@@ -369,6 +369,7 @@ import Omega.Zeta.SyncCyclotomicEliminationEvenness
 import Omega.Zeta.SyncCyclotomicEliminationRootSIntegrality
 import Omega.Zeta.SyncHatdeltaCurveDoubleCoverBranchGenus6
 import Omega.Zeta.SyncHatdeltaCurveQuotientPlaneQuarticGenus3
+import Omega.Zeta.SyncHatdeltaPrymDecomposition
 import Omega.Zeta.SyncKernelMixingRate
 import Omega.Zeta.SyncResetWordGeometricTail
 import Omega.Zeta.SyncKernelPalindrome
@@ -524,6 +525,7 @@ import Omega.Zeta.XiNaturalExtensionH153MinimalFiniteAlphabet
 import Omega.Zeta.XiNonarchimedeanPronyHenselNewtonInversion
 import Omega.Zeta.XiNonarchimedeanPronyUnitJacobianCriterion
 import Omega.Zeta.XiNullCompleteTrichotomyOffline
+import Omega.Zeta.XiUnitarySliceDecidable
 import Omega.Zeta.XiNullThreeWay
 import Omega.Zeta.XiNullOrthogonalTrichotomyResourceNonsubstitutable
 import Omega.Zeta.XiNullFiberEntropyWindow
