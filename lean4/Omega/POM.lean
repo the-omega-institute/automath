@@ -44,6 +44,7 @@ import Omega.POM.CollisionAQFibonacciBFPrimitivePrimeDivisor
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.CollisionEntropyRate
 import Omega.POM.CostCanonicalRepresentativeFunctor
+import Omega.POM.CostOptimizationDecidable
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.CollisionKernelPublication
 import Omega.POM.CoarseGrainedKernel
@@ -397,6 +398,7 @@ import Omega.POM.ProjectivePathAtomicPronyRank
 import Omega.POM.ProjectivePressureDiscreteConvexitySlopes
 import Omega.POM.ProjectivePressureDiscreteFlatnessForcesAffine
 import Omega.POM.ProjectivePressureDiscreteLegendreEnvelope
+import Omega.POM.ProjTropicalMinmean
 import Omega.POM.ProjectivePressureHolderLogconvex
 import Omega.POM.ProjectivePressureZeroNormalization
 import Omega.POM.ZeroTempStableSelection
