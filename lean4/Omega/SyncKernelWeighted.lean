@@ -30,6 +30,7 @@ import Omega.SyncKernelWeighted.KernelSelfDualCharacterSchur
 import Omega.SyncKernelWeighted.KoenigsLinearizationWittDilation
 import Omega.SyncKernelWeighted.LambdaLinearResponse
 import Omega.SyncKernelWeighted.LambdaEndpointsMonotoneUplift
+import Omega.SyncKernelWeighted.LambdaExtremeAsymp
 import Omega.SyncKernelWeighted.MobiusErrorPropagation
 import Omega.SyncKernelWeighted.MuPochhammerNecklaceDirichletPolylog
 import Omega.SyncKernelWeighted.OnlineDelayFromPlocal
