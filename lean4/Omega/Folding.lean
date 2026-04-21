@@ -219,6 +219,7 @@ import Omega.Folding.FoldCollisionZeroReduction
 import Omega.Folding.FoldComplexity
 import Omega.Folding.FoldCongruenceModSemirings
 import Omega.Folding.FoldCriticalResonanceGap
+import Omega.Folding.FoldCriticalResonanceConstantExpRate
 import Omega.Folding.FoldFiberLevelLogspace
 import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy
 import Omega.Folding.FoldFiberParityEnergySimplex

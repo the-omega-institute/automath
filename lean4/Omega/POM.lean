@@ -388,6 +388,7 @@ import Omega.POM.ReplicaSoftcoreTemperatureFreeEnergyPhaseTransition
 import Omega.POM.ReplicaSoftcoreWordTraceCycleGF
 import Omega.POM.ResidueRefinementJensen
 import Omega.POM.ResonanceMod6PeriodQ13Q15
+import Omega.POM.ResonanceHenselSplittingZ2
 import Omega.POM.ResonanceNewmanNotInSingleRootFieldsQ9Q13
 import Omega.POM.ResonanceHankelNullIntegralPrincipalization
 import Omega.POM.ResonanceHankelNullAllScales
