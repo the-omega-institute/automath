@@ -16,6 +16,7 @@ import Omega.Conclusion.BinfoldCollisionScaleForcesMaxfiberDivergence
 import Omega.Conclusion.BinfoldCriticalCapacityThreephaseLaw
 import Omega.Conclusion.BinfoldExactInversionUpperEndpointFreezingSlope
 import Omega.Conclusion.BinfoldTwoScalarCompleteReconstruction
+import Omega.Conclusion.BinarySparsityLogarithmicDeviation
 import Omega.Conclusion.BigWittExactSpectralBudget
 import Omega.Conclusion.BlockConsistencyNotSchurConcave
 import Omega.Conclusion.BlockConsistencyMinMiReduction
@@ -160,6 +161,7 @@ import Omega.Conclusion.InverseLimitAddressFinitePrefixDeterminacy
 import Omega.Conclusion.JGEllipseConditionNumberThreshold
 import Omega.Conclusion.JGEllipseFixedEpsilonInformationBarrier
 import Omega.Conclusion.JGEllipsePackingSqrtLaw
+import Omega.Conclusion.JGFocalDistanceDecoding
 import Omega.Conclusion.JoukowskyHolomorphicBlindnessRadialIdentifiability
 import Omega.Conclusion.KernelChainRule
 import Omega.Conclusion.KirchhoffGreenDeterminantIdentity

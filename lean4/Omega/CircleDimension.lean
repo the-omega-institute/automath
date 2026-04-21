@@ -144,6 +144,7 @@ import Omega.CircleDimension.MinimalAuditCompletion
 import Omega.CircleDimension.MinimalLogAuditablePhaseCircles
 import Omega.CircleDimension.MinimalRecordAxis
 import Omega.CircleDimension.MixedLocalizationPkGrowthInversion
+import Omega.CircleDimension.XiSelfdualMeanPotentialInversion
 import Omega.CircleDimension.MobiusBipartiteColoring
 import Omega.CircleDimension.MobiusCayleyArctanRigidity
 import Omega.CircleDimension.MultiliftInterferenceCorrection
