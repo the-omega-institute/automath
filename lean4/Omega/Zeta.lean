@@ -488,6 +488,7 @@ import Omega.Zeta.XiMomentRatioIdentifiesAmin
 import Omega.Zeta.XiNaturalExtensionH153MinimalFiniteAlphabet
 import Omega.Zeta.XiNonarchimedeanPronyHenselNewtonInversion
 import Omega.Zeta.XiNullCompleteTrichotomyOffline
+import Omega.Zeta.XiNullThreeWay
 import Omega.Zeta.XiNullFiberEntropyWindow
 import Omega.Zeta.XiOffsetNullTypeSafety
 import Omega.Zeta.XiOptimalRecoveryTimeEqualsConditionalEntropy
