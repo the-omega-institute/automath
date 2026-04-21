@@ -2756,7 +2756,9 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         # ── B2: Oracle editorial review (EVENT WAIT) ─────────────
         # Sanitize paper_name to ASCII for URL safety (中文 in task_id breaks polling)
         safe_name = re.sub(r"[^a-zA-Z0-9_-]", "_", state.paper_name)[:80]
-        task_id = f"review_{safe_name}_B{rnd}_{int(time.time())}"
+        # Use stable task_id: paper name only, no round/timestamp.
+        # This ensures Oracle results survive pipeline restarts.
+        task_id = f"review_{safe_name}"
         # Always use first-review prompt: Oracle has no history across rounds
         prompt = build_oracle_review_prompt(state.target_journal)
 
