@@ -411,6 +411,7 @@ import Omega.Conclusion.TentKernelLocalInvertibility
 import Omega.Conclusion.ThreeEndCertificateIrreducibility
 import Omega.Conclusion.ThreeEndCertificateJointSufficiencyMinimality
 import Omega.Conclusion.ThreeEndCertificateOrthogonality
+import Omega.Conclusion.TimeAsAddressResolutionFiltration
 import Omega.Conclusion.TimeReversalOrbitParity
 import Omega.Conclusion.TwoAtomScalarRecoveryAlpha2
 import Omega.Conclusion.TwoAtomThreshold

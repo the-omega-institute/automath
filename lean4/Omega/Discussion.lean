@@ -8,7 +8,9 @@ import Omega.Discussion.CrossingWindingBlaschkeIndex
 import Omega.Discussion.CubicalStokesElimination2Cycle
 import Omega.Discussion.DerivedFiberWatataniTimeParityEquivalence
 import Omega.Discussion.DerivedNoncontractibleLocalTimeMod6
+import Omega.Discussion.DefectMeasureFourierLaplace
 import Omega.Discussion.DimensionalNullTrigger
+import Omega.Discussion.DtnGenerator
 import Omega.Discussion.EndpointDiscreteVsContinuous
 import Omega.Discussion.EpsZkCmiRiskImprovementBound
 import Omega.Discussion.EulerFactorBasepointOrbit
