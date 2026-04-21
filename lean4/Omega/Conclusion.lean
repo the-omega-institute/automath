@@ -274,6 +274,7 @@ import Omega.Conclusion.SectionLedgerCapacityFunctional
 import Omega.Conclusion.SectionLedgerKL
 import Omega.Conclusion.SelfdualScaleMellinDoesNotForceVerticalPeriodicity
 import Omega.Conclusion.SemanticEquivalenceUndecidable
+import Omega.Conclusion.StieltjesPronyStepOptimalLaw
 import Omega.Conclusion.FoldFiberHardcoreAnnealedConservation
 import Omega.Conclusion.MultishiftCommutingAlgorithmsPolynomial
 import Omega.Conclusion.MultishiftRandomWalkProfile

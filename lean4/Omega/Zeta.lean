@@ -457,6 +457,7 @@ import Omega.Zeta.XiPickPoissonSchurFluxClosedForm
 import Omega.Zeta.XiPickPoissonSchurOneStepCollapse
 import Omega.Zeta.XiPoissonSecondOrderTwoCosineChannels
 import Omega.Zeta.XiPomMinrealVsSpectralBudgetSeparation
+import Omega.Zeta.XiPronyDecisionVsReconstructionOneSampleGap
 import Omega.Zeta.XiPronyMomentMapJacobianDelta4
 import Omega.Zeta.XiPwNoContinuousHair
 import Omega.Zeta.XiPwTypeSafetyNull

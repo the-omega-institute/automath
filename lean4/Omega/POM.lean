@@ -195,6 +195,7 @@ import Omega.POM.KCollisionRootFilter
 import Omega.POM.KCollisionMittagLefflerScaling
 import Omega.POM.KLDefectIdentity
 import Omega.POM.KappaKlDecomposition
+import Omega.POM.KLLedgerTelescope
 import Omega.POM.KLPythagorasTower
 import Omega.POM.KLPythagorasUniform
 import Omega.POM.KernelSpectrum
