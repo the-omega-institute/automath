@@ -149,6 +149,7 @@ import Omega.Folding.FixedFiberLipschitzOptimization
 import Omega.Folding.Fold
 import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.GaugeAnomalyLeyangSlopeSquareMinpoly
+import Omega.Folding.GaugeAnomalyLeyangUniversalKernels
 import Omega.Folding.GodelFiniteDictionaryGibbsFactorization
 import Omega.Folding.GodelFiniteDictionaryDirichletPartitionHolomorphic
 import Omega.Folding.KilloFoldApproxAddressFanoLowerBound

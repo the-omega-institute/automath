@@ -36,6 +36,7 @@ import Omega.Zeta.XiPrimeRegisterHistoryInverseLimit
 import Omega.Zeta.XiTerminalZmEllipticBadprime37DenominatorValuationLimitLaw
 import Omega.Zeta.XiTerminalZmS3RootRecoveryCoordinateAutomorphisms
 import Omega.Zeta.XiTerminalZmStokesLeyangSharedArtinRepresentation
+import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne
 import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
 import Omega.Zeta.AuditedEvenFirstCapacityKinkFibonacciJump
