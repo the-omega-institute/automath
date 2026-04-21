@@ -6,6 +6,7 @@ import Omega.OperatorAlgebra.CylinderMarginalization
 import Omega.OperatorAlgebra.FiberDeterminantSignCapacityParity
 import Omega.OperatorAlgebra.FiberReflectorDeterminantPotential
 import Omega.OperatorAlgebra.FiberSpectrumDeterminantPartition
+import Omega.OperatorAlgebra.FkdetProperties
 import Omega.OperatorAlgebra.FoldBayesPosteriorCollapse
 import Omega.OperatorAlgebra.FoldBasicConstructionPairGroupoid
 import Omega.OperatorAlgebra.BlockFoldsatTraceCriterion
