@@ -395,6 +395,7 @@ import Omega.Folding.MaxFiberHigh
 import Omega.Folding.MaxFiberHolographicDepthAmplification
 import Omega.Folding.MaxFiberTwoResonanceBiasStrengthening
 import Omega.Folding.MaxFiberTwoStep
+import Omega.Folding.TopTwoZeckendorfTrisect
 import Omega.Folding.CongruenceUniversalProperty
 import Omega.Folding.MetallicBinetClosedForm
 import Omega.Folding.MetallicCompressionExtremum

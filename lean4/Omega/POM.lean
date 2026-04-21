@@ -30,6 +30,7 @@ import Omega.POM.CapacityCollisionDataProcessing
 import Omega.POM.CatalanMoments
 import Omega.POM.CentralizerDetMod5
 import Omega.POM.CentralizerFPdim
+import Omega.POM.CentralizerSemiringFibonacciFusion
 import Omega.POM.CharpolyModpA2Embedding
 import Omega.POM.CoarsegrainingMajorizationSchur
 import Omega.POM.CollisionAQFibonacciBFPrimitivePrimeDivisor
