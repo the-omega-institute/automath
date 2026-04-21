@@ -36,6 +36,7 @@ import Omega.Zeta.XiSingleBaseDealiasingCountableException
 import Omega.Zeta.XiGridScanDiophantineDealiasingStability
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
 import Omega.Zeta.XiExtremeResonancePositivity
+import Omega.Zeta.XiExtremeResonanceCriterion
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiDefectDensityConeChoquetExtreme

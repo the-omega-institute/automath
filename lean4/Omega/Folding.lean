@@ -47,6 +47,7 @@ import Omega.Folding.BernoulliPPressureQuartic
 import Omega.Folding.FoldBernoulliPPressureDiscriminantDegree11
 import Omega.Folding.FoldBernoulliPPressureCycleTrigonalCurveBranch
 import Omega.Folding.FoldGaugeAnomalyGodelEllipsoidVolume
+import Omega.Folding.FoldGaugeAnomalyFirstTrigonalQ4S4
 import Omega.Folding.BernoulliPRegenerationBivariatePGF
 import Omega.Folding.BernoulliPRegenerationConditionalLengthShiftedNB
 import Omega.Folding.BernoulliPRenewalDeterminantFactorization
