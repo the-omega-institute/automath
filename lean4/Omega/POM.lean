@@ -78,6 +78,7 @@ import Omega.POM.DiagonalRateSeparationWeightSignRule
 import Omega.POM.DiagonalRateAbsorbingMeanHitTime
 import Omega.POM.DiagonalRateAbsorbingHitPGF
 import Omega.POM.DiagonalRateAcceptRefreshHaltingState
+import Omega.POM.DiagonalRateAcceptRefreshSeparationStrict
 import Omega.POM.DiagonalRateAcceptRefreshSSTPGF
 import Omega.POM.DiagonalRateAcceptRefreshSSTStrong
 import Omega.POM.DiagonalRateAcceptRefreshSeparationExact
@@ -94,6 +95,7 @@ import Omega.POM.DiagonalSubleadingTopDegeneracy
 import Omega.POM.DiagonalRateRefreshWeightedCayleyPrufer
 import Omega.POM.DiagonalRateScalarCollapse
 import Omega.POM.DiagonalRateSeparationPGFRational
+import Omega.POM.DiagonalRateSeparationHausdorffLogconvex
 import Omega.POM.DiagonalRateSeparationSpectralResidue
 import Omega.POM.DiagonalRateTensorUpperBound
 import Omega.POM.DiagonalRateUniformSynergyInequality
