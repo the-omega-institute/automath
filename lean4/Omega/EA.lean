@@ -86,6 +86,7 @@ import Omega.EA.PrimeRegisterNormalFormUniqueness
 import Omega.EA.PrimeRegisterOrbitFiberCoincidence
 import Omega.EA.PrimeRegisterResidualLedgerGroup
 import Omega.EA.PrimeRegisterRewriteConfluentNormalForm
+import Omega.EA.PrimitiveFreeArith
 import Omega.EA.PrimitiveMinimalSuccessor
 import Omega.EA.ProjectionWordNormalForm
 import Omega.EA.ProjectionWordRewrite

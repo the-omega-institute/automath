@@ -9,6 +9,7 @@ import Omega.Folding.BernoulliHalfHighTempInversePower
 import Omega.Folding.BernoulliHalfLowTempCubicActivation
 import Omega.Folding.BernoulliPAutocovarianceGeneratingRational
 import Omega.Folding.BernoulliPBitpairLaw
+import Omega.Folding.BernoulliPPrimorialGodelLaws
 import Omega.Folding.BernoulliPCovariancePartialFractions
 import Omega.Folding.BernoulliPCovarianceExplicitEvenOdd
 import Omega.Folding.BernoulliPCumulantDenominatorLaw
