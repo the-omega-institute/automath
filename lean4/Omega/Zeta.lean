@@ -214,6 +214,7 @@ import Omega.Zeta.XiHankelFinitefieldDeterministicCompletion
 import Omega.Zeta.XiHankelNormalformHpDiscreteConcaveInvert
 import Omega.Zeta.XiHellingerHankelConstantRationality
 import Omega.Zeta.XiHellingerKernelFourierSech2
+import Omega.Zeta.XiHellingerGramStrictTotalPositivity
 import Omega.Zeta.HankelFirstBlockDeterminantDiscriminantWeight
 import Omega.Zeta.HankelMaximalMinorSyndromeNormalFormUniqueness
 import Omega.Zeta.HankelMinimalRecurrenceGoodPrimePreservation
@@ -419,6 +420,7 @@ import Omega.Zeta.CayleyTimefiberPoissonCollapse
 import Omega.Zeta.XiCayleyJoukowskyHarmonicMeasureEllipse
 import Omega.Zeta.XiCdimLambdaClosedForm
 import Omega.Zeta.XiCdimLocalizationQuotientSolenoidSurjections
+import Omega.Zeta.XiCdimLocalizationSolenoidCircleExtensionNonsplit
 import Omega.Zeta.XiCdimLocalizationSolenoidNotSubgroupOrQuotientOfFiniteTorus
 import Omega.Zeta.XiCdimLocalizationSolenoidNoNontrivialTorusInput
 import Omega.Zeta.XiCenterSixfoldKappaNodeInversionBlowup

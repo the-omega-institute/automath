@@ -180,6 +180,7 @@ import Omega.Folding.OracleCapacitySlopeJumpsDetermineHistogram
 import Omega.Folding.FoldBoundaryStokesTorsorH1H1
 import Omega.Folding.FoldCapacityGlobalExtremizersFixedMass
 import Omega.Folding.FoldCapacityDiscretePotentialHistogram
+import Omega.Folding.FoldGodelCarryConditionalEntropy
 import Omega.Folding.FoldResonanceLucasNearResonanceGap
 import Omega.Folding.FoldResonanceTruncationError
 import Omega.Folding.FoldBinDigitDP
