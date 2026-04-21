@@ -162,6 +162,7 @@ import Omega.Folding.FoldResonanceLucasNearResonanceGap
 import Omega.Folding.FoldResonanceTruncationError
 import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinDegeneracyTailCapacityKinks
+import Omega.Folding.FoldBinGaugeVolumeStieltjesSum
 import Omega.Folding.FoldBinChi2Col
 import Omega.Folding.FoldBinEscortEscortKl
 import Omega.Folding.FoldBinGaugeBernoulliExtractionOperator

@@ -298,6 +298,7 @@ import Omega.Conclusion.SquarefreeRTLaminarNesting
 import Omega.Conclusion.StableSuccessorFaithfulSemigroup
 import Omega.Conclusion.StableSuccessorOrbitNormalForm
 import Omega.Conclusion.StokesEnergyDyadicMartingale
+import Omega.Conclusion.StokesEnergyHilbertProjection
 import Omega.Conclusion.StokesEnergyGeneralDegreeCascade
 import Omega.Conclusion.StokesSteinWeightedGraphMinflow
 import Omega.Conclusion.SubexponentialLedgerPhaseUniversality
