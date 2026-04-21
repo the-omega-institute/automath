@@ -171,6 +171,7 @@ import Omega.Conclusion.FrozenEscortTvRigidity
 import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Conclusion.FiniteRankLedgerTelescopingLaw
 import Omega.Conclusion.FundamentalCutHadamardRigidity
+import Omega.Conclusion.KirchhoffHadamardEqualityCriterion
 import Omega.Conclusion.GeometricUpliftFourFourCollapse
 import Omega.Conclusion.GodelIntegerizationPrimeShiftPolynomial
 import Omega.Conclusion.GodelPrefixPrimeMonoid
