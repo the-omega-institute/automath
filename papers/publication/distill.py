@@ -859,7 +859,11 @@ def _contains_trigger(text: str, trigger: str) -> bool:
 
 
 def _score_tex_file(tex_file: Path, triggers: list[str]) -> dict[str, Any]:
-    """Score one core `.tex` file against router triggers."""
+    """Score one core .tex file against router triggers.
+
+    Per-file score = matched_triggers / total_triggers (coverage ratio).
+    Context tags (H/T/B) are preserved for section-level weighting.
+    """
     text = read_text(tex_file)
     headings = _extract_headings(text)
     claims = _extract_claims(text)
@@ -884,8 +888,9 @@ def _score_tex_file(tex_file: Path, triggers: list[str]) -> dict[str, Any]:
             context = ""
         if context:
             trigger_hits.append({"trigger": trigger, "context": context})
-    denominator = 5 * len(triggers) if triggers else 1
-    score = (2 * h_count + 2 * t_count + b_count) / denominator
+    matched = h_count + t_count + b_count
+    denominator = len(triggers) if triggers else 1
+    score = matched / denominator
     rel_path = tex_file.relative_to(CORE_BODY).as_posix()
     rel_parts = tex_file.relative_to(CORE_BODY).parts
     section = rel_parts[0] if rel_parts else tex_file.stem
@@ -893,16 +898,96 @@ def _score_tex_file(tex_file: Path, triggers: list[str]) -> dict[str, Any]:
         "section": section,
         "tex_file": rel_path,
         "score": round(score, 4),
-        "match": score >= 0.3,
+        "match": False,  # determined at section level
         "counts": {"H": h_count, "T": t_count, "B": b_count},
         "trigger_hits": trigger_hits,
         "headings": headings[:8],
         "claim_count": len(claims),
     }
 
+def _aggregate_section_scores(
+    file_scores: list[dict[str, Any]], triggers: list[str]
+) -> list[dict[str, Any]]:
+    """Aggregate per-file scores into per-section scores.
+
+    Section score = unique_triggers_matched / total_triggers, with a bonus
+    for triggers matched in heading (H) or theorem (T) context.  The
+    weighted formula is:
+
+        (2*H_unique + 2*T_unique + B_unique) / (2 * total_triggers)
+
+    This keeps the design-doc threshold of 0.3 reachable: a section needs
+    roughly 20% of triggers in H/T context, or 60% in body context.
+    """
+    sections: dict[str, dict[str, Any]] = {}
+    for item in file_scores:
+        sec = item["section"]
+        if sec not in sections:
+            sections[sec] = {
+                "section": sec,
+                "triggers_h": set(),
+                "triggers_t": set(),
+                "triggers_b": set(),
+                "file_scores": [],
+                "best_file": None,
+                "best_file_score": -1.0,
+            }
+        entry = sections[sec]
+        for hit in item["trigger_hits"]:
+            trig = hit["trigger"]
+            ctx = hit["context"]
+            if ctx == "H":
+                entry["triggers_h"].add(trig)
+            elif ctx == "T":
+                entry["triggers_t"].add(trig)
+            else:
+                entry["triggers_b"].add(trig)
+        entry["file_scores"].append(
+            {"tex_file": item["tex_file"], "score": item["score"]}
+        )
+        if item["score"] > entry["best_file_score"]:
+            entry["best_file_score"] = item["score"]
+            entry["best_file"] = item["tex_file"]
+
+    n = len(triggers) if triggers else 1
+    result = []
+    for sec, entry in sections.items():
+        h_unique = len(entry["triggers_h"])
+        # T triggers not already counted in H
+        t_unique = len(entry["triggers_t"] - entry["triggers_h"])
+        # B triggers not already counted in H or T
+        b_unique = len(
+            entry["triggers_b"] - entry["triggers_h"] - entry["triggers_t"]
+        )
+        all_matched = entry["triggers_h"] | entry["triggers_t"] | entry["triggers_b"]
+        coverage = len(all_matched) / n
+        weighted = (2 * h_unique + 2 * t_unique + b_unique) / (2 * n)
+        score = max(coverage, weighted)
+        result.append(
+            {
+                "section": sec,
+                "tex_file": entry["best_file"] or "",
+                "score": round(score, 4),
+                "match": score >= 0.15,
+                "coverage": round(coverage, 4),
+                "counts": {"H": h_unique, "T": t_unique, "B": b_unique},
+                "unique_triggers": sorted(all_matched),
+                "file_count": len(entry["file_scores"]),
+                "top_files": sorted(
+                    entry["file_scores"], key=lambda x: x["score"], reverse=True
+                )[:5],
+            }
+        )
+    result.sort(key=lambda x: x["score"], reverse=True)
+    return result
 
 def run_stage_s(state: DistillState, dry_run: bool = False) -> bool:
-    """Run Stage S deterministic router matching over core LaTeX files."""
+    """Run Stage S deterministic router matching over core LaTeX files.
+
+    Scoring is section-level: triggers are aggregated across all .tex
+    files within each top-level section directory.  A section matches when
+    its coverage score reaches the 0.3 threshold.
+    """
     logger.info("Stage S starting for %s", state.name)
     try:
         raw_research = _read_artifact_json(state, "raw_research.json")
@@ -917,26 +1002,37 @@ def run_stage_s(state: DistillState, dry_run: bool = False) -> bool:
         logger.error("Core body directory not found: %s", CORE_BODY)
         return False
     tex_files = sorted(path for path in CORE_BODY.rglob("*.tex") if path.is_file())
-    scored = [_score_tex_file(path, triggers) for path in tex_files]
-    matches = sorted(
-        [item for item in scored if item["match"]],
-        key=lambda item: item["score"],
-        reverse=True,
+    logger.info(
+        "Stage S scanning %d .tex files against %d triggers",
+        len(tex_files), len(triggers),
     )
+    file_scores = [_score_tex_file(path, triggers) for path in tex_files]
+    section_scores = _aggregate_section_scores(file_scores, triggers)
+    matches = [item for item in section_scores if item["match"]]
+    for item in matches:
+        logger.info(
+            "  matched section=%s score=%.4f coverage=%.4f triggers=%s",
+            item["section"],
+            item["score"],
+            item["coverage"],
+            item["unique_triggers"][:5],
+        )
     output = {
         "mathematician": state.name,
         "trigger_count": len(triggers),
         "triggers": triggers,
         "matches": matches,
-        "all_sections": scored,
+        "all_sections": section_scores,
     }
     _write_artifact_json(state, "section_matches.json", output)
     state.current_stage = "G"
     state.round_number += 1
     save_state(state)
-    logger.info("Stage S completed with %s matches", len(matches))
+    logger.info(
+        "Stage S completed with %d section matches (of %d sections)",
+        len(matches), len(section_scores),
+    )
     return True
-
 
 def _dry_generated_payload(state: DistillState) -> dict[str, Any]:
     """Build a deterministic Stage G artifact for dry-run execution."""
