@@ -206,6 +206,7 @@ import Omega.POM.InvertWFromHomogeneousCurve
 import Omega.POM.KCollisionRootFilter
 import Omega.POM.KCollisionMittagLefflerScaling
 import Omega.POM.KLDefectIdentity
+import Omega.POM.KappaDerivable
 import Omega.POM.KappaKlDecomposition
 import Omega.POM.KLLedgerTelescope
 import Omega.POM.LedgerResidualTelescoping
@@ -297,6 +298,7 @@ import Omega.POM.OrthotopeSurfaceVolumeVariance
 import Omega.POM.P2FrobeniusParitySieve
 import Omega.POM.ParryTwoPointAlternating
 import Omega.POM.ParrySurfaceDerivative
+import Omega.POM.ParryComplexityDetector
 import Omega.POM.PartitionMobiusEventInversion
 import Omega.POM.PartitionPressureKnapsack
 import Omega.POM.PathIndSetPolyClosed
