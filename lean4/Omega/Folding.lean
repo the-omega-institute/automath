@@ -254,6 +254,7 @@ import Omega.Folding.FoldFiberParityEnergySimplex
 import Omega.Folding.FoldCriticalResonanceConstant
 import Omega.Folding.FoldFibonacciFrequencyFourierSpikeClosedForm
 import Omega.Folding.FoldFourierPhaseLockingByComplement
+import Omega.Folding.GaugeAnomalyLeyangQuadraticLatticeZeros
 import Omega.Folding.FoldGaugeAnomalyP10HLinearDisjointness
 import Omega.Folding.FoldGaugeAnomalyP10HSplittingFieldProduct
 import Omega.Folding.FoldGaugeAnomalyCongruencePhaseTransition
