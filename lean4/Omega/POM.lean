@@ -251,6 +251,7 @@ import Omega.POM.MassSplittingMomentRoot
 import Omega.POM.MomLiftBeckChevalley
 import Omega.POM.MaxAtomicWeightParitySecondOrder
 import Omega.POM.MaxFiberEvenChernoffExponent
+import Omega.POM.MaxFiberRateEndpoint
 import Omega.POM.MicrocanonicalFoldSectionCount
 import Omega.POM.MaxFiberPublication
 import Omega.POM.MaxMassDispersionBound
