@@ -13,6 +13,7 @@ import Omega.Zeta.AdamsBinomialProbeKernelToeplitzPsdEquivalence
 import Omega.Zeta.AdamsBinomialProbeLazyWalkHeatKernel
 import Omega.Zeta.AdamsFiberMobiusInversion
 import Omega.Zeta.AppOffcriticalRadiusCompression
+import Omega.Zeta.AppHorizonPoleImprint
 import Omega.Zeta.Arity335CharacterEnergy
 import Omega.Zeta.Arity335CosineOnly
 import Omega.Zeta.Arity335EpsEffInversion
@@ -32,6 +33,7 @@ import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiSingleBaseDealiasingCountableException
+import Omega.Zeta.XiGridScanDiophantineDealiasingStability
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
 import Omega.Zeta.XiExtremeResonancePositivity
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
