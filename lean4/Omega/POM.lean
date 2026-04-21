@@ -179,6 +179,7 @@ import Omega.POM.HankelSyndromeModuleKernelEqualsMultiples
 import Omega.POM.HalfOrderPressureExtremeLowerBoundSqrtFreezing
 import Omega.POM.HighMultiplicitySparse
 import Omega.POM.IndependenceDpRadius2
+import Omega.POM.IndsetPowerHomDisj
 import Omega.POM.InverseLimitNaturality
 import Omega.POM.InvertWFromHomogeneousCurve
 import Omega.POM.KCollisionRootFilter
