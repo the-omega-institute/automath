@@ -62,6 +62,8 @@ import Omega.SyncKernelWeighted.UnitarySliceHalfPhaseLocking
 import Omega.SyncKernelWeighted.VectorPotentialPhiMinusLdpParam
 import Omega.SyncKernelWeighted.WeightedNewmanQGaloisS37
 import Omega.SyncKernelWeighted.WeightedNewmanThreshold
+import Omega.SyncKernelWeighted.EdgeworthSixEight
+import Omega.SyncKernelWeighted.WeightedCompletionQ
 import Omega.SyncKernelWeighted.WeightedUnitRootFinite
 import Omega.SyncKernelWeighted.WittFrobeniusDefectDivisibility
 import Omega.SyncKernelWeighted.WittFrobeniusIteratedDescent
