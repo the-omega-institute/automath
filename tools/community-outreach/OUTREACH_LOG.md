@@ -16,6 +16,7 @@
 | Target | Channel | Result | Date |
 |---|---|---|---|
 | teorth/equational_theories #418 | GitHub issue reply | [submitted](https://github.com/teorth/equational_theories/issues/418#issuecomment-4289701235) | 2026-04-21 |
+| teorth/equational_theories #364 | GitHub PR | [PR #1435](https://github.com/teorth/equational_theories/pull/1435) | 2026-04-22 |
 | mysticflounder/equational-magma-theorems | GitHub issue #1 | [submitted](https://github.com/mysticflounder/equational-magma-theorems/issues/1) | 2026-04-15 |
 
 ## Backflow Tracking
