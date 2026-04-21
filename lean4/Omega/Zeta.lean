@@ -264,6 +264,7 @@ import Omega.Zeta.HankelMinimalRecurrenceGoodPrimePreservation
 import Omega.Zeta.HankelNullspaceTruncatedIdealStructure
 import Omega.Zeta.HankelRankLinearRecurrence
 import Omega.Zeta.HankelRankMinimalLinearRealization
+import Omega.Zeta.HankelSinglePointRandomAudit
 import Omega.Zeta.XiOracleCollapseToeplitzPsdFiniteTruncation
 import Omega.Zeta.HankelShortPrimeAvoidsBadset
 import Omega.Zeta.HankelStiffnessBalance
