@@ -348,6 +348,7 @@ import Omega.Zeta.SyncKernelResetWordWaitingTimeGeneralIid
 import Omega.Zeta.SyncKernelSpectrum
 import Omega.Zeta.SyncNewtonExtremeSlopes
 import Omega.Zeta.SyncRhoGapM8Diffusive
+import Omega.Zeta.SyncRhoGapM2
 import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Zeta.SyncRhoM2Publication
 import Omega.Zeta.TerminalZmTranslationTBranchDiscriminantC3U1Positivity
@@ -458,6 +459,7 @@ import Omega.Zeta.XiHankelNormalformCRTAdelicMultiplicity
 import Omega.Zeta.XiFixedArityDyadicMultiplicityPresburgerInP
 import Omega.Zeta.XiHankelSigminLowerboundVandermondeSeparation
 import Omega.Zeta.XiHellingerToeplitzDense2xLaw
+import Omega.Zeta.XiHellingerToeplitzBitBudgetLinearLaw
 import Omega.Zeta.XiImplCoding
 import Omega.Zeta.XiJDiscriminantElliptic2TorsionMobius
 import Omega.Zeta.XiEllipticTorsionStokesWeilPairing
