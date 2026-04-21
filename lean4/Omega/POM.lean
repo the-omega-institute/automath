@@ -63,6 +63,7 @@ import Omega.POM.DefectBand
 import Omega.POM.DelayMin
 import Omega.POM.EhrhartEqualsOrderpolyShift
 import Omega.POM.DeltaMinExtraReadouts
+import Omega.POM.DeltaqMeanSquareRhCriterion
 import Omega.POM.DeltaqGoldenEnvelope
 import Omega.POM.DeltaqGLambdaIdentity
 import Omega.POM.DeltaqSpectralDimensionIdentity
@@ -88,6 +89,7 @@ import Omega.POM.DiagonalRateAcceptRefreshSSTPGF
 import Omega.POM.DiagonalRateAcceptRefreshSSTStrong
 import Omega.POM.DiagonalRateAcceptRefreshSeparationExact
 import Omega.POM.DiagonalRateBinaryClosedForm
+import Omega.POM.DiagonalRateCriticalContinuousTimeGeneratorMaxent
 import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensor
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete
 import Omega.POM.DiagonalRateRefreshCountRenewalLLNCLT
