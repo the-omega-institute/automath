@@ -412,6 +412,7 @@ import Omega.Zeta.XiHankelSigminLowerboundVandermondeSeparation
 import Omega.Zeta.XiHellingerToeplitzDense2xLaw
 import Omega.Zeta.XiImplCoding
 import Omega.Zeta.XiJDiscriminantElliptic2TorsionMobius
+import Omega.Zeta.XiEllipticTorsionStokesWeilPairing
 import Omega.Zeta.XiJDiscriminantMobiusRigidityCovariance
 import Omega.Zeta.XiJSexticEllipticLattesTMap
 import Omega.Zeta.XiJensenDefectPowerPullbackInvariance

@@ -146,6 +146,7 @@ import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.KilloFoldApproxAddressFanoLowerBound
 import Omega.Folding.Killo2adicHolographicPrefixClassification
 import Omega.Folding.KilloEllipseDiagonalPrimeRegisterEquivalence
+import Omega.Folding.KilloPrimeFreedomNonFinitizability
 import Omega.Folding.KilloFoldCollisionSpectralSelfDuality
 import Omega.Folding.KilloFoldZeroSpectrumAffineCongruence
 import Omega.Folding.KilloChainInteriorGodelGcdLcm
