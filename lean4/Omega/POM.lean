@@ -71,6 +71,7 @@ import Omega.POM.DiagonalRateAcceptRefreshSeparationExact
 import Omega.POM.DiagonalRateBinaryClosedForm
 import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensor
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete
+import Omega.POM.DiagonalRateRefreshCountScgfDerivatives
 import Omega.POM.DiagonalRateKeepProbabilityMonotone
 import Omega.POM.DiagonalRateRankOneRefreshDeterminantCollapse
 import Omega.POM.DiagonalRateKeepResampleChannel
