@@ -377,6 +377,7 @@ import Omega.Zeta.XiEndpointJensenDefectH12GramKernel
 import Omega.Zeta.XiEndpointPoissonWeightScaling
 import Omega.Zeta.XiEndpointPsiPoissonMonopoleAsymptotic
 import Omega.Zeta.XiEndpointPsiPoissonShiftLoewnerMonotone
+import Omega.Zeta.XiEndpointTwoSymbolJet
 import Omega.Zeta.XiEndpointRecursiveRescalingTwoTerm
 import Omega.Zeta.XiEntropyGapExponentialSuppressionNonzeroFingerprint
 import Omega.Zeta.XiBinfoldRenyi2EntropyDefectConstant

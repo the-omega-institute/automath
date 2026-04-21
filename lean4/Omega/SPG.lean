@@ -74,6 +74,7 @@ import Omega.SPG.ErrorThreshold
 import Omega.SPG.ExactScreenMinimaAreMatroidBases
 import Omega.SPG.ExplicitMinimizer
 import Omega.SPG.F2FiberCardinality
+import Omega.SPG.FiberWalshDivergenceTorsor
 import Omega.SPG.FiberWalshL1AreaLowerBound
 import Omega.SPG.FiniteAuditBidirectionalCertificates
 import Omega.SPG.FiniteAuditNpCompleteBarrier
