@@ -123,6 +123,16 @@ theorem tensorModePolynomial_dvd_tensorResultant {ι κ : Type} [Fintype ι] [Fi
       (fun p : ι × κ => tensorCoeff c₁ c₂ p ≠ 0)
       (fun p => X - C (tensorRoot α β p))).symm
 
+/-- `thm:pom-twofactor-tensor-recurrence-exact-resultant-closure` -/
+theorem paper_pom_twofactor_tensor_recurrence_exact_resultant_closure
+    {ι κ : Type} [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
+    (c1 : ι → ℚ) (α : ι → ℚ) (c2 : κ → ℚ) (β : κ → ℚ) (hc1 : ∀ i, c1 i ≠ 0)
+    (hc2 : ∀ j, c2 j ≠ 0) (hroot : Function.Injective (tensorRoot α β)) :
+    tensorModePolynomial (ι := ι) (κ := κ) c1 c2 α β =
+      tensorResultantPolynomial (ι := ι) (κ := κ) α β := by
+  let _ := hroot
+  exact tensorModePolynomial_eq_tensorResultant (ι := ι) (κ := κ) c1 c2 α β hc1 hc2
+
 /-- Concrete two-factor precursor for the tensor-fold resultant recursion: the product sequence
 expands over tensor roots, the active-mode polynomial divides the full resultant, and the
 resultant itself is the explicit product over pairwise roots.
