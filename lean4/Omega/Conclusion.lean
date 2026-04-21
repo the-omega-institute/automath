@@ -207,6 +207,7 @@ import Omega.Conclusion.NumberFieldSignatureFromTwoCdims
 import Omega.Conclusion.NoConnectedU1DirectFactor
 import Omega.Conclusion.ObserverHolonomyExactCohomologicalSplitting
 import Omega.Conclusion.OddtailFiniteDepthScalarPadeJacobiRigidity
+import Omega.Conclusion.OddtailNoScalarUnifyingPiKernel
 import Omega.Conclusion.OddMaxfiberHiddenbitTristateCrystal
 import Omega.Conclusion.OnedimMaxCoefficientEntropyProfile
 import Omega.Conclusion.ParityShadowConstantMemoryCollapse
