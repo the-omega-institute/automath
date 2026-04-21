@@ -115,6 +115,7 @@ import Omega.OperatorAlgebra.OracleProjectionVariationalCapacity
 import Omega.OperatorAlgebra.PimsnerPopaWitnessBound
 import Omega.OperatorAlgebra.BayesInverseZK
 import Omega.OperatorAlgebra.RenyiFlatnessSupEqualsLogIndex
+import Omega.OperatorAlgebra.RenyiLossSpectrumCappedByIndex
 import Omega.OperatorAlgebra.ReplicationCentralizerColoredPartitionOrbitAlgebra
 import Omega.OperatorAlgebra.ReplicationCentralizerDimensionEgf
 import Omega.OperatorAlgebra.SoundnessLowerBoundIndex
