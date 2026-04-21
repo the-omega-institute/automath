@@ -69,6 +69,7 @@ import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.CycleLatticeThetaPoissonDuality
 import Omega.POM.DefectBand
 import Omega.POM.DelayMin
+import Omega.POM.DerivedFiberSingleStieltjesHistogramRecovery
 import Omega.POM.EhrhartEqualsOrderpolyShift
 import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.DeltaqMeanSquareRhCriterion
@@ -220,6 +221,7 @@ import Omega.POM.FoldInversionZeroRateStrongConverse
 import Omega.POM.FoldPrimeGodelBitlengthSuperlinear
 import Omega.POM.ZetaResidueConstantsConjugates
 import Omega.POM.FractranPermutationEmbeddingLength
+import Omega.POM.PrimeTraceShiftFreeMonoid
 import Omega.POM.FractranFiniteUpdateTableOneStep
 import Omega.POM.FractranFirstfitTotalSerialDepth
 import Omega.POM.FractranFirstfitSerialDepth

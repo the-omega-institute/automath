@@ -588,6 +588,7 @@ import Omega.Zeta.XiNonarchimedeanPronyUnitJacobianCriterion
 import Omega.Zeta.XiNullCompleteTrichotomyOffline
 import Omega.Zeta.XiUnitarySliceDecidable
 import Omega.Zeta.XiNullThreeWay
+import Omega.Zeta.XiOffcriticalDichotomyAcceptableOrNull
 import Omega.Zeta.XiNullOrthogonalTrichotomyResourceNonsubstitutable
 import Omega.Zeta.XiNullFiberEntropyWindow
 import Omega.Zeta.XiNullStatisticalRadius
