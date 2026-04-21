@@ -127,6 +127,7 @@ import Omega.POM.FiberParityHomotopyEquivalence
 import Omega.POM.FiberParityMod3
 import Omega.POM.FiberPosteriorEquivalenceActivityField
 import Omega.POM.FiberPosteriorBayesMWIS
+import Omega.POM.FiberBayesDecodingLinearScan
 import Omega.POM.FiberReconstructionAutGroup
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberReflector
@@ -274,6 +275,7 @@ import Omega.POM.ParryTwoPointAlternating
 import Omega.POM.ParrySurfaceDerivative
 import Omega.POM.PartitionMobiusEventInversion
 import Omega.POM.PathIndSetPolyClosed
+import Omega.POM.HardcorePathMarginalClosedForm
 import Omega.POM.PellConeAutomorphism
 import Omega.POM.PerronLandauerLimitLaw
 import Omega.POM.PositiveNegativeMomentCoupling
