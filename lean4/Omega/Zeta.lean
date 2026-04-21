@@ -754,3 +754,4 @@ import Omega.Zeta.XiFoldEscortLogMultiplicityTwoAtom
 import Omega.Zeta.XiFoldEscortRenyiConstantThetaClosed
 import Omega.Zeta.XiPoissonKlContractionRigidity
 import Omega.Zeta.XiDepthHeightTwoLevelExtremal
+import Omega.Zeta.LogMDerivativeResolvent
