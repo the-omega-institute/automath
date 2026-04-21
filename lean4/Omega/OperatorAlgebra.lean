@@ -5,6 +5,7 @@ import Omega.OperatorAlgebra.CircuitCollisionMomentTwoApproxNPlus2
 import Omega.OperatorAlgebra.FoldChoiMaxeigApproxSATHard
 import Omega.OperatorAlgebra.CylinderMarginalization
 import Omega.OperatorAlgebra.CmiLowerBoundByIndexGap
+import Omega.OperatorAlgebra.MinimalSufficiencyGapByIndex
 import Omega.OperatorAlgebra.DerivedCoarseningGenusSignLaw
 import Omega.OperatorAlgebra.FiberDeterminantSignCapacityParity
 import Omega.OperatorAlgebra.FiberReflectorDeterminantPotential
