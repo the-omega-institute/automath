@@ -219,6 +219,7 @@ import Omega.Conclusion.NaturalExtensionLstepMinimalAlphabetSubmultiplicative
 import Omega.Conclusion.NoFiniteResonanceClosure
 import Omega.Conclusion.NoUniversalTwoAxisAuditCompletion
 import Omega.Conclusion.NoncontractibleLossMod6Explicit
+import Omega.Conclusion.NonabelianDyadicFluxDefectTelescoping
 import Omega.Conclusion.NonexposedPhaseIntegerDomination
 import Omega.Conclusion.NumberFieldSignatureFromTwoCdims
 import Omega.Conclusion.NoConnectedU1DirectFactor

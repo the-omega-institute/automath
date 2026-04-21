@@ -240,6 +240,7 @@ import Omega.POM.LucasSquare
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
 import Omega.POM.MaryAuxlength
 import Omega.POM.MaryAuxlengthSeeds
+import Omega.POM.MacroMomentVsMicroPrimeRegisterCertificateSeparation
 import Omega.POM.MassSplittingMomentRoot
 import Omega.POM.MomLiftBeckChevalley
 import Omega.POM.MaxAtomicWeightParitySecondOrder
@@ -310,6 +311,7 @@ import Omega.POM.SchurDirichletTorsionFactorization
 import Omega.POM.OracleCapacityKolmogorovSpectrum
 import Omega.POM.OracleCapacityStieltjesInversionMellin
 import Omega.POM.OracleCriticalQuadraticMarginalLaw
+import Omega.POM.OracleGapAreaLawEnergy
 import Omega.POM.OracleFailureExponentFromRenyiSpectrum
 import Omega.POM.OracleRenyiPressureFailureBound
 import Omega.POM.PowerSumJacobianEntropy
