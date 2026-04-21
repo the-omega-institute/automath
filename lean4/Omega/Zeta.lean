@@ -52,6 +52,7 @@ import Omega.Zeta.BooleanTwoLayerCokerAndModmKernelCount
 import Omega.Zeta.BooleanDisjointnessZetaLDLT
 import Omega.Zeta.BooleanTwoLayerMobiusDiophantineCriterion
 import Omega.Zeta.BooleanTwoLayerInverseSupportLaw
+import Omega.Zeta.BooleanTwoLayerWittCore
 import Omega.Zeta.XiBooleanTwoLayerInverseSupportLaw
 import Omega.Zeta.XiReverseKLRadiusRenormalizationCyclicSymmetrization
 import Omega.Zeta.BooleanTwoLayerOrderIdealPrincipalMinor
@@ -332,6 +333,7 @@ import Omega.Zeta.ShiftInvariantSaturatedLatticePrincipalIdeal
 import Omega.Zeta.SingleScaleDirichletLattice
 import Omega.Zeta.SmithEntropyInvertsVpInvariants
 import Omega.Zeta.SmithEntropyMinDepth
+import Omega.Zeta.SmithFinitePwindowCompleteRecoveryDeterminantIndex
 import Omega.Zeta.XiKernelLossDivisibilityValuationRationalEuler
 import Omega.Zeta.XiSmithLossDiscreteCurvatureAtoms
 import Omega.Zeta.SmithLinearSolvabilityConstantFibers
