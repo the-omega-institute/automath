@@ -920,6 +920,89 @@ def backflow_to_main_paper(
     return placement
 
 
+def fan_out_discovery(
+    state: "RepoState",
+    findings: list[dict[str, Any]],
+) -> list[str]:
+    """After discovery R1, split contribution_opportunities into independent targets.
+
+    Each opportunity gets its own target dir, state, and issue brief.
+    Returns a list of new repo identifiers (e.g. "teorth/analysis#opp_1")
+    that can be processed in parallel by the pipeline.
+    """
+    base = repo_base(state.repo)
+    slug = repo_slug(state.repo)
+
+    # Extract contribution_opportunities from findings
+    opportunities = []
+    for f in findings:
+        if isinstance(f, dict):
+            # Discovery mode returns opportunities in the findings list
+            if f.get("type") in ("data_pr", "script_pr", "computation",
+                                  "mathematical_result", "tooling"):
+                opportunities.append(f)
+            # Also check for nested contribution_opportunities
+            for opp in f.get("contribution_opportunities", []):
+                if isinstance(opp, dict):
+                    opportunities.append(opp)
+
+    if not opportunities:
+        logger.info("[%s] Fan-out: no contribution_opportunities found in R1", state.repo)
+        return []
+
+    new_targets: list[str] = []
+    for idx, opp in enumerate(opportunities, 1):
+        title = opp.get("title", f"opportunity_{idx}")
+        # Create a slug-safe identifier
+        opp_slug = re.sub(r"[^a-zA-Z0-9_]", "_", title.lower())[:40].rstrip("_")
+        opp_id = f"{base}#opp_{idx}_{opp_slug}"
+        opp_dir_slug = repo_slug(opp_id)
+
+        # Create target directory with the opportunity as an issue brief
+        target_dir = SCRIPT_DIR / "targets" / opp_dir_slug
+        target_dir.mkdir(parents=True, exist_ok=True)
+
+        brief = (
+            f"# {base} — Opportunity {idx}: {title}\n\n"
+            f"**Type:** {opp.get('type', 'unknown')}\n"
+            f"**Effort:** {opp.get('effort', 'unknown')}\n\n"
+            f"## Their Gap\n{opp.get('their_gap', opp.get('target_need', 'N/A'))}\n\n"
+            f"## Our Asset\n{opp.get('our_asset', opp.get('our_side', 'N/A'))}\n\n"
+            f"## Deliverable\n{opp.get('deliverable', opp.get('bridge', 'N/A'))}\n\n"
+            f"## Impact\n{opp.get('impact', 'N/A')}\n\n"
+            f"## Context from Discovery\n"
+            f"Parent discovery: {state.repo}\n"
+            f"Automath refs: {opp.get('automath_refs', [])}\n"
+        )
+        brief_path = target_dir / "opportunity_brief.md"
+        brief_path.write_text(brief, encoding="utf-8")
+
+        # Create fresh state
+        opp_state = {
+            "repo": opp_id,
+            "stage": "B",
+            "round": 0,
+            "scores": {"codex": [], "claude": [], "final": []},
+            "findings": [],
+            "events": [],
+            "timestamps": {"created_at": iso_now()},
+            "error": "",
+            "draft_title": "",
+            "draft_body": "",
+            "submission_url": "",
+        }
+        state_path = STATE_DIR / f"{opp_dir_slug}.json"
+        state_path.write_text(json.dumps(opp_state, indent=2), encoding="utf-8")
+
+        new_targets.append(opp_id)
+        logger.info("[%s] Fan-out: created opportunity %d/%d → %s (%s)",
+                    state.repo, idx, len(opportunities), opp_id, title)
+
+    logger.info("[%s] Fan-out complete: %d opportunities → %d targets",
+                state.repo, len(opportunities), len(new_targets))
+    return new_targets
+
+
 def _tex_escape(text: str) -> str:
     """Minimal LaTeX escaping for generated content."""
     if not isinstance(text, str):
@@ -2687,6 +2770,21 @@ def run_stage_b(
         save_state(state)
         auto_commit_push(state.repo, "B", round_num, final_score, dry_run=dry_run)
 
+        # DISCOVERY FAN-OUT: after R1 in discovery mode, split opportunities
+        # into independent targets that can be processed in parallel.
+        if is_first_round and b0_plan.get("mode") == "discovery" and findings:
+            fan_out_targets = fan_out_discovery(state, findings)
+            if fan_out_targets:
+                state.stage = "FAN_OUT"
+                state.timestamps["fan_out_at"] = iso_now()
+                state.log_event("B", "discovery fan-out",
+                                detail=json.dumps(fan_out_targets, ensure_ascii=False))
+                save_state(state)
+                logger.info("[%s] Discovery R1 complete → fan-out to %d targets. "
+                            "Re-run pipeline with these targets for parallel execution.",
+                            state.repo, len(fan_out_targets))
+                return state
+
         # Backflow only on final round (research complete, not mid-iteration)
         # Bug 8 fix: pass gate uses GLOBAL BEST score across all rounds,
         # not just current round. This prevents good findings from being discarded
@@ -3072,6 +3170,11 @@ def process_repo_to_stage_d(
                             pass
                         break
 
+            # FAN_OUT: discovery R1 produced opportunities → return state
+            # so orchestrator can spawn parallel targets
+            if state.stage == "FAN_OUT":
+                return state
+
             # Stage C drafts the reply AFTER backflow (references paper section)
             if state.stage == "C":
                 state = run_stage_c(
@@ -3138,32 +3241,56 @@ def process_repositories(
         return []
 
     logger.info("Processing %d repositories (parallel=%d)", len(unique_repos), parallel)
-    states: list[RepoState] = []
     worker_count = max(1, parallel)
-    if worker_count == 1:
-        for repo in unique_repos:
-            states.append(process_repo_to_stage_d(repo, skip_to=skip_to, model=model, dry_run=dry_run, todo_item=todo_item))
-    else:
-        with ThreadPoolExecutor(max_workers=worker_count) as executor:
-            future_map = {
-                executor.submit(
-                    process_repo_to_stage_d,
-                    repo,
-                    skip_to=skip_to,
-                    model=model,
-                    dry_run=dry_run,
-                ): repo
-                for repo in unique_repos
-            }
-            for future in as_completed(future_map):
-                repo = future_map[future]
-                try:
-                    states.append(future.result())
-                except Exception as exc:
-                    logger.exception("[%s] Worker failed", repo)
-                    failed = RepoState(repo=repo, stage="ERROR", error=str(exc))
-                    save_state(failed)
-                    states.append(failed)
+
+    def _run_batch(repo_list: list[str]) -> list[RepoState]:
+        batch_states: list[RepoState] = []
+        if worker_count == 1 or len(repo_list) == 1:
+            for repo in repo_list:
+                batch_states.append(process_repo_to_stage_d(
+                    repo, skip_to=skip_to, model=model, dry_run=dry_run, todo_item=todo_item))
+        else:
+            with ThreadPoolExecutor(max_workers=min(worker_count, len(repo_list))) as executor:
+                future_map = {
+                    executor.submit(
+                        process_repo_to_stage_d, repo,
+                        skip_to=skip_to, model=model, dry_run=dry_run,
+                    ): repo
+                    for repo in repo_list
+                }
+                for future in as_completed(future_map):
+                    repo = future_map[future]
+                    try:
+                        batch_states.append(future.result())
+                    except Exception as exc:
+                        logger.exception("[%s] Worker failed", repo)
+                        failed = RepoState(repo=repo, stage="ERROR", error=str(exc))
+                        save_state(failed)
+                        batch_states.append(failed)
+        return batch_states
+
+    # Phase 1: run initial batch (may include discovery targets)
+    states = _run_batch(unique_repos)
+
+    # Phase 2: fan-out — collect targets from discovery and process them
+    fan_out_repos: list[str] = []
+    for st in states:
+        if st.stage == "FAN_OUT":
+            for evt in reversed(st.events):
+                if evt.get("action") == "discovery fan-out":
+                    try:
+                        targets = json.loads(evt.get("detail", "[]"))
+                        fan_out_repos.extend(targets)
+                    except (json.JSONDecodeError, TypeError):
+                        pass
+                    break
+
+    if fan_out_repos:
+        logger.info("Fan-out: processing %d discovered opportunities (parallel=%d)",
+                    len(fan_out_repos), worker_count)
+        fan_out_states = _run_batch(fan_out_repos)
+        states.extend(fan_out_states)
+
     return sorted(states, key=lambda state: state.repo)
 
 
