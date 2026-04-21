@@ -53,6 +53,7 @@ import Omega.EA.KernelCltLdp
 import Omega.EA.KernelEquilibriumPF
 import Omega.EA.KernelGlobalCarryfreeSpectralTrichotomy
 import Omega.EA.KernelGroundStateUniversalityClasses
+import Omega.EA.KernelOneSiteBernoulliClass
 import Omega.EA.KernelPressureEndpoints
 import Omega.EA.KernelRHSqrtError
 import Omega.EA.KernelWeightedPrimeOrbit
