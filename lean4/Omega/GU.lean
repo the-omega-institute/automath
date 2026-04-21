@@ -145,6 +145,7 @@ import Omega.GU.TerminalFoldbin6NoTypeRelabelingByGeo
 import Omega.GU.TerminalFoldbin6OffsetsReturnTimes
 import Omega.GU.TerminalFoldbin6OnebitErrorDetecting
 import Omega.GU.TerminalFoldbin6PushforwardMarkov
+import Omega.GU.Foldbin6StrongLumpabilityMinimaxMarkovError
 import Omega.GU.TerminalFoldbin6StrongLumpabilityBinaryWitness
 import Omega.GU.TerminalFoldbin6StrongLumpabilityFails
 import Omega.GU.TerminalFoldbin6TailCubeSection

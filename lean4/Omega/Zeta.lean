@@ -724,4 +724,5 @@ import Omega.Zeta.XiTerminalZmS3EndoscopicPrymA2Coxeter
 import Omega.Zeta.XiTerminalFixedOrderFreezingThreshold
 import Omega.Zeta.XiHankelOfflineModularAuditThreshold
 import Omega.Zeta.XiHorizonReflectionFiniteWitness
+import Omega.Zeta.XiFoldEscortLogMultiplicityTwoAtom
 import Omega.Zeta.XiFoldEscortRenyiConstantThetaClosed
