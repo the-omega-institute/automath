@@ -377,6 +377,11 @@ MAX_STAGE_A_ROUNDS = 5
 MAX_STAGE_B_ROUNDS = 99  # No practical limit — must pass Oracle gate
 MAX_STAGE_C_ROUNDS = 4
 
+# Borrowed from outreach pipeline: escalation & early-skip constants
+DEEP_MODE_THRESHOLD = 3   # After N consecutive non-pass B rounds, escalate to deep mode
+LOW_SCORE_SKIP = 3        # Skip paper in Stage A if score stays below this
+LOW_SCORE_STREAK = 3      # Need this many consecutive low rounds to trigger skip
+
 # ---------------------------------------------------------------------------
 # Logging
 # ---------------------------------------------------------------------------
@@ -456,6 +461,7 @@ class PaperState:
     stage_b_rounds: int = 0
     stage_b_verdicts: list[str] = field(default_factory=list)
     stage_b_passed: bool = False
+    stage_b_all_issues: list[str] = field(default_factory=list)  # Accumulated Oracle issues across all rounds
 
     # Stage C tracking
     stage_c_rounds: int = 0
@@ -509,6 +515,7 @@ class PaperState:
             "stage_b_rounds": self.stage_b_rounds,
             "stage_b_verdicts": self.stage_b_verdicts,
             "stage_b_passed": self.stage_b_passed,
+            "stage_b_all_issues": self.stage_b_all_issues[-200:],  # keep last 200 issue strings
             "stage_c_rounds": self.stage_c_rounds,
             "stage_c_verdicts": self.stage_c_verdicts,
             "stage_c_passed": self.stage_c_passed,
@@ -561,6 +568,7 @@ def load_state(paper_name: str) -> Optional[PaperState]:
                 setattr(s, key, data[key])
         s.stage_a_scores = data.get("stage_a_scores", [])
         s.stage_b_verdicts = data.get("stage_b_verdicts", [])
+        s.stage_b_all_issues = data.get("stage_b_all_issues", [])
         s.stage_c_verdicts = data.get("stage_c_verdicts", [])
         s.stage_d_backflow_items = data.get("stage_d_backflow_items", [])
         s.history = data.get("history", [])
@@ -1899,14 +1907,44 @@ def build_oracle_re_review_prompt(target_journal: str) -> str:
 
 
 def build_codex_fix_from_issues_prompt(paper_dir: str, issues_text: str,
-                                        round_num: int) -> str:
+                                        round_num: int,
+                                        prior_issues: str = "",
+                                        deep_mode: bool = False) -> str:
+    # When prior_issues are supplied, include them so Codex knows what was
+    # already flagged and fixed (prevents regressions).
+    history_block = ""
+    if prior_issues:
+        history_block = textwrap.dedent(f"""\
+
+        ## Prior Oracle issues (already flagged in earlier rounds — do NOT regress)
+        {prior_issues}
+
+        IMPORTANT: The above issues were raised in previous review rounds.
+        Ensure your fixes do NOT reintroduce any of them. If a prior issue
+        is repeated in the current round, it means the previous fix was
+        insufficient — apply a MORE thorough fix this time.
+        """)
+
+    deep_block = ""
+    if deep_mode:
+        deep_block = textwrap.dedent("""\
+
+        ## DEEP MODE ACTIVATED (paper stuck in review loop)
+        Previous patch-level fixes were insufficient. Escalate your approach:
+        1. RESTRUCTURE problematic sections, don't just patch sentences
+        2. Rewrite proofs from scratch if they are flagged repeatedly
+        3. Add new lemmas or intermediate steps where arguments are weak
+        4. Consider reorganizing section order if flow is criticized
+        5. Be aggressive — incremental patches have failed.
+        """)
+
     return textwrap.dedent(f"""\
         You are fixing referee issues in the paper at: {paper_dir}
         Fix round {round_num}.
 
         ## Issues to fix (severity-sorted)
         {issues_text}
-
+        {history_block}{deep_block}
         ## Instructions
         1. Fix BLOCKER issues first, then MEDIUM, then LOW
         2. For mathematical gaps: add missing proof steps or lemmas
@@ -2012,9 +2050,69 @@ def build_backflow_check_prompt(paper_dir: str, main_paper_dir: str) -> str:
     """)
 
 
+def build_backflow_placement_prompt(paper_dir: str, main_paper_dir: str,
+                                     items: list[dict]) -> str:
+    """D1.5: Explicit placement analysis — Codex proposes WHERE each backflow
+    item belongs in the main paper, with section-level precision.
+    Borrowed from outreach pipeline's two-step backflow pattern."""
+    items_summary = ""
+    for i, item in enumerate(items, 1):
+        items_summary += (
+            f"  {i}. {item.get('sub_paper_result', '')}\n"
+            f"     Action: {item.get('action', '')}\n"
+            f"     Detail: {item.get('detail', '')}\n"
+        )
+    return textwrap.dedent(f"""\
+        You are deciding exactly WHERE in the main paper each backflow item
+        should be placed.
+
+        Sub-paper: {paper_dir}
+        Main paper: {main_paper_dir}
+
+        ## Backflow items to place
+        {items_summary}
+
+        ## Instructions
+        1. Read the main paper structure:
+           - `ls {main_paper_dir}` to see all .tex files
+           - Read main.tex and key section files to understand structure
+        2. For EACH item, determine:
+           - Which .tex file to modify
+           - Which section/subsection it belongs in
+           - After which existing theorem/proposition/paragraph
+           - Whether it needs a new subsection or fits in existing text
+
+        ## Output Format (MUST follow exactly)
+        ```json
+        {{
+          "placements": [
+            {{
+              "item_index": 1,
+              "target_file": "sec_main_results.tex",
+              "target_section": "Section 3.2",
+              "insert_after": "Proposition 3.5",
+              "placement_type": "inline|new_subsection|new_theorem|citation_only",
+              "rationale": "why this location (1 sentence)"
+            }}
+          ]
+        }}
+        ```
+
+        Do NOT edit any files — only output the JSON placement plan.
+    """)
+
+
 def build_backflow_apply_prompt(paper_dir: str, main_paper_dir: str,
-                                 items: list[dict]) -> str:
+                                 items: list[dict],
+                                 placements: list[dict] | None = None) -> str:
     items_text = ""
+    # Build a lookup from item_index to placement info
+    placement_map: dict[int, dict] = {}
+    if placements:
+        for p in placements:
+            idx = p.get("item_index", 0)
+            placement_map[idx] = p
+
     for i, item in enumerate(items, 1):
         items_text += (
             f"  {i}. [{item.get('action','')}] "
@@ -2022,21 +2120,32 @@ def build_backflow_apply_prompt(paper_dir: str, main_paper_dir: str,
             f"     Location: {item.get('main_paper_location','')}\n"
             f"     Detail: {item.get('detail','')}\n"
         )
+        # Append explicit placement guidance if available
+        if i in placement_map:
+            pl = placement_map[i]
+            items_text += (
+                f"     >>> PLACEMENT: file={pl.get('target_file', '?')}, "
+                f"section={pl.get('target_section', '?')}, "
+                f"after={pl.get('insert_after', '?')}, "
+                f"type={pl.get('placement_type', '?')}\n"
+            )
+
     return textwrap.dedent(f"""\
         Apply backflow changes from sub-paper to main paper.
 
         Sub-paper: {paper_dir}
         Main paper: {main_paper_dir}
 
-        ## Changes to apply
+        ## Changes to apply (with explicit placement guidance)
         {items_text}
 
         ## Instructions
         1. Read the main paper's .tex files
-        2. Apply each change as specified
-        3. Update references.bib if new citations are needed
-        4. Keep all existing content intact — only add/update as specified
-        5. Compile: cd {main_paper_dir} && xelatex -interaction=nonstopmode main.tex
+        2. For each item, use the PLACEMENT guidance to locate the exact insertion point
+        3. Apply each change at the specified location
+        4. Update references.bib if new citations are needed
+        5. Keep all existing content intact — only add/update as specified
+        6. Compile: cd {main_paper_dir} && xelatex -interaction=nonstopmode main.tex
 
         Only edit files in {main_paper_dir}.
     """)
@@ -2455,6 +2564,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                         detail=f"compiled={compiled_a0}")
         save_state(state)
 
+    h = ""  # Track last commit hash (A0 may have been skipped on resume)
     for rnd in range(state.stage_a_rounds + 1, MAX_STAGE_A_ROUNDS + 1):
         state.stage_a_rounds = rnd
         state.current_round = rnd
@@ -2712,6 +2822,29 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
         logger.info(f"{tag} Score {final_score} < {SCORE_PASS_THRESHOLD}, "
                     f"looping (round {rnd}/{MAX_STAGE_A_ROUNDS})")
 
+        # ── Low score streak skip (borrowed from outreach pipeline) ──
+        # If the last LOW_SCORE_STREAK rounds all scored below LOW_SCORE_SKIP,
+        # this paper is hopeless for the current journal — skip early to save
+        # compute rather than grinding through all MAX_STAGE_A_ROUNDS.
+        if (len(state.stage_a_scores) >= LOW_SCORE_STREAK
+            and all(s < LOW_SCORE_SKIP
+                    for s in state.stage_a_scores[-LOW_SCORE_STREAK:])):
+            logger.warning(
+                f"{tag} Low score streak: last {LOW_SCORE_STREAK} rounds "
+                f"all scored < {LOW_SCORE_SKIP} — skipping early "
+                f"(scores: {state.stage_a_scores[-LOW_SCORE_STREAK:]})")
+            update_program_board(
+                state.paper_name, "A-SKIP",
+                f"low score streak ({state.stage_a_scores[-LOW_SCORE_STREAK:]})")
+            state.stage_a_passed = False
+            state.log_event("A", "low_score_streak_skip", round_num=rnd,
+                            score=final_score,
+                            detail=f"Last {LOW_SCORE_STREAK} scores "
+                                   f"< {LOW_SCORE_SKIP}: "
+                                   f"{state.stage_a_scores[-LOW_SCORE_STREAK:]}")
+            save_state(state)
+            return False
+
     # Max rounds exhausted — proceed anyway with warning
     best = max(state.stage_a_scores) if state.stage_a_scores else 0
     logger.warning(f"{tag} Max {MAX_STAGE_A_ROUNDS} rounds exhausted, "
@@ -2738,10 +2871,24 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
     tag = f"[{state.paper_name}|B]"
     paper_path = Path(state.paper_dir)
 
+    # Track consecutive non-pass rounds for deep mode escalation
+    consecutive_nonpass = 0
+    # Count how many verdicts at end of existing list are non-pass (resume)
+    for v in reversed(state.stage_b_verdicts):
+        if v in ("accept", "minor revision"):
+            break
+        consecutive_nonpass += 1
+
     for rnd in range(state.stage_b_rounds + 1, MAX_STAGE_B_ROUNDS + 1):
         state.stage_b_rounds = rnd
         state.current_round = rnd
         save_state(state)
+
+        # Deep mode: escalate after DEEP_MODE_THRESHOLD consecutive non-pass rounds
+        deep_mode = consecutive_nonpass >= DEEP_MODE_THRESHOLD
+        if deep_mode:
+            logger.info(f"{tag} Round {rnd}: DEEP MODE active "
+                        f"({consecutive_nonpass} consecutive non-pass rounds)")
 
         # ── B1: Compile PDF ──────────────────────────────────────
         logger.info(f"{tag} Round {rnd}: B1 — Compile PDF")
@@ -2814,13 +2961,22 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         verdict = extract_verdict(response)
         issues = parse_oracle_issues(response)
         state.stage_b_verdicts.append(verdict)
+
+        # Accumulate ALL Oracle issues across rounds (optimization #1)
+        issues_text_this_round = format_issues_for_codex(issues)
+        if issues_text_this_round.strip():
+            state.stage_b_all_issues.append(
+                f"=== Round {rnd} (verdict: {verdict}) ===\n"
+                f"{issues_text_this_round}")
+
         state.log_event("B", "oracle_review", round_num=rnd,
                         verdict=verdict,
                         detail=f"{len(issues)} issues")
         save_state(state)
 
         logger.info(f"{tag} Round {rnd}: Verdict = {verdict}, "
-                    f"{len(issues)} issues")
+                    f"{len(issues)} issues "
+                    f"(total accumulated: {len(state.stage_b_all_issues)} rounds)")
 
         # ── Gate: accept or minor revision → Stage C ────────────
         if verdict in ("accept", "minor revision"):
@@ -2831,16 +2987,36 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             update_program_board(state.paper_name, "B-DONE",
                                  f"Oracle: {verdict}, {rnd} rounds")
             state.stage_b_passed = True
+            consecutive_nonpass = 0
             save_state(state)
             return True
 
+        # Update consecutive non-pass counter
+        consecutive_nonpass += 1
+
         # ── B4: Codex fix issues ─────────────────────────────────
-        logger.info(f"{tag} Round {rnd}: B4 — Codex fix")
+        # Build prior issues summary from all accumulated rounds
+        prior_issues_text = ""
+        if len(state.stage_b_all_issues) > 1:
+            # Include all prior rounds except the current one (last entry)
+            prior_issues_text = "\n\n".join(state.stage_b_all_issues[:-1])
+            # Cap at 6000 chars to fit in prompt context
+            if len(prior_issues_text) > 6000:
+                prior_issues_text = prior_issues_text[-6000:]
+
+        # Deep mode escalation: double timeout, activate aggressive fix mode
+        b4_timeout = 3600 if deep_mode else 1800
+
+        logger.info(f"{tag} Round {rnd}: B4 — Codex fix "
+                    f"(deep_mode={deep_mode}, timeout={b4_timeout}s, "
+                    f"prior_rounds={len(state.stage_b_all_issues) - 1})")
         issues_text = format_issues_for_codex(issues)
         fix_prompt = build_codex_fix_from_issues_prompt(
-            state.paper_dir, issues_text, rnd)
+            state.paper_dir, issues_text, rnd,
+            prior_issues=prior_issues_text,
+            deep_mode=deep_mode)
         codex_exec(fix_prompt, work_dir=paper_path,
-                   timeout_seconds=1800, model=model, dry_run=dry_run)
+                   timeout_seconds=b4_timeout, model=model, dry_run=dry_run)
         git_stage(paper_path, tag=tag)  # B4 intermediate issues", tag=tag)
         state.log_event("B", "codex_fix", round_num=rnd,
                         committed=False, commit_hash="")
@@ -3001,20 +3177,47 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
 
     logger.info(f"{tag} {len(items)} backflow items found")
 
-    # ── D2: Claude reviews backflow proposal ─────────────────────
-    logger.info(f"{tag} D2 — Claude review backflow")
+    # ── D1.5: Codex explicit placement analysis (two-step backflow) ──
+    # Borrowed from outreach pipeline: separate "where" from "what" for
+    # more precise backflow. Codex first proposes exact file/section
+    # placement, then Claude reviews the plan before applying.
+    logger.info(f"{tag} D1.5 — Codex placement analysis")
+    placement_prompt = build_backflow_placement_prompt(
+        state.paper_dir, state.main_paper_dir, items)
+    out_d15 = codex_exec(placement_prompt, work_dir=REPO_ROOT,
+                         timeout_seconds=600, model=model, dry_run=dry_run)
+    placement_data = parse_json_from_output(out_d15) if not dry_run else {
+        "placements": [{"item_index": i + 1,
+                        "target_file": "main.tex",
+                        "target_section": "Section 1",
+                        "insert_after": "Theorem 1.1",
+                        "placement_type": "citation_only",
+                        "rationale": "dry run placement"}
+                       for i in range(len(items))],
+    }
+    placements = placement_data.get("placements", [])
+    state.log_event("D", "codex_placement_analysis",
+                    detail=f"{len(placements)} placements proposed")
+    save_state(state)
+
+    # ── D2: Claude reviews backflow proposal + placement plan ─────
+    logger.info(f"{tag} D2 — Claude review backflow + placement")
     claude_bf_prompt = textwrap.dedent(f"""\
-        Review this backflow proposal.
+        Review this backflow proposal AND its placement plan.
         Sub-paper: {state.paper_dir}
         Main paper: {state.main_paper_dir}
 
-        Proposed changes:
+        ## Proposed backflow items
         {json.dumps(items, indent=2, ensure_ascii=False)[:4000]}
+
+        ## Proposed placements
+        {json.dumps(placements, indent=2, ensure_ascii=False)[:3000]}
 
         For each item:
         1. Is this change justified?
         2. Will it improve the main paper?
         3. Any risk of breaking existing content?
+        4. Is the proposed placement (file, section, position) correct?
 
         Output ONLY:
         ```json
@@ -3022,9 +3225,12 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
           "approved": true/false,
           "approved_items": [0, 1, ...],
           "rejected_items": [2, ...],
+          "revised_placements": [],
           "notes": "explanation"
         }}
         ```
+        If any placement is wrong, include the corrected placement in
+        revised_placements (same format as the placements input).
     """)
     out_d2 = claude_exec(claude_bf_prompt, work_dir=REPO_ROOT,
                          dry_run=dry_run)
@@ -3034,6 +3240,17 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
     state.log_event("D", "claude_review_backflow",
                     detail=json.dumps(approval, ensure_ascii=False)[:10000])
     save_state(state)
+
+    # Apply any revised placements from Claude
+    revised = approval.get("revised_placements", [])
+    if revised:
+        # Merge revisions into placements by item_index
+        rev_map = {r.get("item_index"): r for r in revised if isinstance(r, dict)}
+        for i, p in enumerate(placements):
+            idx = p.get("item_index", i + 1)
+            if idx in rev_map:
+                placements[i] = rev_map[idx]
+        logger.info(f"{tag} D2: Claude revised {len(revised)} placements")
 
     if not approval.get("approved", False):
         logger.info(f"{tag} Backflow rejected by Claude — skipping")
@@ -3045,10 +3262,12 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
     approved_idx = set(approval.get("approved_items", range(len(items))))
     approved_items = [it for i, it in enumerate(items) if i in approved_idx]
 
-    # ── D3: Apply backflow to main paper ─────────────────────────
-    logger.info(f"{tag} D3 — Apply {len(approved_items)} backflow items")
+    # ── D3: Apply backflow with explicit placement guidance ──────
+    logger.info(f"{tag} D3 — Apply {len(approved_items)} backflow items "
+                f"with {len(placements)} placement guides")
     apply_prompt = build_backflow_apply_prompt(
-        state.paper_dir, state.main_paper_dir, approved_items)
+        state.paper_dir, state.main_paper_dir, approved_items,
+        placements=placements)
     codex_exec(apply_prompt, work_dir=REPO_ROOT,
                timeout_seconds=1800, model=model, dry_run=dry_run)
     h = git_commit_multi(

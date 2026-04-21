@@ -545,14 +545,30 @@ uses no digit in positions \(m\) or \(m+1\). Adding \(F_{m+2}\) therefore
 places an isolated \(1\) in position \(m+1\) and leaves the first \(m\) digits
 unchanged.
 
-If \(F_{m+1}\le n<F_{m+2}\), the Zeckendorf expansion of \(n\) has a \(1\) in
-position \(m\). Adding \(F_{m+2}\) creates the adjacent pair in positions
-\(m,m+1\), which normalizes to a carry and changes the first \(m\) digits. If
-\(n\ge F_{m+2}\), then \(n=N_m(\Fold_m(a))+F_{m+2}\) by
-Proposition~\ref{prop:canonical-fold-basic}. Adding the final \(F_{m+2}\)
-would require two copies of the digit in position \(m+1\); Zeckendorf
-normalization again carries and cannot leave the first \(m\) digits equal to
-\(\Fold_m(a)\). This proves the stated noncommutation criterion.
+It remains to show that the first \(m\) digits cannot remain unchanged when
+\(n\ge F_{m+1}\). Write \(p:=N_m(\Fold_m(a))\). By
+Proposition~\ref{prop:canonical-fold-basic}, \(n=p+\varepsilon F_{m+2}\) with
+\(\varepsilon\in\{0,1\}\). Also \(N_{m+1}(u)<F_{m+4}\), so no Zeckendorf digit
+beyond position \(m+2\) can occur. If \(F_{m+1}\le n<F_{m+2}\), then
+\(\varepsilon=0\), \(p=n\), and the Zeckendorf expansion of \(p\) has digit
+\(1\) in position \(m\). Keeping the first \(m\) digits after adding
+\(F_{m+2}\) would force the digit in position \(m+1\) also to be \(1\), giving
+an illegal adjacent pair. No alternative choice of higher digits has the same
+value, because the only representation of
+\[
+p+F_{m+2}=p+bF_{m+2}+cF_{m+3},
+\qquad b,c\in\{0,1\},
+\]
+with the first \(m\) digits fixed is \(b=1,c=0\).
+
+If \(n\ge F_{m+2}\), then \(\varepsilon=1\). Were the first \(m\) digits
+unchanged after adding \(F_{m+2}\), the higher digits would have to satisfy
+\[
+2F_{m+2}=bF_{m+2}+cF_{m+3},
+\qquad b,c\in\{0,1\},
+\]
+which is impossible. Hence the first \(m\) digits change exactly in the stated
+case.
 
 For deterministic maps \(A(u)=\Fold_m(r_{m+1\to m}u)\) and
 \(B(u)=\rho_{m+1\to m}\Fold_{m+1}(u)\), the total variation distance between
@@ -583,6 +599,7 @@ variation under the deterministic map \(\rho_{m+1\to m}\):
 E_{m,N}
 &\le
 \TV(\hat\pi_{m,N},\pi_m)
++
 \TV\bigl((\rho_{m+1\to m})_*\pi_{m+1},
 (\rho_{m+1\to m})_*\hat\pi_{m+1,N}\bigr)\\
 &\le
@@ -1926,7 +1943,8 @@ Taking \(\liminf\) proves the lower bound.
 
 For sharpness, first fix \(\gamma\in[0,h)\) and set
 \(k_m:=\max\{1,\lfloor e^{\gamma m}\rfloor\}\). Choose any subset
-\(S_m\subset X_m^A\) with \(|S_m|=k_m\), and define
+\(S_m\subset X_m^A\) with \(|S_m|=k_m\), which is possible for all large
+\(m\) because \(|X_m^A|=e^{hm+o(m)}\). Define
 \(\nu_m:=\pi_m^A(\cdot\mid S_m)\). Then
 \[
 c_A k_m e^{-mh}
@@ -2157,10 +2175,10 @@ p_Y(n)=n+O_\Phi(1).
 
 Standard return-word estimates for nonperiodic linearly recurrent subshifts
 \cite{DurandHostSkau1999Substitutional,Durand2000LinearlyRecurrentFactors}
-give the following uniform frequency bounds. For every word \(v\in
-\mathcal L_n(Y)\), all successive return distances to \(v\) lie between
-\(L^{-1}n\) and \(Ln\), after increasing \(L\) if necessary. Unique
-ergodicity then gives
+give the following uniform frequency bounds; this is the only property of
+linear recurrence used below. After increasing \(L\) if necessary, every
+return word to every \(v\in\mathcal L_n(Y)\) has length between \(L^{-1}n\)
+and \(Ln\). Unique ergodicity then gives
 \[
 \frac{1}{Ln}\le \nu^\Phi([v])\le \frac{L}{n}
 \qquad (v\in\mathcal L_n(Y)).
@@ -2423,7 +2441,8 @@ topologically conjugate to the irrational rotation
 \(R_\alpha:x\mapsto x+\alpha\pmod 1\) via an orientation-preserving
 homeomorphism \(h\) satisfying \(h\circ f=R_\alpha\circ h\). Fix an anchor
 \(a\in S^1\) with \(h(a)=0\), and define the coding window
-\(I_a:=[a,f(a))\). For \(x\in S^1\), let
+\(I_a:=[a,f(a))\), the positively oriented half-open arc from \(a\) to
+\(f(a)\). For \(x\in S^1\), let
 \[
 s_t^{(f)}(x):=\mathbf{1}_{I_a}(f^t(x)),
 \qquad
@@ -2437,9 +2456,11 @@ s_t^{(f)}(x)=s_t^{(\alpha)}(y)
 Consequently, for every \(m,N\ge 1\), the length-\(m\) microstate laws,
 folded laws, empirical histograms, discrepancy certificates, Parry
 comparisons, higher-block conjugacy, and all R\'enyi/KL conclusions of
-Sections~3--5 are identical for the two systems. In particular, if \(f\)
-is a \(C^2\) orientation-preserving circle diffeomorphism with irrational
-rotation number \(\alpha\), the Denjoy theorem
+Sections~3--5 are identical for the two systems, with the invariant target law
+for \(f\) understood as \(h^{-1}_*\leb\) and the discrepancy certificate taken
+in the rotation coordinate \(h(x)\). In particular, if \(f\) is a \(C^2\)
+orientation-preserving circle diffeomorphism with irrational rotation number
+\(\alpha\), the Denjoy theorem
 \cite{Denjoy1932CourbesTore,KatokHasselblatt1995} provides the required
 conjugacy, and the preceding comparison applies.
 \end{theorem}

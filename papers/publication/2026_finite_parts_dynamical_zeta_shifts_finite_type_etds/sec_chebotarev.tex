@@ -1,21 +1,31 @@
 \section{Class functions, Adams operations, and finite-group extensions}
 \label{sec:chebotarev}
 
-The root-of-unity formulas of \Cref{sec:finite-part} describe the
-abelian side of the primitive-orbit calculus. This section is the
-non-abelian analogue of that root-of-unity decomposition. In the
-abelian case, cyclic reconstruction is governed by ordinary Fourier
-analysis on roots of unity. For finite-group extensions the correct
-replacement is the Peter--Weyl decomposition of class functions. The
-new feature is that primitive extraction is no longer governed by
-M\"obius inversion alone: it is M\"obius inversion intertwined with the
-Adams operations \(g\mapsto g^m\). This is the mechanism that turns
-twisted determinant data into primitive Peter--Weyl series. At the
-orbit-counting level, the Chebotarev theorem for finite homogeneous
-extensions of shifts is due to Noorani--Parry
+This section contains the main construction of the paper. For
+finite-group extensions, the twisted matrices \(A_\varrho\) record
+periodic data in Peter--Weyl channels. Passing from those periodic traces
+to primitive orbit labels is the point at which the non-abelian
+structure enters: a repeated primitive orbit with label \(g\) contributes
+the powers \(g^m\), so M\"obius inversion must be combined with the
+Adams operations on class functions. This Adams--M\"obius mechanism turns
+twisted determinant data into primitive Peter--Weyl series. The
+root-of-unity formulas of \Cref{sec:finite-part} are the cyclic
+one-dimensional shadow of the construction developed here, not a
+separate source of the non-abelian result.
+
+At the orbit-counting level, the Chebotarev theorem for finite
+homogeneous extensions of shifts is due to Noorani--Parry
 \cite{NooraniParry1992ChebotarevShifts}, building on the Axiom~A
 framework of Parry--Pollicott \cite{ParryPollicott1986Chebotarev}; see
 also \cite{PollicottSharp2007Chebotarev,BoyleSchmieding2017FiniteGroupExtensions,Parry1999LivsicNonAbelian}.
+The periodic-data viewpoint for finite group actions on SFTs goes back
+to Fiebig \cite{Fiebig1993PeriodicFiniteGroupActions}, while the
+classification and flow-equivalence theory of \(G\)-SFTs is developed
+in Boyle--Carlsen--Eilers
+\cite{BoyleCarlsenEilers2020FlowEquivalenceGSFT}. Our use of the
+finite group is complementary to those works: the action/cocycle is
+fixed, and the problem is to pass from twisted determinant data to
+primitive conjugacy-class data.
 The determinant and \(L\)-function viewpoint is parallel to the
 twisted Perron--Frobenius theory of Adachi--Sunada
 \cite{AdachiSunada1987TwistedPF} and to the graph-covering
@@ -151,6 +161,45 @@ infrastructure. The specific content of the present paper begins when
 the determinant data are pushed to the primitive level by
 Adams--M\"obius inversion.
 
+\begin{lemma}[Twisted trace identity]
+  \label{lem:twisted-trace-identity}
+  For every irreducible representation \(\varrho\in\Irr(G)\) and every
+  \(n\ge 1\),
+  \[
+    \Tr(A_\varrho^n)
+    =
+    \sum_{x\in\operatorname{Fix}(\sigma^n)}
+      \chi_\varrho(\tau_n(x)).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Write a length-\(n\) closed edge path as
+  \(e_0\cdots e_{n-1}\), with
+  \(e_k:i_k\to i_{k+1}\) and \(i_n=i_0\). By the definition of the
+  twisted matrix,
+  \[
+    (A_\varrho^n)_{i_0i_0}
+    =
+    \sum_{e_0\cdots e_{n-1}:\, i_n=i_0}
+      \varrho(\tau(e_0))\cdots\varrho(\tau(e_{n-1})).
+  \]
+  Taking the trace over the representation space and summing over
+  \(i_0\) gives
+  \[
+    \Tr(A_\varrho^n)
+    =
+    \sum_{e_0\cdots e_{n-1}:\, i_n=i_0}
+      \operatorname{tr}_{V_\varrho}
+      \varrho(\tau(e_0)\cdots\tau(e_{n-1})).
+  \]
+  The trace on the representation space is the character
+  \(\chi_\varrho\). Length-\(n\) closed edge paths are exactly
+  \(n\)-periodic points of the edge shift with a distinguished starting
+  time, and their group labels are \(\tau_n(x)\). This gives the stated
+  identity.
+\end{proof}
+
 \begin{theorem}[Class-function determinant linearisation]
   \label{thm:class-function-linearisation}
   Let \(\phi:G\to\CC\) be a class function and write
@@ -179,8 +228,7 @@ Adams--M\"obius inversion.
     =\sum_{\varrho\in\Irr(G)}
       \widehat\phi(\varrho)\Tr(A_\varrho^n),
   \]
-  because \(\Tr(A_\varrho^n)\) is the sum of \(\chi_\varrho\) over all
-  period-\(n\) points. Therefore,
+  by \Cref{lem:twisted-trace-identity}. Therefore,
   \[
     \mathcal L_\phi(z)
     =\sum_{n\ge 1}\frac{z^n}{n}
@@ -243,6 +291,26 @@ Adams--M\"obius inversion.
     \sum_{\gamma\in\cP}\sum_{r\ge 1}
       \frac{\phi(\tau(\gamma)^r)}{r}z^{r|\gamma|}.
   \]
+  This double series is absolutely convergent for
+  \(|z|<\lambda^{-1}\), because \(\phi\) is bounded and
+  \[
+    \sum_{\gamma\in\cP}\sum_{r\ge 1}
+      \frac{|z|^{r|\gamma|}}{r}
+    =
+    \sum_{n\ge 1}\frac{\#\operatorname{Fix}(\sigma^n)}{n}|z|^n
+    <\infty.
+  \]
+  Moreover,
+  \[
+    \sum_{m\ge 1}\frac{1}{m}
+      \sum_{\gamma\in\cP}\sum_{r\ge 1}
+        \frac{|z|^{mr|\gamma|}}{r}
+    \le
+    \sum_{m\ge 1}\frac{1}{m}
+      \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn}
+    <\infty,
+  \]
+  so the \(m,r,\gamma\) sums below may be rearranged absolutely.
   Hence
   \begin{align*}
     \sum_{m\ge 1}\frac{\mu(m)}{m}\mathcal L_{\psi^m\phi}(z^m)
