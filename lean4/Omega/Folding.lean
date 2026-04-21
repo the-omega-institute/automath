@@ -202,6 +202,7 @@ import Omega.Folding.FoldBinEscortEscortKl
 import Omega.Folding.FoldBinGaugeBernoulliExtractionOperator
 import Omega.Folding.FoldBinGaugeConstantZetaEvenRecoveryLimit
 import Omega.Folding.FoldEscortGroundstateConcentration
+import Omega.Folding.FoldEscortGroundstateTvExact
 import Omega.Folding.FoldBinEscortLastbit
 import Omega.Folding.FoldBinEscortTwoScaleResidual
 import Omega.Folding.FoldBbitInversionAvgWorstGap

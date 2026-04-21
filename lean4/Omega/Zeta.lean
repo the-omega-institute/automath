@@ -367,6 +367,7 @@ import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Zeta.ReciprocalPlusKernelRhImpliesToyRh
 import Omega.Zeta.XiMultiscaleConsistencyImpliesRH
 import Omega.Zeta.RecursiveZeroShadowingExplicit
+import Omega.Zeta.ResolutionRecursionZeroDrift
 import Omega.Zeta.RsLocalZeroCertification
 import Omega.Zeta.MultiscaleDriftSummabilityLimit
 import Omega.Zeta.RegularPrefixfreeKraftRational
