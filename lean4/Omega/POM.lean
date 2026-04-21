@@ -17,6 +17,7 @@ import Omega.POM.BCDiscreteStokes
 import Omega.POM.BCQuotientUniversal
 import Omega.POM.BCHighOrderLedgerDecomposition
 import Omega.POM.BCInformationStokesCoboundary
+import Omega.POM.BCUniformLiftPseudofunctor
 import Omega.POM.BCPontryaginDualClassification
 import Omega.POM.BCVisibleQuotientEventualStability
 import Omega.POM.BayesInfonceSecondCollisionDominance
