@@ -289,6 +289,7 @@ import Omega.POM.PressureSlopes
 import Omega.POM.ProfiniteAxisChebotarev
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminant2x2FreeEncoding
+import Omega.POM.PrimeDeterminantAbelianizationFactorization
 import Omega.POM.PrimeDeterminantAreaFiberMultinomial
 import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.PrimitiveDirichletBranchLatticeEssentialPrimeSpectrum
