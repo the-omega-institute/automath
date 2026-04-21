@@ -321,6 +321,7 @@ import Omega.Conclusion.SmithRamanujanShadowSeeds
 import Omega.Conclusion.SoftcoreExceptionalMomentsCombinatorialClosedForm
 import Omega.Conclusion.SoftcoreFixedMQrecurrenceAnnihilator
 import Omega.Conclusion.SoftcoreKroneckerSympowerDecomposition
+import Omega.Conclusion.SolenoidProfiniteBlindnessFixedpointLedger
 import Omega.Conclusion.SympowerExplicitCriticalOrder
 import Omega.Conclusion.SoftcoreWeightMatrixExplicitInverse
 import Omega.Conclusion.SpectrumSignLaw
@@ -401,6 +402,7 @@ import Omega.Conclusion.ZeckendorfEulerReindexing
 import Omega.Conclusion.ZeckendorfEulerSeeds
 import Omega.Conclusion.ZeckendorfResetBoundedCLTAbsent
 import Omega.Conclusion.ZnToCircleInjectiveDenseSeeds
+import Omega.Conclusion.ZeroDimLedgerPositiveSupportOrthogonality
 import Omega.Conclusion.ToeplitzDyadicHorizonCompleteness
 import Omega.Conclusion.ToeplitzGaugeBlindnessZeroDimensionalLedgerNecessity
 import Omega.Conclusion.TwoGroupPostnikovStrictification
