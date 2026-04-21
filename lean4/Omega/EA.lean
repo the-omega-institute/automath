@@ -91,6 +91,7 @@ import Omega.EA.RewriteLocalConfluence
 import Omega.EA.RewriteTermination
 import Omega.EA.RewriteTerminationPublication
 import Omega.EA.RewriteWordProblem
+import Omega.EA.RationalGFLinearConstraints
 import Omega.EA.RoughVisibleDifferenceQuotientCertificate
 import Omega.EA.StableAddComputable
 import Omega.EA.StableAddFiniteResolutionCompatibility

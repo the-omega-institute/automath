@@ -201,6 +201,7 @@ import Omega.Zeta.JensenSoftThresholdLowerBound
 import Omega.Zeta.KilloSmithLossSpectrum
 import Omega.Zeta.LayeredExternalizationAverageShannonBudget
 import Omega.Zeta.LayeredPrimesliceLocalAlphabetFibermax
+import Omega.Zeta.LambertWRecursiveTrajectoryStability
 import Omega.Zeta.LeftCEDyadicDensity
 import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.LocalInversionDelta
