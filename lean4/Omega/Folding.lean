@@ -468,6 +468,7 @@ import Omega.Folding.ModSemiringsEndomorphismsIdempotents
 import Omega.Folding.ModSemiringsIdempotentsCrtBoolean
 import Omega.Folding.ModSemiringsKernelImageGcd
 import Omega.Folding.ModSemiringsSquarefreeNilpotentBranch
+import Omega.Folding.ModSemiringsWindow6SemisimpleSkeleton
 import Omega.Folding.ModSemiringsUnitalAutomorphismRigidity
 import Omega.Folding.ModularTower
 import Omega.Folding.MomentBounds
