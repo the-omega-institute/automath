@@ -1,6 +1,7 @@
 import Omega.Zeta.AbelFinitePartMobiusZeta
 import Omega.Zeta.AbelCongruenceEnergyParsevalBarcode
 import Omega.Zeta.AbelPowerbaseCovariancePolePowerMap
+import Omega.Zeta.AbelResolutionPowerRenormalizationIdentity
 import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.AbelianShadowDefect
 import Omega.Zeta.AbelianTowerNoGo
