@@ -83,6 +83,7 @@ import Omega.POM.DiagonalRateAbsorbingFullVsDeletedInterlacing
 import Omega.POM.DiagonalRateSeparationWeightSignRule
 import Omega.POM.DiagonalRateAbsorbingMeanHitTime
 import Omega.POM.DiagonalRateAbsorbingHitPGF
+import Omega.POM.DiagonalRateAbsorbingGeometricMixture
 import Omega.POM.DiagonalRateAcceptRefreshHaltingState
 import Omega.POM.DiagonalRateAcceptRefreshSeparationStrict
 import Omega.POM.DiagonalRateAcceptRefreshSSTPGF
