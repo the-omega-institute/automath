@@ -155,6 +155,7 @@ import Omega.POM.FiberReconstructionCartesianProduct
 import Omega.POM.FiberReconstructionMedianPartialcubeCat0
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberReflector
+import Omega.POM.FiberSpectrumPZLower
 import Omega.POM.FiberRewritePoissonBinomial
 import Omega.POM.FiberRewriteRootUnityFilterModqExpUniformization
 import Omega.POM.FiberSpectrumPronyHankelRank
