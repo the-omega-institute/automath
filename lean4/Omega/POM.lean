@@ -22,6 +22,7 @@ import Omega.POM.BCHighOrderLedgerDecomposition
 import Omega.POM.BqTraceLucas
 import Omega.POM.BCInformationStokesCoboundary
 import Omega.POM.BCUniformLiftPseudofunctor
+import Omega.POM.TreeKlAmgmDecomposition
 import Omega.POM.BCPontryaginDualClassification
 import Omega.POM.BCVisibleQuotientEventualStability
 import Omega.POM.BayesInfonceSecondCollisionDominance

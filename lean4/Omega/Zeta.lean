@@ -487,6 +487,7 @@ import Omega.Zeta.XiCenterSixfoldKappaNodeInversionBlowup
 import Omega.Zeta.XiChainIdempotentStarSaturationComparableGcd
 import Omega.Zeta.XiCriticalLineHorizonCircle
 import Omega.Zeta.XiCriticalLineUniqueLowComplexitySlice
+import Omega.Zeta.XiLegalReadoutPrefixDoubleBudget
 import Omega.Zeta.XiComovingDefectLatticeCertificateBandExclusion
 import Omega.Zeta.XiComovingDefectTransverseVisibleWindow
 import Omega.Zeta.XiDefectEntropyPeakCompressibilityExtremal

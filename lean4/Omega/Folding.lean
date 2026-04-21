@@ -314,6 +314,7 @@ import Omega.Folding.FoldZeroUncertainty
 import Omega.Folding.FractranFoldCompiler
 import Omega.Folding.GaugeAnomalyAutocovClosed
 import Omega.Folding.GaugeAnomalyA2EisensteinMultiplication
+import Omega.Folding.FoldGaugeAnomalyA2PrymRealization
 import Omega.Folding.GaugeAnomalyBernoulliPKappa4AndKappa3Signflip
 import Omega.Folding.GaugeAnomalyBranchPointClassification
 import Omega.Folding.GaugeAnomalyBranchpointMuReductionEt
