@@ -681,6 +681,7 @@ import Omega.Zeta.XiLocalJetDeterminesFiniteCMVAndToeplitzCertificate
 import Omega.Zeta.XiTimePart63cTrivialAlternatingSignReciprocalDuality
 import Omega.Zeta.XiTimePart9odEscortTvCollapseBlockUniform
 import Omega.Zeta.XiTimePart9odEscortTvCollapseExactBlockWeights
+import Omega.Zeta.XiTimePart9odEscortEscortFdivBinaryClosure
 import Omega.Zeta.XiTimePart9sbEscortChernoffSaddle
 import Omega.Zeta.XiTimePart9gCanonicalSubmonoidFreeMonoid
 import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
@@ -699,6 +700,7 @@ import Omega.Zeta.XiVisibleArithmeticUnitIdempotentCount
 import Omega.Zeta.XiWindow6B3C3NoGlobalLinearUnifier
 import Omega.Zeta.XiWindow6B3C3TightFrameFourthMomentNonsimilarity
 import Omega.Zeta.XiWindow6C3QuadraticEnergyEquipartition
+import Omega.Zeta.XiWindow6C3NoNonzeroLinearInvariant
 import Omega.Zeta.XiWindow6TailSemigroupAperyThresholds
 import Omega.Zeta.XiWindow6TailSemigroupFrobeniusThreshold
 import Omega.Zeta.XiWindow6TailSemigroupTwoGeneratorNormalForm
