@@ -159,6 +159,7 @@ import Omega.Folding.KilloLeyangTwoBranchFieldsProductGalois
 import Omega.Folding.KilloPrimeFreedomNonFinitizability
 import Omega.Folding.KilloFoldCollisionSpectralSelfDuality
 import Omega.Folding.KilloFoldZeroSpectrumAffineCongruence
+import Omega.Folding.KilloZGDirichletMatrixEuler
 import Omega.Folding.KilloFoldBinCapacityInverseTwoRegime
 import Omega.Folding.KilloChainInteriorGodelGcdLcm
 import Omega.Folding.OracleCapacityTailEquivalence
