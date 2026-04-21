@@ -130,6 +130,7 @@ import Omega.POM.FiberPosteriorEquivalenceActivityField
 import Omega.POM.FiberPosteriorBayesMWIS
 import Omega.POM.FiberBayesDecodingLinearScan
 import Omega.POM.FiberReconstructionAutGroup
+import Omega.POM.FiberReconstructionMedianPartialcubeCat0
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberReflector
 import Omega.POM.FiberRewritePoissonBinomial

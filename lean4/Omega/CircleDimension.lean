@@ -193,6 +193,7 @@ import Omega.CircleDimension.PoissonKLEvenOrders
 import Omega.CircleDimension.PoissonKLQuadraticFormSpectral
 import Omega.CircleDimension.PoissonKolmogorovUniversalLimit
 import Omega.CircleDimension.PoissonKernelDerivativeL1Energy
+import Omega.CircleDimension.PoissonL1SecondOrderConstant
 import Omega.CircleDimension.PoissonLatticeSampling
 import Omega.CircleDimension.PoissonSecondOrder
 import Omega.CircleDimension.PoissonSymmetricCase

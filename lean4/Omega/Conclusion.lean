@@ -81,6 +81,7 @@ import Omega.Conclusion.DyadicBoundaryCodeExactUniqueDecodingRadius
 import Omega.Conclusion.EllipticLosslessLift
 import Omega.Conclusion.EllipticT5UniqueQuadraticSubfield
 import Omega.Conclusion.EndpointHorizonArcsineKLClosedForm
+import Omega.Conclusion.EndpointHorizonTwoPrimeApprox
 import Omega.Conclusion.EndpointPoissonCayleyCauchyExactScale
 import Omega.Conclusion.EndpointHorizonKLVsLogCostOnebit
 import Omega.Conclusion.EndpointStatisticsVsTimeAddressLedgerSplitting
