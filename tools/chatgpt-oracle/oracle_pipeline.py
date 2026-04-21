@@ -2792,12 +2792,13 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     (bad_dir / f"{task_id}_{ts}.md").write_text(
                         raw, encoding="utf-8")
                     logger.warning(f"{tag} Oracle returned garbage "
-                                   f"({len(raw)} chars), re-submitting")
-                    # Re-submit same task_id
-                    oracle_submit(task_id, prompt, pdf_path)
+                                   f"({len(raw)} chars), waiting 5min then re-submitting")
                 else:
-                    logger.warning(f"{tag} Oracle poll timeout, re-submitting")
-                    oracle_submit(task_id, prompt, pdf_path)
+                    logger.warning(f"{tag} Oracle poll timeout, waiting 5min then re-submitting")
+                # Wait before re-submitting to avoid spin loop and let
+                # ChatGPT finish thinking on the next attempt
+                time.sleep(300)
+                oracle_submit(task_id, prompt, pdf_path)
             if not response:
                 state.error = f"Oracle failed B{rnd}: no valid response"
                 return False

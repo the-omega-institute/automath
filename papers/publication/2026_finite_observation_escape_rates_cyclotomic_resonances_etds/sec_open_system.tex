@@ -15,10 +15,87 @@ topological Markov chains was developed by
 escape rates and conditionally invariant measures, see
 \citet{DemersYoung2006,DemersWrightYoung2012} and
 \citet{KellerLiverani2009}; for the Gibbs-measure setting, see
-\citet{FergusonPollicott2012}.  Since any finite union of cylinders
-becomes a one-step Markov hole after a sufficiently high block
+\citet{FergusonPollicott2012}.  Recent combinatorial treatments of
+symbolic and Markov holes include
+\citet{CheriyathAgarwal2023,BonannoCristadoroLenci2022} and
+\citet{AgarwalCheriyathTikekar2024}.  Since any finite union of
+cylinders becomes a one-step Markov hole after a sufficiently high block
 presentation, there is no loss in working directly on a one-step shift
 over a finite alphabet \(A\); compare \citet{LindMarcus1995,Bowen2008}.
+
+\begin{lemma}[Residue reachability criterion]
+\label{lem:residue-reachability}
+Let \(A=\mathcal S\sqcup A_{\mathrm{hole}}\) be a finite irreducible
+Markov alphabet with \(A_{\mathrm{hole}}\neq\emptyset\), transition
+matrix \(K\), and \(K_{ij}>0\) exactly on the admissible directed edges.
+Fix \(q\geq2\) and
+\(\emptyset\neq R\subsetneq\ZZ/q\ZZ\).  Form the \(q\)-cyclic directed
+graph \(\mathcal G_{H,q}\) with vertices
+\[
+  \mathcal S\times\ZZ/q\ZZ
+  \quad\text{and}\quad
+  \star_R,\ \star_{R^c}.
+\]
+There is an edge
+\[
+  (i,r)\longrightarrow(j,r+1)
+\]
+whenever \(j\in\mathcal S\) and \(K_{ij}>0\), with residues read modulo
+\(q\).  There is an edge \((i,r)\to\star_R\) if
+\(K_{ih}>0\) for some \(h\in A_{\mathrm{hole}}\) and \(r+1\in R\), and
+an edge \((i,r)\to\star_{R^c}\) if \(K_{ih}>0\) for some
+\(h\in A_{\mathrm{hole}}\) and \(r+1\notin R\).
+
+Let \(\PP_i\) be the Markov law started at \(i\), and let
+\[
+  \tau_H^+:=\inf\{n\geq1:y_n\in A_{\mathrm{hole}}\}.
+\]
+For
+\[
+  p_{i,r}:=\PP_i(r+\tau_H^+\in R\bmod q),
+  \qquad
+  \beta_{i,r}:=\min\{p_{i,r},1-p_{i,r}\},
+\]
+one has \(0<p_{i,r}<1\) if and only if both terminal vertices
+\(\star_R\) and \(\star_{R^c}\) are reachable from \((i,r)\) in
+\(\mathcal G_{H,q}\).  Consequently the uniform residue
+non-degeneracy condition
+\[
+  \inf_{i\in\mathcal S,\ r\in\ZZ/q\ZZ}\beta_{i,r}>0
+\]
+is equivalent to this two-terminal reachability condition at every
+safe-residue vertex.
+\end{lemma}
+
+\begin{proof}
+A directed path
+\[
+  (i,r)=(i_0,r)\to(i_1,r+1)\to\cdots
+  \to(i_{k-1},r+k-1)\to\star_R
+\]
+is exactly an admissible first-hit word
+\[
+  i=i_0,\ i_1,\ldots,i_{k-1}\in\mathcal S,\qquad
+  h\in A_{\mathrm{hole}},
+\]
+with \(K_{i_{t-1}i_t}>0\), \(K_{i_{k-1}h}>0\), and \(r+k\in R\).
+The corresponding cylinder has positive \(\PP_i\)-probability, so
+reachability of \(\star_R\) is equivalent to \(p_{i,r}>0\).  The same
+argument with \(\star_{R^c}\) is equivalent to positive probability of a
+finite first hit with residue outside \(R\).
+
+Because the ambient Markov graph is finite and irreducible and
+\(A_{\mathrm{hole}}\) is non-empty, from every safe state there is an
+admissible path to \(A_{\mathrm{hole}}\) of length at most some
+uniform \(N\).  The product of transition probabilities along these
+finitely many paths is bounded below by a positive constant, hence
+\(\PP_i(\tau_H^+>n)\to0\) uniformly in \(i\).  Thus the complement of
+the event \(\{r+\tau_H^+\in R\}\) is, up to a null set, the union of
+finite first hits with residue outside \(R\).  Therefore
+\(p_{i,r}<1\) is equivalent to reachability of \(\star_{R^c}\).  Since
+\(\mathcal S\times\ZZ/q\ZZ\) is finite, pointwise positivity of all
+\(\beta_{i,r}\) is the same as a positive uniform lower bound.
+\end{proof}
 
 \begin{theorem}[First-entry residue events and escape rates]
 \label{thm:first-entry-escape-rate}
@@ -84,8 +161,11 @@ For \(r\in\ZZ/q\ZZ\), define
   \qquad
   \beta_{i,r}:=\min\set{p_{i,r},1-p_{i,r}}.
 \]
-Assume the following residue non-degeneracy condition:
-for every \(i\in\mathcal S\) and \(r\in\ZZ/q\ZZ\), there exist
+Assume the equivalent residue non-degeneracy conditions of
+Lemma~\ref{lem:residue-reachability}: for every
+\(i\in\mathcal S\) and \(r\in\ZZ/q\ZZ\), the two terminal vertices
+\(\star_R\) and \(\star_{R^c}\) are reachable from \((i,r)\) in the
+\(q\)-cyclic graph \(\mathcal G_{H,q}\).  Equivalently, there are
 admissible future paths starting at \(i\) whose first entry into
 \(A_{\mathrm{hole}}\) occurs at residues both in \(R-r\) and in
 \((\ZZ/q\ZZ\setminus R)-r\).  Then there exists \(\theta>0\) such that
