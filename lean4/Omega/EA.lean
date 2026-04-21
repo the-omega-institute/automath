@@ -52,6 +52,7 @@ import Omega.EA.KernelChebotarevExp
 import Omega.EA.KernelCltLdp
 import Omega.EA.KernelEquilibriumPF
 import Omega.EA.KernelGlobalCarryfreeSpectralTrichotomy
+import Omega.EA.KernelGlobalCarryfreePrimitiveParity
 import Omega.EA.KernelGroundStateUniversalityClasses
 import Omega.EA.Kernel21GroundState
 import Omega.EA.KernelOneSiteBernoulliClass
