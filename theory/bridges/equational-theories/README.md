@@ -20,8 +20,9 @@ equivalently a scan of explicitly defined subschemes of the affine plane.
 
 The verification scripts are:
 
-- `tools/community-outreach/targets/teorth_equational_theories/coefficient_analysis.py`
-- `tools/community-outreach/targets/teorth_equational_theories/nullstellensatz_check.py`
+- `theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/scripts/equational_theory/coefficient_analysis.py`
+- `theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/scripts/equational_theory/nullstellensatz_check.py`
+- `theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/scripts/equational_theory/nullstellensatz_3var_check.py`
 
 ## Main theorem statements
 
