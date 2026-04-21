@@ -140,6 +140,7 @@ import Omega.Folding.FiberEntropySaturation
 import Omega.Folding.FiberFourierPhaseRigidity
 import Omega.Folding.FiberFusion
 import Omega.Folding.FiberGaugeVolumeDoublingV2DigitSum
+import Omega.Folding.FoldTopAffineWindowControlsFiniteFreezing
 import Omega.Folding.FiberGaugeVolumeChainFactorization
 import Omega.Folding.FiberGaugeVolumeIncrementConditionalShannonStirling
 import Omega.Folding.FiberHausdorffDimensionCylinderCount
