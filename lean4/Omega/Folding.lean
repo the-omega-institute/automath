@@ -92,6 +92,7 @@ import Omega.Folding.DerivedFoldExactInversionDyadicThreshold
 import Omega.Folding.DerivedFoldMultiplicityZerofiberEnvelope
 import Omega.Folding.DerivedFoldMultiplicityConvexOrderExtremal
 import Omega.Folding.DerivedFoldTopTwoSameSlope
+import Omega.Folding.DerivedBinfoldOracleCapacityPhaseDiagram
 import Omega.Folding.DiscreteStokesAuditableBound
 import Omega.Folding.DiscreteStokesDefectPublication
 import Omega.Folding.EWTTelescope
