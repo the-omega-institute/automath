@@ -55,6 +55,7 @@ import Omega.OperatorAlgebra.FoldInfoNCELaplaceRenyiMomentExpansion
 import Omega.OperatorAlgebra.FoldInfoNCEMILimit
 import Omega.OperatorAlgebra.FoldInvariantSubalgebra
 import Omega.OperatorAlgebra.FoldJonesBasicConstructionDirectsum
+import Omega.OperatorAlgebra.FoldJonesMatrixUnits
 import Omega.OperatorAlgebra.FoldJonesCommutatorRank2Spectrum
 import Omega.OperatorAlgebra.FoldIndexWeightedCommutatorEnergy
 import Omega.OperatorAlgebra.FoldIndexExtremalEntropyLossMaxfiber
