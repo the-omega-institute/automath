@@ -1,0 +1,221 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+
+\section{Window-6 Countermodel Certificate and Equational Spectra}\label{app:window6-countermodel-certificate}
+
+This appendix records the narrow certificate boundary for the window-\(6\)
+finite countermodel used in the Equational Theories Project interface.  The
+object is the affine-linear magma on \(\ZZ/21\ZZ\)
+\[
+    x\diamond y=7x+15y,
+\]
+or equivalently the same operation transported to the stable fiber \(X_6\) by
+the stable-value ring equivalence.  The only upstream-facing certificate
+claimed here is the compact finite entry
+\[
+    \texttt{Facts G [10, 52, 55] [43, 46]}.
+\]
+The surrounding Fibonacci and CRT structure is Lean-certified on the Omega
+side; the ETP law satisfaction, spectrum count, and current database freshness
+are verified computationally (see \texttt{\detokenize{scripts/equational_theory/}}).
+
+\begin{lemma}[Stable-value affine transfer]\label{lem:window6-affine-stable-transfer}
+Let \(m\geq 0\), and let \(X_m\) be the stable fiber equipped with
+\(\mathrm{stableAdd}\) and \(\mathrm{stableMul}\).  Under the ring equivalence
+\[
+    X_m \simeq \ZZ/F_{m+2}\ZZ,
+\]
+every affine-linear magma operation
+\[
+    x\diamond y=ax+by
+\]
+on \(X_m\) is transported to the same coefficient formula over
+\(\ZZ/F_{m+2}\ZZ\).  Hence a magma equation in this affine-linear family is
+satisfied on \(X_m\) exactly when the transported coefficient congruences are
+satisfied modulo \(F_{m+2}\).
+\end{lemma}
+
+\begin{proof}
+The map \(\mathrm{stableValueRingEquiv}\) identifies \(X_m\) with
+\(\ZZ/F_{m+2}\ZZ\), while \(\mathrm{stableAdd}\) and \(\mathrm{stableMul}\)
+compute modular addition and multiplication on stable values.  For a variable
+term the claim is immediate.  If \(t=u\diamond v\), then the transported value is
+\[
+    a\,\mathrm{val}(u)+b\,\mathrm{val}(v),
+\]
+which is exactly the recursive coefficient rule over the quotient ring.
+Induction on the binary term proves commutation of evaluation with the
+stable-value equivalence, and injectivity of the equivalence gives the stated
+satisfaction criterion.  This is the formal Omega transfer bridge recorded in
+\texttt{\detokenize{lean4/Omega/Folding/FiberRing.lean}} and
+\texttt{\detokenize{lean4/Omega/Folding/FiberArithmetic.lean}}; it is not, by
+itself, an upstream ETP theorem.
+\end{proof}
+
+\begin{proposition}[Window-\(6\) CRT rectangular band]\label{prop:window6-crt-rectangular-band}
+For \(m=6\), the stable-value ring is
+\[
+    X_6\simeq \ZZ/21\ZZ\simeq \ZZ/3\ZZ\times \ZZ/7\ZZ.
+\]
+In this CRT presentation the operation \(x\diamond y=7x+15y\) becomes
+\[
+    \bigl((a_3,a_7),(b_3,b_7)\bigr)\longmapsto (a_3,b_7).
+\]
+Thus the window-\(6\) magma is the rectangular-band projection determined by
+the complementary idempotents \(7\) and \(15\) in \(\ZZ/21\ZZ\).
+\end{proposition}
+
+\begin{proof}
+The factorization \(F_8=21=3\cdot 7\) gives the CRT decomposition.  In
+\(\ZZ/21\ZZ\), the Omega formalization proves
+\[
+    7^2=7,\qquad 15^2=15,\qquad 7\cdot 15=0,\qquad 7+15=1.
+\]
+Modulo \(3\), one has \(7\equiv 1\) and \(15\equiv 0\), so
+\[
+    7x+15y\equiv x\pmod 3.
+\]
+Modulo \(7\), one has \(7\equiv 0\) and \(15\equiv 1\), so
+\[
+    7x+15y\equiv y\pmod 7.
+\]
+Therefore the CRT image of \(x\diamond y\) keeps the \(\ZZ/3\ZZ\)-coordinate of
+the left input and the \(\ZZ/7\ZZ\)-coordinate of the right input.  The
+idempotent identities cited above are formalized in
+\texttt{\detokenize{lean4/Omega/Folding/Window6.lean}}.
+\end{proof}
+
+\begin{lemma}[First--last term classifier]\label{lem:window6-first-last-classifier}
+For every binary magma term \(t(x_1,\ldots,x_n)\), evaluation in the
+window-\(6\) magma has the CRT form
+\[
+    t(x_1,\ldots,x_n)
+    =
+    \bigl(\pi_3(x_{\operatorname{first}(t)}),
+          \pi_7(x_{\operatorname{last}(t)})\bigr),
+\]
+where \(\operatorname{first}(t)\) and \(\operatorname{last}(t)\) are the first
+and last variables encountered in the standard left-to-right traversal of the
+term.  Consequently a law \(s=t\) holds in this magma if and only if
+\[
+    \operatorname{first}(s)=\operatorname{first}(t)
+    \quad\text{and}\quad
+    \operatorname{last}(s)=\operatorname{last}(t).
+\]
+\end{lemma}
+
+\begin{proof}
+For a variable term, the first and last variables are both the variable itself,
+and the displayed formula is tautological.  Suppose the formula is known for
+\(u\) and \(v\).  By Proposition
+\ref{prop:window6-crt-rectangular-band}, the value of \(u\diamond v\) is
+obtained by taking the \(\ZZ/3\ZZ\)-coordinate from \(u\) and the
+\(\ZZ/7\ZZ\)-coordinate from \(v\).  Hence the first variable of
+\(u\diamond v\) is the first variable of \(u\), and the last variable of
+\(u\diamond v\) is the last variable of \(v\).  This proves the formula by
+structural induction.
+
+If two terms have the same first and last variables, the formula gives equal
+values for every assignment.  Conversely, if the first variables differ, choose
+an assignment with distinct \(\ZZ/3\ZZ\)-coordinates on those variables; if the
+last variables differ, choose an assignment with distinct
+\(\ZZ/7\ZZ\)-coordinates.  The two CRT components have more than one element,
+so the corresponding evaluations differ.
+\end{proof}
+
+\begin{theorem}[Window-\(6\) finite certificate]\label{thm:window6-fin21-facts-certificate}
+Let \(G\) be the finite magma on \(\operatorname{Fin}(21)\) induced by
+\[
+    x\diamond y=7x+15y\pmod {21}.
+\]
+With respect to the ETP order-four equation list, \(G\) satisfies
+\[
+    E_{10},\qquad E_{52},\qquad E_{55},
+\]
+and refutes
+\[
+    E_{43},\qquad E_{46}.
+\]
+Equivalently, \(G\) provides the compact finite certificate
+\[
+    \texttt{Facts G [10, 52, 55] [43, 46]}.
+\]
+\end{theorem}
+
+\begin{proof}
+The algebraic form of the model is Proposition
+\ref{prop:window6-crt-rectangular-band}, and the term classifier is Lemma
+\ref{lem:window6-first-last-classifier}.  The correspondence between the ETP
+indices \(10,43,46,52,55\) and the relevant term pairs is an external database
+indexing fact, so the final indexed certificate is verified by direct
+enumeration of the finite magma on \(\operatorname{Fin}(21)\).  This computation
+checks all assignments for the listed laws and produces the stated
+satisfied/refuted split; it is verified computationally (see
+\texttt{\detokenize{scripts/equational_theory/}}).  No Automath/Omega Lean
+theorem is claimed here for the ETP-indexed laws \(E_{10},E_{43},E_{46},E_{52}\),
+or \(E_{55}\).
+\end{proof}
+
+\begin{corollary}[Equational spectrum and current-HEAD audit]\label{cor:window6-equational-spectrum}
+For the same finite magma \(G\), the full ETP order-four spectrum contains
+\[
+    353
+\]
+satisfied equations and
+\[
+    4341
+\]
+refuted equations.  Hence \(G\) separates
+\[
+    353\cdot 4341=1,532,373
+\]
+ordered implication pairs.  At upstream ETP commit
+\[
+    \texttt{b99c0e486501e5b0690ef3fe5250d3aa57e63478},
+\]
+the combined certificate has no exact \(\texttt{Facts}\) entry and no
+satisfied/refuted superset entry in \(\texttt{full\_entries.json}\).  Among the
+six pairwise consequences of Theorem
+\ref{thm:window6-fin21-facts-certificate}, the following five are also absent
+as exact entries and as superset entries:
+\[
+\begin{array}{c|cc}
+\text{pair} & \text{exact entries} & \text{superset entries}\\
+\hline
+E_{10}\not\Rightarrow E_{46} & 0 & 0\\
+E_{52}\not\Rightarrow E_{43} & 0 & 0\\
+E_{52}\not\Rightarrow E_{46} & 0 & 0\\
+E_{55}\not\Rightarrow E_{43} & 0 & 0\\
+E_{55}\not\Rightarrow E_{46} & 0 & 0
+\end{array}
+\]
+The remaining pair \(E_{10}\not\Rightarrow E_{43}\) is already covered by two
+\(\operatorname{Fin}(2)\) \(\texttt{SmallMagmas.lean}\) facts and is not part
+of the nonredundancy claim.
+\end{corollary}
+
+\begin{proof}
+The spectrum count is the direct truth-vector count over the \(4694\) indexed
+ETP equations: \(353+4341=4694\), and every satisfied/refuted ordered pair is
+an anti-implication witnessed by \(G\).  The current-HEAD novelty statement is
+obtained by parsing the upstream \(\texttt{full\_entries.json}\) file, filtering
+finite \(\texttt{Facts}\) entries, and checking both equality and
+satisfied/refuted inclusion against the combined window-\(6\) certificate and
+its pairwise projections.  The audit script copied with this paper is
+\[
+    \texttt{\detokenize{scripts/equational_theory/audit_window6_current.py}}.
+\]
+\end{proof}
+
+\begin{remark}[Certificate boundary]\label{rem:window6-proof-boundary}
+The Omega formalization certifies the stable-value ring equivalence, the
+window-\(6\) CRT decomposition, and the idempotent arithmetic of \(7\) and
+\(15\) in \(\ZZ/21\ZZ\).  The ETP-indexed law satisfaction, the \(353/4341\)
+spectrum split, and the current upstream novelty audit are computational data
+contributions.  They should be cited as a finite countermodel certificate, not
+as a Lean proof of the ETP laws and not as a new graph-edge theorem beyond the
+audited \(\texttt{Facts}\) contribution.
+\end{remark}
+
+\end{document}
