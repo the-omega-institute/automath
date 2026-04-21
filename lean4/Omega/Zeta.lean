@@ -433,6 +433,7 @@ import Omega.Zeta.XiCriticalLineUniqueLowComplexitySlice
 import Omega.Zeta.XiComovingDefectLatticeCertificateBandExclusion
 import Omega.Zeta.XiComovingDefectTransverseVisibleWindow
 import Omega.Zeta.XiDefectEntropyPeakCompressibilityExtremal
+import Omega.Zeta.XiDefectEntropyMassPeakDecoupling
 import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
 import Omega.Zeta.XiEllipseWallcrossingUnitStaircaseUniversality
 import Omega.Zeta.XiEndpointAbsorptionKernelRepresentation
@@ -512,6 +513,7 @@ import Omega.Zeta.XiMarkovDerivativeDeterminantBadPrime
 import Omega.Zeta.XiMomentRatioIdentifiesAmin
 import Omega.Zeta.XiNaturalExtensionH153MinimalFiniteAlphabet
 import Omega.Zeta.XiNonarchimedeanPronyHenselNewtonInversion
+import Omega.Zeta.XiNonarchimedeanPronyUnitJacobianCriterion
 import Omega.Zeta.XiNullCompleteTrichotomyOffline
 import Omega.Zeta.XiNullThreeWay
 import Omega.Zeta.XiNullOrthogonalTrichotomyResourceNonsubstitutable

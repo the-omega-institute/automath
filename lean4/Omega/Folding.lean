@@ -122,6 +122,7 @@ import Omega.Folding.FiberArithmeticProperties
 import Omega.Folding.FiberBiasEnergyDecisionTheoretic
 import Omega.Folding.FiberBiasEnergyErasureIdentity
 import Omega.Folding.FiberBiasEnergyGroupringConstantTerm
+import Omega.Folding.FiberBiasFourierMultiplierEnergy
 import Omega.Folding.FiberBiasFrequencyTransportIdentity
 import Omega.Folding.FiberCollisionHammingSimilarityBiasEnergyIdentity
 import Omega.Folding.FiberConditionalReconstructionOddModulus
