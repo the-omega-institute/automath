@@ -46,6 +46,7 @@ import Omega.EA.FoldGroupoidAut0RationalCohomology
 import Omega.EA.FoldGroupoidAutPi1AllPrimes
 import Omega.EA.FoldCenterResolutionCriterionIndwEps
 import Omega.EA.FoldGroupoidWindow6BoundaryParityRationallyInvisible
+import Omega.EA.FoldGroupoidWindow6RationalTailLadder
 import Omega.EA.FoldTailTopologicalReadout
 import Omega.EA.KernelPeterWeylBlockDiagonalization
 import Omega.EA.FoldDiscreteToContinuousGaugeEmbedding

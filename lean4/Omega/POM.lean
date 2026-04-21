@@ -267,6 +267,7 @@ import Omega.POM.KLPythagorasTower
 import Omega.POM.KLPythagorasUniform
 import Omega.POM.KernelSpectrum
 import Omega.POM.LambdaAlgebraic
+import Omega.POM.LambdaSaturation
 import Omega.POM.LeyangLiftMobiusInvolutionFunctorial
 import Omega.POM.LeyangMonotoneCouplingPrimeRegister
 import Omega.POM.LkArcsineLaw
@@ -276,6 +277,7 @@ import Omega.POM.LowTemperatureDifferenceCertificates
 import Omega.POM.LucasNuPCriterion
 import Omega.POM.LucasPrimeCongruence
 import Omega.POM.LucasSquare
+import Omega.POM.RealInput40ZetaFactorization
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
 import Omega.POM.MicrocanonicalQueryDistortionStrongConversePlane
 import Omega.POM.MaryAuxlength
