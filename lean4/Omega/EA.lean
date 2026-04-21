@@ -25,6 +25,7 @@ import Omega.EA.CompositionTwoLayer
 import Omega.EA.DeterministicRoughVisibleQuantity
 import Omega.EA.DirectedRewriteTermination
 import Omega.EA.DynamicPrimeRegisterBitlength
+import Omega.EA.DynamicPrimeRegister2adicAffineHost
 import Omega.EA.DynamicPrimeRegisterBoundedFeasibility
 import Omega.EA.DynamicPrimeRegisterConcatenation
 import Omega.EA.FibAdicBasic
