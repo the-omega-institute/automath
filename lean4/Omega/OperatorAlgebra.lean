@@ -2,6 +2,7 @@ import Omega.OperatorAlgebra.CircuitCollisionMomentCamouflageMaxfiber
 import Omega.OperatorAlgebra.CircuitIndexGeKNPComplete
 import Omega.OperatorAlgebra.CircuitNoninjectiveNPComplete
 import Omega.OperatorAlgebra.CircuitCollisionMomentTwoApproxNPlus2
+import Omega.OperatorAlgebra.FoldChoiMaxeigApproxSATHard
 import Omega.OperatorAlgebra.CylinderMarginalization
 import Omega.OperatorAlgebra.CmiLowerBoundByIndexGap
 import Omega.OperatorAlgebra.DerivedCoarseningGenusSignLaw
