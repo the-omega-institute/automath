@@ -36,7 +36,6 @@ import Omega.EA.FibCongruence
 import Omega.EA.FibDivisibilityChain
 import Omega.EA.FiniteLedgerRecoverability
 import Omega.EA.FoldWindow6CenterThreeObservablesDimensionDefect
-import Omega.EA.FoldChiLayeredFiberSpectrumCertifiedBySignedPowersums
 import Omega.EA.FoldWindow6ChiLayeredSpectrumReconstructionBy12Moments
 import Omega.EA.FoldAsSection
 import Omega.EA.FoldAsSectionCorollary
@@ -130,6 +129,7 @@ import Omega.EA.SyncKernelResetWords
 import Omega.EA.TimeSpaceCommuting
 import Omega.EA.ValInvariant
 import Omega.EA.Wedderburn
+import Omega.EA.ChiLayeredFiberSpectrumRecovery
 import Omega.EA.Z2x2JointSpectralMeasure
 import Omega.EA.ZeckendorfAddFst
 import Omega.EA.ZeckendorfArithComputable

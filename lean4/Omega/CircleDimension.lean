@@ -335,6 +335,7 @@ import Omega.CircleDimension.VisibleStateProjectivization
 import Omega.CircleDimension.WavefunctionAsCoordinate
 import Omega.CircleDimension.WdimBettiAverageLaw
 import Omega.CircleDimension.WdimSignedCircleDimension
+import Omega.CircleDimension.SolenoidVersusFiniteAdditiveLinearization
 import Omega.CircleDimension.XiCdimDefectChainRule
 import Omega.CircleDimension.XiPhaseFoldKernelMinimalCertificateRank
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
