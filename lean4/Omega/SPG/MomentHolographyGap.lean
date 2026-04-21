@@ -1,4 +1,6 @@
 import Mathlib.Tactic
+import Omega.SPG.BoundaryGodelFiniteMomentCompleteness
+import Omega.SPG.LinearMomentHolographyMinimalDimension
 
 /-!
 # Single-integer vs linear moment holography gap seed values
@@ -30,5 +32,22 @@ theorem paper_spg_linear_moment_holography_minimal_dim_seeds :
   exact ⟨⟨by norm_num, by norm_num, by norm_num⟩, fun _ _ h => by omega,
          ⟨by norm_num, by norm_num, by norm_num⟩,
          ⟨by norm_num, by norm_num, by omega⟩⟩
+
+/-- Paper-facing wrapper: a single natural-number readout already injects the finite dyadic state
+    space, while any injective linear moment readout still obeys the `2^(m*n)` lower bound from
+    `paper_spg_linear_moment_holography_minimal_dim`.
+    thm:spg-single-integer-vs-linear-moment-holography-gap -/
+theorem paper_spg_single_integer_vs_linear_moment_holography_gap
+    (m n L : Nat) (f : Fin (2 ^ (m * n)) → Fin L) (hf : Function.Injective f) :
+    Function.Injective (fun x : Fin (2 ^ (m * n)) => x.1) ∧
+    2 ^ (m * n) ≤ L := by
+  refine ⟨?_, (paper_spg_linear_moment_holography_minimal_dim m n L f hf).1⟩
+  exact paper_spg_boundary_godel_finite_moment_completeness
+    (encode := fun x : Fin (2 ^ (m * n)) => x.1)
+    (momentBox := dyadicMomentBox (m := m) (n := n))
+    (hReadout := by
+      intro u v hEq
+      exact Fin.ext hEq)
+    paper_spg_dyadic_finite_moment_completeness
 
 end Omega.SPG

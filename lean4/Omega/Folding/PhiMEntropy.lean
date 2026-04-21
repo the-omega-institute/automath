@@ -1,4 +1,5 @@
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import Omega.Folding.GmFischerCover
 
 namespace Omega.Folding
 
@@ -12,5 +13,38 @@ theorem paper_resolution_folding_phi_m_entropy
     ∀ {m : ℕ}, 2 ≤ m → hTop m = Real.log 2 := by
   intro m hm
   linarith [hUpper hm, hLower hm]
+
+set_option maxHeartbeats 400000 in
+/-- Paper-facing entropy wrapper for `Φ_m`: once the right Fischer cover of `Y_m` is identified
+with the cover graph `G_m`, any finite-to-one factor realization transports the SFT entropy
+formula from the cover to `Y_m`.
+    prop:Phi_m-entropy -/
+theorem paper_Phi_m_entropy
+    (m : ℕ) (hTopYm hTopXAm rhoAm : ℝ)
+    (irreducibleShift deterministicRightResolvingPresentation singletonCoreComponent
+      followerSeparatedCore labeledIsomorphicToGm rightFischerCoverOfYm
+      finiteToOneFactorMap : Prop)
+    (hIrreducible : irreducibleShift)
+    (hResolve : deterministicRightResolvingPresentation)
+    (hCore : deterministicRightResolvingPresentation → singletonCoreComponent)
+    (hSeparated : singletonCoreComponent → followerSeparatedCore)
+    (hIso : singletonCoreComponent → labeledIsomorphicToGm)
+    (hCover : irreducibleShift → deterministicRightResolvingPresentation →
+      singletonCoreComponent → followerSeparatedCore → rightFischerCoverOfYm)
+    (hFiniteToOne : rightFischerCoverOfYm → finiteToOneFactorMap)
+    (hFactorEntropy : finiteToOneFactorMap → hTopYm = hTopXAm)
+    (hSFTEntropy : labeledIsomorphicToGm → hTopXAm = Real.log rhoAm) :
+    hTopYm = hTopXAm ∧ hTopXAm = Real.log rhoAm ∧ hTopYm = Real.log rhoAm := by
+  let _ := m
+  rcases paper_resolution_folding_g_m_fischer_cover irreducibleShift
+      deterministicRightResolvingPresentation singletonCoreComponent followerSeparatedCore
+      labeledIsomorphicToGm rightFischerCoverOfYm hIrreducible hResolve hCore hSeparated hIso
+      hCover with ⟨hIsoGm, hFischerCover⟩
+  have hCoverEntropy : hTopYm = hTopXAm := hFactorEntropy (hFiniteToOne hFischerCover)
+  have hSftEntropy : hTopXAm = Real.log rhoAm := hSFTEntropy hIsoGm
+  refine ⟨hCoverEntropy, hSftEntropy, ?_⟩
+  calc
+    hTopYm = hTopXAm := hCoverEntropy
+    _ = Real.log rhoAm := hSftEntropy
 
 end Omega.Folding

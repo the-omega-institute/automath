@@ -2,6 +2,7 @@ import Mathlib.Tactic
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset
 import Omega.EA.GodelLogBusemann
+import Omega.GU.GroupJGPrimeRegisterPhaseBohrDense
 
 namespace Omega.EA.JoukowskyEllipse
 
@@ -53,6 +54,18 @@ theorem paper_prime_register_dense_ellipticization_part2
     r * r⁻¹ = 1 ∧ r / r⁻¹ = r^2 ∧ Real.pi * r * r⁻¹ = Real.pi := by
   have h0 : r ≠ 0 := by linarith
   exact ⟨ellipse_axes_product r h0, axis_ratio_eq_r_sq r hr, ellipse_area_eq_pi r h0⟩
+
+/-- Full paper package: the two-prime logarithmic subgroup is dense, and the corresponding
+normalized ellipse has unit area with axis product `1` and axis ratio `r^2`.
+    thm:prime-register-dense-ellipticization -/
+theorem paper_prime_register_dense_ellipticization (r : ℝ) (hr : 1 ≤ r) :
+    Dense (AddSubgroup.closure {Real.log (2 : ℝ), Real.log (3 : ℝ)} : Set ℝ) ∧
+      r * r⁻¹ = 1 ∧ r / r⁻¹ = r ^ 2 ∧ Real.pi * r * r⁻¹ = Real.pi := by
+  have hdense :
+      Dense (AddSubgroup.closure {Real.log (2 : ℝ), Real.log (3 : ℝ)} : Set ℝ) := by
+    simpa [Omega.GU.GroupJGPrimeRegisterPhaseData.phaseImageDense] using
+      Omega.GU.paper_group_jg_prime_register_phase_bohr_dense ⟨1, one_ne_zero⟩
+  exact ⟨hdense, (paper_prime_register_dense_ellipticization_part2 r hr)⟩
 
 /-- The second radial moment of the normalized Joukowsky ellipse. -/
 noncomputable def joukowskySecondRadialMoment (r : ℝ) : ℝ :=

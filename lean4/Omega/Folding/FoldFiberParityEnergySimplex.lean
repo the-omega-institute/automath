@@ -168,6 +168,72 @@ theorem paper_fold_fiber_parity_energy_simplex_pairwise_independence_except_term
     · simp [foldFiberParityPairCovariance, hterm, foldFiberParityTerminalPairRaw_eq_one]
     · simp [foldFiberParityPairCovariance, hterm]
 
+/-- The expected simplex-cardinality under the parity-energy law, obtained by summing the
+single-site Bernoulli marginals. -/
+def foldFiberParityCardMean (m : ℕ) : ℚ :=
+  Finset.sum (Finset.range m) fun i => foldFiberParitySingleSiteMass m i true
+
+/-- The variance contributed by one Bernoulli `1/2` simplex coordinate. -/
+def foldFiberParitySingleSiteVariance (m i : ℕ) : ℚ :=
+  let p := foldFiberParitySingleSiteMass m i true
+  p * (1 - p)
+
+/-- The simplex-cardinality variance: diagonal Bernoulli terms plus twice the unique exceptional
+terminal covariance supplied by the energy-simplex law. -/
+def foldFiberParityCardVariance (m : ℕ) : ℚ :=
+  (Finset.sum (Finset.range m) fun i => foldFiberParitySingleSiteVariance m i) +
+    2 * foldFiberParityPairCovariance m (m - 2) (m - 1)
+
+/-- The simplex-cardinality mean is `m / 2`, and the variance equals the Bernoulli diagonal term
+`m / 4` plus the extra `1 / 4` coming from the unique exceptional terminal pair.
+    cor:fold-fiber-parity-energy-simplex-size-mean-variance -/
+theorem paper_fold_fiber_parity_energy_simplex_size_mean_variance (m : ℕ) (hm : 2 ≤ m) :
+    foldFiberParityCardMean m = (m : ℚ) / 2 ∧
+      foldFiberParityCardVariance m = (m : ℚ) / 4 + 1 / 4 := by
+  have hm1 : 1 ≤ m := le_trans (by norm_num) hm
+  have hsite :
+      ∀ i : ℕ, i < m → foldFiberParitySingleSiteMass m i true = (1 / 2 : ℚ) := by
+    intro i hi
+    exact paper_fold_fiber_parity_energy_simplex_unbiased_marginal m i hm1 hi
+  rcases paper_fold_fiber_parity_energy_simplex_pairwise_independence_except_terminal m hm with
+    ⟨_, _, hpenultimate_lt, hlast_lt, _, hcov_profile⟩
+  have hcov_terminal : foldFiberParityPairCovariance m (m - 2) (m - 1) = (1 / 8 : ℚ) := by
+    simpa using hcov_profile (m - 2) (m - 1) hpenultimate_lt hlast_lt
+  constructor
+  · unfold foldFiberParityCardMean
+    calc
+      Finset.sum (Finset.range m) (fun i => foldFiberParitySingleSiteMass m i true)
+          = Finset.sum (Finset.range m) (fun _i => (1 / 2 : ℚ)) := by
+              refine Finset.sum_congr rfl ?_
+              intro i hi
+              exact hsite i (Finset.mem_range.mp hi)
+      _ = ((Finset.range m).card : ℚ) * (1 / 2 : ℚ) := by
+            rw [Finset.sum_const, nsmul_eq_mul]
+      _ = (m : ℚ) / 2 := by
+            simp [Finset.card_range]
+            ring
+  · unfold foldFiberParityCardVariance foldFiberParitySingleSiteVariance
+    have hdiag :
+        Finset.sum (Finset.range m) (fun i =>
+          let p := foldFiberParitySingleSiteMass m i true
+          p * (1 - p)) =
+          Finset.sum (Finset.range m) (fun _i => ((1 / 2 : ℚ) * (1 - 1 / 2))) := by
+      refine Finset.sum_congr rfl ?_
+      intro i hi
+      rw [hsite i (Finset.mem_range.mp hi)]
+    calc
+      (Finset.sum (Finset.range m) fun i =>
+          let p := foldFiberParitySingleSiteMass m i true
+          p * (1 - p)) +
+          2 * foldFiberParityPairCovariance m (m - 2) (m - 1)
+          =
+            (Finset.sum (Finset.range m) fun _i => ((1 / 2 : ℚ) * (1 - 1 / 2))) +
+              2 * (1 / 8 : ℚ) := by
+                rw [hdiag, hcov_terminal]
+      _ = (m : ℚ) / 4 + 1 / 4 := by
+            rw [Finset.sum_const, nsmul_eq_mul, Finset.card_range]
+            ring
+
 /-- The subset energy entering the parity partition function. -/
 def foldFiberParityPartitionEnergy {m : ℕ} (θ : Fin m → ℝ) (I : Finset (Fin m)) : ℝ :=
   (∏ j ∈ I, (Real.sin (θ j)) ^ 2) *
@@ -314,6 +380,20 @@ theorem paper_fold_fiber_parity_energy_simplex_interval_correlation_classificati
       · simpa [foldFiberParityIntervalCorrelation, foldFiberParityIntervalZeroSumCount, h1, h0,
           h2, hterm] using foldFiberParityIntervalCorrelation_mod2_terminal_value L h2
       · simp [foldFiberParityIntervalCorrelation, foldFiberParityIntervalZeroSumCount, h2, hterm]
+
+/-- Specializing the interval-correlation classification to the full interval `[1, m]` leaves only
+the three residue classes of `m mod 3`, with the terminal branch automatically active.
+    cor:fold-fiber-parity-energy-simplex-global-parity-mod3 -/
+theorem paper_fold_fiber_parity_energy_simplex_global_parity_mod3 (m : ℕ) (hm : 1 ≤ m) :
+    foldFiberParityIntervalCorrelation m 1 m =
+      if m % 3 = 1 then 0
+      else if m % 3 = 0 then (1 : ℚ) / 2 ^ (2 * (m / 3))
+      else (1 : ℚ) / 2 ^ (2 * (m / 3) + 1) := by
+  have hJ : 1 + m - 1 ≤ m := by omega
+  have hterm : 1 + m - 1 = m := by omega
+  simpa [hterm] using
+    paper_fold_fiber_parity_energy_simplex_interval_correlation_classification m 1 m
+      (by decide) hm hJ
 
 /-- Concrete slice/collision bookkeeping for the parity-energy decomposition. -/
 structure FoldFiberSliceCollisionData where

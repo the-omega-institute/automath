@@ -16,6 +16,7 @@ import Omega.HighDimensionalCutProject
 import Omega.Kronecker
 import Omega.LogicExpansionChain
 import Omega.Multiscale
+import Omega.RootUnitCharacterPressureTensor
 import Omega.UnitCirclePhaseArithmetic
 import Omega.OperatorAlgebra
 import Omega.POM

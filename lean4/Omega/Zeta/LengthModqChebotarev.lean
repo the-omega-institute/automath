@@ -85,4 +85,29 @@ theorem paper_zeta_length_modq_dirichlet_artin_mobiuslog
     intro n hn
     rw [hcoeff n]
 
+/-- Paper-facing wrapper combining the Chebotarev-Mertens seed package with the
+Dirichlet-Artin Möbius-log coefficient expansion.
+    thm:zeta-length-modq-chebotarev-mertens -/
+theorem paper_zeta_length_modq_chebotarev_mertens
+    (ω : ℂ) (j : ℕ) (μ trace twistedTrace logZCoeff : ℕ → ℂ) :
+    (∀ n, twistedTrace n = ω ^ (j * n) * trace n) →
+    (∀ n, logZCoeff n = twistedTrace n / (n : ℂ)) →
+    ((1 - 1 - 1 = (-1 : ℤ) ∧ 1 + 1 - 1 = (1 : ℤ)) ∧
+        (1 = 1 ∧ 1 + 1 = 2) ∧
+        (2 * 1 = 2) ∧
+        (1 + 3 = 4 ∧ 3 + 4 = 7) ∧
+        (3 - 1 = 2 ∧ 2 / 2 = 1)) ∧
+      (∀ n,
+        lengthModqMobiuslogCoeff μ logZCoeff n =
+          ∑ d ∈ n.divisors, μ d / (d : ℂ) * lengthModqTraceCoeff ω j trace (n / d)) ∧
+      (∀ z N,
+        lengthModqMobiuslogSeries μ logZCoeff z N =
+          ∑ n ∈ Finset.Icc 1 N,
+            (∑ d ∈ n.divisors, μ d / (d : ℂ) * lengthModqTraceCoeff ω j trace (n / d)) *
+              z ^ n) := by
+  intro hTrace hLog
+  refine ⟨paper_zeta_length_modq_chebotarev_mertens_package, ?_⟩
+  exact paper_zeta_length_modq_dirichlet_artin_mobiuslog
+    ω j μ trace twistedTrace logZCoeff hTrace hLog
+
 end Omega.Zeta

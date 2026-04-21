@@ -23,17 +23,22 @@ If the chapter itself is NEW (no lean4/Omega/<Chapter>.lean exists yet):
   b. Add `import Omega.<Chapter>` to lean4/Omega.lean  ← only allowed in this case.
   This is the ONLY situation where lean4/Omega.lean may be edited.
 
-## Step 2: Full compilation
-```bash
-cd lean4 && python3 scripts/lake_gate.py build
-```
-`lake_gate.py` enforces a host-wide cap on concurrent `lake` invocations
-(LAKE_GATE_MAX_PARALLEL, set by the orchestrator). Use it for ALL `lake`
-calls in this round — single-module builds too, e.g.
-`python3 scripts/lake_gate.py build Omega.X.Y`. Do NOT invoke `lake` directly.
+## Step 2: Per-module type-checking (fast; NO `lake build`)
+For each new or modified .lean file, verify it elaborates by running the
+Lean compiler on that one file:
 
-If errors, fix them (up to 3 attempts per theorem).
-If a theorem is stuck, skip it and continue with the others.
+```bash
+cd lean4 && lake env lean Omega/<Chapter>/<File>.lean
+```
+
+This is fast (seconds, no cache cascade). Do NOT run `lake build` — the
+orchestrator performs the host-wide gated `lake build` after your commit
+as part of round verification, so you don't need to (and shouldn't) wait
+on the lake_gate inside this turn.
+
+If elaboration errors, fix them (up to 3 attempts per theorem).
+If a theorem is stuck, skip it and continue with the others. Only commit
+files whose single-file `lake env lean <file>.lean` passes.
 
 ## Step 3: Annotate .tex files (do this BEFORE rebase)
 Add \leanverified{theorem_name} to the corresponding .tex files in theory/.
@@ -111,13 +116,26 @@ Rules applied to every new file:
 - If you cannot close the proof, use `sorry` and mark `\leanpartial{…}{reason}`
   instead of fabricating a shell structure. A sorry with a real signature is
   HONEST and passes; a shell theorem is DISHONEST and will be auto-rejected.
+  The `reason` text is injected verbatim into LaTeX. It MUST be LaTeX-safe:
+    * NEVER use Markdown backticks (e.g. do NOT write `` `paper_*` ``).
+      To quote an identifier, use \texttt{...} with underscores escaped as \_
+      (e.g. `\texttt{paper\_foo}`).
+    * Escape every LaTeX special character in prose: `_` → `\_`, `$` → `\$`,
+      `%` → `\%`, `&` → `\&`, `#` → `\#`, `^` → `\^{}`, `~` → `\~{}`,
+      `{` → `\{`, `}` → `\}`, `\` → `\textbackslash{}`.
+    * Do NOT insert raw code blocks, `<...>` placeholders, or unescaped
+      identifiers containing underscores. Plain natural-language English or
+      Chinese is fine; any code-like token must be wrapped in \texttt{...}
+      with its specials escaped.
+    * Keep the reason to one short sentence; it is a margin note, not a
+      dissertation.
 
 Existing hybrid files that still contain a historical shell structure are
 tolerated by the scanner, but NEW shell structures in a round's diff cause
 the entire round to be rejected (commits not merged to the base branch).
 
 ## Completion Contract
-- No sorry / admit / axiom; `python3 scripts/lake_gate.py build` must pass with zero errors
+- No sorry / admit / axiom; each touched file's `lake env lean <file>.lean` must pass with zero errors. The orchestrator runs the full gated `lake build` after your commit.
 - Must complete all 5 steps; if a theorem is stuck, skip it and continue
 - Tactic failure: auto-try next; compile error: auto-fix up to 3 rounds
 - Implementation changes: only in lean4/Omega/

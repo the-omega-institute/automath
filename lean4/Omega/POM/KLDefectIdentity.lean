@@ -90,6 +90,39 @@ theorem paper_pom_kl_defect_identity {X : Type*} [Fintype X] [DecidableEq X] (d 
     _ = -liftEntropy d mu + liftEntropy d (fiberUniformLift d pi) := by rw [hnegEntropy, hcross]
     _ = liftEntropy d (fiberUniformLift d pi) - liftEntropy d mu := by ring
 
+/-- Closed-form paper ledger: visible entropy plus fiber capacity minus the KL defect to the
+fiber-uniform lift.
+    thm:pom-kl-ledger -/
+theorem paper_pom_kl_ledger {X : Type*} [Fintype X] [DecidableEq X] (d : X -> Nat)
+    (hd : forall x, 0 < d x) (pi : X -> Real) (mu : FiberMicrostate d -> Real)
+    (hmu_marginal : forall x, fiberMarginal d mu x = pi x) (hmu_nonneg : forall a, 0 <= mu a)
+    (hpi_nonneg : forall x, 0 <= pi x) (hmu_sum : Finset.univ.sum mu = 1) :
+    liftEntropy d mu = (Finset.univ.sum fun x : X => Real.negMulLog (pi x)) +
+      Finset.univ.sum (fun x : X => pi x * Real.log (d x)) - klDiv mu (fiberUniformLift d pi) := by
+  have hdefect :=
+    paper_pom_kl_defect_identity d hd pi mu hmu_marginal hmu_nonneg hpi_nonneg hmu_sum
+  have huniform :
+      liftEntropy d (fiberUniformLift d pi) =
+        (∑ x : X, Real.negMulLog (pi x)) + ∑ x : X, pi x * Real.log (d x) := by
+    exact
+      (paper_pom_maxent_lift d hd pi (fiberUniformLift d pi)
+        (by intro x i j; rfl)
+        (by
+          intro x
+          have hd0 : (d x : ℝ) ≠ 0 := by
+            exact_mod_cast (Nat.ne_of_gt (hd x))
+          calc
+            fiberMarginal d (fiberUniformLift d pi) x = ∑ _i : Fin (d x), pi x / d x := by
+              simp [fiberMarginal, fiberUniformLift]
+            _ = (d x : ℝ) * (pi x / d x) := by simp
+            _ = pi x := by field_simp [hd0])).2
+  calc
+    liftEntropy d mu
+        = liftEntropy d (fiberUniformLift d pi) - klDiv mu (fiberUniformLift d pi) := by
+            linarith [hdefect]
+    _ = (∑ x : X, Real.negMulLog (pi x)) + ∑ x : X, pi x * Real.log (d x) -
+          klDiv mu (fiberUniformLift d pi) := by rw [huniform]
+
 /-- Paper-facing ledger bound: among all lifts with the same marginal, the fiber-uniform lift
 attains the entropy upper bound, and equality forces fiberwise uniformity.
     cor:pom-kl-ledger-bound -/

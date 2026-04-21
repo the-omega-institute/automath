@@ -102,4 +102,13 @@ theorem paper_conclusion_window6_output_exact_gcd_two_scalar_distortion :
       window6ExactGcdSectorMass 3 / window6ExactGcdUniformMass 3 = 21 / 16 := by
   repeat' constructor <;> norm_num [window6ExactGcdSectorMass, window6ExactGcdUniformMass]
 
+/-- Extraction of the three nonzero conductor-sector blind KL quanta from the exact-gcd
+chain-splitting model.
+    cor:conclusion-window6-output-universal-blind-entropy-quantum -/
+theorem paper_conclusion_window6_output_universal_blind_entropy_quantum :
+    window6ExactGcdConditionalKl 0 = (5 / 18 : Real) * Real.log (32 / 27 : Real) /\
+    window6ExactGcdConditionalKl 1 = (2 / 9 : Real) * Real.log (32 / 27 : Real) /\
+    window6ExactGcdConditionalKl 2 = (1 / 3 : Real) * Real.log (32 / 27 : Real) := by
+  repeat' constructor <;> norm_num [window6ExactGcdConditionalKl]
+
 end Omega.Conclusion
