@@ -96,6 +96,7 @@ import Omega.Folding.Defect
 import Omega.Folding.DerivedAffineReciprocity
 import Omega.Folding.DerivedCenteredOddMomentsVanish
 import Omega.Folding.DerivedBinfoldAverageLogPotentialConstant
+import Omega.Folding.DerivedBinfoldEscortFdivBernoulliExponentialFamily
 import Omega.Folding.DerivedBinfoldLogfiberTwoPointLaw
 import Omega.Folding.DerivedBinfoldMinsectorChi2TwoBlockBound
 import Omega.Folding.DerivedChainSquarefreeGibbsBernoulliFactorization

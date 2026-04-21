@@ -54,6 +54,7 @@ import Omega.Conclusion.BoundedSliceFamilyEquivalenceUndecidable
 import Omega.Conclusion.BudgetCurveExactTailDifferenceReconstruction
 import Omega.Conclusion.BudgetSqrtObservableNormUndecidable
 import Omega.Conclusion.CanonicalFixedpointPrimitiveMobius
+import Omega.Conclusion.CanonicalFixedpointFullshiftConjugacy
 import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
 import Omega.Conclusion.CanonicalSliceExactFixedpointCount
 import Omega.Conclusion.CapacityFiniteCompleteness
