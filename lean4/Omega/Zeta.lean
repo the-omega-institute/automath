@@ -503,6 +503,7 @@ import Omega.Zeta.XiEndpointDefectEnergyKlBridgeExplicit
 import Omega.Zeta.XiEdInftyFiberHalvingTangentIntegral
 import Omega.Zeta.XiEndpointFirstNPlusOneProbesSharpToeplitzRecovery
 import Omega.Zeta.XiEndpointHeatProbeAbelStokesAtomRecovery
+import Omega.Zeta.XiEndpointHeatProbeHausdorffHankelClosure
 import Omega.Zeta.XiEndpointHeatProbeCyclotomicTargetExtraction
 import Omega.Zeta.XiEndpointHeatProbeRstarRegularVariationTail
 import Omega.Zeta.XiEndpointJetOrthogonalDecoupling
