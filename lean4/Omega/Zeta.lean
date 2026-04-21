@@ -256,6 +256,7 @@ import Omega.Zeta.FredholmPrimitiveClosedForm
 import Omega.Zeta.GaugeGroupTripleDecomp
 import Omega.Zeta.GeometricHarmonicTail
 import Omega.Zeta.GodelFiberIndexModUniformityIndependence
+import Omega.Zeta.XiGodelRegisterMutualInformationBound
 import Omega.Zeta.GodelTateAddressPrimitivePeriodicCount
 import Omega.Zeta.GoldenMetallicSymbolBudgetEntropyOptimality
 import Omega.Zeta.GoldenRadiusVisibility
