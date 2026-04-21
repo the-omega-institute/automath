@@ -359,6 +359,7 @@ import Omega.Zeta.OffcriticalHorocycleBusemann
 import Omega.Zeta.OffcriticalVisibilityThresholdBitBudget
 import Omega.Zeta.OffcriticalQuadraticRadialCompression
 import Omega.Zeta.XiOrthogonalSliceStructure
+import Omega.Zeta.XiInnerFactorOrthogonalRegister
 import Omega.Zeta.OperatorFixedKernelLocalDensityObstruction
 import Omega.Zeta.OperatorLocalLeyangSelfreciprocalUnitcircle
 import Omega.Zeta.OperatorResolventTraceSpectralFlowQuantization
