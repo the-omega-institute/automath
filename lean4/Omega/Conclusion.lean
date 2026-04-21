@@ -131,6 +131,7 @@ import Omega.Conclusion.EndpointHorizonKLVsLogCostOnebit
 import Omega.Conclusion.EndpointStatisticsVsTimeAddressLedgerSplitting
 import Omega.Conclusion.EndpointStoppingOnebitAncillaryFactorization
 import Omega.Conclusion.EquivariantASplittingRegisterLowerBound
+import Omega.Conclusion.EqualShellVarianceGapIdentity
 import Omega.Conclusion.EscortDecisionThermalCodimensionGap
 import Omega.Conclusion.EssentialPrimeAxisMinimality
 import Omega.Conclusion.EventEllipseGoldenMinimal
