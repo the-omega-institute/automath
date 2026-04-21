@@ -405,6 +405,7 @@ import Omega.Folding.NaturalStateComplexityGap
 import Omega.Folding.NormalizationComplexity
 import Omega.Folding.NormalizeThenTruncateFunctorial
 import Omega.Folding.OracleCapacityTailMoments
+import Omega.Folding.OracleCapacityFullInvertibilityThreshold
 import Omega.Folding.OracleCapacityVariationalProjection
 import Omega.Folding.OstrowskiDenominators
 import Omega.Folding.OstrowskiMetallicPropagationTailVariance

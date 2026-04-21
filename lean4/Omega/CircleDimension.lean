@@ -278,6 +278,7 @@ import Omega.CircleDimension.WavefunctionAsCoordinate
 import Omega.CircleDimension.WdimBettiAverageLaw
 import Omega.CircleDimension.WdimSignedCircleDimension
 import Omega.CircleDimension.XiCdimDefectChainRule
+import Omega.CircleDimension.XiPhaseFoldKernelMinimalCertificateRank
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
 import Omega.CircleDimension.ZeroDimensionFinitePhaseImplementationBudget
 import Omega.CircleDimension.ZnProcyclicAndMinGenerators
