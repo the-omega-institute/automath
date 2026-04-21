@@ -36,6 +36,7 @@ import Omega.CircleDimension.Cdim1DivisibleImpliesQ
 import Omega.CircleDimension.Cdim2MinKernelDim
 import Omega.CircleDimension.CdimAnomalyAffineRegularForm
 import Omega.CircleDimension.CdimStarCompatibleFG
+import Omega.CircleDimension.CdimStarEndomorphismLocalizedDegree
 import Omega.CircleDimension.SecondOrderPrincipalSymbol
 import Omega.CircleDimension.StarPrimeCoordinateOrthogonality
 import Omega.CircleDimension.StarTorsionFiberInvariance

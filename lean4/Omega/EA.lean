@@ -37,10 +37,12 @@ import Omega.EA.FoldWindow6ChiLayeredSpectrumReconstructionBy12Moments
 import Omega.EA.FoldAsSection
 import Omega.EA.FoldAsSectionCorollary
 import Omega.EA.FoldGroupoidAFInductiveLimitHolographicTrace
+import Omega.EA.FoldGroupoidAut0RationalCohomology
 import Omega.EA.KernelPeterWeylBlockDiagonalization
 import Omega.EA.FoldDiscreteToContinuousGaugeEmbedding
 import Omega.EA.FoldGroupoidAutChiSemidirectClassification
 import Omega.EA.FoldGroupoidAutSemidirectPi0
+import Omega.EA.FoldGroupoidZ2x2SectorByOrientation
 import Omega.EA.FoldMaxDataProcessingSaturationChi
 import Omega.EA.GlobalAssemblyZeta
 import Omega.EA.GodelLogBusemann
