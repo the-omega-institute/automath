@@ -112,6 +112,7 @@ import Omega.OperatorAlgebra.LapseTimeGaugeInvariance
 import Omega.OperatorAlgebra.LapseWeightedWishKoksma
 import Omega.OperatorAlgebra.LyapunovSpectralRadiusCertificate
 import Omega.OperatorAlgebra.MultiRoundStrongConverseLinearLeakage
+import Omega.OperatorAlgebra.ModularScatteringPhase
 import Omega.OperatorAlgebra.NpWatataniIndexSupportCharacterization
 import Omega.OperatorAlgebra.OracleProjectionVariationalCapacity
 import Omega.OperatorAlgebra.PimsnerPopaWitnessBound
