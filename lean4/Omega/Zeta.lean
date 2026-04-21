@@ -67,6 +67,7 @@ import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiWindow6URFirstReturnTimeClosedForm
 import Omega.Zeta.XiTimePart9wBasicRootUnityErrorExponentToOne
 import Omega.Zeta.XiTimePart9saUniformBaselineFixedBinaryExperiment
+import Omega.Zeta.XiTimePart9tTopGapAffineCapacitySegment
 import Omega.Zeta.XiTimePart70aUniformAverageLogdegTwoState
 import Omega.Zeta.XiTimePart9gaCrossResolutionAffineRigidity
 import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne

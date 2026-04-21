@@ -349,6 +349,7 @@ import Omega.POM.MultiplicityCompositionMod3Sparsity
 import Omega.POM.MultiplicityCompositionMomentHierarchyRationalGrowth
 import Omega.POM.MultiplicityCompositionPartCountCLT
 import Omega.POM.MultiplicityCompositionPartition
+import Omega.POM.MultiplicityCompositionRealQPressure
 import Omega.POM.MultiplicityCompositionSharpMainTermConstant
 import Omega.POM.MultiplicityFixedLREnvelope
 import Omega.POM.MultiplicityFixedRExtrema
