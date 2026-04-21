@@ -208,6 +208,7 @@ import Omega.Conclusion.StokesSteinDualNorm
 import Omega.Conclusion.StokesEnergyCellSamplingConcentration
 import Omega.Conclusion.LinearExternalizationLiminf
 import Omega.Conclusion.LkBulkBoundaryBesselDuality
+import Omega.Conclusion.LkCentralBinomialCatalanMoments
 import Omega.Conclusion.LkKolmogorovSharpOneOverK
 import Omega.Conclusion.LocalizedGroupsMayerVietoris
 import Omega.Conclusion.LocalizedGroupsAutAndFiniteKernels
