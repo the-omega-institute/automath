@@ -337,6 +337,7 @@ import Omega.Folding.GaugeAnomalyLeyangBranchU1
 import Omega.Folding.GaugeAnomalyLoglossContextDepth
 import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
+import Omega.Folding.GaugeAnomalySpectrumTomographyCertificateTriangle
 import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
 import Omega.Folding.GaugeAnomalyOneBlockThreePeriodLaw
 import Omega.Folding.GaugeAnomalyP10Degree
