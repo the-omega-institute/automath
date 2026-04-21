@@ -335,6 +335,7 @@ import Omega.Folding.GodelDensityEstimatorLil
 import Omega.Folding.GodelDensityEstimatorOptimalThresholdTest
 import Omega.Folding.GodelCoprimeInflation
 import Omega.Folding.GodelFiniteDictionaryBitlength
+import Omega.Folding.GraphCycleAffineTorsorThetaPoissonPhase
 import Omega.Folding.GraphCycleLatticeThetaModularInversion
 import Omega.Folding.HaltingLeyangHolographicEncoding
 import Omega.Folding.HaltingLeyangW1Barrier
