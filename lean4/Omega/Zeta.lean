@@ -153,6 +153,7 @@ import Omega.Zeta.DephysicalizedHorizonQuotientDataStructure
 import Omega.Zeta.DephysPoissonBusemannTimefiber
 import Omega.Zeta.DetVpControlsRankDrop
 import Omega.Zeta.DerivedFixedFreezingRenyiSurface
+import Omega.Zeta.DerivedBinfoldTvBayesConstants
 import Omega.Zeta.DerivedHankelFiniteJetBadPrimeClosure
 import Omega.Zeta.DerivedHankelArithmeticAmbiguityLocalizesBadPrimes
 import Omega.Zeta.DerivedHankelSamplingBadprimeEntropyUnified
