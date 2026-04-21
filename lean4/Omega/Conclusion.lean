@@ -197,7 +197,9 @@ import Omega.Conclusion.GodelIntegerizationPrimeShiftPolynomial
 import Omega.Conclusion.GodelPrefixPrimeMonoid
 import Omega.Conclusion.GodelAffineEllipseEquationIdentifiability
 import Omega.Conclusion.GodelSemidirectTwoadicAffineization
+import Omega.Conclusion.GodelSemidirectLaw
 import Omega.Conclusion.GodelLeyangIFS
+import Omega.Conclusion.GodelPrefixArithmeticCriterion
 import Omega.Conclusion.GodelVsMinimalGap
 import Omega.Conclusion.GoldenAlternatingConstantsRecoverPhi
 import Omega.Conclusion.GoldenBiasSecondOrderUniqueness

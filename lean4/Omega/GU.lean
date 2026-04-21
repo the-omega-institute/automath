@@ -17,6 +17,7 @@ import Omega.GU.BdrySquareIdentity
 import Omega.GU.BdrySymmetricGroupSignTwistedLabelD2
 import Omega.GU.BdryThreeAxisUniqueSymmetricCentralInvariant
 import Omega.GU.BdryUpliftOrientationParity
+import Omega.GU.BdryZ2JumpFunctorUniqueness
 import Omega.GU.BdryZ2JumpUniqueness
 import Omega.GU.BernoulliZetaTower
 import Omega.GU.BetaDeterminantRatio
