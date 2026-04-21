@@ -111,6 +111,7 @@ import Omega.CircleDimension.FinitePrimeSupportMultiplicativeHalfCircleDimension
 import Omega.CircleDimension.RhIffUniformComovingDefect
 import Omega.CircleDimension.FinitePrimeSupportNoRankoneAdditiveHost
 import Omega.CircleDimension.FinitePrimeTruncationKernels
+import Omega.CircleDimension.QhatFinitePrimeWitness
 import Omega.CircleDimension.FiniteProbeExtraction
 import Omega.CircleDimension.FourthRegisterDichotomy
 import Omega.CircleDimension.GcdimFiltrationInvariance
