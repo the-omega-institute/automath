@@ -52,6 +52,7 @@ import Omega.Zeta.XiLimitDefectPotentialRationalization
 import Omega.Zeta.XiLimitDefectPotentialSpectralTailReadsDeltaMax
 import Omega.Zeta.XiLimitDefectPotentialVsDepthProfile
 import Omega.Zeta.XiNaturalExtensionPeriodicOrbitZetaPreservation
+import Omega.Zeta.XiNullMicroKlWindow
 import Omega.Zeta.XiTerminalZmEllipticWeightNCorrespondenceBidegreeDelta
 import Omega.Zeta.XiPrimeRegisterHistoryInverseLimit
 import Omega.Zeta.XiPrimeSliceNontrivialLayerExactMinimality

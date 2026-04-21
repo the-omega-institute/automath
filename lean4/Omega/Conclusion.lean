@@ -169,6 +169,7 @@ import Omega.Conclusion.FixedTempSoftOrderProbabilisticFiniteStateDecidable
 import Omega.Conclusion.FoldHilbertRecognizable
 import Omega.Conclusion.FoldMultiscaleCarryDefect
 import Omega.Conclusion.FoldAuditKLPythagoras
+import Omega.Conclusion.FoldbinSubcoverExponentialMincollapse
 import Omega.Conclusion.FoldFiberHologramBooleanCubePartition
 import Omega.Conclusion.FoldFiberProductSourceHardcoreDisintegration
 import Omega.Conclusion.FluxGodelDimensionDuality
