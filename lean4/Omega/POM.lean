@@ -43,6 +43,7 @@ import Omega.POM.CollisionEntropyRate
 import Omega.POM.CostCanonicalRepresentativeFunctor
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.CollisionKernelPublication
+import Omega.POM.CollisionMoment2AdicOdometerInverseLimit
 import Omega.POM.CollisionSpectrumPhiOnesidedApproximation
 import Omega.POM.CollisionStrengthened
 import Omega.POM.ChernoffThresholdBounds

@@ -11,6 +11,7 @@ import Omega.SyncKernelWeighted.CompletedPrimitivePrimePowerDifferenceQuotient
 import Omega.SyncKernelWeighted.GallavottiCohen
 import Omega.SyncKernelWeighted.GallavottiCohenSlopeInvolution
 import Omega.SyncKernelWeighted.GMTrace3SpectralNormExtremal
+import Omega.SyncKernelWeighted.GmCycleGcdModObstruction
 import Omega.SyncKernelWeighted.IharaArtinFactorization
 import Omega.SyncKernelWeighted.IharaChebotarevExp
 import Omega.SyncKernelWeighted.IharaCyclotomicFactorClassification

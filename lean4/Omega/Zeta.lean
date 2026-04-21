@@ -33,6 +33,7 @@ import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
 import Omega.Zeta.XiLimitDefectPotentialRationalization
+import Omega.Zeta.XiLimitDefectPotentialVsDepthProfile
 import Omega.Zeta.XiNaturalExtensionPeriodicOrbitZetaPreservation
 import Omega.Zeta.XiTerminalZmEllipticWeightNCorrespondenceBidegreeDelta
 import Omega.Zeta.XiPrimeRegisterHistoryInverseLimit
