@@ -454,6 +454,7 @@ import Omega.Zeta.XiHypercubeLeyangAffineOrbifoldTwoLayer
 import Omega.Zeta.XiLimitDefectPotentialL1Sumrule
 import Omega.Zeta.XiLogDefectGammaTranslationL1Lipschitz
 import Omega.Zeta.XiLogDefectPotentialLinftyBoundByTotalDelta
+import Omega.Zeta.XiLogisticDivergenceDictionary
 import Omega.Zeta.XiMarkovDerivativeDeterminantBadPrime
 import Omega.Zeta.XiMomentRatioIdentifiesAmin
 import Omega.Zeta.XiNaturalExtensionH153MinimalFiniteAlphabet
