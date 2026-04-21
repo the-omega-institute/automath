@@ -84,6 +84,7 @@ import Omega.Zeta.ComovingEnergyDeltaBound
 import Omega.Zeta.XiComovingPrefixEndpointBarrierLaw
 import Omega.Zeta.ComovingHorizonScanPoissonKLCovarianceTensor
 import Omega.Zeta.CompletionEndpointJetDiffusion
+import Omega.Zeta.ConclusionSmithPkernelRatioStaircaseJumpInversion
 import Omega.Zeta.Conclusion62MellinRational
 import Omega.Zeta.Conclusion63CLTSpectral
 import Omega.Zeta.Conclusion64HolderRegularity
@@ -338,6 +339,7 @@ import Omega.Zeta.RealInput40GeodesicMertens
 import Omega.Zeta.RealInput40GeodesicRamanujanMargin
 import Omega.Zeta.RealInput40RotationPolytope6V
 import Omega.Zeta.RealInput40RotationPolytopeShear
+import Omega.Zeta.RealInput40ZetaUvCoreZpmoneResonanceSurfaces
 import Omega.Zeta.RealInput40TrivMechSplit
 import Omega.Zeta.RealisabilityVsRigidity
 import Omega.Zeta.ReciprocalPlusKernelRhImpliesToyRh
