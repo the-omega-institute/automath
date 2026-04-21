@@ -122,6 +122,7 @@ import Omega.POM.FiberFullPosteriorUniformizationProductSource
 import Omega.POM.FiberIndexFiniteMPlateau
 import Omega.POM.FiberIndependenceComplexClassification
 import Omega.POM.FiberLedgerPrefixSideinfoLength
+import Omega.POM.FiberLeyangChernoffUniqueMinimizer
 import Omega.POM.FiberLeyangKlBernoulliDecomposition
 import Omega.POM.FiberMultiplicityMatrixProduct
 import Omega.POM.FiberMedianMajorityPrimeValuation
