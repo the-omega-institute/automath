@@ -34,6 +34,7 @@ import Omega.POM.CoarsegrainingMajorizationSchur
 import Omega.POM.CollisionAQFibonacciBFPrimitivePrimeDivisor
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.CollisionEntropyRate
+import Omega.POM.CostCanonicalRepresentativeFunctor
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.CollisionKernelPublication
 import Omega.POM.CollisionSpectrumPhiOnesidedApproximation
