@@ -506,3 +506,4 @@ import Omega.Conclusion.BalancedTwoatomCompletionCapacityBranchSelection
 import Omega.Conclusion.CdimqUniqueExactExtension
 import Omega.Conclusion.SoftcoreFixedMQseriesRationalOgf
 import Omega.Conclusion.ToeplitzNegativeGeometryStrictificationOrthogonalSplit
+import Omega.Conclusion.Period3FiberFullLatticePartition
