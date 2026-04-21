@@ -459,6 +459,7 @@ import Omega.Folding.RankEncodingReversibleLift
 import Omega.Folding.RationalGeneratorGap
 import Omega.Folding.RationalTailSpheres
 import Omega.Folding.ResidueMarkovOrder
+import Omega.Folding.ResidualPushforwardKernelByFiberProbability
 import Omega.Folding.Rewrite
 import Omega.Folding.S3Recurrence
 import Omega.Folding.SecondCharacterReflectionAnnihilation
