@@ -1,4 +1,5 @@
 import Omega.Zeta.AbelFinitePartMobiusZeta
+import Omega.Zeta.AbelBaseRecursionPoleConjugacy
 import Omega.Zeta.AbelCongruenceEnergyParsevalBarcode
 import Omega.Zeta.AbelPowerbaseCovariancePolePowerMap
 import Omega.Zeta.AbelResolutionPowerRenormalizationIdentity
