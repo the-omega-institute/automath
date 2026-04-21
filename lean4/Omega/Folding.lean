@@ -5,6 +5,7 @@ import Omega.Folding.BayesKinkGeometry
 import Omega.Folding.BernoulliHalfDefect36Explicit
 import Omega.Folding.BernoulliHalfEndpoints
 import Omega.Folding.BernoulliHalfFixedDefectGrowth
+import Omega.Folding.BernoulliHalfFixedDefectFibonacciJordanFilter
 import Omega.Folding.BernoulliHalfHighTempInversePower
 import Omega.Folding.BernoulliHalfLowTempCubicActivation
 import Omega.Folding.BernoulliPAutocovarianceGeneratingRational
