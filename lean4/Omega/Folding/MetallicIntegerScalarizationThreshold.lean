@@ -1,3 +1,4 @@
+import Mathlib.Analysis.Complex.ExponentialBounds
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Data.Real.Sqrt
 import Mathlib.NumberTheory.Real.GoldenRatio
@@ -24,6 +25,10 @@ noncomputable def metallicIntegerDeltaK : ℝ :=
 /-- The unique scalarization threshold separating the integer phases `A = 1` and `A = 2`. -/
 noncomputable def beta_ZZ : ℝ :=
   (Real.log (3 / (1 + Real.sqrt 2)) - Real.log (2 / Real.goldenRatio)) / metallicIntegerDeltaK
+
+/-- The audited sample-penalty specialization `β(N) = log N / N`. -/
+noncomputable def samplePenaltyBeta (N : ℕ) : ℝ :=
+  Real.log (N : ℝ) / (N : ℝ)
 
 private lemma metallicA_goldenRatio : metallicAOfLambda Real.goldenRatio = 1 := by
   unfold metallicAOfLambda
@@ -142,5 +147,107 @@ theorem paper_metallic_integer_scalarization_threshold :
         nlinarith [metallicIntegerDeltaK_pos, h]
       rw [← hgap] at h'
       exact sub_neg.mp h'
+
+private lemma samplePenaltyBeta_succ_lt (n : ℕ) (hn : 3 ≤ n) :
+    samplePenaltyBeta (n + 1) < samplePenaltyBeta n := by
+  unfold samplePenaltyBeta
+  have hn_pos : 0 < (n : ℝ) := by positivity
+  have hn_ne : (n : ℝ) ≠ 0 := by positivity
+  have hnp1_ne : (((n + 1 : ℕ) : ℝ)) ≠ 0 := by positivity
+  have hratio_pos : 0 < (((n + 1 : ℕ) : ℝ) / (n : ℝ)) := by positivity
+  have hratio :
+      Real.log (((n + 1 : ℕ) : ℝ) / (n : ℝ)) < 1 / (n : ℝ) := by
+    have hratio_ne : (((n + 1 : ℕ) : ℝ) / (n : ℝ)) ≠ 1 := by
+      intro hEq
+      have hcast : (((n + 1 : ℕ) : ℝ)) = (n : ℝ) := by
+        have := (div_eq_iff hn_ne).mp hEq
+        simpa using this
+      have hnat : n + 1 = n := by
+        exact_mod_cast hcast
+      exact Nat.succ_ne_self n hnat
+    have h := Real.log_lt_sub_one_of_pos hratio_pos hratio_ne
+    have hsimp : (((n + 1 : ℕ) : ℝ) / (n : ℝ)) - 1 = 1 / (n : ℝ) := by
+      field_simp [hn_ne]
+      norm_num
+    rw [hsimp] at h
+    exact h
+  have hlogdiff :
+      Real.log (((n + 1 : ℕ) : ℝ)) - Real.log (n : ℝ) < 1 / (n : ℝ) := by
+    rwa [Real.log_div hnp1_ne hn_ne] at hratio
+  have hlogn_gt_one : 1 < Real.log (n : ℝ) := by
+    have hthree_le : (3 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
+    have hexp_lt_n : Real.exp 1 < (n : ℝ) := lt_of_lt_of_le Real.exp_one_lt_three hthree_le
+    exact (Real.lt_log_iff_exp_lt hn_pos).2 hexp_lt_n
+  have hscaled :
+      (n : ℝ) * (Real.log (((n + 1 : ℕ) : ℝ)) - Real.log (n : ℝ)) < 1 := by
+    have hmul :
+        (n : ℝ) * (Real.log (((n + 1 : ℕ) : ℝ)) - Real.log (n : ℝ)) <
+          (n : ℝ) * (1 / (n : ℝ)) := by
+      exact mul_lt_mul_of_pos_left hlogdiff hn_pos
+    have hsimp : (n : ℝ) * (1 / (n : ℝ)) = 1 := by
+      field_simp [hn_ne]
+    rw [hsimp] at hmul
+    exact hmul
+  have haux : (n : ℝ) * (Real.log (((n + 1 : ℕ) : ℝ)) - Real.log (n : ℝ)) < Real.log (n : ℝ) := by
+    linarith
+  have haux' :
+      (n : ℝ) * Real.log (((n + 1 : ℕ) : ℝ)) - (n : ℝ) * Real.log (n : ℝ) < Real.log (n : ℝ) := by
+    simpa [mul_sub] using haux
+  have hcross :
+      (n : ℝ) * Real.log (((n + 1 : ℕ) : ℝ)) < (((n + 1 : ℕ) : ℝ)) * Real.log (n : ℝ) := by
+    have hcross' : (n : ℝ) * Real.log (((n + 1 : ℕ) : ℝ)) <
+        (n : ℝ) * Real.log (n : ℝ) + Real.log (n : ℝ) := by
+      linarith
+    have hmul_add :
+        (n : ℝ) * Real.log (n : ℝ) + Real.log (n : ℝ) =
+          (((n + 1 : ℕ) : ℝ)) * Real.log (n : ℝ) := by
+      norm_num
+      ring
+    rw [hmul_add] at hcross'
+    exact hcross'
+  have hnp1_pos : 0 < (((n + 1 : ℕ) : ℝ)) := by positivity
+  have hgoal :
+      Real.log (((n + 1 : ℕ) : ℝ)) * (n : ℝ) < Real.log (n : ℝ) * (((n + 1 : ℕ) : ℝ)) := by
+    simpa [mul_comm] using hcross
+  exact (div_lt_div_iff₀ hnp1_pos hn_pos).2 hgoal
+
+private lemma samplePenaltyBeta_antitone {m n : ℕ} (hm : 3 ≤ m) (hmn : m ≤ n) :
+    samplePenaltyBeta n ≤ samplePenaltyBeta m := by
+  rcases Nat.exists_eq_add_of_le hmn with ⟨k, rfl⟩
+  induction k with
+  | zero =>
+      simp
+  | succ k ih =>
+      have ih' : samplePenaltyBeta (m + k) ≤ samplePenaltyBeta m := ih (Nat.le_add_right m k)
+      have hk3 : 3 ≤ m + k := le_trans hm (Nat.le_add_right m k)
+      have hstep : samplePenaltyBeta (m + k + 1) < samplePenaltyBeta (m + k) := by
+        simpa [Nat.add_assoc] using samplePenaltyBeta_succ_lt (m + k) hk3
+      simpa [Nat.add_assoc] using le_trans (le_of_lt hstep) ih'
+
+/-- Paper-facing discrete integer threshold wrapper: `β(N) = log N / N` is strictly decreasing on
+`N ≥ 3`, so any certified bracket `β(189) < beta_ZZ < β(188)` immediately yields the audited split
+`N ≤ 188` versus `N ≥ 189` for the two surviving integer candidates. -/
+theorem paper_metallic_sample_penalty_integer_threshold_lambertw :
+    (∀ N : ℕ, 3 ≤ N → samplePenaltyBeta (N + 1) < samplePenaltyBeta N) ∧
+    ((samplePenaltyBeta 189 < beta_ZZ ∧ beta_ZZ < samplePenaltyBeta 188) →
+      (∀ N : ℕ, 3 ≤ N → N ≤ 188 →
+        metallicIntegerScoreTwo (samplePenaltyBeta N) < metallicIntegerScoreOne (samplePenaltyBeta N))
+        ∧
+      (∀ N : ℕ, 189 ≤ N →
+        metallicIntegerScoreTwo (samplePenaltyBeta N) > metallicIntegerScoreOne (samplePenaltyBeta N))) := by
+  refine ⟨samplePenaltyBeta_succ_lt, ?_⟩
+  intro hbracket
+  rcases paper_metallic_integer_scalarization_threshold with ⟨hgt, _, hlt⟩
+  refine ⟨?_, ?_⟩
+  · intro N hN hN188
+    have h188_le : samplePenaltyBeta 188 ≤ samplePenaltyBeta N :=
+      samplePenaltyBeta_antitone hN hN188
+    have hbeta : beta_ZZ < samplePenaltyBeta N := lt_of_lt_of_le hbracket.2 h188_le
+    exact (hlt (samplePenaltyBeta N)).2 hbeta
+  · intro N h189
+    have hN_le : samplePenaltyBeta N ≤ samplePenaltyBeta 189 :=
+      samplePenaltyBeta_antitone (by norm_num) h189
+    have hbeta : samplePenaltyBeta N < beta_ZZ := lt_of_le_of_lt hN_le hbracket.1
+    exact (hgt (samplePenaltyBeta N)).2 hbeta
 
 end Omega.Folding
