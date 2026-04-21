@@ -378,6 +378,7 @@ import Omega.Zeta.SyncCyclotomicEliminationEvenness
 import Omega.Zeta.SyncCyclotomicEliminationRootSIntegrality
 import Omega.Zeta.SyncHatdeltaCurveDoubleCoverBranchGenus6
 import Omega.Zeta.SyncHatdeltaCurveQuotientPlaneQuarticGenus3
+import Omega.Zeta.SyncHatdeltaQuotientTripleCoverS3Discriminant
 import Omega.Zeta.SyncHatdeltaPrymDecomposition
 import Omega.Zeta.SyncKernelMixingRate
 import Omega.Zeta.SyncResetWordGeometricTail
@@ -627,6 +628,7 @@ import Omega.Zeta.XiTimePart9gZGPrimorialFibonacciAffineRecursion
 import Omega.Zeta.XiTimePart62debbFinitePrimeSupportLocalizedAxisThreshold
 import Omega.Zeta.XiTimePart54abEscortShannonClosedForm
 import Omega.Zeta.XiTimePart63cSchurCauchyMasterKernel
+import Omega.Zeta.XiTimePart64baFoldMultiplicityMajorizationBalancing
 import Omega.Zeta.XiDyadicZeroTracking
 import Omega.Zeta.XiTimePart63cWindow6SchurPacketLockedByCharpoly
 import Omega.Zeta.XiHorizonConservativeRealization
