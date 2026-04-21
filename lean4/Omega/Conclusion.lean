@@ -375,3 +375,4 @@ import Omega.Conclusion.ZnToCircleInjectiveDenseSeeds
 import Omega.Conclusion.ToeplitzDyadicHorizonCompleteness
 import Omega.Conclusion.TwoGroupPostnikovStrictification
 import Omega.Conclusion.PrimeAxisCountScaling
+import Omega.Conclusion.CoordinateBundleAllMinimalExactificationsSpanningTrees

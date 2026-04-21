@@ -403,3 +403,4 @@ import Omega.POM.ZeroTemperatureTwoTermExpansion
 import Omega.POM.ZetaEqualsOrderPoly
 import Omega.POM.DiagonalRateSchurConcavity
 import Omega.POM.SemConservativeOnSlice
+import Omega.POM.DiagonalRateOptimalTP2
