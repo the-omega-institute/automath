@@ -72,6 +72,7 @@ import Omega.EA.KernelOneSiteBernoulliClass
 import Omega.EA.K9IntegrablePressureLdp
 import Omega.EA.KernelPressureEndpoints
 import Omega.EA.KernelMinimalThermoSignatureThree
+import Omega.EA.LambdaLinearResponseKernels
 import Omega.EA.KernelRHSqrtError
 import Omega.EA.KernelWeightedPrimeOrbit
 import Omega.EA.KernelZeroTemp
