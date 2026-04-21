@@ -168,6 +168,7 @@ import Omega.Conclusion.InverseLimitAddressFinitePrefixDeterminacy
 import Omega.Conclusion.JGEllipseConditionNumberThreshold
 import Omega.Conclusion.JGEllipseFixedEpsilonInformationBarrier
 import Omega.Conclusion.JGEllipsePackingSqrtLaw
+import Omega.Conclusion.JGEllipsePrimeLogGenerator
 import Omega.Conclusion.JGFocalDistanceDecoding
 import Omega.Conclusion.JoukowskyHolomorphicBlindnessRadialIdentifiability
 import Omega.Conclusion.KernelChainRule
