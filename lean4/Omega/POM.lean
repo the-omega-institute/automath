@@ -515,6 +515,7 @@ import Omega.POM.ToggleScanSignEdgeParity
 import Omega.POM.ToggleScanSignGeneralFiber
 import Omega.POM.TopGapLimitConstants
 import Omega.POM.TowerDefectCovarianceLaw
+import Omega.POM.TowerDefectPinskerBound
 import Omega.POM.ToyRh
 import Omega.POM.ToyRh2TorsionSource
 import Omega.POM.TypeclassDiagonalCouplingSeeds
@@ -531,6 +532,7 @@ import Omega.POM.RewriteNormalformMinimalAudit
 import Omega.POM.ValueLayerRewritingTerminating
 import Omega.POM.VisibleThickTail
 import Omega.POM.VisibleWalshCommutatorDefect
+import Omega.POM.VisibleWalshParsevalFrame
 import Omega.POM.WitnessExtractionOptimalSuccess
 import Omega.POM.DerivedBinaryAdmissibilityGoldenRateFloor
 import Omega.POM.ZeroTempConcentration
