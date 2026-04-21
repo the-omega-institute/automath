@@ -21,6 +21,7 @@ import Omega.Zeta.AtomicWittIntoTC1
 import Omega.Zeta.AuditableProfiniteChebotarevTradeoff
 import Omega.Zeta.XiExtensionPreservingInitialObject
 import Omega.Zeta.XiAtomicCenteredResidueSimplex
+import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic

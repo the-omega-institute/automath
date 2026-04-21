@@ -65,6 +65,7 @@ import Omega.Conclusion.CompleteStrictificationDualCriterion
 import Omega.Conclusion.ZeroSizebiasedResidualLayerwiseRigidity
 import Omega.Conclusion.ValuationIsometryClassification
 import Omega.Conclusion.ZeroCosetFixedV2FiniteIntersectionGcd
+import Omega.Conclusion.ZeckendorfResetObservationThreshold
 import Omega.Conclusion.ComovingDefectFixedRadialWindowNonhiding
 import Omega.Conclusion.ComovingEndpointAddressBudgetPhaseTransition
 import Omega.Conclusion.CompressionLadderSpin10
@@ -131,6 +132,7 @@ import Omega.Conclusion.FrozenMomentSemigroupSeeds
 import Omega.Conclusion.FundamentalCutHadamardRigidity
 import Omega.Conclusion.GeometricUpliftFourFourCollapse
 import Omega.Conclusion.GodelIntegerizationPrimeShiftPolynomial
+import Omega.Conclusion.GodelPrefixPrimeMonoid
 import Omega.Conclusion.GodelAffineEllipseEquationIdentifiability
 import Omega.Conclusion.GodelSemidirectTwoadicAffineization
 import Omega.Conclusion.GodelLeyangIFS
