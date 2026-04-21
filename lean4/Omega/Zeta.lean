@@ -497,6 +497,7 @@ import Omega.Zeta.XiTimeFiberMinimalDimension
 import Omega.Zeta.XiTimeLowerBoundFromMaxFiber
 import Omega.Zeta.XiTimePart50dcProjectivePressurePerronLogconvex
 import Omega.Zeta.XiTimePart51AADerivedCrossFibGcdFormula
+import Omega.Zeta.XiTimePart54abEscortShannonClosedForm
 import Omega.Zeta.XiTimePart63cSchurCauchyMasterKernel
 import Omega.Zeta.XiTimePart63cWindow6SchurPacketLockedByCharpoly
 import Omega.Zeta.XiTimePart63cTrivialAlternatingSignReciprocalDuality

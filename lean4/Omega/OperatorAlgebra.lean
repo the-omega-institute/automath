@@ -76,4 +76,5 @@ import Omega.OperatorAlgebra.LyapunovSpectralRadiusCertificate
 import Omega.OperatorAlgebra.MultiRoundStrongConverseLinearLeakage
 import Omega.OperatorAlgebra.ReplicationCentralizerColoredPartitionOrbitAlgebra
 import Omega.OperatorAlgebra.ReplicationCentralizerDimensionEgf
+import Omega.OperatorAlgebra.TakesakiCriterion
 import Omega.OperatorAlgebra.Z2x2WalshHadamardSectorTrace
