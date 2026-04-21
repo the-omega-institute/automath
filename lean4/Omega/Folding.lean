@@ -293,6 +293,7 @@ import Omega.Folding.GaugeAnomalyBranchRadiusCumulantGrowth
 import Omega.Folding.GaugeAnomalyBranchpointRationalReduction
 import Omega.Folding.GaugeAnomalyBranchCurveXYExplicit
 import Omega.Folding.GaugeAnomalyClt
+import Omega.Folding.GaugeAnomalyChernoffNonasymptotic
 import Omega.Folding.GaugeAnomalyCovClosed
 import Omega.Folding.GaugeAnomalyCovGenfun
 import Omega.Folding.GaugeAnomalyCovarianceDistributionMoment
