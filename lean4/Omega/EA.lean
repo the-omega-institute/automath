@@ -56,6 +56,7 @@ import Omega.EA.KernelGlobalCarryfreePrimitiveParity
 import Omega.EA.KernelGroundStateUniversalityClasses
 import Omega.EA.Kernel21GroundState
 import Omega.EA.KernelOneSiteBernoulliClass
+import Omega.EA.K9IntegrablePressureLdp
 import Omega.EA.KernelPressureEndpoints
 import Omega.EA.KernelRHSqrtError
 import Omega.EA.KernelWeightedPrimeOrbit

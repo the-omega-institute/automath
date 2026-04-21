@@ -135,6 +135,7 @@ import Omega.Zeta.ETDSZeckendorfPrimesNotSofic
 import Omega.Zeta.ETDSZeckendorfRegularPowerlaw
 import Omega.Zeta.EndpointHeatProbeAdamsTwistRoots
 import Omega.Zeta.EndpointHeatProbeSpectralMarginLowerBound
+import Omega.Zeta.EndpointHeatProbeBinomialConvolution
 import Omega.Zeta.EnergyTailMassSeeds
 import Omega.Zeta.EvenLengthCorrection
 import Omega.Zeta.FiniteDefectCompleteReconstruction
