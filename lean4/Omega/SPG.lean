@@ -55,6 +55,7 @@ import Omega.SPG.DecidableClopen
 import Omega.SPG.DiscreteStokesPoincarePublication
 import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.DoubleBudgetPoisson
+import Omega.SPG.DyadicHolographicReconstructionNoiseBudget
 import Omega.SPG.DyadicBoundaryImageLDPC
 import Omega.SPG.DyadicBoundaryCodeCentralBinomialWall
 import Omega.SPG.DyadicBoundaryImageMinDistance
