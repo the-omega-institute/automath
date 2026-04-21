@@ -256,6 +256,7 @@ import Omega.POM.OrderPolytopeVolumeLinext
 import Omega.POM.OracleBitLowerBoundSubexpMom
 import Omega.POM.OracleCapacityBimeasureIdentity
 import Omega.POM.SchurNearRhLinearInequalityComplete
+import Omega.POM.SchurDirichletTorsionFactorization
 import Omega.POM.OracleCapacityKolmogorovSpectrum
 import Omega.POM.OracleCapacityStieltjesInversionMellin
 import Omega.POM.OracleCriticalQuadraticMarginalLaw
