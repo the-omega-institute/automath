@@ -143,6 +143,7 @@ import Omega.POM.FenceRiccatiError
 import Omega.POM.FibCubeAntipodeCount
 import Omega.POM.FibCubeEccentricityClosedForm
 import Omega.POM.FibCubeEccentricityCore
+import Omega.POM.FibCubeEdgeClosedForm
 import Omega.POM.FibCubeEdgeParity
 import Omega.POM.FibCubeFVectorClosed
 import Omega.POM.FibCubeFpolyGrowthConstant
