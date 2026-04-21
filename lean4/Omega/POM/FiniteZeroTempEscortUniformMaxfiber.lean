@@ -10,7 +10,7 @@ open Finset
 open scoped BigOperators
 
 /-- Binary entropy `h₂(t) = -t log t - (1 - t) log (1 - t)`. -/
-noncomputable def pomBinaryEntropy (t : ℝ) : ℝ :=
+private noncomputable def pomBinaryEntropy (t : ℝ) : ℝ :=
   -(t * Real.log t) - (1 - t) * Real.log (1 - t)
 
 /-- Paper label: `thm:pom-finite-zero-temp-escort-uniform-maxfiber`.
