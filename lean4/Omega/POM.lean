@@ -210,6 +210,7 @@ import Omega.POM.HankelSyndromeInversionUnique
 import Omega.POM.HankelSyndromeModuleKernelEqualsMultiples
 import Omega.POM.HalfOrderPressureExtremeLowerBoundSqrtFreezing
 import Omega.POM.HighMultiplicitySparse
+import Omega.POM.HoelderBridgeDispersionFromSq
 import Omega.POM.IndependenceDpRadius2
 import Omega.POM.IndMatrixGrammar
 import Omega.POM.IndFactorization

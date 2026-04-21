@@ -80,6 +80,7 @@ import Omega.EA.PrimeRegisterBrauerSeveriBrauerSplitting
 import Omega.EA.PrimeRegisterEllipseInvertGodel
 import Omega.EA.PrimeRegisterExternalLedgerOrbitInvariance
 import Omega.EA.PrimeRegisterFibValuation
+import Omega.EA.PrimeRegisterRationalGodelIntegerClosure
 import Omega.EA.PrimeRegisterInternalVsPulledBackProduct
 import Omega.EA.PrimeRegisterJoukowskyCauchyRigidity
 import Omega.EA.PrimeRegisterJoukowskyAnalyticMoments

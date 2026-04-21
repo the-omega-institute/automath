@@ -39,6 +39,7 @@ import Omega.CircleDimension.CdimStarCompatibleFG
 import Omega.CircleDimension.CdimStarEndomorphismLocalizedDegree
 import Omega.CircleDimension.SecondOrderPrincipalSymbol
 import Omega.CircleDimension.StarPrimeCoordinateOrthogonality
+import Omega.CircleDimension.StarNoContinuousSectionFiniteTruncation
 import Omega.CircleDimension.StarTorsionFiberInvariance
 import Omega.CircleDimension.CechCyclotomicQuantization
 import Omega.CircleDimension.ZetaEulerPole
