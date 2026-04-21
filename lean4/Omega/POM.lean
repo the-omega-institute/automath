@@ -208,6 +208,7 @@ import Omega.POM.KCollisionMittagLefflerScaling
 import Omega.POM.KLDefectIdentity
 import Omega.POM.KappaDerivable
 import Omega.POM.KappaKlDecomposition
+import Omega.POM.MobiusCompleteDecomposition
 import Omega.POM.KLLedgerTelescope
 import Omega.POM.LedgerResidualTelescoping
 import Omega.POM.KLPythagorasTower

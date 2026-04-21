@@ -251,6 +251,7 @@ import Omega.Zeta.LogMHolomorphicVariation
 import Omega.Zeta.LucasBarrier
 import Omega.Zeta.MellinUnitarySlice
 import Omega.Zeta.MinimalAuditChainPrimeSupport
+import Omega.Zeta.XiChainInteriorBooleanFlagClosedForm
 import Omega.Zeta.Near1KappaInftyC1StrictIneq
 import Omega.Zeta.NecklaceCorrection
 import Omega.Zeta.NecklaceCounting
