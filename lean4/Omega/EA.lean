@@ -53,6 +53,7 @@ import Omega.EA.JoukowskyEllipse
 import Omega.EA.KernelChebotarevExp
 import Omega.EA.KernelCltLdp
 import Omega.EA.KernelEquilibriumPF
+import Omega.EA.KernelArtinFactorization
 import Omega.EA.KernelGlobalCarryfreeSpectralTrichotomy
 import Omega.EA.KernelGlobalCarryfreePrimitiveParity
 import Omega.EA.KernelGroundStateUniversalityClasses
