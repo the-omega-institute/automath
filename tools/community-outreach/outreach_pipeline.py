@@ -2679,6 +2679,22 @@ def run_stage_b(
         else:
             final_score = min(codex_score, claude_score)
 
+        # AUTO-SKIP: if Claude says "skip this target entirely" or verdict=skip,
+        # don't waste R2-R5 on a dead target
+        claude_verdict = str(b4_data.get("verdict", "")).lower()
+        claude_notes = str(b4_data.get("notes", "")).lower()
+        if claude_verdict == "skip" or "skip entirely" in claude_notes or "no viable contribution" in claude_notes:
+            logger.info("[%s] Claude recommends skip — terminating early", state.repo)
+            state.stage = "SKIPPED"
+            state.error = ""
+            state.timestamps["completed_at"] = iso_now()
+            state.log_event("B", "auto-skipped (Claude recommendation)",
+                            score=final_score, verdict="skip",
+                            detail=str(b4_data.get("notes", ""))[:300])
+            save_state(state)
+            auto_commit_push(state.repo, "B-skip", round_num, final_score, dry_run=dry_run)
+            return state
+
         # Bug 8 fix: ACCUMULATE best findings across rounds instead of overwriting.
         # Keep current round's findings if better; otherwise keep previous best.
         prev_best_score = max(state.scores.get("final", []) or [0])
@@ -2772,7 +2788,8 @@ def run_stage_b(
 
         # DISCOVERY FAN-OUT: after R1 in discovery mode, split opportunities
         # into independent targets that can be processed in parallel.
-        if is_first_round and b0_plan.get("mode") == "discovery" and findings:
+        is_discovery = isinstance(b0_plan, dict) and b0_plan.get("mode") == "discovery"
+        if is_first_round and is_discovery and findings:
             fan_out_targets = fan_out_discovery(state, findings)
             if fan_out_targets:
                 state.stage = "FAN_OUT"
