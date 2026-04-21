@@ -440,3 +440,4 @@ import Omega.Conclusion.FinitePrimeSupportBicartesianBooleanCalculus
 import Omega.Conclusion.PrimeslicePartitionPlateauDyadicSpread
 import Omega.Conclusion.ScreenBasisExchangeGraphGeodesicRigidity
 import Omega.Conclusion.ScreenDeficitUnitDescentChain
+import Omega.Conclusion.AmbiguityShellSpectralInvisibility
