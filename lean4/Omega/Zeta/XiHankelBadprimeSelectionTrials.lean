@@ -103,4 +103,56 @@ theorem paper_xi_hankel_badprime_selection_trials
   refine ⟨hfail_le, hω, ?_⟩
   simpa [xiHankelGeometricMeanTrials] using one_div_le_one_div_of_le hden_bound_pos hden_le
 
+private lemma xiIntervalPrimeCount_pos (Y : ℕ) (hY : 2 ≤ Y) :
+    0 < (xiPrimeSet (2 * Y)).card - (xiPrimeSet (Y - 1)).card := by
+  have hsubset : xiPrimeSet (Y - 1) ⊆ xiPrimeSet (2 * Y) := by
+    intro p hp
+    rw [xiPrimeSet, Finset.mem_filter] at hp ⊢
+    rcases hp with ⟨hp_range, hp_prime⟩
+    refine ⟨?_, hp_prime⟩
+    have hp_le : p ≤ Y - 1 := Nat.le_of_lt_succ (Finset.mem_range.mp hp_range)
+    exact Finset.mem_range.mpr <| Nat.lt_succ_of_le <| le_trans hp_le (by omega)
+  have hproper : xiPrimeSet (Y - 1) ⊂ xiPrimeSet (2 * Y) := by
+    refine Finset.ssubset_iff_subset_ne.mpr ⟨hsubset, ?_⟩
+    intro hEq
+    have hY0 : Y ≠ 0 := by omega
+    rcases Nat.bertrand Y hY0 with ⟨p, hp_prime, hp_gt, hp_le⟩
+    have hp_big : p ∈ xiPrimeSet (2 * Y) := by
+      rw [xiPrimeSet, Finset.mem_filter]
+      exact ⟨Finset.mem_range.mpr (Nat.lt_succ_of_le hp_le), hp_prime⟩
+    have hp_small : p ∉ xiPrimeSet (Y - 1) := by
+      intro hp
+      rw [xiPrimeSet, Finset.mem_filter] at hp
+      have hp_le' : p ≤ Y - 1 := Nat.le_of_lt_succ (Finset.mem_range.mp hp.1)
+      omega
+    exact hp_small (hEq ▸ hp_big)
+  exact Nat.sub_pos_of_lt (Finset.card_lt_card hproper)
+
+/-- Paper label: `cor:xi-hankel-badprime-interval-selection-probability`. Restricting the bad
+primes to the interval `[Y, 2Y]` only decreases the numerator, while Bertrand's postulate keeps
+the interval-prime denominator positive. -/
+theorem paper_xi_hankel_badprime_interval_selection_probability
+    (Y Delta : Nat) (hY : 2 <= Y) (hDelta : Delta != 0) :
+    let intervalPrimeCount := (xiPrimeSet (2 * Y)).card - (xiPrimeSet (Y - 1)).card
+    (((Delta.primeFactors.filter fun p => Y <= p /\ p <= 2 * Y).card : Rat) /
+        (intervalPrimeCount : Rat) <=
+      (Nat.log2 Delta : Rat) / (intervalPrimeCount : Rat)) := by
+  dsimp
+  have hcount_pos : 0 < (xiPrimeSet (2 * Y)).card - (xiPrimeSet (Y - 1)).card :=
+    xiIntervalPrimeCount_pos Y hY
+  have hDelta' : Delta ≠ 0 := by
+    intro h0
+    simp [h0] at hDelta
+  have hcount_nonneg :
+      (0 : ℚ) ≤
+        (((xiPrimeSet (2 * Y)).card - (xiPrimeSet (Y - 1)).card : Nat) : ℚ) := by
+    exact_mod_cast hcount_pos.le
+  have hbad_card :
+      (Delta.primeFactors.filter fun p => Y <= p /\ p <= 2 * Y).card ≤ Nat.log2 Delta := by
+    have hfilter :
+        (Delta.primeFactors.filter fun p => Y <= p /\ p <= 2 * Y).card ≤ Delta.primeFactors.card :=
+      Finset.card_le_card (Finset.filter_subset _ _)
+    exact le_trans hfilter (primeFactors_card_le_log2 Delta hDelta')
+  exact div_le_div_of_nonneg_right (by exact_mod_cast hbad_card) hcount_nonneg
+
 end Omega.Zeta
