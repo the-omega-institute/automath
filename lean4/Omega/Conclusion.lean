@@ -87,6 +87,7 @@ import Omega.Conclusion.ComovingDefectFixedRadialWindowNonhiding
 import Omega.Conclusion.ComovingEndpointAddressBudgetPhaseTransition
 import Omega.Conclusion.CompressionLadderSpin10
 import Omega.Conclusion.ConnectedToDiscreteConstant
+import Omega.Conclusion.ConnectedProfiniteOrthogonality
 import Omega.Conclusion.ContinuousLegendreEulerFenchelContact
 import Omega.Conclusion.ContinuousPressureFrontDominatesDiscreteCertificate
 import Omega.Conclusion.CRTLinearBudgetImpossibility
