@@ -2767,35 +2767,39 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                         "1 | Section 3 | MEDIUM | simulated issue | fix it"
                         if rnd < 2 else "Overall verdict: Minor revision")
         else:
-            # Oracle userscript has ≥40% extraction-failure rate historically.
-            # Retry until we get a substantive response or exhaust attempts.
-            # Failed attempts are archived to oracle/bad/ for debugging but
-            # never enter the live done/ pool.
-            bad_dir = SCRIPT_DIR / "oracle" / "bad"
-            bad_dir.mkdir(parents=True, exist_ok=True)
+            # Submit once with a stable task_id, then poll until a valid
+            # response arrives.  The old multi-attempt approach caused
+            # task_id mismatches when the Oracle server queue was slow.
+            pdf_path = Path(state.pdf_path) if state.pdf_path else None
+            logger.info(f"{tag} B2 oracle submit (task={task_id})")
+            if not oracle_submit(task_id, prompt, pdf_path):
+                state.error = "Oracle submit failed"
+                return False
+            save_state(state)
             response = ""
-            for attempt in range(1, 4):
-                pdf_path = Path(state.pdf_path) if state.pdf_path else None
-                attempt_task = f"{task_id}_a{attempt}"
-                logger.info(f"{tag} B2 oracle attempt {attempt}/3 "
-                            f"(task={attempt_task})")
-                if not oracle_submit(attempt_task, prompt, pdf_path):
-                    state.error = "Oracle submit failed"
-                    return False
-                save_state(state)
-                raw = oracle_poll(attempt_task, timeout=oracle_timeout)
+            # Poll with validation: keep waiting until we get a real
+            # review (>500 chars with verdict anchor), not page garbage.
+            poll_start = time.time()
+            while time.time() - poll_start < oracle_timeout:
+                raw = oracle_poll(task_id, timeout=oracle_timeout)
                 if is_oracle_response_valid(raw):
                     response = raw
                     break
-                # Archive the garbage response for audit
                 if raw:
-                    (bad_dir / f"{attempt_task}.md").write_text(
+                    bad_dir = SCRIPT_DIR / "oracle" / "bad"
+                    bad_dir.mkdir(parents=True, exist_ok=True)
+                    ts = int(time.time())
+                    (bad_dir / f"{task_id}_{ts}.md").write_text(
                         raw, encoding="utf-8")
-                logger.warning(f"{tag} Oracle attempt {attempt} returned "
-                               f"garbage ({len(raw)} chars), archived to "
-                               f"oracle/bad/{attempt_task}.md, retrying")
+                    logger.warning(f"{tag} Oracle returned garbage "
+                                   f"({len(raw)} chars), re-submitting")
+                    # Re-submit same task_id
+                    oracle_submit(task_id, prompt, pdf_path)
+                else:
+                    logger.warning(f"{tag} Oracle poll timeout, re-submitting")
+                    oracle_submit(task_id, prompt, pdf_path)
             if not response:
-                state.error = f"Oracle failed B{rnd}: 3 garbage attempts"
+                state.error = f"Oracle failed B{rnd}: no valid response"
                 return False
 
         # Save oracle response (only substantive ones reach done/)
