@@ -72,6 +72,7 @@ import Omega.OperatorAlgebra.FoldOrbitStieltjesHankelLogconvex
 import Omega.OperatorAlgebra.FoldOrbitTouchardLoworder
 import Omega.OperatorAlgebra.FoldPushforwardLift
 import Omega.OperatorAlgebra.FoldQuantumChannelChoiCapacity
+import Omega.OperatorAlgebra.FoldQuantumChannelCapacity
 import Omega.OperatorAlgebra.FoldQuantumChannelEnvironmentRate
 import Omega.OperatorAlgebra.FoldQuantumChannelMixedUnitary
 import Omega.OperatorAlgebra.FoldQuantumChannelMixedUnitaryLowerBound

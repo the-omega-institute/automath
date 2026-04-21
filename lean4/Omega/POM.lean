@@ -468,6 +468,7 @@ import Omega.POM.ToyRh
 import Omega.POM.ToyRh2TorsionSource
 import Omega.POM.TypeclassDiagonalCouplingSeeds
 import Omega.POM.TypeclassDiagonalMassMonotone
+import Omega.POM.TypeclassKeepResampleChannel
 import Omega.POM.TypeclassRateDistortionMutualInformation
 import Omega.POM.UniformFiberSamplingRandomnessOptimality
 import Omega.POM.UniformLiftKLIsometryUniqueness
