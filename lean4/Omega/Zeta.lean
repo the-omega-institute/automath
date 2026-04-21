@@ -85,6 +85,7 @@ import Omega.Zeta.CyclotomicSectorIdentity
 import Omega.Zeta.DFADensityDichotomy
 import Omega.Zeta.DFADensityDichotomySeeds
 import Omega.Zeta.DFAPrimeRecallPrecisionETDS
+import Omega.Zeta.SyntaxDfaPrimeRecallPrecisionCollapse
 import Omega.Zeta.DFAPrimeSymmetricDiff
 import Omega.Zeta.DFAPrimeSymmetricDiffETDS
 import Omega.Zeta.DFAPrimeSymmetricDiffLowerBound
@@ -158,6 +159,7 @@ import Omega.Zeta.FinitePartResidueDriftTrichotomy
 import Omega.Zeta.FinitePartSingleLayerSquareRootTest
 import Omega.Zeta.FinitePartSingleLayerTorsionNearRh
 import Omega.Zeta.FinitePartSingleQTorsionReconstruction
+import Omega.Zeta.FinitePartCyclicLiftSingleQTorsionReconstruction
 import Omega.Zeta.FinitePrimeSupportThreewayCdimSplit
 import Omega.Zeta.FiniteQuotientCardinality
 import Omega.Zeta.FiniteQuotientScalarGodelLoglogOverhead
@@ -448,6 +450,7 @@ import Omega.Zeta.XiMomentRatioIdentifiesAmin
 import Omega.Zeta.XiNaturalExtensionH153MinimalFiniteAlphabet
 import Omega.Zeta.XiNonarchimedeanPronyHenselNewtonInversion
 import Omega.Zeta.XiNullCompleteTrichotomyOffline
+import Omega.Zeta.XiNullFiberEntropyWindow
 import Omega.Zeta.XiOffsetNullTypeSafety
 import Omega.Zeta.XiOptimalRecoveryTimeEqualsConditionalEntropy
 import Omega.Zeta.XiPickPoissonAnchoredGramRigidityReconstruction
