@@ -287,6 +287,7 @@ import Omega.POM.ProjectivePressureDiscreteFlatnessForcesAffine
 import Omega.POM.ProjectivePressureDiscreteLegendreEnvelope
 import Omega.POM.ProjectivePressureHolderLogconvex
 import Omega.POM.ProjectivePressureZeroNormalization
+import Omega.POM.DerivedFoldWatataniCollisionPressureIdentity
 import Omega.POM.PwNoncommutativeStokes
 import Omega.POM.QstarDiscreteVariationalThreshold
 import Omega.POM.RCRTEpsilon

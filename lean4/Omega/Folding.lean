@@ -182,6 +182,7 @@ import Omega.Folding.FoldCongruenceModSemirings
 import Omega.Folding.FoldFiberLevelLogspace
 import Omega.Folding.FoldFiberParityBiasRieszParsevalEnergy
 import Omega.Folding.FoldFiberParityEnergySimplex
+import Omega.Folding.FoldCriticalResonanceConstant
 import Omega.Folding.FoldFibonacciFrequencyFourierSpikeClosedForm
 import Omega.Folding.FoldFourierPhaseLockingByComplement
 import Omega.Folding.FoldGaugeAnomalyP10HLinearDisjointness
