@@ -332,6 +332,7 @@ import Omega.Conclusion.TwoAtomThreshold
 import Omega.Conclusion.TwoIncommensurableBasesDestroyVerticalLattice
 import Omega.Conclusion.UcdimZr
 import Omega.Conclusion.UnitarySliceBoundaryThreeAxisIrreducibility
+import Omega.Conclusion.VisibleFiniteTypeFibonacciCompleteAudit
 import Omega.Conclusion.VisibleJointHorizonSharp2d
 import Omega.Conclusion.WallisFactorMonoid
 import Omega.Conclusion.WeightedSyncCompletedTraceEven
