@@ -222,6 +222,7 @@ import Omega.Conclusion.PrimeRegisterEllipseCompleteEquivalence
 import Omega.Conclusion.PrimeRegisterFiniteSupportInvertibility
 import Omega.Conclusion.PrimeRegisterProductCompletionInvertibility
 import Omega.Conclusion.PrimeRegister
+import Omega.Conclusion.OrbitGeneratorFinitePhasePrinciple
 import Omega.Conclusion.PrimeShiftPhaseVisibleTwoGenerator
 import Omega.Conclusion.PrimeRegisterUltrametricCompletion
 import Omega.Conclusion.PrimeRegisterFiberCdimDensity

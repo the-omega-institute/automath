@@ -512,6 +512,7 @@ import Omega.Zeta.XiTerminalZmEllipticWeightTriplingRamificationCount
 import Omega.Zeta.XiTerminalZmKappaSquareCubicFieldS3
 import Omega.Zeta.XiTerminalZmLeyangEllipticStructure
 import Omega.Zeta.XiTerminalZmLeyangLinearTwistQuarticFamily
+import Omega.Zeta.XiTerminalZmLeyangMonodromyS4
 import Omega.Zeta.XiTerminalZmPiRationalRootSpecializationEllipticImage
 import Omega.Zeta.XiTerminalZmLeyangP3Minimal27
 import Omega.Zeta.XiTerminalZmLanguageMinimaxLogloss
