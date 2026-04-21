@@ -55,6 +55,7 @@ import Omega.Zeta.XiTerminalZmDeltaNodeOrderDiscriminantIndexRatio
 import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiTimePart9wBasicRootUnityErrorExponentToOne
 import Omega.Zeta.XiTimePart9saUniformBaselineFixedBinaryExperiment
+import Omega.Zeta.XiTimePart9gaCrossResolutionAffineRigidity
 import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne
 import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
 import Omega.Zeta.BdryFreeInvolutionOddFiberObstructionMinCover
@@ -145,6 +146,7 @@ import Omega.Zeta.DerivedLeyangBranchsetIharaZeta
 import Omega.Zeta.DerivedMinimalCyclicAuditAxisZhatPrimeUnlocking
 import Omega.Zeta.DerivedWindow6GaugeVolumeDefectIdentity
 import Omega.Zeta.DerivedProjectivePressureLogconvexConvexHull
+import Omega.Zeta.DerivedWindow6BoundaryParityDirectFactorRefinement
 import Omega.Zeta.DerivedZGHardcoreFactorization
 import Omega.Zeta.DerivedZGNoScalarEulerProduct
 import Omega.Zeta.DiscLedgerAxisDepthSmith
