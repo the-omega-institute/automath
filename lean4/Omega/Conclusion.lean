@@ -392,3 +392,4 @@ import Omega.Conclusion.ToeplitzGaugeBlindnessZeroDimensionalLedgerNecessity
 import Omega.Conclusion.TwoGroupPostnikovStrictification
 import Omega.Conclusion.PrimeAxisCountScaling
 import Omega.Conclusion.CoordinateBundleAllMinimalExactificationsSpanningTrees
+import Omega.Conclusion.FinitePrimeSupportBicartesianBooleanCalculus
