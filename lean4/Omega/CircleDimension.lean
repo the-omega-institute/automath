@@ -203,6 +203,7 @@ import Omega.CircleDimension.PoissonTwoDivergenceMomentTomography
 import Omega.CircleDimension.PoissonKLConstantOneEighth
 import Omega.CircleDimension.PoissonKLDissipationSeventhOrderCorrection
 import Omega.CircleDimension.PoissonKLMomentMatchingLeadingTerm
+import Omega.CircleDimension.PoissonKLAllMomentQuadraticForm
 import Omega.CircleDimension.PoissonNormalizedKLEventualMonotone
 import Omega.CircleDimension.PoissonKLEighth
 import Omega.CircleDimension.PoissonKLEvenOrders
