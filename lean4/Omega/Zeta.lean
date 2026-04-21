@@ -471,6 +471,7 @@ import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
 import Omega.Zeta.XiEllipseWallcrossingUnitStaircaseUniversality
 import Omega.Zeta.XiEndpointAbsorptionKernelRepresentation
 import Omega.Zeta.XiEndpointAbsorptionCoefficient
+import Omega.Zeta.XiEndpointAbsorptionAdditiveTomography
 import Omega.Zeta.XiEndpointAtomSeparation
 import Omega.Zeta.XiHorizonEndpointAtomChristoffel
 import Omega.Zeta.XiEndpointDefectH12EnergyPoissonL2Dissipation
