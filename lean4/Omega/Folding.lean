@@ -284,6 +284,7 @@ import Omega.Folding.FoldSpectrumZeroCriterion
 import Omega.Folding.FoldSpectrumZeroInvolution
 import Omega.Folding.FoldSuitePublication
 import Omega.Folding.FoldTimeRegisterErrorFiberThreshold
+import Omega.Folding.FoldTimeRegisterMomentTailScaling
 import Omega.Folding.FoldZeroDivisorTripleReduction
 import Omega.Folding.FoldZeroDensitySparse
 import Omega.Folding.ZeroCosetUnion

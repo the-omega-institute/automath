@@ -637,6 +637,7 @@ import Omega.Zeta.XiTimePart9odEscortTvCollapseExactBlockWeights
 import Omega.Zeta.XiTimePart9sbEscortChernoffSaddle
 import Omega.Zeta.XiTimePart9gCanonicalSubmonoidFreeMonoid
 import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
+import Omega.Zeta.XiTimePart9zbkPadeJacobiIdentity
 import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage
 import Omega.Zeta.XiTimePart9zhDyadicBulkLinearDepthVsPrimeLedger
 import Omega.Zeta.XiToeplitzDetVerblunsky
