@@ -428,7 +428,22 @@ def _load_prompt(name: str) -> str:
 
 
 def _extract_json(text: str) -> Any:
-    """Extract and parse the first top-level JSON object or array in text."""
+    """Extract and parse the first top-level JSON object or array in text.
+
+    Strips common markdown code fences and retries with minor escape
+    repair before giving up.
+    """
+    # Strip markdown code fences that sometimes wrap JSON output
+    stripped = re.sub(r"```(?:json)?\s*", "", text)
+    for source in (stripped, text):
+        result = _try_parse_json_from(source)
+        if result is not None:
+            return result
+    raise ValueError("No parseable top-level JSON object or array found")
+
+
+def _try_parse_json_from(text: str) -> Any:
+    """Attempt to extract and parse a JSON object/array from text."""
     for start, first_char in enumerate(text):
         if first_char not in "{[":
             continue
@@ -459,8 +474,11 @@ def _extract_json(text: str) -> Any:
                     break
                 if not stack:
                     candidate = text[start : index + 1]
-                    return json.loads(candidate)
-    raise ValueError("No parseable top-level JSON object or array found")
+                    try:
+                        return json.loads(candidate)
+                    except json.JSONDecodeError:
+                        pass  # try next candidate position
+    return None
 
 
 def _ensure_gitignore() -> None:
