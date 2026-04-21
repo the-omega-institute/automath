@@ -37,6 +37,6 @@ theorem paper_conclusion_full_internal_screen_global_complement_law (m n : ℕ) 
     rw [hcomp] at hframework
     omega
   refine ⟨hcomp, hker, ?_⟩
-  simp [fullInternalScreenAllOnesChain] using screenCoordinateComplexity_fullScreenCoordinate 1
+  simpa [fullInternalScreenAllOnesChain] using screenCoordinateComplexity_fullScreenCoordinate 1
 
 end Omega.Conclusion
