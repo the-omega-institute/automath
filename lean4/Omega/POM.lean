@@ -90,6 +90,7 @@ import Omega.POM.EscortMaxfiberTvBound
 import Omega.POM.EulerDefectQuotientCoordinate
 import Omega.POM.ExtendedPrimitives
 import Omega.POM.FenceIntervalClosure
+import Omega.POM.FenceGoldenDetGreen
 import Omega.POM.FenceMobiusRigidity
 import Omega.POM.FenceRiccatiError
 import Omega.POM.FibCubeAntipodeCount

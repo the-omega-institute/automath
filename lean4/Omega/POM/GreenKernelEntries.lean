@@ -2,9 +2,10 @@ import Mathlib
 
 namespace Omega.POM
 
-/-- Hyperbolic parameter used in the fence Green-kernel closed form. -/
+/-- Hyperbolic parameter used in the fence Green-kernel closed form, normalized so that the
+golden-coupling specialization sits at `t = 1`. -/
 noncomputable def pomEta (t : ℝ) : ℝ :=
-  t
+  t * Real.log Real.goldenRatio
 
 /-- Closed-form Green-kernel entry for the fence resolvent. -/
 noncomputable def pomLkGreenEntry (k : ℕ) (t : ℝ) (i j : ℕ) : ℝ :=
