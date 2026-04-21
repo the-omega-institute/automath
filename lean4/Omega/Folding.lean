@@ -230,6 +230,7 @@ import Omega.Folding.FoldGaugeAnomalyP10HLinearDisjointness
 import Omega.Folding.FoldGaugeAnomalyP10HSplittingFieldProduct
 import Omega.Folding.FoldGaugeAnomalyCongruencePhaseTransition
 import Omega.Folding.FoldGaugeAnomalyP10LeyangLinearDisjointness
+import Omega.Folding.FoldGaugeAnomalyP10LeyangHTripleProduct
 import Omega.Folding.FoldGaugeAnomalyP10P9LinearDisjointness
 import Omega.Folding.GodelPrimeRegisterBenford
 import Omega.Folding.FoldHypercubeFibonacciEpsEntropyUpper

@@ -209,6 +209,7 @@ import Omega.Zeta.GoldenRadiusVisibility
 import Omega.Zeta.GmFibonacciSubtowerEntrypointCriterion
 import Omega.Zeta.GroupoidCentralRenyiShannon
 import Omega.Zeta.HankelBadPrimeSelectionProbability
+import Omega.Zeta.XiHankelBadprimeSelectionTrials
 import Omega.Zeta.HankelDeterminantalRadicalEqRigidity
 import Omega.Zeta.HankelDiscriminantUnavoidableBadPrimes
 import Omega.Zeta.HankelFinitefieldRandomCompletionNondegenerate
