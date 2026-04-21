@@ -536,6 +536,7 @@ import Omega.Zeta.XiHypercubeLeyangAffineOrbifoldTwoLayer
 import Omega.Zeta.XiLimitDefectPotentialL1Sumrule
 import Omega.Zeta.XiLogDefectGammaTranslationL1Lipschitz
 import Omega.Zeta.XiLogDefectAffineReproducingMomentIdentities
+import Omega.Zeta.XiLogdefectConeChoquetBauerCompleteness
 import Omega.Zeta.XiLogdefectBandpassPoissonRepresentation
 import Omega.Zeta.XiLogDefectVsQuadraticLoadTwoSided
 import Omega.Zeta.XiLogDefectPotentialLinftyBoundByTotalDelta

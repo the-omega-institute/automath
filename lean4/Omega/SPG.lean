@@ -31,6 +31,7 @@ import Omega.SPG.BulkBoundaryGodelDimensionSandwich
 import Omega.SPG.CapacityRegion
 import Omega.SPG.CheegerStokes
 import Omega.SPG.ClarityBayesOptimality
+import Omega.SPG.ClarityBoundaryDimension
 import Omega.SPG.ClarityMonotone
 import Omega.SPG.ClarityRiskThresholdDepthLaw
 import Omega.SPG.ClarityWalshFamilyStability
