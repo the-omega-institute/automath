@@ -727,12 +727,32 @@ def build_backflow_tex_prompt(state: "RepoState", placement: dict[str, Any]) -> 
         - Reference the paper section for the formal version
         - Reference the verification scripts
 
+        ═══════════════════════════════════════════════════════════════
+        ALSO: Decide whether to copy verification scripts into the paper
+        ═══════════════════════════════════════════════════════════════
+
+        Check: `ls {MAIN_PAPER_DIR}/scripts/`
+        Check: `ls {target_dir}/*.py`
+
+        If the research produced Python scripts that are part of the proof
+        (verification, certificate computation, enumeration), they belong
+        in the paper's scripts/ directory for reproducibility.
+
+        If they are just exploratory/search scripts, leave them in outreach.
+
+        For each script you decide to include:
+        - Copy to: {MAIN_PAPER_DIR}/scripts/<topic_subdir>/<script>.py
+        - Update the .tex and bridge doc to reference the paper path
+
+        ═══════════════════════════════════════════════════════════════
+
         Return JSON:
         {{
           "tex_path": "path to the .tex file written",
           "bridge_doc_path": "path to the bridge markdown written",
           "sections_written": ["list of theorem/lemma names included"],
-          "scripts_referenced": ["list of scripts mentioned"]
+          "scripts_referenced": ["list of scripts mentioned"],
+          "scripts_copied_to_paper": ["list of scripts copied, or empty if none"]
         }}
         """
     )

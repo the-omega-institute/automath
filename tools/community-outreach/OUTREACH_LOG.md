@@ -2,14 +2,14 @@
 
 ## Active Targets
 
-| Target | Channel | Status | Doc | Best Score | Last Update |
+| Target | Channel | Status | Backflow | Best Score | Last Update |
 |---|---|---|---|---|---|
-| teorth/equational_theories | GitHub issue/PR | researching | [doc](targets/teorth_equational_theories/) | 6/10 | 2026-04-20 |
-| google-deepmind/formal-conjectures | GitHub PR | draft ready | [doc](targets/google-deepmind_formal-conjectures/) | manual | 2026-04-18 |
-| math-inc/OpenGauss | GitHub issue | researched | [doc](targets/math-inc_OpenGauss/) | 5/10 | 2026-04-20 |
-| Heath Sanchez | SAIR Zulip | draft ready | [doc](targets/sair_zulip/heath_sanchez.md) | — | 2026-04-18 |
-| Israel Cazares | SAIR Zulip | draft ready | [doc](targets/sair_zulip/israel_cazares.md) | — | 2026-04-19 |
-| Terence Tao | Email | planned wk3-4 | [doc](targets/tao_email/) | — | — |
+| teorth/equational_theories #418 | GitHub issue reply | proof complete, reply pending | body section + bridge doc | 7/10 → proof | 2026-04-21 |
+| teorth/equational_theories (general) | GitHub issue/PR | researched | — | 7/10 | 2026-04-21 |
+| google-deepmind/formal-conjectures | GitHub PR | draft ready | — | manual | 2026-04-18 |
+| Heath Sanchez | SAIR Zulip | draft ready | — | — | 2026-04-18 |
+| Israel Cazares | SAIR Zulip | draft ready | — | — | 2026-04-19 |
+| Terence Tao | Email | planned wk3-4 | — | — | — |
 
 ## Completed
 
@@ -17,13 +17,19 @@
 |---|---|---|---|
 | mysticflounder/equational-magma-theorems | GitHub issue #1 | [submitted](https://github.com/mysticflounder/equational-magma-theorems/issues/1) | 2026-04-15 |
 
+## Backflow Tracking
+
+| Target | Paper Section | Bridge Doc | Scripts | Date |
+|---|---|---|---|---|
+| teorth #418 | body/finite_field_equational_saturation | theory/bridges/equational-theories/ | scripts/equational_theory/*.py | 2026-04-21 |
+
 ## Pipeline Stats
 
 | Metric | Value |
 |---|---|
-| Pipeline version | v16 (bridge-finding + Python verification + document memory) |
-| Best automated score | 6/10 (teorth R1) |
-| Total targets attempted | 9 |
-| Automated gate passes (≥8) | 0 |
-| Manual submissions | 1 (McKenna) |
+| Pipeline version | v22 (goal-driven deep reasoning + paper backflow) |
+| Best automated score | 7/10 (teorth R5) |
+| Manual deep reasoning | Issue #418 Nullstellensatz saturation (complete) |
+| Total targets | 6 active + 1 completed |
+| Backflows to paper | 1 (equational theory saturation) |
 | Drafts ready | 4 (formal-conjectures Lean, 2 Zulip posts, Tao email) |
