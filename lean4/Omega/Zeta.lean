@@ -17,6 +17,7 @@ import Omega.Zeta.Arity335CharacterEnergy
 import Omega.Zeta.Arity335CosineOnly
 import Omega.Zeta.Arity335EpsEffInversion
 import Omega.Zeta.Arity335AbelianUniformGapNogo
+import Omega.Zeta.Arity335LocalizedAbCoupling
 import Omega.Zeta.ArityCollisionQuadraticClosed
 import Omega.Zeta.ArityCharacterProjection
 import Omega.Zeta.Arity335MarginalInvertChi
