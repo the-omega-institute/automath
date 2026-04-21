@@ -409,3 +409,4 @@ import Omega.Conclusion.TwoGroupPostnikovStrictification
 import Omega.Conclusion.PrimeAxisCountScaling
 import Omega.Conclusion.CoordinateBundleAllMinimalExactificationsSpanningTrees
 import Omega.Conclusion.FinitePrimeSupportBicartesianBooleanCalculus
+import Omega.Conclusion.PrimeslicePartitionPlateauDyadicSpread
