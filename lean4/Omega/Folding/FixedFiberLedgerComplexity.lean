@@ -115,6 +115,22 @@ theorem paper_fold_fibre_star_exp_lb :
     _ = foldFibreStarMultiplicity n := by
       simpa [foldFibreStarMultiplicity] using (Fintype.card_coe (foldFibreStarFiber n))
 
+/-- Any external ledger alphabet that is injective on the explicit fixed target fiber must have at
+least `2^n` symbols, because that fiber already contains `2^n` words. -/
+theorem paper_fold_fixed_fiber_external_ledger_linear (n : ℕ) {R : Type} [Fintype R]
+    (r : FoldFibreStarWord n -> R)
+    (hinj : Function.Injective fun x : {x // x ∈ foldFibreStarFiber n} => r x.1) :
+    2 ^ n <= Fintype.card R := by
+  classical
+  have hcard : Fintype.card ↥(foldFibreStarFiber n) ≤ Fintype.card R :=
+    Fintype.card_le_of_injective _ hinj
+  have hmult_card : Fintype.card ↥(foldFibreStarFiber n) = foldFibreStarMultiplicity n := by
+    simpa [foldFibreStarMultiplicity] using (Fintype.card_coe (foldFibreStarFiber n))
+  have hmult : foldFibreStarMultiplicity n ≤ Fintype.card R := by
+    rw [← hmult_card]
+    exact hcard
+  exact (paper_fold_fibre_star_exp_lb n).trans hmult
+
 /-- The one-point macrostate used to package the ledger identity for the fixed target fiber. -/
 abbrev FoldFibreStarLedgerMacrostate := PUnit
 
