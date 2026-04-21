@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (macOS)
 // @namespace    omega-automath
-// @version      5.1
+// @version      5.2
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -21,6 +21,7 @@
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
   const MAX_WAIT = 7200000;       // 120 minutes
+  const MIN_REVIEW_LENGTH = 1000; // Real reviews are 3000+ chars; anything below this is garbage
 
   // ── Multi-agent: detect agent_id from URL or sessionStorage ──────────
   // Open chatgpt.com/?oracle=1  → agent "oracle_1"
@@ -1199,6 +1200,18 @@
 
       // Only count extracted text that's meaningful
       if (responseText.length >= 5) {
+        // HARD GATE: real Oracle reviews are 3000+ chars. Anything below
+        // MIN_REVIEW_LENGTH is thinking preamble, footer, or transition
+        // garbage. Never let it enter stability counting.
+        if (responseText.length < MIN_REVIEW_LENGTH) {
+          if (stableCount === 0) {
+            log(`Too short (${responseText.length} < ${MIN_REVIEW_LENGTH} chars) — not a real review, waiting`);
+          }
+          stableCount = 0;
+          lastText = "";
+          continue;
+        }
+
         // CRITICAL: never accept a prompt echo as a response.
         if (looksLikePromptEcho(responseText)) {
           if (stableCount === 0) {
