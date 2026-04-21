@@ -493,6 +493,7 @@ import Omega.Zeta.XiTerminalZmKappaSquareCubicFieldS3
 import Omega.Zeta.XiTerminalZmLeyangEllipticStructure
 import Omega.Zeta.XiTerminalZmLeyangP3Minimal27
 import Omega.Zeta.XiTerminalZmLanguageMinimaxLogloss
+import Omega.Zeta.XiTerminalZmS4PrymTorusRankLayering
 import Omega.Zeta.VanvleckResidueL2LowerBound
 import Omega.Zeta.XiTimeFiberMinimalDimension
 import Omega.Zeta.XiTimeLowerBoundFromMaxFiber

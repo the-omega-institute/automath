@@ -26,6 +26,7 @@ import Omega.Conclusion.BoundaryExactSelectorComplexity
 import Omega.Conclusion.BoundaryFivefoldComplexityCoscaling
 import Omega.Conclusion.BoundaryGaugeLiftingSharedCycleRankEntropy
 import Omega.Conclusion.BoundaryMixedAuditRankConservation
+import Omega.Conclusion.BoundaryMixedRegisterPhaseBudget
 import Omega.Conclusion.BoundaryParityAnomalyGap
 import Omega.Conclusion.BoundaryParityBlindFiltration
 import Omega.Conclusion.BoundaryParityLieRepairTwoBits
@@ -75,6 +76,7 @@ import Omega.Conclusion.DiscreteCertificateFrontGeneralizedInverse
 import Omega.Conclusion.DiscreteKinkFanPiecewiseLinearization
 import Omega.Conclusion.DiscreteKinkMassHatKernelCurvature
 import Omega.Conclusion.DisjointnessPowerWordDecomposition
+import Omega.Conclusion.DyadicBoundaryGodelAdmissibleMultiplicativeLinearSubcode
 import Omega.Conclusion.DyadicBoundaryCodeExactUniqueDecodingRadius
 import Omega.Conclusion.EllipticLosslessLift
 import Omega.Conclusion.EllipticT5UniqueQuadraticSubfield
