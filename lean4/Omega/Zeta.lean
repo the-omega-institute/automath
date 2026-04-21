@@ -625,6 +625,7 @@ import Omega.Zeta.XiVerblunskyFromLocalJet
 import Omega.Zeta.XiTimePart63cTrivialAlternatingSignReciprocalDuality
 import Omega.Zeta.XiTimePart9odEscortTvCollapseBlockUniform
 import Omega.Zeta.XiTimePart9odEscortTvCollapseExactBlockWeights
+import Omega.Zeta.XiTimePart9sbEscortChernoffSaddle
 import Omega.Zeta.XiTimePart9gCanonicalSubmonoidFreeMonoid
 import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
 import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage

@@ -95,6 +95,7 @@ import Omega.Folding.DerivedAffineReciprocity
 import Omega.Folding.DerivedCenteredOddMomentsVanish
 import Omega.Folding.DerivedBinfoldAverageLogPotentialConstant
 import Omega.Folding.DerivedBinfoldMinsectorChi2TwoBlockBound
+import Omega.Folding.DerivedChainSquarefreeGibbsBernoulliFactorization
 import Omega.Folding.DerivedOracleCapacityMomentEnvelope
 import Omega.Folding.DerivedFoldExactInversionDyadicThreshold
 import Omega.Folding.DerivedFoldMultiplicityCapacityRenyiEnvelope
