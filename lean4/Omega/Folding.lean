@@ -86,6 +86,7 @@ import Omega.Folding.Defect
 import Omega.Folding.DerivedAffineReciprocity
 import Omega.Folding.DerivedCenteredOddMomentsVanish
 import Omega.Folding.DerivedFoldExactInversionDyadicThreshold
+import Omega.Folding.DerivedFoldMultiplicityZerofiberEnvelope
 import Omega.Folding.DerivedFoldMultiplicityConvexOrderExtremal
 import Omega.Folding.DerivedFoldTopTwoSameSlope
 import Omega.Folding.DiscreteStokesAuditableBound
@@ -143,6 +144,7 @@ import Omega.Folding.FixedFiberLipschitzOptimization
 import Omega.Folding.Fold
 import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.KilloFoldApproxAddressFanoLowerBound
+import Omega.Folding.Killo2adicHolographicPrefixClassification
 import Omega.Folding.KilloEllipseDiagonalPrimeRegisterEquivalence
 import Omega.Folding.KilloFoldCollisionSpectralSelfDuality
 import Omega.Folding.KilloFoldZeroSpectrumAffineCongruence

@@ -142,6 +142,7 @@ import Omega.Zeta.FinitePartLogMRelativeScaleTransfer
 import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.FinitePartNyquistErrorExp
 import Omega.Zeta.FinitePartNyquistParsevalAliasing
+import Omega.Zeta.FinitePartOracleAnomalyEquivalence
 import Omega.Zeta.FinitePartResidueDriftTrichotomy
 import Omega.Zeta.FinitePartSingleLayerSquareRootTest
 import Omega.Zeta.FinitePartSingleLayerTorsionNearRh
