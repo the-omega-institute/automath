@@ -376,6 +376,7 @@ import Omega.Conclusion.ZeckendorfEulerSeeds
 import Omega.Conclusion.ZeckendorfResetBoundedCLTAbsent
 import Omega.Conclusion.ZnToCircleInjectiveDenseSeeds
 import Omega.Conclusion.ToeplitzDyadicHorizonCompleteness
+import Omega.Conclusion.ToeplitzGaugeBlindnessZeroDimensionalLedgerNecessity
 import Omega.Conclusion.TwoGroupPostnikovStrictification
 import Omega.Conclusion.PrimeAxisCountScaling
 import Omega.Conclusion.CoordinateBundleAllMinimalExactificationsSpanningTrees
