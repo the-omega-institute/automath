@@ -308,6 +308,7 @@ import Omega.CircleDimension.ShiftedJensenDefectIntegralLaw
 import Omega.CircleDimension.ShortExactAdditivity
 import Omega.CircleDimension.SignedCircleDimension
 import Omega.CircleDimension.SignedStokesCohomologicalCharacterization
+import Omega.CircleDimension.S4V4DeckAndBiellipticInvolutionGenerateS3
 import Omega.CircleDimension.StarQDualExtension
 import Omega.CircleDimension.StarUniversalSolenoidFiberModel
 import Omega.CircleDimension.StarZ1sDualExtension
