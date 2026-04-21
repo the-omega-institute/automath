@@ -334,6 +334,7 @@ import Omega.Folding.GaugeAnomalyMgfOrder4Recurrence
 import Omega.Folding.GaugeAnomalyMuMinus1BranchClassification
 import Omega.Folding.GaugeAnomalyOneBlockThreePeriodLaw
 import Omega.Folding.GaugeAnomalyP10Degree
+import Omega.Folding.GaugeAnomalyDiscSquareRatio
 import Omega.Folding.GaugeAnomalyP10DisjointSqrt5
 import Omega.Folding.GaugeAnomalyP10LeyangChebotarevProductLaw
 import Omega.Folding.FoldGaugeAnomalyP10HChebotarevProductLaw
