@@ -35,6 +35,7 @@ import Omega.CircleDimension.CayleyWindowMassConservation
 import Omega.CircleDimension.Cdim1DivisibleImpliesQ
 import Omega.CircleDimension.Cdim2MinKernelDim
 import Omega.CircleDimension.CdimAnomalyAffineRegularForm
+import Omega.CircleDimension.CdimAnomalyTwistLedgerBilinearCoupling
 import Omega.CircleDimension.CdimStarCompatibleFG
 import Omega.CircleDimension.CdimStarEndomorphismLocalizedDegree
 import Omega.CircleDimension.PlusStarLocalizedCone

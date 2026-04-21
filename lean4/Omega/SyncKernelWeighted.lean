@@ -24,6 +24,7 @@ import Omega.SyncKernelWeighted.KernelHardyRealEven
 import Omega.SyncKernelWeighted.KernelSelfDualCharacter
 import Omega.SyncKernelWeighted.KernelSelfDualCharacterSchur
 import Omega.SyncKernelWeighted.KoenigsLinearizationWittDilation
+import Omega.SyncKernelWeighted.LambdaLinearResponse
 import Omega.SyncKernelWeighted.LambdaEndpointsMonotoneUplift
 import Omega.SyncKernelWeighted.MobiusErrorPropagation
 import Omega.SyncKernelWeighted.MuPochhammerNecklaceDirichletPolylog

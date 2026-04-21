@@ -3,6 +3,7 @@ import Omega.OperatorAlgebra.CircuitIndexGeKNPComplete
 import Omega.OperatorAlgebra.CircuitNoninjectiveNPComplete
 import Omega.OperatorAlgebra.CircuitCollisionMomentTwoApproxNPlus2
 import Omega.OperatorAlgebra.CylinderMarginalization
+import Omega.OperatorAlgebra.CmiLowerBoundByIndexGap
 import Omega.OperatorAlgebra.DerivedCoarseningGenusSignLaw
 import Omega.OperatorAlgebra.FiberDeterminantSignCapacityParity
 import Omega.OperatorAlgebra.FiberReflectorDeterminantPotential
