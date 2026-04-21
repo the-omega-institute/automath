@@ -43,6 +43,7 @@ import Omega.GU.EllipticGatePrimeSpectrumClassification
 import Omega.GU.EllipticGatePrimeSpectrumRigidity
 import Omega.GU.FibPrimePGL2Order
 import Omega.GU.FibPrimePisano
+import Omega.GU.FibLieResonanceGlobalClassification
 import Omega.GU.FibTailP23OrbitQuotientS3Action
 import Omega.GU.FibTailP23Orbits
 import Omega.GU.FibTailP23S3ActionOnOrbitQuotient

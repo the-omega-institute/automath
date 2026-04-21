@@ -16,6 +16,7 @@ import Omega.POM.AnomSingleMomentCompleteEquivalence
 import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.BCDiscreteJacobianStrictification
 import Omega.POM.BCDiscreteStokes
+import Omega.POM.BCTowerFlatness
 import Omega.POM.BCQuotientUniversal
 import Omega.POM.BCHighOrderLedgerDecomposition
 import Omega.POM.BqTraceLucas
