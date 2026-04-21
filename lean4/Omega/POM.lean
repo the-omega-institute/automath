@@ -359,6 +359,7 @@ import Omega.POM.OracleGapAreaLawEnergy
 import Omega.POM.OracleFailureExponentFromRenyiSpectrum
 import Omega.POM.OracleRenyiPressureFailureBound
 import Omega.POM.PowerSumJacobianEntropy
+import Omega.POM.PowerSumVandermondeJacobian
 import Omega.POM.PowerSumRecursiveSpectrumPeeling
 import Omega.POM.OrbitProductNorm
 import Omega.POM.OrderSpatialization

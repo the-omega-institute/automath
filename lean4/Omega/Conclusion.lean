@@ -151,6 +151,7 @@ import Omega.Conclusion.FoldMultiscaleCarryDefect
 import Omega.Conclusion.FoldAuditKLPythagoras
 import Omega.Conclusion.FoldFiberHologramBooleanCubePartition
 import Omega.Conclusion.FoldFiberProductSourceHardcoreDisintegration
+import Omega.Conclusion.FluxGodelDimensionDuality
 import Omega.Conclusion.FoldbinDeepVolumeCarryRenormalization
 import Omega.Conclusion.FoldOutputEntropyGaugeAffineIdentity
 import Omega.Conclusion.FoldGaugeEntropyDensityExactConstant
