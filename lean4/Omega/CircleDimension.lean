@@ -188,6 +188,7 @@ import Omega.CircleDimension.PoissonKLMomentMatchingLeadingTerm
 import Omega.CircleDimension.PoissonNormalizedKLEventualMonotone
 import Omega.CircleDimension.PoissonKLEighth
 import Omega.CircleDimension.PoissonKLEvenOrders
+import Omega.CircleDimension.PoissonKLQuadraticFormSpectral
 import Omega.CircleDimension.PoissonKolmogorovUniversalLimit
 import Omega.CircleDimension.PoissonKernelDerivativeL1Energy
 import Omega.CircleDimension.PoissonLatticeSampling

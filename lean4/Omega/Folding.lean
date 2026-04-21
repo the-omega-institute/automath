@@ -143,6 +143,7 @@ import Omega.Folding.FixedFiberLedgerComplexity
 import Omega.Folding.FixedFiberLipschitzOptimization
 import Omega.Folding.Fold
 import Omega.Folding.FoldAlphaBasic
+import Omega.Folding.GodelFiniteDictionaryDirichletPartitionHolomorphic
 import Omega.Folding.KilloFoldApproxAddressFanoLowerBound
 import Omega.Folding.Killo2adicHolographicPrefixClassification
 import Omega.Folding.KilloEllipseDiagonalPrimeRegisterEquivalence
