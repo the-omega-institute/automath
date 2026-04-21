@@ -290,6 +290,7 @@ import Omega.Zeta.IntroZeckendorf
 import Omega.Zeta.JensenEndpointAngleWindowRigidity
 import Omega.Zeta.JensenQuadraticResolutionBarrier
 import Omega.Zeta.JensenSoftThresholdLowerBound
+import Omega.Zeta.KilloKernelSizeGeneralModulus
 import Omega.Zeta.KilloSmithLossSpectrum
 import Omega.Zeta.LayeredExternalizationAverageShannonBudget
 import Omega.Zeta.LayeredPrimesliceLocalAlphabetFibermax

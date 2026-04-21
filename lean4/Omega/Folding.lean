@@ -162,6 +162,7 @@ import Omega.Folding.FibonacciField
 import Omega.Folding.FibonacciPolynomial
 import Omega.Folding.FingerprintSeparationPublication
 import Omega.Folding.FixedFiberLedgerComplexity
+import Omega.Folding.FixedFiberKolmogorovCollapse
 import Omega.Folding.FixedFiberLipschitzOptimization
 import Omega.Folding.Fold
 import Omega.Folding.FoldAlphaBasic
