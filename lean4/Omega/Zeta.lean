@@ -457,6 +457,7 @@ import Omega.Zeta.XiFoldLastbitStatisticalSufficiencyCollapse
 import Omega.Zeta.XiFoldFibonacciCollisionGapPositiveFloor
 import Omega.Zeta.XiFixedFreezingRenyiCriticalOrderThreshold
 import Omega.Zeta.XiFoldCongruenceUnitalAutomorphismRigidity
+import Omega.Zeta.XiRminIsZhat
 import Omega.Zeta.XiVisibleArithmeticFibonacciAdicProfiniteCoincidence
 import Omega.Zeta.XiVisibleArithmeticFibonacciCofinalQuotients
 import Omega.Zeta.XiFoldLocalInformationDensityFirstOrderDiscreteLaw

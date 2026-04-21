@@ -104,6 +104,7 @@ import Omega.Conclusion.EndpointStatisticsVsTimeAddressLedgerSplitting
 import Omega.Conclusion.EquivariantASplittingRegisterLowerBound
 import Omega.Conclusion.EscortDecisionThermalCodimensionGap
 import Omega.Conclusion.EventEllipseGoldenMinimal
+import Omega.Conclusion.DerivedArtinShadowConstantLayerCompression
 import Omega.Conclusion.ExclusionRadiusTailAffineRecovery
 import Omega.Conclusion.ExtPiKernelPoset
 import Omega.Conclusion.ExternalBudgetTensorEntropyRate
