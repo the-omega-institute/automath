@@ -366,6 +366,7 @@ import Omega.Conclusion.SmithNormalizedKernelPositiveFiniteEulerCorrection
 import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.SmithPKernelSpectrumDiscreteConcaveCharacterization
 import Omega.Conclusion.SmithPrimepowerHessianInversion
+import Omega.Conclusion.SmithPKernelSpectrumConeSimplicial
 import Omega.Conclusion.SmithPprimaryRamanujanCutoffCompleteness
 import Omega.Conclusion.SmithRamanujanShadowInversion
 import Omega.Conclusion.SmithRamanujanShadowSeeds

@@ -516,6 +516,7 @@ import Omega.Zeta.XiHankelSigminLowerboundVandermondeSeparation
 import Omega.Zeta.XiHellingerToeplitzDense2xLaw
 import Omega.Zeta.XiHellingerToeplitzBitBudgetLinearLaw
 import Omega.Zeta.XiImplCoding
+import Omega.Zeta.XiHolographyCoherenceSeparation
 import Omega.Zeta.XiJDiscriminantElliptic2TorsionMobius
 import Omega.Zeta.XiEllipticTorsionStokesWeilPairing
 import Omega.Zeta.XiJDiscriminantMobiusRigidityCovariance
