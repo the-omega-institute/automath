@@ -319,6 +319,7 @@ import Omega.CircleDimension.TensorHomProductLawRestated
 import Omega.CircleDimension.TimeShiftPreservesOverlap
 import Omega.CircleDimension.CarathBufferSharpness
 import Omega.CircleDimension.ToeplitzGapSchurContraction
+import Omega.CircleDimension.ToeplitzGapStabilityRH
 import Omega.CircleDimension.ToeplitzMetricSpectrumNormalForm
 import Omega.CircleDimension.ToeplitzMinrankFalsifierFactorization
 import Omega.CircleDimension.ToeplitzSpectralGapCarathBuffer
