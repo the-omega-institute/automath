@@ -129,6 +129,7 @@ import Omega.CircleDimension.HighrankPhaseRegisterMinimality
 import Omega.CircleDimension.HilbertCarrier
 import Omega.CircleDimension.HilbertQuantumMainClosure
 import Omega.CircleDimension.HorizonCarathSchurEquivalence
+import Omega.CircleDimension.HorizonPurityCriterion
 import Omega.CircleDimension.HypercubeDerhamLift
 import Omega.CircleDimension.KernelAffineCompositionNorm
 import Omega.CircleDimension.KernelEnergyBestNterm
