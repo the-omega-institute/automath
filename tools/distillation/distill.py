@@ -1849,6 +1849,86 @@ def _stage_index(stage: str) -> int:
     return STAGE_ORDER.index(stage)
 
 
+STAGE_COMMIT_FILES: dict[str, list[str]] = {
+    # Stage W writes .tex files; Stage E writes registry + board
+    "W": [],  # populated dynamically from writebacks.json
+    "E": [
+        str(REGISTRY_PATH),
+        str(PUBLICATION_DIR / "DISTILLATION_BOARD.md"),
+    ],
+}
+
+STAGE_NAMES = {
+    "R": "research",
+    "S": "scan",
+    "G": "generate",
+    "W": "writeback",
+    "E": "register",
+}
+
+
+def _git_commit_push(name: str, stage: str, extra_files: Optional[list[str]] = None) -> None:
+    """Commit stage outputs and push to remote. Best-effort, never fatal."""
+    slug = _slugify(name)
+    files_to_add = list(extra_files or [])
+
+    # Stage E: registry + board
+    if stage in STAGE_COMMIT_FILES:
+        files_to_add.extend(STAGE_COMMIT_FILES[stage])
+
+    # Stage W: collect modified .tex files from writebacks.json
+    if stage == "W":
+        wb_path = _state_dir(name) / "writebacks.json"
+        if wb_path.exists():
+            try:
+                wb_data = read_json(wb_path)
+                for item in wb_data.get("applied", []):
+                    tex_rel = item.get("tex_file", "")
+                    if tex_rel:
+                        full = CORE_BODY / tex_rel
+                        if full.exists():
+                            files_to_add.append(str(full))
+            except (OSError, json.JSONDecodeError, KeyError):
+                pass
+
+    if not files_to_add:
+        logger.info("Stage %s: no files to commit", stage)
+        return
+
+    # Filter to files that actually exist
+    files_to_add = [f for f in files_to_add if Path(f).exists()]
+    if not files_to_add:
+        return
+
+    stage_label = STAGE_NAMES.get(stage, stage)
+    msg = f"distill({slug}): stage {stage} ({stage_label}) complete"
+
+    try:
+        subprocess.run(
+            ["git", "add"] + files_to_add,
+            cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=30,
+        )
+        # Check if there's anything staged
+        diff = subprocess.run(
+            ["git", "diff", "--cached", "--quiet"],
+            cwd=str(REPO_ROOT), capture_output=True, timeout=10,
+        )
+        if diff.returncode == 0:
+            logger.info("Stage %s: nothing new to commit", stage)
+            return
+        subprocess.run(
+            ["git", "commit", "-m", msg],
+            cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=30,
+        )
+        subprocess.run(
+            ["git", "push"],
+            cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=60,
+        )
+        logger.info("Stage %s: committed and pushed", stage)
+    except (subprocess.TimeoutExpired, OSError) as exc:
+        logger.warning("Stage %s: git commit/push failed: %s", stage, exc)
+
+
 def run_pipeline(
     name: str,
     skip_to: Optional[str] = None,
@@ -1881,6 +1961,9 @@ def run_pipeline(
         if not runner():
             logger.error("Pipeline stopped at stage %s", stage)
             return False
+        # Commit + push after each stage (skip in dry-run)
+        if not dry_run:
+            _git_commit_push(name, stage)
         state = load_state(name)
     logger.info("Pipeline complete for %s", name)
     return True
