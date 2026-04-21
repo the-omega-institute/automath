@@ -368,6 +368,7 @@ import Omega.POM.OracleBitLowerBoundSubexpMom
 import Omega.POM.OracleCapacityBimeasureIdentity
 import Omega.POM.OracleCriticalBudgetEntropyIdentity
 import Omega.POM.SchurNearRhLinearInequalityComplete
+import Omega.POM.SchurVarianceDecomposition
 import Omega.POM.SchurVarianceGrowthRateSpectralIdentity
 import Omega.POM.SchurDirichletTorsionFactorization
 import Omega.POM.OracleCapacityKolmogorovSpectrum

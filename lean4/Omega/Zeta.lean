@@ -472,6 +472,7 @@ import Omega.Zeta.XiAddressPrimeLedgerJointBudget
 import Omega.Zeta.XiPrimeAxisTensorizedReplayComposition
 import Omega.Zeta.XiAnchorGramLog4Quantum
 import Omega.Zeta.XiBasepointScanAnchorDetCauchyVandermonde
+import Omega.Zeta.XiBasepointScanLeverageGapCodim1ClosedForm
 import Omega.Zeta.XiBasepointScanFullRankWeightGaugeInvariance
 import Omega.Zeta.XiBasepointScanCauchyStableConvolution
 import Omega.Zeta.XiBasepointScanKernelCompletenessFullRank
