@@ -32,6 +32,7 @@ import Omega.OperatorAlgebra.FoldEquivalenceAutSemidir
 import Omega.OperatorAlgebra.FoldFiberFixedpointsCenter
 import Omega.OperatorAlgebra.FoldEmEffectiveSupportSchatten
 import Omega.OperatorAlgebra.FoldFiberMultiplicityTraceMoments
+import Omega.OperatorAlgebra.FoldNegativeMomentLeftTailCertificate
 import Omega.OperatorAlgebra.FoldFiberNormalizerWreath
 import Omega.OperatorAlgebra.FoldWreathAbelianizationCharacters
 import Omega.OperatorAlgebra.FoldGaugeAbK0Mod2
