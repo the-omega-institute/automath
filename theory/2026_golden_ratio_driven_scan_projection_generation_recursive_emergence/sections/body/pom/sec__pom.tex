@@ -90,133 +90,102 @@
 \input{parts/subsec__pom-pw-tannaka-krein-reconstruction}
 
 % --- Distillation writeback ---
-\begin{proposition}[Sticky 纤维的矩核冻结判据]\label{prop:distill-pom-sticky-moment-freezing}
-\textbf{依赖状态：rigidity.}
-在定义~\ref{def:distill-pom-near-extremal-frostman-skeleton}的记号下，固定有理数 \(\epsilon\ge0\)、整数 \(q\ge2\)，并令 \(E=E(\epsilon)\ne\varnothing\)。对 \(r\in\{q,q+1,2q\}\) 置
+\begin{definition}[有限 \v{C}ech--holonomy 宽度与有效寄存器]\label{def:distill-pom-holonomy-width-register}
+\textbf{依赖状态：obstruction.}
+令 \(N\) 为有限覆盖的神经复形，固定素数 \(p\)，并记 \(\mathbb F_p:=\mathbb Z/p\mathbb Z\)。对整数 \(L\ge1\)，令
 \[
-Z_r(E):=\sum_{x\in E}d(x)^r,\qquad
-p_x:=\nu_q(\{x\})={d(x)^q\over Z_q(E)}.
+A_L:=\bigoplus_{\ell=1}^L \mathbb F_p e_\ell
 \]
-定义有限矩核碰撞量、escort 熵与一步压力斜率为
+为常值有限阿贝尔系数层。对 \([c]\in\check H^1(N;A_L)\cong \check H^1(N;\mathbb F_p)\otimes_{\mathbb F_p}A_L\)，定义其系数支撑为
 \[
-\mathsf C_q(E):=\sum_{x\in E}p_x^2={Z_{2q}(E)\over Z_q(E)^2},\qquad
-\mathsf H_q(E):=-\sum_{x\in E}p_x\log p_x,
+\operatorname{Supp}_{\rm coeff}([c])
+:=\bigcap\{W\le A_L:\ [c]\in \check H^1(N;\mathbb F_p)\otimes W\},
 \]
+并定义 \(p\)-holonomy 宽度
 \[
-\Delta_q(E):=\log Z_{q+1}(E)-\log Z_q(E)=\log\Bigl(\sum_{x\in E}p_xd(x)\Bigr).
+\operatorname{wd}_p([c]):=\dim_{\mathbb F_p}\operatorname{Supp}_{\rm coeff}([c]).
 \]
-令 \(h(t):=-t\log t-(1-t)\log(1-t)\)，并约定 \(0\log0=0\)。若 \(0<\delta\le1/2\) 且 \(F\) 在 \((\epsilon,q,\delta)\) 处为 sticky，即存在 \(x_*\in E\) 使 \(p_{x_*}\ge1-\delta\)，则
-\[
-\mathsf C_q(E)\ge(1-\delta)^2,\qquad
-\mathsf H_q(E)\le h(\delta)+\delta\log\max\{1,|E|-1\},
-\]
-并且
-\[
-\Lambda-\epsilon+\log(1-\delta)\le \Delta_q(E)\le \Lambda.
-\]
-反过来，若有限有理数 \(\mathsf C_q(E)\ge1-\delta\)，则 \(F\) 在 \((\epsilon,q,\delta)\) 处为 sticky。因此 sticky 纤维强制进入一个由 \(Z_q(E)\) 与 \(Z_{2q}(E)\) 精确检测的有限冻结相。
-\end{proposition}
-\begin{proof}
-取 \(x_*\in E\) 使 \(p_{x_*}\ge1-\delta\)。碰撞量满足
-\[
-\mathsf C_q(E)=\sum_{x\in E}p_x^2\ge p_{x_*}^2\ge(1-\delta)^2.
-\]
-若 \(|E|=1\)，熵估计显然成立。设 \(|E|=n\ge2\)，令 \(u=1-p_{x_*}\le\delta\)。在固定剩余质量 \(u\) 时，剩余 \(n-1\) 个原子的熵由均匀分布取最大值，故
-\[
-\mathsf H_q(E)\le h(u)+u\log(n-1).
-\]
-因 \(0\le u\le\delta\le1/2\)，函数 \(u\mapsto h(u)+u\log(n-1)\) 在该区间单调不降，于是得到所需熵界。
+一个大小为 \(B\) 的有效 prime-register 指 \(R_B=\mathbb F_p^B\) 及线性读出 \(\rho:R_B\to A_L\)。若存在 \([\widetilde c]\in\check H^1(N;R_B)\) 使 \(\rho_*[\widetilde c]=[c]\)，则称 \(R_B\) 承载或外置了 \([c]\)。同步深度 \(T\) 的协议按同一口径理解为每步最多新增一个 \(\mathbb F_p\)-坐标，故其总有效寄存器维数不超过 \(T\)。
+\end{definition}
 
-又因为 \(x\in E\) 蕴含 \(\Lambda-\epsilon\le\log d(x)\le\Lambda\)，所以
+\begin{lemma}[持久 holonomy 障碍强制线性寄存器深度]\label{lem:distill-pom-holonomy-register-linear-growth}
+在定义~\ref{def:distill-pom-holonomy-width-register}的设定下，若 \([c]\in\check H^1(N;A_L)\) 满足 \(\operatorname{wd}_p([c])=L\)，则任何承载 \([c]\) 的有效 prime-register 均有 \(B\ge L\)，任何每步新增至多一个 \(p\)-坐标的同步协议均有 \(T\ge L\)。特别地，若
 \[
-\sum_{x\in E}p_xd(x)\le e^\Lambda,\qquad
-\sum_{x\in E}p_xd(x)\ge p_{x_*}d(x_*)\ge(1-\delta)e^{\Lambda-\epsilon}.
+[c]=\sum_{\ell=1}^L [c_\ell]\otimes e_\ell,\qquad [c_\ell]\in\check H^1(N;\mathbb F_p),
 \]
-取对数即得 \(\Delta_q(E)\) 的上下界。最后，任意概率向量满足
+且 \([c_1],\ldots,[c_L]\) 在 \(\check H^1(N;\mathbb F_p)\) 中线性无关，则 \(\operatorname{wd}_p([c])=L\)。
+\end{lemma}
+\begin{proof}
+因 \(A_L\) 与 \(R_B\) 都是 \(\mathbb F_p\)-向量空间，有限上链复形逐项张量后仍保持同调商，故
 \[
-\sum_xp_x^2\le (\max_xp_x)\sum_xp_x=\max_xp_x.
+\check H^1(N;A_L)\cong \check H^1(N;\mathbb F_p)\otimes A_L,\qquad
+\check H^1(N;R_B)\cong \check H^1(N;\mathbb F_p)\otimes R_B.
 \]
-若 \(\mathsf C_q(E)\ge1-\delta\)，则 \(\max_xp_x\ge1-\delta\)，这正是 sticky 条件。证毕。
+若 \([c]=\rho_*[\widetilde c]\)，则 \([c]\) 属于
+\[
+\check H^1(N;\mathbb F_p)\otimes \rho(R_B).
+\]
+由系数支撑的最小性，\(\operatorname{Supp}_{\rm coeff}([c])\subseteq \rho(R_B)\)。于是
+\[
+L=\dim\operatorname{Supp}_{\rm coeff}([c])\le \dim \rho(R_B)\le B.
+\]
+同步协议的总寄存器维数至多为 \(T\)，代入同一论证得 \(T\ge L\)。最后，若 \([c_\ell]\) 线性无关而 \([c]\in\check H^1(N;\mathbb F_p)\otimes W\)，则任取在 \(W\) 上为零的线性泛函 \(\lambda:A_L\to\mathbb F_p\)，收缩第二因子得到
+\[
+0=(1\otimes\lambda)([c])=\sum_{\ell=1}^L\lambda(e_\ell)[c_\ell].
+\]
+线性无关性推出 \(\lambda(e_\ell)=0\) 对所有 \(\ell\) 成立，故所有湮灭 \(W\) 的泛函都湮灭 \(A_L\)，即 \(W=A_L\)。因此系数支撑维数为 \(L\)。证毕。
 \end{proof}
 
-\begin{theorem}[近极值纤维的多尺度 sticky--改进替代]\label{thm:distill-pom-near-extremal-multiscale-improvement}
+\begin{proposition}[冻结--容量--谱证书给出的预算反证]\label{prop:distill-pom-budget-certificate-contradiction}
 \textbf{依赖状态：closure.}
-取有限尺度区间 \(I=\{m_0,m_0+1,\ldots,m_1\}\)。对每个 \(m\in I\)，设
+沿用定义~\ref{def:distill-pom-holonomy-width-register}。设 \([c]\in\check H^1(N;A_L)\) 是一个归一化投影词片段的 \v{C}ech/holonomy 障碍类，并满足 \(\operatorname{wd}_p([c])=L\)。设同一片段的有限证书给出三个已经取整的整数上界
 \[
-F_m:\Omega_m\twoheadrightarrow X_m
+U_L^{\rm frz},\qquad U_L^{\rm cap},\qquad U_L^{\rm spec}\in\mathbb Z_{\ge0},
 \]
-为有限折叠，并定义
+分别来自冻结相、容量曲线或谱证书，并假设任何允许的 prime-register 或同步外置实现的有效大小 \(b_{\rm eff}\) 都必须满足
 \[
-d_m(x):=|F_m^{-1}(x)|,\qquad
-\Lambda_m:=\max_{x\in X_m}\log d_m(x),\qquad
-E_m(\epsilon):=\{x\in X_m:\log d_m(x)\ge\Lambda_m-\epsilon\}.
+b_{\rm eff}\le U_L:=\min\{U_L^{\rm frz},U_L^{\rm cap},U_L^{\rm spec}\}.
 \]
-固定 \(\epsilon\ge0\)、整数 \(q\ge2\) 与 \(0<\delta<1/2\)，并假设每个 \(E_m(\epsilon)\) 非空。令
+若 \(U_L<L\)，则不存在承载该障碍类的允许外置实现。等价地，一个宽度为 \(L\) 的持久 holonomy 障碍不能同时满足线性承载需求与上述任一严格小于 \(L\) 的证书预算。
+\end{proposition}
+\begin{proof}
+若存在允许的外置实现，则它或者是大小为 \(b_{\rm eff}\) 的 prime-register，或者是同步深度为 \(b_{\rm eff}\) 的逐步协议。由引理~\ref{lem:distill-pom-holonomy-register-linear-growth}，任一情形均有
 \[
-\nu_{m,q}(A):={\sum_{x\in A\cap E_m(\epsilon)}d_m(x)^q\over
-\sum_{y\in E_m(\epsilon)}d_m(y)^q}
-\qquad(A\subseteq E_m(\epsilon)).
+L\le b_{\rm eff}.
 \]
-进一步假设存在祖先映射
+另一方面，证书假设给出
 \[
-\alpha_m:E_{m+1}(\epsilon)\longrightarrow E_m(\epsilon)\qquad(m_0\le m<m_1)
+b_{\rm eff}\le U_L<L.
 \]
-满足精确 escort 相容性
+二者矛盾。因此此类外置实现不存在。注意这里没有使用渐近记号：反证只依赖有限整数不等式 \(U_L<L\)。证毕。
+\end{proof}
+
+\begin{theorem}[预算反证推出有限 \v{C}ech 粘接闭包]\label{thm:distill-pom-cech-budget-closure}
+\textbf{依赖状态：closure.}
+令 \(\mathcal U=\{U_i\}_{i\in I}\) 为一个归一化投影词对象的有限局部覆盖，令 \(N\) 为其神经复形。固定素数 \(p\)。假设局部规范代表 \(s_i\) 在重叠 \(U_i\cap U_j\) 上的 residual 差由常值有限阿贝尔层
 \[
-(\alpha_m)_*\nu_{m+1,q}=\nu_{m,q}.
+A_r=(\mathbb F_p)^r
 \]
-定义第 \(m\) 层的碰撞、可见度与容量为
-\[
-\mathsf{Col}_m(q,\epsilon):=\sum_{x\in E_m(\epsilon)}\nu_{m,q}(\{x\})^2,\qquad
-\mathsf{Vis}_m(q,\epsilon):=-\log\mathsf{Col}_m(q,\epsilon),
-\]
-\[
-\mathsf{Cap}_m(\epsilon):=\log |E_m(\epsilon)|.
-\]
-则以下至少一项成立：
+中的 \v{C}ech \(1\)-余圈 \(g=(g_{ij})\in Z^1(N;A_r)\) 记录，即三重重叠上满足 \(g_{ij}+g_{jk}+g_{ki}=0\)。又假设：
 \begin{enumerate}
-\item 存在相容链 \((x_m)_{m\in I}\)，满足 \(x_m\in E_m(\epsilon)\)、\(\alpha_m(x_{m+1})=x_m\)，且
-\[
-\nu_{m,q}(\{x_m\})\ge1-\delta\qquad(m\in I),
-\]
-即近极值纤维族为多尺度 sticky；
-\item 存在某个尺度 \(m\in I\) 触发严格的有限 visibility--collision--capacity 改进：
-\[
-\mathsf{Col}_m(q,\epsilon)\le1-\delta,\qquad
--\log(1-\delta)\le\mathsf{Vis}_m(q,\epsilon)\le\mathsf{Cap}_m(\epsilon).
-\]
+\item 粘接成功当且仅当 \([g]=0\in\check H^1(N;A_r)\)；
+\item 若 \([g]\ne0\)，则其持久部分具有宽度 \(r=\operatorname{wd}_p([g])\ge1\)；
+\item 对该宽度 \(r\)，冻结相、容量曲线或谱证书给出整数预算上界 \(U_r<r\)，并且任何试图把该 residual 障碍外置为 prime-register 或同步深度的实现都受 \(U_r\) 控制。
 \end{enumerate}
-换言之，若近极值质量不能沿祖先映射压缩成一条 sticky 链，则某一尺度的碰撞核必然脱离一原子冻结，产生定量正的可见度下界。
+则 \([g]=0\)，因而存在 \(0\)-上链 \(a=(a_i)\in C^0(N;A_r)\) 使
+\[
+g_{ij}=a_j-a_i.
+\]
+将局部代表替换为 \(s_i-a_i\) 后，所有重叠 residual 同时消失，局部代表粘接为一个全局归一化代表。因此，在上述证书窗口内，持久全局 \v{C}ech/holonomy 障碍不可能存在。
 \end{theorem}
 \begin{proof}
-若存在 \(m\in I\) 使 \(\mathsf{Col}_m(q,\epsilon)\le1-\delta\)，则
-\[
-\mathsf{Vis}_m(q,\epsilon)=-\log\mathsf{Col}_m(q,\epsilon)\ge -\log(1-\delta)>0.
-\]
-另一方面，对概率向量 \((\nu_{m,q}(\{x\}))_{x\in E_m(\epsilon)}\)，Cauchy 不等式给出
-\[
-1=\Bigl(\sum_x\nu_{m,q}(\{x\})\Bigr)^2
-\le |E_m(\epsilon)|\sum_x\nu_{m,q}(\{x\})^2
-=|E_m(\epsilon)|\mathsf{Col}_m(q,\epsilon),
-\]
-故 \(\mathsf{Vis}_m(q,\epsilon)\le\log|E_m(\epsilon)|=\mathsf{Cap}_m(\epsilon)\)。于是第二项成立。
+反设 \([g]\ne0\)。由假设 (2)，其持久部分的 \(p\)-holonomy 宽度为 \(r\ge1\)。任何能把该 residual 障碍外置并完成闭包的 prime-register 或同步协议，都是定义~\ref{def:distill-pom-holonomy-width-register}意义下承载 \([g]\) 的实现。因此命题~\ref{prop:distill-pom-budget-certificate-contradiction} 适用于宽度 \(r\)，并与假设 (3) 的 \(U_r<r\) 矛盾。故 \([g]=0\)。
 
-现在假设第二项不成立。则每个尺度均满足
+由于系数层 \(A_r\) 是常值阿贝尔层，\([g]=0\) 正是存在 \(a\in C^0(N;A_r)\) 使 \(g=\check\delta a\)，即 \(g_{ij}=a_j-a_i\)。把 \(s_i\) 作 gauge 修正 \(s_i\mapsto s_i-a_i\) 后，新重叠 residual 为
 \[
-\mathsf{Col}_m(q,\epsilon)>1-\delta.
+g_{ij}-a_j+a_i=0,
 \]
-任意概率向量 \((p_x)\) 都有 \(\sum_xp_x^2\le\max_xp_x\)，故对每个 \(m\) 存在 \(x_m\in E_m(\epsilon)\) 使
-\[
-\nu_{m,q}(\{x_m\})>1-\delta.
-\]
-由于 \(\delta<1/2\)，这样的 \(x_m\) 唯一：两个不同原子若都具有质量 \(>1-\delta\)，总质量将大于 \(2(1-\delta)>1\)。
-
-对 \(m<m_1\)，escort 相容性给出
-\[
-\nu_{m,q}(\{\alpha_m(x_{m+1})\})
-\ge \nu_{m+1,q}(\{x_{m+1}\})>1-\delta.
-\]
-由第 \(m\) 层大原子的唯一性，必有 \(\alpha_m(x_{m+1})=x_m\)。因此 \((x_m)_{m\in I}\) 是相容 sticky 链，第一项成立。证毕。
+于是局部代表在所有非空重叠上一致，并由有限 \v{C}ech 粘接得到全局代表。一般有限阿贝尔系数层的情形仅在明确选定的直和 \(p\)-扭商 \(\mathcal A\twoheadrightarrow A_r\) 上应用本定理；本文不从任意扩张自动推出直和分解。证毕。
 \end{proof}
 
 % --- End distillation writeback ---
