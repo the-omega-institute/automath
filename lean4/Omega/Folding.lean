@@ -478,6 +478,7 @@ import Omega.Folding.YmUnsyncStarPoleCluster
 import Omega.Folding.YmZetaLeadingPole
 import Omega.Folding.YmZetaResidueRatio
 import Omega.Folding.Zeckendorf
+import Omega.Folding.ZeckendorfModDecompositionUnique
 import Omega.Folding.ZeckendorfSignature
 import Omega.Folding.ZeroBlockMemoryDepth
 import Omega.Folding.ZeroBlockMinimaxAbsError
