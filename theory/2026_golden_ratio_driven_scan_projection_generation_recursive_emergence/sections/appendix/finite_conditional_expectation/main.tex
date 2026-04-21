@@ -1,0 +1,332 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+
+\section{Finite Conditional Expectations and Fiberwise Variance Dissipation}\label{app:finite-conditional-expectation}
+
+This appendix isolates the finite-probability calculation that underlies the
+folding conditional expectations used in the paper.  The point is deliberately
+elementary: on a finite space, conditioning on a factor map is the weighted
+orthogonal projection onto the algebra of fiber-constant functions.  The
+corresponding Pythagoras identity is the exact source of the variance loss
+observed in the fold audits.  The same finite lemma is the analysis-domain
+interface formalized in
+\texttt{\detokenize{lean4/Omega/Multiscale/SolenoidStokesMarkovVarianceDissipation.lean}}.
+
+\subsection{Finite conditional expectation}
+
+Let \(\Omega\) and \(X\) be finite sets, let
+\[
+    \pi:\Omega\longrightarrow X
+\]
+be a surjection onto its image, and let \(\mu\) be a probability measure on
+\(\Omega\).  For \(x\in X\), write
+\[
+    F_x:=\pi^{-1}(x),
+    \qquad
+    m_x:=\mu(F_x)=\sum_{\omega\in F_x}\mu(\omega).
+\]
+Only fibers with \(m_x>0\) matter in \(L^2(\Omega,\mu)\).  For
+\(f:\Omega\to\RR\), define
+\[
+    E_{\pi,\mu}f(\omega)
+    :=
+    \begin{cases}
+    \displaystyle
+    \frac{1}{m_{\pi(\omega)}}\sum_{\eta\in F_{\pi(\omega)}}\mu(\eta)f(\eta),
+    &m_{\pi(\omega)}>0,\\[1.2em]
+    0,&m_{\pi(\omega)}=0.
+    \end{cases}
+\]
+Thus \(E_{\pi,\mu}f\) is constant on every positive-mass fiber.  We use the
+weighted inner product
+\[
+    \langle f,g\rangle_\mu:=\sum_{\omega\in\Omega}\mu(\omega)f(\omega)g(\omega),
+    \qquad
+    \norm{f}_{2,\mu}^2:=\langle f,f\rangle_\mu .
+\]
+
+\begin{lemma}[Fiberwise orthogonal projection]\label{lem:finite-condexp-orthogonal-projection}
+Let \(\mathcal B_\pi\subset L^2(\Omega,\mu)\) be the subspace of functions that
+are constant on every positive-mass fiber of \(\pi\).  Then \(E_{\pi,\mu}\) is
+the orthogonal projection from \(L^2(\Omega,\mu)\) onto \(\mathcal B_\pi\).
+Equivalently,
+\[
+    E_{\pi,\mu}^2=E_{\pi,\mu},
+    \qquad
+    \langle f-E_{\pi,\mu}f,g\rangle_\mu=0
+    \quad (g\in\mathcal B_\pi).
+\]
+\end{lemma}
+
+\begin{proof}
+Idempotence is immediate because the average of a fiber-constant function on a
+positive-mass fiber is its common value.  If \(g\in\mathcal B_\pi\), write
+\(g(\omega)=g_x\) for \(\omega\in F_x\).  Then
+\[
+\begin{aligned}
+    \langle f-E_{\pi,\mu}f,g\rangle_\mu
+    &=
+    \sum_{x:m_x>0}
+    g_x
+    \sum_{\omega\in F_x}
+    \mu(\omega)\bigl(f(\omega)-E_{\pi,\mu}f(\omega)\bigr)\\
+    &=
+    \sum_{x:m_x>0}
+    g_x
+    \left(
+    \sum_{\omega\in F_x}\mu(\omega)f(\omega)
+    -
+    m_x\,\frac{1}{m_x}\sum_{\eta\in F_x}\mu(\eta)f(\eta)
+    \right)
+    =0 .
+\end{aligned}
+\]
+Thus \(f-E_{\pi,\mu}f\) is orthogonal to the fiber-constant subspace, and
+\(E_{\pi,\mu}\) is the claimed projection.
+\end{proof}
+
+\begin{theorem}[Finite conditional Pythagoras]\label{thm:finite-condexp-pythagoras}
+For every \(f:\Omega\to\RR\),
+\[
+    \norm{f}_{2,\mu}^2
+    =
+    \norm{E_{\pi,\mu}f}_{2,\mu}^2
+    +
+    \norm{f-E_{\pi,\mu}f}_{2,\mu}^2 .
+\]
+In particular,
+\[
+    \norm{E_{\pi,\mu}f}_{2,\mu}\leq \norm{f}_{2,\mu}.
+\]
+\end{theorem}
+
+\begin{proof}
+Apply Lemma \ref{lem:finite-condexp-orthogonal-projection} to the orthogonal
+decomposition
+\[
+    f=E_{\pi,\mu}f+(f-E_{\pi,\mu}f).
+\]
+The inequality is the first summand bound in the displayed identity.
+\end{proof}
+
+Define the global mean and variance by
+\[
+    \EE_\mu f:=\sum_{\omega}\mu(\omega)f(\omega),
+    \qquad
+    \Var_\mu(f):=\norm{f-\EE_\mu f}_{2,\mu}^2.
+\]
+The conditional, fiber-averaged variance is
+\[
+    \mathcal D_{\pi,\mu}(f)
+    :=
+    \sum_{x:m_x>0}
+    m_x
+    \sum_{\omega\in F_x}
+    \frac{\mu(\omega)}{m_x}
+    \bigl(f(\omega)-E_{\pi,\mu}f(\omega)\bigr)^2 .
+\]
+
+\begin{corollary}[Fiberwise variance decomposition]\label{cor:finite-condexp-variance-decomposition}
+For every \(f:\Omega\to\RR\),
+\[
+    \mathcal D_{\pi,\mu}(f)=\norm{f-E_{\pi,\mu}f}_{2,\mu}^2,
+\]
+and
+\[
+    \Var_\mu(f)=\Var_\mu(E_{\pi,\mu}f)+\mathcal D_{\pi,\mu}(f).
+\]
+Moreover
+\[
+    \mathcal D_{\pi,\mu}(E_{\pi,\mu}f)=0
+    \qquad\text{and}\qquad
+    \mathcal D_{\pi,\mu}(E_{\pi,\mu}f)\leq \mathcal D_{\pi,\mu}(f).
+\]
+\end{corollary}
+
+\begin{proof}
+The first identity is only the definition of \(\mathcal D_{\pi,\mu}\) rewritten
+as a sum over \(\Omega\).  Since \(E_{\pi,\mu}\) preserves the global mean,
+\[
+    \EE_\mu(E_{\pi,\mu}f)=\EE_\mu f,
+\]
+Theorem \ref{thm:finite-condexp-pythagoras} applied to
+\(f-\EE_\mu f\) gives the variance decomposition.  Finally
+\(E_{\pi,\mu}f\) is fiber-constant, so its within-fiber variance is zero.
+\end{proof}
+
+\subsection{Uniform layer average}
+
+The one-fiber case is the finite uniform layer average.  For \(n>0\) and
+\(f:\{0,\ldots,n-1\}\to\RR\), put
+\[
+    \overline f:=\frac{1}{n}\sum_{i=0}^{n-1}f(i),
+    \qquad
+    A_nf(i):=\overline f .
+\]
+
+\begin{theorem}[Uniform layer Markov variance dissipation]\label{thm:finite-uniform-layer-variance-dissipation}
+For every \(n>0\), the operator \(A_n\) preserves constants, contracts the
+counting \(L^2\)-norm, and annihilates the finite layer variance:
+\[
+    A_n\ind=\ind,
+    \qquad
+    \sum_{i=0}^{n-1}(A_nf(i))^2\leq \sum_{i=0}^{n-1}f(i)^2,
+    \qquad
+    \sum_{i=0}^{n-1}(A_nf(i))^2-n\overline f^{\,2}=0 .
+\]
+Equivalently, with
+\[
+    V_n(f):=\sum_{i=0}^{n-1}f(i)^2-n\overline f^{\,2},
+\]
+one has \(V_n(A_nf)=0\leq V_n(f)\).
+\leanverified{paper_app_solenoid_stokes_markov_variance_dissipation}
+\end{theorem}
+
+\begin{proof}
+The constant-preservation identity is immediate.  Cauchy--Schwarz gives
+\[
+    \left(\sum_{i=0}^{n-1}f(i)\right)^2
+    \leq
+    n\sum_{i=0}^{n-1}f(i)^2,
+\]
+and hence
+\[
+    \sum_i(A_nf(i))^2=n\overline f^{\,2}
+    =
+    \frac{1}{n}\left(\sum_i f(i)\right)^2
+    \leq
+    \sum_i f(i)^2 .
+\]
+Since \(A_nf\) is constant with value \(\overline f\), its layer variance is
+zero.  The nonnegativity of \(V_n(f)\) is the same Cauchy--Schwarz inequality.
+This is the finite theorem formalized on the Omega side in the Lean statement
+displayed above.
+\end{proof}
+
+\subsection{Fold conditional expectations}
+
+We now specialize to the paper's folding factor.  Let
+\[
+    \Omega_m:=\{0,1\}^m,
+    \qquad
+    \Fold_m:\Omega_m\to X_m
+\]
+be the finite fold onto the golden-legal stable words, and write
+\[
+    d_m(x):=\card{\Fold_m^{-1}(x)}.
+\]
+Given a probability measure \(\nu_m\) on \(X_m\), its fiber-uniform lift to
+\(\Omega_m\) is
+\[
+    \mu_m(\omega):=
+    \frac{\nu_m(\Fold_m(\omega))}{d_m(\Fold_m(\omega))}.
+\]
+The corresponding conditional expectation is the uniform fiber average
+\[
+    E_mf(\omega)
+    =
+    \frac{1}{d_m(\Fold_m(\omega))}
+    \sum_{\eta\in \Fold_m^{-1}(\Fold_m(\omega))}f(\eta).
+\]
+
+\begin{proposition}[Fold \(L^2\) decomposition]\label{prop:fold-condexp-l2-decomposition}
+For every \(m\), every probability measure \(\nu_m\) on \(X_m\), and every
+\(f:\Omega_m\to\RR\),
+\[
+    \norm{f}_{2,\mu_m}^2
+    =
+    \norm{E_mf}_{2,\mu_m}^2
+    +
+    \norm{f-E_mf}_{2,\mu_m}^2 .
+\]
+Consequently the fold conditional expectation is an \(L^2(\mu_m)\)-contraction,
+and the fold fiberwise variance satisfies
+\[
+    \mathcal D_{\Fold_m,\mu_m}(E_mf)=0\leq
+    \mathcal D_{\Fold_m,\mu_m}(f).
+\]
+\end{proposition}
+
+\begin{proof}
+Apply Theorem \ref{thm:finite-condexp-pythagoras} and Corollary
+\ref{cor:finite-condexp-variance-decomposition} to the factor map
+\(\pi=\Fold_m\) and the measure \(\mu=\mu_m\).  Because \(\mu_m\) is uniform
+inside each nonempty fiber, \(E_{\Fold_m,\mu_m}\) is exactly the displayed
+fiber average \(E_m\).
+\end{proof}
+
+The numerical audits use the normalized window value \(f(\omega)=N(\omega)/F_{m+3}\).
+For the Parry maximum-entropy cylinder measure \(\nu_m\) on \(X_m\), the exact
+orthogonal decomposition above was checked over \(m=4,6,\ldots,16\).  The same
+identity was also checked for several deterministic arbitrary micro-measures
+on \(\Omega_{12}\).  These are sanity checks of the implementation rather than
+extra assumptions: the theorem is finite algebra.  The scripts are
+\texttt{\detokenize{scripts/exp_fold_conditional_expectation_pythagoras.py}}
+and
+\texttt{\detokenize{scripts/exp_fold_conditional_variance_decomposition.py}}.
+The independent finite-field law-enumeration certificates used elsewhere in
+the paper are verified computationally (see
+\texttt{\detokenize{scripts/equational_theory/}}).
+
+\input{sections/generated/tab_fold_conditional_expectation_pythagoras}
+
+\input{sections/generated/tab_fold_conditional_variance_decomposition}
+
+\subsection{Compressed operator spectrum}
+
+For the singular-spectrum audit, the fold average is viewed as a rectangular
+operator
+\[
+    T_m:\ell^2(\Omega_m)\longrightarrow \ell^2(X_m),
+    \qquad
+    (T_mf)(x)=\frac{1}{d_m(x)}
+    \sum_{\omega\in\Fold_m^{-1}(x)}f(\omega),
+\]
+where both sides carry counting inner products.  This is not the same Hilbert
+space representation as the orthogonal projection \(E_m\) on
+\(L^2(\Omega_m,\mu_m)\); it is the compressed map from microscopic functions
+to base functions.
+
+\begin{proposition}[Singular values of the fold compression]\label{prop:fold-condexp-singular-values}
+The nonzero singular values of \(T_m\) are
+\[
+    \sigma_x(T_m)=d_m(x)^{-1/2},
+    \qquad x\in X_m.
+\]
+Consequently, for every \(p>0\),
+\[
+    \norm{T_m}_{S_p}^p=\sum_{x\in X_m}d_m(x)^{-p/2},
+    \qquad
+    \norm{T_m}_{\mathrm{op}}=d_{\min}(m)^{-1/2},
+\]
+where \(d_{\min}(m):=\min_{x\in X_m}d_m(x)\).
+\end{proposition}
+
+\begin{proof}
+With counting inner products, the adjoint is
+\[
+    (T_m^\ast g)(\omega)=\frac{g(\Fold_m(\omega))}{d_m(\Fold_m(\omega))}.
+\]
+Therefore
+\[
+    (T_mT_m^\ast g)(x)
+    =
+    \frac{1}{d_m(x)}
+    \sum_{\omega\in\Fold_m^{-1}(x)}
+    \frac{g(x)}{d_m(x)}
+    =
+    \frac{g(x)}{d_m(x)} .
+\]
+Thus \(T_mT_m^\ast\) is diagonal in the basis of point masses on \(X_m\), with
+eigenvalues \(d_m(x)^{-1}\).  Taking square roots gives the singular values and
+the Schatten formulas.
+\end{proof}
+
+The table below computes these negative multiplicity moments by modular
+dynamic programming, using
+\texttt{\detokenize{scripts/exp_fold_conditional_expectation_singular_spectrum.py}}.
+
+\input{sections/generated/tab_fold_conditional_expectation_singular_spectrum}
+
+\end{document}
