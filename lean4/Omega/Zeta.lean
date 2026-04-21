@@ -20,6 +20,7 @@ import Omega.Zeta.AtomicWittIntoTC1
 import Omega.Zeta.XiAtomicCenteredResidueSimplex
 import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
+import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
 import Omega.Zeta.XiLimitDefectPotentialRationalization
 import Omega.Zeta.XiTerminalZmEllipticBadprime37DenominatorValuationLimitLaw
 import Omega.Zeta.AuditedEvenFirstCapacityKinkFibonacciJump
@@ -96,6 +97,7 @@ import Omega.Zeta.DerivedLeyangArtinMazurZeta
 import Omega.Zeta.DerivedLeyangBranchsetIharaZeta
 import Omega.Zeta.DerivedMinimalCyclicAuditAxisZhatPrimeUnlocking
 import Omega.Zeta.DerivedProjectivePressureLogconvexConvexHull
+import Omega.Zeta.DerivedZGHardcoreFactorization
 import Omega.Zeta.DerivedZGNoScalarEulerProduct
 import Omega.Zeta.DiscLedgerAxisDepthSmith
 import Omega.Zeta.DynZeta
