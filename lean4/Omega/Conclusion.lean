@@ -5,6 +5,7 @@ import Omega.Conclusion.AdelicStokesH1RecoversCdimPrimeProfile
 import Omega.Conclusion.AffineLeftDivisibilityCriterion
 import Omega.Conclusion.AffineNormalFormSemidirect
 import Omega.Conclusion.AffineRegisterBudget
+import Omega.Conclusion.AnchorFullRankWeightblindRigidity
 import Omega.Conclusion.AlgebraicLdpDfiniteStokesCompression
 import Omega.Conclusion.AlgorithmPrimeShiftEquivalence
 import Omega.Conclusion.AmbiguityShellJordanChainGraphLift
