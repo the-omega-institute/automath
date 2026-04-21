@@ -212,6 +212,7 @@ import Omega.Zeta.GodelFiberIndexModUniformityIndependence
 import Omega.Zeta.GodelTateAddressPrimitivePeriodicCount
 import Omega.Zeta.GoldenMetallicSymbolBudgetEntropyOptimality
 import Omega.Zeta.GoldenRadiusVisibility
+import Omega.Zeta.GmFibonacci2PowerVisiblePrimes
 import Omega.Zeta.GmFibonacciSubtowerEntrypointCriterion
 import Omega.Zeta.GroupoidCentralRenyiShannon
 import Omega.Zeta.HankelBadPrimeSelectionProbability
