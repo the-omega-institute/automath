@@ -173,6 +173,7 @@ import Omega.Folding.FixedFiberLipschitzOptimization
 import Omega.Folding.Fold
 import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.GaugeAnomalyLeyangSlopeSquareMinpoly
+import Omega.Folding.GaugeAnomalySecondTrigonalHtSpecializationS3Disjoint
 import Omega.Folding.GaugeAnomalyGcDefectFarfieldCritical
 import Omega.Folding.GaugeAnomalyLeyangUniversalKernels
 import Omega.Folding.GaugeAnomalyRateCurveDeltaDefect27

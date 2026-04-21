@@ -238,6 +238,7 @@ import Omega.Zeta.FinitePartCyclicLiftSingleQTorsionReconstruction
 import Omega.Zeta.FinitePrimeSupportThreewayCdimSplit
 import Omega.Zeta.FiniteQuotientCardinality
 import Omega.Zeta.FiniteQuotientScalarGodelLoglogOverhead
+import Omega.Zeta.XiBoundaryUpliftMixedRadixRegisterLowerBound
 import Omega.Zeta.FiniteRankRealisation
 import Omega.Zeta.FiniteRhPhaseLift
 import Omega.Zeta.FiniteRhPhaseLiftArtin
