@@ -488,6 +488,7 @@ import Omega.POM.ValueLayerRewritingTerminating
 import Omega.POM.VisibleThickTail
 import Omega.POM.VisibleWalshCommutatorDefect
 import Omega.POM.WitnessExtractionOptimalSuccess
+import Omega.POM.DerivedBinaryAdmissibilityGoldenRateFloor
 import Omega.POM.ZeroTempConcentration
 import Omega.POM.ZeroTemperatureGapDivisibilityRaySum
 import Omega.POM.ZeroTemperatureTwoTermExpansion
