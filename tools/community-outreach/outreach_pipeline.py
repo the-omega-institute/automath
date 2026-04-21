@@ -3179,7 +3179,7 @@ def process_repo_to_stage_d(
                     todo_item=todo_item,
                 )
                 # Retrieve backflow placement from state events
-                for evt in reversed(state.events):
+                for evt in reversed(state.action_history):
                     if evt.get("action") == "backflow completed":
                         try:
                             backflow_placement = json.loads(evt.get("detail", "{}"))
@@ -3293,7 +3293,7 @@ def process_repositories(
     fan_out_repos: list[str] = []
     for st in states:
         if st.stage == "FAN_OUT":
-            for evt in reversed(st.events):
+            for evt in reversed(st.action_history):
                 if evt.get("action") == "discovery fan-out":
                     try:
                         targets = json.loads(evt.get("detail", "[]"))
