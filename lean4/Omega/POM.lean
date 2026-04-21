@@ -6,6 +6,7 @@ import Omega.POM.A4TNewmanOcticFieldArithmetic
 import Omega.POM.A4TracePrimitiveTwoTerm
 import Omega.POM.A4tUnitCircleSpectrumClassification
 import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
+import Omega.POM.AddCollisionSpectrumRenyiMonotone
 import Omega.POM.AdditiveFoldCollisionConvolutionFourier
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.AitkenDelta2SquareConvergence

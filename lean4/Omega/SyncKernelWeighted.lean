@@ -76,6 +76,7 @@ import Omega.SyncKernelWeighted.WeightedUnitRootFinite
 import Omega.SyncKernelWeighted.WittFrobeniusDefectDivisibility
 import Omega.SyncKernelWeighted.WittFrobeniusIteratedDescent
 import Omega.SyncKernelWeighted.WittMinus1PadicDerivativeResidues
+import Omega.SyncKernelWeighted.WittDepthEulerProduct
 import Omega.SyncKernelWeighted.WittNecklaceDivisibility
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.SyncKernelWeighted.WittRenormMonoid
