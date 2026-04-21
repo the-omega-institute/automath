@@ -493,6 +493,7 @@ import Omega.Zeta.XiExteriorPowerSmithSchubert
 import Omega.Zeta.XiEndpointJuliaIndicatorEqualsAbsorption
 import Omega.Zeta.XiEndpointJensenDefectH12GramKernel
 import Omega.Zeta.XiEndpointPoissonWeightScaling
+import Omega.Zeta.XiNohairFixedpointFluxClosure
 import Omega.Zeta.XiEndpointPsiPoissonMonopoleAsymptotic
 import Omega.Zeta.XiEndpointPsiPoissonShiftLoewnerMonotone
 import Omega.Zeta.XiEndpointTwoSymbolJet

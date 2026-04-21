@@ -71,6 +71,7 @@ import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.DeltaqMeanSquareRhCriterion
 import Omega.POM.DeltaqGoldenEnvelope
 import Omega.POM.DeltaqGLambdaIdentity
+import Omega.POM.DeltaqHalfThresholdCriterion
 import Omega.POM.DeltaqSpectralDimensionIdentity
 import Omega.POM.DerivedAuditedEvenMinsectorTopologicalPhase
 import Omega.POM.DerivedSchurDirichletRamanujanParseval
@@ -382,6 +383,7 @@ import Omega.POM.ProfiniteCylinderCapacity
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminant2x2FreeEncoding
 import Omega.POM.PrimeDeterminantAbelianizationFactorization
+import Omega.POM.Faithful2x2GeometricPrimorialAreaLaw
 import Omega.POM.PrimeDeterminantAreaFiberMultinomial
 import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.PrimitiveDirichletBranchLatticeEssentialPrimeSpectrum
