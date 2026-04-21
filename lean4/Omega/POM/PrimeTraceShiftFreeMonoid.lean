@@ -1,113 +1,118 @@
+import Mathlib.Algebra.FreeMonoid.Basic
+import Mathlib.Data.Finsupp.Basic
 import Mathlib.Data.List.Basic
 import Mathlib.Tactic
 
 namespace Omega.POM
 
-/-- The finite prime-register trace model used in the paper-facing wrapper. -/
-abbrev PrimeTraceRegister := List ℕ
+open FreeMonoid
 
-/-- The length of a finite prime-register trace. -/
-def primeTraceLength (r : PrimeTraceRegister) : ℕ :=
-  r.length
+def pomPrimeTraceHom {α : Type*} (code : α → ℕ) : FreeMonoid α →* FreeMonoid ℕ :=
+  FreeMonoid.map code
 
-/-- Shifted trace multiplication is realized by concatenation, since the right trace is appended
-after all occupied coordinates of the left trace. -/
-def primeTraceMul (r s : PrimeTraceRegister) : PrimeTraceRegister :=
-  r ++ s
+noncomputable def pomTraceLedger : List ℕ → ℕ →₀ ℕ
+  | [] => 0
+  | n :: ns => Finsupp.single n 1 + pomTraceLedger ns
 
-/-- The trace image of an event word is obtained by recording the event codes in order. -/
-def primeTraceWord {E : Type*} (code : E → ℕ) (w : List E) : PrimeTraceRegister :=
-  w.map code
+@[simp] theorem pomTraceLedger_nil : pomTraceLedger [] = 0 := rfl
 
-/-- The trace image of the event-word monoid. -/
-abbrev PrimeTraceImage {E : Type*} (code : E → ℕ) :=
-  {r : PrimeTraceRegister // ∃ w : List E, primeTraceWord code w = r}
+@[simp] theorem pomTraceLedger_cons (n : ℕ) (ns : List ℕ) :
+    pomTraceLedger (n :: ns) = Finsupp.single n 1 + pomTraceLedger ns := rfl
 
-/-- The trace map into its image. -/
-def primeTraceToImage {E : Type*} (code : E → ℕ) (w : List E) : PrimeTraceImage code :=
-  ⟨primeTraceWord code w, ⟨w, rfl⟩⟩
-
-/-- The unit trace. -/
-def primeTraceImageOne {E : Type*} (code : E → ℕ) : PrimeTraceImage code :=
-  primeTraceToImage code []
-
-/-- Concatenating a pair of event words concatenates their trace images. -/
-lemma primeTraceWord_append {E : Type*} (code : E → ℕ) (u v : List E) :
-    primeTraceWord code (u ++ v) = primeTraceMul (primeTraceWord code u) (primeTraceWord code v) := by
-  simp [primeTraceWord, primeTraceMul, List.map_append]
-
-/-- Multiplication on the trace image, induced by concatenation of event words. -/
-noncomputable def primeTraceImageMul {E : Type*} (code : E → ℕ)
-    (x y : PrimeTraceImage code) : PrimeTraceImage code := by
-  refine ⟨primeTraceMul x.1 y.1, ?_⟩
-  rcases x.2 with ⟨u, hu⟩
-  rcases y.2 with ⟨v, hv⟩
-  refine ⟨u ++ v, ?_⟩
-  simp [primeTraceWord_append, primeTraceMul, hu, hv]
-
-lemma primeTraceMul_assoc (r s t : PrimeTraceRegister) :
-    primeTraceMul (primeTraceMul r s) t = primeTraceMul r (primeTraceMul s t) := by
-  simp [primeTraceMul, List.append_assoc]
-
-lemma primeTraceLength_mul (r s : PrimeTraceRegister) :
-    primeTraceLength (primeTraceMul r s) = primeTraceLength r + primeTraceLength s := by
-  simp [primeTraceLength, primeTraceMul]
-
-lemma primeTraceWord_injective {E : Type*} {code : E → ℕ} (hcode : Function.Injective code) :
-    Function.Injective (primeTraceWord code) := by
-  intro u
-  induction u with
+theorem pomTraceLedger_append (xs ys : List ℕ) :
+    pomTraceLedger (xs ++ ys) = pomTraceLedger xs + pomTraceLedger ys := by
+  induction xs with
   | nil =>
-      intro v huv
-      cases v with
-      | nil =>
-          rfl
-      | cons b v =>
-          cases huv
-  | cons a u ihu =>
-      intro v huv
-      cases v with
-      | nil =>
-          cases huv
-      | cons b v =>
-          simp [primeTraceWord] at huv
-          rcases huv with ⟨hab, huv⟩
-          have hab' : a = b := hcode hab
-          subst hab'
-          have huv' : u = v := ihu huv
-          subst huv'
-          rfl
+      simp [pomTraceLedger]
+  | cons x xs ih =>
+      simp [pomTraceLedger, ih, add_assoc]
 
-/-- Paper-facing statement for the shifted-addition prime-register trace model.  The trace image is
-closed under shifted multiplication, lengths add, and the trace map from event words to its image
-is bijective and multiplicative. -/
-def pomPrimeTraceShiftFreeMonoidStatement : Prop :=
-  ∀ {E : Type*} (code : E → ℕ),
-    Function.Injective code →
-    (∀ e : E, 0 < code e) →
-      (∀ r s t : PrimeTraceRegister,
-        primeTraceMul (primeTraceMul r s) t = primeTraceMul r (primeTraceMul s t)) ∧
-      (∀ r s : PrimeTraceRegister,
-        primeTraceLength (primeTraceMul r s) = primeTraceLength r + primeTraceLength s) ∧
-      primeTraceToImage code [] = primeTraceImageOne code ∧
-      Function.Bijective (primeTraceToImage code) ∧
-      (∀ u v : List E,
-        primeTraceToImage code (u ++ v) =
-          primeTraceImageMul code (primeTraceToImage code u) (primeTraceToImage code v))
+noncomputable def pomPrimeTraceSupport {α : Type*} (code : α → ℕ) (w : FreeMonoid α) : ℕ →₀ ℕ :=
+  pomTraceLedger (FreeMonoid.toList (pomPrimeTraceHom code w))
 
-theorem paper_pom_prime_trace_shift_free_monoid : pomPrimeTraceShiftFreeMonoidStatement := by
-  intro E code hcode _hpos
-  refine ⟨primeTraceMul_assoc, primeTraceLength_mul, rfl, ?_, ?_⟩
-  · constructor
-    · intro u v huv
-      exact primeTraceWord_injective hcode (Subtype.mk.inj huv)
-    · intro x
-      rcases x.2 with ⟨w, hw⟩
-      refine ⟨w, ?_⟩
+def pomValidPrimeTrace {α : Type*} (code : α → ℕ) (w : FreeMonoid ℕ) : Prop :=
+  ∀ n ∈ FreeMonoid.toList w, n ∈ Set.range code
+
+theorem pomPrimeTraceHom_valid {α : Type*} (code : α → ℕ) (w : FreeMonoid α) :
+    pomValidPrimeTrace code (pomPrimeTraceHom code w) := by
+  intro n hn
+  have hn' : n ∈ (FreeMonoid.toList w).map code := by
+    simpa [pomPrimeTraceHom, FreeMonoid.toList_map] using hn
+  rcases List.mem_map.mp hn' with ⟨a, ha, rfl⟩
+  exact ⟨a, rfl⟩
+
+lemma pomEncodeDecodeList {α : Type*} [DecidableEq α] [Nonempty α] (code : α → ℕ) (xs : List ℕ)
+    (hxs : ∀ n ∈ xs, n ∈ Set.range code) :
+    (xs.map (Function.invFun code)).map code = xs := by
+  induction xs with
+  | nil =>
+      rfl
+  | cons n ns ih =>
+      have hn : ∃ a, code a = n := hxs n (by simp)
+      have hns : ∀ m ∈ ns, m ∈ Set.range code := by
+        intro m hm
+        exact hxs m (by simp [hm])
+      simp [Function.invFun_eq hn, ih hns]
+
+lemma pomDecodeEncodeList {α : Type*} [DecidableEq α] [Nonempty α] (code : α → ℕ)
+    (hcode : Function.Injective code)
+    (xs : List α) :
+    (xs.map code).map (Function.invFun code) = xs := by
+  induction xs with
+  | nil =>
+      rfl
+  | cons a as ih =>
+      simp [Function.leftInverse_invFun hcode a, ih]
+
+def pomPrimeTraceShiftFreeMonoidStatement {α : Type*} [DecidableEq α] (code : α → ℕ) : Prop :=
+  let T := pomPrimeTraceHom code
+  (∀ x y, T (x * y) = T x * T y) ∧
+    (∀ x y, pomPrimeTraceSupport code (x * y) = pomPrimeTraceSupport code x + pomPrimeTraceSupport code y) ∧
+    Function.Injective T ∧
+    Function.Surjective
+      (fun x =>
+        (⟨T x, pomPrimeTraceHom_valid code x⟩ :
+          {w : FreeMonoid ℕ // pomValidPrimeTrace code w}))
+
+theorem paper_pom_prime_trace_shift_free_monoid {α : Type*} [DecidableEq α] (code : α → ℕ)
+    (hcode : Function.Injective code) : pomPrimeTraceShiftFreeMonoidStatement code := by
+  dsimp [pomPrimeTraceShiftFreeMonoidStatement]
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro x y
+    exact (pomPrimeTraceHom code).map_mul x y
+  · intro x y
+    simp [pomPrimeTraceSupport, FreeMonoid.toList_mul, pomTraceLedger_append]
+  · intro x y hxy
+    apply FreeMonoid.toList.injective
+    have hlist : FreeMonoid.toList (pomPrimeTraceHom code x) = FreeMonoid.toList (pomPrimeTraceHom code y) := by
+      simpa [pomPrimeTraceHom] using congrArg FreeMonoid.toList hxy
+    have hmap : (FreeMonoid.toList x).map code = (FreeMonoid.toList y).map code := by
+      simpa [pomPrimeTraceHom, FreeMonoid.toList_map] using hlist
+    exact (List.map_injective_iff.2 hcode) hmap
+  · intro w
+    by_cases hα : Nonempty α
+    · letI := hα
+      let decode : FreeMonoid α := FreeMonoid.ofList (FreeMonoid.toList w.1 |>.map (Function.invFun code))
+      refine ⟨decode, ?_⟩
+      have hdecode :
+          List.map code ((FreeMonoid.toList w.1).map (Function.invFun code)) = FreeMonoid.toList w.1 :=
+        pomEncodeDecodeList code (FreeMonoid.toList w.1) w.2
       apply Subtype.ext
-      simpa [primeTraceToImage] using hw
-  · intro u v
-    apply Subtype.ext
-    simp [primeTraceImageMul, primeTraceToImage, primeTraceWord_append, primeTraceMul]
+      apply FreeMonoid.toList.injective
+      simpa [decode, pomPrimeTraceHom, FreeMonoid.toList_map] using hdecode
+    · letI : IsEmpty α := not_nonempty_iff.mp hα
+      have hnil : FreeMonoid.toList w.1 = [] := by
+        cases hw : FreeMonoid.toList w.1 with
+        | nil =>
+            exact rfl
+        | cons n ns =>
+            exfalso
+            have hn : n ∈ Set.range code := w.2 n (by simp [hw])
+            rcases hn with ⟨a, _⟩
+            exact IsEmpty.false a
+      have hw_one : w.1 = 1 := FreeMonoid.toList.injective hnil
+      refine ⟨(1 : FreeMonoid α), ?_⟩
+      apply Subtype.ext
+      simpa [pomPrimeTraceHom] using hw_one.symm
 
 end Omega.POM

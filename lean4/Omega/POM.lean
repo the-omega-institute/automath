@@ -249,6 +249,7 @@ import Omega.POM.HankelMinimalRecurrenceInversionFormula
 import Omega.POM.HankelNFShiftInvarianceAndPropagation
 import Omega.POM.HankelShortIntegerCertificate
 import Omega.POM.ResonanceShortNullmodeCertificate
+import Omega.POM.PrimeTraceShiftFreeMonoid
 import Omega.POM.HankelSyndromeGapRankDefect
 import Omega.POM.HankelSyndromeInversionUnique
 import Omega.POM.HankelSyndromeModuleKernelEqualsMultiples
