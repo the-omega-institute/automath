@@ -444,6 +444,7 @@ import Omega.Zeta.XiPickPoissonSchurOneStepCollapse
 import Omega.Zeta.XiPoissonSecondOrderTwoCosineChannels
 import Omega.Zeta.XiPomMinrealVsSpectralBudgetSeparation
 import Omega.Zeta.XiPronyMomentMapJacobianDelta4
+import Omega.Zeta.XiPwNoContinuousHair
 import Omega.Zeta.XiPwTypeSafetyNull
 import Omega.Zeta.XiRandomPrimeSingleRoundAuditFalseAccept
 import Omega.Zeta.XiReadReflectorFactorization
