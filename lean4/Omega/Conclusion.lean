@@ -16,6 +16,7 @@ import Omega.Conclusion.BinfoldCollisionScaleForcesMaxfiberDivergence
 import Omega.Conclusion.BinfoldCriticalCapacityThreephaseLaw
 import Omega.Conclusion.BinfoldExactInversionUpperEndpointFreezingSlope
 import Omega.Conclusion.BinfoldTwoScalarCompleteReconstruction
+import Omega.Conclusion.BigWittExactSpectralBudget
 import Omega.Conclusion.BlockConsistencyNotSchurConcave
 import Omega.Conclusion.BlockConsistencyMinMiReduction
 import Omega.Conclusion.BlockConstraintInformationCollapse
@@ -118,6 +119,7 @@ import Omega.Conclusion.FixedResolutionScreenCorankAuditCostLaw
 import Omega.Conclusion.FixedTempSoftOrderProbabilisticFiniteStateDecidable
 import Omega.Conclusion.FoldHilbertRecognizable
 import Omega.Conclusion.FoldMultiscaleCarryDefect
+import Omega.Conclusion.FoldAuditKLPythagoras
 import Omega.Conclusion.FoldOutputEntropyGaugeAffineIdentity
 import Omega.Conclusion.FoldGaugeEntropyDensityExactConstant
 import Omega.Conclusion.FoldSinglepairVisibleObstructions
