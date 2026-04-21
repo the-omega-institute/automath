@@ -191,6 +191,7 @@ import Omega.POM.FoldPrimeGodelBitlengthSuperlinear
 import Omega.POM.FractranPermutationEmbeddingLength
 import Omega.POM.FractranFiniteUpdateTableOneStep
 import Omega.POM.FractranFirstfitSerialDepth
+import Omega.POM.FractranCommutativeVsAlgorithmicExternalization
 import Omega.POM.FractranPrimecoreFinitePartialFunctionCategory
 import Omega.POM.FractranSoftFirstfitFixedTempExponentialCollapse
 import Omega.POM.FractranTwoPrimeDenominatorDfaCompile
