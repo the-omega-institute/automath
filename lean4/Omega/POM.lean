@@ -57,6 +57,7 @@ import Omega.POM.ConclusionGoldenSprtEsscherBoundarySymmetry
 import Omega.POM.SprtSymmetricThresholdMeanTime
 import Omega.POM.Congruence2dLockingCfinite
 import Omega.POM.CoprimeLedgerPrimorialOptimality
+import Omega.POM.CrossqGMonotone
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.CycleLatticeThetaPoissonDuality

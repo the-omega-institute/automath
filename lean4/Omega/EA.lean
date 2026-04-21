@@ -22,6 +22,7 @@ import Omega.EA.ChiRigidityShadow
 import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
+import Omega.EA.CrtFactorization
 import Omega.EA.DeterministicRoughVisibleQuantity
 import Omega.EA.DirectedRewriteTermination
 import Omega.EA.DynamicPrimeRegisterBitlength
