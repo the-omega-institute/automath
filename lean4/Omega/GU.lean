@@ -147,6 +147,7 @@ import Omega.GU.TerminalFoldbin6TailCubeSection
 import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalFoldbin6TwoPointFiberDirectionSpectrum
 import Omega.GU.TerminalFoldbin8Histogram256To55
+import Omega.GU.TerminalFoldbinFiniteSaturation
 import Omega.GU.TerminalFoldbinSaturationDiophantine
 import Omega.GU.TerminalGamma6CanonicalAddressing
 import Omega.GU.TerminalGamma6DiameterSimpleSpectrum

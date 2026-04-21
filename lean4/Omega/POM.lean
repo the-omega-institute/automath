@@ -59,6 +59,7 @@ import Omega.POM.DiagonalHighMoments
 import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
 import Omega.POM.DiagonalRateAbsorbingDFR
 import Omega.POM.DiagonalRateAbsorbingLaguerreInterlacing
+import Omega.POM.DiagonalRateSeparationWeightSignRule
 import Omega.POM.DiagonalRateAbsorbingMeanHitTime
 import Omega.POM.DiagonalRateAcceptRefreshHaltingState
 import Omega.POM.DiagonalRateAcceptRefreshSSTPGF
