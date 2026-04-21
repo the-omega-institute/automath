@@ -47,6 +47,7 @@ import Omega.GroupUnification.GutLeyangRHFieldDecoupling
 import Omega.GroupUnification.GutOmegaLinearAction
 import Omega.GroupUnification.GutWindow6ZeroBlockHalfRateBudget
 import Omega.GroupUnification.HankelVandermondeDiscriminantStiffness
+import Omega.GroupUnification.QsqrtfiveRamifiedPrimeStiffness
 import Omega.GroupUnification.MarkovZeroVariance
 import Omega.GroupUnification.MinTotalGodelCostPrimorial
 import Omega.GroupUnification.NormalForm
