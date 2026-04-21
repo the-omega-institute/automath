@@ -453,6 +453,7 @@ import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.PhiEquivariant
 import Omega.Folding.PhiEquivariantPublication
 import Omega.Folding.PhiMEntropy
+import Omega.Folding.PhiMEntropyNoDrop
 import Omega.Folding.PhiMParryPushforward
 import Omega.Folding.PhiMRightResolving
 import Omega.Folding.PhiMemoryThresholdExact
