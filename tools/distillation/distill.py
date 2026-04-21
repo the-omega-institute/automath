@@ -519,6 +519,9 @@ class DistillState:
     scores: dict[str, Any] = field(default_factory=dict)
     created_at: str = field(default_factory=_now_iso)
     updated_at: str = field(default_factory=_now_iso)
+    # Continuous deepening: track which theorem families have been written
+    depth_cycle: int = 0
+    completed_families: list[str] = field(default_factory=list)
 
 
 def _state_dir(name: str) -> Path:
@@ -551,6 +554,8 @@ def load_state(name: str) -> DistillState:
         scores=dict(data.get("scores", {})),
         created_at=str(data.get("created_at", _now_iso())),
         updated_at=str(data.get("updated_at", _now_iso())),
+        depth_cycle=int(data.get("depth_cycle", 0)),
+        completed_families=list(data.get("completed_families", [])),
     )
 
 
@@ -1805,15 +1810,55 @@ def run_stage_w(
       feedback union for deeper Codex generation
     - Idempotent LaTeX injection (no duplicate blocks)
     """
-    logger.info("Stage W starting for %s", state.name)
+    logger.info("Stage W starting for %s (depth_cycle=%d)", state.name, state.depth_cycle)
     try:
         payload = _read_artifact_json(state, "generated_payload.json")
         matches = _read_artifact_json(state, "section_matches.json")
+        raw_research = _read_artifact_json(state, "raw_research.json")
     except FileNotFoundError as exc:
         logger.error("Stage W missing prerequisite artifact: %s", exc)
         return False
 
+    # Determine focused family for deepening cycles
+    focused_family: Optional[dict[str, Any]] = None
+    if state.depth_cycle > 0:
+        focused_family = _next_deepening_family(state)
+        if focused_family is None:
+            logger.info("Stage W: all families exhausted, nothing to deepen")
+            state.current_stage = "E"
+            save_state(state)
+            return True
+        logger.info(
+            "Stage W deepening: family=%s targets=%s",
+            focused_family.get("name"),
+            focused_family.get("target_sections"),
+        )
+
     targets = _select_target_files(payload, matches)
+    # In deepening mode, narrow targets to the focused family's sections
+    if focused_family:
+        family_sections = set(focused_family.get("target_sections", []))
+        focused_targets = [t for t in targets if t["section"] in family_sections]
+        if not focused_targets:
+            # Family targets not in scan matches; use family sections directly
+            for sec in focused_family.get("target_sections", []):
+                sec_dir = CORE_BODY / sec
+                if sec_dir.exists():
+                    main_tex = sec_dir / "main.tex"
+                    if main_tex.exists():
+                        focused_targets.append({
+                            "section": sec,
+                            "tex_file": (main_tex.relative_to(CORE_BODY)).as_posix(),
+                        })
+                    else:
+                        for tex in sorted(sec_dir.rglob("*.tex"))[:1]:
+                            focused_targets.append({
+                                "section": sec,
+                                "tex_file": tex.relative_to(CORE_BODY).as_posix(),
+                            })
+        if focused_targets:
+            targets = focused_targets
+
     if not targets:
         logger.error("Stage W could not select target files")
         return False
@@ -1835,6 +1880,23 @@ def run_stage_w(
                 section_contexts=section_contexts,
                 schema=_writeback_schema(),
             )
+            # Inject focused family context for deepening cycles
+            if focused_family:
+                prompt += (
+                    f"\n\nDEEPENING CYCLE {state.depth_cycle}: "
+                    f"Focus on theorem family '{focused_family['name']}'.\n"
+                    f"Key results to formalize:\n"
+                )
+                for kr in focused_family.get("key_results", []):
+                    prompt += f"  - {kr}\n"
+                prompt += (
+                    "\nYou MUST produce theorem/lemma environments with PROOFS "
+                    "for the above key results. Map them precisely to the Omega "
+                    "constructions visible in the section context.\n"
+                    "Previously completed families (DO NOT repeat): "
+                    + ", ".join(state.completed_families or ["none"])
+                    + "\n"
+                )
             if prior_feedback_block:
                 prompt += "\n\n" + prior_feedback_block
             if feedback:
@@ -2018,10 +2080,18 @@ def run_stage_w(
         },
     )
     state.current_stage = "E"
-    state.scores["W"] = accepted_review
+    score_key = f"W_cycle{state.depth_cycle}" if state.depth_cycle > 0 else "W"
+    state.scores[score_key] = accepted_review
+    # Mark focused family as completed for deepening tracking
+    if focused_family:
+        family_name = focused_family.get("name", "")
+        if family_name and family_name not in state.completed_families:
+            state.completed_families.append(family_name)
+            logger.info("Marked family '%s' complete (total: %d)",
+                        family_name, len(state.completed_families))
     state.round_number += 1
     save_state(state)
-    logger.info("Stage W completed for %s", state.name)
+    logger.info("Stage W completed for %s (cycle %d)", state.name, state.depth_cycle)
     return True
 
 
@@ -2138,8 +2208,28 @@ def _update_distillation_board(registry: list[dict[str, Any]]) -> None:
     write_text(path, text)
 
 
+def _next_deepening_family(state: DistillState) -> Optional[dict[str, Any]]:
+    """Return the next theorem family to deepen, or None if all exhausted."""
+    try:
+        raw = _read_artifact_json(state, "raw_research.json")
+    except FileNotFoundError:
+        return None
+    families = raw.get("theorem_families", [])
+    for family in families:
+        name = family.get("name", "")
+        if name and name not in state.completed_families:
+            return family
+    return None
+
+
 def run_stage_e(state: DistillState, dry_run: bool = False) -> bool:
-    """Run Stage E registry and board export."""
+    """Run Stage E registry and board export, then check for deepening.
+
+    Continuous deepening: after registering, check if theorem families
+    remain unexplored. If yes, loop back to W with the next family as
+    the focused target. The pipeline only reaches DONE when ALL families
+    have been written or the stop file appears.
+    """
     logger.info("Stage E starting for %s", state.name)
     try:
         entry = _registry_entry(state)
@@ -2152,10 +2242,31 @@ def run_stage_e(state: DistillState, dry_run: bool = False) -> bool:
     else:
         registry = _update_registry(entry)
         _update_distillation_board(registry)
+
+    # Check for next deepening target
+    next_family = _next_deepening_family(state)
+    if next_family and not STOP_FILE.exists():
+        state.depth_cycle += 1
+        state.current_stage = "W"
+        state.round_number += 1
+        # Clear prior feedback for fresh cycle but keep scores
+        state.prior_feedback = []
+        save_state(state)
+        logger.info(
+            "Stage E: deepening cycle %d — next family: %s (targets: %s)",
+            state.depth_cycle,
+            next_family.get("name"),
+            next_family.get("target_sections"),
+        )
+        return True
+
     state.current_stage = "DONE"
     state.round_number += 1
     save_state(state)
-    logger.info("Stage E completed for %s", state.name)
+    logger.info(
+        "Stage E completed for %s — all %d families exhausted",
+        state.name, len(state.completed_families),
+    )
     return True
 
 
