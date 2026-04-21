@@ -18,6 +18,7 @@ import Omega.Zeta.Arity335MarginalInvertChi
 import Omega.Zeta.Arity335MarginalInvertCollision
 import Omega.Zeta.AtomicWittIntoTC1
 import Omega.Zeta.XiAtomicCenteredResidueSimplex
+import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.AuditedEvenFirstCapacityKinkFibonacciJump
 import Omega.Zeta.AutomaticDirichletMoment

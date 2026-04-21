@@ -172,6 +172,7 @@ import Omega.Conclusion.MinLatchesLogStates
 import Omega.Conclusion.MinRegisterHalting
 import Omega.Conclusion.MinimalStateComplexityHalting
 import Omega.Conclusion.MixedHiddenStateFiniteAbelianClassification
+import Omega.Conclusion.MixedHiddenStateCharacterConductorZeta
 import Omega.Conclusion.MixedCollisionOverlapMultisetRigidity
 import Omega.Conclusion.MetallicFiniteSampleAntigolden
 import Omega.Conclusion.MetallicIntegerBinaryCollapse
@@ -198,6 +199,7 @@ import Omega.Conclusion.PcdimPropCycleRankMinimal
 import Omega.Conclusion.Period3FiberExactMultiplicity
 import Omega.Conclusion.PhaseBudgetBinaryQuantization
 import Omega.Conclusion.PhaseChannelCrowdingLowerBound
+import Omega.Conclusion.PhaseCoverCompositionAdditionExtensionLaw
 import Omega.Conclusion.PhaseLedgerBudgetExactHalfspace
 import Omega.Conclusion.Pisano1PositiveSea
 import Omega.Conclusion.PoissonCauchyMomentTomography
