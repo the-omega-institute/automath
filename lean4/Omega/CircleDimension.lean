@@ -124,6 +124,7 @@ import Omega.CircleDimension.KernelMercerRationalBasis
 import Omega.CircleDimension.KernelOddGramV2Determinant
 import Omega.CircleDimension.KernelRKHSFeatureMap
 import Omega.CircleDimension.KernelStripExtensionEval
+import Omega.CircleDimension.LedgerPrimeSupportMinGrowth
 import Omega.CircleDimension.LeyangOrthogonalDualImaginaryProjection
 import Omega.CircleDimension.LeyangSixthNormIdentity3Torsion
 import Omega.CircleDimension.LissajousChebyshev
