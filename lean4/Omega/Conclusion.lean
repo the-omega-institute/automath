@@ -175,6 +175,7 @@ import Omega.Conclusion.IndexTorsionTimeLowerBound
 import Omega.Conclusion.IntermediateQuotientSeeds
 import Omega.Conclusion.IntermediateSystemCharacteristicPolynomialSignRigidity
 import Omega.Conclusion.InverseLimitAddressFinitePrefixDeterminacy
+import Omega.Conclusion.TypedCertificateInverseLimitRigidity
 import Omega.Conclusion.JGEllipseConditionNumberThreshold
 import Omega.Conclusion.JGEllipseFixedEpsilonInformationBarrier
 import Omega.Conclusion.JGEllipsePackingSqrtLaw
