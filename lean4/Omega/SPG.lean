@@ -83,6 +83,7 @@ import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.FixedAxisGodelOrderInformation
 import Omega.SPG.FullInternalScreenOneDefectBoundaryClosure
 import Omega.SPG.FoldInjectivizationRegisterLowerBound
+import Omega.SPG.BoundaryGaugeGroupoidCapacity
 import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.GaugeVolumeAreaComplementarity
 import Omega.SPG.GodelAxisBoundaryInvertibility

@@ -499,6 +499,7 @@ import Omega.Folding.SignedFibonacciGapShift
 import Omega.Folding.SpectralQuarticAutTrivial
 import Omega.Folding.StableArithmeticComplexity
 import Omega.Folding.StableSyntax
+import Omega.Folding.StableSyntaxTerminalRecursion
 import Omega.Folding.StableSyntaxCounting
 import Omega.Folding.StableSyntaxEntropyLogqdim
 import Omega.Folding.StokesDefectHaarMixing
