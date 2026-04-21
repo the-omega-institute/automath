@@ -435,11 +435,59 @@ def _load_prompt(name: str) -> str:
     return read_text(PROMPTS_DIR / prompt_name)
 
 
+def _repair_latex_escapes(text: str) -> str:
+    """Repair LaTeX-in-JSON escape issues with a stateful walk.
+
+    Codex produces JSON strings containing LaTeX backslash sequences that are
+    not valid JSON escapes (\\begin, \\label, \\frac, \\text, etc.).  This
+    walks the raw JSON text consuming escape pairs as units so that
+    already-valid \\\\X sequences are not corrupted.
+
+    Only \\", \\\\, \\n, \\/, and \\uXXXX are preserved as valid JSON escapes.
+    All other \\X sequences (including \\b, \\f, \\r, \\t which overlap with
+    common LaTeX commands like \\begin, \\frac, \\ref, \\text) are doubled to
+    \\\\X so json.loads succeeds and decodes them as literal backslash + X.
+    """
+    # We intentionally exclude b/f/r/t from the "keep" set because in
+    # LaTeX-heavy JSON they are almost always \\begin, \\frac, \\ref, \\text.
+    KEEP = frozenset('"\\n/')
+    HEX = frozenset("0123456789abcdefABCDEF")
+    out: list[str] = []
+    i = 0
+    n = len(text)
+    while i < n:
+        c = text[i]
+        if c != "\\" or i + 1 >= n:
+            out.append(c)
+            i += 1
+            continue
+        nxt = text[i + 1]
+        if nxt in KEEP:
+            # Valid JSON escape — emit as-is and skip the pair
+            out.append("\\")
+            out.append(nxt)
+            i += 2
+        elif nxt == "u" and i + 5 < n and all(
+            h in HEX for h in text[i + 2 : i + 6]
+        ):
+            # \\uXXXX unicode escape
+            out.append(text[i : i + 6])
+            i += 6
+        else:
+            # Not a recognized JSON escape — double the backslash
+            out.append("\\")
+            out.append("\\")
+            out.append(nxt)
+            i += 2
+    return "".join(out)
+
+
 def _extract_json(text: str) -> Any:
     """Extract and parse the first top-level JSON object or array in text.
 
-    Strips common markdown code fences and retries with minor escape
-    repair before giving up.
+    Strips common markdown code fences and retries with LaTeX escape
+    repair before giving up.  Prefers arrays over objects when the text
+    starts with '[' to avoid extracting a sub-object from an array.
     """
     # Strip markdown code fences that sometimes wrap JSON output
     stripped = re.sub(r"```(?:json)?\s*", "", text)
@@ -451,7 +499,11 @@ def _extract_json(text: str) -> Any:
 
 
 def _try_parse_json_from(text: str) -> Any:
-    """Attempt to extract and parse a JSON object/array from text."""
+    """Attempt to extract and parse a JSON object/array from text.
+
+    When json.loads fails on a balanced candidate (common with LaTeX content),
+    retries with LaTeX escape repair before moving to the next candidate.
+    """
     for start, first_char in enumerate(text):
         if first_char not in "{[":
             continue
@@ -485,7 +537,13 @@ def _try_parse_json_from(text: str) -> Any:
                     try:
                         return json.loads(candidate)
                     except json.JSONDecodeError:
-                        pass  # try next candidate position
+                        # LaTeX escape repair: Codex produces \begin, \label etc.
+                        # inside JSON strings which are invalid JSON escapes.
+                        try:
+                            repaired = _repair_latex_escapes(candidate)
+                            return json.loads(repaired)
+                        except json.JSONDecodeError:
+                            pass  # try next candidate position
     return None
 
 
