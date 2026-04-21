@@ -450,3 +450,5 @@ import Omega.Conclusion.ScreenBasisExchangeGraphGeodesicRigidity
 import Omega.Conclusion.ScreenDeficitUnitDescentChain
 import Omega.Conclusion.AmbiguityShellSpectralInvisibility
 import Omega.Conclusion.ContinuousDiscreteLegendreBregmanQuantization
+import Omega.Conclusion.BalancedTwoatomCompletionCapacityBranchSelection
+import Omega.Conclusion.SoftcoreFixedMQseriesRationalOgf
