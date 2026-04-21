@@ -262,6 +262,7 @@ import Omega.POM.Mod2DifferenceBinomialBasis
 import Omega.POM.Mod2ShadowEventualPeriodBound
 import Omega.POM.ModpDifferenceBinomialBasis
 import Omega.POM.MomentDimCollapse
+import Omega.POM.MomentCamouflageFiniteOrders
 import Omega.POM.MomentHankel
 import Omega.POM.MomentKernelExists
 import Omega.POM.MomentMinreal

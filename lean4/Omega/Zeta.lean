@@ -26,6 +26,8 @@ import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
+import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
+import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
