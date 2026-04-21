@@ -126,6 +126,7 @@ import Omega.Zeta.DerivedLeyangBranchsetAdjacencySpectrumHeatTrace
 import Omega.Zeta.DerivedLeyangArtinMazurZeta
 import Omega.Zeta.DerivedLeyangBranchsetIharaZeta
 import Omega.Zeta.DerivedMinimalCyclicAuditAxisZhatPrimeUnlocking
+import Omega.Zeta.DerivedWindow6GaugeVolumeDefectIdentity
 import Omega.Zeta.DerivedProjectivePressureLogconvexConvexHull
 import Omega.Zeta.DerivedZGHardcoreFactorization
 import Omega.Zeta.DerivedZGNoScalarEulerProduct
@@ -607,6 +608,7 @@ import Omega.Zeta.XiTripleConsistencyAudit
 import Omega.Zeta.XiUniqueContinuousTransverseRegister
 import Omega.Zeta.XiVisibleArithmeticUnitIdempotentCount
 import Omega.Zeta.XiWindow6B3C3NoGlobalLinearUnifier
+import Omega.Zeta.XiWindow6B3C3TightFrameFourthMomentNonsimilarity
 import Omega.Zeta.XiWindow6C3QuadraticEnergyEquipartition
 import Omega.Zeta.XiWindow6TailSemigroupAperyThresholds
 import Omega.Zeta.XiWindow6TailSemigroupFrobeniusThreshold
