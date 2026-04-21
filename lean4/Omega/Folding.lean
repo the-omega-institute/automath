@@ -221,6 +221,7 @@ import Omega.Folding.FoldEscortGroundstateConcentration
 import Omega.Folding.FoldEscortGroundstateShannonRateLock
 import Omega.Folding.FoldEscortGroundstateTvExact
 import Omega.Folding.FoldBinEscortLastbit
+import Omega.Folding.FoldResonanceZeroCountingLinear
 import Omega.Folding.FoldBinEscortTwoScaleResidual
 import Omega.Folding.FoldBbitInversionAvgWorstGap
 import Omega.Folding.FoldBinExactInversionBitrateStrongConverse
