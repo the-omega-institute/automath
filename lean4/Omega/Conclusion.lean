@@ -298,6 +298,7 @@ import Omega.Conclusion.SubexponentialLedgerPhaseUniversality
 import Omega.Conclusion.SyncKernelPalindrome
 import Omega.Conclusion.TemperatureKernelFreeEnergyHaltingEmbedding
 import Omega.Conclusion.TentKernelLocalInvertibility
+import Omega.Conclusion.ThreeEndCertificateIrreducibility
 import Omega.Conclusion.ThreeEndCertificateJointSufficiencyMinimality
 import Omega.Conclusion.ThreeEndCertificateOrthogonality
 import Omega.Conclusion.TimeReversalOrbitParity
