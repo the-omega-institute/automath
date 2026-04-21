@@ -162,6 +162,7 @@ import Omega.Folding.KilloFoldBinCapacityInverseTwoRegime
 import Omega.Folding.KilloChainInteriorGodelGcdLcm
 import Omega.Folding.OracleCapacityTailEquivalence
 import Omega.Folding.OracleCapacityPigeonholeBound
+import Omega.Folding.OracleCapacitySlopeJumpsDetermineHistogram
 import Omega.Folding.FoldBoundaryStokesTorsorH1H1
 import Omega.Folding.FoldCapacityGlobalExtremizersFixedMass
 import Omega.Folding.FoldCapacityDiscretePotentialHistogram

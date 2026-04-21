@@ -324,6 +324,7 @@ import Omega.Zeta.SyncCyclotomicEliminationEvenness
 import Omega.Zeta.SyncHatdeltaCurveDoubleCoverBranchGenus6
 import Omega.Zeta.SyncHatdeltaCurveQuotientPlaneQuarticGenus3
 import Omega.Zeta.SyncKernelMixingRate
+import Omega.Zeta.SyncResetWordGeometricTail
 import Omega.Zeta.SyncKernelPalindrome
 import Omega.Zeta.SyncKernelResetTimeUnboundedUnderSmallQ
 import Omega.Zeta.SyncKernelResetWordWaitingTimeGeneralIid

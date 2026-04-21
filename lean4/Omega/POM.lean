@@ -291,6 +291,7 @@ import Omega.POM.P2FrobeniusParitySieve
 import Omega.POM.ParryTwoPointAlternating
 import Omega.POM.ParrySurfaceDerivative
 import Omega.POM.PartitionMobiusEventInversion
+import Omega.POM.PartitionPressureKnapsack
 import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.HardcorePathMarginalClosedForm
 import Omega.POM.PellConeAutomorphism
