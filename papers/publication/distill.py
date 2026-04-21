@@ -1647,6 +1647,9 @@ def run_stage_w(
             for item in plan
         ]
     else:
+        if supervised and not sys.stdin.isatty():
+            logger.info("Non-interactive session; auto-applying writebacks")
+            supervised = False
         while supervised:
             diff = "\n\n".join(
                 _make_preview_diff(item["tex_file"], item["old_text"], item["new_text"])
