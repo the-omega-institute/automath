@@ -155,6 +155,7 @@ import Omega.Folding.KilloChainInteriorGodelGcdLcm
 import Omega.Folding.OracleCapacityTailEquivalence
 import Omega.Folding.FoldBoundaryStokesTorsorH1H1
 import Omega.Folding.FoldCapacityDiscretePotentialHistogram
+import Omega.Folding.FoldResonanceTruncationError
 import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinDegeneracyTailCapacityKinks
 import Omega.Folding.FoldBinChi2Col

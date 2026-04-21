@@ -145,6 +145,7 @@ import Omega.POM.FiniteStateDimensionLowerBound
 import Omega.POM.FirstfitExtensionalUndecidable
 import Omega.POM.FisherZerosArcsineSeeds
 import Omega.POM.FixedQFrozenUniversalReversibleThreshold
+import Omega.POM.FixedQFrozenBayesInfoncePoisson
 import Omega.POM.FoldColGapExpUpper
 import Omega.POM.FoldFactorChainDerivedInvariants
 import Omega.POM.FoldFactorChainEffectiveSampleSize
