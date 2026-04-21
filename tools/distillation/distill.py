@@ -54,6 +54,13 @@ SECTION_RE = re.compile(
 
 STAGE_ORDER = ["R", "S", "G", "W", "E", "DONE"]
 
+# Review gate configuration
+SCORE_PASS_THRESHOLD = 7
+MAX_W_ROUNDS = 5          # max writeback generation + review rounds
+MAX_DEEP_ROUNDS = 2       # max A-DEEP style escalation rounds per W cycle
+MIN_NEW_CLAIMS = 1        # anti-fake: minimum new theorem/lemma/etc labels
+MIN_CONTENT_DELTA = 200   # anti-fake: minimum chars of new claim content
+
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 logger = logging.getLogger("distill")
 logger.setLevel(logging.INFO)
@@ -647,6 +654,7 @@ def _score_schema() -> str:
         "verdict": "reject|revise|accept",
         "issues": ["specific issue"],
         "required_changes": ["specific required change"],
+        "depth_assessment": "shallow|adequate|deep",
     }
     return _json_block(schema)
 
@@ -685,6 +693,140 @@ def _required_fields_present(data: Any, fields: list[str]) -> list[str]:
         if value is None or value == "" or value == [] or value == {}:
             missing.append(field_name)
     return missing
+
+
+def verify_substantive_change(
+    writebacks: list[dict[str, Any]],
+    section_contexts: str,
+) -> tuple[bool, str]:
+    """Anti-fake gate: verify writebacks contain real new theorem-like content.
+
+    Catches the pattern where Codex claims to add material but actually
+    only produces filler prose, repeats existing definitions, or outputs
+    trivially shallow remarks.  Ported from oracle_pipeline.py.
+    """
+    if not writebacks:
+        return False, "FAKE: empty writeback list"
+
+    # Count new claim environments in proposed content
+    new_claim_count = 0
+    total_content_chars = 0
+    for item in writebacks:
+        content = item.get("content", "")
+        total_content_chars += len(content)
+        for env in ("theorem", "lemma", "proposition", "corollary", "definition"):
+            if f"\\begin{{{env}}}" in content:
+                new_claim_count += 1
+
+    # Check for duplicate labels already present in section contexts
+    existing_labels: set[str] = set()
+    for match in re.finditer(r"\\label\{([^}]+)\}", section_contexts):
+        existing_labels.add(match.group(1))
+    duplicate_labels = []
+    for item in writebacks:
+        label = item.get("label", "")
+        if label in existing_labels:
+            duplicate_labels.append(label)
+
+    if duplicate_labels:
+        return False, (
+            f"FAKE: {len(duplicate_labels)} duplicate label(s) already in "
+            f"target files: {', '.join(duplicate_labels[:3])}"
+        )
+
+    if new_claim_count < MIN_NEW_CLAIMS:
+        return False, (
+            f"FAKE: only {new_claim_count} claim environment(s) in writebacks "
+            f"(threshold: {MIN_NEW_CLAIMS}). Codex likely produced filler prose."
+        )
+
+    if total_content_chars < MIN_CONTENT_DELTA:
+        return False, (
+            f"FAKE: total content only {total_content_chars} chars "
+            f"(threshold: {MIN_CONTENT_DELTA}). Too shallow."
+        )
+
+    return True, (
+        f"PASS: {new_claim_count} claim(s), {total_content_chars} chars, "
+        f"no duplicate labels"
+    )
+
+
+def _build_prior_feedback_block(state: DistillState) -> str:
+    """Build a structured prior feedback block from history for Codex prompts.
+
+    Ported from oracle_pipeline.py A-DEEP prior_feedback accumulation pattern.
+    """
+    if not state.prior_feedback:
+        return ""
+    lines = ["PRIOR FEEDBACK (address ALL of these):"]
+    for entry in state.prior_feedback[-8:]:
+        lines.append(f"  - {entry}")
+    if state.scores:
+        score_lines = []
+        for stage_key, review_data in state.scores.items():
+            if isinstance(review_data, dict):
+                codex_s = review_data.get("codex", {}).get("score", "?")
+                claude_s = review_data.get("claude", {}).get("score", "?")
+                score_lines.append(f"{stage_key}: codex={codex_s} claude={claude_s}")
+        if score_lines:
+            lines.append("Score history: " + ", ".join(score_lines[-4:]))
+    return "\n".join(lines)
+
+
+def rebuild_from_git(name: str) -> DistillState:
+    """Recover pipeline state from git commit history after crash/reset.
+
+    Scans commits touching distillation artifacts for stage completion
+    markers and advances state counters to avoid repeating work.
+    Ported from oracle_pipeline.py rebuild_rounds_from_git.
+    """
+    state = load_state(name)
+    slug = _slugify(name)
+    try:
+        result = subprocess.run(
+            ["git", "log", "--all", "--format=%s", "-50"],
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=30,
+            encoding="utf-8",
+            errors="replace",
+        )
+    except (subprocess.TimeoutExpired, OSError) as exc:
+        logger.debug("git log failed for state rebuild: %s", exc)
+        return state
+
+    if result.returncode != 0:
+        return state
+
+    max_stage_idx = STAGE_ORDER.index(state.current_stage)
+    max_round = state.round_number
+    for line in result.stdout.splitlines():
+        m = re.search(
+            rf"distill\({re.escape(slug)}\):\s*stage\s+(\w)\s+\((\w+)\)\s+complete",
+            line,
+        )
+        if m:
+            stage_letter = m.group(1)
+            if stage_letter in STAGE_ORDER:
+                idx = STAGE_ORDER.index(stage_letter)
+                # Advance to the stage AFTER the completed one
+                next_idx = min(idx + 1, len(STAGE_ORDER) - 1)
+                if next_idx > max_stage_idx:
+                    max_stage_idx = next_idx
+                    max_round += 1
+
+    if max_stage_idx > STAGE_ORDER.index(state.current_stage):
+        old_stage = state.current_stage
+        state.current_stage = STAGE_ORDER[max_stage_idx]
+        state.round_number = max(state.round_number, max_round)
+        save_state(state)
+        logger.info(
+            "git-rebuild for %s: stage %s -> %s, round %d",
+            name, old_stage, state.current_stage, state.round_number,
+        )
+    return state
 
 
 def _dry_raw_research(name: str) -> dict[str, Any]:
@@ -1376,7 +1518,10 @@ def _codex_score(
     payload: dict[str, Any],
     dry_run: bool,
 ) -> dict[str, Any]:
-    """Run the Codex review prompt and return a normalized score."""
+    """Run the Codex review prompt with retry and return a normalized score.
+
+    Retries once on empty/unparseable JSON (ported from oracle_pipeline.py).
+    """
     if dry_run:
         return {"score": 8, "verdict": "accept", "issues": [], "required_changes": []}
     prompt = _load_prompt("review_codex").format(
@@ -1385,13 +1530,24 @@ def _codex_score(
         payload=_json_block(payload),
         score_schema=_score_schema(),
     )
-    response = codex_exec(
-        prompt,
-        work_dir=REPO_ROOT,
-        timeout_seconds=900,
-        dry_run=False,
-        log_tag=f"{_slugify(state.name)}_W_review_codex",
-    )
+    for attempt in range(1, 3):
+        response = codex_exec(
+            prompt,
+            work_dir=REPO_ROOT,
+            timeout_seconds=900,
+            dry_run=False,
+            log_tag=f"{_slugify(state.name)}_W_review_codex_a{attempt}",
+        )
+        result = _parse_score_response(response)
+        if result.get("score", 0) > 0 and result.get("verdict") != "reject":
+            return result
+        if result.get("issues") and any(
+            "parseable" not in str(i).lower() for i in result["issues"]
+        ):
+            return result
+        logger.warning(
+            "Codex review attempt %d: empty/unparseable, retrying", attempt
+        )
     return _parse_score_response(response)
 
 
@@ -1401,7 +1557,10 @@ def _claude_score(
     section_contexts: str,
     dry_run: bool,
 ) -> dict[str, Any]:
-    """Run the Claude review prompt and return a normalized score."""
+    """Run the Claude review prompt with retry and return a normalized score.
+
+    Retries once on empty/unparseable JSON (ported from oracle_pipeline.py).
+    """
     if dry_run:
         return {"score": 8, "verdict": "accept", "issues": [], "required_changes": []}
     prompt = _load_prompt("review_claude").format(
@@ -1410,12 +1569,23 @@ def _claude_score(
         section_contexts=section_contexts,
         score_schema=_score_schema(),
     )
-    response = claude_exec(
-        prompt,
-        work_dir=REPO_ROOT,
-        timeout_seconds=600,
-        dry_run=False,
-    )
+    for attempt in range(1, 3):
+        response = claude_exec(
+            prompt,
+            work_dir=REPO_ROOT,
+            timeout_seconds=600,
+            dry_run=False,
+        )
+        result = _parse_score_response(response)
+        if result.get("score", 0) > 0 and result.get("verdict") != "reject":
+            return result
+        if result.get("issues") and any(
+            "parseable" not in str(i).lower() for i in result["issues"]
+        ):
+            return result
+        logger.warning(
+            "Claude review attempt %d: empty/unparseable, retrying", attempt
+        )
     return _parse_score_response(response)
 
 
@@ -1426,7 +1596,12 @@ def _review_writebacks(
     section_contexts: str,
     dry_run: bool,
 ) -> dict[str, Any]:
-    """Run the dual-review gate for writeback proposals."""
+    """Run the dual-review gate for writeback proposals.
+
+    Uses parallel independent scoring. If one reviewer returns empty JSON,
+    falls back to the other; if both empty, returns score 0 so the round
+    retries.  Ported from oracle_pipeline.py A3+A4 parallel dual review.
+    """
     with ThreadPoolExecutor(max_workers=2) as executor:
         codex_future = executor.submit(_codex_score, state, writebacks, payload, dry_run)
         claude_future = executor.submit(
@@ -1438,10 +1613,41 @@ def _review_writebacks(
         )
         codex_review = codex_future.result()
         claude_review = claude_future.result()
+
+    codex_ok = codex_review.get("score", 0) > 0
+    claude_ok = claude_review.get("score", 0) > 0
+
+    if codex_ok and claude_ok:
+        final_score = min(codex_review["score"], claude_review["score"])
+    elif codex_ok:
+        logger.warning("Claude review empty, using codex=%d", codex_review["score"])
+        final_score = codex_review["score"]
+    elif claude_ok:
+        logger.warning("Codex review empty, using claude=%d", claude_review["score"])
+        final_score = claude_review["score"]
+    else:
+        logger.warning("Both reviewers returned empty JSON")
+        final_score = 0
+
+    # Detect FUNDAMENTAL depth issue: both reviewers say "reject"
+    both_reject = (
+        codex_review.get("verdict") == "reject"
+        and claude_review.get("verdict") == "reject"
+    )
+
+    logger.info(
+        "Dual review: codex=%d claude=%d final=%d both_reject=%s",
+        codex_review.get("score", 0),
+        claude_review.get("score", 0),
+        final_score,
+        both_reject,
+    )
+
     return {
         "codex": codex_review,
         "claude": claude_review,
-        "minimum_score": min(codex_review["score"], claude_review["score"]),
+        "minimum_score": final_score,
+        "both_reject": both_reject,
     }
 
 
@@ -1459,10 +1665,20 @@ def _find_insert_position(text: str) -> int:
     return len(text)
 
 
+_DISTILL_BLOCK_RE = re.compile(
+    r"\n?% --- Distillation writeback ---\n.*?% --- End distillation writeback ---\n?",
+    re.DOTALL,
+)
+
+
 def _plan_writeback_application(
     writebacks: list[dict[str, Any]],
 ) -> tuple[list[dict[str, Any]], list[str]]:
-    """Prepare file-level writeback insertions without modifying files."""
+    """Prepare file-level writeback insertions without modifying files.
+
+    Idempotent: if the file already contains a distillation writeback block,
+    it is replaced rather than duplicated (ported from backflow.py injection).
+    """
     grouped: dict[str, list[dict[str, Any]]] = {}
     for item in writebacks:
         grouped.setdefault(item["tex_file"], []).append(item)
@@ -1475,15 +1691,21 @@ def _plan_writeback_application(
             errors.append(f"Target file disappeared: {rel}")
             continue
         old_text = read_text(path)
+
+        # Build the new distillation block
         block_lines = ["", "% --- Distillation writeback ---"]
         for item in items:
             block_lines.append(item["content"].strip())
             block_lines.append("")
         block_lines.append("% --- End distillation writeback ---")
         insert_block = "\n".join(block_lines).rstrip() + "\n"
-        position = _find_insert_position(old_text)
-        prefix = old_text[:position].rstrip()
-        suffix = old_text[position:].lstrip("\n")
+
+        # Idempotent: remove any existing distillation block first
+        base_text = _DISTILL_BLOCK_RE.sub("", old_text)
+
+        position = _find_insert_position(base_text)
+        prefix = base_text[:position].rstrip()
+        suffix = base_text[position:].lstrip("\n")
         new_text = prefix + "\n" + insert_block
         if suffix:
             new_text += "\n" + suffix
@@ -1573,7 +1795,16 @@ def run_stage_w(
     dry_run: bool = False,
     supervised: bool = True,
 ) -> bool:
-    """Run Stage W writeback generation, dual review, and optional application."""
+    """Run Stage W writeback generation, dual review, and optional application.
+
+    Deep reasoning upgrades (ported from oracle_pipeline.py + codex_formalize.py):
+    - Anti-fake gate: verify writebacks contain real theorem-like content
+    - Real dual review with retry on empty JSON
+    - Prior feedback accumulation across rounds
+    - A-DEEP escalation: when both reviewers reject, escalate with combined
+      feedback union for deeper Codex generation
+    - Idempotent LaTeX injection (no duplicate blocks)
+    """
     logger.info("Stage W starting for %s", state.name)
     try:
         payload = _read_artifact_json(state, "generated_payload.json")
@@ -1587,11 +1818,13 @@ def run_stage_w(
         logger.error("Stage W could not select target files")
         return False
     section_contexts = _collect_section_contexts(targets)
+    prior_feedback_block = _build_prior_feedback_block(state)
     feedback = ""
     attempts = []
     accepted_writebacks: list[dict[str, Any]] = []
     accepted_review: dict[str, Any] = {}
-    for attempt in range(1, 4):
+    deep_rounds = 0
+    for attempt in range(1, MAX_W_ROUNDS + 1):
         if dry_run:
             raw_writebacks = _dry_writebacks(targets, state.name)
         else:
@@ -1602,16 +1835,24 @@ def run_stage_w(
                 section_contexts=section_contexts,
                 schema=_writeback_schema(),
             )
+            if prior_feedback_block:
+                prompt += "\n\n" + prior_feedback_block
             if feedback:
                 prompt += (
                     "\n\nPrevious writeback failed validation or review. "
                     "Correct these issues:\n"
                     + feedback
                 )
+            # Escalate timeout when stuck in low scores
+            low_rounds = sum(
+                1 for a in attempts
+                if a.get("review", {}).get("minimum_score", 0) < SCORE_PASS_THRESHOLD
+            )
+            w_timeout = 2400 if low_rounds >= 2 else 1800
             response = codex_exec(
                 prompt,
                 work_dir=REPO_ROOT,
-                timeout_seconds=1800,
+                timeout_seconds=w_timeout,
                 dry_run=False,
                 log_tag=f"{_slugify(state.name)}_W_attempt{attempt}",
             )
@@ -1629,14 +1870,72 @@ def run_stage_w(
             state.prior_feedback.append(f"W attempt {attempt}: {feedback}")
             continue
 
+        # Anti-fake gate: verify substantive content before expensive review
+        if not dry_run:
+            substantive, reason = verify_substantive_change(
+                writebacks, section_contexts
+            )
+            if not substantive:
+                logger.warning("ANTI-FAKE: %s", reason)
+                feedback = reason
+                attempts.append({"attempt": attempt, "anti_fake": reason})
+                state.prior_feedback.append(
+                    f"W attempt {attempt}: ANTI-FAKE REJECTED — {reason}"
+                )
+                save_state(state)
+                continue
+            logger.info("Anti-fake: %s", reason)
+
         review = _review_writebacks(state, writebacks, payload, section_contexts, dry_run)
         attempts.append({"attempt": attempt, "review": review, "writebacks": writebacks})
-        if review["minimum_score"] >= 7:
+
+        if review["minimum_score"] >= SCORE_PASS_THRESHOLD:
             accepted_writebacks = writebacks
             accepted_review = review
             break
+
+        # A-DEEP escalation: when both reviewers reject, escalate with
+        # combined feedback union for deeper generation
+        if review.get("both_reject") and deep_rounds < MAX_DEEP_ROUNDS:
+            deep_rounds += 1
+            logger.warning(
+                "Both reviewers reject at attempt %d. A-DEEP escalation %d/%d",
+                attempt, deep_rounds, MAX_DEEP_ROUNDS,
+            )
+            # Build union of concerns from both reviewers
+            codex_issues = review.get("codex", {}).get("issues", [])
+            claude_issues = review.get("claude", {}).get("issues", [])
+            codex_changes = review.get("codex", {}).get("required_changes", [])
+            claude_changes = review.get("claude", {}).get("required_changes", [])
+            deep_feedback = json.dumps({
+                "codex_issues": codex_issues,
+                "claude_issues": claude_issues,
+                "codex_required_changes": codex_changes,
+                "claude_required_changes": claude_changes,
+                "codex_score": review.get("codex", {}).get("score", 0),
+                "claude_score": review.get("claude", {}).get("score", 0),
+                "escalation_round": deep_rounds,
+            }, ensure_ascii=False, indent=2)[:4000]
+            feedback = (
+                "DEEP ESCALATION: Both independent reviewers rejected this output.\n"
+                "You MUST address ALL issues from BOTH reviewers.\n"
+                "Produce REAL theorems with complete proofs, not summaries.\n\n"
+                + deep_feedback
+            )
+            state.prior_feedback.append(
+                f"W attempt {attempt}: A-DEEP escalation {deep_rounds} "
+                f"(codex={review.get('codex', {}).get('score', 0)}, "
+                f"claude={review.get('claude', {}).get('score', 0)})"
+            )
+            save_state(state)
+            continue
+
         feedback = _json_block(review)
-        state.prior_feedback.append(f"W attempt {attempt}: review gate below 7")
+        state.prior_feedback.append(
+            f"W attempt {attempt}: review gate below {SCORE_PASS_THRESHOLD} "
+            f"(codex={review.get('codex', {}).get('score', 0)}, "
+            f"claude={review.get('claude', {}).get('score', 0)})"
+        )
 
     if not accepted_writebacks:
         _write_artifact_json(state, "writeback_response.json", {"attempts": attempts})
@@ -1956,6 +2255,11 @@ def run_pipeline(
     """Run the distillation pipeline from the current or requested stage."""
     _ensure_gitignore()
     state = load_state(name)
+
+    # Crash recovery: reconcile state with git history
+    if not skip_to:
+        state = rebuild_from_git(name)
+
     if skip_to:
         state.current_stage = skip_to
         save_state(state)
