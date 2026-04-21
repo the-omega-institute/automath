@@ -132,6 +132,7 @@ import Omega.POM.FiberIndependenceComplexClassification
 import Omega.POM.FiberLedgerPrefixSideinfoLength
 import Omega.POM.FiberLeyangChernoffUniqueMinimizer
 import Omega.POM.FiberLeyangKlBernoulliDecomposition
+import Omega.POM.FiberTraceMomentsRationality
 import Omega.POM.FiberMultiplicityMatrixProduct
 import Omega.POM.FiberMedianMajorityPrimeValuation
 import Omega.POM.FiberMultivariateHolographicConservation
