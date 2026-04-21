@@ -181,6 +181,7 @@ import Omega.Conclusion.LeyangOffdiagonalTranspositionQuotient
 import Omega.Conclusion.LeyangRho5SingleChannelCodimOneFiber
 import Omega.Conclusion.LeyangS5TwoChannelMinimalCompleteness
 import Omega.Conclusion.StokesSteinDualNorm
+import Omega.Conclusion.StokesEnergyCellSamplingConcentration
 import Omega.Conclusion.LinearExternalizationLiminf
 import Omega.Conclusion.LkKolmogorovSharpOneOverK
 import Omega.Conclusion.LocalizedGroupsMayerVietoris
