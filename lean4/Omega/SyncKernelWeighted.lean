@@ -26,6 +26,7 @@ import Omega.SyncKernelWeighted.PressureBranchpointsDiscriminant
 import Omega.SyncKernelWeighted.PressureTaylorRemainderCauchy
 import Omega.SyncKernelWeighted.PressureUnitCircleBranchAngles
 import Omega.SyncKernelWeighted.PressureUnitRootModulusThreshold
+import Omega.SyncKernelWeighted.PrimitiveFiniteSym
 import Omega.SyncKernelWeighted.RateCenterOmegaThreshold
 import Omega.SyncKernelWeighted.RateCenterPerronDegreeMultiple6
 import Omega.SyncKernelWeighted.RateCenterRstar
