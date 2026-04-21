@@ -1,4 +1,5 @@
 import Omega.OperatorAlgebra.CircuitCollisionMomentCamouflageMaxfiber
+import Omega.OperatorAlgebra.CircuitIndexGeKNPComplete
 import Omega.OperatorAlgebra.CircuitNoninjectiveNPComplete
 import Omega.OperatorAlgebra.CircuitCollisionMomentTwoApproxNPlus2
 import Omega.OperatorAlgebra.CylinderMarginalization

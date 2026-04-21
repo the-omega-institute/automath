@@ -196,6 +196,7 @@ import Omega.Conclusion.NoUniversalTwoAxisAuditCompletion
 import Omega.Conclusion.NoncontractibleLossMod6Explicit
 import Omega.Conclusion.NonexposedPhaseIntegerDomination
 import Omega.Conclusion.NumberFieldSignatureFromTwoCdims
+import Omega.Conclusion.NoConnectedU1DirectFactor
 import Omega.Conclusion.ObserverHolonomyExactCohomologicalSplitting
 import Omega.Conclusion.OddtailFiniteDepthScalarPadeJacobiRigidity
 import Omega.Conclusion.OddMaxfiberHiddenbitTristateCrystal
