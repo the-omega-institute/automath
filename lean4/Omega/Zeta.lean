@@ -23,6 +23,7 @@ import Omega.Zeta.Arity335MarginalInvertChi
 import Omega.Zeta.Arity335MarginalInvertCollision
 import Omega.Zeta.AtomicWittIntoTC1
 import Omega.Zeta.AuditableProfiniteChebotarevTradeoff
+import Omega.Zeta.AuditableProfiniteChebotarevFinite
 import Omega.Zeta.XiExtensionPreservingInitialObject
 import Omega.Zeta.XiAtomicCenteredResidueSimplex
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
