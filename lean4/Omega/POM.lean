@@ -346,6 +346,7 @@ import Omega.POM.SufficientStatisticResidualNoninvertibility
 import Omega.POM.SymmetricCompression
 import Omega.POM.Sync10CollisionTwoFixedpoints
 import Omega.POM.TauTerminalSignIndependence
+import Omega.POM.TensorFoldHankelRankMultiplicativity
 import Omega.POM.TensorFoldResultantRecursion
 import Omega.POM.ThetaGodelizationPrimeValuationIsometry
 import Omega.POM.ThickFiberEnvelope
