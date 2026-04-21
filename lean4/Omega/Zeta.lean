@@ -20,6 +20,7 @@ import Omega.Zeta.Arity335MarginalInvertCollision
 import Omega.Zeta.AtomicWittIntoTC1
 import Omega.Zeta.AuditableProfiniteChebotarevTradeoff
 import Omega.Zeta.XiAtomicCenteredResidueSimplex
+import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY

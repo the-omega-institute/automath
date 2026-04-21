@@ -283,6 +283,7 @@ import Omega.Conclusion.SecondOrderCdimSignature
 import Omega.Conclusion.SectionLedgerCapacityFunctional
 import Omega.Conclusion.SectionLedgerKL
 import Omega.Conclusion.SelfdualScaleMellinDoesNotForceVerticalPeriodicity
+import Omega.Conclusion.SelfdualScaleMellinFiniteCodimInterpolation
 import Omega.Conclusion.SemanticEquivalenceUndecidable
 import Omega.Conclusion.StieltjesPronyStepOptimalLaw
 import Omega.Conclusion.FoldFiberHardcoreAnnealedConservation
