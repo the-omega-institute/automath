@@ -22,6 +22,8 @@ import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
 import Omega.Zeta.XiLimitDefectPotentialRationalization
+import Omega.Zeta.XiNaturalExtensionPeriodicOrbitZetaPreservation
+import Omega.Zeta.XiPrimeRegisterHistoryInverseLimit
 import Omega.Zeta.XiTerminalZmEllipticBadprime37DenominatorValuationLimitLaw
 import Omega.Zeta.AuditedEvenFirstCapacityKinkFibonacciJump
 import Omega.Zeta.AutomaticDirichletMoment
