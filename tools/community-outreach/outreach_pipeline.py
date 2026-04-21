@@ -650,8 +650,7 @@ def build_backflow_placement_prompt(state: "RepoState") -> str:
           "section_title": "Linear Magma Anti-Implications and the Golden Mean Shift",
           "insert_after": "name of the section it should follow",
           "rationale": "why this placement (1-2 sentences)",
-          "bridge_doc_path": "theory/bridges/<topic>/README.md",
-          "bridge_doc_title": "title for the GitHub-readable bridge document"
+          "section_title_short": "short title for commit messages"
         }}
         """
     )
@@ -715,19 +714,6 @@ def build_backflow_tex_prompt(state: "RepoState", placement: dict[str, Any]) -> 
         Create the directory first: `mkdir -p {tex_dir}`
 
         ═══════════════════════════════════════════════════════════════
-        ALSO: Write a GitHub-readable bridge document
-        ═══════════════════════════════════════════════════════════════
-
-        Write a polished markdown version to: {BRIDGES_DIR}/{slug.replace('_', '-')}/README.md
-        Create dir: `mkdir -p {BRIDGES_DIR}/{slug.replace('_', '-')}`
-
-        This is what gets linked from GitHub issues. It should be:
-        - Self-contained and readable without LaTeX
-        - Include the main theorem statements and proof sketches
-        - Reference the paper section for the formal version
-        - Reference the verification scripts
-
-        ═══════════════════════════════════════════════════════════════
         ALSO: Decide whether to copy verification scripts into the paper
         ═══════════════════════════════════════════════════════════════
 
@@ -749,9 +735,7 @@ def build_backflow_tex_prompt(state: "RepoState", placement: dict[str, Any]) -> 
         Return JSON:
         {{
           "tex_path": "path to the .tex file written",
-          "bridge_doc_path": "path to the bridge markdown written",
           "sections_written": ["list of theorem/lemma names included"],
-          "scripts_referenced": ["list of scripts mentioned"],
           "scripts_copied_to_paper": ["list of scripts copied, or empty if none"]
         }}
         """
@@ -879,15 +863,13 @@ def backflow_to_main_paper(
         "placement": placement.get("placement"),
         "section_dir": placement.get("section_dir"),
         "tex_path": gen_result.get("tex_path", ""),
-        "bridge_doc_path": gen_result.get("bridge_doc_path", ""),
         "wired_into_main_tex": str(main_tex_path),
     }, ensure_ascii=False))
 
-    logger.info("[%s] Backflow done: %s/%s → tex=%s bridge=%s wired=%s",
+    logger.info("[%s] Backflow done: %s/%s → tex=%s wired=%s",
                 state.repo,
                 placement.get("placement"), placement.get("section_dir"),
                 gen_result.get("tex_path", "N/A"),
-                gen_result.get("bridge_doc_path", "N/A"),
                 str(main_tex_path))
 
     # Commit ONLY paper-side files (theory/). Never commit outreach intermediates.
@@ -896,7 +878,6 @@ def backflow_to_main_paper(
             # Explicitly add only the backflow outputs
             paths_to_add = [
                 str(MAIN_PAPER_DIR / "sections" / section_type / section_dir),
-                str(BRIDGES_DIR),
                 str(main_tex_path),
             ]
             # If scripts were copied to paper, add those too
@@ -2661,22 +2642,18 @@ def build_stage_c1_prompt(
 ) -> str:
     note_block = f"User revision note:\n{revision_note}\n\n" if revision_note else ""
 
-    # If backflow was done, include links to the paper section and bridge doc
+    # If backflow was done, include reference to the paper section
     backflow_context = ""
     if backflow_placement:
-        gen = backflow_placement.get("gen_result", {})
-        bridge_path = gen.get("bridge_doc_path", "")
-        if bridge_path:
-            # Convert absolute path to GitHub URL
-            rel_path = str(bridge_path).replace(str(REPO_ROOT) + "/", "")
-            backflow_context = (
-                f"\n\nBACKFLOW COMPLETED: The research has been written into the Omega paper.\n"
-                f"- Paper section: {backflow_placement.get('placement', 'appendix')}/{backflow_placement.get('section_dir', '')}\n"
-                f"- Bridge document (linkable): {AUTOMATH_REPO_URL}/blob/dev/{rel_path}\n"
-                f"- Verification scripts: referenced in the bridge doc\n\n"
-                f"Your issue/reply MUST reference the bridge document URL above.\n"
-                f"This is how readers can verify the claims — link to the repo, not just prose.\n"
-            )
+        section_type = backflow_placement.get("placement", "appendix")
+        section_dir = backflow_placement.get("section_dir", "")
+        backflow_context = (
+            f"\n\nBACKFLOW COMPLETED: The research has been written into the Omega paper.\n"
+            f"- Paper section: {section_type}/{section_dir}\n"
+            f"- Verification scripts: in the paper's scripts/ directory\n"
+            f"- Repo: {AUTOMATH_REPO_URL}\n\n"
+            f"Your reply should mention the repo naturally. Lead with the math.\n"
+        )
 
     return textwrap.dedent(
         f"""\
@@ -2688,7 +2665,6 @@ def build_stage_c1_prompt(
         Requirements:
         - Include the main theorem statement(s) and proof sketch
         - Reference verification scripts and computational certificates
-        - If a bridge document exists, link it prominently
         - Cite Lean 4 theorem references using exact file:line form
         - Honest proved/conjectured/untested labeling
         - Avoid self-promotion. Lead with the math, mention the repo naturally.
