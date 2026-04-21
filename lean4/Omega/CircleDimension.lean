@@ -67,6 +67,7 @@ import Omega.CircleDimension.CoprimeFractionLowerBound
 import Omega.CircleDimension.DefectMeasureFourierLaplaceHolographic
 import Omega.CircleDimension.DefectMeasureRecursiveLayerPeeling
 import Omega.CircleDimension.DefectRepulsionRadius
+import Omega.CircleDimension.DiscreteAnomalyLedger
 import Omega.CircleDimension.DenominatorGrowthFiniteS
 import Omega.CircleDimension.DenominatorMultiplesUnionBound
 import Omega.CircleDimension.DerivedChainArithmeticBooleanIntervalGeodesics
