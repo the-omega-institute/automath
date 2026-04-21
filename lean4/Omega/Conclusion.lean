@@ -126,6 +126,7 @@ import Omega.Conclusion.FixedTempSoftOrderProbabilisticFiniteStateDecidable
 import Omega.Conclusion.FoldHilbertRecognizable
 import Omega.Conclusion.FoldMultiscaleCarryDefect
 import Omega.Conclusion.FoldAuditKLPythagoras
+import Omega.Conclusion.FoldbinDeepVolumeCarryRenormalization
 import Omega.Conclusion.FoldOutputEntropyGaugeAffineIdentity
 import Omega.Conclusion.FoldGaugeEntropyDensityExactConstant
 import Omega.Conclusion.FoldSinglepairVisibleObstructions

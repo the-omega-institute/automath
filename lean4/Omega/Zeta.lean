@@ -28,6 +28,7 @@ import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
+import Omega.Zeta.XiScanTailRatioPeeling
 import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
@@ -39,6 +40,7 @@ import Omega.Zeta.XiCauchyPoissonLocationScaleUncenteredThird
 import Omega.Zeta.XiTerminalZmEllipticBadprime37DenominatorValuationLimitLaw
 import Omega.Zeta.XiTerminalZmS3RootRecoveryCoordinateAutomorphisms
 import Omega.Zeta.XiTerminalZmStokesLeyangSharedArtinRepresentation
+import Omega.Zeta.XiTerminalZmDeltaNodeOrderDiscriminantIndexRatio
 import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne
 import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
