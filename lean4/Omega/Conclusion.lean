@@ -18,6 +18,7 @@ import Omega.Conclusion.BinfoldCriticalCapacityThreephaseLaw
 import Omega.Conclusion.BinfoldExactInversionUpperEndpointFreezingSlope
 import Omega.Conclusion.BinfoldTwoScalarCompleteReconstruction
 import Omega.Conclusion.BinarySparsityLogarithmicDeviation
+import Omega.Conclusion.BoundedPopcountExactLogRigidity
 import Omega.Conclusion.BigWittExactSpectralBudget
 import Omega.Conclusion.BlockConsistencyNotSchurConcave
 import Omega.Conclusion.BlockConsistencyMinMiReduction

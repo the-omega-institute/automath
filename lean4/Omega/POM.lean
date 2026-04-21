@@ -239,6 +239,7 @@ import Omega.POM.LeyangLiftMobiusInvolutionFunctorial
 import Omega.POM.LeyangMonotoneCouplingPrimeRegister
 import Omega.POM.LkArcsineLaw
 import Omega.POM.LkChebyshevCharpoly
+import Omega.POM.LkMellinTransformRigidity
 import Omega.POM.LowTemperatureDifferenceCertificates
 import Omega.POM.LucasNuPCriterion
 import Omega.POM.LucasPrimeCongruence
