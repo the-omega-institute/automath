@@ -153,6 +153,7 @@ import Omega.Folding.KilloFoldApproxAddressFanoLowerBound
 import Omega.Folding.Killo2adicHolographicPrefixClassification
 import Omega.Folding.KilloEllipseDiagonalPrimeRegisterEquivalence
 import Omega.Folding.KilloLeyangUnifiedDigitRigidity
+import Omega.Folding.KilloFoldMaxNoncontractibleFiberMod6
 import Omega.Folding.KilloLeyangTwoBranchFieldsProductGalois
 import Omega.Folding.KilloPrimeFreedomNonFinitizability
 import Omega.Folding.KilloFoldCollisionSpectralSelfDuality
