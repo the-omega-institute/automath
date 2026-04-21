@@ -317,6 +317,7 @@ import Omega.CircleDimension.StokesRelativeCohomologyRing
 import Omega.CircleDimension.StokesUniversalObstructionLattice
 import Omega.CircleDimension.SymmetricTruncationExplicitError
 import Omega.CircleDimension.SymmetricTruncationLoglogDepth
+import Omega.CircleDimension.SymmetricTruncationMultipleZeroBarrier
 import Omega.CircleDimension.SymmetricTruncationTailIdentity
 import Omega.CircleDimension.TensorHomExtLaws
 import Omega.CircleDimension.TensorHomProductLawRestated
