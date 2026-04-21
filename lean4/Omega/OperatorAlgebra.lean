@@ -24,6 +24,7 @@ import Omega.OperatorAlgebra.FoldConditionalExpectationSpectrumHistogram
 import Omega.OperatorAlgebra.FoldRelativeTensorPowerFiberProduct
 import Omega.OperatorAlgebra.FoldEquivalenceAutSemidir
 import Omega.OperatorAlgebra.FoldFiberFixedpointsCenter
+import Omega.OperatorAlgebra.FoldEmEffectiveSupportSchatten
 import Omega.OperatorAlgebra.FoldFiberMultiplicityTraceMoments
 import Omega.OperatorAlgebra.FoldFiberNormalizerWreath
 import Omega.OperatorAlgebra.FoldGaugeAbK0Mod2

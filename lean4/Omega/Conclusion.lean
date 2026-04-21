@@ -336,6 +336,7 @@ import Omega.Conclusion.SpectrumSignLaw
 import Omega.Conclusion.SquarefreeMultiplicativeHolographyLogGap
 import Omega.Conclusion.SquarefreeRTLaminarNesting
 import Omega.Conclusion.StableSuccessorFaithfulSemigroup
+import Omega.Conclusion.StableSuccessorTranslationAddition
 import Omega.Conclusion.SingularRingFaithfulSemigroup
 import Omega.Conclusion.StableSuccessorOrbitNormalForm
 import Omega.Conclusion.StokesEnergyDyadicMartingale
