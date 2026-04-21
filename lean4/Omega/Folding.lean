@@ -69,6 +69,7 @@ import Omega.Folding.BinMinsectorLastbit1SectionUnique
 import Omega.Folding.BitRecoveryFromLocalCongruenceData
 import Omega.Folding.BlockBijectionThreshold
 import Omega.Folding.BlockCountsThreshold
+import Omega.Folding.BlockFoldsatNpComplete
 import Omega.Folding.BlockReservoirEncoding
 import Omega.Folding.ReservoirFiberConstantRelativeDistancePacking
 import Omega.Folding.BoundaryHodgeStokesOrthogonalDecomposition
