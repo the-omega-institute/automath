@@ -377,6 +377,7 @@ import Omega.Folding.GaugeAnomalySpectralResidualLaw
 import Omega.Folding.GaugeAnomalyTauIntClosed
 import Omega.Folding.GaugeAnomalyTrigonalDiscUFactorization
 import Omega.Folding.GaugeAnomalyTrigonalGenus
+import Omega.Folding.GaugeAnomalyTrigonalS3GaloisClosure
 import Omega.Folding.GaugeAnomalySecondTrigonalStructureDiscriminant
 import Omega.Folding.GaugeAnomalyTrigonalRationalTangency
 import Omega.Folding.GaugeAnomalyTrigonalRamificationMu

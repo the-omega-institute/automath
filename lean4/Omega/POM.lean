@@ -228,6 +228,7 @@ import Omega.POM.GoldenBiasVarianceEqualsBias
 import Omega.POM.GoldenCouplingUniqueness
 import Omega.POM.HankelBadPrimesTwoDeterminants
 import Omega.POM.HankelDeterminantGeometricLaw
+import Omega.POM.HankelExteriorPowerPropagation
 import Omega.POM.HankelFingerprintSeeds
 import Omega.POM.HankelFinitePoleSpectralGap
 import Omega.POM.HankelInversePropagationLinearOrbits
