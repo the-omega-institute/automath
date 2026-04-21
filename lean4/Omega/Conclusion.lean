@@ -398,6 +398,7 @@ import Omega.Conclusion.TimeReversalOrbitParity
 import Omega.Conclusion.TwoAtomScalarRecoveryAlpha2
 import Omega.Conclusion.TwoAtomThreshold
 import Omega.Conclusion.TwoIncommensurableBasesDestroyVerticalLattice
+import Omega.Conclusion.UniformBulkCutSpaceUniformization
 import Omega.Conclusion.UcdimZr
 import Omega.Conclusion.UnitarySliceBoundaryThreeAxisIrreducibility
 import Omega.Conclusion.VisibleFiniteTypeFibonacciCompleteAudit

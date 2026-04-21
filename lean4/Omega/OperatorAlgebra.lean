@@ -115,5 +115,6 @@ import Omega.OperatorAlgebra.BayesInverseZK
 import Omega.OperatorAlgebra.RenyiFlatnessSupEqualsLogIndex
 import Omega.OperatorAlgebra.ReplicationCentralizerColoredPartitionOrbitAlgebra
 import Omega.OperatorAlgebra.ReplicationCentralizerDimensionEgf
+import Omega.OperatorAlgebra.SoundnessLowerBoundIndex
 import Omega.OperatorAlgebra.TakesakiCriterion
 import Omega.OperatorAlgebra.Z2x2WalshHadamardSectorTrace
