@@ -100,6 +100,7 @@ import Omega.OperatorAlgebra.FoldbinPermutationRepresentationCommutant
 import Omega.OperatorAlgebra.HSPPeriodTrace
 import Omega.OperatorAlgebra.HzomCommutingPolarForcesCriticalLine
 import Omega.OperatorAlgebra.HzomCriticalZerosJointSpectrumComb
+import Omega.OperatorAlgebra.HzomLogsobolevZeroBand
 import Omega.OperatorAlgebra.HzomSimpleZerosJointSpectrum
 import Omega.OperatorAlgebra.HzomZeroSpacingScaleLowerBound
 import Omega.OperatorAlgebra.HiddenbitSheetSubgroupoidIndex

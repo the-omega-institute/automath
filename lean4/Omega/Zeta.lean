@@ -134,6 +134,7 @@ import Omega.Zeta.DFAPrimeSymmetricDiffLowerBound
 import Omega.Zeta.DFAQuantitativeObstruction
 import Omega.Zeta.Degree11GenericGaloisS11
 import Omega.Zeta.DenominatorAxisDirectLimitSolenoid
+import Omega.Zeta.XiDenominatorAxisPrimeSupportCharacterization
 import Omega.Zeta.DephysicalizedHorizonQuotientDataStructure
 import Omega.Zeta.DephysPoissonBusemannTimefiber
 import Omega.Zeta.DetVpControlsRankDrop
@@ -392,6 +393,7 @@ import Omega.Zeta.SyncCyclotomicEliminationEvenness
 import Omega.Zeta.SyncCyclotomicEliminationRootSIntegrality
 import Omega.Zeta.SyncHatdeltaCurveDoubleCoverBranchGenus6
 import Omega.Zeta.SyncHatdeltaCurveQuotientPlaneQuarticGenus3
+import Omega.Zeta.SyncHatdeltaGaloisS6Generic
 import Omega.Zeta.SyncHatdeltaQuotientTripleCoverS3Discriminant
 import Omega.Zeta.SyncHatdeltaPrymDecomposition
 import Omega.Zeta.SyncKernelMixingRate
