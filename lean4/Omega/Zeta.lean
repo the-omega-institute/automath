@@ -311,6 +311,7 @@ import Omega.Zeta.NullZ2SpectralSplittingDoublecover
 import Omega.Zeta.NyquistProportionStability
 import Omega.Zeta.OffcriticalEndpointResolutionLowerBound
 import Omega.Zeta.XiOffcriticalFalsifiableRestatement
+import Omega.Zeta.XiOffcriticalEndpointDepthLogDecomposition
 import Omega.Zeta.OffcriticalHorocycleBusemann
 import Omega.Zeta.OffcriticalVisibilityThresholdBitBudget
 import Omega.Zeta.OffcriticalQuadraticRadialCompression

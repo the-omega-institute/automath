@@ -97,6 +97,7 @@ import Omega.POM.DiagonalRateBinaryClosedForm
 import Omega.POM.DiagonalRateCriticalContinuousTimeGeneratorMaxent
 import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensor
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete
+import Omega.POM.DiagonalRateDiagonalDeterminesSeparationProfile
 import Omega.POM.DiagonalRateRefreshCountRenewalLLNCLT
 import Omega.POM.DiagonalRateRefreshCountScgfDerivatives
 import Omega.POM.DiagonalRateKeepProbabilityMonotone
