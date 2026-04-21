@@ -37,6 +37,7 @@ import Omega.Zeta.XiDefectDensityConeChoquetExtreme
 import Omega.Zeta.XiDefectEntropyHeightBudgetVarianceGap
 import Omega.Zeta.XiScanTailRatioPeeling
 import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
+import Omega.Zeta.XiLeyangEdDyExplicitDivisor
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
 import Omega.Zeta.XiLimitDefectPotentialRationalization

@@ -38,6 +38,7 @@ import Omega.Conclusion.BoundaryGaugeLiftingSharedCycleRankEntropy
 import Omega.Conclusion.BoundaryMixedAuditRankConservation
 import Omega.Conclusion.BoundaryMixedRegisterPhaseBudget
 import Omega.Conclusion.BoundaryGodelDistanceDiscreteIsoperimetricLaw
+import Omega.Conclusion.BoundaryGodelExactnessInstabilityBifurcation
 import Omega.Conclusion.BoundaryParityAnomalyGap
 import Omega.Conclusion.BoundaryParityBlindFiltration
 import Omega.Conclusion.BoundaryParityLieRepairTwoBits
