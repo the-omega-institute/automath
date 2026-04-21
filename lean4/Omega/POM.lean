@@ -372,6 +372,7 @@ import Omega.POM.PressureConvexity
 import Omega.POM.PressureReflectionInequality
 import Omega.POM.PressureSlopes
 import Omega.POM.ProfiniteAxisChebotarev
+import Omega.POM.ProfiniteCylinderCapacity
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminant2x2FreeEncoding
 import Omega.POM.PrimeDeterminantAbelianizationFactorization
