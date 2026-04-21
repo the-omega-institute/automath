@@ -372,6 +372,7 @@ import Omega.POM.ProjectionAsPartitionPrimeRegister
 import Omega.POM.ProjectionAsPartitionPrimeRegisterOneRound
 import Omega.POM.ProjectionAsPartitionPrimeRegisterWidthDepth
 import Omega.POM.PrimeRegisterConditionalEntropyRateLowerbound
+import Omega.POM.KinkPrincipleQSelection
 import Omega.POM.ProjectiveOperatorDegeneratesToMomentKernel
 import Omega.POM.ProjectivePathAtomicPronyRank
 import Omega.POM.ProjectivePressureDiscreteConvexitySlopes
