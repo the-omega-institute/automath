@@ -73,6 +73,7 @@ import Omega.Zeta.ClassMertensFourier
 import Omega.Zeta.ClassPrimitiveDecomposition
 import Omega.Zeta.ClassPrimitiveTrivialSplit
 import Omega.Zeta.ComovingEnergyDeltaBound
+import Omega.Zeta.XiComovingPrefixEndpointBarrierLaw
 import Omega.Zeta.ComovingHorizonScanPoissonKLCovarianceTensor
 import Omega.Zeta.CompletionEndpointJetDiffusion
 import Omega.Zeta.Conclusion62MellinRational
@@ -390,6 +391,7 @@ import Omega.Zeta.XiAddressPrimeLedgerJointBudget
 import Omega.Zeta.XiPrimeAxisTensorizedReplayComposition
 import Omega.Zeta.XiAnchorGramLog4Quantum
 import Omega.Zeta.XiBasepointScanAnchorDetCauchyVandermonde
+import Omega.Zeta.XiBasepointScanFullRankWeightGaugeInvariance
 import Omega.Zeta.XiBasepointScanCauchyStableConvolution
 import Omega.Zeta.XiBasepointScanKernelCompletenessFullRank
 import Omega.Zeta.XiBasepointScanRationalHerglotzPoleTomography
