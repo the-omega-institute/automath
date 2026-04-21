@@ -88,6 +88,7 @@ import Omega.Folding.CurvatureTranslationDihedral
 import Omega.Folding.Defect
 import Omega.Folding.DerivedAffineReciprocity
 import Omega.Folding.DerivedCenteredOddMomentsVanish
+import Omega.Folding.DerivedBinfoldAverageLogPotentialConstant
 import Omega.Folding.DerivedFoldExactInversionDyadicThreshold
 import Omega.Folding.DerivedFoldMultiplicityZerofiberEnvelope
 import Omega.Folding.DerivedFoldMultiplicityConvexOrderExtremal
@@ -127,6 +128,7 @@ import Omega.Folding.FiberFourierPhaseRigidity
 import Omega.Folding.FiberFusion
 import Omega.Folding.FiberGaugeVolumeDoublingV2DigitSum
 import Omega.Folding.FiberGaugeVolumeChainFactorization
+import Omega.Folding.FiberGaugeVolumeIncrementConditionalShannonStirling
 import Omega.Folding.FiberHausdorffDimensionCylinderCount
 import Omega.Folding.FiberIdentifiableSigmaAlgebraMaximal
 import Omega.Folding.FiberOrbitRecurrenceAlternatingSum
