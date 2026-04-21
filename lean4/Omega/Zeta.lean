@@ -460,6 +460,7 @@ import Omega.Zeta.XiJDiscriminantMobiusRigidityCovariance
 import Omega.Zeta.XiJSexticEllipticLattesTMap
 import Omega.Zeta.XiJensenDefectPowerPullbackInvariance
 import Omega.Zeta.XiJensenSingleRadiusBandExclusion
+import Omega.Zeta.XiJensenSingleRadiusBandExclusionMidradius
 import Omega.Zeta.XiLatticeDeheightizedVisibility
 import Omega.Zeta.XiLeyangMplus1PointExtrapolateOptimal
 import Omega.Zeta.XiLeyangEdDiscTildehVsH

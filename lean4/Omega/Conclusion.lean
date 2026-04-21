@@ -341,6 +341,7 @@ import Omega.Conclusion.StokesEnergyHilbertProjection
 import Omega.Conclusion.StokesEnergyGeneralDegreeCascade
 import Omega.Conclusion.StokesSteinWeightedGraphMinflow
 import Omega.Conclusion.SubexponentialLedgerPhaseUniversality
+import Omega.Conclusion.SublinearExcitationFilterInsufficient
 import Omega.Conclusion.SyncKernelPalindrome
 import Omega.Conclusion.TemperatureKernelFreeEnergyHaltingEmbedding
 import Omega.Conclusion.TentKernelLocalInvertibility
