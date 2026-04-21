@@ -42,6 +42,7 @@ import Omega.Zeta.XiTerminalZmStokesLeyangSharedArtinRepresentation
 import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne
 import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
+import Omega.Zeta.XiTimePart62aZGSimplePoleDensityResidue
 import Omega.Zeta.AuditedEvenFirstCapacityKinkFibonacciJump
 import Omega.Zeta.AutomaticDirichletMoment
 import Omega.Zeta.BlockCyclicRigidity
