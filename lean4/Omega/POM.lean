@@ -213,6 +213,7 @@ import Omega.POM.FoldIndexSeeds
 import Omega.POM.FoldInjectivizationMinsideinfo
 import Omega.POM.FoldInversionZeroRateStrongConverse
 import Omega.POM.FoldPrimeGodelBitlengthSuperlinear
+import Omega.POM.ZetaResidueConstantsConjugates
 import Omega.POM.FractranPermutationEmbeddingLength
 import Omega.POM.FractranFiniteUpdateTableOneStep
 import Omega.POM.FractranFirstfitTotalSerialDepth

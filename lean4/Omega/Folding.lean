@@ -165,6 +165,7 @@ import Omega.Folding.FoldAlphaBasic
 import Omega.Folding.GaugeAnomalyLeyangSlopeSquareMinpoly
 import Omega.Folding.GaugeAnomalyGcDefectFarfieldCritical
 import Omega.Folding.GaugeAnomalyLeyangUniversalKernels
+import Omega.Folding.GaugeAnomalyRateCurveDeltaDefect27
 import Omega.Folding.GodelFiniteDictionaryGibbsFactorization
 import Omega.Folding.GodelFiniteDictionaryDirichletPartitionHolomorphic
 import Omega.Folding.KilloFoldApproxAddressFanoLowerBound
