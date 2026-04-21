@@ -18,6 +18,7 @@ import Omega.SyncKernelWeighted.IharaMertensConstant
 import Omega.SyncKernelWeighted.IharaWittPrimitiveSpectrum
 import Omega.SyncKernelWeighted.KernelHardyRealEven
 import Omega.SyncKernelWeighted.KoenigsLinearizationWittDilation
+import Omega.SyncKernelWeighted.LambdaEndpointsMonotoneUplift
 import Omega.SyncKernelWeighted.MobiusErrorPropagation
 import Omega.SyncKernelWeighted.MuPochhammerNecklaceDirichletPolylog
 import Omega.SyncKernelWeighted.PressureAnalyticRadius
