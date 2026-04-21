@@ -55,6 +55,7 @@ import Omega.Zeta.XiTimePart9saUniformBaselineFixedBinaryExperiment
 import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne
 import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
 import Omega.Zeta.XiTimePart62aZGSimplePoleDensityResidue
+import Omega.Zeta.XiTimePart62dgcZGMatrixEulerNoScalarProduct
 import Omega.Zeta.XiTimePart62debbFiniteCircleSolenoidDualLedgerObstruction
 import Omega.Zeta.AuditedEvenFirstCapacityKinkFibonacciJump
 import Omega.Zeta.AutomaticDirichletMoment
