@@ -270,6 +270,7 @@ import Omega.POM.MaxAtomicWeightParitySecondOrder
 import Omega.POM.MaxFiberEvenChernoffExponent
 import Omega.POM.MaxFiberRateEndpoint
 import Omega.POM.MicrocanonicalFoldSectionCount
+import Omega.POM.MicrocanonicalFoldBayesSuccessNminusT
 import Omega.POM.MaxFiberPublication
 import Omega.POM.MaxMassDispersionBound
 import Omega.POM.MesoscopicReversibleWindowStrictGap
