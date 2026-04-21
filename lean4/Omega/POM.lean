@@ -84,6 +84,7 @@ import Omega.POM.DiagonalRateUniformSynergyInequality
 import Omega.POM.DiagonalCollapseQuadraticFreeEnergy
 import Omega.POM.DoubleLimit
 import Omega.POM.DoubleTransversalNormalForm
+import Omega.POM.EllipsoidIsoperimetricBoundaryCertificate
 import Omega.POM.EllipsoidIsoperimetricVariance
 import Omega.POM.EllipticTwoTimeObservabilityDichotomy
 import Omega.POM.EntropyLossFactorChainExpansion
