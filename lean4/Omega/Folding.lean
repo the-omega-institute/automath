@@ -151,6 +151,7 @@ import Omega.Folding.KilloEllipseDiagonalPrimeRegisterEquivalence
 import Omega.Folding.KilloPrimeFreedomNonFinitizability
 import Omega.Folding.KilloFoldCollisionSpectralSelfDuality
 import Omega.Folding.KilloFoldZeroSpectrumAffineCongruence
+import Omega.Folding.KilloFoldBinCapacityInverseTwoRegime
 import Omega.Folding.KilloChainInteriorGodelGcdLcm
 import Omega.Folding.OracleCapacityTailEquivalence
 import Omega.Folding.FoldBoundaryStokesTorsorH1H1
