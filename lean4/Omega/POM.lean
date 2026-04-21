@@ -340,11 +340,13 @@ import Omega.POM.MultiplicativeChainRuleFinite
 import Omega.POM.MultiplicityBinetTwoParameterNormalForm
 import Omega.POM.MultiplicityCompositionExactConditionalIid
 import Omega.POM.MultiplicityCompositionLogconvexLambdaq
+import Omega.POM.MultiplicityCompositionPartCountGeneralqLLT
 import Omega.POM.MultiplicityCompositionMomentShiftLaw
 import Omega.POM.MultiplicityCompositionMod3Sparsity
 import Omega.POM.MultiplicityCompositionMomentHierarchyRationalGrowth
 import Omega.POM.MultiplicityCompositionPartCountCLT
 import Omega.POM.MultiplicityCompositionPartition
+import Omega.POM.MultiplicityCompositionSharpMainTermConstant
 import Omega.POM.MultiplicityFixedLREnvelope
 import Omega.POM.MultiplicityFixedRExtrema
 import Omega.POM.NewmanCriticalAlgebraicEliminationSturm
