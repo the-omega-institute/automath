@@ -169,9 +169,13 @@ class OracleHandler(BaseHTTPRequestHandler):
 
         elif self.path == "/result":
             # Browser tab posts the ChatGPT response
-            task_id = data.get("task_id", "")
             response = data.get("response", "")
             agent_id = data.get("agent_id", "")
+            # Use the task_id from the agent's pending task (pipeline's stable ID),
+            # NOT the userscript's task_id which may be stale/different
+            task_id = data.get("task_id", "")
+            if agent_id and agent_id in pending_tasks:
+                task_id = pending_tasks[agent_id]["task_id"]
 
             if not task_id or not response:
                 self._send_json({"error": "need task_id and response"}, 400)
