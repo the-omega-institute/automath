@@ -156,6 +156,7 @@ import Omega.Zeta.DFAPrimeSymmetricDiffLowerBound
 import Omega.Zeta.DFAQuantitativeObstruction
 import Omega.Zeta.Degree11GenericGaloisS11
 import Omega.Zeta.DenominatorAxisDirectLimitSolenoid
+import Omega.Zeta.DefectLimitedAudit
 import Omega.Zeta.XiDenominatorAxisPrimeSupportCharacterization
 import Omega.Zeta.DephysicalizedHorizonQuotientDataStructure
 import Omega.Zeta.DephysPoissonBusemannTimefiber

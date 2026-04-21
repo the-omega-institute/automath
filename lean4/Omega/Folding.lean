@@ -290,6 +290,7 @@ import Omega.Folding.FoldMaxFiberFourier
 import Omega.Folding.FoldMultiplicityEnergy
 import Omega.Folding.FoldMultiplicityGroupAlgebra
 import Omega.Folding.FoldMultiplicityGroupAlgebraSelfReciprocal
+import Omega.Folding.FoldMultiplicitySpectrumBlindspotHalf
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.FoldPairedStepDirichletCharacterIdentity
 import Omega.Folding.FoldPressureExactFreezingGapThreshold
