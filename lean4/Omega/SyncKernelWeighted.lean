@@ -81,6 +81,7 @@ import Omega.SyncKernelWeighted.TraceCentralMomentsZero
 import Omega.SyncKernelWeighted.TraceOddVanish
 import Omega.SyncKernelWeighted.SyncKernel3DHessianInverseExact
 import Omega.SyncKernelWeighted.SyncKernel2DExactDecouple
+import Omega.SyncKernelWeighted.SyncKernelModerateDeviationCauchyCertified
 import Omega.SyncKernelWeighted.UnitarySliceHalfPhaseLocking
 import Omega.SyncKernelWeighted.UnitRootTwistThreshold
 import Omega.SyncKernelWeighted.VectorPotentialPhiMinusLdpParam
