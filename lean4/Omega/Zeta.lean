@@ -512,6 +512,7 @@ import Omega.Zeta.XiEndpointAbsorptionCoefficient
 import Omega.Zeta.XiEndpointAbsorptionAdditiveTomography
 import Omega.Zeta.XiEndpointAtomSeparation
 import Omega.Zeta.XiHorizonEndpointAtomChristoffel
+import Omega.Zeta.XiHorizonExtremeResonanceTwoStage
 import Omega.Zeta.XiEndpointDefectH12EnergyPoissonL2Dissipation
 import Omega.Zeta.XiEndpointDefectEnergyKlBridgeExplicit
 import Omega.Zeta.XiEdInftyFiberHalvingTangentIntegral
