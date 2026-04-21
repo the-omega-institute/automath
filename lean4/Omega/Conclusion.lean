@@ -125,6 +125,7 @@ import Omega.Conclusion.GoldenBiasSecondOrderUniqueness
 import Omega.Conclusion.GoldenSprtDeltaClosure
 import Omega.Conclusion.GoldenSprtRiskTimeElimination
 import Omega.Conclusion.GlobalClockVanishing
+import Omega.Conclusion.ZGFinitePrefixShadowLocalDimensionBlindness
 import Omega.Conclusion.HaltingTimeExternalBudgetExact
 import Omega.Conclusion.HankelFiniteModSinglevaluedizationShortestLockingThreshold
 import Omega.Conclusion.HiddenFaceBudgetSharpThresholdClassification
