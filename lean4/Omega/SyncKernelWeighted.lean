@@ -104,6 +104,7 @@ import Omega.SyncKernelWeighted.WeightedNewmanQGaloisS37
 import Omega.SyncKernelWeighted.WeightedNewmanThreshold
 import Omega.SyncKernelWeighted.WeightedPhaseAmplitude
 import Omega.SyncKernelWeighted.TracePalindromeCompletedReal
+import Omega.SyncKernelWeighted.TracePalindromeEvenInvariant
 import Omega.SyncKernelWeighted.EdgeworthSixEight
 import Omega.SyncKernelWeighted.WeightedCompletionQ
 import Omega.SyncKernelWeighted.WeightedUnitRootFinite
