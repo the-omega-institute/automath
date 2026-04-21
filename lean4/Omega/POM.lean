@@ -297,6 +297,7 @@ import Omega.POM.LowTemperatureDifferenceCertificates
 import Omega.POM.LucasNuPCriterion
 import Omega.POM.LucasPrimeCongruence
 import Omega.POM.LucasSquare
+import Omega.POM.RealInput40RHSharp
 import Omega.POM.RealInput40ZetaFactorization
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
 import Omega.POM.MicrocanonicalQueryDistortionStrongConversePlane
