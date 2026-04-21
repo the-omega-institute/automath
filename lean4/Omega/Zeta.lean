@@ -511,6 +511,7 @@ import Omega.Zeta.XiNullThreeWay
 import Omega.Zeta.XiNullOrthogonalTrichotomyResourceNonsubstitutable
 import Omega.Zeta.XiNullFiberEntropyWindow
 import Omega.Zeta.XiOffsetNullTypeSafety
+import Omega.Zeta.XiVisibleZerosOnCriticalLine
 import Omega.Zeta.XiOptimalRecoveryTimeEqualsConditionalEntropy
 import Omega.Zeta.XiPickPoissonAnchoredGramRigidityReconstruction
 import Omega.Zeta.XiPickPoissonAnchoredTransverseSeparationInversion
