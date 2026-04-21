@@ -70,6 +70,7 @@ import Omega.Zeta.CyclicEulerSchattenInvariants
 import Omega.Zeta.CyclicEulerSpectralRigidity
 import Omega.Zeta.CyclicFredholmWitt
 import Omega.Zeta.CyclicFredholmRealization
+import Omega.Zeta.CyclicLiftDirichletComb
 import Omega.Zeta.CyclicLiftFiniteProbeEvasion
 import Omega.Zeta.CyclicLiftGcdLcm
 import Omega.Zeta.CyclicPTypicalFrobeniusVerschiebung
