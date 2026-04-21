@@ -194,6 +194,7 @@ import Omega.Conclusion.LucasPowerHankelClosedForm
 import Omega.Conclusion.LucasCharpShiftedHankelGeometricRatio
 import Omega.Conclusion.LucasNormalizedHankelDiscreteCurvature
 import Omega.Conclusion.M2Level3Delta0RamificationSplitting
+import Omega.Conclusion.M2Level3Delta0InertiaKlingenCharpoly
 import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.MaxentropyGapEqualsLogMaxfiber
 import Omega.Conclusion.MaxfiberEntropyGaugeFourmodeRigidity
