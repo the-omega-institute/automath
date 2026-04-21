@@ -592,3 +592,4 @@ import Omega.Folding.ZeroBlockMinimaxAbsError
 import Omega.Folding.ZeroCosetRigidity
 import Omega.Folding.ZeroFiberLinear
 import Omega.Folding.FirstTrigonalStructureGoldenRatio
+import Omega.Folding.FoldBinRecover2Pi
