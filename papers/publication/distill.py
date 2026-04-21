@@ -390,6 +390,7 @@ def claude_exec(
     use_shell = IS_WINDOWS and str(claude_bin).endswith(".cmd")
     start = time.monotonic()
     result: Optional[subprocess.CompletedProcess[str]] = None
+    clean_env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
     try:
         result = subprocess.run(
             cmd,
@@ -399,6 +400,7 @@ def claude_exec(
             timeout=timeout_seconds,
             cwd=str(target_dir),
             shell=use_shell,
+            env=clean_env,
             encoding="utf-8",
             errors="replace",
         )
