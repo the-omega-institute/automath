@@ -24,11 +24,13 @@ import Omega.SyncKernelWeighted.HutchinsonGlobalLift
 import Omega.SyncKernelWeighted.IharaMertensConstant
 import Omega.SyncKernelWeighted.IharaWittPrimitiveSpectrum
 import Omega.SyncKernelWeighted.K21C1Sqrt5
+import Omega.SyncKernelWeighted.K9GeometricZeta
 import Omega.SyncKernelWeighted.KernelHardyRealEven
 import Omega.SyncKernelWeighted.KernelXiFunctionalEquation
 import Omega.SyncKernelWeighted.KernelSelfDualCharacter
 import Omega.SyncKernelWeighted.KernelSelfDualCharacterSchur
 import Omega.SyncKernelWeighted.KoenigsLinearizationWittDilation
+import Omega.SyncKernelWeighted.KappaLinearResponseOrder
 import Omega.SyncKernelWeighted.LambdaLinearResponse
 import Omega.SyncKernelWeighted.LambdaEndpointsMonotoneUplift
 import Omega.SyncKernelWeighted.LambdaExtremeAsymp
