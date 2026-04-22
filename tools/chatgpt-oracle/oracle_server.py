@@ -10,7 +10,7 @@ Usage:
     python oracle_server.py
 
     # Agents submit tasks via oracle_dispatch.py or directly:
-    curl -X POST http://localhost:8765/submit -d '{"prompt":"...", "pdf":"base64..."}'
+    curl -X POST http://127.0.0.1:8765/submit -d '{"prompt":"...", "pdf":"base64..."}'
 
     # The Tampermonkey userscript polls /task, processes it in ChatGPT,
     # and POSTs the result to /result.
@@ -23,7 +23,7 @@ import json
 import sys
 import threading
 import time
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from datetime import datetime
 from collections import deque
@@ -51,13 +51,16 @@ class OracleHandler(BaseHTTPRequestHandler):
         pass
 
     def _send_json(self, data: dict, status: int = 200):
-        self.send_response(status)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
-        self.end_headers()
-        self.wfile.write(json.dumps(data).encode("utf-8"))
+        try:
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            self.end_headers()
+            self.wfile.write(json.dumps(data).encode("utf-8"))
+        except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError):
+            return
 
     def do_OPTIONS(self):
         """Handle CORS preflight."""
@@ -252,7 +255,7 @@ def submit_task(prompt: str, pdf_path: Path | None = None,
         data["pdf_path"] = str(pdf_path)
 
     req = urllib.request.Request(
-        f"http://localhost:{PORT}/submit",
+        f"http://127.0.0.1:{PORT}/submit",
         data=json.dumps(data).encode("utf-8"),
         headers={"Content-Type": "application/json"},
     )
@@ -268,7 +271,7 @@ def wait_for_result(task_id: str, timeout: int = 900) -> str:
     while time.time() - start < timeout:
         try:
             resp = urllib.request.urlopen(
-                f"http://localhost:{PORT}/result/{task_id}", timeout=5
+                f"http://127.0.0.1:{PORT}/result/{task_id}", timeout=5
             )
             data = json.loads(resp.read().decode("utf-8"))
             if data.get("status") == "completed":
@@ -285,8 +288,8 @@ def wait_for_result(task_id: str, timeout: int = 900) -> str:
 
 
 def main():
-    server = HTTPServer(("127.0.0.1", PORT), OracleHandler)
-    print(f"[server] Oracle server running on http://localhost:{PORT}")
+    server = ThreadingHTTPServer(("127.0.0.1", PORT), OracleHandler)
+    print(f"[server] Oracle server running on http://127.0.0.1:{PORT}")
     print(f"[server] Max {MAX_AGENTS} concurrent agents")
     print(f"[server] Open browser tabs:")
     for i in range(1, MAX_AGENTS + 1):

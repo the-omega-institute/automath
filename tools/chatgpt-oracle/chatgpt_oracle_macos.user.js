@@ -16,7 +16,7 @@
 (function () {
   "use strict";
 
-  const SERVER = "http://localhost:8765";
+  const SERVER = "http://127.0.0.1:8765";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -1449,7 +1449,7 @@
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
     const agentLabel = AGENT_ID.replace("oracle_", "#");
-    log(`Oracle Bridge v5.0 agent ${agentLabel} — ${active ? "ACTIVE" : "PAUSED"}`);
+    log(`Oracle Bridge v5.2 agent ${agentLabel} — ${active ? "ACTIVE" : "PAUSED"}`);
 
     // Check if WE navigated here (not the user clicking around)
     const phase = getTaskPhase();

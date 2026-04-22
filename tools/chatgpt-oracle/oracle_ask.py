@@ -29,7 +29,7 @@ import urllib.request
 from datetime import datetime
 from pathlib import Path
 
-SERVER = "http://localhost:8765"
+SERVER = "http://127.0.0.1:8765"
 
 
 def submit(prompt: str, pdf_path: Path | None = None, name: str | None = None,

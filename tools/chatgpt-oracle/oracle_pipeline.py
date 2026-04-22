@@ -93,7 +93,7 @@ THEORY_DIR = REPO_ROOT / "theory"
 LOG_DIR = SCRIPT_DIR / "logs"
 STATE_DIR = SCRIPT_DIR / "pipeline_state"
 
-ORACLE_SERVER = "http://localhost:8765"
+ORACLE_SERVER = "http://127.0.0.1:8765"
 PAPERS_PUB_DIR_CONST = REPO_ROOT / "papers" / "publication"
 
 # Platform-aware Codex discovery
