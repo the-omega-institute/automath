@@ -70,6 +70,7 @@ import Omega.Folding.BinFoldStableTypeCoordinateAlgebraFibonacciSplitting
 import Omega.Folding.BinFoldMinsectorLastbitSectionUnique
 import Omega.Folding.BinGaugeVolume
 import Omega.Folding.FoldBinGaugeVolumeStirling
+import Omega.Folding.FoldbinTailcountBoundFromS2
 import Omega.Folding.BinGaugeVolumeStirlingSecondOrder
 import Omega.Folding.BinMinsectorLastbit1SectionUnique
 import Omega.Folding.BitRecoveryFromLocalCongruenceData
