@@ -4276,7 +4276,6 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         consecutive_nonpass += 1
 
     for rnd in range(state.stage_b_rounds + 1, MAX_STAGE_B_ROUNDS + 1):
-        state.stage_b_rounds = rnd
         state.current_round = rnd
         save_state(state)
 
@@ -4409,6 +4408,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                        f"Oracle review passed", tag=tag)
             update_program_board(state.paper_name, "B-DONE",
                                  f"Oracle: {verdict}, {rnd} rounds")
+            state.stage_b_rounds = rnd
             state.stage_b_passed = True
             consecutive_nonpass = 0
             save_state(state)
@@ -4477,6 +4477,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         h_b4 = git_commit(paper_path,
                           f"stage-B R{rnd}: codex referee fixes",
                           tag=tag)
+        state.stage_b_rounds = rnd
         state.log_event("B", "codex_fix", round_num=rnd,
                         committed=bool(h_b4), commit_hash=h_b4,
                         detail=f"compiled={compiled_b4}")
