@@ -399,6 +399,7 @@ MAX_STAGE_B_ROUNDS = 99  # No practical limit — must pass Oracle gate
 MAX_STAGE_C_ROUNDS = 4
 DEFAULT_TARGET_JOURNAL = "Advances in Mathematics"
 CLAUDE_ENABLED = True
+PAUSED_ERROR_PREFIX = "PAUSED:"
 
 # Borrowed from outreach pipeline: escalation & early-skip constants
 DEEP_MODE_THRESHOLD = 3   # After N consecutive non-pass B rounds, escalate to deep mode
@@ -3662,7 +3663,10 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
     # ── A0: Scope contract (one-shot, no theorem demotion) ─────────
     scope_ok, scope_reason = _scope_contract_valid(paper_path)
     if not state.stage_a_scope_done or not scope_ok:
-        logger.info(f"{tag} A0-C — Claude supervisory scope brief")
+        if CLAUDE_ENABLED:
+            logger.info(f"{tag} A0-C — Claude supervisory scope brief")
+        else:
+            logger.info(f"{tag} A0-S — Codex scope seed (--no-claude)")
         if dry_run:
             claude_scope_data = {
                 "valid": True,
@@ -3721,7 +3725,8 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             raw=claude_scope_out)
         save_state(state)
 
-        logger.info(f"{tag} A0 — Codex scope contract from Claude brief")
+        source = "Claude brief" if CLAUDE_ENABLED else "Codex fallback seed"
+        logger.info(f"{tag} A0 — Codex scope contract from {source}")
         claude_scope_json = json.dumps(
             claude_scope_data, indent=2, ensure_ascii=False)
         prompt_a0 = build_scope_contract_prompt(
@@ -4282,7 +4287,8 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
     paper_path = Path(state.paper_dir)
 
     if not CLAUDE_ENABLED and not dry_run:
-        state.error = "Stage C paused: Claude disabled by --no-claude"
+        state.error = (f"{PAUSED_ERROR_PREFIX} Stage C waiting for Claude; "
+                       "--no-claude completed Codex+ChatGPT work only")
         logger.info(f"{tag} {state.error}")
         state.log_event("C", "paused", detail=state.error)
         save_state(state)
@@ -4438,8 +4444,8 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
     save_state(state)
 
     if not CLAUDE_ENABLED and not dry_run:
-        state.error = ("Stage D paused after Codex placement analysis: "
-                       "Claude disabled by --no-claude")
+        state.error = (f"{PAUSED_ERROR_PREFIX} Stage D waiting for Claude "
+                       "admissibility audit after Codex placement analysis")
         logger.info(f"{tag} {state.error}")
         state.log_event("D", "paused", detail=state.error)
         save_state(state)
@@ -5555,7 +5561,14 @@ def print_status():
         f_sugg = d.get("stage_f_suggested_journal", "")
         journal = d.get("target_journal", "?")
 
-        status = "DONE" if stage == "DONE" else ("FAILED" if err else f"Stage {stage}")
+        if stage == "DONE":
+            status = "DONE"
+        elif str(err).startswith(PAUSED_ERROR_PREFIX):
+            status = "PAUSED"
+        elif err:
+            status = "FAILED"
+        else:
+            status = f"Stage {stage}"
         _print(f"  {name}")
         _print(f"    Status:  {status}  |  Total rounds: {total}")
         _print(f"    Journal: {journal}"
