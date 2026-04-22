@@ -218,6 +218,7 @@ import Omega.POM.FiberStokesEulerBoundaryObservability
 import Omega.POM.FiberSignedIndexMod3
 import Omega.POM.FiberSymmetricOrderVisibleLayerSeparation
 import Omega.POM.FiberTripleMedianMajority
+import Omega.POM.TorsionSymmetryOrderCompleteClassification
 import Omega.POM.FiberTwoPhaseMixing
 import Omega.POM.FiberWalshHardcoreStokesSign
 import Omega.POM.FiberWalshMod2RigidityExtremal
