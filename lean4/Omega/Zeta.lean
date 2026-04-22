@@ -703,6 +703,7 @@ import Omega.Zeta.XiRealInput40LogMInftyTruncationBound
 import Omega.Zeta.XiReplicaSoftcoreReciprocalMomentQRecurrence
 import Omega.Zeta.XiReverseKLCyclicEnergyEquivalence
 import Omega.Zeta.XiReverseKLCyclicKLDecomposition
+import Omega.Zeta.XiReverseKLAffineSecondVariationStrongConvex
 import Omega.Zeta.XiReverseKLGapBayesDecomposition
 import Omega.Zeta.XiReverseKLFourierGapPositiveKernelEnergy
 import Omega.Zeta.XiReverseKLGapW2ToDelta

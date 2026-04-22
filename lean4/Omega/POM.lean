@@ -314,6 +314,7 @@ import Omega.POM.KappaKlDecomposition
 import Omega.POM.MobiusCompleteDecomposition
 import Omega.POM.KLLedgerTelescope
 import Omega.POM.LedgerResidualTelescoping
+import Omega.POM.IprojMaxent
 import Omega.POM.KLPythagorasTower
 import Omega.POM.KLPythagorasUniform
 import Omega.POM.IprojGapExact
