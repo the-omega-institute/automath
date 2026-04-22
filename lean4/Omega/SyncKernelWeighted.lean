@@ -118,6 +118,8 @@ import Omega.SyncKernelWeighted.WeightedPhaseAmplitude
 import Omega.SyncKernelWeighted.TracePalindromeCompletedReal
 import Omega.SyncKernelWeighted.TracePalindromeEvenInvariant
 import Omega.SyncKernelWeighted.EdgeworthSixEight
+import Omega.SyncKernelWeighted.DiscSquareSubstitutionSplit
+import Omega.SyncKernelWeighted.FiniteRhParityGeneral
 import Omega.SyncKernelWeighted.WeightedCompletionQ
 import Omega.SyncKernelWeighted.WeightedUnitRootFinite
 import Omega.SyncKernelWeighted.WittFrobeniusDefectDivisibility
