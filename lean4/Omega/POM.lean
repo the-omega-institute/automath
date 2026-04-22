@@ -434,6 +434,7 @@ import Omega.POM.PartitionMonomialsSymmetricPowerRealizationBound
 import Omega.POM.PartitionPressureKnapsack
 import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.PathIndsetLeyangCyclotomicParam
+import Omega.POM.PhaseResidualLinearizationSqrt15
 import Omega.POM.HardcorePathMarginalClosedForm
 import Omega.POM.PellConeAutomorphism
 import Omega.POM.PerronLandauerLimitLaw
