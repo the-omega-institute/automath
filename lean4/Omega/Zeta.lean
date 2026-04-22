@@ -143,6 +143,7 @@ import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiWindow6C3CyclicFiberTrisection
 import Omega.Zeta.XiWindow6WeylInvariantBestTwoOrbitCompression
 import Omega.Zeta.XiWindow6URFirstReturnTimeClosedForm
+import Omega.Zeta.XiTerminalGbcAnomalyCoordinateCount
 import Omega.Zeta.XiCRTMultistageAxisCountScaling
 import Omega.Zeta.XiTimePart9wBasicRootUnityErrorExponentToOne
 import Omega.Zeta.XiTimePart9pChi2RanktwoResonantFloor
@@ -705,6 +706,7 @@ import Omega.Zeta.XiGramDetNearestNeighborProductUpperBound
 import Omega.Zeta.XiGramshiftIllconditioningForcedByToeplitzMargin
 import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge
 import Omega.Zeta.XiHankelDetScalingCovariance
+import Omega.Zeta.XiHankelMultiprimeOfflineAudit
 import Omega.Zeta.XiHankelHsEnergyClosedFormMassEnergy
 import Omega.Zeta.XiHankelIntegralityPreservedUnderUnimodularConjugacy
 import Omega.Zeta.XiTimePart70cKlGapControlsMaxfiberExcess
