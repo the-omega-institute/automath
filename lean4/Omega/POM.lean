@@ -551,6 +551,7 @@ import Omega.POM.TimeReversalFixedpointRatioDecay
 import Omega.POM.TimeReversalSignGeneralFiber
 import Omega.POM.TimeReversalSymmetricIndsetPolynomial
 import Omega.POM.ToggleCoxeterRelationsPath
+import Omega.POM.ToggleGaugeInvariantEndomorphismsC2Tensor
 import Omega.POM.ToggleGroupPathFullSymmetric
 import Omega.POM.ToggleOrbitCountBellProduct
 import Omega.POM.ToggleOrbitCountAsymptoticVolumeGroup

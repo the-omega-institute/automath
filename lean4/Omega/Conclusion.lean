@@ -264,6 +264,7 @@ import Omega.Conclusion.GodelAffineEllipseEquationIdentifiability
 import Omega.Conclusion.GodelSemidirectTwoadicAffineization
 import Omega.Conclusion.GodelSemidirectLaw
 import Omega.Conclusion.GodelLeyangIFS
+import Omega.Conclusion.GodelLeyangTruncationFiber
 import Omega.Conclusion.GodelPrefixArithmeticCriterion
 import Omega.Conclusion.GodelVsMinimalGap
 import Omega.Conclusion.GoldenAlternatingConstantsRecoverPhi
