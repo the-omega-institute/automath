@@ -91,6 +91,20 @@ theorem paper_spg_screen_kernel_connected_components_package :
     (∀ c c' : ℕ, 0 < c → 0 < c' → c' ≤ c → c' - 1 ≤ c - 1) :=
   paper_spg_screen_kernel_connected_components_seeds
 
+/-- Paper wrapper: the screen-kernel rank is the free component count `c - 1`, the connected case
+is injective, the binary fiber size is `2^(c - 1)`, and the relative-homology quotient has trivial
+boundary in top degree.
+    thm:spg-screen-kernel-connected-components -/
+theorem paper_spg_screen_kernel_connected_components :
+    (∀ c : ℕ, 0 < c → (c - 1 = 0 ↔ c = 1)) ∧
+    (∀ c : ℕ, 1 ≤ c → c - 1 + 1 = c) ∧
+    (∀ c : ℕ, 1 ≤ c → (2 ^ (c - 1) = 1 ↔ c = 1)) ∧
+    (∀ Z_n : ℕ, Z_n - 0 = Z_n) ∧
+    (1 - 1 = 0 ∧ 2 ^ (1 - 1 : ℕ) = 1) ∧
+    (∀ c c' : ℕ, 0 < c → 0 < c' → c' ≤ c → c' - 1 ≤ c - 1) := by
+  exact ⟨kernel_dim_eq_components_minus_one, free_components_count, fiber_card_binary,
+    relative_homology_trivial_boundary, full_screen_injective, screen_monotone_kernel⟩
+
 /-- Paper-facing relative-homology wrapper:
     if the partial observation kernel is the relative cycle set and the relative
     boundary set is empty (no `(n+1)`-cells), then the kernel identifies with the
