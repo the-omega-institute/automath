@@ -149,6 +149,7 @@ import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.SyncKernelWeighted.WittThetaDerivativeFilter
 import Omega.SyncKernelWeighted.WittRootOfUnityCommonPadicLimit
 import Omega.SyncKernelWeighted.WittUnitRootLimit
+import Omega.SyncKernelWeighted.WittDworkSupercongruenceMinusOne
 import Omega.SyncKernelWeighted.WittRenormMonoid
 import Omega.SyncKernelWeighted.ZeroInjectionValuePreserving
 import Omega.SyncKernelWeighted.TracePalindrome
