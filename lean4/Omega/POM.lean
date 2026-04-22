@@ -219,6 +219,7 @@ import Omega.POM.SufficientStatisticInjectiveDegeneracyClassification
 import Omega.POM.StepwiseExternalizationFreeCommutativeRigidity
 import Omega.POM.SymmetricDoubleThresholdPGFChebyshev
 import Omega.POM.FiberIndependenceComplexClassification
+import Omega.POM.SufficientRecoveryRateSinksBelowMaxfiber
 import Omega.POM.FiberLedgerPrefixSideinfoLength
 import Omega.POM.FiberLeyangChernoffUniqueMinimizer
 import Omega.POM.FiberLeyangKlBernoulliDecomposition
