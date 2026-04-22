@@ -1539,6 +1539,12 @@ def update_program_board(paper_name: str, stage: str, detail: str) -> None:
     Finds the row whose backtick-wrapped dir name matches paper_name
     and overwrites the status cell.  Thread-safe via _git_lock.
     """
+    if not CLAUDE_ENABLED:
+        logger.info(
+            "PROGRAM_BOARD update skipped in --no-claude mode: "
+            f"{paper_name} -> {stage}"
+        )
+        return
     if not PROGRAM_BOARD.exists():
         return
     new_status = f"{stage} ({detail})" if detail else stage
