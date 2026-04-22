@@ -26,6 +26,7 @@ import Omega.POM.BCInformationStokesCoboundary
 import Omega.POM.BCUniformLiftPseudofunctor
 import Omega.POM.TreeKlAmgmDecomposition
 import Omega.POM.BCPontryaginDualClassification
+import Omega.POM.BCAnomalyCharacterSupportEventualFreezing
 import Omega.POM.BCVisibleQuotientEventualStability
 import Omega.POM.BayesInfonceSecondCollisionDominance
 import Omega.POM.BayesErrorExplicitSharpAsymptotic
@@ -422,6 +423,7 @@ import Omega.POM.PressureReflectionInequality
 import Omega.POM.PressureSlopes
 import Omega.POM.ProfiniteAxisChebotarev
 import Omega.POM.ProfiniteCylinderCapacity
+import Omega.POM.SyncSubtractedChebotarevCapacity
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminant2x2FreeEncoding
 import Omega.POM.PrimeDeterminantAbelianizationFactorization
