@@ -130,6 +130,7 @@ import Omega.OperatorAlgebra.IndexDeterminantZeroControl
 import Omega.OperatorAlgebra.IndexGapCurvatureSecondVariation
 import Omega.OperatorAlgebra.IndexSubmultiplicativityCommutingSquare
 import Omega.OperatorAlgebra.JonesScalarEqualsExpMinusGap
+import Omega.OperatorAlgebra.FOLDsharpEqualsSharpP
 import Omega.OperatorAlgebra.LapseTimeGaugeInvariance
 import Omega.OperatorAlgebra.LapseWeightedWishKoksma
 import Omega.OperatorAlgebra.LyapunovSpectralRadiusCertificate
