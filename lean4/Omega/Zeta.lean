@@ -84,6 +84,7 @@ import Omega.Zeta.XiTerminalZmCdimBidirectionalMiLoglaw
 import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiWindow6WeylInvariantBestTwoOrbitCompression
 import Omega.Zeta.XiWindow6URFirstReturnTimeClosedForm
+import Omega.Zeta.XiCRTMultistageAxisCountScaling
 import Omega.Zeta.XiTimePart9wBasicRootUnityErrorExponentToOne
 import Omega.Zeta.XiTimePart9saUniformBaselineFixedBinaryExperiment
 import Omega.Zeta.XiTimePart9tTopGapAffineCapacitySegment
