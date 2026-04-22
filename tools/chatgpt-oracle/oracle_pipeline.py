@@ -397,6 +397,7 @@ def detect_target_journal(paper_dir: str) -> str:
 MAX_STAGE_A_ROUNDS = 5
 MAX_STAGE_B_ROUNDS = 99  # No practical limit — must pass Oracle gate
 MAX_STAGE_C_ROUNDS = 4
+DEFAULT_TARGET_JOURNAL = "Advances in Mathematics"
 
 # Borrowed from outreach pipeline: escalation & early-skip constants
 DEEP_MODE_THRESHOLD = 3   # After N consecutive non-pass B rounds, escalate to deep mode
@@ -1166,6 +1167,49 @@ def _find_claude() -> str:
     return "claude"
 
 CLAUDE_PATH = _find_claude()
+CLAUDE_LIMIT_PATTERNS = (
+    "hit your limit",
+    "usage limit",
+    "rate limit",
+    "resets ",
+)
+
+
+def _is_claude_unavailable_text(text: str) -> bool:
+    lower = (text or "").lower()
+    return any(pat in lower for pat in CLAUDE_LIMIT_PATTERNS)
+
+
+def claude_health_status(timeout_seconds: int = 45) -> tuple[bool, str]:
+    """Return whether Claude is available for required supervision gates."""
+    claude_bin = CLAUDE_PATH
+    if not Path(claude_bin).exists() and not shutil.which(claude_bin):
+        return False, f"Claude CLI not found: {claude_bin}"
+    cmd = [claude_bin, "-p", "--dangerously-skip-permissions"]
+    try:
+        result = subprocess.run(
+            cmd,
+            input='Return exactly {"valid": true} and nothing else.',
+            capture_output=True,
+            text=True,
+            timeout=timeout_seconds,
+            cwd=str(REPO_ROOT),
+            shell=IS_WINDOWS and str(claude_bin).endswith(".cmd"),
+            encoding="utf-8",
+            errors="replace",
+        )
+    except subprocess.TimeoutExpired:
+        return False, f"Claude health check timed out after {timeout_seconds}s"
+    text = "\n".join(x for x in (result.stdout, result.stderr) if x).strip()
+    excerpt = text.replace("\n", " ")[:300]
+    if _is_claude_unavailable_text(text):
+        return False, excerpt or "Claude reported a usage limit"
+    if result.returncode != 0:
+        return False, f"Claude health check failed rc={result.returncode}: {excerpt}"
+    if not re.search(r"""["']valid["']\s*:\s*true""", text,
+                     re.IGNORECASE):
+        return False, f"Claude health check returned unexpected output: {excerpt}"
+    return True, "Claude supervision available"
 
 
 def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
@@ -1187,8 +1231,7 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
 
     claude_bin = CLAUDE_PATH
     if not Path(claude_bin).exists() and not shutil.which(claude_bin):
-        logger.warning("Claude CLI not found — falling back to codex_exec")
-        return codex_exec(prompt, work_dir=work_dir, dry_run=dry_run)
+        raise RuntimeError(f"Claude CLI not found: {claude_bin}")
 
     cmd = [claude_bin, "-p", "--dangerously-skip-permissions"]
 
@@ -1205,19 +1248,24 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
             encoding="utf-8", errors="replace",
         )
     except subprocess.TimeoutExpired:
-        logger.warning(f"Claude CLI timed out after {timeout_seconds}s")
-        return "(timeout)"
+        raise RuntimeError(f"Claude CLI timed out after {timeout_seconds}s")
     finally:
         elapsed = time.monotonic() - start
         rc = result.returncode if result else "?"
         logger.info(f"Claude CLI: {elapsed:.1f}s (rc={rc})")
 
     output = result.stdout or ""
+    combined = "\n".join(
+        x for x in (result.stdout or "", result.stderr or "") if x
+    )
+    if _is_claude_unavailable_text(combined):
+        excerpt = combined.replace("\n", " ")[:300]
+        raise RuntimeError(f"Claude CLI unavailable: {excerpt}")
     if result and result.returncode != 0:
-        logger.warning(f"Claude CLI error: {result.stderr[:300]}")
-        if not output:
-            logger.warning("Falling back to codex_exec")
-            return codex_exec(prompt, work_dir=work_dir, dry_run=dry_run)
+        excerpt = combined.replace("\n", " ")[:300]
+        logger.warning(f"Claude CLI error: {excerpt}")
+        raise RuntimeError(
+            f"Claude CLI failed rc={result.returncode}: {excerpt}")
 
     return output
 
@@ -2927,7 +2975,7 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
         "suggested_journals": [
             {"name": "Journal of Functional Analysis", "fit_score": 8,
              "reason": "better scope match"},
-            {"name": "Advances in Mathematics", "fit_score": 5,
+            {"name": DEFAULT_TARGET_JOURNAL, "fit_score": 5,
              "reason": "too broad for this paper"},
         ],
     }
@@ -3425,6 +3473,17 @@ def _stage_a_block(state: PaperState, reason: str, *,
     return False
 
 
+def _stage_a_pause(state: PaperState, reason: str, *,
+                   tag: str = "") -> bool:
+    """Pause for infrastructure/tooling issues without blaming the paper."""
+    state.stage_a_passed = False
+    state.error = f"Stage A paused: {reason}"
+    logger.error(f"{tag} {state.error}")
+    state.log_event("A", "paused", detail=reason)
+    save_state(state)
+    return False
+
+
 def _run_stage_a_inventory(state: PaperState, *,
                            model: Optional[str] = None,
                            dry_run: bool = False,
@@ -3605,9 +3664,9 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 timeout_seconds=900, dry_run=dry_run)
             claude_scope_data = parse_json_from_output(claude_scope_out)
             if not claude_scope_data:
-                return _stage_a_block(
+                return _stage_a_pause(
                     state, "Claude scope brief missing or unparseable",
-                    dry_run=dry_run, tag=tag)
+                    tag=tag)
         _record_claude_supervision(
             state, "stage_a_scope_brief", claude_scope_data,
             raw=claude_scope_out)
@@ -3776,8 +3835,8 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 return True
 
             if audit.get("audit_unparseable"):
-                return _stage_a_block(state, "stage_a_audit_unparseable",
-                                      dry_run=dry_run, tag=tag)
+                return _stage_a_pause(state, "stage_a_audit_unparseable",
+                                      tag=tag)
 
             if audit.get("blockers") or audit.get("required_revisions"):
                 issues = {
@@ -4785,11 +4844,11 @@ def run_new_paper_pipeline(
             "fit_score": 9,
             "rationale": "dry run: topic matches ETDS scope",
             "alternatives": [
-                {"name": "Advances in Mathematics", "fit_score": 6,
+                {"name": DEFAULT_TARGET_JOURNAL, "fit_score": 6,
                  "reason": "broader scope"},
             ],
         }
-        selected = j_data.get("recommended_journal", "Advances in Mathematics")
+        selected = j_data.get("recommended_journal", DEFAULT_TARGET_JOURNAL)
         state.target_journal = selected
         state.log_event("N", "codex_journal_selection",
                         score=j_data.get("fit_score", 0),
@@ -4957,7 +5016,7 @@ STAGE_RUNNERS = {
 def run_paper_pipeline(
     paper_dir: str,
     *,
-    target_journal: str = "Advances in Mathematics",
+    target_journal: str = "",
     main_paper_dir: str = "",
     skip_to: str = "",
     dry_run: bool = False,
@@ -4986,13 +5045,22 @@ def run_paper_pipeline(
     # Prevents redoing Codex/Oracle work already committed in prior sessions.
     rebuild_rounds_from_git(state)
 
-    # Auto-detect target journal: paper metadata > CLI arg > default
+    # Auto-detect target journal: paper metadata/board > explicit CLI arg >
+    # existing state > conservative default.
     detected = detect_target_journal(str(paper_path))
     if detected:
         state.target_journal = detected
         logger.info(f"[{paper_name}] Auto-detected journal: {detected}")
-    else:
+    elif target_journal:
         state.target_journal = target_journal
+        logger.info(f"[{paper_name}] CLI target journal: {target_journal}")
+    elif state.target_journal:
+        logger.info(f"[{paper_name}] Reusing state target journal: "
+                    f"{state.target_journal}")
+    else:
+        state.target_journal = DEFAULT_TARGET_JOURNAL
+        logger.info(f"[{paper_name}] No journal metadata found; defaulting to "
+                    f"{DEFAULT_TARGET_JOURNAL}")
     if main_paper_dir:
         mp = Path(main_paper_dir)
         if not mp.is_absolute():
@@ -5012,7 +5080,7 @@ def run_paper_pipeline(
     tag = f"[{paper_name}]"
     logger.info(f"{'='*60}")
     logger.info(f"{tag} Pipeline start — Stage {state.current_stage}")
-    logger.info(f"{tag} Journal: {target_journal}")
+    logger.info(f"{tag} Journal: {state.target_journal}")
     logger.info(f"{tag} Main paper: {state.main_paper_dir or '(none)'}")
     logger.info(f"{'='*60}")
 
@@ -5460,8 +5528,9 @@ def main() -> int:
     # Review mode
     parser.add_argument("--paper", type=str, action="append")
     parser.add_argument("--all", action="store_true")
-    parser.add_argument("--target-journal", type=str,
-                        default="Advances in Mathematics")
+    parser.add_argument("--target-journal", type=str, default="",
+                        help=("Explicit target journal override. In review "
+                              "mode, omitted means board/paper metadata wins."))
     parser.add_argument("--main-paper", type=str, default="",
                         help="Main paper dir for Stage D backflow")
     parser.add_argument("--parallel", "-p", type=int, default=0,
@@ -5500,6 +5569,16 @@ def main() -> int:
             p.unlink()
             print(f"Reset: {args.reset}")
         return 0
+
+    if not args.dry_run:
+        claude_ok, claude_msg = claude_health_status()
+        if not claude_ok:
+            logger.error("Claude supervision unavailable; refusing to start "
+                         f"pipeline: {claude_msg}")
+            logger.error("No paper status was changed. Restart after Claude "
+                         "availability recovers, or run --dry-run for a "
+                         "non-mutating smoke test.")
+            return 2
 
     # ── New-paper mode ─────────────────────────────────────────
     if args.new:
