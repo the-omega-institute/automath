@@ -54,7 +54,10 @@ SECTION_RE = re.compile(
     re.DOTALL,
 )
 MANUAL_RESULT_ORDINAL_RE = re.compile(
-    "(?:Result|" + "\u7ed3\u679c" + r")\s*[0-9]+|[A-Z]{2,}(?:-[A-Z]{2,})+-[0-9]+",
+    "(?:Result|" + "\u7ed3\u679c" + r")\s*[0-9]+"
+    r"|[A-Z]{2,}(?:-[A-Z]{2,})+-[0-9]+"
+    r"|\\mathsf\{nr\}\s*=\s*[0-9]+"
+    r"|\bnr\s*=\s*[0-9]+",
     re.IGNORECASE,
 )
 
@@ -3378,13 +3381,16 @@ def _resolve_core_tex_path(value: str) -> Optional[Path]:
 
 def _is_wrapper_tex_file(path: Path) -> bool:
     """Return true for subfile/input routing files that are unsafe writeback targets."""
-    if path.name != "main.tex":
-        return False
     try:
         text = read_text(path)
     except OSError:
         return False
-    return bool(re.search(r"\\(?:input|subfile)\{", text))
+    input_count = len(re.findall(r"\\(?:input|subfile)\{", text))
+    if path.name == "main.tex":
+        return input_count > 0
+    if path.name.startswith("sec__") and input_count >= 3:
+        return True
+    return False
 
 
 def _target_priority(path: Path, context: Optional[dict[str, Any]] = None) -> tuple[int, int, int, int, int, str]:
