@@ -67,6 +67,7 @@ import Omega.Zeta.XiScanTailRatioPeeling
 import Omega.Zeta.XiScanAliasingThreshold
 import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
 import Omega.Zeta.XiLeyangEdDyExplicitDivisor
+import Omega.Zeta.XiEdYDivisorAndGroupLawIdentity
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
 import Omega.Zeta.XiLeyangTwoScaleCrossratioCrossingDrift
@@ -114,6 +115,7 @@ import Omega.Zeta.XiTerminalZmDeltaNodeOrderDiscriminantIndexRatio
 import Omega.Zeta.XiTerminalZmCdimBidirectionalMiLoglaw
 import Omega.Zeta.XiTerminalZmGodelPrefixCodeMiDifference
 import Omega.Zeta.XiWindow6KemenyConstantRational
+import Omega.Zeta.XiWindow6C3CyclicFiberTrisection
 import Omega.Zeta.XiWindow6WeylInvariantBestTwoOrbitCompression
 import Omega.Zeta.XiWindow6URFirstReturnTimeClosedForm
 import Omega.Zeta.XiCRTMultistageAxisCountScaling
