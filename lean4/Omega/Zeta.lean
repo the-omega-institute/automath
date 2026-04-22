@@ -826,6 +826,7 @@ import Omega.Zeta.XiTimePart64baFoldMultiplicityMajorizationBalancing
 import Omega.Zeta.XiTimePart9xaaWulffSchurMinimalSpectrum
 import Omega.Zeta.XiTimePart65fExactScreenSpanningTreeThreshold
 import Omega.Zeta.XiDyadicZeroTracking
+import Omega.Zeta.XiDirichletResidueFourierParsevalExact
 import Omega.Zeta.XiTimePart63cWindow6SchurPacketLockedByCharpoly
 import Omega.Zeta.XiHorizonConservativeRealization
 import Omega.Zeta.XiToeplitzReflectionOverrunIndexBound
