@@ -4445,8 +4445,29 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             state.paper_dir, issues_text, rnd,
             prior_issues=prior_issues_text,
             deep_mode=deep_mode)
-        codex_exec(fix_prompt, work_dir=paper_path,
-                   timeout_seconds=b4_timeout, model=model, dry_run=dry_run)
+        if not CLAUDE_ENABLED and issues:
+            item_timeout = 1200 if deep_mode else 900
+            for issue_idx, issue in enumerate(issues, 1):
+                single_issue_text = format_issues_for_codex([issue])
+                if not single_issue_text.strip():
+                    single_issue_text = str(issue)[:3000]
+                logger.info(f"{tag} Round {rnd}: B4.{issue_idx}/"
+                            f"{len(issues)} — Codex focused issue fix "
+                            f"(timeout={item_timeout}s)")
+                single_prompt = build_codex_fix_from_issues_prompt(
+                    state.paper_dir,
+                    single_issue_text,
+                    rnd,
+                    prior_issues=prior_issues_text,
+                    deep_mode=deep_mode,
+                )
+                codex_exec(single_prompt, work_dir=paper_path,
+                           timeout_seconds=item_timeout, model=model,
+                           dry_run=dry_run)
+        else:
+            codex_exec(fix_prompt, work_dir=paper_path,
+                       timeout_seconds=b4_timeout, model=model,
+                       dry_run=dry_run)
         compiled_b4 = compile_gate(paper_path, model=model,
                                    dry_run=dry_run, tag=f"{tag} B4")
         if not compiled_b4:
