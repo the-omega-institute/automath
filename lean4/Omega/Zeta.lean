@@ -553,6 +553,7 @@ import Omega.Zeta.XiHorizonExtremeResonanceTwoStage
 import Omega.Zeta.XiEndpointDefectH12EnergyPoissonL2Dissipation
 import Omega.Zeta.XiEndpointDefectEnergyKlBridgeExplicit
 import Omega.Zeta.XiEdInftyFiberHalvingTangentIntegral
+import Omega.Zeta.XiEdTQuadraticModelPrimitiveGenerator
 import Omega.Zeta.XiEndpointFirstNPlusOneProbesSharpToeplitzRecovery
 import Omega.Zeta.XiEndpointHeatProbeAbelStokesAtomRecovery
 import Omega.Zeta.XiEndpointHeatProbeHausdorffHankelClosure
@@ -754,6 +755,7 @@ import Omega.Zeta.XiTimePart9odEscortEscortFdivBinaryClosure
 import Omega.Zeta.XiTimePart9sbEscortChernoffSaddle
 import Omega.Zeta.XiTimePart9gCanonicalSubmonoidFreeMonoid
 import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
+import Omega.Zeta.XiTimePart9zqThreepointJensenRhDisproof
 import Omega.Zeta.XiTimePart9zbkPadeJacobiIdentity
 import Omega.Zeta.XiTimePart9zbgFoldpiFiniteRankMomentExhaustion
 import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage
