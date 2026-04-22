@@ -142,6 +142,7 @@ import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensor
 import Omega.POM.DiagonalRateDiagonalClosureRankone
 import Omega.POM.DiagonalRateDiagonalLaguerreDeterminant
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete
+import Omega.POM.DiagonalRateEulerDiagonalIdentity
 import Omega.POM.DiagonalRateDiagonalDeterminesSeparationProfile
 import Omega.POM.DiagonalRateMaxAtomExtremizer
 import Omega.POM.DiagonalRateRefreshFundamentalMatrixRankone
