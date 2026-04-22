@@ -578,6 +578,7 @@ import Omega.Zeta.XiEndpointTwoSymbolJet
 import Omega.Zeta.XiEndpointRecursiveRescalingTwoTerm
 import Omega.Zeta.XiEntropyGapExponentialSuppressionNonzeroFingerprint
 import Omega.Zeta.XiBinfoldRenyi2EntropyDefectConstant
+import Omega.Zeta.XiBinfoldZeroBlockCollisionGapDecoupling
 import Omega.Zeta.XiExceptionalIntegerModelMqInverseClosedForm
 import Omega.Zeta.XiExceptionalSecularGenericFullSymmetric
 import Omega.Zeta.XiFiberSpectrumFiniteMomentRigidity
