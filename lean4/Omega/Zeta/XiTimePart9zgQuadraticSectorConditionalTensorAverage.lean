@@ -207,4 +207,301 @@ theorem paper_xi_time_part9zg_quadratic_sector_conditional_tensor_average
   field_simp
   ring
 
+/-- Concrete block data for the splitting-density refinement: the observables are indicator
+functions of two finite blocks on which the sign characters are constant. -/
+structure xi_time_part9zg_quadratic_sector_conditional_splitting_density_data where
+  base : QuadraticSectorConditionalTensorAverageData
+  leftBlock : Finset base.α
+  rightBlock : Finset base.β
+  leftBlockSign : ℝ
+  rightBlockSign : ℝ
+  leftBlock_sign :
+    ∀ x : base.α, x ∈ leftBlock → base.leftSign x = leftBlockSign
+  rightBlock_sign :
+    ∀ y : base.β, y ∈ rightBlock → base.rightSign y = rightBlockSign
+  leftBlockSign_sq : leftBlockSign ^ 2 = 1
+  rightBlockSign_sq : rightBlockSign ^ 2 = 1
+  epsSign_sq : base.epsSign ^ 2 = 1
+  deltaSign_sq : base.deltaSign ^ 2 = 1
+
+noncomputable def xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_indicator
+    (D : xi_time_part9zg_quadratic_sector_conditional_splitting_density_data)
+    (x : D.base.α) : ℝ :=
+  if x ∈ D.leftBlock then 1 else 0
+
+noncomputable def xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_indicator
+    (D : xi_time_part9zg_quadratic_sector_conditional_splitting_density_data)
+    (y : D.base.β) : ℝ :=
+  if y ∈ D.rightBlock then 1 else 0
+
+noncomputable def xi_time_part9zg_quadratic_sector_conditional_splitting_density_tensor_data
+    (D : xi_time_part9zg_quadratic_sector_conditional_splitting_density_data) :
+    QuadraticSectorConditionalTensorAverageData where
+  α := D.base.α
+  β := D.base.β
+  instFintypeα := D.base.instFintypeα
+  instDecEqα := D.base.instDecEqα
+  instFintypeβ := D.base.instFintypeβ
+  instDecEqβ := D.base.instDecEqβ
+  leftObservable := xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_indicator D
+  rightObservable := xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_indicator D
+  leftSign := D.base.leftSign
+  rightSign := D.base.rightSign
+  epsSign := D.base.epsSign
+  deltaSign := D.base.deltaSign
+  cardα_pos := D.base.cardα_pos
+  cardβ_pos := D.base.cardβ_pos
+  leftSignMean_zero := D.base.leftSignMean_zero
+  rightSignMean_zero := D.base.rightSignMean_zero
+
+noncomputable def xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density
+    (D : xi_time_part9zg_quadratic_sector_conditional_splitting_density_data) : ℝ :=
+  D.base.leftAverage
+    (xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_indicator D)
+
+noncomputable def xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density
+    (D : xi_time_part9zg_quadratic_sector_conditional_splitting_density_data) : ℝ :=
+  D.base.rightAverage
+    (xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_indicator D)
+
+noncomputable def xi_time_part9zg_quadratic_sector_conditional_splitting_density_conditional_density
+    (D : xi_time_part9zg_quadratic_sector_conditional_splitting_density_data) : ℝ :=
+  (xi_time_part9zg_quadratic_sector_conditional_splitting_density_tensor_data D).sectorConditionalAverage
+
+def xi_time_part9zg_quadratic_sector_conditional_splitting_density_spec
+    (D : xi_time_part9zg_quadratic_sector_conditional_splitting_density_data) : Prop :=
+  xi_time_part9zg_quadratic_sector_conditional_splitting_density_conditional_density D =
+    if D.base.epsSign = D.leftBlockSign ∧ D.base.deltaSign = D.rightBlockSign then
+      4 * xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density D *
+        xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density D
+    else 0
+
+private lemma xi_time_part9zg_quadratic_sector_conditional_splitting_density_eq_one_or_neg_one
+    {a : ℝ} (ha : a ^ 2 = 1) : a = 1 ∨ a = -1 := by
+  have hprod : (a - 1) * (a + 1) = 0 := by
+    nlinarith [ha]
+  rcases mul_eq_zero.mp hprod with hleft | hright
+  · left
+    linarith
+  · right
+    linarith
+
+private lemma xi_time_part9zg_quadratic_sector_conditional_splitting_density_sign_factor
+    {a b : ℝ} (ha : a ^ 2 = 1) (hb : b ^ 2 = 1) :
+    1 + a * b = if a = b then 2 else 0 := by
+  rcases
+      xi_time_part9zg_quadratic_sector_conditional_splitting_density_eq_one_or_neg_one ha with
+    ha' | ha' <;>
+    rcases
+      xi_time_part9zg_quadratic_sector_conditional_splitting_density_eq_one_or_neg_one hb with
+    hb' | hb' <;>
+    norm_num [ha', hb']
+
+private lemma xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_signed_density
+    (D : xi_time_part9zg_quadratic_sector_conditional_splitting_density_data) :
+    D.base.leftAverage
+        (fun x =>
+          D.base.leftSign x *
+            xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_indicator D x) =
+      D.leftBlockSign *
+        xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density D := by
+  unfold QuadraticSectorConditionalTensorAverageData.leftAverage
+    xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density
+    xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_indicator
+  have hsum :
+      ∑ x : D.base.α, D.base.leftSign x * (if x ∈ D.leftBlock then 1 else 0) =
+        D.leftBlockSign * ∑ x : D.base.α, (if x ∈ D.leftBlock then 1 else 0) := by
+    calc
+      ∑ x : D.base.α, D.base.leftSign x * (if x ∈ D.leftBlock then 1 else 0)
+          = ∑ x : D.base.α, D.leftBlockSign * (if x ∈ D.leftBlock then 1 else 0) := by
+              refine Finset.sum_congr rfl ?_
+              intro x hx
+              by_cases hmem : x ∈ D.leftBlock
+              · simp [hmem, D.leftBlock_sign x hmem]
+              · simp [hmem]
+      _ = D.leftBlockSign * ∑ x : D.base.α, (if x ∈ D.leftBlock then 1 else 0) := by
+            rw [Finset.mul_sum]
+  rw [hsum]
+  calc
+    (D.leftBlockSign * ∑ x : D.base.α, if x ∈ D.leftBlock then 1 else 0) /
+        Fintype.card D.base.α =
+      D.leftBlockSign *
+        ((∑ x : D.base.α, if x ∈ D.leftBlock then 1 else 0) / Fintype.card D.base.α) := by
+          field_simp [Nat.cast_ne_zero.mpr (Nat.ne_of_gt D.base.cardα_pos)]
+    _ = D.leftBlockSign *
+        xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density D := by
+          rfl
+
+private lemma xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_signed_density
+    (D : xi_time_part9zg_quadratic_sector_conditional_splitting_density_data) :
+    D.base.rightAverage
+        (fun y =>
+          D.base.rightSign y *
+            xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_indicator D y) =
+      D.rightBlockSign *
+        xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density D := by
+  unfold QuadraticSectorConditionalTensorAverageData.rightAverage
+    xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density
+    xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_indicator
+  have hsum :
+      ∑ y : D.base.β, D.base.rightSign y * (if y ∈ D.rightBlock then 1 else 0) =
+        D.rightBlockSign * ∑ y : D.base.β, (if y ∈ D.rightBlock then 1 else 0) := by
+    calc
+      ∑ y : D.base.β, D.base.rightSign y * (if y ∈ D.rightBlock then 1 else 0)
+          = ∑ y : D.base.β, D.rightBlockSign * (if y ∈ D.rightBlock then 1 else 0) := by
+              refine Finset.sum_congr rfl ?_
+              intro y hy
+              by_cases hmem : y ∈ D.rightBlock
+              · simp [hmem, D.rightBlock_sign y hmem]
+              · simp [hmem]
+      _ = D.rightBlockSign * ∑ y : D.base.β, (if y ∈ D.rightBlock then 1 else 0) := by
+            rw [Finset.mul_sum]
+  rw [hsum]
+  calc
+    (D.rightBlockSign * ∑ y : D.base.β, if y ∈ D.rightBlock then 1 else 0) /
+        Fintype.card D.base.β =
+      D.rightBlockSign *
+        ((∑ y : D.base.β, if y ∈ D.rightBlock then 1 else 0) / Fintype.card D.base.β) := by
+          field_simp [Nat.cast_ne_zero.mpr (Nat.ne_of_gt D.base.cardβ_pos)]
+    _ = D.rightBlockSign *
+        xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density D := by
+          rfl
+
+/-- Indicator functions of conjugacy-class blocks reduce the conditional tensor-average formula to
+the sign-matching splitting-density table: mismatched signs give zero, while matched signs give a
+uniform factor `4` times the base product density.
+    thm:xi-time-part9zg-quadratic-sector-conditional-splitting-density -/
+theorem paper_xi_time_part9zg_quadratic_sector_conditional_splitting_density
+    (D : xi_time_part9zg_quadratic_sector_conditional_splitting_density_data) :
+    xi_time_part9zg_quadratic_sector_conditional_splitting_density_spec D := by
+  let T := xi_time_part9zg_quadratic_sector_conditional_splitting_density_tensor_data D
+  have hT : T.sectorAverageFormula := by
+    exact paper_xi_time_part9zg_quadratic_sector_conditional_tensor_average T
+  have hformula₀ :
+      xi_time_part9zg_quadratic_sector_conditional_splitting_density_conditional_density D =
+        (T.leftAverage
+            (xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_indicator D) +
+            D.base.epsSign *
+              T.leftAverage
+                (fun x =>
+                  D.base.leftSign x *
+                    xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_indicator
+                      D x)) *
+          (T.rightAverage
+            (xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_indicator D) +
+            D.base.deltaSign *
+              T.rightAverage
+                (fun y =>
+                  D.base.rightSign y *
+                    xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_indicator
+                      D y)) := by
+    simpa [T,
+      xi_time_part9zg_quadratic_sector_conditional_splitting_density_tensor_data,
+      xi_time_part9zg_quadratic_sector_conditional_splitting_density_conditional_density,
+      QuadraticSectorConditionalTensorAverageData.sectorAverageFormula,
+      QuadraticSectorConditionalTensorAverageData.leftSignedAverage,
+      QuadraticSectorConditionalTensorAverageData.rightSignedAverage] using hT
+  have hformula :
+      xi_time_part9zg_quadratic_sector_conditional_splitting_density_conditional_density D =
+        (xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density D +
+            D.base.epsSign * (D.leftBlockSign *
+              xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density D)) *
+          (xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density D +
+            D.base.deltaSign * (D.rightBlockSign *
+              xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density D)) := by
+    have hleft_avg :
+        T.leftAverage
+            (xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_indicator D) =
+          xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density D := by
+      rfl
+    have hright_avg :
+        T.rightAverage
+            (xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_indicator D) =
+          xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density D := by
+      rfl
+    have hleft_signed :
+        T.leftAverage
+            (fun x =>
+              D.base.leftSign x *
+                xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_indicator D x) =
+          D.leftBlockSign *
+            xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density D := by
+      simpa [T, xi_time_part9zg_quadratic_sector_conditional_splitting_density_tensor_data] using
+        xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_signed_density D
+    have hright_signed :
+        T.rightAverage
+            (fun y =>
+              D.base.rightSign y *
+                xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_indicator D y) =
+          D.rightBlockSign *
+            xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density D := by
+      simpa [T, xi_time_part9zg_quadratic_sector_conditional_splitting_density_tensor_data] using
+        xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_signed_density D
+    calc
+      xi_time_part9zg_quadratic_sector_conditional_splitting_density_conditional_density D =
+          (T.leftAverage
+              (xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_indicator D) +
+              D.base.epsSign *
+                T.leftAverage
+                  (fun x =>
+                    D.base.leftSign x *
+                      xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_indicator
+                        D x)) *
+            (T.rightAverage
+              (xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_indicator D) +
+              D.base.deltaSign *
+                T.rightAverage
+                  (fun y =>
+                    D.base.rightSign y *
+                      xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_indicator
+                        D y)) := hformula₀
+      _ = (xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density D +
+              D.base.epsSign * (D.leftBlockSign *
+                xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density D)) *
+            (xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density D +
+              D.base.deltaSign * (D.rightBlockSign *
+                xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density D)) := by
+            rw [hleft_avg, hleft_signed, hright_avg, hright_signed]
+  have hleft_factor :
+      1 + D.base.epsSign * D.leftBlockSign =
+        if D.base.epsSign = D.leftBlockSign then 2 else 0 := by
+    exact
+      xi_time_part9zg_quadratic_sector_conditional_splitting_density_sign_factor
+        D.epsSign_sq D.leftBlockSign_sq
+  have hright_factor :
+      1 + D.base.deltaSign * D.rightBlockSign =
+        if D.base.deltaSign = D.rightBlockSign then 2 else 0 := by
+    exact
+      xi_time_part9zg_quadratic_sector_conditional_splitting_density_sign_factor
+        D.deltaSign_sq D.rightBlockSign_sq
+  have hfactorized :
+      xi_time_part9zg_quadratic_sector_conditional_splitting_density_conditional_density D =
+        ((if D.base.epsSign = D.leftBlockSign then 2 else 0) *
+            xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density D) *
+          ((if D.base.deltaSign = D.rightBlockSign then 2 else 0) *
+            xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density D) := by
+    calc
+      xi_time_part9zg_quadratic_sector_conditional_splitting_density_conditional_density D =
+          ((1 + D.base.epsSign * D.leftBlockSign) *
+              xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density D) *
+            ((1 + D.base.deltaSign * D.rightBlockSign) *
+              xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density D) := by
+            rw [hformula]
+            ring
+      _ = ((if D.base.epsSign = D.leftBlockSign then 2 else 0) *
+            xi_time_part9zg_quadratic_sector_conditional_splitting_density_left_density D) *
+          ((if D.base.deltaSign = D.rightBlockSign then 2 else 0) *
+            xi_time_part9zg_quadratic_sector_conditional_splitting_density_right_density D) := by
+            rw [hleft_factor, hright_factor]
+
+  unfold xi_time_part9zg_quadratic_sector_conditional_splitting_density_spec
+  by_cases hε : D.base.epsSign = D.leftBlockSign
+  · by_cases hδ : D.base.deltaSign = D.rightBlockSign
+    · simp [hfactorized, hε, hδ]
+      ring
+    · simp [hfactorized, hε, hδ]
+  · by_cases hδ : D.base.deltaSign = D.rightBlockSign
+    · simp [hfactorized, hε, hδ]
+    · simp [hfactorized, hε, hδ]
+
 end Omega.Zeta
