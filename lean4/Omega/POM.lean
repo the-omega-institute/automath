@@ -369,6 +369,7 @@ import Omega.POM.MomqPermutationSymmetry
 import Omega.POM.MomqTensorKernelNoncommutativeFibonacciPowers
 import Omega.POM.MultiwellLowTemperatureExpansionIdentifiability
 import Omega.POM.MultiAxisMixingBudgetBarrier
+import Omega.POM.MultiAxisNear1PoleBarrier
 import Omega.POM.MultiAxisNear1Density
 import Omega.POM.MultiplicativeChainRuleFinite
 import Omega.POM.MultiplicityBinetTwoParameterNormalForm
