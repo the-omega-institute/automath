@@ -1476,9 +1476,8 @@ def update_program_board(paper_name: str, stage: str, detail: str) -> None:
                 break
             if updated:
                 PROGRAM_BOARD.write_text("\n".join(lines), encoding="utf-8")
-                run_cmd(["git", "add", str(PROGRAM_BOARD)])
                 _invalidate_board_cache()
-                logger.info(f"PROGRAM_BOARD updated: {paper_name} ��� {new_status}")
+                logger.info(f"PROGRAM_BOARD updated: {paper_name} -> {new_status}")
             else:
                 logger.warning(
                     f"Paper {paper_name} not found in PROGRAM_BOARD.md — "
