@@ -459,6 +459,7 @@ import Omega.POM.PressureConvexity
 import Omega.POM.PressureReflectionInequality
 import Omega.POM.PressureSlopes
 import Omega.POM.ProfiniteAxisChebotarev
+import Omega.POM.ProfiniteCylinderEffectiveN
 import Omega.POM.ProfiniteCylinderCapacity
 import Omega.POM.SyncSubtractedChebotarevCapacity
 import Omega.POM.PrimeAxisVs2dExternalization
