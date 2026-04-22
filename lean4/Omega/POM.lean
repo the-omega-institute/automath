@@ -26,6 +26,7 @@ import Omega.POM.BCTowerFlatness
 import Omega.POM.BCQuotientStrictify
 import Omega.POM.BCQuotientUniversal
 import Omega.POM.BCHighOrderLedgerDecomposition
+import Omega.POM.BqIsSymqAndSpectrum
 import Omega.POM.BqTraceLucas
 import Omega.POM.BCInformationStokesCoboundary
 import Omega.POM.BCUniformLiftPseudofunctor
