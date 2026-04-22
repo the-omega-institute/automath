@@ -6,8 +6,11 @@
 This section contains the main dynamical theorem of the paper.  It
 applies the weighted boundary transfer theorem to first-entry residue
 events of Markov holes, so that the boundary matrix becomes the killed
-transfer matrix and the finite-observation exponent becomes the escape
-rate.  The study of escape rates through holes in dynamical systems
+transfer matrix.  Degenerate residue classes are classified below:
+they are eventually decided on the relevant residue subsequence, while
+all remaining subsequences have the killed survivor exponent.  In the
+two-terminal non-degenerate case the finite-observation exponent becomes
+the escape rate.  The study of escape rates through holes in dynamical systems
 originates with
 \citet{PianigianiYorke1979}; the transfer-operator approach for
 topological Markov chains was developed by
@@ -405,6 +408,160 @@ Since \(Y_H\) is a topologically mixing one-step subshift with alphabet
 \]
 The escape-rate interpretation follows from the comparison with
 \(\nu_\varphi(\tau_H\geq m)\).
+\end{proof}
+
+\begin{proposition}[Degenerate residue dichotomy]
+\label{prop:degenerate-residue-dichotomy}
+Assume the finite Markov-hole setting of
+Theorem~\ref{thm:first-entry-escape-rate}, including the mixing survivor
+subshift, but do not assume the two-terminal residue reachability
+condition.  Define \(p_{i,r}\), \(\beta_{i,r}\), \(b_r\), \(B_H\), and
+\(u\) as in that theorem.  Order
+\(\mathcal S=\mathcal S_\infty\sqcup\mathcal T\) and write
+\[
+  B_H=
+  \begin{pmatrix}
+    B_\infty & C\\
+    0 & Q
+  \end{pmatrix},
+\]
+where \(B_\infty=B_H|_{\mathcal S_\infty}\).  Let
+\(\rho_H=\rho(B_\infty)\), let \(\ell_\infty>0\) be a left
+Perron--Frobenius eigenvector of \(B_\infty\), and set
+\[
+  \ell_H^{\mathsf T}
+  :=
+  \bigl(
+    \ell_\infty^{\mathsf T},
+    \ell_\infty^{\mathsf T}C(\rho_H I-Q)^{-1}
+  \bigr),
+  \qquad
+  \xi_H:=\frac{\ell_H}{\ell_H^{\mathsf T}\mathbf 1}.
+\]
+For every \(m\geq1\),
+\[
+  \varepsilon_m(\mathsf P_R;\nu_\varphi)
+  =
+  u^{\mathsf T}B_H^{m-1}b_{m-1\bmod q}.
+\]
+For each \(r\in\ZZ/q\ZZ\), put
+\[
+  a_r:=\xi_H^{\mathsf T}b_r.
+\]
+Then exactly one of the following alternatives holds on the subsequence
+\(m=nq+r+1\):
+\begin{enumerate}[label=(\roman*)]
+  \item If \(a_r>0\), then
+  \[
+    \lim_{n\to\infty}
+    \frac{\varepsilon_{nq+r+1}(\mathsf P_R;\nu_\varphi)}
+         {\nu_\varphi(\tau_H\ge nq+r+1)}
+    =a_r,
+  \]
+  and this subsequence has escape exponent \(-\log\rho_H\).
+  \item If \(a_r=0\), then
+  \[
+    \varepsilon_{nq+r+1}(\mathsf P_R;\nu_\varphi)=0
+  \]
+  for all sufficiently large \(n\).  Thus the residue event is eventually
+  decided by every safe prefix in that congruence class.
+\end{enumerate}
+Consequently the full sequence recovers the escape exponent
+\(-\log\rho_H=P_Y(\varphi)-P_{Y_H}(\varphi)\) precisely when
+\(a_r>0\) for every \(r\).  The two-terminal reachability hypothesis of
+Theorem~\ref{thm:first-entry-escape-rate} is a finite graph condition
+which implies this positivity for every residue class.
+\end{proposition}
+
+\begin{proof}
+The cylinder computation in the proof of
+Theorem~\ref{thm:first-entry-escape-rate} does not use the positive lower
+bound on the ambiguities.  If a length-\(m\) cylinder has already met the
+hole, the truth value of \(\mathsf P_R\) is decided and its contribution
+to the Bayes error is \(0\).  If the cylinder is safe through time
+\(m-1\), the Markov property gives
+\[
+  \nu_\varphi(\mathsf P_R\mid[a])
+  =
+  p_{a_{m-1},\,m-1\bmod q},
+\]
+so Proposition~\ref{prop:scan-error-cylinder} gives
+\[
+  \varepsilon_m(\mathsf P_R;\nu_\varphi)
+  =
+  \sum_{\substack{a\in A^m\\ a_t\in\mathcal S\ \forall t<m}}
+      \nu_\varphi([a])\,
+      \beta_{a_{m-1},\,m-1\bmod q}
+  =
+  u^{\mathsf T}B_H^{m-1}b_{m-1\bmod q}.
+\]
+
+As in the proof of Theorem~\ref{thm:first-entry-escape-rate}, there is
+no safe edge from \(\mathcal T\) into \(\mathcal S_\infty\), and the
+directed graph on \(\mathcal T\) is acyclic.  Hence \(Q\) is nilpotent,
+\(\rho_H I-Q\) is invertible, and
+\(\ell_H^{\mathsf T}B_H=\rho_H\ell_H^{\mathsf T}\).
+Let \(r_H>0\) be the right Perron--Frobenius eigenvector of
+\(B_\infty\), normalized by
+\(\ell_\infty^{\mathsf T}r_H=1\).  If \(Q^M=0\), then for \(N\geq M\)
+and \(v=(v_\infty,v_T)\),
+\[
+  u^{\mathsf T}B_H^N v
+  =
+  u_\infty^{\mathsf T}B_\infty^N v_\infty
+  + \sum_{j=0}^{M-1}
+      u_\infty^{\mathsf T}B_\infty^{N-1-j}CQ^j v_T.
+\]
+Perron--Frobenius theory for the primitive matrix \(B_\infty\) gives
+\[
+  B_\infty^N
+  =
+  \rho_H^N r_H\ell_\infty^{\mathsf T}+O(\vartheta^N)
+\]
+for some \(0\leq\vartheta<\rho_H\).  Therefore
+\[
+  u^{\mathsf T}B_H^N v
+  =
+  (u_\infty^{\mathsf T}r_H)(\ell_H^{\mathsf T}v)\rho_H^N
+  +O(\vartheta^N).
+\]
+Taking \(v=b_r\) and \(v=\mathbf1\) proves the displayed ratio limit
+whenever \(a_r>0\), and hence the escape exponent on that subsequence.
+
+It remains to prove that \(a_r=0\) forces eventual zero error.  Since
+\(\ell_H\geq0\) and \(b_r\geq0\), the equality
+\(\ell_H^{\mathsf T}b_r=0\) implies \(b_r(i)=0\) for every state
+\(i\) with \(\ell_H(i)>0\).  The support
+\[
+  \mathcal R_\infty:=\set{i\in\mathcal S:\ell_H(i)>0}
+\]
+is forward invariant for the safe graph: if \(i\in\mathcal R_\infty\)
+and \(B_H(i,j)>0\), then
+\[
+  0<\ell_H(i)B_H(i,j)\leq(\ell_H^{\mathsf T}B_H)_j
+  =\rho_H\ell_H(j),
+\]
+so \(j\in\mathcal R_\infty\).  It contains
+\(\mathcal S_\infty\), because \(\ell_\infty>0\).  Thus every safe path
+which starts in \(\mathcal S_\infty\) ends in \(\mathcal R_\infty\),
+where \(b_r\) vanishes.  A safe path which starts in
+\(\mathcal T\setminus\mathcal R_\infty\) either enters
+\(\mathcal R_\infty\), after which the same conclusion applies, or stays
+inside the acyclic graph on \(\mathcal T\setminus\mathcal R_\infty\);
+the latter can happen for only uniformly bounded length.  Hence, for all
+sufficiently large \(N\), every non-zero path contributing to
+\(u^{\mathsf T}B_H^N b_r\) has terminal state in
+\(\mathcal R_\infty\), and its terminal weight is \(0\).  Therefore
+\(u^{\mathsf T}B_H^N b_r=0\) for all sufficiently large \(N\), which is
+the asserted eventual vanishing with \(N=nq+r\).
+
+The pressure identity
+\(-\log\rho_H=P_Y(\varphi)-P_{Y_H}(\varphi)\) is the one proved in
+Theorem~\ref{thm:first-entry-escape-rate}; it uses only the killed
+matrix restricted to \(\mathcal S_\infty\), not residue
+non-degeneracy.  Finally, if the two terminal vertices are reachable
+from every \((i,r)\), Lemma~\ref{lem:residue-reachability} gives
+\(b_r(i)>0\) for all \(i,r\), and hence \(a_r>0\) for every \(r\).
 \end{proof}
 
 \begin{corollary}[Survivor pressure recovery]
