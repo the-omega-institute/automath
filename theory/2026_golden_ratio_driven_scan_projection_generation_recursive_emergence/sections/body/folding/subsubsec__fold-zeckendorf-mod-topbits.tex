@@ -344,6 +344,52 @@ f_m(r)=f_m(F_{m+1}-2-r).
 \leanverified{paper\_folding\_weight\_count\_palindrome}
 \end{proposition}
 
+% --- Distillation writeback ---
+\begin{definition}[fold-aware 跨分辨率限制]\label{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-fold-aware-cross-resolution}
+\textbf{结果 17；日期：2026-04-23T03:31:39+08:00。依赖状态：construction.}
+设 \(m\ge h\ge 1\)，并令 \(Z(N(\omega))=(c_1,c_2,\ldots)\) 为 \(N(\omega)\) 的 Zeckendorf 数字序列。定义 fold-aware 跨分辨率限制
+\[
+\Fold^{\rm aw}_{m\to h}:\Omega_m\longrightarrow X_h,
+\qquad
+\Fold^{\rm aw}_{m\to h}(\omega):=(c_1,\ldots,c_h).
+\]
+同时记稳定前缀投影为
+\[
+\pr_{m,h}:X_m\longrightarrow X_h,
+\qquad
+\pr_{m,h}(x_1,\ldots,x_m):=(x_1,\ldots,x_h).
+\]
+该对象不是把原始输入字 \(\omega\) 截成前 \(h\) 位后再施行 \(\Fold_h\)；它先在同一个整数 \(N(\omega)\) 上取 Zeckendorf 稳定展开，再取稳定前缀。因此它避免了把朴素输入截断误认为跨分辨率不变量的幻觉。
+\end{definition}
+
+\begin{proposition}[fold-aware 限制与稳定前缀交换]\label{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-fold-aware-prefix-commutation}
+\textbf{结果 18；日期：2026-04-23T03:31:39+08:00。依赖状态：rigidity.}
+对任意 \(m\ge h\ge 1\)，有严格交换关系
+\[
+\Fold^{\rm aw}_{m\to h}=\pr_{m,h}\circ\Fold_m.
+\]
+因此，若 \(\gamma_h:X_h\to Y_h\) 是任意 coarse carrier 映射，则
+\[
+\gamma_h\circ\Fold^{\rm aw}_{m\to h}
+=
+(\gamma_h\circ\pr_{m,h})\circ\Fold_m.
+\]
+特别地，所有跨分辨率 sticky/non-sticky 测试若经由 \(\gamma_h\) 读出，都可完全下降到稳定代表 \(\Fold_m(\omega)\) 的前缀，而不依赖原始微态字的朴素前缀。
+\end{proposition}
+\begin{proof}
+由定义，\(\Fold_m(\omega)\) 正是 \(Z(N(\omega))\) 的前 \(m\) 个 Zeckendorf 稳定位，即
+\[
+\Fold_m(\omega)=(c_1,\ldots,c_m).
+\]
+对其施加稳定前缀投影 \(\pr_{m,h}\)，得到
+\[
+\pr_{m,h}(\Fold_m(\omega))=(c_1,\ldots,c_h).
+\]
+右端按定义正是 \(\Fold^{\rm aw}_{m\to h}(\omega)\)。故第一式成立。第二式仅是在第一式两端复合 \(\gamma_h\)。最后一句说明：若 carrier 读出为 \(\gamma_h\)，则其跨尺度值已经由稳定前缀决定；这里未使用、也不需要使用原始输入字的前 \(h\) 位，因此不会把 \(\Fold_h(\omega_1,\ldots,\omega_h)\) 误作跨分辨率不变量。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 由定理 \ref{thm:fold-zeckendorf-mod-decomposition-unique}，$v_m(\Fold_m(\omega))$ 是 $N(\omega)$ 模 $M_m$ 的规范代表，且 $0\le N(\omega)<2M_m$，故事件 $\{v_m(\Fold_m(\omega))=r\}$ 等价于 $\{N(\omega)\in\{r,M_m+r\}\}$，从而得到第一式。
 对合 $\omega\mapsto\bar\omega$ 满足 $N(\bar\omega)=T_m-N(\omega)$，故 $a_m(s)=a_m(T_m-s)$。注意

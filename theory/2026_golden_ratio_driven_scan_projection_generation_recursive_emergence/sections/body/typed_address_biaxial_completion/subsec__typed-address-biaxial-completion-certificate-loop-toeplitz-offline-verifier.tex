@@ -261,75 +261,74 @@ S_r(w):=S(rw),
 \end{proposition}
 
 % --- Distillation writeback ---
-\begin{definition}[branch-pure 的嵌套证书走廊]\label{def:distill-typed-branch-pure-certificate-corridor}
-\textbf{依赖状态：construction.}
-沿定义 \ref{def:typed-address-biaxial-completion-unified-offline-verifier}，记
+\begin{proposition}[branch-pure strictification 的寄存器下界]\label{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-branch-pure-strictification-register-lower-bound}
+\textbf{结果 23；日期：2026-04-23T03:31:39+08:00。依赖状态：obstruction.}
+沿用定义 \ref{def:distill-typed-branch-pure-certificate-corridor}。令 \(E_N\subset\mathcal E_N^\tau\) 为非空 active fine certificate set，并记
 \[
-\mathsf{Cert}^{\mathrm{off}}
-=\mathsf{Cert}_{\mathrm{def}}
-\sqcup\mathsf{Cert}_{\mathrm{psd}}
-\sqcup\mathrm{Addr}_{\mathrm{US}}.
+\pi:=\pi_{N,M}^\tau|_{E_N}:E_N\to C_M(E_N),
+\qquad
+\mu:=\mu_{N|M}^\tau(E_N).
 \]
-令
+称有限寄存器 \(R\) 与映射 \(r:E_N\to R\) 在该 branch-pure 走廊上 strictify coarse ambiguity，若
 \[
-\tau\in\{\mathrm{def},\mathrm{psd},\mathrm{addr}\}.
+E_N\longrightarrow C_M(E_N)\times R,
+\qquad
+e\longmapsto (\pi(e),r(e))
 \]
-一个深度区间 \(M<N\) 上的 active certificate corridor 称为 branch-pure，若存在有限集
+为单射。则任何这样的 strictification 都满足
 \[
-\mathcal E_N^\tau\subset
-\begin{cases}
-\mathsf{Cert}_{\mathrm{def}},&\tau=\mathrm{def},\\
-\mathsf{Cert}_{\mathrm{psd}},&\tau=\mathrm{psd},\\
-\mathrm{Addr}_{\mathrm{US}},&\tau=\mathrm{addr},
-\end{cases}
+|R|\ge\mu.
 \]
-以及同一分支内的 coarse map
+特别地，若 \(R=(\mathbb F_p)^B\)，则
 \[
-\pi_{N,M}^\tau:\mathcal E_N^\tau\longrightarrow \mathcal E_M^\tau
+B\ge \left\lceil\log_p\mu\right\rceil.
 \]
-其中 \(\mathcal E_M^\tau\) 仍位于同一个直和 summand。也就是说，一条 branch-pure 走廊不允许把 Jensen 缺陷证书、Toeplitz--PSD 证书与地址查询混合成同一个 active fibre。
-\end{definition}
-
-\begin{proposition}[branch-pure 证书走廊的 coarse--fine 多重度乘积]\label{prop:distill-typed-branch-pure-multiplicity-product}
-\textbf{依赖状态：rigidity.}
-沿定义 \ref{def:distill-typed-branch-pure-certificate-corridor}。令 \(E_N\subset\mathcal E_N^\tau\) 为非空 active fine certificate set，并定义 coarse support
+进一步，设存在某个 coarse certificate \(c\in C_M(E_N)\)、有限向量空间 \(A_L=(\mathbb F_p)^L\)、以及 fibre mark
 \[
-C_M(E_N):=\pi_{N,M}^\tau(E_N)
+\theta:E_N\cap\pi^{-1}(c)\to A_L
 \]
-与 fine-overlap multiplicity
+满足：对某个 \(e_0\in E_N\cap\pi^{-1}(c)\)，差集
 \[
-\mu_{N|M}^\tau(E_N):=\max_{c\in C_M(E_N)}
-\bigl|E_N\cap (\pi_{N,M}^\tau)^{-1}(c)\bigr|.
+\{\theta(e)-\theta(e_0):e\in E_N\cap\pi^{-1}(c)\}
 \]
-非空假设保证最大值存在。则
+张成维数为 \(L_0\) 的子空间；并且 \(\theta\) 通过线性寄存器读出实现，即存在 \(\mathbb F_p\)-线性映射 \(\rho:(\mathbb F_p)^B\to A_L\) 使
 \[
-|E_N|\le |C_M(E_N)|\,\mu_{N|M}^\tau(E_N).
+\theta(e)=\rho(r(e))
+\qquad(e\in E_N\cap\pi^{-1}(c)).
 \]
-因此，对任意整数预算 \(B_{\rm coarse},B_{\rm fine}\ge1\)，若
+则必有
 \[
-|E_N|>B_{\rm coarse}B_{\rm fine},
+B\ge L_0.
 \]
-则必有一个同分支的有限过载见证：或者
-\[
-|C_M(E_N)|>B_{\rm coarse},
-\]
-或者存在 \(c\in C_M(E_N)\) 使
-\[
-\bigl|E_N\cap (\pi_{N,M}^\tau)^{-1}(c)\bigr|>B_{\rm fine}.
-\]
-该见证属于同一个 verifier syntax branch \(\tau\)：当 \(\tau=\mathrm{def}\) 时是 Jensen 缺陷证书走廊中的过载；当 \(\tau=\mathrm{psd}\) 时是 Toeplitz--PSD 证书走廊中的过载；当 \(\tau=\mathrm{addr}\) 时是地址逆系统走廊中的过载。
+这些下界只使用 branch-pure 的有限 coarse map 与同分支 fibre，不假设证书对象形成 torsor、层或可粘接对象；因而它们是统一离线验证器语法中的纯预算障碍。
 \end{proposition}
 \begin{proof}
-由于 \(E_N\) 非空，\(C_M(E_N)\) 亦非空。按 coarse certificate 分块，得到不交并
+取 \(c_\ast\in C_M(E_N)\) 使
 \[
-E_N=\bigsqcup_{c\in C_M(E_N)}
-\bigl(E_N\cap (\pi_{N,M}^\tau)^{-1}(c)\bigr).
+|E_N\cap\pi^{-1}(c_\ast)|=\mu.
 \]
-每个分块大小不超过 \(\mu_{N|M}^\tau(E_N)\)，故
+若 \(e,e'\in E_N\cap\pi^{-1}(c_\ast)\) 且 \(r(e)=r(e')\)，则
 \[
-|E_N|\le |C_M(E_N)|\mu_{N|M}^\tau(E_N).
+(\pi(e),r(e))=(c_\ast,r(e))=(c_\ast,r(e'))=(\pi(e'),r(e')).
 \]
-若两个预算同时满足 \(|C_M(E_N)|\le B_{\rm coarse}\) 与 \(\mu_{N|M}^\tau(E_N)\le B_{\rm fine}\)，则上式给出 \(|E_N|\le B_{\rm coarse}B_{\rm fine}\)，与假设矛盾。故至少一个预算失败。branch-pure 条件保证 \(\pi_{N,M}^\tau\) 的定义域、值域以及所有 fibre 都位于同一 summand 中，所以得到的过载见证不会混合 Jensen、Toeplitz 与地址三种验证语法。证毕。
+由 strictification 的单射性得 \(e=e'\)。故 \(r\) 在该 fibre 上单射，从而
+\[
+|R|\ge |E_N\cap\pi^{-1}(c_\ast)|=\mu.
+\]
+当 \(R=(\mathbb F_p)^B\) 时，\(|R|=p^B\)，于是 \(p^B\ge\mu\)，即
+\[
+B\ge\lceil\log_p\mu\rceil.
+\]
+
+对最后的线性 mark 断言，固定 \(e_0\)。由假设，所有差
+\[
+\theta(e)-\theta(e_0)=\rho(r(e))-\rho(r(e_0))=\rho(r(e)-r(e_0))
+\]
+都属于 \(\operatorname{im}\rho\)。这些差张成维数 \(L_0\) 的子空间，故
+\[
+L_0\le \dim_{\mathbb F_p}\operatorname{im}\rho\le B.
+\]
+这给出 \(B\ge L_0\)。整个证明只涉及同一 summand \(\tau\) 内的有限 fibre 与寄存器读出，没有使用任何跨分支粘接或 torsor 结构。证毕。
 \end{proof}
 
 % --- End distillation writeback ---

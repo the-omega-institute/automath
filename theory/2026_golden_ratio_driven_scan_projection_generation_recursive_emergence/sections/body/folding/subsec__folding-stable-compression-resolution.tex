@@ -80,56 +80,64 @@ m_{\mathrm{agg}}(\bar\omega):=-\log_2\sum_{\omega\in\Pi_n^{-1}(\bar\omega)}2^{-m
 \end{proposition}
 
 % --- Distillation writeback ---
-\begin{definition}[折叠纤维的整数深度 sticky 测试]\label{def:distill-folding-integer-depth-sticky-test}
-\textbf{依赖状态：construction.}
-固定分辨率 \(m\)，并沿用 \(\Fold_m:\Omega_m\to X_m\) 与 \(d_m(x)=|\Fold_m^{-1}(x)|\) 的记号。令
+\begin{theorem}[dyadic carrier pigeonholing 下的 sticky 或尺度失衡]\label{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-dyadic-sticky-or-scale-imbalance}
+\textbf{结果 19；日期：2026-04-23T03:31:39+08:00。依赖状态：rigidity / conditional routing.}
+沿用定义 \ref{def:distill-folding-integer-depth-sticky-test}。设 \(E\subset X_m\) 非空，并令
 \[
-\gamma_{m,h}:X_m\longrightarrow Y_h
+p_y:=\nu_{E,q}(E\cap\gamma_{m,h}^{-1}(y)),
+\qquad y\in C_{m,h}(E):=\gamma_{m,h}(E).
 \]
-为一个有限 coarse carrier 映射，其中 \(Y_h\) 是有限集合，\(h<m\)。给定非空 \(E\subset X_m\) 与整数 \(q\ge 1\)，定义 escort 质量
+记
 \[
-\nu_{E,q}(A):=
-\frac{\sum_{x\in A\cap E}d_m(x)^q}{\sum_{x\in E}d_m(x)^q}
-\qquad(A\subset X_m).
+p_{\min}:=\min\{p_y:y\in C_{m,h}(E)\},
+\qquad
+J_E:=\left\lceil \log_2\frac1{p_{\min}}\right\rceil,
+\qquad
+L_E:=J_E+1.
 \]
-给定整数 \(s\ge1\)，称 \(E\) 在 \(\gamma_{m,h}\) 上为 \(s\)-sticky，若存在 \(y\in Y_h\) 使
+对 \(0\le j\le J_E\) 定义 dyadic carrier band
 \[
-\nu_{E,q}\bigl(E\cap\gamma_{m,h}^{-1}(y)\bigr)>2^{-s}.
+B_j:=\{y\in C_{m,h}(E):2^{-(j+1)}<p_y\le 2^{-j}\},
+\qquad
+\beta_j:=\sum_{y\in B_j}p_y.
 \]
-若对所有 \(y\in Y_h\) 都有上述质量不超过 \(2^{-s}\)，则称 \(E\) 为 \(s\)-non-sticky。
-\end{definition}
-
-\begin{proposition}[non-sticky 分支给出 coarse-carrier 深度增益]\label{prop:distill-folding-nonsticky-carrier-depth-gain}
-\textbf{依赖状态：rigidity.}
-沿定义 \ref{def:distill-folding-integer-depth-sticky-test}。若非空有限族 \(E\subset X_m\) 为 \(s\)-non-sticky，则其 occupied coarse carrier 集
+则存在 \(j\in\{0,\ldots,J_E\}\) 使得
 \[
-C_{m,h}(E):=\gamma_{m,h}(E)
+\beta_j\ge L_E^{-1}.
 \]
-满足
-\[
-|C_{m,h}(E)|\ge 2^s,
-\]
-且 carrier 熵
-\[
-H_{m,h}(E):=-\sum_{y\in C_{m,h}(E)}p_y\log p_y,\qquad
-p_y:=\nu_{E,q}\bigl(E\cap\gamma_{m,h}^{-1}(y)\bigr),
-\]
-满足
-\[
-H_{m,h}(E)\ge s\log 2.
-\]
-等价地，若 \(|C_{m,h}(E)|<2^s\)，则 \(E\) 必为 \(s\)-sticky。因而在给定 coarse-fine carrier 映射后，non-sticky 不是单纯的非集中描述，而是一个精确的整数 residual-depth gain：至少 \(s\) 个二进深度单位必须在 coarse carrier 支撑中显影。
-\end{proposition}
+进一步，给定整数 \(s\ge1\)，必有以下二者之一：
+\begin{enumerate}
+  \item \(E\) 为 \(s\)-sticky；
+  \item 存在某个 \(j\ge s\) 使得
+  \[
+  \beta_j\ge L_E^{-1},
+  \qquad
+  |B_j|\ge 2^jL_E^{-1}\ge 2^sL_E^{-1},
+  \]
+  且该 band 内所有 occupied carrier 的 escort 质量彼此相差至多一个因子 \(2\)。
+\end{enumerate}
+因此，在给定 carrier 映射后，任意非 sticky 的候选坏例子并非弥散地失败；经过 dyadic pigeonholing 后，它必须在某个可审计质量层上显影为大量同阶 occupied carrier 的尺度失衡。
+\end{theorem}
 \begin{proof}
-设 \(E\) 为 \(s\)-non-sticky。则对每个 \(y\in C_{m,h}(E)\) 都有 \(p_y\le 2^{-s}\)，且 \(\sum_y p_y=1\)。于是
+由于 \(E\) 非空，集合 \(C_{m,h}(E)\) 非空且 \(p_y>0\) 对其中每个 \(y\) 成立，并且
 \[
-1=\sum_{y\in C_{m,h}(E)}p_y\le |C_{m,h}(E)|\,2^{-s},
+\sum_{y\in C_{m,h}(E)}p_y=1.
 \]
-从而 \(|C_{m,h}(E)|\ge2^s\)。熵下界由标准有限概率不等式
+按 \(p_y\) 所在 dyadic 区间分解，集合 \(B_0,\ldots,B_{J_E}\) 覆盖 \(C_{m,h}(E)\)。因此
 \[
-H_{m,h}(E)=\sum_y p_y\log\frac1{p_y}\ge \sum_y p_y\log(2^s)=s\log2
+\sum_{j=0}^{J_E}\beta_j=1,
 \]
-直接得到。最后一句是第一项的逆否命题：若 occupied carrier 少于 \(2^s\)，则不可能所有 carrier 质量都不超过 \(2^{-s}\)，故存在一个 carrier 质量严格大于 \(2^{-s}\)，即为 \(s\)-sticky。证毕。
+从而存在 \(j\) 使 \(\beta_j\ge (J_E+1)^{-1}=L_E^{-1}\)。
+
+若 \(E\) 不是 \(s\)-sticky，则对所有 \(y\in C_{m,h}(E)\) 都有 \(p_y\le2^{-s}\)。于是任何满足 \(B_j\ne\varnothing\) 的 dyadic band 必有 \(j\ge s\)。取上段给出的 \(j\)，便得 \(j\ge s\) 与 \(\beta_j\ge L_E^{-1}\)。又因 \(y\in B_j\) 时 \(p_y\le2^{-j}\)，故
+\[
+\beta_j=\sum_{y\in B_j}p_y\le |B_j|2^{-j},
+\]
+从而
+\[
+|B_j|\ge \beta_j2^j\ge 2^jL_E^{-1}\ge 2^sL_E^{-1}.
+\]
+同时 \(B_j\) 的定义给出每个 \(y\in B_j\) 的质量满足 \(2^{-(j+1)}<p_y\le2^{-j}\)，故任意两者之比至多为 \(2\)。若第一种情形不成立，第二种情形必成立；反之若存在某个 \(p_y>2^{-s}\)，则正是定义 \ref{def:distill-folding-integer-depth-sticky-test} 中的 \(s\)-sticky。证毕。
 \end{proof}
 
 % --- End distillation writeback ---

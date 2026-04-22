@@ -139,66 +139,129 @@ U_b(a):=\{a'\in\mathcal A_\infty:\ a'_b=a_b\}.
 \end{theorem}
 
 % --- Distillation writeback ---
-\begin{definition}[有限逆系统窗口中的 active nested carrier]\label{def:distill-recursive-active-nested-carrier}
-\textbf{依赖状态：construction.}
-令
+\begin{theorem}[稳定逆系统中的伪不变量剔除]\label{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-stable-inverse-limit-pseudoinvariant-elimination}
+\textbf{结果 20；日期：2026-04-23T03:31:39+08:00。依赖状态：rigidity.}
+沿用定理 \ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} 的有限满射逆系统
 \[
-A_h \xleftarrow{\rho_{h+1,h}} A_{h+1}\xleftarrow{}\cdots\xleftarrow{} A_n
+(\mathcal A_b,\pi_{b'\to b})_{b'\ge b\ge0}
 \]
-为有限集合的逆系统窗口，其中 \(h<n\)，并记复合映射为 \(\rho_{b,a}:A_b\to A_a\)（\(h\le a<b\le n\)）。对非空 active fine set \(E_n\subset A_n\)，定义其第 \(a\) 层 coarse support
+及其逆极限 \(\mathcal A_\infty\)。令
 \[
-C_a(E_n):=\rho_{n,a}(E_n),
+p_b:\mathcal A_\infty\to\mathcal A_b,
+\qquad
+p_b((a_j)_{j\ge0})=a_b
 \]
-以及相对最大细纤维多重度
+为第 \(b\) 层投影。则：
+\begin{enumerate}
+  \item 每个 \(p_b\) 都是满射；
+  \item 若 \(f,g:\mathcal A_b\to S\) 是任意到集合 \(S\) 的有限深度读出，且
+  \[
+  f\circ p_b=g\circ p_b
+  \qquad\text{于 }\mathcal A_\infty\text{ 上},
+  \]
+  则 \(f=g\)；
+  \item 若 \(P\subseteq\mathcal A_b\)，则
+  \[
+  p_b^{-1}(P)=\varnothing\Longleftrightarrow P=\varnothing,
+  \qquad
+  p_b^{-1}(P)=\mathcal A_\infty\Longleftrightarrow P=\mathcal A_b.
+  \]
+\end{enumerate}
+因此，任何只在朴素截断层出现、但在 fold-aware 稳定逆极限地址上完全消失的所谓不变量，必为伪不变量；它不能作为协议可审计的结构数据进入递归地址化闭包。
+\end{theorem}
+\begin{proof}
+先证满射性。固定 \(b\) 与任意 \(a_b\in\mathcal A_b\)。由于每个过渡映射满射，可递归选择 \(a_{b+1},a_{b+2},\ldots\)，使
 \[
-M_{n|a}(E_n):=\max_{u\in C_a(E_n)}
-\bigl|E_n\cap \rho_{n,a}^{-1}(u)\bigr|.
+\pi_{j+1\to j}(a_{j+1})=a_j
+\qquad(j\ge b).
 \]
-非空假设保证该最大值在通常意义下存在；本文不采用空集最大值约定。
-\end{definition}
+对 \(i<b\)，定义 \(a_i:=\pi_{b\to i}(a_b)\)。由逆系统相容性，所得序列 \((a_j)_{j\ge0}\) 满足所有关系
+\[
+\pi_{j\to i}(a_j)=a_i
+\qquad(j\ge i),
+\]
+因而属于 \(\mathcal A_\infty\)，并且其第 \(b\) 坐标为给定的 \(a_b\)。故 \(p_b\) 满射。
 
-\begin{lemma}[nested carrier 的 coarse--fine 多重度乘积]\label{lem:distill-recursive-nested-carrier-multiplicity-product}
-\textbf{依赖状态：rigidity.}
-沿定义 \ref{def:distill-recursive-active-nested-carrier}，并令 \(h<k<n\)。设 \(E_n\subset A_n\) 非空，记
+若 \(f\circ p_b=g\circ p_b\)，则对任意 \(a_b\in\mathcal A_b\)，由满射性可取 \(a\in\mathcal A_\infty\) 使 \(p_b(a)=a_b\)。于是
 \[
-E_k:=\rho_{n,k}(E_n)\subset A_k.
+f(a_b)=f(p_b(a))=(f\circ p_b)(a)=(g\circ p_b)(a)=g(p_b(a))=g(a_b),
+\]
+故 \(f=g\)。第三条同理：若 \(p_b^{-1}(P)=\varnothing\) 而 \(P
+e\varnothing\)，取 \(a_b\in P\) 并由满射性提升到 \(a\in\mathcal A_\infty\)，则 \(a\in p_b^{-1}(P)\)，矛盾。其余三个蕴含完全相同。证毕。
+\end{proof}
+
+\begin{theorem}[scale-saturated 闭包的熵亏损恒等式]\label{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-scale-saturated-entropy-deficit-identity}
+\textbf{结果 21；日期：2026-04-23T03:31:39+08:00。依赖状态：rigidity.}
+设 \(0\le k<n\)，并令
+\[
+\rho_{n,k}:A_n\twoheadrightarrow A_k
+\]
+为有限地址层之间的满射。令 \(E_n\subset A_n\) 非空，并令 \(\mu_n\) 为支撑在 \(E_n\) 上的概率测度。记推前测度为
+\[
+\mu_k(v):=\mu_n(\rho_{n,k}^{-1}(v)),
+\qquad v\in A_k,
+\]
+并对每个 \(\mu_k(v)>0\) 定义条件测度
+\[
+\mu_{n|v}(x):=\frac{\mu_n(x)}{\mu_k(v)}
+\qquad
+(x\in E_n\cap\rho_{n,k}^{-1}(v)).
+\]
+用自然对数定义 Shannon 熵 \(H(\cdot)\)。给定斜率参数 \(\alpha\ge0\)，设
+\[
+\Delta_n:=\alpha n-H(\mu_n),
+\qquad
+\Delta_k:=\alpha k-H(\mu_k),
+\]
+以及
+\[
+\Delta_{n|k}(v):=\alpha(n-k)-H(\mu_{n|v})
+\qquad(\mu_k(v)>0).
+\]
+则有精确亏损分解
+\[
+\boxed{\;
+\Delta_n=\Delta_k+\sum_{v:\mu_k(v)>0}\mu_k(v)\Delta_{n|k}(v).
+\;}
+\]
+因此，对任意 \(\eta_c,\eta_f\in\mathbb R\)，若
+\[
+\Delta_k\le\eta_c,
+\qquad
+\Delta_{n|k}(v)\le\eta_f\quad(\forall v:\mu_k(v)>0),
 \]
 则
 \[
-|E_n|\le |C_h(E_n)|\,M_{n|h}(E_n),
+\Delta_n\le\eta_c+\eta_f.
 \]
-并且
+等价地，若 \(\Delta_n>\eta_c+\eta_f\)，则或者 coarse 层已经有亏损 \(\Delta_k>\eta_c\)，或者存在某个 active coarse carrier \(v\) 使 fine fibre 亏损
 \[
-M_{n|h}(E_n)\le M_{k|h}(E_k)\,M_{n|k}(E_n).
+\Delta_{n|k}(v)>\eta_f.
 \]
-因此对任意整数预算 \(B_h,B_{n|k},B_{k|h}\ge1\)，若
-\[
-|E_n|>B_hB_{k|h}B_{n|k},
-\]
-则三类有限见证中至少有一类出现：
-\[
-|C_h(E_n)|>B_h,\qquad
-M_{k|h}(E_k)>B_{k|h},\qquad
-M_{n|k}(E_n)>B_{n|k}.
-\]
-\end{lemma}
+特别地，若 coarse 层与所有 active fine fibre 均满足无亏损条件 \(\Delta_k\le0\)、\(\Delta_{n|k}(v)\le0\)，则全尺度 \(n\) 自动满足无亏损条件 \(\Delta_n\le0\)。这正是稳定逆系统中的 coarse-fine self-similarity no-drop 闭包。
+\end{theorem}
 \begin{proof}
-第一式来自按 \(h\)-层 coarse carrier 分块：
+Shannon 熵的条件分解给出
 \[
-E_n=\bigsqcup_{u\in C_h(E_n)}\bigl(E_n\cap\rho_{n,h}^{-1}(u)\bigr),
+H(\mu_n)=H(\mu_k)+\sum_{v:\mu_k(v)>0}\mu_k(v)H(\mu_{n|v}).
 \]
-每块大小不超过 \(M_{n|h}(E_n)\)。
+于是
+\[
+\begin{aligned}
+\Delta_n
+&=\alpha n-H(\mu_n)\\
+&=\alpha n-H(\mu_k)-\sum_v\mu_k(v)H(\mu_{n|v})\\
+&=\bigl(\alpha k-H(\mu_k)\bigr)
+  +\sum_v\mu_k(v)\bigl(\alpha(n-k)-H(\mu_{n|v})\bigr),
+\end{aligned}
+\]
+其中求和仅在 \(\mu_k(v)>0\) 的 active carrier 上进行，并使用 \(\sum_v\mu_k(v)=1\)。这即为所示恒等式。
 
-对第二式，固定 \(u\in C_h(E_n)\)。在 \(E_k\cap\rho_{k,h}^{-1}(u)\) 中的每个 \(v\) 上，fine fibre
+若 \(\Delta_k\le\eta_c\) 且所有 \(\Delta_{n|k}(v)\le\eta_f\)，代入恒等式得
 \[
-E_n\cap\rho_{n,k}^{-1}(v)
+\Delta_n\le\eta_c+\sum_v\mu_k(v)\eta_f=\eta_c+\eta_f.
 \]
-大小至多为 \(M_{n|k}(E_n)\)；而这样的 \(v\) 的数目至多为 \(M_{k|h}(E_k)\)。故
-\[
-|E_n\cap\rho_{n,h}^{-1}(u)|
-\le M_{k|h}(E_k)M_{n|k}(E_n).
-\]
-对 \(u\) 取最大即得第二式。最后一项是两条乘积不等式的反证形式：若三个预算均不超标，则 \(|E_n|\le B_hB_{k|h}B_{n|k}\)，与假设矛盾。证毕。
+其逆否命题给出坏例子的二分：全尺度亏损若超过 coarse 与 fine 允许亏损之和，则亏损已在 coarse 层出现，或至少有一个 active fine fibre 出现超额亏损。令 \(\eta_c=\eta_f=0\) 即得 no-drop 闭包。证毕。
 \end{proof}
 
 % --- End distillation writeback ---
