@@ -45,9 +45,114 @@ power series and determinant logarithms use this branch consistently.
 
 \begin{proposition}[Primitive-orbit closed form for the finite part]
   \label{thm:finite-part-primitive-closed-form}
-  See \cite[Theorem~2.4]{Ma2026CyclicBlockTraceClass}; in the notation
-  of the present paper, its \(\log\mathcal M(A)\) is \(\FP(A)\).
+  Let \(A\) be a primitive non-negative matrix with Perron root
+  \(\lambda>1\). Then
+  \begin{equation}\label{eq:finite-part-determinant-mobius}
+    \FP(A)
+    =
+    \log C(A)
+    +\sum_{m\ge 2}\frac{\mu(m)}{m}
+      \log\det(I-\lambda^{-m}A)^{-1}.
+  \end{equation}
+  Equivalently,
+  \begin{equation}\label{eq:finite-part-primitive-closed}
+    \FP(A)
+    =
+    \log C(A)
+    +\sum_{n\ge 1}p_n(A)
+      \bigl(\lambda^{-n}+\log(1-\lambda^{-n})\bigr).
+  \end{equation}
+  Both series converge absolutely. In particular, if
+  \[
+    \psi(x):=-x-\log(1-x)=\sum_{k\ge 2}\frac{x^k}{k},
+    \qquad 0<x<1,
+  \]
+  then
+  \begin{equation}\label{eq:finite-part-gap-series}
+    \log C(A)-\FP(A)
+    =
+    \sum_{n\ge 1}p_n(A)\psi(\lambda^{-n}).
+  \end{equation}
 \end{proposition}
+
+\begin{proof}
+  Put \(\zeta_A(z)=\det(I-zA)^{-1}\). For \(|z|<\lambda^{-1}\), the
+  Euler product and the determinant trace expansion give
+  \[
+    \log\zeta_A(z)
+    =
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}z^n
+    =
+    \sum_{\ell\ge 1}p_\ell(A)\sum_{k\ge 1}\frac{z^{k\ell}}{k}.
+  \]
+  Therefore, still for \(|z|<\lambda^{-1}\),
+  \[
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\log\zeta_A(z^m)
+    =
+    \sum_{\ell\ge 1}p_\ell(A)
+      \sum_{q\ge 1}
+        \frac{z^{q\ell}}{q}\sum_{m\mid q}\mu(m)
+    =
+    \sum_{\ell\ge 1}p_\ell(A)z^\ell.
+  \]
+  The last equality uses
+  \(\sum_{m\mid q}\mu(m)=1\) for \(q=1\) and \(0\) otherwise.
+  With \(z=r/\lambda\), this says
+  \[
+    P_A(r)
+    =
+    \log\zeta_A(r/\lambda)
+    +\sum_{m\ge 2}\frac{\mu(m)}{m}
+      \log\zeta_A\bigl((r/\lambda)^m\bigr).
+  \]
+  Since
+  \[
+    \log\zeta_A(r/\lambda)+\log(1-r)
+    =
+    \log\bigl((1-r)\zeta_A(r/\lambda)\bigr)
+    \longrightarrow \log C(A)
+  \]
+  as \(r\uparrow 1\), it remains only to pass to the limit in the
+  \(m\ge2\) sum. This is justified by the spectral-radius bound
+  \[
+    \log\zeta_A(\lambda^{-m})
+    =
+    \sum_{j\ge 1}\frac{\Tr(A^j)}{j}\lambda^{-mj}
+    =
+    O(\lambda^{1-m}),
+    \qquad m\ge 2,
+  \]
+  so the determinant series is absolutely summable. Letting
+  \(r\uparrow1\) gives \eqref{eq:finite-part-determinant-mobius}.
+
+  For the primitive-orbit form, write the same Euler product at
+  \(z=r/\lambda\) as
+  \[
+    \log\zeta_A(r/\lambda)
+    =
+    P_A(r)
+    +\sum_{n\ge 1}p_n(A)\sum_{k\ge 2}
+      \frac{r^{kn}\lambda^{-kn}}{k}.
+  \]
+  By \Cref{lem:primitive-orbit-asymptotic},
+  \(\abs{p_n(A)}=O(\lambda^n/n)\). Since
+  \(\sum_{k\ge 2}\lambda^{-kn}/k=O(\lambda^{-2n})\), the double tail is
+  absolutely summable at \(r=1\). Hence
+  \[
+    \FP(A)
+    =
+    \log C(A)
+    -\sum_{n\ge 1}p_n(A)\sum_{k\ge 2}\frac{\lambda^{-kn}}{k}.
+  \]
+  Finally,
+  \[
+    -\sum_{k\ge 2}\frac{x^k}{k}=x+\log(1-x),
+    \qquad |x|<1,
+  \]
+  with \(x=\lambda^{-n}\), which proves
+  \eqref{eq:finite-part-primitive-closed}. The displayed gap formula is
+  the same identity rewritten with \(\psi\).
+\end{proof}
 
 \begin{proposition}[Reduced determinant identity]
   \label{prop:finite-part-residue-reduced-determinant}

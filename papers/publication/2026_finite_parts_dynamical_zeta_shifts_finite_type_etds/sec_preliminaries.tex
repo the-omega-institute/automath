@@ -58,13 +58,85 @@ If \(\lambda=\rho(A)\) is the Perron root and
 \[
   \Lambda(A):=\max\{|\mu|:\mu\in\spec(A),\ \mu\neq\lambda\},
 \]
+with the maximum interpreted as \(0\) if there are no non-Perron
+eigenvalues,
 then primitive orbit counting enjoys the usual square-root loss from
 the higher divisors in \eqref{eq:primitive-mobius}.
 
-\begin{lemma}\label{lem:primitive-orbit-asymptotic}
-See \cite[Lemma~2.2]{Ma2026CyclicBlockTraceClass} for the primitive
-orbit asymptotic in the same notation.
+\begin{lemma}[Primitive-orbit asymptotic from M\"obius inversion]
+  \label{lem:primitive-orbit-asymptotic}
+  Let \(A\) be a primitive non-negative matrix with Perron root
+  \(\lambda>1\), and let
+  \[
+    \Lambda(A):=\max\{|\mu|:\mu\in\spec(A),\ \mu\neq\lambda\}.
+  \]
+  If the set is empty, put \(\Lambda(A)=0\).
+  Then
+  \[
+    \Tr(A^n)=\lambda^n+O(\Lambda(A)^n)
+  \]
+  and
+  \[
+    p_n(A)
+    =
+    \frac{\lambda^n}{n}
+    +O\!\left(
+      \frac{\max\{\Lambda(A)^n,\lambda^{n/2}\}}{n}
+    \right).
+  \]
+  Consequently, with
+  \[
+    \vartheta_A:=\max\{\Lambda(A)/\lambda,\lambda^{-1/2}\}<1,
+  \]
+  one has
+  \[
+    \frac{p_n(A)}{\lambda^n}
+    =
+    \frac{1}{n}+O\!\left(\frac{\vartheta_A^n}{n}\right),
+  \]
+  and the series
+  \[
+    \sum_{n\ge 1}
+      \left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+  \]
+  converges absolutely.
 \end{lemma}
+
+\begin{proof}
+  List the eigenvalues of \(A\) with algebraic multiplicity as
+  \(\lambda,\mu_2,\dots,\mu_d\). Since \(A\) is primitive,
+  Perron--Frobenius theory gives that \(\lambda\) is simple and
+  \(|\mu_j|<\lambda\) for \(j\ge 2\). For a finite matrix,
+  the trace of \(A^n\) is the sum of the \(n\)-th powers of its
+  eigenvalues, counted with algebraic multiplicity. Hence
+  \[
+    \Tr(A^n)
+    =
+    \lambda^n+\sum_{j=2}^d\mu_j^n
+    =
+    \lambda^n+O(\Lambda(A)^n).
+  \]
+
+  Insert this estimate into the M\"obius formula
+  \[
+    p_n(A)=\frac{1}{n}\sum_{m\mid n}\mu(m)\Tr(A^{n/m}).
+  \]
+  The divisor \(m=1\) contributes
+  \(\lambda^n/n+O(\Lambda(A)^n/n)\). For the remaining divisors,
+  \(m>1\) implies \(n/m\le n/2\), and the spectral estimate
+  \(\Tr(A^k)=O(\lambda^k)\) gives
+  \[
+    \sum_{\substack{m\mid n\\ m>1}}\abs{\Tr(A^{n/m})}
+    \le
+    C\sum_{1\le k\le n/2}\lambda^k
+    =
+    O(\lambda^{n/2}).
+  \]
+  Dividing by \(n\) gives the displayed primitive-orbit asymptotic.
+  Since \(\Lambda(A)<\lambda\) and \(\lambda>1\), the number
+  \(\vartheta_A\) lies in \((0,1)\), and the final two assertions follow
+  by dividing the asymptotic by \(\lambda^n\).
+\end{proof}
 
 \begin{definition}[Square-root bound]\label{def:kernel-rh}
 We say that \(A\) satisfies the \emph{square-root bound} if
@@ -166,12 +238,13 @@ We call \(F_A\) the \emph{reduced spectral polynomial}. Moreover,
   with \eqref{eq:residue-constant-def}.
 \end{proof}
 
-Define the primitive Abel generating series
+When \(\lambda>1\), define the primitive Abel generating series
 \[
   P_A(r):=\sum_{n\ge 1}p_n(A)\lambda^{-n}r^n,
   \qquad 0\le r<1.
 \]
-Since \(p_n(A)\lambda^{-n}=1/n+O(\vartheta^n/n)\) for some
+By \Cref{lem:primitive-orbit-asymptotic},
+\(p_n(A)\lambda^{-n}=1/n+O(\vartheta^n/n)\) for some
 \(\vartheta\in(0,1)\), the renormalised expression
 \[
   P_A(r)+\log(1-r)
@@ -179,7 +252,7 @@ Since \(p_n(A)\lambda^{-n}=1/n+O(\vartheta^n/n)\) for some
 has a finite limit as \(r\uparrow 1\).
 
 \begin{definition}[Abel finite-part constant]\label{def:abel-finite-part}
-For a primitive matrix \(A\) we write
+For a primitive matrix \(A\) with Perron root \(\lambda>1\), we write
 \[
   \FP(A):=\lim_{r\uparrow 1}\bigl(P_A(r)+\log(1-r)\bigr).
 \]
