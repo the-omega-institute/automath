@@ -477,7 +477,9 @@ import Omega.POM.OracleCapacityStieltjesInversionMellin
 import Omega.POM.OracleCriticalQuadraticMarginalLaw
 import Omega.POM.OracleGapAreaLawEnergy
 import Omega.POM.OracleFailureExponentFromRenyiSpectrum
+import Omega.POM.OracleFailureExponentDualityFromDoubleLdp
 import Omega.POM.OracleFailureThermoConjugacySmooth
+import Omega.POM.OracleSuccessExponentTwoMeasureCompetition
 import Omega.POM.OracleRenyiPressureFailureBound
 import Omega.POM.PowerSumJacobianEntropy
 import Omega.POM.PowerSumVandermondeJacobian
