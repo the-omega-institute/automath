@@ -180,6 +180,7 @@ import Omega.Conclusion.ExclusionRadiusTailAffineRecovery
 import Omega.Conclusion.ExtPiKernelPoset
 import Omega.Conclusion.ExternalBudgetTensorEntropyRate
 import Omega.Conclusion.GodelOrbitIdentifiability
+import Omega.Conclusion.GodelOrbitExtremeSmoothness
 import Omega.Conclusion.F2BinomialBasisFromDeltaNilpotent
 import Omega.Conclusion.ScreenEntropyAuditIdentity
 import Omega.Conclusion.ScreenExactBinaryAuditHomologicalBitBound
@@ -484,6 +485,7 @@ import Omega.Conclusion.RiccatiDoubleCayleyExactIsomorphism
 import Omega.Conclusion.ResidueSliceSingleOrbitDoubleSliceRigidity
 import Omega.Conclusion.ResonanceWindow
 import Omega.Conclusion.ResonanceWindowMod2BinomialCollapse
+import Omega.Conclusion.ResonanceWindowZ2HenselTailPeriodicity
 import Omega.Conclusion.ResonanceWindowMod2TailJetCompleteness
 import Omega.Conclusion.ReversibleAuxBitsBudget
 import Omega.Conclusion.ReverseKLSingleFrequencyExclusivity
