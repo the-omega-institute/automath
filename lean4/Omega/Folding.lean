@@ -254,6 +254,7 @@ import Omega.Folding.FoldBinOracleCriticalProfile
 import Omega.Folding.FoldBinOracleLinearThresholdExponent
 import Omega.Folding.FoldBinPhiIdentifiablePowerDivergence
 import Omega.Folding.FoldBinQuantileThresholdConstant
+import Omega.Folding.FoldBinBudgetPhaseTransition
 import Omega.Folding.FoldZeroCosetV2IntersectionRigidity
 import Omega.Folding.FoldBinRenyiDivergenceLimit
 import Omega.Folding.FoldBinRenyiRateCollapse

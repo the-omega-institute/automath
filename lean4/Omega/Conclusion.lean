@@ -455,6 +455,8 @@ import Omega.Conclusion.SquarefreeRTLaminarNesting
 import Omega.Conclusion.StableSuccessorFaithfulSemigroup
 import Omega.Conclusion.StableSuccessorTranslationAddition
 import Omega.Conclusion.SingularRingFaithfulSemigroup
+import Omega.Conclusion.SingularRingPrimeCompositionIrreducibility
+import Omega.Conclusion.GoldenSqueezeDimAut
 import Omega.Conclusion.StableSuccessorOrbitNormalForm
 import Omega.Conclusion.StokesEnergyDyadicMartingale
 import Omega.Conclusion.StokesEnergyHilbertProjection
