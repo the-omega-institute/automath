@@ -31,6 +31,7 @@ import Omega.SPG.BulkBoundaryGodelDimensionSandwich
 import Omega.SPG.CapacityRegion
 import Omega.SPG.CheegerStokes
 import Omega.SPG.ClarityBayesOptimality
+import Omega.SPG.ClarityBoundaryDimension
 import Omega.SPG.ClarityMonotone
 import Omega.SPG.ClarityRiskThresholdDepthLaw
 import Omega.SPG.ClarityWalshFamilyStability
@@ -55,6 +56,7 @@ import Omega.SPG.DecidableClopen
 import Omega.SPG.DiscreteStokesPoincarePublication
 import Omega.SPG.DoubleBudgetAddressCapacity
 import Omega.SPG.DoubleBudgetPoisson
+import Omega.SPG.DerivedSubfullBoundaryComplexityEqualsAdhesion
 import Omega.SPG.DyadicHolographicReconstructionNoiseBudget
 import Omega.SPG.DyadicBoundaryImageLDPC
 import Omega.SPG.DyadicBoundaryCodeCentralBinomialWall
@@ -81,7 +83,9 @@ import Omega.SPG.FiniteAuditBidirectionalCertificates
 import Omega.SPG.FiniteAuditNpCompleteBarrier
 import Omega.SPG.FirstEntryEscapeRate
 import Omega.SPG.FixedAxisGodelOrderInformation
+import Omega.SPG.FullInternalScreenOneDefectBoundaryClosure
 import Omega.SPG.FoldInjectivizationRegisterLowerBound
+import Omega.SPG.BoundaryGaugeGroupoidCapacity
 import Omega.SPG.GaugeGroupoidCircleLaw
 import Omega.SPG.GaugeVolumeAreaComplementarity
 import Omega.SPG.GodelAxisBoundaryInvertibility
@@ -104,10 +108,13 @@ import Omega.SPG.Hypercube6GodelSquareclass
 import Omega.SPG.HypercubeCycleLatticeGodelEllipsoidCounting
 import Omega.SPG.HypercubeCycleLatticeDirectsumCounting
 import Omega.SPG.HypercubeCycleLatticeDirectsumMdl
+import Omega.SPG.HypercubeEntropyAreaRigidity
+import Omega.SPG.HypercubeH1PrimeBudgetMinimal
 import Omega.SPG.HypercubeGodelFluxMultiplicativeVolume
 import Omega.SPG.HypercubeGradientConsistency
 import Omega.SPG.HypercubeGradientPublication
 import Omega.SPG.HypercubeNearDetailedBalancePublication
+import Omega.SPG.HypercubeLinearAreaLawDensity
 import Omega.SPG.HypercubeWalshStokesEnergyCutoffReconstruction
 import Omega.SPG.HypercubeWeightedStokesSobolevEnergySpectrum
 import Omega.SPG.HypercubeWeightedWalshStokes
@@ -142,6 +149,7 @@ import Omega.SPG.PressureGap
 import Omega.SPG.PrimeRegisterBudgetLowerBound
 import Omega.SPG.PrimeRegisterDistinguishableFractionVanishes
 import Omega.SPG.ProfiniteTorusExtensionStokesModuleClassification
+import Omega.SPG.ProuhetThueMorseFluxMoments
 import Omega.SPG.ProuhetThueMorsePowerSum
 import Omega.SPG.QuasistationaryAmbiguityAmplitudes
 import Omega.SPG.RandomBulkBoundarySaturation

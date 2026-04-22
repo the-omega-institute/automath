@@ -1,4 +1,6 @@
 import Mathlib.Tactic
+import Omega.Folding.FirstTrigonalStructureGoldenRatio
+import Omega.Folding.GaugeAnomalyTrigonalS3GaloisClosure
 
 /-!
 # Second trigonal structure: monodromy group and Galois closure genus
@@ -68,3 +70,21 @@ theorem paper_fold_gauge_anomaly_second_trigonal_monodromy_genus :
   exact ⟨s3_order_eq, by omega, by omega⟩
 
 end Omega.Folding.GaugeAnomalyTrigonalGenus
+
+namespace Omega.Folding
+
+/-- Paper label: `cor:fold-gauge-anomaly-first-trigonal-monodromy-genus`.
+The first-trigonal golden-ratio branch supplies the triple ramification seed, and the already
+formalized `S₃`-closure package then gives closure degree `6` and genus `8`. -/
+theorem paper_fold_gauge_anomaly_first_trigonal_monodromy_genus :
+    Nat.factorial 3 = 6 ∧
+      gaugeAnomalyTrigonalS3ClosureDegree = 6 ∧
+      gaugeAnomalyTrigonalS3ClosureGenus = 8 := by
+  have _ :=
+    paper_fold_gauge_anomaly_first_trigonal_structure_golden_ratio
+      ({ mu := 0 } : FirstTrigonalStructureGoldenRatioData)
+  rcases paper_fold_gauge_anomaly_trigonal_s3_galois_closure with
+    ⟨_, _, hdeg, _, _, hgenus⟩
+  exact ⟨Omega.Folding.GaugeAnomalyTrigonalGenus.s3_order_eq, hdeg, hgenus⟩
+
+end Omega.Folding

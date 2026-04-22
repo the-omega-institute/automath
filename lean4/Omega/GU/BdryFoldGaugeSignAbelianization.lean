@@ -37,4 +37,8 @@ theorem paper_bdry_fold_gauge_sign_abelianization_spec (d : ℕ) (hd : 2 ≤ d) 
   intro h3 φ
   exact bdryFoldGauge_character_classification d h3 φ
 
+theorem paper_bdry_fold_gauge_sign_abelianization_verified (d : ℕ) (hd : 2 ≤ d) :
+    paper_bdry_fold_gauge_sign_abelianization d hd := by
+  exact paper_bdry_fold_gauge_sign_abelianization_spec d hd
+
 end Omega.GU

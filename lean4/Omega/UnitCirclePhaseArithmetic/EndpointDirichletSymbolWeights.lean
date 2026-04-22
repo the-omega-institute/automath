@@ -8,7 +8,7 @@ noncomputable section
 
 /-- A concrete seed for the regularized zeta-symbol scale appearing in the endpoint formulas. -/
 def endpointZetaSymbol (s : ℝ) : ℝ :=
-  Real.exp s
+  (Real.pi / 2) * Real.exp (s - 1)
 
 /-- The dyadic scaling factor modeling the `b^{-(1+σ)}` contribution. -/
 def endpointDyadicScale (b : ℕ) (σ : ℝ) : ℝ :=

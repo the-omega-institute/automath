@@ -22,6 +22,9 @@ import Omega.EA.ChiRigidityShadow
 import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
+import Omega.EA.CrtFactorization
+import Omega.EA.Conclusion72EnergyComplementarity
+import Omega.EA.SumproductExponentialLaw
 import Omega.EA.DeterministicRoughVisibleQuantity
 import Omega.EA.DirectedRewriteTermination
 import Omega.EA.DynamicPrimeRegisterBitlength
@@ -34,12 +37,17 @@ import Omega.EA.FibCongruence
 import Omega.EA.FibDivisibilityChain
 import Omega.EA.FiniteLedgerRecoverability
 import Omega.EA.FoldWindow6CenterThreeObservablesDimensionDefect
+import Omega.EA.FoldCenterResolutionCriterionIndwEps
 import Omega.EA.FoldWindow6ChiLayeredSpectrumReconstructionBy12Moments
 import Omega.EA.FoldAsSection
 import Omega.EA.FoldAsSectionCorollary
 import Omega.EA.FoldGroupoidAFInductiveLimitHolographicTrace
 import Omega.EA.FoldGroupoidAut0ComplementFixedSubgroup
 import Omega.EA.FoldGroupoidAut0RationalCohomology
+import Omega.EA.FoldGroupoidAutPi1AllPrimes
+import Omega.EA.FoldGroupoidWindow6BoundaryParityRationallyInvisible
+import Omega.EA.FoldGroupoidWindow6RationalTailLadder
+import Omega.EA.FoldTailTopologicalReadout
 import Omega.EA.KernelPeterWeylBlockDiagonalization
 import Omega.EA.FoldDiscreteToContinuousGaugeEmbedding
 import Omega.EA.FoldGroupoidAutChiSemidirectClassification
@@ -63,6 +71,8 @@ import Omega.EA.Kernel21GroundState
 import Omega.EA.KernelOneSiteBernoulliClass
 import Omega.EA.K9IntegrablePressureLdp
 import Omega.EA.KernelPressureEndpoints
+import Omega.EA.KernelMinimalThermoSignatureThree
+import Omega.EA.LambdaLinearResponseKernels
 import Omega.EA.KernelRHSqrtError
 import Omega.EA.KernelWeightedPrimeOrbit
 import Omega.EA.KernelZeroTemp
@@ -124,6 +134,7 @@ import Omega.EA.SyncKernelResetWords
 import Omega.EA.TimeSpaceCommuting
 import Omega.EA.ValInvariant
 import Omega.EA.Wedderburn
+import Omega.EA.ChiLayeredFiberSpectrumRecovery
 import Omega.EA.Z2x2JointSpectralMeasure
 import Omega.EA.ZeckendorfAddFst
 import Omega.EA.ZeckendorfArithComputable

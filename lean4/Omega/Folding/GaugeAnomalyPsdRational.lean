@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import Omega.Folding.GaugeAnomalyCovGenfun
+import Omega.Folding.GaugeAnomalyCovarianceDistributionMoment
 
 namespace Omega.Folding
 
@@ -53,5 +54,24 @@ theorem paper_fold_gauge_anomaly_psd_rational (D : GaugeAnomalyPsdRationalData) 
     rw [D.powerSpectrum_eq s, gaugeAnomalyPsdDenominator_factorization]
   · intro s
     rw [D.denominator_eq s, gaugeAnomalyPsdDenominator_factorization]
+
+/-- Paper-facing corollary packaging the PSD denominator factorization with the closed
+autocovariance formula. -/
+theorem paper_fold_gauge_anomaly_psd_denominator_factorization_cov (D : GaugeAnomalyPsdRationalData) :
+    (∀ s : ℚ, D.denominator s = gaugeAnomalyPsdDenominatorFactorized s) ∧
+      (∀ k : ℕ, 1 ≤ k →
+        Omega.Folding.AutocovarianceSeedValues.autoCov k =
+          (1 / 8 : ℚ) * (1 / 2 : ℚ) ^ k +
+            ((7 / 648 : ℚ) + (k : ℚ) / 108) * (-1 / 2 : ℚ) ^ k) := by
+  refine ⟨(paper_fold_gauge_anomaly_psd_rational D).2, ?_⟩
+  intro k hk
+  calc
+    Omega.Folding.AutocovarianceSeedValues.autoCov k
+        = gaugeAnomalyCovarianceDistributionMoment (1 / 8) (7 / 648) (1 / 216) k := by
+            exact paper_fold_gauge_anomaly_covariance_distribution_moment.1 k hk
+    _ = (1 / 8 : ℚ) * (1 / 2 : ℚ) ^ k +
+          ((7 / 648 : ℚ) + (k : ℚ) / 108) * (-1 / 2 : ℚ) ^ k := by
+            simp [gaugeAnomalyCovarianceDistributionMoment]
+            ring
 
 end Omega.Folding
