@@ -88,6 +88,7 @@ import Omega.Zeta.XiTerminalZmEllipticWeightNCorrespondenceBidegreeDelta
 import Omega.Zeta.XiPrimeRegisterHistoryInverseLimit
 import Omega.Zeta.XiPrimeShellQuasiOrthogonality
 import Omega.Zeta.XiPrimeSliceNontrivialLayerExactMinimality
+import Omega.Zeta.XiPiPowerSmithComplementarity
 import Omega.Zeta.XiPrecisionTypeNoLeakage
 import Omega.Zeta.SelfdualPressureInversion
 import Omega.Zeta.SyncCyclotomicElimination
