@@ -3,11 +3,12 @@
 
 Workflow:
   Stage A  discovery via gh search repos + Codex/Claude candidate review
-  Stage B  deep mathematical research, score-gated (>= 8), max 3 rounds
-  Stage C  issue drafting in Tolmeton style + Claude review, max 2 rounds
+  Stage B  deep mathematical research, score-gated (>= 8), max 5 rounds
+  Stage C  issue drafting in Tolmeton style + Claude review gate
   Stage D  interactive approval gate + gh issue create
 
-The script is modeled after tools/chatgpt-oracle/oracle_pipeline.py:
+The script reuses subprocess/state patterns from tools/chatgpt-oracle/oracle_pipeline.py,
+but this pipeline has no oracle dependency:
   - structured logging to stdout + file
   - dataclass-backed JSON state persistence
   - subprocess wrappers for codex / claude / gh / git
@@ -18,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import hashlib
 import json
 import logging
 import os
@@ -35,6 +37,11 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Optional
 
+try:
+    import fcntl
+except ImportError:  # pragma: no cover - Windows fallback
+    fcntl = None
+
 
 # ---------------------------------------------------------------------------
 # Paths & constants
@@ -46,6 +53,18 @@ LOG_DIR = SCRIPT_DIR / "logs"
 STATE_DIR = SCRIPT_DIR / "outreach_state"
 CANDIDATES_FILE = STATE_DIR / "candidates.json"
 PROCESSED_FILE = STATE_DIR / "processed.json"
+GIT_OPS_LOCK = STATE_DIR / ".git_ops.lock"
+FUTURE_QUEUE_FILE = STATE_DIR / "future_queue.jsonl"
+
+OUTREACH_STATE_SCHEMA_VERSION = "community-outreach-state-v2"
+OUTREACH_CONTRACT_SCHEMA_VERSION = "community-outreach-contract-v1"
+FUTURE_QUEUE_SCHEMA_VERSION = "community-outreach-future-v1"
+INTERMEDIATE_PATH_PREFIXES = (
+    "tools/community-outreach/outreach_state/",
+    "tools/community-outreach/logs/",
+    "tools/community-outreach/targets/",
+    "tools/community-outreach/drafts/",
+)
 
 AUTOMATH_REPO_URL = "https://github.com/the-omega-institute/automath"
 AUTOMATH_TRAILER = "**Repo:** https://github.com/the-omega-institute/automath"
@@ -71,6 +90,25 @@ RESEARCH_STANDARD_ZH = """继续深入研究, 结合项目论文PDF分析, 找�
 请研究到一些有发表价值的结论再结束, 不要挤牙膏.不要重复之前内容.
 不要重复其他人已经发表公开的, 要求发现定理、推论、猜想、命题及证明, 可以使用其他人的结论.
 不要中间过程结论.请使用顶级数学期刊学术化语言表达, 禁止口语."""
+
+BAD_EXAMPLE_DEEP_RESEARCH_STANDARD_ZH = """深度研究升级规则: 研究范式切换为“坏例子结构定理驱动”。
+先锁定主命题可能失败的最坏反例；再证明坏例子必然落入少数可分类骨架；再对这些骨架分别建立结构定理、分解定理、预算下界、粘接障碍或归纳矛盾；最后只输出能够闭合的定理—推论—命题—猜想链条。
+优先使用 fold-aware restriction 与稳定逆系统、伪不变量剔除、近最大纤维族 sticky 骨架、高阶矩冻结与 escort 集中、Čech 粘接障碍、离散 holonomy 与曲率证书、boundary/Walsh-Stokes/Euler 型证书、prime-register/外置账本与无限预算下界、局部可解而全局不可粘接的对象分类。
+禁止同义改写、旧结果换壳、只换符号/常数/指标的弱变体、仅计算例子、仅启发式论证。凡涉及跨分辨率对象，必须在 fold-aware gauge、稳定逆系统或合法等价表述下工作，显式避免朴素截断幻觉。
+本管线需要 JSON 输出；上述规则作为内部研究约束执行，不要破坏要求的 JSON schema。"""
+
+NO_LEAN_EXECUTION_POLICY = """NO-LEAN-EXECUTION POLICY:
+- This outreach pipeline must not assume a local Lean environment.
+- Do not run `lake`, `lean`, `elan`, `#eval`, `#check`, or any Lean compiler/checker command.
+- Do not create, edit, or patch files under lean4/ or in the target repository.
+- Lean files may be read only as static text evidence with cat/rg/sed.
+- Existing committed Lean theorem refs may be cited as prior evidence, but new claims must be justified by mathematical proof text or Python/combinatorial certificates.
+- If a result needs Lean formalization, mark it as a future external verification prerequisite, not as completed by this pipeline."""
+
+AGENT_CONTEXT_POLICY = """AGENT CONTEXT POLICY:
+- context_aware: use for planning, continued research, scope judgment, and target-facing draft review. Load the scope ledger, prior contribution record, deferred future items, and current issue boundary.
+- zero_init_review: use for independent correctness/tone review after a candidate artifact exists. Do not rely on local outreach memory; judge only the public draft plus committed evidence supplied in the prompt.
+- Every agent call must say which mode it is using. Do not mix scope-memory work with zero-initialized review in one prompt."""
 
 PASS_SCORE = 8
 LOW_SCORE_SKIP = 3  # Bug 6 fix: was 5 (gave up too easily). Only skip if score stays < 3 (genuinely hopeless)
@@ -194,6 +232,7 @@ class RepoState:
 
     def to_dict(self) -> dict[str, Any]:
         return {
+            "schema_version": OUTREACH_STATE_SCHEMA_VERSION,
             "repo": self.repo,
             "stage": self.stage,
             "round": self.round,
@@ -221,7 +260,7 @@ class RepoState:
         state.findings = data.get("findings", [])
         state.draft_title = data.get("draft_title", "")
         state.draft_body = data.get("draft_body", "")
-        state.action_history = data.get("action_history", [])
+        state.action_history = data.get("action_history", data.get("events", []))
         state.timestamps = data.get("timestamps", {})
         state.submission_url = data.get("submission_url", "")
         state.error = data.get("error", "")
@@ -262,6 +301,79 @@ def state_file(repo: str) -> Path:
     return STATE_DIR / f"{repo_slug(repo)}.json"
 
 
+def target_dir_for_repo(repo: str) -> Path:
+    return SCRIPT_DIR / "targets" / repo_slug(repo)
+
+
+def _repo_relative(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(REPO_ROOT.resolve()))
+    except Exception:
+        return str(path)
+
+
+def _rel_from_any(path: str | Path) -> str:
+    raw = Path(path)
+    if raw.is_absolute():
+        return _repo_relative(raw)
+    return str(raw).replace("\\", "/").lstrip("./")
+
+
+def is_intermediate_path(path: str | Path) -> bool:
+    rel = _rel_from_any(path)
+    return any(rel == prefix.rstrip("/") or rel.startswith(prefix) for prefix in INTERMEDIATE_PATH_PREFIXES)
+
+
+@contextlib.contextmanager
+def git_ops_lock() -> Any:
+    """Serialize state/backflow commits across parallel workers."""
+    if IS_WINDOWS or fcntl is None:
+        yield
+        return
+
+    GIT_OPS_LOCK.parent.mkdir(parents=True, exist_ok=True)
+    with open(GIT_OPS_LOCK, "w", encoding="utf-8") as handle:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
+def git_status_porcelain(paths: list[Path]) -> list[str]:
+    if not paths:
+        return []
+    args = [_repo_relative(path) for path in paths]
+    try:
+        result = subprocess.run(
+            ["git", "status", "--porcelain", "--", *args],
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=30,
+            encoding="utf-8",
+            errors="replace",
+        )
+    except Exception:
+        return []
+    if result.returncode != 0:
+        return []
+    return [line for line in result.stdout.splitlines() if line.strip()]
+
+
+def backflow_placement_from_history(state: RepoState) -> Optional[dict[str, Any]]:
+    for evt in reversed(state.action_history):
+        if evt.get("action") != "backflow completed":
+            continue
+        try:
+            payload = json.loads(evt.get("detail", "{}"))
+        except (json.JSONDecodeError, TypeError):
+            continue
+        if isinstance(payload, dict) and payload.get("placement") and payload.get("section_dir"):
+            return payload
+    return None
+
+
 def save_state(state: RepoState) -> None:
     with _state_lock:
         state.timestamps.setdefault("created_at", iso_now())
@@ -296,6 +408,412 @@ def load_all_states() -> list[RepoState]:
         except Exception:
             continue
     return states
+
+
+def _json_sha(payload: Any, length: int = 16) -> str:
+    raw = json.dumps(payload, sort_keys=True, ensure_ascii=False, default=str)
+    return hashlib.sha1(raw.encode("utf-8")).hexdigest()[:length]
+
+
+def future_queue_events() -> list[dict[str, Any]]:
+    events: list[dict[str, Any]] = []
+    if not FUTURE_QUEUE_FILE.exists():
+        return events
+    for line in FUTURE_QUEUE_FILE.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        try:
+            item = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(item, dict):
+            events.append(item)
+    return events
+
+
+def _future_item_id(item: dict[str, Any]) -> str:
+    payload = {
+        "source_repo": item.get("source_repo") or item.get("target_repo", ""),
+        "title": item.get("title", ""),
+        "task": item.get("task", ""),
+    }
+    return _json_sha(payload, length=18)
+
+
+def _future_source_fingerprint(item: dict[str, Any], source: dict[str, Any]) -> str:
+    payload = {
+        "id": item.get("id") or _future_item_id(item),
+        "source_repo": source.get("repo", item.get("source_repo", "")),
+        "source_stage": source.get("stage", ""),
+        "source_title": source.get("draft_title", source.get("title", "")),
+        "scope_boundary": item.get("scope_boundary", ""),
+        "task": item.get("task", ""),
+    }
+    return _json_sha(payload, length=18)
+
+
+def load_future_queue() -> list[dict[str, Any]]:
+    """Compact the append-only local future queue into current items."""
+    items: dict[str, dict[str, Any]] = {}
+    for event in future_queue_events():
+        item_id = str(event.get("id", "")).strip()
+        if not item_id:
+            continue
+        event_type = str(event.get("event_type", "queued"))
+        if event_type == "queued":
+            base = dict(event)
+            base.setdefault("source_records", [])
+            if base.get("source") and not base["source_records"]:
+                base["source_records"].append(base["source"])
+            base.setdefault("updates", [])
+            items[item_id] = base
+            continue
+
+        base = items.setdefault(
+            item_id,
+            {
+                "id": item_id,
+                "schema_version": FUTURE_QUEUE_SCHEMA_VERSION,
+                "event_type": "queued",
+                "status": event.get("status", "queued"),
+                "source_repo": event.get("source_repo", ""),
+                "title": event.get("title", ""),
+                "task": event.get("task", ""),
+                "source_records": [],
+                "updates": [],
+            },
+        )
+        if event.get("status"):
+            base["status"] = event["status"]
+        if event.get("updated_at"):
+            base["updated_at"] = event["updated_at"]
+        for source in event.get("source_records", []):
+            if source not in base["source_records"]:
+                base["source_records"].append(source)
+        base["updates"].append(event)
+    return sorted(items.values(), key=lambda item: (item.get("source_repo", ""), item.get("title", "")))
+
+
+def future_items_for_repo(repo: str, *, include_done: bool = False) -> list[dict[str, Any]]:
+    keys = {repo, repo_base(repo)}
+    issue = repo_issue(repo)
+    matches: list[dict[str, Any]] = []
+    for item in load_future_queue():
+        status = str(item.get("status", "queued"))
+        if status in {"done", "closed", "dropped"} and not include_done:
+            continue
+        source_repo = str(item.get("source_repo", ""))
+        target_repo = str(item.get("target_repo", ""))
+        source_issue = item.get("source_issue")
+        item_keys = {source_repo, target_repo, repo_base(source_repo) if source_repo else ""}
+        if keys.isdisjoint(item_keys):
+            continue
+        if issue is not None and source_issue not in {None, "", issue}:
+            continue
+        matches.append(item)
+    return matches
+
+
+def append_future_queue_item(item: dict[str, Any], *, dry_run: bool = False) -> bool:
+    source = dict(item.pop("source", {}) or {})
+    entry = dict(item)
+    entry.setdefault("schema_version", FUTURE_QUEUE_SCHEMA_VERSION)
+    entry.setdefault("event_type", "queued")
+    entry.setdefault("status", "queued")
+    entry.setdefault("created_at", iso_now())
+    entry["updated_at"] = iso_now()
+    entry.setdefault("source_repo", source.get("repo", ""))
+    entry.setdefault("target_repo", repo_base(str(entry.get("source_repo", ""))))
+    entry.setdefault("source_issue", source.get("issue"))
+    entry["id"] = str(entry.get("id") or _future_item_id(entry))
+    source_fingerprint = _future_source_fingerprint(entry, source)
+    entry["source_records"] = [source] if source else []
+    entry["source_fingerprint"] = source_fingerprint
+
+    existing_events = future_queue_events()
+    if any(
+        event.get("id") == entry["id"] and event.get("source_fingerprint") == source_fingerprint
+        for event in existing_events
+    ):
+        return False
+
+    if any(event.get("id") == entry["id"] for event in existing_events):
+        event = {
+            "schema_version": FUTURE_QUEUE_SCHEMA_VERSION,
+            "event_type": "append",
+            "id": entry["id"],
+            "updated_at": iso_now(),
+            "source_repo": entry.get("source_repo", ""),
+            "target_repo": entry.get("target_repo", ""),
+            "source_issue": entry.get("source_issue"),
+            "title": entry.get("title", ""),
+            "task": entry.get("task", ""),
+            "status": entry.get("status", "queued"),
+            "source_records": entry["source_records"],
+            "source_fingerprint": source_fingerprint,
+        }
+    else:
+        event = entry
+
+    logger.info("Future queue %s: %s", "would append" if dry_run else "append", entry["title"])
+    if dry_run:
+        return True
+    with _state_lock:
+        FUTURE_QUEUE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with open(FUTURE_QUEUE_FILE, "a", encoding="utf-8") as handle:
+            handle.write(json.dumps(event, ensure_ascii=False, sort_keys=True) + "\n")
+    return True
+
+
+def append_future_queue_note(item_id: str, note: str, *, source_repo: str = "", dry_run: bool = False) -> bool:
+    existing = {item["id"]: item for item in load_future_queue()}
+    if item_id not in existing:
+        raise RuntimeError(f"Unknown future queue id: {item_id}")
+    event = {
+        "schema_version": FUTURE_QUEUE_SCHEMA_VERSION,
+        "event_type": "append_note",
+        "id": item_id,
+        "updated_at": iso_now(),
+        "source_repo": source_repo or existing[item_id].get("source_repo", ""),
+        "target_repo": repo_base(source_repo or existing[item_id].get("source_repo", "")),
+        "status": existing[item_id].get("status", "queued"),
+        "note": note,
+        "source_records": [
+            {
+                "repo": source_repo,
+                "stage": "manual",
+                "note": note,
+                "recorded_at": iso_now(),
+            }
+        ],
+        "source_fingerprint": _json_sha({"id": item_id, "note": note, "source_repo": source_repo}, length=18),
+    }
+    if any(
+        old.get("id") == item_id and old.get("source_fingerprint") == event["source_fingerprint"]
+        for old in future_queue_events()
+    ):
+        return False
+    logger.info("Future queue note %s: %s", "would append" if dry_run else "append", item_id)
+    if dry_run:
+        return True
+    with _state_lock:
+        FUTURE_QUEUE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with open(FUTURE_QUEUE_FILE, "a", encoding="utf-8") as handle:
+            handle.write(json.dumps(event, ensure_ascii=False, sort_keys=True) + "\n")
+    return True
+
+
+def _scope_excerpt(text: str, pattern: str, *, radius: int = 260) -> str:
+    match = re.search(pattern, text, flags=re.IGNORECASE | re.DOTALL)
+    if not match:
+        return text[: min(len(text), radius)]
+    start = max(0, match.start() - radius)
+    end = min(len(text), match.end() + radius)
+    return " ".join(text[start:end].split())
+
+
+def future_scope_items_from_state(
+    state: RepoState,
+    *,
+    contract: Optional[dict[str, Any]] = None,
+) -> list[dict[str, Any]]:
+    """Extract deferred-but-valuable research tasks from a scoped public draft."""
+    body = state.draft_body or ""
+    if not body.strip():
+        return []
+    lower = body.lower()
+    source = {
+        "repo": state.repo,
+        "base_repo": repo_base(state.repo),
+        "issue": repo_issue(state.repo),
+        "stage": state.stage,
+        "draft_title": state.draft_title,
+        "state_file": _repo_relative(state_file(state.repo)),
+        "backflow": backflow_placement_from_history(state) or {},
+        "contract_approved": bool((contract or {}).get("approved")),
+        "recorded_at": iso_now(),
+    }
+    current_scope = (
+        "The public reply should close only the confirmed, paper-side scope of the current issue. "
+        "Deferred items remain research tasks until separately proved, backflowed, and reviewed."
+    )
+    items: list[dict[str, Any]] = []
+
+    signed_companion_scope = "signed companion" in lower and ("q=2" in lower or "q=6" in lower or "q=7" in lower)
+    if signed_companion_scope and any(term in lower for term in ["nonnegative", "bowen-franks", "flow-equivalence", "sft"]):
+        items.append(
+            {
+                "title": "Nonnegative lift and flow-equivalence certificate for q=6,7 signed companions",
+                "task": (
+                    "Determine whether the q=6,7 signed-companion proxies admit nonnegative presentations "
+                    "preserving the audited determinant/exterior-square data. If yes, construct the presentation "
+                    "and a Bowen-Franks/SFT flow-equivalence certificate; if no, prove the obstruction in the "
+                    "paper's fold-aware/stable inverse-system language."
+                ),
+                "current_scope": current_scope,
+                "scope_boundary": (
+                    "Issue #38 reply closes the bounded signed-companion coefficient audit and q=2..23 "
+                    "exterior-Lucas certificate. It does not claim a nonnegative collision-kernel presentation, "
+                    "Bowen-Franks invariant, or SFT flow-equivalence result."
+                ),
+                "evidence": _scope_excerpt(body, r"not claimed|nonnegative|Bowen-Franks|flow-equivalence|SFT"),
+                "priority": "high",
+                "recommended_agent_context": "context_aware_research",
+                "review_policy": (
+                    "Use context-aware agents for the proof search because the scope boundary and paper-side "
+                    "artifacts matter; use zero_init_review only after a standalone certificate is drafted."
+                ),
+                "source": source,
+            }
+        )
+
+    if signed_companion_scope and any(term in lower for term in ["q=2,...,23", "q=2..23", "q=2, ..., 23", "q=23"]):
+        items.append(
+            {
+                "title": "All-q obstruction to exterior-Lucas continuation beyond q=5",
+                "task": (
+                    "Upgrade the bounded q=2..23 exterior-Lucas certificate into either an all-q obstruction "
+                    "theorem or a classified bad-example mechanism. The preferred route is a bad-example "
+                    "structure theorem: locate the worst possible continuation failure, force it into a "
+                    "small skeleton, then close the obstruction with a fold-aware or stable inverse-system "
+                    "argument."
+                ),
+                "current_scope": current_scope,
+                "scope_boundary": (
+                    "The current outreach reply only reports the finite q=2..23 certificate and the isolated "
+                    "q=5 triple coincidence in that audited range. It does not assert an all-q classification."
+                ),
+                "evidence": _scope_excerpt(body, r"q=2.*23|q=23|exterior-Lucas|triple coincidence"),
+                "priority": "high",
+                "recommended_agent_context": "context_aware_research",
+                "review_policy": (
+                    "Start with context-aware research using the paper artifacts and prior scope ledger. "
+                    "A later zero_init_review should check any final theorem statement independently."
+                ),
+                "source": source,
+            }
+        )
+
+    if items:
+        return items
+
+    deferred_lines = [
+        line.strip(" -")
+        for line in body.splitlines()
+        if re.search(r"\b(not claimed|future|separate|out[- ]of[- ]scope|requires separate)\b", line, flags=re.IGNORECASE)
+    ]
+    if deferred_lines:
+        items.append(
+            {
+                "title": f"Deferred scope from {state.draft_title or state.repo}",
+                "task": "Resolve the explicitly deferred claims from the scoped outreach draft.",
+                "current_scope": current_scope,
+                "scope_boundary": "The draft explicitly separates current claims from deferred work.",
+                "evidence": " ".join(deferred_lines[:4])[:1200],
+                "priority": "medium",
+                "recommended_agent_context": "context_aware_research",
+                "review_policy": "Use context-aware agents for continuation; use zero_init_review for final public text.",
+                "source": source,
+            }
+        )
+    return items
+
+
+def record_future_scope_items(
+    state: RepoState,
+    *,
+    contract: Optional[dict[str, Any]] = None,
+    dry_run: bool = False,
+) -> int:
+    items = future_scope_items_from_state(state, contract=contract)
+    added = 0
+    for item in items:
+        if append_future_queue_item(item, dry_run=dry_run):
+            added += 1
+    return added
+
+
+def agent_context_header(mode: str, scope_context: str = "") -> str:
+    normalized = mode.strip().lower()
+    if normalized not in {"context_aware", "zero_init_review"}:
+        normalized = "context_aware"
+    header = f"{AGENT_CONTEXT_POLICY}\n\nAGENT_CONTEXT_MODE: {normalized}\n"
+    if normalized == "context_aware":
+        header += (
+            "Use the scope ledger below to distinguish already-closed contribution scope "
+            "from deferred future research. Do not turn deferred tasks into current claims.\n"
+        )
+        if scope_context:
+            header += "\n" + scope_context + "\n"
+    else:
+        header += (
+            "Ignore local outreach memory unless it appears as committed/public evidence in this prompt. "
+            "This is a cold independent review.\n"
+        )
+    return header
+
+
+def build_scope_context(repo: str, state: Optional[RepoState] = None, *, max_chars: int = 4500) -> str:
+    state = state or load_state(repo)
+    queue = future_items_for_repo(repo)
+    if not state and not queue:
+        return ""
+
+    lines = [
+        "SCOPE LEDGER (local ignored outreach memory; not public evidence by itself):",
+        f"- Target: {repo}",
+    ]
+    if state:
+        lines.append(f"- Current state: stage={state.stage}, round={state.round}")
+        if state.draft_title:
+            lines.append(f"- Current/last draft title: {state.draft_title}")
+        backflow = backflow_placement_from_history(state)
+        if backflow:
+            lines.append(
+                "- Paper-side contribution already backflowed: "
+                f"{backflow.get('placement')}/{backflow.get('section_dir')}"
+            )
+        if state.submission_url:
+            lines.append(f"- Submitted issue/reply: {state.submission_url}")
+        if state.error:
+            lines.append(f"- Current blocker: {state.error[:300]}")
+
+    if queue:
+        lines.append("- Deferred future research items:")
+        for item in queue[:6]:
+            lines.append(
+                f"  * [{item.get('id')}] {item.get('title')} "
+                f"(priority={item.get('priority', 'medium')}, agent={item.get('recommended_agent_context', 'context_aware_research')})"
+            )
+            if item.get("scope_boundary"):
+                lines.append(f"    scope_boundary: {str(item.get('scope_boundary'))[:500]}")
+            if item.get("task"):
+                lines.append(f"    task: {str(item.get('task'))[:500]}")
+    lines.append(
+        "- Interaction rule: close only the current verified scope in public replies; "
+        "queue ambitious or unproved extensions for later runs."
+    )
+    return "\n".join(lines)[:max_chars]
+
+
+def print_future_queue(filter_repos: Optional[list[str]] = None) -> None:
+    items = load_future_queue()
+    if filter_repos:
+        keys = set(filter_repos) | {repo_base(repo) for repo in filter_repos}
+        items = [
+            item for item in items
+            if item.get("source_repo") in keys or item.get("target_repo") in keys
+        ]
+    print(f"Future queue items: {len(items)}")
+    for item in items:
+        print(f"{item.get('id')}  {item.get('source_repo')}  {item.get('title')}")
+        print(f"  Status:   {item.get('status', 'queued')}")
+        print(f"  Priority: {item.get('priority', 'medium')}")
+        print(f"  Agent:    {item.get('recommended_agent_context', 'context_aware_research')}")
+        if item.get("scope_boundary"):
+            print(f"  Scope:    {str(item.get('scope_boundary'))[:240]}")
+        print(f"  Task:     {str(item.get('task', ''))[:360]}")
+        print("")
 
 
 def load_processed_repos() -> set[str]:
@@ -462,6 +980,10 @@ def codex_exec(
             return Path(out_file).read_text(encoding="utf-8")
         if stdout:
             return stdout
+        if rc != 0:
+            if stderr:
+                logger.warning("Codex stderr: %s", stderr[:400])
+            return ""
         if stderr:
             logger.warning("Codex stderr: %s", stderr[:400])
             return stderr
@@ -603,7 +1125,6 @@ def _balanced_json_slice(text: str, start: int) -> Optional[str]:
 
 MAIN_PAPER_DIR = REPO_ROOT / "theory" / "2026_golden_ratio_driven_scan_projection_generation_recursive_emergence"
 BACKFLOW_DIR = MAIN_PAPER_DIR / "sections" / "appendix" / "outreach_bridges"
-BRIDGES_DIR = REPO_ROOT / "theory" / "bridges"
 
 
 def build_backflow_placement_prompt(state: "RepoState") -> str:
@@ -744,7 +1265,7 @@ def build_backflow_tex_prompt(state: "RepoState", placement: dict[str, Any]) -> 
 
         For each script you decide to include:
         - Copy to: {MAIN_PAPER_DIR}/scripts/<topic_subdir>/<script>.py
-        - Update the .tex and bridge doc to reference the paper path
+        - Update the .tex to reference the paper path
 
         ═══════════════════════════════════════════════════════════════
 
@@ -763,9 +1284,11 @@ def backflow_to_main_paper(
     *,
     model: Optional[str] = None,
     dry_run: bool = False,
+    push_final_artifacts: bool = True,
+    skip_mid_claude: bool = False,
 ) -> dict[str, Any]:
     """Two-step backflow: Codex proposes paper placement, Claude reviews, then
-    Codex generates paper-quality .tex + bridge markdown doc.
+    Codex generates paper-quality .tex inside the main paper tree.
 
     Returns placement dict with paths to generated files.
     """
@@ -797,29 +1320,32 @@ def backflow_to_main_paper(
     logger.info("[%s] Backflow: Codex proposes %s/%s", state.repo,
                 placement.get("placement"), placement.get("section_dir"))
 
-    # Step 2: Claude reviews the placement
-    review_raw = claude_exec(
-        f"Review this paper placement proposal for outreach findings from {state.repo}.\n\n"
-        f"Proposal: {json.dumps(placement, indent=2, ensure_ascii=False)}\n\n"
-        f"Findings summary: {json.dumps(state.findings[:3], indent=2, ensure_ascii=False)}\n\n"
-        f"Is this the right placement? Check:\n"
-        f"1. Body vs appendix: is this result first-class enough for body?\n"
-        f"2. Section naming: does it match the paper's conventions?\n"
-        f"3. Insert position: does it flow logically?\n\n"
-        f"Return JSON: {{\"approved\": true/false, \"revised_placement\": {{...}} if not approved, \"notes\": \"...\"}}",
-        work_dir=REPO_ROOT,
-        timeout=600,
-        dry_run=dry_run,
-    )
-    review = parse_json_from_output(review_raw)
-    if isinstance(review, dict):
-        if not review.get("approved", True) and review.get("revised_placement"):
-            placement.update(review["revised_placement"])
-            logger.info("[%s] Backflow: Claude revised placement to %s/%s", state.repo,
-                        placement.get("placement"), placement.get("section_dir"))
+    # Step 2: optional mid-pipeline placement review.
+    if skip_mid_claude:
+        logger.info("[%s] Backflow: skipping mid-pipeline Claude placement review", state.repo)
+    else:
+        review_raw = claude_exec(
+            f"Review this paper placement proposal for outreach findings from {state.repo}.\n\n"
+            f"Proposal: {json.dumps(placement, indent=2, ensure_ascii=False)}\n\n"
+            f"Findings summary: {json.dumps(state.findings[:3], indent=2, ensure_ascii=False)}\n\n"
+            f"Is this the right placement? Check:\n"
+            f"1. Body vs appendix: is this result first-class enough for body?\n"
+            f"2. Section naming: does it match the paper's conventions?\n"
+            f"3. Insert position: does it flow logically?\n\n"
+            f"Return JSON: {{\"approved\": true/false, \"revised_placement\": {{...}} if not approved, \"notes\": \"...\"}}",
+            work_dir=REPO_ROOT,
+            timeout=600,
+            dry_run=dry_run,
+        )
+        review = parse_json_from_output(review_raw)
+        if isinstance(review, dict):
+            if not review.get("approved", True) and review.get("revised_placement"):
+                placement.update(review["revised_placement"])
+                logger.info("[%s] Backflow: Claude revised placement to %s/%s", state.repo,
+                            placement.get("placement"), placement.get("section_dir"))
 
-    # Step 3: Codex generates the .tex and bridge doc
-    logger.info("[%s] Backflow: generating .tex and bridge doc", state.repo)
+    # Step 3: Codex generates the .tex section inside the main paper tree.
+    logger.info("[%s] Backflow: generating main-paper .tex section", state.repo)
     gen_raw = codex_exec(
         build_backflow_tex_prompt(state, placement),
         work_dir=REPO_ROOT,
@@ -881,6 +1407,7 @@ def backflow_to_main_paper(
         "tex_path": gen_result.get("tex_path", ""),
         "wired_into_main_tex": str(main_tex_path),
     }, ensure_ascii=False))
+    save_state(state)
 
     logger.info("[%s] Backflow done: %s/%s → tex=%s wired=%s",
                 state.repo,
@@ -888,34 +1415,25 @@ def backflow_to_main_paper(
                 gen_result.get("tex_path", "N/A"),
                 str(main_tex_path))
 
-    # Commit ONLY paper-side files (theory/). Never commit outreach intermediates.
     if not dry_run:
-        try:
-            # Explicitly add only the backflow outputs
-            paths_to_add = [
-                str(MAIN_PAPER_DIR / "sections" / section_type / section_dir),
-                str(main_tex_path),
-            ]
-            # If scripts were copied to paper, add those too
-            scripts_copied = gen_result.get("scripts_copied_to_paper", [])
-            if scripts_copied:
-                paths_to_add.append(str(MAIN_PAPER_DIR / "scripts"))
-            for p in paths_to_add:
-                subprocess.run(
-                    ["git", "add", p],
-                    cwd=str(REPO_ROOT), capture_output=True, timeout=30,
-                )
-            msg = f"backflow: {state.repo} → {section_type}/{section_dir}"
-            result = subprocess.run(
-                ["git", "commit", "-m", msg],
-                cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=30,
-            )
-            if result.returncode == 0:
-                logger.info("[%s] Backflow committed: %s", state.repo, msg)
+        paths_to_add: list[str | Path] = [
+            MAIN_PAPER_DIR / "sections" / section_type / section_dir,
+            main_tex_path,
+        ]
+        scripts_copied = gen_result.get("scripts_copied_to_paper", [])
+        for raw_script in scripts_copied if isinstance(scripts_copied, list) else []:
+            script_path = _paper_script_path(str(raw_script))
+            if script_path and is_final_artifact_path(script_path):
+                paths_to_add.append(script_path)
             else:
-                logger.debug("[%s] Backflow: nothing to commit", state.repo)
-        except Exception as exc:
-            logger.warning("[%s] Backflow commit failed: %s", state.repo, exc)
+                logger.warning("[%s] Ignoring non-paper script path from backflow: %s", state.repo, raw_script)
+        msg = f"backflow: {state.repo} → {section_type}/{section_dir}"
+        auto_commit_final_artifacts(
+            paths_to_add,
+            msg,
+            dry_run=dry_run,
+            push=push_final_artifacts,
+        )
 
     return placement
 
@@ -979,12 +1497,13 @@ def fan_out_discovery(
 
         # Create fresh state
         opp_state = {
+            "schema_version": OUTREACH_STATE_SCHEMA_VERSION,
             "repo": opp_id,
             "stage": "B",
             "round": 0,
             "scores": {"codex": [], "claude": [], "final": []},
             "findings": [],
-            "events": [],
+            "action_history": [],
             "timestamps": {"created_at": iso_now()},
             "error": "",
             "draft_title": "",
@@ -1012,36 +1531,109 @@ def _tex_escape(text: str) -> str:
     return text
 
 
-def auto_commit_push(repo: str, stage: str, round_num: int, score: int, *, dry_run: bool = False) -> None:
-    """Auto-commit state files + push after each round.
-    Safe in worktree isolation — no branch conflicts.
-    Makes progress visible in PR (like lean4-codex-auto-dev PR #37)."""
+def is_final_artifact_path(path: str | Path) -> bool:
+    rel = _rel_from_any(path)
+    allowed_prefixes = (
+        _repo_relative(MAIN_PAPER_DIR / "sections") + "/",
+        _repo_relative(MAIN_PAPER_DIR / "scripts") + "/",
+    )
+    return any(rel.startswith(prefix) for prefix in allowed_prefixes)
+
+
+def _paper_script_path(raw: str) -> Optional[Path]:
+    if not raw:
+        return None
+    path = Path(raw)
+    if path.is_absolute():
+        return path
+    rel = str(path).replace("\\", "/").lstrip("./")
+    if rel.startswith(_repo_relative(MAIN_PAPER_DIR / "scripts") + "/"):
+        return REPO_ROOT / rel
+    if rel.startswith("scripts/"):
+        return MAIN_PAPER_DIR / rel
+    if rel.startswith("theory/"):
+        return REPO_ROOT / rel
+    return MAIN_PAPER_DIR / "scripts" / rel
+
+
+def auto_commit_final_artifacts(
+    paths: list[str | Path],
+    msg: str,
+    *,
+    dry_run: bool = False,
+    push: bool = True,
+) -> None:
+    """Commit only reviewed final artifacts; never commit runtime intermediates."""
     if dry_run:
         return
-    state_dir = str(STATE_DIR)
-    msg = f"outreach {repo}: Stage {stage} R{round_num} (score={score})"
-    try:
+
+    rel_paths: list[str] = []
+    rejected: list[str] = []
+    for path in paths:
+        rel = _rel_from_any(path)
+        if is_intermediate_path(rel) or not is_final_artifact_path(rel):
+            rejected.append(rel)
+        else:
+            rel_paths.append(rel)
+
+    if rejected:
+        raise RuntimeError(
+            "Refusing to commit non-final/intermediate outreach paths: "
+            + ", ".join(rejected[:8])
+        )
+    if not rel_paths:
+        logger.info("No final artifacts to commit for: %s", msg)
+        return
+
+    with git_ops_lock():
         subprocess.run(
-            ["git", "add", state_dir],
-            cwd=str(REPO_ROOT), capture_output=True, timeout=30,
+            ["git", "add", *rel_paths],
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            timeout=30,
         )
         result = subprocess.run(
-            ["git", "commit", "-m", msg, "--allow-empty"],
-            cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=30,
+            ["git", "commit", "-m", msg, "--", *rel_paths],
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=30,
         )
-        if result.returncode == 0:
-            push = subprocess.run(
+        if result.returncode != 0:
+            logger.debug("Final artifact commit skipped: %s", (result.stderr or result.stdout)[:300])
+            return
+        logger.info("Committed final artifacts: %s", msg)
+
+        if push:
+            pushed = subprocess.run(
                 ["git", "push", "origin", "HEAD"],
-                cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=60,
+                cwd=str(REPO_ROOT),
+                capture_output=True,
+                text=True,
+                timeout=60,
             )
-            if push.returncode == 0:
-                logger.info("Auto-committed+pushed: %s", msg)
+            if pushed.returncode == 0:
+                logger.info("Pushed final artifact commit")
             else:
-                logger.warning("Push failed: %s", push.stderr[:200])
-        else:
-            logger.debug("Nothing to commit (no state changes)")
-    except Exception as exc:
-        logger.warning("Auto-commit failed: %s", exc)
+                logger.warning("Push failed: %s", pushed.stderr[:200])
+
+
+def auto_commit_push(repo: str, stage: str, round_num: int, score: int, *, dry_run: bool = False) -> None:
+    """Record a local checkpoint without committing runtime intermediates.
+
+    Outreach state, target research docs, logs, and drafts are runtime
+    intermediates. Final artifacts are committed only through
+    auto_commit_final_artifacts().
+    """
+    if dry_run:
+        return
+    logger.info(
+        "Local checkpoint only: %s Stage %s R%d (score=%d); no git commit/push",
+        repo,
+        stage,
+        round_num,
+        score,
+    )
 
 
 def coerce_score(value: Any, default: int = 0) -> int:
@@ -1143,6 +1735,10 @@ def repo_checkout(repo: str, *, dry_run: bool) -> Optional[Path]:
         return
 
     base = repo_base(repo)
+    if base == "the-omega-institute/automath":
+        yield REPO_ROOT
+        return
+
     temp_dir = Path(tempfile.mkdtemp(prefix=f"outreach_{repo_slug(repo)}_"))
     clone_dir = temp_dir / base.split("/", 1)[1]
     try:
@@ -1533,7 +2129,7 @@ def build_content_plan(
     theorem_refs: list[str],
 ) -> dict[str, Any]:
     """Build a concrete content plan. Reads target-specific docs if they exist,
-    otherwise falls back to generic Lean file scanning.
+    otherwise falls back to static Lean source scanning.
 
     Like loning's oracle_pipeline reading PIPELINE.md per paper:
     we read targets/{repo}/*.md for specific research directions."""
@@ -1563,14 +2159,19 @@ def build_content_plan(
                 else:
                     target_context += f"\n\n--- {f.name} ---\n{content[:2000]}"
 
+    scope_context = build_scope_context(repo)
+    context_header = agent_context_header("context_aware", scope_context)
+
     # If we have target-specific docs (issue briefs, prior research), use them
     if target_context:
         plan = {
             "codex_task": (
+                f"{context_header}\n"
                 f"Read the research documents below for {repo}. "
                 f"They describe specific issues, prior results, and computation data. "
                 f"Your job: continue the research described, address open questions, "
                 f"and produce findings that are NEW and USEFUL to the target.\n"
+                f"{NO_LEAN_EXECUTION_POLICY}\n"
                 f"{target_context}"
             ),
             "target_format": "GitHub issue",
@@ -1591,6 +2192,7 @@ def build_content_plan(
     base = repo_base(repo)
     plan = {
         "codex_task": (
+            f"{context_header}\n"
             f"DISCOVERY MODE for {base}.\n\n"
             f"You are looking for ways the Omega project (https://github.com/the-omega-institute/automath) "
             f"can make SUBSTANTIVE contributions to {base}. Not bug fixes, not doc edits, not filling "
@@ -1601,12 +2203,13 @@ def build_content_plan(
             f"- `gh api repos/{base}/contents/CONTRIBUTING.md --jq '.content' | base64 -d` (if exists)\n"
             f"- `gh pr list --repo {base} --state merged --limit 10 --json number,title,author`\n"
             f"- `gh issue list --repo {base} --state open --limit 20 --json number,title,labels`\n"
-            f"- Browse their code structure and Lean modules\n\n"
+            f"- Browse their code structure and Lean modules as static text only\n\n"
             f"STEP 2: Understand OUR project.\n"
             f"- Read our paper: `head -100 theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.tex`\n"
-            f"- Our Lean modules: `ls lean4/Omega/Folding/ lean4/Omega/POM/ lean4/Omega/Frontier/`\n"
+            f"- Our Lean modules may be inspected with cat/rg only; do not run Lean tooling\n"
             f"- Our scripts: `ls theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/scripts/equational_theory/`\n"
-            f"- Our theorem count: 10,500+ verified Lean 4 theorems from x²=x+1\n\n"
+            f"- Existing committed Lean theorem refs are prior evidence, not something this pipeline recompiles\n\n"
+            f"{NO_LEAN_EXECUTION_POLICY}\n\n"
             f"STEP 3: Find where our work adds value to theirs.\n"
             f"- What mathematical structures do we both care about?\n"
             f"- Where do our computed results answer their open questions?\n"
@@ -1627,7 +2230,7 @@ def build_content_plan(
     logger.info("[%s] B0 plan: DISCOVERY MODE (no target docs)", repo)
     return plan
 
-    # FALLBACK: generic plan from Lean file scanning (only if discovery mode is disabled)
+    # FALLBACK: generic plan from static Lean source scanning (only if discovery mode is disabled)
     # Read Conjectures.lean for open conjectures
     conjectures_file = REPO_ROOT / "lean4" / "Omega" / "Frontier" / "Conjectures.lean"
     open_conjectures: list[dict[str, Any]] = []
@@ -1638,7 +2241,7 @@ def build_content_plan(
             name = match.group(2)
             open_conjectures.append({
                 "name": name,
-                "category": "research_open",
+                "category": "open_reference",
                 "ams": "37",
                 "source_file": f"lean4/Omega/Frontier/Conjectures.lean",
                 "doc_comment": doc,
@@ -1655,7 +2258,7 @@ def build_content_plan(
             if any(kw in name for kw in ["zero", "one", "two", "three", "four", "five"]):
                 test_cases.append({
                     "name": name,
-                    "category": "test",
+                    "category": "proved_reference",
                     "ams": "37",
                     "source_file": "lean4/Omega/Folding/MomentSum.lean",
                     "doc_comment": f"Proved: {name}",
@@ -1665,7 +2268,7 @@ def build_content_plan(
     # FiberRing.lean — proved ring isomorphism
     formalized_results: list[dict[str, Any]] = [{
         "name": "stableValueRingEquiv",
-        "category": "research_formalized",
+        "category": "proved_reference",
         "ams": "11",
         "source_file": "lean4/Omega/Folding/FiberRing.lean:157",
         "doc_comment": "X_m is ring-isomorphic to ZMod(Nat.fib(m+2))",
@@ -1673,17 +2276,17 @@ def build_content_plan(
     }]
 
     # S₃ recurrence IS PROVED (S3Recurrence.lean + CCSPrime8Split.lean, no sorry).
-    # Mark as formalized, not open.
+    # Mark as an existing proved reference, not open.
     key_results: list[dict[str, Any]] = [{
         "name": "S₃_recurrence",
-        "category": "research_formalized",
+        "category": "proved_reference",
         "ams": "37",
         "source_file": "lean4/Omega/Folding/S3Recurrence.lean",
         "doc_comment": "S₃ linear recurrence: proved unconditionally in Automath",
         "proved": True,
     }, {
         "name": "S₂_exponential_growth",
-        "category": "research_open",
+        "category": "open_reference",
         "ams": "37",
         "source_file": "lean4/Omega/Folding/MomentRecurrence.lean",
         "doc_comment": "S₂(m) = Theta(lambda_+^m) where lambda_+ is Perron root of t³-2t²-2t+2",
@@ -1695,23 +2298,22 @@ def build_content_plan(
     # Determine target format from repo
     if "formal-conjectures" in repo:
         task = (
-            "Write a Lean 4 file matching the formal-conjectures format (see ABC.lean). "
-            "Include Apache 2.0 header, import FormalConjectures.Util.ProblemImports, "
-            "use @[category X, AMS N] attributes. Items marked proved=true get short proofs "
-            "(by decide or by norm_num). Items marked proved=false get sorry."
+            "Draft a GitHub issue or data-contribution proposal for formal-conjectures. "
+            "Do not write Lean files or proofs. If a future Lean PR is appropriate, "
+            "describe it as a separate manual follow-up with exact source references."
         )
-        fmt = "Lean file"
+        fmt = "GitHub issue"
         example = "FormalConjectures/Wikipedia/ABC.lean"
-        output = "tools/community-outreach/drafts/OmegaGoldenMeanShift_v2.lean"
+        output = "tools/community-outreach/drafts/OmegaGoldenMeanShift_issue.md"
     elif "equational_theories" in repo:
         task = (
             "Construct Fibonacci ring-operation magmas as separating countermodels. "
-            "Use stableValueRingEquiv to define magma operations on ZMod(Nat.fib(m+2)) "
-            "and test which equation pairs they separate."
+            "Use Python/combinatorial certificates and paper references only. "
+            "Do not define Lean magmas, run Lean, or edit Lean files."
         )
-        fmt = "Lean file + data"
+        fmt = "GitHub issue + data"
         example = "README.md CONTRIBUTING.md"
-        output = "tools/community-outreach/drafts/FibonacciMagmas.lean"
+        output = "tools/community-outreach/drafts/FibonacciMagmas_issue.md"
     else:
         task = f"Analyze {repo} and draft a contribution using Automath results."
         fmt = "GitHub issue"
@@ -1774,6 +2376,8 @@ def build_stage_b0_plan_prompt(
         content selection to Codex — Codex cannot distinguish proved from open,
         true from false. YOU read the Automath sources and pick exactly what to include.
 
+        {NO_LEAN_EXECUTION_POLICY}
+
         1. What FORMAT does the target repo expect?
            (Check CONTRIBUTING.md, look at merged PRs)
 
@@ -1786,30 +2390,30 @@ def build_stage_b0_plan_prompt(
            - Main paper theory/2026_golden_ratio_*/sections/ — open questions in Discussion
 
            For each item you select, mark it clearly:
-           PROVED = can be @[category test] or @[category research formalized]
-           OPEN = must be @[category research open] with sorry
+           PROVED = already present in committed Automath text/Lean/paper sources
+           OPEN = explicitly not proved by the current Automath sources
 
         3. Write a COMPLETE content list for Codex. Codex should NOT search or decide
-           what to include — it should only FORMAT your list into the target's structure.
+           what to include — it should only draft target-facing text/artifact plans.
 
         4. If deep research produces NEW results, flag for backflow to main paper.
 
         Return JSON only:
         {{
-          "codex_task": "Write a Lean 4 file containing exactly the items listed below.
-                        Do NOT add, remove, or modify items. Format only.",
-          "target_format": "Lean file|GitHub issue|PR|zulip post|email",
+          "codex_task": "Draft a target-facing issue/reply/artifact plan containing exactly the items listed below.
+                        Do NOT add, remove, or modify items. Do not write or run Lean.",
+          "target_format": "GitHub issue|PR plan|zulip post|email|data artifact",
           "target_format_example": "URL to example file in target repo to copy format from",
-          "output_type": "Lean 4 file|issue body|post text",
+          "output_type": "issue body|post text|data artifact plan",
           "output_path": "where to write the output",
           "content_list": [
             {{
               "name": "theorem/conjecture name",
-              "category": "test|research_formalized|research_open",
+              "category": "proved_reference|open_reference|new_result|computation",
               "ams": "11|37|40|47",
               "source_file": "lean4/Omega/path/File.lean:line",
-              "lean_statement": "the actual Lean 4 statement to include (or sorry sketch)",
-              "doc_comment": "one-line description for the doc comment",
+              "statement": "mathematical statement in prose/LaTeX, not Lean code",
+              "doc_comment": "one-line description",
               "proved": true
             }}
           ],
@@ -1824,6 +2428,7 @@ def build_stage_b0_plan_prompt(
 
 
 def build_stage_b1_prompt(repo: str, inventory: dict[str, Any]) -> str:
+    scope_context = build_scope_context(repo)
     return textwrap.dedent(
         f"""\
         You are Stage B1 of a community outreach pipeline.
@@ -1831,10 +2436,13 @@ def build_stage_b1_prompt(repo: str, inventory: dict[str, Any]) -> str:
         Repository target: {repo}
         Automath repo root: {REPO_ROOT}
         Forbidden paths: {", ".join(FORBIDDEN_PATH_PATTERNS)}
+        {NO_LEAN_EXECUTION_POLICY}
+        {agent_context_header("context_aware", scope_context)}
 
         Read the target repository and the Automath repository. Identify the
-        mathematically substantive parts of the target repo, especially Lean 4
-        formalizations, README claims, and any PDF papers.
+        mathematically substantive parts of the target repo, especially static
+        Lean 4 source text, README claims, and any PDF papers. Do not compile
+        or edit Lean.
 
         Repository inventory:
         {json.dumps(inventory, indent=2, ensure_ascii=False)}
@@ -1863,6 +2471,9 @@ def build_stage_b2_prompt(
     """Build the B2 prompt. If claude_plan has a content_list, produce a SHORT
     formatting-only prompt. Otherwise fall back to the full research prompt."""
 
+    scope_context = build_scope_context(repo)
+    context_header = agent_context_header("context_aware", scope_context)
+
     # ROUTING: R1 (no previous rounds) → bridge-finding from scratch.
     # R2+ (has previous rounds with doc) → edit existing research.md.
     has_previous_doc = previous_rounds and any(r.get("doc_path") for r in previous_rounds)
@@ -1883,7 +2494,7 @@ def build_stage_b2_prompt(
                 action_items_str = json.dumps(action_items, indent=2, ensure_ascii=False)
                 break
 
-        target_dir = SCRIPT_DIR / "targets" / repo_slug(repo)
+        target_dir = target_dir_for_repo(repo)
         scripts_available = ""
         if target_dir.exists():
             scripts = [f.name for f in target_dir.iterdir() if f.suffix == ".py"]
@@ -1894,6 +2505,8 @@ def build_stage_b2_prompt(
             f"""\
             You are a research mathematician continuing deep work on {repo}.
             Your goal: RESOLVE the open questions below. Use whatever tools you need.
+            {NO_LEAN_EXECUTION_POLICY}
+            {context_header}
 
             ═══════════════════════════════════════════════════════════════
             OPEN QUESTIONS FROM CLAUDE'S REVIEW
@@ -1913,7 +2526,8 @@ def build_stage_b2_prompt(
             - Pure reasoning/proof → write the argument directly
             - Needs computation → write and run a Python script
             - Needs verification of a claim → test it (code or counterexample search)
-            - Needs literature/code reading → read the relevant files
+            - Needs literature/code reading → read the relevant files as text
+            - Needs Lean formalization → mark as blocked/future external verification
 
             You have full access to:
             - Python 3 with sympy, numpy, etc.
@@ -1971,6 +2585,8 @@ def build_stage_b2_prompt(
             return textwrap.dedent(
                 f"""\
                 {claude_plan.get('codex_task', '')}
+                {NO_LEAN_EXECUTION_POLICY}
+                {context_header}
                 {existing_block}
                 Return JSON:
                 {{
@@ -2011,6 +2627,8 @@ def build_stage_b2_prompt(
 
             TARGET: {base}
             TASK: {claude_plan.get('codex_task', '')}
+            {NO_LEAN_EXECUTION_POLICY}
+            {context_header}
             {"" if not existing_research else chr(10) + "═══════════════════════════════════════════════════════════════" + chr(10) + "EXISTING RESEARCH (from previous runs — BUILD ON THIS, don't discard):" + chr(10) + "═══════════════════════════════════════════════════════════════" + chr(10) + existing_research[:4000] + chr(10) + chr(10) + "Keep the findings above. You may ADD new ones but do NOT remove existing." + chr(10)}
             ═══════════════════════════════════════════════════════════════
             STEP 1: DEEP-READ THE TARGET
@@ -2029,6 +2647,7 @@ def build_stage_b2_prompt(
             - `rg "theorem|def " lean4/Omega/Folding/FiberRing.lean | head -20`
             - `rg "theorem|def " lean4/Omega/Folding/Entropy.lean | head -20`
             - Search for specific topics: `rg "<keyword from target>" lean4/ theory/`
+            These are text-inspection commands only; do not run Lean tooling.
 
             ═══════════════════════════════════════════════════════════════
             STEP 3: FIND BRIDGES (the real task)
@@ -2129,7 +2748,7 @@ def build_stage_b2_prompt(
 
     deep_section = ""
     if deep_mode:
-        deep_section = textwrap.dedent("""
+        deep_section = textwrap.dedent(f"""
 
         ═══════════════════════════════════════════════════════════════
         DEEP RESEARCH MODE (previous rounds scored low — escalate depth)
@@ -2158,6 +2777,9 @@ def build_stage_b2_prompt(
            - 遍历论: 熵, 极限分布, 大偏差
            - 对称性: Galois 作用, 拟共轭, 刚性定理
            - 数论算术: Zeckendorf 表示, Sturm 序列, p-adic 极限
+
+        6. 坏例子结构定理驱动约束:
+        {BAD_EXAMPLE_DEEP_RESEARCH_STANDARD_ZH}
         """)
 
     return textwrap.dedent(
@@ -2167,6 +2789,8 @@ def build_stage_b2_prompt(
         Repository target: {repo}
         Automath repo root: {REPO_ROOT}
         Forbidden paths: {", ".join(FORBIDDEN_PATH_PATTERNS)}
+        {NO_LEAN_EXECUTION_POLICY}
+        {context_header}
 
         Stage B1 output:
         {json.dumps(b1_data, indent=2, ensure_ascii=False)}{feedback_section}{whitelist_section}{deep_section}
@@ -2176,15 +2800,16 @@ def build_stage_b2_prompt(
         ═══════════════════════════════════════════════════════════════
         {json.dumps(claude_plan or {}, indent=2, ensure_ascii=False)}
 
-        YOUR JOB: Take the "content_list" above and FORMAT it into the
-        target repo's structure. Do NOT add items. Do NOT remove items.
-        Do NOT change mathematical statements. ONLY format.
+        YOUR JOB: Take the "content_list" above and draft target-facing
+        prose/artifact plans in the target repo's structure. Do NOT add items.
+        Do NOT remove items. Do NOT change mathematical statements. ONLY format.
+        Do not generate Lean files.
 
         If "content_list" is provided:
           - Read the "target_format_example" to learn the exact file format
-          - Write each item from content_list into the output file
-          - Use the category, AMS tag, and lean_statement exactly as given
-          - Add license header and imports matching the example
+          - Write each item from content_list into target-facing prose
+          - Use the category, AMS tag, statement, and source_file exactly as given
+          - Do not add imports, proof terms, `sorry`, or Lean syntax
 
         If "content_list" is empty or missing, fall back to Step 1 below.
 
@@ -2209,8 +2834,8 @@ def build_stage_b2_prompt(
         STEP 2: SEARCH THE ENTIRE AUTOMATH PROJECT
         ═══════════════════════════════════════════════════════════════
 
-        Automath is a large project. USE YOUR TOOLS to search — do not
-        read files manually. Search the ENTIRE project, not just lean4/:
+        Automath is a large project. USE YOUR TOOLS to search static text.
+        Search the ENTIRE project, not just lean4/:
 
         A) SEARCH with rg/grep across ALL directories:
            rg "<keywords from target needs>" lean4/ theory/ papers/ --type lean --type tex
@@ -2245,7 +2870,8 @@ def build_stage_b2_prompt(
         or "they'd say 'interesting but so what?'", it's not a finding.
 
         Good: "Your issue #N asks for X. Automath's theorem Y gives you X
-              for the special case Z, with a Lean 4 proof at file:line."
+              for the special case Z, with an existing committed Lean 4 reference
+              or paper proof at file:line."
         Bad:  "Automath's theorem Y is related to your theorem X."
 
         Research standard (must follow verbatim):
@@ -2254,7 +2880,8 @@ def build_stage_b2_prompt(
         HARD CONSTRAINTS:
         1. Every `automath_refs` entry MUST point to a real file:line in the Automath repo.
            Do NOT invent paths. Verify the file exists before citing it.
-        2. Theorem names MUST match actual Lean 4 theorem names from the whitelist.
+        2. Theorem names MUST match actual committed Lean 4 theorem names from the whitelist,
+           but do not run Lean to check them.
         3. Do NOT invent fictional mathematical objects.
         4. If the target repo has no needs Automath can help with, return
            `"findings": []` with `"stop_reason"` explaining why.
@@ -2291,12 +2918,13 @@ def build_stage_b2_prompt(
 
 def build_stage_b25_verify_prompt(repo: str, findings: list[Any]) -> str:
     """B2.5: Codex verifies its own concrete algebra claims with Python.
-    Like PR #37's `lake build` — execute then verify. If a claim is wrong, fix it."""
+    No Lean execution is allowed; if a claim is wrong, fix it."""
     return textwrap.dedent(
         f"""\
         You made these mathematical claims about {repo}. Some may have concrete
         algebra errors. Your job: VERIFY each concrete claim with Python, then
         fix or remove any that fail.
+        {NO_LEAN_EXECUTION_POLICY}
 
         FINDINGS TO VERIFY:
         {json.dumps(findings, indent=2, ensure_ascii=False)}
@@ -2352,6 +2980,10 @@ def build_stage_b3_prompt(repo: str, findings: list[Any]) -> str:
         Score the following research findings for repository {repo}.
         Focus on mathematical correctness, novelty, and whether the resulting
         outreach issue would be technically credible and publishable.
+        {NO_LEAN_EXECUTION_POLICY}
+
+        Penalize any finding that claims this pipeline ran Lean, added Lean
+        proofs, or completed local formalization.
 
         Findings:
         {json.dumps(findings, indent=2, ensure_ascii=False)}
@@ -2370,25 +3002,30 @@ def build_stage_b3_prompt(repo: str, findings: list[Any]) -> str:
 
 
 def build_stage_b4_prompt(repo: str, findings: list[Any], codex_score_data: dict[str, Any]) -> str:
+    scope_context = build_scope_context(repo)
     return textwrap.dedent(
         f"""\
         You are Stage B4 (Claude final review) of a community outreach pipeline.
 
         Review the findings below for repository {repo}.
         Score on THREE dimensions equally weighted:
+        {NO_LEAN_EXECUTION_POLICY}
+        {agent_context_header("context_aware", scope_context)}
 
         1. CORRECTNESS: Is the math right? Are PROVED items actually proved in
            Automath? Are OPEN items actually open (not proved elsewhere)?
-           CRITICAL: check that no "conjecture" is contradicted by Automath's
-           own verified Lean proofs.
+           CRITICAL: use committed Automath text/Lean refs and paper sections as
+           static evidence only; do not request or assume a local Lean build.
         2. PLAN COMPLIANCE: Did Codex follow the B0 content_list exactly?
            Every item from the list should be present. No invented items.
-           Correct category tags (test vs research_open vs research_formalized).
-        3. FORMAT QUALITY: Does the output match the target repo's format?
-           (license header, imports, AMS tags, doc comments, sorry for open items)
+           Correct category tags (proved_reference, open_reference, new_result, computation).
+        3. FORMAT QUALITY: Does the output match the target-facing artifact?
+           Reject generated Lean code, imports, proof terms, or `sorry` blocks.
 
-        Score 8+ if: all content_list items present, math correct, format matches.
-        Score <5 if: Codex added items not in the plan, or got proved/open wrong.
+        Score 8+ if: all content_list items present, math correct, no Lean execution
+        is claimed, and the artifact is useful to the target.
+        Score <5 if: Codex added items not in the plan, got proved/open wrong, or
+        claims local Lean compilation/formalization.
 
         Findings:
         {json.dumps(findings, indent=2, ensure_ascii=False)}
@@ -2475,6 +3112,9 @@ def run_stage_b(
     model: Optional[str],
     dry_run: bool,
     todo_item: Optional[dict[str, str]] = None,
+    allow_low_score_backflow: bool = False,
+    push_final_artifacts: bool = True,
+    skip_mid_claude: bool = False,
 ) -> RepoState:
     if state.stage not in {"B", "NEW"}:
         return state
@@ -2484,6 +3124,7 @@ def run_stage_b(
 
     # Bug 1 fix: accumulate previous rounds' feedback to pass to next round
     previous_rounds_feedback: list[dict[str, Any]] = []
+    b0_plan: dict[str, Any] = {}
 
     for round_num in range(state.round + 1, MAX_RESEARCH_ROUNDS + 1):
         state.stage = "B"
@@ -2540,7 +3181,7 @@ def run_stage_b(
                 # B2: Codex finds bridges (reads existing research.md if it exists)
                 # Even R1 should know about prior findings — don't start from zero
                 # if there's already a research doc from previous pipeline runs.
-                existing_doc = SCRIPT_DIR / "targets" / repo_slug(state.repo) / "research.md"
+                existing_doc = target_dir_for_repo(state.repo) / "research.md"
                 existing_context = ""
                 if existing_doc.exists():
                     existing_context = existing_doc.read_text(encoding="utf-8")[:5000]
@@ -2610,7 +3251,7 @@ def run_stage_b(
 
             # ─── B2.6 (R1 only): Claude reviews bridge quality ───────
             # R1 defines the direction. Claude catches bad bridges early.
-            if is_first_round and findings:
+            if is_first_round and findings and not skip_mid_claude:
                 b26_raw = claude_exec(
                     f"Review these bridge findings for {state.repo}. "
                     f"Are they genuine mathematical connections or superficial renamings? "
@@ -2658,14 +3299,22 @@ def run_stage_b(
             parsed_b3 = parse_json_from_output(b3_raw)
             b3_data = parsed_b3 if isinstance(parsed_b3, dict) else {}
 
-            b4_raw = claude_exec(
-                build_stage_b4_prompt(state.repo, findings, b3_data),
-                work_dir=REPO_ROOT,
-                timeout=900,
-                dry_run=dry_run,
-            )
-            parsed_b4 = parse_json_from_output(b4_raw)
-            b4_data = parsed_b4 if isinstance(parsed_b4, dict) else {}
+            if skip_mid_claude:
+                b4_data = {
+                    "overall_score": coerce_score(b3_data.get("overall_score"), 0),
+                    "verdict": "pass" if coerce_score(b3_data.get("overall_score"), 0) >= PASS_SCORE else "retry",
+                    "notes": "Mid-pipeline Claude research review skipped by --skip-mid-claude",
+                    "action_items": [],
+                }
+            else:
+                b4_raw = claude_exec(
+                    build_stage_b4_prompt(state.repo, findings, b3_data),
+                    work_dir=REPO_ROOT,
+                    timeout=900,
+                    dry_run=dry_run,
+                )
+                parsed_b4 = parse_json_from_output(b4_raw)
+                b4_data = parsed_b4 if isinstance(parsed_b4, dict) else {}
 
         # Bug 2 fix: fallback score = 0 (not 10) when Codex fails.
         codex_score = coerce_score(b3_data.get("overall_score"), 0)
@@ -2709,10 +3358,10 @@ def run_stage_b(
         state.scores.setdefault("claude", []).append(claude_score)
         state.scores.setdefault("final", []).append(final_score)
 
-        # Document-driven memory: write full findings + review to a file
+        # Document-driven local memory: write full findings + review to a file
         # so next round's Codex can READ the complete document, not just a summary.
-        # Write to targets/{repo}/research.md — single file, git tracks versions
-        target_dir = SCRIPT_DIR / "targets" / repo_slug(state.repo)
+        # targets/{repo}/ is ignored runtime scratch, not a branch artifact.
+        target_dir = target_dir_for_repo(state.repo)
         target_dir.mkdir(parents=True, exist_ok=True)
         doc_path = target_dir / "research.md"
         # If doc exists, read it and append Claude review. If not, write from scratch.
@@ -2817,7 +3466,13 @@ def run_stage_b(
             save_state(state)
 
             # Phase 2.5: BACKFLOW — Codex proposes placement, Claude reviews, generate .tex
-            backflow_placement = backflow_to_main_paper(state, model=model, dry_run=dry_run)
+            backflow_placement = backflow_to_main_paper(
+                state,
+                model=model,
+                dry_run=dry_run,
+                push_final_artifacts=push_final_artifacts,
+                skip_mid_claude=skip_mid_claude,
+            )
 
             return state
 
@@ -2839,8 +3494,25 @@ def run_stage_b(
     state.log_event("B", "max research rounds exhausted", score=last_score)
     save_state(state)
 
-    # Backflow on final round — research is done, write to main paper
-    backflow_to_main_paper(state, model=model, dry_run=dry_run)
+    if allow_low_score_backflow:
+        logger.warning("[%s] Backflow override enabled below pass gate (score=%d)",
+                       state.repo, last_score)
+        backflow_to_main_paper(
+            state,
+            model=model,
+            dry_run=dry_run,
+            push_final_artifacts=push_final_artifacts,
+            skip_mid_claude=skip_mid_claude,
+        )
+    else:
+        state.log_event(
+            "B",
+            "backflow skipped (below pass gate)",
+            score=last_score,
+            verdict="skip",
+            detail=f"requires score >= {PASS_SCORE}; use --allow-low-score-backflow to override",
+        )
+        save_state(state)
 
     auto_commit_push(state.repo, "B-exhausted", MAX_RESEARCH_ROUNDS, last_score, dry_run=dry_run)
     mark_processed(state.repo, dry_run=dry_run)
@@ -2861,6 +3533,7 @@ def build_stage_c1_prompt(
     backflow_placement: Optional[dict[str, Any]] = None,
 ) -> str:
     note_block = f"User revision note:\n{revision_note}\n\n" if revision_note else ""
+    scope_context = build_scope_context(repo)
 
     # If backflow was done, include reference to the paper section
     backflow_context = ""
@@ -2881,13 +3554,27 @@ def build_stage_c1_prompt(
 
         Draft a GitHub issue or issue reply for repository {repo}.
         This must read like a serious technical contribution, not a pitch.
+        {NO_LEAN_EXECUTION_POLICY}
+        {agent_context_header("context_aware", scope_context)}
         {backflow_context}
         Requirements:
         - Include the main theorem statement(s) and proof sketch
-        - Reference verification scripts and computational certificates
-        - Cite Lean 4 theorem references using exact file:line form
+        - Reference committed verification scripts and computational certificates.
+          Prefer paper-side paths under theory/.../scripts/ when backflow copied them.
+          Do not cite tools/community-outreach/targets/...; that directory is local scratch.
+        - Prefer paper-side .tex/scripts over lean4/ refs. If paper-side artifacts
+          exist, do not list lean4/ paths in the public draft; keep Lean refs as
+          internal audit anchors only.
+        - Cite existing committed Automath Lean 4 theorem references using exact file:line form
+          only when they are already present; do not claim new local Lean verification
         - Honest proved/conjectured/untested labeling
+        - Explicitly keep the public reply within the verified current scope.
+          If a stronger direction is interesting but unproved, label it as out-of-scope
+          or omit it; it will be recorded in the local future queue.
         - Avoid self-promotion. Lead with the math, mention the repo naturally.
+        - Do not introduce unrelated target-repo theorem anchors. The refs below
+          are target repository refs, not Automath proof refs; cite them only if
+          the finding directly depends on them.
         - The body must end with exactly:
           {AUTOMATH_TRAILER}
         - Return JSON only.
@@ -2895,7 +3582,7 @@ def build_stage_c1_prompt(
         {note_block}Findings:
         {json.dumps(findings, indent=2, ensure_ascii=False)}
 
-        Lean theorem refs:
+        Target repository Lean theorem refs (not Automath refs):
         {json.dumps(theorem_refs[:40], indent=2, ensure_ascii=False)}
 
         Repository inventory:
@@ -2910,18 +3597,43 @@ def build_stage_c1_prompt(
     )
 
 
-def build_stage_c2_prompt(repo: str, title: str, body: str) -> str:
+def build_stage_c2_prompt(
+    repo: str,
+    title: str,
+    body: str,
+    findings: list[Any],
+    backflow_placement: Optional[dict[str, Any]] = None,
+    agent_context_mode: str = "context_aware",
+) -> str:
+    scope_context = build_scope_context(repo)
+    backflow_block = "No backflow placement was supplied."
+    if backflow_placement:
+        backflow_block = json.dumps(backflow_placement, indent=2, ensure_ascii=False)
     return textwrap.dedent(
         f"""\
         You are Stage C2 of a community outreach pipeline.
 
         Review the GitHub issue draft below for repository {repo}.
+        {NO_LEAN_EXECUTION_POLICY}
+        {agent_context_header(agent_context_mode, scope_context)}
         Check:
         - technical accuracy
         - tone (no self-promotion)
         - honest proved/conjectured/untested labeling
-        - Lean 4 theorem references look plausible and specific
+        - Automath Lean 4 theorem references are real-looking, specific file:line refs
+        - target-repo theorem refs are used only when directly relevant
+        - no unrelated theorem anchors are introduced from the target repository
+        - paper backflow context is reflected when backflow exists
+        - verification artifacts are committed/public paths, not private scratch paths
+        - the draft closes only the verified current scope and does not sell deferred
+          future-queue items as completed results
         - body ends with {AUTOMATH_TRAILER}
+
+        Reject the draft if it cites a theorem/object not present in the findings,
+        if it turns a conjecture into a proved theorem, or if it reads like an
+        Automath advertisement rather than a target-facing technical contribution.
+        Also reject it if it claims that this outreach run compiled Lean, added a
+        Lean proof, ran `lake build`, or otherwise completed local formalization.
 
         Return JSON only:
         {{
@@ -2932,6 +3644,12 @@ def build_stage_c2_prompt(repo: str, title: str, body: str) -> str:
           "notes": "short review note"
         }}
 
+        Findings:
+        {json.dumps(findings[:8], indent=2, ensure_ascii=False)}
+
+        Backflow placement:
+        {backflow_block}
+
         Draft title:
         {title}
 
@@ -2941,41 +3659,176 @@ def build_stage_c2_prompt(repo: str, title: str, body: str) -> str:
     )
 
 
-def fallback_draft(repo: str, findings: list[dict[str, Any]], theorem_refs: list[str]) -> tuple[str, str]:
-    title = f"Potential formal bridge between {repo.split('/')[-1]} and Automath"
+def fallback_draft(
+    repo: str,
+    findings: list[dict[str, Any]],
+    theorem_refs: list[str],
+    backflow_placement: Optional[dict[str, Any]] = None,
+) -> tuple[str, str]:
+    section_dir = (backflow_placement or {}).get("section_dir", "")
+    tex_path = str((backflow_placement or {}).get("tex_path", ""))
+    if section_dir == "signed_companion_collision_audit":
+        title = "Signed companion determinant audit and exterior-Lucas certificate"
+        body = "\n".join(
+            [
+                "I prepared a compact audit note for the signed companion convention used in the collision-kernel calculations.",
+                "",
+                "### Main statement",
+                "",
+                "For the signed Frobenius recurrence companion `A(c)` attached to the monic polynomial",
+                "",
+                "`x^d + c_1 x^{d-1} + ... + c_d`,",
+                "",
+                "the determinant identity is",
+                "",
+                "`det(I - A(c)) = 1 + sum_i c_i`.",
+                "",
+                "For the ordinary recurrence companion with the opposite sign convention, the corresponding determinant is `1 - sum_i c_i`; the two conventions therefore differ by a sign conversion rather than by a new invariant.",
+                "",
+                "For the audited q=6 and q=7 recurrence vectors, the signed proxy determinants are `110` and `422`.",
+                "",
+                "### Finite certificate",
+                "",
+                "The paper-side certificate checks the exterior-Lucas comparison for q=2,...,23. In that range, `c_{q,2} = Lucas(q)` holds exactly for q=3,4,5 and fails for q=2 and every q=6,...,23. The simultaneous triple coincidence with the signed determinant excess occurs exactly at q=5 in the audited range.",
+                "",
+                "### Paper-side artifacts",
+                "",
+                f"- `{_repo_relative(Path(tex_path)) if tex_path else 'the main-paper appendix section signed_companion_collision_audit'}`",
+                "- `theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/scripts/equational_theory/signed_companion_collision_audit.py`",
+                "- `theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/scripts/equational_theory/exterior_lucas_certificate_q2_23.json`",
+                "",
+                "### Status",
+                "",
+                "- Proved in the paper note: the signed determinant convention and the q=6,7 signed proxy determinant values.",
+                "- Computationally certified: the q=2,...,23 exterior-Lucas table.",
+                "- Not claimed here: a nonnegative collision-kernel presentation, a Bowen-Franks invariant statement, or an SFT flow-equivalence certificate for q=6 or q=7. Those require separate nonnegative-presentation or flow-equivalence data.",
+                "",
+                AUTOMATH_TRAILER,
+            ]
+        )
+        return title, sanitize_issue_text(body)
+
+    title = f"Potential paper-side bridge for {repo.split('/')[-1]}"
     rows = []
     for item in findings[:5]:
         status = item.get("status", "untested")
         rows.append(
             f"| {item.get('title', 'Unnamed connection')} | {status} | "
-            f"{'; '.join(item.get('lean_refs', theorem_refs[:1])) or 'n/a'} | "
-            f"{item.get('connection', '')} |"
+            f"{item.get('bridge') or item.get('connection', '')} |"
         )
     if not rows:
-        rows.append("| Candidate connection | untested | n/a | Requires fresh validation |")
+        rows.append("| Candidate connection | untested | Requires fresh validation |")
 
     body = "\n".join(
         [
-            "I have been comparing this Lean 4 repository against Automath and found a few contribution-shaped bridges that look worth checking.",
+            "I found a few paper-side bridges that look worth checking against this target.",
             "",
-            "| Correspondence | Status | Lean refs | Evidence |",
-            "| --- | --- | --- | --- |",
+            "| Correspondence | Status | Evidence |",
+            "| --- | --- | --- |",
             *rows,
             "",
-            "### Proof Sketches",
-            *[
-                f"- **{item.get('title', 'Connection')}**: {item.get('proof_sketch', 'Validation path still needs full formal checking.')}"
-                for item in findings[:5]
-            ],
+            "### Paper-side context",
+            f"- Section: `{section_dir or 'not recorded'}`",
+            f"- TeX path: `{_repo_relative(Path(tex_path)) if tex_path else 'not recorded'}`",
             "",
-            "### Why This Might Matter",
-            "- The overlap is specific enough to support a concrete theorem-level discussion instead of a generic collaboration request.",
-            "- The proved/conjectured/untested split keeps the proposal honest about current evidence.",
+            "This draft intentionally cites paper-side artifacts rather than local outreach scratch files or new local Lean work.",
             "",
             AUTOMATH_TRAILER,
         ]
     )
     return title, sanitize_issue_text(body)
+
+
+def _referenced_local_paths(text: str) -> list[Path]:
+    patterns = (
+        r"(lean4/[A-Za-z0-9_./-]+\.lean)",
+        r"(theory/[A-Za-z0-9_./-]+\.(?:tex|py|lean|json))",
+        r"(papers/[A-Za-z0-9_./-]+\.(?:tex|py|lean|json))",
+        r"(tools/community-outreach/targets/[A-Za-z0-9_./-]+\.(?:py|json|md|lean))",
+    )
+    paths: dict[str, Path] = {}
+    for pattern in patterns:
+        for raw in re.findall(pattern, text):
+            cleaned = raw.rstrip(".,);:`")
+            paths[cleaned] = REPO_ROOT / cleaned
+    return list(paths.values())
+
+
+def validate_draft_contract(
+    state: RepoState,
+    *,
+    backflow_placement: Optional[dict[str, Any]],
+    dry_run: bool,
+    fallback_used: bool = False,
+) -> dict[str, Any]:
+    """Deterministic Stage C gate before a draft can enter Stage D."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    best_score = max(state.scores.get("final", []) or [0])
+
+    if not state.draft_title.strip():
+        errors.append("empty draft title")
+    if not state.draft_body.strip():
+        errors.append("empty draft body")
+    if state.draft_body and not state.draft_body.rstrip().endswith(AUTOMATH_TRAILER):
+        errors.append("draft body does not end with Automath trailer")
+    safe_deterministic_fallback = (
+        fallback_used
+        and "Paper-side artifacts" in state.draft_body
+        and "lean4/" not in state.draft_body
+        and "tools/community-outreach/targets/" not in state.draft_body
+    )
+    if fallback_used and not dry_run and not safe_deterministic_fallback:
+        errors.append("C1 draft generation failed and fallback draft was used")
+    body_without_trailer = state.draft_body.replace(AUTOMATH_TRAILER, "").strip()
+    if len(body_without_trailer) < 500:
+        errors.append("draft body is too short to be a substantive outreach reply")
+
+    if not dry_run and best_score >= PASS_SCORE and not backflow_placement:
+        errors.append("passed research gate but no persisted backflow placement was found")
+
+    if backflow_placement:
+        section_dir = str(backflow_placement.get("section_dir", "")).strip()
+        tex_path = str(backflow_placement.get("tex_path", "")).strip()
+        if section_dir and section_dir not in state.draft_body and tex_path and tex_path not in state.draft_body:
+            warnings.append(f"draft does not mention backflow section/script context: {section_dir}")
+
+    referenced_paths = _referenced_local_paths(state.draft_body)
+    dirty = [] if dry_run else git_status_porcelain(referenced_paths)
+    if dirty:
+        errors.append("draft references uncommitted local artifacts: " + "; ".join(dirty[:8]))
+
+    lean_execution_claims = (
+        r"\blake build\b",
+        r"\bran lake\b",
+        r"\bcompiled (?:the )?Lean\b",
+        r"\bverified with lake\b",
+        r"\bLean proof (?:was )?added\b",
+        r"\badded .*Lean proof\b",
+        r"\bformalized in Lean\b",
+    )
+    if any(re.search(pattern, state.draft_body, flags=re.IGNORECASE) for pattern in lean_execution_claims):
+        errors.append("draft claims local Lean execution/formalization, but this pipeline is no-Lean-execution")
+
+    scratch_refs = [
+        _repo_relative(path)
+        for path in referenced_paths
+        if "tools/community-outreach/targets/" in _repo_relative(path)
+    ]
+    if scratch_refs:
+        warnings.append(
+            "draft cites outreach scratch artifacts; prefer paper-side theory/.../scripts paths: "
+            + ", ".join(scratch_refs[:5])
+        )
+
+    return {
+        "schema_version": OUTREACH_CONTRACT_SCHEMA_VERSION,
+        "approved": not errors,
+        "errors": errors,
+        "warnings": warnings,
+        "referenced_paths": [_repo_relative(path) for path in referenced_paths],
+        "backflow": backflow_placement or {},
+    }
 
 
 def run_stage_c(
@@ -2987,21 +3840,36 @@ def run_stage_c(
     model: Optional[str],
     dry_run: bool,
     backflow_placement: Optional[dict[str, Any]] = None,
+    no_claude_review: bool = False,
+    c2_context_mode: str = "context_aware",
 ) -> RepoState:
     if state.stage not in {"C", "D"}:
         return state
 
-    # Stage C runs AFTER backflow. The reply/issue draft references the paper section
-    # and bridge document that backflow produced.
+    # Stage C runs AFTER backflow. The reply/issue draft references the paper
+    # section produced inside the main paper tree.
     state.stage = "C"
     state.round = 1
     state.timestamps.setdefault("stage_c_started_at", iso_now())
     save_state(state)
-    logger.info("[%s] Stage C (C1 only, user is final gate, backflow=%s)",
+    logger.info("[%s] Stage C (C1 draft + C2 review, backflow=%s)",
                 state.repo, "yes" if backflow_placement else "no")
 
+    fallback_used = False
     if dry_run:
-        title, body = fallback_draft(state.repo, normalize_findings(state.findings), theorem_refs)
+        title, body = fallback_draft(
+            state.repo,
+            normalize_findings(state.findings),
+            theorem_refs,
+            backflow_placement=backflow_placement,
+        )
+        c2_data = {
+            "approved": True,
+            "overall_score": 8,
+            "title": title,
+            "body": body,
+            "notes": "dry-run review",
+        }
     else:
         c1_raw = codex_exec(
             build_stage_c1_prompt(
@@ -3016,38 +3884,107 @@ def run_stage_c(
         parsed_c1 = parse_json_from_output(c1_raw)
         if isinstance(parsed_c1, dict):
             title = str(parsed_c1.get("title", "")).strip()
-            body = sanitize_issue_text(str(parsed_c1.get("body", "")).strip())
+            raw_body = str(parsed_c1.get("body", "")).strip()
+            body = sanitize_issue_text(raw_body) if raw_body else ""
         else:
             title, body = "", ""
         if not title or not body:
-            title, body = fallback_draft(state.repo, normalize_findings(state.findings), theorem_refs)
+            fallback_used = True
+            title, body = fallback_draft(
+                state.repo,
+                normalize_findings(state.findings),
+                theorem_refs,
+                backflow_placement=backflow_placement,
+            )
+
+        if no_claude_review:
+            c2_data = {
+                "approved": True,
+                "overall_score": PASS_SCORE,
+                "title": title,
+                "body": body,
+                "notes": "Claude review skipped; deterministic contract gate only",
+            }
+        else:
+            c2_raw = claude_exec(
+                build_stage_c2_prompt(
+                    state.repo,
+                    title,
+                    body,
+                    normalize_findings(state.findings),
+                    backflow_placement=backflow_placement,
+                    agent_context_mode=c2_context_mode,
+                ),
+                work_dir=REPO_ROOT,
+                timeout=900,
+                dry_run=dry_run,
+            )
+            parsed_c2 = parse_json_from_output(c2_raw)
+            c2_data = parsed_c2 if isinstance(parsed_c2, dict) else {
+                "approved": False,
+                "overall_score": 0,
+                "notes": "C2 returned no parseable JSON",
+            }
+            if c2_data.get("title"):
+                title = str(c2_data.get("title", "")).strip()
+            if c2_data.get("body"):
+                body = sanitize_issue_text(str(c2_data.get("body", "")).strip())
 
     state.draft_title = title
     state.draft_body = sanitize_issue_text(body)
+    c2_score = coerce_score(c2_data.get("overall_score"), 0)
+    approved_raw = c2_data.get("approved")
+    c2_approval_flag = approved_raw is True or str(approved_raw).strip().lower() in {"true", "yes", "approved"}
+    c2_approved = c2_approval_flag and c2_score >= PASS_SCORE
+    contract = validate_draft_contract(
+        state,
+        backflow_placement=backflow_placement,
+        dry_run=dry_run,
+        fallback_used=fallback_used,
+    )
+    future_queue_added = (
+        record_future_scope_items(state, contract=contract, dry_run=dry_run)
+        if state.draft_body and contract["approved"]
+        else 0
+    )
     state.log_event(
         "C",
-        "draft created by C1 (auto-approved, user reviews in Stage D)",
+        "draft reviewed by C2",
         round=1,
-        score=8,
-        verdict="advance",
-        detail=f"title={title[:120]!r} body_len={len(state.draft_body)}",
+        score=c2_score,
+        verdict="advance" if c2_approved and contract["approved"] else "revise",
+        detail=json.dumps(
+            {
+                "title": title[:120],
+                "body_len": len(state.draft_body),
+                "c2_notes": str(c2_data.get("notes", ""))[:800],
+                "c2_agent_context_mode": c2_context_mode,
+                "contract": contract,
+                "future_queue_added": future_queue_added,
+            },
+            ensure_ascii=False,
+        ),
     )
     save_state(state)
 
-    if state.draft_title and state.draft_body:
+    if state.draft_title and state.draft_body and c2_approved and contract["approved"]:
         state.stage = "D"
         state.round = 0
+        state.error = ""
         state.timestamps["stage_c_completed_at"] = iso_now()
         save_state(state)
-        auto_commit_push(state.repo, "C", 1, 8, dry_run=dry_run)
+        auto_commit_push(state.repo, "C", 1, c2_score, dry_run=dry_run)
         return state
 
-    # C1 produced empty output — hard failure
-    state.stage = "SKIPPED"
-    state.timestamps["completed_at"] = iso_now()
-    state.log_event("C", "C1 produced empty draft", verdict="skip")
+    state.stage = "C"
+    state.round = 1
+    reasons = []
+    if not c2_approved:
+        reasons.append(f"C2 score={c2_score}, approved={c2_approval_flag}")
+    reasons.extend(contract["errors"])
+    state.error = "; ".join(reasons)[:1000] or "Stage C draft did not pass review"
     save_state(state)
-    mark_processed(state.repo, dry_run=dry_run)
+    auto_commit_push(state.repo, "C-review", 1, c2_score, dry_run=dry_run)
     return state
 
 
@@ -3152,6 +4089,11 @@ def process_repo_to_stage_d(
     model: Optional[str],
     dry_run: bool,
     todo_item: Optional[dict[str, str]] = None,
+    allow_low_score_backflow: bool = False,
+    push_final_artifacts: bool = True,
+    no_claude_review: bool = False,
+    skip_mid_claude: bool = False,
+    c2_context_mode: str = "context_aware",
 ) -> RepoState:
     if not valid_repo_slug(repo):
         state = RepoState(repo=repo, stage="ERROR", error="Invalid repo slug")
@@ -3168,7 +4110,7 @@ def process_repo_to_stage_d(
             theorem_refs = extract_lean_theorem_refs(repo_path)
 
             # Stage B produces research + backflow placement
-            backflow_placement = None
+            backflow_placement = backflow_placement_from_history(state)
             if state.stage == "B":
                 state = run_stage_b(
                     state,
@@ -3177,15 +4119,11 @@ def process_repo_to_stage_d(
                     model=model,
                     dry_run=dry_run,
                     todo_item=todo_item,
+                    allow_low_score_backflow=allow_low_score_backflow,
+                    push_final_artifacts=push_final_artifacts,
+                    skip_mid_claude=skip_mid_claude,
                 )
-                # Retrieve backflow placement from state events
-                for evt in reversed(state.action_history):
-                    if evt.get("action") == "backflow completed":
-                        try:
-                            backflow_placement = json.loads(evt.get("detail", "{}"))
-                        except (json.JSONDecodeError, TypeError):
-                            pass
-                        break
+                backflow_placement = backflow_placement_from_history(state)
 
             # FAN_OUT: discovery R1 produced opportunities → return state
             # so orchestrator can spawn parallel targets
@@ -3202,6 +4140,8 @@ def process_repo_to_stage_d(
                     model=model,
                     dry_run=dry_run,
                     backflow_placement=backflow_placement,
+                    no_claude_review=no_claude_review,
+                    c2_context_mode=c2_context_mode,
                 )
 
             return state
@@ -3219,6 +4159,8 @@ def complete_repo_interactively(
     *,
     model: Optional[str],
     dry_run: bool,
+    no_claude_review: bool = False,
+    c2_context_mode: str = "context_aware",
 ) -> RepoState:
     while state.stage == "D":
         state, revision_note = run_stage_d(state, dry_run=dry_run)
@@ -3227,6 +4169,7 @@ def complete_repo_interactively(
         with repo_checkout(state.repo, dry_run=dry_run) as repo_path:
             inventory = repo_inventory(repo_path, state.repo)
             theorem_refs = extract_lean_theorem_refs(repo_path)
+            backflow_placement = backflow_placement_from_history(state)
             state = run_stage_c(
                 state,
                 inventory=inventory,
@@ -3234,6 +4177,9 @@ def complete_repo_interactively(
                 revision_note=revision_note,
                 model=model,
                 dry_run=dry_run,
+                backflow_placement=backflow_placement,
+                no_claude_review=no_claude_review,
+                c2_context_mode=c2_context_mode,
             )
     return state
 
@@ -3246,6 +4192,11 @@ def process_repositories(
     model: Optional[str],
     dry_run: bool,
     todo_item: Optional[dict[str, str]] = None,
+    allow_low_score_backflow: bool = False,
+    push_final_artifacts: bool = True,
+    no_claude_review: bool = False,
+    skip_mid_claude: bool = False,
+    c2_context_mode: str = "context_aware",
 ) -> list[RepoState]:
     unique_repos = []
     seen = set()
@@ -3265,13 +4216,30 @@ def process_repositories(
         if worker_count == 1 or len(repo_list) == 1:
             for repo in repo_list:
                 batch_states.append(process_repo_to_stage_d(
-                    repo, skip_to=skip_to, model=model, dry_run=dry_run, todo_item=todo_item))
+                    repo,
+                    skip_to=skip_to,
+                    model=model,
+                    dry_run=dry_run,
+                    todo_item=todo_item,
+                    allow_low_score_backflow=allow_low_score_backflow,
+                    push_final_artifacts=push_final_artifacts,
+                    no_claude_review=no_claude_review,
+                    skip_mid_claude=skip_mid_claude,
+                    c2_context_mode=c2_context_mode,
+                ))
         else:
             with ThreadPoolExecutor(max_workers=min(worker_count, len(repo_list))) as executor:
                 future_map = {
                     executor.submit(
                         process_repo_to_stage_d, repo,
-                        skip_to=skip_to, model=model, dry_run=dry_run,
+                        skip_to=skip_to,
+                        model=model,
+                        dry_run=dry_run,
+                        allow_low_score_backflow=allow_low_score_backflow,
+                        push_final_artifacts=push_final_artifacts,
+                        no_claude_review=no_claude_review,
+                        skip_mid_claude=skip_mid_claude,
+                        c2_context_mode=c2_context_mode,
                     ): repo
                     for repo in repo_list
                 }
@@ -3312,6 +4280,157 @@ def process_repositories(
 
 
 # ---------------------------------------------------------------------------
+# Artifact hygiene / promotion
+# ---------------------------------------------------------------------------
+
+
+def tracked_intermediate_paths() -> list[str]:
+    result = subprocess.run(
+        ["git", "ls-files"],
+        cwd=str(REPO_ROOT),
+        capture_output=True,
+        text=True,
+        timeout=30,
+        encoding="utf-8",
+        errors="replace",
+    )
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or "git ls-files failed")
+    return sorted(path for path in result.stdout.splitlines() if is_intermediate_path(path))
+
+
+def staged_intermediate_additions() -> list[str]:
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--name-status"],
+        cwd=str(REPO_ROOT),
+        capture_output=True,
+        text=True,
+        timeout=30,
+        encoding="utf-8",
+        errors="replace",
+    )
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or "git diff --cached failed")
+    bad: list[str] = []
+    for line in result.stdout.splitlines():
+        if not line.strip():
+            continue
+        status, _, path = line.partition("\t")
+        if status.startswith("D"):
+            continue
+        if is_intermediate_path(path):
+            bad.append(path)
+    return sorted(bad)
+
+
+def check_artifact_hygiene() -> bool:
+    tracked = tracked_intermediate_paths()
+    staged = staged_intermediate_additions()
+    if tracked or staged:
+        print("Outreach artifact hygiene: FAIL")
+        if tracked:
+            print("Tracked intermediate paths:")
+            for path in tracked[:80]:
+                print(f"  {path}")
+            if len(tracked) > 80:
+                print(f"  ... {len(tracked) - 80} more")
+        if staged:
+            print("Staged intermediate additions:")
+            for path in staged[:80]:
+                print(f"  {path}")
+            if len(staged) > 80:
+                print(f"  ... {len(staged) - 80} more")
+        return False
+
+    print("Outreach artifact hygiene: OK")
+    return True
+
+
+def promote_artifact(src_arg: str, dest_arg: str, *, dry_run: bool, push: bool) -> Path:
+    src = Path(src_arg)
+    if not src.is_absolute():
+        src = REPO_ROOT / src
+    dest = Path(dest_arg)
+    if not dest.is_absolute():
+        dest = REPO_ROOT / dest
+
+    if not src.exists() or not src.is_file():
+        raise RuntimeError(f"Promote source must be an existing file: {src_arg}")
+    if is_intermediate_path(dest) or not is_final_artifact_path(dest):
+        raise RuntimeError(
+            "Promote destination must be a final artifact path under the main paper "
+            f"sections/scripts tree: {_repo_relative(dest)}"
+        )
+
+    if dry_run:
+        logger.info("[DRY RUN] promote %s → %s", _repo_relative(src), _repo_relative(dest))
+        return dest
+
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, dest)
+    auto_commit_final_artifacts(
+        [dest],
+        f"promote outreach artifact: {_repo_relative(dest)}",
+        dry_run=dry_run,
+        push=push,
+    )
+    return dest
+
+
+def _state_updated_at(path: Path, data: dict[str, Any]) -> str:
+    timestamps = data.get("timestamps", {})
+    return str(timestamps.get("updated_at") or timestamps.get("created_at") or path.stat().st_mtime)
+
+
+def archive_stale_states(*, dry_run: bool) -> list[Path]:
+    """Move stale local state files into an ignored archive directory."""
+    records: list[tuple[Path, dict[str, Any]]] = []
+    for path in sorted(STATE_DIR.glob("*.json")):
+        if path.name in {"processed.json", "candidates.json"}:
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        records.append((path, data))
+
+    by_repo: dict[str, list[tuple[Path, dict[str, Any]]]] = {}
+    for path, data in records:
+        by_repo.setdefault(str(data.get("repo", "")), []).append((path, data))
+
+    archive: set[Path] = set()
+    for repo, items in by_repo.items():
+        if len(items) <= 1:
+            continue
+        keep_path, _ = max(items, key=lambda item: _state_updated_at(item[0], item[1]))
+        for path, _ in items:
+            if path != keep_path:
+                archive.add(path)
+
+    for path, data in records:
+        if data.get("stage") == "ERROR" and "object has no attribute 'events'" in str(data.get("error", "")):
+            archive.add(path)
+
+    if not archive:
+        logger.info("No stale outreach state files to archive")
+        return []
+
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    archive_dir = STATE_DIR / "archive" / stamp
+    moved: list[Path] = []
+    for path in sorted(archive):
+        dest = archive_dir / path.name
+        logger.info("Archive stale state: %s → %s", path.name, dest.relative_to(STATE_DIR))
+        if dry_run:
+            moved.append(dest)
+            continue
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        path.replace(dest)
+        moved.append(dest)
+    return moved
+
+
+# ---------------------------------------------------------------------------
 # Status / CLI
 # ---------------------------------------------------------------------------
 
@@ -3319,8 +4438,18 @@ def process_repositories(
 def print_status() -> None:
     states = load_all_states()
     processed = load_processed_repos()
+    future_queue = load_future_queue()
+    repo_counts: dict[str, int] = {}
+    for state in states:
+        repo_counts[state.repo] = repo_counts.get(state.repo, 0) + 1
+    duplicates = sorted(repo for repo, count in repo_counts.items() if count > 1)
+
     print(f"Community outreach states: {len(states)}")
     print(f"Processed repos: {len(processed)}")
+    print(f"Future queue items: {len(future_queue)}")
+    print(f"Contract schema: {OUTREACH_CONTRACT_SCHEMA_VERSION}")
+    if duplicates:
+        print(f"Duplicate repo states: {', '.join(duplicates)}")
     if CANDIDATES_FILE.exists():
         print(f"Candidates file: {CANDIDATES_FILE}")
     print("")
@@ -3332,6 +4461,14 @@ def print_status() -> None:
         print(f"  Stage:    {state.stage}")
         print(f"  Round:    {state.round}")
         print(f"  Scores:   codex={codex_scores} claude={claude_scores} final={final_scores}")
+        backflow = backflow_placement_from_history(state)
+        if backflow:
+            print(f"  Backflow: {backflow.get('placement')}/{backflow.get('section_dir')}")
+        future_items = future_items_for_repo(state.repo)
+        if future_items:
+            print(f"  Future:  {len(future_items)} queued")
+            for item in future_items[:3]:
+                print(f"           [{item.get('id')}] {item.get('title')}")
         if state.submission_url:
             print(f"  Issue:    {state.submission_url}")
         if state.error:
@@ -3347,6 +4484,11 @@ def parse_args() -> argparse.Namespace:
             """\
             Examples:
               python3 tools/community-outreach/outreach_pipeline.py --status
+              python3 tools/community-outreach/outreach_pipeline.py --future-queue
+              python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --register-future-scope
+              python3 tools/community-outreach/outreach_pipeline.py --check-artifacts
+              python3 tools/community-outreach/outreach_pipeline.py --archive-stale-states
+              python3 tools/community-outreach/outreach_pipeline.py --promote tools/community-outreach/targets/x/final.tex theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/appendix/x/main.tex
               python3 tools/community-outreach/outreach_pipeline.py --discover --parallel 2
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --skip-to C
@@ -3358,10 +4500,26 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--issue", action="append", default=[], type=int, help="Issue number per --repo (same order); isolates state/context per issue")
     parser.add_argument("--todo", action="store_true", help="Claim and process next TODO item from TODO.md")
     parser.add_argument("--status", action="store_true", help="Show persisted state")
+    parser.add_argument("--future-queue", action="store_true", help="Show deferred scope/deep-research queue")
+    parser.add_argument("--register-future-scope", action="store_true", help="Extract deferred future tasks from the current draft state for --repo targets")
+    parser.add_argument("--append-future-note", nargs=2, metavar=("ID", "NOTE"), help="Append a note/source update to a future queue item")
+    parser.add_argument("--check-artifacts", action="store_true", help="Fail if outreach runtime artifacts are tracked or staged for addition")
+    parser.add_argument("--archive-stale-states", action="store_true", help="Move duplicate/error runtime states into an ignored local archive")
+    parser.add_argument("--promote", nargs=2, action="append", metavar=("SRC", "DEST"), help="Copy a reviewed local artifact to an allowed final path and commit it")
     parser.add_argument("--skip-to", choices=["B", "C", "D"], default="", help="Override the starting stage for --repo targets")
     parser.add_argument("--parallel", "-p", type=int, default=1, help="Number of repositories to process in parallel")
     parser.add_argument("--dry-run", action="store_true", help="Do not call external services or submit issues")
     parser.add_argument("--model", default=None, help="Override Codex model")
+    parser.add_argument("--no-push", action="store_true", help="Commit final artifacts locally without pushing")
+    parser.add_argument("--no-claude-review", action="store_true", help="Skip Claude review stages; use deterministic contract gates only")
+    parser.add_argument("--skip-mid-claude", action="store_true", help="Skip mid-pipeline Claude reviews while keeping final Stage C2 review enabled")
+    parser.add_argument("--zero-init-final-review", action="store_true", help="Run final Stage C2 as a cold zero-init review instead of context-aware scope review")
+    parser.add_argument("--prepare-only", action="store_true", help="Stop after preparing a draft; do not enter interactive Stage D")
+    parser.add_argument(
+        "--allow-low-score-backflow",
+        action="store_true",
+        help="Permit paper backflow after max research rounds even when the research score is below the pass gate",
+    )
     return parser.parse_args()
 
 
@@ -3431,6 +4589,28 @@ def main() -> int:
     if args.status:
         print_status()
         return 0
+    if args.future_queue:
+        print_future_queue(args.repo or None)
+        return 0
+    if args.append_future_note:
+        item_id, note = args.append_future_note
+        source_repo = args.repo[0] if args.repo else ""
+        added = append_future_queue_note(item_id, note, source_repo=source_repo, dry_run=args.dry_run)
+        print(f"Future queue note appended: {1 if added else 0}")
+        return 0
+    if args.check_artifacts:
+        return 0 if check_artifact_hygiene() else 1
+    if args.archive_stale_states:
+        moved = archive_stale_states(dry_run=args.dry_run)
+        print(f"Archived stale state files: {len(moved)}")
+        for path in moved:
+            print(f"  {path}")
+        return 0
+    if args.promote:
+        for src, dest in args.promote:
+            promoted = promote_artifact(src, dest, dry_run=args.dry_run, push=not args.no_push)
+            logger.info("Promoted artifact: %s", _repo_relative(promoted))
+        return 0
 
     repos: list[str] = []
     todo_item: Optional[dict[str, str]] = None
@@ -3469,6 +4649,29 @@ def main() -> int:
             print(f"Invalid repo slug: {repo}", file=sys.stderr)
             return 1
 
+    if args.register_future_scope:
+        total = 0
+        for repo in repos:
+            state = load_state(repo)
+            if not state:
+                print(f"No state found for {repo}", file=sys.stderr)
+                continue
+            contract = validate_draft_contract(
+                state,
+                backflow_placement=backflow_placement_from_history(state),
+                dry_run=True,
+                fallback_used=False,
+            )
+            if not contract["approved"]:
+                logger.warning("[%s] Future scope not registered; draft contract errors: %s",
+                               repo, "; ".join(contract["errors"]))
+                continue
+            added = record_future_scope_items(state, contract=contract, dry_run=args.dry_run)
+            total += added
+            logger.info("[%s] Registered future scope items: %d", repo, added)
+        print(f"Future scope items registered: {total}")
+        return 0
+
     states = process_repositories(
         repos,
         parallel=args.parallel,
@@ -3476,13 +4679,24 @@ def main() -> int:
         model=args.model,
         dry_run=args.dry_run,
         todo_item=todo_item,
+        allow_low_score_backflow=args.allow_low_score_backflow,
+        push_final_artifacts=not args.no_push,
+        no_claude_review=args.no_claude_review,
+        skip_mid_claude=args.skip_mid_claude,
+        c2_context_mode="zero_init_review" if args.zero_init_final_review else "context_aware",
     )
 
-    if not args.dry_run:
+    if not args.dry_run and not args.prepare_only:
         for idx, state in enumerate(states):
             if state.stage == "D":
                 logger.info("[%d/%d] Entering Stage D for %s", idx + 1, len(states), state.repo)
-                states[idx] = complete_repo_interactively(state, model=args.model, dry_run=args.dry_run)
+                states[idx] = complete_repo_interactively(
+                    state,
+                    model=args.model,
+                    dry_run=args.dry_run,
+                    no_claude_review=args.no_claude_review,
+                    c2_context_mode="zero_init_review" if args.zero_init_final_review else "context_aware",
+                )
 
     failed = [state for state in states if state.stage == "ERROR"]
     skipped = [state for state in states if state.stage == "SKIPPED"]
