@@ -6,6 +6,7 @@ import Omega.Zeta.AbelCongruenceEnergyParsevalBarcode
 import Omega.Zeta.AbelDecimationSemigroupIdentity
 import Omega.Zeta.AbelGrowthExponentCriterion
 import Omega.Zeta.AbelOffcriticalExponentialRadiusAmplification
+import Omega.Zeta.AbelMobiusNeutralizationFormal
 import Omega.Zeta.AbelTwoBaseDealiasingInjectivity
 import Omega.Zeta.AbelHardyEnergyDecimationOrthogonal
 import Omega.Zeta.AbelPowerbaseCovariancePolePowerMap

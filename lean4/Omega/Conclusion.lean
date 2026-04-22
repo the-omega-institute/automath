@@ -10,6 +10,7 @@ import Omega.Conclusion.AnchorFullRankWeightblindRigidity
 import Omega.Conclusion.AlgebraicLdpDfiniteStokesCompression
 import Omega.Conclusion.AlgorithmPrimeShiftEquivalence
 import Omega.Conclusion.AmbiguityShellJordanChainGraphLift
+import Omega.Conclusion.AmbiguityShellNilpotentIndexEqualsWindow
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.AuditComplexityAreaEquivalence
