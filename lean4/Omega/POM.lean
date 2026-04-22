@@ -379,6 +379,7 @@ import Omega.POM.MultiplicityFixedRExtrema
 import Omega.POM.NewmanCriticalAlgebraicEliminationSturm
 import Omega.POM.ObliviousWidthSBranchingProgramCount
 import Omega.POM.OnlineMultiplicativePrimeSupportLB
+import Omega.POM.OrderBottleneck
 import Omega.POM.OrderPolytopeVolumeLinext
 import Omega.POM.OracleBitLowerBoundSubexpMom
 import Omega.POM.OracleCapacityBimeasureIdentity
