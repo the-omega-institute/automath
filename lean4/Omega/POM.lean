@@ -186,6 +186,8 @@ import Omega.POM.LkSurfaceFreeEnergy
 import Omega.POM.LkBoundaryBulkRadonNikodym
 import Omega.POM.LkBoundarySpectralMeasureBeta32
 import Omega.POM.LkGapPi2
+import Omega.POM.LkDiscreteWeyl
+import Omega.POM.LkSpectralZetaDirichlet
 import Omega.POM.LowTemperatureThreeTermExpansion
 import Omega.POM.ParryOnesCLT
 import Omega.POM.UnifXnLocalLimitParry
