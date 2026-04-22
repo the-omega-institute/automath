@@ -97,6 +97,7 @@ import Omega.POM.DeltaqMeanSquareRhCriterion
 import Omega.POM.DeltaqGoldenEnvelope
 import Omega.POM.DeltaqGLambdaIdentity
 import Omega.POM.DeltaqHalfThresholdCriterion
+import Omega.POM.DeltaqQuadraticObservableMaxExponent
 import Omega.POM.DeltaqSpectralDimensionIdentity
 import Omega.POM.DerivedAuditedEvenMinsectorTopologicalPhase
 import Omega.POM.DerivedSchurDirichletRamanujanParseval
@@ -586,6 +587,7 @@ import Omega.POM.TowerDefectPinskerBound
 import Omega.POM.ToyRh
 import Omega.POM.ToyRh2TorsionSource
 import Omega.POM.TypeclassDiagonalCouplingSeeds
+import Omega.POM.TypeclassDualDerivative
 import Omega.POM.TypeclassDiagonalMassMonotone
 import Omega.POM.TypeclassKeepResampleChannel
 import Omega.POM.TrivialChannelFiniteDecidability

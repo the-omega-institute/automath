@@ -634,6 +634,7 @@ import Omega.Zeta.XiExceptionalSecularGenericFullSymmetric
 import Omega.Zeta.XiFiberSpectrumFiniteMomentRigidity
 import Omega.Zeta.XiFiberSpectrumHankelConductorPronyPadic
 import Omega.Zeta.XiFinitePrimeSupportHalfdimensionGapFormula
+import Omega.Zeta.XiFinitePrimeWindowHalfcircleLinearGap
 import Omega.Zeta.XiFixedFreezingEscortBoundedObservableCollapse
 import Omega.Zeta.XiFixedFreezingEscortGroundstateTvIdentity
 import Omega.Zeta.XiFoldbinKappaKlCollisionIdentityChain
