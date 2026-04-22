@@ -127,6 +127,7 @@ import Omega.Zeta.XiWindow6URFirstReturnTimeClosedForm
 import Omega.Zeta.XiCRTMultistageAxisCountScaling
 import Omega.Zeta.XiTimePart9wBasicRootUnityErrorExponentToOne
 import Omega.Zeta.XiTimePart9pChi2RanktwoResonantFloor
+import Omega.Zeta.XiTimePart9zbbFiniteStirlingSumTranslation
 import Omega.Zeta.XiTimePart9saUniformBaselineFixedBinaryExperiment
 import Omega.Zeta.XiTimePart9tTopGapAffineCapacitySegment
 import Omega.Zeta.XiTimePart54abEscortLogdefectMoments

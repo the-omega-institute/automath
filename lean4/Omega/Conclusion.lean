@@ -439,6 +439,7 @@ import Omega.Conclusion.PrimeRegisterProductCompletionInvertibility
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.ProjectiveCompletenessSinglelayerInstabilitySynthesis
 import Omega.Conclusion.OrbitGeneratorFinitePhasePrinciple
+import Omega.Conclusion.GodelPhaseCollapseLengthWeight
 import Omega.Conclusion.PrimeShiftPhaseIndistinguishability
 import Omega.Conclusion.PrimeShiftPhaseVisibleTwoGenerator
 import Omega.Conclusion.PrimeRegisterUltrametricCompletion
