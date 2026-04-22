@@ -138,6 +138,7 @@ import Omega.Conclusion.DiscreteCertificateFrontGeneralizedInverse
 import Omega.Conclusion.DiscreteKinkFanPiecewiseLinearization
 import Omega.Conclusion.DiscreteConvexBudgetKinkFan
 import Omega.Conclusion.DiscreteKinkMassHatKernelCurvature
+import Omega.Conclusion.DiscreteIntoConnected
 import Omega.Conclusion.DisjointnessFixedqMeromorphicDeterminantCertificate
 import Omega.Conclusion.DisjointnessFixedqSymmetricKrylovSector
 import Omega.Conclusion.DisjointnessPowerWordDecomposition
@@ -520,6 +521,7 @@ import Omega.Conclusion.TimeReversalOrbitParity
 import Omega.Conclusion.TwoAtomScalarRecoveryAlpha2
 import Omega.Conclusion.TwoAtomThreshold
 import Omega.Conclusion.TwoIncommensurableBasesDestroyVerticalLattice
+import Omega.Conclusion.U1FromRelativeHomologyDual
 import Omega.Conclusion.UniformBulkCutSpaceUniformization
 import Omega.Conclusion.UcdimZr
 import Omega.Conclusion.UnitarySliceBoundaryThreeAxisIrreducibility
