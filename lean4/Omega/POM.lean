@@ -159,6 +159,7 @@ import Omega.POM.EllipsoidIsoperimetricBoundaryCertificate
 import Omega.POM.EllipsoidIsoperimetricVariance
 import Omega.POM.EllipticTwoTimeObservabilityDichotomy
 import Omega.POM.EntropyLossFactorChainExpansion
+import Omega.POM.E8SquareSpectrumCollapseTrace7
 import Omega.POM.EscortMaxfiberTvBound
 import Omega.POM.EulerDefectOrthogonalPythagoras
 import Omega.POM.EulerDefectQuotientCoordinate
