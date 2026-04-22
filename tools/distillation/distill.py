@@ -3839,6 +3839,11 @@ def _oracle_deepening_research(
             attempt,
             "; ".join(issues),
         )
+        if not response:
+            logger.warning(
+                "Oracle deepening produced no response; skipping retry because Oracle is optional"
+            )
+            break
         retry_suffix = (
             "\n\nPREVIOUS ORACLE RESPONSE WAS INVALID FOR THIS PIPELINE: "
             + "; ".join(issues)
