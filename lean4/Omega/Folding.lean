@@ -393,6 +393,7 @@ import Omega.Folding.GaugeAnomalyHankelRank3
 import Omega.Folding.GaugeAnomalyMeanHankelRigidity
 import Omega.Folding.GaugeAnomalyHRencontresFixedPointDensity
 import Omega.Folding.GaugeAnomalySpectralQuarticJacobianL13
+import Omega.Folding.GaugeAnomalySpectralQuarticJacobianSimple
 import Omega.Folding.GaugeAnomalyJordanFingerprint
 import Omega.Folding.GaugeAnomalyKStepInvariance
 import Omega.Folding.GaugeAnomalyLdpRate

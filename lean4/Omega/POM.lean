@@ -106,6 +106,7 @@ import Omega.POM.DerivedMaxNoncontractibleFiberDefectConstants
 import Omega.POM.DeterministicNormalizationForest
 import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DiagonalHighMoments
+import Omega.POM.DiagonalMomentFreeEnergyDegeneracy
 import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
 import Omega.POM.DiagonalRateAbsorbingDFR
 import Omega.POM.DiagonalRateAbsorbingLaguerreInterlacing
