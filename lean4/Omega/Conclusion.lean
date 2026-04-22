@@ -172,6 +172,7 @@ import Omega.Conclusion.ExtPiKernelPoset
 import Omega.Conclusion.ExternalBudgetTensorEntropyRate
 import Omega.Conclusion.F2BinomialBasisFromDeltaNilpotent
 import Omega.Conclusion.ScreenEntropyAuditIdentity
+import Omega.Conclusion.ScreenphaseSurjectsAllFiniteLocalizedShadows
 import Omega.Conclusion.SingleCubeEditRigidity
 import Omega.Conclusion.FibadicLcmFiltrationLaw
 import Omega.Conclusion.FibadicPrimitiveCentralIdempotents
@@ -235,6 +236,7 @@ import Omega.Conclusion.FoldbinDeepVolumeCarryRenormalization
 import Omega.Conclusion.FoldOutputEntropyGaugeAffineIdentity
 import Omega.Conclusion.FoldQuantumProjectiveSimplexQuotient
 import Omega.Conclusion.FoldGaugeEntropyDensityExactConstant
+import Omega.Conclusion.InfonceLargeKVisibleEntropyComplement
 import Omega.Conclusion.FoldbinLikelihoodRatioTwoAtomTransfer
 import Omega.Conclusion.FoldbinRemoveMainResonancePeaksStillDiverges
 import Omega.Conclusion.FullInternalScreenGlobalComplementLaw
