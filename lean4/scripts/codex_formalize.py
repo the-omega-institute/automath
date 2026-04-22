@@ -711,6 +711,29 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
                     run_cmd(["git", "rebase", "--abort"], cwd=wt.path)
                     return False
 
+            # 3.5. Post-rebase Gate 5: under the merge lock, re-check symbol
+            #      uniqueness against the NOW-current base tip. Catches the
+            #      concurrent case where two workers each passed Gate 5 at
+            #      commit time but introduce the same symbol vs each other.
+            latest_base_sha = run_cmd(
+                ["git", "rev-parse", BASE_BRANCH], cwd=REPO_ROOT
+            ).stdout.strip()
+            saved_base = wt.base_sha
+            wt.base_sha = latest_base_sha
+            try:
+                dup = detect_duplicate_symbols(wt)
+            finally:
+                wt.base_sha = saved_base
+            if dup:
+                for v in dup[:10]:
+                    logger.error(f"[R{wt.round_number}] POST-REBASE DUP: {v}")
+                logger.error(
+                    f"[R{wt.round_number}] Rejecting merge: after rebasing onto "
+                    f"latest {BASE_BRANCH}, {len(dup)} new symbol(s) collide with "
+                    f"files concurrent workers already merged."
+                )
+                return False
+
             # 4. Fast-forward local BASE_BRANCH to rebased worktree tip.
             #    git merge --ff-only works on checked-out branches; git fetch . does not.
             wt_tip = run_cmd(["git", "rev-parse", "HEAD"], cwd=wt.path).stdout.strip()
@@ -1279,6 +1302,99 @@ def detect_sorry_literals(wt: WorktreeInfo) -> list[str]:
     return violations
 
 
+_NEW_DECL_RE = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)*"
+    r"(?:private\s+|protected\s+|noncomputable\s+|scoped\s+|local\s+)*"
+    r"(?:def|theorem|lemma|abbrev|structure|class|inductive|instance)\s+"
+    r"([A-Za-z_][\w.]*)",
+    re.MULTILINE,
+)
+
+
+def detect_duplicate_symbols(wt: WorktreeInfo) -> list[str]:
+    """Gate 5: reject rounds that add `def/theorem/lemma/abbrev/structure/
+    class/inductive/instance` names already present on `origin/<BASE_BRANCH>`.
+
+    Parallel workers off the same base can silently introduce the same
+    auxiliary symbol into different files that share a chapter index
+    (e.g. `Omega.Zeta`), causing `environment already contains 'X'` on the
+    first full build. Catching that at commit time lets the round be
+    rejected cheaply instead of wedging the builder into a multi-attempt
+    rename dance.
+
+    For each `.lean` file the round added/modified under `lean4/Omega/`,
+    parse the top-level declarations the round introduces (diff against
+    `base_sha`), and for each new name run `git grep` against `base_sha`'s
+    tree. A hit outside the file the round is currently editing is a
+    violation.
+    """
+    violations: list[str] = []
+    if not wt.base_sha:
+        return violations
+    try:
+        r = run_cmd(
+            ["git", "diff", "--name-only", "--diff-filter=AM",
+             f"{wt.base_sha}..HEAD", "--", "lean4/Omega/"],
+            cwd=wt.path,
+        )
+    except Exception:
+        return violations
+    files = [l.strip() for l in (r.stdout or "").splitlines()
+             if l.strip().endswith(".lean")]
+    for rel in files:
+        try:
+            current_src = (wt.path / rel).read_text(encoding="utf-8")
+        except Exception:
+            continue
+        # Symbols this round declares in this file
+        current_syms = set()
+        for m in _NEW_DECL_RE.finditer(_strip_lean_comments(current_src)):
+            current_syms.add(m.group(1))
+        # Subtract symbols that already existed in this file on base
+        try:
+            base_src = run_cmd(
+                ["git", "show", f"{wt.base_sha}:{rel}"],
+                cwd=wt.path, check=False,
+            ).stdout
+        except Exception:
+            base_src = ""
+        base_syms_in_file = set()
+        if base_src:
+            for m in _NEW_DECL_RE.finditer(_strip_lean_comments(base_src)):
+                base_syms_in_file.add(m.group(1))
+        new_syms = current_syms - base_syms_in_file
+        if not new_syms:
+            continue
+        # For each newly-introduced symbol, check if it exists elsewhere
+        # on base_sha under lean4/Omega/ (excluding this same file).
+        for sym in new_syms:
+            # Escape regex metacharacters in symbol (dots are legal in Lean names)
+            pattern = (
+                r"^\s*(?:@\[[^]]*\]\s*)*"
+                r"(?:private\s+|protected\s+|noncomputable\s+|scoped\s+|local\s+)*"
+                r"(?:def|theorem|lemma|abbrev|structure|class|inductive|instance)\s+"
+                + re.escape(sym) + r"\b"
+            )
+            try:
+                g = run_cmd(
+                    ["git", "grep", "-l", "-E", pattern,
+                     wt.base_sha, "--", "lean4/Omega/"],
+                    cwd=wt.path, check=False,
+                )
+            except Exception:
+                continue
+            hits = [l.strip() for l in (g.stdout or "").splitlines() if l.strip()]
+            # git grep returns "<sha>:<path>" — strip the sha prefix
+            hit_paths = [h.split(":", 1)[1] if ":" in h else h for h in hits]
+            hit_paths = [p for p in hit_paths if p != rel]
+            if hit_paths:
+                violations.append(
+                    f"{rel}: new symbol '{sym}' already exists on "
+                    f"{BASE_BRANCH} in {hit_paths[0]}"
+                )
+    return violations
+
+
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
     """Check for new commits in the worktree. Also rejects signature degradation,
     new abstract-Prop shell files, sorry/admit/axiom literals, and any commit
@@ -1336,6 +1452,18 @@ def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[b
                 f"[R{wt.round_number}] Rejecting round: {len(sorry_violations)} added "
                 f"line(s) contain sorry/admit/axiom literals. The completion contract "
                 f"in phase_c.txt forbids these in committed code."
+            )
+            return False, new
+        # Gate 5: duplicate-symbol clash with base branch
+        dup_violations = detect_duplicate_symbols(wt)
+        if dup_violations:
+            for v in dup_violations[:10]:
+                logger.error(f"[R{wt.round_number}] DUPLICATE SYMBOL: {v}")
+            logger.error(
+                f"[R{wt.round_number}] Rejecting round: {len(dup_violations)} new "
+                f"declaration(s) collide with existing symbols on {BASE_BRANCH}. "
+                f"Fix: prefix new helpers with the target's paper-label slug "
+                f"(snake_case) so they cannot clash with another worker's file."
             )
             return False, new
         return True, new
@@ -1854,6 +1982,25 @@ def _builder_codex_fix(wt: WorktreeInfo, build_log: Path,
             git push origin HEAD:{BASE_BRANCH}
           If push rejected, rebase onto `origin/{BASE_BRANCH}`, re-verify
           with `lake env lean <file>`, push again.
+
+        ## Rename Rule — for `environment already contains 'X'` failures
+        When the error is a duplicate-symbol clash, RENAME the colliding
+        declaration in the file most recently added (NOT the older file).
+
+        The replacement name MUST be:
+        1. Derived from that file's dominant `paper_*` theorem label
+           (convert to snake_case, strip `paper_` prefix): e.g. if the
+           file hosts `paper_xi_limit_defect_potential_vs_depth_profile`,
+           replacement identifiers live in `xi_limit_defect_potential_vs_depth_profile_*` namespace.
+        2. Never shadow mathlib roots (`Complex.conj`, `Real.log`,
+           `Nat.succ`, `List.length`, `Finset.sum`, etc).
+        3. Longer, paper-label-scoped names over short ones — a generic
+           name like `kernel` will collide again; `<slug>_kernel` will not.
+
+        Do NOT open extra `lake env lean` or `lean` processes to test
+        naming candidates — they competes for RAM with concurrent workers.
+        One `lake env lean <file>.lean` on the edited file to confirm it
+        elaborates is enough; the orchestrator re-verifies with full build.
 
         ## Build log tail (last 200 lines)
         ```

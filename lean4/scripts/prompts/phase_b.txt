@@ -41,3 +41,32 @@ Output a single JSON block:
 
 You MUST grep to confirm each target does not already exist.
 Do NOT guess mathlib API names.
+
+## HARD NAMING RULE (prevents duplicate-symbol build failures)
+Because 9 workers run in parallel on the same base, two rounds can silently
+introduce the same auxiliary `def`/`theorem` name and break the Zeta/POM/etc
+chapter's combined import. Rules:
+
+1. Every NEW declaration you add — `theorem`, `lemma`, `def`, `noncomputable
+   def`, `abbrev`, `structure`, `class`, `inductive`, `instance` — MUST
+   be prefixed with a slug derived from the target's `paper_label`.
+   Convert the label to `snake_case` (strip `thm:`/`prop:`/`cor:`/`lem:`,
+   lowercase, replace non-alnum with `_`).
+
+     paper_label = "thm:xi-horizon-reflection-finite-witness"
+     → prefix     = "xi_horizon_reflection_finite_witness_"
+
+   Valid:   `def xi_horizon_reflection_finite_witness_kernel := …`
+   INVALID: `def kernel := …`          (no prefix — will collide)
+   INVALID: `def Complex.conj …`       (mathlib name — forbidden)
+
+2. The top-level `paper_*` theorem itself (the one matching `lean_name`)
+   already carries the prefix and is exempt.
+
+3. Never shadow mathlib root names: `Complex.conj`, `Real.log`, `Nat.succ`,
+   `List.length`, `Finset.sum`, `Matrix.mul`, etc.
+
+Do NOT start extra `lake env lean` or `lean` processes to probe naming;
+the orchestrator runs a post-commit symbol-conflict gate that rejects
+rounds introducing names already present on `origin/lean4-codex-auto-dev`.
+Just follow rule (1) and commit — the gate will catch accidental clashes.
