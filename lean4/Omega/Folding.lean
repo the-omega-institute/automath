@@ -553,6 +553,7 @@ import Omega.Folding.PeriodicCountSandwich
 import Omega.Folding.PhiConjugacyThreshold
 import Omega.Folding.PhiEquivariant
 import Omega.Folding.PhiEquivariantPublication
+import Omega.Folding.P10LeyangIrreducibleRootSplitDensities
 import Omega.Folding.PhiMEntropy
 import Omega.Folding.PhiMEntropyNoDrop
 import Omega.Folding.PhiMParry
