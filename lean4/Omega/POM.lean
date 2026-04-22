@@ -187,6 +187,7 @@ import Omega.POM.FibCubeGrayHamilton
 import Omega.POM.FibCubeKPointCount
 import Omega.POM.FibCubeMarginalBoundaryLayer
 import Omega.POM.FibCubeRadiusCenterClassification
+import Omega.POM.FiniteParetoLegendreCurvature
 import Omega.POM.FiniteAuditNFAnom
 import Omega.POM.FiniteIntegerMomentsCannotReplaceHalf
 import Omega.POM.FibCubeThetaClassSize

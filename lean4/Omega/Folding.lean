@@ -288,6 +288,7 @@ import Omega.Folding.FoldZeroCosetV2IntersectionRigidity
 import Omega.Folding.FoldBinRenyiDivergenceLimit
 import Omega.Folding.FoldBinRenyiMassSpectrumAffine
 import Omega.Folding.FoldBinRenyiRateCollapse
+import Omega.Folding.FoldShannonEntropyRateLowerBoundFromRq
 import Omega.Folding.BinFoldKLConstant
 import Omega.Folding.FoldBinTwoPointLimitLaw
 import Omega.Folding.FoldBinTwoStateAsymptotic
