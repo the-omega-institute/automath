@@ -165,6 +165,7 @@ import Omega.POM.FibCubeFrechetMedianUnique
 import Omega.POM.FibCubeGrayHamilton
 import Omega.POM.FibCubeKPointCount
 import Omega.POM.FibCubeMarginalBoundaryLayer
+import Omega.POM.FibCubeRadiusCenterClassification
 import Omega.POM.FiniteAuditNFAnom
 import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.FibPellQuadratic
@@ -337,6 +338,7 @@ import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensorRecursion
 import Omega.POM.MicrocanonicalAdaptiveNoGain
 import Omega.POM.MicrocanonicalBandBounds
 import Omega.POM.MicrocanonicalCountSufficientStatisticPosteriorUniform
+import Omega.POM.MicrocanonicalCoverTimeGumbelCutoff
 import Omega.POM.MicrocanonicalCoverTimeMean
 import Omega.POM.MicrocanonicalMissingTypesPoisson
 import Omega.POM.MicrocanonicalCoverTimeNlognScale
