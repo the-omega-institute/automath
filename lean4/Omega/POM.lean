@@ -193,10 +193,12 @@ import Omega.POM.FiberReconstructionCartesianProduct
 import Omega.POM.FiberReconstructionMedianPartialcubeCat0
 import Omega.POM.FiberReconstructionRadiusCenterAntipodes
 import Omega.POM.FiberReflector
+import Omega.POM.FiberRewriteIndependentSum
 import Omega.POM.WeightedCondexpVariance
 import Omega.POM.FiberSpectrumPZLower
 import Omega.POM.FiberInhomLogitActivityIdentifiability
 import Omega.POM.FiberRewritePoissonBinomial
+import Omega.POM.FiberRewriteRealrootUlc
 import Omega.POM.FiberRewriteRootUnityFilterModqExpUniformization
 import Omega.POM.FiberSpectrumPronyHankelRank
 import Omega.POM.FiberSpectrumPronyHankelThresholdSharp
