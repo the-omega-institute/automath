@@ -82,7 +82,31 @@ These are exactly the identity, pullback, and transitivity axioms for a Grothend
 Accordingly, we use the same symbol $\mathcal{B}_{p,s}$ for the resulting preorder category in the presheaf and sheaf constructions below.
 
 \begin{definition}[Local object functor]\label{def:local-object-functor}
-See \cite[Definition~4.3]{HomologicalVisibilityGluingObstructions2026}; throughout this paper $F_{p,s}$ denotes that presheaf on $\mathcal B_{p,s}$, with restrictions written $\res_b^a$.
+For a state $p$ and a referenceable sort $s$, a \emph{local object functor} is
+a contravariant set-valued functor
+\[
+F_{p,s}:\mathcal B_{p,s}^{\mathrm{op}}\longrightarrow \mathbf{Set}.
+\]
+Thus each admitted reference class $a\in\mathcal R_s(p)$ has a set
+$F_{p,s}(a)$ of local objects over $a$, and every refinement arrow
+$b\to a$, equivalently $b\sqsubseteq_{p,s}a$, has a restriction map
+\[
+\res_b^a:F_{p,s}(a)\longrightarrow F_{p,s}(b).
+\]
+The restriction maps satisfy
+\[
+\res_a^a=\mathrm{id}_{F_{p,s}(a)}
+\]
+and, whenever $c\sqsubseteq_{p,s} b\sqsubseteq_{p,s}a$,
+\[
+\res_c^a=\res_c^b\circ \res_b^a.
+\]
+When the state and sort are fixed we write $F$ for $F_{p,s}$. The notation
+$F_{p,s}|_{\mathcal C_a}$ denotes the restriction of this presheaf to the slice
+site
+\[
+\mathcal C_a:=\mathcal C_{p,s}/a.
+\]
 \end{definition}
 
 \begin{definition}[Refinement-stable local-object layer]\label{def:refinement-stable-local-object-layer}
@@ -439,18 +463,69 @@ The first isomorphism in \Cref{thm:visible-value-components} is again a sheafifi
 \end{remark}
 
 \begin{definition}[Typed readout]\label{def:typed-readout}
-See \cite[Definition~4.42]{HomologicalVisibilityGluingObstructions2026}, with the visible set interpreted as the common-refinement quotient of \Cref{def:visible-value-classes}.
+Let $r:\mathsf{Ref}_s$ be a reference term at a state $p$. The typed readout
+\[
+\Read_{p,s}(r)
+\]
+takes values in the disjoint union of the visible value classes and a formal
+symbol $\Null$. It is defined as follows:
+\[
+\Read_{p,s}(r)=
+\begin{cases}
+v, & M,p\Vdash \Adm_s(r)\ \text{and}\ \Vis_{p,s}(r)=\{v\},\\
+\Null, & \text{otherwise.}
+\end{cases}
+\]
+Thus a non-null readout is returned only when the reference is admitted and the
+common-refinement visible value quotient has a unique class.
 \end{definition}
 
 \begin{proposition}[Address before value]\label{prop:address-before-value}
-See \cite[Proposition~4.43]{HomologicalVisibilityGluingObstructions2026}, applied with the visible classes of \Cref{def:visible-value-classes}.
+If
+\[
+\Read_{p,s}(r)=v
+\qquad\text{and}\qquad
+v\neq\Null,
+\]
+then $r$ is admitted at $p$, the address
+\[
+a=[r]_p
+\]
+is defined in $\mathcal R_s(p)$, and
+\[
+\Vis_{p,s}(r)=\{v\}.
+\]
+In particular,
+\[
+M,p\Vdash \CompSec_s(r).
+\]
 \leanverified{paper_information_state_address_before_value_seeds}
 \end{proposition}
 
+\begin{proof}
+The first three assertions are immediate from \Cref{def:typed-readout}: the
+only clause that can return a value different from the formal symbol $\Null$ is
+the clause in which $M,p\Vdash\Adm_s(r)$ and $\Vis_{p,s}(r)$ is the singleton
+$\{v\}$. Since $\Vis_{p,s}(r)$ is nonempty, there is a compatible local
+presentation of $r$ by \Cref{def:visible-value-classes}; equivalently
+$M,p\Vdash\CompSec_s(r)$ by \Cref{def:existence-levels}.
+\end{proof}
+
 \begin{corollary}[Non-null readout criterion]\label{cor:nonnull-readout-criterion}
-See \cite[Corollary~4.44]{HomologicalVisibilityGluingObstructions2026}.
+\[
+\Read_{p,s}(r)\neq\Null
+\quad\Longleftrightarrow\quad
+M,p\Vdash \Adm_s(r)\ \text{and}\ |\Vis_{p,s}(r)|=1.
+\]
 \leanverified{paper_information_state_nonnull_readout_criterion_seeds}
 \end{corollary}
+
+\begin{proof}
+If the readout is non-null, \Cref{prop:address-before-value} gives admission
+and shows that $\Vis_{p,s}(r)$ is a singleton. Conversely, if $r$ is admitted
+and $\Vis_{p,s}(r)=\{v\}$, the first clause of \Cref{def:typed-readout} gives
+$\Read_{p,s}(r)=v\neq\Null$.
+\end{proof}
 
 \begin{proposition}[Refinement stability of defined readouts]\label{prop:typed-readout-persistence}
 Let $q\le p$, and suppose
@@ -472,6 +547,8 @@ class:
 \[
 \Vis_{p,s}(r)=\{v\}.
 \]
+Also $M,p\Vdash\Adm_s(r)$ by \Cref{prop:address-before-value}, and admission
+persists along $q\le p$, so the refined visible set $\Vis_{q,s}(r)$ is defined.
 By \Cref{lem:refinement-descent-visible-classes}, the refinement-stable
 local-object layer gives a descent map
 \[
@@ -485,16 +562,75 @@ canonical identification of \Cref{def:refinement-stable-local-object-layer}, and
 \subsection{Structural absence}
 
 \begin{definition}[Undefined, total, and null]\label{def:undef-total-null}
-See \cite[Definition~4.9]{HomologicalVisibilityGluingObstructions2026}.
+For a reference term $r:\mathsf{Ref}_s$ at a state $p$, define the three
+coarse status predicates by the following abbreviations:
+\[
+\Undef_s(r):=\neg\Adm_s(r),
+\qquad
+\Tot_s(r):=\Adm_s(r)\land \Sec_s(r),
+\qquad
+\Null_s(r):=\Adm_s(r)\land \neg\Sec_s(r).
+\]
+Thus undefined means that no admitted address is present at $p$, total means
+that the admitted address already has a global local object, and null means
+that the reference is admitted but has no global section.
 \end{definition}
 
 \begin{definition}[The three null modes]\label{def:null-failure-modes}
-See \cite[Definition~4.10]{HomologicalVisibilityGluingObstructions2026}.
+For an admitted-reference term $r:\mathsf{Ref}_s$ at $p$, the null predicate is
+decomposed into three mutually exclusive modes:
+\[
+\Null^{\mathrm{loc}}_s(r)
+:=
+\Adm_s(r)\land \neg\LocSec_s(r),
+\]
+\[
+\Null^{\mathrm{cmp}}_s(r)
+:=
+\Adm_s(r)\land \LocSec_s(r)\land \neg\CompSec_s(r),
+\]
+and
+\[
+\Null^{\mathrm{glue}}_s(r)
+:=
+\Adm_s(r)\land \CompSec_s(r)\land \neg\Sec_s(r).
+\]
+The first mode says that no local cover carries witnesses, the second says that
+local witnesses exist but cannot be made compatible, and the third says that
+compatible local witnesses exist but do not glue to a global section.
 \end{definition}
 
 \begin{proposition}[The three modes lie inside null]\label{prop:null-modes-imply-null}
-See \cite[Proposition~4.12]{HomologicalVisibilityGluingObstructions2026}.
+For every reference term $r:\mathsf{Ref}_s$ at every state $p$,
+\[
+M,p\Vdash \Null^{\mathrm{loc}}_s(r)
+\quad\text{or}\quad
+M,p\Vdash \Null^{\mathrm{cmp}}_s(r)
+\quad\text{or}\quad
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\]
+implies
+\[
+M,p\Vdash \Null_s(r).
+\]
 \end{proposition}
+
+\begin{proof}
+In the local mode, $r$ is admitted and $\LocSec_s(r)$ fails. If
+$M,p\Vdash\Sec_s(r)$, then
+\Cref{prop:global-implies-compatible-local} would give
+$M,p\Vdash\LocSec_s(r)$, a contradiction. Hence $\Sec_s(r)$ fails and
+\Cref{def:undef-total-null} gives $\Null_s(r)$.
+
+In the compatibility mode, $r$ is admitted, $\LocSec_s(r)$ holds, and
+$\CompSec_s(r)$ fails. If a global section existed, then
+\Cref{prop:global-implies-compatible-local} would give
+$M,p\Vdash\CompSec_s(r)$, again a contradiction. Thus $\Sec_s(r)$ fails and
+$\Null_s(r)$ holds.
+
+In the gluing mode, admission and $\neg\Sec_s(r)$ are part of the definition,
+so $\Null_s(r)$ follows directly from \Cref{def:undef-total-null}.
+\end{proof}
 
 \begin{proposition}[Mutual exclusivity of the null modes]\label{prop:null-modes-exclusive}
 No two distinct null modes can hold simultaneously for the same reference at the same state.
@@ -505,7 +641,17 @@ The mode $\Null^{\mathrm{loc}}_s(r)$ contains $\neg\LocSec_s(r)$, while the othe
 \end{proof}
 
 \begin{definition}[Decomposition decidability]\label{def:decomposition-decidability}
-See \cite[Definition~4.14]{HomologicalVisibilityGluingObstructions2026}.
+A state $p$ has \emph{decomposition decidability} for a reference term
+$r:\mathsf{Ref}_s$ if the two local-object predicates
+\[
+\LocSec_s(r)
+\qquad\text{and}\qquad
+\CompSec_s(r)
+\]
+are decided at $p$: for each
+$P\in\{\LocSec_s(r),\CompSec_s(r)\}$, either $M,p\Vdash P$ or
+$M,p\Vdash\neg P$. No realization-prestack or gerbe data are part of this
+decidability hypothesis.
 \end{definition}
 
 \begin{proposition}[Null trichotomy]\label{prop:null-trichotomy}
