@@ -67,6 +67,7 @@ import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
 import Omega.Conclusion.CanonicalSliceExactFixedpointCount
 import Omega.Conclusion.CapacityFiniteCompleteness
 import Omega.Conclusion.C6JacobianNotSimple
+import Omega.Conclusion.CayleyModulusPoissonPrimitive
 import Omega.Conclusion.CapacityMajorizationExtremizers
 import Omega.Conclusion.FiniteFiberNaturalExtensionRightShiftInsertion
 import Omega.Conclusion.CapacityMajorizationSchurHardness
