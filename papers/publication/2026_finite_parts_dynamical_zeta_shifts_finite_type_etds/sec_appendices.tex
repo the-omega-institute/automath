@@ -9,22 +9,16 @@ proof of Main Theorems~I and~II; they record regularity and effective
 forms of the scalar normalisation after the finite-group reconstruction
 has already been established.
 
-\begin{theorem}[Reduced-determinant gradient formula]
-  \label{thm:finite-part-reduced-determinant-group-inverse-gradient}
-  See \cite[Proposition~4.11]{Ma2026CyclicBlockTraceClass}; the primitive
-  Perron-root case is the specialization
-  \(C(A_\theta,\lambda(\theta))=C(A_\theta)\).
-\end{theorem}
+The reduced-determinant gradient formula for a simple isolated spectral
+value is proved in \cite[Proposition~4.11]{Ma2026CyclicBlockTraceClass}.
+In the primitive Perron-root case relevant here, its notation specializes
+to \(C(A_\theta,\lambda(\theta))=C(A_\theta)\).
+The corresponding holomorphic variation formula for \(\FP(A_\theta)\),
+on a sufficiently small secondary-admissible neighbourhood, is the
+primitive Perron-root specialization of
+\cite[Proposition~4.13]{Ma2026CyclicBlockTraceClass}.
 
 \subsection{Holomorphic variation and effective truncation}
-
-\begin{theorem}[Holomorphic variation formula]
-  \label{thm:logM-holomorphic-variation}
-  See \cite[Proposition~4.13]{Ma2026CyclicBlockTraceClass}; on a
-  sufficiently small secondary-admissible neighbourhood, the primitive
-  Perron-root specialization gives the holomorphic variation formula for
-  \(\FP(A_\theta)\).
-\end{theorem}
 
 \begin{theorem}[Truncation bound]
   \label{thm:logM-truncation-bound}
@@ -107,8 +101,9 @@ The logarithm is well defined because \(|\mu_j|<\lambda\) implies that
       \left|g_A\!\left(\frac{2\pi j}{q}\right)\right|^2
     =
     \sum_{n\ge 1}\frac{|u_n(A)|^2}{n^2}
-    +\sum_{\ell\ne 0}\sum_{n\ge 1}
-      \frac{u_n(A)\overline{u_{n+\ell q}(A)}}{n(n+\ell q)}.
+    +
+    \sum_{\substack{n,n'\ge 1\\ n\neq n'\\ n\equiv n'\,(\mathrm{mod}\ q)}}
+      \frac{u_n(A)\overline{u_{n'}(A)}}{nn'}.
   \]
 \end{theorem}
 
@@ -121,7 +116,12 @@ The logarithm is well defined because \(|\mu_j|<\lambda\) implies that
       e^{2\pi i (n-n')j/q}
     =\mathbf 1_{\{n\equiv n'\,(\mathrm{mod}\ q)\}}.
   \]
-  Writing \(n'=n+\ell q\) yields the stated aliasing formula.
+  Thus the discrete average is
+  \[
+    \sum_{\substack{n,n'\ge 1\\ n\equiv n'\,(\mathrm{mod}\ q)}}
+      \frac{u_n(A)\overline{u_{n'}(A)}}{nn'}.
+  \]
+  Separating the diagonal \(n=n'\) gives the stated aliasing formula.
 \end{proof}
 
 \begin{corollary}[Exponential bound for the sampling error]
@@ -138,16 +138,23 @@ The logarithm is well defined because \(|\mu_j|<\lambda\) implies that
 \end{corollary}
 
 \begin{proof}
-  Since \(|u_n(A)|\le (d-1)\Lambda_{\mathrm{rel}}(A)^n\),
+  Put \(\Lambda=\Lambda_{\mathrm{rel}}(A)\). If \(\Lambda=0\), then all
+  \(u_n(A)\) vanish and the claim is immediate. Otherwise, since
+  \(|u_n(A)|\le (d-1)\Lambda^n\),
   \[
-    \sum_{\ell\ne 0}\sum_{n\ge 1}
+  \begin{aligned}
+    \sum_{\substack{n,n'\ge 1\\ n\neq n'\\ n\equiv n'\,(\mathrm{mod}\ q)}}
       \left|
-        \frac{u_n(A)\overline{u_{n+\ell q}(A)}}{n(n+\ell q)}
+        \frac{u_n(A)\overline{u_{n'}(A)}}{nn'}
       \right|
-    \ll
-    \sum_{\ell\ne 0}\sum_{n\ge 1}
-      \frac{\Lambda_{\mathrm{rel}}(A)^{2n+|\ell|q}}{n^2}
-    \ll \Lambda_{\mathrm{rel}}(A)^q.
+    &\le
+    2(d-1)^2\sum_{k\ge 1}\sum_{n\ge 1}
+      \frac{\Lambda^{2n+kq}}{n(n+kq)} \\
+    &\le
+    2(d-1)^2
+      \left(\sum_{n\ge 1}\frac{\Lambda^{2n}}{n^2}\right)
+      \frac{\Lambda^q}{1-\Lambda}.
+  \end{aligned}
   \]
   The bound follows from
   \Cref{thm:finite-part-nyquist-parseval-aliasing}.
@@ -417,8 +424,9 @@ characters on \((\ZZ/q\ZZ)^\times\); see, for example,
   \[
     \sigma_h\!\bigl(F(\omega_q^j)\bigr)=F(\omega_q^{hj}).
   \]
-  In particular, the values
-  \(\{F_A(\omega_q^j)\}_{j=0}^{q-1}\) is Galois covariant.
+  Consequently, if in a separate situation the reduced spectral
+  polynomial \(F_A\) is known to lie in \(\QQ[t]\), then the values
+  \(\{F_A(\omega_q^j)\}_{j=0}^{q-1}\) are Galois covariant.
 \end{proposition}
 
 \begin{proof}
