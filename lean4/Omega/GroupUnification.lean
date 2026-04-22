@@ -63,6 +63,7 @@ import Omega.GroupUnification.ParryRigidity
 import Omega.GroupUnification.PatiSalamGlobalFormRigidity
 import Omega.GroupUnification.PrimeRegisterNormOneIdeleCoherence
 import Omega.GroupUnification.SMSignatureCyclicDivides6
+import Omega.GroupUnification.SMUpliftResidualMediatorM7
 import Omega.GroupUnification.SMSquareResidualRigidityM6
 import Omega.GroupUnification.SecondOrder
 import Omega.GroupUnification.SpreadEquivalence

@@ -23,6 +23,7 @@ import Omega.POM.BCDiscreteJacobianStrictification
 import Omega.POM.BCDiscreteStokes
 import Omega.POM.BCDefectMultiplicative2Cocycle
 import Omega.POM.BCTowerFlatness
+import Omega.POM.BCQuotientStrictify
 import Omega.POM.BCQuotientUniversal
 import Omega.POM.BCHighOrderLedgerDecomposition
 import Omega.POM.BqTraceLucas
