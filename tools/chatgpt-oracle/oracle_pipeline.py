@@ -35,11 +35,13 @@
     B5: Claude review fixes → commit
     → B1 (max 4 rounds)
 
-  Stage C: Claude 独立审阅（approval-gated loop）
-    C1: Claude 独立审阅 → 返回 verdict
-    Gate: verdict = submit → Stage D
-    C2: Codex fix → commit
-    → C1 (max 4 rounds)
+  Stage C: Oracle + Claude 联合终审（approval-gated loop）
+    C0: 编译最终候选 PDF
+    C1: Oracle final confirmation
+    C2: Claude independent review
+    Gate: Oracle=accept 且 Claude=submit 且无 issue → Stage D
+    C3: Codex fix joint issues → commit
+    → C0 (max 4 rounds)
 
   Stage D: 回流主论文
     D1: Codex 检查回流候选 → 返回 backflow items
@@ -803,6 +805,13 @@ def _diff_summary(paper_path: Path) -> str:
     return summary
 
 
+def _commit_message(*parts: str) -> str:
+    body = [p for p in parts if p]
+    if CLAUDE_ENABLED:
+        body.append("Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>")
+    return "\n\n".join(body)
+
+
 def git_stage(paper_path: Path, *, tag: str = "") -> bool:
     """Stage .tex/.bib changes under paper_path (no commit, no artifacts)."""
     with _git_lock:
@@ -826,11 +835,7 @@ def git_commit(paper_path: Path, msg: str, *, tag: str = "") -> str:
         paper_short = paper_path.name.replace("2026_", "")[:40]
         diff_info = _diff_summary(paper_path)
         body = f"Changes: {diff_info}" if diff_info else ""
-        full_msg = (
-            f"[{paper_short}] {msg}\n\n"
-            f"{body}\n\n"
-            f"Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
-        )
+        full_msg = _commit_message(f"[{paper_short}] {msg}", body)
         result = run_cmd(["git", "commit", "-m", full_msg, "--"]
                          + staged_files)
         if result.returncode == 0:
@@ -855,10 +860,7 @@ def git_commit_multi(paths: list[Path], msg: str, *, tag: str = "") -> str:
         staged_files = sorted(set(staged_files))
         if not staged_files:
             return ""
-        full_msg = (
-            f"{msg}\n\n"
-            f"Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
-        )
+        full_msg = _commit_message(msg)
         result = run_cmd(["git", "commit", "-m", full_msg, "--"]
                          + staged_files)
         if result.returncode == 0:
@@ -3928,8 +3930,12 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
         save_state(state)
         return audit
 
-    logger.info(f"{tag} A3 audit round {audit_round}: "
-                f"Codex math + Claude structural")
+    audit_label = (
+        "Codex math + Claude structural"
+        if CLAUDE_ENABLED or dry_run
+        else "Codex math + Codex structural fallback (--no-claude)"
+    )
+    logger.info(f"{tag} A3 audit round {audit_round}: {audit_label}")
 
     def _codex_audit() -> dict:
         prompt = build_stage_a_audit_prompt(
@@ -4202,6 +4208,12 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                        timeout_seconds=3600, model=model, dry_run=dry_run)
             compiled = compile_gate(paper_path, model=model,
                                     dry_run=dry_run, tag=f"{tag} A2")
+            if not compiled:
+                state.log_event("A", "compile_failed", round_num=rnd,
+                                detail=f"after A2 action={action}")
+                save_state(state)
+                return _stage_a_pause(
+                    state, f"compile_failed_after_{action}", tag=tag)
 
             detail = f"{action}; {len(items)} item(s); compiled={compiled}"
             if (not dry_run
@@ -4252,6 +4264,12 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                        timeout_seconds=2400, model=model, dry_run=dry_run)
             compiled = compile_gate(paper_path, model=model,
                                     dry_run=dry_run, tag=f"{tag} A-SPLIT")
+            if not compiled:
+                state.log_event("A", "compile_failed", round_num=rnd,
+                                detail="after A-SPLIT")
+                save_state(state)
+                return _stage_a_pause(
+                    state, "compile_failed_after_split_hygiene", tag=tag)
             split_data = _read_json_artifact(paper_path,
                                              "split_candidates.json")
             state.stage_a_split_candidates = _coerce_items(
@@ -4329,6 +4347,13 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 compiled = compile_gate(paper_path, model=model,
                                         dry_run=dry_run,
                                         tag=f"{tag} A2-AUDIT")
+                if not compiled:
+                    state.log_event("A", "compile_failed", round_num=rnd,
+                                    detail="after A2 audit blocker revision")
+                    save_state(state)
+                    return _stage_a_pause(
+                        state, "compile_failed_after_audit_blocker_revision",
+                        tag=tag)
                 h = git_commit(paper_path,
                                f"stage-A R{rnd}: audit blocker revision",
                                tag=tag)
