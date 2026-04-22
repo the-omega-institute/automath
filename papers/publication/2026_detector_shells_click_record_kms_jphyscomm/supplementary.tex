@@ -1,7 +1,6 @@
-
 \ifdefined\SUPPLEMENTARYAPPENDIX
-\section*{Supplementary derivations}
-\addcontentsline{toc}{section}{Supplementary derivations}
+\section*{Supplementary calculations}
+\addcontentsline{toc}{section}{Supplementary calculations}
 \newcommand{\supplementaryenddocument}{}
 \else
 \documentclass[11pt]{article}
@@ -9,20 +8,10 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{microtype}
-\usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage{bm}
+\usepackage{amsmath,amssymb,mathtools}
 \usepackage{booktabs}
-\usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
-\crefname{lemma}{lemma}{lemmas}
-\Crefname{lemma}{Lemma}{Lemmas}
-\crefname{theorem}{theorem}{theorems}
-\Crefname{theorem}{Theorem}{Theorems}
-\crefname{proposition}{proposition}{propositions}
-\Crefname{proposition}{Proposition}{Propositions}
-\crefname{corollary}{corollary}{corollaries}
-\Crefname{corollary}{Corollary}{Corollaries}
 \usepackage{setspace}
 \usepackage{xcolor}
 
@@ -31,1097 +20,141 @@
 \setlength{\parskip}{0.3em}
 \setlength{\parindent}{1.2em}
 
-\newtheorem{proposition}{Proposition}[section]
-\newtheorem{lemma}[proposition]{Lemma}
-\newtheorem*{unnumberedlemma}{Lemma}
-\newtheorem{corollary}[proposition]{Corollary}
-\theoremstyle{definition}
-\newtheorem{remark}[proposition]{Remark}
-
-\newcommand{\RR}{\mathbb{R}}
-\newcommand{\EE}{\mathbb{E}}
-\newcommand{\PP}{\mathbb{P}}
-\newcommand{\Var}{\mathrm{Var}}
-
 \begin{document}
 \newcommand{\supplementaryenddocument}{\end{document}}
 
 \begin{center}
-{\LARGE\bfseries Supplementary Material}\par
+{\LARGE\bfseries Supplementary calculations}\par
 \vspace{0.5em}
 {\large for ``Two detector-defined shells from stationary Unruh--DeWitt click records in static KMS spacetimes''}\par
 \end{center}
 \fi
 
-These derivations support the main text. In addition to the shell equations and inverse formulas, we include the explicit proofs of the soft-dead-time limit and the sub-Poisson counting law for the finite-recovery renewal process.
+The main article contains the theorem statements and complete proofs. This
+appendix records auxiliary formulas used for edge cases, finite-counting
+checks, and the numerical example. It is not a second proof ledger.
 
-\section{Ideal dead time and the Parry threshold}\label{sec:supp-ideal}
+\section{Critical-rate branch and equal-rate limits}
 
-\begin{proposition}\label{prop:supp-ideal-markov}
-In the ideal one-step dead-time detector, the sampled output is a stationary Markov chain on the golden-mean shift with transition matrix
-\[
-P_\beta=
-\begin{pmatrix}
- p_\beta & 1-p_\beta \\
- 1 & 0
-\end{pmatrix},
-\qquad p_\beta=e^{-\Gamma_+\Delta\tau}.
-\]
-\end{proposition}
-
-\begin{proof}
-If $A_n=1$, the detector is refractory during the next sampling interval, so $A_{n+1}=0$ with probability one. Hence the block $11$ is forbidden. If $A_n=0$, the detector is ready at the next step, and the next output is $1$ with probability $q_\beta=1-p_\beta$ and $0$ with probability $p_\beta$. These are exactly the transition probabilities above.
-\end{proof}
-
-The Parry measure on the golden-mean shift has transition probabilities
-\[
-P(0,0)=\varphi^{-1},\qquad P(0,1)=\varphi^{-2},\qquad P(1,0)=1,
-\]
-and is the unique measure of maximal entropy on that shift \cite{Parry1964,LindMarcus1995}. Matching the detector law to the Parry matrix yields the ideal threshold.
-
-\begin{corollary}\label{cor:supp-parry-threshold}
-For the ideal dead-time detector,
-\[
-\text{exact symbolic thermality}
-\iff p_\beta=\varphi^{-1}
-\iff \Gamma_+\Delta\tau=\log\varphi.
-\]
-\end{corollary}
-
-\begin{proof}
-By \cref{prop:supp-ideal-markov}, the detector law has only one free transition probability. It is $P_\beta(0,0)=p_\beta$. Matching the Parry matrix therefore requires
-\[
-p_\beta=\varphi^{-1},
-\]
-equivalently $\Gamma_+\Delta\tau=\log\varphi$.
-\end{proof}
-
-\section{Finite recovery as a renewal process}\label{sec:supp-renewal}
-
-The derivations in this section use the counting-limit readout specified in the main text: excitation attempts are independent Poisson increments with rate $\Gamma\equiv\Gamma_+$, the recovery clock is independent, and the hidden counter state is only ready $R$ or refractory $D$. The following kernels are therefore not additional assumptions; they are the one-step transition probabilities obtained by integrating that readout model over one sampling interval.
-
-Write
-\[
-p=e^{-\Gamma\Delta\tau},\qquad q=1-p,\qquad c=e^{-\kappa_{\mathrm r}\Delta\tau},
-\]
-and define
-\begin{equation}\label{eq:supp-a-b}
-a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds,
-\qquad
-b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}e^{-\Gamma(\Delta\tau-s)}\,ds.
-\end{equation}
-The output-labelled kernels are
-\begin{equation}\label{eq:supp-T0T1}
-T_0=
-\begin{pmatrix}
- p & 0 \\
- b & c
-\end{pmatrix},
-\qquad
-T_1=
-\begin{pmatrix}
- 0 & q \\
- 0 & a
-\end{pmatrix},
-\end{equation}
-with rows and columns indexed by the hidden states $(R,D)$.
-
-\begin{proposition}\label{prop:supp-renewal}
-Every observed click resets the next sampling interval to the hidden state $D$. Consequently the visible record is a renewal process, with click times serving as regeneration times in the standard sense \cite{Asmussen2003}, and the zero-run length $G$ between successive clicks satisfies
-\begin{equation}\label{eq:supp-gap-law}
-\PP(G=k)=g_k=e_D^{\top}T_0^kT_1\mathbf 1,\qquad k\ge0,
-\end{equation}
-where $e_D=(0,1)^{\top}$ and $\mathbf 1=(1,1)^{\top}$.
-
-If $\kappa_{\mathrm r}\neq\Gamma$, then
-\begin{equation}\label{eq:supp-a-b-closed}
-a=\frac{\kappa_{\mathrm r}(1-p)-\Gamma(1-c)}{\kappa_{\mathrm r}-\Gamma},
-\qquad
-b=\frac{\kappa_{\mathrm r}(p-c)}{\kappa_{\mathrm r}-\Gamma},
-\end{equation}
-and
-\begin{equation}\label{eq:supp-gap-closed}
-g_k=
-\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}{\kappa_{\mathrm r}-\Gamma},
-\qquad k\ge0.
-\end{equation}
-\end{proposition}
-
-\begin{proof}
-Every observed click places the detector in the refractory state for the next interval, independently of the earlier history. Hence the post-click hidden state is deterministic, and the strong Markov property of the hidden two-state chain makes click times regeneration times. The resulting zero-run lengths are therefore i.i.d., and a gap of length $k$ consists of $k$ successive output-$0$ transitions followed by one output-$1$ transition, giving \cref{eq:supp-gap-law}.
-
-To evaluate it explicitly, note that $T_0$ is lower triangular. Direct integration yields \cref{eq:supp-a-b-closed}. Since
-\[
-T_0^k=
-\begin{pmatrix}
- p^k & 0 \\
- b\,\dfrac{p^k-c^k}{p-c} & c^k
-\end{pmatrix},
-\]
-substituting into \cref{eq:supp-gap-law} gives
-\[
-g_k=q b\frac{p^k-c^k}{p-c}+ac^k,
-\]
-which simplifies to \cref{eq:supp-gap-closed}. The kernel expression also shows full support on zero-run lengths: for every $k$, the detector can produce $k$ zero-labelled intervals after a click and then recover and click in the next interval with positive probability.
-\end{proof}
-
-\begin{lemma}[Stationary hidden law]\label{lem:supp-stationary}
 Let
 \[
-P=T_0+T_1=
-\begin{pmatrix}
- p & q\\
- b & 1-b
-\end{pmatrix}.
+p=e^{-\Gamma\Delta\tau},\qquad
+c=e^{-\kappa_{\mathrm r}\Delta\tau},\qquad
+s=\kappa_{\mathrm r}\Delta\tau,\qquad
+x=\frac{\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\kappa_{\mathrm r}} .
 \]
-The stationary row distribution of $P$ is
+The non-removable critical-rate equation is
 \[
-\pi_R=\frac{b}{q+b},
+\log x=s(x-1),
+\qquad\text{equivalently}\qquad
+x e^{-sx}=e^{-s}.
+\]
+Thus, away from the meeting point $s=1$,
+\[
+\Gamma_c(\kappa_{\mathrm r},\Delta\tau)
+=-\frac{1}{\Delta\tau}
+W_k\!\left(-\kappa_{\mathrm r}\Delta\tau\,e^{-\kappa_{\mathrm r}\Delta\tau}\right),
 \qquad
-\pi_D=\frac{q}{q+b}.
+k=\begin{cases}
+-1,&0<s<1,\\
+0,&s>1.
+\end{cases}
 \]
-The stationary click density is
-\begin{equation}\label{eq:supp-rho}
-\rho=\PP(A_0=1)=\pi_Rq+\pi_Da
-=\frac{q(1-c)}{q+b}.
-\end{equation}
-Moreover $a<\rho<q$. The hidden transition matrix $P$ is primitive, and its nontrivial eigenvalue $\lambda=p-b$ satisfies $|\lambda|<1$.
-\end{lemma}
+The other real branch gives the removable solution $x=1$ of the multiplied
+equation. At $s=1$ the two branches meet and $\Gamma_c=\kappa_{\mathrm r}$.
 
-\begin{proof}
-The balance equation $\pi_Rq=\pi_Db$ and normalization give the displayed stationary distribution. Since $a+b=1-c$, the formula for $\rho$ follows immediately. To prove the bounds, first note that
+When $\kappa_{\mathrm r}=\Gamma$ the distinct-root formulas for the renewal
+law are interpreted by continuity. With $\alpha=\Gamma\Delta\tau$ and
+$p=e^{-\alpha}$,
 \[
-a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}
-\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds
-<q\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\,ds
-<q .
-\]
-Then
-\[
-\rho-a=\frac{b(q-a)}{q+b}>0,
+\mathbb P(G=k)=
+p^k\bigl[(1-p)+\alpha(k(1-p)-p)\bigr],
 \qquad
-q-\rho=\frac{q(q-a)}{q+b}>0.
+\mathbb P(G\ge k)=p^k(1+\alpha k),
 \]
-Finally, $p,q,b$ are positive and $1-b=c+a>0$, so all entries of $P$ are positive. Hence $P$ is primitive. Its Perron root is $1$, and its only other eigenvalue has modulus strictly less than one; for the displayed two-state matrix this eigenvalue is $\lambda=p-b$.
-\end{proof}
-
-\begin{remark}[Equal-rate limit]\label{rem:supp-equal-rate}
-When $\kappa_{\mathrm r}=\Gamma$, equations~\eqref{eq:supp-a-b-closed}--\eqref{eq:supp-gap-closed} are $0/0$ forms. L'H\^opital's rule applied to~\eqref{eq:supp-gap-closed} in $\kappa_{\mathrm r}$ at $\kappa_{\mathrm r}=\Gamma$ gives
+and hence
 \[
-g_k\big|_{\kappa_{\mathrm r}=\Gamma} = p^k\bigl[(1-p)+\Gamma\Delta\tau\bigl(k(1-p)-p\bigr)\bigr],
-\]
-and analogously for $a$, $b$, $\lambda$. If $\alpha=\Gamma\Delta\tau$ and $p=e^{-\alpha}$, then the survival tail and hazard at equal rates are
-\[
-\PP(G\ge k)\big|_{\kappa_{\mathrm r}=\Gamma}=p^k(1+\alpha k),
+h_k=
+\frac{(1-p)+\alpha(k(1-p)-p)}{1+\alpha k},
 \qquad
-h_k\big|_{\kappa_{\mathrm r}=\Gamma}
-=
-\frac{(1-p)+\alpha(k(1-p)-p)}{1+\alpha k}.
-\]
-Consequently
-\[
-h_{k+1}-h_k
-=
-\frac{\alpha^2p}{(1+\alpha k)(1+\alpha(k+1))}>0,
-\]
-so the strict-hazard and finite-memory-obstruction results extend explicitly to $\kappa_{\mathrm r}=\Gamma$.
-\end{remark}
-
-\begin{proposition}\label{prop:supp-hazard}
-Assume $\kappa_{\mathrm r}\neq\Gamma$. Then
-\begin{equation}\label{eq:supp-hazard}
-h_k=\frac{g_k}{\sum_{j\ge k}g_j}
-=\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}{\kappa_{\mathrm r}p^k-\Gamma c^k},
-\qquad k\ge0,
-\end{equation}
-and
-\begin{equation}\label{eq:supp-hazard-diff}
 h_{k+1}-h_k=
-\frac{\kappa_{\mathrm r}\Gamma(p-c)^2p^kc^k}
-{(\kappa_{\mathrm r}p^k-\Gamma c^k)(\kappa_{\mathrm r}p^{k+1}-\Gamma c^{k+1})}>0.
-\end{equation}
-Hence the visible process is not an $r$-step Markov chain for any finite $r$.
-\end{proposition}
-
-\begin{proof}
-The tail of the gap law is
-\[
-\sum_{j\ge k}g_j=
-\frac{\kappa_{\mathrm r}p^k-\Gamma c^k}{\kappa_{\mathrm r}-\Gamma}.
+\frac{\alpha^2p}{(1+\alpha k)(1+\alpha(k+1))}>0 .
 \]
-This gives \cref{eq:supp-hazard}. The tail is a positive survival probability, so the raw factors $\kappa_{\mathrm r}p^k-\Gamma c^k$ all have the same sign as $\kappa_{\mathrm r}-\Gamma$; hence the denominator in \cref{eq:supp-hazard-diff} is positive. Direct subtraction yields \cref{eq:supp-hazard-diff}. If the visible process were finite-order Markov, the next-click probability after a long run of zeros would eventually depend only on a fixed finite suffix, hence would be constant on sufficiently long zero runs. The strict monotonicity of $h_k$ excludes that possibility.
-\end{proof}
-
-\begin{proposition}\label{prop:supp-cov}
-Let $(A_n)_{n\in\mathbb Z}$ be any stationary version of the finite-recovery record and let $\rho=\PP(A_0=1)$. Define
-\begin{equation}\label{eq:supp-lambda}
-\lambda=
-\frac{\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}\Delta\tau}-\Gamma e^{-\Gamma\Delta\tau}}
-{\kappa_{\mathrm r}-\Gamma}.
-\end{equation}
-When $\kappa_{\mathrm r}=\Gamma$, this quotient is interpreted by continuity as
+The hidden eigenvalue on the equal-rate line is
 \[
 \lambda=e^{-\Gamma\Delta\tau}(1-\Gamma\Delta\tau).
 \]
-Then
-\begin{equation}\label{eq:supp-cov}
-\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda^{n-1},\qquad n\ge1.
-\end{equation}
-Moreover $a<\rho<1-p$, so $\operatorname{Cov}(A_0,A_1)<0$. The critical line
-\begin{equation}\label{eq:supp-critical}
-\Delta\tau=\frac{\log\kappa_{\mathrm r}-\log\Gamma}{\kappa_{\mathrm r}-\Gamma}
-\end{equation}
-is the unique locus at which $\lambda=0$, with the quotient interpreted by continuity when $\Gamma=\kappa_{\mathrm r}$. At that locus, $\operatorname{Cov}(A_0,A_n)=0$ for all $n\ge2$.
-\end{proposition}
 
-\begin{proof}
-Let
+For fast sampling at fixed $\kappa_{\mathrm r}$, the same critical equation
+gives
 \[
-P=T_0+T_1=
-\begin{pmatrix}
- p & 1-p\\
- b & 1-b
-\end{pmatrix},
-\qquad
-u=T_1\mathbf 1=\binom{1-p}{a}.
-\]
-The nontrivial eigenvalue of the two-state matrix $P$ is $\lambda=p-b$. If $\pi$ is the stationary distribution of $P$, then $\rho=\pi u$. Whenever $A_0=1$, the next hidden state is deterministically $D$, so
-\[
-\PP(A_0=1,A_n=1)=\rho\, e_D^\top P^{n-1}u,\qquad n\ge1.
-\]
-The vector $u-\rho\mathbf 1$ has zero $\pi$-mean. The zero-mean subspace is one-dimensional and is spanned by
-\[
-w=\binom{q}{-b},
-\qquad
-\pi w=0,
-\qquad
-Pw=(p-b)w=\lambda w .
-\]
-Thus the two-state spectral decomposition gives
-\[
-P^{n-1}u=\rho\mathbf 1+\lambda^{n-1}(u-\rho\mathbf 1).
-\]
-Evaluating at $e_D$ yields
-\[
-e_D^\top P^{n-1}u=\rho+\lambda^{n-1}(a-\rho),
-\]
-which proves \cref{eq:supp-cov}. The inequality $a<\rho<1-p$ is \cref{lem:supp-stationary}. Solving $\lambda=0$ gives \cref{eq:supp-critical}.
-\end{proof}
-
-\begin{unnumberedlemma}[Uniqueness and sign of the critical line]
-For fixed $\kappa_{\mathrm r},\Delta\tau>0$, the equation $\lambda(\Gamma)=0$ has exactly one positive solution $\Gamma_c$. It is characterized by
-\[
-\Delta\tau=\frac{\log\kappa_{\mathrm r}-\log\Gamma_c}{\kappa_{\mathrm r}-\Gamma_c},
-\]
-with the quotient interpreted by continuity when $\Gamma_c=\kappa_{\mathrm r}$. In addition,
-\[
-\lambda(\Gamma)>0\quad\text{for }0<\Gamma<\Gamma_c,
-\qquad
-\lambda(\Gamma)<0\quad\text{for }\Gamma>\Gamma_c .
-\]
-\end{unnumberedlemma}
-
-\begin{proof}
-Set $s=\kappa_{\mathrm r}\Delta\tau$ and $x=\Gamma/\kappa_{\mathrm r}$. For $x\neq1$,
-\[
-\lambda(\Gamma)
-=
-\frac{e^{-s}-x e^{-sx}}{1-x}.
-\]
-The equation $\lambda=0$ is therefore equivalent to
-\[
-H_s(x):=\log x-s(x-1)=0,
-\]
-apart from the removable root $x=1$ introduced by the quotient. The equal-rate value is $\lambda=e^{-s}(1-s)$, so $x=1$ is critical only when $s=1$.
-
-The sign analysis is as follows. Since
-\[
-e^{-s}-x e^{-sx}=e^{-s}\bigl(1-e^{H_s(x)}\bigr),
-\]
-the numerator has the opposite sign from $H_s(x)$. Also $H_s'(x)=x^{-1}-s$ and $H_s''(x)=-x^{-2}<0$. If $0<s<1$, then $H_s$ is strictly increasing on $(0,1]$, so $H_s<0$ on $(0,1)$. On $(1,\infty)$ it first becomes positive and then, by strict concavity and $H_s(x)\to-\infty$ as $x\to\infty$, crosses zero exactly once at $x_c>1$. The quotient formula for $\lambda$ then gives $\lambda>0$ for $0<x<x_c$ and $\lambda<0$ for $x>x_c$.
-
-If $s>1$, then $H_s$ is strictly decreasing on $[1,\infty)$, so $H_s<0$ for $x>1$. On $(0,1)$ the maximum occurs at $x=1/s$, where $H_s(1/s)=s-1-\log s>0$, while $H_s(x)\to-\infty$ as $x\downarrow0$; strict concavity gives exactly one zero $x_c\in(0,1)$. Again $\lambda>0$ for $0<x<x_c$ and $\lambda<0$ for $x>x_c$. If $s=1$, the inequality $\log x\le x-1$ gives $H_1(x)\le0$ with equality only at $x=1$, and the equal-rate limit gives the single critical point $x_c=1$. Rewriting $H_s(x_c)=0$ gives the displayed equation for $\Gamma_c$.
-\end{proof}
-
-\begin{lemma}[Kernel factorization at the critical line]\label{lem:supp-1dep-factorization}
-At the critical line \cref{eq:supp-critical}, let $\pi$ be the stationary row distribution of $P=T_0+T_1$. Then $P=\mathbf 1\pi$. Consequently, for finite words $u$ and $v$ supported respectively on a past block ending at time $0$ and a future block beginning at time $2$,
-\[
-\PP(A_{-m}^0=u,\ A_2^{2+\ell}=v)
-=\PP(A_{-m}^0=u)\PP(A_2^{2+\ell}=v).
-\]
-\end{lemma}
-
-\begin{proof}
-The separation convention is the standard one for $1$-dependent processes: samples with index distance greater than one generate independent sigma algebras. Hence the output at time $1$ is left unobserved between a block ending at time $0$ and a block beginning at time $2$; no conditional independence given $A_1$ is being asserted.
-
-At the critical line, $\lambda=p-b=0$, hence $b=p$ and
-\[
-P=
-\begin{pmatrix}
-p&q\\
-p&q
-\end{pmatrix}
-=\mathbf 1\pi,
-\qquad
-\pi=(p,q).
-\]
-Thus the hidden-state transition matrix has rank one: after one unobserved interval the hidden state has the stationary distribution independently of the incoming hidden state. The labelled-kernel probability of the two words, with the output at time $1$ unobserved, is
-\[
-\PP(A_{-m}^0=u,\ A_2^{2+\ell}=v)
-=\pi T_u P T_v\mathbf 1
-=\pi T_u\mathbf 1\,\pi T_v\mathbf 1
-=\PP(A_{-m}^0=u)\PP(A_2^{2+\ell}=v),
-\]
-where $T_u$ and $T_v$ are the corresponding products of output-labelled kernels.
-If the blocks are separated by more than one unobserved sample, the intervening factor is $P^j$ for some $j\ge1$. Since $P=\mathbf 1\pi$ gives $P^j=P$, the same factorization holds.
-\end{proof}
-
-\begin{corollary}\label{cor:supp-1dep}
-The stationary finite-recovery output is exact $1$-dependent if and only if $\Gamma$ lies on the critical line \cref{eq:supp-critical}. At that line,
-\[
-\sigma(A_i:i\le0)\ \perp\ \sigma(A_j:j\ge2).
-\]
-\end{corollary}
-
-\begin{proof}
-Cylinder events generate the two sigma algebras, and \cref{lem:supp-1dep-factorization} factorizes all such cylinders at the critical line. This yields independence. Conversely, away from the critical line the uniqueness-and-sign lemma gives $\lambda\neq0$, and \cref{eq:supp-cov} gives
-\[
-\operatorname{Cov}(A_0,A_2)=\rho(a-\rho)\lambda\neq0
-\]
-because $\rho>0$ and $a<\rho$. Exact $1$-dependence would make $A_0$ and $A_2$ independent, hence uncorrelated, a contradiction.
-\end{proof}
-
-The proof separates two roles. Independence at the critical line comes from the rank-one labelled-kernel factorization in \cref{lem:supp-1dep-factorization}. Away from the critical line, covariance is used only as an obstruction: exact $1$-dependence would force $\operatorname{Cov}(A_0,A_2)=0$, but \cref{eq:supp-cov} gives a nonzero value.
-
-This exact $1$-dependence should not be confused with finite visible Markov order. At the critical line, separated blocks are independent after one unobserved sample, but the zero-run hazard remains strictly increasing by \cref{prop:supp-hazard} and \cref{rem:supp-equal-rate}. Hence the visible record is still not an $r$-step Markov chain for any finite $r$.
-
-\begin{corollary}\label{cor:supp-no-exact}
-No finite-recovery detector with positive parameters $(\Gamma,\kappa_{\mathrm r},\Delta\tau)$ realizes the Parry-law exact symbolic thermality of the ideal dead-time model. Nor is the finite-recovery record Bernoulli at any positive parameter value.
-\end{corollary}
-
-\begin{proof}
-The Parry law on the golden-mean shift assigns zero probability to the word $11$. In the finite-recovery detector, $\PP(A_{n+1}=1\mid A_n=1)=a>0$, so $\PP(A_n=1,A_{n+1}=1)=\rho a>0$. Thus the support differs from the Parry support. If one instead compares with a Bernoulli full-support law at fixed click density, the zero-run hazard would be constant. By \cref{prop:supp-hazard}, the finite-recovery hazard is strictly increasing, excluding that possibility as well.
-\end{proof}
-
-\section{Soft dead time and finite-window concentration}\label{sec:supp-soft}
-
-\begin{proposition}\label{prop:supp-soft}
-In the finite-recovery model, for fixed positive $\Gamma$ and $\kappa_{\mathrm r}$,
-\begin{equation}\label{eq:supp-soft}
-\PP(A_{n+1}=1\mid A_n=1)=a
-=
-\frac12\,\kappa_{\mathrm r}\Gamma(\Delta\tau)^2+O((\Delta\tau)^3)
-\qquad (\Delta\tau\downarrow0).
-\end{equation}
-Consequently, for the inadmissible set
-\[
-V_m=\{(a_0,\dots,a_{m-1})\in\{0,1\}^m:\exists\,k\le m-2,\ a_ka_{k+1}=11\},
-\]
-one has
-\begin{equation}\label{eq:supp-window}
-\PP\!\bigl((A_0,\dots,A_{m-1})\in V_m\bigr)
-\le
-\frac12\,\kappa_{\mathrm r}\Gamma(\Delta\tau)^2\,(m-1)
-+O\!\bigl(m(\Delta\tau)^3\bigr)
-\qquad(\Delta\tau\downarrow0).
-\end{equation}
-\end{proposition}
-
-\begin{proof}
-The identity $\PP(A_{n+1}=1\mid A_n=1)=a$ is immediate from the recovery model: after a click, the detector begins the next interval in the refractory state, so a second consecutive click requires recovery at time $s\in[0,\Delta\tau]$ followed by excitation during the remaining subinterval. This yields
-\[
-a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds.
-\]
-Using
-\[
-e^{-\kappa_{\mathrm r}s}=1+O(\Delta\tau),
-\qquad
-1-e^{-\Gamma(\Delta\tau-s)}=\Gamma(\Delta\tau-s)+O((\Delta\tau)^2),
-\]
-uniformly for $0\le s\le \Delta\tau$, gives
-\[
-a=
-\kappa_{\mathrm r}\Gamma\int_0^{\Delta\tau}(\Delta\tau-s)\,ds
-+O((\Delta\tau)^3)
-=
-\frac12\,\kappa_{\mathrm r}\Gamma(\Delta\tau)^2+O((\Delta\tau)^3).
-\]
-This proves \cref{eq:supp-soft}.
-
-For the finite-window bound, use the union bound:
-\[
-\PP(V_m)\le \sum_{k=0}^{m-2}\PP(A_k=1,A_{k+1}=1).
-\]
-By stationarity,
-\[
-\PP(A_k=1,A_{k+1}=1)=\PP(A_0=1)\PP(A_1=1\mid A_0=1)\le a.
-\]
-Substituting the expansion for $a$ proves \cref{eq:supp-window}.
-\end{proof}
-
-This estimate is a fixed-rate short-bin statement. If instead one follows the exact-clock scaling $\Gamma\Delta\tau=L$ while $\Delta\tau\downarrow0$, then $\Gamma=L/\Delta\tau$ and the integral definition gives, for fixed $\kappa_{\mathrm r}$,
-\[
-a=\kappa_{\mathrm r}\Delta\tau
-\left(1-\frac{1-e^{-L}}{L}\right)+O((\Delta\tau)^2).
-\]
-Thus the adjacent-click probability is generally $O(\Delta\tau)$, not $O((\Delta\tau)^2)$, under threshold-type scaling. Consequently \cref{eq:supp-soft} and \cref{eq:supp-window} justify convergence to the ideal grammar only for fixed physical rates on fixed finite windows.
-
-\section{Spectral density and sub-Poisson counting}\label{sec:supp-spectrum}
-
-\begin{proposition}\label{prop:supp-spectrum}
-Let $(A_n)$ be a stationary finite-recovery record. Its spectral density
-\[
-f(\theta)=\rho(1-\rho)+2\sum_{n\ge1}\operatorname{Cov}(A_0,A_n)\cos(n\theta)
-\]
-has the closed form
-\begin{equation}\label{eq:supp-spectrum}
-f(\theta)=
-\rho(1-\rho)+2\rho(a-\rho)\,
-\frac{\cos\theta-\lambda}{1-2\lambda\cos\theta+\lambda^2},
-\qquad \theta\in[-\pi,\pi],
-\end{equation}
-and is strictly increasing on $[0,\pi]$.
-\end{proposition}
-
-\begin{proof}
-By \cref{prop:supp-cov},
-\[
-\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda^{n-1},\qquad n\ge1.
-\]
-Hence
-\[
-f(\theta)=
-\rho(1-\rho)+2\rho(a-\rho)\sum_{n\ge1}\lambda^{n-1}\cos(n\theta).
-\]
-By \cref{lem:supp-stationary}, $|\lambda|<1$, so
-\[
-\sum_{n\ge1}\lambda^{n-1}e^{in\theta}
-=
-\frac{e^{i\theta}}{1-\lambda e^{i\theta}},
-\]
-so taking real parts gives \cref{eq:supp-spectrum}. To prove monotonicity, write $x=\cos\theta$ and
-\[
-R_\lambda(x)=\frac{x-\lambda}{1-2\lambda x+\lambda^2}.
-\]
-Then
-\[
-R_\lambda'(x)=\frac{1-\lambda^2}{(1-2\lambda x+\lambda^2)^2}>0.
-\]
-Since $a-\rho<0$, the affine function $\rho(1-\rho)+2\rho(a-\rho)R_\lambda(x)$ is strictly decreasing in $x$, while $\cos\theta$ is strictly decreasing on $[0,\pi]$. Hence $f$ is strictly increasing on $[0,\pi]$.
-\end{proof}
-
-\begin{proposition}\label{prop:supp-fano}
-Let
-\[
-N_N=\sum_{t=0}^{N-1}A_t.
-\]
-Then
-\begin{equation}\label{eq:supp-count-var}
-\Var(N_N)=
-N\rho(1-\rho)
-+
-\frac{2\rho(a-\rho)}{(1-\lambda)^2}
-\Bigl(N(1-\lambda)-1+\lambda^N\Bigr).
-\end{equation}
-Consequently,
-\begin{equation}\label{eq:supp-fano}
-\lim_{N\to\infty}\frac{\Var(N_N)}{\EE N_N}
-=
-1-\rho+\frac{2(a-\rho)}{1-\lambda}
-<1.
-\end{equation}
-\end{proposition}
-
-\begin{proof}
-For any stationary binary process,
-\[
-\Var(N_N)=N\gamma_0+2\sum_{n=1}^{N-1}(N-n)\gamma_n,
-\qquad
-\gamma_n=\operatorname{Cov}(A_0,A_n).
-\]
-Using $\gamma_0=\rho(1-\rho)$ and $\gamma_n=\rho(a-\rho)\lambda^{n-1}$ for $n\ge1$ gives
-\[
-\Var(N_N)=
-N\rho(1-\rho)+2\rho(a-\rho)\sum_{n=1}^{N-1}(N-n)\lambda^{n-1}.
-\]
-The geometric sum evaluates to
-\[
-\sum_{n=1}^{N-1}(N-n)\lambda^{n-1}
-=
-\frac{N(1-\lambda)-1+\lambda^N}{(1-\lambda)^2},
-\]
-which proves \cref{eq:supp-count-var}. Since $\EE N_N=N\rho$, division by $N\rho$ and passage to the limit yield \cref{eq:supp-fano}. The strict inequality follows from $a-\rho<0$ and $1-\lambda>0$.
-\end{proof}
-
-\section{Finite-record diagnostics}\label{sec:supp-finite-record}
-
-The finite-record statements in the main text use only standard consequences of the regenerative structure already proved above. Since every click resets the next interval to $D$, the completed zero runs form an i.i.d. sequence. The closed law \cref{eq:supp-gap-closed}, together with the equal-rate limit in \cref{rem:supp-equal-rate}, gives an exponential tail for those regeneration cycles. Hence fixed-gap empirical hazards, fixed-lag covariance estimators, and fixed-block count variances obey the renewal strong law \cite{Asmussen2003}.
-
-For the memory-shell diagnostic, the relevant population quantity is
-\[
-\gamma_2=\operatorname{Cov}(A_0,A_2)=\rho(a-\rho)\lambda .
-\]
-By \cref{lem:supp-stationary}, $\rho>0$ and $a-\rho<0$, so the sign of $\gamma_2$ is opposite to the sign of the hidden eigenvalue $\lambda$. The uniqueness-and-sign lemma for the critical line therefore implies
-\[
-\gamma_2=0
-\quad\Longleftrightarrow\quad
-\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau),
-\]
-and the sign changes when the local excitation rate crosses this value. If a spatial scan parameter $s$ satisfies $\Gamma_+(s_*)=\Gamma_c$ and $d\Gamma_+/ds|_{s_*}\neq0$, the zero of $\gamma_2$ is a first-order locator for the memory-transition shell in that scan.
-
-The same exponential regeneration tail gives the regenerative central-limit theorem for any fixed finite-window observable. For the lag-two covariance, set
-\[
-\mu_2=\EE(A_0A_2),\qquad
-Z_j=(A_jA_{j+2}-\mu_2)-2\rho(A_j-\rho),
-\]
-and define
-\[
-\sigma_2^2=
-\sum_{\ell\in\mathbb Z}\operatorname{Cov}(Z_0,Z_\ell)
-=
-\lim_{N\to\infty}
-N\,\Var\!\left(\frac1N\sum_{j=0}^{N-1}Z_j\right).
-\]
-The covariance series is absolutely convergent because the regeneration cycles have exponential tails. The regenerative CLT applied to the vector observables $A_j$ and $A_jA_{j+2}$, followed by the delta method for $(u,v)\mapsto v-u^2$, gives
-\[
-\sqrt N\,(\widehat\gamma_2-\gamma_2)
-\Rightarrow
-\mathcal N(0,\sigma_2^2)
-\]
-with this finite long-run variance. Consequently any consistent regenerative batch-means or cycle-block estimate $\widehat\sigma_2^2$ gives the normal interval
-\[
-\widehat\gamma_2\pm z_{1-\alpha/2}\widehat\sigma_2/\sqrt N .
-\]
-The theorem supplies the $N^{-1/2}$ statistical scale; a scan-coordinate interval additionally requires the nonzero transverse slope of $\gamma_2$ at the crossing.
-
-\section{Shell equations, spectral transport, and inverse formulas}\label{sec:supp-kms}
-
-The proper-time inverse temperature along a static worldline is
-\[
-\beta_{\mathrm{loc}}(x)=\beta_\infty N(x),
-\]
-by Tolman scaling in a static background \cite{Tolman1930,TolmanEhrenfest1930}. The weak-coupling response rates obey the detailed-balance ratio \cite{HaagHugenholtzWinnink1967,KayWald1991},
-\[
-\frac{\Gamma_-(x,\Omega)}{\Gamma_+(x,\Omega)}
-=e^{\beta_{\mathrm{loc}}(x)\Omega}.
-\]
-The KMS condition fixes this ratio but not the absolute excitation rate. The model class used in the main text assumes that, for each static worldline in the region under consideration, the fixed-profile pulled-back two-point function is stationary, KMS at inverse temperature $\beta_\infty N(x)$, and has a finite nonzero positive-frequency response at the detector gap. The excitation rate is then written with an explicit positive spectral weight:
-\begin{equation}\label{eq:supp-kms-rate}
-\Gamma_+(x,\Omega)=\lambda_c^2\frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1}.
-\end{equation}
-Here $\mathcal S_x(\Omega)>0$ is the local response spectral density entering the profile-smeared KMS two-point function restricted to the static worldline; in shell-regularity and inverse statements it is assumed to have the displayed $C^1$ regularity in $x$. It carries the local mode-density, detector-profile, greybody, and boundary information not fixed by the KMS occupation factor itself. The homogeneous case used for pure lapse shells is therefore a separate calibration regime, not a consequence of the KMS condition alone.
-The associated de-excitation rate is
-\[
-\Gamma_-(x,\Omega)=
-\lambda_c^2
-\frac{e^{\beta_\infty N(x)\Omega}\mathcal S_x(\Omega)}
-{e^{\beta_\infty N(x)\Omega}-1}.
-\]
-Conversely, for any positive stationary excitation rate satisfying the KMS detailed-balance ratio at local inverse temperature $\beta_\infty N(x)$, the same display may be read as the definition
-\[
-\mathcal S_x(\Omega)=
-\lambda_c^{-2}\bigl(e^{\beta_\infty N(x)\Omega}-1\bigr)\Gamma_+(x,\Omega).
-\]
-Thus the decomposition separates the universal KMS occupation factor from the remaining positive response amplitude; homogeneity of $\mathcal S_x(\Omega)$ is an additional calibration regime, not a consequence of KMS detailed balance.
-Equivalently, with
-\[
-R_\Omega(x)=\lambda_c^2\frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1},
-\qquad
-\gamma_\varphi=\frac{\log\varphi}{\Delta\tau},
-\qquad
-\gamma_{\mathrm{mem}}=\Gamma_c(\kappa_{\mathrm r},\Delta\tau),
-\]
-the two shell equations are the response-level equations
-\[
-R_\Omega(x)=\gamma_\varphi,
-\qquad
-R_\Omega(x)=\gamma_{\mathrm{mem}}.
-\]
-For any positive target rate $\gamma$, the response locus
-\[
-L_\gamma=\{x:R_\Omega(x)=\gamma\}
-\]
-is empty exactly when $\gamma$ is outside the range of $R_\Omega$ on the static region under consideration. If $N$ and $\mathcal S_x(\Omega)$ are $C^1$ and $dR_\Omega$ is nonzero at a point of $L_\gamma$, the regular level-set theorem makes $L_\gamma$ a local $C^1$ codimension-one hypersurface there. In the homogeneous spectral-weight regime,
-\[
-R_\Omega(x)=\lambda_c^2\frac{\mathcal S(\Omega)}{e^{\beta_\infty N(x)\Omega}-1},
-\]
-so the same equation is equivalent to
-\[
-\beta_\infty N(x)=
-\frac{1}{\Omega}\log\!\left(1+\frac{\lambda_c^2\mathcal S(\Omega)}{\gamma}\right),
-\]
-and
-\[
-dR_\Omega=
--\lambda_c^2\mathcal S(\Omega)
-\frac{\beta_\infty\Omega e^{\beta_\infty N\Omega}}
-{(e^{\beta_\infty N\Omega}-1)^2}\,dN .
-\]
-Thus, in the homogeneous regime, shell regularity is exactly the condition $dN\neq0$ at the corresponding lapse level.
-Substituting the ideal and memory thresholds yields the shell equations
-\begin{equation}\label{eq:supp-shell-phi}
-\frac{\lambda_c^2\mathcal S_x(\Omega)\Delta\tau}{e^{\beta_\infty N(x)\Omega}-1}=\log\varphi,
-\end{equation}
-\begin{equation}\label{eq:supp-shell-mem}
-\frac{\lambda_c^2\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1}=\Gamma_c(\kappa_{\mathrm r},\Delta\tau).
-\end{equation}
-If $\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$, these rearrange to the pure-lapse formulas in the main text. At homogeneous shell radii no further geometric input is needed: the ratio law is only the quotient of the two source equations once the orientation has been fixed. Using the abbreviations
-\[
-A=\lambda_c^2\mathcal S(\Omega),
-\]
-and
-\[
-D_\varphi=e^{\beta_\infty\Omega N(r_\varphi)}-1,\qquad
-D_{\mathrm{mem}}=e^{\beta_\infty\Omega N(r_{\mathrm{mem}})}-1,
-\]
-we use the same orientation as in the main text,
-\[
-Q_{\varphi/\mathrm{mem}}=\frac{D_\varphi}{D_{\mathrm{mem}}}.
-\]
-Thus the exact-clock denominator is the numerator of
-$Q_{\varphi/\mathrm{mem}}$ and the memory-transition denominator is the
-denominator. No target-rate quotient is taken before these two Planck
-denominator identities have been written. The two source equations are,
-explicitly,
-\begin{equation}\label{eq:supp-hom-denominator-shells}
-\frac{A\Delta\tau}{e^{\beta_\infty\Omega N(r_\varphi)}-1}
-=\log\varphi,
-\qquad
-\frac{A}{e^{\beta_\infty\Omega N(r_{\mathrm{mem}})}-1}
-=\Gamma_c(\kappa_{\mathrm r},\Delta\tau).
-\end{equation}
-Equivalently, in denominator notation,
-\[
-\frac{A\Delta\tau}{D_\varphi}=\log\varphi,
-\qquad
-\frac{A}{D_{\mathrm{mem}}}=\Gamma_c(\kappa_{\mathrm r},\Delta\tau).
-\]
-The factor $\Delta\tau$ appears only in the exact-clock denominator
-bookkeeping because the ideal threshold is
-$\Gamma_+\Delta\tau=\log\varphi$; the memory threshold
-$\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ is already a rate
-condition. All factors are positive, so \cref{eq:supp-hom-denominator-shells}
-is exactly equivalent to the denominator identities
-\begin{equation}\label{eq:supp-hom-rearranged-shells}
-e^{\beta_\infty\Omega N(r_\varphi)}-1
-=\frac{A\Delta\tau}{\log\varphi},
-\qquad
-e^{\beta_\infty\Omega N(r_{\mathrm{mem}})}-1
-=\frac{A}{\Gamma_c(\kappa_{\mathrm r},\Delta\tau)},
-\end{equation}
-or, compactly,
-\[
-\begin{aligned}
-\Gamma_+\Delta\tau=\log\varphi
-&\quad\Longleftrightarrow\quad
-D_\varphi=\frac{A\Delta\tau}{\log\varphi},\\
-\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)
-&\quad\Longleftrightarrow\quad
-D_{\mathrm{mem}}=\frac{A}{\Gamma_c(\kappa_{\mathrm r},\Delta\tau)} .
-\end{aligned}
-\]
-Taking the quotient of \cref{eq:supp-hom-rearranged-shells} in the displayed
-orientation $D_\varphi/D_{\mathrm{mem}}$ gives
-\begin{equation}\label{eq:supp-hom-ratio-law}
-Q_{\varphi/\mathrm{mem}}
-=
-\frac{e^{\beta_\infty\Omega N(r_\varphi)}-1}
-     {e^{\beta_\infty\Omega N(r_{\mathrm{mem}})}-1}
-=
-\frac{\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\log\varphi}.
-\end{equation}
-The reciprocal quotient is $Q_{\mathrm{mem}/\varphi}=1/Q_{\varphi/\mathrm{mem}}$
-and equals
-$\log\varphi/(\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau))$; it is a
-different denominator orientation and is used only when explicitly named.
-It is also the target-rate quotient:
-\[
-\frac{\log\varphi/\Delta\tau}{\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}
-=
-\frac{\log\varphi}
-{\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}
-=
-\frac{D_{\mathrm{mem}}}{D_\varphi}.
-\]
-This is the homogeneous ratio law used in the main text. The derivation is
-exactly the displayed rearrangement of the two shell equations: it uses no
-monotonicity of the lapse, no horizon expansion, and no inverse theorem. The
-only cancelled factor is the common homogeneous response amplitude $A$.
-
-Without the homogeneity specialization, dividing \cref{eq:supp-shell-phi} and
-\cref{eq:supp-shell-mem} at shell points sharing the same field-facing detector
-core gives the general spectral-transport identity
-\begin{equation}\label{eq:supp-spectral-transport}
-\frac{e^{\beta_\infty\Omega N(x_{\varphi})}-1}
-     {e^{\beta_\infty\Omega N(x_{\mathrm{mem}})}-1}
-=
-\frac{\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\log\varphi}
-\frac{\mathcal S_{x_{\varphi}}(\Omega)}{\mathcal S_{x_{\mathrm{mem}}}(\Omega)}.
-\end{equation}
-The homogeneous ratio law is the special case in which the spectral-weight ratio equals one. In that specialization the common amplitude $\lambda_c^2\mathcal S(\Omega)$ cancels, but the detector design has not disappeared: the known gap $\Omega$ remains in the exponential response factors, and the known readout parameters remain through the constant $C_D$ used below.
-
-If $\mathcal S_x(\Omega)=\mathcal S(\Omega)(1+\varepsilon(x))$ at the two shell points and $|\varepsilon(x)|\le\varepsilon_0<1$, then the ratio $R$ on the left-hand side of \cref{eq:supp-spectral-transport} satisfies, with
-\[
-C_D=\frac{\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\log\varphi},
-\]
-the explicit stability bound
-\begin{equation}\label{eq:supp-spectral-stability}
-C_D\,\frac{1-\varepsilon_0}{1+\varepsilon_0}
-\le R\le
-C_D\,\frac{1+\varepsilon_0}{1-\varepsilon_0},
-\qquad
-\left|\frac{R}{C_D}-1\right|
-\le
-\frac{2\varepsilon_0}{1-\varepsilon_0}.
-\end{equation}
-This is immediate from
-\[
-\frac{R}{C_D}
-=
-\frac{1+\varepsilon(x_\varphi)}{1+\varepsilon(x_{\mathrm{mem}})}.
-\]
-
-For a nonextremal Hartle--Hawking horizon, $\beta_\infty=2\pi/\kappa_{\mathrm H}$ and
-\[
-N(\rho)=\kappa_{\mathrm H}\rho+O(\rho^3).
-\]
-The following expansion is used only under the small-shell hypothesis from the
-main text: a one-parameter family of homogeneous shell pairs whose proper
-distances from the horizon satisfy
-\[
-\epsilon(t)=\max\{\rho_\varphi(t),\rho_{\mathrm{mem}}(t)\}\downarrow0
-\]
-and whose exact ratio law is
-\[
-\frac{e^{\beta_\infty\Omega N(\rho_\varphi(t))}-1}
-     {e^{\beta_\infty\Omega N(\rho_{\mathrm{mem}}(t))}-1}
-=C_D(t),
-\qquad
-C_D(t)=
-\frac{\Delta\tau(t)\Gamma_c(\kappa_{\mathrm r}(t),\Delta\tau(t))}
-{\log\varphi}.
-\]
-This is an additional asymptotic hypothesis, not a consequence of the exact
-ratio law alone. Outside this small-shell regime the exact ratio law above
-remains the applicable statement, but it gives no proper-distance expansion.
-Along the small-shell family,
-\[
-e^{\beta_\infty\Omega N(\rho)}-1
-=
-2\pi\Omega\rho\,\bigl(1+O(\rho)\bigr),
-\]
-so insertion into the homogeneous ratio law yields
-\begin{equation}\label{eq:supp-rho-ratio}
-\frac{\rho_{\varphi}(t)}{\rho_{\mathrm{mem}}(t)}
-=
-C_D(t)\Bigl(1+O(\epsilon(t))\Bigr).
-\end{equation}
-
-For Schwarzschild, write $r_H=2M$ and $h=r-r_H$. The Gaussian normal distance from the horizon satisfies
-\[
-\rho=\int_{r_H}^{r_H+h}\frac{dr}{\sqrt{1-r_H/r}}
-=2\sqrt{r_Hh}+O(h^{3/2}),
-\]
-so
-\begin{equation}\label{eq:supp-schwarz-rho}
-h=\frac{\rho^2}{4r_H}+O(\rho^4).
-\end{equation}
-The area excess of the areal sphere is therefore
-\begin{equation}\label{eq:supp-area-excess}
-A-A_H=4\pi\bigl((r_H+h)^2-r_H^2\bigr)
-=2\pi\rho^2+O(\rho^4).
-\end{equation}
-Combining \cref{eq:supp-rho-ratio} and \cref{eq:supp-area-excess} gives
-\[
-\frac{A_\varphi(t)-A_H}{A_{\mathrm{mem}}(t)-A_H}
-=
-C_D(t)^2\bigl(1+O(\epsilon(t))\bigr),
-\]
-which is the Schwarzschild area-excess ratio in the main text.
-
-For the inverse formulas in Schwarzschild,
-\[
-N(r)=\sqrt{1-\frac{2M}{r}},
-\]
-and under homogeneous spectral weight one has
-\[
-\beta_\infty N(r_{\varphi})=\beta_{\varphi}(D),
-\qquad
-\beta_\infty N(r_{\mathrm{mem}})=\beta_{\mathrm{mem}}(D).
-\]
-More generally, if $N:I\to N(I)$ is strictly monotone on a static spherical radial interval $I$, then the shell equation $\beta_\infty N(r)=\beta_\star$ has a shell in $I$ exactly when $\beta_\star/\beta_\infty\in N(I)$, and the radius is $r_\star=N^{-1}(\beta_\star/\beta_\infty)$. This is the range condition used in the main-text existence statement.
-
-For model-admissible data with $r_\varphi\neq r_{\mathrm{mem}}$, squaring these identities produces two linear equations in $\beta_\infty^2$ and $2M\beta_\infty^2$, which solve to
-\begin{equation}\label{eq:supp-beta-infty}
-\beta_\infty^2=
-\frac{\beta_{\varphi}(D)^2r_{\varphi}-\beta_{\mathrm{mem}}(D)^2r_{\mathrm{mem}}}
-{r_{\varphi}-r_{\mathrm{mem}}},
-\end{equation}
-\begin{equation}\label{eq:supp-mass}
-M=
-\frac{r_{\varphi}r_{\mathrm{mem}}\bigl(\beta_{\varphi}(D)^2-\beta_{\mathrm{mem}}(D)^2\bigr)}
-{2\bigl(\beta_{\varphi}(D)^2r_{\varphi}-\beta_{\mathrm{mem}}(D)^2r_{\mathrm{mem}}\bigr)}.
-\end{equation}
-Here model-admissibility means that the resulting quantities satisfy $\beta_\infty^2>0$, $M>0$, and
-\[
-0<\frac{\beta_\varphi(D)}{\beta_\infty}<1,
-\qquad
-0<\frac{\beta_{\mathrm{mem}}(D)}{\beta_\infty}<1,
-\]
-with the displayed radii lying outside $2M$. Without these inequalities the same algebra is only a formal solution of two squared equations and need not correspond to exterior Schwarzschild shell data.
-
-For the two-mode ratio inverse in the main text, fix one field-facing detector
-core and operate it in two counter modes $D_1,D_2$ with distinct
-sampling/recovery parameters. The main inverse theorem is deliberately the
-fixed-radius version: the recorded radii define two scalar ratio functions, and
-the inverse function theorem is applied to those two ratio values. If the four
-radii are also varied, one obtains only an ambient residual graph. Full
-common-core shell records are a further restricted subset, obtained only after
-the undivided shell equations recover one positive hardware prefactor and the
-radii lie in the exterior range of the chosen background family.
-
-The four recorded radii are
-\[
-\eta=(\eta_{\varphi,1},\eta_{{\mathrm{mem}},1},
-      \eta_{\varphi,2},\eta_{{\mathrm{mem}},2}).
-\]
-For mode $m$ define the physical ratio target
-\[
-C_m=\frac{\Delta\tau_m\Gamma_c(\kappa_{{\mathrm r},m},\Delta\tau_m)}{\log\varphi}
-\]
-and the radius-dependent ratio observable
-\[
-R_m(\theta;\eta)=
-\frac{e^{\beta_\infty(\theta)\Omega N(\eta_{\varphi,m};\theta)}-1}
-     {e^{\beta_\infty(\theta)\Omega N(\eta_{{\mathrm{mem}},m};\theta)}-1}.
-\]
-Thus $\mathcal R_\eta(\theta)=(R_1(\theta;\eta),R_2(\theta;\eta))$. The physical residuals are
-\[
-H_m(\theta,\eta)=R_m(\theta;\eta)-C_m,\qquad
-H(\theta,\eta)=\mathcal R_\eta(\theta)-C,\qquad C=(C_1,C_2).
-\]
-For bookkeeping in the ambient residual problem, write
-\[
-\mathsf e=(\eta,c),\qquad c=(c_1,c_2),
-\]
-and
-\[
-\Phi_m(\theta,\mathsf e)=R_m(\theta;\eta)-c_m,\qquad
-\Phi=(\Phi_1,\Phi_2).
-\]
-For fixed detector settings,
-\[
-\Phi_C(\theta,\eta)=\Phi(\theta,(\eta,C))=H(\theta,\eta).
-\]
-For the physical detector settings, $\mathsf e_*=(\eta_*,C)$ with
-\[
-\eta_*=(r_{\varphi,1},r_{{\mathrm{mem}},1},r_{\varphi,2},r_{{\mathrm{mem}},2}),
-\]
-and exact homogeneous data generated at $\theta_*$ satisfy
-\[
-\Phi(\theta_*,\mathsf e_*)=0,
-\qquad
-\mathcal R_{\eta_*}(\theta_*)=C.
-\]
-The common amplitude $\lambda_c^2\mathcal S(\Omega)$ is absent from
-$\mathcal R_\eta$, $H$, and $\Phi$.
-
-A ratio-level solution is not yet a full common-core solution. The undivided
-equations still contain the homogeneous prefactor
-\[
-\mathcal A=\lambda_c^2\mathcal S(\Omega).
-\]
-For mode $m$, a candidate parameter $\theta$ and data vector $\eta$ give the amplitude estimates
-\[
-\mathcal A_{\varphi,m}(\theta;\eta)=
-\frac{\log\varphi}{\Delta\tau_m}
-\bigl(e^{\beta_\infty(\theta)\Omega N(\eta_{\varphi,m};\theta)}-1\bigr),
-\]
-and
-\[
-\mathcal A_{{\mathrm{mem}},m}(\theta;\eta)=
-\Gamma_c(\kappa_{{\mathrm r},m},\Delta\tau_m)
-\bigl(e^{\beta_\infty(\theta)\Omega N(\eta_{{\mathrm{mem}},m};\theta)}-1\bigr).
-\]
-The equivalence between the physical ratio residual and within-mode amplitude
-equality is just division:
-\[
-\frac{\mathcal A_{\varphi,m}(\theta;\eta)}
-{\mathcal A_{{\mathrm{mem}},m}(\theta;\eta)}
-=
-\frac{e^{\beta_\infty(\theta)\Omega N(\eta_{\varphi,m};\theta)}-1}
-     {e^{\beta_\infty(\theta)\Omega N(\eta_{{\mathrm{mem}},m};\theta)}-1}
-\frac{\log\varphi}
-{\Delta\tau_m\Gamma_c(\kappa_{{\mathrm r},m},\Delta\tau_m)}.
-\]
-Hence $H_m(\theta,\eta)=0$ imposes equality of the two amplitude estimates within mode $m$, while positivity, exterior-range compatibility, and equality of all recovered amplitudes to one common positive value remain exact full-model admissibility checks.
-
-Writing
-\[
-B_{\varphi,m}(\theta;\eta)=\beta_\infty(\theta)\Omega N(\eta_{\varphi,m};\theta),
-\qquad
-B_{\mathrm{mem},m}(\theta;\eta)=\beta_\infty(\theta)\Omega N(\eta_{{\mathrm{mem}},m};\theta),
-\]
-one has
-\[
-d_\theta\Phi_m=d_\theta R_m=
-\frac{
-e^{B_{\varphi,m}}\,d_\theta B_{\varphi,m}\,(e^{B_{\mathrm{mem},m}}-1)
--(e^{B_{\varphi,m}}-1)e^{B_{\mathrm{mem},m}}\,d_\theta B_{\mathrm{mem},m}
-}
-{(e^{B_{\mathrm{mem},m}}-1)^2}.
-\]
-Thus the Jacobian condition says exactly that the two row covectors supplied by
-the two ratio equations are not collinear at the exact parameter and data
-vector.
-
-For fixed recorded radii, the ordinary inverse function theorem applied to
-\[
-\mathcal R_{\eta_*}:\Theta\to\RR^2
-\]
-gives the inverse used in the main theorem. If
-\[
-\det D_\theta\mathcal R_{\eta_*}(\theta_*)\neq0,
-\]
-then there are neighbourhoods $U\ni\theta_*$ and $Y\subset(0,\infty)^2$ of $C$ and a unique inverse
-branch
-\[
-\mathcal I_{\eta_*}:Y\to U,\qquad
-\mathcal R_{\eta_*}(\mathcal I_{\eta_*}(y))=y,
-\qquad
-\mathcal I_{\eta_*}(C)=\theta_* .
-\]
-This is an inverse of two ratio values at the fixed radius record $\eta_*$; it
-is not an inverse from arbitrary nearby four-radius records.
-
-\begin{unnumberedlemma}[Algebraic-data implicit-function step]
-Let $U_0\subset\RR^2$ and $W_0\subset\RR^q$ be open, and let
-$G:U_0\times W_0\to\RR^2$ be $C^1$. If $G(\theta_0,w_0)=0$ and
-$D_\theta G(\theta_0,w_0)$ is nonsingular, then there are neighbourhoods
-$U\ni\theta_0$ and $W\ni w_0$ and a unique $C^1$ map
-$\Psi:W\to U$ with $\Psi(w_0)=\theta_0$ and
-\[
-G(\Psi(w),w)=0\qquad(w\in W).
-\]
-After shrinking $U$ and $W$, every solution of $G(\theta,w)=0$ in
-$U\times W$ lies on this graph. Holding $w=w_0$ gives only local uniqueness for
-that frozen datum; the map from nearby algebraic data to parameters uses $w$
-as the implicit-function parameter.
-\end{unnumberedlemma}
-
-\begin{proof}
-This is the parameter-dependent implicit function theorem \cite{KrantzParks2002},
-applied with $\theta$ as the unknown and $w$ as the parameter.
-\end{proof}
-
-Applying the lemma to $G=\Phi$ gives only the ambient residual graph. Under
-\[
-\det D_\theta\Phi(\theta_*,\mathsf e_*)
-=
-\det D_\theta\mathcal R_{\eta_*}(\theta_*)\neq0,
-\]
-there are neighbourhoods $U\ni\theta_*$ and $W\ni\mathsf e_*$ and a unique
-$C^1$ map $\Psi:W\to U$ such that
-\[
-\Phi(\Psi(\mathsf e),\mathsf e)=0 .
-\]
-Restricting this graph to the fixed-detector slice gives
-\[
-W_C=\{\eta:(\eta,C)\in W\},
-\qquad
-\Psi_C(\eta)=\Psi((\eta,C)),
-\]
-with
-\[
-\Phi_C(\Psi_C(\eta),\eta)=0\qquad(\eta\in W_C).
-\]
-If $\theta\in U$ and $\Phi_C(\theta,\eta)=0$ for some $\eta\in W_C$, then
-$\theta=\Psi_C(\eta)$. This is a statement on the ambient radius-record space;
-it does not say that the radius quadruples in $W_C$ are physical common-core
-shell data.
-
-The restriction to full shell data is a separate subset of the same graph. Along
-the graph write $\theta(\eta)=\Psi_C(\eta)$ and
-\[
-\mathcal A_m(\eta)=
-\mathcal A_{\varphi,m}(\theta(\eta);\eta)
-=
-\mathcal A_{{\mathrm{mem}},m}(\theta(\eta);\eta),
-\qquad m=1,2,
-\]
-where the equality follows from the ratio residuals. Then the full common-core
-subset is the pulled-back amplitude-equality locus
-\[
-\mathcal P_C=
-\{\eta\in W_C:\mathcal A_1(\eta)-\mathcal A_2(\eta)=0,\ 
-\mathcal A_1(\eta)>0,\ \text{and the four radii are exterior-admissible}\}.
-\]
-The map $\eta\mapsto\mathcal A_1(\eta)-\mathcal A_2(\eta)$ is $C^1$. Hence, at
-an exact exterior datum where its differential is nonzero, $\mathcal P_C$ is
-locally a nonempty $C^1$ codimension-one submanifold of the ambient
-radius-record slice. If that transversality fails, only the displayed zero-set
-description is asserted.
-For $\eta\in\mathcal P_C$, the parameter $\Psi_C(\eta)$ satisfies the full
-common-core shell equations with one positive common amplitude. If the same
-$\eta\in W_C$ satisfied those full equations at some other $\theta\in U$,
-division within each mode would give $\Phi_C(\theta,\eta)=0$, so the uniqueness
-part of the ambient graph would force $\theta=\Psi_C(\eta)$. Conversely, any
-full common-core shell record in $W_C$ automatically satisfies the ratio
-equations and the admissibility checks, hence belongs to $\mathcal P_C$.
-
-Degeneracy is a statement about the two ratio functions: equal constants
-$C_1=C_2$ can signal redundant mode choices, but it is not a complete criterion
-in a general two-parameter background family. In the Schwarzschild worked
-example, using $\theta=(\beta_\infty,M)$ as independent local response-model
-coordinates gives
-$\det D_\theta H(\theta_*,\eta_*)\approx -2.97\times10^{-1}$ at the tabulated
-solution; equivalently this is
-$\det D_\theta\mathcal R_{\eta_*}(\theta_*)$. If the Hartle--Hawking regularity
-relation $\beta_\infty=8\pi M$ is imposed before inversion, the Schwarzschild
-family becomes one-dimensional and the two-parameter Jacobian test is replaced
-by a one-parameter sensitivity check. No prior knowledge of the common amplitude
-$\lambda_c^2\mathcal S(\Omega)$ enters $\mathcal R_\eta$ or $\Phi$; the
-amplitude can be recovered or checked afterwards only from an undivided shell
-equation, not from the two ratios alone.
-
-Finally, set
-\[
-s=\kappa_{\mathrm r}\Delta\tau,
-\qquad
-x=\frac{\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\kappa_{\mathrm r}}.
-\]
-The defining equation for $\Gamma_c$ is equivalent to
-\[
-s=\frac{\log x}{x-1}.
-\]
-For $x\neq1$, this is the same as
-\[
-\log x=s(x-1),
-\qquad
-x e^{-sx}=e^{-s}.
-\]
-Hence
-\[
-\Gamma_c(\kappa_{\mathrm r},\Delta\tau)
-=-\frac{1}{\Delta\tau}\,
-W_k\!\left(-\kappa_{\mathrm r}\Delta\tau\,e^{-\kappa_{\mathrm r}\Delta\tau}\right),
-\qquad
-k=
-\begin{cases}
--1, & 0<s<1,\\
-0, & s>1.
-\end{cases}
-\]
-The other real branch gives the removable root $x=1$, which is a solution of the multiplied equation for all $s$ but solves the original quotient equation only at $s=1$. At $s=1$, both real branches meet and $\Gamma_c=\kappa_{\mathrm r}$.
-As $s\downarrow0$, writing $L=\log(1/s)$ and $x=(L+u)/s$ yields $u=\log(L+u)+s$, hence $u=\log L+o(1)$. Therefore
-\begin{equation}\label{eq:supp-fast-gammac}
 \Gamma_c(\kappa_{\mathrm r},\Delta\tau)
 =
 \frac{L+\log L+o(1)}{\Delta\tau},
 \qquad
 L=\log\frac{1}{\kappa_{\mathrm r}\Delta\tau},
-\end{equation}
-which is the fast-sampling asymptotic used in the main text. With fixed homogeneous response amplitude, both the exact-clock rate $\log\varphi/\Delta\tau$ and the memory rate $\Gamma_c$ diverge in this limit, so the associated lapse levels tend to zero and the nonextremal near-horizon expansion applies to the resulting shell pair.
+\qquad
+\Delta\tau\downarrow0 .
+\]
+
+\section{Finite-counting identity}
+
+The main text proves the covariance tail
+\[
+\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda^{n-1},\qquad n\ge1,
+\]
+with $a<\rho$ and $|\lambda|<1$. For the block count
+$N_N=\sum_{t=0}^{N-1}A_t$, stationarity gives
+\[
+\operatorname{Var}(N_N)
+=N\rho(1-\rho)+2\sum_{n=1}^{N-1}(N-n)\rho(a-\rho)\lambda^{n-1}.
+\]
+Evaluating the geometric sum yields the finite-$N$ identity
+\[
+\operatorname{Var}(N_N)
+=
+N\rho(1-\rho)
++
+\frac{2\rho(a-\rho)}{(1-\lambda)^2}
+\bigl(N(1-\lambda)-1+\lambda^N\bigr).
+\]
+Dividing by $\mathbb E N_N=N\rho$ and letting $N\to\infty$ gives the
+sub-Poisson Fano limit displayed in the main text.
+
+\section{Schwarzschild near-horizon expansions}
+
+For Schwarzschild with $r_H=2M$ and $h=r-r_H$, the proper distance from the
+horizon is
+\[
+\rho=\int_{r_H}^{r_H+h}\frac{dr}{\sqrt{1-r_H/r}}
+=2\sqrt{r_Hh}+O(h^{3/2}).
+\]
+Consequently
+\[
+h=\frac{\rho^2}{4r_H}+O(\rho^4),
+\]
+and the area excess of an areal sphere satisfies
+\[
+A-A_H=4\pi\bigl((r_H+h)^2-r_H^2\bigr)
+=2\pi\rho^2+O(\rho^4).
+\]
+Together with the small-shell proper-distance ratio in the main theorem, this
+gives the displayed Schwarzschild area-excess ratio.
+
+\section{Numerical bookkeeping}
+
+The figures and the worked Schwarzschild table use the same detector constants
+as the main text: $r_{\mathrm s}=2M=1$, $\beta_\infty=4\pi$, $\Omega=1$, and
+$\lambda_c^2\mathcal S=2$. For mode $m$ the ratio target tabulated in the
+worked example is
+\[
+C_m=\frac{\Delta\tau_m\Gamma_c(\kappa_{{\mathrm r},m},\Delta\tau_m)}
+{\log\varphi}.
+\]
+The numerical values in the table are generated from the critical-rate branch
+above and the homogeneous lapse-level equations in the article. The local
+two-ratio inverse check treats $(\beta_\infty,M)$ as independent coordinates
+before imposing any Hartle--Hawking relation.
 
 \ifdefined\SUPPLEMENTARYAPPENDIX
 \else
