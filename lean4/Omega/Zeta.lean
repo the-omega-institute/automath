@@ -513,6 +513,7 @@ import Omega.Zeta.XiCRTIndistinguishablePair
 import Omega.Zeta.XiCRTMultistageAxisAllocationAdditiveControl
 import Omega.Zeta.XiCarathPickKernelNormalizationRigidity
 import Omega.Zeta.XiCauchyPoissonDensityRatioSecondOrderProfile
+import Omega.Zeta.XiCauchyPoissonAllLpSharpScaling
 import Omega.Zeta.XiCauchyPoissonDerivativeEnergyClosedForm
 import Omega.Zeta.XiCauchyPoissonSecondOrderShapeLimitNodeRigidity
 import Omega.Zeta.CayleyTimefiberPoissonCollapse
