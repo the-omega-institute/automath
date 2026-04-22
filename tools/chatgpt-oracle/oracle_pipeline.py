@@ -782,6 +782,51 @@ def _staged_paper_source_files(path: Path) -> list[str]:
     return sorted(set(files))
 
 
+def _snapshot_paper_sources(paper_path: Path) -> dict[str, bytes | None]:
+    """Snapshot current paper source bytes before an agent edit attempt."""
+    snapshot: dict[str, bytes | None] = {}
+    for raw in _paper_source_files(paper_path):
+        p = Path(raw)
+        if not p.is_absolute():
+            p = REPO_ROOT / p
+        if not _is_paper_source_path(p):
+            continue
+        try:
+            snapshot[str(p)] = p.read_bytes() if p.exists() else None
+        except Exception:
+            snapshot[str(p)] = None
+    return snapshot
+
+
+def _restore_paper_sources_snapshot(
+    paper_path: Path, snapshot: dict[str, bytes | None]
+) -> None:
+    """Restore source snapshot and remove new source files from failed edits."""
+    expected = set(snapshot)
+    for raw in _paper_source_files(paper_path):
+        p = Path(raw)
+        if not p.is_absolute():
+            p = REPO_ROOT / p
+        if str(p) in expected or not _is_paper_source_path(p):
+            continue
+        try:
+            if p.exists():
+                p.unlink()
+        except Exception as exc:
+            logger.warning(f"Failed to remove failed-edit file {p}: {exc}")
+    for raw, data in snapshot.items():
+        p = Path(raw)
+        try:
+            if data is None:
+                if p.exists():
+                    p.unlink()
+            else:
+                p.parent.mkdir(parents=True, exist_ok=True)
+                p.write_bytes(data)
+        except Exception as exc:
+            logger.warning(f"Failed to restore failed-edit snapshot {p}: {exc}")
+
+
 def _add_paper_only(paper_path: Path) -> None:
     """git add only .tex .bib .sty files under paper_path. Skip artifacts."""
     files = _paper_source_files(paper_path)
@@ -4303,6 +4348,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 state.paper_dir, state.target_journal, action, issues_json,
                 rnd)
             pre_theorems = extract_theorem_statements(paper_path)
+            edit_snapshot = _snapshot_paper_sources(paper_path)
             codex_exec(prompt, work_dir=paper_path,
                        timeout_seconds=3600, model=model, dry_run=dry_run,
                        context_mode="contextual_execution",
@@ -4310,6 +4356,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             compiled = compile_gate(paper_path, model=model,
                                     dry_run=dry_run, tag=f"{tag} A2")
             if not compiled:
+                _restore_paper_sources_snapshot(paper_path, edit_snapshot)
                 state.log_event("A", "compile_failed", round_num=rnd,
                                 detail=f"after A2 action={action}")
                 save_state(state)
@@ -4325,6 +4372,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 state.log_event("A", "substance_check", round_num=rnd,
                                 detail=reason)
                 if not substantive:
+                    _restore_paper_sources_snapshot(paper_path, edit_snapshot)
                     save_state(state)
                     return _stage_a_block(
                         state,
@@ -4361,6 +4409,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                                          ensure_ascii=False)
             prompt = build_split_hygiene_prompt(
                 state.paper_dir, state.target_journal, candidates_json, rnd)
+            edit_snapshot = _snapshot_paper_sources(paper_path)
             codex_exec(prompt, work_dir=paper_path,
                        timeout_seconds=2400, model=model, dry_run=dry_run,
                        context_mode="contextual_execution",
@@ -4368,6 +4417,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             compiled = compile_gate(paper_path, model=model,
                                     dry_run=dry_run, tag=f"{tag} A-SPLIT")
             if not compiled:
+                _restore_paper_sources_snapshot(paper_path, edit_snapshot)
                 state.log_event("A", "compile_failed", round_num=rnd,
                                 detail="after A-SPLIT")
                 save_state(state)
@@ -4403,10 +4453,13 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                                 f"{MIN_STAGE_A_AUDIT_ROUNDS} audit rounds; "
                                 f"running another audit")
                     continue
+                compile_snapshot = _snapshot_paper_sources(paper_path)
                 compiled_pass = compile_gate(paper_path, model=model,
                                              dry_run=dry_run,
                                              tag=f"{tag} A3-PASS")
                 if not compiled_pass:
+                    _restore_paper_sources_snapshot(paper_path,
+                                                    compile_snapshot)
                     state.log_event("A", "compile_failed",
                                     round_num=audit_round,
                                     detail="before Stage A audit pass")
@@ -4458,6 +4511,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 prompt = build_theoremization_prompt(
                     state.paper_dir, state.target_journal, "audit_blockers",
                     json.dumps(issues, indent=2, ensure_ascii=False), rnd)
+                edit_snapshot = _snapshot_paper_sources(paper_path)
                 codex_exec(prompt, work_dir=paper_path,
                            timeout_seconds=3600, model=model,
                            dry_run=dry_run,
@@ -4467,6 +4521,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                                         dry_run=dry_run,
                                         tag=f"{tag} A2-AUDIT")
                 if not compiled:
+                    _restore_paper_sources_snapshot(paper_path, edit_snapshot)
                     state.log_event("A", "compile_failed", round_num=rnd,
                                     detail="after A2 audit blocker revision")
                     save_state(state)
