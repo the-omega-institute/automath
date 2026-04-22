@@ -940,6 +940,24 @@ def git_commit(paper_path: Path, msg: str, *, tag: str = "") -> str:
         if result.returncode == 0:
             h = run_cmd(["git", "rev-parse", "--short", "HEAD"]).stdout.strip()
             logger.info(f"{tag} Committed: {h} — {msg[:60]}")
+            _add_paper_only(paper_path)
+            leftover = _staged_paper_source_files(paper_path)
+            if leftover:
+                follow_msg = _commit_message(
+                    f"[{paper_short}] {msg} (source follow-up)",
+                    "Changes: commit paper-source changes left staged after "
+                    "the primary commit.")
+                follow = run_cmd(["git", "commit", "-m", follow_msg, "--"]
+                                 + leftover)
+                if follow.returncode == 0:
+                    h2 = run_cmd(["git", "rev-parse", "--short",
+                                  "HEAD"]).stdout.strip()
+                    logger.warning(
+                        f"{tag} Committed follow-up staged sources: {h2}")
+                    return h2
+                logger.warning(
+                    f"{tag} Follow-up source commit failed: "
+                    f"{follow.stderr[:200]}")
             return h
         logger.warning(f"{tag} Commit failed: {result.stderr[:200]}")
         return ""
