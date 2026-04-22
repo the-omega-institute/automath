@@ -92,7 +92,7 @@ $(\varepsilon,\eta)$.
 
 \begin{corollary}[Closed formulas for quadratic mode integrals]%
 \label{cor:mode-quadratic-integrals}
-For $|\varepsilon|$ small one has the $L^2(\omega)$ expansion
+For $|\varepsilon|<1$ one has the $L^2(\omega)$ expansion
 \[
 \Psi_\varepsilon
 =\sum_{n=1}^{\infty}u_n\,\varepsilon^{n-1}.
@@ -116,15 +116,36 @@ and
 \end{corollary}
 
 \begin{proof}
-By Proposition~\ref{prop:cayley-mode-remainder},
+Use $y=\tan\theta$ to identify $L^2(\omega)$ with
+$L^2((-\pi/2,\pi/2),\dd\theta/\pi)$.  From
+Theorem~\ref{thm:cayley-chebyshev-mode},
 \[
-\Psi_\varepsilon
-=\sum_{n=1}^{N}u_n\,\varepsilon^{n-1}
-+\varepsilon^N v_N(\cdot,\varepsilon)
+u_n(\tan\theta)=\cos^n\theta\,U_n(\sin\theta).
 \]
-with $v_N$ bounded uniformly on~$\RR^2$.  Since $\omega$ is a probability
-measure, this implies convergence in $L^2(\omega)$ for $|\varepsilon|$
-sufficiently small.  Hence
+For $s\in[-1,1]$ the Chebyshev polynomials of the second kind satisfy
+$|U_n(s)|\le n+1$.  Hence, for every $0<r<1$ and
+$|\varepsilon|\le r$,
+\[
+\sum_{n=1}^{\infty}
+\sup_{\theta}\bigl|u_n(\tan\theta)\varepsilon^{n-1}\bigr|
+\le
+\sum_{n=1}^{\infty}(n+1)r^{n-1}<\infty.
+\]
+The Weierstrass test gives uniform, and therefore $L^2(\omega)$,
+convergence.  The Chebyshev generating function used in
+Theorem~\ref{thm:cayley-chebyshev-mode} is valid because
+$|\varepsilon\cos\theta|<1$, so the uniform limit is
+$(R_\varepsilon-1)/\varepsilon=\Psi_\varepsilon$.
+
+Moreover $\|u_n\|_{L^2(\omega)}\le n+1$, and therefore, for
+$|\varepsilon|,|\eta|\le r<1$,
+\[
+\sum_{m,n\ge1}
+\|u_m\|_{L^2(\omega)}\|u_n\|_{L^2(\omega)}
+|\varepsilon|^{m-1}|\eta|^{n-1}<\infty.
+\]
+Thus the inner product of the two $L^2$ series may be expanded
+absolutely:
 \[
 \frac{2}{4+(\varepsilon-\eta)^2}
 =\sum_{m,n\ge 1}
@@ -200,14 +221,38 @@ $R_\varepsilon(y)\,\omega(\dd y)=P_1(y-\varepsilon)\,\dd y$, this means
 0=\int_{\RR}f(y)P_1(\varepsilon-y)\,\dd y
 \qquad(\varepsilon\in\RR).
 \]
-In other words, the Poisson regularization $T_1f=P_1*f$ vanishes
-identically.  Now $f\in L^2(\omega)\subset\mathscr S'(\RR)$ as a tempered
-distribution, so taking Fourier transforms gives
+In other words, the Poisson regularization $F:=P_1*f$ vanishes
+identically as a function on~$\RR$.  We now justify the injectivity in the
+present weighted space.  Since $f\in L^2(\omega)$,
 \[
-e^{-|\xi|}\widehat f(\xi)=\widehat{T_1f}(\xi)=0.
+\left|\int_{\RR} f(y)\varphi(y)\dd y\right|
+\le
+\left(\int_{\RR}\frac{|f(y)|^2}{1+y^2}\dd y\right)^{1/2}
+\left(\int_{\RR}(1+y^2)|\varphi(y)|^2\dd y\right)^{1/2}
 \]
-Since $e^{-|\xi|}$ never vanishes, $\widehat f=0$ in $\mathscr S'(\RR)$,
-hence $f=0$.  Therefore $\mathcal S_0^\perp=\{0\}$ in $L^2_0(\omega)$, so
+for every $\varphi\in\mathscr S(\RR)$.  Thus $f$ defines a tempered
+distribution.  The convolution identity above agrees with the
+distributional convolution by $P_1$: for $\varphi\in\mathscr S(\RR)$,
+Fubini is justified by the preceding weighted estimate applied to
+$P_1*\varphi$, and
+\[
+\langle F,\varphi\rangle
+=\langle f,\widetilde P_1*\varphi\rangle,
+\qquad \widetilde P_1(x):=P_1(-x)=P_1(x).
+\]
+Using $\widehat{P_1}(\xi)=e^{-|\xi|}$, this gives in $\mathscr S'(\RR)$
+\[
+\widehat F=e^{-|\xi|}\widehat f.
+\]
+Because $F=0$, the left-hand side is zero.  If
+$\psi\in C_c^\infty(\RR)$, then $e^{|\xi|}\psi(\xi)$ is again a compactly
+supported smooth test function, and therefore
+\[
+\langle \widehat f,\psi\rangle
+=\langle e^{-|\xi|}\widehat f,e^{|\xi|}\psi\rangle=0.
+\]
+Hence $\widehat f=0$ as a distribution, and consequently $f=0$.  Therefore
+$\mathcal S_0^\perp=\{0\}$ in $L^2_0(\omega)$, so
 \[
 \overline{\mathcal S_0}^{\,L^2(\omega)}=L^2_0(\omega).
 \]
