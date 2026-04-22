@@ -863,6 +863,28 @@ def _add_paper_only(paper_path: Path) -> None:
         run_cmd(["git", "add", "--"] + files)
 
 
+def _restore_tracked_non_source_changes(path: Path, *, tag: str = "") -> None:
+    """Discard tracked non-paper-source side effects under a paper directory."""
+    changed: set[str] = set()
+    for args in (["git", "diff", "--name-only", "--", str(path)],
+                 ["git", "diff", "--cached", "--name-only", "--", str(path)]):
+        result = run_cmd(args)
+        for raw in result.stdout.splitlines():
+            rel = raw.strip()
+            if not rel:
+                continue
+            p = REPO_ROOT / rel
+            if not _is_paper_source_path(p):
+                changed.add(rel)
+    if not changed:
+        return
+    files = sorted(changed)
+    run_cmd(["git", "restore", "--staged", "--"] + files)
+    run_cmd(["git", "restore", "--"] + files)
+    logger.warning(f"{tag} Restored tracked non-source side effects: "
+                   + ", ".join(files[:8]))
+
+
 def _diff_summary(paper_path: Path) -> str:
     """One-line summary of what changed: files modified, lines added/removed."""
     result = run_cmd(["git", "diff", "--cached", "--stat", str(paper_path)])
@@ -889,6 +911,7 @@ def _commit_message(*parts: str) -> str:
 def git_stage(paper_path: Path, *, tag: str = "") -> bool:
     """Stage .tex/.bib changes under paper_path (no commit, no artifacts)."""
     with _git_lock:
+        _restore_tracked_non_source_changes(paper_path, tag=tag)
         _add_paper_only(paper_path)
         staged = run_cmd(["git", "diff", "--cached", "--name-only",
                           str(paper_path)])
@@ -901,6 +924,7 @@ def git_commit(paper_path: Path, msg: str, *, tag: str = "") -> str:
     Commit message includes a diff summary showing what actually changed.
     """
     with _git_lock:
+        _restore_tracked_non_source_changes(paper_path, tag=tag)
         _add_paper_only(paper_path)
         staged_files = _staged_paper_source_files(paper_path)
         if not staged_files:
@@ -925,6 +949,7 @@ def git_commit_multi(paths: list[Path], msg: str, *, tag: str = "") -> str:
     with _git_lock:
         for p in paths:
             if p.is_dir():
+                _restore_tracked_non_source_changes(p, tag=tag)
                 _add_paper_only(p)
             elif _is_paper_source_path(p):
                 run_cmd(["git", "add", "--", str(p)])
