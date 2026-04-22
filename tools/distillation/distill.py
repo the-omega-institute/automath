@@ -69,6 +69,7 @@ GLOBAL_EVIDENCE_MAX_INTERFACES = 50
 GLOBAL_EVIDENCE_SNIPPET_CHARS = 900
 POLICY_VERSION = 1
 ORACLE_SERVER = "http://127.0.0.1:8765"
+ORACLE_SERVER_SCRIPT = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle_server.py"
 DEFAULT_ORACLE_MODEL = "chatgpt-5.4-pro-extended"
 DEFAULT_ORACLE_TIMEOUT = 7200
 REVIEW_BACKENDS = ("codex", "codex-claude", "codex-oracle")
@@ -722,6 +723,43 @@ def _oracle_server_status() -> dict[str, Any]:
         return {}
 
 
+def _ensure_oracle_server_running() -> dict[str, Any]:
+    """Return Oracle status, starting the local bridge if it is offline."""
+    status = _oracle_server_status()
+    if status:
+        return status
+    if not ORACLE_SERVER_SCRIPT.exists():
+        logger.warning("ChatGPT Oracle server script not found: %s", ORACLE_SERVER_SCRIPT)
+        return {}
+
+    oracle_log_dir = LOG_DIR / "oracle"
+    oracle_log_dir.mkdir(parents=True, exist_ok=True)
+    stdout_path = oracle_log_dir / "oracle_server_stdout.log"
+    stderr_path = oracle_log_dir / "oracle_server_stderr.log"
+    try:
+        with open(stdout_path, "ab") as stdout, open(stderr_path, "ab") as stderr:
+            subprocess.Popen(
+                [sys.executable, str(ORACLE_SERVER_SCRIPT)],
+                cwd=str(REPO_ROOT),
+                stdout=stdout,
+                stderr=stderr,
+                stdin=subprocess.DEVNULL,
+                creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if IS_WINDOWS else 0,
+            )
+    except OSError as exc:
+        logger.warning("Could not start ChatGPT Oracle server: %s", exc)
+        return {}
+
+    for _ in range(10):
+        time.sleep(1)
+        status = _oracle_server_status()
+        if status:
+            logger.info("Started ChatGPT Oracle server at %s", ORACLE_SERVER)
+            return status
+    logger.warning("ChatGPT Oracle server did not become ready at %s", ORACLE_SERVER)
+    return {}
+
+
 def chatgpt_oracle_exec(
     state: DistillState,
     prompt: str,
@@ -748,7 +786,7 @@ def chatgpt_oracle_exec(
     import urllib.error
     import urllib.request
 
-    status_before = _oracle_server_status()
+    status_before = _ensure_oracle_server_running()
     if not status_before:
         logger.warning(
             "ChatGPT Oracle server unreachable at %s; start tools/chatgpt-oracle/oracle_server.py",
