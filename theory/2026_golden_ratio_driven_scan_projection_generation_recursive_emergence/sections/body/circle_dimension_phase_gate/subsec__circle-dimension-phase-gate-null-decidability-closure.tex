@@ -85,79 +85,6 @@ a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}})
 其严格含义是：每一种 \(\mathsf{NULL}\) 来源都必须被编译为可审计的门条件与缺陷账本项，并在必要时通过外置正交记录轴恢复可逆性。
 正交三分律与不可替代性（定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable}；定理 \ref{thm:cdim-budget-failure-separation}）正是该闭环的类型化表达。
 
-% --- Distillation writeback ---
-% --- Distillation writeback: Wang--Zahl finite-test Frostman/slab dichotomy ---
-\begin{definition}[有限测试 Frostman 骨架与 slab 归一化资料]\label{def:distill-cdim-frostman-slab-data}
-\textbf{依赖状态：construction.}
-固定分辨率 \(m\)。令 \(\mathcal A_m\) 为已经通过本节 unitary-slice 预过滤的有限地址族。令 \(Q_m\) 为有限投影词测试族；每个 \(q\in Q_m\) 是映射
-\[
-q:\mathcal A_m\longrightarrow \Pi_q
-\]
-到某个有限集合 \(\Pi_q\)。对非空 \(E\subset\mathcal A_m\)，定义本段局部使用的投影词复杂度
-\[
-\dim_{Q_m}(E):=\sum_{q\in Q_m}\bigl(|q(E)|-1\bigr)\in\mathbb Z_{\ge 0}.
-\]
-给定有理数 \(0<\eta<1\)，称 \(E\) 满足有限测试 Frostman 非集中，记作
-\[
-E\in\mathsf{Sk}^{\rm frost}_m(\eta;Q_m),
-\]
-若对所有 \(q\in Q_m\) 与 \(y\in\Pi_q\) 均有
-\[
-|E\cap q^{-1}(y)|\le \eta |E|.
-\]
-若相反存在 \((q,y)\) 使 \(|E\cap q^{-1}(y)|>\eta |E|\)，则称
-\[
-E_{q,y}:=E\cap q^{-1}(y)
-\]
-为 \(E\) 的 \(q\)-slab。
-
-令 \(\mathsf{Bad}^{\varepsilon}_m(E)\) 表示 \(E\) 对当前 \(\mathsf{NULL}\) 闭包审计命题构成 \(\varepsilon\)-近极值反例。称 \(Q_m\) 配备了针对 \(\mathsf{Bad}^{\varepsilon}_m\) 的 slab 归一化资料，若对每个 slab \(E_{q,y}\) 给定有限像
-\[
-N_{q,y}(E_{q,y})=:E'\subset\mathcal A_m
-\]
-以及截面 \(\iota_{q,y}:E'\to E_{q,y}\)，满足 \(N_{q,y}\circ\iota_{q,y}=\mathrm{id}_{E'}\)，并满足下列四项：
-\begin{enumerate}
-  \item \textbf{重入：} \(E'\) 仍属于同一个 unitary-slice 审计接口，且 \(\mathrm{Out},\mathrm{Cech},\mathrm{Hard}\) 三类失败见证在 \(E'\) 上有定义。
-  \item \textbf{见证拉回：} \(E'\) 上任一有限失败见证可沿 \(\iota_{q,y}\) 拉回为原族 \(E\) 上同类型的有限失败见证；若 \(E'\) 给出非 \(\mathsf{NULL}\) 地址证书，则其与 \(\iota_{q,y}\) 复合给出 \(E\) 的局部地址证书。
-  \item \textbf{复杂度单调：} 对所有 \(r\in Q_m\) 有 \(|r(E')|\le |r(E_{q,y})|\le |r(E)|\)，并且若 \(|q(E)|>1\)，则
-  \[
-  \dim_{Q_m}(E')\le \dim_{Q_m}(E)-1.
-  \]
-  \item \textbf{反例局部性：} 若 \(\mathsf{Bad}^{\varepsilon}_m(E)\) 且 \(E_{q,y}\) 为 slab，则 \(\mathsf{Bad}^{\varepsilon}_m(E')\)。
-\end{enumerate}
-\end{definition}
-
-\begin{theorem}[最小近极值反例的 Frostman--slab 二分]\label{thm:distill-cdim-frostman-slab-minimal-counterexample}
-\textbf{依赖状态：closure.}
-沿定义 \ref{def:distill-cdim-frostman-slab-data}，并假设 slab 归一化资料存在。令 \(B\subset\mathcal A_m\) 为非空有限族，满足 \(\mathsf{Bad}^{\varepsilon}_m(B)\)，且在所有可由 \(B\) 经过有限次 slab 归一化得到并仍满足 \(\mathsf{Bad}^{\varepsilon}_m\) 的族中，\(B\) 对字典序
-\[
-(\dim_{Q_m}(E),|E|)
-\]
-最小。则必有以下二者之一：
-\begin{enumerate}
-  \item \(B\in\mathsf{Sk}^{\rm frost}_m(\eta;Q_m)\)；
-  \item 存在 \(q\in Q_m\) 使 \(|q(B)|=1\)。此时 \(B\) 已塌缩到一个投影词 slab 终端扇区，且该扇区上的任意有限见证均可由定义 \ref{def:distill-cdim-frostman-slab-data} 的拉回机制提升为原地址族的有限见证。
-\end{enumerate}
-更一般地，从任意 \(\mathsf{Bad}^{\varepsilon}_m(B_0)\) 出发，反复选择非 Frostman 的 slab 并归一化；每一次非终端归一化都使 \(\dim_{Q_m}\) 严格下降。因此该过程在至多 \(\dim_{Q_m}(B_0)\) 次非终端步骤后，到达有限测试 Frostman 骨架或某个投影词 slab 终端扇区。
-\end{theorem}
-\begin{proof}
-若 \(B\in\mathsf{Sk}^{\rm frost}_m(\eta;Q_m)\)，则为第一种情形。否则，按定义存在 \(q\in Q_m\) 与 \(y\in\Pi_q\)，使
-\[
-B_{q,y}=B\cap q^{-1}(y),\qquad |B_{q,y}|>\eta |B|.
-\]
-令 \(B':=N_{q,y}(B_{q,y})\)。由反例局部性，\(\mathsf{Bad}^{\varepsilon}_m(B')\) 仍成立；由重入条件，\(B'\) 与 \(B\) 属于同一审计接口，所以可与 \(B\) 在相同的最小性序中比较。
-
-若 \(|q(B)|>1\)，复杂度单调给出
-\[
-\dim_{Q_m}(B')\le \dim_{Q_m}(B)-1,
-\]
-这与 \(B\) 在可达反例族中的最小性矛盾。因此在非 Frostman 情形下只能有 \(|q(B)|=1\)，即第二种终端 slab 情形。
-
-对一般初始族 \(B_0\)，只要当前族既非有限测试 Frostman 又非终端 slab，就可选取一个 slab 并归一化；上述复杂度单调使非负整数 \(\dim_{Q_m}\) 严格下降。故非终端步骤数至多为初始复杂度。若过程中产生失败见证或非 \(\mathsf{NULL}\) 地址证书，见证拉回条件保证它可逐层提升到原族；若没有提前停止，则有限下降必在 Frostman 骨架或终端 slab 处停止。证毕。
-\end{proof}
-
-% --- End distillation writeback ---
-
 % --- Distillation writeback: slab rank certificate ---
 \begin{proposition}[slab 低复杂度的投影词维数与 Hankel 秩证书]\label{prop:distill-cdim-slab-hankel-rank-certificate}
 \textbf{依赖状态：rigidity.}
@@ -192,6 +119,60 @@ A_\lambda:=\sum_{x\in E,\ \beta(q(x))=\lambda}a_x,
 \end{proof}
 
 % --- End distillation writeback ---
+
+% --- End distillation writeback ---
+
+% --- Distillation writeback ---
+\begin{definition}[带损耗的有限测试 Frostman--slab 归一化]\label{def:distill-cdim-loss-calibrated-slab-normalization}
+\textbf{依赖状态：construction.}
+沿定义 \ref{def:distill-cdim-frostman-slab-data} 的记号。给定有理数 \(0<\theta\le 1\)。称该 slab 归一化资料为 \(\theta\)-带损耗的，若对每个非空 slab
+\[
+E_{q,y}=E\cap q^{-1}(y)
+\]
+均有
+\[
+\bigl|N_{q,y}(E_{q,y})\bigr|\ge \theta |E_{q,y}|.
+\]
+这里的 \(\theta\) 只记录有限归一化映射损失的最坏比例；它不是完整 Frostman 条件，而是有限测试 slab descent 中可离线核验的质量保留常数。
+\end{definition}
+
+\begin{proposition}[带损耗 slab descent 的定量质量保留]\label{prop:distill-cdim-loss-calibrated-slab-descent}
+\textbf{依赖状态：rigidity.}
+设定义 \ref{def:distill-cdim-frostman-slab-data} 的 slab 归一化资料存在并且为定义 \ref{def:distill-cdim-loss-calibrated-slab-normalization} 意义下的 \(\theta\)-带损耗资料。令 \(B_0\subset\mathcal A_m\) 为非空有限族并满足 \(\mathsf{Bad}^{\varepsilon}_m(B_0)\)。
+假设已经构造出一列非终端 slab 归一化
+\[
+B_{j+1}=N_{q_j,y_j}\bigl((B_j)_{q_j,y_j}\bigr),\qquad j=0,\ldots,k-1,
+\]
+其中每个 \((B_j)_{q_j,y_j}\) 见证 \(B_j\notin\mathsf{Sk}^{\rm frost}_m(\eta;Q_m)\)，且 \(|q_j(B_j)|>1\)。则对所有 \(0\le j\le k\) 有
+\[
+\mathsf{Bad}^{\varepsilon}_m(B_j),
+\qquad
+\dim_{Q_m}(B_j)\le \dim_{Q_m}(B_0)-j,
+\]
+并且
+\[
+|B_k|>(\theta\eta)^k |B_0|.
+\]
+特别地，任何从 \(B_0\) 出发的非终端 slab descent 至多持续 \(\dim_{Q_m}(B_0)\) 步；若它没有提前给出有限失败见证或非 \(\mathsf{NULL}\) 地址证书，则终点只能是有限测试 Frostman 骨架或某个投影词 slab 终端扇区。
+\end{proposition}
+\begin{proof}
+对每个 \(j\)，由 \((B_j)_{q_j,y_j}\) 见证非 Frostman，得
+\[
+|(B_j)_{q_j,y_j}|>\eta |B_j|.
+\]
+由 \(\theta\)-带损耗归一化，
+\[
+|B_{j+1}|=\bigl|N_{q_j,y_j}((B_j)_{q_j,y_j})\bigr|
+\ge \theta |(B_j)_{q_j,y_j}|
+>\theta\eta |B_j|.
+\]
+迭代即得 \(|B_k|>(\theta\eta)^k|B_0|\)，且每个 \(B_j\) 非空。
+反例局部性给出 \(\mathsf{Bad}^{\varepsilon}_m(B_{j+1})\)；复杂度单调性及非终端条件 \(|q_j(B_j)|>1\) 给出
+\[
+\dim_{Q_m}(B_{j+1})\le \dim_{Q_m}(B_j)-1.
+\]
+归纳得到复杂度下降式。由于 \(\dim_{Q_m}\) 是非负整数，非终端下降步数不超过初始值。若过程停止，则按定义只能是有限测试 Frostman 条件成立，或所有可选过密 slab 已塌缩为 \(|q(B)|=1\) 的终端扇区；见证提升仍由定义 \ref{def:distill-cdim-frostman-slab-data} 的见证拉回条件给出。证毕。
+\end{proof}
 
 % --- End distillation writeback ---
 
