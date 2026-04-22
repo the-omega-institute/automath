@@ -22,6 +22,7 @@ import Omega.POM.WreathArtinFactorization
 import Omega.POM.BCDiscreteJacobianStrictification
 import Omega.POM.BCDiscreteStokes
 import Omega.POM.BCDefectMultiplicative2Cocycle
+import Omega.POM.BCRadonNikodymCurvature
 import Omega.POM.BCTowerFlatness
 import Omega.POM.BCQuotientStrictify
 import Omega.POM.BCQuotientUniversal

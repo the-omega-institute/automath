@@ -95,12 +95,14 @@ import Omega.Zeta.SyncCyclotomicElimination
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotSofic
 import Omega.Zeta.XiAbelianHolonomyFourierInversion
 import Omega.Zeta.XiCauchyPoissonLocationScaleUncenteredThird
+import Omega.Zeta.XiCauchyCoshUnitaryLinearization
 import Omega.Zeta.XiCauchyPoissonSingleScaleMomentInversion
 import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprint
 import Omega.Zeta.XiCriticalLineCircleCauchyUniformization
 import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth
 import Omega.Zeta.XiJDiscriminant2IsogenyVelu
 import Omega.Zeta.XiCayleyDilationMobiusConjugacyFixedpoints
+import Omega.Zeta.XiCayleyTauConjugacyLogdiff
 import Omega.Zeta.CauchyPoissonSixthSignatureNegativityRigidity
 import Omega.Zeta.XiCdimKolmResidualGap
 import Omega.Zeta.XiCdimSpectrumCompleteness
