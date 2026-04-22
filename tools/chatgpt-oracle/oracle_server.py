@@ -41,6 +41,7 @@ results: dict[str, dict] = {}  # task_id -> result
 pending_tasks: dict[str, dict] = {}   # agent_id -> task
 # Track when each task was dispatched (for timeout cleanup)
 dispatch_times: dict[str, float] = {}  # agent_id -> timestamp
+agent_phases: dict[str, dict] = {}     # agent_id -> latest browser-side phase
 
 
 class OracleHandler(BaseHTTPRequestHandler):
@@ -108,7 +109,9 @@ class OracleHandler(BaseHTTPRequestHandler):
             self._cleanup_stale_agents()
             agents_info = {
                 aid: {"task_id": t["task_id"],
-                      "elapsed": int(time.time() - dispatch_times.get(aid, time.time()))}
+                      "elapsed": int(time.time() - dispatch_times.get(aid, time.time())),
+                      "phase": agent_phases.get(aid, {}).get("phase", "assigned"),
+                      "last_seen": agent_phases.get(aid, {}).get("last_seen", None)}
                 for aid, t in pending_tasks.items()
             }
             self._send_json({
@@ -215,6 +218,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                 if pending_tasks[aid]["task_id"] == task_id:
                     del pending_tasks[aid]
                     dispatch_times.pop(aid, None)
+                    agent_phases.pop(aid, None)
                     freed = f" (freed {aid})"
                     break
 
@@ -230,8 +234,40 @@ class OracleHandler(BaseHTTPRequestHandler):
             # Refresh dispatch time to prevent timeout
             if agent_id in dispatch_times:
                 dispatch_times[agent_id] = time.time()
+            agent_phases[agent_id] = {
+                "task_id": task_id,
+                "phase": data.get("phase", "ack"),
+                "last_seen": datetime.now().isoformat(),
+            }
             print(f"[server] Ack: {task_id} by {agent_id}")
             self._send_json({"status": "ok"})
+
+        elif self.path == "/phase":
+            task_id = data.get("task_id", "")
+            agent_id = data.get("agent_id", "?")
+            if agent_id in dispatch_times:
+                dispatch_times[agent_id] = time.time()
+            agent_phases[agent_id] = {
+                "task_id": task_id,
+                "phase": data.get("phase", "unknown"),
+                "last_seen": datetime.now().isoformat(),
+                "detail": data.get("detail", ""),
+            }
+            self._send_json({"status": "ok"})
+
+        elif self.path == "/release":
+            task_id = data.get("task_id", "")
+            agent_id = data.get("agent_id", "")
+            reason = data.get("reason", "unspecified")
+            released = False
+            if agent_id in pending_tasks and pending_tasks[agent_id].get("task_id") == task_id:
+                task = pending_tasks.pop(agent_id)
+                dispatch_times.pop(agent_id, None)
+                agent_phases.pop(agent_id, None)
+                task_queue.appendleft(task)
+                released = True
+                print(f"[server] Released {task_id} from {agent_id}: {reason}")
+            self._send_json({"status": "released" if released else "not_pending"})
 
         else:
             self._send_json({"error": "unknown endpoint"}, 404)

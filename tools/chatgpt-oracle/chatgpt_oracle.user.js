@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      5.2
+// @version      5.3
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -22,6 +22,7 @@
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
   const MAX_WAIT = 7200000;       // 120 minutes
   const MIN_REVIEW_LENGTH = 1000; // Real reviews are 3000+ chars; anything below this is garbage
+  const REQUIRE_FOREGROUND_TO_CLAIM = true;
 
   // ── Multi-agent: detect agent_id from URL or sessionStorage ──────────
   // Open chatgpt.com/?oracle=1  → agent "oracle_1"
@@ -113,7 +114,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v5.2 ${agentLabel}]</b>
+        <b>[Oracle v5.3 ${agentLabel}]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -156,6 +157,33 @@
         ontimeout: () => reject(new Error("timeout")),
       });
     });
+  }
+
+  function foregroundState() {
+    return `visibility=${document.visibilityState}, focus=${document.hasFocus()}`;
+  }
+
+  function isForegroundReady() {
+    if (!REQUIRE_FOREGROUND_TO_CLAIM) return true;
+    return document.visibilityState === "visible" && document.hasFocus();
+  }
+
+  async function postPhase(task_id, phase, detail = "") {
+    try {
+      await serverPost("/phase", { task_id, agent_id: AGENT_ID, phase, detail });
+    } catch {}
+  }
+
+  async function releaseTask(task_id, reason) {
+    log(`Releasing task before send: ${reason}`);
+    try {
+      await serverPost("/release", { task_id, agent_id: AGENT_ID, reason });
+    } catch (e) {
+      log(`Release failed: ${e.message}`);
+    }
+    clearTaskState();
+    busy = false;
+    updatePanel();
   }
 
   function sleep(ms) {
@@ -1287,6 +1315,12 @@
     updatePanel();
 
     try {
+      if (!isForegroundReady()) {
+        await releaseTask(task_id, `tab_not_foreground (${foregroundState()})`);
+        return;
+      }
+      await postPhase(task_id, "foreground_claimed", foregroundState());
+
       // Navigate to a fresh chat page if we're not already on one.
       // IMPORTANT: Only redirect if we're actively processing a task.
       // Never hijack the user's normal ChatGPT browsing.
@@ -1304,7 +1338,7 @@
       }
 
       // ACK the task (only after we're on the right page)
-      try { await serverPost("/ack", { task_id, agent_id: AGENT_ID }); } catch {}
+      try { await serverPost("/ack", { task_id, agent_id: AGENT_ID, phase: "page_ready" }); } catch {}
 
       setTaskPhase("processing");
 
@@ -1318,6 +1352,11 @@
         throw new Error("Prompt input not found after 30s wait");
       }
       log("Page ready");
+      if (!isForegroundReady()) {
+        await releaseTask(task_id, `lost_foreground_before_prompt (${foregroundState()})`);
+        return;
+      }
+      await postPhase(task_id, "prompt_ready", foregroundState());
 
       // Upload PDF if present
       if (pdf_base64) {
@@ -1335,6 +1374,7 @@
 
       // Store prompt text for response extraction
       setSentPrompt(prompt);
+      await postPhase(task_id, "prompt_inserted", `chars=${prompt.length}; ${foregroundState()}`);
 
       // Wait for send button to become enabled (upload + text both ready)
       log("Waiting for send button to enable...");
@@ -1358,6 +1398,7 @@
       if (!sent) {
         throw new Error("Failed to click send");
       }
+      await postPhase(task_id, "sent", foregroundState());
 
       // Wait for URL change — ChatGPT redirects from chatgpt.com to
       // chatgpt.com/c/{id} after accepting a message. This is critical:
@@ -1426,6 +1467,13 @@
       active = GM_getValue(GM_KEY("oracle_active"), true);
       if (active && !busy) {
         try {
+          if (!isForegroundReady()) {
+            if (logHistory.length === 0 || !logHistory[logHistory.length - 1].includes("waiting for foreground")) {
+              log(`ACTIVE but waiting for foreground before polling (${foregroundState()})`);
+            }
+            await sleep(POLL_INTERVAL);
+            continue;
+          }
           const task = await serverGet(`/task?agent=${AGENT_ID}`);
           if (task && task.task_id && task.status !== "idle") {
             // Double-check active right before processing
@@ -1449,7 +1497,7 @@
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
     const agentLabel = AGENT_ID.replace("oracle_", "#");
-    log(`Oracle Bridge v5.2 agent ${agentLabel} — ${active ? "ACTIVE" : "PAUSED"}`);
+    log(`Oracle Bridge v5.3 agent ${agentLabel} — ${active ? "ACTIVE" : "PAUSED"}`);
 
     // Check if WE navigated here (not the user clicking around)
     const phase = getTaskPhase();
