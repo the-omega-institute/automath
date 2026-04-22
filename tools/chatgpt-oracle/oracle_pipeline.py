@@ -732,6 +732,12 @@ _ARTIFACT_PATTERNS = (
     "split_candidates.json", "stage_a_audit.json",
     ".pipeline.stop",
 )
+_ARTIFACT_DIR_NAMES = {
+    "split_material",
+    "non_submission_artifacts",
+    "oracle_reviews",
+    "pipeline_artifacts",
+}
 
 _PAPER_SOURCE_SUFFIXES = (".tex", ".bib", ".sty")
 
@@ -740,6 +746,7 @@ def _is_paper_source_path(path: Path) -> bool:
     return (
         path.suffix in _PAPER_SOURCE_SUFFIXES
         and path.name not in set(_ARTIFACT_PATTERNS)
+        and not any(part in _ARTIFACT_DIR_NAMES for part in path.parts)
     )
 
 
