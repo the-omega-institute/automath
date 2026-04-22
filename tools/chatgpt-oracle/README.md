@@ -41,10 +41,10 @@ Tabs without `?oracle=N` stay dormant so normal ChatGPT use is not affected.
 ## Notes
 
 The distillation pipeline can use this bridge as an optional Stage R deep
-research oracle (`--oracle-research`) and as an optional Stage W second reviewer
-(`--review-backend codex-oracle`). It does not let ChatGPT write paper files
-directly; writeback generation, review gates, and commit hygiene remain in
-`tools/distillation/distill.py`.
+research oracle (`--oracle-research`) and as an optional Stage W deepening
+research oracle (`--oracle-deepening`). It does not use ChatGPT as a reviewer
+and does not let ChatGPT write paper files directly; writeback generation,
+review gates, and commit hygiene remain in `tools/distillation/distill.py`.
 
 The bridge URL is `http://127.0.0.1:8765`.  Use the explicit IPv4 loopback
 address rather than `localhost`; on some Windows setups `localhost` resolves to

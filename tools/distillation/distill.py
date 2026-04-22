@@ -72,10 +72,10 @@ ORACLE_SERVER = "http://127.0.0.1:8765"
 ORACLE_SERVER_SCRIPT = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle_server.py"
 DEFAULT_ORACLE_MODEL = "chatgpt-5.4-pro-extended"
 DEFAULT_ORACLE_TIMEOUT = 7200
-REVIEW_BACKENDS = ("codex", "codex-claude", "codex-oracle")
-DEFAULT_REVIEW_BACKEND = os.environ.get("DISTILL_REVIEW_BACKEND", "codex-claude")
+REVIEW_BACKENDS = ("codex", "codex-claude")
+DEFAULT_REVIEW_BACKEND = os.environ.get("DISTILL_REVIEW_BACKEND", "codex")
 if DEFAULT_REVIEW_BACKEND not in REVIEW_BACKENDS:
-    DEFAULT_REVIEW_BACKEND = "codex-claude"
+    DEFAULT_REVIEW_BACKEND = "codex"
 
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 logger = logging.getLogger("distill")
@@ -1001,6 +1001,53 @@ def _writeback_schema() -> str:
             "content": "complete LaTeX snippet with label",
         }
     ]
+    return _json_block(schema)
+
+
+def _oracle_deepening_schema() -> str:
+    """Return the ChatGPT Oracle deepening context schema."""
+    schema = {
+        "status": "ok|blocked|partial",
+        "current_datetime": "ISO timestamp emitted by the Oracle",
+        "focused_family": "theorem family name",
+        "numbering_continuation": "how the next result numbers should continue",
+        "main_theorem_chain": [
+            {
+                "type": "definition|theorem|proposition|corollary|conjecture",
+                "proposed_title": "precise paper-ready title",
+                "target_sections": ["core section slug"],
+                "omega_objects": ["specific Omega definitions/labels/constructs"],
+                "minimal_hypotheses": ["explicit local assumptions"],
+                "conclusion": "nontrivial project-bound conclusion",
+                "proof_spine": [
+                    "worst counterexample",
+                    "classified skeleton",
+                    "structure/decomposition/budget step",
+                    "closure or obstruction"
+                ],
+                "novelty_reason": "why this is not a known theorem restatement or old writeback",
+                "risk_to_avoid": "main overclaim or unsupported dependency",
+            }
+        ],
+        "bad_example_classification": [
+            {
+                "mechanism": "sticky|Frostman failure|slab/sector collapse|holonomy|infinite externalization",
+                "classification_statement": "formal structure statement to target",
+                "closing_move": "proof move that can close the mechanism",
+            }
+        ],
+        "local_to_global_obstructions": [
+            {
+                "local_object": "locally valid object",
+                "global_failure": "why it cannot glue globally",
+                "certificate": "holonomy/curvature/boundary/WalshStokes/Euler/budget certificate",
+            }
+        ],
+        "forbidden_repetitions": ["labels, claims, or strategies not to repeat"],
+        "codex_writeback_instructions": [
+            "specific instruction for the next Codex writeback attempt"
+        ],
+    }
     return _json_block(schema)
 
 
@@ -3307,36 +3354,80 @@ def _claude_score(
     return _parse_score_response(response)
 
 
-def _oracle_score(
+def _oracle_deepening_research(
     state: DistillState,
-    writebacks: list[dict[str, Any]],
     payload: dict[str, Any],
+    raw_research: dict[str, Any],
+    focused_family: Optional[dict[str, Any]],
+    targets: list[dict[str, Any]],
     section_contexts: str,
+    global_evidence_pack: dict[str, Any],
+    prior_feedback_block: str,
     dry_run: bool,
     oracle_timeout: int,
     oracle_model: str,
     oracle_pdf: Optional[Path],
 ) -> dict[str, Any]:
-    """Run the ChatGPT Oracle review prompt and return a normalized score."""
+    """Ask ChatGPT Oracle for expansion-oriented deep reasoning context."""
     if dry_run:
-        return {"score": 8, "verdict": "accept", "issues": [], "required_changes": []}
-    prompt = _load_prompt("review_oracle").format(
+        return {"status": "dry_run", "main_theorem_chain": []}
+    family = focused_family or {
+        "name": "initial writeback payload",
+        "key_results": payload.get("frontier_chains", []),
+        "target_sections": payload.get("primary_targets", []),
+    }
+    blocked = _read_artifact_json_or_none(state, "blocked.json") or {}
+    prompt = _load_prompt("oracle_deepening").format(
         mathematician=state.name,
+        current_datetime=datetime.now().astimezone().isoformat(timespec="seconds"),
+        depth_cycle=state.depth_cycle,
+        family_name=family.get("name", ""),
+        key_results=_json_block(family.get("key_results", [])),
+        method_operators=_json_block(raw_research.get("method_operators", [])),
         payload=_json_block(payload),
-        writebacks=_json_block(writebacks),
+        targets=_json_block(targets),
         section_contexts=section_contexts,
-        score_schema=_score_schema(),
+        global_evidence_pack=_json_block(global_evidence_pack),
+        prior_feedback=prior_feedback_block or "none",
+        blocked_context=_json_block(blocked),
+        completed_families=", ".join(state.completed_families or ["none"]),
+        deep_research_directive=_deep_research_directive(),
+        schema=_oracle_deepening_schema(),
     )
     response = chatgpt_oracle_exec(
         state,
         prompt,
-        log_tag="W_review_oracle",
+        log_tag=f"W_oracle_deepen_cycle{state.depth_cycle}",
         timeout_seconds=oracle_timeout,
         model=oracle_model,
         pdf_path=oracle_pdf,
         dry_run=False,
     )
-    return _parse_score_response(response)
+    if not response:
+        return {"status": "unavailable", "main_theorem_chain": []}
+    try:
+        data = _extract_json(response)
+    except (ValueError, json.JSONDecodeError) as exc:
+        data = {
+            "status": "parse_failed",
+            "error": str(exc),
+            "raw_response": response[:4000],
+            "main_theorem_chain": [],
+        }
+    if not isinstance(data, dict):
+        data = {
+            "status": "invalid",
+            "raw_response": str(data)[:4000],
+            "main_theorem_chain": [],
+        }
+    data.setdefault("status", "ok")
+    data.setdefault("main_theorem_chain", [])
+    _write_artifact_json(
+        state,
+        f"oracle_deepening_cycle{state.depth_cycle}.json",
+        data,
+    )
+    return data
 
 
 def _score_required_changes(review: dict[str, Any]) -> list[str]:
@@ -3398,19 +3489,6 @@ def _review_writebacks(
                 writebacks,
                 section_contexts,
                 dry_run,
-            )
-        elif review_backend == "codex-oracle":
-            secondary_name = "oracle"
-            secondary_future = executor.submit(
-                _oracle_score,
-                state,
-                writebacks,
-                payload,
-                section_contexts,
-                dry_run,
-                oracle_timeout,
-                oracle_model,
-                oracle_pdf,
             )
         codex_review = codex_future.result()
         secondary_review = (
@@ -3511,9 +3589,7 @@ def _review_writebacks(
         "review_backend": review_backend,
         "both_reject": both_reject,
     }
-    if secondary_name == "oracle":
-        result["oracle"] = secondary_review
-    elif secondary_name == "claude":
+    if secondary_name == "claude":
         result["claude"] = secondary_review
     else:
         result["secondary"] = secondary_review
@@ -3709,6 +3785,7 @@ def run_stage_w(
     dry_run: bool = False,
     supervised: bool = True,
     review_backend: str = DEFAULT_REVIEW_BACKEND,
+    oracle_deepening: bool = False,
     oracle_timeout: int = DEFAULT_ORACLE_TIMEOUT,
     oracle_model: str = DEFAULT_ORACLE_MODEL,
     oracle_pdf: Optional[Path] = None,
@@ -3778,6 +3855,22 @@ def run_stage_w(
     section_contexts = _collect_section_contexts(targets)
     global_evidence_pack = _global_evidence_for_state(state)
     prior_feedback_block = _build_prior_feedback_block(state)
+    oracle_deepening_context: dict[str, Any] = {"status": "disabled"}
+    if oracle_deepening:
+        oracle_deepening_context = _oracle_deepening_research(
+            state,
+            payload,
+            raw_research,
+            focused_family,
+            targets,
+            section_contexts,
+            global_evidence_pack,
+            prior_feedback_block,
+            dry_run,
+            oracle_timeout,
+            oracle_model,
+            oracle_pdf,
+        )
     feedback = ""
     attempts = []
     accepted_writebacks: list[dict[str, Any]] = []
@@ -3801,6 +3894,7 @@ def run_stage_w(
                     targets=_json_block(targets),
                     section_contexts=section_contexts,
                     global_evidence_pack=_json_block(global_evidence_pack),
+                    oracle_deepening_context=_json_block(oracle_deepening_context),
                     completed_families=", ".join(state.completed_families or ["none"]),
                     deep_research_directive=_deep_research_directive(),
                     schema=_writeback_schema(),
@@ -3814,6 +3908,7 @@ def run_stage_w(
                     targets=_json_block(targets),
                     section_contexts=section_contexts,
                     global_evidence_pack=_json_block(global_evidence_pack),
+                    oracle_deepening_context=_json_block(oracle_deepening_context),
                     schema=_writeback_schema(),
                 )
             if prior_feedback_block:
@@ -4401,6 +4496,7 @@ def run_pipeline(
     supervised: bool = True,
     review_backend: str = DEFAULT_REVIEW_BACKEND,
     oracle_research: bool = False,
+    oracle_deepening: bool = False,
     oracle_timeout: int = DEFAULT_ORACLE_TIMEOUT,
     oracle_model: str = DEFAULT_ORACLE_MODEL,
     oracle_pdf: Optional[Path] = None,
@@ -4478,6 +4574,7 @@ def run_pipeline(
                 dry_run=dry_run,
                 supervised=supervised,
                 review_backend=review_backend,
+                oracle_deepening=oracle_deepening,
                 oracle_timeout=oracle_timeout,
                 oracle_model=oracle_model,
                 oracle_pdf=oracle_pdf,
@@ -4560,7 +4657,7 @@ def _validate_environment(name: Optional[str] = None) -> bool:
         "deep_research_directive.txt",
         "review_codex.txt",
         "review_claude.txt",
-        "review_oracle.txt",
+        "oracle_deepening.txt",
     ]
     for prompt_name in required_prompts:
         path = PROMPTS_DIR / prompt_name
@@ -4604,12 +4701,17 @@ def build_parser() -> argparse.ArgumentParser:
         "--review-backend",
         choices=REVIEW_BACKENDS,
         default=DEFAULT_REVIEW_BACKEND,
-        help="Review gate backend: codex, codex-claude, or codex-oracle",
+        help="Review gate backend: codex or codex-claude",
     )
     parser.add_argument(
         "--oracle-research",
         action="store_true",
         help="Use ChatGPT Oracle as the first Stage R deep-research pass",
+    )
+    parser.add_argument(
+        "--oracle-deepening",
+        action="store_true",
+        help="Use ChatGPT Oracle as a Stage W deep-research expansion layer, not as a reviewer",
     )
     parser.add_argument(
         "--oracle-timeout",
@@ -4661,6 +4763,7 @@ def main(argv: Optional[list[str]] = None) -> int:
                 supervised=supervised,
                 review_backend=args.review_backend,
                 oracle_research=args.oracle_research,
+                oracle_deepening=args.oracle_deepening,
                 oracle_timeout=args.oracle_timeout,
                 oracle_model=args.oracle_model,
                 oracle_pdf=args.oracle_pdf,
