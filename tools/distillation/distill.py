@@ -3305,8 +3305,6 @@ def _is_wrapper_tex_file(path: Path) -> bool:
         text = read_text(path)
     except OSError:
         return False
-    if CLAIM_ENV_RE.search(text):
-        return False
     return bool(re.search(r"\\(?:input|subfile)\{", text))
 
 
@@ -3520,7 +3518,10 @@ def _latex_balance_errors(content: str) -> list[str]:
     return errors
 
 
-def _validate_writebacks(writebacks: Any) -> tuple[list[dict[str, Any]], list[str]]:
+def _validate_writebacks(
+    writebacks: Any,
+    allowed_tex_files: Optional[set[str]] = None,
+) -> tuple[list[dict[str, Any]], list[str]]:
     """Validate writeback JSON proposals and return normalized entries."""
     if not isinstance(writebacks, list):
         return [], ["Writeback response must be a JSON array"]
@@ -3537,6 +3538,11 @@ def _validate_writebacks(writebacks: Any) -> tuple[list[dict[str, Any]], list[st
             errors.append(f"Item {index} missing fields: {', '.join(missing)}")
             continue
         rel = str(item["tex_file"]).strip()
+        if allowed_tex_files is not None and rel not in allowed_tex_files:
+            errors.append(
+                f"Item {index} targets {rel}, which was not provided in Target files"
+            )
+            continue
         path = _resolve_core_tex_path(rel)
         if not path or not path.exists():
             errors.append(f"Item {index} target file not found under core body: {rel}")
@@ -4374,7 +4380,11 @@ def run_stage_w(
                 attempts.append({"attempt": attempt, "errors": [feedback]})
                 continue
 
-        writebacks, validation_errors = _validate_writebacks(raw_writebacks)
+        allowed_tex_files = {str(target.get("tex_file", "")) for target in targets}
+        writebacks, validation_errors = _validate_writebacks(
+            raw_writebacks,
+            allowed_tex_files=allowed_tex_files,
+        )
         if validation_errors:
             feedback = "; ".join(validation_errors)
             attempts.append({"attempt": attempt, "errors": validation_errors})
