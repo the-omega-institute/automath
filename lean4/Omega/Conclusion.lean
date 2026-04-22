@@ -322,6 +322,7 @@ import Omega.Conclusion.M2Level3Delta0InertiaKlingenCharpoly
 import Omega.Conclusion.M2Level3Delta0InertiaFixedGeometry
 import Omega.Conclusion.M2Level3ForgetfulOverXiSplittingRamification
 import Omega.Conclusion.M2Level3XiDelta0Order6Cycletypes
+import Omega.Conclusion.M2Level3XiRamificationPushforward
 import Omega.Conclusion.M2Level3XiInertiaPermutationRamification
 import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.MaxfiberAchieversOddEvenCompensation
