@@ -407,6 +407,84 @@ theorem paper_fold_fibre_3sat_np_complete : FoldFibre3SATNPComplete := by
   · intro n formula
     exact foldFibre3SAT_reduction_spec formula
 
+/-- List-level version of the `100/011` encoder used to package many-one reductions on ordinary
+bitstrings. -/
+def fold_layerwise_degenerate_hardness_encode_list : List Bool → List Bool
+  | [] => []
+  | false :: tail => true :: false :: false :: fold_layerwise_degenerate_hardness_encode_list tail
+  | true :: tail => false :: true :: true :: fold_layerwise_degenerate_hardness_encode_list tail
+
+/-- Partial decoder for the list-level `100/011` code. -/
+def fold_layerwise_degenerate_hardness_decode_list : List Bool → Option (List Bool)
+  | [] => some []
+  | true :: false :: false :: tail =>
+      match fold_layerwise_degenerate_hardness_decode_list tail with
+      | some word => some (false :: word)
+      | none => none
+  | false :: true :: true :: tail =>
+      match fold_layerwise_degenerate_hardness_decode_list tail with
+      | some word => some (true :: word)
+      | none => none
+  | _ => none
+
+/-- Total decoder obtained by sending invalid words to a fixed rejecting string. -/
+def fold_layerwise_degenerate_hardness_decode_or_reject (z0 : List Bool) (word : List Bool) :
+    List Bool :=
+  match fold_layerwise_degenerate_hardness_decode_list word with
+  | some decoded => decoded
+  | none => z0
+
+/-- The layerwise-degenerate language consists of the encoded words whose decoder lands back in
+the original language. -/
+def fold_layerwise_degenerate_hardness_encoded_language (L : Set (List Bool)) (z0 : List Bool) :
+    Set (List Bool) :=
+  fun word => fold_layerwise_degenerate_hardness_decode_or_reject z0 word ∈ L
+
+private lemma fold_layerwise_degenerate_hardness_decode_encode_list (word : List Bool) :
+    fold_layerwise_degenerate_hardness_decode_list
+        (fold_layerwise_degenerate_hardness_encode_list word) =
+      some word := by
+  induction word with
+  | nil =>
+      simp [fold_layerwise_degenerate_hardness_encode_list,
+        fold_layerwise_degenerate_hardness_decode_list]
+  | cons b tail ih =>
+      cases b <;> simp [fold_layerwise_degenerate_hardness_encode_list,
+        fold_layerwise_degenerate_hardness_decode_list, ih]
+
+/-- Paper label: `prop:fold-layerwise-degenerate-hardness`. The explicit `100/011` encoding is a
+many-one self-embedding of complexity into a single fixed fold fiber: encoding computes the
+forward reduction, decoding with a fixed reject word computes the inverse reduction, invalid words
+collapse to the designated reject string, and every encoded word lies in the common distinguished
+fiber. -/
+theorem paper_fold_layerwise_degenerate_hardness (L : Set (List Bool)) (z0 : List Bool)
+    (hz0 : z0 ∉ L) :
+    (∀ word,
+      fold_layerwise_degenerate_hardness_encoded_language L z0
+          (fold_layerwise_degenerate_hardness_encode_list word) ↔
+        word ∈ L) ∧
+      (∀ coded,
+        fold_layerwise_degenerate_hardness_encoded_language L z0 coded ↔
+          fold_layerwise_degenerate_hardness_decode_or_reject z0 coded ∈ L) ∧
+      (∀ coded,
+        fold_layerwise_degenerate_hardness_decode_list coded = none →
+          ¬ fold_layerwise_degenerate_hardness_encoded_language L z0 coded) ∧
+      (∀ n (word : FoldFibreStarBitstring n), foldFibreStarEncode word ∈ foldFibreStarFiber n) := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro word
+    simp [fold_layerwise_degenerate_hardness_encoded_language,
+      fold_layerwise_degenerate_hardness_decode_or_reject,
+      fold_layerwise_degenerate_hardness_decode_encode_list]
+  · intro coded
+    rfl
+  · intro coded hDecode hCoded
+    have hz : z0 ∈ L := by
+      simpa [fold_layerwise_degenerate_hardness_encoded_language,
+        fold_layerwise_degenerate_hardness_decode_or_reject, hDecode] using hCoded
+    exact hz0 hz
+  · intro n word
+    exact (mem_foldFibreStarFiber).2 (foldFibreStarEncode_weight word)
+
 end
 
 end Omega

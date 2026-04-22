@@ -668,4 +668,5 @@ import Omega.Folding.FoldCollisionGapResonanceLadderU
 import Omega.Folding.HypercubeCycleLatticeThetaAsymptotic
 import Omega.Folding.GaugeAnomalySpectralQuarticJacobianSimple
 import Omega.Folding.BlockFoldsatSharpPComplete
+import Omega.Folding.BlockFoldsatLowTemperaturePartitionFunctionAdditiveHardness
 import Omega.Folding.FoldGaugeAnomalyBranchResonanceOneParameter
