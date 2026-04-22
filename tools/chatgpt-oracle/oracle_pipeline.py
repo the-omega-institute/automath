@@ -4018,6 +4018,12 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
     if state.stage_a_passed and not stage_a_ready_for_b(state):
         logger.warning(f"{tag} Clearing legacy Stage A pass without audit gate")
         state.stage_a_passed = False
+        if state.stage_a_audit_metrics.get("mode") == "no_claude_deterministic_audit":
+            logger.warning(f"{tag} Resetting deterministic Stage A audit "
+                           "state before Codex audit rerun")
+            state.stage_a_audit_rounds = 0
+            state.stage_a_audit_metrics = {}
+            state.stage_a_scores = []
         save_state(state)
 
     if (not CLAUDE_ENABLED
@@ -5600,6 +5606,12 @@ def run_paper_pipeline(
                        f"Stage A audit pass; routing back to Stage A")
         state.current_stage = "A"
         state.stage_a_passed = False
+        if state.stage_a_audit_metrics.get("mode") == "no_claude_deterministic_audit":
+            logger.warning(f"[{paper_name}] Resetting deterministic Stage A "
+                           "audit counters before rerun")
+            state.stage_a_audit_rounds = 0
+            state.stage_a_audit_metrics = {}
+            state.stage_a_scores = []
         save_state(state)
 
     tag = f"[{paper_name}]"
