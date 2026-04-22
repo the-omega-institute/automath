@@ -11,6 +11,7 @@ import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
 import Omega.POM.AddCollisionSpectrumRenyiMonotone
 import Omega.POM.AdditiveFoldCollisionConvolutionFourier
 import Omega.POM.HiddenBitJumpProbabilityClosedForm
+import Omega.POM.HiddenBitJumpCollisionIsomorphism
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.AitkenDelta2SquareConvergence
 import Omega.POM.AnomSingleMomentCompleteEquivalence
