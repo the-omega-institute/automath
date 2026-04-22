@@ -265,6 +265,7 @@ import Omega.Zeta.DerivedZGSquarefreeConditionalLogdensityHardcore
 import Omega.Zeta.DerivedZGNoScalarEulerProduct
 import Omega.Zeta.DiscLedgerAxisDepthSmith
 import Omega.Zeta.DynZeta
+import Omega.Zeta.DampedPoles
 import Omega.Zeta.ETDSDFADensityDichotomy
 import Omega.Zeta.ETDSEulerProductNaturalBoundary
 import Omega.Zeta.ETDSFinitePartGapPositive
