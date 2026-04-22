@@ -76,6 +76,18 @@ theorem paper_prop_app_solenoid_stokes_period_module_godel_ellipsoid_counting
   exact ⟨periodModuleCovolume_mul detM k l, godelEllipsoidVolume_scaled T axes,
     godelLatticeMainTerm_scaled detM k T axes, godelLatticeLogRemainder_le_asymptotic r T hT⟩
 
+/-- Exact paper-labeled wrapper for the solenoid-period / Gödel-ellipsoid counting package.
+    prop:app-solenoid-stokes-period-module-godel-ellipsoid-counting -/
+theorem paper_app_solenoid_stokes_period_module_godel_ellipsoid_counting
+    (detM k l r : ℕ) (axes : Fin r → ℝ) (T : ℝ) (hT : 0 ≤ T) :
+    periodModuleCovolume detM (k + l) =
+      periodModuleCovolume detM k * periodModuleCovolume detM l ∧
+      godelEllipsoidVolume (scaledAxes T axes) = T ^ r * godelEllipsoidVolume axes ∧
+      godelLatticeMainTerm detM k (scaledAxes T axes) =
+        T ^ r * godelLatticeMainTerm detM k axes ∧
+      godelLatticeLogRemainder r T ≤ godelLatticeLogAsymptotic r T := by
+  exact paper_prop_app_solenoid_stokes_period_module_godel_ellipsoid_counting detM k l r axes T hT
+
 end
 
 end Omega.Multiscale

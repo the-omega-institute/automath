@@ -197,6 +197,7 @@ import Omega.POM.FibComponentFusionGain
 import Omega.POM.FiberInvariance
 import Omega.POM.FiberFullPosteriorUniformizationProductSource
 import Omega.POM.FiberIndexFiniteMPlateau
+import Omega.POM.FiberModqPisanoInvariant
 import Omega.POM.SufficientStatisticInjectiveDegeneracyClassification
 import Omega.POM.StepwiseExternalizationFreeCommutativeRigidity
 import Omega.POM.SymmetricDoubleThresholdPGFChebyshev
