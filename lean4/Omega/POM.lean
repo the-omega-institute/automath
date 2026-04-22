@@ -575,6 +575,7 @@ import Omega.POM.ToggleScanLinearMaxOrbit
 import Omega.POM.ToggleScanSignEdgeParity
 import Omega.POM.ToggleScanSignGeneralFiber
 import Omega.POM.TopGapLimitConstants
+import Omega.POM.SmallDefectFiberRigidity
 import Omega.POM.TowerDefectCovarianceLaw
 import Omega.POM.TowerDefectPinskerBound
 import Omega.POM.ToyRh
