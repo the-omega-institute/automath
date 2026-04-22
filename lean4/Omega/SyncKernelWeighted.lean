@@ -80,6 +80,7 @@ import Omega.SyncKernelWeighted.Bn0EqualsPrimitiveSkeleton
 import Omega.SyncKernelWeighted.RealInput40GroundEntropy
 import Omega.SyncKernelWeighted.RealInput40IsobaricDriftCapacity
 import Omega.SyncKernelWeighted.RealInput40LengthMertens
+import Omega.SyncKernelWeighted.RealInput40LengthSignL1
 import Omega.SyncKernelWeighted.RealInput40LengthTwistConverge
 import Omega.SyncKernelWeighted.RealInput40LogMSplit
 import Omega.SyncKernelWeighted.RealInput40LogMTruncBound

@@ -223,6 +223,7 @@ import Omega.Folding.FoldCapacityDiscretePotentialHistogram
 import Omega.Folding.FoldGodelCarryConditionalEntropy
 import Omega.Folding.PhiMParry
 import Omega.Folding.FoldResonanceLucasNearResonanceGap
+import Omega.Folding.FoldResonanceLadderFibonacciDirectionalLimit
 import Omega.Folding.FoldResonanceTruncationError
 import Omega.Folding.FoldBinDigitDP
 import Omega.Folding.FoldBinDegeneracyTailCapacityKinks

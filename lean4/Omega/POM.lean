@@ -167,6 +167,7 @@ import Omega.POM.FibCubeKPointCount
 import Omega.POM.FibCubeMarginalBoundaryLayer
 import Omega.POM.FibCubeRadiusCenterClassification
 import Omega.POM.FiniteAuditNFAnom
+import Omega.POM.FiniteIntegerMomentsCannotReplaceHalf
 import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.FibPellQuadratic
 import Omega.POM.FibPellRecoverKFromUnitError
