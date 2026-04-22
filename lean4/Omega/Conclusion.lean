@@ -346,6 +346,7 @@ import Omega.Conclusion.MaxentropyGapEqualsLogMaxfiber
 import Omega.Conclusion.MaxfiberEntropyGaugeFourmodeRigidity
 import Omega.Conclusion.MaxfiberHiddenbitCollisionSelfcalibration
 import Omega.Conclusion.MaxfiberHiddenbitBalancedBayesWall
+import Omega.Conclusion.FiberMultiplicityDiameterCubedimRigidity
 import Omega.Conclusion.MinLatchesLogStates
 import Omega.Conclusion.MinRegisterHalting
 import Omega.Conclusion.MinimalStateComplexityHalting
