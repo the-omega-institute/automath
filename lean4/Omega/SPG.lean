@@ -11,6 +11,7 @@ import Omega.SPG.BoundaryDimensionUpper
 import Omega.SPG.BoundaryDominanceExponent
 import Omega.SPG.BoundaryExponentialResidualDof
 import Omega.SPG.BoundaryGodelArithmeticHypercubeMedian
+import Omega.SPG.BoundaryGodelAdhesionDefectPhaseDiagram
 import Omega.SPG.BoundaryGodelBitcomplexityIsoperimetric
 import Omega.SPG.BoundaryGodelClarityExponentEquivalence
 import Omega.SPG.BoundaryGodelDimensionSeparatedUnionMax
