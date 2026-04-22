@@ -3669,6 +3669,32 @@ def _claude_score(
     return _parse_score_response(response)
 
 
+def _oracle_deepening_quality_issues(data: Any, response: str) -> list[str]:
+    """Return issues that make Oracle deepening unusable as research context."""
+    if not isinstance(data, dict):
+        return ["Oracle deepening did not return a JSON object"]
+    status = str(data.get("status", "")).strip().lower()
+    if status in {"parse_failed", "invalid", "unavailable", "error"}:
+        return [f"Oracle deepening status is {status or 'missing'}"]
+    chain = data.get("main_theorem_chain", [])
+    if not isinstance(chain, list) or not chain:
+        return ["Oracle deepening has no main_theorem_chain entries"]
+    substantive = 0
+    for item in chain:
+        if not isinstance(item, dict):
+            continue
+        title = str(item.get("proposed_title", "")).strip()
+        conclusion = str(item.get("conclusion", "")).strip()
+        proof_spine = item.get("proof_spine", [])
+        if title and conclusion and isinstance(proof_spine, list) and proof_spine:
+            substantive += 1
+    if substantive == 0:
+        return ["Oracle deepening has no substantive theorem-chain entry"]
+    if len(response.strip()) < 1200:
+        return ["Oracle deepening response is too short to be reliable"]
+    return []
+
+
 def _oracle_deepening_research(
     state: DistillState,
     payload: dict[str, Any],
@@ -3692,7 +3718,7 @@ def _oracle_deepening_research(
         "target_sections": payload.get("primary_targets", []),
     }
     blocked = _read_artifact_json_or_none(state, "blocked.json") or {}
-    prompt = _load_prompt("oracle_deepening").format(
+    base_prompt = _load_prompt("oracle_deepening").format(
         mathematician=state.name,
         current_datetime=datetime.now().astimezone().isoformat(timespec="seconds"),
         depth_cycle=state.depth_cycle,
@@ -3709,43 +3735,93 @@ def _oracle_deepening_research(
         deep_research_directive=_deep_research_directive(),
         schema=_oracle_deepening_schema(),
     )
-    response = chatgpt_oracle_exec(
-        state,
-        prompt,
-        log_tag=f"W_oracle_deepen_cycle{state.depth_cycle}",
-        timeout_seconds=oracle_timeout,
-        model=oracle_model,
-        pdf_path=oracle_pdf,
-        dry_run=False,
-    )
-    if not response:
-        return {"status": "unavailable", "main_theorem_chain": []}
-    try:
-        data = _extract_json(response)
-    except (ValueError, json.JSONDecodeError) as exc:
-        data = {
-            "status": "parse_failed",
-            "error": str(exc),
-            "raw_response": response[:4000],
-            "main_theorem_chain": [],
-        }
-    if not isinstance(data, dict):
-        data = {
-            "status": "invalid",
-            "raw_response": str(data)[:4000],
-            "main_theorem_chain": [],
-        }
-    data.setdefault("status", "ok")
-    data.setdefault("main_theorem_chain", [])
-    _write_artifact_json(
-        state,
-        f"oracle_deepening_cycle{state.depth_cycle}.json",
-        data,
-    )
-    _upsert_distillation_memory(
-        _memory_entries_from_oracle_sidecar(state, data, focused_family)
-    )
-    return data
+    attempts: list[dict[str, Any]] = []
+    last_data: dict[str, Any] = {"status": "unavailable", "main_theorem_chain": []}
+    retry_suffix = ""
+    for attempt in range(1, 3):
+        prompt = base_prompt + retry_suffix
+        response = chatgpt_oracle_exec(
+            state,
+            prompt,
+            log_tag=f"W_oracle_deepen_cycle{state.depth_cycle}_a{attempt}",
+            timeout_seconds=oracle_timeout,
+            model=oracle_model,
+            pdf_path=oracle_pdf,
+            dry_run=False,
+        )
+        if not response:
+            data: dict[str, Any] = {"status": "unavailable", "main_theorem_chain": []}
+            issues = ["Oracle returned no response"]
+        else:
+            try:
+                parsed = _extract_json(response)
+            except (ValueError, json.JSONDecodeError) as exc:
+                parsed = {
+                    "status": "parse_failed",
+                    "error": str(exc),
+                    "raw_response": response[:4000],
+                    "main_theorem_chain": [],
+                }
+            if isinstance(parsed, dict):
+                data = parsed
+            else:
+                data = {
+                    "status": "invalid",
+                    "raw_response": str(parsed)[:4000],
+                    "main_theorem_chain": [],
+                }
+            data.setdefault("status", "ok")
+            data.setdefault("main_theorem_chain", [])
+            issues = _oracle_deepening_quality_issues(data, response)
+        attempts.append(
+            {
+                "attempt": attempt,
+                "status": data.get("status"),
+                "response_length": len(response or ""),
+                "issues": issues,
+            }
+        )
+        last_data = data
+        if not issues:
+            _write_artifact_json(
+                state,
+                f"oracle_deepening_cycle{state.depth_cycle}.json",
+                data,
+            )
+            _write_artifact_json(
+                state,
+                f"oracle_deepening_cycle{state.depth_cycle}_attempts.json",
+                attempts,
+            )
+            _upsert_distillation_memory(
+                _memory_entries_from_oracle_sidecar(state, data, focused_family)
+            )
+            return data
+        logger.warning(
+            "Oracle deepening attempt %d unusable: %s",
+            attempt,
+            "; ".join(issues),
+        )
+        retry_suffix = (
+            "\n\nPREVIOUS ORACLE RESPONSE WAS INVALID FOR THIS PIPELINE: "
+            + "; ".join(issues)
+            + "\nReturn a single valid JSON object matching the schema. "
+            + "Do not mention bundles, files, markdown, downloads, or prose summaries. "
+            + "If blocked, return status=\"blocked\" with a nonempty main_theorem_chain "
+            + "containing the narrowest conditional theorem chain you can defend."
+        )
+    fallback = {
+        "status": "unavailable",
+        "main_theorem_chain": [],
+        "issues": [
+            "Oracle deepening did not produce valid structured research context after retries"
+        ],
+        "last_response": last_data,
+        "attempts": attempts,
+    }
+    _write_artifact_json(state, f"oracle_deepening_cycle{state.depth_cycle}.json", fallback)
+    _write_artifact_json(state, f"oracle_deepening_cycle{state.depth_cycle}_attempts.json", attempts)
+    return fallback
 
 
 def _score_required_changes(review: dict[str, Any]) -> list[str]:
