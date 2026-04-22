@@ -135,6 +135,7 @@ import Omega.OperatorAlgebra.RenyiLossSpectrumCappedByIndex
 import Omega.OperatorAlgebra.ReplicationCentralizerColoredPartitionOrbitAlgebra
 import Omega.OperatorAlgebra.ReplicationCentralizerDimensionEgf
 import Omega.OperatorAlgebra.SoundnessLowerBoundIndex
+import Omega.OperatorAlgebra.NearZkSoundnessFiberTradeoff
 import Omega.OperatorAlgebra.TakesakiCriterion
 import Omega.OperatorAlgebra.Z2x2WalshHadamardSectorTrace
 import Omega.OperatorAlgebra.HzomLiCriterionOperatorized
