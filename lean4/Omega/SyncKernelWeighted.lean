@@ -116,6 +116,7 @@ import Omega.SyncKernelWeighted.SyncKernel3dCriticalWHalf
 import Omega.SyncKernelWeighted.SyncKernel3dRecurrenceDrop
 import Omega.SyncKernelWeighted.SyncKernel2DExactDecouple
 import Omega.SyncKernelWeighted.SyncKernelCurvatureBilipschitz
+import Omega.SyncKernelWeighted.RateStrictConvex
 import Omega.SyncKernelWeighted.SyncKernelModerateDeviationCauchyCertified
 import Omega.SyncKernelWeighted.UnitarySliceHalfPhaseLocking
 import Omega.SyncKernelWeighted.UnitRootTwistThreshold
