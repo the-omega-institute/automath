@@ -77,6 +77,7 @@ import Omega.Zeta.SelfdualPressureInversion
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotSofic
 import Omega.Zeta.XiAbelianHolonomyFourierInversion
 import Omega.Zeta.XiCauchyPoissonLocationScaleUncenteredThird
+import Omega.Zeta.XiCauchyPoissonSingleScaleMomentInversion
 import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprint
 import Omega.Zeta.XiCriticalLineCircleCauchyUniformization
 import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth
@@ -583,6 +584,7 @@ import Omega.Zeta.XiEndpointHeatProbeHausdorffHankelClosure
 import Omega.Zeta.XiEndpointHeatProbeCyclotomicTargetExtraction
 import Omega.Zeta.XiEndpointHeatProbeAdamsTwistHalfangle
 import Omega.Zeta.XiEndpointHeatProbeRstarRegularVariationTail
+import Omega.Zeta.XiEndpointJensenRationalFactorizationInversion
 import Omega.Zeta.XiEndpointJetOrthogonalDecoupling
 import Omega.Zeta.XiEndpointAbsorptionAdamsRescaling
 import Omega.Zeta.XiExteriorPowerGaussianBinomHilbert
