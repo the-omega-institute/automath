@@ -3055,6 +3055,113 @@ def _resolve_core_tex_path(value: str) -> Optional[Path]:
     return path
 
 
+def _is_wrapper_tex_file(path: Path) -> bool:
+    """Return true for subfile/input routing files that are unsafe writeback targets."""
+    if path.name != "main.tex":
+        return False
+    try:
+        text = read_text(path)
+    except OSError:
+        return False
+    if CLAIM_ENV_RE.search(text):
+        return False
+    return bool(re.search(r"\\(?:input|subfile)\{", text))
+
+
+def _target_priority(path: Path, context: Optional[dict[str, Any]] = None) -> tuple[int, int, int, int, int, str]:
+    """Rank concrete body files for theorem writeback targeting."""
+    try:
+        text = read_text(path)
+    except OSError:
+        text = ""
+    labels = _unique_strings((context or {}).get("required_context_labels", []))
+    label_hits = sum(1 for label in labels if label and label in text)
+    claim_hits = len(CLAIM_ENV_RE.findall(text))
+    name = path.name
+    section_file = int(name.startswith("sec__"))
+    subsection_file = int(name.startswith(("subsec__", "subsubsec__")))
+    body_size = min(len(text), 100000)
+    rel = path.relative_to(CORE_BODY).as_posix()
+    return (label_hits, claim_hits, section_file, subsection_file, body_size, rel)
+
+
+def _choose_writeback_target(
+    candidates: list[Path],
+    context: Optional[dict[str, Any]] = None,
+) -> Optional[Path]:
+    """Choose the best non-wrapper concrete theorem body file."""
+    targets = _choose_writeback_targets(candidates, context=context, limit=1)
+    return targets[0] if targets else None
+
+
+def _choose_writeback_targets(
+    candidates: list[Path],
+    context: Optional[dict[str, Any]] = None,
+    limit: int = 1,
+) -> list[Path]:
+    """Choose the best non-wrapper concrete theorem body files."""
+    usable = []
+    seen = set()
+    for candidate in candidates:
+        path = candidate.resolve()
+        if path in seen:
+            continue
+        seen.add(path)
+        if not path.exists() or path.suffix != ".tex":
+            continue
+        try:
+            path.relative_to(CORE_BODY.resolve())
+        except ValueError:
+            continue
+        if _is_wrapper_tex_file(path):
+            continue
+        usable.append(path)
+    if not usable:
+        return []
+    ranked = sorted(usable, key=lambda p: _target_priority(p, context), reverse=True)
+    return ranked[: max(1, limit)]
+
+
+def _match_candidate_paths(item: dict[str, Any]) -> list[Path]:
+    """Collect concrete file candidates from a semantic match row."""
+    candidates = []
+    rel = str(item.get("tex_file", ""))
+    path = _resolve_core_tex_path(rel)
+    if path and path.exists():
+        candidates.append(path)
+    for row in item.get("top_files", []):
+        rel = str(row.get("tex_file", ""))
+        path = _resolve_core_tex_path(rel)
+        if path and path.exists():
+            candidates.append(path)
+    return candidates
+
+
+def _select_section_writeback_targets(
+    section: str,
+    matches: dict[str, Any],
+    limit: int = 1,
+) -> list[dict[str, str]]:
+    """Select concrete theorem body files for one section slug."""
+    for item in matches.get("matches", []):
+        if item.get("section") != section:
+            continue
+        paths = _choose_writeback_targets(_match_candidate_paths(item), item, limit=limit)
+        if paths:
+            return [
+                {"section": section, "tex_file": path.relative_to(CORE_BODY).as_posix()}
+                for path in paths
+            ]
+    section_dir = CORE_BODY / section
+    if not section_dir.exists():
+        return []
+    paths = _choose_writeback_targets(sorted(section_dir.rglob("*.tex")), limit=limit)
+    return [
+        {"section": section, "tex_file": path.relative_to(CORE_BODY).as_posix()}
+        for path in paths
+    ]
+
+
 def _select_target_files(
     payload: dict[str, Any],
     matches: dict[str, Any],
@@ -3068,7 +3175,7 @@ def _select_target_files(
         selected_for_target = False
         if target.endswith(".tex"):
             path = _resolve_core_tex_path(target)
-            if path and path.exists():
+            if path and path.exists() and not _is_wrapper_tex_file(path):
                 rel = path.relative_to(CORE_BODY).as_posix()
                 selected.append({"section": rel.split("/")[0], "tex_file": rel})
                 seen.add(rel)
@@ -3077,28 +3184,24 @@ def _select_target_files(
         for item in match_rows:
             if item.get("section") != target:
                 continue
-            rel = str(item.get("tex_file", ""))
-            path = _resolve_core_tex_path(rel)
-            if path and path.exists() and rel not in seen:
-                selected.append({"section": target, "tex_file": rel})
+            limit = 2 if _unique_strings(item.get("required_context_labels", [])) else 1
+            for selected_target in _select_section_writeback_targets(target, matches, limit=limit):
+                rel = selected_target["tex_file"]
+                if rel in seen:
+                    continue
+                selected.append(selected_target)
                 seen.add(rel)
                 selected_for_target = True
+            if selected_for_target:
                 break
         if selected_for_target:
             continue
-        section_dir = CORE_BODY / target
-        candidates = []
-        if (section_dir / "main.tex").exists():
-            candidates.append(section_dir / "main.tex")
-        if section_dir.exists():
-            candidates.extend(sorted(section_dir.rglob("*.tex")))
-        for candidate in candidates:
-            rel = candidate.relative_to(CORE_BODY).as_posix()
+        for selected_target in _select_section_writeback_targets(target, matches):
+            rel = selected_target["tex_file"]
             if rel not in seen:
-                selected.append({"section": target, "tex_file": rel})
+                selected.append(selected_target)
                 seen.add(rel)
-                break
-    return selected[:6]
+    return selected[:8]
 
 
 def _collect_section_contexts(targets: list[dict[str, str]]) -> str:
@@ -3195,6 +3298,11 @@ def _validate_writebacks(writebacks: Any) -> tuple[list[dict[str, Any]], list[st
         path = _resolve_core_tex_path(rel)
         if not path or not path.exists():
             errors.append(f"Item {index} target file not found under core body: {rel}")
+            continue
+        if _is_wrapper_tex_file(path):
+            errors.append(
+                f"Item {index} targets wrapper/routing file instead of theorem body: {rel}"
+            )
             continue
         label = str(item["label"]).strip()
         content = str(item["content"]).strip()
@@ -3827,25 +3935,17 @@ def run_stage_w(
     targets = _select_target_files(payload, matches)
     # In deepening mode, narrow targets to the focused family's sections
     if focused_family:
-        family_sections = set(focused_family.get("target_sections", []))
-        focused_targets = [t for t in targets if t["section"] in family_sections]
-        if not focused_targets:
-            # Family targets not in scan matches; use family sections directly
-            for sec in focused_family.get("target_sections", []):
-                sec_dir = CORE_BODY / sec
-                if sec_dir.exists():
-                    main_tex = sec_dir / "main.tex"
-                    if main_tex.exists():
-                        focused_targets.append({
-                            "section": sec,
-                            "tex_file": (main_tex.relative_to(CORE_BODY)).as_posix(),
-                        })
-                    else:
-                        for tex in sorted(sec_dir.rglob("*.tex"))[:1]:
-                            focused_targets.append({
-                                "section": sec,
-                                "tex_file": tex.relative_to(CORE_BODY).as_posix(),
-                            })
+        family_sections = _unique_strings(focused_family.get("target_sections", []))
+        family_section_set = set(family_sections)
+        focused_targets = [t for t in targets if t["section"] in family_section_set]
+        present_sections = {t["section"] for t in focused_targets}
+        for sec in family_sections:
+            if sec in present_sections:
+                continue
+            additions = _select_section_writeback_targets(sec, matches)
+            focused_targets.extend(additions)
+            if additions:
+                present_sections.add(sec)
         if focused_targets:
             targets = focused_targets
 
