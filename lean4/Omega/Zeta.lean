@@ -716,6 +716,7 @@ import Omega.Zeta.VanvleckResidueL2LowerBound
 import Omega.Zeta.XiTimeFiberMinimalDimension
 import Omega.Zeta.TimefiberRandomAffineLyapunovCauchyUnique
 import Omega.Zeta.XiTimeLowerBoundFromMaxFiber
+import Omega.Zeta.XiTimeMonotoneUnderCoarseGraining
 import Omega.Zeta.XiTimePart50dcProjectivePressurePerronLogconvex
 import Omega.Zeta.XiTimePart50BERhBoundaryFiniteTaylorJetCertificate
 import Omega.Zeta.XiTimePart51AADerivedCrossFibGcdFormula
