@@ -38,6 +38,7 @@ import Omega.SyncKernelWeighted.LambdaExtremeAsymp
 import Omega.SyncKernelWeighted.MobiusErrorPropagation
 import Omega.SyncKernelWeighted.MuPochhammerNecklaceDirichletPolylog
 import Omega.SyncKernelWeighted.OnlineDelayFromPlocal
+import Omega.SyncKernelWeighted.ParallelAdditionZeroTempParetoFrontier
 import Omega.SyncKernelWeighted.PressureAnalyticRadius
 import Omega.SyncKernelWeighted.PressureBranchpointsDiscriminant
 import Omega.SyncKernelWeighted.PressureTaylorRemainderCauchy

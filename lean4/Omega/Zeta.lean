@@ -66,6 +66,7 @@ import Omega.Zeta.SelfdualPressureInversion
 import Omega.Zeta.XiAbelianHolonomyFourierInversion
 import Omega.Zeta.XiCauchyPoissonLocationScaleUncenteredThird
 import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprint
+import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth
 import Omega.Zeta.XiCayleyDilationMobiusConjugacyFixedpoints
 import Omega.Zeta.CauchyPoissonSixthSignatureNegativityRigidity
 import Omega.Zeta.XiCdimKolmResidualGap
