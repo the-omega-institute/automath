@@ -326,6 +326,7 @@ import Omega.POM.MicrocanonicalAdaptiveNoGain
 import Omega.POM.MicrocanonicalBandBounds
 import Omega.POM.MicrocanonicalCountSufficientStatisticPosteriorUniform
 import Omega.POM.MicrocanonicalCoverTimeMean
+import Omega.POM.MicrocanonicalMissingTypesPoisson
 import Omega.POM.MicrocanonicalCoverTimeNlognScale
 import Omega.POM.MicrocanonicalCoverTimeStrategyInvariance
 import Omega.POM.MicrocanonicalCoverTimeTailInclusionExclusion

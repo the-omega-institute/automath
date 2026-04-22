@@ -379,6 +379,7 @@ import Omega.Zeta.PickPoissonEnergyStabilityAwayFromCollision
 import Omega.Zeta.PickPoissonInversePrincipalMinorsJacobi
 import Omega.Zeta.ReciprocalSpectrumFunctionalEquation
 import Omega.Zeta.PoissonEnergySingle
+import Omega.Zeta.PoissonCauchyMixtureKLT4MinimalThird
 import Omega.Zeta.PoissonCauchyMixtureT4OptimalityRigidity
 import Omega.Zeta.PoissonEnergySingleRecovery
 import Omega.Zeta.PrimeLanguagesDFAPrimeRecallPrecision
@@ -506,6 +507,7 @@ import Omega.Zeta.XiCauchyPoissonDensityRatioSecondOrderProfile
 import Omega.Zeta.XiCauchyPoissonDerivativeEnergyClosedForm
 import Omega.Zeta.XiCauchyPoissonSecondOrderShapeLimitNodeRigidity
 import Omega.Zeta.CayleyTimefiberPoissonCollapse
+import Omega.Zeta.TimefiberPoissonProjectionPrinciple
 import Omega.Zeta.XiCayleyJoukowskyHarmonicMeasureEllipse
 import Omega.Zeta.XiCdimLambdaClosedForm
 import Omega.Zeta.XiCdimLocalizationQuotientSolenoidSurjections
