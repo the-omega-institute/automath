@@ -99,6 +99,7 @@ import Omega.Conclusion.CollisionResonantKernelTensorPrime
 import Omega.Conclusion.CollisionMomentStieltjesHankelPositivity
 import Omega.Conclusion.CompleteStrictificationDualCriterion
 import Omega.Conclusion.GoldenLucasLinearCyclotomicGate
+import Omega.Conclusion.GoldenSprtClockPureResource
 import Omega.Conclusion.ZeroSizebiasedResidualLayerwiseRigidity
 import Omega.Conclusion.ZeroMeanResidueTestsCompleteDetection
 import Omega.Conclusion.ValuationIsometryClassification

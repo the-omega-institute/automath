@@ -561,6 +561,7 @@ import Omega.POM.TensorFoldResultantRecursion
 import Omega.POM.ThetaGodelizationPrimeValuationIsometry
 import Omega.POM.ThickFiberEnvelope
 import Omega.POM.TimeReversalFixedpointRatioDecay
+import Omega.POM.TimeReversalOrbitCount
 import Omega.POM.TimeReversalSignGeneralFiber
 import Omega.POM.TimeReversalSymmetricIndsetPolynomial
 import Omega.POM.ToggleCoxeterRelationsPath
