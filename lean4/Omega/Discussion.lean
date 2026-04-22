@@ -3,6 +3,7 @@ import Omega.Discussion.AuditClosureZx
 import Omega.Discussion.BridgeParadigmNonlocalDoublelimitFredholm
 import Omega.Discussion.CharacterIndexHolonomy
 import Omega.Discussion.ChebyshevAdams
+import Omega.Discussion.ChebyshevWittEquivariance
 import Omega.Discussion.CmvStabilizationCore
 import Omega.Discussion.CmvTailInvariant
 import Omega.Discussion.CrossingWindingBlaschkeIndex

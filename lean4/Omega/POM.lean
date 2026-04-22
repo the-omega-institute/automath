@@ -490,6 +490,7 @@ import Omega.POM.ReplicaSoftcoreBinomialKernelInverse
 import Omega.POM.ReplicaSoftcoreDet
 import Omega.POM.ReplicaSoftcoreExceptionalSecantEquation
 import Omega.POM.ReplicaSoftcoreTemperatureFreeEnergyPhaseTransition
+import Omega.POM.ReplicaSoftcoreWordTraceFibonacciFactorization
 import Omega.POM.ReplicaSoftcoreWordTraceCycleGF
 import Omega.POM.ResidueRefinementJensen
 import Omega.POM.ResonanceMod6PeriodQ13Q15
