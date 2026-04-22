@@ -76,6 +76,7 @@ import Omega.Zeta.XiLimitDefectPotentialSpectralTailReadsDeltaMax
 import Omega.Zeta.XiLimitDefectPotentialL2EnergyKernel
 import Omega.Zeta.XiLimitDefectPotentialVsDepthProfile
 import Omega.Zeta.XiNaturalExtensionPeriodicOrbitZetaPreservation
+import Omega.Zeta.XiNaturalExtensionMinimalDAlphabetRealization
 import Omega.Zeta.XiNullMicroKlWindow
 import Omega.Zeta.XiZeroTempComparability
 import Omega.Zeta.XiTerminalZmEllipticWeightNCorrespondenceBidegreeDelta
