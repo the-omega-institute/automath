@@ -46,6 +46,7 @@ import Omega.Zeta.XiEndpointHeatProbeToeplitzHerglotzIdentity
 import Omega.Zeta.XiTimePart76SmithSurjectiveModuliPrimeSieve
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
+import Omega.Zeta.XiFiniteDefectRhScanTraceEquivalence
 import Omega.Zeta.XiFiniteFrontierCertificate
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
@@ -149,6 +150,7 @@ import Omega.Zeta.XiTimePart9zbbFiniteStirlingSumTranslation
 import Omega.Zeta.XiTimePart9saUniformBaselineFixedBinaryExperiment
 import Omega.Zeta.XiTimePart9tTopGapAffineCapacitySegment
 import Omega.Zeta.XiTimePart54abEscortLogdefectMoments
+import Omega.Zeta.XiTimePart57bPressureSpectrumDiscreteConvexityMonotoneExcess
 import Omega.Zeta.XiTimePart70aUniformAverageLogdegTwoState
 import Omega.Zeta.XiTimePart70aGaugeFiberGapFirstOrder
 import Omega.Zeta.XiTimePart70daWindow6AbstractOrbittypeMinimalC12
