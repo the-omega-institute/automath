@@ -717,6 +717,7 @@ import Omega.Zeta.XiReverseKLGapBayesDecomposition
 import Omega.Zeta.XiReverseKLFourierGapPositiveKernelEnergy
 import Omega.Zeta.XiReverseKLGapW2ToDelta
 import Omega.Zeta.XiReverseKLFenchelPoissonDuality
+import Omega.Zeta.XiReverseklStrictConvexUniqueMinimizer
 import Omega.Zeta.XiHorizonPerfectZkEquivalences
 import Omega.Zeta.XiReverseKLGapMeanPinsker
 import Omega.Zeta.XiReverseKLPadicEntropyCascade
