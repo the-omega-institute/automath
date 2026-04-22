@@ -53,6 +53,7 @@ import Omega.Zeta.XiGridScanDiophantineDealiasingStability
 import Omega.Zeta.XiGodelCoprimeModFamilyDecoupling
 import Omega.Zeta.XiEndpointHeatProbeAdamsTwistSpectralGapExpBound
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
+import Omega.Zeta.XiEndpointProfileCfiniteHankelRank
 import Omega.Zeta.XiExtremeResonancePositivity
 import Omega.Zeta.XiExtremeResonanceCriterion
 import Omega.Zeta.XiExtremeResonanceToeplitzThreshold
