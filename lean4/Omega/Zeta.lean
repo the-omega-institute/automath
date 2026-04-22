@@ -55,6 +55,7 @@ import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
 import Omega.Zeta.XiLimitDefectPotentialRationalization
 import Omega.Zeta.XiLimitDefectPotentialSpectralTailReadsDeltaMax
+import Omega.Zeta.XiLimitDefectPotentialL2EnergyKernel
 import Omega.Zeta.XiLimitDefectPotentialVsDepthProfile
 import Omega.Zeta.XiNaturalExtensionPeriodicOrbitZetaPreservation
 import Omega.Zeta.XiNullMicroKlWindow
