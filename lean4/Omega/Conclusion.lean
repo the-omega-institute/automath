@@ -303,6 +303,7 @@ import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.MaxfiberAchieversOddEvenCompensation
 import Omega.Conclusion.MaxentropyGapEqualsLogMaxfiber
 import Omega.Conclusion.MaxfiberEntropyGaugeFourmodeRigidity
+import Omega.Conclusion.MaxfiberHiddenbitCollisionSelfcalibration
 import Omega.Conclusion.MaxfiberHiddenbitBalancedBayesWall
 import Omega.Conclusion.MinLatchesLogStates
 import Omega.Conclusion.MinRegisterHalting
