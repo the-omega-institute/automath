@@ -53,6 +53,10 @@ SECTION_RE = re.compile(
     r"\\(section|subsection|subsubsection)\*?\{([^}]+)\}",
     re.DOTALL,
 )
+MANUAL_RESULT_ORDINAL_RE = re.compile(
+    "(?:Result|" + "\u7ed3\u679c" + r")\s*[0-9]+",
+    re.IGNORECASE,
+)
 
 STAGE_ORDER = ["R", "S", "G", "W", "E", "DONE"]
 
@@ -3574,6 +3578,15 @@ def _validate_writebacks(
         labels.add(label)
         if "\\documentclass" in content or "\\begin{document}" in content:
             errors.append(f"Item {index} contains document-level LaTeX")
+        if "\\endinput" in content:
+            errors.append(
+                f"Item {index} emits \\endinput; the application planner handles insertion before it"
+            )
+        ordinal = MANUAL_RESULT_ORDINAL_RE.search(content)
+        if ordinal:
+            errors.append(
+                f"Item {index} hard-codes unstable human-facing result ordinal: {ordinal.group(0)}"
+            )
         if label not in content:
             errors.append(f"Item {index} content does not contain label {label}")
         if re.search(rf"\\label\{{{re.escape(label)}\}}", read_text(path)):
