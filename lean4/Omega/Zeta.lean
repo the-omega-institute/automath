@@ -283,6 +283,7 @@ import Omega.Zeta.XiBoundaryUpliftMixedRadixRegisterLowerBound
 import Omega.Zeta.FiniteRankRealisation
 import Omega.Zeta.FiniteRhPhaseLift
 import Omega.Zeta.FiniteRhPhaseLiftArtin
+import Omega.Zeta.FiniteRhPhaseLiftTimeRescale
 import Omega.Zeta.FoldInversionStrongConverseSideinfo
 import Omega.Zeta.FoldbinGaugeVolumeKappaCompression
 import Omega.Zeta.FourthRegisterDichotomy
@@ -552,6 +553,7 @@ import Omega.Zeta.XiCriticalLineUniqueLowComplexitySlice
 import Omega.Zeta.XiLegalReadoutPrefixDoubleBudget
 import Omega.Zeta.XiComovingDefectLatticeCertificateBandExclusion
 import Omega.Zeta.XiComovingDefectTransverseVisibleWindow
+import Omega.Zeta.XiComovingFiniteCentersBlindspot
 import Omega.Zeta.XiDefectEntropyPeakCompressibilityExtremal
 import Omega.Zeta.XiDefectEntropyMassPeakDecoupling
 import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
