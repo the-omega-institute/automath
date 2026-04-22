@@ -139,6 +139,7 @@ import Omega.SyncKernelWeighted.WittDepthEulerProduct
 import Omega.SyncKernelWeighted.WittCyclotomicInvisibility
 import Omega.SyncKernelWeighted.WittDworkCongruence
 import Omega.SyncKernelWeighted.WittNecklaceDivisibility
+import Omega.SyncKernelWeighted.WittNecklaceDworkR
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.SyncKernelWeighted.WittThetaDerivativeFilter
 import Omega.SyncKernelWeighted.WittRootOfUnityCommonPadicLimit
