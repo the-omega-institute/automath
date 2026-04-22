@@ -299,6 +299,7 @@ import Omega.Conclusion.KernelChainRule
 import Omega.Conclusion.KirchhoffGreenDeterminantIdentity
 import Omega.Conclusion.KrylovHankelFibonacci
 import Omega.Conclusion.KrylovLowrankRigidity
+import Omega.Conclusion.LkFixedIndexHardEdge
 import Omega.Conclusion.LeyangDeltaSecondMomentCollision
 import Omega.Conclusion.LeyangCanonicalBinarySheetLowerBound
 import Omega.Conclusion.LeyangCanonicalAddressDiscreteContinuousSplitting
