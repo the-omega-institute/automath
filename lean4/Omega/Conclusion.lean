@@ -197,6 +197,7 @@ import Omega.Conclusion.FoldHilbertRecognizable
 import Omega.Conclusion.FoldMultiscaleCarryDefect
 import Omega.Conclusion.FoldCollisionMod2StepJumpQ7
 import Omega.Conclusion.FoldAuditKLPythagoras
+import Omega.Conclusion.MinimalAnomalyBlockRelativeRankPhiSquareInverse
 import Omega.Conclusion.FoldbinSubcoverExponentialMincollapse
 import Omega.Conclusion.FoldFiberHologramBooleanCubePartition
 import Omega.Conclusion.FoldFiberProductSourceHardcoreDisintegration

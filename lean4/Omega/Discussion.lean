@@ -4,6 +4,7 @@ import Omega.Discussion.BridgeParadigmNonlocalDoublelimitFredholm
 import Omega.Discussion.CharacterIndexHolonomy
 import Omega.Discussion.ChebyshevAdams
 import Omega.Discussion.CmvStabilizationCore
+import Omega.Discussion.CmvTailInvariant
 import Omega.Discussion.CrossingWindingBlaschkeIndex
 import Omega.Discussion.CubicalStokesElimination2Cycle
 import Omega.Discussion.DerivedFiberWatataniTimeParityEquivalence
