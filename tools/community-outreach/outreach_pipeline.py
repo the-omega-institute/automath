@@ -110,6 +110,13 @@ AGENT_CONTEXT_POLICY = """AGENT CONTEXT POLICY:
 - zero_init_review: use for independent correctness/tone review after a candidate artifact exists. Do not rely on local outreach memory; judge only the public draft plus committed evidence supplied in the prompt.
 - Every agent call must say which mode it is using. Do not mix scope-memory work with zero-initialized review in one prompt."""
 
+RESEARCH_ROUTE_POLICY = """RESEARCH ROUTE POLICY:
+- Every future-scope research task must declare exactly one route before doing substantive work: computation, proof, or hybrid.
+- computation: use when the scope is a finite certificate, matrix/table audit, bounded search, or counterexample enumeration. Output scripts/certificates, input data, reproducibility instructions, and failure conditions.
+- proof: use when the scope asks for an all-q theorem, classification, rigidity/obstruction result, or formal mathematical chain. Output theorem statements with complete proof text; computation may only be auxiliary evidence.
+- hybrid: use when finite computation is needed to find, certify, or exclude structures before proving the resulting obstruction/theorem. Output both the certificate artifacts and the proof that interprets them.
+- If the scope ledger supplies a recommended route, follow it unless you explicitly justify a route override. Never replace proof obligations with numerical evidence."""
+
 PASS_SCORE = 8
 LOW_SCORE_SKIP = 3  # Bug 6 fix: was 5 (gave up too easily). Only skip if score stays < 3 (genuinely hopeless)
 LOW_SCORE_STREAK = 3  # Need 3 consecutive low rounds to skip (was 2)
@@ -452,6 +459,53 @@ def _future_source_fingerprint(item: dict[str, Any], source: dict[str, Any]) -> 
     return _json_sha(payload, length=18)
 
 
+def infer_research_route(item: dict[str, Any]) -> tuple[str, str, str]:
+    """Infer a conservative route from a future item when the scope did not store one."""
+    text = " ".join(
+        str(item.get(key, ""))
+        for key in ("title", "task", "scope_boundary", "evidence")
+    ).lower()
+    has_lift_terms = any(term in text for term in ("nonnegative", "flow-equivalence", "bowen-franks", "sft"))
+    has_all_q_terms = any(term in text for term in ("all-q", "all q", "all-`q`", "classification", "structure theorem", "obstruction theorem"))
+    if has_all_q_terms and not has_lift_terms:
+        return (
+            "proof",
+            "The scope asks for an unbounded theorem/classification rather than only a finite audit.",
+            "Produce formal theorem/proposition statements with complete proof text; use computation only as auxiliary exploration.",
+        )
+    if has_lift_terms or "certificate" in text:
+        return (
+            "hybrid",
+            "The scope asks for concrete certificate data but also requires a mathematical obstruction or interpretation.",
+            "Produce reproducible Python/certificate artifacts and a proof explaining why the artifact gives a lift or obstruction.",
+        )
+    if has_all_q_terms:
+        return (
+            "proof",
+            "The scope asks for an unbounded theorem/classification rather than only a finite audit.",
+            "Produce formal theorem/proposition statements with complete proof text; use computation only as auxiliary exploration.",
+        )
+    if any(term in text for term in ("bounded", "q=2..", "table", "finite", "enumeration", "counterexample")):
+        return (
+            "computation",
+            "The scope is a finite bounded audit or enumeration certificate.",
+            "Produce scripts, input data, JSON/certificate output, and reproducibility/failure checks.",
+        )
+    return (
+        "hybrid",
+        "The scope does not determine a pure proof or pure computation route, so use a conservative hybrid contract.",
+        "Declare which parts are certificate-backed and which parts are theorem/proof obligations.",
+    )
+
+
+def normalize_future_item_route(item: dict[str, Any]) -> dict[str, Any]:
+    route, reason, contract = infer_research_route(item)
+    item.setdefault("research_route", route)
+    item.setdefault("route_reason", reason)
+    item.setdefault("route_contract", contract)
+    return item
+
+
 def load_future_queue() -> list[dict[str, Any]]:
     """Compact the append-only local future queue into current items."""
     items: dict[str, dict[str, Any]] = {}
@@ -466,6 +520,7 @@ def load_future_queue() -> list[dict[str, Any]]:
             if base.get("source") and not base["source_records"]:
                 base["source_records"].append(base["source"])
             base.setdefault("updates", [])
+            normalize_future_item_route(base)
             items[item_id] = base
             continue
 
@@ -487,10 +542,14 @@ def load_future_queue() -> list[dict[str, Any]]:
             base["status"] = event["status"]
         if event.get("updated_at"):
             base["updated_at"] = event["updated_at"]
+        for key in ("research_route", "route_reason", "route_contract", "recommended_agent_context", "priority"):
+            if event.get(key):
+                base[key] = event[key]
         for source in event.get("source_records", []):
             if source not in base["source_records"]:
                 base["source_records"].append(source)
         base["updates"].append(event)
+        normalize_future_item_route(base)
     return sorted(items.values(), key=lambda item: (item.get("source_repo", ""), item.get("title", "")))
 
 
@@ -525,6 +584,7 @@ def append_future_queue_item(item: dict[str, Any], *, dry_run: bool = False) -> 
     entry.setdefault("source_repo", source.get("repo", ""))
     entry.setdefault("target_repo", repo_base(str(entry.get("source_repo", ""))))
     entry.setdefault("source_issue", source.get("issue"))
+    normalize_future_item_route(entry)
     entry["id"] = str(entry.get("id") or _future_item_id(entry))
     source_fingerprint = _future_source_fingerprint(entry, source)
     entry["source_records"] = [source] if source else []
@@ -549,6 +609,11 @@ def append_future_queue_item(item: dict[str, Any], *, dry_run: bool = False) -> 
             "title": entry.get("title", ""),
             "task": entry.get("task", ""),
             "status": entry.get("status", "queued"),
+            "research_route": entry.get("research_route"),
+            "route_reason": entry.get("route_reason"),
+            "route_contract": entry.get("route_contract"),
+            "recommended_agent_context": entry.get("recommended_agent_context"),
+            "priority": entry.get("priority"),
             "source_records": entry["source_records"],
             "source_fingerprint": source_fingerprint,
         }
@@ -659,6 +724,15 @@ def future_scope_items_from_state(
                 "evidence": _scope_excerpt(body, r"not claimed|nonnegative|Bowen-Franks|flow-equivalence|SFT"),
                 "priority": "high",
                 "recommended_agent_context": "context_aware_research",
+                "research_route": "hybrid",
+                "route_reason": (
+                    "A finite q=6,7 lift/obstruction needs computation or explicit certificate data, "
+                    "but BF/SFT promotion also requires a proof interpreting the certificate."
+                ),
+                "route_contract": (
+                    "Produce reproducible scripts/certificates for candidate nonnegative presentations or "
+                    "failed searches, plus a proof that the resulting certificate gives a valid lift or obstruction."
+                ),
                 "review_policy": (
                     "Use context-aware agents for the proof search because the scope boundary and paper-side "
                     "artifacts matter; use zero_init_review only after a standalone certificate is drafted."
@@ -686,6 +760,15 @@ def future_scope_items_from_state(
                 "evidence": _scope_excerpt(body, r"q=2.*23|q=23|exterior-Lucas|triple coincidence"),
                 "priority": "high",
                 "recommended_agent_context": "context_aware_research",
+                "research_route": "proof",
+                "route_reason": (
+                    "The task asks to upgrade a bounded q=2..23 certificate into an all-q obstruction "
+                    "or classified bad-example theorem."
+                ),
+                "route_contract": (
+                    "Produce theorem/proposition statements with complete proof text. Computation may be used "
+                    "to identify candidate skeletons but cannot replace the all-q argument."
+                ),
                 "review_policy": (
                     "Start with context-aware research using the paper artifacts and prior scope ledger. "
                     "A later zero_init_review should check any final theorem statement independently."
@@ -712,6 +795,9 @@ def future_scope_items_from_state(
                 "evidence": " ".join(deferred_lines[:4])[:1200],
                 "priority": "medium",
                 "recommended_agent_context": "context_aware_research",
+                "research_route": "hybrid",
+                "route_reason": "Deferred scope did not specify whether the remaining work is purely finite or theorem-level.",
+                "route_contract": "Declare the route at task start and separate certificate claims from proof obligations.",
                 "review_policy": "Use context-aware agents for continuation; use zero_init_review for final public text.",
                 "source": source,
             }
@@ -737,7 +823,7 @@ def agent_context_header(mode: str, scope_context: str = "") -> str:
     normalized = mode.strip().lower()
     if normalized not in {"context_aware", "zero_init_review"}:
         normalized = "context_aware"
-    header = f"{AGENT_CONTEXT_POLICY}\n\nAGENT_CONTEXT_MODE: {normalized}\n"
+    header = f"{AGENT_CONTEXT_POLICY}\n\n{RESEARCH_ROUTE_POLICY}\n\nAGENT_CONTEXT_MODE: {normalized}\n"
     if normalized == "context_aware":
         header += (
             "Use the scope ledger below to distinguish already-closed contribution scope "
@@ -783,10 +869,13 @@ def build_scope_context(repo: str, state: Optional[RepoState] = None, *, max_cha
         for item in queue[:6]:
             lines.append(
                 f"  * [{item.get('id')}] {item.get('title')} "
-                f"(priority={item.get('priority', 'medium')}, agent={item.get('recommended_agent_context', 'context_aware_research')})"
+                f"(priority={item.get('priority', 'medium')}, route={item.get('research_route', 'hybrid')}, "
+                f"agent={item.get('recommended_agent_context', 'context_aware_research')})"
             )
             if item.get("scope_boundary"):
                 lines.append(f"    scope_boundary: {str(item.get('scope_boundary'))[:500]}")
+            if item.get("route_contract"):
+                lines.append(f"    route_contract: {str(item.get('route_contract'))[:500]}")
             if item.get("task"):
                 lines.append(f"    task: {str(item.get('task'))[:500]}")
     lines.append(
@@ -809,6 +898,8 @@ def print_future_queue(filter_repos: Optional[list[str]] = None) -> None:
         print(f"{item.get('id')}  {item.get('source_repo')}  {item.get('title')}")
         print(f"  Status:   {item.get('status', 'queued')}")
         print(f"  Priority: {item.get('priority', 'medium')}")
+        print(f"  Route:    {item.get('research_route', 'hybrid')}")
+        print(f"  Contract: {str(item.get('route_contract', ''))[:300]}")
         print(f"  Agent:    {item.get('recommended_agent_context', 'context_aware_research')}")
         if item.get("scope_boundary"):
             print(f"  Scope:    {str(item.get('scope_boundary'))[:240]}")
@@ -2543,6 +2634,9 @@ def build_stage_b2_prompt(
             - Needs verification of a claim → test it (code or counterexample search)
             - Needs literature/code reading → read the relevant files as text
             - Needs Lean formalization → mark as blocked/future external verification
+            First declare `research_route` as exactly one of computation, proof,
+            or hybrid. If the scope ledger supplied a recommended route, follow
+            it unless you explicitly justify an override.
 
             You have full access to:
             - Python 3 with sympy, numpy, etc.
@@ -2573,6 +2667,9 @@ def build_stage_b2_prompt(
 
             Return JSON:
             {{
+              "research_route": "computation|proof|hybrid",
+              "route_reason": "why this route fits the scope",
+              "route_contract_satisfied": true,
               "findings": [
                 {{
                   "title": "what you resolved",
@@ -2605,6 +2702,9 @@ def build_stage_b2_prompt(
                 {existing_block}
                 Return JSON:
                 {{
+                  "research_route": "computation|proof|hybrid",
+                  "route_reason": "why this route fits the scope",
+                  "route_contract_satisfied": true,
                   "target_summary": "what {base} does and what they need",
                   "contribution_opportunities": [
                     {{
@@ -2687,6 +2787,9 @@ def build_stage_b2_prompt(
 
             Return JSON:
             {{
+              "research_route": "computation|proof|hybrid",
+              "route_reason": "why this route fits the scope",
+              "route_contract_satisfied": true,
               "target_summary": "what the target project does (2 sentences)",
               "automath_relevant": "which Automath results are relevant (list file:theorem)",
               "findings": [
@@ -2820,6 +2923,11 @@ def build_stage_b2_prompt(
         Do NOT remove items. Do NOT change mathematical statements. ONLY format.
         Do not generate Lean files.
 
+        Before doing substantive work, declare `research_route` as exactly
+        "computation", "proof", or "hybrid". Use the scope ledger route when
+        supplied. The final findings must satisfy the corresponding route
+        contract from the research-route policy.
+
         If "content_list" is provided:
           - Read the "target_format_example" to learn the exact file format
           - Write each item from content_list into target-facing prose
@@ -2905,6 +3013,9 @@ def build_stage_b2_prompt(
 
         Return JSON only:
         {{
+          "research_route": "computation|proof|hybrid",
+          "route_reason": "why this route fits the scope",
+          "route_contract_satisfied": true,
           "target_needs_analysis": {{
             "open_issues": ["issue #N: description"],
             "future_work": ["item from README/paper"],
@@ -2999,6 +3110,9 @@ def build_stage_b3_prompt(repo: str, findings: list[Any]) -> str:
 
         Penalize any finding that claims this pipeline ran Lean, added Lean
         proofs, or completed local formalization.
+        Penalize missing or incoherent research_route declarations. A computation
+        route must include reproducible scripts/certificates; a proof route must
+        include real proof text; a hybrid route must include both.
 
         Findings:
         {json.dumps(findings, indent=2, ensure_ascii=False)}
@@ -3036,6 +3150,9 @@ def build_stage_b4_prompt(repo: str, findings: list[Any], codex_score_data: dict
            Correct category tags (proved_reference, open_reference, new_result, computation).
         3. FORMAT QUALITY: Does the output match the target-facing artifact?
            Reject generated Lean code, imports, proof terms, or `sorry` blocks.
+        4. ROUTE CONTRACT: Did Codex declare computation/proof/hybrid and satisfy
+           that contract? Computation needs reproducible artifacts; proof needs
+           theorem/proof text; hybrid needs both certificate and interpretation.
 
         Score 8+ if: all content_list items present, math correct, no Lean execution
         is claimed, and the artifact is useful to the target.
@@ -3234,6 +3351,16 @@ def run_stage_b(
                 )
             parsed_b2 = parse_json_from_output(b2_raw)
             findings = normalize_findings(parsed_b2.get("findings", []) if isinstance(parsed_b2, dict) else [])
+            if isinstance(parsed_b2, dict) and findings:
+                route = str(parsed_b2.get("research_route", "")).strip().lower()
+                if route in {"computation", "proof", "hybrid"}:
+                    for finding in findings:
+                        finding.setdefault("research_route", route)
+                        finding.setdefault("route_reason", str(parsed_b2.get("route_reason", "")))
+                        finding.setdefault(
+                            "route_contract_satisfied",
+                            bool(parsed_b2.get("route_contract_satisfied", False)),
+                        )
 
             # If B2 timed out or returned empty: SKIP this round entirely.
             # Don't generate fake findings — they break the document chain.
@@ -3426,6 +3553,7 @@ def run_stage_b(
                     "title": f.get("title", "")[:120],
                     "type": f.get("type", ""),
                     "status": f.get("status", ""),
+                    "research_route": f.get("research_route", ""),
                     "connection": str(f.get("connection", ""))[:200],
                 }
                 for f in findings[:5]
