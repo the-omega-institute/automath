@@ -896,3 +896,5 @@ import Omega.Zeta.XiBasepointScanL2EnergyPdKernel
 import Omega.Zeta.StereographicJacobianEntropyDensity
 import Omega.Zeta.XiTerminalZmS4LanglandsFactorTorusRankConductorTable
 import Omega.Zeta.XiTerminalZmLeyangEllipticDoublingStationarity
+import Omega.Zeta.XiAddressabilityCountingObstruction
+import Omega.Zeta.XiPoissonKernelDerivativeL2ClosedForm
