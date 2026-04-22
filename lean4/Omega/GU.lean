@@ -13,6 +13,7 @@ import Omega.GU.BdryOrientationTsubsetLucasParity
 import Omega.GU.BdryOrientationTsubsetTransferBinomial
 import Omega.GU.BdryOrientationWreathCharacterOddVisibility
 import Omega.GU.BdrySheetParityDiscreteBreaking
+import Omega.GU.BdrySheetParityExtensionMinRegister
 import Omega.GU.BdrySquareIdentity
 import Omega.GU.BdrySymmetricGroupSignTwistedLabelD2
 import Omega.GU.BdryThreeAxisUniqueSymmetricCentralInvariant

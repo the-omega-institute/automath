@@ -292,6 +292,7 @@ import Omega.Zeta.FiniteDefectPoissonL2EnergyTailMass
 import Omega.Zeta.FiniteDeterminantArithmeticLattice
 import Omega.Zeta.FiniteKernelLatticeObstruction
 import Omega.Zeta.FinitePartBoundaryMultiplicityQaxisEnergy
+import Omega.Zeta.FinitePartReducedDeterminantGroupInverseGradient
 import Omega.Zeta.FinitePartChannelEliminationLCM
 import Omega.Zeta.FinitePartCyclicLiftCyclotomicDivisorMobius
 import Omega.Zeta.FinitePartCyclicLiftDirichletMultipleSum
