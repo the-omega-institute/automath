@@ -97,6 +97,7 @@ import Omega.SyncKernelWeighted.RealInputDigitwiseSumLayer
 import Omega.SyncKernelWeighted.SchurChannelPressureGC
 import Omega.SyncKernelWeighted.SchurChannelCompletionUnitSlice
 import Omega.SyncKernelWeighted.SchurChannelStrictSelfDualFunctoriality
+import Omega.SyncKernelWeighted.SelfDualU1TwoChannelZeta
 import Omega.SyncKernelWeighted.SelfDualNormalForm1pmu
 import Omega.SyncKernelWeighted.TraceCentralMomentsZero
 import Omega.SyncKernelWeighted.TraceOddVanish
