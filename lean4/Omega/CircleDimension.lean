@@ -324,6 +324,7 @@ import Omega.CircleDimension.SolenoidFiniteDenominatorVisibilityBarrier
 import Omega.CircleDimension.SolenoidKernelBlindness
 import Omega.CircleDimension.SolenoidKernelProductZp
 import Omega.CircleDimension.SolenoidOverTMorphismClassification
+import Omega.CircleDimension.S4A4QuotientIsLeyangCurve
 import Omega.CircleDimension.SolenoidRigidityRankPrimeSupport
 import Omega.CircleDimension.SolenoidTerminalPhaseSystem
 import Omega.CircleDimension.SquarefreeMedianDistance

@@ -92,6 +92,7 @@ import Omega.POM.DerivedFoldGoldenRationalPowerUnitObstruction
 import Omega.POM.DerivedKolmogorovOracleExponentIsomorphism
 import Omega.POM.DerivedProjectiveLengthDirectionRationalCfinite
 import Omega.POM.DerivedMaxNoncontractibleFiberDefectConstants
+import Omega.POM.DeterministicNormalizationForest
 import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DiagonalHighMoments
 import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
