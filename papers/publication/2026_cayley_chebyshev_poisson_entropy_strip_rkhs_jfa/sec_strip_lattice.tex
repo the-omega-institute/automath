@@ -28,7 +28,11 @@ cardinal-reconstruction mechanism is the standard principal
 shift-invariant-space framework, whereas the new information here is the
 closed form of the lattice symbol \eqref{eq:lattice-symbol}, the cardinal
 kernel formula \eqref{eq:cardinal-kernel-fourier}, and the exact norm
-identity \eqref{eq:cardinal-norm-formula}.
+identity \eqref{eq:cardinal-norm-formula}.  The final theorem in the
+section connects this lattice chain back to the Poisson observation
+profiles from Theorem~\ref{thm:poisson-channel-rkhs}: integer samples
+recover exactly the lattice projection of the observation channel, and
+they recover the full channel precisely in the lattice-subspace case.
 
 \subsection{A Poisson image realization of the mode space}
 
@@ -650,10 +654,125 @@ the periodicity of the discrete Fourier series yields
 which proves \eqref{eq:cardinal-kernel-fourier}.
 \end{proof}
 
+\begin{theorem}[Integer-orbit sampling of Poisson observation channels]%
+\label{thm:poisson-observation-lattice-sampling}
+Let $\nu$ be a probability measure on~$\RR$ with finite mean
+$\bar\gamma$, let $t>0$, and let $\widetilde\delta_t$ be the centred
+fluctuation profile from Theorem~\ref{thm:poisson-channel-rkhs}.  Put
+\[
+F_t:=\mathcal U\widetilde\delta_t\in\mathcal H_K,
+\]
+and let $\Pi_{\ZZ}$ denote the orthogonal projection of $\mathcal H_K$ onto
+$\mathcal H_K(\ZZ)$.  Define the integer-orbit observation samples
+\[
+\alpha_n(t):=F_t(n),\qquad n\in\ZZ .
+\]
+Then
+\begin{equation}\label{eq:poisson-observation-integer-samples}
+\alpha_n(t)
+=\langle \widetilde\delta_t,\Psi_n\rangle_{L^2(\omega)}
+=\frac1t\int_{\RR}
+(\gamma-\bar\gamma)\,
+K\!\left(n,\frac{\gamma-\bar\gamma}{t}\right)\dd\nu(\gamma),
+\qquad n\in\ZZ .
+\end{equation}
+Moreover $\alpha(t):=(\alpha_n(t))_{n\in\ZZ}\in\ell^2(\ZZ)$ and
+\begin{equation}\label{eq:poisson-observation-lattice-stability}
+A_{\ZZ}\|\Pi_{\ZZ}F_t\|_{\mathcal H_K}^2
+\le
+\sum_{n\in\ZZ}|\alpha_n(t)|^2
+\le
+B_{\ZZ}\|\Pi_{\ZZ}F_t\|_{\mathcal H_K}^2
+\le
+B_{\ZZ}\|\widetilde\delta_t\|_{L^2(\omega)}^2.
+\end{equation}
+The cardinal reconstruction with these observable samples is exactly the
+lattice projection:
+\begin{equation}\label{eq:poisson-observation-cardinal-projection}
+\Pi_{\ZZ}F_t(z)
+=\sum_{n\in\ZZ}\alpha_n(t)L(z-n)
+\qquad(z\in\mathbb S),
+\end{equation}
+with convergence in $\mathcal H_K(\ZZ)$ and uniformly on compact subsets
+of~$\mathbb S$, and
+\begin{equation}\label{eq:poisson-observation-cardinal-norm}
+\|\Pi_{\ZZ}F_t\|_{\mathcal H_K}^2
+=\frac1{2\pi}\int_{-\pi}^{\pi}
+\frac{|\widetilde\alpha_t(\theta)|^2}{\sigma(\theta)}\dd\theta,
+\qquad
+\widetilde\alpha_t(\theta):=
+\sum_{n\in\ZZ}\alpha_n(t)e^{-\ii n\theta}.
+\end{equation}
+Finally,
+\[
+F_t-\Pi_{\ZZ}F_t\in\mathcal H_K(\ZZ)^\perp
+\qquad\text{and}\qquad
+(F_t-\Pi_{\ZZ}F_t)(n)=0\quad(n\in\ZZ).
+\]
+Thus the integer orbit recovers the full Poisson observation channel if
+and only if $F_t\in\mathcal H_K(\ZZ)$; otherwise it recovers exactly the
+observable lattice component and nothing from the orthogonal component.
+\end{theorem}
+
+\begin{proof}
+Theorem~\ref{thm:poisson-channel-rkhs} gives
+$F_t=\mathcal U\widetilde\delta_t\in\mathcal H_K$ and the formula
+\[
+F_t(a)=\frac1t\int_{\RR}
+(\gamma-\bar\gamma)\,
+K\!\left(a,\frac{\gamma-\bar\gamma}{t}\right)\dd\nu(\gamma).
+\]
+Taking $a=n\in\ZZ$ gives the last expression in
+\eqref{eq:poisson-observation-integer-samples}.  Since
+$\mathcal U\Psi_n=K(\cdot,n)$ and evaluation in $\mathcal H_K$ is
+represented by $K(\cdot,n)$,
+\[
+F_t(n)
+=\langle F_t,K(\cdot,n)\rangle_{\mathcal H_K}
+=\langle \widetilde\delta_t,\Psi_n\rangle_{L^2(\omega)}.
+\]
+This proves \eqref{eq:poisson-observation-integer-samples}.
+
+For every $n\in\ZZ$, the vector $K(\cdot,n)$ belongs to
+$\mathcal H_K(\ZZ)$.  Hence
+$F_t-\Pi_{\ZZ}F_t$ is orthogonal to $K(\cdot,n)$, and therefore
+\[
+(\Pi_{\ZZ}F_t)(n)
+=\langle \Pi_{\ZZ}F_t,K(\cdot,n)\rangle_{\mathcal H_K}
+=\langle F_t,K(\cdot,n)\rangle_{\mathcal H_K}
+=F_t(n)=\alpha_n(t).
+\]
+Applying the sampling inequality
+\eqref{eq:lattice-sampling-HK} from
+Proposition~\ref{thm:poisson-lattice-sampling} to
+$\Pi_{\ZZ}F_t\in\mathcal H_K(\ZZ)$ proves that
+$\alpha(t)\in\ell^2(\ZZ)$ and gives the first two inequalities in
+\eqref{eq:poisson-observation-lattice-stability}.  The last inequality
+follows from the contractivity of the orthogonal projection and the
+unitarity of~$\mathcal U$.
+
+By Corollary~\ref{thm:poisson-cardinal-reconstruction}, there is a unique
+element of $\mathcal H_K(\ZZ)$ with lattice data $\alpha(t)$, and it is
+the cardinal sum in
+\eqref{eq:poisson-observation-cardinal-projection}.  Since
+$\Pi_{\ZZ}F_t$ has exactly those samples, uniqueness identifies the
+cardinal sum with $\Pi_{\ZZ}F_t$.  The convergence assertion and the norm
+identity \eqref{eq:poisson-observation-cardinal-norm} are precisely the
+convergence and norm statements of that corollary applied to
+$\alpha=\alpha(t)$.
+
+The residual belongs to $\mathcal H_K(\ZZ)^\perp$ by definition of
+$\Pi_{\ZZ}$, and the displayed computation above already shows that it
+vanishes at every integer.  If $F_t\in\mathcal H_K(\ZZ)$, then
+$\Pi_{\ZZ}F_t=F_t$, so the cardinal reconstruction is the full channel.
+Conversely, if the integer-orbit cardinal reconstruction is the full
+channel, then $F_t=\Pi_{\ZZ}F_t\in\mathcal H_K(\ZZ)$.
+\end{proof}
+
 \begin{remark}
 Proposition~\ref{thm:poisson-lattice-sampling}
-and Corollary~\ref{thm:poisson-cardinal-reconstruction} fit the standard principal
-shift-invariant sampling paradigm.
+and Corollary~\ref{thm:poisson-cardinal-reconstruction} fit the standard
+sampling paradigm for principal shift-invariant spaces.
 The sampling inequalities come from the bounded and invertible symbol
 $\sigma(\theta)=\pi\cosh(2(\pi-|\theta|))/\sinh(2\pi)$ and the
 frame characterization by Riesz bounds in

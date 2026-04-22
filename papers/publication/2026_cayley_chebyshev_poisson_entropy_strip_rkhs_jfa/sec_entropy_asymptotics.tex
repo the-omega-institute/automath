@@ -20,6 +20,11 @@ Lemma~\ref{lem:mode-parity-vanish}.
 uses the same finite mode calculus at order four and a finite centred
 fifth absolute moment to recover $(\sigma^2,\mu_3,\mu_4)$ from phase
 Fourier coefficients.
+\item Theorem~\ref{thm:finite-grid-poisson-moment-readout} is the
+corresponding finite-grid finite-time readout from exact phase samples.  It
+uses Proposition~\ref{prop:finite-grid-coefficient-readout} to remove
+aliasing for the retained finite mode polynomial and the uniform
+order-five remainder estimate to quantify the residual large-time error.
 \item Theorem~\ref{thm:poisson-kl-eighth} uses the mean, variance, finite
 centred seventh absolute moment,
 Lemma~\ref{lem:tail-uniform-cayley-mode-remainder},
@@ -580,6 +585,112 @@ and
 \]
 Subtracting the two cosine coefficients and multiplying by the displayed
 powers of~$t$ proves the three inversion formulas.
+\end{proof}
+
+The preceding proposition is a continuum phase-coefficient inversion.  The
+finite-grid version below separates the exact alias-free part from the
+large-time error; this is the additional estimate needed before the phase
+coefficients can be read from finitely many exact samples.
+
+\begin{theorem}[Finite-grid finite-time moment readout]%
+\label{thm:finite-grid-poisson-moment-readout}
+Let $\nu$ satisfy the hypotheses of
+Proposition~\ref{prop:cdim-poisson-cauchy-moment-inversion-by-phase-modes},
+and let $F_t$ be the corresponding phase profile.  Let $N\ge9$ be odd.
+For each $\zeta\in\mu_N$, let
+$\theta_\zeta\in(-\pi/2,\pi/2)$ be the unique angle with
+$\zeta=e^{2\ii\theta_\zeta}$, and set, for $k\ge1$,
+\begin{align*}
+\widehat F_{t,N}(k)
+&:=\frac1N\sum_{\zeta\in\mu_N}
+F_t(\theta_\zeta)\zeta^{-k},\\
+\mathcal C_{k,N}(t)&:=2\operatorname{Re}\widehat F_{t,N}(k),
+\qquad
+\mathcal S_{k,N}(t):=-2\operatorname{Im}\widehat F_{t,N}(k).
+\end{align*}
+Then there are constants $C_{\nu},T_{\nu}>0$ such that, for all
+$t\ge T_{\nu}$,
+\begin{align}
+\left|
+\mathcal C_{1,N}(t)-\mathcal C_{4,N}(t)
++\frac{\sigma^2}{2t^2}
+\right|
+&\le C_{\nu}t^{-5},\label{eq:finite-grid-sigma-readout}\\
+\left|
+\mathcal S_{3,N}(t)+\frac{\mu_3}{4t^3}
+\right|
+&\le C_{\nu}t^{-5},\label{eq:finite-grid-mu-three-readout}\\
+\left|
+\mathcal C_{4,N}(t)-\frac{\mu_4}{8t^4}
+\right|
+&\le C_{\nu}t^{-5}.\label{eq:finite-grid-mu-four-readout}
+\end{align}
+Consequently the same fixed finite phase grid recovers the moment
+coordinates in the large-time limit:
+\[
+\sigma^2=\lim_{t\to\infty}
+-2t^2\bigl(\mathcal C_{1,N}(t)-\mathcal C_{4,N}(t)\bigr),
+\qquad
+\mu_3=\lim_{t\to\infty}-4t^3\mathcal S_{3,N}(t),
+\]
+\[
+\mu_4=\lim_{t\to\infty}8t^4\mathcal C_{4,N}(t),
+\]
+with finite-time errors respectively $O(t^{-3})$, $O(t^{-2})$, and
+$O(t^{-1})$ after the displayed renormalizations.  These are deterministic
+estimates for exact phase samples.
+\end{theorem}
+
+\begin{proof}
+The proof of
+Proposition~\ref{prop:cdim-poisson-cauchy-moment-inversion-by-phase-modes},
+using Lemma~\ref{lem:tail-uniform-cayley-mode-remainder} at order~$4$,
+gives constants $C_0,T_0>0$ such that for $t\ge T_0$
+\[
+F_t(\theta)=Q_t(\theta)+r_t(\theta),
+\qquad
+\sup_{-\pi/2<\theta<\pi/2}|r_t(\theta)|\le C_0t^{-5},
+\]
+where
+\[
+Q_t(\theta)
+:=\frac{\sigma^2}{t^2}u_2(\tan\theta)
++\frac{\mu_3}{t^3}u_3(\tan\theta)
++\frac{\mu_4}{t^4}u_4(\tan\theta).
+\]
+By the finite Fourier formulas displayed in the proof of
+Proposition~\ref{prop:cdim-poisson-cauchy-moment-inversion-by-phase-modes},
+$Q_t$ is a Laurent polynomial in $z=e^{2\ii\theta}$ with Fourier support
+contained in $\{-4,\ldots,4\}$.  For $k=1,3,4$, the shifted polynomial
+$z^{-k}Q_t(z)$ has support contained in $\{-8,\ldots,8\}$.  Since
+$N\ge9$, Proposition~\ref{prop:finite-grid-coefficient-readout} applies
+with no aliasing to the $Q_t$ part of each coefficient.  The parity and
+orthogonality computation in the preceding proposition therefore gives
+\[
+\mathcal C_{1,N}^{Q}(t)-\mathcal C_{4,N}^{Q}(t)
+=-\frac{\sigma^2}{2t^2},
+\qquad
+\mathcal S_{3,N}^{Q}(t)=-\frac{\mu_3}{4t^3},
+\qquad
+\mathcal C_{4,N}^{Q}(t)=\frac{\mu_4}{8t^4},
+\]
+where the superscript indicates the same finite-grid readout applied to
+$Q_t$.
+
+For the remainder, the discrete averaging formula gives
+\[
+\left|\frac1N\sum_{\zeta\in\mu_N}
+r_t(\theta_\zeta)\zeta^{-k}\right|
+\le C_0t^{-5}
+\qquad(k\ge1).
+\]
+Thus the corresponding cosine and sine readout errors are at most
+$2C_0t^{-5}$, and the difference
+$\mathcal C_{1,N}-\mathcal C_{4,N}$ has error at most $4C_0t^{-5}$.
+Increasing the constant to one number $C_\nu$ proves
+\eqref{eq:finite-grid-sigma-readout}--\eqref{eq:finite-grid-mu-four-readout}.
+Multiplication by $2t^2$, $4t^3$, and $8t^4$ gives the final
+renormalized error orders and the three limits.
 \end{proof}
 
 \begin{lemma}[Mode parity cancellation]\label{lem:mode-parity-vanish}
