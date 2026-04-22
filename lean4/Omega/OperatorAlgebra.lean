@@ -6,6 +6,7 @@ import Omega.OperatorAlgebra.CircuitCondexpIndexMaxfiber
 import Omega.OperatorAlgebra.CircuitIndexEntropyLossNPHard
 import Omega.OperatorAlgebra.CircuitIndexGeKNPComplete
 import Omega.OperatorAlgebra.CircuitNoninjectiveNPComplete
+import Omega.OperatorAlgebra.CircuitKCollisionProjectorRankSharpPComplete
 import Omega.OperatorAlgebra.CircuitCollisionMomentTwoApproxNPlus2
 import Omega.OperatorAlgebra.CircuitS2SharpPComplete
 import Omega.OperatorAlgebra.CircuitSkFixedKSharpPComplete
