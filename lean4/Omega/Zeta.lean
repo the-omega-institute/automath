@@ -189,6 +189,7 @@ import Omega.Zeta.CriticalCircleStateDimensionLB
 import Omega.Zeta.CriticalLineGapEntropyRateZero
 import Omega.Zeta.CriticalLinePaircorrPurePoint
 import Omega.Zeta.CdimLocalizationZetaAS
+import Omega.Zeta.XiCdimLocalizationZetaRecoversS
 import Omega.Zeta.CyclicBlockTensorDeterminant
 import Omega.Zeta.CyclicDet
 import Omega.Zeta.CyclicDetectionBoundary
