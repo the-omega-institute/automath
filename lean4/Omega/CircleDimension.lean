@@ -373,3 +373,4 @@ import Omega.CircleDimension.XiPhaseFoldKernelMinimalCertificateRank
 import Omega.CircleDimension.ZeroDimLedgerNoCircleReplacement
 import Omega.CircleDimension.ZeroDimensionFinitePhaseImplementationBudget
 import Omega.CircleDimension.ZnProcyclicAndMinGenerators
+import Omega.CircleDimension.CdimS4V4PrymA2PolarizationClass
