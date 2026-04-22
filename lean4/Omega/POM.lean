@@ -75,6 +75,7 @@ import Omega.POM.CompleteHomogeneousPFInfty
 import Omega.POM.ConclusionHankelShiftPadicPrecisionSlope
 import Omega.POM.ConclusionGoldenSprtEsscherBoundarySymmetry
 import Omega.POM.CountertermAnomalyCancellation
+import Omega.POM.StrictificationSplitting
 import Omega.POM.SprtSymmetricThresholdError
 import Omega.POM.SprtSymmetricThresholdMeanTime
 import Omega.POM.StiffZeroHankelGoodReductionDimStability
