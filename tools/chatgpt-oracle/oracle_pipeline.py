@@ -398,6 +398,7 @@ MAX_STAGE_A_ROUNDS = 5
 MAX_STAGE_B_ROUNDS = 99  # No practical limit — must pass Oracle gate
 MAX_STAGE_C_ROUNDS = 4
 DEFAULT_TARGET_JOURNAL = "Advances in Mathematics"
+CLAUDE_ENABLED = True
 
 # Borrowed from outreach pipeline: escalation & early-skip constants
 DEEP_MODE_THRESHOLD = 3   # After N consecutive non-pass B rounds, escalate to deep mode
@@ -1226,6 +1227,8 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
     if dry_run:
         logger.info(f"[DRY RUN] claude_exec:\n{prompt[:200]}...")
         return "(dry run)"
+    if not CLAUDE_ENABLED:
+        raise RuntimeError("Claude disabled by --no-claude")
 
     wait_for_memory(tag="[claude]")
 
@@ -3020,6 +3023,11 @@ def run_stage_f(state: PaperState, *, dry_run: bool = False,
                     f"top suggestion: {codex_top_recommendation})")
         final_fit = fit_score
         recommended = codex_top_recommendation
+    elif not CLAUDE_ENABLED:
+        logger.info(f"{tag} F2 skipped (--no-claude, ambiguous fit="
+                    f"{fit_score}); using Codex recommendation")
+        final_fit = fit_score
+        recommended = codex_top_recommendation
     else:
         # Ambiguous zone 4-6: Claude second opinion is load-bearing
         logger.info(f"{tag} F2 — Claude review (ambiguous fit={fit_score})")
@@ -3565,8 +3573,21 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
         prompt = build_claude_stage_a_structural_audit_prompt(
             state.paper_dir, state.target_journal, audit_round)
         for attempt in range(1, 3):
-            out = claude_exec(prompt, work_dir=paper_path,
-                              timeout_seconds=900, dry_run=dry_run)
+            if not CLAUDE_ENABLED and not dry_run:
+                out = codex_exec(
+                    prompt + textwrap.dedent("""\
+
+                    Claude is unavailable and the pipeline is running in
+                    --no-claude test mode. Act only as a temporary structural
+                    auditor for this smoke test. Preserve the same JSON schema;
+                    do not edit files and do not claim independent Claude
+                    approval.
+                    """),
+                    work_dir=paper_path, timeout_seconds=900,
+                    model=model, dry_run=dry_run)
+            else:
+                out = claude_exec(prompt, work_dir=paper_path,
+                                  timeout_seconds=900, dry_run=dry_run)
             data = parse_json_from_output(out) if not dry_run else {
                 "metrics": {k: 8 for k in STAGE_A_CLAUDE_STRUCTURAL_METRICS},
                 "verdict": "pass",
@@ -3591,8 +3612,12 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
         codex_data = f_codex.result()
         claude_data = f_claude.result()
 
-    _record_claude_supervision(
-        state, f"stage_a_structural_audit_R{audit_round}", claude_data)
+    supervision_phase = (
+        f"stage_a_structural_audit_R{audit_round}"
+        if CLAUDE_ENABLED
+        else f"stage_a_structural_audit_codex_fallback_R{audit_round}"
+    )
+    _record_claude_supervision(state, supervision_phase, claude_data)
     audit = _combine_stage_a_audits(codex_data, claude_data)
     if not dry_run:
         _write_json_artifact(paper_path, "stage_a_audit.json", audit)
@@ -3653,6 +3678,30 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 "bad_example_mechanisms_to_track": [],
                 "human_decisions": [],
                 "codex_a0_instructions": [],
+            }
+            claude_scope_out = ""
+        elif not CLAUDE_ENABLED:
+            claude_scope_data = {
+                "valid": True,
+                "supervision_phase": "scope_brief",
+                "supervision_mode": "codex_chatgpt_test",
+                "paper_role": "pending Codex scope contract",
+                "central_scope": "Use Codex A0 to derive the scope contract "
+                                 "from the paper and main-paper context.",
+                "must_preserve": [],
+                "project_bindings": [],
+                "must_include_or_deepen": [],
+                "supporting_only": [],
+                "split_candidates_to_track": [],
+                "language_structure_risks": [],
+                "bad_example_mechanisms_to_track": [],
+                "human_decisions": [],
+                "codex_a0_instructions": [
+                    "Claude is unavailable in --no-claude test mode.",
+                    "Build scope_contract.md/json directly from the paper, "
+                    "the main-paper interface, and the research directive.",
+                    "Do not demote theorem scope merely to pass the gate.",
+                ],
             }
             claude_scope_out = ""
         else:
@@ -4101,6 +4150,15 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                         detail=f"compiled={compiled_b4}")
         save_state(state)
 
+        if not CLAUDE_ENABLED:
+            logger.info(f"{tag} Round {rnd}: B5 skipped (--no-claude); "
+                        "returning directly to Oracle re-review")
+            state.log_event("B", "claude_supervision_skipped",
+                            round_num=rnd,
+                            detail="--no-claude codex+chatgpt test mode")
+            save_state(state)
+            continue
+
         # ── B5: Claude supervisory review (review-only) ───────────
         logger.info(f"{tag} Round {rnd}: B5 — Claude supervision")
         claude_fix_prompt = textwrap.dedent(f"""\
@@ -4222,6 +4280,13 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 model: Optional[str] = None) -> bool:
     tag = f"[{state.paper_name}|C]"
     paper_path = Path(state.paper_dir)
+
+    if not CLAUDE_ENABLED and not dry_run:
+        state.error = "Stage C paused: Claude disabled by --no-claude"
+        logger.info(f"{tag} {state.error}")
+        state.log_event("C", "paused", detail=state.error)
+        save_state(state)
+        return False
 
     for rnd in range(state.stage_c_rounds + 1, MAX_STAGE_C_ROUNDS + 1):
         state.stage_c_rounds = rnd
@@ -4371,6 +4436,14 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
     state.log_event("D", "codex_placement_analysis",
                     detail=f"{len(placements)} placements proposed")
     save_state(state)
+
+    if not CLAUDE_ENABLED and not dry_run:
+        state.error = ("Stage D paused after Codex placement analysis: "
+                       "Claude disabled by --no-claude")
+        logger.info(f"{tag} {state.error}")
+        state.log_event("D", "paused", detail=state.error)
+        save_state(state)
+        return False
 
     # ── D2: Claude reviews admissibility + placement plan ─────────
     logger.info(f"{tag} D2 — Claude main-paper admissibility audit")
@@ -4924,9 +4997,16 @@ def run_new_paper_pipeline(
         }}
         ```
     """)
-    scope_out = claude_exec(scope_prompt, work_dir=Path(state.main_paper_dir)
-                            if state.main_paper_dir else paper_path,
-                            dry_run=dry_run)
+    scope_work_dir = Path(state.main_paper_dir) if state.main_paper_dir else paper_path
+    if not CLAUDE_ENABLED and not dry_run:
+        scope_out = codex_exec(
+            scope_prompt + "\n\nClaude is disabled by --no-claude; provide "
+            "a temporary Codex scope definition for smoke testing.",
+            work_dir=scope_work_dir, timeout_seconds=900,
+            model=model, dry_run=dry_run)
+    else:
+        scope_out = claude_exec(scope_prompt, work_dir=scope_work_dir,
+                                dry_run=dry_run)
     scope_data = parse_json_from_output(scope_out) if not dry_run else {
         "core_theorem": "dry run theorem",
         "imported_results": [],
@@ -4937,10 +5017,17 @@ def run_new_paper_pipeline(
         "differentiation": "dry run",
         "suggested_title": f"On {topic}",
     }
-    state.log_event("N", "claude_scope_definition",
+    scope_event = (
+        "claude_scope_definition"
+        if CLAUDE_ENABLED else "codex_fallback_scope_definition"
+    )
+    state.log_event("N", scope_event,
                     detail=json.dumps(scope_data, ensure_ascii=False)[:10000])
     _record_claude_supervision(
-        state, "new_paper_scope_definition", scope_data, raw=scope_out)
+        state,
+        "new_paper_scope_definition"
+        if CLAUDE_ENABLED else "new_paper_scope_definition_codex_fallback",
+        scope_data, raw=scope_out)
     save_state(state)
 
     # Pass scope constraints to N1
@@ -4949,12 +5036,15 @@ def run_new_paper_pipeline(
                 f"~{scope_data.get('target_pages', '?')} pages, "
                 f"core: {str(scope_data.get('core_theorem', ''))[:80]}")
 
-    # ── N1: Deep research (guided by Claude's scope) ─────────────
+    # ── N1: Deep research (guided by scope constraints) ──────────
     logger.info(f"{tag} N1 — Codex deep research (for {journal})")
     prompt_n1 = build_new_research_prompt(topic, outline, journal,
                                           main_paper_dir=state.main_paper_dir)
-    # Append Claude's scope constraints to guide codex
-    prompt_n1 += f"\n\n## Scope (defined by independent Claude review)\n{scope_constraints}\n"
+    scope_label = (
+        "defined by independent Claude review"
+        if CLAUDE_ENABLED else "temporary Codex fallback, --no-claude"
+    )
+    prompt_n1 += f"\n\n## Scope ({scope_label})\n{scope_constraints}\n"
     codex_exec(prompt_n1, work_dir=paper_path,
                timeout_seconds=3600, model=model, dry_run=dry_run)
     git_stage(paper_path, tag=tag)  # N1 intermediate
@@ -5487,6 +5577,7 @@ def print_status():
 
 
 def main() -> int:
+    global CLAUDE_ENABLED
     parser = argparse.ArgumentParser(
         description="Oracle Pipeline v2 — new-paper + review automation",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -5539,6 +5630,10 @@ def main() -> int:
     parser.add_argument("--skip-to", type=str, default="",
                         choices=["F", "A", "B", "C", "D"])
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--no-claude", action="store_true",
+                        help=("Disable Claude gates for Codex+ChatGPT smoke "
+                              "testing. Stage C/D will pause instead of "
+                              "claiming Claude approval."))
     parser.add_argument("--model", type=str, default=None)
     parser.add_argument("--oracle-timeout", type=int, default=7200)
     parser.add_argument("--status", action="store_true")
@@ -5550,6 +5645,7 @@ def main() -> int:
     parser.add_argument("--no-assign", action="store_true",
                         help="Ignore machine assignment, process all papers")
     args = parser.parse_args()
+    CLAUDE_ENABLED = not args.no_claude
 
     if args.status:
         print_status()
@@ -5570,7 +5666,7 @@ def main() -> int:
             print(f"Reset: {args.reset}")
         return 0
 
-    if not args.dry_run:
+    if not args.dry_run and CLAUDE_ENABLED:
         claude_ok, claude_msg = claude_health_status()
         if not claude_ok:
             logger.error("Claude supervision unavailable; refusing to start "
@@ -5579,6 +5675,9 @@ def main() -> int:
                          "availability recovers, or run --dry-run for a "
                          "non-mutating smoke test.")
             return 2
+    elif not args.dry_run:
+        logger.warning("Claude gates disabled by --no-claude; running "
+                       "Codex+ChatGPT smoke-test mode")
 
     # ── New-paper mode ─────────────────────────────────────────
     if args.new:
