@@ -200,6 +200,7 @@ import Omega.Conclusion.FixedResolutionScreenCorankAuditCostLaw
 import Omega.Conclusion.FixedConfidenceContinuousCertificateSqrtmCorrection
 import Omega.Conclusion.FixedTempSoftOrderProbabilisticFiniteStateDecidable
 import Omega.Conclusion.FoldHilbertRecognizable
+import Omega.Conclusion.PrimeRegisterGodelOrbitSuperexpLoglaw
 import Omega.Conclusion.FoldMultiscaleCarryDefect
 import Omega.Conclusion.FoldCollisionMod2StepJumpQ7
 import Omega.Conclusion.FoldAuditKLPythagoras
