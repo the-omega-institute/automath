@@ -96,4 +96,25 @@ theorem paper_killo_layered_prime_slices_finite_depth (k : ℕ) :
   refine ⟨primeSlice_pairwise, ?_⟩
   exact (layeredPrimeProductCode_injective k).hasLeftInverse
 
+/-- Paper label: `cor:killo-layered-necessity-minimality`. -/
+theorem paper_killo_layered_necessity_minimality (k : ℕ) :
+    (∀ j : Fin k, ∃ x y : Fin k → ℕ,
+      x ≠ y ∧
+        (∀ i : Fin k, i ≠ j → x i = y i) ∧
+        layeredPrimeProductCode (k := k) x ≠ layeredPrimeProductCode (k := k) y) ∧
+      ∃ decode : ℕ → Fin k → ℕ, Function.LeftInverse decode (layeredPrimeProductCode (k := k)) := by
+  refine ⟨?_, (paper_killo_layered_prime_slices_finite_depth k).2⟩
+  intro j
+  refine ⟨fun _ => 0, fun i => if i = j then 1 else 0, ?_, ?_, ?_⟩
+  · intro hxy
+    have hj := congrArg (fun f : Fin k → ℕ => f j) hxy
+    simp at hj
+  · intro i hij
+    simp [hij]
+  · intro hcode
+    have hxy : (fun i => if i = j then 1 else 0) = (fun _ : Fin k => 0) :=
+      (layeredPrimeProductCode_injective k hcode).symm
+    have hj := congrArg (fun f : Fin k → ℕ => f j) hxy
+    simp at hj
+
 end Omega.Folding

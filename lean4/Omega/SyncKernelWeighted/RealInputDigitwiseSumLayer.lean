@@ -1,9 +1,14 @@
 import Mathlib.Data.Real.Sqrt
+import Mathlib.Data.Matrix.Basic
+import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Tactic
 
 namespace Omega.SyncKernelWeighted
 
 noncomputable section
+
+open Matrix
 
 /-- The golden ratio appearing in the Parry closed forms. -/
 def goldenRatio : ℝ := (1 + Real.sqrt 5) / 2
@@ -11,7 +16,8 @@ def goldenRatio : ℝ := (1 + Real.sqrt 5) / 2
 private lemma goldenRatio_sq : goldenRatio ^ 2 = goldenRatio + 1 := by
   unfold goldenRatio
   have hs : (Real.sqrt 5) ^ 2 = 5 := by
-    rw [Real.sq_sqrt] <;> positivity
+    rw [Real.sq_sqrt]
+    positivity
   nlinarith
 
 private lemma goldenRatio_pos : 0 < goldenRatio := by
@@ -30,6 +36,22 @@ def fin3Tuple {α : Type*} (a₀ a₁ a₂ : α) : Fin 3 → α := fun i =>
 
 /-- The three sum symbols `0,1,2`. -/
 abbrev SumState := Fin 3
+
+/-- The forbidden length-two words in the digitwise-sum image shift. -/
+def real_input_digitwise_sum_sft_forbidden (i j : SumState) : Prop :=
+  (i = 1 ∧ j = 2) ∨ (i = 2 ∧ j = 1) ∨ (i = 2 ∧ j = 2)
+
+/-- The adjacency matrix of the three-state SFT obtained from the forbidden-word analysis. -/
+def real_input_digitwise_sum_sft_adjacency : Matrix SumState SumState ℚ :=
+  !![(1 : ℚ), 1, 1;
+    1, 1, 0;
+    1, 0, 0]
+
+/-- The zeta denominator matrix `I - z A_sum`. -/
+def real_input_digitwise_sum_sft_zetaMatrix (z : ℚ) : Matrix SumState SumState ℚ :=
+  !![(1 - z : ℚ), -z, -z;
+    -z, 1 - z, 0;
+    -z, 0, 1]
 
 /-- Concrete tag for the digitwise-sum pushforward of the golden-mean Parry chain. -/
 def digitwiseSumParryData : Unit := ()
@@ -99,6 +121,32 @@ private lemma stationary2 :
     pi_sum 0 * T_sum 0 2 + pi_sum 1 * T_sum 1 2 + pi_sum 2 * T_sum 2 2 = pi_sum 2 := by
   simp [T_sum, pi_sum, fin3Tuple]
   field_simp [goldenRatio_ne_zero]
+
+private lemma real_input_digitwise_sum_sft_tsum_zero_iff (i j : SumState) :
+    T_sum i j = 0 ↔ real_input_digitwise_sum_sft_forbidden i j := by
+  fin_cases i <;> fin_cases j <;>
+    simp [T_sum, fin3Tuple, real_input_digitwise_sum_sft_forbidden, goldenRatio_ne_zero]
+
+private lemma real_input_digitwise_sum_sft_adjacency_zero_iff (i j : SumState) :
+    real_input_digitwise_sum_sft_adjacency i j = 0 ↔ real_input_digitwise_sum_sft_forbidden i j := by
+  fin_cases i <;> fin_cases j <;>
+    simp [real_input_digitwise_sum_sft_adjacency, real_input_digitwise_sum_sft_forbidden]
+
+private lemma real_input_digitwise_sum_sft_zeta_det (z : ℚ) :
+    (real_input_digitwise_sum_sft_zetaMatrix z).det = 1 - 2 * z - z ^ 2 + z ^ 3 := by
+  simp [real_input_digitwise_sum_sft_zetaMatrix, Matrix.det_fin_three]
+  ring
+
+/-- Paper label: `prop:real-input-digitwise-sum-sft`. -/
+theorem paper_real_input_digitwise_sum_sft :
+    (∀ i j : SumState, T_sum i j = 0 ↔ real_input_digitwise_sum_sft_forbidden i j) ∧
+      (∀ i j : SumState,
+        real_input_digitwise_sum_sft_adjacency i j = 0 ↔
+          real_input_digitwise_sum_sft_forbidden i j) ∧
+      (∀ z : ℚ,
+        (real_input_digitwise_sum_sft_zetaMatrix z).det = 1 - 2 * z - z ^ 2 + z ^ 3) := by
+  refine ⟨real_input_digitwise_sum_sft_tsum_zero_iff, ?_, real_input_digitwise_sum_sft_zeta_det⟩
+  exact real_input_digitwise_sum_sft_adjacency_zero_iff
 
 /-- Paper label: `prop:real-input-digitwise-sum-parry-markov`. -/
 theorem paper_real_input_digitwise_sum_parry_markov :
