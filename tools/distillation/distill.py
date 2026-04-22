@@ -71,6 +71,10 @@ POLICY_VERSION = 1
 ORACLE_SERVER = "http://localhost:8765"
 DEFAULT_ORACLE_MODEL = "chatgpt-5.4-pro-extended"
 DEFAULT_ORACLE_TIMEOUT = 7200
+REVIEW_BACKENDS = ("codex", "codex-claude", "codex-oracle")
+DEFAULT_REVIEW_BACKEND = os.environ.get("DISTILL_REVIEW_BACKEND", "codex-claude")
+if DEFAULT_REVIEW_BACKEND not in REVIEW_BACKENDS:
+    DEFAULT_REVIEW_BACKEND = "codex-claude"
 
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 logger = logging.getLogger("distill")
@@ -1115,8 +1119,12 @@ def _build_prior_feedback_block(state: DistillState) -> str:
         for stage_key, review_data in state.scores.items():
             if isinstance(review_data, dict):
                 codex_s = review_data.get("codex", {}).get("score", "?")
-                claude_s = review_data.get("claude", {}).get("score", "?")
-                score_lines.append(f"{stage_key}: codex={codex_s} claude={claude_s}")
+                secondary_key = "oracle" if "oracle" in review_data else "claude"
+                secondary_s = review_data.get(secondary_key, {}).get("score", "?")
+                passed = review_data.get("gate_passed", "?")
+                score_lines.append(
+                    f"{stage_key}: codex={codex_s} {secondary_key}={secondary_s} pass={passed}"
+                )
         if score_lines:
             lines.append("Score history: " + ", ".join(score_lines[-4:]))
     return "\n".join(lines)
@@ -1585,17 +1593,22 @@ def _review_score_summary(state: DistillState) -> dict[str, Any]:
     """Summarize persisted review scores for policy status."""
     minimums = []
     latest_key = ""
+    latest_passed: Optional[bool] = None
     for key, value in state.scores.items():
         if not isinstance(value, dict):
             continue
         latest_key = key
+        if "gate_passed" in value:
+            latest_passed = bool(value.get("gate_passed"))
         minimum = value.get("minimum_score")
         if minimum is None:
-            codex_score = value.get("codex", {}).get("score")
-            claude_score = value.get("claude", {}).get("score")
             numeric = [
                 float(score)
-                for score in (codex_score, claude_score)
+                for score in (
+                    value.get("codex", {}).get("score"),
+                    value.get("claude", {}).get("score"),
+                    value.get("oracle", {}).get("score"),
+                )
                 if isinstance(score, (int, float))
             ]
             minimum = min(numeric) if numeric else None
@@ -1604,7 +1617,11 @@ def _review_score_summary(state: DistillState) -> dict[str, Any]:
     return {
         "latest": latest_key,
         "minimum_seen": min(minimums) if minimums else None,
-        "latest_passed": bool(minimums and minimums[-1] >= SCORE_PASS_THRESHOLD),
+        "latest_passed": (
+            latest_passed
+            if latest_passed is not None
+            else bool(minimums and minimums[-1] >= SCORE_PASS_THRESHOLD)
+        ),
     }
 
 
@@ -3252,35 +3269,135 @@ def _claude_score(
     return _parse_score_response(response)
 
 
+def _oracle_score(
+    state: DistillState,
+    writebacks: list[dict[str, Any]],
+    payload: dict[str, Any],
+    section_contexts: str,
+    dry_run: bool,
+    oracle_timeout: int,
+    oracle_model: str,
+    oracle_pdf: Optional[Path],
+) -> dict[str, Any]:
+    """Run the ChatGPT Oracle review prompt and return a normalized score."""
+    if dry_run:
+        return {"score": 8, "verdict": "accept", "issues": [], "required_changes": []}
+    prompt = _load_prompt("review_oracle").format(
+        mathematician=state.name,
+        payload=_json_block(payload),
+        writebacks=_json_block(writebacks),
+        section_contexts=section_contexts,
+        score_schema=_score_schema(),
+    )
+    response = chatgpt_oracle_exec(
+        state,
+        prompt,
+        log_tag="W_review_oracle",
+        timeout_seconds=oracle_timeout,
+        model=oracle_model,
+        pdf_path=oracle_pdf,
+        dry_run=False,
+    )
+    return _parse_score_response(response)
+
+
+def _score_required_changes(review: dict[str, Any]) -> list[str]:
+    """Return nonempty required changes from a reviewer result."""
+    raw = review.get("required_changes", [])
+    if isinstance(raw, list):
+        return [str(item).strip() for item in raw if str(item).strip()]
+    if isinstance(raw, str) and raw.strip():
+        return [raw.strip()]
+    return []
+
+
+def _combine_review_scores(scores: list[int]) -> int:
+    """Combine one or two reviewer scores using the existing lenient rule."""
+    if not scores:
+        return 0
+    if len(scores) == 1:
+        return scores[0]
+    low = min(scores)
+    high = max(scores)
+    if low >= SCORE_PASS_THRESHOLD:
+        return low
+    if high >= SCORE_PASS_THRESHOLD and low >= 4:
+        return high
+    if high >= SCORE_PASS_THRESHOLD and low < 4:
+        return 6
+    return high
+
+
 def _review_writebacks(
     state: DistillState,
     writebacks: list[dict[str, Any]],
     payload: dict[str, Any],
     section_contexts: str,
     dry_run: bool,
+    review_backend: str = DEFAULT_REVIEW_BACKEND,
+    oracle_timeout: int = DEFAULT_ORACLE_TIMEOUT,
+    oracle_model: str = DEFAULT_ORACLE_MODEL,
+    oracle_pdf: Optional[Path] = None,
 ) -> dict[str, Any]:
-    """Run the dual-review gate for writeback proposals.
+    """Run the configured review gate for writeback proposals.
 
     Uses parallel independent scoring. If one reviewer returns empty JSON,
     falls back to the other; if both empty, returns score 0 so the round
     retries.  Ported from oracle_pipeline.py A3+A4 parallel dual review.
     """
+    if review_backend not in REVIEW_BACKENDS:
+        review_backend = DEFAULT_REVIEW_BACKEND
+
     with ThreadPoolExecutor(max_workers=2) as executor:
         codex_future = executor.submit(_codex_score, state, writebacks, payload, dry_run)
-        claude_future = executor.submit(
-            _claude_score,
-            state,
-            writebacks,
-            section_contexts,
-            dry_run,
-        )
+        secondary_name = ""
+        secondary_future = None
+        if review_backend == "codex-claude":
+            secondary_name = "claude"
+            secondary_future = executor.submit(
+                _claude_score,
+                state,
+                writebacks,
+                section_contexts,
+                dry_run,
+            )
+        elif review_backend == "codex-oracle":
+            secondary_name = "oracle"
+            secondary_future = executor.submit(
+                _oracle_score,
+                state,
+                writebacks,
+                payload,
+                section_contexts,
+                dry_run,
+                oracle_timeout,
+                oracle_model,
+                oracle_pdf,
+            )
         codex_review = codex_future.result()
-        claude_review = claude_future.result()
+        secondary_review = (
+            secondary_future.result()
+            if secondary_future is not None
+            else {
+                "score": 0,
+                "verdict": "unavailable",
+                "issues": ["No secondary reviewer configured"],
+                "required_changes": [],
+                "unavailable": True,
+                "retryable": False,
+            }
+        )
 
-    codex_s = codex_review.get("score", 0)
-    claude_s = claude_review.get("score", 0)
+    codex_s = int(codex_review.get("score", 0) or 0)
+    secondary_s = int(secondary_review.get("score", 0) or 0)
     codex_ok = codex_s > 0
-    claude_ok = claude_s > 0
+    secondary_ok = secondary_s > 0
+    named_reviews = [("codex", codex_review)]
+    if secondary_name:
+        named_reviews.append((secondary_name, secondary_review))
+    claude_s = secondary_s
+    claude_ok = secondary_ok
+    claude_review = secondary_review
 
     if codex_ok and claude_ok:
         # Lenient dual-review: pass if EITHER reviewer passes AND neither
@@ -3300,13 +3417,13 @@ def _review_writebacks(
         else:
             final_score = high  # neither passes — use the better one
     elif codex_ok:
-        logger.warning("Claude review empty, using codex=%d", codex_s)
+        logger.warning("%s review unavailable, using codex=%d", secondary_name or "secondary", codex_s)
         final_score = codex_s
     elif claude_ok:
-        logger.warning("Codex review empty, using claude=%d", claude_s)
+        logger.warning("Codex review unavailable, using %s=%d", secondary_name or "secondary", claude_s)
         final_score = claude_s
     else:
-        logger.warning("Both reviewers returned empty JSON")
+        logger.warning("No configured reviewer returned usable JSON")
         final_score = 0
 
     # Detect FUNDAMENTAL depth issue: both reviewers say "reject"
@@ -3316,18 +3433,53 @@ def _review_writebacks(
         and codex_review.get("verdict") == "reject"
         and claude_review.get("verdict") == "reject"
     )
-
-    logger.info(
-        "Dual review: codex=%d claude=%d final=%d both_reject=%s",
-        codex_s, claude_s, final_score, both_reject,
+    available_reviews = [
+        (name, review)
+        for name, review in named_reviews
+        if int(review.get("score", 0) or 0) > 0
+    ]
+    blockers = []
+    for name, review in available_reviews:
+        score = int(review.get("score", 0) or 0)
+        verdict = str(review.get("verdict", "")).strip().lower()
+        if score < SCORE_PASS_THRESHOLD:
+            blockers.append(f"{name}: score {score} below threshold")
+        elif verdict != "accept":
+            blockers.append(f"{name}: verdict={verdict or 'missing'}")
+        elif _score_required_changes(review):
+            blockers.append(f"{name}: required_changes present")
+    gate_passed = bool(
+        codex_ok
+        and final_score >= SCORE_PASS_THRESHOLD
+        and not blockers
     )
 
-    return {
+    logger.info(
+        "Review gate: backend=%s codex=%d %s=%d final=%d passed=%s blockers=%s",
+        review_backend,
+        codex_s,
+        secondary_name or "secondary",
+        claude_s,
+        final_score,
+        gate_passed,
+        blockers[:3],
+    )
+
+    result = {
         "codex": codex_review,
-        "claude": claude_review,
         "minimum_score": final_score,
+        "gate_passed": gate_passed,
+        "blocking_reviewers": blockers,
+        "review_backend": review_backend,
         "both_reject": both_reject,
     }
+    if secondary_name == "oracle":
+        result["oracle"] = secondary_review
+    elif secondary_name == "claude":
+        result["claude"] = secondary_review
+    else:
+        result["secondary"] = secondary_review
+    return result
 
 
 def _find_insert_position(text: str) -> int:
@@ -3518,6 +3670,10 @@ def run_stage_w(
     state: DistillState,
     dry_run: bool = False,
     supervised: bool = True,
+    review_backend: str = DEFAULT_REVIEW_BACKEND,
+    oracle_timeout: int = DEFAULT_ORACLE_TIMEOUT,
+    oracle_model: str = DEFAULT_ORACLE_MODEL,
+    oracle_pdf: Optional[Path] = None,
 ) -> bool:
     """Run Stage W writeback generation, dual review, and optional application.
 
@@ -3673,10 +3829,20 @@ def run_stage_w(
                 continue
             logger.info("Anti-fake: %s", reason)
 
-        review = _review_writebacks(state, writebacks, payload, section_contexts, dry_run)
+        review = _review_writebacks(
+            state,
+            writebacks,
+            payload,
+            section_contexts,
+            dry_run,
+            review_backend=review_backend,
+            oracle_timeout=oracle_timeout,
+            oracle_model=oracle_model,
+            oracle_pdf=oracle_pdf,
+        )
         attempts.append({"attempt": attempt, "review": review, "writebacks": writebacks})
 
-        if review["minimum_score"] >= SCORE_PASS_THRESHOLD:
+        if review.get("gate_passed"):
             accepted_writebacks = writebacks
             accepted_review = review
             break
@@ -3691,16 +3857,18 @@ def run_stage_w(
             )
             # Build union of concerns from both reviewers
             codex_issues = review.get("codex", {}).get("issues", [])
-            claude_issues = review.get("claude", {}).get("issues", [])
             codex_changes = review.get("codex", {}).get("required_changes", [])
-            claude_changes = review.get("claude", {}).get("required_changes", [])
+            secondary_key = "oracle" if "oracle" in review else "claude"
+            secondary_review = review.get(secondary_key, {})
+            secondary_issues = secondary_review.get("issues", [])
+            secondary_changes = secondary_review.get("required_changes", [])
             deep_feedback = json.dumps({
                 "codex_issues": codex_issues,
-                "claude_issues": claude_issues,
+                f"{secondary_key}_issues": secondary_issues,
                 "codex_required_changes": codex_changes,
-                "claude_required_changes": claude_changes,
+                f"{secondary_key}_required_changes": secondary_changes,
                 "codex_score": review.get("codex", {}).get("score", 0),
-                "claude_score": review.get("claude", {}).get("score", 0),
+                f"{secondary_key}_score": secondary_review.get("score", 0),
                 "escalation_round": deep_rounds,
             }, ensure_ascii=False, indent=2)[:4000]
             feedback = (
@@ -3712,16 +3880,18 @@ def run_stage_w(
             state.prior_feedback.append(
                 f"W attempt {attempt}: A-DEEP escalation {deep_rounds} "
                 f"(codex={review.get('codex', {}).get('score', 0)}, "
-                f"claude={review.get('claude', {}).get('score', 0)})"
+                f"{secondary_key}={secondary_review.get('score', 0)})"
             )
             save_state(state)
             continue
 
         feedback = _json_block(review)
+        secondary_key = "oracle" if "oracle" in review else "claude"
+        secondary_score = review.get(secondary_key, {}).get("score", 0)
         state.prior_feedback.append(
             f"W attempt {attempt}: review gate below {SCORE_PASS_THRESHOLD} "
             f"(codex={review.get('codex', {}).get('score', 0)}, "
-            f"claude={review.get('claude', {}).get('score', 0)})"
+            f"{secondary_key}={secondary_score})"
         )
         save_state(state)  # persist feedback in case of crash/restart
 
@@ -4191,6 +4361,7 @@ def run_pipeline(
     skip_to: Optional[str] = None,
     dry_run: bool = False,
     supervised: bool = True,
+    review_backend: str = DEFAULT_REVIEW_BACKEND,
     oracle_research: bool = False,
     oracle_timeout: int = DEFAULT_ORACLE_TIMEOUT,
     oracle_model: str = DEFAULT_ORACLE_MODEL,
@@ -4264,7 +4435,15 @@ def run_pipeline(
         elif stage == "G":
             ok = run_stage_g(state, dry_run=dry_run)
         elif stage == "W":
-            ok = run_stage_w(state, dry_run=dry_run, supervised=supervised)
+            ok = run_stage_w(
+                state,
+                dry_run=dry_run,
+                supervised=supervised,
+                review_backend=review_backend,
+                oracle_timeout=oracle_timeout,
+                oracle_model=oracle_model,
+                oracle_pdf=oracle_pdf,
+            )
         elif stage == "E":
             ok = run_stage_e(state, dry_run=dry_run)
         else:
@@ -4343,6 +4522,7 @@ def _validate_environment(name: Optional[str] = None) -> bool:
         "deep_research_directive.txt",
         "review_codex.txt",
         "review_claude.txt",
+        "review_oracle.txt",
     ]
     for prompt_name in required_prompts:
         path = PROMPTS_DIR / prompt_name
@@ -4366,6 +4546,7 @@ def _validate_environment(name: Optional[str] = None) -> bool:
                     logger.warning("Expected artifact missing for %s: %s", stage, filename)
     logger.info("Codex path: %s", CODEX_PATH)
     logger.info("Claude path: %s", CLAUDE_PATH)
+    logger.info("Default review backend: %s", DEFAULT_REVIEW_BACKEND)
     return ok
 
 
@@ -4381,6 +4562,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--validate", action="store_true", help="Validate local configuration")
     parser.add_argument("--supervised", action="store_true", default=True, help="Ask before applying writebacks")
     parser.add_argument("--auto-apply", action="store_true", help="Apply writebacks without prompting")
+    parser.add_argument(
+        "--review-backend",
+        choices=REVIEW_BACKENDS,
+        default=DEFAULT_REVIEW_BACKEND,
+        help="Review gate backend: codex, codex-claude, or codex-oracle",
+    )
     parser.add_argument(
         "--oracle-research",
         action="store_true",
@@ -4434,6 +4621,7 @@ def main(argv: Optional[list[str]] = None) -> int:
                 skip_to=args.skip_to,
                 dry_run=args.dry_run,
                 supervised=supervised,
+                review_backend=args.review_backend,
                 oracle_research=args.oracle_research,
                 oracle_timeout=args.oracle_timeout,
                 oracle_model=args.oracle_model,

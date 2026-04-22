@@ -40,6 +40,8 @@ Tabs without `?oracle=N` stay dormant so normal ChatGPT use is not affected.
 
 ## Notes
 
-The distillation pipeline uses this bridge only as an optional Stage R deep
-research oracle. It does not let ChatGPT write paper files directly; writeback,
-review gates, and commit hygiene remain in `tools/distillation/distill.py`.
+The distillation pipeline can use this bridge as an optional Stage R deep
+research oracle (`--oracle-research`) and as an optional Stage W second reviewer
+(`--review-backend codex-oracle`). It does not let ChatGPT write paper files
+directly; writeback generation, review gates, and commit hygiene remain in
+`tools/distillation/distill.py`.
