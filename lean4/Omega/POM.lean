@@ -21,6 +21,7 @@ import Omega.POM.AnomSingleMomentCompleteEquivalence
 import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.WreathArtinFactorization
 import Omega.POM.BCDiscreteJacobianStrictification
+import Omega.POM.BCBianchi
 import Omega.POM.BCDiscreteStokes
 import Omega.POM.BCDefectMultiplicative2Cocycle
 import Omega.POM.BCRadonNikodymCurvature
