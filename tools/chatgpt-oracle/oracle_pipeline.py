@@ -3459,14 +3459,20 @@ def _deterministic_theorem_inventory(paper_path: Path) -> dict:
         })
 
     gap_patterns = (
-        "todo", "tbd", "proof omitted", "omitted", "sketch",
-        "to be completed", "we leave", "future work",
+        r"\bTODO\b",
+        r"\bTBD\b",
+        r"proof\s+(?:is\s+)?omitted",
+        r"details\s+(?:are\s+)?omitted",
+        r"we\s+omit\s+the\s+proof",
+        r"left\s+to\s+the\s+reader",
+        r"to\s+be\s+completed",
+        r"we\s+leave\s+.*?(?:proof|verification|argument)",
     )
-    lower = text.lower()
     proof_gaps = []
     for pat in gap_patterns:
-        pos = lower.find(pat)
-        if pos >= 0:
+        m = re.search(pat, text, re.IGNORECASE | re.DOTALL)
+        if m:
+            pos = m.start()
             proof_gaps.append({
                 "pattern": pat,
                 "context": _strip_tex_for_contract(text[max(0, pos - 180):pos + 240]),
