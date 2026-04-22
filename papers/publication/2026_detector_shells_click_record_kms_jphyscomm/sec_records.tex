@@ -84,7 +84,7 @@ P^{\mathrm P}(1,0)=1 .
 The detector law and the Parry law have the same support and each has only the single free transition probability out of state $0$. Therefore they coincide if and only if $p_\beta=\varphi^{-1}$. Since $p_\beta=e^{-\Gamma_+\Delta\tau}$, this is equivalent to $\Gamma_+\Delta\tau=\log\varphi$.
 \end{proof}
 
-The threshold in Proposition~\ref{prop:ideal-main} should not be confused with a generic isotherm. It identifies the unique point at which a sampled detector record realizes the zero-jitter, maximum-entropy law compatible with the dead-time grammar. The resulting shell will therefore depend on the detector gap and on the sampling design even before curved-spacetime geometry is introduced.
+The threshold in Proposition~\ref{prop:ideal-main} should not be confused with a generic isotherm. The Parry computation itself is elementary once the golden-mean Markov chain is fixed; the point of the proposition is that the sampled detector clock realizes that benchmark at the concrete setting $\Gamma_+\Delta\tau=\log\varphi$. The resulting shell will therefore depend on the detector gap and on the sampling design even before curved-spacetime geometry is introduced.
 
 \subsection{Finite recovery, renewal structure, and exact \texorpdfstring{$1$}{1}-dependence}
 
@@ -375,27 +375,62 @@ Below $\Gamma_c$ all lag-$n$ covariances with $n\ge1$ are negative; above $\Gamm
 \begin{proof}
 The renewal statement, the kernel formula for $g_k$, the closed form~\eqref{eq:gap-closed-main}, and full support are Lemma~\ref{lem:renewal-gap-main}. It remains to derive the hazard, covariance, and exact-dependence conclusions.
 
-Summing the closed form over $j\ge k$ gives
-\[
-\sum_{j\ge k}g_j=
-\frac{\kappa_{\mathrm r}p^k-\Gamma c^k}{\kappa_{\mathrm r}-\Gamma}
-\]
-and therefore~\eqref{eq:hazard-main}. The tail is a positive survival probability, so the raw factors $\kappa_{\mathrm r}p^k-\Gamma c^k$ all have the same sign as $\kappa_{\mathrm r}-\Gamma$. Direct subtraction yields
+Summing the closed form over $j\ge k$ gives the survival tail
 \[
 \begin{aligned}
-h_{k+1}-h_k
+S_k:=\PP(G\ge k)
+&=\sum_{j\ge k}
+\frac{\kappa_{\mathrm r}(1-p)p^j-\Gamma(1-c)c^j}
+     {\kappa_{\mathrm r}-\Gamma}  \\
 &=
-\frac{\kappa_{\mathrm r}\Gamma(p-c)^2p^kc^k}
-{(\kappa_{\mathrm r}p^k-\Gamma c^k)(\kappa_{\mathrm r}p^{k+1}-\Gamma c^{k+1})}>0 .
+\frac{\kappa_{\mathrm r}(1-p)p^k/(1-p)
+      -\Gamma(1-c)c^k/(1-c)}
+     {\kappa_{\mathrm r}-\Gamma}  \\
+&=
+\frac{\kappa_{\mathrm r}p^k-\Gamma c^k}
+     {\kappa_{\mathrm r}-\Gamma}.
 \end{aligned}
 \]
+Since $S_k>0$ for every $k$, the factor
+$\kappa_{\mathrm r}p^k-\Gamma c^k$ has the same sign as
+$\kappa_{\mathrm r}-\Gamma$ and is never zero. Therefore
+\[
+h_k=\frac{g_k}{S_k}
+=
+\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}
+     {\kappa_{\mathrm r}p^k-\Gamma c^k},
+\]
+which is~\eqref{eq:hazard-main}. Equivalently
+$h_k=1-S_{k+1}/S_k$, so
+\[
+h_{k+1}-h_k
+=
+\frac{S_{k+1}^2-S_kS_{k+2}}{S_kS_{k+1}}.
+\]
+Substituting the displayed expression for $S_k$ gives
+\[
+S_{k+1}^2-S_kS_{k+2}
+=
+\frac{\kappa_{\mathrm r}\Gamma p^kc^k(p-c)^2}
+     {(\kappa_{\mathrm r}-\Gamma)^2},
+\]
+and hence
+\[
+h_{k+1}-h_k
+=
+\frac{\kappa_{\mathrm r}\Gamma(p-c)^2p^kc^k}
+{(\kappa_{\mathrm r}p^k-\Gamma c^k)(\kappa_{\mathrm r}p^{k+1}-\Gamma c^{k+1})}>0 .
+\]
+Here $p\neq c$ because $\kappa_{\mathrm r}\neq\Gamma$, the numerator is
+strictly positive, and the denominator is positive because its two factors
+have the common sign of $\kappa_{\mathrm r}-\Gamma$.
 At $\kappa_{\mathrm r}=\Gamma$, the explicit equal-rate formulas in Remark~\ref{rem:edge-cases} give the same strict inequality for $h_{k+1}-h_k$.
 The gap law has full support for positive parameters, and \Cref{lem:hazard-obstruction-main} then excludes every finite Markov order.
 
 The covariance formula is Lemma~\ref{lem:covariance-transfer-main}, which is identical to~\eqref{eq:cov-main}. By Lemma~\ref{lem:stationary-main}, $a-\rho<0$. Lemma~\ref{lem:critical-rate-main} gives the single zero of $\lambda$ and its sign on both sides. Hence the lag-one covariance is always negative; for $n\ge2$ all covariances vanish at $\Gamma=\Gamma_c$, are negative for $\Gamma<\Gamma_c$, and alternate in sign for $\Gamma>\Gamma_c$. Finally, Lemma~\ref{lem:one-dep-criterion-main} gives the stated equivalence between exact $1$-dependence and $\Gamma=\Gamma_c$.
 \end{proof}
 
-The memory-transition threshold is therefore not a softened version of the ideal one. It is a different record-level transition inside a full-support renewal class. The same recovery mechanism is incompatible both with the Parry support constraint and with a Bernoulli full-support benchmark, as made explicit below. \Cref{fig:hazard-cov} illustrates both the strictly increasing hazard and the covariance phase change across $\Gamma_c$.
+The memory-transition threshold is therefore not a softened version of the ideal one. It is a different record-level transition inside a full-support renewal class. The essential feature is the exact hidden-eigenvalue criterion: the nontrivial hidden mode vanishes precisely at $\Gamma_c$, labelled kernels factor through stationarity at that point, and away from it the lag-two covariance obstructs exact $1$-dependence. The same recovery mechanism is incompatible both with the Parry support constraint and with a Bernoulli full-support benchmark, as made explicit below. \Cref{fig:hazard-cov} illustrates both the strictly increasing hazard and the covariance phase change across $\Gamma_c$.
 
 \begin{figure}[t]
 \centering
