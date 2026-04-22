@@ -6194,6 +6194,7 @@ def run_paper_pipeline(
     target_journal: str = "",
     main_paper_dir: str = "",
     skip_to: str = "",
+    stop_after: str = "",
     dry_run: bool = False,
     model: Optional[str] = None,
     oracle_timeout: int = 7200,
@@ -6288,10 +6289,16 @@ def run_paper_pipeline(
             save_state(state)
             return False, state
 
-        # Advance to next stage
+        # Advance to next stage.  stop_after lets supervised batches push
+        # papers to a precise gate, e.g. A/B complete and ready for C, without
+        # consuming final-review or backflow resources prematurely.
         idx = STAGE_ORDER.index(stage)
         state.current_stage = STAGE_ORDER[idx + 1]
         save_state(state)
+        if stop_after and stage == stop_after:
+            logger.info(f"{tag} STOP-AFTER {stop_after}: "
+                        f"parked at Stage {state.current_stage}")
+            return True, state
 
     state.completed_at = datetime.now().isoformat()
     save_state(state)
@@ -6698,6 +6705,8 @@ def main() -> int:
               oracle_pipeline.py --new --outline notes.md --target-journal "JEMS"
               # Review existing paper:
               oracle_pipeline.py --paper theory/2026_xxx/ --target-journal "Adv. Math."
+              # Push all current drafts through A/B only:
+              oracle_pipeline.py --all --parallel 2 --no-claude --stop-after B
               # All papers, parallel:
               oracle_pipeline.py --all --parallel 2 --continuous
               # Status:
@@ -6727,6 +6736,11 @@ def main() -> int:
     parser.add_argument("--continuous", action="store_true")
     parser.add_argument("--skip-to", type=str, default="",
                         choices=["F", "A", "B", "C", "D"])
+    parser.add_argument("--stop-after", type=str, default="",
+                        choices=["F", "A", "B", "C", "D"],
+                        help=("Stop after the named stage succeeds and park "
+                              "the paper at the next stage. Use "
+                              "`--stop-after B` for A/B-only batches."))
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--no-claude", action="store_true",
                         help=("Disable Claude gates for Codex+ChatGPT smoke "
@@ -6835,6 +6849,7 @@ def main() -> int:
         target_journal=args.target_journal,
         main_paper_dir=args.main_paper,
         skip_to=args.skip_to,
+        stop_after=args.stop_after,
         dry_run=args.dry_run,
         model=args.model,
         oracle_timeout=args.oracle_timeout,
