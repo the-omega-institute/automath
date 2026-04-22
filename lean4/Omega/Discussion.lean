@@ -34,6 +34,7 @@ import Omega.Discussion.HypercubeStokesFourierBinomial
 import Omega.Discussion.IndexGapStrongConverse
 import Omega.Discussion.LambdaEquivariantPrimitive
 import Omega.Discussion.LedgerResidualMutualinfoFactorization
+import Omega.Discussion.DiscreteStokesGaugeLeyang
 import Omega.Discussion.NoHairIffZk
 import Omega.Discussion.NullGatedDotproductAddressability
 import Omega.Discussion.RandomnessCostLowerBound
