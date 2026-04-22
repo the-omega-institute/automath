@@ -48,6 +48,7 @@ import Omega.Zeta.XiExtremeResonancePositivity
 import Omega.Zeta.XiExtremeResonanceCriterion
 import Omega.Zeta.XiExtremeResonanceToeplitzThreshold
 import Omega.Zeta.XiHorizonZkFiberpathStokesDiscriminant
+import Omega.Zeta.XiHypercubeWeightedLaplacianHeatTraceFactorization
 import Omega.Zeta.XiOptimalAllocationUnderProductBound
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
