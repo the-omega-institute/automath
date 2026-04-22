@@ -53,6 +53,7 @@ import Omega.SyncKernelWeighted.PressureUnitCircleBranchAngles
 import Omega.SyncKernelWeighted.PressureUnitRootModulusThreshold
 import Omega.SyncKernelWeighted.PrimitiveSharpPhaseLimit
 import Omega.SyncKernelWeighted.PrimitiveFiniteSym
+import Omega.SyncKernelWeighted.PrimitiveHalfturnSignLaw
 import Omega.SyncKernelWeighted.RateCenterOmegaThreshold
 import Omega.SyncKernelWeighted.RateCenterPerronDegreeMultiple6
 import Omega.SyncKernelWeighted.RateCenterRstar
@@ -61,6 +62,7 @@ import Omega.SyncKernelWeighted.RateCenterUniqueReal
 import Omega.SyncKernelWeighted.RateCurveCenterSliceAudit
 import Omega.SyncKernelWeighted.RateCurveDualityReduction
 import Omega.SyncKernelWeighted.RealInput40ArityChargeCoboundary
+import Omega.SyncKernelWeighted.RealInput40Arity2dNonnegative
 import Omega.SyncKernelWeighted.RealInput40ArityChargeConjectureB211
 import Omega.SyncKernelWeighted.RealInput40ArityChargePrefixDebtStructure
 import Omega.SyncKernelWeighted.RealInput40ArityChargePrefixDebt
