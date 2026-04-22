@@ -1337,6 +1337,400 @@ def review_future_item(item_id: str, *, dry_run: bool = False) -> dict[str, Any]
     return parsed
 
 
+def find_state_record(repo: str, *, include_archive: bool = True) -> tuple[RepoState, Path, bool]:
+    """Load an active state, or the latest archived state for a repo."""
+    active = state_file(repo)
+    if active.exists():
+        state = load_state(repo)
+        if state:
+            return state, active, False
+
+    if not include_archive:
+        raise RuntimeError(f"No state found for {repo}")
+
+    candidates: list[tuple[str, Path, dict[str, Any]]] = []
+    for path in sorted((STATE_DIR / "archive").glob("*/*.json")):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if data.get("repo") != repo:
+            continue
+        candidates.append((_state_updated_at(path, data), path, data))
+
+    if not candidates:
+        raise RuntimeError(f"No active or archived state found for {repo}")
+
+    _, path, data = max(candidates, key=lambda item: item[0])
+    return RepoState.from_dict(data), path, True
+
+
+def state_review_dir(state: RepoState) -> Path:
+    return target_dir_for_repo(state.repo) / "review"
+
+
+def _artifact_listing(root: Path, *, max_items: int = 80) -> list[str]:
+    if not root.exists():
+        return []
+    rows: list[str] = []
+    for path in sorted(p for p in root.rglob("*") if p.is_file()):
+        rel = _repo_relative(path)
+        try:
+            size = path.stat().st_size
+        except OSError:
+            size = 0
+        rows.append(f"- `{rel}` ({size} bytes)")
+        if len(rows) >= max_items:
+            rows.append("- ...")
+            break
+    return rows
+
+
+def prepare_state_review_packet(repo: str, *, dry_run: bool = False) -> Path:
+    """Prepare a final Claude review packet for ordinary repo states.
+
+    This covers Stage D drafts and lower-level discovery/backflow artifacts that
+    are not future-queue items. Runtime packets stay under ignored targets/.
+    """
+    state, source_path, was_archived = find_state_record(repo, include_archive=True)
+    review_dir = state_review_dir(state)
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    packet_path = review_dir / f"claude_state_review_packet_{stamp}.md"
+
+    backflow = backflow_placement_from_history(state) or {}
+    tex_text = ""
+    tex_path_raw = str(backflow.get("tex_path", "") or "")
+    if tex_path_raw:
+        tex_path = Path(tex_path_raw)
+        if not tex_path.is_absolute():
+            tex_path = REPO_ROOT / tex_path_raw
+        if tex_path.exists():
+            tex_text = tex_path.read_text(encoding="utf-8", errors="replace")[:12000]
+
+    research_doc = ""
+    research_path = target_dir_for_repo(state.repo) / "research.md"
+    if research_path.exists():
+        research_doc = research_path.read_text(encoding="utf-8", errors="replace")[:12000]
+
+    body = "\n".join(
+        [
+            f"# Claude State Review Packet: {state.repo}",
+            "",
+            "## State Metadata",
+            f"- state_source: `{_repo_relative(source_path)}`",
+            f"- restored_from_archive: {was_archived}",
+            f"- stage_before_review: {state.stage}",
+            f"- round: {state.round}",
+            f"- scores: `{json.dumps(state.scores, ensure_ascii=False)}`",
+            f"- draft_title: {state.draft_title or '(none)'}",
+            f"- submission_url: {state.submission_url or '(none)'}",
+            f"- backflow: `{json.dumps(backflow, ensure_ascii=False)}`",
+            "",
+            "## Review Mode",
+            "This is a final gate packet for an ordinary outreach state, not a future-queue continuation.",
+            "If a public draft is present, review it as the public reply/issue candidate.",
+            "If no public draft is present, review whether the backflow/research artifact is correct enough to preserve, draft later, or mark reference-only.",
+            "",
+            "## Review Questions",
+            "- Are the mathematical claims correct and scoped honestly?",
+            "- Are the committed paper-side artifacts sufficient evidence for the stated claims?",
+            "- Should the item be posted/drafted, held for more Codex work, or kept only as a reference/negative audit?",
+            "- Does the packet avoid local Lean execution claims and scratch-path public citations?",
+            "",
+            "## Draft",
+            state.draft_body[:12000] if state.draft_body else "(no public draft in state)",
+            "",
+            "## Findings",
+            json.dumps(state.findings[:8], indent=2, ensure_ascii=False)[:12000],
+            "",
+            "## Latest Events",
+            json.dumps(state.action_history[-10:], indent=2, ensure_ascii=False)[:12000],
+            "",
+            "## Research Document Excerpt",
+            research_doc or "(none)",
+            "",
+            "## Paper Backflow Excerpt",
+            tex_text or "(none)",
+            "",
+            "## Target Artifacts",
+            *(_artifact_listing(target_dir_for_repo(state.repo)) or ["(none)"]),
+            "",
+        ]
+    )
+
+    if dry_run:
+        print(body)
+        return packet_path
+
+    review_dir.mkdir(parents=True, exist_ok=True)
+    packet_path.write_text(body, encoding="utf-8")
+    state.stage = "AWAITING_CLAUDE_REVIEW"
+    state.error = ""
+    state.log_event(
+        "R",
+        "prepared Claude final state review packet",
+        verdict="awaiting_claude_review",
+        detail=_repo_relative(packet_path),
+    )
+    save_state(state)
+    logger.info("[%s] State review packet: %s", state.repo, _repo_relative(packet_path))
+    return packet_path
+
+
+def build_state_claude_review_prompt(state: RepoState, packet_path: Path) -> str:
+    packet = packet_path.read_text(encoding="utf-8")
+    return textwrap.dedent(
+        f"""\
+        You are the final Claude review gate for an ordinary community-outreach
+        state. This is a review task, not a generation task.
+
+        {NO_LEAN_EXECUTION_POLICY}
+        {AGENT_CONTEXT_POLICY}
+        {RESEARCH_ROUTE_POLICY}
+
+        Review the packet below. Be strict about scope, public tone, and
+        evidence boundaries. Do not approve claims that require local Lean
+        execution unless the packet cites pre-existing committed Lean evidence.
+
+        TARGET STATE:
+        - repo: {state.repo}
+        - stage: {state.stage}
+        - has_public_draft: {bool(state.draft_title and state.draft_body)}
+
+        REVIEW PACKET:
+        {packet[:22000]}
+
+        Return JSON only:
+        {{
+          "approved": true,
+          "overall_score": 1,
+          "verdict": "approve_public_draft|approve_artifact|approve_partial|needs_revision|reference_only|reject",
+          "status": "claude_approved_public_draft|claude_approved_artifact|claude_approved_partial|needs_codex_revision|reference_only|rejected",
+          "summary": "technical review summary",
+          "findings": [
+            {{"severity": "blocker|major|minor|note", "issue": "specific issue", "recommendation": "specific fix"}}
+          ],
+          "required_fixes": ["..."],
+          "posting_recommendation": "post_now|draft_after_review|hold_partial|reference_only|do_not_use",
+          "scope_assessment": "whether the item stays inside its verified scope",
+          "evidence_assessment": "whether committed paper-side evidence supports the claims"
+        }}
+        """
+    )
+
+
+def write_state_claude_review(
+    state: RepoState,
+    review: dict[str, Any],
+    raw_output: str,
+    prompt: str,
+) -> tuple[Path, Path]:
+    review_dir = state_review_dir(state)
+    review_dir.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    json_path = review_dir / f"claude_state_review_{stamp}.json"
+    md_path = review_dir / f"claude_state_review_{stamp}.md"
+    raw_path = review_dir / f"claude_state_review_raw_{stamp}.txt"
+    prompt_path = review_dir / f"claude_state_review_prompt_{stamp}.txt"
+    json_path.write_text(json.dumps(review, indent=2, ensure_ascii=False), encoding="utf-8")
+    raw_path.write_text(raw_output, encoding="utf-8")
+    prompt_path.write_text(prompt, encoding="utf-8")
+
+    lines = [
+        f"# Claude State Review: {state.repo}",
+        "",
+        f"- approved: {review.get('approved')}",
+        f"- score: {review.get('overall_score')}",
+        f"- verdict: {review.get('verdict')}",
+        f"- status: {review.get('status')}",
+        f"- posting_recommendation: {review.get('posting_recommendation')}",
+        "",
+        "## Summary",
+        str(review.get("summary", "")),
+        "",
+        "## Scope",
+        str(review.get("scope_assessment", "")),
+        "",
+        "## Evidence",
+        str(review.get("evidence_assessment", "")),
+        "",
+        "## Findings",
+    ]
+    for finding in review.get("findings", []) if isinstance(review.get("findings"), list) else []:
+        lines.append(
+            f"- {finding.get('severity', 'note')}: {finding.get('issue', '')} "
+            f"Recommendation: {finding.get('recommendation', '')}"
+        )
+    if review.get("required_fixes"):
+        lines.extend(["", "## Required Fixes"])
+        for fix in review.get("required_fixes", []):
+            lines.append(f"- {fix}")
+    md_path.write_text("\n".join(lines).strip() + "\n", encoding="utf-8")
+    return json_path, md_path
+
+
+def review_state_item(repo: str, *, dry_run: bool = False) -> dict[str, Any]:
+    state, _, _ = find_state_record(repo, include_archive=True)
+    review_dir = state_review_dir(state)
+    packet = latest_file(review_dir, "claude_state_review_packet_*.md")
+    if not packet:
+        packet = prepare_state_review_packet(repo, dry_run=dry_run)
+    prompt = build_state_claude_review_prompt(state, packet)
+    if dry_run:
+        print(prompt)
+        return {
+            "approved": False,
+            "overall_score": 0,
+            "verdict": "dry_run",
+            "status": "dry_run",
+        }
+
+    raw_output = claude_exec(prompt, work_dir=REPO_ROOT, timeout=1200, dry_run=False)
+    parsed = parse_json_from_output(raw_output)
+    raw_lower = raw_output.lower()
+    if "hit your limit" in raw_lower or "usage limit" in raw_lower or "rate limit" in raw_lower:
+        parsed = {
+            "approved": False,
+            "overall_score": 0,
+            "verdict": "claude_quota_blocked",
+            "status": "awaiting_claude_review",
+            "summary": "Claude review could not run because the Claude CLI reported a usage/quota limit.",
+            "findings": [
+                {
+                    "severity": "note",
+                    "issue": "Claude quota/usage limit blocked final state review.",
+                    "recommendation": "Retry --review-state after the Claude quota resets.",
+                }
+            ],
+            "required_fixes": [],
+            "posting_recommendation": "pending_claude",
+            "scope_assessment": "Not reviewed; pending Claude.",
+            "evidence_assessment": "Not reviewed; pending Claude.",
+            "raw_excerpt": raw_output[:2000],
+        }
+    if not isinstance(parsed, dict) or not parsed:
+        parsed = {
+            "approved": False,
+            "overall_score": 0,
+            "verdict": "needs_revision",
+            "status": "needs_codex_revision",
+            "summary": "Claude returned no parseable JSON.",
+            "findings": [
+                {
+                    "severity": "blocker",
+                    "issue": "No parseable JSON review was returned.",
+                    "recommendation": "Rerun review with a stricter prompt or inspect raw output.",
+                }
+            ],
+            "required_fixes": ["Obtain parseable Claude review JSON."],
+            "posting_recommendation": "hold_partial",
+            "scope_assessment": "",
+            "evidence_assessment": "",
+            "raw_excerpt": raw_output[:2000],
+        }
+
+    review_path, md_path = write_state_claude_review(state, parsed, raw_output, prompt)
+    status = str(parsed.get("status") or "needs_codex_revision")
+    allowed_statuses = {
+        "awaiting_claude_review",
+        "claude_approved_public_draft",
+        "claude_approved_artifact",
+        "claude_approved_partial",
+        "needs_codex_revision",
+        "reference_only",
+        "rejected",
+    }
+    if status not in allowed_statuses:
+        verdict = str(parsed.get("verdict", ""))
+        approved = parsed.get("approved") is True
+        if approved and verdict == "approve_public_draft":
+            status = "claude_approved_public_draft"
+        elif approved and verdict == "approve_artifact":
+            status = "claude_approved_artifact"
+        elif approved and verdict == "approve_partial":
+            status = "claude_approved_partial"
+        elif verdict == "reference_only":
+            status = "reference_only"
+        elif verdict == "reject":
+            status = "rejected"
+        else:
+            status = "needs_codex_revision"
+
+    if status == "claude_approved_public_draft" and state.draft_title and state.draft_body:
+        state.stage = "D"
+    elif status == "reference_only":
+        state.stage = "SKIPPED"
+    elif status == "rejected":
+        state.stage = "SKIPPED"
+    elif status == "needs_codex_revision":
+        state.stage = "C" if state.draft_title and state.draft_body else "B"
+    else:
+        state.stage = "AWAITING_CLAUDE_REVIEW"
+    state.error = "" if status != "needs_codex_revision" else str(parsed.get("summary", ""))[:1000]
+    state.log_event(
+        "R",
+        "Claude final state review",
+        score=coerce_score(parsed.get("overall_score"), 0),
+        verdict=status,
+        detail=(
+            f"verdict={parsed.get('verdict')} review={_repo_relative(md_path)} "
+            f"json={_repo_relative(review_path)}"
+        ),
+    )
+    save_state(state)
+    return parsed
+
+
+def set_state_status(repo: str, status: str, note: str, *, dry_run: bool = False) -> RepoState:
+    state, _, _ = find_state_record(repo, include_archive=True)
+    state.stage = status
+    state.error = "" if status not in {"ERROR", "needs_codex_revision"} else note[:1000]
+    if status in {"DONE", "SKIPPED", "REFERENCE_ONLY"}:
+        state.timestamps.setdefault("completed_at", iso_now())
+    state.log_event("R", "manual state status update", verdict=status, detail=note)
+    if not dry_run:
+        save_state(state)
+    logger.info("[%s] State status set to %s", repo, status)
+    return state
+
+
+def refresh_state_draft(repo: str, *, dry_run: bool = False) -> RepoState:
+    """Refresh a public draft from deterministic backflow-aware templates."""
+    state, _, _ = find_state_record(repo, include_archive=True)
+    backflow = backflow_placement_from_history(state) or {}
+    title, body = fallback_draft(
+        state.repo,
+        normalize_findings(state.findings),
+        [],
+        backflow_placement=backflow,
+    )
+    state.draft_title = title
+    state.draft_body = body
+    state.stage = "D"
+    state.round = 0
+    state.error = ""
+    state.log_event(
+        "C",
+        "draft refreshed from deterministic backflow template",
+        score=max(state.scores.get("final", []) or [0]),
+        verdict="draft_ready",
+        detail=json.dumps(
+            {
+                "title": title,
+                "body_len": len(body),
+                "backflow": backflow,
+            },
+            ensure_ascii=False,
+        ),
+    )
+    if dry_run:
+        print(stage_d_prompt(state))
+        return state
+    save_state(state)
+    logger.info("[%s] Draft refreshed from deterministic template", repo)
+    return state
+
+
 def process_future_item(item_id: str, *, model: Optional[str], dry_run: bool) -> dict[str, Any]:
     item = find_future_item(item_id)
     research_dir = future_research_dir(item)
@@ -4326,6 +4720,101 @@ def fallback_draft(
         )
         return title, sanitize_issue_text(body)
 
+    if section_dir == "window6_countermodel_certificate":
+        title = "Window-6 CRT countermodel certificate for #364"
+        body = "\n".join(
+            [
+                "I have a compact finite countermodel certificate that looks relevant to #364.",
+                "",
+                "### Claim",
+                "",
+                "Let `G` be the magma on `Fin 21` defined by",
+                "",
+                "```text",
+                "x ◇ y = 7x + 15y mod 21.",
+                "```",
+                "",
+                "Using `21 = 3 * 7`, the CRT presentation identifies this operation with",
+                "",
+                "```text",
+                "(a3,a7) ◇ (b3,b7) = (a3,b7)",
+                "```",
+                "",
+                "on `ZMod 3 × ZMod 7`. Therefore every binary term evaluates by keeping the first variable in the `ZMod 3` coordinate and the last variable in the `ZMod 7` coordinate. A law holds in this magma exactly when the two sides have the same first and last variables.",
+                "",
+                "Direct enumeration against the current order-four ETP equation list gives:",
+                "",
+                "```lean",
+                "Facts G [10, 52, 55] [43, 46]",
+                "```",
+                "",
+                "That is, `G` satisfies `E10`, `E52`, and `E55`, and refutes `E43` and `E46`.",
+                "",
+                "### Current-head freshness",
+                "",
+                "The audit was run against ETP commit `b99c0e486501e5b0690ef3fe5250d3aa57e63478`. The combined `[10,52,55] / [43,46]` certificate has no exact `Facts` entry and no satisfied/refuted superset entry in `full_entries.json` at that commit.",
+                "",
+                "Five of the six pairwise consequences are also absent as exact entries and as superset entries:",
+                "",
+                "- `E10` does not imply `E46`",
+                "- `E52` does not imply `E43`",
+                "- `E52` does not imply `E46`",
+                "- `E55` does not imply `E43`",
+                "- `E55` does not imply `E46`",
+                "",
+                "The remaining pair, `E10` does not imply `E43`, is already covered upstream by two `Fin 2` `SmallMagmas.lean` facts, so I would not claim novelty for that pair.",
+                "",
+                "### Paper-side artifacts",
+                "",
+                f"- `{_repo_relative(Path(tex_path)) if tex_path else 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/appendix/window6_countermodel_certificate/main.tex'}`",
+                "- `theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/scripts/equational_theory/audit_window6_current.py`",
+                "",
+                "### Scope",
+                "",
+                "The CRT/rectangular-band argument is a mathematical proof of the structure of this `Fin 21` magma. The indexed ETP law satisfaction and current-head freshness checks are Python-verified finite data, not claimed here as new Lean theorems in ETP. I am also not claiming a broad graph-edge theorem, an all-prime-field result, or a general Fibonacci-linear framework contribution for #364.",
+                "",
+                AUTOMATH_TRAILER,
+            ]
+        )
+        return title, sanitize_issue_text(body)
+
+    if section_dir == "finite_conditional_expectation":
+        title = "Finite fiber-average conditional expectation note"
+        body = "\n".join(
+            [
+                "I prepared a finite conditional-expectation note that may fit the analysis/probability side of this project.",
+                "",
+                "### Main statement",
+                "",
+                "For a finite probability space `Ω`, a finite factor map `π : Ω → X`, and a real-valued function `f`, define `E_{π,μ} f` by averaging `f` on each positive-mass fiber of `π`. Then `E_{π,μ}` is the orthogonal projection in `L^2(Ω,μ)` onto the fiber-constant functions.",
+                "",
+                "Consequently, for every `f`,",
+                "",
+                "```text",
+                "||f||_2^2 = ||E_{π,μ} f||_2^2 + ||f - E_{π,μ} f||_2^2,",
+                "```",
+                "",
+                "and the finite variance decomposes as",
+                "",
+                "```text",
+                "Var_μ(f) = Var_μ(E_{π,μ} f) + within_fiber_variance_{π,μ}(f).",
+                "```",
+                "",
+                "The one-fiber uniform case gives the layer-average `L^2` contraction and zero-variance statement used in the Automath fold audits.",
+                "",
+                "### Paper-side artifact",
+                "",
+                f"- `{_repo_relative(Path(tex_path)) if tex_path else 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/appendix/finite_conditional_expectation/main.tex'}`",
+                "",
+                "### Scope",
+                "",
+                "This is an elementary finite theorem, intended as a clean bridge from explicit finite fiber averages to the standard conditional-expectation viewpoint. I am not claiming that this outreach pipeline has added or checked a Lean file in the target repository. If useful, the next step would be a separate target-side Lean contribution reviewed against the target repository's current probability API.",
+                "",
+                AUTOMATH_TRAILER,
+            ]
+        )
+        return title, sanitize_issue_text(body)
+
     title = f"Potential paper-side bridge for {repo.split('/')[-1]}"
     rows = []
     for item in findings[:5]:
@@ -5106,6 +5595,9 @@ def parse_args() -> argparse.Namespace:
               python3 tools/community-outreach/outreach_pipeline.py --process-future 797e010c2138e6bb9b
               python3 tools/community-outreach/outreach_pipeline.py --prepare-future-review 797e010c2138e6bb9b
               python3 tools/community-outreach/outreach_pipeline.py --review-future 797e010c2138e6bb9b
+              python3 tools/community-outreach/outreach_pipeline.py --repo teorth/equational_theories --prepare-state-review
+              python3 tools/community-outreach/outreach_pipeline.py --repo teorth/equational_theories --review-state
+              python3 tools/community-outreach/outreach_pipeline.py --repo teorth/equational_theories --issue 364 --refresh-state-draft
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --register-future-scope
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --mark-replied https://github.com/owner/name/issues/38#issuecomment-...
               python3 tools/community-outreach/outreach_pipeline.py --check-artifacts
@@ -5126,6 +5618,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--process-future", action="append", default=[], metavar="ID", help="Run a queued future-scope Codex research task by id or unique prefix")
     parser.add_argument("--prepare-future-review", action="append", default=[], metavar="ID", help="Prepare a Claude review packet for a future-scope result and mark it awaiting review")
     parser.add_argument("--review-future", action="append", default=[], metavar="ID", help="Run Claude final review for a future-scope result by id or unique prefix")
+    parser.add_argument("--prepare-state-review", action="store_true", help="Prepare Claude final review packets for ordinary --repo states")
+    parser.add_argument("--review-state", action="store_true", help="Run Claude final review for ordinary --repo states")
+    parser.add_argument("--set-state-status", nargs=2, metavar=("STATUS", "NOTE"), help="Set ordinary --repo state status with a note")
+    parser.add_argument("--refresh-state-draft", action="store_true", help="Refresh ordinary --repo drafts from deterministic backflow-aware templates")
     parser.add_argument("--register-future-scope", action="store_true", help="Extract deferred future tasks from the current draft state for --repo targets")
     parser.add_argument("--mark-replied", metavar="URL", help="Mark --repo target state as replied/submitted with an existing GitHub issue comment URL")
     parser.add_argument("--append-future-note", nargs=2, metavar=("ID", "NOTE"), help="Append a note/source update to a future queue item")
@@ -5316,6 +5812,37 @@ def main() -> int:
         for repo in repos:
             mark_repo_replied(repo, args.mark_replied, dry_run=args.dry_run)
         print(f"Marked replied: {len(repos)}")
+        return 0
+
+    if args.prepare_state_review:
+        for repo in repos:
+            packet = prepare_state_review_packet(repo, dry_run=args.dry_run)
+            print(f"State review packet: {_repo_relative(packet)}")
+        return 0
+
+    if args.review_state:
+        for repo in repos:
+            review = review_state_item(repo, dry_run=args.dry_run)
+            print(
+                "State Claude review:",
+                repo,
+                review.get("status"),
+                review.get("verdict"),
+                "score=" + str(review.get("overall_score")),
+            )
+        return 0
+
+    if args.set_state_status:
+        status, note = args.set_state_status
+        for repo in repos:
+            set_state_status(repo, status, note, dry_run=args.dry_run)
+        print(f"State status updated: {len(repos)}")
+        return 0
+
+    if args.refresh_state_draft:
+        for repo in repos:
+            state = refresh_state_draft(repo, dry_run=args.dry_run)
+            print(f"Draft refreshed: {state.repo} ({len(state.draft_body)} chars)")
         return 0
 
     if args.register_future_scope:
