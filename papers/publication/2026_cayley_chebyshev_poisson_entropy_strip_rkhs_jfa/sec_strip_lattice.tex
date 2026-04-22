@@ -256,7 +256,9 @@ broadly the cardinal-interpolation and radial-basis-function literature
 \cite{Buhmann2003}.
 In particular, the symbol criterion in the proof of
 Proposition~\ref{thm:poisson-lattice-sampling} is the usual Fourier-symbol
-approach.
+approach.  The theorem-like input specific to the present Poisson strip is
+the explicit symbol certificate
+Proposition~\ref{prop:poisson-lattice-symbol}.
 
 For the Cauchy/Lorentz generator, integer-shift explicit nod-function and
 Riesz-constant computations appear in the existing Cauchy--type literature,
@@ -268,6 +270,80 @@ with the closed-form lattice symbol
 \eqref{eq:lattice-symbol}, and the exact cardinal Fourier formula and
 norm formula
 \eqref{eq:cardinal-kernel-fourier},\eqref{eq:cardinal-norm-formula}.
+
+\begin{proposition}[Explicit Poisson-strip lattice symbol]%
+\label{prop:poisson-lattice-symbol}
+Let
+\[
+K(a,b):=\frac{2}{4+(a-b)^2},
+\qquad
+\sigma(\theta):=\sum_{n\in\ZZ}K(n,0)e^{-\ii n\theta}
+=\sum_{n\in\ZZ}\frac{2}{4+n^2}e^{-\ii n\theta}.
+\]
+Then $\sigma$ is continuous and $2\pi$-periodic, and for
+$\theta\in[-\pi,\pi]$ one has
+\begin{equation}\label{eq:lattice-symbol}
+\sigma(\theta)
+=\frac{\pi\cosh(2(\pi-|\theta|))}{\sinh(2\pi)}.
+\end{equation}
+Consequently the sharp lattice-symbol bounds are
+\[
+A_{\ZZ}:=\frac{\pi}{\sinh(2\pi)}
+\le
+\sigma(\theta)
+\le
+\pi\coth(2\pi)=:B_{\ZZ}
+\qquad(\theta\in[-\pi,\pi]).
+\]
+Moreover, for every finitely supported scalar sequence
+$c=(c_n)_{n\in\ZZ}$, with
+\[
+\widetilde c(\theta):=\sum_{n\in\ZZ}c_ne^{-\ii n\theta},
+\]
+one has the exact Gram identity
+\begin{equation}\label{eq:lattice-symbol-form}
+\sum_{m,n\in\ZZ}c_m\overline{c_n}\,K(m,n)
+=\frac{1}{2\pi}\int_{-\pi}^{\pi}
+\sigma(\theta)|\widetilde c(\theta)|^2\dd\theta .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Set $k(x):=K(x,0)=2/(4+x^2)$.  With the Fourier convention used in this
+paper,
+\[
+\widehat k(\xi)=\pi e^{-2|\xi|}.
+\]
+The defining series for $\sigma$ is absolutely and uniformly convergent,
+so $\sigma$ is continuous and $2\pi$-periodic.
+The Poisson summation formula \cite[Chapter~III]{Stein1971} gives
+\[
+\sigma(\theta)=\sum_{m\in\ZZ}\widehat k(\theta+2\pi m)
+=\pi\sum_{m\in\ZZ}e^{-2|\theta+2\pi m|}.
+\]
+For $0\le\theta\le\pi$ this geometric series equals
+\[
+\pi\left(e^{-2\theta}
++\sum_{j=1}^{\infty}e^{-2(\theta+2\pi j)}
++\sum_{j=1}^{\infty}e^{-2(2\pi j-\theta)}\right)
+=\pi\,\frac{\cosh(2(\pi-\theta))}{\sinh(2\pi)}.
+\]
+The expression is even in~$\theta$, so \eqref{eq:lattice-symbol} follows
+on $[-\pi,\pi]$, and periodicity gives the full symbol.
+The minimum and maximum of the displayed formula occur respectively at
+$|\theta|=\pi$ and $\theta=0$, which gives the sharp constants
+$A_{\ZZ}$ and $B_{\ZZ}$.
+
+Finally, since $K(m,n)=k(m-n)$, Parseval's identity for the discrete
+Fourier transform gives
+\[
+\sum_{m,n\in\ZZ}c_m\overline{c_n}\,K(m,n)
+=\frac{1}{2\pi}\int_{-\pi}^{\pi}
+\left(\sum_{\ell\in\ZZ}k(\ell)e^{-\ii\ell\theta}\right)
+|\widetilde c(\theta)|^2\dd\theta,
+\]
+which is exactly \eqref{eq:lattice-symbol-form}.
+\end{proof}
 
 \begin{proposition}[Lattice sampling for the integer secant orbit]%
 \label{thm:poisson-lattice-sampling}
@@ -368,39 +444,16 @@ By Theorem~\ref{thm:mode-gram-kernel},
 =\sum_{m,n\in\ZZ}c_m\overline{c_n}\,K(m,n)
 =\sum_{m,n\in\ZZ}c_m\overline{c_n}\,\frac{2}{4+(m-n)^2}.
 \]
-Hence Parseval's identity on~$\ZZ$ gives
-\begin{equation}\label{eq:lattice-symbol-form}
+Thus \eqref{eq:lattice-symbol-form} from
+Proposition~\ref{prop:poisson-lattice-symbol} gives
+\[
 \|F_c\|_{\mathcal H_K}^2
-=\frac{1}{2\pi}\int_{-\pi}^{\pi}\sigma(\theta)\,
-|\widetilde c(\theta)|^2\dd\theta,
-\end{equation}
-where
-\[
-\sigma(\theta):=\sum_{n\in\ZZ}\frac{2}{4+n^2}e^{-\ii n\theta}.
+=\frac{1}{2\pi}\int_{-\pi}^{\pi}\sigma(\theta)
+|\widetilde c(\theta)|^2\dd\theta.
 \]
-Let $k(x):=2/(4+x^2)$.  Proposition~\ref{thm:gram-space-poisson-image}
-gives $\widehat k(\xi)=\pi e^{-2|\xi|}$.  By the Poisson summation formula
-\cite[Chapter~III]{Stein1971},
-\[
-\sigma(\theta)=\sum_{m\in\ZZ}\widehat k(\theta+2\pi m)
-=\pi\sum_{m\in\ZZ}e^{-2|\theta+2\pi m|}.
-\]
-For $\theta\in[-\pi,\pi]$ this sum evaluates to
-\begin{equation}\label{eq:lattice-symbol}
-\sigma(\theta)
-=\frac{\pi\cosh(2(\pi-|\theta|))}{\sinh(2\pi)}.
-\end{equation}
-Consequently,
-\[
-\frac{\pi}{\sinh(2\pi)}
-\le
-\sigma(\theta)
-\le
-\pi\coth(2\pi)
-\qquad(\theta\in[-\pi,\pi]).
-\]
-Combining these bounds with \eqref{eq:lattice-symbol-form} and Parseval
-for $\widetilde c$ proves \eqref{eq:lattice-riesz-kernel}.  Since
+Combining the sharp symbol bounds from
+Proposition~\ref{prop:poisson-lattice-symbol} with Parseval for
+$\widetilde c$ proves \eqref{eq:lattice-riesz-kernel}.  Since
 $\mathcal U\Psi_n=K(\cdot,n)$ by
 Theorem~\ref{thm:mode-space-rkhs}, \eqref{eq:lattice-riesz-secant}
 follows immediately.
