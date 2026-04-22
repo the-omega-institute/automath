@@ -132,6 +132,7 @@ import Omega.Zeta.XiTerminalZmCdimBidirectionalMiLoglaw
 import Omega.Zeta.XiTerminalZmGodelPrefixCodeMiDifference
 import Omega.Zeta.XiScanMinSeparationLocalBilipschitz
 import Omega.Zeta.XiFiniteToOneHolographicAggregationBound
+import Omega.Zeta.XiEllipticRingAverageTwoValuedWallcrossing
 import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiWindow6C3CyclicFiberTrisection
 import Omega.Zeta.XiWindow6WeylInvariantBestTwoOrbitCompression

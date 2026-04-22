@@ -43,6 +43,7 @@ import Omega.POM.GoldenBinaryChannelContraction
 import Omega.POM.GoldenLikelihoodRatioMartingales
 import Omega.POM.BeckChevalleyAmgmDefectIdentity
 import Omega.POM.BivariateSystemIdentificationFiniteWindow
+import Omega.POM.RecurrenceCodeViolationDistance
 import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.BooleanCircuitProjectionBudget
 import Omega.POM.BoundedPerturbationInvariance
