@@ -401,6 +401,7 @@ MAX_STAGE_C_ROUNDS = 4
 DEFAULT_TARGET_JOURNAL = "Advances in Mathematics"
 CLAUDE_ENABLED = True
 PAUSED_ERROR_PREFIX = "PAUSED:"
+ORACLE_CANCELLED_RESPONSE = "__ORACLE_TASK_CANCELLED__"
 
 # Borrowed from outreach pipeline: escalation & early-skip constants
 DEEP_MODE_THRESHOLD = 3   # After N consecutive non-pass B rounds, escalate to deep mode
@@ -949,6 +950,8 @@ def oracle_poll(task_id: str, timeout: int = 7200,
                 if data.get("status") in {"cancelled", "failed"}:
                     logger.warning(f"Oracle terminal status for {task_id}: "
                                    f"{data.get('status')}")
+                    if data.get("status") == "cancelled":
+                        return ORACLE_CANCELLED_RESPONSE
                     return ""
             except Exception:
                 pass
@@ -3796,6 +3799,8 @@ def stage_a_audit_passes(audit: dict) -> bool:
 
 
 def stage_a_ready_for_b(state: PaperState) -> bool:
+    if state.stage_a_audit_metrics.get("mode") == "no_claude_deterministic_audit":
+        return False
     return bool(state.stage_a_passed
                 and stage_a_audit_passes(state.stage_a_audit_metrics))
 
@@ -3883,7 +3888,8 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
                             dry_run: bool = False,
                             tag: str = "") -> dict:
     paper_path = Path(state.paper_dir)
-    if not CLAUDE_ENABLED and not dry_run:
+    use_deterministic_no_claude_audit = False
+    if use_deterministic_no_claude_audit and not CLAUDE_ENABLED and not dry_run:
         logger.info(f"{tag} A3 audit round {audit_round}: "
                     "deterministic --no-claude smoke audit")
         audit = _deterministic_no_claude_stage_a_audit(
@@ -4421,6 +4427,19 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             while time.time() < deadline:
                 remaining = max(1, int(deadline - time.time()))
                 raw = oracle_poll(task_id, timeout=remaining)
+                if raw == ORACLE_CANCELLED_RESPONSE:
+                    state.error = (f"{PAUSED_ERROR_PREFIX} Oracle task "
+                                   f"{task_id} was cancelled; rerun after "
+                                   "pre-Oracle Stage A repair")
+                    logger.info(f"{tag} {state.error}")
+                    state.log_event("B", "oracle_cancelled",
+                                    round_num=rnd, detail=state.error)
+                    if not dry_run:
+                        update_program_board(
+                            state.paper_name, "B-PAUSED",
+                            "oracle task cancelled for Stage A rerun")
+                    save_state(state)
+                    return False
                 if is_oracle_response_valid(raw):
                     response = raw
                     break

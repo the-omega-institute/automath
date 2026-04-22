@@ -86,10 +86,19 @@ class OracleHandler(BaseHTTPRequestHandler):
             agent_id = (qs.get("agent", [None])[0]
                         or qs.get("agent_id", [None])[0]
                         or "default")
+            resume_task_id = qs.get("resume", [""])[0]
 
             if agent_id in pending_tasks:
                 # Already has a task — return it (idempotent poll)
-                self._send_json(pending_tasks[agent_id])
+                task = pending_tasks[agent_id]
+                if resume_task_id and resume_task_id == task.get("task_id"):
+                    self._send_json(task)
+                else:
+                    self._send_json({
+                        "status": "busy",
+                        "assigned_agent": agent_id,
+                        "elapsed": int(time.time() - dispatch_times.get(agent_id, time.time())),
+                    })
             elif task_queue and len(pending_tasks) < MAX_AGENTS:
                 # Assign next task from queue to this agent
                 task = task_queue.popleft()

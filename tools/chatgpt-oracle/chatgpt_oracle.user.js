@@ -876,7 +876,12 @@
   // ── Process a task ───────────────────────────────────────────────────
   async function processTask(task) {
     const { task_id, prompt, pdf_base64, pdf_name } = task;
+    if (!prompt) {
+      log(`Ignoring non-runnable task status for ${task_id || "default"}`);
+      return;
+    }
     log(`=== Task: ${task_id} ===`);
+    saveTaskState(task);
     busy = true;
     updatePanel();
 
@@ -1014,7 +1019,7 @@
       if (active && !busy) {
         try {
           const task = await serverGet("/task");
-          if (task && task.task_id && task.status !== "idle") {
+          if (task && task.task_id && task.status !== "idle" && task.prompt) {
             await processTask(task);
           }
         } catch (err) {
@@ -1045,8 +1050,8 @@
       // Re-fetch the full task (including PDF base64) from the server.
       // The server keeps pending_task until a result is posted.
       try {
-        const task = await serverGet("/task");
-        if (task && task.task_id && task.status !== "idle") {
+        const task = await serverGet(`/task?resume=${encodeURIComponent(navTaskId)}`);
+        if (task && task.task_id && task.status !== "idle" && task.prompt) {
           log(`Re-fetched task: ${task.task_id} (prompt ${task.prompt?.length || 0} chars, pdf=${!!task.pdf_base64})`);
           await processTask(task);
         } else {

@@ -1282,7 +1282,12 @@
   // ── Process a task ───────────────────────────────────────────────────
   async function processTask(task) {
     const { task_id, prompt, pdf_base64, pdf_name } = task;
+    if (!prompt) {
+      log(`Ignoring non-runnable task status for ${task_id || AGENT_ID}`);
+      return;
+    }
     log(`=== Task: ${task_id} ===`);
+    saveTaskState(task);
     busy = true;
     updatePanel();
 
@@ -1427,7 +1432,7 @@
       if (active && !busy) {
         try {
           const task = await serverGet(`/task?agent=${AGENT_ID}`);
-          if (task && task.task_id && task.status !== "idle") {
+          if (task && task.task_id && task.status !== "idle" && task.prompt) {
             // Double-check active right before processing
             if (!GM_getValue(GM_KEY("oracle_active"), true)) {
               log("Task available but oracle is PAUSED — skipping");
@@ -1474,8 +1479,10 @@
 
       // Re-fetch this agent's pending task from the server
       try {
-        const task = await serverGet(`/task?agent=${AGENT_ID}`);
-        if (task && task.task_id && task.status !== "idle") {
+        const task = await serverGet(
+          `/task?agent=${AGENT_ID}&resume=${encodeURIComponent(navTaskId)}`
+        );
+        if (task && task.task_id && task.status !== "idle" && task.prompt) {
           log(`Re-fetched task: ${task.task_id} (prompt ${task.prompt?.length || 0} chars, pdf=${!!task.pdf_base64})`);
           await processTask(task);
         } else {
