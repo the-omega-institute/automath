@@ -175,6 +175,7 @@ import Omega.POM.ExtendedPrimitives
 import Omega.POM.FenceIntervalClosure
 import Omega.POM.FenceGoldenDetGreen
 import Omega.POM.LkSurfaceFreeEnergy
+import Omega.POM.LkBoundaryBulkRadonNikodym
 import Omega.POM.LkBoundarySpectralMeasureBeta32
 import Omega.POM.LkGapPi2
 import Omega.POM.LowTemperatureThreeTermExpansion
