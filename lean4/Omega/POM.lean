@@ -314,6 +314,7 @@ import Omega.POM.HankelDeterminantGeometricLaw
 import Omega.POM.HankelExteriorPowerPropagation
 import Omega.POM.HankelFingerprintSeeds
 import Omega.POM.HankelFinitePoleSpectralGap
+import Omega.POM.HankelFiniteWindowPrincipalRigidity
 import Omega.POM.HankelInversePropagationLinearOrbits
 import Omega.POM.HankelSyndromeDivisibilityReversalLcm
 import Omega.POM.HankelMinimalRecurrenceInversionFormula

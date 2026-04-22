@@ -670,6 +670,7 @@ import Omega.Zeta.XiFixedFreezingEscortGroundstateTvIdentity
 import Omega.Zeta.XiFoldbinKappaKlCollisionIdentityChain
 import Omega.Zeta.XiFoldLastbitStatisticalSufficiencyCollapse
 import Omega.Zeta.XiFoldFibonacciCollisionGapPositiveFloor
+import Omega.Zeta.XiFoldZeroArithmeticSubsequenceAmplification
 import Omega.Zeta.XiFixedFreezingRenyiCriticalOrderThreshold
 import Omega.Zeta.XiFoldCongruenceUnitalAutomorphismRigidity
 import Omega.Zeta.XiRminIsZhat
