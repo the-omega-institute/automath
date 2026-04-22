@@ -557,3 +557,4 @@ import Omega.Conclusion.LeyangFiveBranchBodyAddressRademacherCumulants
 import Omega.Conclusion.SerrinEllipsoidFluxCertificateStability
 import Omega.Conclusion.DeepfrozenMicroescortOracleThreshold
 import Omega.Conclusion.FiniteVerificationClosureComplexityTrilemma
+import Omega.Conclusion.RankoneEigenvalueSpeedDiscriminantIdentity

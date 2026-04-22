@@ -794,3 +794,4 @@ import Omega.Zeta.XiDepthHeightTwoLevelExtremal
 import Omega.Zeta.LogMDerivativeResolvent
 import Omega.Zeta.XiGoldenW1TrueTwoPhaseLimit
 import Omega.Zeta.XiComovingJensenDefectKernelDecomposition
+import Omega.Zeta.XiChainInteriorBooleanMobiusCharacteristicMaxchains

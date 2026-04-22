@@ -559,6 +559,7 @@ import Omega.POM.MinimalIntegerizationFactorCokerExponent
 import Omega.POM.VariationalUnityTauFromF
 import Omega.POM.DiagonalRateAbsorbingFullVsDeletedInterlacingSecondary
 import Omega.POM.FiniteZeroTempEscortUniformMaxfiber
+import Omega.POM.SpectralInformationSandwich
 import Omega.POM.MicrocanonicalPosteriorEntropyLinearLaw
 import Omega.POM.FiberHodgeSteinTensorizationGap
 import Omega.POM.MultiplicityMicrocanonicalEntropy
