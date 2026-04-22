@@ -98,6 +98,7 @@ import Omega.Folding.ConstructibilityRigidityObstruction
 import Omega.Folding.CurvatureTranslationDihedral
 import Omega.Folding.Defect
 import Omega.Folding.DerivedAffineReciprocity
+import Omega.Folding.DerivedFoldFourierPhaseRigidity
 import Omega.Folding.DerivedCenteredOddMomentsVanish
 import Omega.Folding.DerivedBinfoldAverageLogPotentialConstant
 import Omega.Folding.DerivedBinfoldEscortFdivBernoulliExponentialFamily

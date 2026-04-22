@@ -178,6 +178,7 @@ import Omega.Zeta.DerivedHankelSamplingBadprimeEntropyUnified
 import Omega.Zeta.DerivedLeyangBranchsetAdjacencySpectrumHeatTrace
 import Omega.Zeta.DerivedLeyangArtinMazurZeta
 import Omega.Zeta.DerivedLeyangBranchsetIharaZeta
+import Omega.Zeta.DerivedLeyangFouraryRigidity
 import Omega.Zeta.DerivedLeyangProfiniteRigidity
 import Omega.Zeta.DerivedPickPoissonClusteredQuadraticCoerciveLowerBound
 import Omega.Zeta.DerivedMinimalCyclicAuditAxisZhatPrimeUnlocking
