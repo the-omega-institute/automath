@@ -327,15 +327,25 @@ conclusions of the theorem, not hypotheses.
 \end{theorem}
 
 \begin{proof}
-Boundedness is the usual Ruelle estimate.  If \(x,x'\) agree for \(N\)
-symbols, their admissible safe preimages can be paired by the prepended
-symbol.  The paired preimages agree for \(N+1\) symbols, while the
-variation of \(e^\psi\) on such pairs is \(O(d_\theta(x,x'))\).  Hence
+Write \(\abs{f}_\theta\) for the Lipschitz seminorm associated to
+\(d_\theta\), and let \(p\) be a memory for the SFT \(Z\).  Boundedness is
+the standard Ruelle estimate, and we recall the argument because the same
+pairing is used below.  If \(x,x'\) agree for \(N\geq p\) symbols, then
+every admissible safe one-step preimage of \(x\) is paired with the
+preimage obtained by prepending the same safe symbol to \(x'\).  The
+paired preimages agree for \(N+1\) symbols, and the Lipschitz property of
+\(\psi\) gives
+\[
+  \abs{e^{\psi(y)}-e^{\psi(y')}}\leq C_\psi d_\theta(x,x').
+\]
+Since the number of one-step preimages is uniformly bounded,
 \[
   \norm{\mathcal L_{\psi,H}f}_\theta
   \leq C\norm{f}_\theta
 \]
-for a constant \(C\) depending only on \(Z,\psi,H\), and \(\theta\).
+for a constant \(C\) depending only on \(Z,\psi,H\), and \(\theta\).  The
+finitely many cases \(N<p\) are absorbed by the sup-norm bound, since
+\(d_\theta(x,x')\geq\theta^{p-1}\) there.
 
 Let
 \[
@@ -346,7 +356,15 @@ Let
 \]
 and let \(\mathcal E:=\ker\mathcal R\).  The restriction map is onto
 because H\"older functions on the closed subset \(Z_H\) extend to
-H\"older functions on the ambient symbolic metric space.  Moreover
+H\"older functions on the ambient symbolic metric space.  Explicitly, if
+\(A\subset Z\) is closed and \(g:A\to\RR\) is \(L\)-Lipschitz, then
+\[
+  G(x):=\inf_{a\in A}\bigl(g(a)+Ld_\theta(x,a)\bigr)
+\]
+is an \(L\)-Lipschitz extension of \(g\) to \(Z\).  Applying this formula
+to the real and imaginary parts of a complex-valued function proves the
+surjectivity of \(\mathcal R\).  Moreover \(\mathcal E\) is a closed
+invariant subspace and
 \[
   \mathcal R\mathcal L_{\psi,H}
   =
@@ -373,6 +391,24 @@ Lemma~\ref{lem:holder-safe-word-pressure}, there is no safe edge from
 sufficiently long safe word is a word over \(\mathcal S_\infty\) followed
 by a transient suffix of length at most \(K\).
 
+For later use set
+\[
+  W_n(x):=
+  \sum_{\substack{\sigma^n y=x\\ y_0,\ldots,y_{n-1}\in\mathcal S}}
+  e^{S_n\psi(y)} .
+\]
+The finite-suffix decomposition just recalled, bounded distortion, and
+the Ruelle--Perron--Frobenius bound for
+\(\mathcal L_{\psi|Z_H}\) give a constant \(C_W<\infty\) such that
+\[
+  W_n(x)\leq C_W\lambda_H^n
+  \qquad (x\in Z,\ n\geq1).
+\]
+Indeed, after one of finitely many transient suffixes of length at most
+\(K\) is fixed, the remaining sum is a survivor transfer-operator sum on
+\(Z_H\), evaluated at a fixed survivor continuation and changed only by a
+uniform distortion factor.
+
 Take \(f\in\mathcal E\).  If \(y\) occurs in an \(n\)-step summand of
 \(\mathcal L_{\psi,H}^n f(x)\), then \(y_0,\ldots,y_{n-1}\) are safe.
 For \(n>K\), the first \(n-K\) symbols of \(y\) form a survivor word.
@@ -385,28 +421,60 @@ Choose \(\bar y\in Z_H\) with the same first \(n-K\) symbols.  Since
   \leq
   \norm{f}_\theta\,\theta^{n-K}.
 \]
-The weighted sum of all \(n\)-step safe preimages is bounded uniformly in
-the terminal point by \(C_1e^{nP_{Z_H}(\psi)}\): this is the same
-bounded-distortion and finite-suffix comparison used in
-Lemma~\ref{lem:holder-safe-word-pressure}.  Therefore
+Together with the preceding bound on \(W_n(x)\), this gives
 \[
   \norm{\mathcal L_{\psi,H}^n f}_\infty
   \leq
   C_2\theta^n e^{nP_{Z_H}(\psi)}\norm{f}_\theta .
 \]
-The H\"older seminorm satisfies the same bound.  To see this, pair
-\(n\)-step preimages over two terminal points that agree for \(N\)
-symbols.  The paired preimages agree for \(n+N\) symbols.  The difference
-of the two summands is bounded by the preceding
-\(\theta^{n-K}\)-smallness of \(f\), the \(\theta^{n+N}\)-smallness of
-\(f(y)-f(y')\), and the usual Bowen distortion estimate for the
-\(n\)-step weights.  After division by \(d_\theta(x,x')=\theta^N\) and
-summation over the safe preimages, one obtains
+
+The H\"older seminorm satisfies the same bound.  Suppose first that
+\(x,x'\) agree for \(N\geq p\) symbols, so \(d_\theta(x,x')=\theta^N\).
+Pair the \(n\)-step safe preimages by the same safe prefix:
+\(y=ux\) and \(y'=ux'\), \(\abs u=n\).  Then \(y\) and \(y'\) agree for
+\(n+N\) symbols.  Hence
+\[
+  \abs{f(y)-f(y')}
+  \leq
+  \abs{f}_\theta\,\theta^{n+N}
+  =
+  \abs{f}_\theta\,\theta^n d_\theta(x,x').
+\]
+Also, by the previous comparison with \(Z_H\),
+\[
+  \abs{f(y')} \leq \norm{f}_\theta\theta^{n-K}.
+\]
+Finally the Bowen distortion estimate along the paired \(n\)-blocks gives
+\[
+  \abs{S_n\psi(y)-S_n\psi(y')}
+  \leq
+  C_\psi d_\theta(x,x'),
+\]
+and therefore
+\[
+  \abs{e^{S_n\psi(y)}-e^{S_n\psi(y')}}
+  \leq
+  C_\psi e^{S_n\psi(y)}d_\theta(x,x')
+\]
+after increasing \(C_\psi\).  For each paired summand,
+\[
+\begin{aligned}
+ &\abs{e^{S_n\psi(y)}f(y)-e^{S_n\psi(y')}f(y')}        \\
+ &\qquad\leq
+  C e^{S_n\psi(y)}\norm{f}_\theta
+  \theta^n d_\theta(x,x').
+\end{aligned}
+\]
+Summing over safe prefixes and using \(W_n(x)\leq C_W\lambda_H^n\)
+therefore yields
 \[
   \abs{\mathcal L_{\psi,H}^n f}_\theta
   \leq
   C_3\theta^n e^{nP_{Z_H}(\psi)}\norm{f}_\theta .
 \]
+If \(N<p\), the same estimate follows from the sup-norm bound divided by
+the lower bound \(d_\theta(x,x')\geq\theta^{p-1}\).  Thus the displayed
+seminorm estimate holds for all \(x\neq x'\).
 Thus
 \[
   \rho\bigl(\mathcal L_{\psi,H}|_{\mathcal E}\bigr)
@@ -423,15 +491,44 @@ The invariant exact sequence
   \mathcal B_\theta(Z_H)
   \longrightarrow 0
 \]
-now identifies the spectrum of \(\mathcal L_{\psi,H}\) outside the disk
-of radius
-\(\max\{\theta\lambda_H,r_H\}\) with the corresponding spectrum of the
-survivor operator.  Hence \(\lambda_H\) is a simple isolated eigenvalue
-of the open operator, and all remaining spectrum has modulus strictly
-smaller than \(\lambda_H\).  The Riesz projection at \(\lambda_H\) is
-rank one; writing it as
-\(\Pi_H f=\eta_H(f)h_H\) gives the stated right eigenfunction, adjoint
-eigenfunctional, normalization, and spectral decomposition.
+now gives the required spectral comparison.  We spell out the elementary
+Banach-space argument.  Let \(T=\mathcal L_{\psi,H}\), let
+\(T_{\mathcal E}=T|_{\mathcal E}\), and let \(\overline T\) be the
+operator induced by \(T\) on the quotient
+\(\mathcal B_\theta(Z)/\mathcal E\).  The map induced by
+\(\mathcal R\) identifies \(\overline T\) with
+\(\mathcal L_{\psi|Z_H}\).  If
+\(\lambda\notin\spec(T_{\mathcal E})\cup\spec(\overline T)\), then
+\(T-\lambda\) is invertible: solve first in the quotient, lift any
+representative, and then correct the remaining error in \(\mathcal E\)
+using \((T_{\mathcal E}-\lambda)^{-1}\).  This also gives a bounded
+inverse, because the quotient inverse and
+\((T_{\mathcal E}-\lambda)^{-1}\) are bounded.  Conversely, when
+\(\lambda\notin\spec(T_{\mathcal E})\), invertibility of \(T-\lambda\)
+would force invertibility of \(\overline T-\lambda\): the inverse of
+\(T-\lambda\) preserves \(\mathcal E\), since the solution in
+\(\mathcal E\) is unique.
+
+Consequently, outside the disk of radius
+\(\max\{\theta\lambda_H,r_H\}\), the spectrum of \(T\) is exactly the
+corresponding spectrum of the survivor operator.  In particular
+\(\lambda_H\) is an isolated spectral value of \(T\).  Since
+\(\lambda_H\notin\spec(T_{\mathcal E})\) and the survivor eigenspace at
+\(\lambda_H\) is one-dimensional, the same quotient-correction argument
+lifts the survivor eigenfunction uniquely to a one-dimensional
+eigenspace for \(T\).  The Riesz projection at \(\lambda_H\) is therefore
+rank one.  If \(h_H\) spans its range and \(\eta_H^0\) is the positive
+Ruelle--Perron--Frobenius eigenfunctional on
+\(\mathcal B_\theta(Z_H)\), then
+\[
+  \eta_H(f):=\eta_H^0(\mathcal Rf)
+\]
+is a non-zero positive eigenfunctional for \(T^*\).  Normalizing
+\(h_H\) so that \(\eta_H(h_H)=1\) and writing
+\(\Pi_Hf=\eta_H(f)h_H\), the decomposition
+\(\mathcal N_H:=T(I-\Pi_H)\) has
+\(\rho(\mathcal N_H)<\lambda_H\), and the displayed spectral
+decomposition follows.
 \end{proof}
 
 \begin{lemma}[One-step Gibbs error-survival comparison]
