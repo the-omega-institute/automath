@@ -146,6 +146,7 @@ import Omega.POM.DiagonalRateDiagonalDeterminesSeparationProfile
 import Omega.POM.DiagonalRateMaxAtomExtremizer
 import Omega.POM.DiagonalRateRefreshFundamentalMatrixRankone
 import Omega.POM.DiagonalRateSmallDistortionSynergyK
+import Omega.POM.DiagonalRateSmallDistortionSavingHalfMomentFold
 import Omega.POM.DiagonalRateSturmCauchyEigenbasis
 import Omega.POM.DiagonalRateRefreshCountRenewalLLNCLT
 import Omega.POM.DiagonalRateRefreshCountScgfDerivatives
