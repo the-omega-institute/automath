@@ -35,6 +35,7 @@ import Omega.Conclusion.BinfoldTwoConstantCompleteness
 import Omega.Conclusion.BinfoldTailOrderStatisticsSingleJumpCollapse
 import Omega.Conclusion.BinfoldTwoScalarCompleteReconstruction
 import Omega.Conclusion.BinarySparsityLogarithmicDeviation
+import Omega.Conclusion.BinaryGodelEllipticLiftReversibleReadout
 import Omega.Conclusion.BoundedPopcountExactLogRigidity
 import Omega.Conclusion.BigWittExactSpectralBudget
 import Omega.Conclusion.BlockConsistencyNotSchurConcave
