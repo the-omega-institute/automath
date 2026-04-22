@@ -98,6 +98,7 @@ import Omega.SyncKernelWeighted.SelfDualNormalForm1pmu
 import Omega.SyncKernelWeighted.TraceCentralMomentsZero
 import Omega.SyncKernelWeighted.TraceOddVanish
 import Omega.SyncKernelWeighted.SyncKernel3DHessianInverseExact
+import Omega.SyncKernelWeighted.SyncKernel3dCriticalQuintic
 import Omega.SyncKernelWeighted.SyncKernel3dCriticalWHalf
 import Omega.SyncKernelWeighted.SyncKernel3dRecurrenceDrop
 import Omega.SyncKernelWeighted.SyncKernel2DExactDecouple
