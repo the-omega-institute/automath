@@ -241,13 +241,18 @@ def git_log_oneline(n: int = 5, *, cwd: Optional[Path] = None) -> list[str]:
 
 # kern.memorystatus_vm_pressure_level mapping (XNU):
 #   1 = NORMAL, 2 = WARN, 4 = URGENT, 8 = CRITICAL
+# NOTE: the kernel's pressure_level is "sticky" — once a swap spike pushes it
+# to WARN it can stay there for hours even after RAM becomes abundant. We
+# keep it as a logged-only secondary signal and gate dispatch on the more
+# actionable (swap_used >= ceiling) AND (available RAM < min_avail) pair.
 _MEM_LEVEL_BY_NAME = {"normal": 1, "warn": 2, "urgent": 4, "critical": 8}
 
 # Populated by main() from CLI flags.
 _MEM_GUARD_CFG: dict = {
     "enabled": sys.platform == "darwin",
-    "level_threshold": 2,      # block when kern.memorystatus_vm_pressure_level >= this
-    "swap_ceiling_gb": 16.0,   # block when used swap exceeds this
+    "level_threshold": 2,      # LOGGED ONLY — does not block dispatch on its own
+    "swap_ceiling_gb": 16.0,   # block only with avail_ram < min_avail
+    "min_avail_gb": 1.5,       # block only with swap >= swap_ceiling
     "poll_seconds": 30,
     "max_wait_seconds": 1800,
 }
@@ -289,9 +294,37 @@ def _macos_swap_used_gb() -> float:
         return 0.0
 
 
-def memory_pressure_snapshot() -> tuple[int, float]:
-    """Return (pressure_level, swap_used_gb). level=0 if unsupported."""
-    return _macos_pressure_level(), _macos_swap_used_gb()
+def _macos_available_ram_gb() -> float:
+    """Immediately-reclaimable RAM in GB. Sums Pages free + Pages inactive
+    + Pages speculative from `vm_stat`. On macOS these pages can be handed
+    back to a new process without touching swap.
+
+    Returns 0.0 on non-darwin or parse errors (caller treats as "unknown"
+    and is conservative).
+    """
+    if sys.platform != "darwin":
+        return 0.0
+    try:
+        r = subprocess.run(
+            ["vm_stat"],
+            capture_output=True, text=True, timeout=5,
+            stdin=subprocess.DEVNULL,
+        )
+        out = r.stdout or ""
+        pm = re.search(r"page size of (\d+) bytes", out)
+        page_size = int(pm.group(1)) if pm else 16384
+        def _pages(label: str) -> int:
+            m = re.search(rf"{re.escape(label)}:\s+(\d+)\.", out)
+            return int(m.group(1)) if m else 0
+        free_pages = _pages("Pages free") + _pages("Pages inactive") + _pages("Pages speculative")
+        return free_pages * page_size / (1024 ** 3)
+    except Exception:
+        return 0.0
+
+
+def memory_pressure_snapshot() -> tuple[int, float, float]:
+    """Return (pressure_level, swap_used_gb, avail_ram_gb). level=0 if unsupported."""
+    return _macos_pressure_level(), _macos_swap_used_gb(), _macos_available_ram_gb()
 
 
 def memory_pressure_wait(context: str = "") -> bool:
@@ -305,28 +338,36 @@ def memory_pressure_wait(context: str = "") -> bool:
     if not cfg["enabled"]:
         return True
 
-    lvl_thresh = int(cfg["level_threshold"])
     swap_cap = float(cfg["swap_ceiling_gb"])
+    min_avail = float(cfg["min_avail_gb"])
     poll = int(cfg["poll_seconds"])
     max_wait = int(cfg["max_wait_seconds"])
 
-    # Fast path: no pressure, no waiting.
-    lvl, swap = memory_pressure_snapshot()
-    if (lvl == 0 or lvl < lvl_thresh) and swap < swap_cap:
+    # Gating rule: block only when BOTH
+    #   swap already exceeds ceiling  AND
+    #   immediately-reclaimable RAM is below min_avail
+    # The kernel's pressure_level is included in log lines but NOT in the
+    # gate — it's sticky after a prior spike and keeps blocking long after
+    # physical RAM is abundant again.
+
+    def _ok(swap: float, avail: float) -> bool:
+        return swap < swap_cap or avail >= min_avail
+
+    # Fast path.
+    lvl, swap, avail = memory_pressure_snapshot()
+    if _ok(swap, avail):
         return True
 
-    # Serialize the wait so parallel callers don't spam identical log lines.
     with _mem_guard_lock:
         start = time.time()
         warned = False
         while True:
-            lvl, swap = memory_pressure_snapshot()
-            under_level = lvl == 0 or lvl < lvl_thresh
-            under_swap = swap < swap_cap
-            if under_level and under_swap:
+            lvl, swap, avail = memory_pressure_snapshot()
+            if _ok(swap, avail):
                 if warned:
                     logger.info(
-                        f"[mem-guard] pressure cleared (level={lvl}, swap={swap:.1f}GB)"
+                        f"[mem-guard] cleared (level={lvl}, swap={swap:.1f}GB, "
+                        f"avail={avail:.1f}GB)"
                         + (f" — resuming {context}" if context else "")
                     )
                 return True
@@ -334,13 +375,15 @@ def memory_pressure_wait(context: str = "") -> bool:
             if elapsed >= max_wait:
                 logger.warning(
                     f"[mem-guard] timeout after {elapsed}s "
-                    f"(level={lvl}, swap={swap:.1f}GB) — proceeding anyway"
+                    f"(level={lvl}, swap={swap:.1f}GB, avail={avail:.1f}GB) — "
+                    f"proceeding anyway"
                     + (f" with {context}" if context else "")
                 )
                 return False
             logger.warning(
-                f"[mem-guard] pressure elevated (level={lvl}, swap={swap:.1f}GB) — "
-                f"pausing {context or 'dispatch'}, retry in {poll}s (waited {elapsed}s)"
+                f"[mem-guard] pressure elevated (level={lvl}, swap={swap:.1f}GB, "
+                f"avail={avail:.1f}GB) — pausing {context or 'dispatch'}, "
+                f"retry in {poll}s (waited {elapsed}s)"
             )
             warned = True
             time.sleep(poll)
@@ -2187,12 +2230,21 @@ def main() -> int:
     parser.add_argument(
         "--mem-threshold", type=str, default="warn",
         choices=list(_MEM_LEVEL_BY_NAME.keys()),
-        help="Pause dispatch when kern.memorystatus_vm_pressure_level >= this "
-             "(default: warn)",
+        help="[LOGGED ONLY] kern.memorystatus_vm_pressure_level label shown "
+             "in mem-guard log lines; does not affect gating (the kernel's "
+             "pressure_level is sticky and unreliable after a swap spike). "
+             "Default: warn",
     )
     parser.add_argument(
         "--mem-swap-ceiling-gb", type=float, default=16.0,
-        help="Pause dispatch when used swap exceeds this many GB (default: 16)",
+        help="Pause dispatch when used swap exceeds this many GB AND "
+             "--mem-min-avail-gb is violated (default: 16)",
+    )
+    parser.add_argument(
+        "--mem-min-avail-gb", type=float, default=1.5,
+        help="Pause dispatch when immediately-reclaimable RAM "
+             "(vm_stat free+inactive+speculative) drops below this many GB "
+             "AND --mem-swap-ceiling-gb is exceeded. (default: 1.5)",
     )
     parser.add_argument(
         "--mem-poll", type=int, default=30,
@@ -2249,17 +2301,18 @@ def main() -> int:
     )
     _MEM_GUARD_CFG["level_threshold"] = _MEM_LEVEL_BY_NAME[args.mem_threshold]
     _MEM_GUARD_CFG["swap_ceiling_gb"] = float(args.mem_swap_ceiling_gb)
+    _MEM_GUARD_CFG["min_avail_gb"] = float(args.mem_min_avail_gb)
     _MEM_GUARD_CFG["poll_seconds"] = int(args.mem_poll)
     _MEM_GUARD_CFG["max_wait_seconds"] = int(args.mem_max_wait)
     if _MEM_GUARD_CFG["enabled"]:
-        lvl, swap = memory_pressure_snapshot()
+        lvl, swap, avail = memory_pressure_snapshot()
         logger.info(
-            f"Memory guard: ON (threshold={args.mem_threshold} "
-            f"[level≥{_MEM_GUARD_CFG['level_threshold']}], "
-            f"swap≤{_MEM_GUARD_CFG['swap_ceiling_gb']:.1f}GB, "
+            f"Memory guard: ON (gate: swap>{_MEM_GUARD_CFG['swap_ceiling_gb']:.1f}GB "
+            f"AND avail<{_MEM_GUARD_CFG['min_avail_gb']:.1f}GB, "
             f"poll={_MEM_GUARD_CFG['poll_seconds']}s, "
-            f"max_wait={_MEM_GUARD_CFG['max_wait_seconds']}s) | "
-            f"current: level={lvl}, swap={swap:.1f}GB"
+            f"max_wait={_MEM_GUARD_CFG['max_wait_seconds']}s; "
+            f"pressure_level={args.mem_threshold} logged only) | "
+            f"current: level={lvl}, swap={swap:.1f}GB, avail={avail:.1f}GB"
         )
     else:
         logger.info("Memory guard: OFF")
