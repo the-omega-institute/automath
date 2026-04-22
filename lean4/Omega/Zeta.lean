@@ -83,6 +83,7 @@ import Omega.Zeta.XiTerminalZmLeyangRamificationDivisorStokes
 import Omega.Zeta.XiTerminalZmStokesLeyangSharedArtinRepresentation
 import Omega.Zeta.XiTerminalZmDeltaNodeOrderDiscriminantIndexRatio
 import Omega.Zeta.XiTerminalZmCdimBidirectionalMiLoglaw
+import Omega.Zeta.XiTerminalZmGodelPrefixCodeMiDifference
 import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiWindow6WeylInvariantBestTwoOrbitCompression
 import Omega.Zeta.XiWindow6URFirstReturnTimeClosedForm
