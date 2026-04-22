@@ -2,6 +2,7 @@
 """Distillation pipeline for routing external mathematical methods into Omega."""
 
 import argparse
+import hashlib
 import json
 import logging
 import os
@@ -30,6 +31,7 @@ CORE_BODY = THEORY_DIR / "sections" / "body"
 BACKFLOW_DIR = PUBLICATION_DIR / "backflow"
 DISTILLATION_DIR = BACKFLOW_DIR / ".distillation"
 REGISTRY_PATH = BACKFLOW_DIR / "knowledge_backflow_inventory.json"
+DISTILLATION_MEMORY_PATH = BACKFLOW_DIR / "distillation_memory.json"
 PROMPTS_DIR = SCRIPT_DIR / "prompts"
 LOG_DIR = DISTILLATION_DIR / "logs"
 STOP_FILE = SCRIPT_DIR / ".pipeline.stop"
@@ -1047,6 +1049,16 @@ def _oracle_deepening_schema() -> str:
         "codex_writeback_instructions": [
             "specific instruction for the next Codex writeback attempt"
         ],
+        "sidecar_candidates": [
+            {
+                "title": "compact name for a useful side result not needed by the focused family",
+                "target_sections": ["future core section slug"],
+                "scope_relation": "off_scope|future_split|supporting_context",
+                "source_reason": "why this arose while pushing the focused family",
+                "reuse_guidance": "how a later agent should load or avoid this context",
+                "status": "open",
+            }
+        ],
     }
     return _json_block(schema)
 
@@ -1560,9 +1572,10 @@ def _scope_contract_from_artifacts(
                 name = str(item.get("name", "")).strip()
                 if name and name not in mechanism_names:
                     mechanism_names.append(name)
+    in_scope_sections = _family_target_sections(raw)
     target_sections = []
     for source in (
-        _family_target_sections(raw),
+        in_scope_sections,
         _match_sections(matches),
         _payload_declared_sections(payload),
     ):
@@ -1582,6 +1595,7 @@ def _scope_contract_from_artifacts(
         "method_operators": method_names,
         "bad_example_mechanisms": mechanism_names,
         "target_sections": target_sections,
+        "in_scope_target_sections": in_scope_sections,
         "hard_gates": [
             "scope_contract",
             "theorem_inventory",
@@ -1594,6 +1608,10 @@ def _scope_contract_from_artifacts(
         "split_policy": (
             "Strong material outside the declared theorem inventory is recorded "
             "as a split candidate and must not justify passing the current source."
+        ),
+        "distillation_memory": _distillation_memory_context(
+            state,
+            target_sections=target_sections,
         ),
     }
 
@@ -1649,6 +1667,176 @@ def _derive_split_candidates(raw: Any, payload: Any, matches: Any) -> list[dict[
             }
         )
     return candidates
+
+
+def _read_distillation_memory() -> dict[str, Any]:
+    """Read the curated cross-run distillation memory ledger."""
+    if not DISTILLATION_MEMORY_PATH.exists():
+        return {"version": 1, "entries": []}
+    data = read_json(DISTILLATION_MEMORY_PATH)
+    if isinstance(data, list):
+        return {"version": 1, "entries": data}
+    if isinstance(data, dict):
+        entries = data.get("entries", [])
+        if not isinstance(entries, list):
+            entries = []
+        return {"version": int(data.get("version", 1) or 1), "entries": entries}
+    return {"version": 1, "entries": []}
+
+
+def _memory_entry_id(source_slug: str, kind: str, title: str, reason: str) -> str:
+    digest = hashlib.sha1(f"{source_slug}|{kind}|{title}|{reason}".encode("utf-8")).hexdigest()
+    return f"{source_slug}:{kind}:{digest[:12]}"
+
+
+def _upsert_distillation_memory(entries: list[dict[str, Any]]) -> dict[str, Any]:
+    """Upsert compact, curated memory entries that are safe to commit."""
+    if not entries:
+        return _read_distillation_memory()
+    memory = _read_distillation_memory()
+    existing = {
+        str(entry.get("id", "")): entry
+        for entry in memory.get("entries", [])
+        if isinstance(entry, dict) and entry.get("id")
+    }
+    now = _now_iso()
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        entry_id = str(entry.get("id", "")).strip()
+        if not entry_id:
+            continue
+        previous = existing.get(entry_id, {})
+        merged = {**previous, **entry}
+        merged.setdefault("created_at", previous.get("created_at") or now)
+        merged["updated_at"] = now
+        existing[entry_id] = merged
+    output = {
+        "version": 1,
+        "description": (
+            "Curated distillation memory for useful split/off-scope findings. "
+            "Raw intermediate artifacts remain under .distillation and are not committed."
+        ),
+        "entries": sorted(existing.values(), key=lambda item: str(item.get("id", ""))),
+    }
+    write_json(DISTILLATION_MEMORY_PATH, output)
+    return output
+
+
+def _memory_entries_from_split_candidates(state: DistillState) -> list[dict[str, Any]]:
+    """Convert policy split candidates into durable future-context entries."""
+    source_slug = _slugify(state.name)
+    scope = state.scope_contract or {}
+    entries = []
+    for candidate in state.split_candidates:
+        if not isinstance(candidate, dict):
+            continue
+        section = str(candidate.get("section", "")).strip()
+        reason = str(candidate.get("reason", "")).strip()
+        if not section or not reason:
+            continue
+        title = f"{state.name}: future split candidate for {section}"
+        entries.append(
+            {
+                "id": _memory_entry_id(source_slug, "split_candidate", section, reason),
+                "kind": "split_candidate",
+                "status": "open",
+                "source": state.name,
+                "source_slug": source_slug,
+                "title": title,
+                "target_sections": [section],
+                "scope_relation": "outside_current_source_scope",
+                "origin": "policy.split_candidate",
+                "reason": reason,
+                "disposition": candidate.get("disposition", "record_for_split_or_future_source"),
+                "current_scope": {
+                    "theorem_families": scope.get("theorem_families", []),
+                    "in_scope_target_sections": scope.get(
+                        "in_scope_target_sections",
+                        scope.get("target_sections", []),
+                    ),
+                },
+                "reuse_guidance": (
+                    "Load as future context or split-source backlog. Do not use this "
+                    "entry to pass the current source gate unless a later scope contract "
+                    "explicitly adopts it."
+                ),
+            }
+        )
+    return entries
+
+
+def _memory_entries_from_oracle_sidecar(
+    state: DistillState,
+    data: dict[str, Any],
+    focused_family: Optional[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Convert Oracle sidecar candidates into durable future-context entries."""
+    source_slug = _slugify(state.name)
+    family_name = str((focused_family or {}).get("name", "")).strip()
+    entries = []
+    for item in data.get("sidecar_candidates", []) or []:
+        if not isinstance(item, dict):
+            continue
+        title = str(item.get("title", "")).strip()
+        reason = str(item.get("source_reason", item.get("reason", ""))).strip()
+        if not title or not reason:
+            continue
+        target_sections = _unique_strings(item.get("target_sections", []))
+        entries.append(
+            {
+                "id": _memory_entry_id(source_slug, "oracle_sidecar", title, reason),
+                "kind": "oracle_sidecar",
+                "status": str(item.get("status", "open") or "open"),
+                "source": state.name,
+                "source_slug": source_slug,
+                "title": title,
+                "target_sections": target_sections,
+                "scope_relation": str(item.get("scope_relation", "side_result") or "side_result"),
+                "origin": "oracle.deepening",
+                "focused_family": family_name,
+                "reason": reason,
+                "reuse_guidance": str(
+                    item.get(
+                        "reuse_guidance",
+                        "Load only when a later scope contract adopts this side result.",
+                    )
+                ),
+            }
+        )
+    return entries
+
+
+def _distillation_memory_context(
+    state: DistillState,
+    target_sections: Optional[list[str]] = None,
+    limit: int = 12,
+) -> list[dict[str, Any]]:
+    """Return compact memory entries relevant to the current source or targets."""
+    memory = _read_distillation_memory()
+    source_slug = _slugify(state.name)
+    target_set = set(target_sections or [])
+    relevant = []
+    for entry in memory.get("entries", []):
+        if not isinstance(entry, dict):
+            continue
+        sections = set(_unique_strings(entry.get("target_sections", [])))
+        same_source = entry.get("source_slug") == source_slug
+        overlaps = bool(target_set and sections & target_set)
+        if same_source or overlaps:
+            relevant.append(
+                {
+                    "id": entry.get("id"),
+                    "kind": entry.get("kind"),
+                    "status": entry.get("status"),
+                    "title": entry.get("title"),
+                    "target_sections": list(sections),
+                    "scope_relation": entry.get("scope_relation"),
+                    "reason": entry.get("reason"),
+                    "reuse_guidance": entry.get("reuse_guidance"),
+                }
+            )
+    return relevant[-limit:]
 
 
 def _active_coverage_debts(payload: Any, completed_families: list[str]) -> list[dict[str, Any]]:
@@ -1922,6 +2110,8 @@ def refresh_policy_state(state: DistillState, *, persist: bool = True) -> dict[s
     state.scope_contract = scope
     state.open_debts = _open_debts_from_inventory(inventory)
     state.split_candidates = inventory.get("split_candidates", [])
+    if persist:
+        _upsert_distillation_memory(_memory_entries_from_split_candidates(state))
     state.blocked = (
         {
             "active": True,
@@ -2656,7 +2846,15 @@ def _global_evidence_for_state(state: DistillState) -> dict[str, Any]:
     path = _artifact_path(state, "global_evidence_pack.json")
     if path.exists():
         try:
-            return read_json(path)
+            pack = read_json(path)
+            if isinstance(pack, dict):
+                pack["distillation_memory"] = _distillation_memory_context(
+                    state,
+                    target_sections=_payload_declared_sections(
+                        _read_artifact_json_or_none(state, "generated_payload.json")
+                    ),
+                )
+                return pack
         except (OSError, json.JSONDecodeError):
             pass
     try:
@@ -2668,7 +2866,14 @@ def _global_evidence_for_state(state: DistillState) -> dict[str, Any]:
         section_scores = matches.get("all_sections", [])
     except FileNotFoundError:
         section_scores = []
-    return _build_global_evidence_pack(raw, section_scores)
+    pack = _build_global_evidence_pack(raw, section_scores)
+    pack["distillation_memory"] = _distillation_memory_context(
+        state,
+        target_sections=_payload_declared_sections(
+            _read_artifact_json_or_none(state, "generated_payload.json")
+        ),
+    )
+    return pack
 
 
 def _semantic_scan(
@@ -3393,6 +3598,7 @@ def _codex_score(
     state: DistillState,
     writebacks: list[dict[str, Any]],
     payload: dict[str, Any],
+    section_contexts: str,
     dry_run: bool,
 ) -> dict[str, Any]:
     """Run the Codex review prompt with retry and return a normalized score.
@@ -3405,6 +3611,7 @@ def _codex_score(
         mathematician=state.name,
         writebacks=_json_block(writebacks),
         payload=_json_block(payload),
+        section_contexts=section_contexts,
         score_schema=_score_schema(),
     )
     for attempt in range(1, 3):
@@ -3535,6 +3742,9 @@ def _oracle_deepening_research(
         f"oracle_deepening_cycle{state.depth_cycle}.json",
         data,
     )
+    _upsert_distillation_memory(
+        _memory_entries_from_oracle_sidecar(state, data, focused_family)
+    )
     return data
 
 
@@ -3586,7 +3796,14 @@ def _review_writebacks(
         review_backend = DEFAULT_REVIEW_BACKEND
 
     with ThreadPoolExecutor(max_workers=2) as executor:
-        codex_future = executor.submit(_codex_score, state, writebacks, payload, dry_run)
+        codex_future = executor.submit(
+            _codex_score,
+            state,
+            writebacks,
+            payload,
+            section_contexts,
+            dry_run,
+        )
         secondary_name = ""
         secondary_future = None
         if review_backend == "codex-claude":
