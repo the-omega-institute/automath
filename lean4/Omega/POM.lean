@@ -83,6 +83,7 @@ import Omega.POM.CrossqGMonotone
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.CycleLatticeThetaPoissonDuality
+import Omega.POM.LocalDefectGibbsVariational
 import Omega.POM.DefectBand
 import Omega.POM.DelayMin
 import Omega.POM.DerivedFiberDeterminantExtremalEnvelope
