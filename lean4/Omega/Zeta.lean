@@ -30,6 +30,7 @@ import Omega.Zeta.AuditableProfiniteChebotarevTradeoff
 import Omega.Zeta.AuditableProfiniteChebotarevFinite
 import Omega.Zeta.XiExtensionPreservingInitialObject
 import Omega.Zeta.XiAtomicCenteredResidueSimplex
+import Omega.Zeta.XiTimePart76SmithSurjectiveModuliPrimeSieve
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiFiniteFrontierCertificate

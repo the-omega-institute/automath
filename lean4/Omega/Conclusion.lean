@@ -423,6 +423,7 @@ import Omega.Conclusion.SinglephasePrecisionExponentEqualsCdim
 import Omega.Conclusion.SinglepointJetRigidity
 import Omega.Conclusion.SixfoldZeroJointbudgetOrthogonality
 import Omega.Conclusion.SmithLocalZetaPoleResidueHeadTriple
+import Omega.Conclusion.SmithUnimodularResidueRigidity
 import Omega.Conclusion.SmithNormalizedKernelPositiveFiniteEulerCorrection
 import Omega.Conclusion.SmithPrefixBudget
 import Omega.Conclusion.SmithPKernelSpectrumDiscreteConcaveCharacterization

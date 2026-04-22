@@ -55,6 +55,7 @@ import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.CollisionKernelPublication
 import Omega.POM.CoarseGrainedKernel
 import Omega.POM.CollisionMoment2AdicOdometerInverseLimit
+import Omega.POM.FiniteModulusStability
 import Omega.POM.CollisionSpectrumPhiOnesidedApproximation
 import Omega.POM.CollisionStrengthened
 import Omega.POM.ChernoffThresholdBounds
