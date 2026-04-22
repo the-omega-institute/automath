@@ -299,6 +299,7 @@ import Omega.Zeta.FourthRegisterDichotomy
 import Omega.Zeta.FredholmDetSeeds
 import Omega.Zeta.FredholmPrimitiveClosedForm
 import Omega.Zeta.XiEndpointHeatProbeRatioRecoversLocalSpectralDimension
+import Omega.Zeta.XiEndpointSinglePointCertificateComplete
 import Omega.Zeta.GaugeGroupTripleDecomp
 import Omega.Zeta.GeometricHarmonicTail
 import Omega.Zeta.GodelFiberIndexModUniformityIndependence
@@ -386,6 +387,7 @@ import Omega.Zeta.LocalizedSolenoidNonzeroEndomorphismDegreeSemigroup
 import Omega.Zeta.LogMHolomorphicVariation
 import Omega.Zeta.LucasBarrier
 import Omega.Zeta.MellinUnitarySlice
+import Omega.Zeta.MellinUnitarySliceUnique
 import Omega.Zeta.MinimalAuditChainPrimeSupport
 import Omega.Zeta.XiChainInteriorBooleanFlagClosedForm
 import Omega.Zeta.Near1KappaInftyC1StrictIneq

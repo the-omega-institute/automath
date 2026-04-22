@@ -313,6 +313,7 @@ import Omega.POM.KLLedgerTelescope
 import Omega.POM.LedgerResidualTelescoping
 import Omega.POM.KLPythagorasTower
 import Omega.POM.KLPythagorasUniform
+import Omega.POM.IprojGapExact
 import Omega.POM.KernelSpectrum
 import Omega.POM.LambdaAlgebraic
 import Omega.POM.LambdaSaturation
