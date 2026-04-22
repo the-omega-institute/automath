@@ -674,6 +674,25 @@ def _artifact_exists(state: DistillState, filename: str) -> bool:
     return _artifact_path(state, filename).exists()
 
 
+def _remove_artifact_if_exists(state: DistillState, filename: str) -> None:
+    """Remove a stale state-local artifact if it exists."""
+    path = _artifact_path(state, filename)
+    if path.exists():
+        path.unlink()
+
+
+def _remove_artifacts_if_exists(state: DistillState, filenames: list[str]) -> None:
+    """Remove stale state-local artifacts and log the cleanup."""
+    removed = []
+    for filename in filenames:
+        path = _artifact_path(state, filename)
+        if path.exists():
+            path.unlink()
+            removed.append(filename)
+    if removed:
+        logger.info("Invalidated stale artifacts for %s: %s", state.name, ", ".join(removed))
+
+
 def _read_artifact_json_or_none(state: DistillState, filename: str) -> Any:
     """Read a state-local JSON artifact, returning None when unavailable."""
     path = _artifact_path(state, filename)
@@ -1128,6 +1147,125 @@ def _all_families_completed(state: DistillState) -> bool:
     return all(name in completed for name in names)
 
 
+def _prune_completed_families(state: DistillState) -> bool:
+    """Drop completion markers that no longer belong to the current inventory."""
+    names = _theorem_family_names(state)
+    if not names or not state.completed_families:
+        return False
+    allowed = set(names)
+    before = list(state.completed_families)
+    state.completed_families = [name for name in before if name in allowed]
+    if before == state.completed_families:
+        return False
+    state.depth_cycle = min(state.depth_cycle, len(state.completed_families))
+    removed = [name for name in before if name not in allowed]
+    logger.warning(
+        "Pruned stale completed families for %s: %s",
+        state.name,
+        ", ".join(removed),
+    )
+    return True
+
+
+def _invalidate_after_stage_r(state: DistillState) -> None:
+    """A new scope contract invalidates all downstream local artifacts."""
+    _remove_artifacts_if_exists(
+        state,
+        [
+            "section_matches.json",
+            "global_evidence_pack.json",
+            "generated_payload.json",
+            "writeback_response.json",
+            "writebacks.json",
+            "writeback_ledger.json",
+            "registry_entry.json",
+            "blocked.json",
+        ],
+    )
+    state.completed_families = []
+    state.depth_cycle = 0
+    state.scores = {}
+    state.prior_feedback = []
+    state.blocked = {}
+
+
+def _invalidate_after_stage_s(state: DistillState) -> None:
+    """A new router/evidence pass invalidates generated and writeback artifacts."""
+    _remove_artifacts_if_exists(
+        state,
+        [
+            "generated_payload.json",
+            "writeback_response.json",
+            "writebacks.json",
+            "writeback_ledger.json",
+            "registry_entry.json",
+            "blocked.json",
+        ],
+    )
+    state.scores = {}
+    state.prior_feedback = []
+    state.blocked = {}
+    _prune_completed_families(state)
+
+
+def _invalidate_after_stage_g(state: DistillState) -> None:
+    """A new generated payload invalidates writeback and export artifacts."""
+    _remove_artifacts_if_exists(
+        state,
+        [
+            "writeback_response.json",
+            "writebacks.json",
+            "writeback_ledger.json",
+            "registry_entry.json",
+            "blocked.json",
+        ],
+    )
+    state.scores = {}
+    state.prior_feedback = []
+    state.blocked = {}
+    _prune_completed_families(state)
+
+
+def _artifact_mtime(state: DistillState, filename: str) -> Optional[float]:
+    """Return an artifact mtime, or None when it is unavailable."""
+    path = _artifact_path(state, filename)
+    try:
+        return path.stat().st_mtime if path.exists() else None
+    except OSError:
+        return None
+
+
+def _invalidate_stale_artifact_chain(state: DistillState) -> bool:
+    """Invalidate downstream artifacts when an upstream artifact is newer."""
+    raw_m = _artifact_mtime(state, "raw_research.json")
+    section_m = _artifact_mtime(state, "section_matches.json")
+    generated_m = _artifact_mtime(state, "generated_payload.json")
+    writebacks_m = _artifact_mtime(state, "writebacks.json")
+    changed = False
+
+    if raw_m is not None and section_m is not None and raw_m > section_m:
+        logger.warning("raw_research.json is newer than section_matches.json")
+        _invalidate_after_stage_r(state)
+        changed = True
+        section_m = None
+        generated_m = None
+        writebacks_m = None
+
+    if section_m is not None and generated_m is not None and section_m > generated_m:
+        logger.warning("section_matches.json is newer than generated_payload.json")
+        _invalidate_after_stage_s(state)
+        changed = True
+        generated_m = None
+        writebacks_m = None
+
+    if generated_m is not None and writebacks_m is not None and generated_m > writebacks_m:
+        logger.warning("generated_payload.json is newer than writebacks.json")
+        _invalidate_after_stage_g(state)
+        changed = True
+
+    return changed
+
+
 def _pipeline_done_contract(state: DistillState) -> tuple[bool, str]:
     """Check the durable contract required before a pipeline may be DONE."""
     if state.current_stage == "E":
@@ -1166,6 +1304,8 @@ def _resume_stage_from_artifacts(state: DistillState) -> str:
 
 def reconcile_state_contract(state: DistillState) -> DistillState:
     """Repair impossible stage states using local artifacts as source of truth."""
+    artifacts_changed = _invalidate_stale_artifact_chain(state)
+    family_markers_changed = _prune_completed_families(state)
     if state.current_stage not in STAGE_ORDER:
         old_stage = state.current_stage
         state.current_stage = _resume_stage_from_artifacts(state)
@@ -1185,6 +1325,8 @@ def reconcile_state_contract(state: DistillState) -> DistillState:
                 state.current_stage,
             )
             logger.info("State contract repair: %s -> %s", old_stage, state.current_stage)
+        elif artifacts_changed or family_markers_changed:
+            save_state(state)
         return state
 
     required_before = {
@@ -1204,6 +1346,8 @@ def reconcile_state_contract(state: DistillState) -> DistillState:
             required,
             state.current_stage,
         )
+    elif artifacts_changed or family_markers_changed:
+        save_state(state)
     return state
 
 
@@ -1962,6 +2106,7 @@ def run_stage_r(
         missing = _required_fields_present(data, required)
         if not missing:
             _write_artifact_json(state, "raw_research.json", data)
+            _invalidate_after_stage_r(state)
             state.current_stage = "S"
             state.round_number += 1
             save_state(state)
@@ -2631,6 +2776,7 @@ def run_stage_s(state: DistillState, dry_run: bool = False) -> bool:
         "all_sections": section_scores,
     }
     _write_artifact_json(state, "section_matches.json", output)
+    _invalidate_after_stage_s(state)
     state.current_stage = "G"
     state.round_number += 1
     save_state(state)
@@ -2754,6 +2900,7 @@ def run_stage_g(state: DistillState, dry_run: bool = False) -> bool:
         errors = _validate_generated_payload(data)
         if not errors:
             _write_artifact_json(state, "generated_payload.json", data)
+            _invalidate_after_stage_g(state)
             state.current_stage = "W"
             state.round_number += 1
             save_state(state)
@@ -2974,12 +3121,51 @@ def _validate_writebacks(writebacks: Any) -> tuple[list[dict[str, Any]], list[st
 
 def _parse_score_response(response: str) -> dict[str, Any]:
     """Parse a reviewer response into a normalized score object."""
+    cleaned = str(response or "").strip()
+    lower = cleaned.lower()
+    unavailable_markers = (
+        "you've hit your limit",
+        "you have hit your limit",
+        "usage limit",
+        "rate limit",
+        "try again later",
+        "(timeout)",
+        "(start-failed)",
+        "dry run -- no output",
+    )
+    marker_unavailable = any(marker in lower for marker in unavailable_markers)
+    if not cleaned or marker_unavailable:
+        return {
+            "score": 0,
+            "verdict": "unavailable",
+            "issues": [cleaned[:1000] or "Reviewer returned no output"],
+            "required_changes": [],
+            "unavailable": True,
+            "retryable": not marker_unavailable,
+        }
     try:
-        data = _extract_json(response)
+        data = _extract_json(cleaned)
     except (ValueError, json.JSONDecodeError):
-        data = {"score": 1, "verdict": "reject", "issues": [response[:1000]]}
+        return {
+            "score": 0,
+            "verdict": "unavailable",
+            "issues": [
+                "Reviewer returned no parseable score JSON",
+                cleaned[:1000],
+            ],
+            "required_changes": [],
+            "unavailable": True,
+            "retryable": True,
+        }
     if not isinstance(data, dict):
-        data = {"score": 1, "verdict": "reject", "issues": ["Reviewer returned non-object JSON"]}
+        return {
+            "score": 0,
+            "verdict": "unavailable",
+            "issues": ["Reviewer returned non-object JSON"],
+            "required_changes": [],
+            "unavailable": True,
+            "retryable": True,
+        }
     try:
         score = int(float(data.get("score", 1)))
     except (TypeError, ValueError):
@@ -2988,6 +3174,8 @@ def _parse_score_response(response: str) -> dict[str, Any]:
     data.setdefault("verdict", "revise" if data["score"] < 7 else "accept")
     data.setdefault("issues", [])
     data.setdefault("required_changes", [])
+    data.setdefault("unavailable", False)
+    data.setdefault("retryable", False)
     return data
 
 
@@ -3018,11 +3206,9 @@ def _codex_score(
             log_tag=f"{_slugify(state.name)}_W_review_codex_a{attempt}",
         )
         result = _parse_score_response(response)
-        if result.get("score", 0) > 0 and result.get("verdict") != "reject":
+        if result.get("score", 0) > 0:
             return result
-        if result.get("issues") and any(
-            "parseable" not in str(i).lower() for i in result["issues"]
-        ):
+        if not result.get("retryable"):
             return result
         logger.warning(
             "Codex review attempt %d: empty/unparseable, retrying", attempt
@@ -3056,11 +3242,9 @@ def _claude_score(
             dry_run=False,
         )
         result = _parse_score_response(response)
-        if result.get("score", 0) > 0 and result.get("verdict") != "reject":
+        if result.get("score", 0) > 0:
             return result
-        if result.get("issues") and any(
-            "parseable" not in str(i).lower() for i in result["issues"]
-        ):
+        if not result.get("retryable"):
             return result
         logger.warning(
             "Claude review attempt %d: empty/unparseable, retrying", attempt
@@ -3127,7 +3311,9 @@ def _review_writebacks(
 
     # Detect FUNDAMENTAL depth issue: both reviewers say "reject"
     both_reject = (
-        codex_review.get("verdict") == "reject"
+        codex_ok
+        and claude_ok
+        and codex_review.get("verdict") == "reject"
         and claude_review.get("verdict") == "reject"
     )
 
@@ -4119,7 +4305,7 @@ def _status_lines(name: Optional[str] = None) -> list[str]:
         return ["No distillation states found."]
     lines = []
     for item_name in names:
-        state = load_state(item_name)
+        state = reconcile_state_contract(load_state(item_name))
         _scope, inventory, action = _policy_model(state)
         done, reason = _pipeline_done_contract(state)
         family_count = len(_theorem_family_names(state))
