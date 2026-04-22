@@ -69,6 +69,8 @@ MAX_W_ROUNDS = 5          # max writeback generation + review rounds
 MAX_DEEP_ROUNDS = 2       # max A-DEEP style escalation rounds per W cycle
 MIN_NEW_CLAIMS = 1        # anti-fake: minimum new theorem/lemma/etc labels
 MIN_CONTENT_DELTA = 200   # anti-fake: minimum chars of new claim content
+WRITEBACK_LINE_LIMIT = 750
+WRITEBACK_TARGET_LINE_HEADROOM = 120
 PYTHON_SCAN_MATCH_THRESHOLD = 0.15
 SEMANTIC_SCAN_CANDIDATES = 12
 SEMANTIC_SCAN_CONTEXT_CHARS = 4500
@@ -3440,6 +3442,12 @@ def _choose_writeback_targets(
             continue
         if _is_wrapper_tex_file(path):
             continue
+        try:
+            base_lines = len(read_text(path).splitlines())
+        except OSError:
+            continue
+        if base_lines >= WRITEBACK_LINE_LIMIT - WRITEBACK_TARGET_LINE_HEADROOM:
+            continue
         usable.append(path)
     if not usable:
         return []
@@ -4199,8 +4207,10 @@ def _plan_writeback_application(
         if suffix:
             new_text += "\n" + suffix
         line_count = len(new_text.splitlines())
-        if line_count >= 750:
-            errors.append(f"{rel} would have {line_count} lines, exceeding <750 gate")
+        if line_count >= WRITEBACK_LINE_LIMIT:
+            errors.append(
+                f"{rel} would have {line_count} lines, exceeding <{WRITEBACK_LINE_LIMIT} gate"
+            )
             continue
         plan.append(
             {
