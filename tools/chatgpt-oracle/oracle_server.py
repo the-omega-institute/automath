@@ -167,6 +167,51 @@ class OracleHandler(BaseHTTPRequestHandler):
             self._send_json({"status": "queued", "task_id": task_id,
                              "position": len(task_queue)})
 
+        elif self.path == "/cancel":
+            # Pipeline agents use this when their own oracle wait budget expires.
+            # This frees the browser slot and drops queued retries instead of
+            # letting orphaned work occupy all workers indefinitely.
+            task_id = data.get("task_id", "")
+            reason = data.get("reason", "cancelled")
+            if not task_id:
+                self._send_json({"error": "need task_id"}, 400)
+                return
+
+            removed_queue = 0
+            kept: deque[dict] = deque()
+            while task_queue:
+                task = task_queue.popleft()
+                if task.get("task_id") == task_id:
+                    removed_queue += 1
+                else:
+                    kept.append(task)
+            task_queue.extend(kept)
+
+            removed_agents: list[str] = []
+            for aid, task in list(pending_tasks.items()):
+                if task.get("task_id") == task_id:
+                    del pending_tasks[aid]
+                    dispatch_times.pop(aid, None)
+                    removed_agents.append(aid)
+
+            results[task_id] = {
+                "task_id": task_id,
+                "response": "",
+                "timestamp": datetime.now().isoformat(),
+                "model": "",
+                "status": "cancelled",
+                "reason": reason,
+            }
+
+            print(f"[server] Cancelled {task_id}: queue={removed_queue}, "
+                  f"agents={removed_agents or '-'} ({reason})")
+            self._send_json({
+                "status": "cancelled",
+                "task_id": task_id,
+                "removed_queue": removed_queue,
+                "removed_agents": removed_agents,
+            })
+
         elif self.path == "/result":
             # Browser tab posts the ChatGPT response
             response = data.get("response", "")

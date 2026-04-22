@@ -879,6 +879,16 @@ def oracle_submit(task_id: str, prompt: str,
         return False
 
 
+def oracle_cancel(task_id: str, reason: str) -> bool:
+    try:
+        http_post(f"{ORACLE_SERVER}/cancel",
+                  {"task_id": task_id, "reason": reason}, timeout=30)
+        return True
+    except Exception as e:
+        logger.warning(f"Oracle cancel failed for {task_id}: {e}")
+        return False
+
+
 def is_oracle_response_valid(response: str) -> bool:
     """Reject extraction-failure garbage (<2KB, thinking preamble, prompt echo).
 
@@ -4356,11 +4366,14 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 return False
             save_state(state)
             response = ""
-            # Poll with validation: keep waiting until we get a real
-            # review (>500 chars with verdict anchor), not page garbage.
-            poll_start = time.time()
-            while time.time() - poll_start < oracle_timeout:
-                raw = oracle_poll(task_id, timeout=oracle_timeout)
+            deadline = time.time() + oracle_timeout
+            # Poll with validation: retry only after a completed but invalid
+            # extraction.  A true timeout means the active browser task must be
+            # cancelled before any later rerun, otherwise stale ChatGPT jobs
+            # occupy every oracle worker while fresh tasks pile up in queue.
+            while time.time() < deadline:
+                remaining = max(1, int(deadline - time.time()))
+                raw = oracle_poll(task_id, timeout=remaining)
                 if is_oracle_response_valid(raw):
                     response = raw
                     break
@@ -4373,9 +4386,19 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     logger.warning(f"{tag} Oracle returned garbage "
                                    f"({len(raw)} chars), waiting 5min then re-submitting")
                 else:
-                    logger.warning(f"{tag} Oracle poll timeout, waiting 5min then re-submitting")
-                # Wait before re-submitting to avoid spin loop and let
-                # ChatGPT finish thinking on the next attempt
+                    oracle_cancel(task_id, f"{state.paper_name} B{rnd} poll timeout")
+                    logger.warning(f"{tag} Oracle poll timeout; cancelled "
+                                   f"{task_id} and stopping B{rnd} attempt")
+                    break
+
+                remaining = deadline - time.time()
+                if remaining <= 300:
+                    logger.warning(f"{tag} Oracle retry budget exhausted after "
+                                   f"invalid response")
+                    break
+                # Wait before re-submitting to avoid spin loop after a completed
+                # but invalid extraction.  Completed tasks already freed their
+                # browser slot on the server.
                 time.sleep(300)
                 attempt += 1
                 task_id = f"{task_id_base}_a{attempt}"
