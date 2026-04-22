@@ -632,3 +632,4 @@ import Omega.Conclusion.RankoneEigenvalueSpeedDiscriminantIdentity
 import Omega.Conclusion.ConclusionFoldQuantumVisibleBooleanization
 import Omega.Conclusion.HarmonicDispersionRenyiChi2
 import Omega.Conclusion.CapacityOrderedSpectrumInfoNCEEquivalence
+import Omega.Conclusion.FiniteMomentSpectrumStrictDeterminacyTruncation

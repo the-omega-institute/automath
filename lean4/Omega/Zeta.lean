@@ -858,3 +858,4 @@ import Omega.Zeta.XiGoldenW1TrueTwoPhaseLimit
 import Omega.Zeta.XiComovingJensenDefectKernelDecomposition
 import Omega.Zeta.XiChainInteriorBooleanMobiusCharacteristicMaxchains
 import Omega.Zeta.XiBasepointScanL2EnergyPdKernel
+import Omega.Zeta.StereographicJacobianEntropyDensity
