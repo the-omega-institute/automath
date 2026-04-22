@@ -104,6 +104,7 @@ import Omega.POM.DeltaqGoldenEnvelope
 import Omega.POM.DeltaqGLambdaIdentity
 import Omega.POM.DeltaqHalfThresholdCriterion
 import Omega.POM.DeltaqQuadraticObservableMaxExponent
+import Omega.POM.DeltaqSampleComplexityThreshold
 import Omega.POM.DeltaqSpectralDimensionIdentity
 import Omega.POM.DerivedAuditedEvenMinsectorTopologicalPhase
 import Omega.POM.DerivedSchurDirichletRamanujanParseval
