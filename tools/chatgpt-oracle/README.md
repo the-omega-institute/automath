@@ -1,102 +1,45 @@
 # ChatGPT Oracle Bridge
 
-Use your ChatGPT Pro subscription as an automated AI oracle from any script or agent.
+Use a ChatGPT browser tab as a local reasoning oracle for automation tasks.
 
+```text
+client script --POST--> oracle_server.py <--poll-- Tampermonkey userscript
+                         GET /result              chatgpt.com
 ```
-Your Script ──POST──▶ oracle_server.py ◀──poll── Tampermonkey (Chrome)
-                           │                           │
-                      GET /result              chatgpt.com automation
-```
-
-**3 files, 0 dependencies, 5 minutes to set up.**
 
 ## Quick Start
 
-### 1. Install Tampermonkey
-
-Install [Tampermonkey](https://www.tampermonkey.net/) for Chrome/Edge/Firefox.
-
-### 2. Install the userscript
-
-1. Tampermonkey Dashboard → `+` (new script)
-2. Delete template, paste contents of `chatgpt_oracle.user.js`
-3. `Ctrl+S` to save
-
-### 3. Start server
+1. Install Tampermonkey.
+2. Install `chatgpt_oracle.user.js`.
+3. Start the local server:
 
 ```bash
 python oracle_server.py
 ```
 
-### 4. Open ChatGPT
+4. Open one or more dedicated Oracle tabs:
 
-Go to https://chatgpt.com — you should see the Oracle panel (bottom-right).
-
-### 5. Ask
-
-```bash
-# Simple question
-python oracle_ask.py "What is the Riemann hypothesis?"
-
-# With PDF
-python oracle_ask.py "Review this paper as a referee" --pdf paper.pdf
-
-# From prompt file
-python oracle_ask.py --file my_prompt.txt --pdf paper.pdf --name review_v1
+```text
+https://chatgpt.com/?oracle=1
+https://chatgpt.com/?oracle=2
+https://chatgpt.com/?oracle=3
 ```
 
-Results auto-save to `done/<task_id>.md`.
+Tabs without `?oracle=N` stay dormant so normal ChatGPT use is not affected.
 
-## Files
+## Protocol
 
-| File | What | Size |
-|------|------|------|
-| `oracle_server.py` | HTTP bridge server (port 8765) | ~3 KB |
-| `oracle_ask.py` | CLI client — ask & wait | ~3 KB |
-| `chatgpt_oracle.user.js` | Browser automation (Tampermonkey) | ~25 KB |
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/submit` | POST | Queue a task with `task_id`, `prompt`, optional PDF payload |
+| `/task?agent=oracle_1` | GET | Assign or return a pending task for one browser agent |
+| `/ack` | POST | Refresh the pending-task lease for the browser agent |
+| `/result` | POST | Save a browser response; server resolves the stable task id from `agent_id` |
+| `/result/<id>` | GET | Poll for a completed result |
+| `/status` | GET | Inspect queue and browser-agent state |
 
-## Requirements
+## Notes
 
-- Python 3.8+ (stdlib only, no pip install)
-- Chrome/Edge/Firefox + Tampermonkey
-- ChatGPT account (Pro recommended)
-
-## API
-
-Submit tasks programmatically from any language:
-
-```python
-import json, urllib.request
-
-# Submit
-data = {"task_id": "my_task", "prompt": "Hello", "pdf_base64": "...(optional)"}
-urllib.request.urlopen(urllib.request.Request(
-    "http://localhost:8765/submit",
-    data=json.dumps(data).encode(), headers={"Content-Type": "application/json"}
-))
-
-# Poll
-resp = urllib.request.urlopen("http://localhost:8765/result/my_task")
-result = json.loads(resp.read())  # {"status": "completed", "response": "..."}
-```
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/submit` | POST | `{"task_id", "prompt", "pdf_base64?"}` |
-| `/task` | GET | Browser polls for next task |
-| `/result` | POST | Browser posts response |
-| `/result/<id>` | GET | Poll for result |
-| `/status` | GET | Queue info |
-
-## Troubleshooting
-
-| Problem | Fix |
-|---------|-----|
-| Panel not visible | Refresh chatgpt.com, check Tampermonkey enabled |
-| "Server unreachable" | Run `python oracle_server.py` |
-| Response empty | ChatGPT UI changed — update `chatgpt_oracle.user.js` |
-| UnicodeError on Windows | Ignore — result still saved to file |
-
-## License
-
-MIT
+The distillation pipeline uses this bridge only as an optional Stage R deep
+research oracle. It does not let ChatGPT write paper files directly; writeback,
+review gates, and commit hygiene remain in `tools/distillation/distill.py`.

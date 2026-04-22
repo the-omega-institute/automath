@@ -32,7 +32,7 @@ PORT = 8765
 ORACLE_DIR = Path(__file__).parent / "oracle"
 
 MAX_AGENTS = 3          # max concurrent browser tabs
-TASK_TIMEOUT = 14400    # 4 hours — ChatGPT Pro can think 60+ min per task
+TASK_TIMEOUT = 14400    # 4 hours; ChatGPT Pro can think 60+ min per task
 
 # Task queue (thread-safe via GIL for simple operations)
 task_queue: deque[dict] = deque()
@@ -72,7 +72,7 @@ class OracleHandler(BaseHTTPRequestHandler):
             task = pending_tasks.pop(aid)
             dispatch_times.pop(aid, None)
             task_queue.appendleft(task)  # re-queue at front
-            print(f"[server] Agent {aid} timed out — task {task['task_id']} returned to queue")
+            print(f"[server] Agent {aid} timed out; task {task['task_id']} returned to queue")
 
     def do_GET(self):
         from urllib.parse import urlparse, parse_qs
@@ -87,7 +87,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                         or "default")
 
             if agent_id in pending_tasks:
-                # Already has a task — return it (idempotent poll)
+                # Already has a task; return it (idempotent poll)
                 self._send_json(pending_tasks[agent_id])
             elif task_queue and len(pending_tasks) < MAX_AGENTS:
                 # Assign next task from queue to this agent
@@ -95,7 +95,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                 task["assigned_agent"] = agent_id
                 pending_tasks[agent_id] = task
                 dispatch_times[agent_id] = time.time()
-                print(f"[server] Dispatched {task['task_id']} → {agent_id} "
+                print(f"[server] Dispatched {task['task_id']} -> {agent_id} "
                       f"(agents={len(pending_tasks)}/{MAX_AGENTS}, queue={len(task_queue)})")
                 self._send_json(task)
             else:
@@ -169,9 +169,14 @@ class OracleHandler(BaseHTTPRequestHandler):
 
         elif self.path == "/result":
             # Browser tab posts the ChatGPT response
-            task_id = data.get("task_id", "")
             response = data.get("response", "")
             agent_id = data.get("agent_id", "")
+            # Prefer the server-side pending assignment.  Browser automation can
+            # survive ChatGPT page navigation, and stale userscript task ids must
+            # not be allowed to complete the wrong pipeline task.
+            task_id = data.get("task_id", "")
+            if agent_id and agent_id in pending_tasks:
+                task_id = pending_tasks[agent_id]["task_id"]
 
             if not task_id or not response:
                 self._send_json({"error": "need task_id and response"}, 400)
@@ -211,7 +216,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                     break
 
             print(f"[server] Result: {task_id} ({len(response)} chars){freed} "
-                  f"— agents={len(pending_tasks)}/{MAX_AGENTS}, queue={len(task_queue)}")
+                  f"- agents={len(pending_tasks)}/{MAX_AGENTS}, queue={len(task_queue)}")
             print(f"[server] Saved to: {out_file}")
             self._send_json({"status": "saved", "task_id": task_id})
 

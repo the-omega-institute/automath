@@ -60,6 +60,17 @@ MAX_W_ROUNDS = 5          # max writeback generation + review rounds
 MAX_DEEP_ROUNDS = 2       # max A-DEEP style escalation rounds per W cycle
 MIN_NEW_CLAIMS = 1        # anti-fake: minimum new theorem/lemma/etc labels
 MIN_CONTENT_DELTA = 200   # anti-fake: minimum chars of new claim content
+PYTHON_SCAN_MATCH_THRESHOLD = 0.15
+SEMANTIC_SCAN_CANDIDATES = 12
+SEMANTIC_SCAN_CONTEXT_CHARS = 4500
+SEMANTIC_SCAN_ACCEPT_THRESHOLD = 0.55
+GLOBAL_EVIDENCE_MAX_CLAIMS = 80
+GLOBAL_EVIDENCE_MAX_INTERFACES = 50
+GLOBAL_EVIDENCE_SNIPPET_CHARS = 900
+POLICY_VERSION = 1
+ORACLE_SERVER = "http://localhost:8765"
+DEFAULT_ORACLE_MODEL = "chatgpt-5.4-pro-extended"
+DEFAULT_ORACLE_TIMEOUT = 7200
 
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 logger = logging.getLogger("distill")
@@ -435,6 +446,11 @@ def _load_prompt(name: str) -> str:
     return read_text(PROMPTS_DIR / prompt_name)
 
 
+def _deep_research_directive() -> str:
+    """Load the shared deep-research directive used by scan and deepening."""
+    return _load_prompt("deep_research_directive")
+
+
 def _repair_latex_escapes(text: str) -> str:
     """Repair LaTeX-in-JSON escape issues with a stateful walk.
 
@@ -558,6 +574,20 @@ def _ensure_gitignore() -> None:
         lines.append(".distillation/")
     write_text(path, "\n".join(lines).strip() + "\n")
 
+    root_path = REPO_ROOT / ".gitignore"
+    root_lines = read_text(root_path).splitlines() if root_path.exists() else []
+    root_ignores = [
+        "papers/publication/backflow/.distillation/",
+        "tools/distillation/.pipeline.stop",
+    ]
+    changed = False
+    for item in root_ignores:
+        if item not in root_lines:
+            root_lines.append(item)
+            changed = True
+    if changed:
+        write_text(root_path, "\n".join(root_lines).strip() + "\n")
+
 
 def _slugify(value: str) -> str:
     """Convert a human-readable source name into a stable filesystem slug."""
@@ -580,6 +610,13 @@ class DistillState:
     # Continuous deepening: track which theorem families have been written
     depth_cycle: int = 0
     completed_families: list[str] = field(default_factory=list)
+    # Local-only policy model.  These fields live under .distillation/ and are
+    # deliberately excluded from the public commit surface.
+    scope_contract: dict[str, Any] = field(default_factory=dict)
+    policy_state: dict[str, Any] = field(default_factory=dict)
+    open_debts: list[dict[str, Any]] = field(default_factory=list)
+    split_candidates: list[dict[str, Any]] = field(default_factory=list)
+    blocked: dict[str, Any] = field(default_factory=dict)
 
 
 def _state_dir(name: str) -> Path:
@@ -614,6 +651,11 @@ def load_state(name: str) -> DistillState:
         updated_at=str(data.get("updated_at", _now_iso())),
         depth_cycle=int(data.get("depth_cycle", 0)),
         completed_families=list(data.get("completed_families", [])),
+        scope_contract=dict(data.get("scope_contract") or {}),
+        policy_state=dict(data.get("policy_state") or {}),
+        open_debts=list(data.get("open_debts") or []),
+        split_candidates=list(data.get("split_candidates") or []),
+        blocked=dict(data.get("blocked") or {}),
     )
 
 
@@ -625,6 +667,158 @@ def _write_artifact_json(state: DistillState, filename: str, data: Any) -> None:
 def _read_artifact_json(state: DistillState, filename: str) -> Any:
     """Read a state-local JSON artifact."""
     return read_json(_artifact_path(state, filename))
+
+
+def _artifact_exists(state: DistillState, filename: str) -> bool:
+    """Return whether a state-local artifact exists."""
+    return _artifact_path(state, filename).exists()
+
+
+def _read_artifact_json_or_none(state: DistillState, filename: str) -> Any:
+    """Read a state-local JSON artifact, returning None when unavailable."""
+    path = _artifact_path(state, filename)
+    if not path.exists():
+        return None
+    try:
+        return read_json(path)
+    except (OSError, json.JSONDecodeError) as exc:
+        logger.warning("Could not read artifact %s: %s", path, exc)
+        return None
+
+
+def _oracle_server_status() -> dict[str, Any]:
+    """Return the local ChatGPT Oracle bridge status, or {} if unreachable."""
+    import urllib.error
+    import urllib.request
+
+    try:
+        with urllib.request.urlopen(f"{ORACLE_SERVER}/status", timeout=5) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        return data if isinstance(data, dict) else {}
+    except (OSError, urllib.error.URLError, json.JSONDecodeError):
+        return {}
+
+
+def chatgpt_oracle_exec(
+    state: DistillState,
+    prompt: str,
+    *,
+    log_tag: str,
+    timeout_seconds: int = DEFAULT_ORACLE_TIMEOUT,
+    model: str = DEFAULT_ORACLE_MODEL,
+    pdf_path: Optional[Path] = None,
+    dry_run: bool = False,
+) -> str:
+    """Submit a prompt to the local ChatGPT Oracle bridge and wait for a result."""
+    if dry_run:
+        logger.info(
+            "[DRY RUN] ChatGPT Oracle task=%s model=%s prompt=%s",
+            log_tag,
+            model,
+            prompt[:300].replace("\n", " "),
+        )
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        write_text(_artifact_path(state, f"{log_tag}_oracle_prompt_{ts}.txt"), prompt)
+        return ""
+
+    import base64
+    import urllib.error
+    import urllib.request
+
+    status_before = _oracle_server_status()
+    if not status_before:
+        logger.warning(
+            "ChatGPT Oracle server unreachable at %s; start tools/chatgpt-oracle/oracle_server.py",
+            ORACLE_SERVER,
+        )
+        return ""
+    logger.info(
+        "ChatGPT Oracle status: queue=%s agents=%s/%s completed=%s",
+        status_before.get("queue_length", "?"),
+        status_before.get("agents_busy", "?"),
+        status_before.get("max_agents", "?"),
+        status_before.get("completed", "?"),
+    )
+
+    task_id = f"{_slugify(state.name)}_{log_tag}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    payload: dict[str, Any] = {
+        "task_id": task_id,
+        "prompt": prompt,
+        "model": model,
+    }
+    if pdf_path:
+        path = Path(pdf_path)
+        if path.exists():
+            payload["pdf_base64"] = base64.b64encode(path.read_bytes()).decode("ascii")
+            payload["pdf_name"] = path.name
+        else:
+            logger.warning("Oracle PDF path does not exist: %s", path)
+
+    try:
+        req = urllib.request.Request(
+            f"{ORACLE_SERVER}/submit",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+        )
+        urllib.request.urlopen(req, timeout=30).read()
+    except (OSError, urllib.error.URLError) as exc:
+        logger.warning("ChatGPT Oracle submit failed: %s", exc)
+        return ""
+
+    logger.info(
+        "ChatGPT Oracle task queued: %s (timeout=%ss, model=%s)",
+        task_id,
+        timeout_seconds,
+        model,
+    )
+    start = time.time()
+    while time.time() - start < timeout_seconds:
+        try:
+            with urllib.request.urlopen(f"{ORACLE_SERVER}/result/{task_id}", timeout=10) as resp:
+                result = json.loads(resp.read().decode("utf-8"))
+            if result.get("status") == "completed":
+                response = str(result.get("response", ""))
+                metadata = {
+                    "task_id": task_id,
+                    "model": model,
+                    "timestamp": _now_iso(),
+                    "prompt_length": len(prompt),
+                    "response_length": len(response),
+                    "pdf_path": str(pdf_path) if pdf_path else "",
+                    "oracle_status_before": status_before,
+                    "oracle_status_after": _oracle_server_status(),
+                }
+                write_text(
+                    _artifact_path(state, f"{log_tag}_oracle_response.md"),
+                    f"<!-- oracle metadata: {json.dumps(metadata)} -->\n\n{response}",
+                )
+                logger.info(
+                    "ChatGPT Oracle response received: %s (%d chars)",
+                    task_id,
+                    len(response),
+                )
+                return response
+        except (OSError, urllib.error.URLError, json.JSONDecodeError):
+            pass
+        elapsed = int(time.time() - start)
+        if elapsed > 0 and elapsed % 60 == 0:
+            logger.info("Waiting for ChatGPT Oracle task %s (%ss)", task_id, elapsed)
+        time.sleep(30)
+
+    logger.warning("ChatGPT Oracle task timed out: %s", task_id)
+    return ""
+
+
+def _unique_strings(items: Any) -> list[str]:
+    """Return stable, non-empty strings from a mixed iterable."""
+    result = []
+    if not isinstance(items, list):
+        return result
+    for item in items:
+        value = str(item).strip()
+        if value and value not in result:
+            result.append(value)
+    return result
 
 
 def _json_block(data: Any) -> str:
@@ -657,6 +851,25 @@ def _research_schema() -> str:
                 "target_sections": ["core section slug"],
             }
         ],
+        "bad_example_mechanisms": [
+            {
+                "name": "mechanism name",
+                "worst_counterexample_shape": "minimal failure object",
+                "classification_skeletons": ["sticky|Frostman failure|slab|holonomy|budget"],
+                "closure_route": "how the skeleton can be defeated or closed",
+            }
+        ],
+        "frontier_interfaces": [
+            {
+                "omega_interface": "concrete Omega interface or label family",
+                "source_tool": "source-side method/tool",
+                "publishable_question": "new result to attempt",
+                "risk": "duplication or overclaim risk",
+            }
+        ],
+        "novelty_guardrails": [
+            "specific old-result shell or standard theorem that must not be repackaged"
+        ],
         "search_directives": ["actionable search directive"],
         "induction_templates": ["portable induction template"],
         "failure_modes": ["known limitation or false analogy"],
@@ -685,6 +898,26 @@ def _generate_schema() -> str:
             "failure_modes": [],
         },
         "primary_targets": ["core section slug"],
+        "frontier_chains": [
+            {
+                "name": "publishable theorem-chain frontier",
+                "target_sections": ["core section slug"],
+                "result_chain": ["definition", "theorem", "corollary"],
+                "closure_route": "route to proof or obstruction",
+                "status": "active",
+            }
+        ],
+        "coverage_debts": [
+            {
+                "family": "theorem family name",
+                "missing_mechanism": "what remains unclosed",
+                "target_sections": ["core section slug"],
+                "reason": "why this is still a debt",
+            }
+        ],
+        "closure_criteria": [
+            "concrete condition that must hold before the source is considered closed"
+        ],
         "expansion_queue": [
             {
                 "kernel": "work item",
@@ -718,6 +951,39 @@ def _score_schema() -> str:
         "issues": ["specific issue"],
         "required_changes": ["specific required change"],
         "depth_assessment": "shallow|adequate|deep",
+    }
+    return _json_block(schema)
+
+
+def _semantic_scan_schema() -> str:
+    """Return the Stage S+ semantic scan output schema."""
+    schema = {
+        "semantic_matches": [
+            {
+                "section": "core section slug",
+                "tex_file": "relative path under theory sections/body",
+                "semantic_score": 0.0,
+                "mechanism": "bad-example mechanism exposed in this section",
+                "theorem_chain_role": "how this section can support a publishable chain",
+                "reason": "short evidence-bound justification",
+                "required_context_labels": ["nearby label or construction"],
+            }
+        ],
+        "frontier_chains": [
+            {
+                "name": "unified theorem-chain name",
+                "target_sections": ["core section slug"],
+                "result_chain": ["definition/theorem/corollary sequence to attempt"],
+                "closure_route": "how this chain could close or fail",
+                "novelty_risk": "what would make it duplicate old material",
+            }
+        ],
+        "rejects": [
+            {
+                "section": "core section slug",
+                "reason": "why vocabulary match is not a real theorem-chain target",
+            }
+        ],
     }
     return _json_block(schema)
 
@@ -837,14 +1103,625 @@ def _build_prior_feedback_block(state: DistillState) -> str:
     return "\n".join(lines)
 
 
+def _theorem_family_names(state: DistillState) -> list[str]:
+    """Return theorem-family names from raw research, preserving order."""
+    try:
+        raw = _read_artifact_json(state, "raw_research.json")
+    except FileNotFoundError:
+        return []
+    names = []
+    for family in raw.get("theorem_families", []):
+        if not isinstance(family, dict):
+            continue
+        name = str(family.get("name", "")).strip()
+        if name and name not in names:
+            names.append(name)
+    return names
+
+
+def _all_families_completed(state: DistillState) -> bool:
+    """Return whether every known theorem family has been completed."""
+    names = _theorem_family_names(state)
+    if not names:
+        return False
+    completed = set(state.completed_families)
+    return all(name in completed for name in names)
+
+
+def _pipeline_done_contract(state: DistillState) -> tuple[bool, str]:
+    """Check the durable contract required before a pipeline may be DONE."""
+    if state.current_stage == "E":
+        return False, "pending registry export"
+    if not _artifact_exists(state, "raw_research.json"):
+        return False, "missing raw_research.json"
+    if not _artifact_exists(state, "section_matches.json"):
+        return False, "missing section_matches.json"
+    if not _artifact_exists(state, "generated_payload.json"):
+        return False, "missing generated_payload.json"
+    if not _artifact_exists(state, "registry_entry.json"):
+        return False, "missing registry_entry.json"
+    families = _theorem_family_names(state)
+    if families and not _all_families_completed(state):
+        missing = [name for name in families if name not in set(state.completed_families)]
+        return False, "incomplete theorem families: " + ", ".join(missing)
+    return True, "complete"
+
+
+def _resume_stage_from_artifacts(state: DistillState) -> str:
+    """Choose a conservative resume stage from local artifacts."""
+    if not _artifact_exists(state, "raw_research.json"):
+        return "R"
+    if not _artifact_exists(state, "section_matches.json"):
+        return "S"
+    if not _artifact_exists(state, "generated_payload.json"):
+        return "G"
+    done, _reason = _pipeline_done_contract(state)
+    if done:
+        return "DONE"
+    # If research and routing exist but completion is not proven, resume the
+    # generative writeback/deepening stage.  Stage E is only a registry/export
+    # transition and must not be inferred from old git commits.
+    return "W"
+
+
+def reconcile_state_contract(state: DistillState) -> DistillState:
+    """Repair impossible stage states using local artifacts as source of truth."""
+    if state.current_stage not in STAGE_ORDER:
+        old_stage = state.current_stage
+        state.current_stage = _resume_stage_from_artifacts(state)
+        save_state(state)
+        logger.warning("State stage %s invalid; resumed at %s", old_stage, state.current_stage)
+        return state
+
+    if state.current_stage == "DONE":
+        done, reason = _pipeline_done_contract(state)
+        if not done:
+            old_stage = state.current_stage
+            state.current_stage = _resume_stage_from_artifacts(state)
+            save_state(state)
+            logger.warning(
+                "State claimed DONE but contract failed (%s); resumed at %s",
+                reason,
+                state.current_stage,
+            )
+            logger.info("State contract repair: %s -> %s", old_stage, state.current_stage)
+        return state
+
+    required_before = {
+        "S": "raw_research.json",
+        "G": "section_matches.json",
+        "W": "generated_payload.json",
+        "E": "writebacks.json",
+    }
+    required = required_before.get(state.current_stage)
+    if required and not _artifact_exists(state, required):
+        old_stage = state.current_stage
+        state.current_stage = _resume_stage_from_artifacts(state)
+        save_state(state)
+        logger.warning(
+            "State stage %s lacked prerequisite %s; resumed at %s",
+            old_stage,
+            required,
+            state.current_stage,
+        )
+    return state
+
+
+def _raw_theorem_families(raw: Any) -> list[dict[str, Any]]:
+    """Return well-formed theorem-family dictionaries from Stage R output."""
+    if not isinstance(raw, dict):
+        return []
+    families = []
+    for item in raw.get("theorem_families", []):
+        if isinstance(item, dict):
+            families.append(item)
+    return families
+
+
+def _family_target_sections(raw: Any) -> list[str]:
+    """Collect section slugs declared by the Stage R theorem inventory."""
+    sections = []
+    for family in _raw_theorem_families(raw):
+        for section in _unique_strings(family.get("target_sections", [])):
+            if section not in sections:
+                sections.append(section)
+    return sections
+
+
+def _match_sections(matches: Any) -> list[str]:
+    """Collect section slugs accepted by Stage S/S+."""
+    if not isinstance(matches, dict):
+        return []
+    sections = []
+    for item in matches.get("matches", []):
+        if not isinstance(item, dict):
+            continue
+        section = str(item.get("section", "")).strip()
+        if section and section not in sections:
+            sections.append(section)
+    return sections
+
+
+def _coerce_sections(value: Any) -> list[str]:
+    """Collect section-like strings from prompt payload fields."""
+    sections = []
+    if not isinstance(value, list):
+        return sections
+    for item in value:
+        if isinstance(item, str):
+            candidates = [item]
+        elif isinstance(item, dict):
+            candidates = [
+                item.get("section"),
+                item.get("name"),
+                item.get("target"),
+                item.get("tex_file"),
+            ]
+        else:
+            candidates = [str(item)]
+        for candidate in candidates:
+            if not candidate:
+                continue
+            text = str(candidate).strip()
+            section = text.split("/")[0] if text else ""
+            if section and section not in sections:
+                sections.append(section)
+    return sections
+
+
+def _payload_declared_sections(payload: Any) -> list[str]:
+    """Collect target sections declared by Stage G output."""
+    if not isinstance(payload, dict):
+        return []
+    sections = []
+    for field_name in ("primary_targets",):
+        for section in _coerce_sections(payload.get(field_name, [])):
+            if section not in sections:
+                sections.append(section)
+    navigation = payload.get("navigation_payload", {})
+    if isinstance(navigation, dict):
+        for section in _coerce_sections(navigation.get("target_sections", [])):
+            if section not in sections:
+                sections.append(section)
+    for field_name in ("frontier_chains", "coverage_debts", "expansion_queue"):
+        for item in payload.get(field_name, []) or []:
+            if not isinstance(item, dict):
+                continue
+            for key in ("target_sections", "sections", "section"):
+                value = item.get(key)
+                if isinstance(value, str):
+                    value = [value]
+                for section in _coerce_sections(value):
+                    if section not in sections:
+                        sections.append(section)
+    return sections
+
+
+def _scope_contract_from_artifacts(
+    state: DistillState,
+    raw: Any,
+    matches: Any,
+    payload: Any,
+) -> dict[str, Any]:
+    """Build the local scope contract that drives policy decisions."""
+    family_names = [
+        str(family.get("name", "")).strip()
+        for family in _raw_theorem_families(raw)
+        if str(family.get("name", "")).strip()
+    ]
+    method_names = []
+    if isinstance(raw, dict):
+        for item in raw.get("method_operators", []):
+            if isinstance(item, dict):
+                name = str(item.get("name", "")).strip()
+                if name and name not in method_names:
+                    method_names.append(name)
+    mechanism_names = []
+    if isinstance(raw, dict):
+        for item in raw.get("bad_example_mechanisms", []):
+            if isinstance(item, dict):
+                name = str(item.get("name", "")).strip()
+                if name and name not in mechanism_names:
+                    mechanism_names.append(name)
+    target_sections = []
+    for source in (
+        _family_target_sections(raw),
+        _match_sections(matches),
+        _payload_declared_sections(payload),
+    ):
+        for section in source:
+            if section not in target_sections:
+                target_sections.append(section)
+    return {
+        "version": POLICY_VERSION,
+        "source": state.name,
+        "source_slug": _slugify(state.name),
+        "status": "active" if isinstance(raw, dict) else "seed",
+        "objective": (
+            "Distill source-specific mathematical operators into Omega only "
+            "when they produce new, proof-closed, project-bound theorem chains."
+        ),
+        "theorem_families": family_names,
+        "method_operators": method_names,
+        "bad_example_mechanisms": mechanism_names,
+        "target_sections": target_sections,
+        "hard_gates": [
+            "scope_contract",
+            "theorem_inventory",
+            "semantic_scan_relevance",
+            "payload_schema",
+            "writeback_review",
+            "family_closure",
+            "done_contract",
+        ],
+        "split_policy": (
+            "Strong material outside the declared theorem inventory is recorded "
+            "as a split candidate and must not justify passing the current source."
+        ),
+    }
+
+
+def _scope_contract_issues(raw: Any) -> list[str]:
+    """Return hard issues in the Stage R scope contract."""
+    if raw is None:
+        return []
+    if not isinstance(raw, dict):
+        return ["raw_research.json is not a JSON object"]
+    issues = []
+    required = (
+        "method_operators",
+        "omega_object_mappings",
+        "theorem_families",
+        "bad_example_mechanisms",
+        "frontier_interfaces",
+        "novelty_guardrails",
+    )
+    for field_name in required:
+        if not isinstance(raw.get(field_name), list) or not raw.get(field_name):
+            issues.append(f"Stage R missing nonempty {field_name}")
+    for idx, family in enumerate(_raw_theorem_families(raw), start=1):
+        if not str(family.get("name", "")).strip():
+            issues.append(f"theorem family {idx} has no name")
+        if not _unique_strings(family.get("key_results", [])):
+            issues.append(f"theorem family {idx} has no key_results")
+        if not _unique_strings(family.get("target_sections", [])):
+            issues.append(f"theorem family {idx} has no target_sections")
+    return issues
+
+
+def _derive_split_candidates(raw: Any, payload: Any, matches: Any) -> list[dict[str, Any]]:
+    """Detect payload targets that should be externalized from this source."""
+    if not isinstance(payload, dict):
+        return []
+    inventory_sections = set(_family_target_sections(raw))
+    if not inventory_sections:
+        return []
+    matched_sections = set(_match_sections(matches))
+    candidates = []
+    for section in _payload_declared_sections(payload):
+        if section in inventory_sections:
+            continue
+        evidence = "payload target is outside the Stage R theorem inventory"
+        if section in matched_sections:
+            evidence += " but did appear in semantic routing"
+        candidates.append(
+            {
+                "section": section,
+                "reason": evidence,
+                "disposition": "record_for_split_or_future_source",
+            }
+        )
+    return candidates
+
+
+def _active_coverage_debts(payload: Any, completed_families: list[str]) -> list[dict[str, Any]]:
+    """Return unresolved coverage debts from Stage G output."""
+    if not isinstance(payload, dict):
+        return []
+    completed = set(completed_families)
+    active = []
+    for item in payload.get("coverage_debts", []) or []:
+        if not isinstance(item, dict):
+            continue
+        family = str(item.get("family", "")).strip()
+        if family and family in completed:
+            continue
+        active.append(item)
+    return active
+
+
+def _writeback_status(writebacks: Any) -> str:
+    """Return the current writeback artifact status."""
+    if not isinstance(writebacks, dict):
+        return ""
+    return str(writebacks.get("status", "")).strip()
+
+
+def _review_score_summary(state: DistillState) -> dict[str, Any]:
+    """Summarize persisted review scores for policy status."""
+    minimums = []
+    latest_key = ""
+    for key, value in state.scores.items():
+        if not isinstance(value, dict):
+            continue
+        latest_key = key
+        minimum = value.get("minimum_score")
+        if minimum is None:
+            codex_score = value.get("codex", {}).get("score")
+            claude_score = value.get("claude", {}).get("score")
+            numeric = [
+                float(score)
+                for score in (codex_score, claude_score)
+                if isinstance(score, (int, float))
+            ]
+            minimum = min(numeric) if numeric else None
+        if isinstance(minimum, (int, float)):
+            minimums.append(float(minimum))
+    return {
+        "latest": latest_key,
+        "minimum_seen": min(minimums) if minimums else None,
+        "latest_passed": bool(minimums and minimums[-1] >= SCORE_PASS_THRESHOLD),
+    }
+
+
+def _build_inventory_snapshot(
+    state: DistillState,
+    raw: Any,
+    matches: Any,
+    payload: Any,
+    writebacks: Any,
+    registry_entry: Any,
+    blocked_artifact: Any,
+) -> dict[str, Any]:
+    """Build the theorem inventory and gate snapshot for the policy loop."""
+    family_names = [
+        str(family.get("name", "")).strip()
+        for family in _raw_theorem_families(raw)
+        if str(family.get("name", "")).strip()
+    ]
+    completed = [
+        name for name in state.completed_families
+        if name in family_names or not family_names
+    ]
+    missing = [name for name in family_names if name not in set(completed)]
+    match_rows = matches.get("matches", []) if isinstance(matches, dict) else []
+    semantic_rows = [
+        item for item in match_rows
+        if isinstance(item, dict) and str(item.get("match_source", "")).startswith("semantic")
+    ]
+    payload_errors = (
+        _validate_generated_payload(payload)
+        if isinstance(payload, dict)
+        else []
+    )
+    done, done_reason = _pipeline_done_contract(state)
+    split_candidates = _derive_split_candidates(raw, payload, matches)
+    active_debts = _active_coverage_debts(payload, state.completed_families)
+    return {
+        "artifacts": {
+            "raw_research": isinstance(raw, dict),
+            "section_matches": isinstance(matches, dict),
+            "global_evidence_pack": _artifact_exists(state, "global_evidence_pack.json"),
+            "generated_payload": isinstance(payload, dict),
+            "writebacks": isinstance(writebacks, dict),
+            "registry_entry": isinstance(registry_entry, dict),
+            "blocked": isinstance(blocked_artifact, dict),
+        },
+        "scope_issues": _scope_contract_issues(raw),
+        "families": family_names,
+        "completed_families": completed,
+        "missing_families": missing,
+        "match_count": len(match_rows),
+        "semantic_match_count": len(semantic_rows),
+        "payload_errors": payload_errors,
+        "writeback_status": _writeback_status(writebacks),
+        "active_coverage_debts": active_debts,
+        "split_candidates": split_candidates,
+        "blocked_artifact": blocked_artifact if isinstance(blocked_artifact, dict) else {},
+        "review_scores": _review_score_summary(state),
+        "done_contract": {"passed": done, "reason": done_reason},
+    }
+
+
+def _open_debts_from_inventory(inventory: dict[str, Any]) -> list[dict[str, Any]]:
+    """Translate inventory misses into policy debts."""
+    debts = []
+    for family in inventory.get("missing_families", []):
+        debts.append({"type": "theorem_family", "family": family})
+    for debt in inventory.get("active_coverage_debts", []):
+        debts.append({"type": "coverage_debt", **debt})
+    for issue in inventory.get("payload_errors", []):
+        debts.append({"type": "payload_schema", "reason": issue})
+    if inventory.get("artifacts", {}).get("section_matches") and inventory.get("match_count") == 0:
+        debts.append({"type": "empty_scan", "reason": "Stage S produced no relevant targets"})
+    blocked = inventory.get("blocked_artifact", {})
+    if blocked:
+        debts.append(
+            {
+                "type": "blocked_stage",
+                "stage": blocked.get("stage"),
+                "status": blocked.get("status"),
+                "depth_cycle": blocked.get("depth_cycle"),
+            }
+        )
+    return debts
+
+
+def _plan_next_action(
+    state: DistillState,
+    inventory: dict[str, Any],
+) -> dict[str, Any]:
+    """Choose the next pipeline action from hard gates, not round count."""
+    artifacts = inventory.get("artifacts", {})
+    done_contract = inventory.get("done_contract", {})
+    if done_contract.get("passed"):
+        return {
+            "action": "done",
+            "stage": "DONE",
+            "gate": "done_contract",
+            "reason": "all durable completion requirements are satisfied",
+        }
+    if not artifacts.get("raw_research"):
+        return {
+            "action": "run_stage",
+            "stage": "R",
+            "gate": "scope_contract",
+            "reason": "build source scope contract and theorem inventory",
+        }
+    if inventory.get("scope_issues"):
+        return {
+            "action": "run_stage",
+            "stage": "R",
+            "gate": "scope_contract",
+            "reason": "; ".join(inventory["scope_issues"][:3]),
+        }
+    if not artifacts.get("section_matches") or not artifacts.get("global_evidence_pack"):
+        return {
+            "action": "run_stage",
+            "stage": "S",
+            "gate": "semantic_scan_relevance",
+            "reason": "build relevant section routing and whole-article evidence pack",
+        }
+    if inventory.get("match_count", 0) == 0:
+        return {
+            "action": "blocked",
+            "stage": state.current_stage,
+            "gate": "semantic_scan_relevance",
+            "reason": "Stage S produced no relevant section matches",
+        }
+    if not artifacts.get("generated_payload"):
+        return {
+            "action": "run_stage",
+            "stage": "G",
+            "gate": "payload_schema",
+            "reason": "generate theorem-chain payload from scoped evidence",
+        }
+    if inventory.get("payload_errors"):
+        return {
+            "action": "run_stage",
+            "stage": "G",
+            "gate": "payload_schema",
+            "reason": "; ".join(inventory["payload_errors"][:3]),
+        }
+    writeback_status = inventory.get("writeback_status", "")
+    if writeback_status in {"rejected", "skipped"}:
+        return {
+            "action": "run_stage",
+            "stage": "W",
+            "gate": "writeback_review",
+            "reason": f"writeback artifact status is {writeback_status}",
+        }
+    if not artifacts.get("writebacks"):
+        return {
+            "action": "run_stage",
+            "stage": "W",
+            "gate": "writeback_review",
+            "reason": "produce reviewed theorem writebacks",
+        }
+    if state.current_stage == "E":
+        return {
+            "action": "run_stage",
+            "stage": "E",
+            "gate": "registry_export",
+            "reason": "export the current accepted writeback cycle before further deepening",
+        }
+    if not artifacts.get("registry_entry"):
+        return {
+            "action": "run_stage",
+            "stage": "E",
+            "gate": "registry_export",
+            "reason": "export accepted writebacks and advance family deepening",
+        }
+    if inventory.get("missing_families"):
+        return {
+            "action": "run_stage",
+            "stage": "W",
+            "gate": "family_closure",
+            "reason": "incomplete theorem families: "
+            + ", ".join(inventory["missing_families"][:5]),
+        }
+    return {
+        "action": "blocked",
+        "stage": state.current_stage,
+        "gate": "done_contract",
+        "reason": str(done_contract.get("reason", "unclassified completion failure")),
+    }
+
+
+def _policy_model(state: DistillState) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    """Build scope, inventory, and next action without writing artifacts."""
+    raw = _read_artifact_json_or_none(state, "raw_research.json")
+    matches = _read_artifact_json_or_none(state, "section_matches.json")
+    payload = _read_artifact_json_or_none(state, "generated_payload.json")
+    writebacks = _read_artifact_json_or_none(state, "writebacks.json")
+    registry_entry = _read_artifact_json_or_none(state, "registry_entry.json")
+    blocked_artifact = _read_artifact_json_or_none(state, "blocked.json")
+    scope = _scope_contract_from_artifacts(state, raw, matches, payload)
+    inventory = _build_inventory_snapshot(
+        state,
+        raw,
+        matches,
+        payload,
+        writebacks,
+        registry_entry,
+        blocked_artifact,
+    )
+    action = _plan_next_action(state, inventory)
+    return scope, inventory, action
+
+
+def refresh_policy_state(state: DistillState, *, persist: bool = True) -> dict[str, Any]:
+    """Persist the local policy snapshot and return the next action."""
+    scope, inventory, action = _policy_model(state)
+    state.scope_contract = scope
+    state.open_debts = _open_debts_from_inventory(inventory)
+    state.split_candidates = inventory.get("split_candidates", [])
+    state.blocked = (
+        {
+            "active": True,
+            "gate": action.get("gate"),
+            "stage": action.get("stage"),
+            "reason": action.get("reason"),
+            "updated_at": _now_iso(),
+        }
+        if action.get("action") == "blocked"
+        else inventory.get("blocked_artifact", {})
+    )
+    state.policy_state = {
+        "version": POLICY_VERSION,
+        "updated_at": _now_iso(),
+        "current_stage": state.current_stage,
+        "next_action": action,
+        "inventory": {
+            "artifacts": inventory.get("artifacts", {}),
+            "families": len(inventory.get("families", [])),
+            "completed_families": len(inventory.get("completed_families", [])),
+            "missing_families": inventory.get("missing_families", []),
+            "match_count": inventory.get("match_count", 0),
+            "semantic_match_count": inventory.get("semantic_match_count", 0),
+            "payload_error_count": len(inventory.get("payload_errors", [])),
+            "open_debt_count": len(state.open_debts),
+            "split_candidate_count": len(state.split_candidates),
+            "done_contract": inventory.get("done_contract", {}),
+        },
+    }
+    if persist:
+        save_state(state)
+    return action
+
+
 def rebuild_from_git(name: str) -> DistillState:
     """Recover pipeline state from git commit history after crash/reset.
 
-    Scans commits touching distillation artifacts for stage completion
-    markers and advances state counters to avoid repeating work.
-    Ported from oracle_pipeline.py rebuild_rounds_from_git.
+    Local state/artifacts are authoritative.  Git history is only a weak
+    fallback for a missing state directory; it must never advance an incomplete
+    deepening cycle to DONE.
     """
     state = load_state(name)
+    state_path = _artifact_path(state, "state.json")
+    if state_path.exists():
+        return reconcile_state_contract(state)
+
     slug = _slugify(name)
     try:
         result = subprocess.run(
@@ -863,7 +1740,7 @@ def rebuild_from_git(name: str) -> DistillState:
     if result.returncode != 0:
         return state
 
-    max_stage_idx = STAGE_ORDER.index(state.current_stage)
+    max_stage_idx = STAGE_ORDER.index(_resume_stage_from_artifacts(state))
     max_round = state.round_number
     for line in result.stdout.splitlines():
         m = re.search(
@@ -872,10 +1749,10 @@ def rebuild_from_git(name: str) -> DistillState:
         )
         if m:
             stage_letter = m.group(1)
-            if stage_letter in STAGE_ORDER:
+            if stage_letter in STAGE_ORDER[:-1]:
                 idx = STAGE_ORDER.index(stage_letter)
                 # Advance to the stage AFTER the completed one
-                next_idx = min(idx + 1, len(STAGE_ORDER) - 1)
+                next_idx = min(idx + 1, STAGE_ORDER.index("E"))
                 if next_idx > max_stage_idx:
                     max_stage_idx = next_idx
                     max_round += 1
@@ -889,7 +1766,7 @@ def rebuild_from_git(name: str) -> DistillState:
             "git-rebuild for %s: stage %s -> %s, round %d",
             name, old_stage, state.current_stage, state.round_number,
         )
-    return state
+    return reconcile_state_contract(state)
 
 
 def _dry_raw_research(name: str) -> dict[str, Any]:
@@ -943,6 +1820,25 @@ def _dry_raw_research(name: str) -> dict[str, Any]:
                 "target_sections": ["recursive_addressing"],
             },
         ],
+        "bad_example_mechanisms": [
+            {
+                "name": "dry_run_minimal_obstruction_skeleton",
+                "worst_counterexample_shape": "a minimal object failing one audited compatibility layer",
+                "classification_skeletons": ["sticky", "holonomy", "budget"],
+                "closure_route": "show that the skeleton either descends or violates a finite budget bound",
+            }
+        ],
+        "frontier_interfaces": [
+            {
+                "omega_interface": "folding/pom/logic_expansion_chain",
+                "source_tool": "dry-run structural transport",
+                "publishable_question": "whether minimal bad objects admit a canonical skeleton decomposition",
+                "risk": "dry-run placeholder rather than source-backed mathematics",
+            }
+        ],
+        "novelty_guardrails": [
+            "Do not restate finite descent without an Omega-specific obstruction."
+        ],
         "search_directives": [
             "Search for normal form and canonical projection interfaces.",
             "Search for obstruction, failure, and gluing compatibility language.",
@@ -972,7 +1868,14 @@ def _dry_raw_research(name: str) -> dict[str, Any]:
     }
 
 
-def run_stage_r(state: DistillState, dry_run: bool = False) -> bool:
+def run_stage_r(
+    state: DistillState,
+    dry_run: bool = False,
+    oracle_research: bool = False,
+    oracle_timeout: int = DEFAULT_ORACLE_TIMEOUT,
+    oracle_model: str = DEFAULT_ORACLE_MODEL,
+    oracle_pdf: Optional[Path] = None,
+) -> bool:
     """Run Stage R research extraction and persist raw research JSON."""
     logger.info("Stage R starting for %s", state.name)
     required = [
@@ -980,6 +1883,9 @@ def run_stage_r(state: DistillState, dry_run: bool = False) -> bool:
         "method_operators",
         "omega_object_mappings",
         "theorem_families",
+        "bad_example_mechanisms",
+        "frontier_interfaces",
+        "novelty_guardrails",
         "search_directives",
         "induction_templates",
         "failure_modes",
@@ -989,6 +1895,45 @@ def run_stage_r(state: DistillState, dry_run: bool = False) -> bool:
     for attempt in range(1, 4):
         if dry_run:
             data = _dry_raw_research(state.name)
+        elif oracle_research and attempt == 1:
+            prompt = _load_prompt("oracle_research").format(
+                mathematician=state.name,
+                current_datetime=datetime.now().astimezone().isoformat(timespec="seconds"),
+                section_list=_section_list(),
+                euclid_example=_euclid_example(),
+                deep_research_directive=_deep_research_directive(),
+                schema=_research_schema(),
+            )
+            response = chatgpt_oracle_exec(
+                state,
+                prompt,
+                log_tag="R_oracle",
+                timeout_seconds=oracle_timeout,
+                model=oracle_model,
+                pdf_path=oracle_pdf,
+                dry_run=False,
+            )
+            if not response:
+                feedback = "ChatGPT Oracle produced no response; falling back to Codex Stage R"
+                state.prior_feedback.append(f"R oracle attempt: {feedback}")
+                logger.warning(feedback)
+                continue
+            try:
+                data = _extract_json(response)
+                if isinstance(data, dict):
+                    data.setdefault(
+                        "oracle_research_metadata",
+                        {
+                            "source": "chatgpt_oracle",
+                            "model": oracle_model,
+                            "timestamp": _now_iso(),
+                        },
+                    )
+            except (ValueError, json.JSONDecodeError) as exc:
+                feedback = f"Could not parse Oracle JSON: {exc}"
+                state.prior_feedback.append(f"R oracle attempt: {feedback}")
+                logger.warning(feedback)
+                continue
         else:
             prompt = _load_prompt("research").format(
                 mathematician=state.name,
@@ -1194,7 +2139,7 @@ def _aggregate_section_scores(
                 "section": sec,
                 "tex_file": entry["best_file"] or "",
                 "score": round(score, 4),
-                "match": score >= 0.15,
+                "match": score >= PYTHON_SCAN_MATCH_THRESHOLD,
                 "coverage": round(coverage, 4),
                 "counts": {"H": h_unique, "T": t_unique, "B": b_unique},
                 "unique_triggers": sorted(all_matched),
@@ -1207,12 +2152,426 @@ def _aggregate_section_scores(
     result.sort(key=lambda x: x["score"], reverse=True)
     return result
 
+
+def _scan_tex_path(rel: str) -> Optional[Path]:
+    """Resolve a scan target safely under CORE_BODY."""
+    if not rel:
+        return None
+    path = (CORE_BODY / rel).resolve()
+    try:
+        path.relative_to(CORE_BODY.resolve())
+    except ValueError:
+        return None
+    if path.suffix != ".tex":
+        return None
+    return path
+
+
+def _scan_candidate_contexts(section_scores: list[dict[str, Any]]) -> str:
+    """Format compact contexts for Stage S+ semantic reranking."""
+    chunks = []
+    for item in section_scores[:SEMANTIC_SCAN_CANDIDATES]:
+        rel = str(item.get("tex_file", ""))
+        path = _scan_tex_path(rel)
+        if not path or not path.exists():
+            continue
+        text = read_text(path)
+        if len(text) > SEMANTIC_SCAN_CONTEXT_CHARS:
+            text = text[:SEMANTIC_SCAN_CONTEXT_CHARS] + "\n% [context truncated by semantic scan]\n"
+        compact = {
+            "section": item.get("section"),
+            "tex_file": rel,
+            "python_score": item.get("score"),
+            "coverage": item.get("coverage"),
+            "counts": item.get("counts"),
+            "unique_triggers": item.get("unique_triggers", [])[:10],
+        }
+        chunks.append(f"--- candidate ---\n{_json_block(compact)}\n{text}")
+    return "\n\n".join(chunks)
+
+
+def _compact_ws(text: str, limit: int = GLOBAL_EVIDENCE_SNIPPET_CHARS) -> str:
+    """Collapse whitespace and trim a snippet for global evidence packs."""
+    compact = re.sub(r"\s+", " ", text).strip()
+    if len(compact) > limit:
+        return compact[:limit].rstrip() + " ..."
+    return compact
+
+
+def _evidence_terms(raw_research: dict[str, Any]) -> list[str]:
+    """Build high-signal whole-article search terms from research and strategy."""
+    terms = _normalize_triggers(raw_research.get("router_triggers", []))
+    for field_name in ("search_directives", "induction_templates", "failure_modes"):
+        for item in raw_research.get(field_name, []) or []:
+            if isinstance(item, str):
+                terms.extend(re.findall(r"[A-Za-z][A-Za-z0-9_-]{3,}|[\u4e00-\u9fff]{2,}", item))
+    fixed_terms = [
+        "fold-aware",
+        "inverse system",
+        "stable inverse",
+        "pseudo-invariant",
+        "near-extremal",
+        "maximal fiber",
+        "sticky",
+        "Frostman",
+        "slab",
+        "sector",
+        "escort",
+        "freezing",
+        "moment",
+        "Cech",
+        "\\v{C}ech",
+        "holonomy",
+        "curvature",
+        "Walsh",
+        "Stokes",
+        "Euler",
+        "capacity",
+        "prime-register",
+        "external ledger",
+        "budget",
+        "gluing",
+        "obstruction",
+        "counterexample",
+        "localization",
+        "normalization",
+        "externalization",
+        "坏例子",
+        "反例",
+        "骨架",
+        "粘接",
+        "障碍",
+        "预算",
+        "外置",
+        "冻结",
+        "纤维",
+        "曲率",
+    ]
+    terms.extend(fixed_terms)
+    seen = set()
+    result = []
+    for term in terms:
+        value = str(term).strip()
+        key = value.lower()
+        if len(value) < 2 or key in seen:
+            continue
+        seen.add(key)
+        result.append(value)
+    return result[:90]
+
+
+def _term_hit_score(text: str, terms: list[str]) -> tuple[int, list[str]]:
+    """Return a simple evidence relevance score and matched terms."""
+    matched = []
+    score = 0
+    for term in terms:
+        if re.search(re.escape(term), text, re.IGNORECASE):
+            matched.append(term)
+            score += 1
+    return score, matched
+
+
+def _interface_snippets(text: str, terms: list[str]) -> list[dict[str, Any]]:
+    """Extract compact snippets around unfinished or frontier-like terms."""
+    interface_terms = [
+        "TODO",
+        "FIXME",
+        "conjecture",
+        "Conjecture",
+        "open",
+        "interface",
+        "oracle",
+        "capacity",
+        "budget",
+        "obstruction",
+        "holonomy",
+        "Cech",
+        "\\v{C}ech",
+        "fold",
+        "Fold",
+        "external",
+        "ledger",
+        "sticky",
+        "Frostman",
+        "slab",
+        "未完成",
+        "接口",
+        "猜想",
+        "障碍",
+        "预算",
+        "外置",
+        "闭包",
+    ]
+    snippets = []
+    for term in interface_terms:
+        match = re.search(re.escape(term), text, re.IGNORECASE)
+        if not match:
+            continue
+        start = max(0, match.start() - 350)
+        end = min(len(text), match.end() + 550)
+        snippet = text[start:end]
+        score, matched = _term_hit_score(snippet, terms)
+        snippets.append(
+            {
+                "term": term,
+                "score": score,
+                "matched_terms": matched[:8],
+                "snippet": _compact_ws(snippet),
+            }
+        )
+        if len(snippets) >= 3:
+            break
+    return snippets
+
+
+def _build_global_evidence_pack(
+    raw_research: dict[str, Any],
+    section_scores: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Summarize whole-article LaTeX evidence for semantic routing.
+
+    This deliberately stays compact: it lets models see the whole article's
+    section topology and high-signal claims without flooding the prompt with
+    thousands of source files.
+    """
+    terms = _evidence_terms(raw_research)
+    section_index = [
+        {
+            "section": item.get("section"),
+            "best_file": item.get("tex_file"),
+            "python_score": item.get("score"),
+            "coverage": item.get("coverage"),
+            "counts": item.get("counts"),
+            "unique_triggers": item.get("unique_triggers", [])[:8],
+            "file_count": item.get("file_count"),
+        }
+        for item in section_scores
+    ]
+
+    claim_rows: list[dict[str, Any]] = []
+    distill_rows: list[dict[str, Any]] = []
+    interface_rows: list[dict[str, Any]] = []
+    if not CORE_BODY.exists():
+        return {
+            "terms": terms,
+            "section_index": section_index,
+            "high_signal_claims": [],
+            "existing_distillation_claims": [],
+            "frontier_interfaces": [],
+        }
+
+    for tex_file in sorted(path for path in CORE_BODY.rglob("*.tex") if path.is_file()):
+        rel = tex_file.relative_to(CORE_BODY).as_posix()
+        section = rel.split("/")[0]
+        try:
+            text = read_text(tex_file)
+        except OSError:
+            continue
+
+        for claim in _extract_claims(text):
+            claim_text = claim.get("text", "")
+            score, matched = _term_hit_score(claim_text, terms)
+            label = claim.get("label", "")
+            row = {
+                "section": section,
+                "tex_file": rel,
+                "type": claim.get("type"),
+                "label": label,
+                "score": score + (3 if "distill" in label else 0),
+                "matched_terms": matched[:10],
+                "snippet": _compact_ws(claim_text),
+            }
+            if "distill" in label:
+                distill_rows.append(row)
+            if score > 0:
+                claim_rows.append(row)
+
+        for snippet in _interface_snippets(text, terms):
+            snippet["section"] = section
+            snippet["tex_file"] = rel
+            interface_rows.append(snippet)
+
+    claim_rows.sort(key=lambda item: int(item.get("score", 0)), reverse=True)
+    distill_rows.sort(key=lambda item: int(item.get("score", 0)), reverse=True)
+    interface_rows.sort(key=lambda item: int(item.get("score", 0)), reverse=True)
+    return {
+        "terms": terms,
+        "source_theorem_families": raw_research.get("theorem_families", []),
+        "section_index": section_index,
+        "high_signal_claims": claim_rows[:GLOBAL_EVIDENCE_MAX_CLAIMS],
+        "existing_distillation_claims": distill_rows[:GLOBAL_EVIDENCE_MAX_CLAIMS],
+        "frontier_interfaces": interface_rows[:GLOBAL_EVIDENCE_MAX_INTERFACES],
+    }
+
+
+def _global_evidence_for_state(state: DistillState) -> dict[str, Any]:
+    """Read a persisted evidence pack, falling back to a compact rebuild."""
+    path = _artifact_path(state, "global_evidence_pack.json")
+    if path.exists():
+        try:
+            return read_json(path)
+        except (OSError, json.JSONDecodeError):
+            pass
+    try:
+        raw = _read_artifact_json(state, "raw_research.json")
+    except FileNotFoundError:
+        return {}
+    try:
+        matches = _read_artifact_json(state, "section_matches.json")
+        section_scores = matches.get("all_sections", [])
+    except FileNotFoundError:
+        section_scores = []
+    return _build_global_evidence_pack(raw, section_scores)
+
+
+def _semantic_scan(
+    state: DistillState,
+    raw_research: dict[str, Any],
+    section_scores: list[dict[str, Any]],
+    global_evidence_pack: dict[str, Any],
+    dry_run: bool,
+) -> dict[str, Any]:
+    """Run the model-assisted Stage S+ scan over deterministic candidates."""
+    if dry_run:
+        return {
+            "status": "dry_run",
+            "semantic_matches": [],
+            "frontier_chains": [],
+            "rejects": [],
+        }
+    candidates = section_scores[:SEMANTIC_SCAN_CANDIDATES]
+    prompt = _load_prompt("semantic_scan").format(
+        mathematician=state.name,
+        raw_research=_json_block(raw_research),
+        deterministic_scores=_json_block(candidates),
+        global_evidence_pack=_json_block(global_evidence_pack),
+        candidate_contexts=_scan_candidate_contexts(section_scores),
+        deep_research_directive=_deep_research_directive(),
+        schema=_semantic_scan_schema(),
+    )
+    response = codex_exec(
+        prompt,
+        work_dir=REPO_ROOT,
+        timeout_seconds=1200,
+        dry_run=False,
+        log_tag=f"{_slugify(state.name)}_S_semantic",
+    )
+    try:
+        data = _extract_json(response)
+    except (ValueError, json.JSONDecodeError) as exc:
+        logger.warning("Stage S+ semantic scan failed to parse JSON: %s", exc)
+        return {
+            "status": "parse_failed",
+            "semantic_matches": [],
+            "frontier_chains": [],
+            "rejects": [],
+            "raw_response": response[:4000],
+        }
+    if not isinstance(data, dict):
+        return {
+            "status": "invalid",
+            "semantic_matches": [],
+            "frontier_chains": [],
+            "rejects": [],
+        }
+    data.setdefault("status", "ok")
+    data.setdefault("semantic_matches", [])
+    data.setdefault("frontier_chains", [])
+    data.setdefault("rejects", [])
+    return data
+
+
+def _fuse_scan_matches(
+    section_scores: list[dict[str, Any]],
+    semantic_scan: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Fuse deterministic matches with semantic model matches."""
+    by_section = {str(item.get("section", "")): item for item in section_scores}
+    fused: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    semantic_rows = [
+        item for item in semantic_scan.get("semantic_matches", [])
+        if isinstance(item, dict)
+    ]
+    semantic_status = str(semantic_scan.get("status", ""))
+    semantic_authoritative = semantic_status == "ok" and bool(semantic_rows)
+
+    # If Stage S+ failed or was skipped, keep the deterministic recall pass as
+    # a fallback.  If Stage S+ succeeds, require semantic evidence instead of
+    # accepting vocabulary matches blindly.
+    if not semantic_authoritative:
+        for item in section_scores:
+            if item.get("match"):
+                copy = dict(item)
+                copy["match_source"] = "python_fallback"
+                fused.append(copy)
+                seen.add(str(item.get("section", "")))
+
+    rejected_sections = {
+        str(item.get("section", "")).strip()
+        for item in semantic_scan.get("rejects", [])
+        if isinstance(item, dict)
+    }
+
+    for raw in semantic_rows:
+        section = str(raw.get("section", "")).strip()
+        if section in rejected_sections:
+            continue
+        if not section or section not in by_section:
+            continue
+        mechanism = str(raw.get("mechanism", "")).strip()
+        role = str(raw.get("theorem_chain_role", "")).strip()
+        reason = str(raw.get("reason", "")).strip()
+        try:
+            semantic_score = float(raw.get("semantic_score", 0))
+        except (TypeError, ValueError):
+            semantic_score = 0.0
+        if semantic_score < SEMANTIC_SCAN_ACCEPT_THRESHOLD:
+            continue
+        if not (mechanism and role and reason):
+            continue
+        base = dict(by_section[section])
+        rel = str(raw.get("tex_file") or base.get("tex_file") or "")
+        if rel:
+            path = _scan_tex_path(rel)
+            if path and path.exists():
+                base["tex_file"] = path.relative_to(CORE_BODY).as_posix()
+        base["semantic_score"] = round(max(0.0, min(1.0, semantic_score)), 4)
+        base["semantic_reason"] = reason
+        base["bad_example_mechanism"] = mechanism
+        base["theorem_chain_role"] = role
+        base["required_context_labels"] = raw.get("required_context_labels", [])
+        base["match"] = True
+        base["match_source"] = (
+            "semantic" if semantic_authoritative else "python_fallback+semantic"
+        )
+        base["score"] = round(max(float(base.get("score", 0)), base["semantic_score"]), 4)
+        if section in seen:
+            fused = [
+                base if str(existing.get("section", "")) == section else existing
+                for existing in fused
+            ]
+        else:
+            fused.append(base)
+            seen.add(section)
+
+    fused.sort(
+        key=lambda item: (
+            float(item.get("semantic_score", item.get("score", 0))),
+            float(item.get("score", 0)),
+        ),
+        reverse=True,
+    )
+    return fused
+
+
 def run_stage_s(state: DistillState, dry_run: bool = False) -> bool:
     """Run Stage S deterministic router matching over core LaTeX files.
 
     Scoring is section-level: triggers are aggregated across all .tex
-    files within each top-level section directory.  A section matches when
-    its coverage score reaches the 0.3 threshold.
+    files within each top-level section directory.  Python matching is a
+    deterministic recall pass; Stage S+ then lets Codex semantically rerank
+    those candidates before writeback target selection.
     """
     logger.info("Stage S starting for %s", state.name)
     try:
@@ -1234,11 +2593,22 @@ def run_stage_s(state: DistillState, dry_run: bool = False) -> bool:
     )
     file_scores = [_score_tex_file(path, triggers) for path in tex_files]
     section_scores = _aggregate_section_scores(file_scores, triggers)
-    matches = [item for item in section_scores if item["match"]]
+    deterministic_matches = [item for item in section_scores if item["match"]]
+    global_evidence_pack = _build_global_evidence_pack(raw_research, section_scores)
+    _write_artifact_json(state, "global_evidence_pack.json", global_evidence_pack)
+    semantic_scan = _semantic_scan(
+        state,
+        raw_research,
+        section_scores,
+        global_evidence_pack,
+        dry_run=dry_run,
+    )
+    matches = _fuse_scan_matches(section_scores, semantic_scan)
     for item in matches:
         logger.info(
-            "  matched section=%s score=%.4f coverage=%.4f triggers=%s",
+            "  matched section=%s source=%s score=%.4f coverage=%.4f triggers=%s",
             item["section"],
+            item.get("match_source", "python"),
             item["score"],
             item["coverage"],
             item["unique_triggers"][:5],
@@ -1248,6 +2618,16 @@ def run_stage_s(state: DistillState, dry_run: bool = False) -> bool:
         "trigger_count": len(triggers),
         "triggers": triggers,
         "matches": matches,
+        "deterministic_matches": deterministic_matches,
+        "semantic_scan": semantic_scan,
+        "global_evidence_pack": {
+            "artifact": "global_evidence_pack.json",
+            "claim_count": len(global_evidence_pack.get("high_signal_claims", [])),
+            "interface_count": len(global_evidence_pack.get("frontier_interfaces", [])),
+            "distillation_claim_count": len(
+                global_evidence_pack.get("existing_distillation_claims", [])
+            ),
+        },
         "all_sections": section_scores,
     }
     _write_artifact_json(state, "section_matches.json", output)
@@ -1255,8 +2635,10 @@ def run_stage_s(state: DistillState, dry_run: bool = False) -> bool:
     state.round_number += 1
     save_state(state)
     logger.info(
-        "Stage S completed with %d section matches (of %d sections)",
-        len(matches), len(section_scores),
+        "Stage S completed with %d fused section matches (%d deterministic, of %d sections)",
+        len(matches),
+        len(deterministic_matches),
+        len(section_scores),
     )
     return True
 
@@ -1288,6 +2670,19 @@ def _dry_generated_payload(state: DistillState) -> dict[str, Any]:
             "failure_modes": raw.get("failure_modes", []),
         },
         "primary_targets": primary_targets,
+        "frontier_chains": matches.get("semantic_scan", {}).get("frontier_chains", []),
+        "coverage_debts": [
+            {
+                "family": item.get("name", ""),
+                "missing_mechanism": "dry-run family has not been proved",
+                "target_sections": item.get("target_sections", []),
+                "reason": "dry-run payload records coverage debt without claiming closure",
+            }
+            for item in raw.get("theorem_families", [])
+        ],
+        "closure_criteria": [
+            "All theorem families have accepted writebacks and no active coverage debts remain."
+        ],
         "expansion_queue": [
             {
                 "kernel": "dry_run_normal_form_transfer",
@@ -1310,6 +2705,12 @@ def _validate_generated_payload(data: Any) -> list[str]:
         errors.append("Missing primary_targets")
     if not isinstance(data.get("expansion_queue", []), list):
         errors.append("expansion_queue must be a list")
+    if not isinstance(data.get("frontier_chains", []), list):
+        errors.append("frontier_chains must be a list")
+    if not isinstance(data.get("coverage_debts", []), list):
+        errors.append("coverage_debts must be a list")
+    if not isinstance(data.get("closure_criteria", []), list):
+        errors.append("closure_criteria must be a list")
     return errors
 
 
@@ -1490,6 +2891,21 @@ def _dry_writebacks(targets: list[dict[str, str]], name: str) -> list[dict[str, 
             }
         )
     return proposals
+
+
+def _next_distill_result_number() -> int:
+    """Estimate the next global distillation result number from existing labels."""
+    if not CORE_BODY.exists():
+        return 1
+    count = 0
+    for tex_file in CORE_BODY.rglob("*.tex"):
+        if not tex_file.is_file():
+            continue
+        try:
+            count += len(re.findall(r"\\label\{[^}]*distill[-:]", read_text(tex_file)))
+        except OSError:
+            continue
+    return count + 1
 
 
 def _latex_balance_errors(content: str) -> list[str]:
@@ -1868,6 +3284,50 @@ def _apply_writeback_plan(plan: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return applied
 
 
+def _append_writeback_ledger(
+    state: DistillState,
+    *,
+    status: str,
+    focused_family: Optional[dict[str, Any]],
+    accepted_writebacks: list[dict[str, Any]],
+    applied: list[dict[str, Any]],
+    skipped: list[dict[str, Any]],
+    review: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Append a durable cumulative writeback ledger entry."""
+    path = _artifact_path(state, "writeback_ledger.json")
+    if path.exists():
+        try:
+            ledger = read_json(path)
+        except (OSError, json.JSONDecodeError):
+            ledger = []
+    else:
+        ledger = []
+    if not isinstance(ledger, list):
+        ledger = []
+    entry = {
+        "updated_at": _now_iso(),
+        "depth_cycle": state.depth_cycle,
+        "family": focused_family.get("name") if focused_family else None,
+        "status": status,
+        "writebacks": [
+            {
+                "section": item.get("section"),
+                "tex_file": item.get("tex_file"),
+                "type": item.get("type"),
+                "label": item.get("label"),
+            }
+            for item in accepted_writebacks
+        ],
+        "applied": applied,
+        "skipped": skipped,
+        "review": review,
+    }
+    ledger.append(entry)
+    write_json(path, ledger)
+    return ledger
+
+
 def run_stage_w(
     state: DistillState,
     dry_run: bool = False,
@@ -1936,6 +3396,7 @@ def run_stage_w(
         logger.error("Stage W could not select target files")
         return False
     section_contexts = _collect_section_contexts(targets)
+    global_evidence_pack = _global_evidence_for_state(state)
     prior_feedback_block = _build_prior_feedback_block(state)
     feedback = ""
     attempts = []
@@ -1946,29 +3407,34 @@ def run_stage_w(
         if dry_run:
             raw_writebacks = _dry_writebacks(targets, state.name)
         else:
-            prompt = _load_prompt("writeback").format(
-                mathematician=state.name,
-                payload=_json_block(payload),
-                targets=_json_block(targets),
-                section_contexts=section_contexts,
-                schema=_writeback_schema(),
-            )
-            # Inject focused family context for deepening cycles
             if focused_family:
-                prompt += (
-                    f"\n\nDEEPENING CYCLE {state.depth_cycle}: "
-                    f"Focus on theorem family '{focused_family['name']}'.\n"
-                    f"Key results to formalize:\n"
+                prompt = _load_prompt("deepen").format(
+                    mathematician=state.name,
+                    depth_cycle=state.depth_cycle,
+                    family_name=focused_family.get("name", ""),
+                    current_datetime=datetime.now().astimezone().isoformat(timespec="seconds"),
+                    next_number=_next_distill_result_number(),
+                    key_results="\n".join(
+                        f"- {item}" for item in focused_family.get("key_results", [])
+                    ),
+                    method_operators=_json_block(raw_research.get("method_operators", [])),
+                    targets=_json_block(targets),
+                    section_contexts=section_contexts,
+                    global_evidence_pack=_json_block(global_evidence_pack),
+                    completed_families=", ".join(state.completed_families or ["none"]),
+                    deep_research_directive=_deep_research_directive(),
+                    schema=_writeback_schema(),
+                    source_slug=_slugify(state.name),
+                    family_slug=_slugify(str(focused_family.get("name", "family"))),
                 )
-                for kr in focused_family.get("key_results", []):
-                    prompt += f"  - {kr}\n"
-                prompt += (
-                    "\nYou MUST produce theorem/lemma environments with PROOFS "
-                    "for the above key results. Map them precisely to the Omega "
-                    "constructions visible in the section context.\n"
-                    "Previously completed families (DO NOT repeat): "
-                    + ", ".join(state.completed_families or ["none"])
-                    + "\n"
+            else:
+                prompt = _load_prompt("writeback").format(
+                    mathematician=state.name,
+                    payload=_json_block(payload),
+                    targets=_json_block(targets),
+                    section_contexts=section_contexts,
+                    global_evidence_pack=_json_block(global_evidence_pack),
+                    schema=_writeback_schema(),
                 )
             if prior_feedback_block:
                 prompt += "\n\n" + prior_feedback_block
@@ -2074,6 +3540,28 @@ def run_stage_w(
         save_state(state)  # persist feedback in case of crash/restart
 
     if not accepted_writebacks:
+        score_key = f"W_cycle{state.depth_cycle}" if state.depth_cycle > 0 else "W"
+        last_review = {}
+        for attempt_data in reversed(attempts):
+            if isinstance(attempt_data, dict) and attempt_data.get("review"):
+                last_review = attempt_data["review"]
+                break
+        if last_review:
+            state.scores[score_key] = last_review
+        _write_artifact_json(
+            state,
+            "blocked.json",
+            {
+                "stage": "W",
+                "status": "review_failed",
+                "depth_cycle": state.depth_cycle,
+                "focused_family": focused_family,
+                "attempt_count": len(attempts),
+                "last_review": last_review,
+                "resume_stage": "W",
+                "updated_at": _now_iso(),
+            },
+        )
         _write_artifact_json(state, "writeback_response.json", {"attempts": attempts})
         save_state(state)
         logger.error("Stage W failed review gate")
@@ -2153,16 +3641,32 @@ def run_stage_w(
             "skipped": skipped,
         },
     )
+    status = "dry_run" if dry_run else "applied" if applied else "skipped"
+    _append_writeback_ledger(
+        state,
+        status=status,
+        focused_family=focused_family,
+        accepted_writebacks=accepted_writebacks,
+        applied=applied,
+        skipped=skipped,
+        review=accepted_review,
+    )
     state.current_stage = "E"
     score_key = f"W_cycle{state.depth_cycle}" if state.depth_cycle > 0 else "W"
     state.scores[score_key] = accepted_review
     # Mark focused family as completed for deepening tracking
-    if focused_family:
+    family_integrated = bool(applied) or dry_run
+    if focused_family and family_integrated:
         family_name = focused_family.get("name", "")
         if family_name and family_name not in state.completed_families:
             state.completed_families.append(family_name)
             logger.info("Marked family '%s' complete (total: %d)",
                         family_name, len(state.completed_families))
+    elif focused_family:
+        logger.warning(
+            "Family '%s' not marked complete because no writebacks were applied",
+            focused_family.get("name", ""),
+        )
     state.round_number += 1
     save_state(state)
     logger.info("Stage W completed for %s (cycle %d)", state.name, state.depth_cycle)
@@ -2183,6 +3687,23 @@ def _registry_entry(state: DistillState) -> dict[str, Any]:
         {},
     ).get("target_sections", [])
     integrated = []
+    ledger_path = _artifact_path(state, "writeback_ledger.json")
+    if ledger_path.exists():
+        try:
+            ledger = read_json(ledger_path)
+        except (OSError, json.JSONDecodeError):
+            ledger = []
+        if isinstance(ledger, list):
+            for entry in ledger:
+                if not isinstance(entry, dict):
+                    continue
+                for item in entry.get("applied", []):
+                    integrated.extend(item.get("labels", []))
+                if entry.get("status") in ("dry_run", "skipped") and not entry.get("applied"):
+                    for item in entry.get("writebacks", []):
+                        label = item.get("label")
+                        if label:
+                            integrated.append(label)
     for item in writebacks.get("applied", []):
         integrated.extend(item.get("labels", []))
     if not integrated:
@@ -2190,6 +3711,7 @@ def _registry_entry(state: DistillState) -> dict[str, Any]:
             label = item.get("label")
             if label:
                 integrated.append(label)
+    integrated = list(dict.fromkeys(integrated))
     return {
         "source_slug": source_slug,
         "source_type": payload.get("knowledge_payload", {}).get(
@@ -2369,6 +3891,37 @@ STAGE_NAMES = {
 }
 
 
+COMMITTABLE_REGISTRY_FILES = {
+    REGISTRY_PATH.resolve(),
+    (PUBLICATION_DIR / "DISTILLATION_BOARD.md").resolve(),
+}
+
+
+def _is_relative_to(path: Path, parent: Path) -> bool:
+    """Compatibility wrapper for Path.relative_to checks."""
+    try:
+        path.resolve().relative_to(parent.resolve())
+        return True
+    except ValueError:
+        return False
+
+
+def _is_committable_pipeline_output(path: Path) -> bool:
+    """Return whether the distillation auto-commit may stage this path.
+
+    Runtime artifacts are intentionally local-only.  The auto-commit allowlist is
+    limited to actual paper writebacks and public registry summaries.
+    """
+    resolved = path.resolve()
+    if _is_relative_to(resolved, DISTILLATION_DIR):
+        return False
+    if resolved in COMMITTABLE_REGISTRY_FILES:
+        return True
+    if _is_relative_to(resolved, CORE_BODY) and resolved.suffix == ".tex":
+        return True
+    return False
+
+
 def _git_commit_push(name: str, stage: str, extra_files: Optional[list[str]] = None) -> None:
     """Commit stage outputs and push to remote. Best-effort, never fatal."""
     slug = _slugify(name)
@@ -2397,8 +3950,24 @@ def _git_commit_push(name: str, stage: str, extra_files: Optional[list[str]] = N
         logger.info("Stage %s: no files to commit", stage)
         return
 
-    # Filter to files that actually exist
-    files_to_add = [f for f in files_to_add if Path(f).exists()]
+    # Filter to files that actually exist and are explicit public outputs.
+    rejected = []
+    filtered = []
+    for item in files_to_add:
+        path = Path(item)
+        if not path.exists():
+            continue
+        if _is_committable_pipeline_output(path):
+            filtered.append(str(path))
+        else:
+            rejected.append(str(path))
+    if rejected:
+        logger.info(
+            "Stage %s: skipped %d non-committable runtime artifact(s)",
+            stage,
+            len(rejected),
+        )
+    files_to_add = filtered
     if not files_to_add:
         return
 
@@ -2436,6 +4005,10 @@ def run_pipeline(
     skip_to: Optional[str] = None,
     dry_run: bool = False,
     supervised: bool = True,
+    oracle_research: bool = False,
+    oracle_timeout: int = DEFAULT_ORACLE_TIMEOUT,
+    oracle_model: str = DEFAULT_ORACLE_MODEL,
+    oracle_pdf: Optional[Path] = None,
 ) -> bool:
     """Run the distillation pipeline from the current or requested stage."""
     _ensure_gitignore()
@@ -2448,30 +4021,77 @@ def run_pipeline(
     if skip_to:
         state.current_stage = skip_to
         save_state(state)
+    state = reconcile_state_contract(state)
 
-    stages = {
-        "R": lambda: run_stage_r(state, dry_run=dry_run),
-        "S": lambda: run_stage_s(state, dry_run=dry_run),
-        "G": lambda: run_stage_g(state, dry_run=dry_run),
-        "W": lambda: run_stage_w(state, dry_run=dry_run, supervised=supervised),
-        "E": lambda: run_stage_e(state, dry_run=dry_run),
-    }
     while state.current_stage != "DONE":
+        state = reconcile_state_contract(load_state(name))
+        action = refresh_policy_state(state)
+        action_kind = str(action.get("action", ""))
+        if action_kind == "done":
+            if state.current_stage != "DONE":
+                state.current_stage = "DONE"
+                save_state(state)
+            break
+        if action_kind == "blocked":
+            logger.error(
+                "Policy gate blocked %s at %s: %s",
+                name,
+                action.get("gate"),
+                action.get("reason"),
+            )
+            return False
+        stage = str(action.get("stage") or state.current_stage)
+        if stage not in STAGE_ORDER[:-1]:
+            logger.error("Policy selected invalid stage %s", stage)
+            return False
+        if state.current_stage != stage:
+            logger.info(
+                "Policy rerouted %s: %s -> %s (%s)",
+                name,
+                state.current_stage,
+                stage,
+                action.get("reason"),
+            )
+            state.current_stage = stage
+            save_state(state)
         if STOP_FILE.exists():
             logger.warning("Stop file present; pausing before stage %s", state.current_stage)
             return False
-        stage = state.current_stage
-        runner = stages.get(stage)
-        if runner is None:
+        logger.info(
+            "Policy action for %s: stage=%s gate=%s reason=%s",
+            name,
+            stage,
+            action.get("gate"),
+            action.get("reason"),
+        )
+        if stage == "R":
+            ok = run_stage_r(
+                state,
+                dry_run=dry_run,
+                oracle_research=oracle_research,
+                oracle_timeout=oracle_timeout,
+                oracle_model=oracle_model,
+                oracle_pdf=oracle_pdf,
+            )
+        elif stage == "S":
+            ok = run_stage_s(state, dry_run=dry_run)
+        elif stage == "G":
+            ok = run_stage_g(state, dry_run=dry_run)
+        elif stage == "W":
+            ok = run_stage_w(state, dry_run=dry_run, supervised=supervised)
+        elif stage == "E":
+            ok = run_stage_e(state, dry_run=dry_run)
+        else:
             logger.error("No runner for stage %s", stage)
             return False
-        if not runner():
+        if not ok:
             logger.error("Pipeline stopped at stage %s", stage)
             return False
         # Commit + push after each stage (skip in dry-run)
         if not dry_run:
             _git_commit_push(name, stage)
-        state = load_state(name)
+        state = reconcile_state_contract(load_state(name))
+        refresh_policy_state(state)
     logger.info("Pipeline complete for %s", name)
     return True
 
@@ -2500,9 +4120,19 @@ def _status_lines(name: Optional[str] = None) -> list[str]:
     lines = []
     for item_name in names:
         state = load_state(item_name)
+        _scope, inventory, action = _policy_model(state)
+        done, reason = _pipeline_done_contract(state)
+        family_count = len(_theorem_family_names(state))
+        debt_count = len(_open_debts_from_inventory(inventory))
+        next_action = action.get("stage") if action.get("action") != "blocked" else "BLOCKED"
         lines.append(
             f"{state.name}: stage={state.current_stage} "
-            f"round={state.round_number} updated={state.updated_at}"
+            f"round={state.round_number} "
+            f"families={len(state.completed_families)}/{family_count} "
+            f"debts={debt_count} splits={len(inventory.get('split_candidates', []))} "
+            f"next={next_action} gate={action.get('gate')} "
+            f"done_contract={done} ({reason}) "
+            f"updated={state.updated_at}"
         )
     return lines
 
@@ -2519,8 +4149,12 @@ def _validate_environment(name: Optional[str] = None) -> bool:
     ok = True
     required_prompts = [
         "research.txt",
+        "oracle_research.txt",
+        "semantic_scan.txt",
         "generate.txt",
         "writeback.txt",
+        "deepen.txt",
+        "deep_research_directive.txt",
         "review_codex.txt",
         "review_claude.txt",
     ]
@@ -2561,6 +4195,27 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--validate", action="store_true", help="Validate local configuration")
     parser.add_argument("--supervised", action="store_true", default=True, help="Ask before applying writebacks")
     parser.add_argument("--auto-apply", action="store_true", help="Apply writebacks without prompting")
+    parser.add_argument(
+        "--oracle-research",
+        action="store_true",
+        help="Use ChatGPT Oracle as the first Stage R deep-research pass",
+    )
+    parser.add_argument(
+        "--oracle-timeout",
+        type=int,
+        default=DEFAULT_ORACLE_TIMEOUT,
+        help="Seconds to wait for ChatGPT Oracle research",
+    )
+    parser.add_argument(
+        "--oracle-model",
+        default=DEFAULT_ORACLE_MODEL,
+        help="Model label passed to the ChatGPT Oracle bridge",
+    )
+    parser.add_argument(
+        "--oracle-pdf",
+        type=Path,
+        help="Optional project PDF to attach to ChatGPT Oracle research",
+    )
     return parser
 
 
@@ -2593,6 +4248,10 @@ def main(argv: Optional[list[str]] = None) -> int:
                 skip_to=args.skip_to,
                 dry_run=args.dry_run,
                 supervised=supervised,
+                oracle_research=args.oracle_research,
+                oracle_timeout=args.oracle_timeout,
+                oracle_model=args.oracle_model,
+                oracle_pdf=args.oracle_pdf,
             ) and all_ok
         if not args.continuous or STOP_FILE.exists():
             return 0 if all_ok else 1
