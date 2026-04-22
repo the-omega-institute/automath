@@ -468,6 +468,7 @@ import Omega.POM.ProfiniteAxisChebotarev
 import Omega.POM.ProfiniteCylinderEffectiveN
 import Omega.POM.ProfiniteCylinderCapacity
 import Omega.POM.SyncSubtractedChebotarevCapacity
+import Omega.POM.SyncSubtractedChebotarevZeckendorf
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminant2x2FreeEncoding
 import Omega.POM.PrimeDeterminantAbelianizationFactorization
