@@ -1,4 +1,5 @@
 import Mathlib
+import Omega.CircleDimension.CircleDim
 
 /-!
 # Finite prime truncation homomorphism dimension seed values
@@ -19,6 +20,42 @@ def natPrimeLedger (n : ReducedNatMonoid) : ℕ →₀ ℕ :=
 /-- The integer-valued lift of the prime ledger, matching the Grothendieck-group coordinates. -/
 noncomputable def natPrimeLedgerLift (n : ReducedNatMonoid) : ℕ →₀ ℤ :=
   (natPrimeLedger n).mapRange Int.ofNat (by simp)
+
+/-- The finite prime truncation monoid on `B` generators, written in exponent-vector form. -/
+abbrev cdim_finite_prime_truncation_hom_half_circle_exponent_vectors (B : ℕ) := Fin B → ℕ
+
+/-- The explicit embedding of the finite prime truncation monoid into a free commutative monoid of
+rank `B`. -/
+def cdim_finite_prime_truncation_hom_half_circle_embedding (B : ℕ) :
+    cdim_finite_prime_truncation_hom_half_circle_exponent_vectors B →+*
+      (Fin B → ℕ) :=
+  RingHom.id _
+
+lemma cdim_finite_prime_truncation_hom_half_circle_minimal_additive_rank
+    (B k : ℕ)
+    (Ψ : cdim_finite_prime_truncation_hom_half_circle_exponent_vectors B →+* (Fin k → ℕ))
+    (hΨ : Function.Injective Ψ) :
+    B ≤ k := by
+  obtain ⟨σ, hσ⟩ := Omega.semiring_hom_rigidity B k Ψ
+  have hσ_surj : Function.Surjective σ := by
+    intro i
+    by_contra hi
+    let x : cdim_finite_prime_truncation_hom_half_circle_exponent_vectors B :=
+      fun t => if t = i then 1 else 0
+    have hΨx : Ψ x = 0 := by
+      ext j
+      rw [hσ x j]
+      have hneq : σ j ≠ i := by
+        intro hEq
+        exact hi ⟨j, hEq⟩
+      simp [x, hneq]
+    have hxzero : x = 0 := by
+      apply hΨ
+      simpa using hΨx.trans Ψ.map_zero.symm
+    have : (1 : ℕ) = 0 := by
+      simpa [x] using congrArg (fun f => f i) hxzero
+    exact Nat.one_ne_zero this
+  simpa using Fintype.card_le_of_surjective σ hσ_surj
 
 /-- Finite prime truncation seeds: primes, coprimality, products, and minFac.
     cor:cdim-finite-prime-truncation-hom-half-circle -/
@@ -86,5 +123,22 @@ theorem paper_prime_ledger_non_finitizable_ufd :
       rw [hsupport]
       intro hsubset
       exact hp_not_mem (hsubset (by simp))
+
+/-- Finite prime truncation is concretely modeled by exponent vectors on `B` generators, admits an
+explicit embedding into a free commutative monoid of rank `B`, and `B` is the minimal such rank.
+The corresponding hom half-circle dimension is therefore `B / 2`.
+    cor:cdim-finite-prime-truncation-hom-half-circle -/
+theorem paper_cdim_finite_prime_truncation_hom_half_circle (B : ℕ) :
+    Function.Injective (cdim_finite_prime_truncation_hom_half_circle_embedding B) ∧
+      (∀ k : ℕ,
+        ∀ Ψ : cdim_finite_prime_truncation_hom_half_circle_exponent_vectors B →+* (Fin k → ℕ),
+          Function.Injective Ψ → B ≤ k) ∧
+      halfCircleDim B 0 = (B : ℚ) / 2 := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro x y hxy
+    simpa [cdim_finite_prime_truncation_hom_half_circle_embedding] using hxy
+  · intro k Ψ hΨ
+    exact cdim_finite_prime_truncation_hom_half_circle_minimal_additive_rank B k Ψ hΨ
+  · simp [halfCircleDim, circleDim]
 
 end Omega.CircleDimension

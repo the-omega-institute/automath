@@ -1,6 +1,8 @@
 import Mathlib.Data.Nat.Choose.Multinomial
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Tactic
+import Omega.Folding.MultinomialVpCarrySignature
 
 namespace Omega.Conclusion
 
@@ -90,6 +92,51 @@ theorem paper_fold_multiscale_carry_defect
   · exact hquot
   · unfold multiscaleCarryDefect multiscaleLocalCarry
     rw [hquot, hval]
+
+/-- The local refined multiplicity profile over the coarse fiber `w`, recorded as a list. -/
+noncomputable def fold_multiscale_carry_defect_digit_sum_log_gap_localProfile
+    (e : (w : W) → A w → ℕ) (w : W) : List ℕ :=
+  ((Finset.univ : Finset (A w)).toList.map (e w))
+
+/-- Paper-facing corollary: the multiscale carry defect still factors as the sum of the local
+`p`-adic carries, each local carry-count model is the corresponding digit-sum excess, and any
+finite prime-log bookkeeping sum can therefore be rewritten in digit-sum form.
+    cor:fold-multiscale-carry-defect-digit-sum-log-gap -/
+theorem paper_fold_multiscale_carry_defect_digit_sum_log_gap
+    (p : ℕ) [Fact p.Prime] (d : W → ℕ) (e : (w : W) → A w → ℕ)
+    (hcompat : ∀ w, ∑ u, e w u = 2 * d w) :
+    (multiscaleCarryDefect p d e = ∑ w, multiscaleLocalCarry p e w) ∧
+      (∀ w,
+          Omega.Folding.multinomialCarryCount p
+              (fold_multiscale_carry_defect_digit_sum_log_gap_localProfile e w) =
+            Omega.Folding.multinomialLegendreDigitExcess p
+              (fold_multiscale_carry_defect_digit_sum_log_gap_localProfile e w)) ∧
+  ((((∑ w,
+            Omega.Folding.multinomialCarryCount p
+              (fold_multiscale_carry_defect_digit_sum_log_gap_localProfile e w)) : ℤ) : ℝ) *
+          Real.log p =
+        (((∑ w,
+            Omega.Folding.multinomialLegendreDigitExcess p
+              (fold_multiscale_carry_defect_digit_sum_log_gap_localProfile e w)) : ℤ) : ℝ) *
+          Real.log p) := by
+  constructor
+  · exact (paper_fold_multiscale_carry_defect p (Fact.out : Nat.Prime p) d e hcompat).2
+  constructor
+  · intro w
+    exact (Omega.Folding.paper_multinomial_vp_carry_signature p
+      (fold_multiscale_carry_defect_digit_sum_log_gap_localProfile e w)).2
+  · have hsum :
+        (∑ w,
+            Omega.Folding.multinomialCarryCount p
+              (fold_multiscale_carry_defect_digit_sum_log_gap_localProfile e w)) =
+          ∑ w,
+            Omega.Folding.multinomialLegendreDigitExcess p
+              (fold_multiscale_carry_defect_digit_sum_log_gap_localProfile e w) := by
+        refine Finset.sum_congr rfl ?_
+        intro w hw
+        exact (Omega.Folding.paper_multinomial_vp_carry_signature p
+          (fold_multiscale_carry_defect_digit_sum_log_gap_localProfile e w)).2
+    exact congrArg (fun z : ℤ => (z : ℝ) * Real.log p) hsum
 
 end
 
