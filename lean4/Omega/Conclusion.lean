@@ -438,6 +438,7 @@ import Omega.Conclusion.PhaseCoverCompositionAdditionExtensionLaw
 import Omega.Conclusion.PhaseLedgerBudgetExactHalfspace
 import Omega.Conclusion.Pisano1PositiveSea
 import Omega.Conclusion.PoissonCauchyMomentTomography
+import Omega.Conclusion.PoissonCauchyKLSixthNegativeOneSidedApproach
 import Omega.Conclusion.PoissonCauchyRenyiSixthNegativeMonotone
 import Omega.Conclusion.PowerDivergenceSecondorderRecurrence
 import Omega.Conclusion.PowerDivergenceLogconvexDominantRatio
