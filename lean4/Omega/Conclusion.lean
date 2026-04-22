@@ -600,3 +600,4 @@ import Omega.Conclusion.FiniteVerificationClosureComplexityTrilemma
 import Omega.Conclusion.RankoneEigenvalueSpeedDiscriminantIdentity
 import Omega.Conclusion.ConclusionFoldQuantumVisibleBooleanization
 import Omega.Conclusion.HarmonicDispersionRenyiChi2
+import Omega.Conclusion.CapacityOrderedSpectrumInfoNCEEquivalence

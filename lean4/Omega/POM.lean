@@ -591,3 +591,4 @@ import Omega.POM.P7UnorderedRootPairSumInverseR10
 import Omega.POM.NoGlobalComputableCanonicalRepresentative
 import Omega.POM.MultiresolutionGodelTowerInjection
 import Omega.POM.LedgerResidualStokesIncrement
+import Omega.POM.PrimeTraceIndexDuality

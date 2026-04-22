@@ -633,3 +633,4 @@ import Omega.Folding.FirstTrigonalStructureGoldenRatio
 import Omega.Folding.FoldBinRecover2Pi
 import Omega.Folding.FoldCollisionGapResonanceLadderU
 import Omega.Folding.HypercubeCycleLatticeThetaAsymptotic
+import Omega.Folding.GaugeAnomalySpectralQuarticJacobianSimple
