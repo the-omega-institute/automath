@@ -54,7 +54,7 @@ SECTION_RE = re.compile(
     re.DOTALL,
 )
 MANUAL_RESULT_ORDINAL_RE = re.compile(
-    "(?:Result|" + "\u7ed3\u679c" + r")\s*[0-9]+",
+    "(?:Result|" + "\u7ed3\u679c" + r")\s*[0-9]+|[A-Z]{2,}(?:-[A-Z]{2,})+-[0-9]+",
     re.IGNORECASE,
 )
 
