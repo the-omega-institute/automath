@@ -788,3 +788,4 @@ import Omega.Zeta.XiFoldbinCollisionProbabilityNormalizedGroupoidDimension
 import Omega.Zeta.XiPoissonKlContractionRigidity
 import Omega.Zeta.XiDepthHeightTwoLevelExtremal
 import Omega.Zeta.LogMDerivativeResolvent
+import Omega.Zeta.XiGoldenW1TrueTwoPhaseLimit
