@@ -566,6 +566,7 @@ import Omega.Conclusion.StokesSteinWeightedGraphMinflow
 import Omega.Conclusion.SubexponentialLedgerPhaseUniversality
 import Omega.Conclusion.SublinearExcitationFilterInsufficient
 import Omega.Conclusion.SyncKernelPalindrome
+import Omega.Conclusion.SyncKernelFiniteLengthSingleCoordinate
 import Omega.Conclusion.TemperatureKernelFreeEnergyHaltingEmbedding
 import Omega.Conclusion.TentKernelLocalInvertibility
 import Omega.Conclusion.ThreeEndCertificateIrreducibility
