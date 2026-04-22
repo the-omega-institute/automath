@@ -253,6 +253,7 @@ import Omega.Folding.FoldBinBoundaryCenterZ2
 import Omega.Folding.FoldBinGaugeConstantNotCFinite
 import Omega.Folding.FoldBinEscortEscortKl
 import Omega.Folding.FoldBinGaugeBernoulliExtractionOperator
+import Omega.Folding.FoldBinGaugeConstantStirlingBernoulliHierarchy
 import Omega.Folding.FoldBinGaugeConstantZetaEvenRecoveryLimit
 import Omega.Folding.FoldEscortGroundstateConcentration
 import Omega.Folding.FoldEscortMinentropyRate
