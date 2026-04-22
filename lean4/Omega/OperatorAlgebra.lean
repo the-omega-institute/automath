@@ -126,6 +126,7 @@ import Omega.OperatorAlgebra.NpWatataniIndexSupportCharacterization
 import Omega.OperatorAlgebra.OracleProjectionVariationalCapacity
 import Omega.OperatorAlgebra.PimsnerPopaWitnessBound
 import Omega.OperatorAlgebra.BayesInverseZK
+import Omega.OperatorAlgebra.ZkReflectorBayes
 import Omega.OperatorAlgebra.PoissonBoundaryEntropy
 import Omega.OperatorAlgebra.ZKIdealTensorClosure
 import Omega.OperatorAlgebra.RenyiFlatnessSupEqualsLogIndex
