@@ -586,6 +586,7 @@ import Omega.POM.TrivialChannelFiniteDecidability
 import Omega.POM.TypeclassRateDistortionMutualInformation
 import Omega.POM.UniformFiberSamplingRandomnessOptimality
 import Omega.POM.UniformLiftKLIsometryUniqueness
+import Omega.POM.ConclusionGlobalTowerDefectLocoscExact
 import Omega.POM.ValExtensionalEquivalenceDecidable
 import Omega.POM.ValMonotoneBooleanNand
 import Omega.POM.ValPolynomialSemantics
