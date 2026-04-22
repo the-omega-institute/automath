@@ -577,6 +577,7 @@ import Omega.Zeta.XiAdamsNormFixedRadiusJensenCertificate
 import Omega.Zeta.XiAdamsNormRadiusSimilarityLaw
 import Omega.Zeta.XiAddressDefectLaw
 import Omega.Zeta.XiAddressPrimeLedgerJointBudget
+import Omega.Zeta.XiAddressStoppingTimeEquivalence
 import Omega.Zeta.XiPrimeAxisTensorizedReplayComposition
 import Omega.Zeta.XiAnchorGramLog4Quantum
 import Omega.Zeta.XiBasepointScanAnchorDetCauchyVandermonde
