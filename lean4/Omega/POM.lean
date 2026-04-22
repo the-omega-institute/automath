@@ -183,6 +183,7 @@ import Omega.POM.ParryOnesCLT
 import Omega.POM.FenceMaxchainsEuler
 import Omega.POM.FenceMobiusRigidity
 import Omega.POM.FenceRiccatiError
+import Omega.POM.ForbiddenPairFibGap
 import Omega.POM.FibCubeAntipodeCount
 import Omega.POM.FibCubeEccentricityClosedForm
 import Omega.POM.FibCubeEccentricityCore
