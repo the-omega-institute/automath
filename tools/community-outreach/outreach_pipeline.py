@@ -1148,6 +1148,195 @@ def prepare_future_review_packet(item_id: str, *, dry_run: bool = False) -> Path
     return packet_path
 
 
+def build_future_claude_review_prompt(item: dict[str, Any], packet_path: Path) -> str:
+    packet = packet_path.read_text(encoding="utf-8")
+    return textwrap.dedent(
+        f"""\
+        You are the final Claude review gate for a community-outreach future
+        research artifact. This is a review task, not a generation task.
+
+        {NO_LEAN_EXECUTION_POLICY}
+        {AGENT_CONTEXT_POLICY}
+        {RESEARCH_ROUTE_POLICY}
+
+        Review the packet below. Be strict about scope:
+        - Do not approve an all-q theorem if the packet only proves a reduction.
+        - Do not reject a useful partial reduction merely because it is not a full theorem;
+          instead use verdict "approve_partial" when it is correct and worth preserving.
+        - Do not approve any claim that says local Lean was run or that a signed
+          proxy is a canonical nonnegative collision kernel unless the packet proves it.
+        - For SFT/Bowen-Franks claims, check whether the stated invariant is scoped
+          as a nonnegative lift/class representative rather than equality with the
+          original signed companion.
+
+        FUTURE ITEM:
+        {json.dumps(item, indent=2, ensure_ascii=False)}
+
+        REVIEW PACKET:
+        {packet[:18000]}
+
+        Return JSON only:
+        {{
+          "approved": true,
+          "overall_score": 1,
+          "verdict": "approve_backflow|approve_partial|needs_revision|reject",
+          "status": "claude_approved_backflow|claude_approved_partial|needs_codex_revision|rejected",
+          "summary": "technical review summary",
+          "findings": [
+            {{"severity": "blocker|major|minor|note", "issue": "specific issue", "recommendation": "specific fix"}}
+          ],
+          "required_fixes": ["..."],
+          "backflow_recommendation": "backflow_now|hold_partial|continue_codex|do_not_use",
+          "scope_assessment": "whether the result stays inside the recorded scope boundary",
+          "route_contract_assessment": "whether computation/proof/hybrid contract is actually satisfied"
+        }}
+        """
+    )
+
+
+def write_future_claude_review(
+    research_dir: Path,
+    item: dict[str, Any],
+    review: dict[str, Any],
+    raw_output: str,
+    prompt: str,
+) -> tuple[Path, Path]:
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    review_path = research_dir / f"claude_review_{stamp}.json"
+    raw_path = research_dir / f"claude_review_raw_{stamp}.txt"
+    prompt_path = research_dir / f"claude_review_prompt_{stamp}.txt"
+    md_path = research_dir / f"claude_review_{stamp}.md"
+    review_path.write_text(json.dumps(review, indent=2, ensure_ascii=False), encoding="utf-8")
+    raw_path.write_text(raw_output, encoding="utf-8")
+    prompt_path.write_text(prompt, encoding="utf-8")
+
+    lines = [
+        f"# Claude Review: {item.get('title')}",
+        "",
+        f"- future_item_id: {item.get('id')}",
+        f"- approved: {review.get('approved')}",
+        f"- score: {review.get('overall_score')}",
+        f"- verdict: {review.get('verdict')}",
+        f"- status: {review.get('status')}",
+        f"- backflow_recommendation: {review.get('backflow_recommendation')}",
+        "",
+        "## Summary",
+        str(review.get("summary", "")),
+        "",
+        "## Scope",
+        str(review.get("scope_assessment", "")),
+        "",
+        "## Route Contract",
+        str(review.get("route_contract_assessment", "")),
+        "",
+        "## Findings",
+    ]
+    for finding in review.get("findings", []) if isinstance(review.get("findings"), list) else []:
+        lines.append(
+            f"- {finding.get('severity', 'note')}: {finding.get('issue', '')} "
+            f"Recommendation: {finding.get('recommendation', '')}"
+        )
+    if review.get("required_fixes"):
+        lines.extend(["", "## Required Fixes"])
+        for fix in review.get("required_fixes", []):
+            lines.append(f"- {fix}")
+    md_path.write_text("\n".join(lines).strip() + "\n", encoding="utf-8")
+    return review_path, md_path
+
+
+def review_future_item(item_id: str, *, dry_run: bool = False) -> dict[str, Any]:
+    item = find_future_item(item_id)
+    research_dir = future_research_dir(item)
+    packet = latest_file(research_dir, "claude_review_packet_*.md")
+    if not packet:
+        packet = prepare_future_review_packet(item_id, dry_run=dry_run)
+    prompt = build_future_claude_review_prompt(item, packet)
+    if dry_run:
+        print(prompt)
+        return {
+            "approved": False,
+            "overall_score": 0,
+            "verdict": "dry_run",
+            "status": "dry_run",
+        }
+
+    raw_output = claude_exec(prompt, work_dir=REPO_ROOT, timeout=1200, dry_run=False)
+    parsed = parse_json_from_output(raw_output)
+    raw_lower = raw_output.lower()
+    if "hit your limit" in raw_lower or "usage limit" in raw_lower or "rate limit" in raw_lower:
+        parsed = {
+            "approved": False,
+            "overall_score": 0,
+            "verdict": "claude_quota_blocked",
+            "status": "awaiting_claude_review",
+            "summary": "Claude review could not run because the Claude CLI reported a usage/quota limit.",
+            "findings": [
+                {
+                    "severity": "note",
+                    "issue": "Claude quota/usage limit blocked final review.",
+                    "recommendation": "Retry --review-future after the Claude quota resets.",
+                }
+            ],
+            "required_fixes": [],
+            "backflow_recommendation": "pending_claude",
+            "scope_assessment": "Not reviewed; pending Claude.",
+            "route_contract_assessment": "Not reviewed; pending Claude.",
+            "raw_excerpt": raw_output[:2000],
+        }
+    if not isinstance(parsed, dict) or not parsed:
+        parsed = {
+            "approved": False,
+            "overall_score": 0,
+            "verdict": "needs_revision",
+            "status": "needs_codex_revision",
+            "summary": "Claude returned no parseable JSON.",
+            "findings": [
+                {
+                    "severity": "blocker",
+                    "issue": "No parseable JSON review was returned.",
+                    "recommendation": "Rerun review with a stricter prompt or inspect raw output.",
+                }
+            ],
+            "required_fixes": ["Obtain parseable Claude review JSON."],
+            "backflow_recommendation": "continue_codex",
+            "scope_assessment": "",
+            "route_contract_assessment": "",
+            "raw_excerpt": raw_output[:2000],
+        }
+
+    review_path, md_path = write_future_claude_review(research_dir, item, parsed, raw_output, prompt)
+    status = str(parsed.get("status") or "needs_codex_revision")
+    allowed_statuses = {
+        "awaiting_claude_review",
+        "claude_approved_backflow",
+        "claude_approved_partial",
+        "needs_codex_revision",
+        "rejected",
+    }
+    if status not in allowed_statuses:
+        verdict = str(parsed.get("verdict", ""))
+        approved = parsed.get("approved") is True
+        if approved and verdict == "approve_backflow":
+            status = "claude_approved_backflow"
+        elif approved and verdict == "approve_partial":
+            status = "claude_approved_partial"
+        elif verdict == "reject":
+            status = "rejected"
+        else:
+            status = "needs_codex_revision"
+    append_future_queue_note(
+        str(item.get("id")),
+        (
+            f"Claude review status={status} score={parsed.get('overall_score')} "
+            f"verdict={parsed.get('verdict')} review={_repo_relative(md_path)} json={_repo_relative(review_path)}"
+        ),
+        source_repo=str(item.get("source_repo", "")),
+        status=status,
+        dry_run=False,
+    )
+    return parsed
+
+
 def process_future_item(item_id: str, *, model: Optional[str], dry_run: bool) -> dict[str, Any]:
     item = find_future_item(item_id)
     research_dir = future_research_dir(item)
@@ -4916,6 +5105,7 @@ def parse_args() -> argparse.Namespace:
               python3 tools/community-outreach/outreach_pipeline.py --future-queue
               python3 tools/community-outreach/outreach_pipeline.py --process-future 797e010c2138e6bb9b
               python3 tools/community-outreach/outreach_pipeline.py --prepare-future-review 797e010c2138e6bb9b
+              python3 tools/community-outreach/outreach_pipeline.py --review-future 797e010c2138e6bb9b
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --register-future-scope
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --mark-replied https://github.com/owner/name/issues/38#issuecomment-...
               python3 tools/community-outreach/outreach_pipeline.py --check-artifacts
@@ -4935,6 +5125,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--future-queue", action="store_true", help="Show deferred scope/deep-research queue")
     parser.add_argument("--process-future", action="append", default=[], metavar="ID", help="Run a queued future-scope Codex research task by id or unique prefix")
     parser.add_argument("--prepare-future-review", action="append", default=[], metavar="ID", help="Prepare a Claude review packet for a future-scope result and mark it awaiting review")
+    parser.add_argument("--review-future", action="append", default=[], metavar="ID", help="Run Claude final review for a future-scope result by id or unique prefix")
     parser.add_argument("--register-future-scope", action="store_true", help="Extract deferred future tasks from the current draft state for --repo targets")
     parser.add_argument("--mark-replied", metavar="URL", help="Mark --repo target state as replied/submitted with an existing GitHub issue comment URL")
     parser.add_argument("--append-future-note", nargs=2, metavar=("ID", "NOTE"), help="Append a note/source update to a future queue item")
@@ -5043,6 +5234,17 @@ def main() -> int:
         for future_id in args.prepare_future_review:
             packet = prepare_future_review_packet(future_id, dry_run=args.dry_run)
             print(f"Future review packet: {_repo_relative(packet)}")
+        return 0
+    if args.review_future:
+        for future_id in args.review_future:
+            review = review_future_item(future_id, dry_run=args.dry_run)
+            print(
+                "Future Claude review:",
+                future_id,
+                review.get("status"),
+                review.get("verdict"),
+                "score=" + str(review.get("overall_score")),
+            )
         return 0
     if args.append_future_note:
         item_id, note = args.append_future_note
