@@ -376,6 +376,7 @@ import Omega.Folding.ResidualCompletionFiniteDepth
 import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldRewriteNewman
 import Omega.Folding.FoldBernoulliFourierSamplingNotL2
+import Omega.Folding.FoldPisotBernoulliConvolutionRepresentation
 import Omega.Folding.FoldSigmaPhiDiverges
 import Omega.Folding.FoldCollisionScaleDiverges
 import Omega.Folding.FoldSpectrumFactorization

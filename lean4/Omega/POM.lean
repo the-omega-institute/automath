@@ -188,6 +188,7 @@ import Omega.POM.LkBoundarySpectralMeasureBeta32
 import Omega.POM.LkGapPi2
 import Omega.POM.LowTemperatureThreeTermExpansion
 import Omega.POM.ParryOnesCLT
+import Omega.POM.UnifXnLocalLimitParry
 import Omega.POM.FenceMaxchainsEuler
 import Omega.POM.FenceMobiusRigidity
 import Omega.POM.FenceRiccatiError
