@@ -943,10 +943,27 @@ def future_research_dir(item: dict[str, Any]) -> Path:
     return target_dir_for_repo(repo) / "future" / str(item.get("id", "unknown"))
 
 
+def prior_future_research_context(research_dir: Path, *, max_chars: int = 9000) -> str:
+    if not research_dir.exists():
+        return ""
+    parts: list[str] = []
+    for pattern in ("summary_*.md", "result_*.json", "proof.md"):
+        for path in sorted(research_dir.glob(pattern), key=lambda item: item.stat().st_mtime, reverse=True)[:2]:
+            try:
+                text = path.read_text(encoding="utf-8")
+            except Exception:
+                continue
+            parts.append(f"\n--- PRIOR {path.name} ---\n{text[:3500]}")
+    if not parts:
+        return ""
+    return "\n".join(parts)[:max_chars]
+
+
 def build_future_research_prompt(item: dict[str, Any], research_dir: Path) -> str:
     source_repo = str(item.get("source_repo") or item.get("target_repo") or "")
     route = str(item.get("research_route", "hybrid"))
     scope_context = build_scope_context(source_repo)
+    prior_context = prior_future_research_context(research_dir)
     backflow = {}
     state = load_state(source_repo)
     if state:
@@ -970,6 +987,9 @@ def build_future_research_prompt(item: dict[str, Any], research_dir: Path) -> st
 
         WORK DIRECTORY FOR ANY NEW RUNTIME ARTIFACTS:
         {_repo_relative(research_dir)}
+
+        PRIOR RUN CONTEXT FOR THIS FUTURE ITEM:
+        {prior_context or "(none)"}
 
         REQUIRED ROUTE:
         - research_route: {route}
@@ -1059,6 +1079,75 @@ def write_future_research_summary(research_dir: Path, result: dict[str, Any], ra
     return json_path, md_path
 
 
+def latest_file(research_dir: Path, pattern: str) -> Optional[Path]:
+    matches = sorted(research_dir.glob(pattern), key=lambda item: item.stat().st_mtime, reverse=True)
+    return matches[0] if matches else None
+
+
+def prepare_future_review_packet(item_id: str, *, dry_run: bool = False) -> Path:
+    item = find_future_item(item_id)
+    research_dir = future_research_dir(item)
+    latest_summary = latest_file(research_dir, "summary_*.md")
+    latest_result = latest_file(research_dir, "result_*.json")
+    if not latest_summary or not latest_result:
+        raise RuntimeError(f"Future item {item_id} has no result/summary to review")
+
+    try:
+        result_data = json.loads(latest_result.read_text(encoding="utf-8"))
+    except Exception:
+        result_data = {}
+
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    packet_path = research_dir / f"claude_review_packet_{stamp}.md"
+    proof_files = sorted(path for path in research_dir.glob("proof*.md"))
+    script_files = sorted(path for path in research_dir.glob("*.py"))
+    json_files = sorted(path for path in research_dir.glob("*.json"))
+
+    body = "\n".join(
+        [
+            f"# Claude Review Packet: {item.get('title')}",
+            "",
+            "## Queue Metadata",
+            f"- future_item_id: {item.get('id')}",
+            f"- source_repo: {item.get('source_repo')}",
+            f"- queue_status_before_review: {item.get('status', 'queued')}",
+            f"- research_route: {result_data.get('research_route', item.get('research_route'))}",
+            f"- route_contract_satisfied: {result_data.get('route_contract_satisfied')}",
+            f"- result_status: {result_data.get('status')}",
+            f"- backflow_candidate: {result_data.get('backflow_candidate')}",
+            f"- next_review: {result_data.get('next_review')}",
+            "",
+            "## Scope Boundary",
+            str(item.get("scope_boundary", "")),
+            "",
+            "## Review Questions",
+            "- Is the stated result mathematically correct under the recorded scope boundary?",
+            "- Is the route contract actually satisfied?",
+            "- Should this be backflowed into the main paper now, held as a partial reduction, or sent back for more Codex work?",
+            "- Are there any claims that overstate the relation to the original signed companions, Lean formalization, or SFT/Bowen-Franks classification?",
+            "",
+            "## Latest Summary",
+            latest_summary.read_text(encoding="utf-8")[:8000],
+            "",
+            "## Artifacts",
+            *[f"- `{_repo_relative(path)}`" for path in [latest_result, latest_summary, *proof_files, *script_files, *json_files]],
+            "",
+        ]
+    )
+    if dry_run:
+        print(body)
+        return packet_path
+    packet_path.write_text(body, encoding="utf-8")
+    append_future_queue_note(
+        str(item.get("id")),
+        f"Prepared Claude review packet: {_repo_relative(packet_path)}",
+        source_repo=str(item.get("source_repo", "")),
+        status="awaiting_claude_review",
+        dry_run=False,
+    )
+    return packet_path
+
+
 def process_future_item(item_id: str, *, model: Optional[str], dry_run: bool) -> dict[str, Any]:
     item = find_future_item(item_id)
     research_dir = future_research_dir(item)
@@ -1101,11 +1190,18 @@ def process_future_item(item_id: str, *, model: Optional[str], dry_run: bool) ->
         f"contract={parsed.get('route_contract_satisfied')} "
         f"summary={_repo_relative(md_path)} result={_repo_relative(json_path)}"
     )
+    queue_status = str(parsed.get("status", "queued"))
+    if (
+        queue_status == "resolved"
+        and bool(parsed.get("route_contract_satisfied", False))
+        and str(parsed.get("next_review", "")).startswith("claude")
+    ):
+        queue_status = "awaiting_claude_review"
     append_future_queue_note(
         str(item.get("id")),
         note,
         source_repo=str(item.get("source_repo", "")),
-        status=str(parsed.get("status", "queued")),
+        status=queue_status,
         dry_run=False,
     )
     logger.info("Future research result: %s", _repo_relative(md_path))
@@ -4799,9 +4895,9 @@ def print_status() -> None:
             print(f"  Backflow: {backflow.get('placement')}/{backflow.get('section_dir')}")
         future_items = future_items_for_repo(state.repo)
         if future_items:
-            print(f"  Future:  {len(future_items)} queued")
+            print(f"  Future:  {len(future_items)} active")
             for item in future_items[:3]:
-                print(f"           [{item.get('id')}] {item.get('title')}")
+                print(f"           [{item.get('id')}] {item.get('status', 'queued')} — {item.get('title')}")
         if state.submission_url:
             print(f"  Issue:    {state.submission_url}")
         if state.error:
@@ -4819,6 +4915,7 @@ def parse_args() -> argparse.Namespace:
               python3 tools/community-outreach/outreach_pipeline.py --status
               python3 tools/community-outreach/outreach_pipeline.py --future-queue
               python3 tools/community-outreach/outreach_pipeline.py --process-future 797e010c2138e6bb9b
+              python3 tools/community-outreach/outreach_pipeline.py --prepare-future-review 797e010c2138e6bb9b
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --register-future-scope
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --mark-replied https://github.com/owner/name/issues/38#issuecomment-...
               python3 tools/community-outreach/outreach_pipeline.py --check-artifacts
@@ -4837,6 +4934,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--status", action="store_true", help="Show persisted state")
     parser.add_argument("--future-queue", action="store_true", help="Show deferred scope/deep-research queue")
     parser.add_argument("--process-future", action="append", default=[], metavar="ID", help="Run a queued future-scope Codex research task by id or unique prefix")
+    parser.add_argument("--prepare-future-review", action="append", default=[], metavar="ID", help="Prepare a Claude review packet for a future-scope result and mark it awaiting review")
     parser.add_argument("--register-future-scope", action="store_true", help="Extract deferred future tasks from the current draft state for --repo targets")
     parser.add_argument("--mark-replied", metavar="URL", help="Mark --repo target state as replied/submitted with an existing GitHub issue comment URL")
     parser.add_argument("--append-future-note", nargs=2, metavar=("ID", "NOTE"), help="Append a note/source update to a future queue item")
@@ -4940,6 +5038,11 @@ def main() -> int:
                 result.get("research_route"),
                 "contract=" + str(result.get("route_contract_satisfied")),
             )
+        return 0
+    if args.prepare_future_review:
+        for future_id in args.prepare_future_review:
+            packet = prepare_future_review_packet(future_id, dry_run=args.dry_run)
+            print(f"Future review packet: {_repo_relative(packet)}")
         return 0
     if args.append_future_note:
         item_id, note = args.append_future_note
