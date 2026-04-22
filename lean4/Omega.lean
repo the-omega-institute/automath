@@ -4,6 +4,7 @@ import Omega.Combinatorics
 import Omega.Conclusion
 import Omega.Core
 import Omega.Discussion
+import Omega.DerivedConsequences
 import Omega.EA
 import Omega.Experiments
 import Omega.FoldResidualTime
