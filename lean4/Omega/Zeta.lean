@@ -827,6 +827,7 @@ import Omega.Zeta.XiToeplitzPrincipalMinorLogconcavity
 import Omega.Zeta.XiToeplitzNegativeInertiaMinimalSampling
 import Omega.Zeta.XiToeplitzDiskpoleModulusClosedFormHighHeight
 import Omega.Zeta.XiToeplitzPrincipalMinorDiscreteCurvatureRecovery
+import Omega.Zeta.XiToeplitzCurvatureEnergyEquivalence
 import Omega.Zeta.XiMittagLefflerUniversalKfoldJordanCollision
 import Omega.Zeta.XiVanVleckResidueL2LowerBound
 import Omega.Zeta.XiToeplitzNegativeMarginVandermonde4Lowerbound
