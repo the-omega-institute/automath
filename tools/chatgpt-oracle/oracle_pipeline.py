@@ -671,12 +671,14 @@ def rebuild_rounds_from_git(state: PaperState) -> None:
     if result.returncode != 0:
         return
 
+    git_max_a = 0
     max_a = state.stage_a_rounds
     max_b = state.stage_b_rounds
     max_c = state.stage_c_rounds
     for line in result.stdout.splitlines():
         m = re.search(r"stage-A\s+R(\d+)", line, re.IGNORECASE)
         if m:
+            git_max_a = max(git_max_a, int(m.group(1)))
             max_a = max(max_a, int(m.group(1)))
         m = re.search(r"stage-B\s+R(\d+)", line, re.IGNORECASE)
         if m:
@@ -688,6 +690,15 @@ def rebuild_rounds_from_git(state: PaperState) -> None:
         m = re.search(r"(?:oracle|gate)[\s_]+R(\d+)", line, re.IGNORECASE)
         if m:
             max_b = max(max_b, int(m.group(1)))
+    if (state.current_stage == "A"
+        and not state.stage_a_passed
+        and state.stage_a_rounds > git_max_a):
+        logger.warning(f"[{state.paper_name}] git-rebuild: rolling back "
+                       f"incomplete Stage A round counter "
+                       f"{state.stage_a_rounds} → {git_max_a}")
+        state.stage_a_rounds = git_max_a
+        max_a = git_max_a
+
     can_rebuild_a = _state_has_stage_a_evidence(state)
     if max_a != state.stage_a_rounds and can_rebuild_a:
         logger.info(f"[{state.paper_name}] git-rebuild: stage_a_rounds "
