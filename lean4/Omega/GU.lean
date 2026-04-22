@@ -136,6 +136,7 @@ import Omega.GU.TerminalCutProjectToFoldHist
 import Omega.GU.TerminalDeltaParityRule
 import Omega.GU.TerminalFoldbin6BdryUniqueGeoSelectedAxis
 import Omega.GU.TerminalFoldbin6BitflipStabilityPolynomial
+import Omega.GU.TerminalFoldbin6BitflipStabilityAk
 import Omega.GU.TerminalFoldbin6BoundaryPureF9Alias
 import Omega.GU.TerminalFoldbin6CubeEdgeSeparation
 import Omega.GU.TerminalFoldbin6FiberHammingMinDistanceHistogram
