@@ -212,6 +212,7 @@ import Omega.Conclusion.ScreenphaseSurjectsAllFiniteLocalizedShadows
 import Omega.Conclusion.SingleCubeEditRigidity
 import Omega.Conclusion.FibadicLcmFiltrationLaw
 import Omega.Conclusion.FibadicPrimitiveCentralIdempotents
+import Omega.Conclusion.FibadicUniformDivisorRandomizationGap
 import Omega.Conclusion.FibonacciAnomalyBlock
 import Omega.Conclusion.FibonacciDistortionThreshold
 import Omega.Conclusion.FiniteFieldJordanExponentPeriodBound
