@@ -13,24 +13,48 @@ for a weakly dependent sampling scheme is asserted here.
 
 \subsection{Survivor R\'enyi pressure spectra}
 
-Under the hypotheses of Theorem~\ref{thm:first-entry-escape-rate}, let
-\(\mathcal L_m^H\) denote the set of admissible words
-\(a=a_0\cdots a_{m-1}\in A^m\) such that \(a_t\in\mathcal S\) for every
-\(0\leq t<m\), equivalently the set of length-\(m\) words whose cylinder
-is contained in \(\{\tau_H\ge m\}\).
-
 The next theorem is the killed-system version of the usual
 \(L^s\)-spectrum identity for Gibbs cylinder weights: power sums are
 governed by pressure of the scaled potential.  This classical viewpoint
 underlies R\'enyi and generalized-dimension spectra
 \citep{Renyi1961,HentschelProcaccia1983,Pesin1997}; here it is used only
 after conditioning on survival, because that is the input needed for the
-finite-observation collision threshold.
+finite-observation collision threshold.  No residue modulus and no
+two-terminal reachability condition enter this pressure calculation.
 
 \begin{theorem}[Survivor R\'enyi pressure spectrum]
 \label{thm:survivor-renyi-pressure}
-Assume the hypotheses of
-Theorem~\ref{thm:first-entry-escape-rate}.  For \(s>0\) and \(m\geq 1\),
+Let \(Y\subseteq A^{\NNzero}\) be a topologically mixing one-step
+subshift of finite type, and let \(\nu_\varphi\) be the fully supported
+equilibrium Markov measure of a one-step potential \(\varphi\).  Write
+\(\pi\) for its stationary vector, \(K=(K_{ij})_{i,j\in A}\) for its
+transition matrix, and \(M=(M_{ij})_{i,j\in A}\) for the adjacency
+matrix of \(Y\).  Let \(A_{\mathrm{hole}}\subsetneq A\) be a non-empty
+proper subset, set
+\[
+  H:=\bigcup_{h\in A_{\mathrm{hole}}}[h],
+  \qquad
+  \mathcal S:=A\setminus A_{\mathrm{hole}},
+\]
+let
+\[
+  \tau_H(y):=\inf\set{n\geq0:\sigma^n y\in H},
+\]
+and assume that the survivor subshift
+\[
+  Y_H:=\set{y\in Y:\sigma^n y\notin H\text{ for every }n\geq0}
+\]
+is topologically mixing.  Let
+\[
+  \mathcal S_\infty
+  :=\set{i\in\mathcal S:\exists\,y\in Y_H,\ y_0=i},
+  \qquad
+  \mathcal T:=\mathcal S\setminus\mathcal S_\infty.
+\]
+For \(m\geq1\), let \(\mathcal L_m^H\) denote the set of admissible words
+\(a=a_0\cdots a_{m-1}\in A^m\) such that \(a_t\in\mathcal S\) for every
+\(0\leq t<m\), equivalently the set of length-\(m\) words whose cylinder
+is contained in \(\{\tau_H\geq m\}\).  For \(s>0\) and \(m\geq 1\),
 define
 \[
   \mathcal Z_{H,m}(s)
@@ -80,6 +104,7 @@ collision is
   \chi_H:=2P_Y(\varphi)-P_{Y_H}(2\varphi)
         = 2\gamma_H(\varphi)+h_{2,H}.
 \]
+Here \(\gamma_H(\varphi):=P_Y(\varphi)-P_{Y_H}(\varphi)\).
 \leanverified{paper_scan_projection_address_survivor_renyi_pressure}
 \end{theorem}
 
@@ -101,8 +126,15 @@ and summing over all safe words of length \(m\) yields
 \]
 
 Order \(\mathcal S\) so that \(\mathcal S_\infty\) comes first and
-\(\mathcal T\) comes last.  Because \(B_{H,s}\) has the same support as
-\(B_H\), it has block form
+\(\mathcal T\) comes last.  The matrices \(B_{H,s}\) all have the same
+support, namely the directed graph of admissible safe transitions.
+There is no safe edge from \(\mathcal T\) into \(\mathcal S_\infty\):
+otherwise an infinite survivor path beginning at the \(\mathcal S_\infty\)
+endpoint would give an infinite survivor path beginning at the
+\(\mathcal T\) state.  The directed graph on \(\mathcal T\) is acyclic,
+because a cycle in \(\mathcal T\) could be repeated indefinitely to
+produce a survivor orbit through a \(\mathcal T\) symbol.  Since
+\(\mathcal T\) is finite, the \(\mathcal T\)-block is nilpotent.  Thus
 \[
   B_{H,s}=
   \begin{pmatrix}
@@ -111,7 +143,8 @@ Order \(\mathcal S\) so that \(\mathcal S_\infty\) comes first and
   \end{pmatrix},
 \]
 where \(Q_s\) is nilpotent and \(B_{\infty,s}:=B_{H,s}|_{\mathcal S_\infty}\)
-is primitive.  Hence
+is primitive, because it has the support of the mixing survivor subshift.
+Hence
 \[
   \rho(B_{H,s})=\rho(B_{\infty,s}).
 \]
@@ -143,8 +176,12 @@ Consequently
   = e^{-sP_Y(\varphi)}\rho(L_{s\varphi,H})
   = e^{P_{Y_H}(s\varphi)-sP_Y(\varphi)}.
 \]
+The block form, primitivity of \(B_{\infty,s}\), and nilpotence of \(Q_s\)
+show that \(\rho(B_{H,s})\) is a simple isolated eigenvalue of
+\(B_{H,s}\) and that the rest of the spectrum lies in a smaller disc.
 Since \(u_s\) and \(\mathbf 1\) are non-negative and non-zero on
-\(\mathcal S_\infty\), Perron--Frobenius yields
+\(\mathcal S_\infty\), the corresponding spectral coefficient is
+positive.  Therefore finite-dimensional Perron--Frobenius theory gives
 \[
   \mathcal Z_{H,m}(s)
   = c_s\,\rho(B_{H,s})^{m-1}+O(\vartheta_s^m)
@@ -158,7 +195,13 @@ For the conditioned law,
   = \frac{\mathcal Z_{H,m}(s)}
          {\nu_\varphi(\tau_H\ge m)^s}.
 \]
-By Theorem~\ref{thm:first-entry-escape-rate},
+But
+\[
+  \nu_\varphi(\tau_H\geq m)
+  = \sum_{a\in\mathcal L_m^H}\nu_\varphi([a])
+  = \mathcal Z_{H,m}(1),
+\]
+so the first limit at \(s=1\) gives
 \[
   -\frac1m\log \nu_\varphi(\tau_H\ge m)\longrightarrow \gamma_H(\varphi)
   = P_Y(\varphi)-P_{Y_H}(\varphi).
