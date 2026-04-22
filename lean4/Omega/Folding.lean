@@ -266,6 +266,7 @@ import Omega.Folding.FoldBinLastbitSufficientTV
 import Omega.Folding.FoldTvLowerBoundFromFourierSpike
 import Omega.Folding.FoldBinM6FiberHist
 import Omega.Folding.Foldbin6NoU1InAut0GroupoidAlgebra
+import Omega.Folding.FoldbinGroupoidAlgebraWedderburn
 import Omega.Folding.FoldbinGroupoidAut0NoUniversalLieLimit
 import Omega.Folding.FoldbinGroupoidAut0PuProduct
 import Omega.Folding.FoldbinGroupoidAut0Pi1TorsionExponent
