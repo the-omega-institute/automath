@@ -3957,6 +3957,18 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
         state.stage_a_passed = False
         save_state(state)
 
+    if (not CLAUDE_ENABLED
+        and not state.stage_a_passed
+        and state.stage_a_rounds >= MAX_STAGE_A_ROUNDS):
+        logger.warning(f"{tag} Resetting exhausted Stage A state for "
+                       "--no-claude smoke run")
+        state.stage_a_rounds = 0
+        state.current_round = 0
+        state.stage_a_scores = []
+        state.stage_a_audit_rounds = 0
+        state.stage_a_audit_metrics = {}
+        save_state(state)
+
     _ensure_research_directive(paper_path, state.target_journal,
                                dry_run=dry_run)
 
