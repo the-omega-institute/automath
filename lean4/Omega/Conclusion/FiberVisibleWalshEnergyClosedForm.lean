@@ -7,10 +7,12 @@ namespace Omega.Conclusion
 
 noncomputable section
 
-local instance (m : ℕ) : DecidableEq (Word m) :=
+local instance conclusion_fiber_visible_walsh_energy_closed_form_instDecidableEqWord
+    (m : ℕ) : DecidableEq (Word m) :=
   Classical.decEq _
 
-local instance (m : ℕ) : DecidableEq (X m) :=
+local instance conclusion_fiber_visible_walsh_energy_closed_form_instDecidableEqX
+    (m : ℕ) : DecidableEq (X m) :=
   Classical.decEq _
 
 /-- Specializing the exact Gram law to `x = y` identifies the total nonempty Walsh energy of a
