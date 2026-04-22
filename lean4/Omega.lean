@@ -29,6 +29,7 @@ import Omega.RatioResultant
 import Omega.RecursiveAddressing
 import Omega.SPG
 import Omega.StatisticalStability
+import Omega.SyncKernelRealInput
 import Omega.SyncKernelWeighted
 import Omega.Topos
 import Omega.TypedAddressBiaxialCompletion
