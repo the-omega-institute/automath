@@ -26,6 +26,7 @@ import Omega.GU.BetaQuantizationStep
 import Omega.GU.BinMinSectorCollisionDivergence
 import Omega.GU.BinfoldAffinePressureSingleSlope
 import Omega.GU.BoundaryDelta34TripleIdentity
+import Omega.GU.BoundaryM10B3C3RigidFourBlockSplit
 import Omega.GU.BoundaryTowerFibCount
 import Omega.GU.BoundaryTowerMinimalResonanceTripleSM
 import Omega.GU.BulkResonanceDeficit
