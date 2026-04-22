@@ -902,7 +902,9 @@ import Omega.Zeta.XiPoissonKlContractionRigidity
 import Omega.Zeta.XiDepthHeightTwoLevelExtremal
 import Omega.Zeta.LogMDerivativeResolvent
 import Omega.Zeta.XiGoldenW1TrueTwoPhaseLimit
+import Omega.Zeta.XiJacobiGershgorinSupportGuardrail
 import Omega.Zeta.XiComovingJensenDefectKernelDecomposition
+import Omega.Zeta.XiStieltjesW1Lipschitz
 import Omega.Zeta.XiChainInteriorBooleanMobiusCharacteristicMaxchains
 import Omega.Zeta.XiBasepointScanL2EnergyPdKernel
 import Omega.Zeta.StereographicJacobianEntropyDensity
