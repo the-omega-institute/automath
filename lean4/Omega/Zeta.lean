@@ -345,6 +345,7 @@ import Omega.Zeta.GoldenMetallicSymbolBudgetEntropyOptimality
 import Omega.Zeta.GoldenRadiusVisibility
 import Omega.Zeta.GmFibonacci2PowerVisiblePrimes
 import Omega.Zeta.GmFibonacciSubtowerEntrypointCriterion
+import Omega.Zeta.GmChainProfiniteEulerDecomposition
 import Omega.Zeta.GroupoidCentralRenyiShannon
 import Omega.Zeta.HankelBadPrimeSelectionProbability
 import Omega.Zeta.XiHankelBadprimeSelectionTrials
