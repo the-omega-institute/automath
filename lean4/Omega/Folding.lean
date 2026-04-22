@@ -478,6 +478,7 @@ import Omega.Folding.GodelFiniteDictionaryBitlength
 import Omega.Folding.GraphCycleAffineTorsorThetaPoissonPhase
 import Omega.Folding.GraphCycleLatticeThetaModularInversion
 import Omega.Folding.HaltingLeyangHolographicEncoding
+import Omega.Folding.HaltingNoComputableModulusSparseMoments
 import Omega.Folding.HaltingLeyangW1Barrier
 import Omega.Folding.HaltingSpectrumInversionEverywhereDiscontinuous
 import Omega.Folding.HammingDist
