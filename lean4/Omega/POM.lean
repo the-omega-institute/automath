@@ -128,6 +128,7 @@ import Omega.POM.DiagonalRateAcceptRefreshSSTStrong
 import Omega.POM.DiagonalRateAcceptRefreshSeparationExact
 import Omega.POM.DiagonalRateBinaryClosedForm
 import Omega.POM.DiagonalRateCriticalContinuousTimeGeneratorMaxent
+import Omega.POM.DiagonalRateCriticalLaplacianPdetTensorSynergyFactorization
 import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensor
 import Omega.POM.DiagonalRateDiagonalClosureRankone
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete
