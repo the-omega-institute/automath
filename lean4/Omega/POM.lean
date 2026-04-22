@@ -204,6 +204,7 @@ import Omega.POM.FiberParityMod3
 import Omega.POM.FiberPosteriorEquivalenceActivityField
 import Omega.POM.FiberPosteriorBayesMWIS
 import Omega.POM.FiberBulkSchedulingEntropyUniversal
+import Omega.POM.FiberFixedSymmetricLayerUnboundedScheduling
 import Omega.POM.FiberBayesDecodingLinearScan
 import Omega.POM.FiberReconstructionAutGroup
 import Omega.POM.FiberReconstructionCartesianProduct
