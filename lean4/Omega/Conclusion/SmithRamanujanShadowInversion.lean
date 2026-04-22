@@ -1,6 +1,10 @@
 import Mathlib.Tactic
+import Omega.Zeta.SmithPrefixSufficiency
 
 namespace Omega.Conclusion
+
+open Omega.Zeta
+open scoped BigOperators
 
 /-- Telescoping identity for p-primary Ramanujan shadow: the partial sum of R(j)
     satisfies Σ_{j=1}^{k} R(j) = p^k Δ(k) - m.
@@ -57,5 +61,77 @@ theorem paper_conclusion_smith_ramanujan_shadow_inversion_package :
     ((3 : ℕ) - 2 = 1) ∧
     ((3 : ℕ) - 2 + (2 - 1) + (1 - 0) = 3) :=
   paper_conclusion_smith_ramanujan_shadow_inversion_seeds
+
+/-- Concrete inversion package for a p-primary Ramanujan shadow sequence attached to a fixed Smith
+profile of length `m`. If `R` agrees with the shadow formula of that profile, then finite sums of
+`R` recover the tail counts, exact multiplicities are the finite differences of those tail counts,
+and the same tail-count sequence itself realizes the given shadow. -/
+def conclusion_smith_pprimary_ramanujan_shadow_inversion_statement
+    (p m : ℕ) (R : ℕ → ℤ) : Prop :=
+  ∀ e : Fin m → ℕ,
+    (∀ k : ℕ, 1 ≤ k →
+      R k =
+        (p : ℤ) ^ k * (smithPrefixDelta e k : ℤ) -
+          (p : ℤ) ^ (k - 1) * (smithPrefixDelta e (k - 1) : ℤ)) →
+      (∀ K : ℕ,
+        Finset.sum (Finset.range K) (fun j => R (j + 1)) =
+          (p : ℤ) ^ K * (smithPrefixDelta e K : ℤ) - m) ∧
+      (∀ ℓ : ℕ,
+        smithPrefixMultiplicity e ℓ = smithPrefixDelta e ℓ - smithPrefixDelta e (ℓ + 1)) ∧
+      ∃ Δ : ℕ → ℕ,
+        Δ 0 = m ∧
+          (∀ k : ℕ, Δ k = smithPrefixDelta e k) ∧
+          (∀ k : ℕ, 1 ≤ k →
+            R k =
+              (p : ℤ) ^ k * (Δ k : ℤ) - (p : ℤ) ^ (k - 1) * (Δ (k - 1) : ℤ)) ∧
+          (∀ ℓ : ℕ, smithPrefixMultiplicity e ℓ = Δ ℓ - Δ (ℓ + 1))
+
+lemma conclusion_smith_pprimary_ramanujan_shadow_inversion_shadow_telescope
+    (p : ℤ) (Δ : ℕ → ℤ) :
+    ∀ K : ℕ,
+      Finset.sum (Finset.range K) (fun j => (p ^ (j + 1)) * Δ (j + 1) - p ^ j * Δ j) =
+        p ^ K * Δ K - Δ 0
+  | 0 => by simp
+  | K + 1 => by
+      rw [Finset.sum_range_succ,
+        conclusion_smith_pprimary_ramanujan_shadow_inversion_shadow_telescope p Δ K]
+      ring
+
+/-- Paper label: `thm:conclusion-smith-pprimary-ramanujan-shadow-inversion`. -/
+theorem paper_conclusion_smith_pprimary_ramanujan_shadow_inversion
+    (p m : ℕ) (R : ℕ → ℤ) : conclusion_smith_pprimary_ramanujan_shadow_inversion_statement p m R := by
+  intro e hR
+  refine ⟨?_, ?_, ?_⟩
+  · intro K
+    calc
+      Finset.sum (Finset.range K) (fun j => R (j + 1))
+          = Finset.sum (Finset.range K) (fun j =>
+              (p : ℤ) ^ (j + 1) * (smithPrefixDelta e (j + 1) : ℤ) -
+                (p : ℤ) ^ j * (smithPrefixDelta e j : ℤ)) := by
+                  refine Finset.sum_congr rfl ?_
+                  intro j hj
+                  simpa using hR (j + 1) (Nat.succ_le_succ (Nat.zero_le j))
+      _ = (p : ℤ) ^ K * (smithPrefixDelta e K : ℤ) - (smithPrefixDelta e 0 : ℤ) := by
+            simpa using
+              conclusion_smith_pprimary_ramanujan_shadow_inversion_shadow_telescope
+                (p := (p : ℤ)) (Δ := fun k => (smithPrefixDelta e k : ℤ)) K
+      _ = (p : ℤ) ^ K * (smithPrefixDelta e K : ℤ) - m := by
+            have hdelta0 : smithPrefixDelta e 0 = m := by
+              unfold smithPrefixDelta
+              simp
+            rw [hdelta0]
+  · intro ℓ
+    exact smithPrefixMultiplicity_eq_delta_sub_delta e ℓ
+  · refine ⟨smithPrefixDelta e, ?_, ?_, ?_, ?_⟩
+    · have hdelta0 : smithPrefixDelta e 0 = m := by
+        unfold smithPrefixDelta
+        simp
+      simpa using hdelta0
+    · intro k
+      rfl
+    · intro k hk
+      simpa using hR k hk
+    · intro ℓ
+      exact smithPrefixMultiplicity_eq_delta_sub_delta e ℓ
 
 end Omega.Conclusion
