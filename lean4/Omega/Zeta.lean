@@ -723,6 +723,7 @@ import Omega.Zeta.XiCofinalPrimeExhaustion
 import Omega.Zeta.XiSquarefreePrimeSupportMinGrowth
 import Omega.Zeta.XiTerminalHankelModpiNoninvertibilityFiber
 import Omega.Zeta.XiTerminalHankelStandardFormPadicLoss
+import Omega.Zeta.XiTerminalHankelStandardFormP5Threshold
 import Omega.Zeta.XiTerminalReplicaSoftcoreQGenfuncRationalPartition
 import Omega.Zeta.XiTerminalReplicaSoftcorePartitionCoeffSum2mMinus1
 import Omega.Zeta.XiTerminalZmDeltaCa5CollisionNodeSplittingLegendre
