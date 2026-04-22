@@ -258,6 +258,7 @@ import Omega.Zeta.FoldbinGaugeVolumeKappaCompression
 import Omega.Zeta.FourthRegisterDichotomy
 import Omega.Zeta.FredholmDetSeeds
 import Omega.Zeta.FredholmPrimitiveClosedForm
+import Omega.Zeta.XiEndpointHeatProbeRatioRecoversLocalSpectralDimension
 import Omega.Zeta.GaugeGroupTripleDecomp
 import Omega.Zeta.GeometricHarmonicTail
 import Omega.Zeta.GodelFiberIndexModUniformityIndependence

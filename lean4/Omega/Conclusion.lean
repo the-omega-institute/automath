@@ -260,6 +260,8 @@ import Omega.Conclusion.LocalizedCechCompletenessFiniteCover
 import Omega.Conclusion.LocalizedPairwiseUnionWedgeBilinearization
 import Omega.Conclusion.LocalizedKernelInclusionExclusionMobius
 import Omega.Conclusion.OrderParameterUnboundednessTuringCompleteness
+import Omega.Conclusion.DiscreteGaugeDoubleExp
+import Omega.Conclusion.Pi1AllPrimes
 import Omega.Conclusion.LocalizedSolenoidCoprimeArtinMazurCompleteness
 import Omega.Conclusion.LogpWeightedTailOperatorNorm
 import Omega.Conclusion.LogRigidityUnderTropical
