@@ -167,4 +167,130 @@ theorem paper_xi_j_sextic_elliptic_lattes_degree_drop_by_2torsion
     _ = xiJSexticDegreeTwoQuotient (xiJSexticInvariantPi t) := by rw [hpi]
     _ = xiJSexticLattesMap t := hfactor.symm
 
+/-- The denominator of the sextic Lattès map in the `t`-coordinate. -/
+def xiJSexticDenominator (t : ℚ) : ℚ :=
+  4 * (t - 1728) * xiJDiscriminantQuadratic t
+
+/-- The quadratic factor producing the branch value `1728`. -/
+def xiJSexticCriticalFactorA (t : ℚ) : ℚ :=
+  t ^ 2 - 3456 * t - 3379328
+
+/-- The quartic factor producing the branch values cut out by `xiJDiscriminantQuadratic`. -/
+def xiJSexticCriticalFactorB (t : ℚ) : ℚ :=
+  t ^ 4 + 3724 * t ^ 3 + 970752 * t ^ 2 + 10348004864 * t - 8393927966720
+
+/-- Polynomial cutting out the finite postcritical set `{1728, α, β}`. -/
+def xiJSexticCriticalValuePolynomial (z : ℚ) : ℚ :=
+  (z - 1728) * xiJDiscriminantQuadratic z
+
+/-- A symbolic pole condition for the rational map. -/
+def xiJSexticPole (t : ℚ) : Prop :=
+  xiJSexticDenominator t = 0
+
+/-- The map is given by its explicit quartic-over-cubic closed form. -/
+def XiJSexticClosedForm (f : ℚ → ℚ) : Prop :=
+  ∀ t : ℚ,
+    f t =
+      (t ^ 4 + 6111488 * t ^ 2 + 2236612608 * t + 9487424438272) / xiJSexticDenominator t
+
+/-- The only finite critical values are the linear branch value `1728` and the quadratic branch
+cut out by `xiJDiscriminantQuadratic(z) = 0`. -/
+def XiJSexticFiniteCriticalValues (f : ℚ → ℚ) : Prop :=
+  ∀ t : ℚ, t ≠ 1728 → xiJDiscriminantQuadratic t ≠ 0 →
+    (xiJSexticCriticalFactorA t = 0 → f t = 1728) ∧
+      (xiJSexticCriticalFactorB t = 0 → xiJDiscriminantQuadratic (f t) = 0)
+
+/-- Every finite critical point maps into the symbolic postcritical set cut out by
+`(z - 1728) * (z² + 1862 z + 161792) = 0`. -/
+def XiJSexticPostcriticalSet (f : ℚ → ℚ) : Prop :=
+  (∀ t : ℚ, t ≠ 1728 → xiJDiscriminantQuadratic t ≠ 0 →
+      xiJSexticCriticalFactorA t = 0 ∨ xiJSexticCriticalFactorB t = 0 →
+      xiJSexticCriticalValuePolynomial (f t) = 0) ∧
+    xiJSexticCriticalValuePolynomial 1728 = 0
+
+/-- The branch over `1728` hits a pole in one step, while the quadratic branch values themselves
+are poles, so all critical orbits enter infinity in at most two symbolic steps. -/
+def XiJSexticCriticalOrbitsEnterInfinityInTwoSteps (f : ℚ → ℚ) : Prop :=
+  (∀ t : ℚ, t ≠ 1728 → xiJDiscriminantQuadratic t ≠ 0 →
+      xiJSexticCriticalFactorA t = 0 → xiJSexticPole (f t)) ∧
+    (∀ t : ℚ, t ≠ 1728 → xiJDiscriminantQuadratic t ≠ 0 →
+      xiJSexticCriticalFactorB t = 0 → xiJDiscriminantQuadratic (f t) = 0) ∧
+    ∀ z : ℚ, xiJDiscriminantQuadratic z = 0 → xiJSexticPole z
+
+private lemma xiJSextic_first_branch_identity (t : ℚ) :
+    (t ^ 4 + 6111488 * t ^ 2 + 2236612608 * t + 9487424438272) -
+        1728 * xiJSexticDenominator t =
+      xiJSexticCriticalFactorA t ^ 2 := by
+  unfold xiJSexticDenominator xiJSexticCriticalFactorA xiJDiscriminantQuadratic
+  ring_nf
+
+private lemma xiJSextic_maps_firstCriticalFactor_to_1728 (t : ℚ) (ht : t ≠ 1728)
+    (hQ : xiJDiscriminantQuadratic t ≠ 0) (hA : xiJSexticCriticalFactorA t = 0) :
+    xiJSexticLattesMap t = 1728 := by
+  have hu : t - 1728 ≠ 0 := sub_ne_zero.mpr ht
+  have hden : xiJSexticDenominator t ≠ 0 := by
+    exact mul_ne_zero (mul_ne_zero (by norm_num) hu) hQ
+  have hnum : t ^ 4 + 6111488 * t ^ 2 + 2236612608 * t + 9487424438272 =
+      1728 * xiJSexticDenominator t := by
+    have hzero : xiJSexticCriticalFactorA t ^ 2 = 0 := by simp [hA]
+    linarith [xiJSextic_first_branch_identity t, hzero]
+  unfold xiJSexticLattesMap
+  exact (div_eq_iff hden).2 hnum
+
+private lemma xiJSextic_quadratic_branch_numerator_identity (t : ℚ) (ht : t ≠ 1728)
+    (hQ : xiJDiscriminantQuadratic t ≠ 0) :
+    xiJDiscriminantQuadratic (xiJSexticLattesMap t) * xiJSexticDenominator t ^ 2 =
+      xiJSexticCriticalFactorB t ^ 2 := by
+  have hu : t - 1728 ≠ 0 := sub_ne_zero.mpr ht
+  unfold xiJDiscriminantQuadratic xiJSexticLattesMap xiJSexticCriticalFactorB xiJSexticDenominator
+  field_simp [hu, hQ]
+  simp [xiJDiscriminantQuadratic]
+  ring_nf
+
+private lemma xiJSextic_maps_secondCriticalFactor_to_quadraticBranch (t : ℚ) (ht : t ≠ 1728)
+    (hQ : xiJDiscriminantQuadratic t ≠ 0) (hB : xiJSexticCriticalFactorB t = 0) :
+    xiJDiscriminantQuadratic (xiJSexticLattesMap t) = 0 := by
+  have hu : t - 1728 ≠ 0 := sub_ne_zero.mpr ht
+  have hden : xiJSexticDenominator t ≠ 0 := by
+    exact mul_ne_zero (mul_ne_zero (by norm_num) hu) hQ
+  have hmul : xiJDiscriminantQuadratic (xiJSexticLattesMap t) * xiJSexticDenominator t ^ 2 = 0 := by
+    rw [xiJSextic_quadratic_branch_numerator_identity t ht hQ, hB]
+    simp
+  exact (mul_eq_zero.mp hmul).resolve_right (pow_ne_zero 2 hden)
+
+/-- The sextic Lattès map coming from the doubling map on
+`y² = (t - 1728)(t² + 1862 t + 161792)` has the explicit closed form, its finite critical values
+are exactly the linear branch value `1728` together with the quadratic branch cut out by
+`z² + 1862 z + 161792 = 0`, the postcritical set is therefore finite, and every critical orbit
+reaches a pole in at most two symbolic steps.
+    thm:xi-j-sextic-elliptic-lattes-t-doubling-pcf -/
+theorem paper_xi_j_sextic_elliptic_lattes_t_doubling_pcf :
+    XiJSexticClosedForm xiJSexticLattesMap ∧
+      XiJSexticFiniteCriticalValues xiJSexticLattesMap ∧
+      XiJSexticPostcriticalSet xiJSexticLattesMap ∧
+      XiJSexticCriticalOrbitsEnterInfinityInTwoSteps xiJSexticLattesMap := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro t
+    rfl
+  · intro t ht hQ
+    refine ⟨?_, ?_⟩
+    · exact xiJSextic_maps_firstCriticalFactor_to_1728 t ht hQ
+    · exact xiJSextic_maps_secondCriticalFactor_to_quadraticBranch t ht hQ
+  · refine ⟨?_, ?_⟩
+    · intro t ht hQ hcrit
+      rcases hcrit with hA | hB
+      · rw [xiJSextic_maps_firstCriticalFactor_to_1728 t ht hQ hA]
+        simp [xiJSexticCriticalValuePolynomial]
+      · have hquad := xiJSextic_maps_secondCriticalFactor_to_quadraticBranch t ht hQ hB
+        simp [xiJSexticCriticalValuePolynomial, hquad]
+    · simp [xiJSexticCriticalValuePolynomial]
+  · refine ⟨?_, ?_, ?_⟩
+    · intro t ht hQ hA
+      rw [xiJSextic_maps_firstCriticalFactor_to_1728 t ht hQ hA]
+      simp [xiJSexticPole, xiJSexticDenominator]
+    · intro t ht hQ hB
+      exact xiJSextic_maps_secondCriticalFactor_to_quadraticBranch t ht hQ hB
+    · intro z hz
+      simp [xiJSexticPole, xiJSexticDenominator, hz]
+
 end Omega.Zeta

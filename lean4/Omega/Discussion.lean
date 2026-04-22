@@ -7,8 +7,11 @@ import Omega.Discussion.CmvStabilizationCore
 import Omega.Discussion.CrossingWindingBlaschkeIndex
 import Omega.Discussion.CubicalStokesElimination2Cycle
 import Omega.Discussion.DerivedFiberWatataniTimeParityEquivalence
+import Omega.Discussion.DerivedHiddenchannelLinearGhostQuadraticShadow
 import Omega.Discussion.DerivedNoncontractibleLocalTimeMod6
+import Omega.Discussion.DefectMeasureFourierLaplace
 import Omega.Discussion.DimensionalNullTrigger
+import Omega.Discussion.DtnGenerator
 import Omega.Discussion.EndpointDiscreteVsContinuous
 import Omega.Discussion.EpsZkCmiRiskImprovementBound
 import Omega.Discussion.EulerFactorBasepointOrbit
@@ -36,9 +39,12 @@ import Omega.Discussion.RecyclingResiduals
 import Omega.Discussion.SquierCurvatureHolonomyStokes
 import Omega.Discussion.SquierZeroCurvatureStrictification
 import Omega.Discussion.ToeplitzNegativeAtomThreshold
+import Omega.Discussion.ToeplitzNegativeCountThreshold
 import Omega.Discussion.TraceclassFredholmEulerSurjection
 import Omega.Discussion.TwoDesignDecouplingHSZK
 import Omega.Discussion.UniqueContinuousTransversal
+import Omega.Discussion.VarianceGapIntegral
+import Omega.Discussion.WalshStokesHigherFlux
 import Omega.Discussion.WdimFiniteIndexStability
 import Omega.Discussion.WindowQuotientSemiringRigidity
 import Omega.Discussion.ZeckendorfCongruenceAddressRigidity

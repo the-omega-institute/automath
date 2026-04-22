@@ -71,4 +71,23 @@ theorem paper_cdim_stokes_homology_exact_splitting_seeds (u v : ℕ) :
   refine ⟨stokesBoundaryInclusion_injective u v, stokesProjection_surjective u v,
     stokes_range_eq_kernel u v, stokesProjection_section u v, stokes_split_decomposition u v⟩
 
+/-- Paper-facing split short exact sequence statement for Stokes homology.
+    prop:cdim-stokes-homology-exact-splitting -/
+theorem paper_cdim_stokes_homology_exact_splitting (u v : ℕ) :
+    Function.Injective (stokesBoundaryInclusion u v) ∧
+      Function.Surjective (stokesProjection u v) ∧
+      Set.range (stokesBoundaryInclusion u v) =
+        {p | stokesProjection u v p = 0} ∧
+      (∀ x, stokesProjection u v (stokesSection u v x) = x) ∧
+      (∀ p : (Fin u → ℤ) × (Fin v → ℤ),
+        ∃ x : Fin u → ℤ, ∃ y : Fin v → ℤ,
+          p = stokesSection u v x + stokesBoundaryInclusion u v y) := by
+  rcases paper_cdim_stokes_homology_exact_splitting_seeds u v with
+    ⟨hinj, hsurj, hexact, hsection, hsplit⟩
+  refine ⟨hinj, hsurj, hexact, hsection, ?_⟩
+  intro p
+  refine ⟨stokesProjection u v p, p.2, ?_⟩
+  symm
+  exact hsplit p
+
 end Omega.CircleDimension.StokesHomologyExactSplitting

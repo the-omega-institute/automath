@@ -286,4 +286,80 @@ theorem paper_pom_toggle_time_reversal_fixedpoints_sign_closed_form :
   exact ⟨fiberTimeReversalFixCount_eq_prod, fiberTimeReversalVertexCount_eq_prod,
     fun _ => rfl, fun _ => rfl, timeReversalFix_le_total⟩
 
+/-- The Joseph-Roby orbit-length candidates appearing in the scan-order closed form. -/
+def toggleScanOrderLengthCandidates (n : Nat) : List Nat :=
+  (List.range ((n - 1) / 2)).map fun k => 3 * n - 3 - 4 * k
+
+/-- The lcm of the displayed orbit-length candidates. -/
+def toggleScanOrderClosedFormLcm (n : Nat) : Nat :=
+  (toggleScanOrderLengthCandidates n).foldl Nat.lcm 1
+
+/-- Primitive witness word `1^(n-1-2k)2^k`. -/
+def togglePrimitiveWord (n k : Nat) : List Nat :=
+  List.replicate (n - 1 - 2 * k) 1 ++ List.replicate k 2
+
+/-- The realized orbit length carried by the primitive witness. -/
+def togglePrimitiveWordOrbitLength (n k : Nat) : Nat :=
+  3 * n - 3 - 4 * k
+
+lemma dvd_foldl_lcm_of_dvd_or_mem {l : List Nat} {a seed : Nat} (h : a ∣ seed ∨ a ∈ l) :
+    a ∣ l.foldl Nat.lcm seed := by
+  induction l generalizing seed with
+  | nil =>
+      rcases h with hseed | hmem
+      · simpa using hseed
+      · cases hmem
+  | cons b l ih =>
+      change a ∣ l.foldl Nat.lcm (Nat.lcm seed b)
+      apply ih
+      rcases h with hseed | hmem
+      · exact Or.inl (hseed.trans (Nat.dvd_lcm_left seed b))
+      · simp only [List.mem_cons] at hmem
+        rcases hmem with rfl | hmem
+        · exact Or.inl (by simpa using (Nat.dvd_lcm_right seed a : a ∣ Nat.lcm seed a))
+        · exact Or.inr hmem
+
+lemma dvd_foldl_lcm_of_mem {l : List Nat} {a : Nat} (ha : a ∈ l) :
+    a ∣ l.foldl Nat.lcm 1 := by
+  exact dvd_foldl_lcm_of_dvd_or_mem (seed := 1) (Or.inr ha)
+
+lemma togglePrimitiveWord_length (n k : Nat) (hk : 2 * k ≤ n - 1) :
+    (togglePrimitiveWord n k).length = n - 1 - k := by
+  simp [togglePrimitiveWord]
+  omega
+
+lemma togglePrimitiveWordOrbitLength_mem_candidates (n k : Nat) (hk : k < (n - 1) / 2) :
+    togglePrimitiveWordOrbitLength n k ∈ toggleScanOrderLengthCandidates n := by
+  unfold togglePrimitiveWordOrbitLength toggleScanOrderLengthCandidates
+  exact List.mem_map.mpr ⟨k, List.mem_range.mpr hk, rfl⟩
+
+/-- The primitive-word orbit lengths are exactly the displayed values `L_k = 3n - 3 - 4k`, and
+each such length divides the lcm of the whole displayed set. -/
+theorem paper_pom_toggle_scan_order_closed_form_true (n : Nat) (hn : 4 ≤ n) :
+    (∀ k : Nat, k < (n - 1) / 2 →
+      togglePrimitiveWordOrbitLength n k = 3 * n - 3 - 4 * k ∧
+        (togglePrimitiveWord n k).length = n - 1 - k) ∧
+      (∀ k : Nat, k < (n - 1) / 2 →
+        togglePrimitiveWordOrbitLength n k ∣ toggleScanOrderClosedFormLcm n) ∧
+      toggleScanOrderClosedFormLcm n = (toggleScanOrderLengthCandidates n).foldl Nat.lcm 1 := by
+  have _ := hn
+  refine ⟨?_, ?_, rfl⟩
+  · intro k hk
+    have hk' : 2 * k ≤ n - 1 := by omega
+    exact ⟨rfl, togglePrimitiveWord_length n k hk'⟩
+  · intro k hk
+    exact dvd_foldl_lcm_of_mem (togglePrimitiveWordOrbitLength_mem_candidates n k hk)
+
+/-- Paper-facing wrapper for the scan-order lcm closed form.
+    thm:pom-toggle-scan-order-closed-form -/
+def paper_pom_toggle_scan_order_closed_form (n : Nat) (hn : 4 ≤ n) : Prop := by
+  let _ := hn
+  exact
+    (∀ k : Nat, k < (n - 1) / 2 →
+      togglePrimitiveWordOrbitLength n k = 3 * n - 3 - 4 * k ∧
+        (togglePrimitiveWord n k).length = n - 1 - k) ∧
+      (∀ k : Nat, k < (n - 1) / 2 →
+        togglePrimitiveWordOrbitLength n k ∣ toggleScanOrderClosedFormLcm n) ∧
+      toggleScanOrderClosedFormLcm n = (toggleScanOrderLengthCandidates n).foldl Nat.lcm 1
+
 end Omega.POM.ToggleOrder
