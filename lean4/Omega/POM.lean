@@ -373,6 +373,8 @@ import Omega.POM.MaxMassDispersionBound
 import Omega.POM.MesoscopicReversibleWindowStrictGap
 import Omega.POM.MaxchainsEqualsLinext
 import Omega.POM.MaxentLift
+import Omega.POM.FiberUniformLiftMLEEquivalence
+import Omega.POM.KkEigenvalues
 import Omega.POM.MaxentMarkovUniqueOptimalKernel
 import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensorRecursion
 import Omega.POM.MicrocanonicalAdaptiveNoGain
