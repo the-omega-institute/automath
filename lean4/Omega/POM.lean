@@ -176,6 +176,7 @@ import Omega.POM.LkSurfaceFreeEnergy
 import Omega.POM.LkBoundarySpectralMeasureBeta32
 import Omega.POM.LkGapPi2
 import Omega.POM.LowTemperatureThreeTermExpansion
+import Omega.POM.ParryOnesCLT
 import Omega.POM.FenceMaxchainsEuler
 import Omega.POM.FenceMobiusRigidity
 import Omega.POM.FenceRiccatiError
@@ -232,6 +233,7 @@ import Omega.POM.FiberPosteriorBayesMWIS
 import Omega.POM.FiberBulkSchedulingEntropyUniversal
 import Omega.POM.FiberFixedSymmetricLayerUnboundedScheduling
 import Omega.POM.FiberBayesDecodingLinearScan
+import Omega.POM.FiberHyperplaneTensorization
 import Omega.POM.FiberReconstructionAutGroup
 import Omega.POM.FiberReconstructionCartesianProduct
 import Omega.POM.FiberReconstructionMedianPartialcubeCat0
