@@ -601,6 +601,7 @@ import Omega.POM.VisibleWalshCommutatorDefect
 import Omega.POM.VisibleWalshParsevalFrame
 import Omega.POM.WitnessExtractionOptimalSuccess
 import Omega.POM.DerivedBinaryAdmissibilityGoldenRateFloor
+import Omega.POM.DerivedBinaryAdmissibilityGoldenTopophase
 import Omega.POM.ZeroTempConcentration
 import Omega.POM.ZeroTemperatureGapDivisibilityRaySum
 import Omega.POM.ZeroTemperatureTwoTermExpansion

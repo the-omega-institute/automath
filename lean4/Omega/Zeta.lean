@@ -873,3 +873,4 @@ import Omega.Zeta.XiChainInteriorBooleanMobiusCharacteristicMaxchains
 import Omega.Zeta.XiBasepointScanL2EnergyPdKernel
 import Omega.Zeta.StereographicJacobianEntropyDensity
 import Omega.Zeta.XiTerminalZmS4LanglandsFactorTorusRankConductorTable
+import Omega.Zeta.XiTerminalZmLeyangEllipticDoublingStationarity
