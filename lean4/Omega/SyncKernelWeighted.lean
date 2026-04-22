@@ -135,6 +135,7 @@ import Omega.SyncKernelWeighted.EdgeworthSixEight
 import Omega.SyncKernelWeighted.DiscSquareSubstitutionSplit
 import Omega.SyncKernelWeighted.FiniteRhParityGeneral
 import Omega.SyncKernelWeighted.WeightedCompletionQ
+import Omega.SyncKernelWeighted.WeightedXiSingleExceptionPair
 import Omega.SyncKernelWeighted.WeightedUnitRootFinite
 import Omega.SyncKernelWeighted.WittFrobeniusDefectDivisibility
 import Omega.SyncKernelWeighted.WittFrobeniusIteratedDescent

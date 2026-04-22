@@ -172,6 +172,7 @@ import Omega.POM.ExtendedPrimitives
 import Omega.POM.FenceIntervalClosure
 import Omega.POM.FenceGoldenDetGreen
 import Omega.POM.LkSurfaceFreeEnergy
+import Omega.POM.LkBoundarySpectralMeasureBeta32
 import Omega.POM.LowTemperatureThreeTermExpansion
 import Omega.POM.FenceMaxchainsEuler
 import Omega.POM.FenceMobiusRigidity
