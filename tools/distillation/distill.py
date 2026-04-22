@@ -78,7 +78,7 @@ ORACLE_SERVER = "http://127.0.0.1:8765"
 ORACLE_SERVER_SCRIPT = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle_server.py"
 DEFAULT_ORACLE_MODEL = "chatgpt-5.4-pro-extended"
 DEFAULT_ORACLE_TIMEOUT = 7200
-ORACLE_CLAIM_TIMEOUT = 300
+ORACLE_CLAIM_TIMEOUT = int(os.environ.get("ORACLE_CLAIM_TIMEOUT", "90"))
 REVIEW_BACKENDS = ("codex", "codex-claude")
 DEFAULT_REVIEW_BACKEND = os.environ.get("DISTILL_REVIEW_BACKEND", "codex")
 if DEFAULT_REVIEW_BACKEND not in REVIEW_BACKENDS:
@@ -4453,6 +4453,27 @@ def run_stage_w(
                 1 for a in attempts
                 if a.get("review", {}).get("minimum_score", 0) < SCORE_PASS_THRESHOLD
             )
+            if low_rounds >= 3:
+                prompt += (
+                    "\n\nLAST-MILE CONSERVATIVE PROOF MODE:\n"
+                    "- Prior attempts repeatedly overclaimed. Produce only claims whose "
+                    "hypotheses explicitly include every auxiliary predicate, carrier, "
+                    "tag, closure operation, readout, and budget used in the proof.\n"
+                    "- Prefer 1-2 self-contained conditional finite audit lemmas over "
+                    "broad multi-target coverage. Omit a target file if you cannot type "
+                    "all of its symbols locally.\n"
+                    "- Do not use theorem titles or dependency status words suggesting "
+                    "closure, intrinsic dichotomy, or full Wang-Zahl extraction unless "
+                    "you prove every branch. Use construction, conditional audit, or "
+                    "conditional rigidity language.\n"
+                    "- For grain/prism families, include slab, sector, thick-prism or "
+                    "container-budget, thin-prism, and holonomy/Frostman/budget branches "
+                    "only as explicitly defined finite certificate alternatives. If a "
+                    "branch is not proved, state it as an assumption or omit the claim "
+                    "that the family is closed.\n"
+                    "- If a reviewer called a clause vacuous or false, remove that clause "
+                    "rather than rephrasing it.\n"
+                )
             w_timeout = 2400 if low_rounds >= 2 else 1800
             response = codex_exec(
                 prompt,
