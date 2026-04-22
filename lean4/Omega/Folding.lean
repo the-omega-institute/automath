@@ -61,6 +61,7 @@ import Omega.Folding.BernoulliPSpecializeHalf
 import Omega.Folding.BernoulliPSpectrum
 import Omega.Folding.BernoulliPhiHalfRatioLimits
 import Omega.Folding.BinFold
+import Omega.Folding.Foldbin6DegeneracyMultivaluedNonfree
 import Omega.Folding.BinFoldGaugeDecomposition
 import Omega.Folding.BinFoldGaugeDensityTwoScale
 import Omega.Folding.BinFoldGaugeSign
