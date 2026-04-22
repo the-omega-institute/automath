@@ -96,3 +96,4 @@ import Omega.GroupUnification.Window6SU4EmbeddingRigidity
 import Omega.GroupUnification.Window6SplitExtremalDistanceBridge
 import Omega.GroupUnification.Window6WeylSymmetryGraphAnnihilation
 import Omega.GroupUnification.Window6VisibleDegree6IsotropyObstruction
+import Omega.GroupUnification.ZeckendorfCarryAbsorptionM9

@@ -829,6 +829,7 @@ import Omega.Zeta.XiWindow6C3HammingRootLengthSplit
 import Omega.Zeta.XiWindow6C3QuadraticEnergyEquipartition
 import Omega.Zeta.XiWindow6C3NoNonzeroLinearInvariant
 import Omega.Zeta.XiWindow6TailSemigroupAperyThresholds
+import Omega.Zeta.XiWindow6DimensionReachabilityCongruenceUnion
 import Omega.Zeta.XiWindow6TailSemigroupFrobeniusThreshold
 import Omega.Zeta.XiWindow6TailSemigroupTwoGeneratorNormalForm
 import Omega.Zeta.XiZGAbelResidueLogDensity
