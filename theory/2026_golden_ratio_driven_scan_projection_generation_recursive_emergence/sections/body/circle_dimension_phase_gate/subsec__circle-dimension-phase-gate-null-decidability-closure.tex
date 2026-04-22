@@ -123,56 +123,87 @@ A_\lambda:=\sum_{x\in E,\ \beta(q(x))=\lambda}a_x,
 % --- End distillation writeback ---
 
 % --- Distillation writeback ---
-\begin{definition}[带损耗的有限测试 Frostman--slab 归一化]\label{def:distill-cdim-loss-calibrated-slab-normalization}
-\textbf{依赖状态：construction.}
-沿定义 \ref{def:distill-cdim-frostman-slab-data} 的记号。给定有理数 \(0<\theta\le 1\)。称该 slab 归一化资料为 \(\theta\)-带损耗的，若对每个非空 slab
+% --- Distillation writeback: exact container shadow for unitary-slice audits ---
+\begin{definition}[结果 19：unitary-slice exact container shadow]\label{distill:wang_zahl-convex_container_non_concentration_implies_maximal_support-cdim-exact-container-shadow}
+\textbf{日期时间：2026-04-22T17:42:33+08:00. 依赖状态：construction.}
+固定一个与 SPG 端完全相同的 dyadic 网格维数与分辨率 \((m,n)\)，并令
 \[
-E_{q,y}=E\cap q^{-1}(y)
+\mathcal G_{m,n}=\{0,\ldots,2^m-1\}^n.
 \]
-均有
+设
 \[
-\bigl|N_{q,y}(E_{q,y})\bigr|\ge \theta |E_{q,y}|.
+\mathfrak S=(\mathfrak C_m,B,S,\mathscr A_m)
 \]
-这里的 \(\theta\) 只记录有限归一化映射损失的最坏比例；它不是完整 Frostman 条件，而是有限测试 slab descent 中可离线核验的质量保留常数。
+为定义 \ref{distill:wang_zahl-convex_container_non_concentration_implies_maximal_support-spg-support-separating-datum} 中同一 \((m,n)\)-网格上的 support-separating SPG container audit datum。对 unitary-slice 预过滤后的有限地址族 \(E\subset\mathcal A_m\)，称映射
+\[
+\tau:E\longrightarrow\mathcal G_{m,n}
+\]
+给出 \(E\) 的 exact \(\mathfrak S\)-container shadow，若其 active shadow
+\[
+\operatorname{Supp}_{m,n}^{\tau}(E):=\tau(E)\subset\mathcal G_{m,n}
+\]
+属于 \(\mathscr A_m\)，并且每个 container occupancy 被定义为支撑占据数
+\[
+\operatorname{Occ}_{\mathcal K}^{\tau}(E):=\bigl|\tau(E)\cap\mathcal K\bigr|\qquad(\mathcal K\in\mathfrak C_m).
+\]
+若某个查询 \(q\) 的 unitary-slice Hard-axis verifier \(\mathcal V_{\mathrm{Hard}}(q)\) 明确把上述资料 \((m,n,\mathfrak S,\tau)\) 注册为其合法支撑预算子审计，并以全部不等式
+\[
+\operatorname{Occ}_{\mathcal K}^{\tau}(E)\le B_{\mathcal K}\qquad(\mathcal K\in\mathfrak C_m)
+\]
+作为 Hard-axis pass 条件的一部分，则称该 exact container shadow 对 \(q\) 是 authorized 的。未作此注册时，container overload 只是一份支撑预算审计资料，而不自动构成定义 \ref{def:cdim-null-witness-tag} 意义下的 \(\mathrm{Hard}\)-型 \(\mathsf{NULL}\) 失败见证。
 \end{definition}
+% --- End distillation writeback ---
 
-\begin{proposition}[带损耗 slab descent 的定量质量保留]\label{prop:distill-cdim-loss-calibrated-slab-descent}
-\textbf{依赖状态：rigidity.}
-设定义 \ref{def:distill-cdim-frostman-slab-data} 的 slab 归一化资料存在并且为定义 \ref{def:distill-cdim-loss-calibrated-slab-normalization} 意义下的 \(\theta\)-带损耗资料。令 \(B_0\subset\mathcal A_m\) 为非空有限族并满足 \(\mathsf{Bad}^{\varepsilon}_m(B_0)\)。
-假设已经构造出一列非终端 slab 归一化
+% --- Distillation writeback: authorized Hard-axis overload extraction ---
+\begin{proposition}[结果 20：container-shadow overload is a conditional Hard-axis support witness]\label{distill:wang_zahl-convex_container_non_concentration_implies_maximal_support-cdim-authorized-hard-axis-witness}
+\textbf{日期时间：2026-04-22T17:42:33+08:00. 依赖状态：rigidity.}
+设 \((m,n,\mathfrak S,\tau)\) 是定义 \ref{distill:wang_zahl-convex_container_non_concentration_implies_maximal_support-cdim-exact-container-shadow} 中的 exact container shadow，并设 \(E\subset\mathcal A_m\) 为非空有限地址族。记
 \[
-B_{j+1}=N_{q_j,y_j}\bigl((B_j)_{q_j,y_j}\bigr),\qquad j=0,\ldots,k-1,
+A_E:=\operatorname{Supp}_{m,n}^{\tau}(E)=\tau(E).
 \]
-其中每个 \((B_j)_{q_j,y_j}\) 见证 \(B_j\notin\mathsf{Sk}^{\rm frost}_m(\eta;Q_m)\)，且 \(|q_j(B_j)|>1\)。则对所有 \(0\le j\le k\) 有
+若所有 container budgets 均通过，即
 \[
-\mathsf{Bad}^{\varepsilon}_m(B_j),
-\qquad
-\dim_{Q_m}(B_j)\le \dim_{Q_m}(B_0)-j,
+\operatorname{Occ}_{\mathcal K}^{\tau}(E)\le B_{\mathcal K}\qquad(\mathcal K\in\mathfrak C_m),
 \]
-并且
+则
 \[
-|B_k|>(\theta\eta)^k |B_0|.
+|A_E|\ge S.
 \]
-特别地，任何从 \(B_0\) 出发的非终端 slab descent 至多持续 \(\dim_{Q_m}(B_0)\) 步；若它没有提前给出有限失败见证或非 \(\mathsf{NULL}\) 地址证书，则终点只能是有限测试 Frostman 骨架或某个投影词 slab 终端扇区。
+若相反 \(|A_E|<S\)，则存在具体 \(\mathcal K_\ast\in\mathfrak C_m\) 使
+\[
+\operatorname{Occ}_{\mathcal K_\ast}^{\tau}(E)>B_{\mathcal K_\ast}.
+\]
+并且，当且仅当该 exact container shadow 已被 \(\mathcal V_{\mathrm{Hard}}(q)\) 注册为查询 \(q\) 的 authorized Hard-axis verifier 时，元组
+\[
+(m,n,\tau,\mathcal K_\ast,B_{\mathcal K_\ast},
+\operatorname{Occ}_{\mathcal K_\ast}^{\tau}(E))
+\]
+可作为 \(q\) 的 \(\mathrm{Hard}\)-型失败见证中的支撑预算分量；在未授权情形下，它只证明 support-budget overload，而不自动推出 \(q\) 的读出为 \(\mathsf{NULL}\)。
 \end{proposition}
 \begin{proof}
-对每个 \(j\)，由 \((B_j)_{q_j,y_j}\) 见证非 Frostman，得
+由 exact shadow 的定义，\(A_E\in\mathscr A_m\)，并且对每个 \(\mathcal K\in\mathfrak C_m\) 有
 \[
-|(B_j)_{q_j,y_j}|>\eta |B_j|.
+\operatorname{Occ}_{\mathcal K}^{\tau}(E)=|A_E\cap\mathcal K|.
 \]
-由 \(\theta\)-带损耗归一化，
+令
 \[
-|B_{j+1}|=\bigl|N_{q_j,y_j}((B_j)_{q_j,y_j})\bigr|
-\ge \theta |(B_j)_{q_j,y_j}|
->\theta\eta |B_j|.
+f_{A_E}:=\sum_{\mathbf k\in A_E}\ind_{C_{\mathbf k}}\in\mathcal V_m.
 \]
-迭代即得 \(|B_k|>(\theta\eta)^k|B_0|\)，且每个 \(B_j\) 非空。
-反例局部性给出 \(\mathsf{Bad}^{\varepsilon}_m(B_{j+1})\)；复杂度单调性及非终端条件 \(|q_j(B_j)|>1\) 给出
+如定理 \ref{distill:wang_zahl-convex_container_non_concentration_implies_maximal_support-spg-budget-forces-support} 的证明所示，
 \[
-\dim_{Q_m}(B_{j+1})\le \dim_{Q_m}(B_j)-1.
+L_{\mathcal K}(f_{A_E})=|A_E\cap\mathcal K|=\operatorname{Occ}_{\mathcal K}^{\tau}(E).
 \]
-归纳得到复杂度下降式。由于 \(\dim_{Q_m}\) 是非负整数，非终端下降步数不超过初始值。若过程停止，则按定义只能是有限测试 Frostman 条件成立，或所有可选过密 slab 已塌缩为 \(|q(B)|=1\) 的终端扇区；见证提升仍由定义 \ref{def:distill-cdim-frostman-slab-data} 的见证拉回条件给出。证毕。
+因此全部 shadow budgets 通过等价于 \(A_E\) 在 SPG 端满足全部 Wolff-style container budgets。由定理 \ref{distill:wang_zahl-convex_container_non_concentration_implies_maximal_support-spg-budget-forces-support} 得 \(|A_E|\ge S\)。若 \(|A_E|<S\)，同一定理给出某个 overloaded container \(\mathcal K_\ast\) 满足
+\[
+L_{\mathcal K_\ast}(f_{A_E})>B_{\mathcal K_\ast},
+\]
+即
+\[
+\operatorname{Occ}_{\mathcal K_\ast}^{\tau}(E)>B_{\mathcal K_\ast}.
+\]
+最后，定义 \ref{distill:wang_zahl-convex_container_non_concentration_implies_maximal_support-cdim-exact-container-shadow} 已把 authorized 条件规定为：该支撑预算审计必须被 \(\mathcal V_{\mathrm{Hard}}(q)\) 明确纳入查询 \(q\) 的 Hard-axis pass/fail 机制。故在授权情形下，上述 overloaded container 正是 Hard witness 的支撑预算分量；未授权时，它只是独立的 finite-resolution overload 证据，不能越过定义 \ref{def:cdim-null-witness-tag} 的类型边界而自行成为 \(\mathsf{NULL}\) 见证。证毕。
 \end{proof}
+% --- End distillation writeback ---
 
 % --- End distillation writeback ---
 
