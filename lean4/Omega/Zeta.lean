@@ -714,6 +714,7 @@ import Omega.Zeta.XiTerminalZmS3EndoscopicPrymA2Coxeter
 import Omega.Zeta.XiTerminalZmS3EndoscopicHomologyA2Identification
 import Omega.Zeta.XiTerminalZmS4PrymTorusRankLayering
 import Omega.Zeta.VanvleckResidueL2LowerBound
+import Omega.Zeta.XiTimeCenterSemanticRigidity
 import Omega.Zeta.XiTimeFiberMinimalDimension
 import Omega.Zeta.TimefiberRandomAffineLyapunovCauchyUnique
 import Omega.Zeta.XiTimeLowerBoundFromMaxFiber
