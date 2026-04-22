@@ -3441,6 +3441,113 @@ def _bootstrap_scope_contract_from_paper(
     return True, "bootstrapped from existing manuscript source"
 
 
+def _deterministic_theorem_inventory(paper_path: Path) -> dict:
+    """Lightweight theorem inventory for --no-claude smoke testing."""
+    text = _read_stage_a_source_text(paper_path)
+    env_re = re.compile(
+        r"\\begin\{(theorem|lemma|proposition|corollary|conjecture|definition)\}"
+        r"(?:\[[^\]]*\])?(.+?)\\end\{\1\}",
+        re.DOTALL | re.IGNORECASE,
+    )
+    present = []
+    for idx, (kind, body) in enumerate(env_re.findall(text), 1):
+        present.append({
+            "kind": kind.lower(),
+            "index": idx,
+            "statement": _strip_tex_for_contract(body, 700),
+            "source": "deterministic_tex_inventory",
+        })
+
+    gap_patterns = (
+        "todo", "tbd", "proof omitted", "omitted", "sketch",
+        "to be completed", "we leave", "future work",
+    )
+    lower = text.lower()
+    proof_gaps = []
+    for pat in gap_patterns:
+        pos = lower.find(pat)
+        if pos >= 0:
+            proof_gaps.append({
+                "pattern": pat,
+                "context": _strip_tex_for_contract(text[max(0, pos - 180):pos + 240]),
+            })
+    if not present:
+        missing = [{
+            "reason": "No theorem-like environments were found by deterministic inventory.",
+            "required_action": "create explicit theorem/proposition structure",
+        }]
+    else:
+        missing = []
+
+    return {
+        "valid": True,
+        "mode": "no_claude_deterministic_inventory",
+        "in_scope_present": present,
+        "missing_in_scope_results": missing,
+        "weak_in_scope_core_results": [],
+        "proof_gaps": proof_gaps,
+        "supporting_appendix_or_background": [],
+        "out_of_scope_strong_results": [],
+        "split_candidates": [],
+        "irrelevant_or_remove": [],
+        "naive_truncation_risks": [
+            {
+                "reason": "Deterministic smoke-test inventory cannot certify "
+                          "fold-aware descent; Oracle and later Claude review "
+                          "must check cross-resolution claims."
+            }
+        ],
+        "journal_style_gaps": [],
+    }
+
+
+def _deterministic_no_claude_stage_a_audit(
+    state: PaperState, audit_round: int, paper_path: Path
+) -> dict:
+    inventory = _read_json_artifact(paper_path, "theorem_inventory.json")
+    proof_gaps = _coerce_items(inventory.get("proof_gaps")) if inventory else []
+    missing = _coerce_items(
+        inventory.get("missing_in_scope_results")) if inventory else []
+    blockers = []
+    required_revisions = []
+    metrics = {
+        "theorem_completeness": 8,
+        "proof_integrity": 8,
+        "depth_novelty": 7,
+        "scope_coverage": 8,
+        "journal_fit": 7,
+        "split_hygiene": 8,
+    }
+    if missing:
+        metrics["theorem_completeness"] = 5
+        blockers.extend(missing)
+    if proof_gaps:
+        metrics["proof_integrity"] = 6
+        required_revisions.extend(proof_gaps)
+    gate_pass = (
+        not blockers
+        and not required_revisions
+        and all(metrics[k] >= v for k, v in STAGE_A_METRIC_THRESHOLDS.items())
+    )
+    return {
+        "metrics": metrics,
+        "verdict": "pass" if gate_pass else "revise",
+        "audit_unparseable": False,
+        "blockers": blockers,
+        "required_revisions": required_revisions,
+        "work_packages": [],
+        "split_required": False,
+        "split_reasons": [],
+        "ready_for_oracle_review": gate_pass,
+        "mode": "no_claude_deterministic_audit",
+        "audit_round": audit_round,
+        "note": (
+            "Provisional Stage A smoke-test audit. Claude supervision must "
+            "resume later before this is treated as final editorial approval."
+        ),
+    }
+
+
 def _scope_contract_valid(paper_path: Path) -> tuple[bool, str]:
     md = paper_path / "scope_contract.md"
     if not md.exists():
@@ -3665,17 +3772,10 @@ def _run_stage_a_inventory(state: PaperState, *,
                            dry_run: bool = False,
                            tag: str = "") -> dict:
     paper_path = Path(state.paper_dir)
-    prompt = build_theorem_inventory_prompt(
-        state.paper_dir, state.target_journal, state.main_paper_dir)
-    out = codex_exec(prompt, work_dir=paper_path, timeout_seconds=1800,
-                     model=model, dry_run=dry_run)
-    inventory = _read_json_artifact(paper_path, "theorem_inventory.json")
-    if not inventory and not dry_run:
-        inventory = parse_json_from_output(out)
-        if inventory:
-            _write_json_artifact(paper_path, "theorem_inventory.json",
-                                 inventory)
-    if dry_run:
+    if not CLAUDE_ENABLED and not dry_run:
+        inventory = _deterministic_theorem_inventory(paper_path)
+        _write_json_artifact(paper_path, "theorem_inventory.json", inventory)
+    elif dry_run:
         inventory = {
             "valid": True,
             "in_scope_present": [],
@@ -3689,6 +3789,17 @@ def _run_stage_a_inventory(state: PaperState, *,
             "naive_truncation_risks": [],
             "journal_style_gaps": [],
         }
+    else:
+        prompt = build_theorem_inventory_prompt(
+            state.paper_dir, state.target_journal, state.main_paper_dir)
+        out = codex_exec(prompt, work_dir=paper_path, timeout_seconds=1800,
+                         model=model, dry_run=dry_run)
+        inventory = _read_json_artifact(paper_path, "theorem_inventory.json")
+        if not inventory:
+            inventory = parse_json_from_output(out)
+            if inventory:
+                _write_json_artifact(paper_path, "theorem_inventory.json",
+                                     inventory)
 
     valid, reason = _inventory_valid(inventory)
     state.stage_a_inventory = inventory if valid else {}
@@ -3710,6 +3821,23 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
                             dry_run: bool = False,
                             tag: str = "") -> dict:
     paper_path = Path(state.paper_dir)
+    if not CLAUDE_ENABLED and not dry_run:
+        logger.info(f"{tag} A3 audit round {audit_round}: "
+                    "deterministic --no-claude smoke audit")
+        audit = _deterministic_no_claude_stage_a_audit(
+            state, audit_round, paper_path)
+        _write_json_artifact(paper_path, "stage_a_audit.json", audit)
+        state.stage_a_audit_metrics = audit
+        state.stage_a_audit_rounds = audit_round
+        score = _stage_a_score_from_audit(audit)
+        state.stage_a_scores.append(score)
+        state.log_event("A", "stage_a_audit", round_num=audit_round,
+                        score=score, verdict=audit.get("verdict", ""),
+                        detail=json.dumps(audit,
+                                          ensure_ascii=False)[:15000])
+        save_state(state)
+        return audit
+
     logger.info(f"{tag} A3 audit round {audit_round}: "
                 f"Codex math + Claude structural")
 
