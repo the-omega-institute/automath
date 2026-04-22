@@ -43,6 +43,7 @@ import Omega.Discussion.ToeplitzNegativeCountThreshold
 import Omega.Discussion.TraceclassFredholmEulerSurjection
 import Omega.Discussion.TwoDesignDecouplingHSZK
 import Omega.Discussion.UniqueContinuousTransversal
+import Omega.Discussion.VarianceGapIntegral
 import Omega.Discussion.WalshStokesHigherFlux
 import Omega.Discussion.WdimFiniteIndexStability
 import Omega.Discussion.WindowQuotientSemiringRigidity
