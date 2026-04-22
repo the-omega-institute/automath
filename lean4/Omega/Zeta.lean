@@ -64,6 +64,7 @@ import Omega.Zeta.XiSymqRankoneCouplingTPower
 import Omega.Zeta.XiSymqResultantPadicValuation
 import Omega.Zeta.XiMonotoneIdempotentSkeletonGcdLcmSparsity
 import Omega.Zeta.XiScanTailRatioPeeling
+import Omega.Zeta.XiScanAliasingThreshold
 import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
 import Omega.Zeta.XiLeyangEdDyExplicitDivisor
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
@@ -815,6 +816,7 @@ import Omega.Zeta.XiTimePart9zbgFoldpiFiniteRankMomentExhaustion
 import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage
 import Omega.Zeta.XiTimePart9zhDyadicBulkLinearDepthVsPrimeLedger
 import Omega.Zeta.XiToeplitzDetVerblunsky
+import Omega.Zeta.XiToeplitzPrincipalMinorLogconcavity
 import Omega.Zeta.XiToeplitzNegativeInertiaMinimalSampling
 import Omega.Zeta.XiToeplitzDiskpoleModulusClosedFormHighHeight
 import Omega.Zeta.XiToeplitzPrincipalMinorDiscreteCurvatureRecovery
