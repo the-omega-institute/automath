@@ -74,6 +74,7 @@ ORACLE_SERVER = "http://127.0.0.1:8765"
 ORACLE_SERVER_SCRIPT = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle_server.py"
 DEFAULT_ORACLE_MODEL = "chatgpt-5.4-pro-extended"
 DEFAULT_ORACLE_TIMEOUT = 7200
+ORACLE_CLAIM_TIMEOUT = 300
 REVIEW_BACKENDS = ("codex", "codex-claude")
 DEFAULT_REVIEW_BACKEND = os.environ.get("DISTILL_REVIEW_BACKEND", "codex")
 if DEFAULT_REVIEW_BACKEND not in REVIEW_BACKENDS:
@@ -762,6 +763,22 @@ def _ensure_oracle_server_running() -> dict[str, Any]:
     return {}
 
 
+def _oracle_cancel_task(task_id: str, reason: str) -> None:
+    """Best-effort cancel for queued/unclaimed Oracle tasks."""
+    import urllib.error
+    import urllib.request
+
+    try:
+        req = urllib.request.Request(
+            f"{ORACLE_SERVER}/cancel",
+            data=json.dumps({"task_id": task_id, "reason": reason}).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+        )
+        urllib.request.urlopen(req, timeout=10).read()
+    except (OSError, urllib.error.URLError):
+        return
+
+
 def chatgpt_oracle_exec(
     state: DistillState,
     prompt: str,
@@ -864,6 +881,21 @@ def chatgpt_oracle_exec(
         except (OSError, urllib.error.URLError, json.JSONDecodeError):
             pass
         elapsed = int(time.time() - start)
+        status = _oracle_server_status()
+        agents = status.get("agents", {}) if isinstance(status, dict) else {}
+        claimed_by = [
+            agent_id
+            for agent_id, info in agents.items()
+            if isinstance(info, dict) and info.get("task_id") == task_id
+        ]
+        if not claimed_by and elapsed >= ORACLE_CLAIM_TIMEOUT:
+            _oracle_cancel_task(task_id, "claim_timeout_no_foreground_agent")
+            logger.warning(
+                "ChatGPT Oracle task not claimed after %ss; continuing without Oracle: %s",
+                ORACLE_CLAIM_TIMEOUT,
+                task_id,
+            )
+            return ""
         if elapsed > 0 and elapsed % 60 == 0:
             logger.info("Waiting for ChatGPT Oracle task %s (%ss)", task_id, elapsed)
         time.sleep(30)
@@ -1709,7 +1741,12 @@ def _upsert_distillation_memory(entries: list[dict[str, Any]]) -> dict[str, Any]
         previous = existing.get(entry_id, {})
         merged = {**previous, **entry}
         merged.setdefault("created_at", previous.get("created_at") or now)
-        merged["updated_at"] = now
+        previous_compare = {k: v for k, v in previous.items() if k != "updated_at"}
+        merged_compare = {k: v for k, v in merged.items() if k != "updated_at"}
+        if previous and previous_compare == merged_compare:
+            merged["updated_at"] = previous.get("updated_at", now)
+        else:
+            merged["updated_at"] = now
         existing[entry_id] = merged
     output = {
         "version": 1,

@@ -269,6 +269,29 @@ class OracleHandler(BaseHTTPRequestHandler):
                 print(f"[server] Released {task_id} from {agent_id}: {reason}")
             self._send_json({"status": "released" if released else "not_pending"})
 
+        elif self.path == "/cancel":
+            task_id = data.get("task_id", "")
+            reason = data.get("reason", "unspecified")
+            removed = False
+            for aid in list(pending_tasks):
+                if pending_tasks[aid].get("task_id") == task_id:
+                    del pending_tasks[aid]
+                    dispatch_times.pop(aid, None)
+                    agent_phases.pop(aid, None)
+                    removed = True
+            if task_id:
+                kept = deque()
+                while task_queue:
+                    task = task_queue.popleft()
+                    if task.get("task_id") == task_id:
+                        removed = True
+                    else:
+                        kept.append(task)
+                task_queue.extend(kept)
+            if removed:
+                print(f"[server] Canceled {task_id}: {reason}")
+            self._send_json({"status": "canceled" if removed else "not_found"})
+
         else:
             self._send_json({"error": "unknown endpoint"}, 404)
 
