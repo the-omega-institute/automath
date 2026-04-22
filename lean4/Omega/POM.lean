@@ -71,6 +71,7 @@ import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.ComplementaryGoldenBernoulliDivergence
 import Omega.POM.CompleteHomogeneousLinearRecurrence
 import Omega.POM.CompleteHomogeneousPFInfty
+import Omega.POM.ConclusionHankelShiftPadicPrecisionSlope
 import Omega.POM.ConclusionGoldenSprtEsscherBoundarySymmetry
 import Omega.POM.CountertermAnomalyCancellation
 import Omega.POM.SprtSymmetricThresholdError
