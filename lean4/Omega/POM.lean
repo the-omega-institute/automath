@@ -370,6 +370,7 @@ import Omega.POM.MassSplittingMomentRoot
 import Omega.POM.MomLiftBeckChevalley
 import Omega.POM.MaxAtomicWeightParitySecondOrder
 import Omega.POM.MaxFiberEvenChernoffExponent
+import Omega.POM.MaxFiberEvenMajorityVote
 import Omega.POM.MaxFiberSubshiftSpectralEntropy
 import Omega.POM.MaxFiberRateEndpoint
 import Omega.POM.MicrocanonicalFoldSectionCount

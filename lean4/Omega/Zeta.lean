@@ -362,6 +362,7 @@ import Omega.Zeta.XiHankelNormalformHpDiscreteConcaveInvert
 import Omega.Zeta.XiHellingerHankelConstantRationality
 import Omega.Zeta.XiHellingerKernelFourierSech2
 import Omega.Zeta.XiHellingerGramStrictTotalPositivity
+import Omega.Zeta.XiHellingerGramFirstVariationEquilibrium
 import Omega.Zeta.XiHypercubeLeyangStokesHolography
 import Omega.Zeta.HankelFirstBlockDeterminantDiscriminantWeight
 import Omega.Zeta.HankelMaximalMinorSyndromeNormalFormUniqueness
