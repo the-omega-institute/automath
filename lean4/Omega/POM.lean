@@ -217,6 +217,7 @@ import Omega.POM.FiberInhomLogitActivityIdentifiability
 import Omega.POM.FiberRewritePoissonBinomial
 import Omega.POM.FiberRewriteRealrootUlc
 import Omega.POM.FiberRewriteRootUnityFilterModqExpUniformization
+import Omega.POM.FiberSpectrumFiniteReconstructionSharp
 import Omega.POM.FiberSpectrumPronyHankelRank
 import Omega.POM.FiberSpectrumPronyHankelThresholdSharp
 import Omega.POM.FiberSpectrumPronyHankel2rReconstruction
