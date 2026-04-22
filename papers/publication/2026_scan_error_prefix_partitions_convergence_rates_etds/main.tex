@@ -187,16 +187,18 @@ $\mathcal{F}_m=\omega_\infty^{-1}(\sigma([a]:a\in\{0,1\}^m))$.
 \label{prop:decidable-clopen}
 A set $P\subseteq\Omega_\infty$ is in $\mathcal{A}_m:=\sigma([a]:a\in\{0,1\}^m)$
 if and only if it is a union of length-$m$ cylinders $[a]$, equivalently, a
-clopen ball of radius $2^{-m}$ in the prefix ultrametric.  Pulling back along
-$\omega_\infty$, if $\mathsf{P}\in\mathcal{F}_m$ then the truth of
-$\mathsf{P}$ is determined by the first $m$ symbols of the readout.
+finite union of clopen balls of radius $2^{-m}$ in the prefix ultrametric.
+Pulling back along $\omega_\infty$, if $\mathsf{P}\in\mathcal{F}_m$ then the
+truth of $\mathsf{P}$ is determined by the first $m$ symbols of the readout.
 \end{proposition}
 
 \begin{proof}
 The atoms of $\mathcal{A}_m$ are exactly the length-$m$ cylinders, and a set
 is measurable with respect to them iff it is a union of atoms.  In the prefix
-ultrametric, length-$m$ cylinders are clopen balls of radius $2^{-m}$.
-Pulling back along $\omega_\infty$ transfers this to $X$.
+ultrametric, each length-$m$ cylinder is a clopen ball of radius $2^{-m}$, so
+each $\mathcal{A}_m$-measurable set is a finite union of such clopen balls.
+Pulling back along $\omega_\infty$ transfers this finite-cylinder description
+to $X$.
 \end{proof}
 
 \section{The Scan Error Profile}
@@ -273,18 +275,35 @@ $\mathsf{P}\triangle\mathsf{P}_m^\star$.
 
 \begin{corollary}[Monotonicity and decidability]
 \label{cor:basic-properties}
-The profile $m\mapsto\varepsilon_m(\mathsf{P};\mu)$ is nonincreasing, and
+For every $\mathsf{P}\in\mathcal{F}_\infty$, the profile
+$m\mapsto\varepsilon_m(\mathsf{P};\mu)$ is nonincreasing, and
 $\varepsilon_m(\mathsf{P};\mu)=0$ iff $\mathsf{P}$ coincides $\mu$-a.s.\ with
 an event in $\mathcal{F}_m$.
 \leanverified{paper_prefix_scan_error_basic_properties}
 \end{corollary}
+
+\begin{proof}
+Since $\mathcal{F}_m\subseteq\mathcal{F}_{m+1}$, the admissible classifiers at
+depth $m+1$ contain those at depth $m$, and the infimum defining
+$\varepsilon_{m+1}$ is no larger than the infimum defining $\varepsilon_m$.
+For the zero-error criterion, Proposition~\ref{prop:scan-error-cylinder}
+shows that $\varepsilon_m=0$ precisely when, on every positive atom
+$C\in\mathcal{C}_m$, either $\mu(\mathsf{P}\cap C)=0$ or
+$\mu(C\setminus\mathsf{P})=0$.  Let $\mathsf{Q}$ be the union of the positive
+atoms $C$ for which $\mu(C\setminus\mathsf{P})=0$.  Then
+$\mathsf{Q}\in\mathcal{F}_m$ and $\mu(\mathsf{P}\triangle\mathsf{Q})=0$.
+The converse is immediate from the definition of $\varepsilon_m$, since an
+$\mathcal{F}_m$-event equal to $\mathsf{P}$ modulo null sets has zero
+symmetric-difference error.
+\end{proof}
 
 \section{Discrete Tanaka Representation}
 \label{sec:tanaka}
 
 \begin{theorem}[Discrete Tanaka representation of the scan error]
 \label{thm:scan-tanaka}
-Let $p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m)$.  For $m\ge 1$ define
+Let $\mathsf{P}\in\mathcal{F}_\infty$ and set
+$p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m)$.  For $m\ge 1$ define
 \[
 L_m^{1/2}
 :=\sum_{k=0}^{m-1}
@@ -368,8 +387,10 @@ $d=0$ under this convention and the scan error is eventually zero.
 
 \begin{theorem}[Boundary-dimension upper bound]
 \label{thm:boundary-dimension}
-Suppose $\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ for all $m\ge 1$ and every
-positive depth-$m$ atom $C\in\mathcal{C}_m$.  Then
+Let $\mathsf{P}\in\mathcal{F}_\infty$.  Assume that the cylinder growth base
+$\lambda_{\mathrm{cyl}}$ exists and $\lambda_{\mathrm{cyl}}>1$.  Suppose
+$\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ for all $m\ge 1$ and every positive
+depth-$m$ atom $C\in\mathcal{C}_m$.  Then
 \[
 \varepsilon_m(\mathsf{P};\mu)\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P}).
 \]
@@ -397,9 +418,11 @@ the constant $K$ contribute $o(m)$ after taking logs, the bound follows.
 
 \begin{theorem}[Exact rate law from boundary thickness]
 \label{thm:volume-boundary-scaling}
-Suppose $c_-\lambda_{\mathrm{cyl}}^{-m}\le\mu(C)\le c_+\lambda_{\mathrm{cyl}}^{-m}$
-for all $m\ge 1$ and every positive depth-$m$ atom $C\in\mathcal{C}_m$, and
-suppose there exist
+Let $\mathsf{P}\in\mathcal{F}_\infty$.  Assume that the cylinder growth base
+$\lambda_{\mathrm{cyl}}$ exists and $\lambda_{\mathrm{cyl}}>1$.  Suppose
+$c_-\lambda_{\mathrm{cyl}}^{-m}\le\mu(C)\le c_+\lambda_{\mathrm{cyl}}^{-m}$ for
+all $m\ge 1$ and every positive depth-$m$ atom $C\in\mathcal{C}_m$, and suppose
+there exist
 $\theta\in(0,\frac12]$ and $m_0$ such that for all $m\ge m_0$ and all
 $C\in\partial_m\mathsf{P}$,
 \[
@@ -413,7 +436,6 @@ Then for all $m\ge m_0$,
 \]
 If $N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{dm+o(m)}$, then
 $\lim_{m\to\infty}(-\frac{1}{m}\log_{\lambda_{\mathrm{cyl}}}\varepsilon_m)=1-d$.
-\leanverified{paper_prefix_scan_error_volume_boundary_scaling}
 \end{theorem}
 
 \begin{proof}
@@ -435,9 +457,10 @@ measures on mixing SFTs \cite{Bowen1975} but need not hold in general.
 
 \begin{definition}[Log-regular measure]
 \label{def:log-regular}
-A measure $\mu$ is \emph{log-regular with exponent $\alpha>0$} if there exist
-$0<c_1\le c_2<\infty$ such that for all $m\ge 1$ and every
-positive depth-$m$ atom $C\in\mathcal{C}_m$,
+A measure $\mu$ is \emph{log-regular with exponent $\alpha>0$}, relative to an
+existing cylinder growth base $\lambda_{\mathrm{cyl}}>1$, if there exist
+$0<c_1\le c_2<\infty$ such that for all $m\ge 1$ and every positive depth-$m$
+atom $C\in\mathcal{C}_m$,
 \[
 c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}\le\mu(C)\le c_2 m^{\alpha}\lambda_{\mathrm{cyl}}^{-m}.
 \]
@@ -445,9 +468,11 @@ c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}\le\mu(C)\le c_2 m^{\alpha}\lambda_{\m
 
 \begin{theorem}[Rate law for log-regular measures]
 \label{thm:nonuniform-cylinder}
-Let $\mu$ be log-regular with exponent $\alpha>0$.  Assume the thickness
-condition of Theorem~\ref{thm:volume-boundary-scaling} holds with some
-$\theta>0$ and $m_0$.  Then for all $m\ge m_0$,
+Let $\mathsf{P}\in\mathcal{F}_\infty$.  Assume that the cylinder growth base
+$\lambda_{\mathrm{cyl}}$ exists and $\lambda_{\mathrm{cyl}}>1$.  Let $\mu$ be
+log-regular with exponent $\alpha>0$.  Assume the thickness condition of
+Theorem~\ref{thm:volume-boundary-scaling} holds with some $\theta>0$ and
+$m_0$.  Then for all $m\ge m_0$,
 \[
 \theta c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})
 \le\varepsilon_m(\mathsf{P};\mu)
@@ -710,8 +735,10 @@ the displayed formula for $N_m(\partial\mathsf{E})$.
 \label{ex:golden-mean-specialization}
 The set $\mathsf{E}$ belongs to $\mathcal{F}_\infty$: it is the union of the
 cylinders on which a first even obstruction occurs, together with the closed
-set $Y$, and Lemma~\ref{lem:golden-y-null} shows that this added skeleton is
-null.  It is not decided by any finite prefix, because the all-zero
+set $Y$.  The one-sided SFT Borel sigma algebra is generated by its cylinders,
+so the closed set $Y$ is $\mathcal{F}_\infty$-measurable; moreover
+Lemma~\ref{lem:golden-y-null} shows that this added skeleton is null.  It is
+not decided by any finite prefix, because the all-zero
 length-$m$ cylinder is $Y$-admissible and is therefore a boundary cylinder by
 Proposition~\ref{prop:golden-boundary-skeleton}.
 
