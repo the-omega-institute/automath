@@ -663,3 +663,4 @@ import Omega.POM.PrimeTraceIndexDuality
 import Omega.POM.BreakpointCurvatureLawAq
 import Omega.POM.RenyiDimensionNoAlgebraicIrrationality
 import Omega.POM.CoxeterMonodromyCyclotomic
+import Omega.POM.DiagonalRateUniformUniqueMaximizerActive
