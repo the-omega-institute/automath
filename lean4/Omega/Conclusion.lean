@@ -239,6 +239,7 @@ import Omega.Conclusion.FoldSinglepairVisibleObstructions
 import Omega.Conclusion.FoldZeroPacketSynchronousVisibleSuppression
 import Omega.Conclusion.FoldWalshGramSimplexSignatureSection
 import Omega.Conclusion.FoldWalshTotalChargeParsevalDegeneracy
+import Omega.Conclusion.FiberVisibleWalshEnergyClosedForm
 import Omega.Conclusion.FoldMod2ExactHaarization
 import Omega.Conclusion.FoldZeroDivisorLatticeInvolutionWitness
 import Omega.Conclusion.FoldbinGroupoidTracialSimplex
