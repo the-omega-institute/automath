@@ -198,6 +198,7 @@ import Omega.Conclusion.F2BinomialBasisFromDeltaNilpotent
 import Omega.Conclusion.ScreenEntropyAuditIdentity
 import Omega.Conclusion.ScreenExactBinaryAuditHomologicalBitBound
 import Omega.Conclusion.ScalekernelTreeFourthOrderSynchronization
+import Omega.Conclusion.ScreenRankGainClosureDiminishingReturns
 import Omega.Conclusion.ScreenphaseSurjectsAllFiniteLocalizedShadows
 import Omega.Conclusion.SingleCubeEditRigidity
 import Omega.Conclusion.FibadicLcmFiltrationLaw
