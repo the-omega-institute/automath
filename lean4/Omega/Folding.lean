@@ -353,6 +353,7 @@ import Omega.Folding.ResidualCompletionFiniteDepth
 import Omega.Folding.FoldResonanceDocagne
 import Omega.Folding.FoldRewriteNewman
 import Omega.Folding.FoldSigmaPhiDiverges
+import Omega.Folding.FoldCollisionScaleDiverges
 import Omega.Folding.FoldSpectrumFactorization
 import Omega.Folding.FoldSpectrumNontrivialBound
 import Omega.Folding.FoldEvenOddBalance
