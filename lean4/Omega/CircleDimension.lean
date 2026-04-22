@@ -304,6 +304,7 @@ import Omega.CircleDimension.ResidualCircleDimLaws
 import Omega.CircleDimension.ResidualEntropyLowerBound
 import Omega.CircleDimension.RestrictedPrimeRegisterGodelBilogbOverhead
 import Omega.CircleDimension.ResidualQuotientProbe
+import Omega.CircleDimension.RhodoneaDiagonalAntidiagonalSlice
 import Omega.CircleDimension.RhodoneaSubflow
 import Omega.CircleDimension.RhodoneaSolenoidDesingularizedLift
 import Omega.CircleDimension.RiemannSiegelGabckeBitGain

@@ -61,6 +61,7 @@ import Omega.Zeta.XiExtremeResonancePositivity
 import Omega.Zeta.XiExtremeResonanceCriterion
 import Omega.Zeta.XiExtremeResonanceToeplitzThreshold
 import Omega.Zeta.XiGoldenChainVisibleWindowGrowth
+import Omega.Zeta.XiGoldenW1StarCertificateParitySplitting
 import Omega.Zeta.XiHorizonZkFiberpathStokesDiscriminant
 import Omega.Zeta.XiHypercubeWeightedSpanningTreeSpectrumProduct
 import Omega.Zeta.XiHypercubeWeightedLaplacianHeatTraceFactorization
