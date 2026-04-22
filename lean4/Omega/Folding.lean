@@ -289,6 +289,7 @@ import Omega.Folding.BinFoldKLConstant
 import Omega.Folding.FoldBinTwoPointLimitLaw
 import Omega.Folding.FoldBinTwoStateAsymptotic
 import Omega.Folding.FoldCollisionSpectrum
+import Omega.Folding.FoldCapacityMomentCompleteness
 import Omega.Folding.FoldCapacityOrderMajorizationEquivalence
 import Omega.Folding.FoldCollisionSandwich
 import Omega.Folding.FoldCollisionZeroSparsityImpact
