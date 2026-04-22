@@ -25,6 +25,7 @@ import Omega.Zeta.XiAdamsBinomialProbeInversionConditioningPhaseTransition
 import Omega.Zeta.XiAdamsPushforwardToeplitzPrincipalMinorMonotonicity
 import Omega.Zeta.AdamsFiberMobiusInversion
 import Omega.Zeta.AppOffcriticalRadiusCompression
+import Omega.Zeta.DerivedLeyangBfCkRigidity
 import Omega.Zeta.AppHorizonPoleImprint
 import Omega.Zeta.Arity335CharacterEnergy
 import Omega.Zeta.Arity335CosineOnly
