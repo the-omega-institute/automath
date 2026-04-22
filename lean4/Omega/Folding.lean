@@ -37,6 +37,7 @@ import Omega.Folding.BernoulliPLaws
 import Omega.Folding.BernoulliPLdp
 import Omega.Folding.BernoulliPLocalLdpPrefactor
 import Omega.Folding.BernoulliPLdpCompressedCubicParametrization
+import Omega.Folding.BernoulliPBitpairGammaClosed
 import Omega.Folding.BernoulliPMismatchEntropyRate
 import Omega.Folding.BernoulliPMismatchStrictThirdOrderMarkov
 import Omega.Folding.BernoulliPOutputDensity

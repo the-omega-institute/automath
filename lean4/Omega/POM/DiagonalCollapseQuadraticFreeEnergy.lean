@@ -143,4 +143,12 @@ theorem paper_pom_diagonal_collapse_quadratic_free_energy
     (q := pomDiagonalMomentIndex τ) Xcard M S τ αstar hXcard_ge_one hSandwich ?_ hXcard hM
   exact tendsto_pomDiagonalMomentIndex_ratio τ hτ
 
+/-- Paper label: `cor:pom-diagonal-extract-alpha-star`. -/
+theorem paper_pom_diagonal_extract_alpha_star (Xcard M S : ℕ → ℝ) (τ αstar : ℝ) (hτ : 0 < τ)
+    (hdiag : Tendsto (pomDiagonalQuadraticFreeEnergy S) atTop (nhds (τ * αstar))) :
+    Tendsto (fun m : ℕ => Real.log (S m) / (τ * (m : ℝ) ^ 2)) atTop (nhds αstar) := by
+  have hτ_ne : τ ≠ 0 := ne_of_gt hτ
+  simpa [pomDiagonalQuadraticFreeEnergy, div_eq_mul_inv, one_div, hτ_ne, mul_assoc, mul_left_comm,
+    mul_comm] using hdiag.const_mul (1 / τ : ℝ)
+
 end Omega.POM
