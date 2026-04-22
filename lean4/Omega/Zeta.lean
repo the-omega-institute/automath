@@ -336,6 +336,7 @@ import Omega.Zeta.XiHankelExplicitGoodPrimeBound
 import Omega.Zeta.XiHankelSpikeSingularSpectrumSeparation
 import Omega.Zeta.XiHankelFinitePrecisionPotentialSmithKernelCoker
 import Omega.Zeta.XiHankelLiftingBranchCountAffineSolutionSpace
+import Omega.Zeta.XiHankelPronyRootStabilityRecursiveCertificate
 import Omega.Zeta.HankelDeterminantalRadicalEqRigidity
 import Omega.Zeta.HankelDiscriminantUnavoidableBadPrimes
 import Omega.Zeta.HankelFinitefieldRandomCompletionNondegenerate
