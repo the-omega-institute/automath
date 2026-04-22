@@ -82,6 +82,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+from urllib.parse import quote
 
 # ---------------------------------------------------------------------------
 # Paths & constants
@@ -889,6 +890,14 @@ def oracle_cancel(task_id: str, reason: str) -> bool:
         return False
 
 
+def oracle_task_status(task_id: str) -> dict:
+    try:
+        safe_id = quote(task_id, safe="")
+        return http_get(f"{ORACLE_SERVER}/task_status/{safe_id}", timeout=10)
+    except Exception:
+        return {"task_id": task_id, "phase": "unknown"}
+
+
 def is_oracle_response_valid(response: str) -> bool:
     """Reject extraction-failure garbage (<2KB, thinking preamble, prompt echo).
 
@@ -919,28 +928,66 @@ def oracle_poll(task_id: str, timeout: int = 7200,
 
     Registers with oracle_wait_enter/exit so the rolling dispatcher
     knows how many workers are I/O-blocked (not consuming CPU).
+    The timeout is an active-oracle budget: time spent merely queued
+    behind other ChatGPT browser agents does not count against it.
     """
     oracle_wait_enter()
     logger.info(f"EVENT WAIT: oracle {task_id} (max {timeout}s, "
                 f"oracle_waiters={get_oracle_wait_count()})")
-    start = time.time()
+    wait_start = time.time()
+    active_start: Optional[float] = None
+    last_log_bucket = -1
     try:
-        while time.time() - start < timeout:
+        while True:
             try:
                 data = http_get(f"{ORACLE_SERVER}/result/{task_id}", timeout=10)
                 if data.get("status") == "completed":
                     r = data.get("response", "")
                     logger.info(f"Oracle response: {task_id} ({len(r)} chars, "
-                                f"{int(time.time()-start)}s)")
+                                f"{int(time.time()-wait_start)}s wall)")
                     return r
+                if data.get("status") in {"cancelled", "failed"}:
+                    logger.warning(f"Oracle terminal status for {task_id}: "
+                                   f"{data.get('status')}")
+                    return ""
             except Exception:
                 pass
-            elapsed = int(time.time() - start)
-            if elapsed > 0 and elapsed % 60 == 0:
-                logger.info(f"  Waiting for {task_id}... ({elapsed}s, "
-                            f"oracle_waiters={get_oracle_wait_count()})")
+
+            phase = oracle_task_status(task_id)
+            now = time.time()
+            phase_name = phase.get("phase", "unknown")
+            if phase_name == "active":
+                server_elapsed = phase.get("elapsed")
+                if isinstance(server_elapsed, int):
+                    active_elapsed = server_elapsed
+                    active_start = now - active_elapsed
+                else:
+                    if active_start is None:
+                        active_start = now
+                    active_elapsed = int(now - active_start)
+                if active_elapsed >= timeout:
+                    return ""
+                log_elapsed = active_elapsed
+                log_state = f"active/{phase.get('agent_id', '?')}"
+            elif phase_name == "queued":
+                active_start = None
+                log_elapsed = int(now - wait_start)
+                log_state = f"queued pos={phase.get('position', '?')}/{phase.get('queue_length', '?')}"
+            else:
+                log_elapsed = int(now - wait_start)
+                log_state = phase_name
+                if log_elapsed >= 600:
+                    logger.warning(f"Oracle task {task_id} not visible to "
+                                   f"server after {log_elapsed}s "
+                                   f"(phase={phase_name})")
+                    return ""
+
+            bucket = log_elapsed // 60
+            if bucket > 0 and bucket != last_log_bucket:
+                last_log_bucket = bucket
+                logger.info(f"  Waiting for {task_id}... ({log_state}, "
+                            f"{log_elapsed}s, oracle_waiters={get_oracle_wait_count()})")
             time.sleep(poll_interval)
-        return ""
     finally:
         oracle_wait_exit()
 

@@ -27,6 +27,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from datetime import datetime
 from collections import deque
+from urllib.parse import unquote
 
 PORT = 8765
 ORACLE_DIR = Path(__file__).parent / "oracle"
@@ -110,11 +111,42 @@ class OracleHandler(BaseHTTPRequestHandler):
             }
             self._send_json({
                 "queue_length": len(task_queue),
+                "queued": [t["task_id"] for t in task_queue],
                 "agents_busy": len(pending_tasks),
                 "max_agents": MAX_AGENTS,
                 "agents": agents_info,
                 "completed": len(results),
             })
+
+        elif parsed.path.startswith("/task_status/"):
+            task_id = unquote(parsed.path.split("/task_status/", 1)[1])
+            if task_id in results:
+                data = dict(results[task_id])
+                data.setdefault("phase", data.get("status", "result"))
+                self._send_json(data)
+                return
+
+            for aid, task in pending_tasks.items():
+                if task.get("task_id") == task_id:
+                    self._send_json({
+                        "task_id": task_id,
+                        "phase": "active",
+                        "agent_id": aid,
+                        "elapsed": int(time.time() - dispatch_times.get(aid, time.time())),
+                    })
+                    return
+
+            for idx, task in enumerate(task_queue, start=1):
+                if task.get("task_id") == task_id:
+                    self._send_json({
+                        "task_id": task_id,
+                        "phase": "queued",
+                        "position": idx,
+                        "queue_length": len(task_queue),
+                    })
+                    return
+
+            self._send_json({"task_id": task_id, "phase": "not_found"}, 404)
 
         elif parsed.path.startswith("/result/"):
             task_id = parsed.path.split("/result/")[1]
