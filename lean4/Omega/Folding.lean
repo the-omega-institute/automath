@@ -214,6 +214,7 @@ import Omega.Folding.KilloLocalizationCircleDimensionPrimeLedgerSplitting
 import Omega.Folding.KilloPrimeFreedomNonFinitizability
 import Omega.Folding.KilloFoldCollisionMetricTensorSeparation
 import Omega.Folding.KilloFoldCollisionSpectralSelfDuality
+import Omega.Folding.KilloFoldThreeModeWitnessCriticalGap
 import Omega.Folding.KilloFoldZeroSpectrumAffineCongruence
 import Omega.Folding.KilloZGDirichletMatrixEuler
 import Omega.Folding.KilloFoldBinCapacityInverseTwoRegime

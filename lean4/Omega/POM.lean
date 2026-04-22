@@ -106,6 +106,7 @@ import Omega.POM.DerivedFoldRenyiDimensionTranscendenceQ4Q5Q16Q17
 import Omega.POM.DerivedKolmogorovOracleExponentIsomorphism
 import Omega.POM.DerivedOracleThermalDifferentialGeometry
 import Omega.POM.DerivedProjectiveLengthDirectionRationalCfinite
+import Omega.POM.DerivedProjectivePathMaxplusIntercept
 import Omega.POM.DerivedMaxNoncontractibleFiberDefectConstants
 import Omega.POM.DeterministicNormalizationForest
 import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
