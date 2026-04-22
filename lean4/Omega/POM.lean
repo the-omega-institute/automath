@@ -277,6 +277,7 @@ import Omega.POM.FractranFirstfitTotalSerialDepth
 import Omega.POM.FractranFirstfitSerialDepth
 import Omega.POM.FractranSoftFirstfitAnnealedBudget
 import Omega.POM.FractranSoftFirstfitAnalyticDominance
+import Omega.POM.FractranSoftFirstfitUniformError
 import Omega.POM.FractranCommutativeVsAlgorithmicExternalization
 import Omega.POM.FractranPrimeTranslation
 import Omega.POM.FractranPrimecoreFinitePartialFunctionCategory

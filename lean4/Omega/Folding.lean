@@ -439,6 +439,7 @@ import Omega.Folding.GaugeAnomalyPressureCumulants5
 import Omega.Folding.GaugeAnomalyPsdRational
 import Omega.Folding.GaugeAnomalyQ10Tschirnhaus
 import Omega.Folding.GaugeAnomalyQ10UniqueQuadraticSubfield
+import Omega.Folding.GaugeAnomalyHGaloisDiscriminant
 import Omega.Folding.GaugeAnomalyQ19
 import Omega.Folding.GaugeAnomalyQ19GaloisS19
 import Omega.Folding.GaugeAnomalyMutualInformation
