@@ -7,6 +7,7 @@ import Omega.OperatorAlgebra.CircuitIndexEntropyLossNPHard
 import Omega.OperatorAlgebra.CircuitIndexGeKNPComplete
 import Omega.OperatorAlgebra.CircuitNoninjectiveNPComplete
 import Omega.OperatorAlgebra.CircuitCollisionMomentTwoApproxNPlus2
+import Omega.OperatorAlgebra.CircuitS2SharpPComplete
 import Omega.OperatorAlgebra.FoldChoiMaxeigApproxSATHard
 import Omega.OperatorAlgebra.CylinderMarginalization
 import Omega.OperatorAlgebra.CmiLowerBoundByIndexGap

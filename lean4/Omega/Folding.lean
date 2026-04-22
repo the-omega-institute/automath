@@ -248,6 +248,7 @@ import Omega.Folding.FoldBinEscortEscortKl
 import Omega.Folding.FoldBinGaugeBernoulliExtractionOperator
 import Omega.Folding.FoldBinGaugeConstantZetaEvenRecoveryLimit
 import Omega.Folding.FoldEscortGroundstateConcentration
+import Omega.Folding.FoldEscortMinentropyRate
 import Omega.Folding.FoldEscortGroundstateShannonRateLock
 import Omega.Folding.FoldEscortGroundstateTvExact
 import Omega.Folding.FoldBinEscortLastbit

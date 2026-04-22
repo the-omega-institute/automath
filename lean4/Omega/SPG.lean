@@ -100,6 +100,7 @@ import Omega.SPG.GraphCycleLatticeDeterminantPrimeSupport
 import Omega.SPG.GraphCycleLatticeLeyangPhasePolynomial
 import Omega.SPG.GraphCycleLatticeWeightedDiscriminant
 import Omega.SPG.GraphEnergyEllipsoidGodelCodelengthDual
+import Omega.SPG.GraphEnergyEllipsoidGodelCodelengthDualityOptimalPairing
 import Omega.SPG.GraphEnergyShellBitLowerBound
 import Omega.SPG.GraphEnergyShellLatticeCounting
 import Omega.SPG.HolderOpenResonance
