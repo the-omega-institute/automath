@@ -317,7 +317,7 @@ is the spectral radius of the transition matrix \cite{LindMarcus1995}.  The
 \[
 \overline{\dim}_B(\partial\mathsf{P})
 :=\limsup_{m\to\infty}
-\frac{\log N_m(\partial\mathsf{P})}{m\log\lambda_{\mathrm{cyl}}}.
+\frac{\log \max\{N_m(\partial\mathsf{P}),1\}}{m\log\lambda_{\mathrm{cyl}}}.
 \]
 \end{definition}
 
@@ -325,7 +325,9 @@ The dimension $d=\overline{\dim}_B(\partial\mathsf{P})\in[0,1]$ is an
 exponential growth exponent and is invariant under rescaling of $m$ by a
 constant.  The absolute counts $N_m(\partial\mathsf{P})$ depend on the
 particular symbolic representation, but the exponent $d$ is what appears in
-all rate theorems.
+all rate theorems.  The maximum in Definition~\ref{def:boundary-cylinder}
+is only a zero-count convention: if the boundary is eventually empty, then
+$d=0$ under this convention and the scan error is eventually zero.
 
 \subsection{Rate theorems}
 
@@ -343,9 +345,12 @@ $\varepsilon_m(\mathsf{P};\mu)\le\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}$.
 
 \begin{proof}
 Non-boundary cylinders contribute zero to the decomposition
-(Proposition~\ref{prop:scan-error-cylinder}), since
-$\min\{\mu(\mathsf{P}\cap C),\mu(C\setminus\mathsf{P})\}=0$ off
-$\partial_m\mathsf{P}$.  On boundary cylinders,
+(Proposition~\ref{prop:scan-error-cylinder}), since off $\partial_m\mathsf{P}$
+the local term
+\[
+\min\{\mu(\mathsf{P}\cap C),\mu(C\setminus\mathsf{P})\}
+\]
+vanishes.  On boundary cylinders,
 $\min\{\mu(\mathsf{P}\cap C),\mu(C\setminus\mathsf{P})\}\le\mu(C)\le
 K\lambda_{\mathrm{cyl}}^{-m}$.  Summing gives
 $\varepsilon_m\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$.
@@ -406,27 +411,49 @@ c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}\le\mu(C)\le c_2 m^{\alpha}\lambda_{\m
 \label{thm:nonuniform-cylinder}
 Let $\mu$ be log-regular with exponent $\alpha>0$.  Assume the thickness
 condition of Theorem~\ref{thm:volume-boundary-scaling} holds with some
-$\theta>0$ and $m_0$.  If $N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{dm+o(m)}$,
-then there exist $C_1,C_2>0$ such that for all large $m$,
+$\theta>0$ and $m_0$.  Then for all $m\ge m_0$,
 \[
-C_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-(1-d)m}
+\theta c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})
 \le\varepsilon_m(\mathsf{P};\mu)
-\le C_2 m^{\alpha}\lambda_{\mathrm{cyl}}^{-(1-d)m}.
+\le \frac{c_2}{2}m^{\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P}).
 \]
-In particular, the exponential rate $1-d$ is unchanged from the uniform case.
+If $N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{dm+o(m)}$, then
+$\varepsilon_m(\mathsf{P};\mu)=\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}$ and the
+exponential rate $1-d$ is unchanged from the uniform case.  More quantitatively,
+if for some $\beta\ge 0$ and $A_-,A_+>0$,
+\[
+A_-m^{-\beta}\lambda_{\mathrm{cyl}}^{dm}
+\le N_m(\partial\mathsf{P})
+\le A_+m^\beta\lambda_{\mathrm{cyl}}^{dm}
+\]
+for all large $m$, then for all large $m$,
+\[
+\theta c_1A_-m^{-(\alpha+\beta)}\lambda_{\mathrm{cyl}}^{-(1-d)m}
+\le\varepsilon_m(\mathsf{P};\mu)
+\le \frac{c_2A_+}{2}m^{\alpha+\beta}\lambda_{\mathrm{cyl}}^{-(1-d)m}.
+\]
 \leanverified{paper_prefix_scan_error_nonuniform_cylinder}
 \end{theorem}
 
 \begin{proof}
 The same decomposition argument as in Theorem~\ref{thm:volume-boundary-scaling}
 applies with $c_1 m^{-\alpha}$ and $c_2 m^\alpha$ in place of $c_-$ and
-$c_+/2$.  Lower bound:
-$\varepsilon_m\ge\theta c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})
-=\theta c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}$.
-Upper bound:
-$\varepsilon_m\le\frac{c_2}{2}m^{\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})
-=\frac{c_2}{2}m^{\alpha}\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}$.
-The polynomial factors $m^{\pm\alpha}$ do not affect the exponential rate.
+$c_+/2$.  Thus
+\[
+\varepsilon_m
+=\sum_{C\in\partial_m\mathsf{P}}\mu(C)
+\min\{\mu(\mathsf{P}\mid C),1-\mu(\mathsf{P}\mid C)\}
+\]
+is bounded below by
+$\theta c_1m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$
+and above by
+$\frac{c_2}{2}m^\alpha\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$.
+If $N_m=\lambda_{\mathrm{cyl}}^{dm+o(m)}$, then the two bounds have logarithms
+$-(1-d)m\log\lambda_{\mathrm{cyl}}+o(m)$, because
+$\log m=o(m)$.  This gives
+$\varepsilon_m=\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}$.  The final displayed
+polynomial estimate follows by substituting the two-sided polynomial bounds
+for $N_m$ into the two-sided estimate above.
 \end{proof}
 
 \begin{table}[ht]
@@ -440,7 +467,10 @@ $\varepsilon_m\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$ \\
 uniform $c_\pm\lambda_{\mathrm{cyl}}^{-m}$ bounds plus thickness $\theta$ &
 $\varepsilon_m\asymp\lambda_{\mathrm{cyl}}^{-(1-d)m}$ \\
 log-regular ($c_i m^{\pm\alpha}\lambda_{\mathrm{cyl}}^{-m}$) plus thickness $\theta$ &
-$C_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-(1-d)m}\le\varepsilon_m\le C_2 m^{\alpha}\lambda_{\mathrm{cyl}}^{-(1-d)m}$ \\
+$m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m\lesssim\varepsilon_m
+\lesssim m^\alpha\lambda_{\mathrm{cyl}}^{-m}N_m$, hence
+$\varepsilon_m=\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}$ when
+$N_m=\lambda_{\mathrm{cyl}}^{dm+o(m)}$ \\
 \bottomrule
 \end{tabular}
 \caption{Summary of the three rate regimes.  The exponential rate $1-d$ is
@@ -456,120 +486,224 @@ robust to polynomial perturbations of the cylinder-mass profile.}
 If $\mathsf{P}\in\mathcal{F}_r$ for some finite $r$, then
 $\varepsilon_m(\mathsf{P};\mu)=0$ for all $m\ge r$.  Indeed, $\partial_m\mathsf{P}=\varnothing$
 for $m\ge r$ since membership in $\mathsf{P}$ is determined by the first $r$
-symbols.
+symbols.  Under Definition~\ref{def:boundary-cylinder}, the upper boundary
+dimension is $0$ in this eventually empty case.
 \end{example}
 
-\begin{example}[Golden-mean shift: explicit computation with $d=1/2$]
-\label{ex:golden-mean-specialization}
-Let $(X,\mu)$ be the one-sided golden-mean shift with its Parry measure
-\cite{Parry1964}.  The alphabet is $\{0,1\}$; the admissible words are those
-with no two consecutive $1$s; the transition matrix is
+For the golden-mean example, let
+\[
+X:=\{x\in\{0,1\}^{\NN}:x_ix_{i+1}\ne 11\text{ for all }i\ge 0\}
+\]
+and let $\mu$ be its Parry measure.  The transition matrix is
 \[
 A=\begin{pmatrix}1&1\\1&0\end{pmatrix},
+\qquad
+\lambda_{\mathrm{cyl}}=\varphi=\frac{1+\sqrt{5}}{2}.
 \]
-with spectral radius $\lambda_{\mathrm{cyl}}=\varphi=(1+\sqrt5)/2$
-\cite[Chapter~4]{LindMarcus1995}.  The number of admissible length-$m$ words is
-the Fibonacci number $M_m=F_{m+2}\sim C_F\varphi^m$.  The Parry measure
-satisfies the two-sided cylinder bounds
-$c_-\varphi^{-m}\le\mu([a])\le c_+\varphi^{-m}$ for explicit constants
-$c_-,c_+>0$ determined by the left eigenvector of $A$ \cite{Parry1964}.
+For a finite word $a$, the cylinder $[a]$ is always understood as a cylinder
+inside $X$.
 
-\paragraph{The event $\mathsf{E}$.}
-Let $Y\subset X$ be the closed set
+\begin{lemma}[Explicit Parry cylinder bounds]
+\label{lem:golden-parry-bounds}
+For every admissible word $a=a_0\cdots a_{m-1}$ of length $m\ge 1$,
 \[
-Y:=\{x\in X:x_{2j}=0\text{ for all }j\ge 0,\quad
-x_{2j+1}x_{2j+3}\ne 11\text{ for all }j\ge 0\}.
+\mu([a])=\frac{r_{a_0}r_{a_{m-1}}}{\varphi^2+1}\,\varphi^{-(m-1)},
+\qquad r_0=\varphi,\quad r_1=1.
 \]
-Thus the even coordinates are fixed to $0$, and the odd-coordinate
-subsequence is itself golden-mean admissible.  A finite word $a$ is called
-$Y$-admissible if $[a]\cap Y\ne\varnothing$.
-
-For $x\notin Y$, let $\rho(x)$ be the first prefix length at which the
-observed word is no longer $Y$-admissible.  At this first exit there is a
-unique newly visible obstruction: either an even coordinate is $1$, or two
-consecutive odd coordinates in the induced odd subsequence are both $1$.
-Define $\mathsf{E}$ to be the event that the first obstruction is the
-even-coordinate obstruction, and include the null set $Y$ in $\mathsf{E}$.
-The set $Y$ has Parry measure zero: from any $Y$-admissible prefix there is a
-uniformly positive probability of leaving the $Y$-language within the next
-five symbols, and iteration over disjoint five-symbol windows gives
-$\mu(Y)=0$.
-The event is in $\mathcal{F}_\infty$ and is not decided by any finite
-prefix, since every $Y$-admissible prefix has continuations with either type
-of first obstruction.
-
-\paragraph{Boundary count.}
-A length-$m$ cylinder is a boundary cylinder for $\mathsf{E}$ if and only if
-its defining word is $Y$-admissible.  If the word has already left the
-$Y$-language, the first obstruction type has already been observed and every
-extension is classified the same way.  If the word is still $Y$-admissible,
-there are continuations whose first obstruction is an even $1$ and
-continuations whose first obstruction is an odd-subsequence word $11$.
-
-Let $b_k$ be the number of golden-mean admissible words of length $k$ on the
-odd-coordinate alphabet.  The initial values are $b_0=1$ and $b_1=2$.  For
-$k\ge 2$, split such words according to their last symbol: words ending in
-$0$ are obtained by appending $0$ to any word of length $k-1$, while words
-ending in $1$ are obtained by appending $01$ to any word of length $k-2$.
-Hence
+Consequently
 \[
-b_k=b_{k-1}+b_{k-2},\qquad b_0=1,\quad b_1=2,
+\frac{1}{\sqrt{5}}\,\varphi^{-m}
+\le \mu([a])
+\le \frac{\varphi^2}{\sqrt{5}}\,\varphi^{-m}.
 \]
-so $b_k=F_{k+2}$ for the convention $F_0=0,F_1=1$.  Since the even
-coordinates in a $Y$-admissible prefix are forced to be zero,
-\[
-N_{2k}(\partial\mathsf{E})=N_{2k+1}(\partial\mathsf{E})=b_k=F_{k+2}
-\sim\frac{\varphi^{k+2}}{\sqrt5}.
-\]
-Therefore
-\[
-\overline{\dim}_B(\partial\mathsf{E})
-=\limsup_{m\to\infty}\frac{\log N_m(\partial\mathsf{E})}{m\log\varphi}
-=\lim_{k\to\infty}\frac{\log F_{k+2}}{2k\log\varphi}
-=\frac{1}{2}.
-\]
-
-\paragraph{Thickness verification.}
-The Parry transition probabilities are
+The positive transition probabilities are
 \[
 \PP_\mu(0\mid 0)=\varphi^{-1},\qquad
 \PP_\mu(1\mid 0)=\varphi^{-2},\qquad
 \PP_\mu(0\mid 1)=1.
 \]
-Let $p_*:=\varphi^{-2}$ be the smallest positive transition probability.
-From any $Y$-admissible prefix one can force a first even-coordinate
-obstruction by appending an admissible word of length at most five: if the
-next even site can be assigned $1$, do so; otherwise first append zeros until
-the preceding symbol is $0$, then assign $1$ to the next even site.  Similarly,
-one can force a first odd-subsequence obstruction by keeping all intervening
-even sites equal to $0$ and appending odd symbols so that either the most
-recent odd $1$ is followed by another odd $1$, or, if the most recent odd
-symbol is $0$ or absent, the next two odd symbols are $11$; this also takes at
-most five further symbols.
-Both constructions avoid the opposite obstruction before the intended one.
-Thus each boundary cylinder contains a subcylinder of $\mathsf{E}$ and a
-subcylinder of $\mathsf{E}^c$ with conditional Parry mass at least
-$p_*^5=\varphi^{-10}$.  Hence
+In particular, if $m\ge 1$ and $w$ is an admissible continuation of $a$ of
+length $\ell$, then
+\[
+\mu([aw]\mid[a])\ge p_*^\ell,\qquad p_*:=\varphi^{-2}.
+\]
+\end{lemma}
+
+\begin{proof}
+The vector $r=(\varphi,1)$ is a right and left Perron--Frobenius eigenvector
+of $A$.  The Parry transition matrix is
+$P_{ij}=A_{ij}r_j/(\varphi r_i)$, and the stationary distribution is
+$\pi_i=r_i^2/(r_0^2+r_1^2)$ \cite{Parry1964}.  Hence, for an admissible word,
+\[
+\mu([a])=\pi_{a_0}\prod_{j=0}^{m-2}P_{a_j a_{j+1}}
+=\frac{r_{a_0}r_{a_{m-1}}}{\varphi^2+1}\,\varphi^{-(m-1)}.
+\]
+Since $1\le r_{a_0}r_{a_{m-1}}\le\varphi^2$ and
+$\varphi^2+1=\sqrt{5}\,\varphi$, the displayed cylinder bounds follow.  The
+transition probabilities are obtained from the same formula for $P_{ij}$, and
+the continuation estimate follows because every positive transition is at
+least $p_*=\varphi^{-2}$.
+\end{proof}
+
+Let
+\[
+Y:=\{x\in X:x_{2j}=0\text{ for all }j\ge 0,\quad
+x_{2j+1}x_{2j+3}\ne 11\text{ for all }j\ge 0\}.
+\]
+A finite word $a$ is called $Y$-admissible if $[a]\cap Y\ne\varnothing$.  For
+$x\in X\setminus Y$, define
+\[
+\rho(x):=\min\{m\ge 1:x_0\cdots x_{m-1}\text{ is not }Y\text{-admissible}\}.
+\]
+Define $\mathsf{E}$ to be the set of points whose first obstruction at time
+$\rho(x)$ is an even coordinate equal to $1$, and include $Y$ in $\mathsf{E}$.
+
+\begin{lemma}[Bounded first-obstruction continuations]
+\label{lem:golden-bounded-continuations}
+Let $a$ be a $Y$-admissible word of length $m\ge 1$.  There are admissible
+continuations $u_{\mathrm e}$ and $u_{\mathrm o}$, each of length at most five,
+such that every proper prefix of $au_{\mathrm e}$ and $au_{\mathrm o}$ extending
+$a$ is still $Y$-admissible, while $au_{\mathrm e}$ first leaves the
+$Y$-language by an even-coordinate obstruction and $au_{\mathrm o}$ first
+leaves it by an odd-coordinate obstruction.  Moreover,
+\[
+\mu([au_{\mathrm e}]\mid[a])\ge p_*^5,\qquad
+\mu([au_{\mathrm o}]\mid[a])\ge p_*^5.
+\]
+\end{lemma}
+
+\begin{proof}
+For the even obstruction, if the next coordinate $m$ is even and the preceding
+symbol is $0$, append $1$ at coordinate $m$.  If $m$ is even and the preceding
+symbol is $1$, append $001$, so the $1$ lands at the next even coordinate.  If
+$m$ is odd, append $01$, so the $1$ lands at the next even coordinate.  In each
+case the preceding coordinate of the new even $1$ is $0$, so the word remains
+admissible in $X$, and no earlier appended prefix violates the defining
+conditions of $Y$.
+
+For the odd obstruction, let $r$ be the next odd coordinate not yet specified.
+All newly specified even coordinates before the obstruction are set equal to
+$0$.  If the most recent specified odd coordinate exists and carries the value
+$1$, put $1$ at coordinate $r$.  Otherwise put $1$ at coordinate $r$, put $0$
+at the following even coordinate, and put $1$ at the next odd coordinate.  This
+creates the first adjacent pair $11$ in the induced odd-coordinate sequence and
+does not create an even-coordinate obstruction beforehand.  The construction
+uses at most four symbols, hence at most five.
+
+Both constructed words are admissible in $X$.  Lemma~\ref{lem:golden-parry-bounds}
+gives conditional mass at least $p_*^\ell$ for a continuation of length
+$\ell\le 5$, and $p_*^\ell\ge p_*^5$.
+\end{proof}
+
+\begin{lemma}[The skeleton has zero Parry measure]
+\label{lem:golden-y-null}
+The set $Y$ satisfies $\mu(Y)=0$.
+\end{lemma}
+
+\begin{proof}
+Let $A_m$ be the union of all $Y$-admissible cylinders of length $m$.  Then
+$Y=\bigcap_{m\ge 1}A_m$.  By Lemma~\ref{lem:golden-bounded-continuations}, for
+each $Y$-admissible word $a$ of length $m\ge 1$ there is a subcylinder of
+$[a]$ with conditional mass at least $p_*^5$ whose points have left the
+$Y$-language by time $m+5$.  Hence
+\[
+\mu(A_{m+5}\cap[a])\le (1-p_*^5)\mu([a]).
+\]
+Summing over the $Y$-admissible words of length $m$ gives
+$\mu(A_{m+5})\le(1-p_*^5)\mu(A_m)$.  Iterating from $m=1$,
+\[
+\mu(A_{1+5n})\le (1-p_*^5)^n\mu(A_1)\to 0.
+\]
+Since $Y\subseteq A_{1+5n}$ for every $n$, $\mu(Y)=0$.
+\end{proof}
+
+\begin{proposition}[Golden-mean boundary skeleton]
+\label{prop:golden-boundary-skeleton}
+Let $a=a_0\cdots a_{m-1}$ be a finite word of length $m$, and let
+$\mathrm{odd}(a):=a_1a_3\cdots a_{2\lfloor m/2\rfloor-1}$, interpreted as the
+empty word when $\lfloor m/2\rfloor=0$.  Then $a$ is
+$Y$-admissible if and only if all even coordinates visible in $a$ are $0$ and
+$\mathrm{odd}(a)$ is golden-mean admissible.  For $x\in X\setminus Y$, the
+first exit time $\rho(x)$ has exactly one of the following two forms:
+\[
+\rho(x)=2j+1\text{ and }x_{2j}=1,
+\qquad\text{or}\qquad
+\rho(x)=2j+4\text{ and }x_{2j+1}=x_{2j+3}=1.
+\]
+Finally, for every positive length-$m$ cylinder $[a]$,
+\[
+[a]\in\partial_m\mathsf{E}\quad\Longleftrightarrow\quad a
+\text{ is }Y\text{-admissible}.
+\]
+Consequently, with $F_0=0,F_1=1$,
+\[
+N_{2k}(\partial\mathsf{E})=N_{2k+1}(\partial\mathsf{E})=F_{k+2}
+\qquad(k\ge 0).
+\]
+\end{proposition}
+
+\begin{proof}
+The characterization of $Y$-admissible words is immediate in one direction.
+Conversely, if the visible even coordinates of $a$ are $0$ and
+$\mathrm{odd}(a)$ has no adjacent $1$s, then extend $a$ by putting all future
+even and odd coordinates equal to $0$; the extension lies in $Y$.
+
+If $x\notin Y$, the first failure is either the first even coordinate carrying
+$1$, which is seen at prefix length $2j+1$, or the first adjacent pair $11$ in
+the odd-coordinate subsequence, whose second symbol is seen at prefix length
+$2j+4$.  These prefix lengths have opposite parity, so the newly visible
+obstruction is unique.
+
+If $a$ is not $Y$-admissible, let $r\le m$ be the first prefix length at which
+$a_0\cdots a_{r-1}$ is not $Y$-admissible.  The obstruction type at $r$ is
+already fixed by $a$, and every point of $[a]$ has the same first obstruction;
+therefore $[a]$ is contained either in $\mathsf{E}$ or in $\mathsf{E}^c$.
+If $a$ is $Y$-admissible and $m\ge 1$, Lemma~\ref{lem:golden-bounded-continuations}
+gives positive-measure subcylinders of $[a]$ contained in $\mathsf{E}$ and in
+$\mathsf{E}^c$, so $[a]$ is a boundary cylinder.  For $m=0$, the empty cylinder
+$X$ is boundary because the positive cylinders $[1]$ and $[0101]$ have first
+even and first odd obstructions respectively.
+
+For $m=2k$ or $m=2k+1$, the visible odd skeleton has length $k$.  The number
+of golden-mean admissible words of length $k$ is $F_{k+2}$, by the recurrence
+$b_k=b_{k-1}+b_{k-2}$ with $b_0=1$ and $b_1=2$.  The boundary equivalence gives
+the displayed formula for $N_m(\partial\mathsf{E})$.
+\end{proof}
+
+\begin{example}[Golden-mean shift: explicit computation with $d=1/2$]
+\label{ex:golden-mean-specialization}
+The set $\mathsf{E}$ belongs to $\mathcal{F}_\infty$: it is the union of the
+cylinders on which a first even obstruction occurs, together with the closed
+set $Y$, and Lemma~\ref{lem:golden-y-null} shows that this added skeleton is
+null.  It is not decided by any finite prefix, because the all-zero
+length-$m$ cylinder is $Y$-admissible and is therefore a boundary cylinder by
+Proposition~\ref{prop:golden-boundary-skeleton}.
+
+Proposition~\ref{prop:golden-boundary-skeleton} gives
+\[
+N_{2k}(\partial\mathsf{E})=N_{2k+1}(\partial\mathsf{E})=F_{k+2}
+\sim\frac{\varphi^{k+2}}{\sqrt{5}},
+\]
+so
+\[
+\overline{\dim}_B(\partial\mathsf{E})
+=\limsup_{m\to\infty}
+\frac{\log\max\{N_m(\partial\mathsf{E}),1\}}{m\log\varphi}
+=\frac{1}{2}.
+\]
+The same bounded continuations give the thickness estimate
 \[
 \min\{\mu(\mathsf{E}\mid[a]),1-\mu(\mathsf{E}\mid[a])\}
-\ge\varphi^{-10}
-\qquad([a]\in\partial_m\mathsf{E}),
+\ge p_*^5=\varphi^{-10}
+\qquad([a]\in\partial_m\mathsf{E},\ m\ge 1).
 \]
-so the thickness condition holds uniformly.
-
-\paragraph{Rate conclusion.}
-Theorem~\ref{thm:volume-boundary-scaling} with $d=1/2$ and
-$\lambda_{\mathrm{cyl}}=\varphi$ gives, for all large $m$,
-\[
-\theta c_-\,\varphi^{-m/2+O(1)}
-\le\varepsilon_m(\mathsf{E};\mu)
-\le\frac{c_+}{2}\,\varphi^{-m/2+O(1)},
-\]
-so $\varepsilon_m(\mathsf{E};\mu)\asymp\varphi^{-m/2}$.  More precisely, there
-exist constants $C_1,C_2>0$ such that for all sufficiently large $m$,
+Together with the cylinder bounds from Lemma~\ref{lem:golden-parry-bounds},
+Theorem~\ref{thm:volume-boundary-scaling} yields constants $C_1,C_2>0$ such
+that, for all sufficiently large $m$,
 \[
 C_1\varphi^{-m/2}\le\varepsilon_m(\mathsf{E};\mu)\le C_2\varphi^{-m/2}.
 \]
+Thus $\varepsilon_m(\mathsf{E};\mu)\asymp\varphi^{-m/2}$.
 \end{example}
 
 \section{Discussion}
@@ -620,9 +754,9 @@ mutual information.
 \paragraph{Limitations.}
 The rate laws assume exponential cylinder complexity; subexponential systems
 (Sturmian codings, substitution shifts) require separate analysis.  The proofs
-do not use $T$-invariance: all results are purely filtration-theoretic, and the
-dynamical framing motivates the cylinder structure but is not invoked in any
-argument.  Adding results that essentially use invariance---for example,
+do not use invariance of $T$: all results are purely filtration-theoretic, and
+the dynamical framing motivates the cylinder structure but is not invoked in
+any argument.  Adding results that essentially use invariance---for example,
 equivariance of boundary growth under $T$, or Rohlin tower constructions---is
 an open direction.
 
