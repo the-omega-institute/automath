@@ -397,7 +397,7 @@ def detect_target_journal(paper_dir: str) -> str:
             return full_name
 
     return ""
-MAX_STAGE_A_ROUNDS = 5
+MAX_STAGE_A_ROUNDS = 8
 MAX_STAGE_B_ROUNDS = 99  # No practical limit — must pass Oracle gate
 MAX_STAGE_C_ROUNDS = 4
 DEFAULT_TARGET_JOURNAL = "Advances in Mathematics"
