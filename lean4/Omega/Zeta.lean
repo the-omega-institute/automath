@@ -599,6 +599,7 @@ import Omega.Zeta.XiCriticalLineUniqueLowComplexitySlice
 import Omega.Zeta.XiLegalReadoutPrefixDoubleBudget
 import Omega.Zeta.XiComovingDefectLatticeCertificateBandExclusion
 import Omega.Zeta.XiComovingDefectTransverseVisibleWindow
+import Omega.Zeta.XiComovingFiniteCentersBandExclusion
 import Omega.Zeta.XiComovingFiniteCentersBlindspot
 import Omega.Zeta.XiDefectEntropyPeakCompressibilityExtremal
 import Omega.Zeta.XiDefectEntropyMassPeakDecoupling
