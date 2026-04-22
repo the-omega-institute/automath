@@ -3869,10 +3869,7 @@ def _run_stage_a_inventory(state: PaperState, *,
                            dry_run: bool = False,
                            tag: str = "") -> dict:
     paper_path = Path(state.paper_dir)
-    if not CLAUDE_ENABLED and not dry_run:
-        inventory = _deterministic_theorem_inventory(paper_path)
-        _write_json_artifact(paper_path, "theorem_inventory.json", inventory)
-    elif dry_run:
+    if dry_run:
         inventory = {
             "valid": True,
             "in_scope_present": [],
@@ -3887,6 +3884,11 @@ def _run_stage_a_inventory(state: PaperState, *,
             "journal_style_gaps": [],
         }
     else:
+        for stale_name in ("theorem_inventory.json", "theorem_inventory.md"):
+            try:
+                (paper_path / stale_name).unlink(missing_ok=True)
+            except Exception:
+                pass
         prompt = build_theorem_inventory_prompt(
             state.paper_dir, state.target_journal, state.main_paper_dir)
         out = codex_exec(prompt, work_dir=paper_path, timeout_seconds=1800,
