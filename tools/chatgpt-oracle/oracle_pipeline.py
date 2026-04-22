@@ -175,6 +175,7 @@ _state_lock = threading.Lock()
 SCORE_PASS_THRESHOLD = 8
 MIN_STAGE_A_AUDIT_ROUNDS = 2
 MAX_STAGE_A_AUDIT_ROUNDS = 4
+MAX_STAGE_A_FINAL_REPAIR_ROUNDS = 3
 STAGE_A_METRIC_THRESHOLDS = {
     "scope_coverage": 8,
     "theorem_completeness": 8,
@@ -2221,6 +2222,12 @@ def build_theoremization_prompt(paper_dir: str, target_journal: str,
         - `proof_gaps`: close the proof with minimal new lemmas and explicit
           hypotheses; remove or quarantine claims that cannot be proved.
         - `audit_blockers`: revise exactly against the Stage A audit blockers.
+        - `final_audit_repair`: perform a focused near-pass repair against
+          the final Stage A audit.  Prefer source-level fixes: self-contained
+          headline hypotheses, split hygiene for root theorem files, removal
+          of internal audit macros from submission sources, and journal-facing
+          theorem/proof presentation.  Update local artifacts if useful for
+          the next audit, but the durable commit must be paper content.
 
         For `missing_in_scope_results` and `weak_in_scope_core_results`, the
         acceptance criterion is explicit: introduce or strengthen at least one
@@ -4119,13 +4126,15 @@ def _audit_metrics(data: dict, keys=None) -> dict[str, int]:
 
 def _combine_stage_a_audits(codex_data: dict, claude_data: dict) -> dict:
     missing = []
+    structural_auditor = "claude" if CLAUDE_ENABLED else "structural_fallback"
     codex_metrics = _audit_metrics(codex_data, STAGE_A_CODEX_MATH_METRICS)
     claude_metrics = _audit_metrics(
         claude_data, STAGE_A_CLAUDE_STRUCTURAL_METRICS)
     if set(codex_metrics) != set(STAGE_A_CODEX_MATH_METRICS):
         missing.append("codex_math")
     if set(claude_metrics) != set(STAGE_A_CLAUDE_STRUCTURAL_METRICS):
-        missing.append("claude_structural")
+        missing.append(
+            "claude_structural" if CLAUDE_ENABLED else "structural_fallback")
 
     combined_metrics: dict[str, int] = {
         **codex_metrics,
@@ -4138,7 +4147,8 @@ def _combine_stage_a_audits(codex_data: dict, claude_data: dict) -> dict:
     split_reasons = []
     split_required = False
     all_pass = not missing
-    for name, data in (("codex", codex_data), ("claude", claude_data)):
+    for name, data in (("codex", codex_data),
+                       (structural_auditor, claude_data)):
         verdict = str(data.get("verdict", "")).lower()
         if verdict != "pass":
             all_pass = False
@@ -4405,7 +4415,12 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
                 data, STAGE_A_CLAUDE_STRUCTURAL_METRICS
             )) == set(STAGE_A_CLAUDE_STRUCTURAL_METRICS):
                 return data
-            logger.warning(f"{tag} Claude structural audit attempt {attempt} "
+            auditor_label = (
+                "Claude structural audit"
+                if CLAUDE_ENABLED or dry_run
+                else "Structural audit fallback"
+            )
+            logger.warning(f"{tag} {auditor_label} attempt {attempt} "
                            f"empty/unparseable, retrying")
         return {}
 
@@ -4773,7 +4788,9 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 return _stage_a_pause(state, "stage_a_audit_unparseable",
                                       tag=tag)
 
-            if audit.get("blockers") or audit.get("required_revisions"):
+            if (audit.get("blockers") or audit.get("required_revisions")
+                or audit.get("work_packages") or audit.get("split_required")
+                or audit.get("split_reasons")):
                 issues = {
                     "audit_round": audit_round,
                     "metrics": audit.get("metrics", {}),
@@ -4886,7 +4903,9 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 return _stage_a_pause(state, "stage_a_final_audit_unparseable",
                                       tag=tag)
 
-            if audit.get("blockers") or audit.get("required_revisions"):
+            if (audit.get("blockers") or audit.get("required_revisions")
+                or audit.get("work_packages") or audit.get("split_required")
+                or audit.get("split_reasons")):
                 detail = json.dumps(
                     {
                         "score": score,
@@ -4894,6 +4913,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                         "blockers": audit.get("blockers", []),
                         "required_revisions": audit.get(
                             "required_revisions", []),
+                        "work_packages": audit.get("work_packages", []),
                         "split_required": audit.get("split_required", False),
                         "split_reasons": audit.get("split_reasons", []),
                     },
@@ -4903,6 +4923,72 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                                 round_num=audit_round, score=score,
                                 detail=detail)
                 save_state(state)
+                final_repair_count = max(
+                    0, state.stage_a_rounds - MAX_STAGE_A_ROUNDS)
+                if final_repair_count < MAX_STAGE_A_FINAL_REPAIR_ROUNDS:
+                    repair_round = state.stage_a_rounds + 1
+                    issues = {
+                        "audit_round": audit_round,
+                        "final_repair_round": final_repair_count + 1,
+                        "max_final_repair_rounds":
+                            MAX_STAGE_A_FINAL_REPAIR_ROUNDS,
+                        "metrics": audit.get("metrics", {}),
+                        "blockers": audit.get("blockers", []),
+                        "required_revisions": audit.get(
+                            "required_revisions", []),
+                        "work_packages": audit.get("work_packages", []),
+                        "split_required": audit.get("split_required", False),
+                        "split_reasons": audit.get("split_reasons", []),
+                    }
+                    logger.info(
+                        f"{tag} A3-FINAL failed; running final repair "
+                        f"round {repair_round} "
+                        f"({final_repair_count + 1}/"
+                        f"{MAX_STAGE_A_FINAL_REPAIR_ROUNDS})")
+                    prompt = build_theoremization_prompt(
+                        state.paper_dir, state.target_journal,
+                        "final_audit_repair",
+                        json.dumps(issues, indent=2, ensure_ascii=False),
+                        repair_round)
+                    edit_snapshot = _snapshot_paper_sources(paper_path)
+                    codex_exec(prompt, work_dir=paper_path,
+                               timeout_seconds=3600, model=model,
+                               dry_run=dry_run,
+                               context_mode="contextual_execution",
+                               agent_role="stage_a_final_audit_repair")
+                    compiled = compile_gate(
+                        paper_path, model=model, dry_run=dry_run,
+                        tag=f"{tag} A3-FINAL-REPAIR")
+                    if not compiled:
+                        _restore_paper_sources_snapshot(
+                            paper_path, edit_snapshot)
+                        state.log_event(
+                            "A", "compile_failed",
+                            round_num=repair_round,
+                            detail="after final Stage A audit repair")
+                        save_state(state)
+                        return _stage_a_pause(
+                            state,
+                            "compile_failed_after_final_audit_repair",
+                            tag=tag)
+                    h = git_commit(
+                        paper_path,
+                        f"stage-A R{repair_round}: final audit repair",
+                        tag=tag)
+                    state.stage_a_rounds = repair_round
+                    state.current_round = repair_round
+                    state.stage_a_audit_rounds = 0
+                    state.stage_a_audit_metrics = {}
+                    state.log_event(
+                        "A", "final_audit_repair",
+                        round_num=repair_round, committed=bool(h),
+                        commit_hash=h,
+                        detail=f"compiled={compiled}; prior_score={score}; "
+                               f"repair={final_repair_count + 1}/"
+                               f"{MAX_STAGE_A_FINAL_REPAIR_ROUNDS}")
+                    save_state(state)
+                    return run_stage_a(
+                        state, dry_run=dry_run, model=model)
                 return _stage_a_block(
                     state,
                     f"max Stage A rounds exhausted; final audit failed "
