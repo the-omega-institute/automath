@@ -816,6 +816,21 @@ def print_future_queue(filter_repos: Optional[list[str]] = None) -> None:
         print("")
 
 
+def mark_repo_replied(repo: str, url: str, *, dry_run: bool = False) -> RepoState:
+    state = load_state(repo) or RepoState(repo=repo)
+    state.stage = "DONE"
+    state.round = 0
+    state.error = ""
+    state.submission_url = url
+    state.timestamps["completed_at"] = iso_now()
+    state.log_event("D", "issue reply submitted", verdict="approve", detail=url)
+    if not dry_run:
+        save_state(state)
+        mark_processed(repo, dry_run=dry_run)
+    logger.info("[%s] Marked replied: %s", repo, url)
+    return state
+
+
 def load_processed_repos() -> set[str]:
     processed: set[str] = set()
     if PROCESSED_FILE.exists():
@@ -4486,6 +4501,7 @@ def parse_args() -> argparse.Namespace:
               python3 tools/community-outreach/outreach_pipeline.py --status
               python3 tools/community-outreach/outreach_pipeline.py --future-queue
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --register-future-scope
+              python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --mark-replied https://github.com/owner/name/issues/38#issuecomment-...
               python3 tools/community-outreach/outreach_pipeline.py --check-artifacts
               python3 tools/community-outreach/outreach_pipeline.py --archive-stale-states
               python3 tools/community-outreach/outreach_pipeline.py --promote tools/community-outreach/targets/x/final.tex theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/appendix/x/main.tex
@@ -4502,6 +4518,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--status", action="store_true", help="Show persisted state")
     parser.add_argument("--future-queue", action="store_true", help="Show deferred scope/deep-research queue")
     parser.add_argument("--register-future-scope", action="store_true", help="Extract deferred future tasks from the current draft state for --repo targets")
+    parser.add_argument("--mark-replied", metavar="URL", help="Mark --repo target state as replied/submitted with an existing GitHub issue comment URL")
     parser.add_argument("--append-future-note", nargs=2, metavar=("ID", "NOTE"), help="Append a note/source update to a future queue item")
     parser.add_argument("--check-artifacts", action="store_true", help="Fail if outreach runtime artifacts are tracked or staged for addition")
     parser.add_argument("--archive-stale-states", action="store_true", help="Move duplicate/error runtime states into an ignored local archive")
@@ -4648,6 +4665,15 @@ def main() -> int:
         if not valid_repo_slug(repo):
             print(f"Invalid repo slug: {repo}", file=sys.stderr)
             return 1
+
+    if args.mark_replied:
+        if not repos:
+            print("--mark-replied requires --repo", file=sys.stderr)
+            return 1
+        for repo in repos:
+            mark_repo_replied(repo, args.mark_replied, dry_run=args.dry_run)
+        print(f"Marked replied: {len(repos)}")
+        return 0
 
     if args.register_future_scope:
         total = 0
