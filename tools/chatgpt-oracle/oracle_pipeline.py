@@ -619,6 +619,25 @@ def load_state(paper_name: str) -> Optional[PaperState]:
         return None
 
 
+def _state_has_stage_a_evidence(state: PaperState) -> bool:
+    if state.stage_a_scores or state.stage_a_audit_metrics or state.stage_a_passed:
+        return True
+    evidence_actions = {
+        "theorem_inventory",
+        "theoremization",
+        "split_hygiene",
+        "audit_blocker_revision",
+        "substance_check",
+        "cross_paper_dedup_commit",
+        "audit_gate_passed",
+    }
+    return any(
+        h.get("stage") == "A" and h.get("action") in evidence_actions
+        for h in state.history
+        if isinstance(h, dict)
+    )
+
+
 def rebuild_rounds_from_git(state: PaperState) -> None:
     """Recover max prior round numbers from commit history.
 
@@ -666,11 +685,7 @@ def rebuild_rounds_from_git(state: PaperState) -> None:
         m = re.search(r"(?:oracle|gate)[\s_]+R(\d+)", line, re.IGNORECASE)
         if m:
             max_b = max(max_b, int(m.group(1)))
-    can_rebuild_a = bool(
-        state.stage_a_scores
-        or state.stage_a_audit_metrics
-        or state.stage_a_passed
-    )
+    can_rebuild_a = _state_has_stage_a_evidence(state)
     if max_a != state.stage_a_rounds and can_rebuild_a:
         logger.info(f"[{state.paper_name}] git-rebuild: stage_a_rounds "
                     f"{state.stage_a_rounds} → {max_a}")
@@ -4173,8 +4188,7 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
     # Old state files may contain Stage A rounds reconstructed from git but no
     # actual score/audit evidence.  Treat that as stale bookkeeping and rerun A.
     if (state.stage_a_rounds
-        and not state.stage_a_scores
-        and not state.stage_a_audit_metrics):
+        and not _state_has_stage_a_evidence(state)):
         logger.warning(f"{tag} Resetting stale Stage A round counter "
                        f"({state.stage_a_rounds}) with no score/audit state")
         state.stage_a_rounds = 0
