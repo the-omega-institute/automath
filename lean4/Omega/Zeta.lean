@@ -570,10 +570,12 @@ import Omega.Zeta.XiBulkBoundaryHolographicGapDissipation
 import Omega.Zeta.XiBulkCurvatureLogisticKernelDecomposition
 import Omega.Zeta.XiBulkEntropyRGStaircase
 import Omega.Zeta.XiBulkRenormalizedConstantAnomalyGap
+import Omega.Zeta.XiCompletedPolynomialPontryaginIndex
 import Omega.Zeta.XiCRTInvisibilityMarginalPrimeSpectrum
 import Omega.Zeta.XiCRTIndistinguishablePair
 import Omega.Zeta.XiCRTMultistageAxisAllocationAdditiveControl
 import Omega.Zeta.XiCarathPickKernelNormalizationRigidity
+import Omega.Zeta.XiCarathImagConstantInvisible
 import Omega.Zeta.XiCauchyPoissonDensityRatioSecondOrderProfile
 import Omega.Zeta.XiCauchyPoissonAllLpSharpScaling
 import Omega.Zeta.XiCauchyPoissonDerivativeEnergyClosedForm
