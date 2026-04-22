@@ -510,6 +510,64 @@ def _repair_latex_escapes(text: str) -> str:
     return "".join(out)
 
 
+def _escape_json_string_control_chars(text: str) -> str:
+    """Escape raw control characters that appear inside JSON strings."""
+    out: list[str] = []
+    in_string = False
+    escape = False
+    for char in text:
+        if in_string:
+            if escape:
+                out.append(char)
+                escape = False
+                continue
+            if char == "\\":
+                out.append(char)
+                escape = True
+                continue
+            if char == '"':
+                out.append(char)
+                in_string = False
+                continue
+            if char == "\n":
+                out.append("\\n")
+                continue
+            if char == "\r":
+                out.append("\\r")
+                continue
+            if char == "\t":
+                out.append("\\t")
+                continue
+            out.append(char)
+            continue
+        out.append(char)
+        if char == '"':
+            in_string = True
+    return "".join(out)
+
+
+def _parse_json_candidate(candidate: str) -> Any:
+    """Parse a balanced JSON candidate with LaTeX/control-char repairs."""
+    variants = [
+        candidate,
+        _repair_latex_escapes(candidate),
+    ]
+    variants.extend(_escape_json_string_control_chars(item) for item in list(variants))
+    seen: set[str] = set()
+    last_error: Optional[json.JSONDecodeError] = None
+    for variant in variants:
+        if variant in seen:
+            continue
+        seen.add(variant)
+        try:
+            return json.loads(variant)
+        except json.JSONDecodeError as exc:
+            last_error = exc
+    if last_error is not None:
+        raise last_error
+    raise json.JSONDecodeError("empty JSON candidate", candidate, 0)
+
+
 def _extract_json(text: str) -> Any:
     """Extract and parse the first top-level JSON object or array in text.
 
@@ -532,6 +590,13 @@ def _try_parse_json_from(text: str) -> Any:
     When json.loads fails on a balanced candidate (common with LaTeX content),
     retries with LaTeX escape repair before moving to the next candidate.
     """
+    first_json_start: Optional[int] = None
+    for index, char in enumerate(text):
+        if char in "{[":
+            first_json_start = index
+            break
+        if not char.isspace():
+            break
     for start, first_char in enumerate(text):
         if first_char not in "{[":
             continue
@@ -563,15 +628,11 @@ def _try_parse_json_from(text: str) -> Any:
                 if not stack:
                     candidate = text[start : index + 1]
                     try:
-                        return json.loads(candidate)
+                        return _parse_json_candidate(candidate)
                     except json.JSONDecodeError:
-                        # LaTeX escape repair: Codex produces \begin, \label etc.
-                        # inside JSON strings which are invalid JSON escapes.
-                        try:
-                            repaired = _repair_latex_escapes(candidate)
-                            return json.loads(repaired)
-                        except json.JSONDecodeError:
-                            pass  # try next candidate position
+                        if start == first_json_start and first_char == "[":
+                            return None
+                        pass  # try next candidate position
     return None
 
 
