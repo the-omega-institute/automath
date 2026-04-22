@@ -319,6 +319,7 @@ import Omega.POM.InvertWFromHomogeneousCurve
 import Omega.POM.KCollisionRootFilter
 import Omega.POM.KCollisionMittagLefflerScaling
 import Omega.POM.KLDefectIdentity
+import Omega.POM.KilloAddressableGodelizationInfoCost
 import Omega.POM.KappaDerivable
 import Omega.POM.KappaKlDecomposition
 import Omega.POM.MobiusCompleteDecomposition
@@ -336,6 +337,7 @@ import Omega.POM.LeyangMonotoneCouplingPrimeRegister
 import Omega.POM.LkArcsineLaw
 import Omega.POM.LkChebyshevCharpoly
 import Omega.POM.LkMellinTransformRigidity
+import Omega.POM.LogmLinearResponseZero
 import Omega.POM.LkSurfaceFreeEnergyStrictConcavity
 import Omega.POM.LowTemperatureDifferenceCertificates
 import Omega.POM.LucasNuPCriterion
