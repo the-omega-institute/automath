@@ -64,4 +64,11 @@ theorem window6_no_translation_quotient_subgroup :
     simpa using (binFold6_edge_separation ⟨0, by decide⟩ ⟨0, by decide⟩)
   exact hneq h01
 
+/-- Exact paper-facing wrapper for the window-6 translation-quotient obstruction.
+    prop:window6-no-translation-quotient-fiber -/
+theorem paper_window6_no_translation_quotient_fiber :
+    ¬ ∃ H : AddSubgroup (ZMod 64),
+        ∀ x y : ZMod 64, cBinFold 6 x.val = cBinFold 6 y.val ↔ y - x ∈ H := by
+  exact window6_no_translation_quotient_subgroup
+
 end Omega.GU
