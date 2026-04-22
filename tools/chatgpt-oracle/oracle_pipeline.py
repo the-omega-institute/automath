@@ -2226,8 +2226,11 @@ def build_theoremization_prompt(paper_dir: str, target_journal: str,
           the final Stage A audit.  Prefer source-level fixes: self-contained
           headline hypotheses, split hygiene for root theorem files, removal
           of internal audit macros from submission sources, and journal-facing
-          theorem/proof presentation.  Update local artifacts if useful for
-          the next audit, but the durable commit must be paper content.
+          theorem/proof presentation.  Do not spend the repair on README.md,
+          scope/inventory JSON, split-candidate ledgers, or other
+          non-submission artifacts; if an audit mentions stale artifacts,
+          translate that complaint into a source-level paper fix or ignore it
+          for the Stage A gate.
 
         For `missing_in_scope_results` and `weak_in_scope_core_results`, the
         acceptance criterion is explicit: introduce or strengthen at least one
@@ -2339,6 +2342,14 @@ def build_stage_a_audit_prompt(paper_dir: str, target_journal: str,
         Do not duplicate Claude's role.  Your job is theorem-level mathematics:
         whether the in-scope results are present, nontrivial, and proved.
 
+        Gate boundary: score the durable submission source, namely the
+        paper's theorem/proof content in `.tex`, `.bib`, and `.sty` files.
+        README files, scope artifacts, theorem inventories, split ledgers, and
+        non_submission_artifacts are diagnostic context only.  Stale or
+        inconsistent artifacts may reveal a source-level mathematical problem,
+        but artifact staleness itself must not lower a metric, create
+        `split_required`, or block `ready_for_oracle_review`.
+
         Score only these metrics from 1 to 10:
         - `theorem_completeness`: every in-scope mature theorem that belongs in
           this article is present and integrated.
@@ -2400,6 +2411,17 @@ def build_claude_stage_a_structural_audit_prompt(
           architecture;
         - detect local/global contamination, dangling interfaces, revision
           artifacts, and misplaced split candidates.
+
+        Gate boundary: Stage A can only make durable paper-source commits.
+        Therefore, block or lower metrics only for problems visible in the
+        committed submission source package: `.tex`, `.bib`, `.sty`, and
+        theorem-bearing root source files that would travel with the article.
+        README.md, scope_contract files, theorem_inventory files,
+        split_candidates files, research ledgers, and non_submission_artifacts
+        are diagnostic context.  Do not mark `split_required`, reduce
+        `split_hygiene`, or fail `ready_for_oracle_review` solely because such
+        artifacts are stale or internally inconsistent.  If an artifact points
+        to a real source problem, cite the source file that must change.
 
         Score only these metrics from 1 to 10:
         - `scope_coverage`: the article implements the stable scope contract
