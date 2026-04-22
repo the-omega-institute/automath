@@ -1,2 +1,3 @@
+import Omega.DerivedConsequences.DerivedLocalizedPhaseFibersSadicTorsorForgetting
 import Omega.DerivedConsequences.DerivedM2Level3Common24Defect15ExactSequence
 import Omega.DerivedConsequences.DerivedProjectivePathGibbsCumulants
