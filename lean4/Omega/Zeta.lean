@@ -111,6 +111,7 @@ import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprint
 import Omega.Zeta.XiCriticalLineCircleCauchyUniformization
 import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth
 import Omega.Zeta.XiJDiscriminant2IsogenyVelu
+import Omega.Zeta.XiJSexticHyperellipticBranchPolynomialDiscriminantFactorization
 import Omega.Zeta.XiJGMonicBoundaryReadout
 import Omega.Zeta.XiCayleyDilationMobiusConjugacyFixedpoints
 import Omega.Zeta.XiCayleyTauConjugacyLogdiff
