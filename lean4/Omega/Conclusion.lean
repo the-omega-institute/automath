@@ -182,6 +182,7 @@ import Omega.Conclusion.ExternalBudgetTensorEntropyRate
 import Omega.Conclusion.GodelOrbitIdentifiability
 import Omega.Conclusion.F2BinomialBasisFromDeltaNilpotent
 import Omega.Conclusion.ScreenEntropyAuditIdentity
+import Omega.Conclusion.ScreenExactBinaryAuditHomologicalBitBound
 import Omega.Conclusion.ScalekernelTreeFourthOrderSynchronization
 import Omega.Conclusion.ScreenphaseSurjectsAllFiniteLocalizedShadows
 import Omega.Conclusion.SingleCubeEditRigidity
