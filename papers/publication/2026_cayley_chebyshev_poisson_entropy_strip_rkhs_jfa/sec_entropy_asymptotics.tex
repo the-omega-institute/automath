@@ -13,14 +13,16 @@ dependencies are as follows.
 and finite centred fourth moment, through a direct Taylor expansion of
 $R_\varepsilon$.
 \item Theorem~\ref{thm:poisson-kl-even-orders} uses a finite centred
-$(2N+1)$st absolute moment, Proposition~\ref{prop:cayley-mode-remainder},
-and Lemma~\ref{lem:mode-parity-vanish}.
+$(2N+1)$st absolute moment,
+Lemma~\ref{lem:tail-uniform-cayley-mode-remainder}, and
+Lemma~\ref{lem:mode-parity-vanish}.
 \item Proposition~\ref{prop:cdim-poisson-cauchy-moment-inversion-by-phase-modes}
 uses the same finite mode calculus at order four and a finite centred
 fifth absolute moment to recover $(\sigma^2,\mu_3,\mu_4)$ from phase
 Fourier coefficients.
 \item Theorem~\ref{thm:poisson-kl-eighth} uses the mean, variance, finite
-centred seventh absolute moment, Proposition~\ref{prop:cayley-mode-remainder},
+centred seventh absolute moment,
+Lemma~\ref{lem:tail-uniform-cayley-mode-remainder},
 Lemma~\ref{lem:mode-parity-vanish}, and
 Appendix~\ref{app:entropy-integrals}.
 \item Theorems~\ref{thm:poisson-defect-ladder}
@@ -348,7 +350,7 @@ Taking real and imaginary parts after the binomial expansion gives
 
 \begin{proposition}[Finite mode truncations]%
 \label{prop:cayley-mode-remainder}
-For every integer $N\ge 0$ there exists a rational function
+For every integer $N\ge 1$ there exists a rational function
 $v_N:\RR^2\to\RR$, bounded on~$\RR^2$, such that
 \begin{equation}\label{eq:cayley-mode-remainder}
 R_\varepsilon(y)
@@ -371,9 +373,75 @@ v_N(\tan\theta,\varepsilon)
 -\varepsilon\cos^{N+2}\theta\,U_N(\sin\theta)}
 {1-2(\varepsilon\cos\theta)\sin\theta+(\varepsilon\cos\theta)^2}.
 \]
-This expression is rational in $(y,\varepsilon)$.  Since the denominator
-is positive on $\RR^2$ and the numerator has lower degree than the
-denominator, $v_N$ is bounded on~$\RR^2$.
+Equivalently, since
+\[
+1-2(\varepsilon\cos\theta)\sin\theta
+   +(\varepsilon\cos\theta)^2
+=\frac{1+(\tan\theta-\varepsilon)^2}{1+\tan^2\theta},
+\]
+we have
+\[
+v_N(y,\varepsilon)
+=\frac{(1+y^2)u_{N+1}(y)-\varepsilon u_N(y)}
+       {1+(y-\varepsilon)^2},
+\]
+so $v_N$ is rational in $(y,\varepsilon)$.
+
+It remains to prove boundedness.  Put
+$c=\cos\theta$, $s=\sin\theta$, and $d=\tan\theta-\varepsilon$.  Then
+$\varepsilon c=s-dc$, and the preceding trigonometric formula becomes
+\[
+v_N(\tan\theta,\varepsilon)
+=\frac{c^{N-1}\bigl(U_{N+1}(s)-sU_N(s)+dc\,U_N(s)\bigr)}
+       {1+d^2}.
+\]
+For $|s|\le1$, the polynomials $U_N$ and $U_{N+1}$ are bounded by
+constants depending only on~$N$.  Since $N\ge1$, $|c|^{N-1}\le1$, and
+\[
+\frac{|d|\,|c|^N}{1+d^2}\le \frac{|d|}{1+d^2}\le \frac12,
+\]
+the right-hand side is bounded uniformly in $\theta$ and~$\varepsilon$.
+This proves that $v_N$ is bounded on~$\RR^2$.
+\end{proof}
+
+\begin{lemma}[Tail-uniform Cayley mode remainder]%
+\label{lem:tail-uniform-cayley-mode-remainder}
+Let $N\ge1$, let $X$ be a real random variable with
+$\EE|X|^{N+1}<\infty$, and let
+\[
+\mathcal R_{N,t}(y):=
+\EE\!\left[
+R_{X/t}(y)-\sum_{n=0}^{N}u_n(y)\frac{X^n}{t^n}
+\right]
+\qquad(t>0).
+\]
+Then there is a constant $M_N<\infty$, depending only on~$N$, such that
+\begin{equation}\label{eq:tail-uniform-cayley-mode-remainder}
+\sup_{y\in\RR}|\mathcal R_{N,t}(y)|
+\;+\;\|\mathcal R_{N,t}\|_{L^1(\omega)}
+\le
+M_N\,\EE|X|^{N+1}\,t^{-(N+1)},
+\end{equation}
+where $\omega(\dd y)=\pi^{-1}(1+y^2)^{-1}\dd y$.  Thus the remainder is
+uniform in the phase variable after integration over the full, unbounded
+tail of~$X$.
+\end{lemma}
+
+\begin{proof}
+By Proposition~\ref{prop:cayley-mode-remainder},
+\[
+R_{X/t}(y)-\sum_{n=0}^{N}u_n(y)\frac{X^n}{t^n}
+=\frac{X^{N+1}}{t^{N+1}}v_N(y,X/t)
+\]
+for every $y$ and every value of~$X$.  Let
+$M_N:=\|v_N\|_{L^\infty(\RR^2)}$.  Taking expectations gives
+\[
+|\mathcal R_{N,t}(y)|
+\le M_N\,\EE|X|^{N+1}\,t^{-(N+1)}
+\qquad(y\in\RR).
+\]
+This is the asserted uniform estimate.  Since $\omega$ is a probability
+measure, the same bound also gives the displayed $L^1(\omega)$ estimate.
 \end{proof}
 
 For later use we record the first modes explicitly:
@@ -389,6 +457,11 @@ u_5(y)=\frac{6y^5-20y^3+6y}{(1+y^2)^5},
 \qquad
 u_6(y)=\frac{7y^6-35y^4+21y^2-1}{(1+y^2)^6}.
 \end{equation}
+
+Proposition~\ref{prop:phase-coordinate-interface} is the formal link
+with the finite phase-sampling block: the trigonometric coefficients
+below are Haar-Fourier coefficients of the same circle characters whose
+finite grids are counted by~$\Sigma_G(N)$.
 
 \begin{proposition}[Poisson--Cauchy moment inversion by phase modes]%
 \label{prop:cdim-poisson-cauchy-moment-inversion-by-phase-modes}
@@ -444,12 +517,12 @@ Therefore
 F_t(\theta)=\int_{\RR}\bigl(R_{\Delta/t}(\tan\theta)-1\bigr)
 \,\dd\nu(\gamma).
 \]
-Proposition~\ref{prop:cayley-mode-remainder}, used with truncation
-order~$4$, gives a bounded remainder $v_4$ such that
+Proposition~\ref{prop:cayley-mode-remainder} gives the pointwise
+order-four identity
 \[
 R_{\Delta/t}(y)-1
 =\sum_{n=1}^{4}u_n(y)\frac{\Delta^n}{t^n}
-\frac{\Delta^5}{t^5}v_4(y,\Delta/t).
++\frac{\Delta^5}{t^5}v_4(y,\Delta/t).
 \]
 Taking $\nu$-expectations and using $\mu_1=0$ gives, uniformly in
 $\theta$,
@@ -460,8 +533,9 @@ F_t(\theta)
 +\frac{\mu_4}{t^4}u_4(\tan\theta)
 +O(t^{-5}).
 \]
-The finite fifth absolute moment is used only to bound the last
-expectation uniformly.
+The finite fifth absolute moment is used only through
+Lemma~\ref{lem:tail-uniform-cayley-mode-remainder}, with $X=\Delta$ and
+truncation order~$4$, to bound the last expectation uniformly.
 
 The first three nonconstant modes have the finite phase-Fourier
 expansions
@@ -640,19 +714,12 @@ Consequently all remainders in \eqref{eq:uniform-Phi-expansion} and
 \emph{Mode remainder.}
 All constants below may depend on $\nu$ and $N$, and in the power estimate
 also on $k$, but not on $y$ or $t$.
-Apply Proposition~\ref{prop:cayley-mode-remainder} with truncation order
-$2N$.  Since $v_{2N}$ is bounded on~$\RR^2$,
-\[
-R_{\Delta/t}(y)
-=\sum_{n=0}^{2N}u_n(y)\frac{\Delta^n}{t^n}
-+\frac{\Delta^{2N+1}}{t^{2N+1}}v_{2N}(y,\Delta/t).
-\]
-Taking $\nu$-expectations, using $\mu_0=1$ and $\mu_1=0$, and subtracting
-the constant term gives \eqref{eq:uniform-delta-expansion}.  The finite
-moment assumption controls the remainder uniformly by
-$t^{-(2N+1)}\|v_{2N}\|_\infty\EE|\Delta|^{2N+1}$.
-Since $\omega(\RR)=1$, the same estimate gives the displayed
-$L^1(\omega)$ control of $\rho_{N,t}$.
+Apply Lemma~\ref{lem:tail-uniform-cayley-mode-remainder} with
+$X=\Delta$ and truncation order~$2N$.  Taking $\nu$-expectations in the
+mode expansion, using $\mu_0=1$ and $\mu_1=0$, and subtracting the
+constant term gives \eqref{eq:uniform-delta-expansion}.  The lemma gives
+the displayed uniform and $L^1(\omega)$ bound for $\rho_{N,t}$ directly
+from the finite centred $(2N+1)$st absolute moment.
 Each fixed mode $u_n$ is bounded by
 Theorem~\ref{thm:cayley-chebyshev-mode}, so
 \eqref{eq:uniform-delta-expansion} implies \eqref{eq:uniform-delta-bound}.
@@ -840,8 +907,8 @@ D_{\mathrm{KL}}(h_t\|g_t)
 
 \begin{proof}
 Let $\omega(\dd y)=\pi^{-1}(1+y^2)^{-1}\dd y$.  With
-$x=\bar\gamma+ty$, Proposition~\ref{prop:cayley-mode-remainder} with
-truncation order~$6$ gives
+$x=\bar\gamma+ty$, Lemma~\ref{lem:tail-uniform-cayley-mode-remainder}
+with $X=\Delta$ and truncation order~$6$ gives
 \[
 \delta_t(\bar\gamma+ty)
 =\frac{\sigma^2}{t^2}u_2(y)
