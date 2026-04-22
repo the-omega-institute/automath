@@ -3274,6 +3274,173 @@ def _ensure_research_directive(paper_path: Path, target_journal: str,
     return True
 
 
+def _strip_tex_for_contract(text: str, limit: int = 700) -> str:
+    text = re.sub(r"%.*", "", text)
+    text = re.sub(r"\\(label|ref|cite|eqref)\{[^}]*\}", "", text)
+    text = re.sub(r"\\[a-zA-Z]+\*?(?:\[[^\]]*\])?(?:\{([^{}]*)\})?",
+                  lambda m: m.group(1) or "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text[:limit]
+
+
+def _read_stage_a_source_text(paper_path: Path, max_chars: int = 80000) -> str:
+    parts = []
+    preferred = [paper_path / "main.tex"]
+    preferred.extend(sorted(paper_path.glob("sec*.tex")))
+    preferred.extend(sorted(paper_path.glob("*.tex")))
+    seen: set[Path] = set()
+    for path in preferred:
+        if path in seen or not path.exists() or path.name.endswith(".bak"):
+            continue
+        seen.add(path)
+        try:
+            parts.append(path.read_text(encoding="utf-8", errors="replace"))
+        except Exception:
+            continue
+        if sum(len(p) for p in parts) >= max_chars:
+            break
+    return "\n\n".join(parts)[:max_chars]
+
+
+def _bootstrap_scope_contract_from_paper(
+    paper_path: Path, target_journal: str, main_paper_dir: str = ""
+) -> tuple[bool, str]:
+    """Create a deterministic no-Claude scope contract from existing source."""
+    text = _read_stage_a_source_text(paper_path)
+    if len(text.strip()) < 1000:
+        return False, "paper source too small for scope bootstrap"
+
+    title_match = re.search(r"\\title(?:\[[^\]]*\])?\{(.+?)\}",
+                            text, re.DOTALL)
+    title = _strip_tex_for_contract(title_match.group(1), 240) if title_match else paper_path.name
+    abstract_match = re.search(
+        r"\\begin\{abstract\}(.+?)\\end\{abstract\}",
+        text, re.DOTALL | re.IGNORECASE,
+    )
+    abstract = (
+        _strip_tex_for_contract(abstract_match.group(1), 900)
+        if abstract_match else
+        "The current manuscript source determines the article scope."
+    )
+
+    env_re = re.compile(
+        r"\\begin\{(theorem|lemma|proposition|corollary|conjecture|definition)\}"
+        r"(?:\[[^\]]*\])?(.+?)\\end\{\1\}",
+        re.DOTALL | re.IGNORECASE,
+    )
+    theorem_items = []
+    for kind, body in env_re.findall(text):
+        item = f"{kind.title()}: {_strip_tex_for_contract(body, 520)}"
+        if item not in theorem_items:
+            theorem_items.append(item)
+        if len(theorem_items) >= 12:
+            break
+    if not theorem_items:
+        theorem_items = [
+            "All theorem, proposition, lemma, definition, and proof "
+            "interfaces already present in the manuscript source."
+        ]
+
+    bindings = []
+    if main_paper_dir:
+        bindings.append(
+            "Main project interface: "
+            f"{Path(main_paper_dir).name}; only use definitions, notation, "
+            "and theorems that the current paper explicitly imports or needs."
+        )
+    else:
+        bindings.append(
+            "No separate main project directory configured; infer bindings "
+            "from the manuscript source and local bibliography."
+        )
+
+    data = {
+        "valid": True,
+        "research_question": f"Establish the theorem chain of '{title}'. {abstract}",
+        "target_journal_bar": (
+            f"A submission to {target_journal} must have a coherent central "
+            "scope, complete proofs for all in-scope claims, and notation "
+            "compatible with the journal's standards."
+        ),
+        "main_project_bindings": bindings,
+        "in_scope": [
+            "The definitions, notation, constructions, and theorem statements "
+            "already present in the manuscript.",
+            "Any proof interfaces required to make the displayed theorem "
+            "chain complete inside this article.",
+        ],
+        "must_prove_in_this_paper": theorem_items,
+        "supporting_only": [
+            "Background material and external literature may be used only as "
+            "tools, references, or short context unless required by an "
+            "in-scope proof."
+        ],
+        "out_of_scope": [
+            "Results not needed for the article's central theorem chain; "
+            "record strong such results as split-paper candidates."
+        ],
+        "split_policy": (
+            "Do not weaken or delete the current article's central claims to "
+            "pass review. Externalize only genuinely independent results."
+        ),
+        "failure_modes_to_control": [
+            "naive truncation mistaken for an invariant",
+            "unclosed proof interfaces",
+            "scope creep into split-paper material",
+            "local constructions that fail to glue globally",
+            "finite-budget obstructions hidden as notation",
+        ],
+    }
+
+    md = textwrap.dedent(f"""\
+        # Scope Contract
+
+        This contract was bootstrapped deterministically in `--no-claude`
+        mode from the existing manuscript source.  It is a temporary but
+        stable contract for Codex+ChatGPT testing until Claude supervision
+        becomes available.
+
+        ## Central Research Question
+
+        {data["research_question"]}
+
+        ## Target Journal Bar
+
+        {data["target_journal_bar"]}
+
+        ## Main Project Bindings
+
+        {chr(10).join(f"- {x}" for x in data["main_project_bindings"])}
+
+        ## In Scope
+
+        {chr(10).join(f"- {x}" for x in data["in_scope"])}
+
+        ## Must Prove In This Paper
+
+        {chr(10).join(f"- {x}" for x in data["must_prove_in_this_paper"])}
+
+        ## Supporting Only
+
+        {chr(10).join(f"- {x}" for x in data["supporting_only"])}
+
+        ## Out Of Scope
+
+        {chr(10).join(f"- {x}" for x in data["out_of_scope"])}
+
+        ## Split Policy
+
+        {data["split_policy"]}
+
+        ## Failure Modes To Control
+
+        {chr(10).join(f"- {x}" for x in data["failure_modes_to_control"])}
+    """)
+    (paper_path / "scope_contract.md").write_text(md, encoding="utf-8")
+    _write_json_artifact(paper_path, "scope_contract.json", data)
+    return True, "bootstrapped from existing manuscript source"
+
+
 def _scope_contract_valid(paper_path: Path) -> tuple[bool, str]:
     md = paper_path / "scope_contract.md"
     if not md.exists():
@@ -3725,19 +3892,25 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             raw=claude_scope_out)
         save_state(state)
 
-        source = "Claude brief" if CLAUDE_ENABLED else "Codex fallback seed"
-        logger.info(f"{tag} A0 — Codex scope contract from {source}")
-        claude_scope_json = json.dumps(
-            claude_scope_data, indent=2, ensure_ascii=False)
-        prompt_a0 = build_scope_contract_prompt(
-            state.paper_dir, state.target_journal, state.main_paper_dir,
-            claude_scope_brief=claude_scope_json)
-        out = codex_exec(prompt_a0, work_dir=paper_path,
-                         timeout_seconds=2400, model=model, dry_run=dry_run)
         if dry_run:
             state.stage_a_scope_done = True
             scope_ok, scope_reason = True, "dry-run"
+        elif not CLAUDE_ENABLED:
+            logger.info(f"{tag} A0-B — bootstrap scope contract "
+                        "from existing manuscript (--no-claude)")
+            scope_ok, scope_reason = _bootstrap_scope_contract_from_paper(
+                paper_path, state.target_journal, state.main_paper_dir)
+            state.stage_a_scope_done = scope_ok
         else:
+            logger.info(f"{tag} A0 — Codex scope contract from Claude brief")
+            claude_scope_json = json.dumps(
+                claude_scope_data, indent=2, ensure_ascii=False)
+            prompt_a0 = build_scope_contract_prompt(
+                state.paper_dir, state.target_journal, state.main_paper_dir,
+                claude_scope_brief=claude_scope_json)
+            out = codex_exec(prompt_a0, work_dir=paper_path,
+                             timeout_seconds=2400, model=model,
+                             dry_run=dry_run)
             # If the model returned JSON but forgot the file, persist the JSON
             # artifact so the gate can inspect it.
             data = _read_json_artifact(paper_path, "scope_contract.json")
