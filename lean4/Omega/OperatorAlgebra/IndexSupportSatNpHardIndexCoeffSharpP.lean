@@ -8,7 +8,7 @@ variable {Formula Assignment : Type*} [Fintype Formula] [DecidableEq Formula]
   [Fintype Assignment] [DecidableEq Assignment]
 
 /-- Paper label: `cor:index-support-sat-np-hard-index-coeff-sharpP`. -/
-theorem paper_index_support_sat_np_hard_index_coeff_sharpp
+theorem index_support_sat_np_hard_index_coeff_sharpp_characterization
     (satEval : Formula → Assignment → Bool) :
     (∀ φ, verifierProjectorInSupport satEval φ ↔ ∃ a, satEval φ a = true) ∧
       (∀ φ, foldWatataniIndexElement (verifierFold satEval) φ = verifierWitnessCount satEval φ) := by
