@@ -823,6 +823,7 @@ import Omega.Zeta.XiTimePart65fExactScreenSpanningTreeThreshold
 import Omega.Zeta.XiDyadicZeroTracking
 import Omega.Zeta.XiTimePart63cWindow6SchurPacketLockedByCharpoly
 import Omega.Zeta.XiHorizonConservativeRealization
+import Omega.Zeta.XiToeplitzReflectionOverrunIndexBound
 import Omega.Zeta.XiVerblunskyFromLocalJet
 import Omega.Zeta.XiLocalJetDeterminesFiniteCMVAndToeplitzCertificate
 import Omega.Zeta.XiTimePart63cTrivialAlternatingSignReciprocalDuality
