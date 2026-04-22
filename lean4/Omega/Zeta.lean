@@ -371,6 +371,7 @@ import Omega.Zeta.KilloKernelSizeGeneralModulus
 import Omega.Zeta.KilloSmithLossSpectrum
 import Omega.Zeta.LayeredExternalizationAverageShannonBudget
 import Omega.Zeta.LayeredPrimesliceLocalAlphabetFibermax
+import Omega.Zeta.XiLayeredPrimesliceInventoryPrimeIndexFormula
 import Omega.Zeta.LambertWRecursiveTrajectoryStability
 import Omega.Zeta.LeftCEDyadicDensity
 import Omega.Zeta.LengthModqChebotarev
