@@ -630,7 +630,14 @@ def append_future_queue_item(item: dict[str, Any], *, dry_run: bool = False) -> 
     return True
 
 
-def append_future_queue_note(item_id: str, note: str, *, source_repo: str = "", dry_run: bool = False) -> bool:
+def append_future_queue_note(
+    item_id: str,
+    note: str,
+    *,
+    source_repo: str = "",
+    status: Optional[str] = None,
+    dry_run: bool = False,
+) -> bool:
     existing = {item["id"]: item for item in load_future_queue()}
     if item_id not in existing:
         raise RuntimeError(f"Unknown future queue id: {item_id}")
@@ -641,7 +648,7 @@ def append_future_queue_note(item_id: str, note: str, *, source_repo: str = "", 
         "updated_at": iso_now(),
         "source_repo": source_repo or existing[item_id].get("source_repo", ""),
         "target_repo": repo_base(source_repo or existing[item_id].get("source_repo", "")),
-        "status": existing[item_id].get("status", "queued"),
+        "status": status or existing[item_id].get("status", "queued"),
         "note": note,
         "source_records": [
             {
@@ -920,6 +927,189 @@ def mark_repo_replied(repo: str, url: str, *, dry_run: bool = False) -> RepoStat
         mark_processed(repo, dry_run=dry_run)
     logger.info("[%s] Marked replied: %s", repo, url)
     return state
+
+
+def find_future_item(item_id: str) -> dict[str, Any]:
+    matches = [item for item in load_future_queue() if str(item.get("id", "")).startswith(item_id)]
+    if not matches:
+        raise RuntimeError(f"Unknown future queue item: {item_id}")
+    if len(matches) > 1:
+        raise RuntimeError(f"Ambiguous future queue item prefix {item_id}: {[item.get('id') for item in matches]}")
+    return normalize_future_item_route(matches[0])
+
+
+def future_research_dir(item: dict[str, Any]) -> Path:
+    repo = str(item.get("source_repo") or item.get("target_repo") or "future")
+    return target_dir_for_repo(repo) / "future" / str(item.get("id", "unknown"))
+
+
+def build_future_research_prompt(item: dict[str, Any], research_dir: Path) -> str:
+    source_repo = str(item.get("source_repo") or item.get("target_repo") or "")
+    route = str(item.get("research_route", "hybrid"))
+    scope_context = build_scope_context(source_repo)
+    backflow = {}
+    state = load_state(source_repo)
+    if state:
+        backflow = backflow_placement_from_history(state) or {}
+
+    return textwrap.dedent(
+        f"""\
+        You are running a context-aware Codex future-research task from the
+        community outreach queue. This is not a public reply. Produce research
+        artifacts under the ignored runtime directory shown below. Do not edit
+        Lean files, do not run Lean, and do not write public outreach text.
+
+        {NO_LEAN_EXECUTION_POLICY}
+        {agent_context_header("context_aware", scope_context)}
+
+        FUTURE ITEM:
+        {json.dumps(item, indent=2, ensure_ascii=False)}
+
+        PAPER BACKFLOW CONTEXT:
+        {json.dumps(backflow, indent=2, ensure_ascii=False)}
+
+        WORK DIRECTORY FOR ANY NEW RUNTIME ARTIFACTS:
+        {_repo_relative(research_dir)}
+
+        REQUIRED ROUTE:
+        - research_route: {route}
+        - route_reason: {item.get("route_reason", "")}
+        - route_contract: {item.get("route_contract", "")}
+
+        EXECUTION RULES:
+        - Begin by declaring whether you accept the required route or are
+          overriding it. Route override is allowed only with a concrete reason.
+        - If route is computation, produce reproducible Python/certificate
+          artifacts and do not claim theorem-level closure without proof.
+        - If route is proof, produce theorem/proposition statements with complete
+          proof text. Computation may guide but cannot replace the proof.
+        - If route is hybrid, produce both reproducible artifacts and the proof
+          explaining why the artifact gives a lift, obstruction, or certificate.
+        - Save reusable scripts/data into `{_repo_relative(research_dir)}`.
+        - If the task is not resolved, state the precise mathematical blocker.
+        - Do not mention local hidden state as public evidence. Paper paths and
+          committed scripts may be cited as evidence.
+
+        Return JSON only:
+        {{
+          "future_item_id": "{item.get('id')}",
+          "research_route": "computation|proof|hybrid",
+          "route_override": false,
+          "route_reason": "why this route is correct",
+          "route_contract_satisfied": true,
+          "status": "resolved|partial|blocked",
+          "title": "short result title",
+          "summary": "technical summary",
+          "results": [
+            {{
+              "type": "theorem|proposition|certificate|obstruction|counterexample|computation",
+              "statement": "precise statement",
+              "proof_or_verification": "complete proof or reproducibility explanation",
+              "artifact": "path to script/json/tex if any, else null"
+            }}
+          ],
+          "artifacts": ["relative paths created or used"],
+          "backflow_candidate": true,
+          "next_review": "claude_context_aware|zero_init_review|not_ready",
+          "notes": "risks, blockers, or required review"
+        }}
+        """
+    )
+
+
+def write_future_research_summary(research_dir: Path, result: dict[str, Any], raw_output: str, prompt: str) -> tuple[Path, Path]:
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    research_dir.mkdir(parents=True, exist_ok=True)
+    prompt_path = research_dir / f"prompt_{stamp}.txt"
+    raw_path = research_dir / f"raw_{stamp}.txt"
+    json_path = research_dir / f"result_{stamp}.json"
+    md_path = research_dir / f"summary_{stamp}.md"
+    prompt_path.write_text(prompt, encoding="utf-8")
+    raw_path.write_text(raw_output, encoding="utf-8")
+    json_path.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    lines = [
+        f"# {result.get('title', 'Future research result')}",
+        "",
+        f"- status: {result.get('status', 'unknown')}",
+        f"- route: {result.get('research_route', 'unknown')}",
+        f"- route_contract_satisfied: {result.get('route_contract_satisfied', False)}",
+        f"- next_review: {result.get('next_review', 'not_ready')}",
+        "",
+        "## Summary",
+        str(result.get("summary", "")),
+        "",
+        "## Results",
+    ]
+    for entry in result.get("results", []) if isinstance(result.get("results"), list) else []:
+        lines.extend(
+            [
+                "",
+                f"### {entry.get('type', 'result')}",
+                str(entry.get("statement", "")),
+                "",
+                str(entry.get("proof_or_verification", "")),
+                "",
+                f"Artifact: {entry.get('artifact')}",
+            ]
+        )
+    if result.get("notes"):
+        lines.extend(["", "## Notes", str(result.get("notes", ""))])
+    md_path.write_text("\n".join(lines).strip() + "\n", encoding="utf-8")
+    return json_path, md_path
+
+
+def process_future_item(item_id: str, *, model: Optional[str], dry_run: bool) -> dict[str, Any]:
+    item = find_future_item(item_id)
+    research_dir = future_research_dir(item)
+    prompt = build_future_research_prompt(item, research_dir)
+    if dry_run:
+        print(prompt)
+        return {
+            "future_item_id": item.get("id"),
+            "research_route": item.get("research_route", "hybrid"),
+            "status": "dry-run",
+            "route_contract_satisfied": False,
+        }
+
+    raw_output = codex_exec(prompt, work_dir=REPO_ROOT, timeout=2400, model=model, dry_run=dry_run)
+    parsed = parse_json_from_output(raw_output)
+    if not isinstance(parsed, dict):
+        parsed = {
+            "future_item_id": item.get("id"),
+            "research_route": item.get("research_route", "hybrid"),
+            "route_override": False,
+            "route_reason": item.get("route_reason", ""),
+            "route_contract_satisfied": False,
+            "status": "blocked",
+            "title": item.get("title", "Future research task"),
+            "summary": "Codex returned no parseable JSON.",
+            "results": [],
+            "artifacts": [],
+            "backflow_candidate": False,
+            "next_review": "not_ready",
+            "notes": raw_output[:4000],
+        }
+
+    parsed.setdefault("future_item_id", item.get("id"))
+    parsed.setdefault("research_route", item.get("research_route", "hybrid"))
+    parsed.setdefault("status", "partial")
+    json_path, md_path = write_future_research_summary(research_dir, parsed, raw_output, prompt)
+    note = (
+        f"Codex future research run status={parsed.get('status')} "
+        f"route={parsed.get('research_route')} "
+        f"contract={parsed.get('route_contract_satisfied')} "
+        f"summary={_repo_relative(md_path)} result={_repo_relative(json_path)}"
+    )
+    append_future_queue_note(
+        str(item.get("id")),
+        note,
+        source_repo=str(item.get("source_repo", "")),
+        status=str(parsed.get("status", "queued")),
+        dry_run=False,
+    )
+    logger.info("Future research result: %s", _repo_relative(md_path))
+    return parsed
 
 
 def load_processed_repos() -> set[str]:
@@ -4628,6 +4818,7 @@ def parse_args() -> argparse.Namespace:
             Examples:
               python3 tools/community-outreach/outreach_pipeline.py --status
               python3 tools/community-outreach/outreach_pipeline.py --future-queue
+              python3 tools/community-outreach/outreach_pipeline.py --process-future 797e010c2138e6bb9b
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --register-future-scope
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --mark-replied https://github.com/owner/name/issues/38#issuecomment-...
               python3 tools/community-outreach/outreach_pipeline.py --check-artifacts
@@ -4645,9 +4836,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--todo", action="store_true", help="Claim and process next TODO item from TODO.md")
     parser.add_argument("--status", action="store_true", help="Show persisted state")
     parser.add_argument("--future-queue", action="store_true", help="Show deferred scope/deep-research queue")
+    parser.add_argument("--process-future", action="append", default=[], metavar="ID", help="Run a queued future-scope Codex research task by id or unique prefix")
     parser.add_argument("--register-future-scope", action="store_true", help="Extract deferred future tasks from the current draft state for --repo targets")
     parser.add_argument("--mark-replied", metavar="URL", help="Mark --repo target state as replied/submitted with an existing GitHub issue comment URL")
     parser.add_argument("--append-future-note", nargs=2, metavar=("ID", "NOTE"), help="Append a note/source update to a future queue item")
+    parser.add_argument("--set-future-status", nargs=3, metavar=("ID", "STATUS", "NOTE"), help="Append a future queue note and update item status")
     parser.add_argument("--check-artifacts", action="store_true", help="Fail if outreach runtime artifacts are tracked or staged for addition")
     parser.add_argument("--archive-stale-states", action="store_true", help="Move duplicate/error runtime states into an ignored local archive")
     parser.add_argument("--promote", nargs=2, action="append", metavar=("SRC", "DEST"), help="Copy a reviewed local artifact to an allowed final path and commit it")
@@ -4737,11 +4930,28 @@ def main() -> int:
     if args.future_queue:
         print_future_queue(args.repo or None)
         return 0
+    if args.process_future:
+        for future_id in args.process_future:
+            result = process_future_item(future_id, model=args.model, dry_run=args.dry_run)
+            print(
+                "Future research:",
+                result.get("future_item_id"),
+                result.get("status"),
+                result.get("research_route"),
+                "contract=" + str(result.get("route_contract_satisfied")),
+            )
+        return 0
     if args.append_future_note:
         item_id, note = args.append_future_note
         source_repo = args.repo[0] if args.repo else ""
         added = append_future_queue_note(item_id, note, source_repo=source_repo, dry_run=args.dry_run)
         print(f"Future queue note appended: {1 if added else 0}")
+        return 0
+    if args.set_future_status:
+        item_id, status, note = args.set_future_status
+        source_repo = args.repo[0] if args.repo else ""
+        added = append_future_queue_note(item_id, note, source_repo=source_repo, status=status, dry_run=args.dry_run)
+        print(f"Future queue status updated: {1 if added else 0}")
         return 0
     if args.check_artifacts:
         return 0 if check_artifact_hygiene() else 1
