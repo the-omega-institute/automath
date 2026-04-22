@@ -8,6 +8,7 @@ import Omega.DerivedConsequences
 import Omega.EA
 import Omega.Experiments
 import Omega.FoldResidualTime
+import Omega.FoldComputability
 import Omega.Folding
 import Omega.Frontier
 import Omega.GU
