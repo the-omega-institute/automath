@@ -148,6 +148,7 @@ import Omega.POM.EllipsoidIsoperimetricVariance
 import Omega.POM.EllipticTwoTimeObservabilityDichotomy
 import Omega.POM.EntropyLossFactorChainExpansion
 import Omega.POM.EscortMaxfiberTvBound
+import Omega.POM.EulerDefectOrthogonalPythagoras
 import Omega.POM.EulerDefectQuotientCoordinate
 import Omega.POM.ExtendedPrimitives
 import Omega.POM.FenceIntervalClosure
