@@ -156,6 +156,7 @@ import Omega.GU.TerminalFoldbin6StrongLumpabilityFails
 import Omega.GU.TerminalFoldbin6TailCubeSection
 import Omega.GU.TerminalFoldbin6ThreeOffsetRigidity
 import Omega.GU.TerminalFoldbin6TwoPointFiberDirectionSpectrum
+import Omega.GU.TerminalFoldbin7Histogram128To34
 import Omega.GU.TerminalFoldbin8Histogram256To55
 import Omega.GU.TerminalFoldbinFiniteSaturation
 import Omega.GU.TerminalFoldbinSaturationDiophantine
