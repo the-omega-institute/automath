@@ -99,6 +99,7 @@ import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.ConnectedProfiniteOrthogonality
 import Omega.Conclusion.LocalizedDualNoProfiniteHom
 import Omega.Conclusion.ContinuousLegendreEulerFenchelContact
+import Omega.Conclusion.IntegerAnchorLocalConvexInterpolationSqueeze
 import Omega.Conclusion.ContinuousPressureFrontDominatesDiscreteCertificate
 import Omega.Conclusion.CRTLinearBudgetImpossibility
 import Omega.Conclusion.CriticalKernelPdetUniformMinimizer
