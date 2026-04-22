@@ -1,3 +1,5 @@
+import Mathlib.Data.Int.ModEq
+import Mathlib.NumberTheory.LegendreSymbol.QuadraticReciprocity
 import Mathlib.Tactic
 
 /-!
@@ -8,6 +10,8 @@ Pisano period verification, and strong congruence rigidity.
 -/
 
 namespace Omega.GU
+
+open scoped NumberTheorySymbols
 
 /-- Fibonacci prime explicit sqrt(-1): for known Fibonacci primes F_n,
     F_{n+1}² ≡ -1 (mod F_n), verified at n=5,7,11,13.
@@ -36,6 +40,75 @@ theorem paper_fibprime_congruence_p_mod_n :
     Nat.fib 13 % 13 = 12 ∧
     Nat.fib 17 % 17 = 16 := by
   native_decide
+
+set_option maxHeartbeats 400000 in
+/-- If `p = F_n` is prime, `r` is the rank of apparition of `p`, and the classical
+Lucas/Wall divisibility `r ∣ p - (5 / p)` holds, then `r = n`; hence
+`p ≡ (5 / p) [ZMOD n]`.
+    prop:gut-fibprime-congruence-p-mod-n -/
+theorem paper_gut_fibprime_congruence_p_mod_n
+    {n r p : ℕ} [hp : Fact p.Prime]
+    (hn : Nat.Prime n) (hn5 : 5 < n) (hpfib : p = Nat.fib n)
+    (hr_pos : 0 < r) (hpr : p ∣ Nat.fib r)
+    (hr_min : ∀ k, 0 < k → k < r → ¬ p ∣ Nat.fib k)
+    (hWall : (r : ℤ) ∣ (p : ℤ) - legendreSym p 5) :
+    (p : ℤ) ≡ legendreSym p 5 [ZMOD n] := by
+  have hp' : Nat.Prime p := Fact.out
+  have hn_pos : 0 < n := hn.pos
+  have hn_two : 2 ≤ n := by omega
+  have hFibDiv : Nat.fib n ∣ Nat.fib r := by
+    simpa [hpfib] using hpr
+  have hFibGcd : Nat.fib (Nat.gcd n r) = Nat.fib n := by
+    calc
+      Nat.fib (Nat.gcd n r) = Nat.gcd (Nat.fib n) (Nat.fib r) := Nat.fib_gcd n r
+      _ = Nat.fib n := Nat.gcd_eq_left_iff_dvd.mpr hFibDiv
+  have hgcd_two : 2 ≤ Nat.gcd n r := by
+    have hFibPos : 0 < Nat.fib n := Nat.fib_pos.mpr hn_pos
+    have hFibNeOne : Nat.fib n ≠ 1 := by
+      have hFibPrime : Nat.Prime (Nat.fib n) := by simpa [hpfib] using hp'
+      exact Nat.ne_of_gt hFibPrime.one_lt
+    by_contra h
+    have hsmall : Nat.gcd n r = 0 ∨ Nat.gcd n r = 1 := by omega
+    cases hsmall with
+    | inl h0 =>
+        rw [h0] at hFibGcd
+        simp at hFibGcd
+        exact (Nat.ne_of_gt hFibPos) hFibGcd.symm
+    | inr h1 =>
+        rw [h1] at hFibGcd
+        simp at hFibGcd
+        exact hFibNeOne hFibGcd.symm
+  have hgcd_eq_n : Nat.gcd n r = n := by
+    have hgcd_le_n : Nat.gcd n r ≤ n := Nat.le_of_dvd hn_pos (Nat.gcd_dvd_left n r)
+    by_contra hne
+    have hgcd_lt_n : Nat.gcd n r < n := lt_of_le_of_ne hgcd_le_n hne
+    have hFibLt : Nat.fib (Nat.gcd n r) < Nat.fib n := (Nat.fib_lt_fib hgcd_two).2 hgcd_lt_n
+    exact hFibLt.ne hFibGcd
+  have hnr : n ∣ r := Nat.gcd_eq_left_iff_dvd.mp hgcd_eq_n
+  have hr_le_n : r ≤ n := by
+    by_contra h
+    have hlt : n < r := Nat.lt_of_not_ge h
+    have hpn : p ∣ Nat.fib n := by simpa [hpfib]
+    exact (hr_min n hn_pos hlt hpn).elim
+  have hr_eq : r = n := by
+    rcases hnr with ⟨k, hk⟩
+    have hk_pos : 0 < k := by
+      by_contra hk_nonpos
+      have hk_zero : k = 0 := by omega
+      rw [hk, hk_zero] at hr_pos
+      simp at hr_pos
+    have hk_eq_one : k = 1 := by
+      by_contra hk_ne_one
+      have hk_ge_two : 2 ≤ k := by omega
+      have hmul_le : n * 2 ≤ n * k := Nat.mul_le_mul_left n hk_ge_two
+      have hmul_lt : n < n * 2 := by omega
+      have : n < n * k := lt_of_lt_of_le hmul_lt hmul_le
+      rw [← hk] at this
+      exact not_lt_of_ge hr_le_n this
+    simpa [hk_eq_one] using hk
+  have hWall' : (n : ℤ) ∣ (p : ℤ) - legendreSym p 5 := by
+    simpa [hr_eq] using hWall
+  exact (Int.modEq_iff_dvd.mpr hWall').symm
 
 /-- Paper: Pisano-period and congruence rigidity package.
     cor:gut-fibprime-pisano-4n -/
