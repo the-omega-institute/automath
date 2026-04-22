@@ -402,7 +402,7 @@ def detect_target_journal(paper_dir: str) -> str:
     return ""
 MAX_STAGE_A_ROUNDS = 8
 MAX_STAGE_B_ROUNDS = 99  # No practical limit — must pass Oracle gate
-MAX_STAGE_C_ROUNDS = 4
+MAX_STAGE_C_ROUNDS = 99  # No practical limit — must pass Oracle+Claude gate
 DEFAULT_TARGET_JOURNAL = "Advances in Mathematics"
 CLAUDE_ENABLED = True
 PAUSED_ERROR_PREFIX = "PAUSED:"
@@ -2745,7 +2745,23 @@ def build_codex_fix_from_issues_prompt(paper_dir: str, issues_text: str,
 
 
 def build_claude_independent_review_prompt(paper_dir: str,
-                                            target_journal: str) -> str:
+                                            target_journal: str,
+                                            stage_c_memory: str = "") -> str:
+    memory_block = ""
+    if stage_c_memory:
+        memory_block = textwrap.dedent(f"""\
+
+        ## Stage C Memory
+
+        Use this memory to track whether previous final-review issues were
+        actually resolved and whether new regressions were introduced.  You are
+        still reviewing the current manuscript directly; do not rubber-stamp a
+        previous verdict.
+
+        ```json
+        {stage_c_memory}
+        ```
+        """)
     return textwrap.dedent(f"""\
         Systematic pre-submission review for "{target_journal}".
         Paper directory: {paper_dir}
@@ -2768,6 +2784,7 @@ def build_claude_independent_review_prompt(paper_dir: str,
 
         You may mention proof gaps if you see them, but do not spend the
         review duplicating Codex's theorem-level audit.
+        {memory_block}
 
         ## Output Format (MUST follow exactly)
         ```json
@@ -2795,15 +2812,32 @@ def build_claude_independent_review_prompt(paper_dir: str,
 
 def build_codex_fix_from_claude_prompt(paper_dir: str,
                                         issues: list[str],
-                                        round_num: int) -> str:
+                                        round_num: int,
+                                        stage_c_memory: str = "") -> str:
     issues_text = "\n".join(f"  {i+1}. {iss}" for i, iss in enumerate(issues))
+    memory_block = ""
+    if stage_c_memory:
+        memory_block = textwrap.dedent(f"""\
+
+        ## Stage C Memory
+
+        The following memory records prior final-review verdicts, issues, and
+        fixes.  Use it to avoid repeating superficial patches.  If an issue
+        reappears, treat the previous fix as insufficient and make a deeper
+        structural correction.
+
+        ```json
+        {stage_c_memory}
+        ```
+        """)
     return textwrap.dedent(f"""\
-        Fix issues found by independent Claude review.
+        Fix issues found by the Stage C final gate.
         Paper: {paper_dir}
         Fix round {round_num}.
 
         ## Issues
         {issues_text}
+        {memory_block}
 
         ## Instructions
         1. Read the relevant .tex files
@@ -3597,6 +3631,37 @@ def _format_research_ledger_context(paper_dir: str, max_items: int = 8) -> str:
         """)
     except Exception:
         return ""
+
+
+def _format_stage_c_memory(state: PaperState,
+                           current_oracle_verdict: str = "",
+                           current_oracle_issues: Optional[list] = None,
+                           max_events: int = 18) -> str:
+    """Compact final-gate memory for Claude supervision and Codex fixes."""
+    c_events = [
+        {
+            "round": h.get("round_num"),
+            "action": h.get("action"),
+            "verdict": h.get("verdict", ""),
+            "committed": h.get("committed", False),
+            "commit_hash": h.get("commit_hash", ""),
+            "detail": str(h.get("detail", ""))[:2500],
+        }
+        for h in state.history
+        if isinstance(h, dict) and h.get("stage") == "C"
+    ][-max_events:]
+    payload = {
+        "paper_name": state.paper_name,
+        "target_journal": state.target_journal,
+        "stage_c_rounds_completed": state.stage_c_rounds,
+        "stage_c_verdict_history": state.stage_c_verdicts[-20:],
+        "current_oracle_verdict": current_oracle_verdict,
+        "current_oracle_issues": current_oracle_issues or [],
+        "prior_stage_b_verdicts": state.stage_b_verdicts[-10:],
+        "prior_oracle_issues": state.stage_b_all_issues[-30:],
+        "recent_stage_c_events": c_events,
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2)[:12000]
 
 
 def _ensure_research_directive(paper_path: Path, target_journal: str,
@@ -5147,7 +5212,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# STAGE C: Claude Independent Review (approval-gated loop)
+# STAGE C: Oracle + Claude Final Review (memory-bearing approval loop)
 # ═══════════════════════════════════════════════════════════════════════════
 
 def run_stage_c(state: PaperState, *, dry_run: bool = False,
@@ -5233,6 +5298,9 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                         verdict=oracle_verdict,
                         detail=oracle_response[:12000])
         save_state(state)
+        stage_c_memory = _format_stage_c_memory(
+            state, current_oracle_verdict=oracle_verdict,
+            current_oracle_issues=oracle_issues)
 
         issues: list = []
         if not CLAUDE_ENABLED and not dry_run:
@@ -5258,10 +5326,11 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
             # ── C2: Claude independent review ────────────────────
             logger.info(f"{tag} Round {rnd}: C2 — Claude independent review")
             review_prompt = build_claude_independent_review_prompt(
-                state.paper_dir, state.target_journal)
+                state.paper_dir, state.target_journal,
+                stage_c_memory=stage_c_memory)
             out_c1 = claude_exec(review_prompt, work_dir=paper_path,
                                  dry_run=dry_run,
-                                 context_mode="fresh_review",
+                                 context_mode="contextual_supervision",
                                  agent_role="stage_c_claude_final")
             review_data = parse_json_from_output(out_c1) if not dry_run else {
                 "verdict": "revise" if rnd < 2 else "submit",
@@ -5270,7 +5339,7 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
             _record_claude_supervision(
                 state, f"stage_c_presubmission_review_R{rnd}",
                 review_data, raw=out_c1,
-                context_mode="fresh_review",
+                context_mode="contextual_supervision",
                 agent_role="stage_c_claude_final")
             claude_verdict = str(review_data.get("verdict", "revise")).lower()
             issues = list(_coerce_items(review_data.get("issues", [])))
@@ -5329,7 +5398,8 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 "Final gate did not pass. Reconcile Oracle and Claude "
                 "verdicts, improve the manuscript conservatively, and compile.")
         fix_prompt = build_codex_fix_from_claude_prompt(
-            state.paper_dir, combined_issues, rnd)
+            state.paper_dir, combined_issues, rnd,
+            stage_c_memory=stage_c_memory)
         codex_exec(fix_prompt, work_dir=paper_path,
                    timeout_seconds=1800, model=model, dry_run=dry_run,
                    context_mode="contextual_execution",
@@ -5415,7 +5485,7 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
     # ── D1.5: Codex explicit placement analysis (two-step backflow) ──
     # Borrowed from outreach pipeline: separate "where" from "what" for
     # more precise backflow. Codex first proposes exact file/section
-    # placement, then an independent review pass checks the plan before apply.
+    # placement, then Claude reviews the plan before applying.
     logger.info(f"{tag} D1.5 — Codex placement analysis")
     placement_prompt = build_backflow_placement_prompt(
         state.paper_dir, state.main_paper_dir, items)
@@ -5437,10 +5507,17 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
                     detail=f"{len(placements)} placements proposed")
     save_state(state)
 
-    # ── D2: independent admissibility + placement review ─────────
-    reviewer_name = "Claude" if (CLAUDE_ENABLED or dry_run) else "Codex"
-    logger.info(f"{tag} D2 — {reviewer_name} main-paper admissibility audit")
-    backflow_review_prompt = textwrap.dedent(f"""\
+    if not CLAUDE_ENABLED and not dry_run:
+        state.error = (f"{PAUSED_ERROR_PREFIX} Stage D waiting for Claude "
+                       "admissibility audit after Codex placement analysis")
+        logger.info(f"{tag} {state.error}")
+        state.log_event("D", "paused", detail=state.error)
+        save_state(state)
+        return False
+
+    # ── D2: Claude reviews admissibility + placement plan ─────────
+    logger.info(f"{tag} D2 — Claude main-paper admissibility audit")
+    claude_bf_prompt = textwrap.dedent(f"""\
         Review this layered backflow proposal and its placement plan.
         Sub-paper: {state.paper_dir}
         Main paper: {state.main_paper_dir}
@@ -5481,36 +5558,22 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
         If any placement is wrong, include the corrected placement in
         revised_placements (same format as the placements input).
     """)
-    if CLAUDE_ENABLED or dry_run:
-        out_d2 = claude_exec(
-            backflow_review_prompt, work_dir=REPO_ROOT, dry_run=dry_run,
-            context_mode="contextual_supervision",
-            agent_role="stage_d_backflow_admissibility")
-        approval = parse_json_from_output(out_d2) if not dry_run else {
-            "approved": True, "approved_items": list(range(len(items))),
-        }
-        _record_claude_supervision(
-            state, "stage_d_backflow_admissibility", approval, raw=out_d2,
-            context_mode="contextual_supervision",
-            agent_role="stage_d_backflow_admissibility")
-        event_name = "claude_review_backflow"
-    else:
-        out_d2 = codex_exec(
-            backflow_review_prompt, work_dir=REPO_ROOT,
-            timeout_seconds=900, model=model, dry_run=dry_run,
-            context_mode="contextual_supervision",
-            agent_role="stage_d_backflow_admissibility_fallback")
-        approval = parse_json_from_output(out_d2) or {
-            "approved": False,
-            "approved_items": [],
-            "notes": "Codex fallback returned no valid JSON.",
-        }
-        event_name = "codex_review_backflow_admissibility"
-    state.log_event("D", event_name,
+    out_d2 = claude_exec(claude_bf_prompt, work_dir=REPO_ROOT,
+                         dry_run=dry_run,
+                         context_mode="contextual_supervision",
+                         agent_role="stage_d_backflow_admissibility")
+    approval = parse_json_from_output(out_d2) if not dry_run else {
+        "approved": True, "approved_items": list(range(len(items))),
+    }
+    _record_claude_supervision(
+        state, "stage_d_backflow_admissibility", approval, raw=out_d2,
+        context_mode="contextual_supervision",
+        agent_role="stage_d_backflow_admissibility")
+    state.log_event("D", "claude_review_backflow",
                     detail=json.dumps(approval, ensure_ascii=False)[:10000])
     save_state(state)
 
-    # Apply any revised placements from the admissibility reviewer.
+    # Apply any revised placements from Claude
     revised = approval.get("revised_placements", [])
     if revised:
         # Merge revisions into placements by item_index
@@ -5529,8 +5592,7 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
                 idx = i + 1
             if idx in rev_map:
                 placements[i] = rev_map[idx]
-        logger.info(f"{tag} D2: {reviewer_name} revised "
-                    f"{len(revised)} placements")
+        logger.info(f"{tag} D2: Claude revised {len(revised)} placements")
 
     raw_approved = approval.get("approved_items", None)
     if raw_approved is None and approval.get("approved", False):
@@ -5550,7 +5612,7 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
         approved_numbers = [i - 1 for i in approved_numbers]
 
     if not approved_numbers:
-        logger.info(f"{tag} Backflow rejected by {reviewer_name} — skipping")
+        logger.info(f"{tag} Backflow rejected by Claude — skipping")
         state.stage_d_passed = True
         save_state(state)
         return True
@@ -5636,14 +5698,13 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
     h = git_commit(main_path,
                    f"stage-D: verify main paper after backflow",
                    tag=tag)
-    state.log_event("D", "verify_main",
+    state.log_event("D", "claude_verify_main",
                     committed=bool(h), commit_hash=h,
                     detail=f"compiled={compiled_d4}")
     save_state(state)
 
-    # ── D5: independent quality review of backflow changes ─────
-    quality_reviewer = "Claude" if (CLAUDE_ENABLED or dry_run) else "Codex"
-    logger.info(f"{tag} D5 — {quality_reviewer} review backflow quality")
+    # ── D5: Claude quality review of backflow changes ──────────
+    logger.info(f"{tag} D5 — Claude review backflow quality")
     d5_prompt = textwrap.dedent(f"""\
         Independent quality review of backflow changes to the main paper.
         Main paper: {state.main_paper_dir}
@@ -5670,33 +5731,20 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
         quality_verdict = "needs_fixes" means list specific issues to address.
         Do NOT edit files — only output the JSON review.
     """)
-    if CLAUDE_ENABLED or dry_run:
-        out_d5 = claude_exec(
-            d5_prompt, work_dir=main_path, dry_run=dry_run,
-            context_mode="contextual_supervision",
-            agent_role="stage_d_backflow_quality")
-        d5_data = parse_json_from_output(out_d5) if not dry_run else {
-            "quality_verdict": "good", "issues": [], "notes": "dry run",
-        }
-        _record_claude_supervision(
-            state, "stage_d_backflow_quality", d5_data, raw=out_d5,
-            context_mode="contextual_supervision",
-            agent_role="stage_d_backflow_quality")
-        event_name = "claude_review_backflow_quality"
-    else:
-        out_d5 = codex_exec(
-            d5_prompt, work_dir=main_path, timeout_seconds=900, model=model,
-            dry_run=dry_run, context_mode="contextual_supervision",
-            agent_role="stage_d_backflow_quality_fallback")
-        d5_data = parse_json_from_output(out_d5) or {
-            "quality_verdict": "needs_fixes",
-            "issues": ["Codex fallback returned no valid JSON review."],
-            "notes": "",
-        }
-        event_name = "codex_review_backflow_quality"
+    out_d5 = claude_exec(
+        d5_prompt, work_dir=main_path, dry_run=dry_run,
+        context_mode="contextual_supervision",
+        agent_role="stage_d_backflow_quality")
+    d5_data = parse_json_from_output(out_d5) if not dry_run else {
+        "quality_verdict": "good", "issues": [], "notes": "dry run",
+    }
+    _record_claude_supervision(
+        state, "stage_d_backflow_quality", d5_data, raw=out_d5,
+        context_mode="contextual_supervision",
+        agent_role="stage_d_backflow_quality")
     d5_verdict = d5_data.get("quality_verdict", "good")
     d5_issues = d5_data.get("issues", [])
-    state.log_event("D", event_name,
+    state.log_event("D", "claude_review_backflow_quality",
                     verdict=d5_verdict,
                     detail=json.dumps(d5_data, ensure_ascii=False)[:10000])
     save_state(state)
@@ -5705,8 +5753,7 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
         logger.info(f"{tag} D5 found {len(d5_issues)} issues — Codex fixing")
         issues_text = "\n".join(f"  {i+1}. {iss}" for i, iss in enumerate(d5_issues))
         fix_prompt = textwrap.dedent(f"""\
-            Fix issues found by {quality_reviewer}'s quality review of
-            backflow changes.
+            Fix issues found by Claude's quality review of backflow changes.
             Main paper: {state.main_paper_dir}
 
             ## Issues
@@ -6641,8 +6688,8 @@ def main() -> int:
               F  Journal fit check (fit >= 6 to keep target; else auto-reroute)
               A  Codex quality review + journal style (score >= 8 to pass)
               B  Oracle (ChatGPT) review (accept/minor revision to pass)
-              C  Oracle final loop + Claude independent review (submit to pass)
-              D  Backflow check to main paper
+              C  Oracle final loop + Claude memory-bearing review (submit to pass)
+              D  Backflow check to main paper, Claude-gated before apply
 
             Examples:
               # New paper from topic:
@@ -6684,8 +6731,8 @@ def main() -> int:
     parser.add_argument("--no-claude", action="store_true",
                         help=("Disable Claude gates for Codex+ChatGPT smoke "
                               "testing. Stage C keeps fixing Oracle issues "
-                              "and pauses only when final Claude approval is "
-                              "the remaining gate."))
+                              "and pauses when final Claude approval or "
+                              "Stage D backflow approval is required."))
     parser.add_argument("--model", type=str, default=None)
     parser.add_argument("--oracle-timeout", type=int, default=7200)
     parser.add_argument("--status", action="store_true")
