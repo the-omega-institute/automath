@@ -8,7 +8,7 @@ The binary output is attached to the transition across one sampling interval, an
 This protocol is phenomenological in the same sense as dead-time counter models \cite{Muller1973,CantorTeich1975}: it captures the essential refractory structure of any counting device driven by the UDW excitation rate without deriving the measurement back-action from algebraic QFT first principles \cite{Fewster2020,PoloGomezEtAl2022}. The model is explicit: all subsequent grammar, hazard, covariance, and spectral-density results are derived from these kernels.
 
 \begin{assumption}[Counting-limit readout]\label{ass:counting-readout-main}
-The stochastic record analysed below is the leading weak-coupling, stationary counting limit of the detector. Excitation attempts in disjoint proper-time intervals are independent Poisson increments with intensity $\Gamma_+$ supplied by the UDW response, the recovery clock is independent of those attempts, and the only hidden counter state is $R$ or $D$. All record thresholds and shell equations are conditional on this readout layer.
+The stochastic record analysed below is the leading weak-coupling, stationary counting limit of the detector. Excitation attempts in disjoint proper-time intervals are independent Poisson increments with intensity $\Gamma_+$ supplied by the UDW response, the recovery clock is independent of those attempts, at most one visible click is recorded in a sampling interval, and the only hidden counter state is $R$ or $D$. All record thresholds and shell equations are conditional on this readout layer; no theorem below derives the Poisson attempt process from a general repeated-measurement theory for UDW detectors.
 \end{assumption}
 
 \Cref{ass:counting-readout-main} is the bridge between the quantum response calculation and the classical binary record. It is deliberately narrower than a full measurement theory for QFT detectors: the quantum field fixes the attempt rate, while the counter model fixes how attempts are converted into observed clicks.
@@ -17,7 +17,22 @@ All record-level conclusions below are conditional on this bridge. In particular
 
 \subsection{Three notions of detector thermality and the Parry benchmark}\label{subsec:thermality-notions}
 
-Three distinct notions of thermality appear in UDW detector settings. \emph{Detailed-balance thermality}: the excitation and de-excitation rates satisfy $\Gamma_+/\Gamma_-=e^{-\beta\Omega}$, equivalently $\Gamma_-/\Gamma_+=e^{\beta\Omega}$, the standard criterion \cite{Unruh1976,BirDav1982}---a condition on the rate ratio alone. \emph{Gibbs thermalization}: the reduced detector state converges to $e^{-\beta H_{\mathrm{det}}}/Z$ \cite{GarayMartinMartinezRamon2016,JuarezAubryMoustos2022,PercheTherm2022}---a condition on the asymptotic state. \emph{Parry-law (maximum-entropy grammar) thermality}: the stationary click record realizes the Parry measure on the golden-mean shift, the unique measure of maximal entropy for the dead-time grammar $11\notin\mathrm{supp}\,\mu$ \cite{Parry1964,LindMarcus1995}---a condition on the full word distribution. The third notion is what this paper studies. Neither the first nor the second implies the third or vice versa. We retain the name ``exact symbolic thermality'' because the Parry measure is the entropy-maximizing benchmark for its constraint class, just as the Gibbs measure is for the energy constraint; the physical content is that the detector click grammar is as disordered as the dead-time constraint permits. Readers may substitute ``Parry-law benchmark'' throughout without loss of meaning.
+\begin{definition}[Detector thermality notions]\label{def:thermality-notions-main}
+Three distinct notions of thermality are used in this paper.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
+\item \emph{Detailed-balance thermality} means
+\[
+\frac{\Gamma_+}{\Gamma_-}=e^{-\beta\Omega},
+\qquad\text{equivalently}\qquad
+\frac{\Gamma_-}{\Gamma_+}=e^{\beta\Omega},
+\]
+the standard rate-ratio criterion \cite{Unruh1976,BirDav1982}.
+\item \emph{Gibbs thermalization} means convergence of the reduced detector state to $e^{-\beta H_{\mathrm{det}}}/Z$ \cite{GarayMartinMartinezRamon2016,JuarezAubryMoustos2022,PercheTherm2022}.
+\item \emph{Parry-law thermality}, also called exact symbolic thermality in this paper, means that the stationary click record realizes the Parry measure on the golden-mean shift, the unique measure of maximal entropy for the dead-time grammar $11\notin\operatorname{supp}\mu$ \cite{Parry1964,LindMarcus1995}.
+\end{enumerate}
+\end{definition}
+
+The third notion is what this paper studies. Neither detailed balance nor Gibbs thermalization implies the Parry-law record benchmark, and the converse implication is not asserted. We retain the name ``exact symbolic thermality'' because the Parry measure is the entropy-maximizing benchmark for its constraint class, just as the Gibbs measure is for the energy constraint; the physical content is that the detector click grammar is as disordered as the dead-time constraint permits. Readers may substitute ``Parry-law benchmark'' throughout without loss of meaning.
 
 \subsection{Ideal one-step dead time and the exact-clock threshold}
 
@@ -693,18 +708,35 @@ Fix positive finite-recovery parameters and consider the stationary record gener
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
 \item The sign of $\gamma_2=\operatorname{Cov}(A_0,A_2)$ is the opposite of the sign of $\lambda$, and $\gamma_2=0$ if and only if $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
 \item If a spatial scan changes the local excitation rate transversely through $\Gamma_c$ while the readout parameters are fixed, then the zero of $\gamma_2$ locates the memory-transition shell to first order.
-\item For fixed local parameters,
+\item Let
+\[
+\mu_2=\EE(A_0A_2),\qquad
+Z_j=(A_jA_{j+2}-\mu_2)-2\rho(A_j-\rho),
+\]
+and define the regenerative long-run variance
+\begin{equation}\label{eq:sigma2-main}
+\sigma_2^2=
+\sum_{\ell\in\mathbb Z}\operatorname{Cov}(Z_0,Z_\ell)
+=\lim_{N\to\infty}
+N\,\Var\!\left(\frac1N\sum_{j=0}^{N-1}Z_j\right),
+\end{equation}
+where the series is absolutely convergent. Then
 \[
 \sqrt N\,(\widehat\gamma_2-\gamma_2)
 \Rightarrow
-\mathcal N(0,\sigma_2^2)
+\mathcal N(0,\sigma_2^2).
 \]
-for some finite regenerative asymptotic variance $\sigma_2^2$. Thus the statistical scale for resolving a transverse crossing is $N^{-1/2}$ once the detector design is fixed.
+If $\widehat\sigma_2^2$ is any consistent regenerative batch-means or cycle-block estimate of \eqref{eq:sigma2-main}, an asymptotic two-sided $(1-\alpha)$ confidence interval for $\gamma_2$ is
+\[
+\widehat\gamma_2\pm
+z_{1-\alpha/2}\frac{\widehat\sigma_2}{\sqrt N}.
+\]
+Thus the statistical scale for resolving a transverse crossing is $N^{-1/2}$ once the detector design is fixed; a scan-coordinate interval follows by the delta method after dividing by the estimated nonzero slope of $s\mapsto\gamma_2(s)$ at the crossing.
 \end{enumerate}
 \end{proposition}
 
 \begin{proof}
-The click times are regeneration times by Lemma~\ref{lem:renewal-gap-main}, and the zero-run law has exponential tails because it is a finite linear combination of $p^k$ and $c^k$ with $0<p,c<1$; the equal-rate limit has the same exponential tail with a polynomial prefactor. Standard renewal and ergodic theorems therefore give almost-sure convergence of fixed-gap empirical hazards, fixed-lag covariance estimators, and fixed-block counting statistics \cite{Asmussen2003}.
+The click times are regeneration times by Lemma~\ref{lem:renewal-gap-main}, and the zero-run law has exponential tails because it is a finite linear combination of $p^k$ and $c^k$ with $0<p,c<1$; the equal-rate limit has the same exponential tail with a polynomial prefactor. Standard renewal-reward strong laws therefore give almost-sure convergence of fixed-gap empirical hazards, fixed-lag covariance estimators, and fixed-block counting statistics \cite{Asmussen2003}. For $\widehat h_k$, the completed gaps are i.i.d.; since $\PP(G\ge k)>0$, the denominator count diverges almost surely.
 
 For the sign statement, Proposition~\ref{prop:recovery-main} gives
 \[
@@ -712,7 +744,26 @@ For the sign statement, Proposition~\ref{prop:recovery-main} gives
 \]
 Lemma~\ref{lem:stationary-main} gives $\rho>0$ and $a-\rho<0$, so $\gamma_2$ has the opposite sign from $\lambda$. Lemma~\ref{lem:critical-rate-main} says that $\lambda$ has the unique zero $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ and changes sign there, proving (i). If a scan parameter $s$ gives $\Gamma_+(s_*)=\Gamma_c$ and $d\Gamma_+/ds|_{s_*}\neq0$, then the preceding sign change is transverse in the scan coordinate; hence the zero of $\gamma_2$ identifies the threshold location to first order, proving (ii).
 
-Finally, the geometrically decaying regeneration tail gives the regenerative central-limit theorem for any fixed finite-window observable, including the lag-two covariance estimator after replacing the unknown mean by the consistent empirical mean. This yields the displayed normal limit with finite variance and the corresponding $N^{-1/2}$ resolution scale.
+Finally, apply the regenerative central-limit theorem for regenerative processes with finite second cycle moment \cite{Asmussen2003} to the two finite-window additive observables
+\[
+A_j,\qquad A_jA_{j+2}.
+\]
+The exponential cycle tail gives the required moment condition and also implies absolute convergence of the covariance series in \eqref{eq:sigma2-main}. Boundary terms from the last two samples are $o(N^{-1/2})$. Thus
+\[
+\sqrt N\left(
+\frac1N\sum_{j=0}^{N-1}A_j-\rho,\ 
+\frac1{N-2}\sum_{j=0}^{N-3}A_jA_{j+2}-\mu_2
+\right)
+\]
+has a centered Gaussian limit with finite covariance matrix. The map
+$(u,v)\mapsto v-u^2$ is differentiable at $(\rho,\mu_2)$ with derivative
+$(-2\rho,1)$, so the delta method gives the displayed CLT for
+$\widehat\gamma_2$. Written as a scalar long-run variance, the resulting
+variance is exactly \eqref{eq:sigma2-main}. Consistency of standard
+regenerative batch-means or cycle-block variance estimates under the same
+moment condition gives the stated normal confidence interval; the scan
+coordinate statement is the one-dimensional delta method under the transverse
+slope assumption.
 \end{proof}
 
 For the memory shell, the primary local diagnostic is the sign of $\widehat\gamma_2$. In the model,
