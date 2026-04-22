@@ -266,6 +266,7 @@ import Omega.Folding.FoldBinM6FiberHist
 import Omega.Folding.Foldbin6NoU1InAut0GroupoidAlgebra
 import Omega.Folding.FoldbinGroupoidAut0NoUniversalLieLimit
 import Omega.Folding.FoldbinGroupoidAut0PuProduct
+import Omega.Folding.FoldbinGroupoidAut0Pi1TorsionExponent
 import Omega.Folding.FoldbinGroupoidAut0ThirdCohomologyRank
 import Omega.Folding.FoldBinMaxFiberExponent
 import Omega.Folding.FoldBinMinsectorComplementMaxfiber
