@@ -81,6 +81,7 @@ import Omega.Conclusion.CdimFiniteQuotientGrowth
 import Omega.Conclusion.CdimRankShortExactAdditivity
 import Omega.Conclusion.CdimKernelRegisterLowerBound
 import Omega.Conclusion.CircleDimensionPrimeLedgerStrictOrthogonality
+import Omega.Conclusion.Chi2RecoversFullPowerDivergenceFamily
 import Omega.Conclusion.CoarseGrainingConsumesVisibleWalshEnergy
 import Omega.Conclusion.VisibleWalshLowOrderBarcode
 import Omega.Conclusion.CoarsegrainingEnergyInfimum
@@ -187,6 +188,7 @@ import Omega.Conclusion.FiberRamanujanShadowCapacityReconstruction
 import Omega.Conclusion.FixedResolutionAxialScreenCorankAreaLaw
 import Omega.Conclusion.WatataniScreenCompletionFunctorIndependence
 import Omega.Conclusion.Window6BoundaryTripleSpinorRigidity
+import Omega.Conclusion.Window6BoundaryCliffordIdealExactSplit
 import Omega.Conclusion.Window6SMLockingTripleConsistency
 import Omega.Conclusion.Window6ConductorTwoQuarterturnSelection
 import Omega.Conclusion.Window6CyclicMultiplicityThreeparameterNormalform
@@ -300,6 +302,7 @@ import Omega.Conclusion.StokesEnergyCellSamplingConcentration
 import Omega.Conclusion.LinearExternalizationLiminf
 import Omega.Conclusion.LkBulkBoundaryBesselDuality
 import Omega.Conclusion.LkCentralBinomialCatalanMoments
+import Omega.Conclusion.TqftGenusHausdorffMomentSequence
 import Omega.Conclusion.TqftGenusTowerTrivializationCriterion
 import Omega.Conclusion.LkKolmogorovSharpOneOverK
 import Omega.Conclusion.LocalizedGroupsMayerVietoris
