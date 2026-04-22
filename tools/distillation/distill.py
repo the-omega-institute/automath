@@ -1499,6 +1499,20 @@ def _raw_theorem_families(raw: Any) -> list[dict[str, Any]]:
     return families
 
 
+def _payload_theorem_families(payload: Any) -> list[dict[str, Any]]:
+    """Return theorem-family dictionaries from Stage G's scoped payload."""
+    if not isinstance(payload, dict):
+        return []
+    knowledge = payload.get("knowledge_payload", {})
+    if not isinstance(knowledge, dict):
+        return []
+    families = []
+    for item in knowledge.get("theorem_families", []) or []:
+        if isinstance(item, dict):
+            families.append(item)
+    return families
+
+
 def _family_target_sections(raw: Any) -> list[str]:
     """Collect section slugs declared by the Stage R theorem inventory."""
     sections = []
@@ -4739,16 +4753,37 @@ def _update_distillation_board(registry: list[dict[str, Any]]) -> None:
 
 
 def _next_deepening_family(state: DistillState) -> Optional[dict[str, Any]]:
-    """Return the next theorem family to deepen, or None if all exhausted."""
+    """Return the next scoped theorem family to deepen, or None if exhausted."""
+    payload: dict[str, Any] = {}
+    try:
+        payload = _read_artifact_json(state, "generated_payload.json")
+    except FileNotFoundError:
+        payload = {}
     try:
         raw = _read_artifact_json(state, "raw_research.json")
     except FileNotFoundError:
-        return None
-    families = raw.get("theorem_families", [])
+        raw = {}
+    families = _payload_theorem_families(payload) or _raw_theorem_families(raw)
+    coverage_targets: dict[str, list[str]] = {}
+    for debt in _active_coverage_debts(payload, state.completed_families):
+        family_name = str(debt.get("family", "")).strip()
+        if family_name and family_name not in coverage_targets:
+            coverage_targets[family_name] = _unique_strings(
+                debt.get("target_sections", [])
+            )
     for family in families:
         name = family.get("name", "")
-        if name and name not in state.completed_families:
-            return family
+        if not name or name in state.completed_families:
+            continue
+        scoped_family = dict(family)
+        scoped_targets = _unique_strings(scoped_family.get("target_sections", []))
+        debt_targets = coverage_targets.get(str(name).strip(), [])
+        if debt_targets:
+            # Stage G coverage debts are the current scoped repair contract.
+            scoped_targets = debt_targets
+        if scoped_targets:
+            scoped_family["target_sections"] = scoped_targets
+        return scoped_family
     return None
 
 
