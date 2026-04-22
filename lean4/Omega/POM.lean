@@ -417,6 +417,7 @@ import Omega.POM.MultiplicityCompositionSharpMainTermConstant
 import Omega.POM.MultiplicityFixedLREnvelope
 import Omega.POM.MultiplicityFixedRExtrema
 import Omega.POM.NewmanCriticalAlgebraicEliminationSturm
+import Omega.POM.ObjectConstructibilityBeforeRigidity
 import Omega.POM.ObliviousWidthSBranchingProgramCount
 import Omega.POM.OnlineMultiplicativePrimeSupportLB
 import Omega.POM.OrderBottleneck
@@ -477,6 +478,7 @@ import Omega.POM.ProjectionAsPartitionPrimeRegister
 import Omega.POM.ProjectionAsPartitionPrimeRegisterOneRound
 import Omega.POM.ProjectionAsPartitionPrimeRegisterWidthDepth
 import Omega.POM.PrimeRegisterConditionalEntropyRateLowerbound
+import Omega.POM.PrimeResidualLinearLB
 import Omega.POM.KinkPrincipleQSelection
 import Omega.POM.ProjectiveOperatorDegeneratesToMomentKernel
 import Omega.POM.ProjectivePathAtomicPronyRank
