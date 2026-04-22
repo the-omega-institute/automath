@@ -410,6 +410,7 @@ import Omega.POM.MultiplicityCompositionExactConditionalIid
 import Omega.POM.MultiplicityCompositionLogconvexLambdaq
 import Omega.POM.MultiplicityCompositionPartCountGeneralqLLT
 import Omega.POM.MultiplicityCompositionMomentShiftLaw
+import Omega.POM.NoComputableSufficientSliceSelector
 import Omega.POM.MultiplicityCompositionMod3Sparsity
 import Omega.POM.MultiplicityCompositionMomentHierarchyRationalGrowth
 import Omega.POM.MultiplicityCompositionPartCountCLT
