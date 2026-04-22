@@ -69,6 +69,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import hashlib
 import json
 import logging
 import os
@@ -96,6 +97,8 @@ THEORY_DIR = REPO_ROOT / "theory"
 LOG_DIR = SCRIPT_DIR / "logs"
 STATE_DIR = SCRIPT_DIR / "pipeline_state"
 CLAUDE_SUPERVISION_DIR = SCRIPT_DIR / "claude_supervision"
+RESEARCH_LEDGER_DIR = SCRIPT_DIR / "research_ledger"
+RESEARCH_LEDGER_FILE = RESEARCH_LEDGER_DIR / "research_ledger.jsonl"
 
 ORACLE_SERVER = "http://localhost:8765"
 PAPERS_PUB_DIR_CONST = REPO_ROOT / "papers" / "publication"
@@ -1921,6 +1924,7 @@ def build_claude_scope_brief_prompt(paper_dir: str, target_journal: str,
         "\nNo separate main project directory was provided. Infer the project "
         "context from the current paper and sibling publication papers.\n"
     )
+    ledger_section = _format_research_ledger_context(paper_dir)
     return textwrap.dedent(f"""\
         You are Claude acting as the pipeline's independent supervisory
         reviewer.  You do not edit files.  Your role is to set the scope basis
@@ -1929,6 +1933,7 @@ def build_claude_scope_brief_prompt(paper_dir: str, target_journal: str,
         Paper directory: {paper_dir}
         Target journal: {target_journal}
         {main_section}
+        {ledger_section}
         Read the paper and the stable directive if present:
           {paper_dir}/research_directive.md
 
@@ -1980,12 +1985,14 @@ def build_scope_contract_prompt(paper_dir: str, target_journal: str,
         "\nNo separate main project directory was provided. Infer project "
         "bindings from the current paper and sibling publication papers.\n"
     )
+    ledger_section = _format_research_ledger_context(paper_dir)
     return textwrap.dedent(f"""\
         You are setting the Stage A scope contract for a research paper aimed at
         "{target_journal}".
 
         Paper directory: {paper_dir}
         {main_section}
+        {ledger_section}
         Stable directive file: {paper_dir}/research_directive.md
 
         ## Claude supervisory scope brief
@@ -2060,12 +2067,14 @@ def build_theorem_inventory_prompt(paper_dir: str, target_journal: str,
         f"\nMain project paper directory: {main_paper_dir}\n"
         if main_paper_dir else "\n"
     )
+    ledger_section = _format_research_ledger_context(paper_dir)
     return textwrap.dedent(f"""\
         You are running Stage A theorem inventory for a paper aimed at
         "{target_journal}".
 
         Paper directory: {paper_dir}
         {main_section}
+        {ledger_section}
         First read `scope_contract.md`, `scope_contract.json`, and
         `research_directive.md` in {paper_dir}. Then scan the paper's .tex and
         .bib files, and inspect the main project context if provided.
@@ -2101,6 +2110,15 @@ def build_theorem_inventory_prompt(paper_dir: str, target_journal: str,
           "reason": "...",
           "required_action": "..."
         }}
+        For `out_of_scope_strong_results` and `split_candidates`, add these
+        fields whenever applicable:
+        {{
+          "candidate_title": "...",
+          "source_contribution": "what Stage A reasoning discovered",
+          "scope_mismatch": "why it does not belong in the present article",
+          "independent_paper_rationale": "why it may support a new paper",
+          "needed_to_split": ["..."]
+        }}
 
         ## Classification rules
 
@@ -2132,6 +2150,7 @@ def build_theorem_inventory_prompt(paper_dir: str, target_journal: str,
 def build_theoremization_prompt(paper_dir: str, target_journal: str,
                                 issue_kind: str, issues_json: str,
                                 round_num: int) -> str:
+    ledger_section = _format_research_ledger_context(paper_dir)
     return textwrap.dedent(f"""\
         You are performing Stage A2 theoremization round {round_num} for a
         paper aimed at "{target_journal}".
@@ -2148,6 +2167,7 @@ def build_theoremization_prompt(paper_dir: str, target_journal: str,
         ```json
         {issues_json}
         ```
+        {ledger_section}
 
         ## Task
 
@@ -2165,6 +2185,15 @@ def build_theoremization_prompt(paper_dir: str, target_journal: str,
         - `proof_gaps`: close the proof with minimal new lemmas and explicit
           hypotheses; remove or quarantine claims that cannot be proved.
         - `audit_blockers`: revise exactly against the Stage A audit blockers.
+
+        For `missing_in_scope_results` and `weak_in_scope_core_results`, the
+        acceptance criterion is explicit: introduce or strengthen at least one
+        labelled theorem-like environment (`theorem`, `proposition`, `lemma`,
+        or `corollary`) with a complete proof, and connect it to the paper's
+        main theorem chain.  A short explanatory paragraph, synonym rewrite, or
+        local notation cleanup is a failed edit.  If the issue cannot honestly
+        be solved inside this paper, do not pad the manuscript; record it as a
+        split-paper candidate instead.
 
         ## Research route
 
@@ -2226,6 +2255,8 @@ def build_split_hygiene_prompt(paper_dir: str, target_journal: str,
               "title": "...",
               "source_labels": ["..."],
               "independent_paper_potential": "low|medium|high",
+              "source_contribution": "what was discovered while improving this paper",
+              "scope_mismatch": "why it should not be forced into this paper",
               "reason": "...",
               "needed_to_split": ["..."],
               "current_paper_action": "cite_only|appendix_only|remove|keep_as_tool"
@@ -3442,6 +3473,132 @@ def _coerce_items(value) -> list:
     return []
 
 
+def _scope_memory(paper_path: Path) -> dict:
+    data = _read_json_artifact(paper_path, "scope_contract.json")
+    if not data:
+        return {}
+    keys = ("research_question", "in_scope", "must_prove_in_this_paper",
+            "out_of_scope", "split_policy")
+    return {k: data.get(k) for k in keys if data.get(k)}
+
+
+def _ledger_existing_fingerprints() -> set[str]:
+    if not RESEARCH_LEDGER_FILE.exists():
+        return set()
+    seen: set[str] = set()
+    try:
+        for line in RESEARCH_LEDGER_FILE.read_text(
+            encoding="utf-8", errors="replace"
+        ).splitlines():
+            try:
+                data = json.loads(line)
+            except Exception:
+                continue
+            fp = data.get("fingerprint")
+            if fp:
+                seen.add(str(fp))
+    except Exception:
+        return seen
+    return seen
+
+
+def _record_research_ledger_items(
+    state: PaperState, phase: str, items: list
+) -> None:
+    """Persist useful out-of-scope findings for later paper initialization."""
+    if not items:
+        return
+    try:
+        RESEARCH_LEDGER_DIR.mkdir(parents=True, exist_ok=True)
+        paper_path = Path(state.paper_dir)
+        scope = _scope_memory(paper_path)
+        seen = _ledger_existing_fingerprints()
+        written = 0
+        with open(RESEARCH_LEDGER_FILE, "a", encoding="utf-8") as fh:
+            for raw in items:
+                item = raw if isinstance(raw, dict) else {"reason": str(raw)}
+                record = {
+                    "timestamp": datetime.now().isoformat(),
+                    "source_paper": state.paper_name,
+                    "source_dir": state.paper_dir,
+                    "target_journal": state.target_journal,
+                    "phase": phase,
+                    "category": item.get("ledger_category", "candidate"),
+                    "scope_memory": scope,
+                    "item": item,
+                    "source_contribution": item.get("source_contribution", ""),
+                    "scope_mismatch": item.get("scope_mismatch", ""),
+                    "independent_paper_rationale": item.get(
+                        "independent_paper_rationale", ""),
+                    "why_recorded": (
+                        item.get("reason")
+                        or item.get("required_action")
+                        or item.get("needed_to_split")
+                        or "out-of-scope but potentially useful result"
+                    ),
+                    "promotion_status": "candidate_seed",
+                    "status": "todo",
+                }
+                fp_src = json.dumps(
+                    {
+                        "source_paper": record["source_paper"],
+                        "category": record["category"],
+                        "item": record["item"],
+                    },
+                    sort_keys=True, ensure_ascii=False,
+                )
+                record["fingerprint"] = hashlib.sha1(
+                    fp_src.encode("utf-8")).hexdigest()
+                if record["fingerprint"] in seen:
+                    continue
+                seen.add(record["fingerprint"])
+                fh.write(json.dumps(record, ensure_ascii=False) + "\n")
+                written += 1
+        if not written:
+            return
+        state.log_event("A", "research_ledger_recorded",
+                        detail=f"{written} candidate item(s)")
+        save_state(state)
+    except Exception as exc:
+        logger.warning(f"[{state.paper_name}] research ledger write failed: {exc}")
+
+
+def _format_research_ledger_context(paper_dir: str, max_items: int = 8) -> str:
+    if not RESEARCH_LEDGER_FILE.exists():
+        return ""
+    try:
+        rows = []
+        for line in RESEARCH_LEDGER_FILE.read_text(
+            encoding="utf-8", errors="replace"
+        ).splitlines()[-200:]:
+            try:
+                data = json.loads(line)
+            except Exception:
+                continue
+            if data.get("source_dir") == paper_dir:
+                continue
+            rows.append(data)
+        if not rows:
+            return ""
+        rows = rows[-max_items:]
+        return textwrap.dedent(f"""\
+
+            ## Prior Research Ledger Context
+
+            The following items were produced by earlier Stage A reasoning but
+            recorded as out-of-scope or split-paper candidates. They are
+            background memory only: use them to avoid rediscovery, to preserve
+            attribution of prior pipeline contributions, and to decide whether
+            a result belongs in this paper or in a future paper.
+
+            ```json
+            {json.dumps(rows, indent=2, ensure_ascii=False)[:6000]}
+            ```
+        """)
+    except Exception:
+        return ""
+
+
 def _ensure_research_directive(paper_path: Path, target_journal: str,
                                *, dry_run: bool = False) -> bool:
     path = paper_path / "research_directive.md"
@@ -4044,6 +4201,13 @@ def _run_stage_a_inventory(state: PaperState, *,
     if not valid:
         logger.error(f"{tag} A1 inventory invalid: {reason}")
         return {}
+    ledger_items = []
+    for category in ("out_of_scope_strong_results", "split_candidates"):
+        for item in _coerce_items(inventory.get(category)):
+            item_copy = dict(item) if isinstance(item, dict) else {"reason": str(item)}
+            item_copy["ledger_category"] = category
+            ledger_items.append(item_copy)
+    _record_research_ledger_items(state, "stage_a_inventory", ledger_items)
     return inventory
 
 
@@ -4441,6 +4605,15 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                                              "split_candidates.json")
             state.stage_a_split_candidates = _coerce_items(
                 split_data.get("candidates", []))
+            ledger_items = []
+            for item in state.stage_a_split_candidates:
+                item_copy = dict(item) if isinstance(item, dict) else {
+                    "reason": str(item)
+                }
+                item_copy["ledger_category"] = "split_hygiene_candidate"
+                ledger_items.append(item_copy)
+            _record_research_ledger_items(
+                state, "stage_a_split_hygiene", ledger_items)
             h = git_commit(paper_path, f"stage-A R{rnd}: split hygiene",
                            tag=tag)
             state.stage_a_audit_rounds = 0
@@ -4983,14 +5156,6 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
     tag = f"[{state.paper_name}|C]"
     paper_path = Path(state.paper_dir)
 
-    if not CLAUDE_ENABLED and not dry_run:
-        state.error = (f"{PAUSED_ERROR_PREFIX} Stage C waiting for Claude; "
-                       "--no-claude completed Codex+ChatGPT work only")
-        logger.info(f"{tag} {state.error}")
-        state.log_event("C", "paused", detail=state.error)
-        save_state(state)
-        return False
-
     for rnd in range(state.stage_c_rounds + 1, MAX_STAGE_C_ROUNDS + 1):
         state.stage_c_rounds = rnd
         state.current_round = rnd
@@ -5069,42 +5234,64 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                         detail=oracle_response[:12000])
         save_state(state)
 
-        # ── C2: Claude independent review ────────────────────────
-        logger.info(f"{tag} Round {rnd}: C2 — Claude independent review")
-        review_prompt = build_claude_independent_review_prompt(
-            state.paper_dir, state.target_journal)
-        out_c1 = claude_exec(review_prompt, work_dir=paper_path,
-                             dry_run=dry_run,
-                             context_mode="fresh_review",
-                             agent_role="stage_c_claude_final")
-        review_data = parse_json_from_output(out_c1) if not dry_run else {
-            "verdict": "revise" if rnd < 2 else "submit",
-            "issues": [f"dry run issue R{rnd}"] if rnd < 2 else [],
-        }
-        _record_claude_supervision(
-            state, f"stage_c_presubmission_review_R{rnd}",
-            review_data, raw=out_c1,
-            context_mode="fresh_review",
-            agent_role="stage_c_claude_final")
-        claude_verdict = str(review_data.get("verdict", "revise")).lower()
-        issues = list(_coerce_items(review_data.get("issues", [])))
-        work_packages = review_data.get("work_packages", [])
-        if work_packages:
-            issues = list(issues) + [
-                f"[{wp.get('owner', 'codex_editorial')}/"
-                f"{wp.get('priority', 'medium')}] "
-                f"{wp.get('location', '')}: {wp.get('task', '')} "
-                f"(acceptance: {wp.get('acceptance_criterion', '')})"
-                if isinstance(wp, dict) else str(wp)
-                for wp in work_packages
-            ]
-        claude_pass = claude_verdict == "submit"
-        state.stage_c_verdicts.append(
-            f"oracle:{oracle_verdict};claude:{claude_verdict}")
-        state.log_event("C", "claude_independent_review", round_num=rnd,
-                        verdict=claude_verdict,
-                        detail=json.dumps(review_data, ensure_ascii=False)[:10000])
-        save_state(state)
+        issues: list = []
+        if not CLAUDE_ENABLED and not dry_run:
+            claude_verdict = "pending"
+            claude_pass = False
+            state.stage_c_verdicts.append(
+                f"oracle:{oracle_verdict};claude:pending")
+            if oracle_pass and not oracle_issues:
+                state.error = (
+                    f"{PAUSED_ERROR_PREFIX} Stage C pending final Claude "
+                    "review after Oracle accepted the manuscript"
+                )
+                logger.info(f"{tag} {state.error}")
+                state.log_event("C", "pending_final_claude_review",
+                                round_num=rnd, verdict=oracle_verdict,
+                                detail=state.error)
+                save_state(state)
+                return False
+            logger.info(f"{tag} Round {rnd}: C2 skipped (--no-claude); "
+                        "Oracle has not accepted yet, so Codex will fix "
+                        "Oracle final-review issues")
+        else:
+            # ── C2: Claude independent review ────────────────────
+            logger.info(f"{tag} Round {rnd}: C2 — Claude independent review")
+            review_prompt = build_claude_independent_review_prompt(
+                state.paper_dir, state.target_journal)
+            out_c1 = claude_exec(review_prompt, work_dir=paper_path,
+                                 dry_run=dry_run,
+                                 context_mode="fresh_review",
+                                 agent_role="stage_c_claude_final")
+            review_data = parse_json_from_output(out_c1) if not dry_run else {
+                "verdict": "revise" if rnd < 2 else "submit",
+                "issues": [f"dry run issue R{rnd}"] if rnd < 2 else [],
+            }
+            _record_claude_supervision(
+                state, f"stage_c_presubmission_review_R{rnd}",
+                review_data, raw=out_c1,
+                context_mode="fresh_review",
+                agent_role="stage_c_claude_final")
+            claude_verdict = str(review_data.get("verdict", "revise")).lower()
+            issues = list(_coerce_items(review_data.get("issues", [])))
+            work_packages = review_data.get("work_packages", [])
+            if work_packages:
+                issues = list(issues) + [
+                    f"[{wp.get('owner', 'codex_editorial')}/"
+                    f"{wp.get('priority', 'medium')}] "
+                    f"{wp.get('location', '')}: {wp.get('task', '')} "
+                    f"(acceptance: {wp.get('acceptance_criterion', '')})"
+                    if isinstance(wp, dict) else str(wp)
+                    for wp in work_packages
+                ]
+            claude_pass = claude_verdict == "submit"
+            state.stage_c_verdicts.append(
+                f"oracle:{oracle_verdict};claude:{claude_verdict}")
+            state.log_event("C", "claude_independent_review", round_num=rnd,
+                            verdict=claude_verdict,
+                            detail=json.dumps(
+                                review_data, ensure_ascii=False)[:10000])
+            save_state(state)
 
         logger.info(f"{tag} Round {rnd}: Oracle verdict = {oracle_verdict}, "
                     f"Claude verdict = {claude_verdict}; "
@@ -6425,13 +6612,13 @@ def main() -> int:
         epilog=textwrap.dedent("""\
             Two pipelines:
               --new    New paper: N1(research) → N2(scaffold) → N3(style) → Review
-              default  Review:   A(quality+style) → B(oracle) → C(claude) → D(backflow)
+              default  Review:   A(scope+theoremization) → B(oracle) → C(final joint gate) → D(backflow)
 
             Review stages:
               F  Journal fit check (fit >= 6 to keep target; else auto-reroute)
               A  Codex quality review + journal style (score >= 8 to pass)
               B  Oracle (ChatGPT) review (accept/minor revision to pass)
-              C  Claude independent review (submit to pass)
+              C  Oracle final loop + Claude independent review (submit to pass)
               D  Backflow check to main paper
 
             Examples:
@@ -6473,8 +6660,9 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--no-claude", action="store_true",
                         help=("Disable Claude gates for Codex+ChatGPT smoke "
-                              "testing. Stage C/D will pause instead of "
-                              "claiming Claude approval."))
+                              "testing. Stage C keeps fixing Oracle issues "
+                              "and pauses only when final Claude approval is "
+                              "the remaining gate."))
     parser.add_argument("--model", type=str, default=None)
     parser.add_argument("--oracle-timeout", type=int, default=7200)
     parser.add_argument("--status", action="store_true")
