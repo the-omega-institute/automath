@@ -331,6 +331,7 @@ import Omega.Zeta.FiniteQuotientScalarGodelLoglogOverhead
 import Omega.Zeta.XiBoundaryUpliftMixedRadixRegisterLowerBound
 import Omega.Zeta.FiniteRankRealisation
 import Omega.Zeta.FiniteRhPhaseLift
+import Omega.Zeta.FiniteRhPhaseLiftTraceFilter
 import Omega.Zeta.FiniteRhPhaseLiftArtin
 import Omega.Zeta.FiniteRhPhaseLiftTimeRescale
 import Omega.Zeta.FoldInversionStrongConverseSideinfo
