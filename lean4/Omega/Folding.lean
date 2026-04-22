@@ -234,6 +234,7 @@ import Omega.Folding.KilloPrimeRegisterChainIdempotentBooleanRank
 import Omega.Folding.OracleCapacityTailEquivalence
 import Omega.Folding.OracleCapacityPigeonholeBound
 import Omega.Folding.OracleCapacityClosedForm
+import Omega.Folding.FoldOracleSuccessExponentFromH2
 import Omega.Folding.ConclusionFoldZerofreeSubsequenceGapExplosion
 import Omega.Folding.FoldOracleExactInversionJointRateLowerBound
 import Omega.Folding.OracleCapacityWatataniIndexTraceFormula
