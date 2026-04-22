@@ -277,6 +277,7 @@ import Omega.POM.ZetaResidueConstantsConjugates
 import Omega.POM.FractranPermutationEmbeddingLength
 import Omega.POM.PrimeTraceShiftFreeMonoid
 import Omega.POM.FractranFiniteUpdateTableOneStep
+import Omega.POM.ThreeGenInterfaceNormalForm
 import Omega.POM.ThreeGenTermination
 import Omega.POM.FractranFirstfitTotalSerialDepth
 import Omega.POM.FractranFirstfitSerialDepth
