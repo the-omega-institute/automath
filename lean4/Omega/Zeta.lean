@@ -183,6 +183,7 @@ import Omega.Zeta.Conclusion65ExpSumsUniformLDP
 import Omega.Zeta.ConclusionPhiadicMellinPoleLatticeRigidity
 import Omega.Zeta.Conclusion70CriticalIntervalStructureImprovement
 import Omega.Zeta.Conclusion74DoubleLargeSieveInput
+import Omega.Zeta.XiThetaKernelDyadicDecompositionDoubleexpTail
 import Omega.Zeta.ContractiveBoundaryZero
 import Omega.Zeta.CriticalCircleDensityCalibration
 import Omega.Zeta.CriticalCircleModeGrowth

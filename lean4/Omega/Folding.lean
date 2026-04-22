@@ -279,6 +279,7 @@ import Omega.Folding.FoldBinQuantileThresholdConstant
 import Omega.Folding.FoldBinBudgetPhaseTransition
 import Omega.Folding.FoldZeroCosetV2IntersectionRigidity
 import Omega.Folding.FoldBinRenyiDivergenceLimit
+import Omega.Folding.FoldBinRenyiMassSpectrumAffine
 import Omega.Folding.FoldBinRenyiRateCollapse
 import Omega.Folding.BinFoldKLConstant
 import Omega.Folding.FoldBinTwoPointLimitLaw
