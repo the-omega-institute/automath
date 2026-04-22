@@ -466,6 +466,7 @@ import Omega.Zeta.ResidueClassAsymptotics
 import Omega.Zeta.ResidueRingExplicitErrorBound
 import Omega.Zeta.ResolventTraceIntegerResidueNoncancel
 import Omega.Zeta.RhoGapM12
+import Omega.Zeta.RhStratificationThreeKernels
 import Omega.Zeta.RhStratificationSPlane
 import Omega.Zeta.RootSeparation
 import Omega.Zeta.SL2LinearExternalCertificate
