@@ -1,8 +1,8 @@
 \section{Finite certificates}\label{sec:L2}
 
-A protocol supplies canonical forms.  A further, finite layer of
-data is obtained by looking at the fibers of the normalizing map.
-For the Zeckendorf protocol these are the fibers of
+A protocol supplies canonical forms.  At finite resolution one may
+also record invariants of the fibers of the normalizing map.  For
+the Zeckendorf protocol these are the fibers of
 \(\Fold_m\colon\Omega_m\to X_m\).
 
 \subsection{Collision moments}
@@ -12,7 +12,7 @@ For \(x\in X_m\), write
 \[
   d_m(x)=|\Fold_m^{-1}(x)|.
 \]
-Since every legal word folds to itself, \(\Fold_m\) is onto and
+Every legal word folds to itself, so \(\Fold_m\) is onto and
 \(d_m(x)\ge1\).
 
 \begin{definition}[Collision moment]\label{def:collision-moment}
@@ -20,7 +20,7 @@ For \(q\ge0\) and \(m\ge1\), define
 \begin{equation}\label{eq:Sq}
   S_q(m)=\sum_{x\in X_m}d_m(x)^q .
 \end{equation}
-Equivalently, \(S_q(m)\) counts the \(q\)-tuples
+Equivalently, \(S_q(m)\) is the number of \(q\)-tuples
 \((\omega^{(1)},\ldots,\omega^{(q)})\in\Omega_m^q\) whose entries
 have the same fold image, with the convention
 \(S_0(m)=|X_m|\).
@@ -50,18 +50,18 @@ Let
 \[
   \nu_m=\sum_{x\in X_m}\delta_{d_m(x)} .
 \]
-Then \(S_q(m)=\int t^q\,d\nu_m(t)\).  Hence, for
+Then \(S_q(m)=\int t^q\,d\nu_m(t)\).  For
 \(c_0,\ldots,c_r\in\RR\),
 \[
   \sum_{i,j=0}^r c_i c_j S_{i+j}(m)
   =\sum_{x\in X_m}
     \Bigl(\sum_{i=0}^r c_i d_m(x)^i\Bigr)^2\ge0.
 \]
-This proves positive semidefiniteness, equivalently the finite
-case of the Hamburger moment criterion \cite{Hamburger1920}.  The
-\(2\times2\) principal minors give the displayed log-convexity
-inequality.  Dividing by \(S_q(m)S_{q-1}(m)>0\) gives the
-monotonicity of consecutive ratios.
+This proves positive semidefiniteness, the finite case of the
+Hamburger moment criterion \cite{Hamburger1920}.  The \(2\times2\)
+principal minors give the displayed log-convexity inequality, and
+division by \(S_q(m)S_{q-1}(m)>0\) gives the monotonicity of the
+consecutive ratios.
 \end{proof}
 
 \subsection{Finite spectral reconstruction}
@@ -74,15 +74,20 @@ sizes \(d_m(x)\), and put
 \[
   n_i=|\{x\in X_m:d_m(x)=a_i\}|.
 \]
-The fiber-size spectrum is determined uniquely by the finite list
-of moments
+Let \(N_m=|X_m|\).  The fiber-size spectrum is determined uniquely
+by the finite list
+\[
+  S_0(m),\ldots,S_{2N_m-1}(m).
+\]
+More sharply, once \(r_m\) is known, it is determined by
 \[
   S_0(m),\ldots,S_{2r_m-1}(m).
 \]
 More precisely:
 \begin{enumerate}
 \item \(r_m\) is the Hankel rank of the infinite matrix
-  \([S_{i+j}(m)]_{i,j\ge0}\);
+  \([S_{i+j}(m)]_{i,j\ge0}\), and the preceding finite list with
+  \(N_m=|X_m|\) determines this rank;
 \item the moment sequence satisfies a unique recurrence of minimum
   order \(r_m\);
 \item the recurrence polynomial has roots \(a_1,\ldots,a_{r_m}\),
@@ -96,12 +101,19 @@ The moment representation is
 \[
   S_q(m)=\sum_{i=1}^{r_m} n_i a_i^q .
 \]
-The functions \(q\mapsto a_i^q\) are linearly independent because
+The functions \(q\mapsto a_i^q\) are linearly independent, since
 the \(a_i\) are distinct.  Moreover, the finite Hankel block
 \([S_{i+j}(m)]_{0\le i,j<r_m}\) is positive definite: for a
 nonzero polynomial \(Q\) of degree \(<r_m\),
 \(\sum_i n_i Q(a_i)^2>0\).  Hence the infinite Hankel matrix has
-rank \(r_m\).
+rank \(r_m\).  Since the multiplicities \(n_i\) are positive
+integers, \(r_m\le N_m\).  The leading Hankel block of size
+\((s+1)\times(s+1)\) is positive definite for \(s<r_m\) and
+singular for \(s\ge r_m\).  Therefore the finite moments through
+\(S_{2N_m-1}(m)\) determine \(r_m\): it is the least \(s<N_m\) for
+which
+\(\det[S_{i+j}(m)]_{0\le i,j\le s}=0\), or \(N_m\) if no such
+\(s\) occurs.
 Let
 \[
   P(z)=\prod_{i=1}^{r_m}(z-a_i)
@@ -124,8 +136,10 @@ is a nonsingular Vandermonde system for the \(n_i\).  This is the
 finite Prony reconstruction procedure \cite{BatenkovYomdin2013}.
 \end{proof}
 
-Thus \(2r_m\) moments give a finite, checkable certificate for the
-whole fiber-size spectrum at resolution \(m\).
+Thus the finite segment through \(S_{2N_m-1}(m)\) certifies the
+fiber-size spectrum at resolution \(m\).  The shorter segment
+through \(S_{2r_m-1}(m)\) suffices once the Hankel rank has been
+identified.
 
 \subsection{Finite-state compression}
 \label{ssec:kernel}
@@ -163,37 +177,40 @@ summing over \(\alpha\) proves the first assertion.  Since
 nonnegative eigenvector \(v\) for its spectral radius
 \cite{BermanPlemmons1994}.  The vector
 \(\sum_{\pi\in\mathfrak S_{q-1}}P_\pi v\) is nonzero, symmetric,
-and still an eigenvector with eigenvalue \(\rho(A^{(q)})\).  This
-proves the second assertion.  The dimension formula is the usual
-count of monomials of degree \(q-1\) in \(k\) variables.
+and still an eigenvector with eigenvalue \(\rho(A^{(q)})\), proving
+the second assertion.  The dimension formula is the usual count of
+monomials of degree \(q-1\) in \(k\) variables.
 \end{proof}
 
 \begin{definition}[Certificate universality]
 \label{def:cert-univ}
 A protocol-universal system with finite resolution sets is
-\emph{certificate-universal} if the normalization fibers carry
-moment sequences \(\{S_q^{(m)}\}_{q,m}\) such that:
+\emph{certificate-universal in the finite-fiber sense} if its
+normalization fibers carry moment sequences
+\(\{S_q^{(m)}\}_{q,m}\) such that:
 \begin{enumerate}
 \item for each \(m\), the Hankel matrices
   \([S_{i+j}^{(m)}]_{i,j}\) are positive semidefinite;
-\item for each \(m\), a finite initial segment of the moments
+\item for each \(m\), a finite initial segment of the moments,
+  with a computable bound from the finite resolution data,
   determines the full fiber-multiplicity spectrum.
 \end{enumerate}
 It is \emph{finite-state certificate-universal} if, in addition,
 there is a polynomial \(P\) such that, for each \(q\ge1\), the
-sequence in the resolution parameter has a linear transfer
+sequence in the resolution parameter has a transfer-matrix
 representation
 \[
   S_q^{(m)}=u_q^{\mathsf T}A_q^m v_q\qquad(m\ge1),
 \]
-with \(\dim A_q\le P(q)\), arising from one finite-state
-description of the normalization fibers.  In particular, for each
-fixed \(q\) the \(m\)-dependence is represented by a fixed finite
-matrix.
+with \(\dim A_q\le P(q)\).  This is the only consequence of
+finite-state structure used below: for each fixed \(q\), the
+\(m\)-dependence is represented by one fixed finite matrix.
 \end{definition}
 
 The Zeckendorf fold system is certificate-universal by
-\Cref{thm:hankel-psd,thm:prony}.  The finite-state strengthening
-requires a transfer representation of the kind specified in
-\Cref{thm:star-kernel}; it does not follow from finite fibers
-alone.
+\Cref{thm:hankel-psd,thm:prony}.  The finite-state strengthening is
+the additional transfer representation specified in
+\Cref{thm:star-kernel}.  Hence the finite-fiber certificate is
+attached to the finite normalizer, while the finite-state condition
+is a separate computational assertion and is not a consequence of
+Hankel positivity or finite Prony reconstruction.

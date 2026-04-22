@@ -1,40 +1,739 @@
 % ---------------------------------------------------------
-% Computational certification and audited numerical data
+% Exact kernel certification and secondary spectral data
 % ---------------------------------------------------------
-\section{Computational certification and audited numerical data}
+\section{Exact kernel certification and secondary spectral data}
 \label{app:certification}
 
-Section~\ref{sec:chebotarev} uses two kinds of input in the range
-\(q=9,\dots,17\): exact integer recurrences for the collision moments
-\(S_q(m)\), and finite certificate tables extracted from those recurrence
-polynomials.  We also record, separately and with explicit status labels,
-audited high-precision secondary spectral fingerprints.  Since all of these
-data enter the editorial certification of the arithmetic window, we make their
-provenance explicit here.
+Section~\ref{sec:chebotarev} isolates finite algebraic certificate records for
+\(q=9,\dots,17\): row polynomials for \(S_q(m)\), Smith forms, finite-field
+factorization patterns, and discriminant squareclass checks.  The recurrence
+certificate is the one place where the distinction between an empirical check
+and an exact proof matters.  A coefficient row is not evidence for a recurrence
+by itself.  It becomes a recurrence only after the polynomial determined by that
+row has been substituted into the exact histogram kernel and the resulting
+residual vector has been certified to lie in the unobservable subspace.
 
-For each \(m\ge 0\), let \(c_m(r)\) denote the number of binary words
-\(\omega\in\{0,1\}^m\) whose Fibonacci-weighted sum is congruent to
-\(r\bmod F_{m+2}\).  Then
+The proof chain is finite.  The bounded-delay normalizer first gives
 \[
-  S_q(m)=\sum_{r\bmod F_{m+2}} c_m(r)^q.
+  S_q(m)=\widetilde u_q^{\mathsf T}\widetilde A_q^m\widetilde v_q
+  \qquad(m\ge0),
 \]
-Thus \(S_q(m)\) can be computed exactly by modular dynamic programming on
-\(\ZZ/F_{m+2}\ZZ\), without enumerating all \(2^m\) words.  The recurrence
-polynomials \(P_q\) used in Section~\ref{sec:chebotarev} are defined from the
-exact coefficients listed in Table~\ref{tab:appendix-recurrences-q9-17}.
+where \(\widetilde A_q\) is the integer histogram matrix of
+\Cref{def:exact-histogram-kernel}.  Put \(N_q=\dim\widetilde A_q\) and
+\[
+  W_q=\operatorname{span}_{\QQ}
+  \{\widetilde A_q^j\widetilde v_q:j\ge0\}.
+\]
+For the offset used throughout Section~\ref{sec:chebotarev}, define
+\[
+  Z_q=
+  \{w\in W_q:\widetilde u_q^{\mathsf T}\widetilde A_q^t w=0
+    \text{ for every }t\ge2\}.
+\]
+Cayley--Hamilton gives a finite construction of this subspace from the kernel
+itself:
+\[
+  Z_q=
+  \ker\!\left(
+  w\mapsto
+  (\widetilde u_q^{\mathsf T}\widetilde A_q^2w,\dots,
+   \widetilde u_q^{\mathsf T}\widetilde A_q^{N_q+1}w)
+  \right)
+  \quad\text{inside }W_q.
+\]
+Thus \(N_q\) is an a priori order bound obtained from the exact kernel dimension
+before any candidate recurrence is tested.  This is the point at which the
+finite verification becomes sound: the verifier constructs the kernel-defined
+unobservable subspace by \(N_q\) observability rows, rather than choosing a
+numerical interval in the scalar moment sequence.
+If
+\[
+  R_q=
+  \begin{bmatrix}
+  \widetilde u_q^{\mathsf T}\widetilde A_q^2\\
+  \widetilde u_q^{\mathsf T}\widetilde A_q^3\\
+  \vdots\\
+  \widetilde u_q^{\mathsf T}\widetilde A_q^{N_q+1}
+  \end{bmatrix},
+\]
+then \(w\in Z_q\) is equivalent to \(R_qw=0\).  For a row polynomial \(P_q\), the
+exact recurrence certificate is
+\begin{equation}
+\label{eq:primary-residual-certificate}
+  R_qP_q(\widetilde A_q)\widetilde v_q=0.
+\end{equation}
+This identity says precisely that
+\(P_q(\widetilde A_q)\widetilde v_q\in Z_q\).  Consequently
+\[
+  \widetilde u_q^{\mathsf T}\widetilde A_q^t
+  P_q(\widetilde A_q)\widetilde v_q=0\qquad(t\ge2),
+\]
+which is the recurrence for every \(m\ge d_q+2\) after putting \(m=t+d_q\).
+
+The rank equalities
+\[
+  \rk(R_qK_q)=\rk(R_qB_q)=d_q,
+\]
+where
+\[
+  K_q=[\widetilde v_q,\dots,\widetilde A_q^{N_q-1}\widetilde v_q],
+  \qquad
+  B_q=[\widetilde v_q,\dots,\widetilde A_q^{d_q-1}\widetilde v_q],
+\]
+have a separate role.  They identify the quotient \(W_q/Z_q\), show that the
+first \(d_q\) Krylov classes form a cyclic basis, and make \(P_q\) the
+characteristic polynomial of the induced quotient operator.  They are useful for
+minimality and Hankel-principalization, but the all-tail recurrence already
+follows from \eqref{eq:primary-residual-certificate} and the
+Cayley--Hamilton order bound.  Consequently every arithmetic theorem in
+Section~\ref{sec:chebotarev} uses the row polynomial through the chain
+\[
+  \widetilde A_q,\widetilde u_q,\widetilde v_q
+  \longrightarrow
+  R_qP_q(\widetilde A_q)\widetilde v_q=0
+  \longrightarrow
+  P_q(E)S_q(j)=0\quad(j\ge2),
+\]
+and not through an extrapolation from finitely many scalar values of \(S_q(m)\).
+
+\subsection{Kernel certificates for the recurrence table}
+
+The row polynomials below have two logically separate parts.  The first part is
+the construction of the exact matrix coefficient
+\(S_q(m)=\widetilde u_q^{\mathsf T}\widetilde A_q^m\widetilde v_q\).  The second
+part is a residual identity after a proposed polynomial has been substituted into
+that matrix.  Only the second part certifies a recurrence.  A list of scalar
+values \(S_q(0),S_q(1),\dots\), even if very long, is not an input to the
+verifier defined here.
+
+\begin{definition}[Exact histogram kernel]
+\label{def:exact-histogram-kernel}
+Fix the deterministic normalizing transducer \(\mathcal T\) of
+Appendix~\ref{app:transducer}, and let \(\widehat Q\) be the one-copy augmented
+state set of \Cref{prop:appendix-collision-automaton}.  For
+\(s\in\widehat Q\) and \(a\in\{0,1\}\), write
+\[
+  s \xrightarrow[a]{} T_a(s)
+\]
+for the one-copy state update and write \(C_a(s)\in\{0,1\}^*\) for the
+committed visible block emitted during that update.  Let \(\Phi(s)\) be the
+terminal visible suffix obtained from \(s\) by appending the terminal transducer
+output and performing the possible initial deletion described in
+\Cref{prop:appendix-collision-automaton}.
+
+For \(q\ge2\), set
+\[
+  \mathcal H_q:=
+  \{\eta:\widehat Q\to\ZZ_{\ge0}:\sum_{s\in\widehat Q}\eta(s)=q\}.
+\]
+The exact histogram kernel is the integer matrix
+\(\widetilde A_q=(\widetilde A_q)_{\eta,\eta'}\) indexed by
+\(\mathcal H_q\), where
+\[
+(\widetilde A_q)_{\eta,\eta'}
+=
+\sum_{\substack{b\in\{0,1\}^*\\
+                \xi:\widehat Q\times\{0,1\}\to\ZZ_{\ge0}}}
+\prod_{s\in\widehat Q}
+\frac{\eta(s)!}{\xi(s,0)!\xi(s,1)!}.
+\]
+The sum is finite: a summand is included only when
+\[
+\begin{gathered}
+  \xi(s,0)+\xi(s,1)=\eta(s)
+  \qquad(s\in\widehat Q),\\
+  \sum_{\substack{s\in\widehat Q,\ a\in\{0,1\}\\ T_a(s)=t}}\xi(s,a)=\eta'(t)
+  \qquad(t\in\widehat Q),\\
+  \xi(s,a)>0\quad\Longrightarrow\quad C_a(s)=b.
+\end{gathered}
+\]
+The initial vector \(\widetilde u_q\) is supported on the histogram with all
+\(q\) copies in the initial state \((q_0,\varepsilon,0)\).  The terminal vector
+\(\widetilde v_q\) is the indicator of those histograms \(\eta\) for which
+\(\Phi(s)\) is the same word for every \(s\in\mathrm{supp}(\eta)\).
+\end{definition}
+
+\begin{lemma}[Exact histogram realization]
+\label{lem:exact-histogram-realization}
+For every \(q\ge2\) and every \(m\ge0\),
+\[
+  S_q(m)=\widetilde u_q^{\mathsf T}\widetilde A_q^m\widetilde v_q.
+\]
+If
+\[
+  k:=|\widehat Q|=2\,|Q|\,(2^{L+2}-1),
+\]
+then
+\[
+  N_q:=\dim \widetilde A_q=|\mathcal H_q|=\binom{k+q-1}{k-1}
+\]
+is an a priori order bound for every scalar sequence
+\(\widetilde u_q^{\mathsf T}\widetilde A_q^m w\) derived from the same kernel.
+\end{lemma}
+
+\begin{proof}
+The factor
+\(\eta(s)!/(\xi(s,0)!\xi(s,1)!)\) counts the choices, among the labelled copies
+currently in one-copy state \(s\), of how many read digit \(0\) and how many read
+digit \(1\).  The first two displayed conditions say that these choices start
+with histogram \(\eta\) and end with histogram \(\eta'\).  The final condition
+is precisely the synchronized collision condition from
+\Cref{prop:appendix-collision-automaton}: all newly committed visible blocks
+must agree.  Hence \(\widetilde A_q\) is the orbit-sum quotient of the labelled
+synchronized kernel, with labelled multiplicities retained in the transition
+counts.  The initial and terminal vectors encode exactly the initial synchronized
+state and the terminal equality of the unresolved visible suffixes.  The
+accepted length-\(m\) paths are therefore the \(q\)-tuples counted by
+\(S_q(m)\), proving the realization formula.
+
+The dimension formula is the number of weak compositions of \(q\) into
+\(k\) parts.  Cayley--Hamilton applied to the \(N_q\times N_q\) matrix
+\(\widetilde A_q\) gives the stated a priori order bound.
+\end{proof}
+
+\begin{definition}[Residual certificate for a row polynomial]
+\label{def:residual-certificate-row}
+Let \(A\in M_N(\ZZ)\), \(u,v\in\ZZ^N\), and let
+\[
+  P(X)=X^d-c_1X^{d-1}-\cdots-c_d\in\ZZ[X].
+\]
+For \(m\ge d\), define the exact residual
+\[
+  E_P(m;A,u,v):=u^{\mathsf T}A^{m-d}P(A)v.
+\]
+We say that the row \((d;c_1,\dots,c_d)\) is certified from \(m_0\) in the
+kernel \((A,u,v)\) if the following \(N\) residual equations hold after
+substitution of \(P\) into the exact matrix \(A\):
+\[
+  E_P(m;A,u,v)=0
+  \qquad(m=m_0,m_0+1,\dots,m_0+N-1).
+\]
+This is the coordinate form of the kernel inclusion
+\(P(A)v\in Z_{m_0-d}(A,u,v)\) defined below.  It is a finite list of integer
+equalities in the entries of \(A,u,v\).  The length \(N\) is the a priori
+Cayley--Hamilton order bound for the kernel; it is not a tunable numerical
+test interval in the length variable.
+\end{definition}
+
+\begin{lemma}[Direct kernel-residual soundness]
+\label{lem:direct-residual-certificate}
+Let \(A\in M_N(\ZZ)\), \(u,v\in\ZZ^N\), and
+\[
+  P(X)=X^d-c_1X^{d-1}-\cdots-c_d\in\ZZ[X].
+\]
+Fix \(h\ge0\), and form the finite observability block
+\[
+  R_h=
+  \begin{bmatrix}
+  u^{\mathsf T}A^h\\
+  u^{\mathsf T}A^{h+1}\\
+  \vdots\\
+  u^{\mathsf T}A^{h+N-1}
+  \end{bmatrix}.
+\]
+If \(R_hP(A)v=0\), then the scalar sequence
+\(s_m=u^{\mathsf T}A^mv\) satisfies
+\[
+  s_m=\sum_{i=1}^d c_i s_{m-i}
+  \qquad(m\ge d+h).
+\]
+Thus \(N\) exact kernel residual equations, after \(P\) has been substituted
+into \(A\), are enough to certify membership in the all-tail unobservable
+subspace.  The number \(N\) depends only on the kernel dimension and is known
+before the proposed recurrence is tested.
+\end{lemma}
+
+\begin{proof}
+For \(m\ge d\), put
+\[
+  e_m:=s_m-\sum_{i=1}^d c_i s_{m-i}
+  =
+  u^{\mathsf T}A^{m-d}P(A)v.
+\]
+The hypothesis says that
+\[
+  e_{d+h}=e_{d+h+1}=\cdots=e_{d+h+N-1}=0.
+\]
+The sequence \(e_m\) is a scalar coefficient of the same matrix \(A\).  If
+\[
+  \chi_A(X)=X^N+a_1X^{N-1}+\cdots+a_N,
+\]
+then Cayley--Hamilton gives
+\[
+  e_{m+N}+a_1e_{m+N-1}+\cdots+a_Ne_m=0
+  \qquad(m\ge d).
+\]
+The displayed zeros supply the initial zero state for this recurrence at
+\(m=d+h\), so induction gives \(e_m=0\) for every \(m\ge d+h\).
+\end{proof}
+
+\begin{corollary}[Sound finite scalar check once an order bound is known]
+\label{cor:finite-scalar-check-with-order-bound}
+Let \(s_m=u^{\mathsf T}A^m v\) with \(A\in M_N(\ZZ)\), and let
+\[
+  P(X)=X^d-c_1X^{d-1}-\cdots-c_d.
+\]
+If the exact residuals
+\[
+  s_m-\sum_{i=1}^d c_i s_{m-i}
+\]
+vanish for \(N\) consecutive indices \(m=M,M+1,\dots,M+N-1\), where
+\(M\ge d\), then they vanish for every \(m\ge M\).  Therefore a finite check of
+scalar values proves an all-tail recurrence only after the matrix realization
+and its a priori dimension bound \(N\) have been established.
+\end{corollary}
+
+\begin{proof}
+This is \Cref{lem:direct-residual-certificate} with \(h=M-d\).  Equivalently,
+the residual sequence is a scalar coefficient of the same \(N\times N\) matrix
+\(A\), so Cayley--Hamilton propagates any zero block of length \(N\).
+\end{proof}
+
+\begin{definition}[Exact kernel verifier for a recurrence row]
+\label{def:exact-kernel-verifier}
+Fix \(q\ge2\) and a monic polynomial
+\[
+  P(X)=X^d-c_1X^{d-1}-\cdots-c_d\in\ZZ[X].
+\]
+The exact residual verifier \(\mathsf W_q(P)\) and the exact observable
+verifier \(\mathsf V_q(P)\) are the following finite rational linear-algebra
+computations.
+
+First construct \(\widetilde A_q,\widetilde u_q,\widetilde v_q\) from
+\Cref{def:exact-histogram-kernel}, and put \(N=N_q=\dim\widetilde A_q\).  Every
+entry is an integer obtained by the finite summation in the definition of
+\((\widetilde A_q)_{\eta,\eta'}\); no values of \(S_q(m)\) enter this
+construction.  Then form
+\[
+  \begin{gathered}
+  K=[v,Av,\dots,A^{N-1}v],
+  \qquad
+  B=[v,Av,\dots,A^{d-1}v],\\
+  R=
+  \begin{bmatrix}
+  u^{\mathsf T}A^2\\
+  u^{\mathsf T}A^3\\
+  \vdots\\
+  u^{\mathsf T}A^{N+1}
+  \end{bmatrix}
+  \end{gathered}
+\]
+where \(A=\widetilde A_q\), \(u=\widetilde u_q\), and
+\(v=\widetilde v_q\).  The residual verifier \(\mathsf W_q(P)\) accepts if and
+only if
+\[
+  RP(A)v=0.
+\]
+Using exact Gaussian elimination over \(\QQ\), the observable verifier
+\(\mathsf V_q(P)\) accepts if and only if
+\[
+  \rk(RK)=\rk(RB)=d
+  \quad\text{and}\quad
+  RP(A)v=0.
+\]
+Equivalently, after clearing denominators in the row reductions, acceptance is
+a finite collection of integer equalities together with nonzero integer minor
+certificates.  The residual verifier is already sufficient for the all-tail
+recurrence; the additional rank identities identify the observable quotient.
+The definition deliberately separates discovery from proof: however the
+coefficients of \(P\) were found, acceptance is an exact statement about the
+already defined matrix \(\widetilde A_q\).
+\end{definition}
+
+\begin{definition}[Finite recurrence certificate record]
+\label{def:finite-recurrence-certificate-record}
+For fixed \(q\ge2\) and a monic
+\[
+  P(X)=X^d-c_1X^{d-1}-\cdots-c_d\in\ZZ[X],
+\]
+a recurrence certificate record for \(P\) is the following finite collection of
+exact algebraic data.
+First, it contains the transition table of the fixed normalizer
+\(\mathcal T\), from which \(\widehat Q\), the histogram set \(\mathcal H_q\),
+and the integer matrix \(\widetilde A_q\) are reconstructed by
+\Cref{def:exact-histogram-kernel}.  Second, it contains the integer polynomial
+coefficients of \(P\).  Third, it contains the exact residual computation,
+after integer matrix multiplication, for the single equality
+\[
+  R_qP(\widetilde A_q)\widetilde v_q=0.
+\]
+Concretely, the verifier recomputes
+\[
+  z=P(\widetilde A_q)\widetilde v_q,\qquad
+  R_q=
+  \begin{bmatrix}
+  \widetilde u_q^{\mathsf T}\widetilde A_q^2\\
+  \widetilde u_q^{\mathsf T}\widetilde A_q^3\\
+  \vdots\\
+  \widetilde u_q^{\mathsf T}\widetilde A_q^{N_q+1}
+  \end{bmatrix},
+\]
+and checks the \(N_q\) integer equalities in \(R_qz=0\).  The number \(N_q\) is
+fixed before \(P\) is tested, namely
+\[
+  N_q=\dim\widetilde A_q=\binom{|\widehat Q|+q-1}{|\widehat Q|-1}.
+\]
+There is no choice of a terminal sample length in the moment variable \(m\).
+
+An observable-quotient certificate record additionally contains exact
+row-reduction witnesses for
+\[
+  \rk(R_qK_q)=\rk(R_qB_q)=d,
+\]
+with \(K_q=[\widetilde v_q,\widetilde A_q\widetilde v_q,\dots,
+\widetilde A_q^{N_q-1}\widetilde v_q]\) and
+\(B_q=[\widetilde v_q,\widetilde A_q\widetilde v_q,\dots,
+\widetilde A_q^{d-1}\widetilde v_q]\).
+The recurrence record is the object needed for the all-tail recurrence; the
+observable-quotient record is the additional object used for minimality and the
+Hankel statements.
+\end{definition}
+
+\begin{lemma}[Soundness of certificate records]
+\label{lem:finite-certificate-record-soundness}
+If a recurrence certificate record for \(P\) verifies
+\[
+  R_qP(\widetilde A_q)\widetilde v_q=0,
+\]
+then
+\[
+  S_q(m)=\sum_{i=1}^d c_iS_q(m-i)\qquad(m\ge d+2).
+\]
+If the observable-quotient certificate record also verifies
+\(\rk(R_qK_q)=\rk(R_qB_q)=d\), then \(P\) is the characteristic polynomial of
+the induced endomorphism on
+\(\mathcal O_2(\widetilde A_q,\widetilde u_q,\widetilde v_q)\).
+\end{lemma}
+
+\begin{proof}
+The residual part is exactly \(\mathsf W_q(P)=\mathrm{accept}\) in
+\Cref{def:exact-kernel-verifier}, so
+\Cref{lem:exact-kernel-verifier-soundness} gives the all-tail recurrence.
+The additional rank identities are exactly the hypotheses of
+\Cref{lem:cyclic-observable-quotient-certificate} with
+\((A,u,v,h)=(\widetilde A_q,\widetilde u_q,\widetilde v_q,2)\), which gives the
+quotient interpretation.
+\end{proof}
+
+\begin{lemma}[Scalar-free nature of the verifier]
+\label{lem:scalar-free-verifier}
+The acceptance of \(\mathsf W_q(P)\) depends only on the exact transition table
+of \(\mathcal T\), the integer coefficients of \(P\), and exact integer
+arithmetic in the matrix \(\widetilde A_q\).  It does not use the scalar moment
+values \(S_q(0),S_q(1),\dots\), and it does not use a fitted recurrence for
+those scalar values.
+\end{lemma}
+
+\begin{proof}
+\Cref{def:exact-kernel-verifier} constructs \(\widetilde A_q\) entry by entry
+from the finite summation in \Cref{def:exact-histogram-kernel}.  It then forms
+the integer vector \(P(\widetilde A_q)\widetilde v_q\) and tests its dot
+products against the rows
+\[
+  \widetilde u_q^{\mathsf T}\widetilde A_q^2,\,
+  \widetilde u_q^{\mathsf T}\widetilde A_q^3,\dots,
+  \widetilde u_q^{\mathsf T}\widetilde A_q^{N_q+1}.
+\]
+All of these objects are obtained before any scalar coefficient
+\(\widetilde u_q^{\mathsf T}\widetilde A_q^m\widetilde v_q\) is evaluated.
+Thus the verifier substitutes \(P\) into the exact kernel and checks a matrix
+residual; it is not a recurrence fit to a scalar list.
+\end{proof}
+
+\begin{definition}[Observable quotient of a kernel]
+\label{def:observable-quotient}
+Let \(A\in M_N(\ZZ)\), let \(u,v\in\ZZ^N\), and fix an offset \(h\ge0\).  Put
+\[
+  W(A,v):=\operatorname{span}_{\QQ}\{A^jv:\ j\ge0\}\subseteq\QQ^N
+\]
+and
+\[
+  Z_h(A,u,v):=
+  \{w\in W(A,v): u^{\mathsf T}A^t w=0\text{ for every }t\ge h\}.
+\]
+The space \(Z_h(A,u,v)\) is \(A\)-stable, so \(A\) induces an endomorphism
+\(\overline A_h\) of the finite-dimensional quotient
+\[
+  \mathcal O_h(A,u,v):=W(A,v)/Z_h(A,u,v).
+\]
+We call \(\mathcal O_h(A,u,v)\) the observable quotient at offset \(h\).
+\end{definition}
+
+\begin{lemma}[Finite construction of the observable quotient]
+\label{lem:cayley-hamilton-recurrence-certificate}
+The quotient \(\mathcal O_h(A,u,v)\) of
+\Cref{def:observable-quotient} is determined by finitely many exact rational
+linear-algebra operations.  More precisely,
+\[
+  W(A,v)=
+  \operatorname{span}_{\QQ}\{v,Av,\dots,A^{N-1}v\},
+\]
+and \(Z_h(A,u,v)\) is the kernel, inside this finite space, of the finite map
+\[
+  w\longmapsto
+  \bigl(u^{\mathsf T}A^h w,\,
+        u^{\mathsf T}A^{h+1} w,\dots,
+        u^{\mathsf T}A^{h+N-1}w\bigr).
+\]
+\end{lemma}
+
+\begin{proof}
+The first equality is the standard Krylov consequence of the
+Cayley--Hamilton identity for \(A\).  For the second assertion, the displayed
+finite map clearly vanishes on \(Z_h(A,u,v)\).  Conversely, suppose it vanishes
+on \(w\in W(A,v)\).  The scalar sequence
+\[
+  r_t:=u^{\mathsf T}A^t w
+\]
+satisfies the characteristic recurrence of \(A\), again by
+Cayley--Hamilton.  Hence \(N\) consecutive zeros
+\[
+  r_h=r_{h+1}=\cdots=r_{h+N-1}=0
+\]
+force \(r_t=0\) for every \(t\ge h\).  Thus \(w\in Z_h(A,u,v)\).
+\end{proof}
+
+\begin{lemma}[Kernel recurrence certificate]
+\label{lem:kernel-recurrence-certificate}
+Let \(s_m=u^{\mathsf T}A^m v\).  Suppose an exact computation of
+\(\mathcal O_h(A,u,v)\) gives
+\[
+  \dim\mathcal O_h(A,u,v)=d
+  \quad\text{and}\quad
+  \begin{aligned}
+  \chi_{\overline A_h}(X)
+  &=
+  X^d-c_1X^{d-1}-c_2X^{d-2} \\
+  &\quad{}-\cdots-c_d \\
+  &\in\ZZ[X].
+  \end{aligned}
+\]
+Then
+\[
+  s_m=\sum_{i=1}^d c_i s_{m-i}
+  \qquad(m\ge d+h).
+\]
+The certificate is an invariant finite-matrix statement: by
+\Cref{lem:cayley-hamilton-recurrence-certificate}, it is obtained from the
+integer matrix \(A\), the vectors \(u,v\), and the two finite Krylov lists
+\[
+  v,Av,\dots,A^{N-1}v,
+  \qquad
+  u^{\mathsf T}A^h,u^{\mathsf T}A^{h+1},\dots,u^{\mathsf T}A^{h+N-1}.
+\]
+No scalar moment values \(s_m\) are used to infer the polynomial.
+\end{lemma}
+
+\begin{proof}
+Cayley--Hamilton applied on the quotient gives
+\[
+  \chi_{\overline A_h}(\overline A_h)\,\overline v=0
+  \qquad\text{in }\mathcal O_h(A,u,v),
+\]
+where \(\overline v\) is the class of \(v\).  Equivalently,
+\[
+  \chi_{\overline A_h}(A)v\in Z_h(A,u,v).
+\]
+Thus
+\[
+  u^{\mathsf T}A^t\chi_{\overline A_h}(A)v=0
+  \qquad(t\ge h).
+\]
+For \(m\ge d+h\), set \(t=m-d\).  Then
+\[
+  s_m-\sum_{i=1}^d c_i s_{m-i}
+  =
+  u^{\mathsf T}A^{m-d}\chi_{\overline A_h}(A)v
+  =
+  0.
+\]
+\end{proof}
+
+\begin{lemma}[Cyclic observable-quotient certificate]
+\label{lem:cyclic-observable-quotient-certificate}
+Let \(A\in M_N(\ZZ)\), let \(u,v\in\ZZ^N\), fix \(h\ge0\), and put
+\[
+  R_h=
+  \begin{bmatrix}
+  u^{\mathsf T}A^h\\
+  u^{\mathsf T}A^{h+1}\\
+  \vdots\\
+  u^{\mathsf T}A^{h+N-1}
+  \end{bmatrix},
+  \qquad
+  K=[v,Av,\dots,A^{N-1}v].
+\]
+Let
+\[
+  P(X)=X^d-c_1X^{d-1}-\cdots-c_d\in\ZZ[X],
+  \qquad
+  B=[v,Av,\dots,A^{d-1}v].
+\]
+If
+\[
+  R_hP(A)v=0,\qquad \rk(R_hK)=\rk(R_hB)=d,
+\]
+then the exact observable quotient
+\(\mathcal O_h(A,u,v)\) has dimension \(d\), the classes of
+\[
+  v,Av,\dots,A^{d-1}v
+\]
+form a cyclic basis, and the induced endomorphism of
+\(\mathcal O_h(A,u,v)\) has characteristic polynomial \(P\).  Moreover, for
+\(s_m=u^{\mathsf T}A^m v\),
+\[
+  s_m=\sum_{i=1}^d c_i s_{m-i}
+  \qquad(m\ge d+h).
+\]
+\end{lemma}
+
+\begin{proof}
+By \Cref{lem:cayley-hamilton-recurrence-certificate}, the columns of \(K\)
+span \(W(A,v)\), and \(Z_h(A,u,v)\) is the kernel of the finite map
+\[
+  w\longmapsto
+  (u^{\mathsf T}A^h w,\dots,u^{\mathsf T}A^{h+N-1}w).
+\]
+Therefore \(\rk(R_hK)=\dim\mathcal O_h(A,u,v)\).  The equality
+\(\rk(R_hB)=\rk(R_hK)=d\) says that the first \(d\) Krylov classes span this
+quotient and are linearly independent there.
+
+The residual identity \(R_hP(A)v=0\) puts \(P(A)v\) in \(Z_h(A,u,v)\).  In the
+quotient this is
+\[
+  \overline A^{\,d}\overline v
+  =
+  c_1\overline A^{\,d-1}\overline v+\cdots+c_d\overline v.
+\]
+With respect to the cyclic basis
+\(\overline v,\overline A\overline v,\dots,\overline A^{d-1}\overline v\),
+the induced endomorphism is therefore the companion matrix of \(P\), whose
+characteristic polynomial is \(P\).  The recurrence for \(s_m\) is exactly
+\Cref{lem:direct-residual-certificate} applied to the same residual identity.
+\end{proof}
+
+\begin{lemma}[Soundness of the exact kernel verifier]
+\label{lem:exact-kernel-verifier-soundness}
+Let \(P(X)=X^d-c_1X^{d-1}-\cdots-c_d\in\ZZ[X]\).  If
+\(\mathsf W_q(P)\) accepts, and therefore if \(\mathsf V_q(P)\) accepts, then
+\[
+  S_q(m)=\sum_{i=1}^d c_iS_q(m-i)
+  \qquad(m\ge d+2).
+\]
+\end{lemma}
+
+\begin{proof}
+Construct \(A=\widetilde A_q\), \(u=\widetilde u_q\), and
+\(v=\widetilde v_q\) as in \Cref{def:exact-kernel-verifier}.  Acceptance of
+\(\mathsf W_q(P)\) is exactly the residual identity \(RP(A)v=0\) with
+\[
+  R=
+  \begin{bmatrix}
+  u^{\mathsf T}A^2\\
+  u^{\mathsf T}A^3\\
+  \vdots\\
+  u^{\mathsf T}A^{N+1}
+  \end{bmatrix}.
+\]
+\Cref{lem:direct-residual-certificate}, applied with \(h=2\), gives
+\[
+  u^{\mathsf T}A^m v
+  =
+  \sum_{i=1}^d c_i\,u^{\mathsf T}A^{m-i}v
+  \qquad(m\ge d+2).
+\]
+Using \(S_q(m)=u^{\mathsf T}A^mv\) from
+\Cref{lem:exact-histogram-realization} yields the claimed recurrence.  Since
+\(\mathsf V_q(P)\) includes the residual identity among its acceptance
+conditions, the same conclusion holds if \(\mathsf V_q(P)\) accepts.
+\end{proof}
+
+\begin{theorem}[A priori exact-kernel certification]
+\label{thm:apriori-exact-kernel-certification}
+Fix \(q\ge2\), construct the exact histogram kernel
+\[
+  (A,u,v,N)=(\widetilde A_q,\widetilde u_q,\widetilde v_q,N_q)
+\]
+from \Cref{def:exact-histogram-kernel}, and let
+\[
+  P(X)=X^d-c_1X^{d-1}-\cdots-c_d\in\ZZ[X].
+\]
+Set
+\[
+  R=
+  \begin{bmatrix}
+  u^{\mathsf T}A^2\\
+  u^{\mathsf T}A^3\\
+  \vdots\\
+  u^{\mathsf T}A^{N+1}
+  \end{bmatrix}.
+\]
+If the exact integer residual identity
+\[
+  RP(A)v=0
+\]
+holds, then
+\[
+  S_q(m)=\sum_{i=1}^d c_iS_q(m-i)
+  \qquad(m\ge d+2).
+\]
+Thus the recurrence follows from an exact kernel matrix and the a priori
+Cayley--Hamilton order bound \(N=\dim A\).  No scalar sample interval in the
+moment variable is part of the hypothesis.
+
+If, in addition, with
+\[
+  K=[v,Av,\dots,A^{N-1}v],
+  \qquad
+  B=[v,Av,\dots,A^{d-1}v],
+\]
+one has
+\[
+  \rk(RK)=\rk(RB)=d,
+\]
+then \(P\) is the characteristic polynomial of the endomorphism induced by
+\(A\) on \(\mathcal O_2(A,u,v)\).
+\end{theorem}
+
+\begin{proof}
+The residual identity is exactly the hypothesis of
+\Cref{lem:direct-residual-certificate} with \(h=2\), so the scalar coefficient
+\(u^{\mathsf T}A^m v\) satisfies the displayed recurrence for \(m\ge d+2\).
+\Cref{lem:exact-histogram-realization} identifies this scalar coefficient with
+\(S_q(m)\).
+
+The rank assertion is independent of the recurrence propagation.  With \(h=2\),
+\Cref{lem:cyclic-observable-quotient-certificate} says that the ranks construct
+the observable quotient, make
+\(\overline v,\overline{Av},\dots,\overline{A^{d-1}v}\) a cyclic basis there,
+and represent the induced operator by the companion matrix of \(P\).  Hence the
+characteristic polynomial on the quotient is \(P\).
+\end{proof}
+
+The next table states the polynomials.  It is not, by itself, a proof of an
+all-tail recurrence.  The proof consists of the exact residual identity
+\(R_qP_q(\widetilde A_q)\widetilde v_q=0\) in
+Table~\ref{tab:appendix-recurrence-cert-normalization} plus the a priori
+certification theorem \Cref{thm:apriori-exact-kernel-certification}; the theorem
+after the certificate tables reads the two tables together.
 
 \begin{table}[t]
 \centering
 \scriptsize
 \setlength{\tabcolsep}{6pt}
-\caption{Exact integer recurrences for the collision moments
+\caption{Row polynomials for the collision-moment certificate records
 \(S_q(m)=\sum_{x\in X_m} d_m(x)^q\) in the arithmetic window \(q=9,\dots,17\).
 The coefficients are written in the form
-\(S_q(m)=\sum_{i=1}^{d_q} c_{q,i}S_q(m-i)\).}
+\(P_q(X)=X^{d_q}-c_{q,1}X^{d_q-1}-\cdots-c_{q,d_q}\).  The tail column records
+the all-tail conclusion
+\(S_q(m)=\sum_{i=1}^{d_q} c_{q,i}S_q(m-i)\) for \(m\ge d_q+2\), obtained only
+after the residual-verifier theorem is applied to the exact kernel certificates
+in Table~\ref{tab:appendix-recurrence-cert-normalization}.  It is not the
+endpoint of a finite scalar comparison.}
 \label{tab:appendix-recurrences-q9-17}
 \begin{tabular}{r r r l}
 \toprule
-\(q\) & \(d_q\) & valid for \(m\ge\) & \((c_{q,1},\dots,c_{q,d_q})\)\\
+\(q\) & \(d_q\) & tail \(m\ge\) & \((c_{q,1},\dots,c_{q,d_q})\)\\
 \midrule
 9  & 7  & 9  & \((2, 62, 386, 2819, 62, 900, -450)\)\\
 10 & 9  & 11 & \((2, 96, 830, 7945, 2, 1852, -830, 4, -4)\)\\
@@ -81,12 +780,339 @@ The coefficients are written in the form
 \end{tabular}
 \end{table}
 
+For the row \(q\), set
+\[
+  P_q(X):=
+  X^{d_q}
+  -c_{q,1}X^{d_q-1}
+  -c_{q,2}X^{d_q-2}
+  -\cdots
+  -c_{q,d_q}.
+\]
+The recurrence assertion attached to Table~\ref{tab:appendix-recurrences-q9-17}
+is not part of the table data.  It is the theorem-level consequence of the
+certificate table below.  In kernel form the assertion is
+equivalent to
+\[
+  \widetilde u_q^{\mathsf T}\widetilde A_q^t
+  P_q(\widetilde A_q)\widetilde v_q=0
+  \qquad(t\ge2).
+\]
+The coefficient table alone is not used as evidence for this assertion.  The
+next table records the exact kernel residual identity and observable-quotient
+ranks from which the assertion follows.  A table entry is shorthand for the
+finite rational linear-algebra certificate of
+\Cref{def:exact-kernel-verifier}: reconstruct \(\widetilde A_q\) from
+\Cref{def:exact-histogram-kernel}, form \(z_q=P_q(\widetilde A_q)\widetilde v_q\),
+and verify the exact integer vector equality \(R_qz_q=0\).  The subsequent
+observability table records the finite row set that constructs the unobservable
+subspace \(Z_q\), where \(N_q=\dim\widetilde A_q\) is known before \(P_q\) is
+tested.
+
+\begin{table}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\caption{Exact kernel certificates for the recurrence table above, in the
+format of \Cref{def:finite-recurrence-certificate-record}.  Here
+\(R_q\) is the exact \(N_q\)-row observability block and
+\(K_q,B_q\) are the exact Krylov blocks formed from
+\((\widetilde A_q,\widetilde u_q,\widetilde v_q)\).  The residual identity
+\(R_qP_q(\widetilde A_q)\widetilde v_q=0\) is the primary all-tail recurrence
+certificate \(\mathsf W_q(P_q)=\mathrm{accept}\).  The two rank identities are
+the additional observable-quotient certificate
+\(\mathsf V_q(P_q)=\mathrm{accept}\).  After denominators are cleared, these are
+integer equalities and nonzero minor certificates.}
+\label{tab:appendix-recurrence-cert-normalization}
+\begin{tabular}{r r r r p{0.48\textwidth}}
+\toprule
+\(q\) & \(d_q\) & \(m_0(q)\) & offset & certificate output\\
+\midrule
+9  & 7  & 9  & 2 & \(R_qP_q(\widetilde A_q)\widetilde v_q=0\);
+  \(\rk(R_qK_q)=\rk(R_qB_q)=7\).\\
+10 & 9  & 11 & 2 & \(R_qP_q(\widetilde A_q)\widetilde v_q=0\);
+  \(\rk(R_qK_q)=\rk(R_qB_q)=9\).\\
+11 & 9  & 11 & 2 & \(R_qP_q(\widetilde A_q)\widetilde v_q=0\);
+  \(\rk(R_qK_q)=\rk(R_qB_q)=9\).\\
+12 & 13 & 15 & 2 & \(R_qP_q(\widetilde A_q)\widetilde v_q=0\);
+  \(\rk(R_qK_q)=\rk(R_qB_q)=13\).\\
+13 & 11 & 13 & 2 & \(R_qP_q(\widetilde A_q)\widetilde v_q=0\);
+  \(\rk(R_qK_q)=\rk(R_qB_q)=11\).\\
+14 & 13 & 15 & 2 & \(R_qP_q(\widetilde A_q)\widetilde v_q=0\);
+  \(\rk(R_qK_q)=\rk(R_qB_q)=13\).\\
+15 & 11 & 13 & 2 & \(R_qP_q(\widetilde A_q)\widetilde v_q=0\);
+  \(\rk(R_qK_q)=\rk(R_qB_q)=11\).\\
+16 & 13 & 15 & 2 & \(R_qP_q(\widetilde A_q)\widetilde v_q=0\);
+  \(\rk(R_qK_q)=\rk(R_qB_q)=13\).\\
+17 & 13 & 15 & 2 & \(R_qP_q(\widetilde A_q)\widetilde v_q=0\);
+  \(\rk(R_qK_q)=\rk(R_qB_q)=13\).\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The certificate entries in
+\Cref{tab:appendix-recurrence-cert-normalization} have the exact finite meaning
+of \Cref{def:finite-recurrence-certificate-record}.  Put
+\(A=\widetilde A_q\), \(u=\widetilde u_q\),
+\(v=\widetilde v_q\), and \(N=N_q\).  Form the finite Krylov matrix
+\[
+  K_q=\bigl[v\ Av\ \cdots\ A^{N-1}v\bigr]
+\]
+and the finite observability matrix
+\[
+  R_q=
+  \begin{bmatrix}
+  u^{\mathsf T}A^2\\
+  u^{\mathsf T}A^3\\
+  \vdots\\
+  u^{\mathsf T}A^{N+1}
+  \end{bmatrix},
+  \qquad
+  B_q=\bigl[v\ Av\ \cdots\ A^{d_q-1}v\bigr].
+\]
+The equality \(R_qP_q(A)v=0\) is the primary recurrence certificate.  By
+\Cref{thm:apriori-exact-kernel-certification}, it gives
+\[
+  u^{\mathsf T}A^tP_q(A)v=0\qquad(t\ge2),
+\]
+and hence the all-tail recurrence.  The rank identities have a separate role:
+they identify the observable quotient on which \(P_q\) is the characteristic
+polynomial.
+\Cref{thm:apriori-exact-kernel-certification} also gives the precise quotient
+implication: the row space of \(R_q\) detects exactly the quotient
+\(W(A,v)/Z_2(A,u,v)\), the equality \(\rk(R_qK_q)=d_q\) gives quotient
+dimension \(d_q\), the equality \(\rk(R_qB_q)=d_q\) makes
+\[
+  \overline v,\overline{Av},\dots,\overline{A^{d_q-1}v}
+\]
+a cyclic basis, and the residual equality supplies the companion relation.
+Therefore multiplication by \(A\) on the observable quotient has characteristic
+polynomial \(P_q\).
+After denominators are cleared, the residual equality and the row reductions
+certifying the displayed ranks are integer identities.  Thus the table records a
+proof object inside the exact kernel: reconstruct \(\widetilde A_q\) from
+\Cref{def:exact-histogram-kernel}, form \(K_q,R_q,B_q\), perform exact Gaussian
+elimination over \(\QQ\), and multiply the integer residual
+\(R_qP_q(A)v\).  No scalar values \(S_q(0),S_q(1),\dots\) are used to infer
+\(P_q\), and a row is not certified by checking the recurrence at selected
+length indices.
+
+\begin{theorem}[Soundness of the recurrence certificate records]
+\label{prop:observable-quotient-derivation}
+For every \(q=9,\dots,17\), the recurrence and observable-quotient records
+specified in Theorem~\ref{thm:arithmetic-window-certificates} imply that the
+exact residual verifier
+\(\mathsf W_q(P_q)\) accepts the row polynomial \(P_q\) in
+Table~\ref{tab:appendix-recurrences-q9-17}; explicitly,
+\[
+  R_qP_q(\widetilde A_q)\widetilde v_q=0.
+\]
+The additional row-reduction records imply
+\(\mathsf V_q(P_q)=\mathrm{accept}\).  Equivalently, \(P_q\) is the
+characteristic polynomial of multiplication by \(\widetilde A_q\) on
+\[
+  \mathcal O_2(\widetilde A_q,\widetilde u_q,\widetilde v_q).
+\]
+\end{theorem}
+
+\begin{proof}
+For each displayed \(q\), the recurrence record of
+Theorem~\ref{thm:arithmetic-window-certificates} is a finite certificate record in the
+sense of \Cref{def:finite-recurrence-certificate-record} for the printed
+polynomial \(P_q\).  Its content is an exact identity in \(\ZZ\) after the
+kernel has been constructed; it is not a scalar recurrence tested on a finite
+interval of \(m\)-values.  The record reconstructs the integer matrix
+\(\widetilde A_q\) and the two integer vectors
+\(\widetilde u_q,\widetilde v_q\) from
+\Cref{def:exact-histogram-kernel}, using the fixed transducer table of
+Appendix~\ref{app:transducer}.  It then consists of the exact vectors below and
+integer equalities and nonzero minors.  The scalar values \(S_q(m)\) are not
+formed in this record.  The proof object has three parts:
+\[
+  \bigl(z_q,\ R_qz_q,\ \text{rank witnesses for }R_qK_q
+  \text{ and }R_qB_q\bigr).
+\]
+First form the integer vector
+\[
+  z_q:=P_q(\widetilde A_q)\widetilde v_q\in\ZZ^{N_q}
+\]
+by repeated integer matrix-vector multiplication, and form the exact rows
+\[
+  \widetilde u_q^{\mathsf T}\widetilde A_q^2,\,
+  \widetilde u_q^{\mathsf T}\widetilde A_q^3,\dots,
+  \widetilde u_q^{\mathsf T}\widetilde A_q^{N_q+1}.
+\]
+The recurrence part of the proof object is the equality \(R_qz_q=0\), namely the
+exact statement that the \(N_q\) integer dot products of these rows with \(z_q\)
+are all zero:
+\[
+  R_qP_q(\widetilde A_q)\widetilde v_q=0.
+\]
+This is the residual verifier acceptance
+\(\mathsf W_q(P_q)=\mathrm{accept}\).  The integer \(N_q\) used here is the
+proved Cayley--Hamilton dimension bound
+\(\binom{|\widehat Q|+q-1}{|\widehat Q|-1}\) for the exact histogram kernel,
+not a fitted order for the scalar sequence.  Therefore this kernel check is
+equivalent to
+\(P_q(\widetilde A_q)\widetilde v_q\in Z_2\).  No scalar moment list enters
+this test, and no equality of the form
+\[
+  S_q(m)=\sum_i c_{q,i}S_q(m-i)
+\]
+is used as a raw finite-window extrapolation; see
+\Cref{lem:scalar-free-verifier,cor:finite-scalar-check-with-order-bound}.  By
+\Cref{thm:apriori-exact-kernel-certification}, the equality \(R_qz_q=0\)
+gives the displayed identity for every \(t\ge2\).
+
+The rank-witness part of the proof object consists, after clearing
+denominators in the Gaussian eliminations, of integer row-reduction identities
+together with nonzero \(d_q\times d_q\) minor certificates.  These witnesses
+give
+\[
+  \rk(R_qK_q)=\rk(R_qB_q)=d_q.
+\]
+By the quotient part of \Cref{thm:apriori-exact-kernel-certification}, these rank
+identities and the residual identity imply that the first \(d_q\) Krylov
+classes form a cyclic basis of
+\(\mathcal O_2(\widetilde A_q,\widetilde u_q,\widetilde v_q)\), that the
+induced endomorphism is represented by the companion matrix of \(P_q\), and
+that \(\chi_{\overline A_q}=P_q\).  The all-tail recurrence and the
+observable-quotient interpretation are then consequences of the soundness
+theorems above, not separate finite scalar extrapolations.
+\end{proof}
+
+\begin{table}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\caption{Finite construction of the unobservable subspace used by the
+recurrence certificate.  The \(N_q\) rows are the Cayley--Hamilton
+observability rows defining \(Z_q\) inside the exact kernel; they are not a
+scalar sample check of the raw moment list.
+Here \(k=|\widehat Q|=2|Q|(2^{L+2}-1)\) and
+\(N_q=\dim\widetilde A_q=\binom{k+q-1}{k-1}\).  The row means that
+\(P_q(\widetilde A_q)\widetilde v_q\) is tested against exactly the displayed
+rows of \(R_q\); by \Cref{lem:cayley-hamilton-recurrence-certificate}, passing
+this test is equivalent to membership in the all-tail subspace \(Z_q\).}
+\label{tab:appendix-residual-order-certificates}
+\begin{tabular}{r r r l}
+\toprule
+\(q\) & \(d_q\) & \(N_q\) & observability rows defining \(Z_q\) \\
+\midrule
+9  & 7  & \(\binom{k+8}{k-1}\)  & \(t=2,\dots,N_9+1\)\\
+10 & 9  & \(\binom{k+9}{k-1}\)  & \(t=2,\dots,N_{10}+1\)\\
+11 & 9  & \(\binom{k+10}{k-1}\) & \(t=2,\dots,N_{11}+1\)\\
+12 & 13 & \(\binom{k+11}{k-1}\) & \(t=2,\dots,N_{12}+1\)\\
+13 & 11 & \(\binom{k+12}{k-1}\) & \(t=2,\dots,N_{13}+1\)\\
+14 & 13 & \(\binom{k+13}{k-1}\) & \(t=2,\dots,N_{14}+1\)\\
+15 & 11 & \(\binom{k+14}{k-1}\) & \(t=2,\dots,N_{15}+1\)\\
+16 & 13 & \(\binom{k+15}{k-1}\) & \(t=2,\dots,N_{16}+1\)\\
+17 & 13 & \(\binom{k+16}{k-1}\) & \(t=2,\dots,N_{17}+1\)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{proposition}[Kernel residual certificate gives the all-tail recurrence]
+\label{prop:quotient-residual-equivalence}
+For the exact histogram kernels, the certificate records of
+Theorem~\ref{thm:arithmetic-window-certificates} give the residual identity in
+\Cref{tab:appendix-recurrence-cert-normalization}, namely
+\[
+  P_q(\widetilde A_q)\widetilde v_q\in
+  Z_2(\widetilde A_q,\widetilde u_q,\widetilde v_q).
+\]
+Consequently it implies the recurrence in the stated validity range.  The
+finite row set in \Cref{tab:appendix-residual-order-certificates} appears only
+because Cayley--Hamilton gives a finite construction of \(Z_2\); it is not a
+finite scalar sample check of the moment sequence.
+The row-reduction rank identities are not needed for this implication.
+\end{proposition}
+
+\begin{proof}
+Fix \(q\) and abbreviate
+\((A,u,v)=(\widetilde A_q,\widetilde u_q,\widetilde v_q)\).  The exact
+residual identity gives
+\[
+  u^{\mathsf T}A^tP_q(A)v=0\qquad(t=2,\dots,N_q+1).
+\]
+By \Cref{lem:cayley-hamilton-recurrence-certificate}, these finitely many
+equalities are equivalent to \(P_q(A)v\in Z_2(A,u,v)\).  Hence
+\[
+  u^{\mathsf T}A^tP_q(A)v=0\qquad(t\ge2).
+\]
+Putting \(m=t+d_q\), using \(m_0(q)=d_q+2\), and rewriting
+\(S_q(m)=u^{\mathsf T}A^mv\) gives the recurrence for \(S_q(m)\) throughout
+the displayed tail.
+\end{proof}
+
+\begin{theorem}[Kernel derivation of the arithmetic-window recurrences]
+\label{prop:kernel-derived-recurrences}
+For each \(q=9,\dots,17\), the coefficient row of
+Table~\ref{tab:appendix-recurrences-q9-17}, together with the exact residual
+certificate of Theorem~\ref{thm:arithmetic-window-certificates} recorded in
+Table~\ref{tab:appendix-recurrence-cert-normalization}, gives a
+recurrence satisfied by \(S_q(m)\) for every integer \(m\) in the displayed
+validity range.  Equivalently,
+the exact kernel identity, for every \(t\ge2\),
+\[
+  \widetilde u_q^{\mathsf T}\widetilde A_q^t
+  P_q(\widetilde A_q)\widetilde v_q=0
+\]
+holds for every \(q=9,\dots,17\).
+\end{theorem}
+
+\begin{proof}
+Fix \(q\in\{9,\dots,17\}\), and take the exact histogram realization
+\[
+  S_q(m)=\widetilde u_q^{\mathsf T}\widetilde A_q^m\widetilde v_q
+\]
+from \Cref{lem:exact-histogram-realization}.
+Let \(d_q\), \(m_0(q)\), and the coefficient vector
+\((c_{q,1},\dots,c_{q,d_q})\) be the data in
+Table~\ref{tab:appendix-recurrences-q9-17}.  Set
+\[
+  P_q(X):=
+  X^{d_q}
+  -c_{q,1}X^{d_q-1}
+  -\cdots
+  -c_{q,d_q}.
+\]
+
+By Theorem~\ref{prop:observable-quotient-derivation}, the residual certificate
+\(\mathsf W_q(P_q)=\mathrm{accept}\) holds as an exact identity in
+\(\widetilde A_q\).  Applying
+\Cref{thm:apriori-exact-kernel-certification} gives the kernel identity for
+every \(t\ge2\),
+\[
+  \widetilde u_q^{\mathsf T}\widetilde A_q^t
+  P_q(\widetilde A_q)\widetilde v_q=0.
+\]
+Every row of Table~\ref{tab:appendix-recurrences-q9-17} has
+\(m_0(q)=d_q+2\).  Put \(m=t+d_q\).  The displayed identity becomes
+\[
+  S_q(m)=\sum_{i=1}^{d_q}c_{q,i}S_q(m-i)
+  \qquad(m\ge d_q+2).
+\]
+This proves the recurrence in the displayed validity range.  The proof has used
+the coefficient row only after the exact residual verifier has accepted it in the
+kernel.
+
+\Cref{prop:quotient-residual-equivalence} gives the same proof in
+unobservable-subspace language: the identity
+\(R_qP_q(\widetilde A_q)\widetilde v_q=0\) is exactly the finite construction
+of the inclusion
+\(P_q(\widetilde A_q)\widetilde v_q\in Z_2\), and membership in \(Z_2\) gives
+the whole tail.  This theorem is therefore the proof of the recurrence rows in
+Table~\ref{tab:appendix-recurrences-q9-17}.  No floating-point root data, and no
+extrapolation from finitely many scalar values of \(S_q(m)\), enters the proof.
+\end{proof}
+
 \begin{table}[t]
 \centering
 \scriptsize
 \setlength{\tabcolsep}{6pt}
-\caption{Smith-normal-form certificates for
-\Cref{thm:principalization}.  For each \(q\), the displayed diagonal is the
+\caption{Smith-normal-form certificates for Hankel principalization.  For each
+\(q\), the displayed diagonal is the
 Smith normal form of the change-of-basis matrix from the truncated-multiple
 basis \(\{P_q,\lambda P_q,\dots,\lambda^{\kappa_q-1}P_q\}\) to an integral
 basis of \(\mathrm{NullModes}(q)\).  In particular, every invariant factor is
@@ -110,52 +1136,77 @@ index \(1\).}
 \end{tabular}
 \end{table}
 
-\medskip
-\noindent\textbf{Provenance of the certificate tables.}
-The ancillary scripts used for the arithmetic window are the following:
-\begingroup\sloppy
-\begin{enumerate}
-  \item \path{exp_fold_collision_moment_recursions.py} and
-        \path{exp_fold_collision_moment_recursions_mod_dp.py}, which compute
-        exact values of \(S_q(m)\) and verify the printed recurrences on an
-        audit window in \(m\);
-  \item \path{exp_fold_collision_moment_charpoly_irreducible_q9_17.py}, which
-        exports the irreducibility, cycle-type, and discriminant-squareclass
-        tables used in Section~\ref{sec:chebotarev};
-  \item \path{exp_fold_collision_resonance_aitken_certificate_q9_17.py}, which
-        exports the root fingerprints used in
-        \Cref{tab:secondary-spectral-q9-17}.
-\end{enumerate}
-\endgroup
-The same arithmetic audit computes integral bases of the null modules
-\(\mathrm{NullModes}(q)\), confirming
-\(\rk_{\ZZ}\mathrm{NullModes}(q)=\kappa_q\), and the basis-change matrices
-whose Smith normal forms are recorded in
-\Cref{tab:appendix-principalization-q9-17}.
-In each case the audit produced both machine-readable JSON exports and the
-corresponding \LaTeX{} tables.
+\subsection{Exact certificate format for the arithmetic tables}
+
+Each certificate used in Section~\ref{sec:chebotarev} is a finite identity in
+an explicitly specified ring.  The recurrence certificate is the exact
+residual certificate \(\mathsf W_q(P_q)=\mathrm{accept}\) of
+\Cref{def:exact-kernel-verifier}, together with the scalar-free construction
+lemma \Cref{lem:scalar-free-verifier}, the a priori certification theorem
+\Cref{thm:apriori-exact-kernel-certification}, and the recurrence theorem
+\Cref{prop:kernel-derived-recurrences}.  It starts from the exact
+histogram kernel of \Cref{def:exact-histogram-kernel}, checks the exact integer
+identity
+\[
+  R_qP_q(\widetilde A_q)\widetilde v_q=0,
+\]
+which is the finite Cayley--Hamilton construction of
+\(P_q(\widetilde A_q)\widetilde v_q\in Z_2\).  Membership in \(Z_2\) gives the
+all-tail recurrence.  The additional row-reduction identities
+\(\rk(R_qK_q)=\rk(R_qB_q)=d_q\) form the observable-quotient certificate
+\(\mathsf V_q(P_q)=\mathrm{accept}\); they identify the quotient polynomial and
+support the Hankel and minimality arguments, but they are not required for the
+tail recurrence.
+Thus a recurrence row is used only after it has passed through the chain
+\[
+  \begin{array}{c}
+  \text{histogram kernel}\\
+  \Downarrow\\
+  R_qP_q(\widetilde A_q)\widetilde v_q=0\\
+  \Downarrow\ \text{membership in }Z_2\\
+  P_q(E)S_q(j)=0\quad(j\ge2).
+  \end{array}
+\]
+
+The remaining tables have the following exact meanings.
+
+A Smith-normal-form certificate consists of integer unimodular matrices \(U,V\)
+with
+\[
+  U M_q V=\operatorname{diag}(1,\dots,1)
+\]
+for the relevant basis-change matrix \(M_q\) (with the vacuous \(0\times0\)
+case when \(\kappa_{12}=0\)).  A mod-\(p\) factorization certificate consists
+of monic factors in \(\FF_p[\lambda]\) whose product is \(P_q\bmod p\), together
+with the Euclidean gcd checks certifying the displayed degrees.  A
+discriminant-squareclass certificate computes
+\(\Disc(P_q)=(-1)^{d_q(d_q-1)/2}\operatorname{Res}(P_q,P_q')\) and then applies
+Euler's criterion in the displayed finite fields.  Thus the tables record
+exact algebraic certificates; the high-precision root table below is the only
+numerical table, and it is not used in the proofs.
 
 \medskip
 \noindent\textbf{Role in the paper.}
 The proofs in Section~\ref{sec:chebotarev} use only the exact polynomials
-\(P_q\) determined by Table~\ref{tab:appendix-recurrences-q9-17}, the
-Smith-normal-form certificates displayed in
+\(P_q\) determined by the kernel-certified recurrences of
+Table~\ref{tab:appendix-recurrences-q9-17} and
+\Cref{prop:kernel-derived-recurrences}, the Smith-normal-form certificates
+displayed in
 \Cref{tab:appendix-principalization-q9-17}, and the finite mod-\(p\)
 factorization patterns displayed in
 \Cref{tab:galois-certificates-q9-17,tab:disc-squareclass-q12-15}.  The
 high-precision root fingerprints recorded in
-\Cref{tab:secondary-spectral-q9-17} are included as audited descriptive data,
+\Cref{tab:secondary-spectral-q9-17} are included as secondary descriptive data,
 but they are not used in the rigorous theorem chain.
 The appendix is included to make these inputs explicit and citable inside the
-submission itself, rather than leaving them implicit in an external source
-tree.
+submission itself, rather than relying on the secondary numerical fingerprints.
 
-\subsection{Audited secondary spectral fingerprints}
+\subsection{Secondary spectral fingerprints}
 
 The following table is intentionally separated from
-Section~\ref{sec:chebotarev}.  It records the numerically audited spectral
-picture attached to the resonance polynomials \(P_q\) but is not used in any
-proof above.
+Section~\ref{sec:chebotarev}.  It records the high-precision spectral picture
+attached to the resonance polynomials \(P_q\) but is not used in any proof
+above.
 
 \begin{table}[t]
 \centering
@@ -196,13 +1247,14 @@ are consistent with a unique negative real secondary root satisfying
 If this ordering is upgraded to a symbolic root-isolation certificate, then the
 usual linear-recurrence expansion would yield an eventual alternating
 second-order term for \(S_q(m)\).  At present, however, these data remain
-audited descriptive fingerprints rather than symbolic isolation intervals, and
+descriptive fingerprints rather than symbolic isolation intervals, and
 we therefore keep them outside the formal theorem chain.
 \end{remark}
 
 \begin{remark}[What remains open]
 \label{rem:q16q17}
-The full symmetric-group statement already closes for \(q=16\) and \(q=17\).
+The exact certificate records above close the full symmetric-group statement for
+\(q=16\) and \(q=17\).
 The next arithmetic target is to extend squareclass independence and linear
 disjointness beyond the block \(q=12,13,14,15\).  On the spectral side, the
 table above strongly suggests a persistent negative second root throughout the

@@ -1,9 +1,10 @@
 \documentclass[11pt,a4paper]{amsart}
 
-\usepackage{amsmath,amssymb,amsthm,mathrsfs}
+\usepackage{amsmath,amssymb,amsthm}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{hyperref}
+\usepackage{aliascnt}
 \usepackage{cleveref}
 \usepackage{enumitem}
 \usepackage[protrusion=true,expansion=false]{microtype}
@@ -11,15 +12,44 @@
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{lemma}[theorem]{Lemma}
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+\newaliascnt{corollary}{theorem}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+\newaliascnt{lemma}{theorem}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
 
 \theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
+\newaliascnt{definition}{theorem}
+\newtheorem{definition}[definition]{Definition}
+\aliascntresetthe{definition}
+
+\newaliascnt{assumption}{theorem}
+\newtheorem{assumption}[assumption]{Assumption}
+\aliascntresetthe{assumption}
 
 \theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
+\newaliascnt{remark}{theorem}
+\newtheorem{remark}[remark]{Remark}
+\aliascntresetthe{remark}
+
+\crefname{theorem}{Theorem}{Theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+\crefname{proposition}{Proposition}{Propositions}
+\Crefname{proposition}{Proposition}{Propositions}
+\crefname{corollary}{Corollary}{Corollaries}
+\Crefname{corollary}{Corollary}{Corollaries}
+\crefname{lemma}{Lemma}{Lemmas}
+\Crefname{lemma}{Lemma}{Lemmas}
+\crefname{definition}{Definition}{Definitions}
+\Crefname{definition}{Definition}{Definitions}
+\crefname{assumption}{Assumption}{Assumptions}
+\Crefname{assumption}{Assumption}{Assumptions}
+\crefname{remark}{Remark}{Remarks}
+\Crefname{remark}{Remark}{Remarks}
 
 \DeclareMathOperator{\Tr}{Tr}
 \DeclareMathOperator{\spec}{spec}
@@ -34,9 +64,10 @@
 \newcommand{\MM}{\mathcal M}
 \newcommand{\dd}{\mathop{}\!\mathrm{d}}
 \newcommand{\sone}{\mathcal S_1}
+\newcommand{\leanverified}[1]{}
 
-\title[Fredholm Determinants and Spectral Rigidity]{Fredholm determinants, cyclic-block realisations,\\
-and spectral rigidity for symbolic \(\zeta\)-functions}
+\title[Cyclic-Block Trace-Class Realisations]{Cyclic-block trace-class realisations\\
+for symbolic \(\zeta\)-functions}
 
 \author{Haobo Ma}
 \address{CHRONOAI}
@@ -48,24 +79,31 @@ and spectral rigidity for symbolic \(\zeta\)-functions}
 \begin{abstract}
 We place symbolic dynamical \(\zeta\)-functions in a trace-class
 Fredholm framework. The Fredholm--Witt identity and the associated
-spectral rigidity are recorded as connective background. The main new
-result is a cyclic-block characterization: an Euler product
-\[
-  \prod_j (1-\beta_j z^{n_j})^{-m_j}
-\]
-with
+spectral rigidity are recorded as connective background. The main
+structural result is a cyclic-block characterization for data satisfying
 \(
   \sum_j m_j n_j\abs{\beta_j}^{1/n_j}<\infty
-\)
-admits a trace-class normal realization if and only if, up to an
-arbitrary zero summand and unitary equivalence, its non-zero part is a
-direct sum of cyclic blocks \(C(n_j,\alpha_j)\otimes I_{m_j}\) with
-\(\alpha_j^{n_j}=\beta_j\). In particular, the total non-zero block
-size is forced and each factor requires exactly \(m_jn_j\) non-zero
-dimensions.
+\). The positive-exponent product
+\[
+  \prod_j (1-\beta_j z^{n_j})^{m_j}
+\]
+is the Fredholm determinant of a trace-class normal cyclic-block direct
+sum, and only on zero-free neighbourhoods is its reciprocal denoted by the
+negative-exponent Euler product. Thus realising the reciprocal Euler
+product is always a determinant-side statement for the positive-exponent
+Fredholm determinant. Conversely, any trace-class normal operator with
+this Fredholm determinant has non-zero part, up to unitary equivalence and
+an arbitrary zero summand, equal to the direct sum of cyclic blocks
+\(C(n_j,\alpha_j)\otimes I_{m_j}\) with \(\alpha_j^{n_j}=\beta_j\). In
+particular, the total non-zero block size is forced; for a single factor
+\((1-\beta z^n)^{-m}\), the closed span of the non-zero spectral subspaces
+has dimension exactly \(mn\). In infinite cyclic sums this is a
+closed-support statement; the algebraic range can be proper and
+nonclosed.
 
 We then record determinant-level applications in symbolic dynamics.
-For analytic families of primitive matrices we record explicit
+For analytic families of primitive matrices with expanding Perron branch
+we record explicit
 group-inverse and Fredholm formulas for the variation of the finite-part
 constants and of the Abel renormalization, together with a rapidly
 convergent truncation scheme. For locally constant observables, twisted
@@ -73,10 +111,28 @@ Fredholm determinants determine periodic-orbit moment data and
 asymptotic cumulants; on compact frequency sets away from the arithmetic
 lattice obstruction, they also yield uniform off-origin decay of
 characteristic functions. These applications are finite-dimensional
-consequences of the usual spectral-gap formalism, included here to show
-how the determinant package organizes them in one place. Explicit
-computations are given for the golden-mean family and for the full
-two-shift.
+consequences of the usual finite-dimensional spectral-gap formalism,
+with an additional explicit expansion/nonresonance hypothesis whenever
+secondary determinants are used. Explicit computations are given for the
+golden-mean family and for the full two-shift. The secondary determinant
+formulas require the explicit secondary-admissibility hypothesis: a uniform
+complementary relative gap,
+\[
+  \sup_{\theta\in U}
+  \frac{\rho(A_\theta|_{(I-P_\theta)\CC^d})}
+       {\abs{\lambda(\theta)}}<1,
+\]
+together with absolute expansion,
+\[
+  \inf_{\theta\in U}\abs{\lambda(\theta)}>1,
+\]
+which is equivalently the subunit secondary-radius condition
+\[
+  \sup_{\theta\in U}\sup_{k\ge2}
+  \rho(\lambda(\theta)^{-k}A_\theta)<1 .
+\]
+A branch-isolating relative gap alone is not used to infer invertibility of
+\(I-\lambda^{-k}A\).
 \end{abstract}
 
 \subjclass[2020]{37B10, 47B10, 47A55, 60F05}

@@ -10,27 +10,44 @@ The following standing hypothesis is assumed throughout the section and is cited
 
 \subsection{References and local objects}
 
-Fix a family of referenceable sorts
-\[
-S_{\mathrm{ref}}\subseteq S.
-\]
-For each $s\in S_{\mathrm{ref}}$, the language contains a reference sort $\mathsf{Ref}_s$ and an admissibility predicate $\Adm_s(\cdot)$.
+Let $S_{\mathrm{ref}}$ be the family of referenceable sorts fixed in \Cref{prop:theorem-a-boundary-typing,prop:no-reference-increment,def:reference-aware-boundary}. For each $s\in S_{\mathrm{ref}}$, the reference-aware state-forcing language $\Sigma_1$ already contains a reference sort $\mathsf{Ref}_s$ and an admissibility predicate $\Adm_s(\cdot)$. The local-object layer $\Sigma_2$ adds the sites, covers, local object functors, and the predicates $\LocSec_s$, $\CompSec_s$, and $\Sec_s$; these are not part of the lower comparison language used in \Cref{thm:pointwise-irreducibility}. This is the layer where the paper's local-consistency-versus-global-section distinction enters, in the same broad sheaf-theoretic vocabulary as the local-inference analysis of contextuality in \cite{Kishida2016}, but with references and admissibility deliberately placed one layer lower.
 
-\begin{definition}[Reference classes]\label{def:reference-classes}
-Let $p$ be a state and let $r,r'$ be reference terms of sort $\mathsf{Ref}_s$. Define
+\begin{definition}[Reference classes in local-object models]\label{def:reference-classes}
+Let $p$ be a state. If $r,r'$ are reference terms of sort $\mathsf{Ref}_s$ in the context of $p$, define
 \[
 r\equiv_p r'
 \quad:\Longleftrightarrow\quad
 M,p\Vdash (r=r').
 \]
+The same notation is used for semantic reference elements
+\[
+d,e\in D_{\mathsf{Ref}_s}^M
+\]
+supplied by pointed evaluation: choose fresh variables $x,y:\mathsf{Ref}_s$ and put
+\[
+d\equiv_p e
+\quad:\Longleftrightarrow\quad
+M,p[d/x,e/y]\Vdash x=y.
+\]
+Here $p[d/x,e/y]$ denotes the state obtained from $p$ by adjoining the two fresh variables and assigning them the fixed elements $d$ and $e$ in every realization. This is the local-object notation for the lower-layer construction of \Cref{def:lower-reference-data}: by \Cref{lem:reference-data-survive-reduct}, the same equivalence relation and the same admissible classes are obtained in the $\Sigma_1$ reduct $U_{2,1}(M)$.
+For terms this recovers the first clause by substitution, and for elements it makes the later fixed-reduct constructions literal statements about elements of the retained $\Sigma_1$ reference domain. We write $[r]_p$ or $[d]_p$ for the corresponding equivalence class.
 The set of admitted reference classes at $p$ is
 \[
-\mathcal{R}_s(p):=\{[r]_p\mid M,p\Vdash \Adm_s(r)\}.
+\mathcal{R}_s(p):=
+\{[d]_p\mid d\in D_{\mathsf{Ref}_s}^M\text{ and }M,p\Vdash \Adm_s(d)\}.
+\]
+The assertion $M,p\Vdash\Adm_s(d)$ is evaluated by the same pointed-element convention and is a $\Sigma_1$ assertion, not a local-object assertion. Equivalently,
+\[
+\mathcal R_s(p)=\mathcal R_s^1(U_{2,1}(M),\pi^M_{2,1}(p)).
+\]
+Equivalently, when enough reference terms are present, this is the term-based set
+\[
+\{[r]_p\mid M,p\Vdash \Adm_s(r)\}.
 \]
 \end{definition}
 
-\begin{definition}[Local reference site]\label{def:local-reference-frame}
-For a state $p$ and a referenceable sort $s$, a \emph{local reference site} consists of the following data.
+\begin{definition}[Site on admitted reference classes]\label{def:local-reference-frame}
+For a state $p$ and a referenceable sort $s$, a \emph{site on admitted reference classes} consists of the following data.
 \begin{enumerate}[label=(\roman*),nosep]
 \item A reflexive, transitive refinement relation $\sqsubseteq_{p,s}$ on $\mathcal R_s(p)$.
 \item The associated small thin category $\mathcal B_{p,s}$ whose objects are the elements of $\mathcal R_s(p)$ and in which there is a unique morphism
@@ -38,7 +55,7 @@ For a state $p$ and a referenceable sort $s$, a \emph{local reference site} cons
 b\longrightarrow a
 \]
 if and only if $b\sqsubseteq_{p,s} a$.
-\item A Grothendieck pretopology $\Cov_{p,s}$ on $\mathcal B_{p,s}$ satisfying the identity, pullback-stability, and transitivity axioms.
+\item A Grothendieck pretopology $\Cov_{p,s}$ on $\mathcal B_{p,s}$ satisfying the identity, pullback-stability, and transitivity axioms. Covering families used for sectionability are finite and nonempty; this rules out vacuous compatible families over an empty cover.
 \item The standing pullback hypothesis that, for every covering family
 \[
 \{a_i\to a\}_{i\in I}\in \Cov_{p,s}(a)
@@ -71,12 +88,18 @@ If $b\sqsubseteq_{p,s} a$, the induced restriction map is denoted by
 Let $r:\mathsf{Ref}_s$ and assume $M,p\Vdash \Adm_s(r)$. Write $a=[r]_p$.
 \begin{enumerate}[label=(\roman*),nosep]
 \item $M,p\Vdash \LocSec_s(r)$ if there exists a cover $\{a_i\to a\}_{i\in I}\in\Cov_{p,s}(a)$ such that $F_{p,s}(a_i)\neq\varnothing$ for every $i\in I$.
-\item $M,p\Vdash \CompSec_s(r)$ if there exist a cover $\{a_i\to a\}_{i\in I}$ and sections $\sigma_i\in F_{p,s}(a_i)$ such that for every pair $(i,j)$,
+\item $M,p\Vdash \CompSec_s(r)$ if there exist a cover $\{a_i\to a\}_{i\in I}\in\Cov_{p,s}(a)$ and sections $\sigma_i\in F_{p,s}(a_i)$ such that for every pair $(i,j)$,
 \[
 \res_{a_i\times_a a_j}^{a_i}(\sigma_i)=\res_{a_i\times_a a_j}^{a_j}(\sigma_j).
 \]
 \item $M,p\Vdash \Sec_s(r)$ if $F_{p,s}(a)\neq\varnothing$.
 \end{enumerate}
+These are the forcing clauses for the three $\Sigma_2$ atomic predicates at the state $p$. Boolean combinations of them are evaluated classically at that same state; for example
+\[
+M,p\Vdash \neg\Sec_s(r)
+\quad\Longleftrightarrow\quad
+F_{p,s}(a)=\varnothing.
+\]
 \end{definition}
 
 \begin{proposition}[Global sections yield compatible local sections]\label{prop:global-implies-compatible-local}
@@ -94,7 +117,7 @@ Let $a=[r]_p$ and choose $\sigma\in F_{p,s}(a)$. The identity axiom for the pret
 
 \subsection{Sheafification and gluing failure}
 
-For fixed $(p,s)$, the local reference site of \Cref{def:local-reference-frame} determines a presheaf
+For fixed $(p,s)$, the site on admitted reference classes of \Cref{def:local-reference-frame} determines a presheaf
 \[
 F_{p,s}\in\mathbf{PSh}(\mathcal{B}_{p,s}).
 \]
@@ -170,6 +193,180 @@ In particular, no admitted reference remains in gluing failure after sheafificat
 \begin{proof}
 This is \Cref{thm:sheafification-characterization} rewritten for the sheaf $a_{p,s}F_{p,s}$. Once the presheaf has been replaced by a sheaf, compatible local existence and global existence coincide.
 \end{proof}
+
+\subsection{Structural absence and the lower-boundary separation}
+
+The local-object predicates now allow three distinct ways for an admitted reference to fail to determine a global object. These definitions still belong to the $\mathbb L_2$ local-object layer: the admissibility conjunct is inherited from $\Sigma_1$, while the local, compatible, and global sectionability predicates are the new $\Sigma_2$ information.
+
+\begin{definition}[Undefined, total, and null]\label{def:undef-total-null}
+For $r:\mathsf{Ref}_s$, define
+\[
+\Undef_s(r):=\neg\Adm_s(r),\qquad
+\Tot_s(r):=\Adm_s(r)\land \Sec_s(r),\qquad
+\Null_s(r):=\Adm_s(r)\land \neg\Sec_s(r).
+\]
+\end{definition}
+
+\begin{definition}[The three null modes]\label{def:null-failure-modes}
+For $r:\mathsf{Ref}_s$, define
+\[
+\Null^{\mathrm{loc}}_s(r):=\Adm_s(r)\land \neg\LocSec_s(r),
+\]
+\[
+\Null^{\mathrm{cmp}}_s(r):=\Adm_s(r)\land \LocSec_s(r)\land \neg\CompSec_s(r),
+\]
+\[
+\Null^{\mathrm{glue}}_s(r):=\Adm_s(r)\land \CompSec_s(r)\land \neg\Sec_s(r).
+\]
+\end{definition}
+
+\begin{lemma}[Admitted gluing absence]\label{lem:admitted-gluing-null-reduction}
+If $r:\mathsf{Ref}_s$ is admitted at $p$, then
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\quad\Longleftrightarrow\quad
+M,p\Vdash \CompSec_s(r)\ \text{and}\ M,p\nVdash \Sec_s(r).
+\]
+\end{lemma}
+
+\begin{proof}
+By definition,
+\[
+\Null^{\mathrm{glue}}_s(r):=\Adm_s(r)\land \CompSec_s(r)\land \neg\Sec_s(r).
+\]
+The admissibility conjunct is already true under the hypothesis, and the remaining two conjuncts are exactly compatible local sectionability and failure of global sectionability.
+\end{proof}
+
+The notation nevertheless keeps the $\Adm_s$ conjunct in the definition because the predicate is also used outside statements where admission is not fixed in advance.
+
+\begin{proposition}[The three modes lie inside null]\label{prop:null-modes-imply-null}
+Each of $\Null^{\mathrm{loc}}_s(r)$, $\Null^{\mathrm{cmp}}_s(r)$, and $\Null^{\mathrm{glue}}_s(r)$ implies $\Null_s(r)$.
+\end{proposition}
+
+\begin{proof}
+The gluing case is immediate from \Cref{def:null-failure-modes}. In the local and compatibility cases, a global section would imply compatible local sectionability and local sectionability by \Cref{prop:global-implies-compatible-local}, contradicting the defining negations.
+\end{proof}
+
+\begin{proposition}[Mutual exclusivity of the null modes]\label{prop:null-modes-exclusive}
+No two distinct null modes can hold simultaneously for the same reference at the same state.
+\end{proposition}
+
+\begin{proof}
+The mode $\Null^{\mathrm{loc}}_s(r)$ contains $\neg\LocSec_s(r)$, while the other two contain $\LocSec_s(r)$. The mode $\Null^{\mathrm{cmp}}_s(r)$ contains $\neg\CompSec_s(r)$, while $\Null^{\mathrm{glue}}_s(r)$ contains $\CompSec_s(r)$.
+\end{proof}
+
+\begin{definition}[Decomposition decidability]\label{def:decomposition-decidability}
+We say that $p$ has \emph{decomposition decidability} for $r:\mathsf{Ref}_s$ if both $\LocSec_s(r)$ and $\CompSec_s(r)$ are decided at $p$.
+\end{definition}
+
+\begin{proposition}[Null trichotomy]\label{prop:null-trichotomy}
+If $p$ has decomposition decidability for $r:\mathsf{Ref}_s$, then
+\[
+M,p\Vdash \Null_s(r)
+\]
+if and only if exactly one of
+\[
+M,p\Vdash \Null^{\mathrm{loc}}_s(r),\qquad
+M,p\Vdash \Null^{\mathrm{cmp}}_s(r),\qquad
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\]
+holds.
+\end{proposition}
+
+\begin{proof}
+Assume $M,p\Vdash \Null_s(r)$. Then $r$ is admitted but not globally sectionable. Since $\LocSec_s(r)$ and $\CompSec_s(r)$ are decided at $p$, there are three cases: either local sectionability already fails, local sectionability holds but compatibility fails, or compatibility holds while global sectionability fails. These are exactly the three null modes. The converse follows from \Cref{prop:null-modes-imply-null}, and uniqueness is \Cref{prop:null-modes-exclusive}.
+\end{proof}
+
+\begin{theorem}[Classification after refinement]\label{thm:null-classification-under-refinement}
+Let $q\le p$ and suppose
+\[
+M,p\Vdash \Null_s(r).
+\]
+If $q$ has decomposition decidability for $r$, then exactly one null mode holds at $q$.
+\leanverified{paper_conservative_extension_null_classification_under_refinement_apal}
+\end{theorem}
+
+\begin{proof}
+By persistence of forcing, $M,q\Vdash \Null_s(r)$. The hypothesis gives decomposition decidability at $q$, so \Cref{prop:null-trichotomy} applies at the refined state $q$.
+\end{proof}
+
+\begin{proposition}[A finite model for the three absence modes]\label{prop:finite-three-mode-model}
+There exist a finite state $p$ and admitted references
+\[
+r_{\mathrm{loc}},\qquad r_{\mathrm{cmp}},\qquad r_{\mathrm{glue}}
+\]
+of one referenceable sort such that
+\[
+M,p\Vdash \Null^{\mathrm{loc}}_s(r_{\mathrm{loc}}),\qquad
+M,p\Vdash \Null^{\mathrm{cmp}}_s(r_{\mathrm{cmp}}),\qquad
+M,p\Vdash \Null^{\mathrm{glue}}_s(r_{\mathrm{glue}}).
+\]
+\end{proposition}
+
+\begin{proof}
+Take a single state $p$ and one referenceable sort $s$. The $\Sigma_1$ reference domain contains admitted reference elements whose $p$-classes are exactly the objects named below:
+\[
+a_{\mathrm{loc}},
+\quad
+a_{\mathrm{cmp}},u_{\mathrm{cmp}},v_{\mathrm{cmp}},c_{\mathrm{cmp}},
+\quad
+a_{\mathrm{glue}},u_{\mathrm{glue}},v_{\mathrm{glue}},c_{\mathrm{glue}}.
+\]
+Choose representatives
+\[
+r_{\mathrm{loc}},\qquad r_{\mathrm{cmp}},\qquad r_{\mathrm{glue}}
+\]
+for the three root classes $a_{\mathrm{loc}}$, $a_{\mathrm{cmp}}$, and $a_{\mathrm{glue}}$. Thus every object of the site is an admitted reference class, as required by \Cref{def:local-reference-frame}. Let the site be the disjoint union of the three rooted thin categories described below, each equipped with the identity covers and, in the last two components, the displayed binary cover whose pullback is the object denoted by $c_{\mathrm{cmp}}$ or $c_{\mathrm{glue}}$ respectively.
+
+For $r_{\mathrm{loc}}$, use one object $a_{\mathrm{loc}}$ with only the trivial cover and define
+\[
+F(a_{\mathrm{loc}})=\varnothing.
+\]
+Then local sectionability already fails, so $M,p\Vdash \Null^{\mathrm{loc}}_s(r_{\mathrm{loc}})$.
+
+For $r_{\mathrm{cmp}}$, use objects
+\[
+c_{\mathrm{cmp}}\sqsubseteq u_{\mathrm{cmp}}\sqsubseteq a_{\mathrm{cmp}},
+\qquad
+c_{\mathrm{cmp}}\sqsubseteq v_{\mathrm{cmp}}\sqsubseteq a_{\mathrm{cmp}},
+\]
+with nontrivial cover $\{u_{\mathrm{cmp}}\to a_{\mathrm{cmp}},v_{\mathrm{cmp}}\to a_{\mathrm{cmp}}\}$. Define
+\[
+F(u_{\mathrm{cmp}})=\{\sigma_u\},\quad
+F(v_{\mathrm{cmp}})=\{\sigma_v\},\quad
+F(c_{\mathrm{cmp}})=\{0,1\},\quad
+F(a_{\mathrm{cmp}})=\varnothing,
+\]
+and restrictions
+\[
+\res_{c_{\mathrm{cmp}}}^{u_{\mathrm{cmp}}}(\sigma_u)=0,
+\qquad
+\res_{c_{\mathrm{cmp}}}^{v_{\mathrm{cmp}}}(\sigma_v)=1.
+\]
+Local sections exist on the chosen cover, but the only available family is incompatible on the overlap. Hence $M,p\Vdash \Null^{\mathrm{cmp}}_s(r_{\mathrm{cmp}})$.
+
+For $r_{\mathrm{glue}}$, use objects
+\[
+c_{\mathrm{glue}}\sqsubseteq u_{\mathrm{glue}}\sqsubseteq a_{\mathrm{glue}},
+\qquad
+c_{\mathrm{glue}}\sqsubseteq v_{\mathrm{glue}}\sqsubseteq a_{\mathrm{glue}},
+\]
+with cover $\{u_{\mathrm{glue}}\to a_{\mathrm{glue}},v_{\mathrm{glue}}\to a_{\mathrm{glue}}\}$. Define
+\[
+F(u_{\mathrm{glue}})=F(v_{\mathrm{glue}})=F(c_{\mathrm{glue}})=\{*\},
+\qquad
+F(a_{\mathrm{glue}})=\varnothing,
+\]
+and let every restriction map be the identity on $\{*\}$. Then the chosen cover supports a compatible family, but there is no global section at $a_{\mathrm{glue}}$. Thus $M,p\Vdash \Null^{\mathrm{glue}}_s(r_{\mathrm{glue}})$.
+
+By construction,
+\[
+M,p\Vdash \Adm_s(r_{\mathrm{loc}})\land \Adm_s(r_{\mathrm{cmp}})\land \Adm_s(r_{\mathrm{glue}})
+\]
+because the three chosen representatives are admitted.
+\end{proof}
+
+\input{sec_forcing_necessity}
 
 \subsection{Realization prestacks and connected components}
 
@@ -460,214 +657,4 @@ Then
 
 \begin{proof}
 Since $v\neq\Null$, the readout at $p$ is represented by a unique visible value class. By the refinement-conservation hypothesis~\ref{hyp:refinement-conservation}, compatible local families restrict functorially from $q$ to $p$, and a uniquely determined visible class at $p$ cannot split under further refinement. Hence the same class $v$ remains the unique visible class at $q$, so \Cref{def:typed-readout} gives $\Read_{q,s}(r)=v$.
-\end{proof}
-
-\subsection{Structural absence}
-
-\begin{definition}[Undefined, total, and null]\label{def:undef-total-null}
-For $r:\mathsf{Ref}_s$, define
-\[
-\Undef_s(r):=\neg\Adm_s(r),\qquad
-\Tot_s(r):=\Adm_s(r)\land \Sec_s(r),\qquad
-\Null_s(r):=\Adm_s(r)\land \neg\Sec_s(r).
-\]
-\end{definition}
-
-\begin{definition}[The three null modes]\label{def:null-failure-modes}
-For $r:\mathsf{Ref}_s$, define
-\[
-\Null^{\mathrm{loc}}_s(r):=\Adm_s(r)\land \neg\LocSec_s(r),
-\]
-\[
-\Null^{\mathrm{cmp}}_s(r):=\Adm_s(r)\land \LocSec_s(r)\land \neg\CompSec_s(r),
-\]
-\[
-\Null^{\mathrm{glue}}_s(r):=\Adm_s(r)\land \CompSec_s(r)\land \neg\Sec_s(r).
-\]
-\end{definition}
-
-\begin{proposition}[The three modes lie inside null]\label{prop:null-modes-imply-null}
-Each of $\Null^{\mathrm{loc}}_s(r)$, $\Null^{\mathrm{cmp}}_s(r)$, and $\Null^{\mathrm{glue}}_s(r)$ implies $\Null_s(r)$.
-\end{proposition}
-
-\begin{proof}
-The gluing case is immediate from \Cref{def:null-failure-modes}. In the local and compatibility cases, a global section would imply compatible local sectionability and local sectionability by \Cref{prop:global-implies-compatible-local}, contradicting the defining negations.
-\end{proof}
-
-\begin{proposition}[Mutual exclusivity of the null modes]\label{prop:null-modes-exclusive}
-No two distinct null modes can hold simultaneously for the same reference at the same state.
-\end{proposition}
-
-\begin{proof}
-The mode $\Null^{\mathrm{loc}}_s(r)$ contains $\neg\LocSec_s(r)$, while the other two contain $\LocSec_s(r)$. The mode $\Null^{\mathrm{cmp}}_s(r)$ contains $\neg\CompSec_s(r)$, while $\Null^{\mathrm{glue}}_s(r)$ contains $\CompSec_s(r)$.
-\end{proof}
-
-\begin{definition}[Decomposition decidability]\label{def:decomposition-decidability}
-We say that $p$ has \emph{decomposition decidability} for $r:\mathsf{Ref}_s$ if both $\LocSec_s(r)$ and $\CompSec_s(r)$ are decided at $p$.
-\end{definition}
-
-\begin{proposition}[Null trichotomy]\label{prop:null-trichotomy}
-If $p$ has decomposition decidability for $r:\mathsf{Ref}_s$, then
-\[
-M,p\Vdash \Null_s(r)
-\]
-if and only if exactly one of
-\[
-M,p\Vdash \Null^{\mathrm{loc}}_s(r),\qquad
-M,p\Vdash \Null^{\mathrm{cmp}}_s(r),\qquad
-M,p\Vdash \Null^{\mathrm{glue}}_s(r)
-\]
-holds.
-\end{proposition}
-
-\begin{proof}
-Assume $M,p\Vdash \Null_s(r)$. Then $r$ is admitted but not globally sectionable. Since $\LocSec_s(r)$ and $\CompSec_s(r)$ are decided at $p$, there are three cases: either local sectionability already fails, local sectionability holds but compatibility fails, or compatibility holds while global sectionability fails. These are exactly the three null modes. The converse follows from \Cref{prop:null-modes-imply-null}, and uniqueness is \Cref{prop:null-modes-exclusive}.
-\end{proof}
-
-\begin{theorem}[Classification after refinement]\label{thm:null-classification-under-refinement}
-Let $q\le p$ and suppose
-\[
-M,p\Vdash \Null_s(r).
-\]
-If $q$ has decomposition decidability for $r$, then exactly one null mode holds at $q$.
-\leanverified{paper_conservative_extension_null_classification_under_refinement_apal}
-\end{theorem}
-
-\begin{proof}
-By persistence of forcing, $M,q\Vdash \Null_s(r)$. The hypothesis gives decomposition decidability at $q$, so \Cref{prop:null-trichotomy} applies at the refined state $q$.
-\end{proof}
-
-\begin{proposition}[A finite model for the three absence modes]\label{prop:finite-three-mode-model}
-There exist a finite state $p$ and admitted references
-\[
-r_{\mathrm{loc}},\qquad r_{\mathrm{cmp}},\qquad r_{\mathrm{glue}}
-\]
-of one referenceable sort such that
-\[
-M,p\Vdash \Null^{\mathrm{loc}}_s(r_{\mathrm{loc}}),\qquad
-M,p\Vdash \Null^{\mathrm{cmp}}_s(r_{\mathrm{cmp}}),\qquad
-M,p\Vdash \Null^{\mathrm{glue}}_s(r_{\mathrm{glue}}).
-\]
-\end{proposition}
-
-\begin{proof}
-Take a single state $p$ and one referenceable sort $s$. Let the local reference site be the disjoint union of three rooted thin categories, each equipped with the trivial-cover axiom and, in the last two components, the displayed binary cover whose pullback is the object denoted by $c_{\mathrm{cmp}}$ or $c_{\mathrm{glue}}$ respectively.
-
-For $r_{\mathrm{loc}}$, use one object $a_{\mathrm{loc}}$ with only the trivial cover and define
-\[
-F(a_{\mathrm{loc}})=\varnothing.
-\]
-Then local sectionability already fails, so $M,p\Vdash \Null^{\mathrm{loc}}_s(r_{\mathrm{loc}})$.
-
-For $r_{\mathrm{cmp}}$, use objects
-\[
-c_{\mathrm{cmp}}\sqsubseteq u_{\mathrm{cmp}}\sqsubseteq a_{\mathrm{cmp}},
-\qquad
-c_{\mathrm{cmp}}\sqsubseteq v_{\mathrm{cmp}}\sqsubseteq a_{\mathrm{cmp}},
-\]
-with nontrivial cover $\{u_{\mathrm{cmp}}\to a_{\mathrm{cmp}},v_{\mathrm{cmp}}\to a_{\mathrm{cmp}}\}$. Define
-\[
-F(u_{\mathrm{cmp}})=\{\sigma_u\},\quad
-F(v_{\mathrm{cmp}})=\{\sigma_v\},\quad
-F(c_{\mathrm{cmp}})=\{0,1\},\quad
-F(a_{\mathrm{cmp}})=\varnothing,
-\]
-and restrictions
-\[
-\res_{c_{\mathrm{cmp}}}^{u_{\mathrm{cmp}}}(\sigma_u)=0,
-\qquad
-\res_{c_{\mathrm{cmp}}}^{v_{\mathrm{cmp}}}(\sigma_v)=1.
-\]
-Local sections exist on the chosen cover, but the only available family is incompatible on the overlap. Hence $M,p\Vdash \Null^{\mathrm{cmp}}_s(r_{\mathrm{cmp}})$.
-
-For $r_{\mathrm{glue}}$, use objects
-\[
-c_{\mathrm{glue}}\sqsubseteq u_{\mathrm{glue}}\sqsubseteq a_{\mathrm{glue}},
-\qquad
-c_{\mathrm{glue}}\sqsubseteq v_{\mathrm{glue}}\sqsubseteq a_{\mathrm{glue}},
-\]
-with cover $\{u_{\mathrm{glue}}\to a_{\mathrm{glue}},v_{\mathrm{glue}}\to a_{\mathrm{glue}}\}$. Define
-\[
-F(u_{\mathrm{glue}})=F(v_{\mathrm{glue}})=F(c_{\mathrm{glue}})=\{*\},
-\qquad
-F(a_{\mathrm{glue}})=\varnothing,
-\]
-and let every restriction map be the identity on $\{*\}$. Then the chosen cover supports a compatible family, but there is no global section at $a_{\mathrm{glue}}$. Thus $M,p\Vdash \Null^{\mathrm{glue}}_s(r_{\mathrm{glue}})$.
-
-Finally, stipulate
-\[
-M,p\Vdash \Adm_s(r_{\mathrm{loc}})\land \Adm_s(r_{\mathrm{cmp}})\land \Adm_s(r_{\mathrm{glue}})
-\]
-and identify the three reference classes with $a_{\mathrm{loc}},a_{\mathrm{cmp}},a_{\mathrm{glue}}$ respectively.
-\end{proof}
-
-\subsection{Forcing necessity of the enrichment}
-
-The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. The following result makes this precise in the only pointwise sense established here: the gluing predicates introduced at the local-object layer cannot be reduced to automorphism-invariant formulas of the lower-layer reduct.
-
-\begin{theorem}[Automorphism-invariant pointwise undefinability of gluing predicates]\label{thm:pointwise-irreducibility}
-There exist a model $M$, a state $p=(\Gamma_p,R_p)$, and admitted references $r_1,r_2:\mathsf{Ref}_s$ of the same sort such that:
-\begin{enumerate}[label=(\roman*),nosep]
-\item for every $\rho\in R_p$ and every $\mathrm{Form}_1$-formula $\varphi(x)$ with one free variable $x$, invariant under automorphisms of the $\mathrm{Form}_1$-reduct, containing none of the local-object predicates $\LocSec_s$, $\CompSec_s$, $\Sec_s$, and containing no occurrence of the distinguished constants $r_1,r_2$ other than the substituted variable,
-\[
-M,\rho\models\varphi(r_1)
-\quad\Longleftrightarrow\quad
-M,\rho\models\varphi(r_2);
-\]
-\item $M,p\Vdash \CompSec_s(r_1)\land \Sec_s(r_1)$;
-\item $M,p\Vdash \CompSec_s(r_2)\land \neg\Sec_s(r_2)$.
-\end{enumerate}
-Consequently, no $\mathrm{Form}_1$-formula interpreted pointwise and satisfying the invariance condition in \textup{(i)} can define any of the predicates
-\[
-\CompSec_s,
-\qquad
-\Sec_s,
-\qquad
-\Null^{\mathrm{glue}}_s
-\]
-on admitted references.
-\end{theorem}
-
-\begin{proof}
-Take a single state $p$ and one referenceable sort $s$. Introduce two reference terms $r_1,r_2:\mathsf{Ref}_s$ with $[r_1]_p\neq [r_2]_p$. Choose the $\mathrm{Form}_1$-reduct of $M$ so that there is an automorphism
-\[
-\alpha:M|_{\mathrm{Form}_1}\xrightarrow{\sim} M|_{\mathrm{Form}_1}
-\]
-with
-\[
-\alpha(r_1^M)=r_2^M,
-\qquad
-\alpha(r_2^M)=r_1^M,
-\]
-which preserves each realization $\rho\in R_p$. By invariance of first-order truth under automorphisms, every $\mathrm{Form}_1$-formula $\varphi(x)$ satisfying the restriction in~\textup{(i)} therefore obeys
-\[
-M,\rho\models\varphi(r_1)
-\quad\Longleftrightarrow\quad
-M,\rho\models\varphi(r_2)
-\]
-for every $\rho\in R_p$, proving~\textup{(i)}.
-
-Write $a_k=[r_k]_p$ ($k=1,2$) and equip both reference classes with identical local reference sites: each has a binary cover
-\[
-\{u_k\to a_k,v_k\to a_k\}
-\]
-whose pullback is the object $c_k=u_k\times_{a_k} v_k$.
-
-For $r_1$, define
-\[
-F_1(u_1)=F_1(v_1)=F_1(c_1)=F_1(a_1)=\{*\},
-\]
-with all restrictions equal to the identity on $\{*\}$. The unique local family $(*,*)$ is compatible, and $*\in F_1(a_1)$ is a global section. Hence~\textup{(ii)}.
-
-For $r_2$, define
-\[
-F_2(u_2)=F_2(v_2)=F_2(c_2)=\{*\},\qquad F_2(a_2)=\varnothing,
-\]
-with all restrictions to $c_2$ equal to the identity on $\{*\}$. The local family $(*,*)$ is compatible on the overlap, but $F_2(a_2)=\varnothing$. Hence~\textup{(iii)}.
-
-For $\CompSec_s$ and $\Sec_s$, the formulas in \textup{(i)} cannot distinguish $r_1$ from $r_2$, whereas \textup{(ii)} and \textup{(iii)} do distinguish them. Hence no such formula defines either predicate. Since
-\[
-\Null^{\mathrm{glue}}_s(r)=\Adm_s(r)\land \CompSec_s(r)\land \neg \Sec_s(r),
-\]
-the same conclusion follows for $\Null^{\mathrm{glue}}_s$.
 \end{proof}

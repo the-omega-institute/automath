@@ -271,6 +271,38 @@ Let $v\in \Vis_{p,s}(r)$. Then
 By definition of the gerbe notion used in this paper, neutrality means the existence of a global object over $a$. Therefore it is exactly the same as $\mathfrak G_v(a)\neq\varnothing$.
 \end{proof}
 
+\begin{lemma}[Global sections determine neutral visible branches]\label{lem:global-section-neutral-branch}
+In the setting of \Cref{def:compatible-realization-stack}, if
+\[
+M,p\Vdash \Sec_s(r),
+\]
+then there exists
+\[
+v\in \Vis_{p,s}(r)
+\]
+such that $\mathfrak G_v$ is neutral.
+\end{lemma}
+
+\begin{proof}
+By \Cref{def:existence-levels}, $M,p\Vdash\Sec_s(r)$ means that
+\[
+F_{p,s}(a)\neq\varnothing.
+\]
+Choose $\sigma\in F_{p,s}(a)$. The identification
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)(a)\cong F_{p,s}(a)
+\]
+in \Cref{def:realization-prestack} gives an object $y\in(\mathfrak P_r)_a$ whose isomorphism class maps to $\sigma$. Let
+\[
+x:=\iota_r(y)\in \mathfrak L_r(a)
+\]
+be its image under stackification, and put
+\[
+v:=[x]\in \pi_0(\mathfrak L_r)(a)\cong\Vis_{p,s}(r).
+\]
+By construction $x\in\mathfrak G_v(a)$, so $\mathfrak G_v(a)\neq\varnothing$. Hence $\mathfrak G_v$ is neutral by \Cref{lem:terminal-fibre-neutrality}.
+\end{proof}
+
 \begin{proposition}[Global sections versus neutral component gerbes]\label{prop:global-sections-vs-neutral-components}
 \leanverified{paper_gluing_failure_global_sections_vs_neutral_components}
 Assume the hypotheses of \Cref{def:cech-gluing-obstruction} and global conservativity at $a$ in the sense of \Cref{def:global-conservativity}. For an admitted reference
@@ -300,6 +332,38 @@ Then $x\in \mathfrak G_v(a)$, so $\mathfrak G_v(a)\neq\varnothing$.
 Conversely, if $\mathfrak G_v(a)\neq\varnothing$ for some visible branch $v$, then $\mathfrak G_v(a)\subseteq \mathfrak L_r(a)$, so $\mathfrak L_r(a)\neq\varnothing$.
 \end{proof}
 
+\begin{lemma}[Visible branch form of admitted gluing absence]\label{lem:visible-branch-gluing-absence}
+Assume the hypotheses of \Cref{def:cech-gluing-obstruction} and global conservativity at $a$ in the sense of \Cref{def:global-conservativity}. For the admitted reference $r:\mathsf{Ref}_s$ under consideration,
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\]
+if and only if
+\[
+\Vis_{p,s}(r)\neq\varnothing
+\quad\text{and}\quad
+\text{there is no }v\in\Vis_{p,s}(r)\text{ for which }\mathfrak G_v\text{ is neutral}.
+\]
+Equivalently,
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\quad\Longleftrightarrow\quad
+\Vis_{p,s}(r)\neq\varnothing
+\ \text{and}\
+\forall v\in\Vis_{p,s}(r),\ \mathfrak G_v\ \text{is non-neutral},
+\]
+where ``non-neutral'' means ``not neutral'', or equivalently $\mathfrak G_v(a)=\varnothing$ by \Cref{lem:terminal-fibre-neutrality}.
+\end{lemma}
+
+\begin{proof}
+Because $r$ is admitted, \Cref{lem:admitted-gluing-null-reduction} gives
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\quad\Longleftrightarrow\quad
+M,p\Vdash\CompSec_s(r)\ \text{and}\ M,p\nVdash\Sec_s(r).
+\]
+By \Cref{prop:compsecs-vs-visible-branches}, the first conjunct is equivalent to $\Vis_{p,s}(r)\neq\varnothing$. By \Cref{prop:global-sections-vs-neutral-components}, the second conjunct is equivalent to the nonexistence of a visible branch with neutral component gerbe. Combining these two equivalences gives the claim. The final reformulation replaces ``there is no neutral branch'' by ``every visible branch is non-neutral'' and uses \Cref{lem:terminal-fibre-neutrality}. The nonemptiness condition is the image of the $\CompSec_s(r)$ conjunct; it is not supplied by the universal quantifier over visible branches.
+\end{proof}
+
 \begin{theorem}[Conditional branched gerbe semantics of gluing-level absence]\label{thm:gerbe-null-semantics}
 Assume the hypotheses of \Cref{def:cech-gluing-obstruction} and global conservativity at $a$ in the sense of \Cref{def:global-conservativity}. Then, for the admitted reference $r:\mathsf{Ref}_s$ under consideration,
 \[
@@ -320,6 +384,9 @@ M,p\Vdash \Null^{\mathrm{glue}}_s(r)
 \ \text{and}\
 \forall v\in \Vis_{p,s}(r),\ \mathfrak G_v\ \text{is non-neutral}.
 \]
+The first conjunct is part of the equivalence: the universal condition over visible branches is not read vacuously when no compatible local family exists.
+This equivalence is relative to the standing hypothesis that $r$ is admitted; that hypothesis is what makes $\Vis_{p,s}(r)$ and the component gerbes available and is also what reduces $\Null^{\mathrm{glue}}_s(r)$ to compatible local sectionability plus failure of global sectionability.
+Thus the admissibility conjunct in $\Null^{\mathrm{glue}}_s(r)$ is not being dropped globally; it is discharged only inside the admitted-reference context of \textup{(H1)}.
 Under the \v{C}ech-to-derived comparison hypothesis already built into \Cref{def:cech-gluing-obstruction}, the last condition is equivalent to
 \[
 \Vis_{p,s}(r)\neq\varnothing
@@ -327,16 +394,80 @@ Under the \v{C}ech-to-derived comparison hypothesis already built into \Cref{def
 \omega_v\neq 0\ \text{for every}\ v\in \Vis_{p,s}(r).
 \]
 In particular, the single obstruction class picture is recovered precisely when $|\Vis_{p,s}(r)|=1$.
+No branch-constancy hypothesis is used in this theorem; branch constancy is needed only for the global coproduct decomposition in \Cref{cor:branch-decomposition}.
 \leanverified{paper_conservative_extension_gerbe_null_semantics}
 \end{theorem}
 
 \begin{proof}
-The first equivalence is \Cref{prop:compsecs-vs-visible-branches}. The second is \Cref{prop:global-sections-vs-neutral-components}. The third is then immediate from the definition
+The hypotheses include \textup{(H1)}, so $r$ is admitted and $a=[r]_p$ is an object of the slice site. We prove the three equivalences directly from the definitions, keeping track of the admissibility and nonemptiness conjuncts.
+
+First, by \Cref{thm:sheafification-characterization},
 \[
-\Null^{\mathrm{glue}}_s(r):=\Adm_s(r)\land \CompSec_s(r)\land \neg\Sec_s(r).
+M,p\Vdash \CompSec_s(r)
+\quad\Longleftrightarrow\quad
+\bigl(a_{p,s}F_{p,s}\bigr)(a)\neq\varnothing .
 \]
-The final claim is \Cref{prop:derived-branch-classification} applied branchwise.
+By \Cref{thm:visible-value-components}, the set on the right is canonically $\Vis_{p,s}(r)$. Hence compatible local sectionability is equivalent to
+\[
+\Vis_{p,s}(r)\neq\varnothing.
+\]
+
+Second, by the definition of $\Sec_s$ and by global conservativity at $a$,
+\[
+M,p\Vdash\Sec_s(r)
+\quad\Longleftrightarrow\quad
+F_{p,s}(a)\neq\varnothing
+\quad\Longleftrightarrow\quad
+\mathfrak L_r(a)\neq\varnothing.
+\]
+If $x\in\mathfrak L_r(a)$, then its connected-component class
+\[
+v=[x]\in \pi_0(\mathfrak L_r)(a)\cong\Vis_{p,s}(r)
+\]
+has $x\in\mathfrak G_v(a)$, so $\mathfrak G_v$ is neutral. Conversely, if some visible branch has neutral component gerbe, then $\mathfrak G_v(a)\neq\varnothing$, hence $\mathfrak L_r(a)\neq\varnothing$, and global conservativity gives $M,p\Vdash\Sec_s(r)$. This proves the second equivalence.
+
+Finally, expand the definition of gluing-level absence. Since $r$ is admitted,
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\quad\Longleftrightarrow\quad
+M,p\Vdash\CompSec_s(r)\ \text{and}\ M,p\nVdash\Sec_s(r)
+\]
+by \Cref{lem:admitted-gluing-null-reduction}. The first conjunct is equivalent, by the first part of the proof, to
+\[
+\Vis_{p,s}(r)\neq\varnothing.
+\]
+The negation of the second equivalence says
+\[
+M,p\nVdash\Sec_s(r)
+\quad\Longleftrightarrow\quad
+\text{there is no }v\in\Vis_{p,s}(r)\text{ with }\mathfrak G_v\text{ neutral}.
+\]
+Combining the two statements gives
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\quad\Longleftrightarrow\quad
+\Vis_{p,s}(r)\neq\varnothing
+\ \text{and}\
+\forall v\in\Vis_{p,s}(r),\ \mathfrak G_v\ \text{is non-neutral}.
+\]
+This is the precise point at which the $\CompSec_s(r)$ conjunct in the definition of $\Null_s^{\mathrm{glue}}(r)$ is used: it is the nonempty-visible-branch conjunct, so the branchwise universal condition is never read vacuously as a gluing-level obstruction.
+
+Under the \v{C}ech-to-derived comparison hypothesis in \Cref{def:cech-gluing-obstruction}, \Cref{prop:derived-branch-classification} gives
+\[
+\mathfrak G_v\ \text{is neutral}
+\quad\Longleftrightarrow\quad
+\omega_v=0
+\]
+for each visible branch. Applying this branchwise gives the final cohomological reformulation. No branch-constancy hypothesis is used; the argument only uses the component gerbe attached to each visible class.
 \end{proof}
+
+\begin{remark}[Nonvacuity in the gluing-level criterion]\label{rem:nonvacuous-gerbe-null}
+Under the admitted-reference hypotheses of \Cref{thm:gerbe-null-semantics}, the nonemptiness condition is part of the criterion, not a cosmetic add-on. If
+\[
+\Vis_{p,s}(r)=\varnothing,
+\]
+then the statement ``every visible branch is non-neutral'' is vacuously true, but $M,p\nVdash\CompSec_s(r)$ by \Cref{prop:compsecs-vs-visible-branches}. Hence $M,p\nVdash\Null^{\mathrm{glue}}_s(r)$ by \Cref{lem:admitted-gluing-null-reduction}. Gluing-level absence means compatible local data exist and fail to glue globally; it is not the same as the mere absence of a neutral branch.
+\end{remark}
 
 \subsection{Visible quotients and the information cost of strictification}
 

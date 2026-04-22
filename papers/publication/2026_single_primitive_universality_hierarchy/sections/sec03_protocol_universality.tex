@@ -1,35 +1,15 @@
-\section{Protocol universality}\label{sec:L1}
+\section{A Zeckendorf protocol}\label{sec:L1}
 
-Expression universality has no built-in normal form.  The next
-setting has a single primitive accompanied by a computable
-normalization.  The construction is deliberately
-elementary: a monogenic dynamics produces binary words, and the
-fold map replaces each word by its Zeckendorf address.
+We next add the normal-form data absent from expression
+universality.  Let \(\Omega_m=\{0,1\}^m\).  Such words may be
+viewed as finite itineraries of a one-generator symbolic source,
+but no dynamical or statistical property is used below.  The fold
+map sends each word to its Zeckendorf address.  The construction is
+elementary, but it displays the two ingredients needed for a
+protocol: a computable normal form and readout maps from that
+normal form into the intended semantics.
 
-\subsection{Symbolic readout}
-
-\begin{definition}[Monogenic action and binary readout]
-\label{def:spg}
-Let \((X,\mathcal B,\mu)\) be a probability space and let
-\(T\colon X\to X\) be a measure-preserving transformation generated
-by a single element \(g\) of a semigroup \(\Gamma=\langle g\rangle\),
-so that \(T^t(x)=g^t\cdot x\) for \(t\in\NN\).  For a measurable
-window \(W\subseteq X\), put
-\[
-  s_t(x)=\one_W(T^t x)\in\{0,1\}.
-\]
-The microstate word of length \(m\) starting at time \(t\) is
-\[
-  \omega_m(x;t)=s_t(x)s_{t+1}(x)\cdots s_{t+m-1}(x)
-  \in\Omega_m:=\{0,1\}^m .
-\]
-\end{definition}
-
-This is the usual passage from a dynamical system and a partition
-element to symbolic itineraries \cite{MorseHedlund1940}.  The only
-time-evolution datum is the generator \(g\).
-
-\subsection{The Fibonacci fold}
+\subsection{The fold}
 \label{ssec:fold}
 
 Let \(F_1=F_2=1\) and \(F_{n+2}=F_{n+1}+F_n\).  For \(m\ge1\), let
@@ -47,12 +27,14 @@ For \(\omega=\omega_1\cdots\omega_m\in\Omega_m\), set
 \[
   N(\omega)=\sum_{k=1}^m \omega_kF_{k+1}.
 \]
-The fold map at resolution \(m\) is the map
-\(\Fold_m\colon\Omega_m\to X_m\) which sends \(\omega\) to the
-unique legal word \(c\in X_m\) satisfying
+The finite fold map at resolution \(m\) is the map
+\(\Fold_m\colon\Omega_m\to X_m\) sending \(\omega\) to the unique
+legal word \(c\in X_m\) satisfying
 \begin{equation}\label{eq:fold-residue}
   \Val_m(c)\equiv N(\omega)\pmod {F_{m+2}}.
 \end{equation}
+The existence and uniqueness of this residue representative follow
+from \Cref{prop:fold-confluence}.
 \end{definition}
 
 \begin{proposition}[Finite fold normal forms]
@@ -76,8 +58,8 @@ is a bijection \(X_{\infty}^{\mathrm{fin}}\to\NN\).
 \end{proposition}
 
 \begin{proof}
-Zeckendorf's theorem gives a unique expression of every
-\(n\ge0\) as a sum of nonconsecutive Fibonacci numbers
+Zeckendorf's theorem gives a unique expression of every \(n\ge0\)
+as a sum of nonconsecutive Fibonacci numbers
 \(F_{k+1}\) \cite{Zeckendorf1972}.  If \(0\le n<F_{m+2}\), no
 summand \(F_{m+2}\) or larger can occur, so the digits occupy only
 the positions \(1,\ldots,m\).  This gives a legal word in \(X_m\).
@@ -96,10 +78,21 @@ Zeckendorf/Ostrowski arithmetic
 \cite{AhlbachEtAl2013,HieronymiTerry2018}.
 \end{proof}
 
-The finite legal-word spaces form an inverse system under
-coordinate truncation.  We distinguish its countable
-eventually-zero part, where the arithmetic is carried out, from its
-compact completion.
+The finite map \(\Fold_m\) is a residue-level normalizer.  The
+stable normalizer of a finite binary word \(\omega\) is the
+unreduced Zeckendorf address
+\[
+  \mathrm{NF}_{\infty}(\omega)=\Val^{-1}(N(\omega))
+  \in X_{\infty}^{\mathrm{fin}},
+\]
+where \(\omega\) is extended by zeros after its last digit.  Thus the
+finite maps \(\Fold_m\) provide the certificate fibers, whereas
+arithmetic is read on the countable set of eventually-zero normal
+forms.
+
+The finite legal-word spaces also form an inverse system under
+coordinate truncation.  The arithmetic below uses its
+eventually-zero part, not the whole compact limit.
 
 \begin{definition}[Finite and compact completions]
 \label{def:completions}
@@ -114,14 +107,14 @@ countable set in \Cref{prop:fold-confluence}, identified with
     c_kc_{k+1}=0\text{ for all }k\}.
 \end{equation}
 It is a compact zero-dimensional space, analogous to a profinite
-completion \cite{RibesZalesskii2010}.  The arithmetic below,
-however, is carried out on \(X_{\infty}^{\mathrm{fin}}\).
+completion \cite{RibesZalesskii2010}.  The arithmetic operations
+below are carried out on \(X_{\infty}^{\mathrm{fin}}\).
 \end{definition}
 
 \begin{remark}\label{rem:finite-vs-profinite}
 The valuation is not a bijection \(\widehat X\to\NN\), since
-\(\widehat X\) is uncountable.  Stable arithmetic is therefore an
-operation on eventually-zero addresses, not on the whole compact
+\(\widehat X\) is uncountable.  Stable arithmetic is consequently an
+operation on eventually-zero addresses, not on the full compact
 inverse limit.
 \end{remark}
 
@@ -155,7 +148,10 @@ multiplicative identity \(\Val^{-1}(1)\).  The valuation map
 is a semiring isomorphism.  At finite resolution, transporting the
 ring operations on \(\ZZ/F_{m+2}\ZZ\) through the bijection
 \(\Val_m\colon X_m\to\ZZ/F_{m+2}\ZZ\) gives a ring structure on
-\(X_m\) isomorphic to \(\ZZ/F_{m+2}\ZZ\).
+\(X_m\) isomorphic to \(\ZZ/F_{m+2}\ZZ\).  This finite ring
+structure records only the residue-level structure; the stable
+semiring operation is the one on
+\(X_{\infty}^{\mathrm{fin}}\).
 \end{proposition}
 
 \begin{proof}
@@ -166,8 +162,10 @@ statement is the same transport of structure through \(\Val_m\),
 with values taken modulo \(F_{m+2}\).
 \end{proof}
 
-Thus arithmetic is not an additional primitive operation on words.
-It is read from valuation, residue reduction, and normalization.
+Thus arithmetic has not been added as a primitive operation on
+words.  It is read through valuation and stable Zeckendorf
+normalization; residue reduction is the finite-resolution version
+used for certificates.
 
 \subsection{Composition as the primitive}
 \label{ssec:sole}
@@ -221,6 +219,10 @@ transports the addition and multiplication laws to stable
 addresses.
 \end{proof}
 
+No new identity about Church iteration is involved.  The corollary
+records that the usual iteration laws remain decidable after the
+indices are placed in Zeckendorf normal form.
+
 \begin{theorem}[Level-zero obstruction for multiplicative readout]
 \label{thm:level-zero-obstruction}
 Let \(M\) be a monoid and let \(g\in M\) have infinite order.  Put
@@ -236,11 +238,11 @@ There is no injective map
 Consequently multiplication on the positive integers cannot be
 represented by the ambient monoid product on a single free
 monogenic orbit, even after arbitrary recoding of the numerals into
-that orbit.  In the composition model of
-\Cref{thm:two-level}, multiplicative readout therefore requires a
-change of level from the orbit \(\{g^{\circ n}\}\) to the power
-operators \(f\mapsto f^{\circ n}\), under this level-zero
-monogenic-orbit restriction.
+that orbit.  In the composition model of \Cref{thm:two-level},
+therefore, multiplicative readout requires a change of level from
+the orbit \(\{g^{\circ n}\}\) to the power operators
+\(f\mapsto f^{\circ n}\), under this level-zero monogenic-orbit
+restriction.
 \end{theorem}
 
 \begin{proof}
@@ -271,23 +273,65 @@ claim.
 \end{proof}
 
 \begin{definition}[Protocol universality]\label{def:prot-univ}
-A \emph{single-primitive protocol} for a class of operations
-\(\mathcal O\) consists of
+Let \(\mathcal O\) be a class of operations on a set \(D\).  A
+\emph{single-primitive protocol} for \(\mathcal O\) consists of
 \begin{enumerate}
-\item a syntax generated by one operation \(\sigma\);
-\item a computable normalization map \(\mathrm{NF}\) with unique
-  normal forms, in the standard sense of canonical rewriting
-  \cite{BaaderNipkow1998};
-\item a finite family of readout maps
-  \(\{\Phi_\ell\}_{\ell=0}^L\) through which the operations in
-  \(\mathcal O\) are realized from \(\sigma\)-compositions.
+\item a decidable set \(C\) of raw codes and a computable
+  normalization map \(\mathrm{NF}\colon C\to N\) onto a set \(N\) of
+  unique normal forms, with decidable equality on \(N\);
+\item a decoding map \(\nu\colon N\to D\);
+\item a finite family of semantic sorts \(Y_\ell\), each equipped
+  with an interpretation \(\sigma_\ell\) of one binary operation
+  symbol \(\sigma\);
+\item computable readout maps
+  \(\Phi_\ell\colon N\to Y_\ell\).
 \end{enumerate}
-It is \emph{protocol-universal for \(\mathcal O\)} if all
-operations in \(\mathcal O\) are realized in this way and equality
-of normal forms is decidable.
+An operation \(\theta\in\mathcal O\) of arity \(r\) is realized if
+there are a computable operation
+\(\widehat\theta\colon N^r\to N\), a level \(\ell\), and a
+\(\sigma\)-term \(R_\theta\) in \(r\) variables such that
+\[
+  \nu(\widehat\theta(n_1,\ldots,n_r))
+  =\theta(\nu(n_1),\ldots,\nu(n_r))
+\]
+and
+\[
+  \Phi_\ell(\widehat\theta(n_1,\ldots,n_r))
+  =
+  R_\theta(\Phi_\ell(n_1),\ldots,\Phi_\ell(n_r))
+\]
+for all \(n_i\in N\).  The protocol is
+\emph{protocol-universal for \(\mathcal O\)} if every operation in
+\(\mathcal O\) is realized in this sense.  The normalizer is
+algorithmic presentation data; the only algebraic operation used in
+the readout terms is \(\sigma\), as in a canonical rewriting
+system with a decidable word problem \cite{BaaderNipkow1998}.
 \end{definition}
 
-The Zeckendorf address system with composition readouts is
-protocol-universal for \(\mathcal O=\{+,\times\}\) on \(\NN\).
-The normal forms are computable by \Cref{prop:fold-confluence}, and
-the readouts are those of \Cref{thm:two-level,cor:minimal}.
+For the Zeckendorf protocol, \(C\) is the decidable set of finite
+binary words, \(N=X_{\infty}^{\mathrm{fin}}\), and
+\(\nu=\Val\).  The normal form of a raw word is
+\(\mathrm{NF}_{\infty}\).  Equality of normal forms is literal
+equality of finite legal words, hence is decidable by
+\Cref{prop:fold-confluence}.  The single operation symbol is
+interpreted as composition on both semantic sorts
+\(Y_0=\End(A)\) and \(Y_1=\End(\End(A))\).  The readouts are
+\[
+  \Phi_0(c_n)=g^{\circ n},\qquad
+  \Phi_1(c_n)=I_n,\qquad c_n=\Val^{-1}(n).
+\]
+For addition take \(\widehat{+}=\oplus\) and level \(0\);
+for multiplication take \(\widehat{\times}=\otimes\) and level
+\(1\).  Then
+\[
+  \Phi_0(c_m\oplus c_n)
+  =\Phi_0(c_m)\circ\Phi_0(c_n),
+  \qquad
+  \Phi_1(c_m\otimes c_n)
+  =\Phi_1(c_m)\circ\Phi_1(c_n),
+\]
+by \Cref{thm:two-level}.  Hence the Zeckendorf address system with
+these composition readouts is protocol-universal for
+\(\mathcal O=\{+,\times\}\) on \(\NN\).  The finite maps
+\(\Fold_m\) are the resolution quotients whose fibers are studied in
+\Cref{sec:L2}.

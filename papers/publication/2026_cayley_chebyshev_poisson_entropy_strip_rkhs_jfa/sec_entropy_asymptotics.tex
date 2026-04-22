@@ -8,38 +8,41 @@ $\Delta:=\gamma-\bar\gamma$ and
 $\mu_n:=\int_{\RR}\Delta^n\,\dd\nu(\gamma)$ whenever the corresponding
 moment exists.  For ease of reference, the moment hypotheses and logical
 dependencies are as follows.
-{\renewcommand{\arraystretch}{1.15}
-\begin{center}
-\small
-\begin{tabular}{p{0.31\textwidth}p{0.23\textwidth}p{0.34\textwidth}}
-\textbf{Result} & \textbf{Moment input} & \textbf{Main ingredients} \\
-Proposition~\ref{thm:poisson-second-order}
-& mean, variance, finite centred fourth moment
-& direct Taylor expansion of $R_\varepsilon$ \\
-Theorem~\ref{thm:poisson-kl-even-orders}
-& finite centred $(2N+1)$st absolute moment
-& Proposition~\ref{prop:cayley-mode-remainder} and
-Lemma~\ref{lem:mode-parity-vanish} \\
-Theorem~\ref{thm:poisson-kl-eighth}
-& mean, variance, finite centred seventh absolute moment
-& Proposition~\ref{prop:cayley-mode-remainder},
+\begin{itemize}[leftmargin=*]
+\item Proposition~\ref{thm:poisson-second-order} uses the mean, variance,
+and finite centred fourth moment, through a direct Taylor expansion of
+$R_\varepsilon$.
+\item Theorem~\ref{thm:poisson-kl-even-orders} uses a finite centred
+$(2N+1)$st absolute moment, Proposition~\ref{prop:cayley-mode-remainder},
+and Lemma~\ref{lem:mode-parity-vanish}.
+\item Theorem~\ref{thm:poisson-kl-eighth} uses the mean, variance, finite
+centred seventh absolute moment, Proposition~\ref{prop:cayley-mode-remainder},
 Lemma~\ref{lem:mode-parity-vanish}, and
-Appendix~\ref{app:entropy-integrals} \\
-Theorems~\ref{thm:poisson-defect-ladder}
-and~\ref{thm:poisson-defect-amplification}
-& mean, variance, finite centred seventh absolute moment
-& the explicit coefficients from
-Theorem~\ref{thm:poisson-kl-eighth} \\
-Theorem~\ref{thm:poisson-defect-stability}
-& mean, variance, finite centred fourth moment
-& the formula for $\Delta_6(\nu)$ from
-Theorem~\ref{thm:poisson-defect-amplification}
-\end{tabular}
-\end{center}}
+Appendix~\ref{app:entropy-integrals}.
+\item Theorems~\ref{thm:poisson-defect-ladder}
+and~\ref{thm:poisson-defect-amplification} use the same finite centred
+seventh absolute moment hypothesis and the explicit coefficients from
+Theorem~\ref{thm:poisson-kl-eighth}.
+\item The fourth-moment identity \eqref{eq:defect-sixth-fourth-moment} and
+the coupling estimate \eqref{eq:fourth-moment-algebraic-coupling} use only
+the mean, variance, and finite centred fourth moment, and define the
+standalone algebraic defect $\Delta_6^{(4)}(\nu)$.
+\item Theorem~\ref{thm:poisson-defect-stability} is a seventh-moment
+entropy theorem.  It again uses the mean, variance, and finite centred
+seventh absolute moment; only under this hypothesis does the bridge lemma in
+Subsection~\ref{subsec:fourth-moment-stability} identify
+$\Delta_6^{(4)}(\nu)$ with the genuine $t^{-6}$ entropy defect.
+\end{itemize}
 In particular, the appendix enters only in the explicit evaluation of the
 $t^{-6}$ and $t^{-8}$ coefficients in
-Theorem~\ref{thm:poisson-kl-eighth}; the later defect identities are
-algebraic consequences of those coefficients.
+Theorem~\ref{thm:poisson-kl-eighth}.  The defect ladder and amplification
+results are algebraic consequences of those coefficients, while the
+fourth-moment identity below isolates the polynomial which later becomes
+the sixth-order entropy defect.  The stability theorem is stated only after
+imposing the stronger seventh-moment hypothesis, so its defect variable is
+the genuine $t^{-6}$ entropy-asymptotic defect.  Without that stronger
+hypothesis this section uses only the superscripted algebraic notation
+$C_6^{(4)}$ and $\Delta_6^{(4)}$.
 
 \subsection{Entropy in Cayley coordinates}
 
@@ -402,7 +405,21 @@ $n_1+\cdots+n_k$ is odd, so the integral vanishes.
 
 \subsection{Entropy asymptotics and rigidity}
 
-\begin{lemma}[Uniform entropy-expansion remainder]%
+The next lemma is the bookkeeping device used by the coefficient
+computations.  It fixes the order of operations for powers of the density
+ratio.  First one truncates the one-body mode expansion additively, then
+one expands the resulting finite polynomial exactly, and only after that
+one discards monomials whose total $t$-degree is larger than the target
+degree.  The retained polynomial is denoted $P_{k,N,t}$, and the power
+remainder is defined by
+\[
+\varepsilon_{k,N,t}
+:=\bigl(\delta_t(\bar\gamma+t\,\cdot)\bigr)^k-P_{k,N,t}.
+\]
+Thus the power formula below is a pointwise identity with an additive
+remainder in $L^\infty(\RR)\cap L^1(\omega)$.
+
+\begin{lemma}[Uniform additive entropy-expansion remainders]%
 \label{lem:entropy-uniform-remainder}
 Let $N\ge2$ and let $\nu$ have mean~$\bar\gamma$ and finite centred
 $(2N+1)$st absolute moment.  Put
@@ -410,61 +427,129 @@ $(2N+1)$st absolute moment.  Put
 \delta_t(\bar\gamma+ty):=
 \frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1.
 \]
-Then there are constants $C_\nu,T_\nu>0$ such that, for $t\ge1$,
+Let $\omega(\dd y):=\pi^{-1}(1+y^2)^{-1}\dd y$.
+Then there are constants $C_{\nu,N},T_{\nu,N}>0$ and, for each
+$2\le k\le N$, a constant $C_{\nu,N,k}>0$ with the following properties.
+\begin{enumerate}[label=\textup{(\alph*)},leftmargin=*]
+\item For every $t\ge1$,
 \begin{equation}\label{eq:uniform-delta-expansion}
 \delta_t(\bar\gamma+ty)
 =\sum_{n=2}^{2N}\frac{\mu_n}{t^n}u_n(y)+\rho_{N,t}(y),
 \qquad
-\sup_{y\in\RR}|\rho_{N,t}(y)|\le C_\nu t^{-(2N+1)},
+\sup_{y\in\RR}|\rho_{N,t}(y)|
+\;+\;\|\rho_{N,t}\|_{L^1(\omega)}
+\le C_{\nu,N} t^{-(2N+1)},
 \end{equation}
 and
 \begin{equation}\label{eq:uniform-delta-bound}
-\sup_{y\in\RR}|\delta_t(\bar\gamma+ty)|\le C_\nu t^{-2}.
+\sup_{y\in\RR}|\delta_t(\bar\gamma+ty)|\le C_{\nu,N} t^{-2}.
 \end{equation}
-For $t\ge T_\nu$ the function
+
+\item For $t\ge T_{\nu,N}$ the function
 \[
-\Phi(\delta_t):=(1+\delta_t)\log(1+\delta_t)-\delta_t
+y\longmapsto
+\Phi(\delta_t(\bar\gamma+ty))
+:=(1+\delta_t(\bar\gamma+ty))
+\log(1+\delta_t(\bar\gamma+ty))
+-\delta_t(\bar\gamma+ty)
 \]
-is integrable against $\omega(\dd y)=\pi^{-1}(1+y^2)^{-1}\dd y$, and
+is integrable against $\omega$, and
 \begin{equation}\label{eq:uniform-Phi-expansion}
-\Phi(\delta_t)
-=\sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}\delta_t^k+\eta_{N,t},
-\qquad
-\sup_{y\in\RR}|\eta_{N,t}(y)|\le C_\nu t^{-(2N+2)}.
+\Phi(\delta_t(\bar\gamma+ty))
+=\sum_{j=2}^{N}\frac{(-1)^j}{j(j-1)}
+\bigl(\delta_t(\bar\gamma+ty)\bigr)^j+\eta_{N,t}(y),
 \end{equation}
-Moreover, for every $2\le k\le N$,
+where
+\[
+\sup_{y\in\RR}|\eta_{N,t}(y)|
+\;+\;\|\eta_{N,t}\|_{L^1(\omega)}
+\le C_{\nu,N} t^{-(2N+2)}.
+\]
+
+\item Put
+\[
+A_{N,t}(y):=\sum_{n=2}^{2N}\frac{\mu_n}{t^n}u_n(y),
+\qquad
+\delta_t(\bar\gamma+ty)=A_{N,t}(y)+\rho_{N,t}(y).
+\]
+For every $2\le k\le N$, define the retained polynomial
+\[
+P_{k,N,t}(y):=
+\sum_{m=2k}^{2N}\frac{1}{t^m}
+\sum_{\substack{n_1,\dots,n_k\ge2\\ n_1+\cdots+n_k=m}}
+\mu_{n_1}\cdots\mu_{n_k}
+u_{n_1}(y)\cdots u_{n_k}(y).
+\]
+The power remainder is the exact additive difference
+\[
+\varepsilon_{k,N,t}(y):=
+\bigl(\delta_t(\bar\gamma+ty)\bigr)^k-P_{k,N,t}(y).
+\]
+Thus the power expansion is the pointwise additive identity
 \begin{equation}\label{eq:uniform-power-expansion}
-\delta_t(\bar\gamma+ty)^k
-=
+\begin{split}
+\bigl(\delta_t(\bar\gamma+ty)\bigr)^k
+\;=&
 \sum_{m=2k}^{2N}\frac{1}{t^m}
 \sum_{\substack{n_1,\dots,n_k\ge2\\ n_1+\cdots+n_k=m}}
 \mu_{n_1}\cdots\mu_{n_k}
 u_{n_1}(y)\cdots u_{n_k}(y)
-\varepsilon_{k,N,t}(y),
+\;+\;\varepsilon_{k,N,t}(y).
+\end{split}
 \end{equation}
-where $\sup_y|\varepsilon_{k,N,t}(y)|=O(t^{-(2N+1)})$.  Consequently all
-remainders in \eqref{eq:uniform-Phi-expansion} and
+Equivalently, in the retained-polynomial notation this is
+\[
+\bigl(\delta_t(\bar\gamma+ty)\bigr)^k
+=P_{k,N,t}(y)+\varepsilon_{k,N,t}(y).
+\]
+The last term is the whole difference between the exact power and the
+retained polynomial $P_{k,N,t}$.  In terms of the one-body truncation,
+\[
+\varepsilon_{k,N,t}
+=\bigl((A_{N,t}+\rho_{N,t})^k-A_{N,t}^k\bigr)
++\bigl(A_{N,t}^k-P_{k,N,t}\bigr).
+\]
+For every $t\ge1$ the same additive remainder satisfies the uniform and
+integrated bounds
+\begin{equation}\label{eq:uniform-power-error-bound}
+\sup_y |\varepsilon_{k,N,t}(y)|
++\|\varepsilon_{k,N,t}\|_{L^1(\omega)}
+\le C_{\nu,N,k}t^{-(2N+1)}.
+\end{equation}
+In particular,
+\[
+\left|\int_{\RR}\varepsilon_{k,N,t}\,\dd\omega\right|
+\le C_{\nu,N,k}t^{-(2N+1)}.
+\]
+\end{enumerate}
+Consequently all remainders in \eqref{eq:uniform-Phi-expansion} and
 \eqref{eq:uniform-power-expansion} are $o(t^{-2N})$ in $L^1(\omega)$.
 \end{lemma}
 
 \begin{proof}
+\emph{Mode remainder.}
+All constants below may depend on $\nu$ and $N$, and in the power estimate
+also on $k$, but not on $y$ or $t$.
 Apply Proposition~\ref{prop:cayley-mode-remainder} with truncation order
 $2N$.  Since $v_{2N}$ is bounded on~$\RR^2$,
 \[
 R_{\Delta/t}(y)
 =\sum_{n=0}^{2N}u_n(y)\frac{\Delta^n}{t^n}
-\frac{\Delta^{2N+1}}{t^{2N+1}}v_{2N}(y,\Delta/t).
++\frac{\Delta^{2N+1}}{t^{2N+1}}v_{2N}(y,\Delta/t).
 \]
 Taking $\nu$-expectations, using $\mu_0=1$ and $\mu_1=0$, and subtracting
 the constant term gives \eqref{eq:uniform-delta-expansion}.  The finite
 moment assumption controls the remainder uniformly by
 $t^{-(2N+1)}\|v_{2N}\|_\infty\EE|\Delta|^{2N+1}$.
+Since $\omega(\RR)=1$, the same estimate gives the displayed
+$L^1(\omega)$ control of $\rho_{N,t}$.
 Each fixed mode $u_n$ is bounded by
 Theorem~\ref{thm:cayley-chebyshev-mode}, so
 \eqref{eq:uniform-delta-expansion} implies \eqref{eq:uniform-delta-bound}.
 
-Choose $T_\nu$ so large that the right-hand side of
-\eqref{eq:uniform-delta-bound} is at most $1/2$ for $t\ge T_\nu$.  On
+\emph{Entropy Taylor remainder.}
+Choose $T_{\nu,N}$ so large that the right-hand side of
+\eqref{eq:uniform-delta-bound} is at most $1/2$ for $t\ge T_{\nu,N}$.  On
 $|z|\le1/2$ the Taylor series
 \[
 \Phi(z)=\sum_{k=2}^{\infty}\frac{(-1)^k}{k(k-1)}z^k
@@ -472,20 +557,91 @@ $|z|\le1/2$ the Taylor series
 has a remainder after degree~$N$ bounded by a constant times
 $|z|^{N+1}$.  Since $\delta_t=O(t^{-2})$ uniformly, this gives
 \eqref{eq:uniform-Phi-expansion}.  The measure~$\omega$ has total mass
-one, so uniform boundedness implies the asserted integrability.
+one, so the same supremum estimate gives the displayed $L^1(\omega)$
+bound and the asserted integrability.
 
-Finally write
+\emph{Power remainders.}
+It remains to justify \eqref{eq:uniform-power-expansion} and
+\eqref{eq:uniform-power-error-bound}.  From
+\eqref{eq:uniform-delta-expansion},
 \[
-A_t(y):=\sum_{n=2}^{2N}\frac{\mu_n}{t^n}u_n(y).
+\delta_t(\bar\gamma+ty)=A_{N,t}(y)+\rho_{N,t}(y),
+\qquad
+\sup_y|\rho_{N,t}(y)|
+\;+\;\|\rho_{N,t}\|_{L^1(\omega)}
+=O(t^{-(2N+1)}).
 \]
-The modes are bounded, so $A_t=O(t^{-2})$ uniformly.  Expanding the
-finite product $A_t(y)^k$ gives the displayed sum in
-\eqref{eq:uniform-power-expansion} plus terms of total degree at least
-$2N+1$, which are uniformly $O(t^{-(2N+1)})$.  The difference
-$(A_t+\rho_{N,t})^k-A_t^k$ contains at least one factor $\rho_{N,t}$ and
-is therefore $O(t^{-(2N+1)}t^{-2(k-1)})$, hence also
-$O(t^{-(2N+1)})$.  Since $\omega(\RR)=1$, the same estimates hold in
-$L^1(\omega)$ and are $o(t^{-2N})$.
+The modes are bounded, so $A_{N,t}=O(t^{-2})$ uniformly.  First expand the
+finite product $A_{N,t}(y)^k$ exactly:
+\[
+A_{N,t}(y)^k
+=
+\sum_{m=2k}^{2Nk}\frac{1}{t^m}
+\sum_{\substack{2\le n_1,\dots,n_k\le 2N\\
+n_1+\cdots+n_k=m}}
+\mu_{n_1}\cdots\mu_{n_k}
+u_{n_1}(y)\cdots u_{n_k}(y).
+\]
+No estimate has entered this step: it is a finite algebraic identity.
+Splitting this exact finite sum at total degree $2N$ gives
+\[
+A_{N,t}(y)^k=P_{k,N,t}(y)+r_{k,N,t}(y),
+\]
+where
+\[
+r_{k,N,t}(y)=
+\sum_{m=2N+1}^{2Nk}\frac{1}{t^m}
+\sum_{\substack{2\le n_1,\dots,n_k\le 2N\\
+n_1+\cdots+n_k=m}}
+\mu_{n_1}\cdots\mu_{n_k}
+u_{n_1}(y)\cdots u_{n_k}(y).
+\]
+The sum is finite.  Since every mode in it is bounded and $t\ge1$,
+\[
+\sup_y|r_{k,N,t}(y)|=O(t^{-(2N+1)}).
+\]
+Because $\omega(\RR)=1$, this also gives
+\[
+\|r_{k,N,t}\|_{L^1(\omega)}=O(t^{-(2N+1)}).
+\]
+Second, compare the exact power of $\delta_t=A_{N,t}+\rho_{N,t}$ with the
+finite product just expanded.  The binomial formula gives
+\[
+\bigl(A_{N,t}(y)+\rho_{N,t}(y)\bigr)^k-A_{N,t}(y)^k
+=
+\sum_{\ell=1}^{k}\binom{k}{\ell}
+A_{N,t}(y)^{k-\ell}\rho_{N,t}(y)^\ell.
+\]
+For the term with index~$\ell$ the bound $A_{N,t}=O(t^{-2})$ and
+$\rho_{N,t}=O(t^{-(2N+1)})$ gives
+$O(t^{-2(k-\ell)})O(t^{-\ell(2N+1)})$, which is
+$O(t^{-(2N+1)})$ for $t\ge1$.  Hence
+\[
+\bigl(A_{N,t}(y)+\rho_{N,t}(y)\bigr)^k-A_{N,t}(y)^k
+=O(t^{-(2N+1)}).
+\]
+For the corresponding $L^1(\omega)$ estimate, use
+\[
+\|A_{N,t}^{\,k-\ell}\rho_{N,t}^{\,\ell}\|_{L^1(\omega)}
+\le
+\|A_{N,t}\|_\infty^{k-\ell}
+\|\rho_{N,t}\|_\infty^{\ell-1}
+\|\rho_{N,t}\|_{L^1(\omega)}
+=O(t^{-(2N+1)})
+\]
+for every $\ell\ge1$.
+By the definition of $\varepsilon_{k,N,t}$, this proves the explicit
+additive decomposition
+\[
+\varepsilon_{k,N,t}(y)
+=r_{k,N,t}(y)
++\bigl(A_{N,t}(y)+\rho_{N,t}(y)\bigr)^k-A_{N,t}(y)^k
+\]
+for the additive remainder in \eqref{eq:uniform-power-expansion}.  The
+displayed uniform and $L^1(\omega)$ estimates for $r_{k,N,t}$ and the
+binomial difference give \eqref{eq:uniform-power-error-bound}.  The bounds
+$t^{-(2N+2)}=o(t^{-2N})$ and
+$t^{-(2N+1)}=o(t^{-2N})$ give the final claim.
 \end{proof}
 
 \begin{theorem}[Odd orders vanish in the entropy expansion]%
@@ -521,7 +677,17 @@ With $x=\bar\gamma+ty$ one has
 Lemma~\ref{lem:entropy-uniform-remainder} gives the uniform mode
 expansion, the Taylor remainder for
 $\Phi(z)=(1+z)\log(1+z)-z$, and the $L^1(\omega)$ control needed to
-integrate term by term.  Therefore
+integrate term by term.  More explicitly, for each $2\le k\le N$ it gives
+\[
+\bigl(\delta_t(\bar\gamma+ty)\bigr)^k
+=P_{k,N,t}(y)+\varepsilon_{k,N,t}(y),
+\qquad
+\|\varepsilon_{k,N,t}\|_{L^1(\omega)}
+=O(t^{-(2N+1)}),
+\]
+so integrating a power of $\delta_t$ contributes the integral of the
+complete polynomial $P_{k,N,t}$ plus only an additive
+$o(t^{-2N})$ error.  Therefore
 \[
 D_{\mathrm{KL}}(h_t\|g_t)
 =\int_{\RR}\frac{\Phi(\delta_t(\bar\gamma+ty))}{\pi(1+y^2)}\dd y
@@ -563,8 +729,9 @@ D_{\mathrm{KL}}(h_t\|g_t)
 \end{theorem}
 
 \begin{proof}
-With $x=\bar\gamma+ty$, Proposition~\ref{prop:cayley-mode-remainder} with
-$N=6$ gives
+Let $\omega(\dd y)=\pi^{-1}(1+y^2)^{-1}\dd y$.  With
+$x=\bar\gamma+ty$, Proposition~\ref{prop:cayley-mode-remainder} with
+truncation order~$6$ gives
 \[
 \delta_t(\bar\gamma+ty)
 =\frac{\sigma^2}{t^2}u_2(y)
@@ -574,86 +741,154 @@ $N=6$ gives
 +\frac{\mu_6}{t^6}u_6(y)
 +O(t^{-7})
 \]
-uniformly in $y\in\RR$.  Since $\delta_t=O(t^{-2})$, one has
+uniformly in $y\in\RR$.  Also
+$g_t(\bar\gamma+ty)\dd(\bar\gamma+ty)=\omega(\dd y)$, hence
 \[
-\Phi(\delta_t)
-=\frac12\delta_t^2-\frac16\delta_t^3+\frac1{12}\delta_t^4+O(t^{-10}).
+D_{\mathrm{KL}}(h_t\|g_t)
+=\int_{\RR}\Phi(\delta_t(\bar\gamma+ty))\,\omega(\dd y).
 \]
-Also $g_t(\bar\gamma+ty)\dd(\bar\gamma+ty)=\pi^{-1}(1+y^2)^{-1}\dd y$.
-Write
+Set
 \[
 a_2:=\sigma^2u_2,\qquad a_3:=\mu_3u_3,\qquad a_4:=\mu_4u_4,
-\qquad a_5:=\mu_5u_5,\qquad a_6:=\mu_6u_6,
+\qquad a_5:=\mu_5u_5,\qquad a_6:=\mu_6u_6.
 \]
-so that $\delta_t=t^{-2}a_2+t^{-3}a_3+t^{-4}a_4+t^{-5}a_5+t^{-6}a_6+O(t^{-7})$.
-Up to order $t^{-8}$ one therefore has
+Then
 \[
-\frac12\delta_t^2
-=\frac{a_2^2}{2t^4}
-+\frac{a_2a_3}{t^5}
-+\frac{a_2a_4+\frac12 a_3^2}{t^6}
-+\frac{a_2a_5+a_3a_4}{t^7}
-+\frac{a_2a_6+a_3a_5+\frac12 a_4^2}{t^8}
-+O(t^{-9}),
+\delta_t=t^{-2}a_2+t^{-3}a_3+t^{-4}a_4+t^{-5}a_5+t^{-6}a_6+O(t^{-7})
 \]
+uniformly.  Since $\delta_t=O(t^{-2})$ and
 \[
--\frac16\delta_t^3
-=-\frac{a_2^3}{6t^6}
--\frac{a_2^2a_3}{2t^7}
--\frac{\frac12 a_2^2a_4+\frac12 a_2a_3^2}{t^8}
-+O(t^{-9}),
+\Phi(z)=\frac12z^2-\frac16z^3+\frac1{12}z^4+O(z^5)
+\qquad(z\to0),
 \]
+we have, uniformly in $y$,
 \[
-\frac1{12}\delta_t^4
-=\frac{a_2^4}{12t^8}+O(t^{-9}).
+\Phi(\delta_t)
+=\frac12\delta_t^2-\frac16\delta_t^3+\frac1{12}\delta_t^4
++O(t^{-10}).
 \]
-Thus, before inserting the integral identities, the coefficient ledger is
+Write
+\[
+d_t:=t^{-2}a_2+t^{-3}a_3+t^{-4}a_4+t^{-5}a_5+t^{-6}a_6,
+\qquad
+\delta_t=d_t+\theta_t,
+\]
+where $\sup_y|\theta_t(y)|=O(t^{-7})$.  Then
+$d_t=O(t^{-2})$ uniformly.  The finite seventh absolute moment is used
+exactly here: it makes the omitted mode $\theta_t$ small enough that any
+occurrence of it lies past order~$t^{-8}$.  Indeed
+\[
+\delta_t^2=d_t^2+2d_t\theta_t+\theta_t^2=d_t^2+O(t^{-9}),
+\]
+while
+\[
+\delta_t^3=d_t^3+O(t^{-11}),\qquad
+\delta_t^4=d_t^4+O(t^{-13}).
+\]
+Combining these estimates with the Taylor remainder for~$\Phi$ gives the
+following uniform rule for coefficients:
+\[
+\begin{aligned}
+[t^{-m}]\Phi(\delta_t)
+&=[t^{-m}]\bigl(\tfrac12d_t^2-\tfrac16d_t^3+\tfrac1{12}d_t^4\bigr),
+\\
+&\hspace{5em}4\le m\le8.
+\end{aligned}
+\]
+Here coefficient extraction is understood modulo a uniform $O(t^{-9})$
+remainder.  This is the only point in the proof where the seventh absolute
+moment is needed beyond the lower moments appearing in the displayed
+coefficients.  Equivalently,
+\[
+\Phi(\delta_t)
+=\frac12d_t^2-\frac16d_t^3+\frac1{12}d_t^4+O(t^{-9})
+=\sum_{m=4}^{8}t^{-m}B_m(y)+O(t^{-9})
+\]
+uniformly in $y$.  The coefficient functions are therefore obtained by
+expanding only the following finite products in powers of~$t^{-1}$.  No
+term containing $\theta_t$ can contribute to any retained coefficient, and
+all terms of total order larger than eight are absorbed in the uniform
+$O(t^{-9})$ remainder:
 \begin{align*}
-[t^{-4}]\Phi(\delta_t)
-&=\frac12 a_2^2,\\
-[t^{-6}]\Phi(\delta_t)
-&=a_2a_4+\frac12a_3^2-\frac16a_2^3,\\
-[t^{-8}]\Phi(\delta_t)
-&=a_2a_6+a_3a_5+\frac12a_4^2
+d_t^2
+&=t^{-4}a_2^2+2t^{-5}a_2a_3
++t^{-6}(2a_2a_4+a_3^2) \\
+&\quad
++t^{-7}(2a_2a_5+2a_3a_4)
++t^{-8}(2a_2a_6+2a_3a_5+a_4^2)+O(t^{-9}),\\
+d_t^3
+&=t^{-6}a_2^3+3t^{-7}a_2^2a_3
++t^{-8}(3a_2^2a_4+3a_2a_3^2)+O(t^{-9}),\\
+d_t^4
+&=t^{-8}a_2^4+O(t^{-9}).
+\end{align*}
+Thus
+\begin{align*}
+B_4&=\frac12a_2^2,\\
+B_5&=a_2a_3,\\
+B_6&=a_2a_4+\frac12a_3^2-\frac16a_2^3,\\
+B_7&=a_2a_5+a_3a_4-\frac12a_2^2a_3,\\
+B_8&=a_2a_6+a_3a_5+\frac12a_4^2
 -\frac12a_2^2a_4-\frac12a_2a_3^2+\frac1{12}a_2^4.
 \end{align*}
-The possible odd-order terms are
+Thus the extraction rule gives $[t^{-m}]\Phi(\delta_t)=B_m$ for
+$4\le m\le8$.  In particular, the $t^{-8}$ coefficient is exactly the sum
+of three contributions:
 \[
-[t^{-5}]\Phi(\delta_t)=a_2a_3,
+\frac12[t^{-8}]d_t^2
+=a_2a_6+a_3a_5+\frac12a_4^2,
+\]
+\[
+-\frac16[t^{-8}]d_t^3
+=-\frac12a_2^2a_4-\frac12a_2a_3^2,
 \qquad
-[t^{-7}]\Phi(\delta_t)
-=a_2a_5+a_3a_4-\frac12a_2^2a_3.
+\frac1{12}[t^{-8}]d_t^4=\frac1{12}a_2^4.
 \]
-By Lemma~\ref{lem:mode-parity-vanish}, their integrals against
-$\pi^{-1}(1+y^2)^{-1}\dd y$ vanish.
-After integration against $\pi^{-1}(1+y^2)^{-1}\dd y$, the weighted
-identities from Appendix~\ref{app:entropy-integrals} give
+The functions $B_5$ and $B_7$ are sums of products
+$u_{n_1}\cdots u_{n_k}$ with odd total index, so
+Lemma~\ref{lem:mode-parity-vanish} gives
 \[
-\frac12\int_{\RR}\frac{u_2(y)^2}{\pi(1+y^2)}\dd y=\frac18,
+\int_{\RR}B_5\,\dd\omega=\int_{\RR}B_7\,\dd\omega=0.
+\]
+The remaining coefficients are obtained from the identities in
+Appendix~\ref{app:entropy-integrals}:
+\[
+\int_{\RR}B_4\,\dd\omega
+=\frac{\sigma^4}{2}\int_{\RR}u_2^2\,\dd\omega
+=\frac{\sigma^4}{8},
 \]
 \[
-\int_{\RR}\frac{\sigma^2\mu_4u_2u_4+\frac12\mu_3^2u_3^2-\frac16\sigma^6u_2^3}
-{\pi(1+y^2)}\dd y
+\int_{\RR}B_6\,\dd\omega
+=\sigma^2\mu_4\!\int_{\RR}u_2u_4\,\dd\omega
++\frac{\mu_3^2}{2}\!\int_{\RR}u_3^2\,\dd\omega
+-\frac{\sigma^6}{6}\!\int_{\RR}u_2^3\,\dd\omega
 =\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64},
 \]
 and
 \begin{align*}
-\int_{\RR}
-\frac{\sigma^2\mu_6u_2u_6+\mu_3\mu_5u_3u_5+\frac12\mu_4^2u_4^2}
-{\pi(1+y^2)}\dd y
-&=\frac{12\sigma^2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256},
-\\
-\int_{\RR}
-\frac{-\frac12\sigma^4\mu_4u_2^2u_4-\frac12\sigma^2\mu_3^2u_2u_3^2
-+\frac1{12}\sigma^8u_2^4}{\pi(1+y^2)}\dd y
-&=\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2}{256}.
+\int_{\RR}B_8\,\dd\omega
+&=\sigma^2\mu_6\!\int_{\RR}u_2u_6\,\dd\omega
++\mu_3\mu_5\!\int_{\RR}u_3u_5\,\dd\omega
++\frac{\mu_4^2}{2}\!\int_{\RR}u_4^2\,\dd\omega\\
+&\quad
+-\frac{\sigma^4\mu_4}{2}\!\int_{\RR}u_2^2u_4\,\dd\omega
+-\frac{\sigma^2\mu_3^2}{2}\!\int_{\RR}u_2u_3^2\,\dd\omega
++\frac{\sigma^8}{12}\!\int_{\RR}u_2^4\,\dd\omega\\
+&=\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2}{256}
++\frac{12\sigma^2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256}.
 \end{align*}
-This proves \eqref{eq:poisson-kl-eighth}.  The coefficient of order
-$t^{-6}$ is the first coefficient beyond the variance term furnished by
-Theorem~\ref{thm:poisson-kl-even-orders}; the order-$t^{-8}$ term is the
-next level in the same expansion.
+Since $\omega(\RR)=1$, the integrated $O(t^{-9})$ error is
+$o(t^{-8})$.  Substituting these three coefficients proves
+\eqref{eq:poisson-kl-eighth}.
 \end{proof}
 \leanverified{paper_circle_dimension_poisson_kl_eighth}
+
+The next two defect theorems use $C_6$ and $C_8$ only in the sense just
+established: they are entropy-asymptotic coefficients under the finite
+centred seventh absolute moment hypothesis of
+Theorem~\ref{thm:poisson-kl-eighth}.  The fourth-moment algebra in
+Subsection~\ref{subsec:fourth-moment-stability} deliberately uses separate
+superscripted notation until that same seventh-moment hypothesis is imposed.
 
 \begin{theorem}[A two-level defect ladder]%
 \label{thm:poisson-defect-ladder}
@@ -703,8 +938,8 @@ and equality holds if and only if
 +\frac12\delta_{\bar\gamma-\sigma}.
 \]
 The identity \eqref{eq:defect-c6} recovers the classical Pearson
-moment relation, while \eqref{eq:defect-c8} is the first genuinely new
-higher-order component.
+moment relation, while \eqref{eq:defect-c8} gives the next higher-order
+component in the same defect coordinates.
 \leanverified{paper_circle_dimension_poisson_defect_ladder}
 \end{theorem}
 
@@ -774,9 +1009,19 @@ variance $\sigma^2>0$, and finite centred seventh absolute moment.  Define
 \qquad
 \Delta_8(\nu):=C_8-\frac{23}{256}\sigma^8,
 \]
-and set
+where $C_6$ and $C_8$ are the entropy coefficients from
+Theorem~\ref{thm:poisson-kl-eighth}.  Set
 \[
-\kappa:=\|Q_2\|_{L^2(\nu)}^2.
+X:=\frac{\gamma-\bar\gamma}{\sigma},
+\qquad
+\beta_3:=\EE[X^3],
+\qquad
+Q_2:=X^2-1-\beta_3X,
+\]
+\[
+\kappa:=\|Q_2\|_{L^2(\nu)}^2,
+\qquad
+Q_3:=XQ_2-\kappa X-\frac{\beta_3}{4}Q_2.
 \]
 Then
 \[
@@ -900,15 +1145,266 @@ vanish; for $0<p<1$ the extra atom at the mean produces a positive
 sixth- and eighth-order defect.
 \end{example}
 
-\begin{theorem}[Quantitative rigidity towards the symmetric two-point law]%
-\label{thm:poisson-defect-stability}
-Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
-variance $\sigma^2>0$, and finite centred fourth moment.  Let
-$\nu_c$ be the centred law of $\Delta=\gamma-\bar\gamma$ and set
+\subsection{Seventh-moment entropy stability and fourth-moment algebra}
+\label{subsec:fourth-moment-stability}
+
+The symbols $C_6$ and $C_8$ are reserved for coefficients in an entropy
+asymptotic expansion.  In this paper that expansion is supplied by
+Theorem~\ref{thm:poisson-kl-eighth}, whose proof uses a finite centred
+seventh absolute moment to control the mode remainder after $u_6$ by
+$O(t^{-7})$.  A different object is available under fourth moments alone:
+the polynomial obtained by writing down the displayed formula for the
+$t^{-6}$ coefficient.  The notation below separates these two objects.
+
+\begin{itemize}[leftmargin=*]
+\item With only
+\[
+\int_{\RR}\abs{\gamma-\bar\gamma}^{4}\,\dd\nu(\gamma)<\infty,
+\]
+the quantities $C_6^{(4)}(\nu)$ and $\Delta_6^{(4)}(\nu)$ are algebraic
+moment polynomials.  They are not entropy-asymptotic coefficients.
+\item With the stronger hypothesis
+\[
+\int_{\RR}\abs{\gamma-\bar\gamma}^{7}\,\dd\nu(\gamma)<\infty,
+\]
+Theorem~\ref{thm:poisson-kl-eighth} defines the genuine coefficient $C_6$,
+and the bridge lemma below identifies
+\[
+C_6=C_6^{(4)}(\nu),
+\qquad
+\Delta_6(\nu)=\Delta_6^{(4)}(\nu).
+\]
+\end{itemize}
+Consequently finite fourth moment alone never defines the unsuperscripted
+coefficient $C_6$ or the unsuperscripted entropy defect $\Delta_6$ in this
+subsection.  The order of the arguments reflects this distinction: pure
+fourth-moment algebra first, then a seventh-moment bridge, and finally the
+entropy-stability theorem for the genuine coefficient defect.
+
+\paragraph{Fourth-moment algebra.}
+
+\begin{algebralemma}[Fourth-moment algebraic defect]
+Let $\nu$ have mean~$\bar\gamma$, variance $\sigma^2>0$, and finite
+centred fourth moment.  Define
+\[
+C_6^{(4)}(\nu):=
+\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64},
+\qquad
+\Delta_6^{(4)}(\nu):=
+-\frac{7}{64}\sigma^6-C_6^{(4)}(\nu).
+\]
+The superscript $(4)$ is part of the notation: it records that the
+quantity is a fourth-moment polynomial and carries no asymptotic assertion
+by itself.  On $(\RR,\nu)$ set
+\begin{align*}
+X&:=\frac{\gamma-\bar\gamma}{\sigma},
+&
+\beta_3&:=\EE[X^3],
+&
+\beta_4&:=\EE[X^4],
+\\
+Q_2&:=X^2-1-\beta_3X,
+&
+\kappa&:=\|Q_2\|_{L^2(\nu)}^2.
+\end{align*}
+Then the pure fourth-moment identity is
+\begin{equation}\label{eq:defect-sixth-fourth-moment}
+\Delta_6^{(4)}(\nu)
+=\frac{\sigma^6}{32}\beta_3^2+\frac{\sigma^6}{8}\kappa,
+\qquad
+\kappa=\beta_4-1-\beta_3^2\ge0.
+\end{equation}
+Moreover, $\Delta_6^{(4)}(\nu)=0$ if and only if the centred law of
+$\gamma-\bar\gamma$ is $\rho_\sigma=\frac12(\delta_{-\sigma}
++\delta_\sigma)$.
+\end{algebralemma}
+
+\begin{proof}
+The identity for $\kappa$ follows by expanding $Q_2^2$ and using
+$\EE[X]=0$, $\EE[X^2]=1$, and $\EE[X^3]=\beta_3$:
+\[
+\kappa
+=\EE[(X^2-1-\beta_3X)^2]
+=\beta_4-1-\beta_3^2.
+\]
+Since $\mu_3=\sigma^3\beta_3$ and $\mu_4=\sigma^4\beta_4$,
+\[
+-\frac{7}{64}\sigma^6-C_6^{(4)}(\nu)
+=\frac{\sigma^6}{64}\bigl(-7-1-6\beta_3^2+8\beta_4\bigr)
+=\frac{\sigma^6}{32}\beta_3^2+\frac{\sigma^6}{8}\kappa.
+\]
+This proves \eqref{eq:defect-sixth-fourth-moment} and non-negativity.  If
+$\Delta_6^{(4)}(\nu)=0$, then $\beta_3=0$ and $\kappa=0$, so
+$X^2=1$ almost surely.  The conditions $\EE[X]=0$ and $\EE[X^2]=1$ then
+force $X=\pm1$ with equal probabilities, i.e. the centred law is
+$\rho_\sigma$.  The converse is immediate by substitution.
+\end{proof}
+
+\begin{algebralemma}[Fourth-moment algebraic coupling]
+Let $\nu$ have mean~$\bar\gamma$, variance $\sigma^2>0$, and finite
+centred fourth moment.  Let $\nu_c$ be the centred law of
+$\Delta=\gamma-\bar\gamma$ and set
 \[
 \rho_\sigma:=\frac12(\delta_{-\sigma}+\delta_\sigma).
 \]
-Then
+For the fourth-moment polynomial $\Delta_6^{(4)}(\nu)$ defined above,
+\[
+\Delta_6^{(4)}(\nu)\ge0
+\]
+and
+\begin{equation}\label{eq:fourth-moment-algebraic-coupling}
+W_2(\nu_c,\rho_\sigma)
+\le
+4\,\sigma^{-1/2}\Delta_6^{(4)}(\nu)^{1/4}
++8\,\sigma^{-2}\Delta_6^{(4)}(\nu)^{1/2}.
+\end{equation}
+Moreover, $\Delta_6^{(4)}(\nu)=0$ if and only if
+$\nu_c=\rho_\sigma$.  This is an algebraic fourth-moment statement; it does
+not introduce an entropy coefficient.
+\end{algebralemma}
+
+\begin{proof}
+All random variables below live on $(\RR,\nu)$.  Set
+\[
+X:=\frac{\gamma-\bar\gamma}{\sigma},
+\qquad
+\beta_3:=\EE[X^3],
+\qquad
+Q_2:=X^2-1-\beta_3X,
+\qquad
+\kappa:=\|Q_2\|_{L^2(\nu)}^2 .
+\]
+By \eqref{eq:defect-sixth-fourth-moment},
+\begin{equation}\label{eq:algebraic-coupling-delta-six}
+\Delta_6^{(4)}(\nu)
+=\frac{\sigma^6}{32}\beta_3^2+\frac{\sigma^6}{8}\kappa .
+\end{equation}
+Define
+\[
+Y:=\mathbf{1}_{\{X\ge 0\}}-\mathbf{1}_{\{X<0\}}\in\{-1,1\}.
+\]
+For every real $x$, with $\operatorname{sgn}(0)=1$,
+\[
+|x-\operatorname{sgn}(x)|\le |x^2-1|.
+\]
+Therefore
+\[
+\EE[(X-Y)^2]\le \EE[(X^2-1)^2].
+\]
+The decomposition $X^2-1=\beta_3X+Q_2$ is orthogonal in $L^2(\nu)$ because
+\[
+\EE[XQ_2]=\EE[X^3]-\EE[X]-\beta_3\EE[X^2]=0.
+\]
+Thus
+\[
+\EE[(X^2-1)^2]
+=\beta_3^2+\kappa
+\le 2\beta_3^2+8\kappa
+=\frac{64}{\sigma^6}\Delta_6^{(4)}(\nu),
+\]
+where the last equality is \eqref{eq:algebraic-coupling-delta-six}.  Since
+$\EE[X]=0$,
+\[
+|\EE[Y]|=|\EE[Y-X]|
+\le \EE[|Y-X|]
+\le \EE[(Y-X)^2]^{1/2}
+\le \frac{8}{\sigma^3}\Delta_6^{(4)}(\nu)^{1/2}.
+\]
+Let $Z$ be a symmetric Rademacher random variable.  If
+$p=\mathbb P(Y=1)$, then $\EE[Y]=2p-1$ and the optimal transport between
+$\mathcal L(Y)$ and the symmetric law on $\{-1,1\}$ moves
+$|p-1/2|$ mass across distance~$2$.  Hence
+\[
+W_2(\mathcal L(Y),\mathcal L(Z))^2
+=4|p-1/2|=2|\EE[Y]|
+\le \frac{16}{\sigma^3}\Delta_6^{(4)}(\nu)^{1/2}.
+\]
+Also
+\[
+W_2(\mathcal L(X),\mathcal L(Y))
+\le \EE[(X-Y)^2]^{1/2}
+\le \frac{8}{\sigma^3}\Delta_6^{(4)}(\nu)^{1/2}.
+\]
+Since $\nu_c=\mathcal L(\sigma X)$ and
+$\rho_\sigma=\mathcal L(\sigma Z)$, taking square roots in the preceding
+bound for $W_2(\mathcal L(Y),\mathcal L(Z))^2$ and then using scaling and
+the triangle inequality gives \eqref{eq:fourth-moment-algebraic-coupling}.
+The zero statement follows from the preceding fourth-moment algebraic
+defect lemma.
+\end{proof}
+
+\paragraph{Seventh-moment bridge.}
+
+\begin{algebralemma}[Seventh-moment bridge from algebra to entropy]
+Assume that $\nu$ has mean~$\bar\gamma$, variance $\sigma^2>0$, and
+\[
+\int_{\RR}\abs{\gamma-\bar\gamma}^{7}\,\dd\nu(\gamma)<\infty.
+\]
+Let $C_6$ be the $t^{-6}$ entropy coefficient supplied by
+Theorem~\ref{thm:poisson-kl-eighth}, and let $C_6^{(4)}(\nu)$ and
+$\Delta_6^{(4)}(\nu)$ be the fourth-moment polynomials defined in the
+fourth-moment algebraic defect lemma.  Then
+\begin{equation}\label{eq:delta-six-bridge}
+C_6=C_6^{(4)}(\nu),
+\qquad
+\Delta_6(\nu)
+:=-\frac{7}{64}\sigma^6-C_6
+=\Delta_6^{(4)}(\nu).
+\end{equation}
+Thus the unsuperscripted entropy defect $\Delta_6$ is introduced only under
+the finite seventh absolute moment hypothesis.
+\end{algebralemma}
+
+\begin{proof}
+The finite seventh absolute moment implies the fourth moment needed to
+define $C_6^{(4)}(\nu)$ and $\Delta_6^{(4)}(\nu)$.  It also gives the
+uniform remainder in the proof of Theorem~\ref{thm:poisson-kl-eighth}.
+Comparing the $t^{-6}$ coefficient in
+\eqref{eq:poisson-kl-eighth} with the definition of $C_6^{(4)}(\nu)$ gives
+$C_6=C_6^{(4)}(\nu)$.  Substituting this identity into
+$\Delta_6(\nu):=-7\sigma^6/64-C_6$ and using
+\eqref{eq:defect-sixth-fourth-moment} gives the displayed bridge identity.
+\end{proof}
+
+\paragraph{Entropy layer.}
+With only a finite centred fourth moment, the algebraic lemmas prove
+\eqref{eq:defect-sixth-fourth-moment} and
+\eqref{eq:fourth-moment-algebraic-coupling} for the superscripted
+polynomial $\Delta_6^{(4)}(\nu)$.  Without the additional assumption
+\[
+\int_{\RR}\abs{\gamma-\bar\gamma}^{7}\,\dd\nu(\gamma)<\infty,
+\]
+Theorem~\ref{thm:poisson-kl-eighth} is not available, so the
+unsuperscripted coefficient $C_6$ and defect $\Delta_6$ are not defined.
+
+\begin{theorem}[Finite-seventh-moment stability for the sixth-order entropy defect]%
+\label{thm:poisson-defect-stability}
+Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
+variance $\sigma^2>0$, and finite centred seventh absolute moment, i.e.
+\[
+\int_{\RR}\abs{\gamma-\bar\gamma}^{7}\,\dd\nu(\gamma)<\infty.
+\]
+Let
+$C_6$ be the $t^{-6}$ coefficient in
+Theorem~\ref{thm:poisson-kl-eighth}, which exists under the displayed
+seventh-moment hypothesis, and define the sixth-order entropy defect by
+\[
+\Delta_6(\nu):=-\frac{7}{64}\sigma^6-C_6.
+\]
+The finite seventh absolute moment hypothesis is part of the definition of
+the object used in this theorem: $\Delta_6$ is the entropy coefficient
+defect supplied by Theorem~\ref{thm:poisson-kl-eighth}.  The fourth-moment
+polynomial is the superscripted quantity $\Delta_6^{(4)}$ from the
+fourth-moment algebraic defect lemma, and the bridge identity
+\eqref{eq:delta-six-bridge} identifies it with $\Delta_6$ only under the
+seventh-moment hypothesis.  Under finite fourth moment alone this theorem
+is not asserted; only the separate algebraic coupling estimate
+\eqref{eq:fourth-moment-algebraic-coupling} for $\Delta_6^{(4)}$ remains.
+Let $\nu_c$ be the centred law of $\Delta=\gamma-\bar\gamma$ and set
+\[
+\rho_\sigma:=\frac12(\delta_{-\sigma}+\delta_\sigma).
+\]
+Then $\Delta_6(\nu)\ge0$ and
 \[
 W_2(\nu_c,\rho_\sigma)
 \le
@@ -920,67 +1416,44 @@ In particular, for fixed $\sigma$,
 W_2(\nu_c,\rho_\sigma)=O\!\bigl(\Delta_6(\nu)^{1/4}\bigr)
 \qquad\text{as }\Delta_6(\nu)\downarrow 0.
 \]
+Moreover $\Delta_6(\nu)=0$ if and only if $\nu_c=\rho_\sigma$.
 \leanverified{paper_circle_dimension_poisson_defect_stability}
 \end{theorem}
 
 \begin{proof}
-Keep the normalized variable $X=(\gamma-\bar\gamma)/\sigma$, and define
+The displayed seventh absolute moment condition is exactly the hypothesis
+of the bridge lemma above.  Hence
 \[
-Y:=\mathbf{1}_{\{X\ge 0\}}-\mathbf{1}_{\{X<0\}}\in\{-1,1\}.
+\Delta_6(\nu)=\Delta_6^{(4)}(\nu).
 \]
-For every real $x$ one has
-\[
-|x-\operatorname{sgn}(x)|\le |x^2-1|,
-\]
-with the convention $\operatorname{sgn}(0)=1$.  Hence
-\[
-\EE[(X-Y)^2]\le \EE[(X^2-1)^2].
-\]
-Since $X^2-1=\beta_3X+Q_2$, the elementary bound
-$(a+b)^2\le 2a^2+2b^2$ gives
-\[
-\EE[(X^2-1)^2]
-\le 2\beta_3^2\EE[X^2]+2\|Q_2\|_{L^2(\nu)}^2
-=2\beta_3^2+2\kappa.
-\]
-The formula for $\Delta_6(\nu)$ from
-Theorem~\ref{thm:poisson-defect-amplification} therefore yields
-\[
-\EE[(X-Y)^2]\le \frac{64}{\sigma^6}\Delta_6(\nu).
-\]
-Since $\EE[X]=0$,
-\[
-|\EE[Y]|=|\EE[Y-X]|
-\le \EE[|Y-X|]
-\le \EE[(Y-X)^2]^{1/2}
-\le \frac{8}{\sigma^3}\Delta_6(\nu)^{1/2}.
-\]
-Let $Z$ be a symmetric Rademacher random variable.  Because both
-$\mathcal L(Y)$ and $\mathcal L(Z)$ are supported on $\{-1,1\}$,
-\[
-W_2(\mathcal L(Y),\mathcal L(Z))^2=2|\EE[Y]|.
-\]
-Thus
-\[
-W_2(\mathcal L(Y),\mathcal L(Z))
-\le \frac{4}{\sigma^{3/2}}\Delta_6(\nu)^{1/4}.
-\]
-Also,
-\[
-W_2(\mathcal L(X),\mathcal L(Y))
-\le \EE[(X-Y)^2]^{1/2}
-\le \frac{8}{\sigma^3}\Delta_6(\nu)^{1/2}.
-\]
-Since $\nu_c=\mathcal L(\sigma X)$ and $\rho_\sigma=\mathcal L(\sigma Z)$,
-the scaling property of $W_2$ and the triangle inequality give
-\begin{align*}
-W_2(\nu_c,\rho_\sigma)
-&=\sigma W_2(\mathcal L(X),\mathcal L(Z)) \\
-&\le \sigma W_2(\mathcal L(X),\mathcal L(Y))
-+\sigma W_2(\mathcal L(Y),\mathcal L(Z)) \\
-&\le
-8\,\sigma^{-2}\Delta_6(\nu)^{1/2}
-+4\,\sigma^{-1/2}\Delta_6(\nu)^{1/4},
-\end{align*}
-which is the stated estimate.
+The finite fourth moment needed in the preceding algebraic coupling lemma
+is automatic.  Substituting the bridge identity into
+\eqref{eq:fourth-moment-algebraic-coupling} gives the stated $W_2$ estimate,
+and the non-negativity and zero characterization are those of the
+fourth-moment algebraic defect after the same substitution.  The asymptotic
+$O(\Delta_6^{1/4})$ statement for fixed $\sigma$ follows immediately from
+the displayed estimate.
 \end{proof}
+
+\begin{remark}[Fourth-moment coupling for the algebraic defect]\label{rem:fourth-moment-stability-algebraic}
+The finite-fourth-moment-only conclusion is exactly the algebraic estimate
+\eqref{eq:fourth-moment-algebraic-coupling}.  It is deliberately stated
+before the seventh-moment bridge because it concerns only the polynomial
+$\Delta_6^{(4)}$.  It does not assert the existence of a $t^{-6}$ entropy
+coefficient under only fourth moments, and it intentionally contains
+neither $C_6$ nor the unsuperscripted entropy defect $\Delta_6$.
+\end{remark}
+
+\begin{remark}
+The estimate is a coefficient-level analogue of stability-to-extremizers
+results for entropy deficits, such as the logarithmic
+Hardy--Littlewood--Sobolev stability theorem of Carlen
+\cite{Carlen2025LogHLS} and the logarithmic Sobolev stability theorem of
+Brigati--Dolbeault--Simonov
+\cite{BrigatiDolbeaultSimonov2024LogSobolev}.  Here the defect is not a
+functional-inequality deficit: the asymptotic defect $\Delta_6$ is the
+coefficient-level quantity obtained from the Poisson expansion, and the
+proof reduces it to the fourth-moment polynomial
+\eqref{eq:defect-sixth-fourth-moment} before applying an explicit coupling
+to the symmetric two-point law.
+\end{remark}

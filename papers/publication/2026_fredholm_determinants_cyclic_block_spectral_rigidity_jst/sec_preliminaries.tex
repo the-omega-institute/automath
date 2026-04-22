@@ -25,6 +25,11 @@ and the inverse necklace relation is
 \begin{equation}\label{eq:trace-primitive-identity}
   a_n(A)=\sum_{d\mid n}d\,p_d(A).
 \end{equation}
+These are the usual necklace/Witt inversion identities
+\cite{MetropolisRota1983} in the finite symbolic setting.
+The corresponding dynamical \(\zeta\)-function is the finite-state
+instance of the Artin--Mazur periodic-point generating function
+\cite{ArtinMazur1965}.
 
 \begin{proposition}[Trace, primitive orbits, and Euler product]
   \label{prop:prelim-trace-primitive}
@@ -97,7 +102,11 @@ and
   C(A)=F_A(1)^{-1}.
 \end{equation}
 
-Define the primitive Abel generating series
+For the Abel finite part we assume from now on in this subsection that the
+Perron root is expanding, \(\lambda>1\). This is not a consequence of
+primitivity alone: the one-state one-loop matrix has \(\lambda=1\), and
+the renormalisation below is not finite there. Define the primitive Abel
+generating series
 \[
   P_A(r):=\sum_{n\ge 1}p_n(A)\lambda^{-n}r^n,
   \qquad 0\le r<1.
@@ -138,6 +147,16 @@ has a finite limit as \(r\uparrow 1\).
     =\log C(A)+\sum_{k\ge 2}\frac{\mu(k)}{k}
       \log\det(I-\lambda^{-k}A)^{-1}.
   \]
+  The logarithms in the secondary determinants are the trace-log
+  branches determined by the absolutely convergent series
+  \[
+    \log\det(I-\lambda^{-k}A)^{-1}
+    =\sum_{m\ge1}\frac{\Tr((\lambda^{-k}A)^m)}{m}
+    \qquad (k\ge2).
+  \]
+  The expansion assumption \(\lambda>1\) is part of the theorem: it gives
+  \(\rho(\lambda^{-k}A)=\lambda^{1-k}<1\) for \(k\ge2\), and this is the
+  reason the secondary determinant branches are single-valued.
   Equivalently,
   \[
     \log\MM(A)
@@ -149,57 +168,103 @@ has a finite limit as \(r\uparrow 1\).
 \end{theorem}
 
 \begin{proof}
-  By \Cref{prop:prelim-trace-primitive}, for \(|z|<\lambda^{-1}\),
+  We first keep an Abel parameter \(0\le r<1\) in every determinant. By
+  \Cref{prop:prelim-trace-primitive},
   \[
     \log\det(I-zA)^{-1}
-    =\sum_{n\ge 1}\frac{\Tr(A^n)}{n}z^n.
+    =\sum_{m\ge 1}\frac{\Tr(A^m)}{m}z^m
+    \qquad (|z|<\lambda^{-1}).
   \]
-  Hence, for \(0\le r<1\),
+  Since every eigenvalue of \(A\) has modulus at most \(\lambda\),
+  \(\abs{\Tr(A^m)}\le d\lambda^m\). Therefore, for \(0\le r<1\),
+  \[
+    \sum_{k\ge 1}\sum_{m\ge 1}
+    \frac{\abs{\mu(k)}}{km}\,
+    \abs{\Tr(A^m)}\,\lambda^{-km}r^{km}
+    \le d\sum_{k\ge 1}\sum_{m\ge 1}
+    \frac{\lambda^{-(k-1)m}r^{km}}{km}<\infty .
+  \]
+  The \(k=1\) part is \(\sum_{m\ge1}r^m/m\). For \(k\ge2\), the factor
+  \(\lambda^{-(k-1)m}\) gives a geometric majorant; this is the only place
+  in the rearrangement where the expansion \(\lambda>1\) is used.
+  Hence Tonelli--Fubini gives
   \begin{align*}
     \sum_{k\ge 1}\frac{\mu(k)}{k}
       \log\det(I-\lambda^{-k}r^kA)^{-1}
     &=\sum_{k\ge 1}\frac{\mu(k)}{k}
       \sum_{m\ge 1}\frac{\Tr(A^m)}{m}\lambda^{-km}r^{km} \\
-    &=\sum_{n\ge 1}\frac{(\lambda^{-1}r)^n}{n}
+    &=\sum_{n\ge 1}\frac{\lambda^{-n}r^n}{n}
       \sum_{k\mid n}\mu(k)\Tr(A^{n/k}) \\
     &=\sum_{n\ge 1}p_n(A)\lambda^{-n}r^n
       =P_A(r).
   \end{align*}
-  The term \(k=1\) has asymptotic
+
+  Now isolate the only singular term as \(r\uparrow1\). Since
+  \[
+    \det(I-\lambda^{-1}rA)=(1-r)F_A(r),
+    \qquad F_A(1)=C(A)^{-1},
+  \]
+  the principal branch satisfies
   \[
     \log\det(I-\lambda^{-1}rA)^{-1}
-    =-\log(1-r)+\log C(A)+o(1)
-    \qquad (r\uparrow 1),
+    =-\log(1-r)+\log C(A)+o(1).
   \]
-  while every term with \(k\ge 2\) converges absolutely at \(r=1\).
-  This proves the first identity.
-
-  For the second identity, use the Euler product in
-  \Cref{prop:prelim-trace-primitive} and the identity
+  For \(k\ge2\) and \(0\le r\le1\), every eigenvalue of
+  \(\lambda^{-k}r^kA\) has modulus at most \(\lambda^{1-k}<1\). Hence
+  the secondary determinants are non-zero at \(r=1\), their logarithms are
+  the trace-log branches in the statement. More explicitly,
   \[
-    -\sum_{k\ge 1}\frac{\mu(k)}{k}\log(1-x^k)=x
-    \qquad (\abs{x}<1).
+    \left|
+      \log\det(I-\lambda^{-k}r^kA)^{-1}
+    \right|
+    \le
+    d\sum_{m\ge1}\frac{\lambda^{(1-k)m}}{m}
+    \le C\,\lambda^{1-k}
+    \qquad(k\ge2,\ 0\le r\le1),
   \]
-  Indeed,
+  with \(C\) independent of \(k\) and \(r\). This geometric bound permits
+  the limit \(r\uparrow1\) to pass through the secondary sum. Combining
+  this with the definition of
+  \(\log\MM(A)\) proves
+  \[
+    \log\MM(A)
+    =\log C(A)+\sum_{k\ge 2}\frac{\mu(k)}{k}
+      \log\det(I-\lambda^{-k}A)^{-1}.
+  \]
+
+  For the primitive-orbit form, use the Euler product from
+  \Cref{prop:prelim-trace-primitive}. For \(|x|<1\),
   \[
     -\sum_{k\ge 1}\frac{\mu(k)}{k}\log(1-x^k)
-    =\sum_{k\ge 1}\frac{\mu(k)}{k}
-      \sum_{r\ge 1}\frac{x^{kr}}{r}
     =\sum_{n\ge 1}\frac{x^n}{n}\sum_{k\mid n}\mu(k)
-    =x.
+    =x,
   \]
-  Hence
+  so
   \[
     -\sum_{k\ge 2}\frac{\mu(k)}{k}\log(1-x^k)
     =x+\log(1-x).
   \]
-  Setting \(x=\lambda^{-n}\) and \(n\) as the cycle-length index in the
-  Euler product gives
+  The interchange of the \(k\)- and \(n\)-sums is absolute: from
+  \(p_n(A)=O(\lambda^n/n)\) and
+  \(\abs{\log(1-y)}\le C_\lambda y\) for
+  \(0\le y\le\lambda^{-2}\),
+  \[
+    \sum_{n\ge1}\abs{p_n(A)}\sum_{k\ge2}
+    \frac{\abs{\mu(k)}}{k}\,
+    \abs{\log(1-\lambda^{-kn})}
+    \ll
+    \sum_{n\ge1}\frac{\lambda^n}{n}
+    \sum_{k\ge2}\lambda^{-kn}
+    <\infty .
+  \]
+  Setting \(x=\lambda^{-n}\) for the cycle-length index \(n\) gives
   \[
     \log\MM(A)=\log C(A)+\sum_{n\ge 1}
     p_n(A)\bigl(\lambda^{-n}+\log(1-\lambda^{-n})\bigr).
   \]
-  Rearranging the absolutely convergent sums yields the stated formula.
+  This last series is absolutely convergent because
+  \(p_n(A)=O(\lambda^n/n)\) and
+  \(x+\log(1-x)=O(x^2)\) as \(x\to0\), so the rearrangement is legitimate.
 \end{proof}
 \begin{remark}[Finite-state arithmetic]
   \label{rem:finite-state-arithmetic}

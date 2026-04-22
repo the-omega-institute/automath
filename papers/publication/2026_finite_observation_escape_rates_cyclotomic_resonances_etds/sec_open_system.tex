@@ -235,10 +235,25 @@ the truth value of \(\mathsf{P}_R\) is already decided on \([a]\), and
 Assume therefore that \(a_t\in\mathcal S\) for every
 \(0\leq t\leq m-1\).  By the Markov property, conditioned on \([a]\) the
 future depends on the prefix only through the terminal state
-\(a_{m-1}\).  Since the next possible hit time occurs after at least one
-additional step, the conditional probability of \(\mathsf{P}_R\) on
-\([a]\) is exactly \(p_{a_{m-1},\,m-1\bmod q}\).  Hence the Bayes factor
-on \([a]\) is \(\beta_{a_{m-1},\,m-1\bmod q}\).  The residue
+\(a_{m-1}\).  Since the prefix is safe through time \(m-1\), the
+absolute first-hit time is
+\[
+  \tau_H=(m-1)+\tau_H^+
+\]
+for the restarted chain at \(a_{m-1}\).  Therefore
+\[
+  \nu_\varphi(\mathsf P_R\mid[a])
+  =
+  \PP_{a_{m-1}}\bigl((m-1)+\tau_H^+\in R\bmod q\bigr)
+  =
+  p_{a_{m-1},\,m-1\bmod q}.
+\]
+This is the only indexing point in the formula: an observed safe prefix
+of length \(m\) ends at time \(m-1\), and the restarted first-hit time
+\(\tau_H^+\) counts the next symbol as time \(1\).  Thus the ambiguity
+vector is evaluated at the residue \(m-1\bmod q\), not at \(m\bmod q\).
+Hence the Bayes factor on \([a]\) is
+\(\beta_{a_{m-1},\,m-1\bmod q}\).  The residue
 non-degeneracy hypothesis guarantees \(0<\beta_{i,r}\leq \tfrac12\), and
 since the state space \(\mathcal S\times \ZZ/q\ZZ\) is finite, the lower
 bound can be chosen uniformly.
@@ -261,7 +276,20 @@ Since \(\nu_\varphi\) is Markov,
   \nu_\varphi([a])
   = \pi_{a_0}K_{a_0a_1}\cdots K_{a_{m-2}a_{m-1}},
 \]
-and summing over survivor words with a fixed terminal state gives
+and summing first over survivor words with fixed terminal state \(j\)
+gives
+\[
+  \sum_{\substack{a\in A^m\\
+                  a_t\in\mathcal S\ \forall t<m\\
+                  a_{m-1}=j}}
+      \nu_\varphi([a])
+  =
+  \sum_{a_0,\ldots,a_{m-2}\in\mathcal S}
+      \pi_{a_0}K_{a_0a_1}\cdots K_{a_{m-2}j}
+  =
+  (u^{\mathsf T}B_H^{m-1})_j .
+\]
+Therefore
 \[
   \varepsilon_m(\mathsf{P}_R;\nu_\varphi)
   = u^{\mathsf T}B_H^{m-1}b_{m-1\bmod q}.

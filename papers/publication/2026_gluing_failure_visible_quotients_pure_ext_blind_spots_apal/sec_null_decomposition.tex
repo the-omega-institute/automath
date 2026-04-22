@@ -30,7 +30,7 @@ For a state $p$ and a referenceable sort $s$, a \emph{local reference frame} is 
 \[
 \mathcal{B}_{p,s}=\bigl(\mathcal{R}_s(p),\sqsubseteq_{p,s},\Cov_{p,s}\bigr),
 \]
-where $\sqsubseteq_{p,s}$ is a preorder on $\mathcal{R}_s(p)$ and $\Cov_{p,s}$ assigns to each $a\in\mathcal{R}_s(p)$ a collection of covering families
+where $\sqsubseteq_{p,s}$ is a preorder on $\mathcal{R}_s(p)$ and $\Cov_{p,s}$ assigns to each $a\in\mathcal{R}_s(p)$ a collection of nonempty covering families
 \[
 \{a_i\to a\}_{i\in I},
 \qquad
@@ -62,7 +62,7 @@ b\to a
 \quad:\Longleftrightarrow\quad
 b\sqsubseteq_{p,s} a.
 \]
-Then the covering families $\Cov_{p,s}$ form a Grothendieck pretopology on $\mathcal{B}_{p,s}$.
+Then the covering families $\Cov_{p,s}$ form a Grothendieck pretopology on $\mathcal{B}_{p,s}$, in the nonempty-cover convention fixed in \Cref{def:local-reference-frame}.
 \end{proposition}
 
 \begin{proof}
@@ -74,7 +74,7 @@ such that each arrow factors through $a_i\to a$. Finally, if $\{a_i\to a\}_{i\in
 \[
 \{b_{ij}\to a\}_{i\in I,\;j\in J_i}.
 \]
-These are exactly the identity, pullback, and transitivity axioms for a Grothendieck pretopology on a preorder category \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}, \cite[Part~B2.1]{Johnstone2002}.
+These are exactly the identity, pullback, and transitivity axioms for a Grothendieck pretopology on a preorder category \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}, \cite[Part~B2.1]{Johnstone2002}. The nonempty-cover convention is harmless for the semantic applications, where covers represent available local presentations; it also avoids treating the empty family as a vacuous local witness.
 \end{proof}
 
 Accordingly, we use the same symbol $\mathcal{B}_{p,s}$ for the resulting preorder category in the presheaf and sheaf constructions below.
@@ -146,6 +146,10 @@ M,p\Vdash \CompSec_s(r)
 By the standard site-theoretic description of sheafification, a section of $a_{p,s}F_{p,s}$ at $a$ is represented by a matching family over some covering sieve of $a$, equivalently over some covering family of $a$ \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}, \cite[Part~B2.2]{Johnstone2002}. In the present setting, such a matching family is exactly a compatible local family as in \Cref{def:existence-levels}(ii). Hence the sheafified fiber is nonempty exactly when $r$ is compatibly locally sectionable at $p$.
 \end{proof}
 
+\begin{remark}[Role of the sheafification step]\label{rem:sheafification-bookkeeping}
+\Cref{thm:sheafification-characterization} is the standard matching-family description of sheafification, specialized to the local-object notation. Its role is bookkeeping: it identifies which compatible local data survive as visible value classes. It does not construct a realization prestack, a gerbe, or an obstruction class. Those require the separate realization input introduced below.
+\end{remark}
+
 \begin{corollary}[Sheaf condition at a reference]\label{cor:sheaf-local-to-global}
 If $F_{p,s}$ is already a sheaf at $a=[r]_p$, then
 \[
@@ -175,152 +179,12 @@ In particular, no admitted reference remains in gluing failure after sheafificat
 This is \Cref{thm:sheafification-characterization} rewritten for the sheaf $a_{p,s}F_{p,s}$. Once the presheaf has been replaced by a sheaf, compatible local existence and global existence coincide.
 \end{proof}
 
-\subsection{Realization prestacks and connected components}
+The next subsection is an input audit for the realization-theoretic layer. The
+sheafification results above determine visible set-valued classes, but they do
+not by themselves produce groupoids of realizations, off-diagonal isomorphism
+sheaves, component gerbes, or obstruction classes.
 
-The presheaf $F_{p,s}$ records only the isomorphism classes of local realizations. To pass from compatible local families to gerbes and cohomology, one works with a chosen groupoid-valued lift whose connected components recover $F_{p,s}$ after sheafification. The first point is purely categorical: once an abelian band has been fixed on the slice site, such lifts always exist. The substantive issue is therefore not bare existence, but whether one has chosen a lift whose stackification still reflects the intended gluing semantics at the terminal fibre.
-
-\begin{definition}[Realization prestack and stackification]\label{def:realization-prestack}
-Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, and write
-\[
-a=[r]_p,
-\qquad
-\mathcal C_a:=\mathcal C_{p,s}/a.
-\]
-A \emph{realization prestack} for $r$ at $p$ is a category fibred in groupoids
-\[
-\mathfrak P_r\to \mathcal C_a
-\]
-such that:
-\begin{enumerate}[label=(\roman*),nosep]
-\item the presheaf of isomorphism classes
-\[
-\pi_0^{\mathrm{pre}}(\mathfrak P_r):U\longmapsto \Ob(\mathfrak P_r(U))/\!\cong
-\]
-is identified with the restriction of the local object functor,
-\[
-\pi_0^{\mathrm{pre}}(\mathfrak P_r)\cong F_{p,s}|_{\mathcal C_a};
-\]
-\item for every object $U$ of $\mathcal C_a$ and every $x\in \mathfrak P_r(U)$, the automorphism sheaf
-\[
-\underline{\mathrm{Aut}}(x)
-\]
-on $\mathcal C_a/U$ is functorially identified with the restriction of a fixed abelian sheaf $\Band$ on $\mathcal C_a$.
-\end{enumerate}
-Write
-\[
-\mathfrak L_r:=a(\mathfrak P_r)
-\]
-for the stackification of $\mathfrak P_r$ in groupoids \cite[Tag 02ZP]{StacksProject}.
-\end{definition}
-
-\begin{proposition}[Canonical split realization prestack]\label{prop:split-realization-prestack}
-Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, write
-\[
-a=[r]_p,
-\qquad
-\mathcal C_a:=\mathcal C_{p,s}/a,
-\]
-and let $\Band$ be any abelian sheaf on $\mathcal C_a$. Then there exists a realization prestack
-\[
-\mathfrak P_r^{\mathrm{split}}\to \mathcal C_a
-\]
-with band $\Band$ such that
-\[
-\pi_0^{\mathrm{pre}}(\mathfrak P_r^{\mathrm{split}})
-\cong
-F_{p,s}|_{\mathcal C_a}.
-\]
-Explicitly, for each object $U$ of $\mathcal C_a$, the fibre
-\[
-\mathfrak P_r^{\mathrm{split}}(U)
-\]
-has object set $F_{p,s}(U)$ and morphism sets
-\[
-\mathrm{Hom}_{\mathfrak P_r^{\mathrm{split}}(U)}(\sigma,\tau)
-:=
-\begin{cases}
-\Band(U), & \sigma=\tau,\\
-\varnothing, & \sigma\neq\tau,
-\end{cases}
-\]
-with composition given by the group law on $\Band(U)$.
-\end{proposition}
-
-\begin{proof}
-For a morphism $f:V\to U$ in $\mathcal C_a$, define pullback on objects by
-\[
-f^*(\sigma):=\res_V^U(\sigma)\in F_{p,s}(V)
-\]
-and on automorphisms by the sheaf restriction
-\[
-f^*:\Band(U)\to \Band(V).
-\]
-This gives a pseudofunctor $\mathcal C_a^{op}\to \mathbf{Grpd}$ and hence a category fibred in groupoids over $\mathcal C_a$. For any two objects $\sigma,\tau\in \mathfrak P_r^{\mathrm{split}}(U)$, the isomorphism presheaf on $\mathcal C_a/U$ is either $\Band|_U$ or the empty presheaf. Since $\Band$ is a sheaf and the empty presheaf is also a sheaf, $\mathfrak P_r^{\mathrm{split}}$ is a prestack.
-
-By construction, two objects of $\mathfrak P_r^{\mathrm{split}}(U)$ are isomorphic if and only if they are equal as elements of $F_{p,s}(U)$. Therefore
-\[
-\pi_0^{\mathrm{pre}}(\mathfrak P_r^{\mathrm{split}})(U)\cong F_{p,s}(U)
-\]
-for every $U$, giving condition \textup{(i)} of \Cref{def:realization-prestack}. Condition \textup{(ii)} holds because the automorphism sheaf of every object $\sigma$ is exactly $\Band|_U$.
-\end{proof}
-
-\begin{proposition}[Components of the stackification]\label{prop:stackification-components}
-In the setting of \Cref{def:realization-prestack}, there is a canonical isomorphism of sheaves on $\mathcal C_a$:
-\[
-\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a}.
-\]
-\end{proposition}
-
-\begin{proof}
-By stackification, the morphism presheaves of $\mathfrak P_r$ are sheafified and every object of $\mathfrak L_r$ is locally in the essential image of $\mathfrak P_r\to \mathfrak L_r$ \cite[Tag 02ZP]{StacksProject}. Passing to isomorphism classes therefore shows that $\pi_0(\mathfrak L_r)$ is the sheafification of $\pi_0^{\mathrm{pre}}(\mathfrak P_r)$. Since stacks in setoids are precisely sheaves of sets \cite[Tag 042Y]{StacksProject}, we obtain
-\[
-\pi_0(\mathfrak L_r)\cong a\bigl(\pi_0^{\mathrm{pre}}(\mathfrak P_r)\bigr).
-\]
-Using \Cref{def:realization-prestack}(i), this becomes
-\[
-\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a}.
-\qedhere
-\]
-\end{proof}
-
-\begin{definition}[Global conservativity at the terminal fibre]\label{def:global-conservativity}
-In the setting of \Cref{def:realization-prestack}, let
-\[
-\iota_r:\mathfrak P_r\to \mathfrak L_r:=a(\mathfrak P_r)
-\]
-be the stackification morphism. We say that $\mathfrak P_r$ is \emph{globally conservative at $a$} if the induced functor on the terminal fibre
-\[
-(\iota_r)_a:(\mathfrak P_r)_a\to (\mathfrak L_r)_a
-\]
-is essentially surjective.
-\end{definition}
-
-\begin{proposition}[No new global objects at $a$]\label{prop:no-new-global-objects}
-Assume global conservativity at $a$ in the sense of \Cref{def:global-conservativity}. Then
-\[
-M,p\Vdash \Sec_s(r)
-\quad\Longleftrightarrow\quad
-\mathfrak L_r(a)\neq\varnothing.
-\]
-\end{proposition}
-
-\begin{proof}
-By \Cref{def:existence-levels} and \Cref{def:realization-prestack}(i),
-\[
-M,p\Vdash \Sec_s(r)
-\quad\Longleftrightarrow\quad
-F_{p,s}(a)\neq\varnothing
-\quad\Longleftrightarrow\quad
-\pi_0^{\mathrm{pre}}(\mathfrak P_r)(a)\neq\varnothing
-\quad\Longleftrightarrow\quad
-(\mathfrak P_r)_a\neq\varnothing.
-\]
-If $(\mathfrak P_r)_a\neq\varnothing$, choose $y\in (\mathfrak P_r)_a$. Then $\iota_r(y)\in \mathfrak L_r(a)$, so $\mathfrak L_r(a)\neq\varnothing$. Conversely, if $x\in \mathfrak L_r(a)$, essential surjectivity of $(\iota_r)_a$ yields $y\in (\mathfrak P_r)_a$ with $\iota_r(y)\cong x$, so $(\mathfrak P_r)_a\neq\varnothing$.
-\end{proof}
-
-\begin{remark}[What remains conditional]\label{rem:gluing-sensitive-lifts}
-\Cref{prop:split-realization-prestack} shows that admitting some banded realization prestack is not an additional existence burden: once a band has been fixed, a canonical split lift is always available. What remains conditional in the later branch-obstruction theory is the choice of a \emph{gluing-sensitive} lift, namely a realization prestack whose stackification is globally conservative at $a$ and whose component gerbes satisfy the vanishing hypotheses needed to produce branch obstruction classes. The branch obstruction classes of \Cref{sec:gerbe-obstruction} are therefore attached to a chosen gluing-sensitive lift and its band, not to the bare set-valued functor $F_{p,s}$ alone. The substantive semantic claims concern which lifts preserve the intended local-to-global content, not whether a formal groupoid-valued lift exists at all.
-\end{remark}
+\input{sec_realization_inputs}
 
 \subsection{Visible value classes and typed readouts}
 
@@ -334,7 +198,7 @@ as in \Cref{def:existence-levels}(ii). Two visible presentations are called \emp
 
 \begin{theorem}[Visible value classes as global connected components]\label{thm:visible-value-components}
 \leanverified{paper_conservative_extension_visible_value_components_focused}
-Assume that $r$ admits a realization prestack in the sense of \Cref{def:realization-prestack}. Then
+Assume that a stack-banded realization prestack for $r$ has been chosen in the sense of \Cref{def:realization-prestack}. Then
 \[
 \Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a)\cong \pi_0(\mathfrak L_r)(a).
 \]
@@ -347,6 +211,10 @@ By the standard description of sheafification on a site, a section of $a_{p,s}F_
 \]
 The second identification is \Cref{prop:stackification-components} evaluated at $a$.
 \end{proof}
+
+\begin{remark}[Role of the component identification]\label{rem:component-identification-bookkeeping}
+The first isomorphism in \Cref{thm:visible-value-components} is again a sheafification statement about the set-valued functor $F_{p,s}$. The second uses the chosen stack-banded realization prestack through \Cref{prop:stackification-components}. Thus the theorem identifies visible classes with components only after a realization prestack has already been supplied or constructed by the separated split-lift criterion. It is not an existence theorem for such a prestack. The stack-level banding used later for component gerbes is the separate datum in \Cref{def:realization-prestack}, item~\textup{(ii)}, or the descended datum of \Cref{prop:stackification-band-descends}; it is not supplied by the component identification alone.
+\end{remark}
 
 \begin{definition}[Typed readout]\label{def:typed-readout}
 For a reference $r:\mathsf{Ref}_s$ at a state $p$, define the typed readout
@@ -564,7 +432,7 @@ and identify the three reference classes with $a_{\mathrm{loc}},a_{\mathrm{cmp}}
 
 \subsection{Forcing necessity of the enrichment}
 
-The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. The following result makes this precise: the gluing predicates introduced at the local-object layer cannot be reduced to the lower layers.
+The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. The following result makes this precise: the gluing predicates introduced at the local-object layer cannot be reduced to the lower layers. The restriction on formulas is part of the claim: formulas are not allowed to use the local-object or absence predicates themselves, nor to name the distinguished reference constants except through the displayed free variable.
 
 \begin{theorem}[Pointwise irreducibility of gluing predicates]\label{thm:pointwise-irreducibility}
 \leanverified{paper_conservative_extension_pointwise_irreducibility_focused}
@@ -574,7 +442,13 @@ r_1,r_2,r_3,r_4:\mathsf{Ref}_s
 \]
 of the same sort such that:
 \begin{enumerate}[label=(\roman*),nosep]
-\item for every $\rho\in R_p$ and every $\mathrm{Form}_1$-formula $\varphi(x)$ with one free variable $x$, containing none of the local-object predicates $\LocSec_s$, $\CompSec_s$, $\Sec_s$, and containing no occurrence of the distinguished constants $r_1,r_2,r_3,r_4$ other than the substituted variable,
+\item for every $\rho\in R_p$ and every $\mathrm{Form}_1$-formula $\varphi(x)$ with one free variable $x$, containing none of the local-object or absence predicates
+\[
+\Adm_s,\quad \LocSec_s,\quad \CompSec_s,\quad \Sec_s,\quad
+\Null_s,\quad \Null^{\mathrm{loc}}_s,\quad
+\Null^{\mathrm{cmp}}_s,\quad \Null^{\mathrm{glue}}_s,
+\]
+and containing no occurrence of the distinguished constants $r_1,r_2,r_3,r_4$ other than the substituted variable,
 \[
 M,\rho\models\varphi(r_1)
 \quad\Longleftrightarrow\quad
@@ -591,7 +465,7 @@ M,\rho\models\varphi(r_4);
 \item $M,p\Vdash \CompSec_s(r_3)$;
 \item $M,p\Vdash \LocSec_s(r_4)\land \neg\CompSec_s(r_4)$.
 \end{enumerate}
-In particular, no formula of the information-state forcing language that is invariant under $\mathrm{Form}_1$-automorphisms and contains none of the local-object predicates can define the predicates
+In particular, no formula of the information-state forcing language that is invariant under $\mathrm{Form}_1$-automorphisms, contains none of the local-object or absence predicates displayed above, and does not name the distinguished reference constants except through its free variable can define the predicates
 \[
 \CompSec_s,
 \qquad
