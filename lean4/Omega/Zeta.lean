@@ -5,6 +5,7 @@ import Omega.Zeta.AbelChannelEquipartitionCharacter
 import Omega.Zeta.AbelCongruenceEnergyParsevalBarcode
 import Omega.Zeta.AbelDecimationSemigroupIdentity
 import Omega.Zeta.AbelGrowthExponentCriterion
+import Omega.Zeta.AbelAnalyticRemainderDecimationCollapse
 import Omega.Zeta.AbelOffcriticalExponentialRadiusAmplification
 import Omega.Zeta.AbelMobiusNeutralizationFormal
 import Omega.Zeta.AbelTwoBaseDealiasingInjectivity
