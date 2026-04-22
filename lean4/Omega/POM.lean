@@ -81,6 +81,7 @@ import Omega.POM.DefectBand
 import Omega.POM.DelayMin
 import Omega.POM.DerivedFiberDeterminantExtremalEnvelope
 import Omega.POM.DerivedFiberSingleStieltjesHistogramRecovery
+import Omega.POM.ClosureDiagonalToTopSpectrum
 import Omega.POM.ClosurePartitionToFullRecoveryCurve
 import Omega.POM.EhrhartEqualsOrderpolyShift
 import Omega.POM.DeltaMinExtraReadouts
