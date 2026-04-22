@@ -112,6 +112,7 @@ import Omega.Folding.DerivedFoldMultiplicityCapacityRenyiEnvelope
 import Omega.Folding.DerivedFoldMultiplicityZerofiberEnvelope
 import Omega.Folding.DerivedFoldMultiplicityConvexOrderExtremal
 import Omega.Folding.DerivedFoldMultiplicityFourierCollisionFloor
+import Omega.Folding.DerivedFoldNotInOnegapFreezingRegime
 import Omega.Folding.DerivedFoldTopTwoSameSlope
 import Omega.Folding.DerivedBinfoldOracleCapacityPhaseDiagram
 import Omega.Folding.DiscreteStokesAuditableBound
