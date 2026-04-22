@@ -923,6 +923,21 @@ def is_oracle_response_valid(response: str) -> bool:
     return True
 
 
+def is_oracle_final_response_valid(response: str) -> bool:
+    if not response:
+        return False
+    cleaned = response.strip()
+    if len(cleaned) < 300:
+        return False
+    lower = cleaned.lower()
+    if "overall verdict" not in lower and "verdict" not in lower:
+        return False
+    return any(v in lower for v in (
+        "accept", "minor revision", "major revision", "reject",
+        "resolved", "unresolved", "blocker",
+    ))
+
+
 def oracle_poll(task_id: str, timeout: int = 7200,
                 poll_interval: int = 30) -> str:
     """EVENT WAIT — blocks until oracle responds.
@@ -4725,7 +4740,8 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
 # ═══════════════════════════════════════════════════════════════════════════
 
 def run_stage_c(state: PaperState, *, dry_run: bool = False,
-                model: Optional[str] = None) -> bool:
+                model: Optional[str] = None,
+                oracle_timeout: int = 7200) -> bool:
     tag = f"[{state.paper_name}|C]"
     paper_path = Path(state.paper_dir)
 
@@ -4742,8 +4758,77 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
         state.current_round = rnd
         save_state(state)
 
-        # ── C1: Claude independent review ────────────────────────
-        logger.info(f"{tag} Round {rnd}: C1 — Claude independent review")
+        # ── C0: Compile current final candidate ──────────────────
+        logger.info(f"{tag} Round {rnd}: C0 — Compile final candidate")
+        pdf = compile_pdf(paper_path, dry_run=dry_run)
+        if not pdf:
+            if not compile_gate(paper_path, model=model, dry_run=dry_run,
+                                tag=f"{tag} C0"):
+                state.error = f"Stage C round {rnd}: PDF compile failed"
+                save_state(state)
+                return False
+            h_compile = git_commit(
+                paper_path,
+                f"stage-C R{rnd}: repair compilation before final review",
+                tag=tag)
+            if h_compile:
+                state.log_event("C", "compile_repair", round_num=rnd,
+                                committed=True, commit_hash=h_compile)
+            pdf = compile_pdf(paper_path, dry_run=dry_run)
+            if not pdf:
+                state.error = f"Stage C round {rnd}: no PDF after compile gate"
+                save_state(state)
+                return False
+        if pdf:
+            state.pdf_path = str(pdf)
+        save_state(state)
+
+        # ── C1: Oracle final confirmation ────────────────────────
+        logger.info(f"{tag} Round {rnd}: C1 — Oracle final confirmation")
+        if dry_run:
+            oracle_response = (
+                "Overall verdict: Major revision\n"
+                "| C1 | Final | MEDIUM | dry run issue | fix it |"
+                if rnd < 2 else "Overall verdict: Accept\nNo blockers."
+            )
+        else:
+            safe_name = re.sub(r"[^a-zA-Z0-9_-]", "_", state.paper_name)[:80]
+            task_id = f"final_{safe_name}_C{rnd}_{time.time_ns()}_a1"
+            pdf_path = Path(state.pdf_path) if state.pdf_path else None
+            prompt = build_oracle_re_review_prompt(state.target_journal)
+            if not oracle_submit(task_id, prompt, pdf_path):
+                state.error = f"Stage C round {rnd}: Oracle submit failed"
+                save_state(state)
+                return False
+            raw = oracle_poll(task_id, timeout=oracle_timeout)
+            if raw == ORACLE_CANCELLED_RESPONSE:
+                state.error = (f"{PAUSED_ERROR_PREFIX} Stage C Oracle task "
+                               f"{task_id} was cancelled")
+                logger.info(f"{tag} {state.error}")
+                state.log_event("C", "oracle_cancelled",
+                                round_num=rnd, detail=state.error)
+                save_state(state)
+                return False
+            if not is_oracle_final_response_valid(raw):
+                state.error = f"Stage C round {rnd}: no valid Oracle response"
+                save_state(state)
+                return False
+            oracle_response = raw
+            done_dir = SCRIPT_DIR / "oracle" / "done"
+            done_dir.mkdir(parents=True, exist_ok=True)
+            (done_dir / f"{task_id}.md").write_text(
+                oracle_response, encoding="utf-8")
+
+        oracle_verdict = extract_verdict(oracle_response)
+        oracle_issues = parse_oracle_issues(oracle_response)
+        oracle_pass = oracle_verdict == "accept"
+        state.log_event("C", "oracle_final_review", round_num=rnd,
+                        verdict=oracle_verdict,
+                        detail=oracle_response[:12000])
+        save_state(state)
+
+        # ── C2: Claude independent review ────────────────────────
+        logger.info(f"{tag} Round {rnd}: C2 — Claude independent review")
         review_prompt = build_claude_independent_review_prompt(
             state.paper_dir, state.target_journal)
         out_c1 = claude_exec(review_prompt, work_dir=paper_path,
@@ -4755,8 +4840,8 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
         _record_claude_supervision(
             state, f"stage_c_presubmission_review_R{rnd}",
             review_data, raw=out_c1)
-        verdict = review_data.get("verdict", "revise")
-        issues = review_data.get("issues", [])
+        claude_verdict = str(review_data.get("verdict", "revise")).lower()
+        issues = list(_coerce_items(review_data.get("issues", [])))
         work_packages = review_data.get("work_packages", [])
         if work_packages:
             issues = list(issues) + [
@@ -4767,50 +4852,77 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 if isinstance(wp, dict) else str(wp)
                 for wp in work_packages
             ]
-        state.stage_c_verdicts.append(verdict)
+        claude_pass = claude_verdict == "submit"
+        state.stage_c_verdicts.append(
+            f"oracle:{oracle_verdict};claude:{claude_verdict}")
         state.log_event("C", "claude_independent_review", round_num=rnd,
-                        verdict=verdict,
+                        verdict=claude_verdict,
                         detail=json.dumps(review_data, ensure_ascii=False)[:10000])
         save_state(state)
 
-        logger.info(f"{tag} Round {rnd}: Claude verdict = {verdict}, "
-                    f"{len(issues)} issues")
+        logger.info(f"{tag} Round {rnd}: Oracle verdict = {oracle_verdict}, "
+                    f"Claude verdict = {claude_verdict}; "
+                    f"{len(oracle_issues)} oracle issue(s), "
+                    f"{len(issues)} Claude issue(s)")
 
         # ── Gate: submit → Stage D ───────────────────────────────
-        if verdict == "submit" or not issues:
-            logger.info(f"{tag} STAGE C PASSED at round {rnd}: READY TO SUBMIT")
+        if oracle_pass and claude_pass and not oracle_issues and not issues:
+            logger.info(f"{tag} STAGE C PASSED at round {rnd}: "
+                        "Oracle + Claude approved")
             git_commit(paper_path,
-                       f"Stage C (submit, {rnd}R): "
-                       f"Claude approved for submission", tag=tag)
+                       f"Stage C (joint pass, {rnd}R): "
+                       f"Oracle and Claude approved for submission", tag=tag)
             update_program_board(state.paper_name, "C-DONE",
-                                 f"Claude: submit, {rnd} rounds")
+                                 f"Oracle+Claude: pass, {rnd} rounds")
             state.stage_c_passed = True
             save_state(state)
             return True
 
-        # ── C2: Codex fix Claude's issues ────────────────────────
-        logger.info(f"{tag} Round {rnd}: C2 — Codex fix Claude issues")
+        # ── C3: Codex fixes joint final-review issues ────────────
+        logger.info(f"{tag} Round {rnd}: C3 — Codex fix joint final-review issues")
+        combined_issues: list[str] = []
+        oracle_issue_text = format_issues_for_codex(oracle_issues)
+        if oracle_issue_text.strip():
+            combined_issues.append("Oracle final-review issues:\n"
+                                   + oracle_issue_text)
+        elif not oracle_pass:
+            combined_issues.append(
+                "Oracle final-review verdict was not pass:\n"
+                + oracle_response[:6000])
+        for issue in issues:
+            combined_issues.append(str(issue))
+        if not combined_issues:
+            combined_issues.append(
+                "Final gate did not pass. Reconcile Oracle and Claude "
+                "verdicts, improve the manuscript conservatively, and compile.")
         fix_prompt = build_codex_fix_from_claude_prompt(
-            state.paper_dir, issues, rnd)
+            state.paper_dir, combined_issues, rnd)
         codex_exec(fix_prompt, work_dir=paper_path,
                    timeout_seconds=1800, model=model, dry_run=dry_run)
-        git_stage(paper_path, tag=tag)  # C2 intermediate claude issues", tag=tag)
-        state.log_event("C", "codex_fix_claude", round_num=rnd,
-                        committed=False, commit_hash="")
+        compiled_c3 = compile_gate(paper_path, model=model,
+                                   dry_run=dry_run, tag=f"{tag} C3")
+        if not compiled_c3:
+            state.error = f"Stage C round {rnd}: compile failed after Codex fix"
+            save_state(state)
+            return False
+        h_c3 = git_commit(paper_path,
+                          f"stage-C R{rnd}: codex joint final-review fixes",
+                          tag=tag)
+        state.log_event("C", "codex_fix_joint_final_review", round_num=rnd,
+                        committed=bool(h_c3), commit_hash=h_c3,
+                        detail=f"compiled={compiled_c3}")
         save_state(state)
 
         logger.info(f"{tag} Round {rnd}/{MAX_STAGE_C_ROUNDS} complete, "
                     f"looping for re-review")
 
-    logger.warning(f"{tag} Max {MAX_STAGE_C_ROUNDS} rounds exhausted")
-    git_commit(paper_path,
-               f"Stage C ({MAX_STAGE_C_ROUNDS}R max): "
-               f"Claude review exhausted", tag=tag)
-    update_program_board(state.paper_name, "C-DONE",
-                         f"{MAX_STAGE_C_ROUNDS} rounds (max)")
-    state.stage_c_passed = True
+    state.error = f"Stage C stuck: joint Oracle+Claude gate exhausted {MAX_STAGE_C_ROUNDS} rounds"
+    logger.warning(f"{tag} {state.error}")
+    update_program_board(state.paper_name, "C-STUCK",
+                         f"Oracle+Claude exhausted {MAX_STAGE_C_ROUNDS} rounds")
+    state.stage_c_passed = False
     save_state(state)
-    return True
+    return False
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -5638,7 +5750,7 @@ def run_paper_pipeline(
         logger.info(f"{tag} === STAGE {stage} ===")
         try:
             kwargs = dict(dry_run=dry_run, model=model)
-            if stage == "B":
+            if stage in ("B", "C"):
                 kwargs["oracle_timeout"] = oracle_timeout
             ok = runner(state, **kwargs)
         except Exception as exc:
