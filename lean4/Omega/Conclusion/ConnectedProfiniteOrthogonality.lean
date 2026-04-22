@@ -1,11 +1,14 @@
 import Mathlib.Tactic
 import Mathlib.Topology.Algebra.ContinuousMonoidHom
 import Mathlib.Topology.Connected.TotallyDisconnected
-import Mathlib.Topology.Instances.AddCircle.Real
+import Mathlib.Topology.Instances.AddCircle.Defs
 
 namespace Omega.Conclusion
 
 open Set Topology
+
+/-- A concrete finite-dimensional torus model. -/
+abbrev UnitAddCircle := AddCircle (1 : ℝ)
 
 /-- A concrete finite-dimensional torus model. -/
 abbrev FiniteDimensionalTorus (d : ℕ) := Fin d → UnitAddCircle

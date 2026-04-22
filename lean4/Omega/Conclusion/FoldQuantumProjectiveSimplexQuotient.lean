@@ -1,4 +1,6 @@
-import Mathlib.Analysis.Complex.Circle
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Data.Complex.Basic
+import Mathlib.Data.Real.Sqrt
 import Mathlib.Tactic
 
 namespace Omega.Conclusion
