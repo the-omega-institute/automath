@@ -181,6 +181,7 @@ import Omega.POM.FiberContractibilitySphereParityByWalsh
 import Omega.POM.FiberCubicalPoincareStokesLemma
 import Omega.POM.FiberDispersionIndex
 import Omega.POM.FiberEhrhartProduct
+import Omega.POM.FiberFpolyFactorization
 import Omega.POM.FibComponentFusionGain
 import Omega.POM.FiberInvariance
 import Omega.POM.FiberFullPosteriorUniformizationProductSource
