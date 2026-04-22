@@ -4800,6 +4800,101 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             return _stage_a_block(state, "stage_a_audit_failed_max_rounds",
                                   dry_run=dry_run, tag=tag)
 
+    if state.stage_a_rounds >= MAX_STAGE_A_ROUNDS:
+        logger.info(f"{tag} A3-FINAL — max theoremization rounds reached; "
+                    "running final audit before blocking")
+        while state.stage_a_audit_rounds < MAX_STAGE_A_AUDIT_ROUNDS:
+            audit_round = state.stage_a_audit_rounds + 1
+            audit = _run_stage_a_audit_once(
+                state, audit_round, model=model, dry_run=dry_run, tag=tag)
+            score = _stage_a_score_from_audit(audit)
+            logger.info(f"{tag} A3 final audit round {audit_round}: "
+                        f"score={score}, verdict={audit.get('verdict')}")
+
+            if stage_a_audit_passes(audit):
+                if audit_round < MIN_STAGE_A_AUDIT_ROUNDS:
+                    logger.info(f"{tag} A3 final pass but needs "
+                                f"{MIN_STAGE_A_AUDIT_ROUNDS} audit rounds; "
+                                "running another audit")
+                    continue
+                compile_snapshot = _snapshot_paper_sources(paper_path)
+                compiled_pass = compile_gate(paper_path, model=model,
+                                             dry_run=dry_run,
+                                             tag=f"{tag} A3-FINAL-PASS")
+                if not compiled_pass:
+                    _restore_paper_sources_snapshot(paper_path,
+                                                    compile_snapshot)
+                    state.log_event("A", "compile_failed",
+                                    round_num=audit_round,
+                                    detail="before final Stage A audit pass")
+                    save_state(state)
+                    return _stage_a_pause(
+                        state, "compile_failed_before_final_stage_a_pass",
+                        tag=tag)
+                content_summary = summarize_content_changes(
+                    paper_path, _stage_a_pre_theorems)
+                h = git_commit(
+                    paper_path,
+                    f"Stage A audit-pass ({score}/10, "
+                    f"{state.stage_a_rounds}R): {content_summary}",
+                    tag=tag)
+                if not dry_run:
+                    update_program_board(
+                        state.paper_name, "A-DONE",
+                        f"audit {score}/10, {state.stage_a_rounds} rounds, "
+                        f"{audit_round} final A3")
+                state.stage_a_passed = True
+                state.error = ""
+                state.log_event("A", "audit_gate_passed",
+                                round_num=audit_round, score=score,
+                                committed=bool(h), commit_hash=h,
+                                detail=json.dumps(
+                                    {
+                                        "metrics": audit.get("metrics", {}),
+                                        "compiled": compiled_pass,
+                                        "final_after_max_rounds": True,
+                                    },
+                                    ensure_ascii=False))
+                save_state(state)
+                return True
+
+            if audit.get("audit_unparseable"):
+                return _stage_a_pause(state, "stage_a_final_audit_unparseable",
+                                      tag=tag)
+
+            if audit.get("blockers") or audit.get("required_revisions"):
+                detail = json.dumps(
+                    {
+                        "score": score,
+                        "metrics": audit.get("metrics", {}),
+                        "blockers": audit.get("blockers", []),
+                        "required_revisions": audit.get(
+                            "required_revisions", []),
+                        "split_required": audit.get("split_required", False),
+                        "split_reasons": audit.get("split_reasons", []),
+                    },
+                    ensure_ascii=False,
+                )[:8000]
+                state.log_event("A", "final_audit_failed_after_max_rounds",
+                                round_num=audit_round, score=score,
+                                detail=detail)
+                save_state(state)
+                return _stage_a_block(
+                    state,
+                    f"max Stage A rounds exhausted; final audit failed "
+                    f"(score={score})",
+                    dry_run=dry_run, tag=tag)
+
+            return _stage_a_block(
+                state,
+                "max Stage A rounds exhausted; final audit failed without plan",
+                dry_run=dry_run, tag=tag)
+
+        return _stage_a_block(
+            state,
+            "max Stage A rounds exhausted; final audit failed max audit rounds",
+            dry_run=dry_run, tag=tag)
+
     return _stage_a_block(
         state,
         f"max Stage A theoremization rounds exhausted ({MAX_STAGE_A_ROUNDS})",
