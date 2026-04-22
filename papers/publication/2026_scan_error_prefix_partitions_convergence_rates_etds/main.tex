@@ -202,9 +202,43 @@ Pulling back along $\omega_\infty$ transfers this to $X$.
 \section{The Scan Error Profile}
 \label{sec:scan}
 
+\begin{definition}[Scan error profile and admissible classifiers]
+\label{def:scan-error-profile}
+Let $\mathsf{P}\in\mathcal{B}$ be a target event.  A depth-$m$
+\emph{admissible classifier} is an event $\mathsf{Q}\in\mathcal{F}_m$.
+The depth-$m$ scan error is
+\[
+\varepsilon_m(\mathsf{P};\mu)
+:=\inf\{\mu(\mathsf{P}\triangle\mathsf{Q}):\mathsf{Q}\in\mathcal{F}_m\}.
+\]
+Classifiers and target events are identified up to $\mu$-null symmetric
+difference.  Thus statements such as $\mathsf{P}=\mathsf{Q}$, membership in
+$\mathcal{F}_m$, and ``$\mathsf{P}$ is decided by depth $m$'' are understood
+in the $\mu$-a.s.\ sense whenever null sets are irrelevant; this convention
+does not change $\varepsilon_m(\mathsf{P};\mu)$.
+\end{definition}
+
+\begin{definition}[Positive-atom convention and conditional probabilities]
+\label{def:positive-atoms}
+For each $m$, $\mathcal{C}_m$ denotes the finite family of positive atoms of
+$\mathcal{F}_m$, after identifying atoms that agree modulo $\mu$-null sets.
+Equivalently, one may take the atoms of the finite algebra $\mathcal{F}_m$ and
+discard the atoms of $\mu$-measure zero.  All sums and cardinalities over
+$\mathcal{C}_m$ below are over this positive-atom family.  If
+$C\in\mathcal{C}_m$, then
+\[
+\mu(\mathsf{A}\mid C):=\frac{\mu(\mathsf{A}\cap C)}{\mu(C)}
+\]
+for every event $\mathsf{A}$.  In symbolic specializations, a cylinder is
+called positive when it has positive $\mu$-measure, and all hypotheses below
+that quantify over atoms or cylinders are understood to quantify over positive
+ones unless stated otherwise.
+\end{definition}
+
 \begin{proposition}[Exact cylinder decomposition]
 \label{prop:scan-error-cylinder}
-Let $\mathcal{C}_m$ be the atoms of $\mathcal{F}_m$ and $p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m)$.
+Let $\mathcal{C}_m$ be the positive atoms of $\mathcal{F}_m$ and
+$p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m)$.
 For every $\mathsf{P}\in\mathcal{F}_\infty$ and $m\ge 0$,
 \[
 \varepsilon_m(\mathsf{P};\mu)
@@ -214,10 +248,11 @@ For every $\mathsf{P}\in\mathcal{F}_\infty$ and $m\ge 0$,
 \end{proposition}
 
 \begin{proof}
-Any $\mathcal{F}_m$-measurable event $\mathsf{Q}$ is a union of atoms.  On
-each atom $C$, inclusion contributes local error $\mu(C\setminus\mathsf{P})$
-and exclusion contributes $\mu(\mathsf{P}\cap C)$; the optimum is their
-minimum.  Since $\min\{\mu(\mathsf{P}\cap C),\mu(C\setminus\mathsf{P})\}=\mu(C)\min\{p_C,1-p_C\}$
+Any $\mathcal{F}_m$-measurable event $\mathsf{Q}$ is, modulo a null set, a
+union of positive atoms.  On each positive atom $C$, inclusion contributes
+local error $\mu(C\setminus\mathsf{P})$ and exclusion contributes
+$\mu(\mathsf{P}\cap C)$; the optimum is their minimum.  Since
+$\min\{\mu(\mathsf{P}\cap C),\mu(C\setminus\mathsf{P})\}=\mu(C)\min\{p_C,1-p_C\}$
 where $p_C:=\mu(\mathsf{P}\mid C)$, summing over atoms gives the expectation form.
 \end{proof}
 
@@ -309,7 +344,7 @@ resolution $m$ is
 \]
 with cardinality $N_m(\partial\mathsf{P}):=\#(\partial_m\mathsf{P})$.
 
-Let $M_m:=\#\{C\in\mathcal{C}_m:\mu(C)>0\}$.  When the limit
+Let $M_m:=\#\mathcal{C}_m$.  When the limit
 $\lambda_{\mathrm{cyl}}:=\lim_{m\to\infty}M_m^{1/m}$ exists and exceeds $1$,
 it is the \emph{cylinder growth base}.  For a mixing SFT, $\lambda_{\mathrm{cyl}}$
 is the spectral radius of the transition matrix \cite{LindMarcus1995}.  The
@@ -333,8 +368,8 @@ $d=0$ under this convention and the scan error is eventually zero.
 
 \begin{theorem}[Boundary-dimension upper bound]
 \label{thm:boundary-dimension}
-Suppose $\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ for all $m\ge 1$ and all
-$C\in\mathcal{C}_m$.  Then
+Suppose $\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ for all $m\ge 1$ and every
+positive depth-$m$ atom $C\in\mathcal{C}_m$.  Then
 \[
 \varepsilon_m(\mathsf{P};\mu)\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P}).
 \]
@@ -363,7 +398,8 @@ the constant $K$ contribute $o(m)$ after taking logs, the bound follows.
 \begin{theorem}[Exact rate law from boundary thickness]
 \label{thm:volume-boundary-scaling}
 Suppose $c_-\lambda_{\mathrm{cyl}}^{-m}\le\mu(C)\le c_+\lambda_{\mathrm{cyl}}^{-m}$
-for all $C\in\mathcal{C}_m$ and all $m\ge 1$, and suppose there exist
+for all $m\ge 1$ and every positive depth-$m$ atom $C\in\mathcal{C}_m$, and
+suppose there exist
 $\theta\in(0,\frac12]$ and $m_0$ such that for all $m\ge m_0$ and all
 $C\in\partial_m\mathsf{P}$,
 \[
@@ -400,8 +436,8 @@ measures on mixing SFTs \cite{Bowen1975} but need not hold in general.
 \begin{definition}[Log-regular measure]
 \label{def:log-regular}
 A measure $\mu$ is \emph{log-regular with exponent $\alpha>0$} if there exist
-$0<c_1\le c_2<\infty$ such that for all $m\ge 1$ and all $C\in\mathcal{C}_m$
-with $\mu(C)>0$,
+$0<c_1\le c_2<\infty$ such that for all $m\ge 1$ and every
+positive depth-$m$ atom $C\in\mathcal{C}_m$,
 \[
 c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}\le\mu(C)\le c_2 m^{\alpha}\lambda_{\mathrm{cyl}}^{-m}.
 \]
@@ -462,7 +498,7 @@ for $N_m$ into the two-sided estimate above.
 \toprule
 assumption & conclusion for $\varepsilon_m(\mathsf{P};\mu)$ \\
 \midrule
-$\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ on all $m$-cylinders &
+$\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ on all positive $m$-cylinders &
 $\varepsilon_m\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$ \\
 uniform $c_\pm\lambda_{\mathrm{cyl}}^{-m}$ bounds plus thickness $\theta$ &
 $\varepsilon_m\asymp\lambda_{\mathrm{cyl}}^{-(1-d)m}$ \\
