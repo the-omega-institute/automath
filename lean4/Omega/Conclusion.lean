@@ -284,6 +284,8 @@ import Omega.Conclusion.HankelFiniteModSinglevaluedizationShortestLockingThresho
 import Omega.Conclusion.HiddenFaceBudgetSharpThresholdClassification
 import Omega.Conclusion.HypercubePhase
 import Omega.Conclusion.HypercubePhaseGridDense
+import Omega.Conclusion.HypercubePhaseQuadraticClosure
+import Omega.Conclusion.TwoPrimeDenseOrbitHyperbolaLeaf
 import Omega.Conclusion.ImageLayerMinimalInverseMemory
 import Omega.Conclusion.IndexTorsionTimeLowerBound
 import Omega.Conclusion.IntermediateQuotientSeeds
