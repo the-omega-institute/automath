@@ -5,6 +5,15 @@ import Omega.Conclusion.RamanujanCollapse
 
 namespace Omega.UnitCirclePhaseArithmetic
 
+/-- The small boundary-layer parameter in the off-critical shift estimate. -/
+noncomputable def app_jensen_offcritical_shift_boundary_q (γ r0 : ℝ) : ℝ :=
+  ((1 - r0 ^ 2) ^ 2 / (1 + r0 ^ 2) ^ 2) * (γ ^ 2 + 1)
+
+/-- The closed-form boundary-layer upper bound `Δ(γ; r₀)`. -/
+noncomputable def app_jensen_offcritical_shift_boundary_delta (γ r0 : ℝ) : ℝ :=
+  ((1 + r0 ^ 2) / (1 - r0 ^ 2)) *
+    (1 - Real.sqrt (1 - app_jensen_offcritical_shift_boundary_q γ r0))
+
 /-- The endpoint-window `h_\infty` rate written in the golden-ratio base. -/
 noncomputable def endpointHinftyRate : ℝ :=
   Real.log (2 / Real.sqrt Real.goldenRatio) / Real.log Real.goldenRatio
@@ -83,5 +92,39 @@ probability inherit the same golden-ratio `h_\infty` exponential rate.
 theorem paper_app_endpoint_window_hinfty_match (D : EndpointWindowHinftyMatchData) :
     D.windowExponentialMatch ∧ D.probabilityExponentialMatch := by
   exact ⟨D.windowExponentialMatch_proof, D.probabilityExponentialMatch_proof⟩
+
+/-- Paper label: `cor:app-jensen-offcritical-shift-boundary`.
+After rewriting `1 - sqrt (1 - q)` as `q / (1 + sqrt (1 - q))`, the boundary-layer correction is
+the first-order term times the explicit factor `2 / (1 + sqrt (1 - q))`. -/
+theorem paper_app_jensen_offcritical_shift_boundary (γ r0 : ℝ)
+    (hr0 : r0 ^ 2 ≠ 1) (hq : app_jensen_offcritical_shift_boundary_q γ r0 ≤ 1) :
+    app_jensen_offcritical_shift_boundary_delta γ r0 =
+      ((γ ^ 2 + 1) / 2) * ((1 - r0 ^ 2) / (1 + r0 ^ 2)) *
+        (2 / (1 + Real.sqrt (1 - app_jensen_offcritical_shift_boundary_q γ r0))) := by
+  let q := app_jensen_offcritical_shift_boundary_q γ r0
+  have hq_nonneg : 0 ≤ q := by
+    dsimp [q, app_jensen_offcritical_shift_boundary_q]
+    positivity
+  have hsqrt :
+      1 - Real.sqrt (1 - q) = q / (1 + Real.sqrt (1 - q)) := by
+    have h1q_nonneg : 0 ≤ 1 - q := sub_nonneg.mpr hq
+    have hden : 1 + Real.sqrt (1 - q) ≠ 0 := by
+      positivity
+    apply (eq_div_iff hden).2
+    nlinarith [Real.sq_sqrt h1q_nonneg]
+  have hplus_ne : 1 + r0 ^ 2 ≠ 0 := by positivity
+  have hminus_ne : 1 - r0 ^ 2 ≠ 0 := by
+    exact sub_ne_zero.mpr hr0.symm
+  have hroot_den :
+      1 + Real.sqrt (1 - app_jensen_offcritical_shift_boundary_q γ r0) ≠ 0 := by
+    positivity
+  unfold app_jensen_offcritical_shift_boundary_delta
+  rw [show
+      1 - Real.sqrt (1 - app_jensen_offcritical_shift_boundary_q γ r0) =
+        app_jensen_offcritical_shift_boundary_q γ r0 /
+          (1 + Real.sqrt (1 - app_jensen_offcritical_shift_boundary_q γ r0)) by
+        simpa [q] using hsqrt]
+  unfold app_jensen_offcritical_shift_boundary_q
+  field_simp [hplus_ne, hminus_ne, hroot_den]
 
 end Omega.UnitCirclePhaseArithmetic
