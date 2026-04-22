@@ -244,4 +244,20 @@ theorem cutFlux_eq_volumeBias {n : ℕ} (i : Fin n)
   zify at h_false h_true h_bop_eq_b' h_c_eq_c'
   linarith
 
+/-- Paper-facing pullback form of the coarse-grained cut-flux identity: for a coarse graining
+    `f : Ωₙ → X` and a subset `U ⊆ X`, the region `S = f⁻¹(U)` satisfies the same flux/bias
+    identity as the underlying Boolean cube region.
+    thm:spg-coarsegrained-cut-flux-volume-bias -/
+theorem paper_spg_coarsegrained_cut_flux_volume_bias {n : ℕ} {X : Type*}
+    [Fintype X] [DecidableEq X]
+    (i : Fin n) (f : (Fin n → Bool) → X) (_hf : Function.Surjective f) (U : Finset X) :
+    (((Finset.univ.filter
+      (fun ω : Fin n → Bool => ω i = false ∧ f ω ∈ U ∧ f (flipAt i ω) ∉ U)).card : ℤ)
+      - ((Finset.univ.filter
+        (fun ω : Fin n → Bool => ω i = false ∧ f ω ∉ U ∧ f (flipAt i ω) ∈ U)).card : ℤ)) =
+      ∑ ω ∈ Finset.univ.filter (fun ω : Fin n → Bool => f ω ∈ U),
+        (if ω i = false then (1 : ℤ) else -1) := by
+  simpa [cutFlux, volumeBias] using
+    cutFlux_eq_volumeBias i (Finset.univ.filter (fun ω : Fin n → Bool => f ω ∈ U))
+
 end Omega.SPG

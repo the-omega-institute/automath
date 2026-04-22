@@ -41,4 +41,19 @@ theorem paper_bdry_fold_gauge_sign_abelianization_verified (d : ℕ) (hd : 2 ≤
     paper_bdry_fold_gauge_sign_abelianization d hd := by
   exact paper_bdry_fold_gauge_sign_abelianization_spec d hd
 
+/-- Paper-facing uplift reduction statement: the orientation torsor is governed by the sign
+    character, the two-sheet case is already central because `S₂` is abelian, and the three-sheet
+    case survives only through the nontrivial abelianized sign character.
+    prop:uplift-fiber-sign-dimension-reduction -/
+theorem paper_uplift_fiber_sign_dimension_reduction :
+    upliftOrientationParity 2 = signHom 2 ∧
+      (∀ σ τ : Equiv.Perm (Fin 2), σ * τ = τ * σ) ∧
+      paper_bdry_fold_gauge_sign_abelianization 3 (by decide) ∧
+      (∀ φ : Equiv.Perm (Fin 3) →* ℤˣ, φ ≠ 1 → φ = upliftOrientationParity 3) := by
+  refine ⟨bdryFoldGauge_orientation_eq_sign 2, ?_, ?_, ?_⟩
+  · native_decide
+  · exact paper_bdry_fold_gauge_sign_abelianization_spec 3 (by decide)
+  · intro φ hφ
+    exact upliftOrientationParity_three_unique φ hφ
+
 end Omega.GU
