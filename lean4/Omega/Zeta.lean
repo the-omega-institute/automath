@@ -44,6 +44,7 @@ import Omega.Zeta.XiAtomicCenteredResidueSimplex
 import Omega.Zeta.XiEndpointHeatProbeResolutionAccuracyHardConstraint
 import Omega.Zeta.XiEndpointHeatProbeCyclotomicComplementRadius
 import Omega.Zeta.XiEndpointHeatProbeToeplitzHerglotzIdentity
+import Omega.Zeta.XiEndpointHeatProbePowerlawLeading
 import Omega.Zeta.XiTimePart76SmithSurjectiveModuliPrimeSieve
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
