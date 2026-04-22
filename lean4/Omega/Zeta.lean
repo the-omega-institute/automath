@@ -183,6 +183,7 @@ import Omega.Zeta.DerivedFixedFreezingRenyiSurface
 import Omega.Zeta.DerivedBinfoldTvBayesConstants
 import Omega.Zeta.DerivedHankelFiniteJetBadPrimeClosure
 import Omega.Zeta.DerivedHankelArithmeticAmbiguityLocalizesBadPrimes
+import Omega.Zeta.DerivedHankelEntropyGapCodimOneCollapse
 import Omega.Zeta.DerivedHankelSamplingBadprimeEntropyUnified
 import Omega.Zeta.DerivedLeyangBranchsetAdjacencySpectrumHeatTrace
 import Omega.Zeta.DerivedLeyangArtinMazurZeta
