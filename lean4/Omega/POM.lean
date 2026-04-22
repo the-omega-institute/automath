@@ -212,6 +212,7 @@ import Omega.POM.FiberWalshMod2RigidityExtremal
 import Omega.POM.FiberWalshSignatureRademacher
 import Omega.POM.FiberWalshStokesBoundaryTomographyReconstruction
 import Omega.POM.FiniteSampleIndistinguishabilityPowerSums
+import Omega.POM.PartitionExtractPowerSums
 import Omega.POM.FiniteStateDimensionLowerBound
 import Omega.POM.FirstfitExtensionalUndecidable
 import Omega.POM.FisherZerosArcsineSeeds
