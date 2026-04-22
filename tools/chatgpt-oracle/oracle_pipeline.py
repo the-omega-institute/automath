@@ -4300,6 +4300,17 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                                 f"{MIN_STAGE_A_AUDIT_ROUNDS} audit rounds; "
                                 f"running another audit")
                     continue
+                compiled_pass = compile_gate(paper_path, model=model,
+                                             dry_run=dry_run,
+                                             tag=f"{tag} A3-PASS")
+                if not compiled_pass:
+                    state.log_event("A", "compile_failed",
+                                    round_num=audit_round,
+                                    detail="before Stage A audit pass")
+                    save_state(state)
+                    return _stage_a_pause(
+                        state, "compile_failed_before_stage_a_pass",
+                        tag=tag)
                 content_summary = summarize_content_changes(
                     paper_path, _stage_a_pre_theorems)
                 h = git_commit(
@@ -4318,7 +4329,10 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                                 round_num=audit_round, score=score,
                                 committed=bool(h), commit_hash=h,
                                 detail=json.dumps(
-                                    audit.get("metrics", {}),
+                                    {
+                                        "metrics": audit.get("metrics", {}),
+                                        "compiled": compiled_pass,
+                                    },
                                     ensure_ascii=False))
                 save_state(state)
                 return True
