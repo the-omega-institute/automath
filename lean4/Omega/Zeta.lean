@@ -568,6 +568,7 @@ import Omega.Zeta.XiEndpointHeatProbeAdamsTwistHalfangle
 import Omega.Zeta.XiEndpointHeatProbeRstarRegularVariationTail
 import Omega.Zeta.XiEndpointJetOrthogonalDecoupling
 import Omega.Zeta.XiEndpointAbsorptionAdamsRescaling
+import Omega.Zeta.XiExteriorPowerGaussianBinomHilbert
 import Omega.Zeta.XiExteriorPowerSmithSchubert
 import Omega.Zeta.XiEndpointJuliaIndicatorEqualsAbsorption
 import Omega.Zeta.XiEndpointJensenDefectH12GramKernel
