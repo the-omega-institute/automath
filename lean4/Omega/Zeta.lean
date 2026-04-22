@@ -115,6 +115,7 @@ import Omega.Zeta.XiTimePart9xcSerrinCongruenceDiracLengthOne
 import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
 import Omega.Zeta.BdryFreeInvolutionOddFiberObstructionMinCover
 import Omega.Zeta.XiTimePart62aZGSimplePoleDensityResidue
+import Omega.Zeta.XiTimePart62ccEventwordFreeAffineSubmonoid
 import Omega.Zeta.XiTimePart62dLeyangBranchGraphAutomorphismWreath
 import Omega.Zeta.XiTimePart62ebLeyangExternalAuditImmunity
 import Omega.Zeta.XiTimePart62dgcZGMatrixEulerNoScalarProduct
