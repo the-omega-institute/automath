@@ -281,6 +281,7 @@ import Omega.POM.FiniteStateDimensionLowerBound
 import Omega.POM.FirstfitExtensionalUndecidable
 import Omega.POM.FisherZerosArcsineSeeds
 import Omega.POM.FixedQFrozenUniversalReversibleThreshold
+import Omega.POM.FixedQFrozenMinimalReversibleBudget
 import Omega.POM.FixedQFrozenBayesInfoncePoisson
 import Omega.POM.FreezeThreshold
 import Omega.POM.VisibilityToErrorTwoSided
