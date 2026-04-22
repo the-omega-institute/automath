@@ -557,6 +557,7 @@ import Omega.Zeta.XiEndpointFirstNPlusOneProbesSharpToeplitzRecovery
 import Omega.Zeta.XiEndpointHeatProbeAbelStokesAtomRecovery
 import Omega.Zeta.XiEndpointHeatProbeHausdorffHankelClosure
 import Omega.Zeta.XiEndpointHeatProbeCyclotomicTargetExtraction
+import Omega.Zeta.XiEndpointHeatProbeAdamsTwistHalfangle
 import Omega.Zeta.XiEndpointHeatProbeRstarRegularVariationTail
 import Omega.Zeta.XiEndpointJetOrthogonalDecoupling
 import Omega.Zeta.XiEndpointAbsorptionAdamsRescaling
