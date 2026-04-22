@@ -870,13 +870,63 @@ def git_commit_multi(paths: list[Path], msg: str, *, tag: str = "") -> str:
         return ""
 
 
+AGENT_CONTEXT_CONTRACTS = {
+    "fresh_review": (
+        "Clean-room review. Use only the manuscript/PDF and the explicit "
+        "instructions in this prompt. Do not rely on prior pipeline history, "
+        "previous reviews, stale artifacts, or conversation memory."
+    ),
+    "scope_bound_review": (
+        "Independent review bounded by the stable scope files named in the "
+        "prompt. Use the manuscript, research_directive, scope_contract, and "
+        "listed inventories if explicitly requested; ignore previous review "
+        "verdicts unless the prompt quotes them."
+    ),
+    "contextual_supervision": (
+        "Review-only supervisory pass. Use the supplied history, artifacts, "
+        "diff context, and prior decisions to track changes across the "
+        "pipeline. Do not edit files."
+    ),
+    "contextual_execution": (
+        "Execution/repair pass. Use the supplied issues, scope contract, prior "
+        "round context, and manuscript state to edit files directly while "
+        "preserving unrelated work."
+    ),
+}
+
+
+def with_agent_context_contract(prompt: str, *,
+                                context_mode: str = "",
+                                agent_role: str = "") -> str:
+    if not context_mode:
+        return prompt
+    semantics = AGENT_CONTEXT_CONTRACTS.get(
+        context_mode,
+        "Use only the context explicitly authorized by this prompt.",
+    )
+    header = textwrap.dedent(f"""\
+        ## Agent Context Contract
+        context_mode: `{context_mode}`
+        agent_role: `{agent_role or "unspecified"}`
+        semantics: {semantics}
+    """)
+    return f"{header}\n\n{prompt}"
+
+
 # ---------------------------------------------------------------------------
 # Oracle (ChatGPT Pro) interface
 # ---------------------------------------------------------------------------
 
 def oracle_submit(task_id: str, prompt: str,
                   pdf_path: Optional[Path] = None,
-                  model: str = "chatgpt-5.4-pro-extended") -> bool:
+                  model: str = "chatgpt-5.4-pro-extended",
+                  context_mode: str = "",
+                  agent_role: str = "") -> bool:
+    prompt = with_agent_context_contract(
+        prompt, context_mode=context_mode, agent_role=agent_role)
+    if context_mode:
+        logger.info(f"Oracle context: {context_mode}"
+                    f"{'/' + agent_role if agent_role else ''}")
     payload: dict = {"task_id": task_id, "prompt": prompt, "model": model}
     if pdf_path and pdf_path.exists():
         with open(pdf_path, "rb") as f:
@@ -1104,7 +1154,14 @@ def _kill_process_tree(pid: int) -> None:
 
 def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
                timeout_seconds: int = 1800, model: Optional[str] = None,
-               dry_run: bool = False) -> str:
+               dry_run: bool = False,
+               context_mode: str = "",
+               agent_role: str = "") -> str:
+    prompt = with_agent_context_contract(
+        prompt, context_mode=context_mode, agent_role=agent_role)
+    if context_mode:
+        logger.info(f"Codex context: {context_mode}"
+                    f"{'/' + agent_role if agent_role else ''}")
     if dry_run:
         logger.info(f"[DRY RUN] codex exec:\n{prompt[:200]}...")
         return "(dry run)"
@@ -1300,7 +1357,9 @@ def claude_health_status(timeout_seconds: int = 45) -> tuple[bool, str]:
 
 def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
                 timeout_seconds: int = 600,
-                dry_run: bool = False) -> str:
+                dry_run: bool = False,
+                context_mode: str = "",
+                agent_role: str = "") -> str:
     """Call Claude Code CLI for independent review/verification.
 
     Uses `claude -p --dangerously-skip-permissions` for non-interactive
@@ -1309,6 +1368,11 @@ def claude_exec(prompt: str, *, work_dir: Optional[Path] = None,
 
     Used for: Stage F2, A4, C1, D2 (all verification/review steps).
     """
+    prompt = with_agent_context_contract(
+        prompt, context_mode=context_mode, agent_role=agent_role)
+    if context_mode:
+        logger.info(f"Claude context: {context_mode}"
+                    f"{'/' + agent_role if agent_role else ''}")
     if dry_run:
         logger.info(f"[DRY RUN] claude_exec:\n{prompt[:200]}...")
         return "(dry run)"
@@ -1427,7 +1491,9 @@ def compile_gate(paper_path: Path, *, model: Optional[str] = None,
                    f"({len(err)} chars of errors)")
     codex_exec(build_compile_fix_prompt(str(paper_path), err),
                work_dir=paper_path, timeout_seconds=600,
-               model=model, dry_run=dry_run)
+               model=model, dry_run=dry_run,
+               context_mode="contextual_execution",
+               agent_role="compile_repair")
     return try_compile(paper_path, dry_run=dry_run)
 
 
@@ -3276,7 +3342,9 @@ def _write_json_artifact(paper_path: Path, filename: str, data: dict) -> None:
 
 def _record_claude_supervision(state: PaperState, phase: str,
                                data: dict | None = None,
-                               raw: str = "") -> None:
+                               raw: str = "",
+                               context_mode: str = "",
+                               agent_role: str = "") -> None:
     """Append Claude's independent supervision record outside paper commits."""
     try:
         CLAUDE_SUPERVISION_DIR.mkdir(parents=True, exist_ok=True)
@@ -3289,6 +3357,8 @@ def _record_claude_supervision(state: PaperState, phase: str,
             "current_stage": state.current_stage,
             "current_round": state.current_round,
             "phase": phase,
+            "context_mode": context_mode,
+            "agent_role": agent_role,
             "data": data or {},
             "raw_excerpt": (raw or "")[:8000],
         }
@@ -3892,7 +3962,9 @@ def _run_stage_a_inventory(state: PaperState, *,
         prompt = build_theorem_inventory_prompt(
             state.paper_dir, state.target_journal, state.main_paper_dir)
         out = codex_exec(prompt, work_dir=paper_path, timeout_seconds=1800,
-                         model=model, dry_run=dry_run)
+                         model=model, dry_run=dry_run,
+                         context_mode="scope_bound_review",
+                         agent_role="stage_a_theorem_inventory")
         inventory = _read_json_artifact(paper_path, "theorem_inventory.json")
         if not inventory:
             inventory = parse_json_from_output(out)
@@ -3951,7 +4023,9 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
         for attempt in range(1, 3):
             out = codex_exec(prompt, work_dir=paper_path,
                              timeout_seconds=900, model=model,
-                             dry_run=dry_run)
+                             dry_run=dry_run,
+                             context_mode="scope_bound_review",
+                             agent_role="stage_a_codex_math_audit")
             data = parse_json_from_output(out) if not dry_run else {
                 "metrics": {k: 8 for k in STAGE_A_CODEX_MATH_METRICS},
                 "verdict": "pass",
@@ -3984,10 +4058,14 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
                     approval.
                     """),
                     work_dir=paper_path, timeout_seconds=900,
-                    model=model, dry_run=dry_run)
+                    model=model, dry_run=dry_run,
+                    context_mode="scope_bound_review",
+                    agent_role="stage_a_structural_audit_fallback")
             else:
                 out = claude_exec(prompt, work_dir=paper_path,
-                                  timeout_seconds=900, dry_run=dry_run)
+                                  timeout_seconds=900, dry_run=dry_run,
+                                  context_mode="scope_bound_review",
+                                  agent_role="stage_a_claude_structural_audit")
             data = parse_json_from_output(out) if not dry_run else {
                 "metrics": {k: 8 for k in STAGE_A_CLAUDE_STRUCTURAL_METRICS},
                 "verdict": "pass",
@@ -4017,7 +4095,14 @@ def _run_stage_a_audit_once(state: PaperState, audit_round: int, *,
         if CLAUDE_ENABLED
         else f"stage_a_structural_audit_codex_fallback_R{audit_round}"
     )
-    _record_claude_supervision(state, supervision_phase, claude_data)
+    _record_claude_supervision(
+        state, supervision_phase, claude_data,
+        context_mode="scope_bound_review",
+        agent_role=(
+            "stage_a_claude_structural_audit"
+            if CLAUDE_ENABLED
+            else "stage_a_structural_audit_fallback"
+        ))
     audit = _combine_stage_a_audits(codex_data, claude_data)
     if not dry_run:
         _write_json_artifact(paper_path, "stage_a_audit.json", audit)
@@ -4139,7 +4224,9 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 state.main_paper_dir)
             claude_scope_out = claude_exec(
                 claude_scope_prompt, work_dir=paper_path,
-                timeout_seconds=900, dry_run=dry_run)
+                timeout_seconds=900, dry_run=dry_run,
+                context_mode="contextual_supervision",
+                agent_role="stage_a_scope_brief")
             claude_scope_data = parse_json_from_output(claude_scope_out)
             if not claude_scope_data:
                 return _stage_a_pause(
@@ -4147,7 +4234,9 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                     tag=tag)
         _record_claude_supervision(
             state, "stage_a_scope_brief", claude_scope_data,
-            raw=claude_scope_out)
+            raw=claude_scope_out,
+            context_mode="contextual_supervision",
+            agent_role="stage_a_scope_brief")
         save_state(state)
 
         if dry_run:
@@ -4168,7 +4257,9 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 claude_scope_brief=claude_scope_json)
             out = codex_exec(prompt_a0, work_dir=paper_path,
                              timeout_seconds=2400, model=model,
-                             dry_run=dry_run)
+                             dry_run=dry_run,
+                             context_mode="contextual_execution",
+                             agent_role="stage_a_scope_contract")
             # If the model returned JSON but forgot the file, persist the JSON
             # artifact so the gate can inspect it.
             data = _read_json_artifact(paper_path, "scope_contract.json")
@@ -4213,7 +4304,9 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 rnd)
             pre_theorems = extract_theorem_statements(paper_path)
             codex_exec(prompt, work_dir=paper_path,
-                       timeout_seconds=3600, model=model, dry_run=dry_run)
+                       timeout_seconds=3600, model=model, dry_run=dry_run,
+                       context_mode="contextual_execution",
+                       agent_role="stage_a_theoremization")
             compiled = compile_gate(paper_path, model=model,
                                     dry_run=dry_run, tag=f"{tag} A2")
             if not compiled:
@@ -4269,7 +4362,9 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
             prompt = build_split_hygiene_prompt(
                 state.paper_dir, state.target_journal, candidates_json, rnd)
             codex_exec(prompt, work_dir=paper_path,
-                       timeout_seconds=2400, model=model, dry_run=dry_run)
+                       timeout_seconds=2400, model=model, dry_run=dry_run,
+                       context_mode="contextual_execution",
+                       agent_role="stage_a_split_hygiene")
             compiled = compile_gate(paper_path, model=model,
                                     dry_run=dry_run, tag=f"{tag} A-SPLIT")
             if not compiled:
@@ -4365,7 +4460,9 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                     json.dumps(issues, indent=2, ensure_ascii=False), rnd)
                 codex_exec(prompt, work_dir=paper_path,
                            timeout_seconds=3600, model=model,
-                           dry_run=dry_run)
+                           dry_run=dry_run,
+                           context_mode="contextual_execution",
+                           agent_role="stage_a_audit_blocker_revision")
                 compiled = compile_gate(paper_path, model=model,
                                         dry_run=dry_run,
                                         tag=f"{tag} A2-AUDIT")
@@ -4497,7 +4594,11 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             pdf_path = Path(state.pdf_path) if state.pdf_path else None
             attempt = 1
             logger.info(f"{tag} B2 oracle submit (task={task_id})")
-            if not oracle_submit(task_id, prompt, pdf_path):
+            if not oracle_submit(
+                task_id, prompt, pdf_path,
+                context_mode="fresh_review",
+                agent_role="stage_b_oracle_referee",
+            ):
                 state.error = "Oracle submit failed"
                 return False
             save_state(state)
@@ -4551,7 +4652,11 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 time.sleep(300)
                 attempt += 1
                 task_id = f"{task_id_base}_a{attempt}"
-                if not oracle_submit(task_id, prompt, pdf_path):
+                if not oracle_submit(
+                    task_id, prompt, pdf_path,
+                    context_mode="fresh_review",
+                    agent_role="stage_b_oracle_referee_retry",
+                ):
                     state.error = f"Oracle re-submit failed B{rnd} attempt {attempt}"
                     return False
             if not response:
@@ -4647,11 +4752,15 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 )
                 codex_exec(single_prompt, work_dir=paper_path,
                            timeout_seconds=item_timeout, model=model,
-                           dry_run=dry_run)
+                           dry_run=dry_run,
+                           context_mode="contextual_execution",
+                           agent_role="stage_b_focused_oracle_fix")
         else:
             codex_exec(fix_prompt, work_dir=paper_path,
                        timeout_seconds=b4_timeout, model=model,
-                       dry_run=dry_run)
+                       dry_run=dry_run,
+                       context_mode="contextual_execution",
+                       agent_role="stage_b_oracle_fix")
         compiled_b4 = compile_gate(paper_path, model=model,
                                    dry_run=dry_run, tag=f"{tag} B4")
         if not compiled_b4:
@@ -4715,7 +4824,9 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             ```
         """)
         out_b5 = claude_exec(claude_fix_prompt, work_dir=paper_path,
-                             dry_run=dry_run)
+                             dry_run=dry_run,
+                             context_mode="contextual_supervision",
+                             agent_role="stage_b_post_codex_review")
         b5_data = parse_json_from_output(out_b5) if not dry_run else {
             "system_verdict": "good",
             "language_structure_findings": [],
@@ -4724,7 +4835,9 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         }
         _record_claude_supervision(
             state, f"stage_b_post_codex_review_R{rnd}", b5_data,
-            raw=out_b5)
+            raw=out_b5,
+            context_mode="contextual_supervision",
+            agent_role="stage_b_post_codex_review")
         b5_packages = list(_coerce_items(b5_data.get("codex_work_packages", [])))
         for issue in _coerce_items(b5_data.get("remaining_issues", [])):
             b5_packages.append({
@@ -4758,7 +4871,9 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 build_codex_fix_from_claude_prompt(
                     state.paper_dir, package_issues, rnd),
                 work_dir=paper_path, timeout_seconds=1800,
-                model=model, dry_run=dry_run)
+                model=model, dry_run=dry_run,
+                context_mode="contextual_execution",
+                agent_role="stage_b_claude_package_fix")
         compiled_b5 = compile_gate(paper_path, model=model,
                                    dry_run=dry_run, tag=f"{tag} B5")
         if not compiled_b5:
@@ -4850,7 +4965,11 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
             task_id = f"final_{safe_name}_C{rnd}_{time.time_ns()}_a1"
             pdf_path = Path(state.pdf_path) if state.pdf_path else None
             prompt = build_oracle_re_review_prompt(state.target_journal)
-            if not oracle_submit(task_id, prompt, pdf_path):
+            if not oracle_submit(
+                task_id, prompt, pdf_path,
+                context_mode="fresh_review",
+                agent_role="stage_c_oracle_final",
+            ):
                 state.error = f"Stage C round {rnd}: Oracle submit failed"
                 save_state(state)
                 return False
@@ -4886,14 +5005,18 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
         review_prompt = build_claude_independent_review_prompt(
             state.paper_dir, state.target_journal)
         out_c1 = claude_exec(review_prompt, work_dir=paper_path,
-                             dry_run=dry_run)
+                             dry_run=dry_run,
+                             context_mode="fresh_review",
+                             agent_role="stage_c_claude_final")
         review_data = parse_json_from_output(out_c1) if not dry_run else {
             "verdict": "revise" if rnd < 2 else "submit",
             "issues": [f"dry run issue R{rnd}"] if rnd < 2 else [],
         }
         _record_claude_supervision(
             state, f"stage_c_presubmission_review_R{rnd}",
-            review_data, raw=out_c1)
+            review_data, raw=out_c1,
+            context_mode="fresh_review",
+            agent_role="stage_c_claude_final")
         claude_verdict = str(review_data.get("verdict", "revise")).lower()
         issues = list(_coerce_items(review_data.get("issues", [])))
         work_packages = review_data.get("work_packages", [])
@@ -4952,7 +5075,9 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
         fix_prompt = build_codex_fix_from_claude_prompt(
             state.paper_dir, combined_issues, rnd)
         codex_exec(fix_prompt, work_dir=paper_path,
-                   timeout_seconds=1800, model=model, dry_run=dry_run)
+                   timeout_seconds=1800, model=model, dry_run=dry_run,
+                   context_mode="contextual_execution",
+                   agent_role="stage_c_joint_final_fix")
         compiled_c3 = compile_gate(paper_path, model=model,
                                    dry_run=dry_run, tag=f"{tag} C3")
         if not compiled_c3:
@@ -5000,7 +5125,9 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
     prompt_d1 = build_backflow_check_prompt(state.paper_dir,
                                              state.main_paper_dir)
     out_d1 = codex_exec(prompt_d1, work_dir=REPO_ROOT,
-                        timeout_seconds=900, model=model, dry_run=dry_run)
+                        timeout_seconds=900, model=model, dry_run=dry_run,
+                        context_mode="scope_bound_review",
+                        agent_role="stage_d_backflow_discovery")
     bf_data = parse_json_from_output(out_d1) if not dry_run else {
         "backflow_items": [{"sub_paper_result": "dry run thm",
                             "main_paper_location": "Section 1",
@@ -5037,7 +5164,9 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
     placement_prompt = build_backflow_placement_prompt(
         state.paper_dir, state.main_paper_dir, items)
     out_d15 = codex_exec(placement_prompt, work_dir=REPO_ROOT,
-                         timeout_seconds=600, model=model, dry_run=dry_run)
+                         timeout_seconds=600, model=model, dry_run=dry_run,
+                         context_mode="contextual_supervision",
+                         agent_role="stage_d_placement_analysis")
     placement_data = parse_json_from_output(out_d15) if not dry_run else {
         "placements": [{"item_index": i + 1,
                         "target_file": "main.tex",
@@ -5104,12 +5233,16 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
         revised_placements (same format as the placements input).
     """)
     out_d2 = claude_exec(claude_bf_prompt, work_dir=REPO_ROOT,
-                         dry_run=dry_run)
+                         dry_run=dry_run,
+                         context_mode="contextual_supervision",
+                         agent_role="stage_d_backflow_admissibility")
     approval = parse_json_from_output(out_d2) if not dry_run else {
         "approved": True, "approved_items": list(range(len(items))),
     }
     _record_claude_supervision(
-        state, "stage_d_backflow_admissibility", approval, raw=out_d2)
+        state, "stage_d_backflow_admissibility", approval, raw=out_d2,
+        context_mode="contextual_supervision",
+        agent_role="stage_d_backflow_admissibility")
     state.log_event("D", "claude_review_backflow",
                     detail=json.dumps(approval, ensure_ascii=False)[:10000])
     save_state(state)
@@ -5193,7 +5326,9 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
         state.paper_dir, state.main_paper_dir, approved_items,
         placements=placements)
     codex_exec(apply_prompt, work_dir=REPO_ROOT,
-               timeout_seconds=1800, model=model, dry_run=dry_run)
+               timeout_seconds=1800, model=model, dry_run=dry_run,
+               context_mode="contextual_execution",
+               agent_role="stage_d_apply_backflow")
     compiled_d3 = compile_gate(main_path, model=model,
                                dry_run=dry_run, tag=f"{tag} D3")
     if not compiled_d3:
@@ -5225,7 +5360,9 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
           cd {state.main_paper_dir} && xelatex -interaction=nonstopmode main.tex
     """)
     codex_exec(verify_prompt, work_dir=main_path,
-               timeout_seconds=900, model=model, dry_run=dry_run)
+               timeout_seconds=900, model=model, dry_run=dry_run,
+               context_mode="contextual_execution",
+               agent_role="stage_d_verify_main")
     compiled_d4 = compile_gate(main_path, model=model,
                                dry_run=dry_run, tag=f"{tag} D4")
     if not compiled_d4:
@@ -5268,12 +5405,17 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
         quality_verdict = "needs_fixes" means list specific issues to address.
         Do NOT edit files — only output the JSON review.
     """)
-    out_d5 = claude_exec(d5_prompt, work_dir=main_path, dry_run=dry_run)
+    out_d5 = claude_exec(
+        d5_prompt, work_dir=main_path, dry_run=dry_run,
+        context_mode="contextual_supervision",
+        agent_role="stage_d_backflow_quality")
     d5_data = parse_json_from_output(out_d5) if not dry_run else {
         "quality_verdict": "good", "issues": [], "notes": "dry run",
     }
     _record_claude_supervision(
-        state, "stage_d_backflow_quality", d5_data, raw=out_d5)
+        state, "stage_d_backflow_quality", d5_data, raw=out_d5,
+        context_mode="contextual_supervision",
+        agent_role="stage_d_backflow_quality")
     d5_verdict = d5_data.get("quality_verdict", "good")
     d5_issues = d5_data.get("issues", [])
     state.log_event("D", "claude_review_backflow_quality",
@@ -5295,7 +5437,9 @@ def run_stage_d(state: PaperState, *, dry_run: bool = False,
             Compile: cd {state.main_paper_dir} && xelatex -interaction=nonstopmode main.tex
         """)
         codex_exec(fix_prompt, work_dir=main_path,
-                   timeout_seconds=900, model=model, dry_run=dry_run)
+                   timeout_seconds=900, model=model, dry_run=dry_run,
+                   context_mode="contextual_execution",
+                   agent_role="stage_d_backflow_quality_fix")
         compiled_d5 = compile_gate(main_path, model=model,
                                    dry_run=dry_run, tag=f"{tag} D5")
         if not compiled_d5:
