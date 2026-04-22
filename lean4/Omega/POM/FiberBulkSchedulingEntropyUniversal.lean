@@ -40,4 +40,18 @@ theorem paper_pom_fiber_bulk_scheduling_entropy_universal
   refine ⟨?_, paper_pom_order_polytope_volume_linext (fenceDisjointUnionPoset lengths)⟩
   rw [hbulk lengths]
 
+/-- Paper label: `cor:pom-fiber-bulk-scheduling-deficit-linear`. This is the same logarithmic
+bulk-scheduling identity rewritten with the terms moved to the other side. -/
+theorem paper_pom_fiber_bulk_scheduling_deficit_linear
+    (D : PomFiberBulkSchedulingEntropyUniversalData) :
+    D.bulk_hypothesis →
+      ∀ lengths : List ℕ,
+        Real.log (fenceMaxchainsEulerCount lengths : ℝ) -
+            Real.log
+              (maxChainCount (orderIdealLattice (fenceDisjointUnionPoset lengths)) : ℝ) = 0 := by
+  intro hbulk lengths
+  have hEntropy :=
+    (paper_pom_fiber_bulk_scheduling_entropy_universal D hbulk lengths).1
+  linarith
+
 end Omega.POM
