@@ -213,6 +213,7 @@ import Omega.Conclusion.ScalekernelTreeFourthOrderSynchronization
 import Omega.Conclusion.ScreenRankGainClosureDiminishingReturns
 import Omega.Conclusion.ScreenphaseSurjectsAllFiniteLocalizedShadows
 import Omega.Conclusion.SingleCubeEditRigidity
+import Omega.Conclusion.SingleOmittedEdgePartialCorrelationBudget
 import Omega.Conclusion.FibadicLcmFiltrationLaw
 import Omega.Conclusion.FibadicPrimitiveCentralIdempotents
 import Omega.Conclusion.FibadicUniformDivisorRandomizationGap
