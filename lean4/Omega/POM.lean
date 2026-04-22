@@ -136,6 +136,7 @@ import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensor
 import Omega.POM.DiagonalRateDiagonalClosureRankone
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete
 import Omega.POM.DiagonalRateDiagonalDeterminesSeparationProfile
+import Omega.POM.DiagonalRateRefreshFundamentalMatrixRankone
 import Omega.POM.DiagonalRateSmallDistortionSynergyK
 import Omega.POM.DiagonalRateSturmCauchyEigenbasis
 import Omega.POM.DiagonalRateRefreshCountRenewalLLNCLT
@@ -143,6 +144,7 @@ import Omega.POM.DiagonalRateRefreshCountScgfDerivatives
 import Omega.POM.DiagonalRateKeepProbabilityMonotone
 import Omega.POM.DiagonalRateRankOneRefreshDeterminantCollapse
 import Omega.POM.DiagonalRateKeepResampleChannel
+import Omega.POM.DiagonalRateRefreshHittingTimeDeletedLaguerrePGF
 import Omega.POM.DiagonalRateRefreshHittingTimePGFClosed
 import Omega.POM.DiagonalRateRefreshHoldingIntervalPgfHausdorff
 import Omega.POM.DiagonalRateRefreshRegenerationIidExpansion
