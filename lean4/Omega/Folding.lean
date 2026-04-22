@@ -563,6 +563,7 @@ import Omega.Folding.StableArithmeticComplexity
 import Omega.Folding.StableSyntax
 import Omega.Folding.StableSyntaxTerminalRecursion
 import Omega.Folding.StableSyntaxCounting
+import Omega.Folding.StableSyntaxFibFusionRing
 import Omega.Folding.StableSyntaxEntropyLogqdim
 import Omega.Folding.StokesDefectHaarMixing
 import Omega.Folding.StokesDefectParityPolarization
