@@ -79,7 +79,7 @@ STAGE_ORDER = ["R", "S", "G", "W", "E", "DONE"]
 
 # Review gate configuration
 SCORE_PASS_THRESHOLD = 7
-MAX_W_ROUNDS = 5          # max writeback generation + review rounds
+MAX_W_ROUNDS = 8          # max writeback generation + review rounds
 MAX_DEEP_ROUNDS = 2       # max A-DEEP style escalation rounds per W cycle
 MIN_NEW_CLAIMS = 1        # anti-fake: minimum new theorem/lemma/etc labels
 MIN_CONTENT_DELTA = 200   # anti-fake: minimum chars of new claim content
