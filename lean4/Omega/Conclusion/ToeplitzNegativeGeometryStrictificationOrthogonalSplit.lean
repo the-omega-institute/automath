@@ -2,6 +2,8 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.Tactic
+import Omega.Conclusion.ToeplitzShortestNegativeCertificateTailRigidity
+import Omega.Conclusion.VisibleJointHorizonSharp2d
 import Omega.Conclusion.ToeplitzGaugeBlindnessZeroDimensionalLedgerNecessity
 import Omega.Zeta.ToeplitzNegativeSpectrumProductDetHankelSquare
 
@@ -64,5 +66,79 @@ theorem paper_conclusion_toeplitz_negative_geometry_strictification_orthogonal_s
     toeplitzNegativeWitness_neg σ v hnonzero,
     toeplitzNegativeWitness_nonpos σ v, ?_⟩
   simpa [toeplitzNegativeGramBlock] using Omega.Zeta.paper_xi_negative_spectrum_product_dethankel_square σ
+
+/-- The two-parameter revelation package at prefix length `L` and depth `N`: the stable negative
+certificate is fixed by every moment prefix of length `L + 1`, and the visible reconstruction side
+has reached the joint Toeplitz/Prony horizon `N`. -/
+def conclusion_toeplitz_defect_revelation_two_parameter_irreducibility_reveals
+    (κ L N : ℕ) (D : Omega.Zeta.FiniteDefectCompleteReconstructionData κ) : Prop :=
+  (∀ u v : ℕ → ℝ, (∀ n ≤ L, u n = v n) →
+    conclusion_toeplitz_shortest_negative_certificate_tail_rigidity_certificate κ u =
+      conclusion_toeplitz_shortest_negative_certificate_tail_rigidity_certificate κ v) ∧
+    visibleJointHorizon κ ≤ N ∧
+    D.kappaReadable ∧
+    D.reconstructionFrom4KappaSamples ∧
+    D.reconstructionFromMomentSegment
+
+/-- Paper label: `thm:conclusion-toeplitz-defect-revelation-two-parameter-irreducibility`. The
+certificate-length lower bound `2κ - 2` comes from the shortest negative-certificate witness, the
+depth lower bound `2κ` is the sharp visible joint horizon, and at that exact parameter pair the
+finite-defect reconstruction and the strict negative Toeplitz witness are both available. -/
+theorem paper_conclusion_toeplitz_defect_revelation_two_parameter_irreducibility
+    {β : Type*} (audit : (ℂ → ℂ) → β)
+    (hAudit : toeplitzAuditFactorsThroughKernel audit)
+    (κ : ℕ) (D : Omega.Zeta.FiniteDefectCompleteReconstructionData κ)
+    (σ v : Fin κ → ℝ) (C : ℂ → ℂ) (η : ℝ)
+    (hnonzero : ∃ i, σ i * v i ≠ 0) (hκ : 1 ≤ κ) :
+    (∀ L : ℕ,
+      L < Omega.Zeta.xi_toeplitz_negative_inertia_minimal_sampling_lastIndex κ →
+        ¬ conclusion_toeplitz_defect_revelation_two_parameter_irreducibility_reveals
+            κ L (visibleJointHorizon κ) D) ∧
+      (∀ N : ℕ,
+        N < visibleJointHorizon κ →
+          ¬ conclusion_toeplitz_defect_revelation_two_parameter_irreducibility_reveals
+              κ (Omega.Zeta.xi_toeplitz_negative_inertia_minimal_sampling_lastIndex κ) N D) ∧
+      conclusion_toeplitz_defect_revelation_two_parameter_irreducibility_reveals
+          κ (Omega.Zeta.xi_toeplitz_negative_inertia_minimal_sampling_lastIndex κ)
+            (visibleJointHorizon κ) D ∧
+      toeplitzNegativeWitness σ v < 0 := by
+  rcases paper_conclusion_toeplitz_shortest_negative_certificate_tail_rigidity κ with
+    ⟨hFull, hShort, _, _⟩
+  rcases Omega.Zeta.paper_xi_finite_defect_complete_reconstruction κ D with
+    ⟨hReadable, h4κ, h2κ, _⟩
+  rcases paper_conclusion_toeplitz_negative_geometry_strictification_orthogonal_split
+      audit hAudit σ v C η hnonzero with
+    ⟨_, _, _, hneg, _, _⟩
+  refine ⟨?_, ?_, ?_, hneg⟩
+  · intro L hL hReveal
+    rcases hShort with ⟨u, v, hShortPrefix, hSing, hNon⟩
+    have hPrefix : ∀ n ≤ L, u n = v n := by
+      intro n hn
+      exact hShortPrefix n (lt_of_le_of_lt hn hL)
+    have hCertEq :=
+      hReveal.1 u v hPrefix
+    have hCertNe :
+        conclusion_toeplitz_shortest_negative_certificate_tail_rigidity_certificate κ u ≠
+          conclusion_toeplitz_shortest_negative_certificate_tail_rigidity_certificate κ v := by
+      have hSing' :
+          u (Omega.Zeta.xi_toeplitz_negative_inertia_minimal_sampling_lastIndex κ) = 0 := by
+        simpa [Omega.Zeta.xi_toeplitz_negative_inertia_minimal_sampling_hankelBlockSingular] using
+          hSing
+      have hNon' :
+          v (Omega.Zeta.xi_toeplitz_negative_inertia_minimal_sampling_lastIndex κ) ≠ 0 := by
+        simpa [Omega.Zeta.xi_toeplitz_negative_inertia_minimal_sampling_hankelBlockNonsingular] using
+          hNon
+      intro h
+      have hfst := congrArg Prod.fst h
+      have hkNe : κ - 1 ≠ κ := by omega
+      simp [conclusion_toeplitz_shortest_negative_certificate_tail_rigidity_certificate,
+        Omega.Zeta.xi_toeplitz_negative_inertia_minimal_sampling_negativeInertia, hSing', hNon'] at hfst
+      exact hkNe hfst
+    exact hCertNe hCertEq
+  · intro N hN hReveal
+    exact (not_le_of_gt hN) hReveal.2.1
+  · refine ⟨?_, le_rfl, hReadable, h4κ, h2κ⟩
+    intro u v hPrefix
+    exact hFull u v hPrefix
 
 end Omega.Conclusion

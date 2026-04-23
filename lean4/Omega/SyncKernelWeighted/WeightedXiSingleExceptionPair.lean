@@ -1,3 +1,4 @@
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Tactic
 import Mathlib.Topology.Order.IntermediateValue
 
@@ -58,6 +59,10 @@ lemma sync_kernel_weighted_xi_single_exception_pair_signs :
 /-- The quadratic lift attached to a root `t > 2` of the invariant cubic. -/
 def sync_kernel_weighted_xi_single_exception_pair_alpha (t : ℝ) : ℝ :=
   (t + Real.sqrt (t ^ 2 - 4)) / 2
+
+/-- The off-critical coordinate attached to the exceptional real root `α > 1`. -/
+def sync_kernel_weighted_xi_exception_coordinate_beta (α : ℝ) : ℝ :=
+  Real.log α / Real.log 3
 
 /-- The positive exceptional root attached to `t > 2` solves `r^2 - t r + 1 = 0`. -/
 lemma sync_kernel_weighted_xi_single_exception_pair_alpha_quad {t : ℝ} (ht : 2 < t) :
@@ -178,6 +183,100 @@ theorem paper_sync_kernel_weighted_xi_single_exception_pair :
     rfl
   · refine ⟨t1, t2, t3, α, ht1.1, ht1.2, hPt1, ht2.1, ht2.2, hPt2, ht3.1, ht3.2, hPt3,
       rfl, hαgt1, hαquad, hsum, hNα, hNinv⟩
+
+/-- Paper label: `thm:sync-kernel-weighted-xi-exception-coordinate`. The exceptional real zero
+pair is parameterized by `β = log α / log 3`, while the two remaining cubic roots in `(-2,0)`
+produce critical-line angle coordinates through `t = 2 cos θ`. -/
+theorem paper_sync_kernel_weighted_xi_exception_coordinate :
+    ∃ t1 t2 t3 α β θ1 θ2 : ℝ,
+      -2 < t1 ∧
+      t1 < -1 ∧
+      sync_kernel_weighted_xi_single_exception_pair_P t1 = 0 ∧
+      -1 < t2 ∧
+      t2 < 0 ∧
+      sync_kernel_weighted_xi_single_exception_pair_P t2 = 0 ∧
+      3 < t3 ∧
+      t3 < 4 ∧
+      sync_kernel_weighted_xi_single_exception_pair_P t3 = 0 ∧
+      α = sync_kernel_weighted_xi_single_exception_pair_alpha t3 ∧
+      β = sync_kernel_weighted_xi_exception_coordinate_beta α ∧
+      1 < α ∧
+      α + α⁻¹ = t3 ∧
+      0 < β ∧
+      Real.rpow 3 β = α ∧
+      Real.rpow 3 (-β) = α⁻¹ ∧
+      sync_kernel_weighted_xi_single_exception_pair_N (Real.rpow 3 β) = 0 ∧
+      sync_kernel_weighted_xi_single_exception_pair_N (Real.rpow 3 (-β)) = 0 ∧
+      θ1 ∈ Set.Ioo (Real.pi / 2) Real.pi ∧
+      2 * Real.cos θ1 = t1 ∧
+      θ2 ∈ Set.Ioo (Real.pi / 2) Real.pi ∧
+      2 * Real.cos θ2 = t2 := by
+  rcases paper_sync_kernel_weighted_xi_single_exception_pair with
+    ⟨_, _, _, _, t1, t2, t3, α, ht1lo, ht1hi, hPt1, ht2lo, ht2hi, hPt2, ht3lo, ht3hi, hPt3,
+      hαrfl, hαgt1, _, hsum, hNα, hNinv⟩
+  let β := sync_kernel_weighted_xi_exception_coordinate_beta α
+  have hthree_pos : 0 < (3 : ℝ) := by norm_num
+  have hlog3_pos : 0 < Real.log 3 := Real.log_pos (by norm_num)
+  have hlog3_ne : Real.log 3 ≠ 0 := hlog3_pos.ne'
+  have hlogα_pos : 0 < Real.log α := Real.log_pos hαgt1
+  have hβpos : 0 < β := by
+    dsimp [β, sync_kernel_weighted_xi_exception_coordinate_beta]
+    exact div_pos hlogα_pos hlog3_pos
+  have hβeq : β = sync_kernel_weighted_xi_exception_coordinate_beta α := rfl
+  have hpowβ : Real.rpow 3 β = α := by
+    calc
+      Real.rpow 3 β = Real.exp (Real.log 3 * β) := by
+        simpa [mul_comm] using (Real.rpow_def_of_pos hthree_pos β)
+      _ = Real.exp (Real.log α) := by
+        congr 1
+        dsimp [β, sync_kernel_weighted_xi_exception_coordinate_beta]
+        field_simp [hlog3_ne]
+      _ = α := by
+        rw [Real.exp_log (lt_trans zero_lt_one hαgt1)]
+  have hpowNeg : Real.rpow 3 (-β) = α⁻¹ := by
+    calc
+      Real.rpow 3 (-β) = (Real.rpow 3 β)⁻¹ := by
+        simpa using (Real.rpow_neg (by norm_num : (0 : ℝ) ≤ 3) β)
+      _ = α⁻¹ := by rw [hpowβ]
+  have hNpowβ :
+      sync_kernel_weighted_xi_single_exception_pair_N (Real.rpow 3 β) = 0 := by
+    rw [hpowβ]
+    exact hNα
+  have hNpowNeg :
+      sync_kernel_weighted_xi_single_exception_pair_N (Real.rpow 3 (-β)) = 0 := by
+    rw [hpowNeg]
+    exact hNinv
+  have hnegcos_cont : Continuous fun θ : ℝ => -2 * Real.cos θ := by
+    continuity
+  have hpi_half_le_pi : Real.pi / 2 ≤ Real.pi := by
+    nlinarith [Real.pi_pos]
+  have ht1_mem :
+      -t1 ∈ Set.Ioo ((fun θ : ℝ => -2 * Real.cos θ) (Real.pi / 2))
+        ((fun θ : ℝ => -2 * Real.cos θ) Real.pi) := by
+    constructor
+    · have ht1neg : 0 < -t1 := by
+        have ht1lt0 : t1 < 0 := lt_trans ht1hi (by norm_num)
+        linarith
+      simpa [Real.cos_pi_div_two] using ht1neg
+    · have ht1lt2 : -t1 < 2 := by linarith
+      simpa [Real.cos_pi] using ht1lt2
+  rcases intermediate_value_Ioo hpi_half_le_pi hnegcos_cont.continuousOn ht1_mem with
+    ⟨θ1, hθ1, hθ1eq⟩
+  have hθ1eq' : 2 * Real.cos θ1 = t1 := by linarith
+  have ht2_mem :
+      -t2 ∈ Set.Ioo ((fun θ : ℝ => -2 * Real.cos θ) (Real.pi / 2))
+        ((fun θ : ℝ => -2 * Real.cos θ) Real.pi) := by
+    constructor
+    · have ht2neg : 0 < -t2 := by linarith
+      simpa [Real.cos_pi_div_two] using ht2neg
+    · have ht2lt2 : -t2 < 2 := by linarith
+      simpa [Real.cos_pi] using ht2lt2
+  rcases intermediate_value_Ioo hpi_half_le_pi hnegcos_cont.continuousOn ht2_mem with
+    ⟨θ2, hθ2, hθ2eq⟩
+  have hθ2eq' : 2 * Real.cos θ2 = t2 := by linarith
+  refine ⟨t1, t2, t3, α, β, θ1, θ2, ht1lo, ht1hi, hPt1, ht2lo, ht2hi, hPt2, ht3lo, ht3hi,
+    hPt3, hαrfl, hβeq, hαgt1, hsum, hβpos, hpowβ, hpowNeg, hNpowβ, hNpowNeg, hθ1, hθ1eq',
+    hθ2, hθ2eq'⟩
 
 end
 
