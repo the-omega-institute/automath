@@ -794,3 +794,5 @@ import Omega.Conclusion.MaxfiberRelativeEntropyLoss
 import Omega.Conclusion.VisibleCircleDimensionDoesNotControlLedgerGrowth
 import Omega.Conclusion.FixedResolutionParetoColdendLogCusp
 import Omega.Conclusion.PrimeShiftEllipseRenormalizationExponent
+import Omega.Conclusion.ZGPrimePairShadowCorrelationLaw
+import Omega.Conclusion.ZGFixedConductorShadowPoleRigidity
