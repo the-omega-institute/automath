@@ -492,6 +492,38 @@ s>D_0L_h+\log_2\!\bigl((1-\varepsilon_m)^{-1}\bigr)
 \end{enumerate}
 该结论只是有限测试稳定账本；它不声称未声明的块长度、分箱或机制对已经满足全局独立性或完整随机基线。
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{proposition}[有限 packet 平均的确定性冻结证书]\label{prop:distill-bourgain-frt-finite-packet-freezing-extraction}
+\textbf{依赖状态：conditional audit / construction.}
+令 \(\mathcal P\) 为非空有限 packet 族，令 \(\alpha_P\in\QQ_{\ge0}\) 满足 \(\sum_{P\in\mathcal P}\alpha_P=1\)。对每个 \(P\in\mathcal P\)，给定一个已离线计算的残差值 \(R(P)\in\QQ_{\ge0}\) 与一个生存谓词 \(\chi(P)\in\{0,1\}\)。给定 \(\theta,\eta\in\QQ_{>0}\)。若有限审计账本证明
+\[
+\sum_{P:\chi(P)=1}\alpha_P\ge\theta,
+\qquad
+\sum_{P:\chi(P)=1}\alpha_P R(P)\le\theta\eta,
+\]
+则存在 \(P_\ast\in\mathcal P\) 使
+\[
+\alpha_{P_\ast}>0,\qquad \chi(P_\ast)=1,\qquad R(P_\ast)\le\eta.
+\]
+因此，任何以平均、随机抽样或大偏差语言得到的有限 packet 结论，只有在选定并存储这样的 \(P_\ast\) 后，才成为本文意义下的确定性粗糙统计证书。若没有给出上述 \(\theta\)-质量账本或没有冻结 \(P_\ast\)，则至多说明当前有限 packet 测试尚未完成证书抽取，而不能声称所有未测试 packet 或其它机制已经通过随机性判别。
+\end{proposition}
+\begin{proof}
+设反面成立，即每个满足 \(\alpha_P>0\) 且 \(\chi(P)=1\) 的 packet 都有 \(R(P)>\eta\)。由于所有数据为有理数且 \(\mathcal P\) 有限，求和可逐项比较，得到
+\[
+\sum_{P:\chi(P)=1}\alpha_P R(P)
+>
+\eta\sum_{P:\chi(P)=1}\alpha_P
+\ge
+\eta\theta,
+\]
+这与第二个审计不等式 \(\sum_{\chi(P)=1}\alpha_P R(P)\le\theta\eta\) 矛盾。因此存在正权且生存的 \(P_\ast\) 满足 \(R(P_\ast)\le\eta\)。
+
+该证明只使用有限求和与显式生存谓词；它没有使用 packet 族外的任何概率模型。故冻结后的 \((P_\ast,R(P_\ast),\chi(P_\ast))\) 是确定性证书，而缺少冻结步骤时，平均界本身仍只是有限族内部的存在性信息。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 第一条由最大值取在更大集合上立得。第二条是最大值定义的直接等价：最大残差不超过 \(\eta\) 当且仅当每个被列入账本的残差均不超过 \(\eta\)。第三条由第一条应用于递增测试族得到单调性；若所有有限阶段的最大残差都不超过 \(\eta\)，任取并集中的一个测试，它属于某个有限阶段，故在该阶段已经通过。证毕。
 \end{proof}

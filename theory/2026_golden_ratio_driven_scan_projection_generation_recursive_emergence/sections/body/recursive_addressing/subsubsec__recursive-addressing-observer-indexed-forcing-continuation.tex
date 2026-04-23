@@ -142,6 +142,47 @@ p\Vdash \operatorname{Val}_{p,\eta}(t)=\operatorname{Val}_{p,\eta}(t')
   \item 反过来，凡是在上述 primitive 语法中推出的对象层等式，都可整理为一份有限 equality ledger。因此，在该语法内，等式不能由图示相似性或规范化步骤凭空产生；它必须回指到某个非 \(\mathsf{NULL}\) 读出、某条值保持重写或一条 common-notion 规则。
 \end{enumerate}
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{proposition}[随机分支读出的确定性冻结与提升门控]\label{prop:distill-bourgain-forcing-random-certificate-extraction}
+\textbf{依赖状态：conditional audit / conditional rigidity.}
+固定信息状态 \(p\)，有限指标集 \(I\)，以及对每个 \(i\in I\) 的细化状态 \(q_i\le p\)。令 \(\mathcal E\) 表示一个对象层等式断言 \(t=t'\)。假设给定有限审计数据
+\[
+(\lambda_i,L_i,\sigma_i,\pi_i)_{i\in I},
+\]
+其中 \(\lambda_i\in\QQ_{\ge0}\)、\(\sum_i\lambda_i=1\)，\(L_i\) 是一份候选有限 equality ledger 或空符号，\(\sigma_i,\pi_i\in\{0,1\}\)。这些数据的语义规定如下：若 \(\sigma_i=1\)，则 \(L_i\) 是在状态 \(q_i\) 上证明 \(\mathcal E\) 的有限 equality ledger，因而对所有使两侧在 \(q_i\) 上已定义的地址--值环境 \(\eta\) 有
+\[
+q_i\Vdash \operatorname{Val}_{q_i,\eta}(t)=\operatorname{Val}_{q_i,\eta}(t').
+\]
+若 \(\pi_i=1\)，则验证器还显式登记了提升规则
+\[
+(q_i,L_i,\mathcal E)\leadsto_p \mathcal E,
+\]
+其含义正是
+\[
+p\Vdash \operatorname{Val}_{p,\eta}(t)=\operatorname{Val}_{p,\eta}(t')
+\]
+对所有使两侧在 \(p\) 上已定义的环境 \(\eta\) 成立。定义该有限随机分支族的可提升成功质量为
+\[
+M_p(I):=\sum_{i\in I}\lambda_i\sigma_i\pi_i.
+\]
+则：
+\begin{enumerate}
+  \item 若 \(M_p(I)>0\)，则存在 \(i_\ast\in I\) 使 \(\lambda_{i_\ast}>0\)、\(\sigma_{i_\ast}=1\)、\(\pi_{i_\ast}=1\)。冻结三元组 \((q_{i_\ast},L_{i_\ast},\mathcal E)\) 后得到状态 \(p\) 上的一份确定性对象层等式证书；
+  \item 若 \(\sum_i\lambda_i\sigma_i>0\)，则至少存在某个细化状态 \(q_i\) 上的确定性等式 ledger；但除非相应 \(π_i=1\)，该 ledger 只停留在 \(q_i\) 层，不能自动升级为 \(p\) 上的 forcing 结论；
+  \item 若 \(M_p(I)=0\)，则只能推出当前抽样分支族中没有同时满足成功与提升登记的分支。它不推出 \(p\) 上 \(\mathcal E\) 为假，也不排除存在未列入 \(I\) 的其它确定性证明账本。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+第一条由有限和的正性直接给出：若每个正权分支都满足 \(\sigma_i\pi_i=0\)，则 \(M_p(I)=0\)，与假设矛盾。因此可取 \(i_\ast\) 使 \(\lambda_{i_\ast}>0\) 且 \(\sigma_{i_\ast}=\pi_{i_\ast}=1\)。由 \(\sigma_{i_\ast}=1\)，\(L_{i_\ast}\) 是 \(q_{i_\ast}\) 上的有限 equality ledger；再由 \(\pi_{i_\ast}=1\) 的定义，登记的提升规则把该 ledger 编译为状态 \(p\) 上的对象层等式证书。
+
+第二条同理，\(\sum_i\lambda_i\sigma_i>0\) 给出一个正权成功分支，但该结论只使用 \(\sigma_i\) 的语义，因此只得到 \(q_i\) 层 forcing。forcing 的通常细化单调性并不提供从 \(q_i\le p\) 回到 \(p\) 的反向提升；反向提升恰由 \(\pi_i=1\) 单独登记。
+
+第三条只是对有限审计域的否定陈述。\(M_p(I)=0\) 说明在已列出的有限分支中没有正权分支同时通过成功位与提升位；该命题没有量化所有可能 ledger，故不能推出对象层断言在 \(p\) 上不可证或为假。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 第一条正是推论 \ref{cor:observer-indexed-explicit-lifting}：复合表达式要求所有子项在同一可比较域中解释；若不存在共同细化状态，则没有统一对象层评价函数，故表达式不定义。
 
