@@ -4,7 +4,7 @@
 Workflow:
   Stage A  discovery via gh search repos + Codex/Claude candidate review
   Stage B  deep mathematical research, score-gated (>= 8), max 5 rounds
-  Stage C  issue drafting in Tolmeton style + Claude review gate
+  Stage C  issue/reply/proposal drafting in Tolmeton style + review gate
   Stage D  interactive approval gate + gh issue create
 
 The script reuses subprocess/state patterns from tools/chatgpt-oracle/oracle_pipeline.py,
@@ -217,6 +217,7 @@ class RepoState:
     findings: list[Any] = field(default_factory=list)
     draft_title: str = ""
     draft_body: str = ""
+    outreach_kind: str = ""
     action_history: list[dict[str, Any]] = field(default_factory=list)
     timestamps: dict[str, str] = field(default_factory=dict)
     submission_url: str = ""
@@ -247,6 +248,7 @@ class RepoState:
             "findings": self.findings,
             "draft_title": self.draft_title,
             "draft_body": self.draft_body,
+            "outreach_kind": self.outreach_kind,
             "action_history": self.action_history[-30:],
             "timestamps": self.timestamps,
             "submission_url": self.submission_url,
@@ -267,6 +269,7 @@ class RepoState:
         state.findings = data.get("findings", [])
         state.draft_title = data.get("draft_title", "")
         state.draft_body = data.get("draft_body", "")
+        state.outreach_kind = data.get("outreach_kind", "")
         state.action_history = data.get("action_history", data.get("events", []))
         state.timestamps = data.get("timestamps", {})
         state.submission_url = data.get("submission_url", "")
@@ -379,6 +382,24 @@ def backflow_placement_from_history(state: RepoState) -> Optional[dict[str, Any]
         if isinstance(payload, dict) and payload.get("placement") and payload.get("section_dir"):
             return payload
     return None
+
+
+def infer_outreach_kind(repo: str, backflow_placement: Optional[dict[str, Any]]) -> str:
+    """Classify the public outreach surface for a draft.
+
+    issue_reply: state is tied to a known upstream issue.
+    proposal: discovery produced a paper-side artifact that should be opened as
+      a scoped question/proposal, not as a claimed finished PR.
+    issue: default standalone issue for a target repo.
+    """
+    if repo_issue(repo) is not None:
+        return "issue_reply"
+    section_dir = str((backflow_placement or {}).get("section_dir", "") or "")
+    if section_dir == "finite_conditional_expectation":
+        return "proposal"
+    if backflow_placement:
+        return "issue"
+    return "unspecified"
 
 
 def save_state(state: RepoState) -> None:
@@ -1428,6 +1449,7 @@ def prepare_state_review_packet(repo: str, *, dry_run: bool = False) -> Path:
             f"- stage_before_review: {state.stage}",
             f"- round: {state.round}",
             f"- scores: `{json.dumps(state.scores, ensure_ascii=False)}`",
+            f"- outreach_kind: {state.outreach_kind or '(unspecified)'}",
             f"- draft_title: {state.draft_title or '(none)'}",
             f"- submission_url: {state.submission_url or '(none)'}",
             f"- backflow: `{json.dumps(backflow, ensure_ascii=False)}`",
@@ -1914,19 +1936,28 @@ def refresh_state_draft(repo: str, *, dry_run: bool = False) -> RepoState:
     )
     state.draft_title = title
     state.draft_body = body
-    state.stage = "D"
+    state.outreach_kind = infer_outreach_kind(state.repo, backflow)
+    contract = validate_draft_contract(
+        state,
+        backflow_placement=backflow,
+        dry_run=dry_run,
+        fallback_used=False,
+    )
+    state.stage = "D" if contract["approved"] else "C"
     state.round = 0
-    state.error = ""
+    state.error = "" if contract["approved"] else "; ".join(contract["errors"])[:1000]
     state.log_event(
         "C",
         "draft refreshed from deterministic backflow template",
         score=max(state.scores.get("final", []) or [0]),
-        verdict="draft_ready",
+        verdict=f"{state.outreach_kind}_ready" if contract["approved"] else "draft_contract_failed",
         detail=json.dumps(
             {
                 "title": title,
                 "body_len": len(body),
                 "backflow": backflow,
+                "outreach_kind": state.outreach_kind,
+                "contract": contract,
             },
             ensure_ascii=False,
         ),
@@ -4772,7 +4803,7 @@ def build_stage_c1_prompt(
         f"""\
         You are Stage C1 of a community outreach pipeline.
 
-        Draft a GitHub issue or issue reply for repository {repo}.
+        Draft a GitHub issue, issue reply, or scoped proposal for repository {repo}.
         This must read like a serious technical contribution, not a pitch.
         {NO_LEAN_EXECUTION_POLICY}
         {agent_context_header("context_aware", scope_context)}
@@ -4987,10 +5018,10 @@ def fallback_draft(
         return title, sanitize_issue_text(body)
 
     if section_dir == "finite_conditional_expectation":
-        title = "Finite fiber-average conditional expectation note"
+        title = "Finite fiber-average conditional expectation proposal"
         body = "\n".join(
             [
-                "I prepared a finite conditional-expectation note that may fit the analysis/probability side of this project.",
+                "I extracted a small finite conditional-expectation lemma from the Automath fold audit that may be useful as a proposal for the analysis/probability side of this repository.",
                 "",
                 "### Main statement",
                 "",
@@ -5010,13 +5041,22 @@ def fallback_draft(
                 "",
                 "The one-fiber uniform case gives the layer-average `L^2` contraction and zero-variance statement used in the Automath fold audits.",
                 "",
+                "### Possible target-side API",
+                "",
+                "If this is a useful direction for `teorth/analysis`, the contribution could be packaged as an explicit finite combinatorial counterpart to the usual conditional-expectation viewpoint:",
+                "",
+                "- a finite `fiberAverage` operator for a factor map",
+                "- the `L^2` contraction/Pythagoras identity",
+                "- finite mean and variance helpers",
+                "- the corrected zero-variance statement for the one-atom quotient case",
+                "",
                 "### Paper-side artifact",
                 "",
                 f"- `{_repo_relative(Path(tex_path)) if tex_path else 'theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/sections/appendix/finite_conditional_expectation/main.tex'}`",
                 "",
                 "### Scope",
                 "",
-                "This is an elementary finite theorem, intended as a clean bridge from explicit finite fiber averages to the standard conditional-expectation viewpoint. I am not claiming that this outreach pipeline has added or checked a Lean file in the target repository. If useful, the next step would be a separate target-side Lean contribution reviewed against the target repository's current probability API.",
+                "This is a proposal/question rather than a finished PR. The theorem is elementary, and the point is to expose a clean finite fiber-average API that bridges explicit finite sums with the standard conditional-expectation viewpoint. I am not claiming that this outreach pipeline has added or checked a Lean file in the target repository. If the maintainers think the lemma belongs here, the next step would be a separate target-side Lean contribution reviewed against the repository's current probability API.",
                 "",
                 AUTOMATH_TRAILER,
             ]
@@ -5143,6 +5183,7 @@ def validate_draft_contract(
         "warnings": warnings,
         "referenced_paths": [_repo_relative(path) for path in referenced_paths],
         "backflow": backflow_placement or {},
+        "outreach_kind": state.outreach_kind or infer_outreach_kind(state.repo, backflow_placement),
     }
 
 
@@ -5247,6 +5288,7 @@ def run_stage_c(
 
     state.draft_title = title
     state.draft_body = sanitize_issue_text(body)
+    state.outreach_kind = infer_outreach_kind(state.repo, backflow_placement)
     c2_score = coerce_score(c2_data.get("overall_score"), 0)
     approved_raw = c2_data.get("approved")
     c2_approval_flag = approved_raw is True or str(approved_raw).strip().lower() in {"true", "yes", "approved"}
@@ -5272,6 +5314,7 @@ def run_stage_c(
             {
                 "title": title[:120],
                 "body_len": len(state.draft_body),
+                "outreach_kind": state.outreach_kind,
                 "c2_notes": str(c2_data.get("notes", ""))[:800],
                 "c2_agent_context_mode": c2_context_mode,
                 "contract": contract,
@@ -5329,6 +5372,7 @@ def stage_d_prompt(state: RepoState) -> str:
         [
             "=" * 80,
             f"Target repo: {state.repo}",
+            f"Outreach kind: {state.outreach_kind or 'unspecified'}",
             f"Title: {state.draft_title}",
             "",
             state.draft_body,
@@ -5774,6 +5818,8 @@ def print_status() -> None:
         claude_scores = state.scores.get("claude", [])
         print(state.repo)
         print(f"  Stage:    {state.stage}")
+        if state.outreach_kind:
+            print(f"  Outreach: {state.outreach_kind}")
         print(f"  Round:    {state.round}")
         print(f"  Scores:   codex={codex_scores} claude={claude_scores} final={final_scores}")
         backflow = backflow_placement_from_history(state)
