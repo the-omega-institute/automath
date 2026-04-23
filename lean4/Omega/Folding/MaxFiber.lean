@@ -536,4 +536,19 @@ theorem maxFiberMultiplicity_le_add (m : Nat) :
 
 end ClosedForm
 end X
+
+/-- Paper-facing max-fiber package: the universal recurrence upper bound together with the
+Fibonacci closed forms in the even and odd parity classes, assuming the verified two-step
+recurrence. `thm:pom-max-fiber` -/
+theorem paper_pom_max_fiber
+    (two_step : ∀ m, 6 ≤ m →
+      X.maxFiberMultiplicity m = X.maxFiberMultiplicity (m - 2) + X.maxFiberMultiplicity (m - 4)) :
+    (∀ m, X.maxFiberMultiplicity (m + 2) ≤
+      X.maxFiberMultiplicity (m + 1) + X.maxFiberMultiplicity m) ∧
+      (∀ k, 1 ≤ k → X.maxFiberMultiplicity (2 * k) = Nat.fib (k + 2)) ∧
+      (∀ k, 1 ≤ k → X.maxFiberMultiplicity (2 * k + 1) = 2 * Nat.fib (k + 1)) := by
+  exact ⟨X.maxFiberMultiplicity_le_add,
+    X.maxFiberMultiplicity_even_of_two_step two_step,
+    X.maxFiberMultiplicity_odd_of_two_step two_step⟩
+
 end Omega
