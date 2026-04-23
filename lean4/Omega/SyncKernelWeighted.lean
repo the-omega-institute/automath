@@ -177,6 +177,7 @@ import Omega.SyncKernelWeighted.UnitarySliceHalfPhaseLocking
 import Omega.SyncKernelWeighted.UnitRootTwistThreshold
 import Omega.SyncKernelWeighted.VectorPotentialPhiMinusLdpParam
 import Omega.SyncKernelWeighted.WeightedNewmanQGaloisS37
+import Omega.SyncKernelWeighted.WeightedNewmanQSplittingP37
 import Omega.SyncKernelWeighted.WeightedNewmanThreshold
 import Omega.SyncKernelWeighted.WeightedPhaseAmplitude
 import Omega.SyncKernelWeighted.TracePalindromeCompletedReal

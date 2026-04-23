@@ -77,6 +77,7 @@ import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiFourRigidityResidueDepthNormalization
 import Omega.Zeta.DerivedPickPoissonNoFiniteEnergyThermodynamicLimit
+import Omega.Zeta.DerivedPickPoissonFixedFluxUniformSeparationQuadraticCollapse
 import Omega.Zeta.XiTimeVolumeEntropyStateEquation
 import Omega.Zeta.XiPoissonCoarsegrainingFDivergenceContraction
 import Omega.Zeta.XiSingleBaseDealiasingCountableException
