@@ -44,6 +44,7 @@ import Omega.CircleDimension.CdimAnomalySplittingTorsorObstruction
 import Omega.CircleDimension.AnomalyRank2FullTorsionTranslation
 import Omega.CircleDimension.CdimAnomalyTwistLedgerBilinearCoupling
 import Omega.CircleDimension.CdimDrivenNear1PoleApproachLaw
+import Omega.CircleDimension.CdimSpectrumZerosAnnulus
 import Omega.CircleDimension.CdimStarCompatibleFG
 import Omega.CircleDimension.CdimStarEndomorphismLocalizedDegree
 import Omega.CircleDimension.CdimS4A4V4Jacobian3torsor

@@ -94,6 +94,7 @@ import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
 import Omega.Zeta.XiLeyangTwoScaleCrossratioCrossingDrift
 import Omega.Zeta.XiLimitDefectPotentialRationalization
+import Omega.Zeta.XiLimitDefectPotentialFourierInjective
 import Omega.Zeta.XiLimitDefectPotentialSpectralTailReadsDeltaMax
 import Omega.Zeta.XiLimitDefectPotentialL2EnergyKernel
 import Omega.Zeta.XiLimitDefectPotentialVsDepthProfile
