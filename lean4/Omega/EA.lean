@@ -1,4 +1,5 @@
 import Omega.EA.AddAsFold
+import Omega.EA.AddDefinitional
 import Omega.EA.AddressNaturality
 import Omega.EA.ArithComposition
 import Omega.EA.AutDimensionSqueeze
