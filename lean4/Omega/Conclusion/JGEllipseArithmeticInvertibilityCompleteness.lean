@@ -12,7 +12,10 @@ theorem paper_conclusion_jg_ellipse_arithmetic_invertibility_completeness {N1 N2
   have hsqrt : (Real.sqrt N1 : ℝ) = Real.sqrt N2 := by
     linarith
   have hsq : (N1 : ℝ) = N2 := by
-    nlinarith [Real.sq_sqrt (Nat.cast_nonneg N1), Real.sq_sqrt (Nat.cast_nonneg N2), hsqrt]
+    calc
+      (N1 : ℝ) = (Real.sqrt N1 : ℝ) ^ 2 := by rw [Real.sq_sqrt (Nat.cast_nonneg N1)]
+      _ = (Real.sqrt N2 : ℝ) ^ 2 := by exact congrArg (fun x : ℝ => x ^ 2) hsqrt
+      _ = N2 := by rw [Real.sq_sqrt (Nat.cast_nonneg N2)]
   exact Nat.cast_injective (R := ℝ) hsq
 
 end Omega.Conclusion
