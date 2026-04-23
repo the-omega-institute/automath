@@ -183,6 +183,7 @@ import Omega.SyncKernelWeighted.TracePalindromeEvenInvariant
 import Omega.SyncKernelWeighted.DeltaCoeffPalindrome
 import Omega.SyncKernelWeighted.PrimitiveCompletionHatp
 import Omega.SyncKernelWeighted.EdgeworthSixEight
+import Omega.SyncKernelWeighted.EinsteinLegendre
 import Omega.SyncKernelWeighted.EdgeworthFourth
 import Omega.SyncKernelWeighted.DiscSquareSubstitutionSplit
 import Omega.SyncKernelWeighted.FiniteRhParityGeneral
