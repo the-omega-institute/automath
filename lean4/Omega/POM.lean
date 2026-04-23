@@ -182,6 +182,7 @@ import Omega.POM.DiagonalRateAbsorbingWronskianIdentity
 import Omega.POM.DiagonalRateAbsorbingWronskianIdentitySecondary
 import Omega.POM.DiagonalRateAbsorbingFullVsDeletedInterlacing
 import Omega.POM.DiagonalRateCriticalConductanceTensorMultiplicativity
+import Omega.POM.DiagonalRateCriticalCheegerAuditableUpperBound
 import Omega.POM.DiagonalRateSeparationWeightSignRule
 import Omega.POM.DiagonalRateAbsorbingMeanHitTime
 import Omega.POM.DiagonalRateAbsorbingHitPGF
