@@ -8,6 +8,7 @@ import Omega.SyncKernelWeighted.CarryFreeSkeletonThree
 import Omega.SyncKernelWeighted.C1CutFlux
 import Omega.SyncKernelWeighted.NoKappa1InCore
 import Omega.SyncKernelWeighted.ChebyshevDworkCongruenceChain
+import Omega.SyncKernelWeighted.ChebyshevDworkMatrixfree
 import Omega.SyncKernelWeighted.ChebyshevWittCompleted
 import Omega.SyncKernelWeighted.ChebyshevFrobeniusPDerivationIntegrality
 import Omega.SyncKernelWeighted.CharacterPhaseCyclotomicElimination
