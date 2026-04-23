@@ -202,6 +202,7 @@ import Omega.POM.DiagonalRateRefreshCountScgfDerivatives
 import Omega.POM.DiagonalRateTwoOrbitHeavyLightCubic
 import Omega.POM.DiagonalRateRefreshFundamentalMatrixRankoneSet
 import Omega.POM.DiagonalRateUniformClosedForm
+import Omega.POM.DiagonalRateUniformGlobalUpper
 import Omega.POM.DiagonalRateRefreshHittingTimeGeometricSpectralDecomp
 import Omega.POM.DiagonalRateRefreshHittingTimeMeanClosed
 import Omega.POM.DiagonalRateRefreshKronStarEquivalence
