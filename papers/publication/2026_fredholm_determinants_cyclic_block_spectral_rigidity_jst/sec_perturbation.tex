@@ -1031,6 +1031,62 @@ on the recoded shift. For \(t\in\CC\), define the weighted matrix
   M_t(i,j):=B_{ij}e^{t g(i,j)}.
 \]
 
+\begin{lemma}[Block recoding preserves periodic weights and twisted determinant germs]
+  \label{lem:block-recoding-twisted-determinant}
+  Let \(\pi:X_A^+\to X_B^+\) be the \((m-1)\)-block conjugacy,
+  \[
+    (\pi x)_k=(x_k,\dots,x_{k+m-2}),
+  \]
+  and define
+  \[
+    S_n^{(B)}g(y):=\sum_{k=0}^{n-1}g(y_k,y_{k+1})
+    \qquad (y\in X_B^+).
+  \]
+  Then \(\pi\circ\sigma_A=\sigma_B\circ\pi\), and for every \(n\ge1\)
+  the restriction of \(\pi\) is a bijection
+  \[
+    \pi:\Fix(\sigma_A^n)\xrightarrow{\ \cong\ }\Fix(\sigma_B^n).
+  \]
+  Moreover, for every \(x\in X_A^+\),
+  \[
+    S_nf(x)=S_n^{(B)}g(\pi x).
+  \]
+  Consequently, for every \(n\ge1\),
+  \[
+    \sum_{x\in\Fix(\sigma_A^n)}e^{tS_nf(x)}
+    =
+    \sum_{y\in\Fix(\sigma_B^n)}e^{tS_n^{(B)}g(y)}.
+  \]
+  In particular, the germ
+  \[
+    \log\det(I-zM_t)^{-1}
+    =\sum_{n\ge1}\frac{z^n}{n}
+      \sum_{x\in\Fix(\sigma_A^n)}e^{tS_nf(x)}
+  \]
+  depends only on the original observable \(f\) on
+  \((X_A^+,\sigma_A)\), not on the chosen block presentation used to
+  make it one-step.
+\end{lemma}
+
+\begin{proof}
+  The map \(\pi\) is the standard \((m-1)\)-block code, hence a
+  topological conjugacy from \((X_A^+,\sigma_A)\) onto the recoded shift
+  \((X_B^+,\sigma_B)\). Therefore it intertwines the shifts and
+  restricts to a bijection on each fixed-point set \(\Fix(\sigma_A^n)\).
+  By construction of the one-step edge weight \(g\),
+  \[
+    g\bigl((\pi x)_k,(\pi x)_{k+1}\bigr)
+    =f(x_k,\dots,x_{k+m-1}),
+  \]
+  so summing over \(k=0,\dots,n-1\) gives
+  \(S_n^{(B)}g(\pi x)=S_nf(x)\). This proves the equality of the
+  periodic weight sums. Finally, the Fredholm--Witt expansion applied to
+  the finite matrix \(M_t\) expresses the logarithm of the twisted
+  determinant germ in terms of these coefficients, so two one-step block
+  presentations of the same observable yield the same germ
+  coefficientwise.
+\end{proof}
+
 \begin{proposition}[Twisted determinants encode periodic-orbit moments]
   \label{prop:twisted-determinant-orbit-moments}
   For every \(n\ge 1\),
@@ -1047,7 +1103,8 @@ on the recoded shift. For \(t\in\CC\), define the weighted matrix
       \bigl(1-e^{tS_{\mathcal O}f}z^{|\mathcal O|}\bigr)^{-1},
   \]
   where \(\mathcal O\) runs over primitive periodic orbits of the
-  recoded shift. For every integer \(r\ge 0\),
+  recoded shift, equivalently of the original shift under the block
+  conjugacy. For every integer \(r\ge 0\),
   \[
     \left.\partial_t^r\Tr(M_t^n)\right|_{t=0}
     =\sum_{x\in\Fix(\sigma_A^n)}(S_nf(x))^r,
@@ -1064,15 +1121,24 @@ on the recoded shift. For \(t\in\CC\), define the weighted matrix
 \end{proposition}
 
 \begin{proof}
-  For each \(n\ge 1\),
+  For each \(n\ge1\), the diagonal entry \((M_t^n)_{ii}\) is the sum of
+  the weights \(e^{tS_n^{(B)}g(y)}\) over all length-\(n\) loops in the
+  recoded graph based at the state \(i\). Summing over \(i\) gives
   \[
-    \Tr(M_t^n)=\sum_{x\in\Fix(\sigma_A^n)}e^{tS_nf(x)}.
+    \Tr(M_t^n)
+    =\sum_{y\in\Fix(\sigma_B^n)}e^{tS_n^{(B)}g(y)}
+    =\sum_{x\in\Fix(\sigma_A^n)}e^{tS_nf(x)},
   \]
-  Applying \Cref{thm:fredholm-witt-bridge} to the finite matrix \(M_t\)
-  gives the first identity. The primitive-orbit product is the
-  corresponding Euler-product expansion by M\"obius inversion, exactly as
-  in \Cref{prop:prelim-trace-primitive}. Differentiating the logarithm
-  with respect to \(t\) at \(t=0\) yields the moment identities.
+  where the second equality is
+  \Cref{lem:block-recoding-twisted-determinant}. Applying
+  \Cref{thm:fredholm-witt-bridge} to the finite matrix \(M_t\) gives the
+  first determinant identity. The primitive-orbit product is the
+  corresponding Euler-product expansion by M\"obius inversion, exactly
+  as in \Cref{prop:prelim-trace-primitive}; under the block conjugacy,
+  the primitive periodic orbits of the recoded shift are canonically
+  identified with those of the original shift, with the same lengths and
+  orbit weights. Differentiating the logarithm with respect to \(t\) at
+  \(t=0\) yields the moment identities.
 \end{proof}
 
 \begin{proposition}[Twisted determinant rigidity for locally constant observables]
@@ -1281,49 +1347,131 @@ where \(\lambda=\rho(B)\). Then, in the block presentation,
   \]
 \end{proposition}
 
-\begin{proof}
-  The map \(u\mapsto \widetilde M_u\) is entire. Since \(B=\widetilde
-  M_0\) is primitive, analytic perturbation theory gives
-  \(\delta>0\), an analytic simple eigenvalue \(u\mapsto\lambda_c(u)\),
-  an analytic rank-one projector \(u\mapsto P_u\), and constants
-  \(C>0\), \(\vartheta\in(0,1)\) such that
+\begin{lemma}[Local spectral factorization of the characteristic function]
+  \label{lem:local-spectral-factorization}
+  There exist \(\delta>0\), \(C_0>0\), \(\vartheta_0\in(0,1)\), an
+  analytic simple eigenvalue branch \(u\mapsto\lambda_c(u)\), and
+  analytic rank-one projectors \(u\mapsto P_u\) on \(|u|<\delta\) such
+  that
   \[
-    \widetilde M_u^n=\lambda_c(u)^nP_u+N_u^n,
+    \lambda_c(0)=\lambda,\qquad P_0=r_0\ell_0^{\mathsf T},
+  \]
+  and for every \(n\ge1\) and \(|u|<\delta\),
+  \[
+    \widetilde M_u^n=\lambda_c(u)^nP_u+R_u^n,
     \qquad
-    \|N_u^n\|\le C(\vartheta\lambda)^n
+    \|R_u^n\|\le C_0(\vartheta_0\lambda)^n.
   \]
-  for \(|u|<\delta\) and \(n\ge 1\); see
-  \cite[Chapter~II, \S2]{Kato1995Perturbation}. Because \(\bar f\) is
-  centered,
+  Consequently, if
   \[
-    \lambda_c'(0)=0.
+    a(u):=\ell_0^{\mathsf T}P_u r_0,
   \]
-  The standard finite-state spectral method gives
+  then \(a\) is analytic on \(|u|<\delta\), \(a(0)=1\), and
   \[
-    \log\frac{\lambda_c(u)}{\lambda}
-    =-\frac{\sigma_f^2}{2}u^2+O(u^3)
-    \qquad (u\to 0),
+    \phi_n(u)
+    =\left(\frac{\lambda_c(u)}{\lambda}\right)^n a(u)
+      +O(\vartheta_0^n)
   \]
-  where
+  uniformly for \(|u|<\delta\).
+\end{lemma}
+
+\begin{proof}
+  Since \(u\mapsto\widetilde M_u\) is entire and
+  \(\widetilde M_0=B\) is primitive, the Perron eigenvalue
+  \(\lambda=\rho(B)\) is simple and isolated from the rest of the
+  spectrum. Kato's analytic perturbation theory
+  \cite[Chapter~II, \S2]{Kato1995Perturbation} therefore gives
+  \(\delta>0\), an analytic simple eigenvalue branch
+  \(u\mapsto\lambda_c(u)\), and analytic rank-one Riesz projectors
+  \(u\mapsto P_u\) for \(|u|<\delta\), with
+  \(\lambda_c(0)=\lambda\) and \(P_0=r_0\ell_0^{\mathsf T}\).
+  After shrinking \(\delta\), the complementary spectral radius is
+  bounded by \(\vartheta_0\lambda\) for some \(\vartheta_0\in(0,1)\),
+  uniformly on \(|u|<\delta\). Writing
   \[
-    \sigma_f^2
-    =-\left.\frac{\dd^2}{\dd u^2}\log\frac{\lambda_c(u)}{\lambda}
-      \right|_{u=0}>0
+    R_u:=\widetilde M_u(I-P_u),
   \]
-  whenever \(f\) is not a coboundary modulo constants; see
+  one has \(P_uR_u=R_uP_u=0\) and
+  \(\widetilde M_u^n=\lambda_c(u)^nP_u+R_u^n\). The same spectral-gap
+  argument, using the holomorphic functional calculus on a circle of
+  radius between \(\rho(R_u)\) and \(\lambda\), gives a uniform bound
+  \(\|R_u^n\|\le C_0(\vartheta_0\lambda)^n\).
+
+  Multiplying the decomposition on the left by
+  \(\lambda^{-n}\ell_0^{\mathsf T}\) and on the right by \(r_0\) gives
+  \[
+    \phi_n(u)
+    =\lambda^{-n}\ell_0^{\mathsf T}\widetilde M_u^n r_0
+    =\left(\frac{\lambda_c(u)}{\lambda}\right)^n
+      \ell_0^{\mathsf T}P_u r_0
+      +\lambda^{-n}\ell_0^{\mathsf T}R_u^n r_0.
+  \]
+  The last term is \(O(\vartheta_0^n)\) uniformly for \(|u|<\delta\),
+  and \(a(0)=\ell_0^{\mathsf T}P_0r_0=1\).
+\end{proof}
+
+\begin{lemma}[Classical quadratic expansion and variance criterion]
+  \label{lem:quadratic-expansion-variance}
+  After shrinking \(\delta\) from
+  \Cref{lem:local-spectral-factorization} if necessary, one has
+  \(\lambda_c(u)\neq0\) for \(|u|<\delta\), so
+  \[
+    \Gamma(u):=\log\frac{\lambda_c(u)}{\lambda}
+  \]
+  is analytic near \(u=0\). Because \(\bar f\) is centered,
+  \[
+    \Gamma'(0)=0.
+  \]
+  There exists \(\sigma_f^2\ge0\) such that, for real \(u\to0\),
+  \[
+    \Gamma(u)=-\frac{\sigma_f^2}{2}u^2+O(u^3).
+  \]
+  Moreover, \(\sigma_f^2=0\) if and only if \(f\) is a coboundary modulo
+  constants. In particular, under the standing hypothesis of
+  \Cref{thm:clt-spectral}, one has \(\sigma_f^2>0\).
+\end{lemma}
+
+\begin{proof}
+  Analyticity of \(\Gamma\) follows from
+  \Cref{lem:local-spectral-factorization}. The identity
+  \(\Gamma'(0)=0\), the second-order expansion at the origin, and the
+  criterion \(\sigma_f^2=0\iff f\) is a coboundary modulo constants are
+  the classical finite-state spectral-perturbation facts for twisted
+  transfer matrices; in the present finite-dimensional setting see
   \cite[Chapter~5]{Ruelle1978Thermodynamic},
-  \cite[Chapter~3]{Baladi2000PositiveTransfer},
-  and \cite[Chapter~IV]{HennionHerve2001}. Because
-  \(P_0=r_0\ell_0^{\mathsf T}\), one has
+  \cite[Chapter~3]{Baladi2000PositiveTransfer}, and
+  \cite[Chapter~IV]{HennionHerve2001}. The last sentence is the direct
+  specialization of that criterion to the hypothesis of
+  \Cref{thm:clt-spectral}.
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:clt-spectral}]
+  Let \(\lambda_c(u)\), \(a(u)\), \(\vartheta_0\), and \(\sigma_f^2\) be
+  as in
+  \Cref{lem:local-spectral-factorization,lem:quadratic-expansion-variance}.
+  Fix \(u_0\in\RR\). Since \(a\) is analytic and \(a(0)=1\),
   \[
-    \ell_0^{\mathsf T}P_{u_0/\sqrt n}r_0=1+O(n^{-1/2}).
+    a(u_0/\sqrt n)=1+O(n^{-1/2}).
   \]
-  Hence, for each fixed \(u_0\in\RR\),
+  Likewise, the expansion for
+  \(\Gamma(u)=\log(\lambda_c(u)/\lambda)\) gives
+  \[
+    n\,\Gamma(u_0/\sqrt n)
+    =-\frac{\sigma_f^2u_0^2}{2}+O(n^{-1/2}).
+  \]
+  Therefore
+  \[
+    \left(\frac{\lambda_c(u_0/\sqrt n)}{\lambda}\right)^n
+    =e^{\,n\Gamma(u_0/\sqrt n)}
+    \longrightarrow e^{-\sigma_f^2u_0^2/2}.
+  \]
+  Applying \Cref{lem:local-spectral-factorization} at \(u=u_0/\sqrt n\)
+  yields
   \[
     \phi_n(u_0/\sqrt n)
     =\left(\frac{\lambda_c(u_0/\sqrt n)}{\lambda}\right)^n
-      \ell_0^{\mathsf T}P_{u_0/\sqrt n}r_0
-      +O(\vartheta^n)
+      a(u_0/\sqrt n)
+      +O(\vartheta_0^n)
     \longrightarrow e^{-\sigma_f^2u_0^2/2}.
   \]
   L\'evy's continuity theorem yields the central limit theorem.
