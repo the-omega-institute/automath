@@ -620,6 +620,7 @@ import Omega.POM.KinkPrincipleQSelection
 import Omega.POM.ProjectiveOperatorDegeneratesToMomentKernel
 import Omega.POM.ProjectivePathAtomicPronyRank
 import Omega.POM.ProjectivePressureDiscreteConvexitySlopes
+import Omega.POM.ProductFoldAdditivity
 import Omega.POM.ProjectivePressureDiscreteFlatnessForcesAffine
 import Omega.POM.ProjectivePressureDiscreteLegendreEnvelope
 import Omega.POM.ProjwordDecidable
