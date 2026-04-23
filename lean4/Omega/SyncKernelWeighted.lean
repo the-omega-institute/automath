@@ -170,6 +170,7 @@ import Omega.SyncKernelWeighted.WittDworkCongruence
 import Omega.SyncKernelWeighted.WittNecklaceDivisibility
 import Omega.SyncKernelWeighted.WittNecklaceDworkR
 import Omega.SyncKernelWeighted.WittPkSparsification
+import Omega.SyncKernelWeighted.WittPpowerPrimitiveCoordinate
 import Omega.SyncKernelWeighted.WittThetaDerivativeFilter
 import Omega.SyncKernelWeighted.WittRootOfUnityCommonPadicLimit
 import Omega.SyncKernelWeighted.WittUnitRootLimit
