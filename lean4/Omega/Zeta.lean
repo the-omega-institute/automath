@@ -198,6 +198,7 @@ import Omega.Zeta.XiTimeLengthCocycle
 import Omega.Zeta.XiTimePart70daWindow6AbstractOrbittypeMinimalC12
 import Omega.Zeta.XiTimePart9gaCrossResolutionAffineRigidity
 import Omega.Zeta.XiTimePart9zoFibonacciCosineZerosWeylLaw
+import Omega.Zeta.XiTimePart9zoaZeroBlockMaxfiberImpotence
 import Omega.Zeta.XiTimePart9zoStarPerronDegreeQuadratic
 import Omega.Zeta.XiTimePart9gcResolutionTowerHaarLimit
 import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne
