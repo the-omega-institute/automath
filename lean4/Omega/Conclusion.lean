@@ -274,6 +274,7 @@ import Omega.Conclusion.PrimesliceOmegaSupportChainCountable
 import Omega.Conclusion.GodelOrbitExtremeSmoothness
 import Omega.Conclusion.F2BinomialBasisFromDeltaNilpotent
 import Omega.Conclusion.ScreenEntropyAuditIdentity
+import Omega.Conclusion.ScreenKirchhoffDeletionContraction
 import Omega.Conclusion.ScreenExactBinaryAuditHomologicalBitBound
 import Omega.Conclusion.ScreenLinearReadoutNullTrichotomyCollapse
 import Omega.Conclusion.ScreenKernelSolenoidBicompletion
