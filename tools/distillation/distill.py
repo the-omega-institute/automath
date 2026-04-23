@@ -81,6 +81,7 @@ GLOBAL_EVIDENCE_SNIPPET_CHARS = 900
 POLICY_VERSION = 1
 ORACLE_SERVER = "http://127.0.0.1:8765"
 ORACLE_SERVER_SCRIPT = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle_server.py"
+ORACLE_DONE_DIR = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle" / "done"
 DEFAULT_ORACLE_MODEL = "chatgpt-5.4-pro-extended"
 DEFAULT_ORACLE_TIMEOUT = 7200
 ORACLE_CLAIM_TIMEOUT = int(os.environ.get("ORACLE_CLAIM_TIMEOUT", "90"))
@@ -849,6 +850,27 @@ def _oracle_cancel_task(task_id: str, reason: str) -> None:
         return
 
 
+_ORACLE_METADATA_RE = re.compile(r"^\s*<!--\s*oracle metadata:\s*.*?-->\s*", re.DOTALL)
+
+
+def _strip_oracle_response_metadata(text: str) -> str:
+    """Remove local oracle metadata comments from persisted browser responses."""
+    return _ORACLE_METADATA_RE.sub("", text or "", count=1).lstrip()
+
+
+def _read_oracle_done_response(task_id: str) -> str:
+    """Read a durable browser result from tools/chatgpt-oracle/oracle/done."""
+    if not task_id:
+        return ""
+    path = ORACLE_DONE_DIR / f"{task_id}.md"
+    if not path.exists():
+        return ""
+    try:
+        return _strip_oracle_response_metadata(read_text(path)).strip()
+    except OSError:
+        return ""
+
+
 def chatgpt_oracle_exec(
     state: DistillState,
     prompt: str,
@@ -921,6 +943,31 @@ def chatgpt_oracle_exec(
         timeout_seconds,
         model,
     )
+
+    def persist_response(response: str, source: str) -> str:
+        metadata = {
+            "task_id": task_id,
+            "model": model,
+            "timestamp": _now_iso(),
+            "prompt_length": len(prompt),
+            "response_length": len(response),
+            "pdf_path": str(pdf_path) if pdf_path else "",
+            "oracle_status_before": status_before,
+            "oracle_status_after": _oracle_server_status(),
+            "source": source,
+        }
+        write_text(
+            _artifact_path(state, f"{log_tag}_oracle_response.md"),
+            f"<!-- oracle metadata: {json.dumps(metadata)} -->\n\n{response}",
+        )
+        logger.info(
+            "ChatGPT Oracle response received: %s (%d chars, source=%s)",
+            task_id,
+            len(response),
+            source,
+        )
+        return response
+
     start = time.time()
     while time.time() - start < timeout_seconds:
         try:
@@ -928,28 +975,14 @@ def chatgpt_oracle_exec(
                 result = json.loads(resp.read().decode("utf-8"))
             if result.get("status") == "completed":
                 response = str(result.get("response", ""))
-                metadata = {
-                    "task_id": task_id,
-                    "model": model,
-                    "timestamp": _now_iso(),
-                    "prompt_length": len(prompt),
-                    "response_length": len(response),
-                    "pdf_path": str(pdf_path) if pdf_path else "",
-                    "oracle_status_before": status_before,
-                    "oracle_status_after": _oracle_server_status(),
-                }
-                write_text(
-                    _artifact_path(state, f"{log_tag}_oracle_response.md"),
-                    f"<!-- oracle metadata: {json.dumps(metadata)} -->\n\n{response}",
-                )
-                logger.info(
-                    "ChatGPT Oracle response received: %s (%d chars)",
-                    task_id,
-                    len(response),
-                )
-                return response
+                return persist_response(response, "server_result")
         except (OSError, urllib.error.URLError, json.JSONDecodeError):
             pass
+
+        done_response = _read_oracle_done_response(task_id)
+        if done_response:
+            return persist_response(done_response, "done_file")
+
         elapsed = int(time.time() - start)
         status = _oracle_server_status()
         agents = status.get("agents", {}) if isinstance(status, dict) else {}
@@ -3859,6 +3892,10 @@ def _oracle_deepening_quality_issues(data: Any, response: str) -> list[str]:
     status = str(data.get("status", "")).strip().lower()
     if status in {"parse_failed", "invalid", "unavailable", "error"}:
         return [f"Oracle deepening status is {status or 'missing'}"]
+    if status == "ok_raw":
+        return _oracle_raw_research_quality_issues(
+            str(data.get("raw_research_text", response or ""))
+        )
     chain = data.get("main_theorem_chain", [])
     if not isinstance(chain, list) or not chain:
         return ["Oracle deepening has no main_theorem_chain entries"]
@@ -3878,6 +3915,159 @@ def _oracle_deepening_quality_issues(data: Any, response: str) -> list[str]:
     return []
 
 
+def _oracle_raw_research_quality_issues(response: str) -> list[str]:
+    """Return issues for free-form Oracle research text."""
+    text = (response or "").strip()
+    if len(text) < 1200:
+        return ["Oracle raw research response is too short to be reliable"]
+    bundle_markers = (
+        "markdown writeback bundle",
+        "raw tex bundle",
+        "insertion-ready writebacks",
+        "\nfiles:\n",
+    )
+    lowered = text.lower()
+    if any(marker in lowered for marker in bundle_markers):
+        return ["Oracle raw response describes bundles/files instead of research results"]
+    result_markers = (
+        "\\begin{theorem",
+        "\\begin{proposition",
+        "\\begin{lemma",
+        "theorem",
+        "proposition",
+        "lemma",
+        "\u5b9a\u7406",
+        "\u547d\u9898",
+        "\u5f15\u7406",
+        "\u8bc1\u660e",
+        "proof",
+    )
+    if not any(marker in lowered or marker in text for marker in result_markers):
+        return ["Oracle raw response has no theorem/proposition/proof markers"]
+    return []
+
+
+def _raw_oracle_deepening_context(response: str, error: str = "") -> dict[str, Any]:
+    """Wrap free-form Oracle research so Codex can use it as context."""
+    data: dict[str, Any] = {
+        "status": "ok_raw",
+        "format": "free_form_research_text",
+        "raw_research_text": response.strip(),
+        "main_theorem_chain": [],
+        "codex_writeback_instructions": [
+            "Use raw_research_text as expansion-oriented mathematical context.",
+            "Do not assume it is already verified paper text; extract only locally provable claims.",
+        ],
+    }
+    if error:
+        data["parse_note"] = error
+    return data
+
+
+def _has_usable_oracle_deepening(data: Any) -> bool:
+    """Return true for cached Oracle data that should not be overwritten."""
+    if not isinstance(data, dict):
+        return False
+    status = str(data.get("status", "")).strip().lower()
+    if status in {"parse_failed", "invalid", "unavailable", "error"}:
+        return False
+    if status == "ok_raw":
+        return not _oracle_raw_research_quality_issues(
+            str(data.get("raw_research_text", ""))
+        )
+    chain = data.get("main_theorem_chain", [])
+    if not isinstance(chain, list) or not chain:
+        return False
+    for item in chain:
+        if not isinstance(item, dict):
+            continue
+        proof = item.get("proof_spine", [])
+        has_proof = isinstance(proof, list) and len([x for x in proof if str(x).strip()]) >= 3
+        if item.get("conclusion") and (has_proof or item.get("minimal_hypotheses")):
+            return True
+    return False
+
+
+def _recover_oracle_deepening_from_done(
+    state: DistillState,
+    depth_cycle: int,
+) -> tuple[dict[str, Any], Path, str] | None:
+    """Recover a valid Oracle deepening JSON object from durable done files."""
+    prefix = f"{_slugify(state.name)}_W_oracle_deepen_cycle{depth_cycle}"
+    if not ORACLE_DONE_DIR.exists():
+        return None
+    candidates = sorted(
+        ORACLE_DONE_DIR.glob(f"{prefix}*.md"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+    for path in candidates:
+        try:
+            response = _strip_oracle_response_metadata(read_text(path)).strip()
+        except OSError:
+            continue
+        if not response:
+            continue
+        try:
+            parsed = _extract_json(response)
+        except (ValueError, json.JSONDecodeError):
+            raw_data = _raw_oracle_deepening_context(response, "No parseable JSON found")
+            if not _oracle_deepening_quality_issues(raw_data, response):
+                return raw_data, path, response
+            continue
+        if not isinstance(parsed, dict):
+            raw_data = _raw_oracle_deepening_context(
+                response,
+                "Parsed JSON was not an object",
+            )
+            if not _oracle_deepening_quality_issues(raw_data, response):
+                return raw_data, path, response
+            continue
+        parsed.setdefault("status", "ok")
+        parsed.setdefault("main_theorem_chain", [])
+        if not _oracle_deepening_quality_issues(parsed, response):
+            return parsed, path, response
+    return None
+
+
+def _persist_recovered_oracle_deepening(
+    state: DistillState,
+    data: dict[str, Any],
+    source_path: Path,
+    response: str,
+    focused_family: Optional[dict[str, Any]],
+) -> None:
+    """Persist a recovered Oracle deepening result into state artifacts."""
+    _write_artifact_json(state, f"oracle_deepening_cycle{state.depth_cycle}.json", data)
+    _write_artifact_json(
+        state,
+        f"oracle_deepening_cycle{state.depth_cycle}_attempts.json",
+        [
+            {
+                "attempt": "recovered",
+                "status": data.get("status", "ok"),
+                "response_length": len(response),
+                "source": str(source_path.relative_to(REPO_ROOT)),
+                "issues": [],
+            }
+        ],
+    )
+    metadata = {
+        "task_id": source_path.stem,
+        "timestamp": _now_iso(),
+        "response_length": len(response),
+        "source": str(source_path.relative_to(REPO_ROOT)),
+        "recovered": True,
+    }
+    write_text(
+        _artifact_path(state, f"W_oracle_deepen_cycle{state.depth_cycle}_oracle_response.md"),
+        f"<!-- oracle metadata: {json.dumps(metadata)} -->\n\n{response}",
+    )
+    _upsert_distillation_memory(
+        _memory_entries_from_oracle_sidecar(state, data, focused_family)
+    )
+
+
 def _oracle_deepening_research(
     state: DistillState,
     payload: dict[str, Any],
@@ -3895,6 +4085,32 @@ def _oracle_deepening_research(
     """Ask ChatGPT Oracle for expansion-oriented deep reasoning context."""
     if dry_run:
         return {"status": "dry_run", "main_theorem_chain": []}
+    cached = _read_artifact_json_or_none(
+        state,
+        f"oracle_deepening_cycle{state.depth_cycle}.json",
+    )
+    if _has_usable_oracle_deepening(cached):
+        logger.info(
+            "Reusing cached Oracle deepening for cycle %d",
+            state.depth_cycle,
+        )
+        return cached
+    recovered = _recover_oracle_deepening_from_done(state, state.depth_cycle)
+    if recovered:
+        data, source_path, response = recovered
+        logger.info(
+            "Recovered Oracle deepening for cycle %d from %s",
+            state.depth_cycle,
+            source_path,
+        )
+        _persist_recovered_oracle_deepening(
+            state,
+            data,
+            source_path,
+            response,
+            focused_family,
+        )
+        return data
     family = focused_family or {
         "name": "initial writeback payload",
         "key_results": payload.get("frontier_chains", []),
@@ -3939,20 +4155,14 @@ def _oracle_deepening_research(
             try:
                 parsed = _extract_json(response)
             except (ValueError, json.JSONDecodeError) as exc:
-                parsed = {
-                    "status": "parse_failed",
-                    "error": str(exc),
-                    "raw_response": response[:4000],
-                    "main_theorem_chain": [],
-                }
+                parsed = _raw_oracle_deepening_context(response, str(exc))
             if isinstance(parsed, dict):
                 data = parsed
             else:
-                data = {
-                    "status": "invalid",
-                    "raw_response": str(parsed)[:4000],
-                    "main_theorem_chain": [],
-                }
+                data = _raw_oracle_deepening_context(
+                    response,
+                    "Parsed JSON was not an object",
+                )
             data.setdefault("status", "ok")
             data.setdefault("main_theorem_chain", [])
             issues = _oracle_deepening_quality_issues(data, response)
@@ -3998,6 +4208,22 @@ def _oracle_deepening_research(
             + "If blocked, return status=\"blocked\" with a nonempty main_theorem_chain "
             + "containing the narrowest conditional theorem chain you can defend."
         )
+    recovered = _recover_oracle_deepening_from_done(state, state.depth_cycle)
+    if recovered:
+        data, source_path, response = recovered
+        logger.info(
+            "Recovered Oracle deepening for cycle %d after failed live attempts from %s",
+            state.depth_cycle,
+            source_path,
+        )
+        _persist_recovered_oracle_deepening(
+            state,
+            data,
+            source_path,
+            response,
+            focused_family,
+        )
+        return data
     fallback = {
         "status": "unavailable",
         "main_theorem_chain": [],
