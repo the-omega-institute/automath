@@ -191,3 +191,4 @@ import Omega.SyncKernelWeighted.TracePalindrome
 import Omega.SyncKernelWeighted.EvenEdgeworthC4
 import Omega.SyncKernelWeighted.SyncSpectralTangentLock
 import Omega.SyncKernelWeighted.DeltaBranchpointsDiscriminantLock
+import Omega.SyncKernelWeighted.HalfturnPrimeDividesDiscriminant
