@@ -132,6 +132,7 @@ import Omega.Zeta.XiJSexticEllipticLattesBelyiNormalization
 import Omega.Zeta.XiJSexticHyperellipticBranchPolynomialDiscriminantFactorization
 import Omega.Zeta.XiJGMonicBoundaryReadout
 import Omega.Zeta.XiJGDiscriminantSquareclassInvariance
+import Omega.Zeta.XiQuadraticTransportGlobalEvenParity
 import Omega.Zeta.XiTerminalZmJgSignedPermutationRepresentation
 import Omega.Zeta.XiCayleyDilationMobiusConjugacyFixedpoints
 import Omega.Zeta.XiCayleyTauConjugacyLogdiff
@@ -197,6 +198,7 @@ import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne
 import Omega.Zeta.XiTimePart9xcSerrinCongruenceDiracLengthOne
 import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
 import Omega.Zeta.XiTerminalZmLeyangP3RenormalizationHensel
+import Omega.Zeta.XiTerminalZmLeyangP3V3LinearBound
 import Omega.Zeta.XiProjectivePressurePathHolderConvexity
 import Omega.Zeta.XiHzomFunctionalEquation
 import Omega.Zeta.XiRankoneFlipRadiusShallowNegative

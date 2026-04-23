@@ -13,6 +13,7 @@ import Omega.Conclusion.AmbiguityShellJordanChainGraphLift
 import Omega.Conclusion.AmbiguityShellNilpotentIndexEqualsWindow
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.AnomalyHarmonicRigidity
+import Omega.Conclusion.AxialScreenDirectSumVisibleHiddenSplit
 import Omega.Conclusion.AuditComplexityAreaEquivalence
 import Omega.Conclusion.AutComponents
 import Omega.Conclusion.AmbiguityShellZetaSyncSplitting
