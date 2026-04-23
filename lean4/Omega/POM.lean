@@ -9,6 +9,7 @@ import Omega.POM.A4TNewmanThresholdAdeOrdering
 import Omega.POM.A4TNewmanK2ClassNumber
 import Omega.POM.A4TNewmanOcticFieldGaloisS8
 import Omega.POM.A4TNewmanOcticFieldArithmetic
+import Omega.POM.A4TNewmanTransversality
 import Omega.POM.A4TNewmanLinearResponseConstant
 import Omega.POM.A4NewmanU4AlgebraicCertificate
 import Omega.POM.A4TE8TwoResolutionLayerNonembedding
@@ -116,6 +117,7 @@ import Omega.POM.CycleLatticeThetaPoissonDuality
 import Omega.POM.FiberPsiExponentMobiusReconstruct
 import Omega.POM.LocalDefectGibbsVariational
 import Omega.POM.LogMSplit40
+import Omega.POM.RootUnityFilterQ2Law
 import Omega.POM.DefectBand
 import Omega.POM.DelayMin
 import Omega.POM.DerivedFiberDeterminantExtremalEnvelope
