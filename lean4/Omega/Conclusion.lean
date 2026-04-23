@@ -222,6 +222,7 @@ import Omega.Conclusion.ChowliuForcedEdgeThreshold
 import Omega.Conclusion.ChowliuUniqueTreeThreshold
 import Omega.Conclusion.TreeApproximationUniformThresholdCertificate
 import Omega.Conclusion.FoldgaugePiEvenzetaFirstDifference
+import Omega.Conclusion.FoldGaugePurestateProjectiveSpace
 import Omega.Conclusion.CoordinateBundleDyadicBlockLaw
 import Omega.Conclusion.CoordinateBundleLogmodularityVisibleRank
 import Omega.Conclusion.CoordinateBundleOneCoordinateWorthMBits
