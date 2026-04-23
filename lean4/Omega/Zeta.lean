@@ -434,6 +434,7 @@ import Omega.Zeta.DefectLimitedAudit
 import Omega.Zeta.XiDenominatorAxisPrimeSupportCharacterization
 import Omega.Zeta.DephysicalizedHorizonQuotientDataStructure
 import Omega.Zeta.DephysicalizedEpsSoundDominatesTv
+import Omega.Zeta.DephysPetzSufficiencyEquivalences
 import Omega.Zeta.DephysPoissonBusemannTimefiber
 import Omega.Zeta.DetVpControlsRankDrop
 import Omega.Zeta.DerivedFixedFreezingRenyiSurface

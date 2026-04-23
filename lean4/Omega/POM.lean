@@ -519,6 +519,7 @@ import Omega.POM.MaxentMarkovDiagonalPlusRankoneSpectrum
 import Omega.POM.MaxentMarkovUniqueOptimalKernel
 import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensorRecursion
 import Omega.POM.MicrocanonicalAdaptiveNoGain
+import Omega.POM.MicrocanonicalFoldQueryLowerBound
 import Omega.POM.MicrocanonicalBandBounds
 import Omega.POM.MicrocanonicalCountSufficientStatisticPosteriorUniform
 import Omega.POM.MicrocanonicalCoverTimeGumbelCutoff

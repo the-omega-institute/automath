@@ -63,6 +63,7 @@ import Omega.GU.FoldBinMinDegeneracyFibAudited
 import Omega.GU.FoldBinMinDegeneracyFibNonpersistent
 import Omega.GU.FoldbinGaugeAbelian
 import Omega.GU.FoldbinUpliftUnitJumpDeltaInversion
+import Omega.GU.Foldbin6CarryHammingDistance
 import Omega.GU.FreeInvolutionCount
 import Omega.GU.GapDirichletContinuedFraction
 import Omega.GU.GodelConditionNumberIdentity
