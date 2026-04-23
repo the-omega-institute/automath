@@ -55,6 +55,8 @@ SECTION_RE = re.compile(
 )
 MANUAL_RESULT_ORDINAL_RE = re.compile(
     "(?:Result|" + "\u7ed3\u679c" + r")\s*[0-9]+"
+    r"|" + "\u6df1\u5316\u5e8f\u53f7" + r"\s*[:=：]?\s*[0-9]+"
+    r"|\b(?:deepening|continuation)\s*(?:index|number|no\.?)?\s*[:=]?\s*[0-9]+"
     r"|[A-Z]{2,}(?:-[A-Z]{2,})+-[0-9]+"
     r"|\\mathsf\{nr\}\s*=\s*[0-9]+"
     r"|\bnr\s*=\s*[0-9]+",
@@ -5248,6 +5250,7 @@ STAGE_COMMIT_FILES: dict[str, list[str]] = {
     "W": [],  # populated dynamically from writebacks.json
     "E": [
         str(REGISTRY_PATH),
+        str(DISTILLATION_MEMORY_PATH),
         str(PUBLICATION_DIR / "DISTILLATION_BOARD.md"),
     ],
 }
@@ -5263,6 +5266,7 @@ STAGE_NAMES = {
 
 COMMITTABLE_REGISTRY_FILES = {
     REGISTRY_PATH.resolve(),
+    DISTILLATION_MEMORY_PATH.resolve(),
     (PUBLICATION_DIR / "DISTILLATION_BOARD.md").resolve(),
 }
 
