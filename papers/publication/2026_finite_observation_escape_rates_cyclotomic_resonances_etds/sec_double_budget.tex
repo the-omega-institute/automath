@@ -6,24 +6,29 @@
 This section records consequences of the pressure-gap calculation from
 Section~\ref{sec:open-system}.  The survivor R\'enyi spectrum comes from
 the same killed-matrix path sum with power weights, and the collision
-threshold then follows from Chen--Stein.  All collision limits in this
-section are iid sampling statements: the sampled prefixes are independent
-with the displayed common law.  No Poisson theorem for a single orbit or
-for a weakly dependent sampling scheme is asserted here.
+threshold then follows from Chen--Stein.  The pressure identity itself is
+standard; the point of recording it here is to keep the finite-observation
+collision estimates tied to the same killed survivor matrix used in
+Section~\ref{sec:open-system}.  All collision limits in this section are
+iid sampling statements: the sampled prefixes are independent with the
+displayed common law.  No Poisson theorem for a single orbit or for a
+weakly dependent sampling scheme is asserted here.
 
-\subsection{Survivor R\'enyi pressure spectra}
+\subsection{Survivor R\'enyi pressure identity}
 
-The next theorem is the killed-system version of the usual
-\(L^s\)-spectrum identity for Gibbs cylinder weights: power sums are
-governed by pressure of the scaled potential.  This classical viewpoint
-underlies R\'enyi and generalized-dimension spectra
+The finite-dimensional input is the following killed-matrix identity.
+It is the survivor version of the usual \(L^s\)-spectrum calculation for
+Gibbs cylinder weights: power sums are represented by a finite matrix
+whose survivor block is conjugate to the transfer matrix for the scaled
+potential.  This classical viewpoint underlies R\'enyi and
+generalized-dimension spectra
 \citep{Renyi1961,HentschelProcaccia1983,Pesin1997}; here it is used only
 after conditioning on survival, because that is the input needed for the
 finite-observation collision threshold.  No residue modulus and no
 two-terminal reachability condition enter this pressure calculation.
 
-\begin{theorem}[Survivor R\'enyi pressure spectrum]
-\label{thm:survivor-renyi-pressure}
+\begin{lemma}[Power-weight killed matrix identity]
+\label{lem:survivor-renyi-matrix}
 Let \(Y\subseteq A^{\NNzero}\) be a topologically mixing one-step
 subshift of finite type, and let \(\nu_\varphi\) be the fully supported
 equilibrium Markov measure of a one-step potential \(\varphi\).  Write
@@ -73,12 +78,100 @@ Then
   \qquad (m\geq 1).
 \]
 Moreover,
+after ordering \(\mathcal S=\mathcal S_\infty\sqcup\mathcal T\),
+\[
+  B_{H,s}=
+  \begin{pmatrix}
+    B_{\infty,s} & C_s\\
+    0 & Q_s
+  \end{pmatrix},
+\]
+where \(Q_s\) is nilpotent and
+\(B_{\infty,s}:=B_{H,s}|_{\mathcal S_\infty}\) is primitive.  If \(h>0\)
+is a Perron right eigenvector of the ambient transfer matrix
+\[
+  L_\varphi(i,j):=M_{ij}e^{\varphi(i,j)},
+\]
+and
+\[
+  D_s(i,i):=h_i^s,
+  \qquad
+  L_{s\varphi,H}(i,j)
+  := M_{ij}e^{s\varphi(i,j)}\mathbf 1_{\{j\in\mathcal S_\infty\}}
+  \qquad (i,j\in\mathcal S_\infty),
+\]
+then
+\[
+  B_{\infty,s}
+  = e^{-sP_Y(\varphi)}D_s^{-1}L_{s\varphi,H}D_s.
+\]
+Consequently
+\[
+  \rho(B_{H,s})
+  = e^{P_{Y_H}(s\varphi)-sP_Y(\varphi)}.
+\]
+\end{lemma}
+
+\begin{proof}
+For \(a=a_0\cdots a_{m-1}\in\mathcal L_m^H\), the Markov property gives
+\[
+  \nu_\varphi([a])
+  = \pi_{a_0}K_{a_0a_1}\cdots K_{a_{m-2}a_{m-1}}.
+\]
+Therefore
+\[
+  \nu_\varphi([a])^s
+  = u_s(a_0)\,
+    B_{H,s}(a_0,a_1)\cdots B_{H,s}(a_{m-2},a_{m-1}),
+\]
+and summing over all safe words of length \(m\) yields
+\[
+  \mathcal Z_{H,m}(s)=u_s^{\mathsf T}B_{H,s}^{m-1}\mathbf 1.
+\]
+
+There is no safe edge from \(\mathcal T\) into \(\mathcal S_\infty\):
+otherwise an infinite survivor path beginning at the \(\mathcal S_\infty\)
+endpoint would give an infinite survivor path beginning at the
+\(\mathcal T\) state.  The directed graph on \(\mathcal T\) is acyclic,
+because a cycle in \(\mathcal T\) could be repeated indefinitely to
+produce a survivor orbit through a \(\mathcal T\) symbol.  Since
+\(\mathcal T\) is finite, the \(\mathcal T\)-block is nilpotent.  The
+block \(B_{\infty,s}\) is primitive because it has the support of the
+mixing survivor subshift.  Hence the block decomposition above holds and
+\(\rho(B_{H,s})=\rho(B_{\infty,s})\).
+
+For \(i,j\in\mathcal S_\infty\),
+\[
+  K_{ij}
+  = M_{ij}e^{\varphi(i,j)-P_Y(\varphi)}\frac{h_j}{h_i}.
+\]
+Thus
+\[
+  B_{\infty,s}(i,j)
+  = M_{ij}e^{s\varphi(i,j)-sP_Y(\varphi)}
+    \frac{h_j^s}{h_i^s}
+  = \bigl(e^{-sP_Y(\varphi)}D_s^{-1}
+     L_{s\varphi,H}D_s\bigr)(i,j),
+\]
+which proves the conjugacy.  The usual pressure formula for the mixing
+survivor subshift gives
+\(\rho(L_{s\varphi,H})=e^{P_{Y_H}(s\varphi)}\), and therefore
+\[
+  \rho(B_{H,s})
+  =e^{-sP_Y(\varphi)}\rho(L_{s\varphi,H})
+  =e^{P_{Y_H}(s\varphi)-sP_Y(\varphi)}.
+\]
+\end{proof}
+
+\begin{corollary}[Survivor R\'enyi pressure spectrum]
+\label{cor:survivor-renyi-pressure}
+Under the hypotheses and notation of
+Lemma~\ref{lem:survivor-renyi-matrix},
 \[
   \lim_{m\to\infty}
   -\frac1m\log \mathcal Z_{H,m}(s)
   = sP_Y(\varphi)-P_{Y_H}(s\varphi).
 \]
-
 If
 \[
   \lambda_m^H(a)
@@ -105,78 +198,12 @@ collision is
         = 2\gamma_H(\varphi)+h_{2,H}.
 \]
 Here \(\gamma_H(\varphi):=P_Y(\varphi)-P_{Y_H}(\varphi)\).
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
-For \(a=a_0\cdots a_{m-1}\in\mathcal L_m^H\), the Markov property gives
-\[
-  \nu_\varphi([a])
-  = \pi_{a_0}K_{a_0a_1}\cdots K_{a_{m-2}a_{m-1}}.
-\]
-Therefore
-\[
-  \nu_\varphi([a])^s
-  = u_s(a_0)\,
-    B_{H,s}(a_0,a_1)\cdots B_{H,s}(a_{m-2},a_{m-1}),
-\]
-and summing over all safe words of length \(m\) yields
-\[
-  \mathcal Z_{H,m}(s)=u_s^{\mathsf T}B_{H,s}^{m-1}\mathbf 1.
-\]
-
-Order \(\mathcal S\) so that \(\mathcal S_\infty\) comes first and
-\(\mathcal T\) comes last.  The matrices \(B_{H,s}\) all have the same
-support, namely the directed graph of admissible safe transitions.
-There is no safe edge from \(\mathcal T\) into \(\mathcal S_\infty\):
-otherwise an infinite survivor path beginning at the \(\mathcal S_\infty\)
-endpoint would give an infinite survivor path beginning at the
-\(\mathcal T\) state.  The directed graph on \(\mathcal T\) is acyclic,
-because a cycle in \(\mathcal T\) could be repeated indefinitely to
-produce a survivor orbit through a \(\mathcal T\) symbol.  Since
-\(\mathcal T\) is finite, the \(\mathcal T\)-block is nilpotent.  Thus
-\[
-  B_{H,s}=
-  \begin{pmatrix}
-    B_{\infty,s} & C_s\\
-    0 & Q_s
-  \end{pmatrix},
-\]
-where \(Q_s\) is nilpotent and \(B_{\infty,s}:=B_{H,s}|_{\mathcal S_\infty}\)
-is primitive, because it has the support of the mixing survivor subshift.
-Hence
-\[
-  \rho(B_{H,s})=\rho(B_{\infty,s}).
-\]
-
-Let \(h>0\) be a Perron right eigenvector of the ambient transfer matrix
-\[
-  L_\varphi(i,j):=M_{ij}e^{\varphi(i,j)}.
-\]
-For \(i,j\in\mathcal S_\infty\),
-\[
-  K_{ij}
-  = M_{ij}e^{\varphi(i,j)-P_Y(\varphi)}\frac{h_j}{h_i}.
-\]
-Define
-\[
-  D_s(i,i):=h_i^s,
-  \qquad
-  L_{s\varphi,H}(i,j)
-  := M_{ij}e^{s\varphi(i,j)}\mathbf 1_{\{j\in\mathcal S_\infty\}}.
-\]
-Then
-\[
-  B_{\infty,s}
-  = e^{-sP_Y(\varphi)}D_s^{-1}L_{s\varphi,H}D_s.
-\]
-Consequently
-\[
-  \rho(B_{H,s})
-  = e^{-sP_Y(\varphi)}\rho(L_{s\varphi,H})
-  = e^{P_{Y_H}(s\varphi)-sP_Y(\varphi)}.
-\]
-The block form, primitivity of \(B_{\infty,s}\), and nilpotence of \(Q_s\)
-show that \(\rho(B_{H,s})\) is a simple isolated eigenvalue of
+The block form in Lemma~\ref{lem:survivor-renyi-matrix}, primitivity of
+\(B_{\infty,s}\), and nilpotence of \(Q_s\) show that
+\(\rho(B_{H,s})\) is a simple isolated eigenvalue of
 \(B_{H,s}\) and that the rest of the spectrum lies in a smaller disc.
 Since \(u_s\) and \(\mathbf 1\) are non-negative and non-zero on
 \(\mathcal S_\infty\), the corresponding spectral coefficient is
@@ -215,8 +242,8 @@ The formulas for \(h_{2,H}\) and \(\chi_H\) are the special case
 
 \begin{corollary}[IID collision consequences of the survivor spectrum]
 \label{cor:survivor-spectrum-collision}
-Under the hypotheses of
-Theorem~\ref{thm:survivor-renyi-pressure}, let
+Under the hypotheses and notation of
+Corollary~\ref{cor:survivor-renyi-pressure}, let
 \((X_m^{H,(i)})_{1\leq i\leq N_m}\) be independent survivor prefixes,
 all of depth \(m\) and all with common law \(\lambda_m^H\).  Write
 \[
@@ -252,17 +279,17 @@ third-moment condition is the pressure inequality
 
 \begin{proof}
 The asymptotics of \(S_2^H(m)\) and \(S_3^H(m)\) are the cases \(s=2\)
-and \(s=3\) of Theorem~\ref{thm:survivor-renyi-pressure}.  Apply
+and \(s=3\) of Corollary~\ref{cor:survivor-renyi-pressure}.  Apply
 Theorem~\ref{thm:double-budget-poisson} with deterministic synchronization
 time \(T_m\equiv 0\), so that \(q_m=0\) and
 \(\Lambda_m=\binom{N_m}{2}S_2^H(m)\).
 \end{proof}
 
-\begin{proof}[Proof of Theorem~\ref{thm:main-renyi}]
-The introductory theorem isolates the survivor-pressure part of the
+\begin{proof}[Proof of Corollary~\ref{cor:main-renyi}]
+The introductory corollary isolates the survivor-pressure part of the
 finite-state argument.  Its two displayed pressure limits and the
 definitions of \(h_{2,H}\) and \(\chi_H\) are those of
-Theorem~\ref{thm:survivor-renyi-pressure}.
+Corollary~\ref{cor:survivor-renyi-pressure}.
 \end{proof}
 
 \subsection{Poisson thresholds for collision failure}
