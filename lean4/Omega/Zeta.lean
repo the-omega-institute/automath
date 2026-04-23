@@ -223,6 +223,8 @@ import Omega.Zeta.XiTimePart70aUniformAverageLogdegTwoState
 import Omega.Zeta.XiTimePart70aGaugeFiberGapFirstOrder
 import Omega.Zeta.XiTimeLengthCocycle
 import Omega.Zeta.XiTimePart70daWindow6AbstractOrbittypeMinimalC12
+import Omega.Zeta.XiTimePart51AADoublingLucasExtension
+import Omega.Zeta.XiTimePart51AAWindow6RootDictionaryExternality
 import Omega.Zeta.XiTimePart9gaCrossResolutionAffineRigidity
 import Omega.Zeta.XiTimePart9gHolographicPrefixIsometryOnLine
 import Omega.Zeta.XiTimePart9zoFibonacciCosineZerosWeylLaw

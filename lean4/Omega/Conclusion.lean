@@ -245,6 +245,7 @@ import Omega.Conclusion.NoncontractibleRestrictedDpiExact
 import Omega.Conclusion.EllipticLosslessLift
 import Omega.Conclusion.EllipticT5SolvabilityAndTotalSplittingDensity
 import Omega.Conclusion.EllipticT5UniqueQuadraticSubfield
+import Omega.Conclusion.EulerKroneckerThreepointTransportSpectrum
 import Omega.Conclusion.EndpointHorizonArcsineKLClosedForm
 import Omega.Conclusion.EndpointHorizonTwoPrimeApprox
 import Omega.Conclusion.EndpointPoissonCayleyCauchyExactScale
