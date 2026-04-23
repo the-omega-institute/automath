@@ -577,6 +577,7 @@ import Omega.Folding.ModSemiringsKernelImageGcd
 import Omega.Folding.ModSemiringsSquarefreeNilpotentBranch
 import Omega.Folding.ModSemiringsWindow6SemisimpleSkeleton
 import Omega.Folding.ModSemiringsUnitalAutomorphismRigidity
+import Omega.Folding.VisibleUnitalSemiringsNoNontrivialSymmetry
 import Omega.Folding.ModularTower
 import Omega.Folding.MomentBounds
 import Omega.Folding.MomentRecurrence

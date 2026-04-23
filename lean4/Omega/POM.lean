@@ -88,6 +88,7 @@ import Omega.POM.StiffZeroHankelGoodReductionDimStability
 import Omega.POM.Congruence2dLockingCfinite
 import Omega.POM.CoprimeLedgerPrimorialOptimality
 import Omega.POM.CrossqGMonotone
+import Omega.POM.AxisDecomposabilityIff
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.CycleLatticeThetaPoissonDuality
@@ -362,6 +363,7 @@ import Omega.POM.KilloAddressableGodelizationInfoCost
 import Omega.POM.KappaDerivable
 import Omega.POM.KappaKlDecomposition
 import Omega.POM.MobiusCompleteDecomposition
+import Omega.POM.PairwiseCrossAnomInsufficient
 import Omega.POM.KLLedgerTelescope
 import Omega.POM.LedgerResidualTelescoping
 import Omega.POM.IprojMaxent
