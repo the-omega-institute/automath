@@ -177,6 +177,7 @@ import Omega.Zeta.XiWindow6WeylInvariantBestTwoOrbitCompression
 import Omega.Zeta.XiWindow6URFirstReturnTimeClosedForm
 import Omega.Zeta.XiTerminalGbcAnomalyCoordinateCount
 import Omega.Zeta.XiCRTMultistageAxisCountScaling
+import Omega.Zeta.XiEndpointPoissonHyperbolicScaleBounds
 import Omega.Zeta.ZetaSyntaxEulerProductNaturalBoundary
 import Omega.Zeta.XiTimePart9wBasicRootUnityErrorExponentToOne
 import Omega.Zeta.XiTimePart9waBasicRootBeyondSquareRoot
