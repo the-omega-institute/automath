@@ -655,6 +655,7 @@ import Omega.POM.TimeReversalSymmetricIndsetPolynomial
 import Omega.POM.ToggleCoxeterOrderBound
 import Omega.POM.ToggleCoxeterRelationsPath
 import Omega.POM.ToggleGaugeInvariantEndomorphismsC2Tensor
+import Omega.POM.ToggleGaugeSectorDecompositionProjections
 import Omega.POM.ToggleGroupPathFullSymmetric
 import Omega.POM.ToggleOrbitCountBellProduct
 import Omega.POM.ToggleOrbitCountAsymptoticVolumeGroup

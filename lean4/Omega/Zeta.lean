@@ -872,6 +872,7 @@ import Omega.Zeta.XiSecularFamilyFullSymmetricGalois
 import Omega.Zeta.XiSecularSpecializationInfinitelyManyFullSymmetric
 import Omega.Zeta.XiSelfdualSingleProbeDeterminesToeplitzMoments
 import Omega.Zeta.XiShadowSpectrumDeterminantRatioAtZero
+import Omega.Zeta.XiShadowSpectrumTowerPrincipalMinors
 import Omega.Zeta.XiSingleDefectIntegratedClosedForm
 import Omega.Zeta.XiSingleDefectMassLogDerivative
 import Omega.Zeta.XiSingleDefectThresholdPhaseTransition
@@ -948,7 +949,9 @@ import Omega.Zeta.XiTimePart63cTrivialAlternatingSignReciprocalDuality
 import Omega.Zeta.XiTimePart9odEscortTvCollapseBlockUniform
 import Omega.Zeta.XiTimePart9odEscortTvCollapseExactBlockWeights
 import Omega.Zeta.XiTimePart9odEscortEscortFdivBinaryClosure
+import Omega.Zeta.XiTimePart9sEscortLogisticExpfamilyBregman
 import Omega.Zeta.XiTimePart9sbEscortChernoffSaddle
+import Omega.Zeta.XiTimePart9uFrozenEscortLogmultiplicityMgf
 import Omega.Zeta.XiTimePart9gCanonicalSubmonoidFreeMonoid
 import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
 import Omega.Zeta.XiTimePart9zqThreepointJensenRhDisproof
@@ -1022,3 +1025,6 @@ import Omega.Zeta.XiPoissonKernelDerivativeL2ClosedForm
 import Omega.Zeta.PhaseLiftSpectralBound
 import Omega.Zeta.XiTerminalZmBranchPuiseuxCoefficientCubic
 import Omega.Zeta.XiTimePart63cFrobeniusExactInversionCycleMoments
+import Omega.Zeta.XiWindow6ResetClockBoundedDrift
+import Omega.Zeta.XiRadialDimensionObstruction
+import Omega.Zeta.Xi2x2SelfdualOffcriticalTemplate
