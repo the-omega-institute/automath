@@ -8,6 +8,7 @@ import Omega.POM.A4TEvenZetaQuintic
 import Omega.POM.A4TNewmanThresholdAdeOrdering
 import Omega.POM.A4TNewmanOcticFieldArithmetic
 import Omega.POM.A4TracePrimitiveTwoTerm
+import Omega.POM.A2GutCompletion
 import Omega.POM.A4tUnitCircleSpectrumClassification
 import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
 import Omega.POM.AddCollisionSpectrumRenyiMonotone
