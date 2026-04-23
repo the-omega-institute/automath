@@ -70,6 +70,7 @@ import Omega.SyncKernelWeighted.PrimitiveFiniteSym
 import Omega.SyncKernelWeighted.PrimitiveHalfturnSignLaw
 import Omega.SyncKernelWeighted.PiOddCentralSpectrum
 import Omega.SyncKernelWeighted.PrimitiveOddDiv
+import Omega.SyncKernelWeighted.PrimitiveOddParityBalance
 import Omega.SyncKernelWeighted.RateCenterOmegaThreshold
 import Omega.SyncKernelWeighted.RateCenterPerronDegreeMultiple6
 import Omega.SyncKernelWeighted.RateCenterRstar
