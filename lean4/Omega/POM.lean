@@ -238,6 +238,7 @@ import Omega.POM.DiagonalRateRefreshHittingTimeRankTwoPotential
 import Omega.POM.DiagonalRateKeepProbabilityMonotone
 import Omega.POM.DiagonalRateRankOneRefreshDetprime
 import Omega.POM.DiagonalRateRankOneRefreshDeterminantCollapse
+import Omega.POM.DiagonalRateRankOneRefreshTraceZetaFingerprint
 import Omega.POM.DiagonalRateKeepResampleChannel
 import Omega.POM.DiagonalRateRankOneRefreshDecomposition
 import Omega.POM.DiagonalRateRefreshHittingTimeDeletedSetLaguerrePGF

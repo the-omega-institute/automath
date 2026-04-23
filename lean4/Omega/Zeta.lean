@@ -96,6 +96,7 @@ import Omega.Zeta.XiExtremeResonanceToeplitzThreshold
 import Omega.Zeta.XiGoldenChainVisibleWindowGrowth
 import Omega.Zeta.XiGoldenW1StarCertificateParitySplitting
 import Omega.Zeta.XiGramDetEntropyMonotoneUnderContraction
+import Omega.Zeta.XiHankelPrimitiveGapVanishingCriterion
 import Omega.Zeta.XiFlagFactorization12x4x3
 import Omega.Zeta.XiTimePart70cSpectrumZeroZ2OrbitCancellation
 import Omega.Zeta.XiHorizonZkFiberpathStokesDiscriminant
@@ -213,6 +214,7 @@ import Omega.Zeta.XiToeplitzDetVerblunsky
 import Omega.Zeta.XiToeplitzPrincipalMinorDiscreteCurvatureRecovery
 import Omega.Zeta.XiToeplitzCurvatureEnergyEquivalence
 import Omega.Zeta.XiToeplitzDeterminantRatioLimitL2
+import Omega.Zeta.XiToeplitzNegativeSpectrumRobustVerification
 import Omega.Zeta.XiTerminalZmGodelLeyangTropicalStripLattice
 import Omega.Zeta.XiTerminalZmLeyangStripRobustnessErrorControl
 import Omega.Zeta.XiTerminalZmLeyangRamificationDivisorStokes
