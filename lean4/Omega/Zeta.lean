@@ -74,6 +74,7 @@ import Omega.Zeta.XiFiniteFrontierCertificate
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiFourRigidityResidueDepthNormalization
+import Omega.Zeta.XiTimeVolumeEntropyStateEquation
 import Omega.Zeta.XiPoissonCoarsegrainingFDivergenceContraction
 import Omega.Zeta.XiSingleBaseDealiasingCountableException
 import Omega.Zeta.XiNegativeBlockSpectrumSpikeAndShallowBound
@@ -240,6 +241,8 @@ import Omega.Zeta.XiEllipticRingAverageResidueWallcrossing
 import Omega.Zeta.XiEllipticRingAverageTwoValuedWallcrossing
 import Omega.Zeta.XiRightedgeGapCongruenceRank2Certificate
 import Omega.Zeta.XiFixedFreezingEscortRenyiSpectrumCollapse
+import Omega.Zeta.ConclusionWedderburnThresholdHolography
+import Omega.Zeta.ConclusionCoarseningGlobalRigidityOfCapacityCurve
 import Omega.Zeta.XiTimePart60ab4ExactSizebiasPushforwardLaw
 import Omega.Zeta.XiTimePart60abGaugeConstantNonCfiniteOgfObstruction
 import Omega.Zeta.XiCartesianPowerLeyangDoubleAtomTangentClt
