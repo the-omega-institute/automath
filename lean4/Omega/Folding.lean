@@ -259,6 +259,7 @@ import Omega.Folding.FoldCapacityGlobalExtremizersFixedMass
 import Omega.Folding.FoldCapacityDiscretePotentialHistogram
 import Omega.Folding.FoldCapacityGapMellinStieltjesDuality
 import Omega.Folding.FoldGodelCarryConditionalEntropy
+import Omega.Folding.FoldGodelCarrySpectrumConditionalEntropy
 import Omega.Folding.PhiMParry
 import Omega.Folding.FoldResonanceLucasNearResonanceGap
 import Omega.Folding.FoldResonanceLadderFibonacciDirectionalLimit

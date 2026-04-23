@@ -131,6 +131,7 @@ import Omega.Zeta.SyncCyclotomicElimination
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotSofic
 import Omega.Zeta.XiAbelianHolonomyFourierInversion
 import Omega.Zeta.XiCauchyPoissonLocationScaleUncenteredThird
+import Omega.Zeta.XiCauchyPoissonFdivSixthOrderMomentRewrite
 import Omega.Zeta.XiCauchyCoshUnitaryLinearization
 import Omega.Zeta.XiArtinMazurEulerProductZetaRatio
 import Omega.Zeta.XiCauchyPoissonSingleScaleMomentInversion
@@ -352,6 +353,7 @@ import Omega.Zeta.DerivedBinfoldTvBayesConstants
 import Omega.Zeta.DerivedHankelFiniteJetBadPrimeClosure
 import Omega.Zeta.DerivedHankelArithmeticAmbiguityLocalizesBadPrimes
 import Omega.Zeta.DerivedHankelEntropyGapCodimOneCollapse
+import Omega.Zeta.DerivedNegativeSpectrumVolumePotentialCollapse
 import Omega.Zeta.DerivedHankelSamplingBadprimeEntropyUnified
 import Omega.Zeta.DerivedLeyangBranchsetAdjacencySpectrumHeatTrace
 import Omega.Zeta.DerivedLeyangArtinMazurZeta
