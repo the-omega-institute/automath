@@ -44,6 +44,7 @@ import Omega.Discussion.SingularHairHausdorffLowerBound
 import Omega.Discussion.SquierZeroCurvatureStrictification
 import Omega.Discussion.ToeplitzNegativeAtomThreshold
 import Omega.Discussion.ToeplitzNegativeCountThreshold
+import Omega.Discussion.ToeplitzNegativeSpectrumSemiclassical
 import Omega.Discussion.TraceclassFredholmEulerSurjection
 import Omega.Discussion.TwoDesignDecouplingHSZK
 import Omega.Discussion.UniqueContinuousTransversal
