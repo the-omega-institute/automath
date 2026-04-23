@@ -38,6 +38,7 @@ import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.WreathArtinFactorization
 import Omega.POM.BCDiscreteJacobianStrictification
 import Omega.POM.BCBianchi
+import Omega.POM.BCChainDefectEqualsEscortCurvatureSum
 import Omega.POM.BCDiscreteStokes
 import Omega.POM.BCDefectMultiplicative2Cocycle
 import Omega.POM.MertensNotFlowInvariant
@@ -109,6 +110,7 @@ import Omega.POM.StiffZeroHankelGoodReductionDimStability
 import Omega.POM.Congruence2dLockingCfinite
 import Omega.POM.CoprimeLedgerPrimorialOptimality
 import Omega.POM.CrossqGMonotone
+import Omega.POM.CurvatureSummableEventualCommutation
 import Omega.POM.AxisDecomposabilityIff
 import Omega.POM.StableAdditionCarryDefectUniqueElement
 import Omega.POM.CouplingExpectationBound
