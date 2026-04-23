@@ -219,6 +219,7 @@ import Omega.POM.DiagonalRateDiagonalStatisticsComplete
 import Omega.POM.DiagonalRateEulerDiagonalIdentity
 import Omega.POM.DiagonalRateDiagonalLogFeedback
 import Omega.POM.DiagonalRateDiagonalDeterminesSeparationProfile
+import Omega.POM.DiagonalRateDualPotentialReverseOrder
 import Omega.POM.DiagonalRateSchurConcavity
 import Omega.POM.DiagonalRateStrictSchurConcavity
 import Omega.POM.DiagonalRateMaxAtomExtremizer
