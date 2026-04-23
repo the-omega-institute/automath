@@ -162,6 +162,7 @@ import Omega.Zeta.XiTerminalHankelRigidityGenericSharpnessZariski
 import Omega.Zeta.XiTerminalZmCdimBidirectionalMiLoglaw
 import Omega.Zeta.XiTerminalZmEllipticComplexTorusMiLoglaw
 import Omega.Zeta.XiTerminalZmGodelPrefixCodeMiDifference
+import Omega.Zeta.XiTerminalZmGodelHorizonFactorizationForgetting
 import Omega.Zeta.XiFarFieldMomentRecursionOrder2Kappa
 import Omega.Zeta.XiScanMinSeparationLocalBilipschitz
 import Omega.Zeta.XiFiniteToOneHolographicAggregationBound
@@ -192,6 +193,7 @@ import Omega.Zeta.XiTimePart9gcResolutionTowerHaarLimit
 import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne
 import Omega.Zeta.XiTimePart9xcSerrinCongruenceDiracLengthOne
 import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
+import Omega.Zeta.XiTerminalZmLeyangP3RenormalizationHensel
 import Omega.Zeta.XiProjectivePressurePathHolderConvexity
 import Omega.Zeta.XiHzomFunctionalEquation
 import Omega.Zeta.XiRankoneFlipRadiusShallowNegative
