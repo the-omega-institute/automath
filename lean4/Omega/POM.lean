@@ -177,6 +177,7 @@ import Omega.POM.DiagonalRateScalarCollapse
 import Omega.POM.DiagonalRateSeparationPGFRational
 import Omega.POM.DiagonalRateSeparationHausdorffLogconvex
 import Omega.POM.DiagonalRateSeparationSpectralResidue
+import Omega.POM.DiagonalRateCoarsegrainingBounds
 import Omega.POM.DiagonalRateTensorUpperBound
 import Omega.POM.DiagonalRateUniformSynergyInequality
 import Omega.POM.DiagonalCollapseQuadraticFreeEnergy
