@@ -532,6 +532,7 @@ import Omega.Folding.HigherBlockIdentification
 import Omega.Folding.HolographicRateConservation
 import Omega.Folding.HypercubeBiasEllipsoidGodelLength
 import Omega.Folding.HypercubeDiscreteHolographicStokesGaugeArea
+import Omega.Folding.HypercubeGaugeVolumeRenyiUpperbound
 import Omega.Folding.HypercubeGodelEllipsoidVolumeEnergyRigidity
 import Omega.Folding.HypercubeGodelHodgeTorsor
 import Omega.Folding.HypercubeGodelStokesFluxBias
