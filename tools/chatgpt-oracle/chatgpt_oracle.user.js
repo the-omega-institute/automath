@@ -1161,13 +1161,14 @@
     return false;
   }
 
-  async function waitForResponse(minResponseLength = DEFAULT_MIN_RESPONSE_LENGTH) {
+  async function waitForResponse(task_id, minResponseLength = DEFAULT_MIN_RESPONSE_LENGTH) {
     log("Waiting for ChatGPT response...");
 
     const startTime = Date.now();
     let lastText = "";
     let stableCount = 0;
     let lastLogTime = 0;
+    let lastHeartbeat = 0;
 
     while (Date.now() - startTime < MAX_WAIT) {
       await sleep(STABLE_INTERVAL);
@@ -1176,6 +1177,13 @@
       const generating = isStillGenerating();
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const mainLen = (document.querySelector("main")?.innerText || "").length;
+
+      if (Date.now() - lastHeartbeat >= 60000) {
+        lastHeartbeat = Date.now();
+        const phase = generating ? "waiting_response" : "response_observed";
+        const detail = `elapsed=${elapsed}s; extracted=${responseText.length}; page=${mainLen}; stable=${stableCount}; gen=${generating}`;
+        try { await postPhase(task_id, phase, detail); } catch {}
+      }
 
       // Periodic status log (every 2 min)
       if (elapsed - lastLogTime >= 120) {
@@ -1430,7 +1438,8 @@
 
       // Capture page state NOW (on the conversation page, not homepage)
       capturePostSendState();
-      const response = await waitForResponse(minResponseLength);
+      await postPhase(task_id, "waiting_response", `url=${window.location.href.slice(-80)}`);
+      const response = await waitForResponse(task_id, minResponseLength);
 
       if (!response || response.length < 5) {
         throw new Error(`Response too short or empty (${response?.length || 0} chars)`);
