@@ -105,4 +105,102 @@ x_0:=0,\qquad x_1:=h,\qquad b:=\frac12\partial_nh.
 
 % --- End distillation writeback ---
 
+% --- Distillation writeback ---
+\begin{theorem}[投影矩全息的生存纤维质量门]\label{distill:gromov-dimension_waist_projection_families-spg-finite-moment-surviving-fibre-mass-gate}
+固定 \(m,n\ge1\)，令 \(N=2^m\) 且
+\[
+\mathcal G_{m,n}:=\{0,\ldots,N-1\}^n .
+\]
+设 \(q:\mathcal G_{m,n}\to Y\) 为有限投影读出，并把有效可见坐标集缩为
+\[
+Y_q:=q(\mathcal G_{m,n}).
+\]
+定义投影边界质量算子
+\[
+B_q:\RR^{\mathcal G_{m,n}}\longrightarrow \RR^{Y_q},\qquad
+(B_qx)_y:=\sum_{u\in q^{-1}(y)}x_u .
+\]
+令 \(\Phi:\mathcal G_{m,n}\to\RR^D\) 为有限矩读出，并记
+\[
+M_\Phi(x):=\sum_{u\in\mathcal G_{m,n}}x_u\Phi(u).
+\]
+则以下结论成立。
+\begin{enumerate}
+  \item 若 \(\Phi\) 在每个 \(q\)-纤维上为常值，则存在唯一映射 \(\psi:Y_q\to\RR^D\) 使 \(\Phi=\psi\circ q\)，并且规范线性算子
+  \[
+  S_\psi:\RR^{Y_q}\to\RR^D,\qquad S_\psi(b):=\sum_{y\in Y_q}b_y\psi(y)
+  \]
+  满足
+  \[
+  M_\Phi=S_\psi\circ B_q
+  \]
+  于整个 \(\RR^{\mathcal G_{m,n}}\) 上。此处唯一性是在有效像 \(Y_q=q(\mathcal G_{m,n})\) 上的唯一性。
+  \item 反之，若存在某个线性算子 \(S:\RR^{Y_q}\to\RR^D\) 使 \(M_\Phi=S\circ B_q\) 于整个 \(\RR^{\mathcal G_{m,n}}\) 上成立，则 \(\Phi\) 在每个 \(q\)-纤维上为常值。
+  \item 设 \(\mathscr A\subset\RR_{\ge0}^{\mathcal G_{m,n}}\) 为某个 admissible bulk 类。若存在 \(u\ne v\) 满足 \(q(u)=q(v)\)、\(\|\Phi(u)-\Phi(v)\|>0\)，并且存在 \(\beta_0>0\) 与 \(\mu^0\in\RR_{\ge0}^{\mathcal G_{m,n}}\)，使
+  \[
+  \mu^+:=\mu^0+\beta_0(e_u-e_v)\in\mathscr A,\qquad
+  \mu^-:=\mu^0-\beta_0(e_u-e_v)\in\mathscr A,
+  \]
+  则
+  \[
+  B_q\mu^+=B_q\mu^-,
+  \qquad
+  \|M_\Phi(\mu^+)-M_\Phi(\mu^-)\|=2\beta_0\|\Phi(u)-\Phi(v)\|.
+  \]
+  因而不存在只依赖 \(B_q\mu\) 的解码器能在 \(\mathscr A\) 上精确恢复该有限矩读出。
+  \item 更一般地，设 \(R:\RR^{\mathcal G_{m,n}}\to Z\) 为到赋范空间 \(Z\) 的线性残差通道，且存在解码器 \(D:\RR^{Y_q}\times Z\to\RR^D\) 满足
+  \[
+  M_\Phi(\mu)=D(B_q\mu,R\mu)\qquad(\mu\in\mathscr A),
+  \]
+  并且对每个固定 \(b\in\RR^{Y_q}\)，映射 \(z\mapsto D(b,z)\) 为 \(L\)-Lipschitz，其中 \(L>0\)。在第三项的假设下必有
+  \[
+  \|R\mu^+-R\mu^-\|_Z
+  \ge
+  \frac{2\beta_0\|\Phi(u)-\Phi(v)\|}{L}.
+  \]
+  因此，凡要在投影后恢复非 \(q\)-可见的有限矩，就必须保留一个具有上述定量下界的生存纤维残差通道；把该残差质量压到此阈值以下会强制产生两 lift 混淆。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+若 \(\Phi\) 在每个 \(q\)-纤维上为常值，则对 \(y\in Y_q\) 任选 \(u\in q^{-1}(y)\)，令 \(\psi(y):=\Phi(u)\)。常值性保证该定义与选择无关，且 \(\Phi=\psi\circ q\)。于是对任意 \(x\in\RR^{\mathcal G_{m,n}}\)，有
+\[
+M_\Phi(x)=\sum_{u}x_u\psi(q(u))
+=\sum_{y\in Y_q}\left(\sum_{u\in q^{-1}(y)}x_u\right)\psi(y)
+=S_\psi(B_qx).
+\]
+由于 \(Y_q\) 已被替换为实际像，对每个 \(y\in Y_q\) 可取 \(u_y\in q^{-1}(y)\)，并有 \(B_qe_{u_y}=e_y\)。故 \(B_q\) 的像为整个 \(\RR^{Y_q}\)。若两个线性算子在所有 \(B_qx\) 上相同，则它们在 \(\RR^{Y_q}\) 上相同；\(\psi(y)=S_\psi(e_y)\) 也随之唯一。
+
+反过来，若 \(M_\Phi=S\circ B_q\)，且 \(q(u)=q(v)\)，则
+\[
+B_q(e_u-e_v)=0.
+\]
+因此
+\[
+\Phi(u)-\Phi(v)=M_\Phi(e_u-e_v)=S(B_q(e_u-e_v))=0,
+\]
+说明 \(\Phi\) 在每个投影纤维上为常值。
+
+现在设第三项的假设成立。因为 \(q(u)=q(v)\)，有 \(B_q(e_u-e_v)=0\)，从而
+\[
+B_q\mu^+-B_q\mu^-=2\beta_0B_q(e_u-e_v)=0.
+\]
+另一方面，有限矩差为
+\[
+M_\Phi(\mu^+)-M_\Phi(\mu^-)
+=2\beta_0M_\Phi(e_u-e_v)
+=2\beta_0(\Phi(u)-\Phi(v)),
+\]
+取范数即得所示等式。若存在只依赖 \(B_q\mu\) 的精确解码器，则同一输入 \(B_q\mu^+=B_q\mu^-\) 必须输出两个不同矩值，矛盾。
+
+最后设残差通道与 \(L\)-Lipschitz 解码器存在。令 \(b:=B_q\mu^+=B_q\mu^-\)。由精确恢复与 Lipschitz 条件，
+\[
+2\beta_0\|\Phi(u)-\Phi(v)\|
+=\|D(b,R\mu^+)-D(b,R\mu^-)\|
+\le L\|R\mu^+-R\mu^-\|_Z.
+\]
+除以 \(L>0\) 得到残差通道的下界。该下界只使用同一投影纤维内的两点重分布，故正是 SPG 有限矩全息中投影后仍须保留的 surviving fibre mass 门槛。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \endinput
