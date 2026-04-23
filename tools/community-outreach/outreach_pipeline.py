@@ -569,6 +569,8 @@ def future_items_for_repo(repo: str, *, include_done: bool = False) -> list[dict
             continue
         if issue is not None and source_issue not in {None, "", issue}:
             continue
+        if issue is not None and source_issue in {None, ""} and repo not in item_keys:
+            continue
         matches.append(item)
     return matches
 
@@ -1692,6 +1694,123 @@ def set_state_status(repo: str, status: str, note: str, *, dry_run: bool = False
         save_state(state)
     logger.info("[%s] State status set to %s", repo, status)
     return state
+
+
+def queue_state_deepening(repo: str, *, dry_run: bool = False) -> dict[str, Any]:
+    """Convert a reference-only state into a future deep-research task."""
+    state, _, _ = find_state_record(repo, include_archive=True)
+    backflow = backflow_placement_from_history(state) or {}
+    section_dir = str(backflow.get("section_dir", ""))
+
+    if state.repo == "teorth/equational_theories" and section_dir == "stable_arithmetic_equational_audit":
+        title = "Deep structural theorem from stable arithmetic dashboard-disjointness"
+        task = (
+            "Continue from the stable_arithmetic_equational_audit negative result. "
+            "Do not stop at '0 dashboard unknowns'. Use the bad-example-structure route: "
+            "explain structurally why stableAdd/stableMul and the Fibonacci affine-linear "
+            "family are dashboard-disjoint, classify the obstruction if possible, and "
+            "look for a genuinely new theorem chain that either proves an impossibility "
+            "for the affine-linear/stable-arithmetic mechanism or identifies the next "
+            "non-affine mechanism needed to hit current ETP unknowns. The output must be "
+            "publishable mathematical text or a precise blocker theorem, not another "
+            "value-summary."
+        )
+        scope_boundary = (
+            "The existing public-outreach value is insufficient because the computed "
+            "stable arithmetic and Fibonacci affine-linear spectra resolve 0 of 498 "
+            "current ETP dashboard unknowns. This future task should deepen the negative "
+            "audit into structural theory; it must not claim a dashboard resolution unless "
+            "a new verified mechanism is found."
+        )
+        route = "proof"
+        route_reason = (
+            "The finite computations are already available; the missing value is a "
+            "structural theorem/classification or obstruction explaining the negative audit."
+        )
+        route_contract = (
+            "Produce theorem/proposition statements with complete proof text. Existing "
+            "Python certificates may be cited as finite evidence, but a new outreach-worthy "
+            "result must be a structural proof, classification, or impossibility theorem."
+        )
+        priority = "high"
+    else:
+        title = f"Deepen reference-only outreach result for {state.repo}"
+        task = (
+            "Continue from the reference-only or skipped outreach result and attempt to "
+            "turn it into a structural theorem, classification, obstruction, or precise "
+            "negative result. Do not merely restate why the previous public-outreach value "
+            "was low."
+        )
+        scope_boundary = (
+            "The current state is not ready for public outreach. Deepening may produce "
+            "a future contribution, but existing low-value claims must remain scoped as "
+            "reference-only until a stronger result is proved."
+        )
+        route = "proof"
+        route_reason = "The next step is theorem-level strengthening, not another draft."
+        route_contract = "Produce complete proof text or a precise mathematical blocker."
+        priority = "medium"
+
+    source = {
+        "repo": state.repo,
+        "base_repo": repo_base(state.repo),
+        "issue": repo_issue(state.repo),
+        "stage": state.stage,
+        "draft_title": state.draft_title,
+        "state_file": _repo_relative(state_file(state.repo)),
+        "backflow": backflow,
+        "recorded_at": iso_now(),
+    }
+    evidence = {
+        "scores": state.scores,
+        "backflow": backflow,
+        "latest_events": state.action_history[-5:],
+        "findings": state.findings[:4],
+    }
+    item = {
+        "title": title,
+        "task": task,
+        "current_scope": (
+            "This is a continuation of an internal reference-only result. It is not a "
+            "public reply and should not create target-facing text before review."
+        ),
+        "scope_boundary": scope_boundary,
+        "evidence": json.dumps(evidence, ensure_ascii=False)[:2500],
+        "priority": priority,
+        "recommended_agent_context": "context_aware_research",
+        "research_route": route,
+        "route_reason": route_reason,
+        "route_contract": route_contract,
+        "review_policy": (
+            "Use context-aware Codex for deepening because the negative audit, paper "
+            "backflow, and ETP dashboard scope matter. Use zero_init_review only after "
+            "a standalone theorem packet exists."
+        ),
+        "source": source,
+    }
+    item_id = str(
+        item.get("id")
+        or _future_item_id(
+            {
+                **item,
+                "source_repo": source.get("repo", ""),
+                "target_repo": repo_base(source.get("repo", "")),
+            }
+        )
+    )
+    added = append_future_queue_item(item, dry_run=dry_run)
+    if not dry_run:
+        state.stage = "DEEPENING_QUEUED"
+        state.error = ""
+        state.log_event(
+            "R",
+            "queued deepening future task",
+            verdict="deepening_queued",
+            detail=f"{item_id}: {title}",
+        )
+        save_state(state)
+    logger.info("[%s] Deepening future task %s: %s", state.repo, "queued" if added else "already exists", title)
+    return {"queued": added, "id": item_id, "title": title}
 
 
 def refresh_state_draft(repo: str, *, dry_run: bool = False) -> RepoState:
@@ -5598,6 +5717,7 @@ def parse_args() -> argparse.Namespace:
               python3 tools/community-outreach/outreach_pipeline.py --repo teorth/equational_theories --prepare-state-review
               python3 tools/community-outreach/outreach_pipeline.py --repo teorth/equational_theories --review-state
               python3 tools/community-outreach/outreach_pipeline.py --repo teorth/equational_theories --issue 364 --refresh-state-draft
+              python3 tools/community-outreach/outreach_pipeline.py --repo teorth/equational_theories --queue-state-deepening
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --register-future-scope
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --mark-replied https://github.com/owner/name/issues/38#issuecomment-...
               python3 tools/community-outreach/outreach_pipeline.py --check-artifacts
@@ -5622,6 +5742,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--review-state", action="store_true", help="Run Claude final review for ordinary --repo states")
     parser.add_argument("--set-state-status", nargs=2, metavar=("STATUS", "NOTE"), help="Set ordinary --repo state status with a note")
     parser.add_argument("--refresh-state-draft", action="store_true", help="Refresh ordinary --repo drafts from deterministic backflow-aware templates")
+    parser.add_argument("--queue-state-deepening", action="store_true", help="Queue deep-research continuation tasks for reference-only --repo states")
     parser.add_argument("--register-future-scope", action="store_true", help="Extract deferred future tasks from the current draft state for --repo targets")
     parser.add_argument("--mark-replied", metavar="URL", help="Mark --repo target state as replied/submitted with an existing GitHub issue comment URL")
     parser.add_argument("--append-future-note", nargs=2, metavar=("ID", "NOTE"), help="Append a note/source update to a future queue item")
@@ -5843,6 +5964,12 @@ def main() -> int:
         for repo in repos:
             state = refresh_state_draft(repo, dry_run=args.dry_run)
             print(f"Draft refreshed: {state.repo} ({len(state.draft_body)} chars)")
+        return 0
+
+    if args.queue_state_deepening:
+        for repo in repos:
+            item = queue_state_deepening(repo, dry_run=args.dry_run)
+            print(f"Deepening queued: {item['id']} {item['title']} queued={item['queued']}")
         return 0
 
     if args.register_future_scope:
