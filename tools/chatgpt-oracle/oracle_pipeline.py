@@ -2771,8 +2771,10 @@ def build_oracle_review_prompt(target_journal: str) -> str:
         1. **Overall verdict** (labelled as above)
         2. **Novelty rating** per main theorem: HIGH / MEDIUM / LOW with a
            one-sentence justification.
-        3. **Issue table** (Markdown table; no empty cells):
-           ID | Section | Severity (BLOCKER/MEDIUM/LOW) | Description | Suggested fix
+        3. **Issue table** (literal pipe-delimited Markdown table; no empty cells):
+           | ID | Section | Severity (BLOCKER/MEDIUM/LOW) | Description | Suggested fix |
+           Every issue row must be on its own line and must start with a pipe,
+           e.g. `| B1 | §2 | BLOCKER | ... | ... |`.
         4. **Proof audit**: Pick the TWO deepest theorems. Redo the key identity
            by hand. Report any step where a suspicious identity is silently used,
            e.g.  χ(C^{{-1}}) = χ(C)  (should be conjugate),  Tr(AB) = Tr(A)Tr(B),
@@ -3206,7 +3208,9 @@ def parse_oracle_issues(review_text: str) -> list[dict]:
     issues = []
     # Table rows: ID | Section | BLOCKER | desc | fix
     rows = re.findall(
-        r"(\d+)\s*\|\s*([^|]+)\|\s*(BLOCKER|MEDIUM|LOW|HIGH|CRITICAL)\s*\|\s*([^|]+?)(?:\|\s*(.+))?$",
+        r"^\s*\|?\s*([A-Z]{0,4}\d+)\s*\|\s*([^|]+)\|\s*"
+        r"(BLOCKER|MEDIUM|LOW|HIGH|CRITICAL)\s*\|\s*([^|]+?)"
+        r"(?:\|\s*(.+?))?\s*\|?\s*$",
         review_text, re.MULTILINE | re.IGNORECASE,
     )
     for row in rows:
@@ -3216,6 +3220,42 @@ def parse_oracle_issues(review_text: str) -> list[dict]:
             "description": row[3].strip(),
             "suggested_fix": row[4].strip() if len(row) > 4 and row[4] else "",
         })
+    # Fallback: ChatGPT sometimes strips Markdown pipes and collapses the whole
+    # issue table into one line:
+    #   IDSectionSeverity...Suggested fixB1§3 BLOCKER...B2§4 MEDIUM...
+    if not issues:
+        section = review_text
+        m = re.search(
+            r"Issue table\s*(.*?)(?:\n\s*(?:Proof audit|Conditional hypothesis map|"
+            r"Theorem-by-theorem|Missing references|Concrete fixes)\b|\Z)",
+            review_text, re.DOTALL | re.IGNORECASE,
+        )
+        if m:
+            section = m.group(1)
+        section = re.sub(
+            r"^\s*ID\s*Section\s*Severity\s*\([^)]*\)\s*Description\s*Suggested\s*fix\s*",
+            "",
+            section.strip(),
+            flags=re.IGNORECASE,
+        )
+        row_re = re.compile(
+            r"(?P<id>[A-Z]{1,4}\d+)"
+            r"(?P<section>.{1,180}?)"
+            r"(?P<severity>BLOCKER|CRITICAL|HIGH|MEDIUM|LOW)"
+            r"(?P<body>.*?)(?="
+            r"[A-Z]{1,4}\d+.{1,180}?"
+            r"(?:BLOCKER|CRITICAL|HIGH|MEDIUM|LOW)|\Z)",
+            re.DOTALL | re.IGNORECASE,
+        )
+        for m2 in row_re.finditer(section):
+            body = re.sub(r"\s+", " ", m2.group("body")).strip()
+            issues.append({
+                "id": m2.group("id").strip(),
+                "section": re.sub(r"\s+", " ", m2.group("section")).strip(),
+                "severity": m2.group("severity").upper(),
+                "description": body[:1200],
+                "suggested_fix": "",
+            })
     # Fallback: numbered items
     if not issues:
         for m in re.finditer(
