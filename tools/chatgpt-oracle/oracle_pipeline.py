@@ -6735,6 +6735,9 @@ def get_oracle_wait_count() -> int:
         return _oracle_wait_count
 
 
+MAX_ORACLE_WAIT_OVERSUBSCRIPTION = 3
+
+
 def run_rolling(paper_dirs: list[str], *, parallel: int = 0,
                 continuous: bool = False, **kwargs) -> tuple[int, int]:
     """Rolling pipeline with adaptive concurrency.
@@ -6751,11 +6754,15 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 0,
 
     succeeded = failed = 0
     queue = list(paper_dirs)
+    pool_workers = min(
+        len(queue),
+        parallel + MAX_ORACLE_WAIT_OVERSUBSCRIPTION,
+    ) or parallel
 
     logger.info(f"Rolling pipeline: {len(queue)} papers, {parallel} workers "
-                f"(auto={parallel == _auto_parallel()})")
+                f"(pool={pool_workers}, auto={parallel == _auto_parallel()})")
 
-    with ThreadPoolExecutor(max_workers=parallel,
+    with ThreadPoolExecutor(max_workers=pool_workers,
                             thread_name_prefix="paper") as pool:
         futures: dict[Future, str] = {}
 
@@ -6769,11 +6776,24 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 0,
                         f"(active={len(futures)}, oracle_wait={get_oracle_wait_count()}, "
                         f"queue={len(queue)})")
 
-        for _ in range(min(parallel, len(queue))):
-            _submit()
+        def _target_active() -> int:
+            return min(
+                pool_workers,
+                parallel + min(get_oracle_wait_count(),
+                               MAX_ORACLE_WAIT_OVERSUBSCRIPTION),
+            )
+
+        def _fill_available_slots():
+            while queue and len(futures) < _target_active():
+                _submit()
+
+        _fill_available_slots()
 
         while futures:
-            done, _ = wait(futures, return_when=FIRST_COMPLETED)
+            done, _ = wait(futures, timeout=30, return_when=FIRST_COMPLETED)
+            if not done:
+                _fill_available_slots()
+                continue
             for fut in done:
                 d = futures.pop(fut)
                 name = Path(d).name
@@ -6799,7 +6819,7 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 0,
                     else:
                         logger.warning(f"Git push failed after {name}")
 
-                _submit()
+                _fill_available_slots()
 
     return succeeded, failed
 
