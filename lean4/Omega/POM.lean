@@ -301,6 +301,7 @@ import Omega.POM.FoldFactorChainDerivedInvariants
 import Omega.POM.FoldFactorChainEffectiveSampleSize
 import Omega.POM.FoldFactorChainGapLsi
 import Omega.POM.FoldFactorChainMixingTimeBound
+import Omega.POM.FoldFactorChainReversibleNoloop
 import Omega.POM.FoldIndexSeeds
 import Omega.POM.FoldInjectivizationMinsideinfo
 import Omega.POM.FoldInversionZeroRateStrongConverse
