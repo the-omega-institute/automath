@@ -707,3 +707,5 @@ import Omega.POM.RenyiDimensionNoAlgebraicIrrationality
 import Omega.POM.CoxeterMonodromyCyclotomic
 import Omega.POM.DiagonalRateUniformUniqueMaximizerActive
 import Omega.POM.A4TAdeIntersectionTMinpolyDiscriminant
+import Omega.POM.PrimeFactorMomentCompilerResonance
+import Omega.POM.RmomSound

@@ -781,3 +781,4 @@ import Omega.Conclusion.PathDominatedSquarefreeHolographyNeverNearOptimal
 import Omega.Conclusion.BigWittGodelMultiplicative
 import Omega.Conclusion.MaxfiberRelativeEntropyLoss
 import Omega.Conclusion.FixedResolutionParetoColdendLogCusp
+import Omega.Conclusion.PrimeShiftEllipseRenormalizationExponent
