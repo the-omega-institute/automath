@@ -269,6 +269,7 @@ import Omega.Conclusion.SingleCubeEditRigidity
 import Omega.Conclusion.SingleOmittedEdgePartialCorrelationBudget
 import Omega.Conclusion.FibadicLcmFiltrationLaw
 import Omega.Conclusion.FibadicPrimitiveCentralIdempotents
+import Omega.Conclusion.FibadicOpenIdealFiniteQuotientClassification
 import Omega.Conclusion.FibadicSaturatedObserverInverseLimit
 import Omega.Conclusion.FibadicUniformDivisorRandomizationGap
 import Omega.Conclusion.FibonacciAnomalyBlock
@@ -622,6 +623,7 @@ import Omega.Conclusion.ReverseKLSingleFrequencyExclusivity
 import Omega.Conclusion.LucasHankelCurvatureRamanujanTomography
 import Omega.Conclusion.RhsharpQAmplifiedAddressBarrier
 import Omega.Conclusion.S4BoundaryTotalTorusRankConservation
+import Omega.Conclusion.S4HodgeDeterminesFixedpointCounts
 import Omega.Conclusion.SaturationDefect
 import Omega.Conclusion.ScreenArithmeticShadowAdditiveLinearizationObstruction
 import Omega.Conclusion.ScreenAtomicValueAntitone
