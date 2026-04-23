@@ -155,6 +155,7 @@ import Omega.POM.DiagonalRateSmallDistortionSavingHalfMomentFold
 import Omega.POM.DiagonalRateSturmCauchyEigenbasis
 import Omega.POM.DiagonalRateRefreshCountRenewalLLNCLT
 import Omega.POM.DiagonalRateRefreshCountScgfDerivatives
+import Omega.POM.DiagonalRateUniformClosedForm
 import Omega.POM.DiagonalRateRefreshHittingTimeGeometricSpectralDecomp
 import Omega.POM.DiagonalRateKeepProbabilityMonotone
 import Omega.POM.DiagonalRateRankOneRefreshDeterminantCollapse
