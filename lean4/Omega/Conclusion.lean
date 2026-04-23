@@ -686,6 +686,7 @@ import Omega.Conclusion.RealInput40UVAtomCore
 import Omega.Conclusion.RealInput40UVPressureSilentPhase
 import Omega.Conclusion.RealInput40ZeroTempQuarticConstantUnification
 import Omega.Conclusion.RealInput40BartholdiCollapseExponentCensus
+import Omega.Conclusion.RealInput40ArityHardwallCompleteness
 import Omega.Conclusion.RecursiveSolenoidLieShadow
 import Omega.Conclusion.RegisterUltrametricLipschitzAndGodelNoRealExtension
 import Omega.Conclusion.RejectNullFiniteNormalForm
