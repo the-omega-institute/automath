@@ -1,9 +1,9 @@
-\section{Sampled detector laws and operational signatures}\label{sec:records}
+\section{Record laws for a sampled classical counter driven by a calibrated stationary UDW rate}\label{sec:records}
 
 \subsection{Measurement protocol and click model}
-We formulate the readout layer as a sampled interval instrument. The field-facing UDW detector core supplies a stationary excitation intensity, while the counter contributes one hidden readiness bit and a binary ancilla that records only whether at least one ready-state excitation attempt occurred before the next sampling time. Each proper-time interval therefore uses a fresh ancilla and then coarse-grains the within-bin history to a single symbol $A_n\in\{0,1\}$. The hidden state passed to the next interval is again just ready $R$ or refractory $D$, so the sampled record is a two-state hidden Markov model.
+We formulate the readout layer as a classical sampled interval instrument. The field-facing UDW detector core supplies a stationary excitation intensity, while the counter contributes one hidden readiness bit and a binary ancilla that records only whether at least one ready-state excitation attempt occurred before the next sampling time. Each proper-time interval therefore uses a fresh ancilla and then coarse-grains the within-bin history to a single symbol $A_n\in\{0,1\}$. The hidden state passed to the next interval is again just ready $R$ or refractory $D$, so the sampled record is a two-state hidden Markov model.
 
-\begin{proposition}[Sampled interval instrument and labelled kernels]\label{prop:instrument-kernels-main}
+\begin{proposition}[Sampled one-recovery-opportunity boundary-reset instrument and labelled kernels]\label{prop:instrument-kernels-main}
 Fix a sampling interval of length $\Delta\tau$ and a rate parameter $\Gamma>0$.
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
 \item If the hidden state at the beginning of the interval is $R$, let $N$ be a Poisson process of rate $\Gamma$ on $[0,\Delta\tau]$. The output ancilla reports
@@ -92,15 +92,107 @@ readout is therefore not an extra postulate after the fact: it is built into
 the thresholded interval instrument itself.
 \end{proof}
 
+This is the \emph{sampled one-recovery-opportunity boundary-reset}
+instrument used throughout the paper. The point of the name is literal: a bin
+that begins in $D$ allows one recovery opportunity before the sampling
+boundary, but if a click occurs anywhere inside that bin then the hidden state
+passed to the next bin is set to $D$. A second recovery after that within-bin
+click is therefore not modelled inside the same bin. The model is not the
+continuous-time alternating-renewal detector in which recovery and reclicking
+may occur repeatedly before the boundary; it is a boundary-sampled coarse
+graining with one ancilla bit and one post-bin hidden state per interval.
+
+\begin{remark}[Boundary reset versus true continuous intra-bin recovery]\label{rem:continuous-comparator-main}
+The distinction from continuous intra-bin recovery can be written at the kernel
+level. Consider the comparator in which the hidden readiness state evolves
+continuously during a bin as the two-state Markov chain
+\[
+R \xrightarrow{\ \Gamma\ } D,
+\qquad
+D \xrightarrow{\ \kappa_{\mathrm r}\ } R,
+\]
+while the ancilla still records only whether at least one click occurred before
+the boundary. With the state order $(R,D)$, the continuous hidden generator is
+\[
+Q=
+\begin{pmatrix}
+-\Gamma & \Gamma\\
+\kappa_{\mathrm r} & -\kappa_{\mathrm r}
+\end{pmatrix},
+\]
+so the boundary-state transition matrix is
+\[
+\widetilde P=e^{Q\Delta\tau}
+=\frac{1}{\Gamma+\kappa_{\mathrm r}}
+\begin{pmatrix}
+\kappa_{\mathrm r}+\Gamma e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}
+&
+\Gamma\bigl(1-e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}\bigr)
+\\[4pt]
+\kappa_{\mathrm r}\bigl(1-e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}\bigr)
+&
+\Gamma+\kappa_{\mathrm r}e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}
+\end{pmatrix}.
+\]
+The no-click event is the same as in \Cref{prop:instrument-kernels-main},
+because no reset can occur before the first click. Hence the output-$0$ kernel
+remains exactly
+\[
+\widetilde T_0=T_0.
+\]
+The output-$1$ kernel for the continuous model is therefore
+\[
+\widetilde T_1=\widetilde P-\widetilde T_0
+=
+\begin{pmatrix}
+\dfrac{\kappa_{\mathrm r}}{\Gamma+\kappa_{\mathrm r}}
+\bigl(1-e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}\bigr)
+&
+\dfrac{\Gamma}{\Gamma+\kappa_{\mathrm r}}
+\bigl(1-e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}\bigr)
+\\[8pt]
+\dfrac{\kappa_{\mathrm r}}{\Gamma+\kappa_{\mathrm r}}
+\bigl(1-e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}\bigr)-b
+&
+\dfrac{\Gamma+\kappa_{\mathrm r}e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}}
+{\Gamma+\kappa_{\mathrm r}}-c
+\end{pmatrix}.
+\]
+In particular
+\[
+\widetilde T_1(R,R)>0,\qquad \widetilde T_1(D,R)>0,
+\]
+whereas the sampled boundary-reset model has
+\[
+T_1(R,R)=T_1(D,R)=0.
+\]
+Thus the theorem chain below is specific to the sampled one-recovery-opportunity
+boundary-reset instrument and does not describe true continuous recovery after
+every within-bin click.
+\end{remark}
+
 The role of the instrument is precise. Once the attempt intensity $\Gamma$ and the counter recovery law are fixed, the kernels $T_0,T_1$ are no longer postulated phenomenologically; they are the interval probabilities of the sampled repeated-interaction rule above. What remains conditional is the identification of the intensity $\Gamma$ with the stationary UDW response rate supplied by the field-facing detector calculation.
 
-\begin{assumption}[Stationary counting-limit closure]\label{ass:counting-readout-main}
+\begin{assumption}[Sampled classical-counter closure and stationary UDW rate calibration]\label{ass:counting-readout-main}
 The stochastic record analysed below is the sampled interval instrument of \Cref{prop:instrument-kernels-main}, with attempt intensity identified with the stationary weak-coupling UDW excitation rate:
 \[
 \Gamma=\Gamma_+.
 \]
 This is the only bridge from the stationary detector response to the classical binary record. No theorem below claims that an arbitrary repeated-measurement scheme for a UDW detector must reduce to this instrument without further approximation; rather, the paper fixes this sampled counter model and then derives its record laws exactly.
 \end{assumption}
+
+Accordingly, the record-theoretic propositions in this section are first stated for the sampled classical counter with its internal attempt rate $\Gamma$. The closure $\Gamma=\Gamma_+$ is imposed only when Sections~4--5 substitute these model thresholds into the stationary UDW response profile.
+
+No theorem in this paper derives the Poisson attempt process, its independent
+increments, or the inter-bin independence of fresh attempts from stationarity of
+the pulled-back Wightman function alone. Those Poisson ingredients belong to
+the sampled instrument of \Cref{prop:instrument-kernels-main}. The UDW input
+used later is only the modelling closure
+\[
+\Gamma=\Gamma_+(x,\Omega),
+\]
+which calibrates the counter attempt rate to the stationary weak-coupling
+excitation rate of the chosen detector core.
 
 The construction remains an effective measurement model in the same broad spirit as dead-time counter theory \cite{Muller1973,CantorTeich1975}, not a first-principles AQFT derivation of detector back-action \cite{Fewster2020,PoloGomezEtAl2022}. Its purpose is narrower and sufficient for the theorem chain here: it makes explicit which repeated-interaction ingredients produce the binary kernels and isolates the single closure step where the stationary UDW response is converted into the attempt intensity driving the sampled record.
 
@@ -129,7 +221,7 @@ The third criterion is what this paper studies. Neither detailed balance nor Gib
 
 The ideal dead-time model serves as a benchmark. A click suppresses the next one-step interval, so the visible record reduces immediately to a one-parameter Markov chain on the golden-mean shift. Writing
 \begin{equation}\label{eq:p-beta-main}
-p_\beta=e^{-\Gamma_+\Delta\tau}, \qquad q_\beta=1-p_\beta,
+p_\beta=e^{-\Gamma\Delta\tau}, \qquad q_\beta=1-p_\beta,
 \end{equation}
 the sampled output is the stationary Markov chain on the golden-mean shift with transition matrix
 \begin{equation}\label{eq:golden-mean-main}
@@ -142,17 +234,17 @@ P_\beta=
 The reference law on that shift is the Parry measure, namely the unique measure of maximal entropy compatible with the grammar $11\notin\operatorname{supp}\mu$ \cite{Parry1964,LindMarcus1995}.
 
 \begin{proposition}[Exact-clock benchmark]\label{prop:ideal-main}
-For the ideal dead-time detector, the sampled output realizes the Parry benchmark if and only if
+For the ideal one-step blanking mode of the sampled classical counter, the sampled output realizes the Parry benchmark if and only if
 \begin{equation}\label{eq:parry-threshold-main}
 p_\beta=\varphi^{-1}
 \quad\Longleftrightarrow\quad
-\Gamma_+\Delta\tau=\log\varphi,
+\Gamma\Delta\tau=\log\varphi,
 \end{equation}
-where $\varphi=(1+\sqrt5)/2$ is the golden ratio. This threshold defines the exact-clock selector.
+where $\varphi=(1+\sqrt5)/2$ is the golden ratio. Under the closure \Cref{ass:counting-readout-main}, this becomes $\Gamma_+\Delta\tau=\log\varphi$. This threshold defines the exact-clock selector.
 \end{proposition}
 
 \begin{proof}
-After a click the counter is refractory for the whole next sampling interval, so $P_\beta(1,1)=0$ and the word $11$ is forbidden. After a zero the counter is ready at the next interval, and the Poisson no-excitation probability during one interval is $p_\beta=e^{-\Gamma_+\Delta\tau}$. Thus
+After a click the counter is refractory for the whole next sampling interval, so $P_\beta(1,1)=0$ and the word $11$ is forbidden. After a zero the counter is ready at the next interval, and the Poisson no-excitation probability during one interval is $p_\beta=e^{-\Gamma\Delta\tau}$. Thus
 \[
 P_\beta(0,0)=p_\beta,\qquad P_\beta(0,1)=1-p_\beta,\qquad P_\beta(1,0)=1,
 \]
@@ -172,14 +264,21 @@ P^{\mathrm P}(0,0)=\varphi^{-1},\qquad
 P^{\mathrm P}(0,1)=\varphi^{-2},\qquad
 P^{\mathrm P}(1,0)=1 .
 \]
-The detector law and the Parry law have the same support and each has only the single free transition probability out of state $0$. Therefore they coincide if and only if $p_\beta=\varphi^{-1}$. Since $p_\beta=e^{-\Gamma_+\Delta\tau}$, this is equivalent to $\Gamma_+\Delta\tau=\log\varphi$.
+The counter law and the Parry law have the same support and each has only the single free transition probability out of state $0$. Therefore they coincide if and only if $p_\beta=\varphi^{-1}$. Since $p_\beta=e^{-\Gamma\Delta\tau}$, this is equivalent to $\Gamma\Delta\tau=\log\varphi$.
 \end{proof}
 
-\Cref{prop:ideal-main} is included only as the benchmark comparison point. Once the golden-mean Markov chain has been identified, the Perron--Frobenius matching step is standard; its detector-specific content is just the clock value $\Gamma_+\Delta\tau=\log\varphi$. The main mathematical work begins in the finite-recovery model, where the visible law has full support and the dependence threshold is controlled by the hidden eigenmode rather than by a grammar reduction.
+\Cref{prop:ideal-main} is included only as the benchmark comparison point. Once the golden-mean Markov chain has been identified, the Perron--Frobenius matching step is standard; its counter-specific content is just the clock value $\Gamma\Delta\tau=\log\varphi$, later converted to $\Gamma_+\Delta\tau=\log\varphi$ only under the closure \Cref{ass:counting-readout-main}. The main mathematical work begins in the sampled boundary-reset recovery model, where the zero-run law has full support on $\mathbb N_0$ and hence every finite binary word has positive probability; the dependence threshold is controlled by the hidden eigenmode rather than by a grammar reduction.
 
-\subsection{Finite recovery, renewal structure, and exact \texorpdfstring{$1$}{1}-dependence}
+\subsection{Sampled one-recovery-opportunity boundary-reset recovery: renewal structure and exact \texorpdfstring{$1$}{1}-dependence}
 
-A physically more realistic model allows the detector to recover over a finite time rather than instantaneously. Let $\kappa_{\mathrm r}>0$ be the recovery rate. Throughout this section and the remainder of the paper, we write $\Gamma\equiv\Gamma_+$ for the excitation rate when no confusion with other rates arises. Define
+A physically more realistic sampled model allows the detector to recover during
+the bin before the sampling boundary, while still passing only one boundary
+state to the next bin. This is the sampled one-recovery-opportunity
+boundary-reset model described above. Let $\kappa_{\mathrm r}>0$ be the
+recovery rate. Throughout this section, $\Gamma$ denotes the classical attempt
+rate of the sampled counter. Only when the closure
+\Cref{ass:counting-readout-main} is invoked later do we identify it with the
+stationary UDW excitation rate $\Gamma_+$. Define
 \begin{equation}\label{eq:p-c-recall-main}
 p=e^{-\Gamma\Delta\tau}, \qquad c=e^{-\kappa_{\mathrm r}\Delta\tau},
 \end{equation}
@@ -193,6 +292,10 @@ When $\kappa_{\mathrm r}\neq\Gamma$, these integrals evaluate to
 $a=[\kappa_{\mathrm r}(1-p)-\Gamma(1-c)]/(\kappa_{\mathrm r}-\Gamma)$
 and
 $b=\kappa_{\mathrm r}(p-c)/(\kappa_{\mathrm r}-\Gamma)$.
+For brevity, later references to the ``boundary-reset recovery'' record always
+mean this sampled one-recovery-opportunity model, not a continuous-time
+alternating renewal detector with repeated recovery and reclicking inside one
+sampling bin.
 Put $q=1-p$. The aggregate hidden transition matrix is
 \[
 P=
@@ -226,7 +329,7 @@ g_k=
 \frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}{\kappa_{\mathrm r}-\Gamma},
 \qquad k\ge0.
 \end{equation}
-In particular $g_k>0$ for every $k$, so the finite-recovery record has full support on zero-run lengths.
+In particular $g_k>0$ for every $k$, so the sampled boundary-reset recovery record has full support on zero-run lengths.
 \end{lemma}
 
 \begin{proof}
@@ -247,7 +350,34 @@ g_k=(1-p)b\frac{p^k-c^k}{p-c}+ac^k .
 Using the closed forms for $a$ and $b$ reduces this expression to~\eqref{eq:gap-closed-main}. Full support is also visible directly from the kernel path: after a click the detector may remain refractory through $k$ zero-labelled intervals and then recover and click during the next one, an event with positive probability for all positive parameters.
 \end{proof}
 
-\begin{lemma}[Stationary finite-recovery law]\label{lem:stationary-main}
+\begin{corollary}[Support of finite binary words]\label{cor:word-support-main}
+In the sampled boundary-reset recovery model with positive parameters, the
+stationary binary record assigns positive probability to every finite binary
+word.
+\end{corollary}
+
+\begin{proof}
+Let
+\[
+w=0^{\ell_0}1\,0^{\ell_1}1\cdots 1\,0^{\ell_r},
+\qquad \ell_0,\ell_r\ge0,\ \ell_1,\dots,\ell_{r-1}\ge0,
+\]
+be any finite binary word, allowing the case $r=0$ of an all-zero word. Since
+$\PP(A_{-1}=1)=\rho>0$ in the stationary law, there is positive probability of
+starting from a click at time $-1$. Conditional on that click, the successive
+post-click zero-run lengths are i.i.d.\ with common law $(g_k)_{k\ge0}$ by
+Lemma~\ref{lem:renewal-gap-main}. Therefore
+\[
+\PP\bigl(A_{-1}=1,\ G_0=\ell_0,\ \dots,\ G_{r-1}=\ell_{r-1},\ G_r\ge \ell_r\bigr)
+=
+\rho\, g_{\ell_0}\cdots g_{\ell_{r-1}}\PP(G\ge \ell_r)>0,
+\]
+because $g_k>0$ for every $k$. On this event the block
+$(A_0,\dots,A_{|w|-1})$ is exactly $w$. Hence every finite binary word belongs
+to the support of the stationary record.
+\end{proof}
+
+\begin{lemma}[Stationary boundary-reset recovery law]\label{lem:stationary-main}
 The aggregate hidden chain has stationary row distribution
 \[
 \pi_R=\frac{b}{q+b},
@@ -287,7 +417,7 @@ Finally, $p,q,b$ are positive and $1-b=c+a>0$, so every entry of $P$ is positive
 \end{proof}
 
 \begin{lemma}[Covariance transfer through the hidden mode]\label{lem:covariance-transfer-main}
-Let $(A_n)_{n\in\mathbb Z}$ be the stationary finite-recovery record, let $\rho=\PP(A_0=1)$, and let $\lambda$ be the nontrivial eigenvalue in~\eqref{eq:lambda-main}. Then
+Let $(A_n)_{n\in\mathbb Z}$ be the stationary boundary-reset recovery record, let $\rho=\PP(A_0=1)$, and let $\lambda$ be the nontrivial eigenvalue in~\eqref{eq:lambda-main}. Then
 \begin{equation}\label{eq:cov-transfer-main}
 \operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda^{n-1},
 \qquad n\ge1 .
@@ -319,7 +449,17 @@ P^{n-1}u=\rho\mathbf 1+\lambda^{n-1}(u-\rho\mathbf 1).
 Taking the $D$ component and subtracting $\rho^2$ gives~\eqref{eq:cov-transfer-main}.
 \end{proof}
 
-The finite-recovery argument has four logically separate parts, and we keep them separate because they answer different possible objections. First, the deterministic post-click reset gives a renewal process, so waiting-time hazards are legitimate record observables. Second, covariance beyond lag one can only be carried by the single hidden eigenmode in Lemma~\ref{lem:covariance-transfer-main}. Third, the hazard is strictly increasing, which rules out finite visible Markov order; this remains true even at the memory threshold. Fourth, exact $1$-dependence at the threshold is not inferred from vanishing covariances. It follows from a stronger labelled-kernel factorization when the hidden transition matrix loses its nontrivial eigenmode.
+The boundary-reset recovery argument has four logically separate parts, and we
+keep them separate because they answer different possible objections. First,
+the deterministic post-click reset gives a renewal process, so waiting-time
+hazards are legitimate record observables. Second, covariance beyond lag one
+can only be carried by the single hidden eigenmode in
+Lemma~\ref{lem:covariance-transfer-main}. Third, the hazard is strictly
+increasing, which rules out finite visible Markov order; this remains true even
+at the memory threshold. Fourth, exact $1$-dependence at the threshold is not
+inferred from vanishing covariances. It follows from a stronger
+labelled-kernel factorization when the hidden transition matrix loses its
+nontrivial eigenmode.
 
 \begin{lemma}[Critical-rate uniqueness and covariance phase]\label{lem:critical-rate-main}
 For fixed $\kappa_{\mathrm r},\Delta\tau>0$, the equation $\lambda(\Gamma)=0$, with $\lambda$ defined by~\eqref{eq:lambda-main}, has exactly one positive solution. This solution, denoted $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$, is characterized by
@@ -409,7 +549,7 @@ where $T_u$ and $T_v$ denote the ordered products of the labelled kernels for th
 \end{proof}
 
 \begin{lemma}[Exact \texorpdfstring{$1$}{1}-dependence criterion]\label{lem:one-dep-criterion-main}
-For positive finite-recovery parameters, the stationary visible record is exact $1$-dependent if and only if $\lambda=0$. Equivalently,
+For positive boundary-reset recovery parameters, the stationary visible record is exact $1$-dependent if and only if $\lambda=0$. Equivalently,
 \[
 \Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau).
 \]
@@ -423,12 +563,18 @@ If $\lambda=0$, Lemma~\ref{lem:kernel-factorization-main} gives exact $1$-depend
 Here $\rho>0$ and $a-\rho<0$ by Lemma~\ref{lem:stationary-main}, so the displayed covariance is nonzero. Exact $1$-dependence would make $A_0$ and $A_2$ independent and hence uncorrelated, a contradiction. Lemma~\ref{lem:critical-rate-main} identifies the unique positive solution of $\lambda=0$ as $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
 \end{proof}
 
-There is no contradiction between exact $1$-dependence and the strictly increasing hazard proved below. Exact $1$-dependence is an independence statement for two blocks with at least one unobserved sample between them. Finite Markov order is a different property: it would require the next-click probability after a long zero run to depend only on a fixed finite suffix. The hazard lemma shows that the finite-recovery record fails that latter property even at the memory threshold.
+There is no contradiction between exact $1$-dependence and the strictly
+increasing hazard proved below. Exact $1$-dependence is an independence
+statement for two blocks with at least one unobserved sample between them.
+Finite Markov order is a different property: it would require the next-click
+probability after a long zero run to depend only on a fixed finite suffix. The
+hazard lemma shows that the boundary-reset recovery record fails that latter
+property even at the memory threshold.
 
 The converse direction in Lemma~\ref{lem:one-dep-criterion-main} uses covariance only as an obstruction: if the process were exact $1$-dependent, then $A_0$ and $A_2$ would be independent and hence uncorrelated. Independence at the critical rate itself is supplied by the rank-one labelled-kernel factorization, not by covariance cancellation alone.
 
-\begin{unnumberedlemma}[Survival tails and hazard monotonicity]
-For the finite-recovery renewal law, put
+\begin{lemma}[Survival tails and hazard monotonicity]\label{lem:survival-hazard-main}
+For the boundary-reset recovery renewal law, put
 \[
 S_k=\PP(G\ge k),\qquad h_k=\PP(G=k\mid G\ge k)=\frac{g_k}{S_k}.
 \]
@@ -461,8 +607,9 @@ S_k=p^k(1+\alpha k),
 h_{k+1}-h_k=
 \frac{\alpha^2p}{(1+\alpha k)(1+\alpha(k+1))}>0 .
 \]
-Thus the click hazard is strictly increasing for all positive finite-recovery parameters.
-\end{unnumberedlemma}
+Thus the click hazard is strictly increasing for all positive boundary-reset
+recovery parameters.
+\end{lemma}
 
 \begin{proof}
 Assume first that $\kappa_{\mathrm r}\neq\Gamma$. Summing the closed gap law in
@@ -520,15 +667,16 @@ h_k=1-\frac{p(1+\alpha(k+1))}{1+\alpha k},
 and direct subtraction gives the displayed positive increment.
 \end{proof}
 
-\begin{theorem}[Finite-recovery memory transition]\label{prop:recovery-main}
-For the finite-recovery detector, the zero-run length law is the renewal law in Lemma~\ref{lem:renewal-gap-main}. If $\kappa_{\mathrm r}\neq\Gamma$, then the click hazard after $k$ zeros is
+\begin{theorem}[Memory transition for the sampled one-recovery-opportunity boundary-reset counter]\label{prop:recovery-main}
+For the sampled one-recovery-opportunity boundary-reset counter mode, the zero-run length law is the renewal law in Lemma~\ref{lem:renewal-gap-main}. If $\kappa_{\mathrm r}\neq\Gamma$, then the click hazard after $k$ zeros is
 \begin{equation}\label{eq:hazard-main}
 h_k=
 \frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}
      {\kappa_{\mathrm r}p^k-\Gamma c^k},
 \qquad k\ge0.
 \end{equation}
-The hazard is strictly increasing, so the visible process is not an $r$-step Markov chain for any finite $r$.
+By Lemma~\ref{lem:survival-hazard-main}, the hazard is strictly increasing, so
+the visible process is not an $r$-step Markov chain for any finite $r$.
 
 Let $\rho=\PP(A_0=1)$ and let $\lambda$ be the eigenvalue in~\eqref{eq:lambda-main}. Then
 \begin{equation}\label{eq:cov-main}
@@ -540,13 +688,13 @@ Consequently there is a unique critical rate $\Gamma_c(\kappa_{\mathrm r},\Delta
 \qquad
 \operatorname{Cov}(A_0,A_1)<0.
 \]
-Below $\Gamma_c$ all lag-$n$ covariances with $n\ge1$ are negative; above $\Gamma_c$ their signs alternate with the lag.
+Below $\Gamma_c$ all lag-$n$ covariances with $n\ge1$ are negative; above $\Gamma_c$ their signs alternate with the lag. Under the closure \Cref{ass:counting-readout-main}, the model threshold is read as $\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
 \end{theorem}
 
 \begin{proof}
-The renewal statement, the kernel formula for $g_k$, the closed form~\eqref{eq:gap-closed-main}, and full support are Lemma~\ref{lem:renewal-gap-main}. It remains to derive the hazard, covariance, and exact-dependence conclusions.
+The renewal statement, the kernel formula for $g_k$, the closed form~\eqref{eq:gap-closed-main}, and full support on zero-run lengths are Lemma~\ref{lem:renewal-gap-main}; \Cref{cor:word-support-main} upgrades this to support of every finite binary word. It remains to derive the hazard, covariance, and exact-dependence conclusions.
 
-The preceding survival-tail computation gives~\eqref{eq:hazard-main} when
+Lemma~\ref{lem:survival-hazard-main} gives~\eqref{eq:hazard-main} when
 $\kappa_{\mathrm r}\neq\Gamma$ and proves strict hazard increase for both
 unequal and equal rates. The gap law has full support for positive parameters,
 and \Cref{lem:hazard-obstruction-main} then excludes every finite Markov order.
@@ -554,7 +702,7 @@ and \Cref{lem:hazard-obstruction-main} then excludes every finite Markov order.
 The covariance formula is Lemma~\ref{lem:covariance-transfer-main}, which is identical to~\eqref{eq:cov-main}. By Lemma~\ref{lem:stationary-main}, $a-\rho<0$. Lemma~\ref{lem:critical-rate-main} gives the single zero of $\lambda$ and its sign on both sides. Hence the lag-one covariance is always negative; for $n\ge2$ all covariances vanish at $\Gamma=\Gamma_c$, are negative for $\Gamma<\Gamma_c$, and alternate in sign for $\Gamma>\Gamma_c$. Finally, Lemma~\ref{lem:one-dep-criterion-main} gives the stated equivalence between exact $1$-dependence and $\Gamma=\Gamma_c$.
 \end{proof}
 
-The memory-transition threshold is therefore not a softened version of the ideal Parry point. The ideal point is a standard maximum-entropy benchmark for a restricted grammar; the finite-recovery point is the theorem-level result, namely an exact dependence transition inside a full-support renewal class. The essential feature is the hidden-eigenvalue criterion: the nontrivial hidden mode vanishes precisely at $\Gamma_c$, labelled kernels factor through stationarity at that point, and away from it the lag-two covariance obstructs exact $1$-dependence. The same recovery mechanism is incompatible both with the Parry support constraint and with a Bernoulli full-support benchmark, as made explicit below. \Cref{fig:hazard-cov} illustrates both the strictly increasing hazard and the covariance phase change across $\Gamma_c$.
+The memory-transition threshold is therefore not a softened version of the ideal Parry point. The ideal point is a standard maximum-entropy benchmark for a restricted grammar; the sampled boundary-reset recovery point is the theorem-level result, namely an exact dependence transition inside a renewal class whose zero-run law has full support and hence supports every finite binary word. The essential feature is the hidden-eigenvalue criterion: the nontrivial hidden mode vanishes precisely at $\Gamma_c$, labelled kernels factor through stationarity at that point, and away from it the lag-two covariance obstructs exact $1$-dependence. The same recovery mechanism is incompatible both with the Parry support constraint and with a Bernoulli full-support benchmark, as made explicit below. \Cref{fig:hazard-cov} illustrates both the strictly increasing hazard and the covariance phase change across $\Gamma_c$.
 
 \begin{figure}[t]
 \centering
@@ -596,16 +744,28 @@ The memory-transition threshold is therefore not a softened version of the ideal
 \legend{$\Gamma=1.2$,$\Gamma=\Gamma_c$,$\Gamma=3.2$}
 \end{groupplot}
 \end{tikzpicture}
-\caption{Record-level signatures of the finite-recovery detector with $\kappa_{\mathrm r}=5$, $\Delta\tau=0.3$ (so $\Gamma_c\approx2.09$). (a)~Click hazard $h_k$ after $k$ consecutive zeros. All three curves are strictly increasing, confirming infinite symbolic memory. (b)~Normalized lag-$n$ covariance. Below $\Gamma_c$ all covariances are negative; at $\Gamma_c$ only the lag-$1$ covariance is nonzero; above $\Gamma_c$ the signs alternate.}
+\caption{Record-level signatures of the sampled boundary-reset recovery detector with $\kappa_{\mathrm r}=5$, $\Delta\tau=0.3$ (so $\Gamma_c\approx2.09$). (a)~Click hazard $h_k$ after $k$ consecutive zeros. All three curves are strictly increasing, confirming infinite symbolic memory. (b)~Normalized lag-$n$ covariance. Below $\Gamma_c$ all covariances are negative; at $\Gamma_c$ only the lag-$1$ covariance is nonzero; above $\Gamma_c$ the signs alternate.}
 \label{fig:hazard-cov}
 \end{figure}
 
 \begin{corollary}\label{cor:no-exact-main}
-No positive finite-recovery parameter choice realizes the Parry benchmark of Proposition~\ref{prop:ideal-main}. The finite-recovery record is also never Bernoulli.
+No positive parameter choice in the sampled boundary-reset recovery model
+realizes the Parry benchmark of Proposition~\ref{prop:ideal-main}. The same
+record is also never Bernoulli.
 \end{corollary}
 
 \begin{proof}
-The Parry law on the golden-mean shift assigns zero probability to the word $11$. In the finite-recovery detector, however, $\PP(A_{n+1}=1\mid A_n=1)=a>0$, so $\PP(A_n=1,A_{n+1}=1)=\rho a>0$. The support already differs from the Parry support. If one instead compares the full-support record with a Bernoulli maximum-entropy law at fixed click density, the zero-run hazard would be constant. \Cref{prop:recovery-main} gives a strictly increasing hazard for every positive finite-recovery parameter choice, excluding that possibility as well.
+The Parry law on the golden-mean shift assigns zero probability to the word
+$11$. In the sampled boundary-reset recovery detector, however,
+\[
+\PP(A_{n+1}=1\mid A_n=1)=a>0,
+\]
+so $\PP(A_n=1,A_{n+1}=1)=\rho a>0$. The support already differs from the
+Parry support. If one instead compares the full-support record with a Bernoulli
+maximum-entropy law at fixed click density, the zero-run hazard would be
+constant. \Cref{prop:recovery-main} gives a strictly increasing hazard for
+every positive parameter choice in the sampled boundary-reset recovery model,
+excluding that possibility as well.
 \end{proof}
 
 \begin{remark}[Equal-rate limit and Lambert $W$ expression for $\Gamma_c$]\label{rem:edge-cases}
@@ -664,10 +824,13 @@ The excluded branch gives $W(-s e^{-s})=-s$, hence the removable root $x=1$, whi
 
 \subsection{Soft approach to the ideal grammar}
 
-The obstruction in Corollary~\ref{cor:no-exact-main} is exact, but the finite-recovery record still approaches the ideal grammar in a controlled small-$\Delta\tau$ regime. This is the sense in which finite recovery yields a \emph{soft} dead time.
+The obstruction in Corollary~\ref{cor:no-exact-main} is exact, but the sampled
+boundary-reset recovery record still approaches the ideal grammar in a
+controlled small-$\Delta\tau$ regime. This is the sense in which this sampled
+boundary-reset law yields a \emph{soft} dead time.
 
 \begin{proposition}\label{prop:soft-main}
-In the finite-recovery model, for fixed positive $\Gamma$ and $\kappa_{\mathrm r}$,
+In the sampled boundary-reset recovery model, for fixed positive $\Gamma$ and $\kappa_{\mathrm r}$,
 \begin{equation}\label{eq:soft-main}
 \PP(A_{n+1}=1\mid A_n=1)=a
 =\frac12\,\kappa_{\mathrm r}\Gamma(\Delta\tau)^2+O((\Delta\tau)^3)
@@ -684,7 +847,9 @@ Then
 \frac12\,\kappa_{\mathrm r}\Gamma(\Delta\tau)^2\,(m-1)
 +O\!\bigl(m(\Delta\tau)^3\bigr).
 \end{equation}
-Thus, for every fixed $m$, the finite-recovery record concentrates on the golden-mean admissible set as $\Delta\tau\downarrow0$ at fixed physical rates.
+Thus, for every fixed $m$, the sampled boundary-reset recovery record
+concentrates on the golden-mean admissible set as $\Delta\tau\downarrow0$ at
+fixed physical rates.
 \end{proposition}
 
 \begin{proof}
@@ -720,21 +885,41 @@ which proves~\eqref{eq:soft-main}. For the window estimate, use the union bound 
 Inserting the expansion for $a$ gives~\eqref{eq:window-main}.
 \end{proof}
 
-Proposition~\ref{prop:soft-main} explains why the ideal grammar is a singular but physically meaningful limit. It is specifically a fixed-rate short-bin limit: $\Gamma$ and $\kappa_{\mathrm r}$ are held fixed while $\Delta\tau\downarrow0$. It should not be confused with the exact-clock scaling $\Gamma\Delta\tau=\log\varphi$, where the excitation rate grows like $\Delta\tau^{-1}$ and, for fixed $\kappa_{\mathrm r}$, the adjacent-click probability is only $O(\Delta\tau)$. At fixed finite window length and fixed physical rates, inadmissible words become quadratically rare. Yet the Parry benchmark is still excluded at any positive sampling interval: the word $11$ has positive probability, and the hazard remains strictly increasing, so the zero-run length is genuinely remembered.
+Proposition~\ref{prop:soft-main} explains why the ideal grammar is a singular
+but physically meaningful limit. It is specifically a fixed-rate short-bin
+limit: $\Gamma$ and $\kappa_{\mathrm r}$ are held fixed while
+$\Delta\tau\downarrow0$. It should not be confused with the exact-clock
+scaling $\Gamma\Delta\tau=\log\varphi$, where the excitation rate grows like
+$\Delta\tau^{-1}$ and, for fixed $\kappa_{\mathrm r}$, the adjacent-click
+probability is only $O(\Delta\tau)$. At fixed finite window length and fixed
+physical rates, inadmissible words become quadratically rare. Yet the Parry
+benchmark is still excluded at any positive sampling interval: the word $11$
+has positive probability, and the hazard remains strictly increasing, so the
+zero-run length is genuinely remembered.
 
 \subsection{Spectral density and universal antibunching}
 
-The finite-recovery renewal law has a second operational consequence, independent of the shell geometry but directly relevant to finite counting data. In the standard counting-statistics sense, antibunching means suppressed short-time reclicking and sub-Poisson coarse counts \cite{KimbleDagenaisMandel1977,Brandes2008}. Define the spectral density
+The boundary-reset recovery renewal law has a second operational consequence,
+independent of the shell geometry but directly relevant to finite counting
+data. In the standard counting-statistics sense, antibunching means suppressed
+short-time reclicking and sub-Poisson coarse counts
+\cite{KimbleDagenaisMandel1977,Brandes2008}. Define the spectral density
 \[
 f(\theta)=\rho(1-\rho)+2\sum_{n\ge1}\operatorname{Cov}(A_0,A_n)\cos(n\theta),
 \qquad \theta\in[-\pi,\pi].
 \]
 Since the covariance sequence is explicit, so are the low-frequency noise properties.
 
-This antibunching statement is not automatic. Finite recovery suppresses immediate reclicks, but it could in principle still generate longer-range positive correlations and enhanced low-frequency noise. The explicit covariance formula shows that the opposite happens: the reset mechanism suppresses low-frequency fluctuations throughout the parameter range. Once the covariance tail is geometric, both the spectral density and the Fano factor follow from summing the resulting series.
+This antibunching statement is not automatic. The sampled boundary-reset
+recovery law suppresses immediate reclicks, but it could in principle still
+generate longer-range positive correlations and enhanced low-frequency noise.
+The explicit covariance formula shows that the opposite happens: the reset
+mechanism suppresses low-frequency fluctuations throughout the parameter range.
+Once the covariance tail is geometric, both the spectral density and the Fano
+factor follow from summing the resulting series.
 
 \begin{proposition}\label{prop:spectrum-main}
-For the stationary finite-recovery record,
+For the stationary boundary-reset recovery record,
 \begin{equation}\label{eq:spectrum-main}
 f(\theta)=
 \rho(1-\rho)
@@ -753,7 +938,8 @@ then
 1-\rho+\frac{2(a-\rho)}{1-\lambda}
 <1.
 \end{equation}
-Hence the finite-recovery record is strictly sub-Poissonian throughout the parameter range.
+Hence the boundary-reset recovery record is strictly sub-Poissonian throughout
+the parameter range.
 \end{proposition}
 
 \begin{proof}
@@ -843,7 +1029,7 @@ Operationally, the memory shell can therefore be located by more than the sign o
 \legend{Poisson level,$\kappa_{\mathrm r}\Delta\tau=0.5$,$\kappa_{\mathrm r}\Delta\tau=1.0$,$\kappa_{\mathrm r}\Delta\tau=1.5$}
 \end{groupplot}
 \end{tikzpicture}
-\caption{Universal antibunching signatures. (a)~Spectral density $f(\theta)$ for $\kappa_{\mathrm r}=5$, $\Delta\tau=0.3$, and several values of $\Gamma\Delta\tau$. Every curve is strictly increasing on $[0,\pi]$, confirming low-frequency suppression. (b)~Asymptotic Fano factor $F$ as a function of $\Gamma\Delta\tau$ for several values of $\kappa_{\mathrm r}\Delta\tau$. The Poisson level $F=1$ (dashed) is never reached: the finite-recovery record is strictly sub-Poissonian throughout the parameter range.}
+\caption{Universal antibunching signatures. (a)~Spectral density $f(\theta)$ for $\kappa_{\mathrm r}=5$, $\Delta\tau=0.3$, and several values of $\Gamma\Delta\tau$. Every curve is strictly increasing on $[0,\pi]$, confirming low-frequency suppression. (b)~Asymptotic Fano factor $F$ as a function of $\Gamma\Delta\tau$ for several values of $\kappa_{\mathrm r}\Delta\tau$. The Poisson level $F=1$ (dashed) is never reached: the sampled boundary-reset recovery record is strictly sub-Poissonian throughout the parameter range.}
 \label{fig:spectrum-fano}
 \end{figure}
 
@@ -862,33 +1048,198 @@ For a fixed lag $n<N$, use
 \]
 For a block size $B$, split the record into $M=\lfloor N/B\rfloor$ disjoint blocks and write $N_B^{(m)}=\sum_{j=(m-1)B}^{mB-1}A_j$; the empirical block Fano factor is the sample variance of the $N_B^{(m)}$ divided by their sample mean.
 
-\begin{proposition}[Finite-record diagnostics]\label{prop:finite-diagnostics-main}
-Fix positive finite-recovery parameters and consider the stationary record generated by the kernels in~\eqref{eq:t0-t1-main}. For each fixed $k$, $n$, and $B$, the estimators $\widehat h_k$, $\widehat\gamma_n$, and the empirical block Fano factor converge almost surely to the corresponding population quantities as $N\to\infty$; for $\widehat h_k$, the denominator is eventually nonzero almost surely because the zero-run law has full support. Moreover:
-\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
-\item The sign of $\gamma_2=\operatorname{Cov}(A_0,A_2)$ is the opposite of the sign of $\lambda$, and $\gamma_2=0$ if and only if $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
-\item If a spatial scan changes the local excitation rate transversely through $\Gamma_c$ while the readout parameters are fixed, then the zero of $\gamma_2$ locates the memory-transition shell to first order.
-\item Let
+\begin{definition}[Regenerative cycles and the lag-two variance estimator]\label{def:cycle-block-main}
+Let $0\le \tau_1<\cdots<\tau_{J_N}\le N-1$ be the observed click times in the
+record, and assume $J_N\ge3$. To keep one forward click available for the
+lag-two boundary assignment, use the first
 \[
-\mu_2=\EE(A_0A_2),\qquad
-Z_j=(A_jA_{j+2}-\mu_2)-2\rho(A_j-\rho),
+K_N=J_N-2
 \]
-and define the regenerative long-run variance
+click-to-click cycles and write
+\[
+\mathcal C_{j,N}=(A_{\tau_j+1},\ldots,A_{\tau_{j+1}}),
+\qquad
+L_{j,N}=\tau_{j+1}-\tau_j,
+\qquad 1\le j\le K_N.
+\]
+Set
+\[
+\bar L_N=\frac1{K_N}\sum_{j=1}^{K_N}L_{j,N}.
+\]
+Let
+\[
+\widehat\rho_N=
+\frac{1}{K_N\bar L_N}\sum_{n=\tau_1}^{\tau_{K_N+1}-1}A_n,
+\qquad
+\widehat\mu_{2,N}=
+\frac{1}{K_N\bar L_N}\sum_{n=\tau_1}^{\tau_{K_N+1}-1}A_nA_{n+2},
+\]
+where the lag-two contribution with index $n=\tau_{j+1}-1$ is assigned to
+cycle $j+1$. Define the cycle rewards
+\[
+\widehat Y_{j,N}=
+\sum_{n=\tau_j}^{\tau_{j+1}-1}
+\left[
+(A_nA_{n+2}-\widehat\mu_{2,N})-2\widehat\rho_N(A_n-\widehat\rho_N)
+\right],
+\qquad 1\le j\le K_N,
+\]
+with the same boundary convention, and put
+\[
+\bar Y_N=\frac1{K_N}\sum_{j=1}^{K_N}\widehat Y_{j,N}.
+\]
+The implementable regenerative variance estimator is
+\begin{equation}\label{eq:cycle-block-est-main}
+\widehat\sigma_{2,N}^2=
+\frac{1}{\bar L_N\,(K_N-1)}
+\sum_{j=1}^{K_N}(\widehat Y_{j,N}-\bar Y_N)^2.
+\end{equation}
+\end{definition}
+
+\begin{theorem}[Regenerative CLT and implementable lag-two variance estimator under exponential gap tails]\label{thm:cycle-block-main}
+Let $(A_n)_{n\in\mathbb Z}$ be a stationary binary record whose click times are regeneration times, and assume that the inter-click zero-run law satisfies
+\begin{equation}\label{eq:exp-tail-main}
+\PP(G\ge k)\le C e^{-\eta k}
+\qquad(k\ge0)
+\end{equation}
+for some $C,\eta>0$. Define
+\[
+\rho=\EE A_0,\qquad
+\mu_2=\EE(A_0A_2),\qquad
+\gamma_2=\mu_2-\rho^2,
+\]
+\[
+Z_j=(A_jA_{j+2}-\mu_2)-2\rho(A_j-\rho).
+\]
+Let $T_0<T_1<T_2<\cdots$ be the successive click times in the Palm version of
+the stationary process, and let
+\[
+L_j=T_{j+1}-T_j
+\]
+be the cycle lengths. For lag two, define the cycle rewards
+\[
+Y_j=
+\sum_{n=T_j}^{T_{j+1}-1}
+\left[(A_nA_{n+2}-\mu_2)-2\rho(A_n-\rho)\right],
+\]
+with the convention that the single summand whose lag-two window crosses the
+boundary at $T_{j+1}$ is assigned to cycle $j+1$.
+Then the covariance series
 \begin{equation}\label{eq:sigma2-main}
 \sigma_2^2=
-\sum_{\ell\in\mathbb Z}\operatorname{Cov}(Z_0,Z_\ell)
+\frac{\Var(Y_1)}{\EE L_1}
+=\sum_{\ell\in\mathbb Z}\operatorname{Cov}(Z_0,Z_\ell)
 =\lim_{N\to\infty}
-N\,\Var\!\left(\frac1N\sum_{j=0}^{N-1}Z_j\right),
+N\,\Var\!\left(\frac1N\sum_{j=0}^{N-1}Z_j\right)
 \end{equation}
-where the series is absolutely convergent. Then
+is absolutely convergent, and
 \[
 \sqrt N\,(\widehat\gamma_2-\gamma_2)
 \Rightarrow
 \mathcal N(0,\sigma_2^2).
 \]
-If $\widehat\sigma_2^2$ is any consistent regenerative batch-means or cycle-block estimate of \eqref{eq:sigma2-main}, an asymptotic two-sided $(1-\alpha)$ confidence interval for $\gamma_2$ is
+If $\widehat\sigma_{2,N}^2$ is defined by \eqref{eq:cycle-block-est-main}, then
+\[
+\widehat\sigma_{2,N}^2\to \sigma_2^2
+\qquad\text{in probability.}
+\]
+\end{theorem}
+
+\begin{proof}
+Because a click resets the hidden state deterministically,
+Lemma~\ref{lem:renewal-gap-main} implies that the click-to-click cycles are
+i.i.d. in the Palm version. The exponential bound \eqref{eq:exp-tail-main}
+gives $\EE e^{\eta' L_1}<\infty$ for some $\eta'>0$, hence $\EE L_1^m<\infty$
+for every $m\ge1$. Since $Z_n$ is bounded and depends only on the lag-two
+window, the cycle reward $Y_1$ has finite second moment. The regenerative
+central-limit theorem and variance formula \cite{Asmussen2003} therefore give
+\[
+\frac{1}{\sqrt N}\sum_{n=0}^{N-1}Z_n
+\Rightarrow
+\mathcal N\!\left(0,\frac{\Var(Y_1)}{\EE L_1}\right),
+\]
+and identify the same quantity with the absolutely convergent covariance series
+in \eqref{eq:sigma2-main}. This proves the displayed formula for $\sigma_2^2$.
+
+Since
+\[
+\widehat\gamma_2
+=
+\frac1N\sum_{n=0}^{N-3}A_nA_{n+2}
+-\widehat\rho^{\,2}
+=
+\gamma_2+\frac1N\sum_{n=0}^{N-1}Z_n+o_{\PP}(N^{-1/2}),
+\]
+the CLT for $\widehat\gamma_2$ follows.
+
+For consistency of the variance estimator, first consider the infeasible
+version built from the true cycle rewards $Y_j$:
+\[
+\widetilde\sigma_{2,N}^2=
+\frac{1}{\bar L_N\,(K_N-1)}
+\sum_{j=1}^{K_N}(Y_j-\bar Y_N^\circ)^2,
+\qquad
+\bar Y_N^\circ=\frac1{K_N}\sum_{j=1}^{K_N}Y_j.
+\]
+Because $(L_j,Y_j)$ are i.i.d., the strong law gives
+\[
+\bar L_N\to \EE L_1,
+\qquad
+\frac1{K_N-1}\sum_{j=1}^{K_N}(Y_j-\bar Y_N^\circ)^2\to \Var(Y_1)
+\]
+almost surely, so $\widetilde\sigma_{2,N}^2\to\sigma_2^2$ almost surely.
+
+The same regenerative strong law gives
+\[
+\widehat\rho_N\to\rho,
+\qquad
+\widehat\mu_{2,N}\to\mu_2
+\]
+almost surely. Because $A_n\in\{0,1\}$, there is a deterministic constant
+$C_0$ such that for every $1\le j\le K_N$,
+\[
+|\widehat Y_{j,N}-Y_j|
+\le
+C_0\,L_{j,N}\bigl(
+|\widehat\mu_{2,N}-\mu_2|+|\widehat\rho_N-\rho|
+\bigr).
+\]
+Hence
+\[
+\frac1{K_N}\sum_{j=1}^{K_N}(\widehat Y_{j,N}-Y_j)^2
+\le
+C_0^2\bigl(
+|\widehat\mu_{2,N}-\mu_2|+|\widehat\rho_N-\rho|
+\bigr)^2
+\frac1{K_N}\sum_{j=1}^{K_N}L_{j,N}^2
+=o_{\PP}(1),
+\]
+because $\EE L_1^2<\infty$. Therefore replacing $Y_j$ by $\widehat Y_{j,N}$
+changes the empirical mean and empirical variance by $o_{\PP}(1)$, and the
+same is true after dividing by $\bar L_N$. Consequently
+\[
+\widehat\sigma_{2,N}^2-\widetilde\sigma_{2,N}^2\to0
+\qquad\text{in probability,}
+\]
+which together with the almost-sure limit of $\widetilde\sigma_{2,N}^2$
+proves $\widehat\sigma_{2,N}^2\to\sigma_2^2$ in probability.
+\end{proof}
+
+\begin{proposition}[Finite-record diagnostics]\label{prop:finite-diagnostics-main}
+Fix positive boundary-reset recovery parameters and consider the stationary
+record generated by the kernels in~\eqref{eq:t0-t1-main}. For each fixed $k$,
+$n$, and $B$, the estimators $\widehat h_k$, $\widehat\gamma_n$, and the
+empirical block Fano factor converge almost surely to the corresponding
+population quantities as $N\to\infty$; for $\widehat h_k$, the denominator is
+eventually nonzero almost surely because the zero-run law has full support.
+Moreover:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
+\item The sign of $\gamma_2=\operatorname{Cov}(A_0,A_2)$ is the opposite of the sign of $\lambda$, and $\gamma_2=0$ if and only if $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
+\item If a spatial scan changes the local excitation rate transversely through $\Gamma_c$ while the readout parameters are fixed, then the zero of $\gamma_2$ locates the memory-transition shell to first order.
+\item With the regenerative cycle-reward estimator $\widehat\sigma_{2,N}^2$ from \Cref{def:cycle-block-main}, an asymptotic two-sided $(1-\alpha)$ confidence interval for $\gamma_2$ is
 \[
 \widehat\gamma_2\pm
-z_{1-\alpha/2}\frac{\widehat\sigma_2}{\sqrt N}.
+z_{1-\alpha/2}\frac{\widehat\sigma_{2,N}}{\sqrt N}.
 \]
 Thus the statistical scale for resolving a transverse crossing is $N^{-1/2}$ once the detector design is fixed; a scan-coordinate interval follows by the delta method after dividing by the estimated nonzero slope of $s\mapsto\gamma_2(s)$ at the crossing.
 \end{enumerate}
@@ -901,28 +1252,7 @@ For the sign statement, \Cref{prop:recovery-main} gives
 \[
 \gamma_2=\rho(a-\rho)\lambda .
 \]
-Lemma~\ref{lem:stationary-main} gives $\rho>0$ and $a-\rho<0$, so $\gamma_2$ has the opposite sign from $\lambda$. Lemma~\ref{lem:critical-rate-main} says that $\lambda$ has the unique zero $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ and changes sign there, proving (i). If a scan parameter $s$ gives $\Gamma_+(s_*)=\Gamma_c$ and $d\Gamma_+/ds|_{s_*}\neq0$, then the preceding sign change is transverse in the scan coordinate; hence the zero of $\gamma_2$ identifies the threshold location to first order, proving (ii).
-
-Finally, apply the regenerative central-limit theorem for regenerative processes with finite second cycle moment \cite{Asmussen2003} to the two finite-window additive observables
-\[
-A_j,\qquad A_jA_{j+2}.
-\]
-The exponential cycle tail gives the required moment condition and also implies absolute convergence of the covariance series in \eqref{eq:sigma2-main}. Boundary terms from the last two samples are $o(N^{-1/2})$. Thus
-\[
-\sqrt N\left(
-\frac1N\sum_{j=0}^{N-1}A_j-\rho,\ 
-\frac1{N-2}\sum_{j=0}^{N-3}A_jA_{j+2}-\mu_2
-\right)
-\]
-has a centered Gaussian limit with finite covariance matrix. The map
-$(u,v)\mapsto v-u^2$ is differentiable at $(\rho,\mu_2)$ with derivative
-$(-2\rho,1)$, so the delta method gives the displayed CLT for
-$\widehat\gamma_2$. Written as a scalar long-run variance, the resulting
-variance is exactly \eqref{eq:sigma2-main}. Consistency of standard
-regenerative batch-means or cycle-block variance estimates under the same
-moment condition gives the stated normal confidence interval; the scan
-coordinate statement is the one-dimensional delta method under the transverse
-slope assumption.
+Lemma~\ref{lem:stationary-main} gives $\rho>0$ and $a-\rho<0$, so $\gamma_2$ has the opposite sign from $\lambda$. Lemma~\ref{lem:critical-rate-main} says that $\lambda$ has the unique zero $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ and changes sign there, proving (i). If a scan parameter $s$ gives $\Gamma_+(s_*)=\Gamma_c$ and $d\Gamma_+/ds|_{s_*}\neq0$, then the preceding sign change is transverse in the scan coordinate; hence the zero of $\gamma_2$ identifies the threshold location to first order, proving (ii). Item (iii) is the confidence interval from \Cref{thm:cycle-block-main}.
 \end{proof}
 
 For the memory shell, the primary local diagnostic is the sign of $\widehat\gamma_2$. In the model,
@@ -931,9 +1261,15 @@ For the memory shell, the primary local diagnostic is the sign of $\widehat\gamm
 \]
 with $\rho>0$ and $a-\rho<0$. Thus $\gamma_1=\rho(a-\rho)$ remains negative, and Proposition~\ref{prop:finite-diagnostics-main} makes the lag-two zero the finite-record diagnostic for the memory threshold. Without a transverse crossing, the sign diagnostic can identify side information but not a unique shell location.
 
-The same data should also pass two consistency checks: the empirical hazards $\widehat h_k$ should increase over the reliable range of observed gaps, and the lag profile should be compatible with the one-mode form $\widehat\gamma_n\approx \widehat\gamma_1\widehat\lambda^{\,n-1}$ away from sampling noise. These checks are not additional shell equations; they test whether the finite-recovery readout model is the right effective description of the observed record.
+The same data should also pass two consistency checks: the empirical hazards
+$\widehat h_k$ should increase over the reliable range of observed gaps, and
+the lag profile should be compatible with the one-mode form
+$\widehat\gamma_n\approx \widehat\gamma_1\widehat\lambda^{\,n-1}$ away from
+sampling noise. These checks are not additional shell equations; they test
+whether the sampled boundary-reset recovery readout model is the right
+effective description of the observed record.
 
-A design-specific confidence interval still requires either the corresponding regenerative variance estimate or a Monte Carlo calibration; no universal sample-size bound follows from the closed-form law alone.
+Theorem~\ref{thm:cycle-block-main} supplies the lag-two variance estimate directly in terms of observable click-to-click cycles. Other design-specific observables still require the corresponding regenerative variance estimate or a Monte Carlo calibration, and no universal sample-size bound follows from the closed-form law alone.
 
 For the ideal-benchmark shell in the ideal-blanking mode, the finite-sample test is different because the benchmark is a Markov law on a restricted support.
 
@@ -1034,4 +1370,4 @@ p(1-p)(2-p),
 which is the stated variance. Consistency of $\widehat\sigma_{p,N}^2$ follows from $\widehat p_N\to p$ almost surely.
 \end{proof}
 
-In practice the exact-clock test is therefore two-stage: first verify that adjacent clicks are absent up to the experimental tolerance, and then test the benchmark value $p=\varphi^{-1}$ using Proposition~\ref{prop:ideal-diagnostics-main}. This exact-clock diagnostic should not be mixed with the finite-recovery one: the former tests a support-and-transition benchmark, while the latter tests an exact-dependence crossing inside a full-support renewal class. Any design calculation for the exact-clock benchmark must use the variance $\sigma_p^2$ above together with the desired confidence level and power; no universal sample-size rule is asserted here.
+In practice the exact-clock test is therefore two-stage: first verify that adjacent clicks are absent up to the experimental tolerance, and then test the benchmark value $p=\varphi^{-1}$ using Proposition~\ref{prop:ideal-diagnostics-main}. This exact-clock diagnostic should not be mixed with the sampled boundary-reset recovery one: the former tests a support-and-transition benchmark, while the latter tests an exact-dependence crossing inside a renewal class whose zero-run law has full support and hence supports every finite binary word. Any design calculation for the exact-clock benchmark must use the variance $\sigma_p^2$ above together with the desired confidence level and power; no universal sample-size rule is asserted here.
