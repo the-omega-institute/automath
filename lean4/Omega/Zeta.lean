@@ -64,6 +64,7 @@ import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiFiniteDefectRhScanTraceEquivalence
 import Omega.Zeta.XiFoldbinEvenWindowParitySectionCenterIntersection
+import Omega.Zeta.XiFoldbinEscortTvCollapseOnebitGibbs
 import Omega.Zeta.XiFiniteKernelZetaRationalDecidability
 import Omega.Zeta.FiniteQuotientPhaseCompressionPrecisionLowerBound
 import Omega.Zeta.XiFiniteFrontierCertificate
@@ -75,6 +76,7 @@ import Omega.Zeta.XiSingleBaseDealiasingCountableException
 import Omega.Zeta.XiNegativeBlockSpectrumSpikeAndShallowBound
 import Omega.Zeta.XiLinearRecurrenceLocalTestByViolationRate
 import Omega.Zeta.XiOutputPotentialRightEndpointSecondOrderInversionNormalForm
+import Omega.Zeta.XiOutputPotentialEndpointGapGroundState
 import Omega.Zeta.XiGridScanDiophantineDealiasingStability
 import Omega.Zeta.XiGodelCoprimeModFamilyDecoupling
 import Omega.Zeta.XiAddressableGodelWorstcaseRedundancyDiverges
