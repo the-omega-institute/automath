@@ -512,6 +512,7 @@ import Omega.Conclusion.StokesSteinDualNorm
 import Omega.Conclusion.StokesEnergyCellSamplingConcentration
 import Omega.Conclusion.LinearExternalizationLiminf
 import Omega.Conclusion.LkBulkBoundaryBesselDuality
+import Omega.Conclusion.LkBulkBoundaryQuadraticTilt
 import Omega.Conclusion.LkNormalizedZetaOddProjector
 import Omega.Conclusion.LkNdDeterminantZeroTracking
 import Omega.Conclusion.LkCentralBinomialCatalanMoments
