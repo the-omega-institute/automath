@@ -150,6 +150,7 @@ import Omega.POM.DiagonalRateCriticalContinuousTimeGeneratorMaxent
 import Omega.POM.DiagonalRateCriticalLaplacianPdetTensorSynergyFactorization
 import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensor
 import Omega.POM.DiagonalRateDiagonalClosureRankone
+import Omega.POM.DiagonalRateDiagonalDeterminesSpectrum
 import Omega.POM.DiagonalRateDiagonalLaguerreDeterminant
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete
 import Omega.POM.DiagonalRateEulerDiagonalIdentity
