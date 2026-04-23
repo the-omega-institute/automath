@@ -17,3 +17,4 @@ import Omega.SyncKernelRealInput.RealInput40PrimitiveOrbitsMobiusSqrt
 import Omega.SyncKernelRealInput.WittDepthLineConvolution
 import Omega.SyncKernelRealInput.RealInput40ZetaUvSqrtvEigs
 import Omega.SyncKernelRealInput.RealInput40NearCoboundarySVP
+import Omega.SyncKernelRealInput.RealInput40PrimeGenfunIdentity
