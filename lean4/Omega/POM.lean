@@ -147,6 +147,7 @@ import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
 import Omega.POM.DiagonalRateAbsorbingDFR
 import Omega.POM.DiagonalRateAbsorbingLaguerreInterlacing
 import Omega.POM.MaxentMarkovLaguerreSecularSpectrum
+import Omega.POM.MaxentMarkovOptimalCouplingLatentBinaryMixture
 import Omega.POM.MaxentMarkovSpectrumMonotoneInDelta
 import Omega.POM.MaxentMarkovSpectrumSingleShotInversion
 import Omega.POM.DiagonalRateAbsorbingWronskianIdentity
@@ -179,6 +180,7 @@ import Omega.POM.DiagonalRateRefreshKemenyStarClosed
 import Omega.POM.DiagonalRateSmallDistortionSynergyK
 import Omega.POM.DiagonalRateSmallDistortionSynergyGeneratorHomomorphism
 import Omega.POM.DiagonalRateSmallDistortionSavingHalfMomentFold
+import Omega.POM.DiagonalRateSmallDistortionSynergyProduct
 import Omega.POM.DiagonalRateSturmCauchyEigenbasis
 import Omega.POM.DiagonalRateRefreshCountRenewalLLNCLT
 import Omega.POM.DiagonalRateRefreshCountScgfDerivatives
