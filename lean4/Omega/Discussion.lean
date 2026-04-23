@@ -28,6 +28,7 @@ import Omega.Discussion.HSZKIffDiamond
 import Omega.Discussion.HankelSyntaxIndependentRigidity
 import Omega.Discussion.HodgeStokesVarianceRigidity
 import Omega.Discussion.HorizonMeasureFold6Pushforward
+import Omega.Discussion.HorizonBoundarylayerPhiScaling
 import Omega.Discussion.HypercubePotentialCurvatureControlledStrictification
 import Omega.Discussion.HypercubeSpectralTailFromFlux
 import Omega.Discussion.HypercubeStokesFourierBinomial
