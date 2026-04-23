@@ -22,6 +22,7 @@ import Omega.POM.HankelRankMinimal
 import Omega.POM.HiddenBitJumpCollisionIsomorphism
 import Omega.POM.HiddenBitComplementFixedpointBSplitDichotomy
 import Omega.POM.HiddenBitWatataniIndexElement
+import Omega.POM.HighorderSchurPackageDeterminesFullFiberMultiset
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.AitkenDelta2SquareConvergence
 import Omega.POM.AnomSingleMomentCompleteEquivalence
@@ -53,6 +54,7 @@ import Omega.POM.BbitOracleCapacityClosedForm
 import Omega.POM.GoldenBinaryChannelContraction
 import Omega.POM.GoldenLikelihoodRatioMartingales
 import Omega.POM.BeckChevalleyAmgmDefectIdentity
+import Omega.POM.BivariateMomentZetaFredholm
 import Omega.POM.BivariateSystemIdentificationFiniteWindow
 import Omega.POM.RecurrenceCodeViolationDistance
 import Omega.POM.ReverseKlBoundByDispersion
