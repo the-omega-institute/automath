@@ -15,6 +15,7 @@ import Omega.Zeta.AbelTwoBaseDealiasingInjectivity
 import Omega.Zeta.AbelHardyEnergyDecimationOrthogonal
 import Omega.Zeta.AbelTauberianMeanSquareLinearLaw
 import Omega.Zeta.AbelDetailEnergyBudget
+import Omega.Zeta.AbelDepolarizationHardyEnergyBlowup
 import Omega.Zeta.AbelHankelSpectralGapSinglePole
 import Omega.Zeta.AbelPowerBaseGapAmplification
 import Omega.Zeta.AbelPowerbaseCovariancePolePowerMap
