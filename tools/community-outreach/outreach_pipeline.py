@@ -966,6 +966,7 @@ def build_future_research_prompt(item: dict[str, Any], research_dir: Path) -> st
     route = str(item.get("research_route", "hybrid"))
     scope_context = build_scope_context(source_repo)
     prior_context = prior_future_research_context(research_dir)
+    related_future_context = latest_repo_future_context(source_repo)
     backflow = {}
     state = load_state(source_repo)
     if state:
@@ -992,6 +993,9 @@ def build_future_research_prompt(item: dict[str, Any], research_dir: Path) -> st
 
         PRIOR RUN CONTEXT FOR THIS FUTURE ITEM:
         {prior_context or "(none)"}
+
+        RECENT RELATED FUTURE CONTEXT FOR THIS REPO:
+        {related_future_context or "(none)"}
 
         REQUIRED ROUTE:
         - research_route: {route}
@@ -1696,43 +1700,127 @@ def set_state_status(repo: str, status: str, note: str, *, dry_run: bool = False
     return state
 
 
-def queue_state_deepening(repo: str, *, dry_run: bool = False) -> dict[str, Any]:
+def latest_repo_future_context(repo: str, *, max_chars: int = 3500) -> str:
+    future_root = target_dir_for_repo(repo) / "future"
+    if not future_root.exists():
+        return ""
+    parts: list[str] = []
+    patterns = (
+        "summary_*.md",
+        "proof_closure_packet_*.md",
+        "theorem_packet.md",
+        "*certificate*.json",
+    )
+    for pattern in patterns:
+        matches = sorted(
+            future_root.glob(f"*/{pattern}"),
+            key=lambda path: path.stat().st_mtime,
+            reverse=True,
+        )
+        for path in matches[:2]:
+            try:
+                text = path.read_text(encoding="utf-8")
+            except Exception:
+                continue
+            parts.append(f"\n--- {_repo_relative(path)} ---\n{text[:1200]}")
+    return "\n".join(parts)[:max_chars]
+
+
+def queue_state_deepening(repo: str, *, kind: str = "default", dry_run: bool = False) -> dict[str, Any]:
     """Convert a reference-only state into a future deep-research task."""
     state, _, _ = find_state_record(repo, include_archive=True)
     backflow = backflow_placement_from_history(state) or {}
     section_dir = str(backflow.get("section_dir", ""))
+    kind = (kind or "default").strip().lower()
 
     if state.repo == "teorth/equational_theories" and section_dir == "stable_arithmetic_equational_audit":
-        title = "Deep structural theorem from stable arithmetic dashboard-disjointness"
-        task = (
-            "Continue from the stable_arithmetic_equational_audit negative result. "
-            "Do not stop at '0 dashboard unknowns'. Use the bad-example-structure route: "
-            "explain structurally why stableAdd/stableMul and the Fibonacci affine-linear "
-            "family are dashboard-disjoint, classify the obstruction if possible, and "
-            "look for a genuinely new theorem chain that either proves an impossibility "
-            "for the affine-linear/stable-arithmetic mechanism or identifies the next "
-            "non-affine mechanism needed to hit current ETP unknowns. The output must be "
-            "publishable mathematical text or a precise blocker theorem, not another "
-            "value-summary."
-        )
-        scope_boundary = (
-            "The existing public-outreach value is insufficient because the computed "
-            "stable arithmetic and Fibonacci affine-linear spectra resolve 0 of 498 "
-            "current ETP dashboard unknowns. This future task should deepen the negative "
-            "audit into structural theory; it must not claim a dashboard resolution unless "
-            "a new verified mechanism is found."
-        )
-        route = "proof"
-        route_reason = (
-            "The finite computations are already available; the missing value is a "
-            "structural theorem/classification or obstruction explaining the negative audit."
-        )
-        route_contract = (
-            "Produce theorem/proposition statements with complete proof text. Existing "
-            "Python certificates may be cited as finite evidence, but a new outreach-worthy "
-            "result must be a structural proof, classification, or impossibility theorem."
-        )
-        priority = "high"
+        if kind == "integral-primary":
+            title = "Integral and 2/3-primary closure of the affine dashboard obstruction"
+            task = (
+                "Continue from the exact stable-affine dashboard obstruction boundary. "
+                "Attack the remaining all-affine gap: decide whether the coefficient-ideal "
+                "containment I(F) subset I(E) can be strengthened from Z[1/6][a,b] to "
+                "Z[a,b] for the current 498 dashboard pairs. If integral containment fails, "
+                "classify the obstruction over the 2-primary and 3-primary fibers and state "
+                "the sharp replacement theorem. The output must be a theorem packet with "
+                "complete proof or a precise blocker certificate; do not claim a universal "
+                "small-characteristic affine obstruction unless proved."
+            )
+            scope_boundary = (
+                "Previous work proved affine-linear obstruction only over rings where 6 is "
+                "invertible and by finite certificate for the audited Fibonacci residues. "
+                "This task may strengthen that boundary, or prove why the integral/primary "
+                "closure is blocked. It must not treat the Z[1/6] theorem as an integral theorem."
+            )
+            route = "proof"
+            route_reason = (
+                "The remaining gap is an ideal-containment/primary-decomposition theorem, "
+                "not a broad enumeration."
+            )
+            route_contract = (
+                "Produce one of: (1) an integral containment theorem over Z[a,b] with proof; "
+                "(2) a 2/3-primary decomposition theorem with proof; or (3) a minimal "
+                "counterexample/blocker certificate explaining exactly where integral "
+                "containment fails."
+            )
+            priority = "high"
+        elif kind == "non-affine":
+            title = "First non-affine mechanism beyond the stable-affine obstruction"
+            task = (
+                "Use the stable-affine obstruction as a boundary theorem and search for the "
+                "first genuinely non-affine/path-order/nonlinear mechanism that could separate "
+                "a current ETP dashboard pair. The goal is not a broad scan; follow the "
+                "bad-example route: identify the smallest dashboard pair not explainable by "
+                "the affine shadows, propose a non-affine skeleton, and either construct a "
+                "certificate or prove a sharper obstruction for that skeleton."
+            )
+            scope_boundary = (
+                "StableAdd, stableMul, affine-linear rings with 6 invertible, and audited "
+                "Fibonacci affine residues are already excluded. This task must leave those "
+                "shadows and must not repackage affine-linear data as a new mechanism."
+            )
+            route = "hybrid"
+            route_reason = (
+                "A first non-affine mechanism likely needs finite certificate search plus "
+                "a proof interpreting the found skeleton or obstruction."
+            )
+            route_contract = (
+                "Produce a concrete non-affine candidate certificate with proof of what it "
+                "separates, or a precise theorem excluding the attempted skeleton. Include "
+                "reproducible scripts/certificates if a finite search is used."
+            )
+            priority = "high"
+        else:
+            title = "Deep structural theorem from stable arithmetic dashboard-disjointness"
+            task = (
+                "Continue from the stable_arithmetic_equational_audit negative result. "
+                "Do not stop at '0 dashboard unknowns'. Use the bad-example-structure route: "
+                "explain structurally why stableAdd/stableMul and the Fibonacci affine-linear "
+                "family are dashboard-disjoint, classify the obstruction if possible, and "
+                "look for a genuinely new theorem chain that either proves an impossibility "
+                "for the affine-linear/stable-arithmetic mechanism or identifies the next "
+                "non-affine mechanism needed to hit current ETP unknowns. The output must be "
+                "publishable mathematical text or a precise blocker theorem, not another "
+                "value-summary."
+            )
+            scope_boundary = (
+                "The existing public-outreach value is insufficient because the computed "
+                "stable arithmetic and Fibonacci affine-linear spectra resolve 0 of 498 "
+                "current ETP dashboard unknowns. This future task should deepen the negative "
+                "audit into structural theory; it must not claim a dashboard resolution unless "
+                "a new verified mechanism is found."
+            )
+            route = "proof"
+            route_reason = (
+                "The finite computations are already available; the missing value is a "
+                "structural theorem/classification or obstruction explaining the negative audit."
+            )
+            route_contract = (
+                "Produce theorem/proposition statements with complete proof text. Existing "
+                "Python certificates may be cited as finite evidence, but a new outreach-worthy "
+                "result must be a structural proof, classification, or impossibility theorem."
+            )
+            priority = "high"
     else:
         title = f"Deepen reference-only outreach result for {state.repo}"
         task = (
@@ -1766,6 +1854,7 @@ def queue_state_deepening(repo: str, *, dry_run: bool = False) -> dict[str, Any]
         "backflow": backflow,
         "latest_events": state.action_history[-5:],
         "findings": state.findings[:4],
+        "prior_future_context": latest_repo_future_context(state.repo),
     }
     item = {
         "title": title,
@@ -5718,6 +5807,7 @@ def parse_args() -> argparse.Namespace:
               python3 tools/community-outreach/outreach_pipeline.py --repo teorth/equational_theories --review-state
               python3 tools/community-outreach/outreach_pipeline.py --repo teorth/equational_theories --issue 364 --refresh-state-draft
               python3 tools/community-outreach/outreach_pipeline.py --repo teorth/equational_theories --queue-state-deepening
+              python3 tools/community-outreach/outreach_pipeline.py --repo teorth/equational_theories --queue-state-deepening --deepening-kind integral-primary
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --register-future-scope
               python3 tools/community-outreach/outreach_pipeline.py --repo owner/name --issue 38 --mark-replied https://github.com/owner/name/issues/38#issuecomment-...
               python3 tools/community-outreach/outreach_pipeline.py --check-artifacts
@@ -5743,6 +5833,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--set-state-status", nargs=2, metavar=("STATUS", "NOTE"), help="Set ordinary --repo state status with a note")
     parser.add_argument("--refresh-state-draft", action="store_true", help="Refresh ordinary --repo drafts from deterministic backflow-aware templates")
     parser.add_argument("--queue-state-deepening", action="store_true", help="Queue deep-research continuation tasks for reference-only --repo states")
+    parser.add_argument("--deepening-kind", choices=["default", "integral-primary", "non-affine"], default="default", help="Specific deepening task kind for --queue-state-deepening")
     parser.add_argument("--register-future-scope", action="store_true", help="Extract deferred future tasks from the current draft state for --repo targets")
     parser.add_argument("--mark-replied", metavar="URL", help="Mark --repo target state as replied/submitted with an existing GitHub issue comment URL")
     parser.add_argument("--append-future-note", nargs=2, metavar=("ID", "NOTE"), help="Append a note/source update to a future queue item")
@@ -5968,7 +6059,7 @@ def main() -> int:
 
     if args.queue_state_deepening:
         for repo in repos:
-            item = queue_state_deepening(repo, dry_run=args.dry_run)
+            item = queue_state_deepening(repo, kind=args.deepening_kind, dry_run=args.dry_run)
             print(f"Deepening queued: {item['id']} {item['title']} queued={item['queued']}")
         return 0
 
