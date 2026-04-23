@@ -490,6 +490,76 @@ B_{\rm req}<+\infty,\quad B_{\rm av}\ge B_{\rm req}.
 \end{enumerate}
 反过来，三类见证中的任意一类一旦出现，都分别阻止 projected congruence 被当前协议提升为 canonical lifted equality。
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{proposition}[window-\texorpdfstring{$6$}{6} 固定 quotient boundary ledger 的相对闭合判别]
+\label{distill:euclid_elements-diagrammatic_compatibility_audit_families-window6-quotient-ledger-relative-classification}
+\textbf{Distillation timestamp: 2026-04-23T13:05:39+08:00; pipeline index: 47. 依赖状态：conditional finite audit.}
+沿用命题 \ref{prop:typed-address-biaxial-completion-window6-audit-boundary-certificates} 的记号，并固定
+\[
+Q_{\partial}:=C_{\partial}/P_6^{\mathrm{geo}}\cong(\ZZ/2\ZZ)^2.
+\]
+所谓相对于该 quotient 的一份 boundary overlap diagram，是指一个有限图 \(\Gamma=(V,E)\) 与一条类型化边账本
+\[
+\lambda:E^{\rm or}\longrightarrow Q_{\partial},
+\qquad
+\lambda(\bar e)=\lambda(e),
+\]
+其中等式按 \(\FF_2\)-系数理解。对 \(\FF_2\)-循环 \(z=\sum_{e\in E} \epsilon_e e\in Z_1(\Gamma;\FF_2)\)，定义 quotient monodromy
+\[
+\operatorname{Hol}_{\lambda}([z])
+:=
+\sum_{e\in E}\epsilon_e\lambda(e)\in Q_{\partial}.
+\]
+则 \(\operatorname{Hol}_{\lambda}:H_1(\Gamma;\FF_2)\to Q_{\partial}\) 是良定义线性映射，并且：
+\begin{enumerate}
+  \item 存在顶点势 \(\alpha:V\to Q_{\partial}\) 使
+  \[
+  \lambda(uv)=\alpha(u)+\alpha(v)\qquad(uv\in E)
+  \]
+  当且仅当 \(\operatorname{Hol}_{\lambda}=0\)；
+  \item 若 \(H_1(\Gamma;\FF_2)=0\)，则任意类型化 \(Q_{\partial}\)-边账本均可由顶点势闭合；
+  \item 若 \(\operatorname{Hol}_{\lambda}\ne0\)，则在这份固定 quotient ledger 内，其障碍秩只能为
+  \[
+  \operatorname{rank}_{\FF_2}\operatorname{im}(\operatorname{Hol}_{\lambda})\in\{1,2\}.
+  \]
+  秩 \(1\) 表示只剩一位 quotient boundary monodromy，秩 \(2\) 表示两位 \(Q_{\partial}\)-残差均被实际检测到；该分类仅针对给定的 \(Q_{\partial}\)-账本，不声称覆盖所有可能的 boundary 失败机制。
+\end{enumerate}
+进一步，若某个 reduced readout 只杀死子空间 \(K\le Q_{\partial}\)，则该 readout 能闭合当前图解当且仅当
+\[
+\operatorname{im}(\operatorname{Hol}_{\lambda})\subseteq K.
+\]
+因此，在固定 \(Q_{\partial}\)-ledger 口径下，杀死当前 boundary monodromy 所需的最小 quotient bit 数恰为 \(\operatorname{rank}_{\FF_2}\operatorname{im}(\operatorname{Hol}_{\lambda})\)。
+\end{proposition}
+\begin{proof}
+因为 \(Q_{\partial}\) 是 \(\FF_2\)-向量空间，边的方向反转不改变标签，故对循环代表元求和只依赖于其边集的 \(\FF_2\)-同调类；图的一维复形没有非零二维边界，所以 \(\operatorname{Hol}_{\lambda}\) 是良定义线性映射。
+
+若存在顶点势 \(\alpha\) 且 \(z=\sum_e\epsilon_e e\) 是循环，则每个顶点在循环中出现偶数次，于是
+\[
+\sum_e\epsilon_e\lambda(e)
+=\sum_{uv}\epsilon_{uv}(\alpha(u)+\alpha(v))=0.
+\]
+故 \(\operatorname{Hol}_{\lambda}=0\)。
+
+反过来，假设 \(\operatorname{Hol}_{\lambda}=0\)。在每个连通分支中选取一个根顶点 \(o\)，并对顶点 \(v\) 取任意从 \(o\) 到 \(v\) 的路径 \(p_v\)，定义
+\[
+\alpha(v):=\sum_{e\in p_v}\lambda(e).
+\]
+若换取另一条路径，则两条路径的对称差给出一个 \(\FF_2\)-循环；其 \(\lambda\)-和由 \(\operatorname{Hol}_{\lambda}=0\) 消失，所以 \(\alpha(v)\) 与路径选择无关。对任意边 \(uv\)，路径 \(p_u\)、边 \(uv\) 与路径 \(p_v\) 的对称差是一个循环，因此
+\[
+\alpha(u)+\lambda(uv)+\alpha(v)=0,
+\]
+即 \(\lambda(uv)=\alpha(u)+\alpha(v)\)。这证明第一条。第二条由 \(H_1(\Gamma;\FF_2)=0\) 时唯一线性映射 \(H_1\to Q_{\partial}\) 必为零立即推出。
+
+若 \(\operatorname{Hol}_{\lambda}\ne0\)，其像是 \(Q_{\partial}\cong\FF_2^2\) 的非零子空间，因此秩只能为 \(1\) 或 \(2\)。最后，reduced readout 杀死子空间 \(K\) 后，残余 monodromy 正是复合
+\[
+H_1(\Gamma;\FF_2)\xrightarrow{\operatorname{Hol}_{\lambda}}Q_{\partial}\longrightarrow Q_{\partial}/K.
+\]
+该复合为零当且仅当 \(\operatorname{im}(\operatorname{Hol}_{\lambda})\subseteq K\)。最小可行 \(K\) 的维数因此等于 \(\operatorname{im}(\operatorname{Hol}_{\lambda})\) 的维数。该证明把 window-\(6\) 的 boundary 图示相容性严格降为 typed incidence ledger、cycle monodromy 与 quotient bit budget 三项有限数据。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 由定义，projected congruence 只断言两点具有同一个可见折叠值 \(w\)。要把它提升为当前协议中的 canonical lifted equality，协议还必须核验三件互不替代的事实：hidden fibre 选层一致、boundary overlap 的几何不可吸收类为零、以及当前任务所需预算已经登记并被可用预算覆盖。
 

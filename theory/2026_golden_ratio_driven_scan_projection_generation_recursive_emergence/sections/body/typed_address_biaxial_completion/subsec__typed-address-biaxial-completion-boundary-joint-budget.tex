@@ -435,6 +435,73 @@ q_K^{2N}M_K\le\eta,\quad \mathbf T_N\succeq0,
 \end{enumerate}
 并且每一类 overflow 都不可由其余两轴补偿：若某一失败不等式在该轴上保持不变，则任意增大另外两项预算都不能使三元组进入 \(\mathfrak A\)。
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{proposition}[三端边界证书的重叠账本门控正规形]\label{distill:euclid_elements-diagrammatic_compatibility_audit_families-boundary-overlap-gated-triple-verifier}
+\textbf{Distillation timestamp: 2026-04-23T13:05:39+08:00; pipeline index: 45. 依赖状态：conditional finite audit.}
+令 \(\mathcal N\) 为一组边界图表的有限 nerve，令 \(A\) 与 \(\bar A\) 为有限阿贝尔群，并固定群同态
+\[
+\kappa:A\longrightarrow \bar A.
+\]
+对每个顶点 \(i\in\mathcal N_0\)，假设已经给出一份三端边界局部证书，包含区间半径证书
+\[
+\mathsf R_i=(\underline r_i,\overline r_i),\qquad
+0<\underline r_i\le r_i\le\overline r_i<1,
+\]
+半径读数 \(\varrho_i\)、地址分离谓词 \(\mathsf{Sep}_{T_i}(b_i)\)、端点支撑控制数据
+\[
+(q_i,M_i^{\rm end},N_i,\eta_i),\qquad 0<q_i<1,\quad M_i^{\rm end}\ge0,\quad \eta_i>0,
+\]
+以及 Toeplitz--PSD 可接受深度集合 \(\mathsf{PSD}_i\subseteq\NN\)。称第 \(i\) 个局部证书轴向接受，若
+\[
+\varrho_i>\overline r_i,\qquad
+\mathsf{Sep}_{T_i}(b_i),\qquad
+q_i^{2N_i}M_i^{\rm end}\le\eta_i,\qquad
+N_i\in\mathsf{PSD}_i,\qquad
+\mathbf T_{N_i}\succeq0.
+\]
+再设每条有向重叠边 \(ij\in\mathcal N_1^{\rm or}\) 携带一个类型化重叠残差
+\[
+h_{ij}\in A,\qquad h_{ji}=-h_{ij},
+\]
+并记
+\[
+\bar h_{ij}:=\kappa(h_{ij})\in\bar A.
+\]
+对有向二单形 \((i,j,k)\) 定义
+\[
+(\delta\bar h)_{ijk}:=\bar h_{jk}-\bar h_{ik}+\bar h_{ij}.
+\]
+定义重叠门控验证器 \(\operatorname{Ver}^{\partial}_{\rm ov}\) 输出 \(\mathsf{Accept}\) 当且仅当：所有顶点局部证书均轴向接受；所有二单形满足 \(\delta\bar h=0\)；并且由 \(\bar h\) 定义的类满足
+\[
+[\bar h]=0\in \check H^1(\mathcal N;\bar A).
+\]
+则成立：
+\begin{enumerate}
+  \item 若 \(\operatorname{Ver}^{\partial}_{\rm ov}=\mathsf{Accept}\)，则存在顶点势 \(a_i\in\bar A\) 使
+  \[
+  \bar h_{ij}=a_j-a_i\qquad(ij\in\mathcal N_1^{\rm or}).
+  \]
+  因而经由同一顶点势重置后，所有 reduced overlap residual 同时消失；
+  \item 若所有顶点局部证书均轴向接受但某个二单形上 \((\delta\bar h)_{ijk}\ne0\)，则失败是三重重叠 incidence/cocycle failure，此时不得书写 \([\bar h]\) 作为上同调类；
+  \item 若所有顶点局部证书均轴向接受且 \(\delta\bar h=0\)，但 \([\bar h]\ne0\)，则全部局部图表与三重重叠检查均已通过，而全局图解闭合仍因 reduced holonomy obstruction 失败；
+  \item 若 \(\check H^1(\mathcal N;\bar A)=0\)，则任意通过前两道门的 reduced overlap ledger 自动通过 holonomy 门。一般情形下，图解证明闭合的等价条件正是显式给出上述顶点势，亦即显式杀死 monodromy。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+轴向接受条件逐项包含半径端、地址端与端点热核端的充分接受不等式，因此每个顶点处的局部读出先作为有限证书对象成立。这一步只使用已经登记的区间半径、分离谓词、指数尾界与 Toeplitz--PSD 数据，没有使用图形直观。
+
+接着，边 \(ij\) 上的可见重叠关系被替换为元素 \(h_{ij}\in A\)，再经同态 \(\kappa\) 送入 reduced 系数群 \(\bar A\)。由于 \(\kappa\) 是群同态，\(\bar h\) 是 \(\bar A\)-值一上链；但只有当 \(\delta\bar h=0\) 时，它才是 \v Cech 一 cocycle。因此在 \(\delta\bar h\ne0\) 的情形中，上同调类根本未定义，失败只能记录为三重重叠 incidence/cocycle failure。
+
+若 \(\delta\bar h=0\)，则 \(\bar h\in Z^1(\mathcal N;\bar A)\)。按 \(\check H^1=Z^1/B^1\) 的定义，\([\bar h]=0\) 当且仅当存在 \(a\in C^0(\mathcal N;\bar A)\) 使 \(\bar h=\delta a\)，即
+\[
+\bar h_{ij}=a_j-a_i
+\]
+对每条有向边成立。把 ledger 替换为同调等价的 \(\bar h-\delta a\) 后，所有 reduced 边残差同时为零，故所有重叠粘接在 reduced 通道中闭合。反过来，若存在这样的顶点势，则 \(\bar h=\delta a\)，从而 \(\delta\bar h=\delta^2a=0\) 且 \([\bar h]=0\)。最后，若 \(\check H^1(\mathcal N;\bar A)=0\)，每个 cocycle 都是 coboundary，故 holonomy 门自动通过。该证明正是 diagram-to-ledger conversion：每个可见重叠先被类型化为边账本，再分别审计 cocycle 与 monodromy。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 充分接受域 \(\mathfrak A\) 是四个条件的交。若三元组不在其中，则至少有一个条件失败。前三类标签正是把失败条件按半径端、地址端与端点线性代数端分组后的穷尽列表。因此任一非接受三元组必携带至少一个列出的 overflow 见证。
 
