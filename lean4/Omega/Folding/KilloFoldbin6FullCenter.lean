@@ -1,6 +1,7 @@
 import Mathlib.Tactic
 import Omega.Folding.BinFold
 import Omega.Folding.BoundaryLayer
+import Omega.Conclusion.Window6MinimalShellRigidSubcoverRootSlice
 
 namespace Omega
 
@@ -29,5 +30,27 @@ theorem paper_killo_foldbin6_full_center :
   dsimp [foldbin6FullCenterResidualRank, foldbin6FullCenterInvolutionCount,
     foldbin6FullCenterBoundaryGenerators]
   rw [binFold_boundary_count_m6, cBoundaryCount_six]
+
+/-- Concrete boundary/interior split of the eight window-`6` center generators. -/
+def killo_foldbin6_center_boundary_interior_statement : Prop :=
+  Omega.Conclusion.window6BoundaryFiber = {Omega.Conclusion.w100001, Omega.Conclusion.w100101,
+      Omega.Conclusion.w101001} ∧
+    Omega.Conclusion.window6CyclicFiber = {Omega.Conclusion.w000001, Omega.Conclusion.w010001,
+      Omega.Conclusion.w001001, Omega.Conclusion.w000101, Omega.Conclusion.w010101} ∧
+    foldbin6FullCenterBoundaryGenerators = Omega.Conclusion.window6BoundaryFiber.card ∧
+    foldbin6FullCenterResidualRank = Omega.Conclusion.window6CyclicFiber.card ∧
+    foldbin6FullCenterInvolutionCount =
+      foldbin6FullCenterBoundaryGenerators + foldbin6FullCenterResidualRank
+
+/-- Paper label: `cor:killo-foldbin6-center-boundary-interior`. -/
+theorem paper_killo_foldbin6_center_boundary_interior :
+    killo_foldbin6_center_boundary_interior_statement := by
+  rcases Omega.Conclusion.paper_conclusion_window6_minimal_shell_rigid_subcover_root_slice with
+    ⟨_, hboundary, hcyclic, hboundary_card, hcyclic_card, _⟩
+  rcases paper_killo_foldbin6_full_center with ⟨hfull, hboundary_gen, hresidual⟩
+  refine ⟨hboundary, hcyclic, ?_, ?_, ?_⟩
+  · rw [hboundary_gen, hboundary_card]
+  · rw [hresidual, hcyclic_card]
+  · rw [hfull, hboundary_gen, hresidual]
 
 end Omega
