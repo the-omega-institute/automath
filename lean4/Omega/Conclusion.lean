@@ -135,6 +135,7 @@ import Omega.Conclusion.CarryZeroTempSupportCollapse
 import Omega.Conclusion.CausalDepthBranchBudgetOrthogonality
 import Omega.Conclusion.CdimArbitraryProfiniteKernel
 import Omega.Conclusion.CdimFiniteQuotientGrowth
+import Omega.Conclusion.CdimK0UniqueSurvivor
 import Omega.Conclusion.CdimPhaseCompressionBitLowerBound
 import Omega.Conclusion.CdimPhaseCompressionPowerLaw
 import Omega.Conclusion.CdimRankShortExactAdditivity
@@ -531,6 +532,7 @@ import Omega.Conclusion.Pi1AllPrimes
 import Omega.Conclusion.LocalizedSolenoidCoprimeArtinMazurCompleteness
 import Omega.Conclusion.LogpWeightedTailOperatorNorm
 import Omega.Conclusion.LogRigidityUnderTropical
+import Omega.Conclusion.PrimeWeightLogLaw
 import Omega.Conclusion.LucasPowerHankelClosedForm
 import Omega.Conclusion.LucasCharpShiftedHankelGeometricRatio
 import Omega.Conclusion.LucasNormalizedHankelDiscreteCurvature

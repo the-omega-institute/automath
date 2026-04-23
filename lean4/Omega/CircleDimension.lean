@@ -68,6 +68,7 @@ import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.CirclePowerNoContinuousSection
 import Omega.CircleDimension.ConnectedPhaseProfiniteFiberIndecomposable
 import Omega.CircleDimension.CoherenceTimeBarrier2Pow
+import Omega.CircleDimension.CoherenceTimeBarrier2PowKOverD
 import Omega.CircleDimension.CoherenceTimeLowerBoundMOneOverD
 import Omega.CircleDimension.CoherenceTimeLowerBound
 import Omega.CircleDimension.CommutativeVisibleAlgebra
