@@ -823,6 +823,7 @@ import Omega.Zeta.XiBulkBoundaryHolographicGapDissipation
 import Omega.Zeta.XiBulkCurvatureLogisticKernelDecomposition
 import Omega.Zeta.XiBulkEntropyRGStaircase
 import Omega.Zeta.XiBulkRenormalizedConstantAnomalyGap
+import Omega.Zeta.XiDyadicFibonacciCompletionBirthFiltration
 import Omega.Zeta.XiCompletedPolynomialPontryaginIndex
 import Omega.Zeta.XiCRTInvisibilityMarginalPrimeSpectrum
 import Omega.Zeta.XiCRTIndistinguishablePair
