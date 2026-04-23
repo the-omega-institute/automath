@@ -141,6 +141,7 @@ import Omega.POM.MaxentMarkovLaguerreSecularSpectrum
 import Omega.POM.MaxentMarkovSpectrumMonotoneInDelta
 import Omega.POM.MaxentMarkovSpectrumSingleShotInversion
 import Omega.POM.DiagonalRateAbsorbingWronskianIdentity
+import Omega.POM.DiagonalRateAbsorbingWronskianIdentitySecondary
 import Omega.POM.DiagonalRateAbsorbingFullVsDeletedInterlacing
 import Omega.POM.DiagonalRateSeparationWeightSignRule
 import Omega.POM.DiagonalRateAbsorbingMeanHitTime
