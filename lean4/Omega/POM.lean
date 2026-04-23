@@ -146,6 +146,7 @@ import Omega.POM.ClosurePartitionToFullRecoveryCurve
 import Omega.POM.EhrhartEqualsOrderpolyShift
 import Omega.POM.EpsSoundCompose
 import Omega.POM.DeltaMinExtraReadouts
+import Omega.POM.A4TDeltaMinusUniqueGlobalMinimizer
 import Omega.POM.DeltaqMeanSquareRhCriterion
 import Omega.POM.DeltaqGoldenEnvelope
 import Omega.POM.DeltaqGLambdaIdentity
