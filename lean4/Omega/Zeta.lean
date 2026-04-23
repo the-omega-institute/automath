@@ -88,6 +88,7 @@ import Omega.Zeta.XiKreinSpectralShiftEqualsKL
 import Omega.Zeta.XiLeyangEdDyExplicitDivisor
 import Omega.Zeta.XiEdYDivisorAndGroupLawIdentity
 import Omega.Zeta.XiTerminalZmDeltaNodePreimageSumZero
+import Omega.Zeta.XiTerminalZmDihedralDoubleDiscriminantLock
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
 import Omega.Zeta.XiLeyangTwoScaleCrossratioCrossingDrift
