@@ -106,6 +106,7 @@ import Omega.Conclusion.CarryZeroTempSupportCollapse
 import Omega.Conclusion.CausalDepthBranchBudgetOrthogonality
 import Omega.Conclusion.CdimArbitraryProfiniteKernel
 import Omega.Conclusion.CdimFiniteQuotientGrowth
+import Omega.Conclusion.CdimPhaseCompressionBitLowerBound
 import Omega.Conclusion.CdimPhaseCompressionPowerLaw
 import Omega.Conclusion.CdimRankShortExactAdditivity
 import Omega.Conclusion.CdimKernelRegisterLowerBound
