@@ -91,6 +91,7 @@ import Omega.SyncKernelWeighted.RealInput40AtomicWittDirichletComb
 import Omega.SyncKernelWeighted.RealInput40CarryConstant
 import Omega.SyncKernelWeighted.RealInput40ChiReparam4d
 import Omega.SyncKernelWeighted.RealInput40CollisionPressure
+import Omega.SyncKernelWeighted.RealInput40TraceTensor
 import Omega.SyncKernelWeighted.RealInput40TraceRecurrence
 import Omega.SyncKernelWeighted.RealInput40PrimitiveLucas
 import Omega.SyncKernelWeighted.RealInput40PrimitiveLucasSimplified

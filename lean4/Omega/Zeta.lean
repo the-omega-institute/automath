@@ -194,6 +194,8 @@ import Omega.Zeta.XiScanMinSeparationLocalBilipschitz
 import Omega.Zeta.XiFiniteToOneHolographicAggregationBound
 import Omega.Zeta.XiEllipticRingAverageResidueWallcrossing
 import Omega.Zeta.XiEllipticRingAverageTwoValuedWallcrossing
+import Omega.Zeta.XiScanCollisionIllposedness
+import Omega.Zeta.XiScanProfileLpPeakWitness
 import Omega.Zeta.XiOffcriticalCountBoundByIntegratedDefect
 import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiWindow6C3CyclicFiberTrisection
