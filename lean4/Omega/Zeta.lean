@@ -724,6 +724,7 @@ import Omega.Zeta.XiFoldResonanceLadderLogarithmicAuditability
 import Omega.Zeta.XiFoldbinDyadicCapacityCriticalWindowLimit
 import Omega.Zeta.XiFoldbinAuditedWindowOracleHardCap
 import Omega.Zeta.XiFoldbinGaugeDensityExactThermodynamicConstant
+import Omega.Zeta.XiFoldbinGaugeEscortKlDecomposition
 import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
 import Omega.Zeta.XiGramDetNearestNeighborProductUpperBound
 import Omega.Zeta.XiGramshiftIllconditioningForcedByToeplitzMargin
