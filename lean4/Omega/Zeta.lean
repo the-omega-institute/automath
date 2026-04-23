@@ -60,6 +60,7 @@ import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiFiniteDefectRhScanTraceEquivalence
 import Omega.Zeta.XiFiniteKernelZetaRationalDecidability
+import Omega.Zeta.FiniteQuotientPhaseCompressionPrecisionLowerBound
 import Omega.Zeta.XiFiniteFrontierCertificate
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
