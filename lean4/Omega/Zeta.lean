@@ -163,6 +163,7 @@ import Omega.Zeta.XiPrimeSliceNontrivialLayerExactMinimality
 import Omega.Zeta.XiPiPowerSmithComplementarity
 import Omega.Zeta.XiPrecisionTypeNoLeakage
 import Omega.Zeta.XiTerminalZmLeyangSpectralQuarticAJFib89Minpoly
+import Omega.Zeta.XiTerminalZmLeyangLanglandsDualRootStability
 import Omega.Zeta.SelfdualPressureInversion
 import Omega.Zeta.SyncCyclotomicElimination
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotSofic
@@ -184,6 +185,7 @@ import Omega.Zeta.XiJGMonicBoundaryReadout
 import Omega.Zeta.XiJGDiscriminantSquareclassInvariance
 import Omega.Zeta.XiQuadraticTransportGlobalEvenParity
 import Omega.Zeta.XiTerminalZmJgSignedPermutationRepresentation
+import Omega.Zeta.XiTerminalZmJgAlgebraicScaleFiniteExceptionCoherence
 import Omega.Zeta.XiTerminalZmJgWdnForced
 import Omega.Zeta.XiCayleyDilationMobiusConjugacyFixedpoints
 import Omega.Zeta.XiTwoScaleCayleyDilationRigidity
