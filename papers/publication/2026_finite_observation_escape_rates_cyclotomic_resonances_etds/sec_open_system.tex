@@ -14,7 +14,10 @@ the escape rate.  The finite-observation step is the exact identification
 of the Bayes error with a killed path sum carrying residue-dependent
 terminal weights; the subsequent exponent and amplitude estimates use
 finite-dimensional Perron--Frobenius theory for that killed matrix.  The
-study of escape rates through holes in dynamical systems
+quasistationary terminology used here is the classical finite absorbing
+Markov-chain terminology of \citet{DarrochSeneta1965}, specialized to the
+substochastic killed transition matrix introduced below.  The study of
+escape rates through holes in dynamical systems
 originates with
 \citet{PianigianiYorke1979}; the transfer-operator approach for
 topological Markov chains was developed by
@@ -114,6 +117,60 @@ finite first hits with residue outside \(R\).  Therefore
 We call the equivalent finite graph conditions in
 Lemma~\ref{lem:residue-reachability} the
 \emph{two-terminal residue reachability hypothesis}.
+
+\begin{lemma*}[Strong-Markov future-entry estimate]
+Let \(A=\mathcal S\sqcup A_{\mathrm{hole}}\) be a finite irreducible
+Markov alphabet with \(A_{\mathrm{hole}}\neq\emptyset\), and let
+\((K_{ij})\) be a transition matrix with \(K_{ij}>0\) exactly on the
+admissible directed edges.  For
+\[
+  \tau_H^+:=\inf\{n\geq1:y_n\in A_{\mathrm{hole}}\},
+\]
+there are constants \(N\geq1\) and \(\eta>0\) such that, for every
+\(i\in\mathcal S\) and \(k\geq0\),
+\[
+  \PP_i(\tau_H^+>kN)\leq (1-\eta)^k.
+\]
+In particular \(\PP_i(\tau_H^+<\infty)=1\), uniformly in
+\(i\in\mathcal S\).
+\end{lemma*}
+
+\begin{proof}
+For each \(i\in\mathcal S\), irreducibility gives an admissible path
+from \(i\) to \(A_{\mathrm{hole}}\).  Stop this path at its first visit
+to the hole:
+\[
+  i=i_0,\ i_1,\ldots,i_{\ell_i-1}\in\mathcal S,\qquad
+  i_{\ell_i}\in A_{\mathrm{hole}} .
+\]
+Let
+\[
+  N:=\max_{i\in\mathcal S}\ell_i,
+  \qquad
+  \eta:=\min_{i\in\mathcal S}
+       K_{i_0i_1}K_{i_1i_2}\cdots K_{i_{\ell_i-1}i_{\ell_i}} .
+\]
+The minimum is positive because only finitely many positive transition
+probabilities occur in the selected paths.  Hence from every safe state
+there is probability at least \(\eta\) of entering
+\(A_{\mathrm{hole}}\) within the next \(N\) steps.
+
+On the event \(\{\tau_H^+>kN\}\), the state \(y_{kN}\) is still in
+\(\mathcal S\).  Applying the strong Markov property after this failed
+block,
+\[
+  \PP_i(\tau_H^+>(k+1)N)
+  =
+  \EE_i\!\left[
+    \ind_{\{\tau_H^+>kN\}}
+    \PP_{y_{kN}}(\tau_H^+>N)
+  \right]
+  \leq
+  (1-\eta)\PP_i(\tau_H^+>kN).
+\]
+Iteration gives the displayed geometric bound, and then
+\(\PP_i(\tau_H^+=\infty)=0\) follows by letting \(k\to\infty\).
+\end{proof}
 
 \begin{theorem}[First-entry residue events and escape rates]
 \label{thm:first-entry-escape-rate}
@@ -259,9 +316,11 @@ absolute first-hit time is
   \tau_H=(m-1)+\tau_H^+
 \]
 for the restarted chain at \(a_{m-1}\), on the event of a future hit.
-That event has conditional probability one: in the finite irreducible
-Markov graph, a non-empty hole is reachable from every state with a
-uniformly bounded path length, so repeated trials force eventual entry.
+The preceding lemma shows that this future-hit event has conditional
+probability one under the restarted law \(\PP_{a_{m-1}}\).  Indeed, the
+conditional law after the observed safe prefix is the Markov law started
+at \(a_{m-1}\), and
+\(\PP_{a_{m-1}}(\tau_H^+<\infty)=1\).
 Therefore
 \[
   \nu_\varphi(\mathsf P_R\mid[a])
@@ -530,12 +589,34 @@ and \(v=(v_\infty,v_T)\),
       u_\infty^{\mathsf T}B_\infty^{N-1-j}CQ^j v_T.
 \]
 Perron--Frobenius theory for the primitive matrix \(B_\infty\) gives
+a number \(0<\vartheta<\rho_H\) and matrices \(R_k\) with
+\(\norm{R_k}=O(\vartheta^k)\) such that
 \[
-  B_\infty^N
+  B_\infty^k
   =
-  \rho_H^N r_H\ell_\infty^{\mathsf T}+O(\vartheta^N)
+  \rho_H^k r_H\ell_\infty^{\mathsf T}+R_k
+  \qquad (k\geq0).
 \]
-for some \(0\leq\vartheta<\rho_H\).  Therefore
+Substituting this expansion in each term of the displayed finite sum gives
+\begin{align*}
+  u^{\mathsf T}B_H^N v
+  &=
+    (u_\infty^{\mathsf T}r_H)\rho_H^N
+    \left(
+      \ell_\infty^{\mathsf T}v_\infty
+      + \sum_{j=0}^{M-1}
+          \rho_H^{-j-1}\ell_\infty^{\mathsf T}CQ^j v_T
+    \right)
+    +O(\vartheta^N).
+\end{align*}
+The error remains \(O(\vartheta^N)\) because the index \(j\) ranges over
+the fixed finite set \(0\leq j<M\), so
+\(\vartheta^{N-1-j}=O(\vartheta^N)\).  Since \(Q^M=0\),
+\[
+  (\rho_H I-Q)^{-1}
+  =\sum_{j=0}^{M-1}\rho_H^{-j-1}Q^j,
+\]
+and the coefficient in parentheses is \(\ell_H^{\mathsf T}v\).  Hence
 \[
   u^{\mathsf T}B_H^N v
   =
@@ -607,6 +688,13 @@ Theorem~\ref{thm:first-entry-escape-rate}.
 \end{proof}
 
 \subsection{Quasistationary amplitudes}
+
+The next theorem isolates the finite killed-chain amplitude appearing in
+the Bayes error.  The normalized left eigenvector \(\xi_H\) is a
+quasistationary distribution for the substochastic matrix \(B_H\) in the
+finite-state sense of \citet{DarrochSeneta1965}: conditioned on one safe
+step, a chain started with law \(\xi_H\) has law \(\xi_H\) again, and the
+one-step survival probability is \(\rho_H\).
 
 \begin{theorem}[Quasistationary ambiguity amplitudes]
 \label{thm:quasistationary-ambiguity}
@@ -700,13 +788,15 @@ and therefore for \(N\geq M\) and every vector
       u_\infty^{\mathsf T}B_\infty^{N-1-j}CQ^j v_T.
 \]
 
-By Perron--Frobenius,
+By Perron--Frobenius, there are \(0<\vartheta<\rho_H\) and matrices
+\(R_k\), \(k\geq0\), with \(\norm{R_k}=O(\vartheta^k)\) such that
 \[
-  B_\infty^N
-  = \rho_H^N r_H\ell_\infty^{\mathsf T}+O(\vartheta^N)
+  B_\infty^k
+  = \rho_H^k r_H\ell_\infty^{\mathsf T}+R_k .
 \]
-for some \(0\leq \vartheta<\rho_H\).  Substituting this expansion into
-the previous display gives
+Substituting this expansion into the \(B_\infty^N v_\infty\) term and
+every occurrence of \(B_\infty^{N-1-j}\) in the finite off-diagonal sum
+gives
 \begin{align*}
   u^{\mathsf T}B_H^N v
   &=
@@ -718,6 +808,9 @@ the previous display gives
     \right)
     + O(\vartheta^N).
 \end{align*}
+Here the \(j\)-sum is finite and \(j<M\), so the shifted remainders
+\(R_{N-1-j}\) are still \(O(\vartheta^N)\), after changing only the
+implicit constant.
 Because \(Q^M=0\),
 \[
   (\rho_H I-Q)^{-1}
@@ -756,7 +849,7 @@ The equivalent statement is immediate on writing \(m-1=nq+r\).
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:main-amplitude}]
-The headline theorem states the same finite Markov-hole data, the same
+The introductory theorem states the same finite Markov-hole data, the same
 two-terminal residue reachability hypothesis, and the same definitions
 of \(B_H\), \(b_r\), and \(\xi_H\).  The asserted ratio and equivalent
 asymptotic are therefore precisely Theorem~\ref{thm:quasistationary-ambiguity}.
