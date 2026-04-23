@@ -10,6 +10,7 @@ import Omega.Zeta.AbelOffcriticalExponentialRadiusAmplification
 import Omega.Zeta.AbelMobiusNeutralizationFormal
 import Omega.Zeta.AbelTwoBaseDealiasingInjectivity
 import Omega.Zeta.AbelHardyEnergyDecimationOrthogonal
+import Omega.Zeta.AbelDetailEnergyBudget
 import Omega.Zeta.AbelPowerbaseCovariancePolePowerMap
 import Omega.Zeta.AbelPolyphaseReconstruction
 import Omega.Zeta.AbelResolutionPowerRenormalizationIdentity
