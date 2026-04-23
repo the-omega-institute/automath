@@ -246,6 +246,7 @@ import Omega.Folding.KilloFoldThreeModeWitnessCriticalGap
 import Omega.Folding.KilloFoldZeroSpectrumAffineCongruence
 import Omega.Folding.KilloZGDirichletMatrixEuler
 import Omega.Folding.KilloFoldBinCapacityInverseTwoRegime
+import Omega.Folding.KilloFoldBinTwoKinkMellinUniqueness
 import Omega.Folding.KilloChainInteriorGodelGcdLcm
 import Omega.Folding.KilloPrimeRegisterChainIdempotentBooleanMeet
 import Omega.Folding.KilloPrimeRegisterChainIdempotentBooleanRank

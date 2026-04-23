@@ -641,6 +641,7 @@ import Omega.Conclusion.ResonanceWindowZ2HenselTailPeriodicity
 import Omega.Conclusion.ResonanceWindowMod2TailJetCompleteness
 import Omega.Conclusion.ReversibleAuxBitsBudget
 import Omega.Conclusion.ReverseKLSingleFrequencyExclusivity
+import Omega.Conclusion.RightEdgeVisiblePhasesSupportFunctionClosure
 import Omega.Conclusion.LucasHankelCurvatureRamanujanTomography
 import Omega.Conclusion.RhsharpQAmplifiedAddressBarrier
 import Omega.Conclusion.RhsharpForcesPerronPureQuotient
