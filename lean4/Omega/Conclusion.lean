@@ -92,6 +92,7 @@ import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
 import Omega.Conclusion.CanonicalSliceExactFixedpointCount
 import Omega.Conclusion.M2Level3CanonicalPushforwardWithXi
 import Omega.Conclusion.CapacityFiniteCompleteness
+import Omega.Conclusion.CapacityDeficitMellinBernsteinCompletion
 import Omega.Conclusion.CapacityCurveOrderHolographyUniversality
 import Omega.Conclusion.C6JacobianNotSimple
 import Omega.Conclusion.CayleyModulusPoissonPrimitive
@@ -496,6 +497,7 @@ import Omega.Conclusion.FiberMultiplicityDiameterCubedimRigidity
 import Omega.Conclusion.MinLatchesLogStates
 import Omega.Conclusion.MinRegisterHalting
 import Omega.Conclusion.MinimalStateComplexityHalting
+import Omega.Conclusion.MinsectorDoublescaleFeedbackLaw
 import Omega.Conclusion.MixedHiddenStateFiniteAbelianClassification
 import Omega.Conclusion.MixedHiddenStateCharacterConductorZeta
 import Omega.Conclusion.MixedCollisionOverlapMultisetRigidity

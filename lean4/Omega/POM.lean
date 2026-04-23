@@ -683,6 +683,7 @@ import Omega.POM.ToggleOrbitCountEgfFactorization
 import Omega.POM.ToggleOrbitCountCommutantIdentity
 import Omega.POM.ToggleOrbitCountTwoScaleTomography
 import Omega.POM.ToggleOrbitCountFiniteLowlevelInversion
+import Omega.POM.TwoAxisSeparation
 import Omega.POM.ToggleOrder
 import Omega.POM.TruncationNotCommute
 import Omega.POM.ToggleOrderLogAsymptotic
