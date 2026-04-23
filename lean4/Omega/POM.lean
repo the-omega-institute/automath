@@ -125,6 +125,7 @@ import Omega.POM.StiffZeroHankelGoodReductionDimStability
 import Omega.POM.Congruence2dLockingCfinite
 import Omega.POM.CoprimeLedgerPrimorialOptimality
 import Omega.POM.CrossqGMonotone
+import Omega.POM.CrossqPressureConvexity
 import Omega.POM.CurvatureSummableEventualCommutation
 import Omega.POM.AxisDecomposabilityIff
 import Omega.POM.StableAdditionCarryDefectUniqueElement
@@ -325,6 +326,7 @@ import Omega.POM.FiberBooleanIntervalSingleParameterAudit
 import Omega.POM.FiberCategoricalSymmetryFibonacciFusion
 import Omega.POM.FiberConstantDelayTraversal
 import Omega.POM.FiberContractibilitySphereParityByWalsh
+import Omega.POM.FiberSpectrumTwoAtomCompleteInvariant
 import Omega.POM.FiberCubicalPoincareStokesLemma
 import Omega.POM.FiberDispersionIndex
 import Omega.POM.FiberEhrhartProduct
