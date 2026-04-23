@@ -435,6 +435,7 @@ import Omega.Conclusion.StokesSteinDualNorm
 import Omega.Conclusion.StokesEnergyCellSamplingConcentration
 import Omega.Conclusion.LinearExternalizationLiminf
 import Omega.Conclusion.LkBulkBoundaryBesselDuality
+import Omega.Conclusion.LkNormalizedZetaOddProjector
 import Omega.Conclusion.LkCentralBinomialCatalanMoments
 import Omega.Conclusion.TqftGenusHausdorffMomentSequence
 import Omega.Conclusion.TqftGenusTowerTrivializationCriterion
