@@ -72,6 +72,7 @@ import Omega.Zeta.XiExtremeResonanceCriterion
 import Omega.Zeta.XiExtremeResonanceToeplitzThreshold
 import Omega.Zeta.XiGoldenChainVisibleWindowGrowth
 import Omega.Zeta.XiGoldenW1StarCertificateParitySplitting
+import Omega.Zeta.XiFlagFactorization12x4x3
 import Omega.Zeta.XiTimePart70cSpectrumZeroZ2OrbitCancellation
 import Omega.Zeta.XiHorizonZkFiberpathStokesDiscriminant
 import Omega.Zeta.XiHypercubeWeightedSpanningTreeSpectrumProduct
@@ -132,6 +133,7 @@ import Omega.Zeta.XiCauchyPoissonSingleScaleMomentInversion
 import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprint
 import Omega.Zeta.XiCriticalLineCircleCauchyUniformization
 import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth
+import Omega.Zeta.XiKlingenHeckeCharpolyProjectors
 import Omega.Zeta.XiJDiscriminant2IsogenyVelu
 import Omega.Zeta.XiJSexticEllipticLattesBelyiNormalization
 import Omega.Zeta.XiJSexticHyperellipticBranchPolynomialDiscriminantFactorization
