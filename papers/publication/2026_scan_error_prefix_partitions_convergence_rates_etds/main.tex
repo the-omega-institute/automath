@@ -53,14 +53,19 @@ error achievable using only $\mathcal{F}_m$-measurable rules.  Our first
 contribution is a discrete Tanaka representation
 $\varepsilon_m(\mathsf{P};\mu)=\varepsilon_0(\mathsf{P};\mu)-\EE[L_m^{1/2}]$
 in terms of a nonnegative discrete local-time functional.  Our second
-contribution is a pair of boundary-controlled rate laws controlled by the
-growth of ambiguous boundary cylinders.  The thickness hypothesis underlying
-the two-sided law is a combinatorial analogue of the Tsybakov margin condition.
-A third theorem extends both laws to log-regular cylinder measures and shows
-that polynomial losses are genuine in a nonuniform product example.  As a
-fully worked example, we give a parity-sharp formula for an explicit event
-$\mathsf{E}$ on the golden-mean shift with its Parry measure, where
-$\varphi=(1+\sqrt{5})/2$ and the boundary dimension is $d=1/2$.
+contribution is a finite-state posterior theorem for mixing SFTs
+with Parry measure: a finite observer graph with bounded positive and negative
+resolving windows yields both the boundary thickness constant and a
+higher-block invariant ambiguity exponent directly from the ambiguous
+subgraph.  Our third contribution is a pair of boundary-controlled rate laws
+converting those boundary-count and thickness inputs
+into two-sided scan-error bounds.  A fourth theorem extends the count-based law
+to log-regular cylinder measures and shows that polynomial losses are genuine
+in a nonuniform product example.  As a fully worked example, we give an
+exact parity-resolved formula for an explicit event $\mathsf{E}$ on the golden-mean
+shift with its Parry measure, where $\varphi=(1+\sqrt{5})/2$ and the
+higher-block invariant normalized ambiguity exponent is
+$\delta_\partial(\mathsf{E})=1/2$.
 \end{abstract}
 
 \noindent\textbf{AMS 2020 Mathematics Subject Classification.}
@@ -85,31 +90,43 @@ m\longmapsto\varepsilon_m(\mathsf{P};\mu)
 \]
 records the smallest classification error at each prefix depth.
 
-The cylinder decomposition of Bayes risk on finite partitions and the
-optimality of the threshold classifier $p_m\ge 1/2$ are classical
+The atom decomposition of Bayes risk on the finite partitions
+$\mathcal{F}_m$ (equivalently, the cylinder decomposition on the symbolic
+readout space) and the optimality of the threshold classifier
+$p_m\ge 1/2$ are classical
 \cite{Tsybakov2009Nonparametric,DevroyeGyorfiLugosi1996}.  We recall them in
 Section~\ref{sec:scan} to make the paper self-contained.  The new contributions are:
 \begin{enumerate}[label=(\roman*)]
 \item A \emph{discrete Tanaka representation}
   (Theorem~\ref{thm:scan-tanaka}) connecting error decay to the accumulation
   of threshold crossings of the martingale $(p_m)$.
+\item A \emph{finite-state posterior theorem}
+  (Theorem~\ref{thm:finite-state-posterior}) showing that, for a mixing SFT
+  with Parry measure, a finite observer graph with bounded resolving windows
+  determines both the thickness parameter and, together with
+  Proposition~\ref{prop:higher-block-invariance}, a higher-block invariant
+  normalized ambiguity exponent through the spectral radius of its ambiguous
+  subgraph.
 \item \emph{Boundary-cylinder rate laws}
   (Theorems~\ref{thm:boundary-dimension} and~\ref{thm:volume-boundary-scaling})
-  giving upper and two-sided bounds in terms of boundary-cylinder count and mass.
+  giving upper and two-sided error bounds once the boundary count and
+  thickness are available.
 \item A \emph{nonuniform-profile extension}
   (Theorem~\ref{thm:nonuniform-cylinder}) replacing the uniform cylinder-mass
   assumption by a log-regular condition, together with an example where the
   polynomial correction is unavoidable.
 \item A \emph{fully worked example} on the golden-mean shift
-  (Example~\ref{ex:golden-mean-specialization}) with $d=1/2$ and a
-  parity-sharp scan-error formula.
+  (Example~\ref{ex:golden-mean-specialization}) with
+  $\delta_\partial(\mathsf{E})=1/2$ and a
+  closed-form parity-resolved scan-error formula.
 \end{enumerate}
 
-\subsection{Relation to margin assumptions in classification}
+\subsection{Heuristic comparison with margin assumptions}
 \label{sub:margin}
 
 The thickness hypothesis in Theorem~\ref{thm:volume-boundary-scaling} is
-closely related to margin and noise conditions in nonparametric classification.
+best compared heuristically with margin and low-noise conditions in
+nonparametric classification.
 Mammen and Tsybakov \cite{MammenTsybakov1999} introduce a margin condition
 with exponent $\alpha\ge 0$: for the regression function
 $p_\infty(x)=\mu(\mathsf{P}\mid\mathcal{F}_\infty)(x)$,
@@ -121,40 +138,80 @@ Tsybakov \cite{Tsybakov2004} extends this to a general noise-exponent
 framework, showing that margin conditions control the rate of optimal
 plug-in classifiers.
 
-Our uniform thickness condition
-$\min\{\mu(\mathsf{P}\mid C),1-\mu(\mathsf{P}\mid C)\}\ge\theta>0$ for all
-boundary cylinders $C\in\partial_m\mathsf{P}$ is a combinatorial analogue.
-The two conditions are related but incomparable:
-\begin{enumerate}[label=(\arabic*)]
-\item Uniform thickness implies that all boundary-cylinder mass is bounded
-  away from both $0$ and $1$, preventing one-sided concentration; the
-  Mammen--Tsybakov condition is an integrated condition on the regression
-  function and does not directly control individual cylinder probabilities.
-\item Conversely, a measure satisfying the margin condition with large $\alpha$
-  can still have individual boundary cylinders with $\mu(\mathsf{P}\mid C)\to 0$
-  as $m\to\infty$, violating uniform thickness.
-\item Both conditions control classification rates: the Mammen--Tsybakov
-  margin exponent $\alpha$ governs plug-in estimation rates from data, while
-  our thickness hypothesis controls the oracle-error decay rate
-  $\varepsilon_m\asymp\lambda_{\mathrm{cyl}}^{-(1-d)m}$.
-\end{enumerate}
-The precise relationship between the boundary dimension $d$ and the margin
-exponent $\alpha$ depends on the filtration geometry and remains open.
+The exact boundary decomposition is
+\[
+\varepsilon_m(\mathsf{P};\mu)
+=\sum_{C\in \partial_m\mathsf{P}}
+\mu(C)\min\{\mu(\mathsf{P}\mid C),1-\mu(\mathsf{P}\mid C)\}.
+\]
+Hence the uniform thickness condition
+$\min\{\mu(\mathsf{P}\mid C),1-\mu(\mathsf{P}\mid C)\}\ge\theta>0$ on
+boundary cylinders implies the lower bound
+\[
+\varepsilon_m(\mathsf{P};\mu)\ge
+\theta\sum_{C\in\partial_m\mathsf{P}}\mu(C),
+\]
+so thickness controls scan error through the \emph{mass} of the depth-$m$
+boundary.  What it does \emph{not} control is the global distribution of the
+terminal posterior $p_\infty$ near the threshold $1/2$; that global
+distribution is exactly what the Mammen--Tsybakov condition measures.  Thus
+the two notions live at different scales: thickness is a cylinderwise lower
+bound on ambiguous atoms, while the margin condition is an integrated bound on
+how much of the space has $p_\infty$ close to $1/2$.  Without additional
+geometric information, neither hypothesis implies the other, so the comparison
+should be read only as orientation.
+
+The closer multiscale analogue is the dyadic tree analysis of
+Scott and Nowak \cite{ScottNowak2006Dyadic}, where partition geometry and
+near-boundary noise are coupled in a multiscale classifier.  Tsybakov's noise
+framework remains the right broad backdrop for fast-rate phenomena, but it
+should not be read as giving a direct substitute for the thickness hypothesis,
+and we do not identify either $\theta$ or the boundary-growth exponents with a
+classical margin exponent.
+The precise relationship between the higher-block invariant ambiguity exponent
+in the finite-state symbolic setting, or the raw filtration-level boundary
+count exponent in the general setting, and the margin exponent $\alpha$
+remains open.
 
 \subsection{Related work}
 \label{sub:related}
 
 Bayes risk on partitions and optimality of threshold classifiers are classical;
 see \cite{DevroyeGyorfiLugosi1996} and \cite{AudibertTsybakov2007} for refined
-plug-in rates.  The underlying martingale convergence is Doob's upward theorem
-\cite{Doob1953,Williams1991,Durrett2019}.  The discrete Tanaka formula is a
-lattice analogue of Tanaka's formula for Brownian local time
+plug-in rates.  For dyadic tree methods that explicitly couple multiscale
+partition geometry and low-noise behavior near a decision boundary, see
+\cite{ScottNowak2006Dyadic}.  The underlying martingale convergence is Doob's
+upward theorem \cite{Doob1953,Williams1991,Durrett2019}.  The discrete Tanaka
+formula is a lattice analogue of Tanaka's formula for Brownian local time
 \cite{Tanaka1963,RevuzYor1999}.
 
 Cylinder partition structure in symbolic dynamics is treated in
 \cite{LindMarcus1995}; boundary combinatorics connect to
-\cite{Fischer1975,Krieger1984,Boyle1983}.  Exponential cylinder estimates for
-Parry and Gibbs measures are in \cite{Parry1964,Bowen1975,WaltersErgodicTheory}.
+\cite{Fischer1975,Krieger1984,Boyle1983}.  Same-length cylinder bounds for the
+Parry (maximal-entropy) measure are in \cite{Parry1964}; Gibbs estimates with
+potential-dependent weights for H\"older equilibrium states are in
+\cite{Bowen1975,WaltersErgodicTheory}.
+Finite-state observable factors of Markov chains go back to Blackwell and
+Heller \cite{Blackwell1957,Heller1965}; for sofic shifts this observer
+viewpoint is standard in Fischer and Krieger presentations
+\cite{Fischer1975,Krieger1984,LindMarcus1995}.  Our finite-state posterior
+theorem uses this observer philosophy for a different object: not the output
+process itself, but the evolving ambiguity class of a fixed event
+$\mathsf{P}$, from which thickness and higher-block invariant boundary growth
+become finite-state spectral quantities.
+For the literature closest to the symbolic-dynamics side of our setup, Boyle
+and Petersen \cite{BoylePetersen2011} survey hidden Markov (sofic) measures
+and the factor-map questions around them; Chazottes and Ugalde
+\cite{ChazottesUgalde2003,ChazottesUgalde2011}, Pollicott and Kempton
+\cite{PollicottKempton2011}, and Piraino \cite{Piraino2018} study when
+Markov or H\"older Gibbs measures remain Gibbsian after projection and what
+regularity survives in the induced potential.  Those papers concern the
+thermodynamic regularity of factor measures.  Our paper does not prove a
+factor-closure theorem for Gibbs classes, nor does it identify induced
+potentials or relative pressure.  Instead, fixing a measurable event
+$\mathsf{P}$, we study the prefix-filtration boundary of that event and the
+resulting scan-error decay, with rates governed by thickness and boundary
+growth rather than by a general Gibbs-factor formalism.
 The Shannon--McMillan--Breiman theorem \cite{Shannon1948,McMillan1953,Breiman1957}
 gives almost-sure asymptotics for the cylinder \emph{containing} a given
 sample point; this is an almost-sure pointwise statement, weaker than the
@@ -165,8 +222,8 @@ is in \cite{WaltersErgodicTheory,LindMarcus1995,CoverThomas2006,MorseHedlund1940
 \section{The Prefix Filtration Setting}
 \label{sec:prefix}
 
-The results hold in the following general setting; $T$-invariance and dynamics
-are not used in any proof.
+Sections~\ref{sec:prefix}--\ref{sec:tanaka} hold in the following general
+setting; no invariance or symbolic structure is used there.
 
 \begin{definition}[Prefix filtration]
 \label{def:prefix-filtration}
@@ -177,21 +234,44 @@ $(\mathcal{F}_m)_{m\ge 0}$ is the \emph{prefix filtration}; set
 $\mathcal{F}_\infty:=\bigvee_m\mathcal{F}_m$.
 \end{definition}
 
-The dynamical specialization is $s_t(x):=\ind_W(T^tx)$ for a measurable set
-$W$; the symbolic specialization is $X=\Omega_\infty:=\{0,1\}^{\mathbb{N}}$
-and $s_t(\xi):=\xi_t$.  All results below hold for any prefix filtration.
+Let $\Omega_\infty:=\{0,1\}^{\mathbb{N}}$ and, for
+$a=a_0\cdots a_{m-1}\in\{0,1\}^m$, write
+\[
+[a]:=\{\xi\in\Omega_\infty:\xi_0\cdots\xi_{m-1}=a\},
+\qquad
+\mathcal{A}_m:=\sigma([a]:a\in\{0,1\}^m).
+\]
+The readout map
+\[
+\omega_\infty:X\to\Omega_\infty,
+\qquad
+\omega_\infty(x):=(s_0(x),s_1(x),\ldots),
+\]
+is measurable and satisfies
+\[
+\mathcal{F}_m=\omega_\infty^{-1}(\mathcal{A}_m)
+\qquad(m\ge 0).
+\]
+Thus the filtration-theoretic objects below live on $X$, while cylinder
+language belongs to the auxiliary symbolic space $\Omega_\infty$ and is
+pulled back to $X$ through $\omega_\infty$.
 
-For $a=a_0\cdots a_{m-1}\in\{0,1\}^m$, the length-$m$ cylinder in
-$\Omega_\infty$ is $[a]:=\{\xi:\xi_0\cdots\xi_{m-1}=a\}$.  The readout map
-$\omega_\infty(x):=s_0(x)s_1(x)\cdots$ pulls back sigma-algebras:
-$\mathcal{F}_m=\omega_\infty^{-1}(\sigma([a]:a\in\{0,1\}^m))$.
+Two specializations appear later.  In the dynamical setting,
+$s_t(x):=\ind_W(T^tx)$ for a measurable set $W$.  In the symbolic setting,
+$X\subseteq\Omega_\infty$ is a one-sided shift space and $s_t(\xi):=\xi_t$; in
+that case $\omega_\infty$ is the inclusion map, and the atoms of
+$\mathcal{F}_m$ are exactly the positive length-$m$ cylinders of $X$.  Unless
+explicitly stated otherwise, Sections~\ref{sec:prefix}--\ref{sec:tanaka} use
+only the general filtration notation on $X$.
 
 \begin{proposition}[Prefix-decidable events are clopen cylinder unions]
 \label{prop:decidable-clopen}
-A set $P\subseteq\Omega_\infty$ is in $\mathcal{A}_m:=\sigma([a]:a\in\{0,1\}^m)$
+A set $P\subseteq\Omega_\infty$ is in $\mathcal{A}_m$
 if and only if it is a union of length-$m$ cylinders $[a]$, equivalently, a
 finite union of clopen balls of radius $2^{-m}$ in the prefix ultrametric.
-Pulling back along $\omega_\infty$, if $\mathsf{P}\in\mathcal{F}_m$ then the
+Consequently, an event $\mathsf{P}\in\mathcal{F}_m$ is decided by depth $m$ if
+and only if there exists $P\in\mathcal{A}_m$ such that
+$\mathsf{P}=\omega_\infty^{-1}(P)$ modulo $\mu$-null sets; equivalently, the
 truth of $\mathsf{P}$ is determined by the first $m$ symbols of the readout.
 \end{proposition}
 
@@ -201,7 +281,7 @@ is measurable with respect to them iff it is a union of atoms.  In the prefix
 ultrametric, each length-$m$ cylinder is a clopen ball of radius $2^{-m}$, so
 each $\mathcal{A}_m$-measurable set is a finite union of such clopen balls.
 Pulling back along $\omega_\infty$ transfers this finite-cylinder description
-to $X$.
+to depth-$m$ events on $X$.
 \end{proof}
 
 \section{The Scan Error Profile}
@@ -226,7 +306,8 @@ does not change $\varepsilon_m(\mathsf{P};\mu)$.
 \begin{definition}[Positive-atom convention and conditional probabilities]
 \label{def:positive-atoms}
 For each $m$, $\mathcal{C}_m$ denotes the finite family of positive atoms of
-$\mathcal{F}_m$, after identifying atoms that agree modulo $\mu$-null sets.
+$\mathcal{F}_m$ on $X$, after identifying atoms that agree modulo
+$\mu$-null sets.
 Equivalently, one may take the atoms of the finite algebra $\mathcal{F}_m$ and
 discard the atoms of $\mu$-measure zero.  All sums and cardinalities over
 $\mathcal{C}_m$ below are over this positive-atom family.  If
@@ -234,17 +315,18 @@ $C\in\mathcal{C}_m$, then
 \[
 \mu(\mathsf{A}\mid C):=\frac{\mu(\mathsf{A}\cap C)}{\mu(C)}
 \]
-for every event $\mathsf{A}$.  In symbolic specializations, a cylinder is
-called positive when it has positive $\mu$-measure, and all hypotheses below
-that quantify over atoms or cylinders are understood to quantify over positive
-ones unless stated otherwise.
+for every event $\mathsf{A}$.  In the symbolic specialization
+$X\subseteq\Omega_\infty$ with the coordinate readout, the elements of
+$\mathcal{C}_m$ are exactly the positive length-$m$ cylinders in $X$.  Thus
+all filtration-level statements below are atomwise on $X$; when later phrased
+symbolically, they are the corresponding cylinder statements.
 \end{definition}
 
-\begin{proposition}[Exact cylinder decomposition]
+\begin{proposition}[Exact atom decomposition]
 \label{prop:scan-error-cylinder}
 Let $\mathcal{C}_m$ be the positive atoms of $\mathcal{F}_m$ and
 $p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m)$.
-For every $\mathsf{P}\in\mathcal{F}_\infty$ and $m\ge 0$,
+For every $\mathsf{P}\in\mathcal{B}$ and $m\ge 0$,
 \[
 \varepsilon_m(\mathsf{P};\mu)
 =\sum_{C\in\mathcal{C}_m}\min\{\mu(\mathsf{P}\cap C),\mu(C\setminus\mathsf{P})\}
@@ -278,7 +360,7 @@ $\mathsf{P}\triangle\mathsf{P}_m^\star$.
 
 \begin{corollary}[Monotonicity and decidability]
 \label{cor:basic-properties}
-For every $\mathsf{P}\in\mathcal{F}_\infty$, the profile
+For every $\mathsf{P}\in\mathcal{B}$, the profile
 $m\mapsto\varepsilon_m(\mathsf{P};\mu)$ is nonincreasing, and
 $\varepsilon_m(\mathsf{P};\mu)=0$ iff $\mathsf{P}$ coincides $\mu$-a.s.\ with
 an event in $\mathcal{F}_m$.
@@ -305,8 +387,13 @@ symmetric-difference error.
 
 \begin{theorem}[Discrete Tanaka representation of the scan error]
 \label{thm:scan-tanaka}
-Let $\mathsf{P}\in\mathcal{F}_\infty$ and set
-$p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m)$.  For $m\ge 1$ define
+Let $\mathsf{P}\in\mathcal{B}$ and set
+\[
+p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m),
+\qquad
+p_\infty:=\mu(\mathsf{P}\mid\mathcal{F}_\infty).
+\]
+For $m\ge 1$ define
 \[
 L_m^{1/2}
 :=\sum_{k=0}^{m-1}
@@ -323,32 +410,110 @@ nondecreasing.  Moreover,
 \qquad
 \varepsilon_0(\mathsf{P};\mu)=\min\{\mu(\mathsf{P}),1-\mu(\mathsf{P})\}.
 \]
-Since $\mathsf{P}\in\mathcal{F}_\infty$, we have $\varepsilon_m(\mathsf{P};\mu)\to 0$
-and $\EE[L_\infty^{1/2}]=\varepsilon_0(\mathsf{P};\mu)$.
+As $m\to\infty$,
+\[
+\varepsilon_m(\mathsf{P};\mu)\to
+\varepsilon_\infty(\mathsf{P};\mu)
+:=\inf\{\mu(\mathsf{P}\triangle\mathsf{Q}):\mathsf{Q}\in\mathcal{F}_\infty\}
+=\EE[\min\{p_\infty,1-p_\infty\}],
+\]
+and therefore
+\[
+\EE[L_\infty^{1/2}]
+=\varepsilon_0(\mathsf{P};\mu)-\varepsilon_\infty(\mathsf{P};\mu).
+\]
 \leanverified{paper_prefix_scan_error_tanaka_representation}
 \end{theorem}
 
 \begin{proof}
 Proposition~\ref{prop:scan-error-cylinder} gives
-$\varepsilon_m=\frac12-\EE|p_m-\frac12|$.  Convexity of $y\mapsto|y-a|$
-yields the pointwise identity
 \[
-|x_{k+1}-a|=|x_k-a|+\sgn(x_k-a)(x_{k+1}-x_k)+r_k(a),
-\qquad r_k(a)\ge 0,
+\varepsilon_m(\mathsf{P};\mu)
+=\EE[\min\{p_m,1-p_m\}]
+=\frac12-\EE\left|p_m-\frac12\right|.
 \]
-which is the discrete analogue of Tanaka's formula \cite{Tanaka1963,RevuzYor1999}.
-Applying this with $x_k=p_k$, $a=\frac12$, and summing $k=0$ to $m-1$, then
-taking expectations,
+For each $k\ge 0$, define
+\[
+r_k
+:=\left|p_{k+1}-\frac12\right|
+-\left|p_k-\frac12\right|
+-\sgn\!\left(p_k-\frac12\right)(p_{k+1}-p_k).
+\]
+Since $\sgn(x-\tfrac12)\in\partial|x-\tfrac12|$, the subgradient inequality for
+the convex function $x\mapsto |x-\tfrac12|$ gives $r_k\ge 0$ pointwise.  By
+definition,
+\[
+\left|p_{k+1}-\frac12\right|
+=\left|p_k-\frac12\right|
++\sgn\!\left(p_k-\frac12\right)(p_{k+1}-p_k)+r_k,
+\]
+and summing from $k=0$ to $m-1$ yields
+\[
+\left|p_m-\frac12\right|
+=\left|p_0-\frac12\right|
++\sum_{k=0}^{m-1}\sgn\!\left(p_k-\frac12\right)(p_{k+1}-p_k)
++L_m^{1/2},
+\]
+where $L_m^{1/2}=\sum_{k=0}^{m-1}r_k\ge 0$.  This is the discrete analogue of
+Tanaka's formula \cite{Tanaka1963,RevuzYor1999}.  Taking expectations, for each
+$k$ we have
 \[
 \EE\!\left[\sgn\!\left(p_k-\tfrac12\right)(p_{k+1}-p_k)\right]
-=\EE\!\left[\sgn\!\left(p_k-\tfrac12\right)\EE[p_{k+1}-p_k\mid\mathcal{F}_k]\right]=0
+=\EE\!\left[\sgn\!\left(p_k-\tfrac12\right)\EE[p_{k+1}-p_k\mid\mathcal{F}_k]\right]
+=0
 \]
-because $(p_m)$ is a martingale.  Hence
-$\EE|p_m-\frac12|=|p_0-\frac12|+\EE[L_m^{1/2}]$, and
-$\varepsilon_m=\frac12-|p_0-\frac12|-\EE[L_m^{1/2}]=\varepsilon_0-\EE[L_m^{1/2}]$.
+because $\sgn(p_k-\tfrac12)$ is bounded and $\mathcal{F}_k$-measurable, while
+$(p_m)$ is a martingale.  Hence
+\[
+\EE\left|p_m-\frac12\right|
+=\left|p_0-\frac12\right|+\EE[L_m^{1/2}],
+\]
+and therefore
+\[
+\varepsilon_m
+=\frac12-\left|p_0-\frac12\right|-\EE[L_m^{1/2}]
+=\varepsilon_0-\EE[L_m^{1/2}].
+\]
 L\'{e}vy's upward theorem \cite{Doob1953,Williams1991,Durrett2019} gives
-$p_m\to\ind_{\mathsf{P}}$ a.s.\ and in $L^1$, so $\varepsilon_m\to 0$ and
-$\EE[L_\infty^{1/2}]=\varepsilon_0$ by monotone convergence.
+$p_m\to p_\infty$ a.s.\ and in $L^1$.  Since
+$u\mapsto\min\{u,1-u\}$ is $1$-Lipschitz on $[0,1]$,
+Proposition~\ref{prop:scan-error-cylinder} yields
+\[
+\varepsilon_m(\mathsf{P};\mu)=\EE[\min\{p_m,1-p_m\}]
+\longrightarrow
+\EE[\min\{p_\infty,1-p_\infty\}].
+\]
+For any $\mathsf{Q}\in\mathcal{F}_\infty$,
+\[
+\mu(\mathsf{P}\triangle\mathsf{Q})
+=\EE\!\left[p_\infty\ind_{\mathsf{Q}^c}+(1-p_\infty)\ind_{\mathsf{Q}}\right]
+\ge \EE[\min\{p_\infty,1-p_\infty\}],
+\]
+with equality for the threshold classifier
+$\mathsf{Q}_\infty^\star:=\{p_\infty\ge 1/2\}\in\mathcal{F}_\infty$.  Thus
+$\varepsilon_\infty(\mathsf{P};\mu)=\EE[\min\{p_\infty,1-p_\infty\}]$, and the
+identity for $\EE[L_\infty^{1/2}]$ follows from monotone convergence applied
+to $L_m^{1/2}\uparrow L_\infty^{1/2}$.
+\end{proof}
+
+\begin{corollary}[Tail-measurable specialization]
+\label{cor:scan-tanaka-tail}
+If $\mathsf{P}\in\mathcal{F}_\infty$, then
+\[
+\varepsilon_m(\mathsf{P};\mu)\to 0
+\qquad\text{and}\qquad
+\EE[L_\infty^{1/2}]=\varepsilon_0(\mathsf{P};\mu).
+\]
+\end{corollary}
+
+\begin{proof}
+If $\mathsf{P}\in\mathcal{F}_\infty$, then
+$p_\infty=\mu(\mathsf{P}\mid\mathcal{F}_\infty)=\ind_{\mathsf{P}}$ a.s.  Hence
+\[
+\varepsilon_\infty(\mathsf{P};\mu)
+=\EE[\min\{p_\infty,1-p_\infty\}]=0,
+\]
+and the conclusion follows from Theorem~\ref{thm:scan-tanaka}.
 \end{proof}
 
 \begin{proposition}[Threshold-crossing budget]
@@ -383,7 +548,7 @@ Moreover,
 \]
 Thus the local-time increment is exactly the one-step budget spent by children
 whose conditional probabilities cross the Bayes threshold, together with
-children split from a tied parent.  Its tail is the boundary-cylinder error:
+children split from a tied parent.  Its tail is the boundary-atom error:
 \[
 \varepsilon_0(\mathsf{P};\mu)-\EE[L_m^{1/2}]
 =\sum_{C\in\partial_m\mathsf{P}}
@@ -414,9 +579,9 @@ applied at the two consecutive depths.  The piecewise formula is obtained by
 checking the four sign possibilities for $u-\frac12$ and $v-\frac12$, with
 $\sgn(0)=0$.
 
-The tail identity is Theorem~\ref{thm:scan-tanaka} together with the cylinder
+The tail identity is Theorem~\ref{thm:scan-tanaka} together with the atom
 decomposition in Proposition~\ref{prop:scan-error-cylinder}; non-boundary
-cylinders have local error zero.  The two final displays are precisely
+atoms have local error zero.  The two final displays are precisely
 Theorems~\ref{thm:volume-boundary-scaling} and~\ref{thm:nonuniform-cylinder}
 with this tail identity substituted for $\varepsilon_m(\mathsf{P};\mu)$.
 \end{proof}
@@ -424,11 +589,11 @@ with this tail identity substituted for $\varepsilon_m(\mathsf{P};\mu)$.
 \section{Boundary-Controlled Rates}
 \label{sec:rates}
 
-\subsection{Boundary cylinders and the growth scale}
+\subsection{Boundary atoms and the growth scale}
 
-\begin{definition}[Boundary cylinders and cylinder growth]
+\begin{definition}[Boundary atoms and cylinder growth]
 \label{def:boundary-cylinder}
-For $\mathsf{P}\in\mathcal{F}_\infty$, the boundary-cylinder family at
+For $\mathsf{P}\in\mathcal{F}_\infty$, the boundary family at
 resolution $m$ is
 \[
 \partial_m\mathsf{P}
@@ -448,15 +613,280 @@ is the spectral radius of the transition matrix \cite{LindMarcus1995}.  The
 \]
 \end{definition}
 
-The dimension $d=\overline{\dim}_B(\partial\mathsf{P})\in[0,1]$ is an
-exponential growth exponent and is invariant under rescaling of $m$ by a
-constant.  The absolute counts $N_m(\partial\mathsf{P})$ depend on the
-particular symbolic representation, but the exponent $d$ is what appears in
-all rate theorems.  The maximum in Definition~\ref{def:boundary-cylinder}
-is only a zero-count convention: if the boundary is eventually empty, then
-$d=0$ under this convention and the scan error is eventually zero.
+The limsup exponent in Definition~\ref{def:boundary-cylinder} is a property of
+the chosen filtration and presentation.  For arbitrary filtrations we make no
+representation-invariance claim at this level.  The symbolic finite-state
+theorem below isolates the higher-block invariant quantity relevant for
+shift-dynamical
+applications: the ambiguity growth base of the observer graph, whose
+normalization agrees with
+$\overline{\dim}_B(\partial\mathsf{P})$ and is unchanged under higher-block
+recoding (Proposition~\ref{prop:higher-block-invariance}).  No broader
+invariance under general finite-to-one sliding block conjugacies is claimed
+here.  The maximum in Definition~\ref{def:boundary-cylinder} is only a
+zero-count convention: if the boundary is eventually empty, then the resulting
+exponent is $0$ and the scan error is eventually zero.
+In general $\partial_m\mathsf{P}$ is a family of positive atoms of
+$\mathcal{F}_m$; in the symbolic specialization those atoms are precisely the
+positive cylinders, which is why the later symbolic discussion keeps the
+cylinder terminology.
+
+\subsection{Finite-state posterior presentations}
+\label{sub:finite-posterior}
+
+The next theorem supplies a finite-state symbolic source of the thickness
+hypothesis and of the ambiguity exponent.  The input is a finite observer that
+tracks, from a prefix alone, whether the target event is already forced true,
+already forced false, or still ambiguous.
+
+\begin{definition}[Finite-state posterior presentation]
+\label{def:finite-posterior}
+Let $X\subseteq\{0,1\}^{\NN}$ be a one-sided shift space, let $\mu$ be a Borel
+probability measure on $X$, and let $\mathsf{P}\in\mathcal{F}_\infty$.  A
+\emph{finite-state posterior presentation} for $\mathsf{P}$ consists of a
+finite set
+\[
+Q=Q_1\sqcup Q_0\sqcup Q_\partial,
+\]
+an initial state $q_\emptyset\in Q$, and partial update maps
+$T_0,T_1:Q\to Q$ such that:
+\begin{enumerate}[label=(\arabic*)]
+\item for every positive word $a=a_0\cdots a_{m-1}$ in the language of $X$,
+  the iterated state
+  \[
+  q(a):=T_{a_{m-1}}\circ\cdots\circ T_{a_0}(q_\emptyset)
+  \]
+  is defined;
+\item $Q_0$ and $Q_1$ are absorbing under every defined transition;
+\item for every positive word $a$ with cylinder $[a]\subset X$,
+  \[
+  q(a)\in Q_1 \Rightarrow \mu([a]\setminus\mathsf{P})=0,\qquad
+  q(a)\in Q_0 \Rightarrow \mu([a]\cap\mathsf{P})=0,
+  \]
+  and
+  \[
+  q(a)\in Q_\partial \Longleftrightarrow [a]\in\partial_{|a|}\mathsf{P}.
+  \]
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Finite-state posterior theorem]
+\label{thm:finite-state-posterior}
+Let $X$ be a mixing one-step SFT on the alphabet $\{0,1\}$ with transition
+matrix $A$, and let $\mu$ be its Parry measure.  Let
+$\mathsf{P}\in\mathcal{F}_\infty$ admit a finite-state posterior presentation
+as in Definition~\ref{def:finite-posterior}.  Assume $q_\emptyset\in Q_\partial$
+and let $Q_\partial^{\mathrm{acc}}\subseteq Q_\partial$ be the ambiguous states
+reachable from $q_\emptyset$.  Define the ambiguous transition matrix
+$B=(B_{uv})_{u,v\in Q_\partial^{\mathrm{acc}}}$ by
+\[
+B_{uv}:=\#\{b\in\{0,1\}:T_b(u)=v\}.
+\]
+Assume there exists $R\ge 1$ such that for every
+$u\in Q_\partial^{\mathrm{acc}}$ there are admissible words
+$w_u^+,w_u^-$ of length at most $R$ with
+\[
+T_{w_u^+}(u)\in Q_1,
+\qquad
+T_{w_u^-}(u)\in Q_0.
+\]
+Then the following hold.
+\begin{enumerate}[label=(\arabic*)]
+\item For every $m\ge 1$,
+  \[
+  N_m(\partial\mathsf{P})=e_{q_\emptyset}^{\top}B^m\mathbf{1},
+  \]
+  where $e_{q_\emptyset}$ is the coordinate vector of $q_\emptyset$ and
+  $\mathbf{1}$ is the all-ones column vector.
+\item If $B$ is nilpotent, then $\partial_m\mathsf{P}=\varnothing$ for all
+  large $m$.  Otherwise
+  \[
+  \Lambda_\partial(\mathsf{P})
+  :=\limsup_{m\to\infty}\max\{N_m(\partial\mathsf{P}),1\}^{1/m}
+  =\rho(B),
+  \]
+  where $\rho(B)$ is the spectral radius of $B$.  In the nilpotent case set
+  $\Lambda_\partial(\mathsf{P})=1$.  Then the normalized ambiguity exponent
+  \[
+  \delta_\partial(\mathsf{P})
+  :=\frac{\log\Lambda_\partial(\mathsf{P})}{\log\lambda_{\mathrm{cyl}}}
+  \]
+  satisfies
+  \[
+  \delta_\partial(\mathsf{P})
+  =\overline{\dim}_B(\partial\mathsf{P}).
+  \]
+\item Let
+  \[
+  p_*:=\min\{\PP_\mu(x_{n+1}=j\mid x_n=i):A_{ij}=1\}>0,
+  \qquad
+  \theta:=p_*^R.
+  \]
+  Then every boundary cylinder $C\in\partial_m\mathsf{P}$ satisfies
+  \[
+  \min\{\mu(\mathsf{P}\mid C),1-\mu(\mathsf{P}\mid C)\}\ge \theta.
+  \]
+\item There exist constants $c_-,c_+>0$ such that for every $m\ge 1$,
+  \[
+  \theta c_-\lambda_{\mathrm{cyl}}^{-m}e_{q_\emptyset}^{\top}B^m\mathbf{1}
+  \le \varepsilon_m(\mathsf{P};\mu)
+  \le \frac{c_+}{2}\lambda_{\mathrm{cyl}}^{-m}e_{q_\emptyset}^{\top}B^m\mathbf{1}.
+  \]
+  If $B$ is primitive, then
+  \[
+  \varepsilon_m(\mathsf{P};\mu)\asymp
+  \left(\frac{\Lambda_\partial(\mathsf{P})}{\lambda_{\mathrm{cyl}}}\right)^m
+  =\lambda_{\mathrm{cyl}}^{-(1-\delta_\partial(\mathsf{P}))m}.
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Because $Q_0$ and $Q_1$ are absorbing, a positive word $a$ of length $m$ is
+boundary if and only if the run of the observer stays inside
+$Q_\partial^{\mathrm{acc}}$ for $m$ steps and ends there.  The number of such
+words is exactly the number of length-$m$ paths in the ambiguous automaton
+starting from $q_\emptyset$, which is
+$e_{q_\emptyset}^{\top}B^m\mathbf{1}$.  This proves (1).
+
+If $B$ is nilpotent then $B^m=0$ for all large $m$, so (1) gives eventual
+emptiness of the boundary.  Assume now that $B$ is not nilpotent.  The upper
+bound
+\[
+N_m(\partial\mathsf{P})\le \|e_{q_\emptyset}^{\top}\|\,\|B^m\|\,\|\mathbf{1}\|
+\]
+implies
+$\limsup_m N_m(\partial\mathsf{P})^{1/m}\le \rho(B)$ by Gelfand's formula.
+Conversely, choose a strongly connected component of the ambiguous graph with
+spectral radius $\rho(B)$ that is reachable from $q_\emptyset$.  Perron--Frobenius
+theory on that component gives $c>0$ and infinitely many $m$ for which
+$N_m(\partial\mathsf{P})\ge c\,\rho(B)^m$.  Hence
+\[
+\limsup_{m\to\infty}N_m(\partial\mathsf{P})^{1/m}=\rho(B),
+\]
+and the dimension formula in (2) follows from
+Definition~\ref{def:boundary-cylinder}.
+
+For (3), let $C=[a]\in\partial_m\mathsf{P}$ and write
+$u:=q(a)\in Q_\partial^{\mathrm{acc}}$.  By hypothesis there are admissible
+words $w_u^+,w_u^-$ of lengths at most $R$ with
+$T_{w_u^+}(u)\in Q_1$ and $T_{w_u^-}(u)\in Q_0$.  Therefore
+$[aw_u^+]\subseteq \mathsf{P}$ modulo $\mu$-null sets and
+$[aw_u^-]\subseteq C\setminus \mathsf{P}$ modulo $\mu$-null sets.  Since the
+Parry measure is the Markov measure with transition matrix derived from $A$,
+every admissible one-step transition has conditional probability at least
+$p_*$; hence each admissible continuation of length at most $R$ has
+conditional probability at least $p_*^R=\theta$.  Therefore
+\[
+\mu(\mathsf{P}\mid C)\ge \mu([aw_u^+]\mid[a])\ge \theta
+\]
+and similarly
+\[
+1-\mu(\mathsf{P}\mid C)\ge \mu([aw_u^-]\mid[a])\ge \theta.
+\]
+This is the claimed thickness estimate.
+
+Finally, Parry's formula \cite{Parry1964} gives constants $c_-,c_+>0$ such
+that
+$c_-\lambda_{\mathrm{cyl}}^{-m}\le \mu(C)\le c_+\lambda_{\mathrm{cyl}}^{-m}$
+for every positive $m$-cylinder $C$.  Combining these cylinder bounds with
+Proposition~\ref{prop:scan-error-cylinder}, the thickness estimate from (3),
+and the count identity from (1), gives the two-sided inequality in (4).  If
+$B$ is primitive, Perron--Frobenius theory gives
+$e_{q_\emptyset}^{\top}B^m\mathbf{1}\asymp \rho(B)^m$, and substitution into
+the two-sided estimate yields the displayed asymptotic law.
+\end{proof}
+
+\begin{proposition}[Higher-block invariance of the ambiguity exponent]
+\label{prop:higher-block-invariance}
+Assume the hypotheses of Theorem~\ref{thm:finite-state-posterior}.  Then
+$\Lambda_\partial(\mathsf{P})$ and
+$\delta_\partial(\mathsf{P})$ are independent of the chosen finite-state
+posterior presentation.  Let $k\ge 1$, let
+$\beta_k:X\to X^{[k]}$ be the standard $k$-block conjugacy to the higher-block
+presentation \cite{LindMarcus1995}, let
+$\mu^{[k]}:=\mu\circ\beta_k^{-1}$, and let
+$\mathsf{P}^{[k]}:=\beta_k(\mathsf{P})$.  Then for every $m\ge 1$,
+\[
+N_m^{[k]}(\partial\mathsf{P}^{[k]})
+=N_{m+k-1}(\partial\mathsf{P}),
+\qquad
+\varepsilon_m(\mathsf{P}^{[k]};\mu^{[k]})
+=\varepsilon_{m+k-1}(\mathsf{P};\mu),
+\]
+and the cylinder growth bases satisfy
+$\lambda_{\mathrm{cyl}}^{[k]}=\lambda_{\mathrm{cyl}}$.  Consequently
+\[
+\Lambda_\partial(\mathsf{P}^{[k]})=\Lambda_\partial(\mathsf{P}),
+\qquad
+\delta_\partial(\mathsf{P}^{[k]})=\delta_\partial(\mathsf{P}).
+\]
+\end{proposition}
+
+\begin{proof}
+Theorem~\ref{thm:finite-state-posterior}(2) expresses
+$\Lambda_\partial(\mathsf{P})$ as the limsup growth base of the boundary
+counts, so any two finite-state posterior presentations yield the same
+$\Lambda_\partial(\mathsf{P})$ and hence the same
+$\delta_\partial(\mathsf{P})$.
+
+For the higher-block claim, a length-$m$ cylinder in $X^{[k]}$ is determined by
+admissible overlapping $k$-blocks
+$u_0,\dots,u_{m-1}$ and therefore corresponds bijectively to a unique original
+word $a_0\cdots a_{m+k-2}$ of length $m+k-1$.  If
+$D=[u_0\cdots u_{m-1}]_{[k]}\subset X^{[k]}$ denotes the $k$-block cylinder and
+$C=[a_0\cdots a_{m+k-2}]\subset X$ the associated original cylinder, then
+$\beta_k^{-1}(D)=C$.  Therefore
+\[
+\mu^{[k]}(\mathsf{P}^{[k]}\cap D)=\mu(\mathsf{P}\cap C),
+\qquad
+\mu^{[k]}(D\setminus \mathsf{P}^{[k]})=\mu(C\setminus\mathsf{P}),
+\]
+so $D$ is boundary for $\mathsf{P}^{[k]}$ if and only if $C$ is boundary for
+$\mathsf{P}$.  This gives
+$N_m^{[k]}(\partial\mathsf{P}^{[k]})=N_{m+k-1}(\partial\mathsf{P})$.  The same
+cylinder correspondence shows
+$M_m^{[k]}=M_{m+k-1}$, hence
+$\lambda_{\mathrm{cyl}}^{[k]}=\lambda_{\mathrm{cyl}}$.
+
+Likewise the pullback of the depth-$m$ prefix sigma algebra on $X^{[k]}$ is the
+depth-$(m+k-1)$ prefix sigma algebra on $X$:
+\[
+\beta_k^{-1}\bigl(\mathcal{F}_m^{[k]}\bigr)=\mathcal{F}_{m+k-1}.
+\]
+Taking the infimum defining the scan error over corresponding measurable sets
+gives
+$\varepsilon_m(\mathsf{P}^{[k]};\mu^{[k]})
+=\varepsilon_{m+k-1}(\mathsf{P};\mu)$.  The displayed invariance of
+$\Lambda_\partial$ and $\delta_\partial$ now follows from the count identity
+and the equality of cylinder growth bases.
+\end{proof}
+
+\begin{remark}[Sofic and hidden-Markov origin]
+\label{rem:sofic-hidden-markov}
+The state $q(a)$ in Definition~\ref{def:finite-posterior} can be interpreted as
+an observer state.  For a right-resolving sofic presentation, one includes the
+current presentation vertex together with the ambiguity status of
+$\mathsf{P}$; for a finite hidden Markov model, one may equivalently use the
+finite posterior class of hidden states compatible with both
+$\mathsf{P}$ and $\mathsf{P}^c$.  After recoding to an edge shift, both cases
+fall under Theorem~\ref{thm:finite-state-posterior}.  Thus the theorem converts
+finite observer data directly into the thickness constant and the higher-block
+invariant ambiguity exponent $\delta_\partial(\mathsf{P})$; compare
+\cite{Blackwell1957,Heller1965,Fischer1975,Krieger1984,LindMarcus1995}.
+\end{remark}
 
 \subsection{Rate theorems}
+
+Theorem~\ref{thm:finite-state-posterior} and
+Proposition~\ref{prop:higher-block-invariance} identify a higher-block
+invariant symbolic exponent $\delta_\partial(\mathsf{P})$ in the finite-state
+SFT setting.  The
+next results are the general filtration-level transfer principles: once
+boundary count and boundary thickness are known, they turn those inputs into
+scan-error bounds.  Their hypotheses are stated in terms of the raw boundary
+counts $N_m(\partial\mathsf{P})$, with no representation-invariance claim
+beyond the symbolic higher-block setting above.
 
 \begin{theorem}[Boundary-dimension upper bound]
 \label{thm:boundary-dimension}
@@ -467,8 +897,8 @@ depth-$m$ atom $C\in\mathcal{C}_m$.  Then
 \[
 \varepsilon_m(\mathsf{P};\mu)\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P}).
 \]
-If $\overline{\dim}_B(\partial\mathsf{P})=d<1$, then
-$\varepsilon_m(\mathsf{P};\mu)\le\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}$.
+If $\overline{\dim}_B(\partial\mathsf{P})=\delta<1$, then
+$\varepsilon_m(\mathsf{P};\mu)\le\lambda_{\mathrm{cyl}}^{-(1-\delta)m+o(m)}$.
 \leanverified{paper_prefix_scan_error_boundary_dimension_upper}
 \end{theorem}
 
@@ -483,13 +913,13 @@ vanishes.  On boundary cylinders,
 $\min\{\mu(\mathsf{P}\cap C),\mu(C\setminus\mathsf{P})\}\le\mu(C)\le
 K\lambda_{\mathrm{cyl}}^{-m}$.  Summing gives
 $\varepsilon_m\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$.
-For $d<1$: fix $\eta>0$; for large $m$,
-$N_m(\partial\mathsf{P})\le\lambda_{\mathrm{cyl}}^{(d+\eta)m}$, giving
-$\varepsilon_m\le K\lambda_{\mathrm{cyl}}^{-(1-d-\eta)m}$.  Since $\eta$ and
+For $\delta<1$: fix $\eta>0$; for large $m$,
+$N_m(\partial\mathsf{P})\le\lambda_{\mathrm{cyl}}^{(\delta+\eta)m}$, giving
+$\varepsilon_m\le K\lambda_{\mathrm{cyl}}^{-(1-\delta-\eta)m}$.  Since $\eta$ and
 the constant $K$ contribute $o(m)$ after taking logs, the bound follows.
 \end{proof}
 
-\begin{theorem}[Exact rate law from boundary thickness]
+\begin{theorem}[Two-sided bounds and exponent law from boundary thickness]
 \label{thm:volume-boundary-scaling}
 Let $\mathsf{P}\in\mathcal{F}_\infty$.  Assume that the cylinder growth base
 $\lambda_{\mathrm{cyl}}$ exists and $\lambda_{\mathrm{cyl}}>1$.  Suppose
@@ -507,8 +937,12 @@ Then for all $m\ge m_0$,
 \le\varepsilon_m(\mathsf{P};\mu)
 \le\frac{c_+}{2}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P}).
 \]
-If $N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{dm+o(m)}$, then
-$\lim_{m\to\infty}(-\frac{1}{m}\log_{\lambda_{\mathrm{cyl}}}\varepsilon_m)=1-d$.
+If $N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$, then
+\[
+\lim_{m\to\infty}\left(-\frac{1}{m}\log_{\lambda_{\mathrm{cyl}}}\varepsilon_m\right)=1-\delta,
+\]
+so $\varepsilon_m$ has exponential decay exponent $1-\delta$, where $\delta$
+is the exponential growth exponent of $N_m(\partial\mathsf{P})$.
 \end{theorem}
 
 \begin{proof}
@@ -518,15 +952,46 @@ Lower: thickness and the lower cylinder bound give
 $\varepsilon_m\ge\theta c_-\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$.
 Upper: $\min\{p,1-p\}\le\frac12$ and the upper cylinder bound give
 $\varepsilon_m\le\frac{c_+}{2}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$.
-Inserting $N_m=\lambda_{\mathrm{cyl}}^{dm+o(m)}$ and taking
-$-\log_{\lambda_{\mathrm{cyl}}}/m$ yields $1-d$ in the limit.
+Inserting $N_m=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$ and taking
+$-\log_{\lambda_{\mathrm{cyl}}}/m$ yields $1-\delta$ in the limit.
 \end{proof}
+
+\begin{remark}[Parry versus general Gibbs measures]
+\label{rem:parry-vs-gibbs}
+The hypotheses of Theorems~\ref{thm:boundary-dimension}
+and~\ref{thm:volume-boundary-scaling} are genuinely same-length assumptions.
+For a mixing SFT with Parry measure $\mu_{\max}$, every admissible word
+$a=a_0\cdots a_{m-1}$ satisfies
+\[
+\mu_{\max}([a])
+=\frac{\ell_{a_0}r_{a_{m-1}}}{\lambda_{\mathrm{cyl}}^{m-1}\langle \ell,r\rangle},
+\]
+where $\ell,r$ are positive left/right Perron--Frobenius eigenvectors of the
+transition matrix.  Since only the endpoints appear, one obtains constants
+$c_\pm>0$ with $c_-\lambda_{\mathrm{cyl}}^{-m}\le\mu_{\max}([a])\le
+c_+\lambda_{\mathrm{cyl}}^{-m}$ uniformly over all admissible words of length
+$m$ \cite{Parry1964}.  By contrast, a H\"older Gibbs state for a potential
+$\phi$ satisfies
+\[
+\mu_\phi([a])\asymp \exp\!\bigl(S_m\phi(x)-mP(\phi)\bigr)
+\qquad(x\in[a]),
+\]
+so same-length cylinders generally differ exponentially with the word
+\cite{Bowen1975,WaltersErgodicTheory}.  In that regime a count-only law in
+terms of $N_m(\partial\mathsf{P})$ is no longer natural; the corresponding
+quantity is a weighted boundary partition sum.
+\end{remark}
 
 \subsection{Extension to log-regular cylinder measures}
 \label{sub:nonuniform}
 
-The uniform bounds $\mu(C)\asymp\lambda_{\mathrm{cyl}}^{-m}$ hold for Gibbs
-measures on mixing SFTs \cite{Bowen1975} but need not hold in general.
+The uniform bounds $\mu(C)\asymp\lambda_{\mathrm{cyl}}^{-m}$ hold for Parry
+(maximal-entropy) measures on mixing SFTs \cite{Parry1964}; for general
+H\"older Gibbs measures one has instead the potential-weighted estimate from
+Remark~\ref{rem:parry-vs-gibbs}, so same-length cylinders need not have
+comparable masses.  The following log-regular hypothesis isolates a weaker
+count-based regime in which polynomial distortions are allowed but the
+exponential scale remains $\lambda_{\mathrm{cyl}}^{-m}$.
 
 \begin{definition}[Log-regular measure]
 \label{def:log-regular}
@@ -551,20 +1016,20 @@ $m_0$.  Then for all $m\ge m_0$,
 \le\varepsilon_m(\mathsf{P};\mu)
 \le \frac{c_2}{2}m^{\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P}).
 \]
-If $N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{dm+o(m)}$, then
-$\varepsilon_m(\mathsf{P};\mu)=\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}$ and the
-exponential rate $1-d$ is unchanged from the uniform case.  More quantitatively,
+If $N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$, then
+$\varepsilon_m(\mathsf{P};\mu)=\lambda_{\mathrm{cyl}}^{-(1-\delta)m+o(m)}$ and the
+exponential rate $1-\delta$ is unchanged from the uniform case.  More quantitatively,
 if for some $\beta\ge 0$ and $A_-,A_+>0$,
 \[
-A_-m^{-\beta}\lambda_{\mathrm{cyl}}^{dm}
+A_-m^{-\beta}\lambda_{\mathrm{cyl}}^{\delta m}
 \le N_m(\partial\mathsf{P})
-\le A_+m^\beta\lambda_{\mathrm{cyl}}^{dm}
+\le A_+m^\beta\lambda_{\mathrm{cyl}}^{\delta m}
 \]
 for all large $m$, then for all large $m$,
 \[
-\theta c_1A_-m^{-(\alpha+\beta)}\lambda_{\mathrm{cyl}}^{-(1-d)m}
+\theta c_1A_-m^{-(\alpha+\beta)}\lambda_{\mathrm{cyl}}^{-(1-\delta)m}
 \le\varepsilon_m(\mathsf{P};\mu)
-\le \frac{c_2A_+}{2}m^{\alpha+\beta}\lambda_{\mathrm{cyl}}^{-(1-d)m}.
+\le \frac{c_2A_+}{2}m^{\alpha+\beta}\lambda_{\mathrm{cyl}}^{-(1-\delta)m}.
 \]
 \leanverified{paper_prefix_scan_error_nonuniform_cylinder}
 \end{theorem}
@@ -582,10 +1047,10 @@ is bounded below by
 $\theta c_1m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$
 and above by
 $\frac{c_2}{2}m^\alpha\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$.
-If $N_m=\lambda_{\mathrm{cyl}}^{dm+o(m)}$, then the two bounds have logarithms
-$-(1-d)m\log\lambda_{\mathrm{cyl}}+o(m)$, because
+If $N_m=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$, then the two bounds have logarithms
+$-(1-\delta)m\log\lambda_{\mathrm{cyl}}+o(m)$, because
 $\log m=o(m)$.  This gives
-$\varepsilon_m=\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}$.  The final displayed
+$\varepsilon_m=\lambda_{\mathrm{cyl}}^{-(1-\delta)m+o(m)}$.  The final displayed
 polynomial estimate follows by substituting the two-sided polynomial bounds
 for $N_m$ into the two-sided estimate above.
 \end{proof}
@@ -622,7 +1087,7 @@ $\rho(x):=\min\{n\ge 0:x_n=1\}$.  Define
 \mathsf{P}:=\{x\notin Y:\rho(x)\text{ is even}\}\cup Y.
 \]
 At depth $m$, the only boundary cylinder is $[0^m]$, so
-$N_m(\partial\mathsf{P})=1$ and $d=0$.  If the prefix is not $0^m$, the first
+$N_m(\partial\mathsf{P})=1$ and the raw count exponent is $\delta=0$.  If the prefix is not $0^m$, the first
 $1$ has already appeared and the event is decided.  From $[0^m]$, however,
 one can force either parity of the first $1$ within at most two further
 symbols; since all one-coordinate probabilities are bounded below by
@@ -647,7 +1112,7 @@ Thus
 \[
 \varepsilon_m(\mathsf{P};\mu_\alpha)\asymp m^\alpha 2^{-m}.
 \]
-The exponential rate is still $1-d=1$, but the polynomial factor is real; it
+The exponential rate is still $1-\delta=1$, but the polynomial factor is real; it
 cannot be replaced by a uniform constant under log-regularity alone.  Reversing
 the signs in the one-coordinate probabilities gives the matching
 $m^{-\alpha}2^{-m}$ lower-side behaviour.
@@ -662,15 +1127,16 @@ assumption & conclusion for $\varepsilon_m(\mathsf{P};\mu)$ \\
 $\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ on all positive $m$-cylinders &
 $\varepsilon_m\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$ \\
 uniform $c_\pm\lambda_{\mathrm{cyl}}^{-m}$ bounds plus thickness $\theta$ &
-$\varepsilon_m\asymp\lambda_{\mathrm{cyl}}^{-(1-d)m}$ \\
+$\varepsilon_m\asymp\lambda_{\mathrm{cyl}}^{-(1-\delta)m}$ when
+$N_m=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$ \\
 log-regular ($c_i m^{\pm\alpha}\lambda_{\mathrm{cyl}}^{-m}$) plus thickness $\theta$ &
 $m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m\lesssim\varepsilon_m
 \lesssim m^\alpha\lambda_{\mathrm{cyl}}^{-m}N_m$, hence
-$\varepsilon_m=\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}$ when
-$N_m=\lambda_{\mathrm{cyl}}^{dm+o(m)}$ \\
+$\varepsilon_m=\lambda_{\mathrm{cyl}}^{-(1-\delta)m+o(m)}$ when
+$N_m=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$ \\
 \bottomrule
 \end{tabular}
-\caption{Summary of the three rate regimes.  The exponential rate $1-d$ is
+\caption{Summary of the three rate regimes.  The exponential rate $1-\delta$ is
 robust to polynomial perturbations of the cylinder-mass profile.}
 \label{tab:rate-laws}
 \end{table}
@@ -867,14 +1333,94 @@ $b_k=b_{k-1}+b_{k-2}$ with $b_0=1$ and $b_1=2$.  The boundary equivalence gives
 the displayed formula for $N_m(\partial\mathsf{E})$.
 \end{proof}
 
-\begin{proposition}[Parity-sharp scan error in the golden example]
+\begin{lemma}[Diagonalisation of the golden transfer matrix]
+\label{lem:golden-transfer-diagonalization}
+Let $a=\varphi^{-1}$ and
+\[
+B=\begin{pmatrix}a^2&a^3\\ a&0\end{pmatrix},\qquad
+v=\frac1{\sqrt{5}}(1,a),\qquad
+w=\begin{pmatrix}a^2/2\\[2pt]1/2\end{pmatrix}.
+\]
+Define
+\[
+r_+=\begin{pmatrix}1\\ 1\end{pmatrix},
+\qquad
+r_-=\begin{pmatrix}-a^2\\ 1\end{pmatrix}.
+\]
+Then $Br_+=ar_+$ and $Br_-=-a^3r_-$, so
+\[
+B=P\begin{pmatrix}a&0\\ 0&-a^3\end{pmatrix}P^{-1},
+\qquad
+P=\begin{pmatrix}1&-a^2\\ 1&1\end{pmatrix}.
+\]
+Moreover,
+\[
+w=\frac{a^2}{1+a^2}\,r_+ + \frac{a}{2(1+a^2)}\,r_-,
+\]
+and for every $n\ge 0$,
+\[
+vB^n w=\frac15\,a^n-\frac1{10}\,(-a^3)^{n+1}.
+\]
+\end{lemma}
+
+\begin{proof}
+Using $a^2+a=1$, one checks
+\[
+B\begin{pmatrix}1\\ 1\end{pmatrix}
+=\begin{pmatrix}a^2+a^3\\ a\end{pmatrix}
+=\begin{pmatrix}a\\ a\end{pmatrix},
+\qquad
+B\begin{pmatrix}-a^2\\ 1\end{pmatrix}
+=\begin{pmatrix}0\\ -a^3\end{pmatrix}
+=-a^3\begin{pmatrix}-a^2\\ 1\end{pmatrix}.
+\]
+Thus $r_\pm$ are eigenvectors with eigenvalues $a$ and $-a^3$ respectively,
+and the displayed diagonalisation follows because $\det P=1+a^2>0$.
+
+To decompose $w$, write $w=\alpha r_+ + \beta r_-$.  Then
+\[
+\alpha-a^2\beta=\frac{a^2}{2},
+\qquad
+\alpha+\beta=\frac12.
+\]
+Subtracting gives $(1+a^2)\beta=(1-a^2)/2=a/2$, hence
+$\beta=\frac{a}{2(1+a^2)}$ and
+$\alpha=\frac12-\beta=\frac{a^2}{1+a^2}$.
+
+Now
+\[
+vr_+=\frac{1+a}{\sqrt{5}}=\frac{\varphi}{\sqrt{5}},
+\qquad
+vr_-=\frac{a-a^2}{\sqrt{5}}=\frac{a^3}{\sqrt{5}},
+\]
+since $1-a=a^2$.  Therefore
+\[
+vB^n w
+=\alpha\,vr_+\,a^n+\beta\,vr_-\,(-a^3)^n.
+\]
+Using $\varphi a=1$ and
+$1+a^2=1+\varphi^{-2}=\sqrt{5}\,\varphi^{-1}=\sqrt{5}\,a$, this becomes
+\[
+vB^n w
+=\frac{a}{\sqrt{5}(1+a^2)}\,a^n
++\frac{a^4}{2\sqrt{5}(1+a^2)}\,(-a^3)^n
+=\frac15\,a^n+\frac{a^3}{10}\,(-a^3)^n
+=\frac15\,a^n-\frac1{10}\,(-a^3)^{n+1}.
+\]
+\end{proof}
+
+\begin{proposition}[Exact parity-resolved scan error in the golden example]
 \label{prop:golden-parity-sharp}
 For every $k\ge 1$,
 \[
+\gamma_k
+:=\frac{\varphi}{5}\,\varphi^{-k}
+-\frac{1}{10}\,(-\varphi^{-3})^k.
+\]
+\[
 \varepsilon_{2k}(\mathsf{E};\mu)
 =\varepsilon_{2k+1}(\mathsf{E};\mu)
-=\frac{\varphi}{5}\,\varphi^{-k}
--\frac{1}{10}\,(-\varphi^{-3})^k.
+=\gamma_k.
 \]
 Consequently
 \[
@@ -923,16 +1469,40 @@ v=\frac1{\sqrt{5}}(1,a),\qquad
 B=\begin{pmatrix}a^2&a^3\\ a&0\end{pmatrix}
 \quad(k\ge 1).
 \]
-Here $B_{yz}$ is the mass of the forced even return from odd symbol $y$ to the
-next odd symbol $z$, with the transition $1\to1$ excluded by
-$Y$-admissibility.  With
+Indeed, the initial vector is
+\[
+s_1=\bigl(\mu([00]),\mu([01])\bigr)
+=\bigl(\pi_0\PP_\mu(0\mid 0),\pi_0\PP_\mu(1\mid 0)\bigr)
+=\frac1{\sqrt{5}}(1,a)=v.
+\]
+If a $Y$-admissible cylinder contributing to $s_k(0)$ has last visible odd
+symbol $0$, then the next even symbol must be $0$, after which the next odd
+symbol may be $0$ or $1$.  By Lemma~\ref{lem:golden-parry-bounds}, the
+corresponding two-step cylinder-mass multipliers are
+\[
+\PP_\mu(0\mid 0)\PP_\mu(0\mid 0)=a^2,
+\qquad
+\PP_\mu(0\mid 0)\PP_\mu(1\mid 0)=a^3.
+\]
+If the last visible odd symbol is $1$, then the next even symbol is again
+forced to be $0$, and $Y$-admissibility forbids the next odd symbol from being
+$1$; hence the only allowed return is $1\to 0$, with multiplier
+\[
+\PP_\mu(0\mid 1)\PP_\mu(0\mid 0)=a.
+\]
+Therefore
+\[
+s_{k+1}(0)=a^2s_k(0)+as_k(1),\qquad
+s_{k+1}(1)=a^3s_k(0),
+\]
+which is exactly the matrix recurrence $s_{k+1}=s_kB$.  With
 \[
 w=\begin{pmatrix}b/2\\[2pt]1/2\end{pmatrix},
 \]
 the preceding paragraph gives
 $\varepsilon_{2k}(\mathsf{E};\mu)=\varepsilon_{2k+1}(\mathsf{E};\mu)
-=vB^{k-1}w$.  The eigenvalues of $B$ are $a$ and $-a^3$, and direct
-diagonalisation yields
+=vB^{k-1}w$.  Lemma~\ref{lem:golden-transfer-diagonalization} applied with
+$n=k-1$ gives
 \[
 vB^{k-1}w=\frac{\varphi}{5}a^k-\frac{1}{10}(-a^3)^k.
 \]
@@ -940,7 +1510,7 @@ Substituting $a=\varphi^{-1}$ gives the displayed formula and its two
 asymptotic normalizations.
 \end{proof}
 
-\begin{example}[Golden-mean shift: parity-sharp computation with $d=1/2$]
+\begin{example}[Golden-mean shift: exact parity-resolved computation with $\delta_\partial(\mathsf{E})=1/2$]
 \label{ex:golden-mean-specialization}
 The set $\mathsf{E}$ belongs to $\mathcal{F}_\infty$: it is the union of the
 cylinders on which a first even obstruction occurs, together with the closed
@@ -958,11 +1528,16 @@ N_{2k}(\partial\mathsf{E})=N_{2k+1}(\partial\mathsf{E})=F_{k+2}
 \]
 so
 \[
-\overline{\dim}_B(\partial\mathsf{E})
-=\limsup_{m\to\infty}
-\frac{\log\max\{N_m(\partial\mathsf{E}),1\}}{m\log\varphi}
+\Lambda_\partial(\mathsf{E})
+=\limsup_{m\to\infty}\max\{N_m(\partial\mathsf{E}),1\}^{1/m}
+=\varphi^{1/2},
+\qquad
+\delta_\partial(\mathsf{E})
+=\frac{\log\Lambda_\partial(\mathsf{E})}{\log\varphi}
 =\frac{1}{2}.
 \]
+By Proposition~\ref{prop:higher-block-invariance}, these values are unchanged
+under every higher-block recoding of the golden-mean shift.
 The same bounded continuations give the thickness estimate
 \[
 \min\{\mu(\mathsf{E}\mid[a]),1-\mu(\mathsf{E}\mid[a])\}
@@ -971,7 +1546,7 @@ The same bounded continuations give the thickness estimate
 \]
 The general rate theorem therefore predicts the correct exponential order.
 Proposition~\ref{prop:golden-parity-sharp} sharpens this to the exact
-parity-dependent formula
+parity-resolved formula
 \[
 \varepsilon_{2k}(\mathsf{E};\mu)
 =\varepsilon_{2k+1}(\mathsf{E};\mu)
@@ -990,13 +1565,21 @@ Thus $\varepsilon_m(\mathsf{E};\mu)\asymp\varphi^{-m/2}$.
 \section{Discussion}
 \label{sec:discussion}
 
-We have shown that the scan error profile decomposes exactly over prefix
-cylinders (Proposition~\ref{prop:scan-error-cylinder}), that the Bayes-optimal
-rule is the threshold classifier (Proposition~\ref{prop:bayes-optimality}),
+We have shown that the scan error profile decomposes exactly over the positive
+atoms of the prefix partition on $X$ (Proposition~\ref{prop:scan-error-cylinder}),
+or equivalently over prefix cylinders on the symbolic readout space, that the
+Bayes-optimal rule is the threshold classifier
+(Proposition~\ref{prop:bayes-optimality}),
 and that error decay is encoded by discrete local time at the threshold
-(Theorem~\ref{thm:scan-tanaka}).  The rate laws quantify the decay in terms of
-boundary-cylinder count and mass.  Example~\ref{ex:golden-mean-specialization}
-computes the parity-sharp profile for an explicit event with $d=1/2$ on the
+(Theorem~\ref{thm:scan-tanaka}).  Theorem~\ref{thm:finite-state-posterior}
+shows that, in a finite-state symbolic model, the thickness constant and the
+higher-block invariant ambiguity growth base $\Lambda_\partial(\mathsf{P})$ can themselves
+be read off from an observer graph, while
+Proposition~\ref{prop:higher-block-invariance} shows that the normalized
+exponent $\delta_\partial(\mathsf{P})$ is unchanged by higher-block recoding.
+The later rate laws then convert those quantities into scan-error decay.
+Example~\ref{ex:golden-mean-specialization} computes the exact parity-resolved profile
+for an explicit event with $\delta_\partial(\mathsf{E})=1/2$ on the
 golden-mean shift.
 
 \paragraph{Shannon--McMillan--Breiman and uniform bounds.}
@@ -1011,35 +1594,60 @@ almost-sure statement about a single cylinder along a single orbit; it does
 \emph{not} give a uniform bound over all admissible cylinders simultaneously.
 The uniform bounds $\mu(C)\asymp\lambda_{\mathrm{cyl}}^{-m}$ in
 Theorems~\ref{thm:boundary-dimension} and~\ref{thm:volume-boundary-scaling}
-are strictly stronger.  For mixing SFTs with Parry or Gibbs measures, these
-uniform bounds are established by Parry \cite{Parry1964} and Bowen
-\cite{Bowen1975}; in that class the theorems apply directly.
+are strictly stronger.  For a mixing SFT with its Parry measure, these
+same-length bounds are established by Parry \cite{Parry1964}, so the
+count-based theorems apply directly.  For a general H\"older Gibbs measure,
+Bowen's estimate \cite{Bowen1975} is instead
+\[
+\mu([a])\asymp \exp\!\bigl(S_m\phi(x)-mP(\phi)\bigr)\qquad(x\in[a]),
+\]
+which depends on the word $a$ through the Birkhoff sum $S_m\phi$.
+Accordingly, a direct Gibbs-state analogue of our two-sided bound/exponent law should weight
+boundary cylinders by a partition sum rather than by bare cardinality.
 
 \paragraph{Relation to margin conditions.}
-The thickness parameter $\theta$ plays the role of the margin exponent
-$\alpha$ from \cite{MammenTsybakov1999,Tsybakov2004}: both prevent the
-classification problem from becoming degenerate near the decision boundary.
-The Mammen--Tsybakov condition governs estimation error (rate of learning from
-data), while boundary dimension $d$ governs approximation error (oracle decay
-with resolution).  Connecting $d$ to $\alpha$ through the filtration geometry
-is an open problem.
+The exact boundary identity
+\[
+\varepsilon_m(\mathsf{P};\mu)
+=\sum_{C\in\partial_m\mathsf{P}}
+\mu(C)\min\{\mu(\mathsf{P}\mid C),1-\mu(\mathsf{P}\mid C)\}
+\]
+shows the right comparison point.  Uniform thickness gives a lower bound by
+boundary mass, but it does not by itself control how much of the ambient space
+has terminal posterior $p_\infty$ close to $1/2$.  That latter question is the
+domain of the Mammen--Tsybakov condition
+\cite{MammenTsybakov1999,Tsybakov2004}, so the comparison is only heuristic.
+A closer multiscale analogue to our setup is the dyadic tree analysis of Scott and Nowak
+\cite{ScottNowak2006Dyadic}.  In the finite-state symbolic setting the relevant
+exponent is the higher-block invariant quantity
+$\delta_\partial(\mathsf{P})$; in the general filtration-level theorems it is
+only the raw count exponent of $N_m(\partial\mathsf{P})$.  We do not interpret
+these quantities, or the thickness parameter $\theta$, as a classical margin
+exponent.  Connecting either one to a margin exponent through filtration
+geometry remains open.
 
 \paragraph{Extensions.}
 Natural generalizations include: finite alphabets of size $q$ (the discrete
 Tanaka structure extends with $q-1$ threshold parameters); the continuous-time
 limit to Tanaka--Meyer formula \cite{RevuzYor1999}; weakening the thickness
-hypothesis to an $L^p$ condition on boundary-cylinder probabilities; and
-expressing the boundary dimension $d$ in terms of conditional entropies or
-mutual information.
+hypothesis to an $L^p$ condition on boundary-atom probabilities
+(symbolically, boundary-cylinder probabilities); and
+expressing the ambiguity exponent through conditional entropies, mutual
+information, or an intrinsic pressure functional beyond the finite-state case.
 
 \paragraph{Limitations.}
-The rate laws assume exponential cylinder complexity; subexponential systems
-(Sturmian codings, substitution shifts) require separate analysis.  The proofs
-do not use invariance of $T$: all results are purely filtration-theoretic, and
-the dynamical framing motivates the cylinder structure but is not invoked in
-any argument.  Adding results that essentially use invariance---for example,
-equivariance of boundary growth under $T$, or Rohlin tower constructions---is
-an open direction.
+The general rate laws still assume exponential growth of the positive-atom
+counts $M_m=\#\mathcal{C}_m$ (equivalently, exponential cylinder complexity in
+the symbolic specialization);
+subexponential systems (Sturmian codings, substitution shifts) require
+separate analysis.  The finite-state posterior theorem covers sofic and hidden
+Markov situations with a bounded resolving window, but not arbitrary Gibbs
+events whose ambiguity cannot be compressed into finitely many observer states.
+For those systems one would need a weighted thermodynamic formalism for the
+boundary rather than the count-based one used here.  Even in the finite-state
+symbolic setting, the paper proves invariance of
+$\delta_\partial(\mathsf{P})$ only under higher-block recoding; invariance
+under general finite-to-one sliding block conjugacies remains open.
 
 \section*{Acknowledgements}
 
