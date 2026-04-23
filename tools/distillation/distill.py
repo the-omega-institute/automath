@@ -99,6 +99,8 @@ ORACLE_DONE_DIR = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle" / "done"
 DEFAULT_ORACLE_MODEL = "chatgpt-5.4-pro-extended"
 DEFAULT_ORACLE_TIMEOUT = 7200
 ORACLE_CLAIM_TIMEOUT = int(os.environ.get("ORACLE_CLAIM_TIMEOUT", "90"))
+CODEX_INFRA_RETRIES = int(os.environ.get("DISTILL_CODEX_INFRA_RETRIES", "3"))
+CODEX_INFRA_RETRY_SLEEP = int(os.environ.get("DISTILL_CODEX_INFRA_RETRY_SLEEP", "20"))
 REVIEW_BACKENDS = ("codex", "codex-claude")
 DEFAULT_REVIEW_BACKEND = os.environ.get("DISTILL_REVIEW_BACKEND", "codex")
 if DEFAULT_REVIEW_BACKEND not in REVIEW_BACKENDS:
@@ -107,6 +109,15 @@ if DEFAULT_REVIEW_BACKEND not in REVIEW_BACKENDS:
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 logger = logging.getLogger("distill")
 logger.setLevel(logging.INFO)
+
+CODEX_INFRA_UNAVAILABLE_MARKERS = (
+    "selected model is at capacity",
+    "please try a different model",
+    "rate limit",
+    "try again later",
+    "timed out",
+    "(timeout)",
+)
 if not logger.handlers:
     _log_file = LOG_DIR / f"distill_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
     _formatter = logging.Formatter(
@@ -313,7 +324,8 @@ def codex_exec(
     cmd = [
         str(codex_bin),
         "exec",
-        "--dangerously-bypass-approvals-and-sandbox",
+        "--sandbox",
+        "read-only",
         "--json",
         "-C",
         str(target_dir),
@@ -395,6 +407,51 @@ def codex_exec(
     return output
 
 
+def _is_codex_infra_unavailable(response: str) -> bool:
+    """Return true for transient Codex infrastructure failures."""
+    lower = (response or "").lower()
+    return any(marker in lower for marker in CODEX_INFRA_UNAVAILABLE_MARKERS)
+
+
+def _codex_exec_with_infra_retries(
+    prompt: str,
+    *,
+    work_dir: Optional[Path] = None,
+    timeout_seconds: int = 1800,
+    model: Optional[str] = None,
+    dry_run: bool = False,
+    log_tag: Optional[str] = None,
+) -> str:
+    """Run Codex with retries that do not consume mathematical attempts."""
+    attempts = max(1, CODEX_INFRA_RETRIES)
+    last_response = ""
+    for infra_attempt in range(1, attempts + 1):
+        tagged = (
+            log_tag
+            if infra_attempt == 1 or not log_tag
+            else f"{log_tag}_infra{infra_attempt}"
+        )
+        last_response = codex_exec(
+            prompt,
+            work_dir=work_dir,
+            timeout_seconds=timeout_seconds,
+            model=model,
+            dry_run=dry_run,
+            log_tag=tagged,
+        )
+        if not _is_codex_infra_unavailable(last_response):
+            return last_response
+        if infra_attempt < attempts:
+            logger.warning(
+                "Codex infrastructure unavailable; retrying %d/%d after %ss",
+                infra_attempt + 1,
+                attempts,
+                CODEX_INFRA_RETRY_SLEEP,
+            )
+            time.sleep(max(0, CODEX_INFRA_RETRY_SLEEP))
+    return last_response
+
+
 def _find_claude() -> str:
     """Find the Claude CLI, including npm and Homebrew fallback locations."""
     found = shutil.which("claude")
@@ -434,7 +491,7 @@ def claude_exec(
     claude_bin = CLAUDE_PATH
     if not Path(claude_bin).exists() and not shutil.which(claude_bin):
         logger.warning("Claude CLI not found; falling back to codex_exec")
-        return codex_exec(prompt, work_dir=target_dir, dry_run=dry_run)
+        return _codex_exec_with_infra_retries(prompt, work_dir=target_dir, dry_run=dry_run)
 
     cmd = [str(claude_bin), "-p", "--dangerously-skip-permissions"]
     use_shell = IS_WINDOWS and str(claude_bin).lower().endswith(".cmd")
@@ -468,7 +525,7 @@ def claude_exec(
         logger.warning("Claude CLI error: %s", (result.stderr or "")[:500])
         if not output:
             logger.warning("Claude produced no stdout; falling back to codex_exec")
-            return codex_exec(prompt, work_dir=target_dir, dry_run=dry_run)
+            return _codex_exec_with_infra_retries(prompt, work_dir=target_dir, dry_run=dry_run)
     return output
 
 
@@ -2586,7 +2643,7 @@ def run_stage_r(
                     "\n\nPrevious output failed validation. Correct these issues:\n"
                     + feedback
                 )
-            response = codex_exec(
+            response = _codex_exec_with_infra_retries(
                 prompt,
                 work_dir=REPO_ROOT,
                 timeout_seconds=1800,
@@ -3105,7 +3162,7 @@ def _semantic_scan(
         deep_research_directive=_deep_research_directive(),
         schema=_semantic_scan_schema(),
     )
-    response = codex_exec(
+    response = _codex_exec_with_infra_retries(
         prompt,
         work_dir=REPO_ROOT,
         timeout_seconds=1200,
@@ -3395,7 +3452,7 @@ def run_stage_g(state: DistillState, dry_run: bool = False) -> bool:
                     "\n\nPrevious output failed validation. Correct these issues:\n"
                     + feedback
                 )
-            response = codex_exec(
+            response = _codex_exec_with_infra_retries(
                 prompt,
                 work_dir=REPO_ROOT,
                 timeout_seconds=1800,
@@ -3858,9 +3915,9 @@ def _codex_score(
         score_schema=_score_schema(),
     )
     for attempt in range(1, 3):
-        response = codex_exec(
+        response = _codex_exec_with_infra_retries(
             prompt,
-            work_dir=REPO_ROOT,
+            work_dir=CORE_BODY,
             timeout_seconds=900,
             dry_run=False,
             log_tag=f"{_slugify(state.name)}_W_review_codex_a{attempt}",
@@ -4808,9 +4865,9 @@ def run_stage_w(
                     "rather than rephrasing it.\n"
                 )
             w_timeout = 2400 if low_rounds >= 2 else 1800
-            response = codex_exec(
+            response = _codex_exec_with_infra_retries(
                 prompt,
-                work_dir=REPO_ROOT,
+                work_dir=CORE_BODY,
                 timeout_seconds=w_timeout,
                 dry_run=False,
                 log_tag=f"{_slugify(state.name)}_W_attempt{attempt}",
