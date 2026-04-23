@@ -185,6 +185,7 @@ import Omega.SyncKernelWeighted.WittDepthEulerProduct
 import Omega.SyncKernelWeighted.WittCyclotomicInvisibility
 import Omega.SyncKernelWeighted.WittDirichletTwist
 import Omega.SyncKernelWeighted.WittDworkCongruence
+import Omega.SyncKernelWeighted.WittDworkZpIntegrality
 import Omega.SyncKernelWeighted.WittNecklaceDivisibility
 import Omega.SyncKernelWeighted.WittNecklaceDworkR
 import Omega.SyncKernelWeighted.WittPkSparsification

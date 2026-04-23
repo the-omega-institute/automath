@@ -131,6 +131,7 @@ import Omega.Conclusion.CoarsegrainingStokesBeckChevalley
 import Omega.Conclusion.CofinalFixedQuotient
 import Omega.Conclusion.CofinalSparsificationSemanticCompleteness
 import Omega.Conclusion.Window6InversionAnomalyInformationSeparation
+import Omega.Conclusion.Window6Realinput40AlgebraicEdgeComplexityJump
 import Omega.Conclusion.CollisionGenfuncRadiusHalting
 import Omega.Conclusion.CoverTimeTailTwoSidedCompression
 import Omega.Conclusion.CollisionMomentMinrecHaltingTime
