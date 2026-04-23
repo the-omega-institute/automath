@@ -189,6 +189,7 @@ import Omega.SyncKernelWeighted.DiscSquareSubstitutionSplit
 import Omega.SyncKernelWeighted.FiniteRhParityGeneral
 import Omega.SyncKernelWeighted.FiniteRhJensenFreeEnergy
 import Omega.SyncKernelWeighted.FiniteRhSpectralAnnihilationFilter
+import Omega.SyncKernelWeighted.FinitePartMuPochhammerSpectralClosedForm
 import Omega.SyncKernelWeighted.FluctuationEven
 import Omega.SyncKernelWeighted.SyncKernelWeightedHatDelta
 import Omega.SyncKernelWeighted.WeightedCompletionQ
