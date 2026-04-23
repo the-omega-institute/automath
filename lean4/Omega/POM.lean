@@ -348,6 +348,7 @@ import Omega.POM.PrimeTraceShiftFreeMonoid
 import Omega.POM.HankelSyndromeGapRankDefect
 import Omega.POM.HankelSyndromeInversionUnique
 import Omega.POM.HankelSyndromeModuleKernelEqualsMultiples
+import Omega.POM.HankelSyndromeModuleRankAndGenerators
 import Omega.POM.HalfOrderPressureExtremeLowerBoundSqrtFreezing
 import Omega.POM.HighMultiplicitySparse
 import Omega.POM.HoelderBridgeDispersionFromSq
