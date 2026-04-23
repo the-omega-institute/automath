@@ -27,6 +27,7 @@ import Omega.POM.InjectivizationSideinfoExactAlphabet
 import Omega.POM.HankelSyndromeHNFModelFree
 import Omega.POM.S2RankExact
 import Omega.POM.HankelRankMinimal
+import Omega.POM.FiberIndexCltThermo
 import Omega.POM.FiberIndexLdpThermo
 import Omega.POM.HiddenBitJumpCollisionIsomorphism
 import Omega.POM.HiddenBitComplementFixedpointBSplitDichotomy
