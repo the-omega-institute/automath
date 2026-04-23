@@ -224,8 +224,10 @@ import Omega.Zeta.XiScanProfileLpPeakWitness
 import Omega.Zeta.XiOffcriticalCountBoundByIntegratedDefect
 import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiWindow6C3CyclicFiberTrisection
+import Omega.Zeta.XiWindow6GroupQuotientIsotropyStrata
 import Omega.Zeta.XiWindow6WeylInvariantBestTwoOrbitCompression
 import Omega.Zeta.XiWindow6URFirstReturnTimeClosedForm
+import Omega.Zeta.XiChainInteriorIncidenceAlgebraMobiusInversion
 import Omega.Zeta.XiTerminalGbcAnomalyCoordinateCount
 import Omega.Zeta.XiCRTMultistageAxisCountScaling
 import Omega.Zeta.XiEndpointPoissonHyperbolicScaleBounds
