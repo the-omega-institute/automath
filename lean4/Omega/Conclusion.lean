@@ -153,6 +153,7 @@ import Omega.Conclusion.Window6Realinput40AlgebraicEdgeComplexityJump
 import Omega.Conclusion.CollisionGenfuncRadiusHalting
 import Omega.Conclusion.CoverTimeTailTwoSidedCompression
 import Omega.Conclusion.CollisionMomentMinrecHaltingTime
+import Omega.Conclusion.CollisionMomentSinglePulseOgf
 import Omega.Conclusion.CollisionMomentMoritaDefectFusion
 import Omega.Conclusion.CollisionResonantKernelTensorPrime
 import Omega.Conclusion.CollisionMomentStieltjesHankelPositivity

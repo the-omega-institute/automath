@@ -45,6 +45,7 @@ import Omega.POM.WmKlToUniform
 import Omega.POM.BCDiscreteJacobianStrictification
 import Omega.POM.BCBianchi
 import Omega.POM.BCChainDefectEqualsEscortCurvatureSum
+import Omega.POM.BCChainDeviationProbabilityBound
 import Omega.POM.BCDiscreteStokes
 import Omega.POM.BCDefectMultiplicative2Cocycle
 import Omega.POM.MertensNotFlowInvariant
