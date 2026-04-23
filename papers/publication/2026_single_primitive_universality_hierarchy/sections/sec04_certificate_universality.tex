@@ -181,12 +181,38 @@ the second assertion.  The dimension formula is the usual count of
 monomials of degree \(q-1\) in \(k\) variables.
 \end{proof}
 
+\begin{definition}[Effective finite resolution data]
+\label{def:effective-resolution-data}
+Finite resolution data for a protocol are called \emph{effective} if
+they consist of finite raw-code sets \(C_m\), finite normal-form sets
+\(N_m\), and computable surjections
+\[
+  \mathrm{NF}_m\colon C_m\longrightarrow N_m\qquad(m\ge1),
+\]
+together with uniform algorithms which, on input \(m\), output
+finite lists without repetition containing exactly the elements of
+\(C_m\) and \(N_m\).  In particular the cardinalities
+\(|C_m|\) and \(|N_m|\) are computable from the resolution data.
+All sums, fibers, searches, and moment segments at resolution \(m\)
+below are interpreted as bounded computations over these finite
+lists.  Thus a bound ``from the finite resolution data'' means a
+computable integer obtained uniformly from \(m\), the two lists, and
+their cardinalities.
+\end{definition}
+
 \begin{definition}[Certificate universality]
 \label{def:cert-univ}
-A protocol-universal system with finite resolution sets is
-\emph{certificate-universal in the finite-fiber sense} if its
-normalization fibers carry moment sequences
-\(\{S_q^{(m)}\}_{q,m}\) such that:
+A protocol-universal system equipped with effective finite resolution
+data is \emph{certificate-universal in the finite-fiber sense} if,
+for
+\[
+  d_m(n)=|\mathrm{NF}_m^{-1}(n)|,\qquad n\in N_m,
+\]
+the normalization fibers carry the computable moment sequences
+\[
+  S_q^{(m)}=\sum_{n\in N_m}d_m(n)^q
+\]
+such that:
 \begin{enumerate}
 \item for each \(m\), the Hankel matrices
   \([S_{i+j}^{(m)}]_{i,j}\) are positive semidefinite;
@@ -211,7 +237,8 @@ finite-state structure used below: for each fixed \(q\), the
 Let \(A\) be a nonempty set and let \(g\colon A\to A\) be an
 endomorphism of infinite order.  The Zeckendorf protocol of
 \Cref{thm:zeckendorf-protocol-univ}, together with the finite fold
-maps \(\Fold_m\colon\Omega_m\to X_m\) and collision moments
+maps \(\Fold_m\colon\Omega_m\to X_m\), the standard effective finite
+resolution lists, and collision moments
 \[
   S_q(m)=\sum_{x\in X_m}|\Fold_m^{-1}(x)|^q,
 \]
@@ -226,9 +253,12 @@ clause is \Cref{thm:prony}, with the computable a priori bound
 The underlying address system is protocol-universal for
 \(\{+,\times\}\) by \Cref{thm:zeckendorf-protocol-univ}.  It remains
 to verify the two finite-fiber certificate clauses.
-For each \(m\), \(\Omega_m\) and \(X_m\) are finite decidable sets
-and \(\Fold_m\) is a computable surjection by
-\Cref{prop:fold-confluence}.  Hence the fiber sizes
+For each \(m\), the lexicographic list of \(\Omega_m=\{0,1\}^m\) is
+computable, and filtering it by the local condition
+\(c_kc_{k+1}=0\) gives a computable no-repetition list of \(X_m\).
+Thus \(|\Omega_m|=2^m\) and \(|X_m|=F_{m+2}\) are computable from
+the finite resolution data.  The map \(\Fold_m\) is a computable
+surjection by \Cref{prop:fold-confluence}.  Hence the fiber sizes
 \(d_m(x)=|\Fold_m^{-1}(x)|\) are finite and define the moments in
 \Cref{def:collision-moment}.  \Cref{thm:hankel-psd} proves that the
 Hankel matrices \([S_{i+j}(m)]_{i,j}\) are positive semidefinite for

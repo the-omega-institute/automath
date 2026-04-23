@@ -60,21 +60,91 @@ composition, and the total real functions \(\exp\), \(\sin\), and
 \(|\cdot|\).  The identity problem asks whether such an expression
 defines the zero function on all of \(\RR\).
 
+\begin{lemma}[Richardson fragment and equality reduction]
+\label{lem:richardson-fragment}
+For the language \(\mathcal R\) just specified, there is no
+algorithm which decides, from an expression \(E\in\mathcal R\),
+whether \(E(x)=0\) for every \(x\in\RR\).  Consequently the
+functional equality problem for pairs of \(\mathcal R\)-expressions
+is undecidable.  More precisely, an identity-to-zero decision
+procedure would decide equality by applying it to \(E_1-E_2\), and
+an equality decision procedure would decide identity-to-zero by
+comparing \(E\) with the zero expression.
+\end{lemma}
+
+\begin{proof}
+The undecidability of the identity-to-zero problem for this real
+elementary fragment is Richardson's theorem
+\cite{Richardson1968}: the fragment contains the identity function,
+rational constants, \(\pi\), \(\log 2\), \(\exp\), \(\sin\), and
+absolute value, and is closed under addition, subtraction,
+multiplication, and composition.  Since the grammar is closed under
+subtraction, two expressions define the same real function exactly
+when their difference defines the zero function.  Conversely,
+identity-to-zero is the special case of equality against the
+rational constant \(0\).  Thus the two decision problems are
+many-one equivalent for this fragment, and both are undecidable.
+\end{proof}
+
+\begin{lemma}[Richardson-compatible EML witnesses]
+\label{lem:eml-real-witness-library}
+There is a finite, effectively fixed library of principal-branch EML
+terms over the constant \(1\) with the following real-domain
+properties.
+\begin{enumerate}
+\item For all \(u,v\in\RR\), the chosen witnesses for
+  \(u+v\), \(u-v\), and \(uv\) are defined and have those real
+  values; the chosen witness for \(u/v\) is defined and has that
+  value whenever \(v\ne0\).
+\item For all \(u\in\RR\), the chosen witnesses for
+  \(\exp u\) and \(\sin u\) are defined and have those real values.
+\item The chosen square-root witness is defined for every
+  \(t\in\RR_{\ge0}\) and returns the nonnegative square root.
+\item There are fixed witnesses for \(\pi\) and \(\log 2\), and
+  there is an effective construction of a witness for every rational
+  constant.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Odrzywo{\l}ek's principal-branch EML table gives finite terms for
+the standard arithmetic operations, elementary unary functions, and
+scientific-calculator constants used here
+\cite[Table~1 and Supplementary Information, Part~II]{Odrzywolek2026}.
+We choose once and for all the entries for \(+\), \(-\),
+\(\times\), \(\div\), \(\exp\), \(\sin\), square root, and \(\pi\),
+restricted to the displayed real domains.  The real domains in the
+first two items are the usual real domains of those operations.  For
+\(\exp\) this is also immediate from the displayed formula
+\(e^u=\eml(u,1)\), since the second EML input is the nonzero
+constant \(1\).
+
+The square-root entry is used only on \(\RR_{\ge0}\), where the
+principal square root is the ordinary nonnegative real square root.
+The constant \(0\) is obtained as \(1-1\), integers are obtained by
+iterated addition and subtraction, and a rational \(a/b\) with
+\(b>0\) is obtained by applying the chosen division witness to the
+integer witnesses for \(a\) and \(b\); the denominator witness is
+nonzero.  Finally, \(\log 2\) is obtained from the logarithm witness
+in \Cref{thm:eml-universality} applied to the positive real constant
+\(2=1+1\).  These are finite syntactic constructions, uniform in the
+rational input, and each is evaluated only on the real domain on
+which the corresponding principal-branch witness is defined.
+\end{proof}
+
 \begin{lemma}[Effective Richardson translation]
 \label{lem:richardson-translation}
-There is an effective map \(E\mapsto\tau(E)\) from Richardson
-expressions to principal-branch EML terms over \((\eml,1)\), together
-with a transported real semantics
+Using the witnesses of \Cref{lem:eml-real-witness-library}, there is
+an effective map \(E\mapsto\tau(E)\) from Richardson expressions to
+principal-branch EML terms over \((\eml,1)\), together with a
+transported real semantics
 \(\llbracket\tau(E)\rrbracket_{\RR}\), such that
 \[
   \llbracket\tau(E)\rrbracket_{\RR}(x)
   =E(x)\qquad(x\in\RR)
 \]
-for every Richardson expression \(E\).  Rational constants and
-\(\log 2\) are built effectively from the constant \(1\) using the
-chosen arithmetic and logarithm witnesses, \(\pi\) is represented by
-a fixed EML witness from Odrzywo{\l}ek's construction, and absolute
-value is represented by
+for every Richardson expression \(E\).  Absolute value is represented
+by
 \[
   |F|=\sqrt{F^2}
 \]
@@ -82,40 +152,39 @@ using the principal square root on the nonnegative real axis.
 \end{lemma}
 
 \begin{proof}
-Odrzywo{\l}ek's table and supplementary formulas give explicit EML
-terms for the scientific-calculator primitives needed here:
-constants, \(+,-,\times,\div\), \(\exp\), square root, and the
-trigonometric functions, with the principal-branch interpretation on
-their stated domains
-\cite[Table~1 and Supplementary Information, Part~II]{Odrzywolek2026}.
-Since the list of Richardson primitives is finite, fix once and for
-all one such EML witness for each required primitive.  The constant
-\(\pi\) is translated by its fixed constant witness.  If
-\(q=a/b\in\mathbb Q\) with \(b>0\), translate \(a\) and \(b\) by
-iterated addition and subtraction from \(1\), and then apply the
-chosen division witness to obtain \(q\).  The constant \(\log 2\) is
-obtained from the logarithm formula in \Cref{thm:eml-universality}
-applied to the positive real constant \(2=1+1\).
-
 Define \(\tau\) by structural recursion.  A variable is sent to the
-same variable.  Constants are sent to the chosen constant terms.  If
-an expression is formed by \(+,-,\times,\exp\), or \(\sin\), apply
-the corresponding chosen EML witness to the already translated
-subexpressions.  If an expression is a composition, substitute the
-translated inner expression into the translated outer one.  If
+same variable.  Constants are sent to the constant witnesses from
+\Cref{lem:eml-real-witness-library}.  If an expression is formed by
+\(+,-,\times,\exp\), or \(\sin\), apply the corresponding chosen EML
+witness to the translated subexpressions.  If an expression is a
+composition \(G\circ F\), substitute the translated inner expression
+\(\tau(F)\) into the translated outer expression \(\tau(G)\).  If
 \(E=|F|\), translate it as the square-root witness applied to
 \(\tau(F)^2\), where the square is built using the multiplication
 witness.
 
 This recursion is algorithmic because all primitive witnesses are
-finite terms and syntactic substitution is computable.  The asserted
-real semantics follows by induction on the expression tree.  The
-only point not tautological from the primitive witnesses is absolute
-value: for real \(x\), the value of \(F(x)^2\) is a nonnegative real
-number, and the principal square root equals the nonnegative square
-root, hence \(\sqrt{F(x)^2}=|F(x)|\).  Thus every translated term
-agrees with the original Richardson expression as a real function.
-The statement concerns this transported real semantics; it makes no
+finite terms and syntactic substitution is computable.  We prove the
+semantic assertion, including definedness on every real input, by
+induction on the expression tree.  The variable and constant cases
+are immediate from the witness library.  For
+\(+,-,\times,\exp\), and \(\sin\), the induction hypothesis says
+that the translated subexpressions are defined at the given real
+input and evaluate to the corresponding real subexpression values;
+\Cref{lem:eml-real-witness-library} then gives definedness and the
+correct value for the chosen primitive witness on those real
+arguments.  For a composition \(G\circ F\), the induction hypothesis
+first gives \(\llbracket\tau(F)\rrbracket_{\RR}(x)=F(x)\in\RR\);
+applying the induction hypothesis for \(G\) at the real input
+\(F(x)\) proves the composition case.  Finally, for
+\(E=|F|\), the induction hypothesis gives
+\(\llbracket\tau(F)\rrbracket_{\RR}(x)=F(x)\in\RR\), so the
+multiplication witness gives \(F(x)^2\in\RR_{\ge0}\).  The
+square-root witness is defined on this input and returns the
+nonnegative square root, hence
+\(\sqrt{F(x)^2}=|F(x)|\).  Thus every translated term agrees with
+the original Richardson expression as a real function.  The
+statement concerns this transported real semantics; it makes no
 branch-independent assertion about equality of arbitrary raw EML
 terms on a complex domain.
 \end{proof}
@@ -126,8 +195,10 @@ The EML system \((\eml,1)\) is expression-universal for
 \(\mathcal B_{36}\).  Let \(\tau(E)\) be the effective
 principal-branch EML representative of a Richardson expression
 given by \Cref{lem:richardson-translation}.
-There is no computable normal form \(\mathrm{NF}\) on the
-translated set \(\tau(\mathcal R)\) satisfying
+There is no computably presented normal-form codomain
+\(N_{\mathcal R}\) of finite objects with decidable equality and no
+total computable map
+\(\mathrm{NF}\colon\tau(\mathcal R)\to N_{\mathcal R}\) satisfying
 \[
   \mathrm{NF}(\tau(E_1))=\mathrm{NF}(\tau(E_2))
   \quad\Longleftrightarrow\quad
@@ -139,16 +210,15 @@ for all Richardson expressions \(E_1,E_2\in\mathcal R\).
 
 \begin{proof}
 The expression-universality assertion is \Cref{thm:eml-universality}.
-Richardson proved that the identity problem for this real language
-is undecidable \cite{Richardson1968}.
 By \Cref{lem:richardson-translation}, the map \(E\mapsto\tau(E)\)
 is effective and preserves the real function defined by \(E\).  If
 the asserted normal form existed on this translated fragment, then
 for a Richardson expression \(E\) one could translate \(E\) and the
 zero expression into EML terms and compare their normal forms.  The
-displayed equivalence would decide whether \(E\) is identically zero
-in Richardson's sense, as a real function, contradicting
-Richardson's theorem.  Thus the expression grammar, although
+decidable equality predicate on \(N_{\mathcal R}\), together with
+the displayed equivalence, would decide whether \(E\) is identically
+zero in Richardson's sense, as a real function.  This contradicts
+\Cref{lem:richardson-fragment}.  Thus the expression grammar, although
 universal in the sense of \Cref{def:expr-univ}, cannot by itself
 supply the decidable canonical-form component of
 \Cref{def:prot-univ}.
@@ -172,31 +242,38 @@ real semantics of the represented functions.
 
 \begin{proposition}[Generic and additional certificate clauses]
 \label{prop:L2-generic-vs-structural}
-For any protocol system whose normalization map has finite fibers at
-each resolution, the Hankel positivity and finite spectral
-reconstruction clauses in \Cref{def:cert-univ} follow from the
-fiber sizes alone, with the a priori finite bound supplied by the
-number of normal forms at that resolution.  Finite-state
-certificate universality is an additional transfer-operator
-hypothesis of the kind described in \Cref{thm:star-kernel}.
+For any protocol system with effective finite resolution data whose
+normalization map has finite fibers at each resolution, the Hankel
+positivity and finite spectral reconstruction clauses in
+\Cref{def:cert-univ} follow from the fiber sizes alone, with the
+a priori finite bound supplied by the computable number of normal
+forms at that resolution.  Finite-state certificate universality is
+an additional transfer-operator hypothesis of the kind described in
+\Cref{thm:star-kernel}.
 \end{proposition}
 
 \begin{proof}
-Let \(d_m(x)\) be the finite fiber sizes and set
+Let \(N_m\) be the finite normal-form set at resolution \(m\), listed
+as in \Cref{def:effective-resolution-data}.  Let \(d_m(x)\) be the
+finite fiber sizes and set
 \[
-  S_q(m)=\sum_x d_m(x)^q .
+  S_q(m)=\sum_{x\in N_m} d_m(x)^q .
 \]
 For every finitely supported coefficient vector \((c_i)\),
 \[
   \sum_{i,j}c_i c_j S_{i+j}(m)
-  =\sum_x\Bigl(\sum_i c_i d_m(x)^i\Bigr)^2\ge0,
+  =\sum_{x\in N_m}
+    \Bigl(\sum_i c_i d_m(x)^i\Bigr)^2\ge0,
 \]
 which is Hankel positivity.  Since
-\(\sum_x\delta_{d_m(x)}\) has finite support, its support points
-and multiplicities are recovered from finitely many moments, with
-the explicit bound in \Cref{thm:prony}.  Neither argument
-constructs a finite-state transfer operator.  That operator is
-additional structure; when it has the tensor form of
+\(\sum_{x\in N_m}\delta_{d_m(x)}\) has finite support of size at
+most \(|N_m|\), its support points and multiplicities are recovered
+from finitely many moments, with the explicit bound
+\(2|N_m|-1\) from \Cref{thm:prony}.  The value \(|N_m|\) and the
+finite moment segment are computable by bounded enumeration in the
+effective resolution data.  Neither argument constructs a
+finite-state transfer operator.  That operator is additional
+structure; when it has the tensor form of
 \Cref{thm:star-kernel}, it admits the stated symmetric compression.
 \end{proof}
 
@@ -216,7 +293,9 @@ data is a sequence
 \]
 such that each \(\Omega_m^\sharp\) is a finite decidable set,
 the relation \(\omega\in\Omega_m^\sharp\) is decidable uniformly in
-\((m,\omega)\), and
+\((m,\omega)\), and a uniform algorithm outputs a finite
+no-repetition list of all elements of \(\Omega_m^\sharp\), hence the
+cardinality \(|\Omega_m^\sharp|\).  Moreover
 \[
   \Fold_m^\sharp\colon\Omega_m^\sharp\to X_m
 \]
@@ -308,6 +387,9 @@ and the normalization map
 This construction is computable in \(m\): encode the disjoint union
 by tags, use decidability of \(X_m\), and decide
 \((z_m,j)\) by computing \(a_m\) and checking \(1\le j\le a_m\).
+The required finite list is obtained by concatenating the
+lexicographic list of \(X_m\) with the list
+\((z_m,1),\ldots,(z_m,a_m)\).
 The map \(\Fold_m^\sharp\) is then uniformly computable and
 surjective onto \(X_m\), and every fiber is finite.  Thus
 \((\Omega_m^\sharp,\Fold_m^\sharp)\) is a computable finite-fiber
