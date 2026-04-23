@@ -2003,15 +2003,97 @@ D_q(\pi_m^{\mathrm{fold}}\|\pi_m)-L_q(m)\le 2\log\varphi.
 \]
 \end{proof}
 
-\begin{theorem}[Lossless deterministic maps]
+\begin{theorem}[Exact endpoint penalty for injective deterministic placements]
 \label{thm:lossless-coarse-graining-envelope}
-Assume \(\beta=\alpha\), suppose that the partial quotients of \(\alpha\) are
-bounded by \(A\), and let
+Assume \(\beta=\alpha\), let \(m\ge1\), and let
 \[
 T_m:S_m(\alpha)\longrightarrow X_m
 \]
 be injective. Put \(\nu_m:=(T_m)_*\mu_m\). Then, for every \(m\ge1\) and every
-\(q\in[0,\infty]\),
+\(u\in X_m\), define
+\[
+\tau(u):=\varphi^{-\mathbf 1_{\{u_1=1\}}-\mathbf 1_{\{u_m=1\}}}
+\in \{1,\varphi^{-1},\varphi^{-2}\}.
+\]
+Equivalently,
+\[
+\tau(u)=1 \text{ on } X_m^{00},\qquad
+\tau(u)=\varphi^{-1} \text{ on } X_m^{01}\cup X_m^{10},\qquad
+\tau(u)=\varphi^{-2} \text{ on } X_m^{11}.
+\]
+
+For every \(q\in(0,\infty)\setminus\{1\}\),
+\[
+D_q(\nu_m\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_q(\mu_m)+\Gamma_q(T_m),
+\]
+where
+\[
+\Gamma_q(T_m):=
+\frac{1}{q-1}
+\log\!\left(
+\frac{\sum_{a\in S_m(\alpha)}\mu_m(a)^q\tau(T_m(a))^{1-q}}
+{\sum_{a\in S_m(\alpha)}\mu_m(a)^q}
+\right).
+\]
+For \(q=1\),
+\[
+\KL(\nu_m\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_1(\mu_m)+\Gamma_1(T_m),
+\]
+where
+\[
+\Gamma_1(T_m):=
+\bigl(
+\eta_{01}(\nu_m)+\eta_{10}(\nu_m)+2\eta_{11}(\nu_m)
+\bigr)\log\varphi.
+\]
+For \(q=0\),
+\[
+D_0(\nu_m\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_0(\mu_m)+\Gamma_0(T_m),
+\]
+where
+\[
+\Gamma_0(T_m):=
+-\log\!\left(
+\frac{1}{m+1}\sum_{a\in S_m(\alpha)}\tau(T_m(a))
+\right).
+\]
+For every \(q\in[0,\infty)\),
+\[
+0\le \Gamma_q(T_m)\le 2\log\varphi.
+\]
+If \(q\in[0,\infty)\), then
+\[
+\Gamma_q(T_m)=0
+\iff
+T_m(S_m(\alpha))\subset X_m^{00},
+\]
+and
+\[
+\Gamma_q(T_m)=2\log\varphi
+\iff
+T_m(S_m(\alpha))\subset X_m^{11}.
+\]
+For \(q=\infty\),
+\[
+(m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m)
+\le
+D_\infty(\nu_m\|\pi_m)
+\]
+\[
+\le
+(m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m)+2\log\varphi,
+\]
+with equality in the lower bound whenever \(T_m(S_m(\alpha))\subset X_m^{00}\)
+and equality in the upper bound whenever \(T_m(S_m(\alpha))\subset X_m^{11}\).
+
+If, in addition, the partial quotients of \(\alpha\) are bounded by \(A\),
+then, for every \(q\in[0,\infty]\),
 \[
 m\log\varphi-\log(m+1)-\log\pi(0)-\log\varphi
 \le
@@ -2038,10 +2120,133 @@ realized Sturmian law. Hence
 H_q(\nu_m)=H_q(\mu_m)
 \qquad (q\in[0,\infty]).
 \]
-Apply Proposition~\ref{prop:parry-renyi-window} with \(\nu=\nu_m\), and then
-substitute the entropy bounds from
-Proposition~\ref{prop:bounded-type-sturmian-entropy}. This gives the stated
-two-sided window and the \(m\log\varphi-\log m+O_\alpha(1)\) asymptotic.
+
+Put
+\[
+c_{00}:=\pi(0)\varphi^{-(m-1)}.
+\]
+By Proposition~\ref{prop:parry-endpoint-collapse},
+\[
+\pi_m(u)=c_{00}\tau(u)
+\qquad (u\in X_m).
+\]
+
+First let \(q\in(0,\infty)\setminus\{1\}\). Since
+\(\nu_m(T_m(a))=\mu_m(a)\) for every \(a\in S_m(\alpha)\),
+\[
+\begin{aligned}
+D_q(\nu_m\|\pi_m)
+&=
+\frac{1}{q-1}
+\log\!\left(
+\sum_{a\in S_m(\alpha)}\mu_m(a)^q(c_{00}\tau(T_m(a)))^{1-q}
+\right)\\
+&=
+-\log c_{00}-H_q(\mu_m)+\Gamma_q(T_m),
+\end{aligned}
+\]
+which is the claimed identity. Because every \(\mu_m(a)\) is positive and
+\(\tau(T_m(a))\in\{1,\varphi^{-1},\varphi^{-2}\}\), the weighted average
+inside the logarithm defining \(\Gamma_q(T_m)\) lies between the minimum and
+maximum of \(\tau^{1-q}\). Therefore
+\[
+0\le \Gamma_q(T_m)\le 2\log\varphi.
+\]
+The lower endpoint occurs if and only if every \(\tau(T_m(a))=1\), namely
+\(T_m(S_m(\alpha))\subset X_m^{00}\). The upper endpoint occurs if and only if
+every \(\tau(T_m(a))=\varphi^{-2}\), namely
+\(T_m(S_m(\alpha))\subset X_m^{11}\).
+
+For \(q=1\), Theorem~\ref{thm:parry-kl-identity} gives
+\[
+\begin{aligned}
+\KL(\nu_m\|\pi_m)
+&=
+m\log\varphi-\log\pi(0)-H_1(\nu_m)
++
+\bigl(\eta_{11}(\nu_m)-\eta_{00}(\nu_m)\bigr)\log\varphi\\
+&=
+(m-1)\log\varphi-\log\pi(0)-H_1(\mu_m)\\
+&\quad
++
+\bigl(\eta_{01}(\nu_m)+\eta_{10}(\nu_m)+2\eta_{11}(\nu_m)\bigr)\log\varphi,
+\end{aligned}
+\]
+because
+\[
+\eta_{11}(\nu_m)-\eta_{00}(\nu_m)
+=
+-1+\eta_{01}(\nu_m)+\eta_{10}(\nu_m)+2\eta_{11}(\nu_m).
+\]
+This is the stated identity for \(\Gamma_1(T_m)\). Since
+\[
+\eta_{01}(\nu_m)+\eta_{10}(\nu_m)+2\eta_{11}(\nu_m)\in[0,2],
+\]
+one has \(0\le \Gamma_1(T_m)\le2\log\varphi\). The lower endpoint holds
+exactly when \(\eta_{00}(\nu_m)=1\), equivalently
+\(T_m(S_m(\alpha))\subset X_m^{00}\), and the upper endpoint holds exactly
+when \(\eta_{11}(\nu_m)=1\), equivalently
+\(T_m(S_m(\alpha))\subset X_m^{11}\).
+
+For \(q=0\), injectivity of \(T_m\) and the Sturmian complexity
+\(|S_m(\alpha)|=m+1\) give
+\[
+\supp(\nu_m)=T_m(S_m(\alpha)),
+\qquad
+H_0(\mu_m)=\log(m+1).
+\]
+Therefore
+\[
+\begin{aligned}
+D_0(\nu_m\|\pi_m)
+&=
+-\log \pi_m(T_m(S_m(\alpha)))\\
+&=
+-\log\!\left(
+c_{00}\sum_{a\in S_m(\alpha)}\tau(T_m(a))
+\right)\\
+&=
+(m-1)\log\varphi-\log\pi(0)-H_0(\mu_m)+\Gamma_0(T_m).
+\end{aligned}
+\]
+Since the arithmetic mean of numbers in \([\varphi^{-2},1]\) again lies in
+\([\varphi^{-2},1]\), we obtain \(0\le\Gamma_0(T_m)\le2\log\varphi\), with the
+same equality cases as above.
+
+For \(q=\infty\),
+\[
+\begin{aligned}
+D_\infty(\nu_m\|\pi_m)
+&=
+\log\max_{a\in S_m(\alpha)}
+\frac{\mu_m(a)}{c_{00}\tau(T_m(a))}\\
+&=
+(m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m)\\
+&\quad
++
+\log\max_{a\in S_m(\alpha)}
+\frac{\mu_m(a)}{e^{-H_\infty(\mu_m)}\tau(T_m(a))}.
+\end{aligned}
+\]
+Because \(\mu_m(a)\le e^{-H_\infty(\mu_m)}\) and
+\(\tau(T_m(a))\in[\varphi^{-2},1]\), the last logarithm lies in
+\([0,2\log\varphi]\). If \(T_m(S_m(\alpha))\subset X_m^{00}\), then
+\(\tau(T_m(a))=1\) for every \(a\), so the lower bound is attained. If
+\(T_m(S_m(\alpha))\subset X_m^{11}\), then \(\tau(T_m(a))=\varphi^{-2}\) for
+every \(a\), so the upper bound is attained.
+
+Now assume the partial quotients of \(\alpha\) are bounded by \(A\). The lower
+bound for \(q\in[0,\infty)\) follows from \(\Gamma_q(T_m)\ge0\) and
+Proposition~\ref{prop:bounded-type-sturmian-entropy}, while the upper bound for
+\(q\in[0,\infty)\) follows from \(\Gamma_q(T_m)\le2\log\varphi\) and the same
+entropy estimate. The case \(q=\infty\) is covered by the preceding
+two-sided bound together with Proposition~\ref{prop:bounded-type-sturmian-entropy}.
+This proves the displayed bounded-type window. The asymptotic
+\[
+D_q(\nu_m\|\pi_m)=m\log\varphi-\log m+O_\alpha(1)
+\]
+is exactly the same estimate rewritten with constants uniform in
+\(q\in[0,\infty]\).
 \end{proof}
 
 \subsection{Primitive-SFT asymptotic extension}
