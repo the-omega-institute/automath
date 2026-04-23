@@ -197,6 +197,69 @@ p\Vdash \mathcal E.
 \]
 等价地，局部证书族给出的只是形式局部实例化；把它升级为状态 \(p\) 上的对象层事实，需要额外的提升账本。
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{theorem}[同界有限窗口闭包失败的极限骨架判别]\label{distill:gromov-coarse_limit_obstruction_families-forcing-uniform-window-limit-skeleton}
+固定信息状态 \(p\)、对象层断言 \(\mathcal E\)，以及整数 \(B\ge1\)。对每个深度 \(b\ge0\)，令
+\[
+\mathcal L_b^{\le B}(p,\mathcal E)
+\]
+为一个有限集合，其元素解释为深度 \(b\) 内、复杂度不超过 \(B\) 的形式闭包账本；这里复杂度只允许计数非 \(\mathsf{NULL}\) 读出、值保持重写、common-notion 步骤以及已经登记的提升规则。假设这些账本带有有限窗口限制映射
+\[
+\rho_{b',b}:\mathcal L_{b'}^{\le B}(p,\mathcal E)\longrightarrow
+\mathcal L_b^{\le B}(p,\mathcal E)\qquad(b'\ge b)
+\]
+并满足
+\[
+\rho_{b,b}=\mathrm{id},\qquad
+\rho_{b'',b}=\rho_{b',b}\circ\rho_{b'',b'}\qquad(b''\ge b'\ge b).
+\]
+再假设同界有限窗口闭包成立，即
+\[
+\rho_{b',b}\bigl(\mathcal L_{b'}^{\le B}(p,\mathcal E)\bigr)
+=\mathcal L_b^{\le B}(p,\mathcal E)\ne\varnothing
+\qquad(b'\ge b).
+\]
+定义同界形式极限骨架空间
+\[
+\mathfrak S_B(p,
+\mathcal E):=\varprojlim_b\mathcal L_b^{\le B}(p,\mathcal E).
+\]
+最后设有一个谓词 \(\mathsf{Hol}\subseteq\mathfrak S_B(p,\mathcal E)\)，其语义是该兼容形式账本族可由当前 primitive 语法中的单一状态 \(p\) 全局闭包账本编译而来，并要求其健全性为：若 \(s\in\mathsf{Hol}\)，则当前语法确实给出状态 \(p\) 上的全局闭包证书。
+
+若当前 primitive 语法下不存在状态 \(p\) 上的全局闭包账本证明 \(\mathcal E\)，则
+\[
+\mathfrak S_B(p,\mathcal E)\setminus\mathsf{Hol}\ne\varnothing.
+\]
+特别地，在所有有限窗口都满足同一个分辨率界 \(B\) 的前提下，任何全局闭包失败都不能表现为某个有限窗口的局部缺陷；它必然表现为一个兼容的、但不可 holonomic 编译的非平凡极限骨架。
+\end{theorem}
+\begin{proof}
+每个 \(\mathcal L_b^{\le B}(p,\mathcal E)\) 为有限离散空间，故紧。考虑乘积空间
+\[
+\mathcal K:=\prod_{b\ge0}\mathcal L_b^{\le B}(p,\mathcal E).
+\]
+由 Tychonoff 定理，\(\mathcal K\) 紧；在本处也可只用有限离散空间的 Cantor 型紧性。对每个 \(b'\ge b\)，条件
+\[
+\rho_{b',b}(L_{b'})=L_b
+\]
+定义 \(\mathcal K\) 中的闭开子集。因此 \(\mathfrak S_B(p,\mathcal E)\) 是闭集。为了证明它非空，只需验证有限交性质。给定有限多条相容方程，只涉及某个最大深度 \(N\)。由有限窗口闭包假设，取任意
+\[
+L_N\in\mathcal L_N^{\le B}(p,\mathcal E),
+\]
+并令 \(L_b:=\rho_{N,b}(L_N)\) 对所有涉及的 \(b\le N\) 成立，即得到这些有限方程的一个解。故所有闭约束具有有限交性质，紧性给出
+\[
+\mathfrak S_B(p,\mathcal E)\ne\varnothing.
+\]
+
+若反设 \(\mathfrak S_B(p,\mathcal E)\subseteq\mathsf{Hol}\)，则任取 \(s\in\mathfrak S_B(p,\mathcal E)\)，由 \(s\in\mathsf{Hol}\) 与 \(\mathsf{Hol}\) 的健全性，得到一个状态 \(p\) 上的全局闭包账本证明 \(\mathcal E\)。这与假设矛盾。因此必有
+\[
+\mathfrak S_B(p,\mathcal E)\setminus\mathsf{Hol}\ne\varnothing.
+\]
+该点在每个有限深度上都投影为合法形式闭包账本，但作为整体不能由单一全局账本编译。于是它正是本文 forcing 语义下的极限骨架：有限窗口层只看见形式局部闭包，真正的失败发生在从形式族提升为 holonomic 对象层证书的步骤中。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 令 \(\mathcal P\) 为当前 forcing 状态的预序，并定义
 \[
