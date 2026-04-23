@@ -833,6 +833,7 @@ import Omega.Zeta.XiTimePart70cKlGapControlsMaxfiberExcess
 import Omega.Zeta.XiHankelNormalformCRTAdelicMultiplicity
 import Omega.Zeta.XiHankelNormalformAdelicAmbiguityFiniteSupport
 import Omega.Zeta.XiFixedArityDyadicMultiplicityPresburgerInP
+import Omega.Zeta.HankelWindowFiber1d
 import Omega.Zeta.XiHankelSigminLowerboundVandermondeSeparation
 import Omega.Zeta.XiHellingerToeplitzDense2xLaw
 import Omega.Zeta.XiHellingerToeplitzBitBudgetLinearLaw
@@ -1052,6 +1053,7 @@ import Omega.Zeta.XiTerminalFixedOrderFreezingThreshold
 import Omega.Zeta.XiTerminalGbcStabilizedTerminalObject
 import Omega.Zeta.XiLogisticFanoLowerBoundFromError
 import Omega.Zeta.XiHankelOfflineModularAuditThreshold
+import Omega.Zeta.XiHankelRecurrenceJacobianIdentity
 import Omega.Zeta.XiHorizonReflectionFiniteWitness
 import Omega.Zeta.XiFoldEscortLogMultiplicityTwoAtom
 import Omega.Zeta.XiFoldEscortRenyiConstantThetaClosed
