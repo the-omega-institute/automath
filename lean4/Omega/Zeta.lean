@@ -2,6 +2,7 @@ import Omega.Zeta.AbelFinitePartMobiusZeta
 import Omega.Zeta.AbelDampingSemigroupDissipation
 import Omega.Zeta.AbelBaseRecursionPoleConjugacy
 import Omega.Zeta.AbelChannelEquipartitionCharacter
+import Omega.Zeta.AbelCyclicCharacterProjection
 import Omega.Zeta.AbelCharacterSpectrumAsRotationCorrelation
 import Omega.Zeta.AbelCongruenceEnergyParsevalBarcode
 import Omega.Zeta.AbelDecimationSemigroupIdentity
