@@ -107,6 +107,40 @@ The assertion follows by checking every coordinate.
             errors,
         )
 
+    def test_rejects_manual_conclusion_ordinal(self):
+        content = r"""
+\begin{lemma}[结论 1: 稳定限制]
+\label{lem:distill-hygiene}
+相容证书在限制后仍相容。
+\end{lemma}
+\begin{proof}
+逐项限制即可。
+\end{proof}
+""".strip()
+
+        _, errors = self._validate(content)
+
+        self.assertTrue(
+            any("killo-golden" in error for error in errors),
+            errors,
+        )
+
+    def test_accepts_mathematical_conclusion_phrase(self):
+        content = r"""
+\begin{lemma}[局部闭合的逆否形式]
+\label{lem:distill-hygiene}
+若限制后的读出不相容，则原证书族不可能在同一规范下相容。
+\end{lemma}
+\begin{proof}
+这是前一结论的逆否命题：限制保持相容关系，故限制层的不相容性排除
+原层相容性。该论证只使用目标节已经固定的限制映射。
+\end{proof}
+""".strip()
+
+        _, errors = self._validate(content)
+
+        self.assertEqual(errors, [])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -68,9 +68,10 @@ SECTIONING_COMMAND_RE = re.compile(
 CJK_RE = re.compile(r"[\u3400-\u9fff]")
 KILLO_GOLDEN_TRACE_RE = re.compile(
     r"(?:"
-    r"\u65b0\u589e|\u8865\u5145|\u672c\u6b21|\u672c\u8f6e|\u4e0a\u4e00\u8f6e|"
+    r"\u65b0\u589e|\u672c\u6b21|\u672c\u8f6e|\u4e0a\u4e00\u8f6e|"
     r"\u4fee\u6539\u8bb0\u5f55|\u52a0\u5165\u5982\u4e0b|"
-    r"(?:\u7ed3\u8bba|\u95ed\u73af)\s*[A-Z0-9\u4e00-\u9fff]+\s*[:\uff1a]|"
+    r"(?:\u7ed3\u8bba|\u95ed\u73af|\u8865\u5145)\s*"
+    r"(?:[A-Z]|[0-9]+|[一二三四五六七八九十]+)\s*(?=[\]\}:：]|$)|"
     r"\b20[0-9]{2}[-/][0-9]{1,2}[-/][0-9]{1,2}\b"
     r")"
 )
