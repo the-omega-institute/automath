@@ -497,6 +497,7 @@ import Omega.POM.MaxAtomicWeightParitySecondOrder
 import Omega.POM.MaxFiberEvenChernoffExponent
 import Omega.POM.MaxFiberEvenMajorityVote
 import Omega.POM.MaxFiberHiddenBitMinimalSufficient
+import Omega.POM.MaxfiberExponentEqualsRenyiEndpoint
 import Omega.POM.MaxFiberSubshiftSpectralEntropy
 import Omega.POM.MaxFiberRateEndpoint
 import Omega.POM.MicrocanonicalFoldSectionCount

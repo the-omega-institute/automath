@@ -770,6 +770,7 @@ import Omega.Conclusion.TimeAsAddressResolutionFiltration
 import Omega.Conclusion.TimeReversalOrbitParity
 import Omega.Conclusion.TwoAtomScalarRecoveryAlpha2
 import Omega.Conclusion.TwoAtomThreshold
+import Omega.Conclusion.TwoadicFirstDeviationTimeHaltingDepth
 import Omega.Conclusion.TwoIncommensurableBasesDestroyVerticalLattice
 import Omega.Conclusion.U1FromRelativeHomologyDual
 import Omega.Conclusion.UniformBulkCutSpaceUniformization
