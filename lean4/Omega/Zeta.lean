@@ -112,6 +112,7 @@ import Omega.Zeta.XiIntegratedDefectGoldenAsymptotics
 import Omega.Zeta.XiOptimalAllocationUnderProductBound
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
+import Omega.Zeta.XiBinomialToeplitzComovingDeltaScaleLaw
 import Omega.Zeta.XiComovingLeyangEndpointSquareRoot
 import Omega.Zeta.XiLogDefectPotentialPoissonPrimitive
 import Omega.Zeta.XiLocalizedSolenoidPeriodicGrowthMaxScale
