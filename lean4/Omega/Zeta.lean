@@ -62,6 +62,7 @@ import Omega.Zeta.XiFiniteFrontierCertificate
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiSingleBaseDealiasingCountableException
+import Omega.Zeta.XiOutputPotentialRightEndpointSecondOrderInversionNormalForm
 import Omega.Zeta.XiGridScanDiophantineDealiasingStability
 import Omega.Zeta.XiGodelCoprimeModFamilyDecoupling
 import Omega.Zeta.XiAddressableGodelWorstcaseRedundancyDiverges
