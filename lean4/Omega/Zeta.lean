@@ -177,6 +177,7 @@ import Omega.Zeta.XiTerminalHankelRigidityGenericSharpnessZariski
 import Omega.Zeta.XiTerminalZmCdimBidirectionalMiLoglaw
 import Omega.Zeta.XiTerminalZmEllipticComplexTorusMiLoglaw
 import Omega.Zeta.XiTerminalZmGodelPrefixCodeMiDifference
+import Omega.Zeta.XiTerminalZmGodelIntegerTransportSquareAudit
 import Omega.Zeta.XiTerminalZmGodelHorizonFactorizationForgetting
 import Omega.Zeta.XiTerminalZmResolventCubicNoCmMaxEnd
 import Omega.Zeta.XiFarFieldMomentRecursionOrder2Kappa
