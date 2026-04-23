@@ -736,6 +736,7 @@ import Omega.Conclusion.ZnToCircleInjectiveDenseSeeds
 import Omega.Conclusion.ZeroDimLedgerPositiveSupportOrthogonality
 import Omega.Conclusion.ToeplitzDyadicHorizonCompleteness
 import Omega.Conclusion.ToeplitzGaugeBlindnessZeroDimensionalLedgerNecessity
+import Omega.Conclusion.ToeplitzOrderCompilationBound
 import Omega.Conclusion.TowerDefectExactTvDuality
 import Omega.Conclusion.TwoGroupPostnikovStrictification
 import Omega.Conclusion.PrimeAxisCountScaling
