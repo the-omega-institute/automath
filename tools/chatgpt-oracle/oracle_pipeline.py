@@ -176,7 +176,7 @@ _state_lock = threading.Lock()
 @contextlib.contextmanager
 def git_repo_lock():
     """Serialize git/index operations across pipeline processes."""
-    lock_path = SCRIPT_DIR / ".git_repo.lock"
+    lock_path = LOG_DIR / "git_repo.lock"
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     with _git_lock:
         with open(lock_path, "a+", encoding="utf-8") as fh:
