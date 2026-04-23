@@ -805,3 +805,4 @@ import Omega.POM.PwMinnormCountertermHodge
 import Omega.POM.Q4ArithmeticTwoLayerRealImag
 import Omega.POM.LocalFiniteDirichletAction
 import Omega.POM.PathIndsetThermoConstants
+import Omega.POM.DerivedSchurDirichletTorsionFlatCyclotomicPencil
