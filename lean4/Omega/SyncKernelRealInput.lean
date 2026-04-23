@@ -1,2 +1,3 @@
 import Omega.SyncKernelRealInput.TrivFactorPrimitivePolynomial
 import Omega.SyncKernelRealInput.RealInput40SpectrumDecomp
+import Omega.SyncKernelRealInput.AdditionCollisionQ2FullSymmetricGalois
