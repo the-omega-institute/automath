@@ -438,6 +438,7 @@ import Omega.POM.InvertWFromHomogeneousCurve
 import Omega.POM.KCollisionRootFilter
 import Omega.POM.KCollisionMittagLefflerScaling
 import Omega.POM.KLDefectIdentity
+import Omega.POM.EntIncreaseEqualsKl
 import Omega.POM.KilloAddressableGodelizationInfoCost
 import Omega.POM.KappaDerivable
 import Omega.POM.KappaKlDecomposition

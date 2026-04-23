@@ -594,6 +594,7 @@ import Omega.Zeta.XiTerminalZmExteriorSquareCurveGenus2
 import Omega.Zeta.XiTerminalZmExteriorSquareFiniteRamificationIndexIdeal
 import Omega.Zeta.XiChainInteriorBooleanFlagClosedForm
 import Omega.Zeta.Near1KappaInftyC1StrictIneq
+import Omega.Zeta.Near1PoleDiffusiveSp
 import Omega.Zeta.NecklaceCorrection
 import Omega.Zeta.NecklaceCounting
 import Omega.Zeta.NontrivialPerronPointConvergence
