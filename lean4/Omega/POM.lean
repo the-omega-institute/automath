@@ -27,6 +27,7 @@ import Omega.POM.HiddenBitMixedMomentCluster
 import Omega.POM.InjectivizationSideinfoExactAlphabet
 import Omega.POM.HankelSyndromeHNFModelFree
 import Omega.POM.S2RankExact
+import Omega.POM.S3OrbitDecomposition
 import Omega.POM.HankelRankMinimal
 import Omega.POM.FiberIndexCltThermo
 import Omega.POM.FiberIndexLdpThermo
