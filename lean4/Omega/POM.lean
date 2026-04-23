@@ -166,6 +166,7 @@ import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DegeneracyHistogramVandermondeInversion
 import Omega.POM.DiagonalHighMoments
 import Omega.POM.DiagonalMomentFreeEnergyDegeneracy
+import Omega.POM.DiagonalRateReconstructWFromRateCurve
 import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
 import Omega.POM.DiagonalRateAbsorbingDFR
 import Omega.POM.DiagonalRateAbsorbingLaguerreInterlacing
