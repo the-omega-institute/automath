@@ -1,3 +1,4 @@
 import Omega.FoldComputability.HaltingNoUniformLearning
 import Omega.FoldComputability.HaltingSpectrumFiniteFourierWindowBlindspot
+import Omega.FoldComputability.HaltingNoComputableModulus
 import Omega.FoldComputability.UniformCircuitFirstCollisionTime

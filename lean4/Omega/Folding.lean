@@ -352,6 +352,7 @@ import Omega.Folding.FoldHypercubeStokesPlancherelTruncation
 import Omega.Folding.FoldInfoNCEAlphaLogClosedForm
 import Omega.Folding.FoldInfoNCEBayesInfoncePowerSumExpansion
 import Omega.Folding.FoldInfoNCEEntropyDegenerationSecondOrder
+import Omega.Folding.FoldInfoNCERateUndecidable
 import Omega.Folding.FoldInfonceRenyiCollisionUpperEnvelope
 import Omega.Folding.FoldInfoNCETriangularInversionCollisionSpectrum
 import Omega.Folding.FoldInfoNCELossTowerNewtonPronyCompleteness
