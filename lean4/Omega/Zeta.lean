@@ -696,6 +696,7 @@ import Omega.Zeta.XiDefectEntropyPeakCompressibilityExtremal
 import Omega.Zeta.XiDefectEntropyMassPeakDecoupling
 import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
 import Omega.Zeta.XiEllipseWallcrossingUnitStaircaseUniversality
+import Omega.Zeta.XiEllipseWallcrossingRealizeFiniteJumpData
 import Omega.Zeta.XiEndpointAbsorptionKernelRepresentation
 import Omega.Zeta.XiEndpointAbsorptionCoefficient
 import Omega.Zeta.XiEndpointAbsorptionAdditiveTomography

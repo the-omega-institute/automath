@@ -288,6 +288,7 @@ import Omega.Folding.FoldbinGroupoidAlgebraWedderburn
 import Omega.Folding.FoldbinGroupoidAut0NoUniversalLieLimit
 import Omega.Folding.FoldbinGroupoidAut0PuProduct
 import Omega.Folding.FoldbinGroupoidAut0Pi1TorsionExponent
+import Omega.Folding.FoldbinGroupoidAut0CyclicInjectionCriterion
 import Omega.Folding.FoldbinGroupoidAut0ThirdCohomologyRank
 import Omega.Folding.FoldBinMaxFiberExponent
 import Omega.Folding.FoldBinMinsectorComplementMaxfiber
