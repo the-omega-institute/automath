@@ -117,11 +117,12 @@ private theorem xi_chain_interior_incidence_algebra_mobius_inversion_local
               hsplit.symm
 
 theorem paper_xi_chain_interior_incidence_algebra_mobius_inversion (n : Nat) :
-    let m := n - 1
+    let m := n - 1;
     ∀ (f g : Finset (Fin m) → Int),
       (∀ T, g T = Finset.sum T.powerset f) →
       ∀ T, f T = Finset.sum T.powerset (fun S => booleanIntervalSign S T * g S) := by
-  intro m f g hfg T
+  dsimp
+  intro f g hfg T
   exact xi_chain_interior_incidence_algebra_mobius_inversion_local T f g (fun U _ => hfg U)
 
 end Omega.Zeta
