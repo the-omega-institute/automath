@@ -408,6 +408,7 @@ DEFAULT_TARGET_JOURNAL = "Advances in Mathematics"
 CLAUDE_ENABLED = True
 PAUSED_ERROR_PREFIX = "PAUSED:"
 ORACLE_CANCELLED_RESPONSE = "__ORACLE_TASK_CANCELLED__"
+MAX_STAGE_B_ORACLE_TIMEOUT_ATTEMPTS = 2
 
 # Borrowed from outreach pipeline: escalation & early-skip constants
 DEEP_MODE_THRESHOLD = 3   # After N consecutive non-pass B rounds, escalate to deep mode
@@ -5189,8 +5190,30 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                                    f"({len(raw)} chars), waiting 5min then re-submitting")
                 else:
                     oracle_cancel(task_id, f"{state.paper_name} B{rnd} poll timeout")
+                    state.log_event("B", "oracle_timeout",
+                                    round_num=rnd, detail=task_id)
+                    if attempt < MAX_STAGE_B_ORACLE_TIMEOUT_ATTEMPTS:
+                        attempt += 1
+                        task_id = f"{task_id_base}_a{attempt}"
+                        logger.warning(
+                            f"{tag} Oracle poll timeout; cancelled old task "
+                            f"and re-submitting B{rnd} attempt {attempt}/"
+                            f"{MAX_STAGE_B_ORACLE_TIMEOUT_ATTEMPTS} "
+                            f"(task={task_id})")
+                        if not oracle_submit(
+                            task_id, prompt, pdf_path,
+                            context_mode="fresh_review",
+                            agent_role="stage_b_oracle_referee_timeout_retry",
+                        ):
+                            state.error = (
+                                f"Oracle timeout re-submit failed B{rnd} "
+                                f"attempt {attempt}")
+                            return False
+                        save_state(state)
+                        deadline = time.time() + oracle_timeout
+                        continue
                     logger.warning(f"{tag} Oracle poll timeout; cancelled "
-                                   f"{task_id} and stopping B{rnd} attempt")
+                                   f"{task_id} and exhausted B{rnd} attempts")
                     break
 
                 remaining = deadline - time.time()
