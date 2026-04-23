@@ -99,11 +99,12 @@ SEMANTIC_SCAN_CONTEXT_CHARS = 4500
 SEMANTIC_SCAN_ACCEPT_THRESHOLD = 0.55
 GLOBAL_EVIDENCE_MAX_CLAIMS = 80
 GLOBAL_EVIDENCE_MAX_INTERFACES = 50
-ORACLE_EVIDENCE_MAX_SECTION_INDEX = 24
-ORACLE_EVIDENCE_MAX_CLAIMS = 18
-ORACLE_EVIDENCE_MAX_EXISTING = 12
-ORACLE_EVIDENCE_MAX_INTERFACES = 12
-ORACLE_EVIDENCE_MAX_MEMORY = 8
+ORACLE_EVIDENCE_MAX_SECTION_INDEX = 12
+ORACLE_EVIDENCE_MAX_CLAIMS = 8
+ORACLE_EVIDENCE_MAX_EXISTING = 6
+ORACLE_EVIDENCE_MAX_INTERFACES = 6
+ORACLE_EVIDENCE_MAX_MEMORY = 4
+ORACLE_SECTION_CONTEXT_CHARS = 6000
 GLOBAL_EVIDENCE_SNIPPET_CHARS = 900
 POLICY_VERSION = 1
 ORACLE_SERVER = "http://127.0.0.1:8765"
@@ -3306,6 +3307,86 @@ def _oracle_relevant_evidence_pack(
     }
 
 
+def _oracle_payload_summary(
+    payload: dict[str, Any],
+    focused_family: Optional[dict[str, Any]],
+) -> dict[str, Any]:
+    """Compress generated payload into the Oracle-relevant working contract."""
+    if not isinstance(payload, dict):
+        return {}
+    family_name = str((focused_family or {}).get("name", "")).strip()
+    family_targets = set(_unique_strings((focused_family or {}).get("target_sections", [])))
+
+    coverage_debts = []
+    for item in payload.get("coverage_debts", []) or []:
+        if not isinstance(item, dict):
+            continue
+        debt_family = str(item.get("family", "")).strip()
+        debt_targets = _unique_strings(item.get("target_sections", []))
+        if family_name and debt_family and debt_family != family_name:
+            if not (family_targets and set(debt_targets) & family_targets):
+                continue
+        coverage_debts.append(
+            {
+                "family": debt_family,
+                "type": str(item.get("type", "")).strip(),
+                "reason": str(item.get("reason", "")).strip(),
+                "target_sections": debt_targets,
+            }
+        )
+        if len(coverage_debts) >= 6:
+            break
+
+    frontier_chains = []
+    for item in payload.get("frontier_chains", []) or []:
+        if isinstance(item, dict):
+            frontier_chains.append(
+                {
+                    "title": str(item.get("proposed_title", item.get("title", ""))).strip(),
+                    "reason": str(
+                        item.get("reason", item.get("novelty_reason", ""))
+                    ).strip(),
+                    "target_sections": _unique_strings(item.get("target_sections", [])),
+                }
+            )
+        else:
+            text = str(item).strip()
+            if text:
+                frontier_chains.append(text)
+        if len(frontier_chains) >= 6:
+            break
+
+    expansion_queue = []
+    for item in payload.get("expansion_queue", []) or []:
+        if not isinstance(item, dict):
+            continue
+        target_sections = _unique_strings(item.get("target_sections", []))
+        if family_targets and target_sections and not (set(target_sections) & family_targets):
+            continue
+        expansion_queue.append(
+            {
+                "status": str(item.get("status", "active") or "active"),
+                "target_sections": target_sections,
+                "kernel": str(item.get("kernel", "")).strip(),
+            }
+        )
+        if len(expansion_queue) >= 6:
+            break
+
+    return {
+        "source_slug": payload.get("knowledge_payload", {}).get("source_slug"),
+        "source_type": payload.get("knowledge_payload", {}).get("source_type"),
+        "primary_targets": _unique_strings(payload.get("primary_targets", [])),
+        "navigation_targets": _unique_strings(
+            payload.get("navigation_payload", {}).get("target_sections", [])
+        ),
+        "closure_criteria": _unique_strings(payload.get("closure_criteria", []))[:8],
+        "frontier_chains": frontier_chains,
+        "coverage_debts": coverage_debts,
+        "expansion_queue": expansion_queue,
+    }
+
+
 def _semantic_scan(
     state: DistillState,
     raw_research: dict[str, Any],
@@ -3861,7 +3942,11 @@ def _select_target_files(
     return selected[:MAX_WRITEBACK_TARGET_FILES]
 
 
-def _collect_section_contexts(targets: list[dict[str, Any]]) -> str:
+def _collect_section_contexts(
+    targets: list[dict[str, Any]],
+    *,
+    max_chars_per_file: int = 16000,
+) -> str:
     """Read target LaTeX files and format them as prompt context."""
     chunks = []
     for target in targets:
@@ -3870,8 +3955,8 @@ def _collect_section_contexts(targets: list[dict[str, Any]]) -> str:
         if not path or not path.exists():
             continue
         text = read_text(path)
-        if len(text) > 16000:
-            text = text[:16000] + "\n% [context truncated by distill.py]\n"
+        if len(text) > max_chars_per_file:
+            text = text[:max_chars_per_file] + "\n% [context truncated by distill.py]\n"
         chunks.append(f"--- {rel} ---\n{text}")
     return "\n\n".join(chunks)
 
@@ -4385,6 +4470,7 @@ def _oracle_deepening_research(
         "target_sections": payload.get("primary_targets", []),
     }
     blocked = _read_artifact_json_or_none(state, "blocked.json") or {}
+    oracle_payload = _oracle_payload_summary(payload, focused_family)
     oracle_global_evidence_pack = _oracle_relevant_evidence_pack(
         global_evidence_pack,
         focused_family,
@@ -4397,7 +4483,7 @@ def _oracle_deepening_research(
         family_name=family.get("name", ""),
         key_results=_json_block(family.get("key_results", [])),
         method_operators=_json_block(raw_research.get("method_operators", [])),
-        payload=_json_block(payload),
+        payload=_json_block(oracle_payload),
         targets=_json_block(targets),
         section_contexts=section_contexts,
         global_evidence_pack=_json_block(oracle_global_evidence_pack),
@@ -4957,7 +5043,12 @@ def run_stage_w(
     if not targets:
         logger.error("Stage W could not select target files")
         return False
-    section_contexts = _collect_section_contexts(targets)
+    section_contexts = _collect_section_contexts(
+        targets,
+        max_chars_per_file=(
+            ORACLE_SECTION_CONTEXT_CHARS if oracle_deepening else 16000
+        ),
+    )
     global_evidence_pack = _global_evidence_for_state(state)
     prior_feedback_block = _build_prior_feedback_block(state)
     family_specific_contract = _family_specific_deepening_contract(focused_family)
