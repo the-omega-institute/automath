@@ -179,6 +179,7 @@ import Omega.Zeta.XiTerminalGbcAnomalyCoordinateCount
 import Omega.Zeta.XiCRTMultistageAxisCountScaling
 import Omega.Zeta.ZetaSyntaxEulerProductNaturalBoundary
 import Omega.Zeta.XiTimePart9wBasicRootUnityErrorExponentToOne
+import Omega.Zeta.XiTimePart9waBasicRootBeyondSquareRoot
 import Omega.Zeta.XiTimePart9pChi2RanktwoResonantFloor
 import Omega.Zeta.XiTimePart9zbbFiniteStirlingSumTranslation
 import Omega.Zeta.XiTimePart9saUniformBaselineFixedBinaryExperiment
@@ -203,6 +204,7 @@ import Omega.Zeta.XiTerminalZmLeyangP3RenormalizationHensel
 import Omega.Zeta.XiTerminalZmLeyangP3V3LinearBound
 import Omega.Zeta.XiProjectivePressurePathHolderConvexity
 import Omega.Zeta.XiHzomFunctionalEquation
+import Omega.Zeta.XiRankoneSecularMonotonicityDerivativeNorm
 import Omega.Zeta.XiRankoneFlipRadiusShallowNegative
 import Omega.Zeta.XiUnitarySliceZeroCountSpectralFlow
 import Omega.Zeta.BdryFreeInvolutionOddFiberObstructionMinCover
