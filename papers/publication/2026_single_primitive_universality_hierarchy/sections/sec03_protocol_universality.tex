@@ -306,30 +306,75 @@ the readout terms is \(\sigma\), as in a canonical rewriting
 system with a decidable word problem \cite{BaaderNipkow1998}.
 \end{definition}
 
-In the Zeckendorf protocol, \(C\) is the decidable set of finite
-binary words, \(N=X_{\infty}^{\mathrm{fin}}\), and
-\(\nu=\Val\).  The normal form of a raw word is
-\(\mathrm{NF}_{\infty}\).  Equality of normal forms is literal
-equality of finite legal words, hence is decidable by
-\Cref{prop:fold-confluence}.  The single operation symbol is
-interpreted as composition on both semantic sorts
-\(Y_0=\End(A)\) and \(Y_1=\End(\End(A))\).  The readouts are
+\begin{theorem}[Zeckendorf protocol universality]
+\label{thm:zeckendorf-protocol-univ}
+Let \(A\) be a nonempty set and let \(g\colon A\to A\) be an
+endomorphism of infinite order.  The Zeckendorf address system with
+raw codes the finite binary words, normal forms
+\(N=X_{\infty}^{\mathrm{fin}}\), normalizer
+\(\mathrm{NF}_{\infty}\), decoding map \(\nu=\Val\), and the two
+composition readouts
 \[
   \Phi_0(c_n)=g^{\circ n},\qquad
-  \Phi_1(c_n)=I_n,\qquad c_n=\Val^{-1}(n).
+  \Phi_1(c_n)=I_n,\qquad c_n=\Val^{-1}(n),
 \]
-For addition take \(\widehat{+}=\oplus\) and level \(0\);
-for multiplication take \(\widehat{\times}=\otimes\) and level
-\(1\).  Then
+is a single-primitive protocol universal for
+\(\mathcal O=\{+,\times\}\) on \(\NN\).  Addition is realized by
+\(\widehat{+}=\oplus\) at level \(0\), and multiplication is
+realized by \(\widehat{\times}=\otimes\) at level \(1\).  In both
+cases the readout term is the one binary operation symbol,
+interpreted as composition on the relevant semantic sort.
+\end{theorem}
+
+\begin{proof}
+Let \(C\) be the decidable set of finite binary words and let
+\(N=X_{\infty}^{\mathrm{fin}}\).  The normal form of a raw word is
+\(\mathrm{NF}_{\infty}\), obtained by computing the integer
+\(\sum_k\omega_kF_{k+1}\) and applying the greedy Zeckendorf
+algorithm.  Equality of normal forms is literal equality of finite
+legal words, hence is decidable by \Cref{prop:fold-confluence}.  The
+decoding map is \(\nu=\Val\).
+
+Interpret the single operation symbol as composition on both
+semantic sorts
+\[
+  Y_0=\End(A),\qquad Y_1=\End(\End(A)).
+\]
+The readout maps are the displayed maps
+\(\Phi_0(c_n)=g^{\circ n}\) and \(\Phi_1(c_n)=I_n\).  They are
+well defined because \(\Val\) is a bijection
+\(X_{\infty}^{\mathrm{fin}}\to\NN\).
+
+For addition take \(\widehat{+}=\oplus\).  This operation is
+computable: compute the two values, add them in \(\NN\), and return
+the Zeckendorf normal form.  The semantic clause is
+\[
+  \nu(c_m\oplus c_n)=m+n,
+\]
+by \Cref{thm:semiring}.  The readout clause at level \(0\) is
 \[
   \Phi_0(c_m\oplus c_n)
+  =g^{\circ(m+n)}
+  =g^{\circ m}\circ g^{\circ n}
   =\Phi_0(c_m)\circ\Phi_0(c_n),
-  \qquad
-  \Phi_1(c_m\otimes c_n)
-  =\Phi_1(c_m)\circ\Phi_1(c_n),
 \]
-by \Cref{thm:two-level}.  Hence the Zeckendorf address system with
-these composition readouts is protocol-universal for
-\(\mathcal O=\{+,\times\}\) on \(\NN\).  The finite maps
+which is \Cref{thm:two-level}.
+
+For multiplication take \(\widehat{\times}=\otimes\).  It is
+computable by the same valuation-normalization procedure, using
+integer multiplication.  Again \Cref{thm:semiring} gives
+\[
+  \nu(c_m\otimes c_n)=mn.
+\]
+At level \(1\), \Cref{thm:two-level} gives
+\[
+  \Phi_1(c_m\otimes c_n)
+  =I_{mn}
+  =I_m\circ I_n
+  =\Phi_1(c_m)\circ\Phi_1(c_n).
+\]
+Thus both operations in \(\{+,\times\}\) are realized using only the
+single binary operation symbol in the readout.  The finite maps
 \(\Fold_m\) are the resolution quotients whose fibers are studied in
-\Cref{sec:L2}.
+\Cref{sec:L2}; they do not alter the stable readout just verified.
+\end{proof}

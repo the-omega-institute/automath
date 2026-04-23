@@ -60,13 +60,72 @@ composition, and the total real functions \(\exp\), \(\sin\), and
 \(|\cdot|\).  The identity problem asks whether such an expression
 defines the zero function on all of \(\RR\).
 
+\begin{lemma}[Effective Richardson translation]
+\label{lem:richardson-translation}
+There is an effective map \(E\mapsto\tau(E)\) from Richardson
+expressions to principal-branch EML terms over \((\eml,1)\), together
+with a transported real semantics
+\(\llbracket\tau(E)\rrbracket_{\RR}\), such that
+\[
+  \llbracket\tau(E)\rrbracket_{\RR}(x)
+  =E(x)\qquad(x\in\RR)
+\]
+for every Richardson expression \(E\).  Rational constants and
+\(\log 2\) are built effectively from the constant \(1\) using the
+chosen arithmetic and logarithm witnesses, \(\pi\) is represented by
+a fixed EML witness from Odrzywo{\l}ek's construction, and absolute
+value is represented by
+\[
+  |F|=\sqrt{F^2}
+\]
+using the principal square root on the nonnegative real axis.
+\end{lemma}
+
+\begin{proof}
+Odrzywo{\l}ek's table and supplementary formulas give explicit EML
+terms for the scientific-calculator primitives needed here:
+constants, \(+,-,\times,\div\), \(\exp\), square root, and the
+trigonometric functions, with the principal-branch interpretation on
+their stated domains
+\cite[Table~1 and Supplementary Information, Part~II]{Odrzywolek2026}.
+Since the list of Richardson primitives is finite, fix once and for
+all one such EML witness for each required primitive.  The constant
+\(\pi\) is translated by its fixed constant witness.  If
+\(q=a/b\in\mathbb Q\) with \(b>0\), translate \(a\) and \(b\) by
+iterated addition and subtraction from \(1\), and then apply the
+chosen division witness to obtain \(q\).  The constant \(\log 2\) is
+obtained from the logarithm formula in \Cref{thm:eml-universality}
+applied to the positive real constant \(2=1+1\).
+
+Define \(\tau\) by structural recursion.  A variable is sent to the
+same variable.  Constants are sent to the chosen constant terms.  If
+an expression is formed by \(+,-,\times,\exp\), or \(\sin\), apply
+the corresponding chosen EML witness to the already translated
+subexpressions.  If an expression is a composition, substitute the
+translated inner expression into the translated outer one.  If
+\(E=|F|\), translate it as the square-root witness applied to
+\(\tau(F)^2\), where the square is built using the multiplication
+witness.
+
+This recursion is algorithmic because all primitive witnesses are
+finite terms and syntactic substitution is computable.  The asserted
+real semantics follows by induction on the expression tree.  The
+only point not tautological from the primitive witnesses is absolute
+value: for real \(x\), the value of \(F(x)^2\) is a nonnegative real
+number, and the principal square root equals the nonnegative square
+root, hence \(\sqrt{F(x)^2}=|F(x)|\).  Thus every translated term
+agrees with the original Richardson expression as a real function.
+The statement concerns this transported real semantics; it makes no
+branch-independent assertion about equality of arbitrary raw EML
+terms on a complex domain.
+\end{proof}
+
 \begin{theorem}[Expression universality does not give normal forms]
 \label{thm:separation}
 The EML system \((\eml,1)\) is expression-universal for
-\(\mathcal B_{36}\).  Fix an effective choice of the EML
-representatives supplied by Odrzywo{\l}ek's construction for the
-primitives occurring in \(\mathcal R\), and let \(\tau(E)\) denote
-the resulting EML representative of a Richardson expression \(E\).
+\(\mathcal B_{36}\).  Let \(\tau(E)\) be the effective
+principal-branch EML representative of a Richardson expression
+given by \Cref{lem:richardson-translation}.
 There is no computable normal form \(\mathrm{NF}\) on the
 translated set \(\tau(\mathcal R)\) satisfying
 \[
@@ -79,35 +138,20 @@ for all Richardson expressions \(E_1,E_2\in\mathcal R\).
 \end{theorem}
 
 \begin{proof}
+The expression-universality assertion is \Cref{thm:eml-universality}.
 Richardson proved that the identity problem for this real language
 is undecidable \cite{Richardson1968}.
-
-Odrzywo{\l}ek's construction gives explicit EML terms for the
-scientific-calculator primitives needed in this sublanguage:
-constants, \(+,-,\times\), \(\exp\), square root, and the
-trigonometric functions, with the stated principal-branch
-interpretation on the corresponding real domains
-\cite[Table~1 and Supplementary Information, Part~II]{Odrzywolek2026}.
-The constant \(\log 2\) is obtained from the positive-real
-logarithm formula in \Cref{thm:eml-universality}.  On real inputs,
-\(|x|=\sqrt{x^2}\), with the principal square root on the
-nonnegative real axis, so absolute value is translated through the
-square-root witness.  By structural recursion, every Richardson
-expression has an effective EML representative whose transported
-semantics is the original real function.  This transported real
-semantics is the only one used in the reduction.  Since EML formulas
-are partial and principal-branch dependent, the argument makes no
-branch-independent assertion about equality of arbitrary raw EML
-terms on a complex domain.
-
-If the asserted normal form existed on this translated fragment,
-then for a Richardson expression \(E\) one could translate \(E\)
-and the zero expression into EML terms and compare their normal
-forms.  This would decide whether \(E\) is identically zero in
-Richardson's sense, as a real function, contradicting Richardson's
-theorem.  Thus the expression grammar, although universal in the
-sense of \Cref{def:expr-univ}, cannot by itself supply the decidable
-canonical-form component of \Cref{def:prot-univ}.
+By \Cref{lem:richardson-translation}, the map \(E\mapsto\tau(E)\)
+is effective and preserves the real function defined by \(E\).  If
+the asserted normal form existed on this translated fragment, then
+for a Richardson expression \(E\) one could translate \(E\) and the
+zero expression into EML terms and compare their normal forms.  The
+displayed equivalence would decide whether \(E\) is identically zero
+in Richardson's sense, as a real function, contradicting
+Richardson's theorem.  Thus the expression grammar, although
+universal in the sense of \Cref{def:expr-univ}, cannot by itself
+supply the decidable canonical-form component of
+\Cref{def:prot-univ}.
 \end{proof}
 
 \begin{corollary}\label{cor:strict-L0-L1}
@@ -163,6 +207,67 @@ valuation, and readout operations are fixed; only the certificate
 fibers change.  Thus the theorem is not a claim that the unmodified
 Zeckendorf fold lacks a finite-state transfer operator.
 
+\begin{definition}[Computable finite-fiber cover]
+\label{def:computable-cover}
+A \emph{computable finite-fiber cover} of the Zeckendorf resolution
+data is a sequence
+\[
+  (\Omega_m^\sharp,\Fold_m^\sharp)_{m\ge1}
+\]
+such that each \(\Omega_m^\sharp\) is a finite decidable set,
+the relation \(\omega\in\Omega_m^\sharp\) is decidable uniformly in
+\((m,\omega)\), and
+\[
+  \Fold_m^\sharp\colon\Omega_m^\sharp\to X_m
+\]
+is a uniformly computable surjection.  The covered collision moments
+are
+\[
+  S_q^\sharp(m)
+  =\sum_{x\in X_m}|\bigl(\Fold_m^\sharp\bigr)^{-1}(x)|^q .
+\]
+By definition this operation changes only the finite certificate
+fibers over the finite normal-form sets \(X_m\).  The stable
+normal-form space \(X_{\infty}^{\mathrm{fin}}\), the decoding
+\(\Val\), the operations \(\oplus,\otimes\), and the composition
+readouts \(\Phi_0,\Phi_1\) remain the Zeckendorf protocol data.
+\end{definition}
+
+\begin{lemma}[Covers preserve readouts]
+\label{lem:cover-preserves-protocol}
+Let \((\Omega_m^\sharp,\Fold_m^\sharp)\) be a computable
+finite-fiber cover of the Zeckendorf resolution data.  Every
+operation realized by the Zeckendorf protocol with normal forms
+\(X_{\infty}^{\mathrm{fin}}\), decoding \(\Val\), and readouts
+\(\Phi_0,\Phi_1\) is realized by the covered presentation with the
+same realizing map on normal forms, the same level, and the same
+single-operation readout term.  In particular, protocol universality
+for \(\{+,\times\}\) is preserved.
+\end{lemma}
+
+\begin{proof}
+The realization equations in \Cref{def:prot-univ} are equations on
+the stable normal forms and their readouts:
+\[
+  \nu(\widehat\theta(n_1,\ldots,n_r))
+  =\theta(\nu(n_1),\ldots,\nu(n_r))
+\]
+and
+\[
+  \Phi_\ell(\widehat\theta(n_1,\ldots,n_r))
+  =
+  R_\theta(\Phi_\ell(n_1),\ldots,\Phi_\ell(n_r)).
+\]
+A finite-fiber cover leaves \(X_{\infty}^{\mathrm{fin}}\), \(\Val\),
+\(\oplus,\otimes\), and the maps \(\Phi_0,\Phi_1\) unchanged.  It
+changes only the cardinalities of the finite preimages over the
+finite sets \(X_m\), which enter the collision moments but not the
+readout equations.  Therefore the same realization data continue to
+realize the same operations.  Applying this to
+\Cref{thm:zeckendorf-protocol-univ} gives preservation of
+protocol universality for \(\{+,\times\}\).
+\end{proof}
+
 \begin{theorem}[Finite-fiber certificates do not force finite-state transfer]
 \label{thm:finite-state-strictness}
 Let \(a_m\ge1\) be any computable integer sequence.  There is a
@@ -200,15 +305,16 @@ and the normalization map
   \Fold_m^\sharp(x)=x\quad(x\in X_m),\qquad
   \Fold_m^\sharp(z_m,j)=z_m .
 \]
-This construction is computable in \(m\): membership in
-\(\Omega_m^\sharp\) and the map \(\Fold_m^\sharp\) are decidable
-because the sequence \(a_m\) is computable.  Every fiber is finite.
-The stable normal-form space
-\(X_{\infty}^{\mathrm{fin}}\), the valuation map, and the
-readouts \(\oplus,\otimes\) are inherited unchanged.  Hence the
-protocol-universality statement for addition and multiplication is
-the same as in
-\Cref{thm:semiring,thm:two-level,cor:minimal}.
+This construction is computable in \(m\): encode the disjoint union
+by tags, use decidability of \(X_m\), and decide
+\((z_m,j)\) by computing \(a_m\) and checking \(1\le j\le a_m\).
+The map \(\Fold_m^\sharp\) is then uniformly computable and
+surjective onto \(X_m\), and every fiber is finite.  Thus
+\((\Omega_m^\sharp,\Fold_m^\sharp)\) is a computable finite-fiber
+cover in the sense of \Cref{def:computable-cover}.  By
+\Cref{lem:cover-preserves-protocol}, the protocol-universality
+statement for addition and multiplication is unchanged from
+\Cref{thm:zeckendorf-protocol-univ}.
 Certificate-universality follows from
 \Cref{prop:L2-generic-vs-structural}.
 
