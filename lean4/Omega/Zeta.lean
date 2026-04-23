@@ -947,6 +947,7 @@ import Omega.Zeta.XiReverseKLCyclicEnergyEquivalence
 import Omega.Zeta.XiReverseKLCyclicKLDecomposition
 import Omega.Zeta.XiReverseKLAffineSecondVariationStrongConvex
 import Omega.Zeta.XiReverseKLGapBayesDecomposition
+import Omega.Zeta.XiReverseKLDVPoissonVariational
 import Omega.Zeta.XiReverseKLFourierGapPositiveKernelEnergy
 import Omega.Zeta.XiReverseKLGapW2ToDelta
 import Omega.Zeta.XiReverseKLFenchelPoissonDuality
