@@ -509,6 +509,7 @@ import Omega.Zeta.LocalizedIntegersPrimeAxisIncrementLaw
 import Omega.Zeta.LocalizedSolenoidEndomorphismRing
 import Omega.Zeta.LocalizedIntegersTensorUnionLaw
 import Omega.Zeta.LocalizedQuotientLedger
+import Omega.Zeta.XiLocalizedSubgroupZetaEulerProduct
 import Omega.Zeta.LocalizedQuotientTorsionZetaEulerProduct
 import Omega.Zeta.LocalizedSolenoidCircleQuotientLifts
 import Omega.Zeta.LocalizedSolenoidMultiplicationKernelDegree
