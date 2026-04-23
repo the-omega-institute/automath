@@ -135,6 +135,7 @@ import Omega.POM.DerivedOracleThermalDifferentialGeometry
 import Omega.POM.DerivedProjectiveLengthDirectionRationalCfinite
 import Omega.POM.DerivedProjectivePathMaxplusIntercept
 import Omega.POM.DerivedMaxNoncontractibleFiberDefectConstants
+import Omega.POM.MaxNoncontractibleFiberMod6Phase
 import Omega.POM.DeterministicNormalizationForest
 import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DiagonalHighMoments
@@ -495,6 +496,7 @@ import Omega.POM.MultiplicativeChainRuleFinite
 import Omega.POM.MultiplicityBinetTwoParameterNormalForm
 import Omega.POM.MultiplicityCompositionExactConditionalIid
 import Omega.POM.MultiplicityCompositionLogconvexLambdaq
+import Omega.POM.MultiplicityCompositionCollisionExponent
 import Omega.POM.MultiplicityCompositionQ1Markov
 import Omega.POM.MultiplicityCompositionPartCountGeneralqLLT
 import Omega.POM.MultiplicityCompositionMomentShiftLaw
