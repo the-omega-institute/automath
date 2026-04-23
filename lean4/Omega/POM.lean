@@ -230,6 +230,7 @@ import Omega.POM.DiagonalRateRefreshLengthBiasedStationary
 import Omega.POM.DiagonalRateUniformClosedForm
 import Omega.POM.DiagonalRateUniformGlobalUpper
 import Omega.POM.DiagonalRateRefreshHittingTimeGeometricSpectralDecomp
+import Omega.POM.DiagonalRateRefreshHittingTimeTailSpectral
 import Omega.POM.DiagonalRateRefreshHittingTimeMeanClosed
 import Omega.POM.DiagonalRateRefreshKronStarEquivalence
 import Omega.POM.DiagonalRateRefreshHittingTimeRankTwoPotential
