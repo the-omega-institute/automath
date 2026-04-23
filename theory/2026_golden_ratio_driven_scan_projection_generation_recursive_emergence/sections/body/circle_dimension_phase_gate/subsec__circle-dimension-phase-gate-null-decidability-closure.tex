@@ -320,4 +320,78 @@ When \(\Delta_{ij}\ne0\), the displayed identity with \(a=b=1\) gives \(\Delta_{
 
 % --- End distillation writeback ---
 
+% --- Distillation writeback ---
+% --- Distillation writeback: Euclid exhaustion finite-budget closure ---
+\begin{theorem}[conditional exhaustion trichotomy for visible-prefix bad examples]\label{distill:euclid_elements-exhaustion_and_finite_budget_closure_families-cdim-visible-prefix-residual-trichotomy}
+\textbf{Date-time: 2026-04-23T12:38:38+08:00. Family: Euclid--Elements / exhaustion and finite-budget closure families. Dependency status: conditional audit.}
+Let \(Q\) be a fixed unitary-slice query.  Consider a fold-aware inverse chain of nonempty finite visible prefix families
+\[
+E_1\xleftarrow{\rho_{2,1}}E_2\xleftarrow{\rho_{3,2}}E_3\xleftarrow{}\cdots,
+\qquad
+\rho_{j+1,j}\text{ surjective},
+\]
+and probability measures \(\nu_j\) satisfying \((\rho_{j+1,j})_\#\nu_{j+1}=\nu_j\).  For each level \(j\), suppose the offline verifier for \(Q\) has registered two finite geometric ledgers:
+\[
+\mathcal F_j\subset\{(U,\beta):U\subset E_j,\ 0\le\beta\le1\},
+\qquad
+\mathcal S_j\subset\{(q,D):q:E_j\to\Pi_q\text{ finite},\ D\in\NN\}.
+\]
+The first ledger records Frostman-type caps \(\nu_j(U)\le\beta\); the second records slab-collapse tests \(|q(E_j)|>D\).  Define
+\[
+\mathfrak R_F(j):=\max_{(U,\beta)\in\mathcal F_j}\bigl(\nu_j(U)-\beta\bigr)_+,
+\]
+\[
+\mathfrak R_S(j):=\max_{(q,D)\in\mathcal S_j}\bigl(D+1-|q(E_j)|\bigr)_+,
+\]
+with \(\max\varnothing=0\).  Finally, let
+\[
+B_j^\ast(Q,E_j)\in\NN\cup\{\infty\}
+\]
+be the minimal registered Hard-axis auxiliary budget needed to strictify the remaining readout ambiguity of \(Q\) at level \(j\), and assume the fold-aware monotonicity
+\[
+B_j^\ast(Q,E_j)\le B_{j+1}^\ast(Q,E_{j+1}).
+\]
+Assume the following finite-budget closure axiom for this registered verifier: if \(\mathfrak R_F(j)=\mathfrak R_S(j)=0\) for all sufficiently large \(j\), and if \(\sup_j B_j^\ast(Q,E_j)<\infty\), then the inverse chain carries a stable finite non-\(\mathsf{NULL}\) certificate for \(Q\).
+
+If the chain has no stable finite non-\(\mathsf{NULL}\) certificate for \(Q\), then exactly one of the following lexicographically ordered alternatives occurs.
+\begin{enumerate}
+  \item \textbf{Frostman failure.}  There are infinitely many \(j\) with \(\mathfrak R_F(j)>0\).  For each such \(j\), some registered cap \((U_j,\beta_j)\in\mathcal F_j\) gives the finite certificate
+  \[
+  \nu_j(U_j)>\beta_j.
+  \]
+  \item \textbf{Slab concentration.}  Frostman failure occurs only finitely often, but there are infinitely many \(j\) with \(\mathfrak R_S(j)>0\).  For each such \(j\), some registered slab test \((q_j,D_j)\in\mathcal S_j\) gives
+  \[
+  |q_j(E_j)|\le D_j.
+  \]
+  If the Markov/Hankel interface of Proposition \ref{prop:distill-cdim-slab-hankel-rank-certificate} is present for \((E_j,q_j)\), the same finite collapse is equivalently certified by the rank drop of the corresponding Hankel matrix.
+  \item \textbf{Infinite-budget obstruction.}  Both geometric residuals vanish eventually,
+  \[
+  \mathfrak R_F(j)=\mathfrak R_S(j)=0\qquad(j\gg1),
+  \]
+  and the Hard-axis budget is unbounded:
+  \[
+  B_j^\ast(Q,E_j)\longrightarrow\infty.
+  \]
+  Thus the remaining \(\mathsf{NULL}\) is not caused by a finite Frostman cap or a finite slab collapse; it is forced by the absence of any bounded registered external budget capable of stabilizing the readout.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+The chain is fold-aware by hypothesis, so every level is a legal prefix quotient of the same inverse-system object; no naive truncation is being used as an invariant.  We now argue by exhaustion of the registered residual mechanisms.
+
+If \(\mathfrak R_F(j)>0\) for infinitely many \(j\), the first alternative holds.  Since each \(\mathcal F_j\) is finite and the maximum is positive, the maximum is realized by some \((U_j,\beta_j)\), giving \(\nu_j(U_j)>\beta_j\).  This is a finite Frostman-failure witness.
+
+Assume the first alternative does not hold.  Then \(\mathfrak R_F(j)=0\) for all sufficiently large \(j\).  If \(\mathfrak R_S(j)>0\) for infinitely many \(j\), the second alternative holds.  Again finiteness of \(\mathcal S_j\) gives a maximizing pair \((q_j,D_j)\).  Since \(|q_j(E_j)|\) and \(D_j\) are integers, positivity of
+\[
+D_j+1-|q_j(E_j)|
+\]
+is equivalent to \(|q_j(E_j)|\le D_j\).  This is precisely a finite projection-word slab concentration certificate.  Under the additional Markov/Hankel hypotheses cited in Proposition \ref{prop:distill-cdim-slab-hankel-rank-certificate}, that proposition identifies the same inequality with the stated Hankel rank drop.
+
+It remains to treat the case in which neither of the first two alternatives occurs.  Then both \(\mathfrak R_F(j)\) and \(\mathfrak R_S(j)\) vanish for all sufficiently large \(j\).  If \(\sup_j B_j^\ast(Q,E_j)<\infty\), the finite-budget closure axiom supplies a stable finite non-\(\mathsf{NULL}\) certificate for \(Q\), contradicting the hypothesis.  Hence the budgets are unbounded.  Because the sequence \(B_j^\ast(Q,E_j)\) is monotone nondecreasing in \(\NN\cup\{\infty\}\), unboundedness is equivalent to \(B_j^\ast(Q,E_j)\to\infty\).  This is exactly the infinite-budget obstruction.
+
+The three cases are lexicographically exhaustive by construction: first route persistent Frostman failure, then persistent slab collapse after Frostman stabilization, and finally the bounded-geometric-residual tail.  Thus every bad inverse-system example is forced into one of the registered finite mechanisms or into an explicitly unbounded Hard-axis budget.  This proves the theorem.
+\end{proof}
+% --- End distillation writeback ---
+
+% --- End distillation writeback ---
+
 \endinput
