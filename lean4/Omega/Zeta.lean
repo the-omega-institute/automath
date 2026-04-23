@@ -79,6 +79,7 @@ import Omega.Zeta.XiGridScanDiophantineDealiasingStability
 import Omega.Zeta.XiGodelCoprimeModFamilyDecoupling
 import Omega.Zeta.XiAddressableGodelWorstcaseRedundancyDiverges
 import Omega.Zeta.XiFiniteRhoScanTraceClosedFormDepthOnly
+import Omega.Zeta.XiNullSecondOrderRadialChannel
 import Omega.Zeta.XiEndpointHeatProbeAdamsTwistSpectralGapExpBound
 import Omega.Zeta.XiEntropyGapHankelDeterminantCollapseUpperBound
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic

@@ -480,6 +480,7 @@ import Omega.Conclusion.LkNormalizedZetaOddProjector
 import Omega.Conclusion.LkNdDeterminantZeroTracking
 import Omega.Conclusion.LkCentralBinomialCatalanMoments
 import Omega.Conclusion.TqftGenusHausdorffMomentSequence
+import Omega.Conclusion.TqftGenusLogconvexity
 import Omega.Conclusion.TqftGenusTowerTrivializationCriterion
 import Omega.Conclusion.TqftGenusTowerCompleteMultiplicityInvariant
 import Omega.Conclusion.LkKolmogorovSharpOneOverK

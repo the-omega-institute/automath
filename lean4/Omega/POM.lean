@@ -166,6 +166,7 @@ import Omega.POM.DiagonalMomentFreeEnergyDegeneracy
 import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
 import Omega.POM.DiagonalRateAbsorbingDFR
 import Omega.POM.DiagonalRateAbsorbingLaguerreInterlacing
+import Omega.POM.DiagonalRateRefreshAbsorbingLaguerreInterlacing
 import Omega.POM.MaxentMarkovLaguerreSecularSpectrum
 import Omega.POM.MaxentMarkovZetaDeterminantSinglePolynomial
 import Omega.POM.MaxentMarkovOptimalCouplingLatentBinaryMixture
