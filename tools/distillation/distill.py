@@ -99,6 +99,11 @@ SEMANTIC_SCAN_CONTEXT_CHARS = 4500
 SEMANTIC_SCAN_ACCEPT_THRESHOLD = 0.55
 GLOBAL_EVIDENCE_MAX_CLAIMS = 80
 GLOBAL_EVIDENCE_MAX_INTERFACES = 50
+ORACLE_EVIDENCE_MAX_SECTION_INDEX = 24
+ORACLE_EVIDENCE_MAX_CLAIMS = 18
+ORACLE_EVIDENCE_MAX_EXISTING = 12
+ORACLE_EVIDENCE_MAX_INTERFACES = 12
+ORACLE_EVIDENCE_MAX_MEMORY = 8
 GLOBAL_EVIDENCE_SNIPPET_CHARS = 900
 POLICY_VERSION = 1
 ORACLE_SERVER = "http://127.0.0.1:8765"
@@ -3223,6 +3228,84 @@ def _global_evidence_for_state(state: DistillState) -> dict[str, Any]:
     return pack
 
 
+def _oracle_relevant_evidence_pack(
+    global_evidence_pack: dict[str, Any],
+    focused_family: Optional[dict[str, Any]],
+    targets: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Compress whole-article evidence into a target-focused Oracle summary."""
+    if not isinstance(global_evidence_pack, dict):
+        return {}
+    target_sections = set(_unique_strings((focused_family or {}).get("target_sections", [])))
+    target_sections.update(
+        str(item.get("section", "")).strip()
+        for item in targets
+        if isinstance(item, dict) and str(item.get("section", "")).strip()
+    )
+
+    def _row_rank(row: Any) -> tuple[int, int, str]:
+        if not isinstance(row, dict):
+            return (0, 0, "")
+        section = str(row.get("section", "")).strip()
+        hit = 1 if section in target_sections else 0
+        score = int(row.get("score", 0) or 0)
+        return (hit, score, section)
+
+    def _trim_rows(key: str, limit: int) -> list[dict[str, Any]]:
+        rows = [row for row in global_evidence_pack.get(key, []) if isinstance(row, dict)]
+        rows.sort(key=_row_rank, reverse=True)
+        return rows[:limit]
+
+    section_index = [row for row in global_evidence_pack.get("section_index", []) if isinstance(row, dict)]
+    section_index.sort(
+        key=lambda row: (
+            1 if str(row.get("section", "")).strip() in target_sections else 0,
+            int(row.get("python_score", 0) or 0),
+            str(row.get("section", "")).strip(),
+        ),
+        reverse=True,
+    )
+
+    theorem_families = []
+    for item in global_evidence_pack.get("source_theorem_families", []) or []:
+        if not isinstance(item, dict):
+            continue
+        theorem_families.append(
+            {
+                "name": str(item.get("name", "")).strip(),
+                "target_sections": _unique_strings(item.get("target_sections", [])),
+                "key_results": _unique_strings(item.get("key_results", []))[:3],
+            }
+        )
+
+    memory_rows = [row for row in global_evidence_pack.get("distillation_memory", []) if isinstance(row, dict)]
+    memory_rows.sort(
+        key=lambda row: (
+            1 if set(_unique_strings(row.get("target_sections", []))) & target_sections else 0,
+            1 if row.get("kind") == "oracle_sidecar" else 0,
+            str(row.get("id", "")),
+        ),
+        reverse=True,
+    )
+
+    return {
+        "terms": _unique_strings(global_evidence_pack.get("terms", []))[:20],
+        "focused_target_sections": sorted(target_sections),
+        "source_theorem_families": theorem_families[:8],
+        "section_index": section_index[:ORACLE_EVIDENCE_MAX_SECTION_INDEX],
+        "high_signal_claims": _trim_rows("high_signal_claims", ORACLE_EVIDENCE_MAX_CLAIMS),
+        "existing_distillation_claims": _trim_rows(
+            "existing_distillation_claims",
+            ORACLE_EVIDENCE_MAX_EXISTING,
+        ),
+        "frontier_interfaces": _trim_rows(
+            "frontier_interfaces",
+            ORACLE_EVIDENCE_MAX_INTERFACES,
+        ),
+        "distillation_memory": memory_rows[:ORACLE_EVIDENCE_MAX_MEMORY],
+    }
+
+
 def _semantic_scan(
     state: DistillState,
     raw_research: dict[str, Any],
@@ -4302,6 +4385,11 @@ def _oracle_deepening_research(
         "target_sections": payload.get("primary_targets", []),
     }
     blocked = _read_artifact_json_or_none(state, "blocked.json") or {}
+    oracle_global_evidence_pack = _oracle_relevant_evidence_pack(
+        global_evidence_pack,
+        focused_family,
+        targets,
+    )
     base_prompt = _load_prompt("oracle_deepening").format(
         mathematician=state.name,
         current_datetime=datetime.now().astimezone().isoformat(timespec="seconds"),
@@ -4312,7 +4400,7 @@ def _oracle_deepening_research(
         payload=_json_block(payload),
         targets=_json_block(targets),
         section_contexts=section_contexts,
-        global_evidence_pack=_json_block(global_evidence_pack),
+        global_evidence_pack=_json_block(oracle_global_evidence_pack),
         prior_feedback=prior_feedback_block or "none",
         blocked_context=_json_block(blocked),
         completed_families=", ".join(state.completed_families or ["none"]),
