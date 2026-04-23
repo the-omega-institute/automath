@@ -1095,3 +1095,4 @@ import Omega.Zeta.Xi2x2SelfdualOffcriticalTemplate
 import Omega.Zeta.CyclicLiftPrimitiveOrbits
 import Omega.Zeta.XiPartitionTailMinScaleLowerBound
 import Omega.Zeta.XiIntegratedDefectSingleRadiusExclusionBand
+import Omega.Zeta.XiReplicaSoftcoreExceptionalBlockInverseIntegralClosed
