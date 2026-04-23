@@ -150,6 +150,7 @@ import Omega.Zeta.XiQuadraticTransportGlobalEvenParity
 import Omega.Zeta.XiTerminalZmJgSignedPermutationRepresentation
 import Omega.Zeta.XiCayleyDilationMobiusConjugacyFixedpoints
 import Omega.Zeta.XiCayleyTauConjugacyLogdiff
+import Omega.Zeta.XiCayleyScalingNoFiniteInteriorInvariantSet
 import Omega.Zeta.CauchyPoissonSixthSignatureNegativityRigidity
 import Omega.Zeta.XiCdimKolmResidualGap
 import Omega.Zeta.XiCdimSpectrumCompleteness
@@ -263,6 +264,7 @@ import Omega.Zeta.XiTimePart72aZeroSpectrumMaximalOddDivisibilityCompression
 import Omega.Zeta.XiIntegerEllipseModKernelSpectrumPrimewiseUnordered
 import Omega.Zeta.XiTimeMinDelayMinStates
 import Omega.Zeta.XiLogphiTimeRigidity
+import Omega.Zeta.XiScalingMutualEnergyConservationSelfenergyDissipation
 import Omega.Zeta.XiTimeResolutionGaloisAdjunction
 import Omega.Zeta.XiTimeCentralExtensionUniversal
 import Omega.Zeta.AuditedEvenFirstCapacityKinkFibonacciJump
