@@ -276,6 +276,7 @@ import Omega.Folding.PhiMParry
 import Omega.Folding.FoldResonanceLucasNearResonanceGap
 import Omega.Folding.FoldResonanceLadderFibonacciDirectionalLimit
 import Omega.Folding.FoldResonanceLadderFibLucLimits
+import Omega.Folding.FoldResonanceLadderNoDecayNoLimit
 import Omega.Folding.FoldResonanceMinGapGlobalLower
 import Omega.Folding.FoldResonanceTruncationError
 import Omega.Folding.FoldBinDigitDP

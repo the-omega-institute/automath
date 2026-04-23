@@ -685,6 +685,7 @@ import Omega.Zeta.RealInput40Arity2dRigidityN3
 import Omega.Zeta.RealInput40BartholdiEscapeInitialForms
 import Omega.Zeta.RealInput40GeodesicDet
 import Omega.Zeta.RealInput40GeodesicEntropy
+import Omega.Zeta.RealInput40LogMInfty
 import Omega.Zeta.RealInput40GeodesicMertens
 import Omega.Zeta.RealInput40GeodesicRamanujanMargin
 import Omega.Zeta.RealInput40DetUv2plus8
