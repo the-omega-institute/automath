@@ -62,6 +62,18 @@ MANUAL_RESULT_ORDINAL_RE = re.compile(
     r"|\bnr\s*=\s*[0-9]+",
     re.IGNORECASE,
 )
+SECTIONING_COMMAND_RE = re.compile(
+    r"\\(?:part|chapter|section|subsection|subsubsection|paragraph|subparagraph)\*?\{"
+)
+CJK_RE = re.compile(r"[\u3400-\u9fff]")
+KILLO_GOLDEN_TRACE_RE = re.compile(
+    r"(?:"
+    r"\u65b0\u589e|\u8865\u5145|\u672c\u6b21|\u672c\u8f6e|\u4e0a\u4e00\u8f6e|"
+    r"\u4fee\u6539\u8bb0\u5f55|\u52a0\u5165\u5982\u4e0b|"
+    r"(?:\u7ed3\u8bba|\u95ed\u73af)\s*[A-Z0-9\u4e00-\u9fff]+\s*[:\uff1a]|"
+    r"\b20[0-9]{2}[-/][0-9]{1,2}[-/][0-9]{1,2}\b"
+    r")"
+)
 
 STAGE_ORDER = ["R", "S", "G", "W", "E", "DONE"]
 
@@ -71,8 +83,8 @@ MAX_W_ROUNDS = 5          # max writeback generation + review rounds
 MAX_DEEP_ROUNDS = 2       # max A-DEEP style escalation rounds per W cycle
 MIN_NEW_CLAIMS = 1        # anti-fake: minimum new theorem/lemma/etc labels
 MIN_CONTENT_DELTA = 200   # anti-fake: minimum chars of new claim content
-WRITEBACK_LINE_LIMIT = 750
-WRITEBACK_TARGET_LINE_HEADROOM = 120
+WRITEBACK_LINE_LIMIT = 600
+WRITEBACK_TARGET_LINE_HEADROOM = 40
 PYTHON_SCAN_MATCH_THRESHOLD = 0.15
 SEMANTIC_SCAN_CANDIDATES = 12
 SEMANTIC_SCAN_CONTEXT_CHARS = 4500
@@ -3724,9 +3736,22 @@ def _validate_writebacks(
         labels.add(label)
         if "\\documentclass" in content or "\\begin{document}" in content:
             errors.append(f"Item {index} contains document-level LaTeX")
+        if SECTIONING_COMMAND_RE.search(content):
+            errors.append(
+                f"Item {index} opens a sectioning command; integrate into an existing concrete section instead"
+            )
         if "\\endinput" in content:
             errors.append(
                 f"Item {index} emits \\endinput; the application planner handles insertion before it"
+            )
+        if not CJK_RE.search(content):
+            errors.append(
+                f"Item {index} is not written as Chinese main-paper academic prose"
+            )
+        trace = KILLO_GOLDEN_TRACE_RE.search(content)
+        if trace:
+            errors.append(
+                f"Item {index} contains visible patch/log wording forbidden by killo-golden: {trace.group(0)}"
             )
         ordinal = MANUAL_RESULT_ORDINAL_RE.search(content)
         if ordinal:
