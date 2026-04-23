@@ -69,6 +69,7 @@ import Omega.GU.GodelEllipsoidVolume
 import Omega.GU.GodelLorentzAlgebraization
 import Omega.GU.GutLeyangRhFieldDecoupling
 import Omega.GU.GutCriticalLogLiftsTranscendental
+import Omega.GU.GutFibprimeDiscMinus15Criterion
 import Omega.GU.HeckeE4ThreePrimeRefutation
 import Omega.GU.GroupJGBoundaryPrimorialEllipseBound
 import Omega.GU.GroupJGDyadicBoundaryGodelEllipseIllconditioning
