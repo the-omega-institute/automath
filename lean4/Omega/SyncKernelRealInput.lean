@@ -15,4 +15,5 @@ import Omega.SyncKernelRealInput.RealInputDefectEntropy
 import Omega.SyncKernelRealInput.RealInput40NonresetPrimesThin
 import Omega.SyncKernelRealInput.RealInput40PrimitiveOrbitsMobiusSqrt
 import Omega.SyncKernelRealInput.WittDepthLineConvolution
+import Omega.SyncKernelRealInput.RealInput40ZetaUvSqrtvEigs
 import Omega.SyncKernelRealInput.RealInput40NearCoboundarySVP

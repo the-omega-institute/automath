@@ -197,6 +197,7 @@ import Omega.SyncKernelWeighted.WittRootOfUnityCommonPadicLimit
 import Omega.SyncKernelWeighted.WittUnitRootLimit
 import Omega.SyncKernelWeighted.WittDworkSupercongruenceMinusOne
 import Omega.SyncKernelWeighted.WittRenormMonoid
+import Omega.SyncKernelWeighted.WittBridgeFunctorial
 import Omega.SyncKernelWeighted.ZeroInjectionValuePreserving
 import Omega.SyncKernelWeighted.TracePalindrome
 import Omega.SyncKernelWeighted.EvenEdgeworthC4
