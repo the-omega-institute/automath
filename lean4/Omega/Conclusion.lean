@@ -88,6 +88,7 @@ import Omega.Conclusion.CapacityMajorizationExtremizers
 import Omega.Conclusion.JGGodelLoglatticeApproximation
 import Omega.Conclusion.FiniteFiberNaturalExtensionRightShiftInsertion
 import Omega.Conclusion.FiberFixedDiameterMultiplicityExtremals
+import Omega.Conclusion.FiniteDefectRankVsMacroscopicToeplitzAuditScaleSplitting
 import Omega.Conclusion.CapacityMajorizationSchurHardness
 import Omega.Conclusion.CapacityRamanujanPlateauLaw
 import Omega.Conclusion.CanonicalDynamicPrimeRegisterAsymptoticOptimality
@@ -211,6 +212,7 @@ import Omega.Conclusion.ExclusionRadiusTailAffineRecovery
 import Omega.Conclusion.ExtPiKernelPoset
 import Omega.Conclusion.ExternalBudgetTensorEntropyRate
 import Omega.Conclusion.GodelOrbitIdentifiability
+import Omega.Conclusion.PrimeRegisterGodelHistoryExpectedLiminf
 import Omega.Conclusion.GodelOrbitExtremeSmoothness
 import Omega.Conclusion.F2BinomialBasisFromDeltaNilpotent
 import Omega.Conclusion.ScreenEntropyAuditIdentity
