@@ -5029,7 +5029,7 @@ def _registry_entry(state: DistillState) -> dict[str, Any]:
     payload = _read_artifact_json(state, "generated_payload.json")
     writebacks_path = _artifact_path(state, "writebacks.json")
     writebacks = read_json(writebacks_path) if writebacks_path.exists() else {}
-    source_slug = (
+    source_slug = _slugify(
         payload.get("knowledge_payload", {}).get("source_slug")
         or _slugify(state.name)
     )
@@ -5082,6 +5082,54 @@ def _registry_entry(state: DistillState) -> dict[str, Any]:
     }
 
 
+def _merge_unique_sequence(left: Any, right: Any) -> list[Any]:
+    """Merge two JSON lists while preserving first-seen order."""
+    merged = []
+    seen = set()
+    for item in (left or []) + (right or []):
+        key = json.dumps(item, ensure_ascii=False, sort_keys=True, default=str)
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(item)
+    return merged
+
+
+def _merge_registry_entries(existing: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
+    """Merge repeated registrations for the same normalized source slug."""
+    merged = dict(existing)
+    merged["source_slug"] = _slugify(
+        incoming.get("source_slug") or existing.get("source_slug") or ""
+    )
+    original_date = existing.get("date_created")
+    if original_date:
+        merged["date_created"] = original_date
+    elif incoming.get("date_created"):
+        merged["date_created"] = incoming["date_created"]
+
+    for key in ("source_type", "integration_mode"):
+        left = str(existing.get(key, "")).strip()
+        right = str(incoming.get(key, "")).strip()
+        if left and right and left != right:
+            merged[key] = "+".join(_merge_unique_sequence([left], [right]))
+        else:
+            merged[key] = right or left
+
+    if existing.get("primary_note") and incoming.get("primary_note"):
+        notes = _merge_unique_sequence(
+            existing.get("primary_notes") or [existing.get("primary_note")],
+            incoming.get("primary_notes") or [incoming.get("primary_note")],
+        )
+        merged["primary_note"] = notes[0]
+        merged["primary_notes"] = notes
+    else:
+        merged["primary_note"] = incoming.get("primary_note") or existing.get("primary_note", "")
+
+    for key in ("primary_targets", "integrated_writebacks", "expansion_queue"):
+        merged[key] = _merge_unique_sequence(existing.get(key, []), incoming.get(key, []))
+    return merged
+
+
 def _read_registry() -> list[dict[str, Any]]:
     """Read the knowledge backflow registry as a list of entries."""
     if not REGISTRY_PATH.exists():
@@ -5094,15 +5142,17 @@ def _read_registry() -> list[dict[str, Any]]:
 
 def _update_registry(entry: dict[str, Any]) -> list[dict[str, Any]]:
     """Replace or append one entry in the knowledge backflow registry."""
+    entry = dict(entry)
+    entry["source_slug"] = _slugify(entry.get("source_slug", ""))
     registry = _read_registry()
     output = []
     replaced = False
     for existing in registry:
-        if existing.get("source_slug") == entry["source_slug"]:
-            original_date = existing.get("date_created")
-            if original_date:
-                entry["date_created"] = original_date
-            output.append(entry)
+        existing_slug = _slugify(str(existing.get("source_slug", "")))
+        existing = dict(existing)
+        existing["source_slug"] = existing_slug
+        if existing_slug == entry["source_slug"]:
+            output.append(_merge_registry_entries(existing, entry))
             replaced = True
         else:
             output.append(existing)
