@@ -64,9 +64,9 @@ private theorem xi_chain_interior_incidence_algebra_mobius_inversion_local
         have hSins : S ⊆ insert a T := by
           intro x hx
           exact Finset.mem_insert_of_mem (hST hx)
+        have hcard_le : S.card ≤ T.card := Finset.card_le_card hST
         have hcard :
             (insert a T).card - S.card = (T.card - S.card) + 1 := by
-          have hcard_le : S.card ≤ T.card := Finset.card_le_card hST
           rw [Finset.card_insert_of_notMem ha]
           omega
         rw [booleanIntervalSign, booleanIntervalSign, if_pos hSins, if_pos hST, hcard, pow_succ]
@@ -108,7 +108,8 @@ private theorem xi_chain_interior_incidence_algebra_mobius_inversion_local
         rw [← Finset.sum_add_distrib]
         refine Finset.sum_congr rfl ?_
         intro S hS
-        simp_rw [g', hsign_without S (Finset.mem_powerset.mp hS), hsign_with S (Finset.mem_powerset.mp hS)]
+        dsimp [g']
+        rw [hsign_without S (Finset.mem_powerset.mp hS), hsign_with S (Finset.mem_powerset.mp hS)]
         ring
       calc
         f (insert a T) = f' T := by rfl
