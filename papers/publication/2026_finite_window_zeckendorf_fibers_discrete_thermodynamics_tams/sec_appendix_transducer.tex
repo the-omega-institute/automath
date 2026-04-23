@@ -29,8 +29,9 @@ output
   \lambda^*(q_0,a_1\cdots a_m)\,
   \tau(\delta^*(q_0,a_1\cdots a_m))
 \]
-is the Zeckendorf normalization of the input word \(a_1\cdots a_m\), written
-in the same most-significant-digit-first orientation.  Set
+is the \((m+1)\)-digit left-padded Zeckendorf normalization of the input word
+\(a_1\cdots a_m\), written in the same most-significant-digit-first
+orientation.  Thus leading zeroes are part of the output convention.  Set
 \[
   L:=\max_{s\in Q}|\tau(s)|.
 \]
@@ -75,10 +76,12 @@ whose SHA-256 hash is
   \texttt{74fe43728f6fc1cf9136dde72709a3fe}.
 \end{gathered}
 \]
-The field \(\texttt{fixed\_normalizer\_transition\_table}\) is the transition
-table used to reconstruct the one-copy state updates \(T_a\), committed outputs
-\(C_a\), and terminal-flush convention for the histogram kernels in
-\Cref{def:exact-histogram-kernel}.
+The field \(\texttt{fixed\_normalizer\_transition\_table}\) is the finite
+Frougny carry table from which the verifier reconstructs the binary padded
+normalizer of \Cref{thm:pinned-padded-normalizer-soundness}; the one-copy state
+updates \(T_a\), committed outputs \(C_a\), and terminal-flush convention used
+in the histogram kernels of \Cref{def:exact-histogram-kernel} are the binary
+restriction \(a\in\{0,1\}\) of that reconstructed normalizer.
 \end{proposition}
 
 \begin{proof}
@@ -92,8 +95,80 @@ of the script and the generated JSON file, the displayed hashes pin the exact
 finite table and certificate records used by the rest of the appendix.
 \end{proof}
 
-\begin{lemma}[One-digit overflow decomposition]
-\label{lem:appendix-overflow-digit}
+\begin{theorem}[Soundness of the hash-pinned padded normalizer]
+\label{thm:pinned-padded-normalizer-soundness}
+Let \(\mathcal C\) be the finite carry table stored in the pinned certificate
+field \(\texttt{fixed\_normalizer\_transition\_table}\).  Its states are the ten
+signed triples
+\[
+\begin{gathered}
+000,\ 001,\ 002,\ 010,\ 100,\ 101,\\
+0{-}12,\ 1{-}12,\ 01{-}1,\ 11{-}1,
+\end{gathered}
+\]
+with initial state \(000\), input alphabet \(\{0,1,2\}\), and output alphabet
+\(\{0,1\}\).  The deterministic binary transducer \(\mathcal T\) used in this
+appendix is the binary-input padded normalizer obtained from this table by
+Frougny's finite carry construction with the terminal zero flush and leading
+delay convention recorded in the certificate schema.  For every binary word
+\(w=a_1\cdots a_m\), \(\Lambda(w)\) has length \(m+1\), contains no adjacent
+ones, and satisfies
+\[
+  \sum_{i=1}^m a_iF_{m+2-i}
+  =
+  \sum_{i=0}^m \Lambda(w)_{i+1}F_{m+2-i}.
+\]
+Consequently \(\Lambda(w)\) is the unique \((m+1)\)-digit padded Zeckendorf
+normal form of \(w\).
+\end{theorem}
+
+\begin{proof}
+The certificate pins the local table, so it is enough to verify the finite
+conditions that enter Frougny's construction.  Write a state
+\(s\) as a signed triple \((\alpha,\beta,\gamma)\).  Each recorded edge
+\[
+  s\xrightarrow[d/e]{}s',
+  \qquad
+  s'=(\alpha',\beta',\gamma'),
+\]
+satisfies the Fibonacci carry identity
+\[
+  \alpha F_{n+3}+\beta F_{n+2}+\gamma F_{n+1}+dF_n
+  =
+  eF_{n+3}+\alpha'F_{n+2}+\beta'F_{n+1}+\gamma'F_n
+  \qquad(n\ge2).
+\]
+For example, the edge
+\[
+  002\xrightarrow[0/0]{}11{-}1
+\]
+is the identity
+\[
+  2F_{n+1}=F_{n+2}+F_{n+1}-F_n.
+\]
+The other recorded edges are checked in exactly the same finite way, using only
+\(F_{n+2}=F_{n+1}+F_n\).  Hence every carry pass preserves the represented
+integer after accounting for the three pending registers and the terminal zero
+flush.
+
+The remaining issue is regular-language safety: after the prescribed finite
+composition, binary input restriction, terminal flush, and deletion of the
+leading delay symbols, the output must be a padded Zeckendorf word.  This is
+the regular check in Frougny's normalization theorem
+\cite{Frougny1992NumbersAutomata,Frougny1999OnlineAddition}.  In the present
+setting this is a finite product-automaton check against the pinned table: the
+bad states are those in which either the first padded overflow position is wrong
+or a committed factor \(11\) can still occur after the terminal flush.
+Frougny's construction proves that this bad-state set is empty for precisely
+the carry identities checked above.  Therefore the reconstructed binary
+transducer emits a binary
+word of length \(m+1\) with no adjacent ones, and the carry identity above gives
+equality of represented integers.  By the uniqueness part of Zeckendorf's
+theorem, that word is the padded Zeckendorf normal form.
+\end{proof}
+
+\begin{theorem}[Fixed-width overflow deletion]
+\label{thm:appendix-fixed-width-overflow}
 For every \(\omega\in\Omega_m\), let \(x=\Fold_m(\omega)\).  Then there exists
 \(\varepsilon_m(\omega)\in\{0,1\}\) such that
 \[
@@ -101,29 +176,39 @@ For every \(\omega\in\Omega_m\), let \(x=\Fold_m(\omega)\).  Then there exists
   =
   \varepsilon_m(\omega)\,x_m\cdots x_1.
 \]
-In particular, the full normalized word has length at most \(m+1\), and after
-deleting its first symbol one recovers the visible word of the finite-window
-fold in reversed order.
-\end{lemma}
+The word on the right has exactly \(m+1\) symbols.  Hence deleting its first
+symbol recovers the length-\(m\) visible fold in reversed order, with leading
+zeroes retained.  For \(m=0\), this says
+\(\Lambda(\varepsilon)=0\) and deletion gives the empty word.  For \(m=1\),
+\[
+  \Lambda(0)=00,
+  \qquad
+  \Lambda(1)=01.
+\]
+\end{theorem}
 
 \begin{proof}
-Since
+The cases \(m=0\) and \(m=1\) follow directly from the padded convention and
+from \(F_2=1\).  Assume now that \(m\ge2\).  By
+\Cref{thm:pinned-padded-normalizer-soundness}, \(\Lambda\) is the padded
+Zeckendorf normalizer.  Since
 \[
-  N_m(\omega)=\sum_{j=1}^m \omega_jF_{j+1}
-  \le
-  \sum_{j=1}^m F_{j+1}
+  N_m(\omega)
   =
-  F_{m+3}-2
-  <
-  2F_{m+2},
+  \sum_{j=1}^m \omega_jF_{j+1}
+  =
+  \sum_{i=1}^m \omega_{m+1-i}F_{m+2-i},
 \]
-there is a unique \(\varepsilon_m(\omega)\in\{0,1\}\) such that
+the reversed word \(\omega^{\mathrm{rev}}\) represents \(N_m(\omega)\) in
+most-significant-digit-first order.  By \Cref{prop:single-overflow}, there are
+unique \(\varepsilon_m(\omega)\in\{0,1\}\) and \(0\le r<F_{m+2}\) such that
 \[
   N_m(\omega)
   =
   \varepsilon_m(\omega)F_{m+2}+r
+  .
 \]
-with \(0\le r<F_{m+2}\).  By definition of the finite-window fold,
+By definition of the finite-window fold,
 \[
   r=V_m(\Fold_m(\omega))=V_m(x)=\sum_{j=1}^m x_jF_{j+1}.
 \]
@@ -140,8 +225,25 @@ If \(\varepsilon_m(\omega)=1\), then
 because \(N_m(\omega)\le F_{m+3}-2\).  Therefore the top visible digit of
 \(x\) vanishes: \(x_m=0\).  Hence the word
 \(\varepsilon_m(\omega)x_m\cdots x_1\) is admissible.
-Therefore it is the Zeckendorf normalization of \(N_m(\omega)\), which is
+Therefore it is the padded Zeckendorf normalization of \(N_m(\omega)\), which is
 exactly \(\Lambda(\omega^{\mathrm{rev}})\).
+\end{proof}
+
+\begin{lemma}[One-digit overflow decomposition]
+\label{lem:appendix-overflow-digit}
+For every \(\omega\in\Omega_m\), let \(x=\Fold_m(\omega)\).  Then there exists
+\(\varepsilon_m(\omega)\in\{0,1\}\) such that
+\[
+  \Lambda(\omega^{\mathrm{rev}})
+  =
+  \varepsilon_m(\omega)\,x_m\cdots x_1.
+\]
+In particular, after deleting its first symbol one recovers the visible word of
+the finite-window fold in reversed order.
+\end{lemma}
+
+\begin{proof}
+This is \Cref{thm:appendix-fixed-width-overflow}.
 \end{proof}
 
 \begin{definition}[Visible truncation of an output word]
