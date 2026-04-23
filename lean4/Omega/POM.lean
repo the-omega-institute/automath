@@ -73,6 +73,7 @@ import Omega.POM.BivariateMomentZetaFredholm
 import Omega.POM.BivariateSystemIdentificationFiniteWindow
 import Omega.POM.RecurrenceCodeViolationDistance
 import Omega.POM.ReverseKlBoundByDispersion
+import Omega.POM.FoldReverseKlControlledByGenus2Partition
 import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.BooleanCircuitProjectionBudget
 import Omega.POM.BoundedPerturbationInvariance
