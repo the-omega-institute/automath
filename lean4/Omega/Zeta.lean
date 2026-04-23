@@ -58,6 +58,7 @@ import Omega.Zeta.XiCompletenessAuditableDecomposition
 import Omega.Zeta.XiLocalExteriorBoxLoewnerTomographyInversion
 import Omega.Zeta.XiEndpointHeatProbeCyclotomicComplementRadius
 import Omega.Zeta.XiEndpointHeatProbeToeplitzHerglotzIdentity
+import Omega.Zeta.XiEndpointSingleDefectWeightedKlLi2
 import Omega.Zeta.XiEndpointHeatProbePowerlawLeading
 import Omega.Zeta.XiTimePart76SmithSurjectiveModuliPrimeSieve
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
