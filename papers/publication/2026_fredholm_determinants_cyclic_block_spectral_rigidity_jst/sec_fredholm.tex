@@ -293,6 +293,103 @@ in \Cref{lem:cyclic-sum-range-closure}, and every
 optimality statement in this subsection is a statement about
 \(\mathsf S(L)\).
 
+\begin{proposition}[Sharp trace-norm budget for cyclic zero divisors]
+  \label{prop:sharp-trace-budget-support-obstruction}
+  Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) be a countable
+  family with \(n_j,m_j\in\NN\) and
+  \(\beta_j\in\CC\setminus\{0\}\). Choose roots
+  \(\alpha_j^{n_j}=\beta_j\), and let
+  \[
+    \Lambda_{\mathcal D}
+    :=
+    \bigl\{\!\bigl\{\alpha_j\omega:
+      j\in J,\ \omega^{n_j}=1,\text{ repeated }m_j\text{ times}
+    \bigr\}\!\bigr\}
+  \]
+  be the prescribed non-zero spectral multiset, with multiplicities added
+  when the same complex number occurs more than once.
+
+  Suppose \(L\in\sone(H)\) is normal and its non-zero spectrum, counted
+  with algebraic multiplicity, is exactly \(\Lambda_{\mathcal D}\). Then
+  the trace-norm budget is forced:
+  \[
+    \|L\|_1
+    =
+    \sum_{\lambda\in\Lambda_{\mathcal D}}\abs{\lambda}
+    =
+    \sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}
+    <\infty .
+  \]
+  Moreover
+  \[
+    \dim \mathsf S(L)=\sum_{j\in J}m_jn_j,
+  \]
+  as a Hilbert-space dimension. If \(J\) is infinite, then the algebraic
+  range is a proper dense subspace of its closed support:
+  \[
+    \mathrm{ran}(L)\subsetneq \mathsf S(L)
+    =\overline{\mathrm{ran}(L)} .
+  \]
+  Conversely, when the displayed budget is finite, the cyclic direct sum
+  \(L_{\mathcal D}\) constructed in
+  \Cref{thm:cyclic-fredholm-realisation} attains exactly this trace norm
+  and this closed support.
+\end{proposition}
+
+\begin{proof}
+  Since \(L\) is compact and normal, the spectral theorem diagonalizes it
+  on the orthogonal sum of its non-zero eigenspaces and its kernel. For a
+  normal trace-class operator, the trace norm is the sum of the moduli of
+  the non-zero eigenvalues, counted with multiplicity. Therefore
+  \[
+    \|L\|_1
+    =\sum_{\lambda\in\spec(L)\setminus\{0\}}
+      \abs{\lambda}\,\dim\ker(L-\lambda I).
+  \]
+  By the assumed cyclic zero divisor, this is the sum over the multiset
+  \(\Lambda_{\mathcal D}\). Each \(j\)-th cyclic factor contributes
+  \(n_j\) eigenvalues of modulus
+  \(\abs{\alpha_j}=\abs{\beta_j}^{1/n_j}\), each repeated \(m_j\) times.
+  Hence
+  \[
+    \sum_{\lambda\in\Lambda_{\mathcal D}}\abs{\lambda}
+    =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}.
+  \]
+  The left side is \(\|L\|_1<\infty\), so the budget is necessary.
+
+  The closed support \(\mathsf S(L)\) is the Hilbert direct sum of the
+  non-zero eigenspaces. Its dimension is therefore the total multiplicity
+  of \(\Lambda_{\mathcal D}\), namely
+  \[
+    \sum_{\lambda\in\Lambda_{\mathcal D}}1
+    =\sum_{j\in J}m_jn_j,
+  \]
+  with the same convention that multiplicities are counted. This remains
+  true when different cyclic factors contribute the same eigenvalue,
+  because the eigenspace dimension is the sum of the corresponding
+  algebraic multiplicities.
+
+  By \Cref{lem:normal-support-range-closure},
+  \(\overline{\mathrm{ran}(L)}=\mathsf S(L)\). If \(J\) is infinite, then
+  the multiset \(\Lambda_{\mathcal D}\) is infinite and the trace-class
+  condition just proved forces its elements to have moduli tending to
+  \(0\). Choose an orthonormal sequence of eigenvectors \(e_r\) with
+  eigenvalues \(\lambda_r\ne0\) and \(\lambda_r\to0\). The closed range
+  theorem would give a constant \(c>0\) with
+  \(\norm{Lx}\ge c\norm{x}\) for all
+  \(x\in(\ker L)^\perp=\mathsf S(L)\) if \(\mathrm{ran}(L)\) were closed.
+  Applying this to \(e_r\) gives \(\abs{\lambda_r}\ge c\), a
+  contradiction. Thus the algebraic range is not closed. Since its closure
+  is \(\mathsf S(L)\), it is a proper dense subspace of that support.
+
+  Finally assume
+  \(\sum_jm_jn_j\abs{\beta_j}^{1/n_j}<\infty\). The block sum
+  \(L_{\mathcal D}\) is trace-class by
+  \Cref{lem:cyclic-product-trace-norm-limit}. Its blocks have exactly the
+  multiset \(\Lambda_{\mathcal D}\), so the equalities above give both the
+  asserted trace norm and the asserted closed support.
+\end{proof}
+
 \begin{theorem}[Positive-exponent cyclic-block determinant and closed-support optimality]
   \label{thm:cyclic-fredholm-realisation}
   \leanverified{paper_fredholm_witt_cyclic_block_characterization}
@@ -417,7 +514,10 @@ optimality statement in this subsection is a statement about
   attached to the chosen Euler data \(\mathcal D\); distinct but
   equivalent factorizations of the same Euler product produce the same
   collapsed spectral multiset and therefore unitarily equivalent normal
-  models.
+  models. Equivalently, the determinant prescribes a sharp trace-class
+  budget: in the normal category, any realization with this cyclic zero
+  divisor must satisfy the budget and support conclusions of
+  \Cref{prop:sharp-trace-budget-support-obstruction}.
 \end{theorem}
 
 \begin{proof}
@@ -782,19 +882,16 @@ closure is the support invariant \(\mathsf S(L_{\mathcal D})\).
 
 \begin{remark}[Sharpness of the summability condition]
   \label{rem:summability-sharpness}
-  \Cref{thm:cyclic-fredholm-realisation} and
-  \Cref{thm:block-cyclic-rigidity}
-  show that
+  \Cref{prop:sharp-trace-budget-support-obstruction},
+  \Cref{thm:cyclic-fredholm-realisation}, and
+  \Cref{thm:block-cyclic-rigidity} show that
   \[
     \sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}<\infty
   \]
   is exactly the criterion for trace-class normal realizability of the
-  prescribed Euler data. Thus, within the normal category, the
-  summability hypothesis is not merely sufficient but necessary. This
-  sharpness concerns the cyclic-block normal model treated here.
-  Whether the same Euler product can admit a trace-class realization
-  under strictly weaker hypotheses in a different operator model is left
-  open.
+  prescribed Euler data, and that the resulting closed support is forced.
+  Thus, within the normal category, the summability hypothesis is not
+  merely sufficient but necessary.
 \end{remark}
 
 \begin{remark}[Choice of roots]\label{rem:choice-of-roots}
