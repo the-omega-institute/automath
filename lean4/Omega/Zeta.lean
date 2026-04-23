@@ -919,6 +919,8 @@ import Omega.Zeta.XiWindow6B3C3TightFrameFourthMomentNonsimilarity
 import Omega.Zeta.XiWindow6C3HammingRootLengthSplit
 import Omega.Zeta.XiWindow6C3QuadraticEnergyEquipartition
 import Omega.Zeta.XiWindow6C3NoNonzeroLinearInvariant
+import Omega.Zeta.XiWindow6TailSemigroupCongruenceInvolution
+import Omega.Zeta.XiWindow6TailSemigroupAperyFirstMoment
 import Omega.Zeta.XiWindow6TailSemigroupAperyThresholds
 import Omega.Zeta.XiWindow6DimensionReachabilityCongruenceUnion
 import Omega.Zeta.XiWindow6TailSemigroupFrobeniusThreshold
