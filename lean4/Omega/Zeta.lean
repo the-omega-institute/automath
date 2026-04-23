@@ -201,6 +201,7 @@ import Omega.Zeta.XiTimePart9zoFibonacciCosineZerosWeylLaw
 import Omega.Zeta.XiTimePart9zoaZeroBlockMaxfiberImpotence
 import Omega.Zeta.XiTimePart9zoStarPerronDegreeQuadratic
 import Omega.Zeta.XiTimePart9gcResolutionTowerHaarLimit
+import Omega.Zeta.XiTimePart9mFixedFrequencyCollisionCertificateFails
 import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne
 import Omega.Zeta.XiTimePart9xcSerrinCongruenceDiracLengthOne
 import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
