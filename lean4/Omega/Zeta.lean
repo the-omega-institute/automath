@@ -151,6 +151,7 @@ import Omega.Zeta.XiTerminalZmJgSignedPermutationRepresentation
 import Omega.Zeta.XiCayleyDilationMobiusConjugacyFixedpoints
 import Omega.Zeta.XiCayleyTauConjugacyLogdiff
 import Omega.Zeta.XiCayleyScalingNoFiniteInteriorInvariantSet
+import Omega.Zeta.XiSatakeTraceEllipseTemperedSegment
 import Omega.Zeta.CauchyPoissonSixthSignatureNegativityRigidity
 import Omega.Zeta.XiCdimKolmResidualGap
 import Omega.Zeta.XiCdimSpectrumCompleteness
