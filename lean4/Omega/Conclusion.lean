@@ -99,6 +99,7 @@ import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
 import Omega.Conclusion.CanonicalSliceExactFixedpointCount
 import Omega.Conclusion.M2Level3CanonicalPushforwardWithXi
 import Omega.Conclusion.CapacityFiniteCompleteness
+import Omega.Conclusion.M2Level3SteinbergLocalSystemInertiaSpectra
 import Omega.Conclusion.CapacityDeficitMellinBernsteinCompletion
 import Omega.Conclusion.CapacityCurveOrderHolographyUniversality
 import Omega.Conclusion.C6JacobianNotSimple
