@@ -379,6 +379,7 @@ import Omega.Folding.FoldLocalRewritePrimeCertificateBitInflation
 import Omega.Folding.FoldLogMultiplicityPressureDerivative
 import Omega.Folding.FoldMaxFiberFourier
 import Omega.Folding.FoldMaxFiberConstantBias
+import Omega.Folding.FoldMaxFiberBiasResonanceLadder
 import Omega.Folding.FoldMultiplicityEnergy
 import Omega.Folding.FoldMultiplicityGroupAlgebra
 import Omega.Folding.FoldMultiplicityGroupAlgebraSelfReciprocal

@@ -1067,6 +1067,7 @@ import Omega.Zeta.LogMDerivativeResolvent
 import Omega.Zeta.XiGoldenW1TrueTwoPhaseLimit
 import Omega.Zeta.XiJacobiGershgorinSupportGuardrail
 import Omega.Zeta.XiComovingJensenDefectKernelDecomposition
+import Omega.Zeta.XiSingularRingJensenIdentityDefect
 import Omega.Zeta.XiStieltjesW1Lipschitz
 import Omega.Zeta.XiChainInteriorBooleanMobiusCharacteristicMaxchains
 import Omega.Zeta.XiBasepointScanL2EnergyPdKernel

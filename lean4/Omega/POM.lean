@@ -451,6 +451,7 @@ import Omega.POM.MaryAuxlengthSeeds
 import Omega.POM.MacroMomentVsMicroPrimeRegisterCertificateSeparation
 import Omega.POM.MassSplittingMomentRoot
 import Omega.POM.MomLiftBeckChevalley
+import Omega.POM.BCFunctorialityCriterion
 import Omega.POM.MaxAtomicWeightParitySecondOrder
 import Omega.POM.MaxFiberEvenChernoffExponent
 import Omega.POM.MaxFiberEvenMajorityVote
