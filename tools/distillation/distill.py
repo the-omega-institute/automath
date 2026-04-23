@@ -84,7 +84,7 @@ MAX_DEEP_ROUNDS = 2       # max A-DEEP style escalation rounds per W cycle
 MIN_NEW_CLAIMS = 1        # anti-fake: minimum new theorem/lemma/etc labels
 MIN_CONTENT_DELTA = 200   # anti-fake: minimum chars of new claim content
 WRITEBACK_LINE_LIMIT = 600
-WRITEBACK_TARGET_LINE_HEADROOM = 40
+WRITEBACK_TARGET_LINE_HEADROOM = 80
 PYTHON_SCAN_MATCH_THRESHOLD = 0.15
 SEMANTIC_SCAN_CANDIDATES = 12
 SEMANTIC_SCAN_CONTEXT_CHARS = 4500
@@ -3595,6 +3595,24 @@ def _choose_writeback_targets(
     return ranked[: max(1, limit)]
 
 
+def _target_file_descriptor(section: str, path: Path) -> dict[str, Any]:
+    """Return a prompt-facing descriptor with the remaining line budget."""
+    rel = path.relative_to(CORE_BODY).as_posix()
+    try:
+        current_lines = len(read_text(path).splitlines())
+    except OSError:
+        current_lines = 0
+    remaining = max(0, WRITEBACK_LINE_LIMIT - 1 - current_lines)
+    return {
+        "section": section,
+        "tex_file": rel,
+        "current_lines": current_lines,
+        "line_limit_exclusive": WRITEBACK_LINE_LIMIT,
+        "remaining_lines_before_gate": remaining,
+        "recommended_total_insert_lines": max(0, remaining - 8),
+    }
+
+
 def _match_candidate_paths(item: dict[str, Any]) -> list[Path]:
     """Collect concrete file candidates from a semantic match row."""
     candidates = []
@@ -3614,31 +3632,25 @@ def _select_section_writeback_targets(
     section: str,
     matches: dict[str, Any],
     limit: int = 1,
-) -> list[dict[str, str]]:
+) -> list[dict[str, Any]]:
     """Select concrete theorem body files for one section slug."""
     for item in matches.get("matches", []):
         if item.get("section") != section:
             continue
         paths = _choose_writeback_targets(_match_candidate_paths(item), item, limit=limit)
         if paths:
-            return [
-                {"section": section, "tex_file": path.relative_to(CORE_BODY).as_posix()}
-                for path in paths
-            ]
+            return [_target_file_descriptor(section, path) for path in paths]
     section_dir = CORE_BODY / section
     if not section_dir.exists():
         return []
     paths = _choose_writeback_targets(sorted(section_dir.rglob("*.tex")), limit=limit)
-    return [
-        {"section": section, "tex_file": path.relative_to(CORE_BODY).as_posix()}
-        for path in paths
-    ]
+    return [_target_file_descriptor(section, path) for path in paths]
 
 
 def _select_target_files(
     payload: dict[str, Any],
     matches: dict[str, Any],
-) -> list[dict[str, str]]:
+) -> list[dict[str, Any]]:
     """Select concrete target `.tex` files for writeback prompting."""
     selected = []
     seen = set()
@@ -3650,7 +3662,7 @@ def _select_target_files(
             path = _resolve_core_tex_path(target)
             if path and path.exists() and not _is_wrapper_tex_file(path):
                 rel = path.relative_to(CORE_BODY).as_posix()
-                selected.append({"section": rel.split("/")[0], "tex_file": rel})
+                selected.append(_target_file_descriptor(rel.split("/")[0], path))
                 seen.add(rel)
                 selected_for_target = True
             continue
@@ -3677,7 +3689,7 @@ def _select_target_files(
     return selected[:8]
 
 
-def _collect_section_contexts(targets: list[dict[str, str]]) -> str:
+def _collect_section_contexts(targets: list[dict[str, Any]]) -> str:
     """Read target LaTeX files and format them as prompt context."""
     chunks = []
     for target in targets:
@@ -3692,7 +3704,7 @@ def _collect_section_contexts(targets: list[dict[str, str]]) -> str:
     return "\n\n".join(chunks)
 
 
-def _dry_writebacks(targets: list[dict[str, str]], name: str) -> list[dict[str, str]]:
+def _dry_writebacks(targets: list[dict[str, Any]], name: str) -> list[dict[str, str]]:
     """Build deterministic writeback proposals for dry-run execution."""
     slug = _slugify(name)
     proposals = []
@@ -4907,6 +4919,14 @@ def run_stage_w(
                 continue
             logger.info("Anti-fake: %s", reason)
 
+        candidate_plan, plan_errors = _plan_writeback_application(writebacks)
+        if plan_errors:
+            feedback = "Application plan failed: " + "; ".join(plan_errors)
+            attempts.append({"attempt": attempt, "plan_errors": plan_errors})
+            state.prior_feedback.append(f"W attempt {attempt}: {feedback}")
+            save_state(state)
+            continue
+
         review = _review_writebacks(
             state,
             writebacks,
@@ -4921,16 +4941,9 @@ def run_stage_w(
         attempts.append({"attempt": attempt, "review": review, "writebacks": writebacks})
 
         if review.get("gate_passed"):
-            plan, plan_errors = _plan_writeback_application(writebacks)
-            if plan_errors:
-                feedback = "Application plan failed: " + "; ".join(plan_errors)
-                attempts[-1]["plan_errors"] = plan_errors
-                state.prior_feedback.append(f"W attempt {attempt}: {feedback}")
-                save_state(state)
-                continue
             accepted_writebacks = writebacks
             accepted_review = review
-            accepted_plan = plan
+            accepted_plan = candidate_plan
             break
 
         # A-DEEP escalation: when both reviewers reject, escalate with
