@@ -993,3 +993,4 @@ import Omega.Zeta.XiAddressabilityCountingObstruction
 import Omega.Zeta.XiPoissonKernelDerivativeL2ClosedForm
 import Omega.Zeta.PhaseLiftSpectralBound
 import Omega.Zeta.XiTerminalZmBranchPuiseuxCoefficientCubic
+import Omega.Zeta.XiTimePart63cFrobeniusExactInversionCycleMoments

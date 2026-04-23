@@ -698,3 +698,4 @@ import Omega.POM.BreakpointCurvatureLawAq
 import Omega.POM.RenyiDimensionNoAlgebraicIrrationality
 import Omega.POM.CoxeterMonodromyCyclotomic
 import Omega.POM.DiagonalRateUniformUniqueMaximizerActive
+import Omega.POM.A4TAdeIntersectionTMinpolyDiscriminant
