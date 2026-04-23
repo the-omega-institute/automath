@@ -105,6 +105,26 @@ theorem paper_fold_computability_halting_no_uniform_w1_learning
     have hpos : 0 < dyadicScale e := dyadicScale_pos e
     linarith
 
+/-- Concrete chapter-local statement for
+`cor:fold-computability-halting-measure-not-w1-computable`. In the present formalization this is
+exactly the already-proved uniform `W₁` learning barrier. -/
+def fold_computability_halting_measure_not_w1_computable_statement : Prop :=
+  ∀ (e q : ℕ) (hq : 0 < q) (approxMoment targetMoment w1 : ℝ),
+    |approxMoment - targetMoment| ≤ powerMomentErrorBound q w1 →
+    w1 ≤ dyadicScale e / (12 * q) →
+    (targetMoment = 0 ∨ dyadicScale (e + 1) ≤ targetMoment) →
+    (haltingW1Threshold e ≤ approxMoment ↔ dyadicScale (e + 1) ≤ targetMoment)
+
+/-- Paper label: `cor:fold-computability-halting-measure-not-w1-computable`. Any hypothetical
+uniform `W₁` approximator at dyadic precision would feed directly into the forbidden learner from
+`paper_fold_computability_halting_no_uniform_w1_learning`. -/
+theorem paper_fold_computability_halting_measure_not_w1_computable :
+    fold_computability_halting_measure_not_w1_computable_statement := by
+  unfold fold_computability_halting_measure_not_w1_computable_statement
+  intro e q hq approxMoment targetMoment w1
+  simpa using
+    paper_fold_computability_halting_no_uniform_w1_learning e q hq approxMoment targetMoment w1
+
 end
 
 end Omega.Folding

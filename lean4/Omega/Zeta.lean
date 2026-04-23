@@ -125,6 +125,7 @@ import Omega.Zeta.XiJDiscriminant2IsogenyVelu
 import Omega.Zeta.XiJSexticHyperellipticBranchPolynomialDiscriminantFactorization
 import Omega.Zeta.XiJGMonicBoundaryReadout
 import Omega.Zeta.XiJGDiscriminantSquareclassInvariance
+import Omega.Zeta.XiTerminalZmJgSignedPermutationRepresentation
 import Omega.Zeta.XiCayleyDilationMobiusConjugacyFixedpoints
 import Omega.Zeta.XiCayleyTauConjugacyLogdiff
 import Omega.Zeta.CauchyPoissonSixthSignatureNegativityRigidity
