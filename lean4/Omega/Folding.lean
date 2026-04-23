@@ -97,6 +97,7 @@ import Omega.Folding.CircleDimension
 import Omega.Folding.CoarsegrainingNaturalityRayleighStokes
 import Omega.Folding.FoldCoarsegrainingGodelLengthSquareArea
 import Omega.Folding.FoldCoarsegrainingCycleRankFromQuadraticBias
+import Omega.Folding.FoldCosineProductEntireRenormalizationZeros
 import Omega.Folding.CoarsegrainingQuadraticStokesAreaRigidity
 import Omega.Folding.CollisionConditionalHammingMgf
 import Omega.Folding.ComponentResiduePressurePadicSaturation
