@@ -127,6 +127,7 @@ import Omega.Conclusion.ZeroMeanResidueTestsCompleteDetection
 import Omega.Conclusion.ValuationIsometryClassification
 import Omega.Conclusion.ValuationMedianGroup
 import Omega.Conclusion.MedianPrimeSupportMinimalRigidity
+import Omega.Conclusion.ModpSingularityForcesGreenBadPrime
 import Omega.Conclusion.NegativeMellinTwoAtomUniqueness
 import Omega.Conclusion.ZeroCosetFixedV2FiniteIntersectionGcd
 import Omega.Conclusion.ZeckendorfResetObservationThreshold
