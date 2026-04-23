@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (macOS)
 // @namespace    omega-automath
-// @version      5.3
+// @version      5.4
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -21,8 +21,8 @@
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
   const MAX_WAIT = 7200000;       // 120 minutes
-  const MIN_REVIEW_LENGTH = 1000; // Real reviews are 3000+ chars; anything below this is garbage
-  const REQUIRE_FOREGROUND_TO_CLAIM = true;
+  const DEFAULT_MIN_RESPONSE_LENGTH = 1000;
+  const REQUIRE_FOREGROUND_TO_CLAIM = false;
 
   // ── Multi-agent: detect agent_id from URL or sessionStorage ──────────
   // Open chatgpt.com/?oracle=1  → agent "oracle_1"
@@ -1160,7 +1160,7 @@
     return false;
   }
 
-  async function waitForResponse() {
+  async function waitForResponse(minResponseLength = DEFAULT_MIN_RESPONSE_LENGTH) {
     log("Waiting for ChatGPT response...");
 
     const startTime = Date.now();
@@ -1228,12 +1228,11 @@
 
       // Only count extracted text that's meaningful
       if (responseText.length >= 5) {
-        // HARD GATE: real Oracle reviews are 3000+ chars. Anything below
-        // MIN_REVIEW_LENGTH is thinking preamble, footer, or transition
-        // garbage. Never let it enter stability counting.
-        if (responseText.length < MIN_REVIEW_LENGTH) {
+        // HARD GATE: ignore UI chrome, thinking preambles, footers, and
+        // transition fragments before stability counting.
+        if (responseText.length < minResponseLength) {
           if (stableCount === 0) {
-            log(`Too short (${responseText.length} < ${MIN_REVIEW_LENGTH} chars) — not a real review, waiting`);
+            log(`Too short (${responseText.length} < ${minResponseLength} chars) - waiting for complete response`);
           }
           stableCount = 0;
           lastText = "";
@@ -1291,7 +1290,7 @@
 
           // Log progress for short responses
           if (responseText.length < 2000 && stableCount % 3 === 0) {
-            log(`Short response (${responseText.length} chars) — waiting for real review (${elapsed}s)`);
+            log(`Short response (${responseText.length} chars) - waiting for stable completion (${elapsed}s)`);
           }
         } else {
           stableCount = 0;
@@ -1309,7 +1308,10 @@
 
   // ── Process a task ───────────────────────────────────────────────────
   async function processTask(task) {
-    const { task_id, prompt, pdf_base64, pdf_name } = task;
+    const { task_id, prompt, pdf_base64, pdf_name, min_response_length } = task;
+    const minResponseLength = Number.isFinite(Number(min_response_length))
+      ? Number(min_response_length)
+      : DEFAULT_MIN_RESPONSE_LENGTH;
     log(`=== Task: ${task_id} ===`);
     busy = true;
     updatePanel();
@@ -1427,7 +1429,7 @@
 
       // Capture page state NOW (on the conversation page, not homepage)
       capturePostSendState();
-      const response = await waitForResponse();
+      const response = await waitForResponse(minResponseLength);
 
       if (!response || response.length < 5) {
         throw new Error(`Response too short or empty (${response?.length || 0} chars)`);

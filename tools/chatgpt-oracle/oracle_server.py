@@ -153,6 +153,10 @@ class OracleHandler(BaseHTTPRequestHandler):
                 "model": data.get("model", "chatgpt-5.4-pro"),
                 "status": "queued",
             }
+            if "min_response_length" in data:
+                task["min_response_length"] = data["min_response_length"]
+            if "task_kind" in data:
+                task["task_kind"] = data["task_kind"]
 
             # Handle PDF: either base64 data or file path
             if "pdf_base64" in data:
