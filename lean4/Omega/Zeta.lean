@@ -283,6 +283,7 @@ import Omega.Zeta.XiCdimLocalizationZetaRecoversS
 import Omega.Zeta.CyclicBlockTensorDeterminant
 import Omega.Zeta.CyclicDet
 import Omega.Zeta.CyclicDetectionBoundary
+import Omega.Zeta.CyclePermutationDeterminant
 import Omega.Zeta.CyclicEulerProduct
 import Omega.Zeta.CyclicEulerProductComplexSection
 import Omega.Zeta.CyclicEulerSchattenInvariants
