@@ -4702,8 +4702,8 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
         inventory = _run_stage_a_inventory(
             state, model=model, dry_run=dry_run, tag=tag)
         if not inventory:
-            return _stage_a_block(state, "theorem_inventory_invalid",
-                                  dry_run=dry_run, tag=tag)
+            return _stage_a_pause(state, "theorem_inventory_invalid",
+                                  tag=tag)
 
         action, items = _inventory_action(inventory)
 
