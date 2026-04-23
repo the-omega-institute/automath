@@ -111,6 +111,7 @@ import Omega.POM.DerivedFiberSingleStieltjesHistogramRecovery
 import Omega.POM.ClosureDiagonalToTopSpectrum
 import Omega.POM.ClosurePartitionToFullRecoveryCurve
 import Omega.POM.EhrhartEqualsOrderpolyShift
+import Omega.POM.EpsSoundCompose
 import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.DeltaqMeanSquareRhCriterion
 import Omega.POM.DeltaqGoldenEnvelope
@@ -578,6 +579,7 @@ import Omega.POM.ProjectivePathAtomicPronyRank
 import Omega.POM.ProjectivePressureDiscreteConvexitySlopes
 import Omega.POM.ProjectivePressureDiscreteFlatnessForcesAffine
 import Omega.POM.ProjectivePressureDiscreteLegendreEnvelope
+import Omega.POM.ProjwordDecidable
 import Omega.POM.ProjTropicalMinmean
 import Omega.POM.ProjectivePressureHolderLogconvex
 import Omega.POM.ProjectivePressureZeroNormalization
