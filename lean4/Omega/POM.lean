@@ -761,6 +761,7 @@ import Omega.POM.DiagonalRateOptimalTP2
 import Omega.POM.MinimalIntegerizationFactorCokerExponent
 import Omega.POM.VariationalUnityTauFromF
 import Omega.POM.DiagonalRateAbsorbingFullVsDeletedInterlacingSecondary
+import Omega.POM.DiagonalRateRefreshCountSCGFLaguerre
 import Omega.POM.FiniteZeroTempEscortUniformMaxfiber
 import Omega.POM.SpectralInformationSandwich
 import Omega.POM.MicrocanonicalPosteriorEntropyLinearLaw
