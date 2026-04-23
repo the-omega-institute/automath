@@ -4313,6 +4313,16 @@ def stage_a_ready_for_b(state: PaperState) -> bool:
                 and stage_a_audit_passes(state.stage_a_audit_metrics))
 
 
+def _stage_a_audit_has_actionable_issues(audit: dict) -> bool:
+    return bool(
+        audit.get("blockers")
+        or audit.get("required_revisions")
+        or audit.get("work_packages")
+        or audit.get("split_required")
+        or audit.get("split_reasons")
+    )
+
+
 def _stage_a_score_from_audit(audit: dict) -> int:
     metrics = audit.get("metrics", {}) if isinstance(audit, dict) else {}
     vals = [_metric_int(metrics.get(k, 0)) for k in STAGE_A_METRIC_THRESHOLDS]
@@ -4864,13 +4874,12 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 save_state(state)
                 return True
 
-            if audit.get("audit_unparseable"):
+            actionable = _stage_a_audit_has_actionable_issues(audit)
+            if audit.get("audit_unparseable") and not actionable:
                 return _stage_a_pause(state, "stage_a_audit_unparseable",
                                       tag=tag)
 
-            if (audit.get("blockers") or audit.get("required_revisions")
-                or audit.get("work_packages") or audit.get("split_required")
-                or audit.get("split_reasons")):
+            if actionable:
                 issues = {
                     "audit_round": audit_round,
                     "metrics": audit.get("metrics", {}),
@@ -4979,13 +4988,12 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 save_state(state)
                 return True
 
-            if audit.get("audit_unparseable"):
+            actionable = _stage_a_audit_has_actionable_issues(audit)
+            if audit.get("audit_unparseable") and not actionable:
                 return _stage_a_pause(state, "stage_a_final_audit_unparseable",
                                       tag=tag)
 
-            if (audit.get("blockers") or audit.get("required_revisions")
-                or audit.get("work_packages") or audit.get("split_required")
-                or audit.get("split_reasons")):
+            if actionable:
                 detail = json.dumps(
                     {
                         "score": score,
