@@ -40,6 +40,7 @@ import Omega.SyncKernelWeighted.K9GeometricZeta
 import Omega.SyncKernelWeighted.KernelHardyRealEven
 import Omega.SyncKernelWeighted.KernelXiFunctionalEquation
 import Omega.SyncKernelWeighted.KernelSelfDualCharacter
+import Omega.SyncKernelWeighted.KernelSelfDualSignTwist
 import Omega.SyncKernelWeighted.KernelSelfDualCharacterSchur
 import Omega.SyncKernelWeighted.KoenigsLinearizationWittDilation
 import Omega.SyncKernelWeighted.KappaLinearResponseOrder
