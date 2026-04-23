@@ -96,6 +96,7 @@ import Omega.POM.BinaryCoarsegrainingConcavePairingExtremes
 import Omega.POM.CollisionAQFibonacciBFPrimitivePrimeDivisor
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.CollisionEntropyRate
+import Omega.POM.DiagonalRateRefreshEntropyRateRenewalCoding
 import Omega.POM.CostCanonicalRepresentativeFunctor
 import Omega.POM.CostOptimizationDecidable
 import Omega.POM.CollisionKernelDiscriminant
