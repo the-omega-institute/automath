@@ -819,6 +819,7 @@ import Omega.POM.SteinitzTerminalObjectPrefixDecodableLedger
 import Omega.POM.GodelSteinitzFiniteTruncationFiberCylinder
 import Omega.POM.LedgerResidualStokesIncrement
 import Omega.POM.PrimeTraceIndexDuality
+import Omega.POM.PrimeRegisterStrategyGaugeGroupoid
 import Omega.POM.BreakpointCurvatureLawAq
 import Omega.POM.RenyiDimensionNoAlgebraicIrrationality
 import Omega.POM.CoxeterMonodromyCyclotomic

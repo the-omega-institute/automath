@@ -1165,6 +1165,7 @@ import Omega.Zeta.XiFoldEscortRenyiConstantThetaClosed
 import Omega.Zeta.XiFoldbinCollisionProbabilityNormalizedGroupoidDimension
 import Omega.Zeta.XiPoissonCauchyKlTwoTermExplicitCoeff
 import Omega.Zeta.XiPoissonKlContractionRigidity
+import Omega.Zeta.XiPoissonKlCoarsegrainingProjectionCoefficient
 import Omega.Zeta.XiDepthHeightTwoLevelExtremal
 import Omega.Zeta.XiDepthWeightUniquenessMobiusLinearization
 import Omega.Zeta.LogMDerivativeResolvent
