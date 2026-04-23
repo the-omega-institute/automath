@@ -13,17 +13,45 @@ reduced spectrum from the full record \(\{\Psi_q(A)\}_{q\ge 1}\), and
 the one-layer Fourier recovery for one fixed \(q\).
 
 \medskip\noindent\textbf{Logarithm convention.}
-All logarithms in this section are taken in the principal branch
-\(\Log\) on \(\CC\setminus(-\infty,0]\). Since the non-Perron
-eigenvalues satisfy \(|\mu_j|<\lambda\), each factor
-\(1-(\mu_j/\lambda)^q\) has positive real part for all \(q\ge 1\), so
-\(\Log(1-(\mu_j/\lambda)^q)\) is unambiguous. Likewise, the reduced
-spectral polynomial satisfies \(F_A(e^{i\theta})\ne 0\) for all
-\(\theta\in\RR\) (since \(|\mu_j|<\lambda\) implies \(|\mu_j/\lambda|<1\)),
-so \(\Log F_A(e^{i\theta})\) is well defined and
-\(-\Log F_A(e^{i\theta})=\sum_{n\ge 1}u_n(A)e^{in\theta}/n\) is the
-Fourier series of a continuous function on the torus. All subsequent
-power series and determinant logarithms use this branch consistently.
+Throughout this section, \(\Log\) denotes the principal branch on
+\(\CC\setminus(-\infty,0]\). For every \(j\ge 2\) and every \(|t|\le 1\),
+\[
+  \Re\!\left(1-\frac{\mu_j}{\lambda}t\right)
+  \ge 1-\left|\frac{\mu_j}{\lambda}t\right|
+  \ge 1-\frac{|\mu_j|}{\lambda}
+  >0.
+\]
+Hence each factor \(1-(\mu_j/\lambda)t\) stays in the right half-plane,
+so its principal logarithm is defined on the whole closed unit disc. We
+therefore set, for \(|t|\le 1\),
+\[
+  \log F_A(t)
+  :=
+  \sum_{j=2}^d \Log\!\left(1-\frac{\mu_j}{\lambda}t\right).
+\]
+This is a continuous branch of the logarithm of \(F_A\) on \(|t|\le 1\),
+normalized by \(\log F_A(0)=0\). If \(|z|<1\), then
+\(\Re(1-z)\ge 1-|z|>0\), so
+\[
+  -\Log(1-z)=\sum_{n\ge 1}\frac{z^n}{n}.
+\]
+Applying this with \(z=(\mu_j/\lambda)e^{i\theta}\) and summing over the
+finitely many non-Perron eigenvalues gives
+\[
+  -\log F_A(e^{i\theta})
+  =
+  \sum_{n\ge 1}\frac{u_n(A)e^{in\theta}}{n}.
+\]
+This branch is defined factorwise; we do not invoke the principal
+logarithm of the product \(F_A(t)\). Likewise, for every \(q\ge 1\) we
+set
+\[
+  \Psi_q(A)
+  :=
+  -\sum_{j=2}^d
+    \Log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
+\]
+All subsequent determinant logarithms use the indicated branches.
 
 \subsection{Finite parts and reduced determinants}
 
@@ -172,22 +200,34 @@ power series and determinant logarithms use this branch consistently.
 \end{corollary}
 
 \begin{proof}
-  By \Cref{lem:primitive-orbit-asymptotic},
+  By \Cref{lem:primitive-orbit-asymptotic}, there exists
+  \(\vartheta\in(0,1)\) such that
   \[
-    \sum_{n\ge 1}\left|\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right|
-    <\infty.
+    \frac{p_n(A)}{\lambda^n}
+    =
+    \frac{1}{n}+O\!\left(\frac{\vartheta^n}{n}\right).
   \]
-  Hence
+  Hence the correction series
+  \[
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+  \]
+  converges absolutely, and \Cref{lem:abel-correction-sum} gives
+  \[
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+    =
+    \FP(A).
+  \]
+  Therefore
   \[
     \sum_{n\le N}\frac{p_n(A)}{\lambda^n}
     =
-    \sum_{n\le N}\frac{1}{n}
-    +\sum_{n\ge 1}
-      \left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
-    +o(1).
+    H_N+\FP(A)
+    -\sum_{n>N}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right).
   \]
-  The convergent correction term equals \(\FP(A)\), while
-  \(\sum_{n\le N}1/n=\log N+\gamma+o(1)\).
+  The tail is \(O(\vartheta^N/N)\) by
+  \Cref{lem:geometric-harmonic-tail}, while
+  \(H_N=\log N+\gamma+o(1)\). Since \(\mathcal M(A)=\gamma+\FP(A)\),
+  the claimed asymptotic follows.
 \end{proof}
 
 \subsection{Cyclic lifts and reduced spectral reconstruction}
@@ -210,11 +250,11 @@ and
     =\frac{1}{q}\prod_{j=2}^d
       \left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right)^{-1}.
   \]
-  Equivalently,
+  Equivalently, with the logarithm convention above,
   \[
-    \Psi_q(A):=\log q+\log C_\lambda(A^{\langle q\rangle})
-    =-\sum_{j=2}^d
-      \log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
+    \exp(\Psi_q(A))
+    =
+    q\,C_\lambda(A^{\langle q\rangle}).
   \]
 \end{proposition}
 
@@ -264,9 +304,10 @@ and
   By \Cref{thm:finite-part-cyclic-lift-reduced-constant-closed},
   \[
     \Psi_q(A)
-    =-\sum_{j=2}^d\log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
+    =-\sum_{j=2}^d\Log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
   \]
-  Expanding \(-\log(1-x)=\sum_{m\ge 1}x^m/m\) and exchanging the finite
+  Expanding \(-\Log(1-x)=\sum_{m\ge 1}x^m/m\) for \(|x|<1\) and
+  exchanging the finite
   sum over \(j\) with the absolutely convergent series over \(m\) gives
   the first identity. The remainder estimate follows from
   \[
@@ -371,11 +412,14 @@ and
 \begin{proposition}[Fixed-matrix recovery of the reduced spectrum from the
   full cyclic-lift record with explicit remainder]
   \label{thm:finite-part-cyclic-lift-spectrum-identifiability}
-  For one fixed primitive non-negative matrix \(A\), the full recorded
+  For one fixed primitive non-negative matrix \(A\in M_d(\RR)\), the full recorded
   \(\{\Psi_q(A)\}_{q\ge 1}\), equivalently
   \(\{C_\lambda(A^{\langle q\rangle})\}_{q\ge 1}\), determines the
   reduced spectral polynomial \(F_A\) of that same matrix and hence the
-  non-Perron spectrum of \(A\) with algebraic multiplicity. Moreover,
+  non-Perron spectrum of \(A\) with algebraic multiplicity. In
+  particular, once the size \(d\) is known, the multiplicity of the
+  zero non-Perron eigenvalue is recovered as \(d-1-\deg F_A\).
+  Moreover,
   \[
     \Psi_q(A)=u_q(A)+O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right),
   \]
@@ -389,16 +433,29 @@ and
 
 \begin{proof}
   By \Cref{prop:finite-part-cyclic-lift-mobius-inversion}, the cyclic
-  data determine every power sum \(u_n(A)\). Since
+  data determine every power sum \(u_n(A)\). Write
   \[
-    F_A(t)=\prod_{j=2}^d\left(1-\frac{\mu_j}{\lambda}t\right)
+    \alpha_j:=\frac{\mu_j}{\lambda},
+    \qquad
+    P_A(x):=\prod_{j=2}^d(x-\alpha_j)
+    =x^{d-1}F_A(x^{-1}).
   \]
-  has known degree \(d-1\), Newton's identities recover its
-  coefficients from the first \(d-1\) power sums, and hence from the
-  full sequence \(\{u_n(A)\}_{n\ge 1}\). This reconstructs the
-  non-Perron spectrum with algebraic multiplicity. The argument is
-  purely fixed-record: it recovers one polynomial \(F_A\) from the one
-  sequence attached to the same matrix \(A\).
+  Then \(P_A\) is monic of degree \(d-1\), even when some
+  \(\alpha_j=0\). Newton's identities recover the coefficients of this
+  monic degree-\((d-1)\) polynomial from the first \(d-1\) power sums
+  \(u_n(A)=\sum_{j=2}^d\alpha_j^n\), and hence from the full sequence
+  \(\{u_n(A)\}_{n\ge 1}\). Therefore the multiset
+  \(\{\alpha_2,\dots,\alpha_d\}\), including \(0\) with algebraic
+  multiplicity, is determined. Equivalently,
+  \[
+    F_A(t)=\prod_{j=2}^d(1-\alpha_j t)
+  \]
+  is determined. Its ordinary degree counts the nonzero \(\alpha_j\), so
+  the multiplicity of the zero non-Perron eigenvalue is exactly
+  \(d-1-\deg F_A\). This reconstructs the non-Perron spectrum with
+  algebraic multiplicity. The argument is purely fixed-record: it
+  recovers one polynomial \(F_A\) from the one sequence attached to the
+  same matrix \(A\).
 
   For the exponential growth rate,
   \(u_q(A)=\sum_{j=2}^d(\mu_j/\lambda)^q\), so
