@@ -579,6 +579,7 @@ import Omega.Conclusion.PhaseChannelCrowdingLowerBound
 import Omega.Conclusion.PhaseCoverCompositionAdditionExtensionLaw
 import Omega.Conclusion.PhaseLedgerBudgetExactHalfspace
 import Omega.Conclusion.Pisano1PositiveSea
+import Omega.Conclusion.PoissonBivariateQuarticNullConeCovarianceBalance
 import Omega.Conclusion.PoissonCentralSliceSymmetrizationEquivalence
 import Omega.Conclusion.PoissonCauchyFdivJetOddOrderVanishing
 import Omega.Conclusion.PoissonCauchyMomentTomography
