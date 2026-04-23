@@ -180,6 +180,7 @@ import Omega.POM.EntropyLossFactorChainExpansion
 import Omega.POM.E8SquareSpectrumCollapseTrace7
 import Omega.POM.EscortMaxfiberTvBound
 import Omega.POM.EulerDefectOrthogonalPythagoras
+import Omega.POM.EulerDefectMinActionGauge
 import Omega.POM.EulerDefectQuotientCoordinate
 import Omega.POM.ExtendedPrimitives
 import Omega.POM.FenceIntervalClosure
