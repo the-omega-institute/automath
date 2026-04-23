@@ -258,6 +258,76 @@ C_i:=C_i(\mathcal N;A),\qquad Z_1:=\ker(\partial_1),\qquad B_1:=\operatorname{im
 \end{enumerate}
 特别地，边界回路重构的合法性不是纯局部存在性命题，而是受 \(\operatorname{Fill}_{\mathbf w}\le B\) 明确门控的预算命题。
 \end{theorem}
+
+% --- Distillation writeback ---
+\begin{theorem}[持久 \texorpdfstring{\v Cech}{Cech} holonomy 的寄存宽度下界]\label{distill:cech_cohomology-local_to_global_certificate_descent-biaxial-persistent-holonomy-register-bound}
+固定素数 \(p\)，令
+\[
+A_L:=(\FF_p)^L,
+\qquad
+A_L^\ast:=\operatorname{Hom}_{\FF_p}(A_L,\FF_p)
+\]
+为其 \(\FF_p\)-线性对偶。设 \(N\) 为完备相位对象某一有限局部账本覆盖的 nerve，并令
+\[
+\alpha\in Z^1(N;A_L)
+\]
+为局部证书在重叠上的 \(A_L\)-值 holonomy 余循环。对任意 \(\lambda\in A_L^\ast\)，记
+\[
+1\otimes\lambda:C^1(N;A_L)\longrightarrow C^1(N;\FF_p)
+\]
+为由系数映射 \(\lambda:A_L\to\FF_p\) 逐项诱导的上链映射，并定义
+\[
+T_\alpha:A_L^\ast\longrightarrow \check H^1(N;\FF_p),
+\qquad
+T_\alpha(\lambda):=[(1\otimes\lambda)(\alpha)].
+\]
+若 \(r:N'\to N\) 是允许细化的 nerve 映射，则同样定义 \(T_{r^\ast\alpha}\)。
+
+设 \(Q:A_L\to(\FF_p)^B\) 是一个 \(B\)-坐标离散 \(p\)-寄存读出。称 \(Q\) 在细化 \(r\) 上对 \(\alpha\) 的持久 holonomy 完备，若
+\[
+T_{r^\ast\alpha}\bigl(r_Q^\ast((\FF_p)^B)^\ast\bigr)
+=\operatorname{im}T_{r^\ast\alpha},
+\]
+其中 \(r_Q^\ast:((\FF_p)^B)^\ast\to A_L^\ast\) 是 \(Q\) 的对偶拉回。则：
+\begin{enumerate}
+  \item 对每个固定允许细化 \(r\)，任一 holonomy 完备的 \(B\)-坐标 \(p\)-寄存读出都满足
+  \[
+  B\ge \operatorname{rank}_{\FF_p}T_{r^\ast\alpha};
+  \]
+  \item 若同一寄存读出要求对整个允许细化族 \(\mathscr R\) 同时完备，则必须有
+  \[
+  B\ge
+  \sup_{r\in\mathscr R}\operatorname{rank}_{\FF_p}T_{r^\ast\alpha};
+  \]
+  \item 若对所有 \(r\in\mathscr R\) 均有 \(T_{r^\ast\alpha}\ne0\)，则该 holonomy 不能被空寄存轴吸收；它必须作为离散证书包中的 \(p\)-primary 记录方向出现。若某个 \(r\) 使 \(T_{r^\ast\alpha}=0\)，则全部标量 \(p\)-primary holonomy 检测在该分辨率上消失，但这只说明该 \(p\)-primary 检测层可被当前细化杀死，并不自动取消其他素数或其他系数层的障碍。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+先固定一个允许细化 \(r\)。由定义，\(Q\) 的对偶拉回 \(r_Q^\ast\) 的像是 \(A_L^\ast\) 中一个维数不超过 \(B\) 的 \(\FF_p\)-线性子空间。若 \(Q\) 对 \(r^\ast\alpha\) 的 holonomy 完备，则
+\[
+T_{r^\ast\alpha}\bigl(\operatorname{im}r_Q^\ast\bigr)
+=\operatorname{im}T_{r^\ast\alpha}.
+\]
+因此
+\[
+\operatorname{rank}_{\FF_p}T_{r^\ast\alpha}
+=\dim_{\FF_p}\operatorname{im}T_{r^\ast\alpha}
+\le \dim_{\FF_p}\operatorname{im}r_Q^\ast
+\le B.
+\]
+这证明第一项。
+
+若同一个 \(Q\) 对所有 \(r\in\mathscr R\) 都完备，则上述不等式对每个 \(r\) 均成立，取上确界即得第二项。
+
+第三项是第一项在零坐标寄存器上的直接后果。当 \(B=0\) 时，\(Q\) 的对偶像为零子空间；若某个 \(T_{r^\ast\alpha}\ne0\)，则不可能有
+\[
+T_{r^\ast\alpha}(0)=\operatorname{im}T_{r^\ast\alpha}.
+\]
+故只要所有允许细化仍保留非零标量检测，该 holonomy 就不能被视作可见圆轴或空寄存轴中的伪不变量，而必须进入最小记录包的离散证书方向。最后一句只是在系数层面作出的精确限定：\(T_{r^\ast\alpha}=0\) 表示所有 \(\FF_p\)-线性标量检测消失；它不蕴含其他素数、非线性读出或更高阶障碍同时消失。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 前三种情形的互斥性与穷尽性来自 \(\operatorname{Fill}_{\mathbf w}(z)\) 的三种可能取值区间：不超过 \(B\)、有限但大于 \(B\)、以及无穷。第一种情形中，定义本身给出 \(c\in C_2\) 满足 \(\partial_2c=z\) 且 \(\|c\|_{\mathbf w}\le B\)，故当前后端拥有完整的有限填充证书。第二种情形中，虽然存在某个填充，但所有填充的成本均大于 \(B\)，故当前预算语法无法生成接受证书；若仍输出闭合，则输出没有相应的 \(B\)-有界见证。
 
