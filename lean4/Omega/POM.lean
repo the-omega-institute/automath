@@ -109,6 +109,7 @@ import Omega.POM.CountertermAnomalyCancellation
 import Omega.POM.PwCountertermStrictificationCriterion
 import Omega.POM.StrictificationSplitting
 import Omega.POM.SprtSymmetricThresholdError
+import Omega.POM.SprtRiskComplexityFrontier
 import Omega.POM.SprtSymmetricThresholdMeanTime
 import Omega.POM.StiffZeroHankelGoodReductionDimStability
 import Omega.POM.Congruence2dLockingCfinite
