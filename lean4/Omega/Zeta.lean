@@ -1022,3 +1022,4 @@ import Omega.Zeta.XiPoissonKernelDerivativeL2ClosedForm
 import Omega.Zeta.PhaseLiftSpectralBound
 import Omega.Zeta.XiTerminalZmBranchPuiseuxCoefficientCubic
 import Omega.Zeta.XiTimePart63cFrobeniusExactInversionCycleMoments
+import Omega.Zeta.XiWindow6ResetClockBoundedDrift
