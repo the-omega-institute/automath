@@ -141,6 +141,7 @@ import Omega.Zeta.XiNullMicroKlWindow
 import Omega.Zeta.XiZeroTempComparability
 import Omega.Zeta.XiZeroTemperatureFourstateDeterminantStateMinimality
 import Omega.Zeta.XiTerminalZmEllipticWeightNCorrespondenceBidegreeDelta
+import Omega.Zeta.XiTerminalZmEllipticWeight2kDeltaLedger
 import Omega.Zeta.XiPrimeRegisterHistoryInverseLimit
 import Omega.Zeta.XiPrimeRegisterIdempotentUniqueNormalForm
 import Omega.Zeta.XiPrimeShellQuasiOrthogonality

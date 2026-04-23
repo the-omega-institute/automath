@@ -231,6 +231,7 @@ import Omega.POM.DiagonalRateRefreshHittingTimeDeletedSetLaguerrePGF
 import Omega.POM.DiagonalRateRefreshHittingTimeDeletedLaguerrePGF
 import Omega.POM.DiagonalRateRefreshHittingTimePGFClosed
 import Omega.POM.DiagonalRateRefreshHoldingIntervalPgfHausdorff
+import Omega.POM.DiagonalRateRefreshIntervalPgfLogderivative
 import Omega.POM.DiagonalRateRefreshRenewalCoding
 import Omega.POM.DiagonalRateRefreshRegenerationIidExpansion
 import Omega.POM.DiagonalSubleadingTopDegeneracy
