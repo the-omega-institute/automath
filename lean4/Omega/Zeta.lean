@@ -164,6 +164,7 @@ import Omega.Zeta.XiTerminalZmCdimBidirectionalMiLoglaw
 import Omega.Zeta.XiTerminalZmEllipticComplexTorusMiLoglaw
 import Omega.Zeta.XiTerminalZmGodelPrefixCodeMiDifference
 import Omega.Zeta.XiTerminalZmGodelHorizonFactorizationForgetting
+import Omega.Zeta.XiTerminalZmResolventCubicNoCmMaxEnd
 import Omega.Zeta.XiFarFieldMomentRecursionOrder2Kappa
 import Omega.Zeta.XiScanMinSeparationLocalBilipschitz
 import Omega.Zeta.XiFiniteToOneHolographicAggregationBound
