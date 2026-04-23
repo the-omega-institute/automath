@@ -308,14 +308,24 @@ For a normal trace-class operator \(L\), write
 \end{lemma}
 
 \begin{proof}
-  A trace-class normal operator is compact, so the spectral theorem gives
-  an orthogonal decomposition into \(\ker L\) and the finite-dimensional
-  eigenspaces corresponding to non-zero eigenvalues, with possible
-  accumulation only at \(0\). The closed span of the non-zero eigenspaces is
-  therefore \((\ker L)^\perp\). The range contains the finite linear span of
-  the non-zero eigenspaces, because \(L\) is invertible on each such
-  eigenspace, and it is contained in \((\ker L)^\perp\). Taking closures
-  gives the displayed identity.
+  A trace-class normal operator is compact. Hence the spectral theorem
+  yields the orthogonal decomposition
+  \[
+    H=\ker L\oplus
+    \overline{\mathrm{span}}
+    \{\,\ker(L-\lambda I):\lambda\in\spec(L)\setminus\{0\}\,\},
+  \]
+  with possible spectral accumulation only at \(0\). This shows that the
+  closed span of the non-zero eigenspaces is \((\ker L)^\perp\).
+
+  The range contains every non-zero eigenspace because \(L\) is
+  invertible on that eigenspace, and the range is orthogonal to \(\ker L\).
+  Therefore
+  \[
+    \mathsf S(L)\subseteq \overline{\mathrm{ran}(L)}
+    \subseteq (\ker L)^\perp=\mathsf S(L),
+  \]
+  which proves the claim.
 \end{proof}
 
 \begin{proposition}[Sharp trace-norm budget for cyclic zero divisors]
@@ -415,6 +425,98 @@ For a normal trace-class operator \(L\), write
   asserted trace norm and the asserted closed support.
 \end{proof}
 
+\begin{proposition}[Collapsed spectral multiplicities of Euler data]
+  \label{prop:collapsed-spectral-multiplicities}
+  Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) satisfy
+  \[
+    n_j,m_j\in\NN,\qquad
+    \beta_j\in\CC\setminus\{0\},\qquad
+    \sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}<\infty,
+  \]
+  and choose roots \(\alpha_j^{n_j}=\beta_j\). For each
+  \(\lambda\in\CC\setminus\{0\}\), define the collapsed multiplicity
+  \[
+    M_{\mathcal D}(\lambda)
+    :=\sum_{\{j\in J:\lambda^{n_j}=\beta_j\}} m_j.
+  \]
+  Then each \(M_{\mathcal D}(\lambda)\) is finite, the support
+  \[
+    \Sigma_{\mathcal D}
+    :=\{\lambda\in\CC\setminus\{0\}:M_{\mathcal D}(\lambda)\neq 0\}
+  \]
+  is countable, and for the cyclic model
+  \[
+    L_{\mathcal D}
+    =\bigoplus_{j\in J}\bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr)
+  \]
+  one has
+  \[
+    \dim\ker(L_{\mathcal D}-\lambda I)=M_{\mathcal D}(\lambda)
+    \qquad (\lambda\in\CC\setminus\{0\}).
+  \]
+  Consequently,
+  \[
+    L_{\mathcal D}
+    \cong \bigoplus_{\lambda\in\Sigma_{\mathcal D}}
+      \lambda I_{M_{\mathcal D}(\lambda)},
+  \]
+  and
+  \[
+    \det(I-zL_{\mathcal D})
+    =\prod_{\lambda\in\Sigma_{\mathcal D}}
+      (1-\lambda z)^{M_{\mathcal D}(\lambda)}
+  \]
+  as an entire function, where the right-hand side is the locally uniform
+  limit of the corresponding finite products. Equivalently, the multiset
+  \(\Lambda_{\mathcal D}\) of non-zero eigenvalues is exactly the multiset
+  in which \(\lambda\) appears with multiplicity \(M_{\mathcal D}(\lambda)\).
+\end{proposition}
+
+\begin{proof}
+  For each \(j\), the Fourier basis diagonalizes \(\Pi_{n_j}\), so
+  \(C(n_j,\alpha_j)\otimes I_{m_j}\) is unitarily equivalent to
+  \[
+    \bigoplus_{\omega^{n_j}=1}\alpha_j\omega\,I_{m_j}.
+  \]
+  Since \(\lambda^{n_j}=\beta_j\) if and only if
+  \(\lambda=\alpha_j\omega\) for some \(n_j\)-th root of unity \(\omega\),
+  the \(j\)-th block contributes an \(m_j\)-dimensional eigenspace to
+  \(\ker(L_{\mathcal D}-\lambda I)\) exactly when \(\lambda^{n_j}=\beta_j\),
+  and otherwise contributes nothing. Summing over \(j\) gives
+  \[
+    \dim\ker(L_{\mathcal D}-\lambda I)=M_{\mathcal D}(\lambda).
+  \]
+
+  Summing over \(\lambda\neq 0\) and then over the indices contributing to
+  each \(\lambda\) gives
+  \begin{align*}
+    \sum_{\lambda\in\Sigma_{\mathcal D}}\abs{\lambda}M_{\mathcal D}(\lambda)
+    =\sum_{\lambda\in\Sigma_{\mathcal D}}
+      \sum_{\{j:\lambda^{n_j}=\beta_j\}} m_j\abs{\lambda} \\
+    &=\sum_{j\in J}\sum_{\lambda^{n_j}=\beta_j} m_j\abs{\lambda} \\
+    &=\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}<\infty.
+  \end{align*}
+  In particular, each \(M_{\mathcal D}(\lambda)\) is finite and
+  \(\Sigma_{\mathcal D}\) is countable.
+
+  The blockwise Fourier transforms therefore assemble to a unitary
+  equivalence between \(L_{\mathcal D}\) and the diagonal operator
+  \[
+    \bigoplus_{\lambda\in\Sigma_{\mathcal D}}
+      \lambda I_{M_{\mathcal D}(\lambda)}.
+  \]
+  For any finite truncation \(F\subset J\), the corresponding finite model
+  has determinant
+  \[
+    \prod_{\lambda\in\Sigma_{\mathcal D,F}}
+      (1-\lambda z)^{M_{\mathcal D,F}(\lambda)},
+  \]
+  obtained by grouping equal eigenvalues after diagonalization. By
+  \Cref{lem:cyclic-product-trace-norm-limit}, these finite determinants
+  converge locally uniformly to \(\det(I-zL_{\mathcal D})\). This gives the
+  displayed determinant formula and the equivalent multiset statement.
+\end{proof}
+
 \begin{theorem}[Cyclic-block determinant realization and normal classification]
   \label{thm:cyclic-fredholm-realisation}
   \leanverified{paper_fredholm_witt_cyclic_block_characterization}
@@ -489,25 +591,56 @@ For a normal trace-class operator \(L\), write
     \det(I-zL)=\det(I-zL_{\mathcal D})
   \]
   as holomorphic germs at \(0\), hence on all of \(\CC\). By
-  \cite[Theorem~3.7]{Simon2005TraceIdeals}, the zeros of the Fredholm
-  determinant are the reciprocals of the non-zero eigenvalues, counted with
-  algebraic multiplicity. Therefore \(L\) and \(L_{\mathcal D}\) have the
-  same non-zero spectrum with multiplicity.
+  \Cref{prop:fredholm-spectral-rigidity}, the non-zero spectra of \(L\) and
+  \(L_{\mathcal D}\) agree with algebraic multiplicity. By
+  \Cref{prop:collapsed-spectral-multiplicities}, this means that for every
+  \(\lambda\in\CC\setminus\{0\}\),
+  \[
+    \dim\ker(L-\lambda I)=M_{\mathcal D}(\lambda)
+    =\dim\ker(L_{\mathcal D}-\lambda I).
+  \]
 
-  Since both operators are normal, the spectral theorem diagonalizes them on
-  the orthogonal sum of their non-zero eigenspaces and kernels. The
-  non-zero eigenvalues of \(L_{\mathcal D}\) are
+  Since \(L\) is compact and normal, the spectral theorem gives the
+  orthogonal decomposition
   \[
-    \alpha_j\omega,\qquad \omega^{n_j}=1,
+    H=\ker L\oplus
+    \bigoplus_{\lambda\in\Sigma_{\mathcal D}}\ker(L-\lambda I),
   \]
-  each repeated \(m_j\) times, with multiplicities added when equal values
-  arise from different indices. Grouping the corresponding eigenspaces of
-  \(L\) and using the Fourier diagonalisation of \(\Pi_{n_j}\) yields a
-  unitary equivalence
+  where
+  \(\Sigma_{\mathcal D}=\{\lambda\neq0:M_{\mathcal D}(\lambda)\neq0\}\).
+  Choose a unitary
   \[
-    L\cong 0_{\ker L}\oplus L_{\mathcal D},
+    W:H\to \ker L\oplus
+    \bigoplus_{\lambda\in\Sigma_{\mathcal D}}\CC^{M_{\mathcal D}(\lambda)}
   \]
-  which is \textup{(ii)}.
+  that diagonalizes \(L\) as
+  \[
+    W L W^{-1}
+    =0_{\ker L}\oplus
+    \bigoplus_{\lambda\in\Sigma_{\mathcal D}}
+      \lambda I_{M_{\mathcal D}(\lambda)}.
+  \]
+  By \Cref{prop:collapsed-spectral-multiplicities}, there is also a unitary
+  \[
+    W_{\mathcal D}:H_{\mathcal D}\to
+    \bigoplus_{\lambda\in\Sigma_{\mathcal D}}\CC^{M_{\mathcal D}(\lambda)}
+  \]
+  with
+  \[
+    W_{\mathcal D}L_{\mathcal D}W_{\mathcal D}^{-1}
+    =\bigoplus_{\lambda\in\Sigma_{\mathcal D}}
+      \lambda I_{M_{\mathcal D}(\lambda)}.
+  \]
+  Therefore
+  \[
+    U:=(I_{\ker L}\oplus W_{\mathcal D}^{-1})W
+    :H\to \ker L\oplus H_{\mathcal D}
+  \]
+  is unitary and satisfies
+  \[
+    ULU^{-1}=0_{\ker L}\oplus L_{\mathcal D}.
+  \]
+  This is \textup{(ii)}.
 \end{proof}
 
 \begin{definition}[Block-cyclic normal realization]
@@ -766,7 +899,15 @@ For a normal trace-class operator \(L\), write
   Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) and
   \(\mathcal D'=\{(n_k',\beta_k',m_k')\}_{k\in K}\) satisfy the summability
   hypothesis of \Cref{thm:cyclic-fredholm-realisation}, and choose roots
-  \(\alpha_j^{n_j}=\beta_j\) and \((\alpha_k')^{n_k'}=\beta_k'\). Write
+  \(\alpha_j^{n_j}=\beta_j\) and \((\alpha_k')^{n_k'}=\beta_k'\). Define
+  \[
+    M_{\mathcal D}(\lambda)
+    :=\sum_{\{j\in J:\lambda^{n_j}=\beta_j\}} m_j,
+    \qquad
+    M_{\mathcal D'}(\lambda)
+    :=\sum_{\{k\in K:\lambda^{n_k'}=\beta_k'\}} m_k',
+  \]
+  and write
   \(L_{\mathcal D}\), \(L_{\mathcal D'}\) for the associated cyclic models,
   and let
   \[
@@ -781,6 +922,8 @@ For a normal trace-class operator \(L\), write
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item \(\det(I-zL_{\mathcal D})=\det(I-zL_{\mathcal D'})\) as holomorphic
       germs at \(z=0\).
+    \item \(M_{\mathcal D}(\lambda)=M_{\mathcal D'}(\lambda)\) for every
+      \(\lambda\in\CC\setminus\{0\}\).
     \item \(\Lambda_{\mathcal D}=\Lambda_{\mathcal D'}\) as multisets.
     \item There exist Hilbert spaces \(H_0\), \(H_0'\) and a unitary
       \(V:H_0\oplus H_{\mathcal D}\to H_0'\oplus H_{\mathcal D'}\) such that
@@ -802,19 +945,33 @@ For a normal trace-class operator \(L\), write
 \end{theorem}
 
 \begin{proof}
-  The implication \textup{(iii)}\(\Rightarrow\)\textup{(i)} is immediate,
+  The implication \textup{(iv)}\(\Rightarrow\)\textup{(i)} is immediate,
   because unitary equivalence and zero summands do not change the Fredholm
   determinant. For \textup{(i)}\(\Rightarrow\)\textup{(ii)}, apply
   \Cref{prop:fredholm-spectral-rigidity} to \(L_{\mathcal D}\) and
   \(L_{\mathcal D'}\). Their non-zero spectra therefore agree with
-  multiplicity, which is exactly the equality
-  \(\Lambda_{\mathcal D}=\Lambda_{\mathcal D'}\).
+  algebraic multiplicity. By
+  \Cref{prop:collapsed-spectral-multiplicities}, the multiplicity of each
+  \(\lambda\neq0\) in those spectra is exactly
+  \(M_{\mathcal D}(\lambda)\) and \(M_{\mathcal D'}(\lambda)\),
+  respectively. Hence \(M_{\mathcal D}=M_{\mathcal D'}\).
 
-  Assume \textup{(ii)}. By the spectral theorem, both cyclic models are
-  unitarily equivalent on their non-zero spectral subspaces to the diagonal
-  operator whose non-zero eigenvalue multiset is the common multiset
-  \(\Lambda_{\mathcal D}=\Lambda_{\mathcal D'}\). After adjoining arbitrary
-  zero summands, this gives \textup{(iii)}.
+  The equivalence
+  \textup{(ii)}\(\Leftrightarrow\)\textup{(iii)} is exactly the multiset
+  reformulation supplied by
+  \Cref{prop:collapsed-spectral-multiplicities}: \(\lambda\) appears in
+  \(\Lambda_{\mathcal D}\) with multiplicity \(M_{\mathcal D}(\lambda)\),
+  and similarly for \(\mathcal D'\).
+
+  Assume \textup{(ii)}. By
+  \Cref{prop:collapsed-spectral-multiplicities}, both cyclic models are
+  unitarily equivalent to the same diagonal operator
+  \[
+    \bigoplus_{\lambda\in\Sigma}\lambda I_{M_{\mathcal D}(\lambda)},
+    \qquad
+    \Sigma:=\{\lambda\neq0:M_{\mathcal D}(\lambda)\neq0\}.
+  \]
+  After adjoining arbitrary zero summands, this gives \textup{(iv)}.
 
   The closing equalities are the support-dimension and trace-norm formulas
   from \Cref{prop:sharp-trace-budget-support-obstruction} applied to either
