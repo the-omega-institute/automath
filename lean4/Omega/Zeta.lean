@@ -617,6 +617,7 @@ import Omega.Zeta.PickPoissonCharpolyCoefficients
 import Omega.Zeta.PickPoissonCrossEnergyHorizontalSeparation
 import Omega.Zeta.PickPoissonEnergyStabilityAwayFromCollision
 import Omega.Zeta.PickPoissonInversePrincipalMinorsJacobi
+import Omega.Zeta.XiPickPoissonGapLowerBound
 import Omega.Zeta.XiPickPoissonInterpolationMarginCertificate
 import Omega.Zeta.PickPoissonMinSeparationLowerbound
 import Omega.Zeta.ReciprocalSpectrumFunctionalEquation

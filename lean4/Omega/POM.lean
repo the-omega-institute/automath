@@ -526,6 +526,7 @@ import Omega.POM.MomentCamouflageFiniteOrders
 import Omega.POM.SubexpMomentsBlindspotHalf
 import Omega.POM.MomentHankel
 import Omega.POM.MomentKernelExists
+import Omega.POM.MomentMinrecurrenceHankel
 import Omega.POM.MomentMinreal
 import Omega.POM.MomentMod3TwoPhase
 import Omega.POM.MomentOddLagNeutrality
@@ -740,6 +741,7 @@ import Omega.POM.TypeclassDualDerivative
 import Omega.POM.TypeclassDiagonalMassMonotone
 import Omega.POM.TypeclassKeepResampleChannel
 import Omega.POM.TypeclassHammingBallVolumeVariational
+import Omega.POM.TypeclassHammingBallUniqueMaximizerExponentialFamily
 import Omega.POM.TrivialChannelFiniteDecidability
 import Omega.POM.TypeclassRateDistortionMutualInformation
 import Omega.POM.UniformFiberSamplingRandomnessOptimality
