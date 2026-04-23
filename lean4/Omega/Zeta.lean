@@ -107,6 +107,7 @@ import Omega.Zeta.XiHankelFiniteCertificatePrinciple
 import Omega.Zeta.XiHankelCofactorSyndromeSingleCoordinate
 import Omega.Zeta.XiHypercubeWeightedSpanningTreeSpectrumProduct
 import Omega.Zeta.XiHypercubeWeightedLaplacianHeatTraceFactorization
+import Omega.Zeta.XiIntegratedDefectGoldenAsymptotics
 import Omega.Zeta.XiOptimalAllocationUnderProductBound
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
