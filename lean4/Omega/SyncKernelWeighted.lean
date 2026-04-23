@@ -159,6 +159,7 @@ import Omega.SyncKernelWeighted.FiniteRhParityGeneral
 import Omega.SyncKernelWeighted.FiniteRhJensenFreeEnergy
 import Omega.SyncKernelWeighted.FiniteRhSpectralAnnihilationFilter
 import Omega.SyncKernelWeighted.FluctuationEven
+import Omega.SyncKernelWeighted.SyncKernelWeightedHatDelta
 import Omega.SyncKernelWeighted.WeightedCompletionQ
 import Omega.SyncKernelWeighted.WeightedXiSingleExceptionPair
 import Omega.SyncKernelWeighted.WeightedUnitRootFinite

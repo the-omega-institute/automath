@@ -171,6 +171,7 @@ import Omega.POM.DiagonalRateDiagonalLogFeedback
 import Omega.POM.DiagonalRateDiagonalDeterminesSeparationProfile
 import Omega.POM.DiagonalRateMaxAtomExtremizer
 import Omega.POM.DiagonalRateRefreshFundamentalMatrixRankone
+import Omega.POM.DiagonalRateRefreshKemenyStarClosed
 import Omega.POM.DiagonalRateSmallDistortionSynergyK
 import Omega.POM.DiagonalRateSmallDistortionSynergyGeneratorHomomorphism
 import Omega.POM.DiagonalRateSmallDistortionSavingHalfMomentFold
