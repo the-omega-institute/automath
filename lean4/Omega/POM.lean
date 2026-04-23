@@ -485,6 +485,7 @@ import Omega.POM.Mod2ShadowEventualPeriodBound
 import Omega.POM.ModpDifferenceBinomialBasis
 import Omega.POM.MomentDimCollapse
 import Omega.POM.MomentGenfuncJordan
+import Omega.POM.UnifiedClosure
 import Omega.POM.MomentCamouflageFiniteOrders
 import Omega.POM.SubexpMomentsBlindspotHalf
 import Omega.POM.MomentHankel

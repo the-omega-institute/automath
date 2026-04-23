@@ -183,6 +183,7 @@ import Omega.Zeta.XiTerminalZmResolventCubicNoCmMaxEnd
 import Omega.Zeta.XiFarFieldMomentRecursionOrder2Kappa
 import Omega.Zeta.XiScanMinSeparationLocalBilipschitz
 import Omega.Zeta.XiFiniteToOneHolographicAggregationBound
+import Omega.Zeta.XiEllipticRingAverageResidueWallcrossing
 import Omega.Zeta.XiEllipticRingAverageTwoValuedWallcrossing
 import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiWindow6C3CyclicFiberTrisection
