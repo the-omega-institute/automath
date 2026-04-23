@@ -118,6 +118,40 @@ p\Vdash \operatorname{Val}_{p,\eta}(t)=\operatorname{Val}_{p,\eta}(t')
 \leanverified{paper\_recursive\_addressing\_observer\_indexed\_reading\_of\_emergent\_arithmetic}
 \end{corollary}
 
+% --- Distillation writeback ---
+\begin{proposition}[对象层等式的有限 forcing 账本正规形]\label{distill:euclid_elements-finite_construction_certificate_families-forcing-equality-ledger-normal-form}
+\textbf{日期时间：2026-04-23T11:58:48+08:00。依赖状态：rigidity.}
+固定信息状态 \(p\)。考虑由下列 primitive 语法生成的对象层等式证明：
+\begin{enumerate}
+  \item 已在某个共同细化状态 \(q\le p\) 上非 \(\mathsf{NULL}\) 的读出 \(\mathrm{Read}_{\mathrm{US},q}(a)\)；
+  \item 定义 \ref{def:observer-indexed-value-preserving-rewrite} 意义下已登记的值保持重写；
+  \item common-notion 规则：自反、对称、传递以及对已定义对象层值的替换。
+\end{enumerate}
+称一份有限 equality ledger 为一棵有限有向无环证明树，其叶节点只允许是同一非 \(\mathsf{NULL}\) 读出的对象层同一性或已登记值保持重写，其内节点只允许使用上述 common-notion 规则。则在该语法内：
+\begin{enumerate}
+  \item 若参与复合表达式的各读出没有共同细化状态使其落在同一类型化域中，则该表达式在状态 \(p\) 上不定义；
+  \item 任一有限 equality ledger 的根结论
+  \[
+  t=t'
+  \]
+  都满足
+  \[
+  p\Vdash \operatorname{Val}_{p,\eta}(t)=\operatorname{Val}_{p,\eta}(t')
+  \]
+  对所有使两侧已定义的地址--值环境 \(\eta\) 成立；
+  \item 反过来，凡是在上述 primitive 语法中推出的对象层等式，都可整理为一份有限 equality ledger。因此，在该语法内，等式不能由图示相似性或规范化步骤凭空产生；它必须回指到某个非 \(\mathsf{NULL}\) 读出、某条值保持重写或一条 common-notion 规则。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+第一条正是推论 \ref{cor:observer-indexed-explicit-lifting}：复合表达式要求所有子项在同一可比较域中解释；若不存在共同细化状态，则没有统一对象层评价函数，故表达式不定义。
+
+第二条对 ledger 的高度作归纳。高度为零时，叶节点分两类。若叶节点是同一非 \(\mathsf{NULL}\) 读出的对象层同一性，则由定义 \ref{def:observer-indexed-typed-readout} 的第三条，读出类已经唯一确定，故等式成立。若叶节点是已登记的值保持重写，则结论正是定义 \ref{def:observer-indexed-value-preserving-rewrite}。归纳步中，自反、对称与传递保持对象层等式；替换规则只在已定义对象层值上使用，因而由等式的相容性保持强制成立。故 ledger 根结论被 \(p\) 强制。
+
+第三条由语法本身的有限生成性给出。任一推导只有有限多步；把其原始读出同一性与值保持重写作为叶节点，把每次 common-notion 应用作为内节点，即得到有限有向无环证明树。命题 \ref{prop:observer-indexed-value-preserving-no-creation} 进一步保证值保持重写不能从未定义项创造对象层值；因此任何合法等式推导都不可能越过 \(\mathsf{NULL}\) 或未构造地址而生成事实。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 由推论 \ref{cor:observer-indexed-nonnull-criterion}，对象层算术的合法输入首先必须是非 \(\mathsf{NULL}\) 的地址--值对；
 由命题 \ref{prop:observer-indexed-value-preserving-no-creation}，值保持重写只能在已定义对象上改变表示；

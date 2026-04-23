@@ -353,6 +353,61 @@ T_q\,M_q(m)=\bigl(\widetilde M_q(m),\,0_{\Delta(q)}\bigr),\qquad
   \item 若共振且 \(d_q<2h+1\)，则可将模态递推压缩到 \(d_q\) 维，名义坐标中多出的 \(\Delta(q)=2h+1-d_q\) 个寄存器在严格模型下被强制为零（可用作 syndrome 校验子）。
 \end{itemize}
 \end{corollary}
+
+% --- Distillation writeback ---
+\begin{proposition}[线性初值后端的最短递推证书下界]\label{distill:euclid_elements-finite_construction_certificate_families-linear-recurrence-initial-certificate-lower-bound}
+\textbf{日期时间：2026-04-23T11:58:48+08:00。依赖状态：rigidity.}
+设某个 moment 序列后端在指标 \(n\ge n_0+d\) 上由固定的阶数 \(d\) 线性递推
+\[
+T(n)=\sum_{i=1}^{d}c_iT(n-i)
+\]
+生成，并把同一递推系数 \((c_1,\ldots,c_d)\) 作为已构造 primitive。令 \(\mathcal V_P\) 为所有满足该递推的实值序列构成的线性空间。则：
+\begin{enumerate}
+  \item 初值映射
+  \[
+  \mathcal I_d:\mathcal V_P\longrightarrow\mathbb R^d,
+  \qquad
+  T\longmapsto (T(n_0),T(n_0+1),\ldots,T(n_0+d-1))
+  \]
+  是同构；
+  \item 对任意 \(0\le r<d\)，前缀证书
+  \[
+  \mathcal I_r(T):=(T(n_0),\ldots,T(n_0+r-1))
+  \]
+  不能决定下一 moment 坐标 \(T(n_0+r)\)：存在 \(T_0,T_1\in\mathcal V_P\) 使
+  \[
+  \mathcal I_r(T_0)=\mathcal I_r(T_1),
+  \qquad
+  T_0(n_0+r)\ne T_1(n_0+r);
+  \]
+  \item 更一般地，任一只使用少于 \(d\) 个线性标量的初值后端
+  \[
+  L:\mathcal V_P\to\mathbb R^k,\qquad k<d,
+  \]
+  都不是忠实证书：存在 \(T_0\ne T_1\) 使 \(L(T_0)=L(T_1)\)，并且某个初值 moment 坐标
+  \[
+  T(n_0+j),\qquad 0\le j<d,
+  \]
+  将二者分开。
+\end{enumerate}
+因此，对定理 \ref{thm:pom-moment-resonance} 中的 \(S_q\) 最小递推后端而言，若选择线性初值型证书作为构造语法，则确定完整 moment realization 的可审计证书至少需要 \(d_q\) 个线性独立初值坐标或等价的 rank-\(d_q\) 分离数据。
+\end{proposition}
+\begin{proof}
+第一条是线性递推的初值构造。任给 \((x_0,\ldots,x_{d-1})\in\mathbb R^d\)，令 \(T(n_0+j)=x_j\) \((0\le j<d)\)，再用递推式逐步定义所有 \(n\ge n_0+d\) 的值，即得到唯一 \(T\in\mathcal V_P\)。反过来，任一 \(T\in\mathcal V_P\) 显然由这 \(d\) 个初值决定，故 \(\mathcal I_d\) 为同构。
+
+第二条固定 \(r<d\)。取一个差分序列 \(U\in\mathcal V_P\)，其初值满足
+\[
+U(n_0)=\cdots=U(n_0+r-1)=0,
+\qquad
+U(n_0+r)=1,
+\]
+其余初值 \(U(n_0+r+1),\ldots,U(n_0+d-1)\) 任取为 \(0\)，再由递推向前延拓。令 \(T_0=0\)，\(T_1=U\)。则二者共享前 \(r\) 个初值，却在第 \(r\) 个待判定 moment 坐标上不同。
+
+第三条由秩亏损给出。由第一条，\(\mathcal V_P\) 是 \(d\) 维线性空间；若 \(L:\mathcal V_P\to\mathbb R^k\) 且 \(k<d\)，则 \(\ker L\ne0\)。取 \(0\ne U\in\ker L\)，令 \(T_0=0\)、\(T_1=U\)。它们具有相同的 \(L\)-证书。又因 \(U\ne0\)，其初值向量 \(\mathcal I_d(U)\) 非零；否则由第一条会有 \(U=0\)。故存在 \(0\le j<d\) 使 \(U(n_0+j)\ne0\)，该 moment 坐标分离 \(T_0,T_1\)。这正给出有限构造证书的最短性下界，而不对任意非线性 Hankel 或 syndrome 读出作额外断言。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 由定义 \ref{def:pom-resonance-syndrome}，存在线性映射 \(L_q:\RR^{2h+1}\to\RR^{\Delta(q)}\) 使得 \(\ker(L_q)\supseteq V_q^{\mathrm{vis}}\) 且 \(\mathrm{rank}(L_q)=\Delta(q)\)。
 取 \(\Delta(q)\) 个线性无关的行向量作为 \(L_q\) 的行，并再补上 \(d_q\) 个线性无关的行向量，使得合起来构成 \((\RR^{2h+1})^\ast\) 的一组基；将这 \(2h+1=d_q+\Delta(q)\) 个行向量堆叠成矩阵即得可逆的 \(T_q\in\mathrm{GL}_{2h+1}(\RR)\)。

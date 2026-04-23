@@ -414,6 +414,66 @@ N L_6(w)\le N L_6(w')
 \]
 且右端是整数账本中的比较。若 \(N\) 不被 \(\ell(w,w')\) 整除，则 \(N\) 不是这对似然比的可接受共同倍数；此时失败应记录为 denominator-spectrum failure，而不是数值舍入误差。
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{proposition}[重锁定门后的跨尺度 boundary 读出正规形]\label{distill:euclid_elements-finite_construction_certificate_families-crossscale-relocking-normal-form}
+\textbf{日期时间：2026-04-23T11:58:48+08:00。依赖状态：conditional audit.}
+固定 \(m\ge 6\)，并沿用命题 \ref{prop:typed-address-biaxial-completion-window6-audit-crossscale-gate} 中的 boundary uplift 增量集
+\[
+\Delta_m^{\mathrm{bdry}}
+:=
+\{n-V_m(w):\ n\in \Fold_m^{\mathrm{bin}}{}^{-1}(w)\}.
+\]
+称尺度 \(m\) 上的一条跨尺度 boundary parity 读出是 \(\Gamma_m\)-可采纳的，若其有限证书链中先包含一个重锁定门
+\[
+\Gamma_m:\Delta_m^{\mathrm{bdry}}\longrightarrow \widehat\Delta_m^{\mathrm{bdry}}
+\]
+以及一个有限读出映射
+\[
+\widehat\sigma_m:\widehat\Delta_m^{\mathrm{bdry}}\longrightarrow S,
+\]
+并且对象层 parity 断言只允许通过复合
+\[
+\sigma_m^{\Gamma}:=\widehat\sigma_m\circ\Gamma_m
+\]
+出现。则成立：
+\begin{enumerate}
+  \item 若证书链中没有指定 \(\Gamma_m\)，则任何形如更大窗口已经带有与 window-\(6\) 同坐标的 boundary parity 的断言，都不是可采纳对象层读出；
+  \item 一旦 \(\Gamma_m\) 被指定，所有后续 equality 或 incidence 断言都必须因子化为 \(\widehat\Delta_m^{\mathrm{bdry}}\) 上的等式或包含关系；换言之，\(\delta,\delta'\in\Delta_m^{\mathrm{bdry}}\) 在当前读出下可区分的必要条件是
+  \[
+  \Gamma_m(\delta)\ne \Gamma_m(\delta');
+  \]
+  \item 对已固定的 \(\Gamma_m\)，恰有两种结构情形：若 \(\Gamma_m\) 在 \(\Delta_m^{\mathrm{bdry}}\) 上单射，则它给出忠实重锁定读出；若 \(\Gamma_m\) 非单射，则任取
+  \[
+  \delta\ne\delta',\qquad \Gamma_m(\delta)=\Gamma_m(\delta')
+  \]
+  便得到一个有限 collision 见证，并且每个 \(\Gamma_m\)-可采纳读出都满足
+  \[
+  \sigma_m^{\Gamma}(\delta)=\sigma_m^{\Gamma}(\delta').
+  \]
+\end{enumerate}
+因此，跨尺度 parity 的合法结论不是从图形相似性直接外推而来，而是先构造重锁定门，再在该门的纤维上审计忠实性或 collision。
+\end{proposition}
+\begin{proof}
+第一条只是 primitive-admissibility filtering 的直接后果。当前协议允许的 primitive 数据中，尺度 \(m\) 的 boundary 坐标并不自动与 window-\(6\) 的二层 parity 同名；若没有先把 \(\Delta_m^{\mathrm{bdry}}\) 送入某个已声明的坐标集 \(\widehat\Delta_m^{\mathrm{bdry}}\)，则不存在对象层函数可供后续谓词调用。
+
+第二条来自 construction-before-predication。按定义，\(\Gamma_m\)-可采纳读出只能通过复合 \(\widehat\sigma_m\circ\Gamma_m\) 产生。因此，若两个增量在 \(\Gamma_m\) 下同像，则任何只依赖该证书链的谓词都只能看到同一个 \(\widehat\Delta_m^{\mathrm{bdry}}\) 坐标；若后续证明仍把二者分开，它必然使用了未登记的额外 primitive，而不再属于该重锁定协议。
+
+第三条是有限集合映射的二分。任一映射在其定义域上或者单射，或者存在一对不同元素同像。单射时，\(\Gamma_m\) 本身保留了全部增量点，故给出忠实重锁定。非单射时，同像对 \((\delta,\delta')\) 是一个完全有限的 collision 证书；对任意 \(\widehat\sigma_m\)，复合值满足
+\[
+(\widehat\sigma_m\circ\Gamma_m)(\delta)
+=
+\widehat\sigma_m(\Gamma_m(\delta))
+=
+\widehat\sigma_m(\Gamma_m(\delta'))
+=
+(\widehat\sigma_m\circ\Gamma_m)(\delta').
+\]
+这正把 diagram-to-ledger conversion 落到跨尺度 parity 的有限 incidence ledger 上。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 由命题 \ref{prop:typed-address-biaxial-completion-window6-audit-fixed-baseline}，
 \[

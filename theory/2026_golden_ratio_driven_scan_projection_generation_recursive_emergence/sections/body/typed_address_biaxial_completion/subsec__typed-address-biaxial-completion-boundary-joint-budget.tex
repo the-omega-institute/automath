@@ -361,6 +361,58 @@ W=
 \end{enumerate}
 因此，定义 \ref{def:typed-address-biaxial-completion-boundary-verifier} 的统一离线验证器若使用区间半径证书，必须把 \(\mathrm{RadUndec}\) 作为需要加细区间或返回 \(\mathrm{NULL}\) 的正规失败，而不能把它升级为 \(\mathrm{Accept}\)。
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{proposition}[三端区间证书的轴向充分接受律]\label{distill:euclid_elements-finite_construction_certificate_families-boundary-axiswise-sufficient-acceptance}
+\textbf{日期时间：2026-04-23T11:58:48+08:00。依赖状态：conditional audit.}
+沿用定义 \ref{def:typed-address-biaxial-completion-boundary-triple-certificate} 与定义 \ref{def:typed-address-biaxial-completion-boundary-verifier}。设边界层目标半径只以有理区间证书
+\[
+\mathsf R_\rho=(\underline r_\rho,\overline r_\rho),
+\qquad
+0<\underline r_\rho\le r_\rho\le\overline r_\rho<1
+\]
+给出。再设地址端给出一个有限分离谓词
+\[
+\mathsf{Sep}_T(b)
+\]
+其语义是：在高度窗 \((T,2T]\) 与当前 dyadic 地址语法内，深度 \(b\) 已通过离线 collision 表或已登记分离下界的核验。端点端给出有限数据
+\[
+(K,q_K,M_K,N,\eta),
+\qquad
+0<q_K<1,\quad M_K\ge0,\quad \eta>0,
+\]
+并给出 Toeplitz--PSD 证书 \(\mathbf T_N\succeq0\)。若三条轴向条件同时成立：
+\[
+\varrho_{\max}>\overline r_\rho,
+\qquad
+\mathsf{Sep}_T(b),
+\qquad
+q_K^{2N}M_K\le\eta,\quad \mathbf T_N\succeq0,
+\]
+则统一离线验证器可输出一个非 \(\mathsf{NULL}\) 的边界层接受证书。
+
+此外，该接受规则关于三端预算单调：若
+\[
+\varrho'_{\max}\ge\varrho_{\max},\qquad b'\ge b,\qquad N'\ge N
+\]
+并且 \(\mathsf{Sep}_T(b)\Rightarrow\mathsf{Sep}_T(b')\) 是该地址端登记的单调规则，则同一半径区间与同一端点支撑控制下，\((\varrho'_{\max},b',N')\) 仍满足接受条件。若半径端处于
+\[
+\underline r_\rho<\varrho_{\max}\le\overline r_\rho
+\]
+的区间不决状态，或者某一轴缺少对应证书，则本命题不推出拒绝的必要性；它只说明上述有限三端账本是充分接受证书。
+\end{proposition}
+\begin{proof}
+半径端由区间包含给出。若 \(\varrho_{\max}>\overline r_\rho\ge r_\rho\)，则有限半径采样已经越过真实阈值半径，故命题 \ref{prop:typed-address-biaxial-completion-boundary-blindspot} 中的半径盲区不再由该目标点触发。注意这里只使用区间上界，因此没有把 \(\underline r_\rho<\varrho_{\max}\le\overline r_\rho\) 的不决情形误判为通过。
+
+地址端不是由本命题重新证明渐近必要下界，而是由已登记的有限谓词 \(\mathsf{Sep}_T(b)\) 承担。该谓词的作用正是把 dyadic 地址图上的可见 collision 检查转化为 incidence ledger：一旦 \(\mathsf{Sep}_T(b)\) 被核验，验证器便可在当前高度窗中把地址端视为已分离。
+
+端点端由命题 \ref{prop:typed-address-biaxial-completion-boundary-endpoint-heat} 的误差估计给出。在支撑受控记录 \((K,q_K,M_K)\) 下，\(q_K^{2N}M_K\le\eta\) 保证端点热核尾误差不超过 \(\eta\)，而 \(\mathbf T_N\succeq0\) 给出 Toeplitz--PSD 的线性代数合法性。于是三端分别给出半径穿越、地址分离与端点承载控制；定义 \ref{def:typed-address-biaxial-completion-boundary-verifier} 的组合原则正是把三端局部证书在同一协议口径下闭合后输出接受。
+
+单调性逐项成立：增大 \(\varrho_{\max}\) 保持 \(\varrho_{\max}>\overline r_\rho\)；地址端单调性是题设登记规则；而因 \(0<q_K<1\)，若 \(N'\ge N\)，则 \(q_K^{2N'}M_K\le q_K^{2N}M_K\le\eta\)。因此三端接受条件保持。最后一句只是说明本命题给出充分规则而非所有健全验证器的必要条件。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 前两条只是区间包含关系的直接推论。若 \(\varrho_{\max}\le\underline r_\rho\le r_\rho\)，则所有半径采样仍停在阈值半径内侧，故命题 \ref{prop:typed-address-biaxial-completion-boundary-blindspot} 的结构性盲区结论适用。若 \(\varrho_{\max}>\overline r_\rho\ge r_\rho\)，则半径采样已经越过真实阈值。
 
