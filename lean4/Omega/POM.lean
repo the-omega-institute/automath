@@ -191,6 +191,7 @@ import Omega.POM.DiagonalRateKeepProbabilityMonotone
 import Omega.POM.DiagonalRateRankOneRefreshDeterminantCollapse
 import Omega.POM.DiagonalRateKeepResampleChannel
 import Omega.POM.DiagonalRateRankOneRefreshDecomposition
+import Omega.POM.DiagonalRateRefreshHittingTimeDeletedSetLaguerrePGF
 import Omega.POM.DiagonalRateRefreshHittingTimeDeletedLaguerrePGF
 import Omega.POM.DiagonalRateRefreshHittingTimePGFClosed
 import Omega.POM.DiagonalRateRefreshHoldingIntervalPgfHausdorff
