@@ -256,6 +256,7 @@ import Omega.Conclusion.ExclusionRadiusTailAffineRecovery
 import Omega.Conclusion.ExtPiKernelPoset
 import Omega.Conclusion.ExternalBudgetTensorEntropyRate
 import Omega.Conclusion.ExternalBudgetNoComputableConstantFactorApprox
+import Omega.Conclusion.ExternalBudgetTensorMultiplicativity
 import Omega.Conclusion.GodelOrbitIdentifiability
 import Omega.Conclusion.PrimeRegisterGodelHistoryExpectedLiminf
 import Omega.Conclusion.PrimesliceOmegaSupportChainCountable
