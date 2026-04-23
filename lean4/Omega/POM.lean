@@ -127,6 +127,7 @@ import Omega.POM.DiagonalMomentFreeEnergyDegeneracy
 import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
 import Omega.POM.DiagonalRateAbsorbingDFR
 import Omega.POM.DiagonalRateAbsorbingLaguerreInterlacing
+import Omega.POM.MaxentMarkovLaguerreSecularSpectrum
 import Omega.POM.DiagonalRateAbsorbingWronskianIdentity
 import Omega.POM.DiagonalRateAbsorbingFullVsDeletedInterlacing
 import Omega.POM.DiagonalRateSeparationWeightSignRule

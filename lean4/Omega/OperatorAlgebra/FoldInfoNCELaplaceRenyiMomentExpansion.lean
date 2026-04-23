@@ -93,5 +93,31 @@ theorem paper_fold_infonce_laplace_renyi_moment_expansion (m K : Nat) :
   rw [pow_succ, hsub, hs]
   ring
 
+/-- Paper label: `cor:fold-infonce-loss-tower-triangular-inversion-power-sums`. -/
+theorem paper_fold_infonce_loss_tower_triangular_inversion_power_sums (L p b : Nat → Real) :
+    (∀ q, 2 ≤ q →
+      L q =
+        Finset.sum (Finset.Icc 2 q)
+          (fun k => (Nat.choose (q - 1) (k - 1) : Real) * b k * p k)) →
+    ∀ q, 2 ≤ q → b q ≠ 0 →
+      p q =
+        (L q -
+          Finset.sum (Finset.Icc 2 (q - 1))
+            (fun k => (Nat.choose (q - 1) (k - 1) : Real) * b k * p k)) / b q := by
+  intro hL q hq hbq
+  let f : Nat → Real := fun k => (Nat.choose (q - 1) (k - 1) : Real) * b k * p k
+  have hsplit :
+      Finset.sum (Finset.Icc 2 q) f = Finset.sum (Finset.Icc 2 (q - 1)) f + f q := by
+    rw [show q = (q - 1) + 1 by omega]
+    simpa [f] using (Finset.sum_Icc_succ_top (f := f) (show 2 ≤ (q - 1) + 1 by omega))
+  have hmain :
+      L q = Finset.sum (Finset.Icc 2 (q - 1)) f + b q * p q := by
+    rw [hL q hq, hsplit]
+    simp [f]
+  apply (eq_div_iff hbq).2
+  calc
+    p q * b q = b q * p q := by ring
+    _ = L q - Finset.sum (Finset.Icc 2 (q - 1)) f := by linarith [hmain]
+
 end
 end Omega.OperatorAlgebra
