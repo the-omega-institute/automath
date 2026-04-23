@@ -17,8 +17,8 @@ The centre of the paper is the Adams--M\"obius passage from twisted
 determinant data to primitive Peter--Weyl channels. The finite-group
 spine has two steps: Main Theorem~I linearises twisted determinants and
 performs primitive Adams--M\"obius inversion; Main Theorem~II evaluates
-the resulting non-trivial primitive series at \(z=\lambda^{-1}\), under
-the explicit gap \(\eta<\lambda\), and obtains conjugacy-class Mertens
+the resulting non-trivial primitive series at \(z=\lambda^{-1}\), after
+imposing the twisted spectral gap \(\eta<\lambda\), and obtains conjugacy-class Mertens
 constants. The readout of these constants is the Hermitian
 character-orthogonality formula, with
 \(\overline{\chi_\varrho(C)}=\chi_\varrho(C^{-1})\).
@@ -39,7 +39,7 @@ the fixed cocycle. The logical direction of the proofs is
     \xrightarrow[\eta<\lambda]{z=\lambda^{-1}}
     \text{class Mertens constants}
     \xrightarrow{\text{orthogonality}}
-    \text{primitive class profile}.
+    \text{primitive class profile at the Perron point}.
   \end{array}
 \]
 Here the Adams--M\"obius arrow is the primitive extraction step; the last
@@ -106,7 +106,7 @@ calculation of \Cref{thm:finite-part-primitive-closed-form}.
     Adams--M\"obius package on the open Perron disc
     \(|z|<\lambda^{-1}\).
   \item Main Theorem~II begins only after imposing \(\lambda>1\) and
-    the explicit twisted spectral gap
+    the twisted spectral gap
     \[
       \eta:=\max_{\varrho\neq\mathbf 1}\rho(A_\varrho)<\lambda;
     \]
@@ -118,8 +118,9 @@ calculation of \Cref{thm:finite-part-primitive-closed-form}.
     trivial-channel normalisation \(\mathcal M(A)\),
     \Cref{thm:intro-cyclic-reconstruction} recovers the reduced
     spectral polynomial \(F_A\), equivalently the relative non-Perron
-    spectrum \(\{\mu_j/\lambda\}_{j=2}^d\), from the full canonical
-    cyclic-lift record of one fixed matrix \(A\), and
+    spectrum \(\{\mu_j/\lambda\}_{j=2}^d\), from the full branch-lifted
+    logarithmic record \(\{\Psi_q(A)\}_{q\ge 1}\) of one fixed matrix
+    \(A\), and
     \Cref{cor:intro-one-layer-reconstruction} is the one-layer Fourier
     recovery for one fixed \(q\ge d\).
   \end{enumerate}
@@ -173,7 +174,7 @@ calculation of \Cref{thm:finite-part-primitive-closed-form}.
   Equivalently, if
   \[
     \Pi_\varrho(z):=\Pi_{\chi_\varrho}(z)
-      =\sum_{n\ge 1}\pi_{n,\varrho}(A)z^n
+      =\sum_{n\ge 1}\pi_{n,\varrho}(A,\tau)z^n
   \]
   and
   \(\psi^m\chi_\varrho
@@ -189,7 +190,7 @@ calculation of \Cref{thm:finite-part-primitive-closed-form}.
   \]
   Coefficient extraction gives the primitive Peter--Weyl trace formula
   \[
-    \pi_{n,\varrho}(A)
+    \pi_{n,\varrho}(A,\tau)
     =
     \frac{1}{n}\sum_{m\mid n}\mu(m)
       \sum_{\sigma\in\Irr(G)}
@@ -199,9 +200,9 @@ calculation of \Cref{thm:finite-part-primitive-closed-form}.
 \end{theorem}
 
 \begin{theorem}[Main Theorem II: class Mertens constants under
-  the twisted gap]
+  the stated twisted gap]
   \label{thm:intro-class-mertens}
-  Assume \(\lambda>1\) and the explicit twisted spectral gap
+  Assume \(\lambda>1\) and the twisted spectral gap
   \[
     \eta:=\max_{\varrho\neq\mathbf 1}\rho(A_\varrho)<\lambda,
     \qquad
@@ -209,22 +210,28 @@ calculation of \Cref{thm:finite-part-primitive-closed-form}.
   \]
   Here \(\Lambda(A)\) denotes the maximum modulus of the non-Perron
   eigenvalues of the base matrix \(A\).
-  Then for every conjugacy class \(C\subset G\),
+  Then there is a class-uniform constant
+  \(C_{\mathrm{cls}}(A,\tau;G)>0\), made explicit in
+  \Cref{thm:class-mertens-explicit}, such that for every conjugacy class
+  \(C\subset G\),
   \[
-    p_{n,C}
-    =
-    \frac{|C|}{|G|}\frac{\lambda^n}{n}
-    +O\!\left(\frac{\Lambda_*^n}{n}\right),
+    \abs{
+      p_{n,C}
+      -\frac{|C|}{|G|}\frac{\lambda^n}{n}
+    }
+    \le
+    \frac{|C|}{|G|}
+    \frac{C_{\mathrm{cls}}(A,\tau;G)\Lambda_*^n}{n},
   \]
   and
   \[
     \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
     =
-    \frac{|C|}{|G|}\log N+\mathcal M_C(A)+O(N^{-1}).
+    \frac{|C|}{|G|}\log N+\mathcal M_C(A,\tau;G)+O(N^{-1}).
   \]
   The constant is
   \[
-    \mathcal M_C(A)
+    \mathcal M_C(A,\tau;G)
     =
     \frac{|C|}{|G|}\mathcal M(A)
     +\frac{|C|}{|G|}
@@ -233,18 +240,19 @@ calculation of \Cref{thm:finite-part-primitive-closed-form}.
   \]
   The deviations
   \[
-    \Delta_C(A):=\mathcal M_C(A)-\frac{|C|}{|G|}\mathcal M(A)
+    \Delta_C(A,\tau;G)
+    :=\mathcal M_C(A,\tau;G)-\frac{|C|}{|G|}\mathcal M(A)
   \]
   have the following ordinary character-orthogonality readout:
   \[
     \Pi_\sigma(\lambda^{-1})
     =
-    \sum_{C\subset G}\Delta_C(A)\chi_\sigma(C)
+    \sum_{C\subset G}\Delta_C(A,\tau;G)\chi_\sigma(C)
     \qquad(\sigma\neq\mathbf 1).
   \]
   These deviations also satisfy the Parseval identity
   \[
-    \sum_{C\subset G}\frac{|G|}{|C|}\abs{\Delta_C(A)}^2
+    \sum_{C\subset G}\frac{|G|}{|C|}\abs{\Delta_C(A,\tau;G)}^2
     =
     \sum_{\varrho\neq\mathbf 1}
       \abs{\Pi_\varrho(\lambda^{-1})}^2.
@@ -259,7 +267,7 @@ calculation of \Cref{thm:finite-part-primitive-closed-form}.
   functoriality and the abelian shadow]
   \label{thm:intro-quotient-shadow}
   Assume the hypotheses of Main Theorem~II, so the class deviations
-  \(\Delta_C(A)\) are defined. Quotient maps \(q:G\twoheadrightarrow Q\)
+  \(\Delta_C(A,\tau;G)\) are defined. Quotient maps \(q:G\twoheadrightarrow Q\)
   intertwine class-function logarithms and primitive series:
   \[
     \mathcal L_{q^\ast f}^{G}(z)=\mathcal L_f^{Q}(z),
@@ -269,15 +277,17 @@ calculation of \Cref{thm:finite-part-primitive-closed-form}.
   \]
   If
   \[
-    \mathcal B_A(C):=\frac{|G|}{|C|}\Delta_C(A),
+    \mathcal B_{A,\tau;G}(C):=\frac{|G|}{|C|}\Delta_C(A,\tau;G),
   \]
-  then \(\mathcal B_A\) splits orthogonally into its one-dimensional
-  Peter--Weyl part and its higher-dimensional Peter--Weyl part. The span
+  then \(\mathcal B_{A,\tau;G}\) splits orthogonally into its
+  one-dimensional Peter--Weyl part and its higher-dimensional
+  Peter--Weyl part. The span
   of all cyclic quotient observables is exactly the one-dimensional
   sector; hence their aggregate projection is the abelian shadow and is
-  orthogonal to the genuine non-abelian defect. In particular, the full
-  primitive class profile is generated by cyclic quotient shadows if and
-  only if every higher-dimensional primitive channel
+  orthogonal to the genuine non-abelian defect. In particular, under
+  \(\eta<\lambda\), the full primitive class profile at the Perron point
+  is generated by cyclic quotient shadows if and only if every
+  higher-dimensional primitive channel
   \(\Pi_\varrho(\lambda^{-1})\) vanishes.
 \end{corollary}
 
@@ -375,8 +385,13 @@ fixed scalar record attached to one fixed matrix.
   where \(\mu_2,\dots,\mu_d\) are the non-Perron eigenvalues of \(A\),
   \(A^{\langle q\rangle}=A\otimes P_q\) is the cyclic lift, and
   \(\exp(\Psi_q(A))=q\,C_\lambda(A^{\langle q\rangle})\) by
-  \Cref{thm:finite-part-cyclic-lift-reduced-constant-closed}. Then this
-  fixed sequence
+  \Cref{thm:finite-part-cyclic-lift-reduced-constant-closed}. The
+  reconstruction input is this branch-lifted logarithmic sequence, not
+  merely the determinant constants
+  \(\{C_\lambda(A^{\langle q\rangle})\}_{q\ge 1}\); those constants
+  determine the logarithmic record only after a compatible branch choice
+  has been fixed. Then this fixed
+  sequence
   \(\{\Psi_q(A)\}_{q\ge 1}\) canonically determines the reduced
   spectral polynomial \(F_A\) of the same matrix \(A\), and hence the
   relative non-Perron spectrum
@@ -446,8 +461,9 @@ and the existence of Mertens-type asymptotics for Axiom~A flows was
 established by Sharp \cite{Sharp1991Mertens}. For zeta functions
 attached to broader group-action orbit data, Lind's \(\ZZ^d\)-action
 zeta function is the standard reference \cite{Lind1996ZetaZdActions}.
-The present paper does not claim a new prime-orbit theorem or a new
-orbit-counting theorem in homology classes; compare
+The present paper does not claim a new prime-orbit theorem, a new
+Tauberian Mertens theorem, or a new orbit-counting theorem in
+homology classes; compare
 \cite{Lalley1987DistributionPeriodicOrbits,%
 KatsudaSunada1988HomologyClosedGeodesics,%
 KatsudaSunada1990ClosedOrbitsHomology,%
@@ -457,24 +473,45 @@ Adams--M\"obius reconstruction of primitive Peter--Weyl channels from
 twisted determinant data. The scalar finite-part identity at the Perron
 pole is included as an explicit finite-matrix input for the classwise
 constants and as a checkable comparison with the classical Mertens
-constant.
+constant. In particular, the class constant
+\(\mathcal M_C(A,\tau;G)\) below is a finite-state classwise analogue
+of the constant term that accompanies a Mertens asymptotic once a
+spectral gap is already available; it is not presented as a new
+Sharp-style Tauberian theorem for closed orbits.
 
 The transfer-operator approach is developed systematically in
 \cite{Ruelle1976ZetaExpanding,Ruelle1978Thermodynamic,%
 ParryPollicott1990Zeta,Baladi2000PositiveTransfer}.
 Twisted determinant and \(L\)-function constructions for dynamical
-systems and finite-group extensions go back at least to the twisted
+systems and finite-group extensions also appear in the twisted
 Perron--Frobenius framework of Adachi--Sunada
-\cite{AdachiSunada1987TwistedPF}. For skew-product extensions and
-compact-group cocycles one should also compare Parry's compact Lie group
-skew-product paper \cite{Parry1997SkewProductsCompactLie} and the
+\cite{AdachiSunada1987TwistedPF}. These references place the paper on
+the determinant and twisted-zeta side of the subject rather than in the
+broader transfer-operator literature.
+
+Twisted periodic-point formulas and closed-orbit identities also appear
+in Fried's work on periodic points with twisted coefficients
+\cite{Fried1983PeriodicPointsTwistedCoefficients} and homological
+identities for closed orbits
+\cite{Fried1983HomologicalIdentitiesClosedOrbits}. These references are
+closer to the present determinant-level use of twisted coefficients than
+the broader transfer-operator literature, although they do not contain
+the finite-group Adams--M\"obius primitive inversion developed here. For
+skew-product extensions and compact-group cocycles one should also
+compare Parry's compact Lie group skew-product paper
+\cite{Parry1997SkewProductsCompactLie} and the
   compact-group Liv\v{s}ic theorem of Parry--Pollicott
-  \cite{ParryPollicott1997LivsicCompactLie}. The leading Chebotarev
+  \cite{ParryPollicott1997LivsicCompactLie}. The leading Chebotarev-type
   asymptotics for finite extensions are classical: Parry--Pollicott treat
-  Axiom~A Galois coverings \cite{ParryPollicott1986Chebotarev}, and
-  Noorani--Parry prove the corresponding theorem for finite homogeneous
-  extensions of shifts \cite{NooraniParry1992ChebotarevShifts}. For
-  homogeneous-extension background beyond the leading asymptotic,
+  Axiom~A Galois coverings \cite{ParryPollicott1986Chebotarev}, whose
+  title uses the spelling ``Chebotarov'' while proving an analogue of the
+  Chebotarev density principle, and Noorani--Parry prove the
+  corresponding theorem for finite homogeneous extensions of shifts
+  \cite{NooraniParry1992ChebotarevShifts}. The present paper starts
+  after that leading-density stage: assuming the twisted gap
+  \(\eta<\lambda\), it identifies the secondary harmonic constant term
+  \(\mathcal M_C(A,\tau;G)\) for one fixed cocycle in terms of twisted
+  determinants. For homogeneous-extension background beyond the leading asymptotic,
   including ergodicity and weak-mixing criteria with applications to
   Markov shifts, compare Noorani
   \cite{Noorani1997HomogeneousExtensionsMarkov}. For
@@ -501,6 +538,10 @@ new Tauberian method. Instead it isolates the finite-state determinant
 algebra needed after the leading term: the Adams--M\"obius primitive
 constant calculus recovers primitive Peter--Weyl channels and class
 Mertens constants from twisted determinant data for one fixed cocycle.
+The novelty is therefore in the explicit constant-term extraction and
+readout, not in a replacement for the leading asymptotics of
+\cite{ParryPollicott1986Chebotarev,NooraniParry1992ChebotarevShifts,%
+Sharp1991Mertens}.
 
 Finite group actions on SFTs provide the closest symbolic-dynamics
 context. Adler--Kitchens--Marcus
@@ -581,10 +622,11 @@ identifies the abelian shadow and the exact boundary of cyclic
 detection inside the finite-group Peter--Weyl decomposition, and closes
 with the \(S_3\)-model separating the quadratic sign-channel Adams effect
 from the standard-channel non-abelian defect. \Cref{sec:finite-part}
-then proves the auxiliary scalar finite-part formula, the cyclic-lift
-reconstruction of the reduced spectral polynomial \(F_A\), equivalently
-of the relative non-Perron spectrum, and the one-layer discrete Fourier
-corollary used as the canonical cyclic-lift comparison case.
+then proves the auxiliary scalar finite-part formula, the branch-lifted
+cyclic-lift reconstruction of the reduced spectral polynomial \(F_A\),
+equivalently of the relative non-Perron spectrum, and the one-layer
+discrete Fourier corollary used as the canonical cyclic-lift comparison
+case.
 The appendices record
 holomorphic variation and truncation for the scalar finite part
 (\Cref{app:variation}) and mark the boundary separating this article

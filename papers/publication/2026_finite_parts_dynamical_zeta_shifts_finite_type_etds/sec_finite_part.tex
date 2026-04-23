@@ -9,8 +9,9 @@ primitive orbit counts only in the integer multigraph case fixed in
 \Cref{sec:preliminaries}. This section supplies the scalar fixed-matrix
 inputs isolated in \Cref{prop:intro-scope-of-results}: the finite-part
 formula giving \(\mathcal M(A)\), the cyclic-lift recovery of the
-reduced spectrum from the full record \(\{\Psi_q(A)\}_{q\ge 1}\), and
-the one-layer Fourier recovery for one fixed \(q\).
+reduced spectrum from the full branch-lifted logarithmic record
+\(\{\Psi_q(A)\}_{q\ge 1}\), and the one-layer Fourier recovery for one
+fixed \(q\).
 
 \medskip\noindent\textbf{Logarithm convention.}
 Throughout this section, \(\Log\) denotes the principal branch on
@@ -359,50 +360,72 @@ and
   \label{lem:finite-part-exponential-sum-limsup}
   Let
   \[
-    f_q=\sum_{j=1}^r c_j\alpha_j^q
+    f_q=\sum_{\beta\in B} d_\beta \beta^q
     \qquad (q\ge 1),
   \]
-  where \(c_j\in\CC\setminus\{0\}\) and \(\alpha_j\in\CC\). Then
+  where \(B\subset\CC\) is finite and nonempty, the numbers \(\beta\) are
+  pairwise distinct, and \(d_\beta\in\CC\setminus\{0\}\) for every
+  \(\beta\in B\).
+  Then
   \[
     \limsup_{q\to\infty}\abs{f_q}^{1/q}
-    =\max_{1\le j\le r}\abs{\alpha_j}.
+    =\max_{\beta\in B}\abs{\beta}.
   \]
 \end{lemma}
 
 \begin{proof}
-  Set \(R:=\max_j\abs{\alpha_j}\). The upper bound
+  Set
+  \[
+    R:=\max_{\beta\in B}\abs{\beta}.
+  \]
+  The upper bound
   \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\le R\) is immediate from
-  \(\abs{f_q}\le (\sum_j\abs{c_j})R^q\).
-  If \(R=0\), then every \(\alpha_j=0\), so \(f_q=0\) for all \(q\ge 1\)
-  and the asserted equality is immediate.
+  \[
+    \abs{f_q}
+    \le \sum_{\beta\in B}\abs{d_\beta}\,\abs{\beta}^q
+    \le \left(\sum_{\beta\in B}\abs{d_\beta}\right)R^q.
+  \]
+  If \(R=0\), then \(B=\{0\}\), so \(f_q=0\) for all \(q\ge 1\), and the asserted
+  equality is immediate.
 
-  For the reverse inequality, collect equal frequencies on the boundary
-  circle and write
+  Let
+  \[
+    B_R:=\{\beta\in B:\abs{\beta}=R\},
+    \qquad
+    g_q:=\sum_{\beta\in B_R} d_\beta (\beta/R)^q.
+  \]
+  Since \(B\) is finite, there exists \(\vartheta\in[0,1)\) such that
+  \(\abs{\beta}\le \vartheta R\) for every \(\beta\in B\setminus B_R\).
+  Hence
   \[
     f_q
-    =R^q\bigl(g_q+O(\vartheta^q)\bigr),
-    \qquad
-    g_q:=\sum_{k=1}^s d_k\beta_k^q,
+    =
+    R^q\left(g_q+\sum_{\beta\in B\setminus B_R}d_\beta(\beta/R)^q\right)
+    =
+    R^q\bigl(g_q+O(\vartheta^q)\bigr).
   \]
-  where \(\vartheta\in[0,1)\), the numbers \(\beta_1,\dots,\beta_s\in\TT\)
-  are pairwise distinct, and \(d_k\neq 0\). Then
+  The numbers \(\beta/R\) with \(\beta\in B_R\) lie on \(\TT\) and are
+  pairwise distinct. Therefore
   \[
     \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
-    =\sum_{k,\ell=1}^s d_k\overline{d_\ell}\,
-      \frac{1}{N}\sum_{q=1}^N(\beta_k\overline{\beta_\ell})^q.
+    =
+    \sum_{\beta,\gamma\in B_R}
+      d_\beta\overline{d_\gamma}\,
+      \frac{1}{N}\sum_{q=1}^N
+        \left(\frac{\beta\overline{\gamma}}{R^2}\right)^q.
   \]
   As \(N\to\infty\), the inner Ces\`aro average tends to \(1\) when
-  \(k=\ell\) and to \(0\) otherwise. Hence
+  \(\beta=\gamma\) and to \(0\) otherwise. Hence
   \[
     \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
     \longrightarrow
-    \sum_{k=1}^s\abs{d_k}^2>0.
+    \sum_{\beta\in B_R}\abs{d_\beta}^2>0.
   \]
   Therefore \(\limsup_{q\to\infty}\abs{g_q}>0\), so there exist
-  \(c>0\) and infinitely many \(q\) such that \(\abs{g_q}\ge c\). Along
+  \(c>0\) and infinitely many \(q\) such that \(\abs{g_q}\ge 2c\). Along
   that subsequence,
   \[
-    \abs{f_q}\ge \frac{c}{2}R^q
+    \abs{f_q}\ge cR^q
   \]
   for all sufficiently large \(q\), because \(\vartheta^q\to 0\). This
   yields
@@ -410,11 +433,11 @@ and
 \end{proof}
 
 \begin{proposition}[Fixed-matrix recovery of the reduced spectrum from the
-  full cyclic-lift record with explicit remainder]
+  full branch-lifted cyclic-lift record with explicit remainder]
   \label{thm:finite-part-cyclic-lift-spectrum-identifiability}
-  For one fixed primitive non-negative matrix \(A\in M_d(\RR)\), the full recorded
-  \(\{\Psi_q(A)\}_{q\ge 1}\), equivalently
-  \(\{C_\lambda(A^{\langle q\rangle})\}_{q\ge 1}\), determines the
+  For one fixed primitive non-negative matrix \(A\in M_d(\RR)\), the
+  full branch-lifted logarithmic record \(\{\Psi_q(A)\}_{q\ge 1}\)
+  determines the
   reduced spectral polynomial \(F_A\) of that same matrix and hence the
   relative non-Perron spectrum
   \(\{\mu_j/\lambda\}_{j=2}^d\) with algebraic multiplicity. If
@@ -422,6 +445,13 @@ and
   non-Perron spectrum \(\{\mu_j\}_{j=2}^d\) is also recovered. In
   particular, once the size \(d\) is known, the multiplicity of the
   zero non-Perron eigenvalue is recovered as \(d-1-\deg F_A\).
+  The determinant constants
+  \(\{C_\lambda(A^{\langle q\rangle})\}_{q\ge 1}\) enter only through
+  the exponentiated identity
+  \(\exp(\Psi_q(A))=q\,C_\lambda(A^{\langle q\rangle})\). Thus the
+  determinant constants determine this branch-lifted record only after a
+  compatible logarithmic branch has been fixed; no separate claim of
+  canonical branch recovery from those constants alone is made here.
   Moreover,
   \[
     \Psi_q(A)=u_q(A)+O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right),
@@ -462,8 +492,22 @@ and
   is purely fixed-record: it recovers one polynomial \(F_A\) from the
   one sequence attached to the same matrix \(A\).
 
-  For the exponential growth rate,
-  \(u_q(A)=\sum_{j=2}^d(\mu_j/\lambda)^q\), so
+  For the exponential growth rate, let
+  \[
+    B:=\{\alpha_j:2\le j\le d,\ \alpha_j\neq 0\}
+  \]
+  be the set of distinct nonzero values among the relative eigenvalues,
+  and for each \(\beta\in B\) let \(m_\beta\ge 1\) be its algebraic
+  multiplicity among \(\alpha_2,\dots,\alpha_d\). Then
+  \[
+    u_q(A)=\sum_{\beta\in B}m_\beta\beta^q.
+  \]
+  If \(B=\varnothing\), then \(u_q(A)=0\) for every \(q\ge 1\), so
+  \(\Lambda_{\mathrm{rel}}(A)=0\) and the asserted limsup identity is
+  immediate. Assume henceforth that \(B\neq\varnothing\). Since the
+  frequencies in \(B\) are pairwise distinct and each coefficient
+  \(m_\beta\) is a positive integer, no cancellation can occur after
+  grouping equal frequencies, and
   \Cref{lem:finite-part-exponential-sum-limsup} gives
   \[
     \limsup_{q\to\infty}\abs{u_q(A)}^{1/q}
