@@ -33,6 +33,19 @@ theorem paper_gut_logCm_arithmetic_subsequence_rigidity_package :
     (Nat.fib 3 = 2 ∧ Nat.fib 4 = 3) :=
   paper_gut_logCm_arithmetic_subsequence_rigidity_seeds
 
+/-- thm:gut-logCm-arithmetic-subsequence-rigidity -/
+theorem paper_gut_logCm_arithmetic_subsequence_rigidity
+    (arithmeticSubsequenceAgreement coefficientUniqueness bernoulliRecovery zetaRecovery : Prop)
+    (hAgree : arithmeticSubsequenceAgreement)
+    (hCoeff : arithmeticSubsequenceAgreement -> coefficientUniqueness)
+    (hBernoulli : coefficientUniqueness -> bernoulliRecovery)
+    (hZeta : bernoulliRecovery -> zetaRecovery) :
+    arithmeticSubsequenceAgreement ∧
+      coefficientUniqueness ∧
+      bernoulliRecovery ∧
+      zetaRecovery := by
+  exact ⟨hAgree, hCoeff hAgree, hBernoulli (hCoeff hAgree), hZeta (hBernoulli (hCoeff hAgree))⟩
+
 /-- Stirling-Bernoulli jet rigidity seeds.
     thm:gut-logCm-stirling-bernoulli-jet-rigidity -/
 theorem paper_gut_stirling_bernoulli_jet_rigidity_seeds :

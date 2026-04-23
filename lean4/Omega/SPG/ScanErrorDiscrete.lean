@@ -1416,4 +1416,16 @@ theorem paper_scanError_symmDiff_stability {α β : Type*} [Fintype α] [Fintype
           · exact Set.mem_union_right _ (Set.mem_symmDiff.mpr (Or.inr ⟨hx, hxP⟩)))
       _ ≤ setMass μ P + setMass μ (symmDiff P Q) := setMass_union_le μ P (symmDiff P Q)
 
+/-- cor:spg-clarity-basic -/
+theorem paper_spg_clarity_basic
+    {α β γ : Type*} [Fintype α] [Fintype β] [Fintype γ]
+    (μ : PMF α) (obs₁ : α → β) (obs₂ : α → γ) (f : γ → β) (P : Set α)
+    (hRef : obs₁ = f ∘ obs₂) :
+    scanError μ obs₂ P ≤ scanError μ obs₁ P ∧
+      (scanError μ obs₁ P = 0 ↔ boundaryCells μ obs₁ P = ∅) := by
+  constructor
+  · exact scanError_antitone_of_refines μ obs₁ obs₂ f
+      (fun x => by simpa [Function.comp] using congrArg (fun g => g x) hRef) P
+  · exact scanError_eq_zero_iff_boundaryCells_eq_empty μ obs₁ P
+
 end Omega.SPG

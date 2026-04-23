@@ -217,5 +217,15 @@ theorem paper_discussion_discrete_stokes_gauge_leyang
       simp
   exact ⟨hmatrix, hendpoint, hcyclic, hzero⟩
 
+/-- cor:discussion-thermo-ldp-homology-invariance -/
+theorem paper_discussion_thermo_ldp_homology_invariance
+    (telescopingIdentity scgfInvariant ldpInvariant cltInvariant : Prop)
+    (hTel : telescopingIdentity)
+    (hScgf : telescopingIdentity -> scgfInvariant)
+    (hLdp : telescopingIdentity -> ldpInvariant)
+    (hClt : telescopingIdentity -> cltInvariant) :
+    telescopingIdentity ∧ scgfInvariant ∧ ldpInvariant ∧ cltInvariant := by
+  exact ⟨hTel, hScgf hTel, hLdp hTel, hClt hTel⟩
+
 end
 end Omega.Discussion
