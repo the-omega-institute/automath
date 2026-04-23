@@ -30,4 +30,79 @@ b=\partial_n x+\eta,
 若对所有 \(\norm{\eta}_2\le \varepsilon\) 都要求 \(\norm{x^\sharp-x}_2\le \delta\)，则必须有 \(\norm{L}_{2\to 2}\varepsilon\le \delta\)，代入上述下界即得所示必要条件。证毕。
 \end{proof}
 
+% --- Distillation writeback ---
+\begin{proposition}[线性全息解码的精确填充半径门与双 lift 混淆]\label{distill:gromov-filling_budget_closure_families-spg-rad-linear-confusion-gate}
+沿用推论 \ref{cor:spg-dyadic-holographic-reconstruction-noise-budget} 的 dyadic 链复形记号，并令
+\[
+L:C_{n-1}(\mathcal Q_m;\RR)\longrightarrow C_n(\mathcal Q_m;\RR),
+\qquad L\partial_n=\mathrm{Id}.
+\]
+对 \(\delta>0\) 定义该线性左逆的填充半径门
+\[
+\operatorname{Rad}_L(\delta):=\sup\Bigl\{\varepsilon\ge0:
+\|\eta\|_2\le\varepsilon\Longrightarrow \|L\eta\|_2\le\delta\Bigr\}.
+\]
+则
+\[
+\boxed{\ \operatorname{Rad}_L(\delta)=\frac{\delta}{\|L\|_{2\to2}}\ }.
+\]
+因此，给定 \(L\) 后，要求
+\[
+\|L(\partial_nx+\eta)-x\|_2\le\delta
+\qquad\text{对所有 }x\text{ 与所有 }\|\eta\|_2\le\varepsilon\text{ 成立}
+\]
+当且仅当 \(\varepsilon\le \operatorname{Rad}_L(\delta)\)。此外定义两 lift 混淆门
+\[
+\operatorname{Amb}_{m,n}(\delta):=\frac12\inf\Bigl\{\|\partial_nh\|_2:\ h\in C_n(\mathcal Q_m;\RR),\ \|h\|_2>2\delta\Bigr\}.
+\]
+若 \(\varepsilon>\operatorname{Amb}_{m,n}(\delta)\)，则存在两个 bulk 链 \(x_0,x_1\) 与同一个观测边界 \(b\)，使得
+\[
+\|x_0-x_1\|_2>2\delta,\qquad
+\|b-\partial_nx_0\|_2<\varepsilon,\qquad
+\|b-\partial_nx_1\|_2<\varepsilon.
+\]
+于是任何解码器，不论线性与否，都不可能在全部 \(\varepsilon\)-噪声边界数据上保证误差 \(\le\delta\)。特别地，对任意线性左逆 \(L\)，推论 \ref{cor:spg-dyadic-holographic-reconstruction-noise-budget} 给出
+\[
+\operatorname{Rad}_L(\delta)\le \sqrt{2n}\,\delta\,2^{-m/2}.
+\]
+\end{proposition}
+\begin{proof}
+由于链空间有限维，算子范数 \(\|L\|_{2\to2}\) 在单位球面上取到。记 \(M:=\|L\|_{2\to2}\)。若 \(\varepsilon\le\delta/M\)，则对任意 \(\|\eta\|_2\le\varepsilon\)，有
+\[
+\|L\eta\|_2\le M\|\eta\|_2\le M\varepsilon\le\delta,
+\]
+故 \(\operatorname{Rad}_L(\delta)\ge\delta/M\)。反之，若 \(\varepsilon>\delta/M\)，取单位向量 \(u\) 满足 \(\|Lu\|_2=M\)，并取 \(t\) 使 \(\delta/M<t<\varepsilon\)。令 \(\eta=tu\)，则 \(\|\eta\|_2=t<\varepsilon\)，但
+\[
+\|L\eta\|_2=tM>\delta.
+\]
+因此任何大于 \(\delta/M\) 的半径都不满足定义中的一致误差要求，得到所示等式。
+
+又因为 \(L\partial_n=\mathrm{Id}\)，对任意真值 \(x\) 与噪声 \(\eta\) 有
+\[
+L(\partial_nx+\eta)-x=L\eta.
+\]
+故 \(L\) 在 \(\varepsilon\)-噪声球上的 \(\delta\)-稳定性等价于 \(\|\eta\|_2\le\varepsilon\Rightarrow \|L\eta\|_2\le\delta\)，即等价于 \(\varepsilon\le\operatorname{Rad}_L(\delta)\)。
+
+最后设 \(\varepsilon>\operatorname{Amb}_{m,n}(\delta)\)。由下确界定义，可取 \(h\in C_n(\mathcal Q_m;\RR)\) 满足
+\[
+\|h\|_2>2\delta,\qquad \frac12\|\partial_nh\|_2<\varepsilon.
+\]
+令
+\[
+x_0:=0,\qquad x_1:=h,\qquad b:=\frac12\partial_nh.
+\]
+则
+\[
+\|b-\partial_nx_0\|_2=\frac12\|\partial_nh\|_2<\varepsilon,\qquad
+\|b-\partial_nx_1\|_2=\left\|\frac12\partial_nh-\partial_nh\right\|_2<\varepsilon,
+\]
+而 \(\|x_0-x_1\|_2=\|h\|_2>2\delta\)。若某解码器 \(D\) 对所有 \(\varepsilon\)-噪声边界均误差不超过 \(\delta\)，则同一个输入 \(b\) 必同时满足
+\[
+\|D(b)-x_0\|_2\le\delta,\qquad \|D(b)-x_1\|_2\le\delta,
+\]
+从而由三角不等式得 \(\|x_0-x_1\|_2\le2\delta\)，矛盾。最后的不等式直接由推论 \ref{cor:spg-dyadic-holographic-reconstruction-noise-budget} 中的 \(\|L\|_{2\to2}\ge(2n)^{-1/2}2^{m/2}\) 与 \(\operatorname{Rad}_L(\delta)=\delta/\|L\|_{2\to2}\) 相乘得到。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \endinput

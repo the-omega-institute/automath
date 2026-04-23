@@ -222,6 +222,62 @@ b_{\mathrm{mode}}
 \end{enumerate}
 若三者中任一失败，则提高另外两者都不能替代该失败轴的缺口。
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{theorem}[有限填充预算门控与对偶 holonomy 分离]\label{distill:gromov-filling_budget_closure_families-typed-boundary-fill-radius-dual-holonomy}
+设 \(\mathcal N\) 为有限边界 nerve，\(A\) 为有限交换寄存群，并记
+\[
+C_i:=C_i(\mathcal N;A),\qquad Z_1:=\ker(\partial_1),\qquad B_1:=\operatorname{im}(\partial_2).
+\]
+令 \(A^\vee:=\operatorname{Hom}(A,\QQ/\ZZ)\)，并给每个二维单形 \(\sigma\in\mathcal N_2\) 指定权重 \(\mathbf w(\sigma)\in\NN_{>0}\)。对
+\(c=\sum_{\sigma\in\mathcal N_2}a_\sigma\sigma\in C_2\)，定义
+\[
+\|c\|_{\mathbf w}:=\sum_{a_\sigma\ne0}\mathbf w(\sigma).
+\]
+对 \(z\in Z_1\) 定义填充成本
+\[
+\operatorname{Fill}_{\mathbf w}(z):=\inf\{\|c\|_{\mathbf w}:c\in C_2,\ \partial_2c=z\},
+\]
+若该集合为空则取值为 \(+\infty\)。固定预算阈值 \(B\in\NN\)，并规定边界回路重构后端只允许在给出某个 \(c\in C_2\) 且
+\[
+\partial_2c=z,\qquad \|c\|_{\mathbf w}\le B
+\]
+时把证书回路 \(z\) 编译为局部闭合。则对每个 \(z\in Z_1\) 恰有以下三种互斥情形之一：
+\begin{enumerate}
+  \item 若 \(\operatorname{Fill}_{\mathbf w}(z)\le B\)，则 \(z\) 具有显式次临界填充证书，因而可在当前双轴账本中局部闭合；
+  \item 若 \(B<\operatorname{Fill}_{\mathbf w}(z)<+\infty\)，则 \(z\) 在同调上为边界，但当前预算不足；任何不提高填充预算而宣称闭合的重构均不是该预算后端的合法输出；
+  \item 若 \(\operatorname{Fill}_{\mathbf w}(z)=+\infty\)，则存在 \(A^\vee\)-值 \(1\)-余循环
+  \[
+  \chi\in Z^1(\mathcal N;A^\vee)
+  \]
+  使得
+  \[
+  \langle\chi,z\rangle\ne0\in\QQ/\ZZ.
+  \]
+  因而 \(z\) 不能由任何有限二维填充预算关闭；它必须作为离散 holonomy 见证，或作为无限填充预算骨架，进入最小记录包。
+\end{enumerate}
+特别地，边界回路重构的合法性不是纯局部存在性命题，而是受 \(\operatorname{Fill}_{\mathbf w}\le B\) 明确门控的预算命题。
+\end{theorem}
+\begin{proof}
+前三种情形的互斥性与穷尽性来自 \(\operatorname{Fill}_{\mathbf w}(z)\) 的三种可能取值区间：不超过 \(B\)、有限但大于 \(B\)、以及无穷。第一种情形中，定义本身给出 \(c\in C_2\) 满足 \(\partial_2c=z\) 且 \(\|c\|_{\mathbf w}\le B\)，故当前后端拥有完整的有限填充证书。第二种情形中，虽然存在某个填充，但所有填充的成本均大于 \(B\)，故当前预算语法无法生成接受证书；若仍输出闭合，则输出没有相应的 \(B\)-有界见证。
+
+剩下只需证明第三种情形中的对偶检测。若 \(\operatorname{Fill}_{\mathbf w}(z)=+\infty\)，则不存在 \(c\in C_2\) 使 \(\partial_2c=z\)，即 \(z\notin B_1\)。有限交换群 \(C_1/B_1\) 中 \([z]\ne0\)。由有限交换群的 Pontryagin 对偶分离性，存在群同态
+\[
+\lambda:C_1/B_1\longrightarrow \QQ/\ZZ
+\]
+使 \(\lambda([z])\ne0\)。将其与商映射复合，得到 \(\widetilde\lambda:C_1\to\QQ/\ZZ\)，且 \(\widetilde\lambda|_{B_1}=0\)、\(\widetilde\lambda(z)\ne0\)。由于
+\[
+C_1(\mathcal N;A)^\vee\cong C^1(\mathcal N;A^\vee),
+\]
+同态 \(\widetilde\lambda\) 等价于某个 \(1\)-上链 \(\chi\in C^1(\mathcal N;A^\vee)\)。条件 \(\widetilde\lambda|_{B_1}=0\) 正是 \(\chi\circ\partial_2=0\)，即 \(\delta\chi=0\)，所以 \(\chi\in Z^1(\mathcal N;A^\vee)\)。同时
+\[
+\langle\chi,z\rangle=\widetilde\lambda(z)=\lambda([z])\ne0.
+\]
+若 \(\chi\) 是余边界，则它与任意 \(1\)-循环的配对均为零，这与上式矛盾。因此该见证是真正的 holonomy 类，而不是可由顶点规范消去的伪不变量。由此，第三种情形必须进入离散证书轴或无限预算骨架，不能被可见圆轴或有限寄存预算吸收。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 由定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable}，不同失败类携带不同支撑轴上的见证，因此预算提升只能在其所属轴上发生有效补偿，而不能跨轴抵偿。
 \end{proof}
