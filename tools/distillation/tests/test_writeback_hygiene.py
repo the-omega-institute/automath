@@ -141,6 +141,23 @@ The assertion follows by checking every coordinate.
 
         self.assertEqual(errors, [])
 
+    def test_accepts_existing_reference_labels_with_numeric_suffixes(self):
+        content = r"""
+\begin{lemma}[既有掩码引用的局部合法性]
+\label{lem:distill-hygiene}
+若边掩码只调用推论 \ref{cor:foldbin6-geo-mask-34} 中已经登记的位移，则其
+逐边局部合法性只依赖该既有引用，而不引入新的人工编号。
+\end{lemma}
+\begin{proof}
+引用标签只是既有文件中的稳定标识符；证明只检查每条边调用同一个已登记
+位移，因此不含外加的结果序号。
+\end{proof}
+""".strip()
+
+        _, errors = self._validate(content)
+
+        self.assertEqual(errors, [])
+
     def test_writeback_target_selection_skips_plain_paragraph_files(self):
         para = self.core_body / "para__positioning.tex"
         theorem_file = self.core_body / "subsec__inverse-limit.tex"

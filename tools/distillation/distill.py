@@ -54,13 +54,12 @@ SECTION_RE = re.compile(
     re.DOTALL,
 )
 MANUAL_RESULT_ORDINAL_RE = re.compile(
-    "(?:Result|" + "\u7ed3\u679c" + r")\s*[0-9]+"
+    "(?i:(?:Result|" + "\u7ed3\u679c" + r")\s*[0-9]+)"
     r"|" + "\u6df1\u5316\u5e8f\u53f7" + r"\s*[:=：]?\s*[0-9]+"
-    r"|\b(?:deepening|continuation)\s*(?:index|number|no\.?)?\s*[:=]?\s*[0-9]+"
+    r"|(?i:\b(?:deepening|continuation)\s*(?:index|number|no\.?)?\s*[:=]?\s*[0-9]+)"
     r"|[A-Z]{2,}(?:-[A-Z]{2,})+-[0-9]+"
     r"|\\mathsf\{nr\}\s*=\s*[0-9]+"
-    r"|\bnr\s*=\s*[0-9]+",
-    re.IGNORECASE,
+    r"|(?i:\bnr\s*=\s*[0-9]+)",
 )
 SECTIONING_COMMAND_RE = re.compile(
     r"\\(?:part|chapter|section|subsection|subsubsection|paragraph|subparagraph)\*?\{"
