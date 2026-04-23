@@ -86,6 +86,7 @@ import Omega.Zeta.XiScaleMellinNoNonzeroImagPeriod
 import Omega.Zeta.XiRhIffLatticeComovingDefect
 import Omega.Zeta.XiSmithLossSpectrumDiscreteCurvatureCompleteCharacterization
 import Omega.Zeta.XiSingularRingDefectDeltaLowerbound
+import Omega.Zeta.XiSingularCircleHeckeDirichletZetaMultiplier
 import Omega.Zeta.XiDefectDensityConeChoquetExtreme
 import Omega.Zeta.XiDefectEntropyHeightBudgetVarianceGap
 import Omega.Zeta.XiDefectEntropyHyperbolicAreaLaw4pi
