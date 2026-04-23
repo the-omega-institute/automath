@@ -237,6 +237,7 @@ import Omega.Zeta.XiEllipticRingAverageTwoValuedWallcrossing
 import Omega.Zeta.XiRightedgeGapCongruenceRank2Certificate
 import Omega.Zeta.XiFixedFreezingEscortRenyiSpectrumCollapse
 import Omega.Zeta.XiTimePart60ab4ExactSizebiasPushforwardLaw
+import Omega.Zeta.XiTimePart60abGaugeConstantNonCfiniteOgfObstruction
 import Omega.Zeta.XiCartesianPowerLeyangDoubleAtomTangentClt
 import Omega.Zeta.XiScanCollisionIllposedness
 import Omega.Zeta.XiScanProfileLpPeakWitness
