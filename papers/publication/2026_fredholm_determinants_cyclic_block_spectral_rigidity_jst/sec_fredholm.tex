@@ -13,7 +13,7 @@ trace-class operator. Define
 \]
 
 \begin{proposition}[Connecting Fredholm--Witt identity]
-  \label{thm:fredholm-witt-bridge}
+  \label{prop:fredholm-witt-bridge}
   The following is a direct consequence of the classical Fredholm
   determinant identity; we record it here to fix notation and to make
   the Euler-product structure explicit. For every trace-class operator
@@ -40,31 +40,67 @@ trace-class operator. Define
   \]
   is classical for trace-class operators; see Grothendieck
   \cite{Grothendieck1956} and \cite[Chapter~3]{Simon2005TraceIdeals}.
-  By definition of \(p_n(T)\), M\"obius inversion gives
+  Fix \(0<\rho<\min(1,\norm{T}^{-1})\). Since
+  \[
+    \abs{a_n(T)}
+    =\abs{\Tr(T^n)}
+    \le \norm{T^n}_1
+    \le \norm{T}_1\norm{T}^{n-1},
+  \]
+  the series
+  \[
+    \sum_{n\ge 1}\frac{\abs{a_n(T)}}{n}\rho^n
+  \]
+  converges. By definition of \(p_n(T)\), M\"obius inversion gives
   \[
     a_n(T)=\sum_{d\mid n}d\,p_d(T).
   \]
-  Hence
+  Moreover,
   \begin{align*}
-    \sum_{n\ge 1}\frac{a_n(T)}{n}z^n
-    &=\sum_{n\ge 1}\sum_{d\mid n}\frac{d\,p_d(T)}{n}z^n \\
-    &=\sum_{m\ge 1}\sum_{r\ge 1}\frac{p_m(T)}{r}z^{mr}
-      =-\sum_{m\ge 1}p_m(T)\log(1-z^m).
+    \sum_{m\ge 1}\abs{p_m(T)}\rho^m
+    &\le \sum_{m\ge 1}\frac{\rho^m}{m}\sum_{d\mid m}\abs{a_{m/d}(T)} \\
+    &=\sum_{k\ge 1}\frac{\abs{a_k(T)}}{k}\sum_{\ell\ge 1}\frac{\rho^{k\ell}}{\ell}
+      =\sum_{k\ge 1}\frac{\abs{a_k(T)}}{k}\bigl(-\log(1-\rho^k)\bigr) \\
+    &\le \frac{1}{1-\rho}
+      \sum_{k\ge 1}\frac{\abs{a_k(T)}}{k}\rho^k
+      <\infty,
   \end{align*}
-  Here \(\log(1-z^m)\) is the principal branch, which is single-valued
-  for \(\abs{z^m}<1\), i.e.\ for \(\abs{z}<1\). Together with the
-  convergence of the trace series for \(\abs{z}<\norm{T}^{-1}\), the
-  calculation is valid for \(\abs{z}<\min(1,\norm{T}^{-1})\).
-  Exponentiating gives the Euler product.
+  because \(-\log(1-x)\le x/(1-\rho)\) for \(0\le x\le \rho<1\).
+  Therefore, for \(\abs{z}\le \rho\),
+  \begin{align*}
+    \sum_{m\ge 1}\abs{p_m(T)\log(1-z^m)}
+    &\le \sum_{m\ge 1}\abs{p_m(T)}
+      \sum_{r\ge 1}\frac{\abs{z}^{mr}}{r} \\
+    &\le \sum_{m\ge 1}\abs{p_m(T)}\bigl(-\log(1-\rho^m)\bigr) \\
+    &\le \frac{1}{1-\rho}\sum_{m\ge 1}\abs{p_m(T)}\rho^m
+      <\infty.
+  \end{align*}
+  Thus both
+  \[
+    \sum_{n\ge 1}\frac{a_n(T)}{n}z^n
+    \quad\text{and}\quad
+    -\sum_{m\ge 1}p_m(T)\log(1-z^m)
+  \]
+  converge absolutely and locally uniformly on \(\abs{z}<\rho\), with
+  \(\log(1-z^m)\) taken in the principal branch. We may therefore expand
+  \(-\log(1-z^m)=\sum_{r\ge 1}z^{mr}/r\) and rearrange absolutely:
+  \begin{align*}
+    -\sum_{m\ge 1}p_m(T)\log(1-z^m)
+    &=\sum_{m\ge 1}\sum_{r\ge 1}\frac{p_m(T)}{r}z^{mr} \\
+    &=\sum_{n\ge 1}\sum_{d\mid n}\frac{d\,p_d(T)}{n}z^n
+      =\sum_{n\ge 1}\frac{a_n(T)}{n}z^n.
+  \end{align*}
+  Since \(\rho<\min(1,\norm{T}^{-1})\) was arbitrary, this proves the
+  equality on \(\abs{z}<\min(1,\norm{T}^{-1})\). Exponentiating gives the
+  Euler product. The same computation is an identity of formal power
+  series, hence of holomorphic germs at \(0\).
 \end{proof}
 
-\begin{remark}[Loss of arithmetic constraints]
+\begin{remark}[Arithmetic flexibility]
   \label{rem:witt-audit-constraints}
-  \Cref{thm:fredholm-witt-bridge} is purely operator-theoretic. In
-  contrast with \Cref{rem:finite-state-arithmetic}, the coordinates
-  \(p_n(T)\) need not be integers and need not be non-negative. Thus
-  trace-class realisability is strictly broader than finite-state
-  realisability.
+  Unlike \Cref{rem:finite-state-arithmetic}, the coordinates \(p_n(T)\)
+  need neither be integers nor be non-negative. Thus trace-class
+  realisability is strictly broader than finite-state realisability.
 \end{remark}
 
 \subsection{A converse realisation by cyclic blocks}
@@ -282,17 +318,6 @@ For a normal trace-class operator \(L\), write
   gives the displayed identity.
 \end{proof}
 
-\noindent\emph{Range convention.}
-For an infinite direct sum of the cyclic blocks satisfying the trace-class
-summability hypothesis below, the block singular values tend to \(0\), and
-\(\mathrm{ran}(L_{\mathcal D})\) is a proper dense nonclosed subspace. Thus
-identifying the closed support of \(L_{\mathcal D}\) with
-\(H_{\mathcal D}\) is never shorthand for saying that the algebraic range is
-all of \(H_{\mathcal D}\). The exact algebraic range is computed separately
-in \Cref{lem:cyclic-sum-range-closure}, and every
-optimality statement in this subsection is a statement about
-\(\mathsf S(L)\).
-
 \begin{proposition}[Sharp trace-norm budget for cyclic zero divisors]
   \label{prop:sharp-trace-budget-support-obstruction}
   Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) be a countable
@@ -357,9 +382,9 @@ optimality statement in this subsection is a statement about
   \]
   The left side is \(\|L\|_1<\infty\), so the budget is necessary.
 
-  The closed support \(\mathsf S(L)\) is the Hilbert direct sum of the
-  non-zero eigenspaces. Its dimension is therefore the total multiplicity
-  of \(\Lambda_{\mathcal D}\), namely
+  The space \(\mathsf S(L)\) is the Hilbert direct sum of the non-zero
+  eigenspaces. Its dimension is therefore the total multiplicity of
+  \(\Lambda_{\mathcal D}\), namely
   \[
     \sum_{\lambda\in\Lambda_{\mathcal D}}1
     =\sum_{j\in J}m_jn_j,
@@ -390,7 +415,7 @@ optimality statement in this subsection is a statement about
   asserted trace norm and the asserted closed support.
 \end{proof}
 
-\begin{theorem}[Positive-exponent cyclic-block determinant and closed-support optimality]
+\begin{theorem}[Cyclic-block determinant realization and normal classification]
   \label{thm:cyclic-fredholm-realisation}
   \leanverified{paper_fredholm_witt_cyclic_block_characterization}
   Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) be a countable
@@ -411,54 +436,24 @@ optimality statement in this subsection is a statement about
     L_{\mathcal D}
     :=\bigoplus_{j\in J}\bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr).
   \]
-  Then \(L_{\mathcal D}\in \sone(H_{\mathcal D})\). The entire function
+  Then \(L_{\mathcal D}\in \sone(H_{\mathcal D})\) is normal, and the entire
+  Fredholm determinant
   \[
     D_{\mathcal D}(z):=\det(I-zL_{\mathcal D})
   \]
-  is the positive-exponent cyclic product in the convention above. More
-  explicitly, for every finite \(F\subset J\), if
-  \(L_F:=\bigoplus_{j\in F}(C(n_j,\alpha_j)\otimes I_{m_j})\), then
-  \[
-    \det(I-zL_F)
-    =\prod_{j\in F}\prod_{\omega^{n_j}=1}
-      (1-z\alpha_j\omega)^{m_j}
-    =\prod_{j\in F}(1-\beta_j z^{n_j})^{m_j},
-  \]
-  with positive exponent \(m_j\). This is the determinant identity; its
-  reciprocal is a different expression and is used only where the displayed
-  determinant is non-zero. The infinite determinant \(D_{\mathcal D}\) is
-  the locally uniform finite-truncation limit
+  satisfies
   \[
     D_{\mathcal D}(z)
     =\prod_{j\in J}(1-\beta_j z^{n_j})^{m_j}
   \]
-  on compact subsets of \(\CC\), where the right-hand side denotes the
-  limit of the positive-exponent products over finite subsets of \(J\).
+  locally uniformly on compact subsets of \(\CC\), where the right-hand
+  side is the limit of the positive-exponent finite truncation determinants.
   On any connected zero-free neighbourhood \(\Omega\ni0\) for
-  \(D_{\mathcal D}\), the reciprocal Euler product means
+  \(D_{\mathcal D}\), the reciprocal Euler product is defined by
   \[
     D_{\mathcal D}(z)^{-1}
     =\prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}.
   \]
-  Thus the determinant itself is never the negative-exponent product; the
-  latter is only the reciprocal of this already constructed Fredholm
-  determinant on a zero-free domain. Therefore realising the reciprocal
-  Euler product is exactly the same assertion as realising the
-  determinant \(D_{\mathcal D}\) on the determinant side.
-  Since \(\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}<\infty\) and
-  \(m_jn_j\ge 1\), the sequence
-  \(\bigl(\abs{\beta_j}^{1/n_j}\bigr)_{j\in J}\) is bounded. Writing
-  \[
-    r_{\mathcal D}:=
-    \begin{cases}
-      \sup_{j\in J}\abs{\beta_j}^{1/n_j}, & J\ne\varnothing,\\
-      0, & J=\varnothing,
-    \end{cases}
-  \]
-  this zero-free reciprocal identity holds in particular for
-  \(\abs{z}<r_{\mathcal D}^{-1}\), with the convention
-  \(r_{\mathcal D}^{-1}=+\infty\) if \(r_{\mathcal D}=0\).
-
   Moreover, for a normal trace-class operator \(L\in \sone(H)\), the
   following are equivalent:
   \begin{enumerate}[label=\textup{(\roman*)}]
@@ -467,191 +462,52 @@ optimality statement in this subsection is a statement about
       \[
         \det(I-zL)=D_{\mathcal D}(z).
       \]
-      Equivalently, on some common zero-free neighbourhood of \(0\), their
-      reciprocals agree and the right-hand side is the reciprocal Euler
-      product just defined.
     \item There exist a Hilbert space \(H_0\) and a unitary operator
       \(U:H\to H_0\oplus H_{\mathcal D}\) such that
       \[
         ULU^{-1}=0_{H_0}\oplus L_{\mathcal D}.
       \]
   \end{enumerate}
-  The unitary normal form in \textup{(ii)} is a statement about the
-  reducing non-zero spectral subspace \((\ker L)^\perp\). It is not an
-  identification of the algebraic range with \(H_{\mathcal D}\). Under
-  this unitary,
-  \[
-    U\,\mathsf S(L)=U\,\overline{\mathrm{ran}(L)}
-    =\{0\}\oplus H_{\mathcal D},
-  \]
-  while the algebraic range is a different subspace. If \(J\)
-  is infinite, then the algebraic range of
-  \(0_{H_0}\oplus L_{\mathcal D}\) is
-  \(\{0\}\oplus\mathrm{ran}(L_{\mathcal D})\), which is a proper dense
-  subspace of \(\{0\}\oplus H_{\mathcal D}\); the exact blockwise formula
-  is given in \Cref{lem:cyclic-sum-range-closure}.
-  In particular the determinant fixes the non-zero spectral multiset
-  \[
-    \bigl\{\!\bigl\{\alpha_j\omega:
-      j\in J,\ \omega^{n_j}=1,\text{ repeated }m_j\text{ times}
-    \bigr\}\!\bigr\},
-  \]
-  with multiplicities added when different indices give the same
-  eigenvalue. Hence every trace-class normal realization of these Euler
-  data has closed non-zero spectral support, in the sense of
-  \Cref{def:closed-nonzero-support},
-  satisfying
-  \[
-    \dim\mathsf S(L)=\sum_{j\in J}m_j n_j,
-  \]
-  counted as a Hilbert-space dimension. For a single factor
-  \((1-\beta z^n)^{-m}\), this says that
-  \(\dim\mathsf S(L)=mn\) for every normal realization of that factor. In
-  the infinite direct-sum case this closed support is not the algebraic
-  range; the algebraic range is a proper dense nonclosed
-  subspace and is addressed separately in
-  \Cref{lem:cyclic-sum-range-closure}. These counts are
-  attached to the chosen Euler data \(\mathcal D\). More generally, if
-  two choices of Euler data give the same Fredholm determinant, then
-  \Cref{thm:fredholm-spectral-rigidity} forces the same collapsed
-  non-zero spectral multiset, and the converse normal-form argument
-  above shows that their cyclic-block normal models are unitarily
-  equivalent on the non-zero spectral part. Equivalently, the determinant
-  prescribes a sharp trace-class
-  budget: in the normal category, any realization with this cyclic zero
-  divisor must satisfy the budget and support conclusions of
-  \Cref{prop:sharp-trace-budget-support-obstruction}.
 \end{theorem}
 
 \begin{proof}
-  We keep the finite determinant calculation, the trace-norm limit, the
-  reciprocal convention, and the support statement as separate steps. This
-  prevents the reciprocal Euler product from being confused with the
-  Fredholm determinant itself.
-
-  \emph{Finite blocks and trace class.}
-  Each block \(C(n_j,\alpha_j)\otimes I_{m_j}\) has singular value
-  \(\abs{\alpha_j}\) with multiplicity \(m_j n_j\). Therefore
+  By \Cref{lem:cyclic-product-trace-norm-limit},
+  \(L_{\mathcal D}\) is trace-class and
   \[
-    \norm{L_{\mathcal D}}_1
-    =\sum_{j\in J}m_j n_j\abs{\alpha_j}
-    =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}
-    <\infty,
-  \]
-  so \(L_{\mathcal D}\) is trace-class. The determinant is first computed
-  on finite truncations, before any limiting argument or reciprocal is
-  used. For a finite subset \(F\subset J\), put
-  \(L_F:=\bigoplus_{j\in F}(C(n_j,\alpha_j)\otimes I_{m_j})\). The
-  eigenvalues of the \(j\)-th block are \(\alpha_j\omega\),
-  \(\omega^{n_j}=1\), each repeated \(m_j\) times. Hence
-  \begin{align*}
-    \det(I-zL_F)
-    &=\prod_{j\in F}\prod_{\omega^{n_j}=1}
-      (1-z\alpha_j\omega)^{m_j} \\
-    &=\prod_{j\in F}(1-\alpha_j^{n_j}z^{n_j})^{m_j}
-      =\prod_{j\in F}(1-\beta_j z^{n_j})^{m_j}.
-  \end{align*}
-  Thus finite truncations have positive exponents in the determinant. The
-  negative-exponent finite product is only the reciprocal of this determinant
-  away from its zero set.
-
-  \emph{Trace-norm limit and reciprocal domain.}
-  Passing to an increasing finite exhaustion of \(J\),
-  \Cref{lem:cyclic-product-trace-norm-limit} gives the locally uniform
-  Fredholm-determinant limit
-  \[
-    D_{\mathcal D}(z)=\det(I-zL_{\mathcal D})
+    D_{\mathcal D}(z)
+    =\det(I-zL_{\mathcal D})
     =\prod_{j\in J}(1-\beta_j z^{n_j})^{m_j}
   \]
-  as the trace-norm limit of the finite products with positive exponents.
-  On a connected zero-free neighbourhood for \(D_{\mathcal D}\), its
-  reciprocal is holomorphic and the finite reciprocal products converge to
-  \(D_{\mathcal D}^{-1}\), again by
-  \Cref{lem:cyclic-product-trace-norm-limit}. The block diagonal norm
-  satisfies \(\norm{L_{\mathcal D}}=r_{\mathcal D}\) by the definition of
-  \(r_{\mathcal D}\) and the fact that each block has operator norm
-  \(\abs{\alpha_j}=\abs{\beta_j}^{1/n_j}\). If \(r_{\mathcal D}=0\), then
-  \(J=\varnothing\), \(L_{\mathcal D}=0\), and \(D_{\mathcal D}\equiv1\).
-  Otherwise, on the disc \(\abs{z}<r_{\mathcal D}^{-1}\), one has
-  \(\norm{zL_{\mathcal D}}<1\), so \(I-zL_{\mathcal D}\) is invertible and
-  the determinant is non-zero. Taking reciprocals on this disc gives
-  \[
-    D_{\mathcal D}(z)^{-1}
-    =\prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}.
-  \]
+  locally uniformly on compact subsets of \(\CC\); the same lemma gives the
+  reciprocal identity on any connected zero-free neighbourhood
+  \(\Omega\ni0\).
 
-  \emph{Converse normal form.}
-  The implication \textup{(ii)}\(\Rightarrow\)\textup{(i)} is immediate
-  from the positive-exponent direct-sum formula above and the fact that
-  zero summands do not change the Fredholm determinant. Conversely,
-  assume \textup{(i)}. Then
+  The implication \textup{(ii)}\(\Rightarrow\)\textup{(i)} follows because
+  zero summands do not affect the Fredholm determinant. Conversely, assume
+  \textup{(i)}. Then
   \[
     \det(I-zL)=\det(I-zL_{\mathcal D})
   \]
-  as holomorphic germs at the origin. Both sides are entire, hence
-  identical on \(\CC\). By \cite[Theorem~3.7]{Simon2005TraceIdeals},
-  the zeros of the Fredholm determinant are precisely the reciprocals
-  of the non-zero eigenvalues, counted with algebraic multiplicity.
-  Therefore \(L\) and \(L_{\mathcal D}\) have the same non-zero
-  spectrum with multiplicity. Explicitly, the non-zero eigenvalues of
-  \(L_{\mathcal D}\) are
+  as holomorphic germs at \(0\), hence on all of \(\CC\). By
+  \cite[Theorem~3.7]{Simon2005TraceIdeals}, the zeros of the Fredholm
+  determinant are the reciprocals of the non-zero eigenvalues, counted with
+  algebraic multiplicity. Therefore \(L\) and \(L_{\mathcal D}\) have the
+  same non-zero spectrum with multiplicity.
+
+  Since both operators are normal, the spectral theorem diagonalizes them on
+  the orthogonal sum of their non-zero eigenspaces and kernels. The
+  non-zero eigenvalues of \(L_{\mathcal D}\) are
   \[
     \alpha_j\omega,\qquad \omega^{n_j}=1,
   \]
-  each repeated \(m_j\) times, with multiplicities added if the same
-  complex number occurs for more than one pair \((j,\omega)\). The
-  trace-class summability condition rules out infinite multiplicity at
-  any non-zero eigenvalue. Thus the determinant determines this
-  collapsed spectral multiset; it does not carry any additional data
-  about how equal eigenvalues were grouped in a particular Euler
-  factorization.
-
-  The operator \(L_{\mathcal D}\) is normal. Since \(L\) is normal, the
-  spectral theorem gives an orthogonal decomposition
+  each repeated \(m_j\) times, with multiplicities added when equal values
+  arise from different indices. Grouping the corresponding eigenspaces of
+  \(L\) and using the Fourier diagonalisation of \(\Pi_{n_j}\) yields a
+  unitary equivalence
   \[
-    H=\ker L\oplus\bigoplus_{\lambda\in\spec(L)\setminus\{0\}}E_\lambda,
+    L\cong 0_{\ker L}\oplus L_{\mathcal D},
   \]
-  where \(L|_{E_\lambda}=\lambda I\). If the same eigenvalue \(\lambda\)
-  is contributed by several indices \(j\), its eigenspace \(E_\lambda\)
-  has dimension equal to the sum of the corresponding multiplicities.
-  Choose an orthogonal decomposition of each \(E_\lambda\) into pieces
-  with these multiplicities and then regroup those pieces by the index
-  \(j\). This produces reducing subspaces \(H_j\subset H\) such that
-  \(L|_{H_j}\) is unitarily equivalent to
-  \[
-    \bigoplus_{\omega^{n_j}=1}\alpha_j\omega\,I_{m_j}.
-  \]
-  The discrete Fourier transform on \(\CC^{n_j}\) diagonalizes
-  \(\Pi_{n_j}\), so
-  \[
-    \bigoplus_{\omega^{n_j}=1}\alpha_j\omega\,I_{m_j}
-    \cong C(n_j,\alpha_j)\otimes I_{m_j}.
-  \]
-  The remaining part of \(H\) is \(\ker L\). Hence \(L\) is unitarily
-  equivalent to \(0_{\ker L}\oplus L_{\mathcal D}\), proving
-  \textup{(ii)}.
-
-  \emph{Closed support.}
-  The support and minimality assertions are then immediate from this
-  unitary normal form, but they concern closed spectral support rather than
-  algebraic range. The closed non-zero spectral support of
-  \(L_{\mathcal D}\) is all of
-  \[
-    H_{\mathcal D}
-    =\bigoplus_{j\in J}\bigl(\CC^{n_j}\otimes\CC^{m_j}\bigr),
-  \]
-  because every summand is a non-zero spectral subspace after Fourier
-  diagonalisation of the cyclic block. Therefore any normal realization
-  with determinant \(D_{\mathcal D}\) has
-  \[
-    \dim\mathsf S(L)=\dim H_{\mathcal D}
-    =\sum_{j\in J}m_jn_j.
-  \]
-  By \Cref{lem:normal-support-range-closure}, this support is
-  \((\ker L)^\perp=\overline{\mathrm{ran}(L)}\). No surjectivity of the
-  algebraic range is used here; when \(J\) is infinite, the exact
-  algebraic range is the dense proper subspace described in
-  \Cref{lem:cyclic-sum-range-closure}.
+  which is \textup{(ii)}.
 \end{proof}
 
 \begin{definition}[Block-cyclic normal realization]
@@ -736,37 +592,14 @@ optimality statement in this subsection is a statement about
   \overline{\mathrm{ran}(L_{\mathcal D})}\).
 \end{proof}
 
-\noindent\emph{Range caveat.}
-The preceding lemma is the precise range statement used in the support
-claims. In an infinite cyclic direct sum the algebraic range is the dense
-proper subspace described in \Cref{lem:cyclic-sum-range-closure}; only its
-closure is the support invariant \(\mathsf S(L_{\mathcal D})\).
-
-\begin{corollary}[Closed support, exact range, and trace norm]
-  \label{thm:block-cyclic-rigidity}
+\begin{corollary}[Support, range, and trace budget of a block-cyclic realization]
+  \label{cor:block-cyclic-rigidity}
   \leanverified{paper_fredholm_witt_block_cyclic_rigidity}
   Let \(L\) be a block-cyclic normal realization of \(\mathcal D\) in the
   sense of \Cref{def:block-cyclic-normal-realisation}. Let
   \(U:H\to H_0\oplus H_{\mathcal D}\) be any unitary representation with
   \(ULU^{-1}=0_{H_0}\oplus L_{\mathcal D}\), and write
-  \(L_j=C(n_j,\alpha_j)\otimes I_{m_j}\). This is the exact range
-  statement for the model. The closed support
-  \[
-    \mathsf S(L)=
-    \overline{\mathrm{span}}
-    \{\,\ker(L-\lambda I):\lambda\in\spec(L)\setminus\{0\}\,\},
-  \]
-  and the algebraic range are different objects. They are given by
-  \[
-    U\,\mathsf S(L)
-    =
-    U\,\overline{\mathrm{ran}(L)}
-    =
-    \overline{U\,\mathrm{ran}(L)}
-    =
-    \{0\}\oplus H_{\mathcal D},
-  \]
-  while
+  \(L_j=C(n_j,\alpha_j)\otimes I_{m_j}\). Then
   \[
     U\,\mathrm{ran}(L)
     =
@@ -774,14 +607,13 @@ closure is the support invariant \(\mathsf S(L_{\mathcal D})\).
     \left\{
       y=\bigoplus_{j\in J}y_j\in H_{\mathcal D}:
       \sum_{j\in J}\norm{L_j^{-1}y_j}^{2}<\infty
-    \right\}.
+    \right\},
   \]
-  Therefore the determinant fixes the closed non-zero spectral support,
-  equivalently the closure of the range, not the algebraic range itself.
-  The block-cyclic normal form is thus a classification of the reducing
-  non-zero spectral subspace. It is not a claim that
-  \(\mathrm{ran}(L)\) is unitarily equivalent to
-  \(H_{\mathcal D}\) in infinite rank.
+  \[
+    U\,\mathsf S(L)
+    =U\,\overline{\mathrm{ran}(L)}
+    =\{0\}\oplus H_{\mathcal D}.
+  \]
   In particular,
   \[
     \dim\mathsf S(L)=\sum_{j\in J}m_j n_j,
@@ -789,28 +621,10 @@ closure is the support invariant \(\mathsf S(L_{\mathcal D})\).
     \|L\|_1
     =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}.
   \]
-  If \(J\) is finite, then only finitely many block inverses occur and
-  \[
-    U\,\mathrm{ran}(L)=\{0\}\oplus H_{\mathcal D}.
-  \]
-  If \(J\) is infinite, then the trace-class summability condition forces
-  \(\abs{\alpha_j}\to0\), and
-  \[
-    U\,\mathrm{ran}(L)
-    \subsetneq \{0\}\oplus H_{\mathcal D}
-    =U\,\overline{\mathrm{ran}(L)}
-    =U\,\mathsf S(L).
-  \]
-  Thus the equality
-  \(U\,\mathrm{ran}(L)=\{0\}\oplus H_{\mathcal D}\) holds precisely in the
-  finite-block case; in the infinite trace-class case the algebraic range
-  is proper dense and nonclosed.
-  Consequently the summability condition in
-  \Cref{thm:cyclic-fredholm-realisation} is both necessary and
-  sufficient for trace-class normal realizability of the cyclic-block
-  data, and for a single factor \((1-\beta z^n)^{-m}\) no normal
-  realization can have closed span of non-zero spectral subspaces of
-  dimension less than \(mn\).
+  If \(J\) is finite, then \(U\,\mathrm{ran}(L)=\{0\}\oplus H_{\mathcal D}\).
+  If \(J\) is infinite, then
+  \(U\,\mathrm{ran}(L)\subsetneq \{0\}\oplus H_{\mathcal D}\) is a proper
+  dense subspace.
 \end{corollary}
 
 \begin{proof}
@@ -821,73 +635,26 @@ closure is the support invariant \(\mathsf S(L_{\mathcal D})\).
     U\,\mathrm{ran}(L)
     =\{0\}\oplus\mathrm{ran}(L_{\mathcal D}).
   \]
-  Applying \Cref{lem:cyclic-sum-range-closure} gives exactly the blockwise
-  range displayed in the statement. If \(J\) is infinite, the same lemma
-  shows that this algebraic range is dense and proper in
-  \(H_{\mathcal D}\), hence nonclosed. If \(J\) is finite, each block is
-  invertible and the displayed range equals \(H_{\mathcal D}\).
-
-  The non-zero spectral subspaces of \(L_{\mathcal D}\) span
-  \(H_{\mathcal D}\). Since \(L_{\mathcal D}\) is normal compact,
-  \(\mathsf S(L_{\mathcal D})
-  =(\ker L_{\mathcal D})^\perp
-  =\overline{\mathrm{ran}(L_{\mathcal D})}\).
-  By \Cref{lem:cyclic-sum-range-closure},
+  Applying \Cref{lem:cyclic-sum-range-closure} gives the displayed formula
+  for \(U\,\mathrm{ran}(L)\), together with the finite-rank and infinite-rank
+  alternatives. The same lemma shows that
+  \(\overline{\mathrm{ran}(L_{\mathcal D})}=H_{\mathcal D}\), and
+  \Cref{lem:normal-support-range-closure} identifies this closure with the
+  closed support. Hence
   \[
-    \overline{\mathrm{ran}(L_{\mathcal D})}=H_{\mathcal D},
-    \qquad
-    U\,\mathsf S(L)=\{0\}\oplus H_{\mathcal D}.
+    U\,\mathsf S(L)=U\,\overline{\mathrm{ran}(L)}=\{0\}\oplus H_{\mathcal D}.
   \]
-  Thus the invariant used here is explicitly the closed support of the
-  non-zero spectrum. In the infinite case, the algebraic range is dense in
-  \(H_{\mathcal D}\) but not equal to \(H_{\mathcal D}\). Equivalently,
-  \[
-    U\,\mathrm{ran}(L)
-    \subsetneq U\,\overline{\mathrm{ran}(L)}
-    =U\,\mathsf S(L)
-  \]
-  whenever \(J\) is infinite. If \(J\) is finite, the condition defining
-  \(\mathrm{ran}(L_{\mathcal D})\) contains only finitely many inverse
-  norms and is automatic for every vector of \(H_{\mathcal D}\). Hence
-  only in that finite-block case does the algebraic range equal
-  \(\{0\}\oplus H_{\mathcal D}\) after applying \(U\).
-  Hence equality of the algebraic range with the cyclic-block support space
-  occurs precisely in the finite-block case. No closed-range assertion is
-  being used in the infinite case.
-  Consequently
-  \[
-    \dim\mathsf S(L)
-    =\sum_{j\in J}m_j n_j.
-  \]
-  The singular values of \(C(n_j,\alpha_j)\otimes I_{m_j}\) are all
-  equal to \(\abs{\alpha_j}=\abs{\beta_j}^{1/n_j}\), each with
-  multiplicity \(m_j n_j\). Therefore
-  \[
-    \|L\|_1
-    =\|L_{\mathcal D}\|_1
-    =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}.
-  \]
-  The final statement is the single-factor specialization.
+  The formulas for \(\dim \mathsf S(L)\) and \(\|L\|_1\) are exactly the
+  optimality statement of
+  \Cref{prop:sharp-trace-budget-support-obstruction} applied to the model
+  \(L_{\mathcal D}\) and transported by \(U\).
 \end{proof}
-
-\begin{remark}[Why the range is not the support]
-  \label{rem:range-not-support}
-  The unitary normal form
-  \(ULU^{-1}=0_{H_0}\oplus L_{\mathcal D}\) identifies the closed
-  non-zero spectral support, not the algebraic range. In the infinite case
-  the vector constructed in \Cref{lem:cyclic-sum-range-closure},
-  \(y=\bigoplus_j\alpha_j e_j\), lies in \(H_{\mathcal D}\) but has no
-  square-summable blockwise preimage under \(L_{\mathcal D}\). Thus
-  \(y\in\mathsf S(L_{\mathcal D})\setminus\mathrm{ran}(L_{\mathcal D})\).
-  This is the precise obstruction to replacing
-  \(\overline{\mathrm{ran}(L)}\) by \(\mathrm{ran}(L)\) in infinite rank.
-\end{remark}
 
 \begin{remark}[Sharpness of the summability condition]
   \label{rem:summability-sharpness}
   \Cref{prop:sharp-trace-budget-support-obstruction},
   \Cref{thm:cyclic-fredholm-realisation}, and
-  \Cref{thm:block-cyclic-rigidity} show that
+  \Cref{cor:block-cyclic-rigidity} show that
   \[
     \sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}<\infty
   \]
@@ -947,15 +714,15 @@ closure is the support invariant \(\mathsf S(L_{\mathcal D})\).
     =\sum_{j=1}^N \dim(\CC^{n_j}\otimes\CC^{m_j})
     =\sum_{j=1}^N m_jn_j.
   \]
-  Equivalently, \Cref{thm:block-cyclic-rigidity} gives
+  Equivalently, \Cref{cor:block-cyclic-rigidity} gives
   \(\dim\mathsf S(L)=\sum_{j=1}^N m_jn_j\), and in the finite-block case
   the algebraic range equals that whole support space.
 \end{proof}
 
 \subsection{Spectral rigidity}
 
-\begin{proposition}[Spectral rigidity of Fredholm determinants]
-  \label{thm:fredholm-spectral-rigidity}
+\begin{proposition}[Fredholm determinant rigidity]
+  \label{prop:fredholm-spectral-rigidity}
   Let \(T_1,T_2\in \sone\). If
   \[
     \det(I-zT_1)=\det(I-zT_2)
@@ -994,9 +761,68 @@ closure is the support invariant \(\mathsf S(L_{\mathcal D})\).
   M\"obius inversion.
 \end{proof}
 
-\begin{corollary}[Realisability versus rigidity]
-  \label{cor:realisability-vs-rigidity}
-  \leanverified{paper_fredholm_witt_realisability_vs_rigidity}
+\begin{theorem}[Determinant classification by collapsed spectral data]
+  \label{thm:cyclic-data-classification}
+  Let \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) and
+  \(\mathcal D'=\{(n_k',\beta_k',m_k')\}_{k\in K}\) satisfy the summability
+  hypothesis of \Cref{thm:cyclic-fredholm-realisation}, and choose roots
+  \(\alpha_j^{n_j}=\beta_j\) and \((\alpha_k')^{n_k'}=\beta_k'\). Write
+  \(L_{\mathcal D}\), \(L_{\mathcal D'}\) for the associated cyclic models,
+  and let
+  \[
+    \Lambda_{\mathcal D}
+    :=
+    \bigl\{\!\bigl\{\alpha_j\omega:
+      j\in J,\ \omega^{n_j}=1,\text{ repeated }m_j\text{ times}
+    \bigr\}\!\bigr\},
+  \]
+  with \(\Lambda_{\mathcal D'}\) defined analogously. Then the following are
+  equivalent:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item \(\det(I-zL_{\mathcal D})=\det(I-zL_{\mathcal D'})\) as holomorphic
+      germs at \(z=0\).
+    \item \(\Lambda_{\mathcal D}=\Lambda_{\mathcal D'}\) as multisets.
+    \item There exist Hilbert spaces \(H_0\), \(H_0'\) and a unitary
+      \(V:H_0\oplus H_{\mathcal D}\to H_0'\oplus H_{\mathcal D'}\) such that
+      \[
+        V(0_{H_0}\oplus L_{\mathcal D})V^{-1}
+        =0_{H_0'}\oplus L_{\mathcal D'}.
+      \]
+  \end{enumerate}
+  In this situation the determinant germ determines, in the normal
+  trace-class category, a unique block-cyclic realization class up to zero
+  summands. In particular,
+  \[
+    \sum_{j\in J}m_jn_j
+    =\sum_{k\in K}m_k'n_k',
+    \qquad
+    \sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}
+    =\sum_{k\in K}m_k'n_k'\abs{\beta_k'}^{1/n_k'}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  The implication \textup{(iii)}\(\Rightarrow\)\textup{(i)} is immediate,
+  because unitary equivalence and zero summands do not change the Fredholm
+  determinant. For \textup{(i)}\(\Rightarrow\)\textup{(ii)}, apply
+  \Cref{prop:fredholm-spectral-rigidity} to \(L_{\mathcal D}\) and
+  \(L_{\mathcal D'}\). Their non-zero spectra therefore agree with
+  multiplicity, which is exactly the equality
+  \(\Lambda_{\mathcal D}=\Lambda_{\mathcal D'}\).
+
+  Assume \textup{(ii)}. By the spectral theorem, both cyclic models are
+  unitarily equivalent on their non-zero spectral subspaces to the diagonal
+  operator whose non-zero eigenvalue multiset is the common multiset
+  \(\Lambda_{\mathcal D}=\Lambda_{\mathcal D'}\). After adjoining arbitrary
+  zero summands, this gives \textup{(iii)}.
+
+  The closing equalities are the support-dimension and trace-norm formulas
+  from \Cref{prop:sharp-trace-budget-support-obstruction} applied to either
+  model.
+\end{proof}
+
+\begin{remark}[Finite-dimensional specialization]
+  \label{rem:realisability-vs-rigidity}
   Let \(A\) be a finite matrix and let \(T\in \sone\) satisfy
   \[
     \det(I-zT)=\det(I-zA).
@@ -1004,17 +830,7 @@ closure is the support invariant \(\mathsf S(L_{\mathcal D})\).
   Then \(T\) and \(A\) have the same non-zero eigenvalues with
   algebraic multiplicity. Thus cyclic-block constructions may enlarge
   the ambient operator category, but they do not create spectral
-  freedom once the determinant is prescribed.
-\end{corollary}
-
-\begin{proof}
-  Regard the finite matrix \(A\) as a trace-class operator on its
-  finite-dimensional Hilbert space. Then both \(T\) and \(A\) belong to
-  \(\sone\), and the hypothesis gives equality of their Fredholm
-  determinants near \(z=0\). Applying
-  \Cref{thm:fredholm-spectral-rigidity} with \(T_1=T\) and \(T_2=A\)
-  shows that the non-zero spectra coincide with algebraic multiplicity.
-  Thus any determinant-side realization of \(\det(I-zA)^{-1}\) has the
-  same finite-dimensional non-zero spectral data as \(A\); only the
-  ambient zero summand may vary.
-\end{proof}
+  freedom once the determinant is prescribed. This is just
+  \Cref{prop:fredholm-spectral-rigidity} applied to the finite-rank
+  operator \(A\).
+\end{remark}
