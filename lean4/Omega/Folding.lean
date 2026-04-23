@@ -233,6 +233,7 @@ import Omega.Folding.KilloInfiniteStream2adicHolographicPoint
 import Omega.Folding.Killo2adicHolographicPrefixClassification
 import Omega.Folding.KilloEllipseDiagonalPrimeRegisterEquivalence
 import Omega.Folding.KilloZGNaturalDensityTransferMatrix
+import Omega.Folding.KilloLeyangJointChebotarevProductLaw
 import Omega.Folding.KilloLeyangJointDensityExplicit
 import Omega.Folding.KilloLeyangUnifiedDigitRigidity
 import Omega.Folding.KilloVisibleEntropyDensityAreaControl

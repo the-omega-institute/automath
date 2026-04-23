@@ -169,6 +169,7 @@ import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth
 import Omega.Zeta.XiKlingenHeckeCharpolyProjectors
 import Omega.Zeta.XiJDiscriminant2IsogenyVelu
 import Omega.Zeta.XiJSexticEllipticLattesBelyiNormalization
+import Omega.Zeta.XiJSexticEllipticLattesKleinMobius
 import Omega.Zeta.XiJSexticHyperellipticBranchPolynomialDiscriminantFactorization
 import Omega.Zeta.XiJGMonicBoundaryReadout
 import Omega.Zeta.XiJGDiscriminantSquareclassInvariance
