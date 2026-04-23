@@ -44,6 +44,12 @@ pending_tasks: dict[str, dict] = {}   # agent_id -> task
 dispatch_times: dict[str, float] = {}  # agent_id -> timestamp
 
 
+def _is_extraction_failure_response(response: str) -> bool:
+    """Detect userscript diagnostics that are not substantive reviews."""
+    cleaned = response.strip()
+    return cleaned.startswith("ERROR: Response too short or empty")
+
+
 class OracleHandler(BaseHTTPRequestHandler):
     """HTTP request handler for oracle bridge."""
 
@@ -267,17 +273,21 @@ class OracleHandler(BaseHTTPRequestHandler):
                 self._send_json({"error": "need task_id and response"}, 400)
                 return
 
-            # Save result
+            extraction_failed = _is_extraction_failure_response(response)
+
+            # Save result.  Extraction failures are terminal for this browser
+            # task, but they are infrastructure failures, not referee reports.
             results[task_id] = {
                 "task_id": task_id,
                 "response": response,
                 "timestamp": datetime.now().isoformat(),
                 "model": data.get("model", ""),
-                "status": "completed",
+                "status": "failed" if extraction_failed else "completed",
+                "reason": "extraction_failure" if extraction_failed else "",
             }
 
             # Save to file
-            done_dir = ORACLE_DIR / "done"
+            done_dir = ORACLE_DIR / ("bad" if extraction_failed else "done")
             done_dir.mkdir(parents=True, exist_ok=True)
             out_file = done_dir / f"{task_id}.md"
             metadata = {
@@ -300,7 +310,8 @@ class OracleHandler(BaseHTTPRequestHandler):
                     freed = f" (freed {aid})"
                     break
 
-            print(f"[server] Result: {task_id} ({len(response)} chars){freed} "
+            kind = "Extraction failure" if extraction_failed else "Result"
+            print(f"[server] {kind}: {task_id} ({len(response)} chars){freed} "
                   f"— agents={len(pending_tasks)}/{MAX_AGENTS}, queue={len(task_queue)}")
             print(f"[server] Saved to: {out_file}")
             self._send_json({"status": "saved", "task_id": task_id})

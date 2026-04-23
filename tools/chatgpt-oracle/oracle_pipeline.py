@@ -5328,7 +5328,19 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     state.error = f"Oracle re-submit failed B{rnd} attempt {attempt}"
                     return False
             if not response:
-                state.error = f"Oracle failed B{rnd}: no valid response"
+                state.error = (
+                    f"{PAUSED_ERROR_PREFIX} Stage B Oracle infra pause at "
+                    f"B{rnd}: no valid response after {attempt} attempt(s); "
+                    "rerun will re-submit this same review round"
+                )
+                logger.warning(f"{tag} {state.error}")
+                state.log_event("B", "oracle_infra_pause",
+                                round_num=rnd, detail=state.error)
+                if not dry_run:
+                    update_program_board(
+                        state.paper_name, "B-PAUSED",
+                        f"Oracle infra retry needed at B{rnd}")
+                save_state(state)
                 return False
 
         # Save oracle response (only substantive ones reach done/)
@@ -5643,7 +5655,14 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                 save_state(state)
                 return False
             if not is_oracle_final_response_valid(raw):
-                state.error = f"Stage C round {rnd}: no valid Oracle response"
+                state.error = (
+                    f"{PAUSED_ERROR_PREFIX} Stage C Oracle infra pause at "
+                    f"C{rnd}: no valid final-review response; rerun will "
+                    "re-submit this same final gate"
+                )
+                logger.warning(f"{tag} {state.error}")
+                state.log_event("C", "oracle_infra_pause",
+                                round_num=rnd, detail=state.error)
                 save_state(state)
                 return False
             oracle_response = raw
