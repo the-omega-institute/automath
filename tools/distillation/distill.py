@@ -1486,6 +1486,40 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
                 "  if the result cannot be made short and locally anchored.",
             ]
         )
+    if family_slug == "holonomy_residue_classification":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This family has repeatedly failed on overstated H_1 and holonomy",
+                "  claims. Output at most 1-2 short writebacks, and prefer a single",
+                "  accepted corollary over broad multi-section coverage.",
+                "- Never claim that a finite nerve automatically has free H_1. In",
+                "  degree 1, use the correct universal-coefficient argument, or work",
+                "  with explicit 1-cycle representatives, or add an explicit torsion-",
+                "  free / finite-graph hypothesis.",
+                "- Cylinder or torus audit conclusions are allowed only after you",
+                "  explicitly assume that the named loops generate H_1(K;\\ZZ) of the",
+                "  finite protocol quotient, or after you state that all other cycle",
+                "  classes are already killed by admitted face/boundary relations.",
+                "- If a map \\lambda is used on loops or cycles, define it as an",
+                "  additive group homomorphism on Z_1(K;\\ZZ) and state that it kills",
+                "  boundaries, or equivalently descends to H_1(K;\\ZZ). Do not use",
+                "  loop-indexed ledger language without that additivity hypothesis.",
+                "- Do not use words like persistent or closure unless the statement",
+                "  includes explicit admissible refinement maps and a stability",
+                "  hypothesis. Otherwise say finite-nerve or finite-protocol holonomy",
+                "  class / reduced overlap-ledger triviality.",
+                "- In physical_spacetime_skeleton, anchor any writeback directly to",
+                "  def:physical-spacetime-acceptable-instantiation and to the existing",
+                "  reduced-holonomy tree gate. Prefer a corollary/specialization of the",
+                "  registered gate over a parallel exactness theorem.",
+                "- Eliminate mixed English prose in theorem bodies unless it is a fixed",
+                "  object name already present in the local target context.",
+                "- Any refinement family such as \\mathscr R must be explicitly defined",
+                "  before use, and every special quotient/carrier symbol must be",
+                "  locally introduced in the statement.",
+            ]
+        )
     if family_slug != "worst_counterexample_exponent_bootstrapping":
         return ""
     return "\n".join(
