@@ -30,6 +30,7 @@ import Omega.POM.S2RankExact
 import Omega.POM.HankelRankMinimal
 import Omega.POM.FiberIndexCltThermo
 import Omega.POM.FiberIndexLdpThermo
+import Omega.POM.FiberHammingTripleIsometry
 import Omega.POM.HiddenBitJumpCollisionIsomorphism
 import Omega.POM.HiddenBitComplementFixedpointBSplitDichotomy
 import Omega.POM.HiddenBitWatataniIndexElement
@@ -122,6 +123,7 @@ import Omega.POM.CrossqGMonotone
 import Omega.POM.CurvatureSummableEventualCommutation
 import Omega.POM.AxisDecomposabilityIff
 import Omega.POM.StableAdditionCarryDefectUniqueElement
+import Omega.POM.AkSymmetricTransitionPoly
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.CycleLatticeThetaPoissonDuality
