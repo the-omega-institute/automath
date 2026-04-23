@@ -195,6 +195,7 @@ import Omega.POM.LkSpectralZetaDirichlet
 import Omega.POM.LowTemperatureThreeTermExpansion
 import Omega.POM.ParryOnesCLT
 import Omega.POM.UnifXnLocalLimitParry
+import Omega.POM.PrimeRegisterGodelFactorialPointwise
 import Omega.POM.FenceMaxchainsEuler
 import Omega.POM.FenceMobiusRigidity
 import Omega.POM.FenceRiccatiError
@@ -246,6 +247,7 @@ import Omega.POM.FiberTraceMomentsRationality
 import Omega.POM.FiberMultiplicityMatrixProduct
 import Omega.POM.FiberMedianMajorityPrimeValuation
 import Omega.POM.FiberMultivariateHolographicConservation
+import Omega.POM.SteinitzTerminalExternalCoordinates
 import Omega.POM.FiberParityHomotopyEquivalence
 import Omega.POM.FiberParityMod3
 import Omega.POM.FiberPosteriorEquivalenceActivityField
