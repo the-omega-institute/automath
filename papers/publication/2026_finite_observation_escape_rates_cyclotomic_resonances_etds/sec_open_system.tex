@@ -10,7 +10,13 @@ transfer matrix.  Degenerate residue classes are classified below:
 they are eventually decided on the relevant residue subsequence, while
 all remaining subsequences have the killed survivor exponent.  In the
 two-terminal non-degenerate case the finite-observation exponent becomes
-the escape rate.  The finite-observation step is the exact identification
+the escape rate, and the normalized survivor left eigenvector supplies
+the residuewise ambiguity amplitude.  The central statement is
+Theorem~\ref{thm:first-entry-escape-rate}, which collects those
+conclusions in one place.  The later
+Theorem~\ref{thm:quasistationary-ambiguity} is retained only to isolate
+the finite-dimensional Perron--Frobenius calculation behind the final
+ratio formula.  The finite-observation step is the exact identification
 of the Bayes error with a killed path sum carrying residue-dependent
 terminal weights; the subsequent exponent and amplitude estimates use
 finite-dimensional Perron--Frobenius theory for that killed matrix.  The
@@ -23,7 +29,7 @@ originates with
 topological Markov chains was developed by
 \citet{ColletMartinezSchmitt1997}.  For spectral characterizations of
 escape rates and conditionally invariant measures, see
-\citet{DemersYoung2006,DemersWrightYoung2012} and
+\citet{DemersYoung2006,FroylandStancevic2010,DemersWrightYoung2012} and
 \citet{KellerLiverani2009}; for the Gibbs-measure setting, see
 \citet{FergusonPollicott2012}.  Related topological, symbolic, and
 combinatorial treatments of systems with holes include
@@ -83,7 +89,7 @@ is equivalent to this two-terminal reachability condition at every
 safe-residue vertex.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}[Proof of Theorem~\ref{thm:first-entry-escape-rate} except for the final ratio clause]
 A directed path
 \[
   (i,r)=(i_0,r)\to(i_1,r+1)\to\cdots
@@ -100,17 +106,15 @@ reachability of \(\star_R\) is equivalent to \(p_{i,r}>0\).  The same
 argument with \(\star_{R^c}\) is equivalent to positive probability of a
 finite first hit with residue outside \(R\).
 
-Because the ambient Markov graph is finite and irreducible and
-\(A_{\mathrm{hole}}\) is non-empty, from every safe state there is an
-admissible path to \(A_{\mathrm{hole}}\) of length at most some
-uniform \(N\).  The product of transition probabilities along these
-finitely many paths is bounded below by a positive constant, hence
-\(\PP_i(\tau_H^+>n)\to0\) uniformly in \(i\).  Thus the complement of
-the event \(\{r+\tau_H^+\in R\}\) is, up to a null set, the union of
-finite first hits with residue outside \(R\).  Therefore
-\(p_{i,r}<1\) is equivalent to reachability of \(\star_{R^c}\).  Since
-\(\mathcal S\times\ZZ/q\ZZ\) is finite, pointwise positivity of all
-\(\beta_{i,r}\) is the same as a positive uniform lower bound.
+\(A_{\mathrm{hole}}\) is non-empty and the ambient Markov graph is
+finite and irreducible, so Lemma~\ref{lem:future-entry-estimate}
+implies \(\PP_i(\tau_H^+<\infty)=1\) for every \(i\in\mathcal S\).
+Thus the complement of the event \(\{r+\tau_H^+\in R\}\) is, up to a
+null set, exactly the union of finite first hits with residue outside
+\(R\).  Therefore \(p_{i,r}<1\) is equivalent to reachability of
+\(\star_{R^c}\).  Since \(\mathcal S\times\ZZ/q\ZZ\) is finite,
+pointwise positivity of all \(\beta_{i,r}\) is the same as a positive
+uniform lower bound.
 \end{proof}
 
 \noindent
@@ -118,7 +122,8 @@ We call the equivalent finite graph conditions in
 Lemma~\ref{lem:residue-reachability} the
 \emph{two-terminal residue reachability hypothesis}.
 
-\begin{lemma*}[Strong-Markov future-entry estimate]
+\begin{lemma}[Strong-Markov future-entry estimate]
+\label{lem:future-entry-estimate}
 Let \(A=\mathcal S\sqcup A_{\mathrm{hole}}\) be a finite irreducible
 Markov alphabet with \(A_{\mathrm{hole}}\neq\emptyset\), and let
 \((K_{ij})\) be a transition matrix with \(K_{ij}>0\) exactly on the
@@ -131,9 +136,9 @@ there are constants \(N\geq1\) and \(\eta>0\) such that, for every
 \[
   \PP_i(\tau_H^+>kN)\leq (1-\eta)^k.
 \]
-In particular \(\PP_i(\tau_H^+<\infty)=1\), uniformly in
-\(i\in\mathcal S\).
-\end{lemma*}
+In particular \(\PP_i(\tau_H^+<\infty)=1\) for every \(i\in\mathcal S\),
+and the convergence is uniform in \(i\).
+\end{lemma}
 
 \begin{proof}
 For each \(i\in\mathcal S\), irreducibility gives an admissible path
@@ -172,7 +177,7 @@ Iteration gives the displayed geometric bound, and then
 \(\PP_i(\tau_H^+=\infty)=0\) follows by letting \(k\to\infty\).
 \end{proof}
 
-\begin{theorem}[First-entry residue events and escape rates]
+\begin{theorem}[Central finite-state theorem]
 \label{thm:first-entry-escape-rate}
 Let \(Y\subseteq A^{\NNzero}\) be a topologically mixing one-step
 subshift of finite type, and let \(\nu_\varphi\) be the fully supported
@@ -296,8 +301,38 @@ then
   -\log\rho_H
   = P_Y(\varphi)-P_{Y_H}(\varphi).
 \]
+Moreover, if \(\ell_\infty>0\) is a left Perron--Frobenius eigenvector
+of \(B_\infty:=B_H|_{\mathcal S_\infty}\), and if
+\[
+  \ell_H^{\mathsf T}
+  :=
+  \bigl(
+    \ell_\infty^{\mathsf T},
+    \ell_\infty^{\mathsf T}C(\rho_H I-Q)^{-1}
+  \bigr),
+  \qquad
+  \xi_H:=\frac{\ell_H}{\ell_H^{\mathsf T}\mathbf 1},
+\]
+where \(B_H\) is written in block form
+\[
+  B_H=
+  \begin{pmatrix}
+    B_\infty & C\\
+    0 & Q
+  \end{pmatrix}
+\]
+after ordering \(\mathcal S=\mathcal S_\infty\sqcup\mathcal T\), then
+for every residue class \(r\in\ZZ/q\ZZ\),
+\[
+  \lim_{n\to\infty}
+  \frac{\varepsilon_{nq+r+1}(\mathsf P_R;\nu_\varphi)}
+       {\nu_\varphi(\tau_H\ge nq+r+1)}
+  = \xi_H^{\mathsf T}b_r.
+\]
 Thus the finite-observation exponent of \(\mathsf{P}_R\) coincides with
-the escape rate of the open system \((Y,\sigma,H)\).
+the escape rate of the open system \((Y,\sigma,H)\), and the residuewise
+leading constant is the quasistationary ambiguity amplitude
+\(\xi_H^{\mathsf T}b_r\).
 \end{theorem}
 
 \begin{proof}
@@ -316,10 +351,14 @@ absolute first-hit time is
   \tau_H=(m-1)+\tau_H^+
 \]
 for the restarted chain at \(a_{m-1}\), on the event of a future hit.
-The preceding lemma shows that this future-hit event has full probability
-under the restarted law \(\PP_{a_{m-1}}\).  Indeed, the conditional law
-after the observed safe prefix is the Markov law started at \(a_{m-1}\), and
-the strong-Markov estimate gives \(\PP_{a_{m-1}}(\tau_H^+<\infty)=1\).
+Lemma~\ref{lem:future-entry-estimate} shows that this future-hit event
+has full probability under the restarted law \(\PP_{a_{m-1}}\).  Indeed,
+the conditional law after the observed safe prefix is the Markov law
+started at \(a_{m-1}\), and
+\[
+  \PP_{a_{m-1}}(\tau_H^+<\infty)=1
+\]
+by Lemma~\ref{lem:future-entry-estimate}.
 Therefore
 \[
   \nu_\varphi(\mathsf P_R\mid[a])
@@ -482,7 +521,8 @@ Since \(Y_H\) is a topologically mixing one-step subshift with alphabet
   = P_Y(\varphi)-P_{Y_H}(\varphi).
 \]
 The escape-rate interpretation follows from the comparison with
-\(\nu_\varphi(\tau_H\geq m)\).
+\(\nu_\varphi(\tau_H\geq m)\).  This proves every claim of the theorem
+except the final residuewise ratio formula.
 \end{proof}
 
 \begin{proposition}[Degenerate residue dichotomy]
@@ -554,7 +594,12 @@ Theorem~\ref{thm:first-entry-escape-rate} does not use the positive lower
 bound on the ambiguities.  If a length-\(m\) cylinder has already met the
 hole, the truth value of \(\mathsf P_R\) is decided and its contribution
 to the Bayes error is \(0\).  If the cylinder is safe through time
-\(m-1\), the Markov property gives
+\(m-1\), then the conditional law after this safe prefix is the restarted
+Markov law at \(a_{m-1}\), and
+\[
+  \PP_{a_{m-1}}(\tau_H^+<\infty)=1
+\]
+by Lemma~\ref{lem:future-entry-estimate}.  Hence
 \[
   \nu_\varphi(\mathsf P_R\mid[a])
   =
@@ -661,7 +706,7 @@ from every \((i,r)\), Lemma~\ref{lem:residue-reachability} gives
 \(b_r(i)>0\) for all \(i,r\), and hence \(a_r>0\) for every \(r\).
 \end{proof}
 
-\begin{corollary}[Survivor pressure recovery]
+\begin{corollary}[Immediate pressure corollary]
 \label{cor:survivor-pressure-recovery}
 Under the hypotheses of
 Theorem~\ref{thm:first-entry-escape-rate},
@@ -688,14 +733,16 @@ Theorem~\ref{thm:first-entry-escape-rate}.
 
 \subsection{Quasistationary amplitudes}
 
-The next theorem isolates the finite killed-chain amplitude appearing in
-the Bayes error.  The normalized left eigenvector \(\xi_H\) is a
+The next theorem is auxiliary to
+Theorem~\ref{thm:first-entry-escape-rate}.  It isolates the finite
+killed-chain ratio asymptotic that supplies the final clause of the
+central theorem.  The normalized left eigenvector \(\xi_H\) is a
 quasistationary distribution for the substochastic matrix \(B_H\) in the
 finite-state sense of \citet{DarrochSeneta1965}: conditioned on one safe
 step, a chain started with law \(\xi_H\) has law \(\xi_H\) again, and the
 one-step survival probability is \(\rho_H\).
 
-\begin{theorem}[Quasistationary ambiguity amplitudes]
+\begin{theorem}[Auxiliary quasistationary ratio theorem]
 \label{thm:quasistationary-ambiguity}
 Under the hypotheses of Theorem~\ref{thm:first-entry-escape-rate},
 choose an ordering of \(\mathcal S\) for which
@@ -847,9 +894,35 @@ the ratio tends to
 The equivalent statement is immediate on writing \(m-1=nq+r\).
 \end{proof}
 
+\begin{proof}[Completion of the proof of Theorem~\ref{thm:first-entry-escape-rate}]
+The preceding proof of Theorem~\ref{thm:first-entry-escape-rate}
+established the exact killed-matrix formula, the comparison with
+survivor mass, and the pressure identity.  Theorem
+~\ref{thm:quasistationary-ambiguity} proves the remaining residuewise
+ratio limit
+\[
+  \lim_{n\to\infty}
+  \frac{\varepsilon_{nq+r+1}(\mathsf P_R;\nu_\varphi)}
+       {\nu_\varphi(\tau_H\ge nq+r+1)}
+  = \xi_H^{\mathsf T}b_r,
+\]
+so the proof of the central finite-state theorem is complete.
+\end{proof}
+
 \begin{proof}[Proof of Theorem~\ref{thm:main-amplitude}]
-The introductory theorem states the same finite Markov-hole data, the same
-two-terminal residue reachability hypothesis, and the same definitions
-of \(B_H\), \(b_r\), and \(\xi_H\).  The asserted ratio and equivalent
-asymptotic are therefore precisely Theorem~\ref{thm:quasistationary-ambiguity}.
+Theorem~\ref{thm:first-entry-escape-rate} already gives the exact
+killed-matrix formula for \(\varepsilon_m(\mathsf P_R;\nu_\varphi)\),
+the comparison with survivor mass, the pressure identity, and the
+residuewise quasistationary ratio limit.  In particular,
+\[
+  \lim_{m\to\infty}
+  -\frac1m\log\varepsilon_m(\mathsf P_R;\nu_\varphi)
+  =
+  P_Y(\varphi)-P_{Y_H}(\varphi).
+\]
+Theorem~\ref{thm:quasistationary-ambiguity} is exactly the auxiliary
+finite-matrix computation used for the last clause of
+Theorem~\ref{thm:first-entry-escape-rate}.  Hence
+Theorem~\ref{thm:main-amplitude} is just the introductory restatement of
+that central finite-state theorem.
 \end{proof}

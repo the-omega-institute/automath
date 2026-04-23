@@ -16,7 +16,11 @@ have smaller spectral radius.  Second, after a finite block recoding
 whose block length also dominates an ambient Markov memory, it proves the
 finite-prefix Bayes-error comparison needed for general Gibbs weights.
 No statement in this appendix is a hypothesis for the finite-state
-cyclotomic resolvent statement.
+cyclotomic resolvent statement.  At the operator level, this appendix is
+closest in spirit to the open-transfer frameworks of
+\citet{KellerLiverani2009,FroylandStancevic2010,AtnipFroylandGonzalezTokmanVaienti2023},
+but it is used here only as supporting finite-cylinder material rather
+than as the source of the finite-state cyclotomic proposition.
 
 The Bayes-error comparison has four finite steps.  First, Gibbs
 distortion gives uniform lower bounds for bounded-length continuations.
@@ -283,6 +287,209 @@ Combining this with the Gibbs comparison for
 \(\nu_\psi(\tau_H\geq n)\) proves the displayed escape exponent.
 \end{proof}
 
+\begin{lemma}[Lipschitz retraction onto the survivor subshift]
+\label{lem:holder-survivor-extension}
+Let \(Z\) be a topologically mixing one-sided one-step subshift of finite
+type, let \(H\) be a non-empty proper one-step Markov hole with safe
+alphabet \(\mathcal S\), and assume that the survivor subshift
+\[
+  Z_H=\{z\in Z:z_n\in\mathcal S\text{ for all }n\geq0\}
+\]
+is topologically mixing.  Let \(\mathcal S_\infty\subseteq\mathcal S\)
+be the alphabet of symbols that occur in \(Z_H\).  For each
+\(i\in\mathcal S_\infty\), choose a point
+\(\omega^{(i)}\in Z_H\cap[i]\), and choose one base point
+\(\omega^\ast\in Z_H\).
+
+Then there is a \(1\)-Lipschitz retraction
+\[
+  \pi_H:Z\longrightarrow Z_H
+\]
+with \(\pi_H|_{Z_H}=\mathrm{id}_{Z_H}\).  Consequently
+\[
+  \mathcal J_H:\mathcal B_\theta(Z_H)\longrightarrow \mathcal B_\theta(Z),
+  \qquad
+  \mathcal J_H g:=g\circ\pi_H,
+\]
+is a bounded linear extension operator satisfying
+\[
+  \mathcal R\mathcal J_H=\mathrm{id}_{\mathcal B_\theta(Z_H)},
+  \qquad
+  \norm{\mathcal J_H g}_\infty=\norm{g}_\infty,
+  \qquad
+  \abs{\mathcal J_H g}_\theta\leq\abs{g}_\theta .
+\]
+\end{lemma}
+
+\begin{proof}
+For \(x\in Z\), let
+\[
+  n(x):=\inf\{m\geq0:x_m\notin\mathcal S_\infty\},
+\]
+with the convention \(n(x)=\infty\) if the set is empty.  Because \(Z\)
+is one-step and every symbol in \(\mathcal S_\infty\) lies in a safe
+infinite path, a point belongs to \(Z_H\) exactly when all of its
+symbols lie in \(\mathcal S_\infty\).  Thus \(n(x)=\infty\) if and only
+if \(x\in Z_H\).
+
+Define \(\pi_H(x)\) as follows.
+\begin{enumerate}[label=(\roman*)]
+  \item If \(n(x)=\infty\), set \(\pi_H(x)=x\).
+  \item If \(n(x)=0\), set \(\pi_H(x)=\omega^\ast\).
+  \item If \(1\leq n(x)<\infty\), write \(n=n(x)\) and
+  \(i=x_{n-1}\in\mathcal S_\infty\), and set
+  \[
+    \pi_H(x):=
+    x_0x_1\cdots x_{n-1}\omega^{(i)}_1\omega^{(i)}_2\cdots .
+  \]
+\end{enumerate}
+This point lies in \(Z_H\), and \(\pi_H(x)=x\) for \(x\in Z_H\), so
+\(\pi_H\) is a retraction.
+
+To prove the Lipschitz bound, let \(x,y\in Z\) agree in their first
+\(N\geq0\) symbols.  If both \(n(x)\) and \(n(y)\) are at least \(N\),
+then \(\pi_H(x)\) and \(\pi_H(y)\) share the same first \(N\) symbols,
+so \(d_\theta(\pi_H(x),\pi_H(y))\leq\theta^N=d_\theta(x,y)\).  If, say,
+\(n(x)<N\), then \(x_{n(x)}\notin\mathcal S_\infty\), hence also
+\(y_{n(x)}=x_{n(x)}\notin\mathcal S_\infty\).  Therefore
+\(n(y)=n(x)\).  In that case the definitions use the same initial word
+and the same reference tail, so \(\pi_H(x)=\pi_H(y)\).  Thus
+\(d_\theta(\pi_H(x),\pi_H(y))\leq d_\theta(x,y)\) in all cases.
+
+Now let \(g\in\mathcal B_\theta(Z_H)\).  Linearity of \(\mathcal J_H\)
+is immediate.  Since \(\pi_H\) is a retraction,
+\(\mathcal R\mathcal J_H g=g\).  The sup-norm is preserved because
+\(\pi_H(Z)=Z_H\), and the Lipschitz seminorm estimate follows from the
+\(1\)-Lipschitz property of \(\pi_H\):
+\[
+  \abs{\mathcal J_H g(x)-\mathcal J_H g(y)}
+  =
+  \abs{g(\pi_Hx)-g(\pi_Hy)}
+  \leq
+  \abs{g}_\theta\,d_\theta(\pi_Hx,\pi_Hy)
+  \leq
+  \abs{g}_\theta\,d_\theta(x,y).
+\]
+\end{proof}
+
+\begin{lemma}[Spectral comparison through a complemented quotient]
+\label{lem:holder-quotient-spectrum}
+Let \(X,Y\) be Banach spaces, let
+\(R:X\to Y\) be a bounded surjection, and let
+\(J:Y\to X\) be a bounded right inverse of \(R\), so
+\(RJ=\mathrm{id}_Y\).
+Set \(E:=\ker R\).  Let \(T\in\mathcal B(X)\) and
+\(S\in\mathcal B(Y)\) satisfy
+\[
+  RT=SR .
+\]
+Then \(E\) is \(T\)-invariant.  Write \(T_E:=T|_E\).  The following hold.
+\begin{enumerate}[label=(\roman*)]
+  \item If \(\lambda\notin\spec(T_E)\cup\spec(S)\), then
+  \(\lambda\notin\spec(T)\).  More precisely,
+  \[
+    (T-\lambda)^{-1}u
+    =
+    J(S-\lambda)^{-1}Ru
+    +
+    (T_E-\lambda)^{-1}
+    \bigl(u-(T-\lambda)J(S-\lambda)^{-1}Ru\bigr).
+  \]
+  \item If \(\lambda\notin\spec(T_E)\) and \(\lambda\notin\spec(T)\),
+  then \(\lambda\notin\spec(S)\).
+  \item Consequently
+  \[
+    \spec(T)\setminus\spec(T_E)
+    =
+    \spec(S)\setminus\spec(T_E).
+  \]
+  \item If \(\lambda\notin\spec(T_E)\) and \(\lambda\) is an isolated
+  eigenvalue of \(S\) of algebraic multiplicity one, then \(\lambda\) is
+  an isolated eigenvalue of \(T\) of algebraic multiplicity one.
+  Moreover the restriction map
+  \[
+    R:\ker(T-\lambda)\longrightarrow\ker(S-\lambda)
+  \]
+  is an isomorphism, and \(T\) has no non-zero generalized eigenvector
+  at \(\lambda\).
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+If \(e\in E\), then \(RTe=SRe=0\), so \(Te\in E\).  Thus \(E\) is
+\(T\)-invariant.
+
+For (i), fix \(u\in X\) and set \(y:=(S-\lambda)^{-1}Ru\),
+\(x_0:=Jy\).  Then
+\[
+  R\bigl(u-(T-\lambda)x_0\bigr)
+  =
+  Ru-(S-\lambda)y
+  =
+  0,
+\]
+so \(e:=u-(T-\lambda)x_0\) lies in \(E\).  Since
+\(\lambda\notin\spec(T_E)\), the element
+\[
+  x:=x_0+(T_E-\lambda)^{-1}e
+\]
+is well defined and satisfies \((T-\lambda)x=u\).  This gives the
+displayed inverse formula, and every factor in it is bounded.
+
+For (ii), assume \(\lambda\notin\spec(T_E)\) and \(T-\lambda\) is
+invertible on \(X\).  If \(e\in E\), then the equation
+\((T-\lambda)x=e\) has a unique solution \(x=(T-\lambda)^{-1}e\) in
+\(X\).  It also has a unique solution in \(E\), namely
+\((T_E-\lambda)^{-1}e\).  By uniqueness these two solutions coincide, so
+\((T-\lambda)^{-1}E\subseteq E\).  Therefore \(T-\lambda\) induces a
+bounded bijection on the quotient \(X/E\), whose inverse is induced by
+\((T-\lambda)^{-1}\).  Since \(R\) identifies \(X/E\) with \(Y\), the
+induced quotient map is exactly \(S-\lambda\).  Hence \(S-\lambda\) is
+invertible.
+
+Assertion (iii) is immediate from (i) and (ii).
+
+For (iv), assertion (iii) shows that \(\lambda\) is isolated in
+\(\spec(T)\) whenever it is isolated in \(\spec(S)\).  If
+\(x\in\ker(T-\lambda)\) and \(Rx=0\), then \(x\in E\) and
+\((T_E-\lambda)x=0\), hence \(x=0\) because
+\(\lambda\notin\spec(T_E)\).  Thus the restriction map \(R\) is
+injective on \(\ker(T-\lambda)\).
+
+Now let \(y\in\ker(S-\lambda)\).  Put \(x_0:=Jy\).  Then
+\[
+  R\bigl((\lambda-T)x_0\bigr)
+  =
+  (\lambda-S)y
+  =
+  0,
+\]
+so \((\lambda-T)x_0\in E\).  Define
+\[
+  x:=x_0+(T_E-\lambda)^{-1}(\lambda-T)x_0 .
+\]
+Because \(T_E-\lambda=-(\lambda-T_E)\) on \(E\), this satisfies
+\((T-\lambda)x=0\), while \(Rx=y\) because the correction term lies in
+\(E\).  Therefore
+\[
+  R:\ker(T-\lambda)\longrightarrow\ker(S-\lambda)
+\]
+is surjective, hence an isomorphism.  In particular the eigenspace of
+\(T\) at \(\lambda\) is one-dimensional when the eigenspace of \(S\) is.
+
+Finally, let \(v\neq0\) be an eigenvector of \(T\) at \(\lambda\), and
+suppose that \((T-\lambda)x=v\) for some \(x\in X\).  Applying \(R\)
+gives
+\[
+  (S-\lambda)Rx=Rv .
+\]
+Since \(\lambda\) has algebraic multiplicity one for \(S\), the operator
+\(S\) has no non-zero generalized eigenvector at \(\lambda\), so the
+right-hand side must vanish: \(Rv=0\).  But then \(v\in E\) and
+\((T_E-\lambda)v=0\), contradicting \(\lambda\notin\spec(T_E)\).  Thus
+\(T\) has no non-zero generalized eigenvector at \(\lambda\).
+\end{proof}
+
 \begin{theorem}[Open transfer operator on the H\"older space]
 \label{thm:holder-open-transfer}
 Let \(Z\) be a topologically mixing one-sided one-step subshift of finite
@@ -368,17 +575,11 @@ Let
   \qquad
   \mathcal R f=f|_{Z_H},
 \]
-and let \(\mathcal E:=\ker\mathcal R\).  The restriction map is onto
-because H\"older functions on the closed subset \(Z_H\) extend to
-H\"older functions on the ambient symbolic metric space.  Explicitly, if
-\(A\subset Z\) is closed and \(g:A\to\RR\) is \(L\)-Lipschitz, then
-\[
-  G(x):=\inf_{a\in A}\bigl(g(a)+Ld_\theta(x,a)\bigr)
-\]
-is an \(L\)-Lipschitz extension of \(g\) to \(Z\).  Applying this formula
-to the real and imaginary parts of a complex-valued function proves the
-surjectivity of \(\mathcal R\).  Moreover \(\mathcal E\) is a closed
-invariant subspace and
+let \(\mathcal E:=\ker\mathcal R\), and let
+\(\mathcal J_H:\mathcal B_\theta(Z_H)\to\mathcal B_\theta(Z)\) be the
+bounded extension operator from
+Lemma~\ref{lem:holder-survivor-extension}.  In particular
+\(\mathcal R\mathcal J_H=\mathrm{id}\), so \(\mathcal R\) is onto.  Moreover
 \[
   \mathcal R\mathcal L_{\psi,H}
   =
@@ -510,45 +711,38 @@ Thus
   < \lambda_H .
 \]
 
-The invariant exact sequence
+Now apply Lemma~\ref{lem:holder-quotient-spectrum} with
 \[
-  0\longrightarrow \mathcal E
-  \longrightarrow \mathcal B_\theta(Z)
-  \overset{\mathcal R}{\longrightarrow}
-  \mathcal B_\theta(Z_H)
-  \longrightarrow 0
+  X=\mathcal B_\theta(Z),\qquad
+  Y=\mathcal B_\theta(Z_H),\qquad
+  T=\mathcal L_{\psi,H},\qquad
+  S=\mathcal L_{\psi|Z_H},\qquad
+  R=\mathcal R,\qquad
+  J=\mathcal J_H .
 \]
-now gives the required spectral comparison.  We spell out the elementary
-Banach-space argument.  Let \(T=\mathcal L_{\psi,H}\), let
-\(T_{\mathcal E}=T|_{\mathcal E}\), and let \(\overline T\) be the
-operator induced by \(T\) on the quotient
-\(\mathcal B_\theta(Z)/\mathcal E\).  The map induced by
-\(\mathcal R\) identifies \(\overline T\) with
-\(\mathcal L_{\psi|Z_H}\).  If
-\(\lambda\notin\spec(T_{\mathcal E})\cup\spec(\overline T)\), then
-\(T-\lambda\) is invertible: solve first in the quotient, lift any
-representative, and then correct the remaining error in \(\mathcal E\)
-using \((T_{\mathcal E}-\lambda)^{-1}\).  This also gives a bounded
-inverse, because the quotient inverse and
-\((T_{\mathcal E}-\lambda)^{-1}\) are bounded.  Conversely, when
-\(\lambda\notin\spec(T_{\mathcal E})\), invertibility of \(T-\lambda\)
-would force invertibility of \(\overline T-\lambda\): the inverse of
-\(T-\lambda\) preserves \(\mathcal E\), since the solution in
-\(\mathcal E\) is unique.
+Since \(\rho(T_{\mathcal E})<\lambda_H\), the number \(\lambda_H\) does
+not belong to \(\spec(T_{\mathcal E})\).  The survivor
+Ruelle--Perron--Frobenius theorem gives that \(\lambda_H\) is a simple
+isolated eigenvalue of \(S\), with the rest of \(\spec(S)\) contained in
+the disk \(\{z:\abs z\leq r_H\}\).  Therefore
+Lemma~\ref{lem:holder-quotient-spectrum}(iii) shows that every spectral
+value of \(T\) outside the disk of radius
+\(\max\{\rho(T_{\mathcal E}),r_H\}\) comes from \(S\), and
+Lemma~\ref{lem:holder-quotient-spectrum}(iv) gives that \(\lambda_H\) is
+an isolated eigenvalue of \(T\) of algebraic multiplicity one.
 
-Consequently, outside the disk of radius
-\(\max\{\theta\lambda_H,r_H\}\), the spectrum of \(T\) is exactly the
-corresponding spectrum of the survivor operator.  In particular
-\(\lambda_H\) is an isolated spectral value of \(T\).  Since
-\(\lambda_H\notin\spec(T_{\mathcal E})\) and the survivor eigenspace at
-\(\lambda_H\) is one-dimensional, the same quotient-correction argument
-lifts the survivor eigenfunction uniquely to a one-dimensional
-eigenspace for \(T\).  The same reasoning excludes a generalized
-eigenvector in the ambient space: its quotient would be a generalized
-eigenvector for the survivor operator, whose leading eigenvalue is
-simple, and any remaining vector in \(\mathcal E\) would contradict
-\(\lambda_H\notin\spec(T_{\mathcal E})\).  The Riesz projection at
-\(\lambda_H\) is therefore rank one.  If \(h_H\) spans its range and
+Let \(h_H^0\in\mathcal B_\theta(Z_H)\) be a non-zero eigenfunction of
+\(S\) with \(Sh_H^0=\lambda_Hh_H^0\).  The lifting formula in
+Lemma~\ref{lem:holder-quotient-spectrum}(iv) gives an eigenfunction
+\[
+  h_H
+  :=
+  \mathcal J_Hh_H^0
+  +
+  (T_{\mathcal E}-\lambda_H)^{-1}
+  (\lambda_H-T)\mathcal J_Hh_H^0
+\]
+for \(T\), and \(\mathcal R h_H=h_H^0\), so \(h_H\neq0\).  If
 \(\eta_H^0\) is the positive
 Ruelle--Perron--Frobenius eigenfunctional on
 \(\mathcal B_\theta(Z_H)\), then
@@ -556,9 +750,17 @@ Ruelle--Perron--Frobenius eigenfunctional on
   \eta_H(f):=\eta_H^0(\mathcal Rf)
 \]
 is a non-zero positive eigenfunctional for \(T^*\).  Normalizing
-\(h_H\) so that \(\eta_H(h_H)=1\) and writing
-\(\Pi_Hf=\eta_H(f)h_H\), the decomposition
-\(\mathcal N_H:=T(I-\Pi_H)\) has
+\(h_H\) so that \(\eta_H(h_H)=1\), the operator
+\[
+  \Pi_H f:=\eta_H(f)h_H
+\]
+is the rank-one spectral projection of \(T\) at \(\lambda_H\), and
+\(T\Pi_H=\Pi_H T=\lambda_H\Pi_H\).  Setting
+\[
+  \mathcal N_H:=T(I-\Pi_H),
+\]
+the spectrum of \(\mathcal N_H\) is the spectrum of \(T\) with the
+simple eigenvalue \(\lambda_H\) removed, so
 \(\rho(\mathcal N_H)<\lambda_H\), and the displayed spectral
 decomposition follows.
 \end{proof}
