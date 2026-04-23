@@ -203,6 +203,7 @@ import Omega.Zeta.XiCdimPhaseCompressionAliasingExponent
 import Omega.Zeta.XiCdimCircleLedgerSignature
 import Omega.Zeta.XiCdimZetaFingerprintRigidity
 import Omega.Zeta.XiCdimLocalizationSolenoidContinuousHomClassification
+import Omega.Zeta.SingleScaleDirichletImagPeriod
 import Omega.Zeta.XiCdimLocalizationSolenoidQuotientOrderEndomorphism
 import Omega.Zeta.XiCdimLocalizationSolenoidFiniteDimensionalUnitarySingleCharacterNormalForm
 import Omega.Zeta.XiSolenoidPArtinMazurZeta
