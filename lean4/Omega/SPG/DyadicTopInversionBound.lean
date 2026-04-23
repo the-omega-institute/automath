@@ -38,6 +38,17 @@ theorem boundary_ratio_eq (m n : ℕ) (hn : 1 ≤ n) :
   have h2pow_sub_ne : (2 : ℝ) ^ (m * (n - 1)) ≠ 0 := by positivity
   field_simp
 
+/-- Paper-facing statement alias for the dyadic top-dimensional holographic inversion
+exponential ill-conditioning package. -/
+def spg_dyadic_top_dimensional_holographic_inversion_exponential_ill_conditioning_statement :
+    Prop :=
+  (∀ m n : ℕ, topCellCount m n = 2 ^ (m * n)) ∧
+    (∀ m n : ℕ, boundaryCellCount m n = 2 * n * 2 ^ (m * (n - 1))) ∧
+    (∀ m n : ℕ, 1 ≤ n →
+      (boundaryCellCount m n : ℝ) / (topCellCount m n : ℝ) = (2 * n : ℝ) / 2 ^ m) ∧
+    (∀ m : ℕ,
+      (boundaryCellCount m 2 : ℝ) / (topCellCount m 2 : ℝ) = (4 : ℝ) / 2 ^ m)
+
 /-- Paper package: dyadic top-dimensional holographic inversion ill-conditioning
     numerical scaffolding.
     thm:spg-dyadic-top-dimensional-holographic-inversion-exponential-ill-conditioning -/
@@ -55,5 +66,12 @@ theorem paper_spg_dyadic_top_inversion_ill_conditioning :
   rw [boundary_ratio_eq m 2 (by omega)]
   push_cast
   ring
+
+/-- Paper label: `thm:spg-dyadic-top-dimensional-holographic-inversion-exponential-ill-conditioning`.
+This is the paper-facing wrapper around the concrete top-cell, boundary-cell, and boundary-ratio
+identities used to witness the exponential ill-conditioning. -/
+theorem paper_spg_dyadic_top_dimensional_holographic_inversion_exponential_ill_conditioning :
+    spg_dyadic_top_dimensional_holographic_inversion_exponential_ill_conditioning_statement := by
+  exact paper_spg_dyadic_top_inversion_ill_conditioning
 
 end Omega.SPG

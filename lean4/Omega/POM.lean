@@ -97,6 +97,7 @@ import Omega.POM.Congruence2dLockingCfinite
 import Omega.POM.CoprimeLedgerPrimorialOptimality
 import Omega.POM.CrossqGMonotone
 import Omega.POM.AxisDecomposabilityIff
+import Omega.POM.StableAdditionCarryDefectUniqueElement
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.CycleLatticeThetaPoissonDuality

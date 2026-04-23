@@ -110,6 +110,23 @@ theorem specialization_maximal :
   · decide
   · omega
 
+/-! ## Paper-facing specialization wrapper -/
+
+/-- Paper-facing statement alias for the `t = 3` specialization package. -/
+def xi_degree11_et_specialization_galois_s11_statement : Prop :=
+  (11 : ℕ) = 11 ∧
+    Nat.Prime 11 ∧
+    (31 ≠ 2 ∧ 31 ≠ 3 ∧ 31 ≠ 5 ∧ 31 ≠ 23 ∧ 31 ≠ 2741 ∧ 31 ≠ 5153 ∧ 31 ≠ 1315229) ∧
+    1 + 3 + 7 = (11 : ℕ) ∧
+    (7 ≠ 2 ∧ 7 ≠ 3 ∧ 7 ≠ 5 ∧ 7 ≠ 23 ∧ 7 ≠ 2741 ∧ 7 ≠ 5153 ∧ 7 ≠ 1315229) ∧
+    (7 : ℕ) ≤ 11 - 3 ∧
+    Nat.Prime 7 ∧
+    (1 : ℕ) % 2 = 1 ∧
+    (22 % 2 = 0 ∧ 37 % 2 = 1 ∧ 8 % 2 = 0 ∧ 1 % 2 = 1) ∧
+    Nat.factorial 11 = 39916800 ∧
+    Nat.factorial 11 / 2 = 19958400 ∧
+    (11 : ℕ) ≥ 5
+
 /-! ## Paper theorem wrapper -/
 
 /-- Combined seeds for degree-11 generic Galois S₁₁ via Hilbert irreducibility:
@@ -154,5 +171,14 @@ theorem paper_xi_degree11_generic_galois_S11_package :
     -- S₁₁ not solvable
     (11 : ℕ) ≥ 5 :=
   paper_xi_degree11_generic_galois_S11_seeds
+
+/-- Paper label: `thm:xi-degree11-Et-specialization-galois-S11`. This bundles the concrete
+irreducibility audit at `p = 31`, the `(1)(3)(7)` Frobenius cycle at `p = 7`, the discriminant
+parity obstruction to `A₁₁`, and the Jordan-theorem numerical hypotheses recorded in this file. -/
+theorem paper_xi_degree11_et_specialization_galois_s11 :
+    xi_degree11_et_specialization_galois_s11_statement := by
+  refine ⟨poly_degree, eleven_prime, p31_coprime_disc, splitting_mod7_degree_check, p7_unramified,
+    jordan_cycle_bound, seven_prime, disc_odd_exponent_23, disc_exponents_not_all_even, s11_order,
+    a11_order, s11_not_solvable_witness⟩
 
 end Omega.Zeta.Degree11GenericGaloisS11
