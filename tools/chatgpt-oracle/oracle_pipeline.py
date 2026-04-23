@@ -6862,6 +6862,9 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 0,
                         succeeded += 1
                         total = st.stage_a_rounds + st.stage_b_rounds + st.stage_c_rounds
                         logger.info(f"[{name}] SUCCESS — {total} total rounds")
+                    elif str(st.error).startswith(PAUSED_ERROR_PREFIX):
+                        failed += 1
+                        logger.warning(f"[{name}] PAUSED — {st.error}")
                     else:
                         failed += 1
                         logger.warning(f"[{name}] FAILED — {st.error}")
@@ -6926,9 +6929,15 @@ def print_dashboard():
                           default=None)
         a_last = audit_score if audit_score is not None else (
             d.get("stage_a_scores", [0])[-1] if d.get("stage_a_scores") else "-")
+        err = str(d.get("error", ""))
+        stage_cell = d.get("current_stage", "?")
+        if err.startswith(PAUSED_ERROR_PREFIX):
+            stage_cell = "PAUSED"
+        elif err:
+            stage_cell = "FAILED"
         rows.append((
             d.get("paper_name", f.stem)[:55],
-            d.get("current_stage", "?"),
+            stage_cell,
             str(d.get("stage_f_fit_score", "?")),
             f"{d.get('stage_a_rounds', 0)}r "
             f"audit={a_last}",
