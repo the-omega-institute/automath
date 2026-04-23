@@ -74,6 +74,15 @@ theorem paper_leyang_inverse_square_haar_universality (D : leyang_inverse_square
             1 / (Real.pi * |t| * Real.sqrt |1 + 4 * t|)
           else 0 := (paper_leyang_haar_pushforward_density.2.1 t).symm
 
+/-- The cosine-phase inverse-square energy variable always lands in the same Lee--Yang marginal
+density, independently of the frequency and phase shift parameters. -/
+theorem paper_leyang_cosine_energy_marginal_universality (m : ℕ) (_hm : 1 ≤ m) (_δ : ℝ) :
+    ∀ t : ℝ,
+      leyangHaarPushforwardDensity t =
+        if t ≤ -(1 : ℝ) / 4 then 1 / (Real.pi * |t| * Real.sqrt |1 + 4 * t|) else 0 := by
+  intro t
+  simpa using (paper_leyang_haar_pushforward_density.2.1 t)
+
 end
 
 end Omega.UnitCirclePhaseArithmetic

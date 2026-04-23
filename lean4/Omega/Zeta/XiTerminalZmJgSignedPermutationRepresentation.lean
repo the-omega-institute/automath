@@ -1,4 +1,5 @@
 import Mathlib.Data.Fintype.Perm
+import Mathlib.Data.Fin.Tuple.Basic
 import Omega.Zeta.XiJGDiscriminantSquareclassInvariance
 import Omega.Zeta.XiTerminalZmDeltaNodeTangentParityLaw
 
@@ -162,5 +163,62 @@ theorem paper_xi_terminal_zm_jg_signed_permutation_representation :
       simp [xiTerminalQsqrtNegThreeCharacter]
     simpa [xi_terminal_zm_jg_signed_permutation_representation_weyl_D_subgroup,
       xi_terminal_zm_jg_signed_permutation_representation_even_parity, hchar] using hParity
+
+/-- Five free sign bits for the `n = 6` even-parity packet. -/
+abbrev xi_terminal_zm_jg_demicube_32_free_sign_vector := Fin 5 → Bool
+
+/-- The sixth sign is fixed by the parity of the first five coordinates. -/
+def xi_terminal_zm_jg_demicube_32_parity_bit
+    (eps : xi_terminal_zm_jg_demicube_32_free_sign_vector) : Bool :=
+  decide (((∑ i : Fin 5, if eps i then 1 else 0) % 2) = 1)
+
+/-- Appending the parity bit gives a concrete `6`-dimensional even sign vector. -/
+def xi_terminal_zm_jg_demicube_32_append_even
+    (eps : xi_terminal_zm_jg_demicube_32_free_sign_vector) : Fin 6 → Bool :=
+  Fin.snoc eps (xi_terminal_zm_jg_demicube_32_parity_bit eps)
+
+/-- The concrete `6`-dimensional demicube vertex set: the last coordinate is determined by the
+parity of the first five. -/
+abbrev xi_terminal_zm_jg_demicube_32_vertex_set :=
+  {eps : Fin 6 → Bool //
+    eps (Fin.last 5) =
+      xi_terminal_zm_jg_demicube_32_parity_bit (Fin.init eps)}
+
+/-- The first five bits determine an even-parity `6`-bit sign vector, and conversely the first
+five coordinates recover the vector uniquely. -/
+def xi_terminal_zm_jg_demicube_32_equiv :
+    xi_terminal_zm_jg_demicube_32_free_sign_vector ≃
+      xi_terminal_zm_jg_demicube_32_vertex_set where
+  toFun := fun eps =>
+    ⟨xi_terminal_zm_jg_demicube_32_append_even eps, by
+      simpa [xi_terminal_zm_jg_demicube_32_append_even] using
+        (Fin.snoc_last (α := fun _ : Fin 6 => Bool)
+          (p := eps) (x := xi_terminal_zm_jg_demicube_32_parity_bit eps))⟩
+  invFun := fun eps => Fin.init eps.1
+  left_inv := by
+    intro eps
+    funext i
+    simp [xi_terminal_zm_jg_demicube_32_append_even]
+  right_inv := by
+    intro eps
+    have hlast : xi_terminal_zm_jg_demicube_32_parity_bit (Fin.init eps.1) = eps.1 (Fin.last 5) := by
+      simpa [xi_terminal_zm_jg_demicube_32_vertex_set] using eps.2.symm
+    apply Subtype.ext
+    simpa [xi_terminal_zm_jg_demicube_32_append_even, hlast] using Fin.snoc_init_self eps.1
+
+/-- Specializing the even-sign packet to `n = 6` gives the `32` vertices of the `6`-dimensional
+demicube. -/
+theorem paper_xi_terminal_zm_jg_demicube_32 :
+    Fintype.card xi_terminal_zm_jg_demicube_32_vertex_set = 32 ∧
+      Nonempty
+        (xi_terminal_zm_jg_demicube_32_free_sign_vector ≃
+          xi_terminal_zm_jg_demicube_32_vertex_set) := by
+  refine ⟨?_, ⟨xi_terminal_zm_jg_demicube_32_equiv⟩⟩
+  calc
+    Fintype.card xi_terminal_zm_jg_demicube_32_vertex_set =
+        Fintype.card xi_terminal_zm_jg_demicube_32_free_sign_vector :=
+      Fintype.card_congr xi_terminal_zm_jg_demicube_32_equiv.symm
+    _ = 32 := by
+      simp [xi_terminal_zm_jg_demicube_32_free_sign_vector]
 
 end Omega.Zeta
