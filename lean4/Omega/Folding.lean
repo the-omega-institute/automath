@@ -550,6 +550,7 @@ import Omega.Folding.KilloFoldBinEscortRenyiEntropy
 import Omega.Folding.KilloFoldBinEscortRenyiLogisticGeometry
 import Omega.Folding.KilloFoldBinNormalizedGaugeDeficiency
 import Omega.Folding.KilloFoldCarryDefectCocycleNonsplit
+import Omega.Folding.KilloFoldCarryCurvatureInterpretation
 import Omega.Folding.KilloFoldRenyi2UniformityGap
 import Omega.Folding.KilloFoldFourierReflectionPhaseRigidity
 import Omega.Folding.Foldbin6BoundaryCliffordMaximalGradedSubalgebra
