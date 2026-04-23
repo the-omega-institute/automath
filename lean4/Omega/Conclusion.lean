@@ -117,6 +117,7 @@ import Omega.Conclusion.CircleDimensionPrimeLedgerStrictOrthogonality
 import Omega.Conclusion.Chi2RecoversFullPowerDivergenceFamily
 import Omega.Conclusion.CoarseGrainingConsumesVisibleWalshEnergy
 import Omega.Conclusion.VisibleWalshLowOrderBarcode
+import Omega.Conclusion.ZeroAnomalyMaximalVisibleCpRealization
 import Omega.Conclusion.VisibleAllAngleIntervalPsdCollapse
 import Omega.Conclusion.CoarsegrainingEnergyInfimum
 import Omega.Conclusion.CoarsegrainingStokesBeckChevalley
