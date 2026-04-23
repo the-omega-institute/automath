@@ -85,7 +85,8 @@ MAX_DEEP_ROUNDS = 2       # max A-DEEP style escalation rounds per W cycle
 MIN_NEW_CLAIMS = 1        # anti-fake: minimum new theorem/lemma/etc labels
 MIN_CONTENT_DELTA = 200   # anti-fake: minimum chars of new claim content
 WRITEBACK_LINE_LIMIT = 600
-WRITEBACK_TARGET_LINE_HEADROOM = 120
+WRITEBACK_TARGET_LINE_HEADROOM = 220
+MAX_WRITEBACK_TARGET_FILES = 6
 PYTHON_SCAN_MATCH_THRESHOLD = 0.15
 SEMANTIC_SCAN_CANDIDATES = 12
 SEMANTIC_SCAN_CONTEXT_CHARS = 4500
@@ -3690,7 +3691,7 @@ def _select_target_files(
             if rel not in seen:
                 selected.append(selected_target)
                 seen.add(rel)
-    return selected[:8]
+    return selected[:MAX_WRITEBACK_TARGET_FILES]
 
 
 def _collect_section_contexts(targets: list[dict[str, Any]]) -> str:
