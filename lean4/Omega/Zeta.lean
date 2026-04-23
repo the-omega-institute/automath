@@ -76,6 +76,7 @@ import Omega.Zeta.XiHypercubeWeightedLaplacianHeatTraceFactorization
 import Omega.Zeta.XiOptimalAllocationUnderProductBound
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
+import Omega.Zeta.XiComovingLeyangEndpointSquareRoot
 import Omega.Zeta.XiScaleMellinNoNonzeroImagPeriod
 import Omega.Zeta.XiRhIffLatticeComovingDefect
 import Omega.Zeta.XiSmithLossSpectrumDiscreteCurvatureCompleteCharacterization
