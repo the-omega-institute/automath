@@ -107,6 +107,7 @@ import Omega.Conclusion.CircleDimensionPrimeLedgerStrictOrthogonality
 import Omega.Conclusion.Chi2RecoversFullPowerDivergenceFamily
 import Omega.Conclusion.CoarseGrainingConsumesVisibleWalshEnergy
 import Omega.Conclusion.VisibleWalshLowOrderBarcode
+import Omega.Conclusion.VisibleAllAngleIntervalPsdCollapse
 import Omega.Conclusion.CoarsegrainingEnergyInfimum
 import Omega.Conclusion.CoarsegrainingStokesBeckChevalley
 import Omega.Conclusion.CofinalFixedQuotient
@@ -474,6 +475,7 @@ import Omega.Conclusion.OddMaxfiberHiddenbitTristateCrystal
 import Omega.Conclusion.OnedimMaxCoefficientEntropyProfile
 import Omega.Conclusion.ParityShadowConstantMemoryCollapse
 import Omega.Conclusion.ParetoColdendCurvaturePole
+import Omega.Conclusion.FixedResolutionParetoColdendLogCusp
 import Omega.Conclusion.PartialScreenTraceCutSpaceIdentification
 import Omega.Conclusion.ArithmeticDoubleTransversalTerminalNormalForm
 import Omega.Conclusion.ArtinDeterminantMinimalVisibleQuotient
