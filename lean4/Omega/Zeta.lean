@@ -268,6 +268,7 @@ import Omega.Zeta.XiUnitarySliceZeroCountSpectralFlow
 import Omega.Zeta.BdryFreeInvolutionOddFiberObstructionMinCover
 import Omega.Zeta.XiTimePart62aZGSimplePoleDensityResidue
 import Omega.Zeta.XiTimePart62dhZGDirichletDensityResidue
+import Omega.Zeta.XiTimePart62dZgCriticalHausdorffMeasure
 import Omega.Zeta.XiTimePart62ccEventwordFreeAffineSubmonoid
 import Omega.Zeta.XiTimePart62dLeyangBranchGraphAutomorphismWreath
 import Omega.Zeta.XiTimePart62ebLeyangExternalAuditImmunity

@@ -3,6 +3,7 @@ import Omega.SyncKernelRealInput.RealInput40SpectrumDecomp
 import Omega.SyncKernelRealInput.RealInput40MertensConstant
 import Omega.SyncKernelRealInput.RealInput40MertensTwoSeriesTail
 import Omega.SyncKernelRealInput.InputMeasureRigid
+import Omega.SyncKernelRealInput.CoreThermodynamicTailEquivalence
 import Omega.SyncKernelRealInput.RealInput40ResidueConstant
 import Omega.SyncKernelRealInput.RealInput40VertSingleSeries
 import Omega.SyncKernelRealInput.RealInputResetGap
