@@ -669,6 +669,7 @@ import Omega.Conclusion.Q13CrtPeriodCompression
 import Omega.Conclusion.QuadraticFieldRamification
 import Omega.Conclusion.RamanujanAtomicQAxisZetaStripping
 import Omega.Conclusion.RamanujanCollapse
+import Omega.Conclusion.Window6RamanujanSectorAlgebraOnCrtLayer
 import Omega.Conclusion.SunitCdimLinearGrowth
 import Omega.Conclusion.RankoneCauchyOrthogonality
 import Omega.Conclusion.RankoneResultantDiscriminantClosedForm

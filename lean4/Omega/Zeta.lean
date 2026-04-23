@@ -94,6 +94,7 @@ import Omega.Zeta.XiEntropyGapHankelDeterminantCollapseUpperBound
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
 import Omega.Zeta.XiEndpointProfileCfiniteHankelRank
 import Omega.Zeta.XiEndpointProfilePronyInvertibility
+import Omega.Zeta.XiOffsliceRealpartSumLaw
 import Omega.Zeta.XiExtremeResonancePositivity
 import Omega.Zeta.XiExtremeResonanceCriterion
 import Omega.Zeta.XiExtremeResonanceToeplitzThreshold
@@ -258,6 +259,7 @@ import Omega.Zeta.XiFixedFreezingEscortRenyiSpectrumCollapse
 import Omega.Zeta.XiFixedFreezingEscortPairwiseTvCoalescence
 import Omega.Zeta.ConclusionWedderburnThresholdHolography
 import Omega.Zeta.ConclusionCoarseningGlobalRigidityOfCapacityCurve
+import Omega.Zeta.XiTimePart60aComovingDefectFourierPronyLinearization
 import Omega.Zeta.XiTimePart60ab4ExactSizebiasPushforwardLaw
 import Omega.Zeta.XiTimePart60abGaugeConstantNonCfiniteOgfObstruction
 import Omega.Zeta.XiCartesianPowerLeyangDoubleAtomTangentClt
