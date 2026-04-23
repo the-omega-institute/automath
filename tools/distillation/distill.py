@@ -1447,6 +1447,45 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
     if not focused_family:
         return ""
     family_slug = _slugify(str(focused_family.get("name", "")))
+    if family_slug == "random_sparse_obstruction_families":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This family has repeatedly failed when generic finite-dimensional",
+                "  linear algebra, graph cohomology, or abstract ledger perturbations",
+                "  were stated as Omega reconstruction obstructions. Output at most",
+                "  1-2 conservative writebacks, and omit any target whose local",
+                "  Omega carrier is not fully defined in the supplied context.",
+                "- Absolutely do not include the visible style tokens 新增, 本次,",
+                "  本轮, 上一轮, 修改记录, 加入如下, 补充 A, 结论 1, or 闭环 1",
+                "  anywhere in a title, statement, proof, or explanatory sentence.",
+                "- For statistical_stability, quantify explicitly over all probability",
+                "  measures on the concrete finite-resolution carrier X_m or its",
+                "  locally named image, and bind the sparse residual predicate to the",
+                "  surrounding finite-resolution congruence/sieve objects. Do not",
+                "  call a witness empirical unless rational/integer multiplicities",
+                "  are proved.",
+                "- For group_unification, use only a formal cycle-circulation or",
+                "  holonomy-audit statement unless the graph, oriented edges, and edge",
+                "  ledger are constructed from actual window-6/foldbin transition data",
+                "  in the snippet. Do not use filling-cost, expansion-budget, or",
+                "  reconstruction-obstruction language unless those objects are defined",
+                "  and the claimed implication is proved. Avoid mixed-language phrases",
+                "  such as admit.",
+                "- For zeta_finite_part, prefer a short corollary/audit lemma of the",
+                "  existing denominator-ledger and Euler-tail results. Locally define",
+                "  every symbol before use, especially K>=2, M=M_\\theta,",
+                "  \\lambda=\\lambda(\\theta), d=\\dim M, and \\mathcal E_K. Do not claim",
+                "  an abstract ledger perturbation is realizable by an Euler matrix",
+                "  family unless the realization hypothesis is explicitly added.",
+                "- For POM, include Hankel or projection-word readings only if they are",
+                "  explicitly included in the stated finite test space. State the basis",
+                "  and normalization convention for any support-size bound.",
+                "- Prefer a shorter accepted lemma/corollary over broad coverage of all",
+                "  target sections. The zeta target may be near the line budget; omit it",
+                "  if the result cannot be made short and locally anchored.",
+            ]
+        )
     if family_slug != "worst_counterexample_exponent_bootstrapping":
         return ""
     return "\n".join(
