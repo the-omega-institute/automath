@@ -127,6 +127,7 @@ import Omega.Zeta.XiLeyangEdDyExplicitDivisor
 import Omega.Zeta.XiEdYDivisorAndGroupLawIdentity
 import Omega.Zeta.XiTerminalZmDeltaNodePreimageSumZero
 import Omega.Zeta.XiTerminalZmDihedralDoubleDiscriminantLock
+import Omega.Zeta.XiTerminalZmDihedralD4QuadraticSubfields
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
 import Omega.Zeta.XiLeyangTwoScaleCrossratioCrossingDrift

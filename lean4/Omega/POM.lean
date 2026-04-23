@@ -169,6 +169,7 @@ import Omega.POM.DiagonalRateAbsorbingDFR
 import Omega.POM.DiagonalRateAbsorbingLaguerreInterlacing
 import Omega.POM.DiagonalRateRefreshAbsorbingLaguerreInterlacing
 import Omega.POM.MaxentMarkovLaguerreSecularSpectrum
+import Omega.POM.MaxentMarkovSmallDistortionLambda2Slope
 import Omega.POM.MaxentMarkovZetaDeterminantSinglePolynomial
 import Omega.POM.MaxentMarkovOptimalCouplingLatentBinaryMixture
 import Omega.POM.MaxentMarkovSpectrumMonotoneInDelta
