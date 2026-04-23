@@ -119,6 +119,8 @@ CODEX_INFRA_UNAVAILABLE_MARKERS = (
     "try again later",
     "timed out",
     "(timeout)",
+    "(start-failed)",
+    "(codex-exec-failed",
 )
 if not logger.handlers:
     _log_file = LOG_DIR / f"distill_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
@@ -391,6 +393,12 @@ def codex_exec(
         if temp_dir is not None:
             shutil.rmtree(temp_dir, ignore_errors=True)
         return "(start-failed)"
+
+    if returncode != 0:
+        details = _jsonl_agent_messages(stdout) or stderr or stdout
+        if temp_dir is not None:
+            shutil.rmtree(temp_dir, ignore_errors=True)
+        return f"(codex-exec-failed rc={returncode})\n{details[:2000]}"
 
     output = ""
     try:
@@ -4895,6 +4903,8 @@ def run_stage_w(
             except (ValueError, json.JSONDecodeError) as exc:
                 feedback = f"Could not parse writeback JSON: {exc}"
                 attempts.append({"attempt": attempt, "errors": [feedback]})
+                state.prior_feedback.append(f"W attempt {attempt}: {feedback}")
+                save_state(state)
                 continue
 
         allowed_tex_files = {str(target.get("tex_file", "")) for target in targets}
@@ -4906,6 +4916,7 @@ def run_stage_w(
             feedback = "; ".join(validation_errors)
             attempts.append({"attempt": attempt, "errors": validation_errors})
             state.prior_feedback.append(f"W attempt {attempt}: {feedback}")
+            save_state(state)
             continue
 
         # Anti-fake gate: verify substantive content before expensive review
