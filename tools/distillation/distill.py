@@ -1329,6 +1329,42 @@ def _build_prior_feedback_block(state: DistillState) -> str:
     return "\n".join(lines)
 
 
+def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]) -> str:
+    """Return narrow last-mile guidance for families with known failure modes."""
+    if not focused_family:
+        return ""
+    family_slug = _slugify(str(focused_family.get("name", "")))
+    if family_slug != "worst_counterexample_exponent_bootstrapping":
+        return ""
+    return "\n".join(
+        [
+            "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+            "- This family is currently failing because broad ledger/skeleton",
+            "  theorems overclaim. Do not introduce a standalone five-skeleton",
+            "  ledger framework, arbitrary skeleton classes, unique skeleton",
+            "  compression, closed-skeleton sets, inverse-limit closure, or",
+            "  K_h(d+alpha; L_h^+) closure unless every object and inheritance",
+            "  condition is already visible in the target context and proved.",
+            "- The primary accepted writeback should be a narrow FRT result",
+            "  anchored directly to thm:frt-apparent-randomness-freezing-escort",
+            "  and distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-freezing-forces-sticky-or-groundstate-proliferation.",
+            "- Preferred shape: a proposition/corollary proving a conditional",
+            "  non-sticky ground-state carrier proliferation or exponent-budget",
+            "  lower bound using only q, pi_{m,q}, A_m^{max}, gamma_{m,h},",
+            "  G_{m,h}^{max}, epsilon_m, and nearby FRT notation.",
+            "- If the word sticky is used, use the existing sticky/non-sticky",
+            "  notion from def:distill-folding-integer-depth-sticky-test or",
+            "  explicitly state a fold-aware multiscale coarse-fine occupancy",
+            "  law. Never redefine sticky as a single-atom mass condition.",
+            "- POM or conclusion targets are optional. Omit them unless the local",
+            "  file already supplies the exact support/coefficient/holonomy",
+            "  objects needed for a complete proof.",
+            "- Output 1-2 writebacks, with the FRT writeback first. Prefer a",
+            "  conservative theorem that passes review over broad coverage.",
+        ]
+    )
+
+
 def _theorem_family_names(state: DistillState) -> list[str]:
     """Return theorem-family names from raw research, preserving order."""
     try:
@@ -4400,6 +4436,7 @@ def run_stage_w(
     section_contexts = _collect_section_contexts(targets)
     global_evidence_pack = _global_evidence_for_state(state)
     prior_feedback_block = _build_prior_feedback_block(state)
+    family_specific_contract = _family_specific_deepening_contract(focused_family)
     oracle_deepening_context: dict[str, Any] = {"status": "disabled"}
     if oracle_deepening:
         oracle_deepening_context = _oracle_deepening_research(
@@ -4458,6 +4495,8 @@ def run_stage_w(
                 )
             if prior_feedback_block:
                 prompt += "\n\n" + prior_feedback_block
+            if family_specific_contract:
+                prompt += "\n\n" + family_specific_contract
             if feedback:
                 prompt += (
                     "\n\nPrevious writeback failed validation or review. "
