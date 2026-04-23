@@ -317,6 +317,7 @@ import Omega.GU.Window6VisibleCartanQuotientSyzygySplitting
 import Omega.GU.Window6VisibleMatroidMinorCensus
 import Omega.GU.Window6VisibleQuarticShellIsotropization
 import Omega.GU.Window6WeylFamilyEquipotential
+import Omega.GU.Fold6WeylTwoOrbitCompression
 import Omega.GU.Window6Z2Z3ToZ6Readout
 import Omega.GU.Window6ZetaCumulantLocalizationVsGreenKernelPrime571
 import Omega.GU.Z6CenterQuotient
