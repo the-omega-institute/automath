@@ -69,6 +69,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import contextlib
 import hashlib
 import json
 import logging
@@ -168,8 +169,25 @@ def get_my_papers() -> list[str]:
     """Return paper dir names assigned to this machine."""
     return MACHINE_ASSIGNMENT.get(sys.platform, [])
 
-_git_lock = threading.Lock()
+_git_lock = threading.RLock()
 _state_lock = threading.Lock()
+
+
+@contextlib.contextmanager
+def git_repo_lock():
+    """Serialize git/index operations across pipeline processes."""
+    lock_path = SCRIPT_DIR / ".git_repo.lock"
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    with _git_lock:
+        with open(lock_path, "a+", encoding="utf-8") as fh:
+            if os.name == "posix":
+                import fcntl
+                fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
+            try:
+                yield
+            finally:
+                if os.name == "posix":
+                    fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
 
 # Stage gate thresholds
 SCORE_PASS_THRESHOLD = 8
@@ -660,7 +678,7 @@ def rebuild_rounds_from_git(state: PaperState) -> None:
         rel = paper_path
 
     try:
-        with _git_lock:
+        with git_repo_lock():
             result = subprocess.run(
                 ["git", "log", "--all", "--format=%s", "--", str(rel)],
                 cwd=str(REPO_ROOT), capture_output=True, text=True,
@@ -912,7 +930,7 @@ def _commit_message(*parts: str) -> str:
 
 def git_stage(paper_path: Path, *, tag: str = "") -> bool:
     """Stage .tex/.bib changes under paper_path (no commit, no artifacts)."""
-    with _git_lock:
+    with git_repo_lock():
         _restore_tracked_non_source_changes(paper_path, tag=tag)
         _add_paper_only(paper_path)
         staged = run_cmd(["git", "diff", "--cached", "--name-only",
@@ -925,7 +943,7 @@ def git_commit(paper_path: Path, msg: str, *, tag: str = "") -> str:
 
     Commit message includes a diff summary showing what actually changed.
     """
-    with _git_lock:
+    with git_repo_lock():
         _restore_tracked_non_source_changes(paper_path, tag=tag)
         _add_paper_only(paper_path)
         staged_files = _staged_paper_source_files(paper_path)
@@ -966,7 +984,7 @@ def git_commit(paper_path: Path, msg: str, *, tag: str = "") -> str:
 
 def git_commit_multi(paths: list[Path], msg: str, *, tag: str = "") -> str:
     """Commit paper source changes across paths. Never commit artifacts."""
-    with _git_lock:
+    with git_repo_lock():
         for p in paths:
             if p.is_dir():
                 _restore_tracked_non_source_changes(p, tag=tag)
@@ -1734,7 +1752,7 @@ def update_program_board(paper_name: str, stage: str, detail: str) -> None:
         return
     new_status = f"{stage} ({detail})" if detail else stage
     try:
-        with _git_lock:
+        with git_repo_lock():
             text = PROGRAM_BOARD.read_text(encoding="utf-8")
             lines = text.split("\n")
             updated = False
@@ -6738,7 +6756,7 @@ def run_rolling(paper_dirs: list[str], *, parallel: int = 0,
                     logger.error(f"[{name}] EXCEPTION: {exc}")
 
                 # Push after each paper completes
-                with _git_lock:
+                with git_repo_lock():
                     push = run_cmd(["git", "push", "origin",
                                     "dev-automation-integration"], timeout=60)
                     if push.returncode == 0:
@@ -6850,7 +6868,7 @@ def print_review_index():
 
         # Find matching stage-B commit touching any file mentioning paper_key
         try:
-            with _git_lock:
+            with git_repo_lock():
                 after_iso = timestamp.split("T")[0] if "T" in timestamp else "2020-01-01"
                 result = subprocess.run(
                     ["git", "log", "--all", "--format=%h %ci %s",
