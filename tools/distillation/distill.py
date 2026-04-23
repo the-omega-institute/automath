@@ -32,6 +32,13 @@ BACKFLOW_DIR = PUBLICATION_DIR / "backflow"
 DISTILLATION_DIR = BACKFLOW_DIR / ".distillation"
 REGISTRY_PATH = BACKFLOW_DIR / "knowledge_backflow_inventory.json"
 DISTILLATION_MEMORY_PATH = BACKFLOW_DIR / "distillation_memory.json"
+BOARD_STATUS_LABELS = {
+    "active": "进行中",
+    "open": "开放",
+    "partial": "部分完成",
+    "integrated": "已纳入",
+    "done": "完成",
+}
 PROMPTS_DIR = SCRIPT_DIR / "prompts"
 LOG_DIR = DISTILLATION_DIR / "logs"
 STOP_FILE = SCRIPT_DIR / ".pipeline.stop"
@@ -1994,9 +2001,9 @@ def _derive_split_candidates(raw: Any, payload: Any, matches: Any) -> list[dict[
     for section in _payload_declared_sections(payload):
         if section in inventory_sections:
             continue
-        evidence = "payload target is outside the Stage R theorem inventory"
+        evidence = "payload 目标不在 Stage R 的定理清单内"
         if section in matched_sections:
-            evidence += " but did appear in semantic routing"
+            evidence += "，但曾在语义路由中出现"
         candidates.append(
             {
                 "section": section,
@@ -2025,6 +2032,16 @@ def _read_distillation_memory() -> dict[str, Any]:
 def _memory_entry_id(source_slug: str, kind: str, title: str, reason: str) -> str:
     digest = hashlib.sha1(f"{source_slug}|{kind}|{title}|{reason}".encode("utf-8")).hexdigest()
     return f"{source_slug}:{kind}:{digest[:12]}"
+
+
+def _compact_scope_context(scope: dict[str, Any]) -> dict[str, Any]:
+    """Keep only compact scope metadata that is useful across runs."""
+    return {
+        "family_count": len(_unique_strings(scope.get("theorem_families", []))),
+        "in_scope_target_sections": _unique_strings(
+            scope.get("in_scope_target_sections", scope.get("target_sections", []))
+        ),
+    }
 
 
 def _upsert_distillation_memory(entries: list[dict[str, Any]]) -> dict[str, Any]:
@@ -2056,10 +2073,7 @@ def _upsert_distillation_memory(entries: list[dict[str, Any]]) -> dict[str, Any]
         existing[entry_id] = merged
     output = {
         "version": 1,
-        "description": (
-            "Curated distillation memory for useful split/off-scope findings. "
-            "Raw intermediate artifacts remain under .distillation and are not committed."
-        ),
+        "description": "蒸馏记忆账本，仅保留可复用的拆分候选与旁路结论；原始中间产物留在 .distillation 且不提交。",
         "entries": sorted(existing.values(), key=lambda item: str(item.get("id", ""))),
     }
     write_json(DISTILLATION_MEMORY_PATH, output)
@@ -2078,7 +2092,7 @@ def _memory_entries_from_split_candidates(state: DistillState) -> list[dict[str,
         reason = str(candidate.get("reason", "")).strip()
         if not section or not reason:
             continue
-        title = f"{state.name}: future split candidate for {section}"
+        title = f"{state.name}：待拆分候选（{section}）"
         entries.append(
             {
                 "id": _memory_entry_id(source_slug, "split_candidate", section, reason),
@@ -2092,18 +2106,8 @@ def _memory_entries_from_split_candidates(state: DistillState) -> list[dict[str,
                 "origin": "policy.split_candidate",
                 "reason": reason,
                 "disposition": candidate.get("disposition", "record_for_split_or_future_source"),
-                "current_scope": {
-                    "theorem_families": scope.get("theorem_families", []),
-                    "in_scope_target_sections": scope.get(
-                        "in_scope_target_sections",
-                        scope.get("target_sections", []),
-                    ),
-                },
-                "reuse_guidance": (
-                    "Load as future context or split-source backlog. Do not use this "
-                    "entry to pass the current source gate unless a later scope contract "
-                    "explicitly adopts it."
-                ),
+                "current_scope": _compact_scope_context(scope),
+                "reuse_guidance": "仅在后续 scope contract 明确吸收该项时再加载；不得用它直接帮助当前来源过门禁。",
             }
         )
     return entries
@@ -2142,7 +2146,7 @@ def _memory_entries_from_oracle_sidecar(
                 "reuse_guidance": str(
                     item.get(
                         "reuse_guidance",
-                        "Load only when a later scope contract adopts this side result.",
+                        "仅在后续 scope contract 明确吸收该旁路结论时再加载。",
                     )
                 ),
             }
@@ -5259,6 +5263,29 @@ def _registry_entry(state: DistillState) -> dict[str, Any]:
             if label:
                 integrated.append(label)
     integrated = list(dict.fromkeys(integrated))
+    compact_queue = []
+    for item in payload.get("expansion_queue", []):
+        if not isinstance(item, dict):
+            continue
+        target_sections = _unique_strings(item.get("target_sections", []))
+        status = str(item.get("status", "active") or "active")
+        kernel = str(item.get("kernel", "")).strip()
+        digest_source = json.dumps(
+            {
+                "kernel": kernel,
+                "target_sections": target_sections,
+                "status": status,
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+        compact_queue.append(
+            {
+                "queue_id": hashlib.sha1(digest_source.encode("utf-8")).hexdigest()[:12],
+                "target_sections": target_sections,
+                "status": status,
+            }
+        )
     return {
         "source_slug": source_slug,
         "source_type": payload.get("knowledge_payload", {}).get(
@@ -5274,7 +5301,7 @@ def _registry_entry(state: DistillState) -> dict[str, Any]:
         ),
         "primary_targets": primary_targets,
         "integrated_writebacks": integrated,
-        "expansion_queue": payload.get("expansion_queue", []),
+        "expansion_queue": compact_queue,
     }
 
 
@@ -5362,7 +5389,7 @@ def _board_block(registry: list[dict[str, Any]]) -> str:
     """Render the managed distillation board block from registry entries."""
     lines = [
         "<!-- distillation-board:start -->",
-        "| Source | Status | Targets | Writebacks | Queue |",
+        "| 来源 | 状态 | 目标章节 | 写回数 | 待扩张数 |",
         "|---|---|---|---:|---:|",
     ]
     for entry in sorted(registry, key=lambda item: str(item.get("source_slug", ""))):
@@ -5372,7 +5399,7 @@ def _board_block(registry: list[dict[str, Any]]) -> str:
         lines.append(
             "| `{}` | {} | {} | {} | {} |".format(
                 entry.get("source_slug", ""),
-                entry.get("status", ""),
+                BOARD_STATUS_LABELS.get(str(entry.get("status", "")).strip(), entry.get("status", "")),
                 targets,
                 writeback_count,
                 queue_count,
@@ -5389,7 +5416,7 @@ def _update_distillation_board(registry: list[dict[str, Any]]) -> None:
     if path.exists():
         text = read_text(path)
     else:
-        text = "# Distillation Board\n\n"
+        text = "# 蒸馏看板\n\n"
     pattern = re.compile(
         r"<!-- distillation-board:start -->.*?<!-- distillation-board:end -->",
         re.DOTALL,

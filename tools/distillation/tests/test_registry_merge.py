@@ -49,6 +49,22 @@ class RegistryMergeTests(unittest.TestCase):
         self.assertEqual(merged["integrated_writebacks"], ["primitive_discipline", "distill:new"])
         self.assertEqual(len(merged["expansion_queue"]), 2)
 
+    def test_board_block_uses_chinese_headers_and_status_labels(self):
+        board = distill._board_block(
+            [
+                {
+                    "source_slug": "cech_cohomology",
+                    "status": "active",
+                    "primary_targets": ["typed_address_biaxial_completion", "conclusion"],
+                    "integrated_writebacks": ["prop:one", "prop:two"],
+                    "expansion_queue": [{"queue_id": "abc123", "status": "active"}],
+                }
+            ]
+        )
+
+        self.assertIn("| 来源 | 状态 | 目标章节 | 写回数 | 待扩张数 |", board)
+        self.assertIn("| `cech_cohomology` | 进行中 |", board)
+
 
 if __name__ == "__main__":
     unittest.main()

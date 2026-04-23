@@ -17,6 +17,7 @@
   "use strict";
 
   const SERVER = "http://127.0.0.1:8765";
+  const SCRIPT_VERSION = "5.4";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
@@ -114,7 +115,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v5.3 ${agentLabel}]</b>
+        <b>[Oracle v${SCRIPT_VERSION} ${agentLabel}]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -1499,7 +1500,7 @@
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
     const agentLabel = AGENT_ID.replace("oracle_", "#");
-    log(`Oracle Bridge v5.3 agent ${agentLabel} — ${active ? "ACTIVE" : "PAUSED"}`);
+    log(`Oracle Bridge v${SCRIPT_VERSION} agent ${agentLabel} — ${active ? "ACTIVE" : "PAUSED"}`);
 
     // Check if WE navigated here (not the user clicking around)
     const phase = getTaskPhase();
