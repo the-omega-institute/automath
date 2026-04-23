@@ -617,6 +617,7 @@ import Omega.POM.ToggleGaugeInvariantEndomorphismsC2Tensor
 import Omega.POM.ToggleGroupPathFullSymmetric
 import Omega.POM.ToggleOrbitCountBellProduct
 import Omega.POM.ToggleOrbitCountAsymptoticVolumeGroup
+import Omega.POM.ToggleOrbitCountEgfFactorization
 import Omega.POM.ToggleOrbitCountCommutantIdentity
 import Omega.POM.ToggleOrbitCountFiniteLowlevelInversion
 import Omega.POM.ToggleOrder
