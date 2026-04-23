@@ -11,6 +11,7 @@ import Omega.Zeta.AbelAnalyticRemainderDecimationCollapse
 import Omega.Zeta.AbelKadicMultiresolutionEnergyLedger
 import Omega.Zeta.AbelOffcriticalExponentialRadiusAmplification
 import Omega.Zeta.AbelMobiusNeutralizationFormal
+import Omega.Zeta.XiAbelRkRootFilterSemigroup
 import Omega.Zeta.AbelResidueClassChannelRadiusSigmaStar
 import Omega.Zeta.AbelTwoBaseDealiasingInjectivity
 import Omega.Zeta.AbelHardyEnergyDecimationOrthogonal
@@ -187,6 +188,7 @@ import Omega.Zeta.XiArtinMazurEulerProductZetaRatio
 import Omega.Zeta.XiCauchyPoissonSingleScaleMomentInversion
 import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprint
 import Omega.Zeta.XiCriticalLineCircleCauchyUniformization
+import Omega.Zeta.XiJoukowskyL1MeasureLiftChebyshevFourier
 import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth
 import Omega.Zeta.XiKlingenHeckeCharpolyProjectors
 import Omega.Zeta.XiJDiscriminant2IsogenyVelu
