@@ -121,6 +121,7 @@ import Omega.POM.DeltaqSampleComplexityThreshold
 import Omega.POM.DeltaqSpectralDimensionIdentity
 import Omega.POM.DerivedAuditedEvenMinsectorTopologicalPhase
 import Omega.POM.DerivedSchurDirichletRamanujanParseval
+import Omega.POM.DerivedSchurTopLayerCriterion
 import Omega.POM.DerivedFiberIndependencePolynomialMinusOneTrichotomy
 import Omega.POM.DerivedFiberIndcomplexAlternatingWittenParity
 import Omega.POM.DerivedFoldGoldenRationalPowerUnitObstruction

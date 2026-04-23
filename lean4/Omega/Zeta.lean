@@ -551,6 +551,7 @@ import Omega.Zeta.PickPoissonMinSeparationLowerbound
 import Omega.Zeta.ReciprocalSpectrumFunctionalEquation
 import Omega.Zeta.PoissonEnergySingle
 import Omega.Zeta.XiPoissonCauchyKlFourthOrderUniversality
+import Omega.Zeta.XiPoissonLaplaceEnergyMultipoleDecay
 import Omega.Zeta.PoissonCauchyMixtureKLT4MinimalThird
 import Omega.Zeta.PoissonCauchyMixtureT4OptimalityRigidity
 import Omega.Zeta.PoissonEnergySingleRecovery

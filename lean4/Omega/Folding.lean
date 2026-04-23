@@ -168,6 +168,7 @@ import Omega.Folding.FiberFusion
 import Omega.Folding.FiberGaugeVolumeDoublingV2DigitSum
 import Omega.Folding.FoldTopAffineWindowControlsFiniteFreezing
 import Omega.Folding.FoldResonanceEntireLp
+import Omega.Folding.FoldResonanceImagAsymptoticTypePi
 import Omega.Folding.FiberGaugeVolumeChainFactorization
 import Omega.Folding.FiberGaugeVolumeDensityConditionalFactorialChain
 import Omega.Folding.FiberGaugeVolumeIncrementConditionalShannonStirling
