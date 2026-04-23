@@ -427,6 +427,7 @@ import Omega.Zeta.XiHankelFinitefieldDeterministicCompletion
 import Omega.Zeta.XiHankelNormalformHpDiscreteConcaveInvert
 import Omega.Zeta.XiHellingerHankelConstantRationality
 import Omega.Zeta.XiHellingerKernelFourierSech2
+import Omega.Zeta.XiHellingerGreenOperatorCosh2
 import Omega.Zeta.XiHellingerGramStrictTotalPositivity
 import Omega.Zeta.XiHellingerGramFirstVariationEquilibrium
 import Omega.Zeta.XiHypercubeLeyangStokesHolography
@@ -751,6 +752,7 @@ import Omega.Zeta.XiFoldbinGaugeDensityExactThermodynamicConstant
 import Omega.Zeta.XiFoldbinGaugeEscortKlDecomposition
 import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
 import Omega.Zeta.XiGramDetNearestNeighborProductUpperBound
+import Omega.Zeta.XiGramshiftBadPrimesWeightDiscriminant
 import Omega.Zeta.XiGramshiftIllconditioningForcedByToeplitzMargin
 import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge
 import Omega.Zeta.XiHankelDetScalingCovariance
