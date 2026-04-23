@@ -189,3 +189,4 @@ import Omega.SyncKernelWeighted.ZeroInjectionValuePreserving
 import Omega.SyncKernelWeighted.TracePalindrome
 import Omega.SyncKernelWeighted.EvenEdgeworthC4
 import Omega.SyncKernelWeighted.SyncSpectralTangentLock
+import Omega.SyncKernelWeighted.DeltaBranchpointsDiscriminantLock
