@@ -9,16 +9,86 @@ proof of Main Theorems~I and~II; they record regularity and effective
 forms of the scalar normalisation after the finite-group reconstruction
 has already been established.
 
-The reduced-determinant gradient formula for a simple isolated spectral
-value is proved in \cite[Proposition~4.11]{Ma2026CyclicBlockTraceClass}.
-In the primitive Perron-root case relevant here, its notation specializes
-to \(C(A_\theta,\lambda(\theta))=C(A_\theta)\).
-The corresponding holomorphic variation formula for \(\FP(A_\theta)\),
-on a sufficiently small secondary-admissible neighbourhood, is the
-primitive Perron-root specialization of
-\cite[Proposition~4.13]{Ma2026CyclicBlockTraceClass}.
-
 \subsection{Holomorphic variation and effective truncation}
+
+\begin{theorem}[External holomorphic variation formula]
+  \label{thm:finite-part-holomorphic-variation}
+  Let \(U\subset\CC\) be simply connected and let
+  \(\theta\mapsto A_\theta\) be a holomorphic family of complex
+  \(d\times d\) matrices. Assume that there is a holomorphic simple
+  eigenvalue \(\lambda(\theta)\) such that
+  \[
+    |\lambda(\theta)|>1,
+    \qquad
+    |\nu|<|\lambda(\theta)|
+    \quad
+    (\nu\in\spec(A_\theta)\setminus\{\lambda(\theta)\})
+  \]
+  for every \(\theta\in U\). Let \(P_\theta\) be the spectral projection
+  of \(A_\theta\) for \(\lambda(\theta)\), and let \(R_\theta\) be the
+  reduced inverse of \(I-A_\theta/\lambda(\theta)\), characterized by
+  \(R_\theta P_\theta=P_\theta R_\theta=0\) and
+  \[
+    R_\theta\bigl(I-A_\theta/\lambda(\theta)\bigr)
+    =
+    \bigl(I-A_\theta/\lambda(\theta)\bigr)R_\theta
+    =
+    I-P_\theta .
+  \]
+  After choosing the logarithm branches determined at one base point,
+  set
+  \[
+    \mathfrak F(\theta)
+    :=
+    \Log C_{\lambda(\theta)}(A_\theta)
+    +
+    \sum_{m\ge2}\frac{\mu(m)}{m}
+      \Log\det\bigl(I-\lambda(\theta)^{-m}A_\theta\bigr)^{-1}.
+  \]
+  For \(m\ge2\), put
+  \[
+    D_{m,\theta}
+    :=
+    \lambda(\theta)^{-m}\dot A_\theta
+    -m\dot\lambda(\theta)\lambda(\theta)^{-m-1}A_\theta .
+  \]
+  Then \(\mathfrak F\) is holomorphic on \(U\), and
+  \begin{align*}
+    \frac{\dd}{\dd\theta}\mathfrak F(\theta)
+    &=
+    \Tr\!\left[
+      R_\theta\left(
+        \lambda(\theta)^{-1}\dot A_\theta
+        -\dot\lambda(\theta)\lambda(\theta)^{-2}A_\theta
+      \right)
+    \right] \\
+    &\quad+
+    \sum_{m\ge2}\frac{\mu(m)}{m}
+    \Tr\!\left[
+      \bigl(I-\lambda(\theta)^{-m}A_\theta\bigr)^{-1}
+      D_{m,\theta}
+    \right],
+  \end{align*}
+  where dots denote \(\theta\)-derivatives. If \(A_\theta\) is
+  primitive non-negative with Perron root \(\lambda(\theta)>1\), then
+  \(\mathfrak F(\theta)=\FP(A_\theta)\).
+\end{theorem}
+
+\begin{proof}
+  The variation theorem \cite[Prop.~4.13]{Ma2026CyclicBlockTraceClass}
+  gives this primitive Perron-root specialization. The first trace
+  term is the reduced-determinant gradient formula of
+  \cite[Prop.~4.11]{Ma2026CyclicBlockTraceClass}, in the notation
+  \(C_{\lambda(\theta)}(A_\theta)=C(A_\theta,\lambda(\theta))\). The
+  spectral hypotheses imply that
+  \(I-\lambda(\theta)^{-m}A_\theta\) is invertible for \(m\ge2\), and the
+  determinant series and its differentiated series converge locally
+  uniformly because \(|\lambda(\theta)|\) stays \(>1\) on compact subsets
+  of \(U\). Termwise differentiation gives the displayed sum. For
+  primitive non-negative matrices the determinant expression for
+  \(\mathfrak F\) agrees with \(\FP\) by
+  \Cref{thm:finite-part-primitive-closed-form}.
+\end{proof}
 
 \begin{theorem}[Truncation bound]
   \label{thm:logM-truncation-bound}
@@ -500,18 +570,23 @@ characters on \((\ZZ/q\ZZ)^\times\); see, for example,
 \end{theorem}
 
 \begin{proof}
-  The equivalence of (i) and (ii) is a restatement of the definition of
-  \(\Lambda_{\mathrm{rel}}(A)\) once \(F_A\) has been reconstructed from
-  these values. Since
+  By
+  \Cref{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction},
+  the single root-of-unity layer with \(q\ge d\) reconstructs the
+  polynomial \(F_A\) by finite discrete Fourier inversion. Thus the
+  equivalence of (i) and (ii) is a restatement of the definition of
+  \(\Lambda_{\mathrm{rel}}(A)\) for the reconstructed reciprocal roots
+  \(\mu_j/\lambda\), and finite-step decidability follows by the
+  standard algebraic root-modulus test for this reconstructed
+  polynomial. Since
   \[
     u_n(A)=\sum_{j=2}^d\left(\frac{\mu_j}{\lambda}\right)^n
   \]
   is a finite exponential sum, its exponential growth rate is exactly
-  the maximal modulus of the frequencies \(\mu_j/\lambda\), which gives the
-  equivalence of (ii) and (iii). Finite-step decidability follows
-  because \Cref{thm:finite-part-cyclic-lift-spectrum-identifiability}
-  recovers the reduced spectral polynomial, hence the relevant root
-  moduli, from finitely many algebraic operations.
+  the maximal modulus of the frequencies \(\mu_j/\lambda\). This is the
+  limsup step used in
+  \Cref{thm:finite-part-cyclic-lift-spectrum-identifiability}, and it
+  gives the equivalence of (ii) and (iii).
 \end{proof}
 
 \subsection{A Dirichlet series for the cyclic-lift discrepancy}
@@ -611,7 +686,10 @@ Adams--M\"obius mechanism.
     C(A)^{-1}
     =\prod_{j=2}^d\left(1-\frac{\mu_j}{\lambda}\right).
   \]
-  Since the non-real eigenvalues occur in conjugate pairs and
+  This product is a positive real number: the non-real factors occur in
+  conjugate pairs with positive product, while a real non-Perron
+  eigenvalue satisfies \(\mu_j/\lambda\in(-1,1)\) and hence
+  \(1-\mu_j/\lambda>0\). Since
   \(|\mu_j|/\lambda\le \lambda^{-1/2}\), one has
   \[
     1-\lambda^{-1/2}
