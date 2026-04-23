@@ -216,6 +216,7 @@ import Omega.POM.FibCubeRadiusCenterClassification
 import Omega.POM.FiniteParetoLegendreCurvature
 import Omega.POM.FiniteAuditNFAnom
 import Omega.POM.FiniteIntegerMomentsCannotReplaceHalf
+import Omega.POM.HalfExponentExplicitMomentOrderLb
 import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.FibPellQuadratic
 import Omega.POM.FibPellRecoverKFromUnitError

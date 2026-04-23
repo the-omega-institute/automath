@@ -74,6 +74,7 @@ import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiRhIffLatticeComovingDefect
 import Omega.Zeta.XiSmithLossSpectrumDiscreteCurvatureCompleteCharacterization
+import Omega.Zeta.XiSingularRingDefectDeltaLowerbound
 import Omega.Zeta.XiDefectDensityConeChoquetExtreme
 import Omega.Zeta.XiDefectEntropyHeightBudgetVarianceGap
 import Omega.Zeta.XiDefectEntropyFeasibleIntervalFluxIndex
