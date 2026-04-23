@@ -701,6 +701,7 @@ import Omega.POM.TypeclassDiagonalCouplingSeeds
 import Omega.POM.TypeclassDualDerivative
 import Omega.POM.TypeclassDiagonalMassMonotone
 import Omega.POM.TypeclassKeepResampleChannel
+import Omega.POM.TypeclassHammingBallVolumeVariational
 import Omega.POM.TrivialChannelFiniteDecidability
 import Omega.POM.TypeclassRateDistortionMutualInformation
 import Omega.POM.UniformFiberSamplingRandomnessOptimality
