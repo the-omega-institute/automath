@@ -999,8 +999,45 @@ remaining estimates are obtained by substituting the separation lower bounds
 from Proposition~\ref{prop:general-window-atom-separation}.
 \end{proof}
 
-The next two corollaries keep the sharper \((m+1)\)-atom Sturmian constant and
-the explicit bad-approximation lower bound used later in the Parry comparison.
+The next proposition and corollaries keep the sharper \((m+1)\)-atom Sturmian
+constant and the explicit bad-approximation lower bound used later in the
+Parry comparison.
+
+\begin{proposition}[Sturmian microstate relative-entropy certificate]\label{prop:sturmian-microstate-kl-certificate}
+Assume \(\beta=\alpha\). Then
+\[
+\KL(\hat\mu_{m,N}\|\mu_m)
+\le
+\frac{4(m+1)^2}{q_{\min}(m)}D_N^*(\alpha;x_0)^2.
+\]
+If \(\alpha\) is badly approximable, with Diophantine constant
+\(c(\alpha)>0\), then
+\[
+\KL(\hat\mu_{m,N}\|\mu_m)
+\le
+\frac{4m(m+1)^2}{c(\alpha)}D_N^*(\alpha;x_0)^2.
+\]
+\end{proposition}
+
+\begin{proof}
+Every atom counted by \(\hat\mu_{m,N}\) is a length-\(m\) word realized by the
+same Sturmian coding, so
+\(\supp(\hat\mu_{m,N})\subset S_m(\alpha)=\supp(\mu_m)\).  By the sharpened
+Sturmian part of Theorem~\ref{thm:tv-certificate-hist},
+\[
+\TV(\hat\mu_{m,N},\mu_m)\le (m+1)D_N^*(\alpha;x_0).
+\]
+Applying Lemma~\ref{lem:kl-from-tv-qmin} with
+\(q_{\min}=q_{\min}(m)\) therefore gives
+\[
+\KL(\hat\mu_{m,N}\|\mu_m)
+\le
+\frac{4}{q_{\min}(m)}(m+1)^2D_N^*(\alpha;x_0)^2.
+\]
+If \(c(\alpha)>0\), then Proposition~\ref{prop:qmin-lowerbound-markov} yields
+\(q_{\min}(m)\ge c(\alpha)/m\), and substituting this lower bound proves the
+second estimate.
+\end{proof}
 
 \begin{corollary}[Golden-slope microstate improvement]\label{cor:rotation-microstate-kl-certificate}
 Assume \(\beta=\alpha=\varphi^{-1}\).  Then
@@ -1011,25 +1048,11 @@ Assume \(\beta=\alpha=\varphi^{-1}\).  Then
 \]
 \end{corollary}
 
-\begin{remark}
-The general badly-approximable certificate and the \(q_{\min}(m)\)-form appear
-in \cite{MaZhang2026FoldedHistogramsSIADS}, Corollary~4.4; the increment here
-is the replacement of the golden Markov constant by the all-\(k\) lower bound
+\begin{proof}
+Apply Proposition~\ref{prop:sturmian-microstate-kl-certificate} and then use
+the golden lower bound
 \(q_{\min}(m)\ge \varphi^{-2}/m\) from
 Proposition~\ref{prop:qmin-lowerbound-markov}.
-\end{remark}
-
-\begin{proof}
-Lemma~\ref{lem:kl-from-tv-qmin}, the Sturmian total-variation estimate in
-Theorem~\ref{thm:tv-certificate-hist}, and
-Proposition~\ref{prop:qmin-lowerbound-markov} give
-\[
-\KL(\hat\mu_{m,N}\|\mu_m)
-\le
-\frac{4}{q_{\min}(m)}(m+1)^2D_N^*(\alpha;x_0)^2
-\le
-4\varphi^2\,m(m+1)^2D_N^*(\alpha;x_0)^2.
-\]
 \end{proof}
 
 \begin{lemma}[KL monotonicity under pushforward]\label{lem:kl-monotone-pushforward}
@@ -1069,9 +1092,10 @@ Since \(\hat\pi_{m,N}=(\Fold_m)_*\hat\mu_{m,N}\) and
 \le
 \KL(\hat\mu_{m,N}\|\mu_m).
 \]
-The \(q_{\min}(m)\)-bound follows from
-\cite{MaZhang2026FoldedHistogramsSIADS}, Corollary~4.4, and the golden-slope
-bound follows from Corollary~\ref{cor:rotation-microstate-kl-certificate}.
+The \(q_{\min}(m)\)-bound therefore follows from
+Proposition~\ref{prop:sturmian-microstate-kl-certificate}, and the
+golden-slope bound follows from
+Corollary~\ref{cor:rotation-microstate-kl-certificate}.
 \end{proof}
 
 \subsection{No collisions on the Sturmian support}
