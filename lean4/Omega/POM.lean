@@ -210,6 +210,7 @@ import Omega.POM.DiagonalRateRefreshHittingTimeMeanClosed
 import Omega.POM.DiagonalRateRefreshKronStarEquivalence
 import Omega.POM.DiagonalRateRefreshHittingTimeRankTwoPotential
 import Omega.POM.DiagonalRateKeepProbabilityMonotone
+import Omega.POM.DiagonalRateRankOneRefreshDetprime
 import Omega.POM.DiagonalRateRankOneRefreshDeterminantCollapse
 import Omega.POM.DiagonalRateKeepResampleChannel
 import Omega.POM.DiagonalRateRankOneRefreshDecomposition
@@ -221,6 +222,7 @@ import Omega.POM.DiagonalRateRefreshRenewalCoding
 import Omega.POM.DiagonalRateRefreshRegenerationIidExpansion
 import Omega.POM.DiagonalSubleadingTopDegeneracy
 import Omega.POM.DiagonalRateRefreshWeightedCayleyPrufer
+import Omega.POM.FenceOrderPolySpectral
 import Omega.POM.DiagonalRateScalarCollapse
 import Omega.POM.DiagonalRateSeparationPGFRational
 import Omega.POM.DiagonalRateSeparationHausdorffLogconvex
