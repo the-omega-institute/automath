@@ -855,16 +855,8 @@ integer equalities and nonzero minor certificates.}
 
 The certificate entries in
 \Cref{tab:appendix-recurrence-cert-normalization} are human-readable digests of
-the exact finite records pinned in
-\Cref{prop:pinned-normalizer-certificate-table}.  For each
-\(q=9,\dots,17\), the JSON field
-\(\texttt{kernel\_residual\_and\_rank\_records}\) records the row range
-\(t=2,\dots,N_q+1\), the canonical zero value of
-\(R_qP_q(\widetilde A_q)\widetilde v_q\), the hash of that canonical residual
-record, and the rank-witness interface: a nonzero leading Hankel minor for the
-lower bound and the companion-column reductions supplied by the residual record
-for the upper bound.  In formula form this has the exact finite meaning of
-\Cref{def:finite-recurrence-certificate-record}.  Put
+the exact-kernel statements fixed in
+\Cref{def:finite-recurrence-certificate-record}.  In formula form, one puts
 \(A=\widetilde A_q\), \(u=\widetilde u_q\),
 \(v=\widetilde v_q\), and \(N=N_q\).  Form the finite Krylov matrix
 \[
@@ -900,14 +892,20 @@ dimension \(d_q\), the equality \(\rk(R_qB_q)=d_q\) makes
 a cyclic basis, and the residual equality supplies the companion relation.
 Therefore multiplication by \(A\) on the observable quotient has characteristic
 polynomial \(P_q\).
-After denominators are cleared, the residual equality and the row reductions
-certifying the displayed ranks are integer identities.  Thus the table records a
-proof object inside the exact kernel: reconstruct \(\widetilde A_q\) from
-\Cref{def:exact-histogram-kernel}, form \(K_q,R_q,B_q\), perform exact Gaussian
-elimination over \(\QQ\), and multiply the integer residual
-\(R_qP_q(A)v\).  No scalar values \(S_q(0),S_q(1),\dots\) are used to infer
-\(P_q\), and a row is not certified by checking the recurrence at selected
-length indices.
+The paper uses these equalities as theorem-level exact-kernel hypotheses.  The
+local supplementary artifact pinned in
+\Cref{prop:pinned-normalizer-certificate-table} does not attempt to rebuild the
+enormous matrix \(\widetilde A_q\).  Instead, it stores the exact finite
+consequences needed later for the Hankel and Smith arguments: for each
+\(q=9,\dots,17\), the field
+\(\texttt{exact\_moment\_window\_records}\) records the exact integers
+\(S_q(m)\) for \(0\le m\le 2n_q\), the residual block
+\(P_q(E)S_q(j)=0\) for \(2\le j\le n_q+1\), the finite Hankel matrix
+\(H_q=[S_q(i+j+2)]_{0\le i,j\le n_q-1}\), its exact rank \(d_q\), and the
+annihilation of the recorded nullmode basis by \(H_q^{\mathsf T}\).  Thus the
+all-tail recurrence is justified by the exact-kernel theorems of this appendix,
+while the finite Hankel-window arguments are independently reproducible from the
+archived supplement.
 
 \begin{theorem}[Soundness of the recurrence certificate records]
 \label{prop:observable-quotient-derivation}
@@ -929,72 +927,88 @@ characteristic polynomial of multiplication by \(\widetilde A_q\) on
 
 \begin{proof}
 For each displayed \(q\), the recurrence record of
-Theorem~\ref{thm:arithmetic-window-certificates} is a finite certificate record in the
-sense of \Cref{def:finite-recurrence-certificate-record} for the printed
-polynomial \(P_q\).  Its content is an exact identity in \(\ZZ\) after the
-kernel has been constructed; it is not a scalar recurrence tested on a finite
-interval of \(m\)-values.  The record reconstructs the integer matrix
-\(\widetilde A_q\) and the two integer vectors
-\(\widetilde u_q,\widetilde v_q\) from
-\Cref{def:exact-histogram-kernel}, using the fixed transducer table pinned in
-\Cref{prop:pinned-normalizer-certificate-table}.  It then consists of exact
-vectors, integer equalities, and rank witnesses; the manuscript table records
-the digest and the JSON artifact records the canonical proof-object fields.  The
-scalar values \(S_q(m)\) are not formed in this record.  The proof object has
-three parts:
+Theorem~\ref{thm:arithmetic-window-certificates} is, by definition, a finite
+certificate record in the sense of
+\Cref{def:finite-recurrence-certificate-record} for the printed polynomial
+\(P_q\).  Therefore \Cref{lem:finite-certificate-record-soundness} applies
+directly.  Its residual part is exactly the acceptance
+\(\mathsf W_q(P_q)=\mathrm{accept}\), which is the equality
 \[
-  \bigl(z_q,\ R_qz_q,\ \text{rank witnesses for }R_qK_q
-  \text{ and }R_qB_q\bigr).
+  R_qP_q(\widetilde A_q)\widetilde v_q=0,
 \]
-First form the integer vector
-\[
-  z_q:=P_q(\widetilde A_q)\widetilde v_q\in\ZZ^{N_q}
-\]
-by repeated integer matrix-vector multiplication, and form the exact rows
-\[
-  \widetilde u_q^{\mathsf T}\widetilde A_q^2,\,
-  \widetilde u_q^{\mathsf T}\widetilde A_q^3,\dots,
-  \widetilde u_q^{\mathsf T}\widetilde A_q^{N_q+1}.
-\]
-The recurrence part of the proof object is the equality \(R_qz_q=0\), namely the
-exact statement that the \(N_q\) integer dot products of these rows with \(z_q\)
-are all zero; in the artifact this is stored as the canonical zero-vector
-residual record with row range \(t=2,\dots,N_q+1\):
-\[
-  R_qP_q(\widetilde A_q)\widetilde v_q=0.
-\]
-This is the residual verifier acceptance
-\(\mathsf W_q(P_q)=\mathrm{accept}\).  The integer \(N_q\) used here is the
-proved Cayley--Hamilton dimension bound
-\(\binom{|\widehat Q|+q-1}{|\widehat Q|-1}\) for the exact histogram kernel,
-not a fitted order for the scalar sequence.  Therefore this kernel check is
-equivalent to
-\(P_q(\widetilde A_q)\widetilde v_q\in Z_2\).  No scalar moment list enters
-this test, and no equality of the form
-\[
-  S_q(m)=\sum_i c_{q,i}S_q(m-i)
-\]
-is used as a raw finite-window extrapolation; see
-\Cref{lem:scalar-free-verifier,cor:finite-scalar-check-with-order-bound}.  By
-\Cref{thm:apriori-exact-kernel-certification}, the equality \(R_qz_q=0\)
-gives the displayed identity for every \(t\ge2\).
-
-The rank-witness part of the proof object consists, after clearing denominators
-in the Gaussian eliminations, of integer row-reduction identities together with
-nonzero \(d_q\times d_q\) minor certificates.  The artifact records this compactly
-by giving the nonzero leading Hankel minor source for the lower bound and the
-residual companion reductions for the upper bound.  These witnesses give
+and its observable-quotient part is exactly the acceptance
+\(\mathsf V_q(P_q)=\mathrm{accept}\), namely
 \[
   \rk(R_qK_q)=\rk(R_qB_q)=d_q.
 \]
-By the quotient part of \Cref{thm:apriori-exact-kernel-certification}, these rank
-identities and the residual identity imply that the first \(d_q\) Krylov
-classes form a cyclic basis of
-\(\mathcal O_2(\widetilde A_q,\widetilde u_q,\widetilde v_q)\), that the
-induced endomorphism is represented by the companion matrix of \(P_q\), and
-that \(\chi_{\overline A_q}=P_q\).  The all-tail recurrence and the
-observable-quotient interpretation are then consequences of the soundness
-theorems above, not separate finite scalar extrapolations.
+The first implication gives the all-tail recurrence.  The second implication,
+together with the same residual identity, identifies the observable quotient and
+its characteristic polynomial.  No scalar moment list is used in this theorem:
+the entire implication runs through the exact-kernel framework fixed earlier in
+the appendix.
+\end{proof}
+
+\begin{proposition}[Exact finite moment-window supplement]
+\label{prop:exact-moment-window-supplement}
+For every \(q\in\{9,\dots,17\}\), let
+\[
+  n_q:=2\left\lfloor\frac{q}{2}\right\rfloor+1,
+  \qquad
+  H_q:=\bigl[S_q(i+j+2)\bigr]_{0\le i,j\le n_q-1}.
+\]
+The supplementary verifier
+\texttt{certificates/verify\_arithmetic\_window.py} computes the exact integers
+\(S_q(m)\) for \(0\le m\le 2n_q\) directly from the finite-window definition,
+forms the matrix \(H_q\), and checks the following finite identities recorded
+in the field \(\texttt{exact\_moment\_window\_records}\) of
+\texttt{certificates/arithmetic\_window\_certificates.json}:
+\begin{enumerate}
+\item the residual block \(P_q(E)S_q(j)=0\) for \(2\le j\le n_q+1\);
+\item \(\rk H_q=d_q\), witnessed by a nonzero leading \(d_q\times d_q\) minor;
+\item every recorded nullmode basis vector \(\alpha\) satisfies
+\(H_q^{\mathsf T}\alpha=0\).
+\end{enumerate}
+Consequently the finite Hankel-window and Smith-normal-form arguments in the
+arithmetic window are independently reproducible from the archived supplement,
+without reconstructing the full histogram kernel \(\widetilde A_q\).
+\end{proposition}
+
+\begin{proof}
+For fixed \(m\), let \(c_m(s)\) be the number of words
+\(\omega\in\Omega_m\) with
+\[
+  N_m(\omega)=\sum_{j=1}^m \omega_jF_{j+1}=s.
+\]
+The values \(c_m(s)\) satisfy the exact subset-sum recursion
+\[
+  c_{m+1}(s)=c_m(s)+c_m(s-F_{m+2}),
+\]
+with the usual convention that \(c_m(t)=0\) for \(t<0\).  Thus the verifier
+computes all \(c_m(s)\) exactly for \(m\le 34\).  Since
+\[
+  \sum_{j=1}^m F_{j+1}=F_{m+3}-2<2F_{m+2},
+\]
+every value of \(N_m(\omega)\) is either \(r\) or \(r+F_{m+2}\) for a unique
+residue \(0\le r<F_{m+2}\).  Therefore the fiber multiplicity at residue \(r\)
+is exactly
+\[
+  d_m(r)=c_m(r)+c_m(r+F_{m+2}),
+\]
+and hence
+\[
+  S_q(m)=\sum_{r=0}^{F_{m+2}-1} d_m(r)^q.
+\]
+This gives exact integers \(S_q(m)\) for the full range needed in the
+arithmetic window, since \(2n_q\le 34\) for \(q\le 17\).
+
+With these exact integers in hand, the verifier forms the displayed Hankel
+matrix \(H_q\) and checks the nullmode equalities by direct matrix
+multiplication over \(\ZZ\).  It also computes the rank over \(\QQ\) and checks
+that the leading \(d_q\times d_q\) minor is nonzero, which gives
+\(\rk H_q=d_q\).  Finally, it evaluates the residual block
+\(P_q(E)S_q(j)\) for \(2\le j\le n_q+1\) directly from the same exact moments.
+These are precisely the finite records needed later for the Hankel-window and
+Smith computations.
 \end{proof}
 
 \begin{table}[t]

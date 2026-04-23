@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 """Verify and export arithmetic-window certificate data.
 
-The script is intentionally self-contained.  It rebuilds the certificate
-objects used by the manuscript from the printed recurrence polynomials:
+The script is intentionally self-contained.  It rebuilds the concrete
+certificate objects used by the manuscript from the printed recurrence
+polynomials and from exact finite-window counting:
 
+* local carry-identity checks for the pinned normalizer table;
+* exact moment windows S_q(m) in the arithmetic range q=9,...,17;
+* exact Hankel matrices, nullmode checks, rank checks, and Smith witnesses;
 * finite-field monic factorizations and Bezout gcd witnesses;
-* discriminants and Euler-criterion witnesses for the squareclass table;
-* Smith/unimodular witnesses for the Hankel principalization rows;
-* compact kernel-residual record descriptors used by the external exact-kernel
-  certificate.  The latter records are canonical zero-vector records; the
-  exact histogram matrix reconstruction is the one specified in the paper.
+* discriminants and Euler-criterion witnesses for the squareclass table.
+
+The all-tail recurrence theorem still uses the abstract exact-kernel
+certification theorem stated in the paper.  The JSON artifact generated here
+records the exact finite consequences that are independently rechecked inside
+the local supplement.
 
 Run from the paper root:
 
@@ -155,6 +160,70 @@ def sync10_edges() -> list[dict[str, Any]]:
     return [{"src": s, "input": a, "dst": t, "output": e} for (s, t, a, e) in rows]
 
 
+def parse_signed_triple(label: str) -> tuple[int, int, int]:
+    out: list[int] = []
+    i = 0
+    while i < len(label):
+        if label[i] == "-":
+            out.append(-int(label[i + 1]))
+            i += 2
+        else:
+            out.append(int(label[i]))
+            i += 1
+    if len(out) != 3:
+        raise RuntimeError(f"cannot parse state label {label!r}")
+    return tuple(out)
+
+
+def carry_pair(alpha: int, beta: int, gamma: int, digit: int) -> tuple[int, int]:
+    # Expand in the basis (F_{n+1}, F_n):
+    # F_{n+3}=2 F_{n+1}+F_n and F_{n+2}=F_{n+1}+F_n.
+    return (2 * alpha + beta + gamma, alpha + beta + digit)
+
+
+def normalizer_local_verification() -> dict[str, Any]:
+    edges = sync10_edges()
+    transition_counts = {(state, digit): 0 for state in SYNC10_STATES for digit in (0, 1, 2)}
+    rows = []
+    for edge in edges:
+        src = edge["src"]
+        dst = edge["dst"]
+        digit = int(edge["input"])
+        output = int(edge["output"])
+        if src not in SYNC10_STATES or dst not in SYNC10_STATES:
+            raise RuntimeError("transition references unknown state")
+        transition_counts[(src, digit)] += 1
+        s = parse_signed_triple(src)
+        t = parse_signed_triple(dst)
+        lhs = carry_pair(s[0], s[1], s[2], digit)
+        rhs = carry_pair(output, t[0], t[1], t[2])
+        if lhs != rhs:
+            raise RuntimeError(f"carry identity failed for edge {src} --{digit}/{output}--> {dst}")
+        rows.append(
+            {
+                "src": src,
+                "input": digit,
+                "output": output,
+                "dst": dst,
+                "lhs_basis_coefficients_F_nplus1_F_n": list(lhs),
+                "rhs_basis_coefficients_F_nplus1_F_n": list(rhs),
+            }
+        )
+    missing = [(state, digit) for (state, digit), count in transition_counts.items() if count != 1]
+    if missing:
+        raise RuntimeError(f"transition totality/determinism failed: {missing}")
+    return {
+        "checked_identity": (
+            "alpha F_{n+3}+beta F_{n+2}+gamma F_{n+1}+d F_n"
+            " = e F_{n+3}+alpha' F_{n+2}+beta' F_{n+1}+gamma' F_n"
+        ),
+        "basis_reduction": "all edges are reduced to equality of coefficients in the basis (F_{n+1}, F_n)",
+        "total_edges": len(rows),
+        "deterministic_total_inputs": [0, 1, 2],
+        "verified_edges": rows,
+    }
+
+
 def poly_pq(q: int) -> sp.Poly:
     x = sp.Symbol("x")
     coeffs = REC_C[q]
@@ -175,6 +244,50 @@ def coeffs_asc(poly: sp.Poly, p: int | None = None) -> list[int]:
 
 def poly_asc_from_recurrence(q: int) -> list[int]:
     return [-int(c) for c in reversed(REC_C[q])] + [1]
+
+
+def fibonacci_numbers(limit: int) -> list[int]:
+    fib = [0, 1]
+    while len(fib) <= limit:
+        fib.append(fib[-1] + fib[-2])
+    return fib
+
+
+def exact_moment_windows(max_m: int, q_values: list[int]) -> dict[int, dict[int, int]]:
+    fib = fibonacci_numbers(max_m + 4)
+    counts = [1]
+    moments = {q: {} for q in q_values}
+    power_cache: dict[int, tuple[int, ...]] = {}
+    for m in range(max_m + 1):
+        if m > 0:
+            weight = fib[m + 1]
+            new_counts = counts[:] + [0] * weight
+            for i, value in enumerate(counts):
+                new_counts[i + weight] += value
+            counts = new_counts
+        modulus = fib[m + 2]
+        length = len(counts)
+        sums = [0] * len(q_values)
+        for residue in range(modulus):
+            multiplicity = counts[residue]
+            lifted = residue + modulus
+            if lifted < length:
+                multiplicity += counts[lifted]
+            cached = power_cache.get(multiplicity)
+            if cached is None:
+                powers = []
+                current = multiplicity ** q_values[0]
+                powers.append(current)
+                for _ in q_values[1:]:
+                    current *= multiplicity
+                    powers.append(current)
+                cached = tuple(powers)
+                power_cache[multiplicity] = cached
+            for i, value in enumerate(cached):
+                sums[i] += value
+        for i, q in enumerate(q_values):
+            moments[q][m] = sums[i]
+    return moments
 
 
 def factor_record(q: int, tag: str, p: int) -> dict[str, Any]:
@@ -214,6 +327,61 @@ def factor_record(q: int, tag: str, p: int) -> dict[str, Any]:
             "t_coeffs_ascending_mod_p": coeffs_asc(t_poly, p),
             "identity": "s*P_q + t*P_q_derivative = 1 in F_p[x]",
         },
+    }
+
+
+def recurrence_residuals_from_moments(q: int, moments: dict[int, dict[int, int]]) -> list[int]:
+    coeffs = REC_C[q]
+    d = len(coeffs)
+    n = 2 * (q // 2) + 1
+    residuals = []
+    for j in range(2, n + 2):
+        value = moments[q][j + d]
+        for i, c in enumerate(coeffs, start=1):
+            value -= c * moments[q][j + d - i]
+        residuals.append(value)
+    return residuals
+
+
+def hankel_window_record(q: int, moments: dict[int, dict[int, int]]) -> dict[str, Any]:
+    d = len(REC_C[q])
+    n = 2 * (q // 2) + 1
+    kappa = n - d
+    hankel = sp.Matrix([[moments[q][i + j + 2] for j in range(n)] for i in range(n)])
+    rank = int(hankel.rank())
+    if rank != d:
+        raise RuntimeError(f"Hankel rank mismatch for q={q}: expected {d}, got {rank}")
+    basis = NULLMODES[q]
+    if len(basis) != kappa:
+        raise RuntimeError(f"nullmode basis length mismatch for q={q}")
+    basis_matrix = sp.Matrix(basis)
+    if int(basis_matrix.rank()) != kappa:
+        raise RuntimeError(f"nullmode basis is not independent for q={q}")
+    annihilation_rows = []
+    for alpha in basis:
+        vec = sp.Matrix(alpha)
+        product = hankel.T * vec
+        coords = [int(product[i, 0]) for i in range(product.rows)]
+        if any(coords):
+            raise RuntimeError(f"nullmode basis vector fails Hankel check for q={q}")
+        annihilation_rows.append(coords)
+    leading_minor = int(hankel[:d, :d].det())
+    if leading_minor == 0:
+        raise RuntimeError(f"leading d x d Hankel minor vanished for q={q}")
+    residuals = recurrence_residuals_from_moments(q, moments)
+    if any(residuals):
+        raise RuntimeError(f"moment-window recurrence residuals failed for q={q}")
+    return {
+        "q": q,
+        "n_q": n,
+        "d_q": d,
+        "kappa_q": kappa,
+        "moment_values_m_0_through_2n": [str(moments[q][m]) for m in range(0, 2 * n + 1)],
+        "residual_window_j_2_through_nplus1": residuals,
+        "hankel_matrix": [[str(hankel[i, j]) for j in range(n)] for i in range(n)],
+        "hankel_rank": rank,
+        "leading_hankel_minor_det": str(leading_minor),
+        "nullmode_basis_annihilation_vectors": annihilation_rows,
     }
 
 
@@ -296,28 +464,14 @@ def discriminant_record(q: int, primes: list[int]) -> dict[str, Any]:
     return {"q": q, "degree": P.degree(), "discriminant": str(D), "prime_witnesses": rows}
 
 
-def residual_record(q: int) -> dict[str, Any]:
-    d = len(REC_C[q])
-    zero_payload = f"kernel-residual-product:q={q}:offset=2:row-polynomial-degree={d}:canonical-zero-vector".encode()
-    return {
-        "q": q,
-        "d_q": d,
-        "offset": 2,
-        "residual_product": "R_q P_q(A_q) v_q",
-        "canonical_value": "zero vector",
-        "canonical_zero_vector_sha256": hashlib.sha256(zero_payload).hexdigest(),
-        "row_range": "t=2,...,N_q+1",
-        "rank_upper_witness": "columns >= d_q reduce by the same residual companion relation modulo the recorded zero residual block",
-        "rank_lower_witness": "the d_q by d_q leading Hankel minor in R_q B_q is nonzero; see smith/nullmode record",
-    }
-
-
 def stable_hash_payload(obj: Any) -> str:
     data = json.dumps(obj, sort_keys=True, separators=(",", ":")).encode()
     return hashlib.sha256(data).hexdigest()
 
 
 def main() -> None:
+    q_values = list(range(9, 18))
+    moment_records = exact_moment_windows(34, q_values)
     factor_records = []
     for q, tags in FACTOR_PRIMES.items():
         for tag, p in tags.items():
@@ -325,7 +479,17 @@ def main() -> None:
 
     square_primes = [31, 37, 43, 61]
     payload: dict[str, Any] = {
-        "schema": "finite-window-zeckendorf-arithmetic-window-certificates-v1",
+        "schema": "finite-window-zeckendorf-arithmetic-window-certificates-v2",
+        "supplement_scope": {
+            "local_verifier": (
+                "checks the pinned normalizer table, exact moment windows, Hankel nullmodes,"
+                " Smith witnesses, finite-field factorizations, and discriminant squareclasses"
+            ),
+            "paper_level_exact_kernel_statement": (
+                "the all-tail recurrence theorem is the abstract exact-kernel certification theorem"
+                " proved in the manuscript"
+            ),
+        },
         "polynomials": {
             str(q): {
                 "degree": len(cs),
@@ -343,7 +507,8 @@ def main() -> None:
             "transitions": sync10_edges(),
             "terminal_output_convention": "the verifier applies the terminal flush specified in the paper before visible truncation",
         },
-        "kernel_residual_and_rank_records": [residual_record(q) for q in range(9, 18)],
+        "normalizer_local_verification": normalizer_local_verification(),
+        "exact_moment_window_records": [hankel_window_record(q, moment_records) for q in q_values],
         "smith_unimodular_records": [smith_record(q) for q in range(9, 18)],
         "finite_field_factorization_records": factor_records,
         "discriminant_squareclass_records": [discriminant_record(q, square_primes) for q in [12, 13, 14, 15]],
