@@ -145,8 +145,8 @@ The output-$1$ kernel for the continuous model is therefore
 \widetilde T_1=\widetilde P-\widetilde T_0
 =
 \begin{pmatrix}
-\dfrac{\kappa_{\mathrm r}}{\Gamma+\kappa_{\mathrm r}}
-\bigl(1-e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}\bigr)
+\dfrac{\kappa_{\mathrm r}+\Gamma e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}}
+{\Gamma+\kappa_{\mathrm r}}-e^{-\Gamma\Delta\tau}
 &
 \dfrac{\Gamma}{\Gamma+\kappa_{\mathrm r}}
 \bigl(1-e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}\bigr)
@@ -158,6 +158,13 @@ The output-$1$ kernel for the continuous model is therefore
 {\Gamma+\kappa_{\mathrm r}}-c
 \end{pmatrix}.
 \]
+Indeed,
+\[
+(\widetilde T_1)_{RR}=(\widetilde P)_{RR}-(\widetilde T_0)_{RR}
+=\frac{\kappa_{\mathrm r}+\Gamma e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}}
+{\Gamma+\kappa_{\mathrm r}}-p,
+\]
+and \(p=e^{-\Gamma\Delta\tau}\) by \Cref{eq:p-c-main}.
 In particular
 \[
 \widetilde T_1(R,R)>0,\qquad \widetilde T_1(D,R)>0,
@@ -426,27 +433,72 @@ In particular the sign of every covariance beyond lag one is controlled only by 
 \end{lemma}
 
 \begin{proof}
-Put
+Put $q=1-p$ and
 \[
-u=T_1\mathbf 1=\binom{1-p}{a}.
+P=
+\begin{pmatrix}
+p&q\\
+b&1-b
+\end{pmatrix},
+\qquad
+u=T_1\mathbf 1=\binom{q}{a}.
 \]
-If $\pi$ is the stationary row distribution of the hidden matrix $P=T_0+T_1$, then $\rho=\pi u$. Since a click-labelled transition always ends in the hidden state $D$, conditioning on $A_0=1$ fixes the hidden state at the start of the next interval. Therefore
+By Lemma~\ref{lem:stationary-main}, the stationary row distribution is
+\[
+\pi=\left(\frac{b}{q+b},\frac{q}{q+b}\right),
+\qquad
+\rho=\pi u.
+\]
+Since a click-labelled transition always ends in the hidden state $D$,
+conditioning on $A_0=1$ fixes the hidden state at the start of the next
+interval. Therefore
 \[
 \PP(A_0=1,A_n=1)=\rho\,e_D^\top P^{n-1}u,\qquad n\ge1 .
 \]
-The vector $u-\rho\mathbf 1$ has zero $\pi$-mean. This zero-mean subspace is one-dimensional; explicitly it is spanned by
+Using the identities in Lemma~\ref{lem:stationary-main},
+\[
+q-\rho=\frac{q(q-a)}{q+b},
+\qquad
+a-\rho=-\frac{b(q-a)}{q+b},
+\]
+so
+\begin{equation}\label{eq:u-centered-main}
+u-\rho\mathbf 1
+=
+\frac{q-a}{q+b}
+\binom{q}{-b}.
+\end{equation}
+Set
 \[
 w=\binom{q}{-b},
-\qquad
-\pi w=0,
-\qquad
-Pw=(p-b)w=\lambda w .
 \]
-Hence $u-\rho\mathbf 1$ is a scalar multiple of $w$, and
+Then $\pi w=0$, so $w$ spans the one-dimensional zero-$\pi$-mean subspace.
+Moreover
+\[
+Pw=
+\begin{pmatrix}
+pq-qb\\
+bq-b+ b^2
+\end{pmatrix}
+=(p-b)\binom{q}{-b}
+=\lambda w.
+\]
+Thus the only hidden mode away from stationarity is the eigenmode $w$, and
+\eqref{eq:u-centered-main} gives
 \[
 P^{n-1}u=\rho\mathbf 1+\lambda^{n-1}(u-\rho\mathbf 1).
 \]
-Taking the $D$ component and subtracting $\rho^2$ gives~\eqref{eq:cov-transfer-main}.
+Taking the $D$ component,
+\[
+e_D^\top P^{n-1}u
+=\rho+\lambda^{n-1}(a-\rho),
+\]
+because the $D$ component of $u-\rho\mathbf 1$ is $a-\rho$. Hence
+\[
+\PP(A_0=1,A_n=1)
+=\rho\bigl[\rho+(a-\rho)\lambda^{n-1}\bigr].
+\]
+Subtracting $\rho^2$ yields~\eqref{eq:cov-transfer-main}.
 \end{proof}
 
 The boundary-reset recovery argument has four logically separate parts, and we
@@ -982,7 +1034,9 @@ Divide by $\EE N_N=N\rho$ and let $N\to\infty$. The geometric covariance tail yi
 =
 1-\rho+\frac{2(a-\rho)}{1-\lambda}.
 \]
-The denominator is positive and $a-\rho<0$, so the limit is strictly less than $1$.
+This limit is automatically nonnegative because each finite-$N$ ratio
+$\Var(N_N)/\EE N_N$ is nonnegative. The denominator is positive and
+$a-\rho<0$, so the limit is strictly less than $1$.
 \end{proof}
 
 Operationally, the memory shell can therefore be located by more than the sign of one covariance. As one scans through stationary observers, the lag profile changes phase at exact $1$-dependence, while the whole renewal class remains antibunched and low-frequency suppressed. This is a robust signature in finite counting data and not merely a formal property of an idealized symbolic process. \Cref{fig:spectrum-fano} displays both the spectral density and the Fano factor across the parameter range.
@@ -1048,10 +1102,16 @@ For a fixed lag $n<N$, use
 \]
 For a block size $B$, split the record into $M=\lfloor N/B\rfloor$ disjoint blocks and write $N_B^{(m)}=\sum_{j=(m-1)B}^{mB-1}A_j$; the empirical block Fano factor is the sample variance of the $N_B^{(m)}$ divided by their sample mean.
 
+For the lag-two covariance, the natural click-to-click reward is not an i.i.d.\
+one-cycle observable: the terminal lag-two window in one cycle uses the first
+symbol of the next cycle. The correct finite-record construction is therefore a
+cycle decomposition with a stationary $1$-dependent reward sequence and a
+batching step that removes this one-step overlap.
+
 \begin{definition}[Regenerative cycles and the lag-two variance estimator]\label{def:cycle-block-main}
 Let $0\le \tau_1<\cdots<\tau_{J_N}\le N-1$ be the observed click times in the
-record, and assume $J_N\ge3$. To keep one forward click available for the
-lag-two boundary assignment, use the first
+record, and assume $J_N\ge4$. To keep one forward click available for the
+lag-two window, use the first
 \[
 K_N=J_N-2
 \]
@@ -1074,29 +1134,45 @@ Let
 \widehat\mu_{2,N}=
 \frac{1}{K_N\bar L_N}\sum_{n=\tau_1}^{\tau_{K_N+1}-1}A_nA_{n+2},
 \]
-where the lag-two contribution with index $n=\tau_{j+1}-1$ is assigned to
-cycle $j+1$. Define the cycle rewards
+and the centered lag-two summands
+\[
+\widehat Z_{n,N}=
+(A_nA_{n+2}-\widehat\mu_{2,N})-2\widehat\rho_N(A_n-\widehat\rho_N).
+\]
+Define the overlapping cycle rewards
 \[
 \widehat Y_{j,N}=
-\sum_{n=\tau_j}^{\tau_{j+1}-1}
-\left[
-(A_nA_{n+2}-\widehat\mu_{2,N})-2\widehat\rho_N(A_n-\widehat\rho_N)
-\right],
+\sum_{n=\tau_j}^{\tau_{j+1}-1}\widehat Z_{n,N},
 \qquad 1\le j\le K_N,
 \]
-with the same boundary convention, and put
+so the final summand in $\widehat Y_{j,N}$ may use the first symbol after the
+click at $\tau_{j+1}$. Choose
 \[
-\bar Y_N=\frac1{K_N}\sum_{j=1}^{K_N}\widehat Y_{j,N}.
+b_N=\max\{1,\lfloor K_N^{1/3}\rfloor\},
+\qquad
+M_N=\left\lfloor \frac{K_N}{b_N+1}\right\rfloor,
 \]
-The implementable regenerative variance estimator is
+and define the separated batch sums
+\[
+\widehat B_{r,N}
+=
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}\widehat Y_{j,N},
+\qquad 1\le r\le M_N.
+\]
+Let
+\[
+\bar B_N=\frac1{M_N}\sum_{r=1}^{M_N}\widehat B_{r,N}.
+\]
+The omitted reward between successive batches removes the one-step overlap of
+the lag-two rewards. The implementable cycle-batch variance estimator is
 \begin{equation}\label{eq:cycle-block-est-main}
 \widehat\sigma_{2,N}^2=
-\frac{1}{\bar L_N\,(K_N-1)}
-\sum_{j=1}^{K_N}(\widehat Y_{j,N}-\bar Y_N)^2.
+\frac{1}{\bar L_N\,b_N\,(M_N-1)}
+\sum_{r=1}^{M_N}(\widehat B_{r,N}-\bar B_N)^2.
 \end{equation}
 \end{definition}
 
-\begin{theorem}[Regenerative CLT and implementable lag-two variance estimator under exponential gap tails]\label{thm:cycle-block-main}
+\begin{lemma}[Lag-two cycle decomposition and one-dependence]\label{lem:cycle-one-dep-main}
 Let $(A_n)_{n\in\mathbb Z}$ be a stationary binary record whose click times are regeneration times, and assume that the inter-click zero-run law satisfies
 \begin{equation}\label{eq:exp-tail-main}
 \PP(G\ge k)\le C e^{-\eta k}
@@ -1114,25 +1190,69 @@ Z_j=(A_jA_{j+2}-\mu_2)-2\rho(A_j-\rho).
 Let $T_0<T_1<T_2<\cdots$ be the successive click times in the Palm version of
 the stationary process, and let
 \[
-L_j=T_{j+1}-T_j
+L_j=T_{j+1}-T_j,
+\qquad
+G_j=L_j-1
 \]
-be the cycle lengths. For lag two, define the cycle rewards
+be the cycle lengths and zero-run lengths. For lag two, define the cycle rewards
 \[
 Y_j=
-\sum_{n=T_j}^{T_{j+1}-1}
-\left[(A_nA_{n+2}-\mu_2)-2\rho(A_n-\rho)\right],
+\sum_{n=T_j}^{T_{j+1}-1} Z_n.
 \]
-with the convention that the single summand whose lag-two window crosses the
-boundary at $T_{j+1}$ is assigned to cycle $j+1$.
-Then the covariance series
+Then:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
+\item for every $K\ge1$,
+\[
+\sum_{n=T_1}^{T_{K+1}-1} Z_n=\sum_{j=1}^K Y_j;
+\]
+\item each $Y_j$ is measurable with respect to the adjacent gap pair
+$(G_j,G_{j+1})$, hence $(Y_j)_{j\ge1}$ is stationary and $1$-dependent;
+\item $Y_1\in L^m$ for every $m\ge1$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The intervals $[T_j,T_{j+1}-1]$ partition $[T_1,T_{K+1}-1]$, so the sum
+identity is immediate from the definition of $Y_j$.
+
+Because the record is a renewal process, the whole word from the click at
+$T_j$ up to and including the next click at $T_{j+1}$ is determined by the gap
+$G_j$. For $n\in[T_j,T_{j+1}-2]$, the lag-two window $(A_n,A_{n+2})$ stays
+inside that click-to-click word, so $Z_n$ is measurable with respect to $G_j$.
+The only term that looks beyond the click at $T_{j+1}$ is the terminal summand
+$Z_{T_{j+1}-1}$, whose factor $A_{T_{j+1}+1}$ is determined by whether the
+next gap satisfies $G_{j+1}=0$. Hence $Y_j$ is measurable with respect to
+$(G_j,G_{j+1})$.
+
+The renewal gaps $(G_j)_{j\ge1}$ are i.i.d.\ by
+Lemma~\ref{lem:renewal-gap-main}, so functions of adjacent pairs form a
+stationary $1$-dependent sequence. Since $Z_n$ is bounded and
+$|Y_j|\le C_0L_j$ for a deterministic constant $C_0$, the exponential tail of
+$G_j$ gives finite moments of every order for $L_j$ and hence for $Y_j$.
+\end{proof}
+
+\begin{theorem}[Regenerative $1$-dependent cycle CLT and implementable lag-two variance estimator]\label{thm:cycle-block-main}
+Let $(A_n)_{n\in\mathbb Z}$ be a stationary binary record whose click times are
+regeneration times, and assume \eqref{eq:exp-tail-main}. Define
+\[
+\rho=\EE A_0,\qquad
+\mu_2=\EE(A_0A_2),\qquad
+\gamma_2=\mu_2-\rho^2,
+\]
+\[
+Z_j=(A_jA_{j+2}-\mu_2)-2\rho(A_j-\rho).
+\]
+Let $T_0<T_1<T_2<\cdots$ be the successive click times in the Palm version of
+the stationary process, set $L_j=T_{j+1}-T_j$, and define
+\[
+Y_j=\sum_{n=T_j}^{T_{j+1}-1} Z_n.
+\]
+Then
 \begin{equation}\label{eq:sigma2-main}
 \sigma_2^2=
-\frac{\Var(Y_1)}{\EE L_1}
-=\sum_{\ell\in\mathbb Z}\operatorname{Cov}(Z_0,Z_\ell)
-=\lim_{N\to\infty}
-N\,\Var\!\left(\frac1N\sum_{j=0}^{N-1}Z_j\right)
+\frac{\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2)}{\EE L_1}.
 \end{equation}
-is absolutely convergent, and
+Moreover,
 \[
 \sqrt N\,(\widehat\gamma_2-\gamma_2)
 \Rightarrow
@@ -1146,20 +1266,39 @@ If $\widehat\sigma_{2,N}^2$ is defined by \eqref{eq:cycle-block-est-main}, then
 \end{theorem}
 
 \begin{proof}
-Because a click resets the hidden state deterministically,
-Lemma~\ref{lem:renewal-gap-main} implies that the click-to-click cycles are
-i.i.d. in the Palm version. The exponential bound \eqref{eq:exp-tail-main}
-gives $\EE e^{\eta' L_1}<\infty$ for some $\eta'>0$, hence $\EE L_1^m<\infty$
-for every $m\ge1$. Since $Z_n$ is bounded and depends only on the lag-two
-window, the cycle reward $Y_1$ has finite second moment. The regenerative
-central-limit theorem and variance formula \cite{Asmussen2003} therefore give
+By Lemma~\ref{lem:cycle-one-dep-main}, $(Y_j)_{j\ge1}$ is a stationary
+$1$-dependent sequence with finite second moment. Palm inversion gives
+\[
+\EE Y_1=\EE L_1\,\EE Z_0=0.
+\]
+Hence the $m$-dependent central-limit theorem
+\cite{HoeffdingRobbins1948} yields
+\[
+\frac{1}{\sqrt K}\sum_{j=1}^K Y_j
+\Rightarrow
+\mathcal N(0,\tau_2^2),
+\qquad
+\tau_2^2:=\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2),
+\]
+because $\operatorname{Cov}(Y_1,Y_k)=0$ for $k\ge3$.
+
+Let $M(N)=\max\{j:T_j\le N-1\}$. Since $Z_n$ is bounded, there is a constant
+$C_1$ such that
+\[
+\sum_{n=0}^{N-1}Z_n
+=
+\sum_{j=1}^{M(N)-1}Y_j+R_N,
+\qquad
+|R_N|\le C_1\bigl(L_0+L_{M(N)}\bigr).
+\]
+The exponential tail gives $R_N=o_{\PP}(\sqrt N)$, while the renewal strong law
+gives $M(N)/N\to1/\EE L_1$ almost surely. Anscombe's theorem therefore gives
 \[
 \frac{1}{\sqrt N}\sum_{n=0}^{N-1}Z_n
 \Rightarrow
-\mathcal N\!\left(0,\frac{\Var(Y_1)}{\EE L_1}\right),
+\mathcal N\!\left(0,\frac{\tau_2^2}{\EE L_1}\right),
 \]
-and identify the same quantity with the absolutely convergent covariance series
-in \eqref{eq:sigma2-main}. This proves the displayed formula for $\sigma_2^2$.
+which is exactly \eqref{eq:sigma2-main}.
 
 Since
 \[
@@ -1173,56 +1312,87 @@ Since
 the CLT for $\widehat\gamma_2$ follows.
 
 For consistency of the variance estimator, first consider the infeasible
-version built from the true cycle rewards $Y_j$:
+separated-batch version built from the true cycle rewards $Y_j$. With the same
+batch size $b_N$ and number of batches $M_N$ as in
+\Cref{def:cycle-block-main}, set
+\[
+\widetilde B_{r,N}
+=
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}Y_j,
+\qquad
+1\le r\le M_N,
+\]
+\[
+\widetilde B_N^\ast=\frac1{M_N}\sum_{r=1}^{M_N}\widetilde B_{r,N},
+\]
 \[
 \widetilde\sigma_{2,N}^2=
-\frac{1}{\bar L_N\,(K_N-1)}
-\sum_{j=1}^{K_N}(Y_j-\bar Y_N^\circ)^2,
-\qquad
-\bar Y_N^\circ=\frac1{K_N}\sum_{j=1}^{K_N}Y_j.
+\frac{1}{\bar L_N\,b_N\,(M_N-1)}
+\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2.
 \]
-Because $(L_j,Y_j)$ are i.i.d., the strong law gives
+The inserted one-cycle gap between batches makes the batch sums
+$(\widetilde B_{r,N})_{r=1}^{M_N}$ i.i.d., because each batch uses a disjoint
+set of renewal gaps. Moreover,
 \[
-\bar L_N\to \EE L_1,
-\qquad
-\frac1{K_N-1}\sum_{j=1}^{K_N}(Y_j-\bar Y_N^\circ)^2\to \Var(Y_1)
+\frac{\Var(\widetilde B_{1,N})}{b_N}
+=
+\Var(Y_1)+2\left(1-\frac1{b_N}\right)\operatorname{Cov}(Y_1,Y_2)
+\longrightarrow
+\tau_2^2.
 \]
-almost surely, so $\widetilde\sigma_{2,N}^2\to\sigma_2^2$ almost surely.
+Since $Y_1\in L^4$ by Lemma~\ref{lem:cycle-one-dep-main}, one has
+$\EE \widetilde B_{1,N}^4=O(b_N^2)$. Because $M_N\to\infty$ almost surely and
+$\bar L_N\to\EE L_1$ almost surely, it follows that
+\[
+\widetilde\sigma_{2,N}^2\to \sigma_2^2
+\qquad\text{in probability.}
+\]
 
-The same regenerative strong law gives
+Next compare the feasible and infeasible batch sums. The same regenerative
+law-of-large-numbers and CLT argument applied to the bounded local observables
+$A_n$ and $A_nA_{n+2}$ gives
 \[
 \widehat\rho_N\to\rho,
 \qquad
 \widehat\mu_{2,N}\to\mu_2
+\qquad\text{almost surely,}
 \]
-almost surely. Because $A_n\in\{0,1\}$, there is a deterministic constant
-$C_0$ such that for every $1\le j\le K_N$,
+and in fact
+\[
+\delta_N:=
+|\widehat\rho_N-\rho|+|\widehat\mu_{2,N}-\mu_2|
+=O_{\PP}(N^{-1/2}).
+\]
+Because $A_n\in\{0,1\}$, there is a deterministic constant $C_2$ such that for
+every usable cycle,
 \[
 |\widehat Y_{j,N}-Y_j|
 \le
-C_0\,L_{j,N}\bigl(
-|\widehat\mu_{2,N}-\mu_2|+|\widehat\rho_N-\rho|
-\bigr).
+C_2\,L_{j,N}\delta_N.
 \]
 Hence
 \[
-\frac1{K_N}\sum_{j=1}^{K_N}(\widehat Y_{j,N}-Y_j)^2
+\frac1{M_Nb_N}\sum_{r=1}^{M_N}
+(\widehat B_{r,N}-\widetilde B_{r,N})^2
 \le
-C_0^2\bigl(
-|\widehat\mu_{2,N}-\mu_2|+|\widehat\rho_N-\rho|
-\bigr)^2
-\frac1{K_N}\sum_{j=1}^{K_N}L_{j,N}^2
-=o_{\PP}(1),
+C_2^2\delta_N^2\,
+\frac1{M_Nb_N}\sum_{r=1}^{M_N}
+\left(
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}L_{j,N}
+\right)^2.
 \]
-because $\EE L_1^2<\infty$. Therefore replacing $Y_j$ by $\widehat Y_{j,N}$
-changes the empirical mean and empirical variance by $o_{\PP}(1)$, and the
-same is true after dividing by $\bar L_N$. Consequently
+The bracketed average is $O_{\PP}(b_N)$ because $\EE L_1^2<\infty$, while
+$\delta_N^2b_N=O_{\PP}(b_N/N)=o_{\PP}(1)$ for the choice
+$b_N=\lfloor K_N^{1/3}\rfloor$. Hence the left-hand side is $o_{\PP}(1)$.
+By Cauchy--Schwarz, replacing $\widetilde B_{r,N}$ by $\widehat B_{r,N}$
+changes the empirical batch mean and empirical batch variance by $o_{\PP}(b_N)$.
+After division by $\bar L_N b_N$, this gives
 \[
 \widehat\sigma_{2,N}^2-\widetilde\sigma_{2,N}^2\to0
-\qquad\text{in probability,}
+\qquad\text{in probability.}
 \]
-which together with the almost-sure limit of $\widetilde\sigma_{2,N}^2$
-proves $\widehat\sigma_{2,N}^2\to\sigma_2^2$ in probability.
+Together with the preceding limit for $\widetilde\sigma_{2,N}^2$, this proves
+$\widehat\sigma_{2,N}^2\to\sigma_2^2$ in probability.
 \end{proof}
 
 \begin{proposition}[Finite-record diagnostics]\label{prop:finite-diagnostics-main}
@@ -1236,7 +1406,7 @@ Moreover:
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
 \item The sign of $\gamma_2=\operatorname{Cov}(A_0,A_2)$ is the opposite of the sign of $\lambda$, and $\gamma_2=0$ if and only if $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
 \item If a spatial scan changes the local excitation rate transversely through $\Gamma_c$ while the readout parameters are fixed, then the zero of $\gamma_2$ locates the memory-transition shell to first order.
-\item With the regenerative cycle-reward estimator $\widehat\sigma_{2,N}^2$ from \Cref{def:cycle-block-main}, an asymptotic two-sided $(1-\alpha)$ confidence interval for $\gamma_2$ is
+\item With the regenerative cycle-batch estimator $\widehat\sigma_{2,N}^2$ from \Cref{def:cycle-block-main}, an asymptotic two-sided $(1-\alpha)$ confidence interval for $\gamma_2$ is
 \[
 \widehat\gamma_2\pm
 z_{1-\alpha/2}\frac{\widehat\sigma_{2,N}}{\sqrt N}.
