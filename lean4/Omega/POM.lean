@@ -59,6 +59,7 @@ import Omega.POM.BCQuotientUniversal
 import Omega.POM.BCHighOrderLedgerDecomposition
 import Omega.POM.BCLinearizedFunctoriality
 import Omega.POM.BqIsSymqAndSpectrum
+import Omega.POM.BqWeightedSelfadjointBinomial
 import Omega.POM.BqTraceLucas
 import Omega.POM.BCInformationStokesCoboundary
 import Omega.POM.BCUniformLiftPseudofunctor
@@ -72,6 +73,7 @@ import Omega.POM.BayesInfonceThirdOrderLargeK
 import Omega.POM.BayesErrorExplicitSharpAsymptotic
 import Omega.POM.BbitOracleCapacityClosedForm
 import Omega.POM.GoldenBinaryChannelContraction
+import Omega.POM.GoldenGrammarFixedPointRhoAq
 import Omega.POM.GoldenLikelihoodRatioMartingales
 import Omega.POM.SqQuasiMultiplicative
 import Omega.POM.BeckChevalleyAmgmDefectIdentity
