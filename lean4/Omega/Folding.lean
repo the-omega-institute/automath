@@ -703,3 +703,4 @@ import Omega.Folding.BlockFoldsatSharpPComplete
 import Omega.Folding.BlockFoldsatLowTemperaturePartitionFunctionAdditiveHardness
 import Omega.Folding.FoldGaugeAnomalyBranchResonanceOneParameter
 import Omega.Folding.KilloFoldCollisionBowenFranksFibonacciBisection
+import Omega.Folding.KilloCurvatureSummableEventualInverseLimitLift
