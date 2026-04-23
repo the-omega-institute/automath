@@ -530,6 +530,7 @@ import Omega.Conclusion.LinearExternalizationLiminf
 import Omega.Conclusion.LkBulkBoundaryBesselDuality
 import Omega.Conclusion.LkBulkBoundaryQuadraticTilt
 import Omega.Conclusion.LkNormalizedZetaOddProjector
+import Omega.Conclusion.LkNormalizedZetaResidueQuarter
 import Omega.Conclusion.LkNdDeterminantZeroTracking
 import Omega.Conclusion.LkCentralBinomialCatalanMoments
 import Omega.Conclusion.TQFTGenusLinearRecurrenceRecovery

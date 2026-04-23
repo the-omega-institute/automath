@@ -40,6 +40,7 @@ import Omega.Zeta.XiAdamsFiberMobiusInversionFiniteNError
 import Omega.Zeta.AppOffcriticalRadiusCompression
 import Omega.Zeta.DerivedLeyangBfCkRigidity
 import Omega.Zeta.DephysBudgetDistanceDominatesTv
+import Omega.Zeta.DephysIdempotentMonadIProjection
 import Omega.Zeta.DephysicalizedDefectRepulsionRadius
 import Omega.Zeta.AppHorizonPoleImprint
 import Omega.Zeta.Degree11CyclicCubicNormalizationGenus3
