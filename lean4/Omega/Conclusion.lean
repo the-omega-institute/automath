@@ -358,6 +358,7 @@ import Omega.Conclusion.InverseLimitAddressFinitePrefixDeterminacy
 import Omega.Conclusion.TypedCertificateInverseLimitRigidity
 import Omega.Conclusion.JGEllipseConditionNumberThreshold
 import Omega.Conclusion.JGEllipseFixedEpsilonInformationBarrier
+import Omega.Conclusion.JGEllipseArithmeticInvertibilityCompleteness
 import Omega.Conclusion.JGEllipsePackingSqrtLaw
 import Omega.Conclusion.JGEllipsePrimeLogGenerator
 import Omega.Conclusion.JGFocalDistanceDecoding
@@ -461,6 +462,7 @@ import Omega.Conclusion.PhaseChannelCrowdingLowerBound
 import Omega.Conclusion.PhaseCoverCompositionAdditionExtensionLaw
 import Omega.Conclusion.PhaseLedgerBudgetExactHalfspace
 import Omega.Conclusion.Pisano1PositiveSea
+import Omega.Conclusion.PoissonCauchyFdivJetOddOrderVanishing
 import Omega.Conclusion.PoissonCauchyMomentTomography
 import Omega.Conclusion.PoissonCauchyKLSixthNegativeOneSidedApproach
 import Omega.Conclusion.PoissonCauchyRenyiSixthNegativeMonotone
