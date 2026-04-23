@@ -178,6 +178,7 @@ import Omega.POM.DiagonalRateRefreshCountRenewalLLNCLT
 import Omega.POM.DiagonalRateRefreshCountScgfDerivatives
 import Omega.POM.DiagonalRateUniformClosedForm
 import Omega.POM.DiagonalRateRefreshHittingTimeGeometricSpectralDecomp
+import Omega.POM.DiagonalRateRefreshHittingTimeMeanClosed
 import Omega.POM.DiagonalRateKeepProbabilityMonotone
 import Omega.POM.DiagonalRateRankOneRefreshDeterminantCollapse
 import Omega.POM.DiagonalRateKeepResampleChannel
