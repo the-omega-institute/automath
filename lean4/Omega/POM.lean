@@ -445,6 +445,7 @@ import Omega.POM.IprojMaxent
 import Omega.POM.KLPythagorasTower
 import Omega.POM.KLPythagorasUniform
 import Omega.POM.IprojGapExact
+import Omega.POM.MicroSlipWindow
 import Omega.POM.KernelSpectrum
 import Omega.POM.LambdaAlgebraic
 import Omega.POM.LambdaSaturation
