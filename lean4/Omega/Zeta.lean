@@ -785,6 +785,8 @@ import Omega.Zeta.XiBasepointScanFullRankWeightGaugeInvariance
 import Omega.Zeta.XiBasepointScanCauchyStableConvolution
 import Omega.Zeta.XiBasepointScanKernelCompletenessFullRank
 import Omega.Zeta.XiBasepointScanKernelUniqueness
+import Omega.Zeta.XiScanDensitySpectralShiftPhaseDerivative
+import Omega.Zeta.XiDoubleLogTimeHyperbolicAdditivity
 import Omega.Zeta.XiBasepointScanRationalHerglotzPoleTomography
 import Omega.Zeta.XiBinomialToeplitzDominantPoleResponse
 import Omega.Zeta.XiBinomialToeplitzTwoEndpointPoleInversion
