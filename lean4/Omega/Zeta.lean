@@ -1036,3 +1036,4 @@ import Omega.Zeta.XiTimePart63cFrobeniusExactInversionCycleMoments
 import Omega.Zeta.XiWindow6ResetClockBoundedDrift
 import Omega.Zeta.XiRadialDimensionObstruction
 import Omega.Zeta.Xi2x2SelfdualOffcriticalTemplate
+import Omega.Zeta.CyclicLiftPrimitiveOrbits
