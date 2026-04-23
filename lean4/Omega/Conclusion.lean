@@ -634,6 +634,7 @@ import Omega.Conclusion.ReversibleAuxBitsBudget
 import Omega.Conclusion.ReverseKLSingleFrequencyExclusivity
 import Omega.Conclusion.LucasHankelCurvatureRamanujanTomography
 import Omega.Conclusion.RhsharpQAmplifiedAddressBarrier
+import Omega.Conclusion.RhsharpForcesPerronPureQuotient
 import Omega.Conclusion.S4BoundaryTotalTorusRankConservation
 import Omega.Conclusion.S4HodgeDeterminesFixedpointCounts
 import Omega.Conclusion.SaturationDefect

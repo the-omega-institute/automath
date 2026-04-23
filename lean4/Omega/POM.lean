@@ -168,6 +168,7 @@ import Omega.POM.DiagonalRateAbsorbingMeanHitTime
 import Omega.POM.DiagonalRateAbsorbingHitPGF
 import Omega.POM.DiagonalRateAbsorbingSetHitAndOccupancy
 import Omega.POM.DiagonalRateAbsorbingGeometricMixture
+import Omega.POM.DiagonalRateAbsorbingHausdorffMomentTail
 import Omega.POM.DiagonalRateAcceptRefreshHaltingState
 import Omega.POM.DiagonalRateAcceptRefreshSeparationStrict
 import Omega.POM.DiagonalRateAcceptRefreshSSTPGF
