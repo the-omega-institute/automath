@@ -104,15 +104,20 @@ Table~\ref{tab:appendix-recurrences-q9-17}.  First, the recurrence record for
 \]
 and the observable-quotient rank identities
 \(\rk(R_qK_q)=\rk(R_qB_q)=d_q\), as recorded in
-Table~\ref{tab:appendix-recurrence-cert-normalization}.  Second, the
+Table~\ref{tab:appendix-recurrence-cert-normalization} and in the
+machine-checkable artifact of
+\Cref{prop:pinned-normalizer-certificate-table}.  Second, the
 Smith-normal-form records of Table~\ref{tab:appendix-principalization-q9-17}
-are exact unimodular reduction certificates over \(\ZZ\).  Third, the
+are exact unimodular reduction certificates over \(\ZZ\), with the matrices
+\(U_q,V_q\) supplied in the same artifact.  Third, the
 finite-field factorization records of
 Table~\ref{tab:galois-certificates-q9-17} are exact squarefree factorizations
-in the indicated rings \(\FF_p[\lambda]\).  Fourth, for
+in the indicated rings \(\FF_p[\lambda]\), with monic factors and Bezout gcd
+witnesses supplied in the artifact.  Fourth, for
 \(q=12,13,14,15\), the Legendre-symbol records of
 Table~\ref{tab:disc-squareclass-q12-15} are exact evaluations of the
-discriminants of the printed polynomials.
+discriminants of the printed polynomials, with the discriminants, residues, and
+Euler-criterion witnesses supplied in the artifact.
 
 The recurrence record is not a finite scalar audit in the variable \(m\).  It is
 the exact kernel identity above after reconstructing
@@ -123,7 +128,9 @@ Theorems~A--F and the entropy ledger do not use this certificate theorem.
 \end{theorem}
 
 \begin{proof}
-Each record is a finite algebraic identity in an explicitly specified ring.
+Each record is a finite algebraic identity in an explicitly specified ring; the
+tables in the manuscript are digests of the exact records pinned by
+\Cref{prop:pinned-normalizer-certificate-table}.
 For the recurrence records, the verifier reconstructs the integer histogram
 matrix and vectors from the fixed transducer table, forms
 \[
@@ -136,23 +143,27 @@ matrix and vectors from the fixed transducer table, forms
   \widetilde u_q^{\mathsf T}\widetilde A_q^{N_q+1}
   \end{bmatrix},
 \]
-and checks the integer vector equality \(R_qz_q=0\).  It also performs
-fraction-free row reduction and records nonzero minor witnesses for
-\(\rk(R_qK_q)=\rk(R_qB_q)=d_q\).  These are precisely the entries printed in
+and checks the integer vector equality \(R_qz_q=0\).  It also records the
+canonical zero residual vector, the row range \(t=2,\dots,N_q+1\), and rank
+witness descriptors: the leading Hankel minor supplies the lower-rank witness,
+while the residual companion relation supplies the column reductions above
+degree \(d_q\).  These are the records summarized in
 Table~\ref{tab:appendix-recurrence-cert-normalization}.  The number of rows in
 \(R_q\) is \(N_q=\dim\widetilde A_q\), obtained before \(P_q\) is tested; it is
 not chosen from the scalar moment sequence.
 
-The Smith records consist of unimodular row-and-column reductions over
+The Smith records consist of explicit unimodular row-and-column reductions over
 \(\ZZ\); Table~\ref{tab:appendix-principalization-q9-17} prints the resulting
-invariant factors.  The finite-field records consist of monic factors in the
-indicated \(\FF_p[\lambda]\); Table~\ref{tab:galois-certificates-q9-17} prints
-their degree pattern.  They are verified by reducing \(P_q\) modulo the
-indicated primes, multiplying those monic factors, and checking
+invariant factors, while the artifact supplies \(U_q,V_q\).  The finite-field
+records consist of monic factors in the indicated \(\FF_p[\lambda]\);
+Table~\ref{tab:galois-certificates-q9-17} prints their degree pattern.  They
+are verified by reducing \(P_q\) modulo the indicated primes, multiplying those
+monic factors, and checking the recorded Bezout identity for
 \(\gcd(P_q\bmod p,P_q'\bmod p)=1\).  The discriminant records are verified by
-the resultant formula for \(\Disc(P_q)\) followed by Euler's criterion at the
-four displayed primes.  Thus every line is an exact equality or nonvanishing
-certificate over \(\ZZ\), \(\QQ\), or a stated finite field.  The all-tail
+the resultant formula for \(\Disc(P_q)\) followed by the recorded
+Euler-criterion residues at the four displayed primes.  Thus every line is an
+exact equality or nonvanishing certificate over \(\ZZ\), \(\QQ\), or a stated
+finite field.  The all-tail
 recurrence consequence is not part of this finite check; it follows later from
 Cayley--Hamilton through
 \Cref{thm:apriori-exact-kernel-certification,prop:kernel-derived-recurrences}.
@@ -182,18 +193,20 @@ identities giving
   \rk(R_qK_q)=\rk(R_qB_q)=d_q.
 \]
 These are the entries summarized in
-Table~\ref{tab:appendix-recurrence-cert-normalization}; the soundness theorem
-turning them into all-tail recurrences is
+Table~\ref{tab:appendix-recurrence-cert-normalization}; the full finite records
+are the JSON records pinned in
+\Cref{prop:pinned-normalizer-certificate-table}.  The soundness theorem turning
+them into all-tail recurrences is
 \Cref{thm:apriori-exact-kernel-certification}.
 
 For the Galois data, the checker reduces the printed integer polynomial
-\(P_q\) modulo the indicated prime and verifies the displayed monic
-factorization and the Euclidean gcd identity with \(P_q'\) in
-\(\FF_p[\lambda]\).  For the squareclass data it computes
-\(\Disc(P_q)\) by the resultant formula and applies Euler's criterion modulo
-the primes in Table~\ref{tab:disc-squareclass-q12-15}.  Thus the certificate
-records are finite exact identities over \(\ZZ\), \(\QQ\), or the indicated
-finite fields.  No recurrence is inferred from a finite list of scalar moments.
+\(P_q\) modulo the indicated prime and verifies the recorded monic
+factorization and Bezout identity with \(P_q'\) in \(\FF_p[\lambda]\).  For the
+squareclass data it computes \(\Disc(P_q)\) by the resultant formula and checks
+the recorded Euler-criterion residues modulo the primes in
+Table~\ref{tab:disc-squareclass-q12-15}.  Thus the certificate records are
+finite exact identities over \(\ZZ\), \(\QQ\), or the indicated finite fields.
+No recurrence is inferred from a finite list of scalar moments.
 \end{remark}
 
 \begin{remark}[Section-wide convention]
@@ -440,7 +453,9 @@ gives an annihilating relation on the full sequence and hence a vector in
 
 The exact arithmetic certificate recorded in Appendix~\ref{app:certification}
 computes a \(\ZZ\)-basis of \(\mathrm{NullModes}(q)\) for each
-\(q=9,\dots,17\), and the resulting basis has \(\kappa_q\) vectors.  Hence
+\(q=9,\dots,17\); the basis vectors are recorded in the machine-checkable
+artifact of \Cref{prop:pinned-normalizer-certificate-table}, and the resulting
+basis has \(\kappa_q\) vectors.  Hence
 \[
   \rk_{\ZZ}\mathrm{NullModes}(q)=n_q-d_q=\kappa_q.
 \]
@@ -451,7 +466,8 @@ On the other hand, \(\mathcal M(P_q)\) is a free \(\ZZ\)-module of rank
 \(\mathcal M(P_q)\subseteq \mathrm{NullModes}(q)\) and both are free
 \(\ZZ\)-modules of rank \(\kappa_q\), the inclusion has finite index.  To
 verify that this index equals~\(1\), we use the Smith-normal-form certificates
-recorded in Table~\ref{tab:appendix-principalization-q9-17}.  For each
+summarized in Table~\ref{tab:appendix-principalization-q9-17} and recorded with
+unimodular matrices \(U_q,V_q\) in the artifact.  For each
 \(q=9,\dots,17\), the matrix expressing the generators
 \(P_q,\lambda P_q,\dots,\lambda^{\kappa_q-1}P_q\) in a \(\ZZ\)-basis of
 \(\mathrm{NullModes}(q)\) has all invariant factors equal to~\(1\)
@@ -518,8 +534,10 @@ the \(A^{(j)}\) is exactly \(\pm P_q\).
 \setlength{\tabcolsep}{5pt}
 \caption{Unramified mod-\(p\) factorization certificates for the resonance
 window \(q=9,\dots,17\).  The exact proof object in each entry is the
-squarefree factorization of \(P_q\bmod p\); the table records the resulting
-factor degrees.  The pattern \((d_q)\) certifies irreducibility and
+squarefree factorization of \(P_q\bmod p\), together with a Bezout gcd witness;
+the table records the resulting factor degrees, and the monic factors are in
+the artifact of \Cref{prop:pinned-normalizer-certificate-table}.  The pattern
+\((d_q)\) certifies irreducibility and
 transitivity, \((d_q-1,1)\) certifies an odd \((d_q-1)\)-cycle, and the final
 column supplies a prime cycle of length \(3\), \(5\), or \(7\) for Jordan's
 theorem.}
@@ -556,10 +574,12 @@ consists of monic factors in \(\FF_p[\lambda]\), their product identity with
 \[
   \gcd(P_q\bmod p, P_q'\bmod p)=1.
 \]
-All three checks are exact polynomial identities in the finite field, obtained
-by reducing the printed integer polynomial \(P_q\) modulo the displayed prime;
-no root approximation or scalar moment data enter this certificate.  The gcd
-identity says that the listed prime is unramified for \(P_q\).  Dedekind's
+The monic factors and the Bezout polynomials for the gcd identity are recorded
+in the artifact of \Cref{prop:pinned-normalizer-certificate-table}.  All three
+checks are exact polynomial identities in the finite field, obtained by reducing
+the printed integer polynomial \(P_q\) modulo the displayed prime; no root
+approximation or scalar moment data enter this certificate.  The gcd identity
+says that the listed prime is unramified for \(P_q\).  Dedekind's
 factorization theorem, in the squarefree case, identifies the degrees of the
 irreducible factors of \(P_q\bmod p\) with the cycle lengths of a Frobenius
 element in the Galois group.  Hence each displayed degree pattern is realized
@@ -699,7 +719,10 @@ Therefore \(d_q\le 2b\), which is the claimed lower bound.
 \caption{Discriminant squareclass certificate for \(q\in\{12,13,14,15\}\)
 using exact Legendre-symbol computations at the primes \(31,37,43,61\).  After
 the encoding \(-1\mapsto 1\), \(+1\mapsto 0\), the resulting \(4\times 4\)
-matrix has rank \(4\), proving squareclass independence.}
+matrix has rank \(4\), proving squareclass independence.  The exact
+discriminants, residues modulo the four primes, and Euler-criterion witnesses
+are supplied in the artifact of
+\Cref{prop:pinned-normalizer-certificate-table}.}
 \label{tab:disc-squareclass-q12-15}
 \begin{tabular}{r r r r r}
 \toprule
@@ -732,8 +755,12 @@ For each prime \(p\in\{31,37,43,61\}\), the Legendre symbol
   \chi_p(a)=\left(\frac{a}{p}\right)
 \]
 is a homomorphism on the squareclasses represented by rationals whose numerator
-and denominator are prime to \(p\).  The displayed nonzero Legendre symbols show
-that every listed discriminant is a \(p\)-unit for each listed prime.  Encoding
+and denominator are prime to \(p\).  The artifact of
+\Cref{prop:pinned-normalizer-certificate-table} records the exact
+discriminants, their residues modulo each displayed prime, and the
+Euler-criterion witnesses giving the signs in
+\Cref{tab:disc-squareclass-q12-15}.  These nonzero Legendre symbols show that
+every listed discriminant is a \(p\)-unit for each listed prime.  Encoding
 \(-1\) as \(1\) and \(+1\) as \(0\), the table gives the matrix
 \[
   \begin{pmatrix}

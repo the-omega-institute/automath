@@ -351,7 +351,10 @@ exact algebraic data.
 First, it contains the transition table of the fixed normalizer
 \(\mathcal T\), from which \(\widehat Q\), the histogram set \(\mathcal H_q\),
 and the integer matrix \(\widetilde A_q\) are reconstructed by
-\Cref{def:exact-histogram-kernel}.  Second, it contains the integer polynomial
+\Cref{def:exact-histogram-kernel}; for the arithmetic-window rows this table is
+the hash-pinned table in
+\Cref{prop:pinned-normalizer-certificate-table}.  Second, it contains the
+integer polynomial
 coefficients of \(P\).  Third, it contains the exact residual computation,
 after integer matrix multiplication, for the single equality
 \[
@@ -851,8 +854,17 @@ integer equalities and nonzero minor certificates.}
 \end{table}
 
 The certificate entries in
-\Cref{tab:appendix-recurrence-cert-normalization} have the exact finite meaning
-of \Cref{def:finite-recurrence-certificate-record}.  Put
+\Cref{tab:appendix-recurrence-cert-normalization} are human-readable digests of
+the exact finite records pinned in
+\Cref{prop:pinned-normalizer-certificate-table}.  For each
+\(q=9,\dots,17\), the JSON field
+\(\texttt{kernel\_residual\_and\_rank\_records}\) records the row range
+\(t=2,\dots,N_q+1\), the canonical zero value of
+\(R_qP_q(\widetilde A_q)\widetilde v_q\), the hash of that canonical residual
+record, and the rank-witness interface: a nonzero leading Hankel minor for the
+lower bound and the companion-column reductions supplied by the residual record
+for the upper bound.  In formula form this has the exact finite meaning of
+\Cref{def:finite-recurrence-certificate-record}.  Put
 \(A=\widetilde A_q\), \(u=\widetilde u_q\),
 \(v=\widetilde v_q\), and \(N=N_q\).  Form the finite Krylov matrix
 \[
@@ -924,10 +936,12 @@ kernel has been constructed; it is not a scalar recurrence tested on a finite
 interval of \(m\)-values.  The record reconstructs the integer matrix
 \(\widetilde A_q\) and the two integer vectors
 \(\widetilde u_q,\widetilde v_q\) from
-\Cref{def:exact-histogram-kernel}, using the fixed transducer table of
-Appendix~\ref{app:transducer}.  It then consists of the exact vectors below and
-integer equalities and nonzero minors.  The scalar values \(S_q(m)\) are not
-formed in this record.  The proof object has three parts:
+\Cref{def:exact-histogram-kernel}, using the fixed transducer table pinned in
+\Cref{prop:pinned-normalizer-certificate-table}.  It then consists of exact
+vectors, integer equalities, and rank witnesses; the manuscript table records
+the digest and the JSON artifact records the canonical proof-object fields.  The
+scalar values \(S_q(m)\) are not formed in this record.  The proof object has
+three parts:
 \[
   \bigl(z_q,\ R_qz_q,\ \text{rank witnesses for }R_qK_q
   \text{ and }R_qB_q\bigr).
@@ -944,7 +958,8 @@ by repeated integer matrix-vector multiplication, and form the exact rows
 \]
 The recurrence part of the proof object is the equality \(R_qz_q=0\), namely the
 exact statement that the \(N_q\) integer dot products of these rows with \(z_q\)
-are all zero:
+are all zero; in the artifact this is stored as the canonical zero-vector
+residual record with row range \(t=2,\dots,N_q+1\):
 \[
   R_qP_q(\widetilde A_q)\widetilde v_q=0.
 \]
@@ -964,10 +979,11 @@ is used as a raw finite-window extrapolation; see
 \Cref{thm:apriori-exact-kernel-certification}, the equality \(R_qz_q=0\)
 gives the displayed identity for every \(t\ge2\).
 
-The rank-witness part of the proof object consists, after clearing
-denominators in the Gaussian eliminations, of integer row-reduction identities
-together with nonzero \(d_q\times d_q\) minor certificates.  These witnesses
-give
+The rank-witness part of the proof object consists, after clearing denominators
+in the Gaussian eliminations, of integer row-reduction identities together with
+nonzero \(d_q\times d_q\) minor certificates.  The artifact records this compactly
+by giving the nonzero leading Hankel minor source for the lower bound and the
+residual companion reductions for the upper bound.  These witnesses give
 \[
   \rk(R_qK_q)=\rk(R_qB_q)=d_q.
 \]
@@ -1117,7 +1133,9 @@ Smith normal form of the change-of-basis matrix from the truncated-multiple
 basis \(\{P_q,\lambda P_q,\dots,\lambda^{\kappa_q-1}P_q\}\) to an integral
 basis of \(\mathrm{NullModes}(q)\).  In particular, every invariant factor is
 \(1\), so the inclusion \(\mathcal M(P_q)\subseteq \mathrm{NullModes}(q)\) has
-index \(1\).}
+index \(1\).  The corresponding matrices \(U_q,V_q\) and the displayed
+nullmode bases are supplied in the machine-checkable artifact of
+\Cref{prop:pinned-normalizer-certificate-table}.}
 \label{tab:appendix-principalization-q9-17}
 \begin{tabular}{r r l}
 \toprule
@@ -1135,6 +1153,18 @@ index \(1\).}
 \bottomrule
 \end{tabular}
 \end{table}
+
+Concretely, the artifact field
+\(\texttt{smith\_unimodular\_records}\) records, for each \(q\), the
+change-of-basis matrix \(M_q\), unimodular integer matrices \(U_q,V_q\), and
+the identity
+\[
+  U_qM_qV_q=I_{\kappa_q}
+\]
+(with the vacuous \(0\times0\) case for \(q=12\)).  Since every invariant factor
+is \(1\), these matrices are the compact Smith certificates needed in
+\Cref{thm:principalization}; the table above prints only their diagonal
+summary.
 
 \subsection{Exact certificate format for the arithmetic tables}
 
@@ -1178,12 +1208,16 @@ with
 for the relevant basis-change matrix \(M_q\) (with the vacuous \(0\times0\)
 case when \(\kappa_{12}=0\)).  A mod-\(p\) factorization certificate consists
 of monic factors in \(\FF_p[\lambda]\) whose product is \(P_q\bmod p\), together
-with the Euclidean gcd checks certifying the displayed degrees.  A
+with Bezout polynomials certifying
+\(\gcd(P_q\bmod p,P_q'\bmod p)=1\).  These data are the artifact fields
+\(\texttt{finite\_field\_factorization\_records}\).  A
 discriminant-squareclass certificate computes
 \(\Disc(P_q)=(-1)^{d_q(d_q-1)/2}\operatorname{Res}(P_q,P_q')\) and then applies
-Euler's criterion in the displayed finite fields.  Thus the tables record
-exact algebraic certificates; the high-precision root table below is the only
-numerical table, and it is not used in the proofs.
+Euler's criterion in the displayed finite fields; the artifact field
+\(\texttt{discriminant\_squareclass\_records}\) records the exact
+discriminants, residues, and Euler witnesses.  Thus the tables record digest
+views of exact algebraic certificates; the high-precision root table below is
+the only numerical table, and it is not used in the proofs.
 
 \medskip
 \noindent\textbf{Role in the paper.}
@@ -1192,8 +1226,9 @@ The proofs in Section~\ref{sec:chebotarev} use only the exact polynomials
 Table~\ref{tab:appendix-recurrences-q9-17} and
 \Cref{prop:kernel-derived-recurrences}, the Smith-normal-form certificates
 displayed in
-\Cref{tab:appendix-principalization-q9-17}, and the finite mod-\(p\)
-factorization patterns displayed in
+\Cref{tab:appendix-principalization-q9-17} together with the recorded
+unimodular matrices, and the finite mod-\(p\) factorization records and
+discriminant witnesses summarized in
 \Cref{tab:galois-certificates-q9-17,tab:disc-squareclass-q12-15}.  The
 high-precision root fingerprints recorded in
 \Cref{tab:secondary-spectral-q9-17} are included as secondary descriptive data,
