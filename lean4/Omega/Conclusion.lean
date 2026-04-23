@@ -146,6 +146,7 @@ import Omega.Conclusion.NegativeMellinTwoAtomUniqueness
 import Omega.Conclusion.ZeroCosetFixedV2FiniteIntersectionGcd
 import Omega.Conclusion.ZeckendorfResetObservationThreshold
 import Omega.Conclusion.ZeckendorfEulerSuperexponentialTail
+import Omega.Conclusion.ZGEulerMemoryRankTwo
 import Omega.Conclusion.CommonFiniteAdditiveLinearizationObstruction
 import Omega.Conclusion.ComovingDefectFixedRadialWindowNonhiding
 import Omega.Conclusion.ComovingAddressEndpointBudgetTransfer

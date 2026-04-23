@@ -7,3 +7,4 @@ import Omega.SyncKernelRealInput.AdditionCollisionQ2FullSymmetricGalois
 import Omega.SyncKernelRealInput.AdditionCollisionRealInput40Q2Minpoly
 import Omega.SyncKernelRealInput.RealInputDefectEntropy
 import Omega.SyncKernelRealInput.RealInput40NonresetPrimesThin
+import Omega.SyncKernelRealInput.WittDepthLineConvolution
