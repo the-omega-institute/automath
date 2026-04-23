@@ -205,6 +205,7 @@ import Omega.Zeta.XiTimePart9mFixedFrequencyCollisionCertificateFails
 import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne
 import Omega.Zeta.XiTimePart9xcSerrinCongruenceDiracLengthOne
 import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
+import Omega.Zeta.XiTimePart9zgQuadraticSectorCharacterHarmonicCollapse
 import Omega.Zeta.XiTerminalZmLeyangP3RenormalizationHensel
 import Omega.Zeta.XiTerminalZmLeyangPerronP3Radius
 import Omega.Zeta.XiTerminalZmLeyangP3V3LinearBound
