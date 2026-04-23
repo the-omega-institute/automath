@@ -677,70 +677,13 @@ the empirical laws of \(A(u)\) and \(B(u)\) is bounded by the empirical mass of
 \end{proof}
 
 \begin{proposition}[Residuals relative to the Parry measure]\label{prop:multiscale-residual-parry-bound}
-Let $\pi_m$ be the Parry measure on $X_m$.  Since the Parry family is
-projectively consistent,
-\[
-\pi_m=(\rho_{m+1\to m})_*\pi_{m+1},
-\]
-one has
-\[
-E_{m,N}
-\le
-\TV(\hat\pi_{m,N},\pi_m)+\TV(\hat\pi_{m+1,N},\pi_{m+1}).
-\]
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Proposition~3.5.
 \end{proposition}
-
-\begin{proof}
-Apply the triangle inequality around the projectively consistent pair
-$(\pi_m,(\rho_{m+1\to m})_*\pi_{m+1})$ and use monotonicity of total
-variation under the deterministic map \(\rho_{m+1\to m}\):
-\[
-\begin{aligned}
-E_{m,N}
-&\le
-\TV(\hat\pi_{m,N},\pi_m)
-+
-\TV\bigl((\rho_{m+1\to m})_*\pi_{m+1},
-(\rho_{m+1\to m})_*\hat\pi_{m+1,N}\bigr)\\
-&\le
-\TV(\hat\pi_{m,N},\pi_m)+\TV(\pi_{m+1},\hat\pi_{m+1,N}).
-\end{aligned}
-\]
-\end{proof}
 
 \begin{corollary}[Residual comparison bound]
 \label{cor:multiscale-residual-audit-bound}
-For every \(m,N\ge 1\),
-\[
-E_{m,N}
-\le
-(4m+2)D_N^*(\alpha;x_0)
-+\TV(\pi_m^{\mathrm{fold}},\pi_m)
-+\TV(\pi_{m+1}^{\mathrm{fold}},\pi_{m+1}).
-\]
-If \(\beta=\alpha\), one may replace \(4m+2\) by \(2m+3\).
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Corollary~3.6.
 \end{corollary}
-
-\begin{proof}
-Use Proposition~\ref{prop:multiscale-residual-parry-bound} and insert
-\[
-\TV(\hat\pi_{\ell,N},\pi_\ell)
-\le
-\TV(\hat\pi_{\ell,N},\pi_\ell^{\mathrm{fold}})
-+\TV(\pi_\ell^{\mathrm{fold}},\pi_\ell)
-\qquad(\ell=m,m+1).
-\]
-The discrepancy estimates of Theorem~\ref{thm:tv-certificate-hist} then give
-\[
-E_{m,N}
-\le
-2mD_N^*(\alpha;x_0)+2(m+1)D_N^*(\alpha;x_0)
-+\TV(\pi_m^{\mathrm{fold}},\pi_m)
-+\TV(\pi_{m+1}^{\mathrm{fold}},\pi_{m+1}),
-\]
-which simplifies to the first claim. In the Sturmian slice, the sharpened
-coefficients \(m+1\) and \(m+2\) give \(2m+3\).
-\end{proof}
 
 \section{Relative-entropy bounds}
 
@@ -975,18 +918,8 @@ from Proposition~\ref{prop:general-window-atom-separation}.
 The next two corollaries keep the sharper \((m+1)\)-atom Sturmian constant and
 the explicit bad-approximation lower bound used later in the Parry comparison.
 
-\begin{corollary}[Finite-scale microstate bound]\label{cor:rotation-microstate-kl-certificate}
-Assume \(\beta=\alpha\) and let \(\alpha\) be badly approximable. With
-\(q_{\min}(m)\) as in Proposition~\ref{prop:qmin-lowerbound-markov},
-\[
-\KL(\hat\mu_{m,N}\|\mu_m)
-\le
-\frac{4}{q_{\min}(m)}\TV(\hat\mu_{m,N},\mu_m)^2
-\le
-\frac{4(m+1)^2}{q_{\min}(m)}D_N^*(\alpha;x_0)^2.
-\]
-For the golden slope, the finite-\(k\) constant of
-Proposition~\ref{prop:qmin-lowerbound-markov} gives
+\begin{corollary}[Golden-slope microstate improvement]\label{cor:rotation-microstate-kl-certificate}
+Assume \(\beta=\alpha=\varphi^{-1}\).  Then
 \[
 \KL(\hat\mu_{m,N}\|\mu_m)
 \le
@@ -994,15 +927,25 @@ Proposition~\ref{prop:qmin-lowerbound-markov} gives
 \]
 \end{corollary}
 
-\begin{proof}
-The half-open coding convention assigns every boundary point of the finite
-rotation partition to one of the adjacent atoms, and each such atom has
-positive Lebesgue length. Hence
-\(\supp(\hat\mu_{m,N})\subset\supp(\mu_m)\), so
-Lemma~\ref{lem:kl-from-tv-qmin} applies.
-Combine Lemma~\ref{lem:kl-from-tv-qmin}, the Sturmian case of
-Theorem~\ref{thm:tv-certificate-hist}, and
+\begin{remark}
+The general badly-approximable certificate and the \(q_{\min}(m)\)-form appear
+in \cite{MaZhang2026FoldedHistogramsSIADS}, Corollary~4.4; the increment here
+is the replacement of the golden Markov constant by the all-\(k\) lower bound
+\(q_{\min}(m)\ge \varphi^{-2}/m\) from
 Proposition~\ref{prop:qmin-lowerbound-markov}.
+\end{remark}
+
+\begin{proof}
+Lemma~\ref{lem:kl-from-tv-qmin}, the Sturmian total-variation estimate in
+Theorem~\ref{thm:tv-certificate-hist}, and
+Proposition~\ref{prop:qmin-lowerbound-markov} give
+\[
+\KL(\hat\mu_{m,N}\|\mu_m)
+\le
+\frac{4}{q_{\min}(m)}(m+1)^2D_N^*(\alpha;x_0)^2
+\le
+4\varphi^2\,m(m+1)^2D_N^*(\alpha;x_0)^2.
+\]
 \end{proof}
 
 \begin{lemma}[KL monotonicity under pushforward]\label{lem:kl-monotone-pushforward}
@@ -1042,8 +985,9 @@ Since \(\hat\pi_{m,N}=(\Fold_m)_*\hat\mu_{m,N}\) and
 \le
 \KL(\hat\mu_{m,N}\|\mu_m).
 \]
-The two displayed bounds are then exactly
-Corollary~\ref{cor:rotation-microstate-kl-certificate}.
+The \(q_{\min}(m)\)-bound follows from
+\cite{MaZhang2026FoldedHistogramsSIADS}, Corollary~4.4, and the golden-slope
+bound follows from Corollary~\ref{cor:rotation-microstate-kl-certificate}.
 \end{proof}
 
 \subsection{No collisions on the Sturmian support}
@@ -1054,202 +998,26 @@ around the Sturmian cylinder partition, the Fibonacci values of the factors
 remain distinct modulo \(F_{m+2}\).
 
 \begin{theorem}[No collisions on the Sturmian language]\label{thm:sturmian-no-collision-rigidity}
-Assume \(\beta=\alpha\), and define
-\[
-S_m(\alpha):=\supp(\mu_m)\subset\Omega_m,
-\qquad
-Y_m:=\Fold_m(S_m(\alpha))\subset X_m.
-\]
-Then the restriction
-\[
-\Fold_m\!\upharpoonright_{S_m(\alpha)}:S_m(\alpha)\to Y_m
-\]
-is a bijection.
-
-More precisely, let
-\[
-\Xi_m:=\{(1-j)\alpha \bmod 1:\ 0\le j\le m\}\subset\TT,
-\]
-let \(I_0,\dots,I_m\) be the open atoms of \(\TT\setminus \Xi_m\) in
-counterclockwise order, and choose \(x_\ell\in I_\ell\). Writing
-\[
-u^{(\ell)}:=\omega_m(x_\ell)\in S_m(\alpha),
-\qquad
-V_\ell:=N_m(u^{(\ell)}),
-\]
-the cyclic jump multiset
-\[
-\Delta_\ell:=V_{\ell+1}-V_\ell
-\qquad (\ell\!\!\!\!\pmod{m+1})
-\]
-consists of exactly one positive jump \(+F_{m+1}\) and the \(m\) negative
-jumps
-\[
--1\quad\text{and}\quad -F_j\ (1\le j\le m-1),
-\]
-counted with multiplicity. After a cyclic relabeling that starts immediately to
-the right of the unique positive jump, the values \(V_\ell\) form a strictly
-decreasing integer chain. In particular, the residues \(V_\ell\bmod F_{m+2}\)
-are pairwise distinct.
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Theorem~4.7.
 \end{theorem}
-
-\begin{proof}
-The proof has two steps: compute the Fibonacci jump produced by crossing each
-Sturmian boundary atom, and then observe that after the unique positive jump
-the remaining cycle is a strictly decreasing chain whose total drop is smaller
-than \(F_{m+2}\), so residue collisions cannot occur. The boundary bookkeeping
-is the same one that underlies the standard factor partition of Sturmian words;
-see \cite{LindMarcus1995,Fogg2002,Berthe2001Ostrowski}.
-
-For \(0\le k\le m-1\), the \(k\)-th symbol of \(\omega_m(x)\) is
-\[
-\mathbf{1}_{[0,\alpha)}(x+k\alpha),
-\]
-so its discontinuities occur at the two points \(-k\alpha\) and
-\(\alpha-k\alpha=(1-k)\alpha\) on \(\TT\). The union of all such discontinuity
-points is exactly \(\Xi_m\). Hence \(\omega_m(x)\) is constant on each atom
-\(I_\ell\), and \(S_m(\alpha)=\{u^{(\ell)}:0\le \ell\le m\}\).
-
-Fix a boundary point \(\xi_j:=(1-j)\alpha\in\Xi_m\).
-If \(1\le j\le m-1\), then crossing \(\xi_j\) from left to right changes the
-symbols in positions \(j-1\) and \(j\) from \(01\) to \(10\), while all other
-positions stay fixed: among the translated points \(x+k\alpha\), only the two
-with \(k=j-1\) and \(k=j\) meet the coding boundary at the instant \(x=\xi_j\).
-Therefore the Fibonacci value jump is
-\[
-F_{j+1}-F_{j+2}=-F_j.
-\]
-At \(\xi_0=\alpha\), only the first symbol changes, from \(1\) to \(0\), so
-the jump is \(-F_1=-1\). At \(\xi_m=(1-m)\alpha\), only the last symbol
-changes, from \(0\) to \(1\), so the jump is \(+F_{m+1}\). This proves the
-stated jump multiset.
-
-Now start with the atom immediately to the right of \(\xi_m\). Along the
-remaining cycle, every subsequent jump is negative, so the corresponding values
-form a strictly decreasing integer chain. Since
-\[
-1+\sum_{j=1}^{m-1}F_j=F_{m+1},
-\]
-the total drop before the cycle closes is exactly \(F_{m+1}<F_{m+2}\). Hence
-no two values in this chain can be congruent modulo \(F_{m+2}\).
-Proposition~\ref{prop:fold-residue-characterization} shows that
-\(\Fold_m\) is constant on residue classes modulo \(F_{m+2}\), so its
-restriction to \(S_m(\alpha)\) is injective. Bijectivity onto \(Y_m\) is then
-tautological.
-\end{proof}
 
 \begin{remark}[Dependence on the canonical slice]
 \label{rem:sturmian-rigidity-special}
-The proof uses three features special to the canonical slice \(\beta=\alpha\):
-the Sturmian partition of the circle into \(m+1\) atoms, the Fibonacci weights
-in \(N_m\), and the residue characterization of \(\Fold_m\) modulo
-\(F_{m+2}\).  We shall not use, or claim, an analogous jumps-and-residues
-statement for other folds.
+The cited rigidity result is specific to the canonical slice \(\beta=\alpha\);
+we shall not use, or claim, an analogous jumps-and-residues statement for other
+folds.
 \end{remark}
 
 \begin{corollary}[Exact relabeling on the realized Sturmian language]\label{cor:sturmian-exact-relabeling}
-Assume \(\beta=\alpha\), and let
-\[
-B_m:=\Fold_m\!\upharpoonright_{S_m(\alpha)}:S_m(\alpha)\to Y_m.
-\]
-Then \(B_m\) is a bijection, and for every \(N\ge 1\),
-\[
-\pi_m^{\mathrm{fold}}=(B_m)_*\mu_m,
-\qquad
-\hat\pi_{m,N}=(B_m)_*\hat\mu_{m,N}.
-\]
-Consequently,
-\[
-\TV(\hat\pi_{m,N},\pi_m^{\mathrm{fold}})
-=
-\TV(\hat\mu_{m,N},\mu_m),
-\]
-\[
-\KL(\hat\pi_{m,N}\|\pi_m^{\mathrm{fold}})
-=
-\KL(\hat\mu_{m,N}\|\mu_m),
-\]
-and, writing \(H_q\) for the R\'enyi entropy of order \(q\), for every
-\(q\in[0,\infty]\),
-\[
-H_q(\hat\pi_{m,N})=H_q(\hat\mu_{m,N}),
-\qquad
-H_q(\pi_m^{\mathrm{fold}})=H_q(\mu_m).
-\]
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Corollary~4.9.
 \end{corollary}
-
-\begin{proof}
-The pushforward identities follow from Theorem~\ref{thm:sturmian-no-collision-rigidity}.
-Since \(B_m\) is a bijection between the realized supports, total variation,
-relative entropy, and all R\'enyi entropies are invariant under the relabeling
-\(B_m\).
-\end{proof}
 
 \subsection{Higher-block conjugacy on the Sturmian source}
 
 \begin{theorem}[Higher-block conjugacy on the Sturmian source]
 \label{thm:sequence-level-transparency}
-Assume \(\beta=\alpha\), let \(X_\alpha\subset\{0,1\}^{\mathbb{Z}}\) be the
-Sturmian subshift generated by the irrational rotation coding, and fix
-\(m\ge 1\). Define
-\[
-(\Phi_m(s))_t:=\Fold_m(s_t s_{t+1}\cdots s_{t+m-1}),
-\qquad t\in\mathbb{Z}.
-\]
-Then \(\Phi_m:X_\alpha\to \mathcal{Y}_m:=\Phi_m(X_\alpha)\) is a topological
-conjugacy. Equivalently, \(\mathcal{Y}_m\) is a letter relabeling of the
-classical \(m\)-block presentation of \(X_\alpha\).
-
-In particular, \(\mathcal{Y}_m\) is minimal and uniquely ergodic,
-\[
-h_{\mathrm{top}}(\mathcal{Y}_m)=0,
-\]
-and, writing \(p_Z(n)\) for the word complexity of a subshift \(Z\), one has
-\[
-p_{\mathcal{Y}_m}(n)=p_{X_\alpha}(n+m-1)=n+m
-\qquad (n\ge 1).
-\]
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Theorem~4.10.
 \end{theorem}
-
-\begin{proof}
-Let \(\Psi_m:X_\alpha\to S_m(\alpha)^{\mathbb{Z}}\) be the classical higher-block
-code
-\[
-(\Psi_m(s))_t:=s_t s_{t+1}\cdots s_{t+m-1}.
-\]
-Standard higher-block theory gives that \(\Psi_m\) is a topological conjugacy
-from \(X_\alpha\) onto its \(m\)-block presentation
-\cite{LindMarcus1995}. By Corollary~\ref{cor:sturmian-exact-relabeling},
-\[
-B_m:=\Fold_m\!\upharpoonright_{S_m(\alpha)}:S_m(\alpha)\to Y_m
-\]
-is a bijection. Hence the coordinatewise relabeling
-\[
-(\widetilde B_m(z))_t:=B_m(z_t),
-\qquad z\in \Psi_m(X_\alpha),
-\]
-is a topological conjugacy from the \(m\)-block presentation onto
-\(\mathcal{Y}_m\).
-Because
-\[
-\Phi_m=\widetilde B_m\circ \Psi_m,
-\]
-\(\Phi_m\) is itself a topological conjugacy.
-
-Minimality and unique ergodicity are preserved under conjugacy, and the
-irrational rotation coding is classically minimal and uniquely ergodic. The
-same is therefore true of \(\mathcal{Y}_m\). Likewise, topological entropy is
-preserved, so \(h_{\mathrm{top}}(\mathcal{Y}_m)=h_{\mathrm{top}}(X_\alpha)=0\).
-
-A word of length \(n\) in the \(m\)-block presentation corresponds to a word of
-length \(n+m-1\) in \(X_\alpha\), and the relabeling \(\widetilde B_m\) does
-not change word counts. Therefore
-\[
-p_{\mathcal{Y}_m}(n)=p_{X_\alpha}(n+m-1).
-\]
-Since \(X_\alpha\) is Sturmian, \(p_{X_\alpha}(k)=k+1\) for every \(k\ge 1\),
-which gives \(p_{\mathcal{Y}_m}(n)=n+m\).
-\end{proof}
 
 \noindent
 For the next corollary, write
@@ -1264,30 +1032,8 @@ and define the fiber-uniform lift of a law \(\eta\in\Delta(X_m)\) by
 These lifts are developed systematically in Appendix~\ref{app:fiber-lift}.
 
 \begin{corollary}[Fiber degeneracy on the Sturmian slice]\label{cor:sturmian-pure-degeneracy-ledger}
-Assume \(\beta=\alpha\), and let \(\mu_m^e:=Q_m\pi_m^{\mathrm{fold}}\). Then
-\[
-\KL(\mu_m\|\mu_m^e)
-=
-\mathbb{E}_{\pi_m^{\mathrm{fold}}}\bigl[\log d_m(Y)\bigr].
-\]
-Likewise, for every \(N\ge 1\), if \(\hat\mu_{m,N}^e:=Q_m\hat\pi_{m,N}\), then
-\[
-\KL(\hat\mu_{m,N}\|\hat\mu_{m,N}^e)
-=
-\mathbb{E}_{\hat\pi_{m,N}}\bigl[\log d_m(Y)\bigr].
-\]
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Corollary~4.11.
 \end{corollary}
-
-\begin{proof}
-Corollary~\ref{cor:sturmian-exact-relabeling} gives
-\[
-H(\mu_m)=H(\pi_m^{\mathrm{fold}}),
-\qquad
-H(\hat\mu_{m,N})=H(\hat\pi_{m,N}).
-\]
-Applying Proposition~\ref{prop:fold-entropy-ledger} to \(\mu_m\) and
-\(\hat\mu_{m,N}\) yields the two identities.
-\end{proof}
 
 A microstate form of the same decomposition is recorded in
 Appendix~\ref{app:fiber-lift}.  If \(\mu\) is a law on \(\Omega_m\),
@@ -1309,106 +1055,19 @@ golden-mean shift has the useful additional feature that Parry cylinder weights
 depend only on the two endpoints of the word.
 
 \begin{corollary}[Decomposition relative to the Parry measure]\label{cor:tv-decomposition-parry}
-For every $m,N\ge 1$,
-\[
-\TV(\hat\pi_{m,N},\pi_m)
-\le
-2m\,D_N^*(\alpha;x_0)+\TV(\pi_m^{\mathrm{fold}},\pi_m).
-\]
-If \(\beta=\alpha\), one may replace \(2m\) by \(m+1\).
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Corollary~5.1.
 \end{corollary}
-
-\begin{proof}
-Theorem~\ref{thm:tv-certificate-hist} gives
-$\TV(\hat\pi_{m,N},\pi_m^{\mathrm{fold}})\le 2mD_N^*(\alpha;x_0)$, and the
-triangle inequality completes the proof.
-\end{proof}
 
 \subsection{Parry identity and support minima}
 
 \begin{definition}[R\'enyi entropy and divergence]\label{def:renyi-entropy-divergence}
-Let \(E\) be a finite set. For a probability law \(\nu\) on \(E\), define
-\[
-H_q(\nu):=
-\begin{cases}
-\log |\supp(\nu)|,
-& q=0,\\[0.4em]
-\dfrac{1}{1-q}\log\!\Bigl(\sum_{x\in E}\nu(x)^q\Bigr),
-& q\in(0,\infty)\setminus\{1\},\\[0.8em]
--\sum_{x\in E}\nu(x)\log \nu(x),
-& q=1,\\[0.4em]
--\log \max_{x\in E}\nu(x),
-& q=\infty.
-\end{cases}
-\]
-For probability laws \(\nu\) and \(\rho\) on \(E\), define
-\[
-D_q(\nu\|\rho):=
-\begin{cases}
--\log \rho(\supp(\nu)),
-& q=0,\\[0.4em]
-\dfrac{1}{q-1}\log\!\Bigl(\sum_{x\in E}\nu(x)^q\rho(x)^{1-q}\Bigr),
-& q\in(0,\infty)\setminus\{1\},\\[0.8em]
-\KL(\nu\|\rho),
-& q=1,\\[0.4em]
-\log \max_{x:\,\nu(x)>0}\dfrac{\nu(x)}{\rho(x)},
-& q=\infty,
-\end{cases}
-\]
-with the convention \(0\log 0:=0\), and with \(D_q(\nu\|\rho):=\infty\) for
-\(q>0\) if \(\nu\) is not absolutely continuous with respect to \(\rho\).
+For the \(H_q\) and \(D_q\) conventions used below, see
+\cite{MaZhang2026FoldedHistogramsSIADS}, Definition~5.2.
 \end{definition}
 
 \begin{theorem}[Exact divergence identity relative to the Parry measure]\label{thm:parry-kl-identity}
-Let \(\nu\) be a probability measure on \(X_m\), and define the endpoint masses
-\[
-\eta_{ij}(\nu):=\nu\bigl(\{u\in X_m:u_1=i,\ u_m=j\}\bigr),
-\qquad i,j\in\{0,1\}.
-\]
-If, with the convention \(0\log 0:=0\),
-\[
-H(\nu):=-\sum_{u\in X_m}\nu(u)\log \nu(u)
-\]
-denotes the Shannon entropy of \(\nu\), then
-\[
-\KL(\nu\|\pi_m)
-=
-m\log\varphi-H(\nu)-\log\pi(0)
-{}+(\eta_{11}(\nu)-\eta_{00}(\nu))\log\varphi.
-\]
-Consequently,
-\[
-m\log\varphi-H(\nu)-\log\pi(0)-\log\varphi
-\le
-\KL(\nu\|\pi_m)
-\le
-m\log\varphi-H(\nu)-\log\pi(0)+\log\varphi.
-\]
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Theorem~5.3.
 \end{theorem}
-
-\begin{proof}
-By Proposition~\ref{prop:parry-endpoint-collapse},
-\[
-\log \pi_m(u)
-=
-\log\pi(0)-m\log\varphi
-{}+\bigl(\mathbf{1}_{\{u_1=0\}}-\mathbf{1}_{\{u_m=1\}}\bigr)\log\varphi.
-\]
-Therefore
-\[
-\begin{aligned}
-\KL(\nu\|\pi_m)
-&=
-\sum_{u\in X_m}\nu(u)\log\frac{\nu(u)}{\pi_m(u)}\\
-&=
--H(\nu)-\sum_{u\in X_m}\nu(u)\log\pi_m(u)\\
-&=
-m\log\varphi-H(\nu)-\log\pi(0)
-{}+\bigl(\eta_{11}(\nu)-\eta_{00}(\nu)\bigr)\log\varphi.
-\end{aligned}
-\]
-Since \(\eta_{11}(\nu)-\eta_{00}(\nu)\in[-1,1]\), the two-sided bound follows.
-\end{proof}
 
 \begin{remark}[Endpoint collapse]\label{rem:endpoint-collapse-specificity}
 Theorem~\ref{thm:parry-kl-identity} depends essentially on
@@ -1420,292 +1079,26 @@ case.
 \end{remark}
 
 \begin{corollary}[No fold-entropy loss on the Sturmian slice]\label{cor:no-fold-entropy-loss}
-Assume \(\beta=\alpha\). Then
-\[
-\KL(\pi_m^{\mathrm{fold}}\|\pi_m)
-=
-m\log\varphi-H(\mu_m)-\log\pi(0)
-{}+\bigl(\eta_{11}(\pi_m^{\mathrm{fold}})
--\eta_{00}(\pi_m^{\mathrm{fold}})\bigr)\log\varphi.
-\]
-Likewise, for every \(N\ge 1\),
-\[
-\KL(\hat\pi_{m,N}\|\pi_m)
-=
-m\log\varphi-H(\hat\mu_{m,N})-\log\pi(0)
-{}+\bigl(\eta_{11}(\hat\pi_{m,N})
--\eta_{00}(\hat\pi_{m,N})\bigr)\log\varphi.
-\]
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Corollary~5.5.
 \end{corollary}
-
-\begin{proof}
-Apply Theorem~\ref{thm:parry-kl-identity} with
-\(\nu=\pi_m^{\mathrm{fold}}\) and \(\nu=\hat\pi_{m,N}\), and use
-Corollary~\ref{cor:sturmian-exact-relabeling} to replace
-\(H(\pi_m^{\mathrm{fold}})\) by \(H(\mu_m)\) and
-\(H(\hat\pi_{m,N})\) by \(H(\hat\mu_{m,N})\).
-\end{proof}
 
 \begin{proposition}[Order-uniform R\'enyi window relative to the Parry measure]
 \label{prop:parry-renyi-window}
-For every probability law \(\nu\) on \(X_m\) and every \(q\in[0,\infty]\),
-\[
-m\log\varphi-H_q(\nu)-\log\pi(0)-\log\varphi
-\le
-D_q(\nu\|\pi_m)
-\le
-m\log\varphi-H_q(\nu)-\log\pi(0)+\log\varphi.
-\]
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Proposition~5.6.
 \end{proposition}
-
-\begin{proof}
-For \(q=1\), this is Theorem~\ref{thm:parry-kl-identity}. For \(q=0\), let
-\(S:=\supp(\nu)\). Proposition~\ref{prop:parry-endpoint-collapse} gives
-\[
-\pi(0)\varphi^{-(m+1)}
-\le
-\pi_m(u)
-\le
-\pi(0)\varphi^{-(m-1)}
-\qquad (u\in X_m),
-\]
-and therefore
-\[
-|S|\pi(0)\varphi^{-(m+1)}
-\le
-\pi_m(S)
-\le
-|S|\pi(0)\varphi^{-(m-1)}.
-\]
-Since \(D_0(\nu\|\pi_m)=-\log \pi_m(S)\) and \(H_0(\nu)=\log|S|\), the
-displayed bounds follow.
-
-For \(q=\infty\), the same pointwise bounds on \(\pi_m(u)\) imply
-\[
-\frac{\varphi^{m-1}}{\pi(0)}\max_{u\in X_m}\nu(u)
-\le
-\max_{u:\,\nu(u)>0}\frac{\nu(u)}{\pi_m(u)}
-\le
-\frac{\varphi^{m+1}}{\pi(0)}\max_{u\in X_m}\nu(u).
-\]
-Taking logarithms and using \(H_\infty(\nu)=-\log\max_u \nu(u)\) gives the
-claim.
-
-Now fix \(q\in(0,\infty)\setminus\{1\}\). By
-Proposition~\ref{prop:parry-endpoint-collapse},
-\[
-\pi_m(u)
-=
-\pi(0)\varphi^{-m+\theta(u)},
-\qquad
-\theta(u):=\mathbf{1}_{\{u_1=0\}}-\mathbf{1}_{\{u_m=1\}}\in[-1,1].
-\]
-Hence
-\[
-\sum_{u\in X_m}\nu(u)^q\pi_m(u)^{1-q}
-=
-\pi(0)^{1-q}\varphi^{m(q-1)}
-\sum_{u\in X_m}\nu(u)^q\varphi^{(1-q)\theta(u)}.
-\]
-Because \(\theta(u)\in[-1,1]\), one has
-\[
-\varphi^{-|1-q|}\sum_{u\in X_m}\nu(u)^q
-\le
-\sum_{u\in X_m}\nu(u)^q\varphi^{(1-q)\theta(u)}
-\le
-\varphi^{|1-q|}\sum_{u\in X_m}\nu(u)^q.
-\]
-Taking logarithms, dividing by \(q-1\), and using the definition of \(H_q\)
-gives the same two-sided bound with error at most \(\log\varphi\).
-\end{proof}
 
 \begin{proposition}[Support conditioning for R\'enyi divergence]
 \label{prop:renyi-support-conditioning}
-Let \(E\) be finite, let \(\rho\) be a probability law on \(E\), and let
-\(S\subset \supp(\rho)\) satisfy \(\rho(S)>0\). Writing
-\(\rho^S:=\rho(\cdot\mid S)\), every probability law \(\nu\) on \(E\) with
-\(\supp(\nu)\subset S\) satisfies
-\[
-D_q(\nu\|\rho)
-=
-D_q(\nu\|\rho^S)-\log \rho(S)
-\qquad (q\in[0,\infty]).
-\]
-Consequently,
-\[
-\inf_{\substack{\nu\in\Delta(E)\\ \supp(\nu)\subset S}} D_q(\nu\|\rho)
-=
--\log \rho(S)
-\qquad (q\in[0,\infty]).
-\]
-If \(q\in(0,\infty]\), the minimizer is unique and equals \(\rho^S\). If
-\(q=0\), the minimizers are exactly the laws whose support is \(S\).
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Proposition~5.7.
 \end{proposition}
 
-\begin{proof}
-For \(q=1\), the identity is the usual conditioning formula for relative
-entropy. For \(q=0\),
-\[
-D_0(\nu\|\rho)
-=
--\log \rho(\supp(\nu))
-=
--\log \rho^S(\supp(\nu))-\log \rho(S)
-=
-D_0(\nu\|\rho^S)-\log \rho(S).
-\]
-For \(q=\infty\),
-\[
-D_\infty(\nu\|\rho)
-=
-\log\max_{x:\,\nu(x)>0}\frac{\nu(x)}{\rho(x)}
-=
-\log\max_{x:\,\nu(x)>0}\frac{\nu(x)}{\rho(S)\rho^S(x)}
-=
-D_\infty(\nu\|\rho^S)-\log \rho(S).
-\]
-Finally, for \(q\in(0,\infty)\setminus\{1\}\),
-\[
-\sum_{x\in E}\nu(x)^q\rho(x)^{1-q}
-=
-\sum_{x\in S}\nu(x)^q\bigl(\rho(S)\rho^S(x)\bigr)^{1-q}
-=
-\rho(S)^{1-q}\sum_{x\in S}\nu(x)^q(\rho^S(x))^{1-q},
-\]
-which gives the claimed identity after taking logarithms and dividing by
-\(q-1\).
-
-For every \(q>0\), the standard nonnegativity \(D_q(\nu\|\rho^S)\ge 0\) shows
-that \(D_q(\nu\|\rho)\ge -\log\rho(S)\). Equality holds exactly when
-\(D_q(\nu\|\rho^S)=0\), namely when \(\nu=\rho^S\). For \(q=0\),
-\[
-D_0(\nu\|\rho^S)=-\log \rho^S(\supp(\nu))\ge 0,
-\]
-with equality if and only if \(\rho^S(\supp(\nu))=1\), equivalently
-\(\supp(\nu)=S\).
-\end{proof}
-
 \begin{lemma}[Endpoint class counts]\label{lem:endpoint-class-counts}
-With the Fibonacci convention fixed above, for \(m\ge 2\), let
-\[
-X_m^{ij}:=\{u\in X_m:u_1=i,\ u_m=j\},
-\qquad i,j\in\{0,1\}.
-\]
-Then
-\[
-|X_m^{00}|=F_m,\qquad
-|X_m^{01}|=|X_m^{10}|=F_{m-1},\qquad
-|X_m^{11}|=F_{m-2}.
-\]
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Lemma~5.8.
 \end{lemma}
 
-\begin{proof}
-The admissible length-\(m\) words in \(X_m\) are the paths of length \(m-1\) in
-the golden-mean graph with adjacency matrix
-\[
-A=\begin{pmatrix}1&1\\1&0\end{pmatrix}.
-\]
-For the standard Fibonacci extension above,
-\[
-A^n=
-\begin{pmatrix}
-F_{n+1} & F_n\\
-F_n & F_{n-1}
-\end{pmatrix}
-\qquad (n\ge 1).
-\]
-Hence the number of admissible words of length \(m\) with endpoints \((i,j)\) is
-\((A^{m-1})_{ij}\), which gives the displayed formulas.
-\end{proof}
-
 \begin{theorem}[Support-constrained minima]\label{thm:parry-support-barrier}
-Let \(m\ge 2\) and \(1\le k\le F_{m+2}\). Define
-\[
-M_m(k):=\max\{\pi_m(S):S\subset X_m,\ |S|\le k\}.
-\]
-Then
-\[
-M_m(k)=
-\begin{cases}
-k\,\pi(0)\varphi^{-(m-1)},
-& 1\le k\le F_m,\\[0.4em]
-F_m\pi(0)\varphi^{-(m-1)}+(k-F_m)\pi(0)\varphi^{-m},
-& F_m<k\le F_m+2F_{m-1},\\[0.4em]
-1-(F_{m+2}-k)\pi(0)\varphi^{-(m+1)},
-& F_m+2F_{m-1}<k\le F_{m+2}.
-\end{cases}
-\]
-Moreover,
-\[
-\inf_{\substack{\nu\in\Delta(X_m)\\ |\supp(\nu)|\le k}}D_q(\nu\|\pi_m)
-=
--\log M_m(k),
-\qquad q\in[0,\infty],
-\]
-and
-\[
-\inf_{\substack{\nu\in\Delta(X_m)\\ |\supp(\nu)|\le k}}\TV(\nu,\pi_m)
-=
-1-M_m(k).
-\]
-If \(q\in(0,\infty]\), the R\'enyi infimum is attained uniquely by conditioning
-\(\pi_m\) on a maximizing set \(S\subset X_m\); equivalently, one takes all
-words from the heaviest endpoint classes until the budget \(k\) is exhausted.
-If \(q=0\), the minimizers are exactly the laws whose support is such a
-maximizing set. The same conditioned Parry laws attain the TV infimum.
+See \cite{MaZhang2026FoldedHistogramsSIADS}, Theorem~5.9.
 \end{theorem}
-
-\begin{proof}
-By Proposition~\ref{prop:parry-endpoint-collapse}, every word in \(X_m^{00}\) has
-Parry weight \(\pi(0)\varphi^{-(m-1)}\), every word in \(X_m^{01}\cup X_m^{10}\)
-has weight \(\pi(0)\varphi^{-m}\), and every word in \(X_m^{11}\) has weight
-\(\pi(0)\varphi^{-(m+1)}\). These three values are strictly ordered. Together
-with Lemma~\ref{lem:endpoint-class-counts}, this implies that the largest
-possible Parry mass of a \(k\)-point subset is obtained greedily by exhausting
-the endpoint classes in the order
-\[
-X_m^{00},\qquad X_m^{01}\cup X_m^{10},\qquad X_m^{11},
-\]
-which gives the formula for \(M_m(k)\).
-
-Now let \(S\subset X_m\) and let \(\nu\) be supported on \(S\). By
-Proposition~\ref{prop:renyi-support-conditioning},
-\[
-D_q(\nu\|\pi_m)
-\ge
--\log \pi_m(S)
-\qquad (q\in[0,\infty]),
-\]
-with equality for the conditioned law \(\pi_m^S:=\pi_m(\cdot\mid S)\), and
-with uniqueness when \(q\in(0,\infty]\). Therefore
-\[
-\inf_{\substack{\nu\in\Delta(X_m)\\ |\supp(\nu)|\le k}}D_q(\nu\|\pi_m)
-=
--\log\max_{\substack{S\subset X_m\\ |S|\le k}}\pi_m(S)
-=
--\log M_m(k)
-\]
-for every \(q\in[0,\infty]\). The characterization of minimizers follows from
-the same proposition.
-
-For total variation, if \(\nu\) is supported on \(S\), then
-\[
-\TV(\nu,\pi_m)
-\ge
-\pi_m(S^c)
-=
-1-\pi_m(S).
-\]
-Equality holds for \(\nu=\pi_m^S\), since then
-\[
-\TV(\pi_m^S,\pi_m)
-=
-\frac12\sum_{u\in X_m}\bigl|\pi_m^S(u)-\pi_m(u)\bigr|
-=
-1-\pi_m(S).
-\]
-Taking the best support set \(S\) gives the total-variation formula.
-\end{proof}
 
 \begin{corollary}[Complexity-divergence law]\label{cor:exact-complexity-divergence-law}
 Let \(m\ge 2\) and \(1\le k\le F_m\). Then
