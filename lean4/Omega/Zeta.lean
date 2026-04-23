@@ -113,6 +113,7 @@ import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiComovingLeyangEndpointSquareRoot
 import Omega.Zeta.XiLogDefectPotentialPoissonPrimitive
+import Omega.Zeta.XiLocalizedSolenoidPeriodicGrowthMaxScale
 import Omega.Zeta.XiCompactifiedDyadicDepthLowerBound
 import Omega.Zeta.XiScaleMellinNoNonzeroImagPeriod
 import Omega.Zeta.XiRhIffLatticeComovingDefect

@@ -65,6 +65,7 @@ import Omega.GroupUnification.ParryRigidity
 import Omega.GroupUnification.PatiSalamGlobalFormRigidity
 import Omega.GroupUnification.PrimeRegisterNormOneIdeleCoherence
 import Omega.GroupUnification.SMSignatureCyclicDivides6
+import Omega.GroupUnification.SMZeckendorfLieAlgebraRigidity
 import Omega.GroupUnification.SMUpliftResidualMediatorM7
 import Omega.GroupUnification.SMSquareResidualRigidityM6
 import Omega.GroupUnification.SecondOrder
@@ -98,4 +99,5 @@ import Omega.GroupUnification.Window6SU4EmbeddingRigidity
 import Omega.GroupUnification.Window6SplitExtremalDistanceBridge
 import Omega.GroupUnification.Window6WeylSymmetryGraphAnnihilation
 import Omega.GroupUnification.Window6VisibleDegree6IsotropyObstruction
+import Omega.GroupUnification.ZeckendorfNoAdjacentStrictInclusionImpossible
 import Omega.GroupUnification.ZeckendorfCarryAbsorptionM9
