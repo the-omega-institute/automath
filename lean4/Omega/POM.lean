@@ -686,6 +686,7 @@ import Omega.POM.S5Recurrence
 import Omega.POM.S5TwoSubsetDegree10
 import Omega.POM.SchurPartitionEnergyEventualQuasiperiodicLinearLaw
 import Omega.POM.SchurPlancherelEnergyIdentity
+import Omega.POM.SchurTomographyByPartitions
 import Omega.POM.SchurTomographyInversePartitionMonomials
 import Omega.POM.SecondOrderCollisionCommonBottleneck
 import Omega.POM.SecondOrderCollisionMinimaxErrSupportBound
