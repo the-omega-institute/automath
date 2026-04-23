@@ -290,6 +290,7 @@ import Omega.POM.FiberSpectrumStieltjesRigidityDeterminantSchatten
 import Omega.POM.FiberStokesEulerBoundaryObservability
 import Omega.POM.FiberSignedIndexMod3
 import Omega.POM.FiberSymmetricOrderVisibleLayerSeparation
+import Omega.POM.FiberToggleInvariantAuditIncomplete
 import Omega.POM.FiberTripleMedianMajority
 import Omega.POM.TorsionSymmetryOrderCompleteClassification
 import Omega.POM.FiberTwoPhaseMixing
@@ -538,6 +539,7 @@ import Omega.POM.ProfiniteAxisChebotarev
 import Omega.POM.ProfiniteCylinderEffectiveN
 import Omega.POM.ProfiniteCylinderCapacity
 import Omega.POM.SyncSubtractedChebotarevCapacity
+import Omega.POM.SyncSubtractedChebotarevWeak
 import Omega.POM.SyncSubtractedChebotarevZeckendorf
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminant2x2FreeEncoding
