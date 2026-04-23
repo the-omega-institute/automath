@@ -703,6 +703,7 @@ import Omega.Conclusion.SmithRamanujanShadowInversion
 import Omega.Conclusion.SmithTruncatedRamanujanAuditIncompleteness
 import Omega.Conclusion.SmithRamanujanShadowSeeds
 import Omega.Conclusion.SoftcoreExceptionalMomentsCombinatorialClosedForm
+import Omega.Conclusion.SoftcoreInversePowerEntrywise
 import Omega.Conclusion.SoftcoreFixedMQrecurrenceAnnihilator
 import Omega.Conclusion.SoftcoreKroneckerSympowerDecomposition
 import Omega.Conclusion.SoftcoreSpectralScaleSeparation
