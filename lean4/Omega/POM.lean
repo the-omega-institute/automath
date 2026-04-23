@@ -553,6 +553,7 @@ import Omega.POM.PositiveNegativeMomentCoupling
 import Omega.POM.PressureConvexity
 import Omega.POM.PressureReflectionInequality
 import Omega.POM.PressureSlopes
+import Omega.POM.SchurTracesDetermineLowMoments
 import Omega.POM.ProfiniteAxisChebotarev
 import Omega.POM.ProfiniteCylinderEffectiveN
 import Omega.POM.ProfiniteCylinderCapacity

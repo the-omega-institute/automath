@@ -200,6 +200,7 @@ import Omega.Zeta.XiTimePart70aGaugeFiberGapFirstOrder
 import Omega.Zeta.XiTimeLengthCocycle
 import Omega.Zeta.XiTimePart70daWindow6AbstractOrbittypeMinimalC12
 import Omega.Zeta.XiTimePart9gaCrossResolutionAffineRigidity
+import Omega.Zeta.XiTimePart9gHolographicPrefixIsometryOnLine
 import Omega.Zeta.XiTimePart9zoFibonacciCosineZerosWeylLaw
 import Omega.Zeta.XiTimePart9zoaZeroBlockMaxfiberImpotence
 import Omega.Zeta.XiTimePart9zoStarPerronDegreeQuadratic
