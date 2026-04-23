@@ -57,6 +57,7 @@ import Omega.SyncKernelWeighted.MertensEven
 import Omega.SyncKernelWeighted.MobiusErrorPropagation
 import Omega.SyncKernelWeighted.MuPochhammerNecklaceDirichletPolylog
 import Omega.SyncKernelWeighted.MuPochhammerNecklaceExpansion
+import Omega.SyncKernelWeighted.MuPochhammerDecomposition
 import Omega.SyncKernelWeighted.OnlineDelayFromPlocal
 import Omega.SyncKernelWeighted.ParallelAdditionZeroTempParetoFrontier
 import Omega.SyncKernelWeighted.PressureAnalyticRadius
