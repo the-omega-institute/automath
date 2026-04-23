@@ -677,8 +677,46 @@ the empirical laws of \(A(u)\) and \(B(u)\) is bounded by the empirical mass of
 \end{proof}
 
 \begin{proposition}[Residuals relative to the Parry measure]\label{prop:multiscale-residual-parry-bound}
-See \cite{MaZhang2026FoldedHistogramsSIADS}, Proposition~3.5.
+Let \(\pi_m\) be the length-\(m\) Parry block law on \(X_m\). Then, for every
+\(m,N\ge1\),
+\[
+E_{m,N}
+\le
+\TV(\hat\pi_{m,N},\pi_m)+\TV(\hat\pi_{m+1,N},\pi_{m+1}).
+\]
 \end{proposition}
+
+\begin{proof}
+The Parry family is projectively consistent:
+\[
+\pi_m=(\rho_{m+1\to m})_*\pi_{m+1}.
+\]
+Hence
+\[
+\begin{aligned}
+E_{m,N}
+&=
+\TV\!\left(\hat\pi_{m,N},(\rho_{m+1\to m})_*\hat\pi_{m+1,N}\right)\\
+&\le
+\TV(\hat\pi_{m,N},\pi_m)
++
+\TV\!\left(\pi_m,(\rho_{m+1\to m})_*\hat\pi_{m+1,N}\right)\\
+&=
+\TV(\hat\pi_{m,N},\pi_m)
++
+\TV\!\left((\rho_{m+1\to m})_*\pi_{m+1},
+(\rho_{m+1\to m})_*\hat\pi_{m+1,N}\right).
+\end{aligned}
+\]
+Total variation does not increase under pushforward by a deterministic map, so
+\[
+\TV\!\left((\rho_{m+1\to m})_*\pi_{m+1},
+(\rho_{m+1\to m})_*\hat\pi_{m+1,N}\right)
+\le
+\TV(\pi_{m+1},\hat\pi_{m+1,N}).
+\]
+Substituting this estimate proves the claim.
+\end{proof}
 
 \begin{corollary}[Residual comparison bound]
 \label{cor:multiscale-residual-audit-bound}
@@ -1710,8 +1748,132 @@ the constant-mass class \(X_m^{00}\), that conditioned law is uniform.
 
 \begin{theorem}[Optimal injective relabeling of the realized Sturmian law]
 \label{thm:optimal-injective-relabeling}
-See \cite{MaZhang2026FoldedHistogramsSIADS}, Theorem~5.11.
+Assume \(\beta=\alpha\). For \(m\ge1\), let
+\[
+\mathcal I_m(\alpha):=
+\{\iota:S_m(\alpha)\to X_m:\ \iota\text{ is injective}\},
+\]
+and for \(\iota\in\mathcal I_m(\alpha)\) write
+\[
+\nu_\iota:=\iota_*\mu_m.
+\]
+If \(m\ge6\), then for every \(q\in[0,\infty]\),
+\[
+\inf_{\iota\in\mathcal I_m(\alpha)}D_q(\nu_\iota\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_q(\mu_m).
+\]
+Every injection with image contained in \(X_m^{00}\) attains this value. For
+every \(q<\infty\), these are exactly the optimal injections. Since
+\(|X_m^{00}|=F_m\), such placements exist if and only if \(m\ge6\).
 \end{theorem}
+
+\begin{proof}
+Fix \(\iota\in\mathcal I_m(\alpha)\), and put \(\nu:=\nu_\iota\). Since
+\(\iota\) is injective on the \(m+1\)-point Sturmian support \(S_m(\alpha)\),
+it only relabels the atoms of \(\mu_m\). Therefore
+\[
+H_q(\nu)=H_q(\mu_m)
+\qquad (q\in[0,\infty]).
+\]
+
+Set
+\[
+c_{00}:=\pi(0)\varphi^{-(m-1)}.
+\]
+By Proposition~\ref{prop:parry-endpoint-collapse},
+\[
+\pi_m(u)=c_{00}\tau(u),
+\qquad
+\tau(u)\in\{1,\varphi^{-1},\varphi^{-2}\},
+\]
+and \(\tau(u)=1\) exactly on \(X_m^{00}\).
+
+First let \(q\in(0,\infty)\setminus\{1\}\). Then
+\[
+\begin{aligned}
+D_q(\nu\|\pi_m)
+&=
+\frac{1}{q-1}
+\log\!\left(\sum_{u\in X_m}\nu(u)^q(c_{00}\tau(u))^{1-q}\right)\\
+&=
+-\log c_{00}-H_q(\nu)
++
+\frac{1}{q-1}
+\log\!\left(
+\frac{\sum_{u\in X_m}\nu(u)^q\tau(u)^{1-q}}
+{\sum_{u\in X_m}\nu(u)^q}
+\right).
+\end{aligned}
+\]
+Because \(0<\tau(u)\le1\) for every \(u\), the last term is nonnegative. It
+vanishes if and only if \(\tau(u)=1\) on \(\supp(\nu)\), equivalently
+\(\supp(\nu)\subset X_m^{00}\). Hence
+\[
+D_q(\nu\|\pi_m)
+\ge
+(m-1)\log\varphi-\log\pi(0)-H_q(\mu_m),
+\]
+with equality precisely when \(\iota(S_m(\alpha))\subset X_m^{00}\).
+
+For \(q=1\), Theorem~\ref{thm:parry-kl-identity} gives
+\[
+\begin{aligned}
+\KL(\nu\|\pi_m)
+&=
+m\log\varphi-\log\pi(0)-H_1(\nu)
++
+\bigl(\eta_{11}(\nu)-\eta_{00}(\nu)\bigr)\log\varphi\\
+&=
+(m-1)\log\varphi-\log\pi(0)-H_1(\mu_m)\\
+&\quad
++
+\bigl(\eta_{01}(\nu)+\eta_{10}(\nu)+2\eta_{11}(\nu)\bigr)\log\varphi.
+\end{aligned}
+\]
+The correction term is nonnegative and vanishes exactly when
+\(\eta_{01}(\nu)=\eta_{10}(\nu)=\eta_{11}(\nu)=0\), that is, exactly when
+\(\supp(\nu)\subset X_m^{00}\).
+
+For \(q=0\), \(\nu\) has support size \(m+1\), so
+\[
+D_0(\nu\|\pi_m)
+=
+-\log\pi_m(\supp\nu)
+\ge
+-\log\bigl((m+1)c_{00}\bigr)
+=
+(m-1)\log\varphi-\log\pi(0)-H_0(\mu_m).
+\]
+Equality holds if and only if every point of \(\supp(\nu)\) has Parry mass
+\(c_{00}\), namely when \(\supp(\nu)\subset X_m^{00}\).
+
+For \(q=\infty\),
+\[
+\begin{aligned}
+D_\infty(\nu\|\pi_m)
+&=
+\log\max_{u\in\supp(\nu)}\frac{\nu(u)}{\pi_m(u)}\\
+&\ge
+\log\max_{u\in\supp(\nu)}\frac{\nu(u)}{c_{00}}
+=
+-\log c_{00}-H_\infty(\nu)\\
+&=
+(m-1)\log\varphi-\log\pi(0)-H_\infty(\mu_m).
+\end{aligned}
+\]
+Any injection with image in \(X_m^{00}\) attains equality here as well.
+
+It remains to characterize the admissible range. The Sturmian complexity is
+\(|S_m(\alpha)|=m+1\), while Lemma~\ref{lem:endpoint-class-counts} gives
+\(|X_m^{00}|=F_m\). Since \(F_5=5<6\) and \(F_6=8\ge7\), and
+\[
+F_{m+1}-(m+2)=\bigl(F_m-(m+1)\bigr)+F_{m-1}-1,
+\]
+an induction on \(m\) shows that \(F_m\ge m+1\) exactly for \(m\ge6\). Thus
+an injective placement inside \(X_m^{00}\) exists exactly in that range, and
+the displayed infimum formula follows.
+\end{proof}
 
 \begin{remark}[Injective relabeling and support budgets]
 \label{rem:injective-relabeling-stronger}
@@ -1728,29 +1890,310 @@ the \(O_\alpha(1)\) constants.
 \subsection{Support budgets and bounded-type asymptotics}
 
 \begin{proposition}[Bounded-type Sturmian R\'enyi entropy]\label{prop:bounded-type-sturmian-entropy}
-See \cite{MaZhang2026FoldedHistogramsSIADS}, Proposition~5.13.
+Assume \(\beta=\alpha\), and suppose that the partial quotients of \(\alpha\)
+are bounded by \(A\). Then, for every \(m\ge1\) and every \(q\in[0,\infty]\),
+\[
+\log m-\log\!\bigl(2(A+1)\bigr)
+\le
+H_q(\mu_m)
+\le
+\log(m+1)
+\le
+\log m+\log 2.
+\]
+In particular,
+\[
+H_q(\mu_m)=\log m+O_\alpha(1)
+\qquad (q\in[0,\infty]),
+\]
+uniformly in the R\'enyi order.
 \end{proposition}
 
+\begin{proof}
+Choose \(n\) so that \(q_n\le m<q_{n+1}\). Since the partial quotients are at
+most \(A\),
+\[
+q_{n+1}=a_{n+1}q_n+q_{n-1}\le (A+1)q_n.
+\]
+Proposition~\ref{thm:spg-sturmian-cylinder-measure-continued-fraction-sandwich}
+therefore yields, for every \(u\in S_m(\alpha)\),
+\[
+\mu_m(u)<\frac{2}{q_n}\le \frac{2(A+1)}{m}.
+\]
+Hence
+\[
+H_\infty(\mu_m)
+=
+-\log\max_{u\in S_m(\alpha)}\mu_m(u)
+\ge
+\log m-\log\!\bigl(2(A+1)\bigr).
+\]
+
+The same Sturmian cylinder partition has exactly \(m+1\) nonempty atoms, so
+\[
+H_0(\mu_m)=\log|S_m(\alpha)|=\log(m+1).
+\]
+R\'enyi entropy is monotone decreasing in its order on a finite alphabet, so
+\[
+H_\infty(\mu_m)\le H_q(\mu_m)\le H_0(\mu_m)
+\qquad (q\in[0,\infty]).
+\]
+Combining the preceding bounds proves the claim.
+\end{proof}
+
 \begin{proposition}[Explicit bounded-type R\'enyi window]\label{prop:explicit-bounded-type-kl-window}
-See \cite{MaZhang2026FoldedHistogramsSIADS}, Proposition~5.14.
+Assume \(\beta=\alpha\), and suppose that the partial quotients of \(\alpha\)
+are bounded by \(A\). Then, for every \(m\ge1\) and every \(q\in[0,\infty]\),
+\[
+m\log\varphi-\log(m+1)-\log\pi(0)-\log\varphi
+\le
+D_q(\pi_m^{\mathrm{fold}}\|\pi_m)
+\]
+\[
+\le
+m\log\varphi-\log m-\log\pi(0)
++
+\log\varphi+\log\!\bigl(2(A+1)\bigr).
+\]
+Equivalently,
+\[
+D_q(\pi_m^{\mathrm{fold}}\|\pi_m)
+=
+m\log\varphi-\log m+O_\alpha(1)
+\qquad (q\in[0,\infty]),
+\]
+uniformly in the R\'enyi order.
 \end{proposition}
+
+\begin{proof}
+By Corollary~\ref{cor:no-fold-entropy-loss},
+\[
+H_q(\pi_m^{\mathrm{fold}})=H_q(\mu_m).
+\]
+Apply Proposition~\ref{prop:parry-renyi-window} with
+\(\nu=\pi_m^{\mathrm{fold}}\):
+\[
+m\log\varphi-\log\pi(0)-H_q(\mu_m)-\log\varphi
+\le
+D_q(\pi_m^{\mathrm{fold}}\|\pi_m)
+\]
+\[
+\le
+m\log\varphi-\log\pi(0)-H_q(\mu_m)+\log\varphi.
+\]
+Now substitute the two-sided entropy bounds from
+Proposition~\ref{prop:bounded-type-sturmian-entropy}. Using
+\(H_q(\mu_m)\le \log(m+1)\) in the lower estimate and
+\(H_q(\mu_m)\ge \log m-\log(2(A+1))\) in the upper estimate gives the
+displayed window.
+\end{proof}
 
 \begin{corollary}[Bounded-type injective encodings]
 \label{cor:injective-relabeling-bounded-type}
-See \cite{MaZhang2026FoldedHistogramsSIADS}, Corollary~5.15.
+Assume \(\beta=\alpha\), suppose that the partial quotients of \(\alpha\) are
+bounded by \(A\), and let
+\[
+L_q(m):=\inf_{\iota\in\mathcal I_m(\alpha)}D_q(\iota_*\mu_m\|\pi_m).
+\]
+Then, for every \(m\ge6\) and every \(q\in[0,\infty]\),
+\[
+(m-1)\log\varphi-\log(m+1)-\log\pi(0)
+\le
+L_q(m)
+\]
+\[
+\le
+(m-1)\log\varphi-\log m-\log\pi(0)
++
+\log\!\bigl(2(A+1)\bigr).
+\]
+Hence
+\[
+L_q(m)=m\log\varphi-\log m+O_\alpha(1)
+\qquad (q\in[0,\infty]),
+\]
+uniformly in the R\'enyi order. Moreover,
+\[
+0
+\le
+D_q(\pi_m^{\mathrm{fold}}\|\pi_m)-L_q(m)
+\le
+2\log\varphi.
+\]
 \end{corollary}
+
+\begin{proof}
+The exact injective-placement formula from
+Theorem~\ref{thm:optimal-injective-relabeling} gives
+\[
+L_q(m)
+=
+(m-1)\log\varphi-\log\pi(0)-H_q(\mu_m).
+\]
+Applying Proposition~\ref{prop:bounded-type-sturmian-entropy} to
+\(H_q(\mu_m)\) yields the two-sided estimate for \(L_q(m)\).
+
+Since \(\pi_m^{\mathrm{fold}}\) itself is an injective relabeling of
+\(\mu_m\) by Corollary~\ref{cor:sturmian-exact-relabeling},
+\[
+L_q(m)\le D_q(\pi_m^{\mathrm{fold}}\|\pi_m).
+\]
+Subtracting the exact formula for \(L_q(m)\) from the upper bound in
+Proposition~\ref{prop:parry-renyi-window}, again with
+\(\nu=\pi_m^{\mathrm{fold}}\), gives
+\[
+D_q(\pi_m^{\mathrm{fold}}\|\pi_m)-L_q(m)\le 2\log\varphi.
+\]
+\end{proof}
 
 \begin{theorem}[Lossless deterministic maps]
 \label{thm:lossless-coarse-graining-envelope}
-See \cite{MaZhang2026FoldedHistogramsSIADS}, Theorem~5.16.
+Assume \(\beta=\alpha\), suppose that the partial quotients of \(\alpha\) are
+bounded by \(A\), and let
+\[
+T_m:S_m(\alpha)\longrightarrow X_m
+\]
+be injective. Put \(\nu_m:=(T_m)_*\mu_m\). Then, for every \(m\ge1\) and every
+\(q\in[0,\infty]\),
+\[
+m\log\varphi-\log(m+1)-\log\pi(0)-\log\varphi
+\le
+D_q(\nu_m\|\pi_m)
+\]
+\[
+\le
+m\log\varphi-\log m-\log\pi(0)
++
+\log\varphi+\log\!\bigl(2(A+1)\bigr).
+\]
+Equivalently,
+\[
+D_q(\nu_m\|\pi_m)=m\log\varphi-\log m+O_\alpha(1)
+\qquad (q\in[0,\infty]),
+\]
+uniformly in the R\'enyi order.
 \end{theorem}
+
+\begin{proof}
+Because \(T_m\) is injective on \(S_m(\alpha)\), it is a relabeling of the
+realized Sturmian law. Hence
+\[
+H_q(\nu_m)=H_q(\mu_m)
+\qquad (q\in[0,\infty]).
+\]
+Apply Proposition~\ref{prop:parry-renyi-window} with \(\nu=\nu_m\), and then
+substitute the entropy bounds from
+Proposition~\ref{prop:bounded-type-sturmian-entropy}. This gives the stated
+two-sided window and the \(m\log\varphi-\log m+O_\alpha(1)\) asymptotic.
+\end{proof}
 
 \subsection{Primitive-SFT asymptotic extension}
 
 \begin{theorem}[Primitive SFT support asymptotics]
 \label{thm:primitive-sft-renyi-barrier}
-See \cite{MaZhang2026FoldedHistogramsSIADS}, Theorem~5.17.
+Let \(\Sigma_A\) be a primitive one-step shift of finite type with adjacency
+matrix \(A\), Perron eigenvalue \(\lambda=e^h>1\), and Parry \(n\)-block law
+\(\pi_n^A\). Write \(\mathcal L_n(\Sigma_A)\) for the set of admissible
+length-\(n\) words. Then there exist constants \(c_A,C_A>0\) such that
+\[
+c_A e^{-nh}\le \pi_n^A(w)\le C_A e^{-nh}
+\qquad (w\in\mathcal L_n(\Sigma_A),\ n\ge1).
+\]
+If
+\[
+K_A:=\max\{|\log c_A|,|\log C_A|\},
+\]
+then, for every \(\nu\in\Delta(\mathcal L_n(\Sigma_A))\), every \(n\ge1\), and
+every \(q\in[0,\infty]\),
+\[
+nh-H_q(\nu)-K_A
+\le
+D_q(\nu\|\pi_n^A)
+\le
+nh-H_q(\nu)+K_A.
+\]
 \end{theorem}
+
+\begin{proof}
+Let \(\ell,r>0\) be left and right Perron--Frobenius eigenvectors of \(A\),
+normalized by \(\sum_i \ell_i r_i=1\). The Parry measure of a one-step
+primitive SFT satisfies
+\[
+\pi_n^A(w_0\cdots w_{n-1})
+=
+\ell_{w_0}r_{w_{n-1}}\lambda^{-(n-1)}
+\]
+for every admissible word \(w_0\cdots w_{n-1}\)
+\cite{Parry1964IntrinsicMarkovChains,LindMarcus1995}. Therefore
+\[
+\pi_n^A(w)=b_w e^{-nh},
+\qquad
+b_w:=\lambda\,\ell_{w_0}r_{w_{n-1}}.
+\]
+Because the state set is finite and \(\ell,r\) are strictly positive, one may
+choose
+\[
+c_A:=\min_i \lambda\ell_i r_i,
+\qquad
+C_A:=\max_i \lambda\ell_i r_i,
+\]
+which gives the displayed comparability.
+
+Now fix \(\nu\in\Delta(\mathcal L_n(\Sigma_A))\). For
+\(q\in(0,\infty)\setminus\{1\}\),
+\[
+\begin{aligned}
+D_q(\nu\|\pi_n^A)
+&=
+\frac{1}{q-1}
+\log\!\left(\sum_w \nu(w)^q(b_w e^{-nh})^{1-q}\right)\\
+&=
+nh-H_q(\nu)
++
+\frac{1}{q-1}
+\log\!\left(
+\frac{\sum_w \nu(w)^q b_w^{1-q}}
+{\sum_w \nu(w)^q}
+\right).
+\end{aligned}
+\]
+Since every \(b_w\in[c_A,C_A]\), the last term lies in \([-K_A,K_A]\).
+
+For \(q=1\),
+\[
+\KL(\nu\|\pi_n^A)
+=
+\sum_w \nu(w)\log\frac{\nu(w)}{b_we^{-nh}}
+=
+nh-H_1(\nu)-\sum_w \nu(w)\log b_w,
+\]
+and the final average again lies in \([-K_A,K_A]\).
+
+For \(q=0\), if \(S:=\supp(\nu)\), then
+\[
+|S|c_A e^{-nh}\le \pi_n^A(S)\le |S|C_A e^{-nh},
+\]
+so
+\[
+D_0(\nu\|\pi_n^A)
+=
+-\log\pi_n^A(S)
+=
+nh-H_0(\nu)+O_A(1),
+\]
+with error bounded by \(K_A\).
+
+For \(q=\infty\),
+\[
+D_\infty(\nu\|\pi_n^A)
+=
+\log\max_{w\in\supp(\nu)}\frac{\nu(w)}{b_we^{-nh}}
+=
+nh-H_\infty(\nu)+O_A(1),
+\]
+and the same bound by \(K_A\) follows from \(b_w\in[c_A,C_A]\). This proves
+the theorem.
+\end{proof}
 
 \begin{remark}[Asymptotic nature of the primitive-SFT statement]
 \label{rem:primitive-sft-no-finite-m-claim}
@@ -1763,13 +2206,77 @@ envelope \(M_m(k)\) or support-constrained optimizers.
 
 \begin{theorem}[Primitive SFT injective placements]
 \label{thm:primitive-sft-injective-barrier}
-See \cite{MaZhang2026FoldedHistogramsSIADS}, Theorem~5.19.
+Let \(\Sigma_A\) be a primitive one-step SFT with entropy \(h>0\), and let
+\(\pi_n^A\) be its Parry \(n\)-block law. Let \(E_n\) be a finite set,
+\(\sigma_n\in\Delta(E_n)\), and let
+\[
+\iota_n:E_n\longrightarrow \mathcal L_n(\Sigma_A)
+\]
+be injective. Put \(\nu_n:=(\iota_n)_*\sigma_n\). Then, with \(K_A\) from
+Theorem~\ref{thm:primitive-sft-renyi-barrier}, for every
+\(q\in[0,\infty]\),
+\[
+nh-H_q(\sigma_n)-K_A
+\le
+D_q(\nu_n\|\pi_n^A)
+\le
+nh-H_q(\sigma_n)+K_A.
+\]
+In particular, any two injective placements of the same source law inside
+\(\mathcal L_n(\Sigma_A)\) have Parry divergences differing by at most
+\(2K_A\), uniformly in \(n\) and in the R\'enyi order.
 \end{theorem}
+
+\begin{proof}
+Because \(\iota_n\) is injective, \(\nu_n\) is just a relabeling of the source
+law:
+\[
+H_q(\nu_n)=H_q(\sigma_n)
+\qquad (q\in[0,\infty]).
+\]
+Applying Theorem~\ref{thm:primitive-sft-renyi-barrier} to \(\nu_n\) gives the
+displayed estimate. The final statement follows by applying the same bound to
+two injective placements of \(\sigma_n\).
+\end{proof}
 
 \begin{corollary}[Low-complexity source comparison]
 \label{cor:low-complexity-source-barrier}
-See \cite{MaZhang2026FoldedHistogramsSIADS}, Corollary~5.20.
+Let \(\Sigma_A\) be a primitive one-step SFT with entropy \(h>0\), let
+\(\sigma_n\in\Delta(E_n)\), and let
+\[
+\iota_n:E_n\longrightarrow \mathcal L_n(\Sigma_A)
+\]
+be injective. Put \(\nu_n:=(\iota_n)_*\sigma_n\).
+
+If
+\[
+H_q(\sigma_n)=\log n+O(1)
+\qquad (q\in[0,\infty]),
+\]
+uniformly in \(q\), then
+\[
+D_q(\nu_n\|\pi_n^A)=nh-\log n+O_A(1)
+\qquad (q\in[0,\infty]),
+\]
+uniformly in the R\'enyi order.
+
+If instead
+\[
+H_q(\sigma_n)=O(1)
+\qquad (q\in[0,\infty]),
+\]
+uniformly in \(q\), then
+\[
+D_q(\nu_n\|\pi_n^A)=nh+O_A(1)
+\qquad (q\in[0,\infty]).
+\]
 \end{corollary}
+
+\begin{proof}
+This is an immediate reformulation of
+Theorem~\ref{thm:primitive-sft-injective-barrier}. Substitute the assumed
+entropy asymptotics for \(H_q(\sigma_n)\) into the two-sided estimate there.
+\end{proof}
 
 \subsection{Finite-block factors of Sturmian sources}
 
@@ -2103,8 +2610,68 @@ circle maps.
 
 \begin{theorem}[Conjugacy invariance of the comparison]
 \label{thm:audit-conjugacy-invariance}
-See \cite{MaZhang2026FoldedHistogramsSIADS}, Theorem~6.1.
+Let \(f:\TT\to\TT\) be an orientation-preserving circle homeomorphism, and
+assume that there exists a circle homeomorphism \(h\) such that
+\[
+h\circ f=R_\alpha\circ h,
+\qquad
+R_\alpha(y)=y+\alpha \pmod 1,
+\]
+with \(\alpha\) irrational. Fix \(\beta\in(0,1)\), set
+\[
+I:=h^{-1}([0,\beta)),
+\]
+and define the itinerary of \(x_0\in\TT\) by
+\[
+s_t^f:=\mathbf 1_I(f^t(x_0)),
+\qquad t\ge0.
+\]
+If \(y_0:=h(x_0)\), then
+\[
+s_t^f=\mathbf 1_{[0,\beta)}(y_0+t\alpha)
+\qquad (t\ge0).
+\]
+Consequently the empirical microstate laws, folded laws, and projective
+residuals built from the \(f\)-orbit of \(x_0\) coincide exactly with the
+corresponding quantities for the rotation orbit \(y_0+t\alpha\). If one uses
+the \(f\)-invariant measure \(h^{-1}_*\leb\) as the reference law on the
+state space of \(f\), then the limiting microstate and folded laws coincide
+with \(\mu_m\) and \(\pi_m^{\mathrm{fold}}\). In particular every estimate in
+Sections~3--5 transfers verbatim to \(f\) with the same constants. If \(f\) is
+a \(C^2\) circle diffeomorphism with irrational rotation number \(\alpha\), the
+required conjugacy exists by Denjoy's theorem
+\cite{Denjoy1932CourbesTore}.
 \end{theorem}
+
+\begin{proof}
+For every \(t\ge0\),
+\[
+\begin{aligned}
+s_t^f
+&=
+\mathbf 1_I(f^t(x_0))
+=
+\mathbf 1_{[0,\beta)}(h(f^t(x_0)))\\
+&=
+\mathbf 1_{[0,\beta)}(R_\alpha^t(h(x_0)))
+=
+\mathbf 1_{[0,\beta)}(y_0+t\alpha).
+\end{aligned}
+\]
+Thus the entire symbolic sequence generated by \(f\) agrees term-by-term with
+the rotation coding of \(y_0\). Every length-\(m\) block, every folded block,
+and every finite-sample histogram is therefore identical in the two models, so
+the empirical microstate laws, empirical folded laws, and projective residuals
+are the same.
+
+For the limiting laws, the conjugacy pushes the \(f\)-invariant measure
+\(h^{-1}_*\leb\) to Lebesgue measure on the rotation model. Hence the
+length-\(m\) block law generated by \(f\) with respect to \(I\) is exactly the
+rotation law \(\mu_m\), and its folded pushforward is
+\(\pi_m^{\mathrm{fold}}\). Every theorem proved earlier depends only on these
+symbolic laws and on the common itinerary, so the same statements hold for
+\(f\) without any change in constants.
+\end{proof}
 
 For example, consider the standard circle map
 \[
