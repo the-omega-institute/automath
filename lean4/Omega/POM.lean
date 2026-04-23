@@ -771,6 +771,7 @@ import Omega.POM.TowerDefectPinskerBound
 import Omega.POM.ToyRh
 import Omega.POM.ToyRh2TorsionSource
 import Omega.POM.TypeclassDiagonalCouplingSeeds
+import Omega.POM.TypeclassDiagonalCouplingScalarization
 import Omega.POM.TypeclassDualDerivative
 import Omega.POM.TypeclassDiagonalMassMonotone
 import Omega.POM.TypeclassKeepResampleChannel

@@ -270,6 +270,8 @@ import Omega.Zeta.XiOffcriticalCountBoundByIntegratedDefect
 import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiWindow6C3CyclicFiberTrisection
 import Omega.Zeta.XiWindow6GroupQuotientIsotropyStrata
+import Omega.Zeta.XiWindow6GapLedgerInvariants
+import Omega.Zeta.XiWindow6MinrepZeckendorfSignatureInjection
 import Omega.Zeta.XiWindow6WeylInvariantBestTwoOrbitCompression
 import Omega.Zeta.XiWindow6URFirstReturnTimeClosedForm
 import Omega.Zeta.XiChainInteriorIncidenceAlgebraMobiusInversion
