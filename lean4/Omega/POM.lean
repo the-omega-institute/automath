@@ -39,6 +39,7 @@ import Omega.POM.AitkenDelta2SquareConvergence
 import Omega.POM.AnomSingleMomentCompleteEquivalence
 import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.WreathArtinFactorization
+import Omega.POM.WmKlToUniform
 import Omega.POM.BCDiscreteJacobianStrictification
 import Omega.POM.BCBianchi
 import Omega.POM.BCChainDefectEqualsEscortCurvatureSum

@@ -63,6 +63,7 @@ import Omega.Zeta.XiTimePart76SmithSurjectiveModuliPrimeSieve
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiFiniteDefectRhScanTraceEquivalence
+import Omega.Zeta.XiFoldbinEvenWindowParitySectionCenterIntersection
 import Omega.Zeta.XiFiniteKernelZetaRationalDecidability
 import Omega.Zeta.FiniteQuotientPhaseCompressionPrecisionLowerBound
 import Omega.Zeta.XiFiniteFrontierCertificate
