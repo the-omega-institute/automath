@@ -23,6 +23,7 @@ import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
 import Omega.POM.AddCollisionSpectrumRenyiMonotone
 import Omega.POM.AdditiveFoldCollisionConvolutionFourier
 import Omega.POM.HiddenBitJumpProbabilityClosedForm
+import Omega.POM.HiddenBitMixedMomentCluster
 import Omega.POM.InjectivizationSideinfoExactAlphabet
 import Omega.POM.HankelSyndromeHNFModelFree
 import Omega.POM.S2RankExact
