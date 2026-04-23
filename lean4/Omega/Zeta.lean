@@ -118,6 +118,7 @@ import Omega.Zeta.XiZeroTempComparability
 import Omega.Zeta.XiZeroTemperatureFourstateDeterminantStateMinimality
 import Omega.Zeta.XiTerminalZmEllipticWeightNCorrespondenceBidegreeDelta
 import Omega.Zeta.XiPrimeRegisterHistoryInverseLimit
+import Omega.Zeta.XiPrimeRegisterIdempotentUniqueNormalForm
 import Omega.Zeta.XiPrimeShellQuasiOrthogonality
 import Omega.Zeta.XiPrimeSliceNontrivialLayerExactMinimality
 import Omega.Zeta.XiPiPowerSmithComplementarity
@@ -203,6 +204,7 @@ import Omega.Zeta.XiTimePart57bFreezingFirstContactThreshold
 import Omega.Zeta.XiTimePart57bbFreezingGroundstateSubsetEquidistribution
 import Omega.Zeta.XiTimePart60ab2LogcmShiftProjector
 import Omega.Zeta.XiTimePart60abWindow6ZeroBlockHalfscaleInformationImprovement
+import Omega.Zeta.XiReverseKLChi2OptimalUnderLowerBound
 import Omega.Zeta.XiTimePart70aUniformAverageLogdegTwoState
 import Omega.Zeta.XiTimePart70aGaugeFiberGapFirstOrder
 import Omega.Zeta.XiTimeLengthCocycle
