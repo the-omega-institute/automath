@@ -453,6 +453,7 @@ import Omega.POM.MultiplicativeChainRuleFinite
 import Omega.POM.MultiplicityBinetTwoParameterNormalForm
 import Omega.POM.MultiplicityCompositionExactConditionalIid
 import Omega.POM.MultiplicityCompositionLogconvexLambdaq
+import Omega.POM.MultiplicityCompositionQ1Markov
 import Omega.POM.MultiplicityCompositionPartCountGeneralqLLT
 import Omega.POM.MultiplicityCompositionMomentShiftLaw
 import Omega.POM.NoComputableSufficientSliceSelector

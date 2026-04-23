@@ -700,6 +700,7 @@ import Omega.Conclusion.ZGFiniteShadowDeterminesTruncatedMarkovProtocol
 import Omega.Conclusion.PrimorialBodycodeUnionPoleResidueSelection
 import Omega.Conclusion.ZeckendorfCrossResolution
 import Omega.Conclusion.ZeckendorfEulerPoissonBoundary
+import Omega.Conclusion.FactorialPotentialPositiveTemperaturePressureCollapse
 import Omega.Conclusion.ZeckendorfEulerWrappedPoissonFourier
 import Omega.Conclusion.ZeckendorfEulerReindexing
 import Omega.Conclusion.ZeckendorfEulerSeeds
