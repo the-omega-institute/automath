@@ -234,6 +234,7 @@ import Omega.POM.DiagonalRateSeparationSpectralResidue
 import Omega.POM.DiagonalRateCoarsegrainingBounds
 import Omega.POM.DiagonalRateTensorUpperBound
 import Omega.POM.SympowerHankelPolynomialUpperBound
+import Omega.POM.SympowerSqrtBoundInstability
 import Omega.POM.DiagonalRateUniformSynergyInequality
 import Omega.POM.DiagonalCollapseQuadraticFreeEnergy
 import Omega.POM.DoubleLimit

@@ -580,6 +580,7 @@ import Omega.Zeta.MellinUnitarySlice
 import Omega.Zeta.MellinUnitarySliceUnique
 import Omega.Zeta.MinimalAuditChainPrimeSupport
 import Omega.Zeta.XiTerminalZmExteriorSquareCurveGenus2
+import Omega.Zeta.XiTerminalZmExteriorSquareFiniteRamificationIndexIdeal
 import Omega.Zeta.XiChainInteriorBooleanFlagClosedForm
 import Omega.Zeta.Near1KappaInftyC1StrictIneq
 import Omega.Zeta.NecklaceCorrection
