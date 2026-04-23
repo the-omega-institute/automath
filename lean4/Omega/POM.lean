@@ -13,6 +13,7 @@ import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
 import Omega.POM.AddCollisionSpectrumRenyiMonotone
 import Omega.POM.AdditiveFoldCollisionConvolutionFourier
 import Omega.POM.HiddenBitJumpProbabilityClosedForm
+import Omega.POM.HankelSyndromeHNFModelFree
 import Omega.POM.HiddenBitJumpCollisionIsomorphism
 import Omega.POM.HiddenBitComplementFixedpointBSplitDichotomy
 import Omega.POM.HiddenBitWatataniIndexElement
