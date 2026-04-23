@@ -441,6 +441,63 @@ s>D_0L_h+\log_2\!\bigl((1-\varepsilon_m)^{-1}\bigr)
 \]
 的整数 \(s\)，该有限分辨率对象必为 \(s\)-sticky。
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{proposition}[表观随机审计的有限测试稳定账本]\label{prop:distill-euclid-elements-frt-finite-test-stability-ledger}
+\textbf{Dependency status: conditional audit.}
+取有限测试族
+\[
+\mathcal T_{\rm blk}\subset
+\{(m,\varepsilon,\ell,q):m\ge1,\ \ell\ge1,\ q\ge2\}
+\]
+与
+\[
+\mathcal T_{\rm mix}\subset
+\{(m,q):m\ge1,\ q\ge1\},
+\]
+其中所有出现的 \(\Gamma_q^{(\ell)}(m,\varepsilon)\) 与 \(\Xi_q^{(0,1)}(m)\) 均按定义 \ref{def:frt-block-collision-gap} 与定义 \ref{def:frt-normalized-mixed-collision-similarity} 解释。定义该有限测试账本的残差预算为
+\[
+\mathfrak R(\mathcal T_{\rm blk},\mathcal T_{\rm mix})
+:=\max\left(
+\{0\}\cup
+\{|\Gamma_q^{(\ell)}(m,\varepsilon)|:(m,\varepsilon,\ell,q)\in\mathcal T_{\rm blk}\}
+\cup
+\{1-\Xi_q^{(0,1)}(m):(m,q)\in\mathcal T_{\rm mix}\}
+\right).
+\]
+则：
+\begin{enumerate}
+  \item 若 \(\mathcal T_{\rm blk}\subseteq\mathcal T'_{\rm blk}\) 且 \(\mathcal T_{\rm mix}\subseteq\mathcal T'_{\rm mix}\)，则
+  \[
+  \mathfrak R(\mathcal T_{\rm blk},\mathcal T_{\rm mix})
+  \le
+  \mathfrak R(\mathcal T'_{\rm blk},\mathcal T'_{\rm mix});
+  \]
+  \item 对任意有理容忍阈值 \(\eta\in\QQ_{\ge0}\)，该有限测试族全部通过
+  \[
+  |\Gamma_q^{(\ell)}(m,\varepsilon)|\le\eta,
+  \qquad
+  1-\Xi_q^{(0,1)}(m)\le\eta
+  \]
+  当且仅当
+  \[
+  \mathfrak R(\mathcal T_{\rm blk},\mathcal T_{\rm mix})\le\eta;
+  \]
+  \item 若 \((\mathcal T^{(R)}_{\rm blk},\mathcal T^{(R)}_{\rm mix})_{R\ge1}\) 是递增的有限测试账本列，则
+  \[
+  R\longmapsto
+  \mathfrak R(\mathcal T^{(R)}_{\rm blk},\mathcal T^{(R)}_{\rm mix})
+  \]
+  单调不降。若该数列对所有 \(R\) 均不超过 \(\eta\)，则并集中的每一个已声明有限测试均以阈值 \(\eta\) 通过。
+\end{enumerate}
+该结论只是有限测试稳定账本；它不声称未声明的块长度、分箱或机制对已经满足全局独立性或完整随机基线。
+\end{proposition}
+\begin{proof}
+第一条由最大值取在更大集合上立得。第二条是最大值定义的直接等价：最大残差不超过 \(\eta\) 当且仅当每个被列入账本的残差均不超过 \(\eta\)。第三条由第一条应用于递增测试族得到单调性；若所有有限阶段的最大残差都不超过 \(\eta\)，任取并集中的一个测试，它属于某个有限阶段，故在该阶段已经通过。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 由命题 \ref{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-freezing-forces-sticky-or-groundstate-proliferation} 的逆否结论，若同一 carrier 映射 \(\gamma_{m,h}\) 上的 \(X_m\) 为 \(s\)-non-sticky，则最大纤维层在 coarse carrier 上必须满足
 \[

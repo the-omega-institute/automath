@@ -344,6 +344,37 @@ W=
 这些量都必须由有限有理或整数数据给出，使第三方验证器能在实现无关意义下复核拒绝的必要性。
 \end{definition}
 
+% --- Distillation writeback ---
+\begin{proposition}[边界半径阈值的区间认证正规形]\label{prop:distill-euclid-elements-boundary-radius-interval-normal-form}
+\textbf{Dependency status: conditional audit.}
+沿用命题 \ref{prop:typed-address-biaxial-completion-boundary-blindspot} 的记号。设半径端审计并不直接给出真实阈值 \(r_\rho\)，而只给出有理区间证书
+\[
+\mathsf R_\rho=(\underline r_\rho,\overline r_\rho)\in\QQ^2,
+\qquad
+0<\underline r_\rho\le r_\rho\le \overline r_\rho<1.
+\]
+则半径端只能作如下三值判定：
+\begin{enumerate}
+  \item 若 \(\varrho_{\max}\le \underline r_\rho\)，则必有 \(\varrho_{\max}\le r_\rho\)，半径端可输出 \(\mathrm{RadBlind}\) 失败见证；
+  \item 若 \(\varrho_{\max}>\overline r_\rho\)，则必有 \(\varrho_{\max}>r_\rho\)，半径阈值已被穿过，但这只关闭半径盲区，不替代 dyadic 深度端或端点热核端；
+  \item 若 \(\underline r_\rho<\varrho_{\max}\le\overline r_\rho\)，则半径端处于 \(\mathrm{RadUndec}\) 区间不决状态。此时任何只根据下界 \(\underline r_\rho\) 就宣称阈值已穿过的验证器，或任何只根据上界 \(\overline r_\rho\) 就宣称仍在盲区的验证器，都不是对区间证书 \(\mathsf R_\rho\) 声明的健全后端。
+\end{enumerate}
+因此，定义 \ref{def:typed-address-biaxial-completion-boundary-verifier} 的统一离线验证器若使用区间半径证书，必须把 \(\mathrm{RadUndec}\) 作为需要加细区间或返回 \(\mathrm{NULL}\) 的正规失败，而不能把它升级为 \(\mathrm{Accept}\)。
+\end{proposition}
+\begin{proof}
+前两条只是区间包含关系的直接推论。若 \(\varrho_{\max}\le\underline r_\rho\le r_\rho\)，则所有半径采样仍停在阈值半径内侧，故命题 \ref{prop:typed-address-biaxial-completion-boundary-blindspot} 的结构性盲区结论适用。若 \(\varrho_{\max}>\overline r_\rho\ge r_\rho\)，则半径采样已经越过真实阈值。
+
+对第三条，假设 \(\underline r_\rho<\varrho_{\max}\le\overline r_\rho\)。取
+\[
+r^-:=\frac{\underline r_\rho+\varrho_{\max}}2,
+\qquad
+r^+:=\varrho_{\max}.
+\]
+则 \(r^-\in[\underline r_\rho,\overline r_\rho]\) 且 \(\varrho_{\max}>r^-\)，而 \(r^+\in[\underline r_\rho,\overline r_\rho]\) 且 \(\varrho_{\max}\le r^+\)。同一份区间证书因此同时允许一个已穿过阈值的真实半径和一个未穿过阈值的真实半径。任何单侧结论都不由该证书逻辑蕴含。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \subsubsection{小结：破盲是三端闭包，而不是单轴加码}\label{subsubsec:typed-address-biaxial-completion-boundary-summary}
 本节可以压缩为如下闭包原则：
 \[

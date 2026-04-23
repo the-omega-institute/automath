@@ -583,6 +583,58 @@ q\Downarrow A_s,
 \leanverified{paper\_recursive\_addressing\_observer\_indexed\_update\_decides\_not\_create}
 \end{corollary}
 
+% --- Distillation writeback ---
+\begin{proposition}[递归柱事件的有限构造证书与 incidence 账本]\label{prop:distill-euclid-elements-recursive-cylinder-construction-certificate}
+\textbf{Dependency status: construction.}
+沿用命题 \ref{prop:recursive-addressing-refinement} 的记号。给定
+\[
+a=(a_0,\ldots,a_{\ell-1})\in\bigl(\{0,1\}^{r_L}\bigr)^\ell,
+\qquad
+a_j=(a_{j,1},\ldots,a_{j,r_L}),
+\]
+定义有符号原子
+\[
+E_{j,i}(a):=
+\begin{cases}
+T^{-(t+j)}C_i^{(L)},& a_{j,i}=1,\\
+X\setminus T^{-(t+j)}C_i^{(L)},& a_{j,i}=0.
+\end{cases}
+\]
+则有限列表
+\[
+\mathfrak C(L,a,t):=\bigl(E_{j,i}(a)\bigr)_{0\le j<\ell,\ 1\le i\le r_L}
+\]
+是 \(C^{(L+1)}_{a,t}\) 的构造证书，并且其 incidence 账本满足：
+\begin{enumerate}
+  \item 精确构造式
+  \[
+  C^{(L+1)}_{a,t}
+  =\bigcap_{j=0}^{\ell-1}\bigcap_{i=1}^{r_L}E_{j,i}(a);
+  \]
+  \item 若 \(b=(b_0,\ldots,b_{\ell'-1})\) 满足 \(\ell'\ge\ell\) 且 \(b_j=a_j\) 对 \(0\le j<\ell\) 成立，则
+  \[
+  C^{(L+1)}_{b,t}\subseteq C^{(L+1)}_{a,t};
+  \]
+  \item 若 \(a,a'\in(\{0,1\}^{r_L})^\ell\) 且存在 \((j,i)\) 使 \(a_{j,i}\ne a'_{j,i}\)，则
+  \[
+  C^{(L+1)}_{a,t}\cap C^{(L+1)}_{a',t}=\varnothing.
+  \]
+\end{enumerate}
+因此，递归地址化中的派生概念先由有限旧层原子构造，再由包含或相交关系进行谓词化；任何 incidence 断言均可回溯到同一张有限 Boolean 账本。
+\end{proposition}
+\begin{proof}
+第一条只是把条件
+\[
+\mathbf b^{(L)}_{t+j}(x)=a_j
+\qquad(0\le j<\ell)
+\]
+按坐标展开。对固定 \((j,i)\)，等式的第 \(i\) 个坐标为 \(1\) 时要求 \(x\in T^{-(t+j)}C_i^{(L)}\)，为 \(0\) 时要求 \(x\notin T^{-(t+j)}C_i^{(L)}\)。对全部 \((j,i)\) 取有限交即得构造式。
+
+若 \(b\) 延长 \(a\)，则 \(C^{(L+1)}_{b,t}\) 的定义包含 \(C^{(L+1)}_{a,t}\) 的全部原子条件，并额外加入更深时刻的条件，故有包含关系。若 \(a\) 与 \(a'\) 在某个坐标 \((j,i)\) 不同，则一个柱事件要求 \(x\in T^{-(t+j)}C_i^{(L)}\)，另一个要求 \(x\notin T^{-(t+j)}C_i^{(L)}\)，二者不相交。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 由命题 \ref{prop:observer-indexed-common-refinement-decidability} 与命题 \ref{prop:observer-indexed-delayed-classification-not-retrocausal} 联立即得。
 \end{proof}
