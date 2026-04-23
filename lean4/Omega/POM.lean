@@ -26,6 +26,7 @@ import Omega.POM.HiddenBitComplementFixedpointBSplitDichotomy
 import Omega.POM.HiddenBitWatataniIndexElement
 import Omega.POM.HighorderSchurPackageDeterminesFullFiberMultiset
 import Omega.POM.AdjacentPressureConvexity
+import Omega.POM.AitkenCancelsTwoCycle
 import Omega.POM.AitkenDelta2SquareConvergence
 import Omega.POM.AnomSingleMomentCompleteEquivalence
 import Omega.POM.AnomSwapLowerboundAndMomAmplify
