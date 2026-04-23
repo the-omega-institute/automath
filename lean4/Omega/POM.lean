@@ -64,6 +64,7 @@ import Omega.POM.BayesErrorExplicitSharpAsymptotic
 import Omega.POM.BbitOracleCapacityClosedForm
 import Omega.POM.GoldenBinaryChannelContraction
 import Omega.POM.GoldenLikelihoodRatioMartingales
+import Omega.POM.SqQuasiMultiplicative
 import Omega.POM.BeckChevalleyAmgmDefectIdentity
 import Omega.POM.BivariateMomentZetaFredholm
 import Omega.POM.BivariateSystemIdentificationFiniteWindow
