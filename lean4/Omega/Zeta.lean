@@ -633,6 +633,7 @@ import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.LocalInversionDelta
 import Omega.Zeta.LocalizedDirectsumMatrixIsomorphismCriterion
 import Omega.Zeta.LocalizedFiniteIndexLatticeClassification
+import Omega.Zeta.XiLocalizedFiniteIndexProfiniteCompletionClassification
 import Omega.Zeta.LocalizedFiniteIndexLatticeGcdLcmMobius
 import Omega.Zeta.LocalizedFinitePrimeAuditCylinderFactorization
 import Omega.Zeta.LocalizedHomAutCompleteClassification
