@@ -40,6 +40,7 @@ import Omega.Discussion.NullGatedDotproductAddressability
 import Omega.Discussion.RandomnessCostLowerBound
 import Omega.Discussion.RecyclingResiduals
 import Omega.Discussion.SquierCurvatureHolonomyStokes
+import Omega.Discussion.SingularHairHausdorffLowerBound
 import Omega.Discussion.SquierZeroCurvatureStrictification
 import Omega.Discussion.ToeplitzNegativeAtomThreshold
 import Omega.Discussion.ToeplitzNegativeCountThreshold

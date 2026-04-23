@@ -23,6 +23,7 @@ import Omega.Zeta.AdamsBinomialProbeKernelToeplitzPsdEquivalence
 import Omega.Zeta.AdamsBinomialProbeLazyWalkHeatKernel
 import Omega.Zeta.XiAdamsBinomialProbeInversionConditioningPhaseTransition
 import Omega.Zeta.XiAdamsPushforwardToeplitzPrincipalMinorMonotonicity
+import Omega.Zeta.XiAdamsFiberSpectralDimensionMinimum
 import Omega.Zeta.AdamsFiberMobiusInversion
 import Omega.Zeta.AppOffcriticalRadiusCompression
 import Omega.Zeta.DerivedLeyangBfCkRigidity
