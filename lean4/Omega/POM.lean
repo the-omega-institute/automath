@@ -10,6 +10,7 @@ import Omega.POM.A4TNewmanK2ClassNumber
 import Omega.POM.A4TNewmanOcticFieldGaloisS8
 import Omega.POM.A4TNewmanOcticFieldArithmetic
 import Omega.POM.A4TNewmanLinearResponseConstant
+import Omega.POM.A4NewmanU4AlgebraicCertificate
 import Omega.POM.A4TE8TwoResolutionLayerNonembedding
 import Omega.POM.A4TracePrimitiveTwoTerm
 import Omega.POM.CollisionCKClassificationQ234
