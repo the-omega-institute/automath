@@ -4,6 +4,7 @@ import Omega.SPG.BasicProperties
 import Omega.SPG.BayesFiniteMistakesSummable
 import Omega.SPG.BoundaryAffineFiberCycleRank
 import Omega.SPG.BoundaryCycleAuditQueryLowerBound
+import Omega.SPG.BoundaryCycleAuditQueryLowerBoundFull
 import Omega.SPG.BoundaryCycleRankFromEntropy
 import Omega.SPG.BoundaryCylinderGodelizationClarity
 import Omega.SPG.BoundaryDimensionAeStabilization
