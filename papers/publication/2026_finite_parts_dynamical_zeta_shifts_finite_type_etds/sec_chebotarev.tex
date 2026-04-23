@@ -67,8 +67,12 @@ character convention}
   =\frac{1}{|G|}\sum_{g\in G}\phi(g)\overline{\chi_\varrho(g)}.
 \]
 \textbf{Thus every class-indicator expansion and every later Fourier
-readout uses the conjugated character value
-\(\overline{\chi_\varrho(\cdot)}=\chi_\varrho((\cdot)^{-1})\).}
+readout uses the conjugated character value}
+\[
+  \operatorname{conj}\!\bigl(\chi_\varrho(\cdot)\bigr)
+  :=\overline{\chi_\varrho(\cdot)}
+  =\chi_\varrho((\cdot)^{-1}).
+\]
 
 \begin{proposition}[Conjugacy-class expansion]
   \label{prop:class-indicator-expansion}
@@ -112,24 +116,23 @@ readout uses the conjugated character value
 \begin{proposition}[Peter--Weyl determinant factorisation]
   \label{prop:kernel-peter-weyl-block-diagonalisation}
   Let \(\widetilde A\) be the adjacency matrix of the skew-product
-  extension attached to \(\tau\). With the right regular action
-  \(R_h\delta_g=\delta_{gh}\) on \(\CC[G]\), one has
+  extension attached to \(\tau\). Let matrices act on row vectors. With
+  the right regular action \(R_h\delta_g=\delta_{gh}\) on \(\CC[G]\), one
+  has
   \[
     \widetilde A
     =
     \sum_{e\in E_A} E_{o(e),t(e)}\otimes R_{\tau(e)},
   \]
-  and under the Fourier--Wedderburn decomposition of \(\CC[G]\) this
-  operator is similar to the direct sum, over
-  \(\varrho\in\Irr(G)\), of \(\dim\varrho\) copies of the
-  transpose-twisted block
+  and under the Fourier--Wedderburn decomposition
   \[
-    B_\varrho
-    :=
-    \sum_{e\in E_A}
-      E_{o(e),t(e)}\otimes \varrho(\tau(e))^T.
+    \CC[G]\cong \bigoplus_{\varrho\in\Irr(G)}M_{d_\varrho}(\CC),
+    \qquad d_\varrho:=\dim\varrho,
   \]
-  In particular,
+  the operator \(R_h\) becomes, on the \(\varrho\)-summand, right
+  multiplication \(X\mapsto X\varrho(h)\). Equivalently, \(\widetilde A\)
+  is similar to the direct sum, over \(\varrho\in\Irr(G)\), of
+  \(d_\varrho\) copies of \(A_\varrho\). In particular,
   \[
     \det(I-z\widetilde A)
     =
@@ -139,10 +142,11 @@ readout uses the conjugated character value
 \end{proposition}
 
 \begin{proof}
-  Let \(\{\delta_g\}_{g\in G}\) be the standard basis of \(\CC[G]\), and
-  let \(E_{ij}\) denote the matrix units on \(\CC^V\). By definition of
-  the skew product, an edge \(e:i\to j\) sends \((i,g)\) to
-  \((j,g\tau(e))\). Therefore the corresponding adjacency operator on
+  Let \(\{\delta_g\}_{g\in G}\) be the standard row basis of \(\CC[G]\),
+  and let \(E_{ij}\) denote the matrix units acting on row vectors in
+  \(\CC^V\), so that \(e_iE_{ij}=e_j\). By definition of the skew
+  product, an edge \(e:i\to j\) sends \((i,g)\) to \((j,g\tau(e))\).
+  Hence the corresponding adjacency operator on row vectors in
   \(\CC^V\otimes\CC[G]\) is
   \[
     \widetilde A
@@ -151,79 +155,50 @@ readout uses the conjugated character value
   \]
   where \(R_h\delta_g=\delta_{gh}\) is the right regular action.
 
-  Now use the Fourier--Wedderburn isomorphism of the group algebra,
-  written here as
+  For each \(\varrho\in\Irr(G)\), define the Fourier coefficient map
   \[
-    \mathcal F:\CC[G]
-    \cong
-    \bigoplus_{\varrho\in\Irr(G)}
-      \End(V_\varrho),
+    \mathcal F_\varrho:\CC[G]\to M_{d_\varrho}(\CC),
     \qquad
-    \mathcal F(\delta_g)=(\varrho(g))_{\varrho\in\Irr(G)}.
+    \mathcal F_\varrho\!\left(\sum_{g\in G}a_g\delta_g\right)
+    :=\sum_{g\in G}a_g\,\varrho(g).
   \]
-  For \(X=(X_\varrho)_\varrho\) in the right-hand side,
+  Then for every \(h\in G\),
   \[
-    \mathcal F(R_h\delta_g)
-    =(\varrho(gh))_\varrho
-    =(\varrho(g)\varrho(h))_\varrho,
+    \mathcal F_\varrho\bigl((\sum_g a_g\delta_g)R_h\bigr)
+    =\sum_g a_g\,\varrho(gh)
+    =\mathcal F_\varrho\!\left(\sum_g a_g\delta_g\right)\varrho(h).
   \]
-  so \(\mathcal F R_h \mathcal F^{-1}\) acts on each
-  \(\End(V_\varrho)\) by right multiplication:
+  Thus right multiplication by \(h\) becomes right multiplication by
+  \(\varrho(h)\) on the \(\varrho\)-summand. The standard
+  Fourier--Wedderburn theorem gives a vector-space isomorphism
   \[
-    X_\varrho\longmapsto X_\varrho\,\varrho(h).
+    \mathcal F:\CC[G]\xrightarrow{\sim}
+    \bigoplus_{\varrho\in\Irr(G)}M_{d_\varrho}(\CC)
   \]
-  Choose an orthonormal basis of \(V_\varrho\) and identify
-  \(\End(V_\varrho)\cong M_{\dim\varrho}(\CC)\). If we vectorise a matrix
-  by rows, then right multiplication by \(\varrho(h)\) becomes
-  \(\dim\varrho\) copies of \(\varrho(h)^T\). Hence
-  \(\widetilde A\) is similar to the block diagonal operator with
-  \(\dim\varrho\) copies of
+  intertwining the right regular action with the direct sum of the maps
+  \(X\mapsto X\varrho(h)\).
+
+  Now write a matrix \(X\in M_{d_\varrho}(\CC)\) by its rows. Right
+  multiplication \(X\mapsto X\varrho(h)\) acts independently on each row,
+  so it is the direct sum of \(d_\varrho\) copies of \(\varrho(h)\). After
+  tensoring with \(\CC^V\), the operator induced by \(\widetilde A\) on
+  the \(\varrho\)-summand is therefore the direct sum of \(d_\varrho\)
+  copies of
   \[
-    B_\varrho
-    :=
-    \sum_{e\in E_A}
-      E_{o(e),t(e)}\otimes \varrho(\tau(e))^T.
+    \sum_{e\in E_A} E_{o(e),t(e)}\otimes \varrho(\tau(e))
+    =
+    A_\varrho.
   \]
-  Thus
+  Hence \(\widetilde A\) is similar to
+  \(\bigoplus_{\varrho\in\Irr(G)}A_\varrho^{\oplus d_\varrho}\). Taking
+  determinants gives
   \[
     \det(I-z\widetilde A)
     =
     \prod_{\varrho\in\Irr(G)}
-      \det(I-zB_\varrho)^{\dim\varrho}.
+      \det(I-zA_\varrho)^{\dim\varrho},
   \]
-
-  With this right-action convention the Fourier block is therefore
-  transpose-equivalent to \(A_\varrho\), not literally \(A_\varrho\).
-  To pass from \(B_\varrho\) to \(A_\varrho\), expand traces along closed
-  paths exactly as in the proof of the twisted trace identity:
-  for every \(n\ge1\),
-  \[
-    \Tr(B_\varrho^n)
-    =
-    \sum_{x\in\operatorname{Fix}(\sigma^n)}
-      \operatorname{tr}\!\bigl(\varrho(\tau_n(x))^T\bigr)
-    =
-    \sum_{x\in\operatorname{Fix}(\sigma^n)}
-      \chi_\varrho(\tau_n(x))
-    =
-    \Tr(A_\varrho^n),
-  \]
-  because \(\operatorname{tr}(M^T)=\operatorname{tr}(M)\).
-  For \(|z|<\lambda^{-1}\), both \(B_\varrho\) and \(A_\varrho\) satisfy
-  the finite-dimensional logarithmic determinant expansion, so
-  \[
-    \log\det(I-zB_\varrho)^{-1}
-    =
-    \sum_{n\ge1}\frac{\Tr(B_\varrho^n)}{n}z^n
-    =
-    \sum_{n\ge1}\frac{\Tr(A_\varrho^n)}{n}z^n
-    =
-    \log\det(I-zA_\varrho)^{-1}.
-  \]
-  Hence \(\det(I-zB_\varrho)=\det(I-zA_\varrho)\) on a neighbourhood of
-  \(0\), and therefore everywhere, since both sides are polynomials in
-  \(z\). Substituting this into the previous product yields the stated
-  factorisation.
+  as claimed.
 \end{proof}
 
 \begin{proposition}[Twisted spectral-radius bound]
@@ -231,39 +206,46 @@ readout uses the conjugated character value
   For every irreducible unitary representation
   \(\sigma\in\Irr(G)\),
   \[
-    \rho(A_\sigma)\le \rho(\widetilde A)=\lambda.
+    \rho(A_\sigma)\le \lambda.
   \]
 \end{proposition}
 
 \begin{proof}
-  By \Cref{prop:kernel-peter-weyl-block-diagonalisation},
+  Let \(\alpha\) be an eigenvalue of \(A_\sigma\), and choose a non-zero
+  eigenvector \(v=(v_i)_{i\in V}\in\bigoplus_{i\in V}V_\sigma\) with
+  \(A_\sigma v=\alpha v\). With the block convention
   \[
-    \det(tI-\widetilde A)
+    (A_\sigma)_{ij}=\sum_{e:i\to j}\sigma(\tau(e)),
+  \]
+  this means
+  \[
+    \alpha v_i
     =
-    \prod_{\varrho\in\Irr(G)}
-      \det(tI-A_\varrho)^{\dim\varrho}.
+    \sum_j\sum_{e:i\to j}\sigma(\tau(e))v_j
+    \qquad (i\in V).
   \]
-  More explicitly, the preceding proposition shows that with the
-  right-action convention \(\widetilde A\) is similar to the direct sum
-  of the blocks \(B_\varrho\) above, and that
-  \(\det(tI-B_\varrho)=\det(tI-A_\varrho)\). Hence
+  Set \(w_i:=\|v_i\|\). Since \(\sigma(\tau(e))\) is unitary for every
+  edge \(e\),
   \[
-    \spec(A_\sigma)=\spec(B_\sigma)\subset\spec(\widetilde A).
+    |\alpha|\,\|v_i\|
+    =
+    \left\|\sum_j\sum_{e:i\to j}\sigma(\tau(e))v_j\right\|
+    \le \sum_j\sum_{e:i\to j}\|v_j\|
+    =\sum_j A_{ij}w_j.
   \]
-  Every eigenvalue \(\alpha\) of \(A_\sigma\), including \(\alpha=0\),
-  is therefore an eigenvalue of \(\widetilde A\), so
-  \(\rho(A_\sigma)\le \rho(\widetilde A)\).
-
-  To compute \(\rho(\widetilde A)\), observe that admissible
-  length-\(n\) paths in the skew product are in bijection with pairs
-  \((g,\gamma)\), where \(g\in G\) and \(\gamma\) is an admissible
-  length-\(n\) path in the base graph: once \(g\) and \(\gamma\) are
-  fixed, the lift is unique. Thus the number of admissible
-  length-\(n\) paths in the extension is exactly \(|G|\) times the
-  corresponding number in the base. The two shifts therefore have the
-  same topological entropy. For a finite directed multigraph, that
-  entropy is the logarithm of the spectral radius of its adjacency matrix,
-  hence \(\rho(\widetilde A)=\rho(A)=\lambda\).
+  Hence \(w\ge 0\), \(w\neq 0\), and
+  \[
+    |\alpha|\,w\le Aw
+  \]
+  coordinatewise. Let \(u>0\) be a left Perron vector of \(A\), so
+  \(u^\top A=\lambda u^\top\). Multiplying the last inequality by
+  \(u^\top\) gives
+  \[
+    |\alpha|\,u^\top w\le u^\top Aw=\lambda\,u^\top w.
+  \]
+  Because \(u>0\) and \(w\neq 0\), one has \(u^\top w>0\), and therefore
+  \(|\alpha|\le \lambda\). This holds for every eigenvalue \(\alpha\) of
+  \(A_\sigma\), so \(\rho(A_\sigma)\le \lambda\).
 \end{proof}
 
 \noindent
@@ -534,13 +516,16 @@ primitive inversion operates.
     \sum_{n\ge 1}\frac{\Tr(A^n)}{n}
       \bigl(-\log(1-|z|^n)\bigr).
   \]
-  Now \(\Tr(A^n)\le d\,\lambda^n\) and
+  By \Cref{lem:primitive-orbit-asymptotic}, one has
+  \(\Tr(A^n)=\lambda^n+O(\Lambda(A)^n)\), so there is a constant
+  \(C_A>0\) such that \(\Tr(A^n)\le C_A\lambda^n\) for all \(n\ge 1\).
+  Also,
   \[
     -\log(1-|z|^n)\le \frac{|z|^n}{1-|z|^n}\le \frac{|z|^n}{1-|z|},
   \]
   so the last series is bounded by
   \[
-    \frac{d}{1-|z|}
+    \frac{C_A}{1-|z|}
     \sum_{n\ge 1}\frac{(\lambda|z|)^n}{n},
   \]
   which converges for \(|z|<\lambda^{-1}\). Hence absolute
@@ -552,6 +537,10 @@ primitive inversion operates.
     \sum_{m\ge 1}\frac{\mu(m)}{m}
       \sum_{\gamma\in\cP}\sum_{r\ge 1}
         \frac{\phi(\tau(\gamma)^{mr})}{r}z^{mr|\gamma|} \\
+    &=
+    \sum_{\gamma\in\cP}\sum_{s\ge 1}
+      \phi(\tau(\gamma)^s)z^{s|\gamma|}
+      \sum_{m\mid s}\frac{\mu(m)}{m}\frac{1}{s/m} \\
     &=
     \sum_{\gamma\in\cP}\sum_{s\ge 1}
       \frac{\phi(\tau(\gamma)^s)}{s}z^{s|\gamma|}
@@ -753,7 +742,7 @@ but it does not add a new independent main theorem.
     =
     \frac{|C|}{|G|}
       \sum_{\varrho\in\Irr(G)}
-        \chi_\varrho(C^{-1})\,\Pi_\varrho(z),
+        \overline{\chi_\varrho(C)}\,\Pi_\varrho(z),
   \end{equation}
   and therefore
   \begin{equation}\label{eq:class-primitive-coefficients}
@@ -761,7 +750,7 @@ but it does not add a new independent main theorem.
     =
     \frac{|C|}{|G|}
       \sum_{\varrho\in\Irr(G)}
-        \chi_\varrho(C^{-1})\,\pi_{n,\varrho}(A).
+        \overline{\chi_\varrho(C)}\,\pi_{n,\varrho}(A).
   \end{equation}
 \end{proposition}
 
@@ -786,7 +775,7 @@ but it does not add a new independent main theorem.
     =
     \frac{|C|}{|G|\,n}
       \sum_{\varrho\in\Irr(G)}
-        \chi_\varrho(C^{-1})
+        \overline{\chi_\varrho(C)}
         \sum_{m\mid n}\mu(m)
           \sum_{\sigma\in\Irr(G)}
             a_{\varrho,\sigma}^{(m)}
@@ -835,7 +824,7 @@ the trivial Perron-channel contribution.
     \frac{|C|}{|G|}p_n(A)
     +\frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \chi_\varrho(C^{-1})\,\pi_{n,\varrho}(A).
+        \overline{\chi_\varrho(C)}\,\pi_{n,\varrho}(A).
   \]
 \end{lemma}
 
@@ -1079,7 +1068,7 @@ the trivial Perron-channel contribution.
     \frac{|C|}{|G|}\mathcal M(A)
     +\frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \chi_\varrho(C^{-1})\,\Pi_\varrho(\lambda^{-1}).
+        \overline{\chi_\varrho(C)}\,\Pi_\varrho(\lambda^{-1}).
   \end{equation}
   In particular,
   \begin{equation}\label{eq:class-mertens-log}
@@ -1103,7 +1092,7 @@ the trivial Perron-channel contribution.
     \frac{|C|}{|G|}p_n(A)
     +\frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \chi_\varrho(C^{-1})\,\pi_{n,\varrho}(A).
+        \overline{\chi_\varrho(C)}\,\pi_{n,\varrho}(A).
   \]
   The two inputs are
   \[
@@ -1152,7 +1141,7 @@ the trivial Perron-channel contribution.
   representations contribute
   \[
     \frac{|C|}{|G|}
-      \sum_{\varrho\neq\mathbf 1}\chi_\varrho(C^{-1})
+      \sum_{\varrho\neq\mathbf 1}\overline{\chi_\varrho(C)}
       \sum_{n\le N}\pi_{n,\varrho}(A)\lambda^{-n}.
   \]
   For each non-trivial \(\varrho\),
@@ -1189,7 +1178,7 @@ the trivial Perron-channel contribution.
     =
     \frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \chi_\varrho(C^{-1})\,\Pi_\varrho(\lambda^{-1}).
+        \overline{\chi_\varrho(C)}\,\Pi_\varrho(\lambda^{-1}).
   \end{equation}
   Moreover, for every non-trivial \(\varrho\),
   \begin{equation}\label{eq:class-mertens-determinant}
@@ -1257,7 +1246,10 @@ the trivial Perron-channel contribution.
   the Perron eigenvalue from the rest of the spectrum. The corresponding
   Chebotarev asymptotics for finite homogeneous extensions were already
   established by Noorani--Parry
-  \cite{NooraniParry1992ChebotarevShifts}; compare also the earlier
+  \cite{NooraniParry1992ChebotarevShifts}; for further homogeneous-
+  extension background, including ergodicity and weak-mixing criteria
+  with applications to Markov shifts, compare Noorani
+  \cite{Noorani1997HomogeneousExtensionsMarkov}. See also the earlier
   Axiom~A setting of \cite{ParryPollicott1986Chebotarev}, Parry's
   non-abelian Liv\v{s}ic theorem \cite{Parry1999LivsicNonAbelian}, and
   the compact-group Liv\v{s}ic context of
@@ -1318,7 +1310,11 @@ Perron-point coefficients to which the inversion can be applied.
     \sum_{C\subset G}\frac{|C|}{|G|}f(C)\overline{h(C)},
   \]
   so the forward coefficient is
-  \(\chi_\varrho(C^{-1})=\overline{\chi_\varrho(C)}\).
+  \[
+    \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)
+    =\overline{\chi_\varrho(C)}
+    =\chi_\varrho(C^{-1}).
+  \]
 \end{theorem}
 
 \begin{proof}
@@ -1333,15 +1329,13 @@ Perron-point coefficients to which the inversion can be applied.
     =
     \sum_{C\subset G}\frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \chi_\varrho(C^{-1})\Pi_\varrho(\lambda^{-1})\chi_\sigma(C).
+        \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)\,
+        \Pi_\varrho(\lambda^{-1})\chi_\sigma(C).
   \]
   The orthogonality relation
   \[
     \sum_{C\subset G}\frac{|C|}{|G|}
-      \chi_\varrho(C^{-1})\chi_\sigma(C)
-    =
-    \sum_{C\subset G}\frac{|C|}{|G|}
-      \overline{\chi_\varrho(C)}\,\chi_\sigma(C)
+      \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)\,\chi_\sigma(C)
     =\delta_{\varrho,\sigma}
   \]
   yields \eqref{eq:class-mertens-fourier-inversion}.
@@ -1354,7 +1348,8 @@ Perron-point coefficients to which the inversion can be applied.
     =
     \left(\frac{|C|}{|G|}\right)^2
     \left|\sum_{\varrho\neq\mathbf 1}
-      \chi_\varrho(C^{-1})\Pi_\varrho(\lambda^{-1})\right|^2,
+      \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)\,
+      \Pi_\varrho(\lambda^{-1})\right|^2,
   \]
   one obtains
   \[
@@ -1362,7 +1357,8 @@ Perron-point coefficients to which the inversion can be applied.
     =
     \sum_{C\subset G}\frac{|C|}{|G|}
       \left|\sum_{\varrho\neq\mathbf 1}
-        \chi_\varrho(C^{-1})\Pi_\varrho(\lambda^{-1})\right|^2.
+        \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)\,
+        \Pi_\varrho(\lambda^{-1})\right|^2.
   \]
   Expanding the modulus square gives
   \[
@@ -1370,19 +1366,12 @@ Perron-point coefficients to which the inversion can be applied.
       \Pi_\varrho(\lambda^{-1})
       \overline{\Pi_\sigma(\lambda^{-1})}
       \sum_{C\subset G}\frac{|C|}{|G|}
-        \chi_\varrho(C^{-1})\overline{\chi_\sigma(C^{-1})}.
+        \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)\,\chi_\sigma(C).
   \]
-  For unitary representations,
-  \[
-    \overline{\chi_\sigma(C^{-1})}=\chi_\sigma(C),
-  \]
-  so the inner sum is exactly
+  The inner sum is exactly
   \[
     \sum_{C\subset G}\frac{|C|}{|G|}
-      \chi_\varrho(C^{-1})\chi_\sigma(C)
-    =
-    \sum_{C\subset G}\frac{|C|}{|G|}
-      \overline{\chi_\varrho(C)}\,\chi_\sigma(C)
+      \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)\,\chi_\sigma(C)
     =\delta_{\varrho,\sigma}.
   \]
   Therefore only the diagonal terms remain, which
