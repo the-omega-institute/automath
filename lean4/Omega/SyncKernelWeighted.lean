@@ -103,6 +103,7 @@ import Omega.SyncKernelWeighted.RealInput40BFKTheory
 import Omega.SyncKernelWeighted.Bn0EqualsPrimitiveSkeleton
 import Omega.SyncKernelWeighted.RealInput40GroundEntropy
 import Omega.SyncKernelWeighted.RealInput40IsobaricDriftCapacity
+import Omega.SyncKernelWeighted.RealInput40LogMNotJustP
 import Omega.SyncKernelWeighted.RealInput40LengthMertens
 import Omega.SyncKernelWeighted.RealInput40LengthSignL1
 import Omega.SyncKernelWeighted.RealInput40LengthTwistConverge
