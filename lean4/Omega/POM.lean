@@ -596,6 +596,7 @@ import Omega.POM.ReplicaSoftcoreExceptionalPerronHammingMonotone
 import Omega.POM.ReplicaSoftcoreExceptionalSecantEquation
 import Omega.POM.ReplicaSoftcorePerronAngleUniform
 import Omega.POM.ReplicaSoftcoreTemperatureFreeEnergyPhaseTransition
+import Omega.POM.ReplicaSoftcoreWordTracePowerSums
 import Omega.POM.ReplicaSoftcoreWordTraceFibonacciFactorization
 import Omega.POM.ReplicaSoftcoreWordTraceCycleGF
 import Omega.POM.ResidueRefinementJensen

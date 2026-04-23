@@ -31,6 +31,7 @@ import Omega.GroupUnification.GeneralRigidity
 import Omega.GroupUnification.Gibbs
 import Omega.GroupUnification.GapPrimeSquarefreeDirichletFraction
 import Omega.GroupUnification.GutGaugeRenyiConservation
+import Omega.GroupUnification.GutLogCmNoFixedLinearRecurrence
 import Omega.GroupUnification.GroupComplexTimeCoherenceRadius
 import Omega.GroupUnification.GroupJGAlgebraicScaleFiber2Power
 import Omega.GroupUnification.DerivedDualfingerprintFrobeniusConditionalDecoupling
