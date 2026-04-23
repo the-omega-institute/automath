@@ -113,6 +113,7 @@ import Omega.Zeta.XiTerminalZmDihedralDoubleDiscriminantLock
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
 import Omega.Zeta.XiLeyangTwoScaleCrossratioCrossingDrift
+import Omega.Zeta.XiLeyangTwoScaleCrossratioMixingSlope
 import Omega.Zeta.XiLimitDefectPotentialRationalization
 import Omega.Zeta.XiLimitDefectPotentialFourierInjective
 import Omega.Zeta.XiLimitDefectPotentialSpectralTailReadsDeltaMax
