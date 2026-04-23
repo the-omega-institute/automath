@@ -223,6 +223,7 @@ import Omega.POM.DiagonalRateSmallDistortionSynergyGeneratorHomomorphism
 import Omega.POM.DiagonalRateSmallDistortionSavingHalfMomentFold
 import Omega.POM.DiagonalRateSturmCauchyEigenbasis
 import Omega.POM.DiagonalRateRefreshCountRenewalLLNCLT
+import Omega.POM.DiagonalRateRefreshRewardCltVariance
 import Omega.POM.DiagonalRateRefreshCountScgfDerivatives
 import Omega.POM.DiagonalRateTwoOrbitHeavyLightCubic
 import Omega.POM.DiagonalRateRefreshFundamentalMatrixRankoneSet

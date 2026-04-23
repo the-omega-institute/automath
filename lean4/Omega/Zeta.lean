@@ -242,6 +242,7 @@ import Omega.Zeta.XiTimePart60abGaugeConstantNonCfiniteOgfObstruction
 import Omega.Zeta.XiCartesianPowerLeyangDoubleAtomTangentClt
 import Omega.Zeta.XiScanCollisionIllposedness
 import Omega.Zeta.XiScanProfileLpPeakWitness
+import Omega.Zeta.XiOfflineNeumannL2Interaction
 import Omega.Zeta.XiOffcriticalCountBoundByIntegratedDefect
 import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiWindow6C3CyclicFiberTrisection
