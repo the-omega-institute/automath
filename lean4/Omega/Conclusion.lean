@@ -498,6 +498,7 @@ import Omega.Conclusion.LkBulkBoundaryBesselDuality
 import Omega.Conclusion.LkNormalizedZetaOddProjector
 import Omega.Conclusion.LkNdDeterminantZeroTracking
 import Omega.Conclusion.LkCentralBinomialCatalanMoments
+import Omega.Conclusion.TQFTGenusLinearRecurrenceRecovery
 import Omega.Conclusion.TqftGenusHausdorffMomentSequence
 import Omega.Conclusion.TqftGenusLogconvexity
 import Omega.Conclusion.TqftGenusTowerTrivializationCriterion
