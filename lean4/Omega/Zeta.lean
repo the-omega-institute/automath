@@ -211,6 +211,7 @@ import Omega.Zeta.XiTerminalZmGodelPrefixCodeMiDifference
 import Omega.Zeta.XiTerminalZmGodelIntegerTransportSquareAudit
 import Omega.Zeta.XiTerminalZmGodelHorizonFactorizationForgetting
 import Omega.Zeta.XiTerminalZmResolventCubicNoCmMaxEnd
+import Omega.Zeta.GMFibonacciDivisibility
 import Omega.Zeta.XiFarFieldMomentRecursionOrder2Kappa
 import Omega.Zeta.XiScanMinSeparationLocalBilipschitz
 import Omega.Zeta.XiFiniteToOneHolographicAggregationBound
