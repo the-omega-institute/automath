@@ -18,13 +18,17 @@
 \else
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
 \fi
 
 \hypersetup{colorlinks=true,citecolor=blue!60!black,linkcolor=blue!60!black,urlcolor=blue!60!black}
 \setstretch{1.06}
 \setlength{\parskip}{0.3em}
 \setlength{\parindent}{1.2em}
+\newcommand{\RR}{\mathbb{R}}
 
 \begin{document}
 \newcommand{\supplementaryenddocument}{\end{document}}
@@ -32,7 +36,7 @@
 \begin{center}
 {\LARGE\bfseries Supplementary calculations}\par
 \vspace{0.5em}
-{\large for ``Two detector-defined shells from stationary Unruh--DeWitt click records in static KMS spacetimes''}\par
+{\large for ``A conditional note on response-model shells from stationary Unruh--DeWitt click records in static KMS spacetimes''}\par
 \end{center}
 \fi
 
@@ -129,16 +133,60 @@ sub-Poisson Fano limit displayed in the main text.
 
 \section{Ambient residual graph for ratio inversion}
 
+For ambient algebraic radius bookkeeping, write
+\[
+\mathsf e=(\eta,c),\qquad c=(c_1,c_2),
+\]
+and define
+\begin{equation}\label{eq:two-mode-phi-main}
+\Phi_m(\theta,\mathsf e)=R_m(\theta;\eta)-c_m,\qquad
+\Phi=(\Phi_1,\Phi_2).
+\end{equation}
+For the physical detector settings, $c=C$ and
+\[
+\Phi(\theta,(\eta,C))=H(\theta,\eta).
+\]
+Exact generated data at the true parameter are denoted
+\[
+\eta_*=(r_{\varphi,1},r_{{\mathrm{mem}},1},
+        r_{\varphi,2},r_{{\mathrm{mem}},2}),
+\qquad
+\mathsf e_*=(\eta_*,C),
+\]
+and on the fixed-detector slice we write
+\[
+\Phi_C(\theta,\eta)=\Phi(\theta,(\eta,C))=H(\theta,\eta).
+\]
+
+\begin{lemma}[Data-dependent residual graph]
+Let $U_0\subset\RR^2$ and $W_0\subset\RR^q$ be open sets and let
+$G:U_0\times W_0\to\RR^2$ be $C^1$. If $G(\theta_0,w_0)=0$ and
+$D_\theta G(\theta_0,w_0)$ is nonsingular, then there are neighbourhoods
+$U\subset U_0$ of $\theta_0$ and $W\subset W_0$ of $w_0$ and a unique
+$C^1$ map $\Psi:W\to U$ such that $\Psi(w_0)=\theta_0$ and
+\[
+G(\Psi(w),w)=0\qquad(w\in W).
+\]
+After shrinking $U$ and $W$ if necessary, every solution of
+$G(\theta,w)=0$ in $U\times W$ lies on this graph. Freezing the data first
+would give only local uniqueness of a zero of $\theta\mapsto G(\theta,w_0)$;
+the data-to-parameter map is the graph obtained with $w$ retained as the
+parameter.
+\end{lemma}
+
+\begin{proof}
+This is the parameter-dependent implicit function theorem \cite{KrantzParks2002},
+applied with $\theta$ as the unknown and $w$ as the parameter.
+\end{proof}
+
 \begin{corollary}[Ambient residual graph, not a shell-data inverse]\label{cor:ambient-ratio-graph-app-main}
 In the two-mode inverse notation of the main text, let
 \[
-\mathcal E\subset\RR^q,\qquad
-\mathcal D\subset J^4,\qquad
-\Phi:\Theta\times\mathcal E\to\RR^2,
+\mathcal E\subset\mathcal D\times(0,\infty)^2
 \]
-and fix $(\theta_*,\mathsf e_*)$ with $\mathsf e_*=(\eta_*,C)$ and
-$\Phi(\theta_*,\mathsf e_*)=0$. Assume $D_\theta\Phi(\theta_*,\mathsf e_*)$
-is nonsingular.
+be the open algebraic data set on which \eqref{eq:two-mode-phi-main} is
+defined, and fix $(\theta_*,\mathsf e_*)$ with $\Phi(\theta_*,\mathsf e_*)=0$.
+Assume $D_\theta\Phi(\theta_*,\mathsf e_*)$ is nonsingular.
 
 Then there are neighborhoods $U\subset\Theta$ of $\theta_*$ and
 $W\subset\mathcal E$ of $\mathsf e_*$ and a unique $C^1$ map
@@ -161,13 +209,139 @@ there is an identity
 \Phi_C(\Psi_C(\eta),\eta)=0\qquad(\eta\in W_C),
 \]
 and if $\theta\in U$ and $\Phi_C(\theta,\eta)=0$ for some $\eta\in W_C$, then
-$\theta=\Psi_C(\eta)$.
+$\theta=\Psi_C(\eta)$. This is only an ambient residual graph for the two ratio
+equations. It does not assert that the radius quadruples in $W_C$ are physical
+common-core shell data.
 \end{corollary}
 
 \begin{proof}
-The statement is the parameter-dependent implicit function theorem applied to
-the map $\Phi$ at $(\theta_*,\mathsf e_*)$.
+Apply the preceding lemma with $G=\Phi$ and $w=\mathsf e$.
 \end{proof}
+
+\begin{corollary}[Fixed-record local full-shell subset]\label{thm:full-shell-subset-main}
+In the setting of \Cref{cor:ambient-ratio-graph-app-main}, shrink $W_C$ if
+necessary so that the four radii remain in the coordinate range where the
+background family and the response factors are defined. For $\eta\in W_C$ set
+\[
+\theta(\eta)=\Psi_C(\eta),
+\]
+and define the two mode amplitudes along the ratio graph by
+\[
+\mathcal A_m(\eta)=
+\mathcal A_{\varphi,m}(\theta(\eta);\eta)
+=
+\mathcal A_{{\mathrm{mem}},m}(\theta(\eta);\eta),
+\qquad m=1,2,
+\]
+where the equality is the within-mode equality forced by
+$\Phi_C(\theta(\eta),\eta)=0$. Let
+\[
+E_C(\eta)=\mathcal A_1(\eta)-\mathcal A_2(\eta).
+\]
+Then the nearby full common-core shell records in the fixed-detector slice are
+exactly
+\begin{equation}\label{eq:full-shell-subset-main}
+\mathcal P_C
+=
+\{\eta\in W_C:E_C(\eta)=0,\ \mathcal A_1(\eta)>0,
+\text{ and the four radii are exterior-admissible}\}.
+\end{equation}
+The function $E_C$ is $C^1$. In particular, if the exact datum $\eta_*$ is
+exterior-admissible and
+\[
+dE_C(\eta_*)\neq0
+\]
+as a covector on the ambient radius-record space $W_C$, then
+$\mathcal P_C$ is, near $\eta_*$, a nonempty $C^1$ codimension-one submanifold
+of $W_C$. If this transversality fails, the theorem still gives the exact local
+zero-set characterization \eqref{eq:full-shell-subset-main}, but no manifold
+structure is asserted.
+\end{corollary}
+
+\begin{proof}
+For every $\eta\in W_C$, the defining property of the ambient graph gives
+\[
+\Phi_C(\theta(\eta),\eta)=0,
+\]
+which is the pair of physical ratio equations $H_m(\theta(\eta),\eta)=0$.
+\Cref{lem:ratio-admissibility-main} says that each of these two ratio equations
+is equivalent to equality of the ideal-benchmark and memory amplitude estimates
+within the same mode. Hence the displayed definitions of
+$\mathcal A_m(\eta)$ are unambiguous along the graph.
+
+A full common-core shell record requires exactly one positive homogeneous
+hardware prefactor for all four undivided shell equations, together with the
+exterior-range restrictions. Along the ratio graph the two estimates within
+each mode are already equal, so the only remaining cross-mode amplitude
+condition is
+\[
+\mathcal A_1(\eta)=\mathcal A_2(\eta),
+\]
+which is $E_C(\eta)=0$. Positivity of the common amplitude and exterior
+admissibility are the other two conditions in
+\Cref{lem:ratio-admissibility-main}. This proves the set identity
+\eqref{eq:full-shell-subset-main}.
+
+The maps $\Psi_C$, $N$, and $\beta_\infty$ are $C^1$ on the neighbourhoods in
+question, and the amplitude estimates are compositions of $C^1$ functions with
+the smooth exponential function. Therefore $\mathcal A_m$ and $E_C$ are $C^1$.
+At exact generated data, the common-core hypothesis gives
+$E_C(\eta_*)=0$, so $\eta_*\in\mathcal P_C$ after shrinking to preserve
+exterior admissibility and positivity. If $dE_C(\eta_*)\neq0$, the regular
+level-set theorem makes $E_C^{-1}(0)$ a $C^1$ codimension-one submanifold of
+$W_C$ near $\eta_*$. Positivity and exterior admissibility are open conditions,
+so intersecting with them leaves the same local submanifold structure. Without
+the nonvanishing derivative, only the proved zero-set characterization remains.
+\end{proof}
+
+\begin{corollary}[Restriction to full common-core shell records]\label{cor:full-shell-restriction-main}
+In the setting of \Cref{thm:full-shell-subset-main}, let
+$\mathcal P_C\subset W_C$ be the full common-core subset characterized in
+\eqref{eq:full-shell-subset-main}.
+For every $\eta\in\mathcal P_C$, the parameter $\Psi_C(\eta)$ is the unique
+local background parameter in $U$ compatible with the corresponding full
+common-core shell data, and the common amplitude is obtained by evaluating any
+one of the four equal undivided amplitude estimates. Conversely, if
+$\eta\in W_C$ is compatible with full common-core shell equations at some
+$\theta\in U$, then $\theta=\Psi_C(\eta)$ and $\eta\in\mathcal P_C$.
+\end{corollary}
+
+\begin{proof}
+If $\eta\in\mathcal P_C$, then by definition the ratio equations hold at
+$\Psi_C(\eta)$ and the undivided amplitude, positivity, and exterior-range
+checks also hold there. Hence the full shell equations are satisfied with one
+positive common amplitude. If another $\theta\in U$ satisfied the same full
+shell equations, division within each mode would give
+$\Phi_C(\theta,\eta)=0$, so the uniqueness part of
+\Cref{cor:ambient-ratio-graph-app-main} gives $\theta=\Psi_C(\eta)$. The converse is
+the same argument in reverse: full common-core shell equations imply the ratio
+equations and the admissibility checks, hence the local root is $\Psi_C(\eta)$
+and $\eta$ belongs to $\mathcal P_C$.
+\end{proof}
+
+\begin{remark}[Ratio admissibility and amplitude consistency]\label{rem:amplitude-consistency-main}
+Corollary~\ref{thm:two-mode-main},
+\Cref{cor:ambient-ratio-graph-app-main}, and
+\Cref{lem:ratio-admissibility-main} separate checks that are sometimes
+conflated. The fixed-radius map $\mathcal R_{\eta_*}$ contains the two
+ratio-level observables and no unknown common amplitude; the main-text theorem
+is the local inverse for those two values. If the radius record is also varied,
+the only general statement is the ambient residual graph in
+\Cref{cor:ambient-ratio-graph-app-main}. \Cref{cor:full-shell-restriction-main}
+is the step that restricts that graph to full shell data. A candidate
+ratio-level solution is a full common-core solution only if the four undivided
+amplitude estimates
+\[
+\mathcal A_{\varphi,1}(\theta;\eta),\quad
+\mathcal A_{{\mathrm{mem}},1}(\theta;\eta),\quad
+\mathcal A_{\varphi,2}(\theta;\eta),\quad
+\mathcal A_{{\mathrm{mem}},2}(\theta;\eta)
+\]
+are positive and equal to one common value in the exact model. Thus
+amplitude-free ratio inversion means that the amplitude is not needed to solve
+the two ratio equations; it does not mean that arbitrary radius records
+automatically come from one physical detector core.
+\end{remark}
 
 \section{Schwarzschild near-horizon expansions}
 
@@ -200,7 +374,7 @@ C_m=\frac{\Delta\tau_m\Gamma_c(\kappa_{{\mathrm r},m},\Delta\tau_m)}
 {\log\varphi}.
 \]
 The numerical values in the table are generated from the critical-rate branch
-above and the homogeneous lapse-level equations in the article. The local
+above and the homogeneous lapse-level equations in the article. The fixed-record
 two-ratio inverse check treats $(\beta_\infty,M)$ as independent coordinates
 before imposing any Hartle--Hawking relation.
 

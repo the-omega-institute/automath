@@ -1,8 +1,6 @@
-\section{Static KMS backgrounds and shell equations}\label{sec:kms-shells}
+\section{Conditional shell equations in static KMS response models}\label{sec:kms-shells}
 
-Having established the record-level thresholds, we now embed the detector in a specified static KMS response model and formulate the corresponding shell equations.
-
-The construction has two logically distinct parts. First, the record law fixes target rates, namely $\log\varphi/\Delta\tau$ and $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$, before geometry is introduced. Second, a response model assigns a local excitation rate to each static worldline. Only after both steps have been made explicit can a target rate be interpreted as a geometric locus. This section therefore separates the response assumption, the rate-to-locus lemma, and the homogeneous Tolman specialization.
+Having established the record-level thresholds, we now fix a stationary static-KMS response model and ask what level-set statements follow. This section is deliberately conditional. The record law supplies the target rates $\log\varphi/\Delta\tau$ and $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$; a response model supplies the local excitation profile; only their substitution produces a shell equation. No claim is made here that KMS detailed balance alone determines the shell geometry.
 
 Let $N(x)$ be the lapse function of a static spacetime and assume the field is in a global $\beta_\infty$-KMS state for Killing time. Along a static worldline at position $x$, Tolman scaling gives \cite{Tolman1930,TolmanEhrenfest1930}
 \begin{equation}\label{eq:tolman-main}
@@ -16,16 +14,34 @@ W_x(s)=\omega\!\left(\Phi_x(\tau)\Phi_x(\tau-s)\right),
 \qquad
 \widehat W_x(\nu)=\int_{\RR}e^{-i\nu s}W_x(s)\,ds,
 \]
-with the Fourier transform understood in the usual distributional or long-time transition-rate sense.
+with the Fourier transform understood distributionally whenever $W_x$ is not an $L^1$ function.
 
-\begin{assumption}[Long-time switching limit]\label{ass:long-time-switch-main}
-We work with the standard smooth compact-switching protocol used in stationary detector theory: for a smooth nonnegative $\chi\in C_c^\infty(\mathbb R)$ with $\int_{\RR}\chi=1$, let $\chi_T(t)=\chi(t/T)$ and let $H_{g\to e}^{(T)}(x,\Omega)$ and $H_{e\to g}^{(T)}(x,\Omega)$ be the corresponding finite-time first-order transition probabilities for a fixed static worldline through $x$. The long-time rates are defined by
+\begin{assumption}[Stationary response input and KMS strip regularity]\label{ass:long-time-switch-main}
+Fix a static worldline through $x$, a detector gap $\Omega>0$, and a smooth nonnegative switching profile $\chi\in C_c^\infty(\mathbb R)$ with $\int_{\RR}\chi=1$. Let $\chi_T(t)=\chi(t/T)$ and let $H_{g\to e}^{(T)}(x,\Omega)$ and $H_{e\to g}^{(T)}(x,\Omega)$ be the corresponding first-order transition probabilities for a detector with fixed spatial profile and bare coupling $\lambda_c$. Assume:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item The pullback $W_x$ is a tempered distribution on $\RR$, and there is an open interval $I_x\subset\RR$ containing $\pm\Omega$ on which its Fourier transform $\widehat W_x$ is represented by a continuous function.
+\item The long-time stationary detector theorem applies to this worldline and switching family: the limits
 \[
 \Gamma_+(x,\Omega):=\lim_{T\to\infty}\frac{1}{T}H_{g\to e}^{(T)}(x,\Omega),
 \qquad
 \Gamma_-(x,\Omega):=\lim_{T\to\infty}\frac{1}{T}H_{e\to g}^{(T)}(x,\Omega),
 \]
-and we assume this limit exists in the standard sense (the same sense proved in, e.g., \cite{LoukoSatz2008}) and that \(\widehat W_x\) is continuous at \(\nu=\pm\Omega\).
+exist and obey the standard smooth-switching stationary response formulas \cite{LoukoSatz2008,FewsterJuarezLouko2016}.
+\item If the state is $\beta_\infty$-KMS with respect to static Killing time, then with $\beta_{\mathrm{loc}}(x)=\beta_\infty N(x)$ there exists a function $F_x$ holomorphic on the strip
+\[
+S_{\beta_{\mathrm{loc}}}^-=\{z\in\mathbb C:-\beta_{\mathrm{loc}}(x)<\Im z<0\}
+\]
+such that for every closed substrip $-\beta_{\mathrm{loc}}(x)+\delta\le \Im z\le -\delta$ there exist $m_\delta\in\mathbb N$ and $C_\delta>0$ with
+\[
+|F_x(z)|\le C_\delta(1+|\Re z|)^{m_\delta},
+\]
+and the boundary values satisfy
+\[
+\lim_{\epsilon\to0^+}F_x(s-i\epsilon)=W_x(s),\qquad
+\lim_{\epsilon\to0^+}F_x(s-i\beta_{\mathrm{loc}}(x)+i\epsilon)=W_x(-s)
+\]
+in $\mathcal S'(\RR)$.
+\end{enumerate}
 Define the switched effective coupling\footnote{The original bare coupling is $\lambda_c$; the switching convention contributes the fixed factor $\|\chi\|_2^2:=\int_{\mathbb R}\chi(u)^2\,du>0$.} by
 \[
 \lambda_{\mathrm{sw}}^2:=\lambda_c^2\,\|\chi\|_2^2
@@ -33,14 +49,19 @@ Define the switched effective coupling\footnote{The original bare coupling is $\
 and use $\lambda_{\mathrm{sw}}$ in the long-time rate formulas below.
 \end{assumption}
 
-\begin{proposition}[Stationary UDW response]\label{prop:stationary-udw-response-main}
-Fix a static worldline through $x$ and a two-level detector with gap $\Omega>0$, coupling scale $\lambda_c$, and fixed spatial profile. Assume the profile-smeared pullback $W_x$ is stationary, that \Cref{ass:long-time-switch-main} is in force, and that $\widehat W_x(\pm\Omega)$ are finite and continuous. In the stationary weak-coupling long-time limit, the leading excitation and de-excitation rates are
+\begin{proposition}[Stationary UDW response and KMS spectral relation]\label{prop:stationary-udw-response-main}
+Fix a static worldline through $x$ and a two-level detector with gap $\Omega>0$, coupling scale $\lambda_c$, and fixed spatial profile. Assume \Cref{ass:long-time-switch-main}. Then the stationary weak-coupling long-time excitation and de-excitation rates are
 \begin{equation}\label{eq:fourier-rates-main}
 \Gamma_+(x,\Omega)=\lambda_{\mathrm{sw}}^2\widehat W_x(\Omega),
 \qquad
 \Gamma_-(x,\Omega)=\lambda_{\mathrm{sw}}^2\widehat W_x(-\Omega).
 \end{equation}
 If the state is $\beta_\infty$-KMS with respect to static Killing time, then the static pullback is KMS in proper time with inverse temperature $\beta_\infty N(x)$ and
+\begin{equation}\label{eq:kms-spectral-distribution-main}
+\widehat W_x(\nu)=e^{-\beta_\infty N(x)\nu}\widehat W_x(-\nu)
+\qquad\text{in }\mathcal S'(\RR).
+\end{equation}
+In particular, because $\widehat W_x$ is continuous at $\nu=\pm\Omega$,
 \begin{equation}\label{eq:kms-detailed-balance-main}
 \widehat W_x(-\Omega)=e^{\beta_\infty N(x)\Omega}\widehat W_x(\Omega).
 \end{equation}
@@ -63,46 +84,41 @@ gives
 \end{proposition}
 
 \begin{proof}
-For a finite observation time $T$, first-order perturbation theory for the UDW interaction gives the excitation probability
-\[
-P_{g\to e}(T)
-=
-\lambda_c^2\int_0^T\!\int_0^T
-\chi_T(\tau)\chi_T(\tau')
-e^{-i\Omega(\tau-\tau')}W_x(\tau-\tau')\,d\tau\,d\tau'
-+o(\lambda_c^2).
-\]
-Set
-\[
-K_T(s):=\int_{\RR}\chi_T(\tau)\chi_T(\tau+s)\,d\tau,\qquad
-\widetilde K_T(s):=\frac{1}{T}K_T(s)
-=\int_{\RR}\chi(u)\chi\!\left(u+\frac{s}{T}\right)\,du.
-\]
-Stationarity reduces the double integral to
-\[
-\frac{1}{T}P_{g\to e}(T)
-=\lambda_c^2\int_{-T}^{T}\left(1-\frac{|s|}{T}\right)\widetilde K_T(s)e^{-i\Omega s}W_x(s)\,ds
-+o(\lambda_c^2).
-\]
-Under \Cref{ass:long-time-switch-main}, this expression is divided by $T$ and the limit is taken as the switched long-time rate. Because \(\widehat W_x\) is continuous at \(\Omega\), \(\widetilde K_T(s)\to\|\chi\|_2^2\) for fixed $s$ and
-\[
-\sup_{s\in\mathbb R}\bigl|\widetilde K_T(s)\bigr|\le\|\chi\|_2^2.
-\]
-The standard switched Fejér-kernel argument (see \cite{LoukoSatz2008}) then gives
-\[
-\Gamma_+(x,\Omega)=\lambda_c^2\|\chi\|_2^2\widehat W_x(\Omega)
-=\lambda_{\mathrm{sw}}^2\widehat W_x(\Omega).
-\]
-Replacing the detector phase by $e^{+i\Omega(\tau-\tau')}$ gives the de-excitation formula.
+Assumption~\ref{ass:long-time-switch-main}(ii) is exactly the stationary detector input needed for the long-time rate formulas \eqref{eq:fourier-rates-main}; it is the standard smooth-switching stationary response theorem used in detector theory \cite{LoukoSatz2008,FewsterJuarezLouko2016}.
 
-The global Killing-time KMS condition pulls back along a static orbit to the proper-time KMS relation at inverse temperature $\beta_\infty N(x)$. In boundary-value form this is $W_x(s-i\beta_\infty N(x))=W_x(-s)$. Therefore, for $\Omega>0$,
+For the KMS identity, abbreviate $\beta_{\mathrm{loc}}=\beta_\infty N(x)$ and let $\phi\in C_c^\infty(\RR)$. Define the entire function
 \[
-\widehat W_x(-\Omega)
-=\int_{\RR}e^{-i\Omega u}W_x(-u)\,du
-=\int_{\RR}e^{-i\Omega u}W_x(u-i\beta_\infty N(x))\,du
-=e^{\beta_\infty N(x)\Omega}\widehat W_x(\Omega),
+h_\phi(z)=\int_{\RR}e^{-i\nu z}\phi(\nu)\,d\nu.
 \]
-where the last equality is the standard KMS contour shift, or equivalently the KMS spectral relation \cite{HaagHugenholtzWinnink1967,KayWald1991}. Substituting the definition of $\mathcal S_x(\Omega)$ then gives \eqref{eq:kms-rate-main}.
+Because $\phi$ has compact support, $h_\phi$ decays faster than any inverse power uniformly on closed horizontal strips. Together with the polynomial bounds in \Cref{ass:long-time-switch-main}(iii), Cauchy's theorem on rectangles in $S_{\beta_{\mathrm{loc}}}^-$ shows that
+\[
+\int_{\RR}F_x(s-i\eta)\,h_\phi(s-i\eta)\,ds
+\]
+is independent of $\eta\in(0,\beta_{\mathrm{loc}})$. Taking $\eta\downarrow0$ and $\eta\uparrow\beta_{\mathrm{loc}}$, and using the distributional boundary values from \Cref{ass:long-time-switch-main}(iii), yields
+\[
+\langle W_x,h_\phi\rangle
+=
+\langle W_x(-\cdot),h_\phi(\cdot-i\beta_{\mathrm{loc}})\rangle.
+\]
+Since
+\[
+h_\phi(s-i\beta_{\mathrm{loc}})
+=\int_{\RR}e^{-i\nu s}e^{-\beta_{\mathrm{loc}}\nu}\phi(\nu)\,d\nu
+=h_{e^{-\beta_{\mathrm{loc}}(\cdot)}\phi}(s),
+\]
+the preceding identity becomes
+\[
+\langle \widehat W_x,\phi\rangle
+=
+\langle \widehat{W_x(-\cdot)},e^{-\beta_{\mathrm{loc}}(\cdot)}\phi\rangle.
+\]
+Using $\widehat{W_x(-\cdot)}(\nu)=\widehat W_x(-\nu)$ distributionally, we obtain
+\[
+\langle \widehat W_x,\phi\rangle
+=
+\langle e^{-\beta_{\mathrm{loc}}(\cdot)}\widehat W_x(-\cdot),\phi\rangle
+\]
+for all $\phi\in C_c^\infty(\RR)$, hence \eqref{eq:kms-spectral-distribution-main}. Evaluating this identity at $\nu=\Omega$ is legitimate because $\widehat W_x$ is represented by a continuous function near $\pm\Omega$, and this gives \eqref{eq:kms-detailed-balance-main}. Substituting the definition of $\mathcal S_x(\Omega)$ then yields \eqref{eq:kms-rate-main}. For operator-algebraic formulations of the same KMS strip and spectral relation, see \cite{HaagHugenholtzWinnink1967,KayWald1991,BratteliRobinson1997}.
 \end{proof}
 
 Thus the KMS condition fixes the detailed-balance ratio
@@ -116,12 +132,44 @@ with our convention that $\Gamma_+$ is excitation and $\Gamma_-$ is de-excitatio
 Fix a static region $U$ and a detector with positive gap $\Omega$ and fixed spatial profile. For each static worldline $x\in U$, use the stationary weak-coupling rates supplied by \Cref{prop:stationary-udw-response-main}. Assume that the positive-frequency response $\widehat W_x(\Omega)$ is finite and nonzero, and define $\mathcal S_x(\Omega)$ by \eqref{eq:spectral-weight-def-main}. The function $x\mapsto\mathcal S_x(\Omega)$ is specified or calibrated as part of the response model and has the $C^1$ regularity stated in each shell-regularity or inverse result below.
 \end{assumption}
 
+\begin{proposition}[Exact homogeneous model from spatial symmetry]\label{prop:symmetry-homogeneous-main}
+Assume, in addition to \Cref{ass:long-time-switch-main}, that the static region is an ultrastatic spacetime $(\mathbb R\times\Sigma,-dt^2+h)$ and that a group $G$ of spatial isometries acts transitively on a region $U\subset\Sigma$. Suppose the $\beta_\infty$-KMS state $\omega$ is invariant under the induced automorphisms $\alpha_g$ of the field algebra, and that the detector profile at $x=gx_0$ is obtained from one reference profile by rigid transport under $g$. Then
+\[
+W_x(s)=W_{x_0}(s),\qquad
+\widehat W_x(\nu)=\widehat W_{x_0}(\nu),\qquad
+\mathcal S_x(\Omega)=\mathcal S_{x_0}(\Omega)
+\]
+for all $x\in U$. Hence the homogeneous spectral-weight regime holds exactly on $U$.
+
+In particular, for a thermal Klein--Gordon KMS state in Minkowski space with identical translated compactly supported smearing profiles, the one-gap spectral weight is exactly independent of the detector position.
+\end{proposition}
+
+\begin{proof}
+Let $x=gx_0$ with $g\in G$. By construction of the transported detector profile, the smeared detector observable satisfies
+\[
+\Phi_x(\tau)=\alpha_g\!\bigl(\Phi_{x_0}(\tau)\bigr).
+\]
+Using the $G$-invariance of the state,
+\[
+\begin{aligned}
+W_x(s)
+&=\omega\!\left(\Phi_x(\tau)\Phi_x(\tau-s)\right) \\
+&=\omega\!\left(\alpha_g(\Phi_{x_0}(\tau))\,\alpha_g(\Phi_{x_0}(\tau-s))\right) \\
+&=\omega\!\left(\alpha_g(\Phi_{x_0}(\tau)\Phi_{x_0}(\tau-s))\right) \\
+&=\omega\!\left(\Phi_{x_0}(\tau)\Phi_{x_0}(\tau-s)\right)
+=W_{x_0}(s).
+\end{aligned}
+\]
+Taking Fourier transforms gives $\widehat W_x(\nu)=\widehat W_{x_0}(\nu)$, and then \eqref{eq:spectral-weight-def-main} gives $\mathcal S_x(\Omega)=\mathcal S_{x_0}(\Omega)$. In Minkowski thermal equilibrium the spatial translation group is transitive, the thermal state is translation invariant, and rigidly translated detector profiles satisfy the stated covariance, so the same conclusion applies.
+\end{proof}
+
 Under \Cref{ass:kms-response-main}, \eqref{eq:kms-rate-main} is a consequence of the Fourier response formula and the KMS spectral relation. The implication is one-way for the purposes of shell geometry: first a response model supplies the positive-frequency pullback, then the spectral weight in \eqref{eq:spectral-weight-def-main} is computed from it, and only then are the record-selected target rates imposed. If instead one starts with an arbitrary positive stationary excitation profile satisfying KMS detailed balance at the same local inverse temperature, equation~\eqref{eq:kms-rate-main} can be read backwards as the definition of
 \[
 \mathcal S_x(\Omega)=
 \lambda_{\mathrm{sw}}^{-2}\bigl(e^{\beta_\infty N(x)\Omega}-1\bigr)\Gamma_+(x,\Omega).
 \]
 That reverse reading is only a parametrization of the unknown absolute response, not an independent derivation of a detector shell. The content of \Cref{ass:kms-response-main} is therefore not a postulate replacing the transition-rate formula, but the regularity and calibration of the remaining positive factor after the standard response formula has been used. Thus $\mathcal S_x(\Omega)$ is part of the response model, not an inferred geometric invariant. It absorbs the local mode density, detector profile, and any greybody or boundary contribution that remains after the KMS occupation factor has been separated. The homogeneous regime of \Cref{ass:homogeneous-spectral-main} is therefore an explicit calibration regime, not a consequence of KMS thermality. Until that specialization is invoked, all shell statements retain the position dependence of $\mathcal S_x(\Omega)$.
+Proposition~\ref{prop:symmetry-homogeneous-main} gives an explicit detector-field model in which this regime is exact. Section~\ref{sec:inverse} also records a quantitative slow-variation criterion showing that the same regime is recovered asymptotically when the shell separation is small compared with the spatial scale on which $\log \mathcal S_x(\Omega)$ varies.
 
 \begin{unnumberedlemma}[One-gap KMS underdetermination]
 At the fixed-gap rate level used in this section, Tolman scaling and KMS detailed balance do not determine the positive excitation-rate profile. Let $G:U\to(0,\infty)$ be any $C^1$ function. The rates
@@ -146,6 +194,14 @@ Consequently, changing the positive spectral weight changes the target-rate loci
 \begin{proof}
 The displayed ratio of $\Gamma_-^G$ and $\Gamma_+^G$ is immediate. Substituting the displayed $\mathcal S_x^G(\Omega)$ into \eqref{eq:kms-rate-main} gives $\Gamma_+^G(x,\Omega)=G(x)$. Since $G$ was arbitrary among positive $C^1$ functions, the equation $G(x)=\gamma$ has whatever regular level-set geometry the chosen response profile supplies, subject only to the ordinary range and regularity conditions. Thus detailed balance alone cannot select the shell.
 \end{proof}
+
+The point of the underdetermination lemma is methodological. From here through the end of \Cref{sec:inverse}, the manuscript is no longer deriving detector-theoretic consequences of static KMS theory alone; it is recording what follows for a fixed calibrated response function
+\[
+R_\Omega(x)=
+\lambda_{\mathrm{sw}}^2\,
+\frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1}.
+\]
+All shell and inverse statements below should be read in that conditional sense.
 
 Define the positive response function
 \begin{equation}\label{eq:response-function-main}
@@ -207,7 +263,7 @@ dR_\Omega
 The scalar prefactor is strictly negative on $U$, so $dR_\Omega(x_0)$ vanishes exactly when $dN(x_0)$ vanishes.
 \end{proof}
 
-The theorem below applies this lemma to the two record-selected target rates.
+The theorem below is therefore a level-set statement for the fixed response function $R_\Omega$.
 
 \begin{theorem}[Conditional shell loci]\label{thm:shells-general-main}
 Fix a detector design $(\Omega,\lambda_c,\Delta\tau,\kappa_{\mathrm r})$ in a static KMS background with lapse $N(x)>0$ everywhere in the region of interest, and assume the response regularity and calibration in \Cref{ass:kms-response-main}. Assume that $N$ and the specified spectral weight $x\mapsto\mathcal S_x(\Omega)$ are $C^1$ on that region. For this fixed response function $R_\Omega$, the two record benchmarks are equivalent to the following response-level loci.
@@ -219,7 +275,7 @@ Fix a detector design $(\Omega,\lambda_c,\Delta\tau,\kappa_{\mathrm r})$ in a st
 \frac{\lambda_{\mathrm{sw}}^2\mathcal S_x(\Omega)\Delta\tau}{e^{\beta_\infty N(x)\Omega}-1}=\log\varphi
 \right\}.
 \end{equation}
-This is the exact-clock locus for the specified response model. It is a smooth codimension-one hypersurface wherever the gradient of $x\mapsto\lambda_{\mathrm{sw}}^2\mathcal S_x(\Omega)\Delta\tau/(e^{\beta_\infty N(x)\Omega}-1)$ is nonvanishing; otherwise it may fail to be a manifold and we refer to it as the exact-clock locus.
+This is the locus for the ideal benchmark in the specified response model. It is a smooth codimension-one hypersurface wherever the gradient of $x\mapsto\lambda_{\mathrm{sw}}^2\mathcal S_x(\Omega)\Delta\tau/(e^{\beta_\infty N(x)\Omega}-1)$ is nonvanishing; otherwise it may fail to be a manifold and we refer to it as the ideal-benchmark locus.
 
 \item The finite-recovery detector reaches the memory-transition point exactly on the locus
 \begin{equation}\label{eq:shell-mem-general-main}
@@ -236,12 +292,10 @@ This is the memory-transition locus for the specified response model. It is a sm
 \begin{proof}
 For the ideal model, Proposition~\ref{prop:ideal-main} says that the Parry benchmark is equivalent to $\Gamma_+(x,\Omega)\Delta\tau=\log\varphi$, i.e. $R_\Omega(x)=\gamma_\varphi$ with the notation of~\eqref{eq:response-function-main}--\eqref{eq:target-rates-main}. By \Cref{prop:stationary-udw-response-main,ass:kms-response-main}, $\Gamma_+(x,\Omega)$ is the specified function $R_\Omega(x)$, so this condition is exactly \eqref{eq:shell-phi-general-main}. Conversely, any point satisfying \eqref{eq:shell-phi-general-main} has $R_\Omega(x)=\gamma_\varphi$ and hence realizes the ideal record benchmark.
 
-For finite recovery, Proposition~\ref{prop:recovery-main} and \Cref{lem:kernel-factorization-main} say that the memory transition is equivalent to $\Gamma_+(x,\Omega)=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$, i.e. $R_\Omega(x)=\gamma_{\mathrm{mem}}$. With the same fixed calibrated response function, this is exactly \eqref{eq:shell-mem-general-main}, and every point satisfying that equation has an exact $1$-dependent sampled record in the finite-recovery model. The regularity and possible nonexistence statements are then exactly \Cref{lem:response-locus-main} applied to these two target rates. The preceding underdetermination lemma explains why the theorem is not a derivation of $R_\Omega$ from KMS thermality alone: changing $\mathcal S_x(\Omega)$ changes the loci while preserving one-gap detailed balance.
+For finite recovery, \Cref{prop:recovery-main,lem:kernel-factorization-main} say that the memory transition is equivalent to $\Gamma_+(x,\Omega)=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$, i.e. $R_\Omega(x)=\gamma_{\mathrm{mem}}$. With the same fixed calibrated response function, this is exactly \eqref{eq:shell-mem-general-main}, and every point satisfying that equation has an exact $1$-dependent sampled record in the finite-recovery model. The regularity and possible nonexistence statements are then exactly \Cref{lem:response-locus-main} applied to these two target rates. The preceding underdetermination lemma explains why the theorem is not a derivation of $R_\Omega$ from KMS thermality alone: changing $\mathcal S_x(\Omega)$ changes the loci while preserving one-gap detailed balance.
 \end{proof}
 
-Theorem~\ref{thm:shells-general-main} states the shell equations in their natural response-model form. The loci exist as level sets for the specified response function without any homogeneity assumption, but \Cref{lem:response-locus-main} shows exactly what must be checked before they are smooth hypersurfaces. In the calibrated homogeneous spectral-weight regime the defining functions reduce to pure functions of $N(x)$, and both loci are level sets of the lapse function.
-
-Outside the homogeneous regime, the spectral-transport identity in \Cref{cor:spectral-transport-main} controls how the shell-ratio law is modified. The quantitative stability statement in Proposition~\ref{prop:spectral-stability-main} below gives the corresponding two-sided bound when the spectral inhomogeneity is uniformly small.
+Theorem~\ref{thm:shells-general-main} is the main output of this section: once $R_\Omega$ is fixed, the record-selected thresholds become two level sets, and regularity determines whether those level sets are smooth hypersurfaces. The remaining results in this section record the calibrated homogeneous specialization and a simple existence criterion on monotone spherical regions.
 
 \begin{corollary}\label{cor:homogeneous-main}
 Assume that $\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$ on the region under study. Then both shells are pure lapse level sets. Their associated local inverse temperatures are
@@ -264,11 +318,11 @@ so that
 \end{corollary}
 
 \begin{proof}
-With $\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$, the two shell equations contain $x$ only through $\beta_\infty N(x)$. Solving the exact-clock equation for $\beta_\infty N(x)$ gives $\beta_\varphi$, and solving the memory equation gives $\beta_{\mathrm{mem}}$. Hence the loci are the lapse level sets in~\eqref{eq:lapse-level-main}.
+With $\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$, the two shell equations contain $x$ only through $\beta_\infty N(x)$. Solving the ideal-benchmark equation for $\beta_\infty N(x)$ gives $\beta_\varphi$, and solving the memory equation gives $\beta_{\mathrm{mem}}$. Hence the loci are the lapse level sets in~\eqref{eq:lapse-level-main}.
 \end{proof}
 
 For later shell-pair comparisons we use one fixed denominator orientation. If
-$r_\varphi$ and $r_{\mathrm{mem}}$ are homogeneous exact-clock and
+$r_\varphi$ and $r_{\mathrm{mem}}$ are homogeneous ideal-benchmark and
 memory-transition radii, set
 \[
 D_\varphi=e^{\beta_\infty\Omega N(r_\varphi)}-1,
@@ -277,7 +331,7 @@ D_{\mathrm{mem}}=e^{\beta_\infty\Omega N(r_{\mathrm{mem}})}-1,
 \qquad
 Q_{\varphi/\mathrm{mem}}=\frac{D_\varphi}{D_{\mathrm{mem}}}.
 \]
-Thus $Q_{\varphi/\mathrm{mem}}$ means exact-clock denominator divided by
+Thus $Q_{\varphi/\mathrm{mem}}$ means ideal-benchmark denominator divided by
 memory-transition denominator. The cancellation identity and the reciprocal
 target-rate convention are proved once in \Cref{thm:ratio-main}; this section
 uses only the level-set formulas above.
@@ -298,7 +352,7 @@ If $N'(r_\star)\neq0$, this radius defines a regular spherical hypersurface.
 By \Cref{cor:homogeneous-main}, the shell equation is exactly $\beta_\infty N(r)=\beta_\star$. Since $N$ is strictly monotone on $I$, it is one-to-one onto its range. Hence the equation has a solution precisely when $\beta_\star/\beta_\infty$ lies in $N(I)$, and the solution is then the displayed inverse image. The nonzero derivative condition is the one-dimensional form of the regular level-set condition.
 \end{proof}
 
-In this calibrated regime, the exact-clock shell is a Tolman isotherm selected by the standard Parry benchmark for the ideal grammar, while the memory shell is a Tolman isotherm selected by the finite-recovery exact-dependence threshold. The same local response scale therefore supports two different detector-selected response hypersurfaces whenever the range condition in \Cref{prop:existence-main} is met. \Cref{fig:shell-radii} illustrates the two shell lapse values and their proper-distance ratio in Schwarzschild.
+In this calibrated regime, both shells are simply lapse level sets selected by the two record thresholds. The same local response scale therefore supports two different detector-selected response hypersurfaces whenever the range condition in \Cref{prop:existence-main} is met. \Cref{fig:shell-radii} illustrates the corresponding lapse values and proper-distance ratio in Schwarzschild.
 
 \begin{figure}[t]
 \centering
@@ -337,7 +391,7 @@ In this calibrated regime, the exact-clock shell is a Tolman isotherm selected b
 \legend{Exact ratio,Leading-order prediction}
 \end{groupplot}
 \end{tikzpicture}
-\caption{Shell geometry in Schwarzschild under the calibrated homogeneous spectral-weight regime ($r_{\mathrm s}=2M=1$, $\beta_\infty=4\pi$, $\Omega=1$, $\lambda_{\mathrm{sw}}^2\mathcal S=2$, $\kappa_{\mathrm r}=5$). (a)~Lapse values $N_\varphi$ (exact-clock) and $N_{\mathrm{mem}}$ (memory) as functions of $\kappa_{\mathrm r}\Delta\tau$. The shell ordering reverses near $\kappa_{\mathrm r}\Delta\tau\approx1.8$, in agreement with \Cref{prop:order-main}: for faster sampling the memory shell lies closer to the horizon, whereas for slower sampling the exact-clock shell does. (b)~Proper-distance ratio $\rho_\varphi/\rho_{\mathrm{mem}}$ (solid) compared with the leading-order prediction of \Cref{thm:horizon-main} (dashed). The ratio diverges as $\kappa_{\mathrm r}\Delta\tau\to0$, confirming the hierarchy law~\eqref{eq:fast-ratio-main}.}
+\caption{Shell geometry in Schwarzschild under the calibrated homogeneous spectral-weight regime ($r_{\mathrm s}=2M=1$, $\beta_\infty=4\pi$, $\Omega=1$, $\lambda_{\mathrm{sw}}^2\mathcal S=2$, $\kappa_{\mathrm r}=5$). (a)~Lapse values $N_\varphi$ (ideal benchmark) and $N_{\mathrm{mem}}$ (memory) as functions of $\kappa_{\mathrm r}\Delta\tau$. The shell ordering reverses near $\kappa_{\mathrm r}\Delta\tau\approx1.8$, in agreement with \Cref{prop:order-main}: for faster sampling the memory shell lies closer to the horizon, whereas for slower sampling the ideal-benchmark shell does. (b)~Proper-distance ratio $\rho_\varphi/\rho_{\mathrm{mem}}$ (solid) compared with the leading-order prediction of \Cref{thm:horizon-main} (dashed). The ratio diverges as $\kappa_{\mathrm r}\Delta\tau\to0$, confirming the hierarchy law~\eqref{eq:fast-ratio-main}.}
 \label{fig:shell-radii}
 \end{figure}
 

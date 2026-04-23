@@ -1,24 +1,115 @@
 \section{Sampled detector laws and operational signatures}\label{sec:records}
 
 \subsection{Measurement protocol and click model}
-We use an effective counter model driven by the UDW excitation rate. At the record level, weak-coupling excitation attempts in disjoint proper-time intervals are represented by a stationary Poisson clock of rate $\Gamma_+$; this is the only place where the quantum response enters the classical counting law. At the beginning of each proper-time interval $[n\Delta\tau,(n+1)\Delta\tau]$, the counter is in one of two hidden states: ready $R$ or dead/refractory $D$. If the counter is ready, a UDW excitation during the interval produces a click at the interval end and places the counter in $D$ for the next interval; if no excitation occurs, the output is $0$ and the counter remains ready. If the counter is refractory, an independent exponential recovery clock of rate $\kappa_{\mathrm r}$ may return it to $R$ during the interval. A click is then registered only if recovery occurs and a UDW excitation follows before the interval end, in which case the next state is again $D$; if recovery occurs without a subsequent excitation, the next state is $R$, while no recovery leaves the counter in $D$. Integrating these alternatives over one sampling interval gives the output-labelled kernels $T_0$, $T_1$ below.
+We formulate the readout layer as a sampled interval instrument. The field-facing UDW detector core supplies a stationary excitation intensity, while the counter contributes one hidden readiness bit and a binary ancilla that records only whether at least one ready-state excitation attempt occurred before the next sampling time. Each proper-time interval therefore uses a fresh ancilla and then coarse-grains the within-bin history to a single symbol $A_n\in\{0,1\}$. The hidden state passed to the next interval is again just ready $R$ or refractory $D$, so the sampled record is a two-state hidden Markov model.
 
-The binary output is attached to the transition across one sampling interval, and at most one visible click can be recorded in that interval. Thus the labelled kernels have rows indexed by the hidden state at the beginning of the interval and columns indexed by the hidden state at the next sampling time. This convention matters in the finite-recovery model: a click-labelled transition always ends in the refractory state $D$, even though the recovery and excitation times that generated the click may both lie inside the same sampling bin.
+\begin{proposition}[Sampled interval instrument and labelled kernels]\label{prop:instrument-kernels-main}
+Fix a sampling interval of length $\Delta\tau$ and a rate parameter $\Gamma>0$.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
+\item If the hidden state at the beginning of the interval is $R$, let $N$ be a Poisson process of rate $\Gamma$ on $[0,\Delta\tau]$. The output ancilla reports
+\[
+A_n=\mathbf 1_{\{N(\Delta\tau)\ge1\}},
+\]
+and the next hidden state is $D$ when $A_n=1$ and $R$ when $A_n=0$.
+\item If the hidden state at the beginning of the interval is $D$, let $S\sim\mathrm{Exp}(\kappa_{\mathrm r})$ be the recovery time, independent of $N$. When $S>\Delta\tau$, the detector stays refractory throughout the interval and $(A_n,H_{n+1})=(0,D)$. When $S=s\le\Delta\tau$, the detector is ready only on $(s,\Delta\tau]$, and the ancilla reports
+\[
+A_n=\mathbf 1_{\{N(\Delta\tau)-N(s)\ge1\}}.
+\]
+If $A_n=1$, the thresholded binary readout registers a single click for that interval and resets the next hidden state to $D$; if $A_n=0$, the next hidden state is $R$.
+\end{enumerate}
+Repeating this interval instrument with fresh independent copies of $(N,S)$ at each sample produces a time-homogeneous hidden Markov chain on $\{R,D\}$ with output-labelled kernels
+\begin{equation}\label{eq:t0-t1-main}
+T_0=
+\begin{pmatrix}
+ p & 0 \\
+ b & c
+\end{pmatrix},
+\qquad
+T_1=
+\begin{pmatrix}
+ 0 & 1-p \\
+ 0 & a
+\end{pmatrix},
+\end{equation}
+where
+\begin{equation}\label{eq:p-c-main}
+p=e^{-\Gamma\Delta\tau},
+\qquad
+c=e^{-\kappa_{\mathrm r}\Delta\tau},
+\end{equation}
+and
+\begin{equation}\label{eq:a-b-main}
+a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds,
+\qquad
+b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}e^{-\Gamma(\Delta\tau-s)}\,ds.
+\end{equation}
+When $\kappa_{\mathrm r}\neq\Gamma$, these become
+\[
+a=\frac{\kappa_{\mathrm r}(1-p)-\Gamma(1-c)}{\kappa_{\mathrm r}-\Gamma},
+\qquad
+b=\frac{\kappa_{\mathrm r}(p-c)}{\kappa_{\mathrm r}-\Gamma}.
+\]
+\end{proposition}
 
-This protocol is phenomenological in the same sense as dead-time counter models \cite{Muller1973,CantorTeich1975}: it captures the essential refractory structure of any counting device driven by the UDW excitation rate without deriving the measurement back-action from algebraic QFT first principles \cite{Fewster2020,PoloGomezEtAl2022}. The model is explicit: all subsequent grammar, hazard, covariance, and spectral-density results are derived from these kernels.
+\begin{proof}
+From the ready state, the interval contains no attempt with probability
+$p=e^{-\Gamma\Delta\tau}$ and at least one attempt with probability
+$q=1-p$, so
+\[
+\PP_R(A_n=0,H_{n+1}=R)=p,
+\qquad
+\PP_R(A_n=1,H_{n+1}=D)=q.
+\]
+This gives the first row of each labelled kernel.
 
-\begin{assumption}[Counting-limit readout]\label{ass:counting-readout-main}
-The stochastic record analysed below is the leading weak-coupling, stationary counting limit of the detector. Excitation attempts in disjoint proper-time intervals are independent Poisson increments with intensity $\Gamma_+$ supplied by the UDW response, the recovery clock is independent of those attempts, at most one visible click is recorded in a sampling interval, and the only hidden counter state is $R$ or $D$. All record thresholds and shell equations are conditional on this readout layer; no theorem below derives the Poisson attempt process from a general repeated-measurement theory for UDW detectors.
+From the refractory state, there are three disjoint possibilities. No
+recovery before the sample time has probability
+\[
+\PP_D(S>\Delta\tau)=e^{-\kappa_{\mathrm r}\Delta\tau}=c,
+\]
+which contributes the $(D,D)$ entry of $T_0$. If recovery occurs at
+$s\in[0,\Delta\tau]$ and no attempt follows before the end of the bin, then
+$A_n=0$ and $H_{n+1}=R$; integrating the conditional probability
+$e^{-\Gamma(\Delta\tau-s)}$ against the recovery density gives
+\[
+\PP_D(A_n=0,H_{n+1}=R)
+=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}
+e^{-\Gamma(\Delta\tau-s)}\,ds=b.
+\]
+If recovery occurs at $s\le\Delta\tau$ and at least one attempt occurs in
+$(s,\Delta\tau]$, then the thresholded ancilla outputs one visible click and
+the post-click reset gives $H_{n+1}=D$. The corresponding probability is
+\[
+\PP_D(A_n=1,H_{n+1}=D)
+=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}
+\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds=a.
+\]
+These are exactly the second rows of $T_0$ and $T_1$. Because each interval
+uses fresh independent copies of the Poisson attempt process, recovery clock,
+and binary ancilla, the same labelled transition rule applies at every sample;
+hence the sampled hidden process is time-homogeneous. The one-click-per-bin
+readout is therefore not an extra postulate after the fact: it is built into
+the thresholded interval instrument itself.
+\end{proof}
+
+The role of the instrument is precise. Once the attempt intensity $\Gamma$ and the counter recovery law are fixed, the kernels $T_0,T_1$ are no longer postulated phenomenologically; they are the interval probabilities of the sampled repeated-interaction rule above. What remains conditional is the identification of the intensity $\Gamma$ with the stationary UDW response rate supplied by the field-facing detector calculation.
+
+\begin{assumption}[Stationary counting-limit closure]\label{ass:counting-readout-main}
+The stochastic record analysed below is the sampled interval instrument of \Cref{prop:instrument-kernels-main}, with attempt intensity identified with the stationary weak-coupling UDW excitation rate:
+\[
+\Gamma=\Gamma_+.
+\]
+This is the only bridge from the stationary detector response to the classical binary record. No theorem below claims that an arbitrary repeated-measurement scheme for a UDW detector must reduce to this instrument without further approximation; rather, the paper fixes this sampled counter model and then derives its record laws exactly.
 \end{assumption}
 
-\Cref{ass:counting-readout-main} is the bridge between the quantum response calculation and the classical binary record. It is deliberately narrower than a full measurement theory for QFT detectors: the quantum field fixes the attempt rate, while the counter model fixes how attempts are converted into observed clicks.
+The construction remains an effective measurement model in the same broad spirit as dead-time counter theory \cite{Muller1973,CantorTeich1975}, not a first-principles AQFT derivation of detector back-action \cite{Fewster2020,PoloGomezEtAl2022}. Its purpose is narrower and sufficient for the theorem chain here: it makes explicit which repeated-interaction ingredients produce the binary kernels and isolates the single closure step where the stationary UDW response is converted into the attempt intensity driving the sampled record.
 
-All record-level conclusions below are conditional on this bridge. In particular, the Poisson attempt process is not being asserted as a universal consequence of repeated UDW measurements; it is the leading stationary counting limit used to define the effective counter. Conversely, once \Cref{ass:counting-readout-main} is fixed, the subsequent statements about support, hazards, covariance, exact $1$-dependence, and finite-record diagnostics are ordinary consequences of the labelled kernels. This separation is what allows the shell construction later to distinguish response-model assumptions from record-theoretic facts.
+All record-level conclusions below are therefore conditional only in this controlled sense. Once \Cref{ass:counting-readout-main} is fixed, the later statements about support, hazards, covariance, exact $1$-dependence, and finite-record diagnostics are ordinary consequences of the labelled kernels. This separation is what allows the shell construction later to distinguish response-model assumptions from record-theoretic facts.
 
-\subsection{Three notions of detector thermality and the Parry benchmark}\label{subsec:thermality-notions}
+\subsection{Three detector criteria and the Parry benchmark}\label{subsec:thermality-notions}
 
-\begin{definition}[Detector thermality notions]\label{def:thermality-notions-main}
-Three distinct notions of thermality are used in this paper.
+\begin{definition}[Detector criteria]\label{def:thermality-notions-main}
+Three distinct detector criteria are used in this paper.
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
 \item \emph{Detailed-balance thermality} means
 \[
@@ -28,15 +119,15 @@ Three distinct notions of thermality are used in this paper.
 \]
 the standard rate-ratio criterion \cite{Unruh1976,BirDav1982}.
 \item \emph{Gibbs thermalization} means convergence of the reduced detector state to $e^{-\beta H_{\mathrm{det}}}/Z$ \cite{GarayMartinMartinezRamon2016,JuarezAubryMoustos2022,PercheTherm2022}.
-\item \emph{Parry-law thermality}, or the Parry-law benchmark, means that the stationary click record realizes the Parry measure on the golden-mean shift, the unique measure of maximal entropy for the dead-time grammar $11\notin\operatorname{supp}\mu$ \cite{Parry1964,LindMarcus1995}.
+\item \emph{Parry benchmark} means that the stationary click record realizes the Parry measure on the golden-mean shift, the unique measure of maximal entropy for the dead-time grammar $11\notin\operatorname{supp}\mu$ \cite{Parry1964,LindMarcus1995}.
 \end{enumerate}
 \end{definition}
 
-The third notion is what this paper studies. Neither detailed balance nor Gibbs thermalization implies the Parry-law benchmark, and the converse implication is not asserted. The physical content is that the detector click grammar is as disordered as the dead-time constraint permits.
+The third criterion is what this paper studies. Neither detailed balance nor Gibbs thermalization implies the Parry benchmark, and the converse implication is not asserted. The physical content is that the detector click grammar is as disordered as the dead-time constraint permits.
 
-\subsection{Ideal one-step dead time and the exact-clock threshold}
+\subsection{Ideal one-step dead time: benchmark proposition}
 
-In the ideal dead-time model, a click suppresses the next one-step interval. Writing
+The ideal dead-time model serves as a benchmark. A click suppresses the next one-step interval, so the visible record reduces immediately to a one-parameter Markov chain on the golden-mean shift. Writing
 \begin{equation}\label{eq:p-beta-main}
 p_\beta=e^{-\Gamma_+\Delta\tau}, \qquad q_\beta=1-p_\beta,
 \end{equation}
@@ -50,8 +141,8 @@ P_\beta=
 \end{equation}
 The reference law on that shift is the Parry measure, namely the unique measure of maximal entropy compatible with the grammar $11\notin\operatorname{supp}\mu$ \cite{Parry1964,LindMarcus1995}.
 
-\begin{proposition}\label{prop:ideal-main}
-For the ideal dead-time detector, the sampled output realizes the Parry-law benchmark if and only if
+\begin{proposition}[Exact-clock benchmark]\label{prop:ideal-main}
+For the ideal dead-time detector, the sampled output realizes the Parry benchmark if and only if
 \begin{equation}\label{eq:parry-threshold-main}
 p_\beta=\varphi^{-1}
 \quad\Longleftrightarrow\quad
@@ -84,16 +175,16 @@ P^{\mathrm P}(1,0)=1 .
 The detector law and the Parry law have the same support and each has only the single free transition probability out of state $0$. Therefore they coincide if and only if $p_\beta=\varphi^{-1}$. Since $p_\beta=e^{-\Gamma_+\Delta\tau}$, this is equivalent to $\Gamma_+\Delta\tau=\log\varphi$.
 \end{proof}
 
-The threshold in Proposition~\ref{prop:ideal-main} should not be confused with a generic isotherm, nor is the Perron--Frobenius step itself a new symbolic-dynamics result. Once the golden-mean Markov chain is fixed, matching the one free transition probability to the Parry measure is elementary. The role of the proposition is narrower and detector-specific: the sampled detector clock realizes that standard benchmark exactly at $\Gamma_+\Delta\tau=\log\varphi$. The resulting response locus will therefore depend on the detector gap and on the sampling design even before curved-spacetime geometry is introduced.
+\Cref{prop:ideal-main} is included only as the benchmark comparison point. Once the golden-mean Markov chain has been identified, the Perron--Frobenius matching step is standard; its detector-specific content is just the clock value $\Gamma_+\Delta\tau=\log\varphi$. The main mathematical work begins in the finite-recovery model, where the visible law has full support and the dependence threshold is controlled by the hidden eigenmode rather than by a grammar reduction.
 
 \subsection{Finite recovery, renewal structure, and exact \texorpdfstring{$1$}{1}-dependence}
 
 A physically more realistic model allows the detector to recover over a finite time rather than instantaneously. Let $\kappa_{\mathrm r}>0$ be the recovery rate. Throughout this section and the remainder of the paper, we write $\Gamma\equiv\Gamma_+$ for the excitation rate when no confusion with other rates arises. Define
-\begin{equation}\label{eq:p-c-main}
+\begin{equation}\label{eq:p-c-recall-main}
 p=e^{-\Gamma\Delta\tau}, \qquad c=e^{-\kappa_{\mathrm r}\Delta\tau},
 \end{equation}
 and
-\begin{equation}\label{eq:a-b-main}
+\begin{equation}\label{eq:a-b-recall-main}
 a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds,
 \qquad
 b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}e^{-\Gamma(\Delta\tau-s)}\,ds.
@@ -110,20 +201,7 @@ P=
  b & 1-b
 \end{pmatrix},
 \]
-where $a+b=1-c$. The output-labelled kernels, with rows and columns ordered as $(R,D)$, are
-\begin{equation}\label{eq:t0-t1-main}
-T_0=
-\begin{pmatrix}
- p & 0 \\
- b & c
-\end{pmatrix},
-\qquad
-T_1=
-\begin{pmatrix}
- 0 & 1-p \\
- 0 & a
-\end{pmatrix}.
-\end{equation}
+where $a+b=1-c$. By \Cref{prop:instrument-kernels-main}, the output-labelled kernels are exactly the matrices in \eqref{eq:t0-t1-main}.
 The nontrivial eigenvalue of the two-state stochastic matrix $P$ is
 \begin{equation}\label{eq:lambda-main}
 \lambda=p-b=
@@ -134,7 +212,7 @@ with the equal-rate value understood by continuity as
 \[
 \lambda=e^{-\Gamma\Delta\tau}(1-\Gamma\Delta\tau).
 \]
-This scalar is the only hidden mode available to transmit dependence after the deterministic post-click reset. The following four lemmas isolate the separate ingredients used in the finite-recovery theorem: regeneration, stationarity, the critical hidden eigenvalue, and the factorization mechanism at the critical point.
+This scalar is the only hidden mode available to transmit dependence after the deterministic post-click reset. \Cref{prop:recovery-main} below is the main record-theoretic result of this section: it identifies the unique memory-transition rate, proves exact $1$-dependence there, and records the hazard and covariance consequences. The intermediate lemmas isolate the ingredients of that theorem: regeneration, stationarity, covariance transfer through the hidden mode, the critical-rate analysis, the obstruction to finite Markov order, and the labelled-kernel factorization at the critical point.
 
 \begin{lemma}[Regeneration and zero-run law]\label{lem:renewal-gap-main}
 Every observed click resets the next sampling interval to the hidden state $D$. Consequently the visible click record is a renewal process in the standard sense of i.i.d. inter-click zero runs \cite{Asmussen2003}. If $G$ is the number of consecutive zeros after a click and before the next click, then
@@ -442,7 +520,7 @@ h_k=1-\frac{p(1+\alpha(k+1))}{1+\alpha k},
 and direct subtraction gives the displayed positive increment.
 \end{proof}
 
-\begin{proposition}\label{prop:recovery-main}
+\begin{theorem}[Finite-recovery memory transition]\label{prop:recovery-main}
 For the finite-recovery detector, the zero-run length law is the renewal law in Lemma~\ref{lem:renewal-gap-main}. If $\kappa_{\mathrm r}\neq\Gamma$, then the click hazard after $k$ zeros is
 \begin{equation}\label{eq:hazard-main}
 h_k=
@@ -463,7 +541,7 @@ Consequently there is a unique critical rate $\Gamma_c(\kappa_{\mathrm r},\Delta
 \operatorname{Cov}(A_0,A_1)<0.
 \]
 Below $\Gamma_c$ all lag-$n$ covariances with $n\ge1$ are negative; above $\Gamma_c$ their signs alternate with the lag.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
 The renewal statement, the kernel formula for $g_k$, the closed form~\eqref{eq:gap-closed-main}, and full support are Lemma~\ref{lem:renewal-gap-main}. It remains to derive the hazard, covariance, and exact-dependence conclusions.
@@ -476,7 +554,7 @@ and \Cref{lem:hazard-obstruction-main} then excludes every finite Markov order.
 The covariance formula is Lemma~\ref{lem:covariance-transfer-main}, which is identical to~\eqref{eq:cov-main}. By Lemma~\ref{lem:stationary-main}, $a-\rho<0$. Lemma~\ref{lem:critical-rate-main} gives the single zero of $\lambda$ and its sign on both sides. Hence the lag-one covariance is always negative; for $n\ge2$ all covariances vanish at $\Gamma=\Gamma_c$, are negative for $\Gamma<\Gamma_c$, and alternate in sign for $\Gamma>\Gamma_c$. Finally, Lemma~\ref{lem:one-dep-criterion-main} gives the stated equivalence between exact $1$-dependence and $\Gamma=\Gamma_c$.
 \end{proof}
 
-The memory-transition threshold is therefore not a softened version of the ideal Parry point. The ideal point is a standard maximum-entropy benchmark for a restricted grammar; the finite-recovery point is an exact dependence transition inside a full-support renewal class. The essential feature is the hidden-eigenvalue criterion: the nontrivial hidden mode vanishes precisely at $\Gamma_c$, labelled kernels factor through stationarity at that point, and away from it the lag-two covariance obstructs exact $1$-dependence. The same recovery mechanism is incompatible both with the Parry support constraint and with a Bernoulli full-support benchmark, as made explicit below. \Cref{fig:hazard-cov} illustrates both the strictly increasing hazard and the covariance phase change across $\Gamma_c$.
+The memory-transition threshold is therefore not a softened version of the ideal Parry point. The ideal point is a standard maximum-entropy benchmark for a restricted grammar; the finite-recovery point is the theorem-level result, namely an exact dependence transition inside a full-support renewal class. The essential feature is the hidden-eigenvalue criterion: the nontrivial hidden mode vanishes precisely at $\Gamma_c$, labelled kernels factor through stationarity at that point, and away from it the lag-two covariance obstructs exact $1$-dependence. The same recovery mechanism is incompatible both with the Parry support constraint and with a Bernoulli full-support benchmark, as made explicit below. \Cref{fig:hazard-cov} illustrates both the strictly increasing hazard and the covariance phase change across $\Gamma_c$.
 
 \begin{figure}[t]
 \centering
@@ -523,11 +601,11 @@ The memory-transition threshold is therefore not a softened version of the ideal
 \end{figure}
 
 \begin{corollary}\label{cor:no-exact-main}
-No positive finite-recovery parameter choice realizes the Parry-law benchmark of Proposition~\ref{prop:ideal-main}. The finite-recovery record is also never Bernoulli.
+No positive finite-recovery parameter choice realizes the Parry benchmark of Proposition~\ref{prop:ideal-main}. The finite-recovery record is also never Bernoulli.
 \end{corollary}
 
 \begin{proof}
-The Parry law on the golden-mean shift assigns zero probability to the word $11$. In the finite-recovery detector, however, $\PP(A_{n+1}=1\mid A_n=1)=a>0$, so $\PP(A_n=1,A_{n+1}=1)=\rho a>0$. The support already differs from the Parry support. If one instead compares the full-support record with a Bernoulli maximum-entropy law at fixed click density, the zero-run hazard would be constant. Proposition~\ref{prop:recovery-main} gives a strictly increasing hazard for every positive finite-recovery parameter choice, excluding that possibility as well.
+The Parry law on the golden-mean shift assigns zero probability to the word $11$. In the finite-recovery detector, however, $\PP(A_{n+1}=1\mid A_n=1)=a>0$, so $\PP(A_n=1,A_{n+1}=1)=\rho a>0$. The support already differs from the Parry support. If one instead compares the full-support record with a Bernoulli maximum-entropy law at fixed click density, the zero-run hazard would be constant. \Cref{prop:recovery-main} gives a strictly increasing hazard for every positive finite-recovery parameter choice, excluding that possibility as well.
 \end{proof}
 
 \begin{remark}[Equal-rate limit and Lambert $W$ expression for $\Gamma_c$]\label{rem:edge-cases}
@@ -642,7 +720,7 @@ which proves~\eqref{eq:soft-main}. For the window estimate, use the union bound 
 Inserting the expansion for $a$ gives~\eqref{eq:window-main}.
 \end{proof}
 
-Proposition~\ref{prop:soft-main} explains why the ideal grammar is a singular but physically meaningful limit. It is specifically a fixed-rate short-bin limit: $\Gamma$ and $\kappa_{\mathrm r}$ are held fixed while $\Delta\tau\downarrow0$. It should not be confused with the exact-clock scaling $\Gamma\Delta\tau=\log\varphi$, where the excitation rate grows like $\Delta\tau^{-1}$ and, for fixed $\kappa_{\mathrm r}$, the adjacent-click probability is only $O(\Delta\tau)$. At fixed finite window length and fixed physical rates, inadmissible words become quadratically rare. Yet the Parry-law benchmark is still excluded at any positive sampling interval: the word $11$ has positive probability, and the hazard remains strictly increasing, so the zero-run length is genuinely remembered.
+Proposition~\ref{prop:soft-main} explains why the ideal grammar is a singular but physically meaningful limit. It is specifically a fixed-rate short-bin limit: $\Gamma$ and $\kappa_{\mathrm r}$ are held fixed while $\Delta\tau\downarrow0$. It should not be confused with the exact-clock scaling $\Gamma\Delta\tau=\log\varphi$, where the excitation rate grows like $\Delta\tau^{-1}$ and, for fixed $\kappa_{\mathrm r}$, the adjacent-click probability is only $O(\Delta\tau)$. At fixed finite window length and fixed physical rates, inadmissible words become quadratically rare. Yet the Parry benchmark is still excluded at any positive sampling interval: the word $11$ has positive probability, and the hazard remains strictly increasing, so the zero-run length is genuinely remembered.
 
 \subsection{Spectral density and universal antibunching}
 
@@ -679,7 +757,7 @@ Hence the finite-recovery record is strictly sub-Poissonian throughout the param
 \end{proposition}
 
 \begin{proof}
-By Proposition~\ref{prop:recovery-main},
+By \Cref{prop:recovery-main},
 \[
 \operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda^{n-1},\qquad n\ge1.
 \]
@@ -819,7 +897,7 @@ Thus the statistical scale for resolving a transverse crossing is $N^{-1/2}$ onc
 \begin{proof}
 The click times are regeneration times by Lemma~\ref{lem:renewal-gap-main}, and the zero-run law has exponential tails because it is a finite linear combination of $p^k$ and $c^k$ with $0<p,c<1$; the equal-rate limit has the same exponential tail with a polynomial prefactor. Standard renewal-reward strong laws therefore give almost-sure convergence of fixed-gap empirical hazards, fixed-lag covariance estimators, and fixed-block counting statistics \cite{Asmussen2003}. For $\widehat h_k$, the completed gaps are i.i.d.; since $\PP(G\ge k)>0$, the denominator count diverges almost surely.
 
-For the sign statement, Proposition~\ref{prop:recovery-main} gives
+For the sign statement, \Cref{prop:recovery-main} gives
 \[
 \gamma_2=\rho(a-\rho)\lambda .
 \]
@@ -857,10 +935,103 @@ The same data should also pass two consistency checks: the empirical hazards $\w
 
 A design-specific confidence interval still requires either the corresponding regenerative variance estimate or a Monte Carlo calibration; no universal sample-size bound follows from the closed-form law alone.
 
-For the exact-clock shell in the ideal-blanking mode, the finite-sample test is different because the benchmark is a Markov law on a restricted support. First check the support condition by verifying that consecutive clicks are absent up to the finite-sample tolerance. Then estimate
+For the ideal-benchmark shell in the ideal-blanking mode, the finite-sample test is different because the benchmark is a Markov law on a restricted support.
+
+\begin{proposition}[Exact-clock finite-record diagnostic]\label{prop:ideal-diagnostics-main}
+Assume the ideal one-step blanking model of Proposition~\ref{prop:ideal-main}, with transition parameter $p\in(0,1)$ and $q=1-p$. Then
 \[
-\widehat p=
+\PP(A_j=1,A_{j+1}=1)=0\qquad(j\in\mathbb Z).
+\]
+For $N\ge2$, define
+\[
+\widehat p_N=
 \frac{\#\{0\le j\le N-2:(A_j,A_{j+1})=(0,0)\}}
 {\#\{0\le j\le N-2:A_j=0\}}
 \]
-and test $\widehat p=\varphi^{-1}$ by the $2\times2$ transition table. At separation $\delta=|p-\varphi^{-1}|$, the usual Markov-chain standard error gives the design-scale estimate $N\sim\delta^{-2}/\rho$, up to constants depending on the stationary zero frequency. This exact-clock diagnostic should not be mixed with the finite-recovery one: the former tests a support-and-transition benchmark, while the latter tests an exact-dependence crossing inside a full-support renewal class.
+whenever the denominator is nonzero. Then the denominator is eventually positive almost surely,
+\[
+\widehat p_N\to p
+\qquad\text{almost surely,}
+\]
+and
+\[
+\sqrt N\,(\widehat p_N-p)
+\Rightarrow
+\mathcal N(0,\sigma_p^2),
+\qquad
+\sigma_p^2=p(1-p)(2-p).
+\]
+Hence the plug-in estimate
+\[
+\widehat\sigma_{p,N}^2=\widehat p_N(1-\widehat p_N)(2-\widehat p_N)
+\]
+is consistent, and under the ideal-support model an asymptotic two-sided $(1-\alpha)$ confidence interval for $p$ is
+\[
+\widehat p_N\pm
+z_{1-\alpha/2}\frac{\widehat\sigma_{p,N}}{\sqrt N}.
+\]
+\end{proposition}
+
+\begin{proof}
+The support statement is immediate from the ideal blanking rule: after a click the next sample is deterministically $0$.
+
+Let $K_1,K_2,\dots$ be the numbers of zeros between successive clicks. Under the ideal model these gaps are i.i.d. with
+\[
+\PP(K_r=k)=p^{k-1}q,
+\qquad k\ge1,
+\]
+because after the forced post-click zero, each further zero is followed by another zero with probability $p$ and by a click with probability $q$. For one complete inter-click cycle, let
+\[
+U_r=K_r,
+\qquad
+V_r=K_r-1,
+\qquad
+L_r=K_r+1.
+\]
+Then $U_r$ is the number of zero-start transitions in the cycle, $V_r$ is the number of $(0,0)$ transitions, and $L_r$ is the cycle length in samples. Their moments are
+\[
+\EE U_r=\frac1q,
+\qquad
+\EE V_r=\frac{p}{q},
+\qquad
+\EE L_r=\frac{2-p}{q},
+\]
+and
+\[
+V_r-pU_r=(1-p)K_r-1=qK_r-1,
+\qquad
+\Var(V_r-pU_r)=q^2\Var(K_r)=p.
+\]
+
+Up to boundary terms coming from the initial incomplete segment and the final incomplete cycle, the numerator and denominator of $\widehat p_N$ are the sums of $V_r$ and $U_r$ over the complete cycles contained in $\{0,\dots,N-1\}$. Those boundary terms are $O(1)$ almost surely. Since the cycle lengths have exponential tails, the regenerative strong law gives
+\[
+\frac{\sum_{r\le M_N}V_r}{\sum_{r\le M_N}U_r}\to
+\frac{\EE V_r}{\EE U_r}=p
+\qquad\text{almost surely,}
+\]
+where $M_N$ is the number of complete cycles observed by time $N$. Hence $\widehat p_N\to p$ almost surely and the denominator is eventually positive almost surely.
+
+For the fluctuation scale, apply the regenerative central-limit theorem for ratio estimators \cite{Asmussen2003} to the cycle rewards $V_r$ and $U_r$. Because $M_N/N\to1/\EE L_r$ almost surely and the boundary terms are $o(N^{1/2})$, one obtains
+\[
+\sqrt N\left(
+\widehat p_N-\frac{\EE V_r}{\EE U_r}
+\right)
+\Rightarrow
+\mathcal N\!\left(0,\,
+\frac{\EE L_r\,\Var(V_r-pU_r)}{(\EE U_r)^2}
+\right).
+\]
+Substituting the displayed moments gives
+\[
+\frac{\EE L_r\,\Var(V_r-pU_r)}{(\EE U_r)^2}
+=
+\frac{(2-p)q^{-1}\cdot p}{q^{-2}}
+=
+p\,q(2-p)
+=
+p(1-p)(2-p),
+\]
+which is the stated variance. Consistency of $\widehat\sigma_{p,N}^2$ follows from $\widehat p_N\to p$ almost surely.
+\end{proof}
+
+In practice the exact-clock test is therefore two-stage: first verify that adjacent clicks are absent up to the experimental tolerance, and then test the benchmark value $p=\varphi^{-1}$ using Proposition~\ref{prop:ideal-diagnostics-main}. This exact-clock diagnostic should not be mixed with the finite-recovery one: the former tests a support-and-transition benchmark, while the latter tests an exact-dependence crossing inside a full-support renewal class. Any design calculation for the exact-clock benchmark must use the variance $\sigma_p^2$ above together with the desired confidence level and power; no universal sample-size rule is asserted here.
