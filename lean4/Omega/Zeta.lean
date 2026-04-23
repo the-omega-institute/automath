@@ -225,6 +225,7 @@ import Omega.Zeta.XiTimePart65dChainInteriorIntervalSquarefreeDivisorIsomorphism
 import Omega.Zeta.XiTimePart71ZeroCosetFiniteIntersectionPairwiseCompatibility
 import Omega.Zeta.XiTimePart72aZeroCosetGlobalInclusionOddDivisibility
 import Omega.Zeta.XiTimePart72aZeroSpectrumMaximalOddDivisibilityCompression
+import Omega.Zeta.XiIntegerEllipseModKernelSpectrumPrimewiseUnordered
 import Omega.Zeta.XiTimeMinDelayMinStates
 import Omega.Zeta.XiTimeResolutionGaloisAdjunction
 import Omega.Zeta.XiTimeCentralExtensionUniversal
@@ -245,6 +246,7 @@ import Omega.Zeta.XiReverseKLRadiusRenormalizationCyclicSymmetrization
 import Omega.Zeta.BooleanTwoLayerOrderIdealPrincipalMinor
 import Omega.Zeta.BooleanTwoLayerSmithNormalForm
 import Omega.Zeta.BooleanTwoLayerSymmetricQuotientSmith
+import Omega.Zeta.ChiSliceSignChangeCertificate
 import Omega.Zeta.CLTSpectral
 import Omega.Zeta.CayleyDepthIdentity
 import Omega.Zeta.CertInverseLimitCoherence

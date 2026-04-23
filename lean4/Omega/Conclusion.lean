@@ -16,6 +16,7 @@ import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.AxialScreenDirectSumVisibleHiddenSplit
 import Omega.Conclusion.AuditComplexityAreaEquivalence
 import Omega.Conclusion.AddressResidualTotalBitBudget
+import Omega.Conclusion.AuditedEvenFirstkinkHomotopyPurification
 import Omega.Conclusion.AutComponents
 import Omega.Conclusion.AmbiguityShellZetaSyncSplitting
 import Omega.Conclusion.BalancedExternalizationSchurOptimality
