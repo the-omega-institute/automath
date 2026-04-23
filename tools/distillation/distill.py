@@ -3700,7 +3700,9 @@ def _validate_writebacks(
             )
         if label not in content:
             errors.append(f"Item {index} content does not contain label {label}")
-        if re.search(rf"\\label\{{{re.escape(label)}\}}", read_text(path)):
+        existing_text = read_text(path)
+        existing_without_distill = _DISTILL_BLOCK_RE.sub("", existing_text)
+        if re.search(rf"\\label\{{{re.escape(label)}\}}", existing_without_distill):
             errors.append(f"Item {index} label already exists in {rel}: {label}")
         errors.extend([f"Item {index}: {err}" for err in _latex_balance_errors(content)])
         normalized.append(
@@ -4199,9 +4201,25 @@ def _find_insert_position(text: str) -> int:
 
 
 _DISTILL_BLOCK_RE = re.compile(
-    r"\n?% --- Distillation writeback ---\n.*?% --- End distillation writeback ---\n?",
+    r"\n?% --- Distillation writeback(?:[:][^\n]*)? ---\n"
+    r".*?% --- End distillation writeback ---\n?",
     re.DOTALL,
 )
+
+
+def _remove_conflicting_distill_blocks(text: str, labels: list[str]) -> str:
+    """Remove only prior distillation blocks that contain incoming labels."""
+    markers = [f"\\label{{{label}}}" for label in labels if label]
+    if not markers:
+        return text
+
+    def replace(match: re.Match[str]) -> str:
+        block = match.group(0)
+        if any(marker in block for marker in markers):
+            return "\n"
+        return block
+
+    return _DISTILL_BLOCK_RE.sub(replace, text)
 
 
 def _plan_writeback_application(
@@ -4209,8 +4227,9 @@ def _plan_writeback_application(
 ) -> tuple[list[dict[str, Any]], list[str]]:
     """Prepare file-level writeback insertions without modifying files.
 
-    Idempotent: if the file already contains a distillation writeback block,
-    it is replaced rather than duplicated (ported from backflow.py injection).
+    Idempotent: prior distillation blocks are preserved unless they already
+    contain one of the incoming labels, in which case only the conflicting
+    block is replaced.
     """
     grouped: dict[str, list[dict[str, Any]]] = {}
     for item in writebacks:
@@ -4225,16 +4244,22 @@ def _plan_writeback_application(
             continue
         old_text = read_text(path)
 
-        # Build the new distillation block
-        block_lines = ["", "% --- Distillation writeback ---"]
+        # Build one distillation block per item so later replacements do not
+        # delete unrelated writebacks in the same file.
+        blocks = []
         for item in items:
+            block_lines = ["", "% --- Distillation writeback ---"]
             block_lines.append(item["content"].strip())
             block_lines.append("")
-        block_lines.append("% --- End distillation writeback ---")
-        insert_block = "\n".join(block_lines).rstrip() + "\n"
+            block_lines.append("% --- End distillation writeback ---")
+            blocks.append("\n".join(block_lines).rstrip())
+        insert_block = "\n".join(blocks).rstrip() + "\n"
 
-        # Idempotent: remove any existing distillation block first
-        base_text = _DISTILL_BLOCK_RE.sub("", old_text)
+        # Idempotent: only replace blocks containing incoming labels.
+        base_text = _remove_conflicting_distill_blocks(
+            old_text,
+            [item["label"] for item in items],
+        )
 
         position = _find_insert_position(base_text)
         prefix = base_text[:position].rstrip()
