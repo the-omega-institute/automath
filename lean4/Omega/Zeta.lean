@@ -83,6 +83,7 @@ import Omega.Zeta.XiOptimalAllocationUnderProductBound
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiComovingLeyangEndpointSquareRoot
+import Omega.Zeta.XiLogDefectPotentialPoissonPrimitive
 import Omega.Zeta.XiCompactifiedDyadicDepthLowerBound
 import Omega.Zeta.XiScaleMellinNoNonzeroImagPeriod
 import Omega.Zeta.XiRhIffLatticeComovingDefect
@@ -189,6 +190,7 @@ import Omega.Zeta.XiScanMinSeparationLocalBilipschitz
 import Omega.Zeta.XiFiniteToOneHolographicAggregationBound
 import Omega.Zeta.XiEllipticRingAverageResidueWallcrossing
 import Omega.Zeta.XiEllipticRingAverageTwoValuedWallcrossing
+import Omega.Zeta.XiOffcriticalCountBoundByIntegratedDefect
 import Omega.Zeta.XiWindow6KemenyConstantRational
 import Omega.Zeta.XiWindow6C3CyclicFiberTrisection
 import Omega.Zeta.XiWindow6WeylInvariantBestTwoOrbitCompression
