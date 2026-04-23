@@ -667,6 +667,7 @@ import Omega.Zeta.XiBasepointScanKernelCompletenessFullRank
 import Omega.Zeta.XiBasepointScanKernelUniqueness
 import Omega.Zeta.XiBasepointScanRationalHerglotzPoleTomography
 import Omega.Zeta.XiBinomialToeplitzDominantPoleResponse
+import Omega.Zeta.XiBinomialToeplitzTwoEndpointPoleInversion
 import Omega.Zeta.XiBqPowerEntrywiseFibonacciBinomial
 import Omega.Zeta.XiBulkEntropyStrictConvexity
 import Omega.Zeta.XiBulkBoundaryHolographicGapDissipation

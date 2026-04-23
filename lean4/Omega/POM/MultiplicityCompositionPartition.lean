@@ -83,5 +83,101 @@ theorem paper_pom_multiplicity_composition_partition_rational :
   · norm_num [pomCompositionPartition]
   · norm_num [pomCompositionBivariateGF]
 
+/-- Dominant root `λ₊ = (3 + √17) / 2` for the audited `q = 1` multiplicity-composition
+partition recurrence. -/
+def pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus : ℝ :=
+  (3 + Real.sqrt 17) / 2
+
+/-- Subdominant root `λ₋ = (3 - √17) / 2` for the audited `q = 1`
+multiplicity-composition partition recurrence. -/
+def pom_multiplicity_composition_all_ones_exponential_rarity_lambdaMinus : ℝ :=
+  (3 - Real.sqrt 17) / 2
+
+/-- Closed form for the audited `q = 1` multiplicity-composition partition function `Z_L`. -/
+def pom_multiplicity_composition_all_ones_exponential_rarity_partitionClosedForm (L : ℕ) : ℝ :=
+  ((17 + Real.sqrt 17) / 34) *
+      pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus ^ L +
+    ((17 - Real.sqrt 17) / 34) *
+      pom_multiplicity_composition_all_ones_exponential_rarity_lambdaMinus ^ L
+
+/-- Weight of the all-ones composition `(1, …, 1)` of total length `L`. -/
+def pom_multiplicity_composition_all_ones_exponential_rarity_allOnesWeight (L : ℕ) : ℝ :=
+  (2 : ℝ) ^ L
+
+/-- Probability of the all-ones composition under the audited closed-form partition function. -/
+def pom_multiplicity_composition_all_ones_exponential_rarity_allOnesProbability (L : ℕ) : ℝ :=
+  pom_multiplicity_composition_all_ones_exponential_rarity_allOnesWeight L /
+    pom_multiplicity_composition_all_ones_exponential_rarity_partitionClosedForm L
+
+/-- Paper label: `cor:pom-multiplicity-composition-all-ones-exponential-rarity`.
+The all-ones composition has weight `2^L`, its exact probability is `2^L / Z_L`, the partition
+function factors through the dominant root `λ₊`, and the extracted exponential base `2 / λ₊` is
+strictly smaller than `1`. -/
+theorem paper_pom_multiplicity_composition_all_ones_exponential_rarity :
+    (∀ L,
+      pom_multiplicity_composition_all_ones_exponential_rarity_allOnesWeight L = (2 : ℝ) ^ L) ∧
+      (∀ L,
+        pom_multiplicity_composition_all_ones_exponential_rarity_allOnesProbability L =
+          (2 : ℝ) ^ L /
+            pom_multiplicity_composition_all_ones_exponential_rarity_partitionClosedForm L) ∧
+      (∀ L,
+        pom_multiplicity_composition_all_ones_exponential_rarity_partitionClosedForm L =
+          pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus ^ L *
+            (((17 + Real.sqrt 17) / 34) +
+              ((17 - Real.sqrt 17) / 34) *
+                (pom_multiplicity_composition_all_ones_exponential_rarity_lambdaMinus /
+                  pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus) ^ L)) ∧
+      ((2 : ℝ) / pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus < 1) := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro L
+    rfl
+  · intro L
+    rfl
+  · intro L
+    have hlp_ne :
+        pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus ≠ 0 := by
+      dsimp [pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus]
+      positivity
+    have hpow_ne :
+        pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus ^ L ≠ 0 := by
+      exact pow_ne_zero L hlp_ne
+    have hratio :
+        pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus ^ L *
+            (pom_multiplicity_composition_all_ones_exponential_rarity_lambdaMinus /
+                pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus) ^
+              L =
+          pom_multiplicity_composition_all_ones_exponential_rarity_lambdaMinus ^ L := by
+      rw [div_pow]
+      field_simp [hpow_ne]
+    unfold pom_multiplicity_composition_all_ones_exponential_rarity_partitionClosedForm
+    calc
+      ((17 + Real.sqrt 17) / 34) *
+            pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus ^ L +
+          ((17 - Real.sqrt 17) / 34) *
+            pom_multiplicity_composition_all_ones_exponential_rarity_lambdaMinus ^ L =
+          pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus ^ L *
+            ((17 + Real.sqrt 17) / 34) +
+            ((17 - Real.sqrt 17) / 34) *
+              (pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus ^ L *
+                (pom_multiplicity_composition_all_ones_exponential_rarity_lambdaMinus /
+                    pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus) ^
+                  L) := by rw [hratio]; ring
+      _ =
+          pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus ^ L *
+            (((17 + Real.sqrt 17) / 34) +
+              ((17 - Real.sqrt 17) / 34) *
+                (pom_multiplicity_composition_all_ones_exponential_rarity_lambdaMinus /
+                    pom_multiplicity_composition_all_ones_exponential_rarity_lambdaPlus) ^
+                  L) := by ring
+  · change (2 : ℝ) / ((3 + Real.sqrt 17) / 2) < 1
+    have hsqrt17_gt_one : (1 : ℝ) < Real.sqrt 17 := by
+      have hsqrt17_nonneg : 0 ≤ Real.sqrt 17 := by positivity
+      nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 17 by positivity)]
+    have hden_pos : 0 < ((3 + Real.sqrt 17) / 2 : ℝ) := by
+      positivity
+    have hden_ne : ((3 + Real.sqrt 17) / 2 : ℝ) ≠ 0 := ne_of_gt hden_pos
+    field_simp [hden_ne]
+    nlinarith
+
 end
 end Omega.POM
