@@ -113,6 +113,7 @@ import Omega.POM.CovarianceLaplacianPdetClosedForm
 import Omega.POM.CycleLatticeThetaPoissonDuality
 import Omega.POM.FiberPsiExponentMobiusReconstruct
 import Omega.POM.LocalDefectGibbsVariational
+import Omega.POM.LogMSplit40
 import Omega.POM.DefectBand
 import Omega.POM.DelayMin
 import Omega.POM.DerivedFiberDeterminantExtremalEnvelope

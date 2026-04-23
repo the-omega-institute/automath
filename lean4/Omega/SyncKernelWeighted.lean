@@ -8,6 +8,7 @@ import Omega.SyncKernelWeighted.CarryFreeSkeletonThree
 import Omega.SyncKernelWeighted.C1CutFlux
 import Omega.SyncKernelWeighted.NoKappa1InCore
 import Omega.SyncKernelWeighted.ChebyshevDworkCongruenceChain
+import Omega.SyncKernelWeighted.ChebyshevWittCompleted
 import Omega.SyncKernelWeighted.ChebyshevFrobeniusPDerivationIntegrality
 import Omega.SyncKernelWeighted.CharacterPhaseCyclotomicElimination
 import Omega.SyncKernelWeighted.CompletedPrimeCongruence
@@ -53,6 +54,7 @@ import Omega.SyncKernelWeighted.LambdaExtremeAsymp
 import Omega.SyncKernelWeighted.MertensEven
 import Omega.SyncKernelWeighted.MobiusErrorPropagation
 import Omega.SyncKernelWeighted.MuPochhammerNecklaceDirichletPolylog
+import Omega.SyncKernelWeighted.MuPochhammerNecklaceExpansion
 import Omega.SyncKernelWeighted.OnlineDelayFromPlocal
 import Omega.SyncKernelWeighted.ParallelAdditionZeroTempParetoFrontier
 import Omega.SyncKernelWeighted.PressureAnalyticRadius
