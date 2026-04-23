@@ -770,6 +770,7 @@ import Omega.Conclusion.Window6OutputChi2VisibleBlindOrthogonalSplitting
 import Omega.Conclusion.Window6OutputBlindChannelDominates
 import Omega.Conclusion.Window6OutputFirstRamanujanJetsRecoverLogScales
 import Omega.Conclusion.Window6B3C3AnisotropyRankDrop
+import Omega.Conclusion.PcdimMaxLaw
 import Omega.Conclusion.Window6OutputKLExactGcdChainSplitting
 import Omega.Conclusion.Window6RepresentationZetaCountRatio
 import Omega.Conclusion.Window6ResidualBudget
