@@ -116,8 +116,10 @@ the heaviest endpoint class \(X_m^{00}\), and
 \inf_{\iota} D_q(\iota_*\mu_m\|\pi_m)
 =(m-1)\log\varphi-\log\pi(0)-H_q(\mu_m).
 \]
-For bounded-type slopes this is
+For bounded-type slopes the optimal value satisfies
 \[
+\inf_{\iota}D_q(\iota_*\mu_m\|\pi_m)
+=
 m\log\varphi-\log m+O_\alpha(1),
 \]
 uniformly in \(q\).  The canonical folded law is never more than
@@ -151,8 +153,8 @@ Section~3 proves the sampling and relative-entropy estimates.  Section~4
 contains the Sturmian rigidity and conjugacy statements, including the transfer
 to circle maps that are topologically conjugate to irrational rotations.
 Section~5 contains the Parry comparison, including the support minima, the
-injective placement problem and the bounded-type consequences.  Section~6
-records illustrative numerical checks.
+injective placement problem, and a secondary endpoint-penalty refinement.
+Section~6 records brief numerical checks illustrating the theorem chain.
 
 \section{Model and target measures}
 
@@ -1372,7 +1374,7 @@ Since the last factor is constant on each fiber,
 which proves the claim.
 \end{proof}
 
-\begin{corollary}[Decomposition relative to the Parry measure]\label{cor:tv-decomposition-parry}
+\begin{corollary}[KL decomposition relative to the Parry lift of the Parry measure]\label{cor:tv-decomposition-parry}
 Let \(\mu\in\Delta(\Omega_m)\), let \(\pi=(\Fold_m)_*\mu\), and let
 \(\mu^e:=Q_m\pi\). Then
 \[
@@ -1672,7 +1674,10 @@ X_m^{00}\longleftrightarrow X_{m-2},
 \]
 so \(|X_m^{00}|=|X_{m-2}|=F_m\).
 
-For \(X_m^{11}\), admissibility forces the shape \(10w01\) with
+For \(m=2\), the class \(X_2^{11}\) is empty, so \(|X_2^{11}|=0=F_0\). For
+\(m=3\), the only admissible word with both endpoints equal to \(1\) is
+\(101\), so \(|X_3^{11}|=1=F_1\). Now assume \(m\ge4\). Then admissibility
+forces the shape \(10w01\) with
 \(w\in X_{m-4}\), and this gives a bijection
 \[
 X_m^{11}\longleftrightarrow X_{m-4}.
@@ -2048,6 +2053,13 @@ D_q(\pi_m^{\mathrm{fold}}\|\pi_m)-L_q(m)\le 2\log\varphi.
 \]
 \end{proof}
 
+Theorem~\ref{thm:optimal-injective-relabeling} gives the dominant comparison
+result of this section: once \(m\ge6\), the best injective placement is the
+one supported on \(X_m^{00}\).  The next theorem is a secondary refinement. It
+keeps the same injective setting but resolves the exact additive penalty
+incurred by the endpoint classes, including the finite exceptional range
+\(m<6\).
+
 \begin{theorem}[Exact endpoint penalty for injective deterministic placements]
 \label{thm:lossless-coarse-graining-envelope}
 Assume \(\beta=\alpha\), let \(m\ge1\), and let
@@ -2299,13 +2311,14 @@ is exactly the same estimate rewritten with constants uniform in
 The numerical examples follow the two comparisons used in the proofs.  First
 we compare the empirical histogram with the deterministic folded law.  We then
 compare the limiting folded law with the Parry block law.  The examples are
-included to illustrate this separation in the present model, not to survey
-other possible folds.
+included only to illustrate this separation in the present model, not to
+survey other possible folds.
 \end{remark}
 
 \section{Illustrative numerical checks}
 
-This section illustrates the preceding estimates.  We start with
+This section does not add new estimates; it only illustrates the preceding
+theorem chain.  We start with
 the canonical slice \(\beta=\alpha\), where the finite-\(m\) statements of
 Sections~4 and~5 are sharp, and then consider nearby parameter families and an
 independent sampling baseline.  The relevant distinction is between
@@ -2430,14 +2443,24 @@ than these gaps, the source/reference comparison controls the bound.
 Table~\ref{tab:rotation-parry-gap-summary} moves away from the canonical
 slice.  At the fixed sample size \(N=3\times 10^5\), the golden discrepancy
 upper bound is already \(9.33\times 10^{-5}\), while the total-variation and
-relative-entropy gaps to the Parry measure still grow with \(m\) across both
-bounded-type and resonant families.  For the golden branch, for example, the
-total variation distance rises from \(0.506\) at \(m=6\) to \(0.995\) at
-\(m=18\).  This is the same qualitative regime predicted by
-Corollary~\ref{cor:tv-decomposition-parry},
-Corollary~\ref{cor:injective-relabeling-bounded-type}, and the exact
-support-budget formulas of Section~5: once \(m\) grows, the dominant
-contribution is the limiting Parry mismatch rather than sampling error.
+relative-entropy gaps to the Parry measure are numerically increasing in the
+displayed rows across both bounded-type and resonant families.  For the
+golden branch, for example, the total variation distance rises from \(0.506\)
+at \(m=6\) to \(0.995\) at \(m=18\).  This is the same qualitative regime
+predicted by
+Theorem~\ref{thm:tv-certificate-hist},
+Corollary~\ref{cor:multiscale-residual-comparison-bound}, and
+Corollary~\ref{cor:injective-relabeling-bounded-type}.  Theorem
+~\ref{thm:tv-certificate-hist} shows that the empirical-to-folded
+total-variation error is already at the discrepancy scale, while
+Corollary~\ref{cor:multiscale-residual-comparison-bound} identifies the
+deterministic folded-versus-Parry gaps
+\(\TV(\pi_\ell^{\mathrm{fold}},\pi_\ell)\) as the remaining terms in the
+cross-resolution comparison.  On the relative-entropy side,
+Corollary~\ref{cor:injective-relabeling-bounded-type} gives the bounded-type
+asymptotic scale for the limiting Parry mismatch
+\(D_q(\iota_*\mu_m\|\pi_m)\), and the canonical folded law stays within a
+bounded additive distance of that scale.
 
 Across the displayed families, the metallic and resonant examples differ in
 constants, but they exhibit the same qualitative obstruction inside the
@@ -2448,12 +2471,15 @@ baseline dominates the sampling term once \(m\) is moderately large.
 
 \input{generated/tab_iid_sources_fold_vs_parry_ci_en}
 
-The independent comparison illustrates the decomposition in
-Corollary~\ref{cor:tv-decomposition-parry} in two regimes.  When the
-data-generating law is matched to the reference baseline, the sampling term
-controls the observed error.  For folded rotation data, the deterministic
-Parry term remains and eventually dominates for the rotation families shown in
-these tables.
+The independent comparison separates two bookkeeping regimes.  When the
+data-generating law is matched to the reference baseline, the classical
+finite-alphabet sampling envelopes below control the observed error.  For the
+rotation data, Theorem~\ref{thm:tv-certificate-hist} controls the folded
+histogram relative to \(\pi_m^{\mathrm{fold}}\), while
+Corollary~\ref{cor:tv-decomposition-parry} is the exact KL identity for the
+microstate law relative to the Parry lift \(Q_m\pi_m\).  The remaining
+comparison with the Parry block law \(\pi_m\) is therefore deterministic and
+comes from the folded-versus-Parry mismatch isolated in Section~5.
 
 For reference, the standard high-probability envelopes on a finite alphabet
 \(E\) with \(|E|=F_{m+2}\) are
@@ -2521,7 +2547,9 @@ The main obstruction is the low effective complexity of the source inside the
 ambient golden-mean language. Even after optimizing over all injective
 placements of the realized Sturmian law, one obtains
 \[
-D_q=m\log\varphi-\log m+O_\alpha(1)
+\inf_{\iota\in\mathcal I_m(\alpha)}D_q(\iota_*\mu_m\|\pi_m)
+=
+m\log\varphi-\log m+O_\alpha(1)
 \]
 for bounded-type slopes, uniformly in the R\'enyi order. The canonical fold is
 within a bounded additive distance of this optimum.
