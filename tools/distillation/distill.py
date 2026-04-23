@@ -85,7 +85,7 @@ MAX_DEEP_ROUNDS = 2       # max A-DEEP style escalation rounds per W cycle
 MIN_NEW_CLAIMS = 1        # anti-fake: minimum new theorem/lemma/etc labels
 MIN_CONTENT_DELTA = 200   # anti-fake: minimum chars of new claim content
 WRITEBACK_LINE_LIMIT = 600
-WRITEBACK_TARGET_LINE_HEADROOM = 80
+WRITEBACK_TARGET_LINE_HEADROOM = 120
 PYTHON_SCAN_MATCH_THRESHOLD = 0.15
 SEMANTIC_SCAN_CANDIDATES = 12
 SEMANTIC_SCAN_CONTEXT_CHARS = 4500
@@ -3584,9 +3584,12 @@ def _choose_writeback_targets(
         if _is_wrapper_tex_file(path):
             continue
         try:
-            base_lines = len(read_text(path).splitlines())
+            text = read_text(path)
         except OSError:
             continue
+        if path.name.startswith("para__") and not CLAIM_ENV_RE.search(text):
+            continue
+        base_lines = len(text.splitlines())
         if base_lines >= WRITEBACK_LINE_LIMIT - WRITEBACK_TARGET_LINE_HEADROOM:
             continue
         usable.append(path)

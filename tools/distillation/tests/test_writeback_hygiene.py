@@ -141,6 +141,20 @@ The assertion follows by checking every coordinate.
 
         self.assertEqual(errors, [])
 
+    def test_writeback_target_selection_skips_plain_paragraph_files(self):
+        para = self.core_body / "para__positioning.tex"
+        theorem_file = self.core_body / "subsec__inverse-limit.tex"
+        para.write_text("这是普通定位段落。\n", encoding="utf-8")
+        theorem_file.write_text(
+            "\\begin{lemma}\\label{lem:existing-target}\n既有命题。\n\\end{lemma}\n",
+            encoding="utf-8",
+        )
+
+        selected = distill._choose_writeback_targets([para, theorem_file], limit=2)
+        selected_names = [path.name for path in selected]
+
+        self.assertEqual(selected_names, ["subsec__inverse-limit.tex"])
+
 
 if __name__ == "__main__":
     unittest.main()
