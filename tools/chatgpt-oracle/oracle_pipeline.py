@@ -4721,10 +4721,11 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 rnd)
             pre_theorems = extract_theorem_statements(paper_path)
             edit_snapshot = _snapshot_paper_sources(paper_path)
-            codex_exec(prompt, work_dir=paper_path,
-                       timeout_seconds=3600, model=model, dry_run=dry_run,
-                       context_mode="contextual_execution",
-                       agent_role="stage_a_theoremization")
+            codex_out = codex_exec(
+                prompt, work_dir=paper_path,
+                timeout_seconds=3600, model=model, dry_run=dry_run,
+                context_mode="contextual_execution",
+                agent_role="stage_a_theoremization")
             compiled = compile_gate(paper_path, model=model,
                                     dry_run=dry_run, tag=f"{tag} A2")
             if not compiled:
@@ -4746,6 +4747,11 @@ def run_stage_a(state: PaperState, *, dry_run: bool = False,
                 if not substantive:
                     _restore_paper_sources_snapshot(paper_path, edit_snapshot)
                     save_state(state)
+                    if not str(codex_out).strip():
+                        return _stage_a_pause(
+                            state,
+                            f"codex_empty_after_{action}",
+                            tag=tag)
                     return _stage_a_block(
                         state,
                         f"A2 produced no substantive theorem change: {reason}",
