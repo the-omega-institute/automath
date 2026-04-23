@@ -791,20 +791,28 @@ _ARTIFACT_DIR_NAMES = {
 }
 
 _PAPER_SOURCE_SUFFIXES = (".tex", ".bib", ".sty")
+_CERTIFICATE_SOURCE_SUFFIXES = (".json", ".py")
+_CERTIFICATE_SOURCE_DIRS = {"certificates"}
 
 
 def _is_paper_source_path(path: Path) -> bool:
+    if path.name in set(_ARTIFACT_PATTERNS):
+        return False
+    if any(part in _ARTIFACT_DIR_NAMES for part in path.parts):
+        return False
+    if path.suffix in _PAPER_SOURCE_SUFFIXES:
+        return True
     return (
-        path.suffix in _PAPER_SOURCE_SUFFIXES
-        and path.name not in set(_ARTIFACT_PATTERNS)
-        and not any(part in _ARTIFACT_DIR_NAMES for part in path.parts)
+        path.suffix in _CERTIFICATE_SOURCE_SUFFIXES
+        and any(part in _CERTIFICATE_SOURCE_DIRS for part in path.parts)
     )
 
 
 def _paper_source_files(paper_path: Path) -> list[str]:
     """Return repo-relative paper source paths, including tracked deletions."""
     files: set[str] = set()
-    for ext in ("*.tex", "**/*.tex", "*.bib", "**/*.bib", "*.sty"):
+    for ext in ("*.tex", "**/*.tex", "*.bib", "**/*.bib", "*.sty",
+                "certificates/*.json", "certificates/*.py"):
         for f in paper_path.glob(ext):
             if _is_paper_source_path(f):
                 try:
@@ -877,7 +885,7 @@ def _restore_paper_sources_snapshot(
 
 
 def _add_paper_only(paper_path: Path) -> None:
-    """git add only .tex .bib .sty files under paper_path. Skip artifacts."""
+    """git add only submission source files under paper_path."""
     files = _paper_source_files(paper_path)
     if files:
         run_cmd(["git", "add", "--"] + files)
@@ -929,7 +937,7 @@ def _commit_message(*parts: str) -> str:
 
 
 def git_stage(paper_path: Path, *, tag: str = "") -> bool:
-    """Stage .tex/.bib changes under paper_path (no commit, no artifacts)."""
+    """Stage submission source changes under paper_path."""
     with git_repo_lock():
         _restore_tracked_non_source_changes(paper_path, tag=tag)
         _add_paper_only(paper_path)
@@ -939,7 +947,7 @@ def git_stage(paper_path: Path, *, tag: str = "") -> bool:
 
 
 def git_commit(paper_path: Path, msg: str, *, tag: str = "") -> str:
-    """Commit .tex/.bib changes under paper_path. No artifacts. Thread-safe.
+    """Commit submission source changes under paper_path. Thread-safe.
 
     Commit message includes a diff summary showing what actually changed.
     """
@@ -2556,6 +2564,11 @@ def build_quality_review_prompt(paper_dir: str, target_journal: str,
         ## Output
         Edit .tex files directly. After editing, compile:
           cd {paper_dir} && xelatex -interaction=nonstopmode main.tex
+
+        If a proof genuinely requires finite exact certificate data referenced
+        by the manuscript, you may create or update paper-local files under
+        certificates/ with suffix .json or .py. Do not create any other
+        non-submission artifacts.
     """)
 
 
@@ -2636,6 +2649,11 @@ def build_deep_extension_prompt(paper_dir: str, target_journal: str,
         Integrate new content into the existing paper structure. Edit .tex files
         directly. After editing, compile:
           cd {paper_dir} && xelatex -interaction=nonstopmode main.tex
+
+        If a proof genuinely requires finite exact certificate data referenced
+        by the manuscript, you may create or update paper-local files under
+        certificates/ with suffix .json or .py. Do not create any other
+        non-submission artifacts.
 
         No revision artifacts, no changelogs. Write as if this was always in the paper.
     """)
@@ -2842,7 +2860,10 @@ def build_codex_fix_from_issues_prompt(paper_dir: str, issues_text: str,
         7. Keep all \\leanverified annotations intact
         8. Compile: cd {paper_dir} && xelatex -interaction=nonstopmode main.tex
 
-        Only edit .tex and .bib files inside {paper_dir}.
+        Only edit .tex/.bib paper sources inside {paper_dir}. If a fix
+        genuinely requires finite exact certificate data referenced by the
+        manuscript, you may create or update paper-local certificates/*.json
+        or certificates/*.py. Do not create any other artifacts.
     """)
 
 
