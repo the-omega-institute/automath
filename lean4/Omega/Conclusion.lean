@@ -29,6 +29,7 @@ import Omega.Conclusion.BinfoldEscortCsiszarBlackwellPhi
 import Omega.Conclusion.BinfoldEscortChernoffBregmanEquidistance
 import Omega.Conclusion.BinfoldEscortSqrtCircleArc
 import Omega.Conclusion.BinfoldFrozenEscortExactRecoveryPhaseTransition
+import Omega.Conclusion.FrozenBranchTwoScalarClosure
 import Omega.Conclusion.BinfoldExactInversionUpperEndpointFreezingSlope
 import Omega.Conclusion.BinfoldRenyiRateCollapse
 import Omega.Conclusion.BinfoldGaugeCenterEventualTriviality

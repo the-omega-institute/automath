@@ -13,6 +13,7 @@ import Omega.Zeta.AbelResidueClassChannelRadiusSigmaStar
 import Omega.Zeta.AbelTwoBaseDealiasingInjectivity
 import Omega.Zeta.AbelHardyEnergyDecimationOrthogonal
 import Omega.Zeta.AbelDetailEnergyBudget
+import Omega.Zeta.AbelHankelSpectralGapSinglePole
 import Omega.Zeta.AbelPowerBaseGapAmplification
 import Omega.Zeta.AbelPowerbaseCovariancePolePowerMap
 import Omega.Zeta.AbelPolyphaseReconstruction
@@ -45,6 +46,7 @@ import Omega.Zeta.Arity335MarginalInvertCollision
 import Omega.Zeta.AtomicWittIntoTC1
 import Omega.Zeta.AuditableProfiniteChebotarevTradeoff
 import Omega.Zeta.AuditableProfiniteChebotarevFinite
+import Omega.Zeta.AuditableProfiniteChebotarevBalanceTriangle
 import Omega.Zeta.XiExtensionPreservingInitialObject
 import Omega.Zeta.XiAtomicCenteredResidueSimplex
 import Omega.Zeta.XiEndpointHeatProbeResolutionAccuracyHardConstraint
