@@ -103,6 +103,7 @@ import Omega.Zeta.XiPrimeShellQuasiOrthogonality
 import Omega.Zeta.XiPrimeSliceNontrivialLayerExactMinimality
 import Omega.Zeta.XiPiPowerSmithComplementarity
 import Omega.Zeta.XiPrecisionTypeNoLeakage
+import Omega.Zeta.XiTerminalZmLeyangSpectralQuarticAJFib89Minpoly
 import Omega.Zeta.SelfdualPressureInversion
 import Omega.Zeta.SyncCyclotomicElimination
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotSofic
