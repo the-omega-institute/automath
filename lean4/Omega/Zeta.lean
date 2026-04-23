@@ -144,6 +144,7 @@ import Omega.Zeta.XiCayleyTauConjugacyLogdiff
 import Omega.Zeta.CauchyPoissonSixthSignatureNegativityRigidity
 import Omega.Zeta.XiCdimKolmResidualGap
 import Omega.Zeta.XiCdimSpectrumCompleteness
+import Omega.Zeta.XiCdimKGeneratedQuotientMaxOrder
 import Omega.Zeta.XiCdimCircleLedgerSignature
 import Omega.Zeta.XiCdimZetaFingerprintRigidity
 import Omega.Zeta.XiCdimLocalizationSolenoidContinuousHomClassification

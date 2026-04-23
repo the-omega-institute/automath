@@ -380,6 +380,7 @@ import Omega.Conclusion.FiniteRankLedgerTelescopingLaw
 import Omega.Conclusion.FundamentalCutHadamardRigidity
 import Omega.Conclusion.KirchhoffHadamardEqualityCriterion
 import Omega.Conclusion.GeometricUpliftFourFourCollapse
+import Omega.Conclusion.GodelAlgorithmicSufficiencyMetricInstabilitySeparation
 import Omega.Conclusion.GodelIntegerizationPrimeShiftPolynomial
 import Omega.Conclusion.GodelPrefixPrimeMonoid
 import Omega.Conclusion.GodelAffineEllipseEquationIdentifiability
