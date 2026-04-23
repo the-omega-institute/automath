@@ -508,9 +508,90 @@ We first record the elementary estimate which passes from star discrepancy to
 histogram error.  The only point to note is the number of interval atoms in the
 rotation partition.
 
+\begin{lemma}[Interval partitions from star discrepancy]\label{lem:interval-partition-star-discrepancy}
+Let \(\nu_N:=N^{-1}\sum_{t=0}^{N-1}\delta_{x_0+t\alpha}\) and let
+\(\lambda\) be Lebesgue measure on \(\TT\).  If
+\(\mathcal P=\{I_1,\dots,I_r\}\) is a finite partition of \(\TT\) into
+half-open intervals, then
+\[
+\TV\bigl((\nu_N(I))_{I\in\mathcal P},(\lambda(I))_{I\in\mathcal P}\bigr)
+\le r\,D_N^*(\alpha;x_0).
+\]
+\end{lemma}
+
+\begin{proof}
+For every half-open interval \(I\subset\TT\), possibly wrapping around the
+origin,
+\[
+|\nu_N(I)-\lambda(I)|\le 2D_N^*(\alpha;x_0),
+\]
+because \(I\) is the difference, modulo complements if necessary, of two
+anchored intervals \([0,a)\).  Therefore
+\[
+\TV\bigl((\nu_N(I))_{I\in\mathcal P},(\lambda(I))_{I\in\mathcal P}\bigr)
+=\frac12\sum_{I\in\mathcal P}|\nu_N(I)-\lambda(I)|
+\le rD_N^*(\alpha;x_0).
+\]
+\end{proof}
+
 \begin{theorem}[Discrepancy control of microstate and folded laws]\label{thm:tv-certificate-hist}
-See \cite[Theorem~3.1]{MaZhang2026FoldedHistogramsSIADS}.
+For every irrational \(\alpha\), every \(\beta\in(0,1)\), every
+\(x_0\in\TT\), and every \(m,N\ge1\),
+\[
+\TV(\hat\mu_{m,N},\mu_m)
+\le 2m\,D_N^*(\alpha;x_0),
+\qquad
+\TV(\hat\pi_{m,N},\pi_m^{\mathrm{fold}})
+\le 2m\,D_N^*(\alpha;x_0).
+\]
+In the Sturmian slice \(\beta=\alpha\), these improve to
+\[
+\TV(\hat\mu_{m,N},\mu_m)
+\le (m+1)D_N^*(\alpha;x_0),
+\qquad
+\TV(\hat\pi_{m,N},\pi_m^{\mathrm{fold}})
+\le (m+1)D_N^*(\alpha;x_0).
+\]
 \end{theorem}
+
+\begin{proof}
+The length-\(m\) coding map
+\[
+x\longmapsto \omega_m(x)
+=\bigl(\mathbf 1_{[0,\beta)}(x+j\alpha)\bigr)_{j=0}^{m-1}
+\]
+can change only when \(x\) crosses one of the boundary points
+\[
+\Gamma_m(\alpha,\beta)
+:=\{-j\alpha,\ \beta-j\alpha \pmod 1:\ 0\le j<m\}.
+\]
+After deleting repetitions and arranging these points cyclically, they cut
+\(\TT\) into a half-open interval partition \(\mathcal P_m\) with
+\(|\mathcal P_m|\le 2m\).  The convention \([0,\beta)\) makes
+\(\omega_m\) constant on each atom of this partition, so the microstate laws
+\(\hat\mu_{m,N}\) and \(\mu_m\) are pushforwards of the two partition laws
+\((\nu_N(I))_{I\in\mathcal P_m}\) and \((\lambda(I))_{I\in\mathcal P_m}\).
+Total variation cannot increase under a deterministic pushforward.  Hence
+Lemma~\ref{lem:interval-partition-star-discrepancy} gives
+\[
+\TV(\hat\mu_{m,N},\mu_m)
+\le |\mathcal P_m|D_N^*(\alpha;x_0)
+\le 2mD_N^*(\alpha;x_0).
+\]
+Since \(\hat\pi_{m,N}=(\Fold_m)_*\hat\mu_{m,N}\) and
+\(\pi_m^{\mathrm{fold}}=(\Fold_m)_*\mu_m\), another application of
+monotonicity under deterministic pushforward gives the folded estimate.
+
+If \(\beta=\alpha\), then
+\[
+\Gamma_m(\alpha,\alpha)
+=\{-j\alpha,\ \alpha-j\alpha \pmod 1:\ 0\le j<m\}
+=\{-(j-1)\alpha\pmod 1:\ 0\le j\le m\}.
+\]
+These \(m+1\) points are distinct because \(\alpha\) is irrational.  Thus the
+same argument applies with \(|\mathcal P_m|=m+1\), proving the sharpened
+Sturmian bounds.
+\end{proof}
 
 \begin{remark}
 Thus any arithmetic or numerical bound on \(D_N^*(\alpha;x_0)\) gives the same
