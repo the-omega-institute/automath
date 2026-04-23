@@ -54,6 +54,9 @@ and
 \end{equation}
 Since \(\phi\) is bounded and \(p_n(A)\ll \lambda^n/n\), the series
 \(\Pi_\phi(z)\) converges absolutely for \(|z|<\lambda^{-1}\).
+These symbols are generating functions for deterministic orbit data.
+They are not transition kernels or probabilities attached to repeated
+measurements.
 
 \begin{proposition}[Conjugacy-class expansion]
   \label{prop:class-indicator-expansion}
@@ -391,17 +394,47 @@ primitive inversion operates.
     \sum_{\gamma\in\cP}\sum_{r\ge 1}
       \frac{\phi(\tau(\gamma)^{mr})}{r}z^{mr|\gamma|}.
   \]
-  The resulting \(m,r,\gamma\) sums may be rearranged absolutely, because
+  The resulting \(m,r,\gamma\) sums may be rearranged absolutely.
+  Indeed, \(\phi\) is bounded, so
   \[
     \sum_{m\ge 1}\frac{1}{m}
       \sum_{\gamma\in\cP}\sum_{r\ge 1}
-        \frac{|z|^{mr|\gamma|}}{r}
+        \frac{\abs{\phi(\tau(\gamma)^{mr})}}{r} |z|^{mr|\gamma|}
     \le
+    \norm{\phi}_\infty
+    \sum_{m\ge 1}\frac{1}{m}
+      \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn},
+  \]
+  where
+  \[
+    \sum_{\gamma\in\cP}\sum_{r\ge 1}\frac{|z|^{mr|\gamma|}}{r}
+    =
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn}
+  \]
+  by \eqref{eq:class-logarithm-primitive-expansion} with
+  \(\phi=\mathbf 1\). Since all terms are non-negative, Tonelli's
+  theorem gives
+  \[
     \sum_{m\ge 1}\frac{1}{m}
       \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn}
-    <\infty,
+    =
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}
+      \sum_{m\ge 1}\frac{|z|^{mn}}{m}
+    =
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}
+      \bigl(-\log(1-|z|^n)\bigr).
   \]
-  again for \(|z|<\lambda^{-1}\).
+  Now \(\Tr(A^n)\le d\,\lambda^n\) and
+  \[
+    -\log(1-|z|^n)\le \frac{|z|^n}{1-|z|^n}\le \frac{|z|^n}{1-|z|},
+  \]
+  so the last series is bounded by
+  \[
+    \frac{d}{1-|z|}
+    \sum_{n\ge 1}\frac{(\lambda|z|)^n}{n},
+  \]
+  which converges for \(|z|<\lambda^{-1}\). Hence absolute
+  rearrangement is justified.
   Hence
   \begin{align*}
     \sum_{m\ge 1}\frac{\mu(m)}{m}\mathcal L_{\psi^m\phi}(z^m)
@@ -662,17 +695,12 @@ hypothesis
 \[
   \eta:=\max_{\varrho\neq\mathbf 1}\rho(A_\varrho)<\lambda.
 \]
-Its role is only to permit evaluation at the Perron point in the
-non-trivial Peter--Weyl channels; the present paper does not derive this
-strict inequality from separate dynamical criteria.
 Thus the formal determinant identities
 \Cref{thm:class-function-linearisation,cor:class-function-adams-mobius,cor:primitive-peter-weyl-determinant,cor:primitive-peter-weyl-trace}
 are unconditional in the open Perron disc, while the estimates and
 constants from \Cref{lem:nontrivial-peter-weyl-channel-bound} through
 \Cref{thm:class-mertens-fourier} are conditional on \(\lambda>1\) and
 the displayed gap.
-The one-layer condition \(q\ge d\) from \Cref{sec:finite-part} is not
-used anywhere in this finite-group Perron-point argument.
 The only scalar input used below is the trivial-channel
 orbit-Mertens constant \(\mathcal M(A)\); its finite-matrix formula is
 proved independently in \Cref{sec:finite-part}.
@@ -682,8 +710,8 @@ Theorem~II from the introduction. The leading density term is included
 to identify the constant term and normalisation; the new ingredient in
 this section is the passage from the twisted determinant channels to the
 primitive Perron-point class profile. The later Fourier formula is a
-readout of the constants by character orthogonality, not a second
-analytic mechanism. The proof is assembled from the next five lemmas:
+readout of the constants by character orthogonality. The proof is
+assembled from the next five lemmas:
 class decomposition, the non-trivial channel estimate, absolute
 convergence at the Perron point, a geometric-harmonic tail bound, and
 the trivial Perron-channel contribution.
