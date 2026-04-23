@@ -7,6 +7,7 @@ import Omega.POM.A4TEvenSpectrumGammaInversion
 import Omega.POM.A4TEvenZetaQuintic
 import Omega.POM.A4TNewmanThresholdAdeOrdering
 import Omega.POM.A4TNewmanOcticFieldArithmetic
+import Omega.POM.A4TE8TwoResolutionLayerNonembedding
 import Omega.POM.A4TracePrimitiveTwoTerm
 import Omega.POM.CollisionCKClassificationQ234
 import Omega.POM.CollisionCKFibonacci
