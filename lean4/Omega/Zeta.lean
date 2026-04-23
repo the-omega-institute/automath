@@ -6,8 +6,10 @@ import Omega.Zeta.AbelCongruenceEnergyParsevalBarcode
 import Omega.Zeta.AbelDecimationSemigroupIdentity
 import Omega.Zeta.AbelGrowthExponentCriterion
 import Omega.Zeta.AbelAnalyticRemainderDecimationCollapse
+import Omega.Zeta.AbelKadicMultiresolutionEnergyLedger
 import Omega.Zeta.AbelOffcriticalExponentialRadiusAmplification
 import Omega.Zeta.AbelMobiusNeutralizationFormal
+import Omega.Zeta.AbelResidueClassChannelRadiusSigmaStar
 import Omega.Zeta.AbelTwoBaseDealiasingInjectivity
 import Omega.Zeta.AbelHardyEnergyDecimationOrthogonal
 import Omega.Zeta.AbelDetailEnergyBudget
@@ -205,6 +207,7 @@ import Omega.Zeta.XiTimePart9mFixedFrequencyCollisionCertificateFails
 import Omega.Zeta.XiTimePart9xcSerrinHankelPronyRankOne
 import Omega.Zeta.XiTimePart9xcSerrinCongruenceDiracLengthOne
 import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
+import Omega.Zeta.XiTimePart9zgQuadraticSectorCharacterHarmonicCollapse
 import Omega.Zeta.XiTerminalZmLeyangP3RenormalizationHensel
 import Omega.Zeta.XiTerminalZmLeyangPerronP3Radius
 import Omega.Zeta.XiTerminalZmLeyangP3V3LinearBound
@@ -875,6 +878,7 @@ import Omega.Zeta.XiShadowSpectrumDeterminantRatioAtZero
 import Omega.Zeta.XiShadowSpectrumTowerPrincipalMinors
 import Omega.Zeta.XiSingleDefectIntegratedClosedForm
 import Omega.Zeta.XiSingleDefectMassLogDerivative
+import Omega.Zeta.XiSingleDefectThresholdSaturation
 import Omega.Zeta.XiSingleDefectThresholdPhaseTransition
 import Omega.Zeta.XiSingleIntegerCoordinateNoExactAdditiveLedger
 import Omega.Zeta.XiSingleScaleRadialDeviationArcosh
