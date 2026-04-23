@@ -984,3 +984,4 @@ import Omega.Zeta.XiTerminalZmLeyangEllipticDoublingStationarity
 import Omega.Zeta.XiAddressabilityCountingObstruction
 import Omega.Zeta.XiPoissonKernelDerivativeL2ClosedForm
 import Omega.Zeta.PhaseLiftSpectralBound
+import Omega.Zeta.XiTerminalZmBranchPuiseuxCoefficientCubic
