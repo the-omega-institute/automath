@@ -401,6 +401,56 @@ q_K^{2N}M_K\le\eta,\quad \mathbf T_N\succeq0,
 \]
 的区间不决状态，或者某一轴缺少对应证书，则本命题不推出拒绝的必要性；它只说明上述有限三端账本是充分接受证书。
 \end{proposition}
+
+% --- Distillation writeback ---
+% Distillation timestamp: 2026-04-23T12:04:19+08:00; pipeline index: 38.
+\begin{proposition}[三端边界预算的轴向 overflow 正规形]\label{distill:euclid_elements-lifted_congruence_and_residual_rigidity_families-boundary-axiswise-overflow-normal-form}
+\textbf{Dependency status: conditional audit.}
+沿用定义 \ref{def:typed-address-biaxial-completion-boundary-budget-vector}、定义 \ref{def:typed-address-biaxial-completion-boundary-triple-certificate} 与定义 \ref{def:typed-address-biaxial-completion-boundary-verifier}。固定一份区间半径证书
+\[
+\mathsf R_\rho=(\underline r_\rho,\overline r_\rho),\qquad
+0<\underline r_\rho\le r_\rho\le\overline r_\rho<1,
+\]
+一个地址端单调分离谓词 \(\mathsf{Sep}_T(b)\)，以及端点支撑控制数据
+\[
+(K,q_K,M_K,N,\eta),\qquad 0<q_K<1,\quad M_K\ge0,\quad \eta>0.
+\]
+再设 Toeplitz--PSD 可接受深度集合
+\[
+\mathsf{PSD}\subseteq\NN
+\]
+已经作为线性代数端证书登记。定义充分接受域
+\[
+\mathfrak A
+:=
+\left\{(\varrho_{\max},b,N):
+\varrho_{\max}>\overline r_\rho,\ \mathsf{Sep}_T(b),\ q_K^{2N}M_K\le\eta,\ N\in\mathsf{PSD}
+\right\}.
+\]
+若 \((\varrho_{\max},b,N)\notin\mathfrak A\)，则至少出现以下轴向 overflow 见证之一：
+\begin{enumerate}
+  \item \(\mathrm{RadOverflow}\)：\(\varrho_{\max}\le\overline r_\rho\)；
+  \item \(\mathrm{AddrOverflow}\)：\(\mathsf{Sep}_T(b)\) 未通过；
+  \item \(\mathrm{HeatOverflow}\)：\(q_K^{2N}M_K>\eta\) 或 \(N\notin\mathsf{PSD}\)。
+\end{enumerate}
+并且每一类 overflow 都不可由其余两轴补偿：若某一失败不等式在该轴上保持不变，则任意增大另外两项预算都不能使三元组进入 \(\mathfrak A\)。
+\end{proposition}
+\begin{proof}
+充分接受域 \(\mathfrak A\) 是四个条件的交。若三元组不在其中，则至少有一个条件失败。前三类标签正是把失败条件按半径端、地址端与端点线性代数端分组后的穷尽列表。因此任一非接受三元组必携带至少一个列出的 overflow 见证。
+
+下面证明不可补偿性。若 \(\mathrm{RadOverflow}\) 成立，即 \(\varrho_{\max}\le\overline r_\rho\)，则 \(\mathfrak A\) 的第一条条件已经失败；无论如何改变 \(b\) 与 \(N\)，只要 \(\varrho_{\max}\) 保持不变，仍有 \(\varrho_{\max}\le\overline r_\rho\)，故不能进入 \(\mathfrak A\)。这正是命题
+\ref{prop:distill-euclid-elements-boundary-radius-interval-normal-form}
+中区间半径端的健全性要求。
+
+若 \(\mathrm{AddrOverflow}\) 成立，则当前 dyadic 地址语法下 \(\mathsf{Sep}_T(b)\) 未被离线核验。\(\mathfrak A\) 的定义要求同一个 \(b\) 通过该谓词；因此在保持 \(b\) 不变时，提高半径或端点热核深度都不能补出地址分离账本。
+
+若 \(\mathrm{HeatOverflow}\) 成立，则要么指数尾界 \(q_K^{2N}M_K\le\eta\) 失败，要么 Toeplitz--PSD 深度证书缺失。二者均属于端点承载轴的条件。保持 \(N\) 与其 PSD 登记状态不变时，半径穿越与 dyadic 分离不会改变端点热核误差估计，也不会生成新的 Toeplitz--PSD 证书，故仍不能进入 \(\mathfrak A\)。
+
+于是接受域的补集在当前有限三端账本中被这三个轴向 overflow 面覆盖；该覆盖是协议层面的结构分类，而非数值近似误差。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 半径端由区间包含给出。若 \(\varrho_{\max}>\overline r_\rho\ge r_\rho\)，则有限半径采样已经越过真实阈值半径，故命题 \ref{prop:typed-address-biaxial-completion-boundary-blindspot} 中的半径盲区不再由该目标点触发。注意这里只使用区间上界，因此没有把 \(\underline r_\rho<\varrho_{\max}\le\overline r_\rho\) 的不决情形误判为通过。
 
