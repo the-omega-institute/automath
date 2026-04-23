@@ -58,6 +58,7 @@ import Omega.SyncKernelWeighted.LambdaEndpointsMonotoneUplift
 import Omega.SyncKernelWeighted.LambdaExtremeAsymp
 import Omega.SyncKernelWeighted.LogMCompletedReal
 import Omega.SyncKernelWeighted.MertensEven
+import Omega.SyncKernelWeighted.ModerateDeviation
 import Omega.SyncKernelWeighted.MobiusErrorPropagation
 import Omega.SyncKernelWeighted.MuPochhammerNecklaceDirichletPolylog
 import Omega.SyncKernelWeighted.MuPochhammerNecklaceExpansion
