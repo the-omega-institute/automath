@@ -10,6 +10,7 @@ import Omega.Conclusion.AnalyticHolographyInversionRigidity
 import Omega.Conclusion.AffineNormalFormSemidirect
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.AnchorFullRankWeightblindRigidity
+import Omega.Conclusion.AnchorFullRankPoleDominance
 import Omega.Conclusion.AlgebraicLdpDfiniteStokesCompression
 import Omega.Conclusion.AlgorithmPrimeShiftEquivalence
 import Omega.Conclusion.AmbiguityShellJordanChainGraphLift

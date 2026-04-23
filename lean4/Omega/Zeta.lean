@@ -84,6 +84,7 @@ import Omega.Zeta.XiEndpointHeatProbeAdamsTwistSpectralGapExpBound
 import Omega.Zeta.XiEntropyGapHankelDeterminantCollapseUpperBound
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
 import Omega.Zeta.XiEndpointProfileCfiniteHankelRank
+import Omega.Zeta.XiEndpointProfilePronyInvertibility
 import Omega.Zeta.XiExtremeResonancePositivity
 import Omega.Zeta.XiExtremeResonanceCriterion
 import Omega.Zeta.XiExtremeResonanceToeplitzThreshold
@@ -1050,6 +1051,7 @@ import Omega.Zeta.XiTimePart9gCanonicalSubmonoidFreeMonoid
 import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
 import Omega.Zeta.XiTimePart9zqThreepointJensenRhDisproof
 import Omega.Zeta.XiTimePart9zbkPadeJacobiIdentity
+import Omega.Zeta.XiPadeStieltjesOrderPreserving
 import Omega.Zeta.XiTimePart9zbgFoldpiFiniteRankMomentExhaustion
 import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage
 import Omega.Zeta.XiTimePart9zhDyadicBulkLinearDepthVsPrimeLedger
