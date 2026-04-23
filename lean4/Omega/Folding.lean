@@ -400,6 +400,7 @@ import Omega.Folding.FoldMultiplicitySpectrumBlindspotHalf
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.FoldPairedStepDirichletCharacterIdentity
 import Omega.Folding.FoldPressureExactFreezingGapThreshold
+import Omega.Folding.FoldBinPowerSumAsymptotic
 import Omega.Folding.FoldPressureGroundstateBounds
 import Omega.Folding.FoldPressureFreezingThreshold
 import Omega.Folding.FoldPrimeCertificateVsItGapDiverges
