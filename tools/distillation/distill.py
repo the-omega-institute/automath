@@ -4792,6 +4792,7 @@ def run_stage_w(
     attempts = []
     accepted_writebacks: list[dict[str, Any]] = []
     accepted_review: dict[str, Any] = {}
+    accepted_plan: list[dict[str, Any]] = []
     deep_rounds = 0
     for attempt in range(1, MAX_W_ROUNDS + 1):
         if dry_run:
@@ -4920,8 +4921,16 @@ def run_stage_w(
         attempts.append({"attempt": attempt, "review": review, "writebacks": writebacks})
 
         if review.get("gate_passed"):
+            plan, plan_errors = _plan_writeback_application(writebacks)
+            if plan_errors:
+                feedback = "Application plan failed: " + "; ".join(plan_errors)
+                attempts[-1]["plan_errors"] = plan_errors
+                state.prior_feedback.append(f"W attempt {attempt}: {feedback}")
+                save_state(state)
+                continue
             accepted_writebacks = writebacks
             accepted_review = review
+            accepted_plan = plan
             break
 
         # A-DEEP escalation: when both reviewers reject, escalate with
@@ -5006,7 +5015,11 @@ def run_stage_w(
         {"attempts": attempts, "accepted_review": accepted_review},
     )
 
-    plan, plan_errors = _plan_writeback_application(accepted_writebacks)
+    plan = accepted_plan
+    if not plan:
+        plan, plan_errors = _plan_writeback_application(accepted_writebacks)
+    else:
+        plan_errors = []
     if plan_errors:
         _write_artifact_json(
             state,
