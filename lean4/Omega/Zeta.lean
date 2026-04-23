@@ -75,6 +75,7 @@ import Omega.Zeta.XiRhIffLatticeComovingDefect
 import Omega.Zeta.XiSmithLossSpectrumDiscreteCurvatureCompleteCharacterization
 import Omega.Zeta.XiDefectDensityConeChoquetExtreme
 import Omega.Zeta.XiDefectEntropyHeightBudgetVarianceGap
+import Omega.Zeta.XiDefectEntropyFeasibleIntervalFluxIndex
 import Omega.Zeta.XiSymqRankoneCouplingTPower
 import Omega.Zeta.XiSymqResultantPadicValuation
 import Omega.Zeta.XiMonotoneIdempotentSkeletonGcdLcmSparsity
