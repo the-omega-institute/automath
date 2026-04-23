@@ -36,6 +36,7 @@ import Omega.POM.FiberIndexLdpThermo
 import Omega.POM.FiberHammingTripleIsometry
 import Omega.POM.HiddenBitJumpCollisionIsomorphism
 import Omega.POM.HiddenBitComplementFixedpointBSplitDichotomy
+import Omega.POM.HiddenBitTopbitMiHalfEntropy
 import Omega.POM.HiddenBitWatataniIndexElement
 import Omega.POM.HighorderSchurPackageDeterminesFullFiberMultiset
 import Omega.POM.AdjacentPressureConvexity

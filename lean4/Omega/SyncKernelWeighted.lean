@@ -162,6 +162,7 @@ import Omega.SyncKernelWeighted.SchurChannelPressureGC
 import Omega.SyncKernelWeighted.SchurChannelCompletionUnitSlice
 import Omega.SyncKernelWeighted.SchurChannelStrictSelfDualFunctoriality
 import Omega.SyncKernelWeighted.SelfDualU1TwoChannelZeta
+import Omega.SyncKernelWeighted.SelfDualDeltaEvenInOneMinusU
 import Omega.SyncKernelWeighted.SelfDualNormalForm1pmu
 import Omega.SyncKernelWeighted.TraceCentralMomentsZero
 import Omega.SyncKernelWeighted.TraceOddVanish
@@ -211,6 +212,7 @@ import Omega.SyncKernelWeighted.WittNecklaceDworkR
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.SyncKernelWeighted.WittPpowerPrimitiveCoordinate
 import Omega.SyncKernelWeighted.WittThetaDerivativeFilter
+import Omega.SyncKernelWeighted.WittThetaStableResidue
 import Omega.SyncKernelWeighted.WittRootOfUnityCommonPadicLimit
 import Omega.SyncKernelWeighted.WittUnitRootLimit
 import Omega.SyncKernelWeighted.WittDworkSupercongruenceMinusOne
