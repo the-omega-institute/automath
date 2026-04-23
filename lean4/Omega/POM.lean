@@ -16,6 +16,7 @@ import Omega.POM.AdditiveFoldCollisionConvolutionFourier
 import Omega.POM.HiddenBitJumpProbabilityClosedForm
 import Omega.POM.HankelSyndromeHNFModelFree
 import Omega.POM.S2RankExact
+import Omega.POM.HankelRankMinimal
 import Omega.POM.HiddenBitJumpCollisionIsomorphism
 import Omega.POM.HiddenBitComplementFixedpointBSplitDichotomy
 import Omega.POM.HiddenBitWatataniIndexElement
