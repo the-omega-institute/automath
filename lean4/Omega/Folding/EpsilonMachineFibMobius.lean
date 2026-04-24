@@ -23,6 +23,62 @@ theorem paper_fold_epsilon_machine_fibonacci_mobius_seeds :
          ⟨by decide, by decide⟩, ⟨by native_decide, by native_decide⟩,
          ⟨by omega, by omega⟩⟩
 
+/-- Closed forms for the Möbius recursion governing the uncertain epsilon-machine states.
+    thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius -/
+theorem paper_fold_epsilon_machine_fibonacci_mobius
+    (r alpha : Nat → Rat) (h0 : r 0 = (1 : Rat) / 2)
+    (hrec : ∀ n : Nat, r (n + 1) = 1 / (4 * r n + 2))
+    (hAlpha : ∀ n : Nat, alpha n = 1 / (4 * (1 + r n))) :
+    (∀ n : Nat, r n = (Nat.fib (n + 1) : Rat) / (2 * Nat.fib (n + 2))) ∧
+      (∀ n : Nat, alpha n = (Nat.fib (n + 2) : Rat) / (2 * Nat.fib (n + 4))) := by
+  have hFibNe : ∀ n : Nat, (Nat.fib (n + 2) : Rat) ≠ 0 := by
+    intro n
+    have hpos : 0 < (Nat.fib (n + 2) : Rat) := by
+      exact_mod_cast (Nat.fib_pos.mpr (by omega) : 0 < Nat.fib (n + 2))
+    exact ne_of_gt hpos
+  have hFib3 : ∀ n : Nat, (Nat.fib (n + 3) : Rat) = Nat.fib (n + 1) + Nat.fib (n + 2) := by
+    intro n
+    exact_mod_cast
+      (show Nat.fib (n + 3) = Nat.fib (n + 1) + Nat.fib (n + 2) by
+        simpa [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using
+          (Nat.fib_add_two (n := n + 1)))
+  have hFib4 : ∀ n : Nat, (Nat.fib (n + 4) : Rat) = Nat.fib (n + 1) + 2 * Nat.fib (n + 2) := by
+    intro n
+    calc
+      (Nat.fib (n + 4) : Rat) = Nat.fib (n + 2) + Nat.fib (n + 3) := by
+        exact_mod_cast
+          (show Nat.fib (n + 4) = Nat.fib (n + 2) + Nat.fib (n + 3) by
+            simpa [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using
+              (Nat.fib_add_two (n := n + 2)))
+      _ = Nat.fib (n + 1) + 2 * Nat.fib (n + 2) := by rw [hFib3 n]; ring
+  have hrClosed : ∀ n : Nat, r n = (Nat.fib (n + 1) : Rat) / (2 * Nat.fib (n + 2)) := by
+    intro n
+    induction n with
+    | zero =>
+        calc
+          r 0 = (1 : Rat) / 2 := h0
+          _ = (Nat.fib 1 : Rat) / (2 * Nat.fib 2) := by norm_num
+    | succ n ih =>
+        calc
+          r (n + 1) = 1 / (4 * r n + 2) := hrec n
+          _ = 1 / (4 * ((Nat.fib (n + 1) : Rat) / (2 * Nat.fib (n + 2))) + 2) := by rw [ih]
+          _ = (Nat.fib (n + 2) : Rat) / (2 * Nat.fib (n + 3)) := by
+            have hne := hFibNe n
+            rw [hFib3 n]
+            field_simp [hne]
+            ring
+  have hAlphaClosed : ∀ n : Nat, alpha n = (Nat.fib (n + 2) : Rat) / (2 * Nat.fib (n + 4)) := by
+    intro n
+    calc
+      alpha n = 1 / (4 * (1 + r n)) := hAlpha n
+      _ = 1 / (4 * (1 + (Nat.fib (n + 1) : Rat) / (2 * Nat.fib (n + 2)))) := by rw [hrClosed n]
+      _ = (Nat.fib (n + 2) : Rat) / (2 * Nat.fib (n + 4)) := by
+        have hne := hFibNe n
+        rw [hFib4 n]
+        field_simp [hne]
+        ring
+  exact ⟨hrClosed, hAlphaClosed⟩
+
 /-- Zero-run conditional law Fibonacci closed-form seeds.
     thm:fold-gauge-anomaly-zero-run-fibonacci -/
 theorem paper_fold_gauge_anomaly_zero_run_fibonacci_seeds :

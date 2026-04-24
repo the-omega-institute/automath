@@ -87,4 +87,15 @@ theorem paper_bdry_symmetric_group_sign_twisted_label_d2_unique
     intro i
     simpa [hu1, mul_assoc] using hu i
 
+/-- Paper-facing `d = 2` package: existence together with uniqueness up to global sign. -/
+theorem paper_bdry_symmetric_group_sign_twisted_label_d2 :
+    chiTwistedBinaryLabelExists (Equiv.Perm (Fin 2)) (Fin 2) Equiv.Perm.sign ∧
+      ∀ p q : Fin 2 → ℤˣ,
+        chiTwistedBinaryLabel (Equiv.Perm (Fin 2)) (Fin 2) Equiv.Perm.sign p →
+          chiTwistedBinaryLabel (Equiv.Perm (Fin 2)) (Fin 2) Equiv.Perm.sign q →
+            q = p ∨ q = fun i => (-1 : ℤˣ) * p i := by
+  refine ⟨chiTwistedBinaryLabelExists_perm_fin_two, ?_⟩
+  intro p q hp hq
+  exact paper_bdry_symmetric_group_sign_twisted_label_d2_unique p q hp hq
+
 end Omega.GU

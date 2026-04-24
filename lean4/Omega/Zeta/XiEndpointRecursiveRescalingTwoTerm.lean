@@ -35,6 +35,18 @@ def xiEndpointUniformErrorDecay (m : ℕ) (endpointMass endpointValue : ℚ) : P
     |xiEndpointRescaledSample m endpointMass endpointValue n w -
         (endpointMass * xiEndpointB w + endpointValue / (m : ℚ) ^ n)| = 0
 
+/-- The second-difference estimator cancelling the leading endpoint atom. -/
+def xiEndpointSecondDifferenceEstimator
+    (m : ℕ) (endpointMass endpointValue : ℚ) (n : ℕ) (w : ℚ) : ℚ :=
+  (((m : ℚ) * xiEndpointSample m endpointMass endpointValue n w) -
+      xiEndpointSample m endpointMass endpointValue (n + 1) w) / ((m : ℚ) - 1)
+
+/-- The successive difference of the endpoint sample sequence. -/
+def xiEndpointSuccessiveDifference
+    (m : ℕ) (endpointMass endpointValue : ℚ) (n : ℕ) (w : ℚ) : ℚ :=
+  xiEndpointSample m endpointMass endpointValue (n + 1) w -
+    xiEndpointSample m endpointMass endpointValue n w
+
 lemma xiEndpointB_psi (m : ℕ) (hm : 1 < m) {w : ℚ} (hw : |w| < 1) :
     xiEndpointB (xiEndpointPsi m w) = (m : ℚ) * xiEndpointB w := by
   rcases abs_lt.mp hw with ⟨hw_neg, hw_pos⟩
@@ -88,5 +100,46 @@ theorem paper_xi_endpoint_recursive_rescaling_two_term
   · intro n w
     rw [abs_eq_zero]
     exact sub_eq_zero.mpr (hTwoTerm n w)
+
+private lemma xiEndpointSuccessiveDifference_closedForm
+    (m : ℕ) (endpointMass endpointValue : ℚ) (n : ℕ) (w : ℚ) :
+    xiEndpointSuccessiveDifference m endpointMass endpointValue n w =
+      endpointMass * ((m : ℚ) - 1) * (m : ℚ) ^ n * xiEndpointB w := by
+  unfold xiEndpointSuccessiveDifference xiEndpointSample
+  rw [pow_succ]
+  ring
+
+/-- In the concrete two-term endpoint model, the second-difference estimator removes the atomic
+term exactly, so it recovers the endpoint value with zero error; moreover successive differences
+scale geometrically by the same factor `m`.
+    cor:xi-endpoint-second-difference-elimination-holder-estimator -/
+theorem paper_xi_endpoint_second_difference_elimination_holder_estimator
+    (m : ℕ) (hm : 1 < m) (endpointMass endpointValue : ℚ) :
+    (∀ n : ℕ, ∀ w : ℚ,
+      xiEndpointSecondDifferenceEstimator m endpointMass endpointValue n w = endpointValue) ∧
+      (∀ n : ℕ, ∀ w : ℚ,
+        xiEndpointSuccessiveDifference m endpointMass endpointValue (n + 1) w =
+          (m : ℚ) * xiEndpointSuccessiveDifference m endpointMass endpointValue n w) ∧
+      (∀ n : ℕ, ∀ w : ℚ,
+        |xiEndpointSecondDifferenceEstimator m endpointMass endpointValue n w - endpointValue| = 0) := by
+  have hm1 : ((m : ℚ) - 1) ≠ 0 := by
+    have hmq : (1 : ℚ) < m := by
+      exact_mod_cast hm
+    linarith
+  have hEstimator :
+      ∀ n : ℕ, ∀ w : ℚ,
+        xiEndpointSecondDifferenceEstimator m endpointMass endpointValue n w = endpointValue := by
+    intro n w
+    unfold xiEndpointSecondDifferenceEstimator xiEndpointSample
+    field_simp [hm1]
+    ring
+  refine ⟨hEstimator, ?_, ?_⟩
+  · intro n w
+    rw [xiEndpointSuccessiveDifference_closedForm, xiEndpointSuccessiveDifference_closedForm]
+    rw [pow_succ]
+    ring
+  · intro n w
+    rw [abs_eq_zero]
+    exact sub_eq_zero.mpr (hEstimator n w)
 
 end Omega.Zeta

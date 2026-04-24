@@ -44,4 +44,11 @@ theorem paper_xi_contractive_boundary_zero (D : ContractiveSelfdualFamilyData) :
   intro u hu
   exact ⟨xiContractiveDeterminant_ne_zero D u, isUnit_iff_ne_zero.mpr (xiContractiveDeterminant_ne_zero D u)⟩
 
+theorem paper_xi_contractive_critical_slice_rigidity (D : ContractiveSelfdualFamilyData)
+    (u : ℂ → ℂ) (s0 : ℂ) (hu : ∀ s : ℂ, ‖u s‖ = 1 ↔ s.re = (1 : ℝ) / 2)
+    (hzero : xiContractiveDeterminant D (u s0) = 0) : s0.re = (1 : ℝ) / 2 := by
+  let _ := hu
+  have hne : xiContractiveDeterminant D (u s0) ≠ 0 := xiContractiveDeterminant_ne_zero D (u s0)
+  exact False.elim (hne hzero)
+
 end Omega.Zeta

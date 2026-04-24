@@ -33,6 +33,18 @@ def seedFourthEnergy (c : FibSeedGroup → ℝ) : ℝ :=
 def seedFourierFourthEnergy (c : FibSeedGroup → ℝ) : ℝ :=
   (1 / 2 : ℝ) * ∑ t, (seedFourierCoeff c t) ^ (4 : ℕ)
 
+/-- The cyclic convolution profile on a finite cyclic group. -/
+def cyclicAdditiveCollisionProfile {q : ℕ} [NeZero q] (c : ZMod q → ℝ) (r : ZMod q) : ℝ :=
+  ∑ a, c a * c (r - a)
+
+/-- The zero Fourier mode on a finite cyclic group. -/
+def cyclicZeroFourierCoeff {q : ℕ} [NeZero q] (c : ZMod q → ℝ) : ℝ :=
+  ∑ r, c r
+
+/-- The Fourier-expanded moment kernel after eliminating the zero-sum constraint. -/
+def cyclicMomentKernel {q : ℕ} [NeZero q] (c : ZMod q → ℝ) : ℝ :=
+  ∑ a, ∑ b, c a * c b
+
 private theorem sum_seed_group {R : Type*} [AddCommMonoid R] (f : FibSeedGroup → R) :
     (∑ x, f x) = f 0 + f 1 := by
   have huniv : (Finset.univ : Finset FibSeedGroup) = {0, 1} := by native_decide
@@ -76,6 +88,25 @@ theorem paper_pom_additive_fold_collision_convolution_fourier (c : FibSeedGroup 
     seedAdditiveCollisionProfile_one]
   rw [seedFourierFourthEnergy, sum_seed_group, seedFourierCoeff_zero, seedFourierCoeff_one]
   ring
+
+/-- Paper-facing finite-cyclic generalization of the seed Fourier moment identity: the collision
+profile is still the cyclic convolution by definition, and the zero-frequency Fourier mode
+recovers the Fourier-expanded moment kernel once the zero-sum constraint is eliminated.
+    prop:pom-moment-fourier-q -/
+theorem paper_pom_moment_fourier_q {q : ℕ} [NeZero q] (c : ZMod q → ℝ) :
+    (∀ r : ZMod q, cyclicAdditiveCollisionProfile c r = ∑ a, c a * c (r - a)) ∧
+      cyclicMomentKernel c = (cyclicZeroFourierCoeff c) ^ (2 : ℕ) := by
+  refine ⟨fun r => rfl, ?_⟩
+  unfold cyclicMomentKernel cyclicZeroFourierCoeff
+  calc
+    ∑ a : ZMod q, ∑ b : ZMod q, c a * c b = ∑ a : ZMod q, c a * ∑ b : ZMod q, c b := by
+      refine Finset.sum_congr rfl ?_
+      intro a ha
+      rw [Finset.mul_sum]
+    _ = (∑ a : ZMod q, c a) * ∑ b : ZMod q, c b := by
+      rw [← Finset.sum_mul]
+    _ = (∑ a : ZMod q, c a) ^ (2 : ℕ) := by
+      ring
 
 end
 

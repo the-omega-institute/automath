@@ -157,6 +157,80 @@ theorem toZMod_surjective : Function.Surjective (toZMod (m := m)) :=
 noncomputable def stableValueRingEquiv (m : Nat) : X m ≃+* ZMod (Nat.fib (m + 2)) :=
   RingEquiv.ofBijective (stableValueRingHom m) ⟨toZMod_injective, toZMod_surjective⟩
 
+/-! ### Affine-linear magma transfer across stable values -/
+
+universe u
+
+/-- Binary magma terms over a variable type `ι`.  This is deliberately local:
+    it is enough to state the ETP transfer bridge without importing ETP. -/
+inductive AffineMagmaTerm (ι : Type u) where
+  | var : ι → AffineMagmaTerm ι
+  | op : AffineMagmaTerm ι → AffineMagmaTerm ι → AffineMagmaTerm ι
+
+namespace AffineMagmaTerm
+
+/-- Evaluate a term in `X m` using the affine-linear magma operation
+    `x ⋄ y = a*x + b*y`. -/
+def evalX (m : Nat) (a b : X m) (env : ι → X m) : AffineMagmaTerm ι → X m
+  | var i => env i
+  | op lhs rhs => a * evalX m a b env lhs + b * evalX m a b env rhs
+
+/-- Evaluate a term in `ZMod (F_{m+2})` using the same affine-linear formula
+    after transporting coefficients and variables by `stableValueRingEquiv`. -/
+def evalZ (m : Nat) (a b : ZMod (Nat.fib (m + 2)))
+    (env : ι → ZMod (Nat.fib (m + 2))) :
+    AffineMagmaTerm ι → ZMod (Nat.fib (m + 2))
+  | var i => env i
+  | op lhs rhs => a * evalZ m a b env lhs + b * evalZ m a b env rhs
+
+/-- Satisfaction of an affine-linear magma equation on `X m`. -/
+def SatisfiesX (m : Nat) (a b : X m) (lhs rhs : AffineMagmaTerm ι) : Prop :=
+  ∀ env : ι → X m, evalX m a b env lhs = evalX m a b env rhs
+
+/-- Satisfaction of the transported affine-linear magma equation on
+    `ZMod (F_{m+2})`. -/
+def SatisfiesZ (m : Nat) (a b : ZMod (Nat.fib (m + 2)))
+    (lhs rhs : AffineMagmaTerm ι) : Prop :=
+  ∀ env : ι → ZMod (Nat.fib (m + 2)), evalZ m a b env lhs = evalZ m a b env rhs
+
+end AffineMagmaTerm
+
+/-- Term evaluation commutes with the stable-value ring equivalence. -/
+theorem stableValueRingEquiv_eval_affineMagmaTerm
+    {ι : Type u} (m : Nat) (a b : X m) (env : ι → X m) :
+    ∀ term : AffineMagmaTerm ι,
+      stableValueRingEquiv m (AffineMagmaTerm.evalX m a b env term) =
+        AffineMagmaTerm.evalZ m (stableValueRingEquiv m a) (stableValueRingEquiv m b)
+          (fun i => stableValueRingEquiv m (env i)) term := by
+  intro term
+  induction term with
+  | var i => rfl
+  | op lhs rhs ih_lhs ih_rhs =>
+      simp [AffineMagmaTerm.evalX, AffineMagmaTerm.evalZ, ih_lhs, ih_rhs]
+
+/-- The transfer bridge: for any affine-linear magma operation
+    `x ⋄ y = a*x + b*y` on `X m`, a binary equation is satisfied on `X m`
+    exactly when the transported operation with coefficients
+    `stableValueRingEquiv m a`, `stableValueRingEquiv m b` satisfies the same
+    equation over `ZMod (F_{m+2})`. -/
+theorem stableValueRingEquiv_preserves_magma_satisfaction
+    {ι : Type u} (m : Nat) (a b : X m) (lhs rhs : AffineMagmaTerm ι) :
+    AffineMagmaTerm.SatisfiesX m a b lhs rhs ↔
+      AffineMagmaTerm.SatisfiesZ m (stableValueRingEquiv m a) (stableValueRingEquiv m b)
+        lhs rhs := by
+  constructor
+  · intro h envZ
+    let envX : ι → X m := fun i => (stableValueRingEquiv m).symm (envZ i)
+    have hx := h envX
+    have hmap := congrArg (stableValueRingEquiv m) hx
+    simpa [AffineMagmaTerm.SatisfiesZ, envX,
+      stableValueRingEquiv_eval_affineMagmaTerm] using hmap
+  · intro h envX
+    apply (stableValueRingEquiv m).injective
+    have hz := h (fun i => stableValueRingEquiv m (envX i))
+    simpa [AffineMagmaTerm.SatisfiesX,
+      stableValueRingEquiv_eval_affineMagmaTerm] using hz
+
 /-! ### Field instance when F_{m+2} is prime -/
 
 /-- When Nat.fib (m + 2) is prime, X m is a field (transferred from ZMod via the ring iso).
@@ -227,6 +301,11 @@ theorem X6_crt_split : Nonempty (X 6 ≃+* ZMod 3 × ZMod 7) := ⟨X6_decomposit
 /-- crt-X10-decomposition -/
 noncomputable def X10_decomposition : X 10 ≃+* ZMod 16 × ZMod 9 :=
   crtDecomposition 10 16 9 (by native_decide) (by native_decide)
+
+-- X_4: F_6 = 8, with no nontrivial coprime CRT factorization.
+/-- X_4 ≃+* ZMod 8 via stable values (since F_6 = 8). -/
+noncomputable def X4_iso : X 4 ≃+* ZMod 8 :=
+  stableValueRingEquiv 4
 
 -- X_8: F_10 = 55 = 5 × 11, gcd(5,11) = 1.
 /-- cor:crt-factorization -/

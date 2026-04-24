@@ -140,4 +140,22 @@ theorem paper_cdim_denominator_multiples_seeds :
    card_multiplesUpTo_5_100, card_multiplesUpTo_6_100,
    card_forbiddenMultiples_235_100⟩
 
+/-- Exact finite witness: among `1..100`, exactly `26` integers avoid divisibility by `2`, `3`,
+and `5`.
+    prop:cdim-denominator-positive-density-thin-forbidden -/
+theorem card_non_multiples_235_100_exact :
+    ((Finset.Icc 1 100).filter (fun n => ∀ q ∈ ({2, 3, 5} : Finset ℕ), ¬ q ∣ n)).card = 26 := by
+  native_decide
+
+/-- Paper-facing denominator-thinness package: the forbidden union is controlled by the finite
+union bound, the complement count has the corresponding lower bound, and the concrete truncation
+`Q = {2,3,5}` still leaves a positive surviving set in `[1,100]`.
+    prop:cdim-denominator-positive-density-thin-forbidden -/
+theorem paper_cdim_denominator_positive_density_thin_forbidden :
+    (∀ (Q : Finset ℕ) (B : ℕ), (forbiddenMultiples Q B).card ≤ ∑ q ∈ Q, B / q) ∧
+    (∀ (Q : Finset ℕ) (B : ℕ),
+      ((Finset.Icc 1 B).filter (fun n => ∀ q ∈ Q, ¬ q ∣ n)).card ≥ B - ∑ q ∈ Q, B / q) ∧
+    (((Finset.Icc 1 100).filter (fun n => ∀ q ∈ ({2, 3, 5} : Finset ℕ), ¬ q ∣ n)).card = 26) := by
+  exact ⟨card_forbiddenMultiples_le_sum, card_non_multiples_ge, card_non_multiples_235_100_exact⟩
+
 end Omega.CircleDimension.DenominatorMultiplesUnionBound

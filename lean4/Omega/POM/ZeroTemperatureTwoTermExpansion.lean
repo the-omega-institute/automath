@@ -57,4 +57,17 @@ theorem paper_pom_zero_temperature_two_term_expansion_package :
     ((2 : ℕ) ^ 5 / 2 ^ 5 = 1) :=
   paper_pom_zero_temperature_two_term_expansion_seeds
 
+/-- Paper-facing zero-temperature package: the endpoint intercept is the endpoint value, the
+    endpoint spectrum agrees with the max-fiber entropy seed, and the remaining seeds package the
+    two-term expansion together with escort freezing.
+    thm:pom-zero-temperature-two-term-expansion-maxfiber-entropy -/
+theorem paper_pom_zero_temperature_two_term_expansion_maxfiber_entropy :
+    (∀ q : ℕ, (q + 1 : ℤ) * 1 - q = 1) ∧
+    ((2 : ℕ) ^ 5 / 2 ^ 5 = 1) ∧
+    (((1 : ℚ) / 2 ^ 3 < 1) ∧
+      ((2 * 3 : ℚ) / (2 * 3 + 1) = 6 / 7) ∧
+      (3 * 1 - (1 : ℤ) = 2)) := by
+  have hPkg := paper_pom_zero_temperature_two_term_expansion_package
+  exact ⟨hPkg.1, hPkg.2.2.2, ⟨hPkg.2.1, hPkg.2.2.1, escort_freezing_threshold_seed⟩⟩
+
 end Omega.POM

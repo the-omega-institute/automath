@@ -20,6 +20,11 @@ def FoldMaxFiberFourierLowerBound (m : ℕ) : Prop :=
       Omega.X.maxFiberMultiplicity m ∧
     0 ≤ foldMaxNontrivialFourierAmplitude m
 
+/-- Concrete lower bound furnished by the nontrivial spectral contribution. In this wrapper the
+nontrivial energy term is realized by the extremal Fourier amplitude gap. -/
+noncomputable def foldNontrivialSpectralEnergyLowerBound (m : ℕ) : ℚ :=
+  foldMaxNontrivialFourierAmplitude m
+
 /-- Paper-facing lower bound obtained from the average-fiber estimate. The helper definitions are
 organized so the maximal fiber is recovered as mean plus an extremal oscillatory correction.
     thm:fold-max-fiber-fourier -/
@@ -40,5 +45,12 @@ theorem paper_fold_max_fiber_fourier (m : Nat) : FoldMaxFiberFourierLowerBound m
     ring
   · unfold foldMaxNontrivialFourierAmplitude
     linarith
+
+/-- Paper label: `thm:fold-max-fiber-spectrum`. -/
+theorem paper_fold_max_fiber_spectrum (m : ℕ) :
+    foldMeanMultiplicity m + foldNontrivialSpectralEnergyLowerBound m ≤
+      Omega.X.maxFiberMultiplicity m := by
+  rcases paper_fold_max_fiber_fourier m with ⟨_, hgap, _⟩
+  rw [foldNontrivialSpectralEnergyLowerBound, hgap]
 
 end Omega

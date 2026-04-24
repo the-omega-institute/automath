@@ -4,6 +4,7 @@ import Omega.Combinatorics
 import Omega.Conclusion
 import Omega.Core
 import Omega.Discussion
+import Omega.DerivedConsequences
 import Omega.EA
 import Omega.Experiments
 import Omega.FoldResidualTime
@@ -16,6 +17,7 @@ import Omega.HighDimensionalCutProject
 import Omega.Kronecker
 import Omega.LogicExpansionChain
 import Omega.Multiscale
+import Omega.RootUnitCharacterPressureTensor
 import Omega.UnitCirclePhaseArithmetic
 import Omega.OperatorAlgebra
 import Omega.POM

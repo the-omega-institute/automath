@@ -16,4 +16,26 @@ theorem paper_cdim_short_exact_additivity_seeds
   · simp [circleDim]
   · exact cdim_rank_nullity f
 
+/-- Paper-facing package for short-exact additivity and the rank/rational identifications of
+circle dimension.
+    thm:killo-cdim-short-exact-additivity -/
+theorem paper_killo_cdim_short_exact_additivity
+    (rA rB rC tA tB tC rG tG : Nat) (hshort : rB = rA + rC) :
+    circleDim rB tB = circleDim rA tA + circleDim rC tC ∧
+      circleDim rG tG = rG ∧ ((circleDim rG tG : ℚ) = (rG : ℚ)) := by
+  let f : CircleDimHomData :=
+    { sourceRank := 0
+      targetRank := 0
+      kernelRank := 0
+      imageRank := 0
+      rankNullity := by simp
+      imageBound := by simp }
+  have hadd : circleDim rB tB = circleDim rA tA + circleDim rC tC :=
+    (paper_cdim_short_exact_additivity_seeds rA rB rC tA tB tC hshort f).1
+  have hrank : circleDim rG tG = rG := by
+    simp [circleDim]
+  have hrat : (circleDim rG tG : ℚ) = (rG : ℚ) := by
+    exact_mod_cast hrank
+  exact ⟨hadd, hrank, hrat⟩
+
 end Omega.CircleDimension

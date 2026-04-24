@@ -1,5 +1,6 @@
 import Mathlib
 import Omega.CircleDimension.CircleDim
+import Omega.POM.CoprimeLedgerPrimorialOptimality
 
 namespace Omega.CircleDimension
 
@@ -73,5 +74,50 @@ theorem paper_cdim_prefix_prime_ledger_conservation
   have hUpper : realLog2 (Fintype.card B) ≤ (b : ℝ) + realLog2 P :=
     realLog2_nat_cast_le_prefixPrime (Fintype.card B) b P hBpos hP hCard
   linarith
+
+/-- Specializing the prefix-prime ledger inequality to the squarefree primorial modulus
+`P_k# = ∏_{j < k} p_j` yields the advertised ledger lower bound, and the standard Stirling lower
+bound for the primorial logarithm supplies the growth estimate used in the support-count
+discussion.
+    `cor:cdim-squarefree-prime-support-growth` -/
+theorem paper_cdim_squarefree_prime_support_growth
+    {B : Type*} [Fintype B] [Nonempty B] (r N k : ℕ)
+    (hBallEnc :
+      ∃ cN : B → Fin (2 ^ 0) × Fin (Omega.POM.firstPrimeProduct k), Function.Injective cN)
+    (hGrowth :
+      ∃ C : ℝ, (circleDim r 0 : ℝ) * realLog2 N - C ≤ realLog2 (Fintype.card B)) :
+    ∃ C : ℝ,
+      (circleDim r 0 : ℝ) * realLog2 N - C ≤ realLog2 (Omega.POM.firstPrimeProduct k) ∧
+        ((k + 1 : ℝ) * Real.log (k + 1) - (k + 1) +
+            Real.log (k + 1) / 2 + Real.log (2 * Real.pi) / 2 ≤
+          Real.log (Omega.POM.firstPrimeProduct k)) := by
+  let unitEnc : Unit → Fin (2 ^ 0) × Fin (Omega.POM.firstPrimeProduct k) :=
+    fun _ => ⟨⟨0, by decide⟩, ⟨0, Omega.POM.firstPrimeProduct_pos k⟩⟩
+  have hEnc : ∃ c : Unit → Fin (2 ^ 0) × Fin (Omega.POM.firstPrimeProduct k), Function.Injective c :=
+    ⟨unitEnc, by intro x y _; cases x; cases y; rfl⟩
+  have hprefix :=
+    paper_cdim_prefix_prime_ledger_conservation
+      (S := Unit) 0 (Omega.POM.firstPrimeProduct k) hEnc r N hBallEnc
+      (Omega.POM.firstPrimeProduct_pos k)
+  rcases hprefix with ⟨_, hledger⟩
+  rcases hledger hGrowth with ⟨C, hC⟩
+  have hq : ∀ i : Fin k, 2 ≤ Omega.POM.nthPrime i := by
+    intro i
+    exact (Omega.POM.nthPrime_prime i).two_le
+  have hpair : Pairwise fun i j : Fin k => Nat.Coprime (Omega.POM.nthPrime i) (Omega.POM.nthPrime j) :=
+    by
+      intro i j hij
+      refine (Nat.coprime_primes (Omega.POM.nthPrime_prime i) (Omega.POM.nthPrime_prime j)).2 ?_
+      intro hEq
+      apply hij
+      ext
+      exact (Nat.nth_strictMono Nat.infinite_setOf_prime).injective hEq
+  have hprimorial :
+      ((k + 1 : ℝ) * Real.log (k + 1) - (k + 1) +
+          Real.log (k + 1) / 2 + Real.log (2 * Real.pi) / 2) ≤
+        Real.log (Omega.POM.firstPrimeProduct k) :=
+    (Omega.POM.paper_pom_coprime_ledger_primorial_optimality
+      k 1 (fun i : Fin k => Omega.POM.nthPrime i) hq hpair).2.2
+  exact ⟨C, by simpa using hC, hprimorial⟩
 
 end Omega.CircleDimension

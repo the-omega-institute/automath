@@ -33,6 +33,12 @@ def foldZeckendorfNormalizationBitCost (m : ℕ) : ℕ :=
 def foldBitCost (m : ℕ) : ℕ :=
   foldWeightedSummationBitCost m + foldZeckendorfNormalizationBitCost m
 
+/-- Paper-facing wrapper for the Fibonacci weight-sum identity together with the
+logarithmic bitlength bound used in the normalization-complexity estimate. -/
+def bitlengthFibStatement (m : ℕ) : Prop :=
+  (∑ k ∈ Finset.range m, Nat.fib (k + 2) = Nat.fib (m + 3) - 2) ∧
+    Nat.log 2 (Nat.fib (m + 3)) ≤ m + 2
+
 /-- Computing the weighted value and then greedily normalizing it gives the paper's
 linear-in-resolution and quadratic-in-bit-complexity bounds for `Omega.Fold`.
     prop:fold-complexity -/
@@ -76,5 +82,12 @@ theorem paper_fold_complexity :
       _ ≤ (2 * (m + 2)) * (m + 3) := by
             exact Nat.mul_le_mul_right (m + 3) (by omega)
       _ = 2 * (m + 2) * (m + 3) := by ring
+
+/-- Fibonacci weights up to resolution `m` sum to the advertised top-order weight, and the
+resulting encoded value has logarithmic binary length in `m`.
+    lem:bitlength-fib -/
+theorem paper_bitlength_fib (m : ℕ) : bitlengthFibStatement m := by
+  refine ⟨Omega.fib_weight_sum_range m, ?_⟩
+  exact (paper_fold_complexity m).1
 
 end Omega.Folding

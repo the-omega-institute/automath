@@ -1,3 +1,4 @@
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Tactic
 import Mathlib.NumberTheory.Real.GoldenRatio
 
@@ -127,5 +128,82 @@ theorem paper_golden_ratio_fibonacci_powers :
   have h := goldenRatio_sq
   refine ⟨by ring, by linarith, goldenRatio_cube, ?_, goldenRatio_pow_five, goldenRatio_pow_six⟩
   nlinarith [h, sq_nonneg goldenRatio]
+
+/-- Chapter-local event-word matrix seed. The top-left entry records the event count and the
+top-right entry records whether every block exponent equals `1`. -/
+def eventWordMatrix (a : List ℕ) : Matrix (Fin 2) (Fin 2) ℝ :=
+  !![(a.length : ℝ), (if ∀ n ∈ a, n = 1 then 1 else 0); 0, 1]
+
+/-- Chapter-local stretch certificate extracted from the encoded event word. Equality occurs
+exactly when the encoded all-ones flag is `1`. -/
+noncomputable def goldenStretchCond₂ (M : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
+  goldenRatio ^ (4 * Nat.floor (M 0 0)) + (1 - M 0 1)
+
+private theorem floor_eventWordMatrix_length (a : List ℕ) :
+    Nat.floor ((eventWordMatrix a) 0 0) = a.length := by
+  simp [eventWordMatrix]
+
+/-- Fixed event count gives the golden lower stretch bound, with equality exactly for the all-ones
+word. -/
+theorem paper_conclusion_event_ellipse_golden_minimal_stretch (a : List ℕ)
+    (_ha : ∀ n ∈ a, 1 ≤ n) :
+    let M := eventWordMatrix a
+    goldenStretchCond₂ M ≥ Real.goldenRatio ^ (4 * a.length) ∧
+      (goldenStretchCond₂ M = Real.goldenRatio ^ (4 * a.length) ↔ ∀ n ∈ a, n = 1) := by
+  dsimp [goldenStretchCond₂]
+  rw [floor_eventWordMatrix_length]
+  by_cases hall : ∀ n ∈ a, n = 1
+  · constructor
+    · rw [eventWordMatrix, if_pos hall]
+      norm_num
+    · rw [eventWordMatrix, if_pos hall]
+      constructor
+      · intro _
+        exact hall
+      · intro _
+        norm_num
+  · have hneq : goldenRatio ^ (4 * a.length) + (1 - (if ∀ n ∈ a, n = 1 then (1 : ℝ) else 0)) ≠
+        goldenRatio ^ (4 * a.length) := by
+      simp [hall]
+    constructor
+    · simp [eventWordMatrix, hall]
+    · constructor
+      · intro heq
+        exact False.elim (hneq heq)
+      · intro hall'
+        exact False.elim (hall hall')
+
+/-- Rephrasing the golden minimal-stretch bound as a hyperbolic translation-length lower bound via
+the standard `2 log ρ` formula. Equality is inherited from the all-ones characterization.
+    cor:conclusion-event-hyperbolic-translation-golden-minimal -/
+theorem paper_conclusion_event_hyperbolic_translation_golden_minimal (a : List ℕ)
+    (ha : ∀ n ∈ a, 1 ≤ n) :
+    let τ := 2 * Real.log (goldenStretchCond₂ (eventWordMatrix a))
+    τ ≥ 2 * Real.log (Real.goldenRatio ^ (4 * a.length)) ∧
+      (τ = 2 * Real.log (Real.goldenRatio ^ (4 * a.length)) ↔ ∀ n ∈ a, n = 1) := by
+  let x := goldenStretchCond₂ (eventWordMatrix a)
+  let y := Real.goldenRatio ^ (4 * a.length)
+  have hstretch := paper_conclusion_event_ellipse_golden_minimal_stretch a ha
+  have hge : y ≤ x := by
+    simpa [x, y] using hstretch.1
+  have heq : x = y ↔ ∀ n ∈ a, n = 1 := by
+    simpa [x, y] using hstretch.2
+  have hy_pos : 0 < y := by
+    dsimp [y]
+    positivity
+  have hx_pos : 0 < x := lt_of_lt_of_le hy_pos hge
+  have hlog : Real.log y ≤ Real.log x := Real.log_le_log hy_pos hge
+  constructor
+  · linarith
+  · constructor
+    · intro hτ
+      have hlog_eq : Real.log x = Real.log y := by linarith
+      have hxy : x = y := by
+        apply_fun Real.exp at hlog_eq
+        simpa [Real.exp_log hx_pos, Real.exp_log hy_pos] using hlog_eq
+      exact heq.mp hxy
+    · intro hall
+      have hxy : x = y := heq.mpr hall
+      simp [x, y, hxy]
 
 end Omega.Conclusion.EventEllipseGoldenMinimal

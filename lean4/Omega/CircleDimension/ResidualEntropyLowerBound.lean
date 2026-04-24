@@ -1,4 +1,5 @@
 import Mathlib.Data.Nat.Log
+import Mathlib.Tactic
 import Omega.CircleDimension.CircleDim
 
 namespace Omega.CircleDimension
@@ -52,5 +53,50 @@ theorem paper_cdim_residual_entropy_lower_bound_counterexample :
   refine ⟨?_, by decide⟩
   refine ⟨Fin.castLE (by decide), ?_⟩
   exact Fin.castLE_injective (by decide)
+
+/-- Saturation of the phase-space entropy budget. -/
+def phaseUniformOnFullSpace (phaseEntropy phaseSpaceEntropy : ℕ) : Prop :=
+  phaseEntropy = phaseSpaceEntropy
+
+/-- Equality in the joint-entropy subadditivity step. -/
+def phaseResidualIndependent (jointEntropy phaseEntropy residualEntropy : ℕ) : Prop :=
+  jointEntropy = phaseEntropy + residualEntropy
+
+private theorem residual_entropy_lower_bound_of_chain
+    (jointEntropy phaseEntropy residualEntropy phaseSpaceEntropy targetEntropy : ℕ)
+    (hjoint : jointEntropy = phaseSpaceEntropy + targetEntropy)
+    (hphase : phaseEntropy ≤ phaseSpaceEntropy)
+    (hsubadd : jointEntropy ≤ phaseEntropy + residualEntropy) :
+    targetEntropy ≤ residualEntropy := by
+  omega
+
+/-- Equality in the residual-entropy lower bound occurs exactly when the phase component saturates
+the full phase-space budget and the phase/residual coordinates realize equality in subadditivity. -/
+theorem paper_cdim_residual_entropy_lower_bound_rigidity
+    (jointEntropy phaseEntropy residualEntropy phaseSpaceEntropy targetEntropy : ℕ)
+    (hjoint : jointEntropy = phaseSpaceEntropy + targetEntropy)
+    (hphase : phaseEntropy ≤ phaseSpaceEntropy)
+    (hsubadd : jointEntropy ≤ phaseEntropy + residualEntropy) :
+    residualEntropy = targetEntropy ↔
+      phaseUniformOnFullSpace phaseEntropy phaseSpaceEntropy ∧
+        phaseResidualIndependent jointEntropy phaseEntropy residualEntropy := by
+  constructor
+  · intro hEq
+    have hsubadd' : phaseSpaceEntropy + targetEntropy ≤ phaseEntropy + targetEntropy := by
+      simp [hjoint, hEq] at hsubadd ⊢
+      exact hsubadd
+    have hphaseEq : phaseEntropy = phaseSpaceEntropy := by
+      omega
+    have hindep : jointEntropy = phaseEntropy + residualEntropy := by
+      apply le_antisymm hsubadd
+      simp [hjoint, hEq, hphaseEq]
+    exact ⟨hphaseEq, hindep⟩
+  · rintro ⟨hphaseEq, hindep⟩
+    have hsum : phaseSpaceEntropy + targetEntropy = phaseSpaceEntropy + residualEntropy := by
+      calc
+        phaseSpaceEntropy + targetEntropy = jointEntropy := by simp [hjoint]
+        _ = phaseEntropy + residualEntropy := hindep
+        _ = phaseSpaceEntropy + residualEntropy := by rw [hphaseEq]
+    exact Nat.add_left_cancel hsum.symm
 
 end Omega.CircleDimension

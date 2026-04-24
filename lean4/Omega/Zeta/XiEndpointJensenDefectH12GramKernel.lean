@@ -9,7 +9,7 @@ open scoped BigOperators
 
 /-- The closed-form endpoint-defect potential attached to the interval
 `[1 - δ, 1 + δ]` centered at `γ`. -/
-noncomputable def xiEndpointDefectPotential (γ δ x : ℝ) : ℝ :=
+noncomputable def xiEndpointJensenDefectPotential (γ δ x : ℝ) : ℝ :=
   (1 / 2 : ℝ) *
     Real.log (((x - γ) ^ 2 + (1 + δ) ^ 2) / ((x - γ) ^ 2 + (1 - δ) ^ 2))
 
@@ -21,7 +21,7 @@ noncomputable def xiEndpointJensenGramKernel (γ δ γ' δ' : ℝ) : ℝ :=
 
 /-- The finite endpoint-defect superposition with coefficients `m j`. -/
 noncomputable def xiEndpointDefectField {J : ℕ} (γ δ m : Fin J → ℝ) (x : ℝ) : ℝ :=
-  ∑ j : Fin J, m j * xiEndpointDefectPotential (γ j) (δ j) x
+  ∑ j : Fin J, m j * xiEndpointJensenDefectPotential (γ j) (δ j) x
 
 /-- The finite double-sum energy built from the closed Gram kernel. -/
 noncomputable def xiEndpointJensenDefectH12Energy {J : ℕ} (γ δ m : Fin J → ℝ) : ℝ :=
@@ -32,7 +32,7 @@ noncomputable def xiEndpointJensenDefectH12Energy {J : ℕ} (γ δ m : Fin J →
 closed finite double-sum formula for the associated `Ḣ^{1/2}` energy. -/
 noncomputable def xiEndpointJensenDefectH12GramKernelPackage : Prop :=
   (∀ γ δ x : ℝ,
-      xiEndpointDefectPotential γ δ x =
+      xiEndpointJensenDefectPotential γ δ x =
         (1 / 2 : ℝ) *
           Real.log (((x - γ) ^ 2 + (1 + δ) ^ 2) / ((x - γ) ^ 2 + (1 - δ) ^ 2))) ∧
     (∀ γ δ γ' δ' : ℝ,

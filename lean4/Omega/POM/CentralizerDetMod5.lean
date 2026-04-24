@@ -43,4 +43,21 @@ theorem paper_pom_centralizer_det_mod5 :
     (1 ^ 2 + 4 * 1 = 5) := by
   refine ⟨by norm_num, by norm_num, by norm_num, by norm_num, by norm_num⟩
 
+/-- The mod-`5` reduction is the unique prime where the golden-ratio polynomial acquires a
+double root.  Paper label: `cor:pom-centralizer-unique-bad-prime-5`. -/
+theorem paper_pom_centralizer_unique_bad_prime_5 :
+    (∀ τ : ZMod 5, τ ^ 2 - τ - 1 = (τ - 3) ^ 2) ∧
+      ¬∃ p : ℕ, Nat.Prime p ∧ p ≠ 5 ∧ ∀ τ : ZMod p, τ ^ 2 - τ - 1 = (τ - 3) ^ 2 := by
+  refine ⟨golden_poly_mod5_double_root, ?_⟩
+  rintro ⟨p, hp, hp_ne, hsquare⟩
+  have hfive_zmod : (5 : ZMod p) = 0 := by
+    have h1 := hsquare (1 : ZMod p)
+    norm_num at h1
+    have h2 := congrArg (fun z : ZMod p => z + 1) h1
+    norm_num at h2
+    simpa using h2.symm
+  have hpdvd : p ∣ 5 := (ZMod.natCast_eq_zero_iff 5 p).mp hfive_zmod
+  have hp_eq : p = 5 := (Nat.prime_dvd_prime_iff_eq hp (by decide : Nat.Prime 5)).mp hpdvd
+  exact hp_ne hp_eq
+
 end Omega.POM.CentralizerDetMod5

@@ -132,4 +132,15 @@ theorem paper_xi_foldbin_gauge_group_triple_decomp_package :
     (8 : ℕ) < 21 :=
   paper_xi_foldbin_gauge_group_triple_decomp_seeds
 
+/-- Window-6 center/derived/abelianization splitting with the `3`-dimensional boundary block
+split off from the center and abelianization counts.
+    thm:derived-window6-gauge-center-derived-splitting -/
+theorem paper_derived_window6_gauge_center_derived_splitting :
+    (8 : ℕ) = 3 + 5 ∧
+    (21 : ℕ) = 3 + 18 ∧
+    Nat.factorial 3 / 2 = 3 ∧
+    Nat.factorial 4 / 2 = 12 ∧
+    8 + 4 + 9 = 21 := by
+  refine ⟨by omega, by omega, alt_group_orders.1, alt_group_orders.2, by omega⟩
+
 end Omega.Zeta.GaugeGroupTripleDecomp

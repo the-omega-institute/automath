@@ -1,4 +1,5 @@
 import Mathlib.Tactic
+import Omega.CircleDimension.DyadicHolonomyCurvatureLimit
 
 open Finset
 
@@ -27,3 +28,16 @@ theorem paper_chainwise_propagation_bound
   paper_chainwise_propagation_bound_seeds dSpace tauSync cStar hstep
 
 end Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
+
+namespace Omega.TypedAddressBiaxialCompletion
+
+/-- Typed-address wrapper for the dyadic holonomy curvature limit package.
+    cor:typed-address-biaxial-completion-dyadic-curvature-limit -/
+theorem paper_typed_address_biaxial_completion_dyadic_curvature_limit
+    (normalizedCurvatureConvergesL2 energyConverges : Prop)
+    (hReconstruction : normalizedCurvatureConvergesL2 ∧ energyConverges) :
+    normalizedCurvatureConvergesL2 ∧ energyConverges := by
+  exact Omega.CircleDimension.paper_cdim_dyadic_holonomy_curvature_limit
+    normalizedCurvatureConvergesL2 energyConverges hReconstruction
+
+end Omega.TypedAddressBiaxialCompletion

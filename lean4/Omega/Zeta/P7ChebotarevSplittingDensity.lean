@@ -1,8 +1,14 @@
+import Mathlib.Algebra.Polynomial.Basic
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Finset.Basic
 import Mathlib.Tactic
 import Omega.POM.S5GaloisArithmetic
 
 namespace Omega.Zeta
+
+open Polynomial
+open scoped BigOperators
 
 /-- The seven conjugacy classes of `S₅`, identified with the possible splitting types of a
 quintic polynomial modulo an unramified prime. -/
@@ -120,5 +126,64 @@ theorem paper_xi_p7_chebotarev_splitting_density (h : P7ChebotarevSplittingDensi
     · intro τ hτ
       cases τ <;> simp [p7OddCycleTypes, p7RawDensityNumerator, p7ClassSize,
         p7_raw_density_denominator_eq_s5_order] at hτ ⊢
+
+/-- The one-dimensional sign channel attached to the `S₅` splitting classes. -/
+noncomputable def p7SignEigenvalue (τ : P7S5CycleType) : ℂ :=
+  if p7CycleParity τ then 1 else -1
+
+/-- The finite Euler factor in the sign channel. -/
+noncomputable def p7SignLocalEulerFactor (τ : P7S5CycleType) : Polynomial ℂ :=
+  X - C (p7SignEigenvalue τ)
+
+/-- The class-averaged limiting Lee--Yang mass in the sign channel. -/
+noncomputable def p7SignLimitMeasureMass (z : ℂ) : ℝ :=
+  if z = 1 then Finset.sum p7EvenCycleTypes (fun τ => (p7ClassSize τ : ℝ)) / 120
+  else if z = -1 then Finset.sum p7OddCycleTypes (fun τ => (p7ClassSize τ : ℝ)) / 120
+  else 0
+
+/-- The averaged logarithmic potential of the sign-channel limit measure. -/
+noncomputable def p7SignLogPotential (u : ℂ) : ℝ :=
+  p7SignLimitMeasureMass 1 * Real.log ‖u - 1‖ +
+    p7SignLimitMeasureMass (-1) * Real.log ‖u + 1‖
+
+/-- The free energy read off from the two atoms of the sign-channel limiting measure. -/
+noncomputable def p7SignFreeEnergy (u : ℂ) : ℝ :=
+  (Real.log ‖u - 1‖ + Real.log ‖u + 1‖) / 2
+
+lemma p7_even_class_sizes_sum :
+    Finset.sum p7EvenCycleTypes p7ClassSize = 60 := by
+  native_decide
+
+lemma p7_odd_class_sizes_sum :
+    Finset.sum p7OddCycleTypes p7ClassSize = 60 := by
+  native_decide
+
+/-- In the concrete `S₅` sign channel, every finite Euler factor has its zero on the unit circle,
+the Chebotarev limit measure is the class average of the two atoms `±1`, and the free energy is
+the corresponding averaged logarithmic potential.
+    thm:xi-p7-chebotarev-leyang-circularity-and-limit-law -/
+theorem paper_xi_p7_chebotarev_leyang_circularity_and_limit_law (u : ℂ) :
+    (∀ τ : P7S5CycleType,
+      IsRoot (p7SignLocalEulerFactor τ) (p7SignEigenvalue τ) ∧ ‖p7SignEigenvalue τ‖ = 1) ∧
+    p7SignLimitMeasureMass 1 = 1 / 2 ∧
+    p7SignLimitMeasureMass (-1) = 1 / 2 ∧
+    (∀ z : ℂ, z ≠ 1 → z ≠ -1 → p7SignLimitMeasureMass z = 0) ∧
+    p7SignLogPotential u = p7SignFreeEnergy u := by
+  have heven : Finset.sum p7EvenCycleTypes (fun τ => (p7ClassSize τ : ℝ)) = 60 := by
+    exact_mod_cast p7_even_class_sizes_sum
+  have hodd : Finset.sum p7OddCycleTypes (fun τ => (p7ClassSize τ : ℝ)) = 60 := by
+    exact_mod_cast p7_odd_class_sizes_sum
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · intro τ
+    cases τ <;> simp [p7SignLocalEulerFactor, p7SignEigenvalue, p7CycleParity]
+  · simp [p7SignLimitMeasureMass, heven]
+    norm_num
+  · simp [p7SignLimitMeasureMass, hodd]
+    norm_num
+  · intro z hz1 hzneg1
+    simp [p7SignLimitMeasureMass, hz1, hzneg1]
+  · rw [p7SignLogPotential, p7SignFreeEnergy]
+    simp [p7SignLimitMeasureMass, heven, hodd]
+    ring
 
 end Omega.Zeta

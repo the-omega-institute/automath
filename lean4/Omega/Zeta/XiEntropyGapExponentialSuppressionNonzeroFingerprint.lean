@@ -22,6 +22,26 @@ noncomputable def xiComovingFourier {κ : ℕ} (mass δ phase : Fin κ → ℝ) 
   4 * Real.pi * Real.exp (-(n : ℝ)) *
     ∑ j, mass j * (δ j / (1 + δ j)) * phase j * Real.exp (-(δ j * (n : ℝ)))
 
+/-- The defect weights entering the harmonic bounds. -/
+noncomputable def xiFirstHarmonicWeight {κ : ℕ} (δ : Fin κ → ℝ) (j : Fin κ) : ℝ :=
+  δ j / (1 + δ j)
+
+/-- The weighted variance penalty term `κ_ind Var(w)` written directly on the indexed defect
+weights. -/
+noncomputable def xiWeightedVariancePenalty {κ : ℕ} (mass w : Fin κ → ℝ) : ℝ :=
+  ∑ j, mass j * (w j - (∑ i, mass i * w i) / xiIndexMass mass) ^ 2
+
+/-- Paper-facing first-harmonic variance-penalty statement. -/
+def paper_xi_first_harmonic_variance_penalty_statement {κ : ℕ}
+    (mass δ phase : Fin κ → ℝ) : Prop :=
+  (∀ j, 0 ≤ mass j) →
+    (∀ j, 0 < δ j) →
+    (∀ j, |phase j| ≤ 1) →
+    0 < xiIndexMass mass →
+    Real.exp 1 * |xiComovingFourier mass δ phase 1| / (4 * Real.pi) ≤
+      xiDefectEntropy mass δ * (xiIndexMass mass - xiDefectEntropy mass δ) / xiIndexMass mass -
+        xiWeightedVariancePenalty mass (xiFirstHarmonicWeight δ)
+
 lemma exp_neg_mul_nat_le_inv_one_add (δ : ℝ) (hδ : 0 < δ) {n : ℕ} (hn : 1 ≤ n) :
     Real.exp (-(δ * (n : ℝ))) ≤ (1 + δ)⁻¹ := by
   have hstep : Real.exp (-(δ * (n : ℝ))) ≤ Real.exp (-δ) := by
@@ -281,6 +301,184 @@ theorem paper_xi_nonzero_harmonic_entropy_gap_product_sharp {κ : ℕ}
           (xiDefectEntropy mass δ * (xiIndexMass mass - xiDefectEntropy mass δ) /
             xiIndexMass mass) := by
           exact mul_le_mul_of_nonneg_left hmix hfac_nonneg
+
+lemma xi_first_harmonic_weight_sum_bound {κ : ℕ} (mass δ phase : Fin κ → ℝ)
+    (hm : ∀ j, 0 ≤ mass j) (hδ : ∀ j, 0 < δ j) (hphase : ∀ j, |phase j| ≤ 1) :
+    |xiComovingFourier mass δ phase 1| ≤
+      4 * Real.pi * Real.exp (-1) *
+        ∑ j, mass j * (xiFirstHarmonicWeight δ j * (1 - xiFirstHarmonicWeight δ j)) := by
+  have hfac_nonneg : 0 ≤ 4 * Real.pi * Real.exp (-1 : ℝ) := by positivity
+  let T : Fin κ → ℝ :=
+    fun j =>
+      mass j * xiFirstHarmonicWeight δ j * phase j * Real.exp (-(δ j * (1 : ℝ)))
+  have hw : ∀ j, 0 ≤ xiFirstHarmonicWeight δ j ∧ xiFirstHarmonicWeight δ j ≤ 1 := by
+    intro j
+    constructor
+    · have hden_pos : 0 < 1 + δ j := by linarith [hδ j]
+      exact div_nonneg (le_of_lt (hδ j)) hden_pos.le
+    · have hden_pos : 0 < 1 + δ j := by linarith [hδ j]
+      unfold xiFirstHarmonicWeight
+      exact (div_le_iff₀ hden_pos).2 (by linarith [hδ j])
+  have hterm :
+      ∀ j : Fin κ, |T j| ≤ mass j * (xiFirstHarmonicWeight δ j * (1 - xiFirstHarmonicWeight δ j)) := by
+    intro j
+    have hmj : 0 ≤ mass j := hm j
+    have hwj_nonneg : 0 ≤ xiFirstHarmonicWeight δ j := (hw j).1
+    have hexp_nonneg : 0 ≤ Real.exp (-(δ j * (1 : ℝ))) := by positivity
+    have hexp_le : Real.exp (-(δ j * (1 : ℝ))) ≤ 1 - xiFirstHarmonicWeight δ j := by
+      have hbase := exp_neg_mul_nat_le_inv_one_add (δ j) (hδ j) (by norm_num : 1 ≤ (1 : ℕ))
+      have hw_compl : 1 - xiFirstHarmonicWeight δ j = (1 + δ j)⁻¹ := by
+        unfold xiFirstHarmonicWeight
+        have hden_ne : (1 + δ j) ≠ 0 := by linarith [hδ j]
+        field_simp [hden_ne]
+        ring
+      rw [hw_compl]
+      simpa using hbase
+    let A : ℝ := mass j * xiFirstHarmonicWeight δ j
+    have hA_nonneg : 0 ≤ A := by
+      dsimp [A]
+      positivity
+    have hphase_step :
+        A * |phase j| * Real.exp (-(δ j * (1 : ℝ))) ≤ A * Real.exp (-(δ j * (1 : ℝ))) := by
+      have hmul : A * |phase j| ≤ A * 1 := mul_le_mul_of_nonneg_left (hphase j) hA_nonneg
+      simpa using mul_le_mul_of_nonneg_right hmul hexp_nonneg
+    have hexp_step : A * Real.exp (-(δ j * (1 : ℝ))) ≤ A * (1 - xiFirstHarmonicWeight δ j) := by
+      simpa [A] using mul_le_mul_of_nonneg_left hexp_le hA_nonneg
+    calc
+      |T j| = A * |phase j| * Real.exp (-(δ j * (1 : ℝ))) := by
+        dsimp [T, A]
+        rw [abs_mul, abs_mul, abs_mul, abs_of_nonneg hmj, abs_of_nonneg hwj_nonneg,
+          abs_of_nonneg hexp_nonneg]
+      _ ≤ A * Real.exp (-(δ j * (1 : ℝ))) := hphase_step
+      _ ≤ A * (1 - xiFirstHarmonicWeight δ j) := hexp_step
+      _ = mass j * (xiFirstHarmonicWeight δ j * (1 - xiFirstHarmonicWeight δ j)) := by
+        dsimp [A]
+        ring
+  have hsum :
+      |∑ j, T j| ≤ ∑ j, mass j * (xiFirstHarmonicWeight δ j * (1 - xiFirstHarmonicWeight δ j)) := by
+    calc
+      |∑ j, T j| ≤ ∑ j, |T j| := by
+        simpa using (Finset.abs_sum_le_sum_abs (s := Finset.univ) (f := T))
+      _ ≤ ∑ j, mass j * (xiFirstHarmonicWeight δ j * (1 - xiFirstHarmonicWeight δ j)) := by
+        refine Finset.sum_le_sum ?_
+        intro j hj
+        exact hterm j
+  have hraw :
+      |4 * Real.pi * Real.exp (-1 : ℝ) * ∑ j, T j| ≤
+        (4 * Real.pi * Real.exp (-1 : ℝ)) *
+          ∑ j, mass j * (xiFirstHarmonicWeight δ j * (1 - xiFirstHarmonicWeight δ j)) := by
+    calc
+      |4 * Real.pi * Real.exp (-1 : ℝ) * ∑ j, T j| =
+          (4 * Real.pi * Real.exp (-1 : ℝ)) * |∑ j, T j| := by
+            rw [abs_mul, abs_of_nonneg hfac_nonneg]
+      _ ≤ (4 * Real.pi * Real.exp (-1 : ℝ)) *
+            ∑ j, mass j * (xiFirstHarmonicWeight δ j * (1 - xiFirstHarmonicWeight δ j)) := by
+            exact mul_le_mul_of_nonneg_left hsum hfac_nonneg
+  simpa [T, xiComovingFourier, xiFirstHarmonicWeight] using hraw
+
+lemma xi_weighted_variance_penalty_eq_square_sum_sub {κ : ℕ} (mass w : Fin κ → ℝ)
+    (hmass_pos : 0 < xiIndexMass mass) :
+    xiWeightedVariancePenalty mass w =
+      ∑ j, mass j * (w j) ^ 2 - (∑ j, mass j * w j) ^ 2 / xiIndexMass mass := by
+  set S : ℝ := ∑ j, mass j * w j
+  set K : ℝ := xiIndexMass mass
+  set Q : ℝ := ∑ j, mass j * (w j) ^ 2
+  have hK_ne : K ≠ 0 := ne_of_gt (by simpa [K] using hmass_pos)
+  have hsum :
+      ∑ j, mass j * (w j - S / K) ^ 2 = Q - 2 * (S / K) * S + (S / K) ^ 2 * K := by
+    calc
+      ∑ j, mass j * (w j - S / K) ^ 2 =
+          ∑ j, (mass j * (w j) ^ 2 - (2 * (S / K)) * (mass j * w j) + mass j * (S / K) ^ 2) := by
+            refine Finset.sum_congr rfl ?_
+            intro j hj
+            ring
+      _ = (∑ j, mass j * (w j) ^ 2) - ∑ j, (2 * (S / K)) * (mass j * w j) +
+            ∑ j, mass j * (S / K) ^ 2 := by
+            rw [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+      _ = Q - (2 * (S / K)) * ∑ j, mass j * w j + (∑ j, mass j) * (S / K) ^ 2 := by
+            simp [Q, Finset.mul_sum, Finset.sum_mul]
+      _ = Q - 2 * (S / K) * S + K * (S / K) ^ 2 := by
+            simp [S, K, xiIndexMass]
+      _ = Q - 2 * (S / K) * S + (S / K) ^ 2 * K := by ring
+  unfold xiWeightedVariancePenalty
+  calc
+    ∑ j, mass j * (w j - (∑ i, mass i * w i) / xiIndexMass mass) ^ 2
+        = Q - 2 * (S / K) * S + (S / K) ^ 2 * K := by
+            simpa [S, K] using hsum
+    _ = Q - S ^ 2 / K := by
+          field_simp [hK_ne]
+          ring
+    _ = ∑ j, mass j * (w j) ^ 2 - (∑ j, mass j * w j) ^ 2 / xiIndexMass mass := by
+          simp [S, K, Q]
+
+lemma xi_first_harmonic_penalty_rewrite {κ : ℕ} (mass w : Fin κ → ℝ)
+    (hmass_pos : 0 < xiIndexMass mass) :
+    ∑ j, mass j * (w j * (1 - w j)) =
+      (∑ j, mass j * w j) * (xiIndexMass mass - ∑ j, mass j * w j) / xiIndexMass mass -
+        xiWeightedVariancePenalty mass w := by
+  set S : ℝ := ∑ j, mass j * w j
+  set K : ℝ := xiIndexMass mass
+  set Q : ℝ := ∑ j, mass j * (w j) ^ 2
+  have hK_ne : K ≠ 0 := ne_of_gt (by simpa [K] using hmass_pos)
+  have hsum : ∑ j, mass j * (w j * (1 - w j)) = S - Q := by
+    calc
+      ∑ j, mass j * (w j * (1 - w j)) = ∑ j, (mass j * w j - mass j * (w j) ^ 2) := by
+        refine Finset.sum_congr rfl ?_
+        intro j hj
+        ring
+      _ = (∑ j, mass j * w j) - ∑ j, mass j * (w j) ^ 2 := by
+        rw [Finset.sum_sub_distrib]
+      _ = S - Q := by simp [S, Q]
+  have hvar := xi_weighted_variance_penalty_eq_square_sum_sub mass w hmass_pos
+  calc
+    ∑ j, mass j * (w j * (1 - w j)) = S - Q := hsum
+    _ = S * (K - S) / K - (Q - S ^ 2 / K) := by
+          field_simp [hK_ne]
+          ring
+    _ = S * (K - S) / K - xiWeightedVariancePenalty mass w := by
+          rw [hvar]
+    _ = (∑ j, mass j * w j) * (xiIndexMass mass - ∑ j, mass j * w j) / xiIndexMass mass -
+          xiWeightedVariancePenalty mass w := by
+          simp [S, K]
+
+/-- First-harmonic variance penalty for the comoving Fourier model.
+    prop:xi-first-harmonic-variance-penalty -/
+theorem paper_xi_first_harmonic_variance_penalty {kappa : Nat}
+    (mass delta phase : Fin kappa -> Real) :
+    paper_xi_first_harmonic_variance_penalty_statement mass delta phase := by
+  intro hm hδ hphase hmass_pos
+  have hsum_bound := xi_first_harmonic_weight_sum_bound mass delta phase hm hδ hphase
+  have hfac_nonneg : 0 ≤ Real.exp 1 / (4 * Real.pi) := by positivity
+  have hscaled :=
+    mul_le_mul_of_nonneg_left hsum_bound hfac_nonneg
+  have hrewrite :
+      ∑ j, mass j * (xiFirstHarmonicWeight delta j * (1 - xiFirstHarmonicWeight delta j)) =
+        xiDefectEntropy mass delta * (xiIndexMass mass - xiDefectEntropy mass delta) /
+            xiIndexMass mass -
+          xiWeightedVariancePenalty mass (xiFirstHarmonicWeight delta) := by
+    simpa [xiDefectEntropy, xiFirstHarmonicWeight] using
+      xi_first_harmonic_penalty_rewrite mass (xiFirstHarmonicWeight delta) hmass_pos
+  calc
+    Real.exp 1 * |xiComovingFourier mass delta phase 1| / (4 * Real.pi) =
+        (Real.exp 1 / (4 * Real.pi)) * |xiComovingFourier mass delta phase 1| := by
+          ring
+    _ ≤ (Real.exp 1 / (4 * Real.pi)) *
+          (4 * Real.pi * Real.exp (-1) *
+            ∑ j, mass j * (xiFirstHarmonicWeight delta j * (1 - xiFirstHarmonicWeight delta j))) := by
+          simpa [mul_assoc, mul_left_comm, mul_comm] using hscaled
+    _ =
+        ∑ j, mass j * (xiFirstHarmonicWeight delta j * (1 - xiFirstHarmonicWeight delta j)) := by
+          have hpi_ne : (4 * Real.pi : ℝ) ≠ 0 := by positivity
+          field_simp [hpi_ne]
+          have hexp : Real.exp 1 * Real.exp (-1 : ℝ) = 1 := by
+            rw [← Real.exp_add]
+            norm_num
+          rw [hexp]
+          ring
+    _ =
+        xiDefectEntropy mass delta * (xiIndexMass mass - xiDefectEntropy mass delta) /
+            xiIndexMass mass -
+          xiWeightedVariancePenalty mass (xiFirstHarmonicWeight delta) := hrewrite
 
 theorem paper_xi_entropy_gap_lower_bound_from_two_samples {κ : ℕ}
     (mass δ phase : Fin κ → ℝ) (u0 : ℝ) (hm : ∀ j, 0 ≤ mass j) (hδ : ∀ j, 0 < δ j)

@@ -1,0 +1,68 @@
+name: Lean4 Seed Cache
+
+on:
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: lean4-seed-cache
+  cancel-in-progress: false
+
+jobs:
+  seed:
+    name: Cold-build Lean4 and save cache
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Guard — must run on default branch
+        run: |
+          if [ "${GITHUB_REF}" != "refs/heads/dev" ]; then
+            echo "::error::Seed must run on dev branch so PR restore-keys can hit the cache."
+            echo "Current ref: ${GITHUB_REF}"
+            exit 1
+          fi
+
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 1
+
+      - name: Purge stale olean caches for this branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for key in $(gh cache list --ref refs/heads/dev --limit 100 --json key,ref \
+                        --jq '.[] | select(.key | startswith("lean4-olean-")) | .key'); do
+            echo "Deleting stale cache: $key"
+            gh cache delete "$key" || true
+          done
+
+      - name: Build Lean4 project (cold)
+        uses: leanprover/lean-action@c544e89643240c6b398f14a431bcdc6309e36b3e # v1
+        with:
+          lake-package-directory: lean4
+          build: true
+          use-mathlib-cache: true
+
+      - name: Save olean cache
+        uses: actions/cache/save@v4
+        with:
+          path: lean4/.lake/build
+          key: lean4-olean-${{ runner.os }}-seed-${{ github.sha }}
+
+      - name: Summary
+        run: |
+          {
+            echo "# Lean4 seed cache"
+            echo
+            echo "- sha: \`${{ github.sha }}\`"
+            echo "- cache key: \`lean4-olean-${{ runner.os }}-seed-${{ github.sha }}\`"
+            echo "- Any PR with \`restore-keys: lean4-olean-\${{ runner.os }}-\` can now hit this cache."
+          } >> "$GITHUB_STEP_SUMMARY"

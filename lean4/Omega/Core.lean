@@ -8,6 +8,9 @@ import Omega.Core.MaxFiberSplitGcdTrichotomy
 import Omega.Core.No11
 import Omega.Core.OdometerJoukowsky
 import Omega.Core.PowerInequality
+import Omega.Core.SymmetricRemainder
 import Omega.Core.WalshFourier
+import Omega.Core.WalshStokes
+import Omega.Core.WalshStokesSingleton
 import Omega.Core.Word
 import Omega.Core.ZeckendorfParallelPropagationLowerBound

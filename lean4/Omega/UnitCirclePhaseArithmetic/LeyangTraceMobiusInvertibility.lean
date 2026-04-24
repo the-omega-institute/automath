@@ -89,4 +89,15 @@ theorem paper_leyang_phase_translation_correspondence_discriminant
     field_simp [hc0, hu0, hu1, hcu1]
     ring
 
+/-- Specializing the Lee--Yang phase translation to the quarter-phase parameter `c = -1` yields
+the Möbius involution `t ↦ -t / (4t + 1)`. -/
+theorem paper_leyang_quarterphase_mobius_involution (t : Complex) (ht : 4 * t + 1 ≠ 0) :
+    let M : Complex := -t / (4 * t + 1); -M / (4 * M + 1) = t := by
+  dsimp
+  have hden : 4 * (-t / (4 * t + 1)) + 1 = (4 * t + 1)⁻¹ := by
+    field_simp [ht]
+    ring
+  rw [hden]
+  simp [div_eq_mul_inv, ht]
+
 end Omega.UnitCirclePhaseArithmetic

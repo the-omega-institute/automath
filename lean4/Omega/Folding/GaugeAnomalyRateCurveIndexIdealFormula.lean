@@ -47,4 +47,9 @@ theorem paper_fold_gauge_anomaly_rate_curve_index_ideal_formula :
     _ = gaugeAnomalyDiscMu * gaugeAnomalyUPowFiveD19 ^ 2 := by
           rw [gaugeAnomalyDiscMu, gaugeAnomalyUPowFiveD19]
 
+/-- Paper-facing wrapper for the discriminant square-factor statement. -/
+theorem paper_fold_gauge_anomaly_rate_curve_discriminant_squarefactor :
+    gaugeAnomalyDiscAlpha = gaugeAnomalyDiscMu * gaugeAnomalyUPowFiveD19 ^ 2 := by
+  exact paper_fold_gauge_anomaly_rate_curve_index_ideal_formula.1
+
 end Omega.Folding
