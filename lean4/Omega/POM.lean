@@ -57,6 +57,7 @@ import Omega.POM.BCBianchi
 import Omega.POM.BCChainDefectEqualsEscortCurvatureSum
 import Omega.POM.BCChainDeviationProbabilityBound
 import Omega.POM.BCDiscreteStokes
+import Omega.POM.CubicalStokesEnergySampling
 import Omega.POM.BCDefectMultiplicative2Cocycle
 import Omega.POM.MertensNotFlowInvariant
 import Omega.POM.BCRadonNikodymCurvature
@@ -93,6 +94,7 @@ import Omega.POM.ReplicaSoftcoreTemperatureSqReduction
 import Omega.POM.ReverseKlBoundByDispersion
 import Omega.POM.RemainderBitsRenyiCollisionExtremal
 import Omega.POM.FoldReverseKlControlledByGenus2Partition
+import Omega.POM.FoldCollisionMomentBadPrimesLockedByHankel
 import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.BooleanCircuitProjectionBudget
 import Omega.POM.BoundedPerturbationInvariance
