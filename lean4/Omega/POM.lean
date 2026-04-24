@@ -859,3 +859,6 @@ import Omega.POM.LocalFiniteDirichletAction
 import Omega.POM.PathIndsetThermoConstants
 import Omega.POM.DerivedSchurDirichletTorsionFlatCyclotomicPencil
 import Omega.POM.EntropyLossOneCocycleFlat
+import Omega.POM.PressureEntropyFactorizationMultiplicative
+import Omega.POM.OracleLocalCostKlBregman
+import Omega.POM.MicrocanonicalFoldWorstcaseQueryRigidity
