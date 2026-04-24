@@ -142,6 +142,7 @@ import Omega.OperatorAlgebra.NpJonesBasicConstructionWitnessBlocks
 import Omega.OperatorAlgebra.NpWatataniIndexSupportCharacterization
 import Omega.OperatorAlgebra.IndexSupportSatNpHardIndexCoeffSharpP
 import Omega.OperatorAlgebra.OracleProjectionVariationalCapacity
+import Omega.OperatorAlgebra.ProjectionWordNormalForm
 import Omega.OperatorAlgebra.PimsnerPopaWitnessBound
 import Omega.OperatorAlgebra.BayesInverseZK
 import Omega.OperatorAlgebra.ZkReflectorBayes

@@ -444,6 +444,7 @@ import Omega.Folding.FoldTimeRegisterMomentTailScaling
 import Omega.Folding.FoldZeroDivisorTripleReduction
 import Omega.Folding.FoldZeroDensitySparse
 import Omega.Folding.ZeroCosetUnion
+import Omega.Folding.ZeroCosetIntersection
 import Omega.Folding.FoldZeroUncertainty
 import Omega.Folding.FractranFoldCompiler
 import Omega.Folding.GaugeAnomalyAutocovClosed
