@@ -216,6 +216,7 @@ import Omega.SyncKernelWeighted.FinitePartMuPochhammerSpectralClosedForm
 import Omega.SyncKernelWeighted.FluctuationEven
 import Omega.SyncKernelWeighted.SyncKernelWeightedHatDelta
 import Omega.SyncKernelWeighted.WeightedCompletionQ
+import Omega.SyncKernelWeighted.WeightedXiNormSalem
 import Omega.SyncKernelWeighted.WeightedXiSingleExceptionPair
 import Omega.SyncKernelWeighted.WeightedXiThreeQuadratics
 import Omega.SyncKernelWeighted.WeightedUnitRootFinite
@@ -231,6 +232,7 @@ import Omega.SyncKernelWeighted.WittNecklaceDivisibility
 import Omega.SyncKernelWeighted.WittNecklaceDworkR
 import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.SyncKernelWeighted.WittPpowerPrimitiveCoordinate
+import Omega.SyncKernelWeighted.WittThetaBinaryFingerprint
 import Omega.SyncKernelWeighted.WittThetaDerivativeFilter
 import Omega.SyncKernelWeighted.WittThetaStableResidue
 import Omega.SyncKernelWeighted.WittRootOfUnityCommonPadicLimit
