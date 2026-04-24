@@ -697,6 +697,7 @@ import Omega.POM.MultiplicityCompositionMomentShiftLaw
 import Omega.POM.NoComputableSufficientSliceSelector
 import Omega.POM.MultiplicityCompositionMod3Sparsity
 import Omega.POM.MultiplicityCompositionMomentHierarchyRationalGrowth
+import Omega.POM.MultiplicityCompositionSqSymmetryReduction
 import Omega.POM.MultiplicityCompositionPartCountCLT
 import Omega.POM.MultiplicityCompositionPartition
 import Omega.POM.MultiplicityCompositionRealQPressure

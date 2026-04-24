@@ -52,6 +52,7 @@ import Omega.Zeta.DephysHankelFiniteAudit
 import Omega.Zeta.DephysIdempotentMonadIProjection
 import Omega.Zeta.DephysOneQuarterNormalization
 import Omega.Zeta.DephysRenyiFlatnessFoldCommutative
+import Omega.Zeta.DephysIndexChainRule
 import Omega.Zeta.DephysicalizedDefectRepulsionRadius
 import Omega.Zeta.DephysFoldStinespringSqrtLaw
 import Omega.Zeta.DephysFoldHiddenLabelCapSqrt
