@@ -158,6 +158,7 @@ import Omega.Zeta.XiVanvleckResidueEnergyUniformLbUnderRadius
 import Omega.Zeta.XiSmithLossSpectrumDiscreteCurvatureCompleteCharacterization
 import Omega.Zeta.XiSingularRingDefectDeltaLowerbound
 import Omega.Zeta.XiSingularRingDefectCountingBound
+import Omega.Zeta.XiSingularRingDefectMultiplicative
 import Omega.Zeta.XiSingularCircleHeckeDirichletZetaMultiplier
 import Omega.Zeta.XiDefectDensityConeChoquetExtreme
 import Omega.Zeta.XiDefectEntropyHeightBudgetVarianceGap
