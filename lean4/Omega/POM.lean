@@ -205,6 +205,8 @@ import Omega.POM.DiagonalRateAbsorbingDFR
 import Omega.POM.DiagonalRateSchurConcavityUniformMaxPrinciple
 import Omega.POM.DiagonalRateAbsorbingLaguerreInterlacing
 import Omega.POM.DiagonalRateRefreshAbsorbingLaguerreInterlacing
+import Omega.POM.DiagonalRateAcceptRefreshSSTStrong
+import Omega.POM.DiagonalRateRefreshAcceptStrongStationaryTime
 import Omega.POM.MaxentMarkovLaguerreSecularSpectrum
 import Omega.POM.MaxentMarkovNoOscillationEndpoints
 import Omega.POM.MaxentMarkovGapVsRateSlopeCoupling

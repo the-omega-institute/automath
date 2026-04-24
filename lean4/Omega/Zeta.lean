@@ -246,6 +246,7 @@ import Omega.Zeta.XiCauchyPoissonSingleScaleMomentInversion
 import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprint
 import Omega.Zeta.XiCayleyScanAreaLawLowfreqTrace
 import Omega.Zeta.XiCriticalLineCircleCauchyUniformization
+import Omega.Zeta.XiLocalJetToeplitzFailureSemialgebraicStratification
 import Omega.Zeta.XiJoukowskyL1MeasureLiftChebyshevFourier
 import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth
 import Omega.Zeta.XiJensenFourierLaplaceFingerprintInjectivity
