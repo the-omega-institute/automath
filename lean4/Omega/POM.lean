@@ -21,6 +21,7 @@ import Omega.POM.CollisionCKClassificationQ234
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.CollisionFlowEquivalenceFullShift
 import Omega.POM.A2GutCompletion
+import Omega.POM.A2GutSpectralSplitting
 import Omega.POM.A4tUnitCircleSpectrumClassification
 import Omega.POM.AdditionCollisionSpectrumSoficMonotonePerron
 import Omega.POM.AddCollisionSpectrumRenyiMonotone
