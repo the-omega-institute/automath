@@ -24,6 +24,7 @@ import Omega.SyncKernelWeighted.GMOddSchattenSpectralNormExtremal
 import Omega.SyncKernelWeighted.GMCenteredTrace3EnergyVariance
 import Omega.SyncKernelWeighted.GMEnergyExponentTwistCriterion
 import Omega.SyncKernelWeighted.GMTrace3SpectralNormExtremal
+import Omega.SyncKernelWeighted.GMModGapToAffineSaving
 import Omega.SyncKernelWeighted.GMAffineInverseMajorArc
 import Omega.SyncKernelWeighted.GMajorArcRigidityAffineAutocorr
 import Omega.SyncKernelWeighted.GMAffineImprovementDichotomy
@@ -209,6 +210,7 @@ import Omega.SyncKernelWeighted.FluctuationEven
 import Omega.SyncKernelWeighted.SyncKernelWeightedHatDelta
 import Omega.SyncKernelWeighted.WeightedCompletionQ
 import Omega.SyncKernelWeighted.WeightedXiSingleExceptionPair
+import Omega.SyncKernelWeighted.WeightedXiThreeQuadratics
 import Omega.SyncKernelWeighted.WeightedUnitRootFinite
 import Omega.SyncKernelWeighted.WittFrobeniusDefectDivisibility
 import Omega.SyncKernelWeighted.WittFrobeniusIteratedDescent
