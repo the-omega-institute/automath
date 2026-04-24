@@ -70,6 +70,7 @@ import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicFiniteMomentCompleteness
 import Omega.SPG.DyadicFluxZetaMinkowskiPole
 import Omega.SPG.DyadicOuterApproxStokesGainMinkowskiReadout
+import Omega.SPG.DyadicPolyclubeBoundaryVsAdjacencyIdentity
 import Omega.SPG.DyadicPolyclubeDiscreteIsoperimetry
 import Omega.SPG.DyadicTopInversionBound
 import Omega.SPG.EllipsoidBoundaryFluxReconstruction
