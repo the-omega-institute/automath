@@ -219,6 +219,8 @@ import Omega.Conclusion.CertificateFrontConcavePolygonalKinkSupport
 import Omega.Conclusion.FiniteLaurentCertificateSharpSampling
 import Omega.Conclusion.CarryZeroTempSupportCollapse
 import Omega.Conclusion.CausalDepthBranchBudgetOrthogonality
+import Omega.Conclusion.TailCapacityMomentTailLawEquivalence
+import Omega.Conclusion.FoldbinMultiplicityMellinTwoSidedUnification
 import Omega.Conclusion.CdimArbitraryProfiniteKernel
 import Omega.Conclusion.CdimExactAdditiveUniqueness
 import Omega.Conclusion.CdimFiniteRankExtension
