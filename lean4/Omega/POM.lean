@@ -135,6 +135,7 @@ import Omega.POM.CrossqGMonotone
 import Omega.POM.CrossqPressureConvexity
 import Omega.POM.CurvatureSummableEventualCommutation
 import Omega.POM.AxisDecomposabilityIff
+import Omega.POM.CrossAnomMobiusAnovaDimensionTheory
 import Omega.POM.StableAdditionCarryDefectUniqueElement
 import Omega.POM.AkSymmetricTransitionPoly
 import Omega.POM.CouplingExpectationBound
@@ -184,6 +185,7 @@ import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DegeneracyHistogramVandermondeInversion
 import Omega.POM.DiagonalHighMoments
 import Omega.POM.DiagonalMomentFreeEnergyDegeneracy
+import Omega.POM.EulerDefectDimensionFormula
 import Omega.POM.DiagonalRateReconstructWFromRateCurve
 import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
 import Omega.POM.DiagonalRateAbsorbingDFR
