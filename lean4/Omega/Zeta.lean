@@ -262,6 +262,7 @@ import Omega.Zeta.XiBulkCurvatureTomographyIdentifiability
 import Omega.Zeta.XiCdimSpectrumCompleteness
 import Omega.Zeta.XiCdimKGeneratedQuotientMaxOrder
 import Omega.Zeta.XiCriticalSlicePressureZeroDriftLyapunov
+import Omega.Zeta.XiTimePart9gFixedPointPrimitiveWordClassification
 import Omega.Zeta.XiCdimPhaseCompressionAliasingExponent
 import Omega.Zeta.XiCdimCircleLedgerSignature
 import Omega.Zeta.XiCdimSpectrumHomocyclicCircleLaw

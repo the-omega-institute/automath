@@ -219,6 +219,7 @@ import Omega.POM.FiberLeyangRenyiBernoulliDecomposition
 import Omega.POM.MicrocanonicalFoldHtFromPowerSums
 import Omega.POM.DiagonalRateAbsorbingWronskianIdentity
 import Omega.POM.DiagonalRateAbsorbingWronskianIdentitySecondary
+import Omega.POM.OracleQstarAreaIdentity
 import Omega.POM.DiagonalRateAbsorbingEvaluateAtFullRoots
 import Omega.POM.DiagonalRateAbsorbingFullVsDeletedInterlacing
 import Omega.POM.DiagonalRateCriticalConductanceTensorMultiplicativity

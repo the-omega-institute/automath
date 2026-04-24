@@ -261,6 +261,7 @@ import Omega.Conclusion.FoldFiberAverageAlgorithmicComplexity
 import Omega.Conclusion.Gl2FqTraceStrataCount
 import Omega.Conclusion.ConclusionAnomalyHodgeOnepointCriterion
 import Omega.Conclusion.LeyangZeroMeasureStokesInversionLdp
+import Omega.Conclusion.LmaxPrimeProgrammability
 import Omega.Conclusion.LeyangThreeDomainFrobeniusTensorDensity
 import Omega.Conclusion.CoordinateBundleKernelSlabDecomposition
 import Omega.Conclusion.BornWeightDerivedFromHardyAndFoldExpectation
