@@ -104,6 +104,7 @@ import Omega.Zeta.XiAddressableGodelWorstcaseRedundancyDiverges
 import Omega.Zeta.XiFiniteRhoScanTraceClosedFormDepthOnly
 import Omega.Zeta.XiNullSecondOrderRadialChannel
 import Omega.Zeta.XiEndpointHeatProbeAdamsTwistSpectralGapExpBound
+import Omega.Zeta.XiEndpointHeatKernelProbe
 import Omega.Zeta.XiEntropyGapHankelDeterminantCollapseUpperBound
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
 import Omega.Zeta.XiEndpointProfileCfiniteHankelRank
