@@ -112,6 +112,7 @@ import Omega.Zeta.XiTimeWeightedSpectralRadiusGrowthLaw
 import Omega.Zeta.XiPoissonCoarsegrainingFDivergenceContraction
 import Omega.Zeta.XiPoissonKernelDerivativeL1FisherClosed
 import Omega.Zeta.XiCauchyPoissonOddMomentSelectionLaw
+import Omega.Zeta.XiPoissonCauchyKlMomentLocking
 import Omega.Zeta.XiPoissonKlSixthOrderMu3Mu4
 import Omega.Zeta.XiSingleBaseDealiasingCountableException
 import Omega.Zeta.XiSinglePoleContourReadoutErrorAudit
@@ -179,6 +180,7 @@ import Omega.Zeta.RealInput40ZetaUvResidue
 import Omega.Zeta.XiLogDefectPotentialPoissonPrimitive
 import Omega.Zeta.XiDtnActsOnJensenKernel
 import Omega.Zeta.XiBulkBoundarySpeedMatching
+import Omega.Zeta.XiBulkCurvatureExactDeconvolutionOperator
 import Omega.Zeta.XiLocalBinaryNormalizationFibonacciRigidity
 import Omega.Zeta.XiLocalizedSolenoidPeriodicGrowthMaxScale
 import Omega.Zeta.XiLogcmSecondBernoulliCoefficientRatio
