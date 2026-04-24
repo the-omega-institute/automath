@@ -220,6 +220,7 @@ import Omega.SyncKernelWeighted.WeightedXiNormSalem
 import Omega.SyncKernelWeighted.WeightedXiSingleExceptionPair
 import Omega.SyncKernelWeighted.WeightedXiThreeQuadratics
 import Omega.SyncKernelWeighted.WeightedUnitRootFinite
+import Omega.SyncKernelWeighted.SyncSpectralTangentLock6
 import Omega.SyncKernelWeighted.WittFrobeniusDefectDivisibility
 import Omega.SyncKernelWeighted.WittFrobeniusIteratedDescent
 import Omega.SyncKernelWeighted.WittMinus1PadicDerivativeResidues
