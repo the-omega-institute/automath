@@ -192,6 +192,7 @@ import Omega.Zeta.XiTerminalZmLeyangPhaseResonanceFrobeniusParity
 import Omega.Zeta.XiTerminalZmLeyangLanglandsDualRootStability
 import Omega.Zeta.XiTerminalZmLeyangURootPinningDouble
 import Omega.Zeta.SelfdualPressureInversion
+import Omega.Zeta.SelfdualWindVanish
 import Omega.Zeta.SyncCyclotomicElimination
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotSofic
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotRegular

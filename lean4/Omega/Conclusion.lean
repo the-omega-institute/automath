@@ -9,6 +9,7 @@ import Omega.Conclusion.AeRecoveryThresholdSandwich
 import Omega.Conclusion.AdelicHausdorffDimensionCdimPcdim
 import Omega.Conclusion.AdelicStokesH1RecoversCdimPrimeProfile
 import Omega.Conclusion.AffineLeftDivisibilityCriterion
+import Omega.Conclusion.DirichletTwistDivisibilityLiftMonotone
 import Omega.Conclusion.AnalyticHolographyInversionRigidity
 import Omega.Conclusion.AffineNormalFormSemidirect
 import Omega.Conclusion.AffineRegisterBudget

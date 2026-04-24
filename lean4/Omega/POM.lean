@@ -371,6 +371,7 @@ import Omega.POM.SufficientRecoveryRateSinksBelowMaxfiber
 import Omega.POM.FiberLedgerPrefixSideinfoLength
 import Omega.POM.FiberLeyangChernoffUniqueMinimizer
 import Omega.POM.FiberLeyangKlBernoulliDecomposition
+import Omega.POM.FiberLeyangUnitcircleLiftCyclotomic
 import Omega.POM.FiberTraceMomentsRationality
 import Omega.POM.FiberMultiplicityMatrixProduct
 import Omega.POM.FiberMedianMajorityPrimeValuation
