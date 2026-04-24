@@ -1122,6 +1122,7 @@ import Omega.Conclusion.ScreenDeficitUnitDescentChain
 import Omega.Conclusion.S4SchurCentralizerClosedForm
 import Omega.Conclusion.SerrinRealizableMeanConeCollapse
 import Omega.Conclusion.SerrinRigidityZeroSideinfoRate
+import Omega.Conclusion.SerrinWulffDyadicCodimLaw
 import Omega.Conclusion.SerrinEllipsoidFluxIdentifiability
 import Omega.Conclusion.SerrinSupportExactScreenCollapse
 import Omega.Conclusion.SerrinGeometryFactorRenyiMomentTrivialization
