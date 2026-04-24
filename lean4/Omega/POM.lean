@@ -117,6 +117,7 @@ import Omega.POM.CollisionAQFibonacciBFPrimitivePrimeDivisor
 import Omega.POM.CollisionBfSnfQ234
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.CollisionEntropyRate
+import Omega.POM.ComplementaryGoldenBernoulliRenyiSpectrum
 import Omega.POM.DiagonalRateRefreshEntropyRateRenewalCoding
 import Omega.POM.DiagonalRateRefreshRewardClt
 import Omega.POM.MicrocanonicalQueryDistortionFailureExponent
