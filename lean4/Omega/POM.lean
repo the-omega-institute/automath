@@ -214,6 +214,7 @@ import Omega.POM.DiagonalRateAbsorbingEvaluateAtFullRoots
 import Omega.POM.DiagonalRateAbsorbingFullVsDeletedInterlacing
 import Omega.POM.DiagonalRateCriticalConductanceTensorMultiplicativity
 import Omega.POM.DiagonalRateCriticalCheegerAuditableUpperBound
+import Omega.POM.DiagonalRateCriticalEigenvectorShapeSignSeparation
 import Omega.POM.DiagonalRateSeparationWeightSignRule
 import Omega.POM.DiagonalRateAbsorbingMeanHitTime
 import Omega.POM.DiagonalRateAbsorbingHitPGF
