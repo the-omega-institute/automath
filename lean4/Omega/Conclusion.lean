@@ -261,6 +261,7 @@ import Omega.Conclusion.ScreenRTChainArithmeticDivisorShadow
 import Omega.Conclusion.Q6JoukowskyUnitCircleZeroLaw
 import Omega.Conclusion.CoverTimeTailTwoSidedCompression
 import Omega.Conclusion.CollisionMomentMinrecHaltingTime
+import Omega.Conclusion.CriticalGroupTorsionGreenBadPrimeEquivalence
 import Omega.Conclusion.CollisionMomentSinglePulseOgf
 import Omega.Conclusion.CollisionMomentMoritaDefectFusion
 import Omega.Conclusion.VisibleToeplitzNegativeGramChart
