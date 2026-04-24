@@ -143,6 +143,7 @@ import Omega.SPG.NonuniformCylinder
 import Omega.SPG.OptimalContinuousInversePublication
 import Omega.SPG.PartialBoundaryGodelAuditOptimal
 import Omega.SPG.PolycubeAdhesion
+import Omega.SPG.PolyclubeAdhesionSharpUpperBound
 import Omega.SPG.PolycubeIsoperimetryUpper
 import Omega.SPG.PolytimeCertificateSynthesisImpliesPEqualsNP
 import Omega.SPG.PolytimeCompleteInvariantImpliesPEqualsNP
