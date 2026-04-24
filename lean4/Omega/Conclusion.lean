@@ -124,6 +124,7 @@ import Omega.Conclusion.C6JacobianNotSimple
 import Omega.Conclusion.CayleyModulusPoissonPrimitive
 import Omega.Conclusion.CapacityMajorizationExtremizers
 import Omega.Conclusion.JGGodelLoglatticeApproximation
+import Omega.Conclusion.JGGodelDenseOrbitsOnHyperbolaLeaf
 import Omega.Conclusion.JgSlitUniformizationOrthogonalCoordinates
 import Omega.Conclusion.FiniteFiberNaturalExtensionRightShiftInsertion
 import Omega.Conclusion.FiniteStateSelectorCannotSustainKernelRh
