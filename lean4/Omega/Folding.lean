@@ -640,6 +640,7 @@ import Omega.Folding.OracleCapacityTailMoments
 import Omega.Folding.OracleCapacityFullInvertibilityThreshold
 import Omega.Folding.OracleCapacityVariationalProjection
 import Omega.Folding.OstrowskiDenominators
+import Omega.Folding.XmAlphaCardinality
 import Omega.Folding.OstrowskiMetallicPropagationTailVariance
 import Omega.Folding.OstrowskiMetallicTruncationMismatchLimit
 import Omega.Folding.OstrowskiMetallicTwoRuleNormalization
