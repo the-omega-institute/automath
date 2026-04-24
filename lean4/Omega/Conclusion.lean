@@ -3,6 +3,7 @@ import Omega.Conclusion.AdditiveScalarProcircleL1Classification
 import Omega.Conclusion.AdditiveScalarProcircleWeightedModel
 import Omega.Conclusion.AlgebraicLdpSinglevaluednessCriterion
 import Omega.Conclusion.AlgebraicLdpMonodromyStokesQuantization
+import Omega.Conclusion.AlgebraicForcesPrecursiveErrorControl
 import Omega.Conclusion.AddressResidualOptimalBudgetSplitting
 import Omega.Conclusion.AeRecoveryThresholdSandwich
 import Omega.Conclusion.AdelicHausdorffDimensionCdimPcdim

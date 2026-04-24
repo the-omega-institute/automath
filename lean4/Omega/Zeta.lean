@@ -184,6 +184,7 @@ import Omega.Zeta.XiPrecisionTypeNoLeakage
 import Omega.Zeta.XiTerminalZmLeyangSpectralQuarticAJFib89Minpoly
 import Omega.Zeta.XiTerminalZmLeyangPhaseResonanceFrobeniusParity
 import Omega.Zeta.XiTerminalZmLeyangLanglandsDualRootStability
+import Omega.Zeta.XiTerminalZmLeyangURootPinningDouble
 import Omega.Zeta.SelfdualPressureInversion
 import Omega.Zeta.SyncCyclotomicElimination
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotSofic
