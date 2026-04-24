@@ -985,3 +985,4 @@ import Omega.POM.OrderEliminationCorrect
 import Omega.POM.StarMomentKernelPerronSymmetricCompression
 import Omega.POM.DiagonalRateCriticalSpectrumInvariantsClosed
 import Omega.POM.AnomAdditiveUpToBoundary
+import Omega.POM.ZeroTemperatureGibbsLimit
