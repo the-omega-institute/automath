@@ -220,6 +220,7 @@ import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprint
 import Omega.Zeta.XiCriticalLineCircleCauchyUniformization
 import Omega.Zeta.XiJoukowskyL1MeasureLiftChebyshevFourier
 import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth
+import Omega.Zeta.XiJensenFourierLaplaceFingerprintInjectivity
 import Omega.Zeta.XiKlingenHeckeCharpolyProjectors
 import Omega.Zeta.XiHdqcd1LeyangSpectrumRadius
 import Omega.Zeta.XiJDiscriminant2IsogenyVelu

@@ -25,6 +25,7 @@ import Omega.Conclusion.AmbiguityShellJordanChainGraphLift
 import Omega.Conclusion.AmbiguityShellNilpotentIndexEqualsWindow
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.AnomalyHarmonicRigidity
+import Omega.Conclusion.AnomalyTwoCoprimeLayerTomography
 import Omega.Conclusion.AxialScreenDirectSumVisibleHiddenSplit
 import Omega.Conclusion.FullscreenPartialscreenComplexityTransition
 import Omega.Conclusion.AuditComplexityAreaEquivalence
