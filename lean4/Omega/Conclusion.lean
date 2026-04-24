@@ -456,6 +456,7 @@ import Omega.Conclusion.FixedResolutionCollisionRationalHankelRank
 import Omega.Conclusion.HalfEntropyForbiddenBand
 import Omega.Conclusion.FourierActiveModeCountDiverges
 import Omega.Conclusion.FoldgaugePiSufficientStatisticFiberObstruction
+import Omega.Conclusion.FoldgaugeDoubleSpectrumArchimedeanTower
 import Omega.Conclusion.FoldCondexpQuantumOperationNoninvertible
 import Omega.Conclusion.FoldGaugeCommutantMatrixSector
 import Omega.Conclusion.FoldgaugePiZeroRadiusOddGerm
