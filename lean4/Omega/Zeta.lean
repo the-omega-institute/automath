@@ -1038,6 +1038,7 @@ import Omega.Zeta.DerivedSchubertSmithSelfdualMomentLaw
 import Omega.Zeta.XiExteriorPowerSmithSchubert
 import Omega.Zeta.XiEndpointJuliaIndicatorEqualsAbsorption
 import Omega.Zeta.XiEndpointJensenDefectH12GramKernel
+import Omega.Zeta.XiEndpointJensenDefectH12StrictPd
 import Omega.Zeta.XiEndpointPoissonWeightScaling
 import Omega.Zeta.XiNohairFixedpointFluxClosure
 import Omega.Zeta.XiEndpointPsiPoissonMonopoleAsymptotic
