@@ -356,6 +356,7 @@ import Omega.POM.HookChannelImpliesPartitionGapClosed
 import Omega.POM.FiniteAuditNFAnom
 import Omega.POM.FiniteIntegerMomentsCannotReplaceHalf
 import Omega.POM.HalfExponentExplicitMomentOrderLb
+import Omega.POM.HalfExponentNeedsExpMomentOrder
 import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.FibPellQuadratic
 import Omega.POM.FibPellRecoverKFromUnitError
