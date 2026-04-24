@@ -71,6 +71,7 @@ import Omega.POM.TreeKlAmgmDecomposition
 import Omega.POM.BCPontryaginDualClassification
 import Omega.POM.BCAnomalyCharacterSupportEventualFreezing
 import Omega.POM.BCVisibleQuotientEventualStability
+import Omega.POM.BCInverseSystem
 import Omega.POM.BayesInfonceSecondCollisionDominance
 import Omega.POM.BayesFullRecoveryHazardMonotone
 import Omega.POM.BayesInfonceThirdOrderLargeK
@@ -441,6 +442,7 @@ import Omega.POM.ZetaResidueConstantsConjugates
 import Omega.POM.FractranPermutationEmbeddingLength
 import Omega.POM.PrimeTraceShiftFreeMonoid
 import Omega.POM.FractranFiniteUpdateTableOneStep
+import Omega.POM.ThreeGenNormalFormDecidable
 import Omega.POM.ThreeGenInterfaceNormalForm
 import Omega.POM.ThreeGenTermination
 import Omega.POM.FractranFirstfitTotalSerialDepth

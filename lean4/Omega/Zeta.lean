@@ -618,6 +618,7 @@ import Omega.Zeta.XiHellingerHankelConstantRationality
 import Omega.Zeta.XiHellingerKernelFourierSech2
 import Omega.Zeta.XiHellingerGreenOperatorCosh2
 import Omega.Zeta.XiHellingerGramStrictTotalPositivity
+import Omega.Zeta.XiHellingerKernelRKHSVolume
 import Omega.Zeta.XiHellingerGramFirstVariationEquilibrium
 import Omega.Zeta.XiHellingerClusterExpansionLargeSeparation
 import Omega.Zeta.XiHypercubeLeyangStokesHolography
