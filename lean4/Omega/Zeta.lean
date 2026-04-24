@@ -221,6 +221,7 @@ import Omega.Zeta.SelfdualWindVanish
 import Omega.Zeta.SyncCyclotomicElimination
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotSofic
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotRegular
+import Omega.Zeta.XiBasepointScanResidualKernelPolynomialFrame
 import Omega.Zeta.XiAbelianHolonomyFourierInversion
 import Omega.Zeta.XiCauchyPoissonLocationScaleUncenteredThird
 import Omega.Zeta.XiCauchyPoissonFdivSixthOrderMomentRewrite
