@@ -1278,3 +1278,4 @@ import Omega.Zeta.XiTimePart51AADerivedOrthogonalityPositiveDensity
 import Omega.Zeta.XiCauchyPoissonFisherKlSelfsimilarDefect
 import Omega.Zeta.XiTimePart9zbkPositiveNatomicExactnessCeiling
 import Omega.Zeta.XiScalarCertificateIntegratedDefect
+import Omega.Zeta.XiBinomialToeplitzConstantDepthUnderQuadraticRedshift

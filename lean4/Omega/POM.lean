@@ -903,3 +903,4 @@ import Omega.POM.HstarDescentLinext
 import Omega.POM.FenceVolumeLog2Pi
 import Omega.POM.BqExplicitDiagonalizationLinearForms
 import Omega.POM.ResonanceDisc2adicThicknessLb
+import Omega.POM.PathComponentMultiplicityRefinementMonotoneExtrema
