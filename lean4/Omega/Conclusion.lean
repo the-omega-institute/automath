@@ -663,6 +663,7 @@ import Omega.Conclusion.MinsectorDoublescaleFeedbackLaw
 import Omega.Conclusion.MixedHiddenStateFiniteAbelianClassification
 import Omega.Conclusion.MixedHiddenStateCharacterConductorZeta
 import Omega.Conclusion.MixedCollisionOverlapMultisetRigidity
+import Omega.Conclusion.MixedCollisionFiniteStateMmdRecurrence
 import Omega.Conclusion.MetallicFiniteSampleAntigolden
 import Omega.Conclusion.MetallicIntegerBinaryCollapse
 import Omega.Conclusion.MissingTypeFirstSecondMoments
