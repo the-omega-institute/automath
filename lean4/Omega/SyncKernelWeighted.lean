@@ -267,3 +267,4 @@ import Omega.SyncKernelWeighted.EvenEdgeworthC4
 import Omega.SyncKernelWeighted.SyncSpectralTangentLock
 import Omega.SyncKernelWeighted.DeltaBranchpointsDiscriminantLock
 import Omega.SyncKernelWeighted.HalfturnPrimeDividesDiscriminant
+import Omega.SyncKernelWeighted.GMSoficRationalNonconcentrationVtheta
