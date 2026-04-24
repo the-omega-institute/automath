@@ -124,6 +124,7 @@ import Omega.EA.StableAddComputable
 import Omega.EA.StableAddFiniteResolutionCompatibility
 import Omega.EA.StableAddNoWrapTruncation
 import Omega.EA.StableAddNormalizationRealization
+import Omega.EA.SuccessorStructure
 import Omega.EA.Sync10MemoryHorizonInputStatistics
 import Omega.EA.Sync10Regeneration
 import Omega.EA.Sync10RegenerationCorrelationBound
