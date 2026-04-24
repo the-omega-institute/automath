@@ -256,6 +256,7 @@ import Omega.POM.DiagonalRateRefreshHittingTimeGeometricSpectralDecomp
 import Omega.POM.DiagonalRateRefreshHittingTimeTailSpectral
 import Omega.POM.DiagonalRateRefreshHittingTimeMeanClosed
 import Omega.POM.DiagonalRateRefreshKronStarEquivalence
+import Omega.POM.DiagonalRateRefreshLaplacianPdet
 import Omega.POM.DiagonalRateRefreshHittingTimeRankTwoPotential
 import Omega.POM.DiagonalRateKeepProbabilityMonotone
 import Omega.POM.DiagonalRateRankOneRefreshDetprime
