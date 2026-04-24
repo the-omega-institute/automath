@@ -70,7 +70,43 @@ matrix of a finite directed multigraph.
   The determinant identity is standard for finite matrices.
 \end{proof}
 
-If \(\lambda=\rho(A)\) is the Perron root and
+The finite-group Adams--M\"obius arguments only need the following
+uniform Perron--Frobenius trace bound, which remains valid even when
+\(\lambda=1\).
+
+\begin{lemma}[Perron--Frobenius trace bound]
+  \label{lem:pf-trace-bound}
+  Let \(A\) be a primitive non-negative \(d\times d\) matrix with
+  Perron root \(\lambda=\rho(A)\). Then
+  \[
+    \abs{\Tr(A^n)}\le d\,\lambda^n
+    \qquad (n\ge 1).
+  \]
+  In particular, there is a constant \(C_A>0\) such that
+  \[
+    \abs{\Tr(A^n)}\le C_A\lambda^n
+    \qquad (n\ge 1).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Let \(\lambda,\mu_2,\dots,\mu_d\) be the eigenvalues of \(A\), counted
+  with algebraic multiplicity. Since \(A\) is primitive,
+  Perron--Frobenius theory gives \(\lambda>0\), the eigenvalue
+  \(\lambda\) is simple, and \(|\mu_j|<\lambda\) for \(j\ge 2\). Hence
+  \[
+    \abs{\Tr(A^n)}
+    =
+    \abs{\lambda^n+\sum_{j=2}^d\mu_j^n}
+    \le
+    \lambda^n+\sum_{j=2}^d|\mu_j|^n
+    \le
+    d\,\lambda^n,
+  \]
+  which proves the claim.
+\end{proof}
+
+If \(\lambda=\rho(A)\) is the Perron root and \(\lambda>1\), then
 \[
   \Lambda(A):=\max\{|\mu|:\mu\in\spec(A),\ \mu\neq\lambda\},
 \]
@@ -92,6 +128,39 @@ loss from the higher divisors in \eqref{eq:primitive-mobius}.
     \Tr(A^n)=\lambda^n+O(\Lambda(A)^n)
   \]
   and
+  \[
+    K_{\mathrm{PF}}(A)
+    :=
+    \begin{cases}
+      \displaystyle
+      \sup_{n\ge 1}
+        \frac{\abs{\Tr(A^n)-\lambda^n}}{\Lambda(A)^n},
+      & \Lambda(A)>0, \\[2ex]
+      0,
+      & \Lambda(A)=0,
+    \end{cases}
+    \qquad
+    K_{\mathrm{tr}}(A)
+    :=
+    \sup_{\ell\ge 1}\frac{\abs{\Tr(A^\ell)}}{\lambda^\ell}
+  \]
+  are finite. Moreover,
+  \[
+    \abs{p_n(A)-\lambda^n/n}
+    \le
+    \frac{K_{\mathrm{PF}}(A)\Lambda(A)^n}{n}
+    +\frac{K_{\mathrm{tr}}(A)}{n}
+      \sum_{\substack{m\mid n\\ m>1}}\lambda^{n/m}
+  \]
+  and therefore
+  \[
+    \abs{p_n(A)-\lambda^n/n}
+    \le
+    \frac{K_{\mathrm{PF}}(A)\Lambda(A)^n}{n}
+    +\frac{\lambda K_{\mathrm{tr}}(A)}{\lambda-1}
+      \frac{\lambda^{n/2}}{n}.
+  \]
+  Hence
   \[
     p_n(A)
     =
@@ -132,23 +201,36 @@ loss from the higher divisors in \eqref{eq:primitive-mobius}.
     =
     \lambda^n+O(\Lambda(A)^n).
   \]
+  If \(\Lambda(A)=0\), then every non-Perron eigenvalue is \(0\), so
+  \(\Tr(A^n)=\lambda^n\) for all \(n\ge 1\), and the convention
+  \(K_{\mathrm{PF}}(A)=0\) is exact. If \(\Lambda(A)>0\), then
+  \[
+    \frac{\abs{\Tr(A^n)-\lambda^n}}{\Lambda(A)^n}
+    \le
+    \sum_{j=2}^d\left|\frac{\mu_j}{\Lambda(A)}\right|^n
+    \le d-1,
+  \]
+  so \(K_{\mathrm{PF}}(A)<\infty\). The trace bound from
+  \Cref{lem:pf-trace-bound} gives \(K_{\mathrm{tr}}(A)\le d\), so
+  \(K_{\mathrm{tr}}(A)<\infty\).
 
   Insert this estimate into the M\"obius formula
   \[
     p_n(A)=\frac{1}{n}\sum_{m\mid n}\mu(m)\Tr(A^{n/m}).
   \]
-  The divisor \(m=1\) contributes
-  \(\lambda^n/n+O(\Lambda(A)^n/n)\). For the remaining divisors,
-  \(m>1\) implies \(n/m\le n/2\), and the spectral estimate
-  \(\Tr(A^k)=O(\lambda^k)\) gives
+  The divisor \(m=1\) contributes \(\lambda^n/n\), with error bounded
+  by \(K_{\mathrm{PF}}(A)\Lambda(A)^n/n\). For the remaining divisors,
+  \(m>1\) implies \(n/m\le n/2\), and the definition of
+  \(K_{\mathrm{tr}}(A)\) gives
   \[
     \sum_{\substack{m\mid n\\ m>1}}\abs{\Tr(A^{n/m})}
     \le
-    C\sum_{1\le k\le n/2}\lambda^k
-    =
-    O(\lambda^{n/2}).
+    K_{\mathrm{tr}}(A)\sum_{1\le k\le n/2}\lambda^k
+    \le
+    \frac{\lambda K_{\mathrm{tr}}(A)}{\lambda-1}\lambda^{n/2}.
   \]
-  Dividing by \(n\) gives the displayed M\"obius-coefficient asymptotic.
+  Dividing by \(n\) gives the two explicit displayed bounds and hence
+  the stated M\"obius-coefficient asymptotic.
   Since \(\Lambda(A)<\lambda\) and \(\lambda>1\), the number
   \(\vartheta_A\) lies in \((0,1)\), and the final two assertions follow
   by dividing the asymptotic by \(\lambda^n\).

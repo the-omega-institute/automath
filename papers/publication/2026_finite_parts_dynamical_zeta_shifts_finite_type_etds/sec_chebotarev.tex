@@ -20,8 +20,9 @@ mechanism and does not use a twisted spectral gap. The second block,
 \Cref{thm:class-mertens-explicit,prop:class-mertens-deviations,%
 thm:class-mertens-fourier}, is Main Theorem~II: it starts only after the twisted spectral gap
 \(\eta=\max_{\varrho\neq\mathbf 1}\rho(A_\varrho)<\lambda\) is imposed
-and converts the primitive channels into class constants, from which the
-channels are read back by non-abelian character orthogonality. The
+and converts the primitive channels into the class-indexed constants
+\(\mathcal M_C(A,\tau;G)\), from which the channels are read back by
+non-abelian character orthogonality. The
 intervening class-decomposition formulas are bridge statements between
 these two blocks.
 
@@ -74,11 +75,6 @@ readout uses the conjugated character value
 \(\overline{\chi_\varrho(C)}\), equivalently \(\chi_\varrho(C^{-1})\);
 we do not replace this by \(\chi_\varrho(C)\) unless the character is
 real-valued.}
-\[
-  \operatorname{conj}\!\bigl(\chi_\varrho(\cdot)\bigr)
-  :=\overline{\chi_\varrho(\cdot)}
-  =\chi_\varrho((\cdot)^{-1}).
-\]
 
 \medskip
 \noindent\textbf{Logarithm convention for \S\ref{sec:chebotarev}.}
@@ -512,85 +508,108 @@ primitive inversion operates.
 \end{corollary}
 
 \begin{proof}
-  Apply \Cref{lem:class-logarithm-primitive-expansion} to
-  \(\psi^m\phi\). Since
-  \((\psi^m\phi)(\tau(\gamma)^r)=\phi(\tau(\gamma)^{mr})\), we have
+  For each \(m\ge 1\), apply
+  \Cref{lem:class-logarithm-primitive-expansion} to \(\psi^m\phi\) and
+  then substitute \(z^m\). Since
+  \((\psi^m\phi)(\tau(\gamma)^r)=\phi(\tau(\gamma)^{mr})\), one gets
   \[
     \mathcal L_{\psi^m\phi}(z^m)
     =
     \sum_{\gamma\in\cP}\sum_{r\ge 1}
       \frac{\phi(\tau(\gamma)^{mr})}{r}z^{mr|\gamma|}.
   \]
-  The resulting \(m,r,\gamma\) sums may be rearranged absolutely.
-  Indeed, \(\phi\) is bounded, so
+  Multiply by \(\mu(m)/m\) and sum over \(m\ge 1\). The resulting
+  \(m,r,\gamma\) series may be rearranged absolutely: since \(\phi\) is
+  bounded,
   \[
     \sum_{m\ge 1}\frac{1}{m}
       \sum_{\gamma\in\cP}\sum_{r\ge 1}
-        \frac{\abs{\phi(\tau(\gamma)^{mr})}}{r} |z|^{mr|\gamma|}
+        \frac{\abs{\phi(\tau(\gamma)^{mr})}}{r}|z|^{mr|\gamma|}
     \le
     \norm{\phi}_\infty
     \sum_{m\ge 1}\frac{1}{m}
       \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn},
   \]
-  where
+  where the inner identity
   \[
     \sum_{\gamma\in\cP}\sum_{r\ge 1}\frac{|z|^{mr|\gamma|}}{r}
     =
     \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn}
   \]
-  by \eqref{eq:class-logarithm-primitive-expansion} with
-  \(\phi=\mathbf 1\). Since all terms are non-negative, Tonelli's
-  theorem gives
+  is \eqref{eq:class-logarithm-primitive-expansion} with
+  \(\phi=\mathbf 1\). Tonelli's theorem then gives
   \[
     \sum_{m\ge 1}\frac{1}{m}
       \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^{mn}
     =
     \sum_{n\ge 1}\frac{\Tr(A^n)}{n}
-      \sum_{m\ge 1}\frac{|z|^{mn}}{m}
-    =
-    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}
       \bigl(-\log(1-|z|^n)\bigr).
   \]
-  By \Cref{lem:primitive-orbit-asymptotic}, one has
-  \(\Tr(A^n)=\lambda^n+O(\Lambda(A)^n)\), so there is a constant
-  \(C_A>0\) such that \(\Tr(A^n)\le C_A\lambda^n\) for all \(n\ge 1\).
-  Also,
+  By \Cref{lem:pf-trace-bound},
+  \(\Tr(A^n)\le C_A\lambda^n\) for some \(C_A>0\), and
   \[
-    -\log(1-|z|^n)\le \frac{|z|^n}{1-|z|^n}\le \frac{|z|^n}{1-|z|},
+    -\log(1-|z|^n)\le \frac{|z|^n}{1-|z|^n}\le \frac{|z|^n}{1-|z|}.
   \]
-  so the last series is bounded by
+  Hence the majorant is bounded by
   \[
     \frac{C_A}{1-|z|}
     \sum_{n\ge 1}\frac{(\lambda|z|)^n}{n},
   \]
-  which converges for \(|z|<\lambda^{-1}\). Hence absolute
-  rearrangement is justified.
-  Hence
-  \begin{align*}
+  which converges for \(|z|<\lambda^{-1}\). Therefore
+  \[
     \sum_{m\ge 1}\frac{\mu(m)}{m}\mathcal L_{\psi^m\phi}(z^m)
-    &=
-    \sum_{m\ge 1}\frac{\mu(m)}{m}
-      \sum_{\gamma\in\cP}\sum_{r\ge 1}
-        \frac{\phi(\tau(\gamma)^{mr})}{r}z^{mr|\gamma|} \\
-    &=
-    \sum_{\gamma\in\cP}\sum_{s\ge 1}
-      \phi(\tau(\gamma)^s)z^{s|\gamma|}
-      \sum_{m\mid s}\frac{\mu(m)}{m}\frac{1}{s/m} \\
-    &=
+    =
+    \sum_{\gamma\in\cP}\sum_{m,r\ge 1}
+      \frac{\mu(m)}{mr}\phi(\tau(\gamma)^{mr})z^{mr|\gamma|}.
+  \]
+  Now set \(s:=mr\). For fixed \(\gamma\) and \(s\), the coefficient of
+  \(\phi(\tau(\gamma)^s)z^{s|\gamma|}\) is
+  \[
+    \sum_{m\mid s}\frac{\mu(m)}{m(s/m)}
+    =
+    \frac{1}{s}\sum_{m\mid s}\mu(m).
+  \]
+  Hence
+  \[
+    \sum_{m\ge 1}\frac{\mu(m)}{m}\mathcal L_{\psi^m\phi}(z^m)
+    =
     \sum_{\gamma\in\cP}\sum_{s\ge 1}
       \frac{\phi(\tau(\gamma)^s)}{s}z^{s|\gamma|}
-      \sum_{m\mid s}\mu(m),
-  \end{align*}
-  where \(s=mr\). Since \(\sum_{m\mid s}\mu(m)=1\) for \(s=1\) and
-  \(0\) otherwise, only the primitive term survives, yielding
+      \sum_{m\mid s}\mu(m).
+  \]
+  The divisor sum is \(1\) when \(s=1\) and \(0\) when \(s>1\), so only
+  the primitive term remains:
   \[
     \sum_{m\ge 1}\frac{\mu(m)}{m}\mathcal L_{\psi^m\phi}(z^m)
     =
     \sum_{\gamma\in\cP}\phi(\tau(\gamma))z^{|\gamma|}
-    =\Pi_\phi(z).
+    =
+    \Pi_\phi(z).
   \]
-  This proves \eqref{eq:class-adams-mobius-inversion}.
+  This is \eqref{eq:class-adams-mobius-inversion}.
 \end{proof}
+
+\begin{remark}[Relation to necklace/Witt inversion and twisted-zeta
+  precedents]
+  \label{rem:adams-mobius-literature-position}
+  The cancellation in
+  \Cref{cor:class-function-adams-mobius} is the finite-group analogue
+  of the classical ``primitive from repetitions'' mechanism in the
+  necklace and Witt-vector literature
+  \cite{MetropolisRota1983Necklaces,Wehrhahn1990AperiodicRings}. What
+  is specific here is the finite-state cocycle input:
+  repetitions replace a primitive label \(g\) by \(g^m\), so the
+  relevant correction is not scalar M\"obius inversion alone but the
+  Adams operation \(\psi^m\phi(g)=\phi(g^m)\) inside the character ring
+  of one fixed finite-group extension. Twisted periodic-point formulas
+  and determinant identities also appear in Fried's work
+  \cite{Fried1983PeriodicPointsTwistedCoefficients,%
+  Fried1983HomologicalIdentitiesClosedOrbits} and in the dynamical-zeta
+  treatment of Parry--Pollicott \cite{ParryPollicott1990Zeta}. Those
+  works provide determinant and orbit-counting frameworks, but they do
+  not carry out the finite-state Adams--M\"obius primitive inversion and
+  classwise Perron-point constant extraction developed here.
+\end{remark}
 
 \subsection{Primitive Peter--Weyl series}
 
@@ -1124,7 +1143,8 @@ the trivial Perron-channel contribution.
     +\mathcal M_C(A,\tau;G)-\frac{|C|}{|G|}\gamma
     +O\!\left(\frac{(\Lambda_*/\lambda)^N}{N}\right),
   \end{equation}
-  where \(H_N=\sum_{n\le N}1/n\) and
+  where \(H_N=\sum_{n\le N}1/n\) and the corresponding class-indexed
+  constant is
   \begin{equation}\label{eq:class-mertens-constant}
     \mathcal M_C(A,\tau;G)
     =
@@ -1133,21 +1153,37 @@ the trivial Perron-channel contribution.
       \sum_{\varrho\neq\mathbf 1}
         \overline{\chi_\varrho(C)}\,\Pi_\varrho(\lambda^{-1}).
   \end{equation}
-  Choose \(C_A>0\) such that
+  Let \(K_{\mathrm{PF}}(A)\) and \(K_{\mathrm{tr}}(A)\) be the base
+  constants from \Cref{lem:primitive-orbit-asymptotic}. Then
   \begin{equation}\label{eq:class-mertens-base-constant}
     \abs{p_n(A)-\lambda^n/n}
     \le
-    \frac{C_A}{n}\max\{\Lambda(A)^n,\lambda^{n/2}\}
+    \frac{K_{\mathrm{PF}}(A)\Lambda(A)^n}{n}
+    +\frac{\lambda K_{\mathrm{tr}}(A)}{\lambda-1}
+      \frac{\lambda^{n/2}}{n}
     \qquad (n\ge 1),
   \end{equation}
-  which exists by \Cref{lem:primitive-orbit-asymptotic}. For each
-  non-trivial \(\varrho\), let \(K_\varrho\) be as in
+  Define
+  \[
+    K_{\mathrm{base}}(A)
+    :=
+    K_{\mathrm{PF}}(A)
+    +\frac{\lambda K_{\mathrm{tr}}(A)}{\lambda-1}.
+  \]
+  Then
+  \[
+    \abs{p_n(A)-\lambda^n/n}
+    \le
+    \frac{K_{\mathrm{base}}(A)}{n}
+      \max\{\Lambda(A)^n,\lambda^{n/2}\}.
+  \]
+  For each non-trivial \(\varrho\), let \(K_\varrho\) be as in
   \Cref{lem:nontrivial-peter-weyl-channel-bound}, and let \(K_0\) denote
   the same global constant from that lemma. Set
   \begin{equation}\label{eq:class-mertens-explicit-constant}
     C_{\mathrm{cls}}(A,\tau;G)
     :=
-    C_A
+    K_{\mathrm{base}}(A)
     +\sum_{\varrho\neq\mathbf 1}\dim\varrho\,K_\varrho
     +\frac{\lambda K_0\,\abs{\Irr(G)}}{\lambda-1}
       \sum_{\varrho\neq\mathbf 1}(\dim\varrho)^2.
@@ -1189,7 +1225,7 @@ the trivial Perron-channel contribution.
   \[
     \abs{p_n(A)-\lambda^n/n}
     \le
-    \frac{C_A}{n}\max\{\Lambda(A)^n,\lambda^{n/2}\}
+    \frac{K_{\mathrm{base}}(A)}{n}\max\{\Lambda(A)^n,\lambda^{n/2}\}
   \]
   from \eqref{eq:class-mertens-base-constant}, and, for each
   non-trivial \(\varrho\),
@@ -1220,7 +1256,7 @@ the trivial Perron-channel contribution.
     \frac{|C|}{|G|}
     \frac{\Lambda_*^n}{n}
     \left(
-      C_A
+      K_{\mathrm{base}}(A)
       +\sum_{\varrho\neq\mathbf 1}\dim\varrho\,K_\varrho
       +\frac{\lambda K_0\,\abs{\Irr(G)}}{\lambda-1}
         \sum_{\varrho\neq\mathbf 1}(\dim\varrho)^2
@@ -1291,8 +1327,11 @@ the trivial Perron-channel contribution.
   of the type proved for Axiom~A or homogeneous extensions in
   \cite{ParryPollicott1986Chebotarev,NooraniParry1992ChebotarevShifts}.
   Its extra output is the explicit determinant expression for the
-  constant term \(\mathcal M_C(A,\tau;G)\) after the leading
-  \(\frac{|C|}{|G|}\log N\) behaviour has already been separated.
+  class-indexed constant term \(\mathcal M_C(A,\tau;G)\) after the leading
+  \(\frac{|C|}{|G|}\log N\) behaviour has already been separated. In
+  this sense \(\mathcal M_C(A,\tau;G)\) is a classwise finite-state
+  analogue of the constant term in classical orbit-counting asymptotics,
+  not a new Tauberian theorem of Sharp type.
 \end{remark}
 
 \begin{proposition}[Main Theorem II bridge: class-constant deviations
@@ -1383,8 +1422,8 @@ the trivial Perron-channel contribution.
   are valid throughout the disc \(|z|<\lambda^{-1}\) without it. The
   role of the hypothesis is exactly to permit evaluation at the Perron
   point \(z=\lambda^{-1}\) in the non-trivial channels and to convert
-  the primitive Peter--Weyl series into class Mertens
-  constants. From the dynamical point of view this is the
+  the primitive Peter--Weyl series into the class-indexed constants
+  \(\mathcal M_C(A,\tau;G)\). From the dynamical point of view this is the
   representation-by-representation analogue of the usual separation of
   the Perron eigenvalue from the rest of the spectrum. The corresponding
   Chebotarev-type asymptotics for finite homogeneous extensions were
@@ -1410,7 +1449,7 @@ the trivial Perron-channel contribution.
   the hypothesis is kept as a separate stated assumption and marks the boundary between formal
   primitive inversion and Perron-point asymptotics; the new step is the
   finite-state Adams--M\"obius calculus at the level of primitive
-  constants and the explicit classwise constant term
+  constants and the explicit class-indexed constant term
   \(\mathcal M_C(A,\tau;G)\), not a new leading-density theorem of the
   type considered in
   \cite{Lalley1987DistributionPeriodicOrbits,%
@@ -1419,8 +1458,8 @@ the trivial Perron-channel contribution.
 
 \subsection{Readout}
 
-The constants \(\mathcal M_C(A,\tau;G)\) therefore encode more than the
-leading
+The class-indexed constants \(\mathcal M_C(A,\tau;G)\) therefore encode
+more than the leading
 term of the class-counting asymptotic: by
 \Cref{prop:class-mertens-deviations} their deviations from the trivial
 average are already well-defined Fourier coefficients of the non-trivial
@@ -1463,8 +1502,7 @@ Perron-point coefficients to which the inversion can be applied.
   \]
   so the forward coefficient is
   \[
-    \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)
-    =\overline{\chi_\varrho(C)}
+    \overline{\chi_\varrho(C)}
     =\chi_\varrho(C^{-1}).
   \]
 \end{theorem}
@@ -1472,8 +1510,9 @@ Perron-point coefficients to which the inversion can be applied.
 \begin{proof}
   This is Fourier inversion in the full class-function space of \(G\).
   No cyclic quotient and no root-of-unity sampling condition is involved:
-  the inputs are the class constants for all conjugacy classes, and the
-  basis is the full irreducible character basis.
+  the inputs are the class-indexed constants
+  \(\mathcal M_C(A,\tau;G)\) for all conjugacy classes, and the basis is
+  the full irreducible character basis.
   Multiply \eqref{eq:class-mertens-fourier-expansion} by
   \(\chi_\sigma(C)\) and sum over conjugacy classes:
   \[
@@ -1481,13 +1520,13 @@ Perron-point coefficients to which the inversion can be applied.
     =
     \sum_{C\subset G}\frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)\,
+        \overline{\chi_\varrho(C)}\,
         \Pi_\varrho(\lambda^{-1})\chi_\sigma(C).
   \]
   The orthogonality relation
   \[
     \sum_{C\subset G}\frac{|C|}{|G|}
-      \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)\,\chi_\sigma(C)
+      \overline{\chi_\varrho(C)}\,\chi_\sigma(C)
     =\delta_{\varrho,\sigma}
   \]
   yields \eqref{eq:class-mertens-fourier-inversion}.
@@ -1500,7 +1539,7 @@ Perron-point coefficients to which the inversion can be applied.
     =
     \left(\frac{|C|}{|G|}\right)^2
     \left|\sum_{\varrho\neq\mathbf 1}
-      \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)\,
+      \overline{\chi_\varrho(C)}\,
       \Pi_\varrho(\lambda^{-1})\right|^2,
   \]
   one obtains
@@ -1509,7 +1548,7 @@ Perron-point coefficients to which the inversion can be applied.
     =
     \sum_{C\subset G}\frac{|C|}{|G|}
       \left|\sum_{\varrho\neq\mathbf 1}
-        \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)\,
+        \overline{\chi_\varrho(C)}\,
         \Pi_\varrho(\lambda^{-1})\right|^2.
   \]
   Expanding the modulus square gives
@@ -1518,12 +1557,12 @@ Perron-point coefficients to which the inversion can be applied.
       \Pi_\varrho(\lambda^{-1})
       \overline{\Pi_\sigma(\lambda^{-1})}
       \sum_{C\subset G}\frac{|C|}{|G|}
-        \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)\,\chi_\sigma(C).
+        \overline{\chi_\varrho(C)}\,\chi_\sigma(C).
   \]
   The inner sum is exactly
   \[
     \sum_{C\subset G}\frac{|C|}{|G|}
-      \operatorname{conj}\!\bigl(\chi_\varrho(C)\bigr)\,\chi_\sigma(C)
+      \overline{\chi_\varrho(C)}\,\chi_\sigma(C)
     =\delta_{\varrho,\sigma}.
   \]
   Therefore only the diagonal terms remain, which
@@ -1546,10 +1585,12 @@ comparison.
   root-of-unity layer recovers the reduced spectral data by ordinary
   Fourier inversion.
   Here the full family of
-  conjugacy-class Mertens constants recovers the non-trivial twisted
+  conjugacy-class Mertens constants \(\mathcal M_C(A,\tau;G)\) recovers
+  the non-trivial twisted
   primitive values \(\Pi_\varrho(\lambda^{-1})\) by non-abelian
   character orthogonality. The analogy is only at the final readout
-  step: the class constants being inverted here have first been produced by the
+  step: the class-indexed constants being inverted here have first been
+  produced by the
   Adams--M\"obius determinant mechanism and the twisted gap, whereas
   the one-layer statement of \Cref{sec:finite-part} is polynomial
   coefficient recovery.
