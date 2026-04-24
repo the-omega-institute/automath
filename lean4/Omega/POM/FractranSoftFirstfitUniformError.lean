@@ -91,6 +91,40 @@ theorem paper_pom_fractran_soft_firstfit_uniform_error
       nlinarith
     simpa [hp] using herror
 
+/-- Elementary failure bound used to package the fixed-temperature time tradeoff. -/
+lemma pom_fractran_soft_firstfit_temp_time_tradeoff_one_sub_pow_le
+    {u : ℝ} (hu0 : 0 ≤ u) (hu1 : u ≤ 1) :
+    ∀ T : ℕ, 1 - (1 - u) ^ T ≤ (T : ℝ) * u
+  | 0 => by simp
+  | T + 1 => by
+      have hT :
+          1 - (1 - u) ^ T ≤ (T : ℝ) * u :=
+        pom_fractran_soft_firstfit_temp_time_tradeoff_one_sub_pow_le hu0 hu1 T
+      have hpow_le_one : (1 - u) ^ T ≤ 1 := by
+        exact pow_le_one₀ (sub_nonneg.mpr hu1) (by nlinarith)
+      have hu_mul :
+          u * (1 - u) ^ T ≤ u := by
+        simpa using mul_le_mul_of_nonneg_left hpow_le_one hu0
+      have hstep :
+          1 - (1 - u) ^ (T + 1) ≤ (T : ℝ) * u + u := by
+        have hexpand :
+            1 - (1 - u) ^ (T + 1) = (1 - (1 - u) ^ T) + u * (1 - u) ^ T := by
+          ring_nf
+        rw [hexpand]
+        nlinarith
+      simpa [Nat.cast_add, Nat.cast_one, add_mul] using hstep
+
+/-- Fixed-temperature time-tradeoff statement: on the physical interval `u ∈ [0, 1]`, the failure
+probability accumulated over `T` steps is bounded above by the union-bound surrogate `T u`. -/
+def pom_fractran_soft_firstfit_temp_time_tradeoff_statement (u : ℝ) (T : ℕ) : Prop :=
+  (0 ≤ u ∧ u ≤ 1) → 1 - (1 - u) ^ T ≤ (T : ℝ) * u
+
+/-- Paper label: `cor:pom-fractran-soft-firstfit-temp-time-tradeoff`. -/
+theorem paper_pom_fractran_soft_firstfit_temp_time_tradeoff {u : ℝ} (T : ℕ) :
+    pom_fractran_soft_firstfit_temp_time_tradeoff_statement u T := by
+  intro hu
+  exact pom_fractran_soft_firstfit_temp_time_tradeoff_one_sub_pow_le hu.1 hu.2 T
+
 end
 
 end Omega.POM

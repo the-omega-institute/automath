@@ -55,6 +55,17 @@ def conclusion_divisor_compressed_qaxis_squareroot_threshold_data.sqrt_threshold
 
 open conclusion_divisor_compressed_qaxis_squareroot_threshold_data
 
+/-- Paper-facing visible `q`-axis consequence extracted from the square-root-threshold package. -/
+def conclusion_divisor_compressed_qaxis_sqrt_threshold_visible_statement
+    (D : conclusion_divisor_compressed_qaxis_squareroot_threshold_data) : Prop :=
+  conclusion_divisor_compressed_qaxis_squareroot_threshold_signal D =
+      conclusion_divisor_compressed_qaxis_squareroot_threshold_main_term D +
+        conclusion_divisor_compressed_qaxis_squareroot_threshold_tail_term D ∧
+    (D.kernelRH ↔ D.lambdaRel ≤ 1 / Real.sqrt D.rho) ∧
+    |conclusion_divisor_compressed_qaxis_squareroot_threshold_signal D -
+        conclusion_divisor_compressed_qaxis_squareroot_threshold_main_term D| ≤
+      D.tailCoeff * conclusion_divisor_compressed_qaxis_squareroot_threshold_rho_neg_half_pow D
+
 /-- Paper label: `thm:conclusion-divisor-compressed-qaxis-squareroot-threshold`. -/
 theorem paper_conclusion_divisor_compressed_qaxis_squareroot_threshold
     (D : conclusion_divisor_compressed_qaxis_squareroot_threshold_data) :
@@ -89,5 +100,13 @@ theorem paper_conclusion_divisor_compressed_qaxis_squareroot_threshold
       _ ≤ D.tailCoeff * conclusion_divisor_compressed_qaxis_squareroot_threshold_rho_neg_half_pow D := by
             unfold conclusion_divisor_compressed_qaxis_squareroot_threshold_rho_neg_half_pow
             exact mul_le_mul_of_nonneg_left D.hsqrt_tail D.htail
+
+/-- Paper label: `prop:conclusion-divisor-compressed-qaxis-sqrt-threshold-visible`. -/
+theorem paper_conclusion_divisor_compressed_qaxis_sqrt_threshold_visible
+    (D : conclusion_divisor_compressed_qaxis_squareroot_threshold_data) :
+    conclusion_divisor_compressed_qaxis_sqrt_threshold_visible_statement D := by
+  rcases paper_conclusion_divisor_compressed_qaxis_squareroot_threshold D with
+    ⟨hsignal, _, hkernel, hrho⟩
+  exact ⟨hsignal, hkernel, hrho⟩
 
 end Omega.Conclusion
