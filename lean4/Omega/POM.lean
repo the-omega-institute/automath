@@ -353,6 +353,7 @@ import Omega.POM.DiagonalSubleadingTopDegeneracy
 import Omega.POM.DiagonalRateRefreshWeightedCayleyPrufer
 import Omega.POM.FenceOrderPolySpectral
 import Omega.POM.DiagonalRateScalarCollapse
+import Omega.POM.DiagonalRateScalarCollapseRate
 import Omega.POM.DiagonalRateFiniteLayerAlgebraic
 import Omega.POM.DiagonalRateSeparationPGFRational
 import Omega.POM.DiagonalRateSeparationHausdorffLogconvex
