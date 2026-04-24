@@ -218,6 +218,7 @@ import Omega.POM.DiagonalRateAbsorbingSetHitAndOccupancy
 import Omega.POM.DiagonalRateAbsorbingGeometricMixture
 import Omega.POM.DiagonalRateAbsorbingHausdorffMomentTail
 import Omega.POM.DiagonalRateAcceptRefreshHaltingState
+import Omega.POM.TrivialChannelExtremeSpectrumExtraction
 import Omega.POM.DiagonalRateAcceptRefreshSeparationStrict
 import Omega.POM.DiagonalRateAcceptRefreshSSTPGF
 import Omega.POM.DiagonalRateAcceptRefreshSSTStrong

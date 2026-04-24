@@ -219,6 +219,7 @@ import Omega.Zeta.XiTerminalZmJgWdnForced
 import Omega.Zeta.XiCayleyDilationMobiusConjugacyFixedpoints
 import Omega.Zeta.XiTwoScaleCayleyDilationRigidity
 import Omega.Zeta.XiCanonicalTimeGaugeHarmonicRepresentative
+import Omega.Zeta.XiEtaPFourier
 import Omega.Zeta.XiCayleyTauConjugacyLogdiff
 import Omega.Zeta.XiCayleyScalingNoFiniteInteriorInvariantSet
 import Omega.Zeta.XiSatakeTraceEllipseTemperedSegment
