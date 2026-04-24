@@ -994,3 +994,4 @@ import Omega.POM.DiagonalRateCriticalSpectrumInvariantsClosed
 import Omega.POM.AnomAdditiveUpToBoundary
 import Omega.POM.ZeroTemperatureGibbsLimit
 import Omega.POM.DiagonalRateSmallDistortionHellingerEndpoint
+import Omega.POM.DiagonalRateScalingPotentialEndpoints
