@@ -43,6 +43,7 @@ import Omega.Zeta.XiAdamsFiberMobiusInversionFiniteNError
 import Omega.Zeta.AppOffcriticalRadiusCompression
 import Omega.Zeta.DerivedLeyangBfCkRigidity
 import Omega.Zeta.DephysBudgetDistanceDominatesTv
+import Omega.Zeta.DephysHankelFiniteAudit
 import Omega.Zeta.DephysIdempotentMonadIProjection
 import Omega.Zeta.DephysicalizedDefectRepulsionRadius
 import Omega.Zeta.DephysFoldStinespringSqrtLaw
@@ -112,6 +113,7 @@ import Omega.Zeta.XiEntropyGapHankelDeterminantCollapseUpperBound
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
 import Omega.Zeta.XiEndpointProfileCfiniteHankelRank
 import Omega.Zeta.XiEndpointProfilePronyInvertibility
+import Omega.Zeta.XiHankel2dSharpness
 import Omega.Zeta.XiOffsliceRealpartSumLaw
 import Omega.Zeta.XiExtremeResonancePositivity
 import Omega.Zeta.XiExtremeResonanceCriterion
@@ -128,6 +130,7 @@ import Omega.Zeta.XiHorizonZkFiberpathStokesDiscriminant
 import Omega.Zeta.XiHankelFiniteCertificatePrinciple
 import Omega.Zeta.XiHankelCofactorSyndromeSingleCoordinate
 import Omega.Zeta.XiHankelFiberFanoInformationLeakage
+import Omega.Zeta.HankelWindowFiber1d
 import Omega.Zeta.XiHankelSingularityOnePrimeLiftHvzk
 import Omega.Zeta.XiHypercubeWeightedSpanningTreeSpectrumProduct
 import Omega.Zeta.XiHypercubeWeightedLaplacianHeatTraceFactorization
@@ -375,7 +378,6 @@ import Omega.Zeta.XiTimePart9xcSerrinLdpVacuum
 import Omega.Zeta.XiTimePart9xcSerrinJointPressureAffineDegeneration
 import Omega.Zeta.XiTimePart9zgQuadraticSectorCharacterHarmonicCollapse
 import Omega.Zeta.XiTimePart9zbkGaussianCompressorUniqueness
-import Omega.Zeta.DephysHankelFiniteAudit
 import Omega.Zeta.XiTerminalZmLeyangP3RenormalizationHensel
 import Omega.Zeta.XiTerminalZmLeyangPerronP3Radius
 import Omega.Zeta.XiTerminalZmLeyangPerronP3SemistableDegreeDrop
@@ -1004,7 +1006,6 @@ import Omega.Zeta.XiTimePart70cKlGapControlsMaxfiberExcess
 import Omega.Zeta.XiHankelNormalformCRTAdelicMultiplicity
 import Omega.Zeta.XiHankelNormalformAdelicAmbiguityFiniteSupport
 import Omega.Zeta.XiFixedArityDyadicMultiplicityPresburgerInP
-import Omega.Zeta.HankelWindowFiber1d
 import Omega.Zeta.XiHankelSigminLowerboundVandermondeSeparation
 import Omega.Zeta.XiHellingerToeplitzDense2xLaw
 import Omega.Zeta.XiHellingerToeplitzBitBudgetLinearLaw
