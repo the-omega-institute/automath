@@ -243,6 +243,7 @@ import Omega.Zeta.XiTerminalZmJgSignedPermutationRepresentation
 import Omega.Zeta.XiTerminalZmJgAlgebraicScaleFiniteExceptionCoherence
 import Omega.Zeta.XiTerminalZmJgWdnForced
 import Omega.Zeta.XiCayleyDilationMobiusConjugacyFixedpoints
+import Omega.Zeta.XiPrimeHardcoreNormalizationConstant
 import Omega.Zeta.XiTwoScaleCayleyDilationRigidity
 import Omega.Zeta.XiCanonicalTimeGaugeHarmonicRepresentative
 import Omega.Zeta.XiEtaPFourier
