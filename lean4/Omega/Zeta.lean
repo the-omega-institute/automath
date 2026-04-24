@@ -158,6 +158,7 @@ import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiBinomialToeplitzComovingDeltaScaleLaw
 import Omega.Zeta.XiComovingLeyangEndpointSquareRoot
 import Omega.Zeta.RealInput40ArityChargeZeroConstants
+import Omega.Zeta.RealInput40ZetaUvResidue
 import Omega.Zeta.XiLogDefectPotentialPoissonPrimitive
 import Omega.Zeta.XiLocalBinaryNormalizationFibonacciRigidity
 import Omega.Zeta.XiLocalizedSolenoidPeriodicGrowthMaxScale
