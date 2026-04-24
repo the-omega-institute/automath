@@ -67,3 +67,4 @@ import Omega.SyncKernelRealInput.RealInput40RateEndpoints
 import Omega.SyncKernelRealInput.GmAffineSelfmapSpectralGap
 import Omega.SyncKernelRealInput.GMImprovabilityIffD1
 import Omega.SyncKernelRealInput.RealInput40CollisionRhkWindow
+import Omega.SyncKernelRealInput.RealInput40CollisionErrorPhase
