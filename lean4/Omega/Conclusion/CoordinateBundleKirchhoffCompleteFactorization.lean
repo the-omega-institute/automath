@@ -36,21 +36,23 @@ theorem paper_conclusion_coordinate_bundle_kirchhoff_complete_factorization :
       (conclusion_coordinate_bundle_kirchhoff_complete_factorization_partitionFunction E z =
           Finset.univ.prod
             (fun a =>
-              ∑ B in
-                conclusion_coordinate_bundle_kirchhoff_complete_factorization_nonemptySubsets
-                  (E a),
-                conclusion_coordinate_bundle_kirchhoff_complete_factorization_blockWeight z B)) ∧
-        conclusion_coordinate_bundle_kirchhoff_complete_factorization_minimalFunction E z =
-          Finset.univ.prod (fun a => ∑ e in E a, z e) := by
-  intro A Edge _ _ E z
+              (conclusion_coordinate_bundle_kirchhoff_complete_factorization_nonemptySubsets
+                  (E a)).sum
+                (conclusion_coordinate_bundle_kirchhoff_complete_factorization_blockWeight z))) ∧
+        (conclusion_coordinate_bundle_kirchhoff_complete_factorization_minimalFunction E z =
+          Finset.univ.prod (fun a => (E a).sum z)) := by
+  intro A Edge _ _ _ E z
   refine ⟨?_, ?_⟩
   · unfold conclusion_coordinate_bundle_kirchhoff_complete_factorization_partitionFunction
     symm
     simpa [conclusion_coordinate_bundle_kirchhoff_complete_factorization_blockWeight] using
-      (Finset.prod_univ_sum fun a (B : Finset Edge) =>
-        conclusion_coordinate_bundle_kirchhoff_complete_factorization_blockWeight z B)
+      (Finset.prod_univ_sum
+        (t := fun a =>
+          conclusion_coordinate_bundle_kirchhoff_complete_factorization_nonemptySubsets (E a))
+        (f := fun a (B : Finset Edge) =>
+          conclusion_coordinate_bundle_kirchhoff_complete_factorization_blockWeight z B))
   · unfold conclusion_coordinate_bundle_kirchhoff_complete_factorization_minimalFunction
     symm
-    simpa using Finset.prod_univ_sum fun a (e : Edge) => z e
+    simpa using (Finset.prod_univ_sum (t := E) (f := fun a (e : Edge) => z e))
 
 end Omega.Conclusion
