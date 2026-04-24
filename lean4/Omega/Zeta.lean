@@ -181,6 +181,7 @@ import Omega.Zeta.XiTerminalZmEllipticWeight2kDeltaLedger
 import Omega.Zeta.XiPrimeRegisterHistoryInverseLimit
 import Omega.Zeta.XiPrimeRegisterIdempotentUniqueNormalForm
 import Omega.Zeta.XiPrimeShellQuasiOrthogonality
+import Omega.Zeta.XiPrimeShellExplicitFormulaWindow
 import Omega.Zeta.XiPrimeSliceNontrivialLayerExactMinimality
 import Omega.Zeta.XiPiPowerSmithComplementarity
 import Omega.Zeta.XiPrecisionTypeNoLeakage
@@ -363,6 +364,7 @@ import Omega.Zeta.XiTimePart62ccEventwordFreeAffineSubmonoid
 import Omega.Zeta.XiTimePart62dLeyangBranchGraphAutomorphismWreath
 import Omega.Zeta.XiTimePart62ebLeyangExternalAuditImmunity
 import Omega.Zeta.XiTimePart62dgcZGMatrixEulerNoScalarProduct
+import Omega.Zeta.XiTimePart62bZGMatrixEulerContinuant
 import Omega.Zeta.XiTimePart62debbFiniteCircleSolenoidDualLedgerObstruction
 import Omega.Zeta.XiTimePart62debbFiniteLocalizationAxesNoFullMultiplicativeHost
 import Omega.Zeta.XiTimePart9wFiniteLocalizedAdditiveLedgerObstruction
