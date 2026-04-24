@@ -2,102 +2,78 @@
 
 \begin{document}
 
-\section{Window-6 Countermodel Certificate and Equational Spectra}\label{app:window6-countermodel-certificate}
+\section{窗口-6 反模型证书与等式谱}\label{app:window6-countermodel-certificate}
 
-This appendix records the narrow certificate boundary for the window-\(6\)
-finite countermodel used in the Equational Theories Project interface.  The
-object is the affine-linear magma on \(\ZZ/21\ZZ\)
+本附录记录用于 Equational Theories Project 接口的窗口-\(6\) 有限反模型的证书边界。所讨论的对象是 \(\ZZ/21\ZZ\) 上的仿射线性 magma
 \[
     x\diamond y=7x+15y,
 \]
-or equivalently the same operation transported to the stable fiber \(X_6\) by
-the stable-value ring equivalence.  The only upstream-facing certificate
-claimed here is the compact finite entry
+等价地，即经由稳定值环同构搬运到稳定纤维 \(X_6\) 上的同一运算。此处对上游声称的唯一证书为紧凑有限条目
 \[
     \texttt{Facts G [10, 52, 55] [43, 46]}.
 \]
-The surrounding Fibonacci and CRT structure is Lean-certified on the Omega
-side; the ETP law satisfaction, spectrum count, and current database freshness
-are verified computationally (see \texttt{\detokenize{scripts/equational_theory/}}).
+周围的 Fibonacci 与 CRT 结构已在 Omega 端经 Lean 认证；ETP 律满足性、谱计数与当前数据库新颖性检查均由计算验证（见 \texttt{\detokenize{scripts/equational_theory/}}）。
 
-\begin{lemma}[Stable-value affine transfer]\label{lem:window6-affine-stable-transfer}
-Let \(m\geq 0\), and let \(X_m\) be the stable fiber equipped with
-\(\mathrm{stableAdd}\) and \(\mathrm{stableMul}\).  Under the ring equivalence
+\begin{lemma}[稳定值仿射传递]\label{lem:window6-affine-stable-transfer}
+设 \(m\geq 0\)，令 \(X_m\) 为配备 \(\mathrm{stableAdd}\) 与 \(\mathrm{stableMul}\) 的稳定纤维。在环同构
 \[
-    X_m \simeq \ZZ/F_{m+2}\ZZ,
+    X_m \simeq \ZZ/F_{m+2}\ZZ
 \]
-every affine-linear magma operation
+之下，\(X_m\) 上每一仿射线性 magma 运算
 \[
     x\diamond y=ax+by
 \]
-on \(X_m\) is transported to the same coefficient formula over
-\(\ZZ/F_{m+2}\ZZ\).  Hence a magma equation in this affine-linear family is
-satisfied on \(X_m\) exactly when the transported coefficient congruences are
-satisfied modulo \(F_{m+2}\).
+搬运为 \(\ZZ/F_{m+2}\ZZ\) 上相同系数公式的运算。因此该仿射线性族中的 magma 等式在 \(X_m\) 上成立，当且仅当搬运后的系数同余式模 \(F_{m+2}\) 成立。
 \end{lemma}
 
 \begin{proof}
-The map \(\mathrm{stableValueRingEquiv}\) identifies \(X_m\) with
-\(\ZZ/F_{m+2}\ZZ\), while \(\mathrm{stableAdd}\) and \(\mathrm{stableMul}\)
-compute modular addition and multiplication on stable values.  For a variable
-term the claim is immediate.  If \(t=u\diamond v\), then the transported value is
+映射 \(\mathrm{stableValueRingEquiv}\) 将 \(X_m\) 等同于 \(\ZZ/F_{m+2}\ZZ\)，而 \(\mathrm{stableAdd}\) 与 \(\mathrm{stableMul}\) 在稳定值上执行模加法与模乘法。对变量项，结论平凡。设 \(t=u\diamond v\)，则搬运后的值为
 \[
     a\,\mathrm{val}(u)+b\,\mathrm{val}(v),
 \]
-which is exactly the recursive coefficient rule over the quotient ring.
-Induction on the binary term proves commutation of evaluation with the
-stable-value equivalence, and injectivity of the equivalence gives the stated
-satisfaction criterion.  This is the formal Omega transfer bridge recorded in
-\texttt{\detokenize{lean4/Omega/Folding/FiberRing.lean}} and
-\texttt{\detokenize{lean4/Omega/Folding/FiberArithmetic.lean}}; it is not, by
-itself, an upstream ETP theorem.
+恰为商环上的递归系数规则。对二元项作归纳即证赋值与稳定值同构的交换性，由同构的单射性给出所述满足判据。此为 Omega 端的形式传递桥，记录于
+\texttt{\detokenize{lean4/Omega/Folding/FiberRing.lean}} 及
+\texttt{\detokenize{lean4/Omega/Folding/FiberArithmetic.lean}}；其本身不构成上游 ETP 定理。
 \end{proof}
 
-\begin{proposition}[Window-\(6\) CRT rectangular band]\label{prop:window6-crt-rectangular-band}
-For \(m=6\), the stable-value ring is
+\begin{proposition}[窗口-\(6\) CRT 矩形带]\label{prop:window6-crt-rectangular-band}
+取 \(m=6\)，稳定值环为
 \[
     X_6\simeq \ZZ/21\ZZ\simeq \ZZ/3\ZZ\times \ZZ/7\ZZ.
 \]
-In this CRT presentation the operation \(x\diamond y=7x+15y\) becomes
+在此 CRT 表示下，运算 \(x\diamond y=7x+15y\) 化为
 \[
     \bigl((a_3,a_7),(b_3,b_7)\bigr)\longmapsto (a_3,b_7).
 \]
-Thus the window-\(6\) magma is the rectangular-band projection determined by
-the complementary idempotents \(7\) and \(15\) in \(\ZZ/21\ZZ\).
+从而窗口-\(6\) magma 即为由 \(\ZZ/21\ZZ\) 中互补幂等元 \(7\) 与 \(15\) 所确定的矩形带投影。
 \end{proposition}
 
 \begin{proof}
-The factorization \(F_8=21=3\cdot 7\) gives the CRT decomposition.  In
-\(\ZZ/21\ZZ\), the Omega formalization proves
+分解 \(F_8=21=3\cdot 7\) 给出 CRT 分解。在 \(\ZZ/21\ZZ\) 中，Omega 形式化证明了
 \[
     7^2=7,\qquad 15^2=15,\qquad 7\cdot 15=0,\qquad 7+15=1.
 \]
-Modulo \(3\), one has \(7\equiv 1\) and \(15\equiv 0\), so
+模 \(3\) 有 \(7\equiv 1\)、\(15\equiv 0\)，从而
 \[
     7x+15y\equiv x\pmod 3.
 \]
-Modulo \(7\), one has \(7\equiv 0\) and \(15\equiv 1\), so
+模 \(7\) 有 \(7\equiv 0\)、\(15\equiv 1\)，从而
 \[
     7x+15y\equiv y\pmod 7.
 \]
-Therefore the CRT image of \(x\diamond y\) keeps the \(\ZZ/3\ZZ\)-coordinate of
-the left input and the \(\ZZ/7\ZZ\)-coordinate of the right input.  The
-idempotent identities cited above are formalized in
-\texttt{\detokenize{lean4/Omega/Folding/Window6.lean}}.
+因此 \(x\diamond y\) 的 CRT 像保留左输入的 \(\ZZ/3\ZZ\)-分量与右输入的 \(\ZZ/7\ZZ\)-分量。上述幂等恒等式已在
+\texttt{\detokenize{lean4/Omega/Folding/Window6.lean}} 中形式化。
 \end{proof}
 
-\begin{lemma}[First--last term classifier]\label{lem:window6-first-last-classifier}
-For every binary magma term \(t(x_1,\ldots,x_n)\), evaluation in the
-window-\(6\) magma has the CRT form
+\begin{lemma}[首末变量分类器]\label{lem:window6-first-last-classifier}
+对每一二元 magma 项 \(t(x_1,\ldots,x_n)\)，在窗口-\(6\) magma 中的赋值具有 CRT 形式
 \[
     t(x_1,\ldots,x_n)
     =
     \bigl(\pi_3(x_{\operatorname{first}(t)}),
           \pi_7(x_{\operatorname{last}(t)})\bigr),
 \]
-where \(\operatorname{first}(t)\) and \(\operatorname{last}(t)\) are the first
-and last variables encountered in the standard left-to-right traversal of the
-term.  Consequently a law \(s=t\) holds in this magma if and only if
+其中 \(\operatorname{first}(t)\) 与 \(\operatorname{last}(t)\) 分别为标准从左到右遍历中遇到的首个与末个变量。因此律 \(s=t\) 在此 magma 中成立当且仅当
 \[
     \operatorname{first}(s)=\operatorname{first}(t)
     \quad\text{and}\quad
@@ -106,79 +82,53 @@ term.  Consequently a law \(s=t\) holds in this magma if and only if
 \end{lemma}
 
 \begin{proof}
-For a variable term, the first and last variables are both the variable itself,
-and the displayed formula is tautological.  Suppose the formula is known for
-\(u\) and \(v\).  By Proposition
-\ref{prop:window6-crt-rectangular-band}, the value of \(u\diamond v\) is
-obtained by taking the \(\ZZ/3\ZZ\)-coordinate from \(u\) and the
-\(\ZZ/7\ZZ\)-coordinate from \(v\).  Hence the first variable of
-\(u\diamond v\) is the first variable of \(u\), and the last variable of
-\(u\diamond v\) is the last variable of \(v\).  This proves the formula by
-structural induction.
+对变量项，首末变量均为该变量本身，所示公式平凡成立。设公式对 \(u\) 与 \(v\) 已知。由命题 \ref{prop:window6-crt-rectangular-band}，\(u\diamond v\) 的值取自 \(u\) 的 \(\ZZ/3\ZZ\)-分量与 \(v\) 的 \(\ZZ/7\ZZ\)-分量，故 \(u\diamond v\) 的首变量为 \(u\) 的首变量，末变量为 \(v\) 的末变量。由结构归纳即证。
 
-If two terms have the same first and last variables, the formula gives equal
-values for every assignment.  Conversely, if the first variables differ, choose
-an assignment with distinct \(\ZZ/3\ZZ\)-coordinates on those variables; if the
-last variables differ, choose an assignment with distinct
-\(\ZZ/7\ZZ\)-coordinates.  The two CRT components have more than one element,
-so the corresponding evaluations differ.
+若两项具有相同的首末变量，则公式对每一赋值给出相等的值。反之，若首变量不同，可选取在该两变量上具有不同 \(\ZZ/3\ZZ\)-分量的赋值；若末变量不同，可选取具有不同 \(\ZZ/7\ZZ\)-分量的赋值。两个 CRT 分量均含多于一个元素，故对应赋值值不同。
 \end{proof}
 
-\begin{theorem}[Window-\(6\) finite certificate]\label{thm:window6-fin21-facts-certificate}
-Let \(G\) be the finite magma on \(\operatorname{Fin}(21)\) induced by
+\begin{theorem}[窗口-\(6\) 有限证书]\label{thm:window6-fin21-facts-certificate}
+设 \(G\) 为由
 \[
-    x\diamond y=7x+15y\pmod {21}.
+    x\diamond y=7x+15y\pmod {21}
 \]
-With respect to the ETP order-four equation list, \(G\) satisfies
+诱导的 \(\operatorname{Fin}(21)\) 上的有限 magma。关于 ETP 四阶等式表，\(G\) 满足
 \[
     E_{10},\qquad E_{52},\qquad E_{55},
 \]
-and refutes
+而反驳
 \[
     E_{43},\qquad E_{46}.
 \]
-Equivalently, \(G\) provides the compact finite certificate
+等价地，\(G\) 提供紧凑有限证书
 \[
     \texttt{Facts G [10, 52, 55] [43, 46]}.
 \]
 \end{theorem}
 
 \begin{proof}
-The algebraic form of the model is Proposition
-\ref{prop:window6-crt-rectangular-band}, and the term classifier is Lemma
-\ref{lem:window6-first-last-classifier}.  The correspondence between the ETP
-indices \(10,43,46,52,55\) and the relevant term pairs is an external database
-indexing fact, so the final indexed certificate is verified by direct
-enumeration of the finite magma on \(\operatorname{Fin}(21)\).  This computation
-checks all assignments for the listed laws and produces the stated
-satisfied/refuted split; it is verified computationally (see
-\texttt{\detokenize{scripts/equational_theory/}}).  No Automath/Omega Lean
-theorem is claimed here for the ETP-indexed laws \(E_{10},E_{43},E_{46},E_{52}\),
-or \(E_{55}\).
+模型的代数形式见命题 \ref{prop:window6-crt-rectangular-band}，项分类器见引理 \ref{lem:window6-first-last-classifier}。ETP 索引 \(10,43,46,52,55\) 与相关项对的对应是外部数据库索引事实，故最终索引证书由 \(\operatorname{Fin}(21)\) 上有限 magma 的直接枚举验证。此计算检查所列律的全部赋值并产生所述满足/反驳拆分；验证脚本见
+\texttt{\detokenize{scripts/equational_theory/}}。此处不声称对 ETP 索引律 \(E_{10}\)、\(E_{43}\)、\(E_{46}\)、\(E_{52}\) 或 \(E_{55}\) 的 Automath/Omega Lean 定理。
 \end{proof}
 
-\begin{corollary}[Equational spectrum and current-HEAD audit]\label{cor:window6-equational-spectrum}
-For the same finite magma \(G\), the full ETP order-four spectrum contains
+\begin{corollary}[等式谱与当前 HEAD 审计]\label{cor:window6-equational-spectrum}
+对同一有限 magma \(G\)，完整的 ETP 四阶谱含
 \[
     353
 \]
-satisfied equations and
+条满足等式与
 \[
     4341
 \]
-refuted equations.  Hence \(G\) separates
+条反驳等式，从而 \(G\) 分离
 \[
-    353\cdot 4341=1,532,373
+    353\cdot 4341=1{,}532{,}373
 \]
-ordered implication pairs.  At upstream ETP commit
+个有序蕴涵对。在上游 ETP 提交
 \[
-    \texttt{b99c0e486501e5b0690ef3fe5250d3aa57e63478},
+    \texttt{b99c0e486501e5b0690ef3fe5250d3aa57e63478}
 \]
-the combined certificate has no exact \(\texttt{Facts}\) entry and no
-satisfied/refuted superset entry in \(\texttt{full\_entries.json}\).  Among the
-six pairwise consequences of Theorem
-\ref{thm:window6-fin21-facts-certificate}, the following five are also absent
-as exact entries and as superset entries:
+处，该组合证书在 \(\texttt{full\_entries.json}\) 中无精确 \(\texttt{Facts}\) 条目，亦无满足/反驳超集条目。在定理 \ref{thm:window6-fin21-facts-certificate} 的六个逐对推论中，以下五个同样不存在精确或超集条目：
 \[
 \begin{array}{c|cc}
 \text{pair} & \text{exact entries} & \text{superset entries}\\
@@ -190,32 +140,18 @@ E_{55}\not\Rightarrow E_{43} & 0 & 0\\
 E_{55}\not\Rightarrow E_{46} & 0 & 0
 \end{array}
 \]
-The remaining pair \(E_{10}\not\Rightarrow E_{43}\) is already covered by two
-\(\operatorname{Fin}(2)\) \(\texttt{SmallMagmas.lean}\) facts and is not part
-of the nonredundancy claim.
+余下一对 \(E_{10}\not\Rightarrow E_{43}\) 已被两条 \(\operatorname{Fin}(2)\) 的 \(\texttt{SmallMagmas.lean}\) 事实覆盖，不计入非冗余性声明。
 \end{corollary}
 
 \begin{proof}
-The spectrum count is the direct truth-vector count over the \(4694\) indexed
-ETP equations: \(353+4341=4694\), and every satisfied/refuted ordered pair is
-an anti-implication witnessed by \(G\).  The current-HEAD novelty statement is
-obtained by parsing the upstream \(\texttt{full\_entries.json}\) file, filtering
-finite \(\texttt{Facts}\) entries, and checking both equality and
-satisfied/refuted inclusion against the combined window-\(6\) certificate and
-its pairwise projections.  The audit script copied with this paper is
+谱计数为 \(4694\) 条 ETP 索引等式上的直接真值向量计数：\(353+4341=4694\)，每一满足/反驳有序对即为 \(G\) 所见证的反蕴涵。当前 HEAD 新颖性声明通过解析上游 \(\texttt{full\_entries.json}\) 文件，筛选有限 \(\texttt{Facts}\) 条目，并对组合窗口-\(6\) 证书及其逐对投影检查等式与满足/反驳包含关系而得。审计脚本为
 \[
     \texttt{\detokenize{scripts/equational_theory/audit_window6_current.py}}.
 \]
 \end{proof}
 
-\begin{remark}[Certificate boundary]\label{rem:window6-proof-boundary}
-The Omega formalization certifies the stable-value ring equivalence, the
-window-\(6\) CRT decomposition, and the idempotent arithmetic of \(7\) and
-\(15\) in \(\ZZ/21\ZZ\).  The ETP-indexed law satisfaction, the \(353/4341\)
-spectrum split, and the current upstream novelty audit are computational data
-contributions.  They should be cited as a finite countermodel certificate, not
-as a Lean proof of the ETP laws and not as a new graph-edge theorem beyond the
-audited \(\texttt{Facts}\) contribution.
+\begin{remark}[证书边界]\label{rem:window6-proof-boundary}
+Omega 形式化认证了稳定值环同构、窗口-\(6\) CRT 分解以及 \(\ZZ/21\ZZ\) 中 \(7\) 与 \(15\) 的幂等算术。ETP 索引律满足性、\(353/4341\) 谱拆分以及当前上游新颖性审计均为计算数据贡献，应作为有限反模型证书引用，而非 ETP 律的 Lean 证明，亦非超出所审计 \(\texttt{Facts}\) 贡献之外的图边定理。
 \end{remark}
 
 \end{document}

@@ -2,23 +2,17 @@
 
 \begin{document}
 
-\section{Signed Companion Proxies and Collision-Moment Certificates}\label{app:signed-companion-collision-audit}
+\section{带符号伴随代理与碰撞矩证书}\label{app:signed-companion-collision-audit}
 
-This appendix isolates the linear-algebra convention behind the signed
-companions reconstructed from the collision-moment recurrences.  Its purpose is
-twofold.  First, it records the determinant and exterior-square coefficients
-that are forced by the signed Frobenius convention.  Second, it separates those
-formal proxy computations from the stronger assertion that the same matrices
-are nonnegative collision kernels, or are already flow-equivalent to such
-kernels.
+本附录隔离从碰撞矩递推重构的带符号伴随矩阵背后的线性代数约定。其目的有二：第一，记录由带符号 Frobenius 约定所强制的行列式与外平方系数；第二，将这些形式代理计算与更强的断言（即同一矩阵为非负碰撞核或已流等价于此类核）分离。
 
-\subsection{The signed companion convention}
+\subsection{带符号伴随约定}
 
-Let \(R\) be a commutative ring, let \(d\geq 2\), and let
+设 \(R\) 为交换环，\(d\geq 2\)，令
 \[
     c=(c_1,\ldots,c_d)\in R^d.
 \]
-We use the signed recurrence companion
+采用带符号递推伴随
 \[
 A(c)=
 \begin{pmatrix}
@@ -29,47 +23,39 @@ A(c)=
 -c_d&-c_{d-1}&-c_{d-2}&\cdots&-c_1
 \end{pmatrix}.
 \]
-Equivalently, after conjugating by the reversal permutation, this is the
-first-row Frobenius companion with first row \((-c_1,\ldots,-c_d)\) and
-subdiagonal entries \(1\).  This is the convention formalized in the Omega Lean
-file \texttt{\detokenize{lean4/Omega/Folding/CollisionKernel.lean}}.
+等价地，经翻转置换共轭后，此即首行为 \((-c_1,\ldots,-c_d)\)、次对角线元素为 \(1\) 的 Frobenius 伴随矩阵。此约定已在 Omega Lean 文件
+\texttt{\detokenize{lean4/Omega/Folding/CollisionKernel.lean}} 中形式化。
 
-\begin{lemma}[Signed companion coefficients]\label{lem:signed-companion-coefficients}
-The characteristic polynomial of \(A(c)\) is
+\begin{lemma}[带符号伴随系数]\label{lem:signed-companion-coefficients}
+\(A(c)\) 的特征多项式为
 \[
     \chi_{A(c)}(x)=x^d+c_1x^{d-1}+c_2x^{d-2}+\cdots+c_d.
 \]
-Consequently
+从而
 \[
     \tr A(c)=-c_1,\qquad e_2(A(c))=c_2,
 \]
-where \(e_2\) denotes the second elementary symmetric polynomial in the
-eigenvalues, equivalently the trace of \(\Lambda^2 A(c)\) over a splitting
-field.
+其中 \(e_2\) 表示特征值的第二初等对称多项式，等价于 \(\Lambda^2 A(c)\) 在分裂域上的迹。
 \end{lemma}
 
 \begin{proof}
-The displayed matrix is the usual Frobenius companion for the monic polynomial
-\(x^d+c_1x^{d-1}+\cdots+c_d\), up to conjugation by the reversal permutation.
-The characteristic polynomial is therefore the displayed polynomial.  Comparing
-with
+所示矩阵为首一多项式 \(x^d+c_1x^{d-1}+\cdots+c_d\) 的通常 Frobenius 伴随矩阵（相差翻转置换共轭）。因此其特征多项式即为所示多项式。与
 \[
     \chi_A(x)=x^d-e_1(A)x^{d-1}+e_2(A)x^{d-2}-\cdots
 \]
-gives \(e_1(A(c))=\tr A(c)=-c_1\) and \(e_2(A(c))=c_2\).
+比较系数即得 \(e_1(A(c))=\tr A(c)=-c_1\) 及 \(e_2(A(c))=c_2\)。
 \end{proof}
 
-\begin{theorem}[Signed companion determinant]\label{thm:signed-companion-det}
-For the signed companion \(A(c)\),
+\begin{theorem}[带符号伴随行列式]\label{thm:signed-companion-det}
+对带符号伴随 \(A(c)\)，
 \[
     \det(I-A(c))=1+\sum_{i=1}^d c_i.
 \]
-In contrast, the ordinary recurrence companion \(C(c)\), with characteristic
-polynomial \(x^d-c_1x^{d-1}-\cdots-c_d\), satisfies
+相比之下，普通递推伴随 \(C(c)\) 的特征多项式为 \(x^d-c_1x^{d-1}-\cdots-c_d\)，满足
 \[
     \det(I-C(c))=1-\sum_{i=1}^d c_i.
 \]
-Thus the two determinant conventions obey the universal conversion rule
+因此两种行列式约定服从万有转换规则
 \[
     \det(I-C(c))+\det(I-A(c))=2.
 \]
@@ -77,37 +63,33 @@ Thus the two determinant conventions obey the universal conversion rule
 \end{theorem}
 
 \begin{proof}
-The signed identity follows from Lemma
-\ref{lem:signed-companion-coefficients} by evaluating the characteristic
-polynomial at \(x=1\):
+带符号恒等式由引理 \ref{lem:signed-companion-coefficients} 在 \(x=1\) 处赋值特征多项式得到：
 \[
     \det(I-A(c))=\chi_{A(c)}(1)=1+\sum_{i=1}^d c_i.
 \]
-The ordinary recurrence companion has the same formula with the coefficients
-replaced by \(-c_i\), giving \(1-\sum_i c_i\).  Adding the two expressions gives
-the conversion rule.
+普通递推伴随以 \(-c_i\) 替换系数，给出 \(1-\sum_i c_i\)。两式相加即得转换规则。
 \end{proof}
 
-\begin{corollary}[The \(q=6,7\) signed proxy determinants]\label{cor:signed-companion-q6-q7}
-For the audited recurrence vectors
+\begin{corollary}[\(q=6,7\) 带符号代理行列式]\label{cor:signed-companion-q6-q7}
+对审计的递推向量
 \[
 \begin{aligned}
 c_6&=(2,17,28,88,-26,4,-4),\\
 c_7&=(2,26,74,311,-34,84,-42),
 \end{aligned}
 \]
-the signed companion last rows are
+带符号伴随末行为
 \[
 \begin{aligned}
 r_6&=(4,-4,26,-88,-28,-17,-2),\\
 r_7&=(42,-84,34,-311,-74,-26,-2).
 \end{aligned}
 \]
-Their signed determinant proxies are
+其带符号行列式代理值为
 \[
     \det(I-A(c_6))=110,\qquad \det(I-A(c_7))=422.
 \]
-Hence the signed determinant excesses above the even Fibonacci baseline are
+从而带符号行列式超出偶 Fibonacci 基线的余量为
 \[
     110-F_{10}=55,\qquad 422-F_{12}=278.
 \]
@@ -115,53 +97,41 @@ Hence the signed determinant excesses above the even Fibonacci baseline are
 \end{corollary}
 
 \begin{proof}
-The last rows are \((-c_d,\ldots,-c_1)\).  Applying Theorem
-\ref{thm:signed-companion-det} gives
+末行为 \((-c_d,\ldots,-c_1)\)。应用定理 \ref{thm:signed-companion-det} 得
 \[
 1+\sum_i c_{6,i}=1+2+17+28+88-26+4-4=110,
 \]
-and
+以及
 \[
 1+\sum_i c_{7,i}=1+2+26+74+311-34+84-42=422.
 \]
-Since \(F_{10}=55\) and \(F_{12}=144\), the two excesses are \(55\) and \(278\).
+由 \(F_{10}=55\)、\(F_{12}=144\)，两个余量分别为 \(55\) 与 \(278\)。
 \end{proof}
 
-\begin{remark}[Proxy boundary]\label{rem:signed-companion-proxy-boundary}
-Corollary \ref{cor:signed-companion-q6-q7} is a determinant statement about
-signed companions reconstructed from the moment recurrences.  It should not be
-read as a statement that \(A(c_6)\) and \(A(c_7)\) are already certified
-nonnegative collision kernels.  Upgrading the signed proxies to
-Bowen--Franks/SFT invariants requires an additional nonnegative presentation or
-a flow-equivalence certificate.
+\begin{remark}[代理边界]\label{rem:signed-companion-proxy-boundary}
+推论 \ref{cor:signed-companion-q6-q7} 是关于从矩递推重构的带符号伴随矩阵的行列式陈述，不应被解读为 \(A(c_6)\) 与 \(A(c_7)\) 已被认证为非负碰撞核。将带符号代理提升为 Bowen--Franks/SFT 不变量需要额外的非负表示或流等价证书。
 \end{remark}
 
-\subsection{Collision-moment coincidence audit}
+\subsection{碰撞矩巧合审计}
 
-Let \(c_q=(c_{q,1},\ldots,c_{q,d_q})\) denote the audited recurrence
-coefficient vector for the \(q\)-collision moment sequence
+令 \(c_q=(c_{q,1},\ldots,c_{q,d_q})\) 表示 \(q\)-碰撞矩序列
 \[
-    S_q(m)=\sum_{i=1}^{d_q} c_{q,i}S_q(m-i).
+    S_q(m)=\sum_{i=1}^{d_q} c_{q,i}S_q(m-i)
 \]
-For the signed companion \(A_q:=A(c_q)\), Lemma
-\ref{lem:signed-companion-coefficients} and Theorem
-\ref{thm:signed-companion-det} give the two coefficient-level diagnostics
+的审计递推系数向量。对带符号伴随 \(A_q:=A(c_q)\)，引理 \ref{lem:signed-companion-coefficients} 与定理 \ref{thm:signed-companion-det} 给出两个系数层诊断量
 \[
     e_2(A_q)=c_{q,2},
     \qquad
     \epsilon_q:=\abs{1+\sum_i c_{q,i}}-F_{2q-2}.
 \]
-Here \(\epsilon_q\) is only a signed-proxy determinant excess; it is not, by
-itself, an SFT invariant.
+此处 \(\epsilon_q\) 仅为带符号代理行列式余量，其本身不构成 SFT 不变量。
 
 \begin{table}[H]
 \centering
 \scriptsize
 \setlength{\tabcolsep}{5pt}
-\caption{Signed companion collision-moment audit for \(q=2,\ldots,23\).  The
-columns compare \(e_2(A_q)=c_{q,2}\), the Lucas number \(L_q\), and the
-signed-proxy determinant excess
-\(\epsilon_q=\abs{1+\sum_i c_{q,i}}-F_{2q-2}\).}
+\caption{\(q=2,\ldots,23\) 的带符号伴随碰撞矩审计。各列比较 \(e_2(A_q)=c_{q,2}\)、Lucas 数 \(L_q\) 及带符号代理行列式余量
+\(\epsilon_q=\abs{1+\sum_i c_{q,i}}-F_{2q-2}\)。}
 \label{tab:signed-companion-collision-audit-q2-23}
 \begin{tabular}{r r r r}
 \toprule
@@ -193,81 +163,64 @@ signed-proxy determinant excess
 \end{tabular}
 \end{table}
 
-\begin{theorem}[Bounded signed-proxy Lucas certificate]\label{thm:signed-companion-lucas-certificate}
-In the audited recurrence range \(2\leq q\leq 23\), the equality
+\begin{theorem}[有界带符号代理 Lucas 证书]\label{thm:signed-companion-lucas-certificate}
+在审计递推范围 \(2\leq q\leq 23\) 内，等式
 \[
     e_2(A_q)=L_q
 \]
-holds exactly for
+恰在
 \[
-    q=3,4,5.
+    q=3,4,5
 \]
-In the same range, the simultaneous triple coincidence
+处成立。在同一范围内，三重巧合
 \[
     e_2(A_q)=L_q=\epsilon_q
 \]
-holds exactly for \(q=5\).  In particular, no \(q\in\{6,\ldots,23\}\) satisfies
-either \(e_2(A_q)=L_q\) or \(\epsilon_q=L_q\).
+恰在 \(q=5\) 处成立。特别地，\(\{6,\ldots,23\}\) 中无 \(q\) 满足 \(e_2(A_q)=L_q\) 或 \(\epsilon_q=L_q\)。
 \end{theorem}
 
 \begin{proof}
-The identities \(e_2(A_q)=c_{q,2}\) and
-\(\epsilon_q=\abs{1+\sum_i c_{q,i}}-F_{2q-2}\) reduce the claim to the audited
-integer recurrence table.  Direct enumeration gives Table
-\ref{tab:signed-companion-collision-audit-q2-23}.  The standalone
-exterior-Lucas certificate has \(22\) rows, for \(q=2,\ldots,23\), and its true
-rows are precisely \(q=3,4,5\).  Comparing the excess column with \(L_q\) leaves
-only \(q=5\).  The computation is verified computationally (see
-\texttt{\detokenize{scripts/equational_theory/}}), specifically by
+恒等式 \(e_2(A_q)=c_{q,2}\) 与 \(\epsilon_q=\abs{1+\sum_i c_{q,i}}-F_{2q-2}\) 将声明归结为审计整数递推表。直接枚举给出表 \ref{tab:signed-companion-collision-audit-q2-23}。外部 Lucas 证书含 \(22\) 行（\(q=2,\ldots,23\)），其真行恰为 \(q=3,4,5\)。将余量列与 \(L_q\) 比较后仅余 \(q=5\)。计算由
 \[
     \texttt{\detokenize{scripts/equational_theory/signed_companion_collision_audit.py}}
 \]
-and its JSON certificate
+及其 JSON 证书
 \[
-    \texttt{\detokenize{scripts/equational_theory/exterior_lucas_certificate_q2_23.json}}.
+    \texttt{\detokenize{scripts/equational_theory/exterior_lucas_certificate_q2_23.json}}
 \]
+验证。
 \end{proof}
 
-\begin{corollary}[Decomposition of the \(q=5\) coincidence]\label{cor:signed-companion-q5-coincidence-split}
-The \(q=5\) identity
+\begin{corollary}[\(q=5\) 巧合的分解]\label{cor:signed-companion-q5-coincidence-split}
+\(q=5\) 恒等式
 \[
     L_5=e_2(A_5)=\epsilon_5=11
 \]
-is the simultaneous satisfaction of two independent coefficient equations:
+是两个独立系数方程的同时满足：
 \[
     c_{5,2}=L_5,
     \qquad
     1+\sum_i c_{5,i}-F_8=L_5.
 \]
-The first equation persists only through the audited corridor \(q=3,4,5\), and
-the second has no audited solution beyond \(q=5\).
+第一个方程仅在审计走廊 \(q=3,4,5\) 内持续，第二个方程在 \(q=5\) 之后无审计解。
 \end{corollary}
 
 \begin{proof}
-For \(c_5=(2,11,8,20,-10)\), Lemma
-\ref{lem:signed-companion-coefficients} gives \(e_2(A_5)=c_{5,2}=11=L_5\).
-Theorem \ref{thm:signed-companion-det} gives
+对 \(c_5=(2,11,8,20,-10)\)，引理 \ref{lem:signed-companion-coefficients} 给出 \(e_2(A_5)=c_{5,2}=11=L_5\)。定理 \ref{thm:signed-companion-det} 给出
 \[
     1+\sum_i c_{5,i}=1+2+11+8+20-10=32,
 \]
-and \(F_8=21\), so \(\epsilon_5=32-21=11=L_5\).  The remaining assertions are
-exactly the bounded certificate of Theorem
-\ref{thm:signed-companion-lucas-certificate}.
+又 \(F_8=21\)，故 \(\epsilon_5=32-21=11=L_5\)。其余断言恰为定理 \ref{thm:signed-companion-lucas-certificate} 的有界证书。
 \end{proof}
 
-\subsection{Fusion-ring shadow and obstruction}
+\subsection{融合环影子与障碍}
 
-\begin{corollary}[Fusion coherence is not certified by the signed proxy]\label{cor:signed-companion-fusion-obstruction}
-The formal Omega data support a Fibonacci fusion-ring shadow:
+\begin{corollary}[融合相干性未被带符号代理认证]\label{cor:signed-companion-fusion-obstruction}
+形式 Omega 数据支持 Fibonacci 融合环影子：
 \[
     M^2=M+I,
 \]
-the natural centralizer is \(\NN[M]\), and the path-independent-set model is in
-bijection with the Fibonacci fusion-path basis.  They do not certify an
-associator, \(F\)-symbols, braiding, or pentagon coherence for the signed
-collision-moment proxies.  Moreover, any trace-preserving explanation of the
-\(q=5\) equality \(e_2(A_5)=L_5\) as a persistent Fibonacci-anyon coherence
-law is obstructed already at \(q=6\), since
+其自然中心化子为 \(\NN[M]\)，路径独立集模型与 Fibonacci 融合路径基底双射。但这些数据不认证带符号碰撞矩代理的结合子、\(F\)-符号、辫子或五角相干性。更进一步，任何将 \(q=5\) 等式 \(e_2(A_5)=L_5\) 解释为持续 Fibonacci-anyon 相干律的迹保持机制，在 \(q=6\) 处已被障碍：
 \[
     e_2(A_6)=17\neq 18=L_6.
 \]
@@ -277,14 +230,7 @@ law is obstructed already at \(q=6\), since
 \end{corollary}
 
 \begin{proof}
-The fusion-ring and path-basis statements are the formalized semiring-level
-shadow cited in the statement.  A monoidal or braided categorification would
-require additional data: associators, \(F\)-symbols, braiding maps, and
-pentagon or hexagon coherence.  Those data are not part of the signed companion
-certificate above.  If the \(q=5\) exterior-Lucas equality were explained by a
-trace-preserving law that persists with \(q\), it would force
-\(e_2(A_q)=L_q\) beyond \(q=5\).  The audited coefficient \(c_{6,2}=17\), while
-\(L_6=18\), contradicts that persistence at the first subsequent value.
+融合环与路径基底陈述为声明中引用的已形式化半环层影子。幺范畴或辫子范畴化需要额外数据：结合子、\(F\)-符号、辫子映射以及五角或六角相干性，这些均不属于上述带符号伴随证书。若 \(q=5\) 外部 Lucas 等式由一个随 \(q\) 持续的迹保持律解释，则它将强制 \(e_2(A_q)=L_q\) 在 \(q=5\) 之后继续成立。审计系数 \(c_{6,2}=17\) 而 \(L_6=18\)，在下一个值处即给出矛盾。
 \end{proof}
 
 \end{document}

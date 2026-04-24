@@ -2,48 +2,41 @@
 
 \begin{document}
 
-\section{Stable Arithmetic Equational Spectra and Affine-Linear Audit}\label{app:stable-arithmetic-equational-audit}
+\section{稳定算术等式谱与仿射线性审计}\label{app:stable-arithmetic-equational-audit}
 
-This appendix records the certificate boundary for the stable arithmetic
-operations when they are viewed as finite magmas in the Equational Theories
-Project database.  Let
+本附录记录稳定算术运算作为有限 magma 在 Equational Theories Project 数据库中的证书边界。令
 \[
     \mathcal E=\{E_1,\ldots,E_{4694}\}
 \]
-denote the current order-four ETP equation list at commit
+表示提交
 \[
-    \texttt{b99c0e486501e5b0690ef3fe5250d3aa57e63478}.
+    \texttt{b99c0e486501e5b0690ef3fe5250d3aa57e63478}
 \]
-The positive result is a clean affine-linear transport theorem and a complete
-computed spectrum audit.  The negative result is equally important: neither
-the stable arithmetic spectra nor the full Fibonacci affine-linear family meet
-any of the current dashboard unknowns.  Thus this appendix is an audit and
-reproducibility record, not a claim of a new ETP dashboard resolution.
+处的当前四阶 ETP 等式表。正面结果为一个干净的仿射线性传递定理与完整计算谱审计。负面结果同样重要：稳定算术谱与完整 Fibonacci 仿射线性族均未命中任何当前仪表盘未知项。因此本附录为审计与可复现性记录，而非当前 ETP 仪表盘分解的声明。
 
-\subsection{Transport and coefficient criteria}
+\subsection{传递与系数判据}
 
-For a magma term \(t\) in the variables
+对变量
 \[
-    x,y,z,w,u,v,
+    x,y,z,w,u,v
 \]
-write \(\nu(t)\in\NN^6\) for its variable multiplicity vector.  If a binary
-operation is affine-linear over \(\ZZ/n\ZZ\),
+中的 magma 项 \(t\)，记 \(\nu(t)\in\NN^6\) 为其变量重数向量。若二元运算为 \(\ZZ/n\ZZ\) 上的仿射线性运算
 \[
     x\diamond y=ax+by,
 \]
-then every term \(t\) evaluates to a linear form
+则每一项 \(t\) 赋值为线性形式
 \[
-    t=\sum_i \lambda_i(t;n,a,b)x_i
+    t=\sum_i \lambda_i(t;n,a,b)x_i,
 \]
-with coefficients in \(\ZZ/n\ZZ\), obtained by the recursion
+系数在 \(\ZZ/n\ZZ\) 中，由递归
 \[
     \lambda(u\diamond v;n,a,b)
-       =a\,\lambda(u;n,a,b)+b\,\lambda(v;n,a,b).
+       =a\,\lambda(u;n,a,b)+b\,\lambda(v;n,a,b)
 \]
+给出。
 
-\begin{lemma}[Affine-linear coefficient criterion]\label{lem:stable-audit-affine-coefficient-criterion}
-For the affine-linear magma \(x\diamond y=ax+by\) on \(\ZZ/n\ZZ\), an ETP
-equation \(s=t\) holds for all assignments if and only if
+\begin{lemma}[仿射线性系数判据]\label{lem:stable-audit-affine-coefficient-criterion}
+对 \(\ZZ/n\ZZ\) 上的仿射线性 magma \(x\diamond y=ax+by\)，ETP 等式 \(s=t\) 对所有赋值成立当且仅当
 \[
     \lambda(s;n,a,b)=\lambda(t;n,a,b)
         \quad\text{in }(\ZZ/n\ZZ)^6.
@@ -51,87 +44,67 @@ equation \(s=t\) holds for all assignments if and only if
 \end{lemma}
 
 \begin{proof}
-The difference \(s-t\) is a linear form in the six independent input variables
-over \(\ZZ/n\ZZ\).  If all coefficient differences vanish, the equation holds
-for every assignment.  Conversely, if the \(i\)-th coefficient difference is
-nonzero, evaluating at \(x_i=1\) and all other variables \(0\) separates the two
-sides.
+差 \(s-t\) 为六个独立输入变量上的 \(\ZZ/n\ZZ\)-线性形式。若所有系数差消失，则等式对每一赋值成立。反之，若第 \(i\) 个系数差非零，令 \(x_i=1\) 且其余变量为 \(0\) 即可分离两边。
 \end{proof}
 
-\begin{lemma}[Stable-value affine transfer]\label{lem:stable-audit-stable-value-affine-transfer}
-Let \(X_m\) be the stable fiber and let
+\begin{lemma}[稳定值仿射传递]\label{lem:stable-audit-stable-value-affine-transfer}
+设 \(X_m\) 为稳定纤维，
 \[
     X_m\simeq \ZZ/F_{m+2}\ZZ
 \]
-be the stable-value ring equivalence.  For every affine-linear operation
+为稳定值环同构。对 \(X_m\) 上每一仿射线性运算
 \[
-    x\diamond y=ax+by
+    x\diamond y=ax+by,
 \]
-on \(X_m\), satisfaction of any affine magma equation is equivalent to
-satisfaction of the transported equation on \(\ZZ/F_{m+2}\ZZ\) with the same
-coefficient formula.
+任意仿射 magma 等式的满足性等价于搬运到 \(\ZZ/F_{m+2}\ZZ\) 上后以相同系数公式的满足性。
 \leanverified{stableValueRingEquiv\_preserves\_magma\_satisfaction}
 \end{lemma}
 
 \begin{proof}
-The stable-value map is a ring equivalence and hence preserves addition,
-multiplication, and scalar multiplication by stable coefficients.  Induction on
-the local binary term syntax gives equality between evaluation in \(X_m\) and
-evaluation after transport to \(\ZZ/F_{m+2}\ZZ\).  Injectivity of the
-equivalence gives the equivalence of equation satisfaction.  The statement is
-formalized as
+稳定值映射为环同构，因而保持加法、乘法与稳定系数标量乘。对局部二元项语法作归纳，得 \(X_m\) 中赋值与搬运到 \(\ZZ/F_{m+2}\ZZ\) 后赋值相等。由同构的单射性给出等式满足性的等价。此声明已形式化于
 \[
     \texttt{\detokenize{lean4/Omega/Folding/FiberRing.lean:216}}.
 \]
 \end{proof}
 
-The two stable arithmetic operations over a prime field are the special cases
+素域上的两个稳定算术运算为特例
 \[
     \mathrm{stableAdd}(x,y)=x+y,\qquad
     \mathrm{stableMul}(x,y)=xy.
 \]
-For \(\mathrm{stableAdd}\), the law \(s=t\) holds over \(\FF_p\) exactly when
+对 \(\mathrm{stableAdd}\)，律 \(s=t\) 在 \(\FF_p\) 上成立当且仅当
 \[
     \nu(s)\equiv \nu(t)\pmod p.
 \]
-For \(\mathrm{stableMul}\), the term \(t\) evaluates to the monomial
+对 \(\mathrm{stableMul}\)，项 \(t\) 赋值为单项式
 \[
     \prod_i x_i^{\nu_i(t)}.
 \]
-Thus \(s=t\) holds over \(\FF_p\) if and only if the two support sets agree and
-all positive exponents are congruent modulo \(p-1\).  The criteria above were
-verified computationally against exhaustive assignment evaluation for
-\(\operatorname{Fin}(2)\) and \(\operatorname{Fin}(3)\) (see
-\texttt{\detokenize{scripts/equational_theory/}}).
+因此 \(s=t\) 在 \(\FF_p\) 上成立当且仅当两侧支撑集一致且所有正指数模 \(p-1\) 同余。上述判据已对 \(\operatorname{Fin}(2)\) 与 \(\operatorname{Fin}(3)\) 通过穷举赋值赋值进行计算交叉验证（见 \texttt{\detokenize{scripts/equational_theory/}}）。
 
-\subsection{Stable arithmetic spectra}
+\subsection{稳定算术谱}
 
-\begin{theorem}[Stable arithmetic ETP spectra]\label{thm:stable-audit-stable-arithmetic-spectra}
-For the prime Fibonacci moduli \(2,3,5,13,89\), the ETP spectra of
-\(\mathrm{stableAdd}\) and \(\mathrm{stableMul}\) are the spectra shown in
-Table \ref{tab:stable-audit-stable-spectra}.  The generated union contains
+\begin{theorem}[稳定算术 ETP 谱]\label{thm:stable-audit-stable-arithmetic-spectra}
+对素 Fibonacci 模数 \(2,3,5,13,89\)，\(\mathrm{stableAdd}\) 与 \(\mathrm{stableMul}\) 的 ETP 谱如表 \ref{tab:stable-audit-stable-spectra} 所示。其并集含
 \[
-    3,157,020
+    3{,}157{,}020
 \]
-ordered anti-implications, of which
+个有序反蕴涵，其中
 \[
-    2,912,508
+    2{,}912{,}508
 \]
-are not covered by the current \(\texttt{full\_entries.json}\) finite
-\(\texttt{Facts}\) entries.
+个不被当前 \(\texttt{full\_entries.json}\) 中有限 \(\texttt{Facts}\) 条目覆盖。
 \end{theorem}
 
 \begin{table}[H]
 \centering
 \scriptsize
 \setlength{\tabcolsep}{5pt}
-\caption{Stable arithmetic spectra in the current ETP equation list.  The last
-column counts ordered satisfied/refuted pairs not already covered by current
-\(\texttt{full\_entries.json}\) \(\texttt{Facts}\) entries.}
+\caption{当前 ETP 等式表中的稳定算术谱。末列计数不被当前 \(\texttt{full\_entries.json}\) 的 \(\texttt{Facts}\) 条目覆盖的有序满足/反驳对。}
 \label{tab:stable-audit-stable-spectra}
 \begin{tabular}{c r r r r r}
 \toprule
-operation & \(p\) & satisfied & refuted & anti-implications & not covered\\
+运算 & \(p\) & 满足 & 反驳 & 反蕴涵 & 未覆盖\\
 \midrule
 \(\mathrm{stableAdd}\) & 2  & 663 & 4031 & 2672553 & 2492999\\
 \(\mathrm{stableMul}\) & 2  & 164 & 4530 & 742920  & 668079\\
@@ -148,60 +121,44 @@ operation & \(p\) & satisfied & refuted & anti-implications & not covered\\
 \end{table}
 
 \begin{proof}
-The addition rows apply the congruence criterion
-\(\nu(s)\equiv\nu(t)\pmod p\).  The multiplication rows apply the support and
-positive-exponent congruence criterion modulo \(p-1\).  Each row then gives a
-truth vector on the \(4694\) equations; the number of ordered
-anti-implications is the product of the satisfied and refuted counts for that
-row, and the union counts are obtained by bitset union across all rows.  The
-computation is verified computationally (see
-\texttt{\detokenize{scripts/equational_theory/}}), specifically by
+加法行应用同余判据 \(\nu(s)\equiv\nu(t)\pmod p\)。乘法行应用支撑集与正指数模 \(p-1\) 同余判据。每行给出 \(4694\) 条等式上的真值向量；有序反蕴涵数为该行满足与反驳计数之积，并集计数由所有行的位集并给出。计算由
 \[
     \texttt{\detokenize{scripts/equational_theory/stable_arithmetic_facts.py}}
 \]
-and the certificate
+及证书
 \[
-    \texttt{\detokenize{scripts/equational_theory/stable_arithmetic_facts.json}}.
+    \texttt{\detokenize{scripts/equational_theory/stable_arithmetic_facts.json}}
 \]
-The accompanying ETP Lean file
+验证。附带的 ETP Lean 文件
 \[
     \texttt{\detokenize{scripts/equational_theory/stable_arithmetic_facts.lean}}
 \]
-contains the six non-duplicative \(\operatorname{Fin}(2)\),
-\(\operatorname{Fin}(3)\), and \(\operatorname{Fin}(5)\) finite
-\(\texttt{Facts}\) certificates and compiles with \(\texttt{decideFin!}\).
+含六条非重复的 \(\operatorname{Fin}(2)\)、\(\operatorname{Fin}(3)\) 与 \(\operatorname{Fin}(5)\) 有限 \(\texttt{Facts}\) 证书，由 \(\texttt{decideFin!}\) 编译通过。
 \end{proof}
 
-\begin{corollary}[Dashboard disjointness of the stable spectra]\label{cor:stable-audit-stable-dashboard-disjoint}
-The stable arithmetic anti-implication union has zero intersection with the
-current dashboard unknowns.  In particular, the \(2,912,508\) anti-implications
-not covered by current \(\texttt{full\_entries.json}\) resolve
+\begin{corollary}[稳定谱的仪表盘不相交性]\label{cor:stable-audit-stable-dashboard-disjoint}
+稳定算术反蕴涵并集与当前仪表盘未知项交集为零。特别地，\(2{,}912{,}508\) 条不被当前 \(\texttt{full\_entries.json}\) 覆盖的反蕴涵解决
 \[
     0
 \]
-of the \(498\) current dashboard unknown ordered pairs.
+个当前 \(498\) 条仪表盘未知有序对。
 \end{corollary}
 
 \begin{proof}
-The dashboard audit parses \(\texttt{home\_page/fme/unknowns.json}\), extracts
-the \(498\) ordered pairs whose two sides are ETP equations, and intersects
-those pairs with the generated stable arithmetic union and with the subunion
-not covered by current finite \(\texttt{Facts}\) entries.  Both intersections
-are empty.  This is verified computationally (see
-\texttt{\detokenize{scripts/equational_theory/}}), by
+仪表盘审计解析 \(\texttt{home\_page/fme/unknowns.json}\)，提取两侧均为 ETP 等式的 \(498\) 个有序对，并与生成的稳定算术并集及不被当前有限 \(\texttt{Facts}\) 条目覆盖的子并集求交。两个交集均为空。由
 \[
     \texttt{\detokenize{scripts/equational_theory/stable_dashboard_unknowns.py}}
 \]
-and its JSON certificate
+及其 JSON 证书
 \[
-    \texttt{\detokenize{scripts/equational_theory/stable_dashboard_unknowns.json}}.
+    \texttt{\detokenize{scripts/equational_theory/stable_dashboard_unknowns.json}}
 \]
+验证。
 \end{proof}
 
-\subsection{Prime stabilization and the abelian-group shadow}
+\subsection{素数稳定化与 Abel 群影子}
 
-Let \(\mathcal B\subset\mathcal E\) be the set of balanced equations
-\(\nu(s)=\nu(t)\).  In the current ETP equation list this set is
+令 \(\mathcal B\subset\mathcal E\) 为平衡等式集 \(\nu(s)=\nu(t)\)。在当前 ETP 等式表中，此集为
 \[
 \begin{aligned}
 \mathcal B=\{&
@@ -211,113 +168,78 @@ Let \(\mathcal B\subset\mathcal E\) be the set of balanced equations
 \end{aligned}
 \]
 
-\begin{theorem}[Prime stabilization with the \(p=5\) multiplication exception]\label{thm:stable-audit-prime-stabilization}
-The operation \(\mathrm{stableAdd}\) satisfies exactly the \(32\) equations in
-\(\mathcal B\) for every prime \(p\geq 5\).  The operation
-\(\mathrm{stableMul}\) satisfies exactly \(\mathcal B\) for every prime
-\(p\geq 7\), but not for \(p=5\).  Over \(\operatorname{Fin}(5)\),
-\(\mathrm{stableMul}\) satisfies \(46\) equations, including the non-balanced
-equation
+\begin{theorem}[素数稳定化与 \(p=5\) 乘法例外]\label{thm:stable-audit-prime-stabilization}
+运算 \(\mathrm{stableAdd}\) 对每一素数 \(p\geq 5\) 恰满足 \(\mathcal B\) 中的 \(32\) 条等式。运算 \(\mathrm{stableMul}\) 对每一素数 \(p\geq 7\) 恰满足 \(\mathcal B\)，但对 \(p=5\) 则否。在 \(\operatorname{Fin}(5)\) 上，\(\mathrm{stableMul}\) 满足 \(46\) 条等式，包括非平衡等式
 \[
     E_{411}:\qquad x=x\diamond(x\diamond(x\diamond(x\diamond x))).
 \]
 \end{theorem}
 
 \begin{proof}
-For addition, satisfaction is the congruence
-\(\nu(s)\equiv\nu(t)\pmod p\).  The largest absolute variable-multiplicity
-difference occurring in the ETP database is \(5\).  Hence for \(p>5\) the
-congruence forces equality.  The remaining prime \(p=5\) is checked directly:
-no non-balanced difference vector has every coordinate divisible by \(5\).
+对加法，满足性为同余 \(\nu(s)\equiv\nu(t)\pmod p\)。ETP 数据库中出现的最大绝对变量重数差为 \(5\)，故 \(p>5\) 时同余强制相等。余下素数 \(p=5\) 直接验证：无非平衡差向量各分量均被 \(5\) 整除。
 
-For multiplication, satisfaction requires equal supports and equality of all
-positive exponent differences modulo \(p-1\).  When the supports agree, the
-largest absolute positive exponent difference in the ETP database is \(4\).
-Thus \(p-1\geq 6\) forces exponent equality, and all primes \(p\geq 7\) give
-exactly \(\mathcal B\).  At \(p=5\), exponent differences divisible by \(4\)
-produce extra laws.  In particular \(E_{411}\) holds because \(x^5=x\) for all
-\(x\in\FF_5\).  The computation is verified computationally (see
-\texttt{\detokenize{scripts/equational_theory/}}), by
+对乘法，满足性要求支撑集相等且所有正指数差模 \(p-1\) 为零。当支撑集一致时，ETP 数据库中最大绝对正指数差为 \(4\)。因此 \(p-1\geq 6\) 强制指数相等，所有素数 \(p\geq 7\) 恰给出 \(\mathcal B\)。在 \(p=5\) 时，被 \(4\) 整除的指数差产生额外律。特别地 \(E_{411}\) 成立，因为 \(x^5=x\) 对所有 \(x\in\FF_5\) 成立。由
 \[
     \texttt{\detokenize{scripts/equational_theory/stable_prime_stabilization.py}}
 \]
-and
+与
 \[
-    \texttt{\detokenize{scripts/equational_theory/stable_prime_stabilization.json}}.
+    \texttt{\detokenize{scripts/equational_theory/stable_prime_stabilization.json}}
 \]
+验证。
 \end{proof}
 
-\begin{theorem}[Abelian-group identity classification]\label{thm:stable-audit-abelian-group-classification}
-The set \(\mathcal B\) is exactly the set of ETP equations valid in every
-abelian group under the interpretation
+\begin{theorem}[Abel 群恒等式分类]\label{thm:stable-audit-abelian-group-classification}
+集合 \(\mathcal B\) 恰为在解释
 \[
-    x\diamond y=x+y.
+    x\diamond y=x+y
 \]
-Moreover, cyclic addition on \(\ZZ/4\ZZ\) satisfies \(116\) ETP equations,
-namely the \(32\) equations in \(\mathcal B\) together with \(84\) torsion
-identities, while cyclic addition on \(\ZZ/6\ZZ\) satisfies exactly the
-\(32\) equations in \(\mathcal B\).
+下对每一 Abel 群成立的 ETP 等式集。此外，\(\ZZ/4\ZZ\) 上的循环加法满足 \(116\) 条 ETP 等式（即 \(\mathcal B\) 中的 \(32\) 条加上 \(84\) 条扭等式），而 \(\ZZ/6\ZZ\) 上的循环加法恰满足 \(\mathcal B\) 中的 \(32\) 条等式。
 \end{theorem}
 
 \begin{proof}
-In an abelian group, every positive binary term evaluates to the sum of its
-variables with natural-number multiplicities.  If \(\nu(s)=\nu(t)\), then
-associativity and commutativity rewrite both terms to the same formal sum, so
-the equation is valid in every abelian group.  If the multiplicity vectors
-differ in the coordinate of a variable \(v\), the infinite cyclic group
-\(\ZZ\) separates the equation by assigning \(v=1\) and all other variables
-\(0\).  Therefore the universally valid equations are exactly the balanced
-ones.  The extraction of the \(32\)-equation set and the finite cyclic checks
-are verified computationally (see
-\texttt{\detokenize{scripts/equational_theory/}}), by
+在 Abel 群中，每一正二元项赋值为其变量的自然数重数之和。若 \(\nu(s)=\nu(t)\)，则结合律与交换律将两项改写为同一形式和，故等式在每一 Abel 群中成立。若重数向量在变量 \(v\) 的分量上不同，则无限循环群 \(\ZZ\) 通过令 \(v=1\) 且其余变量为 \(0\) 即可分离该等式。因此万有成立等式恰为平衡等式。\(32\)-等式集的提取与有限循环验证由
 \[
     \texttt{\detokenize{scripts/equational_theory/abelian_group_identity_check.py}}
 \]
-and
+与
 \[
-    \texttt{\detokenize{scripts/equational_theory/abelian_group_identity_check.json}}.
+    \texttt{\detokenize{scripts/equational_theory/abelian_group_identity_check.json}}
 \]
+验证。
 \end{proof}
 
-\begin{remark}[Interpretation of the stable-addition stabilization]\label{rem:stable-audit-abelian-shadow}
-The \(32\)-equation stabilization for \(\mathrm{stableAdd}\) is the standard
-abelian-group identity criterion restricted to the finite ETP equation list,
-together with the finite \(p=5\) torsion check in Theorem
-\ref{thm:stable-audit-prime-stabilization}.  It is therefore a useful
-consistency audit of the stable arithmetic interface, not a new universal
-algebra theorem.
+\begin{remark}[稳定加法稳定化的解读]\label{rem:stable-audit-abelian-shadow}
+\(\mathrm{stableAdd}\) 的 \(32\)-等式稳定化即为限制到有限 ETP 等式表的标准 Abel 群恒等式判据，加上定理 \ref{thm:stable-audit-prime-stabilization} 中的有限 \(p=5\) 扭检查。因此它是稳定算术接口的有用一致性审计，而非万有代数层面的定理。
 \end{remark}
 
-\subsection{Full Fibonacci affine-linear dashboard closure}
+\subsection{完整 Fibonacci 仿射线性仪表盘闭合}
 
-\begin{theorem}[Fibonacci affine-linear dashboard closure]\label{thm:stable-audit-affine-fibonacci-dashboard-closure}
-Let
+\begin{theorem}[Fibonacci 仿射线性仪表盘闭合]\label{thm:stable-audit-affine-fibonacci-dashboard-closure}
+令
 \[
     N=\{2,3,5,8,13,21,34,55,89,144\}.
 \]
-For every \(n\in N\) and every pair \(a,b\in\ZZ/n\ZZ\), the affine-linear magma
+对每一 \(n\in N\) 与每对 \(a,b\in\ZZ/n\ZZ\)，\(\ZZ/n\ZZ\) 上的仿射线性 magma
 \[
     x\diamond y=ax+by
 \]
-on \(\ZZ/n\ZZ\) resolves no current dashboard unknown.  Equivalently, after
-checking all
+不解决任何当前仪表盘未知项。等价地，在检查所有
 \[
     \sum_{n\in N}n^2=33550
 \]
-parameter triples \((n,a,b)\), the intersection with the \(498\) current
-dashboard unknown ordered pairs is empty.
+个参数三元组 \((n,a,b)\) 后，与 \(498\) 条当前仪表盘未知有序对的交集为空。
 \end{theorem}
 
 \begin{table}[H]
 \centering
 \scriptsize
 \setlength{\tabcolsep}{8pt}
-\caption{Full Fibonacci affine-linear dashboard audit.  Each row checks all
-\((a,b)\in(\ZZ/n\ZZ)^2\) against the current dashboard unknown pairs.}
+\caption{完整 Fibonacci 仿射线性仪表盘审计。每行检查所有 \((a,b)\in(\ZZ/n\ZZ)^2\) 与当前仪表盘未知对。}
 \label{tab:stable-audit-affine-fibonacci-dashboard}
 \begin{tabular}{r r r r}
 \toprule
-\(n\) & parameter pairs & spectra with dashboard hits & resolved dashboard pairs\\
+\(n\) & 参数对 & 含仪表盘命中的谱数 & 解决的仪表盘对\\
 \midrule
 2   & 4     & 0 & 0\\
 3   & 9     & 0 & 0\\
@@ -334,40 +256,25 @@ dashboard unknown ordered pairs is empty.
 \end{table}
 
 \begin{proof}
-By Lemma \ref{lem:stable-audit-affine-coefficient-criterion}, each equation is
-decided by equality of two coefficient vectors modulo \(n\).  The scan applies
-this criterion to the \(223\) distinct equation numbers appearing in the
-\(498\) dashboard unknown ordered pairs and records whether a spectrum has an
-antecedent true and consequent false for any unknown pair.  Table
-\ref{tab:stable-audit-affine-fibonacci-dashboard} shows that no such spectrum
-exists.  The coefficient-vector criterion was cross-checked by exhaustive
-assignment evaluation for every parameter pair over \(\ZZ/2\ZZ\) and
-\(\ZZ/3\ZZ\).  The computation is verified computationally (see
-\texttt{\detokenize{scripts/equational_theory/}}), by
+由引理 \ref{lem:stable-audit-affine-coefficient-criterion}，每条等式由两个系数向量模 \(n\) 的相等性判定。扫描对出现在 \(498\) 条仪表盘未知有序对中的 \(223\) 个不同等式编号应用此判据，并记录某谱是否对任一未知对存在前件为真且后件为假的情形。表 \ref{tab:stable-audit-affine-fibonacci-dashboard} 显示不存在此种谱。系数向量判据已对 \(\ZZ/2\ZZ\) 与 \(\ZZ/3\ZZ\) 上每个参数对通过穷举赋值赋值交叉验证。由
 \[
     \texttt{\detokenize{scripts/equational_theory/affine_fibonacci_dashboard_scan.py}}
 \]
-and
+与
 \[
-    \texttt{\detokenize{scripts/equational_theory/affine_fibonacci_dashboard_scan.json}}.
+    \texttt{\detokenize{scripts/equational_theory/affine_fibonacci_dashboard_scan.json}}
 \]
+验证。
 \end{proof}
 
-\subsection{Prime-field saturation redundancy}
+\subsection{素域饱和冗余性}
 
-\begin{proposition}[Redundancy of the older prime-field linear audit]\label{prop:stable-audit-prime-field-redundancy}
-In the at-most-two-variable ETP sublist, the older prime-field linear scan
-contains \(810\) equations and produces \(608948\) separated ordered pairs
-after scanning primes through \(31\); the cumulative set is already saturated
-by \(p=13\).  As anti-implication data, this scan is redundant with the
-existing \texttt{\detokenize{_364}} prime-field baseline.
+\begin{proposition}[旧素域线性审计的冗余性]\label{prop:stable-audit-prime-field-redundancy}
+在至多两变量 ETP 子表中，旧素域线性扫描含 \(810\) 条等式，扫描素数至 \(31\) 后产生 \(608948\) 个分离有序对；累积集在 \(p=13\) 处已饱和。作为反蕴涵数据，此扫描与现有 \texttt{\detokenize{_364}} 素域基线冗余。
 \end{proposition}
 
 \begin{proof}
-The recomputation uses the same coefficient-vector linearization as Lemma
-\ref{lem:stable-audit-affine-coefficient-criterion}, restricted to ETP
-equations involving at most two variables and to prime fields \(p\leq 31\).
-The cumulative counts are
+重新计算使用与引理 \ref{lem:stable-audit-affine-coefficient-criterion} 相同的系数向量线性化，限于涉及至多两个变量的 ETP 等式与素域 \(p\leq 31\)。累积计数为
 \[
 \begin{array}{c|rrrrrrrrrrr}
 p&2&3&5&7&11&13&17&19&23&29&31\\
@@ -377,32 +284,23 @@ p&2&3&5&7&11&13&17&19&23&29&31\\
 608948&608948&608948&608948&608948.
 \end{array}
 \]
-The \texttt{\detokenize{_364}} baseline uses all \(4694\) equations and prime fields through
-\(199\), so every pair from the older at-most-two-variable, \(p\leq 31\) scan
-is included by scope and prime-range inclusion.  The recomputation also checks
-that the \(17588\) \(\ZZ/144\ZZ\) witnesses new after the
-prime-fields-plus-\(\ZZ/8\ZZ\) baseline have zero overlap with the older scan.
-This audit is verified computationally (see
-\texttt{\detokenize{scripts/equational_theory/}}), by
+\texttt{\detokenize{_364}} 基线使用全部 \(4694\) 条等式与素域至 \(199\)，故旧至多两变量、\(p\leq 31\) 扫描的每一对均通过范围与素数区间包含被涵盖。重新计算同时验证 \(17588\) 条 \(\ZZ/144\ZZ\) 在素域加 \(\ZZ/8\ZZ\) 基线之后的见证与旧扫描无重叠。由
 \[
     \texttt{\detokenize{scripts/equational_theory/compare_prime_saturation_to_364.py}}
 \]
-and
+与
 \[
-    \texttt{\detokenize{scripts/equational_theory/prime_saturation_vs_364.json}}.
+    \texttt{\detokenize{scripts/equational_theory/prime_saturation_vs_364.json}}
 \]
+验证。
 \end{proof}
 
-\begin{remark}[Certificate boundary]\label{rem:stable-audit-certificate-boundary}
-The Automath/Omega Lean contribution in this appendix is the stable-value
-transport theorem of Lemma \ref{lem:stable-audit-stable-value-affine-transfer}.
-The ETP indexed spectra, \(\texttt{Facts}\) lists, dashboard intersections,
-prime-stabilization finite checks, and prime-field redundancy audit are finite
-computational certificates.  They are included with this paper for
-reproducibility under
+\begin{remark}[证书边界]\label{rem:stable-audit-certificate-boundary}
+本附录中的 Automath/Omega Lean 贡献为引理 \ref{lem:stable-audit-stable-value-affine-transfer} 的稳定值传递定理。ETP 索引谱、\(\texttt{Facts}\) 表、仪表盘交集、素数稳定化有限检查与素域冗余性审计均为有限计算证书，随本文以
 \[
-    \texttt{\detokenize{scripts/equational_theory/}}.
+    \texttt{\detokenize{scripts/equational_theory/}}
 \]
+附录提供以供复现。
 \end{remark}
 
 \end{document}

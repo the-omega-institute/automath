@@ -2,32 +2,25 @@
 
 \begin{document}
 
-\section{Finite Conditional Expectations and Fiberwise Variance Dissipation}\label{app:finite-conditional-expectation}
+\section{有限条件期望与纤维方差耗散}\label{app:finite-conditional-expectation}
 
-This appendix isolates the finite-probability calculation that underlies the
-folding conditional expectations used in the paper.  The point is deliberately
-elementary: on a finite space, conditioning on a factor map is the weighted
-orthogonal projection onto the algebra of fiber-constant functions.  The
-corresponding Pythagoras identity is the exact source of the variance loss
-observed in the fold audits.  The same finite lemma is the analysis-domain
-interface formalized in
-\texttt{\detokenize{lean4/Omega/Multiscale/SolenoidStokesMarkovVarianceDissipation.lean}}.
+本附录隔离论文中折叠条件期望所依赖的有限概率计算。其要点刻意保持初等：在有限空间上，关于因子映射的条件化即为到纤维常值函数代数上的加权正交投影；相应的 Pythagoras 恒等式即为折叠审计中方差损失的精确来源。同一有限引理也是
+\texttt{\detokenize{lean4/Omega/Multiscale/SolenoidStokesMarkovVarianceDissipation.lean}}
+中形式化的分析域接口。
 
-\subsection{Finite conditional expectation}
+\subsection{有限条件期望}
 
-Let \(\Omega\) and \(X\) be finite sets, let
+设 \(\Omega\) 与 \(X\) 为有限集，令
 \[
     \pi:\Omega\longrightarrow X
 \]
-be a surjection onto its image, and let \(\mu\) be a probability measure on
-\(\Omega\).  For \(x\in X\), write
+为到其像的满射，\(\mu\) 为 \(\Omega\) 上的概率测度。对 \(x\in X\)，记
 \[
     F_x:=\pi^{-1}(x),
     \qquad
     m_x:=\mu(F_x)=\sum_{\omega\in F_x}\mu(\omega).
 \]
-Only fibers with \(m_x>0\) matter in \(L^2(\Omega,\mu)\).  For
-\(f:\Omega\to\RR\), define
+在 \(L^2(\Omega,\mu)\) 中仅正质量纤维起作用。对 \(f:\Omega\to\RR\)，定义
 \[
     E_{\pi,\mu}f(\omega)
     :=
@@ -38,19 +31,15 @@ Only fibers with \(m_x>0\) matter in \(L^2(\Omega,\mu)\).  For
     0,&m_{\pi(\omega)}=0.
     \end{cases}
 \]
-Thus \(E_{\pi,\mu}f\) is constant on every positive-mass fiber.  We use the
-weighted inner product
+从而 \(E_{\pi,\mu}f\) 在每一正质量纤维上为常值。采用加权内积
 \[
     \langle f,g\rangle_\mu:=\sum_{\omega\in\Omega}\mu(\omega)f(\omega)g(\omega),
     \qquad
     \norm{f}_{2,\mu}^2:=\langle f,f\rangle_\mu .
 \]
 
-\begin{lemma}[Fiberwise orthogonal projection]\label{lem:finite-condexp-orthogonal-projection}
-Let \(\mathcal B_\pi\subset L^2(\Omega,\mu)\) be the subspace of functions that
-are constant on every positive-mass fiber of \(\pi\).  Then \(E_{\pi,\mu}\) is
-the orthogonal projection from \(L^2(\Omega,\mu)\) onto \(\mathcal B_\pi\).
-Equivalently,
+\begin{lemma}[纤维正交投影]\label{lem:finite-condexp-orthogonal-projection}
+设 \(\mathcal B_\pi\subset L^2(\Omega,\mu)\) 为在 \(\pi\) 的每一正质量纤维上取常值的函数所成子空间。则 \(E_{\pi,\mu}\) 为从 \(L^2(\Omega,\mu)\) 到 \(\mathcal B_\pi\) 的正交投影，即
 \[
     E_{\pi,\mu}^2=E_{\pi,\mu},
     \qquad
@@ -60,9 +49,7 @@ Equivalently,
 \end{lemma}
 
 \begin{proof}
-Idempotence is immediate because the average of a fiber-constant function on a
-positive-mass fiber is its common value.  If \(g\in\mathcal B_\pi\), write
-\(g(\omega)=g_x\) for \(\omega\in F_x\).  Then
+幂等性直接成立：纤维常值函数在正质量纤维上的平均值即为其公共值。设 \(g\in\mathcal B_\pi\)，记 \(g(\omega)=g_x\)（\(\omega\in F_x\)），则
 \[
 \begin{aligned}
     \langle f-E_{\pi,\mu}f,g\rangle_\mu
@@ -82,12 +69,11 @@ positive-mass fiber is its common value.  If \(g\in\mathcal B_\pi\), write
     =0 .
 \end{aligned}
 \]
-Thus \(f-E_{\pi,\mu}f\) is orthogonal to the fiber-constant subspace, and
-\(E_{\pi,\mu}\) is the claimed projection.
+故 \(f-E_{\pi,\mu}f\) 与纤维常值子空间正交，\(E_{\pi,\mu}\) 即为所述投影。
 \end{proof}
 
-\begin{theorem}[Finite conditional Pythagoras]\label{thm:finite-condexp-pythagoras}
-For every \(f:\Omega\to\RR\),
+\begin{theorem}[有限条件 Pythagoras]\label{thm:finite-condexp-pythagoras}
+对每一 \(f:\Omega\to\RR\)，
 \[
     \norm{f}_{2,\mu}^2
     =
@@ -95,28 +81,27 @@ For every \(f:\Omega\to\RR\),
     +
     \norm{f-E_{\pi,\mu}f}_{2,\mu}^2 .
 \]
-In particular,
+特别地，
 \[
     \norm{E_{\pi,\mu}f}_{2,\mu}\leq \norm{f}_{2,\mu}.
 \]
 \end{theorem}
 
 \begin{proof}
-Apply Lemma \ref{lem:finite-condexp-orthogonal-projection} to the orthogonal
-decomposition
+对正交分解
 \[
-    f=E_{\pi,\mu}f+(f-E_{\pi,\mu}f).
+    f=E_{\pi,\mu}f+(f-E_{\pi,\mu}f)
 \]
-The inequality is the first summand bound in the displayed identity.
+应用引理 \ref{lem:finite-condexp-orthogonal-projection}。不等式为所示恒等式中首项界。
 \end{proof}
 
-Define the global mean and variance by
+定义全局均值与方差为
 \[
     \EE_\mu f:=\sum_{\omega}\mu(\omega)f(\omega),
     \qquad
     \Var_\mu(f):=\norm{f-\EE_\mu f}_{2,\mu}^2.
 \]
-The conditional, fiber-averaged variance is
+条件纤维平均方差为
 \[
     \mathcal D_{\pi,\mu}(f)
     :=
@@ -127,16 +112,16 @@ The conditional, fiber-averaged variance is
     \bigl(f(\omega)-E_{\pi,\mu}f(\omega)\bigr)^2 .
 \]
 
-\begin{corollary}[Fiberwise variance decomposition]\label{cor:finite-condexp-variance-decomposition}
-For every \(f:\Omega\to\RR\),
+\begin{corollary}[纤维方差分解]\label{cor:finite-condexp-variance-decomposition}
+对每一 \(f:\Omega\to\RR\)，
 \[
     \mathcal D_{\pi,\mu}(f)=\norm{f-E_{\pi,\mu}f}_{2,\mu}^2,
 \]
-and
+且
 \[
     \Var_\mu(f)=\Var_\mu(E_{\pi,\mu}f)+\mathcal D_{\pi,\mu}(f).
 \]
-Moreover
+此外
 \[
     \mathcal D_{\pi,\mu}(E_{\pi,\mu}f)=0
     \qquad\text{and}\qquad
@@ -145,29 +130,20 @@ Moreover
 \end{corollary}
 
 \begin{proof}
-The first identity is only the definition of \(\mathcal D_{\pi,\mu}\) rewritten
-as a sum over \(\Omega\).  Since \(E_{\pi,\mu}\) preserves the global mean,
-\[
-    \EE_\mu(E_{\pi,\mu}f)=\EE_\mu f,
-\]
-Theorem \ref{thm:finite-condexp-pythagoras} applied to
-\(f-\EE_\mu f\) gives the variance decomposition.  Finally
-\(E_{\pi,\mu}f\) is fiber-constant, so its within-fiber variance is zero.
+第一个恒等式仅将 \(\mathcal D_{\pi,\mu}\) 的定义改写为 \(\Omega\) 上的求和。由 \(E_{\pi,\mu}\) 保持全局均值（即 \(\EE_\mu(E_{\pi,\mu}f)=\EE_\mu f\)），对 \(f-\EE_\mu f\) 应用定理 \ref{thm:finite-condexp-pythagoras} 即得方差分解。最后 \(E_{\pi,\mu}f\) 为纤维常值，故其纤维内方差为零。
 \end{proof}
 
-\subsection{Uniform layer average}
+\subsection{均匀层平均}
 
-The one-fiber case is the finite uniform layer average.  For \(n>0\) and
-\(f:\{0,\ldots,n-1\}\to\RR\), put
+单纤维情形即为有限均匀层平均。对 \(n>0\) 与 \(f:\{0,\ldots,n-1\}\to\RR\)，令
 \[
     \overline f:=\frac{1}{n}\sum_{i=0}^{n-1}f(i),
     \qquad
     A_nf(i):=\overline f .
 \]
 
-\begin{theorem}[Uniform layer Markov variance dissipation]\label{thm:finite-uniform-layer-variance-dissipation}
-For every \(n>0\), the operator \(A_n\) preserves constants, contracts the
-counting \(L^2\)-norm, and annihilates the finite layer variance:
+\begin{theorem}[均匀层 Markov 方差耗散]\label{thm:finite-uniform-layer-variance-dissipation}
+对每一 \(n>0\)，算子 \(A_n\) 保持常值、压缩计数 \(L^2\)-范数并消灭有限层方差：
 \[
     A_n\ind=\ind,
     \qquad
@@ -175,22 +151,22 @@ counting \(L^2\)-norm, and annihilates the finite layer variance:
     \qquad
     \sum_{i=0}^{n-1}(A_nf(i))^2-n\overline f^{\,2}=0 .
 \]
-Equivalently, with
+等价地，令
 \[
     V_n(f):=\sum_{i=0}^{n-1}f(i)^2-n\overline f^{\,2},
 \]
-one has \(V_n(A_nf)=0\leq V_n(f)\).
+则 \(V_n(A_nf)=0\leq V_n(f)\)。
 \leanverified{paper_app_solenoid_stokes_markov_variance_dissipation}
 \end{theorem}
 
 \begin{proof}
-The constant-preservation identity is immediate.  Cauchy--Schwarz gives
+常值保持性直接成立。Cauchy--Schwarz 给出
 \[
     \left(\sum_{i=0}^{n-1}f(i)\right)^2
     \leq
     n\sum_{i=0}^{n-1}f(i)^2,
 \]
-and hence
+从而
 \[
     \sum_i(A_nf(i))^2=n\overline f^{\,2}
     =
@@ -198,31 +174,27 @@ and hence
     \leq
     \sum_i f(i)^2 .
 \]
-Since \(A_nf\) is constant with value \(\overline f\), its layer variance is
-zero.  The nonnegativity of \(V_n(f)\) is the same Cauchy--Schwarz inequality.
-This is the finite theorem formalized on the Omega side in the Lean statement
-displayed above.
+\(A_nf\) 为取值 \(\overline f\) 的常值函数，故其层方差为零。\(V_n(f)\) 的非负性即同一 Cauchy--Schwarz 不等式。此为 Omega 端上述 Lean 声明中形式化的有限定理。
 \end{proof}
 
-\subsection{Fold conditional expectations}
+\subsection{折叠条件期望}
 
-We now specialize to the paper's folding factor.  Let
+现在特化到论文的折叠因子。令
 \[
     \Omega_m:=\{0,1\}^m,
     \qquad
     \Fold_m:\Omega_m\to X_m
 \]
-be the finite fold onto the golden-legal stable words, and write
+为到黄金合法稳定词上的有限折叠，记
 \[
     d_m(x):=\card{\Fold_m^{-1}(x)}.
 \]
-Given a probability measure \(\nu_m\) on \(X_m\), its fiber-uniform lift to
-\(\Omega_m\) is
+给定 \(X_m\) 上的概率测度 \(\nu_m\)，其纤维均匀提升到 \(\Omega_m\) 上为
 \[
     \mu_m(\omega):=
     \frac{\nu_m(\Fold_m(\omega))}{d_m(\Fold_m(\omega))}.
 \]
-The corresponding conditional expectation is the uniform fiber average
+相应的条件期望即为均匀纤维平均
 \[
     E_mf(\omega)
     =
@@ -230,9 +202,8 @@ The corresponding conditional expectation is the uniform fiber average
     \sum_{\eta\in \Fold_m^{-1}(\Fold_m(\omega))}f(\eta).
 \]
 
-\begin{proposition}[Fold \(L^2\) decomposition]\label{prop:fold-condexp-l2-decomposition}
-For every \(m\), every probability measure \(\nu_m\) on \(X_m\), and every
-\(f:\Omega_m\to\RR\),
+\begin{proposition}[折叠 \(L^2\) 分解]\label{prop:fold-condexp-l2-decomposition}
+对每一 \(m\)、\(X_m\) 上的每一概率测度 \(\nu_m\) 以及每一 \(f:\Omega_m\to\RR\)，
 \[
     \norm{f}_{2,\mu_m}^2
     =
@@ -240,8 +211,7 @@ For every \(m\), every probability measure \(\nu_m\) on \(X_m\), and every
     +
     \norm{f-E_mf}_{2,\mu_m}^2 .
 \]
-Consequently the fold conditional expectation is an \(L^2(\mu_m)\)-contraction,
-and the fold fiberwise variance satisfies
+从而折叠条件期望为 \(L^2(\mu_m)\)-压缩，且折叠纤维方差满足
 \[
     \mathcal D_{\Fold_m,\mu_m}(E_mf)=0\leq
     \mathcal D_{\Fold_m,\mu_m}(f).
@@ -249,66 +219,53 @@ and the fold fiberwise variance satisfies
 \end{proposition}
 
 \begin{proof}
-Apply Theorem \ref{thm:finite-condexp-pythagoras} and Corollary
-\ref{cor:finite-condexp-variance-decomposition} to the factor map
-\(\pi=\Fold_m\) and the measure \(\mu=\mu_m\).  Because \(\mu_m\) is uniform
-inside each nonempty fiber, \(E_{\Fold_m,\mu_m}\) is exactly the displayed
-fiber average \(E_m\).
+对因子映射 \(\pi=\Fold_m\) 与测度 \(\mu=\mu_m\) 应用定理 \ref{thm:finite-condexp-pythagoras} 与推论 \ref{cor:finite-condexp-variance-decomposition}。由 \(\mu_m\) 在每一非空纤维内均匀，\(E_{\Fold_m,\mu_m}\) 恰为所示纤维平均 \(E_m\)。
 \end{proof}
 
-The numerical audits use the normalized window value \(f(\omega)=N(\omega)/F_{m+3}\).
-For the Parry maximum-entropy cylinder measure \(\nu_m\) on \(X_m\), the exact
-orthogonal decomposition above was checked over \(m=4,6,\ldots,16\).  The same
-identity was also checked for several deterministic arbitrary micro-measures
-on \(\Omega_{12}\).  These are sanity checks of the implementation rather than
-extra assumptions: the theorem is finite algebra.  The scripts are
+数值审计采用归一化窗口值 \(f(\omega)=N(\omega)/F_{m+3}\)。
+对 \(X_m\) 上的 Parry 最大熵柱面测度 \(\nu_m\)，上述精确正交分解已在 \(m=4,6,\ldots,16\) 上验证。同一恒等式也对 \(\Omega_{12}\) 上若干确定性任意微测度进行了检验。这些是实现的正确性检验，而非额外假设：该定理本质上是有限代数。脚本为
 \texttt{\detokenize{scripts/exp_fold_conditional_expectation_pythagoras.py}}
-and
-\texttt{\detokenize{scripts/exp_fold_conditional_variance_decomposition.py}}.
-The independent finite-field law-enumeration certificates used elsewhere in
-the paper are verified computationally (see
-\texttt{\detokenize{scripts/equational_theory/}}).
+与
+\texttt{\detokenize{scripts/exp_fold_conditional_variance_decomposition.py}}。
+论文其他部分使用的独立有限域律枚举证书由
+\texttt{\detokenize{scripts/equational_theory/}} 验证。
 
 \input{sections/generated/tab_fold_conditional_expectation_pythagoras}
 
 \input{sections/generated/tab_fold_conditional_variance_decomposition}
 
-\subsection{Compressed operator spectrum}
+\subsection{压缩算子谱}
 
-For the singular-spectrum audit, the fold average is viewed as a rectangular
-operator
+对奇异谱审计，折叠平均被视为矩形算子
 \[
     T_m:\ell^2(\Omega_m)\longrightarrow \ell^2(X_m),
     \qquad
     (T_mf)(x)=\frac{1}{d_m(x)}
     \sum_{\omega\in\Fold_m^{-1}(x)}f(\omega),
 \]
-where both sides carry counting inner products.  This is not the same Hilbert
-space representation as the orthogonal projection \(E_m\) on
-\(L^2(\Omega_m,\mu_m)\); it is the compressed map from microscopic functions
-to base functions.
+两侧均配备计数内积。此非 \(L^2(\Omega_m,\mu_m)\) 上正交投影 \(E_m\) 的同一 Hilbert 空间表示；它是从微观函数到基函数的压缩映射。
 
-\begin{proposition}[Singular values of the fold compression]\label{prop:fold-condexp-singular-values}
-The nonzero singular values of \(T_m\) are
+\begin{proposition}[折叠压缩的奇异值]\label{prop:fold-condexp-singular-values}
+\(T_m\) 的非零奇异值为
 \[
     \sigma_x(T_m)=d_m(x)^{-1/2},
     \qquad x\in X_m.
 \]
-Consequently, for every \(p>0\),
+从而对每一 \(p>0\)，
 \[
     \norm{T_m}_{S_p}^p=\sum_{x\in X_m}d_m(x)^{-p/2},
     \qquad
     \norm{T_m}_{\mathrm{op}}=d_{\min}(m)^{-1/2},
 \]
-where \(d_{\min}(m):=\min_{x\in X_m}d_m(x)\).
+其中 \(d_{\min}(m):=\min_{x\in X_m}d_m(x)\)。
 \end{proposition}
 
 \begin{proof}
-With counting inner products, the adjoint is
+在计数内积下，伴随为
 \[
     (T_m^\ast g)(\omega)=\frac{g(\Fold_m(\omega))}{d_m(\Fold_m(\omega))}.
 \]
-Therefore
+因此
 \[
     (T_mT_m^\ast g)(x)
     =
@@ -318,14 +275,11 @@ Therefore
     =
     \frac{g(x)}{d_m(x)} .
 \]
-Thus \(T_mT_m^\ast\) is diagonal in the basis of point masses on \(X_m\), with
-eigenvalues \(d_m(x)^{-1}\).  Taking square roots gives the singular values and
-the Schatten formulas.
+从而 \(T_mT_m^\ast\) 在 \(X_m\) 上点质量基中对角，特征值为 \(d_m(x)^{-1}\)。取平方根即得奇异值与 Schatten 公式。
 \end{proof}
 
-The table below computes these negative multiplicity moments by modular
-dynamic programming, using
-\texttt{\detokenize{scripts/exp_fold_conditional_expectation_singular_spectrum.py}}.
+下表由模动态规划计算这些负重数矩，脚本为
+\texttt{\detokenize{scripts/exp_fold_conditional_expectation_singular_spectrum.py}}。
 
 \input{sections/generated/tab_fold_conditional_expectation_singular_spectrum}
 
