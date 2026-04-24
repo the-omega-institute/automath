@@ -40,6 +40,7 @@ import Omega.Conclusion.AmbiguityShellZetaSyncSplitting
 import Omega.Conclusion.BalancedExternalizationSchurOptimality
 import Omega.Conclusion.BalancedExternalizationOptimalRenyiEnergy
 import Omega.Conclusion.BinfoldCollisionScaleForcesMaxfiberDivergence
+import Omega.Conclusion.BinfoldCriticalBudgetRenyiEnergy
 import Omega.Conclusion.BinfoldCriticalCapacityThreephaseLaw
 import Omega.Conclusion.BinfoldFullInversionGoldenThreshold
 import Omega.Conclusion.BooleanOrderIdealOnebitParityDefect
@@ -695,6 +696,7 @@ import Omega.Conclusion.M2Level3IncidenceExactSequence15Separation
 import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.MaxfiberAchieversOddEvenCompensation
 import Omega.Conclusion.Window6EvenMaxfiberHiddenbitExactFairization
+import Omega.Conclusion.MaxfiberAverageScaleRigidity
 import Omega.Conclusion.MaxfiberMod6HomotopyPhaseDiagram
 import Omega.Conclusion.MaxentropyGapEqualsLogMaxfiber
 import Omega.Conclusion.MaxfiberEntropyGaugeFourmodeRigidity
