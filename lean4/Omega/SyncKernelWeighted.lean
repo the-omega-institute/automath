@@ -235,6 +235,7 @@ import Omega.SyncKernelWeighted.WittPkSparsification
 import Omega.SyncKernelWeighted.WittPpowerPrimitiveCoordinate
 import Omega.SyncKernelWeighted.WittThetaBinaryFingerprint
 import Omega.SyncKernelWeighted.WittThetaDerivativeFilter
+import Omega.SyncKernelWeighted.WittPadicFlatnessBall
 import Omega.SyncKernelWeighted.WittThetaStableResidue
 import Omega.SyncKernelWeighted.WittRootOfUnityCommonPadicLimit
 import Omega.SyncKernelWeighted.WittUnitRootLimit
