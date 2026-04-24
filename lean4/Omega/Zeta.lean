@@ -228,6 +228,7 @@ import Omega.Zeta.XiCauchyCoshUnitaryLinearization
 import Omega.Zeta.XiArtinMazurEulerProductZetaRatio
 import Omega.Zeta.XiCauchyPoissonSingleScaleMomentInversion
 import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprint
+import Omega.Zeta.XiCayleyScanAreaLawLowfreqTrace
 import Omega.Zeta.XiCriticalLineCircleCauchyUniformization
 import Omega.Zeta.XiJoukowskyL1MeasureLiftChebyshevFourier
 import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth

@@ -218,6 +218,7 @@ import Omega.POM.MaxFiberEvenSingleSampleMap
 import Omega.POM.MaxFiberHphiRelativeEntropyGap
 import Omega.POM.FiberLeyangRenyiBernoulliDecomposition
 import Omega.POM.MicrocanonicalFoldHtFromPowerSums
+import Omega.POM.MicrocanonicalFoldResidualMinEntropy
 import Omega.POM.DiagonalRateAbsorbingWronskianIdentity
 import Omega.POM.DiagonalRateAbsorbingWronskianIdentitySecondary
 import Omega.POM.OracleQstarAreaIdentity
