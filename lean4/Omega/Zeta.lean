@@ -239,6 +239,7 @@ import Omega.Zeta.XiTerminalZmEllipticWeightNCorrespondenceBidegreeDelta
 import Omega.Zeta.XiTerminalZmEllipticWeight2kDeltaLedger
 import Omega.Zeta.XiPrimeRegisterHistoryInverseLimit
 import Omega.Zeta.XiPrimeRegisterIdempotentUniqueNormalForm
+import Omega.Zeta.XiPrimePhaseTorusDenseUniquelyErgodic
 import Omega.Zeta.XiPrimeShellQuasiOrthogonality
 import Omega.Zeta.XiPrimeShellExplicitFormulaWindow
 import Omega.Zeta.XiPrimeSliceNontrivialLayerExactMinimality
@@ -449,6 +450,7 @@ import Omega.Zeta.XiTimePart9xcSerrinJointPressureAffineDegeneration
 import Omega.Zeta.XiTimePart9zgQuadraticSectorCharacterHarmonicCollapse
 import Omega.Zeta.XiTimePart9zbkGaussianCompressorUniqueness
 import Omega.Zeta.XiTimePart9zbkChristoffelGaussSquareRemainder
+import Omega.Zeta.XiTimePart9zbkPoleCountOptimality
 import Omega.Zeta.XiTerminalZmLeyangP3RenormalizationHensel
 import Omega.Zeta.XiTerminalZmLeyangPerronP3Radius
 import Omega.Zeta.XiTerminalZmLeyangPerronP3SemistableDegreeDrop

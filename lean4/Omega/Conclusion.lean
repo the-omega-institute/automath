@@ -89,6 +89,7 @@ import Omega.Conclusion.BoundaryCycleRankLoewnerPrimeLowerBound
 import Omega.Conclusion.BoundaryPadicTowerExactRank
 import Omega.Conclusion.BoundaryExactSelectorComplexity
 import Omega.Conclusion.BoundaryFinitePrimeSelectorProductLaw
+import Omega.Conclusion.BoundaryFiniteAuditComplexityBarrier
 import Omega.Conclusion.BoundaryFivefoldComplexityCoscaling
 import Omega.Conclusion.BoundaryGaugeLiftingSharedCycleRankEntropy
 import Omega.Conclusion.BoundaryMixedAuditRankConservation
