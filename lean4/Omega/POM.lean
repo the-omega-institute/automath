@@ -201,6 +201,7 @@ import Omega.POM.DiagonalRateRefreshAbsorbingLaguerreInterlacing
 import Omega.POM.MaxentMarkovLaguerreSecularSpectrum
 import Omega.POM.MaxentMarkovNoOscillationEndpoints
 import Omega.POM.MaxentMarkovGapVsRateSlopeCoupling
+import Omega.POM.MomqTensorKernelSchurDeterminant
 import Omega.POM.MaxentMarkovSmallDistortionLambda2Slope
 import Omega.POM.MaxentMarkovZetaDeterminantSinglePolynomial
 import Omega.POM.MaxentMarkovOptimalCouplingLatentBinaryMixture

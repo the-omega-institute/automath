@@ -228,6 +228,7 @@ import Omega.Zeta.XiJSexticEllipticLattesBelyiNormalization
 import Omega.Zeta.XiJSexticEllipticLattesV4GaloisBranching
 import Omega.Zeta.XiJSexticEllipticLattesKleinMobius
 import Omega.Zeta.XiJSexticEllipticLattesMultiplierRigidity
+import Omega.Zeta.XiHankelShiftDetIntegralityPadicDrift
 import Omega.Zeta.XiJSexticHyperellipticBranchPolynomialDiscriminantFactorization
 import Omega.Zeta.XiJGMonicBoundaryReadout
 import Omega.Zeta.XiJGDiscriminantSquareclassInvariance
