@@ -730,6 +730,7 @@ import Omega.POM.OracleCapacityKolmogorovSpectrum
 import Omega.POM.OracleCapacityStieltjesInversionMellin
 import Omega.POM.OracleCriticalQuadraticMarginalLaw
 import Omega.POM.OracleGapAreaLawEnergy
+import Omega.POM.OracleGapAreaRigidity
 import Omega.POM.OracleFailureExponentFromRenyiSpectrum
 import Omega.POM.OracleFailureExponentDualityFromDoubleLdp
 import Omega.POM.OracleFailureExponentBitLdp
