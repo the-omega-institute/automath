@@ -136,6 +136,7 @@ import Omega.Zeta.XiHankelSingularityOnePrimeLiftHvzk
 import Omega.Zeta.XiHypercubeWeightedSpanningTreeSpectrumProduct
 import Omega.Zeta.XiHypercubeWeightedLaplacianHeatTraceFactorization
 import Omega.Zeta.XiIntegratedDefectGoldenAsymptotics
+import Omega.Zeta.XiLatticeLocalDepthRepulsion
 import Omega.Zeta.XiOptimalAllocationUnderProductBound
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
