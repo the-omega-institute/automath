@@ -631,6 +631,7 @@ import Omega.Zeta.FinitePartDirichletVanishingCyclotomicSymmetry
 import Omega.Zeta.FinitePartExpFinDoubleThresholdSeparation
 import Omega.Zeta.FinitePartLogMKernelRhExplicitBound
 import Omega.Zeta.FinitePartLogMPrimitiveOrbitClosedForm
+import Omega.Zeta.FinitePartLogMGapPositive
 import Omega.Zeta.FinitePartLogMRelativeScaleTransfer
 import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.FinitePartNyquistErrorExp
@@ -1173,6 +1174,7 @@ import Omega.Zeta.XiTerminalZmDeltaS5FivecycleTangentSpectrum
 import Omega.Zeta.XiTerminalZmDeltaS5TameCollisionEtaleQuotientNodeLaw
 import Omega.Zeta.XiTerminalZmDeltaS5TameCollisionSemistableFiber
 import Omega.Zeta.XiTerminalZmDeltaS5TorusRankSignature
+import Omega.Zeta.XiJensenVariationalUpperboundCertificate
 import Omega.Zeta.XiTerminalZmEllipticFiberCountMeanTrace
 import Omega.Zeta.XiTerminalZmEllipticMcTraceEstimator
 import Omega.Zeta.XiTerminalZmEllipticWeightTriplingRamificationCount

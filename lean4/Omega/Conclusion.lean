@@ -104,6 +104,7 @@ import Omega.Conclusion.BoundaryParityAnomalyGap
 import Omega.Conclusion.BoundaryParityBlindFiltration
 import Omega.Conclusion.BoundaryParityLieRepairTwoBits
 import Omega.Conclusion.BoundaryPinningMemoryGap
+import Omega.Conclusion.BoundaryCycleExternalizationMemoryBarriers
 import Omega.Conclusion.FixedResolutionLinearVsNonlinearHolographyStrictBifurcation
 import Omega.Conclusion.BCCurvatureLayerLocalization
 import Omega.Conclusion.BCCurvatureSmallCurvatureStrictificationTV
