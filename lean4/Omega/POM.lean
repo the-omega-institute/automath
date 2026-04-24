@@ -422,6 +422,7 @@ import Omega.POM.FiberParityMod3
 import Omega.POM.ToggleContractibleParityRigidity
 import Omega.POM.FiberPosteriorEquivalenceActivityField
 import Omega.POM.FiberPosteriorEquivalenceFibonacciGauge
+import Omega.POM.FiberPosteriorEquivalenceModuli
 import Omega.POM.FiberPosteriorBayesMWIS
 import Omega.POM.FiberBulkSchedulingEntropyUniversal
 import Omega.POM.FiberFixedSymmetricLayerUnboundedScheduling

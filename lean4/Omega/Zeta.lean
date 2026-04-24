@@ -56,6 +56,7 @@ import Omega.Zeta.DephysFoldStinespringSqrtLaw
 import Omega.Zeta.DephysHolographySufficientStatistic
 import Omega.Zeta.AppHorizonPoleImprint
 import Omega.Zeta.Degree11CyclicCubicNormalizationGenus3
+import Omega.Zeta.Degree11ParameterTDivisorDegree
 import Omega.Zeta.Arity335CharacterEnergy
 import Omega.Zeta.Arity335CosineOnly
 import Omega.Zeta.Arity335EpsEffInversion

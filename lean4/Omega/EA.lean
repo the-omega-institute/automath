@@ -24,6 +24,7 @@ import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
 import Omega.EA.CrtFactorization
+import Omega.EA.FiniteResolutionMod
 import Omega.EA.Conclusion72EnergyComplementarity
 import Omega.EA.SumproductExponentialLaw
 import Omega.EA.DeterministicRoughVisibleQuantity
