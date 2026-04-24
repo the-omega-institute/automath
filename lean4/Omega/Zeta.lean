@@ -1314,3 +1314,4 @@ import Omega.Zeta.XiCauchyPoissonFisherKlSelfsimilarDefect
 import Omega.Zeta.XiTimePart9zbkPositiveNatomicExactnessCeiling
 import Omega.Zeta.XiScalarCertificateIntegratedDefect
 import Omega.Zeta.XiBinomialToeplitzConstantDepthUnderQuadraticRedshift
+import Omega.Zeta.XiContractDefectCriticalSlicePrinciple
