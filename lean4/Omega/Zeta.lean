@@ -509,6 +509,7 @@ import Omega.Zeta.XiBinaryJumpOrientationUnification
 import Omega.Zeta.BooleanBinaryJumpKernelsChar2S3
 import Omega.Zeta.XiBooleanTwoLayerInverseSupportLaw
 import Omega.Zeta.XiReverseKLRadiusRenormalizationCyclicSymmetrization
+import Omega.Zeta.DisjointnessBooleanOrderIdealPrincipalMinors
 import Omega.Zeta.BooleanTwoLayerOrderIdealPrincipalMinor
 import Omega.Zeta.BooleanTwoLayerSmithNormalForm
 import Omega.Zeta.BooleanTwoLayerSymmetricQuotientSmith
