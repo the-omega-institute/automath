@@ -773,6 +773,7 @@ import Omega.Zeta.RealInput40LogMInfty
 import Omega.Zeta.RealInput40GeodesicMertens
 import Omega.Zeta.RealInput40GeodesicRamanujanMargin
 import Omega.Zeta.RealInput40DetUv2plus8
+import Omega.Zeta.RealInput40ZetaUvPressureDegree8
 import Omega.Zeta.RealInput40RotationPolytope6V
 import Omega.Zeta.RealInput40RotationPolytopeShear
 import Omega.Zeta.RealInput40ZetaUvCoreZpmoneResonanceSurfaces
