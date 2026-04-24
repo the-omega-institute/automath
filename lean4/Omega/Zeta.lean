@@ -42,6 +42,7 @@ import Omega.Zeta.DerivedLeyangBfCkRigidity
 import Omega.Zeta.DephysBudgetDistanceDominatesTv
 import Omega.Zeta.DephysIdempotentMonadIProjection
 import Omega.Zeta.DephysicalizedDefectRepulsionRadius
+import Omega.Zeta.DephysHolographySufficientStatistic
 import Omega.Zeta.AppHorizonPoleImprint
 import Omega.Zeta.Degree11CyclicCubicNormalizationGenus3
 import Omega.Zeta.Arity335CharacterEnergy
@@ -113,6 +114,7 @@ import Omega.Zeta.XiTimePart70cSpectrumZeroZ2OrbitCancellation
 import Omega.Zeta.XiHorizonZkFiberpathStokesDiscriminant
 import Omega.Zeta.XiHankelFiniteCertificatePrinciple
 import Omega.Zeta.XiHankelCofactorSyndromeSingleCoordinate
+import Omega.Zeta.XiHankelFiberFanoInformationLeakage
 import Omega.Zeta.XiHypercubeWeightedSpanningTreeSpectrumProduct
 import Omega.Zeta.XiHypercubeWeightedLaplacianHeatTraceFactorization
 import Omega.Zeta.XiIntegratedDefectGoldenAsymptotics
