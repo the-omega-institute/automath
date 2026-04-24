@@ -149,6 +149,7 @@ import Omega.Zeta.XiHypercubeWeightedSpanningTreeSpectrumProduct
 import Omega.Zeta.XiHypercubeWeightedLaplacianHeatTraceFactorization
 import Omega.Zeta.XiIntegratedDefectGoldenAsymptotics
 import Omega.Zeta.XiJensenWindowOptimalScale
+import Omega.Zeta.XiJGHolographicCoefficientExtraction
 import Omega.Zeta.XiLatticeLocalDepthRepulsion
 import Omega.Zeta.XiJensenBoundaryPotentialFiniteDefectExplicit
 import Omega.Zeta.XiJensenEntropyRegularizedVariational
