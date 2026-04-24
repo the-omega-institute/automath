@@ -148,6 +148,7 @@ import Omega.Zeta.XiIntegratedDefectGoldenAsymptotics
 import Omega.Zeta.XiJensenWindowOptimalScale
 import Omega.Zeta.XiLatticeLocalDepthRepulsion
 import Omega.Zeta.XiJensenBoundaryPotentialFiniteDefectExplicit
+import Omega.Zeta.XiJensenEntropyRegularizedVariational
 import Omega.Zeta.XiOptimalAllocationUnderProductBound
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
@@ -158,6 +159,7 @@ import Omega.Zeta.XiLogDefectPotentialPoissonPrimitive
 import Omega.Zeta.XiLocalBinaryNormalizationFibonacciRigidity
 import Omega.Zeta.XiLocalizedSolenoidPeriodicGrowthMaxScale
 import Omega.Zeta.XiLogcmSecondBernoulliCoefficientRatio
+import Omega.Zeta.XiLogDefectConeExtreme
 import Omega.Zeta.XiCompactifiedDyadicDepthLowerBound
 import Omega.Zeta.XiScaleMellinNoNonzeroImagPeriod
 import Omega.Zeta.XiRhIffLatticeComovingDefect
