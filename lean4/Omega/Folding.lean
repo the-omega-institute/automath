@@ -105,6 +105,7 @@ import Omega.Folding.CollisionConditionalHammingMgf
 import Omega.Folding.ComponentResiduePressurePadicSaturation
 import Omega.Folding.FoldPadicSaturationPrime
 import Omega.Folding.FoldPadicSaturationFiniteSet
+import Omega.Folding.FoldBinSaturationResidueWindow
 import Omega.Folding.SaturationSmoothDichotomy
 import Omega.Folding.CollisionDecomp
 import Omega.Folding.CollisionKernel
