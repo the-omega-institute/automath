@@ -257,6 +257,7 @@ import Omega.POM.DiagonalRateSeparationWeightSignRule
 import Omega.POM.DiagonalRateAbsorbingMeanHitTime
 import Omega.POM.DiagonalRateAbsorbingHitPGF
 import Omega.POM.DiagonalRateCriticalXiPolynomialAndZetaScaling
+import Omega.POM.DiagonalRateCriticalLaplacianPdetUniformLimitE
 import Omega.POM.SpectrumLegendreUpper
 import Omega.POM.DiagonalRateAbsorbingSetHitAndOccupancy
 import Omega.POM.DiagonalRateAbsorbingGeometricMixture

@@ -191,6 +191,7 @@ import Omega.SPG.TanakaIncrement
 import Omega.SPG.TanakaStokes
 import Omega.SPG.TanakaStokesPublication
 import Omega.SPG.TotalDegreeMomentThreshold
+import Omega.SPG.TotalDegreeMomentThresholdExponentialScale
 import Omega.SPG.UndecidableNoFiniteComputableCompleteInvariant
 import Omega.SPG.VolumeBoundaryScaling
 import Omega.SPG.WalshDiscreteStokesHolography
