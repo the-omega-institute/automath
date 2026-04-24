@@ -193,6 +193,7 @@ import Omega.Conclusion.PoissonJensenGapReversekl
 import Omega.Conclusion.JensenDefectZeroStockIdentity
 import Omega.Conclusion.CapacityMajorizationSchurHardness
 import Omega.Conclusion.CapacityRamanujanPlateauLaw
+import Omega.Conclusion.PrimesliceMinimalAlphabetRamanujanPlateau
 import Omega.Conclusion.OrientationCartesianKronecker
 import Omega.Conclusion.JointFiniteAuditIncompletenessPhasePrefixMultiscale
 import Omega.Conclusion.CanonicalDynamicPrimeRegisterAsymptoticOptimality
@@ -872,6 +873,7 @@ import Omega.Conclusion.ResidueSliceSingleOrbitDoubleSliceRigidity
 import Omega.Conclusion.ResonanceWindow
 import Omega.Conclusion.ResonanceWindowMod2BinomialCollapse
 import Omega.Conclusion.ResonanceWindowZ2HenselTailPeriodicity
+import Omega.Conclusion.ResonantMod2ShadowFiniteDiscretePolynomialLaw
 import Omega.Conclusion.Renyi2EffectiveSupportZeroDensityCollapse
 import Omega.Conclusion.ResonanceWindowMod2TailJetCompleteness
 import Omega.Conclusion.ReversibleAuxBitsBudget

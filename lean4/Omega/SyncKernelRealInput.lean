@@ -57,3 +57,4 @@ import Omega.SyncKernelRealInput.GMRandomWalkMixingPisano
 import Omega.SyncKernelRealInput.RealInput40JensenKink
 import Omega.SyncKernelRealInput.RealInput40IntegerResonanceCalibration
 import Omega.SyncKernelRealInput.RealInput40P7GenericGaloisS7
+import Omega.SyncKernelRealInput.RealInput40ArityChargeZeroZeta
