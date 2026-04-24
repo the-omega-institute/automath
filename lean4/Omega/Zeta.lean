@@ -70,6 +70,7 @@ import Omega.Zeta.XiEndpointSingleDefectWeightedKlLi2
 import Omega.Zeta.XiEndpointHeatProbePowerlawLeading
 import Omega.Zeta.XiTimePart76SmithSurjectiveModuliPrimeSieve
 import Omega.Zeta.XiTimeAdditivityFiniteCriticalSquareCriterion
+import Omega.Zeta.GMMajorarcEnergyObstructionLoop
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiFiniteDefectRhScanTraceEquivalence
