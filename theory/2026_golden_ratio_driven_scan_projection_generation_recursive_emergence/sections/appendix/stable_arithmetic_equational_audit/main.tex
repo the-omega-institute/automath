@@ -295,8 +295,82 @@ p&2&3&5&7&11&13&17&19&23&29&31\\
 验证。
 \end{proof}
 
+\subsection{整系数仿射仪表盘闭合}
+
+前述定理 \ref{thm:stable-audit-affine-fibonacci-dashboard-closure} 的 Fibonacci 有限扫描以及 \(\ZZ[1/6][a,b]\) 上的 Gröbner 基约化均受限于 \(6\) 可逆的基环。下述定理将仿射障碍加强到整系数环 \(\ZZ[a,b]\)，从而消除所有 \(2\)-primary 与 \(3\)-primary 例外。
+
+\begin{theorem}[整系数仿射仪表盘闭合]\label{thm:stable-audit-integral-affine-closure}
+对 ETP 数据库当前 \(498\) 条仪表盘有序对 \(E\to F\) 中的每一对，
+\[
+    I_{\ZZ}(F)\subset I_{\ZZ}(E)\quad\text{in }\ZZ[a,b],
+\]
+其中 \(I_{\ZZ}(E)\) 由 \(E\) 的六个仿射系数差生成。从而对每一交换含幺环 \(R\) 与每一仿射线性运算 \(x\diamond y=\alpha x+\beta y\)，\(E\) 的满足蕴涵 \(F\) 的满足。
+\end{theorem}
+
+\begin{proof}
+验证器对每条前件理想构造 \(\ZZ\) 上的强 Gröbner 基：在 PID \(\ZZ\) 上，约化要求首项单项式整除且首项整数系数整除；临界对由 S-多项式与 Bézout G-多项式闭合。对所有 \(498\) 对，每一后件生成元约化为零，证书记录
+\(\texttt{all\_pairs\_pass}=\texttt{true}\)，\(\texttt{max\_strong\_basis\_size}=15\)，\(\texttt{max\_pair\_reductions}=105\)。
+由整系数理想包含经基变换到任意交换环保持，结合引理 \ref{lem:stable-audit-affine-coefficient-criterion} 的系数判据即得语义蕴涵。验证脚本见
+\[
+    \texttt{\detokenize{scripts/equational_theory/integral_affine_closure.py}}.
+\]
+\end{proof}
+
+\begin{corollary}[\(2/3\)-primary 闭合]\label{cor:stable-audit-primary-closure}
+当前 \(498\) 条仪表盘对的仿射仪表盘障碍无残余 \(2\)-primary 或 \(3\)-primary 例外。此前 \(\ZZ[1/6]\) Gröbner 约化中出现的分母 \(2\) 与 \(3\) 为有理基选择的伪影，而非这些仪表盘对的真正 primary 障碍。
+\end{corollary}
+
+\begin{proof}
+定理 \ref{thm:stable-audit-integral-affine-closure} 在 \(\ZZ[a,b]\) 上证明了理想包含。张量或特化到任意特征 \(2\)、特征 \(3\)、\(2\)-幂扭或 \(3\)-幂扭的交换环均保持理想包含。
+\end{proof}
+
+\subsection{超越仿射障碍的非仿射有限见证}
+
+定理 \ref{thm:stable-audit-integral-affine-closure} 证明了仿射线性运算不能分离任何当前仪表盘对。下述命题展示该障碍边界是紧的：存在一个非仿射有限 magma 分离了一条仪表盘对。
+
+\begin{proposition}[非仿射有限分离]\label{prop:stable-audit-non-affine-witness}
+设 \(M=\{0,\ldots,35\}\)，配备 ETP 已提交文件
+\[
+    \texttt{\detokenize{Equational_Theories/Generated/All4x4Tables/Refutation936.lean}}
+\]
+中记录的 \(36\times 36\) 运算表。则 \(M\) 满足 \(E_{476}\) 并反驳 \(E_{4065}\)：
+\[
+    E_{476}:\; x=y\diamond(x\diamond(y\diamond(y\diamond x))),
+    \qquad
+    E_{4065}:\; x\diamond x=((x\diamond x)\diamond x)\diamond x.
+\]
+具体地，赋值 \(x=0\) 给出 \(0\diamond 0=17\)、\((0\diamond 0)\diamond 0=10\)、\(((0\diamond 0)\diamond 0)\diamond 0=11\)，从而 \(E_{4065}\) 的两边分别为 \(17\) 与 \(11\)。
+\end{proposition}
+
+\begin{proof}
+\(E_{476}\) 含变量 \(x,y\)，验证器检查全部 \(36^2=1296\) 个赋值，无违例。\(E_{4065}\) 在 \(x=0\) 处即被反驳（如所述）。此为有限表上的直接递归赋值。
+\end{proof}
+
+\begin{proposition}[非仿射性证书]\label{prop:stable-audit-mediality-failure}
+上述 \(36\) 阶运算不属于仿射线性或仿射加常数族 \(x\diamond y=\alpha x+\beta y(+k)\)（系数交换）。
+\end{proposition}
+
+\begin{proof}
+任何具有交换系数的仿射加常数运算 \(x\diamond y=\alpha x+\beta y+k\) 均满足 mediality 恒等式
+\[
+    (a\diamond b)\diamond(c\diamond d)=(a\diamond c)\diamond(b\diamond d).
+\]
+该运算表在赋值 \(a=0,b=0,c=9,d=0\) 处给出左端 \(28\)、右端 \(32\)，mediality 失败。因此该运算超出已排除的仿射障碍之外。
+\end{proof}
+
+\begin{proposition}[小阶有限障碍]\label{prop:stable-audit-small-order-obstruction}
+阶 \(2\) 与阶 \(3\) 的 magma 不分离 \(498\) 条当前仪表盘有序对中的任何一对。
+\end{proposition}
+
+\begin{proof}
+穷举枚举阶 \(2\) 的全部 \(2^{2^2}=16\) 个二元运算与阶 \(3\) 的全部 \(3^{3^2}=19683\) 个二元运算。对每一运算扫描仪表盘对，均未发现前件成立而后件失败的见证。此仅为小阶障碍，不声称 \(36\) 阶见证在阶 \(4\) 至 \(35\) 范围内的极小性。验证脚本见
+\[
+    \texttt{\detokenize{scripts/equational_theory/non_affine_finite_witness.py}}.
+\]
+\end{proof}
+
 \begin{remark}[证书边界]\label{rem:stable-audit-certificate-boundary}
-本附录中的 Automath/Omega Lean 贡献为引理 \ref{lem:stable-audit-stable-value-affine-transfer} 的稳定值传递定理。ETP 索引谱、\(\texttt{Facts}\) 表、仪表盘交集、素数稳定化有限检查与素域冗余性审计均为有限计算证书，随本文以
+本附录中的 Automath/Omega Lean 贡献为引理 \ref{lem:stable-audit-stable-value-affine-transfer} 的稳定值传递定理。ETP 索引谱、\(\texttt{Facts}\) 表、仪表盘交集、素数稳定化有限检查、素域冗余性审计、整系数仿射闭合证书与非仿射有限见证均为有限计算证书，随本文以
 \[
     \texttt{\detokenize{scripts/equational_theory/}}
 \]
