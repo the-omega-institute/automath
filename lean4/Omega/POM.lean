@@ -98,6 +98,7 @@ import Omega.POM.CharpolyModpA2Embedding
 import Omega.POM.CoarsegrainingMajorizationSchur
 import Omega.POM.BinaryCoarsegrainingConcavePairingExtremes
 import Omega.POM.CollisionAQFibonacciBFPrimitivePrimeDivisor
+import Omega.POM.CollisionBfSnfQ234
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.CollisionEntropyRate
 import Omega.POM.DiagonalRateRefreshEntropyRateRenewalCoding
