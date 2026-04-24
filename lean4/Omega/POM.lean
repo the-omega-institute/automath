@@ -5,6 +5,7 @@ import Omega.POM.A4MertensTailBound
 import Omega.POM.A4TCharpolyRationalReducibility
 import Omega.POM.A4TCyclotomicAdjacencyInjection
 import Omega.POM.A4TEvenSpectrumGammaInversion
+import Omega.POM.A4TEvenSpectrumDoubleRootUstar
 import Omega.POM.A4TEvenZetaQuintic
 import Omega.POM.A4TNewmanThresholdAdeOrdering
 import Omega.POM.A4TNewmanK2ClassNumber
