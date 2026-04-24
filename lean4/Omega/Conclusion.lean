@@ -17,6 +17,7 @@ import Omega.Conclusion.RateCdimAchievability
 import Omega.Conclusion.AnchorFullRankWeightblindRigidity
 import Omega.Conclusion.AnchorFullRankPoleDominance
 import Omega.Conclusion.AtomicSurgeryFiniteCongruenceTomography
+import Omega.Conclusion.AtomicSurgerySingleCongruenceInjection
 import Omega.Conclusion.AlgebraicLdpDfiniteStokesCompression
 import Omega.Conclusion.AngularPronyIdentifiability
 import Omega.Conclusion.AlgorithmPrimeShiftEquivalence
