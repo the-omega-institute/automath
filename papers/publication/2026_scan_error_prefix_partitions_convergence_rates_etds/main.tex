@@ -34,9 +34,10 @@
 \DeclareMathOperator{\sgn}{sgn}
 
 % Notation: \mathsf{P} denotes a measurable event (subset of the probability
-% space X); italic P denotes a subset of the symbolic shift space
-% \Omega_\infty=\{0,1\}^\mathbb{N}. When X=\Omega_\infty both coincide and we
-% use \mathsf{P} throughout.
+% space X). For subsets of the symbolic shift space
+% \Omega_\infty=\{0,1\}^\mathbb{N} we use symbols such as A\subseteq\Omega_\infty.
+% When X=\Omega_\infty both viewpoints coincide and we keep the event notation
+% \mathsf{P}.
 
 \title{Scan Error Profiles on Prefix Partitions and Boundary-Controlled Convergence Rates}
 \author{Haobo Ma\\{\small Research Department, CHRONOAI PTE.\ LTD., Singapore}\\{\small\texttt{haobo@chronoai.co}}}
@@ -58,14 +59,16 @@ in terms of a nonnegative discrete local-time functional.  For mixing SFTs
 with Parry measure, a finite follower-resolving observer graph, together with
 the current terminal symbol in a refined ambiguous product graph, yields both
 the boundary thickness constant and a higher-block invariant ambiguity exponent
-directly from finite-state data.  For regular events under H\"older Gibbs
-measures, the same refined ambiguous graph supports a boundary path shift whose
-pressure governs scan-error decay through the gap
+directly from finite-state data.  For H\"older Gibbs measures, the same refined
+ambiguous graph supports a boundary path shift whose reachable recurrent
+components determine an event-relative boundary pressure governing scan-error
+decay through the gap
 $P_X(\phi)-P_\partial(\phi)$.  We then record the resulting
 boundary-to-error transfer consequences of the exact boundary decomposition,
-including a count-based same-length regime and an auxiliary filtration-level
-extension to log-regular cylinder measures showing via a non-stationary product
-example that polynomial losses are genuine.  As fully worked examples, we
+including a count-based same-length regime and, in
+Appendix~\ref{sub:nonuniform}, an auxiliary filtration-level extension to
+log-regular cylinder measures showing via a non-stationary product example
+that polynomial losses are genuine.  As fully worked examples, we
 give an exact parity-resolved formula for an explicit event $\mathsf{E}$ on
 the golden-mean shift with its Parry measure, and for the one-parameter
 locally constant Gibbs potential $\varphi_t(x)=t\,\mathbf{1}_{\{x_0=0\}}$ we
@@ -104,29 +107,45 @@ $\mathcal{F}_m$ (equivalently, the cylinder decomposition on the symbolic
 readout space) and the optimality of the threshold classifier
 $p_m\ge 1/2$ are classical
 \cite{Tsybakov2009Nonparametric,DevroyeGyorfiLugosi1996}.  We recall them in
-Section~\ref{sec:scan} to make the paper self-contained, and
-Proposition~\ref{prop:scan-error-cylinder} reorganizes that atomwise Bayes risk
-into the exact boundary decomposition that drives the later rate statements.
-The core contributions of the paper are:
+Section~\ref{sec:scan} to make the paper self-contained.  In particular,
+Proposition~\ref{prop:scan-error-cylinder} reorganizes that atomwise Bayes
+risk into the exact boundary decomposition used throughout the paper,
+Theorem~\ref{thm:scan-tanaka} rewrites the same bookkeeping as a discrete
+Tanaka identity, and the later transfer statements are immediate once this
+decomposition is combined with the relevant cylinder-mass estimates.  The
+main symbolic results therefore begin when one imposes a finite-state
+observer structure on the ambiguous prefixes of the event.
+
+The main claims of the paper are:
 \begin{enumerate}[label=(\roman*)]
-\item An \emph{exact atomwise Bayes-risk decomposition}, centered at
-  Proposition~\ref{prop:scan-error-cylinder}, together with the associated
-  \emph{discrete Tanaka identity}
-  (Theorem~\ref{thm:scan-tanaka}) connecting error decay to the accumulation
-  of threshold crossings of the martingale $(p_m)$.
 \item A \emph{finite-state boundary observer theorem} for Parry SFTs
   (Theorem~\ref{thm:finite-state-posterior}): a finite follower-resolving
   observer graph determines both the thickness parameter and, together with
   Proposition~\ref{prop:higher-block-invariance}, a higher-block invariant
   normalized ambiguity exponent through the spectral radius of the refined
   ambiguous product graph on terminal symbols and observer states.
-\item A \emph{boundary pressure theorem} for H\"older Gibbs states
+\item A \emph{componentwise boundary pressure theorem} for H\"older Gibbs states
   (Theorem~\ref{thm:weighted-boundary-pressure}): the refined ambiguous
   product graph defines a boundary path shift, and the weighted boundary
-  partition sum grows on the exponential scale
-  $e^{m(P_\partial(\phi)-P_X(\phi))}$, where
-  $P_\partial(\phi):=P_{\Sigma_\partial}(\phi\circ\pi_\partial)$ is the
-  boundary pressure.
+  partition sum is controlled by the reachable recurrent boundary components,
+  so the exponent is the pressure gap
+  $P_X(\phi)-P_\partial(\phi)$ with
+  $P_\partial(\phi)=\max_{C\in\mathfrak{C}_\partial}P_C(\phi)$.
+\item Two \emph{fully explicit golden-mean computations}:
+  Example~\ref{ex:golden-mean-specialization} gives an exact parity-resolved
+  scan-error formula with $\delta_\partial(\mathsf{E})=1/2$, and
+  Example~\ref{ex:golden-mean-gibbs-weighted} computes the non-Parry Gibbs
+  pressure gap on the same refined boundary graph.
+\end{enumerate}
+
+The filtration-level identities recorded earlier serve as preparatory input
+for these symbolic theorems:
+\begin{enumerate}[label=(\roman*),resume]
+\item An \emph{exact atomwise Bayes-risk decomposition}, centered at
+  Proposition~\ref{prop:scan-error-cylinder}, together with the associated
+  \emph{discrete Tanaka identity}
+  (Theorem~\ref{thm:scan-tanaka}) connecting error decay to the accumulation
+  of threshold crossings of the martingale $(p_m)$.
 \item \emph{Transfer propositions and corollaries} converting boundary counts
   or weighted boundary pressure into scan-error rates, namely
   Proposition~\ref{thm:boundary-dimension},
@@ -145,14 +164,16 @@ supplied; their proofs are immediate consequences of the exact atomwise
 decomposition in Proposition~\ref{prop:scan-error-cylinder} together with the
 appropriate cylinder-mass estimates.  The genuinely new symbolic-dynamical
 content therefore lies in the finite-state mechanism of
-Theorem~\ref{thm:finite-state-posterior} and in the boundary pressure theorem
-Theorem~\ref{thm:weighted-boundary-pressure}, which upgrades the regular
-boundary language to a bona fide sofic pressure object for H\"older Gibbs
-measures, with boundary pressure $P_\partial(\phi)$ replacing the raw boundary
-counts.  Examples~\ref{ex:golden-mean-specialization}
-and~\ref{ex:golden-mean-gibbs-weighted} then work out the same
-golden-mean event in two complementary regimes: an exact parity-resolved
-Parry formula and an explicit non-Parry Gibbs pressure-gap computation.
+Theorem~\ref{thm:finite-state-posterior}, in the componentwise boundary
+pressure theorem Theorem~\ref{thm:weighted-boundary-pressure}, and in the
+exact golden-mean computations of
+Examples~\ref{ex:golden-mean-specialization}
+and~\ref{ex:golden-mean-gibbs-weighted}.  These three ingredients are the
+paper's main outputs; the earlier decomposition, Tanaka identity, and transfer
+principles are the filtration-level tools that make those outputs effective.
+For completeness, the auxiliary log-regular transfer principle and its
+non-stationary sharpness example are recorded separately in
+Appendix~\ref{sub:nonuniform}.
 
 \subsection{Heuristic comparison with margin assumptions}
 \label{sub:margin}
@@ -250,6 +271,23 @@ criteria for when factor images of Gibbs measures remain Gibbs.  In a
 different direction, Garc{\'\i}a-Ramos and Pavlov
 \cite{GarciaRamosPavlov2019} use extender-set containment to compare cylinder
 weights for measures of maximal entropy.
+
+The thermodynamic language around our quantity $P_\partial(\varphi)$ is also
+close in notation, but not in definition, to the \emph{weighted topological
+pressure} literature.  Barral and Feng
+\cite{BarralFeng2012WeightedThermodynamic}, Feng and Huang
+\cite{FengHuang2016WeightedPressure}, Tsukamoto
+\cite{Tsukamoto2023WeightedPressure}, and Alibabaei
+\cite{Alibabaei2025WeightedPressure} study weighted entropy and pressure for
+factor towers or factor maps, with an explicit weight vector and a variational
+principle mixing the entropy of the ambient system with the entropies of its
+projected systems.  By contrast, the present paper fixes a single event
+$\mathsf{P}$ and builds a boundary observer for its ambiguous prefixes; the
+quantity $P_\partial(\varphi)$ is then the ordinary topological pressure of
+$\varphi\circ\pi_\partial$ on the event-dependent boundary path shift cut out
+by that observer.  Thus our pressure is \emph{event-relative} and
+\emph{observer-relative}, not a weighted-pressure invariant attached to a
+factor map or an entropy-weighted tower.
 
 Recent ETDS work at the symbolic-information interface also includes
 MacDonald \cite{MacDonald2024}, who studies when a lower-entropy subshift can
@@ -355,12 +393,12 @@ $\overline{B}(\xi,2^{-m})$ around any of its points.
 
 \begin{proposition}[Prefix-decidable events are clopen cylinder unions]
 \label{prop:decidable-clopen}
-A set $P\subseteq\Omega_\infty$ is in $\mathcal{A}_m$
+A set $A\subseteq\Omega_\infty$ is in $\mathcal{A}_m$
 if and only if it is a union of length-$m$ cylinders $[a]$, equivalently, a
 finite union of clopen sets determined by agreement on the first $m$ symbols.
 Consequently, an event $\mathsf{P}\in\mathcal{F}_m$ is decided by depth $m$ if
-and only if there exists $P\in\mathcal{A}_m$ such that
-$\mathsf{P}=\omega_\infty^{-1}(P)$ modulo $\mu$-null sets; equivalently, the
+and only if there exists $A\in\mathcal{A}_m$ such that
+$\mathsf{P}=\omega_\infty^{-1}(A)$ modulo $\mu$-null sets; equivalently, the
 truth of $\mathsf{P}$ is determined by the first $m$ symbols of the readout.
 \end{proposition}
 
@@ -914,12 +952,14 @@ is automatic.
 
 Condition~\emph{(2)} makes the presentation follower-resolving in the sense
 that $q(a)$ determines the admissible one-symbol continuations after $a$.
-It need not determine the last symbol of $a$.  In a one-step SFT that last
-symbol controls adjacency, so the next theorem counts boundary words on the
-refined ambiguous product graph of terminal symbols and observer states.
-Equivalently, the counting recurrence need not close on observer states alone:
-the proof must also know the terminal symbol $a_{m-1}$ in order to test the
-one-step admissibility condition $A_{a_{m-1},j}=1$ for the next symbol $j$.
+It need not determine the last symbol of $a$.  Because the presentation is
+already follower-resolving, one could write the boundary-counting recurrence
+directly on observer states by weighting each transition $u\to v$ with the
+number of symbols $j$ for which $T_j(u)=v$.  For the one-step SFT argument
+below, however, it is convenient to keep the terminal symbol explicitly and to
+work with the refined ambiguous product graph of pairs $(i,u)$, where the
+matrix entries are simply the $0$--$1$ indicators
+$1_{\{A_{ij}=1,\ T_j(u)=v\}}$.
 
 \begin{theorem}[Finite-state posterior theorem]
 \label{thm:finite-state-posterior}
@@ -1181,11 +1221,13 @@ N_m(\partial\mathsf{P})
 \hfill$\triangleleft$
 
 \smallskip
-The point of the refinement is that the aggregated observer-state counts need
-not satisfy a closed recurrence on $\mathcal{S}_\partial^{\mathrm{acc}}$: the same
-observer state may occur with different last symbols.  The matrix
-$\widetilde{B}$ records exactly the extra symbol needed to recover the
-one-step SFT adjacency.  Summing over terminal refined states gives
+The point of the refinement is therefore not that a recurrence on
+$\mathcal{S}_\partial^{\mathrm{acc}}$ is impossible.  Rather, the refined graph
+packages the one-step adjacency test and the deterministic observer update
+into a single $0$--$1$ matrix on pairs $(i,u)$.  When several symbols lead from
+the same observer state $u$ to the same observer state $v$, those
+multiplicities are represented by distinct refined states instead of larger
+matrix entries.  Summing over terminal refined states gives
 \[
 N_m(\partial\mathsf{P})=r_1\widetilde{B}^{\,m-1}\mathbf{1},
 \]
@@ -1529,23 +1571,41 @@ so same-length cylinders generally differ exponentially with the word
 \cite{Bowen1975,WaltersErgodicTheory}.  In that regime a count-only law in
 terms of $N_m(\partial\mathsf{P})$ is no longer natural; the corresponding
 quantity is a weighted boundary partition sum.  The next subsection turns that
-observation into a pressure theorem for regular finite-state events.  In
+observation into a pressure theorem for finite-state events with possibly
+reducible or periodic boundary graphs.  In
 particular, the invariant Gibbs replacement for the same-length count laws in
 Proposition~\ref{thm:boundary-dimension}
 and Corollary~\ref{thm:volume-boundary-scaling} is the boundary-pressure law
 $P_X(\phi)-P_\partial(\phi)$ below, not the auxiliary log-regular statement of
-Section~\ref{sub:nonuniform}.
+Appendix~\ref{sub:nonuniform}.
 \end{remark}
 
-\subsection{Weighted boundary pressure for regular events}
+\subsection{Weighted boundary pressure from reachable boundary components}
 \label{sub:weighted-pressure}
 
-\begin{definition}[Regular event and boundary path shift]
+We isolate one point of terminology before the formal definition.  The
+quantity $P_\partial(\phi)$ introduced in this subsection is \emph{not} the
+weighted topological pressure of Barral--Feng
+\cite{BarralFeng2012WeightedThermodynamic}, Feng--Huang
+\cite{FengHuang2016WeightedPressure}, Tsukamoto
+\cite{Tsukamoto2023WeightedPressure}, or Alibabaei
+\cite{Alibabaei2025WeightedPressure}.  Those theories start from a factor map
+or a tower of factor maps together with a weight vector and define a global
+thermodynamic invariant through weighted Bowen balls or equivalent weighted
+covering formalisms.  Here there is no factor tower and no entropy-weight
+vector.  Instead, one fixes the event $\mathsf{P}$, forms the refined
+ambiguous observer graph, and then takes the ordinary pressure of
+$\phi\circ\pi_\partial$ on the reachable recurrent part of the resulting
+boundary path shift.  The adjective ``boundary'' refers to ambiguous prefixes
+of $\mathsf{P}$, and ``event-relative'' means that changing $\mathsf{P}$
+changes the graph and hence the pressure object itself.
+
+\begin{definition}[Boundary path shift, reachable boundary components, and regularity]
 \label{def:regular-event}
 Assume the hypotheses of Theorem~\ref{thm:finite-state-posterior}.  We call
 $\mathsf{P}$ \emph{regular} if the refined ambiguous matrix
 $\widetilde{B}$ is primitive.  The associated \emph{boundary path shift} is
-the one-sided mixing SFT
+the one-sided SFT
 \[
 \Sigma_\partial
 :=\{r_0r_1\cdots\in\mathcal{R}_\partial^{\NN}:
@@ -1559,11 +1619,26 @@ Writing each refined state as $r_k=(i_k,u_k)$, define the symbol factor
 \]
 Because $\widetilde{B}_{(i,u),(j,v)}=1$ forces $A_{ij}=1$,
 the image $\pi_\partial(\Sigma_\partial)$ lies in $X$.  For any continuous
-potential $\phi:X\to\mathbb{R}$, we write
+potential $\phi:X\to\mathbb{R}$, write $\mathcal{I}\subseteq\mathcal{R}_\partial$
+for the nonempty set of one-step refined boundary states
 \[
-P_\partial(\phi):=P_{\Sigma_\partial}(\phi\circ\pi_\partial)
+\mathcal{I}:=\{r\in\mathcal{R}_\partial:(r_1)_r=1\},
 \]
-for the \emph{boundary pressure} induced by the refined ambiguous graph.
+let $\mathfrak{C}_\partial$ be the collection of strongly connected components
+of $G(\widetilde{B})$ that are reachable from $\mathcal{I}$ and contain at
+least one directed cycle, and for each $C\in\mathfrak{C}_\partial$ let
+$\Sigma_C\subseteq\Sigma_\partial$ denote the irreducible edge shift carried by
+$C$.  Let $\Sigma_\partial^{\mathrm{vis}}\subseteq\Sigma_\partial$ be the
+subshift obtained by removing the states that are not reachable from
+$\mathcal{I}$.  We then write
+\[
+P_C(\phi):=P_{\Sigma_C}(\phi\circ\pi_\partial|_{\Sigma_C}),
+\qquad
+P_\partial(\phi):=P_{\Sigma_\partial^{\mathrm{vis}}}(\phi\circ\pi_\partial)
+=\max_{C\in\mathfrak{C}_\partial}P_C(\phi)
+\]
+for the \emph{boundary pressure} induced by the refined ambiguous graph.  If
+$\mathfrak{C}_\partial=\varnothing$, we set $P_\partial(\phi):=-\infty$.
 \end{definition}
 
 \begin{lemma}[Restricted initial-state partition sums on a primitive SFT]
@@ -1657,6 +1732,144 @@ gives the lower bound for all $n\ge 1$.  Taking $A_I^+:=A_+$ completes the
 proof.
 \end{proof}
 
+\begin{lemma}[Reachable component pressures control initial partition sums]
+\label{lem:reachable-component-partition-sums}
+Let $Y$ be a one-step SFT over a finite alphabet $\mathcal{A}$, let
+$\psi:Y\to\mathbb{R}$ be H\"older, and let $I\subseteq\mathcal{A}$ be nonempty.
+Write $\mathfrak{C}_I$ for the strongly connected components of $G(Y)$ that
+are reachable from $I$ and contain a directed cycle.  For
+$C\in\mathfrak{C}_I$, let $Y_C$ be the irreducible edge shift carried by $C$,
+let $p_C$ be its period, and let
+\[
+P_C(\psi):=P_{Y_C}(\psi|_{Y_C}).
+\]
+If $\mathfrak{C}_I=\varnothing$, then
+$\mathcal{Z}_m^I(\psi)=0$ for all large $m$.  Assume henceforth that
+$\mathfrak{C}_I\neq\varnothing$, and set
+\[
+P_I(\psi):=\max_{C\in\mathfrak{C}_I}P_C(\psi).
+\]
+Then the following hold.
+\begin{enumerate}[label=(\roman*)]
+\item There exists $A_+>0$ such that
+  \[
+  \mathcal{Z}_m^I(\psi)\le A_+e^{mP_I(\psi)}
+  \qquad(m\ge 1).
+  \]
+  In particular,
+  \[
+  \limsup_{m\to\infty}\frac1m\log\mathcal{Z}_m^I(\psi)=P_I(\psi).
+  \]
+\item Let $C\in\mathfrak{C}_I$ satisfy $P_C(\psi)=P_I(\psi)$, and let
+  $\beta=b_0\cdots b_{\ell-1}$ be an admissible bridge word whose first symbol
+  lies in $I$ and whose last symbol lies in $C$.  Then there exists
+  $A_-(\beta)>0$ such that
+  \[
+  \mathcal{Z}_{\ell+np_C}^I(\psi)
+  \ge A_-(\beta)e^{(\ell+np_C)P_I(\psi)}
+  \qquad(n\ge 0).
+  \]
+\item Suppose there is a component $C\in\mathfrak{C}_I$ with
+  $P_C(\psi)=P_I(\psi)$ and admissible bridge words
+  $\beta_0,\dots,\beta_{p_C-1}$ from $I$ into $C$ whose lengths realize every
+  residue class modulo $p_C$:
+  \[
+  |\beta_r|\equiv r \pmod{p_C}
+  \qquad(0\le r\le p_C-1).
+  \]
+  Then there exist $A_->0$ and $m_0\ge 1$ such that
+  \[
+  \mathcal{Z}_m^I(\psi)\ge A_-e^{mP_I(\psi)}
+  \qquad(m\ge m_0).
+  \]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+If $\mathfrak{C}_I=\varnothing$, then every path starting from $I$ stays in the
+finite acyclic subgraph formed by the vertices reachable from $I$, so there are
+no admissible words of large length starting in $I$.  Thus
+$\mathcal{Z}_m^I(\psi)=0$ for all large $m$.
+
+Assume now that $\mathfrak{C}_I\neq\varnothing$.  Let $T$ be the set of states
+reachable from $I$ that do not belong to any component of $\mathfrak{C}_I$.
+Then the subgraph induced by $T$ is acyclic, so every admissible word starting
+from $I$ either has length at most $|T|$ or admits a decomposition
+$w=\beta v$ in which $\beta$ is one of finitely many admissible bridge words
+from $I$ into some component $C\in\mathfrak{C}_I$, and $v$ stays inside $C$.
+Fix a finite family $\mathcal{B}$ of such bridge words that contains one
+representative for every possible first entrance into every component of
+$\mathfrak{C}_I$.
+
+For each $C\in\mathfrak{C}_I$, standard thermodynamic formalism on the
+irreducible SFT $Y_C$ gives constants $K_C^-,K_C^+>0$ such that the unrestricted
+partition sums on $Y_C$ satisfy
+\[
+K_C^-e^{nP_C(\psi)}
+\le \mathcal{Z}_n(\psi|_{Y_C})
+\le K_C^+e^{nP_C(\psi)}
+\qquad(n\ge 1)
+\]
+\cite[Ch.~1]{Bowen1975},\cite[Ch.~9]{WaltersErgodicTheory}.  Because
+$\mathcal{B}$ is finite and $\psi$ is bounded, each bridge contributes only a
+uniform multiplicative constant.  Summing over the finitely many choices of
+bridge therefore yields
+\[
+\mathcal{Z}_m^I(\psi)\le A_+e^{mP_I(\psi)}
+\qquad(m\ge 1)
+\]
+for some $A_+>0$, proving the upper bound in~\emph{(i)}.
+
+For the lower bound along a residue class, fix $C$ and $\beta$ as in~\emph{(ii)},
+write $p:=p_C$, and let $a$ be the last symbol of $\beta$.  If
+$C=C_0\sqcup\cdots\sqcup C_{p-1}$ is the cyclic decomposition with $a\in C_0$,
+then $\sigma^p$ restricted to
+\[
+Y_{C,0}:=\{y\in Y_C:y_0\in C_0\}
+\]
+is topologically mixing.  The potential
+\[
+\psi^{(p)}:=\sum_{k=0}^{p-1}\psi\circ\sigma^k
+\]
+is H\"older on $(Y_{C,0},\sigma^p)$, and its pressure is
+$P_{Y_{C,0}}(\psi^{(p)})=pP_C(\psi)$.  Applying
+Lemma~\ref{lem:restricted-initial-partition-sum} to the primitive one-step
+presentation of $(Y_{C,0},\sigma^p)$ with initial symbol corresponding to $a$
+gives a constant $B_a^->0$ such that the partition sum over words in $Y_C$ of
+length $np+1$ starting at $a$ is bounded below by
+$B_a^-e^{npP_C(\psi)}$ for every $n\ge 0$.  Prepending the fixed bridge $\beta$
+changes the Birkhoff weight by at most a uniform multiplicative constant, so
+there exists $A_-(\beta)>0$ with
+\[
+\mathcal{Z}_{|\beta|+np}^I(\psi)
+\ge A_-(\beta)e^{(|\beta|+np)P_C(\psi)}
+=A_-(\beta)e^{(|\beta|+np)P_I(\psi)}
+\qquad(n\ge 0).
+\]
+This proves~\emph{(ii)}.  Combining~\emph{(ii)} with the upper bound already
+proved shows that
+\[
+\limsup_{m\to\infty}\frac1m\log\mathcal{Z}_m^I(\psi)=P_I(\psi),
+\]
+completing~\emph{(i)}.
+
+Finally, assume the residue-complete visibility hypothesis of~\emph{(iii)}.
+For each residue class $r$ modulo $p_C$, apply~\emph{(ii)} to $\beta_r$ to
+obtain a constant $A_r^->0$ such that
+\[
+\mathcal{Z}_{|\beta_r|+np_C}^I(\psi)
+\ge A_r^-e^{(|\beta_r|+np_C)P_I(\psi)}
+\qquad(n\ge 0).
+\]
+Choose $m_0$ so large that every $m\ge m_0$ can be written as
+$m=|\beta_r|+np_C$ for some $r$ and some $n\ge 0$.  Then
+\[
+\mathcal{Z}_m^I(\psi)\ge \min_{0\le r<p_C}A_r^-\,e^{mP_I(\psi)}
+\qquad(m\ge m_0),
+\]
+which is~\emph{(iii)}.
+\end{proof}
+
 \begin{lemma}[Gibbs boundary-counting lemma]
 \label{lem:gibbs-counting}
 Assume the hypotheses of
@@ -1681,13 +1894,14 @@ state sequence
 \[
 r(a):=(a_0,q(a_0))(a_1,q(a_0a_1))\cdots(a_{m-1},q(a_0\cdots a_{m-1}))
 \]
-is a word in $\mathcal{L}_m(\Sigma_\partial)$ whose first symbol lies in
+is an admissible length-$m$ path in the refined ambiguous graph whose first
+symbol lies in
 \[
 \mathcal{I}:=\{r\in\mathcal{R}_\partial:(r_1)_r=1\}.
 \]
-Conversely, every word $r_0\cdots r_{m-1}\in\mathcal{L}_m(\Sigma_\partial)$ with
-$r_0\in\mathcal{I}$ is uniquely of the form $r(a)$ for an admissible boundary
-word $a\in\mathcal{L}_m(X)$.
+Conversely, every admissible length-$m$ path $r_0\cdots r_{m-1}$ in the
+refined ambiguous graph with $r_0\in\mathcal{I}$ is uniquely of the form
+$r(a)$ for an admissible boundary word $a\in\mathcal{L}_m(X)$.
 \end{lemma}
 
 \begin{proof}
@@ -1718,10 +1932,10 @@ $r(a)\in\mathcal{R}_\partial^m$.  Moreover,
 Definition~\ref{def:finite-posterior}\emph{(2)} gives
 $T_{a_{k+1}}(q(a_0\cdots a_k))=q(a_0\cdots a_{k+1})$, so
 $\widetilde{B}_{r_k,r_{k+1}}=1$ for each $k<m-1$.  Hence
-$r(a)\in\mathcal{L}_m(\Sigma_\partial)$.  Its first symbol lies in
+$r(a)$ is an admissible refined path of length $m$.  Its first symbol lies in
 $\mathcal{I}$ because $[a_0]\in\partial_1\mathsf{P}$.
 
-Conversely, let $r_0\cdots r_{m-1}\in\mathcal{L}_m(\Sigma_\partial)$ with
+Conversely, let $r_0\cdots r_{m-1}$ be an admissible refined path with
 $r_0\in\mathcal{I}$, and write $r_k=(i_k,u_k)$.  Since
 $\widetilde{B}_{r_k,r_{k+1}}=1$, we have $A_{i_ki_{k+1}}=1$ for every $k<m-1$,
 so $a:=i_0\cdots i_{m-1}$ is admissible in $X$.  Because $r_0\in\mathcal{I}$,
@@ -1736,9 +1950,10 @@ states, and the observer states are then forced by the deterministic update
 rule in Definition~\ref{def:finite-posterior}\emph{(2)}.
 \end{proof}
 
-\begin{theorem}[Boundary pressure theorem for regular Gibbs events]
+\begin{theorem}[Boundary pressure theorem via reachable boundary components]
 \label{thm:weighted-boundary-pressure}
-Let $X$ be a mixing one-step SFT on $\{0,1\}$, let
+Let $\mathcal{A}$ be a finite alphabet, let $X$ be a mixing one-step SFT on
+$\mathcal{A}$, let
 $\phi:X\to\mathbb{R}$ be H\"older, and let $\mu_\phi$ be its equilibrium
 state.  Let $\mathsf{P}\in\mathcal{F}_\infty$ admit a finite-state posterior
 presentation with respect to $\mu_\phi$ as in
@@ -1747,34 +1962,67 @@ respect to $\mu_\phi$ as in
 Proposition~\ref{prop:automaton-regular-sufficient} and
 Theorem~\ref{thm:finite-state-posterior}.  Thus the observer in this theorem is
 built for the Gibbs measure $\mu_\phi$, not merely imported from the Parry
-measure unless the decisive languages coincide as above.  Assume that
-$\mathsf{P}$ is regular in the sense of
-Definition~\ref{def:regular-event}.  Let
+measure unless the decisive languages coincide as above.  Let
 $P_X(\phi)$ denote the topological pressure of $\phi$ on $X$, and set
-$\phi_\partial:=\phi\circ\pi_\partial$, so that
-$P_\partial(\phi)=P_{\Sigma_\partial}(\phi_\partial)$.  For $m\ge 1$, define
+$\phi_\partial:=\phi\circ\pi_\partial$.  Write $\mathcal{I}$ and
+$\mathfrak{C}_\partial$ as in Definition~\ref{def:regular-event}.  For $m\ge 1$, define
 the weighted boundary sum
 \[
 Z_m(\partial\mathsf{P},\phi)
 :=\sum_{C=[a]\in\partial_m\mathsf{P}}
 \exp\!\bigl(\sup_{x\in C}S_m\phi(x)-mP_X(\phi)\bigr).
 \]
-Then $Z_m(\partial\mathsf{P},\phi)$ has exponential scale
-$e^{m(P_\partial(\phi)-P_X(\phi))}$, and the boundary cylinders are uniformly
-thick.  More precisely, the following hold.
+If $\mathfrak{C}_\partial=\varnothing$, then
+$Z_m(\partial\mathsf{P},\phi)=0$ for all large $m$.  Assume henceforth that
+$\mathfrak{C}_\partial\neq\varnothing$.  Then $Z_m(\partial\mathsf{P},\phi)$
+has exponential scale governed by the maximum boundary-component pressure
+\[
+P_\partial(\phi)=\max_{C\in\mathfrak{C}_\partial}P_C(\phi),
+\]
+and the boundary cylinders are uniformly thick.  This is the event-relative
+boundary pressure attached to the refined observer graph, not relative pressure
+for a factor map.  More precisely, the following hold.
 \begin{enumerate}[label=(\arabic*)]
-\item There exist constants $C_-,C_+>0$ such that for every $m\ge 1$,
+\item There exists a constant $C_+>0$ such that for every $m\ge 1$,
+  \[
+  Z_m(\partial\mathsf{P},\phi)\le
+  C_+\,e^{-m(P_X(\phi)-P_\partial(\phi))},
+  \]
+  and
+  \[
+  \limsup_{m\to\infty}\frac1m\log Z_m(\partial\mathsf{P},\phi)
+  =P_\partial(\phi)-P_X(\phi).
+  \]
+\item Let $C\in\mathfrak{C}_\partial$ satisfy $P_C(\phi)=P_\partial(\phi)$, and
+  let $\beta$ be a bridge word in the refined ambiguous graph from a state of
+  $\mathcal{I}$ into $C$.  If $p_C$ is the period of $C$ and $|\beta|=\ell$,
+  then there exists $C_-(\beta)>0$ such that
+  \[
+  Z_{\ell+np_C}(\partial\mathsf{P},\phi)
+  \ge C_-(\beta)\,
+  e^{-(\ell+np_C)(P_X(\phi)-P_\partial(\phi))}
+  \qquad(n\ge 0).
+  \]
+\item Suppose some component $C\in\mathfrak{C}_\partial$ with
+  $P_C(\phi)=P_\partial(\phi)$ admits bridge words
+  $\beta_0,\dots,\beta_{p_C-1}$ from $\mathcal{I}$ into $C$ whose lengths
+  realize every residue class modulo $p_C$.  Then there exist constants
+  $C_-,C_+>0$ and $m_0\ge 1$ such that for every $m\ge m_0$,
   \[
   C_-\,e^{-m(P_X(\phi)-P_\partial(\phi))}
   \le Z_m(\partial\mathsf{P},\phi)
   \le
-  C_+\,e^{-m(P_X(\phi)-P_\partial(\phi))},
+  C_+\,e^{-m(P_X(\phi)-P_\partial(\phi))}.
   \]
-  and in particular
+  In particular,
   \[
   \lim_{m\to\infty}\frac1m\log Z_m(\partial\mathsf{P},\phi)
   =P_\partial(\phi)-P_X(\phi).
   \]
+  This residue-complete visibility condition is automatic when a
+  maximal-pressure component is primitive, and hence in particular when
+  $\mathsf{P}$ is regular in the sense of
+  Definition~\ref{def:regular-event}.
 \item There exists $\theta_\phi>0$ such that every boundary cylinder
   $C\in\partial_m\mathsf{P}$ satisfies
   \[
@@ -1782,6 +2030,70 @@ thick.  More precisely, the following hold.
   \]
 \end{enumerate}
 \end{theorem}
+
+\begin{lemma}[Quasi-Bernoulli lower bound for exact admissible concatenations]
+\label{lem:qb-exact-concat}
+Let $X$ be a mixing one-step SFT on a finite alphabet, let
+$\phi:X\to\mathbb{R}$ be H\"older, and let $\mu_\phi$ be its equilibrium
+state.  Then there exists a constant $C_{\mathrm{qb}}\ge 1$ such that for
+every pair of admissible words $u,v\in\mathcal{L}(X)$ with $uv$ admissible,
+\[
+\mu_\phi([uv])\ge C_{\mathrm{qb}}^{-1}\mu_\phi([u])\mu_\phi([v]).
+\]
+Equivalently,
+\[
+\mu_\phi([v]\mid [u])\ge C_{\mathrm{qb}}^{-1}\mu_\phi([v])
+\]
+whenever $uv$ is admissible.
+\end{lemma}
+
+\begin{proof}
+Bowen's Gibbs estimate on the mixing SFT $X$ gives constants $c_-,c_+>0$ such
+that for every admissible word $a$ of length $m\ge 1$,
+\[
+c_-\exp\!\bigl(\sup_{x\in[a]}S_m\phi(x)-mP_X(\phi)\bigr)
+\le \mu_\phi([a])
+\le
+c_+\exp\!\bigl(\sup_{x\in[a]}S_m\phi(x)-mP_X(\phi)\bigr)
+\]
+\cite{Bowen1975,WaltersErgodicTheory}.  Since $\phi$ is H\"older, its Bowen
+variation is uniformly bounded: there exists $V_\phi<\infty$ such that for
+every admissible word $a$ of length $m$,
+\[
+\sup_{x,y\in[a]}|S_m\phi(x)-S_m\phi(y)|\le V_\phi.
+\]
+
+Now let $u,v$ be admissible, with lengths $m$ and $n$, and assume that $uv$ is
+admissible.  Choose $y\in[v]$ with
+$S_n\phi(y)=\sup_{z\in[v]}S_n\phi(z)$; this exists because $[v]$ is compact and
+$S_n\phi$ is continuous.  Prefixing $u$ to $y$ gives a point $z:=uy\in[uv]$.
+Since every point of $[u]$ has the same first $m$ symbols,
+\[
+S_m\phi(z)\ge \sup_{x\in[u]}S_m\phi(x)-V_\phi.
+\]
+Therefore
+\[
+\sup_{x\in[uv]}S_{m+n}\phi(x)
+\ge S_{m+n}\phi(z)
+=S_m\phi(z)+S_n\phi(y)
+\ge \sup_{x\in[u]}S_m\phi(x)+\sup_{x\in[v]}S_n\phi(x)-V_\phi.
+\]
+Applying the lower Gibbs bound to $[uv]$ and the upper Gibbs bounds to $[u]$
+and $[v]$ yields
+\[
+\mu_\phi([uv])
+\ge c_-e^{-V_\phi}
+\exp\!\bigl(\sup_{x\in[u]}S_m\phi(x)-mP_X(\phi)\bigr)
+\exp\!\bigl(\sup_{x\in[v]}S_n\phi(x)-nP_X(\phi)\bigr),
+\]
+and therefore
+\[
+\mu_\phi([uv])\ge c_-c_+^{-2}e^{-V_\phi}\mu_\phi([u])\mu_\phi([v]).
+\]
+Thus the claim holds with
+$C_{\mathrm{qb}}:=c_+^2e^{V_\phi}/c_-$.  The conditional-probability form is
+the same inequality divided by $\mu_\phi([u])>0$.
+\end{proof}
 
 \begin{proof}
 Write
@@ -1800,8 +2112,8 @@ Thus
 \[
 D(a):=[r(a)]\subseteq\Sigma_\partial.
 \]
-Because $\widetilde{B}$ is primitive, every such length-$m$ path extends to an
-infinite path in $\Sigma_\partial$, so $D(a)$ is nonempty.  Moreover,
+Every such length-$m$ path extends to an infinite path in $\Sigma_\partial$
+because it lies on the prefix of an actual boundary word.  Moreover,
 $\pi_\partial(D(a))\subseteq[a]$ and both sets have the same first $m$
 symbols.
 
@@ -1836,33 +2148,64 @@ where
 r_0\in\mathcal{I}}}
 \exp\!\bigl(\sup_{y\in[r_0\cdots r_{m-1}]}S_m\phi_\partial(y)\bigr).
 \]
-Regularity means that $\Sigma_\partial$ is primitive, so
-Lemma~\ref{lem:restricted-initial-partition-sum} applied to
-$Y=\Sigma_\partial$, $\psi=\phi_\partial$, and $I=\mathcal{I}$ yields
-constants $A_{\mathcal{I}}^-,A_{\mathcal{I}}^+>0$ such that
-\[
-A_{\mathcal{I}}^-e^{mP_\partial(\phi)}
-\le
-\mathcal{Z}_m^{\mathcal{I}}(\phi_\partial)
-\le
-A_{\mathcal{I}}^+e^{mP_\partial(\phi)}
-\qquad(m\ge 1).
-\]
-Combining the last two displays proves~\emph{(1)} with
-$C_-:=e^{-V_\phi}A_{\mathcal{I}}^-$ and $C_+:=e^{V_\phi}A_{\mathcal{I}}^+$.
 
-For~\emph{(2)}, let
+If $\mathfrak{C}_\partial=\varnothing$, then
+Lemma~\ref{lem:reachable-component-partition-sums} gives
+$\mathcal{Z}_m^{\mathcal{I}}(\phi_\partial)=0$ for all large $m$, hence also
+$Z_m(\partial\mathsf{P},\phi)=0$ for all large $m$.  Assume now that
+$\mathfrak{C}_\partial\neq\varnothing$.  By
+Lemma~\ref{lem:reachable-component-partition-sums} applied to
+$Y=\Sigma_\partial$, $\psi=\phi_\partial$, and $I=\mathcal{I}$, there exists
+$A_+>0$ such that
+\[
+\mathcal{Z}_m^{\mathcal{I}}(\phi_\partial)
+\le A_+e^{mP_\partial(\phi)}
+\qquad(m\ge 1),
+\]
+and
+\[
+\limsup_{m\to\infty}\frac1m\log
+\mathcal{Z}_m^{\mathcal{I}}(\phi_\partial)=P_\partial(\phi).
+\]
+Combining these with the Bowen-variation comparison proves~\emph{(1)} with
+$C_+:=e^{V_\phi}A_+$.
+
+For~\emph{(2)}, let $C\in\mathfrak{C}_\partial$ satisfy
+$P_C(\phi)=P_\partial(\phi)$ and let $\beta$ be a bridge word from
+$\mathcal{I}$ into $C$.  Lemma~\ref{lem:reachable-component-partition-sums}\emph{(ii)}
+gives $A_-(\beta)>0$ with
+\[
+\mathcal{Z}_{|\beta|+np_C}^{\mathcal{I}}(\phi_\partial)
+\ge A_-(\beta)e^{(|\beta|+np_C)P_\partial(\phi)}
+\qquad(n\ge 0).
+\]
+The lower Bowen-variation estimate therefore yields
+\[
+Z_{|\beta|+np_C}(\partial\mathsf{P},\phi)
+\ge e^{-V_\phi}A_-(\beta)
+e^{-(|\beta|+np_C)(P_X(\phi)-P_\partial(\phi))},
+\]
+which is exactly~\emph{(2)}.
+
+If the residue-complete visibility hypothesis of~\emph{(3)} holds, then
+Lemma~\ref{lem:reachable-component-partition-sums}\emph{(iii)} gives
+$A_->0$ and $m_0\ge 1$ such that
+\[
+\mathcal{Z}_m^{\mathcal{I}}(\phi_\partial)\ge A_-e^{mP_\partial(\phi)}
+\qquad(m\ge m_0).
+\]
+Combining this lower bound with the Bowen-variation comparison and the upper
+bound from~\emph{(1)} proves~\emph{(3)}.
+
+For~\emph{(4)}, let
 \[
 \mathcal{W}:=\{w_r^+,w_r^-:r\in\mathcal{R}_\partial\}.
 \]
 This is a finite family of admissible words, and each cylinder $[w]$ with
 $w\in\mathcal{W}$ has positive $\mu_\phi$-measure because equilibrium states
-for H\"older potentials on mixing SFTs have full support.  The same standard
-thermodynamic formalism gives the quasi-Bernoulli property: there exists
-$C_{\mathrm{qb}}\ge 1$ such that whenever $uv$ is admissible,
-\[
-\mu_\phi([uv])\ge C_{\mathrm{qb}}^{-1}\mu_\phi([u])\mu_\phi([v]).
-\]
+for H\"older potentials on mixing SFTs have full support.  Let
+$C_{\mathrm{qb}}$ be the exact-concatenation constant from
+Lemma~\ref{lem:qb-exact-concat}.
 Set
 \[
 \theta_\phi
@@ -1870,7 +2213,8 @@ Set
 \]
 Now let $C=[a]\in\partial_m\mathsf{P}$ and let
 $r:=(a_{m-1},q(a))\in\mathcal{R}_\partial$.  Then both $aw_r^+$ and $aw_r^-$
-are admissible by the resolving-window hypothesis, so
+are admissible by the resolving-window hypothesis.  Applying
+Lemma~\ref{lem:qb-exact-concat} with $u=a$ and $v=w_r^\pm$ gives
 \[
 \mu_\phi([aw_r^\pm]\mid[a])
 \ge C_{\mathrm{qb}}^{-1}\mu_\phi([w_r^\pm])
@@ -1881,11 +2225,9 @@ Definition~\ref{def:finite-posterior}\emph{(4)} implies that
 $[aw_r^+]$ lies in $\mathsf{P}$ modulo $\mu_\phi$-null sets and $[aw_r^-]$
 lies in $[a]\setminus\mathsf{P}$ modulo $\mu_\phi$-null sets.  Therefore
 \[
-\mu_\phi(\mathsf{P}\mid C)\ge \theta_\phi,
-\qquad
-1-\mu_\phi(\mathsf{P}\mid C)\ge \theta_\phi,
+\min\{\mu_\phi(\mathsf{P}\mid C),1-\mu_\phi(\mathsf{P}\mid C)\}\ge \theta_\phi,
 \]
-proving~\emph{(2)}.
+proving~\emph{(4)}.
 \end{proof}
 
 \begin{corollary}[Weighted transfer corollary from the boundary pressure theorem]
@@ -1897,22 +2239,49 @@ K_-\,Z_m(\partial\mathsf{P},\phi)
 \le \varepsilon_m(\mathsf{P};\mu_\phi)
 \le K_+\,Z_m(\partial\mathsf{P},\phi).
 \]
-Consequently there exist constants $L_-,L_+>0$ such that for every $m\ge 1$,
-\[
-L_-\,e^{-m(P_X(\phi)-P_\partial(\phi))}
-\le \varepsilon_m(\mathsf{P};\mu_\phi)
-\le
-L_+\,e^{-m(P_X(\phi)-P_\partial(\phi))}.
-\]
-In particular,
-\[
-P_X(\phi)>P_\partial(\phi)
-\]
-and
-\[
--\lim_{m\to\infty}\frac1m\log\varepsilon_m(\mathsf{P};\mu_\phi)
-=P_X(\phi)-P_\partial(\phi).
-\]
+If $\mathfrak{C}_\partial=\varnothing$, then
+$\varepsilon_m(\mathsf{P};\mu_\phi)=0$ for all large $m$.  Otherwise the
+following hold.
+\begin{enumerate}[label=(\arabic*)]
+\item There exists $L_+>0$ such that for every $m\ge 1$,
+  \[
+  \varepsilon_m(\mathsf{P};\mu_\phi)
+  \le L_+\,e^{-m(P_X(\phi)-P_\partial(\phi))}.
+  \]
+\item Let $C\in\mathfrak{C}_\partial$ satisfy $P_C(\phi)=P_\partial(\phi)$, and
+  let $\beta$ be a bridge word from $\mathcal{I}$ into $C$.  If $p_C$ is the
+  period of $C$ and $|\beta|=\ell$, then there exists $L_-(\beta)>0$ such that
+  \[
+  \varepsilon_{\ell+np_C}(\mathsf{P};\mu_\phi)
+  \ge L_-(\beta)\,
+  e^{-(\ell+np_C)(P_X(\phi)-P_\partial(\phi))}
+  \qquad(n\ge 0).
+  \]
+\item One has
+  \[
+  P_X(\phi)>P_\partial(\phi)
+  \]
+  and
+  \[
+  \limsup_{m\to\infty}\frac1m\log\varepsilon_m(\mathsf{P};\mu_\phi)
+  =-(P_X(\phi)-P_\partial(\phi)).
+  \]
+\item If the residue-complete visibility hypothesis from
+  Theorem~\ref{thm:weighted-boundary-pressure}\emph{(3)} holds, then there
+  exist $L_-,L_+>0$ and $m_0\ge 1$ such that
+  \[
+  L_-\,e^{-m(P_X(\phi)-P_\partial(\phi))}
+  \le \varepsilon_m(\mathsf{P};\mu_\phi)
+  \le
+  L_+\,e^{-m(P_X(\phi)-P_\partial(\phi))}
+  \qquad(m\ge m_0),
+  \]
+  and consequently
+  \[
+  -\lim_{m\to\infty}\frac1m\log\varepsilon_m(\mathsf{P};\mu_\phi)
+  =P_X(\phi)-P_\partial(\phi).
+  \]
+\end{enumerate}
 \end{corollary}
 
 \begin{proof}
@@ -1927,7 +2296,7 @@ c_-\exp\!\bigl(\sup_{x\in C}S_m\phi(x)-mP_X(\phi)\bigr)
 c_+\exp\!\bigl(\sup_{x\in C}S_m\phi(x)-mP_X(\phi)\bigr).
 \]
 Combining Proposition~\ref{prop:scan-error-cylinder} with
-Theorem~\ref{thm:weighted-boundary-pressure}\emph{(2)} and the last display
+Theorem~\ref{thm:weighted-boundary-pressure}\emph{(4)} and the last display
 yields
 \[
 \theta_\phi c_- Z_m(\partial\mathsf{P},\phi)
@@ -1935,14 +2304,26 @@ yields
 \le \frac{c_+}{2}Z_m(\partial\mathsf{P},\phi),
 \]
 so the first display holds with $K_-:=\theta_\phi c_-$ and $K_+:=c_+/2$.
-Combining this with Theorem~\ref{thm:weighted-boundary-pressure}\emph{(1)}
-gives the exponential bounds with $L_-:=K_-C_-$ and $L_+:=K_+C_+$.
+
+If $\mathfrak{C}_\partial=\varnothing$, then
+Theorem~\ref{thm:weighted-boundary-pressure} gives
+$Z_m(\partial\mathsf{P},\phi)=0$ for all large $m$, hence also
+$\varepsilon_m(\mathsf{P};\mu_\phi)=0$ for all large $m$.  Assume now that
+$\mathfrak{C}_\partial\neq\varnothing$.  Combining the first display with
+Theorem~\ref{thm:weighted-boundary-pressure}\emph{(1)} proves~\emph{(1)} with
+$L_+:=K_+C_+$.  Combining the same display with
+Theorem~\ref{thm:weighted-boundary-pressure}\emph{(2)} proves~\emph{(2)} with
+$L_-(\beta):=K_-C_-(\beta)$.
+
 Because $\mathsf{P}\in\mathcal{F}_\infty$, Corollary~\ref{cor:scan-tanaka-tail}
 gives $\varepsilon_m(\mathsf{P};\mu_\phi)\to 0$ as $m\to\infty$.  If
-$P_X(\phi)\le P_\partial(\phi)$, then the lower bound above would keep
-$\varepsilon_m(\mathsf{P};\mu_\phi)$ bounded away from $0$, a contradiction.
-Hence $P_X(\phi)>P_\partial(\phi)$, and the same two-sided exponential estimate
-implies the stated limit for $-\frac1m\log\varepsilon_m(\mathsf{P};\mu_\phi)$.
+$P_X(\phi)\le P_\partial(\phi)$, then the subsequential lower bound from
+Theorem~\ref{thm:weighted-boundary-pressure}\emph{(2)} would keep
+$\varepsilon_m(\mathsf{P};\mu_\phi)$ bounded away from $0$ along a residue
+class, a contradiction.  Hence $P_X(\phi)>P_\partial(\phi)$.  The upper bound
+from~\emph{(1)} and the residue-class lower bound from~\emph{(2)} then imply
+the limsup identity in~\emph{(3)}.  Finally, combining the first display with
+Theorem~\ref{thm:weighted-boundary-pressure}\emph{(3)} proves~\emph{(4)}.
 \end{proof}
 
 \begin{corollary}[Positivity of the boundary pressure gap]
@@ -1956,7 +2337,7 @@ P_X(\phi)>P_\partial(\phi).
 
 \begin{proof}
 This is the positivity statement already proved in
-Corollary~\ref{cor:weighted-boundary-transfer}.
+Corollary~\ref{cor:weighted-boundary-transfer}\emph{(3)}.
 \end{proof}
 
 \begin{corollary}[Weighted ambiguous transfer matrix in the locally constant case]
@@ -1966,10 +2347,12 @@ in addition that $\phi_\partial$ is locally constant on one-cylinders of
 $\Sigma_\partial$; equivalently, there is a function
 $F:\mathcal{R}_\partial\to\mathbb{R}$ such that
 $\phi_\partial(y)=F(y_0)$ for all $y=(y_0y_1\ldots)\in\Sigma_\partial$.
-Define the weighted ambiguous transfer matrix
+Let $\mathcal{R}_\partial^{\mathrm{vis}}$ be the set of refined boundary states
+reachable from $\mathcal{I}$.  Define the visible weighted ambiguous transfer
+matrix
 \[
 M_{\partial,\phi}
-:=\bigl((M_{\partial,\phi})_{rs}\bigr)_{r,s\in\mathcal{R}_\partial},
+ :=\bigl((M_{\partial,\phi})_{rs}\bigr)_{r,s\in\mathcal{R}_\partial^{\mathrm{vis}}},
 \qquad
 (M_{\partial,\phi})_{rs}:=\widetilde{B}_{rs}e^{F(s)}.
 \]
@@ -1979,207 +2362,150 @@ P_\partial(\phi)=\log\rho(M_{\partial,\phi}).
 \]
 Consequently,
 \[
+Z_m(\partial\mathsf{P},\phi)\ll
+e^{-m(P_X(\phi)-\log\rho(M_{\partial,\phi}))}
+\]
+for all $m$, with matching lower bounds on every visible residue class of a
+maximal-weight component.  If the residue-complete visibility hypothesis from
+Theorem~\ref{thm:weighted-boundary-pressure}\emph{(3)} holds, then
+\[
 Z_m(\partial\mathsf{P},\phi)\asymp
 e^{-m(P_X(\phi)-\log\rho(M_{\partial,\phi}))}
 \]
 and
 \[
 \varepsilon_m(\mathsf{P};\mu_\phi)\asymp
-e^{-m(P_X(\phi)-\log\rho(M_{\partial,\phi}))}.
+e^{-m(P_X(\phi)-\log\rho(M_{\partial,\phi}))}
 \]
+for all large $m$.
 \end{corollary}
 
 \begin{proof}
-For a one-step potential on the mixing SFT $\Sigma_\partial$, the Ruelle
+For a one-step potential on the visible one-sided SFT
+$\Sigma_\partial^{\mathrm{vis}}$, the Ruelle
 transfer operator is represented on one-cylinder functions by the nonnegative
 matrix $M_{\partial,\phi}$, so standard Perron--Frobenius thermodynamic
 formalism gives
-$P_\partial(\phi)=P_{\Sigma_\partial}(\phi_\partial)=\log\rho(M_{\partial,\phi})$
-\cite[Ch.~1]{Bowen1975},\cite[Ch.~9]{WaltersErgodicTheory}.  The two displayed
-asymptotics are then exactly Theorem~\ref{thm:weighted-boundary-pressure}(1)
-and Corollary~\ref{cor:weighted-boundary-transfer} rewritten with this
+$P_\partial(\phi)=P_{\Sigma_\partial^{\mathrm{vis}}}(\phi_\partial)
+=\log\rho(M_{\partial,\phi})$
+\cite[Ch.~1]{Bowen1975},\cite[Ch.~9]{WaltersErgodicTheory}.  The remaining
+claims are exactly Theorem~\ref{thm:weighted-boundary-pressure} and
+Corollary~\ref{cor:weighted-boundary-transfer} rewritten with this
 identity.
 \end{proof}
 
-\subsection{Auxiliary filtration-level extension to log-regular cylinder measures}
-\label{sub:nonuniform}
+\begin{remark}[Primitive regularity is the all-length special case]
+\label{rem:regularity-excludes-transients}
+Theorem~\ref{thm:weighted-boundary-pressure} no longer requires the boundary
+graph to be primitive.  Its invariant content is componentwise: the boundary
+pressure is the maximum pressure over the reachable recurrent boundary
+components, and every visible maximal component contributes a matching lower
+bound on its own residue class.  What primitivity, or more generally the
+residue-complete visibility hypothesis in
+Theorem~\ref{thm:weighted-boundary-pressure}\emph{(3)}, adds is an
+\emph{all-length} lower bound.  This is exactly the point at which transient
+entry states and periodic cores matter.  Example~\ref{ex:golden-mean-gibbs-weighted}
+falls under the theorem componentwise, but its exact prefactor is still most
+transparent when computed directly from the weighted transfer matrix of the
+transient-plus-periodic graph.
+\end{remark}
 
-The uniform bounds $\mu(C)\asymp\lambda_{\mathrm{cyl}}^{-m}$ hold for Parry
-(maximal-entropy) measures on mixing SFTs \cite{Parry1964}; for general
-H\"older Gibbs measures one has instead the potential-weighted estimate from
-Remark~\ref{rem:parry-vs-gibbs}, so same-length cylinders need not have
-comparable masses.  In that invariant Gibbs regime the correct theorem is
-Theorem~\ref{thm:weighted-boundary-pressure}, equivalently the boundary
-pressure law $P_X(\phi)-P_\partial(\phi)$ (or
-$\log\rho(M_{\partial,\phi})$ in the locally constant case of
-Corollary~\ref{cor:weighted-ambiguous-matrix}).  The following log-regular
-hypothesis isolates instead a weaker count-based regime in which polynomial
-distortions are allowed but the exponential scale remains
-$\lambda_{\mathrm{cyl}}^{-m}$.  This subsection is auxiliary to the finite-state
-symbolic results above: it is formulated at the level of an arbitrary prefix
-filtration, does not assume shift-invariance or a finite-state presentation,
-and is included only to show that the exponent law survives polynomial cylinder
-distortions even when the exact prefactor does not.
-
-\begin{definition}[Log-regular measure]
-\label{def:log-regular}
-A measure $\mu$ is \emph{log-regular with exponent $\alpha>0$}, relative to an
-existing cylinder growth base $\lambda_{\mathrm{cyl}}>1$, if there exist
-$0<c_1\le c_2<\infty$ such that for all $m\ge 1$ and every positive depth-$m$
-atom $C\in\mathcal{C}_m$,
+\begin{proposition}[Weighted matrix growth with a transient entry and periodic terminal core]
+\label{prop:weighted-matrix-transient-core}
+Let $M$ be a nonnegative $d\times d$ matrix, let $\alpha\in[0,\infty)^d$ be a
+nonzero row vector, let $\mathbf{1}$ be the all-ones column vector, and write
+$G(M)$ for the directed graph with an edge $r\to s$ whenever $M_{rs}>0$.
+Assume that among the strongly connected components of $G(M)$ reachable from
+$\operatorname{supp}(\alpha)$ there is a unique component $C$ with
 \[
-c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}\le\mu(C)\le c_2 m^{\alpha}\lambda_{\mathrm{cyl}}^{-m}.
+\rho(M_C)=\rho(M),
 \]
-\end{definition}
-
-\begin{theorem}[Log-regular transfer principle]
-\label{thm:nonuniform-cylinder}
-Let $\mathsf{P}\in\mathcal{B}$.  Assume that the cylinder growth base
-$\lambda_{\mathrm{cyl}}$ exists and $\lambda_{\mathrm{cyl}}>1$.  Let $\mu$ be
-log-regular with exponent $\alpha>0$.  Assume the thickness condition of
-Corollary~\ref{thm:volume-boundary-scaling} holds with some $\theta>0$ and
-$m_0$.  Then for all $m\ge m_0$,
+and that $C$ is terminal in the reachable subgraph of $G(M)$.  Then
 \[
-\theta c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})
-\le\varepsilon_m(\mathsf{P};\mu)
-\le \frac{c_2}{2}m^{\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P}).
+\alpha M^n\mathbf{1}\asymp \rho(M)^n
+\qquad(n\ge 0).
 \]
-If, in addition, the boundary count satisfies the exact exponential asymptotic
-$N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$ (again stronger
-than merely $\overline{\dim}_B(\partial\mathsf{P})=\delta$), then
-$\varepsilon_m(\mathsf{P};\mu)=\lambda_{\mathrm{cyl}}^{-(1-\delta)m+o(m)}$ and the
-exponential rate $1-\delta$ is unchanged from the uniform case.  More quantitatively,
-if for some $\beta\ge 0$ and $A_-,A_+>0$,
-\[
-A_-m^{-\beta}\lambda_{\mathrm{cyl}}^{\delta m}
-\le N_m(\partial\mathsf{P})
-\le A_+m^\beta\lambda_{\mathrm{cyl}}^{\delta m}
-\]
-for all large $m$, then for all large $m$,
-\[
-\theta c_1A_-m^{-(\alpha+\beta)}\lambda_{\mathrm{cyl}}^{-(1-\delta)m}
-\le\varepsilon_m(\mathsf{P};\mu)
-\le \frac{c_2A_+}{2}m^{\alpha+\beta}\lambda_{\mathrm{cyl}}^{-(1-\delta)m}.
-\]
-\leanverified{paper_prefix_scan_error_nonuniform_cylinder}
-\end{theorem}
+No primitivity is assumed for $C$.
+\end{proposition}
 
 \begin{proof}
-This is an immediate consequence of Proposition~\ref{prop:scan-error-cylinder},
-with polynomially distorted cylinder-mass bounds in place of the uniform ones
-from Corollary~\ref{thm:volume-boundary-scaling}.
-The same decomposition argument as in Corollary~\ref{thm:volume-boundary-scaling}
-applies with $c_1 m^{-\alpha}$ and $c_2 m^\alpha$ in place of $c_-$ and
-$c_+/2$.  Thus
+Reorder the reachable states so that the states outside $C$ come first and the
+states of $C$ come last.  With this ordering,
 \[
-\varepsilon_m
-=\sum_{C\in\partial_m\mathsf{P}}\mu(C)
-\min\{\mu(\mathsf{P}\mid C),1-\mu(\mathsf{P}\mid C)\}
+M=
+\begin{pmatrix}
+N&B\\
+0&M_C
+\end{pmatrix},
 \]
-is bounded below by
-$\theta c_1m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$
-and above by
-$\frac{c_2}{2}m^\alpha\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$.
-If $N_m=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$, then the two bounds have logarithms
-$-(1-\delta)m\log\lambda_{\mathrm{cyl}}+o(m)$, because
-$\log m=o(m)$.  This gives
-$\varepsilon_m=\lambda_{\mathrm{cyl}}^{-(1-\delta)m+o(m)}$.  The final displayed
-polynomial estimate follows by substituting the two-sided polynomial bounds
-for $N_m$ into the two-sided estimate above.
+where $\rho(N)<\rho(M)$ because $C$ is the unique reachable component with
+maximal spectral radius.  Write $\alpha=(\alpha_N,\alpha_C)$ accordingly.
+Standard spectral-radius bounds give constants $K_N,K_C>0$ and
+$0<\tau<\rho(M)$ such that
+\[
+\|N^n\|\le K_N\tau^n,
+\qquad
+\|M_C^n\|\le K_C\rho(M)^n
+\qquad(n\ge 0).
+\]
+Expanding the block power yields
+\[
+\alpha M^n\mathbf{1}
+=\alpha_NN^n\mathbf{1}
++\sum_{k=0}^{n-1}\alpha_NN^kBM_C^{n-1-k}\mathbf{1}
++\alpha_CM_C^n\mathbf{1}.
+\]
+The first term is $O(\tau^n)$, the last term is $O(\rho(M)^n)$, and the sum
+is bounded by
+\[
+\sum_{k=0}^{n-1}O(\tau^k\rho(M)^{n-1-k})
+=O(\rho(M)^n)
+\]
+because $\tau/\rho(M)<1$.  Hence $\alpha M^n\mathbf{1}\ll \rho(M)^n$.
+
+For the lower bound, choose $a\in C$, $m_0\ge 0$, and $c_0>0$ such that
+$(\alpha M^{m_0})_a=c_0>0$; this is possible because $C$ is reachable from
+$\operatorname{supp}(\alpha)$.  Let $p$ be the period of the irreducible
+matrix $M_C$, and write the cyclic decomposition as
+\[
+C=C_0\sqcup\cdots\sqcup C_{p-1},
+\qquad a\in C_0.
+\]
+For each residue class $s\in\{0,\dots,p-1\}$ choose a state $b_s\in C_s$ and a
+path inside $C$ from $a$ to $b_s$ of length $s$; its weight is some
+$d_s>0$.  The matrix $(M_C^p)|_{C_s}$ is primitive with spectral radius
+$\rho(M)^p$, so Perron--Frobenius gives constants $e_s>0$ and $n_s$ such that
+\[
+e_{b_s}^\top M_C^{pn}\mathbf{1}\ge e_s\,\rho(M)^{pn}
+\qquad(n\ge n_s).
+\]
+Therefore, for $n\ge n_s$,
+\[
+e_a^\top M_C^{pn+s}\mathbf{1}
+\ge d_s\,e_{b_s}^\top M_C^{pn}\mathbf{1}
+\ge d_se_s\,\rho(M)^{pn}
+\asymp \rho(M)^{pn+s}.
+\]
+Since there are only finitely many residues, this gives a constant $c_1>0$
+such that
+\[
+e_a^\top M_C^n\mathbf{1}\ge c_1\rho(M)^n
+\]
+for all sufficiently large $n$.  Hence
+\[
+\alpha M^{m_0+n}\mathbf{1}
+\ge c_0\,e_a^\top M_C^n\mathbf{1}
+\ge c_0c_1\,\rho(M)^n
+\asymp \rho(M)^{m_0+n}.
+\]
+After absorbing finitely many small $n$ into the constants, the lower bound
+holds for every $n\ge 0$.
 \end{proof}
 
-The following example is not shift-invariant and is included only to show that
-the abstract filtration theorem cannot remove polynomial factors under
-log-regular cylinder bounds.  It is not an invariant symbolic-dynamical
-example.
-
-\begin{example}[Auxiliary non-stationary product example with a genuine polynomial correction]
-\label{ex:log-regular-polynomial-correction}
-Let $X=\{0,1\}^{\NN}$ with its prefix filtration and let
-$0<\alpha<1$.  Define the independent, non-identically distributed product
-measure $\mu_\alpha$ by
-\[
-\mu_\alpha(x_n=0)=\frac12\left(1+\frac{\alpha}{n+2}\right),
-\qquad
-\mu_\alpha(x_n=1)=\frac12\left(1-\frac{\alpha}{n+2}\right).
-\]
-Then $\lambda_{\mathrm{cyl}}=2$ and $\mu_\alpha$ is log-regular with exponent
-$\alpha$.  Indeed, for every word
-$a=a_0\cdots a_{m-1}$,
-\[
-\mu_\alpha([a])=2^{-m}\prod_{n=0}^{m-1}
-\left(1+\sigma_n(a_n)\frac{\alpha}{n+2}\right),
-\qquad \sigma_n(0)=1,\quad \sigma_n(1)=-1,
-\]
-and the two extremal products satisfy
-\[
-\prod_{n=0}^{m-1}\left(1+\frac{\alpha}{n+2}\right)\asymp m^\alpha,
-\qquad
-\prod_{n=0}^{m-1}\left(1-\frac{\alpha}{n+2}\right)\asymp m^{-\alpha},
-\]
-by the standard gamma-ratio estimate
-$\Gamma(m+c)/\Gamma(m)\asymp m^c$.
-
-Let $Y:=\{0^\infty\}$ and, for $x\notin Y$, let
-$\rho(x):=\min\{n\ge 0:x_n=1\}$.  Define
-\[
-\mathsf{P}:=\{x\notin Y:\rho(x)\text{ is even}\}\cup Y.
-\]
-At depth $m$, the only boundary cylinder is $[0^m]$, so
-$N_m(\partial\mathsf{P})=1$ and the raw count exponent is $\delta=0$.  If the prefix is not $0^m$, the first
-$1$ has already appeared and the event is decided.  From $[0^m]$, however,
-one can force either parity of the first $1$ within at most two further
-symbols; since all one-coordinate probabilities are bounded below by
-$q_*:=(1-\alpha/2)/2>0$,
-\[
-\min\{\mu_\alpha(\mathsf{P}\mid[0^m]),
-1-\mu_\alpha(\mathsf{P}\mid[0^m])\}\ge q_*^2.
-\]
-Hence the thickness hypothesis holds and
-\[
-q_*^2\,\mu_\alpha([0^m])
-\le \varepsilon_m(\mathsf{P};\mu_\alpha)
-\le \frac12\,\mu_\alpha([0^m]).
-\]
-Finally,
-\[
-\mu_\alpha([0^m])
-=2^{-m}\prod_{n=0}^{m-1}\left(1+\frac{\alpha}{n+2}\right)
-\asymp m^\alpha 2^{-m}.
-\]
-Thus
-\[
-\varepsilon_m(\mathsf{P};\mu_\alpha)\asymp m^\alpha 2^{-m}.
-\]
-The exponential rate is still $1-\delta=1$, but the polynomial factor is real; it
-cannot be replaced by a uniform constant under log-regularity alone.  Reversing
-the signs in the one-coordinate probabilities gives the matching
-$m^{-\alpha}2^{-m}$ lower-side behaviour.
-\end{example}
-
-\begin{table}[ht]
-\centering\small
-\begin{tabular}{p{2.8in}p{3.1in}}
-\toprule
-assumption & conclusion for $\varepsilon_m(\mathsf{P};\mu)$ \\
-\midrule
-$\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ on all positive $m$-cylinders &
-$\varepsilon_m\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$ \\
-uniform $c_\pm\lambda_{\mathrm{cyl}}^{-m}$ bounds plus thickness $\theta$ &
-$\varepsilon_m\asymp\lambda_{\mathrm{cyl}}^{-(1-\delta)m}$ when
-$N_m=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$ \\
-log-regular ($c_i m^{\pm\alpha}\lambda_{\mathrm{cyl}}^{-m}$) plus thickness $\theta$ &
-$m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m\lesssim\varepsilon_m
-\lesssim m^\alpha\lambda_{\mathrm{cyl}}^{-m}N_m$, hence
-$\varepsilon_m=\lambda_{\mathrm{cyl}}^{-(1-\delta)m+o(m)}$ when
-$N_m=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$ \\
-\bottomrule
-\end{tabular}
-\caption{Summary of the three boundary-to-error transfer consequences.  The
-exponential rate $1-\delta$ is robust to polynomial perturbations of the
-cylinder-mass profile.}
-\label{tab:rate-laws}
-\end{table}
+For completeness, Appendix~\ref{sub:nonuniform} records an auxiliary
+filtration-level transfer principle for log-regular cylinder measures and a
+non-stationary sharpness example showing that its polynomial factors are
+genuine.  We now turn to the symbolic examples.
 
 \section{Examples}
 \label{sec:examples}
@@ -2837,7 +3163,12 @@ Proposition~\ref{prop:golden-finite-posterior} is a finite-state posterior
 presentation with the same resolving window $R=4$.  In particular, the
 boundary path shift is still the recurrent four-state core
 $(E_0,E_1,O_0,O_1)$, but the relevant transfer operator is now weighted by
-$\varphi_t$ rather than by raw counts.
+$\varphi_t$ rather than by raw counts.  The full refined ambiguous graph is
+not regular in the sense of Definition~\ref{def:regular-event}: the entry
+state $u$ is transient, and the recurrent core has period $2$.  Theorem~\ref{thm:weighted-boundary-pressure}
+still applies componentwise: it identifies the exponent through the reachable
+periodic core, while the direct matrix calculation below sharpens that theorem
+to an explicit all-length formula.
 
 On the ambient golden-mean shift, the one-step transfer matrix for
 $\varphi_t$ is
@@ -2917,8 +3248,45 @@ P_X(\varphi_t)-\log\rho(M_{\partial,t})
 =\frac12\log\!\Bigl(\frac{\lambda_t}{e^t}\Bigr)
 =\frac12\log\!\Bigl(\frac{1+\sqrt{1+4e^{-t}}}{2}\Bigr).
 \]
-Theorem~\ref{thm:weighted-boundary-pressure} and
-Corollary~\ref{cor:weighted-ambiguous-matrix} now give
+\[
+Z_1(\partial\mathsf{E},\varphi_t)=e^{t-P_X(\varphi_t)}.
+\]
+For $m\ge 2$, every boundary word begins with $0$ and enters the recurrent
+core after one more symbol.  In the state order $(E_0,E_1,O_0,O_1)$, set
+\[
+\alpha_t:=(e^{2t},e^t,0,0).
+\]
+Because $\varphi_t$ is constant on cylinders, the weighted boundary partition
+sum is exactly
+\[
+Z_m(\partial\mathsf{E},\varphi_t)
+=e^{-mP_X(\varphi_t)}\alpha_t M_{\partial,t}^{\,m-2}\mathbf{1}
+\qquad(m\ge 2).
+\]
+The four-state core is the unique terminal strongly connected component seen
+from the transient entry state, so
+Proposition~\ref{prop:weighted-matrix-transient-core} gives
+\[
+Z_m(\partial\mathsf{E},\varphi_t)\asymp
+\exp\!\Bigl(-m\bigl(P_X(\varphi_t)-\log\rho(M_{\partial,t})\bigr)\Bigr)
+\]
+and hence
+\[
+Z_m(\partial\mathsf{E},\varphi_t)\asymp
+\exp\!\Bigl(-m\bigl(P_X(\varphi_t)-P_\partial(\varphi_t)\bigr)\Bigr)
+=\left(\frac{e^t}{\lambda_t}\right)^{m/2}.
+\]
+The same resolving words as in
+Example~\ref{ex:golden-mean-specialization} still force a decision within four
+additional symbols from every boundary state.  Since $\mu_t$ is a full-support
+Gibbs state, Lemma~\ref{lem:qb-exact-concat} gives a constant $\theta_t>0$
+such that
+\[
+\min\{\mu_t(\mathsf{E}\mid[a]),1-\mu_t(\mathsf{E}\mid[a])\}\ge \theta_t
+\qquad([a]\in\partial_m\mathsf{E}).
+\]
+Bowen's Gibbs estimate on cylinders, together with
+Proposition~\ref{prop:scan-error-cylinder}, therefore yields
 \[
 \varepsilon_m(\mathsf{E};\mu_t)\asymp
 \exp\!\Bigl(-m\bigl(P_X(\varphi_t)-P_\partial(\varphi_t)\bigr)\Bigr)
@@ -2934,42 +3302,40 @@ which the weighted boundary pressure differs from the count-only Parry law.
 \section{Discussion}
 \label{sec:discussion}
 
-We have shown that the scan error profile decomposes exactly over the positive
-atoms of the prefix partition on $X$ (Proposition~\ref{prop:scan-error-cylinder}),
-or equivalently over prefix cylinders on the symbolic readout space, that the
-Bayes-optimal rule is the threshold classifier
-(Proposition~\ref{prop:bayes-optimality}),
-and that error decay is encoded by discrete local time at the threshold
-(Theorem~\ref{thm:scan-tanaka}).  Theorem~\ref{thm:finite-state-posterior}
+The paper's main outputs are symbolic.  Theorem~\ref{thm:finite-state-posterior}
 shows that, in a finite-state symbolic model, the thickness constant and the
-higher-block invariant ambiguity growth base $\Lambda_\partial(\mathsf{P})$ can themselves
-be read off from the refined product graph of terminal symbols and
-follower-resolving observer states, while
+higher-block invariant ambiguity growth base
+$\Lambda_\partial(\mathsf{P})$ can be read off from the refined product graph
+of terminal symbols and follower-resolving observer states, while
 Proposition~\ref{prop:higher-block-invariance} shows that the normalized
 exponent $\delta_\partial(\mathsf{P})$ is unchanged by higher-block recoding.
-For regular events under a H\"older Gibbs measure,
-Theorem~\ref{thm:weighted-boundary-pressure} promotes the same refined
-ambiguous graph to a boundary path shift $\Sigma_\partial$ and identifies the
-$Z_m(\partial\mathsf{P},\phi)$ exponent with the pressure gap
-$P_X(\phi)-P_\partial(\phi)$, where
-$P_\partial(\phi)=P_{\Sigma_\partial}(\phi\circ\pi_\partial)$ and, in the
-locally constant case, $P_\partial(\phi)=\log\rho(M_{\partial,\phi})$ by
-Corollary~\ref{cor:weighted-ambiguous-matrix}.  The scan-error transfer from
-this weighted boundary law is then Corollary~\ref{cor:weighted-boundary-transfer}.
-The later transfer consequences
-then convert coarse boundary information into scan-error decay at the
-filtration level.  They are not independent dynamical theorems: once the
-exact boundary identity is in hand, they follow immediately from the relevant
-cylinder-mass and thickness bounds.
-Example~\ref{ex:golden-mean-specialization} computes the exact parity-resolved profile
-for an explicit event with $\delta_\partial(\mathsf{E})=1/2$ on the
-golden-mean shift, while Example~\ref{ex:golden-mean-gibbs-weighted}
-shows on the same observer that the invariant Gibbs exponent is the pressure
-gap $P_X(\varphi_t)-P_\partial(\varphi_t)$ rather than a raw boundary-count law.
-By contrast, Section~\ref{sub:nonuniform} is only an
-auxiliary filtration-level extension: its product example is non-stationary
-and serves solely to show that polynomial distortions cannot be removed from
-the nonuniform theorem.
+Example~\ref{ex:golden-mean-specialization} then verifies this theorem
+completely on a concrete event in the golden-mean shift: the observer is
+explicit, the resolving window is bounded, the refined boundary matrix has
+spectral radius $\sqrt{\varphi}$, and the scan error admits an exact
+parity-resolved formula with $\delta_\partial(\mathsf{E})=1/2$.
+
+For a H\"older Gibbs measure, Theorem~\ref{thm:weighted-boundary-pressure}
+promotes the same refined ambiguous graph to a boundary path shift
+$\Sigma_\partial$, identifies
+$P_\partial(\phi)=P_{\Sigma_\partial^{\mathrm{vis}}}(\phi\circ\pi_\partial)$
+as the maximum pressure over the reachable recurrent boundary components, and
+thereby identifies the exponent of $Z_m(\partial\mathsf{P},\phi)$ with the
+pressure gap $P_X(\phi)-P_\partial(\phi)$.  In the locally constant case,
+Corollary~\ref{cor:weighted-ambiguous-matrix} rewrites this as
+$P_\partial(\phi)=\log\rho(M_{\partial,\phi})$.  Example~\ref{ex:golden-mean-gibbs-weighted}
+shows on the same golden-mean observer that the invariant Gibbs exponent is
+this pressure gap rather than a raw boundary-count law.
+
+By contrast, Proposition~\ref{prop:scan-error-cylinder},
+Theorem~\ref{thm:scan-tanaka}, and the later transfer statements are
+preparatory filtration-level tools.  They make the symbolic outputs effective,
+but they are not independent dynamical theorems: once the exact boundary
+identity is in hand, the transfer consequences follow immediately from the
+relevant cylinder-mass and thickness bounds.  Appendix~\ref{sub:nonuniform} is
+only an auxiliary filtration-level extension; its product example is
+non-stationary and serves solely to show that polynomial distortions cannot be
+removed from the nonuniform theorem.
 
 \begin{table}[ht]
 \centering\small
@@ -2988,8 +3354,9 @@ Theorem~\ref{thm:scan-tanaka},
 Proposition~\ref{thm:boundary-dimension},
 Corollary~\ref{thm:volume-boundary-scaling},
 Theorem~\ref{thm:nonuniform-cylinder} &
-the only event hypothesis needed for the exact boundary decomposition, the
-discrete Tanaka identity, and the finite-depth transfer inequalities \\
+the only event hypothesis needed for the preparatory exact boundary
+decomposition, discrete Tanaka identity, and finite-depth transfer
+inequalities \\
 $p_m=\mu(\mathsf{P}\mid\mathcal{F}_m)$ is a martingale &
 Theorem~\ref{thm:scan-tanaka} &
 automatic from conditional expectation; not an extra assumption \\
@@ -3064,14 +3431,15 @@ these quantities, or the thickness parameter $\theta$, as a classical margin
 exponent.  Connecting either one to a margin exponent through filtration
 geometry remains open.
 
-\paragraph{Extensions.}
-Natural generalizations include: finite alphabets of size $q$ (the discrete
-Tanaka structure extends with $q-1$ threshold parameters); the continuous-time
-limit to Tanaka--Meyer formula \cite{RevuzYor1999}; weakening the thickness
-hypothesis to an $L^p$ condition on boundary-atom probabilities
-(symbolically, boundary-cylinder probabilities); and
-expressing the ambiguity exponent through conditional entropies, mutual
-information, or an intrinsic pressure functional beyond the finite-state case.
+\paragraph{Future directions.}
+We do not claim any extension beyond the discrete finite-depth setting treated
+above.  Two natural open problems are whether the filtration-level Tanaka
+bookkeeping admits a genuine $q$-ary analogue, with $q-1$ threshold parameters,
+and whether any continuous-time scaling limit leads to a Tanaka--Meyer type
+formula \cite{RevuzYor1999}.  Other directions include weakening the thickness
+hypothesis to an $L^p$ condition on boundary-atom probabilities and finding an
+intrinsic pressure or information-theoretic description of ambiguity beyond the
+finite-state observer setting.
 
 \paragraph{Limitations.}
 The general transfer principles still assume exponential growth of the positive-atom
@@ -3089,6 +3457,178 @@ would need a weighted thermodynamic formalism for the boundary rather than the
 count-based one used here.  Even in the finite-state symbolic setting, the paper proves invariance of
 $\delta_\partial(\mathsf{P})$ only under higher-block recoding; invariance
 under general finite-to-one sliding block conjugacies remains open.
+
+\appendix
+
+\section{Auxiliary Filtration-Level Log-Regular Transfer and Sharpness}
+\label{sub:nonuniform}
+\label{app:log-regular}
+
+This appendix records a filtration-only extension of the exact boundary
+decomposition.  It is not part of the symbolic-dynamical ETDS contribution:
+no shift-invariance, no finite-state observer, and no boundary path shift are
+assumed.  Its role is only to isolate the sharp polynomial loss permitted by
+log-regular cylinder bounds.
+
+\begin{definition}[Log-regular measure]
+\label{def:log-regular}
+A measure $\mu$ is \emph{log-regular with exponent $\alpha>0$}, relative to an
+existing cylinder growth base $\lambda_{\mathrm{cyl}}>1$, if there exist
+$0<c_1\le c_2<\infty$ such that for all $m\ge 1$ and every positive depth-$m$
+atom $C\in\mathcal{C}_m$,
+\[
+c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}\le\mu(C)\le c_2 m^{\alpha}\lambda_{\mathrm{cyl}}^{-m}.
+\]
+\end{definition}
+
+\begin{theorem}[Log-regular transfer principle]
+\label{thm:nonuniform-cylinder}
+Let $\mathsf{P}\in\mathcal{B}$.  Assume that the cylinder growth base
+$\lambda_{\mathrm{cyl}}$ exists and $\lambda_{\mathrm{cyl}}>1$.  Let $\mu$ be
+log-regular with exponent $\alpha>0$.  Assume the thickness condition of
+Corollary~\ref{thm:volume-boundary-scaling} holds with some $\theta>0$ and
+$m_0$.  Then for all $m\ge m_0$,
+\[
+\theta c_1 m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})
+\le\varepsilon_m(\mathsf{P};\mu)
+\le \frac{c_2}{2}m^{\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P}).
+\]
+If, in addition, the boundary count satisfies the exact exponential asymptotic
+$N_m(\partial\mathsf{P})=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$ (again stronger
+than merely $\overline{\dim}_B(\partial\mathsf{P})=\delta$), then
+$\varepsilon_m(\mathsf{P};\mu)=\lambda_{\mathrm{cyl}}^{-(1-\delta)m+o(m)}$ and the
+exponential rate $1-\delta$ is unchanged from the uniform case.  More quantitatively,
+if for some $\beta\ge 0$ and $A_-,A_+>0$,
+\[
+A_-m^{-\beta}\lambda_{\mathrm{cyl}}^{\delta m}
+\le N_m(\partial\mathsf{P})
+\le A_+m^\beta\lambda_{\mathrm{cyl}}^{\delta m}
+\]
+for all large $m$, then for all large $m$,
+\[
+\theta c_1A_-m^{-(\alpha+\beta)}\lambda_{\mathrm{cyl}}^{-(1-\delta)m}
+\le\varepsilon_m(\mathsf{P};\mu)
+\le \frac{c_2A_+}{2}m^{\alpha+\beta}\lambda_{\mathrm{cyl}}^{-(1-\delta)m}.
+\]
+\leanverified{paper_prefix_scan_error_nonuniform_cylinder}
+\end{theorem}
+
+\begin{proof}
+This is an immediate consequence of Proposition~\ref{prop:scan-error-cylinder},
+with polynomially distorted cylinder-mass bounds in place of the uniform ones
+from Corollary~\ref{thm:volume-boundary-scaling}.
+The same decomposition argument as in Corollary~\ref{thm:volume-boundary-scaling}
+applies with $c_1 m^{-\alpha}$ and $c_2 m^\alpha$ in place of $c_-$ and
+$c_+/2$.  Thus
+\[
+\varepsilon_m
+=\sum_{C\in\partial_m\mathsf{P}}\mu(C)
+\min\{\mu(\mathsf{P}\mid C),1-\mu(\mathsf{P}\mid C)\}
+\]
+is bounded below by
+$\theta c_1m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$
+and above by
+$\frac{c_2}{2}m^\alpha\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$.
+If $N_m=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$, then the two bounds have logarithms
+$-(1-\delta)m\log\lambda_{\mathrm{cyl}}+o(m)$, because
+$\log m=o(m)$.  This gives
+$\varepsilon_m=\lambda_{\mathrm{cyl}}^{-(1-\delta)m+o(m)}$.  The final displayed
+polynomial estimate follows by substituting the two-sided polynomial bounds
+for $N_m$ into the two-sided estimate above.
+\end{proof}
+
+\begin{example}[Filtration-level sharpness example: non-stationary product with genuine polynomial correction]
+\label{ex:log-regular-polynomial-correction}
+The example below is deliberately outside symbolic dynamics: it is
+non-stationary, not shift-invariant, and serves only to show that the
+polynomial factors in Theorem~\ref{thm:nonuniform-cylinder} cannot in general
+be removed.
+
+Let $X=\{0,1\}^{\NN}$ with its prefix filtration and let
+$0<\alpha<1$.  Define the independent, non-identically distributed product
+measure $\mu_\alpha$ by
+\[
+\mu_\alpha(x_n=0)=\frac12\left(1+\frac{\alpha}{n+2}\right),
+\qquad
+\mu_\alpha(x_n=1)=\frac12\left(1-\frac{\alpha}{n+2}\right).
+\]
+Then $\lambda_{\mathrm{cyl}}=2$ and $\mu_\alpha$ is log-regular with exponent
+$\alpha$.  Indeed, for every word
+$a=a_0\cdots a_{m-1}$,
+\[
+\mu_\alpha([a])=2^{-m}\prod_{n=0}^{m-1}
+\left(1+\sigma_n(a_n)\frac{\alpha}{n+2}\right),
+\qquad \sigma_n(0)=1,\quad \sigma_n(1)=-1,
+\]
+and the two extremal products satisfy
+\[
+\prod_{n=0}^{m-1}\left(1+\frac{\alpha}{n+2}\right)\asymp m^\alpha,
+\qquad
+\prod_{n=0}^{m-1}\left(1-\frac{\alpha}{n+2}\right)\asymp m^{-\alpha},
+\]
+by the standard gamma-ratio estimate
+$\Gamma(m+c)/\Gamma(m)\asymp m^c$.
+
+Let $Y:=\{0^\infty\}$ and, for $x\notin Y$, let
+$\rho(x):=\min\{n\ge 0:x_n=1\}$.  Define
+\[
+\mathsf{P}:=\{x\notin Y:\rho(x)\text{ is even}\}\cup Y.
+\]
+At depth $m$, the only boundary cylinder is $[0^m]$, so
+$N_m(\partial\mathsf{P})=1$ and the raw count exponent is $\delta=0$.  If the
+prefix is not $0^m$, the first $1$ has already appeared and the event is
+decided.  From $[0^m]$, however, one can force either parity of the first $1$
+within at most two further symbols; since all one-coordinate probabilities are
+bounded below by $q_*:=(1-\alpha/2)/2>0$,
+\[
+\min\{\mu_\alpha(\mathsf{P}\mid[0^m]),
+1-\mu_\alpha(\mathsf{P}\mid[0^m])\}\ge q_*^2.
+\]
+Hence the thickness hypothesis holds and
+\[
+q_*^2\,\mu_\alpha([0^m])
+\le \varepsilon_m(\mathsf{P};\mu_\alpha)
+\le \frac12\,\mu_\alpha([0^m]).
+\]
+Finally,
+\[
+\mu_\alpha([0^m])
+=2^{-m}\prod_{n=0}^{m-1}\left(1+\frac{\alpha}{n+2}\right)
+\asymp m^\alpha 2^{-m}.
+\]
+Thus
+\[
+\varepsilon_m(\mathsf{P};\mu_\alpha)\asymp m^\alpha 2^{-m}.
+\]
+The exponential rate is still $1-\delta=1$, but the polynomial factor is
+real; it cannot be replaced by a uniform constant under log-regularity alone.
+Reversing the signs in the one-coordinate probabilities gives the matching
+$m^{-\alpha}2^{-m}$ lower-side behaviour.
+\end{example}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{p{2.8in}p{3.1in}}
+\toprule
+assumption & conclusion for $\varepsilon_m(\mathsf{P};\mu)$ \\
+\midrule
+$\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ on all positive $m$-cylinders &
+$\varepsilon_m\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P})$ \\
+uniform $c_\pm\lambda_{\mathrm{cyl}}^{-m}$ bounds plus thickness $\theta$ &
+$\varepsilon_m\asymp\lambda_{\mathrm{cyl}}^{-(1-\delta)m}$ when
+$N_m=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$ \\
+log-regular ($c_i m^{\pm\alpha}\lambda_{\mathrm{cyl}}^{-m}$) plus thickness $\theta$ &
+$m^{-\alpha}\lambda_{\mathrm{cyl}}^{-m}N_m\lesssim\varepsilon_m
+\lesssim m^\alpha\lambda_{\mathrm{cyl}}^{-m}N_m$, hence
+$\varepsilon_m=\lambda_{\mathrm{cyl}}^{-(1-\delta)m+o(m)}$ when
+$N_m=\lambda_{\mathrm{cyl}}^{\delta m+o(m)}$ \\
+\bottomrule
+\end{tabular}
+\caption{Summary of the three boundary-to-error transfer consequences.  The
+exponential rate $1-\delta$ is robust to polynomial perturbations of the
+cylinder-mass profile.}
+\label{tab:rate-laws}
+\end{table}
 
 \section*{Acknowledgements}
 
