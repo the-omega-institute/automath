@@ -299,6 +299,7 @@ import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprint
 import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprintLayered
 import Omega.Zeta.XiCayleyScanAreaLawLowfreqTrace
 import Omega.Zeta.XiCriticalLineCircleCauchyUniformization
+import Omega.Zeta.XiJoukowskyDoubleCoverUniformization
 import Omega.Zeta.XiLocalJetToeplitzFailureSemialgebraicStratification
 import Omega.Zeta.XiJoukowskyL1MeasureLiftChebyshevFourier
 import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth
