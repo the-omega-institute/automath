@@ -117,6 +117,7 @@ import Omega.SyncKernelWeighted.RealInput40AtomicWittDirichletComb
 import Omega.SyncKernelWeighted.RealInput40AlphaMax
 import Omega.SyncKernelWeighted.RealInput40CarryConstant
 import Omega.SyncKernelWeighted.RealInput40ChiReparam4d
+import Omega.SyncKernelWeighted.RealInput40ChiMomentsFromHessian
 import Omega.SyncKernelWeighted.RealInput40ChiGaugeWardNullmode
 import Omega.SyncKernelWeighted.RealInput40CollisionPressure
 import Omega.SyncKernelWeighted.RealInput40TraceTensor

@@ -243,6 +243,7 @@ import Omega.Folding.KilloEllipseDiagonalPrimeRegisterEquivalence
 import Omega.Folding.KilloFoldMultiplicityConvolutionInvertibilityDefect
 import Omega.Folding.KilloZGNaturalDensityTransferMatrix
 import Omega.Folding.KilloLeyangJointChebotarevProductLaw
+import Omega.Folding.KilloLeyangQuadraticCharacterDecoupling
 import Omega.Folding.KilloLeyangJointDensityExplicit
 import Omega.Folding.KilloLeyangLattesTripleDensity
 import Omega.Folding.KilloLeyangUnifiedDigitRigidity
