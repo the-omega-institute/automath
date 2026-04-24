@@ -257,6 +257,7 @@ import Omega.POM.DiagonalRateRefreshCountScgfDerivatives
 import Omega.POM.DiagonalRateTwoOrbitHeavyLightCubic
 import Omega.POM.DiagonalRateRefreshFundamentalMatrixRankoneSet
 import Omega.POM.DiagonalRateRefreshLengthBiasedStationary
+import Omega.POM.MultiplicativeRefinementTelescopeAlpha
 import Omega.POM.DiagonalRateUniformClosedForm
 import Omega.POM.DiagonalRateUniformGlobalUpper
 import Omega.POM.DiagonalRateRefreshHittingTimeGeometricSpectralDecomp
