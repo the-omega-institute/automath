@@ -111,6 +111,7 @@ import Omega.Zeta.XiTimeVolumeEntropyStateEquation
 import Omega.Zeta.XiTimeWeightedSpectralRadiusGrowthLaw
 import Omega.Zeta.XiPoissonCoarsegrainingFDivergenceContraction
 import Omega.Zeta.XiPoissonKernelDerivativeL1FisherClosed
+import Omega.Zeta.XiCauchyPoissonOddMomentSelectionLaw
 import Omega.Zeta.XiPoissonKlSixthOrderMu3Mu4
 import Omega.Zeta.XiSingleBaseDealiasingCountableException
 import Omega.Zeta.XiSinglePoleContourReadoutErrorAudit
