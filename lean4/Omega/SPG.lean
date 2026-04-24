@@ -116,6 +116,7 @@ import Omega.SPG.HypercubeCycleLatticeDirectsumMdl
 import Omega.SPG.HypercubeEntropyAreaRigidity
 import Omega.SPG.HypercubeH1PrimeBudgetMinimal
 import Omega.SPG.HypercubeGodelFluxMultiplicativeVolume
+import Omega.SPG.HypercubeGaugeVolumeShannonStirlingGap
 import Omega.SPG.HypercubeGradientConsistency
 import Omega.SPG.HypercubeGradientPublication
 import Omega.SPG.HypercubeNearDetailedBalancePublication
