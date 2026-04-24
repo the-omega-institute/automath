@@ -182,6 +182,7 @@ import Omega.Zeta.XiCompactifiedDyadicDepthLowerBound
 import Omega.Zeta.XiScaleMellinNoNonzeroImagPeriod
 import Omega.Zeta.XiRhIffLatticeComovingDefect
 import Omega.Zeta.XiAdelicZkGluingCriticalLine
+import Omega.Zeta.XiRadialDefectIndexCountertermInvariant
 import Omega.Zeta.XiRadialStokesCurvatureCountertermObstruction
 import Omega.Zeta.XiBasepointScanCriticalJacobianCalogeroSymmetric
 import Omega.Zeta.XiBasepointScanVanVleckCoeffResidueBilinearLock

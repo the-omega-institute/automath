@@ -936,6 +936,7 @@ import Omega.POM.BreakpointCurvatureLawAq
 import Omega.POM.RenyiDimensionNoAlgebraicIrrationality
 import Omega.POM.CoxeterMonodromyCyclotomic
 import Omega.POM.DiagonalRateUniformUniqueMaximizerActive
+import Omega.POM.DiagonalRateZeroRateEndpointQuadraticCurvature
 import Omega.POM.DiagonalRateUniformGlobalMax
 import Omega.POM.A4TAdeIntersectionTMinpolyDiscriminant
 import Omega.POM.PrimeFactorMomentCompilerResonance
