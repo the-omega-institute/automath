@@ -89,6 +89,7 @@ import Omega.POM.BivariateMomentZetaFredholm
 import Omega.POM.CommutativeSpectralSurface
 import Omega.POM.BivariateSystemIdentificationFiniteWindow
 import Omega.POM.RecurrenceCodeViolationDistance
+import Omega.POM.ReplicaSoftcoreTemperatureSqReduction
 import Omega.POM.ReverseKlBoundByDispersion
 import Omega.POM.RemainderBitsRenyiCollisionExtremal
 import Omega.POM.FoldReverseKlControlledByGenus2Partition

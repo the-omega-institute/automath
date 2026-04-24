@@ -24,7 +24,9 @@ import Omega.Zeta.AbelDepolarizationHardyEnergyBlowup
 import Omega.Zeta.AbelHankelSpectralGapSinglePole
 import Omega.Zeta.AbelPowerBaseGapAmplification
 import Omega.Zeta.AbelPowerbaseCovariancePolePowerMap
+import Omega.Zeta.AbelPoleJuliaRigidity
 import Omega.Zeta.AbelDampingThresholdBifurcation
+import Omega.Zeta.AbelFixedStepGrowthRecoversSigmaStar
 import Omega.Zeta.AbelHardyProjectionTowerReverseMartingale
 import Omega.Zeta.AbelPolyphaseReconstruction
 import Omega.Zeta.AbelResolutionPowerRenormalizationIdentity
