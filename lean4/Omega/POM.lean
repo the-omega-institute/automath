@@ -301,6 +301,7 @@ import Omega.POM.MultiplicativeRefinementTelescopeAlpha
 import Omega.POM.DiagonalRateUniformClosedForm
 import Omega.POM.DiagonalRateUniformGlobalUpper
 import Omega.POM.DiagonalRateRefreshHittingTimeGeometricSpectralDecomp
+import Omega.POM.DiagonalRateSpectralProjectorResidueAndTransition
 import Omega.POM.DiagonalRateRefreshHittingTimeTailSpectral
 import Omega.POM.DiagonalRateRefreshHittingTimeMeanClosed
 import Omega.POM.DiagonalRateRefreshKronStarEquivalence
