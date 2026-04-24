@@ -514,6 +514,7 @@ import Omega.POM.HighMultiplicitySparse
 import Omega.POM.HoelderBridgeDispersionFromSq
 import Omega.POM.IndependenceDpRadius2
 import Omega.POM.IndMatrixGrammar
+import Omega.POM.IndLocalRecurrence
 import Omega.POM.IndFactorization
 import Omega.POM.InfonceFiberSpectrumTomography
 import Omega.POM.MuSecantAudit

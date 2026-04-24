@@ -1209,6 +1209,7 @@ import Omega.Zeta.XiTimePart9gCanonicalSubmonoidFreeMonoid
 import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
 import Omega.Zeta.XiTimePart9zqThreepointJensenRhDisproof
 import Omega.Zeta.XiTimePart9zbkPadeJacobiIdentity
+import Omega.Zeta.XiTimePart9zaWindow6AreaPairingLiftedCollapse
 import Omega.Zeta.XiPadeStieltjesOrderPreserving
 import Omega.Zeta.XiTimePart9zbgFoldpiFiniteRankMomentExhaustion
 import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage
