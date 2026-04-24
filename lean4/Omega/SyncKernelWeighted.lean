@@ -209,6 +209,7 @@ import Omega.SyncKernelWeighted.EinsteinLegendre
 import Omega.SyncKernelWeighted.EdgeworthFourth
 import Omega.SyncKernelWeighted.DiscSquareSubstitutionSplit
 import Omega.SyncKernelWeighted.CompletedPrimitiveQuadraticFingerprintByConst
+import Omega.SyncKernelWeighted.Disc2Prim8SharedRamified37
 import Omega.SyncKernelWeighted.FiniteRhParityGeneral
 import Omega.SyncKernelWeighted.FiniteRhJensenFreeEnergy
 import Omega.SyncKernelWeighted.FiniteRhSpectralAnnihilationFilter
@@ -217,6 +218,7 @@ import Omega.SyncKernelWeighted.FluctuationEven
 import Omega.SyncKernelWeighted.SyncKernelWeightedHatDelta
 import Omega.SyncKernelWeighted.WeightedCompletionQ
 import Omega.SyncKernelWeighted.WeightedXiNormSalem
+import Omega.SyncKernelWeighted.WeightedXiBetaMahler
 import Omega.SyncKernelWeighted.WeightedXiSingleExceptionPair
 import Omega.SyncKernelWeighted.WeightedXiThreeQuadratics
 import Omega.SyncKernelWeighted.WeightedUnitRootFinite
