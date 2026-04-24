@@ -219,6 +219,7 @@ import Omega.POM.DiagonalRateAbsorbingLaguerreInterlacing
 import Omega.POM.DiagonalRateRefreshAbsorbingLaguerreInterlacing
 import Omega.POM.DiagonalRateAcceptRefreshSSTStrong
 import Omega.POM.DiagonalRateRefreshAcceptStrongStationaryTime
+import Omega.POM.DiagonalRateRobinhoodGain
 import Omega.POM.MaxentMarkovLaguerreSecularSpectrum
 import Omega.POM.FiberPosteriorEquivalenceSingleCandidateTest
 import Omega.POM.MaxentMarkovNoOscillationEndpoints
