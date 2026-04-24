@@ -552,6 +552,7 @@ import Omega.POM.LeyangLiftMobiusInvolutionFunctorial
 import Omega.POM.LeyangMonotoneCouplingPrimeRegister
 import Omega.POM.LkArcsineLaw
 import Omega.POM.LkChebyshevCharpoly
+import Omega.POM.LkShiftedDetFreeEnergy
 import Omega.POM.LkMellinTransformRigidity
 import Omega.POM.LogmLinearResponseZero
 import Omega.POM.LkSurfaceFreeEnergyStrictConcavity

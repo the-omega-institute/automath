@@ -64,6 +64,7 @@ import Omega.GroupUnification.ParryEndpointCollapse
 import Omega.GroupUnification.ParryRigidity
 import Omega.GroupUnification.PatiSalamGlobalFormRigidity
 import Omega.GroupUnification.PrimeRegisterNormOneIdeleCoherence
+import Omega.GroupUnification.PullbackBracketFromOperatorEnvelope
 import Omega.GroupUnification.SMSignatureCyclicDivides6
 import Omega.GroupUnification.SMZeckendorfLieAlgebraRigidity
 import Omega.GroupUnification.SMUpliftResidualMediatorM7

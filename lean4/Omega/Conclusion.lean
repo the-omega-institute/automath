@@ -23,6 +23,7 @@ import Omega.Conclusion.AngularPronyIdentifiability
 import Omega.Conclusion.AlgorithmPrimeShiftEquivalence
 import Omega.Conclusion.AmbiguityShellJordanChainGraphLift
 import Omega.Conclusion.AmbiguityShellNilpotentIndexEqualsWindow
+import Omega.Conclusion.AmbiguityShellUnsyncPrefixPolynomial
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.AnomalyTwoCoprimeLayerTomography
