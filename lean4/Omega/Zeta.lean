@@ -143,6 +143,7 @@ import Omega.Zeta.XiDefectDensityConeChoquetExtreme
 import Omega.Zeta.XiDefectEntropyHeightBudgetVarianceGap
 import Omega.Zeta.XiDefectEntropyHyperbolicAreaLaw4pi
 import Omega.Zeta.XiDefectEntropyFeasibleIntervalFluxIndex
+import Omega.Zeta.XiDiskZeroPoleIndexReduction
 import Omega.Zeta.XiPartitionTailRateDeltamin
 import Omega.Zeta.XiSymqRankoneCouplingTPower
 import Omega.Zeta.XiSymqResultantPadicValuation
