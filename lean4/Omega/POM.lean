@@ -986,3 +986,4 @@ import Omega.POM.StarMomentKernelPerronSymmetricCompression
 import Omega.POM.DiagonalRateCriticalSpectrumInvariantsClosed
 import Omega.POM.AnomAdditiveUpToBoundary
 import Omega.POM.ZeroTemperatureGibbsLimit
+import Omega.POM.DiagonalRateSmallDistortionHellingerEndpoint
