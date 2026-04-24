@@ -263,6 +263,7 @@ import Omega.Conclusion.ZeckendorfResetObservationThreshold
 import Omega.Conclusion.RealInput40CollisionEscortAlgebraicParametrization
 import Omega.Conclusion.ZeckendorfEulerSuperexponentialTail
 import Omega.Conclusion.ZGEulerMemoryRankTwo
+import Omega.Conclusion.Window6ShellLossPureDyadic
 import Omega.Conclusion.ZGShadowNonmultiplicativityNearestNeighbor
 import Omega.Conclusion.CommonFiniteAdditiveLinearizationObstruction
 import Omega.Conclusion.CommonLocalRamificationOnly3

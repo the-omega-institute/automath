@@ -221,6 +221,7 @@ import Omega.POM.MaxentMarkovGapVsRateSlopeCoupling
 import Omega.POM.MomqTensorKernelSchurDeterminant
 import Omega.POM.MaxentMarkovSmallDistortionLambda2Slope
 import Omega.POM.MaxentMarkovZetaDeterminantSinglePolynomial
+import Omega.POM.CscMomentsFiniteTraceInversion
 import Omega.POM.MaxentMarkovOptimalCouplingLatentBinaryMixture
 import Omega.POM.MaxentMarkovSpectrumMonotoneInDelta
 import Omega.POM.MaxentMarkovSpectrumRateCompleteInvariant
