@@ -617,6 +617,7 @@ import Omega.POM.MicrocanonicalModuliInformationLdp
 import Omega.POM.MicrocanonicalFoldPosteriorCountAndProb
 import Omega.POM.MultiplicativeUpgradeFatalAmplification
 import Omega.POM.MicrocanonicalPosteriorModuliCLT
+import Omega.POM.MicrocanonicalQueryDistortionCriticalWindowCLT
 import Omega.POM.MicrocanonicalTwoTemperatureJsIdentity
 import Omega.POM.MicrocanonicalTwoTemperatureKktPowerLaw
 import Omega.POM.MicrocanonicalTwoTemperatureStrongDualitySensitivity
