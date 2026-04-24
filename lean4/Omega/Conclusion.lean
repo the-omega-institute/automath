@@ -1023,3 +1023,4 @@ import Omega.Conclusion.SchurGibbsSignatureCompleteInvertibility
 import Omega.Conclusion.FiniteDefectCommensurableBifrequencyAliasLattice
 import Omega.Conclusion.PisotBoundaryShadowNotL2
 import Omega.Conclusion.RamanujanShellTransformStrictInjectivity
+import Omega.Conclusion.GoldenTransportStarLogOverhead

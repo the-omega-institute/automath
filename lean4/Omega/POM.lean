@@ -875,3 +875,4 @@ import Omega.POM.OracleLocalCostKlBregman
 import Omega.POM.MicrocanonicalFoldWorstcaseQueryRigidity
 import Omega.POM.HstarDescentLinext
 import Omega.POM.FenceVolumeLog2Pi
+import Omega.POM.BqExplicitDiagonalizationLinearForms
