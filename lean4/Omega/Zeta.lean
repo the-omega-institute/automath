@@ -263,6 +263,7 @@ import Omega.Zeta.XiTerminalZmEllipticComplexTorusMiLoglaw
 import Omega.Zeta.DephysIndexMaxRelativeEntropyLoss
 import Omega.Zeta.XiTerminalZmGodelPrefixCodeMiDifference
 import Omega.Zeta.XiTerminalZmGodelIntegerTransportSquareAudit
+import Omega.Zeta.XiTwoScaleComovingSpectrumDiophantineThreshold
 import Omega.Zeta.XiTerminalZmGodelHorizonFactorizationForgetting
 import Omega.Zeta.XiTerminalZmResolventCubicNoCmMaxEnd
 import Omega.Zeta.GMFibonacciDivisibility
