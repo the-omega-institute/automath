@@ -462,6 +462,7 @@ import Omega.POM.GoldenBiasVarianceEqualsBias
 import Omega.POM.GoldenCouplingUniqueness
 import Omega.POM.HankelBadPrimesTwoDeterminants
 import Omega.POM.HankelDeterminantGeometricLaw
+import Omega.POM.HankelExteriorPowerFiniteMemory
 import Omega.POM.HankelExteriorPowerPropagation
 import Omega.POM.HankelFingerprintSeeds
 import Omega.POM.HankelFinitePoleSpectralGap
@@ -643,6 +644,7 @@ import Omega.POM.OracleGapAreaLawEnergy
 import Omega.POM.OracleFailureExponentFromRenyiSpectrum
 import Omega.POM.OracleFailureExponentDualityFromDoubleLdp
 import Omega.POM.OracleFailureExponentBitLdp
+import Omega.POM.OracleIwIuAffineTilt
 import Omega.POM.OracleFailureThermoConjugacySmooth
 import Omega.POM.OracleSuccessExponentTwoMeasureCompetition
 import Omega.POM.OracleRenyiPressureFailureBound
