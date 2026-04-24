@@ -2340,6 +2340,105 @@ def _balanced_json_slice(text: str, start: int) -> Optional[str]:
 MAIN_PAPER_DIR = REPO_ROOT / "theory" / "2026_golden_ratio_driven_scan_projection_generation_recursive_emergence"
 BACKFLOW_DIR = MAIN_PAPER_DIR / "sections" / "appendix" / "outreach_bridges"
 
+# ---------------------------------------------------------------------------
+# Backflow language & terminology policy
+# ---------------------------------------------------------------------------
+PAPER_LANGUAGE = "zh-CN"
+PAPER_LANGUAGE_LABEL = "中文"
+
+BACKFLOW_TERMINOLOGY_FIXES: dict[str, str] = {
+    "稳定纤维": "稳定类型",
+}
+
+BACKFLOW_LANGUAGE_POLICY = """BACKFLOW LANGUAGE POLICY:
+- The main paper is written entirely in Chinese (中文学术散文).
+  All backflow .tex content MUST be in Chinese, matching the style of
+  existing sections (see sync_kernel, unit_circle_phase_arithmetic,
+  normalization appendices for reference).
+- Use \\text{且} (NOT \\text{and}) for connectives in display math.
+- Use established paper terminology:
+    稳定类型集合 (for X_m the set), 稳定类型 (for x ∈ X_m an element),
+    稳定值环同构 (for stableValueRingEquiv), 折叠 (for Fold).
+  Do NOT use 稳定纤维 — the paper uses 稳定类型.
+- Keep technical English terms that have no standard Chinese equivalent:
+  magma, Lean, ETP, CRT, Fibonacci, Bowen-Franks, SFT.
+- Table headers, captions, and all non-formula prose must be in Chinese.
+- No revision notes, no timestamps, no 'new X' or 'updated Y' markers."""
+
+
+def verify_backflow_language(tex_path: "Path") -> dict[str, Any]:
+    """Verify backflow .tex matches paper language and terminology.
+
+    Returns {"passed": bool, "errors": [...], "warnings": [...], "fixes_applied": int}.
+    """
+    errors: list[str] = []
+    warnings: list[str] = []
+    fixes_applied = 0
+
+    if not tex_path.exists():
+        return {"passed": False, "errors": ["tex file does not exist"], "warnings": [], "fixes_applied": 0}
+
+    content = tex_path.read_text(encoding="utf-8")
+
+    # --- Check 1: Language detection (heuristic) ---
+    # Count Chinese chars vs English prose words outside of LaTeX commands
+    import re as _re
+    stripped = _re.sub(r"\\[a-zA-Z]+(\[[^\]]*\])?(\{[^}]*\})*", "", content)
+    stripped = _re.sub(r"\$[^$]*\$", "", stripped)
+    stripped = _re.sub(r"\\\[[^\]]*\\\]", "", stripped)
+    chinese_chars = len(_re.findall(r"[\u4e00-\u9fff]", stripped))
+    english_words = len(_re.findall(r"\b[a-zA-Z]{4,}\b", stripped))
+    # If English words dominate, flag as wrong language
+    if english_words > 0 and chinese_chars < english_words * 2:
+        errors.append(
+            f"backflow content appears to be in English ({english_words} English words vs "
+            f"{chinese_chars} Chinese chars). Paper requires Chinese (中文)."
+        )
+
+    # --- Check 2: Terminology fixes ---
+    original = content
+    for wrong, correct in BACKFLOW_TERMINOLOGY_FIXES.items():
+        if wrong in content:
+            count = content.count(wrong)
+            content = content.replace(wrong, correct)
+            fixes_applied += count
+            warnings.append(f"replaced {count}x '{wrong}' → '{correct}'")
+
+    # --- Check 3: \\text{{and}} in math → \\text{{且}} ---
+    and_pattern = r"\\text\{and\}"
+    and_matches = _re.findall(and_pattern, content)
+    if and_matches:
+        content = _re.sub(and_pattern, r"\\text{且}", content)
+        fixes_applied += len(and_matches)
+        warnings.append(f"replaced {len(and_matches)}x \\text{{and}} → \\text{{且}}")
+
+    # --- Check 4: English table headers ---
+    eng_header_patterns = [
+        (r"\\text\{exact entries\}", r"\\text{精确条目}"),
+        (r"\\text\{superset entries\}", r"\\text{超集条目}"),
+        (r"\\text\{pair\}", r"\\text{对}"),
+        (r"\\text\{satisfied\}", r"\\text{满足}"),
+        (r"\\text\{refuted\}", r"\\text{反驳}"),
+    ]
+    for pat, repl in eng_header_patterns:
+        matches = _re.findall(pat, content)
+        if matches:
+            content = _re.sub(pat, repl, content)
+            fixes_applied += len(matches)
+            warnings.append(f"replaced {len(matches)}x {pat} → {repl}")
+
+    # Write back if fixes were applied
+    if content != original:
+        tex_path.write_text(content, encoding="utf-8")
+        logger.info("backflow language check: applied %d fixes to %s", fixes_applied, tex_path)
+
+    return {
+        "passed": len(errors) == 0,
+        "errors": errors,
+        "warnings": warnings,
+        "fixes_applied": fixes_applied,
+    }
+
 
 def build_backflow_placement_prompt(state: "RepoState") -> str:
     """Build prompt for Codex to propose WHERE in the paper this research belongs."""
@@ -2461,6 +2560,8 @@ def build_backflow_tex_prompt(state: "RepoState", placement: dict[str, Any]) -> 
         - Include \\label{{}} for cross-references
         - Reference verification scripts: "verified computationally (see scripts/equational_theory/)"
 
+        {BACKFLOW_LANGUAGE_POLICY}
+
         Write the COMPLETE .tex file to: {tex_dir}/main.tex
         Create the directory first: `mkdir -p {tex_dir}`
 
@@ -2571,9 +2672,35 @@ def backflow_to_main_paper(
     if not isinstance(gen_result, dict):
         gen_result = {}
 
-    # Step 4: Wire the new section into the paper's main.tex
+    # Step 3.5: Verify backflow language & terminology
     section_type = placement.get("placement", "appendix")
     section_dir = placement.get("section_dir", slug)
+    tex_dir = MAIN_PAPER_DIR / "sections" / section_type / section_dir
+    tex_file = tex_dir / "main.tex"
+    if tex_file.exists() and not dry_run:
+        lang_check = verify_backflow_language(tex_file)
+        if not lang_check["passed"]:
+            logger.warning(
+                "[%s] Backflow language check FAILED: %s. "
+                "Generated content is not in Chinese — requires manual rewrite or re-generation.",
+                state.repo, "; ".join(lang_check["errors"]),
+            )
+            state.log_event("B", "backflow language check failed", detail=json.dumps({
+                "errors": lang_check["errors"],
+                "warnings": lang_check["warnings"],
+            }, ensure_ascii=False))
+            save_state(state)
+        else:
+            if lang_check["fixes_applied"] > 0:
+                logger.info(
+                    "[%s] Backflow language check: auto-fixed %d terminology issues (%s)",
+                    state.repo, lang_check["fixes_applied"],
+                    "; ".join(lang_check["warnings"]),
+                )
+            else:
+                logger.info("[%s] Backflow language check passed", state.repo)
+
+    # Step 4: Wire the new section into the paper's main.tex
     insert_after = placement.get("insert_after", "")
     main_tex_path = MAIN_PAPER_DIR / "sections" / section_type / "main.tex"
     subfile_line = f"\\subfile{{{section_dir}/main}}"
