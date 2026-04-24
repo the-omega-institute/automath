@@ -180,6 +180,7 @@ import Omega.Conclusion.CarryZeroTempSupportCollapse
 import Omega.Conclusion.CausalDepthBranchBudgetOrthogonality
 import Omega.Conclusion.CdimArbitraryProfiniteKernel
 import Omega.Conclusion.CdimFiniteQuotientGrowth
+import Omega.Conclusion.PrimeLogAlphaSingularRankOne
 import Omega.Conclusion.PrimorialAxisSecondOrder
 import Omega.Conclusion.CdimK0UniqueSurvivor
 import Omega.Conclusion.CdimPhaseCompressionBitLowerBound
