@@ -967,3 +967,4 @@ import Omega.Conclusion.FiniteRankExactAdditiveUniqueExtension
 import Omega.Conclusion.FiniteRankAdditiveShadowObstruction
 import Omega.Conclusion.FiniteMomentCertificateIncompleteness
 import Omega.Conclusion.RealInput40SyncLengthZeroSpectrumAlignment
+import Omega.Conclusion.FiberCnfNpcompletePeriodic
