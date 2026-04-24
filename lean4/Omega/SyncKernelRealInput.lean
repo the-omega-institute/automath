@@ -65,3 +65,5 @@ import Omega.SyncKernelRealInput.RealInput40GroundLayerOracleThreshold
 import Omega.SyncKernelRealInput.RealInput40UnifiedGeneratorAlignment
 import Omega.SyncKernelRealInput.RealInput40RateEndpoints
 import Omega.SyncKernelRealInput.GmAffineSelfmapSpectralGap
+import Omega.SyncKernelRealInput.GMImprovabilityIffD1
+import Omega.SyncKernelRealInput.RealInput40CollisionRhkWindow
