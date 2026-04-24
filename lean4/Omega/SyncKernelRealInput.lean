@@ -48,6 +48,8 @@ import Omega.SyncKernelRealInput.RealInput40LogMCurvatureMismatchSpectrum
 import Omega.SyncKernelRealInput.RealInputAddDelayRigidity
 import Omega.SyncKernelRealInput.RealInput40MapAccuracies
 import Omega.SyncKernelRealInput.RealInput40CollisionBranchRadius
+import Omega.SyncKernelRealInput.FiniteRh40
+import Omega.SyncKernelRealInput.FiniteRhExplicitFormula
 import Omega.SyncKernelRealInput.FiniteRhPrimeOrbitOsc
 import Omega.SyncKernelRealInput.GMRandomWalkMixingPisano
 import Omega.SyncKernelRealInput.RealInput40JensenKink

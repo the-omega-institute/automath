@@ -352,6 +352,7 @@ import Omega.Zeta.XiToeplitzCurvatureEnergyEquivalence
 import Omega.Zeta.XiToeplitzDeterminantRatioLimitL2
 import Omega.Zeta.XiToeplitzNegativeSpectrumRobustVerification
 import Omega.Zeta.XiToeplitzNegativeEigenvalueImpliesJensenDefectLb
+import Omega.Zeta.XiToeplitzPsdMinimalFailureSchurCohnRootEscape
 import Omega.Zeta.XiToeplitzPsdFibonacciLocalization
 import Omega.Zeta.XiToeplitzPsdJetSemialgebraic
 import Omega.Zeta.XiToeplitzPsdRobustCofinalAudit
