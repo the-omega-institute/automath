@@ -897,6 +897,7 @@ import Omega.POM.ValueLayerRewritingTerminating
 import Omega.POM.VisibleThickTail
 import Omega.POM.VisibleWalshCommutatorDefect
 import Omega.POM.VisibleWalshGramTransfer
+import Omega.POM.VisibleWalshSectorwiseInheritance
 import Omega.POM.VisibleWalshParsevalFrame
 import Omega.POM.WitnessExtractionOptimalSuccess
 import Omega.POM.DerivedBinaryAdmissibilityGoldenRateFloor
