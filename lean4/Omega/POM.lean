@@ -27,6 +27,7 @@ import Omega.POM.AdditiveFoldCollisionBounds
 import Omega.POM.HiddenBitJumpProbabilityClosedForm
 import Omega.POM.HiddenBitMixedMomentCluster
 import Omega.POM.InjectivizationSideinfoExactAlphabet
+import Omega.POM.FiniteAuditBudgetFactorcodeUndecidable
 import Omega.POM.HankelSyndromeHNFModelFree
 import Omega.POM.HankelMinorDynamicsDominantExteriorSpectrum
 import Omega.POM.S2RankExact
@@ -524,6 +525,7 @@ import Omega.POM.RealInput40ZetaFactorization
 import Omega.POM.MacropriorFiberwiseReversibleCapacity
 import Omega.POM.MicrocanonicalQueryDistortionStrongConversePlane
 import Omega.POM.MaryAuxlength
+import Omega.POM.AncillaHaltingInapproximability
 import Omega.POM.MaryAuxlengthSeeds
 import Omega.POM.MacroMomentVsMicroPrimeRegisterCertificateSeparation
 import Omega.POM.MassSplittingMomentRoot
