@@ -109,6 +109,7 @@ import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.BooleanCircuitProjectionBudget
 import Omega.POM.BoundedPerturbationInvariance
 import Omega.POM.CRTSpatializationPrimeBudget
+import Omega.POM.PrimeRegisterQuantileBudget
 import Omega.POM.CapacityCollisionDataProcessing
 import Omega.POM.CapacityPointwiseMinimalMajorization
 import Omega.POM.CollisionThresholdCapacity
@@ -642,6 +643,7 @@ import Omega.POM.MicrocanonicalInformationCLT
 import Omega.POM.MicrocanonicalInformationLinearLaw
 import Omega.POM.MicrocanonicalModuliInformationLdp
 import Omega.POM.MicrocanonicalFoldPosteriorCountAndProb
+import Omega.POM.MicrocanonicalQueryPlusBitsPhase
 import Omega.POM.MicrocanonicalTwoTemperatureCriticalQuadraticLaw
 import Omega.POM.MultiplicativeUpgradeFatalAmplification
 import Omega.POM.MicrocanonicalPosteriorModuliCLT
