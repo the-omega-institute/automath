@@ -12,7 +12,7 @@ Bernoulli/even-zeta seeds remain available as explicit output data. -/
 def derived_fold_gauge_shift_annihilator_even_zeta_statement : Prop :=
   (∀ (m₀ m₁ μ₀ μ₁ : ℂ) (n : ℕ),
       let a : ℕ → ℂ := fun k => m₀ * μ₀ ^ k + m₁ * μ₁ ^ k
-      let Q : Polynomial ℂ := (X - C μ₀) * (X - C μ₁)
+      let Q : Polynomial ℂ := (Polynomial.X - Polynomial.C μ₀) * (Polynomial.X - Polynomial.C μ₁)
       Omega.SyncKernelWeighted.finite_rh_spectral_annihilation_filter_action Q a n = 0) ∧
     ((4 + 16 = 20) ∧
       (2 * 1 - 1 = 1 ∧ 2 * 2 - 1 = 3 ∧ 2 * 3 - 1 = 5) ∧

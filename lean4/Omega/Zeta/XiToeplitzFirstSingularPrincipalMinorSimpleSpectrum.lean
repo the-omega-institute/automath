@@ -50,8 +50,13 @@ theorem paper_xi_toeplitz_first_singular_principal_minor_simple_spectrum
   dsimp [xi_toeplitz_first_singular_principal_minor_simple_spectrum_statement]
   have hrank :
       Matrix.rank D.toeplitzMatrix = min (D.principalOrder + 1) D.degree := by
-    simpa [xi_toeplitz_first_singular_principal_minor_simple_spectrum_data.toeplitzMatrix,
-      Complex.conj_pow] using
+    change
+      Matrix.rank
+          (fun i j : Fin (D.principalOrder + 1) =>
+            ∑ k : Fin D.degree,
+              (D.weight k : ℂ) * D.root k ^ (j : ℕ) * Complex.conj (D.root k ^ (i : ℕ))) =
+        min (D.principalOrder + 1) D.degree
+    exact
       paper_xi_toeplitz_rank_stabilizes_to_distinct_unitcircle_roots D.degree D.principalOrder
         D.root D.weight D.root_injective D.weight_pos
   refine ⟨hrank, ?_, ?_⟩
@@ -70,4 +75,5 @@ theorem paper_xi_toeplitz_first_singular_principal_minor_simple_spectrum
         simpa [Nat.min_eq_right (le_trans hge (Nat.le_succ _))] using hrank
       omega
 
+end
 end Omega.Zeta

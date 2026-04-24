@@ -14,7 +14,7 @@ lemma pom_fence_maxchains_all_isolated_optimal_eulerProduct_eq_one
   refine Finset.prod_eq_one ?_
   intro i hi
   have hget : lengths.get i = 1 := hall _ (List.get_mem lengths i)
-  simp [fenceEulerComponentCount, hget]
+  rw [fenceEulerComponentCount, if_pos hget]
 
 lemma pom_fence_maxchains_all_isolated_optimal_eulerProduct_eq_zero
     {lengths : List ℕ} (hnot : ¬ ∀ n ∈ lengths, n = 1) :
@@ -24,7 +24,7 @@ lemma pom_fence_maxchains_all_isolated_optimal_eulerProduct_eq_zero
   rcases hnot with ⟨i, hi⟩
   unfold fenceEulerProduct
   refine Finset.prod_eq_zero_iff.mpr ?_
-  exact ⟨i, Finset.mem_univ i, by simp [fenceEulerComponentCount, hi]⟩
+  exact ⟨i, Finset.mem_univ i, by rw [fenceEulerComponentCount, if_neg hi]⟩
 
 lemma pom_fence_maxchains_all_isolated_optimal_shuffle_eq_factorial
     {lengths : List ℕ} (hall : ∀ n ∈ lengths, n = 1) :
@@ -38,12 +38,13 @@ lemma pom_fence_maxchains_all_isolated_optimal_shuffle_eq_factorial
     refine Finset.prod_eq_one ?_
     intro i hi
     have hget : lengths.get i = 1 := hall _ (List.get_mem lengths i)
-    simp [hget]
+    rw [hget]
+    simp
   have hsum :
-      (∑ i ∈ (Finset.univ : Finset (Fin lengths.length)), lengths.get i) = lengths.sum := by
+      (∑ i : Fin lengths.length, lengths.get i) = lengths.sum := by
     have hsumList : (List.ofFn fun i : Fin lengths.length => lengths.get i).sum = lengths.sum := by
       simpa using congrArg List.sum (List.ofFn_get lengths)
-    simpa [sum_ofFn] using hsumList
+    simpa using hsumList
   rw [hprod, hsum] at hspec
   simpa [fenceShuffleCount] using hspec
 

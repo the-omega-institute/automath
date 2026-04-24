@@ -91,7 +91,24 @@ theorem paper_pom_visible_walsh_gram_transfer
           pom_visible_walsh_gram_transfer_lambda D *
               pom_visible_walsh_gram_transfer_gram_matrix D +
             pom_visible_walsh_gram_transfer_commutator_defect D := by
-      exact sub_eq_iff_eq_add.mp hdecomp
+      calc
+        pom_visible_walsh_gram_transfer_transfer_matrix D =
+            (pom_visible_walsh_gram_transfer_transfer_matrix D -
+                pom_visible_walsh_gram_transfer_lambda D *
+                  pom_visible_walsh_gram_transfer_gram_matrix D) +
+              pom_visible_walsh_gram_transfer_lambda D *
+                pom_visible_walsh_gram_transfer_gram_matrix D := by
+              ring
+        _ =
+            pom_visible_walsh_gram_transfer_commutator_defect D +
+              pom_visible_walsh_gram_transfer_lambda D *
+                pom_visible_walsh_gram_transfer_gram_matrix D := by
+              rw [hdecomp]
+        _ =
+            pom_visible_walsh_gram_transfer_lambda D *
+                pom_visible_walsh_gram_transfer_gram_matrix D +
+              pom_visible_walsh_gram_transfer_commutator_defect D := by
+              ring
     simpa [pom_visible_walsh_gram_transfer_gram_matrix, mul_comm, mul_left_comm, mul_assoc] using
       hrewrite
   · intro z
