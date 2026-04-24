@@ -30,6 +30,7 @@ import Omega.Zeta.AbelFixedStepGrowthRecoversSigmaStar
 import Omega.Zeta.AbelHardyProjectionTowerReverseMartingale
 import Omega.Zeta.AbelPolyphaseReconstruction
 import Omega.Zeta.AbelResolutionPowerRenormalizationIdentity
+import Omega.Zeta.XiCrossResolutionTimeRenormalizationDefect
 import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.AbelianShadowDefect
 import Omega.Zeta.AbelianTowerNoGo
