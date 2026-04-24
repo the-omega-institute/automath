@@ -165,6 +165,7 @@ import Omega.Zeta.XiComovingLeyangEndpointSquareRoot
 import Omega.Zeta.RealInput40ArityChargeZeroConstants
 import Omega.Zeta.RealInput40ZetaUvResidue
 import Omega.Zeta.XiLogDefectPotentialPoissonPrimitive
+import Omega.Zeta.XiDtnActsOnJensenKernel
 import Omega.Zeta.XiLocalBinaryNormalizationFibonacciRigidity
 import Omega.Zeta.XiLocalizedSolenoidPeriodicGrowthMaxScale
 import Omega.Zeta.XiLogcmSecondBernoulliCoefficientRatio
@@ -261,6 +262,7 @@ import Omega.Zeta.XiArtinMazurEulerProductZetaRatio
 import Omega.Zeta.XiSimpleLeyangEdgeN2Quantization
 import Omega.Zeta.XiCauchyPoissonSingleScaleMomentInversion
 import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprint
+import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprintLayered
 import Omega.Zeta.XiCayleyScanAreaLawLowfreqTrace
 import Omega.Zeta.XiCriticalLineCircleCauchyUniformization
 import Omega.Zeta.XiLocalJetToeplitzFailureSemialgebraicStratification

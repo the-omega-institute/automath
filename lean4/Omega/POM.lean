@@ -236,6 +236,7 @@ import Omega.POM.MicrocanonicalFoldHtUniformMin
 import Omega.POM.FiberBiasedConditionalKlChain
 import Omega.POM.FiberLeyangRenyiBernoulliDecomposition
 import Omega.POM.MicrocanonicalFoldHtFromPowerSums
+import Omega.POM.MicrocanonicalFoldHtLowOrder
 import Omega.POM.MicrocanonicalFoldResidualMinEntropy
 import Omega.POM.DiagonalRateAbsorbingWronskianIdentity
 import Omega.POM.DiagonalRateAbsorbingWronskianIdentitySecondary
