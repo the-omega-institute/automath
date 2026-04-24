@@ -176,6 +176,7 @@ import Omega.Zeta.XiLimitDefectPotentialSpectralTailReadsDeltaMax
 import Omega.Zeta.XiLimitDefectPotentialL2EnergyKernel
 import Omega.Zeta.XiLimitDefectPotentialVsDepthProfile
 import Omega.Zeta.XiNaturalExtensionPeriodicOrbitZetaPreservation
+import Omega.Zeta.XiMittagLefflerKfoldZeroQuantization
 import Omega.Zeta.XiNaturalExtensionMinimalDAlphabetRealization
 import Omega.Zeta.PhaseLiftFixedSlice
 import Omega.Zeta.XiNullMicroKlWindow
@@ -215,6 +216,7 @@ import Omega.Zeta.XiJDiscriminant2IsogenyVelu
 import Omega.Zeta.XiJSexticEllipticLattesBelyiNormalization
 import Omega.Zeta.XiJSexticEllipticLattesV4GaloisBranching
 import Omega.Zeta.XiJSexticEllipticLattesKleinMobius
+import Omega.Zeta.XiJSexticEllipticLattesMultiplierRigidity
 import Omega.Zeta.XiJSexticHyperellipticBranchPolynomialDiscriminantFactorization
 import Omega.Zeta.XiJGMonicBoundaryReadout
 import Omega.Zeta.XiJGDiscriminantSquareclassInvariance
