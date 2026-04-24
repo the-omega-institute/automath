@@ -653,6 +653,7 @@ import Omega.POM.PellConeAutomorphism
 import Omega.POM.PerronLandauerLimitLaw
 import Omega.POM.PhiLogisticPosteriorGrid
 import Omega.POM.PositiveNegativeMomentCoupling
+import Omega.POM.IntegerPressureDiscreteConvexityStrictBound
 import Omega.POM.PressureConvexity
 import Omega.POM.PressureReflectionInequality
 import Omega.POM.PressureSlopes
