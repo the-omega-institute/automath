@@ -7,6 +7,7 @@ import Omega.Zeta.AbelCharacterSpectrumAsRotationCorrelation
 import Omega.Zeta.AbelCongruenceEnergyParsevalBarcode
 import Omega.Zeta.AbelDecimationSemigroupIdentity
 import Omega.Zeta.AbelGrowthExponentCriterion
+import Omega.Zeta.AbelH2CriticalIndex
 import Omega.Zeta.AbelAnalyticRemainderDecimationCollapse
 import Omega.Zeta.AbelKadicMultiresolutionEnergyLedger
 import Omega.Zeta.AbelOffcriticalExponentialRadiusAmplification

@@ -144,6 +144,7 @@ import Omega.POM.FiberPsiExponentMobiusReconstruct
 import Omega.POM.LocalDefectGibbsVariational
 import Omega.POM.LogMSplit40
 import Omega.POM.RootUnityFilterQ2Law
+import Omega.POM.RootUnityFilterVarthetaSecondOrder
 import Omega.POM.DefectBand
 import Omega.POM.DelayMin
 import Omega.POM.DerivedFiberDeterminantExtremalEnvelope
@@ -199,6 +200,7 @@ import Omega.POM.MaxentMarkovSpectrumSingleShotInversion
 import Omega.POM.SingleQSchurTracesCompleteFiberSpectrum
 import Omega.POM.MaxFiberEvenSingleSampleMap
 import Omega.POM.MaxFiberHphiRelativeEntropyGap
+import Omega.POM.FiberLeyangRenyiBernoulliDecomposition
 import Omega.POM.DiagonalRateAbsorbingWronskianIdentity
 import Omega.POM.DiagonalRateAbsorbingWronskianIdentitySecondary
 import Omega.POM.DiagonalRateAbsorbingFullVsDeletedInterlacing
