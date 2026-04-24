@@ -739,8 +739,7 @@ $p=e^{-\alpha}$ gives
 \[
 S_k=p^k(1+\alpha k),
 \qquad
-h_{k+1}-h_k=
-\frac{\alpha^2p}{(1+\alpha k)(1+\alpha(k+1))}>0 .
+(h_{k+1}-h_k)=\frac{\alpha^2p}{(1+\alpha k)(1+\alpha(k+1))}>0 .
 \]
 Thus the click hazard is strictly increasing for all positive boundary-reset
 recovery parameters.
@@ -810,7 +809,8 @@ attempt rate of the sampled instrument from
 \Gamma=\Gamma_+(x,\Omega)=R_\Omega(x)
 \]
 is not used here and is deferred to the later calibration step in
-Sections~\ref{sec:kms-shells}--\ref{sec:inverse}. Accordingly, the theorem is
+Section~\ref{sec:kms-shells} and the later abstract calibrated toy-model
+appendices. Accordingly, the theorem is
 not a theorem deriving the boundary-reset counter law from UDW detector
 back-action.
 
@@ -1021,9 +1021,7 @@ survival and hazard formulas are stated in
 \Cref{prop:recovery-main,eq:equal-rate-survival-hazard-main}. A direct
 subtraction there gives
 \[
-h_{k+1}-h_k
-=
-\frac{\alpha^2p}{(1+\alpha k)(1+\alpha(k+1))}>0 .
+(h_{k+1}-h_k)=\frac{\alpha^2p}{(1+\alpha k)(1+\alpha(k+1))}>0 .
 \]
 Thus the equal-rate case retains the same strictly increasing hazard and the same obstruction to finite symbolic memory. The formulas for $a$, $b$, and $\lambda_{\mathrm{hid}}$ extend analogously to $\kappa_{\mathrm r}=\Gamma$.
 
@@ -1323,6 +1321,12 @@ M_N=\max\{2,\lfloor N^{1/3}\rfloor\},
 \qquad
 R_N=M_Nb_N+(M_N-1).
 \]
+The estimator $\widehat\sigma_{2,N}^2$ defined first is a
+\emph{consistency-only deterministic-prefix estimator}: its proof uses the
+fixed cycle count $R_N=O(N^{2/3})$ so that the observed record can be coupled
+pathwise to a Palm prefix. It therefore discards most complete cycles
+deliberately, only to keep the proof bookkeeping deterministic.
+
 If $J_N<R_N+2$, set $\widehat\sigma_{2,N}^2=0$. On the event
 $\{J_N\ge R_N+2\}$, use the first $R_N$ usable click-to-click intervals and
 write
@@ -1361,15 +1365,76 @@ Let
 \bar B_N=\frac1{M_N}\sum_{r=1}^{M_N}\widehat B_{r,N}.
 \]
 The omitted reward between successive batches removes the one-step overlap of
-the lag-two rewards. The implementable cycle-batch variance estimator is
+the lag-two rewards. The deterministic-prefix cycle-batch variance estimator is
 \begin{equation}\label{eq:cycle-block-est-main}
 \widehat\sigma_{2,N}^2=
 \frac{1}{\bar L_N\,b_N\,(M_N-1)}
 \sum_{r=1}^{M_N}(\widehat B_{r,N}-\bar B_N)^2.
 \end{equation}
-\Cref{thm:cycle-block-main} proves that this deterministic-prefix estimator is
-well-defined with probability tending to one and is consistent for
-$\sigma_2^2$.
+\Cref{thm:cycle-block-main} proves only the consistency of this
+deterministic-prefix estimator.
+
+For actual data analysis one typically uses all complete cycles up to the
+terminal remainder shorter than one separated batch. Set
+\[
+K_N:=J_N-1,
+\qquad
+M_N^{\mathrm{all}}=
+\max\left\{0,\left\lfloor\frac{K_N}{b_N+1}\right\rfloor\right\},
+\qquad
+R_N^{\mathrm{all}}=
+\begin{cases}
+M_N^{\mathrm{all}}b_N+(M_N^{\mathrm{all}}-1),& M_N^{\mathrm{all}}\ge1,\\
+0,& M_N^{\mathrm{all}}=0.
+\end{cases}
+\]
+If $M_N^{\mathrm{all}}<2$, set $\widehat\sigma_{2,N}^{\mathrm{all},2}=0$. On
+the event $\{M_N^{\mathrm{all}}\ge2\}$, use the first
+$R_N^{\mathrm{all}}=M_N^{\mathrm{all}}(b_N+1)-1$ complete cycles, write
+\[
+L_{j,N}^{\mathrm{all}}=\tau_{j+1}-\tau_j,
+\qquad 1\le j\le R_N^{\mathrm{all}},
+\]
+\[
+\bar L_N^{\mathrm{all}}
+=
+\frac1{R_N^{\mathrm{all}}}\sum_{j=1}^{R_N^{\mathrm{all}}}L_{j,N}^{\mathrm{all}},
+\]
+\[
+\widehat Y_{j,N}^{\mathrm{all}}
+=
+\sum_{n=\tau_j}^{\tau_{j+1}-1}\widehat Z_{n,N},
+\qquad 1\le j\le R_N^{\mathrm{all}},
+\]
+and define the separated batch sums
+\[
+\widehat B_{r,N}^{\mathrm{all}}
+=
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}\widehat Y_{j,N}^{\mathrm{all}},
+\qquad 1\le r\le M_N^{\mathrm{all}}.
+\]
+With
+\[
+\bar B_N^{\mathrm{all}}
+=
+\frac1{M_N^{\mathrm{all}}}\sum_{r=1}^{M_N^{\mathrm{all}}}
+\widehat B_{r,N}^{\mathrm{all}},
+\]
+the all-complete-cycle separated-batch estimator is
+\begin{equation}\label{eq:cycle-block-est-all-main}
+\widehat\sigma_{2,N}^{\mathrm{all},2}
+=
+\frac{1}{\bar L_N^{\mathrm{all}}\,b_N\,(M_N^{\mathrm{all}}-1)}
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+\bigl(\widehat B_{r,N}^{\mathrm{all}}-\bar B_N^{\mathrm{all}}\bigr)^2.
+\end{equation}
+On the event $\{M_N^{\mathrm{all}}\ge1\}$ one has
+\[
+0\le K_N-R_N^{\mathrm{all}}<b_N+1,
+\]
+this practical estimator uses every complete cycle except the unavoidable
+terminal remainder left after grouping the observed cycles into separated
+batches.
 \end{definition}
 
 \begin{lemma}[Lag-two cycle decomposition and one-dependence]\label{lem:cycle-one-dep-main}
@@ -1431,6 +1496,163 @@ $|Y_j|\le C_0L_j$ for a deterministic constant $C_0$, the exponential tail of
 $G_j$ gives finite moments of every order for $L_j$ and hence for $Y_j$.
 \end{proof}
 
+\begin{lemma}[Random-index transfer for stationary $1$-dependent rewards]\label{lem:anscombe-one-dep-main}
+Let $(Y_j)_{j\ge1}$ be stationary and $1$-dependent, with $\EE Y_1=0$ and
+$Y_1\in L^2$, and suppose that for some $\tau^2\ge0$ one has
+\[
+\frac{1}{\sqrt m}\sum_{j=1}^m Y_j
+\Rightarrow
+\mathcal N(0,\tau^2)
+\qquad(m\to\infty).
+\]
+Let $(n_N)$ be deterministic with $n_N\to\infty$, and let $(\nu_N)$ be
+integer-valued random indices such that
+\[
+\frac{\nu_N}{n_N}\to1
+\qquad\text{in probability.}
+\]
+Then
+\[
+\frac{1}{\sqrt{n_N}}\sum_{j=1}^{\nu_N}Y_j
+\Rightarrow
+\mathcal N(0,\tau^2).
+\]
+If in addition
+\[
+\frac{n_N}{N}\to c\in(0,\infty),
+\]
+then
+\[
+\frac{1}{\sqrt N}\sum_{j=1}^{\nu_N}Y_j
+\Rightarrow
+\mathcal N(0,c\,\tau^2).
+\]
+\end{lemma}
+
+\begin{proof}
+Write
+\[
+S_m=\sum_{j=1}^m Y_j,
+\qquad
+S_0:=0.
+\]
+By the deterministic CLT,
+\[
+\frac{S_{n_N}}{\sqrt{n_N}}
+\Rightarrow
+\mathcal N(0,\tau^2).
+\]
+It therefore suffices to prove that
+\[
+\frac{S_{\nu_N}-S_{n_N}}{\sqrt{n_N}}\to0
+\qquad\text{in probability.}
+\]
+
+Fix $\varepsilon,\eta>0$. Since $\nu_N/n_N\to1$ in probability, there exists
+$\delta\in(0,1)$ such that
+\[
+\PP\bigl(|\nu_N-n_N|>\delta n_N\bigr)<\eta
+\]
+for all sufficiently large $N$. On the event
+$E_{N,\delta}:=\{|\nu_N-n_N|\le \delta n_N\}$, one has
+\[
+|S_{\nu_N}-S_{n_N}|
+\le
+\max_{1\le m\le \lceil\delta n_N\rceil}|S_{n_N+m}-S_{n_N}|
++
+\max_{1\le m\le \lceil\delta n_N\rceil}|S_{n_N}-S_{(n_N-m)\vee0}|.
+\]
+By stationarity, each increment on the right has the same law as the prefix sum
+$S_m$, so
+\[
+\PP\!\left(
+\frac{|S_{\nu_N}-S_{n_N}|}{\sqrt{n_N}}>\varepsilon
+\right)
+\le
+\eta
++
+2\PP\!\left(
+\max_{1\le m\le \lceil\delta n_N\rceil}|S_m|>\frac{\varepsilon\sqrt{n_N}}{2}
+\right)
+\]
+for all sufficiently large $N$.
+
+To bound the maximal term, split the sequence into odd and even subsequences:
+\[
+O_r:=\sum_{j=1}^r Y_{2j-1},
+\qquad
+E_r:=\sum_{j=1}^r Y_{2j}.
+\]
+Because $(Y_j)$ is $1$-dependent, each of the sequences
+$(Y_{2j-1})_{j\ge1}$ and $(Y_{2j})_{j\ge1}$ consists of independent centered
+variables. Moreover, for every $m$,
+\[
+S_m=O_{\lceil m/2\rceil}+E_{\lfloor m/2\rfloor},
+\]
+so for every $k\ge1$ and $x>0$,
+\[
+\PP\!\left(\max_{1\le m\le k}|S_m|>x\right)
+\le
+\PP\!\left(\max_{1\le r\le \lceil k/2\rceil}|O_r|>\frac{x}{2}\right)
++
+\PP\!\left(\max_{1\le r\le \lceil k/2\rceil}|E_r|>\frac{x}{2}\right).
+\]
+Kolmogorov's maximal inequality applied to the independent centered odd and even
+subsequences gives
+\[
+\PP\!\left(\max_{1\le m\le k}|S_m|>x\right)
+\le
+\frac{4\Var(O_{\lceil k/2\rceil})}{x^2}
++
+\frac{4\Var(E_{\lceil k/2\rceil})}{x^2}
+\le
+\frac{8\lceil k/2\rceil\,\Var(Y_1)}{x^2}.
+\]
+Hence there is a deterministic constant $C$ such that
+\[
+\PP\!\left(\max_{1\le m\le k}|S_m|>x\right)\le \frac{Ck}{x^2}
+\qquad(k\ge1,\ x>0).
+\]
+With $k=\lceil\delta n_N\rceil$ and $x=\varepsilon\sqrt{n_N}/2$, this yields
+\[
+\PP\!\left(
+\max_{1\le m\le \lceil\delta n_N\rceil}|S_m|>\frac{\varepsilon\sqrt{n_N}}{2}
+\right)
+\le
+\frac{4C\delta}{\varepsilon^2}+o(1).
+\]
+Choosing $\delta$ smaller if necessary, we make the right-hand side at most
+$\eta$ for all large $N$. Therefore
+\[
+\PP\!\left(
+\frac{|S_{\nu_N}-S_{n_N}|}{\sqrt{n_N}}>\varepsilon
+\right)
+\le 3\eta
+\]
+for all sufficiently large $N$, which proves
+\[
+\frac{S_{\nu_N}-S_{n_N}}{\sqrt{n_N}}\to0
+\qquad\text{in probability.}
+\]
+Slutsky's theorem now gives
+\[
+\frac{1}{\sqrt{n_N}}\sum_{j=1}^{\nu_N}Y_j
+\Rightarrow
+\mathcal N(0,\tau^2).
+\]
+
+This is the stationary $1$-dependent reward version of the usual Anscombe
+transfer \cite{Anscombe1952}. If in addition $n_N/N\to c\in(0,\infty)$, then
+writing
+\[
+\frac{1}{\sqrt N}\sum_{j=1}^{\nu_N}Y_j
+=
+\sqrt{\frac{n_N}{N}}\,
+\frac{1}{\sqrt{n_N}}\sum_{j=1}^{\nu_N}Y_j
+\]
+and using Slutsky's theorem.
+\end{proof}
+
 \begin{lemma}[Stationary $1$-dependent cycle rewards and random-sum CLT]\label{lem:cycle-transfer-main}
 Let $(G_j)_{j\ge1}$ be i.i.d.\ $\mathbb N_0$-valued random variables with
 \[
@@ -1485,8 +1707,9 @@ For item (ii), the deterministic Hoeffding--Robbins CLT
 \mathcal N(0,\tau_2^2).
 \]
 Because $(L_j)_{j\ge1}$ is i.i.d.\ with mean $\mu_L\in(0,\infty)$, the
-renewal strong law gives $K_N^\circ/N\to1/\mu_L$ almost surely. The standard
-random-index transfer for renewal-reward sums therefore yields
+renewal strong law gives $K_N^\circ/N\to1/\mu_L$ almost surely. Applying
+\Cref{lem:anscombe-one-dep-main} with $n_N=\lfloor N/\mu_L\rfloor$ and
+$\nu_N=K_N^\circ$ yields
 \[
 \frac{1}{\sqrt{K_N^\circ}}\sum_{j=1}^{K_N^\circ}Y_j
 \Rightarrow
@@ -1839,163 +2062,6 @@ Therefore
 and multiplying by $\sqrt N$ gives the final statement.
 \end{proof}
 
-\begin{lemma}[Random-index transfer for stationary $1$-dependent rewards]\label{lem:anscombe-one-dep-main}
-Let $(Y_j)_{j\ge1}$ be stationary and $1$-dependent, with $\EE Y_1=0$ and
-$Y_1\in L^2$, and suppose that for some $\tau^2\ge0$ one has
-\[
-\frac{1}{\sqrt m}\sum_{j=1}^m Y_j
-\Rightarrow
-\mathcal N(0,\tau^2)
-\qquad(m\to\infty).
-\]
-Let $(n_N)$ be deterministic with $n_N\to\infty$, and let $(\nu_N)$ be
-integer-valued random indices such that
-\[
-\frac{\nu_N}{n_N}\to1
-\qquad\text{in probability.}
-\]
-Then
-\[
-\frac{1}{\sqrt{n_N}}\sum_{j=1}^{\nu_N}Y_j
-\Rightarrow
-\mathcal N(0,\tau^2).
-\]
-If in addition
-\[
-\frac{n_N}{N}\to c\in(0,\infty),
-\]
-then
-\[
-\frac{1}{\sqrt N}\sum_{j=1}^{\nu_N}Y_j
-\Rightarrow
-\mathcal N(0,c\,\tau^2).
-\]
-\end{lemma}
-
-\begin{proof}
-Write
-\[
-S_m=\sum_{j=1}^m Y_j,
-\qquad
-S_0:=0.
-\]
-By the deterministic CLT,
-\[
-\frac{S_{n_N}}{\sqrt{n_N}}
-\Rightarrow
-\mathcal N(0,\tau^2).
-\]
-It therefore suffices to prove that
-\[
-\frac{S_{\nu_N}-S_{n_N}}{\sqrt{n_N}}\to0
-\qquad\text{in probability.}
-\]
-
-Fix $\varepsilon,\eta>0$. Since $\nu_N/n_N\to1$ in probability, there exists
-$\delta\in(0,1)$ such that
-\[
-\PP\bigl(|\nu_N-n_N|>\delta n_N\bigr)<\eta
-\]
-for all sufficiently large $N$. On the event
-$E_{N,\delta}:=\{|\nu_N-n_N|\le \delta n_N\}$, one has
-\[
-|S_{\nu_N}-S_{n_N}|
-\le
-\max_{1\le m\le \lceil\delta n_N\rceil}|S_{n_N+m}-S_{n_N}|
-+
-\max_{1\le m\le \lceil\delta n_N\rceil}|S_{n_N}-S_{(n_N-m)\vee0}|.
-\]
-By stationarity, each increment on the right has the same law as the prefix sum
-$S_m$, so
-\[
-\PP\!\left(
-\frac{|S_{\nu_N}-S_{n_N}|}{\sqrt{n_N}}>\varepsilon
-\right)
-\le
-\eta
-+
-2\PP\!\left(
-\max_{1\le m\le \lceil\delta n_N\rceil}|S_m|>\frac{\varepsilon\sqrt{n_N}}{2}
-\right)
-\]
-for all sufficiently large $N$.
-
-To bound the maximal term, split the sequence into odd and even subsequences:
-\[
-O_r:=\sum_{j=1}^r Y_{2j-1},
-\qquad
-E_r:=\sum_{j=1}^r Y_{2j}.
-\]
-Because $(Y_j)$ is $1$-dependent, each of the sequences
-$(Y_{2j-1})_{j\ge1}$ and $(Y_{2j})_{j\ge1}$ consists of independent centered
-variables. Moreover, for every $m$,
-\[
-S_m=O_{\lceil m/2\rceil}+E_{\lfloor m/2\rfloor},
-\]
-so for every $k\ge1$ and $x>0$,
-\[
-\PP\!\left(\max_{1\le m\le k}|S_m|>x\right)
-\le
-\PP\!\left(\max_{1\le r\le \lceil k/2\rceil}|O_r|>\frac{x}{2}\right)
-+
-\PP\!\left(\max_{1\le r\le \lceil k/2\rceil}|E_r|>\frac{x}{2}\right).
-\]
-Kolmogorov's maximal inequality applied to the independent centered odd and even
-subsequences gives
-\[
-\PP\!\left(\max_{1\le m\le k}|S_m|>x\right)
-\le
-\frac{4\Var(O_{\lceil k/2\rceil})}{x^2}
-+
-\frac{4\Var(E_{\lceil k/2\rceil})}{x^2}
-\le
-\frac{8\lceil k/2\rceil\,\Var(Y_1)}{x^2}.
-\]
-Hence there is a deterministic constant $C$ such that
-\[
-\PP\!\left(\max_{1\le m\le k}|S_m|>x\right)\le \frac{Ck}{x^2}
-\qquad(k\ge1,\ x>0).
-\]
-With $k=\lceil\delta n_N\rceil$ and $x=\varepsilon\sqrt{n_N}/2$, this yields
-\[
-\PP\!\left(
-\max_{1\le m\le \lceil\delta n_N\rceil}|S_m|>\frac{\varepsilon\sqrt{n_N}}{2}
-\right)
-\le
-\frac{4C\delta}{\varepsilon^2}+o(1).
-\]
-Choosing $\delta$ smaller if necessary, we make the right-hand side at most
-$\eta$ for all large $N$. Therefore
-\[
-\PP\!\left(
-\frac{|S_{\nu_N}-S_{n_N}|}{\sqrt{n_N}}>\varepsilon
-\right)
-\le 3\eta
-\]
-for all sufficiently large $N$, which proves
-\[
-\frac{S_{\nu_N}-S_{n_N}}{\sqrt{n_N}}\to0
-\qquad\text{in probability.}
-\]
-Slutsky's theorem now gives
-\[
-\frac{1}{\sqrt{n_N}}\sum_{j=1}^{\nu_N}Y_j
-\Rightarrow
-\mathcal N(0,\tau^2).
-\]
-
-This is the stationary $1$-dependent reward version of the usual Anscombe
-transfer \cite{Anscombe1952}. If in addition $n_N/N\to c\in(0,\infty)$, then
-writing
-\[
-\frac{1}{\sqrt N}\sum_{j=1}^{\nu_N}Y_j
-=
-\sqrt{\frac{n_N}{N}}\,
-\frac{1}{\sqrt{n_N}}\sum_{j=1}^{\nu_N}Y_j
-\]
-and using Slutsky's theorem.
-\end{proof}
-
 \begin{lemma}[Stationary renewal-reward identity and boundary remainder]\label{lem:renewal-reward-boundary-main}
 Let $(A_n)_{n\in\mathbb Z}$ be a stationary binary record whose click times are
 regeneration times, and assume \eqref{eq:exp-tail-main}. Let $(Z_n)_{n\in\mathbb Z}$
@@ -2279,7 +2345,7 @@ The boundary remainder estimate above gives
 and Slutsky's theorem proves the displayed stationary-window CLT.
 \end{proof}
 
-\begin{theorem}[Regenerative $1$-dependent cycle CLT and implementable lag-two variance estimator]\label{thm:cycle-block-main}
+\begin{theorem}[Regenerative $1$-dependent cycle CLT and consistency-only lag-two variance estimator]\label{thm:cycle-block-main}
 Let $(A_n)_{n\in\mathbb Z}$ be a stationary binary record whose click times are
 regeneration times, and assume \eqref{eq:exp-tail-main}. Define
 \[
@@ -2317,12 +2383,22 @@ If $\widehat\sigma_{2,N}^2$ is defined by \eqref{eq:cycle-block-est-main}, then
 \widehat\sigma_{2,N}^2\to \sigma_2^2
 \qquad\text{in probability.}
 \]
+This is a consistency statement for the deterministic-prefix proof device from
+\Cref{def:cycle-block-main}; the all-complete-cycle estimator
+\eqref{eq:cycle-block-est-all-main} is the data-efficient practical analogue.
 If in addition the long-run variance is nondegenerate,
 \[
 \sigma_2^2=
 \frac{\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2)}{\EE L_1}>0,
 \]
 then
+\[
+\PP\!\left(\widehat\sigma_{2,N}^2>0\right)\to1,
+\qquad
+\widehat\sigma_{2,N}:=\sqrt{\widehat\sigma_{2,N}^2}\to\sigma_2
+\qquad\text{in probability,}
+\]
+and therefore
 \[
 \frac{\sqrt N\,(\widehat\gamma_2-\gamma_2)}{\widehat\sigma_{2,N}}
 \Rightarrow
@@ -2601,11 +2677,41 @@ Since $\PP(E_N^c)\to0$, the same limit holds unconditionally, and hence
 \widehat\sigma_{2,N}^2\to\frac{\tau_2^2}{\EE L_1}=\sigma_2^2
 \qquad\text{in probability.}
 \]
-If $\sigma_2^2>0$, then $\widehat\sigma_{2,N}\to\sigma_2$ in probability and
-$\sigma_2>0$. Dividing the CLT for $\sqrt N(\widehat\gamma_2-\gamma_2)$ by the
-consistent denominator $\widehat\sigma_{2,N}$ therefore gives the studentized
+If $\sigma_2^2>0$, then
+\[
+\PP\!\left(\widehat\sigma_{2,N}^2\le0\right)
+\le
+\PP\!\left(\left|\widehat\sigma_{2,N}^2-\sigma_2^2\right|\ge \sigma_2^2\right)
+\to0,
+\]
+so
+\[
+\PP\!\left(\widehat\sigma_{2,N}^2>0\right)\to1.
+\]
+On that event $\widehat\sigma_{2,N}=\sqrt{\widehat\sigma_{2,N}^2}$ is
+well-defined, and the continuous mapping theorem gives
+\[
+\widehat\sigma_{2,N}\to\sigma_2
+\qquad\text{in probability.}
+\]
+Dividing the CLT for $\sqrt N(\widehat\gamma_2-\gamma_2)$ by the consistent
+positive denominator $\widehat\sigma_{2,N}$ therefore gives the studentized
 limit by Slutsky's theorem.
 \end{proof}
+
+\begin{remark}[Why the proof uses the prefix estimator]\label{rem:prefix-proof-device-main}
+The proof of \Cref{thm:cycle-block-main} needs the deterministic cycle count
+$R_N$ only to identify the observed finite-record estimator with the Palm shadow
+estimator on the high-probability event $\{J_N\ge R_N+2\}$. This makes
+\eqref{eq:cycle-block-est-main} a proof device, not a recommendation to discard
+most of the data in applications. In practice one would normally report the
+all-complete-cycle estimator \eqref{eq:cycle-block-est-all-main}, which uses all
+complete cycles except the final remainder shorter than one separated batch. We
+keep the theorem at the deterministic-prefix level because that is enough for
+the consistency and studentization argument needed later, whereas proving the
+same limit for \eqref{eq:cycle-block-est-all-main} would add only random
+batch-count bookkeeping.
+\end{remark}
 
 \begin{remark}[Checkable nondegeneracy condition for the lag-two CLT]\label{rem:lag-two-nondeg-main}
 Lemma~\ref{lem:cycle-one-dep-main} gives $Y_j=f_2(G_j,G_{j+1})$ for a
@@ -2858,7 +2964,7 @@ zero of $\gamma_2(s)$ identifies that scan crossing to first order.
 \item A root-$N$ shell-location estimator or confidence interval requires extra
 scan-design asymptotics not proved by the single-record CLT, precisely as
 isolated in \Cref{prop:finite-diagnostics-main}(iv).
-\item The fixed-radius inverse and covariance formulas in \Cref{sec:inverse}
+\item The inverse and covariance formulas of Appendix~\ref{sec:inverse}
 require separate denominator-, location-, or ratio-data asymptotics such as
 \Cref{ass:ratio-data-clt-main}; they are not consequences of
 \Cref{thm:cycle-block-main}.
@@ -2869,7 +2975,7 @@ require separate denominator-, location-, or ratio-data asymptotics such as
 Items~(i)--(iii) are exactly the separation of roles established by
 \Cref{thm:cycle-block-main,rem:lag-two-nondeg-main,prop:finite-diagnostics-main}.
 Item~(iv) is the standing scope condition recorded again at the start of
-\Cref{sec:inverse} and in \Cref{ass:ratio-data-clt-main}.
+Appendix~\ref{sec:inverse} and in \Cref{ass:ratio-data-clt-main}.
 \end{proof}
 
 For the memory-transition readout, the primary one-record diagnostic is
