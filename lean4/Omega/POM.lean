@@ -398,6 +398,7 @@ import Omega.POM.FiberBiasedPosteriorPoissonBinomial
 import Omega.POM.FiberBirkhoffFenceIdealLattice
 import Omega.POM.FiberBooleanIntervalSingleParameterAudit
 import Omega.POM.FiberCategoricalSymmetryFibonacciFusion
+import Omega.POM.FiberABConvexHull
 import Omega.POM.FiberConstantDelayTraversal
 import Omega.POM.FiberContractibilitySphereParityByWalsh
 import Omega.POM.FiberSpectrumTwoAtomCompleteInvariant

@@ -54,6 +54,7 @@ import Omega.Zeta.DephysOneQuarterNormalization
 import Omega.Zeta.DephysRenyiFlatnessFoldCommutative
 import Omega.Zeta.DephysicalizedDefectRepulsionRadius
 import Omega.Zeta.DephysFoldStinespringSqrtLaw
+import Omega.Zeta.DephysFoldHiddenLabelCapSqrt
 import Omega.Zeta.DephysHolographySufficientStatistic
 import Omega.Zeta.AppHorizonPoleImprint
 import Omega.Zeta.Degree11CyclicCubicNormalizationGenus3
