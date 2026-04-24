@@ -179,6 +179,7 @@ import Omega.Conclusion.CarryZeroTempSupportCollapse
 import Omega.Conclusion.CausalDepthBranchBudgetOrthogonality
 import Omega.Conclusion.CdimArbitraryProfiniteKernel
 import Omega.Conclusion.CdimFiniteQuotientGrowth
+import Omega.Conclusion.PrimorialAxisSecondOrder
 import Omega.Conclusion.CdimK0UniqueSurvivor
 import Omega.Conclusion.CdimPhaseCompressionBitLowerBound
 import Omega.Conclusion.CdimPhaseCompressionPowerLaw
