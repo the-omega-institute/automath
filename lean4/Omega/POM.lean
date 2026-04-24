@@ -152,6 +152,7 @@ import Omega.POM.ClosureDiagonalToTopSpectrum
 import Omega.POM.ClosurePartitionToFullRecoveryCurve
 import Omega.POM.EhrhartEqualsOrderpolyShift
 import Omega.POM.EpsSoundCompose
+import Omega.POM.ExcitationFilterLinearBound
 import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.A4TDeltaMinusUniqueGlobalMinimizer
 import Omega.POM.DeltaqMeanSquareRhCriterion
