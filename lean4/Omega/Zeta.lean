@@ -656,6 +656,7 @@ import Omega.Zeta.GmCofinalModuliInverseLimit
 import Omega.Zeta.GmFibonacciModuliCofinal
 import Omega.Zeta.GmFibonacciSubtowerEntrypointCriterion
 import Omega.Zeta.GmChainProfiniteEulerDecomposition
+import Omega.Zeta.GmZetaCriterionMajorArc
 import Omega.Zeta.GroupoidCentralRenyiShannon
 import Omega.Zeta.HankelBadPrimeSelectionProbability
 import Omega.Zeta.XiHankelBadprimeSelectionTrials
