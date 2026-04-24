@@ -169,6 +169,7 @@ import Omega.Zeta.XiEdYDivisorAndGroupLawIdentity
 import Omega.Zeta.XiTerminalZmDeltaNodePreimageSumZero
 import Omega.Zeta.XiTerminalZmDihedralDoubleDiscriminantLock
 import Omega.Zeta.XiTerminalZmDihedralD4QuadraticSubfields
+import Omega.Zeta.XiTerminalZmDihedralFerrariSingleQuadraticClosure
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangVariableMixingCoboundary
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
