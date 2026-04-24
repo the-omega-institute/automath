@@ -71,10 +71,11 @@ character convention}
   =\frac{1}{|G|}\sum_{g\in G}\phi(g)\overline{\chi_\varrho(g)}.
 \]
 \textbf{Thus every class-indicator expansion and every later Fourier
-readout uses the conjugated character value
-\(\overline{\chi_\varrho(C)}\). By unitarity this also equals
-\(\chi_\varrho(C^{-1})\), but we do not replace it by
-\(\chi_\varrho(C)\) unless the character is real-valued.}
+readout uses the fixed forward class coefficient
+\(\chi_\varrho^\ast(C):=\overline{\chi_\varrho(C)}\).
+For unitary characters this is also \(\chi_\varrho(C^{-1})\).
+We keep this \(\ast\)-notation throughout, and the inverse readout is
+always written separately with \(\chi_\sigma(C)\).}
 
 \medskip
 \noindent\textbf{Logarithm convention for \S\ref{sec:chebotarev}.}
@@ -108,7 +109,7 @@ Likewise, for every \(m\ge 2\) and every \(\sigma\in\Irr(G)\), the value
     \mathbf 1_C(g)
     =\frac{|C|}{|G|}
       \sum_{\varrho\in\Irr(G)}
-        \overline{\chi_\varrho(C)}\,\chi_\varrho(g)
+        \chi_\varrho^\ast(C)\,\chi_\varrho(g)
   \]
 \end{proposition}
 
@@ -129,10 +130,8 @@ Likewise, for every \(m\ge 2\) and every \(\sigma\in\Irr(G)\), the value
   \[
     \langle \mathbf 1_C,\chi_\varrho\rangle
     =\frac{1}{|G|}\sum_{g\in C}\overline{\chi_\varrho(g)}
-    =\frac{|C|}{|G|}\overline{\chi_\varrho(C)},
+    =\frac{|C|}{|G|}\chi_\varrho^\ast(C).
   \]
-  where
-  \(\overline{\chi_\varrho(C)}=\chi_\varrho(C^{-1})\).
   This gives the claim.
 \end{proof}
 
@@ -239,18 +238,14 @@ Likewise, for every \(m\ge 2\) and every \(\sigma\in\Irr(G)\), the value
       \spec(A_\varrho)^{\sqcup \dim\varrho},
   \]
   where the union is taken with algebraic multiplicity. Consequently,
-  \(\eta<\lambda\) is equivalent to saying that no non-trivial
-  Peter--Weyl block contributes spectrum on the circle \(\abs{z}=\lambda\),
-  or equivalently that \(\widetilde A\) has the same peripheral spectrum
-  as the primitive base block \(A\), namely the single simple
-  eigenvalue \(\lambda\). More precisely, the following are equivalent:
+  the following are equivalent:
   \begin{enumerate}[label=\rm(\roman*)]
   \item \(\eta<\lambda\).
-  \item No non-trivial Peter--Weyl block contributes peripheral
-    spectrum at modulus \(\lambda\); equivalently, every eigenvalue of
-    \(\widetilde A\) with modulus \(\lambda\) comes from the trivial
-    block \(A\).
-  \item \(\spec(\widetilde A)\cap\{z\in\CC:\abs{z}=\lambda\}=\{\lambda\}\).
+  \item Every eigenvalue of every non-trivial Peter--Weyl block
+    \(A_\varrho\) (\(\varrho\neq\mathbf 1\)) has modulus strictly less
+    than \(\lambda\).
+  \item The peripheral spectral multiset of \(\widetilde A\) is exactly
+    the single eigenvalue \(\lambda\) with algebraic multiplicity \(1\).
   \item \(\widetilde A\) has a simple strictly dominant Perron
     eigenvalue \(\lambda\).
   \end{enumerate}
@@ -277,17 +272,23 @@ Likewise, for every \(m\ge 2\) and every \(\sigma\in\Irr(G)\), the value
   and the eigenvalue \(\lambda\) is simple.
 
   Therefore \(\eta<\lambda\) holds exactly when every non-trivial block
-  \(A_\varrho\) has all eigenvalues strictly inside the circle
-  \(\abs{z}=\lambda\), which is statement \rm(i) rewritten in
-  skew-product spectral language and proves statement \rm(ii). Because
-  the trivial block contributes only the simple eigenvalue \(\lambda\)
-  on that circle, statement \rm(ii) is exactly the claim that
-  \(\widetilde A\) has the same peripheral spectrum as the primitive
-  base block, so \rm(ii) and \rm(iii) are equivalent. In turn,
-  \rm(iii) says precisely that \(\widetilde A\) has one peripheral
-  eigenvalue, namely the simple Perron eigenvalue \(\lambda\), and that
-  all remaining eigenvalues have modulus \(<\lambda\); this is
-  statement \rm(iv).
+  \(A_\varrho\) has spectral radius strictly less than \(\lambda\).
+  Since every eigenvalue of \(A_\varrho\) has modulus at most
+  \(\rho(A_\varrho)\), this is equivalent to saying that every
+  eigenvalue of every non-trivial block has modulus strictly less than
+  \(\lambda\), which is statement \rm(ii). Because the trivial block
+  contributes exactly one peripheral eigenvalue, namely the simple
+  eigenvalue \(\lambda\), statement \rm(ii) is equivalent to saying
+  that the peripheral spectral multiset of \(\widetilde A\) consists of
+  that single copy of \(\lambda\). This is statement \rm(iii). A mere
+  point-set identity
+  \(\spec(\widetilde A)\cap\{z\in\CC:\abs{z}=\lambda\}=\{\lambda\}\)
+  would not exclude extra copies of \(\lambda\) coming from
+  non-trivial blocks, so multiplicity is essential. Finally,
+  statement \rm(iii) says precisely that \(\widetilde A\) has spectral
+  radius \(\lambda\), that \(\lambda\) is algebraically simple, and
+  that every other eigenvalue has modulus strictly less than
+  \(\lambda\), which is statement \rm(iv).
 
   Finally, if \(\widetilde A\) is irreducible, then Perron--Frobenius
   theory for irreducible non-negative matrices says that irreducibility
@@ -307,41 +308,50 @@ Likewise, for every \(m\ge 2\) and every \(\sigma\in\Irr(G)\), the value
 \end{proposition}
 
 \begin{proof}
-  Let \(\alpha\) be an eigenvalue of \(A_\sigma\), and choose a non-zero
-  eigenvector \(v=(v_i)_{i\in V}\in\bigoplus_{i\in V}V_\sigma\) with
-  \(A_\sigma v=\alpha v\). With the block convention
+  By \Cref{prop:kernel-peter-weyl-block-diagonalisation}, matrices act
+  on row vectors throughout this subsection. Let \(\alpha\) be an
+  eigenvalue of \(A_\sigma\), and choose a non-zero left eigenvector
+  \(v=(v_i)_{i\in V}\) with
+  \(vA_\sigma=\alpha v\). With the block convention
   \[
     (A_\sigma)_{ij}=\sum_{e:i\to j}\sigma(\tau(e)),
   \]
   this means
   \[
-    \alpha v_i
+    \alpha v_j
     =
-    \sum_j\sum_{e:i\to j}\sigma(\tau(e))v_j
-    \qquad (i\in V).
+    \sum_i\sum_{e:i\to j}v_i\sigma(\tau(e))
+    \qquad (j\in V).
   \]
-  Set \(w_i:=\|v_i\|\). Since \(\sigma(\tau(e))\) is unitary for every
-  edge \(e\),
+  Now collect the block norms into the column vector
+  \(w=(w_j)_{j\in V}^{\mathsf T}\), where \(w_j:=\|v_j\|\). Since
+  \(\sigma(\tau(e))\) is unitary for every edge \(e\),
   \[
-    |\alpha|\,\|v_i\|
+    |\alpha|\,w_j
     =
-    \left\|\sum_j\sum_{e:i\to j}\sigma(\tau(e))v_j\right\|
-    \le \sum_j\sum_{e:i\to j}\|v_j\|
-    =\sum_j A_{ij}w_j.
+    \left\|\sum_i\sum_{e:i\to j}v_i\sigma(\tau(e))\right\|
+    \le \sum_i\sum_{e:i\to j}\|v_i\|
+    =\sum_i A_{ij}w_i
+    =(A^{\mathsf T}w)_j.
   \]
   Hence \(w\ge 0\), \(w\neq 0\), and
   \[
-    |\alpha|\,w\le Aw
+    |\alpha|\,w\le A^{\mathsf T}w
   \]
-  coordinatewise. Let \(u>0\) be a left Perron vector of \(A\), so
-  \(u^\top A=\lambda u^\top\). Multiplying the last inequality by
-  \(u^\top\) gives
+  coordinatewise. Let \(r>0\) be a right Perron vector of \(A\), so
+  \(Ar=\lambda r\), equivalently
+  \(r^{\mathsf T}A^{\mathsf T}=\lambda r^{\mathsf T}\). Left-multiplying
+  the last inequality by \(r^{\mathsf T}\) gives
   \[
-    |\alpha|\,u^\top w\le u^\top Aw=\lambda\,u^\top w.
+    |\alpha|\,r^{\mathsf T}w
+    \le
+    r^{\mathsf T}A^{\mathsf T}w
+    =
+    \lambda\,r^{\mathsf T}w.
   \]
-  Because \(u>0\) and \(w\neq 0\), one has \(u^\top w>0\), and therefore
-  \(|\alpha|\le \lambda\). This holds for every eigenvalue \(\alpha\) of
-  \(A_\sigma\), so \(\rho(A_\sigma)\le \lambda\).
+  Because \(r>0\) and \(w\neq 0\), one has \(r^{\mathsf T}w>0\), and
+  therefore \(|\alpha|\le \lambda\). This holds for every eigenvalue
+  \(\alpha\) of \(A_\sigma\), so \(\rho(A_\sigma)\le \lambda\).
 \end{proof}
 
 \noindent
@@ -867,7 +877,7 @@ but it does not add a new independent main theorem.
     =
     \frac{|C|}{|G|}
       \sum_{\varrho\in\Irr(G)}
-        \overline{\chi_\varrho(C)}\,\Pi_\varrho(z),
+        \chi_\varrho^\ast(C)\,\Pi_\varrho(z),
   \end{equation}
   and therefore
   \begin{equation}\label{eq:class-primitive-coefficients}
@@ -875,7 +885,7 @@ but it does not add a new independent main theorem.
     =
     \frac{|C|}{|G|}
       \sum_{\varrho\in\Irr(G)}
-        \overline{\chi_\varrho(C)}\,\pi_{n,\varrho}(A,\tau).
+        \chi_\varrho^\ast(C)\,\pi_{n,\varrho}(A,\tau).
   \end{equation}
 \end{proposition}
 
@@ -900,7 +910,7 @@ but it does not add a new independent main theorem.
     =
     \frac{|C|}{|G|\,n}
       \sum_{\varrho\in\Irr(G)}
-        \overline{\chi_\varrho(C)}
+        \chi_\varrho^\ast(C)
         \sum_{m\mid n}\mu(m)
           \sum_{\sigma\in\Irr(G)}
             a_{\varrho,\sigma}^{(m)}
@@ -949,14 +959,14 @@ the trivial Perron-channel contribution.
     \frac{|C|}{|G|}p_n(A)
     +\frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \overline{\chi_\varrho(C)}\,\pi_{n,\varrho}(A,\tau).
+        \chi_\varrho^\ast(C)\,\pi_{n,\varrho}(A,\tau).
   \]
 \end{lemma}
 
 \begin{proof}
   Separate the trivial representation from
   \eqref{eq:class-primitive-coefficients}. Since
-  \(\overline{\chi_{\mathbf 1}(C)}=\chi_{\mathbf 1}(C^{-1})=1\) and
+  \(\chi_{\mathbf 1}^\ast(C)=1\) and
   \(\pi_{n,\mathbf 1}(A,\tau)=p_n(A)\), the displayed identity follows.
 \end{proof}
 
@@ -1289,7 +1299,7 @@ the trivial Perron-channel contribution.
     \frac{|C|}{|G|}\mathcal M(A)
     +\frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \overline{\chi_\varrho(C)}\,\Pi_\varrho(\lambda^{-1}).
+        \chi_\varrho^\ast(C)\,\Pi_\varrho(\lambda^{-1}).
   \end{equation}
   Let \(K_{\mathrm{PF}}(A)\) and \(K_{\mathrm{tr}}(A)\) be the base
   constants from \Cref{lem:primitive-orbit-asymptotic}. Then
@@ -1382,7 +1392,7 @@ the trivial Perron-channel contribution.
     \frac{|C|}{|G|}p_n(A)
     +\frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \overline{\chi_\varrho(C)}\,\pi_{n,\varrho}(A,\tau).
+        \chi_\varrho^\ast(C)\,\pi_{n,\varrho}(A,\tau).
   \]
   The two inputs are
   \[
@@ -1436,6 +1446,10 @@ the trivial Perron-channel contribution.
   \[
     p_n(A)=\frac{\lambda^n}{n}+O\!\left(\frac{\Lambda_*^n}{n}\right),
   \]
+  equivalently
+  \(p_n(A)=\frac{\lambda^n}{n}\bigl(1+O(\vartheta_*^n)\bigr)\) with
+  \(0<\vartheta_*<1\), one has \(p_n(A)>0\) (hence \(p_n(A)\neq 0\))
+  for all sufficiently large \(n\). Therefore
   dividing \eqref{eq:class-primitive-asymptotic} by \(p_n(A)\) yields
   \eqref{eq:class-chebotarev-density} for all sufficiently large \(n\).
 
@@ -1479,13 +1493,13 @@ the trivial Perron-channel contribution.
     +
     \frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \overline{\chi_\varrho(C)}
+        \chi_\varrho^\ast(C)
         \sum_{n\ge 1}\pi_{n,\varrho}(A,\tau)\lambda^{-n} \\
     &=
     \frac{|C|}{|G|}\bigl(\mathcal M(A)-\gamma\bigr)
     +\frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \overline{\chi_\varrho(C)}\,\Pi_\varrho(\lambda^{-1}),
+        \chi_\varrho^\ast(C)\,\Pi_\varrho(\lambda^{-1}),
   \end{align*}
   which is exactly
   \eqref{eq:class-mertens-constant}. Therefore, for every \(N\ge 1\),
@@ -1563,7 +1577,7 @@ the trivial Perron-channel contribution.
     =
     \frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \overline{\chi_\varrho(C)}\,\Pi_\varrho(\lambda^{-1}).
+        \chi_\varrho^\ast(C)\,\Pi_\varrho(\lambda^{-1}).
   \end{equation}
   In the boundary determinant evaluation below, every logarithm
   \(\log\det(I-\lambda^{-m}A_\sigma)^{-1}\) is taken in the analytic
@@ -1727,9 +1741,10 @@ Perron-point coefficients to which the inversion can be applied.
   \]
   so the forward coefficient is
   \[
-    \overline{\chi_\varrho(C)}
-    =\chi_\varrho(C^{-1}).
+    \chi_\varrho^\ast(C).
   \]
+  In the inverse readout, this coefficient is paired with the
+  unconjugated class character \(\chi_\sigma(C)\).
 \end{theorem}
 
 \begin{proof}
@@ -1745,13 +1760,13 @@ Perron-point coefficients to which the inversion can be applied.
     =
     \sum_{C\subset G}\frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \overline{\chi_\varrho(C)}\,
+        \chi_\varrho^\ast(C)\,
         \Pi_\varrho(\lambda^{-1})\chi_\sigma(C).
   \]
   The orthogonality relation
   \[
     \sum_{C\subset G}\frac{|C|}{|G|}
-      \overline{\chi_\varrho(C)}\,\chi_\sigma(C)
+      \chi_\varrho^\ast(C)\,\chi_\sigma(C)
     =\delta_{\varrho,\sigma}
   \]
   yields \eqref{eq:class-mertens-fourier-inversion}.
@@ -1764,7 +1779,7 @@ Perron-point coefficients to which the inversion can be applied.
     =
     \left(\frac{|C|}{|G|}\right)^2
     \left|\sum_{\varrho\neq\mathbf 1}
-      \overline{\chi_\varrho(C)}\,
+      \chi_\varrho^\ast(C)\,
       \Pi_\varrho(\lambda^{-1})\right|^2,
   \]
   one obtains
@@ -1773,7 +1788,7 @@ Perron-point coefficients to which the inversion can be applied.
     =
     \sum_{C\subset G}\frac{|C|}{|G|}
       \left|\sum_{\varrho\neq\mathbf 1}
-        \overline{\chi_\varrho(C)}\,
+        \chi_\varrho^\ast(C)\,
         \Pi_\varrho(\lambda^{-1})\right|^2.
   \]
   Expanding the modulus square gives
@@ -1782,12 +1797,12 @@ Perron-point coefficients to which the inversion can be applied.
       \Pi_\varrho(\lambda^{-1})
       \overline{\Pi_\sigma(\lambda^{-1})}
       \sum_{C\subset G}\frac{|C|}{|G|}
-        \overline{\chi_\varrho(C)}\,\chi_\sigma(C).
+        \chi_\varrho^\ast(C)\,\chi_\sigma(C).
   \]
   The inner sum is exactly
   \[
     \sum_{C\subset G}\frac{|C|}{|G|}
-      \overline{\chi_\varrho(C)}\,\chi_\sigma(C)
+      \chi_\varrho^\ast(C)\,\chi_\sigma(C)
     =\delta_{\varrho,\sigma}.
   \]
   Therefore only the diagonal terms remain, which
