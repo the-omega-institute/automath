@@ -202,6 +202,8 @@ import Omega.Zeta.XiKreinSpectralShiftEqualsKL
 import Omega.Zeta.XiKreinSpectralShiftStaircaseShadow
 import Omega.Zeta.XiLeyangEdDyExplicitDivisor
 import Omega.Zeta.XiEdYDivisorAndGroupLawIdentity
+import Omega.Zeta.XiTerminalEllipseAreaEulerPrimeLaw
+import Omega.Zeta.XiTerminalRationalEllipseTwoInvariantCompleteness
 import Omega.Zeta.XiTerminalZmDeltaNodePreimageSumZero
 import Omega.Zeta.XiTerminalZmDihedralDoubleDiscriminantLock
 import Omega.Zeta.XiTerminalZmDihedralD4QuadraticSubfields
