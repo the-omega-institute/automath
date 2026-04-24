@@ -1295,6 +1295,7 @@ import Omega.Zeta.XiWindow6TailSemigroupTwoGeneratorNormalForm
 import Omega.Zeta.XiZGAbelResidueLogDensity
 import Omega.Zeta.XiZGAbsoluteConvergenceCriticalLine
 import Omega.Zeta.XiZGHardcoreConstantResidue
+import Omega.Zeta.XiZGZetaFactorization
 import Omega.Zeta.XiZGCountingPowerSavingError
 import Omega.Zeta.XiZGPrefixRecursionMonotoneTailCertificate
 import Omega.Zeta.XiZGReciprocalHarmonicAsymptotic
