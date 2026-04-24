@@ -166,6 +166,29 @@ Indeed,
 {\Gamma+\kappa_{\mathrm r}}-p,
 \]
 and \(p=e^{-\Gamma\Delta\tau}\) by \Cref{eq:p-c-main}.
+Thus the continuous and sampled click kernels differ only by the positive
+post-click leakage back into the ready state,
+\[
+\widetilde T_1-T_1=
+\begin{pmatrix}
+\delta_R & -\delta_R\\
+\delta_D & -\delta_D
+\end{pmatrix},
+\qquad
+\delta_R:=\widetilde T_1(R,R),
+\quad
+\delta_D:=\widetilde T_1(D,R),
+\]
+with
+\[
+\delta_R=
+\frac{\kappa_{\mathrm r}(1-p)-\Gamma p(1-c)}
+{\Gamma+\kappa_{\mathrm r}},
+\qquad
+\delta_D=
+\frac{\kappa_{\mathrm r}}{\Gamma+\kappa_{\mathrm r}}
+\bigl(1-e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}\bigr)-b.
+\]
 In particular
 \[
 \widetilde T_1(R,R)>0,\qquad \widetilde T_1(D,R)>0,
@@ -175,9 +198,91 @@ whereas the sampled boundary-reset model has
 T_1(R,R)=T_1(D,R)=0.
 \]
 Thus the theorem chain below is specific to the sampled one-recovery-opportunity
-boundary-reset instrument and does not describe true continuous recovery after
-every within-bin click.
+boundary-reset instrument obtained by setting this return-to-ready leakage to
+zero, and does not describe true continuous recovery after every within-bin
+click.
 \end{remark}
+
+\begin{proposition}[Short-bin specificity of the sampled boundary reset]\label{prop:short-bin-boundary-reset-main}
+Let $\widetilde T_0,\widetilde T_1$ be the continuous intra-bin recovery kernels
+of \Cref{rem:continuous-comparator-main}, and let $T_0,T_1$ be the sampled
+boundary-reset kernels of \Cref{prop:instrument-kernels-main}. For fixed
+$\Gamma,\kappa_{\mathrm r}>0$, as $\Delta\tau\downarrow0$,
+\[
+(\widetilde T_1)_{RR}
+=\frac12\Gamma\kappa_{\mathrm r}(\Delta\tau)^2
++O((\Delta\tau)^3),
+\qquad
+(\widetilde T_1)_{DR}=O((\Delta\tau)^3),
+\]
+while
+\[
+T_1(R,R)=T_1(D,R)=0.
+\]
+Hence the sampled theorem is a second-order short-bin approximation to
+continuous recovery in the $R\to R$ click-ending channel, not an exact
+continuous-recovery theorem.
+\end{proposition}
+
+\begin{proof}
+The two sampled identities are exactly the boundary-reset convention: after a
+click, the next boundary state is $D$. For the continuous comparator,
+\Cref{rem:continuous-comparator-main} gives
+\[
+(\widetilde T_1)_{RR}
+=
+\frac{\kappa_{\mathrm r}(1-p)-\Gamma p(1-c)}
+{\Gamma+\kappa_{\mathrm r}},
+\]
+where $p=e^{-\Gamma\Delta\tau}$ and
+$c=e^{-\kappa_{\mathrm r}\Delta\tau}$. Taylor expansion of $p$ and $c$ gives
+\[
+(\widetilde T_1)_{RR}
+=\frac12\Gamma\kappa_{\mathrm r}(\Delta\tau)^2
++O((\Delta\tau)^3).
+\]
+Similarly,
+\[
+(\widetilde T_1)_{DR}
+=
+\frac{\kappa_{\mathrm r}}{\Gamma+\kappa_{\mathrm r}}
+\bigl(1-e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}\bigr)-b,
+\]
+with
+\[
+b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}
+e^{-\Gamma(\Delta\tau-s)}\,ds.
+\]
+Expanding both terms to third order gives
+\[
+\frac{\kappa_{\mathrm r}}{\Gamma+\kappa_{\mathrm r}}
+\bigl(1-e^{-(\Gamma+\kappa_{\mathrm r})\Delta\tau}\bigr)
+=
+\kappa_{\mathrm r}\Delta\tau
+-\frac{\kappa_{\mathrm r}(\Gamma+\kappa_{\mathrm r})}{2}(\Delta\tau)^2
++\frac{\kappa_{\mathrm r}(\Gamma+\kappa_{\mathrm r})^2}{6}
+(\Delta\tau)^3
++O((\Delta\tau)^4),
+\]
+and
+\[
+b=
+\kappa_{\mathrm r}\Delta\tau
+-\frac{\kappa_{\mathrm r}(\Gamma+\kappa_{\mathrm r})}{2}(\Delta\tau)^2
++\frac{\kappa_{\mathrm r}(\Gamma^2+\Gamma\kappa_{\mathrm r}
++\kappa_{\mathrm r}^2)}{6}(\Delta\tau)^3
++O((\Delta\tau)^4).
+\]
+Therefore
+\[
+(\widetilde T_1)_{DR}
+=\frac{\Gamma\kappa_{\mathrm r}^2}{6}(\Delta\tau)^3
++O((\Delta\tau)^4)
+=O((\Delta\tau)^3).
+\]
+The $R\to R$ click-ending leakage is therefore the leading discrepancy between
+the continuous comparator and the sampled boundary-reset kernels.
+\end{proof}
 
 The role of the instrument is precise. Once the attempt intensity $\Gamma$ and
 the counter recovery law are fixed, the kernels $T_0,T_1$ are no longer
@@ -190,47 +295,22 @@ supplied by the field-facing detector calculation.
 The paper-level object introduced in the abstract and \Cref{sec:operational} is
 the \emph{UDW-rate-calibrated sampled counter}. Concretely, this means the
 sampled interval instrument of \Cref{prop:instrument-kernels-main} together
-with the sole calibration closure
+with one later calibration step
 \[
 \Gamma=\Gamma_+(x,\Omega).
 \]
-This closure is the only bridge from the stationary detector response to the
-classical binary record. No theorem below claims that an arbitrary
-repeated-measurement scheme for a UDW detector must reduce to this instrument
-without further approximation; rather, the paper fixes this sampled counter
-model and then derives its record laws exactly.
-
-Whenever Sections~4--5 impose this UDW-rate calibration closure, the
-resulting response-facing construction is the paper's
-\emph{UDW-rate-calibrated sampled counter}. This terminology keeps the logical
-order explicit: the counter law is classical and sampled, and the UDW input
-enters only through the calibration step $\Gamma=\Gamma_+$.
-
-Accordingly, the record-theoretic propositions in this section are first stated
-for the sampled classical counter with its internal attempt rate $\Gamma$. The
-closure $\Gamma=\Gamma_+$ is imposed only when Sections~4--5 substitute these
-model thresholds into the stationary UDW response profile.
-\[
-\Gamma \text{ is first a classical attempt rate},
-\qquad
-\Gamma=\Gamma_+(x,\Omega) \text{ is an additional calibration step}.
-\]
-
-No theorem in this paper derives the Poisson attempt process, its independent
-increments, or the inter-bin independence of fresh attempts from stationarity of
-the pulled-back Wightman function alone. Those Poisson ingredients belong to
-the sampled instrument of \Cref{prop:instrument-kernels-main}. The UDW input
-used later is only the modelling closure
-\[
-\Gamma=\Gamma_+(x,\Omega),
-\]
-which calibrates the counter attempt rate to the stationary weak-coupling
-excitation rate of the chosen detector core.
+Sections~\ref{sec:kms-shells}--\ref{sec:inverse} package the response-side use
+of this convention in boxed Model~A (\Cref{ass:udw-rate-calibration-main}).
+That boxed assumption is the only place where the paper states the full
+counter-to-response contract. Here we use only the record-side half of that
+contract: the counter law is fixed first, with internal attempt rate
+$\Gamma$, and no theorem in this section claims that general UDW measurement
+theory derives this sampled instrument or its Poisson attempt structure.
 
 The construction remains an effective measurement model in the same broad spirit as dead-time counter theory \cite{Muller1973,CantorTeich1975}, not a first-principles AQFT derivation of detector back-action or a general solution to the locality constraints emphasized in the measurement literature \cite{Sorkin1993,FewsterVerch2020,Fewster2020,PoloGomezEtAl2022}. Its purpose is narrower and sufficient for the theorem chain here: it makes explicit which repeated-interaction ingredients produce the binary kernels and isolates the single closure step where the stationary UDW response is converted into the attempt intensity driving the sampled record.
 
 All record-level conclusions below are therefore conditional only in this
-controlled sense. Once the UDW-rate calibration closure is fixed, the later
+controlled sense. Once Model~A is invoked in the response sections, the later
 statements about support, hazards, covariance, exact $1$-dependence, and
 finite-record diagnostics are ordinary consequences of the labelled kernels.
 This separation is what allows the shell construction later to distinguish
@@ -330,10 +410,10 @@ controlled by the hidden eigenmode rather than by a grammar reduction.
 
 \subsection{Sampled one-recovery-opportunity boundary-reset recovery: renewal structure and exact \texorpdfstring{$1$}{1}-dependence}
 
-A physically more realistic sampled model allows the detector to recover during
-the bin before the sampling boundary, while still passing only one boundary
-state to the next bin. This is the sampled one-recovery-opportunity
-boundary-reset model described above. Let $\kappa_{\mathrm r}>0$ be the
+A sampled effective recovery model allows the detector to recover during the
+bin before the sampling boundary, while still passing only one boundary state
+to the next bin. This is the sampled one-recovery-opportunity boundary-reset
+model described above. Let $\kappa_{\mathrm r}>0$ be the
 recovery rate. Throughout this section, $\Gamma$ denotes the classical attempt
 rate of the sampled counter. Only when the closure
 $\Gamma=\Gamma_+$ is invoked later do we identify it with the stationary UDW
@@ -802,7 +882,8 @@ and direct subtraction gives the displayed positive increment.
 \end{proof}
 
 The following theorem is the main record-level theorem for the classical
-sampled interval counter. Its Poisson parameter $\Gamma$ is still the internal
+sampled hidden Markov model fixed by the interval instrument above. Its
+Poisson parameter $\Gamma$ is still the internal
 attempt rate of the sampled instrument from
 \Cref{prop:instrument-kernels-main}. The response-side identification
 \[
@@ -810,11 +891,11 @@ attempt rate of the sampled instrument from
 \]
 is not used here and is deferred to the later calibration step in
 Section~\ref{sec:kms-shells} and the later abstract calibrated toy-model
-appendices. Accordingly, the theorem is
-not a theorem deriving the boundary-reset counter law from UDW detector
-back-action.
+appendices. Accordingly, the theorem is only a theorem about that classical
+sampled HMM and not a theorem deriving the boundary-reset counter law from UDW
+detector back-action.
 
-\begin{theorem}[Classical sampled-counter theorem for the one-recovery-opportunity boundary-reset model]\label{prop:recovery-main}
+\begin{theorem}[Main theorem for the classical sampled hidden Markov model with one-recovery-opportunity boundary reset]\label{prop:recovery-main}
 For the sampled one-recovery-opportunity boundary-reset kernels
 \eqref{eq:t0-t1-main}, with $\Gamma,\kappa_{\mathrm r},\Delta\tau>0$, the
 stationary visible process is a full-support renewal process. Its zero-run
@@ -1372,15 +1453,15 @@ the lag-two rewards. The deterministic-prefix cycle-batch variance estimator is
 \sum_{r=1}^{M_N}(\widehat B_{r,N}-\bar B_N)^2.
 \end{equation}
 \Cref{thm:cycle-block-main} proves only the consistency of this
-deterministic-prefix estimator.
+deterministic-prefix estimator, while
+\Cref{prop:cycle-block-est-all-main} handles the data-efficient
+all-complete-cycle version \eqref{eq:cycle-block-est-all-main}.
 
 For actual data analysis one typically uses all complete cycles up to the
 terminal remainder shorter than one separated batch. Set
 \[
-K_N:=J_N-1,
-\qquad
 M_N^{\mathrm{all}}=
-\max\left\{0,\left\lfloor\frac{K_N}{b_N+1}\right\rfloor\right\},
+\left\lfloor\frac{J_N-1}{b_N+1}\right\rfloor,
 \qquad
 R_N^{\mathrm{all}}=
 \begin{cases}
@@ -1388,6 +1469,8 @@ M_N^{\mathrm{all}}b_N+(M_N^{\mathrm{all}}-1),& M_N^{\mathrm{all}}\ge1,\\
 0,& M_N^{\mathrm{all}}=0.
 \end{cases}
 \]
+On the negligible event $\{J_N=0\}$ the displayed floor is interpreted as
+$M_N^{\mathrm{all}}=0$.
 If $M_N^{\mathrm{all}}<2$, set $\widehat\sigma_{2,N}^{\mathrm{all},2}=0$. On
 the event $\{M_N^{\mathrm{all}}\ge2\}$, use the first
 $R_N^{\mathrm{all}}=M_N^{\mathrm{all}}(b_N+1)-1$ complete cycles, write
@@ -1430,7 +1513,7 @@ the all-complete-cycle separated-batch estimator is
 \end{equation}
 On the event $\{M_N^{\mathrm{all}}\ge1\}$ one has
 \[
-0\le K_N-R_N^{\mathrm{all}}<b_N+1,
+0\le (J_N-1)-R_N^{\mathrm{all}}<b_N+1,
 \]
 this practical estimator uses every complete cycle except the unavoidable
 terminal remainder left after grouping the observed cycles into separated
@@ -1818,6 +1901,147 @@ so $\bar B_N^{\,2}/b_N\to0$ in probability. Consequently
 \qquad\text{in probability,}
 \]
 and the displayed variance formula finishes the proof.
+\end{proof}
+
+\begin{lemma}[Separated-batch variance with a random complete-cycle count]\label{lem:batch-var-random-count-main}
+Let $(Y_j)_{j\ge1}$ be a stationary $1$-dependent sequence with
+\[
+\EE Y_1=0,
+\qquad
+\EE|Y_1|^4<\infty,
+\]
+and put
+\[
+\tau^2=\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2).
+\]
+Let $b_N\to\infty$ with $b_N/N\to0$. Suppose that $J_N$ is an
+integer-valued random variable satisfying, for some $\mu_L\in(0,\infty)$,
+\[
+\frac{J_N}{N}\to\frac1{\mu_L}
+\qquad\text{in probability,}
+\]
+and define the all-complete-cycle batch count by
+\[
+M_N^{\mathrm{all}}
+=
+\left\lfloor\frac{J_N-1}{b_N+1}\right\rfloor,
+\]
+with the harmless convention $M_N^{\mathrm{all}}=0$ on $\{J_N=0\}$. For
+$1\le r\le M_N^{\mathrm{all}}$, set
+\[
+B_{r,N}^{\mathrm{all}}
+=
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}Y_j.
+\]
+On $\{M_N^{\mathrm{all}}\ge1\}$ set
+\[
+\bar B_N^{\mathrm{all}}
+=
+\frac1{M_N^{\mathrm{all}}}\sum_{r=1}^{M_N^{\mathrm{all}}}
+B_{r,N}^{\mathrm{all}}.
+\]
+Then, with the expression below set to zero on
+$\{M_N^{\mathrm{all}}<2\}$,
+\[
+\frac{1}{b_N(M_N^{\mathrm{all}}-1)}
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+\left(B_{r,N}^{\mathrm{all}}-\bar B_N^{\mathrm{all}}\right)^2
+\to \tau^2
+\qquad\text{in probability.}
+\]
+\end{lemma}
+
+\begin{proof}
+Let
+\[
+m_N=\left\lfloor\frac{N}{\mu_L(b_N+1)}\right\rfloor.
+\]
+Since $b_N=o(N)$, $m_N\to\infty$, and the assumed click-count law of large
+numbers gives
+\[
+\frac{M_N^{\mathrm{all}}}{m_N}\to1
+\qquad\text{in probability.}
+\]
+In particular, $\PP(M_N^{\mathrm{all}}\ge2)\to1$.
+
+For fixed $N$, the separated batches
+\[
+B_{r,N}=
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}Y_j,
+\qquad r\ge1,
+\]
+are i.i.d. because the omitted reward $Y_{r(b_N+1)}$ separates adjacent
+batches. Their mean is zero, and
+\[
+v_N:=\Var(B_{1,N})
+=
+b_N\Var(Y_1)+2(b_N-1)\operatorname{Cov}(Y_1,Y_2),
+\qquad
+\frac{v_N}{b_N}\to\tau^2.
+\]
+The fourth-moment assumption and the dependence range one imply
+\[
+\EE B_{1,N}^4=O(b_N^2).
+\]
+
+Set $U_{r,N}=B_{r,N}^2-v_N$. Then $(U_{r,N})_{r\ge1}$ is i.i.d. with mean
+zero and $\Var(U_{1,N})=O(b_N^2)$, so
+\[
+\frac1{m_Nb_N}\sum_{r=1}^{m_N}U_{r,N}\to0
+\qquad\text{in probability.}
+\]
+Kolmogorov's maximal inequality also gives, for each fixed
+$\delta\in(0,1)$,
+\[
+\PP\!\left(
+\max_{|k-m_N|\le\delta m_N}
+\left|\sum_{r=1}^{k}U_{r,N}-\sum_{r=1}^{m_N}U_{r,N}\right|
+>\varepsilon m_Nb_N
+\right)
+\le
+\frac{C\delta}{\varepsilon^2}
+\]
+with $C$ independent of $N$ and $\delta$. Letting $\delta\downarrow0$ and using
+$M_N^{\mathrm{all}}/m_N\to1$ transfers the preceding deterministic-index
+limit to the random index:
+\[
+\frac1{M_N^{\mathrm{all}}b_N}
+\sum_{r=1}^{M_N^{\mathrm{all}}}U_{r,N}\to0
+\qquad\text{in probability.}
+\]
+Consequently
+\[
+\frac1{M_N^{\mathrm{all}}b_N}
+\sum_{r=1}^{M_N^{\mathrm{all}}}B_{r,N}^2
+-\frac{v_N}{b_N}
+\to0
+\qquad\text{in probability.}
+\]
+
+The same argument applied to $S_{k,N}:=\sum_{r=1}^kB_{r,N}$, using
+$\Var(B_{1,N})=O(b_N)$, gives
+\[
+\frac{S_{M_N^{\mathrm{all}},N}}{M_N^{\mathrm{all}}\sqrt{b_N}}\to0
+\qquad\text{in probability,}
+\]
+or equivalently
+\[
+\frac{(\bar B_N^{\mathrm{all}})^2}{b_N}\to0
+\qquad\text{in probability.}
+\]
+Since
+\[
+\frac{1}{b_N(M_N^{\mathrm{all}}-1)}
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+(B_{r,N}-\bar B_N^{\mathrm{all}})^2
+=
+\frac{M_N^{\mathrm{all}}}{M_N^{\mathrm{all}}-1}
+\left[
+\frac1{M_N^{\mathrm{all}}b_N}\sum_{r=1}^{M_N^{\mathrm{all}}}B_{r,N}^2
+-\frac{(\bar B_N^{\mathrm{all}})^2}{b_N}
+\right],
+\]
+the result follows from $v_N/b_N\to\tau^2$.
 \end{proof}
 
 \begin{lemma}[Shadow deterministic prefix for the batch estimator]\label{lem:deterministic-prefix-main}
@@ -2345,7 +2569,7 @@ The boundary remainder estimate above gives
 and Slutsky's theorem proves the displayed stationary-window CLT.
 \end{proof}
 
-\begin{theorem}[Regenerative $1$-dependent cycle CLT and consistency-only lag-two variance estimator]\label{thm:cycle-block-main}
+\begin{theorem}[Regenerative $1$-dependent cycle CLT, explicit nondegeneracy criterion, and consistency-only lag-two variance estimator]\label{thm:cycle-block-main}
 Let $(A_n)_{n\in\mathbb Z}$ be a stationary binary record whose click times are
 regeneration times, and assume \eqref{eq:exp-tail-main}. Define
 \[
@@ -2361,10 +2585,34 @@ the stationary process, set $L_j=T_{j+1}-T_j$, and define
 \[
 Y_j=\sum_{n=T_j}^{T_{j+1}-1} Z_n.
 \]
+Write
+\[
+G_j=L_j-1,\qquad
+\pi_g:=\PP(G_1=g),\qquad
+m_1:=\EE G_1,\qquad
+m_2:=\EE G_1^2,
+\]
+and set
+\[
+\alpha:=2\rho^2-\mu_2,
+\qquad
+\beta:=\alpha-2\rho.
+\]
+Then
+\begin{equation}\label{eq:tau2-explicit-main}
+\tau_2^2:=\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2)
+=
+\alpha^2m_2
++2\alpha\beta m_1
++\beta^2
++(2\alpha+2\beta+1)\pi_1
++(4\beta+1)\pi_0^2
++2\pi_0^3.
+\end{equation}
 Then
 \begin{equation}\label{eq:sigma2-main}
 \sigma_2^2=
-\frac{\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2)}{\EE L_1}.
+\frac{\tau_2^2}{\EE L_1}.
 \end{equation}
 Introduce also the infeasible theoretical linearization
 \[
@@ -2383,13 +2631,12 @@ If $\widehat\sigma_{2,N}^2$ is defined by \eqref{eq:cycle-block-est-main}, then
 \widehat\sigma_{2,N}^2\to \sigma_2^2
 \qquad\text{in probability.}
 \]
-This is a consistency statement for the deterministic-prefix proof device from
-\Cref{def:cycle-block-main}; the all-complete-cycle estimator
-\eqref{eq:cycle-block-est-all-main} is the data-efficient practical analogue.
-If in addition the long-run variance is nondegenerate,
+This consistency statement is only for the deterministic-prefix estimator from
+\Cref{def:cycle-block-main}.
+If in addition the explicit cycle-variance criterion is nondegenerate,
 \[
-\sigma_2^2=
-\frac{\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2)}{\EE L_1}>0,
+\tau_2^2>0
+\qquad\text{equivalently, \eqref{eq:tau2-explicit-main} is positive,}
 \]
 then
 \[
@@ -2436,6 +2683,58 @@ Set
 \qquad
 \tau_2^2:=\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2).
 \]
+\smallskip
+\noindent\emph{Step 0: explicit finite reduction of the nondegeneracy criterion.}
+Inspecting the click-to-click word shows that a lag-two success inside one
+cycle occurs only through the words $101$ (when $g=1$) or $111$ across two
+adjacent zero gaps (when $g=h=0$). Therefore
+\[
+f_2(g,h)
+=
+\mathbf 1_{\{g=1\}}
++\mathbf 1_{\{g=0,\ h=0\}}
+-(g+1)\mu_2
+-2\rho\bigl(1-(g+1)\rho\bigr).
+\]
+With
+\[
+c(g):=\alpha g+\beta+\mathbf 1_{\{g=1\}},
+\]
+this becomes
+\[
+f_2(g,h)=c(g)+\mathbf 1_{\{g=0,\ h=0\}}.
+\]
+Let $G,H,H'$ be i.i.d.\ with law $(\pi_g)_{g\ge0}$. Then
+$Y_1=f_2(G,H)$ and $Y_2=f_2(H,H')$. A direct expansion gives
+\[
+\EE c(G)^2
+=
+\alpha^2m_2+2\alpha\beta m_1+\beta^2+(2\alpha+2\beta+1)\pi_1,
+\]
+hence
+\[
+\EE Y_1^2
+=
+\EE c(G)^2+(2\beta+1)\pi_0^2.
+\]
+Also
+\[
+\EE Y_1=\EE c(G)+\pi_0^2=0,
+\qquad\text{so}\qquad
+\EE c(G)=-\pi_0^2.
+\]
+Therefore
+\[
+\EE(Y_1Y_2)
+=
+\sum_{g\ge0}\pi_g
+\bigl(\EE c(G)+\pi_0\mathbf 1_{\{g=0\}}\bigr)
+\bigl(c(g)+\pi_0\mathbf 1_{\{g=0\}}\bigr)
+=
+\beta\pi_0^2+\pi_0^3.
+\]
+Combining the last two displays yields \eqref{eq:tau2-explicit-main}.
+
 \smallskip
 \noindent\emph{Step 1: theoretical linearization CLT.}
 Lemma~\ref{lem:renewal-local-clt-main} applied to the bounded local observable
@@ -2699,55 +2998,338 @@ positive denominator $\widehat\sigma_{2,N}$ therefore gives the studentized
 limit by Slutsky's theorem.
 \end{proof}
 
-\begin{remark}[Why the proof uses the prefix estimator]\label{rem:prefix-proof-device-main}
-The proof of \Cref{thm:cycle-block-main} needs the deterministic cycle count
-$R_N$ only to identify the observed finite-record estimator with the Palm shadow
-estimator on the high-probability event $\{J_N\ge R_N+2\}$. This makes
-\eqref{eq:cycle-block-est-main} a proof device, not a recommendation to discard
-most of the data in applications. In practice one would normally report the
-all-complete-cycle estimator \eqref{eq:cycle-block-est-all-main}, which uses all
-complete cycles except the final remainder shorter than one separated batch. We
-keep the theorem at the deterministic-prefix level because that is enough for
-the consistency and studentization argument needed later, whereas proving the
-same limit for \eqref{eq:cycle-block-est-all-main} would add only random
-batch-count bookkeeping.
+\begin{remark}[Why the theorem starts with the prefix estimator]\label{rem:prefix-proof-device-main}
+Theorem~\ref{thm:cycle-block-main} first works with the deterministic cycle
+count $R_N$ because that turns the observed finite-record construction into a
+fixed Palm prefix on the high-probability event $\{J_N\ge R_N+2\}$, which is
+exactly what the studentization argument needs. The practical estimator is
+still \eqref{eq:cycle-block-est-all-main}:
+\Cref{prop:cycle-block-est-all-main} returns to that all-complete-cycle
+version and proves its consistency by handling the random batch count
+directly. Thus the prefix construction is a proof-organizing device, not a
+recommendation to discard most of the data in applications.
 \end{remark}
 
-\begin{remark}[Checkable nondegeneracy condition for the lag-two CLT]\label{rem:lag-two-nondeg-main}
-Lemma~\ref{lem:cycle-one-dep-main} gives $Y_j=f_2(G_j,G_{j+1})$ for a
-deterministic reward map. Writing $g:=G_j$ and $g':=G_{j+1}$, the click pattern
-inside the $j$th cycle contributes a lag-two success only in the words $101$
-(when $g=1$) or $111$ across two adjacent zero gaps (when $g=g'=0$). Hence
+\begin{proposition}[Consistency of the all-complete-cycle separated-batch estimator]\label{prop:cycle-block-est-all-main}
+Under the assumptions of \Cref{thm:cycle-block-main}, let
+$\widehat\sigma_{2,N}^{\mathrm{all},2}$ be defined by
+\eqref{eq:cycle-block-est-all-main}. Then
 \[
-f_2(g,g')
-=
-\mathbf 1_{\{g=1\}}
-+\mathbf 1_{\{g=0,\ g'=0\}}
--(g+1)\mu_2
--2\rho\bigl(1-(g+1)\rho\bigr).
+\widehat\sigma_{2,N}^{\mathrm{all},2}\to \sigma_2^2
+\qquad\text{in probability.}
 \]
-Because the gap law from Lemma~\ref{lem:renewal-gap-main} has exponential tails
-and $f_2$ grows at most linearly, all of the series below converge absolutely.
-Let $\pi_g:=\PP(G_1=g)$ and define
+If in addition $\sigma_2^2>0$, then
 \[
-m_2^{\mathrm{out}}(g):=\sum_{h\ge0} f_2(g,h)\pi_h,
+\PP\!\left(\widehat\sigma_{2,N}^{\mathrm{all},2}>0\right)\to1,
 \qquad
-m_2^{\mathrm{in}}(g):=\sum_{h\ge0} f_2(h,g)\pi_h.
+\widehat\sigma_{2,N}^{\mathrm{all}}
+:=
+\sqrt{\widehat\sigma_{2,N}^{\mathrm{all},2}}
+\to\sigma_2
+\qquad\text{in probability.}
 \]
-Since $\EE Y_1=0$,
+\end{proposition}
+
+\begin{proof}
+Set
 \[
-\tau_2^2
-=
-\sum_{g,h\ge0} f_2(g,h)^2\pi_g\pi_h
-+2\sum_{g\ge0}m_2^{\mathrm{in}}(g)m_2^{\mathrm{out}}(g)\pi_g,
+\mu_L:=\EE L_1,
 \qquad
-\sigma_2^2=\frac{\tau_2^2}{\EE L_1}.
+\tau_2^2:=\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2),
+\qquad
+m_N:=\left\lfloor\frac{N}{\mu_L(b_N+1)}\right\rfloor.
 \]
-For a fixed detector design, the studentized interval from
-\Cref{thm:cycle-block-main} is therefore available only after checking that this
-explicit cycle-variance quantity is strictly positive. That check may be carried
-out analytically from the closed gap law or numerically for the chosen
-parameter values before reporting a Wald interval.
+As in the proof of \Cref{thm:cycle-block-main}, let
+\[
+\delta_N:=|\widehat\rho-\rho|+|\widehat\mu_{2,N}-\mu_2|
+=O_{\PP}(N^{-1/2}).
+\]
+
+\smallskip
+\noindent\emph{Step 1: oracle all-cycle estimator on the coupled Palm sequence.}
+Let
+\[
+Y_{j,N}^{\circ,\mathrm{all}}
+:=
+\sum_{n=\tau_j}^{\tau_{j+1}-1} Z_n,
+\qquad
+1\le j\le R_N^{\mathrm{all}},
+\]
+and when $M_N^{\mathrm{all}}\ge2$ define the oracle separated batch sums
+\[
+\widehat B_{r,N}^{\circ,\mathrm{all}}
+=
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}
+Y_{j,N}^{\circ,\mathrm{all}},
+\qquad
+1\le r\le M_N^{\mathrm{all}},
+\]
+their mean
+\[
+\bar B_N^{\circ,\mathrm{all}}
+=
+\frac1{M_N^{\mathrm{all}}}\sum_{r=1}^{M_N^{\mathrm{all}}}
+\widehat B_{r,N}^{\circ,\mathrm{all}},
+\]
+and the oracle all-cycle estimator
+\[
+\widehat\sigma_{2,N}^{\circ,\mathrm{all},2}
+=
+\frac{1}{\bar L_N^{\mathrm{all}}\,b_N\,(M_N^{\mathrm{all}}-1)}
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+\bigl(\widehat B_{r,N}^{\circ,\mathrm{all}}-\bar B_N^{\circ,\mathrm{all}}\bigr)^2.
+\]
+If $M_N^{\mathrm{all}}<2$, set
+$\widehat\sigma_{2,N}^{\circ,\mathrm{all},2}=0$. By the renewal strong law from
+\Cref{lem:deterministic-prefix-main},
+\[
+\frac{J_N}{N}\to\frac1{\mu_L}
+\qquad\text{almost surely,}
+\]
+hence
+\[
+\frac{J_N-1}{N}\to\frac1{\mu_L},
+\qquad
+\frac{M_N^{\mathrm{all}}}{m_N}\to1
+\qquad\text{almost surely.}
+\]
+In particular, $\PP(M_N^{\mathrm{all}}\ge2)\to1$ and
+$R_N^{\mathrm{all}}\to\infty$ almost surely.
+
+Under the standard coupling after the first click $\tau_1$, the observed
+complete cycles are exactly the first $J_N-1$ Palm cycles. Therefore, on
+$\{M_N^{\mathrm{all}}\ge2\}$, the oracle quantities above coincide pathwise
+with the Palm batch sums
+\[
+\widetilde B_{r,N}^{\mathrm{sh}}
+:=
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}Y_j,
+\qquad r\ge1,
+\]
+their mean over the first $M_N^{\mathrm{all}}$ batches, and the Palm cycle
+average
+\[
+\bar L_N^{\mathrm{all},\mathrm{sh}}
+:=
+\frac1{R_N^{\mathrm{all}}}\sum_{j=1}^{R_N^{\mathrm{all}}}L_j.
+\]
+Thus it suffices to prove consistency for this shadow oracle estimator.
+
+Applying the random complete-cycle batch lemma,
+\Cref{lem:batch-var-random-count-main}, to the Palm reward sequence
+$(Y_j)_{j\ge1}$ and the observed click count $J_N$ gives directly
+\[
+\frac{1}{b_N(M_N^{\mathrm{all}}-1)}
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+\bigl(\widetilde B_{r,N}^{\mathrm{sh}}-\bar B_N^{\circ,\mathrm{all}}\bigr)^2
+\to\tau_2^2
+\qquad\text{in probability.}
+\]
+Also, the strong law for $(L_j)_{j\ge1}$ and the random-index limit
+$R_N^{\mathrm{all}}\to\infty$ almost surely give
+\[
+\bar L_N^{\mathrm{all},\mathrm{sh}}
+\to\mu_L
+\qquad\text{almost surely.}
+\]
+Hence
+\[
+\widehat\sigma_{2,N}^{\circ,\mathrm{all},2}
+\to
+\frac{\tau_2^2}{\mu_L}
+=
+\sigma_2^2
+\qquad\text{in probability.}
+\]
+
+\smallskip
+\noindent\emph{Step 2: plug-in centering error for the all-cycle estimator.}
+On the event $\{M_N^{\mathrm{all}}\ge2\}$, define
+\[
+\Delta_{r,N}^{\mathrm{all}}
+:=
+\widehat B_{r,N}^{\mathrm{all}}-\widehat B_{r,N}^{\circ,\mathrm{all}}.
+\]
+Exactly as in Step~4 of \Cref{thm:cycle-block-main}, because $A_n\in\{0,1\}$,
+there is a deterministic constant $C_2$ such that
+\[
+|\widehat Y_{j,N}^{\mathrm{all}}-Y_{j,N}^{\circ,\mathrm{all}}|
+\le
+C_2\,L_{j,N}^{\mathrm{all}}\delta_N
+\qquad(1\le j\le R_N^{\mathrm{all}}),
+\]
+and therefore
+\[
+|\Delta_{r,N}^{\mathrm{all}}|
+\le
+C_2\delta_N
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}
+L_{j,N}^{\mathrm{all}}.
+\]
+Write
+\[
+W_{r,N}^{\mathrm{sh}}
+:=
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}L_j,
+\qquad r\ge1.
+\]
+These are i.i.d., $\EE (W_{1,N}^{\mathrm{sh}})^2=O(b_N^2)$, and in fact
+$\EE (W_{1,N}^{\mathrm{sh}})^4=O(b_N^4)$. Applying the same random-index
+argument as above to
+\[
+\bigl(W_{r,N}^{\mathrm{sh}}\bigr)^2-\EE\bigl(W_{1,N}^{\mathrm{sh}}\bigr)^2
+\]
+yields
+\[
+\frac1{M_N^{\mathrm{all}}}
+\sum_{r=1}^{M_N^{\mathrm{all}}}\bigl(W_{r,N}^{\mathrm{sh}}\bigr)^2
+=
+O_{\PP}(b_N^2).
+\]
+Under the coupling, this implies
+\[
+\frac1{M_N^{\mathrm{all}}b_N}
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+\left(
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}
+L_{j,N}^{\mathrm{all}}
+\right)^2
+=
+O_{\PP}(b_N).
+\]
+Consequently
+\[
+\frac1{M_N^{\mathrm{all}}b_N}
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+\bigl(\Delta_{r,N}^{\mathrm{all}}\bigr)^2
+=
+O_{\PP}(\delta_N^2b_N)
+=
+o_{\PP}(1),
+\]
+because $b_N=O(N^{1/3})$ and $\delta_N=O_{\PP}(N^{-1/2})$.
+
+Let
+\[
+\Delta_N^{\mathrm{all},\ast}
+:=
+\frac1{M_N^{\mathrm{all}}}
+\sum_{r=1}^{M_N^{\mathrm{all}}}\Delta_{r,N}^{\mathrm{all}},
+\qquad
+D_{r,N}^{\mathrm{all}}
+:=
+\Delta_{r,N}^{\mathrm{all}}-\Delta_N^{\mathrm{all},\ast}.
+\]
+Then
+\[
+\widehat B_{r,N}^{\mathrm{all}}-\bar B_N^{\mathrm{all}}
+=
+\bigl(\widehat B_{r,N}^{\circ,\mathrm{all}}-\bar B_N^{\circ,\mathrm{all}}\bigr)
++D_{r,N}^{\mathrm{all}}.
+\]
+Since centering cannot increase the Euclidean norm,
+\[
+\sum_{r=1}^{M_N^{\mathrm{all}}}\bigl(D_{r,N}^{\mathrm{all}}\bigr)^2
+\le
+\sum_{r=1}^{M_N^{\mathrm{all}}}\bigl(\Delta_{r,N}^{\mathrm{all}}\bigr)^2.
+\]
+Step~1 gives
+\[
+\frac1{M_N^{\mathrm{all}}b_N}
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+\bigl(\widehat B_{r,N}^{\circ,\mathrm{all}}-\bar B_N^{\circ,\mathrm{all}}\bigr)^2
+=
+O_{\PP}(1),
+\]
+so Cauchy--Schwarz yields
+\[
+\begin{aligned}
+&\left|
+\frac1{M_N^{\mathrm{all}}b_N}
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+\bigl(\widehat B_{r,N}^{\mathrm{all}}-\bar B_N^{\mathrm{all}}\bigr)^2
+-\frac1{M_N^{\mathrm{all}}b_N}
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+\bigl(\widehat B_{r,N}^{\circ,\mathrm{all}}-\bar B_N^{\circ,\mathrm{all}}\bigr)^2
+\right| \\
+&\qquad\le
+\frac{2}{M_N^{\mathrm{all}}b_N}
+\left(
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+\bigl(\widehat B_{r,N}^{\circ,\mathrm{all}}-\bar B_N^{\circ,\mathrm{all}}\bigr)^2
+\right)^{1/2}
+\left(
+\sum_{r=1}^{M_N^{\mathrm{all}}}\bigl(D_{r,N}^{\mathrm{all}}\bigr)^2
+\right)^{1/2} \\
+&\qquad\quad+
+\frac1{M_N^{\mathrm{all}}b_N}
+\sum_{r=1}^{M_N^{\mathrm{all}}}\bigl(D_{r,N}^{\mathrm{all}}\bigr)^2
+=
+o_{\PP}(1).
+\end{aligned}
+\]
+After division by
+\[
+\bar L_N^{\mathrm{all}}\frac{M_N^{\mathrm{all}}-1}{M_N^{\mathrm{all}}}
+=
+\bar L_N^{\mathrm{all}}+o_{\PP}(1),
+\]
+and using $\bar L_N^{\mathrm{all}}\to\mu_L$ in probability, we obtain
+\[
+\widehat\sigma_{2,N}^{\mathrm{all},2}
+-\widehat\sigma_{2,N}^{\circ,\mathrm{all},2}\to0
+\qquad\text{in probability.}
+\]
+Combining this with Step~1 proves
+\[
+\widehat\sigma_{2,N}^{\mathrm{all},2}\to\sigma_2^2
+\qquad\text{in probability.}
+\]
+If $\sigma_2^2>0$, then
+\[
+\PP\!\left(\widehat\sigma_{2,N}^{\mathrm{all},2}\le0\right)
+\le
+\PP\!\left(
+\left|\widehat\sigma_{2,N}^{\mathrm{all},2}-\sigma_2^2\right|
+\ge \sigma_2^2
+\right)
+\to0,
+\]
+so
+\[
+\PP\!\left(\widehat\sigma_{2,N}^{\mathrm{all},2}>0\right)\to1.
+\]
+The continuous mapping theorem therefore yields
+\[
+\widehat\sigma_{2,N}^{\mathrm{all}}
+\to\sigma_2
+\qquad\text{in probability.}
+\]
+\end{proof}
+
+\begin{remark}[Computing the theorem's nondegeneracy criterion]\label{rem:lag-two-nondeg-main}
+Theorem~\ref{thm:cycle-block-main} reduces the studentization hypothesis to the
+finite quantity \eqref{eq:tau2-explicit-main}. The needed inputs are only
+\[
+\rho,\qquad \mu_2,\qquad \pi_0,\qquad \pi_1,\qquad m_1=\sum_{g\ge0}g\,\pi_g,
+\qquad m_2=\sum_{g\ge0}g^2\pi_g,
+\]
+and all are computable from the explicit zero-run law of
+\Cref{lem:renewal-gap-main}. In particular, for $\kappa_{\mathrm r}\neq\Gamma$,
+the mass function $\pi_g$ is a linear combination of $p^g$ and $c^g$, so
+$m_1,m_2,\pi_0,\pi_1$ are closed-form geometric sums; at equal rates, they are
+the corresponding continuous limits of those closed forms.
+
+If one evaluates $m_1$ or $m_2$ numerically by truncating at $K$, then the
+tail error is rigorously controlled by
+\[
+0\le m_1-\sum_{g=0}^K g\,\pi_g\le \sum_{g>K} g\,\pi_g,
+\qquad
+0\le m_2-\sum_{g=0}^K g^2\,\pi_g\le \sum_{g>K} g^2\,\pi_g.
+\]
+Those tail sums are again explicit from the same gap law, so
+\eqref{eq:tau2-explicit-main} can be enclosed by a finite computation before
+reporting a Wald interval.
 \end{remark}
 
 \begin{proposition}[Finite-record diagnostics]\label{prop:finite-diagnostics-main}
@@ -2793,8 +3375,9 @@ Hence the zero of $\gamma_2$ gives the first-order scan-coordinate crossing of
 the memory transition. Interpreting that crossing as a shell statement requires
 the separate response-side range and regularity hypotheses imposed later in
 \Cref{sec:kms-shells}.
-\item If, in addition, the fixed detector setting satisfies the nondegeneracy
-check in \Cref{rem:lag-two-nondeg-main}, equivalently
+\item If, in addition, the fixed detector setting satisfies the explicit
+nondegeneracy criterion \eqref{eq:tau2-explicit-main} from
+\Cref{thm:cycle-block-main}, equivalently
 \[
 \tau_2^2>0
 \quad\Longleftrightarrow\quad
@@ -2923,8 +3506,8 @@ $d\gamma_2/ds(s_*)\neq0$. This proves the first-order scan-crossing claim in
 part~(ii); the later shell interpretation requires the separate response-side
 range and regularity checks from \Cref{sec:kms-shells}.
 Item (iii) is the fixed-setting studentized confidence interval from
-\Cref{thm:cycle-block-main}, used only after the explicit variance check in
-\Cref{rem:lag-two-nondeg-main}.
+\Cref{thm:cycle-block-main}, used only after the explicit positivity check
+\eqref{eq:tau2-explicit-main}.
 
 For item (iv), the displayed first-order expansion is assumed as part of the
 separate scan-design input. Under that additional assumption,
@@ -2955,7 +3538,8 @@ stationary click record from that design. Then:
 \gamma_2=\operatorname{Cov}(A_0,A_2)
 \]
 and its asymptotic variance. After the nondegeneracy check from
-\Cref{rem:lag-two-nondeg-main}, its studentized interval is a confidence
+\Cref{thm:cycle-block-main}, equivalently the positivity of
+\eqref{eq:tau2-explicit-main}, its studentized interval is a confidence
 interval for this fixed-setting $\gamma_2$ and for no other quantity.
 \item \Cref{prop:finite-diagnostics-main}(ii) adds only a deterministic
 first-order scan relation: if the same detector design is embedded in a
@@ -2973,7 +3557,7 @@ require separate denominator-, location-, or ratio-data asymptotics such as
 
 \begin{proof}
 Items~(i)--(iii) are exactly the separation of roles established by
-\Cref{thm:cycle-block-main,rem:lag-two-nondeg-main,prop:finite-diagnostics-main}.
+\Cref{thm:cycle-block-main,prop:finite-diagnostics-main}.
 Item~(iv) is the standing scope condition recorded again at the start of
 Appendix~\ref{sec:inverse} and in \Cref{ass:ratio-data-clt-main}.
 \end{proof}
@@ -2988,7 +3572,7 @@ $\gamma_1=\rho(a-\rho)$ remains negative, and
 \Cref{prop:finite-diagnostics-main,thm:one-record-estimates-main} make the
 lag-two zero the finite-record diagnostic for the memory threshold. The
 fixed-setting confidence interval for $\gamma_2$ is available only after the
-cycle-variance check in \Cref{rem:lag-two-nondeg-main} has confirmed
+explicit cycle-variance check \eqref{eq:tau2-explicit-main} has confirmed
 $\tau_2^2>0$ (equivalently $\sigma_2^2>0$); if the estimated cycle variance is
 numerically close to zero, the appropriate finite-record output is the sign
 diagnostic together with the point estimate, not a Wald interval. Along a
@@ -3005,7 +3589,13 @@ sampling noise. These checks are not additional shell equations; they test
 whether the sampled boundary-reset recovery readout model is the right
 effective description of the observed record.
 
-Theorem~\ref{thm:cycle-block-main} supplies the lag-two variance estimate directly in terms of observable click-to-click cycles, while \Cref{rem:lag-two-nondeg-main} states the parameter-level positivity check required before studentization. Other design-specific observables still require the corresponding regenerative variance estimate or a Monte Carlo calibration, and no universal sample-size bound follows from the closed-form law alone.
+Theorem~\ref{thm:cycle-block-main} supplies both the lag-two variance estimate
+and the explicit positivity criterion \eqref{eq:tau2-explicit-main} required
+before studentization. \Cref{rem:lag-two-nondeg-main} only explains how to
+compute that finite quantity in practice. Other design-specific observables
+still require the corresponding regenerative variance estimate or a Monte
+Carlo calibration, and no universal sample-size bound follows from the
+closed-form law alone.
 
 For the ideal-benchmark shell in the ideal-blanking mode, the finite-sample test is different because the benchmark is a Markov law on a restricted support.
 
