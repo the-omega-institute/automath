@@ -1,5 +1,6 @@
 import Omega.SyncKernelRealInput.TrivFactorPrimitivePolynomial
 import Omega.SyncKernelRealInput.RealInput40A0TensorHidden
+import Omega.SyncKernelRealInput.RealInput40SkeletonFactor
 import Omega.SyncKernelRealInput.RealInput40SpectrumDecomp
 import Omega.SyncKernelRealInput.RealInput40DirectionalCouplingEigs
 import Omega.SyncKernelRealInput.RealInput40MertensConstant
