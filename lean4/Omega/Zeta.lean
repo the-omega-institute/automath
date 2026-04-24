@@ -150,6 +150,7 @@ import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiBinomialToeplitzComovingDeltaScaleLaw
 import Omega.Zeta.XiComovingLeyangEndpointSquareRoot
 import Omega.Zeta.XiLogDefectPotentialPoissonPrimitive
+import Omega.Zeta.XiLocalBinaryNormalizationFibonacciRigidity
 import Omega.Zeta.XiLocalizedSolenoidPeriodicGrowthMaxScale
 import Omega.Zeta.XiLogcmSecondBernoulliCoefficientRatio
 import Omega.Zeta.XiCompactifiedDyadicDepthLowerBound

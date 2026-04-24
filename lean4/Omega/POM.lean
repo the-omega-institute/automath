@@ -112,6 +112,7 @@ import Omega.POM.CollisionBfSnfQ234
 import Omega.POM.CollisionCKFibonacci
 import Omega.POM.CollisionEntropyRate
 import Omega.POM.DiagonalRateRefreshEntropyRateRenewalCoding
+import Omega.POM.MixedCollisionPdKernel
 import Omega.POM.CostCanonicalRepresentativeFunctor
 import Omega.POM.CostOptimizationDecidable
 import Omega.POM.CollisionKernelDiscriminant
