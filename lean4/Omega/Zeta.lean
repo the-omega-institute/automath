@@ -353,6 +353,7 @@ import Omega.Zeta.XiTerminalZmLeyangP3RenormalizationHensel
 import Omega.Zeta.XiTerminalZmLeyangPerronP3Radius
 import Omega.Zeta.XiTerminalZmLeyangPerronP3SemistableDegreeDrop
 import Omega.Zeta.XiTerminalZmLeyangP3V3LinearBound
+import Omega.Zeta.XiTerminalZmLeyangP3Mod3AlgebraicAutomatic
 import Omega.Zeta.XiTerminalZmPistarFiberEqualsFourLinesThroughPoint
 import Omega.Zeta.XiProjectivePressurePathHolderConvexity
 import Omega.Zeta.XiHzomFunctionalEquation
