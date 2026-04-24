@@ -167,6 +167,7 @@ import Omega.Zeta.XiAdelicZkGluingCriticalLine
 import Omega.Zeta.XiRadialStokesCurvatureCountertermObstruction
 import Omega.Zeta.XiVanvleckResidueEnergyUniformLbUnderRadius
 import Omega.Zeta.XiSmithLossSpectrumDiscreteCurvatureCompleteCharacterization
+import Omega.Zeta.XiRoseUnitCircleTouchRingParityBifurcation
 import Omega.Zeta.XiSingularRingDefectDeltaLowerbound
 import Omega.Zeta.XiSingularRingDefectCountingBound
 import Omega.Zeta.XiSingularRingDefectMultiplicative

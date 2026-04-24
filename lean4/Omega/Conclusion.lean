@@ -223,6 +223,7 @@ import Omega.Conclusion.CoverTimeTailTwoSidedCompression
 import Omega.Conclusion.CollisionMomentMinrecHaltingTime
 import Omega.Conclusion.CollisionMomentSinglePulseOgf
 import Omega.Conclusion.CollisionMomentMoritaDefectFusion
+import Omega.Conclusion.VisibleToeplitzNegativeGramChart
 import Omega.Conclusion.CollisionResonantKernelTensorPrime
 import Omega.Conclusion.CollisionMomentStieltjesHankelPositivity
 import Omega.Conclusion.CompletedDefectMixedSemiring
