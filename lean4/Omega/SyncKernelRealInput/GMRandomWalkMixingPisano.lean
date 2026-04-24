@@ -99,6 +99,14 @@ theorem gm_random_walk_mixing_pisano_mixing_time_bound_le (q m : ℕ) :
     nlinarith
   simpa [gm_random_walk_mixing_pisano_mixing_time_bound] using div_le_self hnum hden
 
+/-- Paper label: `prop:gm-epsilon-bias-pisano-scale`. Once the Pisano-scale decay envelope is at
+most `ε`, the concrete Fourier radius of the cyclic random walk is also at most `ε`. -/
+theorem paper_gm_epsilon_bias_pisano_scale (q blocks : ℕ) (ε : ℝ) (hq : 2 ≤ q) (_hε : 0 < ε)
+    (hscale : Real.exp (-((1 : ℝ) / (q : ℝ)) * blocks) ≤ ε) :
+    gm_random_walk_mixing_pisano_fourier_radius q
+        (gm_random_walk_mixing_pisano_period q * blocks) ≤ ε := by
+  exact (gm_random_walk_mixing_pisano_character_decay q blocks hq).trans hscale
+
 /-- Paper label: `prop:gm-random-walk-mixing-pisano`. The finite cyclic walk uses the Pisano-scale
 character-decay package to identify the nontrivial spectral radius with the maximal Fourier mode
 and to record the resulting total-variation and mixing-time bounds. -/
