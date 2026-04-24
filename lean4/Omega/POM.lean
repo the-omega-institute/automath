@@ -372,6 +372,7 @@ import Omega.POM.FiberMultivariateHolographicConservation
 import Omega.POM.SteinitzTerminalExternalCoordinates
 import Omega.POM.FiberParityHomotopyEquivalence
 import Omega.POM.FiberParityMod3
+import Omega.POM.ToggleContractibleParityRigidity
 import Omega.POM.FiberPosteriorEquivalenceActivityField
 import Omega.POM.FiberPosteriorEquivalenceFibonacciGauge
 import Omega.POM.FiberPosteriorBayesMWIS
