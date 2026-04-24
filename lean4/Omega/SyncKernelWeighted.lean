@@ -244,6 +244,7 @@ import Omega.SyncKernelWeighted.WittDworkZpIntegrality
 import Omega.SyncKernelWeighted.WittNecklaceDivisibility
 import Omega.SyncKernelWeighted.WittNecklaceDworkR
 import Omega.SyncKernelWeighted.WittPkSparsification
+import Omega.SyncKernelWeighted.WittRootOfUnityTowerLock
 import Omega.SyncKernelWeighted.WittPpowerPrimitiveCoordinate
 import Omega.SyncKernelWeighted.WittThetaBinaryFingerprint
 import Omega.SyncKernelWeighted.WittThetaDerivativeFilter
