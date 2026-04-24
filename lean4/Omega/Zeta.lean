@@ -995,6 +995,7 @@ import Omega.Zeta.XiFoldbinGaugeDensityExactThermodynamicConstant
 import Omega.Zeta.XiFoldKappaGaugeFirstOrderConstants
 import Omega.Zeta.XiFoldbinGaugeEscortKlDecomposition
 import Omega.Zeta.XiFoldbinGaugeEntropyOneNatLaw
+import Omega.Zeta.XiFoldbinGroupoidMaxentTracialState
 import Omega.Zeta.XiGramDetNearestNeighborProductUpperBound
 import Omega.Zeta.XiGramshiftBadPrimesWeightDiscriminant
 import Omega.Zeta.XiGramshiftIllconditioningForcedByToeplitzMargin

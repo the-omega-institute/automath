@@ -220,6 +220,7 @@ import Omega.Conclusion.ZeroSizebiasedResidualLayerwiseRigidity
 import Omega.Conclusion.ZeroMeanResidueTestsCompleteDetection
 import Omega.Conclusion.ValuationIsometryClassification
 import Omega.Conclusion.ValuationMedianGroup
+import Omega.Conclusion.BrauerRankSupportSharpDensityBound
 import Omega.Conclusion.MedianPrimeSupportMinimalRigidity
 import Omega.Conclusion.ModpSingularityForcesGreenBadPrime
 import Omega.Conclusion.MellinTopLayerPeelingReconstruction
