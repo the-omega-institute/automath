@@ -24,17 +24,29 @@ W_x(s)=\omega\!\left(\Phi_x(\tau)\Phi_x(\tau-s)\right),
 \]
 with the Fourier transform understood distributionally whenever $W_x$ is not an $L^1$ function.
 
-\begin{assumption}[Stationary response input and KMS strip regularity]\label{ass:long-time-switch-main}
+\begin{assumption}[Switched stationary response input and KMS strip regularity]\label{ass:long-time-switch-main}
 Fix a static worldline through $x$, a detector gap $\Omega>0$, and a smooth nonnegative switching profile $\chi\in C_c^\infty(\mathbb R)$ with $\int_{\RR}\chi=1$. Let $\chi_T(t)=\chi(t/T)$ and let $H_{g\to e}^{(T)}(x,\Omega)$ and $H_{e\to g}^{(T)}(x,\Omega)$ be the corresponding first-order transition probabilities for a detector with fixed spatial profile and bare coupling $\lambda_c$. Assume:
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
 \item The pullback $W_x$ is a tempered distribution on $\RR$, and there is an open interval $I_x\subset\RR$ containing $\pm\Omega$ on which its Fourier transform $\widehat W_x$ is represented by a continuous function.
-\item The long-time stationary detector theorem applies to this worldline and switching family: the limits
-\[
-\Gamma_+(x,\Omega):=\lim_{T\to\infty}\frac{1}{T}H_{g\to e}^{(T)}(x,\Omega),
+\item The switched first-order transition probabilities are given by the standard stationary UDW response pairing
+\begin{equation}\label{eq:switched-pairing-main}
+H_{g\to e}^{(T)}(x,\Omega)
+=\lambda_c^2\langle W_x,K_{T,\Omega}\rangle,
 \qquad
-\Gamma_-(x,\Omega):=\lim_{T\to\infty}\frac{1}{T}H_{e\to g}^{(T)}(x,\Omega),
+H_{e\to g}^{(T)}(x,\Omega)
+=\lambda_c^2\langle W_x,K_{T,-\Omega}\rangle,
+\end{equation}
+where
+\[
+K_{T,\omega}(s)=e^{-i\omega s}\int_{\RR}\chi_T(u)\chi_T(u-s)\,du.
 \]
-exist and obey the standard smooth-switching stationary response formulas \cite{LoukoSatz2008,FewsterJuarezLouko2016}.
+Equivalently, whenever $W_x$ is represented by a function, this is the usual double integral
+\begin{equation}\label{eq:switched-double-integral-main}
+H_{g\to e}^{(T)}(x,\Omega)
+=\lambda_c^2\int_{\RR^2}
+\chi_T(\tau)\chi_T(\tau')e^{-i\Omega(\tau-\tau')}W_x(\tau-\tau')\,d\tau\,d\tau',
+\end{equation}
+with the de-excitation formula obtained by replacing $\Omega$ by $-\Omega$.
 \item If the state is $\beta_\infty$-KMS with respect to static Killing time, then with $\beta_{\mathrm{loc}}(x)=\beta_\infty N(x)$ there exists a function $F_x$ holomorphic on the strip
 \[
 S_{\beta_{\mathrm{loc}}}^-=\{z\in\mathbb C:-\beta_{\mathrm{loc}}(x)<\Im z<0\}
@@ -59,6 +71,35 @@ and use $\lambda_{\mathrm{sw}}$ in the long-time rate formulas below.
 
 \begin{proposition}[Stationary UDW response and KMS spectral relation]\label{prop:stationary-udw-response-main}
 Fix a static worldline through $x$ and a two-level detector with gap $\Omega>0$, coupling scale $\lambda_c$, and fixed spatial profile. Assume \Cref{ass:long-time-switch-main}. Then the stationary weak-coupling long-time excitation and de-excitation rates are
+\begin{equation}\label{eq:long-time-kernel-main}
+\frac{1}{T}H_{g\to e}^{(T)}(x,\Omega)
+=\lambda_c^2\|\chi\|_2^2\,\langle \widehat W_x,\Phi_{T,\Omega}\rangle,
+\qquad
+\frac{1}{T}H_{e\to g}^{(T)}(x,\Omega)
+=\lambda_c^2\|\chi\|_2^2\,\langle \widehat W_x,\Phi_{T,-\Omega}\rangle,
+\end{equation}
+where
+\begin{equation}\label{eq:approx-identity-main}
+\Phi_{T,\omega}(\nu)=
+\frac{T}{2\pi\|\chi\|_2^2}\,
+\bigl|\widehat\chi\bigl(T(\omega-\nu)\bigr)\bigr|^2 .
+\end{equation}
+The family $\Phi_{T,\omega}$ is a nonnegative approximate identity centred at $\omega$, so
+\begin{equation}\label{eq:long-time-limit-main}
+\begin{aligned}
+\Gamma_+(x,\Omega)
+&:=\lim_{T\to\infty}\frac{1}{T}H_{g\to e}^{(T)}(x,\Omega)
+=\lambda_c^2\|\chi\|_2^2\,\widehat W_x(\Omega),\\
+\Gamma_-(x,\Omega)
+&:=\lim_{T\to\infty}\frac{1}{T}H_{e\to g}^{(T)}(x,\Omega)
+=\lambda_c^2\|\chi\|_2^2\,\widehat W_x(-\Omega).
+\end{aligned}
+\end{equation}
+Hence, with
+\[
+\lambda_{\mathrm{sw}}^2=\lambda_c^2\|\chi\|_2^2,
+\]
+one obtains
 \begin{equation}\label{eq:fourier-rates-main}
 \Gamma_+(x,\Omega)=\lambda_{\mathrm{sw}}^2\widehat W_x(\Omega),
 \qquad
@@ -92,9 +133,64 @@ gives
 \end{proposition}
 
 \begin{proof}
-Assumption~\ref{ass:long-time-switch-main}(ii) is exactly the stationary detector input needed for the long-time rate formulas \eqref{eq:fourier-rates-main}; it is the standard smooth-switching stationary response theorem used in detector theory \cite{LoukoSatz2008,FewsterJuarezLouko2016}.
+Write
+\[
+g_T(s)=\int_{\RR}\chi_T(u)\chi_T(u-s)\,du.
+\]
+Then \Cref{ass:long-time-switch-main}(ii) gives
+\[
+H_{g\to e}^{(T)}(x,\Omega)=\lambda_c^2\langle W_x,e^{-i\Omega(\cdot)}g_T\rangle.
+\]
+Because $g_T$ is the autocorrelation of $\chi_T$, its Fourier transform is
+\[
+\widehat g_T(\nu)=|\widehat{\chi_T}(\nu)|^2
+=T^2\bigl|\widehat\chi(T\nu)\bigr|^2.
+\]
+Using the Fourier inversion convention
+\[
+g(s)=\frac{1}{2\pi}\int_{\RR}e^{i\nu s}\widehat g(\nu)\,d\nu,
+\]
+we obtain the exact spectral representation
+\[
+\frac{1}{T}H_{g\to e}^{(T)}(x,\Omega)
+=\frac{\lambda_c^2}{2\pi T}
+\left\langle \widehat W_x,\bigl|\widehat{\chi_T}(\Omega-\cdot)\bigr|^2\right\rangle
+=\lambda_c^2\|\chi\|_2^2\,\langle \widehat W_x,\Phi_{T,\Omega}\rangle,
+\]
+which is \eqref{eq:long-time-kernel-main}; the de-excitation formula is the same
+with $\Omega$ replaced by $-\Omega$.
 
-For the KMS identity, abbreviate $\beta_{\mathrm{loc}}=\beta_\infty N(x)$ and let $\phi\in C_c^\infty(\RR)$. Define the entire function
+The functions $\Phi_{T,\omega}$ are nonnegative and
+\[
+\int_{\RR}\Phi_{T,\omega}(\nu)\,d\nu
+=\frac{1}{2\pi\|\chi\|_2^2}\int_{\RR}|\widehat\chi(\zeta)|^2\,d\zeta
+=1
+\]
+by the change of variables $\zeta=T(\omega-\nu)$ and Plancherel. Thus
+$\Phi_{T,\omega}$ is an approximate identity centred at $\omega$. To extract the
+limit against the tempered distribution $\widehat W_x$, choose
+$\eta\in C_c^\infty(I_x)$ with $\eta\equiv1$ on a smaller neighborhood of
+$\omega\in\{\Omega,-\Omega\}$. Then
+\[
+\langle \widehat W_x,\Phi_{T,\omega}\rangle
+=\int_{\RR}\eta(\nu)\widehat W_x(\nu)\Phi_{T,\omega}(\nu)\,d\nu
++\langle \widehat W_x,(1-\eta)\Phi_{T,\omega}\rangle.
+\]
+Because $\eta\widehat W_x$ is continuous near $\omega$, the first term tends to
+$\widehat W_x(\omega)$. Because $\widehat\chi$ is Schwartz and $(1-\eta)$
+vanishes near $\omega$, the second term tends to $0$ in every Schwartz
+seminorm, hence also after pairing with the tempered distribution
+$\widehat W_x$. Therefore
+\[
+\langle \widehat W_x,\Phi_{T,\omega}\rangle\longrightarrow \widehat W_x(\omega),
+\qquad \omega\in\{\Omega,-\Omega\},
+\]
+which proves \eqref{eq:long-time-limit-main} and therefore
+\eqref{eq:fourier-rates-main}. This is the exact long-time normalization used in
+the standard smooth-switching stationary detector theorem
+\cite{LoukoSatz2008,FewsterJuarezLouko2016}.
+
+	For the KMS identity, abbreviate $\beta_{\mathrm{loc}}=\beta_\infty N(x)$ and let $\phi\in C_c^\infty(\RR)$. Define the entire function
 \[
 h_\phi(z)=\int_{\RR}e^{-i\nu z}\phi(\nu)\,d\nu.
 \]
@@ -188,8 +284,11 @@ That reverse reading is only a parametrization of the unknown absolute response,
 Proposition~\ref{prop:symmetry-homogeneous-main} gives an explicit detector-field
 model in which this amplitude homogeneity is exact, but because that
 ultrastatic symmetry example has constant lapse it does not by itself generate
-nontrivial shell geometry. Section~\ref{sec:inverse} instead studies separate
-calibrated models with nonconstant lapse, and also records a quantitative
+nontrivial shell geometry. Section~\ref{sec:inverse} instead studies the
+abstract calibrated specialization in which one fixes a nonconstant lapse and a
+homogeneous response amplitude directly at the response-function level; no
+separate exact nonconstant-lapse UDW realization is proved in the present
+paper. It also records a quantitative
 slow-variation criterion showing that the same homogeneous amplitude regime is
 recovered asymptotically when the shell separation is small compared with the
 spatial scale on which $\log \mathcal S_x(\Omega)$ varies.
@@ -300,16 +399,59 @@ two ingredients that make shell language precise: the first fixes the
 calibration dependence, and the second upgrades a response locus to a shell at
 regular points.
 
+\begin{lemma}[Abstract calibrated homogeneous specialization]\label{lem:abstract-homogeneous-specialization-main}
+Fix a static region $U$, a gap $\Omega>0$, a Tolman parameter
+$\beta_\infty>0$, a positive constant $A$, and a $C^1$ lapse
+$N:U\to(0,\infty)$. Define the calibrated response function
+\[
+R_\Omega^{\mathrm{hom}}(x)=\frac{A}{e^{\beta_\infty N(x)\Omega}-1}.
+\]
+Then for any target rate $\gamma>0$ the response locus
+\[
+L_\gamma^{\mathrm{hom}}
+=\{x\in U:R_\Omega^{\mathrm{hom}}(x)=\gamma\}
+\]
+is exactly the lapse level set
+\[
+\beta_\infty N(x)=\frac{1}{\Omega}\log\!\left(1+\frac{A}{\gamma}\right).
+\]
+If $dN(x_0)\neq0$ at $x_0\in L_\gamma^{\mathrm{hom}}$, then
+$L_\gamma^{\mathrm{hom}}$ is near $x_0$ a $C^1$ codimension-one shell. This is
+an abstract calibrated specialization of a fixed response function. The only
+exact detector-field realization proved in this paper is
+\Cref{prop:symmetry-homogeneous-main}, where the lapse is constant; whenever
+later sections use homogeneous shell geometry with nonconstant lapse, they do
+so through this level-set specialization rather than through a separate exact
+UDW construction.
+\end{lemma}
+
+\begin{proof}
+Solving $R_\Omega^{\mathrm{hom}}(x)=\gamma$ gives
+\[
+e^{\beta_\infty N(x)\Omega}=1+\frac{A}{\gamma},
+\]
+hence the displayed lapse level set. Differentiating yields
+\[
+dR_\Omega^{\mathrm{hom}}
+=-A\frac{\beta_\infty\Omega e^{\beta_\infty N\Omega}}
+{(e^{\beta_\infty N\Omega}-1)^2}\,dN,
+\]
+whose scalar prefactor is strictly negative. Therefore
+$dR_\Omega^{\mathrm{hom}}(x_0)\neq0$ exactly when $dN(x_0)\neq0$, and the
+regular level-set theorem gives the shell statement.
+\end{proof}
+
 \begin{theorem}[Conditional response loci and shell interpretation for a fixed calibrated response function $R_\Omega$]\label{thm:shells-general-main}
-Assume the sampled interval instrument of
-\Cref{prop:instrument-kernels-main} and the modelling closure
+Assume the sampled classical interval instrument of
+\Cref{prop:instrument-kernels-main}, with independent Poisson attempts and
+fresh interval ancillas, and impose only the modelling closure
 $\Gamma=\Gamma_+(x,\Omega)$. Fix a detector design
 $(\Omega,\lambda_c,\Delta\tau,\kappa_{\mathrm r})$ in a static KMS background
 with lapse $N(x)>0$ everywhere in the region of interest, and assume the
 response regularity and calibration in \Cref{ass:kms-response-main}. Assume
 that $N$ and the specified spectral weight $x\mapsto\mathcal S_x(\Omega)$ are
 $C^1$ on that region. For this fixed response function $R_\Omega$, the two
-record benchmarks of the sampled classical counter are equivalent to the
+record benchmarks of the UDW-calibrated classical sampled counter are equivalent to the
 following response-level loci. Their nonemptiness is only a range condition for
 the already calibrated function $R_\Omega$: if the relevant target rate lies
 outside the range of $R_\Omega$ on the chosen region, the corresponding locus
@@ -384,11 +526,15 @@ in item~(iii).
 the record-selected thresholds into two response loci, and regularity
 determines whether those level sets are smooth hypersurfaces. The remaining
 results in this section record the calibrated homogeneous specialization and a
-simple existence criterion on monotone spherical regions.
+simple existence criterion on monotone spherical regions. Whenever that
+specialization is used with nonconstant lapse, it is the abstract level-set
+construction of \Cref{lem:abstract-homogeneous-specialization-main}, not a
+separate exact detector-field model.
 
 \begin{corollary}[Homogeneous specialization for a fixed calibrated response function $R_\Omega$]\label{cor:homogeneous-main}
-Assume the sampled interval instrument of
-\Cref{prop:instrument-kernels-main} and the modelling closure
+Assume the sampled classical interval instrument of
+\Cref{prop:instrument-kernels-main}, with independent Poisson attempts and
+fresh interval ancillas, and impose only the modelling closure
 $\Gamma=\Gamma_+(x,\Omega)$. Assume that
 $\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$ on the region under study. For
 this fixed calibrated homogeneous response function $R_\Omega$, both response
@@ -411,7 +557,9 @@ so that
 \Sigma_{\mathrm{mem}}=\{x:\beta_{\mathrm{loc}}(x)=\beta_{\mathrm{mem}}\}.
 \end{equation}
 If $dN\neq0$ on one of these level sets, then \Cref{lem:response-locus-main}
-identifies it as the corresponding shell.
+identifies it as the corresponding shell. For nonconstant lapse this is an
+abstract calibrated specialization in the sense of
+\Cref{lem:abstract-homogeneous-specialization-main}.
 \end{corollary}
 
 \begin{proof}
@@ -434,8 +582,9 @@ target-rate convention are proved once in \Cref{thm:ratio-main}; this section
 uses only the level-set formulas above.
 
 \begin{proposition}[Existence on monotone spherical regions via the target-rate range condition for a fixed calibrated $R_\Omega$]\label{prop:existence-main}
-Assume the sampled interval instrument of
-\Cref{prop:instrument-kernels-main} and the modelling closure
+Assume the sampled classical interval instrument of
+\Cref{prop:instrument-kernels-main}, with independent Poisson attempts and
+fresh interval ancillas, and impose only the modelling closure
 $\Gamma=\Gamma_+(x,\Omega)$. Assume the calibrated homogeneous spectral-weight
 regime in a static spherically symmetric region $r\in I$, and suppose
 $N:I\to N(I)$ is $C^1$ and strictly monotone. For either threshold
@@ -462,7 +611,7 @@ range of $N$. The nonzero derivative condition is the one-dimensional form of
 the regular level-set condition.
 \end{proof}
 
-In this calibrated regime, both response loci are simply lapse level sets
+In this abstract calibrated homogeneous regime, both response loci are simply lapse level sets
 selected by the two record thresholds, and they become shells when the
 regularity condition holds. The same local response scale therefore supports
 two different detector-selected response hypersurfaces whenever the range
@@ -507,13 +656,14 @@ Schwarzschild.
 \legend{Exact ratio,Leading-order prediction}
 \end{groupplot}
 \end{tikzpicture}
-\caption{Calibrated homogeneous response-locus data in Schwarzschild ($r_{\mathrm s}=2M=1$, $\beta_\infty=4\pi$, $\Omega=1$, $\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)=2$, $\kappa_{\mathrm r}=5$). In this regime the loci are lapse level sets and hence shells wherever $dN\neq0$. (a)~Lapse values $N_\varphi$ (ideal benchmark) and $N_{\mathrm{mem}}$ (memory) as functions of $\kappa_{\mathrm r}\Delta\tau$. The ordering reverses near $\kappa_{\mathrm r}\Delta\tau\approx1.8$, in agreement with \Cref{prop:order-main}: for faster sampling the memory shell lies closer to the horizon, whereas for slower sampling the ideal-benchmark shell does. (b)~Proper-distance ratio $\rho_\varphi/\rho_{\mathrm{mem}}$ (solid) compared with the small-gap linearized prediction of \Cref{thm:horizon-main} (dashed). The solid curve is the exact homogeneous shell-pair ratio; the dashed curve is only the additional near-horizon linearization, and the divergence as $\kappa_{\mathrm r}\Delta\tau\to0$ recovers the fast-sampling hierarchy law~\eqref{eq:fast-ratio-main}.}
+\caption{Algebraic calibrated homogeneous response-locus data in Schwarzschild ($r_{\mathrm s}=2M=1$, $\beta_\infty=4\pi$, $\Omega=1$, $\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)=2$, $\kappa_{\mathrm r}=5$). These curves visualize the abstract specialization of \Cref{lem:abstract-homogeneous-specialization-main}; they are not a separately derived exact nonconstant-lapse UDW model. In this regime the loci are lapse level sets and hence shells wherever $dN\neq0$. The shell-pair orientation matches the convention of \Cref{thm:ratio-main}: $\varphi/\mathrm{mem}$ means ideal benchmark over memory transition, so $Q_{\varphi/\mathrm{mem}}=C_D$ and the reciprocal orientation is written explicitly as $Q_{\mathrm{mem}/\varphi}=C_D^{-1}$. (a)~Lapse values $N_\varphi$ (ideal benchmark) and $N_{\mathrm{mem}}$ (memory) as functions of $\kappa_{\mathrm r}\Delta\tau$. The ordering reverses near $\kappa_{\mathrm r}\Delta\tau\approx1.8$, in agreement with \Cref{prop:order-main}: for faster sampling the memory shell lies closer to the horizon, whereas for slower sampling the ideal-benchmark shell does. (b)~Proper-distance ratio $\rho_\varphi/\rho_{\mathrm{mem}}$ (solid), in the same ideal-over-memory orientation, compared with the small-gap linearized prediction of \Cref{thm:horizon-main} (dashed). The solid curve is the exact homogeneous shell-pair ratio inside that calibrated specialization; the dashed curve is only the additional near-horizon linearization, and the divergence as $\kappa_{\mathrm r}\Delta\tau\to0$ recovers the fast-sampling hierarchy law~\eqref{eq:fast-ratio-main}.}
 \label{fig:shell-radii}
 \end{figure}
 
 \begin{proposition}[Ordering for the fixed calibrated homogeneous response function $R_\Omega$]\label{prop:order-main}
-Assume the sampled interval instrument of
-\Cref{prop:instrument-kernels-main} and the modelling closure
+Assume the sampled classical interval instrument of
+\Cref{prop:instrument-kernels-main}, with independent Poisson attempts and
+fresh interval ancillas, and impose only the modelling closure
 $\Gamma=\Gamma_+(x,\Omega)$. Assume the calibrated homogeneous spectral-weight
 regime and define
 \[
