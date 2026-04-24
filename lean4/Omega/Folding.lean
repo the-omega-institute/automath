@@ -731,3 +731,5 @@ import Omega.Folding.FoldGaugeAnomalyBranchResonanceOneParameter
 import Omega.Folding.KilloFoldCollisionBowenFranksFibonacciBisection
 import Omega.Folding.KilloCurvatureSummableEventualInverseLimitLift
 import Omega.Folding.FoldSubmaximalRecoveryWindowGroundstateDegeneracy
+import Omega.Folding.FoldCondexpIndexMaxFiber
+import Omega.Folding.FoldBinSaturationWindowDensity
