@@ -78,6 +78,21 @@ theorem paper_recursive_addressing_prefix_site_min_visible_quotient
         _ = φbar (visibleProjection α nonemptyTriple a) := hφbara.symm
         _ = φbar q := by rw [ha.symm]
 
+set_option maxHeartbeats 400000 in
+/-- Lower-case theorem name matching the round target: the visible quotient kills every triple
+    overlap cocycle value and is initial among coefficient maps with that vanishing property.
+    prop:prefix-site-min-visible-quotient -/
+theorem paper_prefix_site_min_visible_quotient
+    {ι A : Type*} [AddCommGroup A]
+    (α : ι → ι → ι → A) (nonemptyTriple : ι → ι → ι → Prop) :
+    (∀ i j k, nonemptyTriple i j k →
+      visibleProjection α nonemptyTriple (α i j k) = 0) ∧
+    ∀ {B : Type*} [AddCommGroup B] (φ : A →+ B),
+      (∀ i j k, nonemptyTriple i j k → φ (α i j k) = 0) →
+      ∃! φbar : VisibleQuotient α nonemptyTriple →+ B,
+        φbar.comp (visibleProjection α nonemptyTriple) = φ := by
+  exact paper_recursive_addressing_prefix_site_min_visible_quotient α nonemptyTriple
+
 namespace PointwiseInvisible
 
 section
