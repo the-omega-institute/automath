@@ -757,11 +757,20 @@ and direct subtraction gives the displayed positive increment.
 \end{proof}
 
 \begin{theorem}[Memory transition for the sampled one-recovery-opportunity boundary-reset counter]\label{prop:recovery-main}
-For the sampled one-recovery-opportunity boundary-reset counter mode, the zero-run length law is the renewal law in Lemma~\ref{lem:renewal-gap-main}. If $\kappa_{\mathrm r}\neq\Gamma$, then the click hazard after $k$ zeros is
+For the sampled one-recovery-opportunity boundary-reset counter mode, the zero-run length law is the renewal law in Lemma~\ref{lem:renewal-gap-main}. This theorem is for the sampled one-recovery-opportunity boundary-reset kernels, not the continuous intra-bin recovery kernels of Remark~\ref{rem:continuous-comparator-main}. If $\kappa_{\mathrm r}\neq\Gamma$, then the click hazard after $k$ zeros is
 \begin{equation}\label{eq:hazard-main}
 h_k=
 \frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}
      {\kappa_{\mathrm r}p^k-\Gamma c^k},
+\qquad k\ge0.
+\end{equation}
+If $\kappa_{\mathrm r}=\Gamma$, write $\alpha=\Gamma\Delta\tau$ and
+$p=e^{-\alpha}$. Then the equal-rate survival tail and click hazard are
+\begin{equation}\label{eq:equal-rate-survival-hazard-main}
+\PP(G\ge k)=p^k(1+\alpha k),
+\qquad
+h_k=
+\frac{(1-p)+\alpha(k(1-p)-p)}{1+\alpha k},
 \qquad k\ge0.
 \end{equation}
 By Lemma~\ref{lem:survival-hazard-main}, the hazard is strictly increasing, so
@@ -790,66 +799,18 @@ $\kappa_{\mathrm r}\neq\Gamma$ and proves strict hazard increase for both
 unequal and equal rates. The gap law has full support for positive parameters,
 and \Cref{lem:hazard-obstruction-main} then excludes every finite Markov order.
 
-For the covariance formula, write
-\[
-P=
-\begin{pmatrix}
-p&q\\
-b&1-b
-\end{pmatrix},
-\qquad q=1-p,
-\qquad
-u=T_1\mathbf 1=\binom{q}{a}.
-\]
-By Lemma~\ref{lem:stationary-main},
-\[
-\pi=\left(\frac{b}{q+b},\frac{q}{q+b}\right),
-\qquad
-\rho=\pi u=\frac{q(1-c)}{q+b}.
-\]
-Hence
-\[
-q-\rho=\frac{q(q-a)}{q+b},
-\qquad
-a-\rho=-\frac{b(q-a)}{q+b},
-\]
-so
-\[
-u-\rho\mathbf 1
-=
-\frac{q-a}{q+b}\binom{q}{-b}.
-\]
-Set $w=(q,-b)^\top$. Then
-\[
-Pw=
-\begin{pmatrix}
-pq-qb\\
-bq-b+b^2
-\end{pmatrix}
-=(p-b)\binom{q}{-b}
-=\lambda_{\mathrm{hid}}w,
-\]
-so $w$ spans the unique nonstationary hidden mode. Therefore
-\[
-P^{n-1}u=\rho\mathbf 1+\lambda_{\mathrm{hid}}^{\,n-1}(u-\rho\mathbf 1),
-\qquad n\ge1.
-\]
-Because every click-labelled transition ends in the hidden state $D$,
-\[
-\PP(A_0=1,A_n=1)=\rho\,e_D^\top P^{n-1}u.
-\]
-Taking the $D$ component of the previous identity gives
-\[
-e_D^\top P^{n-1}u
-=\rho+\lambda_{\mathrm{hid}}^{\,n-1}(a-\rho),
-\]
-hence
+The covariance transfer identity is exactly
+\Cref{lem:covariance-transfer-main}, which gives
+\eqref{eq:cov-main}. In particular
 \[
 \PP(A_0=1,A_n=1)
-=\rho\bigl[\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}\bigr].
+=\rho\bigl[\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}\bigr],
+\qquad
+\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1},
 \]
-Subtracting $\rho^2$ yields~\eqref{eq:cov-main}. By
-Lemma~\ref{lem:stationary-main}, $\rho>0$ and $a-\rho<0$.
+for every $n\ge1$. By Lemma~\ref{lem:stationary-main}, $\rho>0$ and
+$a-\rho<0$, so the sign of every lag-$n$ covariance with $n\ge2$ is determined
+entirely by the sign of $\lambda_{\mathrm{hid}}$.
 
 Lemma~\ref{lem:critical-rate-main} gives the unique positive zero
 $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ of $\lambda_{\mathrm{hid}}$ together
@@ -859,19 +820,9 @@ $\Gamma=\Gamma_c$, are negative for $\Gamma<\Gamma_c$, and alternate in sign
 for $\Gamma>\Gamma_c$.
 
 It remains to identify the exact-$1$-dependence point. If
-$\Gamma=\Gamma_c$, then $\lambda_{\mathrm{hid}}=0$, equivalently $p=b$, so
-\[
-P=
-\begin{pmatrix}
-p&q\\
-p&q
-\end{pmatrix}
-=\mathbf 1\pi .
-\]
-Thus after one unobserved sample the hidden state is resampled from
-stationarity, and Lemma~\ref{lem:kernel-factorization-main} gives the
-labelled-kernel factorization that makes the visible output exact
-$1$-dependent.
+$\Gamma=\Gamma_c$, then $\lambda_{\mathrm{hid}}=0$, and
+\Cref{lem:kernel-factorization-main} gives the rank-one factorization
+$P=\mathbf 1\pi$ together with exact $1$-dependence of the visible output.
 
 Conversely, if the visible process were exact $1$-dependent,
 then $A_0$ and $A_2$ would be independent and therefore uncorrelated. Applying
@@ -959,18 +910,10 @@ g_k\big|_{\kappa_{\mathrm r}=\Gamma}
 =
 p^k\bigl[(1-p)+\Gamma\Delta\tau\bigl(k(1-p)-p\bigr)\bigr],
 \]
-which is a continuous function of $(\Gamma,\Delta\tau)$. More importantly, the monotonicity of the hazard does not merely follow from an informal limiting argument. If $\alpha=\Gamma\Delta\tau$ and $p=e^{-\alpha}$, then the corresponding survival tail is
-\[
-\PP(G\ge k)\big|_{\kappa_{\mathrm r}=\Gamma}
-=p^k(1+\alpha k),
-\]
-and hence
-\[
-h_k\big|_{\kappa_{\mathrm r}=\Gamma}
-=
-\frac{(1-p)+\alpha(k(1-p)-p)}{1+\alpha k}.
-\]
-A direct subtraction gives
+which is a continuous function of $(\Gamma,\Delta\tau)$. The equal-rate
+survival and hazard formulas are stated in
+\Cref{prop:recovery-main,eq:equal-rate-survival-hazard-main}. A direct
+subtraction there gives
 \[
 h_{k+1}-h_k
 =
@@ -1728,6 +1671,163 @@ Therefore
 and multiplying by $\sqrt N$ gives the final statement.
 \end{proof}
 
+\begin{lemma}[Random-index transfer for stationary $1$-dependent rewards]\label{lem:anscombe-one-dep-main}
+Let $(Y_j)_{j\ge1}$ be stationary and $1$-dependent, with $\EE Y_1=0$ and
+$Y_1\in L^2$, and suppose that for some $\tau^2\ge0$ one has
+\[
+\frac{1}{\sqrt m}\sum_{j=1}^m Y_j
+\Rightarrow
+\mathcal N(0,\tau^2)
+\qquad(m\to\infty).
+\]
+Let $(n_N)$ be deterministic with $n_N\to\infty$, and let $(\nu_N)$ be
+integer-valued random indices such that
+\[
+\frac{\nu_N}{n_N}\to1
+\qquad\text{in probability.}
+\]
+Then
+\[
+\frac{1}{\sqrt{n_N}}\sum_{j=1}^{\nu_N}Y_j
+\Rightarrow
+\mathcal N(0,\tau^2).
+\]
+If in addition
+\[
+\frac{n_N}{N}\to c\in(0,\infty),
+\]
+then
+\[
+\frac{1}{\sqrt N}\sum_{j=1}^{\nu_N}Y_j
+\Rightarrow
+\mathcal N(0,c\,\tau^2).
+\]
+\end{lemma}
+
+\begin{proof}
+Write
+\[
+S_m=\sum_{j=1}^m Y_j,
+\qquad
+S_0:=0.
+\]
+By the deterministic CLT,
+\[
+\frac{S_{n_N}}{\sqrt{n_N}}
+\Rightarrow
+\mathcal N(0,\tau^2).
+\]
+It therefore suffices to prove that
+\[
+\frac{S_{\nu_N}-S_{n_N}}{\sqrt{n_N}}\to0
+\qquad\text{in probability.}
+\]
+
+Fix $\varepsilon,\eta>0$. Since $\nu_N/n_N\to1$ in probability, there exists
+$\delta\in(0,1)$ such that
+\[
+\PP\bigl(|\nu_N-n_N|>\delta n_N\bigr)<\eta
+\]
+for all sufficiently large $N$. On the event
+$E_{N,\delta}:=\{|\nu_N-n_N|\le \delta n_N\}$, one has
+\[
+|S_{\nu_N}-S_{n_N}|
+\le
+\max_{1\le m\le \lceil\delta n_N\rceil}|S_{n_N+m}-S_{n_N}|
++
+\max_{1\le m\le \lceil\delta n_N\rceil}|S_{n_N}-S_{(n_N-m)\vee0}|.
+\]
+By stationarity, each increment on the right has the same law as the prefix sum
+$S_m$, so
+\[
+\PP\!\left(
+\frac{|S_{\nu_N}-S_{n_N}|}{\sqrt{n_N}}>\varepsilon
+\right)
+\le
+\eta
++
+2\PP\!\left(
+\max_{1\le m\le \lceil\delta n_N\rceil}|S_m|>\frac{\varepsilon\sqrt{n_N}}{2}
+\right)
+\]
+for all sufficiently large $N$.
+
+To bound the maximal term, split the sequence into odd and even subsequences:
+\[
+O_r:=\sum_{j=1}^r Y_{2j-1},
+\qquad
+E_r:=\sum_{j=1}^r Y_{2j}.
+\]
+Because $(Y_j)$ is $1$-dependent, each of the sequences
+$(Y_{2j-1})_{j\ge1}$ and $(Y_{2j})_{j\ge1}$ consists of independent centered
+variables. Moreover, for every $m$,
+\[
+S_m=O_{\lceil m/2\rceil}+E_{\lfloor m/2\rfloor},
+\]
+so for every $k\ge1$ and $x>0$,
+\[
+\PP\!\left(\max_{1\le m\le k}|S_m|>x\right)
+\le
+\PP\!\left(\max_{1\le r\le \lceil k/2\rceil}|O_r|>\frac{x}{2}\right)
++
+\PP\!\left(\max_{1\le r\le \lceil k/2\rceil}|E_r|>\frac{x}{2}\right).
+\]
+Kolmogorov's maximal inequality applied to the independent centered odd and even
+subsequences gives
+\[
+\PP\!\left(\max_{1\le m\le k}|S_m|>x\right)
+\le
+\frac{4\Var(O_{\lceil k/2\rceil})}{x^2}
++
+\frac{4\Var(E_{\lceil k/2\rceil})}{x^2}
+\le
+\frac{8\lceil k/2\rceil\,\Var(Y_1)}{x^2}.
+\]
+Hence there is a deterministic constant $C$ such that
+\[
+\PP\!\left(\max_{1\le m\le k}|S_m|>x\right)\le \frac{Ck}{x^2}
+\qquad(k\ge1,\ x>0).
+\]
+With $k=\lceil\delta n_N\rceil$ and $x=\varepsilon\sqrt{n_N}/2$, this yields
+\[
+\PP\!\left(
+\max_{1\le m\le \lceil\delta n_N\rceil}|S_m|>\frac{\varepsilon\sqrt{n_N}}{2}
+\right)
+\le
+\frac{4C\delta}{\varepsilon^2}+o(1).
+\]
+Choosing $\delta$ smaller if necessary, we make the right-hand side at most
+$\eta$ for all large $N$. Therefore
+\[
+\PP\!\left(
+\frac{|S_{\nu_N}-S_{n_N}|}{\sqrt{n_N}}>\varepsilon
+\right)
+\le 3\eta
+\]
+for all sufficiently large $N$, which proves
+\[
+\frac{S_{\nu_N}-S_{n_N}}{\sqrt{n_N}}\to0
+\qquad\text{in probability.}
+\]
+Slutsky's theorem now gives
+\[
+\frac{1}{\sqrt{n_N}}\sum_{j=1}^{\nu_N}Y_j
+\Rightarrow
+\mathcal N(0,\tau^2).
+\]
+
+This is the stationary $1$-dependent reward version of the usual Anscombe
+transfer \cite{Anscombe1952}. If in addition $n_N/N\to c\in(0,\infty)$, then
+writing
+\[
+\frac{1}{\sqrt N}\sum_{j=1}^{\nu_N}Y_j
+=
+\sqrt{\frac{n_N}{N}}\,
+\frac{1}{\sqrt{n_N}}\sum_{j=1}^{\nu_N}Y_j
+\]
+and using Slutsky's theorem.
+\end{proof}
+
 \begin{theorem}[Regenerative $1$-dependent cycle CLT and implementable lag-two variance estimator]\label{thm:cycle-block-main}
 Let $(A_n)_{n\in\mathbb Z}$ be a stationary binary record whose click times are
 regeneration times, and assume \eqref{eq:exp-tail-main}. Define
@@ -1749,6 +1849,12 @@ Then
 \sigma_2^2=
 \frac{\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2)}{\EE L_1}.
 \end{equation}
+Introduce also the infeasible theoretical linearization
+\[
+\widetilde\gamma_{2,N}:=\frac1N\sum_{n=0}^{N-1}Z_n,
+\]
+which uses the population centering constants $\rho$ and $\mu_2$ and is
+therefore not directly observable from the finite record.
 Moreover,
 \[
 \sqrt N\,(\widehat\gamma_2-\gamma_2)
@@ -1805,14 +1911,8 @@ Let $M(N)=\max\{j:T_j\le N-1\}$ and
 \qquad
 n_N=\left\lfloor\frac{N}{\EE L_1}\right\rfloor .
 \]
-The renewal strong law gives $\nu_N/n_N\to1$ almost surely. Therefore
-Anscombe's theorem for random indices \cite{Anscombe1952} yields
-\[
-\frac{1}{\sqrt{n_N}}\sum_{j=1}^{\nu_N}Y_j
-\Rightarrow
-\mathcal N(0,\tau_2^2).
-\]
-Since $n_N/N\to1/\EE L_1$, Slutsky's theorem gives
+The renewal strong law gives $\nu_N/n_N\to1$ almost surely, and
+$n_N/N\to1/\EE L_1$. Therefore \Cref{lem:anscombe-one-dep-main} yields
 \[
 \frac{1}{\sqrt N}\sum_{j=1}^{M(N)-1}Y_j
 \Rightarrow
@@ -1837,32 +1937,35 @@ The exponential tail gives $R_N=o_{\PP}(\sqrt N)$. Hence
 	which is exactly \eqref{eq:sigma2-main}.
 	
 	\smallskip
-	\noindent\emph{Step 2: transfer from the centered sum to $\widehat\gamma_2$.}
-	Define
-	\[
-	\widetilde\gamma_{2,N}:=\frac1N\sum_{n=0}^{N-1}Z_n.
-	\]
-	Then Step~1 gives
+	\noindent\emph{Step 2: infeasible theoretical linearization and boundary
+	equivalence.}
+	By definition of $\widetilde\gamma_{2,N}$,
 	\[
 	\sqrt N\,\widetilde\gamma_{2,N}
 	=
-	\frac{1}{\sqrt N}\sum_{n=0}^{N-1}Z_n
+	\frac{1}{\sqrt N}\sum_{n=0}^{N-1}Z_n,
+	\]
+	so Step~1 proves the CLT for this infeasible theoretical linearization:
+	\[
+	\sqrt N\,\widetilde\gamma_{2,N}
 	\Rightarrow
 	\mathcal N(0,\sigma_2^2).
 	\]
-	By \Cref{lem:lag2-boundary-main}, the endpoint linearization remainder
-	$r_N^{\mathrm{lin}}$ and the remaining boundary mismatch are jointly
-	absorbed into an $O_{\PP}(N^{-1})$ term, so
+	The only remaining task is to transfer this CLT to the implementable
+	estimator $\widehat\gamma_2-\gamma_2$. That transfer is exactly the content
+	of \Cref{lem:lag2-boundary-main}, which gives the finite-sample boundary
+	equivalence
 	\[
 	\widehat\gamma_2-\gamma_2-\widetilde\gamma_{2,N}=O_{\PP}(N^{-1}),
 	\]
-	so
+	and therefore
 	\[
 	\sqrt N\,\bigl((\widehat\gamma_2-\gamma_2)-\widetilde\gamma_{2,N}\bigr)\to0
 	\qquad\text{in probability.}
 	\]
-	Slutsky's theorem therefore transfers the CLT from
-	$\widetilde\gamma_{2,N}$ to $\widehat\gamma_2-\gamma_2$.
+	Slutsky's theorem now transfers the CLT from the infeasible linearization
+	$\widetilde\gamma_{2,N}$ to the implementable estimator
+	$\widehat\gamma_2-\gamma_2$.
 	
 	\smallskip
 	\noindent\emph{Step 3: deterministic-prefix batch estimator for the true
@@ -2031,6 +2134,21 @@ while Step~3 gives
 \frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2
 =
 O_{\PP}(1).
+\]
+Therefore
+\[
+\begin{aligned}
+&\left|
+\frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widehat B_{r,N}-\bar B_N)^2
+-\frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2
+\right| \\
+&\qquad\le
+\frac{2}{M_Nb_N}
+\left(\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2\right)^{1/2}
+\left(\sum_{r=1}^{M_N}\Delta_{r,N}^2\right)^{1/2}
+\,+\,
+\frac1{M_Nb_N}\sum_{r=1}^{M_N}\Delta_{r,N}^2.
+\end{aligned}
 \]
 Hence the displayed bound is $o_{\PP}(1)$, so after division by
 $\bar L_N(M_N-1)/M_N=\bar L_N+o_{\PP}(1)$ this yields
