@@ -41,6 +41,7 @@ import Omega.POM.HankelSmithMinimalDenominator
 import Omega.POM.FiberIndexCltThermo
 import Omega.POM.FiberIndexLdpThermo
 import Omega.POM.FiberHammingTripleIsometry
+import Omega.POM.FiberGeodesicLinearExtension
 import Omega.POM.FiberIndependenceComplexJoin
 import Omega.POM.FiberIndependenceComplexPath
 import Omega.POM.HiddenBitJumpCollisionIsomorphism
