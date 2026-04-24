@@ -209,6 +209,7 @@ import Omega.POM.DegeneracyHistogramVandermondeInversion
 import Omega.POM.DiagonalHighMoments
 import Omega.POM.DiagonalMomentFreeEnergyDegeneracy
 import Omega.POM.EulerDefectDimensionFormula
+import Omega.POM.EscortMinentropyZeroTemperatureIdentity
 import Omega.POM.DiagonalRateReconstructWFromRateCurve
 import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
 import Omega.POM.DiagonalRateAbsorbingDFR
