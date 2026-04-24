@@ -119,6 +119,7 @@ import Omega.Zeta.XiGoldenChainVisibleWindowGrowth
 import Omega.Zeta.XiGoldenW1StarCertificateParitySplitting
 import Omega.Zeta.XiGramDetEntropyMonotoneUnderContraction
 import Omega.Zeta.XiHankelPrimitiveGapVanishingCriterion
+import Omega.Zeta.XiHankelDefectCdimMinimalLedger
 import Omega.Zeta.XiFlagFactorization12x4x3
 import Omega.Zeta.XiTimePart70cSpectrumZeroZ2OrbitCancellation
 import Omega.Zeta.XiTimePart70aaRealMomentInversemomentBernoulliBridge
@@ -126,6 +127,7 @@ import Omega.Zeta.XiHorizonZkFiberpathStokesDiscriminant
 import Omega.Zeta.XiHankelFiniteCertificatePrinciple
 import Omega.Zeta.XiHankelCofactorSyndromeSingleCoordinate
 import Omega.Zeta.XiHankelFiberFanoInformationLeakage
+import Omega.Zeta.XiHankelSingularityOnePrimeLiftHvzk
 import Omega.Zeta.XiHypercubeWeightedSpanningTreeSpectrumProduct
 import Omega.Zeta.XiHypercubeWeightedLaplacianHeatTraceFactorization
 import Omega.Zeta.XiIntegratedDefectGoldenAsymptotics
