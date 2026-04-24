@@ -31,6 +31,7 @@ T_1=
  0 & a
 \end{pmatrix},
 \end{equation}
+All hidden distributions are row vectors, and word probabilities are computed by multiplying labelled kernels in chronological order.
 where
 \begin{equation}\label{eq:p-c-main}
 p=e^{-\Gamma\Delta\tau},
@@ -269,11 +270,13 @@ P_\beta=
 \end{pmatrix}.
 \end{equation}
 The reference law on that shift is the Parry measure, namely the unique measure of maximal entropy compatible with the grammar $11\notin\operatorname{supp}\mu$ \cite{Parry1964,LindMarcus1995}.
-The next proposition is a theorem about the classical sampled interval
-counter. Its parameter $\Gamma$ is the counter attempt rate from the sampled
-instrument, and the later identification $\Gamma=\Gamma_+(x,\Omega)$ is only
-the response-side calibration step used in Sections~4--5. In particular, this
-proposition does not derive the counter law from UDW detector back-action.
+The following proposition is a theorem about a classical sampled interval
+counter whose Poisson attempt rate is later calibrated to the stationary UDW
+excitation rate. Its parameter $\Gamma$ is the counter attempt rate from the
+sampled instrument, and the later identification $\Gamma=\Gamma_+(x,\Omega)$
+is only the response-side calibration step used in Sections~4--5. In
+particular, this proposition does not derive the counter law from UDW detector
+back-action.
 
 \begin{proposition}[Exact-clock benchmark for the classical sampled counter]\label{prop:ideal-main}
 For the ideal one-step blanking mode of the sampled classical counter, the sampled output realizes the Parry benchmark if and only if
@@ -799,19 +802,42 @@ h_k=1-\frac{p(1+\alpha(k+1))}{1+\alpha k},
 and direct subtraction gives the displayed positive increment.
 \end{proof}
 
-The following theorem is again a theorem about the classical sampled interval
-counter. Its Poisson parameter $\Gamma$ is still the counter attempt rate from
-the sampled instrument, and the identification
-$\Gamma=\Gamma_+(x,\Omega)$ is deferred to the later response-side
-calibration. Accordingly, the theorem does not derive the boundary-reset
-counter law from UDW detector back-action.
+The following theorem is the main record-level theorem for the classical
+sampled interval counter. Its Poisson parameter $\Gamma$ is still the internal
+attempt rate of the sampled instrument from
+\Cref{prop:instrument-kernels-main}. The response-side identification
+\[
+\Gamma=\Gamma_+(x,\Omega)=R_\Omega(x)
+\]
+is not used here and is deferred to the later calibration step in
+Sections~\ref{sec:kms-shells}--\ref{sec:inverse}. Accordingly, the theorem is
+not a theorem deriving the boundary-reset counter law from UDW detector
+back-action.
 
-\begin{theorem}[Memory transition for the classical sampled one-recovery-opportunity boundary-reset counter]\label{prop:recovery-main}
-This theorem is for the sampled one-recovery-opportunity boundary-reset
-kernels of \Cref{prop:instrument-kernels-main}, not the continuous intra-bin
-recovery kernels of \Cref{rem:continuous-comparator-main}. With the record-layer
-notation from Tables~\ref{tab:notation-record}--\ref{tab:notation-response},
-the sampled boundary-reset record satisfies the following.
+\begin{theorem}[Classical sampled-counter theorem for the one-recovery-opportunity boundary-reset model]\label{prop:recovery-main}
+For the sampled one-recovery-opportunity boundary-reset kernels
+\eqref{eq:t0-t1-main}, with $\Gamma,\kappa_{\mathrm r},\Delta\tau>0$, the
+stationary visible process is a full-support renewal process. Its zero-run
+hazard is strictly increasing, its covariance profile is
+\[
+\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1},
+\qquad n\ge1,
+\]
+and it is exact $1$-dependent if and only if
+\[
+\lambda_{\mathrm{hid}}
+=\frac{\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}\Delta\tau}
+-\Gamma e^{-\Gamma\Delta\tau}}
+{\kappa_{\mathrm r}-\Gamma}
+=0,
+\]
+equivalently $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. More
+explicitly, this theorem is for the sampled one-recovery-opportunity
+boundary-reset kernels of \Cref{prop:instrument-kernels-main}, not the
+continuous intra-bin recovery kernels of
+\Cref{rem:continuous-comparator-main}. With the record-layer notation from
+Tables~\ref{tab:notation-record}--\ref{tab:notation-response}, the sampled
+boundary-reset record satisfies the following.
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.3em]
 \item The zero-run length law is the renewal law of
 \Cref{lem:renewal-gap-main}, hence has full support on $\mathbb N_0$ and
@@ -1196,7 +1222,16 @@ the limit is nonnegative. The denominator is positive and $a-\rho<0$, so the
 limit is strictly less than $1$.
 \end{proof}
 
-Operationally, the memory shell can therefore be located by more than the sign of one covariance. As one scans through stationary observers, the lag profile changes phase at exact $1$-dependence, while the whole renewal class remains antibunched and low-frequency suppressed. This is a robust signature in finite counting data and not merely a formal property of an idealized symbolic process. \Cref{fig:spectrum-fano} displays both the spectral density and the Fano factor across the parameter range.
+Operationally, the memory-transition crossing can therefore be probed by more
+than the sign of one covariance. Along a designed scan through stationary
+observers, the lag profile changes phase at exact $1$-dependence, while the
+whole renewal class remains antibunched and low-frequency suppressed. This is a
+robust signature in finite counting data and not merely a formal property of an
+idealized symbolic process. The finite-record CLT below still estimates only
+the fixed-setting covariance $\gamma_2$; a shell-location limit law requires
+the separate scan-design input stated later in
+\Cref{prop:finite-diagnostics-main}. \Cref{fig:spectrum-fano} displays both the
+spectral density and the Fano factor across the parameter range.
 
 \begin{figure}[t]
 \centering
@@ -1245,7 +1280,14 @@ Operationally, the memory shell can therefore be located by more than the sign o
 \end{figure}
 
 \subsection{Finite-sample observability}\label{subsec:finite-sample}
-The shell conditions are operationally meaningful only if the relevant observables can be estimated from finite data. This subsection spells out what is and is not inferred from a finite record. The estimators below test the readout model and locate the two record-level thresholds; they do not by themselves remove the response-model assumptions used later to turn a threshold into a geometric locus.
+The response-side shell conditions are operationally meaningful only if the
+record-side observables can be estimated from finite data. This subsection
+therefore isolates what one fixed stationary record does and does not estimate.
+The estimators below test the readout model and estimate fixed-setting record
+quantities, especially $\gamma_2=\operatorname{Cov}(A_0,A_2)$. Turning a
+threshold crossing into a shell location, or turning fixed detector settings
+into fixed-radius ratio coordinates, requires separate scan or external
+ratio-data asymptotics stated later.
 
 For a record $(A_0,\dots,A_{N-1})$, set $\widehat\rho=N^{-1}\sum_{j=0}^{N-1}A_j$. Let $C_k^{=}$ be the number of completed inter-click gaps with exactly $k$ zeros, and let $C_k^{\ge}$ be the number with at least $k$ zeros; when $C_k^{\ge}>0$, put
 \[
@@ -1555,69 +1597,115 @@ so $\bar B_N^{\,2}/b_N\to0$ in probability. Consequently
 and the displayed variance formula finishes the proof.
 \end{proof}
 
-\begin{lemma}[Deterministic observed prefix for the batch estimator]\label{lem:deterministic-prefix-main}
-Assume the hypotheses of \Cref{lem:cycle-one-dep-main}. Let $R_N$ be the
-deterministic cycle-prefix length from \Cref{def:cycle-block-main}, and let
+\begin{lemma}[Shadow deterministic prefix for the batch estimator]\label{lem:deterministic-prefix-main}
+Let $(L_j,Y_j)_{j\ge1}$ be the infinite Palm post-click sequence, where
+$(Y_j)_{j\ge1}$ is stationary and $1$-dependent,
+$(L_j)_{j\ge1}$ is i.i.d.\ with $\EE L_1<\infty$, and $\EE|Y_1|^4<\infty$.
+Let $b_N,M_N,R_N$ be the deterministic tuning sequences from
+\Cref{def:cycle-block-main}, so
 \[
-E_N=\{J_N\ge R_N+2\}.
+R_N=M_Nb_N+(M_N-1)=O(N^{2/3}).
+\]
+Define the shadow prefix mean
+\[
+\bar L_N^{\mathrm{sh}}=\frac1{R_N}\sum_{j=1}^{R_N}L_j,
+\]
+the shadow batch sums
+\[
+\widetilde B_{r,N}^{\mathrm{sh}}
+=
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}Y_j,
+\qquad
+1\le r\le M_N,
+\]
+their mean
+\[
+\widetilde B_N^{\mathrm{sh},\ast}
+=
+\frac1{M_N}\sum_{r=1}^{M_N}\widetilde B_{r,N}^{\mathrm{sh}},
+\]
+and the shadow deterministic-prefix batch estimator
+\[
+\widetilde\sigma_{2,N}^{2}
+=
+\frac{1}{\bar L_N^{\mathrm{sh}}\,b_N\,(M_N-1)}
+\sum_{r=1}^{M_N}
+\bigl(\widetilde B_{r,N}^{\mathrm{sh}}-\widetilde B_N^{\mathrm{sh},\ast}\bigr)^2.
 \]
 Then
 \[
-\PP(E_N)\to1.
+\widetilde\sigma_{2,N}^{2}
+\to
+\frac{\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2)}{\EE L_1}
+\qquad\text{in probability.}
 \]
-On $E_N$, the first $R_N$ observed complete cycles after the first observed
-click form a deterministic prefix for the batch estimator: if
+
+Now let $(A_n)_{n\in\mathbb Z}$ be a stationary finite record with observed
+click count $J_N$, let
 \[
-Y_{j,N}^\circ=
-\sum_{n=\tau_j}^{\tau_{j+1}-1} Z_n,
-\qquad
-L_{j,N}=\tau_{j+1}-\tau_j,
-\qquad 1\le j\le R_N,
+E_N=\{J_N\ge R_N+2\},
 \]
-then the vector
+and couple the post-$\tau_1$ record to the same infinite Palm sequence. Then
 \[
-\bigl((L_{j,N},Y_{j,N}^\circ)\bigr)_{j=1}^{R_N}
+\PP(E_N^c)\to0.
 \]
-has the same law as the Palm prefix
+On $E_N$, the first $R_N$ observed complete cycles agree pathwise with the
+first $R_N$ shadow cycles. Consequently any observed-prefix estimator built from
+those $R_N$ cycles by the same deterministic batching rule equals
+$\widetilde\sigma_{2,N}^{2}$ on $E_N$. In particular, if
+$\widehat\sigma_{2,N}^{\circ,2}$ denotes such an observed-prefix estimator, then
+for every $\varepsilon>0$,
 \[
-\bigl((L_j,Y_j)\bigr)_{j=1}^{R_N}.
+\PP\bigl(|\widehat\sigma_{2,N}^{\circ,2}-\widetilde\sigma_{2,N}^{2}|>\varepsilon\bigr)
+\le
+\PP(E_N^c)\to0.
 \]
-Consequently the separated batches built from
-$Y_{1,N}^\circ,\dots,Y_{R_N,N}^\circ$ are governed by the deterministic-prefix
-$1$-dependent sequence of \Cref{lem:batch-var-1dep-main}; the random total
-number of cycles in the full record does not enter the batch-variance
-argument.
 \end{lemma}
 
 \begin{proof}
-By the renewal strong law,
+Set
+\[
+\tau_2^2:=\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2).
+\]
+Because $R_N+1=M_N(b_N+1)$ and $b_N/(R_N+1)\to0$,
+\Cref{lem:batch-var-1dep-main} applied with sample size $R_N+1$ gives
+\[
+\frac{1}{b_N(M_N-1)}
+\sum_{r=1}^{M_N}
+\bigl(\widetilde B_{r,N}^{\mathrm{sh}}-\widetilde B_N^{\mathrm{sh},\ast}\bigr)^2
+\to\tau_2^2
+\qquad\text{in probability.}
+\]
+Also $R_N\to\infty$, so the strong law for the i.i.d.\ sequence $(L_j)$ gives
+\[
+\bar L_N^{\mathrm{sh}}\to\EE L_1
+\qquad\text{almost surely.}
+\]
+Combining the last two displays yields
+\[
+\widetilde\sigma_{2,N}^{2}\to\frac{\tau_2^2}{\EE L_1}
+\qquad\text{in probability.}
+\]
+
+For the finite record, the renewal strong law gives
 \[
 \frac{J_N}{N}\to\frac{1}{\EE L_1}
 \qquad\text{almost surely.}
 \]
-Because the deterministic choice in \Cref{def:cycle-block-main} gives
-$R_N=M_Nb_N+(M_N-1)=O(N^{2/3})$, one has $R_N/N\to0$. Hence
+Because $R_N/N\to0$, it follows that
 \[
-\PP(J_N\ge R_N+2)\to1.
+\PP(E_N^c)\to0.
 \]
-
-Now work on $E_N$. The click at $\tau_1$ is a regeneration time, so the future
-record after $\tau_1$ is distributed as the Palm version started from a click.
-Therefore the successive complete observed cycles
+Under the coupling, the future record after the regeneration time $\tau_1$ is
+the Palm record started from a click. On $E_N$, the clicks
 \[
-(\tau_j,\tau_{j+1}),\qquad 1\le j\le R_N,
+\tau_1<\tau_2<\cdots<\tau_{R_N+2}\le N-1
 \]
-have the same law as the first $R_N$ Palm cycles
-\[
-(T_j,T_{j+1}),\qquad 1\le j\le R_N.
-\]
-Since $L_{j,N}$ and $Y_{j,N}^\circ$ are measurable functions of these cycle
-segments in exactly the same way that $L_j$ and $Y_j$ are measurable functions
-of the Palm cycles, the displayed identity in law follows. The final sentence
-is then immediate: once one restricts to the first $R_N$ complete observed
-cycles, every batch uses exactly $b_N$ consecutive rewards separated by one
-omitted reward, so \Cref{lem:batch-var-1dep-main} applies to that
-deterministic prefix rather than to a random number of cycles.
+all lie inside the observation window, so the first $R_N$ observed complete
+cycles coincide pathwise with the first $R_N$ shadow cycles. Therefore any
+observed-prefix estimator that uses exactly those cycles and the same
+deterministic batching pattern is equal to $\widetilde\sigma_{2,N}^{2}$ on
+$E_N$. The displayed probability bound is immediate.
 \end{proof}
 
 \begin{lemma}[Boundary equivalence for the lag-two empirical covariance]\label{lem:lag2-boundary-main}
@@ -2302,58 +2390,10 @@ and Slutsky's theorem transfers the CLT to the implementable estimator
 $\widehat\gamma_2-\gamma_2$.
 
 \smallskip
-\noindent\emph{Step 2: deterministic-prefix batch estimator for the true
-cycle rewards.}
-For consistency of the variance estimator, let
-\[
-E_N=\{J_N\ge R_N+2\},
-\]
-where $R_N=M_Nb_N+(M_N-1)$ is the deterministic cycle prefix from
-\Cref{def:cycle-block-main}. By \Cref{lem:deterministic-prefix-main},
-$\PP(E_N)\to1$, and on $E_N$ the first $R_N$ complete observed cycles have the
-same law as a deterministic Palm prefix. Define the infeasible observed-prefix cycle rewards
-\[
-Y_{j,N}^\circ=
-\sum_{n=\tau_j}^{\tau_{j+1}-1}Z_n,
-\qquad
-1\le j\le R_N,
-\]
-whose joint law is therefore the same as that of $Y_1,\dots,Y_{R_N}$. Define the
-infeasible deterministic-prefix batch sums
-\[
-\widetilde B_{r,N}
-=
-\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}Y_{j,N}^\circ,
-\qquad
-1\le r\le M_N,
-\]
-their mean
-\[
-\widetilde B_N^\ast=\frac1{M_N}\sum_{r=1}^{M_N}\widetilde B_{r,N},
-\]
-and the corresponding infeasible estimator
-\[
-\widetilde\sigma_{2,N}^{2}
-=
-\frac{1}{\bar L_N\,b_N\,(M_N-1)}
-\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2.
-\]
-Since $R_N+1=M_N(b_N+1)$ and $b_N/(R_N+1)\to0$,
-Lemma~\ref{lem:batch-var-1dep-main} applied to $(Y_j)$ with sample size
-$R_N+1$ gives
-\[
-\frac{1}{b_N(M_N-1)}
-\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2
-\to\tau_2^2
-\qquad\text{in probability.}
-\]
-Also $R_N\to\infty$, and the observed prefix mean $\bar L_N$ has the same law
-as $R_N^{-1}\sum_{j=1}^{R_N}L_j$, so the strong law gives
-\[
-\bar L_N\to\EE L_1
-\qquad\text{in probability.}
-\]
-Therefore
+\noindent\emph{Step 2: shadow deterministic-prefix batch estimator.}
+\Cref{lem:deterministic-prefix-main} applied to the Palm cycle sequence
+$(L_j,Y_j)_{j\ge1}$ gives a shadow deterministic-prefix estimator
+$\widetilde\sigma_{2,N}^{2}$ such that
 \[
 \widetilde\sigma_{2,N}^{2}\to\frac{\tau_2^2}{\EE L_1}
 =\sigma_2^2
@@ -2361,8 +2401,58 @@ Therefore
 \]
 
 \smallskip
-\noindent\emph{Step 3: plug-in centering error.}
-It remains to pass from the infeasible observed-prefix rewards
+\noindent\emph{Step 3: observed-prefix oracle estimator.}
+Let
+\[
+E_N=\{J_N\ge R_N+2\},
+\]
+where $R_N=M_Nb_N+(M_N-1)$ is the deterministic cycle prefix from
+\Cref{def:cycle-block-main}. If $J_N<R_N+2$, set
+\[
+\widehat\sigma_{2,N}^{\circ,2}=0.
+\]
+On $E_N$, define the oracle observed-prefix cycle rewards
+\[
+Y_{j,N}^\circ=
+\sum_{n=\tau_j}^{\tau_{j+1}-1}Z_n,
+\qquad
+1\le j\le R_N,
+\]
+the corresponding batch sums
+\[
+\widehat B_{r,N}^{\circ}
+=
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}Y_{j,N}^\circ,
+\qquad
+1\le r\le M_N,
+\]
+their mean
+\[
+\bar B_N^{\circ}=\frac1{M_N}\sum_{r=1}^{M_N}\widehat B_{r,N}^{\circ},
+\]
+and the oracle observed-prefix estimator
+\[
+\widehat\sigma_{2,N}^{\circ,2}
+=
+\frac{1}{\bar L_N\,b_N\,(M_N-1)}
+\sum_{r=1}^{M_N}(\widehat B_{r,N}^{\circ}-\bar B_N^{\circ})^2.
+\]
+By \Cref{lem:deterministic-prefix-main}, $\PP(E_N^c)\to0$, and for every
+$\varepsilon>0$,
+\[
+\PP\bigl(|\widehat\sigma_{2,N}^{\circ,2}-\widetilde\sigma_{2,N}^{2}|>\varepsilon\bigr)
+\le
+\PP(E_N^c)\to0.
+\]
+Since $\widetilde\sigma_{2,N}^{2}\to\sigma_2^2$ in probability, it follows that
+\[
+\widehat\sigma_{2,N}^{\circ,2}\to\sigma_2^2
+\qquad\text{in probability.}
+\]
+
+\smallskip
+\noindent\emph{Step 4: plug-in centering error.}
+It remains to pass from the oracle observed-prefix rewards
 $Y_{j,N}^\circ$ to the feasible rewards $\widehat Y_{j,N}$. The same
 regenerative law-of-large-numbers and CLT
 argument applied to the bounded local observables $A_n$ and $A_nA_{n+2}$ gives
@@ -2387,7 +2477,7 @@ C_2\,L_{j,N}\delta_N
 \]
 Let
 \[
-\Delta_{r,N}:=\widehat B_{r,N}-\widetilde B_{r,N}.
+\Delta_{r,N}:=\widehat B_{r,N}-\widehat B_{r,N}^{\circ}.
 \]
 Then on $E_N$,
 \[
@@ -2396,7 +2486,23 @@ Then on $E_N$,
 C_2\delta_N
 \sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}L_{j,N}.
 \]
-Since $\EE L_1^2<\infty$ and the cycle prefix is deterministic,
+On $E_N$, the quantity
+\[
+\frac1{M_Nb_N}\sum_{r=1}^{M_N}
+\left(
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}L_{j,N}
+\right)^2
+\]
+agrees with
+\[
+\frac1{M_Nb_N}\sum_{r=1}^{M_N}
+\left(
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}L_j
+\right)^2.
+\]
+Because $\EE L_1^2<\infty$ and the shadow deterministic prefix has the same law
+as the Palm prefix, the right-hand side is $O_{\PP}(b_N)$; hence the same bound
+holds for the observed quantity on $E_N$, and therefore
 \[
 \frac1{M_Nb_N}\sum_{r=1}^{M_N}
 \left(
@@ -2412,10 +2518,10 @@ O_{\PP}(\delta_N^2b_N)
 =
 o_{\PP}(1),
 \]
-because $b_N=O(N^{1/3})$. Therefore replacing $\widetilde B_{r,N}$ by
+because $b_N=O(N^{1/3})$. Therefore replacing $\widehat B_{r,N}^{\circ}$ by
 $\widehat B_{r,N}$ changes the empirical batch mean by
 \[
-|\bar B_N-\widetilde B_N^\ast|
+|\bar B_N-\bar B_N^{\circ}|
 =
 \left|\frac1{M_N}\sum_{r=1}^{M_N}\Delta_{r,N}\right|
 \le
@@ -2425,7 +2531,7 @@ o_{\PP}(\sqrt{b_N}),
 \]
 so in particular
 \[
-\frac{(\bar B_N-\widetilde B_N^\ast)^2}{b_N}\to0
+\frac{(\bar B_N-\bar B_N^{\circ})^2}{b_N}\to0
 \qquad\text{in probability.}
 \]
 For the empirical batch variance, set
@@ -2438,18 +2544,18 @@ Then
 \[
 \widehat B_{r,N}-\bar B_N
 =
-(\widetilde B_{r,N}-\widetilde B_N^\ast)+D_{r,N},
+(\widehat B_{r,N}^{\circ}-\bar B_N^{\circ})+D_{r,N},
 \]
 and therefore
 \[
 \begin{aligned}
 &\left|
 \frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widehat B_{r,N}-\bar B_N)^2
--\frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2
+-\frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widehat B_{r,N}^{\circ}-\bar B_N^{\circ})^2
 \right| \\
 &\qquad\le
 \frac{2}{M_Nb_N}
-\left(\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2\right)^{1/2}
+\left(\sum_{r=1}^{M_N}(\widehat B_{r,N}^{\circ}-\bar B_N^{\circ})^2\right)^{1/2}
 \left(\sum_{r=1}^{M_N}D_{r,N}^2\right)^{1/2}
 \,+\,
 \frac1{M_Nb_N}\sum_{r=1}^{M_N}D_{r,N}^2.
@@ -2465,7 +2571,7 @@ Since centering cannot increase the Euclidean norm,
 \]
 while Step~3 gives
 \[
-\frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2
+\frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widehat B_{r,N}^{\circ}-\bar B_N^{\circ})^2
 =
 O_{\PP}(1).
 \]
@@ -2474,11 +2580,11 @@ Therefore
 \begin{aligned}
 &\left|
 \frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widehat B_{r,N}-\bar B_N)^2
--\frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2
+-\frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widehat B_{r,N}^{\circ}-\bar B_N^{\circ})^2
 \right| \\
 &\qquad\le
 \frac{2}{M_Nb_N}
-\left(\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2\right)^{1/2}
+\left(\sum_{r=1}^{M_N}(\widehat B_{r,N}^{\circ}-\bar B_N^{\circ})^2\right)^{1/2}
 \left(\sum_{r=1}^{M_N}\Delta_{r,N}^2\right)^{1/2}
 \,+\,
 \frac1{M_Nb_N}\sum_{r=1}^{M_N}\Delta_{r,N}^2.
@@ -2487,10 +2593,10 @@ Therefore
 Hence the displayed bound is $o_{\PP}(1)$, so after division by
 $\bar L_N(M_N-1)/M_N=\bar L_N+o_{\PP}(1)$ this yields
 \[
-\widehat\sigma_{2,N}^2-\widetilde\sigma_{2,N}^{2}\to0
+\widehat\sigma_{2,N}^2-\widehat\sigma_{2,N}^{\circ,2}\to0
 \qquad\text{in probability on }E_N.
 \]
-Since $\PP(E_N)\to1$, the same limit holds unconditionally, and hence
+Since $\PP(E_N^c)\to0$, the same limit holds unconditionally, and hence
 \[
 \widehat\sigma_{2,N}^2\to\frac{\tau_2^2}{\EE L_1}=\sigma_2^2
 \qquad\text{in probability.}
@@ -2577,7 +2683,10 @@ Hence
 \quad\Longleftrightarrow\quad
 \Gamma_+'(s_*)\neq0.
 \]
-Hence the zero of $\gamma_2$ locates the memory-transition shell to first order in the scan coordinate.
+Hence the zero of $\gamma_2$ gives the first-order scan-coordinate crossing of
+the memory transition. Interpreting that crossing as a shell statement requires
+the separate response-side range and regularity hypotheses imposed later in
+\Cref{sec:kms-shells}.
 \item If, in addition, the fixed detector setting satisfies the nondegeneracy
 check in \Cref{rem:lag-two-nondeg-main}, equivalently
 \[
@@ -2593,7 +2702,7 @@ z_{1-\alpha/2}\frac{\widehat\sigma_{2,N}}{\sqrt N}.
 \]
 This interval is a fixed-setting statement: it applies to $\gamma_2$ at the
 chosen detector design. Along a scan, part~(ii) gives only the deterministic
-first-order transversality of the shell crossing.
+first-order transversality of the scan crossing.
 \item In the scan setting of part~(ii), no root-estimator central limit theorem
 or confidence interval is derived from the fixed-setting regenerative CLT
 alone. If one \emph{separately} supplies a scan-design analysis producing a
@@ -2689,8 +2798,8 @@ $\lambda_{\mathrm{hid}}>0$ for $\Gamma<\Gamma_c$ and
 $\lambda_{\mathrm{hid}}<0$ for $\Gamma>\Gamma_c$. Since
 $\gamma_2=\rho(a-\rho)\lambda_{\mathrm{hid}}$ with $\rho(a-\rho)<0$, the
 lag-two covariance increases through zero instead:
-$\gamma_2<0$ below the shell and $\gamma_2>0$ above it. Equivalently, on this
-branch the sign of $d\gamma_2/ds(s_*)$ agrees with the sign of
+$\gamma_2<0$ for $\Gamma<\Gamma_c$ and $\gamma_2>0$ for $\Gamma>\Gamma_c$.
+Equivalently, on this branch the sign of $d\gamma_2/ds(s_*)$ agrees with the sign of
 $\Gamma_+'(s_*)$ because both $\rho(a-\rho)$ and
 $\lambda_{\mathrm{hid}}'(\Gamma_c)$ are negative.
 Therefore $\lambda_{\mathrm{hid}}$ has a simple zero at $\Gamma_c$ for every
@@ -2704,7 +2813,9 @@ Along a $C^1$ scan with fixed $(\kappa_{\mathrm r},\Delta\tau)$ and $\Gamma_+(s_
 because the derivative of the prefactor is multiplied by
 $\lambda_{\mathrm{hid}}(\Gamma_c)=0$. Here $\rho_*>0$ and $a_*-\rho_*<0$, while
 $\lambda_{\mathrm{hid}}'(\Gamma_c)\neq0$ and $d\Gamma_+/ds(s_*)\neq0$, so
-$d\gamma_2/ds(s_*)\neq0$. This proves the first-order shell-localization claim.
+$d\gamma_2/ds(s_*)\neq0$. This proves the first-order scan-crossing claim in
+part~(ii); the later shell interpretation requires the separate response-side
+range and regularity checks from \Cref{sec:kms-shells}.
 Item (iii) is the fixed-setting studentized confidence interval from
 \Cref{thm:cycle-block-main}, used only after the explicit variance check in
 \Cref{rem:lag-two-nondeg-main}.
@@ -2729,11 +2840,56 @@ Slutsky's theorem therefore yields the stated root CLT with variance
 $\sigma_2^2/\gamma_2'(s_*)^2$.
 \end{proof}
 
-For the memory shell, the primary local diagnostic is the sign of $\widehat\gamma_2$. In the model,
+\begin{theorem}[What one fixed record estimates]\label{thm:one-record-estimates-main}
+Fix one detector design $(\Gamma,\kappa_{\mathrm r},\Delta\tau)$ and observe one
+stationary click record from that design. Then:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
+\item \Cref{thm:cycle-block-main} estimates only the fixed-setting covariance
+\[
+\gamma_2=\operatorname{Cov}(A_0,A_2)
+\]
+and its asymptotic variance. After the nondegeneracy check from
+\Cref{rem:lag-two-nondeg-main}, its studentized interval is a confidence
+interval for this fixed-setting $\gamma_2$ and for no other quantity.
+\item \Cref{prop:finite-diagnostics-main}(ii) adds only a deterministic
+first-order scan relation: if the same detector design is embedded in a
+$C^1$ scan $s\mapsto\Gamma_+(s)$ with a transverse crossing at $s_*$, then the
+zero of $\gamma_2(s)$ identifies that scan crossing to first order.
+\item A root-$N$ shell-location estimator or confidence interval requires extra
+scan-design asymptotics not proved by the single-record CLT, precisely as
+isolated in \Cref{prop:finite-diagnostics-main}(iv).
+\item The fixed-radius inverse and covariance formulas in \Cref{sec:inverse}
+require separate denominator-, location-, or ratio-data asymptotics such as
+\Cref{ass:ratio-data-clt-main}; they are not consequences of
+\Cref{thm:cycle-block-main}.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Items~(i)--(iii) are exactly the separation of roles established by
+\Cref{thm:cycle-block-main,rem:lag-two-nondeg-main,prop:finite-diagnostics-main}.
+Item~(iv) is the standing scope condition recorded again at the start of
+\Cref{sec:inverse} and in \Cref{ass:ratio-data-clt-main}.
+\end{proof}
+
+For the memory-transition readout, the primary one-record diagnostic is
+therefore the sign of $\widehat\gamma_2$. In the model,
 \[
 \gamma_2=\operatorname{Cov}(A_0,A_2)=\rho(a-\rho)\lambda_{\mathrm{hid}},
 \]
-with $\rho>0$ and $a-\rho<0$. Thus $\gamma_1=\rho(a-\rho)$ remains negative, and Proposition~\ref{prop:finite-diagnostics-main} makes the lag-two zero the finite-record diagnostic for the memory threshold. The fixed-setting confidence interval for $\gamma_2$ is available only after the cycle-variance check in \Cref{rem:lag-two-nondeg-main} has confirmed $\tau_2^2>0$ (equivalently $\sigma_2^2>0$); if the estimated cycle variance is numerically close to zero, the appropriate finite-record output is the sign diagnostic together with the point estimate, not a Wald interval. Along a scan, the shell statement is the first-order transversality criterion from part~(ii). Without a transverse crossing, the sign diagnostic can identify side information but not a unique shell location.
+with $\rho>0$ and $a-\rho<0$. Thus the lag-one covariance
+$\gamma_1=\rho(a-\rho)$ remains negative, and
+\Cref{prop:finite-diagnostics-main,thm:one-record-estimates-main} make the
+lag-two zero the finite-record diagnostic for the memory threshold. The
+fixed-setting confidence interval for $\gamma_2$ is available only after the
+cycle-variance check in \Cref{rem:lag-two-nondeg-main} has confirmed
+$\tau_2^2>0$ (equivalently $\sigma_2^2>0$); if the estimated cycle variance is
+numerically close to zero, the appropriate finite-record output is the sign
+diagnostic together with the point estimate, not a Wald interval. Along a
+designed scan, part~(ii) gives only the first-order transversality of the scan
+crossing. Without that extra scan structure, the sign diagnostic can identify
+side information but not a unique shell location, shell confidence interval, or
+ratio coordinate.
 
 The same data should also pass two consistency checks: the empirical hazards
 $\widehat h_k$ should increase over the reliable range of observed gaps, and
