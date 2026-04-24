@@ -624,6 +624,7 @@ import Omega.POM.MicrocanonicalInformationCLT
 import Omega.POM.MicrocanonicalInformationLinearLaw
 import Omega.POM.MicrocanonicalModuliInformationLdp
 import Omega.POM.MicrocanonicalFoldPosteriorCountAndProb
+import Omega.POM.MicrocanonicalTwoTemperatureCriticalQuadraticLaw
 import Omega.POM.MultiplicativeUpgradeFatalAmplification
 import Omega.POM.MicrocanonicalPosteriorModuliCLT
 import Omega.POM.MicrocanonicalQueryDistortionCriticalWindowCLT
