@@ -180,6 +180,8 @@ import Omega.Conclusion.FiniteLaurentCertificateSharpSampling
 import Omega.Conclusion.CarryZeroTempSupportCollapse
 import Omega.Conclusion.CausalDepthBranchBudgetOrthogonality
 import Omega.Conclusion.CdimArbitraryProfiniteKernel
+import Omega.Conclusion.CdimExactAdditiveUniqueness
+import Omega.Conclusion.CdimFiniteRankExtension
 import Omega.Conclusion.CdimFiniteQuotientGrowth
 import Omega.Conclusion.PrimeLogAlphaSingularRankOne
 import Omega.Conclusion.PrimorialAxisSecondOrder
