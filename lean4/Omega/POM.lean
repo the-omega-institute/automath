@@ -37,6 +37,7 @@ import Omega.POM.HankelRankMinimal
 import Omega.POM.FiberIndexCltThermo
 import Omega.POM.FiberIndexLdpThermo
 import Omega.POM.FiberHammingTripleIsometry
+import Omega.POM.FiberIndependenceComplexPath
 import Omega.POM.HiddenBitJumpCollisionIsomorphism
 import Omega.POM.HiddenBitComplementFixedpointBSplitDichotomy
 import Omega.POM.HiddenBitTopbitMiHalfEntropy
