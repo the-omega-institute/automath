@@ -106,6 +106,7 @@ import Omega.POM.CostCanonicalRepresentativeFunctor
 import Omega.POM.CostOptimizationDecidable
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.CollisionKernelPublication
+import Omega.POM.CollisionPerronAuditableInversion
 import Omega.POM.CoarseGrainedKernel
 import Omega.POM.DqConvergenceControlledByGq
 import Omega.POM.CollisionMoment2AdicOdometerInverseLimit
