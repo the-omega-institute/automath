@@ -7,6 +7,7 @@ import Omega.Zeta.AbelCharacterSpectrumAsRotationCorrelation
 import Omega.Zeta.AbelCongruenceEnergyParsevalBarcode
 import Omega.Zeta.AbelDecimationSemigroupIdentity
 import Omega.Zeta.AbelNormalizedResidueInvariantIntegrality
+import Omega.Zeta.ConclusionLocalizedSingleAxisAnomalyVanishing
 import Omega.Zeta.AbelGrowthExponentCriterion
 import Omega.Zeta.AbelH2CriticalIndex
 import Omega.Zeta.AbelH2TailOptimalBound
@@ -1129,6 +1130,7 @@ import Omega.Zeta.XiJensenDefectHatKernelSecondDifference
 import Omega.Zeta.XiJSexticEllipticLattesTMap
 import Omega.Zeta.XiJensenDefectPowerPullbackInvariance
 import Omega.Zeta.XiJensenExclusionRadiusConcavityCrossscale
+import Omega.Zeta.XiJensenBoundaryLayerIndistinguishability
 import Omega.Zeta.XiJensenSingleRadiusBandExclusion
 import Omega.Zeta.XiJensenSingleRadiusBandExclusionMidradius
 import Omega.Zeta.XiLatticeDeheightizedVisibility

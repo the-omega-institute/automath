@@ -567,6 +567,7 @@ import Omega.POM.IndLocalRecurrence
 import Omega.POM.FactorizedSympowerUpperBound
 import Omega.POM.IndFactorization
 import Omega.POM.InfonceFiberSpectrumTomography
+import Omega.POM.InfonceFiberSpectrumTomographyMinimality
 import Omega.POM.MuSecantAudit
 import Omega.POM.InfoncePartitionOptimalClosedForm
 import Omega.POM.InfoNCERemainderBitsSecondOrderRenormalization
