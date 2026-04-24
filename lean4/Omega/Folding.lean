@@ -242,6 +242,7 @@ import Omega.Folding.KilloFoldMultiplicityConvolutionInvertibilityDefect
 import Omega.Folding.KilloZGNaturalDensityTransferMatrix
 import Omega.Folding.KilloLeyangJointChebotarevProductLaw
 import Omega.Folding.KilloLeyangJointDensityExplicit
+import Omega.Folding.KilloLeyangLattesTripleDensity
 import Omega.Folding.KilloLeyangUnifiedDigitRigidity
 import Omega.Folding.KilloVisibleEntropyDensityAreaControl
 import Omega.Folding.KilloNoFiniteAdditiveRegisterLinearization
