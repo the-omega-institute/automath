@@ -616,6 +616,8 @@ import Omega.POM.MicrocanonicalFoldClassCount
 import Omega.POM.MicrocanonicalFoldEntropy
 import Omega.POM.MicrocanonicalInformationDoob
 import Omega.POM.MicrocanonicalInformationIdentity
+import Omega.POM.MicrocanonicalHypergeometricLdpKlSym
+import Omega.POM.MicrocanonicalInformationCLT
 import Omega.POM.MicrocanonicalInformationLinearLaw
 import Omega.POM.MicrocanonicalModuliInformationLdp
 import Omega.POM.MicrocanonicalFoldPosteriorCountAndProb
