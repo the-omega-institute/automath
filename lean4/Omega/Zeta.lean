@@ -147,6 +147,7 @@ import Omega.Zeta.XiGoldenChainVisibleWindowGrowth
 import Omega.Zeta.XiGoldenW1StarCertificateParitySplitting
 import Omega.Zeta.XiGramDetEntropyMonotoneUnderContraction
 import Omega.Zeta.XiHankelPrimitiveGapVanishingCriterion
+import Omega.Zeta.XiHankelPrimitiveSyndromeSiegelBound
 import Omega.Zeta.XiHankelDefectCdimMinimalLedger
 import Omega.Zeta.XiFlagFactorization12x4x3
 import Omega.Zeta.XiTimePart70cSpectrumZeroZ2OrbitCancellation
