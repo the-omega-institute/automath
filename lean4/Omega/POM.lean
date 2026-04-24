@@ -49,6 +49,7 @@ import Omega.POM.HiddenBitJumpCollisionIsomorphism
 import Omega.POM.HiddenBitComplementFixedpointBSplitDichotomy
 import Omega.POM.HiddenBitTopbitMiHalfEntropy
 import Omega.POM.HiddenBitWatataniIndexElement
+import Omega.POM.HiddenbitUpperSupportThreshold
 import Omega.POM.HiddenbitUpperSupportM6Twelve
 import Omega.POM.HighorderSchurPackageDeterminesFullFiberMultiset
 import Omega.POM.AdjacentPressureConvexity
@@ -163,6 +164,7 @@ import Omega.POM.SprtSymmetricThresholdMeanTime
 import Omega.POM.StiffZeroHankelGoodReductionDimStability
 import Omega.POM.Congruence2dLockingCfinite
 import Omega.POM.CoprimeLedgerPrimorialOptimality
+import Omega.POM.CrossqLogconvexChain
 import Omega.POM.CrossqGMonotone
 import Omega.POM.CrossqPressureConvexity
 import Omega.POM.CurvatureSummableEventualCommutation
