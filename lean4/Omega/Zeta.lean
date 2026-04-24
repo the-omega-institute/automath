@@ -1365,3 +1365,4 @@ import Omega.Zeta.XiAbelianGlobalStabilityThresholdMaxChannel
 import Omega.Zeta.XiEllipticDenominatorSecondDifferenceHeightReadout
 import Omega.Zeta.XiTimePart64acAbelianQuotientKlChain
 import Omega.Zeta.CyclicLiftAddressableGridCoveringRadius
+import Omega.Zeta.XiBasepointScanGramDeterminantSchurIncrement
