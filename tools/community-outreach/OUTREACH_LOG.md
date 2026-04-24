@@ -4,7 +4,7 @@
 
 | Target | Channel | Status | Backflow | Best Score | Last Update |
 |---|---|---|---|---|---|
-| teorth/equational_theories #418 | GitHub issue reply | proof complete, reply pending | body section + bridge doc | 7/10 → proof | 2026-04-21 |
+| teorth/equational_theories #418 | GitHub issue reply | **submitted** | body section | 7/10 → proof | 2026-04-21 |
 | teorth/equational_theories (general) | GitHub issue/PR | researched | — | 7/10 | 2026-04-21 |
 | google-deepmind/formal-conjectures | GitHub PR | draft ready | — | manual | 2026-04-18 |
 | Heath Sanchez | SAIR Zulip | draft ready | — | — | 2026-04-18 |
@@ -15,13 +15,15 @@
 
 | Target | Channel | Result | Date |
 |---|---|---|---|
+| teorth/equational_theories #418 | GitHub issue reply | [submitted](https://github.com/teorth/equational_theories/issues/418#issuecomment-4289701235) | 2026-04-21 |
+| teorth/equational_theories #364 | GitHub PR | [PR #1435](https://github.com/teorth/equational_theories/pull/1435) | 2026-04-22 |
 | mysticflounder/equational-magma-theorems | GitHub issue #1 | [submitted](https://github.com/mysticflounder/equational-magma-theorems/issues/1) | 2026-04-15 |
 
 ## Backflow Tracking
 
-| Target | Paper Section | Bridge Doc | Scripts | Date |
+| Target | Paper Section | Scripts | Date |
 |---|---|---|---|---|
-| teorth #418 | body/finite_field_equational_saturation | theory/bridges/equational-theories/ | scripts/equational_theory/*.py | 2026-04-21 |
+| teorth #418 | body/finite_field_equational_saturation | scripts/equational_theory/*.py | 2026-04-21 |
 
 ## Pipeline Stats
 
