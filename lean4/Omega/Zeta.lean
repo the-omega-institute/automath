@@ -115,6 +115,7 @@ import Omega.Zeta.XiGridScanDiophantineDealiasingStability
 import Omega.Zeta.XiGodelCoprimeModFamilyDecoupling
 import Omega.Zeta.XiGl2FpActionSignCharacterLegendreDet
 import Omega.Zeta.XiAddressableGodelWorstcaseRedundancyDiverges
+import Omega.Zeta.XiChainInteriorGodelAverageBudgetOptimality
 import Omega.Zeta.XiFiniteRhoScanTraceClosedFormDepthOnly
 import Omega.Zeta.XiNullSecondOrderRadialChannel
 import Omega.Zeta.XiEndpointHeatProbeAdamsTwistSpectralGapExpBound
@@ -332,6 +333,7 @@ import Omega.Zeta.XiToeplitzNegativeSpectrumRobustVerification
 import Omega.Zeta.XiToeplitzNegativeEigenvalueImpliesJensenDefectLb
 import Omega.Zeta.XiToeplitzPsdFibonacciLocalization
 import Omega.Zeta.XiToeplitzPsdJetSemialgebraic
+import Omega.Zeta.XiToeplitzPsdRobustCofinalAudit
 import Omega.Zeta.XiTerminalZmGodelLeyangTropicalStripLattice
 import Omega.Zeta.XiTerminalZmLeyangStripRobustnessErrorControl
 import Omega.Zeta.XiTerminalZmLeyangRamificationDivisorStokes
