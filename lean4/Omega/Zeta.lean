@@ -78,6 +78,7 @@ import Omega.Zeta.XiEndpointSingleDefectWeightedKlLi2
 import Omega.Zeta.XiEndpointHeatProbePowerlawLeading
 import Omega.Zeta.XiTimePart76SmithSurjectiveModuliPrimeSieve
 import Omega.Zeta.XiTimePart9xcSerrinGeometryAllCumulantsVanish
+import Omega.Zeta.XiTimePart9xEquivariantCompletionBitLowerBound
 import Omega.Zeta.XiTimeAdditivityFiniteCriticalSquareCriterion
 import Omega.Zeta.GMMajorarcEnergyObstructionLoop
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
@@ -305,6 +306,7 @@ import Omega.Zeta.XiToeplitzCurvatureEnergyEquivalence
 import Omega.Zeta.XiToeplitzDeterminantRatioLimitL2
 import Omega.Zeta.XiToeplitzNegativeSpectrumRobustVerification
 import Omega.Zeta.XiToeplitzNegativeEigenvalueImpliesJensenDefectLb
+import Omega.Zeta.XiToeplitzPsdFibonacciLocalization
 import Omega.Zeta.XiToeplitzPsdJetSemialgebraic
 import Omega.Zeta.XiTerminalZmGodelLeyangTropicalStripLattice
 import Omega.Zeta.XiTerminalZmLeyangStripRobustnessErrorControl
