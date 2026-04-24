@@ -221,7 +221,9 @@ import Omega.Zeta.XiCriticalLineCircleCauchyUniformization
 import Omega.Zeta.XiJoukowskyL1MeasureLiftChebyshevFourier
 import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth
 import Omega.Zeta.XiKlingenHeckeCharpolyProjectors
+import Omega.Zeta.XiHdqcd1LeyangSpectrumRadius
 import Omega.Zeta.XiJDiscriminant2IsogenyVelu
+import Omega.Zeta.XiJDiscriminantTranslationFixedFieldQuotient
 import Omega.Zeta.XiJSexticEllipticLattesBelyiNormalization
 import Omega.Zeta.XiJSexticEllipticLattesV4GaloisBranching
 import Omega.Zeta.XiJSexticEllipticLattesKleinMobius
