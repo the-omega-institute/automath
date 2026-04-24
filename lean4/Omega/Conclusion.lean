@@ -1051,3 +1051,5 @@ import Omega.Conclusion.FiniteDefectCommensurableBifrequencyAliasLattice
 import Omega.Conclusion.PisotBoundaryShadowNotL2
 import Omega.Conclusion.RamanujanShellTransformStrictInjectivity
 import Omega.Conclusion.GoldenTransportStarLogOverhead
+import Omega.Conclusion.GoldenRadiusFibonacciNeutralizationLimit
+import Omega.Conclusion.BoundaryReflectionDerivativeIdentity
