@@ -78,6 +78,7 @@ import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiFiniteDefectRhScanTraceEquivalence
 import Omega.Zeta.XiFoldbinEvenWindowParitySectionCenterIntersection
 import Omega.Zeta.XiFoldbinEscortTvCollapseOnebitGibbs
+import Omega.Zeta.XiCongruenceBlockAbelWeilResidueLocking
 import Omega.Zeta.XiFiniteKernelZetaRationalDecidability
 import Omega.Zeta.FiniteQuotientPhaseCompressionPrecisionLowerBound
 import Omega.Zeta.XiFiniteFrontierCertificate
