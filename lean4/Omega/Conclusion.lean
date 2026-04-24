@@ -1134,3 +1134,4 @@ import Omega.Conclusion.GoldenRadiusFibonacciNeutralizationLimit
 import Omega.Conclusion.BoundaryReflectionDerivativeIdentity
 import Omega.Conclusion.SerrinSupportJointScreenRay
 import Omega.Conclusion.ConclusionMorita2traceDeterminantZeta
+import Omega.Conclusion.Window6GaugeGapUniqueTernaryScar

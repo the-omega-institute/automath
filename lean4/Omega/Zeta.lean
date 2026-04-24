@@ -1356,3 +1356,4 @@ import Omega.Zeta.XiContractDefectCriticalSlicePrinciple
 import Omega.Zeta.XiAbelianGlobalStabilityThresholdMaxChannel
 import Omega.Zeta.XiEllipticDenominatorSecondDifferenceHeightReadout
 import Omega.Zeta.XiTimePart64acAbelianQuotientKlChain
+import Omega.Zeta.CyclicLiftAddressableGridCoveringRadius
