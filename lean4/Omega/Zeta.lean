@@ -93,6 +93,7 @@ import Omega.Zeta.XiOutputPotentialRightEndpointSecondOrderInversionNormalForm
 import Omega.Zeta.XiOutputPotentialEndpointGapGroundState
 import Omega.Zeta.XiGridScanDiophantineDealiasingStability
 import Omega.Zeta.XiGodelCoprimeModFamilyDecoupling
+import Omega.Zeta.XiGl2FpActionSignCharacterLegendreDet
 import Omega.Zeta.XiAddressableGodelWorstcaseRedundancyDiverges
 import Omega.Zeta.XiFiniteRhoScanTraceClosedFormDepthOnly
 import Omega.Zeta.XiNullSecondOrderRadialChannel
