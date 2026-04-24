@@ -219,6 +219,7 @@ import Omega.Zeta.CyclicBlockTensorGcdLcm
 import Omega.Zeta.XiCdimKolmResidualGap
 import Omega.Zeta.XiCdimSpectrumCompleteness
 import Omega.Zeta.XiCdimKGeneratedQuotientMaxOrder
+import Omega.Zeta.XiCriticalSlicePressureZeroDriftLyapunov
 import Omega.Zeta.XiCdimPhaseCompressionAliasingExponent
 import Omega.Zeta.XiCdimCircleLedgerSignature
 import Omega.Zeta.XiCdimZetaFingerprintRigidity
