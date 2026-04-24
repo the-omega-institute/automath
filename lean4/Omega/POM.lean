@@ -883,6 +883,7 @@ import Omega.POM.Q4ArithmeticTwoLayerRealImag
 import Omega.POM.LocalFiniteDirichletAction
 import Omega.POM.PathIndsetThermoConstants
 import Omega.POM.DerivedSchurDirichletTorsionFlatCyclotomicPencil
+import Omega.POM.EntropyLossFeasibilityCone
 import Omega.POM.EntropyLossOneCocycleFlat
 import Omega.POM.PressureEntropyFactorizationMultiplicative
 import Omega.POM.OracleLocalCostKlBregman
