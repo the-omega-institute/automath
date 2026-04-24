@@ -268,6 +268,7 @@ import Omega.POM.DiagonalRateCriticalLaplacianPdetTensorSynergyFactorization
 import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensor
 import Omega.POM.DiagonalRateCriticalSpectrumSecularInterlacing
 import Omega.POM.DiagonalRateDiagonalClosureRankone
+import Omega.POM.DiagonalRateDiagonalDeterminesCommute
 import Omega.POM.DiagonalRateDiagonalDeterminesSpectrum
 import Omega.POM.DiagonalRateDiagonalLaguerreDeterminant
 import Omega.POM.DiagonalRateDiagonalStatisticsComplete

@@ -90,6 +90,7 @@ import Omega.Zeta.GMMajorarcEnergyObstructionLoop
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiFiniteDefectRhScanTraceEquivalence
+import Omega.Zeta.XiFoldBayesInfonceNewtonBinomialInversion
 import Omega.Zeta.XiFoldbinEvenWindowParitySectionCenterIntersection
 import Omega.Zeta.XiFoldbinEscortTvCollapseOnebitGibbs
 import Omega.Zeta.XiCongruenceBlockAbelWeilResidueLocking
