@@ -763,6 +763,7 @@ import Omega.POM.TimeReversalFixedpointRatioDecay
 import Omega.POM.TimeReversalOrbitCount
 import Omega.POM.TimeReversalSignGeneralFiber
 import Omega.POM.TimeReversalSymmetricIndsetPolynomial
+import Omega.POM.TauSecondMomentVarianceClosed
 import Omega.POM.ToggleCoxeterOrderBound
 import Omega.POM.ToggleCoxeterRelationsPath
 import Omega.POM.ToggleGaugeInvariantEndomorphismsC2Tensor
