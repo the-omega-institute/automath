@@ -328,6 +328,7 @@ import Omega.Conclusion.CRTLinearBudgetImpossibility
 import Omega.Conclusion.CRTThresholdNecessarySufficientForOrderReadout
 import Omega.Conclusion.MultisqrtNormLowerBound
 import Omega.Conclusion.CriticalKernelPdetUniformMinimizer
+import Omega.Conclusion.CriticalCombCesaroHaar
 import Omega.Conclusion.CriticalKernelSeparationCommonRecurrence
 import Omega.Conclusion.CriticalKernelSeparationCommonGeometricModes
 import Omega.Conclusion.ChowliuForcedEdgeThreshold
@@ -840,6 +841,7 @@ import Omega.Conclusion.ResidueSliceSingleOrbitDoubleSliceRigidity
 import Omega.Conclusion.ResonanceWindow
 import Omega.Conclusion.ResonanceWindowMod2BinomialCollapse
 import Omega.Conclusion.ResonanceWindowZ2HenselTailPeriodicity
+import Omega.Conclusion.Renyi2EffectiveSupportZeroDensityCollapse
 import Omega.Conclusion.ResonanceWindowMod2TailJetCompleteness
 import Omega.Conclusion.ReversibleAuxBitsBudget
 import Omega.Conclusion.ReverseKLSingleFrequencyExclusivity
