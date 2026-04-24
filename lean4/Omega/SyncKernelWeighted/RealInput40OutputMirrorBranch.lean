@@ -91,21 +91,24 @@ theorem paper_real_input_40_output_mirror_branch :
     ring
   · intro u hu
     have hu_ne : u ≠ 0 := by linarith
-    have hsqrt_ne : Real.sqrt u ≠ 0 := Real.sqrt_ne_zero'.2 hu_ne
-    field_simp [real_input_40_output_mirror_branch_mirror_modulus_jet,
-      real_input_40_output_mirror_branch_mirror_jet, hu_ne, hsqrt_ne]
+    have hsqrt_ne : Real.sqrt u ≠ 0 := Real.sqrt_ne_zero'.2 hu
+    unfold real_input_40_output_mirror_branch_mirror_modulus_jet
+      real_input_40_output_mirror_branch_mirror_jet
+    field_simp [hu_ne, hsqrt_ne]
     ring
   · intro u hu
     have hu_ne : u ≠ 0 := by linarith
-    have hsqrt_ne : Real.sqrt u ≠ 0 := Real.sqrt_ne_zero'.2 hu_ne
-    field_simp [real_input_40_output_mirror_branch_perron_jet,
-      real_input_40_output_mirror_branch_mirror_jet, hu_ne, hsqrt_ne]
+    have hsqrt_ne : Real.sqrt u ≠ 0 := Real.sqrt_ne_zero'.2 hu
+    unfold real_input_40_output_mirror_branch_perron_jet
+      real_input_40_output_mirror_branch_mirror_jet
+    field_simp [hu_ne, hsqrt_ne]
     ring
   · intro u hu
     have hu_ne : u ≠ 0 := by linarith
-    have hsqrt_ne : Real.sqrt u ≠ 0 := Real.sqrt_ne_zero'.2 hu_ne
-    field_simp [real_input_40_output_mirror_branch_perron_jet,
-      real_input_40_output_mirror_branch_mirror_modulus_jet, hu_ne, hsqrt_ne]
+    have hsqrt_ne : Real.sqrt u ≠ 0 := Real.sqrt_ne_zero'.2 hu
+    unfold real_input_40_output_mirror_branch_perron_jet
+      real_input_40_output_mirror_branch_mirror_modulus_jet
+    field_simp [hu_ne, hsqrt_ne]
     ring
 
 end

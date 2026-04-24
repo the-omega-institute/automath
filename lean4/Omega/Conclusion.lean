@@ -1233,3 +1233,4 @@ import Omega.Conclusion.BooleanJumpBernoulliGaussianStablerank
 import Omega.Conclusion.SubcriticalBudgetSingleLayerTruncation
 import Omega.Conclusion.FreezingMeasureCollapseAllAxes
 import Omega.Conclusion.Window6ProjectiveLongSectorSpin1CrystalField
+import Omega.Conclusion.Realinput40LegalityMemorySpectralAphasia
