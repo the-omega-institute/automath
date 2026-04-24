@@ -115,10 +115,10 @@ DEFAULT_ORACLE_TIMEOUT = 7200
 ORACLE_CLAIM_TIMEOUT = int(os.environ.get("ORACLE_CLAIM_TIMEOUT", "90"))
 CODEX_INFRA_RETRIES = int(os.environ.get("DISTILL_CODEX_INFRA_RETRIES", "3"))
 CODEX_INFRA_RETRY_SLEEP = int(os.environ.get("DISTILL_CODEX_INFRA_RETRY_SLEEP", "20"))
-REVIEW_BACKENDS = ("codex", "codex-claude")
-DEFAULT_REVIEW_BACKEND = os.environ.get("DISTILL_REVIEW_BACKEND", "codex")
+REVIEW_BACKENDS = ("codex", "codex-claude", "claude")
+DEFAULT_REVIEW_BACKEND = os.environ.get("DISTILL_REVIEW_BACKEND", "claude")
 if DEFAULT_REVIEW_BACKEND not in REVIEW_BACKENDS:
-    DEFAULT_REVIEW_BACKEND = "codex"
+    DEFAULT_REVIEW_BACKEND = "claude"
 
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 logger = logging.getLogger("distill")
@@ -4644,58 +4644,81 @@ def _review_writebacks(
     if review_backend not in REVIEW_BACKENDS:
         review_backend = DEFAULT_REVIEW_BACKEND
 
+    _unavailable_review = {
+        "score": 0,
+        "verdict": "unavailable",
+        "issues": ["Reviewer not configured for this backend"],
+        "required_changes": [],
+        "unavailable": True,
+        "retryable": False,
+    }
     with ThreadPoolExecutor(max_workers=2) as executor:
-        codex_future = executor.submit(
-            _codex_score,
-            state,
-            writebacks,
-            payload,
-            section_contexts,
-            dry_run,
-        )
-        secondary_name = ""
-        secondary_future = None
-        if review_backend == "codex-claude":
-            secondary_name = "claude"
-            secondary_future = executor.submit(
+        codex_future = None
+        claude_future = None
+        if review_backend == "claude":
+            # Claude-only review: Codex generates, Claude reviews
+            claude_future = executor.submit(
                 _claude_score,
                 state,
                 writebacks,
                 section_contexts,
                 dry_run,
             )
-        codex_review = codex_future.result()
-        secondary_review = (
-            secondary_future.result()
-            if secondary_future is not None
-            else {
-                "score": 0,
-                "verdict": "unavailable",
-                "issues": ["No secondary reviewer configured"],
-                "required_changes": [],
-                "unavailable": True,
-                "retryable": False,
-            }
-        )
+        elif review_backend == "codex-claude":
+            # Dual review: both Codex and Claude score in parallel
+            codex_future = executor.submit(
+                _codex_score,
+                state,
+                writebacks,
+                payload,
+                section_contexts,
+                dry_run,
+            )
+            claude_future = executor.submit(
+                _claude_score,
+                state,
+                writebacks,
+                section_contexts,
+                dry_run,
+            )
+        else:  # "codex"
+            codex_future = executor.submit(
+                _codex_score,
+                state,
+                writebacks,
+                payload,
+                section_contexts,
+                dry_run,
+            )
+        codex_review = codex_future.result() if codex_future else dict(_unavailable_review)
+        claude_review = claude_future.result() if claude_future else dict(_unavailable_review)
 
     codex_s = int(codex_review.get("score", 0) or 0)
-    secondary_s = int(secondary_review.get("score", 0) or 0)
+    claude_s = int(claude_review.get("score", 0) or 0)
     codex_ok = codex_s > 0
-    secondary_ok = secondary_s > 0
-    named_reviews = [("codex", codex_review)]
-    if secondary_name:
-        named_reviews.append((secondary_name, secondary_review))
-    claude_s = secondary_s
-    claude_ok = secondary_ok
-    claude_review = secondary_review
+    claude_ok = claude_s > 0
+    named_reviews = []
+    if codex_future is not None:
+        named_reviews.append(("codex", codex_review))
+    if claude_future is not None:
+        named_reviews.append(("claude", claude_review))
 
-    if codex_ok and claude_ok:
-        # Lenient dual-review: pass if EITHER reviewer passes AND neither
-        # gives a fundamentally broken score (< 4).  Using min() alone made
-        # a single harsh reviewer block all progress (e.g. codex=7, claude=3
-        # → final=3).  The new rule: max of both scores, but if the lower
-        # score is < 4, cap the final at 6 (forces a revision but doesn't
-        # fully block when one reviewer sees depth the other misses).
+    if review_backend == "claude":
+        # Claude-only: score is Claude's score directly
+        if claude_ok:
+            final_score = claude_s
+        else:
+            logger.warning("Claude review unavailable in claude-only backend")
+            final_score = 0
+    elif review_backend == "codex":
+        # Codex-only: score is Codex's score directly
+        if codex_ok:
+            final_score = codex_s
+        else:
+            logger.warning("Codex review unavailable in codex-only backend")
+            final_score = 0
+    elif codex_ok and claude_ok:
+        # Dual review (codex-claude): lenient combination
         low = min(codex_s, claude_s)
         high = max(codex_s, claude_s)
         if low >= SCORE_PASS_THRESHOLD:
@@ -4707,22 +4730,27 @@ def _review_writebacks(
         else:
             final_score = high  # neither passes — use the better one
     elif codex_ok:
-        logger.warning("%s review unavailable, using codex=%d", secondary_name or "secondary", codex_s)
+        logger.warning("Claude review unavailable in dual backend, using codex=%d", codex_s)
         final_score = codex_s
     elif claude_ok:
-        logger.warning("Codex review unavailable, using %s=%d", secondary_name or "secondary", claude_s)
+        logger.warning("Codex review unavailable in dual backend, using claude=%d", claude_s)
         final_score = claude_s
     else:
         logger.warning("No configured reviewer returned usable JSON")
         final_score = 0
 
-    # Detect FUNDAMENTAL depth issue: both reviewers say "reject"
-    both_reject = (
-        codex_ok
-        and claude_ok
-        and codex_review.get("verdict") == "reject"
-        and claude_review.get("verdict") == "reject"
-    )
+    # Detect FUNDAMENTAL depth issue: primary reviewer says "reject"
+    if review_backend == "codex-claude":
+        both_reject = (
+            codex_ok
+            and claude_ok
+            and codex_review.get("verdict") == "reject"
+            and claude_review.get("verdict") == "reject"
+        )
+    elif review_backend == "claude":
+        both_reject = claude_ok and claude_review.get("verdict") == "reject"
+    else:
+        both_reject = codex_ok and codex_review.get("verdict") == "reject"
     available_reviews = [
         (name, review)
         for name, review in named_reviews
@@ -4738,17 +4766,16 @@ def _review_writebacks(
             blockers.append(f"{name}: verdict={verdict or 'missing'}")
         elif _score_required_changes(review):
             blockers.append(f"{name}: required_changes present")
-    gate_passed = bool(
-        codex_ok
-        and final_score >= SCORE_PASS_THRESHOLD
-        and not blockers
-    )
+    # Gate passes when primary reviewer(s) OK and score meets threshold
+    if review_backend == "claude":
+        gate_passed = bool(claude_ok and final_score >= SCORE_PASS_THRESHOLD and not blockers)
+    else:
+        gate_passed = bool(codex_ok and final_score >= SCORE_PASS_THRESHOLD and not blockers)
 
     logger.info(
-        "Review gate: backend=%s codex=%d %s=%d final=%d passed=%s blockers=%s",
+        "Review gate: backend=%s codex=%d claude=%d final=%d passed=%s blockers=%s",
         review_backend,
         codex_s,
-        secondary_name or "secondary",
         claude_s,
         final_score,
         gate_passed,
@@ -4757,16 +4784,13 @@ def _review_writebacks(
 
     result = {
         "codex": codex_review,
+        "claude": claude_review,
         "minimum_score": final_score,
         "gate_passed": gate_passed,
         "blocking_reviewers": blockers,
         "review_backend": review_backend,
         "both_reject": both_reject,
     }
-    if secondary_name == "claude":
-        result["claude"] = secondary_review
-    else:
-        result["secondary"] = secondary_review
     return result
 
 
