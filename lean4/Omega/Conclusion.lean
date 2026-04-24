@@ -14,6 +14,7 @@ import Omega.Conclusion.AnalyticHolographyInversionRigidity
 import Omega.Conclusion.AffineNormalFormSemidirect
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.RateCdimAchievability
+import Omega.Conclusion.RateCdimArithmetic
 import Omega.Conclusion.AnchorFullRankWeightblindRigidity
 import Omega.Conclusion.AnchorFullRankPoleDominance
 import Omega.Conclusion.AtomicSurgeryFiniteCongruenceTomography
@@ -223,6 +224,7 @@ import Omega.Conclusion.Window6StatisticalArithmeticStrictOrthogonality
 import Omega.Conclusion.Window6Realinput40AlgebraicEdgeComplexityJump
 import Omega.Conclusion.CapacityGroupoidBidirectionalCompleteInvariant
 import Omega.Conclusion.BinfoldGaugeVolumeDoubleExponentialLaw
+import Omega.Conclusion.FoldGaugeEntropyDefectExact
 import Omega.Conclusion.CollisionGenfuncRadiusHalting
 import Omega.Conclusion.ScreenRTChainArithmeticDivisorShadow
 import Omega.Conclusion.Q6JoukowskyUnitCircleZeroLaw

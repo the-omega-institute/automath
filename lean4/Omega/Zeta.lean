@@ -869,6 +869,7 @@ import Omega.Zeta.RhStratificationSPlane
 import Omega.Zeta.RootSeparation
 import Omega.Zeta.SL2LinearExternalCertificate
 import Omega.Zeta.ShiftInvariantSaturatedLatticePrincipalIdeal
+import Omega.Zeta.ShiftInvariantSaturatedLatticeIntrinsicGenerator
 import Omega.Zeta.SingleScaleDirichletLattice
 import Omega.Zeta.SmithEntropyInvertsVpInvariants
 import Omega.Zeta.SmithEntropyMinDepth
