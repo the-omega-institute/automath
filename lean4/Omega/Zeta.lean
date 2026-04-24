@@ -184,6 +184,7 @@ import Omega.Zeta.XiTerminalZmLeyangLanglandsDualRootStability
 import Omega.Zeta.SelfdualPressureInversion
 import Omega.Zeta.SyncCyclotomicElimination
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotSofic
+import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotRegular
 import Omega.Zeta.XiAbelianHolonomyFourierInversion
 import Omega.Zeta.XiCauchyPoissonLocationScaleUncenteredThird
 import Omega.Zeta.XiCauchyPoissonFdivSixthOrderMomentRewrite

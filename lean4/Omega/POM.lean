@@ -330,6 +330,7 @@ import Omega.POM.FibCubeThetaClassSize
 import Omega.POM.FibPellQuadratic
 import Omega.POM.FibPellRecoverKFromUnitError
 import Omega.POM.FiberSignedIndexPeriodicity
+import Omega.POM.FiberZxMinusOnePsi3Sign
 import Omega.POM.FiberBiasedBernoulliPushforwardHardcore
 import Omega.POM.FiberBiasedPosteriorPoissonBinomial
 import Omega.POM.FiberBirkhoffFenceIdealLattice
