@@ -46,6 +46,7 @@ import Omega.POM.HiddenBitJumpCollisionIsomorphism
 import Omega.POM.HiddenBitComplementFixedpointBSplitDichotomy
 import Omega.POM.HiddenBitTopbitMiHalfEntropy
 import Omega.POM.HiddenBitWatataniIndexElement
+import Omega.POM.HiddenbitUpperSupportM6Twelve
 import Omega.POM.HighorderSchurPackageDeterminesFullFiberMultiset
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.AitkenCancelsTwoCycle
