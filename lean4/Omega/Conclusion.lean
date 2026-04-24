@@ -162,6 +162,7 @@ import Omega.Conclusion.GodelDivisibilityTower
 import Omega.Conclusion.GodelNoiseThresholdNoUniformLinearReconstruction
 import Omega.Conclusion.WidomResultantCertificateDegreeBound
 import Omega.Conclusion.CertificateFrontConcavePolygonalKinkSupport
+import Omega.Conclusion.FiniteLaurentCertificateSharpSampling
 import Omega.Conclusion.CarryZeroTempSupportCollapse
 import Omega.Conclusion.CausalDepthBranchBudgetOrthogonality
 import Omega.Conclusion.CdimArbitraryProfiniteKernel
