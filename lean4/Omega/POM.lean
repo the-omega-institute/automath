@@ -1,5 +1,6 @@
 import Omega.POM.A4LinearObservableTwoTermOscillation
 import Omega.POM.A4GaloisS5
+import Omega.POM.A4DiscQuadraticClassNumber
 import Omega.POM.A4MertensTailBound
 import Omega.POM.A4TCharpolyRationalReducibility
 import Omega.POM.A4TCyclotomicAdjacencyInjection
