@@ -153,6 +153,7 @@ import Omega.Zeta.XiHankelPrimitiveSyndromeSiegelBound
 import Omega.Zeta.XiHankelDefectCdimMinimalLedger
 import Omega.Zeta.XiFlagFactorization12x4x3
 import Omega.Zeta.XiTimePart70cSpectrumZeroZ2OrbitCancellation
+import Omega.Zeta.XiTimePart70eBinfoldEntireAmplitudeLaw
 import Omega.Zeta.XiTimePart70aaRealMomentInversemomentBernoulliBridge
 import Omega.Zeta.XiTimePart71ZeroCosetFiniteIntersectionPairwiseCompatibility
 import Omega.Zeta.XiTimePart71ZeroCosetNerveFlag
