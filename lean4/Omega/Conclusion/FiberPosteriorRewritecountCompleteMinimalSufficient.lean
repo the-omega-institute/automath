@@ -7,7 +7,7 @@ open scoped BigOperators
 /-- Normalizing polynomial of the one-parameter posterior family. -/
 def conclusion_fiber_posterior_rewritecount_complete_minimal_sufficient_partitionFunction
     (N : Nat → Nat) (q : Nat) (t : ℝ) : ℝ :=
-  ∑ k in Finset.range (q + 1), (N k : ℝ) * t ^ k
+  Finset.sum (Finset.range (q + 1)) fun k => (N k : ℝ) * t ^ k
 
 /-- Unnormalized exponential-family factor carried by the rewrite-count statistic. -/
 def conclusion_fiber_posterior_rewritecount_complete_minimal_sufficient_factor
@@ -15,15 +15,16 @@ def conclusion_fiber_posterior_rewritecount_complete_minimal_sufficient_factor
   t ^ k
 
 /-- Posterior weight on a fiber element. -/
-def conclusion_fiber_posterior_rewritecount_complete_minimal_sufficient_posterior
+noncomputable def conclusion_fiber_posterior_rewritecount_complete_minimal_sufficient_posterior
     {Ω : Type*} (r : Ω → Nat) (N : Nat → Nat) (q : Nat) (t : ℝ) (ω : Ω) : ℝ :=
   conclusion_fiber_posterior_rewritecount_complete_minimal_sufficient_factor t (r ω) /
     conclusion_fiber_posterior_rewritecount_complete_minimal_sufficient_partitionFunction N q t
 
 /-- Polynomial whose coefficients encode the centered expectations `h(k) N(k)`. -/
-def conclusion_fiber_posterior_rewritecount_complete_minimal_sufficient_statisticPolynomial
+noncomputable def conclusion_fiber_posterior_rewritecount_complete_minimal_sufficient_statisticPolynomial
     (h : Nat → ℝ) (N : Nat → Nat) (q : Nat) : Polynomial ℝ :=
-  ∑ k in Finset.range (q + 1), Polynomial.C (h k * (N k : ℝ)) * Polynomial.X ^ k
+  Finset.sum (Finset.range (q + 1))
+    fun k => Polynomial.monomial k (h k * (N k : ℝ))
 
 /-- Paper label: `thm:conclusion-fiber-posterior-rewritecount-complete-minimal-sufficient`.
 The posterior is an exponential family in the statistic `r`, equality of all positive-activity
@@ -80,9 +81,19 @@ theorem paper_conclusion_fiber_posterior_rewritecount_complete_minimal_sufficien
       simpa using hpoly t
     have hcoeff :
         h k * (N k : ℝ) = 0 := by
-      have := congrArg (fun p : Polynomial ℝ => p.coeff k) hzero
-      simpa [conclusion_fiber_posterior_rewritecount_complete_minimal_sufficient_statisticPolynomial,
-        hk, Finset.mem_range, Nat.lt_succ_iff] using this
+      have hcoeff_zero :
+          Finset.sum (Finset.range (q + 1))
+            (fun b => (Polynomial.monomial b (h b * (N b : ℝ))).coeff k) = 0 := by
+        simpa [conclusion_fiber_posterior_rewritecount_complete_minimal_sufficient_statisticPolynomial]
+          using congrArg (fun p : Polynomial ℝ => p.coeff k) hzero
+      have hk_mem : k ∈ Finset.range (q + 1) := by
+        exact Finset.mem_range.mpr (Nat.lt_succ_iff.mpr hk)
+      rw [Finset.sum_eq_single k] at hcoeff_zero
+      · simpa using hcoeff_zero
+      · intro b hb hbk
+        simp [Polynomial.coeff_monomial, hbk]
+      · intro hk_not_mem
+        exact False.elim (hk_not_mem hk_mem)
     have hNk : (N k : ℝ) ≠ 0 := by
       exact_mod_cast (Nat.ne_of_gt (hN k hk))
     exact (mul_eq_zero.mp hcoeff).resolve_right hNk

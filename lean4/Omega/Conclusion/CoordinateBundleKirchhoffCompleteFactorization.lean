@@ -49,10 +49,10 @@ theorem paper_conclusion_coordinate_bundle_kirchhoff_complete_factorization :
       (Finset.prod_univ_sum
         (t := fun a =>
           conclusion_coordinate_bundle_kirchhoff_complete_factorization_nonemptySubsets (E a))
-        (f := fun a (B : Finset Edge) =>
+        (f := fun a B =>
           conclusion_coordinate_bundle_kirchhoff_complete_factorization_blockWeight z B))
   · unfold conclusion_coordinate_bundle_kirchhoff_complete_factorization_minimalFunction
     symm
-    simpa using (Finset.prod_univ_sum (t := E) (f := fun a (e : Edge) => z e))
+    simpa using (Finset.prod_univ_sum (t := E) (f := fun a e => z e))
 
 end Omega.Conclusion
