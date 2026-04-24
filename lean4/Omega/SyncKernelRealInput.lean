@@ -40,3 +40,4 @@ import Omega.SyncKernelRealInput.RealInput40LogMFastPrime
 import Omega.SyncKernelRealInput.RealInputAddDelayRigidity
 import Omega.SyncKernelRealInput.RealInput40MapAccuracies
 import Omega.SyncKernelRealInput.FiniteRhPrimeOrbitOsc
+import Omega.SyncKernelRealInput.GMRandomWalkMixingPisano
