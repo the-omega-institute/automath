@@ -1007,3 +1007,4 @@ import Omega.Conclusion.Window6EulerEgfOdeClosure
 import Omega.Conclusion.ZGHarmonicTauberianTripleConstant
 import Omega.Conclusion.DoubleSignTrigonalZeroMutualInformation
 import Omega.Conclusion.SingularRingUnitCircleMaximalShell
+import Omega.Conclusion.FourierExcessCompleteDelocalization
