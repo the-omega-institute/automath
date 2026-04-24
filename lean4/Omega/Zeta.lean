@@ -243,6 +243,7 @@ import Omega.Zeta.XiSatakeTraceEllipseTemperedSegment
 import Omega.Zeta.CauchyPoissonSixthSignatureNegativityRigidity
 import Omega.Zeta.CyclicBlockTensorGcdLcm
 import Omega.Zeta.XiCdimKolmResidualGap
+import Omega.Zeta.XiBulkCurvatureTomographyIdentifiability
 import Omega.Zeta.XiCdimSpectrumCompleteness
 import Omega.Zeta.XiCdimKGeneratedQuotientMaxOrder
 import Omega.Zeta.XiCriticalSlicePressureZeroDriftLyapunov
