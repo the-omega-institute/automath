@@ -993,6 +993,7 @@ import Omega.Conclusion.ScreenBasisExchangeGraphGeodesicRigidity
 import Omega.Conclusion.ScreenDeficitUnitDescentChain
 import Omega.Conclusion.S4SchurCentralizerClosedForm
 import Omega.Conclusion.SerrinRealizableMeanConeCollapse
+import Omega.Conclusion.SerrinRigidityZeroSideinfoRate
 import Omega.Conclusion.SerrinSupportExactScreenCollapse
 import Omega.Conclusion.SerrinSupportScreenRankAtmostOne
 import Omega.Conclusion.SerrinWulffScaleLedgerImpossibility

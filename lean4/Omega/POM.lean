@@ -236,6 +236,7 @@ import Omega.POM.DiagonalRateAcceptRefreshSSTPGF
 import Omega.POM.DiagonalRateAcceptRefreshSSTStrong
 import Omega.POM.DiagonalRateAcceptRefreshSeparationExact
 import Omega.POM.DiagonalRateBinaryClosedForm
+import Omega.POM.DiagonalRateScalingDuality
 import Omega.POM.DiagonalRateCriticalContinuousTimeGeneratorMaxent
 import Omega.POM.DiagonalRateCriticalLineLaplacianFirstOrder
 import Omega.POM.DiagonalRateCriticalLaplacianPseudodeterminant
@@ -263,6 +264,7 @@ import Omega.POM.DiagonalRateSmallDistortionSynergyUniqueAdditiveGenerator
 import Omega.POM.DiagonalRateSmallDistortionSavingHalfMomentFold
 import Omega.POM.DiagonalRateSturmCauchyEigenbasis
 import Omega.POM.DiagonalRateRefreshCountRenewalLLNCLT
+import Omega.POM.DiagonalRateRefreshCountRenewalClt
 import Omega.POM.DiagonalRateRefreshRewardCltVariance
 import Omega.POM.DiagonalRateRefreshCountScgfDerivatives
 import Omega.POM.DiagonalRateTwoOrbitHeavyLightCubic
