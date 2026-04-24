@@ -729,6 +729,7 @@ import Omega.Conclusion.MaxentropyGapEqualsLogMaxfiber
 import Omega.Conclusion.MaxfiberEntropyGaugeFourmodeRigidity
 import Omega.Conclusion.MaxfiberHiddenbitCollisionSelfcalibration
 import Omega.Conclusion.MaxfiberHiddenbitBalancedBayesWall
+import Omega.Conclusion.MaxfiberHiddenbitSufficiencyVsIdentifiabilitySplit
 import Omega.Conclusion.FiberMultiplicityDiameterCubedimRigidity
 import Omega.Conclusion.MinLatchesLogStates
 import Omega.Conclusion.MinRegisterHalting
@@ -1000,6 +1001,7 @@ import Omega.Conclusion.WallisFiniteAdditiveLedgerImpossible
 import Omega.Conclusion.WallisProductCompletionThreshold
 import Omega.Conclusion.WeightedSyncCompletedTraceEven
 import Omega.Conclusion.WeightedScreenCompletionMST
+import Omega.Conclusion.WeightedFreeCmonMetricRigidity
 import Omega.Conclusion.Window10TrisectorResourceOrthogonality
 import Omega.Conclusion.SingularRingEndpointPreimageTower
 import Omega.Conclusion.Window6BinarySuffixCylinderTrichotomy

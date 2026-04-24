@@ -51,6 +51,7 @@ import Omega.SyncKernelRealInput.RealInput40MapAccuracies
 import Omega.SyncKernelRealInput.RealInput40CollisionBranchRadius
 import Omega.SyncKernelRealInput.FiniteRh40
 import Omega.SyncKernelRealInput.FiniteRhExplicitFormula
+import Omega.SyncKernelRealInput.RealInput40LogMMuPochhammerSplit
 import Omega.SyncKernelRealInput.FiniteRhPrimeOrbitOsc
 import Omega.SyncKernelRealInput.FiniteRhSqrtResonanceGeneral
 import Omega.SyncKernelRealInput.GMRandomWalkMixingPisano
