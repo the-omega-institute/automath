@@ -23,6 +23,7 @@ import Omega.SyncKernelWeighted.GallavottiCohenSlopeInvolution
 import Omega.SyncKernelWeighted.GMOddSchattenSpectralNormExtremal
 import Omega.SyncKernelWeighted.GMSoficSpectralCLT
 import Omega.SyncKernelWeighted.GMCenteredTrace3EnergyVariance
+import Omega.SyncKernelWeighted.GMDualSpectralCertificates
 import Omega.SyncKernelWeighted.GMEnergyExponentTwistCriterion
 import Omega.SyncKernelWeighted.GMTrace3SpectralNormExtremal
 import Omega.SyncKernelWeighted.GMModGapToAffineSaving
@@ -91,6 +92,7 @@ import Omega.SyncKernelWeighted.RateCenterRstarJetComplexity
 import Omega.SyncKernelWeighted.RateCenterUniqueReal
 import Omega.SyncKernelWeighted.RateCurveCenterSliceAudit
 import Omega.SyncKernelWeighted.RateCurveDualityReduction
+import Omega.SyncKernelWeighted.RateResultantUadicSplit7
 import Omega.SyncKernelWeighted.RealInput40ArityChargeCoboundary
 import Omega.SyncKernelWeighted.RealInput40Arity2dNonnegative
 import Omega.SyncKernelWeighted.RealInput40ArityChargeNoLaurent
