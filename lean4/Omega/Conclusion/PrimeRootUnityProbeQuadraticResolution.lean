@@ -33,12 +33,8 @@ private lemma conclusion_prime_root_unity_probe_quadratic_resolution_log_formula
           conclusion_prime_root_unity_probe_quadratic_resolution_lambda) =
       -conclusion_prime_root_unity_probe_quadratic_resolution_quadraticCoeff * t ^ 2 +
         conclusion_prime_root_unity_probe_quadratic_resolution_quarticCoeff * t ^ 4 := by
-  let s :=
-    -conclusion_prime_root_unity_probe_quadratic_resolution_quadraticCoeff * t ^ 2 +
-      conclusion_prime_root_unity_probe_quadratic_resolution_quarticCoeff * t ^ 4
   rw [conclusion_prime_root_unity_probe_quadratic_resolution_rho,
     conclusion_prime_root_unity_probe_quadratic_resolution_lambda, div_one, Real.log_exp]
-  simp [s]
 
 private lemma conclusion_prime_root_unity_probe_quadratic_resolution_quadraticCoeff_pos :
     0 < conclusion_prime_root_unity_probe_quadratic_resolution_quadraticCoeff := by
