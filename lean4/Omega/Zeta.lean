@@ -885,6 +885,7 @@ import Omega.Zeta.XiBqPowerEntrywiseFibonacciBinomial
 import Omega.Zeta.XiBulkEntropyStrictConvexity
 import Omega.Zeta.XiBulkBoundaryHolographicGapDissipation
 import Omega.Zeta.XiBulkCurvatureLogisticKernelDecomposition
+import Omega.Zeta.XiBulkCurvatureTomographyIdentifiability
 import Omega.Zeta.XiBulkEntropyRGStaircase
 import Omega.Zeta.XiBulkRenormalizedConstantAnomalyGap
 import Omega.Zeta.XiDyadicFibonacciCompletionBirthFiltration

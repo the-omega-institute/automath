@@ -208,6 +208,7 @@ import Omega.POM.MaxentMarkovOptimalCouplingLatentBinaryMixture
 import Omega.POM.MaxentMarkovSpectrumMonotoneInDelta
 import Omega.POM.MaxentMarkovSpectrumRateCompleteInvariant
 import Omega.POM.MaxentMarkovSpectrumSingleShotInversion
+import Omega.POM.DiagonalRateRateCurveIdentifiability
 import Omega.POM.SingleQSchurTracesCompleteFiberSpectrum
 import Omega.POM.MaxFiberEvenSingleSampleMap
 import Omega.POM.MaxFiberHphiRelativeEntropyGap
