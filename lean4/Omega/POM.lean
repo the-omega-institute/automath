@@ -15,6 +15,7 @@ import Omega.POM.A4TNewmanTransversality
 import Omega.POM.A4TNewmanLinearResponseConstant
 import Omega.POM.A4NewmanU4AlgebraicCertificate
 import Omega.POM.A4TE8TwoResolutionLayerNonembedding
+import Omega.POM.A4TE8IntersectionFieldDiscriminantIndex
 import Omega.POM.A4TracePrimitiveTwoTerm
 import Omega.POM.CollisionCKClassificationQ234
 import Omega.POM.CollisionCKFibonacci
