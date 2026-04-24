@@ -68,3 +68,5 @@ import Omega.SyncKernelRealInput.GmAffineSelfmapSpectralGap
 import Omega.SyncKernelRealInput.GMImprovabilityIffD1
 import Omega.SyncKernelRealInput.RealInput40CollisionRhkWindow
 import Omega.SyncKernelRealInput.RealInput40CollisionErrorPhase
+import Omega.SyncKernelRealInput.GMFareyLocalDensityOpnorm
+import Omega.SyncKernelRealInput.GMZeckNormalizedLimitMeasure
