@@ -11,6 +11,7 @@ import Omega.Conclusion.AdelicStokesH1RecoversCdimPrimeProfile
 import Omega.Conclusion.AffineLeftDivisibilityCriterion
 import Omega.Conclusion.DirichletTwistDivisibilityLiftMonotone
 import Omega.Conclusion.DigitalLocalFactorRationalityObstruction
+import Omega.Conclusion.DeterministicOfflineVerificationMinimalClosure
 import Omega.Conclusion.AnalyticHolographyInversionRigidity
 import Omega.Conclusion.AffineNormalFormSemidirect
 import Omega.Conclusion.AffineRegisterBudget

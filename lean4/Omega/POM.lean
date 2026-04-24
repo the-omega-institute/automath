@@ -187,8 +187,10 @@ import Omega.POM.DOverAvgExponentEqualsChernoff
 import Omega.POM.DelayMin
 import Omega.POM.DerivedFiberDeterminantExtremalEnvelope
 import Omega.POM.DerivedFiberSingleStieltjesHistogramRecovery
+import Omega.POM.RandomFiberTaskBayesError
 import Omega.POM.ClosureDiagonalToTopSpectrum
 import Omega.POM.ClosurePartitionToFullRecoveryCurve
+import Omega.POM.NormalformVsTuringBudgetUndecidable
 import Omega.POM.EhrhartEqualsOrderpolyShift
 import Omega.POM.EpsSoundCompose
 import Omega.POM.ExcitationFilterLinearBound
