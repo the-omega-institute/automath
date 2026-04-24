@@ -207,6 +207,7 @@ import Omega.SyncKernelWeighted.EdgeworthSixEight
 import Omega.SyncKernelWeighted.EinsteinLegendre
 import Omega.SyncKernelWeighted.EdgeworthFourth
 import Omega.SyncKernelWeighted.DiscSquareSubstitutionSplit
+import Omega.SyncKernelWeighted.CompletedPrimitiveQuadraticFingerprintByConst
 import Omega.SyncKernelWeighted.FiniteRhParityGeneral
 import Omega.SyncKernelWeighted.FiniteRhJensenFreeEnergy
 import Omega.SyncKernelWeighted.FiniteRhSpectralAnnihilationFilter
