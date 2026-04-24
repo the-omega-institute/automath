@@ -850,6 +850,8 @@ import Omega.Conclusion.UnitarySliceBoundaryThreeAxisIrreducibility
 import Omega.Conclusion.VisibleFiniteTypeFibonacciCompleteAudit
 import Omega.Conclusion.VisibleJointHorizonSharp2d
 import Omega.Conclusion.WallisFactorMonoid
+import Omega.Conclusion.WallisFiniteAdditiveLedgerImpossible
+import Omega.Conclusion.WallisProductCompletionThreshold
 import Omega.Conclusion.WeightedSyncCompletedTraceEven
 import Omega.Conclusion.WeightedScreenCompletionMST
 import Omega.Conclusion.Window10TrisectorResourceOrthogonality

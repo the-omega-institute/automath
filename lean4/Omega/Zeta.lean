@@ -228,6 +228,7 @@ import Omega.Zeta.XiCdimKGeneratedQuotientMaxOrder
 import Omega.Zeta.XiCriticalSlicePressureZeroDriftLyapunov
 import Omega.Zeta.XiCdimPhaseCompressionAliasingExponent
 import Omega.Zeta.XiCdimCircleLedgerSignature
+import Omega.Zeta.XiCdimSpectrumHomocyclicCircleLaw
 import Omega.Zeta.XiCdimZetaFingerprintRigidity
 import Omega.Zeta.XiCdimLocalizationSolenoidContinuousHomClassification
 import Omega.Zeta.SingleScaleDirichletImagPeriod
