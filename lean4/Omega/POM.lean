@@ -232,6 +232,7 @@ import Omega.POM.DiagonalRateDiagonalDeterminesSeparationProfile
 import Omega.POM.DiagonalRateDualPotentialReverseOrder
 import Omega.POM.DiagonalRateSchurConcavity
 import Omega.POM.DiagonalRateStrictSchurConcavity
+import Omega.POM.DiagonalRateSchurConcavityTP2
 import Omega.POM.DiagonalRateMaxAtomExtremizer
 import Omega.POM.DiagonalRateRefreshFundamentalMatrixRankone
 import Omega.POM.DiagonalRateRefreshKemenyStarClosed
