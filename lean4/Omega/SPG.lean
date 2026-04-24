@@ -48,6 +48,7 @@ import Omega.SPG.CoordinateBundleScreenClosure
 import Omega.SPG.CoordinateBundleScreenCount
 import Omega.SPG.CubeLinftyPrimitiveBoundaryRigidity
 import Omega.SPG.CubeLinftyPrimitiveExplicitMinimizer
+import Omega.SPG.CubeOptimalBoundedPoincareStokesInverse
 import Omega.SPG.CubePoincareInverse
 import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CurlReconstructionPublication

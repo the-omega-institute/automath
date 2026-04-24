@@ -68,6 +68,7 @@ import Omega.Zeta.AuditableProfiniteChebotarevFinite
 import Omega.Zeta.AuditableProfiniteChebotarevBalanceTriangle
 import Omega.Zeta.AuditableProfiniteChebotarevThreeBudgetDeterministic
 import Omega.Zeta.XiExtensionPreservingInitialObject
+import Omega.Zeta.XiTimePart9zlGcdLcmCompilerPrimorialLowerBound
 import Omega.Zeta.XiAtomicCenteredResidueSimplex
 import Omega.Zeta.XiEndpointHeatProbeResolutionAccuracyHardConstraint
 import Omega.Zeta.XiCompletenessAuditableDecomposition

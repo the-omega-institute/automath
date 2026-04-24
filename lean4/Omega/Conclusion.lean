@@ -66,6 +66,7 @@ import Omega.Conclusion.BinfoldTwoScalarCompleteReconstruction
 import Omega.Conclusion.BinarySparsityLogarithmicDeviation
 import Omega.Conclusion.BinaryGodelEllipticLiftReversibleReadout
 import Omega.Conclusion.EllipticGeometricComplexity
+import Omega.Conclusion.EscortThermodynamicsTwoPointFunctionalCalculus
 import Omega.Conclusion.ExtremeBiasFinitepartRhExponentDecoupling
 import Omega.Conclusion.BoundedPopcountExactLogRigidity
 import Omega.Conclusion.BigWittExactSpectralBudget
