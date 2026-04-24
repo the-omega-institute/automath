@@ -734,6 +734,7 @@ import Omega.Folding.FirstTrigonalStructureGoldenRatio
 import Omega.Folding.FoldBinRecover2Pi
 import Omega.Folding.FoldCollisionGapResonanceLadderU
 import Omega.Folding.FoldZeroDivisorLowerBound
+import Omega.Folding.FoldComplementFixedWordPeriod3
 import Omega.Folding.FoldInverseLimitXmXinfty
 import Omega.Folding.HypercubeCycleLatticeThetaAsymptotic
 import Omega.Folding.GaugeAnomalySpectralQuarticJacobianSimple
