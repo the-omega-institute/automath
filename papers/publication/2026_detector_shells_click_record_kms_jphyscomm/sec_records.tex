@@ -207,7 +207,7 @@ used later is only the modelling closure
 which calibrates the counter attempt rate to the stationary weak-coupling
 excitation rate of the chosen detector core.
 
-The construction remains an effective measurement model in the same broad spirit as dead-time counter theory \cite{Muller1973,CantorTeich1975}, not a first-principles AQFT derivation of detector back-action \cite{Fewster2020,PoloGomezEtAl2022}. Its purpose is narrower and sufficient for the theorem chain here: it makes explicit which repeated-interaction ingredients produce the binary kernels and isolates the single closure step where the stationary UDW response is converted into the attempt intensity driving the sampled record.
+The construction remains an effective measurement model in the same broad spirit as dead-time counter theory \cite{Muller1973,CantorTeich1975}, not a first-principles AQFT derivation of detector back-action or a general solution to the locality constraints emphasized in the measurement literature \cite{Sorkin1993,FewsterVerch2020,Fewster2020,PoloGomezEtAl2022}. Its purpose is narrower and sufficient for the theorem chain here: it makes explicit which repeated-interaction ingredients produce the binary kernels and isolates the single closure step where the stationary UDW response is converted into the attempt intensity driving the sampled record.
 
 All record-level conclusions below are therefore conditional only in this controlled sense. Once \Cref{ass:counting-readout-main} is fixed, the later statements about support, hazards, covariance, exact $1$-dependence, and finite-record diagnostics are ordinary consequences of the labelled kernels. This separation is what allows the shell construction later to distinguish response-model assumptions from record-theoretic facts.
 
@@ -531,6 +531,15 @@ inferred from vanishing covariances. It follows from a stronger
 labelled-kernel factorization when the hidden transition matrix loses its
 nontrivial eigenmode.
 
+From the probability side, the relevant comparison class here is exact finite
+dependence rather than finite-state Markov order. Classical $m$-dependent limit
+theory begins with \cite{HoeffdingRobbins1948,Diananda1955}, while
+Holroyd--Liggett \cite{HolroydLiggett2016} give natural stationary finitely
+dependent processes that lie outside block-factor and finite-state Markov-chain
+templates. The present theorem is narrower and explicit: it identifies a
+sampled dead-time hidden-Markov/renewal law whose exact-$1$-dependence point is
+computable and is reached without flattening the renewal hazard.
+
 \begin{lemma}[Critical-rate uniqueness and covariance phase]\label{lem:critical-rate-main}
 For fixed $\kappa_{\mathrm r},\Delta\tau>0$, the equation $\lambda_{\mathrm{hid}}(\Gamma)=0$, with $\lambda_{\mathrm{hid}}$ defined by~\eqref{eq:lambda-hid-main}, has exactly one positive solution. This solution, denoted $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$, is characterized by
 \begin{equation}\label{eq:gamma-c-main}
@@ -762,6 +771,8 @@ Let $\rho=\PP(A_0=1)$ and let $\lambda_{\mathrm{hid}}$ be the eigenvalue in~\eqr
 \begin{equation}\label{eq:cov-main}
 \operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1},\qquad n\ge1.
 \end{equation}
+Thus every covariance beyond lag one is carried by the single hidden mode
+$\lambda_{\mathrm{hid}}$. 
 Consequently there is a unique critical rate $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)>0$, defined by~\eqref{eq:gamma-c-main}. The sampled record is exact $1$-dependent if and only if $\Gamma=\Gamma_c$. At the threshold,
 \[
 \operatorname{Cov}(A_0,A_n)=0\quad(n\ge2),
@@ -779,7 +790,100 @@ $\kappa_{\mathrm r}\neq\Gamma$ and proves strict hazard increase for both
 unequal and equal rates. The gap law has full support for positive parameters,
 and \Cref{lem:hazard-obstruction-main} then excludes every finite Markov order.
 
-The covariance formula is Lemma~\ref{lem:covariance-transfer-main}, which is identical to~\eqref{eq:cov-main}. By Lemma~\ref{lem:stationary-main}, $a-\rho<0$. Lemma~\ref{lem:critical-rate-main} gives the single zero of $\lambda_{\mathrm{hid}}$ and its sign on both sides. Hence the lag-one covariance is always negative; for $n\ge2$ all covariances vanish at $\Gamma=\Gamma_c$, are negative for $\Gamma<\Gamma_c$, and alternate in sign for $\Gamma>\Gamma_c$. Finally, Lemma~\ref{lem:one-dep-criterion-main} gives the stated equivalence between exact $1$-dependence and $\Gamma=\Gamma_c$.
+For the covariance formula, write
+\[
+P=
+\begin{pmatrix}
+p&q\\
+b&1-b
+\end{pmatrix},
+\qquad q=1-p,
+\qquad
+u=T_1\mathbf 1=\binom{q}{a}.
+\]
+By Lemma~\ref{lem:stationary-main},
+\[
+\pi=\left(\frac{b}{q+b},\frac{q}{q+b}\right),
+\qquad
+\rho=\pi u=\frac{q(1-c)}{q+b}.
+\]
+Hence
+\[
+q-\rho=\frac{q(q-a)}{q+b},
+\qquad
+a-\rho=-\frac{b(q-a)}{q+b},
+\]
+so
+\[
+u-\rho\mathbf 1
+=
+\frac{q-a}{q+b}\binom{q}{-b}.
+\]
+Set $w=(q,-b)^\top$. Then
+\[
+Pw=
+\begin{pmatrix}
+pq-qb\\
+bq-b+b^2
+\end{pmatrix}
+=(p-b)\binom{q}{-b}
+=\lambda_{\mathrm{hid}}w,
+\]
+so $w$ spans the unique nonstationary hidden mode. Therefore
+\[
+P^{n-1}u=\rho\mathbf 1+\lambda_{\mathrm{hid}}^{\,n-1}(u-\rho\mathbf 1),
+\qquad n\ge1.
+\]
+Because every click-labelled transition ends in the hidden state $D$,
+\[
+\PP(A_0=1,A_n=1)=\rho\,e_D^\top P^{n-1}u.
+\]
+Taking the $D$ component of the previous identity gives
+\[
+e_D^\top P^{n-1}u
+=\rho+\lambda_{\mathrm{hid}}^{\,n-1}(a-\rho),
+\]
+hence
+\[
+\PP(A_0=1,A_n=1)
+=\rho\bigl[\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}\bigr].
+\]
+Subtracting $\rho^2$ yields~\eqref{eq:cov-main}. By
+Lemma~\ref{lem:stationary-main}, $\rho>0$ and $a-\rho<0$.
+
+Lemma~\ref{lem:critical-rate-main} gives the unique positive zero
+$\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ of $\lambda_{\mathrm{hid}}$ together
+with the sign change across that threshold. Since $\rho(a-\rho)<0$, the lag-one
+covariance is always negative. For $n\ge2$, the covariances vanish at
+$\Gamma=\Gamma_c$, are negative for $\Gamma<\Gamma_c$, and alternate in sign
+for $\Gamma>\Gamma_c$.
+
+It remains to identify the exact-$1$-dependence point. If
+$\Gamma=\Gamma_c$, then $\lambda_{\mathrm{hid}}=0$, equivalently $p=b$, so
+\[
+P=
+\begin{pmatrix}
+p&q\\
+p&q
+\end{pmatrix}
+=\mathbf 1\pi .
+\]
+Thus after one unobserved sample the hidden state is resampled from
+stationarity, and Lemma~\ref{lem:kernel-factorization-main} gives the
+labelled-kernel factorization that makes the visible output exact
+$1$-dependent.
+
+Conversely, if the visible process were exact $1$-dependent,
+then $A_0$ and $A_2$ would be independent and therefore uncorrelated. Applying
+\eqref{eq:cov-main} with $n=2$ gives
+\[
+0=\operatorname{Cov}(A_0,A_2)=\rho(a-\rho)\lambda_{\mathrm{hid}}.
+\]
+Because $\rho(a-\rho)\neq0$, one must have $\lambda_{\mathrm{hid}}=0$, hence
+$\Gamma=\Gamma_c$ by Lemma~\ref{lem:critical-rate-main}. This proves the stated
+equivalence. In particular, covariance is used only for the converse
+obstruction; independence at the threshold comes from the rank-one kernel
+factorization.
 \end{proof}
 
 The memory-transition threshold is therefore not a softened version of the ideal Parry point. The ideal point is a standard maximum-entropy benchmark for a restricted grammar; the sampled boundary-reset recovery point is the theorem-level result, namely an exact dependence transition inside a renewal class whose zero-run law has full support and hence supports every finite binary word. The essential feature is the hidden-eigenvalue criterion: the nontrivial hidden mode $\lambda_{\mathrm{hid}}$ vanishes precisely at $\Gamma_c$, labelled kernels factor through stationarity at that point, and away from it the lag-two covariance obstructs exact $1$-dependence. The same recovery mechanism is incompatible both with the Parry support constraint and with a Bernoulli full-support benchmark, as made explicit below. \Cref{fig:hazard-cov} illustrates both the strictly increasing hazard and the covariance phase change across $\Gamma_c$.
@@ -1062,9 +1166,11 @@ Divide by $\EE N_N=N\rho$ and let $N\to\infty$. The geometric covariance tail yi
 =
 1-\rho+\frac{2(a-\rho)}{1-\lambda_{\mathrm{hid}}}.
 \]
-This limit is automatically nonnegative because each finite-$N$ ratio
-$\Var(N_N)/\EE N_N$ is nonnegative. The denominator is positive and
-$a-\rho<0$, so the limit is strictly less than $1$.
+Evaluating~\eqref{eq:spectrum-main} at $\theta=0$ shows that this limit is
+$f(0)/\rho$. Since $f$ is the spectral density of the stationary covariance
+sequence, the Herglotz theorem gives $f(\theta)\ge0$ for every $\theta$, hence
+the limit is nonnegative. The denominator is positive and $a-\rho<0$, so the
+limit is strictly less than $1$.
 \end{proof}
 
 Operationally, the memory shell can therefore be located by more than the sign of one covariance. As one scans through stationary observers, the lag profile changes phase at exact $1$-dependence, while the whole renewal class remains antibunched and low-frequency suppressed. This is a robust signature in finite counting data and not merely a formal property of an idealized symbolic process. \Cref{fig:spectrum-fano} displays both the spectral density and the Fano factor across the parameter range.
@@ -1502,15 +1608,36 @@ regeneration times, and assume \eqref{eq:exp-tail-main}. Define
 \[
 Z_n=(A_nA_{n+2}-\mu_2)-2\rho(A_n-\rho),
 \qquad
-\widehat\rho=\frac1N\sum_{n=0}^{N-1}A_n,
+\widehat\rho_N=\frac1N\sum_{n=0}^{N-1}A_n,
 \]
 \[
 \widehat\gamma_2=
-\frac{1}{N-2}\sum_{n=0}^{N-3}(A_n-\widehat\rho)(A_{n+2}-\widehat\rho),
+\frac{1}{N-2}\sum_{n=0}^{N-3}(A_n-\widehat\rho_N)(A_{n+2}-\widehat\rho_N),
 \qquad
 \widetilde\gamma_{2,N}=\frac1N\sum_{n=0}^{N-1}Z_n.
 \]
-Then
+Set
+\[
+P_N:=\sum_{n=0}^{N-3}A_nA_{n+2},
+\qquad
+B_N:=A_0+A_1+A_{N-2}+A_{N-1},
+\qquad
+r_N^{\mathrm{lin}}:=
+\frac{\widehat\rho_N(B_N-4\widehat\rho_N)}{N-2}.
+\]
+Then the exact finite-sample identity
+\[
+\widehat\gamma_2-\gamma_2
+=
+\frac{P_N}{N-2}-\mu_2
+-2\rho(\widehat\rho_N-\rho)-(\widehat\rho_N-\rho)^2+r_N^{\mathrm{lin}}
+\]
+holds, and
+\[
+r_N^{\mathrm{lin}}=O(N^{-1})
+\qquad\text{almost surely.}
+\]
+Consequently,
 \[
 \widehat\gamma_2-\gamma_2-\widetilde\gamma_{2,N}=O_{\PP}(N^{-1}).
 \]
@@ -1522,46 +1649,83 @@ In particular,
 \end{lemma}
 
 \begin{proof}
-Expanding the empirical covariance gives
+Because
+\[
+\sum_{n=0}^{N-3}A_n+\sum_{n=0}^{N-3}A_{n+2}
+=
+\sum_{n=0}^{N-3}A_n+\sum_{n=2}^{N-1}A_n
+=
+2\sum_{n=0}^{N-1}A_n-B_N
+=
+2N\widehat\rho_N-B_N,
+\]
+expanding the empirical covariance gives
 \[
 \widehat\gamma_2-\gamma_2
 =
-\frac{1}{N-2}\sum_{n=0}^{N-3}(A_nA_{n+2}-\mu_2)
--2\rho(\widehat\rho-\rho)-(\widehat\rho-\rho)^2.
+\frac{P_N}{N-2}-\mu_2
+-\widehat\rho_N\frac{2N\widehat\rho_N-B_N}{N-2}
++\widehat\rho_N^2+\rho^2.
 \]
-Subtracting
+After regrouping the quadratic terms,
+\[
+\widehat\gamma_2-\gamma_2
+=
+\frac{P_N}{N-2}-\mu_2
+-2\rho(\widehat\rho_N-\rho)-(\widehat\rho_N-\rho)^2+r_N^{\mathrm{lin}},
+\]
+which is the claimed exact identity. Since $0\le \widehat\rho_N\le1$ and
+$0\le B_N\le4$,
+\[
+|r_N^{\mathrm{lin}}|
+\le
+\frac{\widehat\rho_N(B_N+4\widehat\rho_N)}{N-2}
+\le
+\frac{8}{N-2},
+\]
+so $r_N^{\mathrm{lin}}=O(N^{-1})$ almost surely.
+
+Now subtract
 \[
 \widetilde\gamma_{2,N}
 =
-\frac1N\sum_{n=0}^{N-1}(A_nA_{n+2}-\mu_2)-2\rho(\widehat\rho-\rho)
+\frac1N\sum_{n=0}^{N-1}(A_nA_{n+2}-\mu_2)-2\rho(\widehat\rho_N-\rho)
 \]
-therefore yields
+to obtain
 \[
 \widehat\gamma_2-\gamma_2-\widetilde\gamma_{2,N}
 =
-r_N^{\partial}-(\widehat\rho-\rho)^2,
+r_N^{\mathrm{prod}}+r_N^{\mathrm{lin}}-(\widehat\rho_N-\rho)^2,
 \]
-with
+where
 \[
-r_N^{\partial}
+r_N^{\mathrm{prod}}
 =
-\left(\frac{1}{N-2}-\frac1N\right)
-\sum_{n=0}^{N-3}(A_nA_{n+2}-\mu_2)
+\left(\frac1{N-2}-\frac1N\right)\sum_{n=0}^{N-3}(A_nA_{n+2}-\mu_2)
 -\frac1N\sum_{n=N-2}^{N-1}(A_nA_{n+2}-\mu_2).
 \]
 Because $A_n\in\{0,1\}$ and $0\le\mu_2\le1$, every summand
 $A_nA_{n+2}-\mu_2$ is bounded by $1$ in absolute value. Hence
 \[
-|r_N^{\partial}|
+|r_N^{\mathrm{prod}}|
 \le
-\left(\frac{1}{N-2}-\frac1N\right)(N-2)+\frac2N
+\left(\frac1{N-2}-\frac1N\right)(N-2)+\frac2N
 =\frac4N,
 \]
-so $r_N^{\partial}=O(N^{-1})$ almost surely. Also $A_n-\rho$ is a bounded
+so $r_N^{\mathrm{prod}}=O(N^{-1})$ almost surely. Also $A_n-\rho$ is a bounded
 centered regenerative reward, so the standard regenerative CLT gives
-$\sqrt N(\widehat\rho-\rho)=O_{\PP}(1)$ and therefore
-$(\widehat\rho-\rho)^2=O_{\PP}(N^{-1})$. Combining the two bounds proves the
-displayed claim, and multiplying by $\sqrt N$ gives the final statement.
+\[
+\sqrt N\,(\widehat\rho_N-\rho)=O_{\PP}(1),
+\]
+hence
+\[
+(\widehat\rho_N-\rho)^2=O_{\PP}(N^{-1}).
+\]
+Therefore
+\[
+\widehat\gamma_2-\gamma_2-\widetilde\gamma_{2,N}=O_{\PP}(N^{-1}),
+\]
+and multiplying by $\sqrt N$ gives the final statement.
 \end{proof}
 
 \begin{theorem}[Regenerative $1$-dependent cycle CLT and implementable lag-two variance estimator]\label{thm:cycle-block-main}
@@ -1686,7 +1850,9 @@ The exponential tail gives $R_N=o_{\PP}(\sqrt N)$. Hence
 	\Rightarrow
 	\mathcal N(0,\sigma_2^2).
 	\]
-	By \Cref{lem:lag2-boundary-main},
+	By \Cref{lem:lag2-boundary-main}, the endpoint linearization remainder
+	$r_N^{\mathrm{lin}}$ and the remaining boundary mismatch are jointly
+	absorbed into an $O_{\PP}(N^{-1})$ term, so
 	\[
 	\widehat\gamma_2-\gamma_2-\widetilde\gamma_{2,N}=O_{\PP}(N^{-1}),
 	\]
@@ -1810,9 +1976,64 @@ O_{\PP}(\delta_N^2b_N)
 o_{\PP}(1),
 \]
 because $b_N=O(N^{1/3})$. Therefore replacing $\widetilde B_{r,N}$ by
-$\widehat B_{r,N}$ changes both the empirical batch mean and the empirical
-batch variance by $o_{\PP}(b_N)$, and after division by $\bar L_Nb_N$ this
-yields
+$\widehat B_{r,N}$ changes the empirical batch mean by
+\[
+|\bar B_N-\widetilde B_N^\ast|
+=
+\left|\frac1{M_N}\sum_{r=1}^{M_N}\Delta_{r,N}\right|
+\le
+\left(\frac1{M_N}\sum_{r=1}^{M_N}\Delta_{r,N}^2\right)^{1/2}
+=
+o_{\PP}(\sqrt{b_N}),
+\]
+so in particular
+\[
+\frac{(\bar B_N-\widetilde B_N^\ast)^2}{b_N}\to0
+\qquad\text{in probability.}
+\]
+For the empirical batch variance, set
+\[
+\Delta_N^\ast:=\frac1{M_N}\sum_{r=1}^{M_N}\Delta_{r,N},
+\qquad
+D_{r,N}:=\Delta_{r,N}-\Delta_N^\ast.
+\]
+Then
+\[
+\widehat B_{r,N}-\bar B_N
+=
+(\widetilde B_{r,N}-\widetilde B_N^\ast)+D_{r,N},
+\]
+and therefore
+\[
+\begin{aligned}
+&\left|
+\frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widehat B_{r,N}-\bar B_N)^2
+-\frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2
+\right| \\
+&\qquad\le
+\frac{2}{M_Nb_N}
+\left(\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2\right)^{1/2}
+\left(\sum_{r=1}^{M_N}D_{r,N}^2\right)^{1/2}
+\,+\,
+\frac1{M_Nb_N}\sum_{r=1}^{M_N}D_{r,N}^2.
+\end{aligned}
+\]
+Since centering cannot increase the Euclidean norm,
+\[
+\sum_{r=1}^{M_N}D_{r,N}^2
+=
+\sum_{r=1}^{M_N}(\Delta_{r,N}-\Delta_N^\ast)^2
+\le
+\sum_{r=1}^{M_N}\Delta_{r,N}^2,
+\]
+while Step~3 gives
+\[
+\frac1{M_Nb_N}\sum_{r=1}^{M_N}(\widetilde B_{r,N}-\widetilde B_N^\ast)^2
+=
+O_{\PP}(1).
+\]
+Hence the displayed bound is $o_{\PP}(1)$, so after division by
+$\bar L_N(M_N-1)/M_N=\bar L_N+o_{\PP}(1)$ this yields
 \[
 \widehat\sigma_{2,N}^2-\widetilde\sigma_{2,N}^{2}\to0
 \qquad\text{in probability on }E_N.
@@ -1876,8 +2097,10 @@ z_{1-\alpha/2}\frac{\widehat\sigma_{2,N}}{\sqrt N}.
 This interval is a fixed-setting statement: it applies to $\gamma_2$ at the
 chosen detector design. Along a scan, part~(ii) gives only the deterministic
 first-order transversality of the shell crossing.
-\item In the scan setting of part~(ii), suppose one also has a local root
-estimator $\widehat s_N\to s_*$ and a derivative estimator
+\item In the scan setting of part~(ii), no root-estimator central limit theorem
+or confidence interval is derived from the fixed-setting regenerative CLT
+alone. If one \emph{separately} supplies a scan-design analysis producing a
+local root estimator $\widehat s_N\to s_*$ and a derivative estimator
 $\widehat{\gamma_2'}(\widehat s_N)\to\gamma_2'(s_*)\neq0$ in probability such
 that
 \[
@@ -1898,17 +2121,10 @@ Then
 \Rightarrow
 \mathcal N\!\left(0,\frac{\sigma_2^2}{\gamma_2'(s_*)^2}\right).
 \]
-If $\sigma_2^2>0$, the resulting asymptotic two-sided $(1-\alpha)$ confidence
-interval for the scan coordinate is
-\[
-\widehat s_N\pm
-z_{1-\alpha/2}\,
-\frac{\widehat\sigma_{2,N}}
-{\sqrt N\,|\widehat{\gamma_2'}(\widehat s_N)|}.
-\]
-This is a scan-design statement: unlike part~(iii), it requires a local root
-estimator and derivative estimator across nearby detector settings, not only a
-single fixed-setting record.
+This is an external scan-design add-on, not a consequence proved from the
+single-setting regenerative CLT in \Cref{thm:cycle-block-main}. The theorem
+chain used later in the paper relies only on parts~(i)--(iii) together with the
+transversality statement in part~(ii).
 \end{enumerate}
 \end{proposition}
 
@@ -1937,22 +2153,66 @@ contradicting $H_{s_0}(x_c)=0$. Hence $H_{s_0}'(x_c)\neq0$, so differentiation o
 -\frac{e^{-s_0}H_{s_0}'(x_c)}{\kappa_{\mathrm r}(1-x_c)}
 \neq0.
 \]
-If $s_0=1$, then
+If $s_0=1$, then $\Gamma_c=\kappa_{\mathrm r}$. Here
+$s_0=\kappa_{\mathrm r}\Delta\tau$ is held fixed while $\Gamma$ varies, so this
+derivative is not the derivative of the diagonal equal-rate family
+$\Gamma\mapsto e^{-\Gamma\Delta\tau}(1-\Gamma\Delta\tau)$. Instead one must
+differentiate the fixed-$(\kappa_{\mathrm r},\Delta\tau)$ quotient at $x=1$:
 \[
-\lambda_{\mathrm{hid}}(\Gamma)=\frac{e^{-1}-(\Gamma/\kappa_{\mathrm r})e^{-\Gamma/\kappa_{\mathrm r}}}{1-\Gamma/\kappa_{\mathrm r}}
-=\frac{e^{-1}}{2}\left(\frac{\Gamma}{\kappa_{\mathrm r}}-1\right)
+\lambda_{\mathrm{hid}}(\Gamma)
+=\frac{e^{-1}-x e^{-x}}{1-x},
+\qquad
+x=\frac{\Gamma}{\kappa_{\mathrm r}}.
+\]
+Writing $x=1+\delta$ gives
+\[
+x e^{-x}
+=e^{-1}(1+\delta)e^{-\delta}
+=e^{-1}\left(1-\frac{\delta^2}{2}+O(\delta^3)\right),
+\]
+hence
+\[
+e^{-1}-x e^{-x}
+=\frac{e^{-1}}{2}\delta^2+O(\delta^3).
+\]
+Since $1-x=-\delta$, we obtain
+\[
+\lambda_{\mathrm{hid}}(\Gamma)
+=-\frac{e^{-1}}{2}\left(\frac{\Gamma}{\kappa_{\mathrm r}}-1\right)
 +O\!\left(\left(\frac{\Gamma}{\kappa_{\mathrm r}}-1\right)^2\right),
 \]
-so again $\lambda_{\mathrm{hid}}'(\Gamma_c)\neq0$. Therefore $\lambda_{\mathrm{hid}}$ has a simple zero at $\Gamma_c$ for every fixed $(\kappa_{\mathrm r},\Delta\tau)$.
+so
+\[
+\lambda_{\mathrm{hid}}'(\Gamma_c)
+=-\frac{e^{-1}}{2\kappa_{\mathrm r}}\neq0.
+\]
+Thus, when $s_0=1$ and $\Gamma$ increases through
+$\Gamma_c=\kappa_{\mathrm r}$, the hidden mode decreases through zero:
+$\lambda_{\mathrm{hid}}>0$ for $\Gamma<\Gamma_c$ and
+$\lambda_{\mathrm{hid}}<0$ for $\Gamma>\Gamma_c$. Since
+$\gamma_2=\rho(a-\rho)\lambda_{\mathrm{hid}}$ with $\rho(a-\rho)<0$, the
+lag-two covariance increases through zero instead:
+$\gamma_2<0$ below the shell and $\gamma_2>0$ above it. Equivalently, on this
+branch the sign of $d\gamma_2/ds(s_*)$ agrees with the sign of
+$\Gamma_+'(s_*)$ because both $\rho(a-\rho)$ and
+$\lambda_{\mathrm{hid}}'(\Gamma_c)$ are negative.
+Therefore $\lambda_{\mathrm{hid}}$ has a simple zero at $\Gamma_c$ for every
+fixed $(\kappa_{\mathrm r},\Delta\tau)$.
 
 Along a $C^1$ scan with fixed $(\kappa_{\mathrm r},\Delta\tau)$ and $\Gamma_+(s_*)=\Gamma_c$, the identity $\gamma_2(s)=\rho(s)(a(s)-\rho(s))\lambda_{\mathrm{hid}}(\Gamma_+(s))$ gives
 \[
 \frac{d\gamma_2}{ds}(s_*)
 =\rho_*(a_*-\rho_*)\lambda_{\mathrm{hid}}'(\Gamma_c)\frac{d\Gamma_+}{ds}(s_*),
 \]
-because the derivative of the prefactor is multiplied by $\lambda_{\mathrm{hid}}(\Gamma_c)=0$. Here $\rho_*>0$ and $a_*-\rho_*<0$, while $\lambda_{\mathrm{hid}}'(\Gamma_c)\neq0$ and $d\Gamma_+/ds(s_*)\neq0$, so $d\gamma_2/ds(s_*)\neq0$. This proves the first-order shell-localization claim. Item (iii) is the studentized confidence interval from \Cref{thm:cycle-block-main}.
+because the derivative of the prefactor is multiplied by
+$\lambda_{\mathrm{hid}}(\Gamma_c)=0$. Here $\rho_*>0$ and $a_*-\rho_*<0$, while
+$\lambda_{\mathrm{hid}}'(\Gamma_c)\neq0$ and $d\Gamma_+/ds(s_*)\neq0$, so
+$d\gamma_2/ds(s_*)\neq0$. This proves the first-order shell-localization claim.
+Item (iii) is the fixed-setting studentized confidence interval from
+\Cref{thm:cycle-block-main}.
 
-For item (iv), the displayed first-order expansion gives
+For item (iv), the displayed first-order expansion is assumed as part of the
+separate scan-design input. Under that additional assumption,
 \[
 \sqrt N\,(\widehat s_N-s_*)
 =
