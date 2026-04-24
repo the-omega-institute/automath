@@ -1375,3 +1375,4 @@ import Omega.Zeta.XiBasepointScanGramDeterminantSchurIncrement
 import Omega.Zeta.AbelResidueClassChannelPoleExpansion
 import Omega.Zeta.AbelDiagonalRenormalizationRhCriterion
 import Omega.Zeta.XiFoldUniformBaselineGoldenThreshold
+import Omega.Zeta.XiJensenPoissonIntertwinerFractionalDerivative

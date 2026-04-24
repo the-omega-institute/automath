@@ -960,3 +960,4 @@ import Omega.POM.FiberInhomConditionalUniformity
 import Omega.POM.DiagonalRateMixtureOptimalityCriterion
 import Omega.POM.KCollisionEkkRootPhaseQuantization
 import Omega.POM.DefectEccentricityEnergy
+import Omega.POM.PathIndsetPsiFactorizationIrreducible
