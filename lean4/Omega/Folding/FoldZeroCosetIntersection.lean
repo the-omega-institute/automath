@@ -16,7 +16,8 @@ def fold_zero_coset_intersection_card (M g h : ℕ) : ℕ :=
 /-- Paper label: `lem:fold-zero-coset-intersection`. In this concrete model, the pairwise
 compatibility criterion is exactly the stated divisibility condition and the resulting
 intersection size is the gcd. -/
-theorem paper_fold_zero_coset_intersection (M g h : ℕ) (hM : Even M) (hg : g ∣ M / 2)
+theorem fold_zero_coset_intersection_concrete_model_theorem
+    (M g h : ℕ) (hM : Even M) (hg : g ∣ M / 2)
     (hh : h ∣ M / 2) :
     (fold_zero_coset_intersection_nonempty M g h ↔
         2 * Nat.gcd g h ∣ Int.natAbs ((h : ℤ) - g)) ∧
