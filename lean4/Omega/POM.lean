@@ -958,3 +958,4 @@ import Omega.POM.FiberCorrDecay
 import Omega.POM.FiberInhomConditionalUniformity
 import Omega.POM.DiagonalRateMixtureOptimalityCriterion
 import Omega.POM.KCollisionEkkRootPhaseQuantization
+import Omega.POM.DefectEccentricityEnergy

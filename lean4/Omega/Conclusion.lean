@@ -1160,3 +1160,4 @@ import Omega.Conclusion.Window6GaugeGapUniqueTernaryScar
 import Omega.Conclusion.Q13Q15Mixed2k3lPeriodicShells
 import Omega.Conclusion.Window6GeometricOddOperatorShadowOnedim
 import Omega.Conclusion.LeyangGlobalLocalQ5UnramifiedCubic
+import Omega.Conclusion.Window6GeometricDiagonalBitResidualShadow
