@@ -651,6 +651,7 @@ import Omega.Conclusion.JGEllipsePackingSqrtLaw
 import Omega.Conclusion.JGEllipsePrimeLogGenerator
 import Omega.Conclusion.JGFocalDistanceDecoding
 import Omega.Conclusion.JoukowskyHolomorphicBlindnessRadialIdentifiability
+import Omega.Conclusion.JoukowskyProductAnalyticBlindnessMinimalRadialSufficiency
 import Omega.Conclusion.KernelChainRule
 import Omega.Conclusion.KirchhoffGreenDeterminantIdentity
 import Omega.Conclusion.KrylovHankelFibonacci
@@ -1104,6 +1105,7 @@ import Omega.Conclusion.SerrinRealizableMeanConeCollapse
 import Omega.Conclusion.SerrinRigidityZeroSideinfoRate
 import Omega.Conclusion.SerrinEllipsoidFluxIdentifiability
 import Omega.Conclusion.SerrinSupportExactScreenCollapse
+import Omega.Conclusion.SerrinGeometryFactorRenyiMomentTrivialization
 import Omega.Conclusion.SerrinSupportScreenRankAtmostOne
 import Omega.Conclusion.SerrinWulffScaleLedgerImpossibility
 import Omega.Conclusion.SerrinWindow6MinimalAnomalyCertificate

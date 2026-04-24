@@ -232,6 +232,7 @@ import Omega.Zeta.XiNaturalExtensionPeriodicOrbitZetaPreservation
 import Omega.Zeta.XiMittagLefflerKfoldZeroQuantization
 import Omega.Zeta.XiMixedCurvatureZeroCriterion
 import Omega.Zeta.XiNaturalExtensionMinimalDAlphabetRealization
+import Omega.Zeta.XiTraceLatticeDiscriminantLedger
 import Omega.Zeta.PhaseLiftFixedSlice
 import Omega.Zeta.XiNullMicroKlWindow
 import Omega.Zeta.XiZeroTempComparability
