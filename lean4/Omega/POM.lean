@@ -347,6 +347,7 @@ import Omega.POM.ParryOnesCLT
 import Omega.POM.UnifXnLocalLimitParry
 import Omega.POM.PrimeRegisterGodelFactorialPointwise
 import Omega.POM.FenceMaxchainsEuler
+import Omega.POM.FenceMaxchainsAllIsolatedOptimal
 import Omega.POM.FenceMobiusRigidity
 import Omega.POM.FenceRiccatiError
 import Omega.POM.ForbiddenPairFibGap
@@ -863,6 +864,7 @@ import Omega.POM.RewriteNormalformMinimalAudit
 import Omega.POM.ValueLayerRewritingTerminating
 import Omega.POM.VisibleThickTail
 import Omega.POM.VisibleWalshCommutatorDefect
+import Omega.POM.VisibleWalshGramTransfer
 import Omega.POM.VisibleWalshParsevalFrame
 import Omega.POM.WitnessExtractionOptimalSuccess
 import Omega.POM.DerivedBinaryAdmissibilityGoldenRateFloor

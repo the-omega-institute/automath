@@ -309,6 +309,7 @@ import Omega.Zeta.XiTerminalZmLeyangFiniteBranchRegular4aryAddress
 import Omega.Zeta.XiTimefiberLeyangTwoBranchJensenAverage
 import Omega.Zeta.XiTimefiberLeyangEndpointBranchScaling
 import Omega.Zeta.XiToeplitzRankStabilizesDistinctUnitcircleRoots
+import Omega.Zeta.XiToeplitzFirstSingularPrincipalMinorSimpleSpectrum
 import Omega.Zeta.XiToeplitzInertiaStabilizesToKappa
 import Omega.Zeta.XiToeplitzDetVerblunsky
 import Omega.Zeta.XiToeplitzPrincipalMinorDiscreteCurvatureRecovery
