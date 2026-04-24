@@ -724,6 +724,7 @@ import Omega.POM.MomentSymmetricPower
 import Omega.POM.PartitionPressureKnapsack
 import Omega.POM.PathIndSetPolyClosed
 import Omega.POM.PathIndsetLeyangCyclotomicParam
+import Omega.POM.PathIndsetSplittingFieldRealCyclotomic
 import Omega.POM.PhaseResidualLinearizationSqrt15
 import Omega.POM.HardcorePathMarginalClosedForm
 import Omega.POM.PellConeAutomorphism
