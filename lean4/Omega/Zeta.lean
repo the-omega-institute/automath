@@ -1181,6 +1181,7 @@ import Omega.Zeta.XiPwTypeSafetyNull
 import Omega.Zeta.XiRandomPrimeSingleRoundAuditFalseAccept
 import Omega.Zeta.XiReadReflectorFactorization
 import Omega.Zeta.XiRealInput40LogMInftyTruncationBound
+import Omega.Zeta.XiRealInput40OutputFreezingPositiveEntropyHalffill
 import Omega.Zeta.XiReplicaSoftcoreReciprocalMomentQRecurrence
 import Omega.Zeta.XiReverseKLCyclicEnergyEquivalence
 import Omega.Zeta.XiReverseKLCyclicKLDecomposition
