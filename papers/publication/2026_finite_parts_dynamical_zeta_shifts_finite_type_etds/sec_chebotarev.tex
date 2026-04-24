@@ -72,9 +72,9 @@ character convention}
 \]
 \textbf{Thus every class-indicator expansion and every later Fourier
 readout uses the conjugated character value
-\(\overline{\chi_\varrho(C)}\), equivalently \(\chi_\varrho(C^{-1})\);
-we do not replace this by \(\chi_\varrho(C)\) unless the character is
-real-valued.}
+\(\overline{\chi_\varrho(C)}\). By unitarity this also equals
+\(\chi_\varrho(C^{-1})\), but we do not replace it by
+\(\chi_\varrho(C)\) unless the character is real-valued.}
 
 \medskip
 \noindent\textbf{Logarithm convention for \S\ref{sec:chebotarev}.}
@@ -109,9 +109,6 @@ Likewise, for every \(m\ge 2\) and every \(\sigma\in\Irr(G)\), the value
     =\frac{|C|}{|G|}
       \sum_{\varrho\in\Irr(G)}
         \overline{\chi_\varrho(C)}\,\chi_\varrho(g)
-    =\frac{|C|}{|G|}
-      \sum_{\varrho\in\Irr(G)}
-        \chi_\varrho(C^{-1})\,\chi_\varrho(g).
   \]
 \end{proposition}
 
@@ -132,10 +129,9 @@ Likewise, for every \(m\ge 2\) and every \(\sigma\in\Irr(G)\), the value
   \[
     \langle \mathbf 1_C,\chi_\varrho\rangle
     =\frac{1}{|G|}\sum_{g\in C}\overline{\chi_\varrho(g)}
-    =\frac{|C|}{|G|}\overline{\chi_\varrho(C)}
-    =\frac{|C|}{|G|}\chi_\varrho(C^{-1}),
+    =\frac{|C|}{|G|}\overline{\chi_\varrho(C)},
   \]
-  where the last equality uses the unitary identity
+  where
   \(\overline{\chi_\varrho(C)}=\chi_\varrho(C^{-1})\).
   This gives the claim.
 \end{proof}
@@ -226,6 +222,79 @@ Likewise, for every \(m\ge 2\) and every \(\sigma\in\Irr(G)\), the value
       \det(I-zA_\varrho)^{\dim\varrho},
   \]
   as claimed.
+\end{proof}
+
+\begin{lemma}[Twisted gap as a skew-product peripheral-spectrum condition]
+  \label{lem:twisted-gap-skew-product-peripheral}
+  Let \(\widetilde A\) be the skew-product adjacency matrix attached to
+  \(\tau\), and set
+  \[
+    \eta:=\max_{\varrho\neq\mathbf 1}\rho(A_\varrho).
+  \]
+  Then
+  \[
+    \spec(\widetilde A)
+    =
+    \bigsqcup_{\varrho\in\Irr(G)}
+      \spec(A_\varrho)^{\sqcup \dim\varrho},
+  \]
+  where the union is taken with algebraic multiplicity. Consequently,
+  \(\eta<\lambda\) is equivalent to saying that no non-trivial
+  Peter--Weyl block contributes spectrum on the circle \(\abs{z}=\lambda\),
+  or equivalently that \(\widetilde A\) has the same peripheral spectrum
+  as the primitive base block \(A\), namely the single simple
+  eigenvalue \(\lambda\). More precisely, the following are equivalent:
+  \begin{enumerate}[label=\rm(\roman*)]
+  \item \(\eta<\lambda\).
+  \item No non-trivial Peter--Weyl block contributes peripheral
+    spectrum at modulus \(\lambda\); equivalently, every eigenvalue of
+    \(\widetilde A\) with modulus \(\lambda\) comes from the trivial
+    block \(A\).
+  \item \(\spec(\widetilde A)\cap\{z\in\CC:\abs{z}=\lambda\}=\{\lambda\}\).
+  \item \(\widetilde A\) has a simple strictly dominant Perron
+    eigenvalue \(\lambda\).
+  \end{enumerate}
+  If, in addition, \(\widetilde A\) is irreducible, then these
+  conditions are also equivalent to primitivity of \(\widetilde A\).
+\end{lemma}
+
+\begin{proof}
+  By
+  \Cref{prop:kernel-peter-weyl-block-diagonalisation},
+  \(\widetilde A\) is similar to
+  \(\bigoplus_{\varrho\in\Irr(G)}A_\varrho^{\oplus\dim\varrho}\). Hence
+  the multiset of eigenvalues of \(\widetilde A\) is exactly
+  \[
+    \bigsqcup_{\varrho\in\Irr(G)}
+      \spec(A_\varrho)^{\sqcup \dim\varrho},
+  \]
+  which is the displayed spectral decomposition. The trivial
+  representation contributes the block \(A_{\mathbf 1}=A\). Since \(A\)
+  is primitive, Perron--Frobenius theory gives
+  \[
+    \spec(A)\cap\{z\in\CC:\abs{z}=\lambda\}=\{\lambda\},
+  \]
+  and the eigenvalue \(\lambda\) is simple.
+
+  Therefore \(\eta<\lambda\) holds exactly when every non-trivial block
+  \(A_\varrho\) has all eigenvalues strictly inside the circle
+  \(\abs{z}=\lambda\), which is statement \rm(i) rewritten in
+  skew-product spectral language and proves statement \rm(ii). Because
+  the trivial block contributes only the simple eigenvalue \(\lambda\)
+  on that circle, statement \rm(ii) is exactly the claim that
+  \(\widetilde A\) has the same peripheral spectrum as the primitive
+  base block, so \rm(ii) and \rm(iii) are equivalent. In turn,
+  \rm(iii) says precisely that \(\widetilde A\) has one peripheral
+  eigenvalue, namely the simple Perron eigenvalue \(\lambda\), and that
+  all remaining eigenvalues have modulus \(<\lambda\); this is
+  statement \rm(iv).
+
+  Finally, if \(\widetilde A\) is irreducible, then Perron--Frobenius
+  theory for irreducible non-negative matrices says that irreducibility
+  together with the absence of any peripheral eigenvalue other than the
+  simple Perron eigenvalue is equivalent to primitivity. Thus, under
+  irreducibility, statements \rm(i)--\rm(iv) are also equivalent to
+  primitivity of \(\widetilde A\).
 \end{proof}
 
 \begin{proposition}[Twisted spectral-radius bound]
@@ -887,37 +956,28 @@ the trivial Perron-channel contribution.
 \begin{proof}
   Separate the trivial representation from
   \eqref{eq:class-primitive-coefficients}. Since
-  \(\chi_{\mathbf 1}(C^{-1})=1\) and
+  \(\overline{\chi_{\mathbf 1}(C)}=\chi_{\mathbf 1}(C^{-1})=1\) and
   \(\pi_{n,\mathbf 1}(A,\tau)=p_n(A)\), the displayed identity follows.
 \end{proof}
 
 \begin{lemma}[Non-trivial Peter--Weyl channel bound]
   \label{lem:nontrivial-peter-weyl-channel-bound}
-  For every non-trivial \(\varrho\in\Irr(G)\), define
-  \[
-    K_\varrho
-    :=
-    \sup_{n\ge 1}\frac{\abs{\Tr(A_\varrho^n)}}{\eta^n},
-    \qquad
-    K_0
-    :=
-    \max_{\sigma\in\Irr(G)}
-      \sup_{\ell\ge 1}\frac{\abs{\Tr(A_\sigma^\ell)}}{\lambda^\ell}.
-  \]
-  These constants are finite. Moreover, for every \(n\ge 1\),
+  For every non-trivial \(\varrho\in\Irr(G)\) and every \(n\ge 1\),
   \[
     \abs{\pi_{n,\varrho}(A,\tau)}
     \le
-    \frac{K_\varrho\eta^n}{n}
-    +\frac{K_0\,\dim\varrho\,\abs{\Irr(G)}}{n}
+    \frac{|V|\,\dim\varrho\,\eta^n}{n}
+    +\frac{|V|\,\dim\varrho}{n}
+      \left(\sum_{\sigma\in\Irr(G)}\dim\sigma\right)
       \sum_{\substack{m\mid n\\ m>1}}\lambda^{n/m},
   \]
   and therefore
   \[
     \abs{\pi_{n,\varrho}(A,\tau)}
     \le
-    \frac{K_\varrho\eta^n}{n}
-    +\frac{K_0\,\dim\varrho\,\abs{\Irr(G)}}{n}
+    \frac{|V|\,\dim\varrho\,\eta^n}{n}
+    +\frac{|V|\,\dim\varrho}{n}
+      \left(\sum_{\sigma\in\Irr(G)}\dim\sigma\right)
       \frac{\lambda^{n/2+1}}{\lambda-1}.
   \]
   In particular,
@@ -928,14 +988,34 @@ the trivial Perron-channel contribution.
 \end{lemma}
 
 \begin{proof}
-  Fix \(\varrho\neq\mathbf 1\). Every eigenvalue \(\mu\) of
-  \(A_\varrho\) satisfies \(\abs{\mu}\le \rho(A_\varrho)\le \eta\) by
-  \Cref{prop:twisted-spectral-radius-bound}, and
-  \(\Tr(A_\varrho^n)\) is the sum of the \(n\)-th powers of these
-  eigenvalues with algebraic multiplicity. Hence \(K_\varrho<\infty\).
-  The same eigenvalue argument, together with
-  \(\rho(A_\sigma)\le \lambda\) for every \(\sigma\in\Irr(G)\), gives
-  \(K_0<\infty\).
+  Fix \(\varrho\neq\mathbf 1\). For each
+  \(\sigma\in\Irr(G)\), let
+  \(\mu_{\sigma,1},\dots,\mu_{\sigma,|V|\dim\sigma}\) be the eigenvalues
+  of \(A_\sigma\), repeated with algebraic multiplicity. By
+  \Cref{prop:twisted-spectral-radius-bound},
+  \[
+    \abs{\mu_{\sigma,j}}\le \rho(A_\sigma)\le \lambda
+    \qquad
+    (\sigma\in\Irr(G)),
+  \]
+  and for the present non-trivial \(\varrho\) the twisted gap gives
+  \[
+    \abs{\mu_{\varrho,j}}\le \rho(A_\varrho)\le \eta.
+  \]
+  Therefore
+  \[
+    \abs{\Tr(A_\varrho^n)}
+    =
+    \left|\sum_{j=1}^{|V|\dim\varrho}\mu_{\varrho,j}^n\right|
+    \le |V|\,\dim\varrho\,\eta^n,
+  \]
+  and, for every \(\sigma\in\Irr(G)\) and every \(\ell\ge 1\),
+  \[
+    \abs{\Tr(A_\sigma^\ell)}
+    =
+    \left|\sum_{j=1}^{|V|\dim\sigma}\mu_{\sigma,j}^\ell\right|
+    \le |V|\,\dim\sigma\,\lambda^\ell.
+  \]
 
   By \Cref{cor:primitive-peter-weyl-trace},
   \[
@@ -948,16 +1028,21 @@ the trivial Perron-channel contribution.
           a_{\varrho,\sigma}^{(m)}\Tr(A_\sigma^{n/m}).
   \]
   Taking absolute values, the first term is bounded by
-  \(K_\varrho\eta^n/n\). For the divisor sum, use
-  \Cref{lem:adams-coefficients-bounded}:
-  \[
+  \(|V|\,\dim\varrho\,\eta^n/n\). For the divisor sum, use
+  \Cref{lem:adams-coefficients-bounded} together with the trace bound
+  above:
+  \begin{align*}
     \abs{
       \sum_{\sigma\in\Irr(G)}
         a_{\varrho,\sigma}^{(m)}\Tr(A_\sigma^{n/m})
     }
-    \le
-    K_0\,\dim\varrho\,\abs{\Irr(G)}\,\lambda^{n/m}.
-  \]
+    &\le
+    \sum_{\sigma\in\Irr(G)}
+      \dim\varrho\,|V|\,\dim\sigma\,\lambda^{n/m} \\
+    &=
+    |V|\,\dim\varrho
+      \left(\sum_{\sigma\in\Irr(G)}\dim\sigma\right)\lambda^{n/m}.
+  \end{align*}
   This proves the first displayed estimate. Since \(n/m\le n/2\) for
   \(m>1\),
   \[
@@ -1063,6 +1148,58 @@ the trivial Perron-channel contribution.
   The second statement is immediate.
 \end{proof}
 
+\begin{lemma}[Harmonic-log remainder bound]
+  \label{lem:harmonic-log-remainder}
+  For every \(N\ge 1\),
+  \[
+    0
+    <
+    H_N-\log N-\gamma
+    \le
+    \frac{1}{N+1}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since
+  \[
+    \log(N+1)-\log N
+    =
+    \log\!\left(1+\frac{1}{N}\right)
+  \]
+  and \(\frac{x}{1+x}\le \log(1+x)\le x\) for \(x>-1\), one has
+  \[
+    \frac{1}{N+1}
+    \le
+    \log\!\left(1+\frac{1}{N}\right)
+    \le
+    \frac{1}{N}.
+  \]
+  Therefore
+  \[
+    0
+    \le
+    \frac{1}{N}-\log\!\left(1+\frac{1}{N}\right)
+    \le
+    \frac{1}{N(N+1)}.
+  \]
+  Using the defining limit
+  \(\gamma=\lim_{M\to\infty}(H_M-\log M)\), we obtain
+  \begin{align*}
+    H_N-\log N-\gamma
+    &=
+    \sum_{m>N}
+      \left(
+        \frac{1}{m}-\log\!\left(1+\frac{1}{m}\right)
+      \right) \\
+    &\le
+    \sum_{m>N}\frac{1}{m(m+1)}
+    =
+    \frac{1}{N+1}.
+  \end{align*}
+  Each summand is strictly positive, so the left-hand inequality follows.
+\end{proof}
+
 \begin{lemma}[Perron-channel contribution]
   \label{lem:perron-channel-contribution}
   Assume \(\lambda>1\), \(\eta<\lambda\), and set
@@ -1120,6 +1257,7 @@ the trivial Perron-channel contribution.
     \qquad
     \Lambda_*:=\max\{\Lambda(A),\eta,\lambda^{1/2}\}.
   \]
+  Write \(\theta:=\Lambda_*/\lambda\in(0,1)\).
   Then, for every conjugacy class \(C\subset G\),
   \begin{equation}\label{eq:class-primitive-asymptotic}
     p_{n,C}
@@ -1177,16 +1315,19 @@ the trivial Perron-channel contribution.
     \frac{K_{\mathrm{base}}(A)}{n}
       \max\{\Lambda(A)^n,\lambda^{n/2}\}.
   \]
-  For each non-trivial \(\varrho\), let \(K_\varrho\) be as in
-  \Cref{lem:nontrivial-peter-weyl-channel-bound}, and let \(K_0\) denote
-  the same global constant from that lemma. Set
+  Set
+  \[
+    D_G:=\sum_{\sigma\in\Irr(G)}\dim\sigma,
+    \qquad
+    S_G:=\sum_{\varrho\neq\mathbf 1}(\dim\varrho)^2.
+  \]
+  Define
   \begin{equation}\label{eq:class-mertens-explicit-constant}
     C_{\mathrm{cls}}(A,\tau;G)
     :=
     K_{\mathrm{base}}(A)
-    +\sum_{\varrho\neq\mathbf 1}\dim\varrho\,K_\varrho
-    +\frac{\lambda K_0\,\abs{\Irr(G)}}{\lambda-1}
-      \sum_{\varrho\neq\mathbf 1}(\dim\varrho)^2.
+    +|V|\,S_G
+    +\frac{\lambda |V|\,D_G}{\lambda-1}\,S_G.
   \end{equation}
   Then, for every conjugacy class \(C\subset G\) and every \(n\ge 1\),
   \begin{equation}\label{eq:class-primitive-explicit-bound}
@@ -1204,14 +1345,36 @@ the trivial Perron-channel contribution.
     =
     \frac{|C|}{|G|}\log N+\mathcal M_C(A,\tau;G)+O(N^{-1}).
   \end{equation}
+  More explicitly, for every \(N\ge 1\),
+  \begin{equation}\label{eq:class-mertens-log-explicit}
+    \abs{
+      \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+      -\frac{|C|}{|G|}\log N
+      -\mathcal M_C(A,\tau;G)
+    }
+    \le
+    \frac{|C|}{|G|}
+    \left(
+      \frac{1}{N+1}
+      +
+      \frac{
+        C_{\mathrm{cls}}(A,\tau;G)\theta^{N+1}
+      }{
+        (N+1)(1-\theta)
+      }
+    \right).
+  \end{equation}
   The displayed constant in
   \eqref{eq:class-primitive-explicit-bound} is uniform in the conjugacy
-  class \(C\) and in \(n\). The adjective ``stated'' refers only to the
-  finite-dimensional spectral-gap input \(\eta\) and \(\Lambda_*\).
+  class \(C\) and in \(n\), and
+  \eqref{eq:class-mertens-log-explicit} gives the corresponding
+  class-uniform summatory remainder. The adjective ``stated'' refers
+  only to the finite-dimensional spectral-gap input \(\eta\) and
+  \(\Lambda_*\).
 \end{theorem}
 
 \begin{proof}
-  Set \(\vartheta_*:=\Lambda_*/\lambda\in(0,1)\). By
+  Set \(\vartheta_*:=\theta=\Lambda_*/\lambda\in(0,1)\). By
   \Cref{lem:class-primitive-trivial-split},
   \[
     p_{n,C}
@@ -1232,8 +1395,8 @@ the trivial Perron-channel contribution.
   \[
     \abs{\pi_{n,\varrho}(A,\tau)}
     \le
-    \frac{K_\varrho\eta^n}{n}
-    +\frac{K_0\,\dim\varrho\,\abs{\Irr(G)}}{n}
+    \frac{|V|\,\dim\varrho\,\eta^n}{n}
+    +\frac{|V|\,\dim\varrho\,D_G}{n}
       \frac{\lambda^{n/2+1}}{\lambda-1}
   \]
   from \Cref{lem:nontrivial-peter-weyl-channel-bound}. Since
@@ -1257,9 +1420,8 @@ the trivial Perron-channel contribution.
     \frac{\Lambda_*^n}{n}
     \left(
       K_{\mathrm{base}}(A)
-      +\sum_{\varrho\neq\mathbf 1}\dim\varrho\,K_\varrho
-      +\frac{\lambda K_0\,\abs{\Irr(G)}}{\lambda-1}
-        \sum_{\varrho\neq\mathbf 1}(\dim\varrho)^2
+      +|V|\,S_G
+      +\frac{\lambda |V|\,D_G}{\lambda-1}\,S_G
     \right),
   \]
   which is \eqref{eq:class-primitive-explicit-bound}. In particular,
@@ -1279,41 +1441,93 @@ the trivial Perron-channel contribution.
 
   By \Cref{lem:nontrivial-perron-point-convergence}, the series
   \(\Pi_\varrho(\lambda^{-1})\) is absolutely convergent for every
-  non-trivial \(\varrho\). Summing the identity for
-  \(p_{n,C}\lambda^{-n}\) from \(1\) to \(N\), the trivial
-  representation contributes
+  non-trivial \(\varrho\). Since
+  \eqref{eq:class-primitive-explicit-bound} gives
   \[
-    \frac{|C|}{|G|}\sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    \abs{
+      \frac{p_{n,C}}{\lambda^n}
+      -\frac{|C|}{|G|}\frac{1}{n}
+    }
+    \le
+    \frac{|C|}{|G|}
+    \frac{C_{\mathrm{cls}}(A,\tau;G)\vartheta_*^n}{n},
+  \]
+  the correction series
+  \[
+    \sum_{n\ge 1}
+      \left(
+        \frac{p_{n,C}}{\lambda^n}
+        -\frac{|C|}{|G|}\frac{1}{n}
+      \right)
+  \]
+  converges absolutely. Using the Peter--Weyl decomposition termwise,
+  together with \Cref{lem:abel-correction-sum} and the definition of
+  \(\Pi_\varrho(\lambda^{-1})\), we obtain
+  \begin{align*}
+    \sum_{n\ge 1}
+      \left(
+        \frac{p_{n,C}}{\lambda^n}
+        -\frac{|C|}{|G|}\frac{1}{n}
+      \right)
+    &=
+    \frac{|C|}{|G|}
+      \sum_{n\ge 1}
+        \left(
+          \frac{p_n(A)}{\lambda^n}-\frac{1}{n}
+        \right) \\
+    &\quad
+    +
+    \frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf 1}
+        \overline{\chi_\varrho(C)}
+        \sum_{n\ge 1}\pi_{n,\varrho}(A,\tau)\lambda^{-n} \\
+    &=
+    \frac{|C|}{|G|}\bigl(\mathcal M(A)-\gamma\bigr)
+    +\frac{|C|}{|G|}
+      \sum_{\varrho\neq\mathbf 1}
+        \overline{\chi_\varrho(C)}\,\Pi_\varrho(\lambda^{-1}),
+  \end{align*}
+  which is exactly
+  \eqref{eq:class-mertens-constant}. Therefore, for every \(N\ge 1\),
+  \[
+    \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
     =
     \frac{|C|}{|G|}H_N
-    +\frac{|C|}{|G|}\bigl(\mathcal M(A)-\gamma\bigr)
-    +O\!\left(\frac{\vartheta_*^N}{N}\right)
+    +\mathcal M_C(A,\tau;G)-\frac{|C|}{|G|}\gamma
+    -\sum_{n>N}
+      \left(
+        \frac{p_{n,C}}{\lambda^n}
+        -\frac{|C|}{|G|}\frac{1}{n}
+      \right).
   \]
-  by \Cref{lem:perron-channel-contribution}. The non-trivial
-  representations contribute
+  Applying \Cref{lem:geometric-harmonic-tail} to the explicit
+  correction bound above yields
   \[
+    \abs{
+      \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+      -\frac{|C|}{|G|}H_N
+      -\mathcal M_C(A,\tau;G)+\frac{|C|}{|G|}\gamma
+    }
+    \le
     \frac{|C|}{|G|}
-      \sum_{\varrho\neq\mathbf 1}\overline{\chi_\varrho(C)}
-      \sum_{n\le N}\pi_{n,\varrho}(A,\tau)\lambda^{-n}.
+    \frac{
+      C_{\mathrm{cls}}(A,\tau;G)\vartheta_*^{N+1}
+    }{
+      (N+1)(1-\vartheta_*)
+    },
   \]
-  For each non-trivial \(\varrho\),
-  \Cref{lem:nontrivial-peter-weyl-channel-bound} gives
+  which implies \eqref{eq:class-mertens-harmonic}. Finally,
+  \Cref{lem:harmonic-log-remainder} gives
   \[
-    \pi_{n,\varrho}(A,\tau)\lambda^{-n}
-    =O\!\left(\frac{\vartheta_*^n}{n}\right),
+    \abs{
+      H_N-\log N-\gamma
+    }
+    \le
+    \frac{1}{N+1},
   \]
-  so \Cref{lem:geometric-harmonic-tail} implies
-  \[
-    \sum_{n\le N}\pi_{n,\varrho}(A,\tau)\lambda^{-n}
-    =
-    \Pi_\varrho(\lambda^{-1})
-    +O\!\left(\frac{\vartheta_*^N}{N}\right).
-  \]
-  Summing over the finitely many non-trivial irreducibles yields
-  \eqref{eq:class-mertens-harmonic} and
-  \eqref{eq:class-mertens-constant}. Since
-  \(H_N=\log N+\gamma+O(N^{-1})\), equation
-  \eqref{eq:class-mertens-log} follows.
+  so
+  \eqref{eq:class-mertens-log-explicit} follows from the previous
+  display. In particular, \eqref{eq:class-mertens-log} holds.
 \end{proof}
 
 \begin{remark}[Comparison with classical Mertens and Chebotarev
@@ -1446,10 +1660,21 @@ the trivial Perron-channel contribution.
   PollicottSharp2007Chebotarev}, and the analysis of Parry and
   Liv\v{s}ic obstructions in
   \cite{BoyleSchmieding2017FiniteGroupExtensions}. In the present paper
-  the hypothesis is kept as a separate stated assumption and marks the boundary between formal
-  primitive inversion and Perron-point asymptotics; the new step is the
-  finite-state Adams--M\"obius calculus at the level of primitive
-  constants and the explicit class-indexed constant term
+  the hypothesis is kept as a separate stated assumption because the
+  theorem package only needs this exact spectral input to pass from the
+  open disc to the Perron point. In the present finite-state setting it
+  is already an explicit finite-dimensional condition:
+  \Cref{lem:twisted-gap-skew-product-peripheral} identifies it with the
+  absence of non-trivial peripheral spectrum in the skew-product
+  adjacency \(\widetilde A\), equivalently with \(\widetilde A\) having
+  a simple strictly dominant Perron eigenvalue, and, when
+  \(\widetilde A\) is irreducible, with primitivity of
+  \(\widetilde A\). What remains outside the present argument is not
+  finite-matrix verification itself but structural criteria on the
+  cocycle \(\tau\) that imply this spectral condition without first
+  building and testing the full skew-product matrix. The new step here
+  is the finite-state Adams--M\"obius calculus at the level of
+  primitive constants and the explicit class-indexed constant term
   \(\mathcal M_C(A,\tau;G)\), not a new leading-density theorem of the
   type considered in
   \cite{Lalley1987DistributionPeriodicOrbits,%

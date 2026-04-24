@@ -1,58 +1,15 @@
-\section{Auxiliary finite-matrix inputs: scalar finite parts and cyclic
-reconstruction}
+\section{Auxiliary scalar normalisation and cyclic-lift comparison}
 \label{sec:finite-part}
 
 Throughout this section, \(A\) denotes a primitive non-negative real
 matrix with Perron root \(\lambda>1\). The symbols \(p_n(A)\) denote the
 algebraic M\"obius coefficients of \eqref{eq:primitive-mobius}; they are
 primitive orbit counts only in the integer multigraph case fixed in
-\Cref{sec:preliminaries}. This section supplies the scalar fixed-matrix
-inputs isolated in \Cref{prop:intro-scope-of-results}: the finite-part
-formula giving \(\mathcal M(A)\), the cyclic-lift recovery of the
-reduced spectrum from the full branch-lifted logarithmic record
-\(\{\Psi_q(A)\}_{q\ge 1}\), and the one-layer Fourier recovery for one
-fixed \(q\).
-
-\medskip\noindent\textbf{Logarithm convention.}
-Throughout this section, \(\Log\) denotes the principal branch on
-\(\CC\setminus(-\infty,0]\). For every \(j\ge 2\) and every \(|t|\le 1\),
-\[
-  \Re\!\left(1-\frac{\mu_j}{\lambda}t\right)
-  \ge 1-\left|\frac{\mu_j}{\lambda}t\right|
-  \ge 1-\frac{|\mu_j|}{\lambda}
-  >0.
-\]
-Hence each factor \(1-(\mu_j/\lambda)t\) stays in the right half-plane,
-so its principal logarithm is defined on the whole closed unit disc. We
-therefore set, for \(|t|\le 1\),
-\[
-  \log F_A(t)
-  :=
-  \sum_{j=2}^d \Log\!\left(1-\frac{\mu_j}{\lambda}t\right).
-\]
-This is a continuous branch of the logarithm of \(F_A\) on \(|t|\le 1\),
-normalized by \(\log F_A(0)=0\). If \(|z|<1\), then
-\(\Re(1-z)\ge 1-|z|>0\), so
-\[
-  -\Log(1-z)=\sum_{n\ge 1}\frac{z^n}{n}.
-\]
-Applying this with \(z=(\mu_j/\lambda)e^{i\theta}\) and summing over the
-finitely many non-Perron eigenvalues gives
-\[
-  -\log F_A(e^{i\theta})
-  =
-  \sum_{n\ge 1}\frac{u_n(A)e^{in\theta}}{n}.
-\]
-This branch is defined factorwise; we do not invoke the principal
-logarithm of the product \(F_A(t)\). Likewise, for every \(q\ge 1\) we
-set
-\[
-  \Psi_q(A)
-  :=
-  -\sum_{j=2}^d
-    \Log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
-\]
-All subsequent determinant logarithms use the indicated branches.
+\Cref{sec:preliminaries}. The main scalar input is the finite-part
+formula for the trivial channel. The canonical cyclic-lift recovery
+package is retained only as a fixed-matrix comparison device and is
+stated briefly here; its determinant manipulations and supporting proofs
+are deferred to \Cref{app:cyclic-lift-package}.
 
 \subsection{Finite parts and reduced determinants}
 
@@ -231,274 +188,34 @@ All subsequent determinant logarithms use the indicated branches.
   the claimed asymptotic follows.
 \end{proof}
 
-\subsection{Cyclic lifts and reduced spectral reconstruction}
+\subsection{Canonical cyclic-lift comparison}
 
-Let
-\[
-  \Lambda_{\mathrm{rel}}(A):=\Lambda(A)/\lambda\in[0,1)
-\]
-and
-\[
-  u_n(A):=\sum_{j=2}^d\left(\frac{\mu_j}{\lambda}\right)^n
-  \qquad (n\ge 1).
-\]
+The remaining scalar material concerns the canonical cyclic lift
+\(A^{\langle q\rangle}=A\otimes P_q\) from
+\Cref{eq:cyclic-lift-def}. Its input is the branch-lifted logarithmic
+record \(\{\Psi_q(A)\}_{q\ge 1}\) from
+\Cref{def:spectral-fingerprints}, not merely the exponentiated reduced
+determinants \(\{C_\lambda(A^{\langle q\rangle})\}_{q\ge 1}\). The
+latter fix only \(\exp(\Psi_q(A))\) unless a compatible logarithmic
+branch has already been chosen. To keep the finite-group theorem spine
+visibly separate from this scalar comparison model, only the final
+reconstruction statements are stated here; the determinant formulas,
+M\"obius inversion on multiples, and auxiliary scalar examples are
+collected in \Cref{app:cyclic-lift-package}.
 
-\begin{proposition}[A formula for the reduced determinants of cyclic lifts]
-  \label{thm:finite-part-cyclic-lift-reduced-constant-closed}
-  For every \(q\ge 1\),
-  \[
-    C_\lambda(A^{\langle q\rangle})
-    =\frac{1}{q}\prod_{j=2}^d
-      \left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right)^{-1}.
-  \]
-  Equivalently, with the logarithm convention above,
-  \[
-    \exp(\Psi_q(A))
-    =
-    q\,C_\lambda(A^{\langle q\rangle}).
-  \]
-\end{proposition}
-
-\begin{proof}
-  The spectrum of \(A^{\langle q\rangle}=A\otimes P_q\) is
-  \[
-    \{\mu\,\omega_q^k:\mu\in\spec(A),\ 0\le k\le q-1\}.
-  \]
-  The eigenvalue \(\lambda\) of \(A^{\langle q\rangle}\) is simple.
-  Applying \Cref{lem:simple-eigenvalue-reduced-constant} to this
-  eigenvalue yields
-  \[
-    C_\lambda(A^{\langle q\rangle})
-    =\prod_{k=1}^{q-1}(1-\omega_q^k)^{-1}
-      \prod_{j=2}^d\prod_{k=0}^{q-1}
-        \left(1-\frac{\mu_j}{\lambda}\omega_q^k\right)^{-1}.
-  \]
-  The first product equals \(1/q\), while
-  \[
-    \prod_{k=0}^{q-1}(1-x\omega_q^k)=1-x^q.
-  \]
-  Substituting \(x=\mu_j/\lambda\) proves the claim.
-\end{proof}
-
-\begin{proposition}[Multiple-sum expansion for cyclic lifts with
-  explicit exponential remainder]
-  \label{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}
-  For every \(q\ge 1\),
-  \[
-    \Psi_q(A)=\sum_{m\ge 1}\frac{u_{qm}(A)}{m},
-  \]
-  and therefore
-  \[
-    \Psi_q(A)=u_q(A)+O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right)
-    \qquad (q\to\infty).
-  \]
-  More precisely,
-  \[
-    \abs{\Psi_q(A)-u_q(A)}
-    \le
-    \frac{d-1}{2(1-\Lambda_{\mathrm{rel}}(A))}
-    \Lambda_{\mathrm{rel}}(A)^{2q}.
-  \]
-\end{proposition}
-
-\begin{proof}
-  By \Cref{thm:finite-part-cyclic-lift-reduced-constant-closed},
-  \[
-    \Psi_q(A)
-    =-\sum_{j=2}^d\Log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
-  \]
-  Expanding \(-\Log(1-x)=\sum_{m\ge 1}x^m/m\) for \(|x|<1\) and
-  exchanging the finite
-  sum over \(j\) with the absolutely convergent series over \(m\) gives
-  the first identity. The remainder estimate follows from
-  \[
-    |u_{qm}(A)|\le (d-1)\Lambda_{\mathrm{rel}}(A)^{qm}.
-  \]
-  Indeed,
-  \[
-    \begin{aligned}
-      \abs{\Psi_q(A)-u_q(A)}
-      &\le
-      \sum_{m\ge 2}\frac{\abs{u_{qm}(A)}}{m} \\
-      &\le
-      \frac{d-1}{2}\sum_{m\ge 2}\Lambda_{\mathrm{rel}}(A)^{qm} \\
-      &\le
-      \frac{d-1}{2(1-\Lambda_{\mathrm{rel}}(A))}
-      \Lambda_{\mathrm{rel}}(A)^{2q}.
-    \end{aligned}
-  \]
-\end{proof}
-
-\begin{proposition}[M\"obius inversion on multiples]
-  \label{prop:finite-part-cyclic-lift-mobius-inversion}
-  For every \(n\ge 1\),
-  \[
-    \frac{u_n(A)}{n}
-    =\sum_{m\ge 1}\frac{\mu(m)}{mn}\,\Psi_{mn}(A).
-  \]
-\end{proposition}
-
-\begin{lemma}[Absolute convergence for multiples inversion]
-  \label{lem:finite-part-cyclic-lift-mobius-absolute}
-  Let \(b_n:=u_n(A)/n\). Then, for every \(n\ge 1\),
-  \[
-    \sum_{m\ge 1}\sum_{r\ge 1}\abs{b_{mnr}}<\infty.
-  \]
-\end{lemma}
-
-\begin{proof}
-  For every \(k\ge 1\),
-  \[
-    \abs{u_k(A)}
-    \le (d-1)\Lambda_{\mathrm{rel}}(A)^k,
-  \]
-  so
-  \[
-    \abs{b_k}
-    \le \frac{d-1}{k}\Lambda_{\mathrm{rel}}(A)^k.
-  \]
-  Therefore
-  \[
-    \sum_{m\ge 1}\sum_{r\ge 1}\abs{b_{mnr}}
-    =
-    \sum_{s\ge 1}
-      \#\{(m,r)\in \NN^2:mr=s\}\,\abs{b_{ns}}.
-  \]
-  Since every factorization \(mr=s\) is determined by the divisor \(m\),
-  the multiplicity \(\#\{(m,r)\in \NN^2:mr=s\}\) is at most \(s\). Hence
-  \[
-    \sum_{m\ge 1}\sum_{r\ge 1}\abs{b_{mnr}}
-    \le
-    \sum_{s\ge 1}s\,\abs{b_{ns}}
-    \le
-    \frac{d-1}{n}\sum_{s\ge 1}\Lambda_{\mathrm{rel}}(A)^{ns}
-    <\infty,
-  \]
-  because \(0\le \Lambda_{\mathrm{rel}}(A)<1\).
-\end{proof}
-
-\begin{proof}[Proof of \Cref{prop:finite-part-cyclic-lift-mobius-inversion}]
-  Set \(b_n:=u_n(A)/n\). Then
-  \[
-    \frac{\Psi_q(A)}{q}
-    =\sum_{m\ge 1}b_{qm}
-  \]
-  by \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}. By
-  \Cref{lem:finite-part-cyclic-lift-mobius-absolute},
-  \[
-    \sum_{m\ge 1}\sum_{r\ge 1}\abs{\mu(m)b_{mnr}}
-    \le
-    \sum_{m\ge 1}\sum_{r\ge 1}\abs{b_{mnr}}
-    <\infty,
-  \]
-  so Tonelli--Fubini applies to the double series below. Hence
-  \begin{align*}
-    \sum_{m\ge 1}\frac{\mu(m)}{mn}\Psi_{mn}(A)
-    &=
-    \sum_{m\ge 1}\mu(m)\sum_{r\ge 1}b_{mnr} \\
-    &=
-    \sum_{s\ge 1}b_{ns}\sum_{m\mid s}\mu(m)
-    =b_n,
-  \end{align*}
-  since \(\sum_{m\mid s}\mu(m)=0\) unless \(s=1\).
-\end{proof}
-
-\begin{lemma}[Limsup of a finite exponential sum]
-  \label{lem:finite-part-exponential-sum-limsup}
-  Let
-  \[
-    f_q=\sum_{\beta\in B} d_\beta \beta^q
-    \qquad (q\ge 1),
-  \]
-  where \(B\subset\CC\) is finite and nonempty, the numbers \(\beta\) are
-  pairwise distinct, and \(d_\beta\in\CC\setminus\{0\}\) for every
-  \(\beta\in B\).
-  Then
-  \[
-    \limsup_{q\to\infty}\abs{f_q}^{1/q}
-    =\max_{\beta\in B}\abs{\beta}.
-  \]
-\end{lemma}
-
-\begin{proof}
-  Set
-  \[
-    R:=\max_{\beta\in B}\abs{\beta}.
-  \]
-  The upper bound
-  \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\le R\) is immediate from
-  \[
-    \abs{f_q}
-    \le \sum_{\beta\in B}\abs{d_\beta}\,\abs{\beta}^q
-    \le \left(\sum_{\beta\in B}\abs{d_\beta}\right)R^q.
-  \]
-  If \(R=0\), then \(B=\{0\}\), so \(f_q=0\) for all \(q\ge 1\), and the asserted
-  equality is immediate.
-
-  Let
-  \[
-    B_R:=\{\beta\in B:\abs{\beta}=R\},
-    \qquad
-    g_q:=\sum_{\beta\in B_R} d_\beta (\beta/R)^q.
-  \]
-  Since \(B\) is finite, there exists \(\vartheta\in[0,1)\) such that
-  \(\abs{\beta}\le \vartheta R\) for every \(\beta\in B\setminus B_R\).
-  Hence
-  \[
-    f_q
-    =
-    R^q\left(g_q+\sum_{\beta\in B\setminus B_R}d_\beta(\beta/R)^q\right)
-    =
-    R^q\bigl(g_q+O(\vartheta^q)\bigr).
-  \]
-  The numbers \(\beta/R\) with \(\beta\in B_R\) lie on \(\TT\) and are
-  pairwise distinct. Therefore
-  \[
-    \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
-    =
-    \sum_{\beta,\gamma\in B_R}
-      d_\beta\overline{d_\gamma}\,
-      \frac{1}{N}\sum_{q=1}^N
-        \left(\frac{\beta\overline{\gamma}}{R^2}\right)^q.
-  \]
-  As \(N\to\infty\), the inner Ces\`aro average tends to \(1\) when
-  \(\beta=\gamma\) and to \(0\) otherwise. Hence
-  \[
-    \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
-    \longrightarrow
-    \sum_{\beta\in B_R}\abs{d_\beta}^2>0.
-  \]
-  Therefore \(\limsup_{q\to\infty}\abs{g_q}>0\), so there exist
-  \(c>0\) and infinitely many \(q\) such that \(\abs{g_q}\ge 2c\). Along
-  that subsequence,
-  \[
-    \abs{f_q}\ge cR^q
-  \]
-  for all sufficiently large \(q\), because \(\vartheta^q\to 0\). This
-  yields
-  \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\ge R\), completing the proof.
-\end{proof}
-
-\begin{proposition}[Fixed-matrix recovery of the reduced spectrum from the
-  full branch-lifted cyclic-lift record with explicit remainder]
+\begin{theorem}[Auxiliary fixed-matrix cyclic-lift recovery of the
+  reduced spectrum]
   \label{thm:finite-part-cyclic-lift-spectrum-identifiability}
   For one fixed primitive non-negative matrix \(A\in M_d(\RR)\), the
   full branch-lifted logarithmic record \(\{\Psi_q(A)\}_{q\ge 1}\)
-  determines the
-  reduced spectral polynomial \(F_A\) of that same matrix and hence the
+  determines the reduced spectral polynomial \(F_A\) of that same
+  matrix and hence the
   relative non-Perron spectrum
   \(\{\mu_j/\lambda\}_{j=2}^d\) with algebraic multiplicity. If
   \(\lambda\) is supplied as additional data, then the unnormalised
   non-Perron spectrum \(\{\mu_j\}_{j=2}^d\) is also recovered. In
   particular, once the size \(d\) is known, the multiplicity of the
   zero non-Perron eigenvalue is recovered as \(d-1-\deg F_A\).
-  The determinant constants
-  \(\{C_\lambda(A^{\langle q\rangle})\}_{q\ge 1}\) enter only through
-  the exponentiated identity
-  \(\exp(\Psi_q(A))=q\,C_\lambda(A^{\langle q\rangle})\). Thus the
-  determinant constants determine this branch-lifted record only after a
-  compatible logarithmic branch has been fixed; no separate claim of
-  canonical branch recovery from those constants alone is made here.
   Moreover,
   \[
     \Psi_q(A)=u_q(A)+O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right),
@@ -509,70 +226,16 @@ and
     \limsup_{q\to\infty}\abs{\Psi_q(A)}^{1/q}
     =\Lambda_{\mathrm{rel}}(A).
   \]
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
-  By \Cref{prop:finite-part-cyclic-lift-mobius-inversion}, the cyclic
-  data determine every power sum \(u_n(A)\). Write
-  \[
-    \alpha_j:=\frac{\mu_j}{\lambda},
-    \qquad
-    P_A(x):=\prod_{j=2}^d(x-\alpha_j)
-    =x^{d-1}F_A(x^{-1}).
-  \]
-  Then \(P_A\) is monic of degree \(d-1\), even when some
-  \(\alpha_j=0\). Newton's identities recover the coefficients of this
-  monic degree-\((d-1)\) polynomial from the first \(d-1\) power sums
-  \(u_n(A)=\sum_{j=2}^d\alpha_j^n\), and hence from the full sequence
-  \(\{u_n(A)\}_{n\ge 1}\). Therefore the multiset
-  \(\{\alpha_2,\dots,\alpha_d\}\), including \(0\) with algebraic
-  multiplicity, is determined. Equivalently,
-  \[
-    F_A(t)=\prod_{j=2}^d(1-\alpha_j t)
-  \]
-  is determined. Its ordinary degree counts the nonzero \(\alpha_j\), so
-  the multiplicity of the zero non-Perron eigenvalue is exactly
-  \(d-1-\deg F_A\). This reconstructs the relative non-Perron spectrum
-  with algebraic multiplicity. Multiplying by \(\lambda\) would recover
-  the unnormalised eigenvalues \(\mu_j\), but that requires \(\lambda\)
-  as additional data beyond the cyclic-lift record itself. The argument
-  is purely fixed-record: it recovers one polynomial \(F_A\) from the
-  one sequence attached to the same matrix \(A\).
-
-  For the exponential growth rate, let
-  \[
-    B:=\{\alpha_j:2\le j\le d,\ \alpha_j\neq 0\}
-  \]
-  be the set of distinct nonzero values among the relative eigenvalues,
-  and for each \(\beta\in B\) let \(m_\beta\ge 1\) be its algebraic
-  multiplicity among \(\alpha_2,\dots,\alpha_d\). Then
-  \[
-    u_q(A)=\sum_{\beta\in B}m_\beta\beta^q.
-  \]
-  If \(B=\varnothing\), then \(u_q(A)=0\) for every \(q\ge 1\), so
-  \(\Lambda_{\mathrm{rel}}(A)=0\) and the asserted limsup identity is
-  immediate. Assume henceforth that \(B\neq\varnothing\). Since the
-  frequencies in \(B\) are pairwise distinct and each coefficient
-  \(m_\beta\) is a positive integer, no cancellation can occur after
-  grouping equal frequencies, and
-  \Cref{lem:finite-part-exponential-sum-limsup} gives
-  \[
-    \limsup_{q\to\infty}\abs{u_q(A)}^{1/q}
-    =\Lambda_{\mathrm{rel}}(A).
-  \]
-  The explicit remainder bound from
-  \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum} shows that
-  \[
-    \Psi_q(A)-u_q(A)
-    =O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right).
-  \]
-  If \(\Lambda_{\mathrm{rel}}(A)=0\), then both sequences are
-  eventually zero. Otherwise the error term has strictly smaller
-  exponential rate than \(u_q(A)\), so
-  \[
-    \limsup_{q\to\infty}\abs{\Psi_q(A)}^{1/q}
-    =\Lambda_{\mathrm{rel}}(A).
-  \]
+  The proof combines the cyclic-lift determinant identity, M\"obius
+  inversion on multiples, Newton's identities, and the finite
+  exponential-sum limsup lemma; see
+  \Cref{app:cyclic-lift-package,%
+  prop:finite-part-cyclic-lift-dirichlet-multiple-sum,%
+  prop:finite-part-cyclic-lift-mobius-inversion,%
+  lem:finite-part-exponential-sum-limsup}.
 \end{proof}
 
 \subsection{One fixed root-of-unity layer}
@@ -603,21 +266,8 @@ sampled on a large enough cyclic subgroup of the unit circle.
 \end{corollary}
 
 \begin{proof}
-  The polynomial identity
-  \[
-    F_A(\omega_q^j)=\sum_{n=0}^{d-1}a_n\omega_q^{jn}
-  \]
-  holds for \(0\le j\le q-1\). Averaging against
-  \(\omega_q^{-jm}\) and using discrete orthogonality gives
-  \[
-    \frac{1}{q}\sum_{j=0}^{q-1}
-      F_A(\omega_q^j)\omega_q^{-jm}
-    =
-    \sum_{n=0}^{d-1}a_n
-      \frac{1}{q}\sum_{j=0}^{q-1}\omega_q^{j(n-m)}.
-  \]
-  Since \(q\ge d\), the inner sum equals \(1\) when \(n=m\) and \(0\)
-  otherwise.
+  This is the fixed-layer discrete Fourier inversion recorded in
+  \Cref{app:cyclic-lift-package}.
 \end{proof}
 
 \noindent
@@ -628,98 +278,6 @@ construction or in the proof of the class-Mertens theorem or its
 character-orthogonality readout. In particular, it is a recovery formula
 for one fixed recorded layer, not an ambient inverse statement for
 varying families of samples, even when those samples are taken at one
-fixed radius \(q\).
-
-\begin{corollary}[A fixed root-of-unity layer of \(\zeta_A\) recovers the
-  reduced spectrum]
-  \label{cor:finite-part-cyclic-lift-zeta-torsion-determines-spectrum}
-  For \(1\le j\le q-1\),
-  \[
-    F_A(\omega_q^j)
-    =\frac{\det(I-(\omega_q^j/\lambda)A)}{1-\omega_q^j}
-    =\frac{1}{1-\omega_q^j}\,
-      \zeta_A(\omega_q^j/\lambda)^{-1},
-  \]
-  while
-  \[
-    F_A(1)=\det\nolimits'(I-A/\lambda)=C(A)^{-1}.
-  \]
-  Consequently, if \(q\ge d\), then the data
-  \[
-    \Bigl(C(A),\ \{\zeta_A(\omega_q^j/\lambda)\}_{j=1}^{q-1}\Bigr)
-  \]
-  recover the reduced spectral polynomial \(F_A\), equivalently the
-  relative non-Perron spectrum \(\{\mu_j/\lambda\}_{j=2}^d\), with
-  multiplicity. If \(\lambda\) is supplied separately, they also
-  recover the unnormalised non-Perron spectrum.
-\end{corollary}
-
-\begin{proof}
-  The displayed identities are immediate from the definitions of
-  \(F_A\), \(\zeta_A\), and \(C(A)\). The reconstruction statement
-  follows from
-  \Cref{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction}.
-\end{proof}
-
-\begin{remark}[A fixed-layer cyclic toy example]
-  \label{rem:finite-part-fibonacci-example}
-  Let
-  \[
-    A=\begin{pmatrix}
-      1 & 1 \\
-      1 & 0
-    \end{pmatrix}.
-  \]
-  Then \(d=2\), the Perron root is
-  \(\lambda=(1+\sqrt5)/2\), the non-Perron eigenvalue is
-  \(\mu=-\lambda^{-1}\), and
-  \[
-    F_A(t)=1+\lambda^{-2}t.
-  \]
-  Since \(q=2\ge d\), the single layer \(\{F_A(1),F_A(-1)\}\) already
-  reconstructs \(F_A\):
-  \[
-    F_A(1)=1+\lambda^{-2},
-    \qquad
-    F_A(-1)=1-\lambda^{-2},
-  \]
-  so discrete Fourier inversion gives
-  \[
-    a_0=\frac{F_A(1)+F_A(-1)}{2}=1,
-    \qquad
-    a_1=\frac{F_A(1)-F_A(-1)}{2}=\lambda^{-2}.
-  \]
-  Thus one order-\(2\) root-of-unity layer already recovers the reduced
-  polynomial and hence the relative non-Perron eigenvalue
-  \(\mu/\lambda=-\lambda^{-2}\); since \(\lambda\) is known here, this
-  also yields \(\mu=-\lambda^{-1}\).
-\end{remark}
-
-\subsection{Selected scalar remarks}
-
-\begin{remark}[Consequences retained only for orientation]
-  The one-layer reconstruction above also decides any condition expressible
-  only in terms of the roots of \(F_A\). For example, when \(q\ge d\), the
-  values \(\{F_A(\omega_q^j)\}_{0\le j\le q-1}\) determine whether
-  \[
-    \Lambda(A)\le \lambda^{1/2},
-    \qquad\text{equivalently}\qquad
-    \max_{j\ge 2}\left|\frac{\mu_j}{\lambda}\right|
-      \le \lambda^{-1/2}.
-  \]
-  This is a scalar spectral test for the canonical cyclic-lift comparison;
-  it is not part of the finite-group Adams--M\"obius theorem chain.
-
-  Similarly, when \(A\) is an integer adjacency matrix,
-  \eqref{eq:finite-part-gap-series} gives
-  \[
-    \log C(A)-\FP(A)
-    =\sum_{n\ge 1}p_n(A)\psi(\lambda^{-n}),
-    \qquad
-    \psi(x)=-x-\log(1-x).
-  \]
-  Since \(p_n(A)\ge0\), \(p_n(A)>0\) for all sufficiently large \(n\), and
-  \(\psi(x)>0\) for \(0<x<1\), this gap is positive. The observation is a
-  useful check on the scalar normalisation \(\mathcal M(A)=\gamma+\FP(A)\),
-  not an independent primitive reconstruction result.
-\end{remark}
+fixed radius \(q\). The equivalent \(\zeta_A\)-sampling reformulation,
+the toy example, and the scalar boundary remarks are recorded in
+\Cref{app:cyclic-lift-package}.

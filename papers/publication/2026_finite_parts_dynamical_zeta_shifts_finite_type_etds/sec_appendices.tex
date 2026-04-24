@@ -1,3 +1,481 @@
+\section{Detailed proofs for the cyclic-lift comparison package}
+\label{app:cyclic-lift-package}
+
+This appendix collects the scalar cyclic-lift reconstruction arguments
+that are auxiliary to the finite-group theorem spine. The main text
+records only the fixed-matrix outputs; the determinant identities,
+M\"obius inversion on multiples, and the one-layer Fourier calculations
+are placed here to keep the finite-group results in the foreground.
+
+\subsection{Logarithm convention for the cyclic-lift package}
+
+Throughout this appendix, \(\Log\) denotes the principal branch on
+\(\CC\setminus(-\infty,0]\). For every \(j\ge 2\) and every \(|t|\le 1\),
+\[
+  \Re\!\left(1-\frac{\mu_j}{\lambda}t\right)
+  \ge 1-\left|\frac{\mu_j}{\lambda}t\right|
+  \ge 1-\frac{|\mu_j|}{\lambda}
+  >0.
+\]
+Hence each factor \(1-(\mu_j/\lambda)t\) stays in the right half-plane,
+so its principal logarithm is defined on the whole closed unit disc. We
+therefore set, for \(|t|\le 1\),
+\[
+  \log F_A(t)
+  :=
+  \sum_{j=2}^d \Log\!\left(1-\frac{\mu_j}{\lambda}t\right).
+\]
+This is a continuous branch of the logarithm of \(F_A\) on \(|t|\le 1\),
+normalized by \(\log F_A(0)=0\). If \(|z|<1\), then
+\(\Re(1-z)\ge 1-|z|>0\), so
+\[
+  -\Log(1-z)=\sum_{n\ge 1}\frac{z^n}{n}.
+\]
+Applying this with \(z=(\mu_j/\lambda)e^{i\theta}\) and summing over the
+finitely many non-Perron eigenvalues gives
+\[
+  -\log F_A(e^{i\theta})
+  =
+  \sum_{n\ge 1}\frac{u_n(A)e^{in\theta}}{n}.
+\]
+This branch is defined factorwise; we do not invoke the principal
+logarithm of the product \(F_A(t)\). Likewise, for every \(q\ge 1\) we
+set
+\[
+  \Psi_q(A)
+  :=
+  -\sum_{j=2}^d
+    \Log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
+\]
+All determinant logarithms in this appendix use the indicated branches.
+
+We also write
+\[
+  \Lambda_{\mathrm{rel}}(A):=\Lambda(A)/\lambda\in[0,1)
+\]
+and
+\[
+  u_n(A):=\sum_{j=2}^d\left(\frac{\mu_j}{\lambda}\right)^n
+  \qquad (n\ge 1).
+\]
+
+\subsection{Reduced determinants and multiple sums}
+
+\begin{proposition}[A formula for the reduced determinants of cyclic lifts]
+  \label{thm:finite-part-cyclic-lift-reduced-constant-closed}
+  For every \(q\ge 1\),
+  \[
+    C_\lambda(A^{\langle q\rangle})
+    =\frac{1}{q}\prod_{j=2}^d
+      \left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right)^{-1}.
+  \]
+  Equivalently,
+  \[
+    \exp(\Psi_q(A))
+    =
+    q\,C_\lambda(A^{\langle q\rangle}).
+  \]
+\end{proposition}
+
+\begin{proof}
+  The spectrum of \(A^{\langle q\rangle}=A\otimes P_q\) is
+  \[
+    \{\mu\,\omega_q^k:\mu\in\spec(A),\ 0\le k\le q-1\}.
+  \]
+  The eigenvalue \(\lambda\) of \(A^{\langle q\rangle}\) is simple.
+  Applying \Cref{lem:simple-eigenvalue-reduced-constant} to this
+  eigenvalue yields
+  \[
+    C_\lambda(A^{\langle q\rangle})
+    =\prod_{k=1}^{q-1}(1-\omega_q^k)^{-1}
+      \prod_{j=2}^d\prod_{k=0}^{q-1}
+        \left(1-\frac{\mu_j}{\lambda}\omega_q^k\right)^{-1}.
+  \]
+  The first product equals \(1/q\), while
+  \[
+    \prod_{k=0}^{q-1}(1-x\omega_q^k)=1-x^q.
+  \]
+  Substituting \(x=\mu_j/\lambda\) proves the claim.
+\end{proof}
+
+\begin{proposition}[Multiple-sum expansion for cyclic lifts with
+  explicit exponential remainder]
+  \label{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}
+  For every \(q\ge 1\),
+  \[
+    \Psi_q(A)=\sum_{m\ge 1}\frac{u_{qm}(A)}{m},
+  \]
+  and therefore
+  \[
+    \Psi_q(A)=u_q(A)+O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right)
+    \qquad (q\to\infty).
+  \]
+  More precisely,
+  \[
+    \abs{\Psi_q(A)-u_q(A)}
+    \le
+    \frac{d-1}{2(1-\Lambda_{\mathrm{rel}}(A))}
+    \Lambda_{\mathrm{rel}}(A)^{2q}.
+  \]
+\end{proposition}
+
+\begin{proof}
+  By \Cref{thm:finite-part-cyclic-lift-reduced-constant-closed},
+  \[
+    \Psi_q(A)
+    =-\sum_{j=2}^d\Log\!\left(1-\left(\frac{\mu_j}{\lambda}\right)^q\right).
+  \]
+  Expanding \(-\Log(1-x)=\sum_{m\ge 1}x^m/m\) for \(|x|<1\) and
+  exchanging the finite sum over \(j\) with the absolutely convergent
+  series over \(m\) gives the first identity. The remainder estimate
+  follows from
+  \[
+    |u_{qm}(A)|\le (d-1)\Lambda_{\mathrm{rel}}(A)^{qm}.
+  \]
+  Indeed,
+  \[
+    \begin{aligned}
+      \abs{\Psi_q(A)-u_q(A)}
+      &\le
+      \sum_{m\ge 2}\frac{\abs{u_{qm}(A)}}{m} \\
+      &\le
+      \frac{d-1}{2}\sum_{m\ge 2}\Lambda_{\mathrm{rel}}(A)^{qm} \\
+      &\le
+      \frac{d-1}{2(1-\Lambda_{\mathrm{rel}}(A))}
+      \Lambda_{\mathrm{rel}}(A)^{2q}.
+    \end{aligned}
+  \]
+\end{proof}
+
+\begin{proposition}[M\"obius inversion on multiples]
+  \label{prop:finite-part-cyclic-lift-mobius-inversion}
+  For every \(n\ge 1\),
+  \[
+    \frac{u_n(A)}{n}
+    =\sum_{m\ge 1}\frac{\mu(m)}{mn}\,\Psi_{mn}(A).
+  \]
+\end{proposition}
+
+\begin{lemma}[Absolute convergence for multiples inversion]
+  \label{lem:finite-part-cyclic-lift-mobius-absolute}
+  Let \(b_n:=u_n(A)/n\). Then, for every \(n\ge 1\),
+  \[
+    \sum_{m\ge 1}\sum_{r\ge 1}\abs{b_{mnr}}<\infty.
+  \]
+\end{lemma}
+
+\begin{proof}
+  For every \(k\ge 1\),
+  \[
+    \abs{u_k(A)}
+    \le (d-1)\Lambda_{\mathrm{rel}}(A)^k,
+  \]
+  so
+  \[
+    \abs{b_k}
+    \le \frac{d-1}{k}\Lambda_{\mathrm{rel}}(A)^k.
+  \]
+  Therefore
+  \[
+    \sum_{m\ge 1}\sum_{r\ge 1}\abs{b_{mnr}}
+    =
+    \sum_{s\ge 1}
+      \#\{(m,r)\in \NN^2:mr=s\}\,\abs{b_{ns}}.
+  \]
+  Since every factorization \(mr=s\) is determined by the divisor \(m\),
+  the multiplicity \(\#\{(m,r)\in \NN^2:mr=s\}\) is at most \(s\). Hence
+  \[
+    \sum_{m\ge 1}\sum_{r\ge 1}\abs{b_{mnr}}
+    \le
+    \sum_{s\ge 1}s\,\abs{b_{ns}}
+    \le
+    \frac{d-1}{n}\sum_{s\ge 1}\Lambda_{\mathrm{rel}}(A)^{ns}
+    <\infty,
+  \]
+  because \(0\le \Lambda_{\mathrm{rel}}(A)<1\).
+\end{proof}
+
+\begin{proof}[Proof of \Cref{prop:finite-part-cyclic-lift-mobius-inversion}]
+  Set \(b_n:=u_n(A)/n\). Then
+  \[
+    \frac{\Psi_q(A)}{q}
+    =\sum_{m\ge 1}b_{qm}
+  \]
+  by \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}. By
+  \Cref{lem:finite-part-cyclic-lift-mobius-absolute},
+  \[
+    \sum_{m\ge 1}\sum_{r\ge 1}\abs{\mu(m)b_{mnr}}
+    \le
+    \sum_{m\ge 1}\sum_{r\ge 1}\abs{b_{mnr}}
+    <\infty,
+  \]
+  so Tonelli--Fubini applies to the double series below. Hence
+  \begin{align*}
+    \sum_{m\ge 1}\frac{\mu(m)}{mn}\Psi_{mn}(A)
+    &=
+    \sum_{m\ge 1}\mu(m)\sum_{r\ge 1}b_{mnr} \\
+    &=
+    \sum_{s\ge 1}b_{ns}\sum_{m\mid s}\mu(m)
+    =b_n,
+  \end{align*}
+  since \(\sum_{m\mid s}\mu(m)=0\) unless \(s=1\).
+\end{proof}
+
+\begin{lemma}[Limsup of a finite exponential sum]
+  \label{lem:finite-part-exponential-sum-limsup}
+  Let
+  \[
+    f_q=\sum_{\beta\in B} d_\beta \beta^q
+    \qquad (q\ge 1),
+  \]
+  where \(B\subset\CC\) is finite and nonempty, the numbers \(\beta\) are
+  pairwise distinct, and \(d_\beta\in\CC\setminus\{0\}\) for every
+  \(\beta\in B\).
+  Then
+  \[
+    \limsup_{q\to\infty}\abs{f_q}^{1/q}
+    =\max_{\beta\in B}\abs{\beta}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Set
+  \[
+    R:=\max_{\beta\in B}\abs{\beta}.
+  \]
+  The upper bound
+  \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\le R\) is immediate from
+  \[
+    \abs{f_q}
+    \le \sum_{\beta\in B}\abs{d_\beta}\,\abs{\beta}^q
+    \le \left(\sum_{\beta\in B}\abs{d_\beta}\right)R^q.
+  \]
+  If \(R=0\), then \(B=\{0\}\), so \(f_q=0\) for all \(q\ge 1\), and the
+  asserted equality is immediate.
+
+  Let
+  \[
+    B_R:=\{\beta\in B:\abs{\beta}=R\},
+    \qquad
+    g_q:=\sum_{\beta\in B_R} d_\beta (\beta/R)^q.
+  \]
+  Since \(B\) is finite, there exists \(\vartheta\in[0,1)\) such that
+  \(\abs{\beta}\le \vartheta R\) for every \(\beta\in B\setminus B_R\).
+  Hence
+  \[
+    f_q
+    =
+    R^q\left(g_q+\sum_{\beta\in B\setminus B_R}d_\beta(\beta/R)^q\right)
+    =
+    R^q\bigl(g_q+O(\vartheta^q)\bigr).
+  \]
+  The numbers \(\beta/R\) with \(\beta\in B_R\) lie on \(\TT\) and are
+  pairwise distinct. Therefore
+  \[
+    \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
+    =
+    \sum_{\beta,\gamma\in B_R}
+      d_\beta\overline{d_\gamma}\,
+      \frac{1}{N}\sum_{q=1}^N
+        \left(\frac{\beta\overline{\gamma}}{R^2}\right)^q.
+  \]
+  As \(N\to\infty\), the inner Ces\`aro average tends to \(1\) when
+  \(\beta=\gamma\) and to \(0\) otherwise. Hence
+  \[
+    \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
+    \longrightarrow
+    \sum_{\beta\in B_R}\abs{d_\beta}^2>0.
+  \]
+  Therefore \(\limsup_{q\to\infty}\abs{g_q}>0\), so there exist
+  \(c>0\) and infinitely many \(q\) such that \(\abs{g_q}\ge 2c\). Along
+  that subsequence,
+  \[
+    \abs{f_q}\ge cR^q
+  \]
+  for all sufficiently large \(q\), because \(\vartheta^q\to 0\). This
+  yields
+  \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\ge R\), completing the proof.
+\end{proof}
+
+\subsection{Proofs of the reconstruction outputs}
+
+\begin{proof}[Proof of \Cref{thm:finite-part-cyclic-lift-spectrum-identifiability}]
+  By \Cref{prop:finite-part-cyclic-lift-mobius-inversion}, the cyclic
+  data determine every power sum \(u_n(A)\). Write
+  \[
+    \alpha_j:=\frac{\mu_j}{\lambda},
+    \qquad
+    P_A(x):=\prod_{j=2}^d(x-\alpha_j)
+    =x^{d-1}F_A(x^{-1}).
+  \]
+  Then \(P_A\) is monic of degree \(d-1\), even when some
+  \(\alpha_j=0\). Newton's identities recover the coefficients of this
+  monic degree-\((d-1)\) polynomial from the first \(d-1\) power sums
+  \(u_n(A)=\sum_{j=2}^d\alpha_j^n\), and hence from the full sequence
+  \(\{u_n(A)\}_{n\ge 1}\). Therefore the multiset
+  \(\{\alpha_2,\dots,\alpha_d\}\), including \(0\) with algebraic
+  multiplicity, is determined. Equivalently,
+  \[
+    F_A(t)=\prod_{j=2}^d(1-\alpha_j t)
+  \]
+  is determined. Its ordinary degree counts the nonzero \(\alpha_j\), so
+  the multiplicity of the zero non-Perron eigenvalue is exactly
+  \(d-1-\deg F_A\). This reconstructs the relative non-Perron spectrum
+  with algebraic multiplicity. Multiplying by \(\lambda\) would recover
+  the unnormalised eigenvalues \(\mu_j\), but that requires \(\lambda\)
+  as additional data beyond the cyclic-lift record itself. The argument
+  is purely fixed-record: it recovers one polynomial \(F_A\) from the
+  one sequence attached to the same matrix \(A\).
+
+  For the exponential growth rate, let
+  \[
+    B:=\{\alpha_j:2\le j\le d,\ \alpha_j\neq 0\}
+  \]
+  be the set of distinct nonzero values among the relative eigenvalues,
+  and for each \(\beta\in B\) let \(m_\beta\ge 1\) be its algebraic
+  multiplicity among \(\alpha_2,\dots,\alpha_d\). Then
+  \[
+    u_q(A)=\sum_{\beta\in B}m_\beta\beta^q.
+  \]
+  If \(B=\varnothing\), then \(u_q(A)=0\) for every \(q\ge 1\), so
+  \(\Lambda_{\mathrm{rel}}(A)=0\) and the asserted limsup identity is
+  immediate. Assume henceforth that \(B\neq\varnothing\). Since the
+  frequencies in \(B\) are pairwise distinct and each coefficient
+  \(m_\beta\) is a positive integer, no cancellation can occur after
+  grouping equal frequencies, and
+  \Cref{lem:finite-part-exponential-sum-limsup} gives
+  \[
+    \limsup_{q\to\infty}\abs{u_q(A)}^{1/q}
+    =\Lambda_{\mathrm{rel}}(A).
+  \]
+  The explicit remainder bound from
+  \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum} shows that
+  \[
+    \Psi_q(A)-u_q(A)
+    =O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right).
+  \]
+  If \(\Lambda_{\mathrm{rel}}(A)=0\), then both sequences are
+  eventually zero. Otherwise the error term has strictly smaller
+  exponential rate than \(u_q(A)\), so
+  \[
+    \limsup_{q\to\infty}\abs{\Psi_q(A)}^{1/q}
+    =\Lambda_{\mathrm{rel}}(A).
+  \]
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction}]
+  The polynomial identity
+  \[
+    F_A(\omega_q^j)=\sum_{n=0}^{d-1}a_n\omega_q^{jn}
+  \]
+  holds for \(0\le j\le q-1\). Averaging against
+  \(\omega_q^{-jm}\) and using discrete orthogonality gives
+  \[
+    \frac{1}{q}\sum_{j=0}^{q-1}
+      F_A(\omega_q^j)\omega_q^{-jm}
+    =
+    \sum_{n=0}^{d-1}a_n
+      \frac{1}{q}\sum_{j=0}^{q-1}\omega_q^{j(n-m)}.
+  \]
+  Since \(q\ge d\), the inner sum equals \(1\) when \(n=m\) and \(0\)
+  otherwise.
+\end{proof}
+
+\begin{corollary}[A fixed root-of-unity layer of \(\zeta_A\) recovers the
+  reduced spectrum]
+  \label{cor:finite-part-cyclic-lift-zeta-torsion-determines-spectrum}
+  For \(1\le j\le q-1\),
+  \[
+    F_A(\omega_q^j)
+    =\frac{\det(I-(\omega_q^j/\lambda)A)}{1-\omega_q^j}
+    =\frac{1}{1-\omega_q^j}\,
+      \zeta_A(\omega_q^j/\lambda)^{-1},
+  \]
+  while
+  \[
+    F_A(1)=\det\nolimits'(I-A/\lambda)=C(A)^{-1}.
+  \]
+  Consequently, if \(q\ge d\), then the data
+  \[
+    \Bigl(C(A),\ \{\zeta_A(\omega_q^j/\lambda)\}_{j=1}^{q-1}\Bigr)
+  \]
+  recover the reduced spectral polynomial \(F_A\), equivalently the
+  relative non-Perron spectrum \(\{\mu_j/\lambda\}_{j=2}^d\), with
+  multiplicity. If \(\lambda\) is supplied separately, they also
+  recover the unnormalised non-Perron spectrum.
+\end{corollary}
+
+\begin{proof}
+  The displayed identities are immediate from the definitions of
+  \(F_A\), \(\zeta_A\), and \(C(A)\). The reconstruction statement
+  follows from
+  \Cref{thm:finite-part-cyclic-lift-single-q-torsion-reconstruction}.
+\end{proof}
+
+\begin{remark}[A fixed-layer cyclic toy example]
+  \label{rem:finite-part-fibonacci-example}
+  Let
+  \[
+    A=\begin{pmatrix}
+      1 & 1 \\
+      1 & 0
+    \end{pmatrix}.
+  \]
+  Then \(d=2\), the Perron root is
+  \(\lambda=(1+\sqrt5)/2\), the non-Perron eigenvalue is
+  \(\mu=-\lambda^{-1}\), and
+  \[
+    F_A(t)=1+\lambda^{-2}t.
+  \]
+  Since \(q=2\ge d\), the single layer \(\{F_A(1),F_A(-1)\}\) already
+  reconstructs \(F_A\):
+  \[
+    F_A(1)=1+\lambda^{-2},
+    \qquad
+    F_A(-1)=1-\lambda^{-2},
+  \]
+  so discrete Fourier inversion gives
+  \[
+    a_0=\frac{F_A(1)+F_A(-1)}{2}=1,
+    \qquad
+    a_1=\frac{F_A(1)-F_A(-1)}{2}=\lambda^{-2}.
+  \]
+  Thus one order-\(2\) root-of-unity layer already recovers the reduced
+  polynomial and hence the relative non-Perron eigenvalue
+  \(\mu/\lambda=-\lambda^{-2}\); since \(\lambda\) is known here, this
+  also yields \(\mu=-\lambda^{-1}\).
+\end{remark}
+
+\begin{remark}[Consequences retained only for orientation]
+  The one-layer reconstruction above also decides any condition
+  expressible only in terms of the roots of \(F_A\). For example, when
+  \(q\ge d\), the values \(\{F_A(\omega_q^j)\}_{0\le j\le q-1}\)
+  determine whether
+  \[
+    \Lambda(A)\le \lambda^{1/2},
+    \qquad\text{equivalently}\qquad
+    \max_{j\ge 2}\left|\frac{\mu_j}{\lambda}\right|
+      \le \lambda^{-1/2}.
+  \]
+  This is a scalar spectral test for the canonical cyclic-lift
+  comparison; it is not part of the finite-group Adams--M\"obius theorem
+  chain.
+
+  Similarly, when \(A\) is an integer adjacency matrix,
+  \eqref{eq:finite-part-gap-series} gives
+  \[
+    \log C(A)-\FP(A)
+    =\sum_{n\ge 1}p_n(A)\psi(\lambda^{-n}),
+    \qquad
+    \psi(x)=-x-\log(1-x).
+  \]
+  Since \(p_n(A)\ge0\), \(p_n(A)>0\) for all sufficiently large \(n\),
+  and \(\psi(x)>0\) for \(0<x<1\), this gap is positive. The
+  observation is a useful check on the scalar normalisation
+  \(\mathcal M(A)=\gamma+\FP(A)\), not an independent primitive
+  reconstruction result.
+\end{remark}
+
 \section{Auxiliary holomorphic variation and effective truncation}
 \label{app:variation}
 
@@ -275,8 +753,10 @@ cyclic-lift comparison from \Cref{sec:finite-part}.
 This appendix contains the rational interval arithmetic omitted from
 \Cref{sec:shadows}. The main text keeps only the matrices, channel
 values, and the coarse certified non-vanishing windows of
-\Cref{lem:s3-example-perron-certificates}; the exact finite
-decompositions and row-by-row rational bounds are recorded here.
+\Cref{lem:s3-example-perron-certificates}; this appendix keeps only the
+finite truncations, exact tail bounds, and the final rational
+enclosures needed for the proof. The termwise arithmetic is delegated to
+the paper-local checker \path{certificates/s3_log_certificates.py}.
 
 \begin{lemma}[Exact rational certificate for the \(S_3\)-channels]
   \label{lem:appendix-s3-sharp-certificates}
@@ -390,105 +870,21 @@ decompositions and row-by-row rational bounds are recorded here.
   \]
   gives \(L_3(q)<\log q<U_3(q)\). Hence the coefficient-weighted bounds
   \(cL_3(q)\le c\log q\le cU_3(q)\) are rational for every term
-  \(c\log q\) in the finite sums. The next two tables print those exact
-  rational intervals. Every terminating decimal below is an exact
-  rational with denominator \(10^{15}\), and the rounding is outward in
-  both the logarithm and weighted columns.
-
-  \medskip
-  \noindent\textbf{The \(\varepsilon\)-channel.}
-  \begin{center}
-    \scriptsize
-    \begin{tabular}{@{}L{0.18\linewidth} L{0.31\linewidth} L{0.33\linewidth}@{}}
-      \toprule
-      term & exact rational interval for \(\log q\) &
-      exact rational interval for \(c\log q\) \\
-      \midrule
-      \(-\frac12\log 2\) &
-      \(0.693134757332288<\log 2<0.693147458648145\) &
-      \(-0.346573729324073<-\frac12\log 2<-0.346567378666144\) \\
-      \(\frac16\log\frac{32}{31}\) &
-      \(0.031748698314580<\log\frac{32}{31}<0.031748698314581\) &
-      \(0.005291449719096<\frac16\log\frac{32}{31}<0.005291449719097\) \\
-      \(\frac1{10}\log\frac{512}{511}\) &
-      \(0.001955034835803<\log\frac{512}{511}<0.001955034835804\) &
-      \(0.000195503483580<\frac1{10}\log\frac{512}{511}<0.000195503483581\) \\
-      \(\frac1{14}\log\frac{8192}{8191}\) &
-      \(0.000122077763686<\log\frac{8192}{8191}<0.000122077763687\) &
-      \(0.000008719840263<\frac1{14}\log\frac{8192}{8191}<0.000008719840264\) \\
-      \bottomrule
-    \end{tabular}
-  \end{center}
-  Summing the weighted intervals gives the exact rational enclosure
-  \[
-    -0.341078056281134
-    <E_7<
-    -0.341071705623202.
-  \]
-  In particular,
-  \[
+  \(c\log q\) in the finite sums. Applying these bounds termwise and
+  adding the resulting rational intervals gives the finite-sum windows
+  \begin{equation}\label{eq:s3-example-finite-sum-windows}
     -\frac{341079}{10^6}
     <E_7<
-    -\frac{341071}{10^6}.
-  \]
-
-  \medskip
-  \noindent\textbf{The \(\rho\)-channel.}
-  \begin{center}
-    \scriptsize
-    \begin{tabular}{@{}L{0.19\linewidth} L{0.30\linewidth} L{0.34\linewidth}@{}}
-      \toprule
-      term & exact rational interval for \(\log q\) &
-      exact rational interval for \(c\log q\) \\
-      \midrule
-      \(-\log\frac32\) &
-      \(0.405464990476190<\log\frac32<0.405465108994709\) &
-      \(-0.405465108994709<-\log\frac32<-0.405464990476190\) \\
-      \(-\frac12\log\frac85\) &
-      \(0.470003197958333<\log\frac85<0.470003633626001\) &
-      \(-0.235001816813001<-\frac12\log\frac85<-0.235001598979166\) \\
-      \(-\frac13\log\frac43\) &
-      \(0.287682066851339<\log\frac43<0.287682072472940\) &
-      \(-0.095894024157647<-\frac13\log\frac43<-0.095894022283779\) \\
-      \(\frac15\log\frac{33}{32}\) &
-      \(0.030771658666753<\log\frac{33}{32}<0.030771658666754\) &
-      \(0.006154331733350<\frac15\log\frac{33}{32}<0.006154331733351\) \\
-      \(\frac13\log\frac{32}{31}\) &
-      \(0.031748698314580<\log\frac{32}{31}<0.031748698314581\) &
-      \(0.010582899438193<\frac13\log\frac{32}{31}<0.010582899438194\) \\
-      \(\frac17\log\frac{129}{128}\) &
-      \(0.007782140442054<\log\frac{129}{128}<0.007782140442055\) &
-      \(0.001111734348864<\frac17\log\frac{129}{128}<0.001111734348865\) \\
-      \(\frac1{10}\log\frac{512\cdot1024}{511\cdot1025}\) &
-      \(0.000978948862747<\log\frac{512\cdot1024}{511\cdot1025}<0.000978948862748\) &
-      \(0.000097894886274<\frac1{10}\log\frac{512\cdot1024}{511\cdot1025}<0.000097894886275\) \\
-      \(\frac1{11}\log\frac{2049}{2048}\) &
-      \(0.000488162079501<\log\frac{2049}{2048}<0.000488162079502\) &
-      \(0.000044378370863<\frac1{11}\log\frac{2049}{2048}<0.000044378370864\) \\
-      \(\frac1{13}\log\frac{8193}{8192}\) &
-      \(0.000122062862525<\log\frac{8193}{8192}<0.000122062862526\) &
-      \(0.000009389450963<\frac1{13}\log\frac{8193}{8192}<0.000009389450964\) \\
-      \(\frac1{14}\log\frac{8192\cdot16384}{8191\cdot16385}\) &
-      \(0.000061044470006<\log\frac{8192\cdot16384}{8191\cdot16385}<0.000061044470007\) &
-      \(0.000004360319286<\frac1{14}\log\frac{8192\cdot16384}{8191\cdot16385}<0.000004360319287\) \\
-      \(\frac1{15}\log\frac{16384}{16383}\) &
-      \(0.000061037018970<\log\frac{16384}{16383}<0.000061037018971\) &
-      \(0.000004069134598<\frac1{15}\log\frac{16384}{16383}<0.000004069134599\) \\
-      \bottomrule
-    \end{tabular}
-  \end{center}
-  Summing the weighted intervals gives the exact rational enclosure
-  \[
-    -0.718351892282966
-    <R_{15}<
-    -0.718351554056736.
-  \]
-  In particular,
-  \[
+    -\frac{341071}{10^6},
+    \qquad
     -\frac{718352}{10^6}
     <R_{15}<
     -\frac{718351}{10^6}.
-  \]
+  \end{equation}
+  This is a finite common-denominator computation. The paper-local
+  checker \path{certificates/s3_log_certificates.py} prints the exact
+  lower and upper rational sums term by term and verifies
+  \eqref{eq:s3-example-finite-sum-windows}.
 
   Combining these finite-sum bounds with
   \eqref{eq:s3-example-epsilon-tail-certificate} and
@@ -506,6 +902,5 @@ decompositions and row-by-row rational bounds are recorded here.
 \end{proof}
 
 The paper-local checker \path{certificates/s3_log_certificates.py}
-reproduces the same rational arithmetic, but the proof above is fully
-printed inside the paper and does not depend on any external repository
-or unprinted output.
+records the full termwise exact rational arithmetic underlying the
+compact proof above.
