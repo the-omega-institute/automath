@@ -189,6 +189,7 @@ import Omega.Zeta.XiPrimeShellQuasiOrthogonality
 import Omega.Zeta.XiPrimeShellExplicitFormulaWindow
 import Omega.Zeta.XiPrimeSliceNontrivialLayerExactMinimality
 import Omega.Zeta.XiPiPowerSmithComplementarity
+import Omega.Zeta.XiTimePart58aDirichletMinimalWitnessWorstExponent
 import Omega.Zeta.XiPrecisionTypeNoLeakage
 import Omega.Zeta.XiTerminalZmLeyangSpectralQuarticAJFib89Minpoly
 import Omega.Zeta.XiTerminalZmLeyangPhaseResonanceFrobeniusParity

@@ -179,6 +179,7 @@ import Omega.Conclusion.FiniteCoreCollapseUniformDimension
 import Omega.Conclusion.VisibleAllAngleIntervalPsdCollapse
 import Omega.Conclusion.CoarsegrainingEnergyInfimum
 import Omega.Conclusion.CoarsegrainingStokesBeckChevalley
+import Omega.Conclusion.SecondRefinedCollisionExactFourierEnergy
 import Omega.Conclusion.CofinalFixedQuotient
 import Omega.Conclusion.CofinalSparsificationSemanticCompleteness
 import Omega.Conclusion.Window6InversionAnomalyInformationSeparation
