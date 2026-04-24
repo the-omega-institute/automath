@@ -94,6 +94,7 @@ import Omega.POM.BeckChevalleyAmgmDefectIdentity
 import Omega.POM.BivariateMomentZetaFredholm
 import Omega.POM.CommutativeSpectralSurface
 import Omega.POM.BivariateSystemIdentificationFiniteWindow
+import Omega.POM.BivariateModRectangleLiftsToPlane
 import Omega.POM.RecurrenceCodeViolationDistance
 import Omega.POM.ReplicaSoftcoreTemperatureSqReduction
 import Omega.POM.ReverseKlBoundByDispersion
@@ -542,6 +543,7 @@ import Omega.POM.HoelderBridgeDispersionFromSq
 import Omega.POM.IndependenceDpRadius2
 import Omega.POM.IndMatrixGrammar
 import Omega.POM.IndLocalRecurrence
+import Omega.POM.FactorizedSympowerUpperBound
 import Omega.POM.IndFactorization
 import Omega.POM.InfonceFiberSpectrumTomography
 import Omega.POM.MuSecantAudit
