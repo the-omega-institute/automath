@@ -15,6 +15,7 @@ import Omega.SyncKernelWeighted.CharacterPhaseCyclotomicElimination
 import Omega.SyncKernelWeighted.CompletedPrimeCongruence
 import Omega.SyncKernelWeighted.CompletedSimilarity
 import Omega.SyncKernelWeighted.CompletedTeichmuellerCongruence
+import Omega.SyncKernelWeighted.CompletionRealLine
 import Omega.SyncKernelWeighted.CompletedDworkFrobeniusTower
 import Omega.SyncKernelWeighted.CompletedPrimitivePrimePowerDifferenceQuotient
 import Omega.SyncKernelWeighted.GallavottiCohen
