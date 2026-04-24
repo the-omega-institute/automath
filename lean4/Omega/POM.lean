@@ -863,3 +863,5 @@ import Omega.POM.EntropyLossOneCocycleFlat
 import Omega.POM.PressureEntropyFactorizationMultiplicative
 import Omega.POM.OracleLocalCostKlBregman
 import Omega.POM.MicrocanonicalFoldWorstcaseQueryRigidity
+import Omega.POM.HstarDescentLinext
+import Omega.POM.FenceVolumeLog2Pi
