@@ -559,6 +559,7 @@ import Omega.Zeta.FoldInversionStrongConverseSideinfo
 import Omega.Zeta.FoldbinGaugeVolumeKappaCompression
 import Omega.Zeta.FourthRegisterDichotomy
 import Omega.Zeta.FredholmDetSeeds
+import Omega.Zeta.OperatorFredholmZetaEqualityUndecidable
 import Omega.Zeta.FredholmPrimitiveClosedForm
 import Omega.Zeta.XiEndpointHeatProbeRatioRecoversLocalSpectralDimension
 import Omega.Zeta.XiEndpointSinglePointCertificateComplete

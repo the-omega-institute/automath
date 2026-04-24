@@ -71,6 +71,7 @@ import Omega.SyncKernelWeighted.PressureBranchpointsDiscriminant
 import Omega.SyncKernelWeighted.PressureTaylorRemainderCauchy
 import Omega.SyncKernelWeighted.PressureUnitCircleBranchAngles
 import Omega.SyncKernelWeighted.PressureUnitRootModulusThreshold
+import Omega.SyncKernelWeighted.PrimeLocalCLT
 import Omega.SyncKernelWeighted.PrimitiveNaturalBoundaryUnitCircle
 import Omega.SyncKernelWeighted.PrimitiveSharpPhaseLimit
 import Omega.SyncKernelWeighted.PrimitiveFiniteSym
