@@ -1129,6 +1129,7 @@ import Omega.Conclusion.S4SchurCentralizerClosedForm
 import Omega.Conclusion.SerrinRealizableMeanConeCollapse
 import Omega.Conclusion.SerrinRigidityZeroSideinfoRate
 import Omega.Conclusion.SerrinWulffDyadicCodimLaw
+import Omega.Conclusion.SerrinWulffTerminalObjectInverseLimit
 import Omega.Conclusion.SerrinEllipsoidFluxIdentifiability
 import Omega.Conclusion.SerrinEllipsoidLpTransverseRigidity
 import Omega.Conclusion.SerrinSupportExactScreenCollapse
