@@ -20,6 +20,7 @@ import Omega.Conclusion.AtomicSurgeryFiniteCongruenceTomography
 import Omega.Conclusion.AtomicSurgerySingleCongruenceInjection
 import Omega.Conclusion.AlgebraicLdpDfiniteStokesCompression
 import Omega.Conclusion.AngularPronyIdentifiability
+import Omega.Conclusion.AngularResidueMeasureReconstruction
 import Omega.Conclusion.AlgorithmPrimeShiftEquivalence
 import Omega.Conclusion.AmbiguityShellJordanChainGraphLift
 import Omega.Conclusion.AmbiguityShellNilpotentIndexEqualsWindow
