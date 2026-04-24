@@ -222,6 +222,7 @@ import Omega.POM.EscortMinentropyZeroTemperatureIdentity
 import Omega.POM.DiagonalRateReconstructWFromRateCurve
 import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
 import Omega.POM.DiagonalRateAbsorbingDFR
+import Omega.POM.DiagonalRateResolventEntryClosedForm
 import Omega.POM.DiagonalRateSchurConcavityUniformMaxPrinciple
 import Omega.POM.DiagonalRateAbsorbingLaguerreInterlacing
 import Omega.POM.DiagonalRateRefreshAbsorbingLaguerreInterlacing

@@ -160,6 +160,7 @@ import Omega.Zeta.XiHypercubeWeightedLaplacianHeatTraceFactorization
 import Omega.Zeta.XiIntegratedDefectGoldenAsymptotics
 import Omega.Zeta.XiJensenWindowOptimalScale
 import Omega.Zeta.XiJGHolographicCoefficientExtraction
+import Omega.Zeta.XiJensenPoissonIntertwinerTwoScale
 import Omega.Zeta.XiLatticeLocalDepthRepulsion
 import Omega.Zeta.XiJensenBoundaryPotentialFiniteDefectExplicit
 import Omega.Zeta.XiFiniteDefectRhCriterionJensenScanTrace
@@ -174,6 +175,7 @@ import Omega.Zeta.RealInput40ArityChargeZeroConstants
 import Omega.Zeta.RealInput40ZetaUvResidue
 import Omega.Zeta.XiLogDefectPotentialPoissonPrimitive
 import Omega.Zeta.XiDtnActsOnJensenKernel
+import Omega.Zeta.XiBulkBoundarySpeedMatching
 import Omega.Zeta.XiLocalBinaryNormalizationFibonacciRigidity
 import Omega.Zeta.XiLocalizedSolenoidPeriodicGrowthMaxScale
 import Omega.Zeta.XiLogcmSecondBernoulliCoefficientRatio
