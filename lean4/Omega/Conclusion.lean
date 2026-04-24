@@ -637,6 +637,7 @@ import Omega.Conclusion.LkNormalizedZetaOddProjector
 import Omega.Conclusion.LkNormalizedZetaResidueQuarter
 import Omega.Conclusion.LkNdDeterminantZeroTracking
 import Omega.Conclusion.LkCentralBinomialCatalanMoments
+import Omega.Conclusion.TQFTGenusGeneratingFunctionRational
 import Omega.Conclusion.TQFTGenusLinearRecurrenceRecovery
 import Omega.Conclusion.TqftGenusHausdorffMomentSequence
 import Omega.Conclusion.TqftGenusBoundByPositivePressure
