@@ -166,6 +166,7 @@ import Omega.Zeta.XiJensenBoundaryPotentialFiniteDefectExplicit
 import Omega.Zeta.XiFiniteDefectRhCriterionJensenScanTrace
 import Omega.Zeta.XiFiniteDefectEndpointJensenExplicitTail
 import Omega.Zeta.XiJensenEntropyRegularizedVariational
+import Omega.Zeta.XiJensenRecursiveResolutionNoiseCoupling
 import Omega.Zeta.XiOptimalAllocationUnderProductBound
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
