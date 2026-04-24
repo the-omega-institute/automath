@@ -430,6 +430,7 @@ import Omega.Zeta.ClassPrimitiveTrivialSplit
 import Omega.Zeta.ComovingEnergyDeltaBound
 import Omega.Zeta.XiComovingPrefixEndpointBarrierLaw
 import Omega.Zeta.XiPhasePrefixCollisionLowerBound
+import Omega.Zeta.XiPhasePrefixClarityHorizon
 import Omega.Zeta.XiComovingJensenWeightIntegralConservation
 import Omega.Zeta.ComovingHorizonScanPoissonKLCovarianceTensor
 import Omega.Zeta.CompletionEndpointJetDiffusion

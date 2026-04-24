@@ -864,6 +864,7 @@ import Omega.POM.DiagonalRateUniformUniqueMaximizerActive
 import Omega.POM.DiagonalRateUniformGlobalMax
 import Omega.POM.A4TAdeIntersectionTMinpolyDiscriminant
 import Omega.POM.PrimeFactorMomentCompilerResonance
+import Omega.POM.MomPrefixProductInvariant
 import Omega.POM.FiberLowerBoundCascade
 import Omega.POM.EntropyGapBound
 import Omega.POM.RmomSound
