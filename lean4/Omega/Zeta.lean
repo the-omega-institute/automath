@@ -1410,6 +1410,7 @@ import Omega.Zeta.XiJensenPoissonIntertwinerFractionalDerivative
 import Omega.Zeta.XiCayleyDepthScanAreaLowfreq
 import Omega.Zeta.XiEndpointJensenSingleDefectAreaLaw
 import Omega.Zeta.XiDiscLedgerKernelDual
+import Omega.Zeta.XiCoherenceAffineSubcube
 import Omega.Zeta.XiTerminalZmElliptic5torsionSignQuadraticField
 import Omega.Zeta.AmpDefectUnitary
 import Omega.Zeta.XiHankelFullrankOnePrimeAudit
