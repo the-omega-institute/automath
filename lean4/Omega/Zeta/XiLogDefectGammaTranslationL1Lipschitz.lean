@@ -38,4 +38,13 @@ theorem paper_xi_log_defect_gamma_translation_l1_lipschitz :
     simpa [xiLogDefectExactL1Lipschitz] using mul_nonneg htwo hlog
   · simpa [xiLogDefectUniformHalfBound] using le_of_eq (by norm_num)
 
+/-- Requested publication-facing theorem name for
+    `thm:xi-logdefect-gamma-translation-l1-lipschitz`. -/
+theorem paper_xi_logdefect_gamma_translation_l1_lipschitz :
+    xiLogDefectTranslationReduction ∧
+      xiLogDefectDerivativeNormClosedForm ∧
+      xiLogDefectExactL1Lipschitz ∧
+      xiLogDefectUniformHalfBound :=
+  paper_xi_log_defect_gamma_translation_l1_lipschitz
+
 end Omega.Zeta

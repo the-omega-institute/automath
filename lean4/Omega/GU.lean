@@ -1,5 +1,6 @@
 import Omega.GU.AltCriterionStability
 import Omega.GU.AnomalyLedgerNoMultiplicative
+import Omega.GU.GutFiniteAnomalyLedgerNoMultiplicativeEmbedding
 import Omega.GU.BdryBinaryLayeringOrbitClassification
 import Omega.GU.BdryChiTwistedBinaryLabelExistence
 import Omega.GU.BdryEquivariantRegisterMinDegreeChoose
