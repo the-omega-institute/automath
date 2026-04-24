@@ -1017,3 +1017,6 @@ import Omega.Conclusion.SingularRingUnitCircleMaximalShell
 import Omega.Conclusion.FourierExcessCompleteDelocalization
 import Omega.Conclusion.LkFirstZeroMonotoneApproach
 import Omega.Conclusion.SchurGibbsSignatureCompleteInvertibility
+import Omega.Conclusion.FiniteDefectCommensurableBifrequencyAliasLattice
+import Omega.Conclusion.PisotBoundaryShadowNotL2
+import Omega.Conclusion.RamanujanShellTransformStrictInjectivity
