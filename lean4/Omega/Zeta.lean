@@ -42,6 +42,7 @@ import Omega.Zeta.DerivedLeyangBfCkRigidity
 import Omega.Zeta.DephysBudgetDistanceDominatesTv
 import Omega.Zeta.DephysIdempotentMonadIProjection
 import Omega.Zeta.DephysicalizedDefectRepulsionRadius
+import Omega.Zeta.DephysFoldStinespringSqrtLaw
 import Omega.Zeta.DephysHolographySufficientStatistic
 import Omega.Zeta.AppHorizonPoleImprint
 import Omega.Zeta.Degree11CyclicCubicNormalizationGenus3
@@ -253,6 +254,7 @@ import Omega.Zeta.XiToeplitzPrincipalMinorDiscreteCurvatureRecovery
 import Omega.Zeta.XiToeplitzCurvatureEnergyEquivalence
 import Omega.Zeta.XiToeplitzDeterminantRatioLimitL2
 import Omega.Zeta.XiToeplitzNegativeSpectrumRobustVerification
+import Omega.Zeta.XiToeplitzNegativeEigenvalueImpliesJensenDefectLb
 import Omega.Zeta.XiToeplitzPsdJetSemialgebraic
 import Omega.Zeta.XiTerminalZmGodelLeyangTropicalStripLattice
 import Omega.Zeta.XiTerminalZmLeyangStripRobustnessErrorControl
