@@ -31,3 +31,4 @@ import Omega.SyncKernelRealInput.RealInput40PrimeGenfunIdentity
 import Omega.SyncKernelRealInput.MobiusCollapse
 import Omega.SyncKernelRealInput.GMSoficZeckLinearConstraintsPF
 import Omega.SyncKernelRealInput.RealInput40LogMFastPrime
+import Omega.SyncKernelRealInput.RealInputAddDelayRigidity
