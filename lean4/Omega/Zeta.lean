@@ -194,6 +194,7 @@ import Omega.Zeta.XiPiPowerSmithComplementarity
 import Omega.Zeta.XiTimePart58aDirichletMinimalWitnessWorstExponent
 import Omega.Zeta.XiPrecisionTypeNoLeakage
 import Omega.Zeta.XiTerminalZmLeyangSpectralQuarticAJFib89Minpoly
+import Omega.Zeta.XiTerminalZmJgFiberBoundDnContraction
 import Omega.Zeta.XiTerminalZmLeyangPhaseResonanceFrobeniusParity
 import Omega.Zeta.XiTerminalZmLeyangLanglandsDualRootStability
 import Omega.Zeta.XiTerminalZmLeyangURootPinningDouble
