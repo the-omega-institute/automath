@@ -76,6 +76,7 @@ import Omega.POM.BqTraceLucas
 import Omega.POM.BCInformationStokesCoboundary
 import Omega.POM.BCUniformLiftPseudofunctor
 import Omega.POM.TreeKlAmgmDecomposition
+import Omega.POM.NontrivialSchurVanishingIffSingleFiber
 import Omega.POM.BCPontryaginDualClassification
 import Omega.POM.BCAnomalyCharacterSupportEventualFreezing
 import Omega.POM.BCVisibleQuotientEventualStability

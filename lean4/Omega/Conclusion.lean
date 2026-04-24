@@ -180,6 +180,7 @@ import Omega.Conclusion.FactorialCanonicalSectionZeroRateCode
 import Omega.Conclusion.FiniteToeplitzFalsifierNyquistDepthBarrier
 import Omega.Conclusion.FiniteTestDepthBusybeaver
 import Omega.Conclusion.OfflineFiberCountTailInvariance
+import Omega.Conclusion.FiniteWindowConnectedLieFactorCollapse
 import Omega.Conclusion.JensenDefectEnergyReverseklIdentity
 import Omega.Conclusion.PoissonJensenGapReversekl
 import Omega.Conclusion.JensenDefectZeroStockIdentity
