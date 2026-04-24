@@ -120,4 +120,15 @@ theorem paper_witt_dieudonne_dwork (n : ℕ) :
     _ = 0 := by
         simp [witt_dieudonne_dwork_B_asym, Matrix.trace, Fin.sum_univ_two]
 
+/-- Paper label: `lem:sync-kernel-ward-traces`. In the concrete completed `2 × 2` seed, the
+first-order Ward trace vanishes for every time length because `\widetilde B(0) = I` and the odd
+part is traceless. -/
+theorem paper_sync_kernel_ward_traces :
+    ∀ n : ℕ, 1 ≤ n →
+      Matrix.trace ((witt_dieudonne_dwork_completed 0) ^ (n - 1) * witt_dieudonne_dwork_B_asym) =
+        0 := by
+  intro n hn
+  rw [witt_dieudonne_dwork_completed_zero]
+  simp [witt_dieudonne_dwork_B_asym, Matrix.trace, Fin.sum_univ_two]
+
 end Omega.SyncKernelWeighted
