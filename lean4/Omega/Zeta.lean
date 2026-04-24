@@ -1348,3 +1348,4 @@ import Omega.Zeta.XiBinomialToeplitzConstantDepthUnderQuadraticRedshift
 import Omega.Zeta.XiContractDefectCriticalSlicePrinciple
 import Omega.Zeta.XiAbelianGlobalStabilityThresholdMaxChannel
 import Omega.Zeta.XiEllipticDenominatorSecondDifferenceHeightReadout
+import Omega.Zeta.XiTimePart64acAbelianQuotientKlChain

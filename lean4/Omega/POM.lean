@@ -946,3 +946,5 @@ import Omega.POM.BqExplicitDiagonalizationLinearForms
 import Omega.POM.ResonanceDisc2adicThicknessLb
 import Omega.POM.PathComponentMultiplicityRefinementMonotoneExtrema
 import Omega.POM.FiberCorrDecay
+import Omega.POM.FiberInhomConditionalUniformity
+import Omega.POM.DiagonalRateMixtureOptimalityCriterion
