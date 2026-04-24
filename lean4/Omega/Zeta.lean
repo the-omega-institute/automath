@@ -163,6 +163,7 @@ import Omega.Zeta.XiJGHolographicCoefficientExtraction
 import Omega.Zeta.XiLatticeLocalDepthRepulsion
 import Omega.Zeta.XiJensenBoundaryPotentialFiniteDefectExplicit
 import Omega.Zeta.XiFiniteDefectRhCriterionJensenScanTrace
+import Omega.Zeta.XiFiniteDefectEndpointJensenExplicitTail
 import Omega.Zeta.XiJensenEntropyRegularizedVariational
 import Omega.Zeta.XiOptimalAllocationUnderProductBound
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
