@@ -495,6 +495,7 @@ import Omega.Conclusion.Window6NoLinearFactorization
 import Omega.Conclusion.Window6NotRootSystemNotFreeQuotient
 import Omega.Conclusion.TimeWindowAsymptoticallyFullPhaseLaw
 import Omega.Conclusion.TimeWindowCdimLedgerLowerBound
+import Omega.Conclusion.TolerantTimewindowLedgerLowerBound
 import Omega.Conclusion.TruncatedPrimeRegisterCollisionProduct
 import Omega.Conclusion.TrivialTwistCompleteJetFailure
 import Omega.Conclusion.FixedResolutionHologramExactErrorRadius
