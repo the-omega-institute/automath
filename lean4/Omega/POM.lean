@@ -736,6 +736,7 @@ import Omega.POM.PressureReflectionInequality
 import Omega.POM.PressureSlopes
 import Omega.POM.SchurTracesDetermineLowMoments
 import Omega.POM.ProfiniteAxisChebotarev
+import Omega.POM.RepcontProfiniteColimit
 import Omega.POM.ProfiniteCylinderEffectiveN
 import Omega.POM.ProfiniteCylinderCapacity
 import Omega.POM.SyncSubtractedChebotarevCapacity
