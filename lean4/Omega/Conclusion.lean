@@ -1013,3 +1013,4 @@ import Omega.Conclusion.DoubleSignTrigonalZeroMutualInformation
 import Omega.Conclusion.SingularRingUnitCircleMaximalShell
 import Omega.Conclusion.FourierExcessCompleteDelocalization
 import Omega.Conclusion.LkFirstZeroMonotoneApproach
+import Omega.Conclusion.SchurGibbsSignatureCompleteInvertibility
