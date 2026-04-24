@@ -1,5 +1,6 @@
 import Omega.Conclusion.AdditiveScalarProcircleObstruction
 import Omega.Conclusion.AdditiveScalarProcircleL1Classification
+import Omega.Conclusion.AdditiveScalarProcircleWeightedModel
 import Omega.Conclusion.AlgebraicLdpSinglevaluednessCriterion
 import Omega.Conclusion.AlgebraicLdpMonodromyStokesQuantization
 import Omega.Conclusion.AddressResidualOptimalBudgetSplitting
