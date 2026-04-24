@@ -159,6 +159,18 @@ theorem paper_conclusion_period3_fiber_exact_multiplicity_package :
     3 * 2 = (6 : ℕ) :=
   paper_conclusion_period3_fiber_exact_multiplicity_seeds
 
+/-- Paper-facing theorem `thm:conclusion-period3-fiber-exact-multiplicity`. -/
+theorem paper_conclusion_period3_fiber_exact_multiplicity (n : Nat) :
+    Function.Bijective (period3MiddleProjection n) ∧
+      Fintype.card (Period3FiberBlockChoices n) = 2 ^ n := by
+  refine ⟨?_, ?_⟩
+  · constructor
+    · intro ω ω' hω
+      simpa [period3MiddleProjection] using hω
+    · intro y
+      exact ⟨y, rfl⟩
+  · simp [Period3FiberBlockChoices]
+
 /-- Paper-facing wrapper for the hypercube/VC corollary:
     the middle-coordinate projection is bijective on the period-3 fiber model,
     every middle-coordinate pattern is realized, the fiber has `2^n` patterns,
