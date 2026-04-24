@@ -37,4 +37,31 @@ theorem paper_pom_pressure_entropy_factorization_multiplicative
   nlinarith
     [D.paper_label_pom_pressure_entropy_factorization_multiplicative_entropy_loss_identity]
 
+/-- Paper label: `cor:pom-escort-renyi-rate-inversion`. -/
+theorem paper_pom_escort_renyi_rate_inversion
+    (pressure : ℕ → ℝ) (escortEntropyRate : ℕ → ℕ → ℝ)
+    (hfactor :
+      ∀ a b, 1 ≤ a → 2 ≤ b →
+        pressure (a * b) =
+          (b : ℝ) * pressure a - ((b : ℝ) - 1) * escortEntropyRate a b)
+    (hP1 : pressure 1 = Real.log 2) :
+    (∀ a b, 1 ≤ a → 2 ≤ b →
+      escortEntropyRate a b = ((b : ℝ) * pressure a - pressure (a * b)) / ((b : ℝ) - 1)) ∧
+    ∀ b, 2 ≤ b →
+      escortEntropyRate 1 b = ((b : ℝ) * Real.log 2 - pressure b) / ((b : ℝ) - 1) := by
+  have hinv :
+      ∀ a b, 1 ≤ a → 2 ≤ b →
+        escortEntropyRate a b = ((b : ℝ) * pressure a - pressure (a * b)) / ((b : ℝ) - 1) := by
+    intro a b ha hb
+    have hb1_ne : (b : ℝ) - 1 ≠ 0 := by
+      norm_num
+      omega
+    apply (eq_div_iff hb1_ne).2
+    nlinarith [hfactor a b ha hb]
+  refine ⟨?_, ?_⟩
+  · exact hinv
+  · intro b hb
+    have hmain := hinv 1 b (by omega) hb
+    simpa [hP1] using hmain
+
 end Omega.POM
