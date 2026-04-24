@@ -1009,6 +1009,7 @@ import Omega.Zeta.XiCarathImagConstantInvisible
 import Omega.Zeta.XiCauchyPoissonDensityRatioSecondOrderProfile
 import Omega.Zeta.XiCauchyPoissonAllLpSharpScaling
 import Omega.Zeta.XiCauchyPoissonDerivativeEnergyClosedForm
+import Omega.Zeta.XiCauchyPoissonL2SharpKlScaling
 import Omega.Zeta.XiCauchyPoissonSecondOrderShapeLimitNodeRigidity
 import Omega.Zeta.CayleyTimefiberPoissonCollapse
 import Omega.Zeta.TimefiberPoissonProjectionPrinciple
