@@ -633,13 +633,23 @@ If $\lambda_{\mathrm{hid}}=0$, Lemma~\ref{lem:kernel-factorization-main} gives e
 Here $\rho>0$ and $a-\rho<0$ by Lemma~\ref{lem:stationary-main}, so the displayed covariance is nonzero. Exact $1$-dependence would make $A_0$ and $A_2$ independent and hence uncorrelated, a contradiction. Lemma~\ref{lem:critical-rate-main} identifies the unique positive solution of $\lambda_{\mathrm{hid}}=0$ as $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
 \end{proof}
 
-There is no contradiction between exact $1$-dependence and the strictly
-increasing hazard proved below. Exact $1$-dependence is an independence
-statement for two blocks with at least one unobserved sample between them.
-Finite Markov order is a different property: it would require the next-click
-probability after a long zero run to depend only on a fixed finite suffix. The
-hazard lemma shows that the boundary-reset recovery record fails that latter
-property even at the memory threshold.
+At the critical rate $\Gamma=\Gamma_c$, exact $1$-dependence and nonconstant
+renewal hazard coexist in a concrete way. The factorization in
+Lemma~\ref{lem:kernel-factorization-main} gives
+\[
+\PP(A_0=1,\ A_2=1)=\PP(A_0=1)\PP(A_2=1),
+\]
+so the click at time $0$ is independent of the click two samples later once
+one unobserved sample separates the blocks. But the renewal hazard still keeps
+track of how many zeros have elapsed since the last click:
+\[
+\PP(A_{k+1}=1\mid A_0=1,\ A_1=\cdots=A_k=0)=h_k,
+\]
+and \Cref{lem:survival-hazard-main} shows that $h_{k+1}>h_k$. Thus exact
+$1$-dependence removes dependence across a skipped sample, whereas finite
+Markov order would require the next-click probability after a long zero run to
+stabilize, which the strictly increasing hazard forbids even at
+$\Gamma=\Gamma_c$.
 
 The converse direction in Lemma~\ref{lem:one-dep-criterion-main} uses covariance only as an obstruction: if the process were exact $1$-dependent, then $A_0$ and $A_2$ would be independent and hence uncorrelated. Independence at the critical rate itself is supplied by the rank-one labelled-kernel factorization, not by covariance cancellation alone.
 
@@ -1481,6 +1491,79 @@ omitted reward, so \Cref{lem:batch-var-1dep-main} applies to that
 deterministic prefix rather than to a random number of cycles.
 \end{proof}
 
+\begin{lemma}[Boundary equivalence for the lag-two empirical covariance]\label{lem:lag2-boundary-main}
+Let $(A_n)_{n\in\mathbb Z}$ be a stationary binary record whose click times are
+regeneration times, and assume \eqref{eq:exp-tail-main}. Define
+\[
+\rho=\EE A_0,\qquad
+\mu_2=\EE(A_0A_2),\qquad
+\gamma_2=\mu_2-\rho^2,
+\]
+\[
+Z_n=(A_nA_{n+2}-\mu_2)-2\rho(A_n-\rho),
+\qquad
+\widehat\rho=\frac1N\sum_{n=0}^{N-1}A_n,
+\]
+\[
+\widehat\gamma_2=
+\frac{1}{N-2}\sum_{n=0}^{N-3}(A_n-\widehat\rho)(A_{n+2}-\widehat\rho),
+\qquad
+\widetilde\gamma_{2,N}=\frac1N\sum_{n=0}^{N-1}Z_n.
+\]
+Then
+\[
+\widehat\gamma_2-\gamma_2-\widetilde\gamma_{2,N}=O_{\PP}(N^{-1}).
+\]
+In particular,
+\[
+\sqrt N\,\bigl((\widehat\gamma_2-\gamma_2)-\widetilde\gamma_{2,N}\bigr)\to0
+\qquad\text{in probability.}
+\]
+\end{lemma}
+
+\begin{proof}
+Expanding the empirical covariance gives
+\[
+\widehat\gamma_2-\gamma_2
+=
+\frac{1}{N-2}\sum_{n=0}^{N-3}(A_nA_{n+2}-\mu_2)
+-2\rho(\widehat\rho-\rho)-(\widehat\rho-\rho)^2.
+\]
+Subtracting
+\[
+\widetilde\gamma_{2,N}
+=
+\frac1N\sum_{n=0}^{N-1}(A_nA_{n+2}-\mu_2)-2\rho(\widehat\rho-\rho)
+\]
+therefore yields
+\[
+\widehat\gamma_2-\gamma_2-\widetilde\gamma_{2,N}
+=
+r_N^{\partial}-(\widehat\rho-\rho)^2,
+\]
+with
+\[
+r_N^{\partial}
+=
+\left(\frac{1}{N-2}-\frac1N\right)
+\sum_{n=0}^{N-3}(A_nA_{n+2}-\mu_2)
+-\frac1N\sum_{n=N-2}^{N-1}(A_nA_{n+2}-\mu_2).
+\]
+Because $A_n\in\{0,1\}$ and $0\le\mu_2\le1$, every summand
+$A_nA_{n+2}-\mu_2$ is bounded by $1$ in absolute value. Hence
+\[
+|r_N^{\partial}|
+\le
+\left(\frac{1}{N-2}-\frac1N\right)(N-2)+\frac2N
+=\frac4N,
+\]
+so $r_N^{\partial}=O(N^{-1})$ almost surely. Also $A_n-\rho$ is a bounded
+centered regenerative reward, so the standard regenerative CLT gives
+$\sqrt N(\widehat\rho-\rho)=O_{\PP}(1)$ and therefore
+$(\widehat\rho-\rho)^2=O_{\PP}(N^{-1})$. Combining the two bounds proves the
+displayed claim, and multiplying by $\sqrt N$ gives the final statement.
+\end{proof}
+
 \begin{theorem}[Regenerative $1$-dependent cycle CLT and implementable lag-two variance estimator]\label{thm:cycle-block-main}
 Let $(A_n)_{n\in\mathbb Z}$ be a stationary binary record whose click times are
 regeneration times, and assume \eqref{eq:exp-tail-main}. Define
@@ -1586,64 +1669,38 @@ The exponential tail gives $R_N=o_{\PP}(\sqrt N)$. Hence
 \frac{1}{\sqrt N}\sum_{n=0}^{N-1}Z_n
 \Rightarrow
 \mathcal N\!\left(0,\frac{\tau_2^2}{\EE L_1}\right),
-\]
-which is exactly \eqref{eq:sigma2-main}.
-
-\smallskip
-\noindent\emph{Step 2: transfer from the centered sum to $\widehat\gamma_2$.}
-Since
-\[
-\widehat\gamma_2
-=
-\frac{1}{N-2}\sum_{n=0}^{N-3}A_nA_{n+2}
--\widehat\rho^{\,2},
-\]
-we have
-\[
-\widehat\gamma_2-\gamma_2
-=
-\left(
-\frac{1}{N-2}\sum_{n=0}^{N-3}(A_nA_{n+2}-\mu_2)
-\right)
--2\rho(\widehat\rho-\rho)-(\widehat\rho-\rho)^2.
-\]
-The last term is $O_{\PP}(N^{-1})=o_{\PP}(N^{-1/2})$ because
-$\widehat\rho-\rho=O_{\PP}(N^{-1/2})$. To compare the first two terms with the
-cycle sum, write
-\[
-\frac{1}{N-2}\sum_{n=0}^{N-3}(A_nA_{n+2}-\mu_2)-2\rho(\widehat\rho-\rho)
-=
-\frac1N\sum_{n=0}^{N-3}Z_n+r_N^{\partial},
-\]
-where
-\[
-r_N^{\partial}
-=
-\left(\frac{1}{N-2}-\frac1N\right)
-\sum_{n=0}^{N-3}(A_nA_{n+2}-\mu_2)
--\frac{2\rho}{N}\sum_{n=N-2}^{N-1}(A_n-\rho).
-\]
-Because $A_n\in\{0,1\}$, both sums in $r_N^{\partial}$ are bounded by a
-deterministic multiple of $N$ and $1$, respectively, so
-$r_N^{\partial}=O_{\PP}(N^{-1})$. Also
-\[
-\frac1N\sum_{n=0}^{N-3}Z_n
-=
-\frac1N\sum_{n=0}^{N-1}Z_n-\frac{Z_{N-2}+Z_{N-1}}{N},
-\]
-and the boundedness of $Z_n$ gives $(Z_{N-2}+Z_{N-1})/N=O_{\PP}(N^{-1})$.
-Therefore
-\[
-\widehat\gamma_2-\gamma_2
-=
-\frac1N\sum_{n=0}^{N-1}Z_n+o_{\PP}(N^{-1/2}),
-\]
-so the CLT for $\widehat\gamma_2$ follows from the CLT for the centered sum of
-$Z_n$.
-
-\smallskip
-\noindent\emph{Step 3: deterministic-prefix batch estimator for the true
-cycle rewards.}
+	\]
+	which is exactly \eqref{eq:sigma2-main}.
+	
+	\smallskip
+	\noindent\emph{Step 2: transfer from the centered sum to $\widehat\gamma_2$.}
+	Define
+	\[
+	\widetilde\gamma_{2,N}:=\frac1N\sum_{n=0}^{N-1}Z_n.
+	\]
+	Then Step~1 gives
+	\[
+	\sqrt N\,\widetilde\gamma_{2,N}
+	=
+	\frac{1}{\sqrt N}\sum_{n=0}^{N-1}Z_n
+	\Rightarrow
+	\mathcal N(0,\sigma_2^2).
+	\]
+	By \Cref{lem:lag2-boundary-main},
+	\[
+	\widehat\gamma_2-\gamma_2-\widetilde\gamma_{2,N}=O_{\PP}(N^{-1}),
+	\]
+	so
+	\[
+	\sqrt N\,\bigl((\widehat\gamma_2-\gamma_2)-\widetilde\gamma_{2,N}\bigr)\to0
+	\qquad\text{in probability.}
+	\]
+	Slutsky's theorem therefore transfers the CLT from
+	$\widetilde\gamma_{2,N}$ to $\widehat\gamma_2-\gamma_2$.
+	
+	\smallskip
+	\noindent\emph{Step 3: deterministic-prefix batch estimator for the true
+	cycle rewards.}
 For consistency of the variance estimator, let
 \[
 E_N=\{J_N\ge R_N+2\},
@@ -1816,23 +1873,42 @@ Hence the zero of $\gamma_2$ locates the memory-transition shell to first order 
 \widehat\gamma_2\pm
 z_{1-\alpha/2}\frac{\widehat\sigma_{2,N}}{\sqrt N}.
 \]
-If, moreover, a local scan fit supplies a consistent transverse root estimator
-$\widehat s$ with $\widehat\gamma_2(\widehat s)=0$ and a consistent slope
-estimate $\widehat\gamma_2'(\widehat s)\to\gamma_2'(s_*)$, then
+This interval is a fixed-setting statement: it applies to $\gamma_2$ at the
+chosen detector design. Along a scan, part~(ii) gives only the deterministic
+first-order transversality of the shell crossing.
+\item In the scan setting of part~(ii), suppose one also has a local root
+estimator $\widehat s_N\to s_*$ and a derivative estimator
+$\widehat{\gamma_2'}(\widehat s_N)\to\gamma_2'(s_*)\neq0$ in probability such
+that
 \[
-\frac{\sqrt N\,(\widehat s-s_*)\,|\widehat\gamma_2'(\widehat s)|}
-{\widehat\sigma_{2,N}}
+0=
+\widehat\gamma_{2,N}(s_*)+
+\widehat{\gamma_2'}(\widehat s_N)\,(\widehat s_N-s_*)
++o_{\PP}(N^{-1/2}),
+\]
+and
+\[
+\sqrt N\,\widehat\gamma_{2,N}(s_*)
 \Rightarrow
-\mathcal N(0,1),
+\mathcal N(0,\sigma_2^2).
 \]
-and therefore the scan-coordinate confidence interval is
+Then
 \[
-\widehat s\pm z_{1-\alpha/2}\,
-\frac{\widehat\sigma_{2,N}}
-{\sqrt N\,|\widehat\gamma_2'(\widehat s)|}.
+\sqrt N\,(\widehat s_N-s_*)
+\Rightarrow
+\mathcal N\!\left(0,\frac{\sigma_2^2}{\gamma_2'(s_*)^2}\right).
 \]
-For a transverse crossing, the statistical scale for resolving the shell is
-therefore $N^{-1/2}$ once the detector design is fixed.
+If $\sigma_2^2>0$, the resulting asymptotic two-sided $(1-\alpha)$ confidence
+interval for the scan coordinate is
+\[
+\widehat s_N\pm
+z_{1-\alpha/2}\,
+\frac{\widehat\sigma_{2,N}}
+{\sqrt N\,|\widehat{\gamma_2'}(\widehat s_N)|}.
+\]
+This is a scan-design statement: unlike part~(iii), it requires a local root
+estimator and derivative estimator across nearby detector settings, not only a
+single fixed-setting record.
 \end{enumerate}
 \end{proposition}
 
@@ -1875,32 +1951,35 @@ Along a $C^1$ scan with fixed $(\kappa_{\mathrm r},\Delta\tau)$ and $\Gamma_+(s_
 =\rho_*(a_*-\rho_*)\lambda_{\mathrm{hid}}'(\Gamma_c)\frac{d\Gamma_+}{ds}(s_*),
 \]
 because the derivative of the prefactor is multiplied by $\lambda_{\mathrm{hid}}(\Gamma_c)=0$. Here $\rho_*>0$ and $a_*-\rho_*<0$, while $\lambda_{\mathrm{hid}}'(\Gamma_c)\neq0$ and $d\Gamma_+/ds(s_*)\neq0$, so $d\gamma_2/ds(s_*)\neq0$. This proves the first-order shell-localization claim. Item (iii) is the studentized confidence interval from \Cref{thm:cycle-block-main}.
-For the scan-coordinate statement, a transverse root satisfies the first-order
-expansion
+
+For item (iv), the displayed first-order expansion gives
 \[
-0=\widehat\gamma_2(\widehat s)
+\sqrt N\,(\widehat s_N-s_*)
 =
-\widehat\gamma_2(s_*)+\gamma_2'(s_*)(\widehat s-s_*)+o_{\PP}(N^{-1/2}),
-\]
-and hence
-\[
-\sqrt N\,(\widehat s-s_*)
-=
-\frac{-\sqrt N\,(\widehat\gamma_2(s_*)-\gamma_2(s_*))}
-{\gamma_2'(s_*)}
+-\frac{\sqrt N\,\widehat\gamma_{2,N}(s_*)}
+{\widehat{\gamma_2'}(\widehat s_N)}
 +o_{\PP}(1).
 \]
-Replacing $\gamma_2'(s_*)$ by the consistent estimator
-$\widehat\gamma_2'(\widehat s)$ and combining this with the studentized limit
-from \Cref{thm:cycle-block-main} gives the displayed asymptotic normal law and
-the confidence interval.
+By assumption,
+$\widehat{\gamma_2'}(\widehat s_N)\to\gamma_2'(s_*)\neq0$ in probability and
+\[
+\sqrt N\,\widehat\gamma_{2,N}(s_*)
+\Rightarrow
+\mathcal N(0,\sigma_2^2).
+\]
+Slutsky's theorem therefore yields the stated root CLT with variance
+$\sigma_2^2/\gamma_2'(s_*)^2$. If $\sigma_2^2>0$ and
+$\widehat\sigma_{2,N}\to\sigma_2$ in probability, replacing $\sigma_2$ and
+$\gamma_2'(s_*)$ by the consistent estimators
+$\widehat\sigma_{2,N}$ and $\widehat{\gamma_2'}(\widehat s_N)$ gives the
+displayed asymptotic confidence interval.
 \end{proof}
 
 For the memory shell, the primary local diagnostic is the sign of $\widehat\gamma_2$. In the model,
 \[
 \gamma_2=\operatorname{Cov}(A_0,A_2)=\rho(a-\rho)\lambda_{\mathrm{hid}},
 \]
-with $\rho>0$ and $a-\rho<0$. Thus $\gamma_1=\rho(a-\rho)$ remains negative, and Proposition~\ref{prop:finite-diagnostics-main} makes the lag-two zero the finite-record diagnostic for the memory threshold. Without a transverse crossing, the sign diagnostic can identify side information but not a unique shell location.
+with $\rho>0$ and $a-\rho<0$. Thus $\gamma_1=\rho(a-\rho)$ remains negative, and Proposition~\ref{prop:finite-diagnostics-main} makes the lag-two zero the finite-record diagnostic for the memory threshold. The finite-record confidence interval is for $\gamma_2$ at a fixed detector setting; along a scan, the shell statement is the first-order transversality criterion from part~(ii). Without a transverse crossing, the sign diagnostic can identify side information but not a unique shell location.
 
 The same data should also pass two consistency checks: the empirical hazards
 $\widehat h_k$ should increase over the reliable range of observed gaps, and
