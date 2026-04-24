@@ -1167,3 +1167,4 @@ import Omega.Conclusion.Window6GeometricOddOperatorShadowOnedim
 import Omega.Conclusion.LeyangGlobalLocalQ5UnramifiedCubic
 import Omega.Conclusion.Window6GeometricDiagonalBitResidualShadow
 import Omega.Conclusion.SerrinLpFluxLogStabilityPrimeLedger
+import Omega.Conclusion.SerrinRealizableThermodynamicFrontierAffine
