@@ -747,6 +747,7 @@ import Omega.Zeta.PerronChannelContribution
 import Omega.Zeta.PhaseCombPoleCounting
 import Omega.Zeta.PhaseImplementationRankLimit
 import Omega.Zeta.PickPoissonCharpolyCoefficients
+import Omega.Zeta.PickPoissonPartitionFunctionDeterminant
 import Omega.Zeta.PickPoissonCrossEnergyHorizontalSeparation
 import Omega.Zeta.PickPoissonEnergyStabilityAwayFromCollision
 import Omega.Zeta.PickPoissonInversePrincipalMinorsJacobi
