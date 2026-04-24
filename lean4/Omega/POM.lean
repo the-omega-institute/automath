@@ -45,6 +45,7 @@ import Omega.POM.FiberHammingTripleIsometry
 import Omega.POM.FiberGeodesicLinearExtension
 import Omega.POM.FiberIndependenceComplexJoin
 import Omega.POM.FiberIndependenceComplexPath
+import Omega.POM.FiberIndependenceComplexHomology
 import Omega.POM.HiddenBitJumpCollisionIsomorphism
 import Omega.POM.HiddenBitComplementFixedpointBSplitDichotomy
 import Omega.POM.HiddenBitTopbitMiHalfEntropy
@@ -132,6 +133,7 @@ import Omega.POM.DiagonalRatePiMajorizationChain
 import Omega.POM.DiagonalRateRefreshRewardClt
 import Omega.POM.MicrocanonicalQueryDistortionFailureExponent
 import Omega.POM.MicrocanonicalPartialInversionThreshold
+import Omega.POM.MicrocanonicalStreamingProgramTypicalWidthLb
 import Omega.POM.MixedCollisionPdKernel
 import Omega.POM.CostCanonicalRepresentativeFunctor
 import Omega.POM.CostOptimizationDecidable
