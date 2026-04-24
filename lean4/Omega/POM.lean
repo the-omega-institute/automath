@@ -83,6 +83,7 @@ import Omega.POM.GoldenLikelihoodRatioMartingales
 import Omega.POM.SqQuasiMultiplicative
 import Omega.POM.BeckChevalleyAmgmDefectIdentity
 import Omega.POM.BivariateMomentZetaFredholm
+import Omega.POM.CommutativeSpectralSurface
 import Omega.POM.BivariateSystemIdentificationFiniteWindow
 import Omega.POM.RecurrenceCodeViolationDistance
 import Omega.POM.ReverseKlBoundByDispersion
@@ -580,6 +581,7 @@ import Omega.POM.MultiplicativeUpgradeFatalAmplification
 import Omega.POM.MicrocanonicalPosteriorModuliCLT
 import Omega.POM.MicrocanonicalTwoTemperatureJsIdentity
 import Omega.POM.MicrocanonicalTwoTemperatureKktPowerLaw
+import Omega.POM.MicrocanonicalTwoTemperatureStrongDualitySensitivity
 import Omega.POM.MicrocanonicalUniversalSection
 import Omega.POM.MinEntropyRate
 import Omega.POM.MinKernelProjectionAndInversion
