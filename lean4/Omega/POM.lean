@@ -969,3 +969,4 @@ import Omega.POM.PathIndsetPsiFactorizationIrreducible
 import Omega.POM.DiagonalRateFiniteLayerAlgebraicPhaseDiagram
 import Omega.POM.OrderEliminationCorrect
 import Omega.POM.StarMomentKernelPerronSymmetricCompression
+import Omega.POM.DiagonalRateCriticalSpectrumInvariantsClosed
