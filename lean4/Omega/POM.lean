@@ -201,6 +201,7 @@ import Omega.POM.EulerDefectDimensionFormula
 import Omega.POM.DiagonalRateReconstructWFromRateCurve
 import Omega.POM.DiagonalRateAbsorbingFundamentalMatrixRankone
 import Omega.POM.DiagonalRateAbsorbingDFR
+import Omega.POM.DiagonalRateSchurConcavityUniformMaxPrinciple
 import Omega.POM.DiagonalRateAbsorbingLaguerreInterlacing
 import Omega.POM.DiagonalRateRefreshAbsorbingLaguerreInterlacing
 import Omega.POM.MaxentMarkovLaguerreSecularSpectrum
