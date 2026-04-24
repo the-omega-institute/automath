@@ -175,6 +175,7 @@ import Omega.Conclusion.FiniteToeplitzFalsifierNyquistDepthBarrier
 import Omega.Conclusion.FiniteTestDepthBusybeaver
 import Omega.Conclusion.OfflineFiberCountTailInvariance
 import Omega.Conclusion.JensenDefectEnergyReverseklIdentity
+import Omega.Conclusion.PoissonJensenGapReversekl
 import Omega.Conclusion.JensenDefectZeroStockIdentity
 import Omega.Conclusion.CapacityMajorizationSchurHardness
 import Omega.Conclusion.CapacityRamanujanPlateauLaw
