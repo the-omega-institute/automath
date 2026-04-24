@@ -21,6 +21,7 @@ import Omega.SyncKernelRealInput.AdditionCollisionSpectrumSync10VsReal40
 import Omega.SyncKernelRealInput.FiniteRhTriangleDict
 import Omega.SyncKernelRealInput.FiniteRhHalfstripNopoles
 import Omega.SyncKernelRealInput.FiniteRhBeatIrrationalLog
+import Omega.SyncKernelRealInput.FiniteRhZeroEngineeringEps
 import Omega.SyncKernelRealInput.RealInputDefectEntropy
 import Omega.SyncKernelRealInput.RealInputDefectEntropyM5
 import Omega.SyncKernelRealInput.GMAbsCenteredOddMomentExtremal
@@ -51,6 +52,7 @@ import Omega.SyncKernelRealInput.RealInput40CollisionBranchRadius
 import Omega.SyncKernelRealInput.FiniteRh40
 import Omega.SyncKernelRealInput.FiniteRhExplicitFormula
 import Omega.SyncKernelRealInput.FiniteRhPrimeOrbitOsc
+import Omega.SyncKernelRealInput.FiniteRhSqrtResonanceGeneral
 import Omega.SyncKernelRealInput.GMRandomWalkMixingPisano
 import Omega.SyncKernelRealInput.RealInput40JensenKink
 import Omega.SyncKernelRealInput.RealInput40IntegerResonanceCalibration
