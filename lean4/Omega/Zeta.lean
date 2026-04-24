@@ -974,6 +974,7 @@ import Omega.Zeta.XiGramshiftToeplitzCayleyLogBridge
 import Omega.Zeta.XiHankelDetScalingCovariance
 import Omega.Zeta.XiHankelMultiprimeOfflineAudit
 import Omega.Zeta.XiHankelHsEnergyClosedFormMassEnergy
+import Omega.Zeta.PeakVsEnergyAuditIndependence
 import Omega.Zeta.XiHankelIntegralityPreservedUnderUnimodularConjugacy
 import Omega.Zeta.XiTimePart70cKlGapControlsMaxfiberExcess
 import Omega.Zeta.XiHankelNormalformCRTAdelicMultiplicity

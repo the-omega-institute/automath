@@ -543,6 +543,7 @@ import Omega.POM.BCFunctorialityCriterion
 import Omega.POM.MaxAtomicWeightParitySecondOrder
 import Omega.POM.MaxFiberEvenChernoffExponent
 import Omega.POM.MaxFiberEvenMajorityVote
+import Omega.POM.MaxFiberHiddenBitUnbiased
 import Omega.POM.MaxFiberHiddenBitMinimalSufficient
 import Omega.POM.MaxfiberExponentEqualsRenyiEndpoint
 import Omega.POM.MaxFiberSubshiftSpectralEntropy
