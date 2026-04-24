@@ -130,6 +130,7 @@ import Omega.POM.DiagonalRateRefreshEntropyRateRenewalCoding
 import Omega.POM.DiagonalRatePiMajorizationChain
 import Omega.POM.DiagonalRateRefreshRewardClt
 import Omega.POM.MicrocanonicalQueryDistortionFailureExponent
+import Omega.POM.MicrocanonicalPartialInversionThreshold
 import Omega.POM.MixedCollisionPdKernel
 import Omega.POM.CostCanonicalRepresentativeFunctor
 import Omega.POM.CostOptimizationDecidable
