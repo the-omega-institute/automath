@@ -1240,3 +1240,4 @@ import Omega.Zeta.XiHdqcdCwTricritical
 import Omega.Zeta.XiWindow6ExactInversionVsAnomalyAudit
 import Omega.Zeta.XiTimePart9rWindow6RadialSpherical3design
 import Omega.Zeta.XiTimePart51AADerivedOrthogonalityPositiveDensity
+import Omega.Zeta.XiCauchyPoissonFisherKlSelfsimilarDefect
