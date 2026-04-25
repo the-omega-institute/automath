@@ -1,3 +1,4 @@
+import Omega.POM.DiagonalRateFoldedCurvatureAuditable
 import Omega.POM.ObservableMinpolyOrderCollapseQ913
 import Omega.POM.MultiplicityAtomMultifractal
 import Omega.POM.ConvexityForcesTypicalLeWorst
