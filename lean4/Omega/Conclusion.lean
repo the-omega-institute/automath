@@ -1,4 +1,5 @@
 import Omega.Conclusion.AdditiveScalarProcircleObstruction
+import Omega.Conclusion.Window6ExactReversibleCapacityCurve
 import Omega.Conclusion.SchurEvenOddAverageTrivialAlternating
 import Omega.Conclusion.SchurNontrivialEnergyEqualsCycleVariance
 import Omega.Conclusion.RanktwoSmithAuditConstantOnBooleanTorsor

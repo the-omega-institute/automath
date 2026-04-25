@@ -1,4 +1,5 @@
 import Omega.Zeta.XiAeSimpleZerosUnderAcSeeds
+import Omega.Zeta.XiProjectiveMomentFeketeSlope
 import Omega.Zeta.AbelFinitePartMobiusZeta
 import Omega.Zeta.XiHeightIntervalMinimalSampling
 import Omega.Zeta.XiSymqGoldenCqDeterminantalDivisors
