@@ -1206,3 +1206,4 @@ import Omega.POM.FiberFenceRankPolyFactorization
 import Omega.POM.P7RootRatioQuadraticTowerRamification
 import Omega.POM.SecondLawKm
 import Omega.POM.FoldMultifractalEnvelope
+import Omega.POM.SchurCycleIndexTomography

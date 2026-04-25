@@ -1417,3 +1417,4 @@ import Omega.Conclusion.DiscreteFanWidthTentKernelTomography
 import Omega.Conclusion.FiberMultiplicityProductNoninjective
 import Omega.Conclusion.Window6LowestHiddenShellBoundaryInteriorThreeEighths
 import Omega.Conclusion.BinfoldRamanujanCapacitySuccessCentralTrace
+import Omega.Conclusion.S4TranspositionQuotientSquareEulerFactor
