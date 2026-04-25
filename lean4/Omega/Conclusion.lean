@@ -1,5 +1,6 @@
 import Omega.Conclusion.BranchEntropyPrimesliceRate
 import Omega.Conclusion.Window6MinimalExactReplaySymmetryBreaking
+import Omega.Conclusion.RealInput40CenteredCramerMinimum
 import Omega.Conclusion.Window6SyzygyGreenInverseClosedForm
 import Omega.Conclusion.FoldWalshPrincipalMinorsUniqueRelation
 import Omega.Conclusion.HypercubeJointChiralHeattraceProduct
