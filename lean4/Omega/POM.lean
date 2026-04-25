@@ -61,6 +61,7 @@ import Omega.POM.AitkenWindowGoldenInvariance
 import Omega.POM.AnomSingleMomentCompleteEquivalence
 import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.TorsionQArtinFactorizationResidueFourier
+import Omega.POM.TorsionSymmetryCoprimeClosure
 import Omega.POM.WreathArtinFactorization
 import Omega.POM.WmKlToUniform
 import Omega.POM.BCDiscreteJacobianStrictification
