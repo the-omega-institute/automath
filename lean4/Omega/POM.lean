@@ -196,6 +196,7 @@ import Omega.POM.DiagonalRatePiMajorizationChain
 import Omega.POM.DiagonalRateScalingKeepComonotone
 import Omega.POM.DiagonalRateRefreshRewardClt
 import Omega.POM.MicrocanonicalQueryDistortionFailureExponent
+import Omega.POM.QueryDistortionZeroBitCorridor
 import Omega.POM.MicrocanonicalQueryDistortionSufficientStatistic
 import Omega.POM.MicrocanonicalTwoTemperatureMajorizationChain
 import Omega.POM.DiagonalRateRefreshCommuteEffectiveResistance

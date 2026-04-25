@@ -351,6 +351,7 @@ import Omega.Zeta.XiTerminalZmReconstructW3FromSrg
 import Omega.Zeta.XiTerminalZmDihedralDoubleDiscriminantLock
 import Omega.Zeta.XiTerminalZmDihedralD4SpecializationFunctionfield
 import Omega.Zeta.XiTerminalZmDihedralD4QuadraticSubfields
+import Omega.Zeta.XiTerminalZMLeyangSpectralQuarticAJ01728NoQ
 import Omega.Zeta.XiTerminalZmDihedralFerrariSingleQuadraticClosure
 import Omega.Zeta.XiLeyangEdTschirnhausResultantsLockPLY
 import Omega.Zeta.XiLeyangVariableMixingCoboundary
