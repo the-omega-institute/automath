@@ -5,6 +5,7 @@ import Omega.Zeta.XiToeplitzMinEigControlsDepth
 import Omega.Zeta.LocalizedIntegersDivisibilityTopologicalRigidity
 import Omega.Zeta.XiTimePart62dgFiberReducedEulerWittenParity
 import Omega.Zeta.XiTimePart63bInfiniteDepthFinitePrimeRegisterImpossibility
+import Omega.Zeta.XiCoherenceResolutionInformationIdentity
 import Omega.Zeta.Near1PoleParabola
 import Omega.Zeta.XiHorizonProtocolZetaLoopExpansion
 import Omega.Zeta.XiJoukowskyEllipseAverageConstantTerm
@@ -30,6 +31,7 @@ import Omega.Zeta.XiBoundedFluxForcesKappa0
 import Omega.Zeta.XiCpVisibleImpliesKappa0
 import Omega.Zeta.XiSmithPkCongruenceSolvabilityCount
 import Omega.Zeta.XiReconstructionSuccessCurveDiscreteDerivative
+import Omega.Zeta.XiZeroDispersionFiniteAtomReconstruction
 import Omega.Zeta.AbelDampingSemigroupDissipation
 import Omega.Zeta.AbelBaseRecursionPoleConjugacy
 import Omega.Zeta.AbelChannelEquipartitionCharacter
