@@ -240,6 +240,7 @@ import Omega.Zeta.XiHankelPrimitiveSyndromeSiegelBound
 import Omega.Zeta.XiHankelDefectCdimMinimalLedger
 import Omega.Zeta.XiOrthogonalAdjacency33Isogeny
 import Omega.Zeta.XiFlagFactorization12x4x3
+import Omega.Zeta.XiEpsFixedRadiusLimit
 import Omega.Zeta.XiTerminalZmLineSrgAndFlagDoubleProjection
 import Omega.Zeta.XiTimePart69UnitAutomorphismPeriodicPointFormula
 import Omega.Zeta.TimePart69dLocalizedSolenoidAutomorphismSunits
