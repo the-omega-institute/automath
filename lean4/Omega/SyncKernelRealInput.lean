@@ -94,6 +94,7 @@ import Omega.SyncKernelRealInput.GMEnergyRateTunable
 import Omega.SyncKernelRealInput.GMEnergyWindowSaving
 import Omega.SyncKernelRealInput.GMContinuousMajorArcControl
 import Omega.SyncKernelRealInput.GmMellinPoleGoldenComb
+import Omega.SyncKernelRealInput.GmMellinJensenProfileDet
 import Omega.SyncKernelRealInput.GmTrace3TruncatedMomentRank2
 import Omega.SyncKernelRealInput.GMTwistEqualRadiusArithmeticFactor
 import Omega.SyncKernelRealInput.GMTwistedPerronFourierDecay
