@@ -299,6 +299,7 @@ import Omega.POM.ZeroVarianceIffClosure
 import Omega.POM.DerivedFiberIndependencePolynomialMinusOneTrichotomy
 import Omega.POM.DerivedFiberIndcomplexAlternatingWittenParity
 import Omega.POM.EMMomResidualSwap
+import Omega.POM.EmLiftResidualSwap
 import Omega.POM.FiberRewriteMeanVarDensity
 import Omega.POM.DerivedFoldGoldenRationalPowerUnitObstruction
 import Omega.POM.DerivedFoldNoAlgebraicGoldenPowerLocking
