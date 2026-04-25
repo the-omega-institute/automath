@@ -1522,3 +1522,4 @@ import Omega.Zeta.DephysTimefiberTwoEnded
 import Omega.Zeta.XiSmithStaircaseRigidityDistinct
 import Omega.Zeta.XiHeightWindowUnifiedQuadraticHardness
 import Omega.Zeta.XiMaslovSpectralflowEntropyQuantization
+import Omega.Zeta.XiFiniteTimeDistinguishabilityMutualInformationRate
