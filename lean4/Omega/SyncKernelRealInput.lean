@@ -70,3 +70,5 @@ import Omega.SyncKernelRealInput.RealInput40CollisionRhkWindow
 import Omega.SyncKernelRealInput.RealInput40CollisionErrorPhase
 import Omega.SyncKernelRealInput.GMFareyLocalDensityOpnorm
 import Omega.SyncKernelRealInput.GMZeckNormalizedLimitMeasure
+import Omega.SyncKernelRealInput.GMLargeValuesSDPMomentDuality
+import Omega.SyncKernelRealInput.GMModBiasInverseNearResonance
