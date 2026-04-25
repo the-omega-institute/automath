@@ -57,4 +57,13 @@ theorem paper_xi_terminal_replica_softcore_exceptional_power_sum_m2_closed_form 
     _ = (4 : ℚ) ^ q + 3 ^ q + 3 ^ q + Nat.fib (2 * q + 2) := by rw [hmix, hfib]
     _ = (4 : ℚ) ^ q + 2 * 3 ^ q + Nat.fib (2 * q + 2) := by ring
 
+/-- Paper label:
+`cor:xi-replica-softcore-exceptional-power-sum-square-closed-form-via-fib-necklace`. -/
+theorem paper_xi_replica_softcore_exceptional_power_sum_square_closed_form_via_fib_necklace
+    (q : Nat) (hq : 2 <= q) :
+    4 * xi_terminal_replica_softcore_exceptional_power_sum_m2_closed_form_S2 q =
+      4 ^ q + 2 * 3 ^ q + Nat.fib (2 * q + 2) := by
+  have _hq : 2 <= q := hq
+  exact paper_xi_terminal_replica_softcore_exceptional_power_sum_m2_closed_form q
+
 end Omega.Zeta

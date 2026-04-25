@@ -198,6 +198,7 @@ import Omega.POM.CycleLatticeThetaPoissonDuality
 import Omega.POM.FiberPsiExponentMobiusReconstruct
 import Omega.POM.FiberFourierVariance
 import Omega.POM.FiberBiasedWeightedPartitionIdentity
+import Omega.POM.FiberMultiplicityV2Thresholds
 import Omega.POM.LocalDefectGibbsVariational
 import Omega.POM.LogMSplit40
 import Omega.POM.RootUnityFilterQ2Law
