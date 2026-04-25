@@ -218,6 +218,7 @@ import Omega.Conclusion.AreaLawScalarGodelIncompatibility
 import Omega.Conclusion.CapacityCurveMellinCompleteReconstruction
 import Omega.Conclusion.CapacityCurveOrderHolographyUniversality
 import Omega.Conclusion.C6JacobianNotSimple
+import Omega.Conclusion.C6EulerFactorPointcount
 import Omega.Conclusion.CayleyModulusPoissonPrimitive
 import Omega.Conclusion.CapacityMajorizationExtremizers
 import Omega.Conclusion.JGGodelLoglatticeApproximation

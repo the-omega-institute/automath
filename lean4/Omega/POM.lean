@@ -220,6 +220,7 @@ import Omega.POM.DiagonalRateRefreshCommuteEffectiveResistance
 import Omega.POM.MicrocanonicalPartialInversionThreshold
 import Omega.POM.MicrocanonicalStreamingProgramTypicalWidthLb
 import Omega.POM.MixedCollisionPdKernel
+import Omega.POM.MicrocanonicalFoldBayesSuccessExamplesT2T3
 import Omega.POM.MomentColLumping
 import Omega.POM.CostCanonicalRepresentativeFunctor
 import Omega.POM.CostOptimizationDecidable
