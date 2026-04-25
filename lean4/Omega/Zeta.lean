@@ -1555,3 +1555,4 @@ import Omega.Zeta.XiTimePart69PrimeRegisterIdempotentCountLaw
 import Omega.Zeta.XiTimePart9vkResonanceShadowFiniteStepPoleGeneration
 import Omega.Zeta.XiFinitePrimeRefutationAudit
 import Omega.Zeta.XiDyadicTruncationSeparationAndInterval
+import Omega.Zeta.XiSmithKernelDirichletEulerSinglePole

@@ -1116,3 +1116,4 @@ import Omega.POM.SprtStoppingPosteriorConstant
 import Omega.POM.MultiplicityCompositionRenewalHitProb
 import Omega.POM.TruncationDefectGaugeCoboundary
 import Omega.POM.FiberInhomBernoulliPosteriorHardcore
+import Omega.POM.ReplicaSoftcorePerronFibonacciFixedPoint
