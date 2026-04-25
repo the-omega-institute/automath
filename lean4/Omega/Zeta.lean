@@ -1625,3 +1625,4 @@ import Omega.Zeta.XiTimePart9n1bKaniRosenHiddenQuotientGenera
 import Omega.Zeta.DephysHyperbolicCurvatureNormalizationFour
 import Omega.Zeta.XiPoissonCauchyKLUniversalCmComplexMoment
 import Omega.Zeta.DiscreteAbelWeilExpansion
+import Omega.Zeta.XiFoldFiberFibonacciPhiExponentialLaw

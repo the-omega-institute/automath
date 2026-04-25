@@ -1179,3 +1179,4 @@ import Omega.POM.MicrocanonicalEscortAllRenyiCollapse
 import Omega.POM.CurvatureConditionalEntropyBound
 import Omega.POM.BCZeroDefectRigidityParenthesization
 import Omega.POM.HankelSyndromeCrtOfflineAudit
+import Omega.POM.SignatureAudit
