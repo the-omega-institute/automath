@@ -959,6 +959,7 @@ import Omega.POM.VisibleWalshCommutatorDefect
 import Omega.POM.VisibleWalshGramTransfer
 import Omega.POM.VisibleWalshSectorwiseInheritance
 import Omega.POM.VisibleWalshParsevalFrame
+import Omega.POM.GoldenDriftWalkLdpRate
 import Omega.POM.WitnessExtractionOptimalSuccess
 import Omega.POM.DerivedBinaryAdmissibilityGoldenRateFloor
 import Omega.POM.DerivedBinaryAdmissibilityGoldenTopophase

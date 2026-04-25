@@ -1469,3 +1469,5 @@ import Omega.Zeta.XiTimePart66MaxfiberOverMeanDiverges
 import Omega.Zeta.XiMaskedPosteriorGoldenMeanTransferMatrix
 import Omega.Zeta.XiCombIncommensurabilityLogLLogphi
 import Omega.Zeta.XiTimefiberCauchyFixedpoint
+import Omega.Zeta.XiFoldEscortLastbitGibbsLimit
+import Omega.Zeta.XiRenyiFlatnessUnderMomqAmplification
