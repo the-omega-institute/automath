@@ -782,6 +782,7 @@ import Omega.POM.MultiplicityCompositionSqSymmetryReduction
 import Omega.POM.MultiplicityCompositionPartCountCLT
 import Omega.POM.MultiplicityCompositionPartition
 import Omega.POM.MultiplicityCompositionFirstPartExactAndRate
+import Omega.POM.MultiplicityRenyiContinuous
 import Omega.POM.MultiplicityCompositionRealQPressure
 import Omega.POM.MultiplicityCompositionTwoParameterHessianPD
 import Omega.POM.MultiplicityCompositionReplicaSoftcoreTransfer
