@@ -1366,6 +1366,8 @@ import Omega.Zeta.XiWindow6TailSemigroupAperyFirstMoment
 import Omega.Zeta.XiWindow6TailSemigroupAperyThresholds
 import Omega.Zeta.XiWindow6DimensionReachabilityCongruenceUnion
 import Omega.Zeta.XiWindow6TailSemigroupFrobeniusThreshold
+import Omega.Zeta.XiWindow6ResetClockSemigroupCoupling
+import Omega.Zeta.XiWindow6ResetGapMgfMoments
 import Omega.Zeta.XiWindow6TailSemigroupTwoGeneratorNormalForm
 import Omega.Zeta.XiZGAbelResidueLogDensity
 import Omega.Zeta.XiZGAbsoluteConvergenceCriticalLine
