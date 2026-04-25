@@ -213,6 +213,7 @@ import Omega.Zeta.XiEndpointHeatKernelProbe
 import Omega.Zeta.XiEntropyGapHankelDeterminantCollapseUpperBound
 import Omega.Zeta.XiEndpointPsiPoissonDipoleAsymptotic
 import Omega.Zeta.XiEndpointProfileCfiniteHankelRank
+import Omega.Zeta.EndpointAbsorptionInversionUniqueness
 import Omega.Zeta.XiEndpointProfilePronyInvertibility
 import Omega.Zeta.XiEndpointTomographyCertificateChain
 import Omega.Zeta.XiHankel2dSharpness
