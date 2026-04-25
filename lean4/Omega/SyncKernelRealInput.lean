@@ -74,3 +74,4 @@ import Omega.SyncKernelRealInput.GMLargeValuesSDPMomentDuality
 import Omega.SyncKernelRealInput.GMModBiasInverseNearResonance
 import Omega.SyncKernelRealInput.GMAcSingularDichotomy
 import Omega.SyncKernelRealInput.GMCriticalExponentShiftKVtheta
+import Omega.SyncKernelRealInput.GmTrace3Delta3Stability
