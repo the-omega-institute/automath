@@ -1320,3 +1320,4 @@ import Omega.Conclusion.EscortTwoStateClosure
 import Omega.Conclusion.SphericalPhaseMeasureSparsityExtremalRigiditySeparation
 import Omega.Conclusion.FrozenTailZeroCurvatureSecondMaximumVisibility
 import Omega.Conclusion.HypercubeDeepestAllnegativeEvenodd
+import Omega.Conclusion.Window6CyclicEscortFullAxisOrdering

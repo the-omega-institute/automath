@@ -1532,3 +1532,4 @@ import Omega.Zeta.XiHeightWindowUnifiedQuadraticHardness
 import Omega.Zeta.XiMaslovSpectralflowEntropyQuantization
 import Omega.Zeta.XiFiniteTimeDistinguishabilityMutualInformationRate
 import Omega.Zeta.XiTimePart69FoldGaugeFormalKoenigsLinearization
+import Omega.Zeta.XiTimePart9vkResonanceShadowFiniteStepPoleGeneration
