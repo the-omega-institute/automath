@@ -1299,3 +1299,4 @@ import Omega.Conclusion.FoldSymtftPartitionFunctionSectorization
 import Omega.Conclusion.AbelMertensRegularizationNotRhsharp
 import Omega.Conclusion.DerivedQuasiIsogenyEulerCdimInvariance
 import Omega.Conclusion.FibadicHaarConditionalExpectationConvolution
+import Omega.Conclusion.EscortTwoStateClosure

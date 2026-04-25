@@ -1069,3 +1069,4 @@ import Omega.POM.DispersionLqLowerBound
 import Omega.POM.CoarsegrainingCollisionMomentStrictMonotonicity
 import Omega.POM.MicrocanonicalTwoTemperatureEscortOrbitEntropyMonotone
 import Omega.POM.OneFoldNormalForm
+import Omega.POM.HiddenBitTriggerGeometryLaw
