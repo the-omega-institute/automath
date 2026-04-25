@@ -4,6 +4,7 @@ import Omega.POM.CrossAnomSupportConstraint
 import Omega.POM.FiniteFalsifierAnom
 import Omega.POM.OracleCriticalBudgetZeckendorfPlusGap
 import Omega.POM.MultiplicityEnergyLdpUnderPL
+import Omega.POM.MultiplicityLogwClt
 import Omega.POM.RenyiEntropyGapAsInf
 import Omega.POM.DiagonalRateFiniteMomentClosure
 import Omega.POM.A4LinearObservableTwoTermOscillation
