@@ -1,4 +1,5 @@
 import Omega.Zeta.AbelFinitePartMobiusZeta
+import Omega.Zeta.XiHeightIntervalMinimalSampling
 import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
 import Omega.Zeta.XiBoundedFluxForcesKappa0
 import Omega.Zeta.XiSmithPkCongruenceSolvabilityCount
