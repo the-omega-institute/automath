@@ -38,6 +38,7 @@ import Omega.POM.HankelMinorDynamicsDominantExteriorSpectrum
 import Omega.POM.HankelDeterministicModAuditThreshold
 import Omega.POM.S2RankExact
 import Omega.POM.S2Recurrence
+import Omega.POM.S3Recurrence
 import Omega.POM.S3OrbitDecomposition
 import Omega.POM.HankelRankMinimal
 import Omega.POM.HankelSmithMinimalDenominator
