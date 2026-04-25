@@ -114,6 +114,7 @@ import Omega.Zeta.XiBmDensityForcesLinearTranscriptLength
 import Omega.Zeta.XiCongruenceBlockAbelWeilResidueLocking
 import Omega.Zeta.XiFiniteKernelZetaRationalDecidability
 import Omega.Zeta.FiniteQuotientPhaseCompressionPrecisionLowerBound
+import Omega.Zeta.FinitePartResidueConstantRHSqueeze
 import Omega.Zeta.XiFiniteFrontierCertificate
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
