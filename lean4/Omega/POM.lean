@@ -223,6 +223,7 @@ import Omega.POM.PressureDelayLowerBound
 import Omega.POM.PressureStabilityUnderBoundedPerturbation
 import Omega.POM.DerivedFiberDeterminantExtremalEnvelope
 import Omega.POM.DerivedFiberSingleStieltjesHistogramRecovery
+import Omega.POM.IclErrorRationalRecursion
 import Omega.POM.RandomFiberTaskBayesError
 import Omega.POM.ClosureDiagonalToTopSpectrum
 import Omega.POM.ClosurePartitionToFullRecoveryCurve

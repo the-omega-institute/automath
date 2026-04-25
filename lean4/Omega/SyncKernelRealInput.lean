@@ -106,3 +106,4 @@ import Omega.SyncKernelRealInput.GMResonantCharacterGroupHomology
 import Omega.SyncKernelRealInput.GmSmithComputeObstructions
 import Omega.SyncKernelRealInput.GMTwoFiniteObjectsOutline
 import Omega.SyncKernelRealInput.GMAbsCenteredMomentThreeChannels
+import Omega.SyncKernelRealInput.GmTrace3PoissonCollisionEnergy
