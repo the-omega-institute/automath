@@ -782,6 +782,7 @@ import Omega.POM.MultiplicityCompositionMod3SimplePoleU
 import Omega.POM.MultiplicityCompositionRenyiEntropyRate
 import Omega.POM.MultiplicityCompositionRenyiCollisionGeneralq
 import Omega.POM.Mod2DifferenceBinomialBasis
+import Omega.POM.Mod2StaircaseQ7DifferenceOrderJump
 import Omega.POM.Mod2ShadowEventualPeriodBound
 import Omega.POM.ModpDifferenceBinomialBasis
 import Omega.POM.MomentDimCollapse

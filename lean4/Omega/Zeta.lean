@@ -163,6 +163,7 @@ import Omega.Zeta.XiCauchyPoissonOddMomentSelectionLaw
 import Omega.Zeta.XiPoissonCauchyKlMomentLocking
 import Omega.Zeta.XiPoissonKlSixthOrderMu3Mu4
 import Omega.Zeta.XiCauchyPoissonEntropyAuditCircleAverage
+import Omega.Zeta.XiRootUnityFilterSingleClassInjection
 import Omega.Zeta.XiTimePart60abZeroBlockForcesBinomialFactor
 import Omega.Zeta.XiTimePart60ab2StableSpectrumSelfreciprocalCenter
 import Omega.Zeta.XiTimePart60ab2ExactDarkModeArithmeticCriterion
