@@ -28,6 +28,7 @@ import Omega.SyncKernelWeighted.GMDualSpectralCertificates
 import Omega.SyncKernelWeighted.GMEnergyExponentTwistCriterion
 import Omega.SyncKernelWeighted.GMTrace3SpectralNormExtremal
 import Omega.SyncKernelWeighted.GMModGapToAffineSaving
+import Omega.SyncKernelWeighted.GmModAdditiveEnergyInverse
 import Omega.SyncKernelWeighted.GMAffineInverseMajorArc
 import Omega.SyncKernelWeighted.GMajorArcRigidityAffineAutocorr
 import Omega.SyncKernelWeighted.GMAffineImprovementDichotomy
