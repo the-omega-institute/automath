@@ -219,6 +219,7 @@ import Omega.POM.ClosureDiagonalToTopSpectrum
 import Omega.POM.ClosurePartitionToFullRecoveryCurve
 import Omega.POM.NormalformVsTuringBudgetUndecidable
 import Omega.POM.PomAkSymmetricCompression
+import Omega.POM.EpsDistanceLawvere
 import Omega.POM.PwHolonomyFillLinearBound
 import Omega.POM.EhrhartEqualsOrderpolyShift
 import Omega.POM.EpsSoundCompose
