@@ -53,6 +53,7 @@ import Omega.Conclusion.AmbiguityShellNilpotentIndexEqualsWindow
 import Omega.Conclusion.AmbiguityShellPreperiodicLocalization
 import Omega.Conclusion.AmbiguityShellUnsyncPrefixPolynomial
 import Omega.Conclusion.AlphabetThreshold
+import Omega.Conclusion.UniaxialPadicTraceEncoding
 import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.AnomalyTwoCoprimeLayerTomography
 import Omega.Conclusion.AxialScreenDirectSumVisibleHiddenSplit
