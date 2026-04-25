@@ -7,7 +7,7 @@ namespace Omega.POM
 The formal algebraic core of the freezing criterion: zero escort min-entropy is the
 corresponding pressure equality, and vanishing multiplicative entropy loss is the same as the
 pure-power pressure equality on every multiplier. -/
-theorem paper_pom_escort_freezing_criterion
+theorem paper_pom_escort_freezing_criterion_algebraic_core
     (pressure : ℕ → ℝ) (alphaStar : ℝ) (a : ℕ) (ha : 1 ≤ a) :
     let escortMinEntropyLoss : ℝ := pressure a - (a : ℝ) * alphaStar
     let multiplicativeEntropyLoss : ℕ → ℝ :=
@@ -34,5 +34,22 @@ theorem paper_pom_escort_freezing_criterion
     exact (hloss b hb).mp (hzero b hb)
   · intro hpure b hb
     exact (hloss b hb).mpr (hpure b hb)
+
+/-- Paper label: `cor:pom-escort-freezing-criterion`. -/
+theorem paper_pom_escort_freezing_criterion (P hEsc : Nat -> Real) (alpha : Real) (a : Nat)
+    (ha : 1 <= a) (h_formula : hEsc a = P a - (a : Real) * alpha)
+    (h_chain : (P a = (a : Real) * alpha) <->
+      forall b : Nat, 2 <= b -> P (a * b) = (b : Real) * P a) :
+    (hEsc a = 0 <-> P a = (a : Real) * alpha) ∧
+      (P a = (a : Real) * alpha <->
+        forall b : Nat, 2 <= b -> P (a * b) = (b : Real) * P a) := by
+  have _ : 1 <= a := ha
+  constructor
+  · constructor
+    · intro hzero
+      nlinarith [h_formula, hzero]
+    · intro hpressure
+      nlinarith [h_formula, hpressure]
+  · exact h_chain
 
 end Omega.POM
