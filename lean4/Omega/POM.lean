@@ -428,6 +428,7 @@ import Omega.POM.FiberZxMinusOnePsi3Sign
 import Omega.POM.FiberBiasedBernoulliPushforwardHardcore
 import Omega.POM.FiberBiasedPosteriorPoissonBinomial
 import Omega.POM.FiberBirkhoffFenceIdealLattice
+import Omega.POM.FiberBiasedPosteriorMLR
 import Omega.POM.FiberBooleanIntervalSingleParameterAudit
 import Omega.POM.FiberCategoricalSymmetryFibonacciFusion
 import Omega.POM.FiberABConvexHull
@@ -438,6 +439,7 @@ import Omega.POM.FiberCubicalPoincareStokesLemma
 import Omega.POM.FiberDispersionIndex
 import Omega.POM.FiberEhrhartProduct
 import Omega.POM.FiberFpolyFactorization
+import Omega.POM.FiberZetaProductFence
 import Omega.POM.FibComponentFusionGain
 import Omega.POM.FiberInvariance
 import Omega.POM.FiberFullPosteriorUniformizationProductSource
