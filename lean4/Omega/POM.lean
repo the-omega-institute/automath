@@ -130,6 +130,7 @@ import Omega.POM.BCInverseSystem
 import Omega.POM.BayesInfonceSecondCollisionDominance
 import Omega.POM.BayesFullRecoveryHazardMonotone
 import Omega.POM.BayesInfonceThirdOrderLargeK
+import Omega.POM.InfonceFoldThirdOrderLargeK
 import Omega.POM.BayesErrorExplicitSharpAsymptotic
 import Omega.POM.BbitOracleCapacityClosedForm
 import Omega.POM.GoldenBinaryChannelContraction
