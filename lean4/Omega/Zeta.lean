@@ -126,6 +126,7 @@ import Omega.Zeta.XiTimePart47caInfonceSignedHausdorffInversion
 import Omega.Zeta.XiFoldbinEvenWindowParitySectionCenterIntersection
 import Omega.Zeta.XiFoldbinEscortTvCollapseOnebitGibbs
 import Omega.Zeta.XiFoldbinGaugeCollisionRigidShift
+import Omega.Zeta.XiFoldbinGaugeVolumeThreeFactorProduct
 import Omega.Zeta.XiFoldGauge2PiEstimatorGeometricLock
 import Omega.Zeta.XiDebrangesDppSineKernelLimit
 import Omega.Zeta.XiSu11RhpEquivalence
