@@ -1,5 +1,6 @@
 import Omega.SyncKernelRealInput.TrivFactorPrimitivePolynomial
 import Omega.SyncKernelRealInput.GmEnergyAffineComplementarity
+import Omega.SyncKernelRealInput.GmChebotarevPlancherelL2
 import Omega.SyncKernelRealInput.RealInput40A0TensorHidden
 import Omega.SyncKernelRealInput.RealInput40SkeletonFactor
 import Omega.SyncKernelRealInput.RealInput40SpectrumDecomp

@@ -32,6 +32,7 @@ import Omega.POM.AdditiveFoldCollisionBounds
 import Omega.POM.HiddenBitJumpProbabilityClosedForm
 import Omega.POM.HiddenBitMixedMomentCluster
 import Omega.POM.HiddenBitBiasEnergyIdentity
+import Omega.POM.MultiplicityLambdaqTaylorQ0
 import Omega.POM.InjectivizationSideinfoExactAlphabet
 import Omega.POM.FiniteAuditBudgetFactorcodeUndecidable
 import Omega.POM.HankelSyndromeHNFModelFree
