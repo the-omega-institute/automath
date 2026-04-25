@@ -63,6 +63,7 @@ import Omega.POM.AitkenGoldenLimit
 import Omega.POM.AitkenWindowGoldenInvariance
 import Omega.POM.AnomSingleMomentCompleteEquivalence
 import Omega.POM.AnomSwapLowerboundAndMomAmplify
+import Omega.POM.ProjMomPsiLaw
 import Omega.POM.TorsionQArtinFactorizationResidueFourier
 import Omega.POM.TorsionSymmetryCoprimeClosure
 import Omega.POM.WreathArtinFactorization
