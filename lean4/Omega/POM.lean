@@ -945,6 +945,7 @@ import Omega.POM.ZeroTempConcentration
 import Omega.POM.ZeroTemperatureGapDivisibilityRaySum
 import Omega.POM.ZeroTemperatureTwoTermExpansion
 import Omega.POM.ZetaEqualsOrderPoly
+import Omega.POM.SchurChannelsCfiniteSpectralMultiplicativeSemigroup
 import Omega.POM.DiagonalRateSchurConcavity
 import Omega.POM.SemConservativeOnSlice
 import Omega.POM.DiagonalRateOptimalTP2
