@@ -588,6 +588,7 @@ import Omega.POM.KLLedgerTelescope
 import Omega.POM.LedgerResidualTelescoping
 import Omega.POM.IprojMaxent
 import Omega.POM.KLPythagorasTower
+import Omega.POM.KappaGibbsVariationalEscortFrontier
 import Omega.POM.KLPythagorasUniform
 import Omega.POM.IprojGapExact
 import Omega.POM.MicroSlipWindow
