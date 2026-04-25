@@ -262,6 +262,7 @@ import Omega.Zeta.XiGoldenW1StarCertificateParitySplitting
 import Omega.Zeta.XiGramDetEntropyMonotoneUnderContraction
 import Omega.Zeta.XiHankelPrimitiveGapVanishingCriterion
 import Omega.Zeta.Xi2x2SelfdualSlicePurityIff
+import Omega.Zeta.XiCarathRadialWallcrossing
 import Omega.Zeta.XiHankelPrimitiveSyndromeSiegelBound
 import Omega.Zeta.XiHankelDefectCdimMinimalLedger
 import Omega.Zeta.XiOrthogonalAdjacency33Isogeny

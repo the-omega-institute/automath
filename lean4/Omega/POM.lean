@@ -222,6 +222,8 @@ import Omega.POM.DiagonalRateCriticalSpectrumGapBounds
 import Omega.POM.DiagonalRatePiMajorizationChain
 import Omega.POM.DiagonalRateScalingKeepComonotone
 import Omega.POM.DiagonalRateRefreshRewardClt
+import Omega.POM.OracleTomographyCompletenessFIuIw
+import Omega.POM.HankelFreeEnergyEvaluator
 import Omega.POM.MicrocanonicalQueryDistortionFailureExponent
 import Omega.POM.MultiplicityEnsembleEquivalence
 import Omega.POM.QueryDistortionZeroBitCorridor
