@@ -242,6 +242,7 @@ import Omega.Zeta.XiTimePart65fScreenPosteriorFairBits
 import Omega.Zeta.TimePart66ShannonGapTimesMDiverges
 import Omega.Zeta.XiHorizonZkFiberpathStokesDiscriminant
 import Omega.Zeta.XiHankelFiniteCertificatePrinciple
+import Omega.Zeta.XiHankelInversionNoiseStabilityNeumannBauerfike
 import Omega.Zeta.XiHankelCofactorSyndromeSingleCoordinate
 import Omega.Zeta.XiHankelFiberFanoInformationLeakage
 import Omega.Zeta.XiHankelNoncontiguousSampling2dInformationLowerBound
