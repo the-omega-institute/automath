@@ -1290,3 +1290,4 @@ import Omega.Conclusion.SyncHolonomyBcCertificate
 import Omega.Conclusion.Window6ResidualTorsionShadowRationalBlindness
 import Omega.Conclusion.FoldSymtftPartitionFunctionSectorization
 import Omega.Conclusion.AbelMertensRegularizationNotRhsharp
+import Omega.Conclusion.DerivedQuasiIsogenyEulerCdimInvariance

@@ -1498,3 +1498,4 @@ import Omega.Zeta.XiFoldEscortLastbitGibbsLimit
 import Omega.Zeta.XiRenyiFlatnessUnderMomqAmplification
 import Omega.Zeta.XiPolesNegativeSquaresEquivalence
 import Omega.Zeta.DephysTimefiberTwoEnded
+import Omega.Zeta.XiSmithStaircaseRigidityDistinct
