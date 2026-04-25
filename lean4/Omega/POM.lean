@@ -79,6 +79,7 @@ import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.AnomTorusPhaseElimination
 import Omega.POM.ProjMomPsiLaw
 import Omega.POM.TorsionQArtinFactorizationResidueFourier
+import Omega.POM.TorsionQResidueClassFourierRigidity
 import Omega.POM.TorsionSymmetryCoprimeClosure
 import Omega.POM.InfiniteCoprimeTorsionSymmetryRankone
 import Omega.POM.WreathArtinFactorization
