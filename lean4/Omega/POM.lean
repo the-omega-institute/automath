@@ -1173,3 +1173,4 @@ import Omega.POM.SchurNontrivialChannelActivation
 import Omega.POM.SpectrumIntermittencyDeficit
 import Omega.POM.MultiplicityEnergyLdpBoundary
 import Omega.POM.MicrocanonicalEscortAllRenyiCollapse
+import Omega.POM.CurvatureConditionalEntropyBound
