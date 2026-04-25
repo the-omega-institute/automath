@@ -126,6 +126,7 @@ import Omega.POM.CharpolyMod2ClosedExponentLawQ4Q11
 import Omega.POM.CharpolyModpA2Embedding
 import Omega.POM.CoarsegrainingMajorizationSchur
 import Omega.POM.BinaryCoarsegrainingConcavePairingExtremes
+import Omega.POM.BinaryInvariantsFunctoriality
 import Omega.POM.CollisionAQFibonacciBFPrimitivePrimeDivisor
 import Omega.POM.CollisionBfSnfQ234
 import Omega.POM.CollisionCKFibonacci
