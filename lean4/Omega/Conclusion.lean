@@ -16,6 +16,7 @@ import Omega.Conclusion.DeterministicOfflineVerificationMinimalClosure
 import Omega.Conclusion.AnalyticHolographyInversionRigidity
 import Omega.Conclusion.AffineNormalFormSemidirect
 import Omega.Conclusion.AffineRegisterBudget
+import Omega.Conclusion.ProjectionWordGodelSemidirect
 import Omega.Conclusion.RateCdimAchievability
 import Omega.Conclusion.RateCdimArithmetic
 import Omega.Conclusion.ScaleLedgerDegeneracyLedgerOrthogonality

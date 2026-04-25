@@ -422,6 +422,7 @@ import Omega.POM.EllipsoidIsoperimetricVariance
 import Omega.POM.EllipticTwoTimeObservabilityDichotomy
 import Omega.POM.DiagonalRateCollisionThresholdQuadraticLaw
 import Omega.POM.EntropyLossFactorChainExpansion
+import Omega.POM.PressurePrimeEdgeHolographicReconstruction
 import Omega.POM.E8SquareSpectrumCollapseTrace7
 import Omega.POM.EscortMaxfiberTvBound
 import Omega.POM.EulerDefectOrthogonalPythagoras
