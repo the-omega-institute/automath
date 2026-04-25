@@ -140,6 +140,7 @@ import Omega.POM.ReplicaSoftcoreFibonacciPowerMomentCollapse
 import Omega.POM.ReplicaSoftcoreWordTraceExtremal
 import Omega.POM.ReplicaSoftcoreWordTraceMinimalBaseMultiplicity
 import Omega.POM.LkAreaLawQform
+import Omega.POM.LkBoundaryFixedPointRiccati
 import Omega.POM.ReplicaSoftcoreTensorEigenbasis
 import Omega.POM.ReplicaSoftcoreSymEigenbasisBinomialWeights
 import Omega.POM.ReverseKlBoundByDispersion
