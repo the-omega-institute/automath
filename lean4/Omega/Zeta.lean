@@ -258,6 +258,7 @@ import Omega.Zeta.XiOrthogonalAdjacency33Isogeny
 import Omega.Zeta.XiFlagFactorization12x4x3
 import Omega.Zeta.XiEpsFixedRadiusLimit
 import Omega.Zeta.XiTerminalZmLineSrgAndFlagDoubleProjection
+import Omega.Zeta.XiTerminalZmPuiseuxInfty4cycle
 import Omega.Zeta.XiTimePart69UnitAutomorphismPeriodicPointFormula
 import Omega.Zeta.TimePart69dLocalizedSolenoidAutomorphismSunits
 import Omega.Zeta.XiTimePart70cSpectrumZeroZ2OrbitCancellation

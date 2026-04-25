@@ -103,6 +103,7 @@ import Omega.POM.HiddenBitTopbitMiHalfEntropy
 import Omega.POM.HiddenBitWatataniIndexElement
 import Omega.POM.HiddenbitUpperSupportThreshold
 import Omega.POM.HiddenbitUpperSupportM6Twelve
+import Omega.POM.SpectrumRightEdgeSupportFunction
 import Omega.POM.HighorderSchurPackageDeterminesFullFiberMultiset
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.AitkenCancelsTwoCycle
