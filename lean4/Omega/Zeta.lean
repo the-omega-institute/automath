@@ -1457,3 +1457,4 @@ import Omega.Zeta.XiTimePart9zbiMinimalExactCompressor
 import Omega.Zeta.XiTimePart62dcHologramSelfaffineCantorDynamics
 import Omega.Zeta.XiTerminalZmLeyangLinearTwistDiscriminantElliptification
 import Omega.Zeta.XiTimePart66MaxfiberOverMeanDiverges
+import Omega.Zeta.XiMaskedPosteriorGoldenMeanTransferMatrix
