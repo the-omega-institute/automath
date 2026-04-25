@@ -657,6 +657,7 @@ import Omega.POM.InfonceFiberSpectrumTomographyMinimality
 import Omega.POM.MuSecantAudit
 import Omega.POM.InfoncePartitionOptimalClosedForm
 import Omega.POM.InfoNCERemainderBitsSecondOrderRenormalization
+import Omega.POM.InfonceFoldLedgerRemainderBits
 import Omega.POM.IndsetPowerHomDisj
 import Omega.POM.InverseLimitNaturality
 import Omega.POM.InvertWFromHomogeneousCurve
