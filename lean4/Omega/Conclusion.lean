@@ -1332,3 +1332,4 @@ import Omega.Conclusion.FrozenTailZeroCurvatureSecondMaximumVisibility
 import Omega.Conclusion.HypercubeDeepestAllnegativeEvenodd
 import Omega.Conclusion.Window6CyclicEscortFullAxisOrdering
 import Omega.Conclusion.PickPoissonOffdiagonalGapEntropyWall
+import Omega.Conclusion.RealInput40GaugeDifferenceCumulantSignOscillation
