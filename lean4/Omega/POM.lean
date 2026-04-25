@@ -1132,3 +1132,4 @@ import Omega.POM.ReplicaSoftcorePerronFibonacciFixedPoint
 import Omega.POM.HiddenBitFirstNon10Gate
 import Omega.POM.SchurNontrivialChannelActivation
 import Omega.POM.SpectrumIntermittencyDeficit
+import Omega.POM.MultiplicityEnergyLdpBoundary
