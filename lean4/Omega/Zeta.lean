@@ -1564,3 +1564,4 @@ import Omega.Zeta.XiFinitePrimeRefutationAudit
 import Omega.Zeta.XiDyadicTruncationSeparationAndInterval
 import Omega.Zeta.XiSmithKernelDirichletEulerSinglePole
 import Omega.Zeta.DephysicalizedHorizonFiberCapacityAreaLaw
+import Omega.Zeta.XiTimeEntropyParetoGibbsGlobalTemperature

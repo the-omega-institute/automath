@@ -127,3 +127,4 @@ import Omega.SyncKernelRealInput.GMPWBandlimitedSamplingToeplitz
 import Omega.SyncKernelRealInput.GmCriticalBottleneckResidualOpnorm
 import Omega.SyncKernelRealInput.GMRelativeGapAfterObstruction
 import Omega.SyncKernelRealInput.GmTwistedZetaPrimeOrbit
+import Omega.SyncKernelRealInput.GmNonresonantExpSumCurvature
