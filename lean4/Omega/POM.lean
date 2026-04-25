@@ -223,6 +223,7 @@ import Omega.POM.CostOptimizationDecidable
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.CollisionKernelPublication
 import Omega.POM.DisjointnessSymmetricCompressionBq
+import Omega.POM.FiberPosteriorHammingDiversity
 import Omega.POM.RewriteAuditLoop
 import Omega.POM.StrictificationExistenceDecidableBoundedSlice
 import Omega.POM.MultiplicityCompositionMod3BadcountClt
