@@ -138,6 +138,7 @@ import Omega.POM.ComplementaryGoldenBernoulliRenyiSpectrum
 import Omega.POM.DiagonalRateRefreshEntropyRateRenewalCoding
 import Omega.POM.DiagonalRateRefreshEntropyRateRenewalCodingSecondary
 import Omega.POM.DiagonalRatePiMajorizationChain
+import Omega.POM.DiagonalRateScalingKeepComonotone
 import Omega.POM.DiagonalRateRefreshRewardClt
 import Omega.POM.MicrocanonicalQueryDistortionFailureExponent
 import Omega.POM.MicrocanonicalPartialInversionThreshold
