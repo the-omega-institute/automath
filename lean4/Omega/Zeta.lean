@@ -192,6 +192,7 @@ import Omega.Zeta.XiJensenEntropyRegularizedVariational
 import Omega.Zeta.XiJensenRecursiveResolutionNoiseCoupling
 import Omega.Zeta.XiJensenDefectNoisyThreepointCertificate
 import Omega.Zeta.XiOptimalAllocationUnderProductBound
+import Omega.Zeta.XiFoldingScaleVsToeplitzOrderNonsubstitutability
 import Omega.Zeta.XiTimeHorizonProductLowerBound
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
