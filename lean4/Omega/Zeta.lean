@@ -266,6 +266,7 @@ import Omega.Zeta.XiLeyangVariableMixingCoboundary
 import Omega.Zeta.XiLeyangRecoverCDFromThreeLeadingZeros
 import Omega.Zeta.XiTimePart9zWindow6HistogramFromThreeMoments
 import Omega.Zeta.XiTimePart9zWindow6ThreeatomHankelFlatness
+import Omega.Zeta.XiTimePart9zWindow6InvolutiveThermodynamicsClosure
 import Omega.Zeta.XiLeyangTwoHypothesisUnitCircle
 import Omega.Zeta.XiLeyangTwoScaleCrossratioCrossingDrift
 import Omega.Zeta.XiLeyangTwoScaleCrossratioMixingSlope
