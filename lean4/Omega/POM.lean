@@ -1086,3 +1086,4 @@ import Omega.POM.MicrocanonicalTwoTemperatureEscortOrbitEntropyMonotone
 import Omega.POM.OneFoldNormalForm
 import Omega.POM.HiddenBitTriggerGeometryLaw
 import Omega.POM.ZeroAnomPullbackExactness
+import Omega.POM.ToggleOddSectorExponentialThinness
