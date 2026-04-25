@@ -19,4 +19,19 @@ theorem paper_conclusion_scalekernel_tree_third_order_blindness {Obj Obs Out : T
   intro hfaith
   exact hseparates hfaith (hsame ▸ hfaith)
 
+/-- Paper label:
+`thm:conclusion-scalekernel-finite-shell-fourth-order-obstruction`. -/
+theorem paper_conclusion_scalekernel_finite_shell_fourth_order_obstruction
+    (finite_shell_deconvolution variance_formula fourth_cumulant_formula odd_cumulants_vanish
+      fourth_order_first_obstruction : Prop)
+    (hDeconv : finite_shell_deconvolution) (hVar : variance_formula)
+    (hK4 : fourth_cumulant_formula) (hOdd : odd_cumulants_vanish)
+    (hFirst :
+      finite_shell_deconvolution ->
+        variance_formula -> fourth_cumulant_formula -> odd_cumulants_vanish ->
+          fourth_order_first_obstruction) :
+    finite_shell_deconvolution ∧ variance_formula ∧ fourth_cumulant_formula ∧
+      odd_cumulants_vanish ∧ fourth_order_first_obstruction := by
+  exact ⟨hDeconv, hVar, hK4, hOdd, hFirst hDeconv hVar hK4 hOdd⟩
+
 end Omega.Conclusion

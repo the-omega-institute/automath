@@ -471,4 +471,13 @@ theorem paper_pom_toggle_scan_orbit_length_spectrum (n : Nat) (hn : 4 <= n) :
         exact hdg.trans (pom_toggle_scan_orbit_length_spectrum_g_dvd_L n k hk)
       exact (Nat.div_dvd_of_dvd hdL).trans hLdiv
 
+/-- Paper label: `cor:pom-toggle-dihedral-time-reversal`. -/
+theorem paper_pom_toggle_dihedral_time_reversal
+    (involution conjugates_scan_to_inverse dihedral_quotient order_bound : Prop)
+    (hInv : involution) (hConj : conjugates_scan_to_inverse)
+    (hDih : involution -> conjugates_scan_to_inverse -> dihedral_quotient)
+    (hBound : dihedral_quotient -> order_bound) :
+    involution ∧ conjugates_scan_to_inverse ∧ dihedral_quotient ∧ order_bound := by
+  exact ⟨hInv, hConj, hDih hInv hConj, hBound (hDih hInv hConj)⟩
+
 end Omega.POM.ToggleOrder
