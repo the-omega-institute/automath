@@ -12,6 +12,7 @@ import Omega.SyncKernelRealInput.RealInput40MertensTwoSeries
 import Omega.SyncKernelRealInput.RealInput40MertensTwoSeriesTail
 import Omega.SyncKernelRealInput.RealInput40CollisionAllReal
 import Omega.SyncKernelRealInput.InputMeasureRigid
+import Omega.SyncKernelRealInput.LogMTruncBound
 import Omega.SyncKernelRealInput.RealInput40InputPotentialReduction
 import Omega.SyncKernelRealInput.CoreThermodynamicTailEquivalence
 import Omega.SyncKernelRealInput.RealInput40ResidueConstant
