@@ -500,6 +500,7 @@ import Omega.POM.ParryOnesCLT
 import Omega.POM.UnifXnLocalLimitParry
 import Omega.POM.PrimeRegisterGodelFactorialPointwise
 import Omega.POM.FenceMaxchainsEuler
+import Omega.POM.FenceMultichainEntropyPi
 import Omega.POM.FenceMaxchainsAllIsolatedOptimal
 import Omega.POM.FenceMobiusRigidity
 import Omega.POM.FenceRiccatiError

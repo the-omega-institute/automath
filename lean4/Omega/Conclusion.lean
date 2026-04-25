@@ -34,6 +34,7 @@ import Omega.Conclusion.RateCdimArithmetic
 import Omega.Conclusion.ScaleLedgerDegeneracyLedgerOrthogonality
 import Omega.Conclusion.AnchorFullRankWeightblindRigidity
 import Omega.Conclusion.AnchorFullRankPoleDominance
+import Omega.Conclusion.AnchorLaststepScalarPotentialCollapse
 import Omega.Conclusion.AtomicSurgeryFiniteCongruenceTomography
 import Omega.Conclusion.AtomicSurgerySingleCongruenceInjection
 import Omega.Conclusion.AtomicEulerGhostPrimitiveCompleteSurgery
