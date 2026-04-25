@@ -568,6 +568,7 @@ import Omega.POM.HankelFinitePoleSpectralGap
 import Omega.POM.HankelFiniteWindowPrincipalRigidity
 import Omega.POM.HankelInversePropagationLinearOrbits
 import Omega.POM.HankelSyndromeDivisibilityReversalLcm
+import Omega.POM.HankelRealizationProtocol
 import Omega.POM.HankelMinimalRecurrenceInversionFormula
 import Omega.POM.HankelModpkSolvabilityCount
 import Omega.POM.HankelNFShiftInvarianceAndPropagation

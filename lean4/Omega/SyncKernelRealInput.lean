@@ -77,6 +77,7 @@ import Omega.SyncKernelRealInput.GMModBiasInverseNearResonance
 import Omega.SyncKernelRealInput.GMAcSingularDichotomy
 import Omega.SyncKernelRealInput.GMCriticalExponentShiftKVtheta
 import Omega.SyncKernelRealInput.GmTrace3Delta3Stability
+import Omega.SyncKernelRealInput.GMTrace3GapOptimalSpectralization
 import Omega.SyncKernelRealInput.GmTrace3NearExtremalClustering
 import Omega.SyncKernelRealInput.GMScaleBootstrapGram
 import Omega.SyncKernelRealInput.GMZeckSoficAdditiveEnergy
