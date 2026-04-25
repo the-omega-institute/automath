@@ -1416,6 +1416,7 @@ import Omega.Zeta.XiTimePart9obEscortLoglikOnebitExpfamily
 import Omega.Zeta.XiTimePart9obEscortProductLecam
 import Omega.Zeta.XiTimePart9sEscortLogisticExpfamilyBregman
 import Omega.Zeta.XiTimePart9sbEscortChernoffSaddle
+import Omega.Zeta.XiTimePart9sbEscortErrorExponentLatticeWalk
 import Omega.Zeta.XiTimePart9uFrozenEscortLogmultiplicityMgf
 import Omega.Zeta.XiTimePart9gCanonicalSubmonoidFreeMonoid
 import Omega.Zeta.XiTimePart9gLeyangCubicDiscriminant
