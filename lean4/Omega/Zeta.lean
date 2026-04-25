@@ -1495,6 +1495,7 @@ import Omega.Zeta.XiComovingJensenDefectKernelDecomposition
 import Omega.Zeta.XiSingularRingJensenIdentityDefect
 import Omega.Zeta.XiStieltjesW1Lipschitz
 import Omega.Zeta.XiChainInteriorBooleanMobiusCharacteristicMaxchains
+import Omega.Zeta.XiTimePart65dChainInteriorBooleanArithmeticization
 import Omega.Zeta.XiBasepointScanL2EnergyPdKernel
 import Omega.Zeta.StereographicJacobianEntropyDensity
 import Omega.Zeta.XiTerminalZmS4LanglandsFactorTorusRankConductorTable

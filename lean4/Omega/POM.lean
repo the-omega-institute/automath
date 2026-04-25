@@ -139,6 +139,7 @@ import Omega.POM.BbitOracleCapacityClosedForm
 import Omega.POM.GoldenBinaryChannelContraction
 import Omega.POM.GoldenGrammarFixedPointRhoAq
 import Omega.POM.GoldenLikelihoodRatioMartingales
+import Omega.POM.GoldenEsscherSymmetrization
 import Omega.POM.SqQuasiMultiplicative
 import Omega.POM.BeckChevalleyAmgmDefectIdentity
 import Omega.POM.BivariateMomentZetaFredholm
