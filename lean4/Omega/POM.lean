@@ -1,6 +1,7 @@
 import Omega.POM.MultiplicityAtomMultifractal
 import Omega.POM.SchurTraceFiniteLaplacePrinciple
 import Omega.POM.CollisionKernelAk
+import Omega.POM.MaxFiberHiddenBitMinentropySpectrum
 import Omega.POM.CrossAnomSupportConstraint
 import Omega.POM.FiniteFalsifierAnom
 import Omega.POM.OracleCriticalBudgetZeckendorfPlusGap
