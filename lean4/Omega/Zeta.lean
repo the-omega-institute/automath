@@ -167,6 +167,7 @@ import Omega.Zeta.XiFoldbinEscortTvCollapseOnebitGibbs
 import Omega.Zeta.XiFoldbinGaugeCollisionRigidShift
 import Omega.Zeta.XiFoldbinGaugeVolumeThreeFactorProduct
 import Omega.Zeta.XiFoldGauge2PiEstimatorGeometricLock
+import Omega.Zeta.XiIndexFluxTwoLaws
 import Omega.Zeta.XiDebrangesDppSineKernelLimit
 import Omega.Zeta.XiSu11RhpEquivalence
 import Omega.Zeta.XiBmDensityForcesLinearTranscriptLength
