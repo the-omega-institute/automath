@@ -308,6 +308,7 @@ import Omega.POM.DiagonalRateDiagonalDeterminesSeparationProfile
 import Omega.POM.DiagonalRateDualPotentialReverseOrder
 import Omega.POM.DiagonalRateRefreshCountTiltPerronSecular
 import Omega.POM.DiagonalRateSchurConcavity
+import Omega.POM.DiagonalRateMajorizationFullCurveOrder
 import Omega.POM.DiagonalRateStrictSchurConcavity
 import Omega.POM.DiagonalRateSchurConcavityTP2
 import Omega.POM.DiagonalRateMaxAtomExtremizer
