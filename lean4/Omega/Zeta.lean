@@ -195,6 +195,7 @@ import Omega.Zeta.XiBulkBoundarySpeedMatching
 import Omega.Zeta.XiBulkCurvatureExactDeconvolutionOperator
 import Omega.Zeta.XiLocalBinaryNormalizationFibonacciRigidity
 import Omega.Zeta.XiLocalizedSolenoidPeriodicGrowthMaxScale
+import Omega.Zeta.XiCdimLocalizationSolenoidFiniteDimensionalUnitaryRepresentationsFromCircle
 import Omega.Zeta.XiLogcmSecondBernoulliCoefficientRatio
 import Omega.Zeta.XiLogDefectConeExtreme
 import Omega.Zeta.XiCompactifiedDyadicDepthLowerBound
@@ -263,6 +264,7 @@ import Omega.Zeta.XiTraceLatticeDiscriminantLedger
 import Omega.Zeta.PhaseLiftFixedSlice
 import Omega.Zeta.XiNullMicroKlWindow
 import Omega.Zeta.XiZeroTempComparability
+import Omega.Zeta.GMMajorArcProfiniteEquivalence
 import Omega.Zeta.XiZeroTemperatureFourstateDeterminantStateMinimality
 import Omega.Zeta.XiTerminalZmEllipticWeightNCorrespondenceBidegreeDelta
 import Omega.Zeta.XiTerminalZmEllipticWeight2kDeltaLedger
