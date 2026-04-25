@@ -70,6 +70,7 @@ import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.ProjMomPsiLaw
 import Omega.POM.TorsionQArtinFactorizationResidueFourier
 import Omega.POM.TorsionSymmetryCoprimeClosure
+import Omega.POM.InfiniteCoprimeTorsionSymmetryRankone
 import Omega.POM.WreathArtinFactorization
 import Omega.POM.WmKlToUniform
 import Omega.POM.BCDiscreteJacobianStrictification
