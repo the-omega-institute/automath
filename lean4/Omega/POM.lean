@@ -225,6 +225,7 @@ import Omega.POM.FiniteModulusStability
 import Omega.POM.PartitionResonanceRatioTest
 import Omega.POM.CollisionSpectrumPhiOnesidedApproximation
 import Omega.POM.CollisionStrengthened
+import Omega.POM.RandomFiberTaskBayesErrorMinimalTomography
 import Omega.POM.ChernoffThresholdBounds
 import Omega.POM.WittenIndexScanSignCouplingOddFiber
 import Omega.POM.QuantileChernoff
