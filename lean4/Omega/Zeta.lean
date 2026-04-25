@@ -210,6 +210,7 @@ import Omega.Zeta.XiJensenDefectNoisyThreepointCertificate
 import Omega.Zeta.XiOptimalAllocationUnderProductBound
 import Omega.Zeta.XiFoldingScaleVsToeplitzOrderNonsubstitutability
 import Omega.Zeta.XiTimeHorizonProductLowerBound
+import Omega.Zeta.XiHeightWindowUnifiedQuadraticHardness
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiBinomialToeplitzComovingDeltaScaleLaw
