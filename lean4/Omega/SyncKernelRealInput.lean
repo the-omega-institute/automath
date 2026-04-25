@@ -98,6 +98,7 @@ import Omega.SyncKernelRealInput.GMProfiniteHaarDichotomy
 import Omega.SyncKernelRealInput.GmUnifiedReductionOneSpectralNumber
 import Omega.SyncKernelRealInput.GMEnergyRateTunable
 import Omega.SyncKernelRealInput.GMEnergyWindowSaving
+import Omega.SyncKernelRealInput.GMDoubleLargeSieveInput
 import Omega.SyncKernelRealInput.GMContinuousMajorArcControl
 import Omega.SyncKernelRealInput.GmMellinPoleGoldenComb
 import Omega.SyncKernelRealInput.GmMellinJensenProfileDet
