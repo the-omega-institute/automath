@@ -199,6 +199,7 @@ import Omega.POM.RootUnityFilterVarthetaSecondOrder
 import Omega.POM.DefectBand
 import Omega.POM.DOverAvgExponentEqualsChernoff
 import Omega.POM.DelayMin
+import Omega.POM.PressureDelayLowerBound
 import Omega.POM.DerivedFiberDeterminantExtremalEnvelope
 import Omega.POM.DerivedFiberSingleStieltjesHistogramRecovery
 import Omega.POM.RandomFiberTaskBayesError
