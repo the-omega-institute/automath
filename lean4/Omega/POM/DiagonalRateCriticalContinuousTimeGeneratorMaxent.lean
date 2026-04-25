@@ -39,6 +39,15 @@ def uniqueMaxentGenerator : Prop :=
         (twoStateGeneratorEntropy Q = twoStateGeneratorEntropy twoStateCriticalGenerator →
           Q = twoStateCriticalGenerator)
 
+/-- The concrete continuous-time generator extracted from the critical diagonal-rate limit. -/
+def pom_diagonal_rate_critical_continuous_time_generator_Qw : Fin 2 → Fin 2 → ℝ :=
+  twoStateCriticalGenerator
+
+/-- The induced edge conductance in the concrete two-state model. -/
+def pom_diagonal_rate_critical_continuous_time_generator_conductance
+    (x y : Fin 2) : ℝ :=
+  pom_diagonal_rate_critical_continuous_time_generator_Qw x y
+
 lemma twoStateCriticalGenerator_feasible : twoStateGeneratorFeasible twoStateCriticalGenerator := by
   constructor
   · simp [twoStateUniformReversible, twoStateCriticalGenerator]
@@ -64,6 +73,32 @@ lemma twoStateGeneratorFeasible_eq_critical
     linarith [hrows.2]
   funext x y
   fin_cases x <;> fin_cases y <;> simp [twoStateCriticalGenerator, h00, h01, h10, h11]
+
+/-- Paper label: `cor:pom-diagonal-rate-critical-continuous-time-generator`.
+
+In the concrete two-state specialization, the critical limit generator has zero row sums, is
+reversible for the uniform law, is normalized to average jump rate `1`, and its off-diagonal
+conductance is `1` in both directions. -/
+theorem paper_pom_diagonal_rate_critical_continuous_time_generator :
+    pom_diagonal_rate_critical_continuous_time_generator_Qw 0 0 +
+        pom_diagonal_rate_critical_continuous_time_generator_Qw 0 1 = 0 ∧
+      pom_diagonal_rate_critical_continuous_time_generator_Qw 1 0 +
+        pom_diagonal_rate_critical_continuous_time_generator_Qw 1 1 = 0 ∧
+      twoStateUniformReversible pom_diagonal_rate_critical_continuous_time_generator_Qw ∧
+      twoStateNormalizedJumpRate pom_diagonal_rate_critical_continuous_time_generator_Qw ∧
+      pom_diagonal_rate_critical_continuous_time_generator_conductance 0 1 = 1 ∧
+      pom_diagonal_rate_critical_continuous_time_generator_conductance 1 0 = 1 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · simp [pom_diagonal_rate_critical_continuous_time_generator_Qw, twoStateCriticalGenerator]
+  · simp [pom_diagonal_rate_critical_continuous_time_generator_Qw, twoStateCriticalGenerator]
+  · simpa [pom_diagonal_rate_critical_continuous_time_generator_Qw] using
+      twoStateCriticalGenerator_feasible.1
+  · simpa [pom_diagonal_rate_critical_continuous_time_generator_Qw] using
+      twoStateCriticalGenerator_feasible.2.1
+  · simp [pom_diagonal_rate_critical_continuous_time_generator_conductance,
+      pom_diagonal_rate_critical_continuous_time_generator_Qw, twoStateCriticalGenerator]
+  · simp [pom_diagonal_rate_critical_continuous_time_generator_conductance,
+      pom_diagonal_rate_critical_continuous_time_generator_Qw, twoStateCriticalGenerator]
 
 /-- Paper label: `thm:pom-diagonal-rate-critical-continuous-time-generator-maxent`.
 

@@ -24,4 +24,15 @@ theorem paper_recursive_addressing_prefix_site_register_lower_bound
       q r hinj (q a0)
   simpa [hcard] using hle
 
+/-- Paper-facing wrapper with the exact theorem slug used in the manuscript.
+    thm:prefix-site-register-lower-bound -/
+theorem paper_prefix_site_register_lower_bound
+    {A Avis R H : Type} [Fintype A] [Fintype R] [Fintype H] [DecidableEq Avis] [Nonempty A]
+    (q : A → Avis) (r : A → R)
+    (hinj : Function.Injective fun a => (q a, r a))
+    (hfiber : ∀ a : A, Fintype.card {x // q x = q a} = Fintype.card H)
+    (hsharp : ∃ f : A → Avis × H, Function.Injective f) :
+    Fintype.card H ≤ Fintype.card R ∧ ∃ f : A → Avis × H, Function.Injective f := by
+  exact paper_recursive_addressing_prefix_site_register_lower_bound q r hinj hfiber hsharp
+
 end Omega.RecursiveAddressing

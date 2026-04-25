@@ -50,4 +50,25 @@ theorem paper_killo_finite_semigroup_prime_valuation_arithmetization (n : ℕ)
     funext i
     rfl
 
+/-- Paper label: `cor:killo-projection-idempotent-prime-register`. -/
+theorem paper_killo_projection_idempotent_prime_register {n : ℕ}
+    (D : PrimeValuationArithmetizationData n) (N : PrimeRegister n) :
+    ((D.phi N) ∘ (D.phi N) = D.phi N) ↔ primeRegisterMul N N = N := by
+  rcases paper_killo_finite_semigroup_prime_valuation_arithmetization n D with ⟨_, hcomp⟩
+  constructor
+  · intro h
+    have hphi : D.phi (primeRegisterMul N N) = D.phi N := by
+      calc
+        D.phi (primeRegisterMul N N) = D.phi N ∘ D.phi N := hcomp N N
+        _ = D.phi N := h
+    funext i
+    exact congrArg (fun f => f i) hphi
+  · intro h
+    calc
+      D.phi N ∘ D.phi N = D.phi (primeRegisterMul N N) := by
+        symm
+        exact hcomp N N
+      _ = D.phi N := by
+        simpa using congrArg D.phi h
+
 end Omega.Folding

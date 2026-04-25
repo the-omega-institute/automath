@@ -20,6 +20,22 @@ theorem paper_Ym_sync_tail
   exact ⟨hSync, hExp hSync, hBudget hSync⟩
 
 set_option maxHeartbeats 400000 in
+/-- Lower-case publication wrapper matching the round target name for the exponential
+    synchronization-tail package.
+    thm:Ym-sync-tail -/
+theorem paper_ym_sync_tail
+    (cylinderUpperBound unsyncPrefixExponentialCount syncTailExponentialBound
+      finiteExpectedSyncTime syncBudget : Prop)
+    (hCyl : cylinderUpperBound)
+    (hUnsync : unsyncPrefixExponentialCount)
+    (hTail : cylinderUpperBound → unsyncPrefixExponentialCount → syncTailExponentialBound)
+    (hExp : syncTailExponentialBound → finiteExpectedSyncTime)
+    (hBudget : syncTailExponentialBound → syncBudget) :
+    syncTailExponentialBound ∧ finiteExpectedSyncTime ∧ syncBudget := by
+  exact paper_Ym_sync_tail cylinderUpperBound unsyncPrefixExponentialCount
+    syncTailExponentialBound finiteExpectedSyncTime syncBudget hCyl hUnsync hTail hExp hBudget
+
+set_option maxHeartbeats 400000 in
 /-- Paper-facing dichotomy between finite-delay synchronization and nontrivial spectral tails.
     cor:Ym-finite-delay-spectral-tail -/
 theorem paper_Ym_finite_delay_spectral_tail (rhoAmb : ℝ) (acyclic finiteDelay spectralTail : Prop)
@@ -30,6 +46,16 @@ theorem paper_Ym_finite_delay_spectral_tail (rhoAmb : ℝ) (acyclic finiteDelay 
     exact hFinite ((hAcyclic).2 hZero)
   · intro hNeZero
     exact hTail (mt (hAcyclic).1 hNeZero)
+
+set_option maxHeartbeats 400000 in
+/-- Lower-case publication wrapper matching the round target name for the finite-delay/spectral-tail
+    dichotomy.
+    cor:Ym-finite-delay-spectral-tail -/
+theorem paper_ym_finite_delay_spectral_tail (rhoAmb : ℝ) (acyclic finiteDelay spectralTail : Prop)
+    (hAcyclic : acyclic ↔ rhoAmb = 0) (hFinite : acyclic → finiteDelay)
+    (hTail : ¬ acyclic → spectralTail) : (rhoAmb = 0 → finiteDelay) ∧ (rhoAmb ≠ 0 → spectralTail) := by
+  exact paper_Ym_finite_delay_spectral_tail rhoAmb acyclic finiteDelay spectralTail
+    hAcyclic hFinite hTail
 
 set_option maxHeartbeats 400000 in
 /-- Paper-facing Perron--Frobenius sharpening for the unsynchronized-prefix count.

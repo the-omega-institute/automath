@@ -241,13 +241,18 @@ def git_log_oneline(n: int = 5, *, cwd: Optional[Path] = None) -> list[str]:
 
 # kern.memorystatus_vm_pressure_level mapping (XNU):
 #   1 = NORMAL, 2 = WARN, 4 = URGENT, 8 = CRITICAL
+# NOTE: the kernel's pressure_level is "sticky" — once a swap spike pushes it
+# to WARN it can stay there for hours even after RAM becomes abundant. We
+# keep it as a logged-only secondary signal and gate dispatch on the more
+# actionable (swap_used >= ceiling) AND (available RAM < min_avail) pair.
 _MEM_LEVEL_BY_NAME = {"normal": 1, "warn": 2, "urgent": 4, "critical": 8}
 
 # Populated by main() from CLI flags.
 _MEM_GUARD_CFG: dict = {
     "enabled": sys.platform == "darwin",
-    "level_threshold": 2,      # block when kern.memorystatus_vm_pressure_level >= this
-    "swap_ceiling_gb": 16.0,   # block when used swap exceeds this
+    "level_threshold": 2,      # LOGGED ONLY — does not block dispatch on its own
+    "swap_ceiling_gb": 16.0,   # block only with avail_ram < min_avail
+    "min_avail_gb": 1.5,       # block only with swap >= swap_ceiling
     "poll_seconds": 30,
     "max_wait_seconds": 1800,
 }
@@ -289,9 +294,37 @@ def _macos_swap_used_gb() -> float:
         return 0.0
 
 
-def memory_pressure_snapshot() -> tuple[int, float]:
-    """Return (pressure_level, swap_used_gb). level=0 if unsupported."""
-    return _macos_pressure_level(), _macos_swap_used_gb()
+def _macos_available_ram_gb() -> float:
+    """Immediately-reclaimable RAM in GB. Sums Pages free + Pages inactive
+    + Pages speculative from `vm_stat`. On macOS these pages can be handed
+    back to a new process without touching swap.
+
+    Returns 0.0 on non-darwin or parse errors (caller treats as "unknown"
+    and is conservative).
+    """
+    if sys.platform != "darwin":
+        return 0.0
+    try:
+        r = subprocess.run(
+            ["vm_stat"],
+            capture_output=True, text=True, timeout=5,
+            stdin=subprocess.DEVNULL,
+        )
+        out = r.stdout or ""
+        pm = re.search(r"page size of (\d+) bytes", out)
+        page_size = int(pm.group(1)) if pm else 16384
+        def _pages(label: str) -> int:
+            m = re.search(rf"{re.escape(label)}:\s+(\d+)\.", out)
+            return int(m.group(1)) if m else 0
+        free_pages = _pages("Pages free") + _pages("Pages inactive") + _pages("Pages speculative")
+        return free_pages * page_size / (1024 ** 3)
+    except Exception:
+        return 0.0
+
+
+def memory_pressure_snapshot() -> tuple[int, float, float]:
+    """Return (pressure_level, swap_used_gb, avail_ram_gb). level=0 if unsupported."""
+    return _macos_pressure_level(), _macos_swap_used_gb(), _macos_available_ram_gb()
 
 
 def memory_pressure_wait(context: str = "") -> bool:
@@ -305,28 +338,36 @@ def memory_pressure_wait(context: str = "") -> bool:
     if not cfg["enabled"]:
         return True
 
-    lvl_thresh = int(cfg["level_threshold"])
     swap_cap = float(cfg["swap_ceiling_gb"])
+    min_avail = float(cfg["min_avail_gb"])
     poll = int(cfg["poll_seconds"])
     max_wait = int(cfg["max_wait_seconds"])
 
-    # Fast path: no pressure, no waiting.
-    lvl, swap = memory_pressure_snapshot()
-    if (lvl == 0 or lvl < lvl_thresh) and swap < swap_cap:
+    # Gating rule: block only when BOTH
+    #   swap already exceeds ceiling  AND
+    #   immediately-reclaimable RAM is below min_avail
+    # The kernel's pressure_level is included in log lines but NOT in the
+    # gate — it's sticky after a prior spike and keeps blocking long after
+    # physical RAM is abundant again.
+
+    def _ok(swap: float, avail: float) -> bool:
+        return swap < swap_cap or avail >= min_avail
+
+    # Fast path.
+    lvl, swap, avail = memory_pressure_snapshot()
+    if _ok(swap, avail):
         return True
 
-    # Serialize the wait so parallel callers don't spam identical log lines.
     with _mem_guard_lock:
         start = time.time()
         warned = False
         while True:
-            lvl, swap = memory_pressure_snapshot()
-            under_level = lvl == 0 or lvl < lvl_thresh
-            under_swap = swap < swap_cap
-            if under_level and under_swap:
+            lvl, swap, avail = memory_pressure_snapshot()
+            if _ok(swap, avail):
                 if warned:
                     logger.info(
-                        f"[mem-guard] pressure cleared (level={lvl}, swap={swap:.1f}GB)"
+                        f"[mem-guard] cleared (level={lvl}, swap={swap:.1f}GB, "
+                        f"avail={avail:.1f}GB)"
                         + (f" — resuming {context}" if context else "")
                     )
                 return True
@@ -334,13 +375,15 @@ def memory_pressure_wait(context: str = "") -> bool:
             if elapsed >= max_wait:
                 logger.warning(
                     f"[mem-guard] timeout after {elapsed}s "
-                    f"(level={lvl}, swap={swap:.1f}GB) — proceeding anyway"
+                    f"(level={lvl}, swap={swap:.1f}GB, avail={avail:.1f}GB) — "
+                    f"proceeding anyway"
                     + (f" with {context}" if context else "")
                 )
                 return False
             logger.warning(
-                f"[mem-guard] pressure elevated (level={lvl}, swap={swap:.1f}GB) — "
-                f"pausing {context or 'dispatch'}, retry in {poll}s (waited {elapsed}s)"
+                f"[mem-guard] pressure elevated (level={lvl}, swap={swap:.1f}GB, "
+                f"avail={avail:.1f}GB) — pausing {context or 'dispatch'}, "
+                f"retry in {poll}s (waited {elapsed}s)"
             )
             warned = True
             time.sleep(poll)
@@ -710,6 +753,29 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
                     logger.error(f"Codex could not resolve conflicts for {wt.branch}")
                     run_cmd(["git", "rebase", "--abort"], cwd=wt.path)
                     return False
+
+            # 3.5. Post-rebase Gate 5: under the merge lock, re-check symbol
+            #      uniqueness against the NOW-current base tip. Catches the
+            #      concurrent case where two workers each passed Gate 5 at
+            #      commit time but introduce the same symbol vs each other.
+            latest_base_sha = run_cmd(
+                ["git", "rev-parse", BASE_BRANCH], cwd=REPO_ROOT
+            ).stdout.strip()
+            saved_base = wt.base_sha
+            wt.base_sha = latest_base_sha
+            try:
+                dup = detect_duplicate_symbols(wt)
+            finally:
+                wt.base_sha = saved_base
+            if dup:
+                for v in dup[:10]:
+                    logger.error(f"[R{wt.round_number}] POST-REBASE DUP: {v}")
+                logger.error(
+                    f"[R{wt.round_number}] Rejecting merge: after rebasing onto "
+                    f"latest {BASE_BRANCH}, {len(dup)} new symbol(s) collide with "
+                    f"files concurrent workers already merged."
+                )
+                return False
 
             # 4. Fast-forward local BASE_BRANCH to rebased worktree tip.
             #    git merge --ff-only works on checked-out branches; git fetch . does not.
@@ -1279,6 +1345,99 @@ def detect_sorry_literals(wt: WorktreeInfo) -> list[str]:
     return violations
 
 
+_NEW_DECL_RE = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)*"
+    r"(?:private\s+|protected\s+|noncomputable\s+|scoped\s+|local\s+)*"
+    r"(?:def|theorem|lemma|abbrev|structure|class|inductive|instance)\s+"
+    r"([A-Za-z_][\w.]*)",
+    re.MULTILINE,
+)
+
+
+def detect_duplicate_symbols(wt: WorktreeInfo) -> list[str]:
+    """Gate 5: reject rounds that add `def/theorem/lemma/abbrev/structure/
+    class/inductive/instance` names already present on `origin/<BASE_BRANCH>`.
+
+    Parallel workers off the same base can silently introduce the same
+    auxiliary symbol into different files that share a chapter index
+    (e.g. `Omega.Zeta`), causing `environment already contains 'X'` on the
+    first full build. Catching that at commit time lets the round be
+    rejected cheaply instead of wedging the builder into a multi-attempt
+    rename dance.
+
+    For each `.lean` file the round added/modified under `lean4/Omega/`,
+    parse the top-level declarations the round introduces (diff against
+    `base_sha`), and for each new name run `git grep` against `base_sha`'s
+    tree. A hit outside the file the round is currently editing is a
+    violation.
+    """
+    violations: list[str] = []
+    if not wt.base_sha:
+        return violations
+    try:
+        r = run_cmd(
+            ["git", "diff", "--name-only", "--diff-filter=AM",
+             f"{wt.base_sha}..HEAD", "--", "lean4/Omega/"],
+            cwd=wt.path,
+        )
+    except Exception:
+        return violations
+    files = [l.strip() for l in (r.stdout or "").splitlines()
+             if l.strip().endswith(".lean")]
+    for rel in files:
+        try:
+            current_src = (wt.path / rel).read_text(encoding="utf-8")
+        except Exception:
+            continue
+        # Symbols this round declares in this file
+        current_syms = set()
+        for m in _NEW_DECL_RE.finditer(_strip_lean_comments(current_src)):
+            current_syms.add(m.group(1))
+        # Subtract symbols that already existed in this file on base
+        try:
+            base_src = run_cmd(
+                ["git", "show", f"{wt.base_sha}:{rel}"],
+                cwd=wt.path, check=False,
+            ).stdout
+        except Exception:
+            base_src = ""
+        base_syms_in_file = set()
+        if base_src:
+            for m in _NEW_DECL_RE.finditer(_strip_lean_comments(base_src)):
+                base_syms_in_file.add(m.group(1))
+        new_syms = current_syms - base_syms_in_file
+        if not new_syms:
+            continue
+        # For each newly-introduced symbol, check if it exists elsewhere
+        # on base_sha under lean4/Omega/ (excluding this same file).
+        for sym in new_syms:
+            # Escape regex metacharacters in symbol (dots are legal in Lean names)
+            pattern = (
+                r"^\s*(?:@\[[^]]*\]\s*)*"
+                r"(?:private\s+|protected\s+|noncomputable\s+|scoped\s+|local\s+)*"
+                r"(?:def|theorem|lemma|abbrev|structure|class|inductive|instance)\s+"
+                + re.escape(sym) + r"\b"
+            )
+            try:
+                g = run_cmd(
+                    ["git", "grep", "-l", "-E", pattern,
+                     wt.base_sha, "--", "lean4/Omega/"],
+                    cwd=wt.path, check=False,
+                )
+            except Exception:
+                continue
+            hits = [l.strip() for l in (g.stdout or "").splitlines() if l.strip()]
+            # git grep returns "<sha>:<path>" — strip the sha prefix
+            hit_paths = [h.split(":", 1)[1] if ":" in h else h for h in hits]
+            hit_paths = [p for p in hit_paths if p != rel]
+            if hit_paths:
+                violations.append(
+                    f"{rel}: new symbol '{sym}' already exists on "
+                    f"{BASE_BRANCH} in {hit_paths[0]}"
+                )
+    return violations
+
+
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
     """Check for new commits in the worktree. Also rejects signature degradation,
     new abstract-Prop shell files, sorry/admit/axiom literals, and any commit
@@ -1336,6 +1495,18 @@ def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[b
                 f"[R{wt.round_number}] Rejecting round: {len(sorry_violations)} added "
                 f"line(s) contain sorry/admit/axiom literals. The completion contract "
                 f"in phase_c.txt forbids these in committed code."
+            )
+            return False, new
+        # Gate 5: duplicate-symbol clash with base branch
+        dup_violations = detect_duplicate_symbols(wt)
+        if dup_violations:
+            for v in dup_violations[:10]:
+                logger.error(f"[R{wt.round_number}] DUPLICATE SYMBOL: {v}")
+            logger.error(
+                f"[R{wt.round_number}] Rejecting round: {len(dup_violations)} new "
+                f"declaration(s) collide with existing symbols on {BASE_BRANCH}. "
+                f"Fix: prefix new helpers with the target's paper-label slug "
+                f"(snake_case) so they cannot clash with another worker's file."
             )
             return False, new
         return True, new
@@ -1855,6 +2026,25 @@ def _builder_codex_fix(wt: WorktreeInfo, build_log: Path,
           If push rejected, rebase onto `origin/{BASE_BRANCH}`, re-verify
           with `lake env lean <file>`, push again.
 
+        ## Rename Rule — for `environment already contains 'X'` failures
+        When the error is a duplicate-symbol clash, RENAME the colliding
+        declaration in the file most recently added (NOT the older file).
+
+        The replacement name MUST be:
+        1. Derived from that file's dominant `paper_*` theorem label
+           (convert to snake_case, strip `paper_` prefix): e.g. if the
+           file hosts `paper_xi_limit_defect_potential_vs_depth_profile`,
+           replacement identifiers live in `xi_limit_defect_potential_vs_depth_profile_*` namespace.
+        2. Never shadow mathlib roots (`Complex.conj`, `Real.log`,
+           `Nat.succ`, `List.length`, `Finset.sum`, etc).
+        3. Longer, paper-label-scoped names over short ones — a generic
+           name like `kernel` will collide again; `<slug>_kernel` will not.
+
+        Do NOT open extra `lake env lean` or `lean` processes to test
+        naming candidates — they competes for RAM with concurrent workers.
+        One `lake env lean <file>.lean` on the edited file to confirm it
+        elaborates is enough; the orchestrator re-verifies with full build.
+
         ## Build log tail (last 200 lines)
         ```
         {log_tail}
@@ -2040,12 +2230,21 @@ def main() -> int:
     parser.add_argument(
         "--mem-threshold", type=str, default="warn",
         choices=list(_MEM_LEVEL_BY_NAME.keys()),
-        help="Pause dispatch when kern.memorystatus_vm_pressure_level >= this "
-             "(default: warn)",
+        help="[LOGGED ONLY] kern.memorystatus_vm_pressure_level label shown "
+             "in mem-guard log lines; does not affect gating (the kernel's "
+             "pressure_level is sticky and unreliable after a swap spike). "
+             "Default: warn",
     )
     parser.add_argument(
         "--mem-swap-ceiling-gb", type=float, default=16.0,
-        help="Pause dispatch when used swap exceeds this many GB (default: 16)",
+        help="Pause dispatch when used swap exceeds this many GB AND "
+             "--mem-min-avail-gb is violated (default: 16)",
+    )
+    parser.add_argument(
+        "--mem-min-avail-gb", type=float, default=1.5,
+        help="Pause dispatch when immediately-reclaimable RAM "
+             "(vm_stat free+inactive+speculative) drops below this many GB "
+             "AND --mem-swap-ceiling-gb is exceeded. (default: 1.5)",
     )
     parser.add_argument(
         "--mem-poll", type=int, default=30,
@@ -2102,17 +2301,18 @@ def main() -> int:
     )
     _MEM_GUARD_CFG["level_threshold"] = _MEM_LEVEL_BY_NAME[args.mem_threshold]
     _MEM_GUARD_CFG["swap_ceiling_gb"] = float(args.mem_swap_ceiling_gb)
+    _MEM_GUARD_CFG["min_avail_gb"] = float(args.mem_min_avail_gb)
     _MEM_GUARD_CFG["poll_seconds"] = int(args.mem_poll)
     _MEM_GUARD_CFG["max_wait_seconds"] = int(args.mem_max_wait)
     if _MEM_GUARD_CFG["enabled"]:
-        lvl, swap = memory_pressure_snapshot()
+        lvl, swap, avail = memory_pressure_snapshot()
         logger.info(
-            f"Memory guard: ON (threshold={args.mem_threshold} "
-            f"[level≥{_MEM_GUARD_CFG['level_threshold']}], "
-            f"swap≤{_MEM_GUARD_CFG['swap_ceiling_gb']:.1f}GB, "
+            f"Memory guard: ON (gate: swap>{_MEM_GUARD_CFG['swap_ceiling_gb']:.1f}GB "
+            f"AND avail<{_MEM_GUARD_CFG['min_avail_gb']:.1f}GB, "
             f"poll={_MEM_GUARD_CFG['poll_seconds']}s, "
-            f"max_wait={_MEM_GUARD_CFG['max_wait_seconds']}s) | "
-            f"current: level={lvl}, swap={swap:.1f}GB"
+            f"max_wait={_MEM_GUARD_CFG['max_wait_seconds']}s; "
+            f"pressure_level={args.mem_threshold} logged only) | "
+            f"current: level={lvl}, swap={swap:.1f}GB, avail={avail:.1f}GB"
         )
     else:
         logger.info("Memory guard: OFF")

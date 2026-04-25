@@ -168,6 +168,69 @@ theorem paper_pom_block_consistency_rate_schur_concavity_impossible (δ : ℝ) :
   · intro hsymm
     exact pulledLeadingBlockRate_swap_ne δ (hsymm schurWitnessWeight schurWitnessSwap)
 
+/-- If the agreement threshold is at most the independent-coupling diagonal mass floor `1 / m`,
+the block problem admits a zero-information witness. `cor:pom-block-consistency-rate-threshold-zero`
+-/
+theorem paper_pom_block_consistency_rate_threshold_zero {X B : Type*} [Fintype X] [DecidableEq X]
+    [Fintype B] [DecidableEq B] [Nonempty B] (π : X → B) (w : X → ℝ) (δ : ℝ)
+    (hcard : 2 ≤ Fintype.card B) (hw_nonneg : ∀ x, 0 ≤ w x) (hw_sum : ∑ x, w x = 1)
+    (hδ : 1 - 1 / (Fintype.card B : ℝ) ≤ δ) :
+    ∃ C : BlockCoupling B, (∀ i, ∑ j, C.joint i j = blockWeight π w i) ∧
+      (∀ j, ∑ i, C.joint i j = blockWeight π w j) ∧ diagonalAgreement C ≥ 1 - δ := by
+  classical
+  let W : B → ℝ := blockWeight π w
+  let C : BlockCoupling B := { joint := fun i j => W i * W j }
+  have hW_nonneg : ∀ i, 0 ≤ W i := by
+    intro i
+    dsimp [W, blockWeight]
+    refine Finset.sum_nonneg ?_
+    intro x hx
+    split_ifs with hxi
+    · exact hw_nonneg x
+    · simp
+  have hW_sum : ∑ i, W i = 1 := by
+    dsimp [W]
+    rw [sum_blockWeight_eq_sum]
+    exact hw_sum
+  have hdiag_eq : diagonalAgreement C = ∑ i, W i ^ 2 := by
+    simp [C, diagonalAgreement, W, pow_two]
+  have hcard_pos_nat : 0 < Fintype.card B := lt_of_lt_of_le (by decide : 0 < 2) hcard
+  have hcard_pos : 0 < (Fintype.card B : ℝ) := by
+    exact_mod_cast hcard_pos_nat
+  have hsq_lb : 1 / (Fintype.card B : ℝ) ≤ ∑ i, W i ^ 2 := by
+    have hcs :
+        (∑ i : B, W i * (1 : ℝ)) ^ 2 ≤ (∑ i : B, W i ^ 2) * ∑ i : B, (1 : ℝ) ^ 2 := by
+      simpa using
+        (Finset.sum_mul_sq_le_sq_mul_sq (s := Finset.univ) (f := W) (g := fun _ : B => (1 : ℝ)))
+    have hone_le :
+        1 ≤ (∑ i, W i ^ 2) * (Fintype.card B : ℝ) := by
+      simpa [hW_sum, pow_two, mul_comm, mul_left_comm, mul_assoc] using hcs
+    have hone_le' : 1 ≤ (Fintype.card B : ℝ) * ∑ i, W i ^ 2 := by
+      simpa [mul_comm] using hone_le
+    by_contra hbound
+    have hlt : ∑ i, W i ^ 2 < 1 / (Fintype.card B : ℝ) := lt_of_not_ge hbound
+    have hmul_lt : (Fintype.card B : ℝ) * ∑ i, W i ^ 2 < 1 := by
+      have := mul_lt_mul_of_pos_left hlt hcard_pos
+      simpa [hcard_pos.ne', mul_comm, mul_left_comm, mul_assoc] using this
+    linarith
+  refine ⟨C, ?_, ?_, ?_⟩
+  · intro i
+    calc
+      ∑ j, C.joint i j = ∑ j, W i * W j := by rfl
+      _ = W i * ∑ j, W j := by rw [Finset.mul_sum]
+      _ = W i := by rw [hW_sum]; ring
+      _ = blockWeight π w i := rfl
+  · intro j
+    calc
+      ∑ i, C.joint i j = ∑ i, W i * W j := by rfl
+      _ = (∑ i, W i) * W j := by rw [Finset.sum_mul]
+      _ = W j := by rw [hW_sum]; ring
+      _ = blockWeight π w j := rfl
+  · calc
+      1 - δ ≤ 1 / (Fintype.card B : ℝ) := by linarith
+      _ ≤ ∑ i, W i ^ 2 := hsq_lb
+      _ = diagonalAgreement C := hdiag_eq.symm
+
 end BlockReduction
 
 end Omega.POM

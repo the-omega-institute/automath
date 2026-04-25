@@ -26,4 +26,15 @@ theorem paper_Ym_conjugacy_all_mge3 :
   · intro y
     simp [PsiConjugacySeed, PhiConjugacySeed_eq_id hn]
 
+/-- Lowercase paper-facing alias for the stabilized conjugacy collapse.
+    cor:Ym-conjugacy-all-mge3 -/
+theorem paper_ym_conjugacy_all_mge3 :
+    ∀ m n : ℕ, 3 ≤ m → 3 ≤ n →
+      Function.Bijective
+          (fun y : ℤ → Bool => PhiConjugacySeed n (PsiConjugacySeed m y)) ∧
+        (∀ y : ℤ → Bool,
+          PhiConjugacySeed n (PsiConjugacySeed m (shiftSeq y)) =
+            shiftSeq (PhiConjugacySeed n (PsiConjugacySeed m y))) := by
+  simpa using paper_Ym_conjugacy_all_mge3
+
 end Omega.Folding

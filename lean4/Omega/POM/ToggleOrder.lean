@@ -302,6 +302,47 @@ def togglePrimitiveWord (n k : Nat) : List Nat :=
 def togglePrimitiveWordOrbitLength (n k : Nat) : Nat :=
   3 * n - 3 - 4 * k
 
+/-- The number of `1`'s in the `k`th snake-composition pattern. -/
+def pom_toggle_scan_orbit_length_spectrum_N1 (n k : Nat) : Nat :=
+  n - 1 - 2 * k
+
+/-- The total primitive block length `ℓ(k) = N₁(k) + k`. -/
+def pom_toggle_scan_orbit_length_spectrum_ell (n k : Nat) : Nat :=
+  pom_toggle_scan_orbit_length_spectrum_N1 n k + k
+
+/-- The common divisor `g(k) = gcd(N₁(k), k)` controlling repeated blocks. -/
+def pom_toggle_scan_orbit_length_spectrum_g (n k : Nat) : Nat :=
+  Nat.gcd (pom_toggle_scan_orbit_length_spectrum_N1 n k) k
+
+/-- The Joseph--Roby displayed orbit length `L_k = 3n - 3 - 4k`. -/
+def pom_toggle_scan_orbit_length_spectrum_L (n k : Nat) : Nat :=
+  3 * n - 3 - 4 * k
+
+/-- The displayed quotient family `{L_k / d : d ∣ g(k)}`. -/
+def pom_toggle_scan_orbit_length_spectrum_family (n k : Nat) : Finset Nat :=
+  (pom_toggle_scan_orbit_length_spectrum_g n k).divisors.image fun d =>
+    pom_toggle_scan_orbit_length_spectrum_L n k / d
+
+/-- The primitive block `u = 1^(N₁(k)/d) 2^(k/d)` whose `d`-fold repeat recovers the
+snake-composition data. -/
+def pom_toggle_scan_orbit_length_spectrum_primitive_block (n k d : Nat) : List Nat :=
+  List.replicate (pom_toggle_scan_orbit_length_spectrum_N1 n k / d) 1 ++
+    List.replicate (k / d) 2
+
+/-- Concrete package for `thm:pom-toggle-scan-orbit-length-spectrum`. It records the displayed
+formulae `N₁(k), ℓ(k), g(k), L_k` together with the primitive-block witnesses producing every
+quotient `L_k / d` for `d ∣ g(k)`. -/
+def pom_toggle_scan_orbit_length_spectrum_statement (n : Nat) : Prop :=
+  (∀ k : Nat, k < (n - 1) / 2 →
+    togglePrimitiveWordOrbitLength n k = pom_toggle_scan_orbit_length_spectrum_L n k ∧
+      (togglePrimitiveWord n k).length = pom_toggle_scan_orbit_length_spectrum_ell n k) ∧
+    ∀ k : Nat, 1 ≤ k → k < (n - 1) / 2 →
+      ∀ d ∈ (pom_toggle_scan_orbit_length_spectrum_g n k).divisors,
+        ∃ u : List Nat,
+          u = pom_toggle_scan_orbit_length_spectrum_primitive_block n k d ∧
+          u.length = pom_toggle_scan_orbit_length_spectrum_ell n k / d ∧
+          pom_toggle_scan_orbit_length_spectrum_L n k / d ∣ toggleScanOrderClosedFormLcm n
+
 lemma dvd_foldl_lcm_of_dvd_or_mem {l : List Nat} {a seed : Nat} (h : a ∣ seed ∨ a ∈ l) :
     a ∣ l.foldl Nat.lcm seed := by
   induction l generalizing seed with
@@ -333,6 +374,42 @@ lemma togglePrimitiveWordOrbitLength_mem_candidates (n k : Nat) (hk : k < (n - 1
   unfold togglePrimitiveWordOrbitLength toggleScanOrderLengthCandidates
   exact List.mem_map.mpr ⟨k, List.mem_range.mpr hk, rfl⟩
 
+lemma pom_toggle_scan_orbit_length_spectrum_g_dvd_L (n k : Nat) (hk : k < (n - 1) / 2) :
+    pom_toggle_scan_orbit_length_spectrum_g n k ∣ pom_toggle_scan_orbit_length_spectrum_L n k := by
+  let g := pom_toggle_scan_orbit_length_spectrum_g n k
+  have hleft : g ∣ pom_toggle_scan_orbit_length_spectrum_N1 n k := by
+    exact Nat.gcd_dvd_left _ _
+  have hright : g ∣ k := by
+    exact Nat.gcd_dvd_right _ _
+  rcases hleft with ⟨a, ha⟩
+  rcases hright with ⟨b, hb⟩
+  refine ⟨3 * a + 2 * b, ?_⟩
+  calc
+    pom_toggle_scan_orbit_length_spectrum_L n k =
+        3 * pom_toggle_scan_orbit_length_spectrum_N1 n k + 2 * k := by
+      unfold pom_toggle_scan_orbit_length_spectrum_L pom_toggle_scan_orbit_length_spectrum_N1
+      have hk' : 2 * k ≤ n - 1 := by omega
+      have : n - 1 - 2 * k = n - 1 - 2 * k := rfl
+      omega
+    _ = g * (3 * a + 2 * b) := by rw [ha, hb]; ring
+
+lemma pom_toggle_scan_orbit_length_spectrum_primitive_block_length (n k d : Nat)
+    (hd : d ≠ 0) (hdN1 : d ∣ pom_toggle_scan_orbit_length_spectrum_N1 n k) (hdk : d ∣ k) :
+    (pom_toggle_scan_orbit_length_spectrum_primitive_block n k d).length =
+      pom_toggle_scan_orbit_length_spectrum_ell n k / d := by
+  rcases hdN1 with ⟨a, ha⟩
+  rcases hdk with ⟨b, hb⟩
+  calc
+    (pom_toggle_scan_orbit_length_spectrum_primitive_block n k d).length =
+        pom_toggle_scan_orbit_length_spectrum_N1 n k / d + k / d := by
+      simp [pom_toggle_scan_orbit_length_spectrum_primitive_block]
+    _ = a + b := by
+      rw [ha, hb, Nat.mul_div_right _ (Nat.pos_of_ne_zero hd),
+        Nat.mul_div_right _ (Nat.pos_of_ne_zero hd)]
+    _ = pom_toggle_scan_orbit_length_spectrum_ell n k / d := by
+      unfold pom_toggle_scan_orbit_length_spectrum_ell
+      rw [ha, hb, ← Nat.mul_add, Nat.mul_div_right _ (Nat.pos_of_ne_zero hd)]
+
 /-- The primitive-word orbit lengths are exactly the displayed values `L_k = 3n - 3 - 4k`, and
 each such length divides the lcm of the whole displayed set. -/
 theorem paper_pom_toggle_scan_order_closed_form_true (n : Nat) (hn : 4 ≤ n) :
@@ -361,5 +438,37 @@ def paper_pom_toggle_scan_order_closed_form (n : Nat) (hn : 4 ≤ n) : Prop := b
       (∀ k : Nat, k < (n - 1) / 2 →
         togglePrimitiveWordOrbitLength n k ∣ toggleScanOrderClosedFormLcm n) ∧
       toggleScanOrderClosedFormLcm n = (toggleScanOrderLengthCandidates n).foldl Nat.lcm 1
+
+/-- Paper label: `thm:pom-toggle-scan-orbit-length-spectrum`. The displayed quotient family
+`L_k / d` is realized by primitive blocks `u = 1^(N₁(k)/d) 2^(k/d)`, and every such length
+divides the closed-form scan-order lcm. -/
+theorem paper_pom_toggle_scan_orbit_length_spectrum (n : Nat) (hn : 4 <= n) :
+    pom_toggle_scan_orbit_length_spectrum_statement n := by
+  refine ⟨?_, ?_⟩
+  · intro k hk
+    have hclosed := (paper_pom_toggle_scan_order_closed_form_true n hn).1 k hk
+    have hell : pom_toggle_scan_orbit_length_spectrum_ell n k = n - 1 - k := by
+      unfold pom_toggle_scan_orbit_length_spectrum_ell pom_toggle_scan_orbit_length_spectrum_N1
+      omega
+    refine ⟨hclosed.1, ?_⟩
+    simpa [hell] using hclosed.2
+  · intro k hk1 hk d hd
+    refine ⟨pom_toggle_scan_orbit_length_spectrum_primitive_block n k d, rfl, ?_, ?_⟩
+    · have hdg : d ∣ pom_toggle_scan_orbit_length_spectrum_g n k := Nat.dvd_of_mem_divisors hd
+      have hdpos : d ≠ 0 := Nat.ne_of_gt (Nat.pos_of_mem_divisors hd)
+      have hdN1 :
+          d ∣ pom_toggle_scan_orbit_length_spectrum_N1 n k := by
+        exact hdg.trans (Nat.gcd_dvd_left _ _)
+      have hdk : d ∣ k := by
+        exact hdg.trans (Nat.gcd_dvd_right _ _)
+      exact pom_toggle_scan_orbit_length_spectrum_primitive_block_length n k d hdpos hdN1 hdk
+    · have hLdiv :
+          pom_toggle_scan_orbit_length_spectrum_L n k ∣ toggleScanOrderClosedFormLcm n := by
+        simpa [pom_toggle_scan_orbit_length_spectrum_L] using
+          (paper_pom_toggle_scan_order_closed_form_true n hn).2.1 k hk
+      have hdg : d ∣ pom_toggle_scan_orbit_length_spectrum_g n k := Nat.dvd_of_mem_divisors hd
+      have hdL : d ∣ pom_toggle_scan_orbit_length_spectrum_L n k := by
+        exact hdg.trans (pom_toggle_scan_orbit_length_spectrum_g_dvd_L n k hk)
+      exact (Nat.div_dvd_of_dvd hdL).trans hLdiv
 
 end Omega.POM.ToggleOrder

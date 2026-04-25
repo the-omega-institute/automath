@@ -31,6 +31,45 @@ lemma gmFibonacciEntrypoint_dvd_fib {m : ℕ} (hm : 0 < m) :
   simp [hm]
   exact hspec.2
 
+private lemma gm_entrypoint_divisibility_criterion_le_of_dvd_fib {m n : ℕ} (hm : 0 < m)
+    (hn : 0 < n) (hdiv : m ∣ Nat.fib n) : gmFibonacciEntrypoint m ≤ n := by
+  unfold gmFibonacciEntrypoint
+  rw [dif_pos hm]
+  exact Nat.find_min' (exists_gmFibonacciEntrypoint m hm) ⟨hn, hdiv⟩
+
+private lemma gm_entrypoint_divisibility_criterion_iff (m n : ℕ) (hm : 0 < m) :
+    m ∣ Nat.fib n ↔ gmFibonacciEntrypoint m ∣ n := by
+  constructor
+  · intro hdiv
+    have hentry : m ∣ Nat.fib (gmFibonacciEntrypoint m) := gmFibonacciEntrypoint_dvd_fib hm
+    have hgcd_div : m ∣ Nat.fib (Nat.gcd (gmFibonacciEntrypoint m) n) := by
+      rw [Nat.fib_gcd]
+      exact dvd_gcd hentry hdiv
+    have hgcd_pos : 0 < Nat.gcd (gmFibonacciEntrypoint m) n := by
+      exact Nat.gcd_pos_of_pos_left n (gmFibonacciEntrypoint_pos hm)
+    have hmin :
+        gmFibonacciEntrypoint m ≤ Nat.gcd (gmFibonacciEntrypoint m) n :=
+      gm_entrypoint_divisibility_criterion_le_of_dvd_fib hm hgcd_pos hgcd_div
+    have hgcd_le : Nat.gcd (gmFibonacciEntrypoint m) n ≤ gmFibonacciEntrypoint m :=
+      Nat.gcd_le_left n (gmFibonacciEntrypoint_pos hm)
+    have hgcd_eq : Nat.gcd (gmFibonacciEntrypoint m) n = gmFibonacciEntrypoint m :=
+      le_antisymm hgcd_le hmin
+    have hgcd_eq' : Nat.gcd n (gmFibonacciEntrypoint m) = gmFibonacciEntrypoint m := by
+      simpa [Nat.gcd_comm] using hgcd_eq
+    exact Nat.gcd_eq_right_iff_dvd.mp hgcd_eq'
+  · intro hentry
+    exact dvd_trans (gmFibonacciEntrypoint_dvd_fib hm) (Nat.fib_dvd _ _ hentry)
+
+/-- Paper label: `lem:gm-entrypoint-divisibility-criterion`. -/
+theorem paper_gm_entrypoint_divisibility_criterion :
+    (∀ m n : ℕ, 0 < m → 0 < n → (m ∣ Nat.fib n ↔ gmFibonacciEntrypoint m ∣ n)) ∧
+      (∀ p n : ℕ, Nat.Prime p → 0 < n → (p ∣ Nat.fib n ↔ gmFibonacciEntrypoint p ∣ n)) := by
+  refine ⟨?_, ?_⟩
+  · intro m n hm hn
+    exact gm_entrypoint_divisibility_criterion_iff m n hm
+  · intro p n hp hn
+    exact gm_entrypoint_divisibility_criterion_iff p n hp.pos
+
 /-- Concrete criterion package: keep the original divisibility chain, show that entrypoint
 coverage forces cofinality of the subtower moduli, and identify any such cofinal subtower with the
 same profinite completion proxy used elsewhere in the chapter. -/

@@ -67,4 +67,13 @@ theorem paper_op_algebra_fold_quantum_channel_md_fix_recoverable
   · rw [multiplicativeDomain, hFix]
   · rw [maxRecoverableAlgebra, hFix]
 
+/-- Paper label: `prop:op-algebra-fold-quantum-channel-max-recoverable-algebra`. -/
+theorem paper_op_algebra_fold_quantum_channel_max_recoverable_algebra
+    (D : FoldQuantumChannelMdFixRecoverableData) :
+    D.maxRecoverableAlgebra = D.centralFiberAlgebra ∧
+      D.fixedPointAlgebra = D.centralFiberAlgebra := by
+  constructor
+  · rfl
+  · exact D.fixedPointAlgebra_eq_centralFiberAlgebra
+
 end Omega.OperatorAlgebra

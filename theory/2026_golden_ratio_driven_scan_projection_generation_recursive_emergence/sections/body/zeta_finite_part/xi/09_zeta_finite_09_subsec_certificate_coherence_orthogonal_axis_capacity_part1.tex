@@ -742,16 +742,15 @@ h(\rho)\sim 4\pi\,\delta\,e^{-\mathcal{P}(\gamma)}
 \end{remark}
 
 \begin{theorem}[端点分辨率—位复杂度屏障：二次压缩导出的不可约预算下界（显式最坏情形）]\label{thm:xi-offcritical-endpoint-resolution-lower-bound}
-\leanpartial{paper\_xi\_offcritical\_endpoint\_resolution\_lower\_bound}{the requested Lean signature is false in this repository state: \(\delta_0=0.1\), \(T=1\), \(\delta=100\), \(\gamma=0\) satisfy the hypotheses, but \(4\delta_0/(T^2+(1+\delta_0)^2)\approx 0.181\) while \(4\delta/(\gamma^2+(1+\delta)^2)\approx 0.0392\)}
-固定 \(\delta_0\in(0,\tfrac12)\) 与 \(T>0\)。
-若存在离临界线零点 \(\rho=\beta+\mathrm{i}\gamma\) 满足
+\leanverified{paper\_xi\_offcritical\_endpoint\_resolution\_lower\_bound}
+固定 \(\delta_0\in(0,\tfrac12)\)、\(T>0\)，并令
 \[
-|\gamma|\le T,\qquad \beta\le \tfrac12-\delta_0,
+|\gamma|\le T,\qquad \delta\in[\delta_0,\tfrac12].
 \]
-并仍记其圆盘像为 \(w_\rho=\mathcal{C}(\gamma+\mathrm{i}(\tfrac12-\beta))\)，则端点层余量满足显式下界
+记 \(w=\mathcal{C}(\gamma+\mathrm{i}\delta)\)，则端点层余量满足显式下界
 \begin{equation}\label{eq:xi-offcritical-endpoint-margin-min}
 \boxed{\;
-1-|w_\rho|^2\ \ge\ \frac{4\delta_0}{T^2+(1+\delta_0)^2}\; }.
+1-|w|^2\ \ge\ \frac{4\delta_0}{T^2+(1+\delta_0)^2}\; }.
 \end{equation}
 因此，任何试图仅以端点层分辨率阈值控制来排除上述高度窗内全部离线零点的核验策略，若其对余量 \(1-|w|^2\) 的最小可分辨尺度为 \(2^{-p}\)，则必须满足
 \begin{equation}\label{eq:xi-offcritical-endpoint-bit-lower-bound}
@@ -773,13 +772,13 @@ p\ \ge\ \frac{\mathcal{P}(T)+\log(1/\delta_0)-\log(4\pi)}{\log 2}+o(1)\qquad(T\t
 \begin{proof}
 由定理 \ref{thm:xi-offcritical-quadratic-radial-compression} 第 (1) 条的闭式恒等式，
 \[
-1-|w_\rho|^2=\frac{4\delta}{\gamma^2+(1+\delta)^2},
-\qquad \delta=\tfrac12-\beta\in[\delta_0,\tfrac12).
+1-|w|^2=\frac{4\delta}{\gamma^2+(1+\delta)^2},
+\qquad \delta\in[\delta_0,\tfrac12].
 \]
 在 \(\delta\in(0,1)\) 上，函数 \(\delta\mapsto \frac{4\delta}{\gamma^2+(1+\delta)^2}\) 单调递增；并且对 \(|\gamma|\le T\) 其右端随 \(|\gamma|\) 增大而减小。
 因此在约束 \(\delta\ge\delta_0,|\gamma|\le T\) 下，余量的最小值由 \(\delta=\delta_0\) 与 \(|\gamma|=T\) 取得，从而得到 \eqref{eq:xi-offcritical-endpoint-margin-min}。
 \par
-若核验机制对端点余量的最小可分辨尺度为 \(2^{-p}\)，则要在该高度窗内实现对全部可能离线零点的端点层可分辨排除，必须满足 \(2^{-p}<\inf(1-|w_\rho|^2)\)，结合 \eqref{eq:xi-offcritical-endpoint-margin-min} 即得 \eqref{eq:xi-offcritical-endpoint-bit-lower-bound}。
+若核验机制对端点余量的最小可分辨尺度为 \(2^{-p}\)，则要在该参数窗内实现端点层可分辨排除，必须满足 \(2^{-p}<\inf(1-|w|^2)\)，结合 \eqref{eq:xi-offcritical-endpoint-margin-min} 即得 \eqref{eq:xi-offcritical-endpoint-bit-lower-bound}。
 \eqref{eq:xi-offcritical-endpoint-bit-asymptotic} 由 \(\log_2(T^2+(1+\delta_0)^2)=2\log_2 T+O(1)\) 得到。
 最后，由 \(\mathcal{P}(T)=\log\pi+\log(1+T^2)\) 可将主项写成精度势形式，得到 \eqref{eq:xi-offcritical-endpoint-bit-precision-potential-form}。证毕。
 \end{proof}

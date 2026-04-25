@@ -72,4 +72,9 @@ theorem paper_root_unit_gauge_pressure_resolvent_disc_identity
       ring]
     exact paper_fold_gauge_anomaly_discriminant_factorization D.u
 
+/-- Paper label: `prop:gauge-pressure-resolvent-disc-identity`. -/
+theorem paper_gauge_pressure_resolvent_disc_identity (D : GaugePressureResolventDiscIdentityData) :
+    D.resolventFormula ∧ D.discriminantCoincidence ∧ D.p10Factorization := by
+  exact paper_root_unit_gauge_pressure_resolvent_disc_identity D
+
 end Omega.Folding

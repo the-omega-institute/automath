@@ -52,4 +52,13 @@ theorem paper_pom_mom_lift_beck_chevalley {Q G Y : Type*} [Group G] [Fintype G]
   intro s
   exact qFoldLiftOutputEqual_iff out s
 
+/-- Paper label: `prop:pom-rmoml-sound`.
+The finite abelian RMOML reading is the abelian specialization of the moment--lift
+Beck--Chevalley witness. -/
+theorem paper_pom_rmoml_sound {Q G Y : Type*} [CommGroup G] [Fintype G] (q : ℕ)
+    (out : Q → Y) :
+    ∃ e : qFoldLiftState q Q G ≃ qFoldMomentLiftState q Q G,
+      ∀ s, qFoldLiftOutputEqual out s ↔ qFoldOutputEqual out (e s).1 := by
+  exact paper_pom_mom_lift_beck_chevalley q out
+
 end Omega.POM

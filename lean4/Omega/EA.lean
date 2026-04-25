@@ -1,4 +1,6 @@
 import Omega.EA.AddAsFold
+import Omega.EA.AddFromSuccessor
+import Omega.EA.AddDefinitional
 import Omega.EA.AddressNaturality
 import Omega.EA.ArithComposition
 import Omega.EA.AutDimensionSqueeze
@@ -23,6 +25,7 @@ import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
 import Omega.EA.CrtFactorization
+import Omega.EA.FiniteResolutionMod
 import Omega.EA.Conclusion72EnergyComplementarity
 import Omega.EA.SumproductExponentialLaw
 import Omega.EA.DeterministicRoughVisibleQuantity
@@ -42,11 +45,13 @@ import Omega.EA.FoldWindow6ChiLayeredSpectrumReconstructionBy12Moments
 import Omega.EA.FoldAsSection
 import Omega.EA.FoldAsSectionCorollary
 import Omega.EA.FoldGroupoidAFInductiveLimitHolographicTrace
+import Omega.EA.FoldGroupoidWedderburn
 import Omega.EA.FoldGroupoidAut0ComplementFixedSubgroup
 import Omega.EA.FoldGroupoidAut0RationalCohomology
 import Omega.EA.FoldGroupoidAutPi1AllPrimes
 import Omega.EA.FoldGroupoidWindow6BoundaryParityRationallyInvisible
 import Omega.EA.FoldGroupoidWindow6RationalTailLadder
+import Omega.EA.FoldLargeFiberMomentUpperbounds
 import Omega.EA.FoldTailTopologicalReadout
 import Omega.EA.KernelPeterWeylBlockDiagonalization
 import Omega.EA.FoldDiscreteToContinuousGaugeEmbedding
@@ -121,6 +126,7 @@ import Omega.EA.StableAddComputable
 import Omega.EA.StableAddFiniteResolutionCompatibility
 import Omega.EA.StableAddNoWrapTruncation
 import Omega.EA.StableAddNormalizationRealization
+import Omega.EA.SuccessorStructure
 import Omega.EA.Sync10MemoryHorizonInputStatistics
 import Omega.EA.Sync10Regeneration
 import Omega.EA.Sync10RegenerationCorrelationBound
@@ -136,6 +142,7 @@ import Omega.EA.TimeSpaceCommuting
 import Omega.EA.ValInvariant
 import Omega.EA.Wedderburn
 import Omega.EA.ChiLayeredFiberSpectrumRecovery
+import Omega.EA.FoldIndwHighQExtractMaxfiberAndChi
 import Omega.EA.Z2x2JointSpectralMeasure
 import Omega.EA.ZeckendorfAddFst
 import Omega.EA.ZeckendorfArithComputable
