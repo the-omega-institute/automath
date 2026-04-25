@@ -203,6 +203,7 @@ import Omega.POM.DeltaMinExtraReadouts
 import Omega.POM.A4TDeltaMinusUniqueGlobalMinimizer
 import Omega.POM.DeltaqMeanSquareRhCriterion
 import Omega.POM.DeltaqGoldenEnvelope
+import Omega.POM.DeltaqLinearExtrapolationBreak
 import Omega.POM.DeltaqGLambdaIdentity
 import Omega.POM.DeltaqHalfThresholdCriterion
 import Omega.POM.DeltaqQuadraticObservableMaxExponent

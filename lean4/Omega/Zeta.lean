@@ -162,6 +162,7 @@ import Omega.Zeta.XiHankelPrimitiveSyndromeSiegelBound
 import Omega.Zeta.XiHankelDefectCdimMinimalLedger
 import Omega.Zeta.XiOrthogonalAdjacency33Isogeny
 import Omega.Zeta.XiFlagFactorization12x4x3
+import Omega.Zeta.XiTimePart69UnitAutomorphismPeriodicPointFormula
 import Omega.Zeta.XiTimePart70cSpectrumZeroZ2OrbitCancellation
 import Omega.Zeta.XiTimePart70eBinfoldEntireAmplitudeLaw
 import Omega.Zeta.XiTimePart70aaRealMomentInversemomentBernoulliBridge
