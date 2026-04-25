@@ -18,6 +18,7 @@ import Omega.Zeta.AbelOffcriticalExponentialRadiusAmplification
 import Omega.Zeta.AbelMobiusNeutralizationFormal
 import Omega.Zeta.AbelMobiusLinearization
 import Omega.Zeta.XiAbelRkRootFilterSemigroup
+import Omega.Zeta.XiAbelRightedgeGapAr2ExpError
 import Omega.Zeta.AbelResidueClassChannelRadiusSigmaStar
 import Omega.Zeta.AbelTwoBaseDealiasingInjectivity
 import Omega.Zeta.AbelHardyEnergyDecimationOrthogonal
