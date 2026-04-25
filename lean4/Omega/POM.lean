@@ -201,6 +201,7 @@ import Omega.POM.FiniteModulusStability
 import Omega.POM.CollisionSpectrumPhiOnesidedApproximation
 import Omega.POM.CollisionStrengthened
 import Omega.POM.ChernoffThresholdBounds
+import Omega.POM.WittenIndexScanSignCouplingOddFiber
 import Omega.POM.QuantileChernoff
 import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.ComplementaryGoldenBernoulliDivergence

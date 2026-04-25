@@ -119,6 +119,7 @@ import Omega.Zeta.XiTimePart9xfTailSpectrumCompleteStatistic
 import Omega.Zeta.XiTimeAdditivityFiniteCriticalSquareCriterion
 import Omega.Zeta.GMMajorarcEnergyObstructionLoop
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
+import Omega.Zeta.XiFoldbinShannonGaugeConstantMirror
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiFiniteStateTimeImageDiscreteOrDense
 import Omega.Zeta.XiFiniteDefectRhScanTraceEquivalence
