@@ -222,6 +222,7 @@ import Omega.POM.DerivedMaxNoncontractibleFiberDefectConstants
 import Omega.POM.MaxNoncontractibleFiberMod6Phase
 import Omega.POM.DeterministicNormalizationForest
 import Omega.POM.DiagonalRateRefreshAcceptUniquenessOptimality
+import Omega.POM.DiagonalRateSstPgfQdelta
 import Omega.POM.DiagonalRateTwoCurveIdentifiability
 import Omega.POM.DeterministicCongruenceAuditThresholdOptimal
 import Omega.POM.DegeneracyHistogramVandermondeInversion
