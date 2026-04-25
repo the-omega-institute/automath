@@ -860,6 +860,7 @@ import Omega.POM.ParrySurfaceDerivative
 import Omega.POM.ParryComplexityDetector
 import Omega.POM.PartitionMobiusEventInversion
 import Omega.POM.PartitionMonomialsSymmetricPowerRealizationBound
+import Omega.POM.PartitionMonomialExponentialMainTerm
 import Omega.POM.MomentSymmetricPower
 import Omega.POM.PartitionPressureKnapsack
 import Omega.POM.PathIndSetPolyClosed
