@@ -811,6 +811,7 @@ import Omega.POM.MicrocanonicalInformationCLT
 import Omega.POM.MicrocanonicalInformationLinearLaw
 import Omega.POM.MicrocanonicalModuliInformationLdp
 import Omega.POM.MicrocanonicalFoldPosteriorCountAndProb
+import Omega.POM.MicrocanonicalFoldSingletonAndLowComplexityRarity
 import Omega.POM.MicrocanonicalQueryPlusBitsPhase
 import Omega.POM.MicrocanonicalTwoTemperatureCriticalQuadraticLaw
 import Omega.POM.MultiplicativeUpgradeFatalAmplification
@@ -1151,6 +1152,7 @@ import Omega.POM.PressureEntropyFactorizationMultiplicative
 import Omega.POM.OracleLocalCostKlBregman
 import Omega.POM.RqGroundstateNormalizedSlope
 import Omega.POM.MicrocanonicalFoldWorstcaseQueryRigidity
+import Omega.POM.MultiplicityLowTemperatureGibbs
 import Omega.POM.HstarDescentLinext
 import Omega.POM.FenceVolumeLog2Pi
 import Omega.POM.BqExplicitDiagonalizationLinearForms
