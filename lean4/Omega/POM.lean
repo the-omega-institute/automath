@@ -1049,3 +1049,4 @@ import Omega.POM.DiagonalRateUniformEntropyRewrite
 import Omega.POM.MaxFiberSplitRatioFiniteScale
 import Omega.POM.ConfidenceHittingTimePhiThreshold
 import Omega.POM.DirichletVerticalLattice
+import Omega.POM.DispersionLqLowerBound
