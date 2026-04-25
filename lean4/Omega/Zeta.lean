@@ -18,6 +18,7 @@ import Omega.Zeta.XiSymqGoldenCqDeterminantalDivisors
 import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
 import Omega.Zeta.ZGDensitySecondOrderSummability
 import Omega.Zeta.XiBoundedFluxForcesKappa0
+import Omega.Zeta.XiCpVisibleImpliesKappa0
 import Omega.Zeta.XiSmithPkCongruenceSolvabilityCount
 import Omega.Zeta.XiReconstructionSuccessCurveDiscreteDerivative
 import Omega.Zeta.AbelDampingSemigroupDissipation
