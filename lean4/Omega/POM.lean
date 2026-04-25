@@ -7,6 +7,7 @@ import Omega.POM.ReversibleExternalResidualKolmogorovTypicalEquality
 import Omega.POM.RcrtPressureReductionLaw
 import Omega.POM.KkGramDet
 import Omega.POM.SchurTraceFiniteLaplacePrinciple
+import Omega.POM.SchurPressureFanDiagram
 import Omega.POM.CollisionKernelAk
 import Omega.POM.MaxFiberHiddenBitMinentropySpectrum
 import Omega.POM.CrossAnomSupportConstraint
