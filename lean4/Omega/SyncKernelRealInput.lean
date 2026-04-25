@@ -72,3 +72,5 @@ import Omega.SyncKernelRealInput.GMFareyLocalDensityOpnorm
 import Omega.SyncKernelRealInput.GMZeckNormalizedLimitMeasure
 import Omega.SyncKernelRealInput.GMLargeValuesSDPMomentDuality
 import Omega.SyncKernelRealInput.GMModBiasInverseNearResonance
+import Omega.SyncKernelRealInput.GMAcSingularDichotomy
+import Omega.SyncKernelRealInput.GMCriticalExponentShiftKVtheta

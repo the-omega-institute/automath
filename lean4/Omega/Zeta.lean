@@ -1258,6 +1258,7 @@ import Omega.Zeta.XiTerminalZmEllipticMcTraceEstimator
 import Omega.Zeta.XiTerminalZmEllipticWeightTriplingRamificationCount
 import Omega.Zeta.XiTerminalZmKappaSquareCubicFieldS3
 import Omega.Zeta.XiTerminalZmLeyangEllipticStructure
+import Omega.Zeta.XiTerminalZmLeyangEllipticModularity37
 import Omega.Zeta.XiTerminalZmLeyangLinearTwistQuarticFamily
 import Omega.Zeta.XiTerminalZmLeyangLinearTwistParameterMapS5
 import Omega.Zeta.XiTerminalZmLeyangMonodromyS4
