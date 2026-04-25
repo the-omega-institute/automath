@@ -1411,3 +1411,4 @@ import Omega.Conclusion.SixfoldZeroWitnessSquareRootLaw
 import Omega.Conclusion.DiscreteFanWidthTentKernelTomography
 import Omega.Conclusion.FiberMultiplicityProductNoninjective
 import Omega.Conclusion.Window6LowestHiddenShellBoundaryInteriorThreeEighths
+import Omega.Conclusion.BinfoldRamanujanCapacitySuccessCentralTrace
