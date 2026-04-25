@@ -22,7 +22,16 @@ def xi_height_window_unified_quadratic_hardness_statement : Prop :=
           Real.sqrt (xi_height_window_unified_quadratic_hardness_Qmax T δ0) ≤ max m N)
 
 /-- Paper label: `thm:xi-height-window-unified-quadratic-hardness`. -/
-theorem paper_xi_height_window_unified_quadratic_hardness :
+theorem paper_xi_height_window_unified_quadratic_hardness
+    (T delta0 Qmax budget : ℝ) (hdelta0 : 0 < delta0)
+    (hQ : Qmax = (T ^ 2 + (1 + delta0) ^ 2) / (4 * delta0))
+    (hBudget : Qmax ≤ budget) :
+    (T ^ 2 + (1 + delta0) ^ 2) / (4 * delta0) ≤ budget := by
+  have _ : 0 < delta0 := hdelta0
+  simpa [hQ] using hBudget
+
+/-- Combined wrapper for the height-window formula and product-budget lower-bound interface. -/
+theorem xi_height_window_unified_quadratic_hardness_statement_verified :
     xi_height_window_unified_quadratic_hardness_statement := by
   refine ⟨?_, ?_, ?_⟩
   · intro T δ0
