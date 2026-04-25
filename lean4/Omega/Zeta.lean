@@ -1322,6 +1322,7 @@ import Omega.Zeta.XiNullFiberEntropyWindow
 import Omega.Zeta.XiNullStatisticalRadius
 import Omega.Zeta.XiOffsetNullTypeSafety
 import Omega.Zeta.XiVisibleZerosOnCriticalLine
+import Omega.Zeta.XiScaleMellinFEReal
 import Omega.Zeta.MinDisambiguationTimeEntropyDecomposition
 import Omega.Zeta.XiOptimalRecoveryTimeEqualsConditionalEntropy
 import Omega.Zeta.XiPickPoissonAnchoredGramRigidityReconstruction
