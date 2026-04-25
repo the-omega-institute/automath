@@ -99,3 +99,4 @@ import Omega.SyncKernelRealInput.GMAffineUniformizationImprovement
 import Omega.SyncKernelRealInput.GMAffineRationalSieveM4
 import Omega.SyncKernelRealInput.GMS3UpgradeVtheta
 import Omega.SyncKernelRealInput.GMToeplitzCMVVerblunskyEmbedding
+import Omega.SyncKernelRealInput.GMResonantCharacterGroupHomology
