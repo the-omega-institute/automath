@@ -218,6 +218,7 @@ import Omega.Zeta.XiBinomialToeplitzComovingDeltaScaleLaw
 import Omega.Zeta.XiComovingLeyangEndpointSquareRoot
 import Omega.Zeta.XiLeyangFoldingSignedRoots
 import Omega.Zeta.XiComovingPrefixRecursiveBisection
+import Omega.Zeta.XiPhiLToeplitzInertiaStabilizes
 import Omega.Zeta.XiComovingPrefixChebyshevCenterLaw
 import Omega.Zeta.RealInput40ArityChargeZeroConstants
 import Omega.Zeta.RealInput40ZetaUvResidue
