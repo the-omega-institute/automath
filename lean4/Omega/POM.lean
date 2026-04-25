@@ -205,6 +205,7 @@ import Omega.POM.RootUnityFilterQ2Law
 import Omega.POM.RootUnityFilterVarthetaSecondOrder
 import Omega.POM.DefectBand
 import Omega.POM.DOverAvgExponentEqualsChernoff
+import Omega.POM.ErrorExponentTripleIdentity
 import Omega.POM.DelayMin
 import Omega.POM.PressureDelayLowerBound
 import Omega.POM.DerivedFiberDeterminantExtremalEnvelope
