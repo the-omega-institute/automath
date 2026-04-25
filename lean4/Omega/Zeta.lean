@@ -83,6 +83,7 @@ import Omega.Zeta.XiExtensionPreservingInitialObject
 import Omega.Zeta.XiTimePart9zlGcdLcmCompilerPrimorialLowerBound
 import Omega.Zeta.XiTimePart9zlChainArithmeticHeightFormula
 import Omega.Zeta.XiTimePart10FiberTopologyRankoneLaw
+import Omega.Zeta.XiTimeBoundaryDoubleReconstruction
 import Omega.Zeta.XiAtomicCenteredResidueSimplex
 import Omega.Zeta.XiEndpointHeatProbeResolutionAccuracyHardConstraint
 import Omega.Zeta.XiCompletenessAuditableDecomposition

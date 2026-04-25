@@ -120,6 +120,17 @@ private lemma fiberUniformizationSemigroup_decomposition (P : Omega → X) (t : 
   unfold fiberUniformizationSemigroup
   ring
 
+/-- Paper label: `prop:xi-fiber-uniformization-spectral-decay-equals-exp`.
+The explicit uniformization semigroup splits into the fiber-uniform component and an
+exponentially damped transverse component. -/
+theorem paper_xi_fiber_uniformization_spectral_decay_equals_exp {Omega X : Type}
+    [Fintype Omega] [DecidableEq Omega] [Fintype X] [DecidableEq X] (P : Omega → X)
+    (t : ℝ) (μ : Omega → ℝ) :
+    fiberUniformizationSemigroup P t μ =
+      fun ω => fiberReflectorReal P μ ω + Real.exp (-t) * (μ ω - fiberReflectorReal P μ ω) := by
+  funext ω
+  exact fiberUniformizationSemigroup_decomposition P t μ ω
+
 /-- Paper label: `thm:xi-fiber-uniformization-markov-semigroup-explicit`. The idempotent
 fiber reflector yields the closed form `e^{-t} I + (1 - e^{-t}) K`, hence the semigroup law,
 the initial value, and pointwise convergence to the reflector. -/
