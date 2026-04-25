@@ -8,10 +8,9 @@ finite slice, the existence of an assignment satisfying all finite constraints i
 This is a `def` rather than a `theorem` because `Decidable p` is data in `Type`, and Lean only
 permits `theorem` declarations whose resulting type is a proposition. -/
 def paper_pom_strictification_existence_decidable_bounded_slice
-    (Constraint Assignment : Type*) [Fintype Constraint] [Fintype Assignment]
-    (satisfies : Assignment → Constraint → Prop)
-    [∀ a c, Decidable (satisfies a c)] :
-    Decidable (∃ a : Assignment, ∀ c : Constraint, satisfies a c) := by
+    {Sigma C : Type*} [Fintype Sigma] [Fintype C] (closes : Sigma → C → Prop)
+    [∀ σ c, Decidable (closes σ c)] :
+    Decidable (∃ σ : Sigma, ∀ c : C, closes σ c) := by
   infer_instance
 
 end Omega.POM
