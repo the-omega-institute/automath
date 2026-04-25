@@ -1481,3 +1481,4 @@ import Omega.Zeta.XiCombIncommensurabilityLogLLogphi
 import Omega.Zeta.XiTimefiberCauchyFixedpoint
 import Omega.Zeta.XiFoldEscortLastbitGibbsLimit
 import Omega.Zeta.XiRenyiFlatnessUnderMomqAmplification
+import Omega.Zeta.XiPolesNegativeSquaresEquivalence

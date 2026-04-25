@@ -1045,3 +1045,4 @@ import Omega.POM.MixedCollisionKernelComputable
 import Omega.POM.DiagonalRateUniformEntropyRewrite
 import Omega.POM.MaxFiberSplitRatioFiniteScale
 import Omega.POM.ConfidenceHittingTimePhiThreshold
+import Omega.POM.DirichletVerticalLattice
