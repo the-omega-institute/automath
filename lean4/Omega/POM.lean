@@ -221,6 +221,8 @@ import Omega.POM.CollisionStrengthened
 import Omega.POM.ChernoffThresholdBounds
 import Omega.POM.WittenIndexScanSignCouplingOddFiber
 import Omega.POM.QuantileChernoff
+import Omega.POM.MinKernelGaloisAdjunctionClosure
+import Omega.POM.FiberSpectrumResolventRational
 import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.SchurNontrivialEnergyExplicitLowerBound
 import Omega.POM.ComplementaryGoldenBernoulliDivergence
