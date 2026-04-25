@@ -95,3 +95,4 @@ import Omega.SyncKernelRealInput.GMTwistEqualRadiusArithmeticFactor
 import Omega.SyncKernelRealInput.GMTwistedPerronFourierDecay
 import Omega.SyncKernelRealInput.RealInput40P7BranchSetNoBaseSymmetryDeckTrivial
 import Omega.SyncKernelRealInput.GMAffineUniformizationImprovement
+import Omega.SyncKernelRealInput.GMAffineRationalSieveM4
