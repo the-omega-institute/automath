@@ -1297,3 +1297,4 @@ import Omega.Conclusion.Window6FullCenterTwofiberFactorization
 import Omega.Conclusion.FoldSymtftPartitionFunctionSectorization
 import Omega.Conclusion.AbelMertensRegularizationNotRhsharp
 import Omega.Conclusion.DerivedQuasiIsogenyEulerCdimInvariance
+import Omega.Conclusion.FibadicHaarConditionalExpectationConvolution
