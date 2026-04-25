@@ -219,6 +219,7 @@ import Omega.POM.ChernoffThresholdBounds
 import Omega.POM.WittenIndexScanSignCouplingOddFiber
 import Omega.POM.QuantileChernoff
 import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
+import Omega.POM.SchurNontrivialEnergyExplicitLowerBound
 import Omega.POM.ComplementaryGoldenBernoulliDivergence
 import Omega.POM.CompleteHomogeneousLinearRecurrence
 import Omega.POM.CompleteHomogeneousPFInfty

@@ -260,6 +260,8 @@ import Omega.Zeta.XiFiniteDefectRhCriterionJensenScanTrace
 import Omega.Zeta.XiFiniteDefectEndpointJensenExplicitTail
 import Omega.Zeta.XiJensenEntropyRegularizedVariational
 import Omega.Zeta.XiJensenRecursiveResolutionNoiseCoupling
+import Omega.Zeta.AbelWeilPolarMeasurePowerPushforward
+import Omega.Zeta.XiBscMismatchInformationRate
 import Omega.Zeta.XiJensenDefectNoisyThreepointCertificate
 import Omega.Zeta.XiOptimalAllocationUnderProductBound
 import Omega.Zeta.XiFoldingScaleVsToeplitzOrderNonsubstitutability
