@@ -39,6 +39,7 @@ import Omega.Conclusion.AddressResidualTotalBitBudget
 import Omega.Conclusion.GodelLogarithmicDimensionTax
 import Omega.Conclusion.AuditedEvenFirstkinkHomotopyPurification
 import Omega.Conclusion.ConclusionAuditedEvenWindowFibonacciAdjacentOdds
+import Omega.Conclusion.AuditedEvenWindowCassiniLock
 import Omega.Conclusion.AutComponents
 import Omega.Conclusion.AmbiguityShellZetaSyncSplitting
 import Omega.Conclusion.BalancedExternalizationSchurOptimality
