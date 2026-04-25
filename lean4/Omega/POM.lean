@@ -139,6 +139,7 @@ import Omega.POM.CommutativeSpectralSurface
 import Omega.POM.BivariateSystemIdentificationFiniteWindow
 import Omega.POM.BivariateModRectangleLiftsToPlane
 import Omega.POM.RecurrenceCodeViolationDistance
+import Omega.POM.EscortDerivativeIdentities
 import Omega.POM.ReplicaSoftcoreTemperatureSqReduction
 import Omega.POM.ReplicaSoftcoreFibonacciPowerMomentCollapse
 import Omega.POM.ReplicaSoftcoreWordTraceExtremal
