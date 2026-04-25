@@ -68,6 +68,7 @@ import Omega.Zeta.AbelPowerbaseCovariancePolePowerMap
 import Omega.Zeta.AbelPoleJuliaRigidity
 import Omega.Zeta.AbelDampingThresholdBifurcation
 import Omega.Zeta.AbelSupercriticalDampingConstantAttractor
+import Omega.Zeta.AbelHarddampedUniversalRenormConstant
 import Omega.Zeta.AbelFixedStepGrowthRecoversSigmaStar
 import Omega.Zeta.AbelHardyProjectionTowerReverseMartingale
 import Omega.Zeta.AbelPolyphaseReconstruction
@@ -141,6 +142,7 @@ import Omega.Zeta.XiTimePart78AnomalySplittingTorsorCardinality
 import Omega.Zeta.XiTimePositiveCocycleLeftOrderTorsionfree
 import Omega.Zeta.XiTimePart51AAWindow14StrictDirectFactorLift
 import Omega.Zeta.XiTimePart9xcSerrinGeometryAllCumulantsVanish
+import Omega.Zeta.XiTimePart9xaaLowfiberAnomalyTax
 import Omega.Zeta.XiTimePart9xEquivariantCompletionBitLowerBound
 import Omega.Zeta.XiTimePart9xfTailSpectrumCompleteStatistic
 import Omega.Zeta.XiTimeAdditivityFiniteCriticalSquareCriterion
