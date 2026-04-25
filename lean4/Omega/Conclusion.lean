@@ -36,6 +36,7 @@ import Omega.Conclusion.AnomalyTwoCoprimeLayerTomography
 import Omega.Conclusion.AxialScreenDirectSumVisibleHiddenSplit
 import Omega.Conclusion.FullscreenPartialscreenComplexityTransition
 import Omega.Conclusion.AuditComplexityAreaEquivalence
+import Omega.Conclusion.AreaLawPageTimeLowerBound
 import Omega.Conclusion.AddressResidualTotalBitBudget
 import Omega.Conclusion.GodelLogarithmicDimensionTax
 import Omega.Conclusion.AuditedEvenFirstkinkHomotopyPurification
