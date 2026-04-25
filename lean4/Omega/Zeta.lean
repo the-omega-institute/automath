@@ -1,4 +1,5 @@
 import Omega.Zeta.AbelFinitePartMobiusZeta
+import Omega.Zeta.XiReconstructionSuccessCurveDiscreteDerivative
 import Omega.Zeta.AbelDampingSemigroupDissipation
 import Omega.Zeta.AbelBaseRecursionPoleConjugacy
 import Omega.Zeta.AbelChannelEquipartitionCharacter
