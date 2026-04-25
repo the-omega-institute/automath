@@ -132,6 +132,7 @@ import Omega.Zeta.FiniteQuotientPhaseCompressionPrecisionLowerBound
 import Omega.Zeta.FinitePartResidueConstantRHSqueeze
 import Omega.Zeta.XiFiniteFrontierCertificate
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
+import Omega.Zeta.XiDirichletZeroFreeFromUnifiedZk
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiFourRigidityResidueDepthNormalization
 import Omega.Zeta.DerivedPickPoissonNoFiniteEnergyThermodynamicLimit

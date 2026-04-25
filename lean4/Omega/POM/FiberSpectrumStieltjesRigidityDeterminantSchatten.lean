@@ -67,4 +67,10 @@ theorem paper_pom_fiber_spectrum_stieltjes_rigidity_determinant_schatten
   · intro k
     simp [fiberSpectrumSchattenEvenData, fiberSpectrumNegativePowerSum, inv_pow]
 
+/-- Paper label: `cor:pom-conditional-expectation-schatten-negative-pressure`. The isolated
+Schatten-even component is exactly the negative pressure power-sum profile. -/
+theorem paper_pom_conditional_expectation_schatten_negative_pressure (d1 d2 d3 k : Nat) :
+    fiberSpectrumSchattenEvenData d1 d2 d3 k = fiberSpectrumNegativePowerSum d1 d2 d3 k := by
+  simp [fiberSpectrumSchattenEvenData, fiberSpectrumNegativePowerSum, inv_pow]
+
 end Omega.POM
