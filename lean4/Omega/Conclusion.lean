@@ -1363,3 +1363,5 @@ import Omega.Conclusion.Period3FiberCoordinateLatticeBooleanization
 import Omega.Conclusion.AngularPronyStability
 import Omega.Conclusion.MaxfiberRenyiFamilySingleChi2Closure
 import Omega.Conclusion.ChainDefectCoordinatesNoLinearResponse
+import Omega.Conclusion.JensenDefectDistributionalCurvatureClassification
+import Omega.Conclusion.NoFaithfulTotalOrderTimeFunctor
