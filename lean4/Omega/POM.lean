@@ -143,6 +143,7 @@ import Omega.POM.CollisionEntropyRate
 import Omega.POM.ComplementaryGoldenBernoulliRenyiSpectrum
 import Omega.POM.DiagonalRateRefreshEntropyRateRenewalCoding
 import Omega.POM.DiagonalRateRefreshEntropyRateRenewalCodingSecondary
+import Omega.POM.DiagonalRateZeroThresholdCollision
 import Omega.POM.DiagonalRatePiMajorizationChain
 import Omega.POM.DiagonalRateScalingKeepComonotone
 import Omega.POM.DiagonalRateRefreshRewardClt
