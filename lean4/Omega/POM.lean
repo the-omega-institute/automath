@@ -85,6 +85,7 @@ import Omega.POM.AitkenGoldenLimit
 import Omega.POM.AitkenWindowGoldenInvariance
 import Omega.POM.AnomSingleMomentCompleteEquivalence
 import Omega.POM.AnomClassAdditive
+import Omega.POM.AnomCohomologyClass
 import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.AnomTorusPhaseElimination
 import Omega.POM.ProjMomPsiLaw
