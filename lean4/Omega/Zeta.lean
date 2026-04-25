@@ -219,6 +219,8 @@ import Omega.Zeta.XiDiskZeroPoleIndexReduction
 import Omega.Zeta.XiPartitionTailRateDeltamin
 import Omega.Zeta.XiSymqRankoneCouplingTPower
 import Omega.Zeta.XiBQAuditableResolventPoleRemainder
+import Omega.Zeta.XiSecondOrderCircleDimensionSignatureCompleteness
+import Omega.Zeta.XiEdXhHyperellipticDiscriminantGoodReduction
 import Omega.Zeta.XiSymqResultantPadicValuation
 import Omega.Zeta.XiZetaInterfaceAuditableUniqueness
 import Omega.Zeta.XiMonotoneIdempotentSkeletonGcdLcmSparsity
