@@ -42,4 +42,44 @@ theorem paper_gm_critical_window_automatic_saving
 
 end
 
+/-- Concrete rational exponent data for the automatic-coefficient critical window. -/
+structure gm_critical_window_automatic_saving_data where
+  TExp : ℚ
+  VExp : ℚ
+  eps : ℚ
+  TExp_eq : TExp = 6 / 5
+  VExp_eq : VExp = 3 / 4
+  eps_pos : 0 < eps
+
+/-- The displayed exponent before the `V^{-4}` factor. -/
+def gm_critical_window_automatic_saving_displayExponent
+    (D : gm_critical_window_automatic_saving_data) : ℚ :=
+  D.TExp + 6 / 5 - D.eps
+
+/-- The total exponent after substituting the critical threshold `V = N^(3/4)`. -/
+def gm_critical_window_automatic_saving_totalExponent
+    (D : gm_critical_window_automatic_saving_data) : ℚ :=
+  gm_critical_window_automatic_saving_displayExponent D - 4 * D.VExp
+
+/-- The critical-window rational exponent calculation. -/
+def gm_critical_window_automatic_saving_statement
+    (D : gm_critical_window_automatic_saving_data) : Prop :=
+  gm_critical_window_automatic_saving_displayExponent D = 12 / 5 - D.eps ∧
+    gm_critical_window_automatic_saving_totalExponent D = -3 / 5 - D.eps ∧
+      0 < D.eps
+
+/-- The algebra behind the displayed large-values exponent after substituting
+`T = N^(6/5)` and `V = N^(3/4)`. -/
+theorem gm_critical_window_automatic_saving_exponent_algebra
+    (D : gm_critical_window_automatic_saving_data) :
+    gm_critical_window_automatic_saving_statement D := by
+  refine ⟨?_, ?_, D.eps_pos⟩
+  · unfold gm_critical_window_automatic_saving_displayExponent
+    rw [D.TExp_eq]
+    ring
+  · unfold gm_critical_window_automatic_saving_totalExponent
+      gm_critical_window_automatic_saving_displayExponent
+    rw [D.TExp_eq, D.VExp_eq]
+    ring
+
 end Omega.SyncKernelRealInput
