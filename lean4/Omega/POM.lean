@@ -199,6 +199,7 @@ import Omega.POM.ConclusionLocalCurvatureKlSizebias
 import Omega.POM.ConclusionPomSizeBiasMonotonicity
 import Omega.POM.ConclusionGoldenSprtEsscherBoundarySymmetry
 import Omega.POM.CountertermAnomalyCancellation
+import Omega.POM.MaxFiberHiddenBitMiGap
 import Omega.POM.PwCountertermStrictificationCriterion
 import Omega.POM.StrictificationSplitting
 import Omega.POM.SchurResonantLayerTotalCancellation

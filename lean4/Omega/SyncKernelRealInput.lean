@@ -117,3 +117,4 @@ import Omega.SyncKernelRealInput.GMAbsCenteredMomentThreeChannels
 import Omega.SyncKernelRealInput.GmTrace3PoissonCollisionEnergy
 import Omega.SyncKernelRealInput.GMMellinPoleSkeletonResidueAdjugate
 import Omega.SyncKernelRealInput.GMPWBandlimitedSamplingToeplitz
+import Omega.SyncKernelRealInput.GmCriticalBottleneckResidualOpnorm
