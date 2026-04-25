@@ -1468,3 +1468,4 @@ import Omega.Zeta.XiTerminalZmLeyangLinearTwistDiscriminantElliptification
 import Omega.Zeta.XiTimePart66MaxfiberOverMeanDiverges
 import Omega.Zeta.XiMaskedPosteriorGoldenMeanTransferMatrix
 import Omega.Zeta.XiCombIncommensurabilityLogLLogphi
+import Omega.Zeta.XiTimefiberCauchyFixedpoint
