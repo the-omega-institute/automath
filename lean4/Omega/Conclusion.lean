@@ -1014,6 +1014,7 @@ import Omega.Conclusion.RhsharpQAmplifiedAddressBarrier
 import Omega.Conclusion.RhsharpForcesPerronPureQuotient
 import Omega.Conclusion.S4BoundaryTotalTorusRankConservation
 import Omega.Conclusion.S4HodgeDeterminesFixedpointCounts
+import Omega.Conclusion.S4HodgeRecoversFullBranchType
 import Omega.Conclusion.S4HurwitzJacobianFourGeneratorSemiring
 import Omega.Conclusion.SaturationDefect
 import Omega.Conclusion.ScreenArithmeticShadowAdditiveLinearizationObstruction
