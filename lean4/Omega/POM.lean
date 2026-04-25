@@ -999,6 +999,7 @@ import Omega.POM.DiagonalRateSchurConcavity
 import Omega.POM.SemConservativeOnSlice
 import Omega.POM.DiagonalRateOptimalTP2
 import Omega.POM.MinimalIntegerizationFactorCokerExponent
+import Omega.POM.StiffnessVsIntegerizationSeparation
 import Omega.POM.VariationalUnityTauFromF
 import Omega.POM.DiagonalRateAbsorbingFullVsDeletedInterlacingSecondary
 import Omega.POM.DiagonalRateRefreshCountSCGFLaguerre
