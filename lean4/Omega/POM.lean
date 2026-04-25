@@ -105,6 +105,7 @@ import Omega.POM.BivariateSystemIdentificationFiniteWindow
 import Omega.POM.BivariateModRectangleLiftsToPlane
 import Omega.POM.RecurrenceCodeViolationDistance
 import Omega.POM.ReplicaSoftcoreTemperatureSqReduction
+import Omega.POM.ReplicaSoftcoreFibonacciPowerMomentCollapse
 import Omega.POM.ReverseKlBoundByDispersion
 import Omega.POM.RemainderBitsRenyiCollisionExtremal
 import Omega.POM.FoldReverseKlControlledByGenus2Partition
