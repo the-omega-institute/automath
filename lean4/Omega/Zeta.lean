@@ -221,6 +221,7 @@ import Omega.Zeta.XiOffsliceBlaschkeOriginModulus
 import Omega.Zeta.XiPhilDefectWeightBlaschkeOrigin
 import Omega.Zeta.XiExtremeResonancePositivity
 import Omega.Zeta.XiExtremeResonanceCriterion
+import Omega.Zeta.XiTimePart70eAffinePressureMonofractal
 import Omega.Zeta.XiExtremeResonanceToeplitzThreshold
 import Omega.Zeta.XiGoldenChainVisibleWindowGrowth
 import Omega.Zeta.XiGoldenW1TwoPhaseAmplitudeCenter

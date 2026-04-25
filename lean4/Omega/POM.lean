@@ -221,6 +221,7 @@ import Omega.POM.CoarseGrainedKernel
 import Omega.POM.DqConvergenceControlledByGq
 import Omega.POM.CollisionMoment2AdicOdometerInverseLimit
 import Omega.POM.FiniteModulusStability
+import Omega.POM.PartitionResonanceRatioTest
 import Omega.POM.CollisionSpectrumPhiOnesidedApproximation
 import Omega.POM.CollisionStrengthened
 import Omega.POM.ChernoffThresholdBounds
