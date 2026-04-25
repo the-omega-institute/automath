@@ -1,4 +1,5 @@
 import Omega.POM.MultiplicityAtomMultifractal
+import Omega.POM.ReversibleExternalResidualKolmogorovTypicalEquality
 import Omega.POM.KkGramDet
 import Omega.POM.SchurTraceFiniteLaplacePrinciple
 import Omega.POM.CollisionKernelAk
