@@ -225,6 +225,8 @@ import Omega.Zeta.XiLocalizedSolenoidPeriodicGrowthMaxScale
 import Omega.Zeta.XiLocalizedFinitePrimeAuditArbitraryExponentialAmbiguity
 import Omega.Zeta.XiCdimLocalizationSolenoidFiniteDimensionalUnitaryRepresentationsFromCircle
 import Omega.Zeta.XiLogcmSecondBernoulliCoefficientRatio
+import Omega.Zeta.XiCarathDegeneracyPureImagConstant
+import Omega.Zeta.XiGxOffcriticalPoleResidue
 import Omega.Zeta.XiLogDefectConeExtreme
 import Omega.Zeta.XiCompactifiedDyadicDepthLowerBound
 import Omega.Zeta.XiScaleMellinNoNonzeroImagPeriod
