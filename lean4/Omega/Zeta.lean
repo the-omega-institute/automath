@@ -271,6 +271,7 @@ import Omega.Zeta.XiSingularCircleHeckeDirichletZetaMultiplier
 import Omega.Zeta.XiDefectDensityConeChoquetExtreme
 import Omega.Zeta.XiDefectEntropyHeightBudgetVarianceGap
 import Omega.Zeta.XiReverseKLExteriorPolynomialWitnessLower
+import Omega.Zeta.XiRealInput40ZeroTempAbelAtomicShare
 import Omega.Zeta.XiDefectEntropyHyperbolicAreaLaw4pi
 import Omega.Zeta.XiDefectEntropyFeasibleIntervalFluxIndex
 import Omega.Zeta.XiDiskZeroPoleIndexReduction
