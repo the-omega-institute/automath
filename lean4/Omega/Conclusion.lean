@@ -1312,3 +1312,4 @@ import Omega.Conclusion.DerivedQuasiIsogenyEulerCdimInvariance
 import Omega.Conclusion.FibadicHaarConditionalExpectationConvolution
 import Omega.Conclusion.EscortTwoStateClosure
 import Omega.Conclusion.SphericalPhaseMeasureSparsityExtremalRigiditySeparation
+import Omega.Conclusion.FrozenTailZeroCurvatureSecondMaximumVisibility
