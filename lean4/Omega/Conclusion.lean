@@ -1238,6 +1238,7 @@ import Omega.Conclusion.GoldenRadiusFibonacciNeutralizationLimit
 import Omega.Conclusion.BoundaryReflectionDerivativeIdentity
 import Omega.Conclusion.SerrinSupportJointScreenRay
 import Omega.Conclusion.ConclusionMorita2traceDeterminantZeta
+import Omega.Conclusion.Collision2LieDimRank
 import Omega.Conclusion.Window6GaugeGapUniqueTernaryScar
 import Omega.Conclusion.Q13Q15Mixed2k3lPeriodicShells
 import Omega.Conclusion.Window6GeometricOddOperatorShadowOnedim
