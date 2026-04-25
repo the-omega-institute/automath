@@ -43,6 +43,14 @@ theorem paper_cdim_residual_entropy_lower_bound_corrected (b r k t R : Nat) (ht 
       _ ≤ R := hR
   exact Nat.le_log_of_pow_le (by norm_num : 1 < 2) hpow
 
+/-- Paper-facing corrected wrapper for `thm:cdim-residual-entropy-lower-bound`. -/
+theorem paper_cdim_residual_entropy_lower_bound (b r k t R : Nat) (ht : 0 < t)
+    (hk : k ≤ r)
+    (hinj : Exists fun f : Fin ((2 ^ (b * r)) * t) -> Fin ((2 ^ (b * k)) * R) =>
+      Function.Injective f) :
+    (r - k) * b + Nat.log 2 t <= Nat.log 2 R := by
+  exact paper_cdim_residual_entropy_lower_bound_corrected b r k t R ht hk hinj
+
 /-- The unqualified signature requested in the paper draft is false as written.
     A concrete counterexample is `b = 1`, `r = 1`, `k = 2`, `t = 4`, `R = 2`.
     thm:cdim-residual-entropy-lower-bound -/
