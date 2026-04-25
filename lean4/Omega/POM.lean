@@ -637,6 +637,7 @@ import Omega.POM.GibbsSelection
 import Omega.POM.ZeroTemperatureGibbsRigidity
 import Omega.POM.GodelAxisVarianceNoGap
 import Omega.POM.GreenKernelEntries
+import Omega.POM.LkExponentialClusteringGaplaw
 import Omega.POM.GodelOrthotopeArithmeticIsoperimetricGap
 import Omega.POM.GlobalPressureConvexityPublication
 import Omega.POM.GoldenBiasVarianceEqualsBias

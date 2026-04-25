@@ -112,6 +112,7 @@ import Omega.Zeta.XiTimePart9zbkPresingularOneSidedApproximation
 import Omega.Zeta.XiTimePart10FiberTopologyRankoneLaw
 import Omega.Zeta.XiTimeBoundaryDoubleReconstruction
 import Omega.Zeta.XiAtomicCenteredResidueSimplex
+import Omega.Zeta.XiHankelNonnegativeKernelizationIdealclassObstruction
 import Omega.Zeta.XiEndpointHeatProbeResolutionAccuracyHardConstraint
 import Omega.Zeta.XiCompletenessAuditableDecomposition
 import Omega.Zeta.XiLocalExteriorBoxLoewnerTomographyInversion
