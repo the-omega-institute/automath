@@ -1597,3 +1597,4 @@ import Omega.Zeta.XiTimePart9zbmFoldpiPointwiseSlopeRigidity
 import Omega.Zeta.XiBinfoldOracleSuccessBitrateThresholdExact
 import Omega.Zeta.XiHellingerKernelAndreiefLoggas
 import Omega.Zeta.XiHellingerToeplitzFreeEnergyAreaLaw
+import Omega.Zeta.XiTimePart9n1bKaniRosenHiddenQuotientGenera
