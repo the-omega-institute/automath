@@ -1,3 +1,4 @@
+import Omega.Conclusion.HypercubeJointChiralHeattraceProduct
 import Omega.Conclusion.AdditiveScalarProcircleObstruction
 import Omega.Conclusion.Window6ExactReversibleCapacityCurve
 import Omega.Conclusion.SchurEvenOddAverageTrivialAlternating
