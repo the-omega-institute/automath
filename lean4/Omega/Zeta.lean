@@ -1525,6 +1525,7 @@ import Omega.Zeta.XiFoldEscortLastbitGibbsLimit
 import Omega.Zeta.XiRenyiFlatnessUnderMomqAmplification
 import Omega.Zeta.XiPolesNegativeSquaresEquivalence
 import Omega.Zeta.DephysTimefiberTwoEnded
+import Omega.Zeta.DephysFullStateRecoveryForcesTrivialIndex1
 import Omega.Zeta.XiSmithStaircaseRigidityDistinct
 import Omega.Zeta.XiHeightWindowUnifiedQuadraticHardness
 import Omega.Zeta.XiMaslovSpectralflowEntropyQuantization
