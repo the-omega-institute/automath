@@ -661,6 +661,7 @@ import Omega.POM.MicrocanonicalAdaptiveNoGain
 import Omega.POM.MicrocanonicalFoldQueryLowerBound
 import Omega.POM.MicrocanonicalBandBounds
 import Omega.POM.MicrocanonicalCountSufficientStatisticPosteriorUniform
+import Omega.POM.MicrocanonicalQueryDistortionStrategyInvariantPosterior
 import Omega.POM.MicrocanonicalCoverTimeGumbelCutoff
 import Omega.POM.MicrocanonicalStreamingProgramRarity
 import Omega.POM.MicrocanonicalCoverTimeMean
