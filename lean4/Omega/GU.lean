@@ -5,6 +5,7 @@ import Omega.GU.BdryBinaryLayeringOrbitClassification
 import Omega.GU.BdryChiTwistedBinaryLabelExistence
 import Omega.GU.BdryEquivariantRegisterMinDegreeChoose
 import Omega.GU.BdryFoldGaugeSignAbelianization
+import Omega.GU.BdryGap33CassiniFactorization
 import Omega.GU.BdryFibSquareIdentity
 import Omega.GU.BdryOrientationBlockDecompositionOddVisibility
 import Omega.GU.BdryOrientationCartesianPowerParityCollapse

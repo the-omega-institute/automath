@@ -141,6 +141,7 @@ import Omega.Folding.DiscreteStokesAuditableBound
 import Omega.Folding.DiscreteStokesDefectPublication
 import Omega.Folding.EWTTelescope
 import Omega.Folding.EndpointMmMinusOneUnique
+import Omega.Folding.FoldEndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
 import Omega.Folding.Entropy
 import Omega.Folding.EntropyRandomResidues
@@ -413,6 +414,7 @@ import Omega.Folding.FoldMultiplicityEnergy
 import Omega.Folding.FoldMultiplicityGroupAlgebra
 import Omega.Folding.FoldMultiplicityGroupAlgebraSelfReciprocal
 import Omega.Folding.FoldMultiplicitySpectrumBlindspotHalf
+import Omega.Folding.FoldmOrderIndep
 import Omega.Folding.FoldOrderIndependent
 import Omega.Folding.FoldPairedStepDirichletCharacterIdentity
 import Omega.Folding.FoldPressureExactFreezingGapThreshold
