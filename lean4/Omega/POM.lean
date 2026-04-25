@@ -200,6 +200,7 @@ import Omega.POM.CostCanonicalRepresentativeFunctor
 import Omega.POM.CostOptimizationDecidable
 import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.CollisionKernelPublication
+import Omega.POM.BcritSmallDistortionExpansion
 import Omega.POM.CollisionMomentHomDisj
 import Omega.POM.CollisionPerronAuditableInversion
 import Omega.POM.CoarseGrainedKernel

@@ -201,6 +201,7 @@ import Omega.Zeta.XiEndpointTomographyCertificateChain
 import Omega.Zeta.XiHankel2dSharpness
 import Omega.Zeta.XiOffsliceRealpartSumLaw
 import Omega.Zeta.XiOffsliceBlaschkeOriginModulus
+import Omega.Zeta.XiPhilDefectWeightBlaschkeOrigin
 import Omega.Zeta.XiExtremeResonancePositivity
 import Omega.Zeta.XiExtremeResonanceCriterion
 import Omega.Zeta.XiExtremeResonanceToeplitzThreshold
