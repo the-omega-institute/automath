@@ -17,6 +17,7 @@ import Omega.Zeta.XiLeyangSimpleRootAlgebraicJetClosure
 import Omega.Zeta.AbelFinitePartMobiusZeta
 import Omega.Zeta.XiHeightIntervalMinimalSampling
 import Omega.Zeta.XiSymqGoldenCqDeterminantalDivisors
+import Omega.Zeta.XiSmithStaircaseTemplateSymq
 import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
 import Omega.Zeta.XiTimePart63bSmithKernelGrowthSpectrumCriterion
 import Omega.Zeta.ZGDensitySecondOrderSummability
