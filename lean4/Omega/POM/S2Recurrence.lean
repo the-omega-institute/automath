@@ -26,4 +26,17 @@ theorem paper_pom_s2_recurrence :
   rw [Nat.add_comm 5 k]
   simp [pom_s2_recurrence_seq]
 
+/-- lem:pom-s2-minimal-order -/
+theorem paper_pom_s2_minimal_order :
+    ¬ ∃ α β : ℚ, ∀ m : ℕ, 4 ≤ m →
+      (pom_s2_recurrence_seq m : ℚ) =
+        α * (pom_s2_recurrence_seq (m - 1) : ℚ) +
+          β * (pom_s2_recurrence_seq (m - 2) : ℚ) := by
+  rintro ⟨α, β, h⟩
+  have h4 := h 4 (by norm_num)
+  have h5 := h 5 (by norm_num)
+  have h6 := h 6 (by norm_num)
+  norm_num [pom_s2_recurrence_seq] at h4 h5 h6
+  nlinarith
+
 end Omega.POM
