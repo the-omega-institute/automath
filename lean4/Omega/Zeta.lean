@@ -635,6 +635,7 @@ import Omega.Zeta.XiTimeResolutionGaloisAdjunction
 import Omega.Zeta.XiTimeCentralExtensionUniversal
 import Omega.Zeta.AuditedEvenFirstCapacityKinkFibonacciJump
 import Omega.Zeta.AutomaticDirichletMoment
+import Omega.Zeta.PrefixReadoutOrthogonalErrorDecomposition
 import Omega.Zeta.XiStieltjesSemidirectPDE
 import Omega.Zeta.BlockCyclicRigidity
 import Omega.Zeta.BooleanBinaryJumpKernels2AdicHalfperiod
