@@ -114,6 +114,7 @@ import Omega.Zeta.XiFoldBayesInfonceNewtonBinomialInversion
 import Omega.Zeta.XiFoldbinEvenWindowParitySectionCenterIntersection
 import Omega.Zeta.XiFoldbinEscortTvCollapseOnebitGibbs
 import Omega.Zeta.XiFoldbinGaugeCollisionRigidShift
+import Omega.Zeta.XiFoldGauge2PiEstimatorGeometricLock
 import Omega.Zeta.XiDebrangesDppSineKernelLimit
 import Omega.Zeta.XiBmDensityForcesLinearTranscriptLength
 import Omega.Zeta.XiCongruenceBlockAbelWeilResidueLocking

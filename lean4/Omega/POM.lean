@@ -196,6 +196,7 @@ import Omega.POM.CrossqLogconvexChain
 import Omega.POM.CrossqGMonotone
 import Omega.POM.CrossqPressureConvexity
 import Omega.POM.CurvatureSummableEventualCommutation
+import Omega.POM.MultistepCurvatureDominated
 import Omega.POM.AxisDecomposabilityIff
 import Omega.POM.CrossAnomMobiusAnovaDimensionTheory
 import Omega.POM.StableAdditionCarryDefectUniqueElement
