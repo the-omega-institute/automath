@@ -16,6 +16,7 @@ import Omega.Zeta.AbelFinitePartMobiusZeta
 import Omega.Zeta.XiHeightIntervalMinimalSampling
 import Omega.Zeta.XiSymqGoldenCqDeterminantalDivisors
 import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
+import Omega.Zeta.XiTimePart63bSmithKernelGrowthSpectrumCriterion
 import Omega.Zeta.ZGDensitySecondOrderSummability
 import Omega.Zeta.XiBoundedFluxForcesKappa0
 import Omega.Zeta.XiCpVisibleImpliesKappa0

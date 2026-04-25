@@ -14,6 +14,7 @@ import Omega.POM.A4LinearObservableTwoTermOscillation
 import Omega.POM.HolographicConservationFPlusGamma
 import Omega.POM.HolographicDimensionSumBound
 import Omega.POM.OrientationFingerprintGeometryAudit
+import Omega.POM.OccupancyFunctionalCollisionExpansion
 import Omega.POM.GrhMixUpper
 import Omega.POM.PhaseLockDiscriminantMinus15Splitting
 import Omega.POM.PressureCumulants
