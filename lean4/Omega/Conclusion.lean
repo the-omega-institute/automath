@@ -8,6 +8,7 @@ import Omega.Conclusion.RealInput40CenteredCramerMinimum
 import Omega.Conclusion.Window6SyzygyGreenInverseClosedForm
 import Omega.Conclusion.Window6DiscriminantDegreeLowmomentClosure
 import Omega.Conclusion.FoldWalshPrincipalMinorsUniqueRelation
+import Omega.Conclusion.CoordinateBundleExactMbitDropLaw
 import Omega.Conclusion.HypercubeJointChiralHeattraceProduct
 import Omega.Conclusion.TwoBodyAuditCompletenessCodimension
 import Omega.Conclusion.AdditiveScalarProcircleObstruction
