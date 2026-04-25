@@ -1575,6 +1575,7 @@ import Omega.Zeta.XiTerminalZmElliptic5torsionSignQuadraticField
 import Omega.Zeta.AmpDefectUnitary
 import Omega.Zeta.XiHankelFullrankOnePrimeAudit
 import Omega.Zeta.XiTimePart9zbiMinimalExactCompressor
+import Omega.Zeta.XiTimePart62dcbHologramPiecewiseAffineZeta
 import Omega.Zeta.XiTimePart62dcHologramSelfaffineCantorDynamics
 import Omega.Zeta.XiTimePart62dcHologramBernoulliExactDimensional
 import Omega.Zeta.XiTimePart62dhLeyangBranchHyperoctahedralWreath
