@@ -1417,6 +1417,7 @@ import Omega.Zeta.CyclicLiftPrimitiveOrbits
 import Omega.Zeta.XiPartitionTailMinScaleLowerBound
 import Omega.Zeta.XiIntegratedDefectSingleRadiusExclusionBand
 import Omega.Zeta.XiReplicaSoftcoreExceptionalBlockInverseIntegralClosed
+import Omega.Zeta.XiReplicaSoftcoreWordtraceIndependentSetFactorization
 import Omega.Zeta.XiReplicaSoftcoreReciprocalCornerFibonacciPowerLaw
 import Omega.Zeta.XiCdimZetaEulerAbscissaLocality
 import Omega.Zeta.XiBinomialToeplitzScaleDepthExchange
