@@ -120,6 +120,7 @@ import Omega.POM.TorsionSymmetryCoprimeClosure
 import Omega.POM.InfiniteCoprimeTorsionSymmetryRankone
 import Omega.POM.WreathArtinFactorization
 import Omega.POM.WmKlToUniform
+import Omega.POM.WmTailLdpRqCertificate
 import Omega.POM.BCDiscreteJacobianStrictification
 import Omega.POM.BCBianchi
 import Omega.POM.BCChainDefectEqualsEscortCurvatureSum
