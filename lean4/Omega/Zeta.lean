@@ -265,6 +265,7 @@ import Omega.Zeta.XiScanTailRatioPeeling
 import Omega.Zeta.XiScanAliasingThreshold
 import Omega.Zeta.XiKoenigsPrimeGeneratorSpectralFactorization
 import Omega.Zeta.XiKreinSpectralShiftEqualsKL
+import Omega.Zeta.XiToeplitzNegativeWitnessFromScanHankel
 import Omega.Zeta.XiKreinSpectralShiftStaircaseShadow
 import Omega.Zeta.XiLeyangEdDyExplicitDivisor
 import Omega.Zeta.XiEdYDivisorAndGroupLawIdentity
