@@ -1021,3 +1021,4 @@ import Omega.POM.AnomAdditiveUpToBoundary
 import Omega.POM.ZeroTemperatureGibbsLimit
 import Omega.POM.DiagonalRateSmallDistortionHellingerEndpoint
 import Omega.POM.DiagonalRateScalingPotentialEndpoints
+import Omega.POM.MomentFiniteSamplingDecidable
