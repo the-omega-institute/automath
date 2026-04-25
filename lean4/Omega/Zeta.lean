@@ -1,4 +1,5 @@
 import Omega.Zeta.XiFoldLastbitSubcriticalSampleLecamEquivalence
+import Omega.Zeta.XiBulkCurvatureMassQuantization
 import Omega.Zeta.XiPoissonCauchyLocationScaleInformationProjection
 import Omega.Zeta.XiPoissonCauchyMixturePointLeadingConstants
 import Omega.Zeta.XiHellingerToeplitzSymbolPoisson
