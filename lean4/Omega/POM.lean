@@ -223,6 +223,7 @@ import Omega.POM.CrossqPressureConvexity
 import Omega.POM.CurvatureSummableEventualCommutation
 import Omega.POM.MultistepCurvatureDominated
 import Omega.POM.AxisDecomposabilityIff
+import Omega.POM.PhaseTransitionKinkVsLinearFace
 import Omega.POM.CrossAnomMobiusAnovaDimensionTheory
 import Omega.POM.StableAdditionCarryDefectUniqueElement
 import Omega.POM.AkSymmetricTransitionPoly

@@ -150,6 +150,7 @@ import Omega.Zeta.XiPoissonKernelDerivativeL1FisherClosed
 import Omega.Zeta.XiCauchyPoissonOddMomentSelectionLaw
 import Omega.Zeta.XiPoissonCauchyKlMomentLocking
 import Omega.Zeta.XiPoissonKlSixthOrderMu3Mu4
+import Omega.Zeta.XiCauchyPoissonEntropyAuditCircleAverage
 import Omega.Zeta.XiTimePart60abZeroBlockForcesBinomialFactor
 import Omega.Zeta.XiTimePart60ab2StableSpectrumSelfreciprocalCenter
 import Omega.Zeta.XiTimePart60ab2ExactDarkModeArithmeticCriterion
