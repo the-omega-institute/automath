@@ -1114,6 +1114,7 @@ import Omega.POM.ToggleOddSectorExponentialThinness
 import Omega.POM.AkCoefficientExtraction
 import Omega.POM.SprtStoppingPosteriorConstant
 import Omega.POM.MultiplicityCompositionRenewalHitProb
+import Omega.POM.MultiplicityGibbsIdentity
 import Omega.POM.TruncationDefectGaugeCoboundary
 import Omega.POM.FiberInhomBernoulliPosteriorHardcore
 import Omega.POM.ReplicaSoftcorePerronFibonacciFixedPoint
