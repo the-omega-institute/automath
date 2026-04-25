@@ -221,6 +221,7 @@ import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.CollisionKernelPublication
 import Omega.POM.RewriteAuditLoop
 import Omega.POM.StrictificationExistenceDecidableBoundedSlice
+import Omega.POM.MultiplicityCompositionMod3BadcountClt
 import Omega.POM.BcritSmallDistortionExpansion
 import Omega.POM.CollisionMomentHomDisj
 import Omega.POM.CollisionPerronAuditableInversion
