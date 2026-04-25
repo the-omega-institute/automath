@@ -162,6 +162,7 @@ import Omega.POM.InfonceFoldThirdOrderLargeK
 import Omega.POM.BayesErrorExplicitSharpAsymptotic
 import Omega.POM.BbitOracleCapacityClosedForm
 import Omega.POM.GoldenBinaryChannelContraction
+import Omega.POM.FiberWittenIndexZxMinusOne
 import Omega.POM.GoldenGrammarFixedPointRhoAq
 import Omega.POM.GoldenLikelihoodRatioMartingales
 import Omega.POM.GoldenEsscherSymmetrization
