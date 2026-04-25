@@ -1202,3 +1202,4 @@ import Omega.POM.SignatureAudit
 import Omega.POM.LkResolventTraceHyperbolic
 import Omega.POM.EscortZeroTemperatureSuperexpConcentration
 import Omega.POM.FiberFenceRankPolyFactorization
+import Omega.POM.P7RootRatioQuadraticTowerRamification
