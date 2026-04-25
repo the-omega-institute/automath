@@ -104,3 +104,4 @@ import Omega.SyncKernelRealInput.GMToeplitzCMVVerblunskyEmbedding
 import Omega.SyncKernelRealInput.GMResonantCharacterGroupHomology
 import Omega.SyncKernelRealInput.GmSmithComputeObstructions
 import Omega.SyncKernelRealInput.GMTwoFiniteObjectsOutline
+import Omega.SyncKernelRealInput.GMAbsCenteredMomentThreeChannels

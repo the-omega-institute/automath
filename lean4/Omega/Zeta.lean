@@ -220,6 +220,7 @@ import Omega.Zeta.XiFoldingScaleVsToeplitzOrderNonsubstitutability
 import Omega.Zeta.XiTimeHorizonProductLowerBound
 import Omega.Zeta.XiHeightWindowUnifiedQuadraticHardness
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
+import Omega.Zeta.XiTwoParamDisjointnessQuotientDetTrace
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiBinomialToeplitzComovingDeltaScaleLaw
 import Omega.Zeta.XiComovingLeyangEndpointSquareRoot
