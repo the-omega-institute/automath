@@ -1,3 +1,4 @@
+import Omega.POM.MultiplicityAtomMultifractal
 import Omega.POM.SchurTraceFiniteLaplacePrinciple
 import Omega.POM.CollisionKernelAk
 import Omega.POM.CrossAnomSupportConstraint
