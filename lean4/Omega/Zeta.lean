@@ -144,6 +144,7 @@ import Omega.Zeta.XiGodelCoprimeModFamilyDecoupling
 import Omega.Zeta.XiGl2FpActionSignCharacterLegendreDet
 import Omega.Zeta.XiUnboundedPrimeDirectionsForceInfiniteHalfCircleDimension
 import Omega.Zeta.XiAddressableGodelWorstcaseRedundancyDiverges
+import Omega.Zeta.XiAddressableGodelAverageBinaryOptimality
 import Omega.Zeta.XiChainInteriorGodelAverageBudgetOptimality
 import Omega.Zeta.XiFiniteRhoScanTraceClosedFormDepthOnly
 import Omega.Zeta.XiNullSecondOrderRadialChannel
