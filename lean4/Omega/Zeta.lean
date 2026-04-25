@@ -1,3 +1,5 @@
+import Omega.Zeta.XiFoldLastbitSubcriticalSampleLecamEquivalence
+import Omega.Zeta.XiPoissonCauchyLocationScaleInformationProjection
 import Omega.Zeta.XiHellingerToeplitzSymbolPoisson
 import Omega.Zeta.XiSmithNormalizedKernelPositiveFiniteEulerCorrection
 import Omega.Zeta.XiFinitePrimeSupportLinearRegisterLaw
