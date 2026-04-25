@@ -148,3 +148,4 @@ import Omega.EA.Z2x2JointSpectralMeasure
 import Omega.EA.ZeckendorfAddFst
 import Omega.EA.ZeckendorfArithComputable
 import Omega.EA.ZeckendorfTransversal
+import Omega.EA.Crt235MinDepth

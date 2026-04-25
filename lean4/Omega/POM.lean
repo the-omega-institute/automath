@@ -1056,3 +1056,4 @@ import Omega.POM.MaxFiberSplitRatioFiniteScale
 import Omega.POM.ConfidenceHittingTimePhiThreshold
 import Omega.POM.DirichletVerticalLattice
 import Omega.POM.DispersionLqLowerBound
+import Omega.POM.CoarsegrainingCollisionMomentStrictMonotonicity
