@@ -76,6 +76,7 @@ import Omega.POM.FiberGeodesicLinearExtension
 import Omega.POM.FiberIndependenceComplexJoin
 import Omega.POM.FiberIndependenceComplexPath
 import Omega.POM.FiberIndependenceComplexHomology
+import Omega.POM.FiberHyperplaneSpectrumInvertibility
 import Omega.POM.HiddenBitJumpCollisionIsomorphism
 import Omega.POM.HiddenBitComplementFixedpointBSplitDichotomy
 import Omega.POM.HiddenBitTopbitMiHalfEntropy
