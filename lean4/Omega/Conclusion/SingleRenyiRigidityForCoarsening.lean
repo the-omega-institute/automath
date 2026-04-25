@@ -236,4 +236,183 @@ theorem paper_conclusion_single_renyi_rigidity_for_coarsening
       _ = ∑ x : X, Nat.min (A x) T := by
         simpa [A] using (Fintype.sum_fiberwise (g := g) (f := fun x : X => Nat.min (A x) T))
 
+private lemma conclusion_strict_coarsening_exact_bit_budget_loss_min_add_le_add_min
+    (a b T : Nat) :
+    Nat.min (a + b) T ≤ Nat.min a T + Nat.min b T := by
+  by_cases ha : a ≤ T
+  ·
+    by_cases hb : b ≤ T
+    · have hright : Nat.min a T + Nat.min b T = a + b := by
+        simp [Nat.min_eq_left ha, Nat.min_eq_left hb]
+      calc
+        Nat.min (a + b) T ≤ a + b := Nat.min_le_left _ _
+        _ = Nat.min a T + Nat.min b T := hright.symm
+    · have hTb : T ≤ b := by omega
+      have hright : Nat.min a T + Nat.min b T = a + T := by
+        simp [Nat.min_eq_left ha, Nat.min_eq_right hTb]
+      have hleft : Nat.min (a + b) T ≤ T := Nat.min_le_right _ _
+      calc
+        Nat.min (a + b) T ≤ T := hleft
+        _ ≤ a + T := by omega
+        _ = Nat.min a T + Nat.min b T := hright.symm
+  · have hTa : T ≤ a := by omega
+    have hright : Nat.min a T + Nat.min b T = T + Nat.min b T := by
+      simp [Nat.min_eq_right hTa]
+    have hleft : Nat.min (a + b) T ≤ T := Nat.min_le_right _ _
+    calc
+      Nat.min (a + b) T ≤ T := hleft
+      _ ≤ T + Nat.min b T := Nat.le_add_right _ _
+      _ = Nat.min a T + Nat.min b T := hright.symm
+
+private lemma conclusion_strict_coarsening_exact_bit_budget_loss_min_sum_le_sum_min
+    {ι : Type*} (s : Finset ι) (a : ι → Nat) (T : Nat) :
+    Nat.min (s.sum a) T ≤ s.sum fun i => Nat.min (a i) T := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert i s hi ih =>
+      calc
+        Nat.min ((insert i s).sum a) T =
+            Nat.min (a i + s.sum a) T := by simp [hi]
+        _ ≤ Nat.min (a i) T + Nat.min (s.sum a) T :=
+          conclusion_strict_coarsening_exact_bit_budget_loss_min_add_le_add_min (a i) (s.sum a) T
+        _ ≤ Nat.min (a i) T + s.sum (fun j => Nat.min (a j) T) :=
+          Nat.add_le_add_left ih _
+        _ = (insert i s).sum (fun j => Nat.min (a j) T) := by simp [hi]
+
+private lemma conclusion_strict_coarsening_exact_bit_budget_loss_two_min_gt
+    {a b T : Nat} (ha : 0 < a) (hb : 0 < b) (hTpos : 0 < T) (hT : T < a + b) :
+    T < Nat.min a T + Nat.min b T := by
+  by_cases haT : a ≤ T
+  ·
+    by_cases hbT : b ≤ T
+    · have hright : Nat.min a T + Nat.min b T = a + b := by
+        simp [Nat.min_eq_left haT, Nat.min_eq_left hbT]
+      simpa [hright] using hT
+    · have hTb : T ≤ b := by omega
+      have hright : Nat.min a T + Nat.min b T = a + T := by
+        simp [Nat.min_eq_left haT, Nat.min_eq_right hTb]
+      calc
+        T < a + T := by omega
+        _ = Nat.min a T + Nat.min b T := hright.symm
+  · have hTa : T ≤ a := by omega
+    have hmina : Nat.min a T = T := Nat.min_eq_right hTa
+    by_cases hbT : b ≤ T
+    · have hright : Nat.min a T + Nat.min b T = T + b := by
+        simp [hmina, Nat.min_eq_left hbT]
+      calc
+        T < T + b := by omega
+        _ = Nat.min a T + Nat.min b T := hright.symm
+    · have hTb : T ≤ b := by omega
+      have hright : Nat.min a T + Nat.min b T = T + T := by
+        simp [hmina, Nat.min_eq_right hTb]
+      calc
+        T < T + T := by omega
+        _ = Nat.min a T + Nat.min b T := hright.symm
+
+/-- Paper label: `cor:conclusion-strict-coarsening-exact-bit-budget-loss`. A strict
+coarsening that merges two nonempty fibers whose combined size exceeds the dyadic cap strictly
+reduces the capped capacity sum at that cap. -/
+theorem paper_conclusion_strict_coarsening_exact_bit_budget_loss
+    {Omega X Y : Type*} [Fintype Omega] [Fintype X] [Fintype Y] [DecidableEq X]
+    [DecidableEq Y] (f : Omega → X) (g : X → Y) (B : ℕ) {x1 x2 : X} (hne : x1 ≠ x2)
+    (hg : g x1 = g x2) (h1 : 0 < Fintype.card {w : Omega // f w = x1})
+    (h2 : 0 < Fintype.card {w : Omega // f w = x2})
+    (hT : 2 ^ B <
+      Fintype.card {w : Omega // f w = x1} + Fintype.card {w : Omega // f w = x2}) :
+    (∑ y : Y, Nat.min (Fintype.card {w : Omega // g (f w) = y}) (2 ^ B)) <
+      ∑ x : X, Nat.min (Fintype.card {w : Omega // f w = x}) (2 ^ B) := by
+  classical
+  let A : X → Nat := fun x => Fintype.card {w : Omega // f w = x}
+  let C : Y → Nat := fun y => Fintype.card {w : Omega // g (f w) = y}
+  let T : Nat := 2 ^ B
+  have hC :
+      ∀ y : Y, C y = ∑ x : {x : X // g x = y}, A x := by
+    intro y
+    calc
+      C y = Fintype.card (Σ x : {x : X // g x = y}, {w : Omega // f w = x.1}) := by
+        unfold C
+        exact Fintype.card_congr (coarseningFiberEquiv f g y)
+      _ = ∑ x : {x : X // g x = y}, A x := by
+        simp [A, Fintype.card_sigma]
+  have hlocal_le :
+      ∀ y : Y, Nat.min (C y) T ≤ ∑ x : {x : X // g x = y}, Nat.min (A x) T := by
+    intro y
+    rw [hC y]
+    exact conclusion_strict_coarsening_exact_bit_budget_loss_min_sum_le_sum_min
+      (Finset.univ : Finset {x : X // g x = y}) (fun x => A x) T
+  let y0 : Y := g x1
+  let z1 : {x : X // g x = y0} := ⟨x1, rfl⟩
+  let z2 : {x : X // g x = y0} := ⟨x2, hg.symm⟩
+  have hz_ne : z2 ≠ z1 := by
+    intro hz
+    exact hne (Subtype.ext_iff.mp hz).symm
+  have htwo_min_gt : T < Nat.min (A z1) T + Nat.min (A z2) T := by
+    exact conclusion_strict_coarsening_exact_bit_budget_loss_two_min_gt
+      (by simpa [A, z1] using h1) (by simpa [A, z2] using h2)
+      (by simp [T]) (by simpa [A, T] using hT)
+  have htwo_le_sum :
+      Nat.min (A z1) T + Nat.min (A z2) T ≤
+        ∑ x : {x : X // g x = y0}, Nat.min (A x) T := by
+    let s : Finset {x : X // g x = y0} := Finset.univ.erase z1
+    have hz2_mem : z2 ∈ s := by
+      simp [s, hz_ne]
+    have hsecond :
+        Nat.min (A z2) T ≤ s.sum (fun x => Nat.min (A x) T) :=
+      Finset.single_le_sum (f := fun x : {x : X // g x = y0} => Nat.min (A x) T)
+        (fun _ _ => Nat.zero_le _) hz2_mem
+    calc
+      Nat.min (A z1) T + Nat.min (A z2) T ≤
+          Nat.min (A z1) T + s.sum (fun x => Nat.min (A x) T) :=
+        Nat.add_le_add_left hsecond _
+      _ = ∑ x : {x : X // g x = y0}, Nat.min (A x) T := by
+        dsimp [s]
+        simpa [add_comm, add_left_comm, add_assoc] using
+          (Finset.sum_erase_add (s := (Finset.univ : Finset {x : X // g x = y0}))
+            (f := fun x : {x : X // g x = y0} => Nat.min (A x) T)
+            (by simp : z1 ∈ Finset.univ))
+  have hpair_le_C : A z1 + A z2 ≤ C y0 := by
+    let s : Finset {x : X // g x = y0} := Finset.univ.erase z1
+    have hz2_mem : z2 ∈ s := by
+      simp [s, hz_ne]
+    have hsecond : A z2 ≤ s.sum (fun x => A x) :=
+      Finset.single_le_sum (f := fun x : {x : X // g x = y0} => A x)
+        (fun _ _ => Nat.zero_le _) hz2_mem
+    calc
+      A z1 + A z2 ≤ A z1 + s.sum (fun x => A x) := Nat.add_le_add_left hsecond _
+      _ = ∑ x : {x : X // g x = y0}, A x := by
+        dsimp [s]
+        simpa [add_comm, add_left_comm, add_assoc] using
+          (Finset.sum_erase_add (s := (Finset.univ : Finset {x : X // g x = y0}))
+            (f := fun x : {x : X // g x = y0} => A x)
+            (by simp : z1 ∈ Finset.univ))
+      _ = C y0 := (hC y0).symm
+  have hCy0_cap : T ≤ C y0 := by
+    exact le_trans (Nat.le_of_lt (by simpa [A, T, z1, z2] using hT)) hpair_le_C
+  have hstrict_local :
+      Nat.min (C y0) T < ∑ x : {x : X // g x = y0}, Nat.min (A x) T := by
+    calc
+      Nat.min (C y0) T = T := Nat.min_eq_right hCy0_cap
+      _ < Nat.min (A z1) T + Nat.min (A z2) T := htwo_min_gt
+      _ ≤ ∑ x : {x : X // g x = y0}, Nat.min (A x) T := htwo_le_sum
+  have hsum_lt :
+      (∑ y : Y, Nat.min (C y) T) <
+        ∑ y : Y, ∑ x : {x : X // g x = y}, Nat.min (A x) T := by
+    simpa using
+      (Finset.sum_lt_sum (s := (Finset.univ : Finset Y))
+        (f := fun y : Y => Nat.min (C y) T)
+        (g := fun y : Y => ∑ x : {x : X // g x = y}, Nat.min (A x) T)
+        (by intro y _; exact hlocal_le y)
+        ⟨y0, by simp [y0], hstrict_local⟩)
+  calc
+    (∑ y : Y, Nat.min (Fintype.card {w : Omega // g (f w) = y}) (2 ^ B)) =
+        ∑ y : Y, Nat.min (C y) T := by
+      simp [C, T]
+    _ < ∑ y : Y, ∑ x : {x : X // g x = y}, Nat.min (A x) T := hsum_lt
+    _ = ∑ x : X, Nat.min (A x) T := by
+      simpa [A] using (Fintype.sum_fiberwise (g := g) (f := fun x : X => Nat.min (A x) T))
+    _ = ∑ x : X, Nat.min (Fintype.card {w : Omega // f w = x}) (2 ^ B) := by
+      simp [A, T]
+
 end Omega.Conclusion

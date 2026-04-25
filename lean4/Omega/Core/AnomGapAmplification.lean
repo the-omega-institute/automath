@@ -6,6 +6,12 @@ namespace Omega.POM
     cor:pom-anom-gap-amplification-completeness -/
 def anomAmp (a : ℝ) (q : ℕ) : ℝ := (q : ℝ) * a
 
+/-- Paper-facing statement of the POM anomaly gap amplification law.
+    prop:pom-anom-gap-amplification -/
+theorem paper_pom_anom_gap_amplification (q : Nat) (a : Real) :
+    anomAmp a q = (q : Real) * a := by
+  rfl
+
 /-- Base: zero iterations give zero amplification.
     cor:pom-anom-gap-amplification-completeness -/
 theorem anomAmp_zero (a : ℝ) : anomAmp a 0 = 0 := by

@@ -1,4 +1,5 @@
 import Omega.Core.WalshStokes
+import Omega.Core.WalshFourier
 
 namespace Omega.SPG
 
@@ -76,5 +77,12 @@ theorem paper_spg_walsh_stokes_sqrt_fiber_holography
   dsimp
   exact paper_spg_walsh_discrete_stokes_holography m
     (fun w => Real.sqrt (Fintype.card {w' // f w' = f w} : ℝ)) I
+
+/-- Paper label: `cor:spg-walsh-fourier-inversion-completeness`. -/
+theorem paper_spg_walsh_fourier_inversion_completeness (f : Omega.Word n → ℤ)
+    (w : Omega.Word n) :
+    ((2 : ℤ) ^ n) * f w =
+      ∑ I : Finset (Fin n), Omega.Core.walshBias f I * Omega.Core.walshChar I w := by
+  exact Omega.Core.paper_walsh_fourier_inversion_completeness f w
 
 end Omega.SPG
