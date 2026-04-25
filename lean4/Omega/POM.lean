@@ -1059,3 +1059,4 @@ import Omega.POM.ConfidenceHittingTimePhiThreshold
 import Omega.POM.DirichletVerticalLattice
 import Omega.POM.DispersionLqLowerBound
 import Omega.POM.CoarsegrainingCollisionMomentStrictMonotonicity
+import Omega.POM.MicrocanonicalTwoTemperatureEscortOrbitEntropyMonotone
