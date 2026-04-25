@@ -293,6 +293,7 @@ import Omega.POM.DiagonalRateAcceptRefreshSSTPGF
 import Omega.POM.DiagonalRateAcceptRefreshSSTStrong
 import Omega.POM.DiagonalRateAcceptRefreshSeparationExact
 import Omega.POM.DiagonalRateBinaryClosedForm
+import Omega.POM.DiagonalRateBinaryLinearMixture
 import Omega.POM.DiagonalRateScalingDuality
 import Omega.POM.DiagonalRateCriticalSpectrumBinaryUniform
 import Omega.POM.DiagonalRateCriticalContinuousTimeGeneratorMaxent
