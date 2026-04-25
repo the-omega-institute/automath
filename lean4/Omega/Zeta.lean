@@ -194,6 +194,7 @@ import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiBinomialToeplitzComovingDeltaScaleLaw
 import Omega.Zeta.XiComovingLeyangEndpointSquareRoot
+import Omega.Zeta.XiLeyangFoldingSignedRoots
 import Omega.Zeta.XiComovingPrefixRecursiveBisection
 import Omega.Zeta.XiComovingPrefixChebyshevCenterLaw
 import Omega.Zeta.RealInput40ArityChargeZeroConstants
