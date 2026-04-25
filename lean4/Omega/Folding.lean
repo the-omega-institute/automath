@@ -141,6 +141,7 @@ import Omega.Folding.DiscreteStokesAuditableBound
 import Omega.Folding.DiscreteStokesDefectPublication
 import Omega.Folding.EWTTelescope
 import Omega.Folding.EndpointMmMinusOneUnique
+import Omega.Folding.FoldEndpointMmMinusOneUnique
 import Omega.Folding.EndpointUnique
 import Omega.Folding.Entropy
 import Omega.Folding.EntropyRandomResidues
