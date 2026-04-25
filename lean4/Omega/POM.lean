@@ -210,6 +210,7 @@ import Omega.POM.DOverAvgExponentEqualsChernoff
 import Omega.POM.ErrorExponentTripleIdentity
 import Omega.POM.DelayMin
 import Omega.POM.PressureDelayLowerBound
+import Omega.POM.PressureStabilityUnderBoundedPerturbation
 import Omega.POM.DerivedFiberDeterminantExtremalEnvelope
 import Omega.POM.DerivedFiberSingleStieltjesHistogramRecovery
 import Omega.POM.RandomFiberTaskBayesError

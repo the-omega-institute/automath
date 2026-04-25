@@ -192,6 +192,7 @@ import Omega.Zeta.XiHankelFiniteCertificatePrinciple
 import Omega.Zeta.XiHankelCofactorSyndromeSingleCoordinate
 import Omega.Zeta.XiHankelFiberFanoInformationLeakage
 import Omega.Zeta.XiHankelNoncontiguousSampling2dInformationLowerBound
+import Omega.Zeta.XiHellingerGramInverseCheckerboard
 import Omega.Zeta.HankelWindowFiber1d
 import Omega.Zeta.XiHankelSingularityOnePrimeLiftHvzk
 import Omega.Zeta.XiHypercubeWeightedSpanningTreeSpectrumProduct
