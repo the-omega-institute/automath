@@ -222,6 +222,7 @@ import Omega.POM.MicrocanonicalQueryDistortionFailureExponent
 import Omega.POM.MultiplicityEnsembleEquivalence
 import Omega.POM.QueryDistortionZeroBitCorridor
 import Omega.POM.MicrocanonicalQueryDistortionSufficientStatistic
+import Omega.POM.OracleCapacityKinksSlopes
 import Omega.POM.MicrocanonicalTwoTemperatureMajorizationChain
 import Omega.POM.DiagonalRateRefreshCommuteEffectiveResistance
 import Omega.POM.MicrocanonicalPartialInversionThreshold
