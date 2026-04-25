@@ -779,6 +779,7 @@ import Omega.Conclusion.TqftGenusHausdorffMomentSequence
 import Omega.Conclusion.TqftHighGenusBottomSpectrumPeeling
 import Omega.Conclusion.TqftGenusBoundByPositivePressure
 import Omega.Conclusion.TqftGenusLogconvexity
+import Omega.Conclusion.TqftGenusLogconvexityRigidityEquivalences
 import Omega.Conclusion.TqftGenusTowerTrivializationCriterion
 import Omega.Conclusion.TqftGenusTowerCompleteMultiplicityInvariant
 import Omega.Conclusion.LkKolmogorovSharpOneOverK
