@@ -661,6 +661,7 @@ import Omega.POM.MicrocanonicalCoverTimeStrategyInvariance
 import Omega.POM.MicrocanonicalCoverTimeTailInclusionExclusion
 import Omega.POM.MicrocanonicalFoldClassCount
 import Omega.POM.MicrocanonicalFoldEntropy
+import Omega.POM.MicrocanonicalFoldDescriptionLengthLowerBound
 import Omega.POM.MicrocanonicalInformationDoob
 import Omega.POM.MicrocanonicalInformationIdentity
 import Omega.POM.MicrocanonicalHypergeometricLdpKlSym
