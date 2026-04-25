@@ -43,6 +43,7 @@ import Omega.Conclusion.FullscreenPartialscreenComplexityTransition
 import Omega.Conclusion.AuditComplexityAreaEquivalence
 import Omega.Conclusion.DualinterfaceUniversal2dAuditLaw
 import Omega.Conclusion.AreaLawPageTimeLowerBound
+import Omega.Conclusion.OracleGapGoldenBaselineVariance
 import Omega.Conclusion.AddressResidualTotalBitBudget
 import Omega.Conclusion.GodelLogarithmicDimensionTax
 import Omega.Conclusion.AuditedEvenFirstkinkHomotopyPurification
