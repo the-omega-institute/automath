@@ -1,4 +1,5 @@
 import Omega.Zeta.TimeZetaIdentifiabilityMarkovCohomology
+import Omega.Zeta.XiToeplitzMinEigControlsDepth
 import Omega.Zeta.XiTimePart63bInfiniteDepthFinitePrimeRegisterImpossibility
 import Omega.Zeta.Near1PoleParabola
 import Omega.Zeta.XiHorizonProtocolZetaLoopExpansion

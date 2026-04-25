@@ -1,4 +1,6 @@
 import Omega.POM.MultiplicityAtomMultifractal
+import Omega.POM.ConvexityForcesTypicalLeWorst
+import Omega.POM.SaturationPhaseCharacterization
 import Omega.POM.ReversibleExternalResidualKolmogorovTypicalEquality
 import Omega.POM.RcrtPressureReductionLaw
 import Omega.POM.KkGramDet
