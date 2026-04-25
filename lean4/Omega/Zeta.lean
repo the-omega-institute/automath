@@ -1386,6 +1386,7 @@ import Omega.Zeta.XiVisibleArithmeticUnitIdempotentCount
 import Omega.Zeta.XiWindow6B3C3NoGlobalLinearUnifier
 import Omega.Zeta.XiWindow6CyclicKernelBc3RootDatum
 import Omega.Zeta.XiWindow6B3C3TightFrameFourthMomentNonsimilarity
+import Omega.Zeta.XiWindow6B3C3WeylInvariantImageQuadratic
 import Omega.Zeta.XiWindow6C3HammingRootLengthSplit
 import Omega.Zeta.XiWindow6C3QuadraticEnergyEquipartition
 import Omega.Zeta.XiWindow6C3NoNonzeroLinearInvariant
