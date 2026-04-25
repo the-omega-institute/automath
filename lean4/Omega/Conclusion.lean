@@ -221,6 +221,7 @@ import Omega.Conclusion.C6JacobianNotSimple
 import Omega.Conclusion.CayleyModulusPoissonPrimitive
 import Omega.Conclusion.CapacityMajorizationExtremizers
 import Omega.Conclusion.JGGodelLoglatticeApproximation
+import Omega.Conclusion.MultiplicativeRayFinitePlateauRigidity
 import Omega.Conclusion.JGGodelDenseOrbitsOnHyperbolaLeaf
 import Omega.Conclusion.JGGodelHypercubeDenseSamplingOmega
 import Omega.Conclusion.DisjointnessExceptionalSpectrumReconstructionFromQplus1Traces
