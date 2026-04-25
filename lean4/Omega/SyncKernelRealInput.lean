@@ -1,4 +1,5 @@
 import Omega.SyncKernelRealInput.TrivFactorPrimitivePolynomial
+import Omega.SyncKernelRealInput.GmCriticalBottleneckResidualOpnorm
 import Omega.SyncKernelRealInput.GmMultiplicativeEnergyCompilable
 import Omega.SyncKernelRealInput.GmEnergyAffineComplementarity
 import Omega.SyncKernelRealInput.GmChebotarevPlancherelL2
