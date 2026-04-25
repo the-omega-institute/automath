@@ -138,6 +138,7 @@ import Omega.POM.MicrocanonicalQueryDistortionFailureExponent
 import Omega.POM.MicrocanonicalPartialInversionThreshold
 import Omega.POM.MicrocanonicalStreamingProgramTypicalWidthLb
 import Omega.POM.MixedCollisionPdKernel
+import Omega.POM.MomentColLumping
 import Omega.POM.CostCanonicalRepresentativeFunctor
 import Omega.POM.CostOptimizationDecidable
 import Omega.POM.CollisionKernelDiscriminant
