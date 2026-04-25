@@ -69,6 +69,7 @@ import Omega.POM.HiddenBitBiasEnergyIdentity
 import Omega.POM.MultiplicityLambdaqTaylorQ0
 import Omega.POM.MultiplicityLambdaqLargeQTransseries
 import Omega.POM.MultiplicityCompositionExponentialMixing
+import Omega.POM.MultiplicityCompositionJointLdpPartcountEnergy
 import Omega.POM.MultiplicityLambdaqDerivativeGibbs
 import Omega.POM.InjectivizationSideinfoExactAlphabet
 import Omega.POM.FiniteAuditBudgetFactorcodeUndecidable
