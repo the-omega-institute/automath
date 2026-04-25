@@ -766,6 +766,7 @@ import Omega.Conclusion.LkNormalizedTraceMomentsCentralBinomial
 import Omega.Conclusion.TQFTGenusGeneratingFunctionRational
 import Omega.Conclusion.TQFTGenusLinearRecurrenceRecovery
 import Omega.Conclusion.TqftGenusHausdorffMomentSequence
+import Omega.Conclusion.TqftHighGenusBottomSpectrumPeeling
 import Omega.Conclusion.TqftGenusBoundByPositivePressure
 import Omega.Conclusion.TqftGenusLogconvexity
 import Omega.Conclusion.TqftGenusTowerTrivializationCriterion
