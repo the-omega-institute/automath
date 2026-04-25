@@ -111,6 +111,7 @@ import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiFiniteStateTimeImageDiscreteOrDense
 import Omega.Zeta.XiFiniteDefectRhScanTraceEquivalence
 import Omega.Zeta.XiFoldBayesInfonceNewtonBinomialInversion
+import Omega.Zeta.XiTimePart47caInfonceSignedHausdorffInversion
 import Omega.Zeta.XiFoldbinEvenWindowParitySectionCenterIntersection
 import Omega.Zeta.XiFoldbinEscortTvCollapseOnebitGibbs
 import Omega.Zeta.XiFoldbinGaugeCollisionRigidShift
