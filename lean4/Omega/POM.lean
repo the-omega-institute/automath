@@ -6,6 +6,7 @@ import Omega.POM.HolographicConservationFPlusGamma
 import Omega.POM.OrientationFingerprintGeometryAudit
 import Omega.POM.GrhMixUpper
 import Omega.POM.PhaseLockDiscriminantMinus15Splitting
+import Omega.POM.PressureCumulants
 import Omega.POM.TruncationDefectCocycle
 import Omega.POM.ToggleProductComponents
 import Omega.POM.ToggleScanLCMTensorization
