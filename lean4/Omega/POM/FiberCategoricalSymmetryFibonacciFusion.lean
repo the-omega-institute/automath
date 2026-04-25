@@ -55,4 +55,22 @@ theorem paper_pom_fiber_fibonacci_anyon_fusion_path_bijection
   simpa [FiberFibonacciFusionData.fusionPathBasisCard,
     FiberFibonacciFusionData.fusionPathBasis] using Omega.X.card_eq_fib D.ell
 
+/-- Endpoint splitting for path-independent sets gives the Fibonacci recursion for the
+Grothendieck-semiring fiber model.
+    prop:pom-fiber-grothendieck-fibonacci-fusion-semiring -/
+theorem paper_pom_fiber_grothendieck_fibonacci_fusion_semiring (ell : Nat)
+    (hell : 1 ≤ ell) :
+    Nonempty (PathIndSets (ell + 1) ≃ Sum (PathIndSets ell) (PathIndSets (ell - 1))) ∧
+      Nat.fib (ell + 3) = Nat.fib (ell + 2) + Nat.fib (ell + 1) := by
+  have hcard :
+      Fintype.card (PathIndSets (ell + 1)) =
+        Fintype.card (Sum (PathIndSets ell) (PathIndSets (ell - 1))) := by
+    rw [Fintype.card_sum, Omega.card_pathIndSets, Omega.card_pathIndSets,
+      Omega.card_pathIndSets]
+    have hleft : ell + 1 + 2 = ell + 3 := by omega
+    have hpred : ell - 1 + 2 = ell + 1 := by omega
+    rw [hleft, hpred]
+    exact Omega.fib_succ_succ' (ell + 1)
+  exact ⟨⟨Fintype.equivOfCardEq hcard⟩, Omega.fib_succ_succ' (ell + 1)⟩
+
 end Omega.POM
