@@ -1565,3 +1565,4 @@ import Omega.Zeta.XiDyadicTruncationSeparationAndInterval
 import Omega.Zeta.XiSmithKernelDirichletEulerSinglePole
 import Omega.Zeta.DephysicalizedHorizonFiberCapacityAreaLaw
 import Omega.Zeta.XiTimeEntropyParetoGibbsGlobalTemperature
+import Omega.Zeta.XiTimePart9zbmFoldpiPointwiseSlopeRigidity
