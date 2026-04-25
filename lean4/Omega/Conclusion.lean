@@ -199,6 +199,7 @@ import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
 import Omega.Conclusion.CanonicalSliceExactFixedpointCount
 import Omega.Conclusion.GlobalNullPureCohomologicalRemainder
 import Omega.Conclusion.M2Level3CanonicalPushforwardWithXi
+import Omega.Conclusion.HydrogenicResidualAuditCapacity
 import Omega.Conclusion.CapacityFiniteCompleteness
 import Omega.Conclusion.CapacityDefectBernsteinMellin
 import Omega.Conclusion.InfonceCapacityWedderburnUnifiedClosure
