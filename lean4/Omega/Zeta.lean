@@ -183,6 +183,7 @@ import Omega.Zeta.XiFiniteDefectEndpointJensenExplicitTail
 import Omega.Zeta.XiJensenEntropyRegularizedVariational
 import Omega.Zeta.XiJensenRecursiveResolutionNoiseCoupling
 import Omega.Zeta.XiOptimalAllocationUnderProductBound
+import Omega.Zeta.XiTimeHorizonProductLowerBound
 import Omega.Zeta.XiScaledShiftedCayleyDepthOptimalScale
 import Omega.Zeta.XiScaledShiftedJensenImpliesDeltaBound
 import Omega.Zeta.XiBinomialToeplitzComovingDeltaScaleLaw

@@ -48,6 +48,16 @@ theorem paper_Ym_finite_delay_spectral_tail (rhoAmb : ℝ) (acyclic finiteDelay 
     exact hTail (mt (hAcyclic).1 hNeZero)
 
 set_option maxHeartbeats 400000 in
+/-- Lower-case publication wrapper matching the round target name for the finite-delay/spectral-tail
+    dichotomy.
+    cor:Ym-finite-delay-spectral-tail -/
+theorem paper_ym_finite_delay_spectral_tail (rhoAmb : ℝ) (acyclic finiteDelay spectralTail : Prop)
+    (hAcyclic : acyclic ↔ rhoAmb = 0) (hFinite : acyclic → finiteDelay)
+    (hTail : ¬ acyclic → spectralTail) : (rhoAmb = 0 → finiteDelay) ∧ (rhoAmb ≠ 0 → spectralTail) := by
+  exact paper_Ym_finite_delay_spectral_tail rhoAmb acyclic finiteDelay spectralTail
+    hAcyclic hFinite hTail
+
+set_option maxHeartbeats 400000 in
 /-- Paper-facing Perron--Frobenius sharpening for the unsynchronized-prefix count.
     thm:Ym-unsync-prefix-pf-sharp -/
 theorem paper_Ym_unsync_prefix_pf_sharp
