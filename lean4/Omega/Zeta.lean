@@ -258,6 +258,8 @@ import Omega.Zeta.XiBinomialToeplitzComovingDeltaScaleLaw
 import Omega.Zeta.XiComovingLeyangEndpointSquareRoot
 import Omega.Zeta.XiLeyangFoldingSignedRoots
 import Omega.Zeta.XiComovingPrefixRecursiveBisection
+import Omega.Zeta.ReplicaSoftcoreExceptionalPowerSumM2
+import Omega.Zeta.TwoScaleBinomialTransportSingularCircle
 import Omega.Zeta.XiPhiLToeplitzInertiaStabilizes
 import Omega.Zeta.XiPhiLToeplitzLengthLbDeltaMin
 import Omega.Zeta.XiComovingPrefixChebyshevCenterLaw
