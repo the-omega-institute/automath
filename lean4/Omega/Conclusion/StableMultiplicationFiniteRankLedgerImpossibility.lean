@@ -30,8 +30,7 @@ theorem paper_conclusion_stable_multiplication_finite_rank_ledger_impossibility 
         | zero =>
             rfl
         | succ n ih =>
-            rw [Function.iterate_succ_apply']
-            exact congrArg Nat.succ ih)).2.2
+            rw [Function.iterate_succ_apply', ← ih])).2.2
   have hno_linear :
       ¬ conclusion_wallis_finite_additive_ledger_impossible_hasFiniteAdditiveLinearization :=
     paper_conclusion_wallis_finite_additive_ledger_impossible.2

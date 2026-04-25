@@ -31,10 +31,16 @@ from collections import deque
 PORT = 8765
 ORACLE_DIR = Path(__file__).parent / "oracle"
 
+MAX_AGENTS = 3          # max concurrent browser tabs
+TASK_TIMEOUT = 14400    # 4 hours — ChatGPT Pro can think 60+ min per task
+
 # Task queue (thread-safe via GIL for simple operations)
 task_queue: deque[dict] = deque()
 results: dict[str, dict] = {}  # task_id -> result
-pending_task: dict | None = None  # currently dispatched to browser
+# Multi-agent: each browser tab claims a slot keyed by agent_id
+pending_tasks: dict[str, dict] = {}   # agent_id -> task
+# Track when each task was dispatched (for timeout cleanup)
+dispatch_times: dict[str, float] = {}  # agent_id -> timestamp
 
 
 class OracleHandler(BaseHTTPRequestHandler):
@@ -57,29 +63,61 @@ class OracleHandler(BaseHTTPRequestHandler):
         """Handle CORS preflight."""
         self._send_json({})
 
-    def do_GET(self):
-        global pending_task
+    def _cleanup_stale_agents(self):
+        """Return stale pending tasks (older than TASK_TIMEOUT) to the queue."""
+        now = time.time()
+        stale = [aid for aid, t in dispatch_times.items()
+                 if now - t > TASK_TIMEOUT and aid in pending_tasks]
+        for aid in stale:
+            task = pending_tasks.pop(aid)
+            dispatch_times.pop(aid, None)
+            task_queue.appendleft(task)  # re-queue at front
+            print(f"[server] Agent {aid} timed out — task {task['task_id']} returned to queue")
 
-        if self.path == "/task":
-            # Tampermonkey polls this endpoint for new tasks
-            if pending_task:
-                self._send_json(pending_task)
-            elif task_queue:
-                pending_task = task_queue.popleft()
-                print(f"[server] Dispatching task: {pending_task['task_id']}")
-                self._send_json(pending_task)
+    def do_GET(self):
+        from urllib.parse import urlparse, parse_qs
+        parsed = urlparse(self.path)
+        qs = parse_qs(parsed.query)
+
+        if parsed.path == "/task":
+            self._cleanup_stale_agents()
+            # Agent identifies itself via ?agent=oracle_1 (or legacy no-param)
+            agent_id = (qs.get("agent", [None])[0]
+                        or qs.get("agent_id", [None])[0]
+                        or "default")
+
+            if agent_id in pending_tasks:
+                # Already has a task — return it (idempotent poll)
+                self._send_json(pending_tasks[agent_id])
+            elif task_queue and len(pending_tasks) < MAX_AGENTS:
+                # Assign next task from queue to this agent
+                task = task_queue.popleft()
+                task["assigned_agent"] = agent_id
+                pending_tasks[agent_id] = task
+                dispatch_times[agent_id] = time.time()
+                print(f"[server] Dispatched {task['task_id']} → {agent_id} "
+                      f"(agents={len(pending_tasks)}/{MAX_AGENTS}, queue={len(task_queue)})")
+                self._send_json(task)
             else:
                 self._send_json({"status": "idle"})
 
-        elif self.path == "/status":
+        elif parsed.path == "/status":
+            self._cleanup_stale_agents()
+            agents_info = {
+                aid: {"task_id": t["task_id"],
+                      "elapsed": int(time.time() - dispatch_times.get(aid, time.time()))}
+                for aid, t in pending_tasks.items()
+            }
             self._send_json({
                 "queue_length": len(task_queue),
-                "pending": pending_task["task_id"] if pending_task else None,
+                "agents_busy": len(pending_tasks),
+                "max_agents": MAX_AGENTS,
+                "agents": agents_info,
                 "completed": len(results),
             })
 
-        elif self.path.startswith("/result/"):
-            task_id = self.path.split("/result/")[1]
+        elif parsed.path.startswith("/result/"):
+            task_id = parsed.path.split("/result/")[1]
             if task_id in results:
                 self._send_json(results[task_id])
             else:
@@ -101,12 +139,12 @@ class OracleHandler(BaseHTTPRequestHandler):
             return
 
         if self.path == "/submit":
-            # Agent submits a new task
+            # Pipeline agent submits a new task to the queue
             task_id = data.get("task_id", f"task_{int(time.time())}")
             task = {
                 "task_id": task_id,
                 "prompt": data.get("prompt", ""),
-                "model": data.get("model", "o3-mini-high"),
+                "model": data.get("model", "chatgpt-5.4-pro"),
                 "status": "queued",
             }
 
@@ -123,13 +161,17 @@ class OracleHandler(BaseHTTPRequestHandler):
                     print(f"[server] PDF loaded: {pdf_path.name} ({pdf_path.stat().st_size // 1024} KB)")
 
             task_queue.append(task)
-            print(f"[server] Task queued: {task_id} ({len(task['prompt'])} chars prompt)")
-            self._send_json({"status": "queued", "task_id": task_id, "position": len(task_queue)})
+            print(f"[server] Task queued: {task_id} "
+                  f"({len(task['prompt'])} chars, queue={len(task_queue)}, "
+                  f"agents={len(pending_tasks)}/{MAX_AGENTS})")
+            self._send_json({"status": "queued", "task_id": task_id,
+                             "position": len(task_queue)})
 
         elif self.path == "/result":
-            # Tampermonkey posts the ChatGPT response
+            # Browser tab posts the ChatGPT response
             task_id = data.get("task_id", "")
             response = data.get("response", "")
+            agent_id = data.get("agent_id", "")
 
             if not task_id or not response:
                 self._send_json({"error": "need task_id and response"}, 400)
@@ -150,26 +192,37 @@ class OracleHandler(BaseHTTPRequestHandler):
             out_file = done_dir / f"{task_id}.md"
             metadata = {
                 "timestamp": datetime.now().isoformat(),
-                "model": data.get("model", "o3-mini-high"),
+                "model": data.get("model", "chatgpt-5.4-pro"),
                 "response_length": len(response),
+                "agent_id": agent_id,
             }
             out_file.write_text(
                 f"<!-- oracle metadata: {json.dumps(metadata)} -->\n\n{response}",
                 encoding="utf-8",
             )
 
-            # Clear pending task
-            if pending_task and pending_task["task_id"] == task_id:
-                pending_task = None
+            # Free the agent slot that held this task
+            freed = ""
+            for aid in list(pending_tasks):
+                if pending_tasks[aid]["task_id"] == task_id:
+                    del pending_tasks[aid]
+                    dispatch_times.pop(aid, None)
+                    freed = f" (freed {aid})"
+                    break
 
-            print(f"[server] Result received: {task_id} ({len(response)} chars)")
+            print(f"[server] Result: {task_id} ({len(response)} chars){freed} "
+                  f"— agents={len(pending_tasks)}/{MAX_AGENTS}, queue={len(task_queue)}")
             print(f"[server] Saved to: {out_file}")
             self._send_json({"status": "saved", "task_id": task_id})
 
         elif self.path == "/ack":
-            # Tampermonkey acknowledges it picked up the task
+            # Browser tab acknowledges it picked up the task
             task_id = data.get("task_id", "")
-            print(f"[server] Task acknowledged by browser: {task_id}")
+            agent_id = data.get("agent_id", "?")
+            # Refresh dispatch time to prevent timeout
+            if agent_id in dispatch_times:
+                dispatch_times[agent_id] = time.time()
+            print(f"[server] Ack: {task_id} by {agent_id}")
             self._send_json({"status": "ok"})
 
         else:
@@ -177,7 +230,7 @@ class OracleHandler(BaseHTTPRequestHandler):
 
 
 def submit_task(prompt: str, pdf_path: Path | None = None,
-                task_id: str | None = None, model: str = "o3-mini-high"):
+                task_id: str | None = None, model: str = "chatgpt-5.4-pro"):
     """Submit a task to the server (called by agents)."""
     import urllib.request
 
@@ -229,7 +282,10 @@ def wait_for_result(task_id: str, timeout: int = 900) -> str:
 def main():
     server = HTTPServer(("127.0.0.1", PORT), OracleHandler)
     print(f"[server] Oracle server running on http://localhost:{PORT}")
-    print(f"[server] Install the Tampermonkey userscript, then open https://chatgpt.com")
+    print(f"[server] Max {MAX_AGENTS} concurrent agents")
+    print(f"[server] Open browser tabs:")
+    for i in range(1, MAX_AGENTS + 1):
+        print(f"  Tab {i}: https://chatgpt.com/?oracle={i}")
     print(f"[server] Press Ctrl+C to stop.\n")
 
     try:

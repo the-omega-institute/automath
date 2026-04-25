@@ -1,0 +1,286 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+
+\section{有限条件期望与纤维方差耗散}\label{app:finite-conditional-expectation}
+
+本附录隔离论文中折叠条件期望所依赖的有限概率计算。其要点刻意保持初等：在有限空间上，关于因子映射的条件化即为到纤维常值函数代数上的加权正交投影；相应的 Pythagoras 恒等式即为折叠审计中方差损失的精确来源。同一有限引理也是
+\texttt{\detokenize{lean4/Omega/Multiscale/SolenoidStokesMarkovVarianceDissipation.lean}}
+中形式化的分析域接口。
+
+\subsection{有限条件期望}
+
+设 \(\Omega\) 与 \(X\) 为有限集，令
+\[
+    \pi:\Omega\longrightarrow X
+\]
+为到其像的满射，\(\mu\) 为 \(\Omega\) 上的概率测度。对 \(x\in X\)，记
+\[
+    F_x:=\pi^{-1}(x),
+    \qquad
+    m_x:=\mu(F_x)=\sum_{\omega\in F_x}\mu(\omega).
+\]
+在 \(L^2(\Omega,\mu)\) 中仅正质量纤维起作用。对 \(f:\Omega\to\RR\)，定义
+\[
+    E_{\pi,\mu}f(\omega)
+    :=
+    \begin{cases}
+    \displaystyle
+    \frac{1}{m_{\pi(\omega)}}\sum_{\eta\in F_{\pi(\omega)}}\mu(\eta)f(\eta),
+    &m_{\pi(\omega)}>0,\\[1.2em]
+    0,&m_{\pi(\omega)}=0.
+    \end{cases}
+\]
+从而 \(E_{\pi,\mu}f\) 在每一正质量纤维上为常值。采用加权内积
+\[
+    \langle f,g\rangle_\mu:=\sum_{\omega\in\Omega}\mu(\omega)f(\omega)g(\omega),
+    \qquad
+    \norm{f}_{2,\mu}^2:=\langle f,f\rangle_\mu .
+\]
+
+\begin{lemma}[纤维正交投影]\label{lem:finite-condexp-orthogonal-projection}
+设 \(\mathcal B_\pi\subset L^2(\Omega,\mu)\) 为在 \(\pi\) 的每一正质量纤维上取常值的函数所成子空间。则 \(E_{\pi,\mu}\) 为从 \(L^2(\Omega,\mu)\) 到 \(\mathcal B_\pi\) 的正交投影，即
+\[
+    E_{\pi,\mu}^2=E_{\pi,\mu},
+    \qquad
+    \langle f-E_{\pi,\mu}f,g\rangle_\mu=0
+    \quad (g\in\mathcal B_\pi).
+\]
+\end{lemma}
+
+\begin{proof}
+幂等性直接成立：纤维常值函数在正质量纤维上的平均值即为其公共值。设 \(g\in\mathcal B_\pi\)，记 \(g(\omega)=g_x\)（\(\omega\in F_x\)），则
+\[
+\begin{aligned}
+    \langle f-E_{\pi,\mu}f,g\rangle_\mu
+    &=
+    \sum_{x:m_x>0}
+    g_x
+    \sum_{\omega\in F_x}
+    \mu(\omega)\bigl(f(\omega)-E_{\pi,\mu}f(\omega)\bigr)\\
+    &=
+    \sum_{x:m_x>0}
+    g_x
+    \left(
+    \sum_{\omega\in F_x}\mu(\omega)f(\omega)
+    -
+    m_x\,\frac{1}{m_x}\sum_{\eta\in F_x}\mu(\eta)f(\eta)
+    \right)
+    =0 .
+\end{aligned}
+\]
+故 \(f-E_{\pi,\mu}f\) 与纤维常值子空间正交，\(E_{\pi,\mu}\) 即为所述投影。
+\end{proof}
+
+\begin{theorem}[有限条件 Pythagoras]\label{thm:finite-condexp-pythagoras}
+对每一 \(f:\Omega\to\RR\)，
+\[
+    \norm{f}_{2,\mu}^2
+    =
+    \norm{E_{\pi,\mu}f}_{2,\mu}^2
+    +
+    \norm{f-E_{\pi,\mu}f}_{2,\mu}^2 .
+\]
+特别地，
+\[
+    \norm{E_{\pi,\mu}f}_{2,\mu}\leq \norm{f}_{2,\mu}.
+\]
+\end{theorem}
+
+\begin{proof}
+对正交分解
+\[
+    f=E_{\pi,\mu}f+(f-E_{\pi,\mu}f)
+\]
+应用引理 \ref{lem:finite-condexp-orthogonal-projection}。不等式为所示恒等式中首项界。
+\end{proof}
+
+定义全局均值与方差为
+\[
+    \EE_\mu f:=\sum_{\omega}\mu(\omega)f(\omega),
+    \qquad
+    \Var_\mu(f):=\norm{f-\EE_\mu f}_{2,\mu}^2.
+\]
+条件纤维平均方差为
+\[
+    \mathcal D_{\pi,\mu}(f)
+    :=
+    \sum_{x:m_x>0}
+    m_x
+    \sum_{\omega\in F_x}
+    \frac{\mu(\omega)}{m_x}
+    \bigl(f(\omega)-E_{\pi,\mu}f(\omega)\bigr)^2 .
+\]
+
+\begin{corollary}[纤维方差分解]\label{cor:finite-condexp-variance-decomposition}
+对每一 \(f:\Omega\to\RR\)，
+\[
+    \mathcal D_{\pi,\mu}(f)=\norm{f-E_{\pi,\mu}f}_{2,\mu}^2,
+\]
+且
+\[
+    \Var_\mu(f)=\Var_\mu(E_{\pi,\mu}f)+\mathcal D_{\pi,\mu}(f).
+\]
+此外
+\[
+    \mathcal D_{\pi,\mu}(E_{\pi,\mu}f)=0
+    \qquad\text{且}\qquad
+    \mathcal D_{\pi,\mu}(E_{\pi,\mu}f)\leq \mathcal D_{\pi,\mu}(f).
+\]
+\end{corollary}
+
+\begin{proof}
+第一个恒等式仅将 \(\mathcal D_{\pi,\mu}\) 的定义改写为 \(\Omega\) 上的求和。由 \(E_{\pi,\mu}\) 保持全局均值（即 \(\EE_\mu(E_{\pi,\mu}f)=\EE_\mu f\)），对 \(f-\EE_\mu f\) 应用定理 \ref{thm:finite-condexp-pythagoras} 即得方差分解。最后 \(E_{\pi,\mu}f\) 为纤维常值，故其纤维内方差为零。
+\end{proof}
+
+\subsection{均匀层平均}
+
+单纤维情形即为有限均匀层平均。对 \(n>0\) 与 \(f:\{0,\ldots,n-1\}\to\RR\)，令
+\[
+    \overline f:=\frac{1}{n}\sum_{i=0}^{n-1}f(i),
+    \qquad
+    A_nf(i):=\overline f .
+\]
+
+\begin{theorem}[均匀层 Markov 方差耗散]\label{thm:finite-uniform-layer-variance-dissipation}
+对每一 \(n>0\)，算子 \(A_n\) 保持常值、压缩计数 \(L^2\)-范数并消灭有限层方差：
+\[
+    A_n\ind=\ind,
+    \qquad
+    \sum_{i=0}^{n-1}(A_nf(i))^2\leq \sum_{i=0}^{n-1}f(i)^2,
+    \qquad
+    \sum_{i=0}^{n-1}(A_nf(i))^2-n\overline f^{\,2}=0 .
+\]
+等价地，令
+\[
+    V_n(f):=\sum_{i=0}^{n-1}f(i)^2-n\overline f^{\,2},
+\]
+则 \(V_n(A_nf)=0\leq V_n(f)\)。
+\leanverified{paper_app_solenoid_stokes_markov_variance_dissipation}
+\end{theorem}
+
+\begin{proof}
+常值保持性直接成立。Cauchy--Schwarz 给出
+\[
+    \left(\sum_{i=0}^{n-1}f(i)\right)^2
+    \leq
+    n\sum_{i=0}^{n-1}f(i)^2,
+\]
+从而
+\[
+    \sum_i(A_nf(i))^2=n\overline f^{\,2}
+    =
+    \frac{1}{n}\left(\sum_i f(i)\right)^2
+    \leq
+    \sum_i f(i)^2 .
+\]
+\(A_nf\) 为取值 \(\overline f\) 的常值函数，故其层方差为零。\(V_n(f)\) 的非负性即同一 Cauchy--Schwarz 不等式。此为 Omega 端上述 Lean 声明中形式化的有限定理。
+\end{proof}
+
+\subsection{折叠条件期望}
+
+现在特化到论文的折叠因子。令
+\[
+    \Omega_m:=\{0,1\}^m,
+    \qquad
+    \Fold_m:\Omega_m\to X_m
+\]
+为到黄金合法稳定词上的有限折叠，记
+\[
+    d_m(x):=\card{\Fold_m^{-1}(x)}.
+\]
+给定 \(X_m\) 上的概率测度 \(\nu_m\)，其纤维均匀提升到 \(\Omega_m\) 上为
+\[
+    \mu_m(\omega):=
+    \frac{\nu_m(\Fold_m(\omega))}{d_m(\Fold_m(\omega))}.
+\]
+相应的条件期望即为均匀纤维平均
+\[
+    E_mf(\omega)
+    =
+    \frac{1}{d_m(\Fold_m(\omega))}
+    \sum_{\eta\in \Fold_m^{-1}(\Fold_m(\omega))}f(\eta).
+\]
+
+\begin{proposition}[折叠 \(L^2\) 分解]\label{prop:fold-condexp-l2-decomposition}
+对每一 \(m\)、\(X_m\) 上的每一概率测度 \(\nu_m\) 以及每一 \(f:\Omega_m\to\RR\)，
+\[
+    \norm{f}_{2,\mu_m}^2
+    =
+    \norm{E_mf}_{2,\mu_m}^2
+    +
+    \norm{f-E_mf}_{2,\mu_m}^2 .
+\]
+从而折叠条件期望为 \(L^2(\mu_m)\)-压缩，且折叠纤维方差满足
+\[
+    \mathcal D_{\Fold_m,\mu_m}(E_mf)=0\leq
+    \mathcal D_{\Fold_m,\mu_m}(f).
+\]
+\end{proposition}
+
+\begin{proof}
+对因子映射 \(\pi=\Fold_m\) 与测度 \(\mu=\mu_m\) 应用定理 \ref{thm:finite-condexp-pythagoras} 与推论 \ref{cor:finite-condexp-variance-decomposition}。由 \(\mu_m\) 在每一非空纤维内均匀，\(E_{\Fold_m,\mu_m}\) 恰为所示纤维平均 \(E_m\)。
+\end{proof}
+
+数值审计采用归一化窗口值 \(f(\omega)=N(\omega)/F_{m+3}\)。
+对 \(X_m\) 上的 Parry 最大熵柱面测度 \(\nu_m\)，上述精确正交分解已在 \(m=4,6,\ldots,16\) 上验证。同一恒等式也对 \(\Omega_{12}\) 上若干确定性任意微测度进行了检验。这些是实现的正确性检验，而非额外假设：该定理本质上是有限代数。脚本为
+\texttt{\detokenize{scripts/exp_fold_conditional_expectation_pythagoras.py}}
+与
+\texttt{\detokenize{scripts/exp_fold_conditional_variance_decomposition.py}}。
+论文其他部分使用的独立有限域律枚举证书由
+\texttt{\detokenize{scripts/equational_theory/}} 验证。
+
+\input{sections/generated/tab_fold_conditional_expectation_pythagoras}
+
+\input{sections/generated/tab_fold_conditional_variance_decomposition}
+
+\subsection{压缩算子谱}
+
+对奇异谱审计，折叠平均被视为矩形算子
+\[
+    T_m:\ell^2(\Omega_m)\longrightarrow \ell^2(X_m),
+    \qquad
+    (T_mf)(x)=\frac{1}{d_m(x)}
+    \sum_{\omega\in\Fold_m^{-1}(x)}f(\omega),
+\]
+两侧均配备计数内积。此非 \(L^2(\Omega_m,\mu_m)\) 上正交投影 \(E_m\) 的同一 Hilbert 空间表示；它是从微观函数到基函数的压缩映射。
+
+\begin{proposition}[折叠压缩的奇异值]\label{prop:fold-condexp-singular-values}
+\(T_m\) 的非零奇异值为
+\[
+    \sigma_x(T_m)=d_m(x)^{-1/2},
+    \qquad x\in X_m.
+\]
+从而对每一 \(p>0\)，
+\[
+    \norm{T_m}_{S_p}^p=\sum_{x\in X_m}d_m(x)^{-p/2},
+    \qquad
+    \norm{T_m}_{\mathrm{op}}=d_{\min}(m)^{-1/2},
+\]
+其中 \(d_{\min}(m):=\min_{x\in X_m}d_m(x)\)。
+\end{proposition}
+
+\begin{proof}
+在计数内积下，伴随为
+\[
+    (T_m^\ast g)(\omega)=\frac{g(\Fold_m(\omega))}{d_m(\Fold_m(\omega))}.
+\]
+因此
+\[
+    (T_mT_m^\ast g)(x)
+    =
+    \frac{1}{d_m(x)}
+    \sum_{\omega\in\Fold_m^{-1}(x)}
+    \frac{g(x)}{d_m(x)}
+    =
+    \frac{g(x)}{d_m(x)} .
+\]
+从而 \(T_mT_m^\ast\) 在 \(X_m\) 上点质量基中对角，特征值为 \(d_m(x)^{-1}\)。取平方根即得奇异值与 Schatten 公式。
+\end{proof}
+
+下表由模动态规划计算这些负重数矩，脚本为
+\texttt{\detokenize{scripts/exp_fold_conditional_expectation_singular_spectrum.py}}。
+
+\input{sections/generated/tab_fold_conditional_expectation_singular_spectrum}
+
+\end{document}

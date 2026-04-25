@@ -1,0 +1,206 @@
+\section{Finite-Field Equational Saturation of Linear Magmas}\label{sec:finite-field-equational-saturation}
+
+This section records the finite-field linear fragment of the equational theory
+search.  Throughout, \(p\) is a prime and a linear magma over \(\FF_p\) means a
+binary operation
+\[
+    x\diamond y=ax+by,\qquad a,b\in\FF_p.
+\]
+For an equation \(E:s=t\), satisfaction in this family is not an opaque
+finite-model condition: it is the vanishing of explicitly computable
+coefficient polynomials in the two parameters \(a,b\).  The order-four ETP
+universe therefore becomes a finite incidence geometry in the affine
+coefficient plane.
+
+\begin{theorem}[Linearization Theorem]\label{thm:finite-field-linearization}
+Let \(R\) be a commutative ring and let \(t(x_1,\ldots,x_n)\) be a magma term.
+Under the interpretation \(x\diamond y=ax+by\), the value of \(t\) has the form
+\[
+    t=\sum_{i=1}^n c_i(t;a,b)x_i
+\]
+with \(c_i(t;a,b)\in\ZZ[a,b]\).  If \(|t|\) denotes the number of internal
+\(\diamond\)-nodes of \(t\), then \(\deg c_i(t;a,b)\leq |t|\) for every \(i\).
+\end{theorem}
+
+\begin{proof}
+For the variable term \(x_i\), the coefficient of \(x_i\) is \(1\) and all
+other coefficients are \(0\).  If \(t=u\diamond v\), then the recursive rule is
+\[
+    c_i(t;a,b)=a\,c_i(u;a,b)+b\,c_i(v;a,b).
+\]
+Thus the interpretation remains linear in the input variables, and each
+internal node raises total degree in \(a,b\) by at most one.  Induction on the
+binary tree of \(t\) proves both assertions.
+\end{proof}
+
+\begin{corollary}[Coefficient ideal criterion]\label{cor:finite-field-coefficient-ideal}
+For an equation \(E:s=t\), define
+\[
+    I_E=\bigl\langle c_i(s;a,b)-c_i(t;a,b)\ :\ i\geq 1\bigr\rangle
+        \subset \ZZ[a,b],
+\]
+where missing variables have coefficient \(0\).  For any prime \(p\) and any
+\((a,b)\in\FF_p^2\), the linear magma \(x\diamond y=ax+by\) satisfies \(E\) for
+all input assignments if and only if every generator of \(I_E\) vanishes at
+\((a,b)\) modulo \(p\).
+\end{corollary}
+
+\begin{proof}
+By Theorem \ref{thm:finite-field-linearization}, the difference \(s-t\) is a
+linear form in independent variables \(x_i\).  Over \(\FF_p\), this linear form
+vanishes on all assignments exactly when each of its coefficients vanishes.
+\end{proof}
+
+Consequently each equation determines an integral closed subscheme
+\[
+    X_E=\operatorname{Spec}\ZZ[a,b]/I_E
+\]
+of the coefficient plane, and an anti-implication \(E_i\not\Rightarrow E_j\)
+over \(\FF_p\) is exactly the existence of a point in the constructible set
+\[
+    \bigl(X_{E_i}\setminus X_{E_j}\bigr)(\FF_p).
+\]
+This is the bridge from finite magma search to two-variable algebraic
+geometry.
+
+\begin{theorem}[Content Bound]\label{thm:finite-field-content-bound}
+Let
+\[
+    f=\sum_{\alpha} n_\alpha a^{\alpha_1}b^{\alpha_2}\in\ZZ[a,b]
+\]
+be nonzero, and let
+\[
+    \operatorname{cont}(f)=\gcd_{\alpha} n_\alpha
+\]
+be its content.  The reduction of \(f\) in \(\FF_p[a,b]\) is the zero
+polynomial if and only if \(p\mid \operatorname{cont}(f)\).
+\end{theorem}
+
+\begin{proof}
+The monomials \(a^r b^s\) form an \(\FF_p\)-basis of \(\FF_p[a,b]\).  Hence the
+reduction of \(f\) is zero precisely when every integer coefficient
+\(n_\alpha\) is divisible by \(p\), which is equivalent to
+\(p\mid\operatorname{cont}(f)\).
+\end{proof}
+
+For the order-four ETP enumeration considered here, the coefficient analysis
+has the following numerical envelope: every generator has degree at most \(4\);
+every term coefficient and coefficient-difference coefficient has absolute
+value at most \(2\); and the only prime at which a nonzero defining polynomial
+can collapse to the zero polynomial is \(p=2\).  In particular, all odd primes
+see the same nonzero integral defining equations.  Later variation in rational
+points is therefore arithmetic variation on fixed low-degree schemes, not a
+change in the defining equations themselves.
+
+\begin{lemma}[Geometric degree control]\label{lem:finite-field-geometric-control}
+In the order-four linear ETP family, every independent pair of coefficient
+constraints cuts out, after removal of common components over an algebraic
+closure, a zero-dimensional scheme of degree at most \(16\).
+\end{lemma}
+
+\begin{proof}
+Each coefficient constraint has total degree at most \(4\).  The assertion is
+the plane Bezout bound \(4\cdot 4=16\), applied to the two curves after common
+components have been removed.
+\end{proof}
+
+The point of Lemma \ref{lem:finite-field-geometric-control} is not that degree
+alone forces saturation.  A bounded-degree variety may acquire rational points
+over infinitely many primes.  Rather, the lemma identifies the finite
+low-complexity algebraic arrangement on which the scan operates.  Implication
+over an algebraically closed field \(k\) can also be expressed by the radical
+containment
+\[
+    I_{E_j}\subseteq \sqrt{I_{E_i}}\subset k[a,b],
+\]
+and failures of containment are constructible differences.  This
+Nullstellensatz viewpoint is computationally verified (scripts/equational\_theory/coefficient\_analysis.py, scripts/equational\_theory/nullstellensatz\_check.py)
+for the finite certificate described below.
+
+Let \({\mathcal E}_{\leq 2}\) denote the \(810\) order-four ETP laws involving
+at most two variables, and let \({\mathcal E}_{=3}\) denote the \(2090\) laws
+involving exactly three variables.  For a finite set \({\mathcal S}\) of laws
+and a prime \(p\), define
+\[
+    A_{\mathcal S}(p)=
+    \{(i,j)\in{\mathcal S}^2:\exists(a,b)\in\FF_p^2
+      \text{ such that }E_i(a,b)\text{ holds and }E_j(a,b)\text{ fails}\}.
+\]
+The computed prime scan is:
+\[
+\begin{array}{c|rrr|rrr}
+p
+& \multicolumn{3}{c|}{{\mathcal E}_{\leq 2}}
+& \multicolumn{3}{c}{{\mathcal E}_{=3}}\\
+\hline
+& \text{new} & \text{cumulative} & \text{patterns}
+& \text{new} & \text{cumulative} & \text{patterns}\\
+\hline
+2  & 439263 & 439263 & 4   & 2519673 & 2519673 & 4\\
+3  & 90422  & 529685 & 9   & 106071  & 2625744 & 9\\
+5  & 56259  & 585944 & 23  & 18310   & 2644054 & 17\\
+7  & 20008  & 605952 & 45  & 48279   & 2692333 & 23\\
+11 & 2612   & 608564 & 97  & 0       & 2692333 & 23\\
+13 & 384    & 608948 & 129 & 0       & 2692333 & 39\\
+17 & 0      & 608948 & 187 & 0       & 2692333 & 37\\
+19 & 0      & 608948 & 201 & 0       & 2692333 & 29\\
+23 & 0      & 608948 & 193 & 0       & 2692333 & 23\\
+29 & 0      & 608948 & 248 & 0       & 2692333 & 33\\
+31 & 0      & 608948 & 223 & 0       & 2692333 & 29
+\end{array}
+\]
+
+\begin{theorem}[Prime-Field Saturation Theorem]\label{thm:prime-field-saturation}
+For the scanned primes
+\[
+    P=\{2,3,5,7,11,13,17,19,23,29,31\},
+\]
+the anti-implication relation for \({\mathcal E}_{\leq 2}\) is already
+saturated by \(p\leq 13\):
+\[
+    \bigcup_{p\in P} A_{{\mathcal E}_{\leq 2}}(p)
+    =
+    \bigcup_{p\in\{2,3,5,7,11,13\}} A_{{\mathcal E}_{\leq 2}}(p),
+\]
+and this common set has cardinality \(608948\).  For
+\({\mathcal E}_{=3}\), the anti-implication relation is already saturated by
+\(p\leq 7\):
+\[
+    \bigcup_{p\in P} A_{{\mathcal E}_{=3}}(p)
+    =
+    \bigcup_{p\in\{2,3,5,7\}} A_{{\mathcal E}_{=3}}(p),
+\]
+and this common set has cardinality \(2692333\).
+\end{theorem}
+
+\begin{proof}
+For each equation \(E\), Corollary
+\ref{cor:finite-field-coefficient-ideal} converts satisfaction in the linear
+magma \(x\diamond y=ax+by\) into a finite list of polynomial vanishing tests in
+\(\FF_p^2\).  The verification enumerates all \((a,b)\in\FF_p^2\), records the
+truth vector of the selected law family, and inserts every ordered pair
+\((i,j)\) for which the vector has \(E_i\) true and \(E_j\) false.  The table
+shows the incremental contribution of each prime in \(P\).  After \(p=13\) in
+the at-most-two-variable family, and after \(p=7\) in the exactly-three-variable
+family, the incremental contribution is zero through the remainder of \(P\).
+The stated equalities and cardinalities are exactly these finite unions.  The
+certificate is computationally verified (scripts/equational\_theory/coefficient\_analysis.py, scripts/equational\_theory/nullstellensatz\_check.py).
+\end{proof}
+
+The theorem should be read as saturation of ordered separations, not as
+stabilization of point counts or truth-vector sets.  Indeed, the number of
+observed satisfaction patterns continues to change after the saturation prime:
+for \({\mathcal E}_{\leq2}\), the scan records \(129\) patterns at \(p=13\),
+\(187\) at \(p=17\), and \(248\) at \(p=29\), even though no new ordered
+anti-implication appears.  Thus the implication graph is a coarser invariant
+than the full finite-field moduli problem.  It records the order-theoretic
+shadow of the coefficient geometry.
+
+Several consequences follow.  First, the ETP linear fragment is a finite
+scheme-theoretic incidence problem in \(\mathbb A^2\), rather than an
+unstructured finite algebra search.  Second, the Catalan--Bell syntactic
+complexity of order-four magma terms collapses, under linearization, to
+degree-four coefficient geometry in two parameters.  Third, the content bound
+isolates \(p=2\) as the only characteristic at which a nonzero defining
+polynomial disappears identically.  The remaining primes may vary in rational
+point structure, but they vary on a fixed family of low-degree schemes.

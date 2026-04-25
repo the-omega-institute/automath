@@ -1,3 +1,0 @@
-<!-- oracle metadata: {"timestamp": "2026-04-06T21:18:41.739923", "model": "o3-mini-high", "response_length": 384} -->
-
-I’m also cross-checking the PDF page by page where notation and local coordinate formulas may not survive text extraction, and I’m reviewing the surrounding literature for consequential citation gaps. The main technical pressure points are the determinant computation, the genus and branching analysis, the Galois-group argument, and the asymptotic choice of the relevant root branch.
