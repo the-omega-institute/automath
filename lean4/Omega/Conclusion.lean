@@ -44,6 +44,7 @@ import Omega.Conclusion.AngularResidueMeasureReconstruction
 import Omega.Conclusion.AlgorithmPrimeShiftEquivalence
 import Omega.Conclusion.AmbiguityShellJordanChainGraphLift
 import Omega.Conclusion.AmbiguityShellNilpotentIndexEqualsWindow
+import Omega.Conclusion.AmbiguityShellPreperiodicLocalization
 import Omega.Conclusion.AmbiguityShellUnsyncPrefixPolynomial
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.AnomalyHarmonicRigidity
