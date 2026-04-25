@@ -189,6 +189,7 @@ import Omega.Zeta.XiTimePart62daFibonacciTorsionSaturatesCircle
 import Omega.Zeta.XiTimePart62daRationalRoseOriginTangentCone
 import Omega.Zeta.XiSingleBaseDealiasingCountableException
 import Omega.Zeta.XiSinglePoleContourReadoutErrorAudit
+import Omega.Zeta.XiSmithKernelDirichletEulerStokesTailResidue
 import Omega.Zeta.XiNegativeBlockSpectrumSpikeAndShallowBound
 import Omega.Zeta.XiNonnormalityObstructionOffcritical
 import Omega.Zeta.XiLinearRecurrenceLocalTestByViolationRate
