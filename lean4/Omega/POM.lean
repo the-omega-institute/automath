@@ -1040,3 +1040,4 @@ import Omega.POM.MomentFiniteSamplingDecidable
 import Omega.POM.MixedCollisionKernelComputable
 import Omega.POM.DiagonalRateUniformEntropyRewrite
 import Omega.POM.MaxFiberSplitRatioFiniteScale
+import Omega.POM.ConfidenceHittingTimePhiThreshold

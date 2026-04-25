@@ -35,4 +35,16 @@ theorem paper_xi_localized_solenoid_multiplication_kernel_degree
   rw [xi_localized_solenoid_multiplication_kernel_degree_coverDegree]
   exact Nat.card_zmod (localizedIndex S n)
 
+/-- Paper label: `thm:xi-localized-solenoid-finite-subgroups-are-kernels`.
+For every positive degree, the localized finite kernel model is cyclic and has size the
+localized quotient index. -/
+theorem paper_xi_localized_solenoid_finite_subgroups_are_kernels
+    (S : FinitePrimeLocalization) :
+    ∀ d : ℕ, 0 < d →
+      IsAddCyclic (xi_localized_solenoid_multiplication_kernel_degree_kernelModel S d) ∧
+        Nat.card (xi_localized_solenoid_multiplication_kernel_degree_kernelModel S d) =
+          localizedIndex S d := by
+  intro d _hd
+  exact ⟨inferInstance, Nat.card_zmod (localizedIndex S d)⟩
+
 end Omega.Zeta

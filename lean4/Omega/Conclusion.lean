@@ -1276,3 +1276,4 @@ import Omega.Conclusion.FiniteMomentAuditNeedsExactlyMmScalars
 import Omega.Conclusion.RealInput40BartholdiTropicalMassConservation
 import Omega.Conclusion.SyncHolonomyBcCertificate
 import Omega.Conclusion.Window6ResidualTorsionShadowRationalBlindness
+import Omega.Conclusion.FoldSymtftPartitionFunctionSectorization
