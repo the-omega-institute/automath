@@ -45,6 +45,7 @@ import Omega.EA.FoldWindow6ChiLayeredSpectrumReconstructionBy12Moments
 import Omega.EA.FoldAsSection
 import Omega.EA.FoldAsSectionCorollary
 import Omega.EA.FoldGroupoidAFInductiveLimitHolographicTrace
+import Omega.EA.FoldGroupoidWedderburn
 import Omega.EA.FoldGroupoidAut0ComplementFixedSubgroup
 import Omega.EA.FoldGroupoidAut0RationalCohomology
 import Omega.EA.FoldGroupoidAutPi1AllPrimes
