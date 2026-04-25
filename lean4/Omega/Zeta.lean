@@ -52,6 +52,7 @@ import Omega.Zeta.DerivedLeyangBfCkRigidity
 import Omega.Zeta.DephysBudgetDistanceDominatesTv
 import Omega.Zeta.DephysBudgetDistanceUniversalProperty
 import Omega.Zeta.DephysHankelFiniteAudit
+import Omega.Zeta.DephysHorizonSufficiencyZeroKnowledge
 import Omega.Zeta.DephysIdempotentMonadIProjection
 import Omega.Zeta.DephysOneQuarterNormalization
 import Omega.Zeta.DephysRenyiFlatnessFoldCommutative
@@ -155,6 +156,7 @@ import Omega.Zeta.XiGramDetEntropyMonotoneUnderContraction
 import Omega.Zeta.XiHankelPrimitiveGapVanishingCriterion
 import Omega.Zeta.XiHankelPrimitiveSyndromeSiegelBound
 import Omega.Zeta.XiHankelDefectCdimMinimalLedger
+import Omega.Zeta.XiOrthogonalAdjacency33Isogeny
 import Omega.Zeta.XiFlagFactorization12x4x3
 import Omega.Zeta.XiTimePart70cSpectrumZeroZ2OrbitCancellation
 import Omega.Zeta.XiTimePart70eBinfoldEntireAmplitudeLaw
