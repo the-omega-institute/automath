@@ -857,6 +857,7 @@ import Omega.POM.HardcorePathMarginalClosedForm
 import Omega.POM.PellConeAutomorphism
 import Omega.POM.PerronLandauerLimitLaw
 import Omega.POM.PhiLogisticPosteriorGrid
+import Omega.POM.PhiLogitLatticeTranslation
 import Omega.POM.PositiveNegativeMomentCoupling
 import Omega.POM.IntegerPressureDiscreteConvexityStrictBound
 import Omega.POM.PressureConvexity
@@ -964,6 +965,7 @@ import Omega.POM.SymmetricCompression
 import Omega.POM.Sync10CollisionTwoFixedpoints
 import Omega.POM.Sync10CollisionTraceTwo
 import Omega.POM.TauTerminalSignIndependence
+import Omega.POM.TauPmfFiniteSpectralDecomposition
 import Omega.POM.TensorFoldHankelRankMultiplicativity
 import Omega.POM.TensorFoldResultantRecursion
 import Omega.POM.ThetaGodelizationPrimeValuationIsometry
