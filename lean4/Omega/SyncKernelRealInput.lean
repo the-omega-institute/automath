@@ -29,6 +29,7 @@ import Omega.SyncKernelRealInput.RealInputDefectEntropy
 import Omega.SyncKernelRealInput.RealInputDefectEntropyM5
 import Omega.SyncKernelRealInput.GMAbsCenteredOddMomentExtremal
 import Omega.SyncKernelRealInput.GMAffineAverageRank1Residual
+import Omega.SyncKernelRealInput.GMAffineGapImprovesTrace3
 import Omega.SyncKernelRealInput.GMTensorTwistCenteredMoments
 import Omega.SyncKernelRealInput.GmEnergySumsetExponent
 import Omega.SyncKernelRealInput.RealInput40NonresetPrimesThin
