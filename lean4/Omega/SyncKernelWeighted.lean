@@ -281,3 +281,4 @@ import Omega.SyncKernelWeighted.DeltaBranchpointsDiscriminantLock
 import Omega.SyncKernelWeighted.HalfturnPrimeDividesDiscriminant
 import Omega.SyncKernelWeighted.GMSoficRationalNonconcentrationVtheta
 import Omega.SyncKernelWeighted.GMTripleComplementarity
+import Omega.SyncKernelWeighted.GMSumproductExponentLaw
