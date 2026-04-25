@@ -173,4 +173,25 @@ theorem paper_pom_a4t_newman_octic_field_prime_decomp :
   · native_decide
   · native_decide
 
+/-- The nilpotent thickness at the four ramified residue algebras, in prime order
+`2, 7, 23, 1151`. -/
+def pom_a4t_newman_octic_field_residue_algebra_thickness_spectrum : List ℕ :=
+  [pom_a4t_newman_octic_field_prime_decomp_inertia_order
+      pom_a4t_newman_octic_field_prime_decomp_data_2,
+    pom_a4t_newman_octic_field_tame_inertia_order pom_a4t_newman_octic_field_tame_data_7,
+    pom_a4t_newman_octic_field_tame_inertia_order pom_a4t_newman_octic_field_tame_data_23,
+    pom_a4t_newman_octic_field_tame_inertia_order pom_a4t_newman_octic_field_tame_data_1151]
+
+/-- The reduced residue-degree spectrum of the nontrivial residue factors, in prime order
+`2, 7, 23, 1151`. -/
+def pom_a4t_newman_octic_field_residue_algebra_residue_degree_spectrum : List (List ℕ) :=
+  [[1], [5], [1, 2, 2], [2, 2, 2]]
+
+/-- Paper label: `cor:pom-a4t-newman-octic-field-residue-algebra`. -/
+theorem paper_pom_a4t_newman_octic_field_residue_algebra :
+    pom_a4t_newman_octic_field_residue_algebra_thickness_spectrum = [8, 3, 3, 2] ∧
+      pom_a4t_newman_octic_field_residue_algebra_residue_degree_spectrum =
+        [[1], [5], [1, 2, 2], [2, 2, 2]] := by
+  constructor <;> native_decide
+
 end Omega.POM

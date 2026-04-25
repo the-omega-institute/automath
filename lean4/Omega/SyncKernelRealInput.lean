@@ -78,3 +78,4 @@ import Omega.SyncKernelRealInput.GMCriticalExponentShiftKVtheta
 import Omega.SyncKernelRealInput.GmTrace3Delta3Stability
 import Omega.SyncKernelRealInput.GMScaleBootstrapGram
 import Omega.SyncKernelRealInput.GMZeckSoficAdditiveEnergy
+import Omega.SyncKernelRealInput.GMProfiniteHaarDichotomy
