@@ -149,18 +149,39 @@ lemma pom_a4t_newman_linear_response_constant_formula_denominator_ne
     positivity
   linarith
 
-lemma pom_a4t_newman_linear_response_constant_elimination_identity (zStar : ℝ) :
+set_option maxHeartbeats 0 in
+lemma pom_a4t_newman_linear_response_constant_elimination_identity
+    (zStar : ℝ)
+    (hden_ne : pom_a4t_newman_linear_response_constant_denominator zStar ≠ 0) :
     pom_a4t_newman_linear_response_constant_polynomial
         (pom_a4t_newman_linear_response_constant_formula zStar) *
         pom_a4t_newman_linear_response_constant_denominator zStar ^ 8 =
       (zStar ^ 8 - 2 * zStar ^ 6 - 2 * zStar ^ 5 - 2 * zStar ^ 4 - 2 * zStar ^ 3 - 2) *
         pom_a4t_newman_linear_response_constant_elimination_quotient zStar := by
+  have hfirst_ne : zStar ^ 5 + zStar ^ 4 + 2 * zStar + 3 ≠ 0 := by
+    intro hfirst
+    apply hden_ne
+    simp [pom_a4t_newman_linear_response_constant_denominator, hfirst]
+  have hsecond_ne :
+      2 * zStar ^ 8 + 2 * zStar ^ 7 - 2 * zStar ^ 4 - 2 * zStar ^ 3 +
+          4 * zStar ^ 2 - 5 ≠ 0 := by
+    intro hsecond
+    apply hden_ne
+    simp [pom_a4t_newman_linear_response_constant_denominator, hsecond]
+  have hfirst_nf_ne : zStar * (zStar ^ 3 * (zStar + 1) + 2) + 3 ≠ 0 := by
+    convert hfirst_ne using 1 <;> ring
+  have hsecond_nf_ne :
+      zStar ^ 2 * (zStar * 2 * (zStar * (zStar ^ 3 * (zStar + 1) - 1) - 1) + 4) -
+          5 ≠ 0 := by
+    convert hsecond_ne using 1 <;> ring
   unfold pom_a4t_newman_linear_response_constant_polynomial
     pom_a4t_newman_linear_response_constant_formula
-    pom_a4t_newman_linear_response_constant_denominator
     pom_a4t_newman_linear_response_constant_elimination_quotient
+  field_simp [pom_a4t_newman_linear_response_constant_denominator, hfirst_ne, hsecond_ne,
+    hfirst_nf_ne, hsecond_nf_ne]
+  unfold pom_a4t_newman_linear_response_constant_denominator
   set_option maxRecDepth 10000 in
-    ring
+    ring1
 
 lemma pom_a4t_newman_linear_response_constant_polynomial_eq_zero
     {zStar : ℝ} (hz1 : 1 < zStar)
@@ -176,7 +197,7 @@ lemma pom_a4t_newman_linear_response_constant_polynomial_eq_zero
           (pom_a4t_newman_linear_response_constant_formula zStar) *
           pom_a4t_newman_linear_response_constant_denominator zStar ^ 8 =
         0 := by
-    rw [pom_a4t_newman_linear_response_constant_elimination_identity]
+    rw [pom_a4t_newman_linear_response_constant_elimination_identity zStar hden_ne]
     dsimp [pom_a4t_newman_linear_response_constant_newman_octic] at hz
     simp [hz]
   exact (mul_eq_zero.mp hmul).resolve_right (pow_ne_zero 8 hden_ne)

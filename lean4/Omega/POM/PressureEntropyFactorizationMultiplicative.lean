@@ -54,8 +54,8 @@ theorem paper_pom_escort_renyi_rate_inversion
         escortEntropyRate a b = ((b : ℝ) * pressure a - pressure (a * b)) / ((b : ℝ) - 1) := by
     intro a b ha hb
     have hb1_ne : (b : ℝ) - 1 ≠ 0 := by
-      norm_num
-      omega
+      have hb_ne : b ≠ 1 := by omega
+      exact sub_ne_zero.mpr (by exact_mod_cast hb_ne)
     apply (eq_div_iff hb1_ne).2
     nlinarith [hfactor a b ha hb]
   refine ⟨?_, ?_⟩
