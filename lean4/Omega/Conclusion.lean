@@ -1,5 +1,6 @@
 import Omega.Conclusion.BranchEntropyPrimesliceRate
 import Omega.Conclusion.Window6SyzygyGreenInverseClosedForm
+import Omega.Conclusion.FoldWalshPrincipalMinorsUniqueRelation
 import Omega.Conclusion.HypercubeJointChiralHeattraceProduct
 import Omega.Conclusion.TwoBodyAuditCompletenessCodimension
 import Omega.Conclusion.AdditiveScalarProcircleObstruction
