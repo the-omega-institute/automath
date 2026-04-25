@@ -1034,3 +1034,4 @@ import Omega.POM.DiagonalRateSmallDistortionHellingerEndpoint
 import Omega.POM.DiagonalRateScalingPotentialEndpoints
 import Omega.POM.MomentFiniteSamplingDecidable
 import Omega.POM.MixedCollisionKernelComputable
+import Omega.POM.DiagonalRateUniformEntropyRewrite
