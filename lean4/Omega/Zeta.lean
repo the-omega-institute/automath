@@ -1017,6 +1017,7 @@ import Omega.Zeta.SyncHatdeltaGaloisS6Generic
 import Omega.Zeta.SyncHatdeltaQuotientTripleCoverS3Discriminant
 import Omega.Zeta.SyncHatdeltaPrymDecomposition
 import Omega.Zeta.SyncKernelMixingRate
+import Omega.Zeta.SyntaxTraceLinearRecurrence
 import Omega.Zeta.SyncResetWordGeometricTail
 import Omega.Zeta.SyncKernelPalindrome
 import Omega.Zeta.SyncKernelResetTimeUnboundedUnderSmallQ
