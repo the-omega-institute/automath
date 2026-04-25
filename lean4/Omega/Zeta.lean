@@ -1664,3 +1664,4 @@ import Omega.Zeta.XiHorocycleDepthQuadraticSuppression
 import Omega.Zeta.XiFoldbinLastbitTailSpectrumSingleJumpStaircase
 import Omega.Zeta.XiThetaKernelDyadicAllDerivativesBudget
 import Omega.Zeta.XiTimePart9eSmithKernelCokernelCount
+import Omega.Zeta.XiFoldCongruenceQuotientDivisorLattice
