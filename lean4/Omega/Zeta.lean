@@ -133,6 +133,7 @@ import Omega.Zeta.XiPoissonCauchyKlMomentLocking
 import Omega.Zeta.XiPoissonKlSixthOrderMu3Mu4
 import Omega.Zeta.XiTimePart60abZeroBlockForcesBinomialFactor
 import Omega.Zeta.XiTimePart60abbGaugeVolumeParityTransverseSeparation
+import Omega.Zeta.XiTimePart60acbConstantFiberFreeGroupActionCriterion
 import Omega.Zeta.XiTimePart60f2NoFaithfulFiniteDimensionalLieModel
 import Omega.Zeta.XiSingleBaseDealiasingCountableException
 import Omega.Zeta.XiSinglePoleContourReadoutErrorAudit

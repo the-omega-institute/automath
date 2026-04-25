@@ -93,3 +93,4 @@ import Omega.SyncKernelRealInput.GmMellinPoleGoldenComb
 import Omega.SyncKernelRealInput.GmTrace3TruncatedMomentRank2
 import Omega.SyncKernelRealInput.GMTwistEqualRadiusArithmeticFactor
 import Omega.SyncKernelRealInput.RealInput40P7BranchSetNoBaseSymmetryDeckTrivial
+import Omega.SyncKernelRealInput.GMAffineUniformizationImprovement
