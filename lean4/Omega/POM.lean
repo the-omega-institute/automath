@@ -223,6 +223,7 @@ import Omega.POM.DerivedFoldPerronGoldenExponentTranscendenceQ4Q5Q16Q17
 import Omega.POM.DerivedFoldRenyiDimensionTranscendenceQ4Q5Q16Q17
 import Omega.POM.DerivedKolmogorovOracleExponentIsomorphism
 import Omega.POM.DerivedOracleThermalDifferentialGeometry
+import Omega.POM.FiberReconstructionSpectrumComplete
 import Omega.POM.DerivedProjectiveLengthDirectionRationalCfinite
 import Omega.POM.HiddenBitCount
 import Omega.POM.DerivedProjectivePathMaxplusIntercept

@@ -224,6 +224,7 @@ import Omega.Zeta.XiRoseUnitCircleTouchRingParityBifurcation
 import Omega.Zeta.XiSingularRingDefectDeltaLowerbound
 import Omega.Zeta.XiSingularRingDefectCountingBound
 import Omega.Zeta.XiSingularRingDefectMultiplicative
+import Omega.Zeta.XiDualBaseDealiasingInjectiveEncoding
 import Omega.Zeta.XiSingularCircleHeckeDirichletZetaMultiplier
 import Omega.Zeta.XiDefectDensityConeChoquetExtreme
 import Omega.Zeta.XiDefectEntropyHeightBudgetVarianceGap
