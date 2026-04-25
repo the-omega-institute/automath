@@ -1,6 +1,7 @@
 import Omega.Zeta.XiAeSimpleZerosUnderAcSeeds
 import Omega.Zeta.AbelFinitePartMobiusZeta
 import Omega.Zeta.XiHeightIntervalMinimalSampling
+import Omega.Zeta.XiSymqGoldenCqDeterminantalDivisors
 import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
 import Omega.Zeta.ZGDensitySecondOrderSummability
 import Omega.Zeta.XiBoundedFluxForcesKappa0
