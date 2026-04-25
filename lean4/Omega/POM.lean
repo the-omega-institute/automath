@@ -349,6 +349,7 @@ import Omega.POM.DiagonalRateRateCurveIdentifiability
 import Omega.POM.SingleQSchurTracesCompleteFiberSpectrum
 import Omega.POM.MaxFiberEvenSingleSampleMap
 import Omega.POM.MaxFiberHphiRelativeEntropyGap
+import Omega.POM.FiniteScaleEntropyOscillation
 import Omega.POM.MaxFiberOddIndistinguishability
 import Omega.POM.MicrocanonicalFoldHtUniformMin
 import Omega.POM.FiberBiasedConditionalKlChain
