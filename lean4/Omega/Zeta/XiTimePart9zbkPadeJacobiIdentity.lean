@@ -66,4 +66,13 @@ theorem paper_xi_time_part9zbk_pade_jacobi_identity (n : Nat) (_hn : 1 <= n) :
       finiteDepth_matchesToOrder_implies_pade_jacobi
       n R hFinite hMatch
 
+/-- Any finite-depth continued-fraction shadow matching the atomic model through order `2n`
+collapses to the canonical Padé-Jacobi shadow.
+    cor:xi-time-part9zbk-continued-fraction-rigidity-collapse -/
+theorem paper_xi_time_part9zbk_continued_fraction_rigidity_collapse
+    (n : Nat) (hn : 1 <= n) (R : PadeJacobiShadow) (hFinite : finiteDepth R)
+    (hMatch : matchesToOrder m_phi R (2 * n)) :
+    R = m_phi_n n := by
+  exact paper_xi_time_part9zbk_pade_jacobi_identity n hn R hFinite hMatch
+
 end Omega.Zeta

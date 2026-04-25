@@ -17,4 +17,15 @@ theorem paper_Ym_ambiguity_shell_zeta_factor_trivial {m : Nat} (hm : 3 <= m)
   rcases hpack with ⟨_, hdet, hedge⟩
   exact ⟨hdet, hedge, h_closed hedge⟩
 
+/-- Lowercase paper-label spelling for the ambiguity-shell zeta factor wrapper.
+    thm:Ym-ambiguity-shell-zeta-factor-trivial -/
+theorem paper_ym_ambiguity_shell_zeta_factor_trivial {m : Nat} (hm : 3 <= m)
+    (ambNilpotent detReduction edgeZetaEquality intrinsicZetaClosed : Prop)
+    (h_nil : ambNilpotent) (h_det : ambNilpotent -> detReduction)
+    (h_edge : detReduction -> edgeZetaEquality)
+    (h_closed : edgeZetaEquality -> intrinsicZetaClosed) :
+    detReduction ∧ edgeZetaEquality ∧ intrinsicZetaClosed := by
+  exact paper_Ym_ambiguity_shell_zeta_factor_trivial hm ambNilpotent detReduction
+    edgeZetaEquality intrinsicZetaClosed h_nil h_det h_edge h_closed
+
 end Omega.Folding
