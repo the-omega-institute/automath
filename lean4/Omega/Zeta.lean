@@ -1531,6 +1531,7 @@ import Omega.Zeta.DephysTimefiberTwoEnded
 import Omega.Zeta.DephysFullStateRecoveryForcesTrivialIndex1
 import Omega.Zeta.XiSmithStaircaseRigidityDistinct
 import Omega.Zeta.XiSmithSpectrumSelfSquareRootSymmetry
+import Omega.Zeta.XiSymqGoldenCqCokernelStructure
 import Omega.Zeta.XiHeightWindowUnifiedQuadraticHardness
 import Omega.Zeta.XiMaslovSpectralflowEntropyQuantization
 import Omega.Zeta.XiFiniteTimeDistinguishabilityMutualInformationRate

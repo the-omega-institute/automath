@@ -56,6 +56,7 @@ import Omega.POM.S3Recurrence
 import Omega.POM.S3OrbitDecomposition
 import Omega.POM.HankelRankMinimal
 import Omega.POM.HankelSmithMinimalDenominator
+import Omega.POM.HankelIntegerRealizationCriterion
 import Omega.POM.FiberIndexCltThermo
 import Omega.POM.FiberIndexLdpThermo
 import Omega.POM.FiberLowerBoundIndependentSets
