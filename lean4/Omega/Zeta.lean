@@ -18,6 +18,7 @@ import Omega.Zeta.XiTimePart63bInfiniteDepthFinitePrimeRegisterImpossibility
 import Omega.Zeta.XiCoherenceResolutionInformationIdentity
 import Omega.Zeta.Near1PoleParabola
 import Omega.Zeta.XiHorizonProtocolZetaLoopExpansion
+import Omega.Zeta.XiLowRankHorizonCertificate2KappaSharp
 import Omega.Zeta.XiJoukowskyEllipseAverageConstantTerm
 import Omega.Zeta.XiBayesianFreeEnergyVariationalPosteriorMinimizer
 import Omega.Zeta.XiFoldQueryComplexityExactM
