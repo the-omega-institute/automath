@@ -1558,3 +1558,4 @@ import Omega.Conclusion.ToyRHCriticalLineNearestNeighborFiniteAlphabet
 import Omega.Conclusion.PrimitiveRamanujanDirichletShadow
 import Omega.Conclusion.BinfoldGaugeConjugacyMidscaleAsymptotic
 import Omega.Conclusion.ChainInteriorMobiusArithmeticIdentification
+import Omega.Conclusion.Window6HiddenCoinvariantGorensteinPackage
