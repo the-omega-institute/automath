@@ -1322,3 +1322,4 @@ import Omega.POM.SchurChebotarevPrimeDeviation
 import Omega.POM.SchurSpectrumAuditFromLowMoments
 import Omega.POM.CurvatureCarryDefectZ2ObstructionPrinciple
 import Omega.POM.RealQZetaMainPole
+import Omega.POM.AnomSupportedOnBCKernel
