@@ -219,6 +219,7 @@ import Omega.POM.KkStrongSzegoBulkSurface
 import Omega.POM.LkBoundaryFixedPointRiccati
 import Omega.POM.ReplicaSoftcoreTensorEigenbasis
 import Omega.POM.ReplicaSoftcoreSymEigenbasisBinomialWeights
+import Omega.POM.FirstVariationFidelityRHBreaking
 import Omega.POM.ReverseKlBoundByDispersion
 import Omega.POM.RemainderBitsRenyiCollisionExtremal
 import Omega.POM.TypicalFiberExponentRenyiTangent
