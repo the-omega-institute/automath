@@ -220,6 +220,8 @@ import Omega.POM.PrimeRegisterQQuotaFamily
 import Omega.POM.CapacityCollisionDataProcessing
 import Omega.POM.MultiplicityCompositionMomentQ2Q3Closed
 import Omega.POM.IntegerMomentStrongestTailBound
+import Omega.POM.FunctorialKernelRHImpossibility
+import Omega.POM.FirstVariationPseudospectrumAmplification
 import Omega.POM.MaxfiberOrientationChargePeriodic
 import Omega.POM.MaxfiberSignedIndexExtinctionPeriodic
 import Omega.POM.FiberRewriteLocalCLT

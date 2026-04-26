@@ -221,6 +221,7 @@ import Omega.Zeta.XiTimePart60acbGroupoidDimensionOverload
 import Omega.Zeta.XiTimeResolutionDualBudgetPhaseTransition
 import Omega.Zeta.XiPoissonCoarsegrainingFDivergenceContraction
 import Omega.Zeta.XiPoissonKernelDerivativeL1FisherClosed
+import Omega.Zeta.XiSinglezeroDefectTranslationAverage
 import Omega.Zeta.MomqGapLinearAmplificationRandomnessCost
 import Omega.Zeta.XiToeplitzSchurCohnInertiaAlignment
 import Omega.Zeta.XiCauchyPoissonOddMomentSelectionLaw
