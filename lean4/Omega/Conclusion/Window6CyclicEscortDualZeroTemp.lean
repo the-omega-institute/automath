@@ -70,6 +70,26 @@ theorem paper_conclusion_window6_cyclic_escort_dual_zero_temp :
       convert hden0 using 1 <;> funext q <;> ring
     exact hnum.div hden (by norm_num : (5 : ℝ) ≠ 0)
 
+/-- Paper label: `thm:conclusion-window6-cyclic-escort-first-moment`. The normalized cyclic
+escort first moment vanishes only at `q = 0`, is nonzero at every positive integer temperature
+parameter, and converges to the positive zero-temperature endpoint `1 / 9`. -/
+theorem paper_conclusion_window6_cyclic_escort_first_moment :
+    conclusion_window6_cyclic_escort_dual_zero_temp_beta_at_top 0 = 0 ∧
+      (∀ q : ℕ, 0 < q →
+        conclusion_window6_cyclic_escort_dual_zero_temp_beta_at_top q ≠ 0) ∧
+      Filter.Tendsto conclusion_window6_cyclic_escort_dual_zero_temp_beta_at_top
+        Filter.atTop (nhds (1 / 9 : ℝ)) := by
+  rcases paper_conclusion_window6_cyclic_escort_dual_zero_temp with ⟨hzero, htop, _hbot⟩
+  refine ⟨hzero, ?_, htop⟩
+  intro q hq
+  have hhalf_lt_one : (1 / 2 : ℝ) ^ q < 1 := by
+    exact pow_lt_one₀ (by norm_num) (by norm_num) (Nat.ne_of_gt hq)
+  have hnum_pos : 0 < 1 - (1 / 2 : ℝ) ^ q := by linarith
+  have hden_pos : 0 <
+      (1 / 2 : ℝ) ^ q * 5 + (3 / 4 : ℝ) ^ q * 4 + 9 := by
+    positivity
+  exact ne_of_gt (div_pos hnum_pos hden_pos)
+
 end
 
 end Omega.Conclusion

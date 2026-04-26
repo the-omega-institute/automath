@@ -174,6 +174,28 @@ theorem paper_xi_fiber_uniformization_markov_semigroup_explicit {Omega X : Type}
       tendsto_const_nhds.add hmul
     simpa [fiberUniformizationSemigroup_decomposition] using hadd
 
+/-- Concrete KL-gap/index-cap data for the fiber-uniformization semigroup. The decay comparison
+is the convexity estimate along the affine mixture, and `klGap0_le_indexCap` records the
+Pimsner--Popa/Jones index cap for the initial gap. -/
+structure xi_fiber_uniformization_kl_gap_exp_decay_index_cap_Data where
+  klGap : ℝ → ℝ
+  decay : ℝ → ℝ
+  indexCap : ℝ
+  decay_nonneg : ∀ t : ℝ, 0 ≤ decay t
+  klGap_convex_decay : ∀ t : ℝ, klGap t ≤ decay t * klGap 0
+  klGap0_le_indexCap : klGap 0 ≤ indexCap
+
+/-- Paper label: `prop:xi-fiber-uniformization-kl-gap-exp-decay-index-cap`.
+The convexity decay estimate and the initial index cap combine by monotonicity of multiplication
+by the nonnegative decay factor. -/
+theorem paper_xi_fiber_uniformization_kl_gap_exp_decay_index_cap
+    (D : xi_fiber_uniformization_kl_gap_exp_decay_index_cap_Data) (t : ℝ) :
+    D.klGap t ≤ D.decay t * D.klGap 0 ∧ D.klGap t ≤ D.decay t * D.indexCap := by
+  constructor
+  · exact D.klGap_convex_decay t
+  · exact le_trans (D.klGap_convex_decay t)
+      (mul_le_mul_of_nonneg_left D.klGap0_le_indexCap (D.decay_nonneg t))
+
 end FiberUniformizationMarkovSemigroupExplicit
 
 end

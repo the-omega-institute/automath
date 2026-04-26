@@ -173,6 +173,66 @@ theorem paper_conclusion_fold_nontrivial_walsh_exact_gram_law (m : ℕ) (x y : X
       (X.fiberMultiplicity x : ℝ) * (X.fiberMultiplicity y : ℝ)
   linarith [hsplit, hfull, hempty]
 
+/-- Boundary-visible Walsh energy is exact, and some nonempty Walsh mode carries at least the
+average visible energy.
+    cor:conclusion-fold-boundary-visible-energy-nonremovable-mode -/
+theorem paper_conclusion_fold_boundary_visible_energy_nonremovable_mode (m : ℕ) (hm : 1 ≤ m)
+    (x : X m) :
+    (∑ I ∈ nonemptySubsets m, walshProfile m x I ^ 2 =
+      (X.fiberMultiplicity x : ℝ) *
+        ((2 : ℝ) ^ m - (X.fiberMultiplicity x : ℝ))) ∧
+    (∃ I, I ∈ nonemptySubsets m ∧
+      ((X.fiberMultiplicity x : ℝ) *
+          ((2 : ℝ) ^ m - (X.fiberMultiplicity x : ℝ))) / ((2 : ℝ) ^ m - 1) ≤
+        walshProfile m x I ^ 2) := by
+  classical
+  let energy : ℝ :=
+    (X.fiberMultiplicity x : ℝ) * ((2 : ℝ) ^ m - (X.fiberMultiplicity x : ℝ))
+  have henergy :
+      ∑ I ∈ nonemptySubsets m, walshProfile m x I ^ 2 = energy := by
+    calc
+      ∑ I ∈ nonemptySubsets m, walshProfile m x I ^ 2
+          = ∑ I ∈ nonemptySubsets m, walshProfile m x I * walshProfile m x I := by
+              simp [pow_two]
+      _ = (2 : ℝ) ^ m * (X.fiberMultiplicity x : ℝ) * (if x = x then 1 else 0) -
+          (X.fiberMultiplicity x : ℝ) * (X.fiberMultiplicity x : ℝ) :=
+            paper_conclusion_fold_nontrivial_walsh_exact_gram_law m x x
+      _ = energy := by
+            simp [energy]
+            ring
+  refine ⟨by simpa [energy] using henergy, ?_⟩
+  let S : Finset (Finset (Fin m)) := nonemptySubsets m
+  let f : Finset (Fin m) → ℝ := fun I => walshProfile m x I ^ 2
+  have hmpos : 0 < m := Nat.lt_of_lt_of_le Nat.zero_lt_one hm
+  let i : Fin m := ⟨0, hmpos⟩
+  have hS : S.Nonempty := by
+    refine ⟨{i}, ?_⟩
+    simp [S, nonemptySubsets, allSubsets]
+  obtain ⟨I, hI, hmax⟩ := Finset.exists_max_image S f hS
+  refine ⟨I, by simpa [S] using hI, ?_⟩
+  have hsum_le : ∑ J ∈ S, f J ≤ S.card • f I := by
+    simpa using S.sum_le_card_nsmul f (f I) hmax
+  have hsum_eq : ∑ J ∈ S, f J = energy := by
+    simpa [S, f] using henergy
+  have henergy_le : energy ≤ (S.card : ℝ) * f I := by
+    calc
+      energy = ∑ J ∈ S, f J := hsum_eq.symm
+      _ ≤ S.card • f I := hsum_le
+      _ = (S.card : ℝ) * f I := by simp [nsmul_eq_mul]
+  have hcard_nat : S.card = 2 ^ m - 1 := by
+    simp [S, nonemptySubsets, allSubsets]
+  have hpow_ge_one : 1 ≤ 2 ^ m := by
+    exact Nat.one_le_pow m 2 (by norm_num)
+  have hcard_real : (S.card : ℝ) = (2 : ℝ) ^ m - 1 := by
+    rw [hcard_nat, Nat.cast_sub hpow_ge_one]
+    norm_num
+  have hcard_pos : 0 < (S.card : ℝ) := by
+    exact_mod_cast Finset.card_pos.mpr hS
+  have haverage_le : energy / (S.card : ℝ) ≤ f I := by
+    rw [div_le_iff₀ hcard_pos]
+    simpa [mul_comm] using henergy_le
+  simpa [energy, S, f, hcard_real] using haverage_le
+
 end
 
 end Omega.Conclusion

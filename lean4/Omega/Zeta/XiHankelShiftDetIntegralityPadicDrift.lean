@@ -81,4 +81,74 @@ theorem paper_xi_hankel_shift_det_integrality_padic_drift
     simpa [padicDriftAffine, xi_hankel_shift_det_integrality_padic_drift_shiftedDeterminant,
       xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet] using hvaluation
 
+/-- Paper label: `cor:xi-hankel-padic-stiffness-drift-dichotomy-badprimes`. -/
+theorem paper_xi_hankel_padic_stiffness_drift_dichotomy_badprimes
+    (D : xi_hankel_shift_det_integrality_padic_drift_data) :
+    (padicValNat D.p
+          D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet = 0 →
+        ∀ r : ℕ,
+          padicValNat D.p
+              (D.xi_hankel_shift_det_integrality_padic_drift_baseDet *
+                D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet ^ r) =
+            padicValNat D.p D.xi_hankel_shift_det_integrality_padic_drift_baseDet) ∧
+      (0 < padicValNat D.p
+          D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet →
+        ∀ r s : ℕ, r < s →
+          padicValNat D.p
+              (D.xi_hankel_shift_det_integrality_padic_drift_baseDet *
+                D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet ^ r) <
+            padicValNat D.p
+              (D.xi_hankel_shift_det_integrality_padic_drift_baseDet *
+                D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet ^ s)) ∧
+      ((∃ r : ℕ,
+          D.p ∣ D.xi_hankel_shift_det_integrality_padic_drift_baseDet *
+            D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet ^ r) ↔
+        D.p ∣ D.xi_hankel_shift_det_integrality_padic_drift_baseDet *
+          D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet) := by
+  let _ : Fact D.p.Prime := D.hp
+  have hshift_ne :
+      D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet ≠ 0 := by
+    simpa [xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet] using
+      D.xi_hankel_shift_det_integrality_padic_drift_hratio
+  have hval :
+      ∀ r : ℕ,
+        padicValNat D.p
+            (D.xi_hankel_shift_det_integrality_padic_drift_baseDet *
+              D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet ^ r) =
+          padicValNat D.p D.xi_hankel_shift_det_integrality_padic_drift_baseDet +
+            r * padicValNat D.p
+              D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet := by
+    intro r
+    rw [padicValNat.mul
+        D.xi_hankel_shift_det_integrality_padic_drift_hbase
+        (pow_ne_zero _ hshift_ne),
+      padicValNat.pow _ hshift_ne]
+  refine ⟨?_, ?_, ?_⟩
+  · intro hzero r
+    rw [hval r, hzero, mul_zero, add_zero]
+  · intro hpos r s hrs
+    rw [hval r, hval s]
+    exact Nat.add_lt_add_left (Nat.mul_lt_mul_of_pos_right hrs hpos) _
+  · constructor
+    · rintro ⟨r, hr⟩
+      cases r with
+      | zero =>
+          have hbase :
+              D.p ∣ D.xi_hankel_shift_det_integrality_padic_drift_baseDet := by
+            simpa using hr
+          exact dvd_mul_of_dvd_left hbase
+            D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet
+      | succ r =>
+          have hmul := D.hp.out.dvd_mul.mp hr
+          rcases hmul with hbase | hpow
+          · exact dvd_mul_of_dvd_left hbase
+              D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet
+          · have hshift :
+                D.p ∣ D.xi_hankel_shift_det_integrality_padic_drift_shiftOperatorDet :=
+              D.hp.out.dvd_of_dvd_pow hpow
+            exact dvd_mul_of_dvd_right hshift
+              D.xi_hankel_shift_det_integrality_padic_drift_baseDet
+    · intro hbad
+      exact ⟨1, by simpa using hbad⟩
+
 end Omega.Zeta

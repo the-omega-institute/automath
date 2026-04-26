@@ -51,6 +51,12 @@ theorem paper_conclusion69_automatic_dirichlet_moment (D : AutomaticDirichletMom
   intro k
   exact ⟨D.spectralGap, D.baseConstant k, D.uniform_moment_bound_of_gap k⟩
 
+/-- Paper label: `thm:gm-automatic-dirichlet-moment-bound`. The GM appendix uses the same
+finite-state spectral-gap package as the conclusion-level automatic Dirichlet moment theorem. -/
+theorem paper_gm_automatic_dirichlet_moment_bound (D : AutomaticDirichletMomentData) :
+    ∀ k : ℕ, ∃ ε C, D.uniformMomentBound k ε C := by
+  exact paper_conclusion69_automatic_dirichlet_moment D
+
 end
 
 end Omega.Zeta

@@ -1,4 +1,5 @@
 import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.LinearAlgebra.Vandermonde
 import Mathlib.NumberTheory.Real.GoldenRatio
 import Mathlib.Tactic
 
@@ -110,6 +111,76 @@ theorem paper_pom_replica_softcore_fibonacci_power_moment_collapse (q m : ℕ) :
     rw [← mul_pow]
     norm_num
   rw [← mul_assoc, hpow, one_mul]
+
+/-- The geometric node appearing in the Fibonacci-power moment expansion. -/
+noncomputable def pom_replica_softcore_fibonacci_power_hankel_determinant_node
+    (q : ℕ) (i : Fin (q + 1)) : ℝ :=
+  Real.goldenRatio ^ (q - i.1) * Real.goldenConj ^ i.1
+
+/-- The binomial weight attached to a geometric node. -/
+noncomputable def pom_replica_softcore_fibonacci_power_hankel_determinant_weight
+    (q : ℕ) (i : Fin (q + 1)) : ℝ :=
+  (Nat.choose q i.1 : ℝ) * (1 + 2 / Real.sqrt 5) ^ (q - i.1) *
+    (1 - 2 / Real.sqrt 5) ^ i.1
+
+/-- The Hankel matrix of the finite geometric moment expansion for `F_{n+3}^q`. -/
+noncomputable def pom_replica_softcore_fibonacci_power_hankel_determinant_hankel
+    (q : ℕ) : Matrix (Fin (q + 1)) (Fin (q + 1)) ℝ :=
+  fun i j =>
+    ∑ k : Fin (q + 1),
+      pom_replica_softcore_fibonacci_power_hankel_determinant_weight q k *
+        pom_replica_softcore_fibonacci_power_hankel_determinant_node q k ^ (i.1 + j.1)
+
+lemma pom_replica_softcore_fibonacci_power_hankel_determinant_vandermonde_factorization
+    (q : ℕ) :
+    pom_replica_softcore_fibonacci_power_hankel_determinant_hankel q =
+      Matrix.transpose
+          (Matrix.vandermonde
+            (pom_replica_softcore_fibonacci_power_hankel_determinant_node q)) *
+        Matrix.diagonal
+          (pom_replica_softcore_fibonacci_power_hankel_determinant_weight q) *
+        Matrix.vandermonde
+          (pom_replica_softcore_fibonacci_power_hankel_determinant_node q) := by
+  ext i j
+  simp [pom_replica_softcore_fibonacci_power_hankel_determinant_hankel,
+    Matrix.mul_apply, Matrix.vandermonde_apply, Matrix.diagonal, pow_add]
+  refine Finset.sum_congr rfl ?_
+  intro k _
+  by_cases hki : k = i <;> simp [hki, mul_assoc, mul_left_comm, mul_comm]
+
+lemma pom_replica_softcore_fibonacci_power_hankel_determinant_det_factorization
+    (q : ℕ) :
+    (pom_replica_softcore_fibonacci_power_hankel_determinant_hankel q).det =
+      (∏ k : Fin (q + 1),
+          pom_replica_softcore_fibonacci_power_hankel_determinant_weight q k) *
+        (∏ i : Fin (q + 1),
+          ∏ j ∈ Finset.Ioi i,
+            (pom_replica_softcore_fibonacci_power_hankel_determinant_node q j -
+              pom_replica_softcore_fibonacci_power_hankel_determinant_node q i)) ^ 2 := by
+  rw [pom_replica_softcore_fibonacci_power_hankel_determinant_vandermonde_factorization]
+  rw [Matrix.det_mul, Matrix.det_mul, Matrix.det_transpose, Matrix.det_diagonal,
+    Matrix.det_vandermonde]
+  ring
+
+/-- Paper-facing determinant package: the Hankel matrix of the finite Fibonacci-power geometric
+moment expansion factors as `Vᵀ C V`, hence its determinant is the squared Vandermonde product
+times the product of the binomial weights. -/
+def pom_replica_softcore_fibonacci_power_hankel_determinant_statement : Prop :=
+  ∀ q : ℕ,
+    (pom_replica_softcore_fibonacci_power_hankel_determinant_hankel q).det =
+      (∏ k : Fin (q + 1),
+          pom_replica_softcore_fibonacci_power_hankel_determinant_weight q k) *
+        (∏ i : Fin (q + 1),
+          ∏ j ∈ Finset.Ioi i,
+            (pom_replica_softcore_fibonacci_power_hankel_determinant_node q j -
+              pom_replica_softcore_fibonacci_power_hankel_determinant_node q i)) ^ 2
+
+/-- Paper label:
+`thm:pom-replica-softcore-fibonacci-power-hankel-determinant`. -/
+theorem paper_pom_replica_softcore_fibonacci_power_hankel_determinant :
+    pom_replica_softcore_fibonacci_power_hankel_determinant_statement := by
+  intro q
+  exact pom_replica_softcore_fibonacci_power_hankel_determinant_det_factorization q
 
 end
 

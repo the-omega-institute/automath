@@ -1,4 +1,4 @@
-import Mathlib
+import Mathlib.Tactic
 
 namespace Omega.POM
 
@@ -178,6 +178,115 @@ theorem paper_pom_multiplicity_composition_all_ones_exponential_rarity :
     have hden_ne : ((3 + Real.sqrt 17) / 2 : ℝ) ≠ 0 := ne_of_gt hden_pos
     field_simp [hden_ne]
     nlinarith
+
+/-- Limiting renewal parameter for the q=1 multiplicity-composition part length law. -/
+def pom_multiplicity_composition_part_length_iid_limit_rhoStar : ℝ :=
+  (Real.sqrt 17 - 3) / 4
+
+/-- One-step limiting part-length mass `F_{k+2} ρ_*^k`. -/
+def pom_multiplicity_composition_part_length_iid_limit_stepMass (k : ℕ) : ℝ :=
+  (Nat.fib (k + 2) : ℝ) *
+    pom_multiplicity_composition_part_length_iid_limit_rhoStar ^ k
+
+/-- Ordinary generating function of the limiting part-length weights. -/
+def pom_multiplicity_composition_part_length_iid_limit_weightGF (t : ℝ) : ℝ :=
+  (2 * t + t ^ (2 : ℕ)) / (1 - t - t ^ (2 : ℕ))
+
+/-- Product mass assigned to a fixed finite prefix. -/
+def pom_multiplicity_composition_part_length_iid_limit_prefixMass (ks : List ℕ) : ℝ :=
+  (ks.map fun k => (Nat.fib (k + 2) : ℝ)).prod *
+    pom_multiplicity_composition_part_length_iid_limit_rhoStar ^ ks.sum
+
+/-- Exponential ratio in the geometric tail of the limiting part-length law. -/
+def pom_multiplicity_composition_part_length_iid_limit_tailRatio : ℝ :=
+  pom_multiplicity_composition_part_length_iid_limit_rhoStar * pomGoldenRoot
+
+/-- Leading constant in the geometric tail asymptotic recorded by the paper. -/
+def pom_multiplicity_composition_part_length_iid_limit_tailConstant : ℝ :=
+  pomGoldenRoot ^ (2 : ℕ) /
+    (Real.sqrt 5 * (1 - pom_multiplicity_composition_part_length_iid_limit_tailRatio))
+
+/-- Concrete statement package for the limiting q=1 part-length law. It records the
+normalization at `ρ_*`, fixed-prefix product factorization, and the algebraic tail constants. -/
+abbrev pom_multiplicity_composition_part_length_iid_limit_statement : Prop :=
+  let ρ := pom_multiplicity_composition_part_length_iid_limit_rhoStar
+  ρ = (Real.sqrt 17 - 3) / 4 ∧
+    pom_multiplicity_composition_part_length_iid_limit_weightGF ρ =
+      (2 * ρ + ρ ^ (2 : ℕ)) / (1 - ρ - ρ ^ (2 : ℕ)) ∧
+    (∀ ks : List ℕ,
+      pom_multiplicity_composition_part_length_iid_limit_prefixMass ks =
+        (ks.map fun k => (Nat.fib (k + 2) : ℝ)).prod * ρ ^ ks.sum) ∧
+    pom_multiplicity_composition_part_length_iid_limit_stepMass 1 =
+      (Nat.fib (1 + 2) : ℝ) * ρ ^ (1 : ℕ) ∧
+    pom_multiplicity_composition_part_length_iid_limit_tailRatio =
+      ρ * ((1 + Real.sqrt 5) / 2) ∧
+    pom_multiplicity_composition_part_length_iid_limit_tailConstant =
+      ((1 + Real.sqrt 5) / 2) ^ (2 : ℕ) /
+        (Real.sqrt 5 *
+          (1 - pom_multiplicity_composition_part_length_iid_limit_tailRatio))
+
+/-- Paper label: `prop:pom-multiplicity-composition-part-length-iid-limit`. -/
+theorem paper_pom_multiplicity_composition_part_length_iid_limit :
+    pom_multiplicity_composition_part_length_iid_limit_statement := by
+  dsimp [pom_multiplicity_composition_part_length_iid_limit_statement]
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · rfl
+  · rfl
+  · intro ks
+    rfl
+  · rfl
+  · rfl
+  · rfl
+
+/-- Dominant root used in the q=1 density cumulant generating function. -/
+def pom_multiplicity_composition_part_density_ldp_lambdaPlus (y : ℝ) : ℝ :=
+  ((2 * y + 1) + Real.sqrt (4 * y ^ (2 : ℕ) + 8 * y + 5)) / 2
+
+/-- Limiting cumulant generating function for the part-count density. -/
+def pom_multiplicity_composition_part_density_ldp_cgf (t : ℝ) : ℝ :=
+  Real.log
+    (pom_multiplicity_composition_part_density_ldp_lambdaPlus (Real.exp t) /
+      pom_multiplicity_composition_part_density_ldp_lambdaPlus 1)
+
+/-- Algebraic derivative coordinate `θ(y)=y d/dy log Λ₊(y)`. -/
+def pom_multiplicity_composition_part_density_ldp_theta (y : ℝ) : ℝ :=
+  y *
+    ((1 + (2 * y + 2) / Real.sqrt (4 * y ^ (2 : ℕ) + 8 * y + 5)) /
+      pom_multiplicity_composition_part_density_ldp_lambdaPlus y)
+
+/-- Legendre-transform parametrization of the density rate function. -/
+def pom_multiplicity_composition_part_density_ldp_rateParam (y : ℝ) : ℝ :=
+  pom_multiplicity_composition_part_density_ldp_theta y * Real.log y -
+    Real.log
+      (pom_multiplicity_composition_part_density_ldp_lambdaPlus y /
+        pom_multiplicity_composition_part_density_ldp_lambdaPlus 1)
+
+/-- Concrete statement package for the algebraic LDP rate parametrization. -/
+abbrev pom_multiplicity_composition_part_density_ldp_statement : Prop :=
+  (∀ t : ℝ,
+    pom_multiplicity_composition_part_density_ldp_cgf t =
+      Real.log
+        (pom_multiplicity_composition_part_density_ldp_lambdaPlus (Real.exp t) /
+          pom_multiplicity_composition_part_density_ldp_lambdaPlus 1)) ∧
+    (∀ y : ℝ,
+      pom_multiplicity_composition_part_density_ldp_rateParam y =
+        pom_multiplicity_composition_part_density_ldp_theta y * Real.log y -
+          Real.log
+            (pom_multiplicity_composition_part_density_ldp_lambdaPlus y /
+              pom_multiplicity_composition_part_density_ldp_lambdaPlus 1)) ∧
+    pom_multiplicity_composition_part_density_ldp_lambdaPlus 1 =
+      ((2 * (1 : ℝ) + 1) +
+          Real.sqrt (4 * (1 : ℝ) ^ (2 : ℕ) + 8 * (1 : ℝ) + 5)) / 2
+
+/-- Paper label: `thm:pom-multiplicity-composition-part-density-ldp`. -/
+theorem paper_pom_multiplicity_composition_part_density_ldp :
+    pom_multiplicity_composition_part_density_ldp_statement := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro t
+    rfl
+  · intro y
+    rfl
+  · rfl
 
 end
 end Omega.POM

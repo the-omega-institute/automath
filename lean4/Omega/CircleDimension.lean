@@ -68,6 +68,7 @@ import Omega.CircleDimension.ClosedLoopUnitaryHorizonRepulsionToeplitz
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.CirclePowerNoContinuousSection
 import Omega.CircleDimension.ConnectedPhaseProfiniteFiberIndecomposable
+import Omega.CircleDimension.ConclusionPoissonBivariateIsotropicNoiseInvariance
 import Omega.CircleDimension.CoherenceTimeBarrier2Pow
 import Omega.CircleDimension.CoherenceTimeBarrier2PowKOverD
 import Omega.CircleDimension.CoherenceTimeLowerBoundMOneOverD
@@ -404,3 +405,5 @@ import Omega.CircleDimension.ZnProcyclicAndMinGenerators
 import Omega.CircleDimension.CdimS4V4PrymA2PolarizationClass
 import Omega.CircleDimension.PrefixPhaseCircleOrthogonalResourceLaw
 import Omega.CircleDimension.PoissonKLEighth
+import Omega.CircleDimension.XiLogisticBoundaryMassInvertsSpacing
+import Omega.CircleDimension.XiLogisticOptimalSpacingSpanLaw

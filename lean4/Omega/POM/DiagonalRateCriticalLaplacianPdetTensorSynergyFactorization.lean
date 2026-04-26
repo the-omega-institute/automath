@@ -82,4 +82,38 @@ theorem pom_diagonal_rate_critical_laplacian_pdet_tensor_synergy_factorization_h
             (∏ j, r j) ^ (k - 1) := by
             simp [Q, R]
 
+/-- Paper label:
+`cor:pom-diagonal-rate-critical-laplacian-pdet-tensor-synergy-geometricmean-stripped`. -/
+theorem paper_pom_diagonal_rate_critical_laplacian_pdet_tensor_synergy_geometricmean_stripped
+    {k l : ℕ} (q : Fin k → ℚ) (r : Fin l → ℚ) (Gq Gr : ℚ) :
+    (∏ p : Fin k × Fin l, (q p.1 * Gq) * (r p.2 * Gr)) =
+      ((∏ i, q i) * Gq ^ k) ^ l * ((∏ j, r j) * Gr ^ l) ^ k := by
+  classical
+  set Q : ℚ := ∏ i, q i
+  set R : ℚ := ∏ j, r j
+  have hq : (∏ p : Fin k × Fin l, q p.1) = Q ^ l := by
+    rw [Fintype.prod_prod_type]
+    simp [Q, Finset.prod_const, Finset.prod_pow]
+  have hr : (∏ p : Fin k × Fin l, r p.2) = R ^ k := by
+    rw [Fintype.prod_prod_type]
+    simp [R, Finset.prod_const]
+  have hGq : (∏ _p : Fin k × Fin l, Gq) = (Gq ^ k) ^ l := by
+    simp [Finset.prod_const, Fintype.card_prod, pow_mul]
+  have hGr : (∏ _p : Fin k × Fin l, Gr) = (Gr ^ l) ^ k := by
+    rw [Finset.prod_const]
+    simp only [Finset.card_univ, Fintype.card_prod, Fintype.card_fin]
+    rw [← pow_mul]
+    rw [Nat.mul_comm k l]
+  calc
+    (∏ p : Fin k × Fin l, (q p.1 * Gq) * (r p.2 * Gr))
+        = (∏ p : Fin k × Fin l, q p.1) * (∏ p : Fin k × Fin l, Gq) *
+            ((∏ p : Fin k × Fin l, r p.2) * (∏ p : Fin k × Fin l, Gr)) := by
+          simp [Finset.prod_mul_distrib]
+    _ = Q ^ l * (Gq ^ k) ^ l * (R ^ k * (Gr ^ l) ^ k) := by
+          rw [hq, hr, hGq, hGr]
+    _ = (Q * Gq ^ k) ^ l * (R * Gr ^ l) ^ k := by
+          rw [mul_pow, mul_pow]
+    _ = ((∏ i, q i) * Gq ^ k) ^ l * ((∏ j, r j) * Gr ^ l) ^ k := by
+          simp [Q, R]
+
 end Omega.POM

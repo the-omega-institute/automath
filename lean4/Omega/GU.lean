@@ -5,6 +5,7 @@ import Omega.GU.BdryBinaryLayeringOrbitClassification
 import Omega.GU.BdryChiTwistedBinaryLabelExistence
 import Omega.GU.BdryEquivariantRegisterMinDegreeChoose
 import Omega.GU.BdryFoldGaugeSignAbelianization
+import Omega.GU.BdryGap33CassiniFactorization
 import Omega.GU.BdryFibSquareIdentity
 import Omega.GU.BdryOrientationBlockDecompositionOddVisibility
 import Omega.GU.BdryOrientationCartesianPowerParityCollapse
@@ -84,6 +85,7 @@ import Omega.GU.GroupJGPrimeRegisterPhaseBohrDense
 import Omega.GU.GroupJGPrimeRegisterPhaseScanDense
 import Omega.GU.GroupJGTwoPrimeEulerPhaseInjective
 import Omega.GU.GutHalfScaleZeroBlockCoversStableSpace
+import Omega.GU.GutALocalOptimality
 import Omega.GU.HolomorphicMomentRigidity
 import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GU.JGBinomialFilteringFourierExtraction
