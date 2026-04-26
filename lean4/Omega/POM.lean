@@ -1,4 +1,5 @@
 import Omega.POM.CurvatureIndependentDivergent
+import Omega.POM.TensorProductRootGaloisDegreeRigidity
 import Omega.POM.A4TCharpolyDegenerateGalois
 import Omega.POM.VarianceInterceptEqualsGroundstateEntropy
 import Omega.POM.HalfEndpointConstantSubexpMomInvisible
