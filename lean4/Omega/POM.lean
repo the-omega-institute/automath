@@ -77,6 +77,7 @@ import Omega.POM.A4TNewmanOcticFieldArithmetic
 import Omega.POM.A4TNewmanTransversality
 import Omega.POM.A4TNewmanLinearResponseConstant
 import Omega.POM.A4TNewmanShortElimination
+import Omega.POM.A4TNewmanReciprocalLocking
 import Omega.POM.A4TNewmanPoleQuadraticResonance
 import Omega.POM.A4TPuiseuxExpansionAndDeltaAsymptotics
 import Omega.POM.A4NewmanU4AlgebraicCertificate
