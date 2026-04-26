@@ -1,1 +1,2 @@
 import Omega.StableArithmetic.MedialityFailure
+import Omega.StableArithmetic.NonAffineWitness
