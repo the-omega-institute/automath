@@ -576,6 +576,7 @@ import Omega.Zeta.XiPiPowerSmithComplementarity
 import Omega.Zeta.XiTimePart58aDirichletMinimalWitnessWorstExponent
 import Omega.Zeta.XiTimePart57bcFrozenSupportExactLocalInversionRate
 import Omega.Zeta.XiHorizonB3SectorFrameDecomposition
+import Omega.Zeta.XiHorizonCarathClosure
 import Omega.Zeta.XiPointAtomEndpointJetDepthLogarithmic
 import Omega.Zeta.XiTimePart60fZGZeroPrefixLogDensity
 import Omega.Zeta.XiTimePart60f2ZgDensityMeasureNonGibbs
