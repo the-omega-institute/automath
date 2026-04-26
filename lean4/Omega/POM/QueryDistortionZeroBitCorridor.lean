@@ -26,4 +26,12 @@ theorem paper_pom_query_distortion_zero_bit_corridor
     rw [hplane β hβ0 hβ1]
     exact div_pos hR (sub_pos.mpr hβ1)
 
+/-- Paper label: `cor:pom-query-distortion-zero-bit-threshold-auditable`. -/
+theorem paper_pom_query_distortion_zero_bit_threshold_auditable
+    {m : ℕ} {S2 Col delta0 : ℝ}
+    (hCol : Col = S2 / (2 : ℝ) ^ (2 * m))
+    (hdelta0 : delta0 = 1 - Col) :
+    delta0 = 1 - S2 / (2 : ℝ) ^ (2 * m) := by
+  rw [hdelta0, hCol]
+
 end Omega.POM
