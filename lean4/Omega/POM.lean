@@ -258,6 +258,7 @@ import Omega.POM.CRTSpatializationPrimeBudget
 import Omega.POM.SchurChannelsModPNFromPtypicalGhost
 import Omega.POM.PrimeRegisterQuantileBudget
 import Omega.POM.PrimeRegisterQQuotaFamily
+import Omega.POM.LkContinuumNDDetCosh
 import Omega.POM.FiberFibFusionRealizationGeneralX
 import Omega.POM.CapacityCollisionDataProcessing
 import Omega.POM.QueryDistortionCriticalSlopeInvertsHalfPressure

@@ -218,6 +218,7 @@ import Omega.Zeta.XiFiniteRhoScanTraceClosedForm
 import Omega.Zeta.XiFoldBayesInfonceNewtonBinomialInversion
 import Omega.Zeta.XiTimePart47caInfonceSignedHausdorffInversion
 import Omega.Zeta.XiFoldbinEvenWindowParitySectionCenterIntersection
+import Omega.Zeta.XiJoukowskyGodelResultantQuadraticNormClosed
 import Omega.Zeta.XiFoldbinEscortTvCollapseOnebitGibbs
 import Omega.Zeta.XiFoldbinGaugeCollisionRigidShift
 import Omega.Zeta.XiFoldbinGaugeVolumeThreeFactorProduct
