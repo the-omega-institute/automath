@@ -1,3 +1,4 @@
+import Omega.POM.TorsionSchurDualMicroscope
 import Omega.POM.PrimOddEven
 import Omega.POM.CurvatureIndependentDivergent
 import Omega.POM.CmRigidityQsqrtm15

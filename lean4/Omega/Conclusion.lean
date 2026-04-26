@@ -1,3 +1,4 @@
+import Omega.Conclusion.FiniteSignatureUnifiesEquivalenceAndOptimization
 import Omega.Conclusion.Window6GodelBase64InverseLimit
 import Omega.Conclusion.FinitePrimesupportQuotientOrderCharacterization
 import Omega.Conclusion.ChainMarkovRigidityFourfoldEquivalence
