@@ -200,6 +200,7 @@ import Omega.Zeta.XiFiniteKernelZetaRationalDecidability
 import Omega.Zeta.XiKernelSizeGcdLcmExactMultiplicativity
 import Omega.Zeta.FiniteQuotientPhaseCompressionPrecisionLowerBound
 import Omega.Zeta.FinitePartResidueConstantRHSqueeze
+import Omega.Zeta.XiTimePart9xbPrefixWordsFaithfulAffineRealization
 import Omega.Zeta.XiTimePart60ab2LogcmShiftEvenZeta
 import Omega.Zeta.XiTimePart60acbGaugeConstantRecoversEvenZeta
 import Omega.Zeta.XiFiniteFrontierCertificate
