@@ -1,5 +1,6 @@
 import Omega.Conclusion.ScreenBernoulliExactnessTutteLaw
 import Omega.Conclusion.OffcriticalShiftCarriesNoNewGeometry
+import Omega.Conclusion.OracleFixedHistogramNearExhaustiveQueryLowerBound
 import Omega.Conclusion.OracleGapSaturationEdgeEnergy
 import Omega.Conclusion.MicroescortOracleCapacityClosedForm
 import Omega.Conclusion.SmithLocalZetaHadamardLinearization

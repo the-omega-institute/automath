@@ -1,5 +1,6 @@
 import Omega.POM.MultiplicityCompositionChiVsSupersym
 import Omega.POM.DiagonalRateTwoLayerQuartic
+import Omega.POM.DisjointnessGraphTensorPowerSpectrum
 import Omega.POM.DiagonalRateFoldedCurvatureAuditable
 import Omega.POM.CapacitySaturationDiscriminant
 import Omega.POM.OracleSigmaDeterminesTauOn01
