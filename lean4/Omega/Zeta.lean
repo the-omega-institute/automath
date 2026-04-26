@@ -1845,3 +1845,4 @@ import Omega.Zeta.XiFoldbinLastbitCompleteReadoutStatistic
 import Omega.Zeta.XiJGTransportResultantLeadingRigidity
 import Omega.Zeta.XiTimePart63bFixedqSchurPacketRecoversLowMomentsPrimitives
 import Omega.Zeta.XiGramEntropyLowerBoundByCoherence
+import Omega.Zeta.XiTimePart62baPadicKernelGrowthLocalZetaSingleTailPole

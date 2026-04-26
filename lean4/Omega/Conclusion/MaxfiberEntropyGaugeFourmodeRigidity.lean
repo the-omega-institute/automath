@@ -127,4 +127,40 @@ theorem paper_conclusion_fiber_entropy_jensen_pimsner_double_bound :
   · intro hmax
     exact log_average_eq_log_max_of_all_max hn d hmax
 
+/-- Paper label: `cor:conclusion-uniform-visible-baseline-double-gap`. -/
+theorem paper_conclusion_uniform_visible_baseline_double_gap {n m : Nat}
+    (hn : 0 < n) (d : Fin n -> Nat) (hd : forall i, 0 < d i)
+    (hsum : (Finset.univ.sum fun i : Fin n => d i) = 2 ^ m) :
+    fiberEntropyPotential d <= Real.log (((2 ^ m : Nat) : Real) / n) ∧
+      Real.log (((2 ^ m : Nat) : Real) / n) <= Real.log (maxFiberSize d : Real) ∧
+      Real.log (maxFiberSize d : Real) - fiberEntropyPotential d >=
+        Real.log (((maxFiberSize d : Real) * n) / ((2 ^ m : Nat) : Real)) := by
+  rcases paper_conclusion_fiber_entropy_jensen_pimsner_double_bound hn d hd with
+    ⟨hJensen, hAverageMax, _, _⟩
+  have hsumReal : (∑ i : Fin n, (d i : ℝ)) = ((2 ^ m : Nat) : ℝ) := by
+    exact_mod_cast hsum
+  have hAverage :
+      averageFiberSize d = (((2 ^ m : Nat) : ℝ) / n) := by
+    unfold averageFiberSize
+    rw [hsumReal]
+  have hleft : fiberEntropyPotential d <= Real.log (((2 ^ m : Nat) : Real) / n) := by
+    simpa [hAverage] using hJensen
+  have hmiddle :
+      Real.log (((2 ^ m : Nat) : Real) / n) <= Real.log (maxFiberSize d : Real) := by
+    simpa [hAverage] using hAverageMax
+  refine ⟨hleft, hmiddle, ?_⟩
+  have hmax_ne : (maxFiberSize d : ℝ) ≠ 0 :=
+    (maxFiberSize_pos hn d hd).ne'
+  have hn_ne : (n : ℝ) ≠ 0 := by exact_mod_cast hn.ne'
+  have hpow_ne : (((2 ^ m : Nat) : ℝ) : ℝ) ≠ 0 := by
+    exact_mod_cast (pow_ne_zero m (by norm_num : (2 : Nat) ≠ 0))
+  have hlog_gap :
+      Real.log (maxFiberSize d : ℝ) - Real.log (((2 ^ m : Nat) : ℝ) / n) =
+        Real.log (((maxFiberSize d : ℝ) * n) / ((2 ^ m : Nat) : ℝ)) := by
+    rw [Real.log_div (mul_ne_zero hmax_ne hn_ne) hpow_ne,
+      Real.log_mul hmax_ne hn_ne, Real.log_div hpow_ne hn_ne]
+    ring
+  rw [← hlog_gap]
+  linarith
+
 end Omega.Conclusion
