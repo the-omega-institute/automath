@@ -38,6 +38,7 @@ import Omega.Zeta.XiCycleSumsDetermineTimeCohomology
 import Omega.Zeta.XiTimePart66PeriodizedBernoulliNonrajchmanNoLp
 import Omega.Zeta.XiTimePart66FibonacciVisibleMultiplierNoL2
 import Omega.Zeta.XiTimePart66ZeroDensityNeverSufficient
+import Omega.Zeta.XiTimePart66MacroResonanceLogAbundance
 import Omega.Zeta.XiToeplitzMinEigControlsDepth
 import Omega.Zeta.LocalizedIntegersDivisibilityTopologicalRigidity
 import Omega.Zeta.XiTimePart62dgFiberReducedEulerWittenParity
