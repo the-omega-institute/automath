@@ -175,6 +175,7 @@ import Omega.Zeta.PrefixAuditExplicitStoppingFrontier
 import Omega.Zeta.XiExtensionPreservingInitialObject
 import Omega.Zeta.XiTimePart9zlGcdLcmCompilerPrimorialLowerBound
 import Omega.Zeta.XiTimePart9zWindow6CanonicalLift
+import Omega.Zeta.XiTimePart9zePositiveZeroTempGeometricSplitting
 import Omega.Zeta.XiTimePart9zlChainArithmeticHeightFormula
 import Omega.Zeta.XiTimePart9jLogBudgetLowerBound
 import Omega.Zeta.XiTimePart9jSoftFirstfitConjectureInstance
