@@ -114,6 +114,7 @@ import Omega.POM.MultiplicityCompositionSharpMainTermFromRenewal
 import Omega.POM.MultiplicityCompositionMaxpartGumbelGeneralq
 import Omega.POM.MultiplicityCompositionMaxPartGumbel
 import Omega.POM.MultiplicityCompositionPalmSizeBias
+import Omega.POM.MultiplicityCompositionBrownBridgeInvariance
 import Omega.POM.MultiplicityLambdaqDerivativeGibbs
 import Omega.POM.InjectivizationSideinfoExactAlphabet
 import Omega.POM.FiniteAuditBudgetFactorcodeUndecidable
