@@ -1339,3 +1339,4 @@ import Omega.POM.AnomSupportedOnBCKernel
 import Omega.POM.SchurEnvelopeLpExponentIdentity
 import Omega.POM.OracleGapAreaUniversalBoundsBetaCrit
 import Omega.POM.FiberIndexLdpFromCollisionSpectrum
+import Omega.POM.EllipticCircleDimensionMinimality
