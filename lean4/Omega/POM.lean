@@ -220,6 +220,7 @@ import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.BooleanCircuitProjectionBudget
 import Omega.POM.BoundedPerturbationInvariance
 import Omega.POM.MomLiftFourierDistribution
+import Omega.POM.SchurTraceJacobiTrudiEulerPrimitiveFiber
 import Omega.POM.FiberLabelDistributionInversion
 import Omega.POM.CRTSpatializationPrimeBudget
 import Omega.POM.PrimeRegisterQuantileBudget
