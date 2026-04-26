@@ -2,3 +2,4 @@ import Omega.StableArithmetic.StableAuditPrimeFieldRedundancy
 import Omega.StableArithmetic.MedialityFailure
 import Omega.StableArithmetic.NonAffineWitness
 import Omega.StableArithmetic.PrimeStabilization
+import Omega.StableArithmetic.PrimaryClosure
