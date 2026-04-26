@@ -1219,6 +1219,7 @@ import Omega.POM.MultiplicityGibbsIdentity
 import Omega.POM.TruncationDefectGaugeCoboundary
 import Omega.POM.FiberInhomBernoulliPosteriorHardcore
 import Omega.POM.ReplicaSoftcorePerronFibonacciFixedPoint
+import Omega.POM.ReplicaSoftcoreExceptionalCharpolyLinearCoefficient
 import Omega.POM.ResolutionThreshold
 import Omega.POM.InjectivizationBinaryAuxbitsExact
 import Omega.POM.HiddenBitFirstNon10Gate
