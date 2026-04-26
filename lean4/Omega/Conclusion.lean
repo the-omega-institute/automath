@@ -1,3 +1,4 @@
+import Omega.Conclusion.OffcriticalShiftCarriesNoNewGeometry
 import Omega.Conclusion.OracleGapSaturationEdgeEnergy
 import Omega.Conclusion.MicroescortOracleCapacityClosedForm
 import Omega.Conclusion.SmithLocalZetaHadamardLinearization
