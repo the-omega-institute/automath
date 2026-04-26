@@ -140,6 +140,7 @@ import Omega.Zeta.AuditableProfiniteChebotarevTradeoff
 import Omega.Zeta.AuditableProfiniteChebotarevFinite
 import Omega.Zeta.AuditableProfiniteChebotarevBalanceTriangle
 import Omega.Zeta.AuditableProfiniteChebotarevThreeBudgetDeterministic
+import Omega.Zeta.LocalizedIntegersHomClassification
 import Omega.Zeta.PrefixAuditExplicitStoppingFrontier
 import Omega.Zeta.XiExtensionPreservingInitialObject
 import Omega.Zeta.XiTimePart9zlGcdLcmCompilerPrimorialLowerBound

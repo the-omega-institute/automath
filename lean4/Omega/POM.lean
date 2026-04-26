@@ -40,6 +40,7 @@ import Omega.POM.PomSubcriticalOccupancyVarianceSecondOrder
 import Omega.POM.GrhMixUpper
 import Omega.POM.PhaseLockDiscriminantMinus15Splitting
 import Omega.POM.PressureCumulants
+import Omega.POM.PressureDerivativesFromEscort
 import Omega.POM.TruncationDefectCocycle
 import Omega.POM.ToggleProductComponents
 import Omega.POM.ToggleScanLCMTensorization
