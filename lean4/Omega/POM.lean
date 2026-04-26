@@ -59,6 +59,7 @@ import Omega.POM.OccupancyFunctionalCollisionExpansion
 import Omega.POM.PomSubcriticalOccupancyVarianceSecondOrder
 import Omega.POM.GrhMixUpper
 import Omega.POM.PhaseLockDiscriminantMinus15Splitting
+import Omega.POM.ResonancePolelineExponentTranscendenceQ9_13
 import Omega.POM.PressureCumulants
 import Omega.POM.PressureDerivativesFromEscort
 import Omega.POM.TruncationDefectCocycle
