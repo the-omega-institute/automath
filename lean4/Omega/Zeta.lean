@@ -221,6 +221,7 @@ import Omega.Zeta.XiCauchyPoissonEntropyAuditCircleAverage
 import Omega.Zeta.XiRootUnityFilterSingleClassInjection
 import Omega.Zeta.XiLissajousCyclicOrbitAliasLattice
 import Omega.Zeta.XiTimePart60abZeroBlockForcesBinomialFactor
+import Omega.Zeta.XiTwoParamDisjointnessResultantIntegerFibonacci
 import Omega.Zeta.XiTimePart60ab2StableSpectrumSelfreciprocalCenter
 import Omega.Zeta.XiTimePart60ab2ExactDarkModeArithmeticCriterion
 import Omega.Zeta.XiMultichannelWitnessKappaOrAnom

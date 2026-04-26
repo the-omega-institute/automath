@@ -53,6 +53,36 @@ def largeQExpansion
     (_D : pom_multiplicity_composition_shannon_entropy_rate_generalq_data) : Prop :=
   pom_multiplicity_lambdaq_large_q_asymptotic_statement
 
+/-- Snake-case alias for the closed-form clause used by the paper index. -/
+def closed_form
+    (D : pom_multiplicity_composition_shannon_entropy_rate_generalq_data) : Prop :=
+  D.closedForm
+
+/-- Snake-case alias for the zero-endpoint clause used by the paper index. -/
+def h_zero
+    (D : pom_multiplicity_composition_shannon_entropy_rate_generalq_data) : Prop :=
+  D.endpointZero
+
+/-- Snake-case alias for the large-`q` endpoint clause used by the paper index. -/
+def h_tends_zero
+    (D : pom_multiplicity_composition_shannon_entropy_rate_generalq_data) : Prop :=
+  D.endpointInfinity
+
+/-- Snake-case alias for the analytic monotonicity clause used by the paper index. -/
+def analytic_strict_decreasing
+    (D : pom_multiplicity_composition_shannon_entropy_rate_generalq_data) : Prop :=
+  D.strictlyDecreasing
+
+/-- Snake-case alias for the small-`q` expansion clause used by the paper index. -/
+def small_q_asymptotic
+    (D : pom_multiplicity_composition_shannon_entropy_rate_generalq_data) : Prop :=
+  D.smallQExpansion
+
+/-- Snake-case alias for the large-`q` expansion clause used by the paper index. -/
+def large_q_asymptotic
+    (D : pom_multiplicity_composition_shannon_entropy_rate_generalq_data) : Prop :=
+  D.largeQExpansion
+
 lemma closedForm_holds
     (D : pom_multiplicity_composition_shannon_entropy_rate_generalq_data) :
     D.closedForm := by
@@ -75,8 +105,8 @@ open pom_multiplicity_composition_shannon_entropy_rate_generalq_data
 `prop:pom-multiplicity-composition-shannon-entropy-rate-generalq`. -/
 theorem paper_pom_multiplicity_composition_shannon_entropy_rate_generalq
     (D : pom_multiplicity_composition_shannon_entropy_rate_generalq_data) :
-    D.closedForm ∧ D.endpointZero ∧ D.endpointInfinity ∧ D.strictlyDecreasing ∧
-      D.smallQExpansion ∧ D.largeQExpansion := by
+    D.closed_form ∧ D.h_zero ∧ D.h_tends_zero ∧ D.analytic_strict_decreasing ∧
+      D.small_q_asymptotic ∧ D.large_q_asymptotic := by
   exact
     ⟨D.closedForm_holds, D.endpointZeroValue_eq, D.endpointInfinityValue_eq,
       D.strictlyDecreasing_holds, paper_pom_multiplicity_lambdaq_taylor_q0 D.taylorData,
