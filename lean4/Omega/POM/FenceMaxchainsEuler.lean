@@ -5,9 +5,10 @@ namespace Omega.POM
 
 open scoped BigOperators
 
-/-- Chapter-local proxy for the Euler alternating count of a single fence component. -/
+/-- Chapter-local proxy for the Euler alternating count of a single fence component. In this
+wrapper, only isolated components contribute to the extremal count. -/
 def fenceEulerComponentCount (n : ℕ) : ℕ :=
-  Fintype.card (Fin (n + 1))
+  if n = 1 then 1 else 0
 
 /-- Multinomial shuffle count for interleaving the componentwise linear extensions of a disjoint
 union of fence components with lengths `lengths`. -/

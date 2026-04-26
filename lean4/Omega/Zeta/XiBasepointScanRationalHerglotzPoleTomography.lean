@@ -161,4 +161,22 @@ theorem paper_xi_basepoint_scan_rational_herglotz_pole_tomography
 
 end XiBasepointScanPoleDatum
 
+/-- For a single Lorentzian atom with width parameter `w = 1 + δ`, the normalized amplitude
+`a = 4δ / w²` is positive and bounded by `1`. This is the algebraic consistency relation used by
+the paper's half-width test. -/
+theorem paper_xi_lorentzian_rigidity_amplitude_halfwidth {delta : ℝ} (hdelta : 0 < delta) :
+    let w := 1 + delta
+    let a := 4 * delta / w ^ 2
+    w = 1 + delta ∧ a = 4 * (w - 1) / w ^ 2 ∧ 0 < a ∧ a ≤ 1 := by
+  dsimp
+  refine ⟨rfl, ?_, ?_, ?_⟩
+  · ring
+  · have hw_pos : 0 < 1 + delta := by linarith
+    exact div_pos (by nlinarith) (sq_pos_of_pos hw_pos)
+  · have hw_pos : 0 < 1 + delta := by linarith
+    have hsq_pos : 0 < (1 + delta) ^ 2 := sq_pos_of_pos hw_pos
+    have hbound : 4 * delta ≤ (1 + delta) ^ 2 := by
+      nlinarith [sq_nonneg (delta - 1)]
+    exact (div_le_iff₀ hsq_pos).2 (by simpa using hbound)
+
 end Omega.Zeta

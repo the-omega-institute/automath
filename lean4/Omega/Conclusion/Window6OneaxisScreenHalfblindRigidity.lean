@@ -17,4 +17,19 @@ theorem paper_conclusion_window6_oneaxis_screen_halfblind_rigidity
       minimalExactScreenSize = 64 := hSize
       _ = 2 ^ 6 := by norm_num
 
+/-- Paper label: `cor:conclusion-window6-oneaxis-exact-replay-two-scale-obstruction`.
+The one-axis replay obstruction has a global cost scale `32` and an independent local boundary
+support scale `12`. -/
+theorem paper_conclusion_window6_oneaxis_exact_replay_two_scale_obstruction
+    (singleAxisCost minimalExactScreenSize boundaryMinSupport : ℕ) (hCost : singleAxisCost = 32)
+    (hSize : minimalExactScreenSize = 64) (hSupport : boundaryMinSupport = 12) :
+    singleAxisCost = 2 ^ (1 * (6 - 1)) ∧
+      minimalExactScreenSize = 2 ^ 6 ∧
+      boundaryMinSupport = 12 := by
+  rcases
+      paper_conclusion_window6_oneaxis_screen_halfblind_rigidity
+        singleAxisCost minimalExactScreenSize hCost hSize with
+    ⟨hCost', hSize'⟩
+  exact ⟨hCost', hSize', hSupport⟩
+
 end Omega.Conclusion

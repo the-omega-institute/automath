@@ -69,6 +69,24 @@ theorem paper_Phi_m_conjugacy_threshold :
     have hne : ¬ (s = constZero ∨ s = constOne) := by
       simp [hz, ho]
     simp [PhiConjugacySeed, hne]
+
+/-- Lowercase paper-label wrapper for the stabilized inverse and the `m = 2` collapse.
+    thm:Phi_m-conjugacy-threshold -/
+theorem paper_phi_m_conjugacy_threshold :
+    (∀ m : ℕ, 3 ≤ m →
+      Function.LeftInverse (PsiConjugacySeed m) (PhiConjugacySeed m) ∧
+      Function.RightInverse (PsiConjugacySeed m) (PhiConjugacySeed m)) ∧
+    PhiConjugacySeed 2 constZero = PhiConjugacySeed 2 constOne := by
+  refine ⟨?_, ?_⟩
+  · intro m hm
+    have hPhi : PhiConjugacySeed m = fun s => s := PhiConjugacySeed_eq_id hm
+    constructor
+    · intro s
+      simp [PsiConjugacySeed, hPhi]
+    · intro s
+      simp [PsiConjugacySeed, hPhi]
+  · simp [PhiConjugacySeed]
+
 universe u v w
 
 set_option maxHeartbeats 400000 in

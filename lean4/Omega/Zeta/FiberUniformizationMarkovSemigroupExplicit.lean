@@ -120,6 +120,17 @@ private lemma fiberUniformizationSemigroup_decomposition (P : Omega → X) (t : 
   unfold fiberUniformizationSemigroup
   ring
 
+/-- Paper label: `prop:xi-fiber-uniformization-spectral-decay-equals-exp`.
+The explicit uniformization semigroup splits into the fiber-uniform component and an
+exponentially damped transverse component. -/
+theorem paper_xi_fiber_uniformization_spectral_decay_equals_exp {Omega X : Type}
+    [Fintype Omega] [DecidableEq Omega] [Fintype X] [DecidableEq X] (P : Omega → X)
+    (t : ℝ) (μ : Omega → ℝ) :
+    fiberUniformizationSemigroup P t μ =
+      fun ω => fiberReflectorReal P μ ω + Real.exp (-t) * (μ ω - fiberReflectorReal P μ ω) := by
+  funext ω
+  exact fiberUniformizationSemigroup_decomposition P t μ ω
+
 /-- Paper label: `thm:xi-fiber-uniformization-markov-semigroup-explicit`. The idempotent
 fiber reflector yields the closed form `e^{-t} I + (1 - e^{-t}) K`, hence the semigroup law,
 the initial value, and pointwise convergence to the reflector. -/
@@ -162,6 +173,28 @@ theorem paper_xi_fiber_uniformization_markov_semigroup_explicit {Omega X : Type}
           (nhds (fiberReflectorReal P μ ω + 0 * (μ ω - fiberReflectorReal P μ ω))) :=
       tendsto_const_nhds.add hmul
     simpa [fiberUniformizationSemigroup_decomposition] using hadd
+
+/-- Concrete KL-gap/index-cap data for the fiber-uniformization semigroup. The decay comparison
+is the convexity estimate along the affine mixture, and `klGap0_le_indexCap` records the
+Pimsner--Popa/Jones index cap for the initial gap. -/
+structure xi_fiber_uniformization_kl_gap_exp_decay_index_cap_Data where
+  klGap : ℝ → ℝ
+  decay : ℝ → ℝ
+  indexCap : ℝ
+  decay_nonneg : ∀ t : ℝ, 0 ≤ decay t
+  klGap_convex_decay : ∀ t : ℝ, klGap t ≤ decay t * klGap 0
+  klGap0_le_indexCap : klGap 0 ≤ indexCap
+
+/-- Paper label: `prop:xi-fiber-uniformization-kl-gap-exp-decay-index-cap`.
+The convexity decay estimate and the initial index cap combine by monotonicity of multiplication
+by the nonnegative decay factor. -/
+theorem paper_xi_fiber_uniformization_kl_gap_exp_decay_index_cap
+    (D : xi_fiber_uniformization_kl_gap_exp_decay_index_cap_Data) (t : ℝ) :
+    D.klGap t ≤ D.decay t * D.klGap 0 ∧ D.klGap t ≤ D.decay t * D.indexCap := by
+  constructor
+  · exact D.klGap_convex_decay t
+  · exact le_trans (D.klGap_convex_decay t)
+      (mul_le_mul_of_nonneg_left D.klGap0_le_indexCap (D.decay_nonneg t))
 
 end FiberUniformizationMarkovSemigroupExplicit
 

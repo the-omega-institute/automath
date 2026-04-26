@@ -79,6 +79,13 @@ theorem epsilonMachineZeroRunPGF_closed (z : ℚ) :
   · simp [h]
   · field_simp [h]
 
+/-- After a zero block of length `n`, the next-`1` conditional law is the shifted Fibonacci ratio
+from the local epsilon-machine recursion. This is the chapter-local closed form used in the paper's
+zero-run analysis. -/
+theorem paper_fold_gauge_anomaly_zero_run_fibonacci (n : ℕ) :
+    epsilonMachineZeroRunAlpha (n + 1) = (Nat.fib (n + 3) : ℚ) / (2 * Nat.fib (n + 5)) := by
+  simp [epsilonMachineZeroRunAlpha, Nat.add_assoc]
+
 /-- Exact zero-run length package from the Fibonacci/Mobius epsilon-machine seeds.
     cor:fold-gauge-anomaly-epsilon-machine-zero-run-length -/
 theorem paper_fold_gauge_anomaly_epsilon_machine_zero_run_length :

@@ -8,6 +8,7 @@ import Omega.DerivedConsequences
 import Omega.EA
 import Omega.Experiments
 import Omega.FoldResidualTime
+import Omega.FoldComputability
 import Omega.Folding
 import Omega.Frontier
 import Omega.GU
@@ -28,6 +29,7 @@ import Omega.RatioResultant
 import Omega.RecursiveAddressing
 import Omega.SPG
 import Omega.StatisticalStability
+import Omega.SyncKernelRealInput
 import Omega.SyncKernelWeighted
 import Omega.Topos
 import Omega.TypedAddressBiaxialCompletion

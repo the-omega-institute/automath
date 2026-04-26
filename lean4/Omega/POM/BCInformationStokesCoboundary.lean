@@ -49,6 +49,12 @@ theorem paper_pom_bc_information_stokes_coboundary (a b : ℕ) (ha : 0 < a) (hb 
   rw [hMicroToKappa, hMiddleToKappa]
   ring
 
+/-- Paper-facing corollary wrapper: in the concrete two-fiber Beck--Chevalley model, the KL
+defect is exactly the curvature average. `cor:pom-bc-kl-as-curvature-average` -/
+theorem paper_pom_bc_kl_as_curvature_average (a b : ℕ) (ha : 0 < a) (hb : 0 < b) :
+    klDiv (sequentialUniformLift a b) (directUniformLift a b) = bcInformationEntropyPotential a b :=
+  (paper_pom_bc_information_stokes_coboundary a b ha hb).1.1
+
 end
 
 end Omega.POM

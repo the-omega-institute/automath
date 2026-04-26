@@ -29,7 +29,9 @@ import Omega.GroupUnification.FreeEnergyComposition
 import Omega.GroupUnification.GeneralNormalForm
 import Omega.GroupUnification.GeneralRigidity
 import Omega.GroupUnification.Gibbs
+import Omega.GroupUnification.GapPrimeSquarefreeDirichletFraction
 import Omega.GroupUnification.GutGaugeRenyiConservation
+import Omega.GroupUnification.GutLogCmNoFixedLinearRecurrence
 import Omega.GroupUnification.GroupComplexTimeCoherenceRadius
 import Omega.GroupUnification.GroupJGAlgebraicScaleFiber2Power
 import Omega.GroupUnification.DerivedDualfingerprintFrobeniusConditionalDecoupling
@@ -62,7 +64,10 @@ import Omega.GroupUnification.ParryEndpointCollapse
 import Omega.GroupUnification.ParryRigidity
 import Omega.GroupUnification.PatiSalamGlobalFormRigidity
 import Omega.GroupUnification.PrimeRegisterNormOneIdeleCoherence
+import Omega.GroupUnification.PullbackBracketFromOperatorEnvelope
 import Omega.GroupUnification.SMSignatureCyclicDivides6
+import Omega.GroupUnification.SMZeckendorfLieAlgebraRigidity
+import Omega.GroupUnification.SMUpliftResidualMediatorM7
 import Omega.GroupUnification.SMSquareResidualRigidityM6
 import Omega.GroupUnification.SecondOrder
 import Omega.GroupUnification.SpreadEquivalence
@@ -95,3 +100,5 @@ import Omega.GroupUnification.Window6SU4EmbeddingRigidity
 import Omega.GroupUnification.Window6SplitExtremalDistanceBridge
 import Omega.GroupUnification.Window6WeylSymmetryGraphAnnihilation
 import Omega.GroupUnification.Window6VisibleDegree6IsotropyObstruction
+import Omega.GroupUnification.ZeckendorfNoAdjacentStrictInclusionImpossible
+import Omega.GroupUnification.ZeckendorfCarryAbsorptionM9

@@ -34,4 +34,11 @@ theorem paper_gut_cyclotomic_specialization_falsifiability
   intro ℓ hℓ
   exact hfinite.mem_toFinset.mpr hℓ
 
+/-- Paper label: `cor:cyclotomic-specialization-falsifiability`. -/
+theorem paper_cyclotomic_specialization_falsifiability
+    (D : CyclotomicSpecializationFalsifiabilityData) :
+    D.residualGcdTrivial →
+      ∃ witnessSet : Finset D.Layer, ∀ l, D.exceptionalLayer l → l ∈ witnessSet := by
+  exact paper_gut_cyclotomic_specialization_falsifiability D
+
 end Omega.GU

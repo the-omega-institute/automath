@@ -78,6 +78,13 @@ theorem abel_constant_shift (logM logM_core vz2 : ℝ)
     (h : logM = logM_core + vz2) :
     logM - logM_core = vz2 := by linarith
 
+/-- Paper-facing wrapper for primitive surgery additivity together with the Abel constant shift.
+    thm:conclusion-realinput40-uv-primitive-surgery-abel-shift -/
+theorem paper_conclusion_realinput40_uv_primitive_surgery_abel_shift
+    (pCore atom logM logMCore vz2 : ℝ) (hshift : logM = logMCore + vz2) :
+    atom + pCore = pCore + atom ∧ logM - logMCore = vz2 := by
+  exact ⟨primitive_surgery_additivity pCore atom, abel_constant_shift logM logMCore vz2 hshift⟩
+
 /-- Collision-output delta shell: the primitive difference is supported on
     a single atom (n=2, c=0, r≡1 mod m). We formalize the indicator
     product identity: 1_{n=2} * 1_{c=0} * 1_{r≡1} vanishes unless all hold.

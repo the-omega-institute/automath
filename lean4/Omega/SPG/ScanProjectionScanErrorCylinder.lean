@@ -32,4 +32,17 @@ theorem paper_scan_projection_address_scan_error_cylinder_package
           (cellComplMass μ (prefixObservation h) P a))) :=
   paper_scan_projection_address_scan_error_cylinder_seeds μ h P
 
+/-- Paper-facing package for `prop:spg-scan-error-cylinder`. -/
+theorem paper_spg_scan_error_cylinder
+    (μ : PMF (Word n)) (h : m ≤ n) (P : Set (Word n)) :
+    (prefixScanError μ h P =
+      Finset.sum Finset.univ (fun a : Word m =>
+        min (cellEventMass μ (prefixObservation h) P a)
+          (cellComplMass μ (prefixObservation h) P a))) ∧
+    (prefixScanError μ h P =
+      Finset.sum (prefixBoundaryCells μ h P) (fun a =>
+        min (cellEventMass μ (prefixObservation h) P a)
+          (cellComplMass μ (prefixObservation h) P a))) :=
+  paper_scan_projection_address_scan_error_cylinder_package μ h P
+
 end Omega.SPG.ScanProjectionScanErrorCylinder

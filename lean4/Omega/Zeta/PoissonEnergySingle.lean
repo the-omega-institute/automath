@@ -177,4 +177,18 @@ theorem paper_singleDefectEnergy_zero_rigidity_package :
    fun t δ ht hm hp => singleDefectEnergy_rational_identity t δ ht hm hp,
    singleDefectEnergy_rational_identity 0 (1/2) (by norm_num) (by norm_num) (by norm_num)⟩
 
+/-- Paper-facing corollary packaging the `t = 0` identity and the cubic asymptotic for the
+single-defect Poisson `L²` energy.
+    cor:xi-finite-defect-poisson-l2-energy-single-defect -/
+theorem paper_xi_finite_defect_poisson_l2_energy_single_defect
+    (m δ : ℝ) (hδ0 : 0 ≤ δ) (hδ1 : δ < 1) :
+    Real.pi * m^2 * (1 / (2 * (1 - δ)) + 1 / (2 * (1 + δ)) - 1) =
+      Real.pi * m^2 * (δ^2 / (1 - δ^2)) ∧
+    Tendsto
+      (fun t : ℝ =>
+        (t + 1)^3 * (Real.pi * m^2 * (δ^2 / ((t + 1) * ((t + 1)^2 - δ^2)))))
+      atTop (𝓝 (Real.pi * (m * δ)^2)) := by
+  refine ⟨singleDefectEnergy_zero m δ hδ0 hδ1, ?_⟩
+  simpa using singleDefectEnergy_cubic_limit m δ
+
 end Omega.Zeta

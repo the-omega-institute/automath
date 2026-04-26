@@ -14,4 +14,13 @@ theorem paper_etds_finite_part_cyclic_lift_mobius_inversion
   intro hMultiple hRecovery
   exact ⟨hMultiple, hRecovery hMultiple⟩
 
+/-- Publication-facing finite-part wrapper for the cyclic-lift multiple-sum Möbius recovery.
+    prop:finite-part-cyclic-lift-mobius-inversion -/
+theorem paper_finite_part_cyclic_lift_mobius_inversion
+    (dirichletMultipleSum mobiusRecovery : Prop)
+    (hMultiple : dirichletMultipleSum)
+    (hRecovery : dirichletMultipleSum → mobiusRecovery) :
+    dirichletMultipleSum ∧ mobiusRecovery := by
+  exact ⟨hMultiple, hRecovery hMultiple⟩
+
 end Omega.Zeta
