@@ -272,6 +272,7 @@ import Omega.GU.Window6FamilyProjectionSphericalHeckeTwoModes
 import Omega.GU.Window6FamilyProjectionWequivariantUniqueness
 import Omega.GU.Window6FiberEdgeCouplingDet
 import Omega.GU.Window6FiberEdgeCouplingPadicWindow
+import Omega.GU.Window6FirstLastClassifier
 import Omega.GU.Window6Foldbin6FiberDifferenceSpectrum
 import Omega.GU.Window6Foldbin6ZeckendorfLowbitProjection
 import Omega.GU.Window6FoldbinGaugeAbelianizationEvenParity
