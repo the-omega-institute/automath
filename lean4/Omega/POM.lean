@@ -200,6 +200,7 @@ import Omega.POM.BayesFullRecoveryHazardMonotone
 import Omega.POM.BayesInfonceThirdOrderLargeK
 import Omega.POM.InfonceFoldThirdOrderLargeK
 import Omega.POM.PartitionGapPositiveKillsHooks
+import Omega.POM.PowerSumHankelPSD
 import Omega.POM.BayesErrorExplicitSharpAsymptotic
 import Omega.POM.BbitOracleCapacityClosedForm
 import Omega.POM.GoldenBinaryChannelContraction
