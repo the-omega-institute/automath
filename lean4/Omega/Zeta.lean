@@ -200,6 +200,7 @@ import Omega.Zeta.XiTimePart60acbGaugeConstantRecoversEvenZeta
 import Omega.Zeta.XiFiniteFrontierCertificate
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiDirichletZeroFreeFromUnifiedZk
+import Omega.Zeta.XiFoldbinInformationSpectrumSinglePointCollapse
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiFourRigidityResidueDepthNormalization
 import Omega.Zeta.DerivedPickPoissonNoFiniteEnergyThermodynamicLimit

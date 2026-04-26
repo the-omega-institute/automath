@@ -200,6 +200,7 @@ import Omega.POM.ReplicaSoftcoreTensorEigenbasis
 import Omega.POM.ReplicaSoftcoreSymEigenbasisBinomialWeights
 import Omega.POM.ReverseKlBoundByDispersion
 import Omega.POM.RemainderBitsRenyiCollisionExtremal
+import Omega.POM.TypicalFiberExponentRenyiTangent
 import Omega.POM.FoldReverseKlControlledByGenus2Partition
 import Omega.POM.FoldCollisionMomentBadPrimesLockedByHankel
 import Omega.POM.CollisionMomentsReplicaFusionSpace
