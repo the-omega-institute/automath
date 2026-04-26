@@ -14,6 +14,7 @@ import Omega.Conclusion.OracleFixedHistogramNearExhaustiveQueryLowerBound
 import Omega.Conclusion.OracleGapSaturationEdgeEnergy
 import Omega.Conclusion.MicroescortOracleCapacityClosedForm
 import Omega.Conclusion.MomentFiniteGoodPrimesCrtReconstruction
+import Omega.Conclusion.PadicHankelGlobalRigidifier
 import Omega.Conclusion.SmithLocalZetaHadamardLinearization
 import Omega.Conclusion.SerrinWulffPositiveGaugeAnomalyExcludes
 import Omega.Conclusion.Window6E64FiniteBorelPartition
