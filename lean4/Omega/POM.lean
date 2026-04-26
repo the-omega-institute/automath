@@ -109,6 +109,7 @@ import Omega.POM.MultiplicityCompositionExponentialMixing
 import Omega.POM.MultiplicityCompositionJointLdpPartcountEnergy
 import Omega.POM.MultiplicityCompositionSharpMainTermFromRenewal
 import Omega.POM.MultiplicityCompositionMaxpartGumbelGeneralq
+import Omega.POM.MultiplicityCompositionMaxPartGumbel
 import Omega.POM.MultiplicityCompositionPalmSizeBias
 import Omega.POM.MultiplicityLambdaqDerivativeGibbs
 import Omega.POM.InjectivizationSideinfoExactAlphabet
@@ -212,6 +213,7 @@ import Omega.POM.BbitOracleCapacityClosedForm
 import Omega.POM.GoldenBinaryChannelContraction
 import Omega.POM.FiberWittenIndexZxMinusOne
 import Omega.POM.MultiplicityCompositionUniformVarianceExplosion
+import Omega.POM.TauCLTLargeThreshold
 import Omega.POM.GoldenGrammarFixedPointRhoAq
 import Omega.POM.GoldenLikelihoodRatioMartingales
 import Omega.POM.GoldenEsscherSymmetrization
