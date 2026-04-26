@@ -108,7 +108,7 @@ lemma signed_companion_lucas_certificate_det7 :
       signed_companion_lucas_certificate_signedDet 7 := by
   native_decide
 
-theorem paper_signed_companion_lucas_certificate :
+theorem signed_companion_lucas_certificate_audited_q2_q23 :
     signed_companion_lucas_certificate_statement := by
   dsimp [signed_companion_lucas_certificate_statement,
     signed_companion_lucas_certificate_range]
