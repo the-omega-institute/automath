@@ -221,6 +221,7 @@ import Omega.POM.CapacityCollisionDataProcessing
 import Omega.POM.MaxfiberOrientationChargePeriodic
 import Omega.POM.MaxfiberSignedIndexExtinctionPeriodic
 import Omega.POM.CapacityPointwiseMinimalMajorization
+import Omega.POM.FiberParallelismPoset
 import Omega.POM.FoldGroupoid2dTqftPartition
 import Omega.POM.CollisionThresholdCapacity
 import Omega.POM.FiniteQWindowDecidableFullAudit
