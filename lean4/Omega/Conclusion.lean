@@ -11,6 +11,7 @@ import Omega.Conclusion.PrimeLogZeroLyapunovCalibration
 import Omega.Conclusion.Window6CubicCentralRelation
 import Omega.Conclusion.Window6LedgerLieDimensionIdentity
 import Omega.Conclusion.UniformGridQuantizedStokesPoincareScale
+import Omega.Conclusion.OnequarterCrossCategoryRigidity
 import Omega.Conclusion.Window6MinimalExactReplaySymmetryBreaking
 import Omega.Conclusion.Window6ShellEscortFourchamberPhaseDiagram
 import Omega.Conclusion.Window6ExteriorShellSmithGeometry

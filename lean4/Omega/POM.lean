@@ -1161,6 +1161,7 @@ import Omega.POM.DiagonalRateRefreshCountSCGFLaguerre
 import Omega.POM.FiniteZeroTempEscortUniformMaxfiber
 import Omega.POM.SpectralInformationSandwich
 import Omega.POM.MicrocanonicalPosteriorEntropyLinearLaw
+import Omega.POM.MicrocanonicalPosteriorMapSuccessDoubleExponential
 import Omega.POM.FiberHodgeSteinTensorizationGap
 import Omega.POM.MultiplicityMicrocanonicalEntropy
 import Omega.POM.MultiplicityAtomMultifractal
