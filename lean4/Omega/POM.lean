@@ -218,6 +218,7 @@ import Omega.POM.ReverseKlBoundByDispersion
 import Omega.POM.RemainderBitsRenyiCollisionExtremal
 import Omega.POM.TypicalFiberExponentRenyiTangent
 import Omega.POM.FoldReverseKlControlledByGenus2Partition
+import Omega.POM.MicrocanonicalFoldBayesSuccessPhaseDiagram
 import Omega.POM.FoldCollisionMomentBadPrimesLockedByHankel
 import Omega.POM.CollisionMomentsReplicaFusionSpace
 import Omega.POM.BlockConsistencyRateBlockReduction
