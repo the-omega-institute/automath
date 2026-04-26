@@ -240,6 +240,7 @@ import Omega.POM.MomLiftFourierDistribution
 import Omega.POM.SchurTraceJacobiTrudiEulerPrimitiveFiber
 import Omega.POM.FiberLabelDistributionInversion
 import Omega.POM.CRTSpatializationPrimeBudget
+import Omega.POM.SchurChannelsModPNFromPtypicalGhost
 import Omega.POM.PrimeRegisterQuantileBudget
 import Omega.POM.PrimeRegisterQQuotaFamily
 import Omega.POM.FiberFibFusionRealizationGeneralX
