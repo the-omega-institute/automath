@@ -561,6 +561,7 @@ import Omega.Zeta.XiTimefiberLeyangEndpointBranchScaling
 import Omega.Zeta.XiToeplitzRankStabilizesDistinctUnitcircleRoots
 import Omega.Zeta.XiToeplitzFirstSingularPrincipalMinorSimpleSpectrum
 import Omega.Zeta.XiToeplitzInertiaStabilizesToKappa
+import Omega.Zeta.XiInertiaStableCountsDiskZeros
 import Omega.Zeta.XiToeplitzDetVerblunsky
 import Omega.Zeta.XiToeplitzPrincipalMinorDiscreteCurvatureRecovery
 import Omega.Zeta.XiToeplitzCurvatureEnergyEquivalence
