@@ -1,3 +1,4 @@
+import Omega.Conclusion.ChainMarkovRigidityFourfoldEquivalence
 import Omega.Conclusion.ScreenBernoulliExactnessTutteLaw
 import Omega.Conclusion.OffcriticalShiftCarriesNoNewGeometry
 import Omega.Conclusion.OracleFixedHistogramNearExhaustiveQueryLowerBound
