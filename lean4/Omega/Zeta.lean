@@ -223,6 +223,7 @@ import Omega.Zeta.XiPoissonCauchyKlMomentLocking
 import Omega.Zeta.XiPoissonKlSixthOrderMu3Mu4
 import Omega.Zeta.XiFoldBiasTangentFactorizationGramPsd
 import Omega.Zeta.XiPhilEndpointAsymmetryLogCorrection
+import Omega.Zeta.XiAbelianVisibleChannelNegativeSupportIncompressible
 import Omega.Zeta.XiCauchyPoissonEntropyAuditCircleAverage
 import Omega.Zeta.XiRootUnityFilterSingleClassInjection
 import Omega.Zeta.TerminalZmTranslationTBranchDiscriminantC3U1

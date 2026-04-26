@@ -223,6 +223,7 @@ import Omega.POM.MaxfiberSignedIndexExtinctionPeriodic
 import Omega.POM.FiberRewriteLocalCLT
 import Omega.POM.CapacityPointwiseMinimalMajorization
 import Omega.POM.FiberParallelismPoset
+import Omega.POM.HankelNullNoPrimitiveResidual
 import Omega.POM.FoldGroupoid2dTqftPartition
 import Omega.POM.CollisionThresholdCapacity
 import Omega.POM.FiniteQWindowDecidableFullAudit
