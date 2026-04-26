@@ -1526,3 +1526,4 @@ import Omega.Conclusion.Window6GeometryProtocolExactTwoBitDeficit
 import Omega.Conclusion.LmaxNotFinitePrimeizable
 import Omega.Conclusion.FinitePrimeSupportProductPhaseLedgerSplit
 import Omega.Conclusion.ZeroCurvatureTowerCanonicalStrictificationUniqueness
+import Omega.Conclusion.DirichletEvenModulusUniformParityObstruction
