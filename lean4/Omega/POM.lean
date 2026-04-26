@@ -923,6 +923,7 @@ import Omega.POM.MicrocanonicalFoldSingletonAndLowComplexityRarity
 import Omega.POM.MicrocanonicalQueryPlusBitsPhase
 import Omega.POM.MicrocanonicalTwoTemperatureCriticalQuadraticLaw
 import Omega.POM.MultiplicativeUpgradeFatalAmplification
+import Omega.POM.MultiplicativeUpgradeNormalDirectSpectrum
 import Omega.POM.MicrocanonicalPosteriorModuliCLT
 import Omega.POM.MicrocanonicalQueryDistortionCriticalWindowCLT
 import Omega.POM.MicrocanonicalTwoTemperatureJsIdentity
