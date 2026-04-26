@@ -15,6 +15,7 @@ import Omega.POM.RcrtPressureReductionLaw
 import Omega.POM.RcrtSelfConsistentSqrtBudget
 import Omega.POM.KkGramDet
 import Omega.POM.SchurTraceFiniteLaplacePrinciple
+import Omega.POM.IdentitySectorCollapseAllSchurChannels
 import Omega.POM.SchurTraceTrivialChannelPrimitiveFiberExpansion
 import Omega.POM.SchurPressureFanDiagram
 import Omega.POM.CollisionKernelAk
