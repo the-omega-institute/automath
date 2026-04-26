@@ -220,6 +220,7 @@ import Omega.POM.MaxfiberSignedIndexExtinctionPeriodic
 import Omega.POM.CapacityPointwiseMinimalMajorization
 import Omega.POM.FoldGroupoid2dTqftPartition
 import Omega.POM.CollisionThresholdCapacity
+import Omega.POM.FiniteQWindowDecidableFullAudit
 import Omega.POM.CatalanMoments
 import Omega.POM.QstarMonotoneComparativeStaticsMEpsilon
 import Omega.POM.CentralizerDetMod5

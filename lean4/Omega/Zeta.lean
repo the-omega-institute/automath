@@ -261,6 +261,7 @@ import Omega.Zeta.XiMaxFiberMonoidCircleDimensionUnbounded
 import Omega.Zeta.XiAddressableGodelWorstcaseRedundancyDiverges
 import Omega.Zeta.XiAddressableGodelAverageBinaryOptimality
 import Omega.Zeta.XiFiniteWindowThresholdResonanceInverseSpectral
+import Omega.Zeta.XiFoldOddFiberExponentialUpperBoundFromV2
 import Omega.Zeta.XiChainInteriorGodelAverageBudgetOptimality
 import Omega.Zeta.XiFiniteRhoScanTraceClosedFormDepthOnly
 import Omega.Zeta.XiHankelFiberMobiusRigidity
