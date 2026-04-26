@@ -151,6 +151,7 @@ import Omega.POM.AnomCohomologyClass
 import Omega.POM.AnomMomentAmplification
 import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.AnomTorusPhaseElimination
+import Omega.POM.AnomCyclotomicPhaseTorsion
 import Omega.POM.ProjMomPsiLaw
 import Omega.POM.TorsionQArtinFactorizationResidueFourier
 import Omega.POM.TorsionQResidueClassFourierRigidity
