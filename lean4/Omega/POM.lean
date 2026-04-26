@@ -1308,3 +1308,4 @@ import Omega.POM.OracleExtremesDoNotDetermineBetaCrit
 import Omega.POM.ThetaGodelizationEllipseMultiplicativeEmbedding
 import Omega.POM.SchurChebotarevPrimeDeviation
 import Omega.POM.SchurSpectrumAuditFromLowMoments
+import Omega.POM.CurvatureCarryDefectZ2ObstructionPrinciple
