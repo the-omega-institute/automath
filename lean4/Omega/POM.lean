@@ -1338,6 +1338,7 @@ import Omega.POM.SchurChebotarevPrimeDeviation
 import Omega.POM.SchurSpectrumAuditFromLowMoments
 import Omega.POM.CurvatureCarryDefectZ2ObstructionPrinciple
 import Omega.POM.RealQZetaMainPole
+import Omega.POM.ResonanceComplexGap2OverQ
 import Omega.POM.AnomSupportedOnBCKernel
 import Omega.POM.SchurEnvelopeLpExponentIdentity
 import Omega.POM.OracleGapAreaUniversalBoundsBetaCrit
