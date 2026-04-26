@@ -413,6 +413,7 @@ import Omega.POM.FiberPosteriorEquivalenceSingleCandidateTest
 import Omega.POM.MaxentMarkovNoOscillationEndpoints
 import Omega.POM.MaxentMarkovGapVsRateSlopeCoupling
 import Omega.POM.MaxFiberAchieversHiddenBitImbalance
+import Omega.POM.MaxFiberAchieversHiddenBitProbSpectrum
 import Omega.POM.MaxFiberPhaseHiddenBitMi
 import Omega.POM.MomqTensorKernelSchurDeterminant
 import Omega.POM.MaxentMarkovSmallDistortionLambda2Slope
