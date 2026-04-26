@@ -220,6 +220,7 @@ import Omega.Zeta.FinitePartResidueConstantRHSqueeze
 import Omega.Zeta.XiTimePart9xbPrefixWordsFaithfulAffineRealization
 import Omega.Zeta.XiTimePart60ab2LogcmShiftEvenZeta
 import Omega.Zeta.XiTimePart60acbGaugeConstantRecoversEvenZeta
+import Omega.Zeta.XiTimePart62ddAddressableGodelExpectedComplexitySourceOptimality
 import Omega.Zeta.XiGoldenW1TwoPhaseArithmeticMean
 import Omega.Zeta.TerminalZMBetaMinpolyIntegralization
 import Omega.Zeta.XiFiniteFrontierCertificate

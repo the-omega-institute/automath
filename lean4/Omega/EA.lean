@@ -129,6 +129,7 @@ import Omega.EA.StableAddNoNullCreation
 import Omega.EA.StableAddNoWrapTruncation
 import Omega.EA.StableAuditAffineCoefficientCriterion
 import Omega.EA.StableAuditAbelianGroupClassification
+import Omega.EA.StableAuditSmallOrderObstruction
 import Omega.EA.StableAddNormalizationRealization
 import Omega.EA.SuccessorStructure
 import Omega.EA.Sync10MemoryHorizonInputStatistics
