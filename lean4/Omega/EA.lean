@@ -146,6 +146,7 @@ import Omega.EA.TimeSpaceCommuting
 import Omega.EA.ValInvariant
 import Omega.EA.Wedderburn
 import Omega.EA.Window6CountermodelCertificate
+import Omega.EA.Window6AffineStableTransfer
 import Omega.EA.ChiLayeredFiberSpectrumRecovery
 import Omega.EA.FoldIndwHighQExtractMaxfiberAndChi
 import Omega.EA.Z2x2JointSpectralMeasure
