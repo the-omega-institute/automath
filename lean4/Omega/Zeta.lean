@@ -21,6 +21,7 @@ import Omega.Zeta.XiToeplitzMinEigControlsDepth
 import Omega.Zeta.LocalizedIntegersDivisibilityTopologicalRigidity
 import Omega.Zeta.XiTimePart62dgFiberReducedEulerWittenParity
 import Omega.Zeta.XiTimePart63bInfiniteDepthFinitePrimeRegisterImpossibility
+import Omega.Zeta.TimePart63bPrimitiveKernelLayerSubgroupMobius
 import Omega.Zeta.XiCoherenceResolutionInformationIdentity
 import Omega.Zeta.Near1PoleParabola
 import Omega.Zeta.XiHorizonProtocolZetaLoopExpansion
