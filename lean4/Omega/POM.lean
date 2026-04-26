@@ -1,3 +1,4 @@
+import Omega.POM.MultiplicityCompositionChiVsSupersym
 import Omega.POM.DiagonalRateTwoLayerQuartic
 import Omega.POM.DiagonalRateFoldedCurvatureAuditable
 import Omega.POM.CapacitySaturationDiscriminant
