@@ -132,6 +132,7 @@ import Omega.Zeta.AuditableProfiniteChebotarevBalanceTriangle
 import Omega.Zeta.AuditableProfiniteChebotarevThreeBudgetDeterministic
 import Omega.Zeta.XiExtensionPreservingInitialObject
 import Omega.Zeta.XiTimePart9zlGcdLcmCompilerPrimorialLowerBound
+import Omega.Zeta.XiTimePart9zWindow6CanonicalLift
 import Omega.Zeta.XiTimePart9zlChainArithmeticHeightFormula
 import Omega.Zeta.XiTimePart9zbkPresingularOneSidedApproximation
 import Omega.Zeta.XiTimePart10FiberTopologyRankoneLaw

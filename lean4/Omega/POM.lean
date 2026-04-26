@@ -55,6 +55,7 @@ import Omega.POM.A4TE8IntersectionFieldDiscriminantIndex
 import Omega.POM.A4TracePrimitiveTwoTerm
 import Omega.POM.CollisionCKClassificationQ234
 import Omega.POM.CollisionCKFibonacci
+import Omega.POM.CollisionCkFibonacciCollapse
 import Omega.POM.CollisionFlowEquivalenceFullShift
 import Omega.POM.A2GutCompletion
 import Omega.POM.A2GutSpectralSplitting
