@@ -1,3 +1,4 @@
+import Omega.POM.CurvatureIndependentDivergent
 import Omega.POM.HalfEndpointConstantSubexpMomInvisible
 import Omega.POM.MultiplicityCompositionChiVsSupersym
 import Omega.POM.DiagonalRateTwoLayerQuartic

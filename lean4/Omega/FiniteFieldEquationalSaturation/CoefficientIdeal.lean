@@ -1,38 +1,39 @@
-import Mathlib.Data.ZMod.Basic
 import Omega.FiniteFieldEquationalSaturation.Linearization
 
 namespace Omega.FiniteFieldEquationalSaturation
 
-/-- The coefficient of a variable after evaluating a linearized magma term at parameters
-`(a,b)` over `ZMod p`. -/
-def finite_field_coefficient_ideal_coeff (p : ℕ) (a b : ZMod p)
-    (t : finite_field_linearization_term) (i : ℕ) : ZMod p :=
-  (finite_field_linearization_coeffSupport t i).sum fun e => a ^ e.1 * b ^ e.2
+/-- Coefficient of the variable `i` and monomial `a^e.1 b^e.2` in the linearized
+interpretation of a magma term. -/
+def finite_field_coefficient_ideal_coeff :
+    finite_field_linearization_term → ℕ → ℕ × ℕ → ℤ
+  | .var j, i, e => if i = j ∧ e = (0, 0) then 1 else 0
+  | .node u v, i, e =>
+      (if e.1 = 0 then 0 else finite_field_coefficient_ideal_coeff u i (e.1 - 1, e.2)) +
+        if e.2 = 0 then 0 else finite_field_coefficient_ideal_coeff v i (e.1, e.2 - 1)
 
-/-- Equation satisfaction in the linear coefficient model: all variable coefficients agree. -/
-def finite_field_coefficient_ideal_satisfied (p : ℕ) (a b : ZMod p)
+/-- The linear magma interpretation satisfies `s = t` for every assignment exactly when all
+variable-monomial coefficients in the two linearized terms agree. -/
+def finite_field_coefficient_ideal_equation_holds
     (s t : finite_field_linearization_term) : Prop :=
-  ∀ i, finite_field_coefficient_ideal_coeff p a b s i =
-    finite_field_coefficient_ideal_coeff p a b t i
+  ∀ i e, finite_field_coefficient_ideal_coeff s i e =
+    finite_field_coefficient_ideal_coeff t i e
 
-/-- The coefficient-ideal generators vanish after substituting `(a,b)` over `ZMod p`. -/
-def finite_field_coefficient_ideal_generators_vanish (p : ℕ) (a b : ZMod p)
+/-- The coefficient ideal generators attached to `s = t` vanish coefficientwise. -/
+def finite_field_coefficient_ideal_generators_vanish
     (s t : finite_field_linearization_term) : Prop :=
-  ∀ i, finite_field_coefficient_ideal_coeff p a b s i -
-    finite_field_coefficient_ideal_coeff p a b t i = 0
+  ∀ i e, finite_field_coefficient_ideal_coeff s i e -
+    finite_field_coefficient_ideal_coeff t i e = 0
 
-/-- Paper label: `cor:finite-field-coefficient-ideal`.  In the linearized finite-field model,
-an equation is satisfied exactly when every coefficient-difference generator vanishes. -/
-theorem paper_finite_field_coefficient_ideal (p : ℕ) (a b : ZMod p)
-    (s t : finite_field_linearization_term) :
-    finite_field_coefficient_ideal_satisfied p a b s t ↔
-      finite_field_coefficient_ideal_generators_vanish p a b s t := by
-  have hs := paper_finite_field_linearization s
-  have ht := paper_finite_field_linearization t
+/-- Paper label: `cor:finite-field-coefficient-ideal`. The coefficient-ideal generators
+vanish exactly when the prefixed linearized coefficient semantics satisfies the equation. -/
+theorem paper_finite_field_coefficient_ideal (s t : finite_field_linearization_term) :
+    finite_field_coefficient_ideal_equation_holds s t ↔
+      finite_field_coefficient_ideal_generators_vanish s t := by
   constructor
-  · intro h i
-    exact sub_eq_zero.mpr (h i)
-  · intro h i
-    exact sub_eq_zero.mp (h i)
+  · intro h i e
+    rw [h i e]
+    simp
+  · intro h i e
+    exact sub_eq_zero.mp (h i e)
 
 end Omega.FiniteFieldEquationalSaturation
