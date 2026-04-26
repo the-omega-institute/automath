@@ -935,6 +935,7 @@ import Omega.Zeta.DerivedLeyangBranchsetAdjacencySpectrumHeatTrace
 import Omega.Zeta.DerivedLeyangArtinMazurZeta
 import Omega.Zeta.XiTimePart62aLeyangBranchArtinMazurZeta
 import Omega.Zeta.DerivedLeyangBranchsetIharaZeta
+import Omega.Zeta.XiTimePart62dhLeyangBranchSpectrumForestIhara
 import Omega.Zeta.DerivedLeyangFouraryRigidity
 import Omega.Zeta.DerivedLeyangProfiniteRigidity
 import Omega.Zeta.DerivedPickPoissonClusteredQuadraticCoerciveLowerBound
