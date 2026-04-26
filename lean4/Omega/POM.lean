@@ -1,5 +1,6 @@
 import Omega.POM.DiagonalRateFoldedCurvatureAuditable
 import Omega.POM.FiberFactorialCumulantsSignLogconvex
+import Omega.POM.FiberSchurBidirectionalCompilation
 import Omega.POM.ObservableMinpolyOrderCollapseQ913
 import Omega.POM.MultiplicityAtomMultifractal
 import Omega.POM.ConvexityForcesTypicalLeWorst
@@ -902,6 +903,7 @@ import Omega.POM.OracleCapacityBimeasureIdentity
 import Omega.POM.OracleCriticalBudgetEntropyIdentity
 import Omega.POM.OracleRestrictedFenchelDualityNegativeTemp
 import Omega.POM.SchurNearRhLinearInequalityComplete
+import Omega.POM.SchurNearRHFiniteCheck
 import Omega.POM.SchurVarianceDecomposition
 import Omega.POM.SchurVarianceGrowthRateSpectralIdentity
 import Omega.POM.SchurDirichletTorsionFactorization
