@@ -1,5 +1,6 @@
 import Omega.POM.TorsionSchurDualMicroscope
 import Omega.POM.PrimOddEven
+import Omega.POM.A4tCyclotomicAdjMinpolyResultant
 import Omega.POM.CurvatureIndependentDivergent
 import Omega.POM.CmRigidityQsqrtm15
 import Omega.POM.ReplicaSoftcorePerronFeshbachCompositionMomentSeries
