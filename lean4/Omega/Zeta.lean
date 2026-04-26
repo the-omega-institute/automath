@@ -60,6 +60,7 @@ import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
 import Omega.Zeta.XiTimePart62dcbHologramAmbientIsometryDimension
 import Omega.Zeta.XiTimePart62dcbZgDensityRowRatioRiccatiProduct
 import Omega.Zeta.XiTimePart63bSmithKernelGrowthSpectrumCriterion
+import Omega.Zeta.XiTimePart63bLossZetaEulerFactorizationSmithRigidity
 import Omega.Zeta.ZGDensitySecondOrderSummability
 import Omega.Zeta.XiBoundedFluxForcesKappa0
 import Omega.Zeta.XiCpVisibleImpliesKappa0
