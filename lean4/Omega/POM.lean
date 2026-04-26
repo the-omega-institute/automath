@@ -894,6 +894,7 @@ import Omega.POM.MomentMod3TwoPhase
 import Omega.POM.MomentOddLagNeutrality
 import Omega.POM.MomentResonance
 import Omega.POM.MomqPermutationSymmetry
+import Omega.POM.MomqSchurWeylCommutant
 import Omega.POM.MomqTensorKernelNoncommutativeFibonacciPowers
 import Omega.POM.MultiwellLowTemperatureExpansionIdentifiability
 import Omega.POM.MultiAxisMixingBudgetBarrier
