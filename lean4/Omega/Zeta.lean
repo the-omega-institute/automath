@@ -220,6 +220,7 @@ import Omega.Zeta.XiTimePart60ab2LogcmShiftEvenZeta
 import Omega.Zeta.XiTimePart60acbGaugeConstantRecoversEvenZeta
 import Omega.Zeta.XiFiniteFrontierCertificate
 import Omega.Zeta.XiToeplitzNegativeMarginFromHankelFingerprint
+import Omega.Zeta.XiCoherenceStoppingTimeLeyangK5
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiDirichletZeroFreeFromUnifiedZk
 import Omega.Zeta.XiFoldbinInformationSpectrumSinglePointCollapse
