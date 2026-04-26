@@ -240,6 +240,7 @@ import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
 import Omega.Conclusion.CanonicalSliceExactFixedpointCount
 import Omega.Conclusion.Window6BoundaryTwofoldMinimalFaithfulRealization
 import Omega.Conclusion.GlobalNullPureCohomologicalRemainder
+import Omega.Conclusion.FoldFiberHardcoreExactBinomialRecovery
 import Omega.Conclusion.M2Level3CanonicalPushforwardWithXi
 import Omega.Conclusion.HydrogenicResidualAuditCapacity
 import Omega.Conclusion.CapacityFiniteCompleteness
