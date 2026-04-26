@@ -24,11 +24,11 @@ jobs:
           ref: ${{ inputs.checkout_ref != '' && inputs.checkout_ref || github.sha }}
           fetch-depth: 0
 
-      - name: Cache Lean build artifacts
-        uses: actions/cache@v4
+      - name: Restore Lean olean cache
+        uses: actions/cache/restore@v4
         with:
           path: lean4/.lake/build
-          key: lean4-olean-${{ runner.os }}-${{ github.run_id }}
+          key: lean4-olean-${{ runner.os }}-${{ github.sha }}
           restore-keys: |
             lean4-olean-${{ runner.os }}-
 
@@ -38,6 +38,7 @@ jobs:
           lake-package-directory: lean4
           build: true
           use-mathlib-cache: true
+          use-github-cache: "false"
 
       - name: Audit Lean sources
         run: python3 lean4/scripts/omega_ci.py audit
@@ -47,3 +48,10 @@ jobs:
 
       - name: Build paper coverage report
         run: python3 lean4/scripts/omega_ci.py paper-coverage --sections body --json "${RUNNER_TEMP}/omega-paper-coverage.json"
+
+      - name: Save Lean olean cache (dev only)
+        if: success() && github.ref == 'refs/heads/dev'
+        uses: actions/cache/save@v4
+        with:
+          path: lean4/.lake/build
+          key: lean4-olean-${{ runner.os }}-${{ github.sha }}
