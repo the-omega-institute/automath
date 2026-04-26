@@ -589,6 +589,7 @@ import Omega.POM.FiberSignedIndexPeriodicity
 import Omega.POM.FiberZxMinusOnePsi3Sign
 import Omega.POM.FiberBiasedBernoulliPushforwardHardcore
 import Omega.POM.FiberBiasedPosteriorPoissonBinomial
+import Omega.POM.FiberBiasedPosteriorBernstein
 import Omega.POM.FiberBirkhoffFenceIdealLattice
 import Omega.POM.FiberBiasedPosteriorMLR
 import Omega.POM.FiberBooleanIntervalSingleParameterAudit
