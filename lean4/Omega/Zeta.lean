@@ -115,6 +115,7 @@ import Omega.Zeta.DephysicalizedDefectRepulsionRadius
 import Omega.Zeta.DephysFoldStinespringSqrtLaw
 import Omega.Zeta.DephysFoldHiddenLabelCapSqrt
 import Omega.Zeta.DephysHolographySufficientStatistic
+import Omega.Zeta.DephysRelativeCommutantDimensionIndexCap
 import Omega.Zeta.AppHorizonPoleImprint
 import Omega.Zeta.Degree11CyclicCubicNormalizationGenus3
 import Omega.Zeta.Degree11ParameterTDivisorDegree
@@ -134,6 +135,7 @@ import Omega.Zeta.AuditableProfiniteChebotarevTradeoff
 import Omega.Zeta.AuditableProfiniteChebotarevFinite
 import Omega.Zeta.AuditableProfiniteChebotarevBalanceTriangle
 import Omega.Zeta.AuditableProfiniteChebotarevThreeBudgetDeterministic
+import Omega.Zeta.PrefixAuditExplicitStoppingFrontier
 import Omega.Zeta.XiExtensionPreservingInitialObject
 import Omega.Zeta.XiTimePart9zlGcdLcmCompilerPrimorialLowerBound
 import Omega.Zeta.XiTimePart9zWindow6CanonicalLift
