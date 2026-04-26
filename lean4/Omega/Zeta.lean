@@ -1787,6 +1787,7 @@ import Omega.Zeta.XiTimeEntropyParetoGibbsGlobalTemperature
 import Omega.Zeta.XiTimePart9zbmFoldpiPointwiseSlopeRigidity
 import Omega.Zeta.XiTimePart9zbmFoldpiHadamardIndicator
 import Omega.Zeta.XiTimePart9zbmFoldpiArcsineSlopeLaw
+import Omega.Zeta.XiTimePart9zbmFoldpiBorelWaveFourierDuality
 import Omega.Zeta.XiBinfoldOracleSuccessBitrateThresholdExact
 import Omega.Zeta.XiHellingerKernelAndreiefLoggas
 import Omega.Zeta.XiHellingerToeplitzFreeEnergyAreaLaw

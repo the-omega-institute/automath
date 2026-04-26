@@ -222,6 +222,7 @@ import Omega.POM.SqQuasiMultiplicative
 import Omega.POM.BeckChevalleyAmgmDefectIdentity
 import Omega.POM.BivariateMomentZetaFredholm
 import Omega.POM.CommutativeSpectralSurface
+import Omega.POM.TwoStepRenormFixedPointLoglaw
 import Omega.POM.BivariateSystemIdentificationFiniteWindow
 import Omega.POM.BivariateModRectangleLiftsToPlane
 import Omega.POM.RecurrenceCodeViolationDistance
