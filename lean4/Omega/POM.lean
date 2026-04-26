@@ -828,6 +828,7 @@ import Omega.POM.InverseLimitNaturality
 import Omega.POM.InvertWFromHomogeneousCurve
 import Omega.POM.KCollisionRootFilter
 import Omega.POM.KCollisionMittagLefflerScaling
+import Omega.POM.KCollisionLeeYangScaling
 import Omega.POM.KLDefectIdentity
 import Omega.POM.EntIncreaseEqualsKl
 import Omega.POM.KilloAddressableGodelizationInfoCost
