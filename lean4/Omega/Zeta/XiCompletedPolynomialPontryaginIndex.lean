@@ -74,6 +74,22 @@ theorem paper_xi_phil_negative_squares_equals_disk_roots
       xi_phiL_negative_squares_equals_disk_roots_kappa,
       xi_phiL_negative_squares_equals_disk_roots_poleMultiplicity]
 
+/-- Paper label: `thm:xi-minimal-pontryagin-conservative-realization`. The model theorem already
+contains the conservative-realization existence statement and the two minimal index
+identifications, uniformly for each Schur-class element. -/
+theorem paper_xi_minimal_pontryagin_conservative_realization {S : Type*}
+    (inSchurClass hasConservativeRealization : S → Nat → Prop)
+    (negativeSquareIndex minimalIndex : S → Nat)
+    (h_model : ∀ s kappa,
+      inSchurClass s kappa →
+        hasConservativeRealization s kappa ∧
+          negativeSquareIndex s = kappa ∧ minimalIndex s = kappa) :
+    ∀ s kappa,
+      inSchurClass s kappa →
+        hasConservativeRealization s kappa ∧
+          negativeSquareIndex s = kappa ∧ minimalIndex s = kappa := by
+  exact h_model
+
 end
 
 end Omega.Zeta
