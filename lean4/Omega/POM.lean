@@ -1356,3 +1356,4 @@ import Omega.POM.OracleGapAreaUniversalBoundsBetaCrit
 import Omega.POM.FiberIndexLdpFromCollisionSpectrum
 import Omega.POM.EllipticCircleDimensionMinimality
 import Omega.POM.IclExponentialPromptPhaseTransition
+import Omega.POM.ResonanceRenyiDimensionRationalDenominatorDegreeLbQ9_17
