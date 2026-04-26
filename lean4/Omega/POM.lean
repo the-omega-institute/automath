@@ -999,6 +999,7 @@ import Omega.POM.OracleCapacityBimeasureIdentity
 import Omega.POM.OracleCriticalBudgetEntropyIdentity
 import Omega.POM.OracleRestrictedFenchelDualityNegativeTemp
 import Omega.POM.SchurNearRhLinearInequalityComplete
+import Omega.POM.SchurNearRhMarginPropagation
 import Omega.POM.SchurNearRHFiniteCheck
 import Omega.POM.SchurVarianceDecomposition
 import Omega.POM.SchurVarianceGrowthRateSpectralIdentity
