@@ -2366,6 +2366,48 @@ BACKFLOW_LANGUAGE_POLICY = """BACKFLOW LANGUAGE POLICY:
 - No revision notes, no timestamps, no 'new X' or 'updated Y' markers."""
 
 
+def annotate_outreach_posted(
+    tex_path: "Path",
+    url: str,
+    *,
+    dry_run: bool = False,
+) -> bool:
+    """Append \\outreachposted{url} to a backflow .tex section.
+
+    Mirrors the formalization pipeline's \\leanverified annotation pattern:
+    additive-only, so it never conflicts with parallel formalization rounds.
+    Returns True if the annotation was added (or already present).
+    """
+    if not tex_path.exists():
+        logger.warning("annotate_outreach_posted: %s does not exist", tex_path)
+        return False
+
+    tag = f"\\outreachposted{{{url}}}"
+    content = tex_path.read_text(encoding="utf-8")
+
+    if tag in content:
+        logger.info("outreach annotation already present in %s", tex_path.name)
+        return True
+
+    # Insert before \end{document}
+    if "\\end{document}" not in content:
+        logger.warning("annotate_outreach_posted: no \\end{document} in %s", tex_path)
+        return False
+
+    content = content.replace(
+        "\\end{document}",
+        f"\n{tag}\n\n\\end{{document}}",
+    )
+
+    if dry_run:
+        logger.info("[dry-run] would annotate %s with %s", tex_path.name, url)
+        return True
+
+    tex_path.write_text(content, encoding="utf-8")
+    logger.info("annotate_outreach_posted: added %s to %s", url, tex_path.name)
+    return True
+
+
 def verify_backflow_language(tex_path: "Path") -> dict[str, Any]:
     """Verify backflow .tex matches paper language and terminology.
 
