@@ -58,6 +58,7 @@ import Omega.Zeta.AbelCongruenceEnergyParsevalBarcode
 import Omega.Zeta.AbelDecimationSemigroupIdentity
 import Omega.Zeta.AbelNormalizedResidueInvariantIntegrality
 import Omega.Zeta.ConclusionLocalizedSingleAxisAnomalyVanishing
+import Omega.Zeta.LocalizedDirectsumTwoaxisLedgerCancellation
 import Omega.Zeta.AbelGrowthExponentCriterion
 import Omega.Zeta.AbelH2CriticalIndex
 import Omega.Zeta.AbelH2TailOptimalBound
