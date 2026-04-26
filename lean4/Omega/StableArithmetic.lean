@@ -6,3 +6,4 @@ import Omega.StableArithmetic.PrimeStabilization
 import Omega.StableArithmetic.PrimaryClosure
 import Omega.StableArithmetic.StableAuditDashboardDisjoint
 import Omega.StableArithmetic.StableAuditIntegralAffineClosure
+import Omega.StableArithmetic.StableArithmeticSpectra
