@@ -1,4 +1,6 @@
 import Omega.Zeta.XiAbelAr2ExpErrorForcesRightedgeZero
+import Omega.Zeta.XiTimePart62eaDualfingerprintBooleanStrongProductLaw
+import Omega.Zeta.AbelianDiffusiveChebotarevSufficient
 import Omega.Zeta.XiTimePart63bLogcmAsymptoticGermFaithfulEvenZeta
 import Omega.Zeta.XiDiscreteVsContinuousHairByNegativeInertia
 import Omega.Zeta.XiExceptionalThetaOmegaIdentification
