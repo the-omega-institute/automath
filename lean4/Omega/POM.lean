@@ -86,8 +86,10 @@ import Omega.POM.HankelSyndromeHNFModelFree
 import Omega.POM.HankelMinorDynamicsDominantExteriorSpectrum
 import Omega.POM.HankelDeterministicModAuditThreshold
 import Omega.POM.HankelStiffnessAffineLaw
+import Omega.POM.HankelStiffnessEntropyDecomposition
 import Omega.POM.HankelModMPurePeriodicity
 import Omega.POM.S2RankExact
+import Omega.POM.S2Asymptotic
 import Omega.POM.S2HankelDet
 import Omega.POM.S2Recurrence
 import Omega.POM.S3Recurrence
