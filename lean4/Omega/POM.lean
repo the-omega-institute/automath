@@ -948,6 +948,7 @@ import Omega.POM.MultiplicityRenyiContinuous
 import Omega.POM.MultiplicityCompositionRealQPressure
 import Omega.POM.MultiplicityCompositionTwoParameterHessianPD
 import Omega.POM.MultiplicityCompositionReplicaSoftcoreTransfer
+import Omega.POM.MultiplicityCompositionReplicaExplicitEigs
 import Omega.POM.MultiplicityCompositionSharpMainTermConstant
 import Omega.POM.MultiplicityFixedLREnvelope
 import Omega.POM.MultiplicityFixedRExtrema
