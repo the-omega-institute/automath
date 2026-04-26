@@ -1527,3 +1527,4 @@ import Omega.Conclusion.LmaxNotFinitePrimeizable
 import Omega.Conclusion.FinitePrimeSupportProductPhaseLedgerSplit
 import Omega.Conclusion.ZeroCurvatureTowerCanonicalStrictificationUniqueness
 import Omega.Conclusion.DirichletEvenModulusUniformParityObstruction
+import Omega.Conclusion.DisjointnessExceptionalPolyScalingSplice

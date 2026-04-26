@@ -222,6 +222,7 @@ import Omega.Zeta.XiSu11RhpEquivalence
 import Omega.Zeta.XiHilbertPolyaNinefoldEquivalenceDoubledSelfadjointCompression
 import Omega.Zeta.XiPhiLCmvStabilizationForcesDetectionDepthDivergence
 import Omega.Zeta.XiEndpointFluxFiniteCMVComputable
+import Omega.Zeta.XiPhiLDepthDeltaMinAlignment
 import Omega.Zeta.XiBmDensityForcesLinearTranscriptLength
 import Omega.Zeta.XiCongruenceBlockAbelWeilResidueLocking
 import Omega.Zeta.XiFiniteKernelZetaRationalDecidability
