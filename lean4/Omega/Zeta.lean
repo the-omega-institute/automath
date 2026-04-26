@@ -31,6 +31,7 @@ import Omega.Zeta.TimeZetaIdentifiabilityMarkovCohomology
 import Omega.Zeta.XiTimePartitionIdentifiabilityIndMultiset
 import Omega.Zeta.XiCycleSumsDetermineTimeCohomology
 import Omega.Zeta.XiTimePart66PeriodizedBernoulliNonrajchmanNoLp
+import Omega.Zeta.XiTimePart66FibonacciVisibleMultiplierNoL2
 import Omega.Zeta.XiTimePart66ZeroDensityNeverSufficient
 import Omega.Zeta.XiToeplitzMinEigControlsDepth
 import Omega.Zeta.LocalizedIntegersDivisibilityTopologicalRigidity
