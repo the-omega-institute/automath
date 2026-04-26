@@ -222,6 +222,7 @@ import Omega.POM.GoldenBinaryChannelContraction
 import Omega.POM.FiberWittenIndexZxMinusOne
 import Omega.POM.MultiplicityCompositionUniformVarianceExplosion
 import Omega.POM.MultiplicityCompositionRenyi2DivergenceToUniform
+import Omega.POM.TwoTimeReconstructionConditionNumber
 import Omega.POM.TauCLTLargeThreshold
 import Omega.POM.RealQPressureAnalyticInterpolation
 import Omega.POM.GoldenGrammarFixedPointRhoAq
