@@ -85,6 +85,7 @@ import Omega.GU.GroupJGPrimeRegisterPhaseBohrDense
 import Omega.GU.GroupJGPrimeRegisterPhaseScanDense
 import Omega.GU.GroupJGTwoPrimeEulerPhaseInjective
 import Omega.GU.GutHalfScaleZeroBlockCoversStableSpace
+import Omega.GU.GutALocalOptimality
 import Omega.GU.HolomorphicMomentRigidity
 import Omega.GU.IndistinguishablePairsCollisionProbability
 import Omega.GU.JGBinomialFilteringFourierExtraction

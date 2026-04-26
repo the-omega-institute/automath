@@ -287,3 +287,4 @@ import Omega.SyncKernelWeighted.HalfturnPrimeDividesDiscriminant
 import Omega.SyncKernelWeighted.GMSoficRationalNonconcentrationVtheta
 import Omega.SyncKernelWeighted.GMTripleComplementarity
 import Omega.SyncKernelWeighted.GMSumproductExponentLaw
+import Omega.SyncKernelWeighted.RealInput40AtomicFactorThermodynamicInvariance

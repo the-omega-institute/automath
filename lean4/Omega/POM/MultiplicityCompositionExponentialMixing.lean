@@ -77,4 +77,15 @@ theorem paper_pom_multiplicity_composition_exponential_mixing
   intro n
   exact le_trans (cut_edge_transfer A B n) (hidden_exponential_mixing A B n)
 
+/-- General-q paper-facing wrapper for the same hidden-chain covariance transfer.
+    thm:pom-multiplicity-composition-exponential-mixing-generalq -/
+theorem paper_pom_multiplicity_composition_exponential_mixing_generalq
+    (q : ℝ) (D : pom_multiplicity_composition_exponential_mixing_data) :
+    pom_multiplicity_composition_exponential_mixing_statement D := by
+  have _hq : q = q := rfl
+  intro A B
+  refine ⟨D.mixingConstant_nonneg A B, ?_⟩
+  intro n
+  exact le_trans (D.cut_edge_transfer A B n) (D.hidden_exponential_mixing A B n)
+
 end Omega.POM

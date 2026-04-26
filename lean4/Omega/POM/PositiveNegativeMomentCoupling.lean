@@ -89,4 +89,56 @@ theorem paper_pom_cauchy_schwarz_coupling_seed :
 theorem paper_pom_fiber_dispersion_lower_bound_seed :
     (64 * 7 : ℕ) ≥ 441 ∧ (441 : ℕ) = 21 ^ 2 := by omega
 
+/-- Positive moment sum for a finite fiber-weight profile.
+    prop:pom-positive-negative-coupling -/
+noncomputable def pom_positive_negative_coupling_positiveMoment {n : ℕ} (w : Fin n → ℝ) : ℝ :=
+  ∑ i : Fin n, w i
+
+/-- Inverse moment sum for a finite fiber-weight profile.
+    prop:pom-positive-negative-coupling -/
+noncomputable def pom_positive_negative_coupling_inverseMoment {n : ℕ} (w : Fin n → ℝ) :
+    ℝ :=
+  ∑ i : Fin n, (w i)⁻¹
+
+/-- Concrete positive/negative moment coupling statement for strictly positive finite weights.
+    prop:pom-positive-negative-coupling -/
+def pom_positive_negative_coupling_statement : Prop :=
+  ∀ {n : ℕ} (w : Fin n → ℝ),
+    (∀ i, 0 < w i) →
+      (n : ℝ) ^ 2 ≤
+        pom_positive_negative_coupling_positiveMoment w *
+          pom_positive_negative_coupling_inverseMoment w
+
+/-- Paper label: `prop:pom-positive-negative-coupling`.
+Finite Cauchy--Schwarz applied to `sqrt w` and `sqrt w⁻¹` gives
+`(Σ w_i)(Σ w_i⁻¹) ≥ n²`. -/
+theorem paper_pom_positive_negative_coupling :
+    pom_positive_negative_coupling_statement := by
+  intro n w hw
+  have hcs :=
+    (Finset.sum_mul_sq_le_sq_mul_sq (s := Finset.univ)
+      (f := fun i : Fin n => Real.sqrt (w i))
+      (g := fun i : Fin n => (Real.sqrt (w i))⁻¹))
+  have hprod' : (∑ i : Fin n, Real.sqrt (w i) * (Real.sqrt (w i))⁻¹) = n := by
+    simp [Real.sqrt_ne_zero'.mpr (hw _)]
+  have hsumsq_w : (∑ i : Fin n, (Real.sqrt (w i)) ^ 2) =
+      pom_positive_negative_coupling_positiveMoment w := by
+    simp [pom_positive_negative_coupling_positiveMoment, Real.sq_sqrt (le_of_lt (hw _))]
+  have hsumsq_inv : (∑ i : Fin n, ((Real.sqrt (w i))⁻¹) ^ 2) =
+      pom_positive_negative_coupling_inverseMoment w := by
+    refine Finset.sum_congr rfl ?_
+    intro i hi
+    have hsqrt_ne : Real.sqrt (w i) ≠ 0 := Real.sqrt_ne_zero'.mpr (hw i)
+    have hsqrt_sq : Real.sqrt (w i) ^ 2 = w i := Real.sq_sqrt (le_of_lt (hw i))
+    calc
+      ((Real.sqrt (w i))⁻¹) ^ 2 = (Real.sqrt (w i) ^ 2)⁻¹ := by
+        field_simp [hsqrt_ne]
+      _ = (w i)⁻¹ := by rw [hsqrt_sq]
+  have hsumsq_inv' : (∑ i : Fin n, (Real.sqrt (w i) ^ 2)⁻¹) =
+      pom_positive_negative_coupling_inverseMoment w := by
+    refine Finset.sum_congr rfl ?_
+    intro i hi
+    rw [Real.sq_sqrt (le_of_lt (hw i))]
+  simpa [hprod', hsumsq_w, hsumsq_inv'] using hcs
+
 end Omega.POM

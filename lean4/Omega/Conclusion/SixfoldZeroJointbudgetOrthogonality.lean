@@ -61,4 +61,26 @@ theorem paper_conclusion_sixfold_zero_random_hit_sharp_threshold (M : ℕ) (p th
   · simpa [N, a] using h_union
   · simpa [N, a] using sub_le_sub_left h_exp 1
 
+/-- Paper-facing fixed-confidence squeeze: the subcritical half-rate witness is bounded above by
+the union estimate, while the supercritical half-rate witness is bounded below by the exponential
+estimate. -/
+def conclusion_sixfold_zero_fixed_confidence_sample_complexity_statement : Prop :=
+  ∀ (M : ℕ) (p ε : ℝ), 0 ≤ p ∧ p ≤ 1 →
+    let Nsub : ℕ := Nat.floor (Real.rpow (M : ℝ) ((1 / 2 : ℝ) - ε))
+    let Nsuper : ℕ := Nat.floor (Real.rpow (M : ℝ) ((1 / 2 : ℝ) + ε))
+    1 - (1 - p) ^ Nsub ≤ (Nsub : ℝ) * p ∧
+      1 - Real.exp (-((Nsuper : ℝ) * p)) ≤ 1 - (1 - p) ^ Nsuper
+
+/-- Paper label:
+`cor:conclusion-sixfold-zero-fixed-confidence-sample-complexity`. -/
+theorem paper_conclusion_sixfold_zero_fixed_confidence_sample_complexity :
+    conclusion_sixfold_zero_fixed_confidence_sample_complexity_statement := by
+  intro M p ε hp
+  dsimp only
+  constructor
+  · exact (paper_conclusion_sixfold_zero_random_hit_sharp_threshold
+      M p ((1 / 2 : ℝ) - ε) hp).1
+  · exact (paper_conclusion_sixfold_zero_random_hit_sharp_threshold
+      M p ((1 / 2 : ℝ) + ε) hp).2
+
 end Omega.Conclusion

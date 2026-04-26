@@ -84,4 +84,14 @@ theorem paper_dephys_zero_knowledge_quotient_factorization
     funext A
     exact hEq A
 
+/-- Paper label: `cor:dephys-universal-zk-simulation-factorization`. A recovery map on the
+state family turns every bulk-output channel into a simulator on external data by composition. -/
+theorem paper_dephys_universal_zk_simulation_factorization {Bulk Ext Out : Type*}
+    (E : Bulk → Ext) (R : Ext → Bulk) (Gamma : Bulk → Out) (F : Set Bulk)
+    (hRecover : ∀ rho ∈ F, R (E rho) = rho) :
+    ∃ GammaTilde : Ext → Out, ∀ rho ∈ F, Gamma rho = GammaTilde (E rho) := by
+  refine ⟨fun sigma => Gamma (R sigma), ?_⟩
+  intro rho hrho
+  simp [hRecover rho hrho]
+
 end Omega.Zeta
