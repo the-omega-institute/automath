@@ -917,6 +917,7 @@ import Omega.POM.MomentKernelExists
 import Omega.POM.MomentMinrecurrenceHankel
 import Omega.POM.MomentMinreal
 import Omega.POM.MomentMod3TwoPhase
+import Omega.POM.ResonanceMod3TwoPhasePeriodQ13Q15
 import Omega.POM.MomentOddLagNeutrality
 import Omega.POM.MomentResonance
 import Omega.POM.MomqPermutationSymmetry

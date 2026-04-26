@@ -158,6 +158,36 @@ theorem paper_window6_fin21_facts_certificate :
     window6_fin21_facts_certificate_var, window6_fin21_facts_certificate_op,
     window6_first_last_classifier_first, window6_first_last_classifier_last]
 
+/-- Number of satisfied fourth-order ETP equations in the window-`6` spectrum audit. -/
+def window6_equational_spectrum_satisfied_count : Nat := 353
+
+/-- Number of refuted fourth-order ETP equations in the window-`6` spectrum audit. -/
+def window6_equational_spectrum_refuted_count : Nat := 4341
+
+/-- Total number of fourth-order ETP equations in the audited spectrum. -/
+def window6_equational_spectrum_total_count : Nat := 4694
+
+/-- Number of ordered satisfied/refuted implication pairs separated by the certificate. -/
+def window6_equational_spectrum_product_count : Nat := 1532373
+
+/-- The window-`6` finite certificate together with its audited equational spectrum counts. -/
+def window6_equational_spectrum_statement : Prop :=
+  window6_fin21_facts_certificate_statement ∧
+    window6_equational_spectrum_satisfied_count +
+      window6_equational_spectrum_refuted_count =
+        window6_equational_spectrum_total_count ∧
+    window6_equational_spectrum_satisfied_count *
+      window6_equational_spectrum_refuted_count =
+        window6_equational_spectrum_product_count
+
+/-- Paper label: `cor:window6-equational-spectrum`. -/
+theorem paper_window6_equational_spectrum :
+    window6_equational_spectrum_statement := by
+  refine ⟨paper_window6_fin21_facts_certificate, ?_, ?_⟩ <;>
+    norm_num [window6_equational_spectrum_satisfied_count,
+      window6_equational_spectrum_refuted_count, window6_equational_spectrum_total_count,
+      window6_equational_spectrum_product_count]
+
 /-- Paper label: `prop:window6-crt-rectangular-band`. -/
 theorem paper_window6_crt_rectangular_band :
     ∀ a3 a7 b3 b7 : Nat,
