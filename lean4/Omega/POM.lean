@@ -504,6 +504,7 @@ import Omega.POM.FiniteScaleEntropyOscillation
 import Omega.POM.MaxFiberOddIndistinguishability
 import Omega.POM.MicrocanonicalFoldHtUniformMin
 import Omega.POM.FiberBiasedConditionalKlChain
+import Omega.POM.FiberKLFisherRao
 import Omega.POM.FiberLeyangRenyiBernoulliDecomposition
 import Omega.POM.MicrocanonicalFoldHtFromPowerSums
 import Omega.POM.MicrocanonicalFoldHtLowOrder

@@ -554,6 +554,7 @@ import Omega.Zeta.XiNullMicroKlWindow
 import Omega.Zeta.XiZeroTempComparability
 import Omega.Zeta.GMMajorArcProfiniteEquivalence
 import Omega.Zeta.XiZeroTemperatureFourstateDeterminantStateMinimality
+import Omega.Zeta.XiZeroTemperatureFourstatePerronParryClosedForm
 import Omega.Zeta.XiTerminalZmEllipticWeightNCorrespondenceBidegreeDelta
 import Omega.Zeta.XiTerminalZmEllipticWeightTriplingSingularityProjection
 import Omega.Zeta.XiTerminalZmEllipticWeight2kDeltaLedger

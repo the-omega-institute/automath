@@ -595,6 +595,7 @@ import Omega.Conclusion.CRTLinearBudgetImpossibility
 import Omega.Conclusion.CRTThresholdNecessarySufficientForOrderReadout
 import Omega.Conclusion.MultisqrtNormLowerBound
 import Omega.Conclusion.CriticalKernelPdetUniformMinimizer
+import Omega.Conclusion.CriticalKernelTensorPdetHalfentropyParam
 import Omega.Conclusion.CriticalCombCesaroHaar
 import Omega.Conclusion.CriticalKernelSeparationCommonRecurrence
 import Omega.Conclusion.CriticalKernelSeparationCommonGeometricModes
