@@ -239,6 +239,7 @@ import Omega.Zeta.XiToeplitzNegativeMarginFromHankelFingerprint
 import Omega.Zeta.XiCoherenceStoppingTimeLeyangK5
 import Omega.Zeta.XiDebrangesCanonicalExtremeZk
 import Omega.Zeta.XiDirichletZeroFreeFromUnifiedZk
+import Omega.Zeta.XiFoldLastbitTwoLayerCollapse
 import Omega.Zeta.XiFoldbinInformationSpectrumSinglePointCollapse
 import Omega.Zeta.XiTwoBaseResidueRatioUniqueRecovery
 import Omega.Zeta.XiFourRigidityResidueDepthNormalization

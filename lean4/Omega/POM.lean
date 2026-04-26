@@ -239,6 +239,7 @@ import Omega.POM.FoldCollisionMomentBadPrimesLockedByHankel
 import Omega.POM.CollisionMomentsReplicaFusionSpace
 import Omega.POM.BlockConsistencyRateBlockReduction
 import Omega.POM.BooleanCircuitProjectionBudget
+import Omega.POM.DisjointnessRamanujanQ4Critical
 import Omega.POM.BoundedPerturbationInvariance
 import Omega.POM.MomLiftFourierDistribution
 import Omega.POM.SchurTraceJacobiTrudiEulerPrimitiveFiber
