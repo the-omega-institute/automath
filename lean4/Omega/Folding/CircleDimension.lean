@@ -292,6 +292,13 @@ theorem semiring_aut_is_perm (r : Nat) (f : (Fin r → ℕ) ≃+* (Fin r → ℕ
     rw [← hσeq] at h2; linarith
   exact ⟨Equiv.ofBijective σ ⟨hinj, Finite.surjective_of_injective hinj⟩, hσ⟩
 
+/-- Paper-facing wrapper for coordinate-permutation automorphism rigidity.
+    cor:cdim-nr-nd-semiring-hom-inj-auto -/
+theorem paper_cdim_nr_nd_semiring_hom_inj_auto (r : Nat)
+    (f : (Fin r → ℕ) ≃+* (Fin r → ℕ)) :
+    ∃ σ : Equiv.Perm (Fin r), ∀ x : Fin r → ℕ, ∀ j : Fin r, f x j = x (σ j) := by
+  simpa using semiring_aut_is_perm r f
+
 /-- Fibonacci radius is monotone.
     con:cdim-fibonacci-radius-time-conjugacy -/
 theorem fibRadius_mono (m : Nat) : fibRadius m ≤ fibRadius (m + 1) := by
