@@ -824,6 +824,7 @@ import Omega.POM.MicrocanonicalFoldSectionCount
 import Omega.POM.MicrocanonicalFoldBayesSuccessNminusT
 import Omega.POM.MicrocanonicalFoldBayesSuccessPolynomialInMoments
 import Omega.POM.MicrocanonicalFoldBayesSuccessNearCompleteUniform
+import Omega.POM.MicrocanonicalFoldBayesSuccessNearCompletePoleLaw
 import Omega.POM.MaxFiberPublication
 import Omega.POM.MaxMassDispersionBound
 import Omega.POM.MesoscopicReversibleWindowStrictGap

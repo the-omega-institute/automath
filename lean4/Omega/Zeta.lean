@@ -6,6 +6,7 @@ import Omega.Zeta.XiBulkCurvatureMassQuantization
 import Omega.Zeta.XiPoissonCauchyLocationScaleInformationProjection
 import Omega.Zeta.XiPoissonCauchyMixturePointLeadingConstants
 import Omega.Zeta.XiHellingerToeplitzSymbolPoisson
+import Omega.Zeta.XiHellingerToeplitzSzegoThermoLimit
 import Omega.Zeta.XiHellingerToeplitzHeineSzegoCue
 import Omega.Zeta.XiSmithNormalizedKernelPositiveFiniteEulerCorrection
 import Omega.Zeta.XiFinitePrimeSupportLinearRegisterLaw

@@ -662,6 +662,7 @@ import Omega.Conclusion.SingleCubeEditRigidity
 import Omega.Conclusion.SingleOmittedEdgePartialCorrelationBudget
 import Omega.Conclusion.FibadicLcmFiltrationLaw
 import Omega.Conclusion.FibadicPrimitiveCentralIdempotents
+import Omega.Conclusion.FibadicRandomDepthAverageSpectralCriterion
 import Omega.Conclusion.FibadicAddressPontryaginDualQmodz
 import Omega.Conclusion.FibadicOpenIdealFiniteQuotientClassification
 import Omega.Conclusion.FibadicSaturatedObserverInverseLimit
