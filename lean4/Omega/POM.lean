@@ -1080,6 +1080,7 @@ import Omega.POM.ResonanceNewmanNotInSingleRootFieldsQ9Q13
 import Omega.POM.ResonanceHankelNullIntegralPrincipalization
 import Omega.POM.ResonanceHankelNullAllScales
 import Omega.POM.ResonanceNoSpuriousEliminationUniqueShortMultiple
+import Omega.POM.ResonanceGcdRecoversMinpoly
 import Omega.POM.ResonanceMod2FiniteBitAutomaticity
 import Omega.POM.ResonanceS13TwoPrimeCertificateQ16Q17
 import Omega.POM.ResonanceTwoCycleRatio
