@@ -685,6 +685,7 @@ import Omega.Folding.S3Recurrence
 import Omega.Folding.SecondCharacterReflectionAnnihilation
 import Omega.Folding.SecondMaxFiberGapConstant
 import Omega.Folding.ShiftDynamics
+import Omega.Folding.SignedCompanionCollisionAudit
 import Omega.Folding.SignedFibonacciGapShift
 import Omega.Folding.SpectralQuarticAutTrivial
 import Omega.Folding.StableArithmeticComplexity
@@ -710,6 +711,7 @@ import Omega.Folding.Value
 import Omega.Folding.VisibleValueOverflow
 import Omega.Folding.Weight
 import Omega.Folding.Window6
+import Omega.Folding.Window6CountermodelCertificate
 import Omega.Folding.Window6VariableLengthExactInversionRateGap
 import Omega.Folding.YmAmbiguityHausdorffCodim
 import Omega.Folding.YmAmbiguityMainSingularityStar
