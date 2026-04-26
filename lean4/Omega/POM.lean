@@ -1,5 +1,6 @@
 import Omega.POM.PrimOddEven
 import Omega.POM.CurvatureIndependentDivergent
+import Omega.POM.CmRigidityQsqrtm15
 import Omega.POM.ReplicaSoftcorePerronFeshbachCompositionMomentSeries
 import Omega.POM.ReplicaSoftcoreAlternatingVandermondeFibonacciProduct
 import Omega.POM.TensorProductRootGaloisDegreeRigidity
