@@ -1,5 +1,6 @@
 import Omega.Zeta.XiBulkCurvatureModsquareHolography
 import Omega.Zeta.XiMomqStrongConverseBilinearLeakage
+import Omega.Zeta.XiFixedFreezingOracleStrongConverseExponent
 import Omega.Zeta.TerminalReplicaSoftcoreInverseSupportCount
 import Omega.Zeta.XiTimePart9xNoBoundaryEquivariantFourValuedCompanionField
 import Omega.Zeta.XiPickPoissonThreeSetMobiusIdentity
