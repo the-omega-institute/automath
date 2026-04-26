@@ -135,6 +135,7 @@ import Omega.POM.S3OrbitDecomposition
 import Omega.POM.HankelRankMinimal
 import Omega.POM.HankelSmithMinimalDenominator
 import Omega.POM.HankelIntegerRealizationCriterion
+import Omega.POM.HankelPrimitiveTorsionSpectrum
 import Omega.POM.FiberIndexCltVarianceCertificate
 import Omega.POM.FiberIndexCltThermo
 import Omega.POM.FiberIndexLdpThermo
