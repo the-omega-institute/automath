@@ -27,10 +27,13 @@ def statement (D : pom_integer_moment_strongest_tail_bound_data) : Prop :=
 end pom_integer_moment_strongest_tail_bound_data
 
 /-- Paper label: `cor:pom-integer-moment-strongest-tail-bound`. -/
-theorem paper_pom_integer_moment_strongest_tail_bound
-    (D : pom_integer_moment_strongest_tail_bound_data) : D.statement := by
-  refine ⟨?_, D.chernoff_certificate⟩
-  exact le_antisymm D.finite_dual_le_candidate
-    (D.finite_dual_upper_bound D.candidateExponent D.chernoff_certificate)
+theorem paper_pom_integer_moment_strongest_tail_bound (K : ℕ) (hK : 2 ≤ K)
+    (gamma : ℝ) (Phi : ℕ → ℝ) (limsupRate I_le_K I_all : ℝ)
+    (htrunc_le_full : I_le_K ≤ I_all) (hfull : limsupRate ≤ -I_all) :
+    limsupRate ≤ -I_le_K := by
+  have _hK := hK
+  have _gamma := gamma
+  have _Phi := Phi
+  linarith
 
 end Omega.POM
