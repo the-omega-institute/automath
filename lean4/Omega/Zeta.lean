@@ -48,6 +48,7 @@ import Omega.Zeta.XiSymqGoldenCqModPiRankoneOuter
 import Omega.Zeta.XiSmithStaircaseTemplateSymq
 import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
 import Omega.Zeta.XiTimePart62dcbHologramAmbientIsometryDimension
+import Omega.Zeta.XiTimePart62dcbZgDensityRowRatioRiccatiProduct
 import Omega.Zeta.XiTimePart63bSmithKernelGrowthSpectrumCriterion
 import Omega.Zeta.ZGDensitySecondOrderSummability
 import Omega.Zeta.XiBoundedFluxForcesKappa0
@@ -177,6 +178,7 @@ import Omega.Zeta.XiTimePositiveCocycleLeftOrderTorsionfree
 import Omega.Zeta.XiTimePart51AAWindow14StrictDirectFactorLift
 import Omega.Zeta.XiTimePart9xcSerrinGeometryAllCumulantsVanish
 import Omega.Zeta.XiTimePart9xaaLowfiberAnomalyTax
+import Omega.Zeta.XiTimePart9xaaBoundaryCenterIrreducibleTax
 import Omega.Zeta.XiTimePart9xabWindow6MinsectorRigidX4Subcover
 import Omega.Zeta.XiTimePart9xabWindow6LocalFourierMultipliersExactZeroSet
 import Omega.Zeta.XiTimePart9xEquivariantCompletionBitLowerBound

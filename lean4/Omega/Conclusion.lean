@@ -10,6 +10,7 @@ import Omega.Conclusion.SerrinWulffPositiveGaugeAnomalyExcludes
 import Omega.Conclusion.Window6E64FiniteBorelPartition
 import Omega.Conclusion.Window6TrueMultiplicityZeemanImpuritySplitting
 import Omega.Conclusion.Window6FiberGaugeLaplacianSpectrum
+import Omega.Conclusion.Window6PermutationModuleVisibleHiddenSplitting
 import Omega.Conclusion.BranchEntropyPrimesliceRate
 import Omega.Conclusion.PrimeLogZeroLyapunovCalibration
 import Omega.Conclusion.Window6CubicCentralRelation
