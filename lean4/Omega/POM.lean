@@ -222,6 +222,7 @@ import Omega.POM.FiberLabelDistributionInversion
 import Omega.POM.CRTSpatializationPrimeBudget
 import Omega.POM.PrimeRegisterQuantileBudget
 import Omega.POM.PrimeRegisterQQuotaFamily
+import Omega.POM.FiberFibFusionRealizationGeneralX
 import Omega.POM.CapacityCollisionDataProcessing
 import Omega.POM.MultiplicityCompositionMomentQ2Q3Closed
 import Omega.POM.IntegerMomentStrongestTailBound
