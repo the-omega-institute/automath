@@ -126,6 +126,7 @@ import Omega.POM.FiberLowerBoundIndependentSets
 import Omega.POM.FiberLowerBoundDP
 import Omega.POM.FiberHammingTripleIsometry
 import Omega.POM.FiberGeodesicLinearExtension
+import Omega.POM.FiberGeodesicLog2Pi
 import Omega.POM.FiberIndependenceComplexJoin
 import Omega.POM.FiberIndependenceComplexPath
 import Omega.POM.FiberIndependenceComplexHomology
