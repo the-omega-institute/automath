@@ -201,6 +201,7 @@ import Omega.Zeta.XiTimePart9xfTailSpectrumCompleteStatistic
 import Omega.Zeta.XiWindow6CentralNoncentralAnomalySplitting
 import Omega.Zeta.XiTimeAdditivityFiniteCriticalSquareCriterion
 import Omega.Zeta.GMMajorarcEnergyObstructionLoop
+import Omega.Zeta.DephysDirichletWindingMinimal
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiFoldbinShannonGaugeConstantMirror
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
