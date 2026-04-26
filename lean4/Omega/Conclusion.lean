@@ -1523,3 +1523,4 @@ import Omega.Conclusion.PoissonCauchyC3FdivSixthJetAffineLaw
 import Omega.Conclusion.Window6GeometryProtocolExactTwoBitDeficit
 import Omega.Conclusion.LmaxNotFinitePrimeizable
 import Omega.Conclusion.FinitePrimeSupportProductPhaseLedgerSplit
+import Omega.Conclusion.ZeroCurvatureTowerCanonicalStrictificationUniqueness
