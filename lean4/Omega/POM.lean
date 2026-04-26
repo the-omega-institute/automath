@@ -42,6 +42,7 @@ import Omega.POM.PressureCumulants
 import Omega.POM.TruncationDefectCocycle
 import Omega.POM.ToggleProductComponents
 import Omega.POM.ToggleScanLCMTensorization
+import Omega.POM.ToggleScanMaxOrbitArithmetic
 import Omega.POM.A4GaloisS5
 import Omega.POM.A4DiscQuadraticClassNumber
 import Omega.POM.A4MertensTailBound

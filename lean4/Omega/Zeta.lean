@@ -378,6 +378,7 @@ import Omega.Zeta.XiLogDefectConeExtreme
 import Omega.Zeta.XiCompactifiedDyadicDepthLowerBound
 import Omega.Zeta.XiScaleMellinNoNonzeroImagPeriod
 import Omega.Zeta.XiScaleTimeBicomplexObstruction
+import Omega.Zeta.XiScaleTimeConnectionHolonomyCriterion
 import Omega.Zeta.XiRhIffLatticeComovingDefect
 import Omega.Zeta.XiAdelicZkGluingCriticalLine
 import Omega.Zeta.XiRadialDefectIndexCountertermInvariant
