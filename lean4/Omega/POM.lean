@@ -1296,3 +1296,4 @@ import Omega.POM.DiagonalRateExplicitParamAndDerivative
 import Omega.POM.OracleExtremesDoNotDetermineBetaCrit
 import Omega.POM.ThetaGodelizationEllipseMultiplicativeEmbedding
 import Omega.POM.SchurChebotarevPrimeDeviation
+import Omega.POM.SchurSpectrumAuditFromLowMoments
