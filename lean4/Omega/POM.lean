@@ -24,6 +24,7 @@ import Omega.POM.MultiplicityLogwMDP
 import Omega.POM.RenyiEntropyGapAsInf
 import Omega.POM.DimensionSpectrumGapMinPrinciple
 import Omega.POM.DiagonalRateFiniteMomentClosure
+import Omega.POM.DiagonalRateOptimalCouplingMinorSignRigidity
 import Omega.POM.A4LinearObservableTwoTermOscillation
 import Omega.POM.HolographicConservationFPlusGamma
 import Omega.POM.HolographicDimensionSumBound
