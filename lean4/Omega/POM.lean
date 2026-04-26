@@ -218,6 +218,7 @@ import Omega.POM.BayesInfonceThirdOrderLargeK
 import Omega.POM.InfonceFoldThirdOrderLargeK
 import Omega.POM.PartitionGapPositiveKillsHooks
 import Omega.POM.PowerSumHankelPSD
+import Omega.POM.ResonanceHenselSplittingSequenceModule
 import Omega.POM.BayesErrorExplicitSharpAsymptotic
 import Omega.POM.SchurNearRhVarianceConcentration
 import Omega.POM.BbitOracleCapacityClosedForm
