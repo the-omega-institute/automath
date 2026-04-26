@@ -123,6 +123,22 @@ theorem paper_xi_poisson_cauchy_mixture_i1_t5_minimal_third (sigma M6 : ℝ) :
     hderiv_model.congr' hderiv_eventual.symm
   exact ⟨hfirst, hsecond⟩
 
+/-- Paper label:
+`cor:xi-poisson-cauchy-mixture-golden-exponent4-barrier`. -/
+theorem paper_xi_poisson_cauchy_mixture_golden_exponent4_barrier
+    (sigma M6 : ℝ) (m : ℕ) :
+    xi_poisson_cauchy_mixture_kl_t4_minimal_third_model sigma M6
+        (((1 + Real.sqrt 5) / 2) ^ m) =
+      sigma ^ 4 / (8 * ((1 + Real.sqrt 5) / 2) ^ (4 * m)) +
+        M6 / ((1 + Real.sqrt 5) / 2) ^ (6 * m) := by
+  set φ : ℝ := (1 + Real.sqrt 5) / 2
+  unfold xi_poisson_cauchy_mixture_kl_t4_minimal_third_model
+  have h4 : (φ ^ m) ^ 4 = φ ^ (4 * m) := by
+    rw [← pow_mul, Nat.mul_comm m 4]
+  have h6 : (φ ^ m) ^ 6 = φ ^ (6 * m) := by
+    rw [← pow_mul, Nat.mul_comm m 6]
+  rw [h4, h6]
+
 end
 
 end Omega.Zeta
