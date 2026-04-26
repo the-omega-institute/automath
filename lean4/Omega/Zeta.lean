@@ -223,6 +223,7 @@ import Omega.Zeta.XiTimeWeightedSpectralRadiusGrowthLaw
 import Omega.Zeta.XiTimePart60acbGroupoidDimensionOverload
 import Omega.Zeta.XiTimeResolutionDualBudgetPhaseTransition
 import Omega.Zeta.XiZeroDispersionKinkCountUnderComposition
+import Omega.Zeta.Near1AlphaMinpolySplittingD4
 import Omega.Zeta.XiPoissonCoarsegrainingFDivergenceContraction
 import Omega.Zeta.XiPoissonKernelDerivativeL1FisherClosed
 import Omega.Zeta.XiSinglezeroDefectTranslationAverage

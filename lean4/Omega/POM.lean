@@ -224,6 +224,7 @@ import Omega.POM.PrimeRegisterQuantileBudget
 import Omega.POM.PrimeRegisterQQuotaFamily
 import Omega.POM.FiberFibFusionRealizationGeneralX
 import Omega.POM.CapacityCollisionDataProcessing
+import Omega.POM.QueryDistortionCriticalSlopeInvertsHalfPressure
 import Omega.POM.MultiplicityCompositionMomentQ2Q3Closed
 import Omega.POM.IntegerMomentStrongestTailBound
 import Omega.POM.FunctorialKernelRHImpossibility
