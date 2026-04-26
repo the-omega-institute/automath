@@ -218,6 +218,8 @@ import Omega.Zeta.DephysDirichletWindingMinimal
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiFoldbinShannonGaugeConstantMirror
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
+import Omega.Zeta.XiHankelJacobianToeplitzHankelFactorization
+import Omega.Zeta.XiSelfreciprocalEscapeJensen
 import Omega.Zeta.XiFiniteStateTimeImageDiscreteOrDense
 import Omega.Zeta.JacobianProjectorIdempotentAlgebra
 import Omega.Zeta.XiFiniteDefectRhScanTraceEquivalence

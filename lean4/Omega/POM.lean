@@ -221,6 +221,7 @@ import Omega.POM.FiberWittenIndexZxMinusOne
 import Omega.POM.MultiplicityCompositionUniformVarianceExplosion
 import Omega.POM.MultiplicityCompositionRenyi2DivergenceToUniform
 import Omega.POM.TauCLTLargeThreshold
+import Omega.POM.RealQPressureAnalyticInterpolation
 import Omega.POM.GoldenGrammarFixedPointRhoAq
 import Omega.POM.GoldenLikelihoodRatioMartingales
 import Omega.POM.ResonanceWindowMinpolyIrreducibleQ9Q17
