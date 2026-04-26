@@ -1408,6 +1408,7 @@ import Omega.Zeta.XiShadowSpectrumTowerPrincipalMinors
 import Omega.Zeta.XiSingleDefectIntegratedClosedForm
 import Omega.Zeta.XiSingleDefectMassLogDerivative
 import Omega.Zeta.XiSingleDefectThresholdSaturation
+import Omega.Zeta.XiGoldenWindowSaturationUpperbound
 import Omega.Zeta.XiSingleDefectThresholdPhaseTransition
 import Omega.Zeta.XiSingleIntegerCoordinateNoExactAdditiveLedger
 import Omega.Zeta.XiSingleScaleRadialDeviationArcosh
