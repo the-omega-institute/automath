@@ -1,4 +1,5 @@
 import Omega.Conclusion.OracleGapSaturationEdgeEnergy
+import Omega.Conclusion.MicroescortOracleCapacityClosedForm
 import Omega.Conclusion.SmithLocalZetaHadamardLinearization
 import Omega.Conclusion.SerrinWulffPositiveGaugeAnomalyExcludes
 import Omega.Conclusion.Window6E64FiniteBorelPartition
