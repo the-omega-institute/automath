@@ -220,6 +220,7 @@ import Omega.POM.MultiplicityCompositionUniformVarianceExplosion
 import Omega.POM.TauCLTLargeThreshold
 import Omega.POM.GoldenGrammarFixedPointRhoAq
 import Omega.POM.GoldenLikelihoodRatioMartingales
+import Omega.POM.ResonanceWindowMinpolyIrreducibleQ9Q17
 import Omega.POM.GoldenEsscherSymmetrization
 import Omega.POM.SqQuasiMultiplicative
 import Omega.POM.BeckChevalleyAmgmDefectIdentity
