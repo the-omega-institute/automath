@@ -219,6 +219,7 @@ import Omega.Zeta.XiPoissonCauchyKlMomentLocking
 import Omega.Zeta.XiPoissonKlSixthOrderMu3Mu4
 import Omega.Zeta.XiCauchyPoissonEntropyAuditCircleAverage
 import Omega.Zeta.XiRootUnityFilterSingleClassInjection
+import Omega.Zeta.TerminalZmTranslationTBranchDiscriminantC3U1
 import Omega.Zeta.XiLissajousCyclicOrbitAliasLattice
 import Omega.Zeta.XiTimePart60abZeroBlockForcesBinomialFactor
 import Omega.Zeta.XiTwoParamDisjointnessResultantIntegerFibonacci
