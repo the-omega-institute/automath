@@ -1710,3 +1710,4 @@ import Omega.Zeta.XiTimePart9eSmithKernelCokernelCount
 import Omega.Zeta.XiFoldCongruenceQuotientDivisorLattice
 import Omega.Zeta.XiBooleanTwoLayerZetaMuDiagonalization
 import Omega.Zeta.XiTerminalZmEllipticWeightTriplingC3NormalizationDelta
+import Omega.Zeta.XiFullMicrostateExactInversionBitrateThreshold
