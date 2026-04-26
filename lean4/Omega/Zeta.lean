@@ -1,4 +1,6 @@
 import Omega.Zeta.DephysCommutingSquareMutualInformationDefect
+import Omega.Zeta.XiTimePart62daFibonacciSolenoidCofinalUniversal
+import Omega.Zeta.XiTimePart60ebHorizonLedgerSeparationPrinciple
 import Omega.Zeta.XiAbelAr2ExpErrorForcesRightedgeZero
 import Omega.Zeta.XiTerminalReplicaSoftcorePartitionFibAggregatedCoeff
 import Omega.Zeta.XiTimePart62eaDualfingerprintBooleanStrongProductLaw
