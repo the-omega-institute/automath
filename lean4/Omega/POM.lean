@@ -1212,6 +1212,7 @@ import Omega.POM.EntropyGapBound
 import Omega.POM.EntropySaturation
 import Omega.POM.RmomSound
 import Omega.POM.PwMinnormCountertermHodge
+import Omega.POM.DinftyTranscendence
 import Omega.POM.Q4ArithmeticTwoLayerRealImag
 import Omega.POM.LocalFiniteDirichletAction
 import Omega.POM.PathIndsetThermoConstants

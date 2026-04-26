@@ -1209,6 +1209,7 @@ import Omega.Zeta.SyncRhoGapM2
 import Omega.Zeta.SyncRhoM2ClosedForm
 import Omega.Zeta.SyncRhoM2Publication
 import Omega.Zeta.TerminalZmTranslationTBranchDiscriminantC3U1Positivity
+import Omega.Zeta.TerminalZmTranslationTBranchDiscriminantC3Mu3Weight
 import Omega.Zeta.ToeplitzDeterminantSignRigidity
 import Omega.Zeta.ToeplitzNegativeInertiaAllowedPerturbRadius
 import Omega.Zeta.ToeplitzNegativeInertiaSpectralGapStability
