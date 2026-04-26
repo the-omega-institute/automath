@@ -1484,3 +1484,4 @@ import Omega.Conclusion.LeyangRho456WallCancelChannel
 import Omega.Conclusion.LeyangRho456WallPotentialIdentities
 import Omega.Conclusion.PolynomialExponentPrimeAxisExpansion
 import Omega.Conclusion.Window6FibonacciResonanceThresholdLock
+import Omega.Conclusion.Window6RationalGeometricJointBlindSpot

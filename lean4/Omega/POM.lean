@@ -1280,3 +1280,4 @@ import Omega.POM.TauExponentialTailAnalyticDisk
 import Omega.POM.ConfluenceModAnomAudited
 import Omega.POM.DiagonalRateExplicitParamAndDerivative
 import Omega.POM.OracleExtremesDoNotDetermineBetaCrit
+import Omega.POM.ThetaGodelizationEllipseMultiplicativeEmbedding

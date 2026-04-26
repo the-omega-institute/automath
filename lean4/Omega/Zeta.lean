@@ -1744,3 +1744,4 @@ import Omega.Zeta.XiTerminalZmEllipticWeightTriplingC3NormalizationDelta
 import Omega.Zeta.XiFullMicrostateExactInversionBitrateThreshold
 import Omega.Zeta.XiTerminalFixedFreezingTvCollapse
 import Omega.Zeta.XiToeplitzLengthVsBoundaryDepth
+import Omega.Zeta.XiTimePart63bIntegerAxisEllipsePrimeAxisRigidity
