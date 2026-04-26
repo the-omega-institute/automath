@@ -243,6 +243,7 @@ import Omega.POM.ReplicaSoftcoreSymEigenbasisBinomialWeights
 import Omega.POM.FirstVariationFidelityRHBreaking
 import Omega.POM.ReverseKlBoundByDispersion
 import Omega.POM.RemainderBitsRenyiCollisionExtremal
+import Omega.POM.SymmetricGroupGibbsMixture
 import Omega.POM.TypicalFiberExponentRenyiTangent
 import Omega.POM.FoldReverseKlControlledByGenus2Partition
 import Omega.POM.MicrocanonicalFoldBayesSuccessPhaseDiagram
