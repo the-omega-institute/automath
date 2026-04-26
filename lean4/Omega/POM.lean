@@ -241,6 +241,7 @@ import Omega.POM.CoarsegrainingMajorizationSchur
 import Omega.POM.BinaryCoarsegrainingConcavePairingExtremes
 import Omega.POM.BinaryInvariantsFunctoriality
 import Omega.POM.InterpolationVariancePoissonEiCollision
+import Omega.POM.IdentityConeRequiresCurvatureReduction
 import Omega.POM.CollisionAQFibonacciBFPrimitivePrimeDivisor
 import Omega.POM.CollisionBfSnfQ234
 import Omega.POM.CollisionCKFibonacci

@@ -243,6 +243,7 @@ import Omega.Conclusion.HydrogenicResidualAuditCapacity
 import Omega.Conclusion.CapacityFiniteCompleteness
 import Omega.Conclusion.CapacityDefectBernsteinMellin
 import Omega.Conclusion.InfonceCapacityWedderburnUnifiedClosure
+import Omega.Conclusion.Z2TorsorSquareParityCollapse
 import Omega.Conclusion.AffineClosedFormExcludedByFanWidth
 import Omega.Conclusion.M2Level3SteinbergLocalSystemInertiaSpectra
 import Omega.Conclusion.M2Level3Delta0InertiaInvariantsConductorDeterminant
