@@ -151,6 +151,7 @@ import Omega.POM.AnomSingleMomentCompleteEquivalence
 import Omega.POM.AnomClassAdditive
 import Omega.POM.AnomCohomologyClass
 import Omega.POM.AnomMomentAmplification
+import Omega.POM.AnomOracleCollapseTwoPointTrigger
 import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.AnomTorusPhaseElimination
 import Omega.POM.AnomCyclotomicPhaseTorsion
