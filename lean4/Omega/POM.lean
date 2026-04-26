@@ -243,6 +243,7 @@ import Omega.POM.DisjointnessRamanujanQ4Critical
 import Omega.POM.BoundedPerturbationInvariance
 import Omega.POM.MomLiftFourierDistribution
 import Omega.POM.SchurTraceJacobiTrudiEulerPrimitiveFiber
+import Omega.POM.SchurTraceAllChannelsPrimitiveFiberCoordinate
 import Omega.POM.FiberLabelDistributionInversion
 import Omega.POM.CRTSpatializationPrimeBudget
 import Omega.POM.SchurChannelsModPNFromPtypicalGhost
