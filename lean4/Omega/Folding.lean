@@ -110,6 +110,7 @@ import Omega.Folding.FoldBinSaturationResidueWindow
 import Omega.Folding.SaturationSmoothDichotomy
 import Omega.Folding.CollisionDecomp
 import Omega.Folding.CollisionKernel
+import Omega.Folding.SignedCompanionLucasCertificate
 import Omega.Folding.CollisionZeta
 import Omega.Folding.CollisionZetaOperator
 import Omega.Folding.ComplementPhaseLockingFixedpoints
