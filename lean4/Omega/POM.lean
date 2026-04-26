@@ -154,6 +154,7 @@ import Omega.POM.WreathArtinFactorization
 import Omega.POM.FreezingVsSchurEnvelopeSeparation
 import Omega.POM.WmKlToUniform
 import Omega.POM.WmTailLdpRqCertificate
+import Omega.POM.SymmetricGroupGibbsFreezing
 import Omega.POM.BCDiscreteJacobianStrictification
 import Omega.POM.BCBianchi
 import Omega.POM.BCChainDefectEqualsEscortCurvatureSum
