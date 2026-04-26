@@ -1825,3 +1825,4 @@ import Omega.Zeta.XiTimePart9zmParityCharacterBreaksSquareRootBarrier
 import Omega.Zeta.XiPoissonKlBridgeVarianceNecessaryCondition
 import Omega.Zeta.XiFoldbinLastbitCompleteReadoutStatistic
 import Omega.Zeta.XiJGTransportResultantLeadingRigidity
+import Omega.Zeta.XiTimePart63bFixedqSchurPacketRecoversLowMomentsPrimitives

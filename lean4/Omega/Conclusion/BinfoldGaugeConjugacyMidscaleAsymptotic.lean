@@ -98,12 +98,17 @@ def log_conjugacy_main_asymptotic
       D.logConjugacy m / conclusion_binfold_gauge_conjugacy_midscale_asymptotic_scale m)
     atTop (nhds conclusion_binfold_gauge_conjugacy_midscale_asymptotic_constant)
 
+/-- Paper-facing law name for the conjugacy-class midscale asymptotic. -/
+def conclusion_binfold_gauge_conjugacy_midscale_asymptotic_law
+    (D : conclusion_binfold_gauge_conjugacy_midscale_asymptotic_data) : Prop :=
+  D.log_conjugacy_main_asymptotic
+
 end conclusion_binfold_gauge_conjugacy_midscale_asymptotic_data
 
 /-- Paper label: `thm:conclusion-binfold-gauge-conjugacy-midscale-asymptotic`. -/
 theorem paper_conclusion_binfold_gauge_conjugacy_midscale_asymptotic
     (D : conclusion_binfold_gauge_conjugacy_midscale_asymptotic_data) :
-    D.log_conjugacy_main_asymptotic := by
+    D.conclusion_binfold_gauge_conjugacy_midscale_asymptotic_law := by
   have hOneWeighted :
       Tendsto
         (fun m : ℕ =>
