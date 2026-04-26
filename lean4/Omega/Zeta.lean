@@ -200,6 +200,7 @@ import Omega.Zeta.XiTimeResolutionDualBudgetPhaseTransition
 import Omega.Zeta.XiPoissonCoarsegrainingFDivergenceContraction
 import Omega.Zeta.XiPoissonKernelDerivativeL1FisherClosed
 import Omega.Zeta.MomqGapLinearAmplificationRandomnessCost
+import Omega.Zeta.XiToeplitzSchurCohnInertiaAlignment
 import Omega.Zeta.XiCauchyPoissonOddMomentSelectionLaw
 import Omega.Zeta.XiPoissonCauchyKlMomentLocking
 import Omega.Zeta.XiPoissonKlSixthOrderMu3Mu4

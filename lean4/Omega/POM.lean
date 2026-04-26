@@ -203,6 +203,7 @@ import Omega.POM.CRTSpatializationPrimeBudget
 import Omega.POM.PrimeRegisterQuantileBudget
 import Omega.POM.PrimeRegisterQQuotaFamily
 import Omega.POM.CapacityCollisionDataProcessing
+import Omega.POM.MaxfiberOrientationChargePeriodic
 import Omega.POM.CapacityPointwiseMinimalMajorization
 import Omega.POM.FoldGroupoid2dTqftPartition
 import Omega.POM.CollisionThresholdCapacity
