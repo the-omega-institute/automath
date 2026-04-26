@@ -218,6 +218,7 @@ import Omega.Zeta.FinitePartResidueConstantRHSqueeze
 import Omega.Zeta.XiTimePart9xbPrefixWordsFaithfulAffineRealization
 import Omega.Zeta.XiTimePart60ab2LogcmShiftEvenZeta
 import Omega.Zeta.XiTimePart60acbGaugeConstantRecoversEvenZeta
+import Omega.Zeta.XiGoldenW1TwoPhaseArithmeticMean
 import Omega.Zeta.XiFiniteFrontierCertificate
 import Omega.Zeta.XiToeplitzNegativeMarginFromHankelFingerprint
 import Omega.Zeta.XiCoherenceStoppingTimeLeyangK5
