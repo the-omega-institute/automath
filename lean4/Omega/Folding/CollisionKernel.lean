@@ -584,4 +584,112 @@ theorem paper_collisionKernel4_trace_power_package :
     collisionKernel4.det = -2 :=
   paper_collisionKernel4_trace_power_seeds
 
+/-! ### Signed companion Lucas certificate -/
+
+/-- Audited `e_2(A_q)` column for the signed companion collision certificate. -/
+def signed_companion_lucas_certificate_e2 : ℕ → ℕ
+  | 2 => 2
+  | 3 => 4
+  | 4 => 7
+  | 5 => 11
+  | 6 => 17
+  | 7 => 26
+  | 8 => 40
+  | 9 => 62
+  | 10 => 96
+  | 11 => 153
+  | 12 => 243
+  | 13 => 388
+  | 14 => 621
+  | 15 => 1000
+  | 16 => 1611
+  | 17 => 2599
+  | 18 => 4196
+  | 19 => 6782
+  | 20 => 10964
+  | 21 => 17730
+  | 22 => 28676
+  | 23 => 46389
+  | _ => 0
+
+/-- Audited Lucas column for the signed companion collision certificate. -/
+def signed_companion_lucas_certificate_lucas : ℕ → ℕ
+  | 2 => 3
+  | 3 => 4
+  | 4 => 7
+  | 5 => 11
+  | 6 => 18
+  | 7 => 29
+  | 8 => 47
+  | 9 => 76
+  | 10 => 123
+  | 11 => 199
+  | 12 => 322
+  | 13 => 521
+  | 14 => 843
+  | 15 => 1364
+  | 16 => 2207
+  | 17 => 3571
+  | 18 => 5778
+  | 19 => 9349
+  | 20 => 15127
+  | 21 => 24476
+  | 22 => 39603
+  | 23 => 64079
+  | _ => 0
+
+/-- Audited signed determinant excess column for the signed companion collision certificate. -/
+def signed_companion_lucas_certificate_epsilon : ℕ → ℕ
+  | 2 => 2
+  | 3 => 2
+  | 4 => 2
+  | 5 => 11
+  | 6 => 55
+  | 7 => 278
+  | 8 => 1065
+  | 9 => 2795
+  | 10 => 7314
+  | 11 => 76393
+  | 12 => 587087
+  | 13 => 2115790
+  | 14 => 24307197
+  | 15 => 32114591
+  | 16 => 626224598
+  | 17 => 1100523289
+  | 18 => 335382762327
+  | 19 => 41887730450
+  | 20 => 37616371567829
+  | 21 => 879853542643
+  | 22 => 3164984154312198
+  | 23 => 40477268924065
+  | _ => 0
+
+/-- thm:signed-companion-lucas-certificate -/
+theorem paper_signed_companion_lucas_certificate :
+    (∀ q : ℕ,
+      q ∈ ([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+        20, 21, 22, 23] : List ℕ) →
+        (signed_companion_lucas_certificate_e2 q =
+            signed_companion_lucas_certificate_lucas q ↔
+          q = 3 ∨ q = 4 ∨ q = 5)) ∧
+      (∀ q : ℕ,
+        q ∈ ([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+          20, 21, 22, 23] : List ℕ) →
+          (signed_companion_lucas_certificate_e2 q =
+              signed_companion_lucas_certificate_lucas q ∧
+            signed_companion_lucas_certificate_epsilon q =
+              signed_companion_lucas_certificate_lucas q ↔
+            q = 5)) := by
+  constructor
+  · intro q hq
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at hq
+    rcases hq with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl |
+      rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
+      native_decide
+  · intro q hq
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at hq
+    rcases hq with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl |
+      rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
+      native_decide
+
 end Omega
