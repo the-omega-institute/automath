@@ -1699,6 +1699,7 @@ import Omega.Zeta.XiTimePart9zbmFoldpiHadamardIndicator
 import Omega.Zeta.XiBinfoldOracleSuccessBitrateThresholdExact
 import Omega.Zeta.XiHellingerKernelAndreiefLoggas
 import Omega.Zeta.XiHellingerToeplitzFreeEnergyAreaLaw
+import Omega.Zeta.XiQepZeroEquivalence
 import Omega.Zeta.XiTimePart9n1bKaniRosenHiddenQuotientGenera
 import Omega.Zeta.DephysHyperbolicCurvatureNormalizationFour
 import Omega.Zeta.XiPoissonCauchyKLUniversalCmComplexMoment
