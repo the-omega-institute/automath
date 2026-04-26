@@ -220,6 +220,7 @@ import Omega.Zeta.XiLissajousCyclicOrbitAliasLattice
 import Omega.Zeta.XiTimePart60abZeroBlockForcesBinomialFactor
 import Omega.Zeta.XiTimePart60ab2StableSpectrumSelfreciprocalCenter
 import Omega.Zeta.XiTimePart60ab2ExactDarkModeArithmeticCriterion
+import Omega.Zeta.XiMultichannelWitnessKappaOrAnom
 import Omega.Zeta.XiTimePart60ab2LogcmShiftInfiniteModal
 import Omega.Zeta.XiCayleyPhaseDoubleRotationRationalParity
 import Omega.Zeta.XiPhiDiskpoleRatioIdentity
