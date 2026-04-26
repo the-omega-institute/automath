@@ -85,6 +85,18 @@ theorem paper_prop_fold_conditional_expectation_singular_spectrum (D : FoldFiber
   · intro x
     exact D.singularValue_sq x
 
+/-- Paper label: `prop:fold-condexp-singular-values`. The fiber-average compression has diagonal
+`E E*` entries `1 / d(x)`, so the squared singular value over `x` is `1 / d(x)`. -/
+theorem paper_fold_condexp_singular_values (D : FoldFiberMultiplicity) :
+    (∀ g x, D.conditionalExpectation (D.conditionalExpectationAdjoint g) x =
+      (1 / (D.d x : ℝ)) * g x) ∧
+      (∀ x, D.singularValue x ^ 2 = 1 / (D.d x : ℝ)) := by
+  refine ⟨?_, ?_⟩
+  · intro g x
+    simpa [FoldFiberMultiplicity.diagonalEntry] using D.conditionalExpectation_comp_adjoint g x
+  · intro x
+    simpa [FoldFiberMultiplicity.diagonalEntry] using D.singularValue_sq x
+
 end
 
 end Omega.OperatorAlgebra
