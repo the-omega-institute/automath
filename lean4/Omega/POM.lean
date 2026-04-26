@@ -5,6 +5,7 @@ import Omega.POM.FiberFactorialCumulantsSignLogconvex
 import Omega.POM.FiberSchurBidirectionalCompilation
 import Omega.POM.ObservableMinpolyOrderCollapseQ913
 import Omega.POM.MultiplicityAtomMultifractal
+import Omega.POM.SpaceLowerBound
 import Omega.POM.ConvexityForcesTypicalLeWorst
 import Omega.POM.SaturationPhaseCharacterization
 import Omega.POM.ReversibleExternalResidualKolmogorovTypicalEquality
