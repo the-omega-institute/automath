@@ -1,3 +1,4 @@
+import Omega.POM.PrimOddEven
 import Omega.POM.CurvatureIndependentDivergent
 import Omega.POM.ReplicaSoftcorePerronFeshbachCompositionMomentSeries
 import Omega.POM.ReplicaSoftcoreAlternatingVandermondeFibonacciProduct
