@@ -22,6 +22,7 @@ import Omega.OperatorAlgebra.FiberDeterminantSignCapacityParity
 import Omega.OperatorAlgebra.FiberReflectorDeterminantPotential
 import Omega.OperatorAlgebra.FiberSpectrumDeterminantPartition
 import Omega.OperatorAlgebra.FiniteConditionalExpectationPythagoras
+import Omega.OperatorAlgebra.FiniteCondexpVarianceDecomposition
 import Omega.OperatorAlgebra.FkdetChiSectorFactorization
 import Omega.OperatorAlgebra.FkdetProperties
 import Omega.OperatorAlgebra.FoldBayesPosteriorCollapse
