@@ -21,6 +21,7 @@ structure CollisionMomentMinrecHaltingTimeData where
   nonhalting_seq : ¬ halts → seq = fun _ => 2
   halting_seq : halts → ∀ n, seq n = if n < haltingSteps then 2 else 2 ^ q
   halting_plateau_ne_two : halts → 0 < haltingSteps → 2 ^ q ≠ 2
+  halting_power_ge_two : halts → 2 ≤ 2 ^ q
   min_order_spec : ∀ r, collisionMomentTailOrder seq r ↔ minRecurrenceOrder ≤ r
 
 private theorem collisionMomentTailOrder_const_two :

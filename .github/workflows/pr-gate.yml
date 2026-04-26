@@ -78,9 +78,20 @@ jobs:
     uses: ./.github/workflows/reusable-lean4.yml
     secrets: inherit
 
+  outreach_artifacts:
+    name: Outreach Artifact Hygiene
+    needs: detect_changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Reject outreach runtime artifacts
+        run: python3 tools/community-outreach/outreach_pipeline.py --check-artifacts
+
   gate:
     name: Gate
-    needs: [detect_changes, pdf, lean4]
+    needs: [detect_changes, pdf, lean4, outreach_artifacts]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
@@ -89,6 +100,7 @@ jobs:
           detect_result="${{ needs.detect_changes.result }}"
           pdf_result="${{ needs.pdf.result }}"
           lean4_result="${{ needs.lean4.result }}"
+          outreach_result="${{ needs.outreach_artifacts.result }}"
 
           {
             echo "PR gate results"
@@ -96,6 +108,7 @@ jobs:
             echo "- detect_changes: \`$detect_result\`"
             echo "- pdf: \`$pdf_result\`"
             echo "- lean4: \`$lean4_result\`"
+            echo "- outreach_artifacts: \`$outreach_result\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
           if [ "$detect_result" = "failure" ] || [ "$detect_result" = "cancelled" ]; then
@@ -107,5 +120,9 @@ jobs:
           fi
 
           if [ "$lean4_result" = "failure" ] || [ "$lean4_result" = "cancelled" ]; then
+            exit 1
+          fi
+
+          if [ "$outreach_result" = "failure" ] || [ "$outreach_result" = "cancelled" ]; then
             exit 1
           fi

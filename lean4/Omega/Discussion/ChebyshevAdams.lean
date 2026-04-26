@@ -441,6 +441,16 @@ theorem chebyAdams_pow_prime_compose (p k : ℕ) (S : ℤ) :
     chebyAdams (p ^ (k + 1)) S = chebyAdams (p ^ k) (chebyAdams p S) := by
   rw [pow_succ, chebyAdams_mul]
 
+/-- Paper-facing completed Dwork package in Chebyshev coordinates.
+    thm:discussion-completed-dwork-chebyshev -/
+theorem paper_discussion_completed_dwork_chebyshev (p k : ℕ) (S : ℤ) :
+    chebyAdams (p ^ (k + 1)) S = chebyAdams (p ^ k) (chebyAdams p S) ∧
+      chebyAdams (2 * p ^ k) S = chebyAdams (p ^ k) (S ^ 2 - 2) ∧
+      chebyAdams (3 * p ^ k) S = chebyAdams (p ^ k) (S ^ 3 - 3 * S) := by
+  refine ⟨chebyAdams_pow_prime_compose p k S, ?_, ?_⟩
+  · simpa using chebyAdams_double (p ^ k) S
+  · simpa using chebyAdams_triple (p ^ k) S
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R320: Chebyshev-Adams at S=4
 -- ══════════════════════════════════════════════════════════════

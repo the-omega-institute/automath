@@ -66,4 +66,22 @@ theorem paper_fold_logmultiplicity_pressure_derivative
     change Real.log 2 - D.normalizedKappaLimit = Real.log 2 - D.pressureDerivAtOne
     exact congrArg (fun x : ℝ => Real.log 2 - x) hDiff
 
+/-- Paper label: `cor:fold-logmultiplicity-normalized-pressure-derivative`. The normalized
+pressure derivative is the pressure derivative shifted by `log 2`, so the mean log-multiplicity
+rate is recovered from the endpoint derivative of the normalized pressure. -/
+theorem paper_fold_logmultiplicity_normalized_pressure_derivative
+    (D : FoldLogMultiplicityPressureDerivativeData) :
+    (∀ m : ℕ,
+      D.kappa m / (m : ℝ) =
+        Real.log 2 + (D.logSaDerivAtOne m / (m : ℝ) - Real.log 2)) ∧
+    (D.pressureDifferentiableAtOne ->
+      D.normalizedKappaLimit = Real.log 2 + (D.pressureDerivAtOne - Real.log 2)) := by
+  refine ⟨?_, ?_⟩
+  · intro m
+    rw [show D.kappa m = D.logSaDerivAtOne m by rfl]
+    ring
+  · intro hDiff
+    simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using
+      congrArg (fun x : ℝ => Real.log 2 + (x - Real.log 2)) hDiff
+
 end Omega.Folding

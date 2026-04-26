@@ -30,4 +30,16 @@ theorem paper_recursive_addressing_observer_indexed_forcing_monotonicity
       (φ := φ)
       hp)
 
+/-- Lowercase paper-label wrapper for observer-indexed forcing monotonicity.
+    prop:observer-indexed-forcing-monotonicity -/
+theorem paper_observer_indexed_forcing_monotonicity
+    {Context Val Formula : Type}
+    (satisfies : Val → Formula → Prop)
+    (p q : Omega.LogicExpansionChain.ForcingPersistence.InformationState Context Val)
+    (href : q.realizations ⊆ p.realizations)
+    {φ : Formula}
+    (hp : Omega.LogicExpansionChain.ForcingPersistence.Forces satisfies p φ) :
+    Omega.LogicExpansionChain.ForcingPersistence.Forces satisfies q φ :=
+  paper_recursive_addressing_observer_indexed_forcing_monotonicity satisfies p q href hp
+
 end Omega.RecursiveAddressing

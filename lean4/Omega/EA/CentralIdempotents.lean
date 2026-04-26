@@ -117,6 +117,15 @@ theorem paper_central_idempotents_complete_system {a b : ℚ}
     epp_mul_epn ha hb, epp_mul_enp ha hb, epp_mul_enn ha hb,
     epn_mul_enp ha hb, epn_mul_enn ha hb, enp_mul_enn ha hb⟩
 
+/-- Paper-facing wrapper for the complete central-idempotent package.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem paper_fold_groupoid_z2x2_central_idempotents {a b : ℚ} (ha : a ^ 2 = 1) (hb : b ^ 2 = 1) :
+    epp a b + epn a b + enp a b + enn a b = 1 ∧ epp a b ^ 2 = epp a b ∧
+    epn a b ^ 2 = epn a b ∧ enp a b ^ 2 = enp a b ∧ enn a b ^ 2 = enn a b ∧
+    epp a b * epn a b = 0 ∧ epp a b * enp a b = 0 ∧ epp a b * enn a b = 0 ∧
+    epn a b * enp a b = 0 ∧ epn a b * enn a b = 0 ∧ enp a b * enn a b = 0 := by
+  exact paper_central_idempotents_complete_system ha hb
+
 /-- Central idempotents at (+1, +1): only epp activates.
     thm:fold-groupoid-z2x2-central-idempotents -/
 theorem central_idempotents_at_one_one :

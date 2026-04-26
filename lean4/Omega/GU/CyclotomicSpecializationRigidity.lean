@@ -22,4 +22,11 @@ theorem paper_gut_cyclotomic_specialization_rigidity
     D.infinitelyManyCommonSlowModes → ∃ H : D.BivariatePolynomial, D.nontrivialCommonFactor H := by
   exact D.specializationRigidity
 
+/-- Chapter-facing wrapper around the GU specialization-rigidity package.
+    thm:cyclotomic-specialization-rigidity -/
+theorem paper_cyclotomic_specialization_rigidity
+    (D : CyclotomicSpecializationRigidityData) :
+    D.infinitelyManyCommonSlowModes → ∃ H : D.BivariatePolynomial, D.nontrivialCommonFactor H := by
+  exact paper_gut_cyclotomic_specialization_rigidity D
+
 end Omega.GU

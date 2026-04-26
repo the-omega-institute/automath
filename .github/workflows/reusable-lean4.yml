@@ -16,7 +16,7 @@ jobs:
   build-lean4:
     name: Build Lean4
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 180
     steps:
       - name: Check out repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -24,13 +24,13 @@ jobs:
           ref: ${{ inputs.checkout_ref != '' && inputs.checkout_ref || github.sha }}
           fetch-depth: 0
 
-      - name: Cache Lean build artifacts
-        uses: actions/cache@v4
+      - name: Restore Lean .lake cache
+        uses: actions/cache/restore@v4
         with:
-          path: lean4/.lake/build
-          key: lean4-olean-${{ runner.os }}-${{ github.run_id }}
+          path: lean4/.lake
+          key: lean4-lake-${{ runner.os }}-${{ github.sha }}
           restore-keys: |
-            lean4-olean-${{ runner.os }}-
+            lean4-lake-${{ runner.os }}-
 
       - name: Build Lean4 project
         uses: leanprover/lean-action@c544e89643240c6b398f14a431bcdc6309e36b3e # v1
@@ -38,6 +38,7 @@ jobs:
           lake-package-directory: lean4
           build: true
           use-mathlib-cache: true
+          use-github-cache: "false"
 
       - name: Audit Lean sources
         run: python3 lean4/scripts/omega_ci.py audit
@@ -47,3 +48,10 @@ jobs:
 
       - name: Build paper coverage report
         run: python3 lean4/scripts/omega_ci.py paper-coverage --sections body --json "${RUNNER_TEMP}/omega-paper-coverage.json"
+
+      - name: Save Lean .lake cache (dev only)
+        if: success() && github.ref == 'refs/heads/dev'
+        uses: actions/cache/save@v4
+        with:
+          path: lean4/.lake
+          key: lean4-lake-${{ runner.os }}-${{ github.sha }}

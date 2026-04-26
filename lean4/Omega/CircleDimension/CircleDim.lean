@@ -39,6 +39,16 @@ theorem circleDim_iso (a b c d : Nat) (h : a = b) :
 theorem circleDim_finite_extension (n t1 t2 : Nat) :
     circleDim n t1 = circleDim n t2 := rfl
 
+/-- Paper-facing package of the basic circle-dimension laws.
+    prop:circle-dimension-laws -/
+theorem paper_circle_dimension_laws (a b c d n t1 t2 : Nat) :
+    (a = b → circleDim a c = circleDim b d) ∧
+    circleDim (a + b) (c + d) = circleDim a c + circleDim b d ∧
+    circleDim n t1 = circleDim n t2 := by
+  refine ⟨?_, circleDim_add a b c d, circleDim_finite_extension n t1 t2⟩
+  intro h
+  exact circleDim_iso a b c d h
+
 /-- Circle dimension is zero iff free rank is zero.
     prop:circle-dimension-laws -/
 theorem circleDim_eq_zero_iff (n t : Nat) :

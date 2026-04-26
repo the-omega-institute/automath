@@ -33,4 +33,11 @@ theorem paper_unitgroup_z2_character_count_m5_m6_package :
     involutionCount 13 = 1 ∧ involutionCount 21 = 3 := by
   exact paper_unitgroup_z2_character_count_m5_m6_seeds
 
+/--
+Paper-facing proposition `prop:unitgroup-z2-character-count-m5-m6`.
+-/
+theorem paper_unitgroup_z2_character_count_m5_m6 :
+    involutionCount 13 = 1 ∧ involutionCount 21 = 3 := by
+  exact ⟨involutionCount_13, involutionCount_21⟩
+
 end Omega.GU.UnitgroupZ2CharacterCount

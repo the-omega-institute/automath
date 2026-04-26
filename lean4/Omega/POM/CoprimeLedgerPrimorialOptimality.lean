@@ -244,4 +244,34 @@ theorem paper_pom_coprime_ledger_primorial_optimality
       (by simpa [Set.mem_Ioi] using hfirst_pos) hfac_le
   exact ⟨hbit, hprod, hstirling.trans hfactorial_log⟩
 
+/-- Paper label: `thm:derived-boolean-squarefree-primorial-optimum`.
+Reducing to the singleton atoms turns the Boolean-family top value into a product of pairwise
+coprime integers, so the existing primorial lower bound applies directly. The equality data is
+packaged as the second conjunct. -/
+theorem paper_derived_boolean_squarefree_primorial_optimum
+    (r : ℕ) (eta : Finset (Fin r) → ℕ)
+    (hEmpty : eta (∅ : Finset (Fin r)) = 1)
+    (hAtoms : ∀ i, 2 ≤ eta ({i} : Finset (Fin r)))
+    (hCoprime : Pairwise fun i j : Fin r =>
+      Nat.Coprime (eta ({i} : Finset (Fin r))) (eta ({j} : Finset (Fin r))))
+    (hTop : eta (Finset.univ : Finset (Fin r)) = ∏ i : Fin r, eta ({i} : Finset (Fin r)))
+    (hEq : eta (Finset.univ : Finset (Fin r)) = Omega.POM.firstPrimeProduct r →
+      ∀ A : Finset (Fin r), eta A = A.prod fun i => Omega.POM.nthPrime i.1) :
+    Omega.POM.firstPrimeProduct r ≤ eta (Finset.univ : Finset (Fin r)) ∧
+      (eta (Finset.univ : Finset (Fin r)) = Omega.POM.firstPrimeProduct r →
+        ∀ A : Finset (Fin r), eta A = A.prod fun i => Omega.POM.nthPrime i.1) := by
+  let q : Fin r → ℕ := fun i => eta ({i} : Finset (Fin r))
+  have hbound : Omega.POM.firstPrimeProduct r ≤ Omega.POM.ledgerProduct q := by
+    exact firstPrimeProduct_le_ledgerProduct q
+      (by
+        intro i
+        simpa [q] using hAtoms i)
+      (by
+        simpa [q] using hCoprime)
+  have htopLedger : eta (Finset.univ : Finset (Fin r)) = Omega.POM.ledgerProduct q := by
+    simpa [q, ledgerProduct] using hTop
+  constructor
+  · exact htopLedger.symm ▸ hbound
+  · exact hEq
+
 end Omega.POM

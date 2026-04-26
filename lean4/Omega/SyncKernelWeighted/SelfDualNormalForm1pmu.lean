@@ -61,4 +61,9 @@ theorem paper_self_dual_normal_form_1pmu (u : ℂ) (X Y Z W : ℂ) :
   · ext <;> simp <;> ring
   · exact ⟨rfl, rfl⟩
 
+/-- Paper label: `cor:self-dual-u1-decouple`. -/
+theorem paper_self_dual_u1_decouple (B0 : SelfDualBlockMatrix) :
+    selfDualFamily 1 B0 = { X := 2 * B0.X, Y := 0, Z := 0, W := 2 * B0.W } := by
+  ext <;> simp [selfDualFamily, selfDualPiConj] <;> ring
+
 end Omega.SyncKernelWeighted

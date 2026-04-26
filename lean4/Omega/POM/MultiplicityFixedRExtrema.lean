@@ -1,4 +1,4 @@
-import Mathlib.Tactic
+import Omega.POM.MultiplicityFixedLREnvelope
 
 namespace Omega.POM.MultiplicityFixedRExtrema
 
@@ -85,5 +85,12 @@ theorem paper_pom_multiplicity_fixed_r_extrema_algebra_core :
   ⟨fib_three_mul,
    two_fib_add_four_eq_three_fib_add_three_plus_fib,
    fib_shifted_fusion⟩
+
+/-- Paper wrapper for the fixed-`(L,r)` multiplicity extremal witnesses and closed-form
+    endpoint values proved in the shared envelope module.
+    prop:pom-multiplicity-fixed-r-extrema -/
+theorem paper_pom_multiplicity_fixed_r_extrema (L r : ℕ) (_hL : 1 ≤ L) (hr : 1 ≤ r) (hrL : r ≤ L) :
+    Omega.POM.multiplicityFixedLREnvelopeStatement L r :=
+  Omega.POM.paper_pom_multiplicity_fixed_L_r_envelope L r (by omega) hr hrL
 
 end Omega.POM.MultiplicityFixedRExtrema

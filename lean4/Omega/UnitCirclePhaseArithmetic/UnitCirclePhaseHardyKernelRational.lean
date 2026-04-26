@@ -1,13 +1,6 @@
 import Mathlib.Analysis.SpecialFunctions.Complex.Circle
 import Mathlib.Tactic
 
-namespace Complex
-
-/-- Compatibility alias used by some Omega statements. -/
-abbrev conj : ℂ → ℂ := star
-
-end Complex
-
 namespace Omega.UnitCirclePhaseArithmetic
 
 noncomputable section
@@ -19,8 +12,8 @@ def unitCirclePhaseW (x : Real) : Complex :=
 /-- Truncated Hardy kernel in rational closed form.  The diagonal value is defined by continuity. -/
 def unitCirclePhaseHardyKernel (N : Nat) (x y : Real) : Complex :=
   if _hxy : x = y then (N : Complex)
-  else (1 - (unitCirclePhaseW x * Complex.conj (unitCirclePhaseW y)) ^ N) /
-    (1 - unitCirclePhaseW x * Complex.conj (unitCirclePhaseW y))
+  else (1 - (unitCirclePhaseW x * star (unitCirclePhaseW y)) ^ N) /
+    (1 - unitCirclePhaseW x * star (unitCirclePhaseW y))
 
 lemma one_sub_I_mul_ne_zero (x : Real) : (1 - Complex.I * (x : Complex)) ≠ 0 := by
   intro h
@@ -33,16 +26,16 @@ lemma one_add_I_mul_ne_zero (x : Real) : (1 + Complex.I * (x : Complex)) ≠ 0 :
   norm_num at hre
 
 lemma unitCirclePhase_one_sub_mul_conj (x y : Real) :
-    1 - unitCirclePhaseW x * Complex.conj (unitCirclePhaseW y) =
+    1 - unitCirclePhaseW x * star (unitCirclePhaseW y) =
       (2 * Complex.I * (y - x)) / ((1 - Complex.I * x) * (1 + Complex.I * y)) := by
   have hDen1 : (1 - Complex.I * (x : Complex)) ≠ 0 := one_sub_I_mul_ne_zero x
   have hDen2 : (1 + Complex.I * (y : Complex)) ≠ 0 := one_add_I_mul_ne_zero y
-  simp [unitCirclePhaseW, Complex.conj, div_eq_mul_inv]
+  simp [unitCirclePhaseW, div_eq_mul_inv]
   field_simp [hDen1, hDen2]
   ring
 
 lemma unitCirclePhase_inv_one_sub_mul_conj (x y : Real) (hxy : x ≠ y) :
-    1 / (1 - unitCirclePhaseW x * Complex.conj (unitCirclePhaseW y)) =
+    1 / (1 - unitCirclePhaseW x * star (unitCirclePhaseW y)) =
       ((1 - Complex.I * x) * (1 + Complex.I * y)) / (2 * Complex.I * (y - x)) := by
   have hDen1 : (1 - Complex.I * (x : Complex)) ≠ 0 := one_sub_I_mul_ne_zero x
   have hDen2 : (1 + Complex.I * (y : Complex)) ≠ 0 := one_add_I_mul_ne_zero y
@@ -57,10 +50,10 @@ lemma unitCirclePhase_inv_one_sub_mul_conj (x y : Real) (hxy : x ≠ y) :
 theorem paper_unit_circle_phase_hardy_kernel_rational (N : Nat) (hN : 1 <= N) (x y : Real) :
     unitCirclePhaseHardyKernel N x y =
       (if _hxy : x = y then (N : Complex)
-       else (1 - (unitCirclePhaseW x * Complex.conj (unitCirclePhaseW y)) ^ N) /
-         (1 - unitCirclePhaseW x * Complex.conj (unitCirclePhaseW y))) ∧
+       else (1 - (unitCirclePhaseW x * star (unitCirclePhaseW y)) ^ N) /
+         (1 - unitCirclePhaseW x * star (unitCirclePhaseW y))) ∧
     (x != y ->
-      1 / (1 - unitCirclePhaseW x * Complex.conj (unitCirclePhaseW y)) =
+      1 / (1 - unitCirclePhaseW x * star (unitCirclePhaseW y)) =
         ((1 - Complex.I * x) * (1 + Complex.I * y)) / (2 * Complex.I * (y - x))) := by
   let _ := hN
   constructor

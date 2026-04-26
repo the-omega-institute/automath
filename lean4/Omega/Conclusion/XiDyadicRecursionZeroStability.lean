@@ -83,6 +83,38 @@ private lemma xiDyadicCompletion_sub_partial (z : ℂ) (K : ℕ) :
       (xiDyadicTailConstant : ℂ) * (-((z ^ 2) + (1 / 4 : ℂ))) * (xiDyadicWeight K : ℂ) := by
   simp [xiDyadicCompletion, sub_eq_add_neg, add_left_comm, add_comm]
 
+private lemma conclusion_xi_dyadic_depth_law_tail_constant_pos :
+    0 < xiDyadicTailConstant := by
+  unfold xiDyadicTailConstant
+  have hden : 0 < Real.pi * (1 - Real.exp (-3 * Real.pi)) := by
+    have hpi : 0 < Real.pi := Real.pi_pos
+    have hexp : Real.exp (-3 * Real.pi) < 1 := by
+      rw [Real.exp_lt_one_iff]
+      nlinarith [Real.pi_pos]
+    have hone : 0 < 1 - Real.exp (-3 * Real.pi) := by linarith
+    exact mul_pos hpi hone
+  exact one_div_pos.mpr hden
+
+private lemma conclusion_xi_dyadic_depth_law_weight_le_exp (K : ℕ) :
+    xiDyadicWeight K ≤ Real.exp (-Real.pi * 2 ^ K) := by
+  let x : ℝ := ((2 ^ K : ℕ) : ℝ)
+  have hx1 : 1 ≤ x := by
+    have hpow : (1 : ℕ) ≤ 2 ^ K := by
+      exact Nat.succ_le_of_lt (pow_pos (by decide : 0 < 2) K)
+    change (1 : ℝ) ≤ ((2 ^ K : ℕ) : ℝ)
+    exact_mod_cast hpow
+  have hx0 : 0 ≤ x := le_trans zero_le_one hx1
+  have hpow : 1 ≤ x ^ (3 / 4 : ℝ) := Real.one_le_rpow hx1 (by positivity)
+  have hfac : x ^ (-(3 / 4 : ℝ)) ≤ 1 := by
+    rw [Real.rpow_neg hx0]
+    simpa [one_div] using inv_le_one_of_one_le₀ hpow
+  unfold xiDyadicWeight
+  calc
+    x ^ (-(3 / 4 : ℝ)) * Real.exp (-Real.pi * 2 ^ K) ≤
+        1 * Real.exp (-Real.pi * 2 ^ K) := by
+          exact mul_le_mul_of_nonneg_right hfac (by positivity)
+    _ = Real.exp (-Real.pi * 2 ^ K) := by ring
+
 /-- Dyadic recursion plus explicit real-axis and strip superexponential bounds for the concrete
 Xi-completion model.
     thm:conclusion-xi-dyadic-recursion-superexp -/
@@ -129,5 +161,59 @@ theorem paper_conclusion_xi_dyadic_recursion_superexp
             have hfac_nonneg : 0 ≤ xiDyadicTailConstant * (‖z‖ ^ 2 + 1) := by
               exact mul_nonneg xiDyadicTailConstant_nonneg (by positivity)
             exact mul_le_mul_of_nonneg_left (xiDyadicWeight_le_strip K hη0) hfac_nonneg
+
+/-- Paper label: `cor:conclusion-xi-dyadic-depth-law`. On the real axis, once `2^K` passes the
+explicit logarithmic threshold, the dyadic tail is bounded by `ε`. -/
+theorem paper_conclusion_xi_dyadic_depth_law
+    (t ε : ℝ) (K : ℕ) (hε0 : 0 < ε) (_hε1 : ε ≤ 1)
+    (hK :
+      ((2 ^ K : ℕ) : ℝ) ≥
+        (1 / Real.pi) * Real.log (xiDyadicTailConstant * (t ^ 2 + 1) / ε)) :
+    ‖xiDyadicCompletion (t : ℂ) K - xiDyadicPartial (t : ℂ) K‖ ≤ ε := by
+  have hsuper :=
+    paper_conclusion_xi_dyadic_recursion_superexp (t := t) (z := (t : ℂ)) (K := K) (η := 0)
+      (hη0 := le_rfl) (_hη1 := by norm_num) (_hstrip := by simp)
+  rcases hsuper with ⟨_, hreal, _⟩
+  have htail :
+      ‖xiDyadicCompletion (t : ℂ) K - xiDyadicPartial (t : ℂ) K‖ ≤
+        xiDyadicTailConstant * (t ^ 2 + 1) * Real.exp (-Real.pi * 2 ^ K) := by
+    calc
+      ‖xiDyadicCompletion (t : ℂ) K - xiDyadicPartial (t : ℂ) K‖ ≤
+          xiDyadicTailConstant * (t ^ 2 + 1) * xiDyadicWeight K := hreal
+      _ ≤ xiDyadicTailConstant * (t ^ 2 + 1) * Real.exp (-Real.pi * 2 ^ K) := by
+          have hfac_nonneg : 0 ≤ xiDyadicTailConstant * (t ^ 2 + 1) := by
+            exact mul_nonneg xiDyadicTailConstant_nonneg (by positivity)
+          exact mul_le_mul_of_nonneg_left
+            (conclusion_xi_dyadic_depth_law_weight_le_exp K) hfac_nonneg
+  have hdiv_pos : 0 < xiDyadicTailConstant * (t ^ 2 + 1) / ε := by
+    refine div_pos ?_ hε0
+    exact mul_pos conclusion_xi_dyadic_depth_law_tail_constant_pos (by positivity)
+  have hpi_pos : 0 < Real.pi := Real.pi_pos
+  have hpi_ne : (Real.pi : ℝ) ≠ 0 := ne_of_gt hpi_pos
+  have hlog_le : Real.log (xiDyadicTailConstant * (t ^ 2 + 1) / ε) ≤ Real.pi * 2 ^ K := by
+    have hmul :
+        Real.pi * ((1 / Real.pi) * Real.log (xiDyadicTailConstant * (t ^ 2 + 1) / ε)) ≤
+          Real.pi * (((2 ^ K : ℕ) : ℝ)) := by
+      exact mul_le_mul_of_nonneg_left hK hpi_pos.le
+    simpa [div_eq_mul_inv, mul_assoc, hpi_ne] using hmul
+  have hexp_le :
+      xiDyadicTailConstant * (t ^ 2 + 1) / ε ≤ Real.exp (Real.pi * 2 ^ K) := by
+    have := Real.exp_le_exp.2 hlog_le
+    simpa [Real.exp_log hdiv_pos] using this
+  have hscaled :
+      (xiDyadicTailConstant * (t ^ 2 + 1) / ε) * Real.exp (-Real.pi * 2 ^ K) ≤ 1 := by
+    have htmp := mul_le_mul_of_nonneg_right hexp_le (by positivity : 0 ≤ Real.exp (-Real.pi * 2 ^ K))
+    simpa [mul_assoc, ← Real.exp_add, add_comm, add_left_comm, add_assoc] using htmp
+  have hmain :
+      xiDyadicTailConstant * (t ^ 2 + 1) * Real.exp (-Real.pi * 2 ^ K) ≤ ε := by
+    have hεne : (ε : ℝ) ≠ 0 := ne_of_gt hε0
+    calc
+      xiDyadicTailConstant * (t ^ 2 + 1) * Real.exp (-Real.pi * 2 ^ K) =
+          ε * ((xiDyadicTailConstant * (t ^ 2 + 1) / ε) * Real.exp (-Real.pi * 2 ^ K)) := by
+            field_simp [hεne]
+      _ ≤ ε * 1 := by
+            exact mul_le_mul_of_nonneg_left hscaled hε0.le
+      _ = ε := by ring
+  exact htail.trans hmain
 
 end Omega.Conclusion

@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import Omega.CircleDimension.AtomicDefectProny2KappaRecovery
+import Omega.CircleDimension.ComputablePrefixNonidentifiability
 import Omega.CircleDimension.AtomicDefectTwoFrequency4KappaRecovery
 import Omega.Zeta.ToeplitzNegativeInertiaSpectralGapStability
 
@@ -109,5 +110,88 @@ theorem paper_xi_finite_defect_complete_reconstruction
   · intro η
     funext j
     rfl
+
+/-- The `xi`-parameter package read directly from the finite-defect model. -/
+def xi_scan_minimal_complete_2kappa_xi_parameters
+    {κ : ℕ} (D : FiniteDefectCompleteReconstructionData κ) :
+    Fin κ → ℝ × ℝ × ℝ :=
+  fun j => (D.horizontal j, D.depths j, D.weights j)
+
+/-- The `xi`-parameter package recovered by first reading off the Prony node and then evaluating the
+two-frequency weight formula. -/
+noncomputable def xi_scan_minimal_complete_2kappa_recovered_parameters
+    {κ : ℕ} (D : FiniteDefectCompleteReconstructionData κ) :
+    Fin κ → ℝ × ℝ × ℝ :=
+  fun j =>
+    (D.horizontal j,
+      recoveredAtomicDefectDepth D.deltaStep (atomicDefectNode D.deltaStep (D.depths j)),
+      recoveredTwoFrequencyAtomicWeight D.s0
+        (recoveredAtomicDefectDepth D.deltaStep (atomicDefectNode D.deltaStep (D.depths j)))
+        (D.amplitudesXi j))
+
+theorem xi_scan_minimal_complete_2kappa_recovered_parameters_eq
+    {κ : ℕ} (D : FiniteDefectCompleteReconstructionData κ) :
+    xi_scan_minimal_complete_2kappa_recovered_parameters D =
+      xi_scan_minimal_complete_2kappa_xi_parameters D := by
+  funext j
+  have hstep_ne : D.deltaStep ≠ 0 := ne_of_gt D.deltaStep_pos
+  have hdepth :
+      recoveredAtomicDefectDepth D.deltaStep (atomicDefectNode D.deltaStep (D.depths j)) =
+        D.depths j := by
+    unfold recoveredAtomicDefectDepth atomicDefectNode
+    rw [Real.log_exp]
+    field_simp [hstep_ne]
+  simp [xi_scan_minimal_complete_2kappa_recovered_parameters,
+    xi_scan_minimal_complete_2kappa_xi_parameters, hdepth, (D.weight_formula j).symm]
+
+/-- A short binary prefix can be matched by a distinct competitor, so prefixes of length
+`2κ - 1` admit a concrete nonuniqueness witness. -/
+def xi_scan_minimal_complete_2kappa_short_prefix_nonuniqueness (κ : ℕ) : Prop :=
+  ∃ y : ℕ → Bool,
+    (∀ m, m < 2 * κ - 1 → y m = false) ∧
+      y (2 * κ - 1) = true ∧
+      y ≠ fun _ => false
+
+theorem xi_scan_minimal_complete_2kappa_short_prefix_nonuniqueness_holds (κ : ℕ) :
+    xi_scan_minimal_complete_2kappa_short_prefix_nonuniqueness κ := by
+  let x : ℕ → Bool := fun _ => false
+  have hflip :
+      (fun y : ℕ → Bool =>
+        0)
+          (fun m =>
+            if m < 2 * κ - 1 then
+              x m
+            else if m = 2 * κ - 1 then
+              !(x (2 * κ - 1))
+            else
+              false) ≤
+        (fun y : ℕ → Bool =>
+          0) x + 0 := by
+    simp
+  rcases paper_cdim_computable_prefix_nonidentifiability
+      (Kgen := fun _ : (ℕ → Bool) => 0) x (2 * κ - 1) 0 hflip with
+    ⟨y, hyPrefix, hyFlip, hyNe, _⟩
+  refine ⟨y, ?_, ?_, ?_⟩
+  · intro m hm
+    simpa [x] using hyPrefix m hm
+  · simpa [x] using hyFlip
+  · simpa using hyNe
+
+/-- Paper-facing minimal-completeness wrapper for the finite-defect `xi` scan: the existing
+`2κ` Prony package recovers the moment-segment data, the two-frequency package recovers the
+horizontal/weight channel, those recovered node/amplitude data transport back to the concrete
+`xi` parameters, and the shorter prefix regime carries the standard computable nonuniqueness
+witness. -/
+theorem paper_xi_scan_minimal_complete_2kappa
+    (κ : ℕ) (D : FiniteDefectCompleteReconstructionData κ) :
+    D.kappaReadable ∧
+      D.reconstructionFromMomentSegment ∧
+      D.reconstructionFrom4KappaSamples ∧
+      xi_scan_minimal_complete_2kappa_recovered_parameters D =
+        xi_scan_minimal_complete_2kappa_xi_parameters D ∧
+      xi_scan_minimal_complete_2kappa_short_prefix_nonuniqueness κ := by
+  rcases paper_xi_finite_defect_complete_reconstruction κ D with ⟨hkappa, h4kappa, h2kappa, _⟩
+  exact ⟨hkappa, h2kappa, h4kappa, xi_scan_minimal_complete_2kappa_recovered_parameters_eq D,
+    xi_scan_minimal_complete_2kappa_short_prefix_nonuniqueness_holds κ⟩
 
 end Omega.Zeta

@@ -22,6 +22,14 @@ theorem paper_spg_screen_injectivity_audit_cost :
     (∀ c : Nat, 0 < c → (c - 1 = 0 ↔ c = 1)) := by
   refine ⟨by omega, by omega, by omega, fun c hc => by omega⟩
 
+/-- Paper-facing corollary: injectivity is equivalent to connectedness, and the audit-cost
+    component is the `ℤ^(c-1)` circle dimension.
+    cor:spg-screen-injectivity-and-audit-cost-components -/
+theorem paper_spg_screen_injectivity_and_audit_cost_components (c : ℕ) (hc : 0 < c) :
+    (c - 1 = 0 ↔ c = 1) ∧ circleDim (c - 1) 0 = c - 1 := by
+  refine ⟨paper_spg_screen_kernel_connected_components.1 c hc, ?_⟩
+  simpa using circleDim_Zk (c - 1)
+
 /-- Kernel rank is zero iff the screen map is injective.
     cor:spg-screen-injectivity-and-audit-cost-components -/
 theorem kernel_rank_zero_iff_injective (k : Nat) :

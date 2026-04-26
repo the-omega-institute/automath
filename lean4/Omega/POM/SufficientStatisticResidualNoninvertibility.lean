@@ -47,6 +47,24 @@ theorem paper_pom_fiber_multiplicity_fibonacci_prime_closure (m : ℕ) (L : List
   rw [hprod] at hdm
   exact hmain L hlen p hp hdm
 
+/-- Summing the fiberwise residual coverage bound over stable types gives a global coverage bound,
+which becomes a Fibonacci bound once `|X_m| = F_{m+2}` is substituted. -/
+theorem paper_pom_sufficient_statistic_residual_global_coverage (m : Nat) (X : Type*)
+    [Fintype X] (cover : Nat) (d : X → Nat) (hcover : cover ≤ ∑ x, (d x + 1))
+    (hX : Fintype.card X = Nat.fib (m + 2)) (hbound : ∀ x, d x + 1 ≤ m + 1) :
+    (cover : Real) / (2 : Real) ^ m ≤ (((m + 1) * Nat.fib (m + 2)) : Real) / (2 : Real) ^ m := by
+  have htotal_nat : cover ≤ (m + 1) * Fintype.card X := by
+    calc
+      cover ≤ ∑ x, (d x + 1) := hcover
+      _ ≤ ∑ _x : X, (m + 1) := Finset.sum_le_sum fun x _ => hbound x
+      _ = (m + 1) * Fintype.card X := by simp [Nat.mul_comm]
+  have htotal_nat' : cover ≤ (m + 1) * Nat.fib (m + 2) := by
+    rw [← hX]
+    exact htotal_nat
+  have hpow_pos : 0 < (2 : Real) ^ m := by positivity
+  simpa [div_eq_mul_inv] using
+    mul_le_mul_of_nonneg_right (by exact_mod_cast htotal_nat') (inv_nonneg.mpr (le_of_lt hpow_pos))
+
 private lemma fib_lower_phi_pow_pair :
     ∀ n : ℕ, φ ^ n ≤ (Nat.fib (n + 2) : ℝ) ∧ φ ^ (n + 1) ≤ (Nat.fib (n + 3) : ℝ)
   | 0 => by

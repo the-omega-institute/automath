@@ -144,6 +144,20 @@ private lemma derivedFixedFreezingEscortExpectation :
           hescort_eq_ground
     _ = derivedFixedFreezingGStar := derivedFixedFreezingGroundExpectation
 
+/-- In the concrete frozen three-state model, the escort law is already exponentially close to the
+microcanonical law on the maximal fiber, and bounded observables collapse accordingly.
+    thm:derived-fixed-freezing-microcanonical-tv -/
+theorem paper_derived_fixed_freezing_microcanonical_tv :
+    derivedFixedFreezingTvData.tvDistance = 1 - derivedFixedFreezingTvData.massOnMaxFiber ∧
+      derivedFixedFreezingTvData.tvDistance ≤ Real.exp (-derivedFixedFreezingTvData.exponentialGap) ∧
+      XiFixedFreezingEscortObservableData.exponentialObservableCollapse
+        derivedFixedFreezingObservableData := by
+  have htv :=
+    Omega.Conclusion.paper_conclusion_frozen_escort_tv_rigidity derivedFixedFreezingTvData
+  have hcollapse :=
+    paper_xi_fixed_freezing_escort_bounded_observable_collapse derivedFixedFreezingObservableData
+  exact ⟨htv.1, htv.2, hcollapse⟩
+
 /-- In the concrete frozen three-state model, the `r < 1` and `1 ≤ r` branches both collapse to
 the same limiting value `gStar`.
     thm:derived-fixed-freezing-renyi-surface -/

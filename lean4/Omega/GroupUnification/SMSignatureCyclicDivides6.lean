@@ -87,4 +87,15 @@ theorem paper_sm_signature_common_cyclic (n : Nat)
   have hdvd : n ∣ 6 := sm_signature_common_cyclic_divides_6 n h4
   exact sm_signature_common_cyclic_eq_6 n hdvd h2 h3
 
+/-- Paper package with the exact two-part conclusion used in the manuscript:
+common cyclic subgroup order divides `6`, and if both `2` and `3` divide the order, then the
+order is exactly `6`.
+    thm:sm-signature-common-cyclic-identification-divides-6 -/
+theorem paper_sm_signature_common_cyclic_identification_divides_6 (n : Nat)
+    (h4 : n ∣ torsionExponent 4) :
+    n ∣ 6 ∧ (2 ∣ n → 3 ∣ n → n = 6) := by
+  refine ⟨sm_signature_common_cyclic_divides_6 n h4, ?_⟩
+  intro h2 h3
+  exact sm_signature_common_cyclic_eq_6 n (sm_signature_common_cyclic_divides_6 n h4) h2 h3
+
 end Omega.GroupUnification.SMSignatureCyclicDivides6

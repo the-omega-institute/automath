@@ -11,8 +11,9 @@ namespace Omega.Zeta
 noncomputable def xiDepthProfile {n : ℕ} (w h : Fin n → ℝ) : ℝ :=
   ∑ j, w j * h j
 
-/-- The defect potential `Φ(x₀)` as the weighted sum of the endpoint defects `-log (1 - hⱼ)`. -/
-noncomputable def xiLimitDefectPotential {n : ℕ} (w h : Fin n → ℝ) : ℝ :=
+/-- The endpoint defect potential `Φ(x₀)` as the weighted sum of the endpoint defects
+`-log (1 - hⱼ)`. -/
+noncomputable def xiEndpointDefectPotential {n : ℕ} (w h : Fin n → ℝ) : ℝ :=
   ∑ j, w j * (-Real.log (1 - h j))
 
 lemma xi_neg_log_lower_quadratic {u : ℝ} (hu₀ : 0 ≤ u) (hu₁ : u < 1) :
@@ -63,8 +64,8 @@ upper bound comes from `log x ≤ x - 1` applied to `(1 - u)⁻¹` and the unifo
 theorem paper_xi_limit_defect_potential_vs_depth_profile {n : ℕ} (w h : Fin n → ℝ)
     {η κ : ℝ} (hw : ∀ j, 0 ≤ w j) (hκ : ∑ j, w j = κ) (hκ_pos : 0 < κ) (hη : 0 < η)
     (hh₀ : ∀ j, 0 ≤ h j) (hhη : ∀ j, h j ≤ 1 - η) :
-    xiDepthProfile w h + (xiDepthProfile w h) ^ 2 / (2 * κ) ≤ xiLimitDefectPotential w h ∧
-      xiLimitDefectPotential w h ≤ xiDepthProfile w h / η := by
+    xiDepthProfile w h + (xiDepthProfile w h) ^ 2 / (2 * κ) ≤ xiEndpointDefectPotential w h ∧
+      xiEndpointDefectPotential w h ≤ xiDepthProfile w h / η := by
   have hterm_lower :
       ∀ j : Fin n, w j * (h j + h j ^ 2 / 2) ≤ w j * (-Real.log (1 - h j)) := by
     intro j
@@ -76,11 +77,11 @@ theorem paper_xi_limit_defect_potential_vs_depth_profile {n : ℕ} (w h : Fin n 
     refine mul_le_mul_of_nonneg_left ?_ (hw j)
     exact xi_neg_log_upper_linear (hh₀ j) hη (hhη j)
   have hsum_lower :
-      ∑ j, w j * (h j + h j ^ 2 / 2) ≤ xiLimitDefectPotential w h := by
-    simpa [xiLimitDefectPotential] using Finset.sum_le_sum fun j _ => hterm_lower j
+      ∑ j, w j * (h j + h j ^ 2 / 2) ≤ xiEndpointDefectPotential w h := by
+    simpa [xiEndpointDefectPotential] using Finset.sum_le_sum fun j _ => hterm_lower j
   have hsum_upper :
-      xiLimitDefectPotential w h ≤ ∑ j, w j * (h j / η) := by
-    simpa [xiLimitDefectPotential] using Finset.sum_le_sum fun j _ => hterm_upper j
+      xiEndpointDefectPotential w h ≤ ∑ j, w j * (h j / η) := by
+    simpa [xiEndpointDefectPotential] using Finset.sum_le_sum fun j _ => hterm_upper j
   have hcauchy :
       (xiDepthProfile w h) ^ (2 : ℕ) ≤ κ * ∑ j, w j * h j ^ (2 : ℕ) := by
     simpa [xiDepthProfile, hκ] using xi_weighted_cauchy_sq w h hw
@@ -107,9 +108,9 @@ theorem paper_xi_limit_defect_potential_vs_depth_profile {n : ℕ} (w h : Fin n 
             refine Finset.sum_congr rfl ?_
             intro j hj
             ring
-      _ ≤ xiLimitDefectPotential w h := hsum_lower
+      _ ≤ xiEndpointDefectPotential w h := hsum_lower
   · calc
-      xiLimitDefectPotential w h ≤ ∑ j, w j * (h j / η) := hsum_upper
+      xiEndpointDefectPotential w h ≤ ∑ j, w j * (h j / η) := hsum_upper
       _ = xiDepthProfile w h / η := by
             calc
               ∑ j, w j * (h j / η) = ∑ j, (w j * h j) / η := by
