@@ -132,6 +132,7 @@ import Omega.EA.StableAuditAbelianGroupClassification
 import Omega.EA.StableAuditSmallOrderObstruction
 import Omega.EA.StableAddNormalizationRealization
 import Omega.EA.StableAuditPrimeFieldRedundancy
+import Omega.EA.StableAuditAffineFibonacciDashboardClosure
 import Omega.EA.SuccessorStructure
 import Omega.EA.Sync10MemoryHorizonInputStatistics
 import Omega.EA.Sync10Regeneration

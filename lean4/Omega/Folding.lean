@@ -738,6 +738,7 @@ import Omega.Folding.Zeckendorf
 import Omega.Folding.ZeckendorfModDecompositionUnique
 import Omega.Folding.ZeckendorfSignature
 import Omega.Folding.ZeroBlockMemoryDepth
+import Omega.Folding.Window6EquationalSpectrum
 import Omega.Folding.ZeroBlockMinimaxAbsError
 import Omega.Folding.ZeroCosetRigidity
 import Omega.Folding.ZeroFiberLinear
