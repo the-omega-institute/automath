@@ -1784,3 +1784,4 @@ import Omega.Zeta.XiTimePart63bIntegerAxisEllipsePrimeAxisRigidity
 import Omega.Zeta.XiGodelPrimeRegisterInitialObject
 import Omega.Zeta.XiTimePart62dhLeyangBranchAffineTateRegularCover
 import Omega.Zeta.XiZeckendorfGoldenShiftMaxCapacity
+import Omega.Zeta.SelfdualImpliesKappa0
