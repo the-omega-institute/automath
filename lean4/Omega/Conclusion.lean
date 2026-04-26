@@ -78,6 +78,7 @@ import Omega.Conclusion.AmbiguityShellJordanChainGraphLift
 import Omega.Conclusion.AmbiguityShellNilpotentIndexEqualsWindow
 import Omega.Conclusion.AmbiguityShellPreperiodicLocalization
 import Omega.Conclusion.AmbiguityShellUnsyncPrefixPolynomial
+import Omega.Conclusion.Window6LocalMoritaTrivialGlobalNonorbitizable
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.UniaxialPadicTraceEncoding
 import Omega.Conclusion.AnomalyHarmonicRigidity
