@@ -158,4 +158,17 @@ theorem paper_window6_fin21_facts_certificate :
     window6_fin21_facts_certificate_var, window6_fin21_facts_certificate_op,
     window6_first_last_classifier_first, window6_first_last_classifier_last]
 
+/-- Paper label: `prop:window6-crt-rectangular-band`. -/
+theorem paper_window6_crt_rectangular_band :
+    ∀ a3 a7 b3 b7 : Nat,
+      window6_first_last_classifier_eval
+          (fun i : Fin 2 => if i = 0 then a3 else b3)
+          (fun i : Fin 2 => if i = 0 then a7 else b7)
+          (window6_first_last_classifier_term.window6_first_last_classifier_op
+            (window6_first_last_classifier_term.window6_first_last_classifier_var 0)
+            (window6_first_last_classifier_term.window6_first_last_classifier_var 1)) =
+        (a3 % 3, b7 % 7) := by
+  intro a3 a7 b3 b7
+  simp [window6_first_last_classifier_eval]
+
 end Omega.EA
