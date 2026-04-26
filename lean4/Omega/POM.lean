@@ -13,6 +13,7 @@ import Omega.POM.OracleSigmaDeterminesTauOn01
 import Omega.POM.OracleAnalyticExtensionAllSpectrum
 import Omega.POM.OracleThermalPointCriteria
 import Omega.POM.OracleFailureExponentInverseDesign
+import Omega.POM.OracleCriticalWindowMDP
 import Omega.POM.FiberFactorialCumulantsSignLogconvex
 import Omega.POM.FiberSchurBidirectionalCompilation
 import Omega.POM.ObservableMinpolyOrderCollapseQ913
