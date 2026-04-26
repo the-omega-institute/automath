@@ -1,5 +1,6 @@
 import Omega.POM.DiagonalRateTwoLayerQuartic
 import Omega.POM.DiagonalRateFoldedCurvatureAuditable
+import Omega.POM.CapacitySaturationDiscriminant
 import Omega.POM.OracleSigmaDeterminesTauOn01
 import Omega.POM.OracleFailureExponentInverseDesign
 import Omega.POM.FiberFactorialCumulantsSignLogconvex
