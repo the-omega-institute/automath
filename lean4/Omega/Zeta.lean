@@ -1020,6 +1020,7 @@ import Omega.Zeta.XiHypercubeLeyangStokesHolography
 import Omega.Zeta.HankelFirstBlockDeterminantDiscriminantWeight
 import Omega.Zeta.HankelMaximalMinorSyndromeNormalFormUniqueness
 import Omega.Zeta.HankelMaximalMinorSyndromeOffsetProjectiveInvariance
+import Omega.Zeta.XiHankelRecurrenceCommonDenominator
 import Omega.Zeta.HankelMinimalRecurrenceGoodPrimePreservation
 import Omega.Zeta.HankelNullspaceTruncatedIdealStructure
 import Omega.Zeta.HankelRankLinearRecurrence

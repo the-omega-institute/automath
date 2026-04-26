@@ -257,6 +257,7 @@ import Omega.POM.CentralizerSemiringFibonacciFusion
 import Omega.POM.Rank2RigidityFibonacciFusionLaw
 import Omega.POM.CharpolyMod2ClosedExponentLawQ4Q11
 import Omega.POM.CharpolyModpA2Embedding
+import Omega.POM.CharpolyModpA2Subdynamics
 import Omega.POM.CoarsegrainingMajorizationSchur
 import Omega.POM.BinaryCoarsegrainingConcavePairingExtremes
 import Omega.POM.BinaryInvariantsFunctoriality
