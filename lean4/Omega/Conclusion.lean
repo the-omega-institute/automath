@@ -220,6 +220,7 @@ import Omega.Conclusion.BoundaryParityAnomalyGap
 import Omega.Conclusion.BoundaryParityBlindFiltration
 import Omega.Conclusion.BoundaryParityLieRepairTwoBits
 import Omega.Conclusion.Window6BoundaryParityRigidX4Localization
+import Omega.Conclusion.SixfoldZeroHitcountSparseSelfaveraging
 import Omega.Conclusion.Window6BoundaryUniqueEquivariantGeometricScalar
 import Omega.Conclusion.Window6VisibleHiddenThermalCrossover
 import Omega.Conclusion.BoundaryPinningMemoryGap
