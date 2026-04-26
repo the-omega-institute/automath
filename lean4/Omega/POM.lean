@@ -44,6 +44,7 @@ import Omega.POM.MaxFiberHiddenBitMinentropySpectrum
 import Omega.POM.CrossAnomSupportConstraint
 import Omega.POM.FiniteFalsifierAnom
 import Omega.POM.OracleCriticalBudgetZeckendorfPlusGap
+import Omega.POM.OracleRateBudgetBregmanIsodistance
 import Omega.POM.MultiplicityEnergyLdpUnderPL
 import Omega.POM.MultiplicityEnergyLdpUniform
 import Omega.POM.MultiplicityLogwClt
