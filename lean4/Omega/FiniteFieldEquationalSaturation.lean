@@ -1,3 +1,4 @@
 import Omega.FiniteFieldEquationalSaturation.Linearization
 import Omega.FiniteFieldEquationalSaturation.ContentBound
 import Omega.FiniteFieldEquationalSaturation.GeometricControl
+import Omega.FiniteFieldEquationalSaturation.CoefficientIdeal

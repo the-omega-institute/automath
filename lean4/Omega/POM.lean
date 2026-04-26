@@ -1200,6 +1200,7 @@ import Omega.POM.PrimeRegisterStrategyGaugeGroupoid
 import Omega.POM.BreakpointCurvatureLawAq
 import Omega.POM.RenyiDimensionNoAlgebraicIrrationality
 import Omega.POM.CoxeterMonodromyCyclotomic
+import Omega.POM.CoxeterTopSign
 import Omega.POM.DiagonalRateUniformUniqueMaximizerActive
 import Omega.POM.DiagonalRateZeroRateEndpointQuadraticCurvature
 import Omega.POM.DiagonalRateAnalyticStrictConvexityCurvature
