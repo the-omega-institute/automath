@@ -1,5 +1,6 @@
 import Omega.POM.CurvatureIndependentDivergent
 import Omega.POM.ReplicaSoftcorePerronFeshbachCompositionMomentSeries
+import Omega.POM.ReplicaSoftcoreAlternatingVandermondeFibonacciProduct
 import Omega.POM.TensorProductRootGaloisDegreeRigidity
 import Omega.POM.A4TCharpolyDegenerateGalois
 import Omega.POM.VarianceInterceptEqualsGroundstateEntropy

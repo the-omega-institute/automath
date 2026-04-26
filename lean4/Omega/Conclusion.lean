@@ -1,4 +1,5 @@
 import Omega.Conclusion.ChainMarkovRigidityFourfoldEquivalence
+import Omega.Conclusion.SoftcoreBiInfiniteExactInvisibilityOffSymmetricSector
 import Omega.Conclusion.FixedSampleEscortCountShellSufficiency
 import Omega.Conclusion.ShiftedHankelUniformIntegralityFourfoldEquivalence
 import Omega.Conclusion.PoissonCentralSliceEvenMomentJetRigidity
