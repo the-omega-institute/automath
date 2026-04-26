@@ -29,6 +29,7 @@ import Omega.Principles
 import Omega.RatioResultant
 import Omega.RecursiveAddressing
 import Omega.SPG
+import Omega.StableArithmetic
 import Omega.StatisticalStability
 import Omega.SyncKernelRealInput
 import Omega.SyncKernelWeighted
