@@ -1853,3 +1853,4 @@ import Omega.Zeta.XiGramEntropyLowerBoundByCoherence
 import Omega.Zeta.XiTimePart62baPadicKernelGrowthLocalZetaSingleTailPole
 import Omega.Zeta.XiFoldbinCriticalCapacityBrokenLine
 import Omega.Zeta.XiTimePart9vkResonanceStieltjesShadowRenormalizationUniqueness
+import Omega.Zeta.BooleanTwoLayerOrderIdealSmithShapeInvariance
