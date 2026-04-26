@@ -50,6 +50,7 @@ import Omega.POM.A4DiscQuadraticClassNumber
 import Omega.POM.A4MertensTailBound
 import Omega.POM.A4TCharpolyRationalReducibility
 import Omega.POM.A4TCyclotomicAdjacencyInjection
+import Omega.POM.A4TCyclotomicAdjOrderingChain
 import Omega.POM.A4TEvenSpectrumGammaInversion
 import Omega.POM.A4TEvenSpectrumCompletionGammaFactorization
 import Omega.POM.A4TEvenSpectrumDoubleRootUstar

@@ -1480,4 +1480,5 @@ import Omega.Conclusion.CollisionHierarchyAffineRankOne
 import Omega.Conclusion.Window6BoundaryRationalBlindTorsionSuperselection
 import Omega.Conclusion.RealInput40ResetGateAnnihilationRegeneration
 import Omega.Conclusion.LeyangRho456WallCancelChannel
+import Omega.Conclusion.LeyangRho456WallPotentialIdentities
 import Omega.Conclusion.PolynomialExponentPrimeAxisExpansion

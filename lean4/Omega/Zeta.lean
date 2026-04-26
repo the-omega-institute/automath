@@ -1238,6 +1238,7 @@ import Omega.Zeta.XiBinomialToeplitzDominantPoleResponse
 import Omega.Zeta.XiBinomialToeplitzTwoEndpointPoleInversion
 import Omega.Zeta.XiBqPowerEntrywiseFibonacciBinomial
 import Omega.Zeta.XiCqPowerBoundaryAndRowSum
+import Omega.Zeta.XiCqPowerStrictSignRegular
 import Omega.Zeta.XiBulkEntropyStrictConvexity
 import Omega.Zeta.XiBulkBoundaryHolographicGapDissipation
 import Omega.Zeta.XiBulkCurvatureLogisticKernelDecomposition
