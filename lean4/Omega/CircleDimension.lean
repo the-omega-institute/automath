@@ -405,3 +405,5 @@ import Omega.CircleDimension.ZnProcyclicAndMinGenerators
 import Omega.CircleDimension.CdimS4V4PrymA2PolarizationClass
 import Omega.CircleDimension.PrefixPhaseCircleOrthogonalResourceLaw
 import Omega.CircleDimension.PoissonKLEighth
+import Omega.CircleDimension.XiLogisticBoundaryMassInvertsSpacing
+import Omega.CircleDimension.XiLogisticOptimalSpacingSpanLaw
