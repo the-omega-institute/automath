@@ -261,6 +261,7 @@ import Omega.POM.OracleTomographyCompletenessFIuIw
 import Omega.POM.HankelFreeEnergyEvaluator
 import Omega.POM.SchurVarianceVanishingNilpotentChannels
 import Omega.POM.MicrocanonicalQueryDistortionFailureExponent
+import Omega.POM.ToggleDihedralOrientationCharacter
 import Omega.POM.MultiplicityEnsembleEquivalence
 import Omega.POM.QueryDistortionZeroBitCorridor
 import Omega.POM.MicrocanonicalQueryDistortionSufficientStatistic
