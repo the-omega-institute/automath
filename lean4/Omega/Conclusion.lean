@@ -1,4 +1,5 @@
 import Omega.Conclusion.ChainMarkovRigidityFourfoldEquivalence
+import Omega.Conclusion.GaugeAnomalyL2Law
 import Omega.Conclusion.ScreenBernoulliExactnessTutteLaw
 import Omega.Conclusion.RelativePrimitiveSubtractionPreservesMainExponent
 import Omega.Conclusion.OffcriticalShiftCarriesNoNewGeometry
