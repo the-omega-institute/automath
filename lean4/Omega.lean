@@ -10,6 +10,7 @@ import Omega.Experiments
 import Omega.FoldResidualTime
 import Omega.FoldComputability
 import Omega.Folding
+import Omega.FiniteFieldEquationalSaturation
 import Omega.Frontier
 import Omega.GU
 import Omega.Graph
