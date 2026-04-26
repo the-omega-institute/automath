@@ -1487,3 +1487,4 @@ import Omega.Conclusion.LeyangRho456WallPotentialIdentities
 import Omega.Conclusion.PolynomialExponentPrimeAxisExpansion
 import Omega.Conclusion.Window6FibonacciResonanceThresholdLock
 import Omega.Conclusion.Window6RationalGeometricJointBlindSpot
+import Omega.Conclusion.PoissonCauchyC3FdivSixthJetAffineLaw
