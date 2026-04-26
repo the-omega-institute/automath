@@ -221,6 +221,7 @@ import Omega.Zeta.XiFiniteKernelZetaRationalDecidability
 import Omega.Zeta.XiKernelSizeGcdLcmExactMultiplicativity
 import Omega.Zeta.FiniteQuotientPhaseCompressionPrecisionLowerBound
 import Omega.Zeta.FinitePartResidueConstantRHSqueeze
+import Omega.Zeta.XiFoldbinCenterSolvableFiberCriterion
 import Omega.Zeta.XiTimePart9xbPrefixWordsFaithfulAffineRealization
 import Omega.Zeta.XiSinglezeroJensenLoggridMinimax
 import Omega.Zeta.XiTimePart62debHologramPrefixCongruenceBijection

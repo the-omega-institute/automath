@@ -222,6 +222,7 @@ import Omega.POM.ReplicaSoftcoreWordTraceMinimalBaseMultiplicity
 import Omega.POM.CollisionMomentPtypicalCongruenceTeichmullerHistogram
 import Omega.POM.LkAreaLawQform
 import Omega.POM.KkStrongSzegoBulkSurface
+import Omega.POM.DoubleLimitCommutePrincipalExponent
 import Omega.POM.LkBoundaryFixedPointRiccati
 import Omega.POM.ReplicaSoftcoreTensorEigenbasis
 import Omega.POM.ReplicaSoftcoreSymEigenbasisBinomialWeights

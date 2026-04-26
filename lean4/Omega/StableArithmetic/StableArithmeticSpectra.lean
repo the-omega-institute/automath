@@ -62,11 +62,16 @@ def stable_audit_stable_arithmetic_spectra_total_implications : Nat :=
 def stable_audit_stable_arithmetic_spectra_uncovered_implications : Nat :=
   stable_audit_stable_arithmetic_spectra_uncovered_certificate.foldl (· + ·) 0
 
+/-- Paper-facing certificate for the published stable arithmetic spectrum aggregates. -/
+abbrev stable_audit_stable_arithmetic_spectra_certificate : Prop :=
+  stable_audit_stable_arithmetic_spectra_total_implications = 3157020 ∧
+    stable_audit_stable_arithmetic_spectra_uncovered_implications = 2912508
+
 /-- Paper label: `thm:stable-audit-stable-arithmetic-spectra`. -/
 theorem paper_stable_audit_stable_arithmetic_spectra :
-    stable_audit_stable_arithmetic_spectra_total_implications = 3157020 ∧
-      stable_audit_stable_arithmetic_spectra_uncovered_implications = 2912508 := by
-  norm_num [stable_audit_stable_arithmetic_spectra_total_implications,
+    stable_audit_stable_arithmetic_spectra_certificate := by
+  norm_num [stable_audit_stable_arithmetic_spectra_certificate,
+    stable_audit_stable_arithmetic_spectra_total_implications,
     stable_audit_stable_arithmetic_spectra_uncovered_implications,
     stable_audit_stable_arithmetic_spectra_total_certificate,
     stable_audit_stable_arithmetic_spectra_uncovered_certificate]
