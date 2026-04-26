@@ -755,6 +755,7 @@ import Omega.Zeta.XiScalingMutualEnergyConservationSelfenergyDissipation
 import Omega.Zeta.XiTimeResolutionGaloisAdjunction
 import Omega.Zeta.XiTimeCentralExtensionUniversal
 import Omega.Zeta.AuditedEvenFirstCapacityKinkFibonacciJump
+import Omega.Zeta.XiAuditedEvenDyadicFirstCapacityLinearRegime
 import Omega.Zeta.AutomaticDirichletMoment
 import Omega.Zeta.PrefixReadoutOrthogonalErrorDecomposition
 import Omega.Zeta.XiStieltjesSemidirectPDE
