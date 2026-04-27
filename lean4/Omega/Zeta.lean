@@ -200,6 +200,7 @@ import Omega.Zeta.XiTimePart9zePositiveZeroTempGeometricSplitting
 import Omega.Zeta.XiTimePart9zlChainArithmeticHeightFormula
 import Omega.Zeta.XiTimePart9jLogBudgetLowerBound
 import Omega.Zeta.XiTimePart9jSoftFirstfitConjectureInstance
+import Omega.Zeta.XiTimeEulerProductUnderZeroMixedCurvature
 import Omega.Zeta.XiTimePart9zbkPresingularOneSidedApproximation
 import Omega.Zeta.XiTimePart10FiberTopologyRankoneLaw
 import Omega.Zeta.XiTimeBoundaryDoubleReconstruction

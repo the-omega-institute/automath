@@ -201,6 +201,7 @@ import Omega.POM.BCBianchi
 import Omega.POM.BCChainDefectEqualsEscortCurvatureSum
 import Omega.POM.BCChainDeviationProbabilityBound
 import Omega.POM.BCDiscreteStokes
+import Omega.POM.EscortFrontierLimitParam
 import Omega.POM.CubicalStokesEnergySampling
 import Omega.POM.BCDefectMultiplicative2Cocycle
 import Omega.POM.MertensNotFlowInvariant
