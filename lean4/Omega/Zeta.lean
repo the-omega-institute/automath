@@ -1,4 +1,5 @@
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryStrictAdditivity
+import Omega.Zeta.XiOutputPotentialDirichletFourierRadiusBarrier
 import Omega.Zeta.XiCollisionSquareRootNormalizationTrichotomy
 import Omega.Zeta.ZetaSyntaxFiniteForbiddenExpSparse
 import Omega.Zeta.XiPlyQ5CommonRootsPrime3173
