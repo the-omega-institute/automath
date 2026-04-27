@@ -1,5 +1,6 @@
 import Omega.Conclusion.CPVisibleNonrealizabilityFiniteRefuter
 import Omega.Conclusion.RealInput40NoUniformRHResidueLaw
+import Omega.Conclusion.PrincipalShadowWythoffPoleDensityRigidity
 import Omega.Conclusion.ContinuousLegendreSupportOneCellShadowing
 import Omega.Conclusion.CmonExternalizationInitialPrimeRegister
 import Omega.Conclusion.LeyangLoopCertificateRankLowerBound
