@@ -979,6 +979,7 @@ import Omega.POM.MicrocanonicalBandBounds
 import Omega.POM.MicrocanonicalCountSufficientStatisticPosteriorUniform
 import Omega.POM.MicrocanonicalQueryDistortionStrategyInvariantPosterior
 import Omega.POM.MicrocanonicalCoverTimeGumbelCutoff
+import Omega.POM.MicrocanonicalCoverTimeFibonacciSeparation
 import Omega.POM.MicrocanonicalStreamingProgramRarity
 import Omega.POM.MicrocanonicalCoverTimeMean
 import Omega.POM.MicrocanonicalMissingTypesPoisson
