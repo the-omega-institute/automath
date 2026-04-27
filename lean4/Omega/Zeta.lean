@@ -147,6 +147,7 @@ import Omega.Zeta.XiHeightIntervalMinimalSampling
 import Omega.Zeta.XiSymqGoldenCqDeterminantalDivisors
 import Omega.Zeta.XiSymqGoldenCqModPiPowerStaircase
 import Omega.Zeta.XiSymqGoldenCqModPiRankoneOuter
+import Omega.Zeta.XiSymqGoldenArSmithClosedForm
 import Omega.Zeta.XiSdrImpliesGlobalShadowing
 import Omega.Zeta.XiSmithStaircaseTemplateSymq
 import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
@@ -900,6 +901,7 @@ import Omega.Zeta.XiTimePart51AAWindow6RootDictionaryExternality
 import Omega.Zeta.XiTimePart9gaCrossResolutionAffineRigidity
 import Omega.Zeta.XiTimePart9gHolographicPrefixIsometryOnLine
 import Omega.Zeta.XiTimePart9gbCanonicalFixedpointCountPrefixStratification
+import Omega.Zeta.XiTimePart9gbFixedpointPrimitiveKernelMobius
 import Omega.Zeta.XiTimePart9zoFibonacciCosineZerosWeylLaw
 import Omega.Zeta.XiTimePart9zoaZeroBlockMaxfiberImpotence
 import Omega.Zeta.XiTimePart9zoStarPerronDegreeQuadratic
