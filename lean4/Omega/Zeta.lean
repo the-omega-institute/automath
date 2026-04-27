@@ -62,6 +62,7 @@ import Omega.Zeta.XiTimePart9hZ2x2HadamardTomography
 import Omega.Zeta.XiPickPoissonThreeSetMobiusIdentity
 import Omega.Zeta.TVEnvelopeMarkov
 import Omega.Zeta.XiFoldLastbitSubcriticalSampleLecamEquivalence
+import Omega.Zeta.XiTimePart9sbEscortFixedNBinomialBlackwell
 import Omega.Zeta.XiBulkCurvatureMassQuantization
 import Omega.Zeta.BulkCurvatureMaxLipschitz
 import Omega.Zeta.BulkCurvatureResidueExtremalRecovery
