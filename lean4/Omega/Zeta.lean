@@ -1548,6 +1548,8 @@ import Omega.Zeta.XiComovingFiniteCentersBlindspot
 import Omega.Zeta.XiComovingScanHankelRankDefect
 import Omega.Zeta.XiDefectEntropyPeakCompressibilityExtremal
 import Omega.Zeta.XiDefectEntropyMassPeakDecoupling
+import Omega.Zeta.XiComovingDefectImpliesDeltaBound
+import Omega.Zeta.XiDefectEntropyClosedFormInvariant
 import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
 import Omega.Zeta.XiEllipseWallcrossingUnitStaircaseUniversality
 import Omega.Zeta.XiEllipseWallcrossingRealizeFiniteJumpData
