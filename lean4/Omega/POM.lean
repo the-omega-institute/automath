@@ -1394,3 +1394,4 @@ import Omega.POM.ResonanceRenyiDimensionRationalDenominatorDegreeLbQ9_17
 import Omega.POM.OracleSuccessVariationalLaplace
 import Omega.POM.OccupancySymquotientRHObstruction
 import Omega.POM.MaxFiberAchieversHiddenBitEntropy
+import Omega.POM.ResonanceCayleyNarrowingOrbit
