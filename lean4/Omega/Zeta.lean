@@ -513,6 +513,7 @@ import Omega.Zeta.XiRealInput40CinfQuarticElimination
 import Omega.Zeta.XiLogDefectPotentialPoissonPrimitive
 import Omega.Zeta.XiDtnActsOnJensenKernel
 import Omega.Zeta.XiBulkBoundarySpeedMatching
+import Omega.Zeta.XiBulkBoundarySpeedMatchingScaleBracketing
 import Omega.Zeta.XiBulkCurvatureExactDeconvolutionOperator
 import Omega.Zeta.XiLocalBinaryNormalizationFibonacciRigidity
 import Omega.Zeta.XiLocalizedSolenoidPeriodicGrowthMaxScale
