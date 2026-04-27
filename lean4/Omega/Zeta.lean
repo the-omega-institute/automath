@@ -110,6 +110,8 @@ import Omega.Zeta.XiTimePart63bPrimitiveQuotientEnergyLossExact
 import Omega.Zeta.XiTimePart63SchurCrtExactRecovery
 import Omega.Zeta.XiTimePart63bPrimitiveHookSchurClosedForm
 import Omega.Zeta.InfiniteDepthPrimeLedgerInfiniteRankObstruction
+import Omega.Zeta.XiFoldFiberSquarefreePrimeExternalization
+import Omega.Zeta.XiFiniteRamanujanDefectTranslation
 import Omega.Zeta.XiCoherenceResolutionInformationIdentity
 import Omega.Zeta.XiCoherenceGodel4adicValuation
 import Omega.Zeta.Near1PoleParabola
