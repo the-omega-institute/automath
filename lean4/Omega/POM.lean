@@ -17,6 +17,7 @@ import Omega.POM.DisjointnessGraphTensorPowerSpectrum
 import Omega.POM.DiagonalRateFoldedCurvatureAuditable
 import Omega.POM.CapacitySaturationDiscriminant
 import Omega.POM.OracleCapacityThermalCut
+import Omega.POM.OracleCapacitySlopeReadout
 import Omega.POM.OracleSigmaDeterminesTauOn01
 import Omega.POM.OracleAnalyticExtensionAllSpectrum
 import Omega.POM.OracleThermalPointCriteria
