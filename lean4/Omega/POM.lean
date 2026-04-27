@@ -1,4 +1,5 @@
 import Omega.POM.A4TNewmanResultantCurveIntersection
+import Omega.POM.ResonanceQ16Q17DedekindFactorization
 import Omega.POM.DiagonalFreezeChiSuperselection
 import Omega.POM.A4TNewmanOffsetPoleGeometry
 import Omega.POM.SchurNearRhLpSuppressionEquivalence

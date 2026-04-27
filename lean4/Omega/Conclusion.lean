@@ -1,4 +1,5 @@
 import Omega.Conclusion.CPVisibleNonrealizabilityFiniteRefuter
+import Omega.Conclusion.SecondOrderRefinedCollisionWeightedUniformization
 import Omega.Conclusion.TropicalParetoRigidityOnBoundedSlice
 import Omega.Conclusion.PcdimLowerboundDeepAmbiguity
 import Omega.Conclusion.RealInput40NoUniformRHResidueLaw
