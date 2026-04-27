@@ -267,6 +267,7 @@ import Omega.Zeta.XiPhiLCmvStabilizationForcesDetectionDepthDivergence
 import Omega.Zeta.XiEndpointFluxFiniteCMVComputable
 import Omega.Zeta.XiPhiLDepthDeltaMinAlignment
 import Omega.Zeta.XiBmDensityForcesLinearTranscriptLength
+import Omega.Zeta.XiTwoParamDisjointnessFullTraceNecklace
 import Omega.Zeta.XiCongruenceBlockAbelWeilResidueLocking
 import Omega.Zeta.XiFiniteKernelZetaRationalDecidability
 import Omega.Zeta.XiKernelSizeGcdLcmExactMultiplicativity
