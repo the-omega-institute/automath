@@ -1514,6 +1514,8 @@ import Omega.Zeta.XiCdimLocalizationSolenoidNoNontrivialTorusInput
 import Omega.Zeta.XiCenterSixfoldKappaNodeInversionBlowup
 import Omega.Zeta.XiChainIdempotentStarSaturationComparableGcd
 import Omega.Zeta.XiChainIdempotentComparableFiniteGcdCollapse
+import Omega.Zeta.XiChainIdempotentWeightedEnergyDescent
+import Omega.Zeta.XiChainIdempotentNonautonomousFiniteTermination
 import Omega.Zeta.XiCriticalLineHorizonCircle
 import Omega.Zeta.XiCriticalLineUniqueLowComplexitySlice
 import Omega.Zeta.XiLegalReadoutPrefixDoubleBudget
