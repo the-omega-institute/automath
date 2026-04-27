@@ -1416,3 +1416,4 @@ import Omega.POM.MaxFiberAchieversHiddenBitEntropy
 import Omega.POM.ResonanceCayleyNarrowingOrbit
 import Omega.POM.AnomSignatureTowerSympowerComplexitySeparation
 import Omega.POM.DiagonalObservationStrongUnidentifiability
+import Omega.POM.ReplicaSoftcoreSecondExceptionalEigenvectorLocalization
