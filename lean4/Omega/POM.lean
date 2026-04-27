@@ -24,6 +24,7 @@ import Omega.POM.OracleThermalPointCriteria
 import Omega.POM.OracleFailureExponentInverseDesign
 import Omega.POM.OracleCriticalWindowMDP
 import Omega.POM.OracleCriticalWindowGaussian
+import Omega.POM.OracleCriticalWindowBitInversion
 import Omega.POM.OracleCriticalWindowEdgeworth
 import Omega.POM.MicrocanonicalEscortKLRateZero
 import Omega.POM.FiberFactorialCumulantsSignLogconvex
