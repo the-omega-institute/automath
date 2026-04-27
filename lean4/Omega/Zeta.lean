@@ -2048,3 +2048,5 @@ import Omega.Zeta.XiMellinScaleBohrRhEquivalence
 import Omega.Zeta.XiModularFlowEqualsTimeCocycle
 import Omega.Zeta.XiTimeRegisterCrossedProductEquivalence
 import Omega.Zeta.XiHypercubeDimensionReadableFromLeyangAngularVariance
+import Omega.Zeta.XiJensenFenchelDeepzeroProductFunctional
+import Omega.Zeta.XiJGLeyangBadPrimeRigidity
