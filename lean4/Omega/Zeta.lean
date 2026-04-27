@@ -74,6 +74,7 @@ import Omega.Zeta.XiTimePart63bInfiniteDepthFinitePrimeRegisterImpossibility
 import Omega.Zeta.TimePart63bPrimitiveKernelLayerSubgroupMobius
 import Omega.Zeta.PrimitiveCongruenceFourierInversionUniformity
 import Omega.Zeta.XiTimePart63bCyclicKernelLayerDivisorMobius
+import Omega.Zeta.XiTimePart63SchurCrtExactRecovery
 import Omega.Zeta.XiTimePart63bPrimitiveHookSchurClosedForm
 import Omega.Zeta.InfiniteDepthPrimeLedgerInfiniteRankObstruction
 import Omega.Zeta.XiCoherenceResolutionInformationIdentity
@@ -191,6 +192,7 @@ import Omega.Zeta.DephysOneQuarterNormalization
 import Omega.Zeta.DephysOfflineHairIffCurvature
 import Omega.Zeta.DephysOperatorZKSimulationIndexLowerBound
 import Omega.Zeta.DephysRenyiFlatnessFoldCommutative
+import Omega.Zeta.XiFoldProductInfonceEgfHadamardLaw
 import Omega.Zeta.DephysIndexChainRule
 import Omega.Zeta.DephysMultiplicityIndexGapLinearCmi
 import Omega.Zeta.DephysicalizedDefectRepulsionRadius

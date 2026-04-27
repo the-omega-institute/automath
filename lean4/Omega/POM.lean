@@ -83,6 +83,7 @@ import Omega.POM.ResonanceLinearDisjointnessQ14Q15
 import Omega.POM.ResonanceS13FrobeniusCycleCertificateQ16Q17
 import Omega.POM.ResonanceDiscSupportQ16Q17
 import Omega.POM.ResonanceGaloisS13Q16Q17
+import Omega.POM.ResonanceQ16Q17JointSplittingTypeDensity
 import Omega.POM.PressureCumulants
 import Omega.POM.PressureDerivativesFromEscort
 import Omega.POM.TruncationDefectCocycle
