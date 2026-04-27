@@ -577,6 +577,7 @@ import Omega.Conclusion.CoverTimeTailTwoSidedCompression
 import Omega.Conclusion.CollisionMomentMinrecHaltingTime
 import Omega.Conclusion.CriticalGroupTorsionGreenBadPrimeEquivalence
 import Omega.Conclusion.CollisionMomentSinglePulseOgf
+import Omega.Conclusion.CollisionPerronLogconvexRenyiConcavity
 import Omega.Conclusion.CollisionMomentMoritaDefectFusion
 import Omega.Conclusion.VisibleToeplitzNegativeGramChart
 import Omega.Conclusion.CollisionResonantKernelTensorPrime
@@ -888,6 +889,7 @@ import Omega.Conclusion.FoldpiEulerMellinTranslation
 import Omega.Conclusion.FoldCondexpQuantumOperationNoninvertible
 import Omega.Conclusion.FoldGaugeCommutantMatrixSector
 import Omega.Conclusion.FoldgaugePiZeroRadiusOddGerm
+import Omega.Conclusion.FoldgaugePiBorweinLocalAnalyticObstruction
 import Omega.Conclusion.FoldbinTailSumThresholdStaircase
 import Omega.Conclusion.FoldQuantumChannelMultiplicityClassification
 import Omega.Conclusion.FoldQuantumFiberSpectrumResourcePartition
