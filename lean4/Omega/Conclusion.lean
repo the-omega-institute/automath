@@ -223,6 +223,7 @@ import Omega.Conclusion.InfonceCapacityGapKernelRepresentation
 import Omega.Conclusion.InfonceLargeKGaugeRateComplement
 import Omega.Conclusion.BinfoldTwoConstantCompleteness
 import Omega.Conclusion.BinfoldSingleConstantHolography
+import Omega.Conclusion.MixedHiddenStateMinimalFiniteReceiver
 import Omega.Conclusion.FoldpiRanktwoFourMomentRigidity
 import Omega.Conclusion.BinfoldTailOrderStatisticsSingleJumpCollapse
 import Omega.Conclusion.BinfoldTwoScalarCompleteReconstruction
