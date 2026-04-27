@@ -407,3 +407,4 @@ import Omega.CircleDimension.PrefixPhaseCircleOrthogonalResourceLaw
 import Omega.CircleDimension.PoissonKLEighth
 import Omega.CircleDimension.XiLogisticBoundaryMassInvertsSpacing
 import Omega.CircleDimension.XiLogisticOptimalSpacingSpanLaw
+import Omega.CircleDimension.QuadraticReadoutConsistency
