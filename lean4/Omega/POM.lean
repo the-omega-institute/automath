@@ -24,6 +24,7 @@ import Omega.POM.OracleFailureExponentInverseDesign
 import Omega.POM.OracleCriticalWindowMDP
 import Omega.POM.OracleCriticalWindowGaussian
 import Omega.POM.OracleCriticalWindowEdgeworth
+import Omega.POM.MicrocanonicalEscortKLRateZero
 import Omega.POM.FiberFactorialCumulantsSignLogconvex
 import Omega.POM.FiberSchurBidirectionalCompilation
 import Omega.POM.ObservableMinpolyOrderCollapseQ913
