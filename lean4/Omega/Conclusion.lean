@@ -1597,3 +1597,4 @@ import Omega.Conclusion.BooleanOrderIdealDyadicUnimodularity
 import Omega.Conclusion.BoundedEllipseFamilyRankTwoTateCarpet
 import Omega.Conclusion.LinearBudgetAbsoluteCountingWall
 import Omega.Conclusion.Window6FiberGaugeLaplacianProjectors
+import Omega.Conclusion.CoordinatebundleStrictBoundaryGapForcesStars
