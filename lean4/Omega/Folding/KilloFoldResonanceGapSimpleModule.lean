@@ -49,7 +49,7 @@ def killo_fold_resonance_gap_simple_module_statement : Prop :=
           killo_fold_resonance_gap_simple_module_noInvariantDirectSum K M)
 
 /-- Paper label: `thm:killo-fold-resonance-gap-simple-module`. -/
-theorem paper_killo_fold_resonance_gap_simple_module :
+theorem killo_fold_resonance_gap_simple_module_statement_proof :
     killo_fold_resonance_gap_simple_module_statement := by
   refine ⟨by norm_num [killo_fold_resonance_gap_simple_module_delta,
       killo_fold_resonance_gap_simple_module_nominalCount,
@@ -76,6 +76,57 @@ theorem paper_killo_fold_resonance_gap_simple_module :
     rcases hfieldModel with ⟨e⟩
     have hsimple : IsSimpleModule K M := IsSimpleModule.congr e
     refine ⟨hsimple, ?_⟩
+    intro U V hsup hinf
+    haveI : IsSimpleModule K M := hsimple
+    rcases eq_bot_or_eq_top U with rfl | rfl
+    · left
+      constructor
+      · rfl
+      · simpa using hsup
+    · right
+      constructor
+      · rfl
+      · simpa using hinf
+
+abbrev killo_fold_resonance_gap_simple_module_data : Type :=
+  Unit
+
+namespace killo_fold_resonance_gap_simple_module_data
+
+def gap_values (_D : killo_fold_resonance_gap_simple_module_data) : Prop :=
+  killo_fold_resonance_gap_simple_module_delta 13 = 2 ∧
+    killo_fold_resonance_gap_simple_module_delta 14 = 2 ∧
+    killo_fold_resonance_gap_simple_module_delta 15 = 4 ∧
+    killo_fold_resonance_gap_simple_module_delta 16 = 4 ∧
+    killo_fold_resonance_gap_simple_module_delta 17 = 4
+
+def simple_minimal_module (_D : killo_fold_resonance_gap_simple_module_data) : Prop :=
+  ∀ (K M : Type*) [DivisionRing K] [AddCommGroup M] [Module K M],
+    Nonempty (M ≃ₗ[K] K) → IsSimpleModule K M
+
+def no_nontrivial_rational_block_split
+    (_D : killo_fold_resonance_gap_simple_module_data) : Prop :=
+  ∀ (K M : Type*) [DivisionRing K] [AddCommGroup M] [Module K M],
+    Nonempty (M ≃ₗ[K] K) →
+      killo_fold_resonance_gap_simple_module_noInvariantDirectSum K M
+
+end killo_fold_resonance_gap_simple_module_data
+
+/-- Paper label: `thm:killo-fold-resonance-gap-simple-module`. -/
+theorem paper_killo_fold_resonance_gap_simple_module
+    (D : killo_fold_resonance_gap_simple_module_data) :
+    D.gap_values ∧ D.simple_minimal_module ∧ D.no_nontrivial_rational_block_split := by
+  refine ⟨?_, ?_, ?_⟩
+  · norm_num [killo_fold_resonance_gap_simple_module_data.gap_values,
+      killo_fold_resonance_gap_simple_module_delta,
+      killo_fold_resonance_gap_simple_module_nominalCount,
+      killo_fold_resonance_gap_simple_module_degree]
+  · intro K M _ _ _ hfieldModel
+    rcases hfieldModel with ⟨e⟩
+    exact IsSimpleModule.congr e
+  · intro K M _ _ _ hfieldModel
+    rcases hfieldModel with ⟨e⟩
+    have hsimple : IsSimpleModule K M := IsSimpleModule.congr e
     intro U V hsup hinf
     haveI : IsSimpleModule K M := hsimple
     rcases eq_bot_or_eq_top U with rfl | rfl
