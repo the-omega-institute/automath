@@ -1,5 +1,4 @@
 import Omega.POM.A4TNewmanResultantCurveIntersection
-import Omega.POM.ResonanceQ16Q17DedekindFactorization
 import Omega.POM.DiagonalFreezeChiSuperselection
 import Omega.POM.A4TNewmanOffsetPoleGeometry
 import Omega.POM.SchurNearRhLpSuppressionEquivalence
@@ -92,6 +91,7 @@ import Omega.POM.ResonanceS13FrobeniusCycleCertificateQ16Q17
 import Omega.POM.ResonanceDiscSupportQ16Q17
 import Omega.POM.ResonanceGaloisS13Q16Q17
 import Omega.POM.ResonanceQ16Q17JointSplittingTypeDensity
+import Omega.POM.ResonanceQ16Q17DedekindFactorization
 import Omega.POM.ResonanceQ16Q17LinearlyDisjoint
 import Omega.POM.ResonanceNewmanUqDegreeNormQ16Q17
 import Omega.POM.PressureCumulants

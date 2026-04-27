@@ -46,6 +46,7 @@ import Omega.Zeta.XiMomqStrongConverseBilinearLeakage
 import Omega.Zeta.XiFixedFreezingOracleStrongConverseExponent
 import Omega.Zeta.TerminalReplicaSoftcoreInverseSupportCount
 import Omega.Zeta.XiTimePart9xNoBoundaryEquivariantFourValuedCompanionField
+import Omega.Zeta.XiTimePart9hZ2x2HadamardTomography
 import Omega.Zeta.XiPickPoissonThreeSetMobiusIdentity
 import Omega.Zeta.TVEnvelopeMarkov
 import Omega.Zeta.XiFoldLastbitSubcriticalSampleLecamEquivalence
