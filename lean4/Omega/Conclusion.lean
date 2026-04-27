@@ -31,6 +31,7 @@ import Omega.Conclusion.Window6PermutationModuleCommutant
 import Omega.Conclusion.BranchEntropyPrimesliceRate
 import Omega.Conclusion.PrimeLogZeroLyapunovCalibration
 import Omega.Conclusion.Window6CubicCentralRelation
+import Omega.Conclusion.Window6LongRootFourierSelectionRule
 import Omega.Conclusion.Window6LedgerLieDimensionIdentity
 import Omega.Conclusion.UniformGridQuantizedStokesPoincareScale
 import Omega.Conclusion.OnequarterCrossCategoryRigidity
