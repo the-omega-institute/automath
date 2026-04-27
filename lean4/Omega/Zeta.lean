@@ -588,6 +588,7 @@ import Omega.Zeta.XiPrimeRegisterHistoryInverseLimit
 import Omega.Zeta.XiBranchRegisterImageCoordinateInverseLimit
 import Omega.Zeta.XiPrimeRegisterIdempotentUniqueNormalForm
 import Omega.Zeta.XiPrimePhaseTorusDenseUniquelyErgodic
+import Omega.Zeta.XiUnitarySlicePrimePhaseLift
 import Omega.Zeta.XiPrimeShellQuasiOrthogonality
 import Omega.Zeta.XiPrimeShellExplicitFormulaWindow
 import Omega.Zeta.XiPrimeSliceNontrivialLayerExactMinimality
