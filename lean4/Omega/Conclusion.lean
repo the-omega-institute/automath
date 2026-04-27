@@ -36,6 +36,7 @@ import Omega.Conclusion.OracleGapSaturationEdgeEnergy
 import Omega.Conclusion.MicroescortOracleCapacityClosedForm
 import Omega.Conclusion.MomentFiniteGoodPrimesCrtReconstruction
 import Omega.Conclusion.PadicHankelGlobalRigidifier
+import Omega.Conclusion.PadicHankelExactConditionLedger
 import Omega.Conclusion.PadicHankelAdjugateColumnValuationProfile
 import Omega.Conclusion.PadicHankelPairwiseCollisionEnergyPrecisionTax
 import Omega.Conclusion.SmithLocalZetaHadamardLinearization

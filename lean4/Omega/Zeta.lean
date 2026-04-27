@@ -1950,6 +1950,7 @@ import Omega.Zeta.XiZeckendorfGoldenShiftMaxCapacity
 import Omega.Zeta.SelfdualImpliesKappa0
 import Omega.Zeta.XiSqrt5LeyangDoubleSplitDensity
 import Omega.Zeta.XiPoissonLowerboundReverseKLL2
+import Omega.Zeta.XiPoissonSignCoarsegrainingT6Constant
 import Omega.Zeta.XiTimePart9zmParityCharacterBreaksSquareRootBarrier
 import Omega.Zeta.XiPoissonKlBridgeVarianceNecessaryCondition
 import Omega.Zeta.XiFoldbinLastbitCompleteReadoutStatistic
