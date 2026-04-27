@@ -1,3 +1,4 @@
+import Omega.Zeta.XiCoherenceArrivalTimeRelativeEntropyRate
 import Omega.Zeta.XiAuditedEvenGaugeEntropyBalancedLowerBound
 import Omega.Zeta.NoComputableSliceBoundForSemanticEquivalence
 import Omega.Zeta.XiOfflineMembershipGrassmannLowerBound
