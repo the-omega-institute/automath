@@ -60,6 +60,7 @@ import Omega.POM.MultiplicityEnergyLdpUniform
 import Omega.POM.MultiplicityLogwClt
 import Omega.POM.MultiplicityLogwMDP
 import Omega.POM.RenyiEntropyGapAsInf
+import Omega.POM.RenyiRateSpectralFormulaDiscreteConcavity
 import Omega.POM.DimensionSpectrumGapMinPrinciple
 import Omega.POM.DiagonalRateFiniteMomentClosure
 import Omega.POM.DiagonalRateOptimalCouplingMinorSignRigidity
