@@ -1683,6 +1683,7 @@ import Omega.Zeta.XiTerminalZmLeyangEllipticModularity37
 import Omega.Zeta.XiTerminalZmLeyangLinearTwistQuarticFamily
 import Omega.Zeta.XiTerminalZmLeyangLinearTwistParameterMapS5
 import Omega.Zeta.XiTerminalZmLeyangMonodromyS4
+import Omega.Zeta.XiTerminalZmLeyangCoverPrimitive
 import Omega.Zeta.XiTerminalZmPiRationalRootSpecializationEllipticImage
 import Omega.Zeta.XiTerminalZmLeyangP3Minimal27
 import Omega.Zeta.XiTerminalZmLanguageMinimaxLogloss

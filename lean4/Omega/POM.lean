@@ -41,6 +41,7 @@ import Omega.POM.ObservableMinpolyOrderCollapseQ913
 import Omega.POM.ObservableMinpolyDiscriminantRamificationQ9Q13
 import Omega.POM.ObservableMinpolyChebotarevDensityQ9_13
 import Omega.POM.ObservableMinpolyFrobParityQ9Q13
+import Omega.POM.ObservableMinpolyNegativeRealDominanceQ9_13
 import Omega.POM.ObservableMinpolyGaloisSdQ9Q13
 import Omega.POM.MultiplicityAtomMultifractal
 import Omega.POM.SpaceLowerBound

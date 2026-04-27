@@ -24,6 +24,7 @@ import Omega.Conclusion.ShiftedHankelUniformIntegralityFourfoldEquivalence
 import Omega.Conclusion.ShiftedHankelRigidity
 import Omega.Conclusion.PoissonCentralSliceEvenMomentJetRigidity
 import Omega.Conclusion.GaugeAnomalyL2Law
+import Omega.Conclusion.GoldenTopGapEqualsSdpi
 import Omega.Conclusion.ScreenBernoulliExactnessTutteLaw
 import Omega.Conclusion.RelativePrimitiveSubtractionPreservesMainExponent
 import Omega.Conclusion.OffcriticalShiftCarriesNoNewGeometry
