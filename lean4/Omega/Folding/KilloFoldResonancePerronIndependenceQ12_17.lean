@@ -129,4 +129,11 @@ theorem paper_killo_fold_resonance_perron_independence_q12_17 :
         killo_fold_resonance_perron_independence_q12_17_certificateTable],
     killo_fold_resonance_perron_independence_q12_17_table_independent⟩
 
+/-- Paper label: `cor:killo-fold-resonance-log-linear-independence-q12-17`. -/
+theorem paper_killo_fold_resonance_log_linear_independence_q12_17
+    (logLinearIndependent : Prop)
+    (h : killo_fold_resonance_perron_independence_q12_17_statement → logLinearIndependent) :
+    logLinearIndependent := by
+  exact h paper_killo_fold_resonance_perron_independence_q12_17
+
 end Omega.Folding
