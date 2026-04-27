@@ -1665,3 +1665,4 @@ import Omega.Conclusion.Window6LongRootGeneratedAlgebraDoubleblock
 import Omega.Conclusion.CoordinatebundleStrictBoundaryGapForcesStars
 import Omega.Conclusion.FibadicSingleDepthProjectionRankGcd
 import Omega.Conclusion.LeyangPrym3NoQPrincipalizationDegree2
+import Omega.Conclusion.FrozenMomentSpectrumSemigroupLinearization
