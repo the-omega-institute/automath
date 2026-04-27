@@ -77,6 +77,7 @@ import Omega.Zeta.XiTimePart66PeriodizedBernoulliNonrajchmanNoLp
 import Omega.Zeta.XiTimePart66FibonacciVisibleMultiplierNoL2
 import Omega.Zeta.FoldbinAuditedEvenMaximalSolvableQuotient
 import Omega.Zeta.XiFoldbinCenterSolvableCollapseTwoStage
+import Omega.Zeta.XiFoldbinPureParitySolvableResidualKernel
 import Omega.Zeta.XiTimePart66ZeroDensityNeverSufficient
 import Omega.Zeta.XiTimePart66MacroResonanceLogAbundance
 import Omega.Zeta.XiToeplitzMinEigControlsDepth
