@@ -15,7 +15,7 @@ def killo_fold_resonance_log_linear_independence_q12_17_statement : Prop :=
         a = 0 ∧ b = 0 ∧ c = 0 ∧ d = 0 ∧ e = 0 ∧ f = 0
 
 /-- Paper label: `cor:killo-fold-resonance-log-linear-independence-q12-17`. -/
-theorem paper_killo_fold_resonance_log_linear_independence_q12_17 :
+theorem killo_fold_resonance_log_linear_independence_q12_17_corollary :
     killo_fold_resonance_log_linear_independence_q12_17_statement := by
   refine ⟨paper_killo_fold_resonance_perron_independence_q12_17, ?_⟩
   intro a b c d e f hlog
