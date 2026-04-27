@@ -1688,3 +1688,4 @@ import Omega.Conclusion.FrozenMomentSpectrumSemigroupLinearization
 import Omega.Conclusion.PrimeRegisterComparableIdempotentGcdBand
 import Omega.Conclusion.PeriodicFiberBooleanIntervalMobius
 import Omega.Conclusion.FiniteVisibleArchimedeanEssentialPrimeLedgerSplitting
+import Omega.Conclusion.PadicHankelSimultaneousDeresonance
