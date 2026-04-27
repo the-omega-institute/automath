@@ -1172,6 +1172,7 @@ import Omega.POM.SmallDistortionConstantTensorMultiplicative
 import Omega.POM.ReplicaBernoulliSubgraph
 import Omega.POM.ReplicaSoftcoreBinomialKernelInverse
 import Omega.POM.ReplicaSoftcoreDet
+import Omega.POM.ReplicaSoftcoreDoobReversibleMarkovCorr
 import Omega.POM.ReplicaSoftcoreExceptionalPerronHammingMonotone
 import Omega.POM.ReplicaSoftcoreExceptionalSecantEquation
 import Omega.POM.ReplicaSoftcorePerronAngleUniform
