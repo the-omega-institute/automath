@@ -661,6 +661,8 @@ import Omega.Zeta.XiToeplitzNegativeWitnessFromScanHankel
 import Omega.Zeta.XiKreinSpectralShiftStaircaseShadow
 import Omega.Zeta.XiLeyangEdDyExplicitDivisor
 import Omega.Zeta.XiEdYDivisorAndGroupLawIdentity
+import Omega.Zeta.XiEdBivariateDoubleDiscriminantIdentities
+import Omega.Zeta.XiEdFmCompleteFactorizationAndBranchpoints
 import Omega.Zeta.XiTerminalEllipseAreaEulerPrimeLaw
 import Omega.Zeta.XiTerminalRationalEllipseTwoInvariantCompleteness
 import Omega.Zeta.XiTerminalZmDeltaNodePreimageSumZero
