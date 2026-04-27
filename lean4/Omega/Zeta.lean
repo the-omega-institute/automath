@@ -222,6 +222,8 @@ import Omega.Zeta.AbelianCyclicShadow
 import Omega.Zeta.AbelianShadowDefect
 import Omega.Zeta.AbelianTowerNoGo
 import Omega.Zeta.XiFoldbinRenyiDeficitSpectrumClosedForm
+import Omega.Zeta.XiFoldbinExactInversionMinimalAdviceBits
+import Omega.Zeta.XiFoldbinTailSpectrumDiscreteDifference
 import Omega.Zeta.AdamsBinomialProbeDiscreteInversionEquispacedGrid
 import Omega.Zeta.AdamsBinomialProbeCompletenessStrictification
 import Omega.Zeta.AdamsBinomialProbeFourierDiagonalization

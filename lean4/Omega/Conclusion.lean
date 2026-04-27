@@ -221,6 +221,7 @@ import Omega.Conclusion.ExtremeBiasFinitepartRhExponentDecoupling
 import Omega.Conclusion.BoundedPopcountExactLogRigidity
 import Omega.Conclusion.QaxisCumulativeAtomicSignalUniformParsevalBound
 import Omega.Conclusion.ResiduePressureDropEscortRenyiFreeEnergy
+import Omega.Conclusion.StokesExtensionPhaseSamplingBound
 import Omega.Conclusion.BigWittExactSpectralBudget
 import Omega.Conclusion.BlockConsistencyNotSchurConcave
 import Omega.Conclusion.BlockConsistencyMinMiReduction
