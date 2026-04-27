@@ -4,6 +4,7 @@ import Omega.Folding.AutocovarianceSeedValues
 import Omega.Folding.BayesKinkGeometry
 import Omega.Folding.BernoulliHalfDefect36Explicit
 import Omega.Folding.BernoulliHalfEndpoints
+import Omega.Folding.BernoulliHalfEndpointsOscillation
 import Omega.Folding.BernoulliHalfFixedDefectBoundaryLdp
 import Omega.Folding.BernoulliHalfFixedDefectGrowth
 import Omega.Folding.BernoulliHalfFixedDefectFibonacciJordanFilter
