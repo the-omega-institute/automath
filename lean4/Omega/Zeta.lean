@@ -112,6 +112,7 @@ import Omega.Zeta.LocalizedIntegersDivisibilityTopologicalRigidity
 import Omega.Zeta.XiTimePart62dgFiberReducedEulerWittenParity
 import Omega.Zeta.XiTimePart62dfCapacityCurveCompleteInversion
 import Omega.Zeta.XiTimePart62diMaxNoncontractibleFiberSixstepRenormalization
+import Omega.Zeta.XiTimePart62diTripleClassfunctionChebotarevFactorization
 import Omega.Zeta.XiTimePart63bInfiniteDepthFinitePrimeRegisterImpossibility
 import Omega.Zeta.TimePart63bPrimitiveKernelLayerSubgroupMobius
 import Omega.Zeta.PrimitiveCongruenceFourierInversionUniformity
@@ -224,6 +225,7 @@ import Omega.Zeta.AbelTwoBaseDealiasingInjectivity
 import Omega.Zeta.AbelHardyEnergyDecimationOrthogonal
 import Omega.Zeta.AbelTauberianMeanSquareLinearLaw
 import Omega.Zeta.AbelDetailEnergyBudget
+import Omega.Zeta.XiLogisticMulticlassMapError
 import Omega.Zeta.AbelDepolarizationHardyEnergyBlowup
 import Omega.Zeta.XiBQAuditablePrimitiveOrbitLucasMobius
 import Omega.Zeta.AbelDepolarizationRootUnityRotation
