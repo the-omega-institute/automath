@@ -883,6 +883,7 @@ import Omega.Zeta.XiTerminalZmLeyangP3V3LinearBound
 import Omega.Zeta.XiTerminalZmLeyangP3Mod3AlgebraicAutomatic
 import Omega.Zeta.XiTerminalZmLeyangPerronP3InertiaPointStabilizer
 import Omega.Zeta.XiTerminalZmPistarFiberEqualsFourLinesThroughPoint
+import Omega.Zeta.TerminalZMCyclic3To33IsogenyFourExtensions
 import Omega.Zeta.XiProjectivePressurePathHolderConvexity
 import Omega.Zeta.XiHzomFunctionalEquation
 import Omega.Zeta.XiRankoneSecularMonotonicityDerivativeNorm
