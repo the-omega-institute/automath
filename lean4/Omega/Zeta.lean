@@ -240,6 +240,7 @@ import Omega.Zeta.DephysHorizonSufficiencyZeroKnowledge
 import Omega.Zeta.DephysIdempotentMonadIProjection
 import Omega.Zeta.DephysOneQuarterNormalization
 import Omega.Zeta.DephysOfflineHairIffCurvature
+import Omega.Zeta.XiTimePart70ContinuousCapacityTwoAtomSecondDerivative
 import Omega.Zeta.DephysOperatorZKSimulationIndexLowerBound
 import Omega.Zeta.DephysRenyiFlatnessFoldCommutative
 import Omega.Zeta.XiFoldProductInfonceEgfHadamardLaw
