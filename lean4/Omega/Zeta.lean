@@ -1,3 +1,4 @@
+import Omega.Zeta.XiAuditedEvenGaugeEntropyBalancedLowerBound
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryStrictAdditivity
 import Omega.Zeta.ResidueRatioErrorPropagationRealpart
 import Omega.Zeta.XiOutputPotentialDirichletFourierRadiusBarrier

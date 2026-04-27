@@ -121,6 +121,8 @@ import Omega.POM.A2GutCompletion
 import Omega.POM.A2GutSpectralSplitting
 import Omega.POM.A2GutInvertAlpha
 import Omega.POM.A2GutNewmanThreshold
+import Omega.POM.SchurChannelRadiusCharacterSieve
+import Omega.POM.DiagonalObservationStrongUnidentifiability
 import Omega.POM.A2Benchmark
 import Omega.POM.A2StrictRhCertificate
 import Omega.POM.A4tUnitCircleSpectrumClassification
