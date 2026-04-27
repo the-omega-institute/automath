@@ -299,6 +299,7 @@ import Omega.POM.BivariateModRectangleLiftsToPlane
 import Omega.POM.RecurrenceCodeViolationDistance
 import Omega.POM.EscortDerivativeIdentities
 import Omega.POM.ReplicaSoftcoreTemperatureSqReduction
+import Omega.POM.ReplicaSoftcoreTemperatureExceptionalDeterminant
 import Omega.POM.ReplicaSoftcoreFibonacciPowerMomentCollapse
 import Omega.POM.ReplicaSoftcoreRhoTwoTermRemainder
 import Omega.POM.ReplicaSoftcoreWordTraceExtremal

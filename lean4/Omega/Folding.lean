@@ -178,6 +178,7 @@ import Omega.Folding.FiberFusion
 import Omega.Folding.FiberGaugeVolumeDoublingV2DigitSum
 import Omega.Folding.FoldTopAffineWindowControlsFiniteFreezing
 import Omega.Folding.FoldResonanceEntireLp
+import Omega.Folding.KilloFoldResonancePerronIndependenceQ12_17
 import Omega.Folding.FoldResonanceJensenHyperbolicity
 import Omega.Folding.FoldResonanceCartwrightIndicator
 import Omega.Folding.FoldResonanceImagAsymptoticTypePi
