@@ -1299,6 +1299,7 @@ import Omega.POM.ZeroTempConcentration
 import Omega.POM.ZeroTemperatureGapDivisibilityRaySum
 import Omega.POM.ZeroTemperatureTwoTermExpansion
 import Omega.POM.EscortFreezingCriterion
+import Omega.POM.EscortFreezingGapThreshold
 import Omega.POM.ZetaEqualsOrderPoly
 import Omega.POM.ZetaFactorizationRewrite
 import Omega.POM.SchurChannelsCfiniteSpectralMultiplicativeSemigroup

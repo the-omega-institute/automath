@@ -627,6 +627,7 @@ import Omega.Zeta.XiLogcmSecondBernoulliCoefficientRatio
 import Omega.Zeta.XiScaleCoherenceKernelClosedForm
 import Omega.Zeta.XiCarathDegeneracyPureImagConstant
 import Omega.Zeta.XiGxOffcriticalPoleResidue
+import Omega.Zeta.XiGxLocalSignFlipFalsifier
 import Omega.Zeta.XiLogDefectConeExtreme
 import Omega.Zeta.XiCompactifiedDyadicDepthLowerBound
 import Omega.Zeta.XiScaleMellinNoNonzeroImagPeriod
