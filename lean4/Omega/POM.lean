@@ -38,6 +38,7 @@ import Omega.POM.FiberFactorialCumulantsSignLogconvex
 import Omega.POM.FiberSchurBidirectionalCompilation
 import Omega.POM.ObservableMinpolyOrderCollapseQ913
 import Omega.POM.ObservableMinpolyDiscriminantRamificationQ9Q13
+import Omega.POM.ObservableMinpolyChebotarevDensityQ9_13
 import Omega.POM.MultiplicityAtomMultifractal
 import Omega.POM.SpaceLowerBound
 import Omega.POM.ConvexityForcesTypicalLeWorst
