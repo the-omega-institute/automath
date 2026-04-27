@@ -25,6 +25,7 @@ import Omega.Zeta.XiExceptionalThetaOmegaIdentification
 import Omega.Zeta.XiGoldenChainReverseklLogBarrier
 import Omega.Zeta.TwoParamDisjointnessFullSpectrumSecular
 import Omega.Zeta.XiLeyangAngleOverPiIrrational
+import Omega.Zeta.XiLeyangLogSingularityTranscendence
 import Omega.Zeta.XiLeyangSolenoidalLiftMonoidal
 import Omega.Zeta.XiCompletedZetaDyadicLPImpliesRH
 import Omega.Zeta.TerminalZmTranslationTBranchDiscriminantC3DeltaFactor
