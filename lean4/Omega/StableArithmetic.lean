@@ -9,3 +9,4 @@ import Omega.StableArithmetic.StableAuditDashboardDisjoint
 import Omega.StableArithmetic.StableAuditIntegralAffineClosure
 import Omega.StableArithmetic.StableArithmeticSpectra
 import Omega.StableArithmetic.StableAuditStableArithmeticSpectra
+import Omega.StableArithmetic.StableAuditStableValueAffineTransfer
