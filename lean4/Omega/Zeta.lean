@@ -2017,3 +2017,5 @@ import Omega.Zeta.XiSqrt5AxisLeyangCubicLinearDisjoint
 import Omega.Zeta.XiReverseKLTruncationDepthLowerBound
 import Omega.Zeta.XiTimePart60aJensenDefectRadialMeasureInversion
 import Omega.Zeta.XiScaleMellinZeroDensityUpper
+import Omega.Zeta.XiChainIdempotentNonautonomousFiniteTermination
+import Omega.Zeta.DephysMobiusMarkovUniquePoisson
