@@ -47,6 +47,7 @@ import Omega.Zeta.BulkCurvatureMaxLipschitz
 import Omega.Zeta.BulkCurvatureResidueExtremalRecovery
 import Omega.Zeta.XiPoissonCauchyLocationScaleInformationProjection
 import Omega.Zeta.XiPoissonCauchyMixturePointLeadingConstants
+import Omega.Zeta.XiBulkCurvaturePrimitiveMaxDepthDominance
 import Omega.Zeta.XiHellingerToeplitzSymbolPoisson
 import Omega.Zeta.XiHellingerToeplitzSzegoThermoLimit
 import Omega.Zeta.XiHellingerToeplitzHeineSzegoCue
