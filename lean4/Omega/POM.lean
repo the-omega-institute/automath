@@ -1096,6 +1096,7 @@ import Omega.POM.PrimeDeterminantAbelianizationFactorization
 import Omega.POM.Faithful2x2GeometricPrimorialAreaLaw
 import Omega.POM.PrimeDeterminantAreaFiberMultinomial
 import Omega.POM.PrimeDeterminantEllipseLedger
+import Omega.POM.LkHeatKernelBessel
 import Omega.POM.PrimitiveDirichletBranchLatticeEssentialPrimeSpectrum
 import Omega.POM.PrimitiveDirichletNonAlgebraicNonDfinite
 import Omega.POM.PrimitivePrimeLucas
