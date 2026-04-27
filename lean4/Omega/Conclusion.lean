@@ -957,6 +957,7 @@ import Omega.Conclusion.GodelVsMinimalGap
 import Omega.Conclusion.GoldenAlternatingConstantsRecoverPhi
 import Omega.Conclusion.GoldenBiasSecondOrderUniqueness
 import Omega.Conclusion.GoldenSprtDeltaClosure
+import Omega.Conclusion.GoldenSprtThreeConstantClosure
 import Omega.Conclusion.GoldenSprtTailExponentChernoffIdentity
 import Omega.Conclusion.GoldenSprtTerminalSignMinimalSufficiency
 import Omega.Conclusion.GoldenSprtOnebitAncillary

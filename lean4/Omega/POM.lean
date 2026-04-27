@@ -99,6 +99,7 @@ import Omega.POM.ResonanceQ16Q17DedekindFactorization
 import Omega.POM.ResonanceQ16Q17LinearlyDisjoint
 import Omega.POM.ResonanceQ16Q17SimultaneousIrreducibleChebotarev
 import Omega.POM.KilloFoldResonanceProductGaloisQ1217
+import Omega.POM.KilloFoldResonanceSimultaneousIrreducibleDensityQ1217
 import Omega.POM.ResonanceNewmanUqDegreeNormQ16Q17
 import Omega.POM.PomResonanceNewmanLogTranscendenceNormQ9_13
 import Omega.POM.PressureCumulants
