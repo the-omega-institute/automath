@@ -1,3 +1,4 @@
+import Omega.POM.ResonancePerronMultiplicativeIndependenceQ12Q15
 import Omega.POM.ResonanceChebotarevProductDensityQ1215
 import Omega.POM.A4TNewmanResultantCurveIntersection
 import Omega.POM.DiagonalFreezeChiSuperselection
