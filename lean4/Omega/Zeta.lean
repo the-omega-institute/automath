@@ -1935,3 +1935,4 @@ import Omega.Zeta.XiTimePart61accChainGodelAverageVarianceBudgetOptimality
 import Omega.Zeta.XiFoldbinUniversalFibonacciUpperBoundLastbitImprovement
 import Omega.Zeta.XiCpBreakdownFiniteWitness
 import Omega.Zeta.XiEndpointInfiniteBlaschkeDriftIdentifiabilityStability
+import Omega.Zeta.XiFoldCongruenceCrtPrimitiveIdempotents
