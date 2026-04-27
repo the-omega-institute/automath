@@ -1,196 +1,100 @@
 \section{Introduction}\label{sec:introduction}
 
-For a primitive finite matrix \(A\), the dynamical \(\zeta\)-function
+For a finite matrix \(A\), one has the familiar identity
+\begin{equation}\label{eq:intro-finite-zeta}
+  \det(I-zA)^{-1}
+  =\exp\!\left(\sum_{n\ge 1}\frac{\Tr(A^n)}{n}z^n\right)
+  =\prod_{n\ge 1}(1-z^n)^{-p_n(A)}.
+\end{equation}
+In symbolic dynamics, \eqref{eq:intro-finite-zeta} is one of the standard
+forms of the dynamical \(\zeta\)-function; see
+\cite{BowenLanford1970Zeta,Manning1971Axiom,Ruelle1976ZetaExpanding,ParryPollicott1990Zeta,LindMarcus1995}.
+The purpose of this paper is to study the corresponding inverse problem in
+the trace-class setting. Given countable Euler data
 \[
-  \zeta_A(z)=\det(I-zA)^{-1}
+  \mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J},
+  \qquad
+  n_j,m_j\in\NN,\ \beta_j\in\CC\setminus\{0\},
 \]
-packages periodic-orbit data, transfer-operator traces, and non-Perron
-spectral data into one holomorphic object. In symbolic dynamics this
-identity is classical and can be viewed as the finite-state shadow of a
-broader Fredholm determinant identity valid for general trace-class
-operators.
+we ask when the germ
+\begin{equation}\label{eq:intro-euler-product}
+  \prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}
+\end{equation}
+can be realized as the Fredholm zeta function
+\begin{equation}\label{eq:intro-fredholm-zeta}
+  Z_T(z):=\det(I-zT)^{-1}
+\end{equation}
+of a normal trace-class operator.
 
-This paper separates three layers that are often used together. The
-first layer is connective and classical: the Fredholm determinant
-recovers both the trace sequence and the associated Witt coordinates.
-The second layer is the new structural contribution of the paper: we
-identify exactly when an abstract Euler product admits a trace-class
-normal realisation by cyclic blocks, and we show that in the normal
-class this cyclic-block geometry is forced and support-minimal. The
-third layer returns to symbolic dynamics as an application: once the
-determinant is taken as the primary object, finite-part constants, Abel
-renormalisations, orbit-weight moments, and limit-law data can all be
-organized within one operator-theoretic package.
+Fredholm determinants for trace and nuclear operators, together with their
+factorization properties and the description of their zeros, belong to the
+classical theory; see
+\cite{Grothendieck1956,GohbergKrein1969,Simon2005TraceIdeals,GohbergGoldbergKrupnik2000}.
+In dynamics, related determinant formalisms on Banach spaces are used to
+study transfer operators, meromorphic continuation, and spectral
+variation; see, for instance,
+\cite{Ruelle1990Extension,Keller1989Fredholm,Baladi2000PositiveTransfer,Baladi2018DynZeta}.
+We do not address those more flexible settings here. Rather, we stay in
+the Hilbert trace-class category and ask a narrower question: for a
+prescribed Euler product, when does a realization exist, and to what
+extent is it determined by the determinant?
 
-The novelty is concentrated in the strengthened cyclic-block theorem.
-The Fredholm--Witt bridge and the spectral rigidity statement are
-included because they are the two classical links that make this
-characterisation useful in the symbolic applications: the former turns
-periodic data into determinants, and the latter turns determinant
-identities back into spectral information. The symbolic section is
-application-level throughout: it repackages standard perturbative and
-spectral-gap consequences at the determinant level, but it is not
-presented as a second source of structural novelty.
+The answer is rigid. For \(n\ge 1\), let \(\Pi_n\) be the cyclic
+permutation matrix on \(\CC^n\), and set \(C(n,\alpha)=\alpha\Pi_n\).
+\Cref{thm:cyclic-fredholm-realisation} shows that the condition
+\begin{equation}\label{eq:intro-summability}
+  \sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}<\infty
+\end{equation}
+is necessary and sufficient for normal trace-class realizability. Whenever
+\eqref{eq:intro-summability} holds, one obtains a model operator
+\[
+  L_{\mathcal D}
+  =\bigoplus_{j\in J}\bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr),
+  \qquad
+  \alpha_j^{n_j}=\beta_j,
+\]
+and every normal realization is unitarily equivalent to
+\(0\oplus L_{\mathcal D}\). Thus the Fredholm zeta germ determines both
+the total algebraic multiplicity of the non-zero spectrum and the trace
+norm in the normal class. If
+\[
+  N(T):=\sum_{\lambda\in\spec(T)\setminus\{0\}}m_a(\lambda),
+\]
+then every normal realization \(L\) satisfies
+\[
+  N(L)=\sum_{j\in J}m_jn_j,
+  \qquad
+  \|L\|_1=\sum_{j\in J}m_jn_j\abs{\beta_j}^{1/n_j}.
+\]
 
-\subsection{Main results}
+The determinant also controls the ambient trace-class problem.
+\Cref{thm:trace-norm-minimality} shows that the same quantity is the least
+possible trace norm among all trace-class realizations of
+\eqref{eq:intro-euler-product}, and that equality characterizes the normal
+model. In this sense the cyclic-block realization is not merely one
+realization among many; it is singled out variationally by the Fredholm
+determinant. On the other hand, once the non-zero eigenvalue multiset is
+fixed, the determinant places no further restriction on Jordan structure
+away from the spectral point \(0\). \Cref{thm:nonnormal-jordan-classification}
+shows that every family of Jordan partitions compatible with the forced
+algebraic multiplicities is realized by a trace-class operator. The
+infimum of the trace norm over such a Jordan class is still the normal
+value, and it is attained only in the semisimple case.
 
-We begin by recording the classical bridge in the form used throughout
-the paper.
-\begin{proposition}[Connecting Fredholm--Witt identity]
-  \label{prop:intro-fredholm-witt}
-  Let \(T\in \sone(H)\) be a trace-class operator on a complex Hilbert
-  space. Define
-  \[
-    a_n(T):=\Tr(T^n),
-    \qquad
-    p_n(T):=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(T)
-    \qquad (n\ge 1).
-  \]
-  Then for every \(\abs{z}<\norm{T}^{-1}\),
-  \[
-    \det(I-zT)^{-1}
-    =\exp\!\left(\sum_{n\ge 1}\frac{a_n(T)}{n}z^n\right)
-    =\prod_{n\ge 1}(1-z^n)^{-p_n(T)}.
-  \]
-\end{proposition}
+The proofs use only standard ingredients: Grothendieck's formula for the
+Fredholm determinant, Simon's description of the zeros of
+\(\det(I-zT)\), the spectral theorem for compact normal operators, and
+classical triangularization results for compact operators. The point is
+that, in this inverse problem, these ingredients combine to give a sharp
+realization theorem, a unitary classification in the normal class, and a
+complete description of the freedom that remains outside it. The
+finite-dimensional proposition in \Cref{sec:preliminaries} is included
+only to keep in view the symbolic-dynamical source of the Euler products;
+the proofs of the main results are operator-theoretic throughout.
 
-The main new theorem strengthens the converse realization statement by
-adding necessity and optimality in the normal trace-class category.
-\begin{theorem}[Cyclic-block characterization and optimality]
-  \label{thm:intro-cyclic-characterization}
-  \leanverified{paper_fredholm_witt_intro_cyclic_characterization}
-  Let \(\{(n_j,\beta_j,m_j)\}_{j\in J}\) be a countable family with
-  \(n_j,m_j\in\NN\), \(\beta_j\in\CC\setminus\{0\}\), and
-  \[
-    \sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}<\infty.
-  \]
-  Then the Euler product
-  \[
-    \prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}
-  \]
-  is the Fredholm determinant of a trace-class normal operator if and
-  only if, after adjoining an arbitrary zero summand, that operator is
-  unitarily equivalent to
-  \[
-    \bigoplus_{j\in J}\bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr),
-    \qquad \alpha_j^{n_j}=\beta_j.
-  \]
-  Consequently every trace-class normal realization has non-zero
-  spectral multiplicity
-  \(
-    \sum_{j\in J}m_j n_j
-  \)
-  and trace norm
-  \(
-    \sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}
-  \).
-  In particular, each factor \((1-\beta_j z^{n_j})^{-m_j}\) requires
-  exactly \(m_j n_j\) non-zero dimensions. These counts are attached to
-  the chosen Euler data \(\mathcal D=\{(n_j,\beta_j,m_j)\}\); distinct
-  but equivalent factorizations of the same Euler product produce
-  unitarily equivalent normal models.
-\end{theorem}
-
-Once the determinant is fixed, the non-zero spectrum is fixed as well.
-The next statement is classical but important because it is the
-mechanism that turns determinant identities into rigidity.
-\begin{proposition}[Spectral rigidity]
-  \label{prop:intro-spectral-rigidity}
-  Let \(T_1,T_2\in \sone\). If
-  \[
-    \det(I-zT_1)=\det(I-zT_2)
-  \]
-  in a neighbourhood of \(z=0\), then \(T_1\) and \(T_2\) have the same
-  non-zero eigenvalues with algebraic multiplicity.
-\end{proposition}
-
-Section~4 records determinant-level applications in two
-symbolic-dynamical directions. The first concerns finite-part constants
-and their Abel renormalisations. The second concerns twisted
-determinants attached to locally constant observables, which
-simultaneously encode periodic-orbit moments and limit-law data. These
-are applications of standard finite-dimensional perturbation theory and
-spectral-gap methods, rather than additional claims of structural
-novelty. In particular,
-\Cref{prop:secondary-fredholm-normal-convergence,thm:logM-holomorphic-variation,prop:logM-truncation}
-separate the normal-convergence, differentiation, and truncation
-statements needed for \(\log\MM(A_\theta)\).
-\Cref{prop:twisted-determinant-orbit-moments,thm:twisted-determinant-rigidity,cor:twisted-determinant-cumulants}
-separate periodic-orbit moment recovery from cumulant rigidity for
-twisted determinants. Finally,
-\Cref{prop:off-origin-decay,thm:clt-spectral} states the off-origin
-decay and central limit theorem in the exact operator form actually
-used: decay is controlled by the spectral radius of the centered
-twisted matrix family on compact sets away from the arithmetic lattice
-obstruction.
-
-\subsection{Previous work}
-
-The rationality of symbolic dynamical \(\zeta\)-functions goes back to
-Bowen--Lanford and Manning
-\cite{BowenLanford1970Zeta,Manning1971Axiom}; see also
-\cite{Ruelle1976ZetaExpanding,Ruelle1978Thermodynamic,ParryPollicott1990Zeta,LindMarcus1995,Kitchens1998}.
-The theory of Fredholm determinants for trace-class operators, and more
-generally for operators in trace ideals, originates with Grothendieck
-\cite{Grothendieck1956}, is extended to the nuclear setting by Ruelle
-\cite{Ruelle1990Extension}, and is developed systematically in Simon
-\cite{Simon2005TraceIdeals}. The product representation for trace-class
-Fredholm determinants that underlies the spectral rigidity discussion is
-\cite[Theorem~3.7]{Simon2005TraceIdeals}.
-
-The operator-theoretic approach to dynamical zeta-functions via
-Fredholm determinants of transfer operators was developed by Pollicott
-\cite{Pollicott1986Meromorphic} in the Axiom~A setting, and the
-Fredholm theory of dynamical determinants for piecewise invertible
-systems in the trace-class sense was carried out by Keller
-\cite{Keller1989Fredholm}. The perturbative arguments in the symbolic
-applications draw on transfer-operator spectral theory in the sense of
-Ruelle and Baladi
-\cite{Ruelle1969,Ruelle1978Thermodynamic,Baladi2000PositiveTransfer}.
-For finite-state spectral-gap CLT, cumulants, and perturbative
-regularity of eigenvalues, we also follow the standard finite-dimensional
-framework described in
-\cite[Chapter~5]{Ruelle1978Thermodynamic},
-\cite[Chapter~3]{Baladi2000PositiveTransfer},
-\cite[Chapters~I and~IV]{HennionHerve2001},
-and \cite[Chapter~II]{Kato1995Perturbation}.
-The spectral-gap approach to limit theorems for Markov chains was
-initiated by Nagaev \cite{Nagaev1957} and extended to the dynamical
-setting by Guivarc'h and Hardy \cite{GuivarchHardy1988}; for broader
-stability results for transfer-operator spectra, see also
-\cite[Theorem~1 and Corollary~1]{KellerLiverani1999}. For group inverses
-and reduced resolvents we use standard matrix-analytic material from
-\cite{CampbellMeyer1979}, while the analytic perturbation theory for
-isolated eigenvalues is taken from Kato \cite{Kato1995Perturbation}.
-The finite-state Liv\v{s}ic-type coboundary criterion used in the
-off-origin Fourier estimate is cited in the form of Parry's cocycle
-theorem \cite[Theorem~1]{Parry1992Cocycle}. For the parameter
-regularity of holomorphic families of dynamical determinants beyond the
-finite-dimensional setting, see J\'ezéquel \cite{Jezequel2017Parameter}.
-
-The present note does not claim a new symbolic model, a new Fredholm
-identity, or a new spectral-gap limit theorem. The new point is the
-strengthened cyclic-block theorem of
-\Cref{thm:cyclic-fredholm-realisation}: sufficiency, necessity in the
-normal trace-class class, and optimality of the resulting non-zero block
-size. The remaining operator statements are classical connective input
-or determinant-level applications, included because they place the
-cyclic-block theorem in the right framework and show how the same
-determinant package interfaces with standard symbolic perturbation
-theory.
-
-\subsection{Organisation}
-
-\Cref{sec:preliminaries} recalls the finite-state \(\zeta\)-function,
-primitive orbit counts, and the finite-part constants used later.
-\Cref{sec:fredholm} contains the Fredholm--Witt bridge, the strengthened
-cyclic-block characterization theorem, its immediate support-optimality
-corollary, and the classical determinant rigidity statement.
-\Cref{sec:perturbation} develops the symbolic applications in separate
-blocks: normal convergence and truncation for the Abel finite part,
-twisted-determinant moment and cumulant rigidity, the spectral-radius
-form of off-origin decay together with the standard CLT, explicit
-computational examples, and a brief comparison with classical
-finite-dimensional perturbation theory. \Cref{sec:conclusion} closes
-with the logical status of the main ingredients and the scope of the
-operator-theoretic package.
+The paper is organized as follows. In \Cref{sec:preliminaries} we record
+the determinant identities used later. Section \Cref{sec:fredholm}
+contains the normal realization theorem and the cyclic-block model. In
+\Cref{sec:rigidity} we study the determinant rigidity that persists in the
+full trace-class class, establish the trace-norm minimality statement, and
+describe the possible Jordan geometry away from \(0\).

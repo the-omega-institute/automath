@@ -37,7 +37,7 @@ For every integer \(q\ge 2\), there exist a finite nonnegative integer matrix
 \(A_q\) and nonnegative integer vectors \(u_q,v_q\) such that
 \[
   S_q(m)=u_q^{\mathsf T}A_q^m v_q
-  \qquad (m\ge 0).
+  \qquad (m\ge 1).
 \]
 Moreover, \(A_q\) may be chosen trim: every state of the underlying automaton
 lies on a directed path from the initial state to an accepting terminal state.
@@ -45,9 +45,8 @@ lies on a directed path from the initial state to an accepting terminal state.
 
 \begin{proof}
 Appendix~\ref{app:transducer} makes the construction explicit.  Choose the
-classical deterministic subsequential normalizer on reversed Fibonacci words,
-and identify the finite-window fold with the normalized output after deleting
-its unique possible overflow digit; see
+deterministic subsequential padded fold transducer on reversed Fibonacci
+words from Appendix~\ref{app:transducer}; see
 \Cref{lem:appendix-overflow-digit}.  By
 \Cref{lem:appendix-prefix-stability}, once a prefix has been read, only a
 bounded suffix of the visible output can still be altered by any further
@@ -64,7 +63,7 @@ matrix of this trim automaton, let \(u_q\) select the initial state, and let
 \(v_q\) mark the accepting terminal states.  Then
 \[
   S_q(m)=u_q^{\mathsf T}A_q^m v_q
-  \qquad (m\ge 0).
+  \qquad (m\ge 1).
 \]
 \end{proof}
 
@@ -72,7 +71,11 @@ matrix of this trim automaton, let \(u_q\) select the initial state, and let
 \label{thm:symmetric-compression}
 \leanverified{paper_projection_symmetric_compression}
 Let \(k\) be the number of states of the one-copy augmented fold automaton from
-Appendix~\ref{app:transducer}.  The kernel \(A_q\) of
+Appendix~\ref{app:transducer}; explicitly,
+\[
+  k=|Q|\,(2^{L+1}-1).
+\]
+The kernel \(A_q\) of
 \Cref{thm:collision-kernel} admits a symmetric quotient
 \(\widetilde A_q\) acting on histogram states of cardinality
 \[
@@ -90,7 +93,7 @@ In particular, for fixed \(k\) the state-space dimension grows polynomially in
 
 \begin{proof}
 Let \(\widehat Q\) be the one-copy augmented state set from
-\Cref{prop:appendix-collision-automaton}, so \(k=\card{\widehat Q}\).  The
+\Cref{prop:appendix-one-copy}, so \(k=\card{\widehat Q}\).  The
 symmetric group \(\mathfrak S_q\) acts on the synchronized state space
 \(\widehat Q^q\) by permuting the \(q\) coordinates.  The transition relation
 and the collision condition are invariant under this action, so the kernel
@@ -241,14 +244,14 @@ monotonicity of \(\lambda_q^{1/q}\).  The limit is Sanna's theorem
 \label{def:pressure-slopes}
 Set
 \[
-  P_0:=\log\varphi,
+  p_0:=\log\varphi,
   \qquad
-  P_q:=\log\lambda_q
+  p_q:=\log\lambda_q
   \qquad (q\ge 1),
 \]
 and define
 \[
-  \Delta_q:=P_q-P_{q-1}
+  \Delta_q:=p_q-p_{q-1}
   \qquad (q\ge 1).
 \]
 For each integer \(q\ge 1\), let
@@ -273,19 +276,19 @@ satisfy
 The monotonicity is exactly the convexity statement of
 \Cref{thm:global-pressure-convexity}.  Moreover,
 \[
-  \frac{P_q-P_0}{q}
+  \frac{p_q-p_0}{q}
   =
   \frac1q\sum_{j=1}^q \Delta_j.
 \]
 By \Cref{cor:renyi-endpoint},
 \[
-  \frac{P_q}{q}
+  \frac{p_q}{q}
   =
   \log\bigl(\lambda_q^{1/q}\bigr)
   \to
   \frac12\log\varphi,
 \]
-and \(P_0/q\to 0\).  Hence the Ces\`aro means of the increasing sequence
+and \(p_0/q\to 0\).  Hence the Ces\`aro means of the increasing sequence
 \((\Delta_q)\) converge to \(\frac12\log\varphi\), which forces the sequence
 itself to converge to the same limit.
 \end{proof}
@@ -328,7 +331,7 @@ Hence
 \]
 Choose \(\alpha=\Delta_{q+1}+\varepsilon\).  Since
 \[
-  \frac{S_{q+1}(m)}{S_q(m)}=\exp\bigl((P_{q+1}-P_q+o(1))m\bigr)
+  \frac{S_{q+1}(m)}{S_q(m)}=\exp\bigl((p_{q+1}-p_q+o(1))m\bigr)
   =
   \exp\bigl((\Delta_{q+1}+o(1))m\bigr),
 \]
@@ -350,7 +353,7 @@ When \(q\ge 2\), choose \(\alpha=\Delta_q-\varepsilon\) and use
 \[
   \frac{S_{q-1}(m)}{S_q(m)}
   =
-  \exp\bigl((P_{q-1}-P_q+o(1))m\bigr)
+  \exp\bigl((p_{q-1}-p_q+o(1))m\bigr)
   =
   \exp\bigl((-\Delta_q+o(1))m\bigr).
 \]
@@ -362,8 +365,8 @@ When \(q=1\), the same argument gives
   \le
   e^{\alpha m}\frac{S_0(m)}{S_1(m)}.
 \]
-Now \(S_0(m)=F_{m+2}=\exp((P_0+o(1))m)\) and \(S_1(m)=2^m=\exp(P_1m)\), so
-choosing \(\alpha=\Delta_1-\varepsilon=P_1-P_0-\varepsilon\) again yields
+Now \(S_0(m)=F_{m+2}=\exp((p_0+o(1))m)\) and \(S_1(m)=2^m=\exp(p_1m)\), so
+choosing \(\alpha=\Delta_1-\varepsilon=p_1-p_0-\varepsilon\) again yields
 \(\exp(-(\varepsilon+o(1))m)\).
 \end{proof}
 
@@ -387,25 +390,25 @@ Then
 \]
 Moreover,
 \[
-  P_q-q(\Delta_{q+1}+\varepsilon)
+  p_q-q(\Delta_{q+1}+\varepsilon)
   \le
   \liminf_{m\to\infty}\frac1m\log |B_{m,q}(\varepsilon)|,
 \]
 \[
   \limsup_{m\to\infty}\frac1m\log |B_{m,q}(\varepsilon)|
   \le
-  P_q-q(\Delta_q-\varepsilon),
+  p_q-q(\Delta_q-\varepsilon),
 \]
 and
 \[
-  P_q-\log 2-(q-1)(\Delta_{q+1}+\varepsilon)
+  p_q-\log 2-(q-1)(\Delta_{q+1}+\varepsilon)
   \le
   \liminf_{m\to\infty}\frac1m\log p_m\bigl(B_{m,q}(\varepsilon)\bigr),
 \]
 \[
   \limsup_{m\to\infty}\frac1m\log p_m\bigl(B_{m,q}(\varepsilon)\bigr)
   \le
-  P_q-\log 2-(q-1)(\Delta_q-\varepsilon),
+  p_q-\log 2-(q-1)(\Delta_q-\varepsilon),
 \]
 where \(p_m(x):=d_m(x)/2^m\).
 \end{theorem}
@@ -418,7 +421,7 @@ The concentration statement follows immediately from
   =
   \Bigl(1-\exp\bigl(-(\varepsilon+o(1))m\bigr)\Bigr)S_q(m)
   =
-  \exp\bigl((P_q+o(1))m\bigr).
+  \exp\bigl((p_q+o(1))m\bigr).
 \]
 If \(x\in B_{m,q}(\varepsilon)\), then
 \[

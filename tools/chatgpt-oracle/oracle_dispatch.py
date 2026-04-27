@@ -131,7 +131,7 @@ def compile_paper(paper_dir: Path) -> Path | None:
 
 
 def dispatch_direct(task_name: str, prompt_text: str, pdf_path: Path | None = None,
-                    model: str = "o3-mini-high") -> str:
+                    model: str = "chatgpt-5.4-pro") -> str:
     """Submit via oracle_server.py + Tampermonkey bridge. Returns response text."""
     import json as _json
     import base64
@@ -261,7 +261,7 @@ def wait_for_result(result_path: Path, timeout: int = 900, poll: int = 5) -> str
 
 
 def dispatch_api(task_name: str, prompt_text: str, pdf_path: Path | None = None,
-                 model: str = "o3-mini-high") -> str:
+                 model: str = "chatgpt-5.4-pro") -> str:
     """Submit via chatgpt_api.py direct API (fastest, no browser needed).
 
     Requires a valid token saved via: python chatgpt_api.py --setup
@@ -342,8 +342,8 @@ def main():
                         help="Use clipboard fallback instead of direct API")
     parser.add_argument("--api", action="store_true",
                         help="Use chatgpt_api.py direct API (fastest, needs token)")
-    parser.add_argument("--model", type=str, default="o3-mini-high",
-                        help="ChatGPT model (default: o3-mini-high)")
+    parser.add_argument("--model", type=str, default="chatgpt-5.4-pro",
+                        help="ChatGPT model (default: chatgpt-5.4-pro)")
     args = parser.parse_args()
 
     # Determine prompt text

@@ -1,210 +1,106 @@
-\section{Finite-State \texorpdfstring{$\zeta$}{zeta}-Functions and Finite Parts}
-\label{sec:preliminaries}
+\section{Determinants and Euler products}\label{sec:preliminaries}
 
-\subsection{Primitive orbit counts}
+We begin by recording the two determinant identities that will be used
+throughout the paper. The first is the finite-dimensional formula behind
+\eqref{eq:intro-finite-zeta}.
 
-Let \(\mathcal A\) be a finite alphabet and let
-\(A\in\{0,1\}^{\mathcal A\times\mathcal A}\) be a primitive adjacency
-matrix. The associated one-sided subshift of finite type is
+Let \(A\) be a complex \(d\times d\) matrix and set
 \[
-  X_A^+
-  =\bigl\{(x_n)_{n\ge 0}\in \mathcal A^{\NN}:
-    A_{x_n,x_{n+1}}=1\ \text{for all }n\ge 0\bigr\},
+  a_n(A):=\Tr(A^n),
+  \qquad
+  p_n(A):=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(A)
+  \qquad (n\ge 1).
 \]
-equipped with the left shift \(\sigma\). We write
-\[
-  a_n(A):=\Tr(A^n)
-  =\#\Fix(\sigma^n)
-\]
-for the number of points of period dividing \(n\). The number of
-primitive orbits of least period \(n\) is
-\begin{equation}\label{eq:primitive-mobius}
-  p_n(A)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(A),
-\end{equation}
-and the inverse necklace relation is
-\begin{equation}\label{eq:trace-primitive-identity}
-  a_n(A)=\sum_{d\mid n}d\,p_d(A).
-\end{equation}
 
-\begin{proposition}[Trace, primitive orbits, and Euler product]
+\begin{proposition}[Finite matrices and Euler products]
   \label{prop:prelim-trace-primitive}
-  For every primitive matrix \(A\),
-  \begin{equation}\label{eq:zeta-def}
-    \zeta_A(z)
-    :=\exp\!\left(\sum_{n\ge 1}\frac{\Tr(A^n)}{n}z^n\right)
-    =\det(I-zA)^{-1}
-    =\prod_{n\ge 1}(1-z^n)^{-p_n(A)}.
+  For every complex \(d\times d\) matrix \(A\),
+  \begin{equation}\label{eq:zeta-finite-matrix}
+    \det(I-zA)^{-1}
+    =\exp\!\left(\sum_{n\ge 1}\frac{\Tr(A^n)}{n}z^n\right)
+    =\prod_{n\ge 1}(1-z^n)^{-p_n(A)}
   \end{equation}
+  as an identity of holomorphic germs at \(z=0\), equivalently as an
+  identity of formal power series. If \(A\) is a primitive
+  \(\{0,1\}\)-matrix, then \(p_n(A)\) is the number of primitive orbits
+  of length \(n\) for the associated subshift
+  \cite{BowenLanford1970Zeta,LindMarcus1995}.
 \end{proposition}
 
 \begin{proof}
-  By \eqref{eq:trace-primitive-identity},
-  \begin{align*}
-    \sum_{n\ge 1}\frac{a_n(A)}{n}z^n
-    &=\sum_{n\ge 1}\sum_{d\mid n}\frac{d\,p_d(A)}{n}z^n \\
-    &=\sum_{m\ge 1}\sum_{r\ge 1}\frac{p_m(A)}{r}z^{mr}
-      =-\sum_{m\ge 1}p_m(A)\log(1-z^m).
-  \end{align*}
-  Exponentiating gives the Euler product, and the determinant identity
-  is standard for finite matrices.
-\end{proof}
-
-If \(\lambda=\rho(A)\) is the Perron root and
-\[
-  \Lambda(A):=\max\{|\mu|:\mu\in\spec(A),\ \mu\neq\lambda\},
-\]
-then the primitive orbit counts satisfy the usual Perron asymptotic.
-
-\begin{lemma}\label{lem:primitive-orbit-asymptotic}
-For a primitive matrix \(A\),
-\[
-  p_n(A)=\frac{\lambda^n}{n}
-  +O\!\left(\frac{\max\{\Lambda(A)^n,\lambda^{n/2}\}}{n}\right).
-\]
-\end{lemma}
-
-\begin{proof}
-  Perron--Frobenius theory gives
+  The determinant formula is classical and follows from the Newton
+  identities. M\"obius inversion gives
   \(
-    a_n(A)=\lambda^n+O(\Lambda(A)^n)
-  \).
-  In \eqref{eq:primitive-mobius}, the divisor \(d=1\) gives the main
-  term. For \(d\ge 2\), one has \(n/d\le n/2\), hence
+    a_n(A)=\sum_{d\mid n}d\,p_d(A)
+  \),
+  and hence
   \[
-    \sum_{\substack{d\mid n\\ d\ge 2}}\frac{|a_{n/d}(A)|}{n}
-    \ll \frac{\lambda^{n/2}}{n},
+    \sum_{n\ge 1}\frac{a_n(A)}{n}z^n
+    =-\sum_{m\ge 1}p_m(A)\log(1-z^m).
   \]
-  where the implied constant depends only on the Jordan data of the
-  non-Perron spectrum of \(A\).
-  This proves the estimate.
+  Exponentiating yields \eqref{eq:zeta-finite-matrix}. Analytically, the
+  argument is valid for \(\abs{z}<\min(1,\|A\|^{-1})\), and formally no
+  convergence issue arises. The interpretation of \(p_n(A)\) in terms of
+  primitive periodic orbits is standard.
 \end{proof}
-\leanverified{paper_fredholm_witt_primitive_orbit_asymptotic}
 
-\subsection{Finite-part constants}
+The trace-class analogue is equally standard.
 
-Let \(z_\ast=\lambda^{-1}\). Since \(\lambda\) is a simple eigenvalue,
-\(\zeta_A\) has a simple pole at \(z_\ast\), and we define
-\begin{equation}\label{eq:residue-constant-def}
-  C(A):=\lim_{z\to z_\ast}(1-\lambda z)\zeta_A(z).
-\end{equation}
-If \(\mu_2,\dots,\mu_d\) are the non-Perron eigenvalues of \(A\), then
-\begin{equation}\label{eq:reduced-det-poly}
-  F_A(t):=\frac{\det(I-tA/\lambda)}{1-t}
-  =\prod_{j=2}^d\left(1-\frac{\mu_j}{\lambda}t\right)
-\end{equation}
-and
-\begin{equation}\label{eq:reduced-det-constant}
-  C(A)=F_A(1)^{-1}.
-\end{equation}
-
-Define the primitive Abel generating series
-\[
-  P_A(r):=\sum_{n\ge 1}p_n(A)\lambda^{-n}r^n,
-  \qquad 0\le r<1.
-\]
-Because
-\(
-  p_n(A)\lambda^{-n}=1/n+O(\vartheta^n/n)
-\)
-for some \(\vartheta\in(0,1)\), the renormalised quantity
-\[
-  P_A(r)+\log(1-r)
-\]
-has a finite limit as \(r\uparrow 1\).
-
-\begin{definition}[Abel finite-part constant]
-  \label{def:abel-finite-part}
-  We write
+\begin{proposition}[Fredholm determinants and Euler products]
+  \label{thm:fredholm-witt-bridge}
+  Let \(H\) be a complex Hilbert space and let \(T\in \sone(H)\). Write
   \[
-    \log\MM(A):=\lim_{r\uparrow 1}\bigl(P_A(r)+\log(1-r)\bigr).
+    Z_T(z):=\det(I-zT)^{-1},
+    \qquad
+    a_n(T):=\Tr(T^n),
   \]
-  Indeed,
+  and
   \[
-    P_A(r)+\log(1-r)
-    =\sum_{n\ge 1}\left(p_n(A)\lambda^{-n}-\frac1n\right)r^n,
+    p_n(T):=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(T)
+    \qquad (n\ge 1).
   \]
-  and the estimate
-  \(p_n(A)\lambda^{-n}=1/n+O(\vartheta^n/n)\) compares the difference
-  termwise with the absolutely convergent series
-  \(\sum_{n\ge 1}\vartheta^n r^n/n\).
-\end{definition}
-
-\begin{theorem}[Primitive-orbit closed form]
-  \label{thm:finite-part-primitive-closed-form}
-  Let \(A\) be primitive with Perron root \(\lambda>1\). Then
-  \(\log\MM(A)\) exists and satisfies
+  Then, for
+  \(\abs{z}<\min(1,\|T\|^{-1})\),
   \[
-    \log\MM(A)
-    =\log C(A)+\sum_{k\ge 2}\frac{\mu(k)}{k}
-      \log\det(I-\lambda^{-k}A)^{-1}.
+    Z_T(z)
+    =\exp\!\left(\sum_{n\ge 1}\frac{a_n(T)}{n}z^n\right)
+    =\prod_{n\ge 1}(1-z^n)^{-p_n(T)},
   \]
-  Equivalently,
-  \[
-    \log\MM(A)
-    =\log C(A)
-      +\sum_{n\ge 1}p_n(A)
-       \bigl(\lambda^{-n}+\log(1-\lambda^{-n})\bigr).
-  \]
-  \leanverified{paper_fredholm_witt_finite_part_primitive_closed_form}
-\end{theorem}
+  where
+  \(
+    (1-z^m)^{-p_m(T)}
+    :=\exp\!\bigl(-p_m(T)\log(1-z^m)\bigr)
+  \)
+  and \(\log(1-z^m)\) is the principal branch on \(\abs{z}<1\). In
+  particular, the identity holds as an equality of holomorphic germs at
+  \(z=0\).
+\end{proposition}
 
 \begin{proof}
-  By \Cref{prop:prelim-trace-primitive}, for \(|z|<\lambda^{-1}\),
+  The first identity,
   \[
-    \log\det(I-zA)^{-1}
-    =\sum_{n\ge 1}\frac{\Tr(A^n)}{n}z^n.
+    Z_T(z)
+    =\exp\!\left(\sum_{n\ge 1}\frac{\Tr(T^n)}{n}z^n\right),
   \]
-  Hence, for \(0\le r<1\),
+  is Grothendieck's trace formula; see \cite{Grothendieck1956} or
+  \cite[Chapter~3]{Simon2005TraceIdeals}. Since
+  \(a_n(T)=\sum_{d\mid n}d\,p_d(T)\), we find
   \begin{align*}
-    \sum_{k\ge 1}\frac{\mu(k)}{k}
-      \log\det(I-\lambda^{-k}r^kA)^{-1}
-    &=\sum_{k\ge 1}\frac{\mu(k)}{k}
-      \sum_{m\ge 1}\frac{\Tr(A^m)}{m}\lambda^{-km}r^{km} \\
-    &=\sum_{n\ge 1}\frac{(\lambda^{-1}r)^n}{n}
-      \sum_{k\mid n}\mu(k)\Tr(A^{n/k}) \\
-    &=\sum_{n\ge 1}p_n(A)\lambda^{-n}r^n
-      =P_A(r).
+    \sum_{n\ge 1}\frac{a_n(T)}{n}z^n
+      &=\sum_{n\ge 1}\sum_{d\mid n}\frac{d\,p_d(T)}{n}z^n \\
+      &=\sum_{m\ge 1}\sum_{r\ge 1}\frac{p_m(T)}{r}z^{mr}
+       =-\sum_{m\ge 1}p_m(T)\log(1-z^m).
   \end{align*}
-  The term \(k=1\) has asymptotic
-  \[
-    \log\det(I-\lambda^{-1}rA)^{-1}
-    =-\log(1-r)+\log C(A)+o(1)
-    \qquad (r\uparrow 1),
-  \]
-  while every term with \(k\ge 2\) converges absolutely at \(r=1\).
-  This proves the first identity.
-
-  For the second identity, use the Euler product in
-  \Cref{prop:prelim-trace-primitive} and the identity
-  \[
-    -\sum_{k\ge 1}\frac{\mu(k)}{k}\log(1-x^k)=x
-    \qquad (\abs{x}<1).
-  \]
-  Indeed,
-  \[
-    -\sum_{k\ge 1}\frac{\mu(k)}{k}\log(1-x^k)
-    =\sum_{k\ge 1}\frac{\mu(k)}{k}
-      \sum_{r\ge 1}\frac{x^{kr}}{r}
-    =\sum_{n\ge 1}\frac{x^n}{n}\sum_{k\mid n}\mu(k)
-    =x.
-  \]
-  Hence
-  \[
-    -\sum_{k\ge 2}\frac{\mu(k)}{k}\log(1-x^k)
-    =x+\log(1-x).
-  \]
-  Setting \(x=\lambda^{-n}\) and \(n\) as the cycle-length index in the
-  Euler product gives
-  \[
-    \log\MM(A)=\log C(A)+\sum_{n\ge 1}
-    p_n(A)\bigl(\lambda^{-n}+\log(1-\lambda^{-n})\bigr).
-  \]
-  Rearranging the absolutely convergent sums yields the stated formula.
+  The logarithm is single-valued for \(\abs{z}<1\), while the trace
+  series converges for \(\abs{z}<\|T\|^{-1}\). Exponentiating gives the
+  stated product formula.
 \end{proof}
-\begin{remark}[Finite-state arithmetic]
-  \label{rem:finite-state-arithmetic}
-  For primitive finite matrices, the numbers \(p_n(A)\) are
-  non-negative integers because they count primitive periodic orbits.
-  This arithmetic feature belongs to the finite-state category and will
-  not survive after passage to general trace-class operators.
+
+\begin{remark}[Euler coordinates]
+  \label{rem:witt-audit-constraints}
+  In contrast with the finite-dimensional symbolic setting, the
+  coefficients \(p_n(T)\) need not be integers and need not be
+  non-negative. Accordingly, the product formula is to be understood as
+  an identity of holomorphic germs, interpreted through the chosen branch
+  of the logarithm.
 \end{remark}

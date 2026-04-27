@@ -3,11 +3,17 @@
 
 \subsection{First-entry residue events and escape rates}
 
-This section contains the main dynamical theorem of the paper.  It
-applies the weighted boundary transfer theorem to first-entry residue
-events of Markov holes, so that the boundary matrix becomes the killed
-transfer matrix and the finite-observation exponent becomes the escape
-rate.  The study of escape rates through holes in dynamical systems
+This section contains the finite-state core of the paper.  The
+observation model here is the symbolic prefix filtration
+\(\mathcal F_m=\sigma(y_0,\ldots,y_{m-1})\) on the shift \(Y\), so the
+Bayes error is computed from full symbolic prefixes over the shift
+alphabet \(A\).  For first-entry residue events of a Markov hole, the
+required path sum can be derived directly from the Markov property,
+without any auxiliary boundary-language theorem.  We therefore give a
+self-contained proof of the exact killed-matrix formula, its escape-rate
+consequence, and the quasistationary amplitude refinement.
+
+The study of escape rates through holes in dynamical systems
 originates with
 \citet{PianigianiYorke1979}; the transfer-operator approach for
 topological Markov chains was developed by
@@ -68,6 +74,11 @@ Fix \(q\geq 2\) and a non-empty proper subset
       \tau_H(y)<\infty,\
       \tau_H(y)\bmod q\in R }.
 \]
+For this theorem, depth \(m\) means conditioning on
+\[
+  \mathcal F_m=\sigma(y_0,\ldots,y_{m-1}),
+\]
+where \(y_t(y)=y_t\) is the coordinate process on \(Y\).
 
 For \(i\in\mathcal S\), let \(\PP_i\) be the Markov law on \(Y\)
 conditioned to start at state \(i\), and let
@@ -78,17 +89,25 @@ conditioned to start at state \(i\), and let
 Thus \(\tau_H\) is the ambient first-entry time, whereas \(\tau_H^+\) is
 the remaining first-entry time after one has already read a safe prefix
 and restarted at its terminal state.
+For each safe state \(i\in\mathcal S\), define the attainable first-hit
+residue set
+\[
+  D_i:=\set{d\bmod q:\PP_i(\tau_H^+=d)>0}\subseteq \ZZ/q\ZZ.
+\]
 For \(r\in\ZZ/q\ZZ\), define
 \[
   p_{i,r}:=\PP_i\bigl(r+\tau_H^+\in R \bmod q\bigr),
   \qquad
   \beta_{i,r}:=\min\set{p_{i,r},1-p_{i,r}}.
 \]
-Assume the following residue non-degeneracy condition:
-for every \(i\in\mathcal S\) and \(r\in\ZZ/q\ZZ\), there exist
-admissible future paths starting at \(i\) whose first entry into
-\(A_{\mathrm{hole}}\) occurs at residues both in \(R-r\) and in
-\((\ZZ/q\ZZ\setminus R)-r\).  Then there exists \(\theta>0\) such that
+Assume the residue non-degeneracy condition
+\[
+  D_i\cap (R-r)\neq\varnothing,
+  \qquad
+  D_i\cap ((\ZZ/q\ZZ\setminus R)-r)\neq\varnothing
+\]
+for every \(i\in\mathcal S\) and \(r\in\ZZ/q\ZZ\).  Then there exists
+\(\theta>0\) such that
 \[
   0<\theta\leq \beta_{i,r}\leq \frac12
   \qquad
@@ -294,6 +313,246 @@ The escape-rate interpretation follows from the comparison with
 \(\nu_\varphi(\tau_H\geq m)\).
 \end{proof}
 
+\begin{proof}[Proof of Theorem~\ref{thm:main-escape}]
+This is exactly Theorem~\ref{thm:first-entry-escape-rate}.
+\end{proof}
+
+\begin{remark}[Residue computation on a finite product graph]
+\label{rem:residue-bfs}
+For fixed \(q\), the attainable residue set \(D_i\) can be computed
+exactly on the finite graph with vertex set
+\(\mathcal S\times \ZZ/q\ZZ\) and edges
+\[
+  (j,r)\to (k,r+1\bmod q)
+  \qquad
+  \text{whenever } M_{jk}=1 \text{ and } k\in\mathcal S.
+\]
+Start from \((i,0)\), perform breadth-first search, and record a residue
+\(r+1\bmod q\) whenever a visited vertex \((j,r)\) has an outgoing edge
+from \(j\) into \(A_{\mathrm{hole}}\).  The set of recorded residues is
+exactly \(D_i\).  If \(i\in\mathcal T\), the safe subgraph on
+\(\mathcal T\) is acyclic, so only finitely many transient safe paths
+occur before the search either terminates or enters \(\mathcal S_\infty\).
+\end{remark}
+
+\begin{lemma}[Sufficient condition for residue non-degeneracy]
+\label{lem:residue-nondegen-sufficient}
+Under the hypotheses of
+Theorem~\ref{thm:first-entry-escape-rate}, for each safe state
+\(i\in\mathcal S\) define the set of attainable first-hit residues
+\[
+  D_i:=\set{d\bmod q:\PP_i(\tau_H^+=d)>0}\subseteq \ZZ/q\ZZ.
+\]
+The residue non-degeneracy condition holds whenever \(D_i=\ZZ/q\ZZ\) for
+every \(i\in\mathcal S\).
+
+More generally, the residue non-degeneracy condition for a given
+non-empty proper subset \(R\subsetneq\ZZ/q\ZZ\) holds whenever the
+following condition is satisfied: for every safe state
+\(i\in\mathcal S\) and every \(r\in\ZZ/q\ZZ\), both
+\(D_i\cap (R-r)\neq\varnothing\) and
+\(D_i\cap ((\ZZ/q\ZZ\setminus R)-r)\neq\varnothing\).
+\end{lemma}
+
+\begin{proof}
+Fix \(i\in\mathcal S\) and \(r\in\ZZ/q\ZZ\).  The conditional
+probability \(p_{i,r}=\PP_i(r+\tau_H^+\in R\bmod q)\) satisfies
+\[
+  p_{i,r}
+  = \sum_{\substack{d\geq 1\\ d\bmod q\in R-r}}
+      \PP_i(\tau_H^+=d).
+\]
+Therefore \(p_{i,r}>0\) if and only if \(D_i\cap (R-r)\neq\varnothing\).
+Likewise,
+\[
+  1-p_{i,r}
+  = \sum_{\substack{d\geq 1\\ d\bmod q\in (\ZZ/q\ZZ\setminus R)-r}}
+      \PP_i(\tau_H^+=d),
+\]
+so \(1-p_{i,r}>0\) if and only if
+\(D_i\cap ((\ZZ/q\ZZ\setminus R)-r)\neq\varnothing\).  Under either
+hypothesis, both conditions hold for every \(i\) and \(r\), so
+\(\beta_{i,r}=\min\{p_{i,r},1-p_{i,r}\}>0\).  Finiteness of
+\(\mathcal S\times\ZZ/q\ZZ\) then yields a uniform lower bound
+\(\theta>0\).
+
+If \(D_i=\ZZ/q\ZZ\) for every \(i\), then in particular
+\(D_i\cap (R-r)\supseteq (R-r)\neq\varnothing\) and
+\(D_i\cap ((\ZZ/q\ZZ\setminus R)-r)\supseteq
+(\ZZ/q\ZZ\setminus R)-r\neq\varnothing\), so the general condition
+holds.
+\end{proof}
+
+\begin{example}[Non-degeneracy holds: the hole {$[11]$} after {$2$}-block recoding]
+\label{ex:nondegen-holds}
+Let \(Y=\{0,1\}^{\NNzero}\) be the full two-shift and let
+\(H=[11]\).  Passing to the \(2\)-block presentation gives a one-step
+shift with alphabet
+\[
+  A^{(2)}=\{00,01,10,11\},
+\]
+safe alphabet \(\mathcal S=\{00,01,10\}\), and hole symbol
+\(A_{\mathrm{hole}}=\{11\}\).  Take \(q=2\).
+
+The admissible paths from each safe state to the hole realize both
+parities:
+\[
+  00\to 01\to 11 \quad\text{and}\quad 00\to 00\to 01\to 11,
+\]
+\[
+  01\to 11 \quad\text{and}\quad 01\to 10\to 00\to 01\to 11,
+\]
+\[
+  10\to 01\to 11 \quad\text{and}\quad 10\to 00\to 01\to 11.
+\]
+Hence \(D_i=\ZZ/2\ZZ\) for every \(i\in\mathcal S\).  By
+Lemma~\ref{lem:residue-nondegen-sufficient}, the residue non-degeneracy
+condition holds for every non-empty proper \(R\subsetneq\ZZ/2\ZZ\).
+\end{example}
+
+\begin{example}[Non-degeneracy fails: a graph with forced even first hits]
+\label{ex:nondegen-fails}
+Let \(A=\{0,1,2\}\) and define the one-step graph by
+\[
+  0\to 1,\qquad 1\to 0,\qquad 1\to 2,\qquad 2\to 0,\qquad 2\to 2.
+\]
+This is a non-full topologically mixing graph.  Set
+\(A_{\mathrm{hole}}=\{2\}\), so the safe alphabet is
+\(\mathcal S=\{0,1\}\), and take \(q=2\).
+
+Starting from \(0\), every first hit to the hole has even length:
+\[
+  0\to 1\to 2,\qquad
+  0\to 1\to 0\to 1\to 2,\qquad
+  0\to 1\to 0\to 1\to 0\to 1\to 2,\ \ldots
+\]
+Thus
+\[
+  D_0=\{0\bmod 2\}.
+\]
+Take \(R=\{0\}\).  Then \(D_0\cap (R-0)\neq\varnothing\) but
+\(D_0\cap ((\ZZ/2\ZZ\setminus R)-0)=\varnothing\).  Equivalently,
+\(\PP_0(\tau_H^+\equiv 1 \bmod 2)=0\), so \(\beta_{0,0}=0\).  The
+criterion of Lemma~\ref{lem:residue-nondegen-sufficient} therefore
+fails.  This example only illustrates the residue obstruction: the safe
+subgraph \(0\leftrightarrow 1\) is periodic, so the mixing hypothesis of
+Theorem~\ref{thm:first-entry-escape-rate} is not intended here.
+\end{example}
+
+\begin{example}[Equal escape exponents with different ambiguity amplitudes]
+\label{ex:amplitude-contrast}
+Let \(Y=\{0,1\}^{\NNzero}\) be the full shift with the Bernoulli
+\((\tfrac12,\tfrac12)\) measure, and take the Markov hole \(H=[1]\).
+Then \(\mathcal S=\{0\}\), \(B_H=(\tfrac12)\), and \(Y_H\) consists of
+the single survivor \(0^\infty\), so
+\(\nu_\varphi(\tau_H\ge m)=2^{-m}\) and the escape exponent is
+\(-\log\tfrac12\).  Fix \(q=3\) and consider the residue events
+\[
+  R_{\text{thin}}:=\{0\},
+  \qquad
+  R_{\text{wide}}:=\{0,1\}.
+\]
+The remaining hitting time \(\tau_H^+\) is geometric with parameter
+\(\tfrac12\), hence
+\[
+  \PP(\tau_H^+\equiv 0\bmod 3)=\frac17,\quad
+  \PP(\tau_H^+\equiv 1\bmod 3)=\frac47,\quad
+  \PP(\tau_H^+\equiv 2\bmod 3)=\frac27.
+\]
+Consequently
+\[
+  b^{\text{thin}}=(\tfrac17,\tfrac27,\tfrac37),
+  \qquad
+  b^{\text{wide}}=(\tfrac27,\tfrac37,\tfrac17).
+\]
+Because \(u_0=\pi_0=\tfrac12\), Theorem~\ref{thm:first-entry-escape-rate}
+reduces to
+\[
+  \varepsilon_m(\mathsf P_{R};\nu_\varphi)
+  = 2^{-m}\,b^{R}_{m-1\bmod 3},
+  \qquad
+  R\in\{\text{thin},\text{wide}\}.
+\]
+Both residue events therefore have exactly the same escape exponent and
+survivor mass, yet they display different residue-dependent ambiguity
+amplitudes: for \(m\equiv 1\bmod 3\) the thin event has limit \(\tfrac17\)
+whereas the wide event has limit \(\tfrac27\), and the roles permute as
+the residue class of \(m\) changes.  The Bayes-error observable thus
+distinguishes events that the survivor mass alone would identify.
+\end{example}
+
+\begin{example}[An asymmetric two-state survivor component]
+\label{ex:two-state-asymmetric}
+Let \(A=\{0,1,h\}\), let \(Y=A^{\NNzero}\) be the full shift, and let
+\(H=[h]\).  Consider the one-step Markov measure with transition matrix
+\[
+  K=
+  \begin{pmatrix}
+    \tfrac12 & \tfrac14 & \tfrac14\\[2pt]
+    \tfrac18 & \tfrac12 & \tfrac38\\[2pt]
+    \tfrac12 & \tfrac14 & \tfrac14
+  \end{pmatrix},
+\]
+where the rows are indexed by \(0,1,h\).  Then
+\[
+  B_H=
+  \begin{pmatrix}
+    \tfrac12 & \tfrac14\\[2pt]
+    \tfrac18 & \tfrac12
+  \end{pmatrix}
+\]
+is primitive, so the survivor component is genuinely two-state and
+non-Bernoulli.  Take \(q=3\) and \(R=\{0\}\).  Solving the first-hit
+renewal equations for the residue classes of \(\tau_H^+\) gives
+\[
+  b_0\approx(0.244,0.194),\qquad
+  b_1\approx(0.336,0.304),\qquad
+  b_2\approx(0.420,0.498).
+\]
+The normalized left Perron eigenvector of \(B_H\) is
+\[
+  \xi_H=(\sqrt2-1,\ 2-\sqrt2).
+\]
+Hence
+\[
+  \xi_H^{\mathsf T}b_0\approx 0.215,\qquad
+  \xi_H^{\mathsf T}b_1\approx 0.317,\qquad
+  \xi_H^{\mathsf T}b_2\approx 0.466.
+\]
+Thus the residue-dependent ambiguity amplitudes remain visibly distinct
+even on a primitive two-state survivor component.  This is the finite
+Markov effect detected by Theorem~\ref{thm:quasistationary-ambiguity}
+beyond the one-state Bernoulli example above.
+\end{example}
+
+\begin{example}[Cyclotomic poles and residue subsequences]
+\label{ex:cyclotomic-example}
+Continue with Example~\ref{ex:amplitude-contrast} and take
+\(R=R_{\text{thin}}\).  The periodic structure of
+\(b^{\text{thin}}\) yields the closed-form generating function
+\[
+  \mathcal E_{\mathsf P_R}(z)
+  = \frac{
+      z\left(
+        \tfrac17 + \tfrac27(\tfrac12 z)+ \tfrac37(\tfrac12 z)^2
+      \right)
+    }{1-(\tfrac12)^3 z^3}.
+\]
+The denominator has zeros at the reciprocal cyclotomic rotations
+\((\tfrac12)^{-1}e^{2\pi i k/3}\) for \(k=0,1,2\), exactly as predicted
+by Corollary~\ref{cor:error-resolvent-cyclotomic}.  Moreover
+\[
+  \varepsilon_{3n+r+1}(\mathsf P_R;\nu_\varphi)
+  = \frac{b^{\text{thin}}_r}{2^{3n+r+1}},
+  \qquad r\in\{0,1,2\},
+\]
+so each residue subsequence decays with the common escape rate but
+carries a different quasistationary ambiguity factor \(b^{\text{thin}}_r\).
+This explicit computation displays both the cyclotomic poles and the
+residue-sensitive subsequence asymptotics furnished by the general
+theorem.
+\end{example}
+
 \begin{corollary}[Survivor pressure recovery]
 \label{cor:survivor-pressure-recovery}
 Under the hypotheses of
@@ -352,7 +611,7 @@ Define a row vector on the whole safe alphabet by
     \ell_\infty^{\mathsf T}C(\rho_H I-Q)^{-1}
   \bigr),
   \qquad
-  \xi_H:=\frac{\ell_H}{\ell_H^{\mathsf T}\mathbf 1}.
+\xi_H:=\frac{\ell_H}{\ell_H^{\mathsf T}\mathbf 1}.
 \]
 Then \(\ell_H^{\mathsf T}B_H=\rho_H\ell_H^{\mathsf T}\), and for every
 \(r\in\ZZ/q\ZZ\),
@@ -373,6 +632,19 @@ Equivalently,
 \]
 \leanverified{paper_scan_projection_address_quasistationary_ambiguity_amplitudes}
 \end{theorem}
+
+\paragraph{Quasistationary view.}
+Because \(\xi_H\) is the normalized left Perron eigenvector of the
+killed matrix, it is the quasistationary distribution of the killed
+chain; compare \citet{DarrochSeneta1965},
+\citet{ColletMartinezSanMartin2013}, and
+\citet{KellerLiverani2009}.  Hence
+Theorem~\ref{thm:quasistationary-ambiguity} identifies the Bayes
+ambiguity as the quasistationary expectation of the residue weight:
+\(\xi_H^{\mathsf T}b_r = \EE_{\xi_H}[b_r(Y_0)]\).  The finite-observation
+statistics therefore recover the same quasistationary object that
+appears in the operator-theoretic literature, but they package it into
+explicit residue-dependent finite-depth limits.
 
 \begin{proof}
 The eigenvector identity follows from the block form of \(B_H\).  Using

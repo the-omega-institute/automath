@@ -1,7 +1,9 @@
-\section{Appendix D: The partition-function recurrence, discriminant, and weight asymptotics}
+\section{The partition-function recurrence and discriminant}
 \label{app:recurrence}
 
-\subsection{Weighted transfer matrix}
+This appendix collects the transfer-matrix calculations used in Section~\ref{sec:partition}. Once the four-state presentation from Appendix~\ref{app:pressure} is fixed, the remaining arguments are linear algebra and symbolic elimination, so we separate them from the main narrative.
+
+\subsection{Weighted transfer matrix and boundary vectors}
 Weight each edge of the four-state graph from Appendix~\ref{app:pressure} by \(y^{Y}\), where \(Y\in\{0,1\}\) is the second component of the label \((X,Y)\). In the state order \((00,01,10,11)\) this gives the weighted adjacency matrix
 \[
 M(y)=
@@ -28,6 +30,56 @@ Replacing \(\lambda\) by \(t^{-1}\) gives
 =
 D(t;y).
 \]
+Because the synchronized graph is finite, the weighted language counted by \(Z_m(y)\) is rational and admits a four-dimensional linear representation; compare the standard transfer-matrix formalism in \cite[Chapter~6]{AlloucheShallit2003} and \cite{GrabnerKirschenhoferTichy2002}. With \(\alpha\) fixed by the synchronized initial state \(00\), a convenient terminal vector is obtained by solving
+\[
+\alpha^{\mathsf T}M(y)^m\beta(y)=Z_m(y)\qquad (m=0,1,2,3),
+\]
+using the directly enumerated initial polynomials
+\[
+Z_0(y)=1,\qquad
+Z_1(y)=1+y,\qquad
+Z_2(y)=2+2y,\qquad
+Z_3(y)=2+5y+y^2.
+\]
+The resulting representation is
+\[
+Z_m(y)=\alpha^{\mathsf T}M(y)^m\beta(y),
+\qquad
+\alpha=
+\begin{pmatrix}
+1\\ 0\\ 0\\ 0
+\end{pmatrix},
+\qquad
+\beta(y)=
+\begin{pmatrix}
+1\\[1mm]
+\dfrac{1}{1+y}\\[2mm]
+\dfrac{1}{y}\\[2mm]
+\dfrac{y}{1+y}
+\end{pmatrix}.
+\]
+The rational entries of \(\beta(y)\) are an artifact of this compact \(4\times4\) representation; after multiplication by \(M(y)^m\) all poles cancel and one recovers the polynomial \(Z_m(y)\).
+
+\subsection{Numerator computation}
+The generating function \(Z(t;y)=\sum_{m\ge 0}Z_m(y)t^m\) satisfies
+\[
+Z(t;y)=\frac{N(t;y)}{D(t;y)},
+\]
+where \(N(t;y)=Z(t;y)\cdot D(t;y)\) is determined by the initial values. Setting
+\[
+\begin{aligned}
+N(t;y)
+&=\sum_{m=0}^{3}
+\Bigl(
+Z_m(y)-\sum_{k=1}^{\min(m,4)}c_k(y)Z_{m-k}(y)
+\Bigr)t^m,
+\end{aligned}
+\]
+where \(c_1=1\), \(c_2=2y+1\), \(c_3=-1\), \(c_4=-y(y+1)\) are the recurrence coefficients, a direct calculation using \(Z_0=1\), \(Z_1=1+y\), \(Z_2=2+2y\), \(Z_3=2+5y+y^2\) gives
+\[
+N(t;y)=1+yt-yt^2-y^2t^3=(1+ty)(1-yt^2).
+\]
+The factorization is verified by expanding the product.
 
 \subsection{Recurrence and Hankel rank}
 Because \(Z_m(y)\) is obtained by summing the weights \(y^{\abs{\Fold_m(\omega)}_1}\) over all length-\(m\) microstate words, it is a linear functional of the weighted transfer-matrix dynamics. Consequently \(Z_m(y)\) satisfies the characteristic recurrence of \(M(y)\),
@@ -46,13 +98,7 @@ come from direct enumeration. Therefore
 \[
 Z(t;y)=\sum_{m\ge0}Z_m(y)t^m
 \]
-is a rational function with denominator \(D(t;y)\).
-
-For the Hankel matrices
-\[
-H^{(n)}(y)=\bigl(Z_{i+j}(y)\bigr)_{0\le i,j\le n-1},
-\]
-the recurrence implies \(\mathrm{rank}\,H^{(n)}(y)\le 4\) for every \(n\). Generic equality follows because the denominator degree is \(4\) away from the proper algebraic set where the leading recurrence collapses.
+is a rational function with denominator \(D(t;y)\) and numerator \(N(t;y)=(1+ty)(1-yt^2)\).
 
 \subsection{Discriminant factorization}
 Let
@@ -66,9 +112,22 @@ A direct symbolic computation gives
 \]
 The cubic factor has exactly one negative real root,
 \[
-y_{\mathrm{LY}}\approx -1.13445.
+y_{\mathrm{c}}\approx -1.13445.
 \]
-This is the unique negative real value of \(y\) at which \(\Pi(\lambda,y)\) has a repeated root. At \(y=y_{\mathrm{LY}}\approx -1.13445\), the four roots of \(\Pi(\lambda,y_{\mathrm{LY}})\) can be computed numerically: the polynomial evaluates to \(\lambda^4-\lambda^3+1.2689\lambda^2+\lambda+0.1525\), which has one root near \(\lambda\approx 2.03\) (simple, dominant), a pair of coincident roots near \(\lambda\approx -0.38\) (the repeated root), and one further root near \(\lambda\approx -0.27\). Since \(|-0.38|<|2.03|\), the repeated root is strictly subdominant. Hence the discriminant zero at \(y_{\mathrm{LY}}\) does not produce a singularity of the dominant eigenvalue, and in particular does not create a branch point of the free energy \(f(y)\) on the negative real axis.
+This is the unique negative real value of \(y\) at which \(\Pi(\lambda,y)\) has a repeated root, apart from the zeros at \(y=0\) and \(y=1\).
+
+\subsection{Root analysis at the discriminant zeros}
+At each discriminant zero, we compute the roots of \(\Pi(\lambda,y)\) explicitly.
+
+\emph{At \(y=0\):} \(\Pi(\lambda,0)=\lambda^4-\lambda^3-\lambda^2+\lambda=\lambda(\lambda-1)^2(\lambda+1)\). The repeated root is \(\lambda=1\), which is dominant. Since \(Z(t;0)=1/((1-t)^2(1+t))\), the coefficients \(Z_m(0)=\abs{\Fold_m^{-1}(0^m)}\) grow linearly in \(m\), exactly as expected from the double dominant root.
+
+\emph{At \(y=1\):} \(\Pi(\lambda,1)=\lambda^4-\lambda^3-3\lambda^2+\lambda+2=(\lambda-2)(\lambda+1)^2(\lambda-1)\). The repeated root is \(\lambda=-1\), which is subdominant (dominated by \(\lambda=2\)).
+
+\emph{At \(y=y_{\mathrm{c}}\approx -1.13445\):} the quartic \(\Pi(\lambda,y_{\mathrm{c}})\) evaluates to approximately \(\lambda^4-\lambda^3+1.2689\lambda^2+\lambda+0.1525\). Numerical root-finding gives a repeated real root near \(\lambda\approx -0.2734\) and a complex-conjugate pair near \(\lambda\approx 0.7734\pm 1.2008\,i\) with modulus approximately \(1.428\). Since \(|-0.2734|<1.428\), the repeated root is strictly subdominant. Hence the discriminant zero at \(y_{\mathrm{c}}\) does not produce a singularity of the dominant eigenvalue.
+
+\begin{remark}
+For \(y>0\), the Perron--Frobenius theorem guarantees that the dominant root of \(M(y)\) is simple, real, and positive. The free energy \(f(y)=\log\lambda_\star(y)\) is therefore real-analytic on \((0,\infty)\). On the negative real axis, \(Z_m(y)\) involves sign-alternating terms and a separate dominant-sheet analysis would be needed; we do not pursue this.
+\end{remark}
 
 \subsection{Output-weight cumulants}
 Set \(y=e^\theta\). The scaled cumulant generating function for \(H_m\) is
@@ -105,7 +164,7 @@ one obtains \(\rho''(0)=71/243\). Consequently,
 \qquad
 \Lambda_Y''(0)=\frac{67}{972}.
 \]
-These are the mean density and asymptotic variance appearing in Theorem~\ref{thm:weight-stats}. Since \(\theta\mapsto \rho(M(e^\theta))\) is real-analytic on \(\RR\), the G\"artner--Ellis rate function is
+These are the mean density and asymptotic variance appearing in Corollary~\ref{thm:weight-stats}. Since \(\theta\mapsto \rho(M(e^\theta))\) is real-analytic on \(\RR\), the G\"artner--Ellis rate function is
 \[
 I(a)=\sup_{\theta\in\RR}\bigl(\theta a-\Lambda_Y(\theta)\bigr).
 \]
