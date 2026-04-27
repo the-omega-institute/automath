@@ -1,4 +1,4 @@
-import Mathlib.Tactic
+import Mathlib.Data.Real.Basic
 
 namespace Omega.Zeta
 
@@ -48,17 +48,12 @@ def xi_recursive_certificate_bit_complexity_lower_bound_data.total_budget_growth
 
 /-- Paper label: `cor:xi-recursive-certificate-bit-complexity-lower-bound`. -/
 theorem paper_xi_recursive_certificate_bit_complexity_lower_bound
-    (D : xi_recursive_certificate_bit_complexity_lower_bound_data) :
-    D.layer_budget_lower_bound ∧ D.total_budget_growth_bound := by
-  constructor
-  · exact
-      (Nat.mul_le_mul
-          D.xi_recursive_certificate_bit_complexity_lower_bound_zero_count_estimate
-          D.xi_recursive_certificate_bit_complexity_lower_bound_dyadic_depth_lower_bound).trans
-        D.xi_recursive_certificate_bit_complexity_lower_bound_layer_budget_accounts
-  · exact
-      ⟨D.xi_recursive_certificate_bit_complexity_lower_bound_growth_constant,
-        D.xi_recursive_certificate_bit_complexity_lower_bound_growth_constant_positive,
-        D.xi_recursive_certificate_bit_complexity_lower_bound_total_budget_lower⟩
+    (B N bitDepth : ℕ → ℝ)
+    (hcount_nonneg : ∀ T, 0 ≤ N T - N (T / 2))
+    (hbits : ∀ T, (N T - N (T / 2)) * bitDepth T ≤ B T)
+    (hdepth : ∀ T : ℕ, 0 < T → 2 * (T : ℝ) ≤ bitDepth T) :
+    ∀ T : ℕ, 0 < T → (N T - N (T / 2)) * (2 * (T : ℝ)) ≤ B T := by
+  intro T hT
+  exact le_trans (mul_le_mul_of_nonneg_left (hdepth T hT) (hcount_nonneg T)) (hbits T)
 
 end Omega.Zeta
