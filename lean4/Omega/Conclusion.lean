@@ -64,6 +64,7 @@ import Omega.Conclusion.PrimeLogUnweightedEulerRegular
 import Omega.Conclusion.PrimeLogFaithfulLayerCountableInfiniteRank
 import Omega.Conclusion.Window6CubicCentralRelation
 import Omega.Conclusion.Window6LongRootFourierSelectionRule
+import Omega.Conclusion.Window6LongRootProjectiveShortRootDefect
 import Omega.Conclusion.Window6LedgerLieDimensionIdentity
 import Omega.Conclusion.UniformGridQuantizedStokesPoincareScale
 import Omega.Conclusion.OnequarterCrossCategoryRigidity

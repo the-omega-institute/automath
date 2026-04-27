@@ -51,6 +51,7 @@ import Omega.Zeta.XiDiscreteVsContinuousHairByNegativeInertia
 import Omega.Zeta.XiBooleanTwoLayerInertiaCount
 import Omega.Zeta.XiExceptionalThetaOmegaIdentification
 import Omega.Zeta.XiGoldenChainReverseklLogBarrier
+import Omega.Zeta.XiReverseKLPoissonExtremalGapFourierStability
 import Omega.Zeta.TwoParamDisjointnessFullSpectrumSecular
 import Omega.Zeta.XiLeyangAngleOverPiIrrational
 import Omega.Zeta.XiLeyangLogSingularityTranscendence
@@ -81,6 +82,7 @@ import Omega.Zeta.XiPoissonCauchyMixturePointLeadingConstants
 import Omega.Zeta.XiPoissonCauchyCayleyFourierInversionSingleTime
 import Omega.Zeta.XiPoissonCauchyChi2DissipationIdentity
 import Omega.Zeta.XiWindow6SheetParityAnchorM6
+import Omega.Zeta.XiPoissonCauchyI1OverKlRatio2m
 import Omega.Zeta.XiBulkCurvaturePrimitiveMaxDepthDominance
 import Omega.Zeta.XiHellingerToeplitzSymbolPoisson
 import Omega.Zeta.XiHellingerToeplitzSzegoThermoLimit
