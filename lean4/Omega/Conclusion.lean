@@ -38,6 +38,7 @@ import Omega.Conclusion.Window6PermutationModuleVisibleHiddenSplitting
 import Omega.Conclusion.Window6PermutationModuleCommutant
 import Omega.Conclusion.BranchEntropyPrimesliceRate
 import Omega.Conclusion.PrimeLogZeroLyapunovCalibration
+import Omega.Conclusion.PrimeLogUnweightedEulerRegular
 import Omega.Conclusion.Window6CubicCentralRelation
 import Omega.Conclusion.Window6LongRootFourierSelectionRule
 import Omega.Conclusion.Window6LedgerLieDimensionIdentity
