@@ -78,6 +78,7 @@ import Omega.POM.GrhMixUpper
 import Omega.POM.PhaseLockDiscriminantMinus15Splitting
 import Omega.POM.ResonancePolelineExponentTranscendenceQ9_13
 import Omega.POM.ResonanceLinearDisjointnessQ14Q15
+import Omega.POM.ResonanceS13FrobeniusCycleCertificateQ16Q17
 import Omega.POM.PressureCumulants
 import Omega.POM.PressureDerivativesFromEscort
 import Omega.POM.TruncationDefectCocycle
