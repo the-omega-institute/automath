@@ -944,6 +944,7 @@ import Omega.POM.MaxchainsEqualsLinext
 import Omega.POM.MaxentLift
 import Omega.POM.FiberUniformLiftMLEEquivalence
 import Omega.POM.KkEigenvalues
+import Omega.POM.KkSineProductSum
 import Omega.POM.MaxentMarkovDiagonalPlusRankoneSpectrum
 import Omega.POM.MaxentMarkovUniqueOptimalKernel
 import Omega.POM.DiagonalRateCriticalSpectrumStieltjesTensorRecursion
