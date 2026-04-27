@@ -2046,3 +2046,5 @@ import Omega.Zeta.DephysMobiusMarkovUniquePoisson
 import Omega.Zeta.XiBranchRhZeroTempChebotarevProductDensities
 import Omega.Zeta.XiMellinScaleBohrRhEquivalence
 import Omega.Zeta.XiModularFlowEqualsTimeCocycle
+import Omega.Zeta.XiTimeRegisterCrossedProductEquivalence
+import Omega.Zeta.XiHypercubeDimensionReadableFromLeyangAngularVariance
