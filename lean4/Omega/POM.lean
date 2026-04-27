@@ -86,6 +86,7 @@ import Omega.POM.PhaseLockDiscriminantMinus15Splitting
 import Omega.POM.ResonancePolelineExponentTranscendenceQ9_13
 import Omega.POM.ResonanceMinpolyGaloisSdQ12Q15
 import Omega.POM.ResonanceDiscSquareclassIndependenceQ12Q15
+import Omega.POM.ResonancePerronMultiplicativeIndependenceQ12_15
 import Omega.POM.PerronNegativeRootFieldCoprimeQ913
 import Omega.POM.ResonanceNewmanFieldDiscriminantQuadraticDisjoint
 import Omega.POM.ResonancePerronNegativeRootFieldCoprimeQ9_13
