@@ -274,6 +274,7 @@ import Omega.Folding.KilloS4Genus49JacobianComputableIsogeny
 import Omega.Folding.KilloFoldThreeModeWitnessCriticalGap
 import Omega.Folding.KilloFoldResonanceGapSimpleModule
 import Omega.Folding.KilloFoldResonanceSimultaneousIrreducibleDensityQ12_17
+import Omega.Folding.KilloFoldResonanceGapNotGaloisDegeneracy
 import Omega.Folding.KilloFoldCollisionBowenFranksQ5Break
 import Omega.Folding.KilloFoldZeroSpectrumAffineCongruence
 import Omega.Folding.KilloZGDirichletMatrixEuler
