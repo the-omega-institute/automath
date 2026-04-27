@@ -138,6 +138,7 @@ import Omega.Zeta.XiHeightIntervalMinimalSampling
 import Omega.Zeta.XiSymqGoldenCqDeterminantalDivisors
 import Omega.Zeta.XiSymqGoldenCqModPiPowerStaircase
 import Omega.Zeta.XiSymqGoldenCqModPiRankoneOuter
+import Omega.Zeta.XiSdrImpliesGlobalShadowing
 import Omega.Zeta.XiSmithStaircaseTemplateSymq
 import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
 import Omega.Zeta.XiTimePart62dcbZgDirichletRiccatiResidue
