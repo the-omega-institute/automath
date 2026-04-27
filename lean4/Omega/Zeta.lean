@@ -85,6 +85,7 @@ import Omega.Zeta.XiAeSimpleZerosUnderAcSeeds
 import Omega.Zeta.XiTailEntropyPressureCapacityVariational
 import Omega.Zeta.XiBasepointScanGramInverseClosedForm
 import Omega.Zeta.XiBasepointScanGramDeterminantLeverageProduct
+import Omega.Zeta.XiBasepointScanGramNondegeneracyUpToKappa
 import Omega.Zeta.XiBasepointScanCodim1ExactGreedyWeightIndependence
 import Omega.Zeta.XiProjectiveMomentFeketeSlope
 import Omega.Zeta.XiLeyangSimpleRootAlgebraicJetClosure
