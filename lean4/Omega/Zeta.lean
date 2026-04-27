@@ -132,6 +132,7 @@ import Omega.Zeta.XiReconstructionSuccessCurveDiscreteDerivative
 import Omega.Zeta.XiOptimalReconstructionSuccessProbabilityConstantBias
 import Omega.Zeta.XiReconstructionCardinalityStrongConverse
 import Omega.Zeta.XiZeroDispersionFiniteAtomReconstruction
+import Omega.Zeta.XiZeroDispersionKinks
 import Omega.Zeta.XiLReciprocalImpliesCriticalPairing
 import Omega.Zeta.AbelDampingSemigroupDissipation
 import Omega.Zeta.AbelBaseRecursionPoleConjugacy
