@@ -220,6 +220,7 @@ import Omega.POM.BqIsSymqAndSpectrum
 import Omega.POM.BqWeightedSelfadjointBinomial
 import Omega.POM.BqTraceLucas
 import Omega.POM.BqLucasSquareSpectrumFactorization
+import Omega.POM.ReplicaSoftcoreNodeDiscriminantFieldNorm
 import Omega.POM.BCInformationStokesCoboundary
 import Omega.POM.BCUniformLiftPseudofunctor
 import Omega.POM.TreeKlAmgmDecomposition

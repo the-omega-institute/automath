@@ -4,17 +4,27 @@ namespace Omega.POM
 
 open scoped BigOperators
 
+/-- Concrete field-norm statement for the node discriminant.  The Vandermonde certificate
+identifies the discriminant with the displayed Fibonacci product, and the quadratic-field norm
+of that integer is its square. -/
+def pom_replica_softcore_node_discriminant_field_norm_statement (q : ℕ) : Prop :=
+  ∀ (disc discNorm : ℤ),
+    disc =
+        (5 : ℤ) ^ (q * (q + 1) / 2) *
+          ∏ d ∈ Finset.Icc 1 q, (Nat.fib d : ℤ) ^ (2 * (q + 1 - d)) →
+    discNorm = disc ^ 2 →
+    discNorm =
+      (5 : ℤ) ^ (q * (q + 1)) *
+        ∏ d ∈ Finset.Icc 1 q, (Nat.fib d : ℤ) ^ (4 * (q + 1 - d))
+
 /-- Paper label: `prop:pom-replica-softcore-node-discriminant-field-norm`. -/
-theorem paper_pom_replica_softcore_node_discriminant_field_norm
-    (q : Nat) (disc discNorm : ℤ)
+theorem paper_pom_replica_softcore_node_discriminant_field_norm (q : ℕ) :
+    pom_replica_softcore_node_discriminant_field_norm_statement q := by
+  intro disc discNorm
     (hvand :
       disc =
         (5 : ℤ) ^ (q * (q + 1) / 2) *
-          ∏ d ∈ Finset.Icc 1 q, (Nat.fib d : ℤ) ^ (2 * (q + 1 - d)))
-    (hnorm : discNorm = disc ^ 2) :
-    discNorm =
-      (5 : ℤ) ^ (q * (q + 1)) *
-        ∏ d ∈ Finset.Icc 1 q, (Nat.fib d : ℤ) ^ (4 * (q + 1 - d)) := by
+          ∏ d ∈ Finset.Icc 1 q, (Nat.fib d : ℤ) ^ (2 * (q + 1 - d))) hnorm
   have htwo :
       2 * (q * (q + 1) / 2) = q * (q + 1) := by
     exact Nat.two_mul_div_two_of_even (Nat.even_mul_succ_self q)

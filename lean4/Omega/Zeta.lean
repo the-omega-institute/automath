@@ -221,6 +221,7 @@ import Omega.Zeta.XiEndpointHeatProbeCyclotomicComplementRadius
 import Omega.Zeta.XiEndpointHeatProbeToeplitzHerglotzIdentity
 import Omega.Zeta.XiEndpointSingleDefectWeightedKlLi2
 import Omega.Zeta.XiEndpointAbsorptionJetMoments
+import Omega.Zeta.XiLeyangSexticPerfectPowerCollapse
 import Omega.Zeta.XiEndpointHeatProbePowerlawLeading
 import Omega.Zeta.XiTimePart76SmithSurjectiveModuliPrimeSieve
 import Omega.Zeta.XiTimePart75ResonanceAnomalyRigidCoreInfiniteTail
