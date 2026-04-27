@@ -65,6 +65,7 @@ import Omega.Zeta.XiTimePart66MacroResonanceLogAbundance
 import Omega.Zeta.XiToeplitzMinEigControlsDepth
 import Omega.Zeta.LocalizedIntegersDivisibilityTopologicalRigidity
 import Omega.Zeta.XiTimePart62dgFiberReducedEulerWittenParity
+import Omega.Zeta.XiTimePart62dfCapacityCurveCompleteInversion
 import Omega.Zeta.XiTimePart62diMaxNoncontractibleFiberSixstepRenormalization
 import Omega.Zeta.XiTimePart63bInfiniteDepthFinitePrimeRegisterImpossibility
 import Omega.Zeta.TimePart63bPrimitiveKernelLayerSubgroupMobius
@@ -1000,6 +1001,7 @@ import Omega.Zeta.XiDenominatorAxisPrimeSupportCharacterization
 import Omega.Zeta.DephysicalizedHorizonQuotientDataStructure
 import Omega.Zeta.DephysicalizedEpsSoundDominatesTv
 import Omega.Zeta.DephysPetzSufficiencyEquivalences
+import Omega.Zeta.XiPoissonSecondOrderPetzCommutingSquare
 import Omega.Zeta.DephysPoissonBusemannTimefiber
 import Omega.Zeta.DetVpControlsRankDrop
 import Omega.Zeta.DerivedFixedFreezingRenyiSurface
