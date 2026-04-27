@@ -89,6 +89,7 @@ import Omega.Zeta.XiTimePart63SchurCrtExactRecovery
 import Omega.Zeta.XiTimePart63bPrimitiveHookSchurClosedForm
 import Omega.Zeta.InfiniteDepthPrimeLedgerInfiniteRankObstruction
 import Omega.Zeta.XiCoherenceResolutionInformationIdentity
+import Omega.Zeta.XiCoherenceGodel4adicValuation
 import Omega.Zeta.Near1PoleParabola
 import Omega.Zeta.XiHorizonProtocolZetaLoopExpansion
 import Omega.Zeta.XiLowRankHorizonCertificate2KappaSharp
@@ -114,6 +115,7 @@ import Omega.Zeta.XiBasepointScanGramInverseClosedForm
 import Omega.Zeta.XiBasepointScanGramDeterminantLeverageProduct
 import Omega.Zeta.XiBasepointScanGramNondegeneracyUpToKappa
 import Omega.Zeta.XiBasepointScanCodim1ExactGreedyWeightIndependence
+import Omega.Zeta.XiBasepointScanDoptimalLastStepWeightFree
 import Omega.Zeta.XiBasepointScanLeverageGapCodim1CriticalPoints
 import Omega.Zeta.XiBasepointScanLeverageGapGeneralCodimMatrix
 import Omega.Zeta.XiBasepointScanLeverageGapUniversalXminus2Tail
