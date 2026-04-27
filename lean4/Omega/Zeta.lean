@@ -2,6 +2,7 @@ import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryStrictAdditivity
 import Omega.Zeta.XiCollisionSquareRootNormalizationTrichotomy
 import Omega.Zeta.ZetaSyntaxFiniteForbiddenExpSparse
 import Omega.Zeta.XiPlyQ5CommonRootsPrime3173
+import Omega.Zeta.XiIntegerEllipseGrothendieckDoubleCountableRank
 import Omega.Zeta.BlaschkePointSpectrumCorrespondence
 import Omega.Zeta.XiTimePart9n1bFourGeneraRecoverHodgeVector
 import Omega.Zeta.DephysCommutingSquareMutualInformationDefect

@@ -1,5 +1,6 @@
 import Omega.POM.A4TNewmanResultantCurveIntersection
 import Omega.POM.A4TNewmanOffsetPoleGeometry
+import Omega.POM.SchurNearRhLpSuppressionEquivalence
 import Omega.POM.PressureZeroTemp
 import Omega.POM.TorsionSchurDualMicroscope
 import Omega.POM.PrimOddEven
