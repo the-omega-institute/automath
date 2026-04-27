@@ -1,6 +1,7 @@
 import Omega.Conclusion.SerrinWulffArtinMazurWittTripleCollapse
 import Omega.Conclusion.BinfoldMellinTwoStepLaw
 import Omega.Conclusion.CPVisibleNonrealizabilityFiniteRefuter
+import Omega.Conclusion.CompletedSliceBalancedAtomsBecomeConstants
 import Omega.Conclusion.SecondOrderRefinedCollisionWeightedUniformization
 import Omega.Conclusion.TropicalParetoRigidityOnBoundedSlice
 import Omega.Conclusion.PcdimLowerboundDeepAmbiguity

@@ -21,6 +21,7 @@ import Omega.Zeta.BlaschkePointSpectrumCorrespondence
 import Omega.Zeta.WindingEqualsBlaschkeDegree
 import Omega.Zeta.XiTimePart9n1bFourGeneraRecoverHodgeVector
 import Omega.Zeta.DephysCommutingSquareMutualInformationDefect
+import Omega.Zeta.DephysIdempotentMonadEntropyAxiomaticUniqueness
 import Omega.Zeta.DephysJensenDefectLogDerivative
 import Omega.Zeta.XiTimePart62daFibonacciSolenoidCofinalUniversal
 import Omega.Zeta.XiTimePart60ebHorizonLedgerSeparationPrinciple
