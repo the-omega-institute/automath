@@ -1670,3 +1670,4 @@ import Omega.Conclusion.CoordinatebundleStrictBoundaryGapForcesStars
 import Omega.Conclusion.FibadicSingleDepthProjectionRankGcd
 import Omega.Conclusion.LeyangPrym3NoQPrincipalizationDegree2
 import Omega.Conclusion.FrozenMomentSpectrumSemigroupLinearization
+import Omega.Conclusion.PrimeRegisterComparableIdempotentGcdBand
