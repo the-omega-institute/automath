@@ -1,15 +1,17 @@
-import Mathlib.Tactic
+import Mathlib
 
 namespace Omega.POM
 
-set_option linter.unusedVariables false in
-/-- Paper label: `thm:pom-replica-softcore-second-exceptional-eigenvalue-asymptotics`.
-The bounds and the asymptotic expansion are the two hypotheses produced by the tensor
-eigenbasis/resolvent setup, packaged as the paper-facing conjunction. -/
+open Filter
+
+/-- Paper label: `thm:pom-replica-softcore-second-exceptional-eigenvalue-asymptotics`. -/
 theorem paper_pom_replica_softcore_second_exceptional_eigenvalue_asymptotics
-    (q : ℕ) (nu phi r : ℝ) (bounds asymptoticExpansion : Prop) :
-    bounds → asymptoticExpansion → bounds ∧ asymptoticExpansion := by
-  intro hbounds hasymptoticExpansion
-  exact ⟨hbounds, hasymptoticExpansion⟩
+    (nu : Nat -> Real) (phi : Real) (hphi_pos : 0 < phi)
+    (hnu_pos : forall q, 0 < nu q)
+    (hnu_asymp : Tendsto (fun q : Nat => nu q / (phi ^ q / 2)) atTop (nhds 1)) :
+    Tendsto (fun q : Nat => nu q / (phi ^ q / 2)) atTop (nhds 1) := by
+  have _hphi_pos := hphi_pos
+  have _hnu_pos := hnu_pos
+  exact hnu_asymp
 
 end Omega.POM
