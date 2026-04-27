@@ -2020,6 +2020,8 @@ import Omega.Zeta.XiPoissonLowerboundReverseKLL2
 import Omega.Zeta.XiPoissonSignCoarsegrainingT6Constant
 import Omega.Zeta.XiTimePart9zmParityCharacterBreaksSquareRootBarrier
 import Omega.Zeta.XiPoissonKlBridgeVarianceNecessaryCondition
+import Omega.Zeta.XiPoissonKlAlignmentImpliesRh
+import Omega.Zeta.XiTimePart9xgFiniteIntegerMomentSamplesBridge
 import Omega.Zeta.XiFoldbinLastbitCompleteReadoutStatistic
 import Omega.Zeta.XiFoldbinGaugeConstantEvenZetaRecovery
 import Omega.Zeta.XiJGTransportResultantLeadingRigidity
