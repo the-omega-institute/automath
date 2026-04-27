@@ -1,4 +1,5 @@
 import Omega.Conclusion.ThreebodyOriginFirstorderLocalCeiling
+import Omega.Conclusion.CenteredTrigonalObservableSignShadowOrthogonality
 import Omega.Conclusion.JoukowskyFiniteGroupWedderburnDecoupling
 import Omega.Conclusion.CertificateCofinalSparsificationInvariant
 import Omega.Conclusion.SerrinWulffArtinMazurWittTripleCollapse

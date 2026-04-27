@@ -1,4 +1,6 @@
 import Omega.Zeta.HankelSinglePrimeAuditZeroError
+import Omega.Zeta.XiTimePart9xfFrozenPhaseTwoCoordinateThermodynamics
+import Omega.Zeta.XiTimePart9xfGoldenMetallicLogcostMinimizer
 import Omega.Zeta.HankelWindowPerfectZKIndistinguishability
 import Omega.Zeta.XiDiscLedgerFourierTensorization
 import Omega.Zeta.XiDepthSpectrumMajorizationConvexOrder
