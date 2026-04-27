@@ -1,3 +1,4 @@
+import Omega.POM.A4TNewmanResultantCurveIntersection
 import Omega.POM.PressureZeroTemp
 import Omega.POM.TorsionSchurDualMicroscope
 import Omega.POM.PrimOddEven
