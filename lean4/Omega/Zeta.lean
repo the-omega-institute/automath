@@ -36,6 +36,7 @@ import Omega.Zeta.TwoParamDisjointnessFullSpectrumSecular
 import Omega.Zeta.XiLeyangAngleOverPiIrrational
 import Omega.Zeta.XiLeyangLogSingularityTranscendence
 import Omega.Zeta.XiLeyangSolenoidalLiftMonoidal
+import Omega.Zeta.XiLeyangEvidenceIsingLyapunov
 import Omega.Zeta.XiCompletedZetaDyadicLPImpliesRH
 import Omega.Zeta.TerminalZmTranslationTBranchDiscriminantC3DeltaFactor
 import Omega.Zeta.TerminalZMTranslationTBranchDiscriminantC3SingularElimination
