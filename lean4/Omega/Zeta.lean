@@ -96,6 +96,7 @@ import Omega.Zeta.XiSymqGoldenCqModPiPowerStaircase
 import Omega.Zeta.XiSymqGoldenCqModPiRankoneOuter
 import Omega.Zeta.XiSmithStaircaseTemplateSymq
 import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
+import Omega.Zeta.XiTimePart62dcbZgDirichletRiccatiResidue
 import Omega.Zeta.XiTimePart62dcbHologramAmbientIsometryDimension
 import Omega.Zeta.XiTimePart62dcbZgDensityRowRatioRiccatiProduct
 import Omega.Zeta.XiTimePart63bSmithKernelGrowthSpectrumCriterion
