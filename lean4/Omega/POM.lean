@@ -96,6 +96,7 @@ import Omega.POM.ResonanceQ16Q17JointSplittingTypeDensity
 import Omega.POM.ResonanceQ16Q17DedekindFactorization
 import Omega.POM.ResonanceQ16Q17LinearlyDisjoint
 import Omega.POM.ResonanceNewmanUqDegreeNormQ16Q17
+import Omega.POM.PomResonanceNewmanLogTranscendenceNormQ9_13
 import Omega.POM.PressureCumulants
 import Omega.POM.PressureDerivativesFromEscort
 import Omega.POM.TruncationDefectCocycle
