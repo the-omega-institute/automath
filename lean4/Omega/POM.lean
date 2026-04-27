@@ -220,6 +220,7 @@ import Omega.POM.BCQuotientStrictify
 import Omega.POM.BCQuotientUniversal
 import Omega.POM.BCHighOrderLedgerDecomposition
 import Omega.POM.BCLinearizedFunctoriality
+import Omega.POM.ReplicaSoftcoreGapRatioLogSeparation
 import Omega.POM.BqIsSymqAndSpectrum
 import Omega.POM.BqWeightedSelfadjointBinomial
 import Omega.POM.BqTraceLucas
