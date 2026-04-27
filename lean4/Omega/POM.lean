@@ -248,6 +248,7 @@ import Omega.POM.RecurrenceCodeViolationDistance
 import Omega.POM.EscortDerivativeIdentities
 import Omega.POM.ReplicaSoftcoreTemperatureSqReduction
 import Omega.POM.ReplicaSoftcoreFibonacciPowerMomentCollapse
+import Omega.POM.ReplicaSoftcoreRhoTwoTermRemainder
 import Omega.POM.ReplicaSoftcoreWordTraceExtremal
 import Omega.POM.ReplicaSoftcoreWordTraceMinimalBaseMultiplicity
 import Omega.POM.CollisionMomentPtypicalCongruenceTeichmullerHistogram
@@ -280,6 +281,7 @@ import Omega.POM.SchurChannelsModPNFromPtypicalGhost
 import Omega.POM.PrimeRegisterQuantileBudget
 import Omega.POM.PrimeRegisterQQuotaFamily
 import Omega.POM.LkContinuumNDDetCosh
+import Omega.POM.LkContinuumNDDetCoshLocallyUniform
 import Omega.POM.FiberFibFusionRealizationGeneralX
 import Omega.POM.CapacityCollisionDataProcessing
 import Omega.POM.QueryDistortionCriticalSlopeInvertsHalfPressure
