@@ -1767,6 +1767,7 @@ import Omega.Zeta.XiTimePart9zbkPadeJacobiIdentity
 import Omega.Zeta.XiTimePart9zaWindow6AreaPairingLiftedCollapse
 import Omega.Zeta.XiPadeStieltjesOrderPreserving
 import Omega.Zeta.XiTimePart9zbgFoldpiFiniteRankMomentExhaustion
+import Omega.Zeta.XiTimePart9zblFoldpiWeylStieltjesClosedForm
 import Omega.Zeta.XiTimePart9zgQuadraticSectorConditionalTensorAverage
 import Omega.Zeta.XiTimePart9zhDyadicBulkLinearDepthVsPrimeLedger
 import Omega.Zeta.XiToeplitzDetVerblunsky
