@@ -199,6 +199,7 @@ import Omega.POM.AnomClassAdditive
 import Omega.POM.AnomCohomologyClass
 import Omega.POM.AnomMomentAmplification
 import Omega.POM.AnomUnboundedAmplification
+import Omega.POM.FibFusionSubmultiplicativity
 import Omega.POM.AnomOracleCollapseTwoPointTrigger
 import Omega.POM.AnomSwapLowerboundAndMomAmplify
 import Omega.POM.AnomTorusPhaseElimination
