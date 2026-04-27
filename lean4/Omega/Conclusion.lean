@@ -1,5 +1,6 @@
 import Omega.Conclusion.ThreebodyOriginFirstorderLocalCeiling
 import Omega.Conclusion.JoukowskyFiniteGroupWedderburnDecoupling
+import Omega.Conclusion.CertificateCofinalSparsificationInvariant
 import Omega.Conclusion.SerrinWulffArtinMazurWittTripleCollapse
 import Omega.Conclusion.BinfoldMellinTwoStepLaw
 import Omega.Conclusion.CyclelatticeAffineTorsorUvBlindness
