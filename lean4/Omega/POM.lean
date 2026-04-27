@@ -1046,6 +1046,7 @@ import Omega.POM.SchurNearRhLinearNecessaryQuasiperiodic
 import Omega.POM.SchurNearRHFiniteCheck
 import Omega.POM.SchurVarianceDecomposition
 import Omega.POM.SchurVarianceGrowthRateSpectralIdentity
+import Omega.POM.SchurVarianceExponentPartitionOptimization
 import Omega.POM.SchurDirichletTorsionFactorization
 import Omega.POM.OracleCapacityKolmogorovSpectrum
 import Omega.POM.OracleCapacityStieltjesInversionMellin
