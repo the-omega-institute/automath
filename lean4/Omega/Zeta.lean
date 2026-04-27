@@ -29,6 +29,7 @@ import Omega.Zeta.XiTimePart9n1bFourGeneraRecoverHodgeVector
 import Omega.Zeta.DephysCommutingSquareMutualInformationDefect
 import Omega.Zeta.DephysIdempotentMonadEntropyAxiomaticUniqueness
 import Omega.Zeta.DephysJensenDefectLogDerivative
+import Omega.Zeta.DephysPwNohair
 import Omega.Zeta.XiTimePart62daFibonacciSolenoidCofinalUniversal
 import Omega.Zeta.XiTimePart60ebHorizonLedgerSeparationPrinciple
 import Omega.Zeta.XiTimePart60ebFiniteVisibleLanguageSpectralSurrogates
