@@ -199,6 +199,7 @@ import Omega.Zeta.AbelHardyEnergyDecimationOrthogonal
 import Omega.Zeta.AbelTauberianMeanSquareLinearLaw
 import Omega.Zeta.AbelDetailEnergyBudget
 import Omega.Zeta.AbelDepolarizationHardyEnergyBlowup
+import Omega.Zeta.XiBQAuditablePrimitiveOrbitLucasMobius
 import Omega.Zeta.AbelDepolarizationRootUnityRotation
 import Omega.Zeta.AbelDualBaseDealiasingBakerEffectiveSeparation
 import Omega.Zeta.AbelHankelSpectralGapSinglePole
