@@ -26,6 +26,7 @@ import Omega.Zeta.XiLeyangAngleOverPiIrrational
 import Omega.Zeta.XiLeyangSolenoidalLiftMonoidal
 import Omega.Zeta.XiCompletedZetaDyadicLPImpliesRH
 import Omega.Zeta.TerminalZmTranslationTBranchDiscriminantC3DeltaFactor
+import Omega.Zeta.TerminalZMTranslationTBranchDiscriminantC3SingularElimination
 import Omega.Zeta.PrimeRegisterMinimalIdealLeftZeroBand
 import Omega.Zeta.XiBulkCurvatureModsquareHolography
 import Omega.Zeta.XiMomqStrongConverseBilinearLeakage

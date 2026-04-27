@@ -28,6 +28,7 @@ import Omega.POM.OracleThermalPointCriteria
 import Omega.POM.OracleFailureExponentInverseDesign
 import Omega.POM.OracleCriticalWindowMDP
 import Omega.POM.OracleCriticalWindowGaussian
+import Omega.POM.OracleFrontierCurvatureGaussianWindow
 import Omega.POM.OracleCriticalWindowBitInversion
 import Omega.POM.OracleCriticalWindowEdgeworth
 import Omega.POM.MicrocanonicalEscortKLRateZero
@@ -63,6 +64,7 @@ import Omega.POM.RenyiEntropyGapAsInf
 import Omega.POM.RenyiRateSpectralFormulaDiscreteConcavity
 import Omega.POM.DimensionSpectrumGapMinPrinciple
 import Omega.POM.DiagonalRateFiniteMomentClosure
+import Omega.POM.DiagonalRateFrechetDerivativeScalingPotential
 import Omega.POM.DiagonalRateOptimalCouplingMinorSignRigidity
 import Omega.POM.A4LinearObservableTwoTermOscillation
 import Omega.POM.HolographicConservationFPlusGamma
