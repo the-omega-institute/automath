@@ -995,6 +995,7 @@ import Omega.POM.MultiplicityCompositionMod3Sparsity
 import Omega.POM.MultiplicityCompositionMomentHierarchyRationalGrowth
 import Omega.POM.MultiplicityCompositionSqSymmetryReduction
 import Omega.POM.MultiplicityCompositionPartCountCLT
+import Omega.POM.MultiplicityCompositionCutDensity
 import Omega.POM.MultiplicityCompositionPartition
 import Omega.POM.MultiplicityCompositionFirstPartExactAndRate
 import Omega.POM.MultiplicityRenyiContinuous
