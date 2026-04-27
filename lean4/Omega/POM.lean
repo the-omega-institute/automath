@@ -515,6 +515,7 @@ import Omega.POM.HiddenBitCount
 import Omega.POM.DerivedProjectivePathMaxplusIntercept
 import Omega.POM.DerivedMaxNoncontractibleFiberDefectConstants
 import Omega.POM.MaxNoncontractibleFiberMod6Phase
+import Omega.POM.MaxNoncontractibleFiberExponentMod6Ratio
 import Omega.POM.DeterministicNormalizationForest
 import Omega.POM.DiagonalRateRefreshAcceptUniquenessOptimality
 import Omega.POM.DiagonalRateSstPgfQdelta
