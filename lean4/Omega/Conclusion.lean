@@ -1,4 +1,5 @@
 import Omega.Conclusion.CPVisibleNonrealizabilityFiniteRefuter
+import Omega.Conclusion.ContinuousLegendreSupportOneCellShadowing
 import Omega.Conclusion.LeyangLoopCertificateRankLowerBound
 import Omega.Conclusion.SoftcoreBiInfiniteSymmetricKrylovCompression
 import Omega.Conclusion.FiniteSignatureUnifiesEquivalenceAndOptimization
