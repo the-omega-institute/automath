@@ -227,6 +227,7 @@ import Omega.Zeta.AbelPowerbaseCovariancePolePowerMap
 import Omega.Zeta.AbelPoleJuliaRigidity
 import Omega.Zeta.AbelDampingThresholdBifurcation
 import Omega.Zeta.AbelSupercriticalDampingConstantAttractor
+import Omega.Zeta.XiResolventDiscLeyang3adicPeeling
 import Omega.Zeta.AbelHarddampedUniversalRenormConstant
 import Omega.Zeta.AbelFixedStepGrowthRecoversSigmaStar
 import Omega.Zeta.AbelHardyProjectionTowerReverseMartingale
