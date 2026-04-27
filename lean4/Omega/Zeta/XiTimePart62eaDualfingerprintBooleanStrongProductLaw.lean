@@ -35,6 +35,11 @@ structure xi_time_part62ea_dualfingerprint_boolean_strong_product_law_Context wh
   densityProduct :
     (xi_time_part62ea_dualfingerprint_boolean_strong_product_law_G10 ×
       xi_time_part62ea_dualfingerprint_boolean_strong_product_law_G3 → ℝ) → ℝ
+  xi_time_part62ea_dualfingerprint_classfunction_prime_average_factorization_tensor_independence_h :
+    ∀ f g,
+      xi_time_part62ea_dualfingerprint_boolean_strong_product_law_ClassFunction f →
+        xi_time_part62ea_dualfingerprint_boolean_strong_product_law_ClassFunction g →
+          densityProduct (fun x => f x.1 * g x.2) = density10 f * density3 g
 
 /-- Tensor independence for all class functions on the two Frobenius components. -/
 def xi_time_part62ea_dualfingerprint_boolean_strong_product_law_Context.class_function_tensor_independence

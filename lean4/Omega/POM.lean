@@ -241,6 +241,7 @@ import Omega.POM.GoldenLikelihoodRatioMartingales
 import Omega.POM.ResonanceWindowMinpolyIrreducibleQ9Q17
 import Omega.POM.GoldenEsscherSymmetrization
 import Omega.POM.SqQuasiMultiplicative
+import Omega.POM.SchurEnvelopeVariationalCharacterization
 import Omega.POM.BeckChevalleyAmgmDefectIdentity
 import Omega.POM.BivariateMomentZetaFredholm
 import Omega.POM.CommutativeSpectralSurface
