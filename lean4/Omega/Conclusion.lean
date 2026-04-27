@@ -251,6 +251,7 @@ import Omega.Conclusion.LeeYangEssentialOddPrimes
 import Omega.Conclusion.UniformCompleteGraphGenerator
 import Omega.Conclusion.LeyangTransportZeroCloudCentralBinomial
 import Omega.Conclusion.LeyangRho456TwoChannelCompleteness
+import Omega.Conclusion.LeyangRho456RankOneCollapseModWalls
 import Omega.Conclusion.GodelTateBadicPrefixTree
 import Omega.Conclusion.HolographicEventualPeriodicBadicRationals
 import Omega.Conclusion.GlobalTerminalStateForcesGlobalPrimitiveSpectrum
