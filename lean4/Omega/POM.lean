@@ -1302,6 +1302,7 @@ import Omega.POM.HstarDescentLinext
 import Omega.POM.FenceVolumeLog2Pi
 import Omega.POM.BqExplicitDiagonalizationLinearForms
 import Omega.POM.ResonanceDisc2adicThicknessLb
+import Omega.POM.ResonanceDisc3adicQ13Q15
 import Omega.POM.PathComponentMultiplicityRefinementMonotoneExtrema
 import Omega.POM.FiberCorrDecay
 import Omega.POM.FiberInhomConditionalUniformity
