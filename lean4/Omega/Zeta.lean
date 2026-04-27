@@ -1,4 +1,5 @@
 import Omega.Zeta.XiBranchRhZeroTempArithmeticIndependence
+import Omega.Zeta.CayleyOffsetDefectSpectrumBounds
 import Omega.Zeta.HankelSinglePrimeAuditZeroError
 import Omega.Zeta.XiTimePart9xfFrozenPhaseTwoCoordinateThermodynamics
 import Omega.Zeta.XiTimePart9xfGoldenMetallicLogcostMinimizer

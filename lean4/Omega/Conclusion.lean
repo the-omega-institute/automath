@@ -1,5 +1,6 @@
 import Omega.Conclusion.GlobalStrictificationSidebandInapproximability
 import Omega.Conclusion.LeyangXaC3SubgroupDescent
+import Omega.Conclusion.CoordinateBundleFourfoldComplexityCollapse
 import Omega.Conclusion.ThreebodyOriginFirstorderLocalCeiling
 import Omega.Conclusion.CenteredTrigonalObservableSignShadowOrthogonality
 import Omega.Conclusion.JoukowskyFiniteGroupWedderburnDecoupling
