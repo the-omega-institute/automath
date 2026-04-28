@@ -205,7 +205,9 @@ import Omega.CircleDimension.MinimalLogAuditablePhaseCircles
 import Omega.CircleDimension.MinimalRecordAxis
 import Omega.CircleDimension.MellinInversionDuality
 import Omega.CircleDimension.MixedLocalizationPkGrowthInversion
+import Omega.CircleDimension.XiBasepointDepthClosedForm
 import Omega.CircleDimension.XiSelfdualMeanPotentialInversion
+import Omega.CircleDimension.XiCauchyPoissonTVSharpConstant
 import Omega.CircleDimension.XiPoissonCauchyMultipoleMomentChain
 import Omega.CircleDimension.MobiusBipartiteColoring
 import Omega.CircleDimension.MobiusCayleyArctanRigidity
