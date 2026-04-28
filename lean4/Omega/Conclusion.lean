@@ -1,5 +1,6 @@
 import Omega.Conclusion.FibadicKoopmanDepthAlgebraJointSpectrum
 import Omega.Conclusion.RealInput40CorePressureInvarianceAbelShift
+import Omega.Conclusion.PronyJacobianNegativeSpectrumVolumeIdentity
 import Omega.Conclusion.FullResidueRegularSimplexOrbit
 import Omega.Conclusion.ZGFiniteCertificateFiberFullSpectrum
 import Omega.Conclusion.CdimPrecisionLedgerLbKphase
