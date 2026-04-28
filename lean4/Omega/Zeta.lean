@@ -2139,3 +2139,5 @@ import Omega.Zeta.SingleFaceZeroOneMarginalLaw
 import Omega.Zeta.XiTimePart9zrNoncontractibleSixphaseLaw
 import Omega.Zeta.XiOutputPotentialOddPrimeBadModuliPrimeDensityOne
 import Omega.Zeta.XiTimePart9vkNoFiniteLocalAnalyticTransformFromResonanceGermToFoldpiTail
+import Omega.Zeta.XiCayleyDilationInvariantMeasureEndpointAtomic
+import Omega.Zeta.XiCompactifiedSpacingQuadratic
