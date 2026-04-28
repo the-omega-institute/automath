@@ -2168,6 +2168,8 @@ import Omega.Zeta.XiJensenPoissonIntertwinerFractionalDerivative
 import Omega.Zeta.XiCayleyDepthScanAreaLowfreq
 import Omega.Zeta.XiCayleyLogdepthVsDepthfieldComparability
 import Omega.Zeta.XiEndpointJensenSingleDefectAreaLaw
+import Omega.Zeta.XiEndpointJensenFiniteEnsembleAreaLaw
+import Omega.Zeta.XiHankelBadprimesSingleCoordinateStiffness
 import Omega.Zeta.XiDiscLedgerKernelDual
 import Omega.Zeta.XiCoherenceAffineSubcube
 import Omega.Zeta.XiTerminalZmElliptic5torsionSignQuadraticField
