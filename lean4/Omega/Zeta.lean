@@ -2264,3 +2264,4 @@ import Omega.Zeta.XiLeyangImageSevenTorsionEliminationIrreducibilityDiscriminant
 import Omega.Zeta.RadiusCapturesSigmaStar
 import Omega.Zeta.XiHankelGoodBadPrimeDichotomy
 import Omega.Zeta.XiKmsCode12ConnesTInvariant
+import Omega.Zeta.XiTimePart50dcMomentKernelConvexEnvelope
