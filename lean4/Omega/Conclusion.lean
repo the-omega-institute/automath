@@ -1,4 +1,5 @@
 import Omega.Conclusion.FoldbinGroupoidRegularTraceEscort
+import Omega.Conclusion.PrefixConditionedGoldenTailMinimality
 import Omega.Conclusion.NonarchHankelCauchyBinetVandermonde
 import Omega.Conclusion.Window6BoundarySixAtomMinimalCommutativeEnlargement
 import Omega.Conclusion.OracleCompleteSpectralSideinfoNohelp
