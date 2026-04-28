@@ -160,6 +160,7 @@ import Omega.Zeta.XiBranchRhZeroTempArithmeticIndependence
 import Omega.Zeta.XiAbelH2ContractionTruncationNoamplify
 import Omega.Zeta.XiAuditDehnFunctionTimeGeometry
 import Omega.Zeta.XiQepCommutingModalFactorization
+import Omega.Zeta.XiTimePart65hDivisibilitySlopeFreezingPropagation
 import Omega.Zeta.XiQepLeakageLowerBound
 import Omega.Zeta.XiQepScalarModeTowerClassification
 import Omega.Zeta.CayleyOffsetDefectSpectrumBounds
