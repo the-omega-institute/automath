@@ -3,6 +3,8 @@ import Omega.Zeta.XiP7S5MinimalArtinDedekindZetaFactorization
 import Omega.Zeta.XiUniqueTransverseVsInfinitePrimeRankSeparation
 import Omega.Zeta.XiHilbertPolyaJacobi
 import Omega.Zeta.XiTimePart9zWindow6MomentInvolutiveAlgebraRealization
+import Omega.Zeta.XiPickPoissonLambdaMinRatioBound
+import Omega.Zeta.XiReverseKLCoprimeFrequencyPhaseAmplification
 import Omega.Zeta.XiPrimeMomentSemialgebraicCone
 import Omega.Zeta.XiEndpointHeatProbeRichardsonExtrapolation
 import Omega.Zeta.XiCartesianPowerJoukowskyGodelAnisotropicParabola
