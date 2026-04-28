@@ -97,6 +97,7 @@ import Omega.Zeta.CayleyOffsetDefectSpectrumBounds
 import Omega.Zeta.HankelSinglePrimeAuditZeroError
 import Omega.Zeta.XiTimePart9xfFrozenPhaseTwoCoordinateThermodynamics
 import Omega.Zeta.XiTimePart9xfGoldenMetallicLogcostMinimizer
+import Omega.Zeta.XiTimePart9xfaMetallicValueC1Nonc2Transition
 import Omega.Zeta.HankelWindowPerfectZKIndistinguishability
 import Omega.Zeta.XiHankelSingularityHVZK
 import Omega.Zeta.XiDiscLedgerFourierTensorization
