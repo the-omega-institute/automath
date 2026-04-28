@@ -17,6 +17,7 @@ import Omega.Zeta.XiExteriorPowerDetCokerSize
 import Omega.Zeta.XiExteriorPowerJordanAffinePoincareClt
 import Omega.Zeta.XiFoldbinAuditedEvenCenterCollapseAbelFullRank
 import Omega.Zeta.XiFoldbinCriticalScaleSuccessCurveInversion
+import Omega.Zeta.XiFoldbinCriticalScaleMarginalGainPhiDrop
 import Omega.Zeta.XiTimePart71CollisionUpperBoundWeightedCliqueEuler
 import Omega.Zeta.XiPhiRigidityFromKmsEntropyDensity
 import Omega.Zeta.XiRhFiniteCurvatureMatrixCriterion
