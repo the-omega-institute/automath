@@ -264,6 +264,8 @@ import Omega.Zeta.XiTimePart9faDyadicFiniteMomentCompleteness
 import Omega.Zeta.XiPoissonCauchyCayleyMultipoleFourier
 import Omega.Zeta.AtomicWallcrossingStieltjesIdentifiability
 import Omega.Zeta.XiCauchyPoissonFdivUniversalConstant
+import Omega.Zeta.XiVisibleArithmeticNoCompatibleFiniteRankLedger
+import Omega.Zeta.XiVisibleArithmeticPrimepowerQuotientChain
 import Omega.Zeta.XiPoissonTvKlSecondOrder
 import Omega.Zeta.XiBulkCurvaturePrimitiveMaxDepthDominance
 import Omega.Zeta.XiKmsCode12TypeRigidity

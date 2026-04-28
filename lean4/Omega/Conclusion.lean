@@ -345,6 +345,7 @@ import Omega.Conclusion.Window6CyclicMultiplicityEscortUniqueIsotropy
 import Omega.Conclusion.AnomalyTwoCoprimeLayerTomography
 import Omega.Conclusion.OracleHotphaseDifferentialTomography
 import Omega.Conclusion.AxialScreenDirectSumVisibleHiddenSplit
+import Omega.Conclusion.WidomEventSetGlobalFinite
 import Omega.Conclusion.FullscreenPartialscreenComplexityTransition
 import Omega.Conclusion.AuditComplexityAreaEquivalence
 import Omega.Conclusion.DualinterfaceUniversal2dAuditLaw
