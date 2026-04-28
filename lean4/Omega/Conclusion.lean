@@ -164,6 +164,7 @@ import Omega.Conclusion.OracleHotlayerAllRenyiCollapse
 import Omega.Conclusion.MicroescortOracleCapacityClosedForm
 import Omega.Conclusion.FoldgaugeLocalExtractionBudgetBarrier
 import Omega.Conclusion.MomentFiniteGoodPrimesCrtReconstruction
+import Omega.Conclusion.MomentHankelBadPrimeStiffnessSupport
 import Omega.Conclusion.PadicHankelGlobalRigidifier
 import Omega.Conclusion.PadicHankelExactConditionLedger
 import Omega.Conclusion.PadicHankelAdjugateColumnValuationProfile
