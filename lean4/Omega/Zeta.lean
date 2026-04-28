@@ -1,4 +1,6 @@
 import Omega.Zeta.XiTimePart9KFoldForwardOnlineNotConstantMemoryReversible
+import Omega.Zeta.XiDefectWindowOrbitBridge
+import Omega.Zeta.XiHardeningTimeFrontierRigidity
 import Omega.Zeta.XiTimePart9KCoprimeLedgerMemoryHorizon
 import Omega.Zeta.XiBinfoldScaledMultiplicityMellinCumulants
 import Omega.Zeta.XiBinfoldCriticalCapacityDefectAtomicLaw
