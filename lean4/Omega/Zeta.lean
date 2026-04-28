@@ -224,6 +224,7 @@ import Omega.Zeta.XiBulkCurvatureProbabilityMoments
 import Omega.Zeta.BulkCurvatureMaxLipschitz
 import Omega.Zeta.BulkCurvatureResidueDirichletData
 import Omega.Zeta.BulkCurvatureResidueExtremalRecovery
+import Omega.Zeta.XiIndexEntropyDecomposition
 import Omega.Zeta.XiPoissonCauchyLocationScaleInformationProjection
 import Omega.Zeta.XiEndpointPoissonJensenCauchyLedger
 import Omega.Zeta.XiPoissonCauchyComplexStieltjesFullExpansion
