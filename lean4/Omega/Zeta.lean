@@ -1,4 +1,5 @@
 import Omega.Zeta.XiFoldbinAbsoluteRenyiEntropyConstantClosed
+import Omega.Zeta.XiHzomTwoChannelModsquare
 import Omega.Zeta.XiFoldbinCriticalScaleSuccessCurveInversion
 import Omega.Zeta.XiTimePart71CollisionUpperBoundWeightedCliqueEuler
 import Omega.Zeta.XiPhiRigidityFromKmsEntropyDensity
