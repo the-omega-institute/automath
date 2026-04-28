@@ -266,6 +266,8 @@ import Omega.Zeta.XiHellingerToeplitzSymbolPoisson
 import Omega.Zeta.XiHellingerToeplitzSzegoThermoLimit
 import Omega.Zeta.XiHellingerToeplitzHeineSzegoCue
 import Omega.Zeta.XiHellingerChargePotentialDualityDtn
+import Omega.Zeta.XiCaratheodoryPoissonFiberReverseklEnergy
+import Omega.Zeta.XiGoldenChainReverseklCritical
 import Omega.Zeta.XiHellingerGramCollisionHankelConstant
 import Omega.Zeta.XiSmithNormalizedKernelPositiveFiniteEulerCorrection
 import Omega.Zeta.XiWindow6ResolutionArithmeticSplitSeparation
