@@ -35,7 +35,7 @@ def xi_offslice_indicators_additivity_statement (n : ℕ) : Prop :=
           xi_offslice_indicators_additivity_origin_modulus b B)
 
 /-- Paper label: `thm:xi-offslice-indicators-additivity`. -/
-theorem paper_xi_offslice_indicators_additivity (n : ℕ) :
+theorem xi_offslice_indicators_additivity_finite_packet_additivity (n : ℕ) :
     xi_offslice_indicators_additivity_statement n := by
   intro A B hdisj
   refine ⟨?_, ?_, ?_⟩
