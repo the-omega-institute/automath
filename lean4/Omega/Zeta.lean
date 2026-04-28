@@ -1,4 +1,6 @@
 import Omega.Zeta.XiSaturatedShiftInvariantLatticeGcdLcm
+import Omega.Zeta.XiCmvStabilizationInfinite
+import Omega.Zeta.XiCollisionU1AuditWindowUniformSubcriticality
 import Omega.Zeta.XiSyndromeCertificateIncompressibility
 import Omega.Zeta.XiTimePart65cEscortRenyiTwoParameterFreezingLine
 import Omega.Zeta.XiGodelPrimeRegisterExteriorVolumeQuadraticLaw
