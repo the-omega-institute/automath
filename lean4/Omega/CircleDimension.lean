@@ -22,6 +22,7 @@ import Omega.CircleDimension.BareCircleNotCompleteCarrier
 import Omega.CircleDimension.BasepointScanFiniteRankRKHS
 import Omega.CircleDimension.BasicComputation
 import Omega.CircleDimension.BiphaseAverageHaarPushforwardDensity
+import Omega.CircleDimension.BiphaseAverageDiskCriticalRing
 import Omega.CircleDimension.BiphaseAverageFiberDiagonalAntidiagonal
 import Omega.CircleDimension.BiphaseFiber
 import Omega.CircleDimension.BorelHomomorphismNoncollapse
