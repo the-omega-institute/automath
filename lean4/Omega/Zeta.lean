@@ -220,6 +220,8 @@ import Omega.Zeta.XiBoundedFluxForcesKappa0
 import Omega.Zeta.XiCpVisibleImpliesKappa0
 import Omega.Zeta.Near1Log2OverLogphiDInfinityTranscendence
 import Omega.Zeta.Near1KappaInftyC1TranscendenceObstruction
+import Omega.Zeta.XiEndpointHeatProbeRstarRootRatio
+import Omega.Zeta.XiEndpointHeatProbeStieltjesAbelResidue
 import Omega.Zeta.XiSmithPkCongruenceSolvabilityCount
 import Omega.Zeta.XiReconstructionSuccessCurveDiscreteDerivative
 import Omega.Zeta.XiOptimalReconstructionSuccessProbabilityConstantBias
