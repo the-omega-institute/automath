@@ -4,6 +4,8 @@ import Omega.Zeta.XiBinfoldScaledMultiplicityMellinCumulants
 import Omega.Zeta.XiBinfoldCriticalCapacityDefectAtomicLaw
 import Omega.Zeta.XiTimePart65aWeightedExactizationMatroidTopGap
 import Omega.Zeta.XiLogcmHankelVandermondeMainterm
+import Omega.Zeta.XiNodePolynomialRationalReconstruction
+import Omega.Zeta.XiFoldHiddenLogmultiplicityBranchbitTwoPointLaw
 import Omega.Zeta.ToeplitzCaratheodoryCompletionTailExclusion
 import Omega.Zeta.XiKappaKLArClosedAsymptotic
 import Omega.Zeta.XiPoissonCauchyKolmogorovSecondOrderConstant
