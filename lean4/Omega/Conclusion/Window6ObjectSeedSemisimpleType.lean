@@ -5,7 +5,7 @@ namespace Omega.Conclusion
 
 /-- Paper label:
 `thm:conclusion-window6-object-seed-fixes-unlabelled-semisimple-type-up-to-block-permutation`. -/
-theorem paper_conclusion_window6_object_seed_fixes_unlabelled_semisimple_type_up_to_block_permutation
+theorem conclusion_window6_object_seed_fixes_unlabelled_semisimple_type_up_to_block_permutation_from_moments
     {n2 n3 n4 : ℕ}
     (h0 : n2 + n3 + n4 = 21)
     (h1 : 2 * n2 + 3 * n3 + 4 * n4 = 64)
