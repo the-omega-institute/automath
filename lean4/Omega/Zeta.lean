@@ -351,6 +351,7 @@ import Omega.Zeta.XiStrongConverseExponentBelowCriticalRate
 import Omega.Zeta.XiHorizonMultipoleTemperednessDichotomy
 import Omega.Zeta.XiHorizonPoleResidueDepthStrength
 import Omega.Zeta.XiTimePart62dLeyangLstepOracleBudget
+import Omega.Zeta.XiTimePart62dActivatedBranchSecondOrderSilence
 import Omega.Zeta.XiTimePart9dFiniteToeplitzCertificate
 import Omega.Zeta.XiAbelianBlockToeplitzDirectsum
 import Omega.Zeta.TerminalReplicaSoftcoreInverseSupportCount
@@ -1506,6 +1507,7 @@ import Omega.Zeta.BooleanTwoLayerCokerAndModmKernelCount
 import Omega.Zeta.BooleanDisjointnessZetaLDLT
 import Omega.Zeta.BooleanTwoLayerMobiusDiophantineCriterion
 import Omega.Zeta.BooleanTwoLayerInverseSupportLaw
+import Omega.Zeta.XiDisjointnessBooleanAdjugateCoverSupport
 import Omega.Zeta.BooleanTwoLayerWittCore
 import Omega.Zeta.XiBinaryJumpOrientationUnification
 import Omega.Zeta.BooleanBinaryJumpKernelsChar2S3
