@@ -225,6 +225,7 @@ import Omega.Zeta.XiZeroDispersionKinks
 import Omega.Zeta.XiDecidableButUnrealizableVisibleQuery
 import Omega.Zeta.XiLReciprocalImpliesCriticalPairing
 import Omega.Zeta.AbelDampingSemigroupDissipation
+import Omega.Zeta.XiTimeIndexTheoremK1Holonomy
 import Omega.Zeta.AbelBaseRecursionPoleConjugacy
 import Omega.Zeta.AbelChannelEquipartitionCharacter
 import Omega.Zeta.AbelCyclicCharacterProjection
