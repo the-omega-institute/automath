@@ -223,6 +223,7 @@ import Omega.Conclusion.OracleSuccessStrongConverse
 import Omega.Conclusion.ReplayGodelSharpStrongConverse
 import Omega.Conclusion.OracleGapSaturationEdgeEnergy
 import Omega.Conclusion.OracleHotlayerAllRenyiCollapse
+import Omega.Conclusion.LeyangUniaxialAddressSquareRootDefect
 import Omega.Conclusion.MicroescortOracleCapacityClosedForm
 import Omega.Conclusion.FoldgaugeLocalExtractionBudgetBarrier
 import Omega.Conclusion.WeightedSyncOddprimeUnitrootStaticization
