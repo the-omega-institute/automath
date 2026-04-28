@@ -78,6 +78,7 @@ import Omega.Zeta.XiTimePart9zpZGPrimeGrammarMatrixization
 import Omega.Zeta.XiPrimeHardcoreDeltaHcMatchesCHc
 import Omega.Zeta.XiTimePart9zbFoldpiTwoAtomicMomentCharacterization
 import Omega.Zeta.XiLogisticHellingerGramDeterminant
+import Omega.Zeta.XiHellingerQuasiOrthogonalPhase
 import Omega.Zeta.XiTimeOnlyConservedQuantity
 import Omega.Zeta.XiNodePolynomialGoodReductionDiscriminant
 import Omega.Zeta.XiGramshiftPadicDiscriminantHalfloss
