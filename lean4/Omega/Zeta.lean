@@ -144,6 +144,7 @@ import Omega.Zeta.XiPrimeHardcoreDeltaHcMatchesCHc
 import Omega.Zeta.XiPrimeHardcoreNewtonMaclaurin
 import Omega.Zeta.XiTimePart9zbFoldpiTwoAtomicMomentCharacterization
 import Omega.Zeta.XiLogisticHellingerGramDeterminant
+import Omega.Zeta.HellingerGramClusterAdditivityExp
 import Omega.Zeta.XiHellingerQuasiOrthogonalPhase
 import Omega.Zeta.XiTimeOnlyConservedQuantity
 import Omega.Zeta.XiNodePolynomialGoodReductionDiscriminant
