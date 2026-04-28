@@ -573,6 +573,7 @@ import Omega.Conclusion.SerrinSupportJointExactScreenCollapse
 import Omega.Conclusion.CdimFiniteQuotientGrowth
 import Omega.Conclusion.PrimeLogAlphaSingularRankOne
 import Omega.Conclusion.PrimorialAxisSecondOrder
+import Omega.Conclusion.PrimeBudgetAxisLambert
 import Omega.Conclusion.DerivedTorsionCamouflageEulerCdim
 import Omega.Conclusion.ResidueDriftAllOddMomentsVanish
 import Omega.Conclusion.CdimK0UniqueSurvivor
