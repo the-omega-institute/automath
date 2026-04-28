@@ -2384,3 +2384,5 @@ import Omega.Zeta.XiDefectResidualDegree
 import Omega.Zeta.XiHorizonForcedGeometricTail
 import Omega.Zeta.XiTimePart60aaaWedderburnInformationCompleteness
 import Omega.Zeta.FiniteDefectPoissonL2EnergyZeroRigidity
+import Omega.Zeta.XiHankelDetReachObserveFactorizationPadic
+import Omega.Zeta.XiJGTranscendentalScaleGaloisFullFidelity
