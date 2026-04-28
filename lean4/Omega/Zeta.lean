@@ -2312,3 +2312,4 @@ import Omega.Zeta.XiTimePart62daFibonacciUnitLimitZhatUnits
 import Omega.Zeta.XiTimePart69cWindow6RootBoundaryBlindCodim3
 import Omega.Zeta.XiAdamsNormZeroTransport
 import Omega.Zeta.XiOffcriticalConstructibleButNullOrExtraRegister
+import Omega.Zeta.XiTimePart9zWindow6LocalEntropySourceRenormalization
