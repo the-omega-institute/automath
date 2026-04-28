@@ -253,6 +253,8 @@ import Omega.Zeta.XiBoundedFluxForcesKappa0
 import Omega.Zeta.XiCpVisibleImpliesKappa0
 import Omega.Zeta.XiTimePart60acbBinfoldFirstNoncommutativeThreshold
 import Omega.Zeta.XiFoldbinMaxfiberSaturationFinalSubfibonacci
+import Omega.Zeta.XiAuditedEvenMinsectorAlgebraicDensityGoldenSplitting
+import Omega.Zeta.XiLeyangAlgebraicTransportVsLogEntropyNoSquareLaw
 import Omega.Zeta.XiTimeZetaSingularityFromGrowth
 import Omega.Zeta.Near1Log2OverLogphiDInfinityTranscendence
 import Omega.Zeta.Near1KappaInftyC1TranscendenceObstruction
