@@ -1,5 +1,7 @@
 import Omega.Zeta.ToeplitzCaratheodoryCompletionTailExclusion
 import Omega.Zeta.XiSaturatedShiftInvariantLatticeGcdLcm
+import Omega.Zeta.CapacityOverlapFunctionalL1Identity
+import Omega.Zeta.CauchyPoissonKlGoldenScale
 import Omega.Zeta.XiCmvStabilizationInfinite
 import Omega.Zeta.XiCollisionU1AuditWindowUniformSubcriticality
 import Omega.Zeta.XiSyndromeCertificateIncompressibility
