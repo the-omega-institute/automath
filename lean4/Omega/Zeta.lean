@@ -263,6 +263,8 @@ import Omega.Zeta.XiWindow6A2pmIdenticalFiberSpectrum
 import Omega.Zeta.XiDefectEntropyForcesNegativeBlockMass
 import Omega.Zeta.XiBooleanTwoLayerSymmetricQuotientInverse
 import Omega.Zeta.XiDisjointnessBooleanOverlapMatrixInverse
+import Omega.Zeta.XiTerminalZmDeltaBadprime37B5DoubleRoot
+import Omega.Zeta.XiZGContinuedEulerFactorization
 import Omega.Zeta.XiIntegerEllipseFreeCommutativeMonoid
 import Omega.Zeta.XiExceptionalThetaOmegaIdentification
 import Omega.Zeta.XiGoldenChainReverseklLogBarrier
