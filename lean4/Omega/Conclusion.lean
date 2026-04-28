@@ -1,5 +1,6 @@
 import Omega.Conclusion.Window6LongRootCommutantClosed
 import Omega.Conclusion.OddtailPrincipalCompressionTripleOptimality
+import Omega.Conclusion.ParityTailFiniteStateObject
 import Omega.Conclusion.KernelRhGoldenResidualTwoStepSaturation
 import Omega.Conclusion.ToeplitzScanAuditFunctorNonfaithful
 import Omega.Conclusion.ComovingMinimalPrefixLocalLipschitzStability
