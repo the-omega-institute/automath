@@ -1,6 +1,9 @@
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Tactic
 import Omega.Conclusion.Window6Collision
+import Omega.Folding.GaugeAnomalyMean
+import Omega.Folding.GaugeAnomalySecondFactorialFiniteClosed
+import Omega.Folding.GaugeAnomalyVarianceFiniteWindowClosed
 
 namespace Omega.Conclusion
 
@@ -162,5 +165,40 @@ theorem paper_conclusion_uniform_visible_baseline_double_gap {n m : Nat}
     ring
   rw [← hlog_gap]
   linarith
+
+/-- The dyadic-sign correction alphabet that occurs in the uniform gauge-anomaly first and
+second moment closures. -/
+noncomputable def conclusion_gauge_anomaly_uniform_moments_alphabet_closure_alphabet :
+    Finset ℚ :=
+  {((1 : ℚ) / 2), (-(1 : ℚ) / 2), ((1 : ℚ) / 4), (-(1 : ℚ) / 4)}
+
+/-- Paper-facing package for the uniform gauge-anomaly finite mean, second factorial moment,
+variance, and the four dyadic-sign correction bases. -/
+def conclusion_gauge_anomaly_uniform_moments_alphabet_closure_statement : Prop :=
+  Omega.Folding.GaugeAnomalyMean.fold_gauge_anomaly_mean_finite_closed_statement ∧
+    (∀ m : ℕ,
+      Omega.Folding.gaugeAnomalySecondFactorial m =
+        (16 / 81 : ℚ) * (m : ℚ) ^ 2 - (106 / 243 : ℚ) * m + 443 / 729 -
+          (((5 : ℚ) / 16) * m + 1 / 2) * (1 / 2 : ℚ) ^ m +
+          (-(m : ℚ) ^ 3 / 648 + (m : ℚ) ^ 2 / 27 - (m : ℚ) / 432 -
+              157 / 1458) *
+            (-1 / 2 : ℚ) ^ m) ∧
+      (∀ m : ℕ,
+        Omega.Folding.gaugeAnomalyFiniteVariance m =
+          (118 / 243 : ℚ) * m - 40 / 81 +
+            ((243 : ℚ) - (-1 : ℚ) ^ m * (2 * m + 3)) / (486 * 2 ^ m)) ∧
+        conclusion_gauge_anomaly_uniform_moments_alphabet_closure_alphabet =
+          {((1 : ℚ) / 2), (-(1 : ℚ) / 2), ((1 : ℚ) / 4), (-(1 : ℚ) / 4)}
+
+/-- Paper label:
+`thm:conclusion-gauge-anomaly-uniform-moments-alphabet-closure`. -/
+theorem paper_conclusion_gauge_anomaly_uniform_moments_alphabet_closure :
+    conclusion_gauge_anomaly_uniform_moments_alphabet_closure_statement := by
+  refine ⟨Omega.Folding.GaugeAnomalyMean.paper_fold_gauge_anomaly_mean_finite_closed,
+    ?_, ?_, rfl⟩
+  · intro m
+    exact Omega.Folding.paper_fold_gauge_anomaly_second_factorial_finite_closed m
+  · intro m
+    exact Omega.Folding.paper_fold_gauge_anomaly_variance_finite_window_closed m
 
 end Omega.Conclusion

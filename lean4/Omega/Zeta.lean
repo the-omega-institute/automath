@@ -159,6 +159,7 @@ import Omega.Zeta.Near1PoleParabola
 import Omega.Zeta.XiHorizonProtocolZetaLoopExpansion
 import Omega.Zeta.XiLowRankHorizonCertificate2KappaSharp
 import Omega.Zeta.XiJoukowskyEllipseAverageConstantTerm
+import Omega.Zeta.XiUnitCircleCriterionSingularRingResultant
 import Omega.Zeta.XiBayesianFreeEnergyVariationalPosteriorMinimizer
 import Omega.Zeta.XiFoldQueryComplexityExactM
 import Omega.Zeta.XiFoldCongruenceBinaryQuotientPeriod3
