@@ -59,6 +59,7 @@ import Omega.Zeta.XiHankelMaxminorHeightBoundDeterministicCrtReconstruction
 import Omega.Zeta.XiBulkBoundaryQuadraticClosureAudit
 import Omega.Zeta.XiBulkBoundaryDoubleScalingHolography
 import Omega.Zeta.XiTimePart75aSinglePowerDivergenceDeterminesLimitTower
+import Omega.Zeta.CollisionGapInfiniteResonanceRank
 import Omega.Zeta.XiTimePart9n1bPrymC6HUniqueSquareRoot
 import Omega.Zeta.XiCollisionThresholdQuinticUnsolvability
 import Omega.Zeta.XiTimeConjugacyRigidityBoundedClass
