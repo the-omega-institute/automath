@@ -246,6 +246,8 @@ import Omega.Zeta.XiTimePart63bLogcmAsymptoticGermFaithfulEvenZeta
 import Omega.Zeta.XiDiscreteVsContinuousHairByNegativeInertia
 import Omega.Zeta.XiComovingPrefixRatePhaseTransition
 import Omega.Zeta.XiBooleanTwoLayerInertiaCount
+import Omega.Zeta.XiWindow6A2pmIdenticalFiberSpectrum
+import Omega.Zeta.XiDefectEntropyForcesNegativeBlockMass
 import Omega.Zeta.XiBooleanTwoLayerSymmetricQuotientInverse
 import Omega.Zeta.XiDisjointnessBooleanOverlapMatrixInverse
 import Omega.Zeta.XiIntegerEllipseFreeCommutativeMonoid

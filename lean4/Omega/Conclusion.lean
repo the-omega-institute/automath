@@ -246,6 +246,7 @@ import Omega.Conclusion.PrimeLogFaithfulLayerCountableInfiniteRank
 import Omega.Conclusion.PrimeLogInfiniteRankRegister
 import Omega.Conclusion.PrimorialCompletionHorocyclicPacket
 import Omega.Conclusion.Window6CubicCentralRelation
+import Omega.Conclusion.CollisionBlowupSpectralAntidilution
 import Omega.Conclusion.Window6LongRootFourierSelectionRule
 import Omega.Conclusion.Window6LongRootGL2Symmetry
 import Omega.Conclusion.Window6LongRootProjectiveShortRootDefect
