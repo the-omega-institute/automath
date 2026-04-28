@@ -2608,3 +2608,5 @@ import Omega.Zeta.XiSelfdualScatteringSufficientRh
 import Omega.Zeta.XiVisibleAnomIffRadialWallcrossing
 import Omega.Zeta.XiTimePart9xdSingleFrequencySamplingExactTomography
 import Omega.Zeta.XiTimePart9xdRedshiftTaxComovingPrefixGap
+import Omega.Zeta.XiTimeTorsionSpectralFingerprint
+import Omega.Zeta.XiStableSemiringPtimeBiinterpretability
