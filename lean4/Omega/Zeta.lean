@@ -1,5 +1,6 @@
 import Omega.Zeta.XiTimePart60abHiddenGapKlRenyi2Collision
 import Omega.Zeta.XiTimePart9obEscortLoginfoCumulantsNegativeSkew
+import Omega.Zeta.XiTimePart9gAffineSemigroupUniqueFixedPoint
 import Omega.Zeta.XiTimePart9obEscortSurprisalTwoLevelQuantization
 import Omega.Zeta.XiTimePart9zmAmbiguityShellExactMemoryDepth
 import Omega.Zeta.XiTimePart9zjResonanceWindowMod2OrderAliasing
