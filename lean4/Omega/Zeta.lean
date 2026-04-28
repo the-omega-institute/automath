@@ -493,6 +493,7 @@ import Omega.Zeta.XiLogisticDepthDesignLaw
 import Omega.Zeta.XiSelfinversiveJensenCriterion
 import Omega.Zeta.XiHurwitzHorizonReduction
 import Omega.Zeta.XiWindow6BoundaryEightSectorCentralDecomposition
+import Omega.Zeta.XiWindow6BoundaryTwoSheetCommutantFourdimensional
 import Omega.Zeta.XiTimePart9gcCanonicalAffineSemigroupWordGrowth
 import Omega.Zeta.XiReconstructionCardinalityStrongConverse
 import Omega.Zeta.XiZeroDispersionFiniteAtomReconstruction
@@ -1642,6 +1643,7 @@ import Omega.Zeta.LeftCEDyadicDensity
 import Omega.Zeta.LengthModqChebotarev
 import Omega.Zeta.LocalInversionDelta
 import Omega.Zeta.LocalizedDirectsumMatrixIsomorphismCriterion
+import Omega.Zeta.XiLocalizedDirectsumEndRingPoset
 import Omega.Zeta.LocalizedFiniteIndexLatticeClassification
 import Omega.Zeta.XiLocalizedFiniteIndexProfiniteCompletionClassification
 import Omega.Zeta.LocalizedFiniteIndexLatticeGcdLcmMobius
