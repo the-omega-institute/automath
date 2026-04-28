@@ -86,4 +86,64 @@ theorem paper_conclusion_zeckendorf_15_16_cross_resolution :
       X.card_eq_fib 7, X.card_eq_fib 2]
     exact Omega.ZeckSig.zeckendorf_16Fn_instances.2.2
 
+/-- Stable-range index set in the closed Zeckendorf expansion of `15F_n`. -/
+def conclusion_zeckendorf_resolution_lock_m6_stable_indices (n : Nat) : Finset Nat :=
+  {n + 5, n + 2, n, n - 3, n - 6}
+
+/-- Finite witnesses for the remaining audited cases `4 ≤ n ≤ 7`. -/
+def conclusion_zeckendorf_resolution_lock_m6_finite_indices (n : Nat) : Finset Nat :=
+  match n with
+  | 4 => {9, 6, 4}
+  | 5 => {10, 7, 5, 3}
+  | 6 => {11, 8, 6, 3}
+  | 7 => {12, 9, 7, 4, 2}
+  | _ => ∅
+
+/-- A pair of visible `F_4` and `F_6` terms is present in an index set. -/
+def conclusion_zeckendorf_resolution_lock_m6_has_visible_pair (S : Finset Nat) : Prop :=
+  4 ∈ S ∧ 6 ∈ S
+
+/-- Concrete paper-facing statement for the `m = 6` Zeckendorf resolution lock. The variable
+`n = m - 2` is used, so the locked case is `n = 4`. -/
+def conclusion_zeckendorf_resolution_lock_m6_statement : Prop :=
+  (15 * Nat.fib 4 =
+      (conclusion_zeckendorf_resolution_lock_m6_finite_indices 4).sum Nat.fib ∧
+    conclusion_zeckendorf_resolution_lock_m6_has_visible_pair
+      (conclusion_zeckendorf_resolution_lock_m6_finite_indices 4)) ∧
+  (∀ n : Nat, 4 ≤ n → n ≤ 7 → n ≠ 4 →
+    15 * Nat.fib n =
+        (conclusion_zeckendorf_resolution_lock_m6_finite_indices n).sum Nat.fib ∧
+      ¬ conclusion_zeckendorf_resolution_lock_m6_has_visible_pair
+        (conclusion_zeckendorf_resolution_lock_m6_finite_indices n)) ∧
+  (∀ n : Nat, 8 ≤ n →
+    15 * Nat.fib n = Nat.fib (n + 5) + Nat.fib (n + 2) + Nat.fib n +
+        Nat.fib (n - 3) + Nat.fib (n - 6) ∧
+      ¬ conclusion_zeckendorf_resolution_lock_m6_has_visible_pair
+        (conclusion_zeckendorf_resolution_lock_m6_stable_indices n))
+
+/-- Paper-facing wrapper for the `m = 6` Zeckendorf resolution lock.
+    thm:conclusion-zeckendorf-resolution-lock-m6 -/
+theorem paper_conclusion_zeckendorf_resolution_lock_m6 :
+    conclusion_zeckendorf_resolution_lock_m6_statement := by
+  unfold conclusion_zeckendorf_resolution_lock_m6_statement
+  refine ⟨?_, ?_, ?_⟩
+  · constructor
+    · simpa [conclusion_zeckendorf_resolution_lock_m6_finite_indices] using
+        Omega.ZeckSig.zeckendorf_resolution_lock_m6
+    · simp [conclusion_zeckendorf_resolution_lock_m6_has_visible_pair,
+        conclusion_zeckendorf_resolution_lock_m6_finite_indices]
+  · intro n hn4 hn7 hn_ne
+    have hn_cases : n = 5 ∨ n = 6 ∨ n = 7 := by omega
+    rcases hn_cases with rfl | rfl | rfl <;>
+      simp [conclusion_zeckendorf_resolution_lock_m6_has_visible_pair,
+        conclusion_zeckendorf_resolution_lock_m6_finite_indices] <;>
+      norm_num [Nat.fib]
+  · intro n hn
+    constructor
+    · exact Omega.ZeckSig.zeckendorf_15Fn_general n hn
+    · intro hpair
+      rcases hpair with ⟨h4, h6⟩
+      simp [conclusion_zeckendorf_resolution_lock_m6_stable_indices] at h4 h6
+      omega
+
 end Omega.Conclusion
