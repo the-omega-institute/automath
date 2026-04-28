@@ -1,5 +1,6 @@
 import Omega.Zeta.XiTimePart71CollisionUpperBoundWeightedCliqueEuler
 import Omega.Zeta.XiPhiRigidityFromKmsEntropyDensity
+import Omega.Zeta.XiRhFiniteCurvatureMatrixCriterion
 import Omega.Zeta.XiTimePart9xgS10ParityNeutralityForS3Splitting
 import Omega.Zeta.XiTimePart9KFoldForwardOnlineNotConstantMemoryReversible
 import Omega.Zeta.XiDefectWindowOrbitBridge
