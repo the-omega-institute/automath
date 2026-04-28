@@ -14,6 +14,7 @@ import Omega.Zeta.XiWindow6B3C3WeylAverageMeasureSecondMoment
 import Omega.Zeta.XiHilbertPolyaCMV
 import Omega.Zeta.XiHankelMaxminorHeightBoundDeterministicCrtReconstruction
 import Omega.Zeta.XiBulkBoundaryQuadraticClosureAudit
+import Omega.Zeta.XiBulkBoundaryDoubleScalingHolography
 import Omega.Zeta.XiTimePart75aSinglePowerDivergenceDeterminesLimitTower
 import Omega.Zeta.XiTimePart9n1bPrymC6HUniqueSquareRoot
 import Omega.Zeta.XiCollisionThresholdQuinticUnsolvability
@@ -53,6 +54,7 @@ import Omega.Zeta.HankelSinglePrimeAuditZeroError
 import Omega.Zeta.XiTimePart9xfFrozenPhaseTwoCoordinateThermodynamics
 import Omega.Zeta.XiTimePart9xfGoldenMetallicLogcostMinimizer
 import Omega.Zeta.HankelWindowPerfectZKIndistinguishability
+import Omega.Zeta.XiHankelSingularityHVZK
 import Omega.Zeta.XiDiscLedgerFourierTensorization
 import Omega.Zeta.XiDepthSpectrumMajorizationConvexOrder
 import Omega.Zeta.XiAxisSwapStieltjesHankelCriterion
