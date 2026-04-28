@@ -226,6 +226,7 @@ import Omega.Conclusion.PrimeLogZeroLyapunovCalibration
 import Omega.Conclusion.PrimeLogUnweightedEulerRegular
 import Omega.Conclusion.PrimeLogBoundaryCurrent
 import Omega.Conclusion.PrimeLogSparsePrimeLaw
+import Omega.Conclusion.TruncatedSmithLedgerInfiniteIndistinguishability
 import Omega.Conclusion.PrimeLogFaithfulLayerCountableInfiniteRank
 import Omega.Conclusion.PrimeLogInfiniteRankRegister
 import Omega.Conclusion.PrimorialCompletionHorocyclicPacket

@@ -229,6 +229,7 @@ import Omega.Zeta.XiDiffusiveM2BarrierSampling
 import Omega.Zeta.XiTimePart9zqJensenCentralRootThreshold
 import Omega.Zeta.XiTimePart63bLogcmAsymptoticGermFaithfulEvenZeta
 import Omega.Zeta.XiDiscreteVsContinuousHairByNegativeInertia
+import Omega.Zeta.XiComovingPrefixRatePhaseTransition
 import Omega.Zeta.XiBooleanTwoLayerInertiaCount
 import Omega.Zeta.XiBooleanTwoLayerSymmetricQuotientInverse
 import Omega.Zeta.XiDisjointnessBooleanOverlapMatrixInverse
