@@ -2065,6 +2065,7 @@ import Omega.Zeta.XiTimePart69AuditedEvenPurePigeonholeLinearPhase
 import Omega.Zeta.XiTerminalZmLeyangCubicDoubleCollisionMonodromyType
 import Omega.Zeta.XiSqrt5AxisLeyangCubicLinearDisjoint
 import Omega.Zeta.XiReverseKLTruncationDepthLowerBound
+import Omega.Zeta.XiReverseKLFiniteFourierCertificate
 import Omega.Zeta.XiTimePart60aJensenDefectRadialMeasureInversion
 import Omega.Zeta.XiScaleMellinZeroDensityUpper
 import Omega.Zeta.XiChainIdempotentNonautonomousFiniteTermination
@@ -2076,3 +2077,4 @@ import Omega.Zeta.XiTimeRegisterCrossedProductEquivalence
 import Omega.Zeta.XiHypercubeDimensionReadableFromLeyangAngularVariance
 import Omega.Zeta.XiJensenFenchelDeepzeroProductFunctional
 import Omega.Zeta.XiJGLeyangBadPrimeRigidity
+import Omega.Zeta.XiFoldLastbitAsymptoticSufficiency
