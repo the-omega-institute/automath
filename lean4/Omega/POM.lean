@@ -160,6 +160,7 @@ import Omega.POM.HiddenBitJumpProbabilityClosedForm
 import Omega.POM.OddFourphaseQCollapseThreshold
 import Omega.POM.HiddenBitMixedMomentCluster
 import Omega.POM.HiddenBitBiasEnergyIdentity
+import Omega.POM.OneBit
 import Omega.POM.MultiplicityLambdaqTaylorQ0
 import Omega.POM.MultiplicityLambdaqLargeQTransseries
 import Omega.POM.MultiplicityCompositionExponentialMixing
