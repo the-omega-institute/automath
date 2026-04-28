@@ -222,6 +222,7 @@ import Omega.Conclusion.DigitalLocalFactorRationalityObstruction
 import Omega.Conclusion.DeterministicOfflineVerificationMinimalClosure
 import Omega.Conclusion.AnalyticHolographyInversionRigidity
 import Omega.Conclusion.AffineNormalFormSemidirect
+import Omega.Conclusion.UniversalFiniteAuditLayerCollapseObstruction
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.ProjectionWordGodelSemidirect
 import Omega.Conclusion.WidomDefinableSelectionGlobal
