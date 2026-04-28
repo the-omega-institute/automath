@@ -5,6 +5,7 @@ import Omega.Zeta.XiTimePart60abHiddenGapKlRenyi2Collision
 import Omega.Zeta.XiAnchoredCapacityThreeProperties
 import Omega.Zeta.XiEqualityPattern2nCompleteIdentifiability
 import Omega.Zeta.XiRhUnitCircleReciprocal
+import Omega.Zeta.XiRhCayleyHyperbolicity
 import Omega.Zeta.IdealLatticeMultichainPrimeStratification
 import Omega.Zeta.PickKernelGaugeRigidity
 import Omega.Zeta.XiPoissonFirstMismatchDissipationLeading
@@ -71,6 +72,7 @@ import Omega.Zeta.XiFoldHiddenLogmultiplicityBranchbitTwoPointLaw
 import Omega.Zeta.XiTimePart60abHiddenLogmultiplicityPressureDerivatives
 import Omega.Zeta.XiUnitarySliceSpectralCrossing
 import Omega.Zeta.ToeplitzCaratheodoryCompletionTailExclusion
+import Omega.Zeta.XiChannelHorizonToeplitzCertificate
 import Omega.Zeta.XiKappaKLArClosedAsymptotic
 import Omega.Zeta.XiPoissonCauchyKolmogorovSecondOrderConstant
 import Omega.Zeta.XiPoissonCauchyFisherKreinTailHalfVar2
