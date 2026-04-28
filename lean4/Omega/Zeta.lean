@@ -218,6 +218,8 @@ import Omega.Zeta.XiBulkCurvatureBitComplexityLowerBound
 import Omega.Zeta.XiMomqStrongConverseBilinearLeakage
 import Omega.Zeta.XiFixedFreezingOracleStrongConverseExponent
 import Omega.Zeta.XiStrongConverseExponentBelowCriticalRate
+import Omega.Zeta.XiHorizonMultipoleTemperednessDichotomy
+import Omega.Zeta.XiHorizonPoleResidueDepthStrength
 import Omega.Zeta.TerminalReplicaSoftcoreInverseSupportCount
 import Omega.Zeta.XiTimePart9xNoBoundaryEquivariantFourValuedCompanionField
 import Omega.Zeta.XiTimePart53daBoundaryZ6Torsor
