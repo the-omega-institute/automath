@@ -2488,3 +2488,5 @@ import Omega.Zeta.XiLogcmFiniteWindowBernoulliRecovery
 import Omega.Zeta.XiTimePart61acaPrimeweightedWhitenedRadialChi2
 import Omega.Zeta.XiTimePart9xgSquarefreeNormalizationCannotCloseLossLaw
 import Omega.Zeta.XiFoldCongruenceNilradicalReducedQuotient
+import Omega.Zeta.XiTimePart70dMinsectorTerminalSheetRealization
+import Omega.Zeta.XiTimePart70dGlobalNonquotientRigidity
