@@ -1,3 +1,4 @@
+import Omega.Conclusion.FullResidueRegularSimplexOrbit
 import Omega.Conclusion.PrimeAdjunctionFiniteDepthInverseLimitBudgetPhase
 import Omega.Conclusion.HypercubeLeyangLiftOddprimeRigidity
 import Omega.Conclusion.Window6LongRootCommutantClosed
