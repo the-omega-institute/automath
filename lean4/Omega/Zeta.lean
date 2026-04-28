@@ -61,6 +61,7 @@ import Omega.Zeta.XiBranchRhZeroTempArithmeticIndependence
 import Omega.Zeta.XiAbelH2ContractionTruncationNoamplify
 import Omega.Zeta.XiAuditDehnFunctionTimeGeometry
 import Omega.Zeta.XiQepCommutingModalFactorization
+import Omega.Zeta.XiQepLeakageLowerBound
 import Omega.Zeta.XiQepScalarModeTowerClassification
 import Omega.Zeta.CayleyOffsetDefectSpectrumBounds
 import Omega.Zeta.HankelSinglePrimeAuditZeroError
@@ -204,6 +205,7 @@ import Omega.Zeta.XiTimePart66ZeroDensityNeverSufficient
 import Omega.Zeta.XiTimePart66MacroResonanceLogAbundance
 import Omega.Zeta.XiTimePart66UniformBaselineSqrtMRigidity
 import Omega.Zeta.XiToeplitzMinEigControlsDepth
+import Omega.Zeta.XiToeplitzVsScanLinearLowerbound
 import Omega.Zeta.LocalizedIntegersDivisibilityTopologicalRigidity
 import Omega.Zeta.XiTimePart62dgFiberReducedEulerWittenParity
 import Omega.Zeta.XiTimePart62dfCapacityCurveCompleteInversion
