@@ -32,6 +32,7 @@ import Omega.Zeta.XiDefectWindowOrbitBridge
 import Omega.Zeta.XiChainIdempotentComparabilityBidirectionalDefect
 import Omega.Zeta.XiHardeningTimeFrontierRigidity
 import Omega.Zeta.XiTimePart65eWindow6GeometricDiagonalZ2Parity
+import Omega.Zeta.XiTimePart70dAnomalySignatureSaturation
 import Omega.Zeta.XiTimePart9KCoprimeLedgerMemoryHorizon
 import Omega.Zeta.XiBinfoldScaledMultiplicityMellinCumulants
 import Omega.Zeta.XiBinfoldCriticalCapacityDefectAtomicLaw
