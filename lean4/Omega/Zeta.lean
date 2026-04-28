@@ -233,6 +233,8 @@ import Omega.Zeta.XiReconstructionCardinalityStrongConverse
 import Omega.Zeta.XiZeroDispersionFiniteAtomReconstruction
 import Omega.Zeta.XiZeroDispersionKinks
 import Omega.Zeta.XiDecidableButUnrealizableVisibleQuery
+import Omega.Zeta.XiTimePart70LogcmRichardsonResidualRatio
+import Omega.Zeta.XiTimePart70OddPrimeRhDefectSummableMass
 import Omega.Zeta.XiLReciprocalImpliesCriticalPairing
 import Omega.Zeta.AbelDampingSemigroupDissipation
 import Omega.Zeta.XiTimeIndexTheoremK1Holonomy
