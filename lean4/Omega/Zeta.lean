@@ -95,6 +95,7 @@ import Omega.Zeta.XiFoldUniformBaselineTestingConstant
 import Omega.Zeta.XiTimePart9n1bFourGeneraRecoverHodgeVector
 import Omega.Zeta.XiTimePart9n1bPrymChevalleyWeilReciprocity
 import Omega.Zeta.DephysCommutingSquareMutualInformationDefect
+import Omega.Zeta.DephysImplIndependentDefectCertificate
 import Omega.Zeta.DephysIdempotentMonadEntropyAxiomaticUniqueness
 import Omega.Zeta.DephysJensenDefectLogDerivative
 import Omega.Zeta.DephysPwNohair
@@ -161,6 +162,7 @@ import Omega.Zeta.XiPoissonCauchyMixturePointLeadingConstants
 import Omega.Zeta.XiPoissonCauchyCayleyFourierInversionSingleTime
 import Omega.Zeta.XiPoissonCauchyChi2DissipationIdentity
 import Omega.Zeta.XiPoissonCauchyAllOrderNormalFormUniformRemainder
+import Omega.Zeta.XiScaleMellinWindowNecessaryTlogt
 import Omega.Zeta.XiPoissonCauchyTwoParameterTracefreeCovarianceStructure
 import Omega.Zeta.XiWindow6SheetParityAnchorM6
 import Omega.Zeta.XiWindow6DyadicMicrostateExactThreeBlockMassSplit
