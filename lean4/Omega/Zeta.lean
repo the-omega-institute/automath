@@ -1,6 +1,7 @@
 import Omega.Zeta.XiHadamardProductResultantMultiplicativeConvolution
 import Omega.Zeta.Near1NormalizedDriftExponentTranscendence
 import Omega.Zeta.XiOffsliceNontrivialCertificateTwoAxisLowerBound
+import Omega.Zeta.XiTimePart6TropicalizationCompleteness
 import Omega.Zeta.XiTimeCharacteristicClassIntegrality
 import Omega.Zeta.XiTimePart9zpAllonesAreaTimeCubicLowerBound
 import Omega.Zeta.XiPrimeHardcoreDeltaHcMatchesCHc
