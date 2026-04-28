@@ -820,6 +820,8 @@ import Omega.Zeta.XiJoukowskyL1MeasureLiftChebyshevFourier
 import Omega.Zeta.XiJoukowskyModsquareArcsineFixedwidth
 import Omega.Zeta.XiLogpotentialIntegralGeomean
 import Omega.Zeta.XiJensenFourierLaplaceFingerprintInjectivity
+import Omega.Zeta.XiJensenModulusRecursiveObservabilityStability
+import Omega.Zeta.XiJensenNearestZeroPlatformRigidity
 import Omega.Zeta.XiJensenPotentialFourierLaplaceInjective
 import Omega.Zeta.XiKlingenHeckeCharpolyProjectors
 import Omega.Zeta.XiHdqcd1LeyangSpectrumRadius
