@@ -247,6 +247,7 @@ import Omega.Zeta.AbelMobiusLinearization
 import Omega.Zeta.XiAbelRhDensePolesNaturalBoundary
 import Omega.Zeta.XiScaleCoherentTimePfRigidity
 import Omega.Zeta.XiAbelRkRootFilterSemigroup
+import Omega.Zeta.XiTimePart69FiniteCharacterFamilySinglePrimitivePhase
 import Omega.Zeta.XiAbelRightedgeGapAr2ExpError
 import Omega.Zeta.XiRightedgeGapCongruenceAr2Amplification
 import Omega.Zeta.AbelResidueClassChannelRadiusSigmaStar
