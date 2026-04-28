@@ -225,6 +225,8 @@ import Omega.Zeta.XiBulkCurvatureMomentGeneratingFactorization
 import Omega.Zeta.XiGammaStrippedDepthSpectrumImaging
 import Omega.Zeta.XiBulkCurvatureBitComplexityLowerBound
 import Omega.Zeta.XiMomqStrongConverseBilinearLeakage
+import Omega.Zeta.XiNodeSpectrumMinimalWindow2Kappa
+import Omega.Zeta.XiGramshiftSpectrumDiskpoles
 import Omega.Zeta.XiFixedFreezingOracleStrongConverseExponent
 import Omega.Zeta.XiDefectFreeRankIdentifiableByCovarianceKernel
 import Omega.Zeta.XiTimePart9xgQuadraticSignPairCannotRecoverFullS3Type
