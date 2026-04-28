@@ -197,6 +197,8 @@ import Omega.Conclusion.GaugeAnomalyL2Law
 import Omega.Conclusion.GoldenTopGapEqualsSdpi
 import Omega.Conclusion.GoldenCouplingFiniteKRigidity
 import Omega.Conclusion.GoldenSprtStoppingSpectrumRadialContraction
+import Omega.Conclusion.HaltingWalshPlateauLocalfactorLocking
+import Omega.Conclusion.HiddenchannelSquareRootSquareLaw
 import Omega.Conclusion.CapacityMajorizationInfoNCEAntiisomorphism
 import Omega.Conclusion.GoldenResonanceCartwrightRigidityZeroCounting
 import Omega.Conclusion.GoldenResonanceIntegerTraceNotL2
