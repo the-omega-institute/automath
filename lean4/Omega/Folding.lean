@@ -112,6 +112,7 @@ import Omega.Folding.SaturationSmoothDichotomy
 import Omega.Folding.CollisionDecomp
 import Omega.Folding.CollisionKernel
 import Omega.Folding.SignedCompanionDet
+import Omega.Folding.SignedCompanionQ6Q7
 import Omega.Folding.SignedCompanionLucasCertificate
 import Omega.Folding.SignedCompanionQ5CoincidenceSplit
 import Omega.Folding.CollisionZeta
