@@ -223,6 +223,7 @@ import Omega.Zeta.XiHeightIntervalMinimalSampling
 import Omega.Zeta.XiSymqGoldenCqDeterminantalDivisors
 import Omega.Zeta.XiSymqGoldenCqModPiPowerStaircase
 import Omega.Zeta.XiSymqGoldenCqModPiRankoneOuter
+import Omega.Zeta.XiLeyangTangentDimensionResurrection
 import Omega.Zeta.XiSymqGoldenArSmithClosedForm
 import Omega.Zeta.XiSdrImpliesGlobalShadowing
 import Omega.Zeta.XiSmithStaircaseTemplateSymq
