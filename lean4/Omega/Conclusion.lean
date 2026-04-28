@@ -1,4 +1,6 @@
 import Omega.Conclusion.Window6MinshellEscortSectorLaw
+import Omega.Conclusion.FirstfitSerialDepthThetaK
+import Omega.Conclusion.OrientationSupermonoidalKoszul
 import Omega.Conclusion.RealInput40ZeroTempParryChainExplicit
 import Omega.Conclusion.EscortFisherTotalMassLogphi
 import Omega.Conclusion.Window6StabilityProbabilityUniqueInternalMinimum

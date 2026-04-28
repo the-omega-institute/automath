@@ -273,6 +273,7 @@ import Omega.Zeta.XiFiniteTruncationSpectrumConverges
 import Omega.Zeta.AtomicWittSurgeryPressureLdpAbelInvariance
 import Omega.Zeta.TopBandMaxLayerSufficiency
 import Omega.Zeta.XiHellingerToeplitzSymbolPoisson
+import Omega.Zeta.XiHellingerToeplitzSymbolExtremaQstar
 import Omega.Zeta.XiHellingerToeplitzSzegoThermoLimit
 import Omega.Zeta.XiHellingerToeplitzHeineSzegoCue
 import Omega.Zeta.XiHellingerChargePotentialDualityDtn
