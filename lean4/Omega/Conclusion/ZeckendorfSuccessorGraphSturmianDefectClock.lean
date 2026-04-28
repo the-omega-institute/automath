@@ -83,4 +83,14 @@ theorem paper_conclusion_zeckendorf_successor_graph_sturmian_defect_clock (m : N
   · rw [show m + 5 = (m + 3) + 2 by omega, Nat.fib_add_two, add_comm]
   · exact ⟨0, by simp⟩
 
+/-- Exact paper-label wrapper exposing the full rigidity statement and the Fibonacci two-gap
+clause. -/
+theorem paper_conclusion_zeckendorf_reset_sturmian_clock_rigidity (m : Nat) (hm : 2 ≤ m) :
+    conclusion_zeckendorf_successor_graph_sturmian_defect_clock_statement m ∧
+      (∀ g : Nat,
+        g ∈ conclusion_zeckendorf_successor_graph_sturmian_defect_clock_gapSet m ↔
+          g = Nat.fib (m + 3) ∨ g = Nat.fib (m + 4)) := by
+  have h := paper_conclusion_zeckendorf_successor_graph_sturmian_defect_clock m hm
+  exact ⟨h, h.2.2.2.1⟩
+
 end Omega.Conclusion

@@ -29,4 +29,13 @@ theorem paper_xi_boolean_two_layer_coker_and_modm_kernel_count
   · rfl
   · simp [booleanTwoLayerSmithDiagonal, Nat.mul_assoc]
 
+/-- Exact paper-label wrapper for the symmetric quotient cokernel and mod-`m` kernel count. -/
+theorem paper_xi_boolean_two_layer_symmetric_quotient_coker_modm (a b q m : Nat) :
+    booleanTwoLayerCokernelFactors a b (2 ^ q - 2) =
+      Nat.gcd a (a - b) :: Nat.lcm a (a - b) :: List.replicate (2 ^ q - 2) (a - b) ∧
+    booleanTwoLayerModKernelCount a b (2 ^ q - 2) m =
+      Nat.gcd m (Nat.gcd a (a - b)) * Nat.gcd m (Nat.lcm a (a - b)) *
+        Nat.gcd m (a - b) ^ (2 ^ q - 2) := by
+  exact paper_xi_boolean_two_layer_coker_and_modm_kernel_count a b q m
+
 end Omega.Zeta
