@@ -224,6 +224,7 @@ import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.UniaxialPadicTraceEncoding
 import Omega.Conclusion.EndpointStoppingThreeConstantGoldenSaving
 import Omega.Conclusion.AnomalyHarmonicRigidity
+import Omega.Conclusion.Window6CyclicMultiplicityEscortUniqueIsotropy
 import Omega.Conclusion.AnomalyTwoCoprimeLayerTomography
 import Omega.Conclusion.AxialScreenDirectSumVisibleHiddenSplit
 import Omega.Conclusion.FullscreenPartialscreenComplexityTransition
