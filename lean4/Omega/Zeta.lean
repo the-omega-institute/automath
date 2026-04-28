@@ -2308,3 +2308,5 @@ import Omega.Zeta.DefectRankControlsLdpFlatness
 import Omega.Zeta.XiFoldMicroblockCentralizerStrongDensity
 import Omega.Zeta.XiTimePart62daFibonacciUnitLimitZhatUnits
 import Omega.Zeta.XiTimePart69cWindow6RootBoundaryBlindCodim3
+import Omega.Zeta.XiAdamsNormZeroTransport
+import Omega.Zeta.XiOffcriticalConstructibleButNullOrExtraRegister
