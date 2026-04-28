@@ -1,4 +1,6 @@
 import Omega.Zeta.XiTimeCharacteristicClassIntegrality
+import Omega.Zeta.XiTimePart9zpAllonesAreaTimeCubicLowerBound
+import Omega.Zeta.XiPrimeHardcoreDeltaHcMatchesCHc
 import Omega.Zeta.XiTimePart9ZbFoldpiTwoAtomicMomentCharacterization
 import Omega.Zeta.XiLogisticHellingerGramDeterminant
 import Omega.Zeta.XiTimeOnlyConservedQuantity
