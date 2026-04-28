@@ -196,6 +196,7 @@ import Omega.Zeta.BulkCurvatureMaxLipschitz
 import Omega.Zeta.BulkCurvatureResidueDirichletData
 import Omega.Zeta.BulkCurvatureResidueExtremalRecovery
 import Omega.Zeta.XiPoissonCauchyLocationScaleInformationProjection
+import Omega.Zeta.XiEndpointPoissonJensenCauchyLedger
 import Omega.Zeta.XiPoissonCauchyComplexStieltjesFullExpansion
 import Omega.Zeta.XiPoissonCauchyMixturePointLeadingConstants
 import Omega.Zeta.XiPoissonCauchyCayleyFourierInversionSingleTime
@@ -226,6 +227,7 @@ import Omega.Zeta.XiTimePartitionIdentifiabilityIndMultiset
 import Omega.Zeta.XiP7S5K20OverK10OrientedFlipInertiaProfile
 import Omega.Zeta.XiBulkCurvatureDepthSpanZeroDensity
 import Omega.Zeta.XiCycleSumsDetermineTimeCohomology
+import Omega.Zeta.XiTimeRayPrimeFactorizationRigidity
 import Omega.Zeta.XiTimePart66PeriodizedBernoulliNonrajchmanNoLp
 import Omega.Zeta.XiTimePart9m2BinfoldSharpThresholdWindowExplicitCurve
 import Omega.Zeta.XiConstantBiasInversionBEps
