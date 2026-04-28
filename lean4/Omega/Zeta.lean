@@ -1,4 +1,6 @@
 import Omega.Zeta.XiP7S5MinimalArtinDedekindZetaFactorization
+import Omega.Zeta.XiPrimeMomentSemialgebraicCone
+import Omega.Zeta.XiEndpointHeatProbeRichardsonExtrapolation
 import Omega.Zeta.XiCartesianPowerJoukowskyGodelAnisotropicParabola
 import Omega.Zeta.XiLissajousPhaseSingularRingImmersion
 import Omega.Zeta.ConclusionCapacityWedderburnThermodynamicCompleteness
