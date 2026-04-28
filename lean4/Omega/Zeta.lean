@@ -2283,3 +2283,4 @@ import Omega.Zeta.XiKmsCode12ConnesTInvariant
 import Omega.Zeta.XiTimePart50dcMomentKernelConvexEnvelope
 import Omega.Zeta.XiBulkCurvatureMgfFactorizationZetaTower
 import Omega.Zeta.DefectRankControlsLdpFlatness
+import Omega.Zeta.XiFoldMicroblockCentralizerStrongDensity
