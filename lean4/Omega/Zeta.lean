@@ -706,6 +706,7 @@ import Omega.Zeta.HankelWindowFiber1d
 import Omega.Zeta.XiHankelSingularityOnePrimeLiftHvzk
 import Omega.Zeta.XiHypercubeWeightedSpanningTreeSpectrumProduct
 import Omega.Zeta.XiHypercubeWeightedLaplacianHeatTraceFactorization
+import Omega.Zeta.XiHypercubeWalshJoukowskyLeyangExplicit
 import Omega.Zeta.XiIntegratedDefectGoldenAsymptotics
 import Omega.Zeta.XiJensenWindowOptimalScale
 import Omega.Zeta.XiJGHolographicCoefficientExtraction
