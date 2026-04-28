@@ -105,6 +105,7 @@ import Omega.Conclusion.OracleFixedHistogramNearExhaustiveQueryLowerBound
 import Omega.Conclusion.OracleSuccessStrongConverse
 import Omega.Conclusion.OracleGapSaturationEdgeEnergy
 import Omega.Conclusion.MicroescortOracleCapacityClosedForm
+import Omega.Conclusion.FoldgaugeLocalExtractionBudgetBarrier
 import Omega.Conclusion.MomentFiniteGoodPrimesCrtReconstruction
 import Omega.Conclusion.PadicHankelGlobalRigidifier
 import Omega.Conclusion.PadicHankelExactConditionLedger
