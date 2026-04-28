@@ -219,6 +219,8 @@ import Omega.Conclusion.ShiftedHankelUniformIntegralityFourfoldEquivalence
 import Omega.Conclusion.ShiftedHankelRigidity
 import Omega.Conclusion.PoissonCentralSliceEvenMomentJetRigidity
 import Omega.Conclusion.PoissonCauchyM4Decode
+import Omega.Conclusion.BoundaryGodelHighambientAdhesionSaturation
+import Omega.Conclusion.BoundaryGodelBitlengthExponentEqualsAdhesion
 import Omega.Conclusion.ZGPositiveEntropyFinitestateObstruction
 import Omega.Conclusion.GaugeAnomalyL2Law
 import Omega.Conclusion.GoldenTopGapEqualsSdpi
