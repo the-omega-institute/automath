@@ -221,6 +221,7 @@ import Omega.Zeta.XiHorizonProtocolZetaLoopExpansion
 import Omega.Zeta.XiLowRankHorizonCertificate2KappaSharp
 import Omega.Zeta.XiJoukowskyEllipseAverageConstantTerm
 import Omega.Zeta.XiUnitCircleCriterionSingularRingResultant
+import Omega.Zeta.XiRealInputGroundLayerMeanGapPositiveEntropy
 import Omega.Zeta.XiUnitarySliceLeyangFoldedScan
 import Omega.Zeta.XiBayesianFreeEnergyVariationalPosteriorMinimizer
 import Omega.Zeta.XiFoldQueryComplexityExactM
