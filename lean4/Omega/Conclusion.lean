@@ -1,3 +1,4 @@
+import Omega.Conclusion.Window6MinshellEscortSectorLaw
 import Omega.Conclusion.FoldbinGroupoidRegularTraceEscort
 import Omega.Conclusion.PrefixConditionedGoldenTailMinimality
 import Omega.Conclusion.LargeDeviationSkeletonCarriedByAnnihilatorFamily
