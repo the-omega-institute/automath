@@ -226,6 +226,7 @@ import Omega.Zeta.XiTimePart63SchurCrtExactRecovery
 import Omega.Zeta.XiTimePart63bPrimitiveHookSchurClosedForm
 import Omega.Zeta.InfiniteDepthPrimeLedgerInfiniteRankObstruction
 import Omega.Zeta.XiFoldFiberSquarefreePrimeExternalization
+import Omega.Zeta.XiCountertermInvarianceKappa
 import Omega.Zeta.XiSquarefreeExternalizationLogOverhead
 import Omega.Zeta.XiFoldLossPrimeEllipseTripleCorrespondence
 import Omega.Zeta.XiFiniteRamanujanDefectTranslation
