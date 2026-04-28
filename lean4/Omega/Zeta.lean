@@ -104,6 +104,8 @@ import Omega.Zeta.XiTimePart63bLogcmAsymptoticGermFaithfulEvenZeta
 import Omega.Zeta.XiDiscreteVsContinuousHairByNegativeInertia
 import Omega.Zeta.XiBooleanTwoLayerInertiaCount
 import Omega.Zeta.XiBooleanTwoLayerSymmetricQuotientInverse
+import Omega.Zeta.XiDisjointnessBooleanOverlapMatrixInverse
+import Omega.Zeta.XiIntegerEllipseFreeCommutativeMonoid
 import Omega.Zeta.XiExceptionalThetaOmegaIdentification
 import Omega.Zeta.XiGoldenChainReverseklLogBarrier
 import Omega.Zeta.XiGoldenChainPoissonKLAlignmentRate
