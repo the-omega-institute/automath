@@ -938,6 +938,7 @@ import Omega.POM.LkShiftedDetFreeEnergy
 import Omega.POM.LkMellinTransformRigidity
 import Omega.POM.LogmLinearResponseZero
 import Omega.POM.LkSurfaceFreeEnergyStrictConcavity
+import Omega.POM.LkDetLucasUnit
 import Omega.POM.LowTemperatureDifferenceCertificates
 import Omega.POM.LucasNuPCriterion
 import Omega.POM.LucasPrimeCongruence
