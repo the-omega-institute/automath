@@ -1,5 +1,7 @@
 import Omega.Zeta.XiTimePart60abHiddenGapKlRenyi2Collision
 import Omega.Zeta.XiRhUnitCircleReciprocal
+import Omega.Zeta.IdealLatticeMultichainPrimeStratification
+import Omega.Zeta.PickKernelGaugeRigidity
 import Omega.Zeta.XiPoissonFirstMismatchDissipationLeading
 import Omega.Zeta.XiPoissonFdivSixthOrderMu3Mu4
 import Omega.Zeta.XiTimePart60ab2Window6BoundaryEightSuperselection
