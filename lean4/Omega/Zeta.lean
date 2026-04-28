@@ -72,6 +72,7 @@ import Omega.Zeta.XiBooleanTwoLayerInertiaCount
 import Omega.Zeta.XiBooleanTwoLayerSymmetricQuotientInverse
 import Omega.Zeta.XiExceptionalThetaOmegaIdentification
 import Omega.Zeta.XiGoldenChainReverseklLogBarrier
+import Omega.Zeta.XiGoldenChainPoissonKLAlignmentRate
 import Omega.Zeta.XiReverseKLPoissonExtremalGapFourierStability
 import Omega.Zeta.TwoParamDisjointnessFullSpectrumSecular
 import Omega.Zeta.XiLeyangAngleOverPiIrrational
@@ -972,6 +973,7 @@ import Omega.Zeta.XiTimePart70aUniformAverageLogdegTwoState
 import Omega.Zeta.XiTimePart70aGaugeFiberGapFirstOrder
 import Omega.Zeta.XiTimeLengthCocycle
 import Omega.Zeta.XiTimePart70daWindow6AbstractOrbittypeMinimalC12
+import Omega.Zeta.XiTimePart70dCentralFiberSecondMoment
 import Omega.Zeta.XiTimePart51AADoublingLucasExtension
 import Omega.Zeta.XiTimePart51AAWindow6RootDictionaryExternality
 import Omega.Zeta.XiTimePart9gaCrossResolutionAffineRigidity
