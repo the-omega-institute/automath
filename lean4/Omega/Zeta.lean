@@ -1,4 +1,5 @@
 import Omega.Zeta.XiHadamardProductResultantMultiplicativeConvolution
+import Omega.Zeta.XiP7Q5PrimitiveElementDegree25
 import Omega.Zeta.Near1NormalizedDriftExponentTranscendence
 import Omega.Zeta.XiOffsliceNontrivialCertificateTwoAxisLowerBound
 import Omega.Zeta.XiTimePart6TropicalizationCompleteness

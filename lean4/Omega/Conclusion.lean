@@ -1,4 +1,6 @@
 import Omega.Conclusion.FibadicGcdRankFingerprintRigidity
+import Omega.Conclusion.LeyangPrym3PrincipalizationModuliThreepointEtale
+import Omega.Conclusion.KstepGaugeModgaussianCongruence
 import Omega.Conclusion.FinitePrimesupportBooleanExactRealization
 import Omega.Conclusion.FibadicCyclotomicPacketDecomposition
 import Omega.Conclusion.ResonanceWindowFinitePrimeSamplingExactRecovery
