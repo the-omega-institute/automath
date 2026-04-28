@@ -49,6 +49,7 @@ import Omega.Zeta.Near1NormalizedDriftExponentTranscendence
 import Omega.Zeta.Near1Log2OverLogphiDInfinityTranscendenceAlt
 import Omega.Zeta.Near1NormalizedC1OverLogphiTranscendence
 import Omega.Zeta.XiOffsliceNontrivialCertificateTwoAxisLowerBound
+import Omega.Zeta.XiOffsliceIndicators
 import Omega.Zeta.XiTimePart6TropicalizationCompleteness
 import Omega.Zeta.XiTimeCharacteristicClassIntegrality
 import Omega.Zeta.XiTimePhaseTransitionGrowthAndDefectRank
