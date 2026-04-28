@@ -2539,3 +2539,5 @@ import Omega.Zeta.XiFoldReversibleLiftLengthLowerboundKappa
 import Omega.Zeta.XiTimePart60aFiniteJensenCertificateBlindspot
 import Omega.Zeta.XiTimePart9zeAuditedEvenWindowAboveWulffFloor
 import Omega.Zeta.XiTimePart9waPressureBlindFinitepartMemory
+import Omega.Zeta.XiLeyangZeroDivisorTensorFunctorFaithful
+import Omega.Zeta.XiBulkCurvatureScaleGramTwoPhase
