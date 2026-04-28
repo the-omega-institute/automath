@@ -2084,3 +2084,5 @@ import Omega.Zeta.XiHypercubeDimensionReadableFromLeyangAngularVariance
 import Omega.Zeta.XiJensenFenchelDeepzeroProductFunctional
 import Omega.Zeta.XiJGLeyangBadPrimeRigidity
 import Omega.Zeta.XiFoldLastbitAsymptoticSufficiency
+import Omega.Zeta.Window6D2SliceUniqueLocalInteraction
+import Omega.Zeta.SingleFaceZeroOneMarginalLaw
