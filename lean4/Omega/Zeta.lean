@@ -533,6 +533,7 @@ import Omega.Zeta.GMMajorarcEnergyObstructionLoop
 import Omega.Zeta.DephysDirichletWindingMinimal
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryAdditivity
 import Omega.Zeta.XiFoldbinShannonGaugeConstantMirror
+import Omega.Zeta.XiFoldbinEntropyRateRigidity
 import Omega.Zeta.XiFiniteEulerPolynomialEscapeAdditivity
 import Omega.Zeta.XiHankelJacobianToeplitzHankelFactorization
 import Omega.Zeta.XiSelfreciprocalEscapeJensen
@@ -2251,3 +2252,4 @@ import Omega.Zeta.XiFoldbinComplexTemperatureZeroLattice
 import Omega.Zeta.XiLeyangImageSevenTorsionEliminationIrreducibilityDiscriminant
 import Omega.Zeta.RadiusCapturesSigmaStar
 import Omega.Zeta.XiHankelGoodBadPrimeDichotomy
+import Omega.Zeta.XiKmsCode12ConnesTInvariant
