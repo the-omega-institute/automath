@@ -1157,6 +1157,8 @@ import Omega.Zeta.XiPrimeShellQuasiOrthogonality
 import Omega.Zeta.XiPrimeShellExplicitFormulaWindow
 import Omega.Zeta.XiPrimeSliceNontrivialLayerExactMinimality
 import Omega.Zeta.XiDeltaLFunctionalEquation
+import Omega.Zeta.XiDeltaLCriticalLineReal
+import Omega.Zeta.XiRhIntervalCriterion
 import Omega.Zeta.XiProjectiveMomentRadiusSubmultiplicative
 import Omega.Zeta.XiPiPowerSmithComplementarity
 import Omega.Zeta.XiTimePart58aDirichletMinimalWitnessWorstExponent
