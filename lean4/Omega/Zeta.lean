@@ -33,6 +33,7 @@ import Omega.Zeta.XiWindow6DimensionSieveFinite
 import Omega.Zeta.XiBinaryJumpSemidirectAbelianizationCoinvariants
 import Omega.Zeta.XiBranchRhZeroTempArithmeticIndependence
 import Omega.Zeta.XiAbelH2ContractionTruncationNoamplify
+import Omega.Zeta.XiAuditDehnFunctionTimeGeometry
 import Omega.Zeta.XiQepCommutingModalFactorization
 import Omega.Zeta.XiQepScalarModeTowerClassification
 import Omega.Zeta.CayleyOffsetDefectSpectrumBounds
