@@ -333,3 +333,4 @@ import Omega.GU.Z6CenterQuotient
 import Omega.GU.ZeckendorfNoCarryAdditivity
 import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.ZeroDefectExpRate
+import Omega.GU.FiberParityMinimalCompleteBits

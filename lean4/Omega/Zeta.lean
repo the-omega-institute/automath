@@ -2386,3 +2386,5 @@ import Omega.Zeta.XiTimePart60aaaWedderburnInformationCompleteness
 import Omega.Zeta.FiniteDefectPoissonL2EnergyZeroRigidity
 import Omega.Zeta.XiHankelDetReachObserveFactorizationPadic
 import Omega.Zeta.XiJGTranscendentalScaleGaloisFullFidelity
+import Omega.Zeta.XiBQAuditablePerronProjectorGap
+import Omega.Zeta.XiTimePart9zWindow6ThreeatomRenyiSpectrum
