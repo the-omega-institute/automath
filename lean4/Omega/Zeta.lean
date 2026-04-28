@@ -225,6 +225,8 @@ import Omega.Zeta.DephysIdempotentMonadEntropyAxiomaticUniqueness
 import Omega.Zeta.DephysJensenDefectLogDerivative
 import Omega.Zeta.OffcriticalPoissonSemigroupHomomorphism
 import Omega.Zeta.XiCauchyPoissonTvKlSharpInterface
+import Omega.Zeta.XiTimePart63aHookChannelClosedDifferenceLaw
+import Omega.Zeta.XiTimePart62afHankelGapDivisorLattice
 import Omega.Zeta.DephysRepulsionRadiusZeroCountDriving
 import Omega.Zeta.DephysPwNohair
 import Omega.Zeta.XiComovingPrefixBitBudgetGain
