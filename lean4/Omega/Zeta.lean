@@ -104,6 +104,7 @@ import Omega.Zeta.XiTimePhaseTransitionGrowthAndDefectRank
 import Omega.Zeta.XiTimePart9zpAllonesAreaTimeCubicLowerBound
 import Omega.Zeta.XiTimePart9zpZGPrimeGrammarMatrixization
 import Omega.Zeta.XiPrimeHardcoreDeltaHcMatchesCHc
+import Omega.Zeta.XiPrimeHardcoreNewtonMaclaurin
 import Omega.Zeta.XiTimePart9zbFoldpiTwoAtomicMomentCharacterization
 import Omega.Zeta.XiLogisticHellingerGramDeterminant
 import Omega.Zeta.XiHellingerQuasiOrthogonalPhase
