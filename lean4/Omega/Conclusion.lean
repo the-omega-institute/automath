@@ -2248,3 +2248,4 @@ import Omega.Conclusion.ResonanceWindowGoodprimeExactModpRecovery
 import Omega.Conclusion.ContinuousStrictDropImpliesDiscreteFiniteCertificate
 import Omega.Conclusion.FibonacciSolenoidDualQ
 import Omega.Conclusion.AnomalyTorusExpandingEntropy
+import Omega.Conclusion.PressureFanCollapsesToCharacterSimplexCells
