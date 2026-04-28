@@ -248,6 +248,7 @@ import Omega.Zeta.XiBasepointScanLeverageGapUniversalXminus2Tail
 import Omega.Zeta.XiBasepointScanLeverageGapPsl2rInvariantRatio
 import Omega.Zeta.XiProjectiveMomentFeketeSlope
 import Omega.Zeta.XiLeyangSimpleRootAlgebraicJetClosure
+import Omega.Zeta.XiLeyangFiniteKernelAlgebraicVsTranscendentalLayering
 import Omega.Zeta.XiLeyangKappaVsC1SquareObstruction
 import Omega.Zeta.AbelFinitePartMobiusZeta
 import Omega.Zeta.XiHeightIntervalMinimalSampling
@@ -261,6 +262,7 @@ import Omega.Zeta.XiTruncatedMomentMinAtomicRealization
 import Omega.Zeta.XiPadeHankelExactInversion
 import Omega.Zeta.XiSdrImpliesGlobalShadowing
 import Omega.Zeta.XiSmithStaircaseTemplateSymq
+import Omega.Zeta.XiSmithKernelSpectrumDiscreteConcavityPlateauInversion
 import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
 import Omega.Zeta.XiTimePart62dcbZgDirichletRiccatiResidue
 import Omega.Zeta.XiDisjointnessBooleanCongruenceSolvabilityGcd2m
