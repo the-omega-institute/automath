@@ -2606,3 +2606,5 @@ import Omega.Zeta.XiTimePart28bStripJacobiQuarticPsd
 import Omega.Zeta.LocalizedPhaseSamplingNotFinitelyGenerated
 import Omega.Zeta.XiSelfdualScatteringSufficientRh
 import Omega.Zeta.XiVisibleAnomIffRadialWallcrossing
+import Omega.Zeta.XiTimePart9xdSingleFrequencySamplingExactTomography
+import Omega.Zeta.XiTimePart9xdRedshiftTaxComovingPrefixGap
