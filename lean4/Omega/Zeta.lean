@@ -220,6 +220,8 @@ import Omega.Zeta.XiTimePart9hZ2x2HadamardTomography
 import Omega.Zeta.XiTimePart9iOrientationLocalSystemCohomology
 import Omega.Zeta.XiTimePart9iCoverTowerTransferLaw
 import Omega.Zeta.XiTimePart9iEvenStackingAnnihilation
+import Omega.Zeta.XiOracleCapacityFullBudgetDiscreteInversion
+import Omega.Zeta.XiTimePart9qCriticalFlatnessHolonomyIdentity
 import Omega.Zeta.XiPickPoissonThreeSetMobiusIdentity
 import Omega.Zeta.TVEnvelopeMarkov
 import Omega.Zeta.XiFoldLastbitSubcriticalSampleLecamEquivalence
