@@ -228,6 +228,8 @@ import Omega.Zeta.XiTimePart9waCoreGeneratedThresholdResidueShell
 import Omega.Zeta.XiAbelianChannelKappaCarAdditivity
 import Omega.Zeta.BulkCurvatureMaxLipschitz
 import Omega.Zeta.BulkCurvatureResidueDirichletData
+import Omega.Zeta.XiTimePart9lEscortTwoBlockNormalForm
+import Omega.Zeta.XiTimePart71ResonanceEntireLogTaylorZeroMoments
 import Omega.Zeta.BulkCurvatureResidueExtremalRecovery
 import Omega.Zeta.XiIndexEntropyDecomposition
 import Omega.Zeta.XiPoissonCauchyLocationScaleInformationProjection
