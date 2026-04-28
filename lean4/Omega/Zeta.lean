@@ -3,6 +3,7 @@ import Omega.Zeta.Near1NormalizedDriftExponentTranscendence
 import Omega.Zeta.XiOffsliceNontrivialCertificateTwoAxisLowerBound
 import Omega.Zeta.XiTimePart6TropicalizationCompleteness
 import Omega.Zeta.XiTimeCharacteristicClassIntegrality
+import Omega.Zeta.XiTimePhaseTransitionGrowthAndDefectRank
 import Omega.Zeta.XiTimePart9zpAllonesAreaTimeCubicLowerBound
 import Omega.Zeta.XiPrimeHardcoreDeltaHcMatchesCHc
 import Omega.Zeta.XiTimePart9zbFoldpiTwoAtomicMomentCharacterization
