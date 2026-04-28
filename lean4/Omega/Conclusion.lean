@@ -1,5 +1,6 @@
 import Omega.Conclusion.FoldbinGroupoidRegularTraceEscort
 import Omega.Conclusion.NonarchHankelCauchyBinetVandermonde
+import Omega.Conclusion.Window6BoundarySixAtomMinimalCommutativeEnlargement
 import Omega.Conclusion.OracleCompleteSpectralSideinfoNohelp
 import Omega.Conclusion.FoldbinGroupoidMoritaKHochschild
 import Omega.Conclusion.RenyiSchattenGapRigidOnebitSatOrderParameter

@@ -3,6 +3,7 @@ import Omega.Zeta.XiTimePart9xgS10ParityNeutralityForS3Splitting
 import Omega.Zeta.XiTimePart9KFoldForwardOnlineNotConstantMemoryReversible
 import Omega.Zeta.XiDefectWindowOrbitBridge
 import Omega.Zeta.XiHardeningTimeFrontierRigidity
+import Omega.Zeta.XiTimePart65eWindow6GeometricDiagonalZ2Parity
 import Omega.Zeta.XiTimePart9KCoprimeLedgerMemoryHorizon
 import Omega.Zeta.XiBinfoldScaledMultiplicityMellinCumulants
 import Omega.Zeta.XiBinfoldCriticalCapacityDefectAtomicLaw
