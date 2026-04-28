@@ -220,6 +220,8 @@ import Omega.Conclusion.AnalyticHolographyInversionRigidity
 import Omega.Conclusion.AffineNormalFormSemidirect
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.ProjectionWordGodelSemidirect
+import Omega.Conclusion.WidomDefinableSelectionGlobal
+import Omega.Conclusion.ComovingAlgebraicVsNumericalIdentifiabilitySplit
 import Omega.Conclusion.RateCdimAchievability
 import Omega.Conclusion.RateCdimArithmetic
 import Omega.Conclusion.ScaleLedgerDegeneracyLedgerOrthogonality
