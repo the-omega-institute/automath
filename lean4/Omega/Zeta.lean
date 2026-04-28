@@ -1,5 +1,6 @@
 import Omega.Zeta.XiSaturatedShiftInvariantLatticeGcdLcm
 import Omega.Zeta.XiSyndromeCertificateIncompressibility
+import Omega.Zeta.XiTimePart65cEscortRenyiTwoParameterFreezingLine
 import Omega.Zeta.XiTimePart50dcPeriodicResidueRationalCoreOctic
 import Omega.Zeta.XiP7S5MinimalArtinDedekindZetaFactorization
 import Omega.Zeta.XiUniqueTransverseVsInfinitePrimeRankSeparation
