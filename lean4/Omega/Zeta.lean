@@ -223,6 +223,8 @@ import Omega.Zeta.XiLocalizedDirectsumPrimeTruncationMinimalChannels
 import Omega.Zeta.AbelGrowthExponentCriterion
 import Omega.Zeta.AbelH2CriticalIndex
 import Omega.Zeta.AbelH2TailOptimalBound
+import Omega.Zeta.DephysEndpointKoenigsRigidity
+import Omega.Zeta.DephysPadicGuardrailsEndpointRigidity
 import Omega.Zeta.AbelAnalyticRemainderDecimationCollapse
 import Omega.Zeta.AbelKadicMultiresolutionEnergyLedger
 import Omega.Zeta.XiCollisionThresholdQuinticHalfplaneRootDistribution
