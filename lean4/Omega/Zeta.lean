@@ -207,6 +207,7 @@ import Omega.Zeta.XiPoissonCauchyMixturePointLeadingConstants
 import Omega.Zeta.XiPoissonCauchyCayleyFourierInversionSingleTime
 import Omega.Zeta.XiPoissonCauchyChi2DissipationIdentity
 import Omega.Zeta.XiPoissonCauchyAllOrderNormalFormUniformRemainder
+import Omega.Zeta.XiPoissonSubordinationHalfStable
 import Omega.Zeta.XiScaleMellinWindowNecessaryTlogt
 import Omega.Zeta.XiPoissonCauchyTwoParameterTracefreeCovarianceStructure
 import Omega.Zeta.XiWindow6SheetParityAnchorM6

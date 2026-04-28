@@ -185,6 +185,7 @@ import Omega.POM.S2Recurrence
 import Omega.POM.S3Recurrence
 import Omega.POM.S3OrbitDecomposition
 import Omega.POM.HankelRankMinimal
+import Omega.POM.LkBoundaryCatalanMomentsGF
 import Omega.POM.HankelSmithMinimalDenominator
 import Omega.POM.HankelIntegerRealizationCriterion
 import Omega.POM.HankelPrimitiveTorsionSpectrum
