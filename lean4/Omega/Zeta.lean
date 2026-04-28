@@ -731,6 +731,7 @@ import Omega.Zeta.XiTimePart9xcSerrinGeometryAllCumulantsVanish
 import Omega.Zeta.XiAbelNaturalBoundaryNoFiniteOrderExpLock
 import Omega.Zeta.XiSmithNormalizedKernelAverageOrder
 import Omega.Zeta.XiTimePart9xaaLowfiberAnomalyTax
+import Omega.Zeta.XiTimePart9xaaWindow6AuditedSpectrumExactTax
 import Omega.Zeta.XiTimePart9xaaBoundaryCenterIrreducibleTax
 import Omega.Zeta.XiTimePart9xabWindow6MinsectorRigidX4Subcover
 import Omega.Zeta.XiSuspensionFlowUniversality
