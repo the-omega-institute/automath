@@ -288,6 +288,7 @@ import Omega.Zeta.DephysBudgetDistanceDominatesTv
 import Omega.Zeta.DephysBudgetDistanceUniversalProperty
 import Omega.Zeta.DephysHankelFiniteAudit
 import Omega.Zeta.XiLogisticMutualInformationLowResolution
+import Omega.Zeta.XiLogisticFisherInformationDeficit
 import Omega.Zeta.DephysHorizonSufficiencyZeroKnowledge
 import Omega.Zeta.DephysIdempotentMonadIProjection
 import Omega.Zeta.DephysOneQuarterNormalization
