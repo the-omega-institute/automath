@@ -117,6 +117,7 @@ import Omega.Zeta.DephysCommutingSquareMutualInformationDefect
 import Omega.Zeta.DephysImplIndependentDefectCertificate
 import Omega.Zeta.DephysIdempotentMonadEntropyAxiomaticUniqueness
 import Omega.Zeta.DephysJensenDefectLogDerivative
+import Omega.Zeta.DephysRepulsionRadiusZeroCountDriving
 import Omega.Zeta.DephysPwNohair
 import Omega.Zeta.XiTimePart62daFibonacciSolenoidCofinalUniversal
 import Omega.Zeta.XiTimePart62daDirichletTwistsIntrinsicOnFibonacciLevels
@@ -188,6 +189,7 @@ import Omega.Zeta.XiPoissonCauchyTwoParameterTracefreeCovarianceStructure
 import Omega.Zeta.XiWindow6SheetParityAnchorM6
 import Omega.Zeta.XiWindow6DyadicMicrostateExactThreeBlockMassSplit
 import Omega.Zeta.XiPoissonCauchyI1OverKlRatio2m
+import Omega.Zeta.XiCauchyPoissonFdivUniversalConstant
 import Omega.Zeta.XiBulkCurvaturePrimitiveMaxDepthDominance
 import Omega.Zeta.XiHellingerToeplitzSymbolPoisson
 import Omega.Zeta.XiHellingerToeplitzSzegoThermoLimit
