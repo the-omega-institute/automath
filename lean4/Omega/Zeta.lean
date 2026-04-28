@@ -1,3 +1,4 @@
+import Omega.Zeta.XiHadamardProductResultantMultiplicativeConvolution
 import Omega.Zeta.XiTimeCharacteristicClassIntegrality
 import Omega.Zeta.XiTimePart9zpAllonesAreaTimeCubicLowerBound
 import Omega.Zeta.XiPrimeHardcoreDeltaHcMatchesCHc
