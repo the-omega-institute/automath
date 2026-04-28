@@ -2130,3 +2130,4 @@ import Omega.Zeta.Window6D2SliceUniqueLocalInteraction
 import Omega.Zeta.SingleFaceZeroOneMarginalLaw
 import Omega.Zeta.XiTimePart9zrNoncontractibleSixphaseLaw
 import Omega.Zeta.XiOutputPotentialOddPrimeBadModuliPrimeDensityOne
+import Omega.Zeta.XiTimePart9vkNoFiniteLocalAnalyticTransformFromResonanceGermToFoldpiTail
