@@ -18,6 +18,10 @@ def xi_time_part28b_completed_realroot_zero_tower_classification_derivativeFacto
     (y : ℝ) : ℝ :=
   1 - 1 / y ^ 2
 
+/-- The logarithmic vertical spacing of the zero combs. -/
+def xi_time_part28b_completed_realroot_zero_tower_classification_period (L : ℝ) : ℝ :=
+  2 * Real.pi / Real.log L
+
 /-- Multiplicity transfer through `S_L`: noncritical branches keep multiplicity, while
 the endpoint branches double it. -/
 def xi_time_part28b_completed_realroot_zero_tower_classification_transferredMultiplicity
@@ -25,14 +29,19 @@ def xi_time_part28b_completed_realroot_zero_tower_classification_transferredMult
   if derivativeVanishes then 2 * m else m
 
 /-- Concrete algebraic classification behind the completed real-root zero towers. -/
-def xi_time_part28b_completed_realroot_zero_tower_classification_statement : Prop :=
-  (∀ S₀ : ℝ, |S₀| < 2 →
+def xi_time_part28b_completed_realroot_zero_tower_classification_statement
+    (L S₀ : ℝ) : Prop :=
+  0 < Real.log L ∧
+    0 < xi_time_part28b_completed_realroot_zero_tower_classification_period L ∧
+    (|S₀| < 2 →
       xi_time_part28b_completed_realroot_zero_tower_classification_caseCode S₀ = 0) ∧
-    (∀ S₀ : ℝ, S₀ = 2 →
+    (S₀ = 2 →
       xi_time_part28b_completed_realroot_zero_tower_classification_caseCode S₀ = 1) ∧
-      (∀ S₀ : ℝ, S₀ = -2 →
+      (S₀ = -2 →
         xi_time_part28b_completed_realroot_zero_tower_classification_caseCode S₀ = 2) ∧
-        (∀ S₀ : ℝ, 2 < |S₀| →
+        (2 < S₀ →
+          xi_time_part28b_completed_realroot_zero_tower_classification_caseCode S₀ = 3) ∧
+        (S₀ < -2 →
           xi_time_part28b_completed_realroot_zero_tower_classification_caseCode S₀ = 3) ∧
           (∀ S₀ y : ℝ, y ≠ 0 → y + 1 / y = S₀ →
             xi_time_part28b_completed_realroot_zero_tower_classification_quadraticResidual
@@ -109,25 +118,44 @@ lemma xi_time_part28b_completed_realroot_zero_tower_classification_endpoint_minu
   norm_num [xi_time_part28b_completed_realroot_zero_tower_classification_derivativeFactor]
 
 /-- Paper label: `thm:xi-time-part28b-completed-realroot-zero-tower-classification`. -/
-theorem paper_xi_time_part28b_completed_realroot_zero_tower_classification :
-    xi_time_part28b_completed_realroot_zero_tower_classification_statement := by
-  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
-  · intro S₀ hS₀
+theorem paper_xi_time_part28b_completed_realroot_zero_tower_classification
+    (L S₀ : ℝ) (hL : 1 < L) :
+    xi_time_part28b_completed_realroot_zero_tower_classification_statement L S₀ := by
+  have hlog_pos : 0 < Real.log L := Real.log_pos hL
+  have hperiod_pos :
+      0 < xi_time_part28b_completed_realroot_zero_tower_classification_period L := by
+    unfold xi_time_part28b_completed_realroot_zero_tower_classification_period
+    positivity
+  refine ⟨hlog_pos, hperiod_pos, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro hS₀
     simp [xi_time_part28b_completed_realroot_zero_tower_classification_caseCode, hS₀]
-  · intro S₀ hS₀
+  · intro hS₀
     subst S₀
     norm_num [xi_time_part28b_completed_realroot_zero_tower_classification_caseCode]
-  · intro S₀ hS₀
+  · intro hS₀
     subst S₀
     norm_num [xi_time_part28b_completed_realroot_zero_tower_classification_caseCode]
-  · intro S₀ hS₀
+  · intro hS₀
     unfold xi_time_part28b_completed_realroot_zero_tower_classification_caseCode
     split_ifs with hlt hplus hminus
-    · linarith
+    · have habs_gt : 2 < |S₀| := by
+        rw [abs_of_pos (by linarith)]
+        exact hS₀
+      linarith
     · subst S₀
-      norm_num at hS₀
+      linarith
     · subst S₀
-      norm_num at hS₀
+      linarith
+    · rfl
+  · intro hS₀
+    unfold xi_time_part28b_completed_realroot_zero_tower_classification_caseCode
+    split_ifs with hlt hplus hminus
+    · rw [abs_of_neg (by linarith)] at hlt
+      linarith
+    · subst S₀
+      linarith
+    · subst S₀
+      linarith
     · rfl
   · intro S₀ y hy h
     exact
@@ -137,18 +165,19 @@ theorem paper_xi_time_part28b_completed_realroot_zero_tower_classification :
     exact xi_time_part28b_completed_realroot_zero_tower_classification_endpoint_plus hy h
   · intro y hy h
     exact xi_time_part28b_completed_realroot_zero_tower_classification_endpoint_minus hy h
-  · intro S₀ y hy h hplus hminus hderiv
-    have hycases :=
-      (xi_time_part28b_completed_realroot_zero_tower_classification_derivative_zero_iff
-        hy).1 hderiv
-    rcases hycases with rfl | rfl
-    · norm_num at h
-      exact hplus h.symm
-    · norm_num at h
-      exact hminus h.symm
-  · intro m
-    norm_num
-      [xi_time_part28b_completed_realroot_zero_tower_classification_transferredMultiplicity]
+  · constructor
+    · intro S₀ y hy h hplus hminus hderiv
+      have hycases :=
+        (xi_time_part28b_completed_realroot_zero_tower_classification_derivative_zero_iff
+          hy).1 hderiv
+      rcases hycases with rfl | rfl
+      · norm_num at h
+        exact hplus h.symm
+      · norm_num at h
+        exact hminus h.symm
+    · intro m
+      norm_num
+        [xi_time_part28b_completed_realroot_zero_tower_classification_transferredMultiplicity]
 
 end
 

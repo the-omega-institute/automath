@@ -62,6 +62,7 @@ import Omega.Zeta.XiBasepointScanResidualKernelCodim1Rankone
 import Omega.Zeta.XiTimePart50dcResidueZetaCyclotomicWitt
 import Omega.Zeta.XiP7S5MinimalArtinDedekindZetaFactorization
 import Omega.Zeta.XiP7S5LocalEulerFactorTripleIsomorphismAtQ
+import Omega.Zeta.XiP7S5GlobalArtinConductorsRho456
 import Omega.Zeta.LocalizedPhaseSamplingClosedForm
 import Omega.Zeta.LocalizedDyadicPhaseBlindness
 import Omega.Zeta.XiUniqueTransverseVsInfinitePrimeRankSeparation
