@@ -2524,3 +2524,4 @@ import Omega.Zeta.XiFoldCongruenceNilradicalReducedQuotient
 import Omega.Zeta.XiFoldMultiplicityQuotientDescentFourierConductor
 import Omega.Zeta.XiTimePart70dMinsectorTerminalSheetRealization
 import Omega.Zeta.XiTimePart70dGlobalNonquotientRigidity
+import Omega.Zeta.XiLocalizedQuotientExactSfreeExternalization
