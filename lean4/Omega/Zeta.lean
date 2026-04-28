@@ -1,5 +1,7 @@
 import Omega.Zeta.XiBranchRhZeroTempArithmeticIndependence
 import Omega.Zeta.XiAbelH2ContractionTruncationNoamplify
+import Omega.Zeta.XiQepCommutingModalFactorization
+import Omega.Zeta.XiQepScalarModeTowerClassification
 import Omega.Zeta.CayleyOffsetDefectSpectrumBounds
 import Omega.Zeta.HankelSinglePrimeAuditZeroError
 import Omega.Zeta.XiTimePart9xfFrozenPhaseTwoCoordinateThermodynamics
