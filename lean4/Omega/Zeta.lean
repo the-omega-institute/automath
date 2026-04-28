@@ -62,6 +62,7 @@ import Omega.Zeta.WindingEqualsBlaschkeDegree
 import Omega.Zeta.SelfdualWindDegDblKappaIdentity
 import Omega.Zeta.XiFoldUniformBaselineTestingConstant
 import Omega.Zeta.XiTimePart9n1bFourGeneraRecoverHodgeVector
+import Omega.Zeta.XiTimePart9n1bPrymChevalleyWeilReciprocity
 import Omega.Zeta.DephysCommutingSquareMutualInformationDefect
 import Omega.Zeta.DephysIdempotentMonadEntropyAxiomaticUniqueness
 import Omega.Zeta.DephysJensenDefectLogDerivative
