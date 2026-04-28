@@ -220,6 +220,8 @@ import Omega.Zeta.XiTimePart62dLissajousKleinOrbitIntersection
 import Omega.Zeta.RationalRosePeriodPetalClassification
 import Omega.Zeta.XiTimePart62dcbZgDensityRowRatioRiccatiProduct
 import Omega.Zeta.XiTimePart63bSmithKernelGrowthSpectrumCriterion
+import Omega.Zeta.XiDiscLedgerLocalAxisRankDefect
+import Omega.Zeta.XiGodelLoewnerTwoLevelHolographicInversion
 import Omega.Zeta.XiTimePart63bLossZetaEulerFactorizationSmithRigidity
 import Omega.Zeta.ZGDensitySecondOrderSummability
 import Omega.Zeta.XiBoundedFluxForcesKappa0
