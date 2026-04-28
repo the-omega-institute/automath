@@ -37,6 +37,8 @@ import Omega.Zeta.XiPlyQ5CommonRootsPrime3173
 import Omega.Zeta.XiIntegerEllipseGrothendieckDoubleCountableRank
 import Omega.Zeta.BlaschkePointSpectrumCorrespondence
 import Omega.Zeta.WindingEqualsBlaschkeDegree
+import Omega.Zeta.SelfdualWindDegDblKappaIdentity
+import Omega.Zeta.XiFoldUniformBaselineTestingConstant
 import Omega.Zeta.XiTimePart9n1bFourGeneraRecoverHodgeVector
 import Omega.Zeta.DephysCommutingSquareMutualInformationDefect
 import Omega.Zeta.DephysIdempotentMonadEntropyAxiomaticUniqueness
