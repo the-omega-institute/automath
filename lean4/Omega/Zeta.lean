@@ -220,6 +220,7 @@ import Omega.Zeta.AbelH2CriticalIndex
 import Omega.Zeta.AbelH2TailOptimalBound
 import Omega.Zeta.AbelAnalyticRemainderDecimationCollapse
 import Omega.Zeta.AbelKadicMultiresolutionEnergyLedger
+import Omega.Zeta.XiCollisionThresholdQuinticHalfplaneRootDistribution
 import Omega.Zeta.AbelOffcriticalExponentialRadiusAmplification
 import Omega.Zeta.AbelMobiusNeutralizationFormal
 import Omega.Zeta.AbelMobiusLinearization
