@@ -436,6 +436,7 @@ import Omega.Zeta.XiBasepointScanGramDeterminantLeverageProduct
 import Omega.Zeta.XiBasepointScanGramNondegeneracyUpToKappa
 import Omega.Zeta.XiBasepointScanCodim1ExactGreedyWeightIndependence
 import Omega.Zeta.XiScaleCoherenceCollisionVandermonde
+import Omega.Zeta.XiScaleCoherenceKernelZetaTaylor
 import Omega.Zeta.XiHankelOfflineAuditMaxPrimeLogscale
 import Omega.Zeta.XiTimePart9eRecurrenceJacobianHankel
 import Omega.Zeta.XiHankelNfGldSliceStabilizer
