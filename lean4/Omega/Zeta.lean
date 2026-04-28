@@ -1701,6 +1701,8 @@ import Omega.Zeta.XiSmithLossDiscreteCurvatureAtoms
 import Omega.Zeta.SmithLinearSolvabilityConstantFibers
 import Omega.Zeta.SmithPadicLossSpectrumClassification
 import Omega.Zeta.SmithPrefixSufficiency
+import Omega.Zeta.XiSmithIndexLayerLifetimeRegister
+import Omega.Zeta.XiWindow6ZeroBlockCollisionGapCoexistence
 import Omega.Zeta.SyncActionGap
 import Omega.Zeta.SyncBivariateEulerProduct
 import Omega.Zeta.SyncCyclotomicDegreeLaw
