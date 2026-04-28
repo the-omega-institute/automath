@@ -107,6 +107,7 @@ import Omega.Conclusion.BranchEntropyPrimesliceRate
 import Omega.Conclusion.LayeredPrimesliceFiniteSupportDepthCeiling
 import Omega.Conclusion.PrimeLogZeroLyapunovCalibration
 import Omega.Conclusion.PrimeLogUnweightedEulerRegular
+import Omega.Conclusion.PrimeLogBoundaryCurrent
 import Omega.Conclusion.PrimeLogFaithfulLayerCountableInfiniteRank
 import Omega.Conclusion.PrimeLogInfiniteRankRegister
 import Omega.Conclusion.Window6CubicCentralRelation
@@ -1077,6 +1078,7 @@ import Omega.Conclusion.BinfoldTwoAtomInformationGeometryUniversality
 import Omega.Conclusion.FoldbinRemoveMainResonancePeaksStillDiverges
 import Omega.Conclusion.FoldGoldenResonanceMaxfiberLift
 import Omega.Conclusion.GoldenResonanceFibLucTwoPositiveClusters
+import Omega.Conclusion.GoldenResonanceWeierstrassGenusDrop
 import Omega.Conclusion.FullInternalScreenGlobalComplementLaw
 import Omega.Conclusion.FullInternalVisibilityUniqueGlobalMode
 import Omega.Conclusion.FoldSinglepairVisibleObstructions
