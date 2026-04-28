@@ -224,6 +224,8 @@ import Omega.Zeta.XiFoldLastbitSubcriticalSampleLecamEquivalence
 import Omega.Zeta.XiTimePart9sbEscortFixedNBinomialBlackwell
 import Omega.Zeta.XiBulkCurvatureMassQuantization
 import Omega.Zeta.XiBulkCurvatureProbabilityMoments
+import Omega.Zeta.XiTimePart9waCoreGeneratedThresholdResidueShell
+import Omega.Zeta.XiAbelianChannelKappaCarAdditivity
 import Omega.Zeta.BulkCurvatureMaxLipschitz
 import Omega.Zeta.BulkCurvatureResidueDirichletData
 import Omega.Zeta.BulkCurvatureResidueExtremalRecovery
