@@ -12,6 +12,8 @@ import Omega.Zeta.XiJetLowOrderInequalities
 import Omega.Zeta.XiBusemannDepthFiniteWindowEstimator
 import Omega.Zeta.XiHzomTwoChannelModsquare
 import Omega.Zeta.XiExteriorPowerDetCokerSize
+import Omega.Zeta.XiExteriorPowerJordanAffinePoincareClt
+import Omega.Zeta.XiFoldbinAuditedEvenCenterCollapseAbelFullRank
 import Omega.Zeta.XiFoldbinCriticalScaleSuccessCurveInversion
 import Omega.Zeta.XiTimePart71CollisionUpperBoundWeightedCliqueEuler
 import Omega.Zeta.XiPhiRigidityFromKmsEntropyDensity
