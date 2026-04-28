@@ -1910,3 +1910,5 @@ import Omega.Conclusion.PeriodicFiberSingleCharacterMoment
 import Omega.Conclusion.FoldRademacherSecondMomentDegeneracy
 import Omega.Conclusion.ZeroDensityPearsonExplosionStrictSeparation
 import Omega.Conclusion.ToyRHCriticalLineAtomicLimitMeasure
+import Omega.Conclusion.VolumePeakThresholdSeparation
+import Omega.Conclusion.FrozenPhasePeakObstructionLocalization
