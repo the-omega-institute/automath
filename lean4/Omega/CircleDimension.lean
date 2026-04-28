@@ -206,6 +206,7 @@ import Omega.CircleDimension.MinimalRecordAxis
 import Omega.CircleDimension.MellinInversionDuality
 import Omega.CircleDimension.MixedLocalizationPkGrowthInversion
 import Omega.CircleDimension.XiSelfdualMeanPotentialInversion
+import Omega.CircleDimension.XiPoissonCauchyMultipoleMomentChain
 import Omega.CircleDimension.MobiusBipartiteColoring
 import Omega.CircleDimension.MobiusCayleyArctanRigidity
 import Omega.CircleDimension.MultiliftInterferenceCorrection
