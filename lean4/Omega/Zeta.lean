@@ -1,3 +1,5 @@
+import Omega.Zeta.XiFoldbinRankUnrankOptimalAdvicePolytime
+import Omega.Zeta.XiReplicaSoftcoreExceptionalPowerSumM6CompleteClosed
 import Omega.Zeta.XiTimePart60abHiddenGapKlRenyi2Collision
 import Omega.Zeta.XiRhUnitCircleReciprocal
 import Omega.Zeta.IdealLatticeMultichainPrimeStratification
