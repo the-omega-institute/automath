@@ -181,6 +181,7 @@ import Omega.Zeta.XiFoldFiberSquarefreePrimeExternalization
 import Omega.Zeta.XiSquarefreeExternalizationLogOverhead
 import Omega.Zeta.XiFoldLossPrimeEllipseTripleCorrespondence
 import Omega.Zeta.XiFiniteRamanujanDefectTranslation
+import Omega.Zeta.XiTimeInducedDirichletForm
 import Omega.Zeta.XiCoherenceResolutionInformationIdentity
 import Omega.Zeta.XiCoherenceGodel4adicValuation
 import Omega.Zeta.Near1PoleParabola
