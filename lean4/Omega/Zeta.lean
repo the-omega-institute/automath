@@ -224,6 +224,8 @@ import Omega.Zeta.XiLeyangLogSingularityTranscendence
 import Omega.Zeta.XiLeyangSolenoidalLiftMonoidal
 import Omega.Zeta.XiLeyangEvidenceIsingLyapunov
 import Omega.Zeta.XiTimePart9zrReconstructionBudgetPhiCliff
+import Omega.Zeta.XiJoukowskyMultipleAngleChebyshevRadicalNormalform
+import Omega.Zeta.XiJoukowskyModsquareQuantileInversion
 import Omega.Zeta.XiCompletedZetaDyadicLPImpliesRH
 import Omega.Zeta.TerminalZmTranslationTBranchDiscriminantC3DeltaFactor
 import Omega.Zeta.XiCoherenceModulusFiniteDecidability
