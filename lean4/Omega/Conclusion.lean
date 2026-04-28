@@ -90,6 +90,7 @@ import Omega.Conclusion.CertificateCofinalSparsificationInvariant
 import Omega.Conclusion.SerrinWulffArtinMazurWittTripleCollapse
 import Omega.Conclusion.BinfoldMellinTwoStepLaw
 import Omega.Conclusion.RankTwoTateCarpetFinitelevelKLAdditivity
+import Omega.Conclusion.RankTwoTateCarpet
 import Omega.Conclusion.CyclelatticeAffineTorsorUvBlindness
 import Omega.Conclusion.CPVisibleNonrealizabilityFiniteRefuter
 import Omega.Conclusion.CompletedSliceBalancedAtomsBecomeConstants
@@ -243,6 +244,7 @@ import Omega.Conclusion.ProjectionWordGodelSemidirect
 import Omega.Conclusion.WidomDefinableSelectionGlobal
 import Omega.Conclusion.ComovingAlgebraicVsNumericalIdentifiabilitySplit
 import Omega.Conclusion.RateCdimAchievability
+import Omega.Conclusion.WeightedSyncDyadicChebyshevDworkFinitePrecision
 import Omega.Conclusion.RateCdimArithmetic
 import Omega.Conclusion.ScaleLedgerDegeneracyLedgerOrthogonality
 import Omega.Conclusion.UniqueGlobalShortestHistoryRay
