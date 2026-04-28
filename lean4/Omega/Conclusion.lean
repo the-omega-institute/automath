@@ -224,6 +224,8 @@ import Omega.Conclusion.RateCdimAchievability
 import Omega.Conclusion.RateCdimArithmetic
 import Omega.Conclusion.ScaleLedgerDegeneracyLedgerOrthogonality
 import Omega.Conclusion.AnchorFullRankWeightblindRigidity
+import Omega.Conclusion.AmbiguityShellPeriodicAmplitudeObstruction
+import Omega.Conclusion.BinfoldPushforwardExactSizeBias
 import Omega.Conclusion.AnchorFullRankPoleDominance
 import Omega.Conclusion.ConclusionSoftcoreHighqOneModeDominance
 import Omega.Conclusion.FirstCoordinateBiasGlobalCollisionResonanceHomology
