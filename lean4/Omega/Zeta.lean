@@ -2367,3 +2367,4 @@ import Omega.Zeta.XiFoldSinglebitResidueMiBounds
 import Omega.Zeta.XiThresholdModularGapMaxfiberEquivalence
 import Omega.Zeta.XiTimePart9zdWindow6LieSupportKrylovRankCoincidence
 import Omega.Zeta.XiDefectResidualDegree
+import Omega.Zeta.XiHorizonForcedGeometricTail

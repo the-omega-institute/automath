@@ -1980,3 +1980,4 @@ import Omega.Conclusion.Window6HammingWeylOrbitDetector
 import Omega.Conclusion.MaxfiberHomotopyVisibilityDensity
 import Omega.Conclusion.Window6CartanSyzygyOrthogonalRigiditySplitting
 import Omega.Conclusion.Window6DoubleGaugeQuarticTomographyCompleteness
+import Omega.Conclusion.PrimitiveTwoStepCodimoneBlindness
