@@ -2396,3 +2396,4 @@ import Omega.Zeta.XiBQAuditablePerronProjectorGap
 import Omega.Zeta.XiTimePart9zWindow6ThreeatomRenyiSpectrum
 import Omega.Zeta.LeyangImagRatioUnstableCrossratioInvariant
 import Omega.Zeta.XiHankelMinimalSamplingOnePointExceptionRobust
+import Omega.Zeta.XiMomAmplifyDetectTrueResonance
