@@ -90,7 +90,7 @@ lemma dephys_stieltjes_inversion_scale_entropy_recovers
 end dephys_stieltjes_inversion_scale_entropy_data
 
 /-- Paper label: `cor:dephys-stieltjes-inversion-scale-entropy`. -/
-theorem paper_dephys_stieltjes_inversion_scale_entropy
+theorem dephys_stieltjes_inversion_scale_entropy_paper_recovers
     (D : dephys_stieltjes_inversion_scale_entropy_data) : D.recovers := by
   exact D.dephys_stieltjes_inversion_scale_entropy_recovers
 
