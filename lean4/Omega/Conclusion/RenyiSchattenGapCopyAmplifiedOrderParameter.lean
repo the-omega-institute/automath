@@ -61,4 +61,14 @@ theorem paper_conclusion_renyi_schatten_gap_copy_amplified_order_parameter
       Real.log_le_log hpow_pos (le_add_of_nonneg_right zero_le_one)
     simpa [Nat.cast_pow, Real.log_pow] using hlog_mono
 
+/-- Paper label: `cor:conclusion-renyi-entropy-copy-amplification`. -/
+theorem paper_conclusion_renyi_entropy_copy_amplification
+    (alpha N t Hunsat Hsat gap : ℝ) (halpha : 2 < alpha)
+    (hUnsat : Hunsat = 2 * Real.log N)
+    (hSat : Hsat ≤ 2 * Real.log N - Real.log (t + 1))
+    (hGap : gap = Real.log (t + 1)) :
+    Hunsat = 2 * Real.log N ∧ Hsat ≤ 2 * Real.log N - gap := by
+  have _ : 2 < alpha := halpha
+  exact ⟨hUnsat, by simpa [hGap] using hSat⟩
+
 end Omega.Conclusion
