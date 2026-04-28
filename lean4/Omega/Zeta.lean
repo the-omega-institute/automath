@@ -2534,3 +2534,5 @@ import Omega.Zeta.XiTimePart70dGlobalNonquotientRigidity
 import Omega.Zeta.XiLocalizedQuotientExactSfreeExternalization
 import Omega.Zeta.XiScanFingerprintCaratheodoryLift
 import Omega.Zeta.XiFoldReversibleLiftLengthLowerboundKappa
+import Omega.Zeta.XiTimePart60aFiniteJensenCertificateBlindspot
+import Omega.Zeta.XiTimePart9zeAuditedEvenWindowAboveWulffFloor

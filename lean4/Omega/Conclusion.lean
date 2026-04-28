@@ -2140,3 +2140,4 @@ import Omega.Conclusion.AxialScreenDeficitExponentialLaw
 import Omega.Conclusion.FoldFiberFaceposetSquarefreeDivisibilityShadow
 import Omega.Conclusion.FoldFiberSquarefreeShadowHardcoreHolography
 import Omega.Conclusion.PadicNewtonPolygonVerticesValuationHistogram
+import Omega.Conclusion.ZetaIsospectralSyncLinearSeparation
