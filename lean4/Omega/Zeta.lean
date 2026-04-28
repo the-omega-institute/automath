@@ -246,6 +246,8 @@ import Omega.Zeta.XiFoldFiberSquarefreePrimeExternalization
 import Omega.Zeta.XiCountertermInvarianceKappa
 import Omega.Zeta.XiSquarefreeExternalizationLogOverhead
 import Omega.Zeta.XiFoldLossPrimeEllipseTripleCorrespondence
+import Omega.Zeta.XiTimePart9zrLeyangFivecubeSpectrum
+import Omega.Zeta.XiLocalizedSolenoidTerminalObjectPoset
 import Omega.Zeta.XiFiniteRamanujanDefectTranslation
 import Omega.Zeta.XiTimeInducedDirichletForm
 import Omega.Zeta.XiCoherenceResolutionInformationIdentity
