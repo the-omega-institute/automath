@@ -1,4 +1,5 @@
 import Omega.SyncKernelRealInput.GMAdjustableMomentMeanSquare
+import Omega.SyncKernelRealInput.KoenigsLinearizationWittDilation
 import Omega.SyncKernelRealInput.TrivFactorPrimitivePolynomial
 import Omega.SyncKernelRealInput.GmCriticalBottleneckResidualOpnorm
 import Omega.SyncKernelRealInput.GmMultiplicativeEnergyCompilable

@@ -1,5 +1,6 @@
 import Omega.POM.ResonancePerronMultiplicativeIndependenceQ12Q15
 import Omega.POM.MultiplicativeGradedSplitting
+import Omega.POM.ShiftedFibFusionDefectPositive
 import Omega.POM.MomentCongruenceQ
 import Omega.POM.ResonanceChebotarevProductDensityQ1215
 import Omega.POM.A4TNewmanResultantCurveIntersection
