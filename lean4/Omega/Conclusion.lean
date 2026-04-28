@@ -223,6 +223,7 @@ import Omega.Conclusion.ProjectionWordGodelSemidirect
 import Omega.Conclusion.RateCdimAchievability
 import Omega.Conclusion.RateCdimArithmetic
 import Omega.Conclusion.ScaleLedgerDegeneracyLedgerOrthogonality
+import Omega.Conclusion.UniqueGlobalShortestHistoryRay
 import Omega.Conclusion.AnchorFullRankWeightblindRigidity
 import Omega.Conclusion.AmbiguityShellPeriodicAmplitudeObstruction
 import Omega.Conclusion.BinfoldPushforwardExactSizeBias
