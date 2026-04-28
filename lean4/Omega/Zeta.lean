@@ -2382,3 +2382,4 @@ import Omega.Zeta.XiTimePart9zdWindow6LieSupportKrylovRankCoincidence
 import Omega.Zeta.XiDefectResidualDegree
 import Omega.Zeta.XiHorizonForcedGeometricTail
 import Omega.Zeta.XiTimePart60aaaWedderburnInformationCompleteness
+import Omega.Zeta.FiniteDefectPoissonL2EnergyZeroRigidity
