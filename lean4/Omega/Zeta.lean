@@ -216,6 +216,7 @@ import Omega.Zeta.XiCMVPointSpectrumDimensionEqualsBlaschkeDegree
 import Omega.Zeta.SelfdualMaslovSingularDichotomy
 import Omega.Zeta.WindingEqualsBlaschkeDegree
 import Omega.Zeta.SelfdualWindDegDblKappaIdentity
+import Omega.Zeta.XiAnomWindingObstruction
 import Omega.Zeta.XiFoldUniformBaselineTestingConstant
 import Omega.Zeta.XiTimePart9n1bFourGeneraRecoverHodgeVector
 import Omega.Zeta.XiTimePart9n1bPrymChevalleyWeilReciprocity
