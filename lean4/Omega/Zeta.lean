@@ -1,3 +1,4 @@
+import Omega.Zeta.XiLogcmHankelVandermondeMainterm
 import Omega.Zeta.ToeplitzCaratheodoryCompletionTailExclusion
 import Omega.Zeta.XiKappaKLArClosedAsymptotic
 import Omega.Zeta.XiPoissonCauchyKolmogorovSecondOrderConstant
