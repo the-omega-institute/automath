@@ -242,6 +242,8 @@ import Omega.Zeta.TerminalReplicaSoftcoreInverseSupportCount
 import Omega.Zeta.XiTimePart9xNoBoundaryEquivariantFourValuedCompanionField
 import Omega.Zeta.XiTimePart53daBoundaryZ6Torsor
 import Omega.Zeta.XiTimePart9hZ2x2HadamardTomography
+import Omega.Zeta.XiAbelLocalFourpointRegressionExponentialRecovery
+import Omega.Zeta.XiBasepointScanAnchorDetResultant
 import Omega.Zeta.XiTimePart9iOrientationLocalSystemCohomology
 import Omega.Zeta.XiTimePart9iCoverTowerTransferLaw
 import Omega.Zeta.XiTimePart9iEvenStackingAnnihilation
