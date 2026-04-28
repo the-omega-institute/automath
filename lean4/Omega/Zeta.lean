@@ -223,6 +223,7 @@ import Omega.Zeta.XiLeyangAngleOverPiIrrational
 import Omega.Zeta.XiLeyangLogSingularityTranscendence
 import Omega.Zeta.XiLeyangSolenoidalLiftMonoidal
 import Omega.Zeta.XiLeyangEvidenceIsingLyapunov
+import Omega.Zeta.PickPoissonConfluentVandermonde
 import Omega.Zeta.XiTimePart9zrReconstructionBudgetPhiCliff
 import Omega.Zeta.XiJoukowskyMultipleAngleChebyshevRadicalNormalform
 import Omega.Zeta.XiJoukowskyModsquareQuantileInversion
