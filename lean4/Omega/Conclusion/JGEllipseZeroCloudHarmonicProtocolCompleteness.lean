@@ -1,0 +1,40 @@
+import Mathlib.Tactic
+
+namespace Omega.Conclusion
+
+/-- Concrete error-transfer data for the elliptic zero-cloud harmonic protocol.  The unit-circle
+discrepancy gives the bound, while the two Joukowsky pushforward identities identify that
+discrepancy with the protocol error. -/
+structure conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_data where
+  conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_unit_circle_discrepancy :
+    ℝ
+  conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_joukowsky_integral : ℝ
+  conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_protocol_error : ℝ
+  conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_error_bound : ℝ
+  conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_unit_circle_estimate :
+    conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_unit_circle_discrepancy ≤
+      conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_error_bound
+  conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_joukowsky_pushforward :
+    conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_joukowsky_integral =
+      conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_unit_circle_discrepancy
+  conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_zero_cloud_pushforward :
+    conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_protocol_error =
+      conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_joukowsky_integral
+
+/-- The harmonic protocol error is bounded by the transported unit-circle discrepancy bound. -/
+def conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_data.protocol_error_bound
+    (D : conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_data) : Prop :=
+  D.conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_protocol_error ≤
+    D.conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_error_bound
+
+/-- Paper label:
+`thm:conclusion-elliptic-transport-zero-cloud-harmonic-protocol-completeness`. -/
+theorem paper_conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness
+    (D : conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_data) :
+    D.protocol_error_bound := by
+  rw [conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_data.protocol_error_bound]
+  rw [D.conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_zero_cloud_pushforward,
+    D.conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_joukowsky_pushforward]
+  exact D.conclusion_elliptic_transport_zero_cloud_harmonic_protocol_completeness_unit_circle_estimate
+
+end Omega.Conclusion

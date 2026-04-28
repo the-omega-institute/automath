@@ -1258,6 +1258,7 @@ import Omega.Conclusion.TypedCertificateInverseLimitRigidity
 import Omega.Conclusion.JGEllipseConditionNumberThreshold
 import Omega.Conclusion.JGEllipseFixedEpsilonInformationBarrier
 import Omega.Conclusion.JGEllipseArithmeticInvertibilityCompleteness
+import Omega.Conclusion.JGEllipseZeroCloudHarmonicProtocolCompleteness
 import Omega.Conclusion.JGEllipsePackingSqrtLaw
 import Omega.Conclusion.JGEllipsePrimeLogGenerator
 import Omega.Conclusion.JGFocalDistanceDecoding
