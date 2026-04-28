@@ -191,6 +191,7 @@ import Omega.Zeta.TerminalZMTranslationTBranchDiscriminantC3SingularElimination
 import Omega.Zeta.PrimeRegisterMinimalIdealLeftZeroBand
 import Omega.Zeta.XiBulkCurvatureModsquareHolography
 import Omega.Zeta.XiBulkCurvatureMomentGeneratingFactorization
+import Omega.Zeta.XiGammaStrippedDepthSpectrumImaging
 import Omega.Zeta.XiBulkCurvatureBitComplexityLowerBound
 import Omega.Zeta.XiMomqStrongConverseBilinearLeakage
 import Omega.Zeta.XiFixedFreezingOracleStrongConverseExponent

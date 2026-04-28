@@ -173,6 +173,7 @@ import Omega.Conclusion.PrimeLogUnweightedEulerRegular
 import Omega.Conclusion.PrimeLogBoundaryCurrent
 import Omega.Conclusion.PrimeLogFaithfulLayerCountableInfiniteRank
 import Omega.Conclusion.PrimeLogInfiniteRankRegister
+import Omega.Conclusion.PrimorialCompletionHorocyclicPacket
 import Omega.Conclusion.Window6CubicCentralRelation
 import Omega.Conclusion.Window6LongRootFourierSelectionRule
 import Omega.Conclusion.Window6LongRootGL2Symmetry
@@ -220,6 +221,7 @@ import Omega.Conclusion.SchurEvenOddAverageTrivialAlternating
 import Omega.Conclusion.PoissonCauchyMirrorJetBlindness
 import Omega.Conclusion.PoissonSecondOrderTwoNodeBlindness
 import Omega.Conclusion.SchurNontrivialEnergyEqualsCycleVariance
+import Omega.Conclusion.ZeroMeanResidueBasisIndependentTomography
 import Omega.Conclusion.SchurSignatureParsevalSimplex
 import Omega.Conclusion.RanktwoSmithAuditConstantOnBooleanTorsor
 import Omega.Conclusion.RankoneLargeCouplingTwoPhaseSeparation
