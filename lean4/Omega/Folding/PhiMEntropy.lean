@@ -47,4 +47,13 @@ theorem paper_Phi_m_entropy
     hTopYm = hTopXAm := hCoverEntropy
     _ = Real.log rhoAm := hSftEntropy
 
+/-- Paper label: `prop:Phi_m-entropy`.
+
+The publication theorem is just the transitive closure of the factor entropy equality and
+the Perron/Fischer-cover entropy formula. -/
+theorem paper_phi_m_entropy (m : Nat) (hTopYm hTopXA logRho : ℝ)
+    (h_factor : hTopYm = hTopXA) (h_pf : hTopXA = logRho) : hTopYm = logRho := by
+  let _ := m
+  exact h_factor.trans h_pf
+
 end Omega.Folding
