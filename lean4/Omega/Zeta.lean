@@ -1031,6 +1031,7 @@ import Omega.Zeta.SelfdualPressureInversion
 import Omega.Zeta.SelfdualWindVanish
 import Omega.Zeta.SyncCyclotomicElimination
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotSofic
+import Omega.Zeta.XiMaxFiberParityHiddenbitFiniteSpectrum
 import Omega.Zeta.ZetaSyntaxZeckendorfPrimesNotRegular
 import Omega.Zeta.XiBasepointScanResidualKernelPolynomialFrame
 import Omega.Zeta.XiAbelianHolonomyFourierInversion
