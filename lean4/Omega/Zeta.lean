@@ -244,6 +244,7 @@ import Omega.Zeta.XiSdrImpliesGlobalShadowing
 import Omega.Zeta.XiSmithStaircaseTemplateSymq
 import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
 import Omega.Zeta.XiTimePart62dcbZgDirichletRiccatiResidue
+import Omega.Zeta.XiDisjointnessBooleanCongruenceSolvabilityGcd2m
 import Omega.Zeta.XiTimePart62dcbHologramAmbientIsometryDimension
 import Omega.Zeta.XiTimePart62dcaHologramAffineIFSFixedpointEquation
 import Omega.Zeta.XiTimePart62dLissajousKleinOrbitIntersection
