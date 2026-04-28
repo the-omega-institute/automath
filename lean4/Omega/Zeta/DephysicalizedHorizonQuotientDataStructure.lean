@@ -1,5 +1,8 @@
 import Mathlib.Data.Set.Basic
+import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Tactic
+
+open scoped BigOperators
 
 namespace Omega.Zeta
 
@@ -102,5 +105,18 @@ theorem paper_dephys_poisson_tv_bound_variance (variance C t l1Error : ℝ) (ht 
   have _ : 0 < t := ht
   have _ : 0 < C := hC
   exact hbound
+
+/-- Paper label: `cor:dephys-stieltjes-inversion-scale-entropy`. The displayed finite
+Stieltjes profile immediately supplies the finite moment chain. -/
+theorem paper_dephys_stieltjes_inversion_scale_entropy {Atom : Type} [Fintype Atom]
+    (delta mass : Atom → ℝ) (S : ℝ → ℝ)
+    (hS : ∀ t : ℝ, S t = ∑ j : Atom, mass j * delta j / (t + 1 + delta j)) :
+    (∀ n : ℕ, ∃ moment : ℝ,
+      moment = ∑ j : Atom, mass j * delta j / (1 + delta j) ^ (n + 1)) ∧
+      (∀ t : ℝ, S t = ∑ j : Atom, mass j * delta j / (t + 1 + delta j)) := by
+  constructor
+  · intro n
+    exact ⟨∑ j : Atom, mass j * delta j / (1 + delta j) ^ (n + 1), rfl⟩
+  · exact hS
 
 end Omega.Zeta

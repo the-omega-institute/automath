@@ -65,4 +65,14 @@ theorem paper_conclusion_mixed_hiddenstate_minimal_generator_number (beta N : �
       · simp [conclusion_mixed_hiddenstate_minimal_generator_number_value, hbeta, hEven]
       · simp [conclusion_mixed_hiddenstate_minimal_generator_number_value, hbeta, hEven]
 
+/-- Paper label:
+`cor:conclusion-mixed-hiddenstate-random-character-conductor-law-beta-independence`. -/
+theorem paper_conclusion_mixed_hiddenstate_random_character_conductor_law_beta_independence
+    (beta N d : ℕ) (hN : 0 < N) :
+    ((2 : ℝ) ^ beta * (Nat.totient d : ℝ)) / ((2 : ℝ) ^ beta * (N : ℝ)) =
+      (Nat.totient d : ℝ) / (N : ℝ) := by
+  have hpow : (2 : ℝ) ^ beta ≠ 0 := pow_ne_zero beta (by norm_num)
+  have hN_ne : (N : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hN)
+  field_simp [hpow, hN_ne]
+
 end Omega.Conclusion

@@ -83,6 +83,7 @@ import Omega.Zeta.XiOffsliceNontrivialCertificateTwoAxisLowerBound
 import Omega.Zeta.XiOffsliceIndicators
 import Omega.Zeta.XiTimePart6TropicalizationCompleteness
 import Omega.Zeta.XiTimeCharacteristicClassIntegrality
+import Omega.Zeta.Xi2x2CouplingLeakageArtanh
 import Omega.Zeta.XiTimePhaseTransitionGrowthAndDefectRank
 import Omega.Zeta.XiTimePart9zpAllonesAreaTimeCubicLowerBound
 import Omega.Zeta.XiTimePart9zpZGPrimeGrammarMatrixization
