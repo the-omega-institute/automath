@@ -1455,3 +1455,4 @@ import Omega.POM.DiagonalObservationStrongUnidentifiability
 import Omega.POM.ReplicaSoftcoreSecondExceptionalEigenvectorLocalization
 import Omega.POM.ReplicaSoftcoreSecondExceptionalEigenvalueAsymptotics
 import Omega.POM.CentralizerFpdimGolden
+import Omega.POM.AnomCoprimeTwoPointTest

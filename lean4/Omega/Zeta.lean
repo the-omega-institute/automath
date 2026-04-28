@@ -2407,3 +2407,4 @@ import Omega.Zeta.XiTimePart9zWindow6ThreeatomRenyiSpectrum
 import Omega.Zeta.LeyangImagRatioUnstableCrossratioInvariant
 import Omega.Zeta.XiHankelMinimalSamplingOnePointExceptionRobust
 import Omega.Zeta.XiMomAmplifyDetectTrueResonance
+import Omega.Zeta.FixedParameterNecklaceCorrection
