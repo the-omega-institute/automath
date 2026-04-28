@@ -243,6 +243,7 @@ import Omega.Zeta.XiSymqGoldenCqModPiPowerStaircase
 import Omega.Zeta.XiSymqGoldenCqModPiRankoneOuter
 import Omega.Zeta.XiLeyangTangentDimensionResurrection
 import Omega.Zeta.XiSymqGoldenArSmithClosedForm
+import Omega.Zeta.XiSymqGoldenCqPiAdicKernelGrowth
 import Omega.Zeta.XiTruncatedMomentMinAtomicRealization
 import Omega.Zeta.XiPadeHankelExactInversion
 import Omega.Zeta.XiSdrImpliesGlobalShadowing
