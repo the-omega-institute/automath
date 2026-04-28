@@ -187,6 +187,8 @@ import Omega.Zeta.XiRealInput40GroundEntropyEndpointSquareLaw
 import Omega.Zeta.XiRealInput40PrimitiveTwoStepExactCount
 import Omega.Zeta.XiFoldbinContinuousCapacityRightDerivativeAbelianCenter
 import Omega.Zeta.XiRealInput40ZeroTempCoreAbelConstantSplitting
+import Omega.Zeta.XiRealInput40ZeroTempAbelJumpQuarticLocked
+import Omega.Zeta.XiFoldbinUnderresolutionTwoAtomicCurvatureMeasure
 import Omega.Zeta.XiBulkEntropyMicrocanonicalLegendreDual
 import Omega.Zeta.XiParrySymbolMarkovPeripheralSpectrum
 import Omega.Zeta.XiReplayGodelPrimeTerminality
@@ -230,7 +232,6 @@ import Omega.Zeta.XiBoundedFluxForcesKappa0
 import Omega.Zeta.XiCpVisibleImpliesKappa0
 import Omega.Zeta.XiTimePart60acbBinfoldFirstNoncommutativeThreshold
 import Omega.Zeta.XiFoldbinMaxfiberSaturationFinalSubfibonacci
-import Omega.Zeta.XiFoldbinUnderresolutionTwoAtomicCurvatureMeasure
 import Omega.Zeta.XiTimeZetaSingularityFromGrowth
 import Omega.Zeta.Near1Log2OverLogphiDInfinityTranscendence
 import Omega.Zeta.Near1KappaInftyC1TranscendenceObstruction
