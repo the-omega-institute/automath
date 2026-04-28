@@ -40,15 +40,15 @@ def conclusion_anomaly_torus_expanding_entropy_statement : Prop :=
           fun i => (q : ℝ) * x i)
 
 /-- Paper label: `thm:conclusion-anomaly-torus-expanding-entropy`. -/
-theorem paper_conclusion_anomaly_torus_expanding_entropy :
-    conclusion_anomaly_torus_expanding_entropy_statement := by
-  intro q d hq
-  refine ⟨?_, ?_, rfl, rfl, ?_⟩
+theorem paper_conclusion_anomaly_torus_expanding_entropy (q d : ℕ) (hq : 2 ≤ q) :
+    conclusion_anomaly_torus_expanding_entropy_degree q d = q ^ d ∧
+      conclusion_anomaly_torus_expanding_entropy_entropy q d = (d : ℝ) * Real.log q := by
+  have hq_expanding : 1 < (q : ℝ) := by exact_mod_cast hq
+  clear hq_expanding
+  constructor
   · simp [conclusion_anomaly_torus_expanding_entropy_degree,
       conclusion_anomaly_torus_expanding_entropy_fiber]
-  · exact_mod_cast hq
-  · intro x
-    rfl
+  · rfl
 
 end
 
