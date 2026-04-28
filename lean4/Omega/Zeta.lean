@@ -2,6 +2,8 @@ import Omega.Zeta.XiFoldbinRankUnrankOptimalAdvicePolytime
 import Omega.Zeta.XiGoldenMetallicPerdigitExponentialEfficiency
 import Omega.Zeta.XiReplicaSoftcoreExceptionalPowerSumM6CompleteClosed
 import Omega.Zeta.XiTimePart60abHiddenGapKlRenyi2Collision
+import Omega.Zeta.XiAnchoredCapacityThreeProperties
+import Omega.Zeta.XiEqualityPattern2nCompleteIdentifiability
 import Omega.Zeta.XiRhUnitCircleReciprocal
 import Omega.Zeta.IdealLatticeMultichainPrimeStratification
 import Omega.Zeta.PickKernelGaugeRigidity
