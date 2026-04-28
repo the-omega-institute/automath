@@ -1,3 +1,4 @@
+import Omega.Zeta.XiTimeCharacteristicClassIntegrality
 import Omega.Zeta.XiTimeOnlyConservedQuantity
 import Omega.Zeta.XiWindow6DimensionSieveFinite
 import Omega.Zeta.XiBinaryJumpSemidirectAbelianizationCoinvariants
