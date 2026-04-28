@@ -740,6 +740,7 @@ import Omega.Folding.YmScanLengthAsymptotic
 import Omega.Folding.YmSingletonEssentialFiniteDelay
 import Omega.Folding.YmSofic
 import Omega.Folding.YmSyncTail
+import Omega.Folding.YmUnsyncPrefixPFSharp
 import Omega.Folding.YmSyncTailPfSharp
 import Omega.Folding.YmSynchronized
 import Omega.Folding.YmUnsyncStarPoleCluster
