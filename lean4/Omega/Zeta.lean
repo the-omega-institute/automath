@@ -139,6 +139,7 @@ import Omega.Zeta.XiFoldbinPureParitySolvableResidualKernel
 import Omega.Zeta.XiFoldbinSolvableShadowExponentialThinning
 import Omega.Zeta.XiTimePart66ZeroDensityNeverSufficient
 import Omega.Zeta.XiTimePart66MacroResonanceLogAbundance
+import Omega.Zeta.XiTimePart66UniformBaselineSqrtMRigidity
 import Omega.Zeta.XiToeplitzMinEigControlsDepth
 import Omega.Zeta.LocalizedIntegersDivisibilityTopologicalRigidity
 import Omega.Zeta.XiTimePart62dgFiberReducedEulerWittenParity
