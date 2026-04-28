@@ -224,6 +224,7 @@ import Omega.Zeta.XiHorizonMultipoleTemperednessDichotomy
 import Omega.Zeta.XiHorizonPoleResidueDepthStrength
 import Omega.Zeta.XiTimePart62dLeyangLstepOracleBudget
 import Omega.Zeta.XiTimePart9dFiniteToeplitzCertificate
+import Omega.Zeta.XiAbelianBlockToeplitzDirectsum
 import Omega.Zeta.TerminalReplicaSoftcoreInverseSupportCount
 import Omega.Zeta.XiTimePart9xNoBoundaryEquivariantFourValuedCompanionField
 import Omega.Zeta.XiTimePart53daBoundaryZ6Torsor
