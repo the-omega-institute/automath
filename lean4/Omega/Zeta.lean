@@ -1,4 +1,5 @@
 import Omega.Zeta.XiTimePart9n1bPrymC6HUniqueSquareRoot
+import Omega.Zeta.XiCollisionThresholdQuinticUnsolvability
 import Omega.Zeta.XiEndpointFluxLogSampleComplexity
 import Omega.Zeta.XiScanHankelRankEqualsDefect
 import Omega.Zeta.XiP7Q5B5PrimitiveElementDegree125
