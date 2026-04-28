@@ -1266,6 +1266,7 @@ import Omega.Conclusion.SizebiasedResidualTelescope
 import Omega.Conclusion.PhaseSamplingGrowthExponentRank
 import Omega.Conclusion.PcdimPropCycleRankMinimal
 import Omega.Conclusion.Period3FiberExactMultiplicity
+import Omega.Conclusion.PeriodicFiberAcceptanceRateNormalizedSharpSat
 import Omega.Conclusion.PhaseBudgetBinaryQuantization
 import Omega.Conclusion.PhaseChannelCrowdingLowerBound
 import Omega.Conclusion.PhaseCoverCompositionAdditionExtensionLaw
