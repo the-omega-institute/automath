@@ -202,6 +202,21 @@ theorem paper_conclusion_gauge_anomaly_uniform_moments_alphabet_closure :
   · intro m
     exact Omega.Folding.paper_fold_gauge_anomaly_variance_finite_window_closed m
 
+/-- Paper-facing exclusion of any additional mesoscopic correction base outside the exact
+dyadic-sign alphabet. -/
+def conclusion_gauge_anomaly_no_mesoscopic_exponents_statement : Prop :=
+  ∀ q : ℚ,
+    q ∉ ({((1 : ℚ) / 2), (-(1 : ℚ) / 2), ((1 : ℚ) / 4), (-(1 : ℚ) / 4)} : Finset ℚ) →
+      q ∉ conclusion_gauge_anomaly_uniform_moments_alphabet_closure_alphabet
+
+/-- Paper label: `cor:conclusion-gauge-anomaly-no-mesoscopic-exponents`. -/
+theorem paper_conclusion_gauge_anomaly_no_mesoscopic_exponents :
+    conclusion_gauge_anomaly_no_mesoscopic_exponents_statement := by
+  rcases paper_conclusion_gauge_anomaly_uniform_moments_alphabet_closure with
+    ⟨_, _, _, halphabet⟩
+  intro q hq hqAlphabet
+  exact hq (by simpa [halphabet] using hqAlphabet)
+
 /-- Concrete data for the four-dimensional auditable minimality wrapper. -/
 structure conclusion_gauge_anomaly_fourdim_auditable_minimality_data where
   Mtilde : ℤ → ℕ → ℤ
