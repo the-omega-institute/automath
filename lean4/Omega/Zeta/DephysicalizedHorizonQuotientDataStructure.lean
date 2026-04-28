@@ -1,3 +1,5 @@
+import Omega.Zeta.DephysMultiplicityIndexGapLinearCmi
+import Omega.Zeta.DephysPetzSufficiencyEquivalences
 import Mathlib.Data.Set.Basic
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Tactic
@@ -118,5 +120,34 @@ theorem paper_dephys_stieltjes_inversion_scale_entropy {Atom : Type} [Fintype At
   · intro n
     exact ⟨∑ j : Atom, mass j * delta j / (1 + delta j) ^ (n + 1), rfl⟩
   · exact hS
+
+/-- Concrete two-source anonymity template: the index/CMI bound gives the finite-period leakage
+lower bound, Petz sufficiency identifies conditional-independence faithfulness with recovery, and
+recovered external data universally simulates every external-output channel. -/
+def dephys_two_source_anonymy_completeness_template_statement : Prop :=
+  (∀ (n : ℕ) (ind1 ind2 ind0 Gamma cmiN : ℝ),
+      Gamma = Real.log (ind1 * ind2 / ind0) →
+        Real.log ((ind1 ^ n) * (ind2 ^ n) / (ind0 ^ n)) = (n : ℝ) * Gamma →
+          Real.log ((ind1 ^ n) * (ind2 ^ n) / (ind0 ^ n)) ≤ cmiN →
+            (n : ℝ) * Gamma ≤ cmiN) ∧
+    (∀ D : DephysPetzSufficiencyEquivalencesData,
+      D.relativeEntropyFaithful ↔ D.recoverable) ∧
+    (∀ {Bulk Ext Out : Type*} (E : Bulk → Ext) (R : Ext → Bulk)
+      (Gamma : Bulk → Out) (F : Set Bulk),
+        (∀ rho ∈ F, R (E rho) = rho) →
+          ∃ GammaTilde : Ext → Out, ∀ rho ∈ F, Gamma rho = GammaTilde (E rho))
+
+/-- Paper label: `cor:dephys-two-source-anonymy-completeness-template`. -/
+theorem paper_dephys_two_source_anonymy_completeness_template :
+    dephys_two_source_anonymy_completeness_template_statement := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro n ind1 ind2 ind0 Gamma cmiN hGamma hTensor hIndex
+    exact paper_dephys_multiplicity_index_gap_linear_cmi n ind1 ind2 ind0 Gamma cmiN
+      hGamma hTensor hIndex
+  · intro D
+    have hPetz := paper_dephys_petz_sufficiency_equivalences D
+    exact hPetz.1.symm.trans hPetz.2
+  · intro Bulk Ext Out E R Gamma F hRecover
+    exact paper_dephys_universal_zk_simulation_factorization E R Gamma F hRecover
 
 end Omega.Zeta
