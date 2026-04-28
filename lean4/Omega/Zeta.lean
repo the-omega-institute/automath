@@ -225,6 +225,7 @@ import Omega.Zeta.BlaschkePointSpectrumCorrespondence
 import Omega.Zeta.XiCMVPointSpectrumDimensionEqualsBlaschkeDegree
 import Omega.Zeta.XiKappaInvariantUnification
 import Omega.Zeta.SelfdualMaslovSingularDichotomy
+import Omega.Zeta.XiGramshiftCharpolyAsPhiImageOfDiskpoles
 import Omega.Zeta.WindingEqualsBlaschkeDegree
 import Omega.Zeta.SelfdualWindDegDblKappaIdentity
 import Omega.Zeta.XiAnomWindingObstruction
