@@ -2164,3 +2164,5 @@ import Omega.Conclusion.ZetaIsospectralSyncLinearSeparation
 import Omega.Conclusion.SerrinWulffRayEventualCenterlessGauge
 import Omega.Conclusion.RhoM2CrossTwistExclusion
 import Omega.Conclusion.SmithLocalZetaDirectsumCancellation
+import Omega.Conclusion.OddtailMinimalExactCompressorPointedUnitaryRigidity
+import Omega.Conclusion.OddtailFinitePointedHostSilentSector
