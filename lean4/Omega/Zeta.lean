@@ -1,4 +1,6 @@
 import Omega.Zeta.XiTimeCharacteristicClassIntegrality
+import Omega.Zeta.XiTimePart9ZbFoldpiTwoAtomicMomentCharacterization
+import Omega.Zeta.XiLogisticHellingerGramDeterminant
 import Omega.Zeta.XiTimeOnlyConservedQuantity
 import Omega.Zeta.XiNodePolynomialGoodReductionDiscriminant
 import Omega.Zeta.XiHankelDeterminantGramshiftDiscriminantIdentity
