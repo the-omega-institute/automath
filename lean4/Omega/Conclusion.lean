@@ -1740,3 +1740,4 @@ import Omega.Conclusion.PeriodicFiberBooleanIntervalMobius
 import Omega.Conclusion.FiniteVisibleArchimedeanEssentialPrimeLedgerSplitting
 import Omega.Conclusion.PadicHankelSimultaneousDeresonance
 import Omega.Conclusion.FibadicRamanujanKernelConvolutionPrimitiveIdempotent
+import Omega.Conclusion.Window6BoundaryHiddenSignModule

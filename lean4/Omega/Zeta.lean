@@ -2091,3 +2091,5 @@ import Omega.Zeta.XiJGLeyangBadPrimeRigidity
 import Omega.Zeta.XiFoldLastbitAsymptoticSufficiency
 import Omega.Zeta.Window6D2SliceUniqueLocalInteraction
 import Omega.Zeta.SingleFaceZeroOneMarginalLaw
+import Omega.Zeta.XiTimePart9zrNoncontractibleSixphaseLaw
+import Omega.Zeta.XiOutputPotentialOddPrimeBadModuliPrimeDensityOne
