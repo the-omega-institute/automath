@@ -835,6 +835,7 @@ import Omega.Conclusion.FiniteTestDepthBusybeaver
 import Omega.Conclusion.FiniteUnitGluingStokesInvisibility
 import Omega.Conclusion.OfflineFiberCountTailInvariance
 import Omega.Conclusion.FiniteWindowConnectedLieFactorCollapse
+import Omega.Conclusion.CircleLieFactorSquareRootThresholdObstruction
 import Omega.Conclusion.JensenDefectEnergyReverseklIdentity
 import Omega.Conclusion.PoissonJensenGapReversekl
 import Omega.Conclusion.JensenDefectZeroStockIdentity
