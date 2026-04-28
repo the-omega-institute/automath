@@ -204,6 +204,7 @@ import Omega.Conclusion.NullRejectOracleTrichotomyStructural
 import Omega.Conclusion.AuditedEvenWindowCassiniLock
 import Omega.Conclusion.GaugeAnomalySelfaveragingDespiteSuperpoisson
 import Omega.Conclusion.CriticalScalesRationalFunctionDecoupling
+import Omega.Conclusion.JGTransportOddpartGaloisInvariance
 import Omega.Conclusion.AutComponents
 import Omega.Conclusion.AmbiguityShellZetaSyncSplitting
 import Omega.Conclusion.AmbiguityShellZetaEntropyIsospectralDeformation
