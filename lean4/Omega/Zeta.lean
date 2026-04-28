@@ -222,6 +222,7 @@ import Omega.Zeta.AbelCongruenceEnergyParsevalBarcode
 import Omega.Zeta.AbelDecimationSemigroupIdentity
 import Omega.Zeta.AbelNormalizedResidueInvariantIntegrality
 import Omega.Zeta.ConclusionLocalizedSingleAxisAnomalyVanishing
+import Omega.Zeta.XiTimePart9xAbelianizedCertificateStrictInsufficiency
 import Omega.Zeta.LocalizedDirectsumTwoaxisLedgerCancellation
 import Omega.Zeta.XiLocalizedDirectsumPrimeTruncationMinimalChannels
 import Omega.Zeta.AbelGrowthExponentCriterion
