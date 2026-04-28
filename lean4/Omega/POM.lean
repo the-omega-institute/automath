@@ -219,6 +219,7 @@ import Omega.POM.AitkenWindowGoldenInvariance
 import Omega.POM.AnomSingleMomentCompleteEquivalence
 import Omega.POM.AnomClassAdditive
 import Omega.POM.AnomCohomologyClass
+import Omega.POM.ConclusionPomCurvatureAndTowerDefectSameKernel
 import Omega.POM.AnomMomentAmplification
 import Omega.POM.AnomUnboundedAmplification
 import Omega.POM.FibFusionSubmultiplicativity
