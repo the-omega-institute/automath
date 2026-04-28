@@ -2624,3 +2624,5 @@ import Omega.Zeta.XiTimePart9xdSingleFrequencySamplingExactTomography
 import Omega.Zeta.XiTimePart9xdRedshiftTaxComovingPrefixGap
 import Omega.Zeta.XiTimeTorsionSpectralFingerprint
 import Omega.Zeta.XiStableSemiringPtimeBiinterpretability
+import Omega.Zeta.XiTerminalZmLeyangLinearTwistDiscriminantQuinticUnsolvable
+import Omega.Zeta.XiSingularRingGreenPotentialClosed
