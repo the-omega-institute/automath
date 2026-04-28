@@ -200,6 +200,7 @@ import Omega.Conclusion.OffcriticalShiftCarriesNoNewGeometry
 import Omega.Conclusion.FiniteAuditDimensionPhaseTransition
 import Omega.Conclusion.OracleFixedHistogramNearExhaustiveQueryLowerBound
 import Omega.Conclusion.OracleSuccessStrongConverse
+import Omega.Conclusion.ReplayGodelSharpStrongConverse
 import Omega.Conclusion.OracleGapSaturationEdgeEnergy
 import Omega.Conclusion.OracleHotlayerAllRenyiCollapse
 import Omega.Conclusion.MicroescortOracleCapacityClosedForm

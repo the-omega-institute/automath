@@ -2546,3 +2546,5 @@ import Omega.Zeta.XiTimePart9zeAuditedEvenWindowAboveWulffFloor
 import Omega.Zeta.XiTimePart9waPressureBlindFinitepartMemory
 import Omega.Zeta.XiLeyangZeroDivisorTensorFunctorFaithful
 import Omega.Zeta.XiBulkCurvatureScaleGramTwoPhase
+import Omega.Zeta.XiBulkCurvatureGaussianRegularizationThreshold
+import Omega.Zeta.XiTerminalZmDeltaCa5WdEllipticPlusSpecial
