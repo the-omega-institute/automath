@@ -1,5 +1,7 @@
 import Omega.Zeta.XiCauchyPoissonKLVarianceReadout
 import Omega.Zeta.XiFoldbinAbsoluteRenyiEntropyConstantClosed
+import Omega.Zeta.XiWindow6ResetGapFibCoupling
+import Omega.Zeta.XiTimePart9zpWindow6QuotientIntrinsicallyGroupoidal
 import Omega.Zeta.TimePart9xgFiniteModulusTemplateMissesSlowestTwist
 import Omega.Zeta.DephysStieltjesInversionScaleEntropy
 import Omega.Zeta.XiCauchyPoissonMomentGapDissipation
