@@ -79,4 +79,13 @@ theorem paper_resonance_window_mod6_period_witness :
    resonance_window_eighteen_dvd_72,
    resonance_window_lcm_universal⟩
 
+/-- Exact paper-label wrapper for the mixed-residue mod-6 period-72 resonance window.
+    thm:conclusion-resonance-window-q13-q15-mod6-period72 -/
+theorem paper_conclusion_resonance_window_q13_q15_mod6_period72 :
+    Nat.lcm 8 18 = 72 ∧
+    (8 : Nat) ∣ 72 ∧
+    (18 : Nat) ∣ 72 ∧
+    (∀ d : Nat, 8 ∣ d → 18 ∣ d → 72 ∣ d) :=
+  paper_resonance_window_mod6_period_witness
+
 end Omega.Conclusion

@@ -153,6 +153,7 @@ import Omega.EA.Window6CountermodelCertificate
 import Omega.EA.Window6AffineStableTransfer
 import Omega.EA.ChiLayeredFiberSpectrumRecovery
 import Omega.EA.FoldIndwHighQExtractMaxfiberAndChi
+import Omega.EA.FoldCollision2AutLieDimensionRank
 import Omega.EA.Z2x2JointSpectralMeasure
 import Omega.EA.ZeckendorfAddFst
 import Omega.EA.ZeckendorfArithComputable
