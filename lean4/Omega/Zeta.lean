@@ -1,6 +1,8 @@
 import Omega.Zeta.ToeplitzCaratheodoryCompletionTailExclusion
 import Omega.Zeta.XiKappaKLArClosedAsymptotic
 import Omega.Zeta.XiPoissonCauchyKolmogorovSecondOrderConstant
+import Omega.Zeta.XiTimeDefectSmithReduction
+import Omega.Zeta.HardyCriterionDelta
 import Omega.Zeta.XiSaturatedShiftInvariantLatticeGcdLcm
 import Omega.Zeta.CapacityOverlapFunctionalL1Identity
 import Omega.Zeta.CauchyPoissonKlGoldenScale
