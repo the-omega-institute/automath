@@ -114,6 +114,7 @@ import Omega.Zeta.XiTimePart62daLissajousTwoNonimmersedPoints
 import Omega.Zeta.XiTimePart60ebHorizonLedgerSeparationPrinciple
 import Omega.Zeta.XiTimePart60ebFiniteVisibleLanguageSpectralSurrogates
 import Omega.Zeta.XiTimePart60ebCofinalPrimeLedgerFiniteHorizonNonreconstruction
+import Omega.Zeta.FiniteHorizonRhAuditTrilemma
 import Omega.Zeta.XiTimePart60ebPurePhaseOffsliceBifurcation
 import Omega.Zeta.XiAbelAr2ExpErrorForcesRightedgeZero
 import Omega.Zeta.XiTerminalReplicaSoftcorePartitionFibAggregatedCoeff
@@ -2281,3 +2282,4 @@ import Omega.Zeta.XiPoissonCoarsegrainingFirstMismatchKL
 import Omega.Zeta.XiKmsCode12ConnesTInvariant
 import Omega.Zeta.XiTimePart50dcMomentKernelConvexEnvelope
 import Omega.Zeta.XiBulkCurvatureMgfFactorizationZetaTower
+import Omega.Zeta.DefectRankControlsLdpFlatness
