@@ -247,6 +247,7 @@ import Omega.Conclusion.MomentFiniteGoodPrimesCrtReconstruction
 import Omega.Conclusion.MomentGoodPrimeShadowRigidity
 import Omega.Conclusion.MomentHankelBadPrimeStiffnessSupport
 import Omega.Conclusion.PadicHankelGlobalRigidifier
+import Omega.Conclusion.MaxfiberLeakageDecouplesFromHomotopy
 import Omega.Conclusion.Window6DyadicFlags
 import Omega.Conclusion.PadicHankelExactConditionLedger
 import Omega.Conclusion.PadicHankelAdjugateColumnValuationProfile

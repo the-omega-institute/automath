@@ -24,6 +24,20 @@ def xi_time_part9ze_center_condexp_pimsner_popa_index_statement : Prop :=
         xi_time_part9ze_center_condexp_pimsner_popa_index_finiteBlockBound Λ → 4 ≤ Λ) ∧
         ((64 : ℚ) / 21 ≠ 4)
 
+/-- Scalar weighted center-index package: the already audited window-`6` Pimsner--Popa
+maximum is `4`, while the scalar and doubled weighted normalizations evaluate to `64` and `32`.
+-/
+def xi_time_part9ze_scalar_weighted_center_condexp_indices_statement : Prop :=
+  xi_time_part9ze_center_condexp_pimsner_popa_index_statement ∧
+    ((64 : ℚ) / 16 =
+      xi_time_part9ze_center_condexp_pimsner_popa_index_window6FiberDegree
+        ⟨12, by norm_num⟩) ∧
+      ((64 : ℚ) / 1 = 64) ∧
+        ((64 : ℚ) / 2 = 32) ∧
+          ((32 : ℚ) / 8 =
+            xi_time_part9ze_center_condexp_pimsner_popa_index_window6FiberDegree
+              ⟨12, by norm_num⟩)
+
 lemma xi_time_part9ze_center_condexp_pimsner_popa_index_window6FiberDegree_le_four
     (i : Fin 21) :
     xi_time_part9ze_center_condexp_pimsner_popa_index_window6FiberDegree i ≤ 4 := by
@@ -42,5 +56,14 @@ theorem paper_xi_time_part9ze_center_condexp_pimsner_popa_index :
     norm_num [xi_time_part9ze_center_condexp_pimsner_popa_index_window6FiberDegree] at hblock
     exact hblock
   · norm_num
+
+/-- Paper label: `thm:xi-time-part9ze-scalar-weighted-center-condexp-indices`. -/
+theorem paper_xi_time_part9ze_scalar_weighted_center_condexp_indices :
+    xi_time_part9ze_scalar_weighted_center_condexp_indices_statement := by
+  refine ⟨paper_xi_time_part9ze_center_condexp_pimsner_popa_index, ?_, ?_, ?_, ?_⟩
+  · norm_num [xi_time_part9ze_center_condexp_pimsner_popa_index_window6FiberDegree]
+  · norm_num
+  · norm_num
+  · norm_num [xi_time_part9ze_center_condexp_pimsner_popa_index_window6FiberDegree]
 
 end Omega.Zeta
