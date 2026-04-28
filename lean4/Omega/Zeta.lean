@@ -1612,6 +1612,7 @@ import Omega.Zeta.LocalizedSolenoidPrimeKernelTomography
 import Omega.Zeta.LocalizedSolenoidNonzeroEndomorphismDegreeSemigroup
 import Omega.Zeta.LogMHolomorphicVariation
 import Omega.Zeta.FinitePartLogMTruncationExplicitBound
+import Omega.Zeta.XiTimePart9jTwoCycleExponentialCollapse
 import Omega.Zeta.LucasBarrier
 import Omega.Zeta.MellinUnitarySlice
 import Omega.Zeta.MellinUnitarySliceUnique
