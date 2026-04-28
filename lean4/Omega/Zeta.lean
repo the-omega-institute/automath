@@ -201,6 +201,7 @@ import Omega.Zeta.XiBulkCurvaturePrimitiveMaxDepthDominance
 import Omega.Zeta.XiHellingerToeplitzSymbolPoisson
 import Omega.Zeta.XiHellingerToeplitzSzegoThermoLimit
 import Omega.Zeta.XiHellingerToeplitzHeineSzegoCue
+import Omega.Zeta.XiHellingerChargePotentialDualityDtn
 import Omega.Zeta.XiHellingerGramCollisionHankelConstant
 import Omega.Zeta.XiSmithNormalizedKernelPositiveFiniteEulerCorrection
 import Omega.Zeta.XiFinitePrimeSupportLinearRegisterLaw
@@ -222,6 +223,7 @@ import Omega.Zeta.XiTimePart66UniformBaselineSqrtMRigidity
 import Omega.Zeta.XiToeplitzMinEigControlsDepth
 import Omega.Zeta.XiToeplitzVsScanLinearLowerbound
 import Omega.Zeta.LocalizedIntegersDivisibilityTopologicalRigidity
+import Omega.Zeta.XiRhCriterionEntropyEnergyRewrite
 import Omega.Zeta.XiTimePart62dgFiberReducedEulerWittenParity
 import Omega.Zeta.XiTimePart62dfCapacityCurveCompleteInversion
 import Omega.Zeta.XiTimePart62diMaxNoncontractibleFiberSixstepRenormalization
