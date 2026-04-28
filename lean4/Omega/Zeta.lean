@@ -910,6 +910,7 @@ import Omega.Zeta.XiDtnActsOnJensenKernel
 import Omega.Zeta.XiBulkBoundarySpeedMatching
 import Omega.Zeta.XiBulkBoundarySpeedMatchingScaleBracketing
 import Omega.Zeta.XiBulkCurvatureExactDeconvolutionOperator
+import Omega.Zeta.XiBulkCurvatureSuperresolutionPiBarrier
 import Omega.Zeta.XiLocalBinaryNormalizationFibonacciRigidity
 import Omega.Zeta.XiLocalizedSolenoidPeriodicGrowthMaxScale
 import Omega.Zeta.XiLocalizedFinitePrimeAuditArbitraryExponentialAmbiguity
@@ -1952,6 +1953,7 @@ import Omega.Zeta.XiLeyangMplus1PointExtrapolateOptimal
 import Omega.Zeta.XiLeyangEdDiscTildehVsH
 import Omega.Zeta.XiLeyangSplitPrimesQuadraticCharacterFilter
 import Omega.Zeta.XiLeyangSquareRootCollisionLeadingZerosN2
+import Omega.Zeta.XiLeyangPuiseuxM2Parabola
 import Omega.Zeta.XiPolynomialTransferMatrixBranchpointDiscriminantDegree
 import Omega.Zeta.XiLeyangTwoScaleCrossratioInvariant
 import Omega.Zeta.XiLeyangTwoScaleCrossratioSlopeExponent
