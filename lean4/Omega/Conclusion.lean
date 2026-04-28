@@ -1,4 +1,6 @@
 import Omega.Conclusion.FibadicKoopmanDepthAlgebraJointSpectrum
+import Omega.Conclusion.HydrogenicStrictTwolevelGaugeTower
+import Omega.Conclusion.HydrogenicPhaseblindAverageResidualBits
 import Omega.Conclusion.RealInput40CorePressureInvarianceAbelShift
 import Omega.Conclusion.PronyJacobianNegativeSpectrumVolumeIdentity
 import Omega.Conclusion.LowMultiplicitySectorLocalInvisibility
