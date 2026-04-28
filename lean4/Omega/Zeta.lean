@@ -219,6 +219,8 @@ import Omega.Zeta.XiUnitCircleCriterionSingularRingResultant
 import Omega.Zeta.XiUnitarySliceLeyangFoldedScan
 import Omega.Zeta.XiBayesianFreeEnergyVariationalPosteriorMinimizer
 import Omega.Zeta.XiFoldQueryComplexityExactM
+import Omega.Zeta.XiAnchoredCapacityExtremalFixedFlux
+import Omega.Zeta.XiLeyangSolenoidalProjectionRecoversCircle
 import Omega.Zeta.XiFoldCongruenceBinaryQuotientPeriod3
 import Omega.Zeta.XiLocalIndexEqualsLocalTimeFiber
 import Omega.Zeta.XiEndpointPoissonCauchyCayleyPullback
