@@ -24,6 +24,7 @@ import Omega.Zeta.XiTimePart9KCoprimeLedgerMemoryHorizon
 import Omega.Zeta.XiBinfoldScaledMultiplicityMellinCumulants
 import Omega.Zeta.XiBinfoldCriticalCapacityDefectAtomicLaw
 import Omega.Zeta.XiTimePart65aWeightedExactizationMatroidTopGap
+import Omega.Zeta.XiTimePart65aScalarVsMultichannelExponentialPrecisionGap
 import Omega.Zeta.XiLogcmHankelVandermondeMainterm
 import Omega.Zeta.XiNodePolynomialRationalReconstruction
 import Omega.Zeta.XiFoldHiddenLogmultiplicityBranchbitTwoPointLaw
@@ -148,6 +149,7 @@ import Omega.Zeta.XiP7S5OddRamificationDiscriminantAndConductor
 import Omega.Zeta.XiFiniteEulerPrimitiveSurgeryStrictAdditivity
 import Omega.Zeta.XiFiniteSkeletonEulerUniqueness
 import Omega.Zeta.ResidueRatioErrorPropagationRealpart
+import Omega.Zeta.XiCongruenceBlockResidueRatioRealpart
 import Omega.Zeta.XiOutputPotentialDirichletFourierRadiusBarrier
 import Omega.Zeta.XiAuditedEvenAbelCenterFibonacciSplitting
 import Omega.Zeta.XiAuditedEvenMinsectorHomotopyMod6Phase
