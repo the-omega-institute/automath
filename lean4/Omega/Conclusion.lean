@@ -1,4 +1,5 @@
 import Omega.Conclusion.FullResidueRegularSimplexOrbit
+import Omega.Conclusion.ZGFiniteCertificateFiberFullSpectrum
 import Omega.Conclusion.CdimPrecisionLedgerLbKphase
 import Omega.Conclusion.AtomicWittFactorQuantizedAbelShift
 import Omega.Conclusion.ComovingMinimalPrefixCompleteNegativeState
