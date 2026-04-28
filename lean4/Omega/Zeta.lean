@@ -1954,6 +1954,7 @@ import Omega.Zeta.AbelDiagonalRenormalizationRhCriterion
 import Omega.Zeta.XiFoldUniformBaselineGoldenThreshold
 import Omega.Zeta.XiJensenPoissonIntertwinerFractionalDerivative
 import Omega.Zeta.XiCayleyDepthScanAreaLowfreq
+import Omega.Zeta.XiCayleyLogdepthVsDepthfieldComparability
 import Omega.Zeta.XiEndpointJensenSingleDefectAreaLaw
 import Omega.Zeta.XiDiscLedgerKernelDual
 import Omega.Zeta.XiCoherenceAffineSubcube
