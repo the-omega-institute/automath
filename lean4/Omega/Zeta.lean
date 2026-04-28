@@ -2033,6 +2033,7 @@ import Omega.Zeta.XiEndpointPoissonWeightScaling
 import Omega.Zeta.XiNohairFixedpointFluxClosure
 import Omega.Zeta.XiEndpointPsiPoissonMonopoleAsymptotic
 import Omega.Zeta.XiEndpointPsiPoissonShiftLoewnerMonotone
+import Omega.Zeta.XiEndpointPsiPoissonCompleteMonotonicity
 import Omega.Zeta.XiEndpointTwoSymbolJet
 import Omega.Zeta.XiEndpointRecursiveRescalingTwoTerm
 import Omega.Zeta.XiEntropyGapExponentialSuppressionNonzeroFingerprint
@@ -2041,6 +2042,7 @@ import Omega.Zeta.XiBinfoldRenyi2EntropyDefectConstant
 import Omega.Zeta.XiBinfoldZeroBlockCollisionGapDecoupling
 import Omega.Zeta.XiExceptionalIntegerModelMqInverseClosedForm
 import Omega.Zeta.XiExceptionalSecularGenericFullSymmetric
+import Omega.Zeta.XiToeplitzNegativeSpectrumExponentialRate
 import Omega.Zeta.XiFiberSpectrumFiniteMomentRigidity
 import Omega.Zeta.XiFiberSpectrumHankelConductorPronyPadic
 import Omega.Zeta.XiFinitePrimeSupportHalfdimensionGapFormula
