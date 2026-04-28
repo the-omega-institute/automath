@@ -3,6 +3,7 @@ import Omega.Zeta.XiTimePart9zjResonanceWindowMod2OrderAliasing
 import Omega.Zeta.XiTimePart28CArtinStripOfflineCountAdditivity
 import Omega.Zeta.XiTimePart28CEndpointFluxExponentialCylinderContinuity
 import Omega.Zeta.XiCauchyPoissonKLVarianceReadout
+import Omega.Zeta.XiCauchyPoissonKLRigidity
 import Omega.Zeta.XiCoarsegrainingIllposednessExponentialLaw
 import Omega.Zeta.XiPoissonCauchyMultipoleInvisibilityConstruction
 import Omega.Zeta.XiScanTwoSourceMinDiscriminant
@@ -2288,6 +2289,7 @@ import Omega.Zeta.XiDefectScaleMixtureKLRigidity
 import Omega.Zeta.XiTimePart76IntegerEllipseAtomicLengthDivisibility
 import Omega.Zeta.XiTerminalZmS3EndoscopicPrymA2Coxeter
 import Omega.Zeta.XiTerminalFixedOrderFreezingThreshold
+import Omega.Zeta.XiTerminalFixedOrderEscortMaxfiberConcentration
 import Omega.Zeta.XiTerminalGbcStabilizedTerminalObject
 import Omega.Zeta.XiLogisticFanoLowerBoundFromError
 import Omega.Zeta.XiHankelOfflineModularAuditThreshold
