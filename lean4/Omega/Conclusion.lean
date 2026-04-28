@@ -1544,6 +1544,7 @@ import Omega.Conclusion.LucasHankelCurvatureRamanujanTomography
 import Omega.Conclusion.RhsharpQAmplifiedAddressBarrier
 import Omega.Conclusion.RhsharpForcesPerronPureQuotient
 import Omega.Conclusion.S4BoundaryTotalTorusRankConservation
+import Omega.Conclusion.S4BoundaryDifferentExponent72
 import Omega.Conclusion.S4HodgeDeterminesFixedpointCounts
 import Omega.Conclusion.S4HodgeRecoversFullBranchType
 import Omega.Conclusion.S4HurwitzJacobianFourGeneratorSemiring
