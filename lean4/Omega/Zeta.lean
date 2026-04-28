@@ -9,6 +9,7 @@ import Omega.Zeta.XiRhCayleyHyperbolicity
 import Omega.Zeta.IdealLatticeMultichainPrimeStratification
 import Omega.Zeta.PickKernelGaugeRigidity
 import Omega.Zeta.XiPoissonFirstMismatchDissipationLeading
+import Omega.Zeta.XiPoissonVarianceMismatchTVLeading
 import Omega.Zeta.XiPoissonFdivSixthOrderMu3Mu4
 import Omega.Zeta.XiTimePart60ab2Window6BoundaryEightSuperselection
 import Omega.Zeta.XiTimePart60ab2Window6CentralBulkParitySplittingRatio
