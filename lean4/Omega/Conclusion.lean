@@ -2228,3 +2228,4 @@ import Omega.Conclusion.PhaseCoverPrimeLedgerSupportUnion
 import Omega.Conclusion.TwoAdicAddressPrimeLedgerOrthogonalIrreducibility
 import Omega.Conclusion.EscortTiltedLdpMaxfiberAttractor
 import Omega.Conclusion.ResonanceWindowGoodprimeExactModpRecovery
+import Omega.Conclusion.ContinuousStrictDropImpliesDiscreteFiniteCertificate

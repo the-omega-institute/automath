@@ -2634,3 +2634,5 @@ import Omega.Zeta.XiTimeTorsionSpectralFingerprint
 import Omega.Zeta.XiStableSemiringPtimeBiinterpretability
 import Omega.Zeta.XiTerminalZmLeyangLinearTwistDiscriminantQuinticUnsolvable
 import Omega.Zeta.XiSingularRingGreenPotentialClosed
+import Omega.Zeta.XiOutputPotentialOddPrimeRhObstructionIndexToOne
+import Omega.Zeta.XiToeplitzFirstFailureMinimalBlockingPolynomial
