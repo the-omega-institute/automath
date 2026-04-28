@@ -82,4 +82,18 @@ theorem paper_xi_poisson_cauchy_two_parameter_tracefree_covariance_structure
   · intro t x
     rfl
 
+/-- Paper label: `cor:xi-poisson-cauchy-covariance-balance-supersecond-collapse`. -/
+theorem paper_xi_poisson_cauchy_covariance_balance_supersecond_collapse
+    (D : xi_poisson_cauchy_two_parameter_tracefree_covariance_structure_data)
+    (hvar : D.varianceGamma = D.varianceDelta)
+    (hcov : D.covariance = 0) :
+    D.has_tracefree_second_order_normal_form ∧ ∀ t x : ℝ, D.tracefreeCorrection t x = 0 := by
+  refine ⟨paper_xi_poisson_cauchy_two_parameter_tracefree_covariance_structure D, ?_⟩
+  intro t x
+  simp [
+    xi_poisson_cauchy_two_parameter_tracefree_covariance_structure_data.tracefreeCorrection,
+    xi_poisson_cauchy_two_parameter_tracefree_covariance_structure_data.gammaSecondDerivative,
+    xi_poisson_cauchy_two_parameter_tracefree_covariance_structure_data.mixedDerivative,
+    hvar, hcov]
+
 end Omega.Zeta
