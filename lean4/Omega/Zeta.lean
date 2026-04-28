@@ -38,6 +38,7 @@ import Omega.Zeta.XiBinfoldCriticalCapacityDefectAtomicLaw
 import Omega.Zeta.XiTimePart65aWeightedExactizationMatroidTopGap
 import Omega.Zeta.XiTimePart65aScalarVsMultichannelExponentialPrecisionGap
 import Omega.Zeta.XiLogcmHankelVandermondeMainterm
+import Omega.Zeta.XiVandermondeConditioningLowerBoundDisc
 import Omega.Zeta.XiNodePolynomialRationalReconstruction
 import Omega.Zeta.XiFoldHiddenLogmultiplicityBranchbitTwoPointLaw
 import Omega.Zeta.XiTimePart60abHiddenLogmultiplicityPressureDerivatives
@@ -2094,6 +2095,7 @@ import Omega.Zeta.XiPickPoissonSchurOneStepCollapse
 import Omega.Zeta.XiPoissonSecondOrderTwoCosineChannels
 import Omega.Zeta.XiPomMinrealVsSpectralBudgetSeparation
 import Omega.Zeta.XiPronyDecisionVsReconstructionOneSampleGap
+import Omega.Zeta.XiPronyDecisionReconstructionOneSampleGap
 import Omega.Zeta.XiPronyMomentMapJacobianDelta4
 import Omega.Zeta.XiPwNoContinuousHair
 import Omega.Zeta.XiPwTypeSafetyNull
