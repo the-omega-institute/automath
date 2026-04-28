@@ -2574,3 +2574,5 @@ import Omega.Zeta.XiTerminalZmDeltaCa5WdEllipticPlusSpecial
 import Omega.Zeta.XiTimePart9zeWulffSchurConvexEnvelope
 import Omega.Zeta.XiTimePart28bStripJacobiQuarticPsd
 import Omega.Zeta.LocalizedPhaseSamplingNotFinitelyGenerated
+import Omega.Zeta.XiSelfdualScatteringSufficientRh
+import Omega.Zeta.XiVisibleAnomIffRadialWallcrossing
