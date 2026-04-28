@@ -1,25 +1,29 @@
-import Mathlib.Tactic
+import Mathlib.Data.Fintype.Card
 
 namespace Omega.Conclusion
 
+open scoped Classical
+open Classical
+
+attribute [local instance] Classical.decEq
 attribute [local instance] Classical.propDecidable
 
-/-- Paper label: `cor:conclusion-single-fiber-assignment-extraction-bound`. -/
-theorem paper_conclusion_single_fiber_assignment_extraction_bound
-    {n L : ℕ} {Fx Code : Type*} [Fintype Fx] [Fintype Code]
-    (hFx : Fintype.card Fx = 2 ^ n) (hCode : Fintype.card Code ≤ 2 ^ L)
-    (E : Fx → Code) (D : Code → Fx) :
-    Fintype.card {x : Fx // D (E x) = x} ≤ 2 ^ L := by
-  classical
-  have _ : Fintype.card Fx = 2 ^ n := hFx
-  have hInjective :
-      Function.Injective (fun x : {x : Fx // D (E x) = x} => E x.1) := by
-    intro x y hxy
+/-- Paper label: `cor:conclusion-single-fiber-assignment-extraction-bound`.
+Successful assignment reconstructions inject into the code alphabet through the encoder. -/
+theorem paper_conclusion_single_fiber_assignment_extraction_bound {F Code Bits : Type*}
+    [Fintype F] [Fintype Code] [Fintype Bits] (E : F → Code) (g : Code → Bits)
+    (π : F ≃ Bits) (L : ℕ) (hCode : Fintype.card Code ≤ 2 ^ L) :
+    Fintype.card {ω : F // g (E ω) = π ω} ≤ 2 ^ L := by
+  have hsuccess_le_code :
+      Fintype.card {ω : F // g (E ω) = π ω} ≤ Fintype.card Code := by
+    refine Fintype.card_le_of_injective (fun ω : {ω : F // g (E ω) = π ω} => E ω.1) ?_
+    intro ω₁ ω₂ hE
     apply Subtype.ext
+    apply π.injective
     calc
-      x.1 = D (E x.1) := x.2.symm
-      _ = D (E y.1) := congrArg D hxy
-      _ = y.1 := y.2
-  exact (Fintype.card_le_of_injective _ hInjective).trans hCode
+      π ω₁.1 = g (E ω₁.1) := ω₁.2.symm
+      _ = g (E ω₂.1) := congrArg g hE
+      _ = π ω₂.1 := ω₂.2
+  exact hsuccess_le_code.trans hCode
 
 end Omega.Conclusion
