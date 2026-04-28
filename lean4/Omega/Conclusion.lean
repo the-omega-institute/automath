@@ -1970,3 +1970,5 @@ import Omega.Conclusion.S4HodgeFourBlockPsdConeDecoupling
 import Omega.Conclusion.OracleSinglecurveTomographyCompleteness
 import Omega.Conclusion.Window6HammingWeylOrbitDetector
 import Omega.Conclusion.MaxfiberHomotopyVisibilityDensity
+import Omega.Conclusion.Window6CartanSyzygyOrthogonalRigiditySplitting
+import Omega.Conclusion.Window6DoubleGaugeQuarticTomographyCompleteness
