@@ -1200,6 +1200,7 @@ import Omega.Conclusion.MinRegisterHalting
 import Omega.Conclusion.MinimalStateComplexityHalting
 import Omega.Conclusion.MinsectorDoublescaleFeedbackLaw
 import Omega.Conclusion.MixedHiddenStateFiniteAbelianClassification
+import Omega.Conclusion.MixedHiddenStateOddOrderBlindness
 import Omega.Conclusion.MixedHiddenStateCharacterConductorZeta
 import Omega.Conclusion.MixedCollisionCharacteristicHilbertGeometry
 import Omega.Conclusion.MixedCollisionOverlapMultisetRigidity
