@@ -3,6 +3,7 @@ import Mathlib.Tactic
 import Omega.Conclusion.Window6Collision
 import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.GaugeAnomalySecondFactorialFiniteClosed
+import Omega.Folding.GaugeAnomalySpectrumTomographyCertificateTriangle
 import Omega.Folding.GaugeAnomalyVarianceFiniteWindowClosed
 
 namespace Omega.Conclusion
@@ -200,5 +201,30 @@ theorem paper_conclusion_gauge_anomaly_uniform_moments_alphabet_closure :
     exact Omega.Folding.paper_fold_gauge_anomaly_second_factorial_finite_closed m
   · intro m
     exact Omega.Folding.paper_fold_gauge_anomaly_variance_finite_window_closed m
+
+/-- Concrete data for the four-dimensional auditable minimality wrapper. -/
+structure conclusion_gauge_anomaly_fourdim_auditable_minimality_data where
+  Mtilde : ℤ → ℕ → ℤ
+  spectralData : Omega.Folding.BernoulliPAutocovarianceGeneratingRationalData
+  autocovarianceData : Omega.Folding.GaugeAnomalyAutocovarianceData
+  recurrence :
+    ∀ u m,
+      Mtilde u (m + 4) =
+        Mtilde u (m + 3) + (2 * u + 1) * Mtilde u (m + 2) +
+          (u ^ 3 - 2 * u) * Mtilde u (m + 1) - 2 * u * Mtilde u m
+
+/-- Paper-facing claim for finite-window gauge-anomaly auditable minimality. -/
+def conclusion_gauge_anomaly_fourdim_auditable_minimality_claim
+    (D : conclusion_gauge_anomaly_fourdim_auditable_minimality_data) : Prop :=
+  ∀ r, r < 4 →
+    ¬ Omega.Folding.foldGaugeAnomalyTomographyStateModelOrder r D.autocovarianceData
+
+/-- Paper label: `thm:conclusion-gauge-anomaly-fourdim-auditable-minimality`. -/
+theorem paper_conclusion_gauge_anomaly_fourdim_auditable_minimality
+    (D : conclusion_gauge_anomaly_fourdim_auditable_minimality_data) :
+    conclusion_gauge_anomaly_fourdim_auditable_minimality_claim D := by
+  intro r hr
+  exact Omega.Folding.paper_fold_gauge_anomaly_spectrum_tomography_certificate_triangle
+    D.Mtilde D.spectralData D.autocovarianceData r D.recurrence hr
 
 end Omega.Conclusion
