@@ -2339,3 +2339,5 @@ import Omega.Zeta.XiTimePart69cWindow6RootBoundaryBlindCodim3
 import Omega.Zeta.XiAdamsNormZeroTransport
 import Omega.Zeta.XiOffcriticalConstructibleButNullOrExtraRegister
 import Omega.Zeta.XiTimePart9zWindow6LocalEntropySourceRenormalization
+import Omega.Zeta.XiFoldSinglebitResidueMiBounds
+import Omega.Zeta.XiThresholdModularGapMaxfiberEquivalence
