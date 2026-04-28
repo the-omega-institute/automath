@@ -224,6 +224,7 @@ import Omega.Zeta.XiPoissonCauchyTwoParameterTracefreeCovarianceStructure
 import Omega.Zeta.XiWindow6SheetParityAnchorM6
 import Omega.Zeta.XiWindow6DyadicMicrostateExactThreeBlockMassSplit
 import Omega.Zeta.XiPoissonCauchyI1OverKlRatio2m
+import Omega.Zeta.AtomicWallcrossingStieltjesIdentifiability
 import Omega.Zeta.XiCauchyPoissonFdivUniversalConstant
 import Omega.Zeta.XiPoissonTvKlSecondOrder
 import Omega.Zeta.XiBulkCurvaturePrimitiveMaxDepthDominance
