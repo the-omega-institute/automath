@@ -204,6 +204,7 @@ import Omega.Zeta.XiBasepointScanCodim1ExactGreedyWeightIndependence
 import Omega.Zeta.XiScaleCoherenceCollisionVandermonde
 import Omega.Zeta.XiHankelOfflineAuditMaxPrimeLogscale
 import Omega.Zeta.XiTimePart9eRecurrenceJacobianHankel
+import Omega.Zeta.XiHankelNfGldSliceStabilizer
 import Omega.Zeta.XiBasepointScanDoptimalLastStepWeightFree
 import Omega.Zeta.XiBasepointScanLambdaCauchyLagrangeClosedForm
 import Omega.Zeta.XiBasepointScanLeverageGapCodim1CriticalPoints
