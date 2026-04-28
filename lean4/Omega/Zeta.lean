@@ -251,6 +251,7 @@ import Omega.Zeta.AbelDualBaseDealiasingBakerEffectiveSeparation
 import Omega.Zeta.AbelHankelSpectralGapSinglePole
 import Omega.Zeta.AbelPowerBaseGapAmplification
 import Omega.Zeta.AbelPowerbaseCovariancePolePowerMap
+import Omega.Zeta.XiCayleyU1InterferenceProjectionUnification
 import Omega.Zeta.AbelPoleJuliaRigidity
 import Omega.Zeta.AbelDampingThresholdBifurcation
 import Omega.Zeta.AbelSupercriticalDampingConstantAttractor
