@@ -221,6 +221,7 @@ import Omega.Zeta.XiGoldenChainReverseklLogBarrier
 import Omega.Zeta.XiGoldenChainPoissonKLAlignmentRate
 import Omega.Zeta.XiReverseKLPoissonExtremalGapFourierStability
 import Omega.Zeta.XiReverseKLPoissonSemigroupDissipation
+import Omega.Zeta.XiLeyangCrossratioDemixingCrossing
 import Omega.Zeta.TwoParamDisjointnessFullSpectrumSecular
 import Omega.Zeta.XiLeyangAngleOverPiIrrational
 import Omega.Zeta.XiLeyangLogSingularityTranscendence
