@@ -1964,3 +1964,5 @@ import Omega.Conclusion.FrozenPhasePeakObstructionLocalization
 import Omega.Conclusion.DiscriminantSupportLocalGlobalUnification
 import Omega.Conclusion.S4HodgeFourBlockPsdConeDecoupling
 import Omega.Conclusion.OracleSinglecurveTomographyCompleteness
+import Omega.Conclusion.Window6HammingWeylOrbitDetector
+import Omega.Conclusion.MaxfiberHomotopyVisibilityDensity
