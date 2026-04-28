@@ -262,6 +262,8 @@ import Omega.Zeta.XiPoissonTvKlSecondOrder
 import Omega.Zeta.XiBulkCurvaturePrimitiveMaxDepthDominance
 import Omega.Zeta.XiKmsCode12TypeRigidity
 import Omega.Zeta.XiFiniteTruncationSpectrumConverges
+import Omega.Zeta.AtomicWittSurgeryPressureLdpAbelInvariance
+import Omega.Zeta.TopBandMaxLayerSufficiency
 import Omega.Zeta.XiHellingerToeplitzSymbolPoisson
 import Omega.Zeta.XiHellingerToeplitzSzegoThermoLimit
 import Omega.Zeta.XiHellingerToeplitzHeineSzegoCue
