@@ -5,6 +5,8 @@ import Omega.Zeta.XiGodelPrimeRegisterExteriorVolumeQuadraticLaw
 import Omega.Zeta.XiHankelHvzkConstantRoundVsDefectLinearRound
 import Omega.Zeta.XiTimePart50dcPeriodicResidueRationalCoreOctic
 import Omega.Zeta.XiP7S5MinimalArtinDedekindZetaFactorization
+import Omega.Zeta.LocalizedPhaseSamplingClosedForm
+import Omega.Zeta.LocalizedDyadicPhaseBlindness
 import Omega.Zeta.XiUniqueTransverseVsInfinitePrimeRankSeparation
 import Omega.Zeta.XiHilbertPolyaJacobi
 import Omega.Zeta.XiTimePart9zWindow6MomentInvolutiveAlgebraRealization
