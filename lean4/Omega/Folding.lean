@@ -674,6 +674,7 @@ import Omega.Folding.PhiEquivariantPublication
 import Omega.Folding.P10LeyangIrreducibleRootSplitDensities
 import Omega.Folding.PhiMEntropy
 import Omega.Folding.PhiMEntropyNoDrop
+import Omega.Folding.PhiMEquivariant
 import Omega.Folding.PhiMFactorOnSubshift
 import Omega.Folding.PhiMParry
 import Omega.Folding.PhiMParryPushforward

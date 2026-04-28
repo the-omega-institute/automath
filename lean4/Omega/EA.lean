@@ -84,6 +84,7 @@ import Omega.EA.KernelWeightedPrimeOrbit
 import Omega.EA.KernelZeroTemp
 import Omega.EA.MonoidQuotientIsN
 import Omega.EA.MulByIteratedAdd
+import Omega.EA.MulFromSuccessor
 import Omega.EA.MulNoNewPrimitive
 import Omega.EA.MinStateSpecFlow
 import Omega.EA.MultiplicativeEnergyCompilable
