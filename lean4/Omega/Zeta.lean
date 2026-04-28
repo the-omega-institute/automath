@@ -228,6 +228,8 @@ import Omega.Zeta.XiSymqGoldenCqModPiPowerStaircase
 import Omega.Zeta.XiSymqGoldenCqModPiRankoneOuter
 import Omega.Zeta.XiLeyangTangentDimensionResurrection
 import Omega.Zeta.XiSymqGoldenArSmithClosedForm
+import Omega.Zeta.XiTruncatedMomentMinAtomicRealization
+import Omega.Zeta.XiPadeHankelExactInversion
 import Omega.Zeta.XiSdrImpliesGlobalShadowing
 import Omega.Zeta.XiSmithStaircaseTemplateSymq
 import Omega.Zeta.XiTimePart62dcbZgDensityRiccatiEuler
