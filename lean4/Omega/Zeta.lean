@@ -225,6 +225,8 @@ import Omega.Zeta.OffcriticalPoissonSemigroupHomomorphism
 import Omega.Zeta.XiCauchyPoissonTvKlSharpInterface
 import Omega.Zeta.DephysRepulsionRadiusZeroCountDriving
 import Omega.Zeta.DephysPwNohair
+import Omega.Zeta.XiComovingPrefixBitBudgetGain
+import Omega.Zeta.XiFoldRightInverseCountDispersionLowerBound
 import Omega.Zeta.XiTimePart62daFibonacciSolenoidCofinalUniversal
 import Omega.Zeta.XiTimePart62daDirichletTwistsIntrinsicOnFibonacciLevels
 import Omega.Zeta.XiTimePart62daLissajousTwoNonimmersedPoints
