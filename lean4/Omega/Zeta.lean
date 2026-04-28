@@ -223,6 +223,7 @@ import Omega.Zeta.XiPlyQ5CommonRootsPrime3173
 import Omega.Zeta.XiIntegerEllipseGrothendieckDoubleCountableRank
 import Omega.Zeta.BlaschkePointSpectrumCorrespondence
 import Omega.Zeta.XiCMVPointSpectrumDimensionEqualsBlaschkeDegree
+import Omega.Zeta.XiKappaInvariantUnification
 import Omega.Zeta.SelfdualMaslovSingularDichotomy
 import Omega.Zeta.WindingEqualsBlaschkeDegree
 import Omega.Zeta.SelfdualWindDegDblKappaIdentity
