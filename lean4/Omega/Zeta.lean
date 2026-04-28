@@ -76,6 +76,7 @@ import Omega.Zeta.XiFoldUniformBaselineClassicalFdivBernoulliCollapse
 import Omega.Zeta.XiFoldbinAuditedEvenMinsectorCollisionExplicitFloor
 import Omega.Zeta.XiLeakageZeroOffsetSum
 import Omega.Zeta.XiWindow6B3C3WeylAverageMeasureSecondMoment
+import Omega.Zeta.XiWindow6BoundaryParityC3EquivariantIdempotents
 import Omega.Zeta.XiHilbertPolyaCMV
 import Omega.Zeta.XiHankelMaxminorHeightBoundDeterministicCrtReconstruction
 import Omega.Zeta.XiBulkBoundaryQuadraticClosureAudit
