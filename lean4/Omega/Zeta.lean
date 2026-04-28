@@ -347,6 +347,7 @@ import Omega.Zeta.XiWindow6SheetParityAnchorM6
 import Omega.Zeta.XiWindow6DyadicMicrostateExactThreeBlockMassSplit
 import Omega.Zeta.XiPoissonCauchyI1OverKlRatio2m
 import Omega.Zeta.XiTimePart9faDyadicFiniteMomentCompleteness
+import Omega.Zeta.XiTimePart9fSideinfoExpectedLengthLowerBound
 import Omega.Zeta.XiPoissonCauchyCayleyMultipoleFourier
 import Omega.Zeta.AtomicWallcrossingStieltjesIdentifiability
 import Omega.Zeta.XiCauchyPoissonFdivUniversalConstant
