@@ -240,6 +240,8 @@ import Omega.Zeta.XiHellingerToeplitzHeineSzegoCue
 import Omega.Zeta.XiHellingerChargePotentialDualityDtn
 import Omega.Zeta.XiHellingerGramCollisionHankelConstant
 import Omega.Zeta.XiSmithNormalizedKernelPositiveFiniteEulerCorrection
+import Omega.Zeta.XiWindow6ResolutionArithmeticSplitSeparation
+import Omega.Zeta.XiEdXh2TorsionDictionaryMod2
 import Omega.Zeta.XiFinitePrimeSupportLinearRegisterLaw
 import Omega.Zeta.XiFiniteDepthPrimesliceBranchPrefixCompression
 import Omega.Zeta.XiLayeredPrimesliceComplexityActiveDepth
