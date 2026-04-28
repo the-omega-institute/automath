@@ -222,6 +222,7 @@ import Omega.Conclusion.Window6GaugeEntropyConstantsFromTailMeasure
 import Omega.Conclusion.Window6CoinvariantPoincarePackageGeneratedByTailMeasure
 import Omega.Conclusion.AlphabetThreshold
 import Omega.Conclusion.UniaxialPadicTraceEncoding
+import Omega.Conclusion.EndpointStoppingThreeConstantGoldenSaving
 import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.AnomalyTwoCoprimeLayerTomography
 import Omega.Conclusion.AxialScreenDirectSumVisibleHiddenSplit
