@@ -108,6 +108,7 @@ import Omega.Zeta.XiFoldLastbitSubcriticalSampleLecamEquivalence
 import Omega.Zeta.XiTimePart9sbEscortFixedNBinomialBlackwell
 import Omega.Zeta.XiBulkCurvatureMassQuantization
 import Omega.Zeta.BulkCurvatureMaxLipschitz
+import Omega.Zeta.BulkCurvatureResidueDirichletData
 import Omega.Zeta.BulkCurvatureResidueExtremalRecovery
 import Omega.Zeta.XiPoissonCauchyLocationScaleInformationProjection
 import Omega.Zeta.XiPoissonCauchyComplexStieltjesFullExpansion
