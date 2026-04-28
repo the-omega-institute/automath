@@ -2049,3 +2049,4 @@ import Omega.Conclusion.Window6AnomalyToralQuotientMod2Recovery
 import Omega.Conclusion.WidomNearestBranchSemiAlgebraicClosure
 import Omega.Conclusion.EllipticE3TwoTorsionQ6Branching
 import Omega.Conclusion.PoissonCauchyUniversalQuarticInformationMetric
+import Omega.Conclusion.BlackwellCollapseVsIntermediateSystemExplosion
