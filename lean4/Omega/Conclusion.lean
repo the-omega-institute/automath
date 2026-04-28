@@ -184,6 +184,7 @@ import Omega.Conclusion.OracleHotlayerAllRenyiCollapse
 import Omega.Conclusion.MicroescortOracleCapacityClosedForm
 import Omega.Conclusion.FoldgaugeLocalExtractionBudgetBarrier
 import Omega.Conclusion.MomentFiniteGoodPrimesCrtReconstruction
+import Omega.Conclusion.MomentGoodPrimeShadowRigidity
 import Omega.Conclusion.MomentHankelBadPrimeStiffnessSupport
 import Omega.Conclusion.PadicHankelGlobalRigidifier
 import Omega.Conclusion.PadicHankelExactConditionLedger
@@ -221,6 +222,7 @@ import Omega.Conclusion.UniformGridQuantizedStokesPoincareScale
 import Omega.Conclusion.OnequarterCrossCategoryRigidity
 import Omega.Conclusion.Window6MinimalExactReplaySymmetryBreaking
 import Omega.Conclusion.Window6ShellEscortFourchamberPhaseDiagram
+import Omega.Conclusion.ProjectivePressureIntegerAlgebraicAnchor
 import Omega.Conclusion.Window6ExteriorShellSmithGeometry
 import Omega.Conclusion.LocalizedHostPhaseQPullback
 import Omega.Conclusion.EntropyGapRankoneNegativeCollapse
