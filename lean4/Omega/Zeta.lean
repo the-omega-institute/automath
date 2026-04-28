@@ -225,6 +225,7 @@ import Omega.Zeta.TVEnvelopeMarkov
 import Omega.Zeta.XiFoldLastbitSubcriticalSampleLecamEquivalence
 import Omega.Zeta.XiTimePart9sbEscortFixedNBinomialBlackwell
 import Omega.Zeta.XiBulkCurvatureMassQuantization
+import Omega.Zeta.XiTimePart9zWindow6FixedSectorDistinctCollision
 import Omega.Zeta.XiBulkCurvatureProbabilityMoments
 import Omega.Zeta.XiTimePart9waCoreGeneratedThresholdResidueShell
 import Omega.Zeta.XiAbelianChannelKappaCarAdditivity
