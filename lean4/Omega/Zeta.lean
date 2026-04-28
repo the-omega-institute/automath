@@ -1865,6 +1865,8 @@ import Omega.Zeta.XiComovingDefectTransverseVisibleWindow
 import Omega.Zeta.XiComovingFiniteCentersBandExclusion
 import Omega.Zeta.XiComovingFiniteCentersBlindspot
 import Omega.Zeta.XiComovingScanHankelRankDefect
+import Omega.Zeta.XiComovingHorizonScanFourierInversion
+import Omega.Zeta.XiClarkMeasureHorizonSemantics
 import Omega.Zeta.XiDefectEntropyPeakCompressibilityExtremal
 import Omega.Zeta.XiDefectEntropyMassPeakDecoupling
 import Omega.Zeta.XiComovingDefectImpliesDeltaBound
