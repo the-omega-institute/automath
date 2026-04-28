@@ -3,7 +3,7 @@ import Mathlib.Tactic
 namespace Omega.Zeta
 
 /-- Paper label: `prop:xi-offslice-fixed-slice-indicator-criterion`. -/
-theorem paper_xi_offslice_fixed_slice_indicator_criterion {α : Type _} [DecidableEq α]
+theorem xi_offslice_fixed_slice_indicator_criterion_iff_chain {α : Type _} [DecidableEq α]
     (Zplus : Finset α) (Ind : Nat) (W B0 : ℝ) (hInd : (Zplus = ∅ ↔ Ind = 0))
     (hW : (Zplus = ∅ ↔ W = 0)) (hB : (W = 0 ↔ B0 = 1)) :
     (Zplus = ∅ ↔ Ind = 0) ∧ (Ind = 0 ↔ W = 0) ∧ (W = 0 ↔ B0 = 1) := by
