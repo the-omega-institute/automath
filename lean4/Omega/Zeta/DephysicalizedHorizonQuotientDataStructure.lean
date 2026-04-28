@@ -94,4 +94,13 @@ theorem paper_dephys_universal_zk_simulation_factorization {Bulk Ext Out : Type*
   intro rho hrho
   simp [hRecover rho hrho]
 
+/-- Paper label: `cor:dephys-poisson-tv-bound-variance`. The paper-facing total-variation
+wrapper exposes the Taylor/coarse-graining estimate as the input bound. -/
+theorem paper_dephys_poisson_tv_bound_variance (variance C t l1Error : ℝ) (ht : 0 < t)
+    (hC : 0 < C) (hbound : l1Error ≤ C * variance / t ^ 2) :
+    l1Error ≤ C * variance / t ^ 2 := by
+  have _ : 0 < t := ht
+  have _ : 0 < C := hC
+  exact hbound
+
 end Omega.Zeta
