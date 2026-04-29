@@ -1,0 +1,130 @@
+You are Stage W of the Omega distillation pipeline.
+
+Source:
+{mathematician}
+
+Generated payload:
+{payload}
+
+Target files:
+{targets}
+
+Actual target LaTeX context:
+{section_contexts}
+
+Whole-article Omega evidence pack:
+{global_evidence_pack}
+
+ChatGPT Oracle deep-research expansion context:
+{oracle_deepening_context}
+
+Return only a JSON array matching this schema:
+{schema}
+
+Task:
+Generate 1-3 LaTeX additions per target section that integrate the distilled method into the existing Omega text.
+
+CRITICAL: Produce REAL mathematical content with PROOFS, not prose summaries.
+Each writeback MUST contain at least one theorem/lemma/proposition/definition
+environment with a \label and substantive mathematical content.
+Mere remarks or commentary WITHOUT formal claim environments will be REJECTED.
+
+Requirements:
+- Each item must contain section, tex_file, type, label, and content.
+- The tex_file must be one of the concrete body files listed in Target files.
+  Never target a section wrapper such as main.tex or any file that only inputs
+  other files.
+- Each target file entry includes current_lines, remaining_lines_before_gate,
+  and recommended_total_insert_lines. Across all items for the same tex_file,
+  keep the inserted LaTeX, including proof environments and wrapper overhead,
+  within recommended_total_insert_lines. Omit a target rather than exceeding
+  its remaining line budget.
+- Do not run shell commands, inspect files, or use external tools. All allowed
+  targets and all necessary local context are already supplied in this prompt.
+- Write the main-paper content in formal academic Chinese. Keep LaTeX macros,
+  labels, cited object names, and mathematical symbols unchanged.
+- Content must be a complete LaTeX snippet suitable for insertion into the listed tex_file.
+- Do not emit \part, \chapter, \section, \subsection, \subsubsection,
+  \paragraph, or \subparagraph. Integrate into the existing concrete target
+  context. If the existing context cannot carry the result, make the result
+  narrower or omit that item instead of opening a new section.
+- Use labels with a stable prefix such as def:distill-, lem:distill-, prop:distill-, or thm:distill-.
+- Fit the local notation and tone already present in the target context.
+- Definitions must be precise. Lemmas and propositions must have proofs or proof sketches.
+- Do not duplicate existing claims, labels, or paragraphs.
+- Follow the killo-golden paper style: no visible patch phrasing, no change-log
+  language, no manual result prefixes such as "new result", "补充 A", "结论 1",
+  "闭环 1", "新增", "本次", or "本轮", and no timestamp or edit-history text
+  inside the LaTeX content.
+- HARD REJECTION TOKENS: the LaTeX content must not contain "新增", "本次",
+  "本轮", "上一轮", "修改记录", "加入如下", "补充 A", "结论 1", or "闭环 1".
+  If a sentence would use one of these words, rewrite it as ordinary
+  mathematical prose without any patch/revision marker.
+- Keep each target file below the 600-line body-file gate after insertion.
+- Do not hard-code human-facing ordinals such as "Result 18" or
+  "\u7ed3\u679c 18" in theorem titles or metadata; nearby files may already
+  contain those ordinals. Do not use numbered entry codes such as WZ-GP-18 or
+  \mathsf{{nr}}=19 either. Use stable labels and optional non-numbered family
+  codes instead.
+- Do not add document preamble, bibliography commands, or markdown.
+- Do NOT insert pipeline metadata lines such as \textbf{依赖状态：...},
+  \textbf{结果 N；日期：...}, \textbf{日期时间：...}, \textbf{Distillation
+  timestamp: ...}, or % --- Distillation writeback --- comment markers.
+  These are internal tracking artifacts, not mathematical content.
+- If a result depends on another theorem, express the dependency as a
+  mathematical hypothesis in the theorem statement itself, e.g.,
+  "设定理 \ref{thm:X} 的条件 Y 成立。则 ..." — standard mathematical prose,
+  not metadata tags.
+- The content must be DEEPER than what already exists — add new structural insight, not paraphrase.
+- If the target context supports only conditional finite audit lemmas, do not
+  inflate them into closure or intrinsic dichotomy theorems. State all carrier,
+  tag, budget, closure, holonomy, and readout data as hypotheses, and use
+  conditional-audit titles/status.
+
+MATHEMATICAL CORRECTNESS (learned from prior review failures):
+- Every symbol used in a claim MUST be locally defined or referenced to a nearby definition in the target file. Do NOT use X_m, d_m, S_q(m), w_{{m,q}} etc. without defining them first or citing an existing \label in the target context.
+- Do NOT cite scripts, generated files, JSON files, or audit artifacts that do not exist. Only reference existing LaTeX labels visible in the section context above.
+- Thresholds involving log, exp, or epsilon must use exact rational/integer cutoffs or include certified interval bounds. Do NOT claim decidability unless the criterion is computably exact.
+- Frostman-type non-concentration must be qualified as finite-test Frostman non-concentration unless full Frostman condition is provable.
+- Spectral sequence claims must state the precise filtration compatibility hypotheses (filtered chain maps, degree-zero homotopies, etc.).
+- Cech coefficient claims must specify whether the coefficient group is abelian, the sheaf type, and whether the result is for direct-sum or general extensions.
+- Cech/holonomy obstruction claims must distinguish cocycle compatibility from
+  coboundary triviality. A nontrivial class obstructs global trivialization,
+  untwisting, or a strengthened closure predicate; it does NOT by itself
+  disprove local gluing admissibility unless that equivalence is explicitly
+  present in the target context and proved in the snippet.
+- For nonabelian holonomy, declare the path-product and coboundary convention
+  and make the telescoping proof match it exactly; otherwise restrict the
+  statement to an abelian quotient.
+- Finite graph holonomy audits must use an unoriented connected graph with
+  chosen oriented edge generators and inverse labels, or explicitly assume a
+  directed graph whose reverse edges and root paths are present. Do not use
+  directed path arguments from mere connectedness.
+- A finite sparse witness or two-point witness proves only failure of a stated
+  finite test or factorization. Do not call it a sparse/expander obstruction
+  unless a refinement-stable rank, kernel, denominator, holonomy-width, or
+  recurrence-certificate invariant is part of the statement.
+- When an image of a map is used as a vector subspace or module, define it as
+  the linear span or generated submodule, not merely as the raw image set.
+- Phase-gate or dimension-waist claims must not treat an arbitrary continuous
+  torus coordinate as finite-dimensional evidence against a profinite residual:
+  such a coordinate may encode infinite profinite data. Require an authorized
+  group-homomorphic, quotient-compatible, or profinite-insensitive readout, or
+  explicitly restrict the conclusion to the finite-discrete factor.
+- Register lower bounds on quotients must distinguish separation from descent.
+  To define a map on a quotient, require constancy on cosets; to prove a
+  cardinality lower bound from separated cosets, argue with chosen
+  representatives without claiming quotient well-definedness.
+- Existing distillation blocks in the target context are prior results. You
+  may cite them as lemmas, but do not output direct corollaries, renamed
+  variants, finite restatements, or theorem-level duplicates of those blocks.
+- Do not use asymptotic-cone, coarse-limit, blow-down, or noncollapse
+  terminology unless the target context or the snippet itself defines a stable
+  metric/scaling law compatible with Omega restrictions. Without such a law,
+  state only a finite-level compactness or budget lemma.
+- If the target file ends with \endinput, do not emit \endinput; the
+  application planner inserts accepted content BEFORE the existing \endinput.
+- Skeleton naming conventions: use \mathsf{{Sk}}^{{\rm frost}}_m for Frostman skeletons, not \mathsf{{Sk}}^{{\rm frob}}_m.
+
+Output:
+Valid JSON array only. No markdown fence. No prose outside JSON.

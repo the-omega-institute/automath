@@ -10,7 +10,7 @@ Usage:
     python oracle_server.py
 
     # Agents submit tasks via oracle_dispatch.py or directly:
-    curl -X POST http://localhost:8765/submit -d '{"prompt":"...", "pdf":"base64..."}'
+    curl -X POST http://127.0.0.1:8765/submit -d '{"prompt":"...", "pdf":"base64..."}'
 
     # The Tampermonkey userscript polls /task, processes it in ChatGPT,
     # and POSTs the result to /result.
@@ -23,7 +23,7 @@ import json
 import sys
 import threading
 import time
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from datetime import datetime
 from collections import deque
@@ -32,7 +32,7 @@ PORT = 8765
 ORACLE_DIR = Path(__file__).parent / "oracle"
 
 MAX_AGENTS = 3          # max concurrent browser tabs
-TASK_TIMEOUT = 14400    # 4 hours — ChatGPT Pro can think 60+ min per task
+TASK_TIMEOUT = 14400    # 4 hours; ChatGPT Pro can think 60+ min per task
 
 # Task queue (thread-safe via GIL for simple operations)
 task_queue: deque[dict] = deque()
@@ -41,6 +41,7 @@ results: dict[str, dict] = {}  # task_id -> result
 pending_tasks: dict[str, dict] = {}   # agent_id -> task
 # Track when each task was dispatched (for timeout cleanup)
 dispatch_times: dict[str, float] = {}  # agent_id -> timestamp
+agent_phases: dict[str, dict] = {}     # agent_id -> latest browser-side phase
 
 
 class OracleHandler(BaseHTTPRequestHandler):
@@ -51,13 +52,16 @@ class OracleHandler(BaseHTTPRequestHandler):
         pass
 
     def _send_json(self, data: dict, status: int = 200):
-        self.send_response(status)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
-        self.end_headers()
-        self.wfile.write(json.dumps(data).encode("utf-8"))
+        try:
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            self.end_headers()
+            self.wfile.write(json.dumps(data).encode("utf-8"))
+        except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError):
+            return
 
     def do_OPTIONS(self):
         """Handle CORS preflight."""
@@ -72,7 +76,7 @@ class OracleHandler(BaseHTTPRequestHandler):
             task = pending_tasks.pop(aid)
             dispatch_times.pop(aid, None)
             task_queue.appendleft(task)  # re-queue at front
-            print(f"[server] Agent {aid} timed out — task {task['task_id']} returned to queue")
+            print(f"[server] Agent {aid} timed out; task {task['task_id']} returned to queue")
 
     def do_GET(self):
         from urllib.parse import urlparse, parse_qs
@@ -87,7 +91,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                         or "default")
 
             if agent_id in pending_tasks:
-                # Already has a task — return it (idempotent poll)
+                # Already has a task; return it (idempotent poll)
                 self._send_json(pending_tasks[agent_id])
             elif task_queue and len(pending_tasks) < MAX_AGENTS:
                 # Assign next task from queue to this agent
@@ -95,7 +99,7 @@ class OracleHandler(BaseHTTPRequestHandler):
                 task["assigned_agent"] = agent_id
                 pending_tasks[agent_id] = task
                 dispatch_times[agent_id] = time.time()
-                print(f"[server] Dispatched {task['task_id']} → {agent_id} "
+                print(f"[server] Dispatched {task['task_id']} -> {agent_id} "
                       f"(agents={len(pending_tasks)}/{MAX_AGENTS}, queue={len(task_queue)})")
                 self._send_json(task)
             else:
@@ -105,7 +109,9 @@ class OracleHandler(BaseHTTPRequestHandler):
             self._cleanup_stale_agents()
             agents_info = {
                 aid: {"task_id": t["task_id"],
-                      "elapsed": int(time.time() - dispatch_times.get(aid, time.time()))}
+                      "elapsed": int(time.time() - dispatch_times.get(aid, time.time())),
+                      "phase": agent_phases.get(aid, {}).get("phase", "assigned"),
+                      "last_seen": agent_phases.get(aid, {}).get("last_seen", None)}
                 for aid, t in pending_tasks.items()
             }
             self._send_json({
@@ -147,6 +153,10 @@ class OracleHandler(BaseHTTPRequestHandler):
                 "model": data.get("model", "chatgpt-5.4-pro"),
                 "status": "queued",
             }
+            if "min_response_length" in data:
+                task["min_response_length"] = data["min_response_length"]
+            if "task_kind" in data:
+                task["task_kind"] = data["task_kind"]
 
             # Handle PDF: either base64 data or file path
             if "pdf_base64" in data:
@@ -169,9 +179,14 @@ class OracleHandler(BaseHTTPRequestHandler):
 
         elif self.path == "/result":
             # Browser tab posts the ChatGPT response
-            task_id = data.get("task_id", "")
             response = data.get("response", "")
             agent_id = data.get("agent_id", "")
+            # Prefer the server-side pending assignment.  Browser automation can
+            # survive ChatGPT page navigation, and stale userscript task ids must
+            # not be allowed to complete the wrong pipeline task.
+            task_id = data.get("task_id", "")
+            if agent_id and agent_id in pending_tasks:
+                task_id = pending_tasks[agent_id]["task_id"]
 
             if not task_id or not response:
                 self._send_json({"error": "need task_id and response"}, 400)
@@ -207,11 +222,12 @@ class OracleHandler(BaseHTTPRequestHandler):
                 if pending_tasks[aid]["task_id"] == task_id:
                     del pending_tasks[aid]
                     dispatch_times.pop(aid, None)
+                    agent_phases.pop(aid, None)
                     freed = f" (freed {aid})"
                     break
 
             print(f"[server] Result: {task_id} ({len(response)} chars){freed} "
-                  f"— agents={len(pending_tasks)}/{MAX_AGENTS}, queue={len(task_queue)}")
+                  f"- agents={len(pending_tasks)}/{MAX_AGENTS}, queue={len(task_queue)}")
             print(f"[server] Saved to: {out_file}")
             self._send_json({"status": "saved", "task_id": task_id})
 
@@ -222,8 +238,63 @@ class OracleHandler(BaseHTTPRequestHandler):
             # Refresh dispatch time to prevent timeout
             if agent_id in dispatch_times:
                 dispatch_times[agent_id] = time.time()
+            agent_phases[agent_id] = {
+                "task_id": task_id,
+                "phase": data.get("phase", "ack"),
+                "last_seen": datetime.now().isoformat(),
+            }
             print(f"[server] Ack: {task_id} by {agent_id}")
             self._send_json({"status": "ok"})
+
+        elif self.path == "/phase":
+            task_id = data.get("task_id", "")
+            agent_id = data.get("agent_id", "?")
+            if agent_id in dispatch_times:
+                dispatch_times[agent_id] = time.time()
+            agent_phases[agent_id] = {
+                "task_id": task_id,
+                "phase": data.get("phase", "unknown"),
+                "last_seen": datetime.now().isoformat(),
+                "detail": data.get("detail", ""),
+            }
+            self._send_json({"status": "ok"})
+
+        elif self.path == "/release":
+            task_id = data.get("task_id", "")
+            agent_id = data.get("agent_id", "")
+            reason = data.get("reason", "unspecified")
+            released = False
+            if agent_id in pending_tasks and pending_tasks[agent_id].get("task_id") == task_id:
+                task = pending_tasks.pop(agent_id)
+                dispatch_times.pop(agent_id, None)
+                agent_phases.pop(agent_id, None)
+                task_queue.appendleft(task)
+                released = True
+                print(f"[server] Released {task_id} from {agent_id}: {reason}")
+            self._send_json({"status": "released" if released else "not_pending"})
+
+        elif self.path == "/cancel":
+            task_id = data.get("task_id", "")
+            reason = data.get("reason", "unspecified")
+            removed = False
+            for aid in list(pending_tasks):
+                if pending_tasks[aid].get("task_id") == task_id:
+                    del pending_tasks[aid]
+                    dispatch_times.pop(aid, None)
+                    agent_phases.pop(aid, None)
+                    removed = True
+            if task_id:
+                kept = deque()
+                while task_queue:
+                    task = task_queue.popleft()
+                    if task.get("task_id") == task_id:
+                        removed = True
+                    else:
+                        kept.append(task)
+                task_queue.extend(kept)
+            if removed:
+                print(f"[server] Canceled {task_id}: {reason}")
+            self._send_json({"status": "canceled" if removed else "not_found"})
 
         else:
             self._send_json({"error": "unknown endpoint"}, 404)
@@ -247,7 +318,7 @@ def submit_task(prompt: str, pdf_path: Path | None = None,
         data["pdf_path"] = str(pdf_path)
 
     req = urllib.request.Request(
-        f"http://localhost:{PORT}/submit",
+        f"http://127.0.0.1:{PORT}/submit",
         data=json.dumps(data).encode("utf-8"),
         headers={"Content-Type": "application/json"},
     )
@@ -263,7 +334,7 @@ def wait_for_result(task_id: str, timeout: int = 900) -> str:
     while time.time() - start < timeout:
         try:
             resp = urllib.request.urlopen(
-                f"http://localhost:{PORT}/result/{task_id}", timeout=5
+                f"http://127.0.0.1:{PORT}/result/{task_id}", timeout=5
             )
             data = json.loads(resp.read().decode("utf-8"))
             if data.get("status") == "completed":
@@ -280,8 +351,8 @@ def wait_for_result(task_id: str, timeout: int = 900) -> str:
 
 
 def main():
-    server = HTTPServer(("127.0.0.1", PORT), OracleHandler)
-    print(f"[server] Oracle server running on http://localhost:{PORT}")
+    server = ThreadingHTTPServer(("127.0.0.1", PORT), OracleHandler)
+    print(f"[server] Oracle server running on http://127.0.0.1:{PORT}")
     print(f"[server] Max {MAX_AGENTS} concurrent agents")
     print(f"[server] Open browser tabs:")
     for i in range(1, MAX_AGENTS + 1):
