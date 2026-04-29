@@ -258,6 +258,8 @@ import Omega.Zeta.XiTimeOnlyConservedQuantity
 import Omega.Zeta.XiTimeConsistentInverseLimitReadout
 import Omega.Zeta.XiNodePolynomialGoodReductionDiscriminant
 import Omega.Zeta.XiGramshiftPadicDiscriminantHalfloss
+import Omega.Zeta.XiPoissonTVSharpConstantSecondMomentOnly
+import Omega.Zeta.XiHorizonMuEndpointProbeConstant
 import Omega.Zeta.XiHankelDeterminantGramshiftDiscriminantIdentity
 import Omega.Zeta.XiTerminalZmB2Kappa2RationalInterconstruction
 import Omega.Zeta.Xi2x2SelfdualOrthogonalAxisProjectionForget
