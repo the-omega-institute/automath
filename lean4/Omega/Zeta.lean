@@ -2907,3 +2907,5 @@ import Omega.Zeta.XiPoissonFirstNonvanishingMomentFdivSharp
 import Omega.Zeta.XiSmithLossSpectrumConjugatePartitionRealization
 import Omega.Zeta.XiZGDirichletLogRenormalization
 import Omega.Zeta.XiFiniteWitnessToOfflineFiber
+import Omega.Zeta.XiTimePart9xSerrinRayExactCapacity
+import Omega.Zeta.XiTimePart9xWindow6BoundaryArithmeticPinning
