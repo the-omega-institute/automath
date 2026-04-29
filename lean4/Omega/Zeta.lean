@@ -2828,6 +2828,7 @@ import Omega.Zeta.XiTimePart9zbThirdOrderHankelObstruction
 import Omega.Zeta.XiFiberSpectrumHankelVandermondeExplicitRecovery
 import Omega.Zeta.XiLeyangCardanoChebyshevLinearizationZ
 import Omega.Zeta.XiWindow6NineteenBitInflationRigidity
+import Omega.Zeta.XiFiniteWindowTrueResonanceIndex
 import Omega.Zeta.NullZ2CechTransferBockstein
 import Omega.Zeta.XiOracleEliminationTwoAxes
 import Omega.Zeta.XiMultistageCrtAxisCountScaling
