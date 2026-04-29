@@ -203,6 +203,7 @@ import Omega.Zeta.XiTimePart9xfaMetallicValueC1Nonc2Transition
 import Omega.Zeta.HankelWindowPerfectZKIndistinguishability
 import Omega.Zeta.XiHankelSingularityHVZK
 import Omega.Zeta.XiDiscLedgerFourierTensorization
+import Omega.Zeta.XiTimePart51AADoublingSplitDensity
 import Omega.Zeta.XiDepthSpectrumMajorizationConvexOrder
 import Omega.Zeta.XiAxisSwapStieltjesHankelCriterion
 import Omega.Zeta.XiTerminalZmLeyangChebyshevLinearizationOddNormalization
