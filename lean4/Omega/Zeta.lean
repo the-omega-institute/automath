@@ -1,5 +1,7 @@
 import Omega.Zeta.XiTimePart9hDriftMixUncertainty
 import Omega.Zeta.XiTimePart9hSpectralTaxDriftProduct
+import Omega.Zeta.XiP7K5IntegralBasisDiscriminantDyadicSplitting
+import Omega.Zeta.XiTerminalZmTranslationTBranchDiscriminantC3T1GaloisS11
 import Omega.Zeta.XiWardSignFactorGaugeIrreducible
 import Omega.Zeta.XiTimePart62aePrimegameActiveSupportSplitting
 import Omega.Zeta.XiTimePart56SingleCircleDimensionExponentialDiversity
