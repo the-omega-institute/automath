@@ -244,6 +244,8 @@ import Omega.Zeta.XiCongruenceBlockResidueRatioRealpart
 import Omega.Zeta.XiOutputPotentialDirichletFourierRadiusBarrier
 import Omega.Zeta.XiAuditedEvenAbelCenterFibonacciSplitting
 import Omega.Zeta.XiAuditedEvenMinsectorHomotopyMod6Phase
+import Omega.Zeta.XiTimePart55baTerminalSectorOrderIdeal
+import Omega.Zeta.XiTimePart59FoldgaugeCircleConstantRecovery
 import Omega.Zeta.XiCollisionSquareRootNormalizationTrichotomy
 import Omega.Zeta.ZetaSyntaxFiniteForbiddenExpSparse
 import Omega.Zeta.XiPlyQ5CommonRootsPrime3173
