@@ -2800,3 +2800,4 @@ import Omega.Conclusion.BigwittBudgetDecidableIdentityUndecidable
 import Omega.Conclusion.Window6MajorizationEntropyCapacityOrder
 import Omega.Conclusion.AnnealedSoftFirstfitGapHalting
 import Omega.Conclusion.GoldenLucasHankelV5QuadraticGrowth
+import Omega.Conclusion.ExclusionRadiusConcaveSpline
