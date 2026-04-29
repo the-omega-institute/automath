@@ -2733,6 +2733,7 @@ import Omega.Zeta.XiTerminalZmS3ClosureHasseWeilFactorization
 import Omega.Zeta.XiFoldbinGaugeGroupOrderAbelCenterClosed
 import Omega.Zeta.XiTimePart60abGaugeConstantLeadingModeRatio
 import Omega.Zeta.LeyangLogshiftTwoSpectrum
+import Omega.Zeta.XiLeyangJordanLogshift
 import Omega.Zeta.LeyangFunctorialityDefectBound
 import Omega.Zeta.XiLeyangCrossratioProjectiveFingerprintComplete
 import Omega.Zeta.XiTerminalZmHurwitzIrreducibleAndGenus2Jac3torsionModuli
