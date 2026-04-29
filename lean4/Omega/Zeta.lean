@@ -1,3 +1,4 @@
+import Omega.Zeta.XiWardSignFactorGaugeIrreducible
 import Omega.Zeta.XiGaugeVolumeBoltzmannStirlingExponential
 import Omega.Zeta.XiRhCohomologicalReductionHolonomy
 import Omega.Zeta.XiJacobiSturmNestedLocalization
