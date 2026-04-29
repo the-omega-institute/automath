@@ -1,5 +1,7 @@
 import Omega.Zeta.XiFoldbinRankUnrankOptimalAdvicePolytime
 import Omega.Zeta.XiFoldZminusoneCancellationBinomialConvolution
+import Omega.Zeta.XiJensenDefectEntropyEnergyIdentity
+import Omega.Zeta.XiTimePart9zblFoldpiGoldenOperatorSplitting
 import Omega.Zeta.XiGoldenMetallicPerdigitExponentialEfficiency
 import Omega.Zeta.XiReplicaSoftcoreExceptionalPowerSumM6CompleteClosed
 import Omega.Zeta.XiTimePart60abHiddenGapKlRenyi2Collision
