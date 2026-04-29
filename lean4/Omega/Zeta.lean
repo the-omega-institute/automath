@@ -2948,3 +2948,5 @@ import Omega.Zeta.XiPoissonTwoParameterKLSharpQuadratic
 import Omega.Zeta.XiTimePart65GFoldEnergyThreevaluedPhaseWalk
 import Omega.Zeta.XiIdealLatticeHasseMetricDeltaGeodesics
 import Omega.Zeta.XiTimePart9oEscortTestingGeometryClosed
+import Omega.Zeta.XiTimePart9zbgFoldpiFiniteDepthExactnessObstruction
+import Omega.Zeta.XiTimePart65hEscortBlackwellOnebitEquivalence
