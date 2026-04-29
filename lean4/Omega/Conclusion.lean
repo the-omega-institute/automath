@@ -2832,3 +2832,5 @@ import Omega.Conclusion.RamanujanKernelPsdDerivativeParsevalControl
 import Omega.Conclusion.HankelWitnessGlobalBadPrimeSupport
 import Omega.Conclusion.JoukowskyReciprocityResidueDuality
 import Omega.Conclusion.CoverKernelMinPrimeLedgerSignature
+import Omega.Conclusion.FixedAlphaRenyiEntropyGapSatHard
+import Omega.Conclusion.ValLawvereEquivalenceFirstfitCollapse
