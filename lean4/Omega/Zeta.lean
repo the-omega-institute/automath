@@ -46,6 +46,8 @@ import Omega.Zeta.ChebotarevQuotientMonotonicityErrorExponent
 import Omega.Zeta.XiBasepointScanHeineStieltjesOde
 import Omega.Zeta.XiAtomicWittEnergyResidueL2Law
 import Omega.Zeta.XiFoldbinEntropyGaugeOneNatGap
+import Omega.Zeta.XiFoldbinFDivergenceTwoPointExperiment
+import Omega.Zeta.XiAsymptoticFDivergenceFunctionalTwoAtomRigidity
 import Omega.Zeta.XiLeyangGtDiscriminantAndSpecialFiberFactorization
 import Omega.Zeta.XiLeyangNormOneUnitExplicit3Torsion
 import Omega.Zeta.XiSymqGoldenCqModPiQuadraticPhaseTransition
