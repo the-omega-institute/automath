@@ -1,3 +1,4 @@
+import Omega.Zeta.XiEdFUniqueReconstructionFromDiscriminantAndCritical
 import Omega.Zeta.XiLocalizedBasicExtensionStrictlyNonsplit
 import Omega.Zeta.XiTimePart74FinitePastPrimesliceComplexityDepth
 import Omega.Zeta.XiTimePart74NaturalExtensionFiniteSupportPrimesliceImpossibility

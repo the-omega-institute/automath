@@ -1,3 +1,5 @@
+import Omega.Conclusion.CollisionMomentPerronBlindness
+import Omega.Conclusion.MajorarcFiniteAuditSufficesForGlobalWavepacketSuppression
 import Omega.Conclusion.PrimeSinglephasePrecisionWindowExp2r
 import Omega.Conclusion.RankTwoTateCarpetLogisticDimensionSurface
 import Omega.Conclusion.SixfoldZeroBlockSubexponentialListImpossibility
