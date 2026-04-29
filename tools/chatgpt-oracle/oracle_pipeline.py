@@ -431,6 +431,14 @@ MAX_STAGE_A_ROUNDS = 8
 # warrants more rounds, raise the cap explicitly with a recorded reason.
 MAX_STAGE_B_ROUNDS = 20
 MAX_STAGE_C_ROUNDS = 15
+
+# Per-paper wall-clock budget. Stage A/B/C round caps bound the round count
+# but each round's Oracle wait can be up to oracle_timeout=7200s, so worst
+# case is 20+15 rounds × 2h ≈ 70 hours per paper. The budget below caps
+# total wall-clock per paper to keep the rolling pool moving. Override via
+# env var ORACLE_PAPER_TIME_BUDGET_HOURS for stuck-but-progressing papers.
+PAPER_TIME_BUDGET_HOURS = float(
+    os.environ.get("ORACLE_PAPER_TIME_BUDGET_HOURS", "24"))
 DEFAULT_TARGET_JOURNAL = "Advances in Mathematics"
 CLAUDE_ENABLED = True
 PAUSED_ERROR_PREFIX = "PAUSED:"
@@ -6702,15 +6710,29 @@ def run_paper_pipeline(
     logger.info(f"{tag} Pipeline start — Stage {state.current_stage}")
     logger.info(f"{tag} Journal: {state.target_journal}")
     logger.info(f"{tag} Main paper: {state.main_paper_dir or '(none)'}")
+    logger.info(f"{tag} Time budget: {PAPER_TIME_BUDGET_HOURS}h")
     logger.info(f"{'='*60}")
 
+    paper_started_monotonic = time.monotonic()
+
     while state.current_stage != "DONE":
+        elapsed_h = (time.monotonic() - paper_started_monotonic) / 3600
+        if elapsed_h > PAPER_TIME_BUDGET_HOURS:
+            state.error = (f"TIME-STUCK at Stage {state.current_stage}: "
+                           f"{elapsed_h:.1f}h elapsed > "
+                           f"{PAPER_TIME_BUDGET_HOURS}h budget")
+            logger.warning(f"{tag} {state.error}")
+            update_program_board(state.paper_name, "TIME-STUCK", state.error)
+            save_state(state)
+            return False, state
+
         stage = state.current_stage
         runner = STAGE_RUNNERS.get(stage)
         if not runner:
             break
 
-        logger.info(f"{tag} === STAGE {stage} ===")
+        logger.info(f"{tag} === STAGE {stage} (elapsed {elapsed_h:.1f}h"
+                    f"/{PAPER_TIME_BUDGET_HOURS}h) ===")
         try:
             kwargs = dict(dry_run=dry_run, model=model)
             if stage in ("B", "C"):
