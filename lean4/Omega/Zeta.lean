@@ -3300,3 +3300,4 @@ import Omega.Zeta.XiDiscreteCurvatureNearUnimodalRigidity
 import Omega.Zeta.XiBasepointScanFullRankAnchorCriticalEquations
 import Omega.Zeta.XiSliceWeylHerglotz
 import Omega.Zeta.XiTimePart59acFoldgaugeRatioOneFortyEighth
+import Omega.Zeta.XiTimePart9zgFrobeniusClassfunctionTensorFactorization
