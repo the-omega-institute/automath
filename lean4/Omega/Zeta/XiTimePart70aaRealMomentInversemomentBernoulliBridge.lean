@@ -53,6 +53,36 @@ theorem paper_xi_time_part70aa_binfold_all_real_moments_closed (q : ℕ) :
           Real.rpow (Omega.Conclusion.foldbinLikelihoodRatioHigh q) t := by
           rw [hhigh, hlow]
 
+/-- The inverse odd moment test exponent attached to the `r`th Bernoulli coefficient. -/
+def xi_time_part70aa_bernoulli_coefficient_inverse_moment_interpretation_exponent
+    (r : ℕ) : ℝ :=
+  -((2 * r - 1 : ℕ) : ℝ)
+
+/-- Concrete inverse odd moment specialization of the all-real-moments formula. -/
+def xi_time_part70aa_bernoulli_coefficient_inverse_moment_interpretation_statement
+    (r : ℕ) : Prop :=
+  ∀ q : ℕ,
+    Omega.Conclusion.foldbinLikelihoodRatioExpectation q
+        (fun x =>
+          Real.rpow x
+            (xi_time_part70aa_bernoulli_coefficient_inverse_moment_interpretation_exponent r)) =
+      (Real.goldenRatio ^ (q + 1) / (1 + Real.goldenRatio ^ (q + 1))) *
+        Real.rpow (Omega.Conclusion.foldbinLikelihoodRatioLow q)
+          (xi_time_part70aa_bernoulli_coefficient_inverse_moment_interpretation_exponent r) +
+      (1 / (1 + Real.goldenRatio ^ (q + 1))) *
+        Real.rpow (Omega.Conclusion.foldbinLikelihoodRatioHigh q)
+          (xi_time_part70aa_bernoulli_coefficient_inverse_moment_interpretation_exponent r)
+
+/-- Paper label:
+`cor:xi-time-part70aa-bernoulli-coefficient-inverse-moment-interpretation`. -/
+theorem paper_xi_time_part70aa_bernoulli_coefficient_inverse_moment_interpretation
+    (r : ℕ) (hr : 1 ≤ r) :
+    xi_time_part70aa_bernoulli_coefficient_inverse_moment_interpretation_statement r := by
+  intro q
+  let _ := hr
+  exact (paper_xi_time_part70aa_binfold_all_real_moments_closed q
+    (xi_time_part70aa_bernoulli_coefficient_inverse_moment_interpretation_exponent r)).2
+
 end
 
 end Omega.Zeta
