@@ -225,6 +225,7 @@ import Omega.Zeta.XiTimePart65hDivisibilitySlopeFreezingPropagation
 import Omega.Zeta.XiQepLeakageLowerBound
 import Omega.Zeta.XiQepScalarModeTowerClassification
 import Omega.Zeta.CayleyOffsetDefectSpectrumBounds
+import Omega.Zeta.XiGramShiftPositivePencilNodeSpectrum
 import Omega.Zeta.XiAbelCrossscaleChebyshevClosureAcceleration
 import Omega.Zeta.XiSpectralMarginFinitePsdCertificate
 import Omega.Zeta.HankelSinglePrimeAuditZeroError
