@@ -2788,3 +2788,4 @@ import Omega.Zeta.XiZeroTemperatureFourstateArtinMazurZetaPrimitiveAsymptotic
 import Omega.Zeta.XiSingleAtomCenteredResidueRankoneSpike
 import Omega.Zeta.XiGoldenW1GoodSideGapToSingleBoxOptimum
 import Omega.Zeta.XiTimePart63aTorsionQCesaroFourierProjection
+import Omega.Zeta.XiSelfreciprocalEscapeSingularRingResultant
