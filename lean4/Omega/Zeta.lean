@@ -3183,3 +3183,4 @@ import Omega.Zeta.XiRealInput40EvenlengthAbelShiftRigidity
 import Omega.Zeta.XiTimePart9zbbNoRationalCoscaleStirlingCollapse
 import Omega.Zeta.NullZ2ConjugacyRigidity
 import Omega.Zeta.XiEndpointAtomCentralChannelStrength
+import Omega.Zeta.XiTimePart65gDirichletAxisSwapObstruction

@@ -2722,3 +2722,5 @@ import Omega.Conclusion.HiddenSubgroupDeterminesAnomalyMinimalAlphabet
 import Omega.Conclusion.MaxfiberUniphaseMod6Law
 import Omega.Conclusion.S4FixedpointCensusRepackaged
 import Omega.Conclusion.CollisionKernelMatrixPowerExpDimensionUnderSharpeth
+import Omega.Conclusion.Window6HistogramGeneratorFivefoldDecoding
+import Omega.Conclusion.Window6RamanujanBlindResidualChannel
