@@ -2667,3 +2667,4 @@ import Omega.Zeta.XiTimePart28bStripOnsetLaw
 import Omega.Zeta.XiInnerIffConservativeColligation
 import Omega.Zeta.XiTimePart9xabaWindow6HiddenTwoRegisterNormalForm
 import Omega.Zeta.XiTimePart9xabaWindow6GaussianCompatibilityNecessaryCondition
+import Omega.Zeta.XiStableTypeMinspecGradedSemiring

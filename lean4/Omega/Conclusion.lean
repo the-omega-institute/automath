@@ -2263,3 +2263,5 @@ import Omega.Conclusion.FibonacciSolenoidDualQ
 import Omega.Conclusion.AnomalyTorusExpandingEntropy
 import Omega.Conclusion.PressureFanCollapsesToCharacterSimplexCells
 import Omega.Conclusion.CoreMirrorBranchSaturationDominance
+import Omega.Conclusion.FixedQCollisionChoiRankSharpPComplete
+import Omega.Conclusion.RealInput40AtomicSurgeryThreeLevelInvertibility
