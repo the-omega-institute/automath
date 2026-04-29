@@ -218,6 +218,8 @@ import Omega.Zeta.XiTimeConjugacyRigidityBoundedClass
 import Omega.Zeta.XiEndpointFluxLogSampleComplexity
 import Omega.Zeta.XiRealInputGroundLayerUnbiasedRarity
 import Omega.Zeta.XiScanHankelRankEqualsDefect
+import Omega.Zeta.XiHorizonSubexpGrowthImpliesRh
+import Omega.Zeta.XiTimeReversalSpectralReciprocity
 import Omega.Zeta.XiP7Q5B5PrimitiveElementDegree125
 import Omega.Zeta.XiTimePart9EFibonacciPowerHankelProduct
 import Omega.Zeta.XiHadamardProductResultantMultiplicativeConvolution
