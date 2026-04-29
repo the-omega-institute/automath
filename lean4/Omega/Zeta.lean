@@ -18,6 +18,7 @@ import Omega.Zeta.Arity335CollisionMixingScale
 import Omega.Zeta.XiTimePart9IMinimalOrientationDoubleCover
 import Omega.Zeta.XiTimePart9iSignLocalSystemCompleteness
 import Omega.Zeta.XiTimePart9IMonoidalRigidityByTwoPoints
+import Omega.Zeta.XiTimePart9iMonoidalRigidityByTwoPoints
 import Omega.Zeta.XiTimePart9saChi2AffinePhiInversion
 import Omega.Zeta.XiQ5UnsolvableByRadicals
 import Omega.Zeta.XiFoldbinRankUnrankOptimalAdvicePolytime
@@ -30,6 +31,7 @@ import Omega.Zeta.XiTimePart9zrLattesFullsplitTransparency
 import Omega.Zeta.XiGoldenMetallicPerdigitExponentialEfficiency
 import Omega.Zeta.XiReplicaSoftcoreExceptionalPowerSumM6CompleteClosed
 import Omega.Zeta.XiTimePart60abHiddenGapKlRenyi2Collision
+import Omega.Zeta.XiTimePart60aaaAuditedEvenMinidealFibonacciSemisimple
 import Omega.Zeta.XiTimePart60aRepulsionRadiusPiecewisePowerLaw
 import Omega.Zeta.XiTimePart60aComovingDefectMinimalSamplingSharp
 import Omega.Zeta.XiAnchoredCapacityThreeProperties
