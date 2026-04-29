@@ -50,4 +50,10 @@ theorem paper_fold_gauge_anomaly_bernoulli_p_density_unimodal :
       (hf_strict.injOn ⟨le_of_lt hpStar.1, le_of_lt hpStar.2⟩
         ⟨le_of_lt hqIoo.1, le_of_lt hqIoo.2⟩ (hpRoot.trans hqRoot.symm)).symm
 
+/-- Paper label: `cor:fold-gauge-anomaly-bernoulli-p-density-maximizer-cardano`. -/
+theorem paper_fold_gauge_anomaly_bernoulli_p_density_maximizer_cardano :
+    ∃! pStar : Real, pStar ∈ Set.Ioo 0 1 ∧ pStar ^ 3 + 2 * pStar - 2 = 0 ∧
+      pStar ^ 2 * (3 - 2 * pStar) / (1 + pStar ^ 3) = pStar ^ 2 := by
+  exact paper_fold_gauge_anomaly_bernoulli_p_density_unimodal
+
 end Omega.Folding
