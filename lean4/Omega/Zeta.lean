@@ -267,6 +267,8 @@ import Omega.Zeta.XiReverseklExtremalGapEnergyCorrection
 import Omega.Zeta.XiWindow6SmEnvelopeCenter2torsionObstruction
 import Omega.Zeta.XiTerminalZm4MomentKernelS5
 import Omega.Zeta.XiPrimeMomentSemialgebraicCone
+import Omega.Zeta.XiKernelDirichletEulerRationalSmithCompleteness
+import Omega.Zeta.XiEndpointHeatProbeDyadicExponentReadout
 import Omega.Zeta.XiEndpointHeatProbeRichardsonExtrapolation
 import Omega.Zeta.XiOutputPotentialDirichletFixedJFourthOrder
 import Omega.Zeta.XiPoissonFirstNonvanishingMomentTvKlSharp
