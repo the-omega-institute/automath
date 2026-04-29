@@ -144,6 +144,8 @@ import Omega.Zeta.XiTimePart50dcResidueZetaCyclotomicWitt
 import Omega.Zeta.XiP7S5MinimalArtinDedekindZetaFactorization
 import Omega.Zeta.XiP7S5LocalEulerFactorTripleIsomorphismAtQ
 import Omega.Zeta.XiP7S5GlobalArtinConductorsRho456
+import Omega.Zeta.XiP7LeyangFiniteVolumeArtinDedekindFactorization
+import Omega.Zeta.XiP7LeyangInversionRecoversChebotarevDensities
 import Omega.Zeta.LocalizedPhaseSamplingClosedForm
 import Omega.Zeta.LocalizedDyadicPhaseBlindness
 import Omega.Zeta.XiUniqueTransverseVsInfinitePrimeRankSeparation
