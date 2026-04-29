@@ -1,4 +1,5 @@
 import Omega.Zeta.XiLeyangGtDiscriminantAndSpecialFiberFactorization
+import Omega.Zeta.XiSyndromeQuotientModuleRationalCanonicalFingerprint
 import Omega.Zeta.XiVisibleArithmeticNilradicalSemisimpleThickness
 import Omega.Zeta.XiHzomUnitarySlice
 import Omega.Zeta.XiTimePart9fStreamingWidthRarity
