@@ -219,6 +219,7 @@ import Omega.Conclusion.FullResiduePhiSquareUniversalExponent
 import Omega.Conclusion.ZGFiniteCertificateFiberFullSpectrum
 import Omega.Conclusion.ZGNowhereLocallyDoubling
 import Omega.Conclusion.CdimPrecisionLedgerLbKphase
+import Omega.Conclusion.PositivePushforwardEntropyThreeScaleLaw
 import Omega.Conclusion.OperatorCaratheodoryCPVisibleEquivalence
 import Omega.Conclusion.AtomicWittFactorQuantizedAbelShift
 import Omega.Conclusion.RealInput40AtomicFourierFingerprint
