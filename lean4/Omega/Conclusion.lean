@@ -1,4 +1,5 @@
 import Omega.Conclusion.LocalizedSolenoidFinitewindowPeriodicAuditBlindPrimes
+import Omega.Conclusion.PoissonCauchyOptimalDriftCompleteInversion
 import Omega.Conclusion.HistoryRecoveryActivePrimeSliceLinearDepth
 import Omega.Conclusion.FiniteDefectAtomicCountEqualsIntrinsicMinimalCauchyRank
 import Omega.Conclusion.GodelFiveSymbolThreshold
