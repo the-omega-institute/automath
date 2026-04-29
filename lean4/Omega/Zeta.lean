@@ -3098,3 +3098,4 @@ import Omega.Zeta.XiCapacityTailHistogramMomentCompleteStatistic
 import Omega.Zeta.XiCauchyPoissonKlTwoTermLimit
 import Omega.Zeta.XiLocalizedEndomorphismRingSolenoidIndecomposable
 import Omega.Zeta.XiTimePart65eWindow6NoGatelessZ2CentralExtension
+import Omega.Zeta.XiRhCohnDerivative
