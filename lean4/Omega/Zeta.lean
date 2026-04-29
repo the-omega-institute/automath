@@ -221,6 +221,7 @@ import Omega.Zeta.XiGridScanTwoStepDealiasing
 import Omega.Zeta.CapacityOverlapFunctionalL1Identity
 import Omega.Zeta.CauchyPoissonKlGoldenScale
 import Omega.Zeta.XiSingleEllipticZeroReconstructsScale
+import Omega.Zeta.XiFiniteWindowExtremeResonanceCertificate
 import Omega.Zeta.XiCmvStabilizationInfinite
 import Omega.Zeta.XiTimePart28cVerblunskyPrefixExactMomentRigidity
 import Omega.Zeta.XiTimePart60eSolenoidTerminalMorphismClassification
