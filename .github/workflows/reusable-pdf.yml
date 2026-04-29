@@ -70,6 +70,9 @@ jobs:
             export LC_ALL=en_US.UTF-8
           fi
 
+          # Bootstrap: run xelatex once to produce .aux, then bibtex, then latexmk for convergence
+          xelatex -cnf-line=max_in_open=50 -no-pdf -interaction=nonstopmode -file-line-error main.tex || true
+          bibtex main || true
           latexmk -pdfxe -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 
       - name: Package dated PDF
