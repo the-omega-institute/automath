@@ -242,6 +242,7 @@ import Omega.Zeta.XiKappaInvariantUnification
 import Omega.Zeta.SelfdualMaslovSingularDichotomy
 import Omega.Zeta.XiGramshiftCharpolyAsPhiImageOfDiskpoles
 import Omega.Zeta.WindingEqualsBlaschkeDegree
+import Omega.Zeta.XiOracleCapacityExponentTailVariationalBounds
 import Omega.Zeta.SelfdualWindDegDblKappaIdentity
 import Omega.Zeta.XiAnomWindingObstruction
 import Omega.Zeta.XiFoldUniformBaselineTestingConstant
