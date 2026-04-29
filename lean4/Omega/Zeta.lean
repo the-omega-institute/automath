@@ -2355,6 +2355,7 @@ import Omega.Zeta.XiTimePart9odEscortTvCollapseExactBlockWeights
 import Omega.Zeta.XiTimePart9odEscortEscortFdivBinaryClosure
 import Omega.Zeta.XiTimePart60adAuditedEvenFibonacciNeighborPartition
 import Omega.Zeta.XiTimePart9obEscortLastbitBernoulliFdiv
+import Omega.Zeta.XiTimePart9obEscortFisherTotalLength
 import Omega.Zeta.XiTimePart9obEscortLoglikOnebitExpfamily
 import Omega.Zeta.XiTimePart9obEscortProductLecam
 import Omega.Zeta.XiTimePart9sEscortLogisticExpfamilyBregman
