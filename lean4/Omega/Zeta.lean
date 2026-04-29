@@ -3005,3 +3005,4 @@ import Omega.Zeta.XiTimePart9fLocalNormalizationStepLowerBound
 import Omega.Zeta.XiRealInputRhWindowZeroTempPerronGap
 import Omega.Zeta.XiTimePart57bcFreezingSlopeCodingRate
 import Omega.Zeta.XiTimePart64CoverZetaLeadingPoleStability
+import Omega.Zeta.XiTimePart62afHankelGapQuotientRingModel
