@@ -1,6 +1,8 @@
 import Omega.Zeta.XiPointAtomTruncatedRealizabilityEnvelope
 import Omega.Zeta.XiFoldbinEntropyGaugeOneNatGap
 import Omega.Zeta.XiLeyangGtDiscriminantAndSpecialFiberFactorization
+import Omega.Zeta.XiSymqGoldenCqModPiQuadraticPhaseTransition
+import Omega.Zeta.XiSymqGoldenCqMod5HalfThresholdPhaseTransition
 import Omega.Zeta.XiSyndromeQuotientModuleRationalCanonicalFingerprint
 import Omega.Zeta.XiPadicRootResolutionDiscriminantHalfLoss
 import Omega.Zeta.XiGodelLeyangTwoPhaseCoexistenceWindow
