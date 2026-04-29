@@ -2745,3 +2745,5 @@ import Omega.Zeta.XiOModPiIntegerSplitting
 import Omega.Zeta.XiTimePart9znWindow6So21OrbitSaturationSym0
 import Omega.Zeta.XiFixedBudgetIncompleteOffcriticalExclusion
 import Omega.Zeta.XiTimePart9qPerfectZkNoDisambiguationGain
+import Omega.Zeta.XiFiberSpectrumHankelVandermondeExplicitRecovery
+import Omega.Zeta.XiLeyangCardanoChebyshevLinearizationZ
