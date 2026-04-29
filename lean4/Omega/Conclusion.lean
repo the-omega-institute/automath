@@ -1,4 +1,6 @@
 import Omega.Conclusion.JensenDefectRadialSplineRigidity
+import Omega.Conclusion.PoissonCauchyKLSixthOrderExpansion
+import Omega.Conclusion.Window6DynamicalCentralizerTorusCollapse
 import Omega.Conclusion.Window6FullRenyiThermodynamicsClosed
 import Omega.Conclusion.ZetaRegularizedPrimeIndependenceMaxent
 import Omega.Conclusion.PrimeLogRhOperatorCountablePrimeRank
