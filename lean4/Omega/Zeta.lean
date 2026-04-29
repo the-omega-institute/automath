@@ -3304,3 +3304,5 @@ import Omega.Zeta.XiBasepointScanFullRankAnchorCriticalEquations
 import Omega.Zeta.XiSliceWeylHerglotz
 import Omega.Zeta.XiTimePart59acFoldgaugeRatioOneFortyEighth
 import Omega.Zeta.XiTimePart9zgFrobeniusClassfunctionTensorFactorization
+import Omega.Zeta.XiReplicaSoftcoreReciprocalMomentRingDecomposition
+import Omega.Zeta.XiTimePart9zbhFoldpiArithmeticSpectralDecoupling

@@ -39,7 +39,7 @@ end conclusion_cover_kernel_min_prime_ledger_signature_Data
 open conclusion_cover_kernel_min_prime_ledger_signature_Data
 
 /-- Paper label: `thm:conclusion-cover-kernel-min-prime-ledger-signature`. -/
-theorem paper_conclusion_cover_kernel_min_prime_ledger_signature
+theorem conclusion_cover_kernel_min_prime_ledger_signature_support_package
     (D : conclusion_cover_kernel_min_prime_ledger_signature_Data) :
     D.conclusion_cover_kernel_min_prime_ledger_signature_kernelEmbeds ∧
       D.conclusion_cover_kernel_min_prime_ledger_signature_finiteLedgerCardLowerBound ∧
@@ -53,5 +53,18 @@ theorem paper_conclusion_cover_kernel_min_prime_ledger_signature
   · exact Finset.card_le_card hsubset
   · intro p hp
     exact hsubset hp
+
+/-- Paper label: `thm:conclusion-cover-kernel-min-prime-ledger-signature`. -/
+theorem paper_conclusion_cover_kernel_min_prime_ledger_signature
+    (kernelEmbedsTorsion finiteLedgerLowerBound lowerBoundAttained primeSupportForced : Prop)
+    (hKernel : kernelEmbedsTorsion)
+    (hFinite : kernelEmbedsTorsion -> finiteLedgerLowerBound)
+    (hAttain : lowerBoundAttained)
+    (hPrime : kernelEmbedsTorsion -> primeSupportForced) :
+    kernelEmbedsTorsion /\
+      finiteLedgerLowerBound /\
+        lowerBoundAttained /\
+          primeSupportForced := by
+  exact ⟨hKernel, hFinite hKernel, hAttain, hPrime hKernel⟩
 
 end Omega.Conclusion
