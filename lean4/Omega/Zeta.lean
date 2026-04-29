@@ -3229,3 +3229,5 @@ import Omega.Zeta.XiEndpointAtomCentralChannelStrength
 import Omega.Zeta.XiTimePart65gDirichletAxisSwapObstruction
 import Omega.Zeta.XiComovingProfileCompleteReconstruction
 import Omega.Zeta.XiComovingProfileIntegralityTest
+import Omega.Zeta.XiTimePart62aeAnomalyInfiniteRankDichotomy
+import Omega.Zeta.XiTimePart62aeNoFiniteCountertermFredholmClosure
