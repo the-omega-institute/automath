@@ -2658,3 +2658,4 @@ import Omega.Zeta.XiToeplitzFirstFailureMinimalBlockingPolynomial
 import Omega.Zeta.XiTimePart9fBoundaryHolographicSaturation
 import Omega.Zeta.XiTerminalZmS3DoubleCoverBranchComplementarity
 import Omega.Zeta.XiTimePart28bStripOnsetLaw
+import Omega.Zeta.XiInnerIffConservativeColligation
