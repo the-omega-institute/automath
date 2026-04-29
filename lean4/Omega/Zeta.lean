@@ -159,6 +159,7 @@ import Omega.Zeta.XiHilbertPolyaJacobi
 import Omega.Zeta.XiTimePart9zWindow6MomentInvolutiveAlgebraRealization
 import Omega.Zeta.XiTimePart9zWindow6StieltjesCapacityDuality
 import Omega.Zeta.XiPickPoissonLambdaMinRatioBound
+import Omega.Zeta.XiPickPoissonDetScalingLaw
 import Omega.Zeta.XiReverseKLCoprimeFrequencyPhaseAmplification
 import Omega.Zeta.XiReverseklExtremalGapEnergyCorrection
 import Omega.Zeta.XiPrimeMomentSemialgebraicCone
