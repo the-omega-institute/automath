@@ -165,4 +165,15 @@ theorem paper_xi_zero_dispersion_infimal_convolution_package :
       totalBudget g1 g2 b (m + 1) - totalBudget g1 g2 b m = compositeRate g1 g2) :=
   paper_xi_zero_dispersion_infimal_convolution_seeds
 
+/-- Paper-facing wrapper for the zero-dispersion infimal convolution package.
+    thm:xi-zero-dispersion-infimal-convolution -/
+theorem paper_xi_zero_dispersion_infimal_convolution :
+    compositeRate 3 5 = 8 ∧ compositeRate 7 2 = 9 ∧
+      (∀ g1 g2 : Int, compositeRate g1 g2 = compositeRate g2 g1) ∧
+      splitCost 2 3 4 6 = 26 ∧
+      (∀ c eps1 eps2 : Int, splitCost c c eps1 eps2 = c * (eps1 + eps2)) ∧
+      (∀ g1 g2 b m : Int,
+        totalBudget g1 g2 b (m + 1) - totalBudget g1 g2 b m = compositeRate g1 g2) := by
+  exact paper_xi_zero_dispersion_infimal_convolution_package
+
 end Omega.Zeta.ZeroDispersionInfimalConvolutionSeeds

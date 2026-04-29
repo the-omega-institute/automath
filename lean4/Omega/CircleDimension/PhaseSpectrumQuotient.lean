@@ -12,4 +12,10 @@ theorem paper_cdim_phase_spectrum_quotient_seeds :
   intro r t N
   exact phaseSpectrumCount_split r t N
 
+/-- Paper-facing wrapper for the finite quotient closed form.
+    prop:cdim-phase-spectrum-quotient -/
+theorem paper_cdim_phase_spectrum_quotient :
+    ∀ r t N : Nat, phaseSpectrumCount r t N = N ^ r * Nat.gcd t N := by
+  exact paper_cdim_phase_spectrum_quotient_seeds
+
 end Omega.CircleDimension
