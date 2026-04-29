@@ -223,6 +223,8 @@ import Omega.Zeta.XiReverseKLCoprimeFrequencyPhaseAmplification
 import Omega.Zeta.XiReverseklExtremalGapEnergyCorrection
 import Omega.Zeta.XiPrimeMomentSemialgebraicCone
 import Omega.Zeta.XiEndpointHeatProbeRichardsonExtrapolation
+import Omega.Zeta.XiOutputPotentialDirichletFixedJFourthOrder
+import Omega.Zeta.XiPoissonFirstNonvanishingMomentTvKlSharp
 import Omega.Zeta.XiEndpointHeatProbePowerlawDifferences
 import Omega.Zeta.XiEndpointCompressionPrecision
 import Omega.Zeta.XiCartesianPowerJoukowskyGodelAnisotropicParabola
