@@ -3035,6 +3035,7 @@ import Omega.Zeta.XiTimePart64CoverZetaLeadingPoleStability
 import Omega.Zeta.XiTimePart62afHankelGapQuotientRingModel
 import Omega.Zeta.FibonacciHankelPadicValuation
 import Omega.Zeta.XiCompletedZetaDyadicRemainderBudget
+import Omega.Zeta.XiTimePart9zbhaFiniteLocalAlgebraEvenZetaFactorization
 import Omega.Zeta.XiTimePart60acaPidegMaxfiberThreshold
 import Omega.Zeta.XiCompletedZetaSimpleZeroStability
 import Omega.Zeta.XiV4BidoubleCoverExplicitLinebundles

@@ -31,4 +31,9 @@ theorem paper_conclusion_window6_boundary_image_ldpc_576_64_12
   · exact hcheck
   · rw [hvar]
 
+/-- Paper label: `cor:conclusion-window6-boundary-ldpc-minsupport-12`. -/
+theorem paper_conclusion_window6_boundary_ldpc_minsupport_12 :
+    Omega.SPG.dyadicBoundaryImageMinDistance 1 6 = 12 := by
+  simpa using Omega.SPG.paper_spg_dyadic_boundary_image_min_distance 1 6 (by norm_num)
+
 end Omega.Conclusion
