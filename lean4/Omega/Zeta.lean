@@ -3094,3 +3094,5 @@ import Omega.Zeta.XiVisibleArithmeticOmegaControlledSplitting
 import Omega.Zeta.XiP7S5GlobalConductorsSchurQuadraticTensor
 import Omega.Zeta.XiCapacityTailHistogramMomentCompleteStatistic
 import Omega.Zeta.XiCauchyPoissonKlTwoTermLimit
+import Omega.Zeta.XiLocalizedEndomorphismRingSolenoidIndecomposable
+import Omega.Zeta.XiTimePart65eWindow6NoGatelessZ2CentralExtension
