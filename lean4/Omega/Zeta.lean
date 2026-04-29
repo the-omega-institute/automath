@@ -2723,3 +2723,5 @@ import Omega.Zeta.LeyangLogshiftTwoSpectrum
 import Omega.Zeta.LeyangFunctorialityDefectBound
 import Omega.Zeta.XiLeyangCrossratioProjectiveFingerprintComplete
 import Omega.Zeta.XiTerminalZmHurwitzIrreducibleAndGenus2Jac3torsionModuli
+import Omega.Zeta.XiRankoneSatakeCartanGreenTrace
+import Omega.Zeta.XiOModPiIntegerSplitting

@@ -2319,3 +2319,4 @@ import Omega.Conclusion.MaxfiberHalfLawFromPhaseCensus
 import Omega.Conclusion.FirstFeasibleAlphabetStillFailsOnMaxfiber
 import Omega.Conclusion.Length2AtomNyquistRigidity
 import Omega.Conclusion.LeyangS4DoubleObservableClassification
+import Omega.Conclusion.FoldZeroTemperatureOrthantSelection
