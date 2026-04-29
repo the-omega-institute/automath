@@ -120,6 +120,8 @@ import Omega.Zeta.XiRhomPressureSeriesConvergenceThresholdRemainder
 import Omega.Zeta.XiScaleMellinBesselKernel
 import Omega.Zeta.XiFoldbinAbsoluteRenyiEntropyConstantClosed
 import Omega.Zeta.XiFoldbinRenyiDivergenceFreezingAffine
+import Omega.Zeta.XiFoldbinFiberWallcrossingRepresentation
+import Omega.Zeta.XiFoldRenyiConstantSpectrumClosedForm
 import Omega.Zeta.XiWindow6ResetGapFibCoupling
 import Omega.Zeta.XiWindow6ResetClockGapFrequencies
 import Omega.Zeta.XiWindow6ReciprocalFluxBoson12
