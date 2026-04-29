@@ -233,6 +233,8 @@ import Omega.Zeta.XiTimePart67LastbitTerminalCsiszarCollapse
 import Omega.Zeta.HardyCriterionDelta
 import Omega.Zeta.XiSaturatedShiftInvariantLatticeGcdLcm
 import Omega.Zeta.XiGridScanTwoStepDealiasing
+import Omega.Zeta.XiJoukowskyModsquareMomentsBessel
+import Omega.Zeta.XiTerminalZmStokesAmplitudeSquareCubicRigidity
 import Omega.Zeta.CapacityOverlapFunctionalL1Identity
 import Omega.Zeta.XiTerminalBelyiFullSymmetricCover
 import Omega.Zeta.CauchyPoissonKlGoldenScale

@@ -122,12 +122,11 @@ lemma xi_terminal_zm_stokes_amplitude_square_cubic_rigidity_no_rational_root
 
 /-- Paper label: `thm:xi-terminal-zm-stokes-amplitude-square-cubic-rigidity`. -/
 theorem paper_xi_terminal_zm_stokes_amplitude_square_cubic_rigidity :
-    (∀ q : ℚ, (162 : ℚ) * q ^ 3 + 1593 * q ^ 2 + 1998 * q + 1184 ≠ 0) ∧
-      (let disc : ℤ :=
-        1593 ^ 2 * 1998 ^ 2 - 4 * 162 * 1998 ^ 3 - 4 * 1593 ^ 3 * 1184 -
-          27 * 162 ^ 2 * 1184 ^ 2 + 18 * 162 * 1593 * 1998 * 1184;
-        disc = -2 ^ 2 * 3 ^ 9 * 11 ^ 2 * 37 * 109 ^ 2 ∧ disc < 0) := by
-  refine ⟨xi_terminal_zm_stokes_amplitude_square_cubic_rigidity_no_rational_root, ?_⟩
-  norm_num
+    (1593 ^ 2 * 1998 ^ 2 - 4 * 162 * 1998 ^ 3 - 4 * 1593 ^ 3 * 1184 -
+        27 * 162 ^ 2 * 1184 ^ 2 + 18 * 162 * 1593 * 1998 * 1184 =
+      - (2 ^ 2 * 3 ^ 9 * 11 ^ 2 * 37 * 109 ^ 2 : ℤ)) ∧
+      (∀ q : ℚ, 162 * q ^ 3 + 1593 * q ^ 2 + 1998 * q + 1184 ≠ 0) := by
+  refine ⟨by norm_num, ?_⟩
+  exact xi_terminal_zm_stokes_amplitude_square_cubic_rigidity_no_rational_root
 
 end Omega.Zeta
