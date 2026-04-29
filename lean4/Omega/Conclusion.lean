@@ -2527,3 +2527,5 @@ import Omega.Conclusion.SmithPKernelSpectrumFreeCommutativeMonoid
 import Omega.Conclusion.OrientationCartesianParityCollapse
 import Omega.Conclusion.LengthCongruenceMertensParsevalUniformization
 import Omega.Conclusion.RealInput40PositiveAxisFiniteSpectralPhasePartition
+import Omega.Conclusion.LaurentRoseGcdCollapseIndex
+import Omega.Conclusion.SympowerDiscriminantFactorization
