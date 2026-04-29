@@ -126,6 +126,7 @@ import Omega.Zeta.XiReverseKLCoprimeFrequencyPhaseAmplification
 import Omega.Zeta.XiReverseklExtremalGapEnergyCorrection
 import Omega.Zeta.XiPrimeMomentSemialgebraicCone
 import Omega.Zeta.XiEndpointHeatProbeRichardsonExtrapolation
+import Omega.Zeta.XiEndpointCompressionPrecision
 import Omega.Zeta.XiCartesianPowerJoukowskyGodelAnisotropicParabola
 import Omega.Zeta.XiLissajousPhaseSingularRingImmersion
 import Omega.Zeta.XiTimePart62dLissajousBranchSpectrumResultant
