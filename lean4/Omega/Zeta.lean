@@ -2945,3 +2945,4 @@ import Omega.Zeta.AbelPoleDivisorPowermapLyapunov
 import Omega.Zeta.AbelianChannelNegativityLocalization
 import Omega.Zeta.XiPoissonTwoParameterKLSharpQuadratic
 import Omega.Zeta.XiTimePart65GFoldEnergyThreevaluedPhaseWalk
+import Omega.Zeta.XiIdealLatticeHasseMetricDeltaGeodesics

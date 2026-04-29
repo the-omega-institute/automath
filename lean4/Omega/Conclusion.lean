@@ -2515,3 +2515,5 @@ import Omega.Conclusion.SchurSingleRowCompleteRecovery
 import Omega.Conclusion.PartitionSquarefreePartitionFunctionGroundstate
 import Omega.Conclusion.SmithBadPrimeLossSupport
 import Omega.Conclusion.ZigzagHstarStrictRefinementOfReplayCount
+import Omega.Conclusion.TwofiberRenyiBalanceInversion
+import Omega.Conclusion.SmithPKernelSpectrumFreeCommutativeMonoid
