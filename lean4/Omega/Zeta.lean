@@ -159,6 +159,7 @@ import Omega.Zeta.XiTimePart50dcResidueZetaCyclotomicWitt
 import Omega.Zeta.XiP7S5MinimalArtinDedekindZetaFactorization
 import Omega.Zeta.XiP7S5LocalEulerFactorTripleIsomorphismAtQ
 import Omega.Zeta.XiP7S5GlobalArtinConductorsRho456
+import Omega.Zeta.XiV4SubcoverBranchRigidityInertiaDistinct
 import Omega.Zeta.XiP7LeyangFiniteVolumeArtinDedekindFactorization
 import Omega.Zeta.XiP7LeyangInversionRecoversChebotarevDensities
 import Omega.Zeta.LocalizedPhaseSamplingClosedForm
@@ -271,6 +272,7 @@ import Omega.Zeta.XiTimeConsistentInverseLimitReadout
 import Omega.Zeta.XiNodePolynomialGoodReductionDiscriminant
 import Omega.Zeta.XiGramshiftPadicDiscriminantHalfloss
 import Omega.Zeta.XiPoissonTVSharpConstantSecondMomentOnly
+import Omega.Zeta.XiPoissonKLSharpSecondMomentOnly
 import Omega.Zeta.XiHorizonMuEndpointProbeConstant
 import Omega.Zeta.XiHankelDeterminantGramshiftDiscriminantIdentity
 import Omega.Zeta.XiTerminalZmB2Kappa2RationalInterconstruction

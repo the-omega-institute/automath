@@ -160,6 +160,7 @@ import Omega.Conclusion.LowMultiplicitySectorLocalInvisibility
 import Omega.Conclusion.FullResidueRegularSimplexOrbit
 import Omega.Conclusion.FullResiduePhiSquareUniversalExponent
 import Omega.Conclusion.ZGFiniteCertificateFiberFullSpectrum
+import Omega.Conclusion.ZGNowhereLocallyDoubling
 import Omega.Conclusion.CdimPrecisionLedgerLbKphase
 import Omega.Conclusion.OperatorCaratheodoryCPVisibleEquivalence
 import Omega.Conclusion.AtomicWittFactorQuantizedAbelShift
