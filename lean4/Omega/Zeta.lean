@@ -2768,6 +2768,7 @@ import Omega.Zeta.XiTimePart62dcaHologramBernoulliExactDimensionFormula
 import Omega.Zeta.XiTerminalZmS3ClosureHasseWeilFactorization
 import Omega.Zeta.XiFoldbinGaugeGroupOrderAbelCenterClosed
 import Omega.Zeta.XiTimePart60abGaugeConstantLeadingModeRatio
+import Omega.Zeta.XiTimePart70adGaugeEntropyLeadingDrift
 import Omega.Zeta.LeyangLogshiftTwoSpectrum
 import Omega.Zeta.XiLeyangJordanLogshift
 import Omega.Zeta.LeyangFunctorialityDefectBound

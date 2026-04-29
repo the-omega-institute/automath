@@ -409,6 +409,7 @@ import Omega.Conclusion.PrimorialCompletionHorocyclicPacket
 import Omega.Conclusion.Window6CubicCentralRelation
 import Omega.Conclusion.CollisionBlowupSpectralAntidilution
 import Omega.Conclusion.Window6LongRootFourierSelectionRule
+import Omega.Conclusion.Window6FourierSelectionLawArithmeticSupport
 import Omega.Conclusion.Window6LongRootGL2Symmetry
 import Omega.Conclusion.Window6LongRootProjectiveShortRootDefect
 import Omega.Conclusion.Window6LedgerLieDimensionIdentity
