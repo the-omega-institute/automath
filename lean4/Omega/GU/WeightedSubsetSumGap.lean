@@ -42,6 +42,13 @@ theorem paper_gut_weighted_subset_sum_min_gap_upper
     simpa using Finset.single_le_sum (fun j _ => abs_nonneg (w j)) (Finset.mem_univ i)
   simpa [weightedSubsetSum] using hle
 
+/-- Label-correct paper wrapper for the weighted subset-sum min-gap upper bound.
+    thm:group-jg-weighted-subset-sum-min-gap-upper -/
+theorem paper_group_jg_weighted_subset_sum_min_gap_upper
+    {k : Nat} (hk : 1 ≤ k) (w : Fin k → ℝ) :
+    weightedSubsetSumMinGapUpper w :=
+  paper_gut_weighted_subset_sum_min_gap_upper hk w
+
 /-- Paper-facing log-scale specialization of the weighted subset-sum gap seed.
     cor:group-jg-prime-register-logscale-indistinguishability-threshold -/
 theorem paper_gut_prime_register_logscale_indistinguishability_threshold

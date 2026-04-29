@@ -34,4 +34,12 @@ theorem paper_etds_finite_part_cyclic_lift_torsion_product
   exact
     ⟨D.cyclotomicSectorFactorization_h, D.remainingSectorsAreTorsionValues_h, hProduct⟩
 
+/-- Label-correct paper wrapper for the finite-part cyclic-lift torsion product formula.
+    prop:finite-part-cyclic-lift-torsion-product -/
+theorem paper_finite_part_cyclic_lift_torsion_product
+    (D : FinitePartCyclicLiftTorsionProductData) :
+    D.cyclotomicSectorFactorization ∧ D.remainingSectorsAreTorsionValues ∧
+      D.torsionProductFormula :=
+  paper_etds_finite_part_cyclic_lift_torsion_product D
+
 end Omega.Zeta
