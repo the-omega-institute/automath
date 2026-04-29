@@ -247,6 +247,8 @@ import Omega.Zeta.XiOutputPotentialDirichletFixedJFourthOrder
 import Omega.Zeta.XiPoissonFirstNonvanishingMomentTvKlSharp
 import Omega.Zeta.XiEndpointHeatProbePowerlawDifferences
 import Omega.Zeta.XiEndpointCompressionPrecision
+import Omega.Zeta.XiGodelModRegisterCollisionDilution
+import Omega.Zeta.XiS4MainComponentJacobianIsotypicMissingPattern
 import Omega.Zeta.XiOffcriticalPoissonHerglotzInversion
 import Omega.Zeta.XiSymmetryAuditTensionScaled
 import Omega.Zeta.XiCartesianPowerJoukowskyGodelAnisotropicParabola
