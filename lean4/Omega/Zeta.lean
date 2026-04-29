@@ -1,4 +1,5 @@
 import Omega.Zeta.XiBasepointScanAnchorAngleConcentration
+import Omega.Zeta.XiLeyangUBSquareCommonQuadraticResolvent
 import Omega.Zeta.XiOutputPotentialLargeOddPrimesBad
 import Omega.Zeta.XiWindow6ParityChargeTrigradingB3
 import Omega.Zeta.XiTimePart59abPeriodizedLogEnergyFib

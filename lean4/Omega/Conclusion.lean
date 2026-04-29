@@ -1,4 +1,5 @@
 import Omega.Conclusion.AnchorFullrankPointwiseLaststepDecomposition
+import Omega.Conclusion.FirstCoordinateBiasEnergySpectralFaithfulness
 import Omega.Conclusion.AnchorCodimCompletionStieltjesVanvleckClosure
 import Omega.Conclusion.Window6PerfectReplayThresholdOnebitGap
 import Omega.Conclusion.Window6ReplayBoundaryAnomalyBitSeparation
