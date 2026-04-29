@@ -222,6 +222,7 @@ import Omega.Zeta.XiWindow6FullAutomorphismGroupStructure
 import Omega.Zeta.XiWindow6SchurMultiplier219
 import Omega.Zeta.XiFdeltaChar73TransverseNode
 import Omega.Zeta.XiWindow6BoundaryParityCocycleExtension
+import Omega.Zeta.XiTerminalZmStokesHiddenSquareRationalInversion
 import Omega.Zeta.XiBQAuditableEntrywiseAsymptoticPositivity
 import Omega.Zeta.XiHilbertPolyaCMV
 import Omega.Zeta.XiHankelMaxminorHeightBoundDeterministicCrtReconstruction

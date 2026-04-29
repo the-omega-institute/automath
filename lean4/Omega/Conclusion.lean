@@ -265,6 +265,7 @@ import Omega.Conclusion.Window6So10CenterDeficit
 import Omega.Conclusion.Window6NoInverseLimitCylinderParityLift
 import Omega.Conclusion.PrimeLogModularTwistInsufficient
 import Omega.Conclusion.PrimeLogExactCoboundary
+import Omega.Conclusion.Window6VisibleOddKernelBasis
 import Omega.Conclusion.DigitalLocalFactorRegularizationConstraint
 import Omega.Conclusion.AlgebraicLdpAffineMonodromyRepresentation
 import Omega.Conclusion.PcdimResourceCompleteness
