@@ -51,6 +51,7 @@ import Omega.Zeta.XiPointAtomTruncatedRealizabilityEnvelope
 import Omega.Zeta.ExteriorPowerCokernelIntegerSplitting
 import Omega.Zeta.ChebotarevQuotientMonotonicityErrorExponent
 import Omega.Zeta.XiBasepointScanHeineStieltjesOde
+import Omega.Zeta.XiBasepointScanVanVleckResidueMoment2
 import Omega.Zeta.XiAtomicWittEnergyResidueL2Law
 import Omega.Zeta.XiFoldbinEntropyGaugeOneNatGap
 import Omega.Zeta.XiFoldbinFDivergenceTwoPointExperiment
