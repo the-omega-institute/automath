@@ -226,6 +226,7 @@ import Omega.Zeta.XiDefectEntropyScaleFingerprintStieltjes
 import Omega.Zeta.XiCauchyPoissonChi2HellingerSixthOrder
 import Omega.Zeta.XiAnchoredCapacityStabilizerCovariance
 import Omega.Zeta.XiPickPoissonDetMultipartitionKappa2Collapse
+import Omega.Zeta.XiHzomWeilPositivityCp
 import Omega.Zeta.XiDefectWindowOrbitBridge
 import Omega.Zeta.XiChainIdempotentComparabilityBidirectionalDefect
 import Omega.Zeta.XiHardeningTimeFrontierRigidity
