@@ -51,6 +51,22 @@ lemma localizedDirectsumMatrixOfFamily_sparse (S T : LocalizedDirectsumFamily)
   have hzero : (Φ j i).1 1 = 0 := hObstacle hNotSubset (Φ j i) 1
   simpa [localizedDirectsumMatrixOfFamily, localizedCrossHomScalar] using hzero
 
+/-- Localized direct-sum homomorphisms are exactly sparse integer matrices acting by the usual
+finite matrix formula.
+    thm:xi-localized-directsum-hom-sparse-matrix -/
+theorem paper_xi_localized_directsum_hom_sparse_matrix (S T : LocalizedDirectsumFamily) :
+    (∀ Φ : localizedDirectsumCrossHomFamily S T,
+      localizedDirectsumSparseMatrix S T (localizedDirectsumMatrixOfFamily S T Φ)) ∧
+    (∀ Q : Fin T.length → Fin S.length → ℤ,
+      localizedDirectsumSparseMatrix S T Q →
+        ∃ F : (Fin S.length → ℤ) →+ (Fin T.length → ℤ),
+          ∀ x j, F x j = ∑ i, Q j i * x i) := by
+  refine ⟨?_, ?_⟩
+  · intro Φ
+    exact localizedDirectsumMatrixOfFamily_sparse S T Φ
+  · intro Q _hQ
+    exact ⟨localizedDirectsumMatrixHom S T Q, fun _ _ => rfl⟩
+
 /-- Every sparse localized matrix acts componentwise on the direct sum, and the resulting
 isomorphism criterion is equality of the support multiset, equivalently permutation of the finite
 family.

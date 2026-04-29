@@ -1,4 +1,6 @@
 import Omega.Multiscale.CoveringTowerGodelBoundaryNormalizedStokes
+import Omega.Multiscale.NonabelianBianchiDyadicAuditThreshold
+import Omega.Multiscale.FiniteConditionalExpectation
 import Omega.Multiscale.HighRankSolenoidPontryaginStokesPeriodModule
 import Omega.Multiscale.NormalizedBCStokesFiberedInverseTower
 import Omega.Multiscale.NormalizedIntegrationL1DefectInverseTower

@@ -12,4 +12,10 @@ theorem paper_fold_gauge_anomaly_P10H_splitting_field_product :
     ⟨_, _, _, hdirect, hdegree⟩
   exact ⟨hdirect, hdegree⟩
 
+/-- Paper label: `cor:fold-gauge-anomaly-P10H-splitting-field-product`. -/
+theorem paper_fold_gauge_anomaly_p10h_splitting_field_product :
+    foldGaugeAnomalyP10HDirectProductGalois ∧
+      foldGaugeAnomalyP10HCompositumDegree = Nat.factorial 10 * Nat.factorial 19 := by
+  exact paper_fold_gauge_anomaly_P10H_splitting_field_product
+
 end Omega.Folding

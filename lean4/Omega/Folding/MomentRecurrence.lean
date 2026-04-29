@@ -1109,6 +1109,18 @@ theorem paper_pom_collision_moment_package :
     (∀ q m : Nat, 1 ≤ q → 2 ^ m ≤ momentSum q m) :=
   ⟨momentSum_two_pos', momentSum_two_strict_mono', momentSum_ge_card', momentSum_ge_pow'⟩
 
+/-- Concrete collision-moment package used by the Rényi collision identity wrapper.
+    prop:fold-renyi-collision-identity -/
+def fold_renyi_collision_identity_statement : Prop :=
+    (∀ m : Nat, 0 < momentSum 2 m) ∧
+    (∀ m : Nat, 1 ≤ m → momentSum 2 m < momentSum 2 (m + 1)) ∧
+    (∀ q m : Nat, Nat.fib (m + 2) ≤ momentSum q m) ∧
+    (∀ q m : Nat, 1 ≤ q → 2 ^ m ≤ momentSum q m)
+
+/-- Paper label: `prop:fold-renyi-collision-identity`. -/
+theorem paper_fold_renyi_collision_identity : fold_renyi_collision_identity_statement :=
+  paper_pom_collision_moment_package
+
 /-- Moment sum hierarchy: S_0, S_1, monotonicity in q.
     prop:fold-groupoid-wedderburn -/
 theorem paper_momentSum_hierarchy :

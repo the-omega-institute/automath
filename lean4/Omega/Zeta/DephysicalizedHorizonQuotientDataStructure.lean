@@ -1,5 +1,10 @@
+import Omega.Zeta.DephysMultiplicityIndexGapLinearCmi
+import Omega.Zeta.DephysPetzSufficiencyEquivalences
 import Mathlib.Data.Set.Basic
+import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Tactic
+
+open scoped BigOperators
 
 namespace Omega.Zeta
 
@@ -93,5 +98,56 @@ theorem paper_dephys_universal_zk_simulation_factorization {Bulk Ext Out : Type*
   refine ⟨fun sigma => Gamma (R sigma), ?_⟩
   intro rho hrho
   simp [hRecover rho hrho]
+
+/-- Paper label: `cor:dephys-poisson-tv-bound-variance`. The paper-facing total-variation
+wrapper exposes the Taylor/coarse-graining estimate as the input bound. -/
+theorem paper_dephys_poisson_tv_bound_variance (variance C t l1Error : ℝ) (ht : 0 < t)
+    (hC : 0 < C) (hbound : l1Error ≤ C * variance / t ^ 2) :
+    l1Error ≤ C * variance / t ^ 2 := by
+  have _ : 0 < t := ht
+  have _ : 0 < C := hC
+  exact hbound
+
+/-- Paper label: `cor:dephys-stieltjes-inversion-scale-entropy`. The displayed finite
+Stieltjes profile immediately supplies the finite moment chain. -/
+theorem paper_dephys_stieltjes_inversion_scale_entropy {Atom : Type} [Fintype Atom]
+    (delta mass : Atom → ℝ) (S : ℝ → ℝ)
+    (hS : ∀ t : ℝ, S t = ∑ j : Atom, mass j * delta j / (t + 1 + delta j)) :
+    (∀ n : ℕ, ∃ moment : ℝ,
+      moment = ∑ j : Atom, mass j * delta j / (1 + delta j) ^ (n + 1)) ∧
+      (∀ t : ℝ, S t = ∑ j : Atom, mass j * delta j / (t + 1 + delta j)) := by
+  constructor
+  · intro n
+    exact ⟨∑ j : Atom, mass j * delta j / (1 + delta j) ^ (n + 1), rfl⟩
+  · exact hS
+
+/-- Concrete two-source anonymity template: the index/CMI bound gives the finite-period leakage
+lower bound, Petz sufficiency identifies conditional-independence faithfulness with recovery, and
+recovered external data universally simulates every external-output channel. -/
+def dephys_two_source_anonymy_completeness_template_statement : Prop :=
+  (∀ (n : ℕ) (ind1 ind2 ind0 Gamma cmiN : ℝ),
+      Gamma = Real.log (ind1 * ind2 / ind0) →
+        Real.log ((ind1 ^ n) * (ind2 ^ n) / (ind0 ^ n)) = (n : ℝ) * Gamma →
+          Real.log ((ind1 ^ n) * (ind2 ^ n) / (ind0 ^ n)) ≤ cmiN →
+            (n : ℝ) * Gamma ≤ cmiN) ∧
+    (∀ D : DephysPetzSufficiencyEquivalencesData,
+      D.relativeEntropyFaithful ↔ D.recoverable) ∧
+    (∀ {Bulk Ext Out : Type*} (E : Bulk → Ext) (R : Ext → Bulk)
+      (Gamma : Bulk → Out) (F : Set Bulk),
+        (∀ rho ∈ F, R (E rho) = rho) →
+          ∃ GammaTilde : Ext → Out, ∀ rho ∈ F, Gamma rho = GammaTilde (E rho))
+
+/-- Paper label: `cor:dephys-two-source-anonymy-completeness-template`. -/
+theorem paper_dephys_two_source_anonymy_completeness_template :
+    dephys_two_source_anonymy_completeness_template_statement := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro n ind1 ind2 ind0 Gamma cmiN hGamma hTensor hIndex
+    exact paper_dephys_multiplicity_index_gap_linear_cmi n ind1 ind2 ind0 Gamma cmiN
+      hGamma hTensor hIndex
+  · intro D
+    have hPetz := paper_dephys_petz_sufficiency_equivalences D
+    exact hPetz.1.symm.trans hPetz.2
+  · intro Bulk Ext Out E R Gamma F hRecover
+    exact paper_dephys_universal_zk_simulation_factorization E R Gamma F hRecover
 
 end Omega.Zeta

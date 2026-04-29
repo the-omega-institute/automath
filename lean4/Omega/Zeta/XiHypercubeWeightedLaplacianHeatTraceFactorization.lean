@@ -137,4 +137,15 @@ theorem paper_xi_hypercube_weighted_laplacian_heat_trace_factorization
           exact Finset.prod_one_add (s := (Finset.univ : Finset (Fin k)))
             (f := fun i => Real.exp (-2 * t * w i))
 
+/-- Paper label: `cor:xi-prime-log-weighted-hypercube-heat-trace-euler`.  The product component
+of the weighted hypercube heat-trace factorization specialized to prime-log weights. -/
+theorem paper_xi_prime_log_weighted_hypercube_heat_trace_euler (k : ℕ) (p : Fin k → ℝ)
+    (_hp : ∀ i, 0 < p i) (t : ℝ) :
+    xi_hypercube_weighted_laplacian_heat_trace_factorization_heatTrace
+        (fun i => Real.log (p i)) t =
+      ∏ i : Fin k, (1 + Real.exp (-2 * t * Real.log (p i))) := by
+  exact
+    (paper_xi_hypercube_weighted_laplacian_heat_trace_factorization k
+      (fun i => Real.log (p i)) t).2
+
 end Omega.Zeta

@@ -1,6 +1,6 @@
-\section{Numerical checks of the exact results}\label{sec:verification}
+\section{Numerical checks and reproducibility}\label{sec:verification}
 
-The preceding sections establish the exact branch structure and endpoint asymptotics of the quartic family by algebraic and analytic methods.
+The preceding sections establish the branch structure and endpoint asymptotics of the quartic family by algebraic and analytic methods.
 The computations in this section serve only as consistency checks for the real-axis modulus ordering and the endpoint zero formula.
 
 \subsection{Validation targets from the exact theory}
@@ -15,7 +15,7 @@ Z_m(y)=\sum_{j=1}^4 C_j(y)\lambda_j(y)^m,
 \qquad
 C_j(y)=\frac{\lambda_j(y)^3\,N(1/\lambda_j(y),y)}{\partial_\lambda\Pi(\lambda_j(y),y)}.
 \]
-The Beraha--Kahane--Weiss theorem, in the form used here \cite{BerahaKahaneWeiss1975,Sokal2004}, gives two alternatives for a limit point of zeros of \(\{Z_m(y)\}_{m\ge0}\): either two or more eigenvalues of maximal modulus tie, or a unique dominant eigenvalue exists but its coefficient vanishes.
+The Beraha--Kahane--Weiss theorem, in the form used here \cite{BerahaKahaneWeiss1975,BerahaKahaneWeiss1978,Sokal2004}, gives two alternatives for a limit point of zeros of \(\{Z_m(y)\}_{m\ge0}\): either two or more eigenvalues of maximal modulus tie, or a unique dominant eigenvalue exists but its coefficient vanishes.
 On \(\Omega\), the second alternative does not occur.
 Indeed, for a simple root \(\lambda_j(y)\) one has \(\partial_\lambda\Pi(\lambda_j(y),y)\neq 0\), and Theorem~\ref{thm:minimal-order} shows that \(N(t,y)\) and \(D(t,y)\) are coprime for \(y\notin\{-1,0,1\}\).
 Since \(D(1/\lambda_j(y),y)=0\), it follows that \(N(1/\lambda_j(y),y)\neq 0\), hence \(C_j(y)\neq 0\) on \(\Omega\).
@@ -43,26 +43,28 @@ No fitting parameters are introduced: all markers correspond to the exact branch
 }
 \caption{
 \textbf{Left:} ordered root moduli of $\Pi(\lambda,y)=0$ along the real axis.
-At $y=0$, the top two moduli meet, confirming that the dominant sheet over $y>0$ terminates there.
+At $y=0$, the top two moduli meet, confirming that the dominant branch over $y>0$ terminates there.
 At $y=1$, only the lower pair collides while the dominant root remains isolated.
 At $y=\ySub$, the colliding double root lies strictly below the dominant modulus, as predicted by Theorem~\ref{thm:ep-classification}.
 \textbf{Center:} zeros of $Z_{80}(y)$ and $Z_{120}(y)$ in the complex $y$-plane.
-The finite-volume zero clouds organize around the same branch-value window and terminate at $y=0$ rather than at $y=\ySub$.
-The algebraically forced multiplicity-two contribution at $y=-1$ is pinned for every $m\ge 2$, while no comparable zero accumulation appears near $y=1$.
+The zero clouds organize around the same branch-value window and terminate at $y=0$ rather than at $y=\ySub$.
+The algebraically forced multiplicity-two zero at $y=-1$ (Proposition~\ref{prop:double-zero}) is present for every $m\ge 2$, while no comparable zero accumulation appears near $y=1$.
 \textbf{Right:} scaled negative zeros $-m^2y_{m,k}$ for $k=1,\dots,4$.
 Filled markers are exact zeros of $Z_m$ for $m=80,120,200$; open markers are the two-term asymptotic prediction from Theorem~\ref{thm:vacuum-zero-quantization}; the black line is the leading odd-integer law $\pi^2(2k-1)^2/2$.
-The data verify both the $m^{-2}$ edge scale and the odd-integer quantization inherited from the square-root branch point.
+The data are consistent with both the $m^{-2}$ edge scale and the odd-integer quantization inherited from the square-root branch point.
 }
 \label{fig:validation}
 \end{figure}
 
-The three panels match the exact theory in the expected places.
-On the real axis, the dominant-modulus collision occurs only at \(y=0\), while the collisions at \(y=1\) and \(y=\ySub\) are visibly subdominant.
-In the complex plane, the zero clouds for \(m=80\) and \(m=120\) accumulate on the same branch-value window, terminate at the endpoint \(y=0\), and retain the forced multiplicity-two zero at \(y=-1\).
-At the endpoint scale, the values \(-m^2y_{m,k}\) follow the odd-integer law \(\pi^2(2k-1)^2/2\) with the predicted \(m^{-3}\) correction from Theorem~\ref{thm:vacuum-zero-quantization}.
+The three panels are consistent with the exact results: the dominant-modulus collision occurs at \(y=0\), the endpoint-scale zeros follow the odd-integer law of Theorem~\ref{thm:vacuum-zero-quantization}, and the multiplicity-two zero at \(y=-1\) is pinned for every \(m\ge 2\).
 
 \medskip
 \noindent\textbf{Reproducibility.}
-Appendix~\ref{app:pseudocode} records the plotting conventions explicitly.
-For Figure~\ref{fig:validation}, the left panel samples \(1500\) equally spaced real points on \([-1.6,1.2]\), the center panel plots the zeros of \(Z_{80}\) and \(Z_{120}\), and the right panel uses \(m=80,120,200\) together with the first four negative real zeros nearest \(0\).
-All computations use IEEE double precision, and the real branch value \(y_{\mathrm{sub}}\) is selected by the filter \(\abs{\Im y}<10^{-10}\).
+Appendix~\ref{app:pseudocode} lists the dependable entry point \texttt{scripts/generate\_validation\_figure.py} and the precise commands needed to reproduce the plots.
+Running
+\[
+\texttt{python3\ scripts/generate\_validation\_figure.py}
+\]
+with Python~3.11, NumPy~1.26, Matplotlib~3.8, SymPy~1.12, and mpmath~1.3 regenerates Figure~\ref{fig:validation}, writes \texttt{figures/zero\_locus\_validation.pdf}, and records the modulus gaps along the sampled grid.
+The script factors out $(y+1)^2$ symbolically (Proposition~\ref{prop:double-zero}) before solving for the zeros so that the enforced double zero at $y=-1$ is verified algebraically.
+Appendix~\ref{app:pseudocode} also provides a short mpmath snippet for the 80-digit cross-check of the modulus ordering near $y\in\{0,1,y_{\mathrm{sub}}\}$.

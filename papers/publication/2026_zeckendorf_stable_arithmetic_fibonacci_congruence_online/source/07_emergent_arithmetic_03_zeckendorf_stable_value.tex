@@ -1,0 +1,231 @@
+\subsection{Zeckendorf value and the numerical realization of stable addresses}\label{subsec:emergent-arithmetic-zeckendorf-value-address}
+
+For \(w=w_1\cdots w_m\in X_m\), define its Zeckendorf value by
+\[
+V_m(w)=\sum_{k=1}^m w_k F_{k+1}.
+\]
+When \(0\le N\le F_{m+2}-1\), the Zeckendorf expansion \(Z(N)=(c_1,c_2,\dots)\) has no nonzero digits beyond the \(m\)-th place by Lemma \ref{lem:zeckendorf-range-bijection}. Hence
+\[
+Z_m(N):=\pi_m(Z(N))=(c_1,\dots,c_m)\in X_m
+\]
+is well defined, and
+\[
+N=V_m\bigl(Z_m(N)\bigr).
+\]
+Thus \(X_m\) may be regarded as a canonical address space for the integers in the range \(0\le N<F_{m+2}\).
+
+\subsubsection{Finite-resolution arithmetic and modular structure}
+To turn finite-resolution readout into a closed algebraic object, we define the operations on \(X_m\) by pulling modular arithmetic back along the value map.
+
+\begin{definition}[Finite-resolution arithmetic]
+For any \(w,v\in X_m\), define
+\[
+w\boxplus_m v:=Z_m\Bigl((V_m(w)+V_m(v))\bmod F_{m+2}\Bigr),
+\qquad
+w\boxtimes_m v:=Z_m\Bigl((V_m(w)\cdot V_m(v))\bmod F_{m+2}\Bigr),
+\]
+and write \(0_m:=Z_m(0)\), \(1_m:=Z_m(1)\).
+\end{definition}
+
+\begin{theorem}[Modular structure of finite-resolution arithmetic]
+\label{thm:finite-resolution-mod}
+The map \(V_m:X_m\to\ZZ/(F_{m+2}\ZZ)\) is an isomorphism of commutative rings
+\[
+(X_m,\boxplus_m,\boxtimes_m)\cong\bigl(\ZZ/(F_{m+2}\ZZ),+,\times\bigr).
+\]
+In particular, finite-resolution arithmetic on \(X_m\) is uniquely determined by modularizing values and then pulling back the canonical representatives.
+\end{theorem}
+
+\begin{proof}
+By Lemma \ref{lem:zeckendorf-range-bijection} and the definition of \(Z_m(N)\), the map \(V_m\) is a bijection from \(X_m\) onto \(\{0,1,\dots,F_{m+2}-1\}\), hence may be identified with a bijection onto \(\ZZ/(F_{m+2}\ZZ)\). The definitions of \(\boxplus_m\) and \(\boxtimes_m\) immediately give
+\[
+V_m(w\boxplus_m v)\equiv V_m(w)+V_m(v)\pmod{F_{m+2}},
+\qquad
+V_m(w\boxtimes_m v)\equiv V_m(w)\,V_m(v)\pmod{F_{m+2}}.
+\]
+Since these operations are transported from the residue ring along a bijection, they endow \(X_m\) with a commutative ring structure for which \(V_m\) is a ring isomorphism. Uniqueness follows from bijectivity: any operations making \(V_m\) into a ring homomorphism must coincide with the pullback formulas above.
+\end{proof}
+
+\begin{corollary}[Field phase: uniform arithmetic at Fibonacci-prime resolutions]\label{cor:field-phase-fib-prime}
+Let \(m\ge 1\) and set \(M:=F_{m+2}\). If \(M\) is a prime \(p\), then
+\[
+(X_m,\boxplus_m,\boxtimes_m)\cong \mathbb{F}_p
+\]
+is a finite field, and its nonzero elements form a cyclic multiplicative group
+\[
+(X_m\setminus\{0_m\},\boxtimes_m)\cong \mathbb{F}_p^\times\cong C_{p-1}.
+\]
+\leanverified{fib\_fifteen\_not\_prime}
+\leanverified{fib\_nineteen\_not\_prime}
+\leanverified{fib\_twentyone\_not\_prime}
+\leanverified{paper\_fibonacci\_prime\_composite\_classification\_1\_to\_29}
+\leanverified{pisano\_period\_67}
+\leanverified{pisano\_period\_73}
+\leanverified{pisano\_period\_79}
+\leanverified{paper\_pisano\_period\_67\_73\_79\_extended}
+\end{corollary}
+
+\begin{proof}
+By Theorem \ref{thm:finite-resolution-mod},
+\[
+(X_m,\boxplus_m,\boxtimes_m)\cong \ZZ/(p\ZZ)\cong\mathbb{F}_p,
+\]
+and \(\mathbb{F}_p^\times\) is cyclic.
+\end{proof}
+
+\begin{corollary}[CRT splitting: canonical product decomposition at composite resolutions]\label{cor:crt-factorization}
+Let \(m\ge 1\), set \(M:=F_{m+2}\), and write its prime factorization as
+\[
+M=\prod_{i=1}^{r} p_i^{k_i}
+\qquad
+(p_i\text{ pairwise distinct}).
+\]
+Then there is a ring isomorphism
+\[
+\ZZ/(M\ZZ)\cong \prod_{i=1}^{r}\ZZ/(p_i^{k_i}\ZZ),
+\]
+and therefore \((X_m,\boxplus_m,\boxtimes_m)\) is isomorphic to the same direct product ring. Its unit group likewise decomposes as
+\[
+(\ZZ/(M\ZZ))^\times\cong \prod_{i=1}^{r}(\ZZ/(p_i^{k_i}\ZZ))^\times.
+\]
+In particular, if \(r\ge 2\), then \(\ZZ/(M\ZZ)\) contains nontrivial idempotents and hence admits a canonical many-factor splitting in the ring-theoretic sense.
+\end{corollary}
+
+\begin{proof}
+All statements are standard consequences of the Chinese remainder theorem. The ring decomposition is the usual CRT isomorphism, the description of the unit group follows componentwise, and nontrivial idempotents occur exactly when the modulus has at least two coprime factors.
+\end{proof}
+
+\begin{proposition}[Minimal depth for the simultaneous \(2/3/5\) axes]\label{prop:crt-235-min-depth}
+Let \(M:=F_{m+2}\). Then the following conditions are equivalent:
+\begin{enumerate}
+  \item \(2,3,5\mid M\), equivalently \(30\mid M\);
+  \item \(3,4,5\mid (m+2)\);
+  \item \(60\mid (m+2)\).
+\end{enumerate}
+Consequently, under the finite-resolution arithmetic isomorphism
+\[
+(X_m,\boxplus_m,\boxtimes_m)\cong \ZZ/(F_{m+2}\ZZ)
+\]
+from Theorem \ref{thm:finite-resolution-mod}, if one requires simultaneous CRT visibility of the three basic congruence axes modulo \(2\), \(3\), and \(5\) inside a single modulus ring, then the smallest admissible resolution is
+\[
+\boxed{\ m_{\min}=58\qquad(m_{\min}+2=60)\ }.
+\]
+\leanverified{crt\_235\_min\_depth}
+\end{proposition}
+
+\begin{proof}
+Note that \(2=F_3\), \(3=F_4\), and \(5=F_5\). By the classical identity
+\[
+\gcd(F_a,F_b)=F_{\gcd(a,b)},
+\]
+we have for every \(n\) and every \(d\ge 1\),
+\[
+F_d\mid F_n
+\quad\Longleftrightarrow\quad
+\gcd(F_d,F_n)=F_d
+\quad\Longleftrightarrow\quad
+F_{\gcd(d,n)}=F_d
+\quad\Longleftrightarrow\quad
+d\mid n.
+\]
+Taking \(d=3,4,5\) and \(n=m+2\), we obtain
+\[
+2\mid F_{m+2}\Longleftrightarrow 3\mid(m+2),\qquad
+3\mid F_{m+2}\Longleftrightarrow 4\mid(m+2),\qquad
+5\mid F_{m+2}\Longleftrightarrow 5\mid(m+2).
+\]
+Therefore \(30\mid F_{m+2}\) if and only if \(3,4,5\mid(m+2)\), and this is equivalent to \(60\mid(m+2)\). The smallest solution is \(m+2=60\), hence \(m_{\min}=58\).
+\end{proof}
+
+\begin{remark}[\texorpdfstring{$m=58$}{m=58}: the three-axis CRT modulus and its rich prime-factor structure]\label{rem:crt-235-m58-factorization}
+By Proposition \ref{prop:crt-235-min-depth}, the minimal modulus supporting the simultaneous \(2/3/5\) axes is
+\[
+F_{60}=1548008755920
+=2^4\cdot 3^2\cdot 5\cdot 11\cdot 31\cdot 41\cdot 61\cdot 2521.
+\]
+Thus, besides the factors \(2,3,5\), the modulus automatically carries several additional prime components. From the CRT viewpoint of Corollary \ref{cor:crt-factorization}, these extra prime factors correspond to an auditably larger family of congruence axes.
+\end{remark}
+
+\begin{remark}[A rigid structural trichotomy: field / local / CRT-split]\label{rem:ring-phase-trichotomy}
+By Theorem \ref{thm:finite-resolution-mod}, the invertible internal symmetries at resolution \(m\) are naturally encoded by the unit group
+\[
+(X_m^\times,\boxtimes_m)\cong (\ZZ/(M\ZZ))^\times,
+\qquad
+M=F_{m+2},
+\]
+where
+\[
+X_m^\times:=\{w\in X_m:\ \exists\,w^{-1}\in X_m\text{ such that }w\boxtimes_m w^{-1}=1_m\}.
+\]
+Hence the most rigid notion of ``unification'' or ``symmetry breaking'' is a fact about the residue ring itself, rather than an a priori choice of a continuous Lie group:
+\begin{itemize}
+  \item \textbf{field} (maximal uniformity): \(M\) is prime, so the arithmetic is a field by Corollary \ref{cor:field-phase-fib-prime};
+  \item \textbf{local}: \(M=p^k\) is a prime power, so the ring does not split by CRT but is not a field unless \(k=1\);
+  \item \textbf{CRT-split}: \(M\) has at least two distinct prime factors, so the ring and its unit group decompose canonically as in Corollary \ref{cor:crt-factorization}.
+\end{itemize}
+\end{remark}
+
+\subsubsection{Completable cross-scale unification: a Fibonacci-adic inverse-limit ring}\label{subsubsec:fib-adic-inverse-limit}
+In general, the modulus at resolution \(m\) is \(M_m:=F_{m+2}\), but the sequence \((M_m)_{m\ge 1}\) is not itself a divisibility chain. Therefore, if one wants to make cross-scale compatibility precise in the form of an inverse limit, one must choose a subtower along which the moduli do divide one another.
+
+\begin{lemma}[Fibonacci divisibility chain]\label{lem:fib-divisibility-chain}
+If \(a\mid b\), then \(F_a\mid F_b\).
+\end{lemma}
+
+\begin{proof}
+This is a standard property of Fibonacci numbers. It follows immediately from
+\[
+\gcd(F_a,F_b)=F_{\gcd(a,b)}:
+\]
+if \(a\mid b\), then \(\gcd(a,b)=a\), hence \(\gcd(F_a,F_b)=F_a\), which is equivalent to \(F_a\mid F_b\).
+\end{proof}
+
+\begin{definition}[Dyadic subtower and the Fibonacci-adic ring]\label{def:fib-adic-ring}
+Let
+\[
+n_k:=2^k,\qquad m_k:=n_k-2,\qquad M_k:=F_{n_k}=F_{m_k+2}\qquad(k\ge 2).
+\]
+By Lemma \ref{lem:fib-divisibility-chain}, we have \(M_k\mid M_{k+1}\), so there are natural surjective ring homomorphisms
+\[
+\rho_{k+1\to k}:\ZZ/(M_{k+1}\ZZ)\twoheadrightarrow \ZZ/(M_k\ZZ),
+\qquad
+[x]_{M_{k+1}}\longmapsto [x]_{M_k}.
+\]
+Define the inverse-limit ring
+\[
+\boxed{\;
+\ZZ_{\mathrm{Fib},2}:=\varprojlim_{k\to\infty}\ZZ/(F_{2^k}\ZZ)
+\;}.
+\]
+\leanpartial{paper\_def\_fib\_adic\_ring\_divisibility}{Only the divisibility chain \(M_k\mid M_{k+1}\) along the dyadic tower has been formalized; the profinite topology of \(\mathbb{Z}_{\mathrm{Fib},2}\) and its unit group are left for later formalization}
+\leanverified{n\_k}
+\leanverified{M\_k}
+\leanverified{two\_pow\_dvd\_succ}
+\leanverified{n\_k\_dvd\_succ}
+\leanverified{M\_k\_dvd\_succ}
+\leanverified{M\_k\_dvd\_of\_le}
+\end{definition}
+
+\begin{proposition}[Basic properties of the inverse-limit ring: finite quotients and a compact unit group]\label{prop:fib-adic-basic}
+Let \(\ZZ_{\mathrm{Fib},2}\) be as in Definition \ref{def:fib-adic-ring}. Then:
+\begin{enumerate}
+  \item \textbf{(profinite completeness)} \(\ZZ_{\mathrm{Fib},2}\) is an inverse limit of finite rings and therefore a compact, totally disconnected commutative topological ring in the inverse-limit topology;
+  \item \textbf{(finite-resolution quotients)} for each \(k\), there is a natural surjective ring homomorphism
+\[
+\pi_k:\ZZ_{\mathrm{Fib},2}\twoheadrightarrow \ZZ/(F_{2^k}\ZZ),
+\]
+and these projections satisfy the compatibility relation \(\rho_{k+1\to k}\circ \pi_{k+1}=\pi_k\);
+  \item \textbf{(compactification of the unit groups)} the unit group \(\ZZ_{\mathrm{Fib},2}^\times\) is a compact topological group, naturally isomorphic to the inverse limit of the finite unit groups:
+\[
+\ZZ_{\mathrm{Fib},2}^\times\cong \varprojlim_k \bigl(\ZZ/(F_{2^k}\ZZ)\bigr)^\times.
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Parts (1) and (2) are standard facts about inverse limits: a product of finite discrete rings is compact, the inverse limit is a closed subset of that product, and the ring operations are inherited componentwise. For (3), if \(x=(x_k)_k\in \ZZ_{\mathrm{Fib},2}\) is invertible, then each coordinate \(x_k=\pi_k(x)\) is invertible because \(\pi_k\) is a ring homomorphism. Conversely, assume that every \(x_k\) is a unit and write \(y_k:=x_k^{-1}\). Since \(\rho_{k+1\to k}(x_{k+1})=x_k\), applying \(\rho_{k+1\to k}\) to \(x_{k+1}y_{k+1}=1\) shows that \(\rho_{k+1\to k}(y_{k+1})\) is an inverse of \(x_k\); by uniqueness of inverses, \(\rho_{k+1\to k}(y_{k+1})=y_k\). Thus \((y_k)_k\) belongs to the inverse limit and is the inverse of \(x\). Hence the unit group is exactly the inverse limit of the finite unit groups and is compact as a closed subgroup of a compact product.
+\end{proof}
+
+\begin{remark}[Relation with the projective limit of admissible prefixes]\label{rem:fib-adic-vs-syntax}
+The ring \(\ZZ_{\mathrm{Fib},2}\) should be distinguished from the projective limit formed by admissible Fibonacci words under truncation. The latter is a syntactic object describing compatibility of visible prefixes in the Fibonacci shift, whereas \(\ZZ_{\mathrm{Fib},2}\) is an arithmetic object describing compatibility of finite quotient rings along a divisibility tower. These are complementary limiting constructions inside the same folding framework.
+\end{remark}

@@ -35,4 +35,12 @@ theorem paper_multiscale_zero_stable_package
     residual = 0 :=
   paper_multiscale_zero_stable_seeds residual bound hnn hbound hzero
 
+/-- Exact paper-facing zero-boundary stability wrapper.
+    cor:multiscale-zero-stable -/
+theorem paper_multiscale_zero_stable
+    (residual bound : ℝ) (hnn : 0 ≤ residual) (hbound : residual ≤ bound)
+    (hzero : bound = 0) :
+    residual = 0 := by
+  exact paper_multiscale_zero_stable_package residual bound hnn hbound hzero
+
 end Omega.Experiments.MultiscaleResidual

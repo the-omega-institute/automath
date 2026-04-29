@@ -169,6 +169,12 @@ theorem paper_mismatch_label_non_coboundary :
   intro ⟨h, h01, h12, h20⟩
   omega
 
+/-- Paper label: `prop:fold-gauge-anomaly-mismatch-language-non-coboundary`. -/
+theorem paper_fold_gauge_anomaly_mismatch_language_non_coboundary :
+    ¬ ∃ (h : Fin 3 → ℤ), h 1 - h 0 = 1 ∧ h 2 - h 1 = 1 ∧ h 0 - h 2 = 1 := by
+  intro ⟨h, h01, h12, h20⟩
+  omega
+
 /-- The non-coboundary property generalizes to any cycle length n ≥ 1:
     if every edge in an n-cycle has label 1, the telescoping sum gives
     n ≠ 0, contradicting the coboundary condition.

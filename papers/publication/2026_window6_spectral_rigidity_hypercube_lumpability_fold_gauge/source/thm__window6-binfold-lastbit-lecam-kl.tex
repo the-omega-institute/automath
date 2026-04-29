@@ -1,0 +1,90 @@
+\begin{theorem}[Last-bit testing equivalence for the bin-fold pushforward law: total variation collapses to one bit]\label{thm:window6-binfold-lastbit-lecam-equivalence}
+Let \(\mu_m\) be the pushforward distribution of the bin-fold model on \(X_m\), and let \(u_m:=\mathrm{Unif}(X_m)\).
+Let \(\ell:X_m\to\{0,1\}\) be the last-bit statistic introduced in Section \ref{sec:preliminaries}.
+Assume there exists a ``within-block homogenized'' distribution \(\bar\mu_m\) and parameters \(\beta_m\) such that
+\[
+\bar\mu_m(x)\ \propto\ u_m(x)\,e^{-\beta_m\ell(x)},
+\qquad
+D_{\mathrm{TV}}(\mu_m,\bar\mu_m)\ \le\ C\Bigl(\frac{\varphi}{2}\Bigr)^m,
+\qquad
+\beta_m\to\log\varphi.
+\]
+Then for every \(m\ge 1\),
+\[
+\boxed{\;
+\Bigl|D_{\mathrm{TV}}(\mu_m,u_m)-D_{\mathrm{TV}}(\ell_\#\mu_m,\ell_\#u_m)\Bigr|
+\ \le\ 2\,D_{\mathrm{TV}}(\mu_m,\bar\mu_m)\;}
+\]
+and hence
+\[
+\Bigl|D_{\mathrm{TV}}(\mu_m,u_m)-D_{\mathrm{TV}}(\ell_\#\mu_m,\ell_\#u_m)\Bigr|
+\ \le\ 2C\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+\end{theorem}
+\begin{proof}
+Because the likelihood ratio \(\bar\mu_m/u_m\) depends only on \(\ell(x)\), the Neyman--Pearson optimal test for the binary hypothesis pair \((\bar\mu_m,u_m)\) may be taken to be \(\ell\)-measurable.
+Therefore
+\(
+D_{\mathrm{TV}}(\bar\mu_m,u_m)=D_{\mathrm{TV}}(\ell_\#\bar\mu_m,\ell_\#u_m)
+\).
+Moreover, total variation cannot increase under pushforward, so
+\(
+D_{\mathrm{TV}}(\ell_\#\mu_m,\ell_\#\bar\mu_m)\le D_{\mathrm{TV}}(\mu_m,\bar\mu_m)
+\).
+Applying the triangle inequality once gives
+\[
+D_{\mathrm{TV}}(\mu_m,u_m)
+\le D_{\mathrm{TV}}(\mu_m,\bar\mu_m)+D_{\mathrm{TV}}(\bar\mu_m,u_m)
+\le 2D_{\mathrm{TV}}(\mu_m,\bar\mu_m)+D_{\mathrm{TV}}(\ell_\#\mu_m,\ell_\#u_m),
+\]
+and the reverse bound follows by the same argument with \(\mu_m\) and \(\ell_\#\mu_m\) interchanged.
+Combining the two inequalities proves the claim. \qedhere
+\end{proof}
+
+\begin{corollary}[The limiting relative entropy constant for bin-fold: a closed Bernoulli KL formula]\label{cor:window6-binfold-kl-limit-constant}
+In the setting of Theorem \ref{thm:window6-binfold-lastbit-lecam-equivalence}, let \(D(\cdot\|\cdot)\) denote Kullback--Leibler relative entropy.
+Assume in addition that \(|X_m|=F_{m+2}\) and that exactly \(F_m\) states of \(X_m\) satisfy \(\ell(x)=1\).
+Then the limit
+\[
+\lim_{m\to\infty}D(\mu_m\|u_m)=:\mathcal D_\infty
+\]
+exists and admits the explicit expression
+\[
+\mathcal D_\infty
+=D\!\left(\mathrm{Bern}\!\left(\frac{1}{1+\varphi^2}\right)\Big\|\mathrm{Bern}\!\left(\frac{1}{\varphi^2}\right)\right)
+=\frac{1}{1+\varphi^2}\log\frac{\varphi^2}{1+\varphi^2}
++\frac{\varphi^2}{1+\varphi^2}\log\frac{\varphi^3}{1+\varphi^2}.
+\]
+Moreover, there exists \(C'>0\) such that
+\[
+\bigl|D(\mu_m\|u_m)-D(\bar\mu_m\|u_m)\bigr|
+\ \le\ C' m\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+\end{corollary}
+\begin{proof}
+Since \(\bar\mu_m\propto u_m e^{-\beta_m\ell}\), one has
+\(
+D(\bar\mu_m\|u_m)=D(\ell_\#\bar\mu_m\|\ell_\#u_m)
+\).
+By the counting assumption,
+\(
+\ell_\#u_m(1)=F_m/F_{m+2}\to \varphi^{-2}
+\),
+while \(\beta_m\to\log\varphi\) implies
+\(
+\ell_\#\bar\mu_m(1)\to (1+\varphi^2)^{-1}
+\).
+Hence \(D(\bar\mu_m\|u_m)\to \mathcal D_\infty\), where \(\mathcal D_\infty\) is exactly the Bernoulli relative entropy displayed above.
+For the error estimate, use the identity
+\(
+D(\cdot\|u_m)=\log|X_m|-H(\cdot)
+\)
+together with the entropy continuity bound
+\(
+|H(P)-H(Q)|\le \varepsilon\log(|X_m|-1)+h(\varepsilon)
+\),
+where \(\varepsilon=D_{\mathrm{TV}}(P,Q)\) and \(h(t):=-t\log t-(1-t)\log(1-t)\) is the binary entropy function.
+Substituting \(\varepsilon=D_{\mathrm{TV}}(\mu_m,\bar\mu_m)\le C(\varphi/2)^m\) and \(|X_m|=F_{m+2}\) gives the claimed bound, because \(\log F_{m+2}=\Theta(m)\). \qedhere
+\end{proof}
+
+\endinput

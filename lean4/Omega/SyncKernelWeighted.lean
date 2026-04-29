@@ -3,6 +3,7 @@ import Omega.SyncKernelWeighted.AbelMertensAnalyticFamily
 import Omega.SyncKernelWeighted.AbelMertensConstantUniversal
 import Omega.SyncKernelWeighted.AbelMertensUniversal
 import Omega.SyncKernelWeighted.AlphaEndpointSeries
+import Omega.SyncKernelWeighted.ArchimedeanJetBinaryCompression
 import Omega.SyncKernelWeighted.CarryFreeCoreBlock
 import Omega.SyncKernelWeighted.CarryFreeLeakage
 import Omega.SyncKernelWeighted.CarryFreeSkeletonThree
@@ -218,6 +219,7 @@ import Omega.SyncKernelWeighted.TraceOddVanish
 import Omega.SyncKernelWeighted.SyncKernel3DHessianInverseExact
 import Omega.SyncKernelWeighted.SyncKernel3DOrthobasis
 import Omega.SyncKernelWeighted.SyncKernel3dCriticalQuintic
+import Omega.SyncKernelWeighted.XiTimePart68aCollisionAllEvenModuliBad
 import Omega.SyncKernelWeighted.SyncKernel3dCriticalWHalf
 import Omega.SyncKernelWeighted.SyncKernel3dRecurrenceDrop
 import Omega.SyncKernelWeighted.SyncKernel2DExactDecouple

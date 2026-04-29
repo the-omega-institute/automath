@@ -434,6 +434,14 @@ theorem collisionMoment_q2_explicit {n : ℕ} (hn : 1 < n)
         field_simp [hnR_ne, hm_ne]
         ring
 
+/-- Paper label: `cor:conclusion-section-ledger-collision-moment-q2-explicit`. -/
+theorem paper_conclusion_section_ledger_collision_moment_q2_explicit {n : ℕ} (hn : 1 < n)
+    {c : ℝ} (hc1 : 1 / n ≤ c) (hc2 : c ≤ 1) :
+    let a : ℝ := (1 + Real.sqrt ((n - 1 : ℝ) * ((n : ℝ) * c - 1))) / n
+    let b : ℝ := (1 - Real.sqrt (((n : ℝ) * c - 1) / (n - 1 : ℝ))) / n
+    a + (n - 1 : ℝ) * b = 1 ∧ a^2 + (n - 1 : ℝ) * b^2 = c := by
+  exact collisionMoment_q2_explicit hn hc1 hc2
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R169: Window-10 histogram consistency
 -- ══════════════════════════════════════════════════════════════

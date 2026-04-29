@@ -27,6 +27,17 @@ theorem paper_chainwise_propagation_bound
     (∑ i, dSpace i) ≤ cStar * ∑ i, tauSync i :=
   paper_chainwise_propagation_bound_seeds dSpace tauSync cStar hstep
 
+/-- Exact typed-address paper-facing chainwise propagation wrapper.
+    prop:typed-address-biaxial-completion-chainwise-propagation-bound -/
+theorem paper_typed_address_biaxial_completion_chainwise_propagation_bound
+    {n : ℕ} (dSpace tauSync : Fin n → ℝ) (cStar : ℝ)
+    (hstep : ∀ i : Fin n, dSpace i ≤ cStar * tauSync i) :
+    (∑ i, dSpace i) ≤ cStar * ∑ i, tauSync i := by
+  calc (∑ i, dSpace i)
+      ≤ ∑ i, cStar * tauSync i :=
+        Finset.sum_le_sum (fun i _ => hstep i)
+    _ = cStar * ∑ i, tauSync i := by rw [← Finset.mul_sum]
+
 end Omega.TypedAddressBiaxialCompletion.SyncCausalHolonomy
 
 namespace Omega.TypedAddressBiaxialCompletion

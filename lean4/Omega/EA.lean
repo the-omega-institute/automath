@@ -38,6 +38,7 @@ import Omega.EA.FibAdicBasic
 import Omega.EA.FibAdicTower
 import Omega.EA.FibCongruence
 import Omega.EA.FibDivisibilityChain
+import Omega.EA.FiniteFieldLinearization
 import Omega.EA.FiniteLedgerRecoverability
 import Omega.EA.FoldWindow6CenterThreeObservablesDimensionDefect
 import Omega.EA.FoldCenterResolutionCriterionIndwEps
@@ -83,6 +84,7 @@ import Omega.EA.KernelWeightedPrimeOrbit
 import Omega.EA.KernelZeroTemp
 import Omega.EA.MonoidQuotientIsN
 import Omega.EA.MulByIteratedAdd
+import Omega.EA.MulFromSuccessor
 import Omega.EA.MulNoNewPrimitive
 import Omega.EA.MinStateSpecFlow
 import Omega.EA.MultiplicativeEnergyCompilable
@@ -122,11 +124,17 @@ import Omega.EA.RewriteTerminationPublication
 import Omega.EA.RewriteWordProblem
 import Omega.EA.RationalGFLinearConstraints
 import Omega.EA.RoughVisibleDifferenceQuotientCertificate
+import Omega.EA.StableAddCommutativeMonoid
 import Omega.EA.StableAddComputable
 import Omega.EA.StableAddFiniteResolutionCompatibility
 import Omega.EA.StableAddNoNullCreation
 import Omega.EA.StableAddNoWrapTruncation
+import Omega.EA.StableAuditAffineCoefficientCriterion
+import Omega.EA.StableAuditAbelianGroupClassification
+import Omega.EA.StableAuditSmallOrderObstruction
 import Omega.EA.StableAddNormalizationRealization
+import Omega.EA.StableAuditPrimeFieldRedundancy
+import Omega.EA.StableAuditAffineFibonacciDashboardClosure
 import Omega.EA.SuccessorStructure
 import Omega.EA.Sync10MemoryHorizonInputStatistics
 import Omega.EA.Sync10Regeneration
@@ -142,8 +150,11 @@ import Omega.EA.SyncKernelResetWords
 import Omega.EA.TimeSpaceCommuting
 import Omega.EA.ValInvariant
 import Omega.EA.Wedderburn
+import Omega.EA.Window6CountermodelCertificate
+import Omega.EA.Window6AffineStableTransfer
 import Omega.EA.ChiLayeredFiberSpectrumRecovery
 import Omega.EA.FoldIndwHighQExtractMaxfiberAndChi
+import Omega.EA.FoldCollision2AutLieDimensionRank
 import Omega.EA.Z2x2JointSpectralMeasure
 import Omega.EA.ZeckendorfAddFst
 import Omega.EA.ZeckendorfArithComputable

@@ -233,6 +233,243 @@ theorem paper_conclusion_fold_boundary_visible_energy_nonremovable_mode (m : ℕ
     simpa [mul_comm] using henergy_le
   simpa [energy, S, f, hcard_real] using haverage_le
 
+private lemma conclusion_fold_normalized_walsh_weighted_simplex_geometry_sum_fibers
+    (m : ℕ) (f : Word m → ℝ) :
+    ∑ x : X m, ∑ w ∈ X.fiber x, f w = ∑ w : Word m, f w := by
+  classical
+  have hDisjoint : (↑(Finset.univ : Finset (X m)) : Set (X m)).PairwiseDisjoint X.fiber := by
+    intro x _ y _ hxy
+    rw [Function.onFun, Finset.disjoint_left]
+    intro w hwx hwy
+    exact hxy ((X.mem_fiber.1 hwx).symm.trans (X.mem_fiber.1 hwy))
+  have hUnion : (Finset.univ : Finset (Word m)) = Finset.univ.biUnion X.fiber := by
+    ext w
+    simp only [Finset.mem_univ, Finset.mem_biUnion, true_iff]
+    exact ⟨Fold w, trivial, X.mem_fiber_Fold w⟩
+  calc
+    ∑ x : X m, ∑ w ∈ X.fiber x, f w
+        = ∑ w ∈ Finset.univ.biUnion X.fiber, f w := by
+            simpa using (Finset.sum_biUnion hDisjoint (f := f)).symm
+    _ = ∑ w : Word m, f w := by rw [← hUnion]
+
+private lemma conclusion_fold_normalized_walsh_weighted_simplex_geometry_walsh_total_zero
+    {m : ℕ} {I : Finset (Fin m)} (hI : I ∈ nonemptySubsets m) :
+    ∑ w : Word m, walshCharacter m w I = 0 := by
+  classical
+  have hne : I ≠ ∅ := by
+    exact (Finset.mem_erase.mp (by simpa [nonemptySubsets] using hI)).1
+  obtain ⟨i, hiI⟩ := Finset.nonempty_iff_ne_empty.mpr hne
+  let τ : Word m ≃ Word m := {
+    toFun := fun w j => if j = i then !w j else w j
+    invFun := fun w j => if j = i then !w j else w j
+    left_inv w := by
+      funext j
+      by_cases hji : j = i
+      · simp [hji]
+      · simp [hji]
+    right_inv w := by
+      funext j
+      by_cases hji : j = i
+      · simp [hji]
+      · simp [hji] }
+  have htoggle : ∀ w : Word m, walshCharacter m (τ w) I = -walshCharacter m w I := by
+    intro w
+    have hi_toggle : coordSign (τ w) i = -coordSign w i := by
+      by_cases hwi : w i <;> simp [τ, coordSign, hwi]
+    have hsame : ∀ j ∈ I.erase i, coordSign (τ w) j = coordSign w j := by
+      intro j hj
+      have hji : j ≠ i := (Finset.mem_erase.mp hj).1
+      simp [τ, coordSign, hji]
+    calc
+      walshCharacter m (τ w) I
+          = coordSign (τ w) i * ∏ j ∈ I.erase i, coordSign (τ w) j := by
+              rw [walshCharacter, Finset.mul_prod_erase I (fun j => coordSign (τ w) j) hiI]
+      _ = (-coordSign w i) * ∏ j ∈ I.erase i, coordSign w j := by
+              rw [hi_toggle]
+              congr 1
+              apply Finset.prod_congr rfl
+              exact hsame
+      _ = -(coordSign w i * ∏ j ∈ I.erase i, coordSign w j) := by ring
+      _ = -walshCharacter m w I := by
+              rw [walshCharacter, Finset.mul_prod_erase I (fun j => coordSign w j) hiI]
+  have hsum_perm :
+      ∑ w : Word m, walshCharacter m (τ w) I = ∑ w : Word m, walshCharacter m w I :=
+    Equiv.sum_comp τ (fun w => walshCharacter m w I)
+  have hneg :
+      ∑ w : Word m, walshCharacter m (τ w) I = -∑ w : Word m, walshCharacter m w I := by
+    simp [htoggle]
+  linarith
+
+private lemma conclusion_fold_normalized_walsh_weighted_simplex_geometry_profile_total_zero
+    {m : ℕ} {I : Finset (Fin m)} (hI : I ∈ nonemptySubsets m) :
+    ∑ x : X m, walshProfile m x I = 0 := by
+  classical
+  calc
+    ∑ x : X m, walshProfile m x I
+        = ∑ x : X m, ∑ w ∈ X.fiber x, walshCharacter m w I := by
+            simp [walshProfile]
+    _ = ∑ w : Word m, walshCharacter m w I :=
+            conclusion_fold_normalized_walsh_weighted_simplex_geometry_sum_fibers
+              (m := m) (f := fun w => walshCharacter m w I)
+    _ = 0 := conclusion_fold_normalized_walsh_weighted_simplex_geometry_walsh_total_zero hI
+
+/-- thm:conclusion-fold-normalized-walsh-weighted-simplex-geometry -/
+theorem paper_conclusion_fold_normalized_walsh_weighted_simplex_geometry (m : ℕ) :
+    (∀ x y : X m, x ≠ y →
+      ∑ I ∈ nonemptySubsets m,
+        (walshProfile m x I / (X.fiberMultiplicity x : ℝ)) *
+          (walshProfile m y I / (X.fiberMultiplicity y : ℝ)) = -1) ∧
+    (∀ x : X m,
+      ∑ I ∈ nonemptySubsets m, (walshProfile m x I / (X.fiberMultiplicity x : ℝ)) ^ 2 =
+        (2 : ℝ) ^ m / (X.fiberMultiplicity x : ℝ) - 1) ∧
+    (∀ x y : X m, x ≠ y →
+      ∑ I ∈ nonemptySubsets m,
+        ((walshProfile m x I / (X.fiberMultiplicity x : ℝ)) -
+          (walshProfile m y I / (X.fiberMultiplicity y : ℝ))) ^ 2 =
+        (2 : ℝ) ^ m *
+          (1 / (X.fiberMultiplicity x : ℝ) + 1 / (X.fiberMultiplicity y : ℝ))) ∧
+    (∀ I, I ∈ nonemptySubsets m →
+      ∑ x : X m,
+        ((X.fiberMultiplicity x : ℝ) / (2 : ℝ) ^ m) *
+          (walshProfile m x I / (X.fiberMultiplicity x : ℝ)) = 0) := by
+  classical
+  have hpow_ne : (2 : ℝ) ^ m ≠ 0 := pow_ne_zero _ (by norm_num)
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro x y hxy
+    have hx : (X.fiberMultiplicity x : ℝ) ≠ 0 := by
+      exact_mod_cast ne_of_gt (X.fiberMultiplicity_pos x)
+    have hy : (X.fiberMultiplicity y : ℝ) ≠ 0 := by
+      exact_mod_cast ne_of_gt (X.fiberMultiplicity_pos y)
+    have hgram := paper_conclusion_fold_nontrivial_walsh_exact_gram_law m x y
+    calc
+      ∑ I ∈ nonemptySubsets m,
+          (walshProfile m x I / (X.fiberMultiplicity x : ℝ)) *
+            (walshProfile m y I / (X.fiberMultiplicity y : ℝ))
+          = (∑ I ∈ nonemptySubsets m, walshProfile m x I * walshProfile m y I) /
+              ((X.fiberMultiplicity x : ℝ) * (X.fiberMultiplicity y : ℝ)) := by
+              rw [Finset.sum_div]
+              apply Finset.sum_congr rfl
+              intro I hI
+              field_simp [hx, hy]
+      _ = -1 := by
+              rw [hgram]
+              simp [hxy]
+              field_simp [hx, hy]
+  · intro x
+    have hx : (X.fiberMultiplicity x : ℝ) ≠ 0 := by
+      exact_mod_cast ne_of_gt (X.fiberMultiplicity_pos x)
+    have hgram := paper_conclusion_fold_nontrivial_walsh_exact_gram_law m x x
+    calc
+      ∑ I ∈ nonemptySubsets m, (walshProfile m x I / (X.fiberMultiplicity x : ℝ)) ^ 2
+          = (∑ I ∈ nonemptySubsets m, walshProfile m x I * walshProfile m x I) /
+              ((X.fiberMultiplicity x : ℝ) ^ 2) := by
+              rw [Finset.sum_div]
+              apply Finset.sum_congr rfl
+              intro I hI
+              field_simp [hx]
+      _ = (2 : ℝ) ^ m / (X.fiberMultiplicity x : ℝ) - 1 := by
+              rw [hgram]
+              simp
+              field_simp [hx]
+  · intro x y hxy
+    have hx : (X.fiberMultiplicity x : ℝ) ≠ 0 := by
+      exact_mod_cast ne_of_gt (X.fiberMultiplicity_pos x)
+    have hy : (X.fiberMultiplicity y : ℝ) ≠ 0 := by
+      exact_mod_cast ne_of_gt (X.fiberMultiplicity_pos y)
+    have hxyInner :
+        ∑ I ∈ nonemptySubsets m,
+          (walshProfile m x I / (X.fiberMultiplicity x : ℝ)) *
+            (walshProfile m y I / (X.fiberMultiplicity y : ℝ)) = -1 := by
+      have hgram := paper_conclusion_fold_nontrivial_walsh_exact_gram_law m x y
+      calc
+        ∑ I ∈ nonemptySubsets m,
+            (walshProfile m x I / (X.fiberMultiplicity x : ℝ)) *
+              (walshProfile m y I / (X.fiberMultiplicity y : ℝ))
+            = (∑ I ∈ nonemptySubsets m, walshProfile m x I * walshProfile m y I) /
+                ((X.fiberMultiplicity x : ℝ) * (X.fiberMultiplicity y : ℝ)) := by
+                rw [Finset.sum_div]
+                apply Finset.sum_congr rfl
+                intro I hI
+                field_simp [hx, hy]
+        _ = -1 := by
+                rw [hgram]
+                simp [hxy]
+                field_simp [hx, hy]
+    have hxNorm :
+        ∑ I ∈ nonemptySubsets m, (walshProfile m x I / (X.fiberMultiplicity x : ℝ)) ^ 2 =
+          (2 : ℝ) ^ m / (X.fiberMultiplicity x : ℝ) - 1 := by
+      have hgram := paper_conclusion_fold_nontrivial_walsh_exact_gram_law m x x
+      calc
+        ∑ I ∈ nonemptySubsets m, (walshProfile m x I / (X.fiberMultiplicity x : ℝ)) ^ 2
+            = (∑ I ∈ nonemptySubsets m, walshProfile m x I * walshProfile m x I) /
+                ((X.fiberMultiplicity x : ℝ) ^ 2) := by
+                rw [Finset.sum_div]
+                apply Finset.sum_congr rfl
+                intro I hI
+                field_simp [hx]
+        _ = (2 : ℝ) ^ m / (X.fiberMultiplicity x : ℝ) - 1 := by
+                rw [hgram]
+                simp
+                field_simp [hx]
+    have hyNorm :
+        ∑ I ∈ nonemptySubsets m, (walshProfile m y I / (X.fiberMultiplicity y : ℝ)) ^ 2 =
+          (2 : ℝ) ^ m / (X.fiberMultiplicity y : ℝ) - 1 := by
+      have hgram := paper_conclusion_fold_nontrivial_walsh_exact_gram_law m y y
+      calc
+        ∑ I ∈ nonemptySubsets m, (walshProfile m y I / (X.fiberMultiplicity y : ℝ)) ^ 2
+            = (∑ I ∈ nonemptySubsets m, walshProfile m y I * walshProfile m y I) /
+                ((X.fiberMultiplicity y : ℝ) ^ 2) := by
+                rw [Finset.sum_div]
+                apply Finset.sum_congr rfl
+                intro I hI
+                field_simp [hy]
+        _ = (2 : ℝ) ^ m / (X.fiberMultiplicity y : ℝ) - 1 := by
+                rw [hgram]
+                simp
+                field_simp [hy]
+    calc
+      ∑ I ∈ nonemptySubsets m,
+          ((walshProfile m x I / (X.fiberMultiplicity x : ℝ)) -
+            (walshProfile m y I / (X.fiberMultiplicity y : ℝ))) ^ 2
+          =
+          ∑ I ∈ nonemptySubsets m,
+            ((walshProfile m x I / (X.fiberMultiplicity x : ℝ)) ^ 2 +
+              (walshProfile m y I / (X.fiberMultiplicity y : ℝ)) ^ 2 -
+              2 * ((walshProfile m x I / (X.fiberMultiplicity x : ℝ)) *
+                (walshProfile m y I / (X.fiberMultiplicity y : ℝ)))) := by
+              apply Finset.sum_congr rfl
+              intro I hI
+              ring
+      _ =
+          ∑ I ∈ nonemptySubsets m, (walshProfile m x I / (X.fiberMultiplicity x : ℝ)) ^ 2 +
+            ∑ I ∈ nonemptySubsets m, (walshProfile m y I / (X.fiberMultiplicity y : ℝ)) ^ 2 -
+            2 * ∑ I ∈ nonemptySubsets m,
+              (walshProfile m x I / (X.fiberMultiplicity x : ℝ)) *
+                (walshProfile m y I / (X.fiberMultiplicity y : ℝ)) := by
+              rw [Finset.sum_sub_distrib, Finset.sum_add_distrib]
+              simp [Finset.mul_sum]
+      _ = (2 : ℝ) ^ m *
+          (1 / (X.fiberMultiplicity x : ℝ) + 1 / (X.fiberMultiplicity y : ℝ)) := by
+              rw [hxyInner, hxNorm, hyNorm]
+              field_simp [hx, hy]
+              ring
+  · intro I hI
+    have htotal := conclusion_fold_normalized_walsh_weighted_simplex_geometry_profile_total_zero
+      (m := m) hI
+    calc
+      ∑ x : X m,
+          ((X.fiberMultiplicity x : ℝ) / (2 : ℝ) ^ m) *
+            (walshProfile m x I / (X.fiberMultiplicity x : ℝ))
+          = ∑ x : X m, walshProfile m x I / (2 : ℝ) ^ m := by
+              apply Finset.sum_congr rfl
+              intro x hxmem
+              have hx : (X.fiberMultiplicity x : ℝ) ≠ 0 := by
+                exact_mod_cast ne_of_gt (X.fiberMultiplicity_pos x)
+              field_simp [hx, hpow_ne]
+      _ = 0 := by
+              rw [← Finset.sum_div, htotal]
+              simp
+
 end
 
 end Omega.Conclusion

@@ -193,4 +193,59 @@ theorem paper_xi_time_part65c_atomic_centered_residue_simplex (m : Nat) (hm : 2 
     simpa using inner_atomicCenteredResidueVector_self (m := m) i
   · simp [inner_atomicCenteredResidueVector_ne, hij]
 
+private lemma xi_time_part65c_atomic_centered_residue_isotropic_inner_vector
+    (m : Nat) (v : Fin m → ℤ) (ℓ : Fin m) :
+    atomicCenteredResidueInner v (atomicCenteredResidueVector m ℓ) =
+      (2 : ℤ) * (m : ℤ) * v ℓ - 2 * ∑ r, v r := by
+  unfold atomicCenteredResidueInner atomicCenteredResidueVector
+  calc
+    ∑ r : Fin m, v r * (if r = ℓ then (2 : ℤ) * m - 2 else -2)
+        = ∑ r : Fin m, (-2 * v r + if r = ℓ then (2 : ℤ) * (m : ℤ) * v r else 0) := by
+            apply Finset.sum_congr rfl
+            intro r hr
+            by_cases h : r = ℓ
+            · simp [h]
+              ring
+            · simp [h]
+              ring
+    _ = -2 * ∑ r : Fin m, v r +
+          ∑ r : Fin m, if r = ℓ then (2 : ℤ) * (m : ℤ) * v r else 0 := by
+            simp [Finset.sum_add_distrib, Finset.mul_sum]
+    _ = (2 : ℤ) * (m : ℤ) * v ℓ - 2 * ∑ r, v r := by
+            have hsingle :
+                (∑ r : Fin m, if r = ℓ then (2 : ℤ) * (m : ℤ) * v r else 0) =
+                  (2 : ℤ) * (m : ℤ) * v ℓ := by
+              rw [Fintype.sum_eq_single ℓ]
+              · simp only [↓reduceIte]
+              · intro r hr
+                simp [hr]
+            rw [hsingle]
+            ring
+
+/-- cor:xi-time-part65c-atomic-centered-residue-isotropic -/
+theorem paper_xi_time_part65c_atomic_centered_residue_isotropic (m : Nat) (hm : 2 <= m)
+    (v : Fin m → ℤ) (hv : ∑ r, v r = 0) :
+    ∑ ℓ : Fin m, atomicCenteredResidueInner v (atomicCenteredResidueVector m ℓ) ^ (2 : Nat) =
+      (4 : ℤ) * (m : ℤ) ^ (2 : Nat) * atomicCenteredResidueInner v v := by
+  let _ := hm
+  have hinner :
+      ∀ ℓ : Fin m, atomicCenteredResidueInner v (atomicCenteredResidueVector m ℓ) =
+        (2 : ℤ) * (m : ℤ) * v ℓ := by
+    intro ℓ
+    rw [xi_time_part65c_atomic_centered_residue_isotropic_inner_vector, hv]
+    ring
+  calc
+    ∑ ℓ : Fin m, atomicCenteredResidueInner v (atomicCenteredResidueVector m ℓ) ^ (2 : Nat)
+        = ∑ ℓ : Fin m, ((2 : ℤ) * (m : ℤ) * v ℓ) ^ (2 : Nat) := by
+            apply Finset.sum_congr rfl
+            intro ℓ hℓ
+            rw [hinner]
+    _ = (4 : ℤ) * (m : ℤ) ^ (2 : Nat) * ∑ ℓ : Fin m, v ℓ * v ℓ := by
+            rw [Finset.mul_sum]
+            apply Finset.sum_congr rfl
+            intro ℓ hℓ
+            ring
+    _ = (4 : ℤ) * (m : ℤ) ^ (2 : Nat) * atomicCenteredResidueInner v v := by
+            simp [atomicCenteredResidueInner, pow_two]
+
 end Omega.Zeta

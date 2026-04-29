@@ -95,37 +95,51 @@ C^{(L+1)}_{a,t}:=\{x\in X:\mathbf{b}^{(L)}_t(x)=a_0,\dots,\mathbf{b}^{(L)}_{t+\e
 为把读出/证书限制到子柱 \(C_b\)（等价地：在事件层面对更深前缀条件化）。
 \end{definition}
 
-\begin{proposition}[局部截面存在性与 \texorpdfstring{$\mathsf{NULL}$}{NULL}]\label{prop:null-as-local-section-obstruction}
-在定义 \ref{def:prefix-site}--\ref{def:prefix-sheaf-readout} 的口径下，“地址先于取值”的语义可等价表述为：
-\[
-\text{地址 }a\text{ 的读出在类型层非 }\mathsf{NULL}
-\quad\Longleftrightarrow\quad
-\mathscr{F}(a)\neq\varnothing.
-\]
-并且在递归地址化的闭包口径下（命题 \ref{prop:recursive-addressing-refinement}），\(\mathscr{F}\) 对任意有限柱覆盖满足粘接唯一性：若 \(\{b_i\succeq a\}\) 覆盖 \(a\)，且一族局部对象 \(s_i\in\mathscr{F}(b_i)\) 在重叠处相容（即在任意交 \(C_{b_i}\cap C_{b_j}\) 上的限制一致），则存在唯一 \(s\in\mathscr{F}(a)\) 使得 \(s|_{C_{b_i}}=s_i\)。
-\leanverified{paper\_null\_as\_local\_section\_obstruction}
+\begin{proposition}[局部截面、兼容局部截面与 \texorpdfstring{$\mathsf{NULL}$}{NULL}]\label{prop:null-as-local-section-obstruction}
+在定义 \ref{def:prefix-site}--\ref{def:prefix-sheaf-readout} 的口径下，记 \(\mathscr{F}^{\sharp}:=a\mathscr{F}\) 为预层 \(\mathscr{F}\) 在此前缀站点上的 sheafification。则“地址先于取值”的语义应区分为三层：
+\begin{enumerate}
+  \item \textbf{实际全局读出：}
+  \[
+  \text{地址 }a\text{ 的读出在类型层非 }\mathsf{NULL}
+  \quad\Longleftrightarrow\quad
+  \mathscr{F}(a)\neq\varnothing.
+  \]
+  \item \textbf{兼容局部读出：}有限柱覆盖 \(\{b_i\succeq a\}\) 上的兼容局部对象族 \((s_i\in\mathscr{F}(b_i))\) 按共同 refinement 取商后，恰好给出 \(\mathscr{F}^{\sharp}(a)\) 的元素。因而
+  \[
+  \mathscr{F}^{\sharp}(a)\neq\varnothing
+  \quad\Longleftrightarrow\quad
+  \text{地址 }a\text{ 处存在兼容局部截面族。}
+  \]
+  \item \textbf{sheaf-at-\(a\) 时的全球化：}若 \(\mathscr{F}\) 在 \(a\) 处已经满足层条件，则
+  \[
+  \mathscr{F}(a)\neq\varnothing
+  \quad\Longleftrightarrow\quad
+  \mathscr{F}^{\sharp}(a)\neq\varnothing.
+  \]
+  换言之，兼容局部存在一般只保证 sheafification 层的全局截面；只有在显式的 sheaf-at-\(a\) 假设下，它才等价于原始对象层中的实际全局读出。
+\end{enumerate}
 \end{proposition}
 
 \begin{proof}
-第一条等价仅是将 “不定义（\(\mathsf{NULL}\)）” 从数值层改写为对象层的存在性断言：读出/证书之所以可核验，要求其在给定地址处确有协议允许的局部对象可供引用；当且仅当该局部对象存在时，读出在类型层被视为非 \(\mathsf{NULL}\)。
+第一条仅是把“不定义（\(\mathsf{NULL}\)）”从数值层改写为对象层存在性断言：读出/证书之所以可核验，要求其在给定地址处确有协议允许的全局对象可供引用；当且仅当该对象存在时，读出在类型层被视为非 \(\mathsf{NULL}\)。
 \par
-对粘接唯一性：柱覆盖是有限并集分解，且柱事件在 refinement 下封闭（由定义）；递归地址化又保证所有派生对象仍落在既有可观测柱事件所生成的 \(\sigma\)-代数内（命题 \ref{prop:recursive-addressing-refinement}）。
-因此若局部对象在重叠处一致，则它们在集合层的拼接由并集给出且唯一；协议可接受性在限制映射下保持，故粘接得到的对象仍属于 \(\mathscr{F}(a)\) 并满足唯一性。
+对第二条，\(\mathscr{F}^{\sharp}(a)\) 的标准描述正是：取 \(a\) 的有限柱覆盖及其上的匹配族，并按共同 refinement 取商。这里的“匹配”恰是局部对象在全部重叠上的限制一致，因此 \(\mathscr{F}^{\sharp}(a)\neq\varnothing\) 与“存在兼容局部截面族”完全等价。
+\par
+第三条则是 sheafification 的定义性推论：若 \(\mathscr{F}\) 在 \(a\) 处已经是层，则单位映射 \(\mathscr{F}(a)\to \mathscr{F}^{\sharp}(a)\) 为双射，于是原始全局对象与兼容局部匹配族不再区分。
 \end{proof}
 
 \begin{corollary}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 的三分解（局部截面障碍版）]\label{cor:null-trichotomy-local-section}
 在上述站点/（预）层表述下，\(\mathsf{NULL}\) 的三类来源（定义 \ref{def:xi-visible-read-null} 与命题 \ref{prop:xi-null-three-way}）可被统一为三类互不混淆的局部截面障碍：
 \begin{enumerate}
   \item \textbf{语义空值：} \(a\notin\mathcal{A}_{\mathrm{adm}}\)，即协议未提供该地址对象；此时在站点上无对象可供取截面，空值由“缺乏指称”直接给出。
-  \item \textbf{协议空值：} \(a\in\mathcal{A}_{\mathrm{adm}}\) 但可见域/类型系统拒绝在 \(C_a\) 上建立读出（典型地：可见域被锁定为某一切片而拒绝额外坐标轴），从而 \(\mathscr{F}(a)=\varnothing\)。
-  \item \textbf{碰撞空值：} \(a\in\mathcal{A}_{\mathrm{adm}}\) 且通过检查器，但在“单值可核验读出”的类型约定下，若底层读出存在多对一压缩而未外置使扩展读出单射化的残差轴，则在该类型中仍等价表现为 \(\mathscr{F}(a)=\varnothing\)；其最小侧信息预算由命题 \ref{prop:xi-null-three-way} 与定理 \ref{thm:address-defect-law} 给出。
+  \item \textbf{协议空值：} \(a\in\mathcal{A}_{\mathrm{adm}}\) 且局部对象可在有限覆盖上形成兼容家族，即 \(\mathscr{F}^{\sharp}(a)\neq\varnothing\)，但这些兼容局部对象不能下降为原始对象层中的实际全局读出，即 \(\mathscr{F}(a)=\varnothing\)。这是显式的下降失败；只有在 \(\mathscr{F}\) 于 \(a\) 处成层时，它才会消失。
+  \item \textbf{碰撞空值：} \(a\in\mathcal{A}_{\mathrm{adm}}\) 且协议允许全局对象，但“单值可核验读出”的契约因非分离性而失败：存在不同的全局候选在某个有限覆盖上给出相同局部限制，于是唯一性而非存在性失效；其最小侧信息预算仍由命题 \ref{prop:xi-null-three-way} 与定理 \ref{thm:address-defect-law} 给出。
 \end{enumerate}
-因此，“\(\mathsf{NULL}\)”并非字符串的数值性质，而是站点对象与（预）层纤维在协议意义下的结构性空缺：合法性由 \(\mathscr{F}(a)\) 的非空性判定。
-\leanverified{paper\_null\_trichotomy\_local\_section}
+因此，“\(\mathsf{NULL}\)”并非单一的 \(\mathscr{F}(a)=\varnothing\) 现象：\(\mathscr{F}(a)\) 检测的是实际全局对象的存在，\(\mathscr{F}^{\sharp}(a)\) 检测的是兼容局部家族的存在，而碰撞型 \(\mathsf{NULL}\) 则对应唯一化失败。
 \end{corollary}
 
 \paragraph{粘合障碍的上同调口径：\texorpdfstring{$H^2$}{H2} 见证}
-命题 \ref{prop:null-as-local-section-obstruction} 将 \(\mathsf{NULL}\) 内禀化为“局部截面不存在”的对象论断言。
+命题 \ref{prop:null-as-local-section-obstruction} 把实际全局读出与 \(\mathscr{F}(a)\neq\varnothing\) 等同，并把兼容局部家族提升为 sheafification 纤维 \(\mathscr{F}^{\sharp}(a)\) 的元素；因此 gluing-level 的协议空值恰对应于“兼容局部存在，但原始对象层全局下降失败”的间隙。
 在本文后续的多轴前缀语义（定义 \ref{def:multi_axis_address}）与协议闭包中，局部证书对象往往还携带一组\emph{可调但必须可审计}的相容性标签（例如纤维自同构/gauge 选择的等价类；可取其阿贝尔化作为系数，见定义 \ref{def:fold-gauge-group}）。
 此时，“在重叠处相容”不仅是集合意义的相等，还可能包含一个可复核的二阶一致性约束；其失败可用 Čech 上同调的二阶障碍类作证书化刻画。
 
@@ -178,7 +192,7 @@ C_{b_{ijk}}:=C_{b_i}\cap C_{b_j}\cap C_{b_k}
 则存在一个由 \((\{b_i\},\alpha)\) 函子性构造的纤维化群胚 \(\mathcal{G}_\alpha\to \mathcal{A}_{\mathrm{adm}}\)，满足：
 \begin{enumerate}
   \item \(\mathcal{G}_\alpha\) 为以 \(A\) 为 band 的带状 gerbe：在足够细覆盖下局部非空且局部连通，并且任意对象的自同构群自然同构于 \(A\)。
-  \item \(\mathcal{G}_\alpha\) 的中性化（存在全局对象）与“地址 \(a\) 处存在协议允许的全局证书对象”严格等价。
+  \item \(\mathcal{G}_\alpha\) 的中性化严格等价于由该 cocycle 数据构造出的 gerbe/stack 层在 \(a\) 上存在全局对象。若进一步附加终端纤维保守性或“无新全局对象”假设，则这一 stack-层全局对象才可再识别为原始对象层中某个协议允许的全局证书对象。
   \item \(\mathcal{G}_\alpha\) 的等价类仅由 \([\alpha]\) 决定：更精确地，\(\mathcal{G}_\alpha\) 的带状类与 \([\alpha]\) 在 \(H^2(\{b_i\},A)\) 中一致。
 \end{enumerate}
 \end{theorem}
@@ -188,29 +202,34 @@ C_{b_{ijk}}:=C_{b_i}\cap C_{b_j}\cap C_{b_k}
 在二重交 \(C_{b_{ij}}\) 上以转移数据 \(g_{ij}\) 识别局部对象，并要求在三重交 \(C_{b_{ijk}}\) 上的两种复合 \(g_{ij}g_{jk}\) 与 \(g_{ik}\) 的差异由 \(\alpha_{ijk}\) 给出（以 \(A\) 的作用实现结合缺陷）。
 局部对象的存在性给出局部非空性；在假设“局部证书对象带 \(A\)-纤维的相容结构”下，任意两局部对象在足够细覆盖下局部同构，从而得局部连通性；而自同构的局部群由 \(A\) 决定并在加细下稳定，故得到 \(A\)-带状 gerbe。
 \par
-若存在全局证书对象，则其限制与恒等粘合数据给出中性对象；反之，中性对象给出覆盖上的 descent datum，并且中性化意味着可在允许的 gauge 调整下将结合缺陷严格消去，从而得到全局对象。
+若存在 gerbe/stack 层的全局对象，则其限制与恒等粘合数据给出中性对象；反之，中性对象给出覆盖上的 descent datum，并且中性化意味着可在允许的 gauge 调整下将结合缺陷严格消去，从而得到一个 stack-层的全局对象。
+至于该 stack-层对象是否已经来自原始对象层中的实际全局证书，则不是本定理的无条件内容；它还要求终端纤维上的保守性，亦即 stackification 不在 \(a\) 处制造新的全局对象。
 最后，更换局部对象与识别只会把 \(\alpha\) 改变为 Čech 余边界，因此 \(\mathcal{G}_\alpha\) 的等价类仅依赖于 \([\alpha]\)。
 证毕。
 \end{proof}
 \leanverified{paper\_recursive\_addressing\_prefix\_site\_cech\_null\_gerbe}
 \leanverified{paper\_prefix\_site\_cech\_null\_gerbe}
 
-\paragraph{障碍的最小可见化：通用系数商}
+\begin{remark}[终端纤维保守性的额外角色]\label{rem:prefix-site-gerbe-neutrality-conservativity}
+因此，gerbe 的中性化本身只是 stack-层语句：它断言 compatible local data 已在带状 gerbe 中实现为全局对象。若要把这一对象再读回原始协议层的实际全局证书，必须额外要求终端纤维保守性或等价的“无新全局对象”条件；这一修正步骤在配套 APAL 论文中被单独抽离并证明，见 \cite{MaZhang2026StateForcingSemantics}。
+\end{remark}
+
+\paragraph{障碍的最小可见化：严格/表示层可见商}
 当 \([\alpha]\neq 0\) 时，中性化失败把读出推向 \(\mathsf{NULL}\)（命题 \ref{prop:null-as-h2-obstruction}）。
 另一方面，若允许把系数群作最小化商化，则可在不改变覆盖与局部数据的前提下把二阶缺陷严格消去，从而将 gerbe 归约到中性情形。
 
-\begin{proposition}[使障碍点态消失的最小系数商]\label{prop:prefix-site-min-visible-quotient}
+\begin{proposition}[使障碍点态消失的最小系数商（严格可见商）]\label{prop:prefix-site-min-visible-quotient}
 在定理 \ref{thm:prefix-site-cech-null-gerbe} 的设定下，令
 \[
 H_\alpha:=\bigl\langle \alpha_{ijk}\ \bigm|\ C_{b_{ijk}}\neq\varnothing \bigr\rangle\le A,
 \qquad
 A_{\mathrm{vis}}:=A/H_\alpha,
 \]
-并记自然投影为 \(\pi:A\twoheadrightarrow A_{\mathrm{vis}}\)。
+并记自然投影为 \(\pi:A\twoheadrightarrow A_{\mathrm{vis}}\)。这里的 \(A_{\mathrm{vis}}\) 仅指\emph{附着于所选 cocycle 表示 \(\alpha\) 的严格（presentation-level）可见商}。
 则：
 \begin{enumerate}
   \item \(\alpha\) 推送到 \(A_{\mathrm{vis}}\) 后点态为零：其像 \(\bar\alpha\in Z^2(\{b_i\},A_{\mathrm{vis}})\) 满足 \(\bar\alpha_{ijk}=0\) 对一切 \(C_{b_{ijk}}\neq\varnothing\)。
-  因而对应的 gerbe \(\mathcal{G}_{\bar\alpha}\) 必为中性 gerbe。
+  因而对应的 gerbe \(\mathcal{G}_{\bar\alpha}\) 必为中性 gerbe；此处的中性化仍然首先是 \(\mathcal G_{\bar\alpha}\) 的 stack-层陈述。
   \item 若 \(\varphi:A\to B\) 为任意阿贝尔群同态，使得 \(\varphi(\alpha_{ijk})=0\) 对所有三重交成立（等价地，\(\alpha\) 在系数 \(B\) 下点态消失），则 \(\varphi\) 唯一因子分解为
   \[
   A\twoheadrightarrow A_{\mathrm{vis}}\xrightarrow{\ \exists!\ } B.
@@ -229,7 +248,7 @@ A_{\mathrm{vis}}:=A/H_\alpha,
 \leanverified{paper\_prefix\_site\_min\_visible\_quotient}
 
 \paragraph{保留分辨率的代价：外置寄存器的严格下界}
-命题 \ref{prop:prefix-site-min-visible-quotient} 表明：在只允许改变系数群而不引入外置记录轴的制度下，\([\alpha]\) 的可见化最小化为 \(A_{\mathrm{vis}}\)。
+命题 \ref{prop:prefix-site-min-visible-quotient} 表明：在只允许改变系数群而不引入外置记录轴的制度下，所选表示 \(\alpha\) 的\emph{严格可见化}最小化为 \(A_{\mathrm{vis}}=A/H_\alpha\)。
 若目标是恢复原始 \(A\) 的分辨率，则必须显式外置承载 \(H_\alpha\) 的信息量。
 
 \begin{theorem}[恢复 \(A\)-分辨率所需的最小寄存器容量]\label{thm:prefix-site-register-lower-bound}
@@ -262,6 +281,61 @@ A\hookrightarrow A_{\mathrm{vis}}\times R,
 证毕。
 \end{proof}
 
+\paragraph{从严格可见到内禀可见：链级与同调级的比较}
+上面的 \(A_{\mathrm{vis}}=A/H_\alpha\) 仍依赖于具体 cocycle 表示 \(\alpha\)。若只保留障碍类本身而不记住给定表示，则可把可见性压回到覆盖神经的同调层。
+
+\begin{definition}[内禀隐藏子群与内禀可见商]\label{def:prefix-site-intrinsic-visible-quotient}
+在上述有限覆盖 \(\{b_i\}\) 的神经 \(N:=\mathfrak N(\{b_i\})\) 上，把 \(\alpha\) 视为 \(A\)-值 simplicial \(2\)-余圈，并记其同调类为 \(\omega=[\alpha]\in H^2(N,A)\)。
+对 \(2\)-链群 \(C_2(N,\ZZ)\) 定义链级评价
+\[
+\widetilde\alpha:C_2(N,\ZZ)\to A
+\]
+为对有向 \(2\)-单形线性延拓所得的映射。由于 \(\alpha\) 是 \(2\)-余圈，\(\widetilde\alpha\) 在 \(2\)-边界上为零，故诱导同调评价
+\[
+\overline\alpha:H_2(N,\ZZ)\to A.
+\]
+定义
+\[
+K_\omega:=\operatorname{Im}(\overline\alpha)\le A,
+\qquad
+A_{\mathrm{vis}}^\omega:=A/K_\omega.
+\]
+称 \(K_\omega\) 为\textbf{内禀隐藏子群}，称 \(A_{\mathrm{vis}}^\omega\) 为\textbf{内禀可见商}。
+\end{definition}
+
+\begin{proposition}[严格隐藏子群与内禀隐藏子群]\label{prop:prefix-site-strict-vs-intrinsic-hidden}
+\leanverified{paper\_prefix\_site\_strict\_vs\_intrinsic\_hidden}
+在定义 \ref{def:prefix-site-intrinsic-visible-quotient} 的设定下，
+\[
+H_\alpha=\operatorname{Im}(\widetilde\alpha),
+\qquad
+K_\omega=\operatorname{Im}(\overline\alpha)\subseteq H_\alpha.
+\]
+因此，\(H_\alpha\) 记录的是所选表示在\emph{全部 \(2\)-链}上的链级可见性，而 \(K_\omega\) 记录的是只由障碍类 \(\omega\) 决定的\emph{真实 \(2\)-循环}上的同调可见性；二者的差恰是“链级可见”与“同调可见”的差。
+\end{proposition}
+
+\begin{proof}
+\(\widetilde\alpha\) 的像正是由全部 \(\alpha_{ijk}\) 生成的子群，因此等于 \(H_\alpha\)。
+又因为 \(\alpha\) 为余圈，\(\widetilde\alpha\) 在 \(2\)-边界上为零，从而诱导 \(\overline\alpha:H_2(N,\ZZ)\to A\)；其像按定义即为 \(K_\omega\)。
+每个 \(2\)-循环本身也是 \(2\)-链，所以 \(\operatorname{Im}(\overline\alpha)\subseteq \operatorname{Im}(\widetilde\alpha)\)，即 \(K_\omega\subseteq H_\alpha\)。
+\end{proof}
+
+\begin{corollary}[内禀可见商到严格可见商的自然满射]\label{cor:prefix-site-intrinsic-to-strict-visible}
+\leanverified{paper\_prefix\_site\_intrinsic\_to\_strict\_visible}
+存在自然满射
+\[
+A_{\mathrm{vis}}^\omega=A/K_\omega\twoheadrightarrow A/H_\alpha=A_{\mathrm{vis}}.
+\]
+等价地，所选表示层的严格可见商始终是内禀可见商的一个进一步商。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:prefix-site-strict-vs-intrinsic-hidden} 有 \(K_\omega\subseteq H_\alpha\)，故商的泛性质给出自然满射
+\[
+A/K_\omega\twoheadrightarrow A/H_\alpha.
+\]
+\end{proof}
+
 \paragraph{代数化的读出：扭曲群胚与投影表象}
 二阶结合缺陷亦可被转写为覆盖神经上的扭曲乘法，从而把“局部证书 + 识别数据”的读出链条解释为投影表象而非严格表象。
 
@@ -286,10 +360,10 @@ A\hookrightarrow A_{\mathrm{vis}}\times R,
 \leanverified{paper\_recursive\_addressing\_prefix\_site\_projective\_rep\_twist}
 \end{proof}
 
-\paragraph{对偶下降与谱可定义性：角色通道的可见子群}
-在角色分解口径下，只有能湮灭 \(H_\alpha\) 的角色才可在可审计意义下给出无歧义的全局模式。
+\paragraph{对偶下降与谱可定义性：严格可见角色与内禀可见角色}
+在角色分解口径下，首先出现的是所选表示 \(\alpha\) 的严格可见角色；而真正只由障碍类决定的角色通道则应通过 \(K_\omega\) 来刻画。
 
-\begin{corollary}[可见角色与湮灭子群]\label{cor:prefix-site-visible-characters-annihilator}
+\begin{corollary}[严格可见角色与湮灭子群]\label{cor:prefix-site-visible-characters-annihilator}
 设 \(A\) 为有限阿贝尔群，并记 Pontryagin 对偶 \(\widehat A:=\Hom(A,\TT)\)。
 令 \(H_\alpha\le A\) 与 \(A_{\mathrm{vis}}=A/H_\alpha\) 如命题 \ref{prop:prefix-site-min-visible-quotient}。
 则有自然同构
@@ -298,31 +372,57 @@ A\hookrightarrow A_{\mathrm{vis}}\times R,
 :=\{\chi\in\widehat A:\ \chi(h)=1\ \forall h\in H_\alpha\}.
 \]
 并且 \(\chi\in H_\alpha^\perp\) 当且仅当 \(\chi(\alpha_{ijk})=1\) 对所有 \(C_{b_{ijk}}\neq\varnothing\) 成立。
+\leanverified{paper\_prefix\_site\_visible\_characters\_annihilator}
+\par
+另一方面，内禀可见角色由
+\[
+K_\omega^\perp\cong \widehat{A_{\mathrm{vis}}^\omega}
+\]
+给出；由 \(K_\omega\subseteq H_\alpha\) 立即得到
+\[
+H_\alpha^\perp\subseteq K_\omega^\perp,
+\]
+故严格可见角色只是内禀可见角色中的一个表示依赖子族。
 \end{corollary}
 
 \begin{proof}
 商同态 \(A\twoheadrightarrow A/H_\alpha\) 的对偶同态为嵌入 \(\widehat{A/H_\alpha}\hookrightarrow \widehat A\)，其像恰为湮灭子群 \(H_\alpha^\perp\)。
 又因 \(H_\alpha\) 由 \(\{\alpha_{ijk}\}\) 生成，\(\chi\in H_\alpha^\perp\) 等价于 \(\chi(\alpha_{ijk})=1\) 对所有生成元成立。
+后半部分只是把同样的商-对偶对应应用到 \(A_{\mathrm{vis}}^\omega=A/K_\omega\)，再结合 \(K_\omega\subseteq H_\alpha\)。
 证毕。
 \end{proof}
-\leanverified{paper\_recursive\_addressing\_prefix\_site\_visible\_characters\_annihilator}
 
-\begin{theorem}[谱化输出的可定义性判别：只能在 \texorpdfstring{$A_{\mathrm{vis}}$}{Avis} 上无歧义成立]\label{thm:prefix-site-spectral-definability-avis}
+\begin{theorem}[谱化输出的可定义性判别：严格商与内禀商]\label{thm:prefix-site-spectral-definability-avis}
 考虑任一“谱化”步骤，其输入为命题 \ref{prop:prefix-site-projective-rep-twist} 的 descent 数据（等价地，扭曲群胚代数 \(\CC_\alpha[\Pi]\)），输出为可审计的谱对象（例如：转移算子族、迹/行列式、\(\zeta\)-函数型不变量或基于角色分解的误差控制）。
 假设该步骤满足最弱的自然性：对允许的局部 gauge 调整（即改变 \(\alpha\) 为同调余边界）最终输出不变。
 则：
 \begin{enumerate}
   \item 若 \(\chi\in\widehat A\) 不属于 \(H_\alpha^\perp\)，则任何以 \(\chi\) 作为模式的“扭曲谱对象”都不具备 gauge 不变性，从而无法下降为全局可审计对象。
-  \item 若 \(\chi\in H_\alpha^\perp\cong\widehat{A_{\mathrm{vis}}}\)，则上述歧义消失；因此一切基于角色分解的谱命题在形式上只能理解为关于 \(A_{\mathrm{vis}}\) 的命题，而非关于原始 \(A\) 的命题。
+  \item 因而，\(\alpha\) 的\emph{点态/表示层谱化}只能无歧义地落在严格可见商
+  \[
+  A_{\mathrm{vis}}=A/H_\alpha
+  \]
+  上；而由命题 \ref{prop:prefix-site-strict-vs-intrinsic-hidden} 与推论 \ref{cor:prefix-site-intrinsic-to-strict-visible}，其真正的类级可见部分先落在内禀可见商
+  \[
+  A_{\mathrm{vis}}^\omega=A/K_\omega
+  \]
+  上，并经自然满射
+  \[
+  A_{\mathrm{vis}}^\omega\twoheadrightarrow A_{\mathrm{vis}}
+  \]
+  再下降到严格商。
+  \item 若 \(K_\omega=0\) 而 \([\alpha]\neq 0\)，则全部字符通道在类级上都可能允许通过，而障碍仍然非平凡；此时 phase-shadow 或 character-channel 的审计会严格漏检 genuine 的粘合障碍。该“pure-\(\operatorname{Ext}\)/character-blind”盲区在配套 APAL 论文中被完全刻画，见 \cite{MaZhang2026StateForcingSemantics}。
 \end{enumerate}
 \end{theorem}
+\leanverified{paper\_prefix\_site\_spectral\_definability\_avis}
 
 \begin{proof}
 由命题 \ref{prop:prefix-site-projective-rep-twist}，沿不同复合路径得到的线性化实现相差乘子 \(\chi(\alpha_{ijk})\)。
 若存在某个三重交使 \(\chi(\alpha_{ijk})\neq 1\)，则该乘子在 gauge 调整下不能被消去，从而违背“最终输出 gauge 不变”的可审计性要求，故全局对象不可定义。
-反之，当 \(\chi\in H_\alpha^\perp\) 时，对所有三重交均有 \(\chi(\alpha_{ijk})=1\)，投影乘子消失，谱化输出可下降为无歧义的全局对象；再由推论 \ref{cor:prefix-site-visible-characters-annihilator} 得到其必经由 \(\widehat{A_{\mathrm{vis}}}\)。
+反之，当 \(\chi\in H_\alpha^\perp\) 时，对所有三重交均有 \(\chi(\alpha_{ijk})=1\)，投影乘子消失，谱化输出可下降为无歧义的全局对象；这正说明表示层谱命题只能经由严格商 \(A_{\mathrm{vis}}\) 来书写。
+而 \(K_\omega\subseteq H_\alpha\) 给出自然满射 \(A_{\mathrm{vis}}^\omega\twoheadrightarrow A_{\mathrm{vis}}\)，说明严格谱化只是更大、且类级定义的内禀可见商之进一步压缩。
+最后一条正是配套 APAL 论文对 pure-\(\operatorname{Ext}\) 盲区的刻画结果在此处的直接应用。
 证毕。
 \end{proof}
-\leanverified{paper\_recursive\_addressing\_prefix\_site\_spectral\_definability\_avis}
 
 \input{subsec__recursive-addressing-observer-indexed-forcing}

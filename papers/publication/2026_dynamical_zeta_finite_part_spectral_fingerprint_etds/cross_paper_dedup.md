@@ -1,0 +1,10 @@
+| local_label | sibling | chosen_action | one-line rationale |
+| --- | --- | --- | --- |
+| `thm:finite-part-reduced-determinant-group-inverse-gradient` | `2026_fredholm_witt_cyclic_block_spectral_rigidity_symbolic_zeta` | `C` | The local appendix statement was only a copied intermediate formula, so I deleted it and folded the needed derivative identity into the next proof. |
+| `thm:cyclic-fredholm-realisation` | `2026_fredholm_witt_cyclic_block_spectral_rigidity_symbolic_zeta` | `A` | The local theorem is the same cyclic-block construction, while the sibling paper is the authoritative source and also states the convergence radius more carefully. |
+| `prop:sync-hatdelta-completion` | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | `A` | The completed-determinant formula and parity symmetry are verbatim background imported from the dedicated kernel paper. |
+| `cor:rho-m2-closed-form` | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | `A` | The \(m=2\) closed form is the same calculation already isolated in the sibling paper. |
+| `prop:sync-endpoint-jet` | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | `B` | I reframed the local copy to keep only the paper-specific increment \(\kappa_\infty=11/204\) and deferred the endpoint jet itself to the sibling paper. |
+| `thm:rho-gap-m12` | `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | `A` | The full \(m^{-12}\) asymptotic expansion is the same theorem from the dedicated cyclotomic-twists paper. |
+| `thm:dfa-density-dichotomy` | `2026_prime_languages_sofic_obstructions_dynamical_zeta` | `A` | The DFA density dichotomy is background imported unchanged from the sibling paper's main automata theorem. |
+| `cor:dfa-prime-symmetric-diff` | `2026_prime_languages_sofic_obstructions_dynamical_zeta` | `A` | The binary-prime symmetric-difference bound is a direct specialisation of the sibling paper's stated corollary. |

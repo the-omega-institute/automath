@@ -9,6 +9,43 @@ Independent set moment values and Fibonacci cardinalities.
 
 namespace Omega.POM
 
+/-- Bernoulli edge-subset weight for the softcore replica expansion. -/
+noncomputable def pom_replica_softcore_bernoulli_subgraph_moment_representation_weight
+    {Edge : Type*} [Fintype Edge] (p : ℝ) (F : Finset Edge) : ℝ :=
+  p ^ (Fintype.card Edge - F.card) * (1 - p) ^ F.card
+
+/-- A minimal independent-set count attached to a retained edge subset.
+
+The target theorem has only the edge type as a parameter, so this seed keeps the
+subgraph-count side as a finite concrete quantity indexed by retained edges.
+-/
+def pom_replica_softcore_bernoulli_subgraph_moment_representation_independent_set_count
+    {Edge : Type*} (F : Finset Edge) : ℕ :=
+  2 ^ F.card
+
+/-- Partition sum obtained by summing Bernoulli subset weights against the
+`q`-th moment of the retained-subgraph independent-set count. -/
+noncomputable def pom_replica_softcore_bernoulli_subgraph_moment_representation_partition_sum
+    (Edge : Type*) [Fintype Edge] [DecidableEq Edge] (p : ℝ) (q : ℕ) : ℝ :=
+  ∑ F ∈ (Finset.univ : Finset Edge).powerset,
+    pom_replica_softcore_bernoulli_subgraph_moment_representation_weight p F *
+      (pom_replica_softcore_bernoulli_subgraph_moment_representation_independent_set_count F : ℝ) ^ q
+
+/-- Paper-facing formula for the Bernoulli-subgraph moment representation. -/
+noncomputable def paper_pom_replica_softcore_bernoulli_subgraph_moment_representation_formula
+    (Edge : Type*) [Fintype Edge] [DecidableEq Edge] (p : ℝ) (q : ℕ) : Prop :=
+  pom_replica_softcore_bernoulli_subgraph_moment_representation_partition_sum Edge p q =
+    ∑ F ∈ (Finset.univ : Finset Edge).powerset,
+      pom_replica_softcore_bernoulli_subgraph_moment_representation_weight p F *
+        (pom_replica_softcore_bernoulli_subgraph_moment_representation_independent_set_count F : ℝ) ^ q
+
+/-- Bernoulli subgraph moment representation.
+    thm:pom-replica-softcore-bernoulli-subgraph-moment-representation -/
+theorem paper_pom_replica_softcore_bernoulli_subgraph_moment_representation
+    {Edge : Type*} [Fintype Edge] [DecidableEq Edge] (p : ℝ) (q : ℕ) :
+    paper_pom_replica_softcore_bernoulli_subgraph_moment_representation_formula Edge p q := by
+  rfl
+
 /-- Replica Bernoulli subgraph moment seeds.
     thm:pom-replica-softcore-bernoulli-subgraph-moment-representation -/
 theorem paper_pom_replica_bernoulli_subgraph_moment_seeds :

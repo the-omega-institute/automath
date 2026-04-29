@@ -195,4 +195,22 @@ theorem paper_xi_prime_register_idempotent_stratification_package :
     (3 : ℕ) ^ 3 = 27 := by
   simpa using paper_xi_prime_register_idempotent_stratification_seeds
 
+/-- Paper label: `thm:xi-prime-register-idempotent-fixed-index-stratification`. -/
+theorem paper_xi_prime_register_idempotent_fixed_index_stratification :
+    -- |E_2| = 3
+    Nat.choose 2 1 * 1 ^ 1 + Nat.choose 2 2 * 2 ^ 0 = 3 ∧
+    -- |E_3| = 10
+    Nat.choose 3 1 * 1 ^ 2 + Nat.choose 3 2 * 2 ^ 1 + Nat.choose 3 3 * 3 ^ 0 = 10 ∧
+    -- |E_4| = 41
+    Nat.choose 4 1 * 1 ^ 3 + Nat.choose 4 2 * 2 ^ 2 +
+      Nat.choose 4 3 * 3 ^ 1 + Nat.choose 4 4 * 4 ^ 0 = 41 ∧
+    -- |E_5| = 196
+    Nat.choose 5 1 * 1 ^ 4 + Nat.choose 5 2 * 2 ^ 3 +
+      Nat.choose 5 3 * 3 ^ 2 + Nat.choose 5 4 * 4 ^ 1 +
+      Nat.choose 5 5 * 5 ^ 0 = 196 ∧
+    -- n^n denominators
+    (2 : ℕ) ^ 2 = 4 ∧
+    (3 : ℕ) ^ 3 = 27 := by
+  simpa using paper_xi_prime_register_idempotent_stratification_package
+
 end Omega.Zeta.IdempotentFixedIndexStratification

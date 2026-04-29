@@ -1,0 +1,171 @@
+% main.tex -- Spectral Rigidity of Hypercube Lumpability and Fold Gauge Homology
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{margin=2.8cm}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{conclusion}[theorem]{Conclusion}
+
+\numberwithin{equation}{section}
+
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\Sym}{Sym}
+\DeclareMathOperator{\Tr}{Tr}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\TT}{\mathbb{T}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\abs}[1]{\lvert #1\rvert}
+\newcommand{\card}[1]{\lvert #1\rvert}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\ii}{\mathrm{i}}
+\newcommand{\Fold}{\operatorname{Fold}}
+
+% Lean verification macros
+\newcommand{\leanverified}[1]{}
+\newcommand{\leanpartial}[2]{}
+
+\title{Spectral Rigidity of Hypercube Lumpability\\
+and Fold Gauge Homology}
+\author{
+  Haobo Ma\thanks{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981. Email: \texttt{auric@aelf.io}}
+  \and
+  Wenlin Zhang\thanks{Corresponding author. National University of Singapore, Singapore. Email: \texttt{e1327962@u.nus.edu}}
+}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study coarse-grainings of the simple random walk on the hypercube and prove a spectral rigidity principle for equitable lumpings: every quotient eigenvalue must belong to the discrete hypercube spectrum \(\{1-2k/m:0\le k\le m\}\). Applied to the audited bin-fold pushforward kernel in window \(6\), this yields a sharp falsifier for hidden-state-free strong lumpability, because the observed nontrivial eigenvalues fall outside the hypercube grid. We then show that permutation-natural binary jump structures on boundary uplift fibers are uniquely controlled by the sign character, giving rise to orientation torsors with explicit product, subset, and wreath formulas. Finally, we compute low-degree homology of the associated fold-gauge groups, analyze chiral compression of hypercube sectors, and quantify the entropy cost of fiberwise free involutions and one-bit statistical tests.
+\end{abstract}
+
+\section{Introduction}\label{sec:introduction}
+Coarse-graining is indispensable in the analysis of large stochastic systems: one seeks a reduced state space that preserves the effective dynamics seen by a smaller collection of observables. In finite Markov chains this idea is classically formalized by lumpability, intertwining, and Markov functions \cite{burke1958markovian,kemeny1976finite,rogers1981markov,buchholz1994exact,levin2017markov}. The central difficulty is rigidity: once a coarse partition is fixed, which spectral, geometric, and symmetry constraints must hold if the quotient chain is to arise from a genuine hidden-state-free Markov evolution?
+
+The hypercube \(Q_m\) is a natural test case for this question. Its random walk is explicitly diagonalized by Walsh characters, its spectrum is completely discrete, and its geometry is intertwined with coding theory, association schemes, and product structures \cite{biggs1993algebraic,brouwer1989distance,godsil2001algebraic,macwilliams1977theory,lovasz1996random,diaconis1988group}. These features make the hypercube an ideal laboratory for separating authentic quotients from effective models that only mimic quotient behavior after additional bookkeeping has been introduced.
+
+This paper develops that program for an audited binary folding model, denoted \(\Fold_m^{\mathrm{bin}}\), together with its pushforward dynamics and boundary uplift data. Our first conclusion is spectral: equitable coarse-grainings of the simple random walk on \(Q_m\) inherit only the eigenvalues already present in the ambient hypercube. Consequently, any candidate pushforward kernel with an off-grid eigenvalue cannot be the transition kernel of a strong lumping of \(Q_m\) unless extra hidden states are added. In the audited window-\(6\) model, this obstruction is already decisive.
+
+The second theme is parity. Boundary uplift fibers carry natural relabeling symmetries, and the basic question is whether one can assign a nontrivial binary sheet variable without choosing a distinguished branch. We prove that, once permutation-naturalness is imposed, the only nontrivial two-valued structure is the orientation torsor induced by the sign representation of the symmetric group. This viewpoint organizes the parity problem into a functorial \(\ZZ_2\)-torsor theory, connects it with determinant line local systems and Stiefel--Whitney classes \cite{milnor1974characteristic,hatcher2002algebraic}, and explains why central sheet flips survive in window \(6\) but disappear in the audited higher-window boundary data.
+
+The third theme is group-theoretic and information-theoretic. The fold-gauge group \(\mathcal G_m^{\mathrm{bin}}=\Aut(\Fold_m^{\mathrm{bin}})\) splits over fibers, so its low-degree homology is governed by symmetric-group calculations \cite{brown1982cohomology,nakaoka1961homology}. At the same time, free involutions on fibers are counted by perfect matchings \cite{stanley2012enumerative}, leading to explicit entropy lower bounds for any register-free parity protocol. We also show that a chiral sector of the window-\(6\) model carries the exact spectrum of \(Q_4\), thereby isolating a rigid lower-dimensional hypercube inside the coarse-grained model.
+
+Our main contributions may be summarized as follows.
+\begin{enumerate}[label=(\roman*)]
+\item We establish spectral rigidity for equitable lumpings of \(Q_m\) and use it to disqualify the audited window-\(6\) pushforward kernel as a strong lumping of the hypercube.
+\item We classify permutation-natural binary jump structures on finite fibers by the sign character, derive a comprehensive orientation-torsor calculus, and identify the precise audited boundary windows in which nontrivial central sheet parity can occur.
+\item We analyze affine chiral compression, showing that antisymmetric sectors of the hypercube can collapse to smaller hypercubes with explicit heat traces and spectral fingerprints.
+\item We compute \(H_1\), \(H_2\), and \(H^2(\cdot;\ZZ_2)\) of the fold-gauge groups from multiplicity thresholds, and we derive exact counting and information bounds for fiberwise free involutions and last-bit statistical tests.
+\end{enumerate}
+
+The paper is organized accordingly. Section \ref{sec:preliminaries} fixes notation for hypercube walks, equitable partitions, boundary lifts, and gauge groups. Sections \ref{sec:spectral-rigidity}--\ref{sec:gauge-homology} develop the spectral, parity, chiral, and homological components of the theory, and Section \ref{sec:discussion} concludes with implications and open problems.
+
+\section{Preliminaries}\label{sec:preliminaries}
+For \(m\ge 1\), let \(Q_m\) denote the \(m\)-dimensional hypercube with vertex set \(\Omega_m:=\{0,1\}^m\), adjacency operator \(A_m\), and simple random-walk operator \(T_m:=m^{-1}A_m\). The Walsh characters \(\chi_S(\omega)=(-1)^{\sum_{i\in S}\omega_i}\) diagonalize both operators, and hence
+\[
+\Spec(A_m)=\{m-2k:0\le k\le m\},
+\qquad
+\Spec(T_m)=\left\{1-\frac{2k}{m}:0\le k\le m\right\}.
+\]
+We use \(\mathbf 1_\omega\) for the indicator of a vertex \(\omega\in\Omega_m\).
+
+Let \(F:\Omega_m\twoheadrightarrow X\) be a surjection onto a finite state space. Its block-indicator matrix \(M\) has columns indexed by \(X\), with \(x\)-th column equal to the indicator vector of \(F^{-1}(x)\). The partition is called \emph{equitable} if there exists a matrix \(B\) such that
+\[
+A_m M = M B.
+\]
+Equivalently, every vertex in a block has the same number of neighbors in every other block; in that case \(P:=m^{-1}B\) is the transition matrix of the quotient chain. We refer to \(P\) as the pushforward kernel or quotient kernel associated with \(F\).
+
+Throughout the rest of the paper, \(\Fold_m^{\mathrm{bin}}:\Omega_m\to X_m\) denotes the audited binary folding map underlying the window-\(m\) coarse-graining. For \(w\in X_m\), we write
+\[
+d_m^{\mathrm{bin}}(w):=\card{(\Fold_m^{\mathrm{bin}})^{-1}(w)}
+\]
+for the fiber multiplicity, and we set
+\[
+\mathcal G_m^{\mathrm{bin}}:=\Aut(\Fold_m^{\mathrm{bin}})
+=\{g\in\Sym(\Omega_m):\Fold_m^{\mathrm{bin}}\circ g=\Fold_m^{\mathrm{bin}}\}.
+\]
+The subset \(X_m^{\mathrm{bdry}}\subseteq X_m\) denotes the audited boundary sector, and \(\Delta_m^{\mathrm{bdry}}(w)\) denotes the finite set of boundary uplift branches attached to \(w\in X_m^{\mathrm{bdry}}\).
+
+We shall repeatedly use the groupoid \(\mathbf{FinSet}_k^{\cong}\) of \(k\)-element sets and bijections, together with the Picard groupoid \(\mathbf{Tors}(\ZZ_2)\) of \(\ZZ_2\)-torsors. For a finite set \(S\) with \(|S|=k\), its orientation torsor is
+\[
+\mathrm{Or}(S):=\mathrm{Bij}([k],S)\big/\mathfrak A_k,
+\]
+where \(\mathfrak A_k\subset\mathfrak S_k\) is the alternating group. This construction packages the sign representation into a permutation-natural binary object and will be the basic parity invariant of the boundary theory.
+
+When an affine involution \(\sigma_{i,j}\) acts on \(\Omega_m\), we write \(V_m^\pm\subseteq \CC^{\Omega_m}\) for the \(\pm 1\) eigenspaces of the induced permutation action. These spaces control the chiral decomposition of hypercube observables. On the probabilistic side, \(\mu_m\) denotes the pushforward law of the uniform distribution on \(\Omega_m\) under \(\Fold_m^{\mathrm{bin}}\), \(u_m\) denotes the uniform law on \(X_m\), and \(\ell:X_m\to\{0,1\}\) denotes the last-bit statistic used in the information-theoretic comparison. Finally, for a finite-to-one map \(p:E\twoheadrightarrow B\), we write \(E_b:=p^{-1}(b)\) and \(\mathrm{Inv}_{\mathrm{free}}(p)\) for the set of fiberwise fixed-point-free involutions of \(E\).
+
+We write \(\varphi:=(1+\sqrt5)/2\) for the golden ratio and \(F_0:=0\), \(F_1:=1\), \(F_{n+2}:=F_{n+1}+F_n\) for the Fibonacci sequence. The detailed combinatorial definition of the audited folding model \(\Fold_m^{\mathrm{bin}}\) is not needed for the arguments below. Whenever a window-specific numerical or combinatorial audit input is used, it will be stated explicitly in the relevant theorem or corollary.
+
+\section{Spectral rigidity of equitable lumpability}\label{sec:spectral-rigidity}
+We begin with the linear-algebraic rigidity principle that drives the entire paper. The next theorem shows that every equitable quotient of a hypercube walk inherits its spectrum from the ambient Walsh spectrum, so any off-grid eigenvalue immediately detects hidden-state-free nonrealizability.
+\input{source/thm__window6-strong-lumpability-spectral-rigidity}
+
+The abstract spectral criterion becomes concrete for the audited bin-fold pushforward kernel. The following result specializes spectral rigidity to the window-\(6\) data and turns the observed non-discrete eigenvalues into a direct falsifier for strong lumpability.
+\input{source/thm__foldbin6_equitable_lumpability_spectral_rigidity}
+
+\section{Boundary orientation parity}\label{sec:boundary-parity}
+We next isolate the categorical source of binary boundary parity. The theorem below shows that once relabeling-equivariance is imposed, the only nontrivial two-valued jump on a fiber is the orientation torsor induced by the sign character.
+\input{source/thm__bdry_uplift_orientation_torsor_parity}
+
+The orientation viewpoint admits a richer functorial calculus. The next block of results develops determinant, fiber-product, Cartesian-product, and subset-selection formulas that organize all permutation-natural parity effects into a single \(\ZZ_2\)-torsor formalism.
+\input{source/thm__window6-bdry-orientation-parity-functor}
+
+After the functorial theory, we return to the audited boundary lifts themselves. The following theorem determines exactly when fixed-point-free boundary sheet parities exist without auxiliary registers and identifies window \(6\) as the unique audited case carrying nontrivial boundary central charge.
+\input{source/thm__window6-bdry-sheet-parity-nonfunctorial-extension}
+
+\section{Chiral compression and hypercube adjacency}\label{sec:chiral}
+The next ingredient is a chiral decomposition of the hypercube induced by an affine involution. It compresses an antisymmetric sector of \(Q_m\) to a smaller hypercube and exposes a rigid lower-dimensional spectral fingerprint inside the window-\(6\) model.
+\input{source/thm__window6-chiral-compression-hypercube-adjacency}
+
+These chiral symmetries have immediate group-theoretic consequences for the boundary gauge sector. The next theorem shows that the resulting three commuting boundary flips force a central \(2\)-rank incompatible with any compact connected simple Lie envelope.
+\input{source/thm__window6-center-2rank-excludes-simple-groups}
+
+\section{Fold gauge homology and entropy}\label{sec:gauge-homology}
+We now turn from spectral and parity obstructions to the internal algebra of the fold-gauge group. The following theorem shows that low-degree homology and cohomology are controlled entirely by the threshold multiplicities \(N_2\) and \(N_4\), hence by a short initial segment of the capacity curve.
+\input{source/thm__window6-foldbin-gauge-low-degree-homology}
+
+The pushforward measure itself also exhibits a strong compression phenomenon. The next theorem shows that total variation against the uniform law asymptotically collapses to the last-bit statistic, yielding an explicit Bernoulli relative-entropy limit.
+\input{source/thm__window6-binfold-lastbit-lecam-kl}
+
+We close the technical development by counting the register-free involutive matchings available on fibers. This converts the combinatorics of perfect matchings into sharp entropy lower bounds for any deterministic protocol that selects a fiberwise free involution.
+\input{source/thm__fiberwise_free_involution_matching_entropy}
+
+\section{Discussion}\label{sec:discussion}
+The results of this paper identify three complementary rigidity mechanisms for coarse-grained hypercube dynamics. Spectral rigidity shows that equitable lumpings cannot create new eigenvalues; orientation rigidity shows that permutation-natural binary boundary data are forced to pass through the sign representation; and homological rigidity shows that low-degree gauge invariants are already determined by coarse multiplicity thresholds. Together these statements provide a practical hierarchy of obstructions for deciding whether an audited coarse model is a genuine quotient of a hypercube walk or only an effective description with hidden bookkeeping.
+
+From the viewpoint of stochastic modeling, the window-\(6\) audit is especially instructive. Its pushforward kernel violates the discrete spectral law required by equitable lumpability, yet its boundary sector still remembers a highly structured parity object and a chiral \(Q_4\) fingerprint. This combination suggests that realistic coarse models may preserve selected geometric and gauge-theoretic shadows of the ambient walk even after they cease to be exact Markov quotients. Understanding which invariants survive such failures should be relevant both for probabilistic model reduction and for coding-theoretic coarse descriptions on Hamming graphs \cite{macwilliams1977theory,godsil2001algebraic}.
+
+Several problems remain open. First, one would like a sharp converse to the spectral obstruction: which additional constraints, beyond spectral inclusion, characterize those audited pushforward kernels that truly arise from equitable hypercube partitions? Second, the orientation-torsor formalism should extend to other product graphs and association schemes, where higher-sign or determinant-type obstructions may coexist with non-binary local systems. Third, the low-degree homology formulas invite a stable theory for the family \(\mathcal G_m^{\mathrm{bin}}\), including explicit secondary operations and relations with Schur multipliers beyond degree \(2\) \cite{brown1982cohomology,nakaoka1961homology}. Finally, the underlying Lean formalization suggests a program of computer-verified coarse-graining theory in which spectral, parity, and entropy obstructions are certified simultaneously rather than independently.
+
+%% ============================================================
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

@@ -114,4 +114,9 @@ theorem paper_near1_alpha_minpoly_splitting_d4 :
     near1_alpha_minpoly_splitting_d4_quadratic_factor_comparison,
     near1_alpha_minpoly_splitting_d4_dihedral_relations⟩
 
+/-- Paper label: `thm:near1-alpha-2-over-sqrtphi-galois-D4`. -/
+theorem paper_near1_alpha_2_over_sqrtphi_galois_d4 :
+    near1_alpha_minpoly_splitting_d4_statement := by
+  exact paper_near1_alpha_minpoly_splitting_d4
+
 end Omega.Zeta

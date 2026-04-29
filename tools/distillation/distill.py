@@ -5772,16 +5772,13 @@ def _is_committable_pipeline_output(path: Path) -> bool:
     return False
 
 
-def _git_commit_push(name: str, stage: str, extra_files: Optional[list[str]] = None) -> None:
-    """Commit stage outputs and push to remote. Best-effort, never fatal."""
-    slug = _slugify(name)
+def _git_stage_files(name: str, stage: str, extra_files: Optional[list[str]] = None) -> None:
+    """Stage (git add) outputs for the given stage. Does NOT commit."""
     files_to_add = list(extra_files or [])
 
-    # Stage E: registry + board
     if stage in STAGE_COMMIT_FILES:
         files_to_add.extend(STAGE_COMMIT_FILES[stage])
 
-    # Stage W: collect modified .tex files from writebacks.json
     if stage == "W":
         wb_path = _state_dir(name) / "writebacks.json"
         if wb_path.exists():
@@ -5797,10 +5794,8 @@ def _git_commit_push(name: str, stage: str, extra_files: Optional[list[str]] = N
                 pass
 
     if not files_to_add:
-        logger.info("Stage %s: no files to commit", stage)
         return
 
-    # Filter to files that actually exist and are explicit public outputs.
     rejected = []
     filtered = []
     for item in files_to_add:
@@ -5817,25 +5812,62 @@ def _git_commit_push(name: str, stage: str, extra_files: Optional[list[str]] = N
             stage,
             len(rejected),
         )
-    files_to_add = filtered
-    if not files_to_add:
+    if not filtered:
         return
-
-    stage_label = STAGE_NAMES.get(stage, stage)
-    msg = f"distill({slug}): stage {stage} ({stage_label}) complete"
 
     try:
         subprocess.run(
-            ["git", "add"] + files_to_add,
+            ["git", "add"] + filtered,
             cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=30,
         )
-        # Check if there's anything staged
+        logger.info("Stage %s: staged %d file(s)", stage, len(filtered))
+    except (subprocess.TimeoutExpired, OSError) as exc:
+        logger.warning("Stage %s: git add failed: %s", stage, exc)
+
+
+def _build_commit_summary(name: str) -> str:
+    """Build a descriptive commit body from writeback data."""
+    lines: list[str] = []
+    wb_path = _state_dir(name) / "writebacks.json"
+    if wb_path.exists():
+        try:
+            wb_data = read_json(wb_path)
+            applied = wb_data.get("applied", [])
+            if applied:
+                # Collect sections touched
+                sections: set[str] = set()
+                total_lines = 0
+                for item in applied:
+                    tex = item.get("tex_file", "")
+                    parts = tex.replace("\\", "/").split("/")
+                    if len(parts) >= 2:
+                        sections.add(parts[0])
+                    total_lines += item.get("line_count", 0)
+                n_theorems = sum(len(item.get("labels", [])) for item in applied)
+                lines.append(
+                    f"{n_theorems} theorem(s) across {len(applied)} file(s), "
+                    f"~{total_lines} lines"
+                )
+                if sections:
+                    lines.append(f"sections: {', '.join(sorted(sections))}")
+        except (OSError, json.JSONDecodeError, KeyError):
+            pass
+    return "\n".join(lines)
+
+
+def _git_commit_batch(name: str, label: str) -> None:
+    """Commit all staged files as one batch. Best-effort, never fatal."""
+    slug = _slugify(name)
+    title = f"distill({slug}): {label}"
+    body = _build_commit_summary(name)
+    msg = f"{title}\n\n{body}" if body else title
+    try:
         diff = subprocess.run(
             ["git", "diff", "--cached", "--quiet"],
             cwd=str(REPO_ROOT), capture_output=True, timeout=10,
         )
         if diff.returncode == 0:
-            logger.info("Stage %s: nothing new to commit", stage)
+            logger.info("Batch commit: nothing staged for %s", name)
             return
         subprocess.run(
             ["git", "commit", "-m", msg],
@@ -5845,9 +5877,15 @@ def _git_commit_push(name: str, stage: str, extra_files: Optional[list[str]] = N
             ["git", "push"],
             cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=60,
         )
-        logger.info("Stage %s: committed and pushed", stage)
+        logger.info("Batch commit: committed and pushed for %s", name)
     except (subprocess.TimeoutExpired, OSError) as exc:
-        logger.warning("Stage %s: git commit/push failed: %s", stage, exc)
+        logger.warning("Batch commit failed for %s: %s", name, exc)
+
+
+def _git_commit_push(name: str, stage: str, extra_files: Optional[list[str]] = None) -> None:
+    """Legacy entry point — now delegates to stage + batch commit."""
+    _git_stage_files(name, stage, extra_files)
+    _git_commit_batch(name, f"stage {stage} ({STAGE_NAMES.get(stage, stage)}) complete")
 
 
 def run_pipeline(
@@ -5908,6 +5946,8 @@ def run_pipeline(
             save_state(state)
         if STOP_FILE.exists():
             logger.warning("Stop file present; pausing before stage %s", state.current_stage)
+            if not dry_run:
+                _git_commit_batch(name, f"partial (stop file before stage {state.current_stage})")
             return False
         logger.info(
             "Policy action for %s: stage=%s gate=%s reason=%s",
@@ -5947,12 +5987,18 @@ def run_pipeline(
             return False
         if not ok:
             logger.error("Pipeline stopped at stage %s", stage)
+            # Safety net: commit whatever was staged so work isn't lost
+            if not dry_run:
+                _git_commit_batch(name, f"partial (stopped at stage {stage})")
             return False
-        # Commit + push after each stage (skip in dry-run)
+        # Stage files for later batch commit (skip in dry-run)
         if not dry_run:
-            _git_commit_push(name, stage)
+            _git_stage_files(name, stage)
         state = reconcile_state_contract(load_state(name))
         refresh_policy_state(state)
+    # Batch commit all accumulated stages at DONE
+    if not dry_run:
+        _git_commit_batch(name, "complete (all stages)")
     logger.info("Pipeline complete for %s", name)
     return True
 

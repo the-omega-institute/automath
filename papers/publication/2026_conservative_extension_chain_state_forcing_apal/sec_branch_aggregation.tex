@@ -1,6 +1,6 @@
-\subsection{Aggregating visibility across branches}
+\section{Comparison of branches and realization}\label{sec:branch-aggregation}
 
-The preceding results analyze one visible branch at a time. When an admitted reference carries several visible branches, there are two distinct ways of aggregating the branchwise visible data: one may allow the observer to know which branch has been reached, or one may require the same observation channel to remain admissible on every branch simultaneously. These two requirements lead to different quotients.
+We compare the quotients attached to the different visible branches of a single admitted reference. Retaining the branch label leads to a branch-sensitive quotient, while forgetting it leads to a branch-uniform quotient. The comparison results below are formal once the branchwise intrinsic data have been fixed, whereas the realization theorems later in the section remain internal to explicitly chosen finite nerves and constant bands.
 
 \begin{definition}[Branchwise intrinsic data]\label{def:branchwise-intrinsic-data}
 Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, and assume:
@@ -48,7 +48,7 @@ The first isomorphism theorem therefore yields
 \cong
 A\Big/\bigcap_{v\in \Vis_{p,s}(r)} K_v.
 \]
-The final interpretation is immediate: once the visible branch is known, two elements of $A$ remain semantically indistinguishable exactly when they are indistinguishable on every individual branch quotient.
+Thus, once the visible branch is known, two elements of $A$ remain semantically indistinguishable exactly when they are indistinguishable on every individual branch quotient.
 \end{proof}
 
 \begin{proposition}[Branch-uniform visible quotient]\label{thm:branch-uniform-visible-quotient}
@@ -408,7 +408,817 @@ K_v.
 The quotient statements follow from \Cref{thm:branch-sensitive-visible-quotient,thm:branch-uniform-visible-quotient}, and the budget statement is \Cref{thm:multi-branch-strictification-budget}.
 \end{proof}
 
+\subsection{Realization of prescribed branch data}
+
+The preceding algebra isolates the branchwise and aggregate quotients attached to a given family of hidden subgroups. The next theorem gives a converse existence statement on connected finite nerves with vanishing first homology. It is internal to the fixed finite-nerve framework of the paper: the nerve, the constant band, and the comparison data are fixed in advance, and the theorem constructs local-object and prestack data realizing the prescribed images.
+
+\begin{theorem}[Realization of prescribed branchwise hidden subgroups when $H_1$ vanishes]\label{thm:prescribed-branch-realization}
+Let
+\[
+\mathcal U=\{U_i\to a\}_{i\in I}
+\]
+be a finite cover in a slice site $\mathcal C_a$ whose \v{C}ech nerve
+\[
+N:=N(\mathcal U)
+\]
+is connected. Let $A$ be a finite abelian group, viewed on $\mathcal U$ as a constant band, and assume
+\[
+H_1(N,\mathbb Z)=0.
+\]
+Assume moreover that $\mathcal U$ belongs to a filtered cofinal family of covers satisfying \textup{(H4)}. Let $\Lambda$ be a finite nonempty set, and let
+\[
+\phi_\lambda:H_2(N,\mathbb Z)\to A
+\]
+be a nonzero homomorphism for each $\lambda\in\Lambda$. Then there exist a state $p$, an admitted reference $r:\mathsf{Ref}_s$ with $a=[r]_p$, a local object functor $F_{p,s}$ on $\mathcal C_a$, and a realization prestack
+\[
+\mathfrak P_r\to \mathcal C_a
+\]
+with band $A$ such that, for $\mathfrak L_r:=a(\mathfrak P_r)$, the following hold:
+\begin{enumerate}[label=(\roman*),nosep]
+\item
+\[
+\Vis_{p,s}(r)\cong \Lambda;
+\]
+\item under the identification in \textup{(i)}, for each $\lambda\in\Lambda$ the corresponding component gerbe $\mathfrak G_\lambda\subseteq \mathfrak L_r$ has branch obstruction class
+\[
+\omega_\lambda\in H^2(N,A)
+\]
+satisfying
+\[
+\mathrm{ev}_{\omega_\lambda}=\phi_\lambda,
+\qquad
+K_\lambda=\operatorname{Im}(\phi_\lambda);
+\]
+\item $\mathfrak P_r$ is globally conservative at $a$ and
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r);
+\]
+\item the aggregate visibility quotients satisfy
+\[
+A_{\mathrm{vis}}^{\mathrm{br}}(r)\cong A\Big/\bigcap_{\lambda\in\Lambda}\operatorname{Im}(\phi_\lambda),
+\qquad
+A_{\mathrm{vis}}^{\mathrm{unif}}(r)\cong A\Big/\sum_{\lambda\in\Lambda}\operatorname{Im}(\phi_\lambda).
+\]
+\end{enumerate}
+In particular, within the fixed finite-nerve framework above, every finite family of subgroups of $A$ arising as images of homomorphisms
+\[
+H_2(N,\mathbb Z)\to A
+\]
+is realized as the family of intrinsic hidden subgroups of the visible branches of one admitted reference.
+\end{theorem}
+
+\begin{proof}
+Since
+\[
+H_1(N,\mathbb Z)=0,
+\]
+the universal coefficient sequence reduces to an isomorphism
+\[
+\eta_A:H^2(N,A)\xrightarrow{\sim}\mathrm{Hom}(H_2(N,\mathbb Z),A).
+\]
+For each $\lambda\in\Lambda$, choose the unique class
+\[
+\omega_\lambda\in H^2(N,A)
+\]
+with
+\[
+\eta_A(\omega_\lambda)=\phi_\lambda,
+\]
+and choose a normalized simplicial cocycle
+\[
+\alpha_\lambda\in Z^2(N,A)
+\]
+representing $\omega_\lambda$, extended by $0$ on repeated indices.
+
+Replace $\mathcal C_a$ by the full subsite generated by the nonempty finite intersections of the members of $\mathcal U$ together with the terminal object $a$. The chosen cover, its nerve, and the cohomology groups used in the finite nerve presentation remain unchanged under this replacement. A one-state model $M$ is fixed, together with an admitted reference $r:\mathsf{Ref}_s$ at the unique state $p$, so that the local slice site of $r$ is exactly the chosen $\mathcal C_a$.
+
+Define the local object functor
+\[
+F_{p,s}:\mathcal C_a^{op}\to\mathsf{Set}
+\]
+by
+\[
+F_{p,s}(U):=\Lambda
+\qquad
+\text{for every proper intersection object }U\to a,
+\]
+\[
+F_{p,s}(a):=\varnothing,
+\]
+and by identity restrictions on every morphism between proper intersection objects. Because $N$ is connected, a matching family for $F_{p,s}$ on the cover $\mathcal U$ is exactly a constant label
+\[
+\lambda\in\Lambda.
+\]
+Indeed, a matching family assigns labels $\lambda_i\in\Lambda$ to the objects $U_i$, and compatibility on each nonempty overlap $U_{ij}$ forces $\lambda_i=\lambda_j$ because the restriction maps between proper intersections are identities on $\Lambda$. Connectivity of the nerve propagates these equalities along chains of overlaps, so all labels coincide.
+Therefore the sheafification satisfies
+\[
+\bigl(a_{p,s}F_{p,s}\bigr)(a)\cong \Lambda.
+\]
+
+For each $\lambda\in\Lambda$, define a category fibred in groupoids
+\[
+\mathfrak P_\lambda\to \mathcal C_a
+\]
+as follows. On the terminal fibre set
+\[
+\mathfrak P_\lambda(a):=\varnothing.
+\]
+If
+\[
+U=U_{i_0\cdots i_n}
+\]
+is a nonempty intersection object, let the fibre $\mathfrak P_\lambda(U)$ have object set
+\[
+\{x_i^{(\lambda,U)}\mid i\in \{i_0,\dots,i_n\}\}.
+\]
+For objects $x_i^{(\lambda,U)}$ and $x_j^{(\lambda,U)}$, define
+\[
+\mathrm{Hom}_{\mathfrak P_\lambda(U)}\!\bigl(x_i^{(\lambda,U)},x_j^{(\lambda,U)}\bigr):=A.
+\]
+Writing an element $a\in A$ as a morphism
+\[
+(a,i,j):x_i^{(\lambda,U)}\to x_j^{(\lambda,U)},
+\]
+define composition by
+\[
+(b,j,k)\circ (a,i,j):=
+\bigl(a+b+\alpha_{\lambda,ijk},\,i,k\bigr).
+\]
+Since each $\alpha_\lambda$ is normalized, the identity on $x_i^{(\lambda,U)}$ is $(0,i,i)$ and the inverse of $(a,i,j)$ is $(-a,j,i)$. Associativity on quadruples is exactly the simplicial cocycle identity
+\[
+\alpha_{\lambda,jkl}-\alpha_{\lambda,ikl}+\alpha_{\lambda,ijl}-\alpha_{\lambda,ijk}=0.
+\]
+If
+\[
+V\to U
+\]
+is a morphism between proper intersection objects, send $x_i^{(\lambda,U)}$ to $x_i^{(\lambda,V)}$ and send $(a,i,j)$ to the same element $(a,i,j)$. This defines a prestack because every isomorphism presheaf is either the constant sheaf $A$ or the empty presheaf.
+
+Let
+\[
+\mathfrak P_r:=\coprod_{\lambda\in\Lambda}\mathfrak P_\lambda.
+\]
+On every proper intersection object $U\to a$, each summand $\mathfrak P_\lambda(U)$ is connected, while there are no morphisms between distinct summands. Consequently,
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)(U)\cong \Lambda
+\qquad
+\text{for every proper }U\to a,
+\]
+and
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)(a)=\varnothing.
+\]
+Hence
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)\cong F_{p,s}.
+\]
+By \Cref{prop:stackification-components},
+\[
+\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s},
+\]
+so the visible value classes at $a$ are exactly
+\[
+\Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a)\cong \Lambda.
+\]
+This proves \textup{(i)}.
+
+For each $\lambda\in\Lambda$, let $\mathfrak G_\lambda$ be the full substack of $\mathfrak L_r$ determined by the visible branch $\lambda$. On the cover $\mathcal U$, take the local objects
+\[
+x_i^{(\lambda)}:=x_i^{(\lambda,U_i)}
+\]
+and, on each overlap $U_{ij}$, take the distinguished isomorphism
+\[
+\phi_{ij}^{(\lambda)}:=(0,i,j):x_i^{(\lambda)}|_{U_{ij}}\xrightarrow{\sim}x_j^{(\lambda)}|_{U_{ij}}.
+\]
+Then on every triple overlap $U_{ijk}$,
+\[
+\bigl(\phi_{ik}^{(\lambda)}\bigr)^{-1}\circ
+\phi_{jk}^{(\lambda)}\circ
+\phi_{ij}^{(\lambda)}
+=
+(\alpha_{\lambda,ijk},i,i),
+\]
+which identifies with $\alpha_{\lambda,ijk}\in A$ under the automorphism-band identification. Therefore the \v{C}ech cocycle produced by \Cref{thm:cech-bridge-compatible-realizations} is exactly $\alpha_\lambda$, and the branch obstruction class of $\mathfrak G_\lambda$ is
+\[
+\omega_\lambda=[\alpha_\lambda].
+\]
+Since
+\[
+\mathrm{ev}_{\omega_\lambda}=\eta_A(\omega_\lambda)=\phi_\lambda,
+\]
+one gets
+\[
+K_\lambda=\operatorname{Im}(\phi_\lambda).
+\]
+This proves \textup{(ii)}.
+
+Because each $\phi_\lambda$ is nonzero and $\eta_A$ is an isomorphism, each class $\omega_\lambda$ is nonzero. By \Cref{prop:derived-branch-classification}, every component gerbe $\mathfrak G_\lambda$ is therefore non-neutral, and \Cref{lem:terminal-fibre-neutrality} gives
+\[
+\mathfrak G_\lambda(a)=\varnothing
+\qquad
+(\forall \lambda\in\Lambda).
+\]
+Hence
+\[
+\mathfrak L_r(a)=\varnothing.
+\]
+Since also
+\[
+\mathfrak P_r(a)=\varnothing,
+\]
+the stackification functor on the terminal fibre is
+\[
+(\iota_r)_a:\mathfrak P_r(a)\to \mathfrak L_r(a),
+\]
+that is, the empty functor $\varnothing\to\varnothing$, and it is essentially surjective. Thus $\mathfrak P_r$ is globally conservative at $a$.
+
+Moreover,
+\[
+\bigl(a_{p,s}F_{p,s}\bigr)(a)\cong \Lambda\neq\varnothing,
+\]
+so \Cref{thm:sheafification-characterization} gives
+\[
+M,p\Vdash \CompSec_s(r).
+\]
+On the other hand,
+\[
+F_{p,s}(a)=\varnothing,
+\]
+so
+\[
+M,p\nVdash \Sec_s(r).
+\]
+Since $r$ is admitted by construction, it follows that
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r).
+\]
+This proves \textup{(iii)}.
+
+Finally, \textup{(iv)} is \Cref{thm:branch-sensitive-visible-quotient,thm:branch-uniform-visible-quotient} applied to the family
+\[
+K_\lambda=\operatorname{Im}(\phi_\lambda)
+\qquad
+(\lambda\in\Lambda).
+\]
+The last sentence is the same statement rewritten in terms of the images of the chosen homomorphisms.
+\end{proof}
+
+The preceding realization theorem forces every branch to be non-neutral. The next theorem removes that restriction and identifies the neutral branches exactly with the zero homomorphisms.
+
+\begin{theorem}[Mixed realization of neutral and obstructed branches when $H_1$ vanishes]\label{thm:mixed-branch-realization}
+Let
+\[
+\mathcal U=\{U_i\to a\}_{i\in I}
+\]
+be a finite cover in a slice site $\mathcal C_a$ whose \v{C}ech nerve
+\[
+N:=N(\mathcal U)
+\]
+is connected. Let $A$ be a finite abelian group, viewed on $\mathcal U$ as a constant band, and assume
+\[
+H_1(N,\mathbb Z)=0.
+\]
+Assume moreover that $\mathcal U$ belongs to a filtered cofinal family of covers satisfying \textup{(H4)}. Let $\Lambda$ be a finite nonempty set, and let
+\[
+\phi_\lambda:H_2(N,\mathbb Z)\to A
+\]
+be a homomorphism for each $\lambda\in\Lambda$. Define
+\[
+\Lambda_0:=\{\lambda\in\Lambda\mid \phi_\lambda=0\}.
+\]
+Then there exist a state $p$, an admitted reference $r:\mathsf{Ref}_s$ with $a=[r]_p$, a local object functor $F_{p,s}$ on $\mathcal C_a$, and a realization prestack
+\[
+\mathfrak P_r\to \mathcal C_a
+\]
+with band $A$ such that, for $\mathfrak L_r:=a(\mathfrak P_r)$, the following hold.
+\begin{enumerate}[label=(\roman*),nosep]
+\item
+\[
+\Vis_{p,s}(r)\cong \Lambda.
+\]
+\item Under the identification in \textup{(i)}, for each $\lambda\in\Lambda$ the corresponding component gerbe $\mathfrak G_\lambda\subseteq \mathfrak L_r$ has branch obstruction class
+\[
+\omega_\lambda\in H^2(N,A)
+\]
+satisfying
+\[
+\mathrm{ev}_{\omega_\lambda}=\phi_\lambda,
+\qquad
+K_\lambda=\operatorname{Im}(\phi_\lambda).
+\]
+Consequently,
+\[
+\mathfrak G_\lambda\ \text{is neutral}
+\quad\Longleftrightarrow\quad
+\phi_\lambda=0.
+\]
+\item $\mathfrak P_r$ is globally conservative at $a$, and
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+\Lambda_0\neq\varnothing.
+\]
+\item
+\[
+M,p\Vdash \CompSec_s(r),
+\]
+and
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\quad\Longleftrightarrow\quad
+\Lambda_0=\varnothing.
+\]
+\item The aggregate visibility quotients satisfy
+\[
+A_{\mathrm{vis}}^{\mathrm{br}}(r)\cong A\Big/\bigcap_{\lambda\in\Lambda}\operatorname{Im}(\phi_\lambda),
+\qquad
+A_{\mathrm{vis}}^{\mathrm{unif}}(r)\cong A\Big/\sum_{\lambda\in\Lambda}\operatorname{Im}(\phi_\lambda).
+\]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Since
+\[
+H_1(N,\mathbb Z)=0,
+\]
+the universal coefficient sequence reduces to an isomorphism
+\[
+\eta_A:H^2(N,A)\xrightarrow{\sim}\mathrm{Hom}(H_2(N,\mathbb Z),A).
+\]
+For each $\lambda\in\Lambda$, let
+\[
+\omega_\lambda\in H^2(N,A)
+\]
+be the unique class satisfying
+\[
+\eta_A(\omega_\lambda)=\phi_\lambda,
+\]
+and choose a normalized simplicial cocycle
+\[
+\alpha_\lambda\in Z^2(N,A)
+\]
+representing $\omega_\lambda$, extended by $0$ on repeated indices. In particular,
+\[
+\lambda\in\Lambda_0
+\quad\Longleftrightarrow\quad
+\omega_\lambda=0
+\quad\Longleftrightarrow\quad
+\alpha_\lambda=0.
+\]
+
+Replace $\mathcal C_a$ by the full subsite generated by the nonempty finite intersections of the members of $\mathcal U$ together with the terminal object $a$. The chosen cover, its nerve, and the cohomology groups used in the finite nerve presentation remain unchanged under this replacement. A one-state model $M$ is fixed, together with an admitted reference $r:\mathsf{Ref}_s$ at the unique state $p$, so that the local slice site of $r$ is exactly the chosen $\mathcal C_a$.
+
+Define the local object functor
+\[
+F_{p,s}:\mathcal C_a^{op}\to\mathsf{Set}
+\]
+by
+\[
+F_{p,s}(U):=\Lambda
+\qquad
+\text{for every proper intersection object }U\to a,
+\]
+\[
+F_{p,s}(a):=\Lambda_0,
+\]
+and by identity restrictions on every morphism between proper intersection objects, while the restriction maps
+\[
+F_{p,s}(a)\to F_{p,s}(U)
+\]
+are the inclusions $\Lambda_0\hookrightarrow \Lambda$.
+
+Because $N$ is connected, a matching family for $F_{p,s}$ on the cover $\mathcal U$ is exactly a constant label
+\[
+\lambda\in\Lambda.
+\]
+Two such constant families with distinct labels remain distinct after every common refinement, because all restrictions on proper intersections are the identity on the label set $\Lambda$. Therefore
+\[
+\bigl(a_{p,s}F_{p,s}\bigr)(a)\cong \Lambda.
+\]
+As above, compatibility on nonempty overlaps forces equality of adjacent labels, and connectivity of the nerve makes every matching family constant. Distinct constants remain distinct under every common refinement because the restriction maps on proper intersections preserve the label.
+
+For each $\lambda\in\Lambda\setminus\Lambda_0$, define a category fibred in groupoids
+\[
+\mathfrak P_\lambda\to \mathcal C_a
+\]
+exactly as in the proof of \Cref{thm:prescribed-branch-realization}: on the terminal fibre set
+\[
+\mathfrak P_\lambda(a):=\varnothing,
+\]
+and on each nonempty intersection object
+\[
+U=U_{i_0\cdots i_n}
+\]
+let the fibre $\mathfrak P_\lambda(U)$ have object set
+\[
+\{x_i^{(\lambda,U)}\mid i\in\{i_0,\dots,i_n\}\},
+\]
+morphism sets equal to $A$, and composition twisted by the cocycle $\alpha_\lambda$. The argument of \Cref{thm:prescribed-branch-realization} shows that $\mathfrak P_\lambda$ is a prestack with constant band $A$, that
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_\lambda)(U)\cong\{ \lambda\}
+\]
+for every proper intersection object $U\to a$, that
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_\lambda)(a)=\varnothing,
+\]
+and that the \v{C}ech cocycle attached to the branch is exactly $\alpha_\lambda$.
+
+For each $\lambda\in\Lambda_0$, define a stack in groupoids
+\[
+\mathfrak P_\lambda\to \mathcal C_a
+\]
+by taking, for every object $U$ of $\mathcal C_a$, a one-object groupoid with distinguished object $y_U^{(\lambda)}$ and automorphism group $A$, and by taking every restriction functor to be the identity on the distinguished object and on the automorphism group. Then $\mathfrak P_\lambda$ is already a stack with constant band $A$,
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_\lambda)(U)\cong\{\lambda\}
+\]
+for every object $U$ of $\mathcal C_a$, and the \v{C}ech cocycle on the cover $\mathcal U$ is identically zero.
+
+Now set
+\[
+\mathfrak P_r:=\coprod_{\lambda\in\Lambda}\mathfrak P_\lambda.
+\]
+Because distinct summands have no morphisms between them, $\mathfrak P_r$ is again a prestack with constant band $A$. Its presheaf of isomorphism classes is
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)(U)\cong \Lambda
+\qquad
+\text{for every proper intersection object }U\to a,
+\]
+and
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)(a)\cong \Lambda_0.
+\]
+Hence
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)\cong F_{p,s}.
+\]
+Applying \Cref{prop:stackification-components} gives
+\[
+\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s},
+\]
+so
+\[
+\Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a)\cong \Lambda.
+\]
+This proves \textup{(i)}.
+
+For each $\lambda\in\Lambda\setminus\Lambda_0$, the same calculation as in \Cref{thm:prescribed-branch-realization} shows that the component gerbe $\mathfrak G_\lambda$ has branch obstruction class
+\[
+\omega_\lambda=[\alpha_\lambda]
+\]
+and therefore
+\[
+\mathrm{ev}_{\omega_\lambda}=\eta_A(\omega_\lambda)=\phi_\lambda,
+\qquad
+K_\lambda=\operatorname{Im}(\phi_\lambda).
+\]
+For each $\lambda\in\Lambda_0$, the stack $\mathfrak P_\lambda$ is already a neutral $A$-banded gerbe on $\mathcal C_a$, and choosing the objects $y_{U_i}^{(\lambda)}$ together with the identity isomorphisms on overlaps yields the zero \v{C}ech $2$-cocycle. Hence
+\[
+\omega_\lambda=0,
+\qquad
+\mathrm{ev}_{\omega_\lambda}=0=\phi_\lambda,
+\qquad
+K_\lambda=0=\operatorname{Im}(\phi_\lambda).
+\]
+The neutrality criterion in \Cref{prop:derived-branch-classification} therefore gives
+\[
+\mathfrak G_\lambda\ \text{is neutral}
+\quad\Longleftrightarrow\quad
+\omega_\lambda=0
+\quad\Longleftrightarrow\quad
+\phi_\lambda=0.
+\]
+This proves \textup{(ii)}.
+
+The identity
+\[
+F_{p,s}(a)=\Lambda_0
+\]
+immediately gives
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+\Lambda_0\neq\varnothing.
+\]
+It remains to prove global conservativity at $a$. If $\lambda\in\Lambda_0$, then $\mathfrak P_\lambda$ is already a stack, so the restriction of the stackification morphism to the fibre over $a$ is an equivalence on that summand. If $\lambda\notin\Lambda_0$, then $\phi_\lambda\neq 0$, hence $\omega_\lambda\neq 0$, and \Cref{prop:derived-branch-classification} implies that the component gerbe $\mathfrak G_\lambda$ is non-neutral. Therefore
+\[
+\mathfrak G_\lambda(a)=\varnothing
+\qquad
+(\lambda\notin\Lambda_0)
+\]
+by \Cref{lem:terminal-fibre-neutrality}. Consequently every object of $\mathfrak L_r(a)$ lies in a zero-branch component and is therefore in the essential image of $\mathfrak P_r(a)$. Thus $\mathfrak P_r$ is globally conservative at $a$. This proves \textup{(iii)}.
+
+Since $\Lambda\neq\varnothing$, the identification
+\[
+\bigl(a_{p,s}F_{p,s}\bigr)(a)\cong \Lambda
+\]
+shows that
+\[
+\bigl(a_{p,s}F_{p,s}\bigr)(a)\neq\varnothing.
+\]
+By \Cref{thm:sheafification-characterization},
+\[
+M,p\Vdash \CompSec_s(r).
+\]
+Using \textup{(iii)} and the definition
+\[
+\Null^{\mathrm{glue}}_s(r):=\Adm_s(r)\land \CompSec_s(r)\land \neg\Sec_s(r),
+\]
+one gets
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\quad\Longleftrightarrow\quad
+\Lambda_0=\varnothing.
+\]
+This proves \textup{(iv)}.
+
+Finally, \textup{(v)} is \Cref{thm:branch-sensitive-visible-quotient,thm:branch-uniform-visible-quotient} applied to the family
+\[
+K_\lambda=\operatorname{Im}(\phi_\lambda)
+\qquad
+(\lambda\in\Lambda).
+\qedhere
+\]
+\end{proof}
+
+\begin{corollary}[Exact subgroup classification on torsion-free second homology]\label{cor:torsion-free-h2-classification}
+Assume the hypotheses of \Cref{thm:mixed-branch-realization} and, in addition,
+\[
+H_2(N,\mathbb Z)\cong \mathbb Z^\beta
+\]
+for some integer $\beta\ge 0$. Let $(K_\lambda)_{\lambda\in\Lambda}$ be a family of subgroups of $A$. Then the following are equivalent.
+\begin{enumerate}[label=(\roman*),nosep]
+\item There exist a state $p$, an admitted reference $r:\mathsf{Ref}_s$ on the fixed nerve $N$, and a bijection
+\[
+\Vis_{p,s}(r)\cong \Lambda
+\]
+such that the branch indexed by $\lambda$ has intrinsic hidden subgroup
+\[
+K_\lambda.
+\]
+\item Every subgroup $K_\lambda$ is generated by at most $\beta$ elements.
+\end{enumerate}
+When these conditions hold,
+\[
+A_{\mathrm{vis}}^{\mathrm{br}}(r)\cong A\Big/\bigcap_{\lambda\in\Lambda}K_\lambda,
+\qquad
+A_{\mathrm{vis}}^{\mathrm{unif}}(r)\cong A\Big/\sum_{\lambda\in\Lambda}K_\lambda,
+\]
+and
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+K_\lambda=0\ \text{for some}\ \lambda\in\Lambda.
+\]
+In particular, a single branch realizes maximal collapse
+\[
+K_\omega=A
+\]
+if and only if $A$ is generated by at most $\beta$ elements. For $\beta=1$, the realizable single-branch intrinsic hidden subgroups are exactly the cyclic subgroups of $A$.
+\end{corollary}
+
+\begin{proof}
+Assume \textup{(i)}. By \Cref{thm:mixed-branch-realization}(ii), for each $\lambda$ there exists a homomorphism
+\[
+\phi_\lambda:H_2(N,\mathbb Z)\to A
+\]
+with
+\[
+K_\lambda=\operatorname{Im}(\phi_\lambda).
+\]
+After choosing an identification
+\[
+H_2(N,\mathbb Z)\cong \mathbb Z^\beta,
+\]
+the image of $\phi_\lambda$ is generated by the images of the $\beta$ standard basis vectors. Hence $K_\lambda$ is generated by at most $\beta$ elements. Therefore \textup{(ii)} holds.
+
+Assume conversely that \textup{(ii)} holds. For each $\lambda\in\Lambda$, choose generators
+\[
+k_{\lambda,1},\dots,k_{\lambda,\beta}\in K_\lambda
+\]
+of $K_\lambda$, allowing repetitions and zeros when fewer than $\beta$ generators are needed. Define
+\[
+\phi_\lambda:\mathbb Z^\beta\to A,
+\qquad
+(n_1,\dots,n_\beta)\longmapsto \sum_{j=1}^{\beta} n_j k_{\lambda,j}.
+\]
+Then
+\[
+\operatorname{Im}(\phi_\lambda)=K_\lambda.
+\]
+Transporting these maps across the chosen isomorphism
+\[
+H_2(N,\mathbb Z)\cong \mathbb Z^\beta
+\]
+and applying \Cref{thm:mixed-branch-realization} yields the required state $p$, reference $r$, and branch family. Hence \textup{(i)} holds.
+
+The quotient formulas are those of \Cref{thm:mixed-branch-realization}(v). The global-section criterion follows from \Cref{thm:mixed-branch-realization}(iii), because
+\[
+K_\lambda=0
+\quad\Longleftrightarrow\quad
+\operatorname{Im}(\phi_\lambda)=0
+\quad\Longleftrightarrow\quad
+\phi_\lambda=0.
+\]
+For the maximal-collapse claim, take $\Lambda$ to be a singleton and $K_\omega=A$. Then the equivalence between \textup{(i)} and \textup{(ii)} says exactly that such a branch exists if and only if $A$ is generated by at most $\beta$ elements. The final sentence is the case $\beta=1$.
+\end{proof}
+
+The preceding corollary classifies the branchwise hidden subgroups that can occur on a fixed finite nerve with $H_2\cong \mathbb Z^\beta$. The next theorem replaces that abstract nerve by a canonical topological family and classifies, inside that family, the finite abelian groups that occur as pure two-branch resolution kernels.
+
+\begin{theorem}[Natural two-branch resolution on bouquet good covers]\label{thm:bouquet-two-branch-resolution}
+Fix an integer $\beta\ge 1$, let $K_\beta$ be a finite connected simplicial complex whose geometric realization is homotopy equivalent to
+\[
+\bigvee_{j=1}^{\beta} S^2,
+\]
+and write
+\[
+X_\beta:=|K_\beta|.
+\]
+For each $m\ge 0$, let
+\[
+\mathcal U_\beta^{(m)}
+\]
+be the open-star cover of the barycentric subdivision $\operatorname{Sd}^m K_\beta$, viewed as a cover of $X_\beta$. Let $\mathcal C_a$ be the site whose objects are $X_\beta$ together with all nonempty finite intersections of members of the covers $\mathcal U_\beta^{(m)}$, and whose covering families are generated by the families $\mathcal U_\beta^{(m)}$ and their pullbacks.
+
+Then the family
+\[
+\bigl(\mathcal U_\beta^{(m)}\bigr)_{m\ge 0}
+\]
+is a filtered cofinal family satisfying \textup{(H4)} for every constant finite abelian band.
+
+Let $G$ be a finite abelian group, and write $d(G)$ for the minimal number of generators of $G$. Then the following are equivalent.
+\begin{enumerate}[label=(\roman*),nosep]
+\item $d(G)\le 2\beta$ and $G$ is not a cyclic $p$-group.
+\item There exist a state $p$, an admitted reference $r:\mathsf{Ref}_s$ with $a=[r]_p$, a local object functor on $\mathcal C_a$, and a realization prestack
+\[
+\mathfrak P_r\to \mathcal C_a
+\]
+with constant band $G$ such that
+\[
+\Vis_{p,s}(r)=\{v_1,v_2\},
+\]
+both component gerbes $\mathfrak G_{v_1}$ and $\mathfrak G_{v_2}$ are non-neutral, and
+\[
+K_{v_1}\cap K_{v_2}=0,
+\qquad
+K_{v_1}+K_{v_2}=G.
+\]
+\end{enumerate}
+Whenever these conditions hold,
+\[
+A_{\mathrm{vis}}^{\mathrm{br}}(r)\cong B_{\mathrm{res}}(r)\cong G,
+\qquad
+A_{\mathrm{vis}}^{\mathrm{unif}}(r)=0,
+\qquad
+M,p\Vdash \Null_s^{\mathrm{glue}}(r).
+\]
+\end{theorem}
+
+\begin{proof}
+For each $m\ge 0$, every nonempty finite intersection of members of $\mathcal U_\beta^{(m)}$ is the open star of a simplex of $\operatorname{Sd}^m K_\beta$, hence contractible. Therefore each $\mathcal U_\beta^{(m)}$ is a finite good cover of $X_\beta$. In particular, the constant band $G$ is trivial on every such cover, and
+\[
+H^1(U_{i_0\cdots i_n},G)=0
+\]
+for every nonempty intersection appearing in the \v{C}ech descent argument.
+
+Since $\operatorname{Sd}^{m+1}K_\beta$ is a subdivision of $\operatorname{Sd}^{m}K_\beta$, the cover $\mathcal U_\beta^{(m+1)}$ refines $\mathcal U_\beta^{(m)}$. Thus the family $\bigl(\mathcal U_\beta^{(m)}\bigr)_{m\ge 0}$ is filtered, and it is cofinal in the pretopology of $\mathcal C_a$ by construction.
+
+For every $m$, the nerve $N(\mathcal U_\beta^{(m)})$ is canonically $\operatorname{Sd}^{m}K_\beta$. Because each cover is good, \v{C}ech cochains on $\mathcal U_\beta^{(m)}$ with coefficients in the constant band $G$ identify with simplicial cochains on $\operatorname{Sd}^{m}K_\beta$. The subdivision maps induce isomorphisms on cohomology, so the transition maps in the filtered system
+\[
+\check H^2(\mathcal U_\beta^{(m)},G)
+\]
+are isomorphisms and
+\[
+\varinjlim_m \check H^2(\mathcal U_\beta^{(m)},G)\cong H^2(K_\beta,G).
+\]
+Since $X_\beta$ is a finite polyhedron and the covers $\mathcal U_\beta^{(m)}$ are Leray covers for the constant band, the Leray--\v{C}ech comparison theorem identifies this group with the derived cohomology group
+\[
+H^2(\mathcal C_a,G)
+\]
+\cite{Bredon1997}. Hence the family satisfies \textup{(H4)}.
+
+Every subdivision of $K_\beta$ is homotopy equivalent to $K_\beta$, so
+\[
+H_1\bigl(N(\mathcal U_\beta^{(m)}),\mathbb Z\bigr)=0,
+\qquad
+H_2\bigl(N(\mathcal U_\beta^{(m)}),\mathbb Z\bigr)\cong \mathbb Z^\beta
+\]
+for every $m$ \cite[Secs.~2.1, 2.2]{Hatcher2002}. In particular, the realization theorem \Cref{thm:mixed-branch-realization} applies on this natural family of covers once suitable branch homomorphisms have been chosen.
+
+Assume \textup{(i)}. Two cases occur.
+
+If $d(G)=m\ge 2$, choose an invariant-factor decomposition
+\[
+G\cong C_{n_1}\oplus\cdots\oplus C_{n_m},
+\qquad
+n_1\mid n_2\mid\cdots\mid n_m.
+\]
+Set
+\[
+t:=\min\{\beta,m-1\}.
+\]
+Since $m\le 2\beta$, one has $m-t\le \beta$. Define
+\[
+G_1:=C_{n_1}\oplus\cdots\oplus C_{n_t},
+\qquad
+G_2:=C_{n_{t+1}}\oplus\cdots\oplus C_{n_m}.
+\]
+Then $G_1$ and $G_2$ are nonzero direct summands of $G$ and
+\[
+G=G_1\oplus G_2,
+\qquad
+d(G_1)\le \beta,
+\qquad
+d(G_2)\le \beta.
+\]
+
+If $d(G)=1$, then $G$ is cyclic. Because $G$ is not a cyclic $p$-group, its order has at least two distinct prime divisors. Choose coprime integers $a,b>1$ with
+\[
+G\cong \mathbb Z/ab\mathbb Z.
+\]
+The Chinese remainder theorem yields
+\[
+G\cong \mathbb Z/a\mathbb Z\oplus \mathbb Z/b\mathbb Z,
+\]
+so again $G=G_1\oplus G_2$ for nonzero direct summands $G_1,G_2$ with
+\[
+d(G_1)=d(G_2)=1\le \beta.
+\]
+
+In either case, each $G_i$ is generated by at most $\beta$ elements. Since
+\[
+H_2\bigl(N(\mathcal U_\beta^{(0)}),\mathbb Z\bigr)\cong \mathbb Z^\beta,
+\]
+there are homomorphisms
+\[
+\phi_i:H_2\bigl(N(\mathcal U_\beta^{(0)}),\mathbb Z\bigr)\to G
+\]
+with
+\[
+\operatorname{Im}(\phi_i)=G_i
+\qquad
+(i=1,2).
+\]
+Apply \Cref{thm:mixed-branch-realization} on the cover $\mathcal U_\beta^{(0)}$ with band $A:=G$, branch index set $\Lambda=\{1,2\}$, and the two homomorphisms $\phi_1,\phi_2$. This yields a state $p$, an admitted reference $r$, and exactly two visible branches $v_1,v_2$ with
+\[
+K_{v_i}=\operatorname{Im}(\phi_i)=G_i
+\qquad
+(i=1,2).
+\]
+Because both $G_1$ and $G_2$ are nonzero, both branches are non-neutral by \Cref{thm:mixed-branch-realization}(ii). Since
+\[
+G_1\cap G_2=0,
+\qquad
+G_1+G_2=G,
+\]
+condition \textup{(ii)} follows.
+
+Assume conversely that \textup{(ii)} holds. Put
+\[
+K_i:=K_{v_i}
+\qquad
+(i=1,2).
+\]
+For each $i$, choose a finite nerve presentation of the branch class $\omega_{v_i}$ on one of the covers $\mathcal U_\beta^{(m_i)}$. Since
+\[
+H_2\bigl(N(\mathcal U_\beta^{(m_i)}),\mathbb Z\bigr)\cong \mathbb Z^\beta,
+\]
+the hidden subgroup
+\[
+K_i=\operatorname{Im}(\mathrm{ev}_{\omega_{v_i}})
+\]
+is generated by at most $\beta$ elements. The equalities
+\[
+K_1\cap K_2=0,
+\qquad
+K_1+K_2=G
+\]
+therefore give an internal direct-sum decomposition
+\[
+G\cong K_1\oplus K_2
+\]
+with both summands nonzero. Finite abelian indecomposable groups are exactly the cyclic $p$-groups \cite[Chap.~12]{DummitFoote2004}, so $G$ is not a cyclic $p$-group. Moreover
+\[
+d(G)\le d(K_1)+d(K_2)\le 2\beta.
+\]
+Thus \textup{(i)} holds.
+
+The final displayed identities are immediate from
+\[
+\bigcap_{i=1}^2 K_{v_i}=0,
+\qquad
+\sum_{i=1}^2 K_{v_i}=G,
+\]
+via \Cref{thm:branch-sensitive-visible-quotient,thm:branch-uniform-visible-quotient,thm:branch-comparison-exact-sequence}. Since both branches are non-neutral, \Cref{thm:mixed-branch-realization}(iv) gives
+\[
+M,p\Vdash \Null_s^{\mathrm{glue}}(r).
+\qedhere
+\]
+\end{proof}
+
 \begin{example}[A two-branch sphere example separating the aggregate invariants]\label{ex:two-branch-sphere-separation}
+This is the case $\beta=1$ and $G=(\mathbb Z/2\mathbb Z)^2$ of \Cref{thm:bouquet-two-branch-resolution}.
+
 Let $\mathcal U$ be a finite good cover of $S^2$ with nerve
 \[
 N:=N(\mathcal U),
@@ -427,41 +1237,55 @@ H_2(N,\mathbb Z)\cong \mathbb Z
 \[
 H^2(N,A)\cong \mathrm{Hom}(H_2(N,\mathbb Z),A)\cong A.
 \]
-Choose classes
+Choose simplicial cocycles
 \[
-\omega_1,\omega_2\in H^2(N,A)
+\alpha_1,\alpha_2\in Z^2(N,A)
 \]
-corresponding to the two basis vectors $(1,0)$ and $(0,1)$, and let
+whose cohomology classes evaluate on the fundamental class $[S^2]$ as the basis vectors $(1,0)$ and $(0,1)$. Define the local object functor
 \[
-\mathfrak G_{v_1},
+F_{p,s}|_{\mathcal C_a}:\mathcal C_a^{op}\to\mathsf{Set}
+\]
+by
+\[
+F_{p,s}(U)=\{v_1,v_2\}
+\]
+for every nonempty proper finite intersection $U$ of members of $\mathcal U$, by
+\[
+F_{p,s}(a)=\varnothing,
+\]
+and by the identity map on the labels $v_1,v_2$ under restriction. Then
+\[
+M,p\Vdash \CompSec_s(r),
 \qquad
-\mathfrak G_{v_2}
+M,p\nVdash \Sec_s(r),
 \]
-be banded $A$-gerbes representing those classes \cite[Chap.~IV]{Giraud1971}, \cite[Tag 06NY]{StacksProject}. Put
+and the sheafification has exactly two global visible classes, represented by the constant families $v_1$ and $v_2$ on the cover. For $m=1,2$, choose local realizations $x_i^{(m)}$ over the members of $\mathcal U$ with automorphism group $A$ and transition maps whose triple-overlap defect is $\alpha_m$. The standard cocycle construction \cite[Chap.~IV]{Giraud1971}, \cite[Sec.~5]{Breen2006}, \cite{Murray1996} then yields a prestack presentation $\mathfrak P^{(m)}$ with
 \[
-\mathfrak L_r:=\mathfrak G_{v_1}\sqcup \mathfrak G_{v_2}
+\pi_0^{\mathrm{pre}}(\mathfrak P^{(m)})
 \]
-and define the local object functor on $\mathcal C_a$ by
+equal to the singleton subpresheaf of $F_{p,s}|_{\mathcal C_a}$ generated by $v_m$, and its stackification
 \[
-F_{p,s}|_{\mathcal C_a}:=\pi_0(\mathfrak L_r).
+\mathfrak G_{v_m}:=a(\mathfrak P^{(m)})
 \]
-Since $\mathfrak L_r$ is already a stack, we may take
+is the corresponding non-neutral $A$-banded branch gerbe.
+
+Form the disjoint union prestack
 \[
-\mathfrak P_r:=\mathfrak L_r
+\mathfrak P_r:=\mathfrak P^{(1)}\sqcup \mathfrak P^{(2)}
 \]
-as the realization prestack of an admitted reference $r$, with
+and let
 \[
-\pi_0^{\mathrm{pre}}(\mathfrak P_r)=\pi_0(\mathfrak L_r)=F_{p,s}|_{\mathcal C_a}.
+\mathfrak L_r:=a(\mathfrak P_r).
 \]
-Then
+Its presheaf of isomorphism classes is the disjoint union of the two singleton local-object subpresheaves supplied by $\mathfrak P^{(1)}$ and $\mathfrak P^{(2)}$, hence
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)\cong F_{p,s}|_{\mathcal C_a}.
+\]
+Therefore
 \[
 \Vis_{p,s}(r)=\{v_1,v_2\},
 \]
-and
-\[
-M,p\Vdash \CompSec_s(r)\land \neg \Sec_s(r),
-\]
-because each gerbe is locally nonempty while both are non-neutral.
+while both component gerbes are non-neutral. Thus the two visible branches are recovered from explicit local-object data plus chosen local realization data, rather than inserted by taking gerbes as primitive input.
 
 If $[S^2]$ denotes the fundamental class in $H_2(N,\mathbb Z)$, then
 \[
@@ -504,9 +1328,9 @@ B_{\mathrm{res}}(r)\cong A,
 Thus each branch individually hides one coordinate of $A$, but the hidden coordinates are transverse: once the branch label is known, nothing remains hidden across all branches, whereas any single character channel admissible on both branches must be trivial. In this example the entire uniform hidden budget is exhausted by branch resolution itself.
 \end{example}
 
-\subsection{Connection to sheaf-theoretic contextuality}
+\subsection{Comparison with sheaf-theoretic contextuality}
 
-The unique-branch case $|\Vis_{p,s}(r)|=1$ deserves separate attention because it connects the present theory to the sheaf-theoretic analysis of contextuality. The comparison in this subsection is deliberately formal: it assumes from the outset that the local object functor has been identified with the support presheaf of an Abramsky--Brandenburger measurement scenario and that the extra realization hypotheses of the present paper have been verified. We do not claim that arbitrary empirical models automatically satisfy the unique-branch, realization-prestack, or global-conservativity hypotheses. The relevant contextuality background is the support-presheaf framework of \cite{AbramskyBrandenburger2011}, its cohomological refinements \cite{AbramskyMansfieldSoaresBarbosa2012,AbramskyBarbosaKishidaLalMansfield2015}, and the blind-case analysis of \cite{Caru2017}.
+The case $|\Vis_{p,s}(r)|=1$ is the one closest to the sheaf-theoretic analysis of contextuality. In this subsection we identify the local object functor with the support presheaf of an Abramsky--Brandenburger scenario and keep the realization hypotheses from the preceding sections. Under these assumptions the comparison with the support-presheaf framework of \cite{AbramskyBrandenburger2011} and its later refinements \cite{AbramskyMansfieldSoaresBarbosa2012,AbramskyBarbosaKishidaLalMansfield2015,Caru2017,Caru2018,Montanhano2021} becomes direct.
 \begin{proposition}[Compatibility translation for contextuality data]\label{prop:ab-compatibility-translation}
 Assume $r:\mathsf{Ref}_s$ is admitted at $p$, write $a=[r]_p$, and let $S_e$ be the support presheaf of a finite Abramsky--Brandenburger empirical model. If
 \[
@@ -537,7 +1361,7 @@ Under the identification $F_{p,s}|_{\mathcal C_a}\cong S_e$, a cover of $a$ in $
 Likewise, a section of $F_{p,s}$ over the terminal object $a$ is, by construction, a global assignment in the support presheaf. Hence \textup{(ii)}. The displayed equivalences in \textup{(iii)} are just these identifications rewritten in the forcing notation of the present paper.
 \end{proof}
 
-\begin{theorem}[Conditional unique-branch comparison with the no-global-section picture]\label{thm:unique-branch-contextuality-comparison}
+\begin{proposition}[Conditional unique-branch comparison with the no-global-section picture]\label{thm:unique-branch-contextuality-comparison}
 Let $r:\mathsf{Ref}_s$ be admitted at $p$, write $a=[r]_p$, and assume:
 \begin{enumerate}[label=(\roman*),nosep]
 \item the slice site $\mathcal C_a$ is the measurement-cover site of a finite Abramsky--Brandenburger scenario, and the local object functor $F_{p,s}|_{\mathcal C_a}$ is identified with the support presheaf $S_e$ of an empirical model $e$ \cite{AbramskyBrandenburger2011};
@@ -588,7 +1412,7 @@ K_{\omega}=0
 \]
 Hence the no-global-section obstruction can remain nontrivial while being invisible to every admissible character channel precisely when the surviving class is pure $\operatorname{Ext}$-type.
 \end{enumerate}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 Clause \textup{(i)} is exactly \Cref{prop:ab-compatibility-translation}(iii) for compatible families, and clause \textup{(ii)} is the same proposition for global sections.
@@ -617,5 +1441,5 @@ the condition $K_{\omega}=0$ is equivalent to $A_{\mathrm{vis}}^{\omega}=A$. Thu
 \end{proof}
 
 \begin{remark}[Car\`u-type blind cases as pure $\operatorname{Ext}$-residuals]\label{rem:caru-ext-residual}
-Under the explicit hypotheses of \Cref{thm:unique-branch-contextuality-comparison}, the comparison with \cite{Caru2017} takes the following precise form: the failure of cohomological completeness in the unique-branch case is exactly the case in which the surviving obstruction class lies entirely in the $\operatorname{Ext}$-summand of the universal coefficient sequence.
+Under the hypotheses of \Cref{thm:unique-branch-contextuality-comparison}, the comparison with \cite{Caru2017,Caru2018,Montanhano2021} is as follows: failure of cohomological completeness in the unique-branch case occurs precisely when the surviving obstruction class lies entirely in the $\operatorname{Ext}$-summand of the universal coefficient sequence. The point here is not to replace those completeness programmes, but to isolate, inside the finite-nerve banded setting, the blind regime that any complete refinement must account for.
 \end{remark}
