@@ -489,6 +489,7 @@ import Omega.Zeta.XiTimePart65hDivisibilitySlopeFreezingPropagation
 import Omega.Zeta.XiEdDiscriminantJClosedForm
 import Omega.Zeta.XiLeyangDiscriminantSyncEd
 import Omega.Zeta.XiQepLeakageLowerBound
+import Omega.Zeta.XiQepLeakageSpectrumCommuting
 import Omega.Zeta.XiQepScalarModeTowerClassification
 import Omega.Zeta.CayleyOffsetDefectSpectrumBounds
 import Omega.Zeta.XiGramShiftPositivePencilNodeSpectrum
