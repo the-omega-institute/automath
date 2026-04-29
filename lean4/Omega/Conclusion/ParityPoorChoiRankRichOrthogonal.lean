@@ -1,6 +1,6 @@
 import Omega.Conclusion.FoldNormalizerCharactersCompletelyStratified
 import Omega.Conclusion.QfoldChannelChoiRankEqualsQcollision
-import Omega.Conclusion.FixedQCollisionChoiRankSharppComplete
+import Omega.Conclusion.FixedQCollisionChoiRankSharpPComplete
 import Omega.Conclusion.SingleCollapseChoiRankSharppPersists
 
 open scoped BigOperators
