@@ -107,6 +107,7 @@ import Omega.Zeta.XiSaturatedShiftInvariantLatticeGcdLcm
 import Omega.Zeta.CapacityOverlapFunctionalL1Identity
 import Omega.Zeta.CauchyPoissonKlGoldenScale
 import Omega.Zeta.XiCmvStabilizationInfinite
+import Omega.Zeta.XiTimePart28cVerblunskyPrefixExactMomentRigidity
 import Omega.Zeta.XiCollisionU1AuditWindowUniformSubcriticality
 import Omega.Zeta.XiSyndromeCertificateIncompressibility
 import Omega.Zeta.XiTimePart65cEscortRenyiTwoParameterFreezingLine
@@ -617,6 +618,7 @@ import Omega.Zeta.XiFoldbinUnderresolutionTwoAtomicCurvatureMeasure
 import Omega.Zeta.XiBulkEntropyMicrocanonicalLegendreDual
 import Omega.Zeta.XiParrySymbolMarkovPeripheralSpectrum
 import Omega.Zeta.XiReplayGodelPrimeTerminality
+import Omega.Zeta.XiReplayAlgorithmPrimeDeterminism
 import Omega.Zeta.XiAeSimpleZerosUnderAcSeeds
 import Omega.Zeta.XiTailEntropyPressureCapacityVariational
 import Omega.Zeta.XiBasepointScanGramInverseClosedForm
