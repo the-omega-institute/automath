@@ -244,6 +244,7 @@ import Omega.Zeta.XiTerminalZmStokesAmplitudeSquareCubicRigidity
 import Omega.Zeta.CapacityOverlapFunctionalL1Identity
 import Omega.Zeta.XiTerminalBelyiFullSymmetricCover
 import Omega.Zeta.CauchyPoissonKlGoldenScale
+import Omega.Zeta.XiCauchyPoissonEntropyCurvatureInvariant
 import Omega.Zeta.XiSingleEllipticZeroReconstructsScale
 import Omega.Zeta.XiFiniteWindowExtremeResonanceCertificate
 import Omega.Zeta.XiCmvStabilizationInfinite
@@ -689,6 +690,7 @@ import Omega.Zeta.XiDisjointnessBooleanOverlapMatrixInverse
 import Omega.Zeta.XiTerminalZmDeltaBadprime37B5DoubleRoot
 import Omega.Zeta.XiZGContinuedEulerFactorization
 import Omega.Zeta.XiIntegerEllipseFreeCommutativeMonoid
+import Omega.Zeta.XiIntegerEllipseAreaPreservingAutomorphismProduct
 import Omega.Zeta.XiExceptionalThetaOmegaIdentification
 import Omega.Zeta.XiGoldenChainReverseklLogBarrier
 import Omega.Zeta.XiGoldenChainPoissonKLAlignmentRate
