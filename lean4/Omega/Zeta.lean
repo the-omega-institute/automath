@@ -49,6 +49,8 @@ import Omega.Zeta.XiRhomPressureSeriesConvergenceThresholdRemainder
 import Omega.Zeta.XiScaleMellinBesselKernel
 import Omega.Zeta.XiFoldbinAbsoluteRenyiEntropyConstantClosed
 import Omega.Zeta.XiWindow6ResetGapFibCoupling
+import Omega.Zeta.XiWindow6ResetClockGapFrequencies
+import Omega.Zeta.XiWindow6ReciprocalFluxBoson12
 import Omega.Zeta.XiWindow6BoundaryMinimalLinearVisibleDimension
 import Omega.Zeta.XiTimePart9zpWindow6QuotientIntrinsicallyGroupoidal
 import Omega.Zeta.TimePart9xgFiniteModulusTemplateMissesSlowestTwist
