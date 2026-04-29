@@ -2841,3 +2841,5 @@ import Omega.Zeta.XiTimePart63aTorsionQCesaroFourierProjection
 import Omega.Zeta.XiSelfreciprocalEscapeSingularRingResultant
 import Omega.Zeta.XiOutputPotentialDirichletGlobalWorstModeJ1
 import Omega.Zeta.XiOutputPotentialActivatedBranchUniformScaleSeparation
+import Omega.Zeta.XiTerminalZmCumulantSignDensityExtremes
+import Omega.Zeta.XiTerminalZmCumulantLocalGrowthDense
