@@ -233,6 +233,7 @@ import Omega.Zeta.HardyCriterionDelta
 import Omega.Zeta.XiSaturatedShiftInvariantLatticeGcdLcm
 import Omega.Zeta.XiGridScanTwoStepDealiasing
 import Omega.Zeta.CapacityOverlapFunctionalL1Identity
+import Omega.Zeta.XiTerminalBelyiFullSymmetricCover
 import Omega.Zeta.CauchyPoissonKlGoldenScale
 import Omega.Zeta.XiSingleEllipticZeroReconstructsScale
 import Omega.Zeta.XiFiniteWindowExtremeResonanceCertificate
