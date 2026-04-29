@@ -218,6 +218,7 @@ import Omega.Zeta.XiQepLeakageLowerBound
 import Omega.Zeta.XiQepScalarModeTowerClassification
 import Omega.Zeta.CayleyOffsetDefectSpectrumBounds
 import Omega.Zeta.XiAbelCrossscaleChebyshevClosureAcceleration
+import Omega.Zeta.XiSpectralMarginFinitePsdCertificate
 import Omega.Zeta.HankelSinglePrimeAuditZeroError
 import Omega.Zeta.XiTimePart9xfFrozenPhaseTwoCoordinateThermodynamics
 import Omega.Zeta.XiTimePart9xfGoldenMetallicLogcostMinimizer
