@@ -68,6 +68,7 @@ import Omega.Zeta.XiTimePart28CEndpointFluxExponentialCylinderContinuity
 import Omega.Zeta.XiTimePart28cStabilizedEndpointFluxCauchyModulus
 import Omega.Zeta.XiCauchyPoissonKLVarianceReadout
 import Omega.Zeta.XiCauchyPoissonKLRigidity
+import Omega.Zeta.XiPoissonRelativeEntropyContraction
 import Omega.Zeta.XiCoarsegrainingIllposednessExponentialLaw
 import Omega.Zeta.XiPoissonCauchyMultipoleInvisibilityConstruction
 import Omega.Zeta.XiScanTwoSourceMinDiscriminant
