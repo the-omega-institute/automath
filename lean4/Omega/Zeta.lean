@@ -1,5 +1,6 @@
 import Omega.Zeta.XiGaugeVolumeBoltzmannStirlingExponential
 import Omega.Zeta.XiRhCohomologicalReductionHolonomy
+import Omega.Zeta.XiJacobiSturmNestedLocalization
 import Omega.Zeta.XiFiniteTimeNaturalExtensionActiveBranchBudget
 import Omega.Zeta.XiLocalizedFinitePrimeAuditExponentialIncompleteness
 import Omega.Zeta.XiHorizonWeightedExplicitFormula
