@@ -220,6 +220,8 @@ import Omega.Zeta.CapacityOverlapFunctionalL1Identity
 import Omega.Zeta.CauchyPoissonKlGoldenScale
 import Omega.Zeta.XiCmvStabilizationInfinite
 import Omega.Zeta.XiTimePart28cVerblunskyPrefixExactMomentRigidity
+import Omega.Zeta.XiTimePart60eSolenoidTerminalMorphismClassification
+import Omega.Zeta.XiEntropyProductionEqualsOuterFactor
 import Omega.Zeta.XiCollisionU1AuditWindowUniformSubcriticality
 import Omega.Zeta.XiSyndromeCertificateIncompressibility
 import Omega.Zeta.XiTimePart65cEscortRenyiTwoParameterFreezingLine
