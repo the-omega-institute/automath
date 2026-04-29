@@ -79,6 +79,16 @@ theorem paper_fold_epsilon_machine_fibonacci_mobius
         ring
   exact ⟨hrClosed, hAlphaClosed⟩
 
+/-- Closed forms for the Möbius recursion governing the uncertain epsilon-machine states.
+    thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius -/
+theorem paper_fold_gauge_anomaly_epsilon_machine_fibonacci_mobius
+    (r alpha : Nat → Rat) (h0 : r 0 = (1 : Rat) / 2)
+    (hrec : ∀ n : Nat, r (n + 1) = 1 / (4 * r n + 2))
+    (hAlpha : ∀ n : Nat, alpha n = 1 / (4 * (1 + r n))) :
+    (∀ n : Nat, r n = (Nat.fib (n + 1) : Rat) / (2 * Nat.fib (n + 2))) ∧
+      (∀ n : Nat, alpha n = (Nat.fib (n + 2) : Rat) / (2 * Nat.fib (n + 4))) := by
+  exact paper_fold_epsilon_machine_fibonacci_mobius r alpha h0 hrec hAlpha
+
 /-- Zero-run conditional law Fibonacci closed-form seeds.
     thm:fold-gauge-anomaly-zero-run-fibonacci -/
 theorem paper_fold_gauge_anomaly_zero_run_fibonacci_seeds :

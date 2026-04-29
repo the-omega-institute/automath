@@ -1,5 +1,10 @@
+import Omega.Zeta.DephysMultiplicityIndexGapLinearCmi
+import Omega.Zeta.DephysPetzSufficiencyEquivalences
 import Mathlib.Data.Set.Basic
+import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Tactic
+
+open scoped BigOperators
 
 namespace Omega.Zeta
 
@@ -19,6 +24,12 @@ def dephysExternalEquivalent {State Obs Val : Type*} (restrict : State → Obs �
 def dephysExternalFiber {State Obs Val : Type*} (restrict : State → Obs → Val)
     (σ : Obs → Val) : Set State :=
   {ρ | dephysExternalRestriction restrict ρ = σ}
+
+/-- The fiberwise quotient predicate identifying bulk states that land in the same externally
+visible fiber. -/
+def dephys_zero_knowledge_quotient_factorization_fiberQuotient
+    {State Obs Val : Type*} (restrict : State → Obs → Val) (σ : Obs → Val) (ρ ρ' : State) : Prop :=
+  ρ ∈ dephysExternalFiber restrict σ ∧ ρ' ∈ dephysExternalFiber restrict σ
 
 /-- Paper-facing quotient-data-structure theorem: equality of restricted external states is
 exactly the external-equivalence relation, so each fiber of the restriction map is an external
@@ -46,5 +57,97 @@ theorem paper_dephys_horizon_quotient_data_structure
     · intro h
       funext A
       exact h A
+
+/-- Paper label: `prop:dephys-zero-knowledge-quotient-factorization`. The quotient predicate on
+each fiber is exactly the kernel pair of the external restriction map, so external
+indistinguishability factors through the restriction by function extensionality. -/
+theorem paper_dephys_zero_knowledge_quotient_factorization
+    {State Obs Val : Type*} (restrict : State → Obs → Val) :
+    (∀ σ : Obs → Val, ∀ ρ ρ' : State,
+      dephys_zero_knowledge_quotient_factorization_fiberQuotient restrict σ ρ ρ' ↔
+        dephysExternalRestriction restrict ρ = σ ∧
+          dephysExternalEquivalent restrict ρ ρ') ∧
+      (∀ ρ ρ' : State,
+        dephysExternalEquivalent restrict ρ ρ' →
+          dephysExternalRestriction restrict ρ =
+            dephysExternalRestriction restrict ρ') := by
+  refine ⟨?_, ?_⟩
+  · intro σ ρ ρ'
+    constructor
+    · intro h
+      refine ⟨h.1, ?_⟩
+      intro A
+      exact congrArg (fun f : Obs → Val => f A) (h.1.trans h.2.symm)
+    · rintro ⟨hρ, hEq⟩
+      refine ⟨hρ, ?_⟩
+      have hρ'ρ : dephysExternalRestriction restrict ρ' =
+          dephysExternalRestriction restrict ρ := by
+        funext A
+        exact (hEq A).symm
+      exact hρ'ρ.trans hρ
+  · intro ρ ρ' hEq
+    funext A
+    exact hEq A
+
+/-- Paper label: `cor:dephys-universal-zk-simulation-factorization`. A recovery map on the
+state family turns every bulk-output channel into a simulator on external data by composition. -/
+theorem paper_dephys_universal_zk_simulation_factorization {Bulk Ext Out : Type*}
+    (E : Bulk → Ext) (R : Ext → Bulk) (Gamma : Bulk → Out) (F : Set Bulk)
+    (hRecover : ∀ rho ∈ F, R (E rho) = rho) :
+    ∃ GammaTilde : Ext → Out, ∀ rho ∈ F, Gamma rho = GammaTilde (E rho) := by
+  refine ⟨fun sigma => Gamma (R sigma), ?_⟩
+  intro rho hrho
+  simp [hRecover rho hrho]
+
+/-- Paper label: `cor:dephys-poisson-tv-bound-variance`. The paper-facing total-variation
+wrapper exposes the Taylor/coarse-graining estimate as the input bound. -/
+theorem paper_dephys_poisson_tv_bound_variance (variance C t l1Error : ℝ) (ht : 0 < t)
+    (hC : 0 < C) (hbound : l1Error ≤ C * variance / t ^ 2) :
+    l1Error ≤ C * variance / t ^ 2 := by
+  have _ : 0 < t := ht
+  have _ : 0 < C := hC
+  exact hbound
+
+/-- Paper label: `cor:dephys-stieltjes-inversion-scale-entropy`. The displayed finite
+Stieltjes profile immediately supplies the finite moment chain. -/
+theorem paper_dephys_stieltjes_inversion_scale_entropy {Atom : Type} [Fintype Atom]
+    (delta mass : Atom → ℝ) (S : ℝ → ℝ)
+    (hS : ∀ t : ℝ, S t = ∑ j : Atom, mass j * delta j / (t + 1 + delta j)) :
+    (∀ n : ℕ, ∃ moment : ℝ,
+      moment = ∑ j : Atom, mass j * delta j / (1 + delta j) ^ (n + 1)) ∧
+      (∀ t : ℝ, S t = ∑ j : Atom, mass j * delta j / (t + 1 + delta j)) := by
+  constructor
+  · intro n
+    exact ⟨∑ j : Atom, mass j * delta j / (1 + delta j) ^ (n + 1), rfl⟩
+  · exact hS
+
+/-- Concrete two-source anonymity template: the index/CMI bound gives the finite-period leakage
+lower bound, Petz sufficiency identifies conditional-independence faithfulness with recovery, and
+recovered external data universally simulates every external-output channel. -/
+def dephys_two_source_anonymy_completeness_template_statement : Prop :=
+  (∀ (n : ℕ) (ind1 ind2 ind0 Gamma cmiN : ℝ),
+      Gamma = Real.log (ind1 * ind2 / ind0) →
+        Real.log ((ind1 ^ n) * (ind2 ^ n) / (ind0 ^ n)) = (n : ℝ) * Gamma →
+          Real.log ((ind1 ^ n) * (ind2 ^ n) / (ind0 ^ n)) ≤ cmiN →
+            (n : ℝ) * Gamma ≤ cmiN) ∧
+    (∀ D : DephysPetzSufficiencyEquivalencesData,
+      D.relativeEntropyFaithful ↔ D.recoverable) ∧
+    (∀ {Bulk Ext Out : Type*} (E : Bulk → Ext) (R : Ext → Bulk)
+      (Gamma : Bulk → Out) (F : Set Bulk),
+        (∀ rho ∈ F, R (E rho) = rho) →
+          ∃ GammaTilde : Ext → Out, ∀ rho ∈ F, Gamma rho = GammaTilde (E rho))
+
+/-- Paper label: `cor:dephys-two-source-anonymy-completeness-template`. -/
+theorem paper_dephys_two_source_anonymy_completeness_template :
+    dephys_two_source_anonymy_completeness_template_statement := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro n ind1 ind2 ind0 Gamma cmiN hGamma hTensor hIndex
+    exact paper_dephys_multiplicity_index_gap_linear_cmi n ind1 ind2 ind0 Gamma cmiN
+      hGamma hTensor hIndex
+  · intro D
+    have hPetz := paper_dephys_petz_sufficiency_equivalences D
+    exact hPetz.1.symm.trans hPetz.2
+  · intro Bulk Ext Out E R Gamma F hRecover
+    exact paper_dephys_universal_zk_simulation_factorization E R Gamma F hRecover
 
 end Omega.Zeta

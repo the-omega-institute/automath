@@ -155,4 +155,9 @@ theorem paper_op_algebra_fold_conditional_expectation (D : FoldConditionalExpect
   · intro B₁ B₂ A hB₁ hB₂
     exact D.foldExpectation_bimodule B₁ B₂ A hB₁ hB₂
 
+/-- prop:fold-conditional-expectation -/
+theorem paper_fold_conditional_expectation (D : FoldConditionalExpectationData) :
+    D.positiveUnitalIdempotent ∧ D.identityOnInvariantSubalgebra ∧ D.bimoduleLaw := by
+  exact paper_op_algebra_fold_conditional_expectation D
+
 end Omega.OperatorAlgebra

@@ -16,4 +16,9 @@ theorem paper_congruence_m6_idempotents_four_seeds : idem21.card = 4 := by
 theorem paper_congruence_m6_idempotents_four_package : idem21.card = 4 :=
   paper_congruence_m6_idempotents_four_seeds
 
+/-- Paper-facing theorem matching the statement label used in the manuscript.
+    prop:congruence-m6-idempotents-four -/
+theorem paper_congruence_m6_idempotents_four : idem21.card = 4 :=
+  paper_congruence_m6_idempotents_four_package
+
 end Omega.GU.CongruenceM6IdempotentsFour

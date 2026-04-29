@@ -3,6 +3,7 @@
 以下命题把二者之间的定量关系压缩为一条可审计不等式：负谱幅度不仅是二值否证器，还可给出缺陷的贴边深度与相应漏泄下界的显式规模。
 
 \begin{proposition}[Toeplitz 负特征值导出 Jensen 缺陷下界]\label{prop:xi-toeplitz-negative-eigenvalue-implies-jensen-defect-lb}
+\leanverified{paper\_xi\_toeplitz\_negative\_eigenvalue\_implies\_jensen\_defect\_lb}
 设 Toeplitz 主子矩阵 \(\mathbf{T}_N\) 的最小特征值为 \(\lambda_{\min}(\mathbf{T}_N)=-\eta_N<0\)。
 则存在圆盘内零点 \(a\in\mathbb{D}\) 使边界层深度 \(h:=1-|a|\) 满足
 \[
@@ -26,6 +27,7 @@ D_\zeta(\varrho)\ \ge\ \log\!\Bigl(\frac{\varrho}{|a|}\Bigr),
 \end{proof}
 
 \begin{theorem}[统一验证器的三端预算与正交不可补偿性]\label{thm:xi-unified-verifier-three-budget-orthogonality}
+\leanpartial{paper\_xi\_unified\_verifier\_three\_budget\_orthogonality}{现有签名在 \(\delta_0 \le 0\) 时为假，需补充 \(0 < \delta_0 \le \tfrac12\) 假设。}
 考虑纯相位--离线核验接口中的统一验证器，并记其三类可调预算分别为
 \[
 \Delta_\rho:=1-\rho_{\max}
@@ -82,6 +84,55 @@ N
 第 (3) 条由结论 \ref{con:xi-terminal-endpoint-heat-kernel-probe-identity} 给出：端点原子质量是通过有限 Toeplitz 二次型的单调极限抽取出来的，故截断阶不足时只能得到不完全的端点证书。
 
 最后，定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable} 已证明这些失败见证分属互不重叠的支撑轴，预算不能跨轴抵偿；将三条阈值并读即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[唯一连续横截与无限素数秩的严格分离]\label{thm:xi-unique-transverse-vs-infinite-prime-rank-separation}
+在扩展保存语义下，自指系统同时满足下列两条严格相容而不可混同的资源律：
+\begin{enumerate}
+  \item 若连续外置坐标
+  \[
+  r:\CC^\times\longrightarrow \RR
+  \]
+  使得
+  \[
+  u\longmapsto \bigl(\operatorname{projPhase}(u),r(u)\bigr)
+  \]
+  成为单射，则 \(r\) 必经由
+  \[
+  \varrho(u)=\log|u|
+  \]
+  因子化；特别地，在单调重参数化意义下，唯一的连续离切片寄存器就是 \(\varrho\)（推论 \ref{cor:xi-unique-continuous-transverse-register}）。
+  \item 若要求对全深度 prime-register 自指扇区给出忠实账本化，则该账本必须携带可数无穷个彼此独立的 prime directions；尤其不存在任何有限生成交换群账本，能够把这一结构严格同态化到有限秩加法记录之中（定理 \ref{thm:xi-infinite-depth-prime-ledger-infinite-rank-obstruction}）。
+\end{enumerate}
+因此，离切片连续模在结构上是一维且唯一的，而算术账本秩却是不可有限化的；二者构成两类严格分离的证书资源，而非同一轴上的不同刻度。
+\end{theorem}
+\begin{proof}
+第 \(1\) 条正是推论 \ref{cor:xi-unique-continuous-transverse-register} 的直接重述。第 \(2\) 条则由定理 \ref{thm:xi-infinite-depth-prime-ledger-infinite-rank-obstruction} 给出：忠实的全深度 prime-register 账本必然需要无穷多个彼此独立的素数方向，并因此排斥一切有限生成加法账本上的严格同态化。将二者并读即可得到所述分离结论。证毕。
+\end{proof}
+\leanverified{paper\_xi\_unique\_transverse\_vs\_infinite\_prime\_rank\_separation}
+
+\begin{proposition}[离切片真缺陷证书的二轴下界]\label{prop:xi-offslice-nontrivial-certificate-two-axis-lower-bound}
+\leanverified{paper\_xi\_offslice\_nontrivial\_certificate\_two\_axis\_lower\_bound}
+设某一自指断言同时满足下列两点：
+\begin{enumerate}
+  \item 其有效读出确实离开 unitary slice，因而需要非平凡的连续横截信息；
+  \item 其对应的链型固定点集为某个 proper 子集
+  \[
+  F\subsetneq[n].
+  \]
+\end{enumerate}
+则任何有限可核验的证书都至少需要两条原始且正交的支撑轴：一条是径向寄存器 \(\varrho(u)=\log|u|\) 的重参数化，另一条是见证 \(F\) 所遗漏素数方向的 prime-register 轴。特别地，不存在单轴证书能够同时完成这两类核验。
+\end{proposition}
+\begin{proof}
+若断言离开 unitary slice，则由定理 \ref{thm:xi-pw-no-continuous-hair} 与推论 \ref{cor:xi-unique-continuous-transverse-register}，其连续部分只能通过 \(\varrho\) 的重参数化外置；否则在纯相位闭包中读出即退化为 \(\mathsf{NULL}\)。
+
+另一方面，若 \(F\subsetneq[n]\)，则定理 \ref{thm:xi-comparable-chain-word-kappa-completeness} 中的公式
+\[
+\kappa(N_F)=\prod_{i\in F}q_i
+\]
+表明：\(F\) 的算术内容由平方自由素数积精确承载，而被删去的素数方向正是这一账本对象的结构性缺口；它不能由任何连续横截坐标恢复。因而，见证 \(F\neq[n]\) 必须保留独立的 prime-register 轴。
+
+最后，定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable} 已经证明不同失败来源的证书预算不可跨轴补偿。故连续横截轴与 prime-register 轴必须同时出现，且任何单轴压缩都不能完成这两类核验。证毕。
 \end{proof}
 
 \endinput

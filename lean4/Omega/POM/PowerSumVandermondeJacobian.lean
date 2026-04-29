@@ -32,4 +32,9 @@ theorem paper_pom_power_sum_vandermonde_jacobian (D : PomPowerSumVandermondeJaco
     PomPowerSumVandermondeJacobianData.tangentMapFullRank] using
     mul_pos hfac D.vandermondeProduct_pos
 
+/-- Paper label: `cor:pom-power-sum-local-chart`. -/
+theorem paper_pom_power_sum_local_chart (D : PomPowerSumVandermondeJacobianData) :
+    D.tangentMapFullRank := by
+  exact (paper_pom_power_sum_vandermonde_jacobian D).2
+
 end Omega.POM

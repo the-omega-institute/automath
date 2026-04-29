@@ -47,4 +47,11 @@ theorem paper_circle_dimension_continuous_spectrum_representation (A : Type*) [F
   · intro addr
     exact sameTimeAddressProjection_eq_characteristicMultiplier addr
 
+/-- Exact paper-label wrapper for the continuous-spectrum representation theorem.
+    thm:cdim-continuous-spectrum-representation -/
+theorem paper_cdim_continuous_spectrum_representation (A : Type*) [Fintype A] :
+    ContinuousSpectrumRepresentation (visibleVonNeumannAlgebra A)
+      (sameTimeAddressProjection (A := A)) := by
+  simpa using paper_circle_dimension_continuous_spectrum_representation A
+
 end Omega.CircleDimension

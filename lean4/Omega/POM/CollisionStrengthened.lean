@@ -30,6 +30,13 @@ theorem sum_sq_le_max_mul_sum {ι : Type*} [DecidableEq ι] (s : Finset ι)
         exact Nat.mul_le_mul_right (a i) (hD i hi)
     _ = D * s.sum a := by rw [← Finset.mul_sum]
 
+/-- Paper-labeled finite max-times-sum collision core.
+    cor:pom-injectivization-collision-strengthened-lowerbound -/
+theorem paper_pom_injectivization_collision_strengthened_lowerbound {ι : Type*}
+    [DecidableEq ι] (s : Finset ι) (d : ι → ℕ) (D : ℕ) (hD : ∀ i ∈ s, d i ≤ D) :
+    s.sum (fun i => d i * d i) ≤ D * s.sum d := by
+  exact sum_sq_le_max_mul_sum s d D hD
+
 /-- Cauchy-Schwarz consequence for uniform distributions:
     Col(f) ≥ 1/|X| with equality iff d_f is constant.
     Seed verification: for |X| = 5 uniform fibers of size 2,

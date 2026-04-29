@@ -59,4 +59,13 @@ theorem paper_fold_gauge_anomaly_P10_H_linear_disjointness :
   · exact ⟨hIntersection, rfl, rfl⟩
   · rfl
 
+/-- Paper label: `prop:fold-gauge-anomaly-P10-H-linear-disjointness`. -/
+theorem paper_fold_gauge_anomaly_p10_h_linear_disjointness :
+    foldGaugeAnomalyP10UnramifiedAt101 ∧
+      foldGaugeAnomalyHRamifiedAt101 ∧
+      foldGaugeAnomalyP10HIntersectionIsBase ∧
+      foldGaugeAnomalyP10HDirectProductGalois ∧
+      foldGaugeAnomalyP10HCompositumDegree = Nat.factorial 10 * Nat.factorial 19 := by
+  exact paper_fold_gauge_anomaly_P10_H_linear_disjointness
+
 end Omega.Folding

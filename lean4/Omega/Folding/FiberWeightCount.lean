@@ -658,6 +658,14 @@ theorem fiberHiddenBitCount_zero_sum (m : Nat) :
       rw [hsplit x]; omega)
   omega
 
+/-- Paper-facing package for `cor:pom-branch-mass-law`. -/
+theorem paper_pom_branch_mass_law (m : Nat) :
+    (∀ x : X m, X.fiberMultiplicity x = fiberHiddenBitCount 0 x + fiberHiddenBitCount 1 x) ∧
+    (∑ x : X m, fiberHiddenBitCount 1 x = hiddenBitCount m) ∧
+    (∑ x : X m, fiberHiddenBitCount 0 x = 2 ^ m - hiddenBitCount m) := by
+  exact ⟨fiberMultiplicity_split_by_hiddenBit, fiberHiddenBitCount_one_sum m,
+    fiberHiddenBitCount_zero_sum m⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- ══════════════════════════════════════════════════════════════
 -- Phase R6: hidden-bit ↔ ewc bridges
@@ -761,6 +769,37 @@ theorem momentSum_two_hiddenBit_expand (m : Nat) :
     rw [fiberMultiplicity_split_by_hiddenBit x]
     ring
   simp_rw [hsplit, Finset.sum_add_distrib, Finset.mul_sum]
+
+/-- General hidden-bit mixed-moment cluster expansion.
+    prop:pom-hiddenbit-mixed-moment-cluster -/
+theorem paper_pom_hiddenbit_mixed_moment_cluster (k m : Nat) :
+    momentSum k m = Finset.sum (Finset.range (k + 1)) (fun a =>
+      Nat.choose k a * ∑ x : X m, fiberHiddenBitCount 0 x ^ a * fiberHiddenBitCount 1 x ^ (k - a)) := by
+  classical
+  rw [momentSum]
+  calc
+    ∑ x : X m, X.fiberMultiplicity x ^ k
+      = ∑ x : X m, (fiberHiddenBitCount 0 x + fiberHiddenBitCount 1 x) ^ k := by
+          refine Finset.sum_congr rfl ?_
+          intro x _
+          rw [fiberMultiplicity_split_by_hiddenBit x]
+    _ = ∑ x : X m, Finset.sum (Finset.range (k + 1)) (fun a =>
+          Nat.choose k a * (fiberHiddenBitCount 0 x ^ a * fiberHiddenBitCount 1 x ^ (k - a))) := by
+          refine Finset.sum_congr rfl ?_
+          intro x _
+          simpa [mul_assoc, mul_left_comm, mul_comm] using
+            add_pow (fiberHiddenBitCount 0 x) (fiberHiddenBitCount 1 x) k
+    _ = Finset.sum (Finset.range (k + 1)) (fun a => ∑ x : X m,
+          Nat.choose k a * (fiberHiddenBitCount 0 x ^ a * fiberHiddenBitCount 1 x ^ (k - a))) := by
+          rw [Finset.sum_comm]
+    _ = Finset.sum (Finset.range (k + 1)) (fun a =>
+          Nat.choose k a * ∑ x : X m, fiberHiddenBitCount 0 x ^ a * fiberHiddenBitCount 1 x ^ (k - a)) := by
+          refine Finset.sum_congr rfl ?_
+          intro a ha
+          simpa using
+            (Finset.mul_sum (s := Finset.univ)
+              (f := fun x : X m => fiberHiddenBitCount 0 x ^ a * fiberHiddenBitCount 1 x ^ (k - a))
+              (a := Nat.choose k a)).symm
 
 /-- Fiber multiplicity equals the sum of two exact weight counts.
     d(x) = ewc(m, sv(x)) + ewc(m, sv(x) + F_{m+2}).

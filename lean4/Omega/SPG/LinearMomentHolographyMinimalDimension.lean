@@ -23,4 +23,15 @@ theorem paper_spg_linear_moment_holography_minimal_dim
     ptm_power_sum_m2_l0, ptm_power_sum_m2_l1⟩
   simpa [Fintype.card_fin] using Fintype.card_le_of_injective f hf
 
+/-- Exact paper-facing wrapper for the linear-moment holography threshold package.
+    thm:spg-linear-moment-holography-minimal-dimension -/
+theorem paper_spg_linear_moment_holography_minimal_dimension
+    (m n L : Nat) (f : Fin (2 ^ (m * n)) → Fin L) (hf : Function.Injective f) :
+    2 ^ (m * n) ≤ L ∧
+    Function.Injective (dyadicMomentBox (m := m) (n := n)) ∧
+    (∑ j ∈ Finset.range 2, tau j * (j : ℤ) ^ 0 = 0) ∧
+    (∑ j ∈ Finset.range 4, tau j * (j : ℤ) ^ 0 = 0) ∧
+    (∑ j ∈ Finset.range 4, tau j * (j : ℤ) ^ 1 = 0) := by
+  exact paper_spg_linear_moment_holography_minimal_dim m n L f hf
+
 end Omega.SPG

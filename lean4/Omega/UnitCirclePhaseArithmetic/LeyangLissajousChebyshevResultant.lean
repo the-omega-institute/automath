@@ -1,4 +1,5 @@
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Chebyshev.Basic
 import Mathlib.Tactic
 
 namespace Omega.UnitCirclePhaseArithmetic
@@ -103,5 +104,62 @@ theorem paper_leyang_lissajous_chebyshev_resultant (a b : ℕ) (t δ : ℝ)
       nlinarith [hxfrac, htx]
     · dsimp [t_y]
       nlinarith [hyfrac, hty]
+
+/-- Parameter-level torus loop for the Lee--Yang Lissajous family. -/
+noncomputable def leyang_lissajous_torus_endomorphism_chebyshev_gamma
+    (a b : ℕ) (t δ : ℝ) : ℂ × ℂ :=
+  (Complex.exp ((((a : ℝ) * t) + δ) * Complex.I), Complex.exp (((b : ℝ) * t) * Complex.I))
+
+/-- Synchronized diagonal loop obtained after the torus endomorphism. -/
+noncomputable def leyang_lissajous_torus_endomorphism_chebyshev_diagonal
+    (a b : ℕ) (t δ : ℝ) : ℂ × ℂ :=
+  (Complex.exp ((((a * b : ℕ) : ℝ) * t + (b : ℝ) * δ) * Complex.I),
+    Complex.exp ((((a * b : ℕ) : ℝ) * t) * Complex.I))
+
+/-- Concrete statement of the torus-endomorphism factorization and the folded Chebyshev formulas
+for the Lee--Yang Lissajous family. -/
+def leyang_lissajous_torus_endomorphism_chebyshev_statement
+    (a b : ℕ) (t δ : ℝ) : Prop :=
+  let γ := leyang_lissajous_torus_endomorphism_chebyshev_gamma a b t δ
+  let Δ := leyang_lissajous_torus_endomorphism_chebyshev_diagonal a b t δ
+  (γ.1 ^ b, γ.2 ^ a) = Δ ∧
+    (Polynomial.Chebyshev.T ℝ (b : ℤ)).eval (leyangLissajousX a t δ) =
+      Real.cos ((((a * b : ℕ) : ℝ) * t) + (b : ℝ) * δ) ∧
+    (Polynomial.Chebyshev.T ℝ (a : ℤ)).eval (leyangLissajousY b t) =
+      Real.cos (((a * b : ℕ) : ℝ) * t)
+
+/-- Paper label: `prop:leyang-lissajous-torus-endomorphism-chebyshev`. -/
+theorem paper_leyang_lissajous_torus_endomorphism_chebyshev (a b : ℕ) (t δ : ℝ) :
+    leyang_lissajous_torus_endomorphism_chebyshev_statement a b t δ := by
+  dsimp [leyang_lissajous_torus_endomorphism_chebyshev_statement,
+    leyang_lissajous_torus_endomorphism_chebyshev_gamma,
+    leyang_lissajous_torus_endomorphism_chebyshev_diagonal, leyangLissajousX, leyangLissajousY]
+  have hfold_b :
+      ((b : ℤ) : ℝ) * ((a : ℝ) * t + δ) = (((a * b : ℕ) : ℝ) * t) + (b : ℝ) * δ := by
+    push_cast
+    ring
+  have hfold_a : ((a : ℤ) : ℝ) * ((b : ℝ) * t) = (((a * b : ℕ) : ℝ) * t) := by
+    push_cast
+    ring
+  refine ⟨?_, ?_, ?_⟩
+  · ext <;> dsimp
+    · rw [← Complex.exp_nat_mul]
+      congr 1
+      push_cast
+      ring
+    · rw [← Complex.exp_nat_mul]
+      congr 1
+      push_cast
+      ring
+  · calc
+      (Polynomial.Chebyshev.T ℝ (b : ℤ)).eval (Real.cos ((a : ℝ) * t + δ))
+          = Real.cos ((b : ℤ) * ((a : ℝ) * t + δ)) := by
+              simpa using Polynomial.Chebyshev.T_real_cos (((a : ℝ) * t) + δ) (b : ℤ)
+      _ = Real.cos ((((a * b : ℕ) : ℝ) * t) + (b : ℝ) * δ) := by rw [hfold_b]
+  · calc
+      (Polynomial.Chebyshev.T ℝ (a : ℤ)).eval (Real.cos ((b : ℝ) * t))
+          = Real.cos ((a : ℤ) * ((b : ℝ) * t)) := by
+              simpa using Polynomial.Chebyshev.T_real_cos ((b : ℝ) * t) (a : ℤ)
+      _ = Real.cos (((a * b : ℕ) : ℝ) * t) := by rw [hfold_a]
 
 end Omega.UnitCirclePhaseArithmetic

@@ -4,6 +4,7 @@ import Omega.SPG.BasicProperties
 import Omega.SPG.BayesFiniteMistakesSummable
 import Omega.SPG.BoundaryAffineFiberCycleRank
 import Omega.SPG.BoundaryCycleAuditQueryLowerBound
+import Omega.SPG.BoundaryCycleAuditQueryLowerBoundFull
 import Omega.SPG.BoundaryCycleRankFromEntropy
 import Omega.SPG.BoundaryCylinderGodelizationClarity
 import Omega.SPG.BoundaryDimensionAeStabilization
@@ -11,6 +12,7 @@ import Omega.SPG.BoundaryDimensionUpper
 import Omega.SPG.BoundaryDominanceExponent
 import Omega.SPG.BoundaryExponentialResidualDof
 import Omega.SPG.BoundaryGodelArithmeticHypercubeMedian
+import Omega.SPG.BoundaryGodelAdhesionDefectPhaseDiagram
 import Omega.SPG.BoundaryGodelBitcomplexityIsoperimetric
 import Omega.SPG.BoundaryGodelClarityExponentEquivalence
 import Omega.SPG.BoundaryGodelDimensionSeparatedUnionMax
@@ -46,6 +48,7 @@ import Omega.SPG.CoordinateBundleScreenClosure
 import Omega.SPG.CoordinateBundleScreenCount
 import Omega.SPG.CubeLinftyPrimitiveBoundaryRigidity
 import Omega.SPG.CubeLinftyPrimitiveExplicitMinimizer
+import Omega.SPG.CubeOptimalBoundedPoincareStokesInverse
 import Omega.SPG.CubePoincareInverse
 import Omega.SPG.CubePotentialCurl
 import Omega.SPG.CurlReconstructionPublication
@@ -59,6 +62,7 @@ import Omega.SPG.DoubleBudgetPoisson
 import Omega.SPG.DerivedSubfullBoundaryComplexityEqualsAdhesion
 import Omega.SPG.DyadicHolographicReconstructionNoiseBudget
 import Omega.SPG.DyadicBoundaryImageLDPC
+import Omega.SPG.DyadicBoundaryCodeNotAsymptoticallyGood
 import Omega.SPG.DyadicBoundaryCodeCentralBinomialWall
 import Omega.SPG.DyadicBoundaryImageMinDistance
 import Omega.SPG.DyadicBoundarySyndromeFillability
@@ -67,6 +71,7 @@ import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.DyadicFiniteMomentCompleteness
 import Omega.SPG.DyadicFluxZetaMinkowskiPole
 import Omega.SPG.DyadicOuterApproxStokesGainMinkowskiReadout
+import Omega.SPG.DyadicPolyclubeBoundaryVsAdjacencyIdentity
 import Omega.SPG.DyadicPolyclubeDiscreteIsoperimetry
 import Omega.SPG.DyadicTopInversionBound
 import Omega.SPG.EllipsoidBoundaryFluxReconstruction
@@ -100,17 +105,20 @@ import Omega.SPG.GraphCycleLatticeDeterminantPrimeSupport
 import Omega.SPG.GraphCycleLatticeLeyangPhasePolynomial
 import Omega.SPG.GraphCycleLatticeWeightedDiscriminant
 import Omega.SPG.GraphEnergyEllipsoidGodelCodelengthDual
+import Omega.SPG.GraphEnergyEllipsoidGodelCodelengthDualityOptimalPairing
 import Omega.SPG.GraphEnergyShellBitLowerBound
 import Omega.SPG.GraphEnergyShellLatticeCounting
 import Omega.SPG.HolderOpenResonance
 import Omega.SPG.HomotopyDecomposition
 import Omega.SPG.Hypercube6GodelSquareclass
 import Omega.SPG.HypercubeCycleLatticeGodelEllipsoidCounting
+import Omega.SPG.HypercubeCycleLatticeCountingGodelLog
 import Omega.SPG.HypercubeCycleLatticeDirectsumCounting
 import Omega.SPG.HypercubeCycleLatticeDirectsumMdl
 import Omega.SPG.HypercubeEntropyAreaRigidity
 import Omega.SPG.HypercubeH1PrimeBudgetMinimal
 import Omega.SPG.HypercubeGodelFluxMultiplicativeVolume
+import Omega.SPG.HypercubeGaugeVolumeShannonStirlingGap
 import Omega.SPG.HypercubeGradientConsistency
 import Omega.SPG.HypercubeGradientPublication
 import Omega.SPG.HypercubeNearDetailedBalancePublication
@@ -138,6 +146,7 @@ import Omega.SPG.NonuniformCylinder
 import Omega.SPG.OptimalContinuousInversePublication
 import Omega.SPG.PartialBoundaryGodelAuditOptimal
 import Omega.SPG.PolycubeAdhesion
+import Omega.SPG.PolyclubeAdhesionSharpUpperBound
 import Omega.SPG.PolycubeIsoperimetryUpper
 import Omega.SPG.PolytimeCertificateSynthesisImpliesPEqualsNP
 import Omega.SPG.PolytimeCompleteInvariantImpliesPEqualsNP
@@ -181,7 +190,9 @@ import Omega.SPG.SurvivorSpectrumCollision
 import Omega.SPG.SymbolicFactor
 import Omega.SPG.TanakaIncrement
 import Omega.SPG.TanakaStokes
+import Omega.SPG.TanakaStokesPublication
 import Omega.SPG.TotalDegreeMomentThreshold
+import Omega.SPG.TotalDegreeMomentThresholdExponentialScale
 import Omega.SPG.UndecidableNoFiniteComputableCompleteInvariant
 import Omega.SPG.VolumeBoundaryScaling
 import Omega.SPG.WalshDiscreteStokesHolography
@@ -191,3 +202,4 @@ import Omega.SPG.WeightedBoundaryPole
 import Omega.SPG.WeightedBoundaryTransfer
 import Omega.SPG.WeightedDiscreteFluxIdentity
 import Omega.SPG.WeightedL1TorusStableLengthGodel
+import Omega.SPG.WulffFiniteFluxCoordinateFactorization

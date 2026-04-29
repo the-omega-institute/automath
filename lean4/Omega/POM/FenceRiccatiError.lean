@@ -139,6 +139,12 @@ theorem paper_pom_Lk_t1_error_closed_form (k : Nat) :
   field_simp [hden]
   ring_nf
 
+/-- Paper: `cor:pom-Lk-t1-error-closed-form`. -/
+theorem paper_pom_lk_t1_error_closed_form (k : Nat) :
+    qT1 k - phiInvSq =
+      (1 - phiInvSq ^ 2) * phiInvSq ^ (2 * k) / (1 + phiInvSq ^ (2 * k + 1)) := by
+  exact paper_pom_Lk_t1_error_closed_form k
+
 private theorem phiInvSq_lt_one : phiInvSq < 1 := by
   dsimp [phiInvSq]
   have hinv : Real.goldenRatio⁻¹ = Real.goldenRatio - 1 := by

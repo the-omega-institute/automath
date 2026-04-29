@@ -1,13 +1,8 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (macOS)
 // @namespace    omega-automath
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-// @version      4.6
-// @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
-========
-// @version      5.0
-// @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
+// @version      4.10
+// @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review — macOS variant with long-prompt extraction support
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
 // @grant        GM_xmlhttpRequest
@@ -15,7 +10,7 @@
 // @grant        GM_getValue
 // @connect      localhost
 // @connect      127.0.0.1
-// @run-at       document-start
+// @run-at       document-idle
 // ==/UserScript==
 
 (function () {
@@ -27,51 +22,8 @@
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
   const MAX_WAIT = 7200000;       // 120 minutes
 
-  // ── Multi-agent: detect agent_id from URL or sessionStorage ──────────
-  // Open chatgpt.com/?oracle=1  → agent "oracle_1"
-  // Open chatgpt.com/?oracle=2  → agent "oracle_2"
-  // Open chatgpt.com (no param) → dormant, user's tab
-  //
-  // Runs at document-start so we read the URL before ChatGPT's SPA
-  // router can strip the query parameter.
-  function detectAgentId() {
-    // 1. Current URL (works at document-start before SPA routing)
-    const urlParam = new URLSearchParams(window.location.search).get("oracle");
-    if (urlParam) {
-      const id = `oracle_${urlParam}`;
-      try { sessionStorage.setItem("oracle_agent_id", id); } catch {}
-      return id;
-    }
-    // 2. Navigation entry — catches the original URL even if SPA already rewrote it
-    try {
-      const navEntries = performance.getEntriesByType("navigation");
-      if (navEntries.length > 0) {
-        const origUrl = new URL(navEntries[0].name);
-        const origParam = origUrl.searchParams.get("oracle");
-        if (origParam) {
-          const id = `oracle_${origParam}`;
-          try { sessionStorage.setItem("oracle_agent_id", id); } catch {}
-          return id;
-        }
-      }
-    } catch {}
-    // 3. sessionStorage — persists across same-tab navigations (e.g. /c/{id})
-    try {
-      return sessionStorage.getItem("oracle_agent_id") || "";
-    } catch { return ""; }
-  }
-
-  const AGENT_ID = detectAgentId();
-  const IS_ORACLE_TAB = !!AGENT_ID;
-
-  // Dormant mode: user's own ChatGPT tab — script does absolutely nothing
-  if (!IS_ORACLE_TAB) return;
-
-  // Agent-namespaced GM keys (shared storage, but unique per agent)
-  const GM_KEY = (k) => `${k}_${AGENT_ID}`;
-
   let busy = false;
-  let active = GM_getValue(GM_KEY("oracle_active"), true); // oracle tabs auto-start
+  let active = GM_getValue("oracle_active", false); // starts PAUSED by default
 
   // ── Logging ──────────────────────────────────────────────────────────
   const logHistory = [];
@@ -86,8 +38,8 @@
 
   function toggleActive() {
     active = !active;
-    GM_setValue(GM_KEY("oracle_active"), active);
-    log(active ? "ACTIVATED — polling will start" : "PAUSED");
+    GM_setValue("oracle_active", active);
+    log(active ? "ACTIVATED — polling will start" : "PAUSED — your ChatGPT is free");
     updatePanel();
   }
 
@@ -113,11 +65,10 @@
     const statusText = active ? (busy ? "BUSY" : "ACTIVE") : "PAUSED";
     const btnText = active ? "⏸ Pause" : "▶ Start";
     const btnColor = active ? "#f55" : "#0f0";
-    const agentLabel = AGENT_ID.replace("oracle_", "#");
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v5.0 ${agentLabel}]</b>
+        <b>[Oracle v4.9 mac]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -166,26 +117,26 @@
     return new Promise((r) => setTimeout(r, ms));
   }
 
-  // ── Persistent task state (survives page navigation, namespaced per agent) ──
+  // ── Persistent task state (survives page navigation) ─────────────────
   function saveTaskState(task) {
-    GM_setValue(GM_KEY("current_task"), JSON.stringify(task));
-    GM_setValue(GM_KEY("task_phase"), "pending");
+    GM_setValue("current_task", JSON.stringify(task));
+    GM_setValue("task_phase", "pending");
   }
   function loadTaskState() {
     try {
-      const s = GM_getValue(GM_KEY("current_task"), "");
+      const s = GM_getValue("current_task", "");
       return s ? JSON.parse(s) : null;
     } catch { return null; }
   }
   function getTaskPhase() {
-    return GM_getValue(GM_KEY("task_phase"), "");
+    return GM_getValue("task_phase", "");
   }
   function setTaskPhase(phase) {
-    GM_setValue(GM_KEY("task_phase"), phase);
+    GM_setValue("task_phase", phase);
   }
   function clearTaskState() {
-    GM_setValue(GM_KEY("current_task"), "");
-    GM_setValue(GM_KEY("task_phase"), "");
+    GM_setValue("current_task", "");
+    GM_setValue("task_phase", "");
   }
 
   // ── DOM helpers for ChatGPT UI ───────────────────────────────────────
@@ -283,23 +234,9 @@
   }
 
   function isOnNewChatPage() {
-    // Check light DOM first
-    const lightMsgs = document.querySelectorAll("[data-message-author-role]");
-    if (lightMsgs.length > 0) return false;
-
-    // Check Shadow DOM (ChatGPT 5.4 Pro renders messages there)
-    for (const el of document.querySelectorAll("*")) {
-      if (!el.shadowRoot) continue;
-      const shadowMsgs = el.shadowRoot.querySelectorAll(
-        "[data-message-author-role], [data-testid*='conversation-turn']"
-      );
-      if (shadowMsgs.length > 0) return false;
-    }
-
-    // Also check URL: /c/ in path means existing conversation
-    if (/\/c\/[a-f0-9-]+/.test(window.location.pathname)) return false;
-
-    return true;
+    // New chat page has no conversation messages
+    const msgs = document.querySelectorAll("[data-message-author-role]");
+    return msgs.length === 0;
   }
 
   // ── Wait for PDF upload to finish ─────────────────────────────────
@@ -833,121 +770,18 @@
     return (clone.innerText || "").trim();
   }
 
-  function stripSSRGarbage(text) {
-    // Remove SSR bootstrap script fragments from extracted text instead of
-    // rejecting the entire response. Real ChatGPT replies can get mixed with
-    // SSR remnants in the same DOM extraction pass.
-    if (!text) return text;
-    // Remove known SSR script patterns
-    let cleaned = text
-      .replace(/I?window\.__oai_logHTML\?[^)]*\)\s*/g, "")
-      .replace(/window\.__oai_SSR_HTML\s*=\s*window\.__oai_SSR_HTML\s*\|\|\s*Date\.now\(\)\s*;?\s*/g, "")
-      .replace(/requestAnimationFrame\(\(function\(\)\{[^}]*\}\)\)\s*/g, "")
-      .replace(/window\.__oai_logTTI\?[^)]*\)\s*/g, "")
-      .replace(/window\.__oai_SSR_TTI\s*=\s*window\.__oai_SSR_TTI\s*\|\|\s*Date\.now\(\)\s*;?\s*/g, "")
-      .replace(/ChatGPT said:/g, "")
-      .trim();
-    return cleaned;
-  }
-
-  function isSSROnly(text) {
-    // Returns true ONLY if the text is ENTIRELY SSR garbage with no real content.
+  function isSSRGarbage(text) {
+    // Reject responses that are SSR bootstrap scripts, not real ChatGPT output.
+    // These appear when the page hasn't hydrated yet.
     if (!text || text.length < 10) return false;
-    const stripped = stripSSRGarbage(text);
-    // After stripping SSR, filter chrome lines too
-    const lines = stripped.split("\n").filter(l => {
-      const t = l.trim();
-      return t.length > 0 && !isChromeLine(t);
-    });
-    return lines.join("").trim().length < 20;
+    if (SSR_GARBAGE_RE.test(text)) return true;
+    // Also reject if >50% of text is JS-like (no spaces between words)
+    const jsRatio = (text.match(/[{}();=]/g) || []).length / text.length;
+    if (jsRatio > 0.05 && text.length < 1000) return true;
+    return false;
   }
 
   function extractResponseText() {
-    // ═══ Strategy S0: Shadow DOM extraction (ChatGPT 5.4 Pro) ═══
-    // ChatGPT 5.4 Pro renders conversation inside a shadow root.
-    // Standard querySelector can't reach inside.
-    // IMPORTANT: skip extraction if ChatGPT is still thinking/generating —
-    // shadow root has thinking preamble text that looks like content but isn't.
-    for (const el of document.querySelectorAll("*")) {
-      if (!el.shadowRoot) continue;
-
-      // Quick check: is this shadow root still in thinking state?
-      const rawPreview = (el.shadowRoot.textContent || "").slice(0, 2000);
-      if (/Pro thinking|Thought for \d|正在思考|I'm checking|I'm looking|I'm searching|I'm analyzing/i.test(rawPreview)) {
-        // Check if there's ALSO a substantial response (thinking is done, response follows)
-        if (rawPreview.length < 3000) continue;  // still thinking, skip
-      }
-
-      // Helper: get clean text from shadow element (skip style/script content)
-      function shadowInnerText(root) {
-        // Can't clone ShadowRoot — walk children and collect text, skipping style/script
-        let text = "";
-        function walk(node) {
-          if (node.nodeType === Node.TEXT_NODE) {
-            text += node.textContent;
-            return;
-          }
-          if (node.nodeType !== Node.ELEMENT_NODE) return;
-          const tag = node.tagName?.toLowerCase();
-          if (tag === "style" || tag === "script" || tag === "link") return;
-          for (const child of node.childNodes) walk(child);
-          // Add newline after block elements
-          if (/^(div|p|h[1-6]|li|br|article|section|blockquote|pre|tr)$/.test(tag)) {
-            text += "\n";
-          }
-        }
-        if (root.childNodes) {
-          for (const child of root.childNodes) walk(child);
-        }
-        return text.trim();
-      }
-
-      // Find assistant messages inside shadow DOM
-      const assistantEls = el.shadowRoot.querySelectorAll(
-        "[data-message-author-role='assistant'], " +
-        "div[class*='markdown'], div[class*='prose'], " +
-        "article, [class*='agent-turn']"
-      );
-      if (assistantEls.length > 0) {
-        // Take the last (most recent) assistant message
-        const lastAssistant = assistantEls[assistantEls.length - 1];
-        const text = cleanText(shadowInnerText(lastAssistant));
-        if (text.length > 100 && !looksLikePromptEcho(text)) {
-          return text;
-        }
-      }
-
-      // Helper: strip ChatGPT thinking preamble from extracted text
-      function stripThinkingPreamble(t) {
-        return t
-          .replace(/^ChatGPT said:\s*/i, "")
-          .replace(/^I'm (?:checking|looking|searching|thinking|analyzing)[^.]*\.\s*/i, "")
-          .replace(/^Thought for \d+[sm]\s*\d*[sm]?\s*/i, "")
-          .trim();
-      }
-
-      // Fallback: get all text from shadow, stripped of CSS/JS
-      const shadowText = shadowInnerText(el.shadowRoot);
-      if (shadowText.length < 500) continue;
-
-      // Try tail-anchor split
-      if (sentPromptText.length > 50) {
-        const tail = sentPromptText.slice(-80).trim();
-        const idx = shadowText.lastIndexOf(tail);
-        if (idx >= 0) {
-          const after = stripThinkingPreamble(cleanText(shadowText.slice(idx + tail.length)));
-          if (after.length > 100) return after;
-        }
-      }
-
-      // Last resort: take second 60% (prompt first, response second)
-      const halfPoint = Math.floor(shadowText.length * 0.4);
-      const secondHalf = stripThinkingPreamble(cleanText(shadowText.slice(halfPoint)));
-      if (secondHalf.length > 200 && !looksLikePromptEcho(secondHalf)) {
-        return secondHalf;
-      }
-    }
-
     const main = document.querySelector("main");
     if (!main) return "";
 
@@ -1016,18 +850,6 @@
       "div[class*='prose']",
       "div.markdown",
       "[class*='agent-turn']",
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-      "[class*='message']",
-      // 2026 newer layouts
-      "[class*='response']",
-      "[class*='assistant']",
-      "[class*='answer']",
-      "[role='article']",
-      "[role='log'] > div",
-      "[class*='chat-message']",
-      "[class*='turn']",
-========
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
     ];
 
     for (const sel of s0Selectors) {
@@ -1048,59 +870,9 @@
       } catch {}
     }
 
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-    // ═══ Strategy 1: Nuclear fallback — walk ALL elements, find biggest text block ═══
-    // If no selector matched, scan the page for the largest text block that
-    // isn't our prompt. This handles unknown DOM structures.
-    try {
-      const candidates = [];
-      // Walk all elements with substantial text content
-      const allEls = document.querySelectorAll("main *");
-      for (const el of allEls) {
-        // Skip tiny elements, scripts, styles
-        if (["SCRIPT", "STYLE", "NOSCRIPT", "INPUT", "TEXTAREA", "BUTTON", "SVG", "PATH"].includes(el.tagName)) continue;
-        // Only consider leaf-ish elements (no child block elements, or markdown containers)
-        const text = (el.innerText || "").trim();
-        if (text.length < 200) continue;
-        if (looksLikePromptEcho(text)) continue;
-        // Avoid selecting the entire main container (too broad)
-        if (el.tagName === "MAIN") continue;
-        // Score by text length but prefer elements deeper in the DOM
-        const depth = getDepth(el);
-        candidates.push({ el, text, len: text.length, depth });
-      }
-
-      if (candidates.length > 0) {
-        // Prefer deep elements with substantial text (likely the response container)
-        // Sort by: has review-like content > length > depth
-        candidates.sort((a, b) => {
-          // Prefer texts that look like reviews (contain "##", "BLOCKER", "theorem", etc.)
-          const aReview = /#{1,3}\s|BLOCKER|MEDIUM|theorem|proof|Theorem|Proof|Accept|Reject|revision/i.test(a.text) ? 1 : 0;
-          const bReview = /#{1,3}\s|BLOCKER|MEDIUM|theorem|proof|Theorem|Proof|Accept|Reject|revision/i.test(b.text) ? 1 : 0;
-          if (bReview !== aReview) return bReview - aReview;
-          return b.len - a.len;
-        });
-
-        const best = candidates[0];
-        if (best.len > 200) {
-          log(`Nuclear fallback: found ${best.len} chars via DOM walk (tag=${best.el.tagName}, depth=${best.depth})`);
-          return cleanChromeLines(best.text);
-        }
-      }
-    } catch (e) {
-      log(`Nuclear fallback error: ${e.message}`);
-    }
-
-    // ═══ Strategy 2: grab all text from main, then post-process ═══
-    const main = document.querySelector("main");
-    if (!main) return "";
-    const fullText = (main.innerText || "").trim();
-    if (fullText.length < 10) return "";
-========
     // ═══ Strategy C: Full-page text minus prompt (absolute fallback) ═══
     // fullText already declared at top of function; just re-check length
     if (fullText.length < 100) return "";
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
 
     // Try to locate prompt in page text and take everything after it
     if (sentPromptText.length > 30) {
@@ -1134,57 +906,11 @@
       }
     }
 
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-    // Step 3: Clean and return
-    const cleaned = cleanChromeLines(responseText);
-
-    // Step 4: Final check — don't return text that IS the prompt
-    if (cleaned.length > 5) {
-      if (looksLikePromptEcho(cleaned)) return "";
-      // Legacy backup
-      const promptStart = sentPromptText.slice(0, 40).trim();
-      if (promptStart && cleaned.startsWith(promptStart) && cleaned.length < sentPromptText.length * 1.2) {
-        return "";
-      }
-      return cleaned;
-    }
-
-========
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
     return "";
   }
 
-  function getDepth(el) {
-    let depth = 0;
-    let node = el;
-    while (node.parentElement) { depth++; node = node.parentElement; }
-    return depth;
-  }
-
-  function cleanChromeLines(text) {
-    const lines = text.split("\n");
-    const cleaned = lines.filter(line => {
-      const t = line.trim();
-      if (!t) return true;
-      // Remove known chrome
-      if (/^(进阶专业|ChatGPT\s*也可能会犯错|请核查重要信息|查看\s*Cookie|Cookie\s*首选项)/.test(t)) return false;
-      if (/^(ChatGPT can make mistakes|Check important info)/.test(t)) return false;
-      if (/^Thought for \d+/.test(t)) return false;
-      if (/^(你说|You said|ChatGPT\s*说|ChatGPT\s*said)[：:]?\s*$/.test(t)) return false;
-      if (/^(正在思考|正在搜索|Searching)/.test(t)) return false;
-      // Remove PDF filename line and bare "main" artifacts
-      if (/^main(\.pdf)?\s*$/.test(t)) return false;
-      if (/^PDF\s*$/.test(t)) return false;
-      // Remove nav/sidebar artifacts
-      if (/^(新建聊天|New chat|ChatGPT|GPT-4|GPT-5|升级|Upgrade|Log out|登出)\s*$/.test(t)) return false;
-      return true;
-    }).join("\n").trim();
-    return cleaned;
-  }
-
   function isStillGenerating() {
-    // Check light DOM first
-    if (
+    return !!(
       document.querySelector("button[aria-label='Stop generating']") ||
       document.querySelector("button[aria-label='Stop streaming']") ||
       document.querySelector("button[aria-label='停止生成']") ||
@@ -1193,39 +919,8 @@
       document.querySelector("[class*='result-streaming']") ||
       document.querySelector("[class*='streaming']") ||
       document.querySelector("[class*='thinking']") ||
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-      document.querySelector("[class*='progress']") ||
-      // 2026 newer indicators
-      document.querySelector("[class*='generating']") ||
-      document.querySelector("[class*='loading']") ||
-      document.querySelector("[class*='typing']") ||
-      document.querySelector("[aria-busy='true']") ||
-      document.querySelector("[data-testid='stop-button']") ||
-      document.querySelector("button[aria-label*='stop' i]") ||
-      document.querySelector("button[aria-label*='Stop' i]")
-    );
-========
       document.querySelector("[class*='progress']")
-    ) return true;
-
-    // Check inside Shadow DOM (ChatGPT 5.4 Pro renders there)
-    for (const el of document.querySelectorAll("*")) {
-      if (!el.shadowRoot) continue;
-      if (
-        el.shadowRoot.querySelector("button[aria-label='Stop generating']") ||
-        el.shadowRoot.querySelector("button[aria-label='Stop streaming']") ||
-        el.shadowRoot.querySelector("button[data-testid='stop-button']") ||
-        el.shadowRoot.querySelector("[class*='streaming']") ||
-        el.shadowRoot.querySelector("[class*='thinking']") ||
-        el.shadowRoot.querySelector("[class*='progress']")
-      ) return true;
-      // Also check for "Pro thinking" text in shadow DOM
-      const text = (el.shadowRoot.textContent || "").slice(0, 2000);
-      if (/Pro thinking|Thought for \d|正在思考|Searching|Deep research/i.test(text)
-          && text.length < 3000) return true;
-    }
-    return false;
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
+    );
   }
 
   async function waitForResponse() {
@@ -1239,87 +934,24 @@
     while (Date.now() - startTime < MAX_WAIT) {
       await sleep(STABLE_INTERVAL);
 
-      let responseText = extractResponseText();
+      const responseText = extractResponseText();
       const generating = isStillGenerating();
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const mainLen = (document.querySelector("main")?.innerText || "").length;
 
-      // Periodic status log (every 2 min)
-      if (elapsed - lastLogTime >= 120) {
+      // Periodic status log (every 5 min)
+      if (elapsed - lastLogTime >= 300) {
         lastLogTime = elapsed;
         log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}, url=${window.location.href.slice(-30)}`);
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-        // DOM debug: log what selectors match (first 2 checks)
-        if (elapsed <= 600) {
+        // One-time DOM debug: log what selectors match
+        if (elapsed <= 300) {
           const dbg = [];
-          for (const s of [
-            "[data-message-author-role]", "article",
-            "[data-testid*='conversation-turn']", "div[class*='markdown']",
-            "div[class*='prose']", "[class*='agent-turn']",
-            "[class*='response']", "[class*='assistant']",
-            "[class*='message']", "[class*='turn']",
-            "[role='article']", "[role='log']",
-            "[aria-busy]",
-          ]) {
+          for (const s of ["[data-message-author-role]", "article", "[data-testid*='conversation-turn']", "div[class*='markdown']", "div[class*='prose']", "[class*='agent-turn']"]) {
             const n = document.querySelectorAll(s).length;
             if (n > 0) dbg.push(`${s}:${n}`);
           }
           log(`DOM debug: ${dbg.join(", ") || "no matches"}`);
-
-          // Log the main element's direct children structure
-          const mainEl = document.querySelector("main");
-          if (mainEl) {
-            const childTags = Array.from(mainEl.children).map(c =>
-              `${c.tagName}${c.className ? "." + c.className.split(" ")[0].slice(0, 20) : ""}(${(c.innerText || "").length}ch)`
-            ).slice(0, 8);
-            log(`Main children: ${childTags.join(", ")}`);
-          }
-========
-        // DOM debug: comprehensive search for where content lives
-        const dbg = [];
-        for (const s of ["main", "[data-message-author-role]", "[data-message-author-role='assistant']", "article", "[data-testid*='conversation-turn']", "div[class*='markdown']", "div[class*='prose']", "[class*='agent-turn']", "[role='presentation']", "[class*='conversation']", "[class*='thread']"]) {
-          const els = document.querySelectorAll(s);
-          if (els.length > 0) {
-            const maxLen = Math.max(...Array.from(els).map(e => (e.innerText||"").length));
-            dbg.push(`${s}:${els.length}(max=${maxLen})`);
-          }
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
         }
-        log(`DOM debug: ${dbg.join(", ") || "NO MATCHES"}`);
-
-        // Deep scan: check shadow DOM, iframes, and all large text nodes
-        let shadowCount = 0, iframeCount = 0, biggestText = 0;
-        document.querySelectorAll("*").forEach(el => {
-          if (el.shadowRoot) {
-            shadowCount++;
-            const sText = (el.shadowRoot.textContent || "").length;
-            if (sText > biggestText) biggestText = sText;
-          }
-        });
-        const iframes = document.querySelectorAll("iframe");
-        iframeCount = iframes.length;
-        let iframeBiggest = 0;
-        iframes.forEach(f => {
-          try {
-            const len = (f.contentDocument?.body?.innerText || "").length;
-            if (len > iframeBiggest) iframeBiggest = len;
-          } catch(e) { /* cross-origin */ }
-        });
-
-        // Check body total text vs main text
-        const bodyLen = (document.body?.innerText || "").length;
-
-        // Find the single biggest div by innerText
-        let bigDiv = 0, bigDivTag = "";
-        document.querySelectorAll("div").forEach(d => {
-          const len = (d.innerText || "").length;
-          if (len > bigDiv) {
-            bigDiv = len;
-            bigDivTag = d.className?.slice(0, 50) || d.id || "anon";
-          }
-        });
-
-        log(`DEEP: body=${bodyLen}, biggestDiv=${bigDiv}(${bigDivTag}), shadows=${shadowCount}(max=${biggestText}), iframes=${iframeCount}(max=${iframeBiggest})`);
       }
 
       // Only count extracted text that's meaningful
@@ -1334,47 +966,18 @@
           continue;
         }
 
-        // Strip SSR/hydration fragments from response (they can mix with real text)
-        if (SSR_GARBAGE_RE.test(responseText)) {
-          responseText = stripSSRGarbage(responseText);
-          // If NOTHING remains after stripping, page is still hydrating
-          if (isSSROnly(responseText)) {
-            if (stableCount === 0) {
-              log(`SSR-only content (${responseText.length} chars) — page still hydrating, waiting`);
-            }
-            stableCount = 0;
-            lastText = "";
-            continue;
+        // CRITICAL: reject SSR/hydration garbage (page not rendered yet)
+        if (isSSRGarbage(responseText)) {
+          if (stableCount === 0) {
+            log(`SSR garbage detected (${responseText.length} chars) — page still hydrating, waiting`);
           }
-          log(`Stripped SSR fragments, ${responseText.length} chars remain`);
+          stableCount = 0;
+          lastText = "";
+          continue;
         }
 
         if (responseText === lastText) {
           stableCount++;
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-          // Return when stable AND either not generating, or stable for long
-          // enough that "thinking" indicator is likely stale (ChatGPT 5.4
-          // keeps [class*='thinking'] present even after output completes).
-          // Short responses (<2000 chars) need more stability checks — ChatGPT 5.4
-          // often emits a brief "thinking" text before extended processing,
-          // which looks stable but is just the preamble to the real response.
-          // Minimum response length for paper reviews — a valid editorial review
-          // is always >1000 chars.  Responses shorter than this are ChatGPT's
-          // "thinking aloud" preamble, not the actual review.
-          const MIN_REVIEW_LENGTH = 1000;
-          const tooShort = responseText.length < MIN_REVIEW_LENGTH;
-
-          const minChecks = responseText.length < 2000 ? STABLE_CHECKS * 3 : STABLE_CHECKS;
-          const stableEnough = stableCount >= minChecks && !generating;
-          const stableOverride = stableCount >= minChecks + 2;
-
-          if (tooShort) {
-            // Never accept a <1000 char response as final — keep waiting
-            if (stableCount % 5 === 0 && stableCount > 0) {
-              log(`Short response (${responseText.length} chars) — waiting for real review (${stableCount * STABLE_INTERVAL / 1000}s)`);
-            }
-          } else if (stableEnough || stableOverride) {
-========
           // Determine minimum stability checks based on response size.
           // Large responses (>=2000 chars) are almost certainly real — 3 checks.
           // Medium (200-2000) — 5 checks (guard against thinking preamble).
@@ -1393,7 +996,6 @@
           // (ChatGPT 5.4 sometimes keeps stale [class*='thinking'])
           const stableOverride = stableCount >= minChecks + 3;
           if (stableEnough || stableOverride) {
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
             log(`Response complete: ${responseText.length} chars (stable ${stableCount * STABLE_INTERVAL / 1000}s, gen=${generating})`);
             return responseText;
           }
@@ -1429,19 +1031,18 @@
       // Never hijack the user's normal ChatGPT browsing.
       if (!isOnNewChatPage()) {
         // Mark that WE are about to navigate (not the user)
-        GM_setValue(GM_KEY("oracle_navigating"), true);
-        GM_setValue(GM_KEY("nav_task_id"), task_id);
+        GM_setValue("oracle_navigating", true);
+        GM_setValue("nav_task_id", task_id);
         setTaskPhase("navigating");
-        const agentNum = AGENT_ID.replace("oracle_", "");
         log(`Not on fresh chat — navigating to chatgpt.com ...`);
         busy = false;
         updatePanel();
-        window.location.href = `https://chatgpt.com/?oracle=${agentNum}`;
+        window.location.href = "https://chatgpt.com/?oracle=1";
         return; // Script re-inits on new page, resumes from init()
       }
 
       // ACK the task (only after we're on the right page)
-      try { await serverPost("/ack", { task_id, agent_id: AGENT_ID }); } catch {}
+      try { await serverPost("/ack", { task_id }); } catch {}
 
       setTaskPhase("processing");
 
@@ -1534,7 +1135,6 @@
         task_id,
         response,
         model: task.model || "unknown",
-        agent_id: AGENT_ID,
       });
 
       log(`DONE: ${task_id} (${response.length} chars)`);
@@ -1546,7 +1146,6 @@
           task_id,
           response: `ERROR: ${err.message}`,
           model: task.model || "unknown",
-          agent_id: AGENT_ID,
         });
       } catch {}
       clearTaskState();
@@ -1560,13 +1159,14 @@
   async function pollLoop() {
     while (true) {
       // Re-read active state each iteration (user may toggle mid-loop)
-      active = GM_getValue(GM_KEY("oracle_active"), true);
+      active = GM_getValue("oracle_active", false);
       if (active && !busy) {
         try {
-          const task = await serverGet(`/task?agent=${AGENT_ID}`);
+          const task = await serverGet("/task");
           if (task && task.task_id && task.status !== "idle") {
             // Double-check active right before processing
-            if (!GM_getValue(GM_KEY("oracle_active"), true)) {
+            // (user might have paused between poll and response)
+            if (!GM_getValue("oracle_active", false)) {
               log("Task available but oracle is PAUSED — skipping");
             } else {
               await processTask(task);
@@ -1585,37 +1185,32 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-<<<<<<<< HEAD:papers/publication/chatgpt_oracle.user.js
-    log(`Oracle Bridge v4.6 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
-========
-    const agentLabel = AGENT_ID.replace("oracle_", "#");
-    log(`Oracle Bridge v5.0 agent ${agentLabel} — ${active ? "ACTIVE" : "PAUSED"}`);
->>>>>>>> 486d2da6 (feat: publication automation pipeline — 21 papers through P0-P7 + Oracle review):tools/chatgpt-oracle/chatgpt_oracle_macos.user.js
+    log(`Oracle Bridge v4.9 (macOS) loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
     // Check if WE navigated here (not the user clicking around)
     const phase = getTaskPhase();
-    const navTaskId = GM_getValue(GM_KEY("nav_task_id"), "");
-    const oracleNav = GM_getValue(GM_KEY("oracle_navigating"), false);
-    const urlHasOracleFlag = /[?&]oracle=\d/.test(window.location.search);
+    const navTaskId = GM_getValue("nav_task_id", "");
+    const oracleNav = GM_getValue("oracle_navigating", false);
+    const urlHasOracleFlag = window.location.search.includes("oracle=1");
 
-    // Only resume task processing if this navigation was initiated by this agent
+    // Only resume task processing if this navigation was initiated by oracle
     if (phase === "navigating" && navTaskId && (oracleNav || urlHasOracleFlag)) {
-      log(`Resuming after navigation for task: ${navTaskId}`);
-      GM_setValue(GM_KEY("nav_task_id"), "");
-      GM_setValue(GM_KEY("oracle_navigating"), false);
+      log(`Resuming after oracle navigation for task: ${navTaskId}`);
+      GM_setValue("nav_task_id", "");
+      GM_setValue("oracle_navigating", false);
       clearTaskState();
 
       // Clean oracle flag from URL without triggering navigation
       if (urlHasOracleFlag) {
-        const cleanUrl = window.location.href.replace(/[?&]oracle=\d+/, "").replace(/\?$/, "");
+        const cleanUrl = window.location.href.replace(/[?&]oracle=1/, "").replace(/\?$/, "");
         history.replaceState(null, "", cleanUrl);
       }
 
       await sleep(3000); // Let fresh chat page fully load
 
-      // Re-fetch this agent's pending task from the server
+      // Re-fetch the full task (including PDF base64) from the server.
       try {
-        const task = await serverGet(`/task?agent=${AGENT_ID}`);
+        const task = await serverGet("/task");
         if (task && task.task_id && task.status !== "idle") {
           log(`Re-fetched task: ${task.task_id} (prompt ${task.prompt?.length || 0} chars, pdf=${!!task.pdf_base64})`);
           await processTask(task);
@@ -1626,10 +1221,10 @@
         log(`Failed to re-fetch task after navigation: ${e.message}`);
       }
     } else if (phase === "navigating") {
-      // Stale navigating state — clear it
-      log("Clearing stale navigation state");
-      GM_setValue(GM_KEY("nav_task_id"), "");
-      GM_setValue(GM_KEY("oracle_navigating"), false);
+      // Stale navigating state or user-initiated navigation — clear it, don't hijack
+      log("Clearing stale navigation state (user browsing, not oracle)");
+      GM_setValue("nav_task_id", "");
+      GM_setValue("oracle_navigating", false);
       clearTaskState();
     }
 
@@ -1637,14 +1232,10 @@
     pollLoop();
   }
 
-  // Run after page is fully loaded (script runs at document-start,
-  // so DOM/body won't exist yet — defer everything to load event)
-  function startWhenReady() {
-    if (document.readyState === "complete") {
-      setTimeout(init, 2000);
-    } else {
-      window.addEventListener("load", () => setTimeout(init, 2000));
-    }
+  // Run after page is ready
+  if (document.readyState === "complete") {
+    setTimeout(init, 2000);
+  } else {
+    window.addEventListener("load", () => setTimeout(init, 2000));
   }
-  startWhenReady();
 })();

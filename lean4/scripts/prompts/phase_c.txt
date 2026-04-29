@@ -64,6 +64,47 @@ Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
 
 ## IMPORTANT: Do NOT git push. The merge and push will be handled externally.
 
+## HARD NAMING RULE — Paper-Label Prefix (duplicate-symbol prevention)
+Because 9 workers run in parallel on the same base branch, two workers can
+silently introduce the same `def`/`noncomputable def` name (e.g. `kernel`,
+`coeff`, `xiLimitDefectPotential`, `pomBinaryEntropy`) into different files
+that share a chapter index like `Omega.Zeta`, breaking the combined build
+with `environment already contains 'X'`.
+
+Rules that apply to EVERY new declaration in this round — `theorem`,
+`lemma`, `def`, `noncomputable def`, `abbrev`, `structure`, `class`,
+`inductive`, `instance`:
+
+1. PREFIX every new identifier with the target's `paper_label` slug
+   (snake_case; strip `thm:`/`prop:`/`cor:`/`lem:` tags; lowercase;
+   non-alphanumeric → `_`). Example:
+
+     paper_label = "thm:fold-gauge-anomaly-rate-curve"
+     slug        = "fold_gauge_anomaly_rate_curve"
+     allowed:    `def fold_gauge_anomaly_rate_curve_kernel := …`
+     FORBIDDEN:  `def kernel := …`            (unprefixed)
+     FORBIDDEN:  `def Complex.conj …`         (mathlib shadow)
+
+   The top-level `paper_*` theorem matching the target's `lean_name`
+   already satisfies this and is exempt.
+
+2. Never shadow mathlib root names (`Complex.conj`, `Real.log`, `Nat.succ`,
+   `List.length`, `Finset.sum`, `Matrix.mul`, etc).
+
+3. Within one file, multiple helper defs should share the same paper-label
+   prefix and disambiguate via suffix:
+     `def <slug>_kernel := …`
+     `def <slug>_kernel_support := …`
+     `def <slug>_kernel_convolution := …`
+
+Do NOT open extra `lake env lean` or `lean` processes to probe naming
+candidates — they compete for RAM with the 9 workers and can blow up
+swap. The orchestrator runs a post-commit symbol-conflict gate (Gate 5)
+that rejects any round whose new `def/theorem/lemma/abbrev/structure/
+class/inductive/instance` name already appears on `origin/lean4-codex-auto-dev`.
+Just follow rule (1) and commit — the gate will catch accidental clashes
+and the round will be re-tried by the next worker.
+
 ## HARD PROHIBITION — Signature Integrity
 Existing theorems already in the file have mathematically meaningful signatures.
 You MUST NOT weaken or replace them. Specifically:

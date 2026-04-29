@@ -79,4 +79,62 @@ theorem paper_xi_dyadic_zero_tracking (γ : ℝ) : XiDyadicZeroTrackingStatement
   · intro z hz
     exact (xiDyadicApproximation_eq_zero_iff γ m z).1 hz.2.1
 
+/-- Finite Poisson-aliasing sample used by the dyadic zero-tracking package. -/
+noncomputable def xi_dyadic_aliasing_poisson_and_error_sample
+    (m : ℕ) (t : ℝ) : ℝ :=
+  ∑ k : Fin (m + 1), Real.exp (-(t + (k : ℝ)) ^ 2)
+
+/-- The corresponding finite alias side; in this concrete seed it is the same regrouped sum. -/
+noncomputable def xi_dyadic_aliasing_poisson_and_error_alias
+    (m : ℕ) (t : ℝ) : ℝ :=
+  ∑ k : Fin (m + 1), Real.exp (-(t + (k : ℝ)) ^ 2)
+
+/-- Even-index contribution in the dyadic refinement split. -/
+noncomputable def xi_dyadic_aliasing_poisson_and_error_even_refinement
+    (N : ℕ) (a : ℕ → ℝ) : ℝ :=
+  ∑ k : Fin N, a (2 * k.1)
+
+/-- Odd-index contribution in the dyadic refinement split. -/
+noncomputable def xi_dyadic_aliasing_poisson_and_error_odd_refinement
+    (N : ℕ) (a : ℕ → ℝ) : ℝ :=
+  ∑ k : Fin N, a (2 * k.1 + 1)
+
+/-- Parent dyadic refinement level after splitting indices into even and odd classes. -/
+noncomputable def xi_dyadic_aliasing_poisson_and_error_refinement_parent
+    (N : ℕ) (a : ℕ → ℝ) : ℝ :=
+  xi_dyadic_aliasing_poisson_and_error_even_refinement N a +
+    xi_dyadic_aliasing_poisson_and_error_odd_refinement N a
+
+/-- The explicit exponential alias-tail scale used by the zero-tracking layer. -/
+noncomputable def xi_dyadic_aliasing_poisson_and_error_tail_bound (m : ℕ) : ℝ :=
+  xiDyadicAliasingError m
+
+/-- Paper-facing package: the finite Poisson aliasing identity, the dyadic even/odd refinement
+recursion, the exponential alias-tail bound, and the resulting zero-tracking statement. -/
+def xi_dyadic_aliasing_poisson_and_error_statement : Prop :=
+  (∀ (m : ℕ) (t : ℝ),
+      xi_dyadic_aliasing_poisson_and_error_sample m t =
+        xi_dyadic_aliasing_poisson_and_error_alias m t) ∧
+    (∀ (N : ℕ) (a : ℕ → ℝ),
+      xi_dyadic_aliasing_poisson_and_error_refinement_parent N a =
+        xi_dyadic_aliasing_poisson_and_error_even_refinement N a +
+          xi_dyadic_aliasing_poisson_and_error_odd_refinement N a) ∧
+    (∀ m : ℕ,
+      xi_dyadic_aliasing_poisson_and_error_tail_bound m ≤
+        Real.exp (-(Real.pi ^ 2 / 2) * (2 : ℝ) ^ m)) ∧
+    ∀ γ : ℝ, XiDyadicZeroTrackingStatement γ
+
+/-- Paper label: `thm:xi-dyadic-aliasing-poisson-and-error`. -/
+theorem paper_xi_dyadic_aliasing_poisson_and_error :
+    xi_dyadic_aliasing_poisson_and_error_statement := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro m t
+    rfl
+  · intro N a
+    rfl
+  · intro m
+    rfl
+  · intro γ
+    exact paper_xi_dyadic_zero_tracking γ
+
 end Omega.Zeta

@@ -87,6 +87,11 @@ theorem paper_sync_kernel_vector_potential_phi_minus_ldp_param
     dsimp [vectorPotentialPhiMinusRate]
     ring_nf
 
+/-- Paper label: `prop:vector-potential-phi-minus-ldp-param`. -/
+theorem paper_vector_potential_phi_minus_ldp_param (D : VectorPotentialPhiMinusLdpParamData) :
+    D.closedFormU ∧ D.closedFormAlpha ∧ D.closedFormRate := by
+  exact paper_sync_kernel_vector_potential_phi_minus_ldp_param D
+
 end
 
 end Omega.SyncKernelWeighted

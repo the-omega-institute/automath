@@ -14,4 +14,13 @@ theorem paper_fibonacci_stabilization_fold_suite (m : Nat) :
   intro x
   simp
 
+/-- Paper-label wrapper for `thm:fold-suite`. -/
+theorem paper_fold_suite (m : Nat) :
+    (∃ f : Word m → X m, ∀ x : X m, f x.1 = x) ∧
+      Function.Surjective (Fold (m := m)) ∧
+      (∑ x : X m, X.fiberMultiplicity x = 2 ^ m) := by
+  refine ⟨⟨Fold, ?_⟩, Fold_surjective m, X.fiberMultiplicity_sum_eq_pow m⟩
+  intro x
+  simp
+
 end Omega

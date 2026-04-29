@@ -1,6 +1,10 @@
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Tactic
 import Omega.Conclusion.Window6Collision
+import Omega.Folding.GaugeAnomalyMean
+import Omega.Folding.GaugeAnomalySecondFactorialFiniteClosed
+import Omega.Folding.GaugeAnomalySpectrumTomographyCertificateTriangle
+import Omega.Folding.GaugeAnomalyVarianceFiniteWindowClosed
 
 namespace Omega.Conclusion
 
@@ -126,5 +130,116 @@ theorem paper_conclusion_fiber_entropy_jensen_pimsner_double_bound :
     exact fiberEntropy_eq_log_average_of_constant hn d hconst
   · intro hmax
     exact log_average_eq_log_max_of_all_max hn d hmax
+
+/-- Paper label: `cor:conclusion-uniform-visible-baseline-double-gap`. -/
+theorem paper_conclusion_uniform_visible_baseline_double_gap {n m : Nat}
+    (hn : 0 < n) (d : Fin n -> Nat) (hd : forall i, 0 < d i)
+    (hsum : (Finset.univ.sum fun i : Fin n => d i) = 2 ^ m) :
+    fiberEntropyPotential d <= Real.log (((2 ^ m : Nat) : Real) / n) ∧
+      Real.log (((2 ^ m : Nat) : Real) / n) <= Real.log (maxFiberSize d : Real) ∧
+      Real.log (maxFiberSize d : Real) - fiberEntropyPotential d >=
+        Real.log (((maxFiberSize d : Real) * n) / ((2 ^ m : Nat) : Real)) := by
+  rcases paper_conclusion_fiber_entropy_jensen_pimsner_double_bound hn d hd with
+    ⟨hJensen, hAverageMax, _, _⟩
+  have hsumReal : (∑ i : Fin n, (d i : ℝ)) = ((2 ^ m : Nat) : ℝ) := by
+    exact_mod_cast hsum
+  have hAverage :
+      averageFiberSize d = (((2 ^ m : Nat) : ℝ) / n) := by
+    unfold averageFiberSize
+    rw [hsumReal]
+  have hleft : fiberEntropyPotential d <= Real.log (((2 ^ m : Nat) : Real) / n) := by
+    simpa [hAverage] using hJensen
+  have hmiddle :
+      Real.log (((2 ^ m : Nat) : Real) / n) <= Real.log (maxFiberSize d : Real) := by
+    simpa [hAverage] using hAverageMax
+  refine ⟨hleft, hmiddle, ?_⟩
+  have hmax_ne : (maxFiberSize d : ℝ) ≠ 0 :=
+    (maxFiberSize_pos hn d hd).ne'
+  have hn_ne : (n : ℝ) ≠ 0 := by exact_mod_cast hn.ne'
+  have hpow_ne : (((2 ^ m : Nat) : ℝ) : ℝ) ≠ 0 := by
+    exact_mod_cast (pow_ne_zero m (by norm_num : (2 : Nat) ≠ 0))
+  have hlog_gap :
+      Real.log (maxFiberSize d : ℝ) - Real.log (((2 ^ m : Nat) : ℝ) / n) =
+        Real.log (((maxFiberSize d : ℝ) * n) / ((2 ^ m : Nat) : ℝ)) := by
+    rw [Real.log_div (mul_ne_zero hmax_ne hn_ne) hpow_ne,
+      Real.log_mul hmax_ne hn_ne, Real.log_div hpow_ne hn_ne]
+    ring
+  rw [← hlog_gap]
+  linarith
+
+/-- The dyadic-sign correction alphabet that occurs in the uniform gauge-anomaly first and
+second moment closures. -/
+noncomputable def conclusion_gauge_anomaly_uniform_moments_alphabet_closure_alphabet :
+    Finset ℚ :=
+  {((1 : ℚ) / 2), (-(1 : ℚ) / 2), ((1 : ℚ) / 4), (-(1 : ℚ) / 4)}
+
+/-- Paper-facing package for the uniform gauge-anomaly finite mean, second factorial moment,
+variance, and the four dyadic-sign correction bases. -/
+def conclusion_gauge_anomaly_uniform_moments_alphabet_closure_statement : Prop :=
+  Omega.Folding.GaugeAnomalyMean.fold_gauge_anomaly_mean_finite_closed_statement ∧
+    (∀ m : ℕ,
+      Omega.Folding.gaugeAnomalySecondFactorial m =
+        (16 / 81 : ℚ) * (m : ℚ) ^ 2 - (106 / 243 : ℚ) * m + 443 / 729 -
+          (((5 : ℚ) / 16) * m + 1 / 2) * (1 / 2 : ℚ) ^ m +
+          (-(m : ℚ) ^ 3 / 648 + (m : ℚ) ^ 2 / 27 - (m : ℚ) / 432 -
+              157 / 1458) *
+            (-1 / 2 : ℚ) ^ m) ∧
+      (∀ m : ℕ,
+        Omega.Folding.gaugeAnomalyFiniteVariance m =
+          (118 / 243 : ℚ) * m - 40 / 81 +
+            ((243 : ℚ) - (-1 : ℚ) ^ m * (2 * m + 3)) / (486 * 2 ^ m)) ∧
+        conclusion_gauge_anomaly_uniform_moments_alphabet_closure_alphabet =
+          {((1 : ℚ) / 2), (-(1 : ℚ) / 2), ((1 : ℚ) / 4), (-(1 : ℚ) / 4)}
+
+/-- Paper label:
+`thm:conclusion-gauge-anomaly-uniform-moments-alphabet-closure`. -/
+theorem paper_conclusion_gauge_anomaly_uniform_moments_alphabet_closure :
+    conclusion_gauge_anomaly_uniform_moments_alphabet_closure_statement := by
+  refine ⟨Omega.Folding.GaugeAnomalyMean.paper_fold_gauge_anomaly_mean_finite_closed,
+    ?_, ?_, rfl⟩
+  · intro m
+    exact Omega.Folding.paper_fold_gauge_anomaly_second_factorial_finite_closed m
+  · intro m
+    exact Omega.Folding.paper_fold_gauge_anomaly_variance_finite_window_closed m
+
+/-- Paper-facing exclusion of any additional mesoscopic correction base outside the exact
+dyadic-sign alphabet. -/
+def conclusion_gauge_anomaly_no_mesoscopic_exponents_statement : Prop :=
+  ∀ q : ℚ,
+    q ∉ ({((1 : ℚ) / 2), (-(1 : ℚ) / 2), ((1 : ℚ) / 4), (-(1 : ℚ) / 4)} : Finset ℚ) →
+      q ∉ conclusion_gauge_anomaly_uniform_moments_alphabet_closure_alphabet
+
+/-- Paper label: `cor:conclusion-gauge-anomaly-no-mesoscopic-exponents`. -/
+theorem paper_conclusion_gauge_anomaly_no_mesoscopic_exponents :
+    conclusion_gauge_anomaly_no_mesoscopic_exponents_statement := by
+  rcases paper_conclusion_gauge_anomaly_uniform_moments_alphabet_closure with
+    ⟨_, _, _, halphabet⟩
+  intro q hq hqAlphabet
+  exact hq (by simpa [halphabet] using hqAlphabet)
+
+/-- Concrete data for the four-dimensional auditable minimality wrapper. -/
+structure conclusion_gauge_anomaly_fourdim_auditable_minimality_data where
+  Mtilde : ℤ → ℕ → ℤ
+  spectralData : Omega.Folding.BernoulliPAutocovarianceGeneratingRationalData
+  autocovarianceData : Omega.Folding.GaugeAnomalyAutocovarianceData
+  recurrence :
+    ∀ u m,
+      Mtilde u (m + 4) =
+        Mtilde u (m + 3) + (2 * u + 1) * Mtilde u (m + 2) +
+          (u ^ 3 - 2 * u) * Mtilde u (m + 1) - 2 * u * Mtilde u m
+
+/-- Paper-facing claim for finite-window gauge-anomaly auditable minimality. -/
+def conclusion_gauge_anomaly_fourdim_auditable_minimality_claim
+    (D : conclusion_gauge_anomaly_fourdim_auditable_minimality_data) : Prop :=
+  ∀ r, r < 4 →
+    ¬ Omega.Folding.foldGaugeAnomalyTomographyStateModelOrder r D.autocovarianceData
+
+/-- Paper label: `thm:conclusion-gauge-anomaly-fourdim-auditable-minimality`. -/
+theorem paper_conclusion_gauge_anomaly_fourdim_auditable_minimality
+    (D : conclusion_gauge_anomaly_fourdim_auditable_minimality_data) :
+    conclusion_gauge_anomaly_fourdim_auditable_minimality_claim D := by
+  intro r hr
+  exact Omega.Folding.paper_fold_gauge_anomaly_spectrum_tomography_certificate_triangle
+    D.Mtilde D.spectralData D.autocovarianceData r D.recurrence hr
 
 end Omega.Conclusion

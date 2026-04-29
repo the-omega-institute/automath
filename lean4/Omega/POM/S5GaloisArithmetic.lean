@@ -126,4 +126,15 @@ theorem paper_pom_s5_galois_s5_package :
     (1 : ℕ) + 1 + 3 = 5 := by
   simpa using paper_pom_s5_galois_s5_seeds
 
+/-- Paper-facing proposition `prop:pom-s5-galois-s5`. -/
+theorem paper_pom_s5_galois_s5 :
+    2 ^ 4 * 3 ^ 4 * 5 * 11 * 13 * 17383 = (16107783120 : Nat) ∧
+      -(16107783120 : Int) < 0 ∧
+      16107783120 % 17 ≠ 0 ∧
+      16107783120 % 29 ≠ 0 ∧
+      Nat.factorial 5 = 120 ∧
+      (1 : Nat) + 1 + 3 = 5 := by
+  exact ⟨disc_factorization, disc_negative, p17_unramified, p29_unramified, s5_order,
+    splitting_pattern_sum⟩
+
 end Omega.POM.S5GaloisArithmetic

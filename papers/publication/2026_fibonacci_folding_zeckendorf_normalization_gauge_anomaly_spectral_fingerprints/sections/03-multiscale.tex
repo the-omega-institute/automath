@@ -1,31 +1,31 @@
-\section{Folding projections and multiscale commuting structure}
+\section{Compatible restriction across scales}
 \label{sec:multiscale}
 
-\subsection{A rewriting realization and categorical properties}
-The map \(\Fold_m\) can be computed by a finite-time local rewriting system realizing Zeckendorf normalization. Two indexing conventions appear in the literature and both are used in this paper; we fix them precisely here.
+The finite-window fold admits a simple local description. In most-significant-digit-first order the Zeckendorf rewriting rule is
+\[
+011\to 100,
+\]
+whereas in the low-to-high convention of Section~\ref{sec:preliminaries} it becomes
+\[
+110\to 001.
+\]
+We record the translation once, since the main text and the appendices use both conventions.
 
-\begin{lemma}[Convention translation]\label{lem:convention}
-Let \(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\) be a microstate word written in the \emph{low-to-high} (LH) convention of \eqref{eq:Nomega}, so that position \(k\) carries weight \(\Fib_{k+1}\). Let \(\omega^\sharp=(\omega_m,\dots,\omega_1)\) be the same word written in the \emph{most-significant-digit-first} (MSD-first) convention. Then:
+\begin{lemma}\label{lem:convention}
+Let \(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\) be written in low-to-high order, and let \(\omega^\sharp=(\omega_m,\dots,\omega_1)\) be the same word in most-significant-digit-first order. Then:
 \begin{enumerate}
-\item[(i)] The local MSD-first rewrite rule \(011\to 100\) applied at positions \((k,k+1,k+2)\) (counting from the left of \(\omega^\sharp\)) corresponds, in the LH convention, to the rule \(110\to 001\) applied at positions \((m-k-1,m-k,m-k+1)\).
-\item[(ii)] After a leading zero is prepended in MSD-first convention (equivalently, \(\omega_m=0\) is available as a carry slot), scanning the MSD-first word left-to-right and applying \(011\to 100\) until no occurrence remains is equivalent to scanning the LH word right-to-left and applying \(110\to 001\) until no occurrence remains.
-\item[(iii)] In either convention, each application of the rule preserves the Fibonacci value \(N(\omega)=\sum_k\omega_k\Fib_{k+1}\) and strictly decreases the total number of \(1\)s. The unique fixed point is the Zeckendorf representation of \(N(\omega)\).
+\item[(i)] The rule \(011\to 100\) in most-significant-digit-first order corresponds, after reversal, to the rule \(110\to 001\) in low-to-high order.
+\item[(ii)] Prefixing a zero and scanning left to right in most-significant-digit-first order is equivalent to scanning the low-to-high word from high weights to low weights.
+\item[(iii)] Each rewrite preserves the Fibonacci value and strictly decreases the number of \(1\)s. The unique normal form is the Zeckendorf representation of the same integer.
 \end{enumerate}
 \end{lemma}
 
 \begin{proof}
-Part (i) is immediate: reversing indices maps \((a,b,c)\mapsto (c,b,a)\), so \(011\to 100\) becomes \(110\to 001\). Part (ii) follows because left-to-right scanning in MSD-first order corresponds to scanning from the highest-weight position to the lowest in LH order, i.e., right-to-left. Part (iii): the identity \(\Fib_{k}+\Fib_{k+1}=\Fib_{k+2}\) shows that replacing \(011\) at MSD positions \((k,k+1,k+2)\) by \(100\) replaces \(\Fib_{m-k+1}+\Fib_{m-k}\) with \(\Fib_{m-k+2}\) and does not alter the total value; the count of \(1\)s decreases by \(1\). Termination and uniqueness of the normal form are proved in Appendix~\ref{app:rewriting}.
+Part (i) is immediate from reversal. Part (ii) is just the corresponding statement about scan direction. For part (iii), the identity \(\Fib_k+\Fib_{k+1}=\Fib_{k+2}\) shows that each rewrite preserves the represented value, while the number of \(1\)s drops by one. Termination and uniqueness of the normal form are proved in Appendix~\ref{app:rewriting}.
 \end{proof}
 
-One convenient formulation uses MSD-first convention with the rule
-\[
-011 \;\to\; 100,
-\]
-scanning left-to-right after prefixing a leading zero; by Lemma~\ref{lem:convention}(i)--(ii), in the window convention of \eqref{eq:Nomega} this is the equivalent rule \(110\to 001\) acting from high to low Fibonacci weights. See \cite{Frougny1992,Frougny1999,ShallitShan2023} for automata-theoretic formulations. Termination is immediate since each rewrite strictly decreases the total number of \(1\)s. Confluence holds and yields a unique normal form, which is precisely the Zeckendorf representation.
-
-In our window model, this implies:
-\begin{proposition}[Well-definedness, idempotence, surjectivity]\label{prop:idempotent}
-For each \(m\ge 1\), the fold \(\Fold_m:\Om_m\to X_m\) is well-defined, idempotent, and surjective:
+\begin{proposition}\label{prop:idempotent}
+For each \(m\ge 1\), the map \(\Fold_m:\Om_m\to X_m\) is well defined, idempotent, and surjective:
 \[
 \Fold_m\circ \Fold_m=\Fold_m,
 \qquad
@@ -34,55 +34,45 @@ For each \(m\ge 1\), the fold \(\Fold_m:\Om_m\to X_m\) is well-defined, idempote
 \end{proposition}
 
 \begin{proof}
-Appendix~\ref{app:rewriting} proves that the rewriting system terminates and is confluent, so every \(\omega\in\Om_m\) has a unique Zeckendorf normal form with the same Fibonacci value. This is exactly \(\Fold_m(\omega)\), hence \(\Fold_m\) is well-defined.
+Appendix~\ref{app:rewriting} shows that the rewriting system terminates and is confluent. Hence every \(\omega\in\Om_m\) has a unique normal form with the same Fibonacci value, and by definition this normal form is \(\Fold_m(\omega)\). This proves that \(\Fold_m\) is well defined.
 
-If \(x\in X_m\), then \(x\) already has no adjacent \(1\)s and therefore is itself the Zeckendorf expansion of \(N(x)\). Hence \(\Fold_m(x)=x\). Applying this to \(x=\Fold_m(\omega)\in X_m\) gives
-\[
-\Fold_m(\Fold_m(\omega))=\Fold_m(\omega),
-\]
-so \(\Fold_m\) is idempotent. The same fixed-point property implies surjectivity: every \(x\in X_m\) lies in the image because \(\Fold_m(x)=x\).
+If \(x\in X_m\), then \(x\) already contains no adjacent \(1\)s and is therefore its own Zeckendorf normal form. Hence \(\Fold_m(x)=x\). Applying this to \(x=\Fold_m(\omega)\in X_m\) gives idempotence, and the same fixed-point property shows that every \(x\in X_m\) lies in the image.
 \end{proof}
 
-\subsection{Stable restriction and the inverse limit}
-For \(m_2\ge m_1\), define the stable truncation
+For \(m_2\ge m_1\), define
 \[
-\proj_{m_2\to m_1}: X_{m_2}\to X_{m_1},
+\proj_{m_2\to m_1}:X_{m_2}\to X_{m_1},
 \qquad
-\proj_{m_2\to m_1}(x_1\cdots x_{m_2}) := x_1\cdots x_{m_1}.
+\proj_{m_2\to m_1}(x_1\cdots x_{m_2}):=x_1\cdots x_{m_1}.
 \]
-Then \(\bigl(X_m,\proj_{m_2\to m_1}\bigr)\) is an inverse system, and the inverse limit
-\[
-X_\infty := \varprojlim_m X_m
-\]
-is naturally identified with the one-sided golden-mean shift (equivalently, the one-sided subshift forbidding \(11\)); see \cite[Chapter~1]{LindMarcus1995} or \cite[Chapter~1]{Kitchens1998}.
+Then \((X_m,\proj_{m_2\to m_1})\) is an inverse system, and its inverse limit is naturally the one-sided golden-mean shift; see \cite[Chapter~1]{LindMarcus1995} or \cite[Chapter~1]{Kitchens1998}.
 
-\subsection{The fold-aware restriction operator}
-Let \(\naive_{m+1\to m}:\Om_{m+1}\to \Om_m\) be the naive truncation (drop the last coordinate),
+On the microstate side there is also the naive truncation
 \[
-\naive_{m+1\to m}(\omega_1\cdots \omega_{m+1}) := \omega_1\cdots \omega_m.
+\naive_{m+1\to m}:\Om_{m+1}\to\Om_m,\qquad
+\naive_{m+1\to m}(\omega_1\cdots\omega_{m+1})=\omega_1\cdots\omega_m.
 \]
-Multiscale consistency suggests enforcing the commuting relation
+The problem is to find a restriction map on microstates for which folding commutes with restriction:
 \begin{equation}\label{eq:commuting}
 \Fold_m\circ \aware_{m+1\to m}
 \;=\;
-\proj_{m+1\to m}\circ \Fold_{m+1},
+\proj_{m+1\to m}\circ \Fold_{m+1}.
 \end{equation}
-so that ``restrict-then-fold'' agrees with ``fold-then-restrict'' at the stable level.
+The natural candidate is obtained by restricting on the stable side after folding.
 
-\begin{definition}[Fold-aware restriction]\label{def:fold-aware}
-Define the fold-aware restriction \(\aware_{m+1\to m}:\Om_{m+1}\to \Om_m\) by the explicit formula
+\begin{definition}\label{def:fold-aware}
+For \(\omega\in\Om_{m+1}\), define
 \begin{equation}\label{eq:re-def}
-\aware_{m+1\to m}(\omega)
-:= \proj_{m+1\to m}\!\bigl(\Fold_{m+1}(\omega)\bigr)\in X_m\subset \Om_m.
+\aware_{m+1\to m}(\omega):=\proj_{m+1\to m}\!\bigl(\Fold_{m+1}(\omega)\bigr)\in X_m\subset\Om_m.
 \end{equation}
 \end{definition}
 
-\begin{lemma}[Strict commutation]\label{lem:strict-commute}
-The operator \(\aware_{m+1\to m}\) satisfies \eqref{eq:commuting}. Moreover, it is the unique map \(\Om_{m+1}\to X_m\) satisfying \eqref{eq:commuting}.
+\begin{lemma}\label{lem:strict-commute}
+The map \(\aware_{m+1\to m}\) satisfies \eqref{eq:commuting}. Moreover, it is the unique map \(\Om_{m+1}\to X_m\) with this property.
 \end{lemma}
 
 \begin{proof}
-Since \(\Fold_{m+1}(\omega)\in X_{m+1}\), its truncation \(\proj_{m+1\to m}(\Fold_{m+1}(\omega))\) lies in \(X_m\), hence is fixed by \(\Fold_m\). Therefore
+Since \(\Fold_{m+1}(\omega)\in X_{m+1}\), its truncation belongs to \(X_m\) and is fixed by \(\Fold_m\). Therefore
 \[
 \Fold_m(\aware_{m+1\to m}(\omega))
 =
@@ -90,6 +80,8 @@ Since \(\Fold_{m+1}(\omega)\in X_{m+1}\), its truncation \(\proj_{m+1\to m}(\Fol
 =
 \proj_{m+1\to m}(\Fold_{m+1}(\omega)),
 \]
-which is \eqref{eq:commuting}. For uniqueness among maps into \(X_m\), note that \(\Fold_m\) restricts to the identity on \(X_m\), so \eqref{eq:commuting} forces \(\aware_{m+1\to m}(\omega)=\proj_{m+1\to m}(\Fold_{m+1}(\omega))\).
+which is exactly \eqref{eq:commuting}. If \(T:\Om_{m+1}\to X_m\) also satisfies \eqref{eq:commuting}, then \(\Fold_m\) acts as the identity on \(T(\omega)\), so
+\[
+T(\omega)=\proj_{m+1\to m}(\Fold_{m+1}(\omega))=\aware_{m+1\to m}(\omega).
+\]
 \end{proof}
-

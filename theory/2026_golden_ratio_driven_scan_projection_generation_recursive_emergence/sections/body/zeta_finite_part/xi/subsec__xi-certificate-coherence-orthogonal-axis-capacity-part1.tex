@@ -428,8 +428,8 @@ b=2\log_{2}T+\log_{2}\log T+O(1)
 由于 \(\mathrm{Ver}\) 对有限编码对象的运行是确定性的，任何“读出为非 \(\mathsf{NULL}\)”的断言都必须由某个有限证书对象 \(C\) 见证，且其可核验性完全由 \(\mathrm{Ver}(F;C)\) 的真值决定（定义 \ref{def:xi-cert-refinement-equivalence}）。
 因此在固定实现约定下，读出输出仅依赖输入地址与证书对象的有限编码，从而跨实现一致；这正是定理 \ref{thm:xi-cert-inverse-limit-coherence} 的“实现中立性/无侧信息通道”在读出层的直接推论。
 \par
-另一方面，命题 \ref{prop:null-as-local-section-obstruction} 将 \(\mathsf{NULL}\) 内禀化为证书纤维 \(\mathscr F(a)\) 的空性；而命题 \ref{prop:unitary-two-integer-reproducible} 给出在一个具体、可执行的 unitary 证书后端中“同一位串 \(\Rightarrow\) 唯一证书或唯一空值”的可回放性。
-二者共同保证：\(\mathsf{NULL}\) 的来源是对象层的“不可指称/不可构造”（证书不存在），而非浮点轨迹或数值噪声。证毕。
+另一方面，命题 \ref{prop:null-as-local-section-obstruction} 将 typed 读出分解为对象层全局证书纤维 \(\mathscr F(a)\)、相容局部族的 sheafification \(\mathscr F^\sharp(a)\) 以及显式的 sheaf-at-\(a\) 下降条件；而命题 \ref{prop:unitary-two-integer-reproducible} 给出在一个具体、可执行的 unitary 证书后端中“同一位串 \(\Rightarrow\) 唯一证书或唯一空值”的可回放性。
+二者共同保证：\(\mathsf{NULL}\) 的来源是对象层证书缺失、仅有相容局部而无全局下降，或唯一性失败，而非浮点轨迹或数值噪声。证毕。
 \end{proof}
 
 \begin{corollary}[信息不泄漏的形式化：精度索引的类型化与显式提升]\label{cor:xi-precision-type-no-leakage}
@@ -441,7 +441,7 @@ b=2\log_{2}T+\log_{2}\log T+O(1)
 \begin{proof}
 证书对象在定义上被分层组织为 \(\mathsf{Cert}_b(F)\)，并且任何“同一断言”的一致性只允许通过细化（\(b\) 递增）与可共同细化的等价关系 \(\sim\) 来表达（定义 \ref{def:xi-cert-refinement-equivalence}；定理 \ref{thm:xi-cert-inverse-limit-coherence}）。
 因此，若某个过程未显式进入共同深度就试图输出一个“混合精度”的候选对象，则它在任一固定 \(b\) 的证书范畴中都不构成可核验对象：要么无法通过 \(\mathrm{Ver}\)，要么根本不属于协议允许的证书纤维。
-按命题 \ref{prop:null-as-local-section-obstruction}，此时读出在对象层即表现为 \(\mathscr F(a)=\varnothing\)，从而在协议语义下等价为 \(\mathsf{NULL}\)。
+按命题 \ref{prop:null-as-local-section-obstruction}，此时读出至少不能在原始对象层给出可接受的全局证书；更精确地，要么 \(\mathscr F(a)=\varnothing\)，要么只存在 \(\mathscr F^\sharp(a)\) 中的相容局部类而无对象层下降，因此在协议语义下仍等价为 \(\mathsf{NULL}\)。
 故结论成立。证毕。
 \end{proof}
 \leanverified{paper\_xi\_precision\_type\_no\_leakage}
@@ -741,16 +741,15 @@ h(\rho)\sim 4\pi\,\delta\,e^{-\mathcal{P}(\gamma)}
 \end{remark}
 
 \begin{theorem}[端点分辨率—位复杂度屏障：二次压缩导出的不可约预算下界（显式最坏情形）]\label{thm:xi-offcritical-endpoint-resolution-lower-bound}
-\leanpartial{paper\_xi\_offcritical\_endpoint\_resolution\_lower\_bound}{the requested Lean signature is false in this repository state: \(\delta_0=0.1\), \(T=1\), \(\delta=100\), \(\gamma=0\) satisfy the hypotheses, but \(4\delta_0/(T^2+(1+\delta_0)^2)\approx 0.181\) while \(4\delta/(\gamma^2+(1+\delta)^2)\approx 0.0392\)}
-固定 \(\delta_0\in(0,\tfrac12)\) 与 \(T>0\)。
-若存在离临界线零点 \(\rho=\beta+\mathrm{i}\gamma\) 满足
+\leanverified{paper\_xi\_offcritical\_endpoint\_resolution\_lower\_bound}
+固定 \(\delta_0\in(0,\tfrac12)\)、\(T>0\)，并令
 \[
-|\gamma|\le T,\qquad \beta\le \tfrac12-\delta_0,
+|\gamma|\le T,\qquad \delta\in[\delta_0,\tfrac12].
 \]
-并仍记其圆盘像为 \(w_\rho=\mathcal{C}(\gamma+\mathrm{i}(\tfrac12-\beta))\)，则端点层余量满足显式下界
+记 \(w=\mathcal{C}(\gamma+\mathrm{i}\delta)\)，则端点层余量满足显式下界
 \begin{equation}\label{eq:xi-offcritical-endpoint-margin-min}
 \boxed{\;
-1-|w_\rho|^2\ \ge\ \frac{4\delta_0}{T^2+(1+\delta_0)^2}\; }.
+1-|w|^2\ \ge\ \frac{4\delta_0}{T^2+(1+\delta_0)^2}\; }.
 \end{equation}
 因此，任何试图仅以端点层分辨率阈值控制来排除上述高度窗内全部离线零点的核验策略，若其对余量 \(1-|w|^2\) 的最小可分辨尺度为 \(2^{-p}\)，则必须满足
 \begin{equation}\label{eq:xi-offcritical-endpoint-bit-lower-bound}
@@ -772,18 +771,19 @@ p\ \ge\ \frac{\mathcal{P}(T)+\log(1/\delta_0)-\log(4\pi)}{\log 2}+o(1)\qquad(T\t
 \begin{proof}
 由定理 \ref{thm:xi-offcritical-quadratic-radial-compression} 第 (1) 条的闭式恒等式，
 \[
-1-|w_\rho|^2=\frac{4\delta}{\gamma^2+(1+\delta)^2},
-\qquad \delta=\tfrac12-\beta\in[\delta_0,\tfrac12).
+1-|w|^2=\frac{4\delta}{\gamma^2+(1+\delta)^2},
+\qquad \delta\in[\delta_0,\tfrac12].
 \]
 在 \(\delta\in(0,1)\) 上，函数 \(\delta\mapsto \frac{4\delta}{\gamma^2+(1+\delta)^2}\) 单调递增；并且对 \(|\gamma|\le T\) 其右端随 \(|\gamma|\) 增大而减小。
 因此在约束 \(\delta\ge\delta_0,|\gamma|\le T\) 下，余量的最小值由 \(\delta=\delta_0\) 与 \(|\gamma|=T\) 取得，从而得到 \eqref{eq:xi-offcritical-endpoint-margin-min}。
 \par
-若核验机制对端点余量的最小可分辨尺度为 \(2^{-p}\)，则要在该高度窗内实现对全部可能离线零点的端点层可分辨排除，必须满足 \(2^{-p}<\inf(1-|w_\rho|^2)\)，结合 \eqref{eq:xi-offcritical-endpoint-margin-min} 即得 \eqref{eq:xi-offcritical-endpoint-bit-lower-bound}。
+若核验机制对端点余量的最小可分辨尺度为 \(2^{-p}\)，则要在该参数窗内实现端点层可分辨排除，必须满足 \(2^{-p}<\inf(1-|w|^2)\)，结合 \eqref{eq:xi-offcritical-endpoint-margin-min} 即得 \eqref{eq:xi-offcritical-endpoint-bit-lower-bound}。
 \eqref{eq:xi-offcritical-endpoint-bit-asymptotic} 由 \(\log_2(T^2+(1+\delta_0)^2)=2\log_2 T+O(1)\) 得到。
 最后，由 \(\mathcal{P}(T)=\log\pi+\log(1+T^2)\) 可将主项写成精度势形式，得到 \eqref{eq:xi-offcritical-endpoint-bit-precision-potential-form}。证毕。
 \end{proof}
 
 \begin{corollary}[共动前缀的位预算收益律：二次压缩 \texorpdfstring{$\Rightarrow$}{=>} 常数预算]\label{cor:xi-comoving-prefix-bit-budget-gain}
+\leanverified{paper\_xi\_comoving\_prefix\_bit\_budget\_gain}
 沿用定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound} 的设定并固定 \(\delta_0\in(0,\tfrac12)\)。
 若允许在对象层外置可寻址前缀 \(x_0\) 并取共动局部化 \(x_0=\gamma\)（附录定理 \ref{thm:app-comoving-horizon-localization}；并见注 \ref{rem:xi-comoving-horizon-localization-address-null} 对制度成本的说明），则离线偏移在共动图表中的可检测余量满足
 \[

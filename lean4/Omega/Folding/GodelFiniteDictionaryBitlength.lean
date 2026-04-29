@@ -75,18 +75,31 @@ lemma bitLength_pow_le (n B : Nat) (hB : 1 ≤ B) : bitLength (n ^ B) ≤ B * bi
 /-- Finite-dictionary Gödel coding is sandwiched between the primorial baseline and its `B`-th
 power, and the same comparison yields the advertised bitlength bounds.
     cor:fold-godel-finite-dictionary-bitlength-theta-TlogT -/
+theorem paper_fold_godel_finite_dictionary_bitlength_theta_tlogt (B T : Nat) (hB : 1 <= B)
+    (a : Fin T -> Nat) (ha : ∀ t, 1 <= a t ∧ a t <= B) :
+    primorial T <= godelCode a ∧ godelCode a <= primorial T ^ B ∧
+      bitLength (primorial T) <= bitLength (godelCode a) ∧
+      bitLength (godelCode a) <= B * bitLength (primorial T) := by
+  have hlower : primorial T ≤ godelCode a := primorial_le_godelCode a ha
+  have hupper : godelCode a ≤ primorial T ^ B := godelCode_le_primorial_pow a ha
+  have hbitLower : bitLength (primorial T) ≤ bitLength (godelCode a) := bitLength_mono hlower
+  have hbitUpperBase : bitLength (godelCode a) ≤ bitLength (primorial T ^ B) :=
+    bitLength_mono hupper
+  have hbitUpperPow : bitLength (primorial T ^ B) ≤ B * bitLength (primorial T) :=
+    bitLength_pow_le (primorial T) B hB
+  exact ⟨hlower, hupper, hbitLower, le_trans hbitUpperBase hbitUpperPow⟩
+
+/-- Finite-dictionary Gödel coding is sandwiched between the primorial baseline and its `B`-th
+power, and the same comparison yields the advertised bitlength bounds.
+    cor:fold-godel-finite-dictionary-bitlength-theta-TlogT -/
 theorem paper_fold_godel_finite_dictionary_bitlength_theta_TlogT (B T : Nat) (hB : 1 <= B)
     (a : Fin T -> Nat) (ha : ∀ t, 1 <= a t ∧ a t <= B) :
     primorial T <= godelCode a ∧ godelCode a <= primorial T ^ B ∧
       bitLength (primorial T) <= bitLength (godelCode a) ∧
       bitLength (godelCode a) <= B * bitLength (primorial T) + 1 := by
-  have hlower : primorial T ≤ godelCode a := primorial_le_godelCode a ha
-  have hupper : godelCode a ≤ primorial T ^ B := godelCode_le_primorial_pow a ha
-  have hbitLower : bitLength (primorial T) ≤ bitLength (godelCode a) := bitLength_mono hlower
-  have hbitUpperBase : bitLength (godelCode a) ≤ bitLength (primorial T ^ B) := bitLength_mono hupper
-  have hbitUpperPow : bitLength (primorial T ^ B) ≤ B * bitLength (primorial T) :=
-    bitLength_pow_le (primorial T) B hB
+  obtain ⟨hlower, hupper, hbitLower, hbitUpper⟩ :=
+    paper_fold_godel_finite_dictionary_bitlength_theta_tlogt B T hB a ha
   refine ⟨hlower, hupper, hbitLower, ?_⟩
-  exact le_trans hbitUpperBase (le_trans hbitUpperPow (Nat.le_add_right _ 1))
+  exact le_trans hbitUpper (Nat.le_add_right _ 1)
 
 end Omega.Folding

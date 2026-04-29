@@ -1,0 +1,223 @@
+% main.tex -- Zeckendorf Stable Arithmetic: Fibonacci Congruence and Online Addition
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{margin=2.8cm}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\abs}[1]{\lvert #1\rvert}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\Fold}{\operatorname{Fold}}
+
+\newcommand{\leanverified}[1]{}
+\newcommand{\leanpartial}[2]{}
+
+\title{Zeckendorf Stable Arithmetic:\\
+Fibonacci Congruence, Field Phases, and Online Algorithms}
+\author{
+  Haobo Ma\thanks{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981. Email: \texttt{auric@aelf.io}}
+  \and
+  Wenlin Zhang\thanks{Corresponding author. National University of Singapore, Singapore. Email: \texttt{e1327962@u.nus.edu}}
+}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study arithmetic induced by Zeckendorf representations and show that the relevant algebraic structure is forced by local Fibonacci rewriting rather than inserted a priori. Starting from the free commutative monoid of scale-counting configurations, we quotient by the Fibonacci relations and prove that the resulting monoid is canonically isomorphic to \(\NN\), with the Zeckendorf language furnishing a unique computable normal representative in each class. At finite resolution \(m\), the stable value map \(V_m:X_m\to \ZZ/(F_{m+2}\ZZ)\) transports addition and multiplication to a commutative ring structure on \(X_m\), yielding field phases when \(F_{m+2}\) is prime and Chinese-remainder decompositions when it is composite. We then connect this algebraic picture with online Zeckendorf addition, multiplicative generation by iteration, and a Fibonacci-adic inverse-limit ring obtained from the divisibility chain \(F_{2^k}\mid F_{2^{k+1}}\).
+\end{abstract}
+
+%% ============================================================
+\section{Introduction}\label{sec:introduction}
+Zeckendorf's theorem states that every nonnegative integer admits a unique expansion as a sum of nonconsecutive Fibonacci numbers. This classical representation theorem, anticipated in work of Lekkerkerker and formulated explicitly by Zeckendorf, places Fibonacci numeration among the most natural nonstandard positional systems in arithmetic and combinatorics \cite{Lekkerkerker1952,Zeckendorf1972,Zeckendorf1972Generalized,Koshy2018}. It is also a distinguished example of an Ostrowski--Pisot numeration system, where digit constraints, greedy normal forms, and recurrence relations interact in a particularly rigid way \cite{Fraenkel1985,Frougny1992NumbersAutomata,BerendFrougny1994Pisot}.
+
+From a computational point of view, Fibonacci numeration has been studied through finite automata, symbolic dynamics, and online algorithms. The admissible digit strings form the language of the golden-mean shift, and normalization in Pisot-based numeration systems is known to admit automata-theoretic descriptions \cite{Blanchard1989Beta,AlloucheShallit2003,LindMarcus1995,PytheasFogg2002}. For Zeckendorf digits in particular, addition can be implemented in linear time and, in suitable senses, online \cite{Frougny1999OnlineAddition,AhlbachUsatineFrougnyPippenger2013,HieronymiTerry2018OstrowskiAddition}. What is less explicit in the literature is the algebra forced by these normal forms when one treats finite windows of admissible digits as arithmetic objects in their own right.
+
+The present paper develops that algebraic viewpoint. Our starting point is not the semiring \((\NN,+,\times)\), but the free commutative monoid of scale-counting configurations together with the local Fibonacci relations. We show that quotienting by those relations produces \(\NN\) canonically, while the Zeckendorf language provides a computable transversal of the quotient. At finite resolution \(m\), the stable value map \(V_m\) identifies admissible words of length \(m\) with the residue ring \(\ZZ/(F_{m+2}\ZZ)\), so that addition and multiplication on stable addresses are obtained by transport of structure. This yields a concrete commutative ring on \(X_m\), field phases when \(F_{m+2}\) is prime, and canonical Chinese-remainder splittings when \(F_{m+2}\) is composite.
+
+The paper also records consequences for computation across scales. After establishing the quotient and finite-resolution structures, we discuss online stable addition, multiplication generated from addition and successor, and a Fibonacci-adic inverse-limit ring built from the dyadic divisibility tower \(F_{2^k}\mid F_{2^{k+1}}\). In this way the paper links classical divisibility properties of Fibonacci numbers \cite{Wall1960} with normal forms, automata, and resolution-dependent arithmetic in a single framework.
+
+%% ============================================================
+\section{Preliminaries}\label{sec:preliminaries}
+Throughout, we write \(\NN=\{0,1,2,\dots\}\). For \(n\ge 0\), let \((F_n)_{n\ge 0}\) denote the Fibonacci sequence
+\[
+F_0=0,\qquad F_1=1,\qquad F_{n+2}=F_{n+1}+F_n\quad(n\ge 0),
+\]
+and let
+\[
+\phi:=\frac{1+\sqrt5}{2}
+\]
+be the golden ratio. We use the standard admissible binary words
+\[
+X_m:=\{w=w_1\cdots w_m\in\{0,1\}^m:\ w_i w_{i+1}=0\text{ for }1\le i<m\}
+\]
+and
+\[
+X_\infty:=\{(c_1,c_2,\dots): c_k\in\{0,1\},\ c_kc_{k+1}=0,\ \text{only finitely many }c_k\neq 0\}.
+\]
+Thus \(X_m\) consists of length-\(m\) admissible prefixes, while \(X_\infty\) is the eventually zero part of the Fibonacci (golden-mean) shift. For \(c\in X_\infty\) and \(w\in X_m\), define
+\[
+\mathrm{Val}(c):=\sum_{k\ge 1} c_k F_{k+1},
+\qquad
+V_m(w):=\sum_{k=1}^m w_k F_{k+1}.
+\]
+We write \(\pi_m:X_\infty\to X_m\) for truncation to the first \(m\) digits.
+
+\begin{theorem}[Zeckendorf--Lekkerkerker]\label{thm:zeckendorf-unique}
+Every \(N\in\NN\) admits a unique expansion
+\[
+N=\sum_{k\ge 1} c_k F_{k+1},
+\qquad
+c_k\in\{0,1\},\qquad c_kc_{k+1}=0,
+\]
+with only finitely many nonzero digits. We denote the corresponding admissible sequence by
+\[
+Z(N)=(c_1,c_2,\dots)\in X_\infty.
+\]
+\end{theorem}
+
+\begin{proof}
+This is the classical Zeckendorf representation theorem; see \cite{Lekkerkerker1952,Zeckendorf1972}.
+\end{proof}
+
+\begin{lemma}[Finite Zeckendorf window]\label{lem:zeckendorf-range-bijection}
+For every \(m\ge 1\), the map
+\[
+V_m:X_m\longrightarrow \{0,1,\dots,F_{m+2}-1\}
+\]
+is a bijection. Equivalently, an integer \(N\) satisfies \(0\le N<F_{m+2}\) if and only if its Zeckendorf expansion \(Z(N)\) has no nonzero digits beyond the \(m\)-th place.
+\end{lemma}
+
+\begin{proof}
+Injectivity of \(V_m\) follows from the uniqueness in Theorem \ref{thm:zeckendorf-unique}. On the other hand, the cardinalities satisfy
+\[
+|X_m|=|X_{m-1}|+|X_{m-2}|
+\]
+for \(m\ge 3\), with initial values \(|X_1|=2\) and \(|X_2|=3\). Hence \(|X_m|=F_{m+2}\). Since the codomain also has cardinality \(F_{m+2}\), the injective map \(V_m\) is bijective. The support statement is exactly the same bijection expressed in terms of Zeckendorf digits.
+\end{proof}
+
+For \(n\ge 2\), we write \(\pi(n)\) for the Pisano period modulo \(n\), namely the least positive integer \(T\) such that
+\[
+F_{k+T}\equiv F_k \pmod n
+\qquad\text{for all }k\ge 0.
+\]
+We also use the classical identity
+\[
+\gcd(F_a,F_b)=F_{\gcd(a,b)},
+\]
+and in particular
+\[
+F_a\mid F_b \quad\Longleftrightarrow\quad a\mid b
+\]
+for positive integers \(a,b\); see \cite{Wall1960,Koshy2018}. Finally, if one drops the eventual-zero restriction in the definition of \(X_\infty\), one obtains the full Fibonacci shift. Its finite windows are the sets \(X_m\), linked by the obvious truncation maps \(X_n\to X_m\) for \(n\ge m\), and this symbolic-dynamical viewpoint will reappear in the discussion \cite{LindMarcus1995,PytheasFogg2002}.
+
+%% ============================================================
+\section{Fibonacci congruence structure}\label{sec:fib-congruence}
+
+We begin at the configuration level, before any arithmetic has been transported from \(\NN\). The point of the next subsection is that the local Fibonacci relations already force a complete quotient invariant: once one passes from raw scale-counting data to congruence classes, numerical value is the only remaining degree of freedom, and Zeckendorf words appear as the unique computable normal forms.
+
+\input{source/07_emergent_arithmetic_01_def_fib_congruence}
+
+%% ============================================================
+\section{Zeckendorf stable value and finite-resolution arithmetic}\label{sec:stable-value}
+
+The quotient description of \(\NN\) immediately suggests a finite-resolution version: instead of allowing arbitrary support, we work inside the admissible window \(X_m\) and ask which arithmetic is visible at depth \(m\). The next subsection shows that the answer is precisely the residue ring modulo \(F_{m+2}\), with prime and composite values of \(F_{m+2}\) leading respectively to field phases and CRT factorization.
+
+\input{source/07_emergent_arithmetic_03_zeckendorf_stable_value}
+
+%% ============================================================
+\section{Online stable addition}\label{sec:stable-add}
+
+At the infinite level, addition is obtained by transporting the additive structure of \(\NN\) back to admissible sequences. For later algorithmic statements it is convenient to isolate the fold map from arbitrary scale-counting configurations to Zeckendorf normal form and to record that stable addition is exactly normalization after pointwise superposition.
+
+For \(a\in\mathcal{D}\), define the folding map
+\[
+\Fold_\infty(a):=Z(\mathrm{Val}(a))\in X_\infty.
+\]
+
+\begin{definition}[Stable addition]\label{def:stable-add}
+For \(c,d\in X_\infty\), define
+\[
+c\oplus d:=\mathrm{Val}^{-1}\bigl(\mathrm{Val}(c)+\mathrm{Val}(d)\bigr).
+\]
+\end{definition}
+
+\begin{theorem}[Definitional transport of addition]\label{thm:add-definitional}
+The operation \(\oplus\) makes \(X_\infty\) into a commutative monoid, and
+\[
+\mathrm{Val}:(X_\infty,\oplus)\longrightarrow (\NN,+)
+\]
+is an isomorphism.
+\end{theorem}
+
+\begin{proof}
+This is the transport of the additive monoid structure along the bijection supplied by Theorem \ref{thm:zeckendorf-unique}.
+\end{proof}
+
+\begin{corollary}[Addition as folding]\label{cor:add-as-fold}
+If \(c,d\in X_\infty\) are regarded as elements of \(\mathcal{D}\), then
+\[
+c\oplus d=\Fold_\infty(c+d).
+\]
+\end{corollary}
+
+\begin{proof}
+Both sides are the unique admissible sequence of value \(\mathrm{Val}(c)+\mathrm{Val}(d)\).
+\end{proof}
+
+\input{source/07_emergent_arithmetic_04_def_stable_add}
+
+%% ============================================================
+\section{Online stable multiplication}\label{sec:stable-mul}
+
+Multiplication admits a parallel hierarchy of descriptions: as transported integer multiplication, as iteration of stable addition, and as a two-layer composition law on endomorphism semigroups. The following subsection makes these equivalences explicit and shows how little primitive structure is actually needed to reconstruct the multiplicative theory on stable addresses.
+
+\input{source/07_emergent_arithmetic_06_def_stable_mul}
+
+%% ============================================================
+\section{Discussion}\label{sec:discussion}
+The constructions above place Zeckendorf arithmetic at the intersection of numeration theory, symbolic dynamics, and algebra. The admissible-word sets \(X_m\) are the length-\(m\) windows of the golden-mean shift, while the fold map identifies arithmetic as a normalization problem on this shift space; this is precisely the perspective in which Pisot numeration, finite automata, and symbolic codings interact \cite{Blanchard1989Beta,Frougny1992NumbersAutomata,BerendFrougny1994Pisot,AlloucheShallit2003,LindMarcus1995,PytheasFogg2002}. What the present paper adds is an explicit finite-resolution algebra: each admissible window \(X_m\) carries a canonical commutative ring structure, not merely a convenient encoding.
+
+The ``field phase'' phenomenon is especially striking. Whenever \(F_{m+2}\) is prime, the stable arithmetic on \(X_m\) is literally the finite field \(\mathbb{F}_{F_{m+2}}\); when \(F_{m+2}\) is composite, the same address space decomposes canonically through the Chinese remainder theorem. This suggests a resolution-dependent supply of sparse coordinate systems for modular arithmetic. Any cryptographic application, however, would require much more than the present structural observations: one would need effective control of the distribution of Fibonacci primes, the behavior of unit groups, leakage under normalization algorithms, and implementation costs in concrete architectures \cite{Wall1960,Knuth1988FibonacciMultiplication,Koshy2018}.
+
+The inverse-limit ring \(\ZZ_{\mathrm{Fib},2}\) should be viewed as complementary to the symbolic inverse system of admissible prefixes. The latter records consistency of visible words in the Fibonacci shift, while the former records consistency of finite quotient rings along a divisibility tower. This separation between syntax and arithmetic is useful conceptually: it distinguishes the projective limit of words from the projective limit of quotient rings, yet both are controlled by the same Fibonacci recurrence and the same normalization map. On the computational side, the online-addition results of Frougny and the linear-time Zeckendorf algorithms of Ahlbach, Usatine, Frougny, and Pippenger show that the additive fold has efficient implementations, whereas direct multiplicative normalizers remain less explicit \cite{Frougny1999OnlineAddition,AhlbachUsatineFrougnyPippenger2013,HieronymiTerry2018OstrowskiAddition,Bernat2006FibonacciBase}.
+
+Several problems remain open.
+\begin{enumerate}[label=\arabic*.]
+  \item Determine the distribution of indices \(m\) for which \(F_{m+2}\) is prime, and hence the frequency of genuine field phases in the finite-resolution tower.
+  \item Give an intrinsic description of the unit groups \(X_m^\times\) and of the local factors that appear when \(F_{m+2}\) is a prime power.
+  \item Develop direct online or bounded-delay algorithms for multiplication, division, and inversion in stable address space, without passing through the ambient integer arithmetic.
+  \item Clarify the relation between the Fibonacci-adic ring \(\ZZ_{\mathrm{Fib},2}\), completions of \(\ZZ[\phi]\), and more general Ostrowski or Pisot towers \cite{Fraenkel1985,Zeckendorf1972Generalized}.
+\end{enumerate}
+
+%% ============================================================
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

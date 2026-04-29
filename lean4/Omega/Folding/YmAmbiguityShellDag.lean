@@ -69,4 +69,16 @@ theorem paper_Ym_ambiguity_shell_dag
     simpa [show n + m * k = m * k + n by omega, Function.iterate_add_apply] using hFixMul
   exact hAmb (hEq ▸ hEventually')
 
+/-- Lowercase paper-name entry point for the ambiguity-shell DAG theorem. -/
+theorem paper_ym_ambiguity_shell_dag
+    {α : Type*} (f : α → α) (singleton : α → Prop) (s₀ : α) (m : ℕ)
+    (_hm : 3 ≤ m)
+    (hThreshold : singleton ((f^[m]) s₀))
+    (hClosed : ∀ s, singleton s → singleton (f s)) :
+    (∀ t, m ≤ t → singleton ((f^[t]) s₀)) ∧
+      (∀ n k, 0 < k → ¬ singleton ((f^[n]) s₀) →
+        (f^[k]) ((f^[n]) s₀) ≠ (f^[n]) s₀) := by
+  exact paper_Ym_ambiguity_shell_dag
+    (f := f) (singleton := singleton) (s₀ := s₀) (m := m) hThreshold hClosed
+
 end Omega.Folding

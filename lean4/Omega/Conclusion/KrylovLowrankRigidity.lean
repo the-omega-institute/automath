@@ -82,6 +82,20 @@ theorem paper_conclusion_krylov_lowrank_rigidity_package :
     (∀ m q : ℕ, min m (2 ^ q) ≤ 2 ^ q) :=
   paper_conclusion_krylov_lowrank_rigidity_seeds
 
+/-- Rank-correction dimension for the fixed-time Krylov low-rank package.
+    It records the Krylov span bound `min m (2^q)` coming from the vectors
+    `D^0 1, ..., D^(m-1) 1` inside the ambient `2^q`-dimensional space.
+    thm:conclusion-disjointness-fixedm-krylov-lowrank -/
+def conclusion_disjointness_fixedm_krylov_lowrank_rankCorrection (m q : ℕ) : ℕ :=
+  min m (2 ^ q)
+
+/-- Exact paper-facing fixed-time Krylov low-rank rigidity wrapper.
+    thm:conclusion-disjointness-fixedm-krylov-lowrank -/
+theorem paper_conclusion_disjointness_fixedm_krylov_lowrank {m q : ℕ} (hm : 1 ≤ m) :
+    conclusion_disjointness_fixedm_krylov_lowrank_rankCorrection m q ≤ m := by
+  have _hword : 2 ^ m - 1 ≥ m := paper_krylov_word_count_vs_rank m hm
+  simp [conclusion_disjointness_fixedm_krylov_lowrank_rankCorrection]
+
 /-- Fibonacci matrix power identity: K^n = [[F_{n+1}, F_n], [F_n, F_{n-1}]].
     Seed values verify the 2×2 matrix entries for small n.
     thm:conclusion-disjointness-fixedm-krylov-lowrank -/

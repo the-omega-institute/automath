@@ -100,4 +100,12 @@ theorem paper_recursive_addressing_prefix_site_projective_rep_twist
   refine ⟨?_, strictifiable_iff_killedByCoboundary G α ρ hρ⟩
   exact ⟨⟨α⟩, rfl⟩
 
+/-- Paper label: `prop:prefix-site-projective-rep-twist`. Strictification of a projective
+representation is equivalent to killing its multiplier by a Čech coboundary. -/
+theorem paper_prefix_site_projective_rep_twist
+    {ι A : Type*} [AddCommGroup A] (G : PrefixSiteCechGroupoid ι)
+    (α : ι → ι → ι → A) (ρ : ι → ι → A) (hρ : IsProjectiveRep G α ρ) :
+    Strictifiable G ρ ↔ MultiplierKilledByCoboundary G α := by
+  exact strictifiable_iff_killedByCoboundary G α ρ hρ
+
 end Omega.RecursiveAddressing

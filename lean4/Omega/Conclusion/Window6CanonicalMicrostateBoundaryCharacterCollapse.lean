@@ -63,4 +63,17 @@ theorem paper_conclusion_window6_canonical_microstate_boundary_character_collaps
     simp [window6CanonicalMicrostateBoundaryCharacterMultiplicity, χ000, χ111, χ100, χ010, χ001,
       χ110, χ101, χ011]
 
+/-- Paper-facing parity-central rank spectrum for the window-6 canonical microstate boundary:
+subset sums of the four realized boundary-character multiplicities `61, 1, 1, 1` are exactly
+the displayed finite spectrum.
+    prop:conclusion-window6-parity-central-rank-spectrum -/
+theorem paper_conclusion_window6_parity_central_rank_spectrum (rank : ℕ)
+    (h :
+      ∃ s0 s1 s2 s3 : Bool,
+        rank = (if s0 then 61 else 0) + (if s1 then 1 else 0) +
+          (if s2 then 1 else 0) + (if s3 then 1 else 0)) :
+    rank ∈ ({0, 1, 2, 3, 61, 62, 63, 64} : Finset ℕ) := by
+  rcases h with ⟨s0, s1, s2, s3, rfl⟩
+  fin_cases s0 <;> fin_cases s1 <;> fin_cases s2 <;> fin_cases s3 <;> decide
+
 end Omega.Conclusion

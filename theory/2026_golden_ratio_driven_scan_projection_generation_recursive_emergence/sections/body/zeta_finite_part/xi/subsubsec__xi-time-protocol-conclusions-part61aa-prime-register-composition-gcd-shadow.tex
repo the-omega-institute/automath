@@ -106,6 +106,7 @@ N_F\star N_G=N_{F\cap G}.
 则由定理 \ref{thm:killo-chain-interior-godel-gcd-lcm} 的平方自由算术化立得。证毕。
 \end{proof}
 
+\leanverified{paper\_xi\_chain\_idempotent\_comparable\_finite\_gcd\_collapse}
 \begin{corollary}[可比链式投影复合的一步交换化与像集闭式]\label{cor:xi-chain-idempotent-comparable-finite-gcd-collapse}
 沿用定理 \ref{thm:xi-chain-idempotent-star-saturation-comparable-gcd} 的记号。设
 \[
@@ -173,6 +174,199 @@ H=\bigcap_{j=1}^{r}F_j
 \]
 即得像集与不动点集的闭式。证毕。
 \end{proof}
+
+\begin{theorem}[链型幂等元相对于严格递增权的加权下降律]\label{thm:xi-chain-idempotent-weighted-energy-descent}
+\leanverified{paper\_xi\_chain\_idempotent\_weighted\_energy\_descent}
+沿用定理 \ref{thm:xi-chain-idempotent-star-saturation-comparable-gcd} 的记号。取任意严格递增权
+\[
+0=w_0<w_1<\cdots<w_{n-1},
+\]
+并对任意满足 \(0\in H\subseteq[n]\) 的子集定义
+\[
+E_w(H):=\sum_{i\in H}w_i.
+\]
+再对任意 \(0\in F,G\subseteq[n]\) 定义加权缺陷
+\[
+\Delta_w(F,G):=E_w(G)-E_w(F\triangleright G).
+\]
+则
+\[
+\Delta_w(F,G)\ge 0,
+\]
+并且
+\[
+\Delta_w(F,G)=0
+\iff
+G\subseteq F.
+\]
+\end{theorem}
+\begin{proof}
+定义
+\[
+\phi:G\longrightarrow F\triangleright G,
+\qquad
+\phi(g):=I_F(g).
+\]
+由定义对每个 \(g\in G\) 都有 \(\phi(g)\le g\)，故严格递增性给出
+\[
+w_{\phi(g)}\le w_g.
+\]
+又因 \(F\triangleright G=\operatorname{Im}(\phi)\)，遂有
+\[
+E_w(F\triangleright G)
+=
+\sum_{y\in \operatorname{Im}(\phi)}w_y
+\le
+\sum_{g\in G}w_{\phi(g)}
+\le
+\sum_{g\in G}w_g
+=
+E_w(G).
+\]
+故 \(\Delta_w(F,G)\ge 0\)。
+
+若 \(\Delta_w(F,G)=0\)，则上式两处不等号都必须取等。特别地，
+\[
+\sum_{g\in G}w_{\phi(g)}=\sum_{g\in G}w_g
+\]
+迫使 \(w_{\phi(g)}=w_g\) 对每个 \(g\in G\) 成立；由权严格递增只能推出 \(\phi(g)=g\)。于是
+\[
+I_F(g)=g
+\qquad(g\in G),
+\]
+故 \(g\in F\)，即 \(G\subseteq F\)。反向蕴含显然：若 \(G\subseteq F\)，则 \(I_F(g)=g\) 对所有 \(g\in G\) 成立，从而 \(F\triangleright G=G\) 并且 \(\Delta_w(F,G)=0\)。证毕。
+\end{proof}
+
+\begin{theorem}[非自治自指更新轨道的有限终止]\label{thm:xi-chain-idempotent-nonautonomous-finite-termination}
+\leanverified{paper\_xi\_chain\_idempotent\_nonautonomous\_finite\_termination}
+设 \(\{F_t\}_{t\ge 1}\) 为任意序列，其中
+\[
+0\in F_t\subseteq[n]
+\qquad (t\ge 1).
+\]
+从任意初态 \(0\in G_1\subseteq[n]\) 出发，递归定义
+\[
+G_{t+1}:=I_{F_t}(G_t)
+\qquad (t\ge 1).
+\]
+令
+\[
+L(G):=\sum_{i\in G}i.
+\]
+则对每个 \(t\ge 1\) 都有
+\[
+L(G_{t+1})\le L(G_t),
+\]
+并且等号成立当且仅当
+\[
+G_t\subseteq F_t;
+\]
+在该情形下进一步有
+\[
+G_{t+1}=G_t.
+\]
+特别地，轨道中的严格变化次数至多为
+\[
+\sum_{i=1}^{n-1}i=\frac{n(n-1)}2,
+\]
+故该非自治自指动力学在有限步后必稳定为常值；尤其不存在长度大于 \(1\) 的周期轨道。
+\end{theorem}
+\begin{proof}
+在定理 \ref{thm:xi-chain-idempotent-weighted-energy-descent} 中取 \(w_i=i\)，便得
+\[
+L(G_{t+1})=L(I_{F_t}(G_t))\le L(G_t),
+\]
+且等号当且仅当 \(G_t\subseteq F_t\)。
+若 \(G_t\subseteq F_t\)，则对每个 \(g\in G_t\) 都有 \(I_{F_t}(g)=g\)，故
+\[
+G_{t+1}=I_{F_t}(G_t)=G_t.
+\]
+
+另一方面，\(L(G_t)\) 始终是非负整数，并满足
+\[
+0\le L(G_t)\le \sum_{i=1}^{n-1}i=\frac{n(n-1)}2.
+\]
+每发生一次严格变化，\(L\) 至少下降 \(1\)。故严格变化次数至多为 \(\frac{n(n-1)}2\)。当严格下降终止之后，每一步都必须取等，因而由前一段得到状态恒定。若存在长度大于 \(1\) 的周期轨道，则沿一周期 \(L\) 必先下降后回升，这与单调性矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[可比性的双向缺陷判别]\label{cor:xi-chain-idempotent-comparability-bidirectional-defect}
+\leanverified{paper\_xi\_chain\_idempotent\_comparability\_bidirectional\_defect}
+沿用定理 \ref{thm:xi-chain-idempotent-weighted-energy-descent} 的记号，并固定任意严格递增权 \(\{w_i\}_{i=0}^{n-1}\)。
+则对任意 \(0\in F,G\subseteq[n]\)，有
+\[
+F,\ G\ \text{在包含偏序下可比}
+\iff
+\Delta_w(F,G)\Delta_w(G,F)=0.
+\]
+特别地，若 \(F\) 与 \(G\) 不可比，则必有
+\[
+\Delta_w(F,G)>0,
+\qquad
+\Delta_w(G,F)>0.
+\]
+\end{corollary}
+\begin{proof}
+若 \(G\subseteq F\)，则由定理 \ref{thm:xi-chain-idempotent-weighted-energy-descent} 得 \(\Delta_w(F,G)=0\)；
+若 \(F\subseteq G\)，则同理 \(\Delta_w(G,F)=0\)。
+反之，若
+\(
+\Delta_w(F,G)\Delta_w(G,F)=0
+\)，则至少有一项为零。再由定理 \ref{thm:xi-chain-idempotent-weighted-energy-descent}，该零值恰等价于相应包含关系成立，故 \(F,G\) 可比。证毕。
+\end{proof}
+
+\begin{theorem}[可比链型自指词的 \texorpdfstring{$\kappa$}{kappa} 完备性]\label{thm:xi-comparable-chain-word-kappa-completeness}
+\leanverified{paper\_xi\_comparable\_chain\_word\_kappa\_completeness}
+沿用定理 \ref{thm:xi-chain-idempotent-star-saturation-comparable-gcd} 的记号。设
+\[
+F_1\supseteq F_2\supseteq\cdots\supseteq F_r,
+\qquad
+0\in F_j\subseteq[n].
+\]
+令 \(W\) 为由 \(\{N_{F_1},\dots,N_{F_r}\}\) 中若干字母组成的任意 \(\star\)-词，并记这些实际出现的字母对应子集的交为
+\[
+H:=\bigcap_{\nu}F_{i_\nu}.
+\]
+则
+\[
+W=N_H,
+\qquad
+\kappa(W)=\prod_{i\in H}q_i.
+\]
+特别地，\(\kappa(W)\) 唯一决定 \(W\)。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:xi-chain-idempotent-comparable-finite-gcd-collapse}，任意由可比链中字母组成的有限复合都塌缩为其出现字母对应子集的交，故
+\[
+W=N_H.
+\]
+再由 \(\kappa\) 的定义，
+\[
+\kappa(W)=\kappa(N_H)=\prod_{i\in H}q_i.
+\]
+由于右端是平方自由素数积，唯一分解立即恢复 \(H\)，从而恢复 \(N_H=W\)。证毕。
+\end{proof}
+
+结合推论 \ref{cor:xi-unique-continuous-transverse-register} 可见：在可比链型扇区内，\(\star\)-组合律已经被 \(\kappa\) 的平方自由算术完全锁定；离切片连续模只可能作为独立模式轴外置出现，而不会改变该交换幂等律的内部闭式。
+
+\begin{conjecture}[等基数反链双向缺陷的相邻穿越极小化]\label{conj:xi-antichain-adjacent-crossing-minimal-defect}
+沿用定理 \ref{thm:xi-chain-idempotent-weighted-energy-descent} 的记号，并取
+\[
+w_i:=\log q_i.
+\]
+对任意满足 \(|F|=|G|\) 的不可比对子，定义总缺陷
+\[
+D(F,G):=\Delta_w(F,G)+\Delta_w(G,F).
+\]
+则在固定等基数层 \(|F|=|G|\) 内，\(D(F,G)\) 的极小值应当恰由单个相邻穿越实现；更具体地，极小情形预期等价于存在某个 \(a\) 使
+\[
+F\setminus G=\{a\},
+\qquad
+G\setminus F=\{a+1\},
+\]
+且其余元素完全一致。
+\end{conjecture}
+
+上述猜想与定理 \ref{thm:xi-chain-idempotent-weighted-energy-descent} 及推论 \ref{cor:xi-chain-idempotent-comparability-bidirectional-defect} 的机制一致：每个不可比见证都会强制产生双向正缺陷，而相邻穿越正是同时最小化两侧最近回退权差的最紧局部构型。
 
 \noindent 结合定理 \ref{thm:xi-prime-register-minimal-ideal-left-zero-band} 的显式最小理想与推论 \ref{cor:xi-monotone-idempotent-skeleton-superexponential-sparsity} 的超指数稀薄性可见，素数寄存器幂等宇宙内部同时存在两类彼此对照的刚性对象：一类是由 \(\{Q_n^c\}_{c\in[n]}\) 构成的左零吸收核，另一类是由可比链型幂等元所诱导的交换 \(\gcd\)-带阴影；后者虽然在包含链上完全交换化，但在全部幂等元中仍只占超指数稀薄的比例。
 

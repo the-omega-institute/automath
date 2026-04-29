@@ -1,4 +1,6 @@
 import Omega.EA.AddAsFold
+import Omega.EA.AddFromSuccessor
+import Omega.EA.AddDefinitional
 import Omega.EA.AddressNaturality
 import Omega.EA.ArithComposition
 import Omega.EA.AutDimensionSqueeze
@@ -23,6 +25,7 @@ import Omega.EA.CompositionPullback
 import Omega.EA.CompositionPullbackSeeds
 import Omega.EA.CompositionTwoLayer
 import Omega.EA.CrtFactorization
+import Omega.EA.FiniteResolutionMod
 import Omega.EA.Conclusion72EnergyComplementarity
 import Omega.EA.SumproductExponentialLaw
 import Omega.EA.DeterministicRoughVisibleQuantity
@@ -35,6 +38,7 @@ import Omega.EA.FibAdicBasic
 import Omega.EA.FibAdicTower
 import Omega.EA.FibCongruence
 import Omega.EA.FibDivisibilityChain
+import Omega.EA.FiniteFieldLinearization
 import Omega.EA.FiniteLedgerRecoverability
 import Omega.EA.FoldWindow6CenterThreeObservablesDimensionDefect
 import Omega.EA.FoldCenterResolutionCriterionIndwEps
@@ -42,11 +46,13 @@ import Omega.EA.FoldWindow6ChiLayeredSpectrumReconstructionBy12Moments
 import Omega.EA.FoldAsSection
 import Omega.EA.FoldAsSectionCorollary
 import Omega.EA.FoldGroupoidAFInductiveLimitHolographicTrace
+import Omega.EA.FoldGroupoidWedderburn
 import Omega.EA.FoldGroupoidAut0ComplementFixedSubgroup
 import Omega.EA.FoldGroupoidAut0RationalCohomology
 import Omega.EA.FoldGroupoidAutPi1AllPrimes
 import Omega.EA.FoldGroupoidWindow6BoundaryParityRationallyInvisible
 import Omega.EA.FoldGroupoidWindow6RationalTailLadder
+import Omega.EA.FoldLargeFiberMomentUpperbounds
 import Omega.EA.FoldTailTopologicalReadout
 import Omega.EA.KernelPeterWeylBlockDiagonalization
 import Omega.EA.FoldDiscreteToContinuousGaugeEmbedding
@@ -78,6 +84,7 @@ import Omega.EA.KernelWeightedPrimeOrbit
 import Omega.EA.KernelZeroTemp
 import Omega.EA.MonoidQuotientIsN
 import Omega.EA.MulByIteratedAdd
+import Omega.EA.MulFromSuccessor
 import Omega.EA.MulNoNewPrimitive
 import Omega.EA.MinStateSpecFlow
 import Omega.EA.MultiplicativeEnergyCompilable
@@ -117,10 +124,18 @@ import Omega.EA.RewriteTerminationPublication
 import Omega.EA.RewriteWordProblem
 import Omega.EA.RationalGFLinearConstraints
 import Omega.EA.RoughVisibleDifferenceQuotientCertificate
+import Omega.EA.StableAddCommutativeMonoid
 import Omega.EA.StableAddComputable
 import Omega.EA.StableAddFiniteResolutionCompatibility
+import Omega.EA.StableAddNoNullCreation
 import Omega.EA.StableAddNoWrapTruncation
+import Omega.EA.StableAuditAffineCoefficientCriterion
+import Omega.EA.StableAuditAbelianGroupClassification
+import Omega.EA.StableAuditSmallOrderObstruction
 import Omega.EA.StableAddNormalizationRealization
+import Omega.EA.StableAuditPrimeFieldRedundancy
+import Omega.EA.StableAuditAffineFibonacciDashboardClosure
+import Omega.EA.SuccessorStructure
 import Omega.EA.Sync10MemoryHorizonInputStatistics
 import Omega.EA.Sync10Regeneration
 import Omega.EA.Sync10RegenerationCorrelationBound
@@ -135,8 +150,13 @@ import Omega.EA.SyncKernelResetWords
 import Omega.EA.TimeSpaceCommuting
 import Omega.EA.ValInvariant
 import Omega.EA.Wedderburn
+import Omega.EA.Window6CountermodelCertificate
+import Omega.EA.Window6AffineStableTransfer
 import Omega.EA.ChiLayeredFiberSpectrumRecovery
+import Omega.EA.FoldIndwHighQExtractMaxfiberAndChi
+import Omega.EA.FoldCollision2AutLieDimensionRank
 import Omega.EA.Z2x2JointSpectralMeasure
 import Omega.EA.ZeckendorfAddFst
 import Omega.EA.ZeckendorfArithComputable
 import Omega.EA.ZeckendorfTransversal
+import Omega.EA.Crt235MinDepth

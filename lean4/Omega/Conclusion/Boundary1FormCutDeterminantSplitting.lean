@@ -38,4 +38,10 @@ theorem paper_conclusion_boundary_1form_cut_determinant_splitting
   · unfold determinantBonus
     linarith
 
+/-- Paper label: `cor:conclusion-treewise-cut-proxy-misses-determinant-layer`. -/
+theorem paper_conclusion_treewise_cut_proxy_misses_determinant_layer
+    {logN proxy bonus : ℝ} (hdecomp : logN = proxy + bonus) (hbonus : 0 < bonus) :
+    proxy < logN := by
+  linarith
+
 end Omega.Conclusion
