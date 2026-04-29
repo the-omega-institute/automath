@@ -1438,11 +1438,59 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
             os.unlink(out_file)
         except OSError:
             pass
+    if not output and not dry_run:
+        # Codex returned nothing usable — try Anthropic API as fallback.
+        # Mirrors tools/autoresearch/run_overnight.py:call_llm multi-backend
+        # pattern. Graceful no-op when SDK or API key is absent.
+        fallback = _anthropic_fallback(prompt, timeout_seconds=timeout_seconds)
+        if fallback:
+            logger.info("Anthropic fallback produced %d chars (codex was empty)",
+                        len(fallback))
+            output = fallback
+            if log_tag:
+                ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+                (CODEX_LOG_DIR / f"{log_tag}_{ts}.anthropic.out.txt").write_text(
+                    output, encoding="utf-8")
+
     if log_tag and output:
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
         (CODEX_LOG_DIR / f"{log_tag}_{ts}.out.txt").write_text(
             output, encoding="utf-8")
     return output
+
+
+def _anthropic_fallback(prompt: str, *, timeout_seconds: int = 600,
+                        model: str = "claude-sonnet-4-6") -> str:
+    """Direct Anthropic API call used when codex CLI returns empty output.
+
+    Returns "" on any failure (missing SDK, missing API key, network error).
+    The caller treats "" identically to a codex failure.
+    """
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if not api_key:
+        return ""
+    try:
+        import anthropic
+    except ImportError:
+        logger.warning("Anthropic fallback skipped: 'anthropic' package not "
+                       "installed (pip install anthropic)")
+        return ""
+    try:
+        client = anthropic.Anthropic(api_key=api_key,
+                                     timeout=float(timeout_seconds))
+        msg = client.messages.create(
+            model=model,
+            max_tokens=8192,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        if not msg.content:
+            return ""
+        parts = [b.text for b in msg.content if hasattr(b, "text")]
+        return "\n\n".join(p for p in parts if p)
+    except Exception as exc:  # noqa: BLE001 — any SDK error is non-fatal
+        logger.warning("Anthropic fallback raised %s: %s",
+                       type(exc).__name__, str(exc)[:200])
+        return ""
 
 
 # ---------------------------------------------------------------------------
