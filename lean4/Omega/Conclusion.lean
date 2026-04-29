@@ -2713,3 +2713,4 @@ import Omega.Conclusion.HaltingTimePrimeRegisterAxisLowerBound
 import Omega.Conclusion.HiddenSubgroupDeterminesAnomalyMinimalAlphabet
 import Omega.Conclusion.MaxfiberUniphaseMod6Law
 import Omega.Conclusion.S4FixedpointCensusRepackaged
+import Omega.Conclusion.CollisionKernelMatrixPowerExpDimensionUnderSharpeth
