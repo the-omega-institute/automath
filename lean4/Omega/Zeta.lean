@@ -148,6 +148,7 @@ import Omega.Zeta.XiReverseKLCoprimeFrequencyPhaseAmplification
 import Omega.Zeta.XiReverseklExtremalGapEnergyCorrection
 import Omega.Zeta.XiPrimeMomentSemialgebraicCone
 import Omega.Zeta.XiEndpointHeatProbeRichardsonExtrapolation
+import Omega.Zeta.XiEndpointHeatProbePowerlawDifferences
 import Omega.Zeta.XiEndpointCompressionPrecision
 import Omega.Zeta.XiCartesianPowerJoukowskyGodelAnisotropicParabola
 import Omega.Zeta.XiLissajousPhaseSingularRingImmersion
@@ -334,6 +335,7 @@ import Omega.Zeta.XiTerminalReplicaSoftcorePartitionFibDistinctCountExact
 import Omega.Zeta.XiFoldZeroSetHalfDimensionalExponentLaw
 import Omega.Zeta.XiTimePart9rMomentKernelRadiusSubmultiplicative
 import Omega.Zeta.DephysImplIndependentDefectCertificate
+import Omega.Zeta.DephysRhCertificateAuditLoop
 import Omega.Zeta.DephysIdempotentMonadEntropyAxiomaticUniqueness
 import Omega.Zeta.DephysJensenDefectLogDerivative
 import Omega.Zeta.OffcriticalPoissonSemigroupHomomorphism
