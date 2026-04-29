@@ -247,6 +247,8 @@ import Omega.Zeta.XiTimePart9vResonanceZeroDensityLinear
 import Omega.Zeta.XiWindow6FalsifiabilityLayeringFromSemigroup
 import Omega.Zeta.XiTerminalBelyiR3ExplicitLeyangInterval
 import Omega.Zeta.XiBinaryJumpSemidirectAbelianizationCoinvariants
+import Omega.Zeta.XiFourierPontryaginBlockToeplitz
+import Omega.Zeta.Xi2x2SelfdualOrthogonalAxisProjectionForget
 import Omega.Zeta.XiBranchRhZeroTempArithmeticIndependence
 import Omega.Zeta.XiAbelH2ContractionTruncationNoamplify
 import Omega.Zeta.XiAuditDehnFunctionTimeGeometry
