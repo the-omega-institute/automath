@@ -224,6 +224,7 @@ import Omega.Zeta.XiBasepointScanResidualKernelCodim1Rankone
 import Omega.Zeta.XiBasepointScanAnchorDetGlobalMaximum
 import Omega.Zeta.XiTimePart50dcResidueZetaCyclotomicWitt
 import Omega.Zeta.XiPickPoissonConditionNumberCertificate
+import Omega.Zeta.XiPickPoissonEnergyFixedFluxExtremal
 import Omega.Zeta.XiP7S5MinimalArtinDedekindZetaFactorization
 import Omega.Zeta.XiP7S5LocalEulerFactorTripleIsomorphismAtQ
 import Omega.Zeta.XiP7S5GlobalArtinConductorsRho456
