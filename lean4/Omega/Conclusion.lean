@@ -240,6 +240,7 @@ import Omega.Conclusion.ZGPointwiseLocalDimensionFormula
 import Omega.Conclusion.ZGCylinderUniformAsymptotic
 import Omega.Conclusion.ZGHolographicEntropyInformationDimension
 import Omega.Conclusion.JoukowskyFiniteGroupWedderburnDecoupling
+import Omega.Conclusion.SingleFiberWedderburnBigBlock
 import Omega.Conclusion.CertificateCofinalSparsificationInvariant
 import Omega.Conclusion.SmithMinimalSolenoidalHostByBadPrimes
 import Omega.Conclusion.HaarZeroUniversalityFixedPrimeLedgerDecoupling
@@ -1736,6 +1737,7 @@ import Omega.Conclusion.PhaseSamplingGrowthExponentRank
 import Omega.Conclusion.PcdimPropCycleRankMinimal
 import Omega.Conclusion.Period3FiberExactMultiplicity
 import Omega.Conclusion.PeriodicFiberAcceptanceRateNormalizedSharpSat
+import Omega.Conclusion.PeriodicFiberMajorityPPComplete
 import Omega.Conclusion.PeriodicFiberSingleNormExactSharpsat
 import Omega.Conclusion.PhaseBudgetBinaryQuantization
 import Omega.Conclusion.PhaseChannelCrowdingLowerBound
