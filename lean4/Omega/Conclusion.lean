@@ -1,4 +1,5 @@
 import Omega.Conclusion.FiniteDefectAtomicCountEqualsIntrinsicMinimalCauchyRank
+import Omega.Conclusion.ScaledLawUniqueFromRecoverabilityProfile
 import Omega.Conclusion.TateRankoneFiniteShadowFullInverseLimitHollow
 import Omega.Conclusion.Window6GroupoidInvolutionLefschetz
 import Omega.Conclusion.PoissonCauchyMinimalLaurentOrderIdentifiability
