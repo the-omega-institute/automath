@@ -324,6 +324,7 @@ import Omega.Zeta.XiEndpointHeatProbeDyadicExponentReadout
 import Omega.Zeta.XiEndpointHeatProbeRichardsonExtrapolation
 import Omega.Zeta.XiOutputPotentialDirichletFixedJFourthOrder
 import Omega.Zeta.XiPoissonFirstNonvanishingMomentTvKlSharp
+import Omega.Zeta.XiPoissonFirstNonvanishingMomentI1Sharp
 import Omega.Zeta.XiEndpointHeatProbePowerlawDifferences
 import Omega.Zeta.XiOperatorEndpointProbeHausdorffBochnerCompleteMonotone
 import Omega.Zeta.XiEndpointCompressionPrecision
