@@ -2624,6 +2624,7 @@ import Omega.Zeta.XiEllipticTorsionStokesWeilPairing
 import Omega.Zeta.XiJDiscriminantMobiusRigidityCovariance
 import Omega.Zeta.XiJensenDefectHatKernelSecondDifference
 import Omega.Zeta.XiJSexticEllipticLattesTMap
+import Omega.Zeta.XiJSexticEllipticLattesFixedpointsOddTorsion
 import Omega.Zeta.XiJensenDefectPowerPullbackInvariance
 import Omega.Zeta.XiJensenExclusionRadiusConcavityCrossscale
 import Omega.Zeta.XiJensenBoundaryLayerIndistinguishability
