@@ -96,6 +96,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
 THEORY_DIR = REPO_ROOT / "theory"
 LOG_DIR = SCRIPT_DIR / "logs"
+CODEX_LOG_DIR = LOG_DIR / "codex"
 STATE_DIR = SCRIPT_DIR / "pipeline_state"
 CLAUDE_SUPERVISION_DIR = SCRIPT_DIR / "claude_supervision"
 RESEARCH_LEDGER_DIR = SCRIPT_DIR / "research_ledger"
@@ -1304,7 +1305,8 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
                timeout_seconds: int = 1800, model: Optional[str] = None,
                dry_run: bool = False,
                context_mode: str = "",
-               agent_role: str = "") -> str:
+               agent_role: str = "",
+               log_tag: Optional[str] = None) -> str:
     prompt = with_agent_context_contract(
         prompt, context_mode=context_mode, agent_role=agent_role)
     if context_mode:
@@ -1329,6 +1331,12 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
 
     out_fd, out_file = tempfile.mkstemp(suffix=".txt", prefix="codex_out_")
     os.close(out_fd)
+
+    if log_tag:
+        CODEX_LOG_DIR.mkdir(parents=True, exist_ok=True)
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        (CODEX_LOG_DIR / f"{log_tag}_{ts}.prompt.txt").write_text(
+            prompt, encoding="utf-8")
 
     # Use both --json (JSONL stream) and -o (last message).
     # --json gives us all agent_message events as fallback if -o is empty.
@@ -1435,6 +1443,10 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
             os.unlink(out_file)
         except OSError:
             pass
+    if log_tag and output:
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        (CODEX_LOG_DIR / f"{log_tag}_{ts}.out.txt").write_text(
+            output, encoding="utf-8")
     return output
 
 
