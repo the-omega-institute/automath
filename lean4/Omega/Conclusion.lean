@@ -2517,3 +2517,5 @@ import Omega.Conclusion.SmithBadPrimeLossSupport
 import Omega.Conclusion.ZigzagHstarStrictRefinementOfReplayCount
 import Omega.Conclusion.TwofiberRenyiBalanceInversion
 import Omega.Conclusion.SmithPKernelSpectrumFreeCommutativeMonoid
+import Omega.Conclusion.OrientationCartesianParityCollapse
+import Omega.Conclusion.LengthCongruenceMertensParsevalUniformization
