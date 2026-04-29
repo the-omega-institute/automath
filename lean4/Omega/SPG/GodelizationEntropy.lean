@@ -56,4 +56,11 @@ theorem paper_spg_scalar_godelization_entropy_doubleexp_package :
     (2 ^ 0 = 1 ∧ 2 ^ 1 = 2 ∧ 2 ^ 2 = 4 ∧ 2 ^ 3 = 8) :=
   paper_spg_scalar_godelization_entropy_doubleexp_seeds
 
+/-- Paper-facing theorem for `thm:spg-scalar-godelization-entropy-doubleexp`. -/
+theorem paper_spg_scalar_godelization_entropy_doubleexp :
+    And (forall n : Nat, 0 < n.factorial)
+      (And (forall n : Nat, (n + 1).factorial = (n + 1) * n.factorial)
+        (And (2 ^ 0 = 1) (And (2 ^ 1 = 2) (And (2 ^ 2 = 4) (2 ^ 3 = 8))))) := by
+  exact paper_spg_scalar_godelization_entropy_doubleexp_package
+
 end Omega.SPG

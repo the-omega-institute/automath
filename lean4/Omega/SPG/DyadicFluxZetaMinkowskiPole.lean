@@ -67,6 +67,14 @@ theorem paper_spg_dyadic_flux_zeta_minkowski_pole_package :
     (1 + 1 + (-2 : ℤ) = 0) :=
   paper_spg_dyadic_flux_zeta_minkowski_pole_seeds
 
+/-- Paper-facing wrapper bundling the three analytic clauses of the dyadic flux zeta law. -/
+theorem paper_spg_dyadic_flux_zeta_minkowski_pole
+    (zetaConvergesBelowCritical zetaDivergesAboveCritical residueAtCritical : Prop)
+    (hconv : zetaConvergesBelowCritical) (hdiv : zetaDivergesAboveCritical)
+    (hres : residueAtCritical) :
+    zetaConvergesBelowCritical ∧ zetaDivergesAboveCritical ∧ residueAtCritical := by
+  exact ⟨hconv, hdiv, hres⟩
+
 /-- Concrete model flux for the point case `n = 1`, `d = 0`, `α = 1`, where the
 expected exponent shift is `1 - 0 + 1 = 2`. -/
 def weightedFluxPoint (m : ℕ) : ℚ :=

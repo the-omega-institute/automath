@@ -1,9 +1,39 @@
 import Omega.Folding.BinFold
 import Omega.Folding.FiberArithmeticProperties
 import Omega.Conclusion.Window6Collision
+import Omega.GU.Window6AbelianizedParityChargeRootCartanSplitting
+import Mathlib.Data.ZMod.Basic
 import Mathlib.Tactic
 
 namespace Omega.GU
+
+/-- Binary center coordinates contributed by the eight two-point fibers at window `6`. -/
+abbrev window6_foldbin_gauge_center_vs_charge_separation_center_binary_dual :=
+  Fin (cBinFiberHist 6 2) → Window6F2
+
+/-- Binary charge coordinates coming from all nontrivial fibers at window `6`. -/
+abbrev window6_foldbin_gauge_center_vs_charge_separation_charge_binary_dual :=
+  Fin (cBinFiberHist 6 2 + cBinFiberHist 6 3 + cBinFiberHist 6 4) → Window6F2
+
+/-- Extend a central two-point-fiber charge by zero to the full binary charge lattice. -/
+def window6_foldbin_gauge_center_vs_charge_separation_center_to_charge_dual :
+    window6_foldbin_gauge_center_vs_charge_separation_center_binary_dual →
+      window6_foldbin_gauge_center_vs_charge_separation_charge_binary_dual := fun z i =>
+  if h : i.1 < cBinFiberHist 6 2 then z ⟨i.1, h⟩ else 0
+
+lemma window6_foldbin_gauge_center_vs_charge_separation_center_to_charge_dual_injective :
+    Function.Injective
+      window6_foldbin_gauge_center_vs_charge_separation_center_to_charge_dual := by
+  intro z w hzw
+  funext i
+  have hle : cBinFiberHist 6 2 ≤ cBinFiberHist 6 2 + cBinFiberHist 6 3 + cBinFiberHist 6 4 := by
+    omega
+  let i' :
+      Fin (cBinFiberHist 6 2 + cBinFiberHist 6 3 + cBinFiberHist 6 4) :=
+    ⟨i.1, lt_of_lt_of_le i.2 hle⟩
+  have hpoint := congrArg (fun f => f i') hzw
+  simpa [window6_foldbin_gauge_center_vs_charge_separation_center_to_charge_dual, i', i.2] using
+    hpoint
 
 /-- Window-6 histogram total count.
     prop:window6-foldbin-gauge-center-vs-charge-separation -/
@@ -61,6 +91,24 @@ theorem paper_gu_window6_boundary_certificate :
     21 - 8 = (13 : ℕ) ∧ 13 = Nat.fib 7 ∧
     9 * 3 > 21 := by
   refine ⟨by omega, by omega, by omega, by native_decide, by omega⟩
+
+/-- Window-6 foldbin gauge center contributions occupy exactly the two-point-fiber coordinates,
+embed into the binary charge lattice, and leave a rank gap of `13`. 
+    prop:window6-foldbin-gauge-center-vs-charge-separation -/
+theorem paper_window6_foldbin_gauge_center_vs_charge_separation :
+    cBinFiberHist 6 2 = 8 ∧
+    cBinFiberHist 6 3 = 4 ∧
+    cBinFiberHist 6 4 = 9 ∧
+    Fintype.card Window6BoundaryParityBlock = 3 ∧
+    Fintype.card Window6ParityCoordinate = 21 ∧
+    Function.LeftInverse window6BoundaryCartanProjection window6BoundaryCartanInclusion ∧
+    Function.Injective window6_foldbin_gauge_center_vs_charge_separation_center_to_charge_dual ∧
+    21 - 8 = (13 : ℕ) := by
+  rcases paper_window6_abelianized_parity_charge_root_cartan_splitting with
+    ⟨_, _, _, _, _, _, _, hBoundary, hParity, hLeft, _⟩
+  refine ⟨by rw [cBinFiberHist_6_2], by rw [cBinFiberHist_6_3], by rw [cBinFiberHist_6_4],
+    hBoundary, hParity, hLeft,
+    window6_foldbin_gauge_center_vs_charge_separation_center_to_charge_dual_injective, by omega⟩
 
 /-- Window-8 Fibonacci audit.
     subsec:bdry-tower-zeck-gut-part1 -/

@@ -17,4 +17,17 @@ theorem paper_fold_truncation_pi_functorial_golden
   exact ⟨X.restrict_functorial h₁ h₂ x, restrictWord_comp h₁ h₂ u,
     restrictWord_xor (Nat.le_trans h₁ h₂) u v⟩
 
+set_option maxHeartbeats 400000 in
+/-- Publication-facing wrapper for the coordinatewise functoriality of finite truncations and its
+specialization to infinite legal sequences.
+    lem:pi-functorial-golden -/
+theorem paper_pi_functorial_golden
+    (h₁ : m₁ ≤ m₂) (h₂ : m₂ ≤ m₃) (x : X m₃) (c : X.XInfinity) :
+    X.restrictLE h₁ (X.restrictLE h₂ x) = X.restrictLE (Nat.le_trans h₁ h₂) x ∧
+      X.restrictLE h₁ (X.prefixWord c m₂) = X.prefixWord c m₁ := by
+  refine ⟨X.restrict_functorial h₁ h₂ x, ?_⟩
+  apply Subtype.ext
+  funext i
+  rfl
+
 end Omega

@@ -11,6 +11,7 @@ structure FiniteLocalizationPrimeLedgerData where
   primeSupport : Finset Nat
   m_p : Nat → Nat
   support_spec : ∀ p, p ∉ primeSupport → m_p p = 0
+  primeSupport_nonempty : primeSupport.Nonempty
   discreteExactSequence : Prop
   compactExactSequence : Prop
   hDiscreteExactSequence : discreteExactSequence

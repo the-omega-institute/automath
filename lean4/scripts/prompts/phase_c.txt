@@ -23,17 +23,22 @@ If the chapter itself is NEW (no lean4/Omega/<Chapter>.lean exists yet):
   b. Add `import Omega.<Chapter>` to lean4/Omega.lean  ← only allowed in this case.
   This is the ONLY situation where lean4/Omega.lean may be edited.
 
-## Step 2: Full compilation
-```bash
-cd lean4 && python3 scripts/lake_gate.py build
-```
-`lake_gate.py` enforces a host-wide cap on concurrent `lake` invocations
-(LAKE_GATE_MAX_PARALLEL, set by the orchestrator). Use it for ALL `lake`
-calls in this round — single-module builds too, e.g.
-`python3 scripts/lake_gate.py build Omega.X.Y`. Do NOT invoke `lake` directly.
+## Step 2: Per-module type-checking (fast; NO `lake build`)
+For each new or modified .lean file, verify it elaborates by running the
+Lean compiler on that one file:
 
-If errors, fix them (up to 3 attempts per theorem).
-If a theorem is stuck, skip it and continue with the others.
+```bash
+cd lean4 && lake env lean Omega/<Chapter>/<File>.lean
+```
+
+This is fast (seconds, no cache cascade). Do NOT run `lake build` — the
+orchestrator performs the host-wide gated `lake build` after your commit
+as part of round verification, so you don't need to (and shouldn't) wait
+on the lake_gate inside this turn.
+
+If elaboration errors, fix them (up to 3 attempts per theorem).
+If a theorem is stuck, skip it and continue with the others. Only commit
+files whose single-file `lake env lean <file>.lean` passes.
 
 ## Step 3: Annotate .tex files (do this BEFORE rebase)
 Add \leanverified{theorem_name} to the corresponding .tex files in theory/.
@@ -58,6 +63,47 @@ Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
 ```
 
 ## IMPORTANT: Do NOT git push. The merge and push will be handled externally.
+
+## HARD NAMING RULE — Paper-Label Prefix (duplicate-symbol prevention)
+Because 9 workers run in parallel on the same base branch, two workers can
+silently introduce the same `def`/`noncomputable def` name (e.g. `kernel`,
+`coeff`, `xiLimitDefectPotential`, `pomBinaryEntropy`) into different files
+that share a chapter index like `Omega.Zeta`, breaking the combined build
+with `environment already contains 'X'`.
+
+Rules that apply to EVERY new declaration in this round — `theorem`,
+`lemma`, `def`, `noncomputable def`, `abbrev`, `structure`, `class`,
+`inductive`, `instance`:
+
+1. PREFIX every new identifier with the target's `paper_label` slug
+   (snake_case; strip `thm:`/`prop:`/`cor:`/`lem:` tags; lowercase;
+   non-alphanumeric → `_`). Example:
+
+     paper_label = "thm:fold-gauge-anomaly-rate-curve"
+     slug        = "fold_gauge_anomaly_rate_curve"
+     allowed:    `def fold_gauge_anomaly_rate_curve_kernel := …`
+     FORBIDDEN:  `def kernel := …`            (unprefixed)
+     FORBIDDEN:  `def Complex.conj …`         (mathlib shadow)
+
+   The top-level `paper_*` theorem matching the target's `lean_name`
+   already satisfies this and is exempt.
+
+2. Never shadow mathlib root names (`Complex.conj`, `Real.log`, `Nat.succ`,
+   `List.length`, `Finset.sum`, `Matrix.mul`, etc).
+
+3. Within one file, multiple helper defs should share the same paper-label
+   prefix and disambiguate via suffix:
+     `def <slug>_kernel := …`
+     `def <slug>_kernel_support := …`
+     `def <slug>_kernel_convolution := …`
+
+Do NOT open extra `lake env lean` or `lean` processes to probe naming
+candidates — they compete for RAM with the 9 workers and can blow up
+swap. The orchestrator runs a post-commit symbol-conflict gate (Gate 5)
+that rejects any round whose new `def/theorem/lemma/abbrev/structure/
+class/inductive/instance` name already appears on `origin/lean4-codex-auto-dev`.
+Just follow rule (1) and commit — the gate will catch accidental clashes
+and the round will be re-tried by the next worker.
 
 ## HARD PROHIBITION — Signature Integrity
 Existing theorems already in the file have mathematically meaningful signatures.
@@ -111,13 +157,26 @@ Rules applied to every new file:
 - If you cannot close the proof, use `sorry` and mark `\leanpartial{…}{reason}`
   instead of fabricating a shell structure. A sorry with a real signature is
   HONEST and passes; a shell theorem is DISHONEST and will be auto-rejected.
+  The `reason` text is injected verbatim into LaTeX. It MUST be LaTeX-safe:
+    * NEVER use Markdown backticks (e.g. do NOT write `` `paper_*` ``).
+      To quote an identifier, use \texttt{...} with underscores escaped as \_
+      (e.g. `\texttt{paper\_foo}`).
+    * Escape every LaTeX special character in prose: `_` → `\_`, `$` → `\$`,
+      `%` → `\%`, `&` → `\&`, `#` → `\#`, `^` → `\^{}`, `~` → `\~{}`,
+      `{` → `\{`, `}` → `\}`, `\` → `\textbackslash{}`.
+    * Do NOT insert raw code blocks, `<...>` placeholders, or unescaped
+      identifiers containing underscores. Plain natural-language English or
+      Chinese is fine; any code-like token must be wrapped in \texttt{...}
+      with its specials escaped.
+    * Keep the reason to one short sentence; it is a margin note, not a
+      dissertation.
 
 Existing hybrid files that still contain a historical shell structure are
 tolerated by the scanner, but NEW shell structures in a round's diff cause
 the entire round to be rejected (commits not merged to the base branch).
 
 ## Completion Contract
-- No sorry / admit / axiom; `python3 scripts/lake_gate.py build` must pass with zero errors
+- No sorry / admit / axiom; each touched file's `lake env lean <file>.lean` must pass with zero errors. The orchestrator runs the full gated `lake build` after your commit.
 - Must complete all 5 steps; if a theorem is stuck, skip it and continue
 - Tactic failure: auto-try next; compile error: auto-fix up to 3 rounds
 - Implementation changes: only in lean4/Omega/

@@ -14,4 +14,9 @@ theorem paper_cdim_star_compatible_fg_package (r t : ℕ) :
     Omega.CircleDimension.circleDim r t = Omega.CircleDimension.circleDim r 0 :=
   paper_cdim_star_compatible_fg_seeds r t
 
+/-- Paper-facing theorem matching the exact statement from the manuscript. -/
+theorem paper_cdim_star_compatible_fg (r t : ℕ) :
+    Omega.CircleDimension.circleDim r t = Omega.CircleDimension.circleDim r 0 :=
+  paper_cdim_star_compatible_fg_package r t
+
 end Omega.CircleDimension.CdimStarCompatibleFG

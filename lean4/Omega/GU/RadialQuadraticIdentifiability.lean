@@ -59,6 +59,116 @@ private lemma normalizedSemiMinorAxis_strictMono {r₁ r₂ : ℝ}
     exact div_pos hnum_pos hprod_pos
   linarith
 
+private def radialLowerEndpoint (r : ℕ) : ℚ :=
+  (r : ℚ) ^ 2 + ((r : ℚ)⁻¹) ^ 2 - 2
+
+private def radialUpperEndpoint (r : ℕ) : ℚ :=
+  (r : ℚ) ^ 2 + ((r : ℚ)⁻¹) ^ 2 + 2
+
+private lemma radialLowerEndpoint_le_radialUpperEndpoint (r : ℕ) :
+    radialLowerEndpoint r ≤ radialUpperEndpoint r := by
+  unfold radialLowerEndpoint radialUpperEndpoint
+  linarith
+
+private lemma radialAdjacentGap_formula (r : ℕ) (hr : 2 ≤ r) :
+    radialLowerEndpoint (r + 1) - radialUpperEndpoint r =
+      (2 * r - 3 : ℚ) - (2 * r + 1 : ℚ) / ((r : ℚ) ^ 2 * ((r + 1 : ℚ) ^ 2)) := by
+  have hr0 : (r : ℚ) ≠ 0 := by
+    have hr0' : r ≠ 0 := by omega
+    exact_mod_cast hr0'
+  have hr1 : ((r + 1 : ℕ) : ℚ) ≠ 0 := by positivity
+  unfold radialLowerEndpoint radialUpperEndpoint
+  rw [Nat.cast_add, Nat.cast_one]
+  field_simp [hr0, hr1]
+  ring
+
+private lemma radialFraction_le_five_thirtysixths (r : ℕ) (hr : 2 ≤ r) :
+    (2 * r + 1 : ℚ) / ((r : ℚ) ^ 2 * ((r + 1 : ℚ) ^ 2)) ≤ (5 : ℚ) / 36 := by
+  have hrq : (2 : ℚ) ≤ r := by exact_mod_cast hr
+  have hcross :
+      (36 : ℚ) * (2 * (r : ℚ) + 1) ≤ 5 * ((r : ℚ) ^ 2 * ((r + 1 : ℚ) ^ 2)) := by
+    have hfactor :
+        5 * ((r : ℚ) ^ 2 * ((r + 1 : ℚ) ^ 2)) - (36 : ℚ) * (2 * (r : ℚ) + 1) =
+          ((r : ℚ) - 2) * (5 * (r : ℚ) ^ 3 + 20 * (r : ℚ) ^ 2 + 45 * (r : ℚ) + 18) := by
+      ring
+    have hnonneg :
+        0 ≤
+          ((r : ℚ) - 2) * (5 * (r : ℚ) ^ 3 + 20 * (r : ℚ) ^ 2 + 45 * (r : ℚ) + 18) := by
+      apply mul_nonneg
+      · linarith
+      · positivity
+    rw [← hfactor] at hnonneg
+    linarith
+  have hdenpos : 0 < ((r : ℚ) ^ 2 * ((r + 1 : ℚ) ^ 2)) := by positivity
+  field_simp [hdenpos.ne']
+  linarith
+
+private lemma radialAdjacentGap_lower_bound (r : ℕ) (hr : 2 ≤ r) :
+    (31 : ℚ) / 36 ≤ radialLowerEndpoint (r + 1) - radialUpperEndpoint r := by
+  rw [radialAdjacentGap_formula r hr]
+  have hfrac := radialFraction_le_five_thirtysixths r hr
+  have hsub :
+      (2 * r - 3 : ℚ) - (5 : ℚ) / 36 ≤
+        (2 * r - 3 : ℚ) - (2 * r + 1 : ℚ) / ((r : ℚ) ^ 2 * ((r + 1 : ℚ) ^ 2)) := by
+    exact sub_le_sub_left hfrac _
+  have hrq : (2 : ℚ) ≤ r := by exact_mod_cast hr
+  have hbase : (31 : ℚ) / 36 ≤ (2 * r - 3 : ℚ) - (5 : ℚ) / 36 := by
+    linarith
+  exact le_trans hbase hsub
+
+private lemma radialAdjacentIntervals_separated (r : ℕ) (hr : 2 ≤ r) :
+    radialUpperEndpoint r < radialLowerEndpoint (r + 1) := by
+  have hgap := radialAdjacentGap_lower_bound r hr
+  linarith
+
+private lemma radialIntervals_separated_of_lt {r s : ℕ} (hr : 2 ≤ r) (hrs : r < s) :
+    radialUpperEndpoint r < radialLowerEndpoint s := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_lt hrs
+  have haux : ∀ k : ℕ, radialUpperEndpoint r < radialLowerEndpoint (r + k + 1) := by
+    intro k
+    induction k with
+    | zero =>
+        simpa [Nat.add_assoc] using radialAdjacentIntervals_separated r hr
+    | succ k ih =>
+        have hmid :
+            radialUpperEndpoint (r + k + 1) < radialLowerEndpoint (r + k + 2) := by
+          have hr' : 2 ≤ r + k + 1 := by omega
+          simpa [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using
+            radialAdjacentIntervals_separated (r + k + 1) hr'
+        have hle :
+            radialLowerEndpoint (r + k + 1) ≤ radialUpperEndpoint (r + k + 1) :=
+          radialLowerEndpoint_le_radialUpperEndpoint (r + k + 1)
+        exact lt_trans (lt_of_lt_of_le ih hle) hmid
+  simpa [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using haux k
+
+/-- Paper label: `thm:group-jg-radial-quadratic-single-sample-identifiability`.
+For integer radii `r ≥ 2`, the single-sample support intervals for the quadratic observable are
+uniformly separated, so one observed value determines the radius uniquely. -/
+theorem paper_group_jg_radial_quadratic_single_sample_identifiability :
+    let lower : ℕ → ℚ := fun r => (r : ℚ) ^ 2 + ((r : ℚ)⁻¹) ^ 2 - 2;
+    let upper : ℕ → ℚ := fun r => (r : ℚ) ^ 2 + ((r : ℚ)⁻¹) ^ 2 + 2;
+    (∀ r : ℕ, 2 ≤ r → (31 : ℚ) / 36 ≤ lower (r + 1) - upper r) ∧
+      (∀ {r s : ℕ} {u : ℚ}, 2 ≤ r → 2 ≤ s → lower r ≤ u → u ≤ upper r → lower s ≤ u →
+        u ≤ upper s → r = s) := by
+  dsimp
+  change
+    (∀ r : ℕ, 2 ≤ r → (31 : ℚ) / 36 ≤ radialLowerEndpoint (r + 1) - radialUpperEndpoint r) ∧
+      (∀ {r s : ℕ} {u : ℚ}, 2 ≤ r → 2 ≤ s → radialLowerEndpoint r ≤ u →
+        u ≤ radialUpperEndpoint r → radialLowerEndpoint s ≤ u → u ≤ radialUpperEndpoint s →
+        r = s)
+  refine ⟨radialAdjacentGap_lower_bound, ?_⟩
+  intro r s u hr hs hrl hur hsl hus
+  rcases lt_trichotomy r s with hlt | rfl | hgt
+  · exfalso
+    have hsep : radialUpperEndpoint r < radialLowerEndpoint s :=
+      radialIntervals_separated_of_lt hr hlt
+    linarith
+  · rfl
+  · exfalso
+    have hsep : radialUpperEndpoint s < radialLowerEndpoint r :=
+      radialIntervals_separated_of_lt hs hgt
+    linarith
+
 /-- Fresh seed wrapper for radial quadratic single-sample identifiability.
     thm:group-jg-radial-quadratic-single-sample-identifiability -/
 theorem paper_gut_radial_quadratic_single_sample_identifiability_seeds :

@@ -31,4 +31,13 @@ theorem paper_cdim_comoving_defect_implies_delta_bound_package
     δ ≤ (1 - ρ * Real.exp (-ε)) / (1 + ρ * Real.exp (-ε)) :=
   paper_cdim_comoving_defect_implies_delta_bound_seeds hρ hρlt hε hδ hbound
 
+/-- Paper-facing wrapper for the comoving Jensen-defect offset bound.
+    prop:cdim-comoving-defect-implies-delta-bound -/
+theorem paper_cdim_comoving_defect_implies_delta_bound
+    {ρ ε δ : ℝ}
+    (hρ : 0 < ρ) (hρlt : ρ < 1) (hε : 0 ≤ ε) (hδ : 0 ≤ δ)
+    (hbound : ρ * Real.exp (-ε) ≤ (1 - δ) / (1 + δ)) :
+    δ ≤ (1 - ρ * Real.exp (-ε)) / (1 + ρ * Real.exp (-ε)) :=
+  paper_cdim_comoving_defect_implies_delta_bound_package hρ hρlt hε hδ hbound
+
 end Omega.CircleDimension.ComovingDefectDeltaBound

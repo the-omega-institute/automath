@@ -40,4 +40,11 @@ theorem paper_etds_finite_part_cyclic_lift_cyclotomic_divisor_mobius
       h.cyclotomicComponent q = finitePartCyclotomicMobiusRecovery h.finitePartAnomaly q := by
   exact ⟨h.divisorDecomposition hq, h.mobiusRecovery hq⟩
 
+/-- Paper label: `prop:finite-part-cyclic-lift-cyclotomic-divisor-mobius`. -/
+theorem paper_finite_part_cyclic_lift_cyclotomic_divisor_mobius
+    (h : FinitePartCyclicLiftCyclotomicData) {q : ℕ} (hq : 2 ≤ q) :
+    h.finitePartAnomaly q = finitePartCyclotomicDivisorSum h.cyclotomicComponent q ∧
+      h.cyclotomicComponent q = finitePartCyclotomicMobiusRecovery h.finitePartAnomaly q := by
+  exact paper_etds_finite_part_cyclic_lift_cyclotomic_divisor_mobius h hq
+
 end Omega.Zeta

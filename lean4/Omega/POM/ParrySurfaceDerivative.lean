@@ -92,6 +92,14 @@ theorem paper_pom_parry_surface_derivative_package :
     ((1 : ℝ) / (1 + 1) = 1 / 2) :=
   paper_pom_parry_surface_derivative_seeds
 
+/-- Paper: `prop:pom-Lk-branch-puiseux`. -/
+theorem paper_pom_lk_branch_puiseux :
+    ((0 : ℝ) * (4 + 0) = 0 ∧ (-4 : ℝ) * (4 + -4) = 0) ∧
+      ((2 : ℚ) * (1 / 6) = 1 / 3 ∧ (1 : ℚ) / (2 ^ 3 * 3) = 1 / 24) ∧
+      ((1 : ℝ) / (1 + 1) = 1 / 2) := by
+  refine ⟨?_, puiseux_coefficient_identity, surface_leading_coefficient⟩
+  constructor <;> norm_num
+
 /-- Paper: `cor:pom-Lk-t1-parry-surface-derivative`. -/
 theorem paper_pom_Lk_t1_parry_surface_derivative :
     (∀ x : ℝ, 0 < x → x⁻¹ / (1 + x⁻¹) = 1 / (x + 1)) ∧

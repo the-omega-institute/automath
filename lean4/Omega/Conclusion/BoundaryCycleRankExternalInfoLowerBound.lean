@@ -18,6 +18,15 @@ theorem paper_conclusion_boundary_cycle_rank_external_info_lower_bound_seeds
     exact ⟨f, f.injective⟩
 
 set_option maxHeartbeats 400000 in
+/-- Paper-facing lower-bound package together with the sharp identity witness.
+    cor:conclusion-boundary-cycle-rank-external-info-lower-bound -/
+theorem paper_conclusion_boundary_cycle_rank_external_info_lower_bound
+    (p r R : Nat) :
+    ((∃ f : Fin (p ^ r) → Fin R, Function.Injective f) → p ^ r ≤ R) ∧
+      (∃ f : Fin (p ^ r) → Fin (p ^ r), Function.Injective f) := by
+  exact ⟨registerBudget_lower_bound p r R, registerBudget_sharp p r⟩
+
+set_option maxHeartbeats 400000 in
 /-- Transcript-plus-register encodings of a `p^r`-state boundary fiber into
     `p^q × (E+1)^k` force the expected product-cardinality lower bound.
     cor:conclusion-boundary-query-register-budget-exponential-law -/

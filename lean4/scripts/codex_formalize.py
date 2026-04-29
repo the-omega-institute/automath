@@ -83,6 +83,24 @@ _round_lock = threading.Lock()
 # Lock serializing .lake/build merges back to the main repo
 _lake_merge_lock = threading.Lock()
 
+# Single-slot build request for the background builder (multi-producer,
+# single-consumer, collapsing). Each worker that merges a round calls
+# `request_build(sha)`. The builder consumes only the latest SHA — if
+# multiple commits land while the builder is busy, only the newest tip
+# is built; intermediate SHAs are skipped.
+_build_cv = threading.Condition()
+_build_request: Optional[str] = None
+_builder_stop = threading.Event()
+
+
+def request_build(sha: str) -> None:
+    """Producer: signal that `sha` is a new build candidate. Overwrites
+    any pending (unbuild) request — the builder will pick the latest."""
+    global _build_request
+    with _build_cv:
+        _build_request = sha
+        _build_cv.notify()
+
 # In-memory dedup of in-flight target IDs across parallel rounds.
 # Phase B selects targets concurrently and can pick the same paper (same
 # lean_name / paper_label) in two worktrees; the second one wastes a Phase C
@@ -223,13 +241,18 @@ def git_log_oneline(n: int = 5, *, cwd: Optional[Path] = None) -> list[str]:
 
 # kern.memorystatus_vm_pressure_level mapping (XNU):
 #   1 = NORMAL, 2 = WARN, 4 = URGENT, 8 = CRITICAL
+# NOTE: the kernel's pressure_level is "sticky" — once a swap spike pushes it
+# to WARN it can stay there for hours even after RAM becomes abundant. We
+# keep it as a logged-only secondary signal and gate dispatch on the more
+# actionable (swap_used >= ceiling) AND (available RAM < min_avail) pair.
 _MEM_LEVEL_BY_NAME = {"normal": 1, "warn": 2, "urgent": 4, "critical": 8}
 
 # Populated by main() from CLI flags.
 _MEM_GUARD_CFG: dict = {
     "enabled": sys.platform == "darwin",
-    "level_threshold": 2,      # block when kern.memorystatus_vm_pressure_level >= this
-    "swap_ceiling_gb": 16.0,   # block when used swap exceeds this
+    "level_threshold": 2,      # LOGGED ONLY — does not block dispatch on its own
+    "swap_ceiling_gb": 16.0,   # block only with avail_ram < min_avail
+    "min_avail_gb": 1.5,       # block only with swap >= swap_ceiling
     "poll_seconds": 30,
     "max_wait_seconds": 1800,
 }
@@ -271,9 +294,37 @@ def _macos_swap_used_gb() -> float:
         return 0.0
 
 
-def memory_pressure_snapshot() -> tuple[int, float]:
-    """Return (pressure_level, swap_used_gb). level=0 if unsupported."""
-    return _macos_pressure_level(), _macos_swap_used_gb()
+def _macos_available_ram_gb() -> float:
+    """Immediately-reclaimable RAM in GB. Sums Pages free + Pages inactive
+    + Pages speculative from `vm_stat`. On macOS these pages can be handed
+    back to a new process without touching swap.
+
+    Returns 0.0 on non-darwin or parse errors (caller treats as "unknown"
+    and is conservative).
+    """
+    if sys.platform != "darwin":
+        return 0.0
+    try:
+        r = subprocess.run(
+            ["vm_stat"],
+            capture_output=True, text=True, timeout=5,
+            stdin=subprocess.DEVNULL,
+        )
+        out = r.stdout or ""
+        pm = re.search(r"page size of (\d+) bytes", out)
+        page_size = int(pm.group(1)) if pm else 16384
+        def _pages(label: str) -> int:
+            m = re.search(rf"{re.escape(label)}:\s+(\d+)\.", out)
+            return int(m.group(1)) if m else 0
+        free_pages = _pages("Pages free") + _pages("Pages inactive") + _pages("Pages speculative")
+        return free_pages * page_size / (1024 ** 3)
+    except Exception:
+        return 0.0
+
+
+def memory_pressure_snapshot() -> tuple[int, float, float]:
+    """Return (pressure_level, swap_used_gb, avail_ram_gb). level=0 if unsupported."""
+    return _macos_pressure_level(), _macos_swap_used_gb(), _macos_available_ram_gb()
 
 
 def memory_pressure_wait(context: str = "") -> bool:
@@ -287,28 +338,36 @@ def memory_pressure_wait(context: str = "") -> bool:
     if not cfg["enabled"]:
         return True
 
-    lvl_thresh = int(cfg["level_threshold"])
     swap_cap = float(cfg["swap_ceiling_gb"])
+    min_avail = float(cfg["min_avail_gb"])
     poll = int(cfg["poll_seconds"])
     max_wait = int(cfg["max_wait_seconds"])
 
-    # Fast path: no pressure, no waiting.
-    lvl, swap = memory_pressure_snapshot()
-    if (lvl == 0 or lvl < lvl_thresh) and swap < swap_cap:
+    # Gating rule: block only when BOTH
+    #   swap already exceeds ceiling  AND
+    #   immediately-reclaimable RAM is below min_avail
+    # The kernel's pressure_level is included in log lines but NOT in the
+    # gate — it's sticky after a prior spike and keeps blocking long after
+    # physical RAM is abundant again.
+
+    def _ok(swap: float, avail: float) -> bool:
+        return swap < swap_cap or avail >= min_avail
+
+    # Fast path.
+    lvl, swap, avail = memory_pressure_snapshot()
+    if _ok(swap, avail):
         return True
 
-    # Serialize the wait so parallel callers don't spam identical log lines.
     with _mem_guard_lock:
         start = time.time()
         warned = False
         while True:
-            lvl, swap = memory_pressure_snapshot()
-            under_level = lvl == 0 or lvl < lvl_thresh
-            under_swap = swap < swap_cap
-            if under_level and under_swap:
+            lvl, swap, avail = memory_pressure_snapshot()
+            if _ok(swap, avail):
                 if warned:
                     logger.info(
-                        f"[mem-guard] pressure cleared (level={lvl}, swap={swap:.1f}GB)"
+                        f"[mem-guard] cleared (level={lvl}, swap={swap:.1f}GB, "
+                        f"avail={avail:.1f}GB)"
                         + (f" — resuming {context}" if context else "")
                     )
                 return True
@@ -316,13 +375,15 @@ def memory_pressure_wait(context: str = "") -> bool:
             if elapsed >= max_wait:
                 logger.warning(
                     f"[mem-guard] timeout after {elapsed}s "
-                    f"(level={lvl}, swap={swap:.1f}GB) — proceeding anyway"
+                    f"(level={lvl}, swap={swap:.1f}GB, avail={avail:.1f}GB) — "
+                    f"proceeding anyway"
                     + (f" with {context}" if context else "")
                 )
                 return False
             logger.warning(
-                f"[mem-guard] pressure elevated (level={lvl}, swap={swap:.1f}GB) — "
-                f"pausing {context or 'dispatch'}, retry in {poll}s (waited {elapsed}s)"
+                f"[mem-guard] pressure elevated (level={lvl}, swap={swap:.1f}GB, "
+                f"avail={avail:.1f}GB) — pausing {context or 'dispatch'}, "
+                f"retry in {poll}s (waited {elapsed}s)"
             )
             warned = True
             time.sleep(poll)
@@ -692,6 +753,29 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
                     logger.error(f"Codex could not resolve conflicts for {wt.branch}")
                     run_cmd(["git", "rebase", "--abort"], cwd=wt.path)
                     return False
+
+            # 3.5. Post-rebase Gate 5: under the merge lock, re-check symbol
+            #      uniqueness against the NOW-current base tip. Catches the
+            #      concurrent case where two workers each passed Gate 5 at
+            #      commit time but introduce the same symbol vs each other.
+            latest_base_sha = run_cmd(
+                ["git", "rev-parse", BASE_BRANCH], cwd=REPO_ROOT
+            ).stdout.strip()
+            saved_base = wt.base_sha
+            wt.base_sha = latest_base_sha
+            try:
+                dup = detect_duplicate_symbols(wt)
+            finally:
+                wt.base_sha = saved_base
+            if dup:
+                for v in dup[:10]:
+                    logger.error(f"[R{wt.round_number}] POST-REBASE DUP: {v}")
+                logger.error(
+                    f"[R{wt.round_number}] Rejecting merge: after rebasing onto "
+                    f"latest {BASE_BRANCH}, {len(dup)} new symbol(s) collide with "
+                    f"files concurrent workers already merged."
+                )
+                return False
 
             # 4. Fast-forward local BASE_BRANCH to rebased worktree tip.
             #    git merge --ff-only works on checked-out branches; git fetch . does not.
@@ -1261,6 +1345,99 @@ def detect_sorry_literals(wt: WorktreeInfo) -> list[str]:
     return violations
 
 
+_NEW_DECL_RE = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)*"
+    r"(?:private\s+|protected\s+|noncomputable\s+|scoped\s+|local\s+)*"
+    r"(?:def|theorem|lemma|abbrev|structure|class|inductive|instance)\s+"
+    r"([A-Za-z_][\w.]*)",
+    re.MULTILINE,
+)
+
+
+def detect_duplicate_symbols(wt: WorktreeInfo) -> list[str]:
+    """Gate 5: reject rounds that add `def/theorem/lemma/abbrev/structure/
+    class/inductive/instance` names already present on `origin/<BASE_BRANCH>`.
+
+    Parallel workers off the same base can silently introduce the same
+    auxiliary symbol into different files that share a chapter index
+    (e.g. `Omega.Zeta`), causing `environment already contains 'X'` on the
+    first full build. Catching that at commit time lets the round be
+    rejected cheaply instead of wedging the builder into a multi-attempt
+    rename dance.
+
+    For each `.lean` file the round added/modified under `lean4/Omega/`,
+    parse the top-level declarations the round introduces (diff against
+    `base_sha`), and for each new name run `git grep` against `base_sha`'s
+    tree. A hit outside the file the round is currently editing is a
+    violation.
+    """
+    violations: list[str] = []
+    if not wt.base_sha:
+        return violations
+    try:
+        r = run_cmd(
+            ["git", "diff", "--name-only", "--diff-filter=AM",
+             f"{wt.base_sha}..HEAD", "--", "lean4/Omega/"],
+            cwd=wt.path,
+        )
+    except Exception:
+        return violations
+    files = [l.strip() for l in (r.stdout or "").splitlines()
+             if l.strip().endswith(".lean")]
+    for rel in files:
+        try:
+            current_src = (wt.path / rel).read_text(encoding="utf-8")
+        except Exception:
+            continue
+        # Symbols this round declares in this file
+        current_syms = set()
+        for m in _NEW_DECL_RE.finditer(_strip_lean_comments(current_src)):
+            current_syms.add(m.group(1))
+        # Subtract symbols that already existed in this file on base
+        try:
+            base_src = run_cmd(
+                ["git", "show", f"{wt.base_sha}:{rel}"],
+                cwd=wt.path, check=False,
+            ).stdout
+        except Exception:
+            base_src = ""
+        base_syms_in_file = set()
+        if base_src:
+            for m in _NEW_DECL_RE.finditer(_strip_lean_comments(base_src)):
+                base_syms_in_file.add(m.group(1))
+        new_syms = current_syms - base_syms_in_file
+        if not new_syms:
+            continue
+        # For each newly-introduced symbol, check if it exists elsewhere
+        # on base_sha under lean4/Omega/ (excluding this same file).
+        for sym in new_syms:
+            # Escape regex metacharacters in symbol (dots are legal in Lean names)
+            pattern = (
+                r"^\s*(?:@\[[^]]*\]\s*)*"
+                r"(?:private\s+|protected\s+|noncomputable\s+|scoped\s+|local\s+)*"
+                r"(?:def|theorem|lemma|abbrev|structure|class|inductive|instance)\s+"
+                + re.escape(sym) + r"\b"
+            )
+            try:
+                g = run_cmd(
+                    ["git", "grep", "-l", "-E", pattern,
+                     wt.base_sha, "--", "lean4/Omega/"],
+                    cwd=wt.path, check=False,
+                )
+            except Exception:
+                continue
+            hits = [l.strip() for l in (g.stdout or "").splitlines() if l.strip()]
+            # git grep returns "<sha>:<path>" — strip the sha prefix
+            hit_paths = [h.split(":", 1)[1] if ":" in h else h for h in hits]
+            hit_paths = [p for p in hit_paths if p != rel]
+            if hit_paths:
+                violations.append(
+                    f"{rel}: new symbol '{sym}' already exists on "
+                    f"{BASE_BRANCH} in {hit_paths[0]}"
+                )
+    return violations
+
+
 def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[bool, list[str]]:
     """Check for new commits in the worktree. Also rejects signature degradation,
     new abstract-Prop shell files, sorry/admit/axiom literals, and any commit
@@ -1318,6 +1495,18 @@ def verify_worktree_commits(wt: WorktreeInfo, pre_commits: list[str]) -> tuple[b
                 f"[R{wt.round_number}] Rejecting round: {len(sorry_violations)} added "
                 f"line(s) contain sorry/admit/axiom literals. The completion contract "
                 f"in phase_c.txt forbids these in committed code."
+            )
+            return False, new
+        # Gate 5: duplicate-symbol clash with base branch
+        dup_violations = detect_duplicate_symbols(wt)
+        if dup_violations:
+            for v in dup_violations[:10]:
+                logger.error(f"[R{wt.round_number}] DUPLICATE SYMBOL: {v}")
+            logger.error(
+                f"[R{wt.round_number}] Rejecting round: {len(dup_violations)} new "
+                f"declaration(s) collide with existing symbols on {BASE_BRANCH}. "
+                f"Fix: prefix new helpers with the target's paper-label slug "
+                f"(snake_case) so they cannot clash with another worker's file."
             )
             return False, new
         return True, new
@@ -1421,6 +1610,10 @@ def run_round_in_worktree(
             success = True
         else:
             assert wt is not None
+            # No lake build here — codex did single-file `lake env lean` per
+            # touched file in Phase C. A separate background builder
+            # (bg_builder.py) watches the base branch and auto-dispatches
+            # codex repair rounds when the full build breaks downstream.
             success, new_commits = verify_worktree_commits(wt, pre_commits)
 
         # ── Merge back ────────────────────────────────────────────
@@ -1432,12 +1625,18 @@ def run_round_in_worktree(
                 _save_round_log(round_num, phase_b, phase_c, new_commits, False)
                 return False, round_num, new_commits
             logger.info(f"[{tag}] SUCCESS: merged {len(new_commits)} commit(s) to {BASE_BRANCH}")
-            # Propagate freshly-built .olean artifacts back to main's cache so the
-            # next round's worktree starts warm for the files added in this round.
+            # Offer the new tip to the builder (collapsing: it will pick
+            # up only the latest if multiple rounds land in parallel).
             try:
-                merge_lake_cache_back(wt, new_commits)
+                new_tip = run_cmd(["git", "rev-parse", BASE_BRANCH],
+                                  cwd=REPO_ROOT).stdout.strip()
+                if new_tip:
+                    request_build(new_tip)
             except Exception as exc:
-                logger.warning(f"[{tag}] Lake cache merge-back raised: {exc}")
+                logger.warning(f"[{tag}] request_build failed: {exc}")
+            # No more merge_lake_cache_back: workers don't run lake build under
+            # 方案 B, so copying worker-worktree .oleans back would only risk
+            # polluting the main checkout cache that the builder thread owns.
         elif success and dry_run:
             logger.info(f"[{tag}] [DRY RUN] Would merge to {BASE_BRANCH}")
 
@@ -1628,6 +1827,338 @@ def run_round_serial(
 
 
 # ---------------------------------------------------------------------------
+# Background builder (single consumer for the _build_request slot)
+# ---------------------------------------------------------------------------
+
+BUILDER_LOG_DIR = LOG_DIR / "builder"
+BROKEN_SHAS_FILE = BUILDER_LOG_DIR / "broken_shas.txt"
+# Dedicated worktree for the builder thread. Keeping it separate from
+# REPO_ROOT stops the race where a worker's `merge_worktree_to_base`
+# ff-updates the main checkout's working tree mid-`lake build`, which
+# had been leaving the main .lake/build with stale/mixed .oleans.
+BUILDER_WORKTREE = WORKTREE_DIR / "_builder"
+BUILDER_BRANCH = "_builder_tmp"
+# Lock serializing any write to the main REPO_ROOT/.lake/build so that
+# round worktree creation (_clone_lake_cache) and builder olean sync
+# don't observe each other mid-update.
+_main_cache_lock = threading.Lock()
+
+
+def _ensure_builder_worktree() -> Path:
+    """Create the builder worktree on first use, COW-cloning packages/build
+    from REPO_ROOT so lake starts warm. Safe to call repeatedly."""
+    WORKTREE_DIR.mkdir(parents=True, exist_ok=True)
+    if BUILDER_WORKTREE.exists() and (BUILDER_WORKTREE / "lean4").exists():
+        return BUILDER_WORKTREE
+    with _git_lock:
+        # Clean any half-created state.
+        run_cmd(["git", "worktree", "remove", "--force", str(BUILDER_WORKTREE)],
+                cwd=REPO_ROOT)
+        if BUILDER_WORKTREE.exists():
+            shutil.rmtree(BUILDER_WORKTREE, ignore_errors=True)
+        run_cmd(["git", "branch", "-D", BUILDER_BRANCH], cwd=REPO_ROOT)
+        r = run_cmd(
+            ["git", "worktree", "add", "-B", BUILDER_BRANCH,
+             str(BUILDER_WORKTREE), BASE_BRANCH],
+            cwd=REPO_ROOT,
+        )
+        if r.returncode != 0:
+            raise RuntimeError(f"builder worktree add failed: {r.stderr}")
+    _clone_lake_cache(BUILDER_WORKTREE)
+    logger.info(f"[builder] worktree ready at {BUILDER_WORKTREE}")
+    return BUILDER_WORKTREE
+
+
+def _builder_checkout(sha: str) -> None:
+    """Move the builder worktree's branch pointer to `sha` without touching
+    any other git state. Done under _git_lock because workers run git ops
+    on the same repo."""
+    with _git_lock:
+        run_cmd(["git", "fetch", "origin", BASE_BRANCH],
+                cwd=BUILDER_WORKTREE, timeout=60)
+        # reset --hard is safer than merge --ff-only here: we want the
+        # worktree to match the requested sha exactly, and we own this branch.
+        run_cmd(["git", "reset", "--hard", sha],
+                cwd=BUILDER_WORKTREE, timeout=60)
+
+
+def _sync_omega_cache_to_main() -> None:
+    """After a successful lake build in BUILDER_WORKTREE, copy freshly-built
+    Omega .oleans back to REPO_ROOT/lean4/.lake/build so that round worker
+    worktrees (which COW this cache on creation) pick up the latest olean
+    set. mathlib/Cli/etc under .lake/packages are untouched."""
+    src_root = BUILDER_WORKTREE / "lean4" / ".lake" / "build"
+    dst_root = LEAN_ROOT / ".lake" / "build"
+    if not src_root.exists():
+        return
+    with _main_cache_lock:
+        t0 = time.monotonic()
+        copied = 0
+        # Atomic-ish replace: rename dir → new side-by-side, then swap.
+        for sub in ("lib/lean/Omega", "ir/Omega"):
+            src = src_root / sub
+            dst = dst_root / sub
+            if not src.exists():
+                continue
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            tmp = dst.with_name(dst.name + f".new_{os.getpid()}")
+            try:
+                if tmp.exists():
+                    shutil.rmtree(tmp, ignore_errors=True)
+                # APFS copy-on-write when possible.
+                r = subprocess.run(
+                    ["cp", "-Rc", str(src), str(tmp)],
+                    timeout=600, check=False, stdin=subprocess.DEVNULL,
+                )
+                if r.returncode != 0:
+                    shutil.rmtree(tmp, ignore_errors=True)
+                    continue
+                if dst.exists():
+                    old = dst.with_name(dst.name + f".old_{os.getpid()}")
+                    dst.rename(old)
+                    tmp.rename(dst)
+                    shutil.rmtree(old, ignore_errors=True)
+                else:
+                    tmp.rename(dst)
+                copied += 1
+            except Exception as exc:
+                logger.warning(f"[builder] sync {sub} failed: {exc}")
+                shutil.rmtree(tmp, ignore_errors=True)
+        # Root-level Omega artifacts (Omega.olean and friends).
+        for name in ("Omega.olean", "Omega.olean.hash",
+                     "Omega.ilean", "Omega.ilean.hash"):
+            src_file = src_root / "lib" / "lean" / name
+            dst_file = dst_root / "lib" / "lean" / name
+            if src_file.exists():
+                try:
+                    shutil.copy2(src_file, dst_file)
+                    copied += 1
+                except Exception:
+                    pass
+        elapsed = time.monotonic() - t0
+        logger.info(f"[builder] synced {copied} Omega cache item(s) "
+                    f"to main checkout ({elapsed:.1f}s)")
+
+
+def _read_broken_shas() -> set[str]:
+    if not BROKEN_SHAS_FILE.exists():
+        return set()
+    try:
+        return set(l.split("\t", 1)[0].strip()
+                   for l in BROKEN_SHAS_FILE.read_text().splitlines() if l.strip())
+    except Exception:
+        return set()
+
+
+def _record_broken_sha(sha: str, log_name: str) -> None:
+    BUILDER_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(BROKEN_SHAS_FILE, "a", encoding="utf-8") as f:
+        f.write(f"{sha}\t{ts}\t{log_name}\n")
+
+
+def _builder_lake_build(cwd: Path, log_file: Path, timeout: int = 7200) -> tuple[bool, str]:
+    log_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(log_file, "w", encoding="utf-8") as lf:
+        lf.write(f"# lake build at {datetime.now().isoformat()} cwd={cwd}\n\n")
+        lf.flush()
+        try:
+            r = subprocess.run(
+                ["lake", "build"], cwd=str(cwd),
+                stdout=lf, stderr=subprocess.STDOUT,
+                timeout=timeout, stdin=subprocess.DEVNULL,
+            )
+            ok = r.returncode == 0
+        except subprocess.TimeoutExpired:
+            lf.write("\n# TIMEOUT\n")
+            ok = False
+    try:
+        tail = "\n".join(log_file.read_text(encoding="utf-8").splitlines()[-30:])
+    except Exception:
+        tail = ""
+    return ok, tail
+
+
+def _builder_make_fix_worktree(sha: str) -> WorktreeInfo:
+    """Create a `fix-<sha8>` worktree at `sha`, with .lake cache cloned."""
+    WORKTREE_DIR.mkdir(parents=True, exist_ok=True)
+    short = sha[:8]
+    branch = f"fix-{short}"
+    wt_path = WORKTREE_DIR / f"fix_{short}"
+    with _git_lock:
+        if wt_path.exists():
+            run_cmd(["git", "worktree", "remove", "--force", str(wt_path)],
+                    cwd=REPO_ROOT)
+            if wt_path.exists():
+                shutil.rmtree(wt_path, ignore_errors=True)
+        run_cmd(["git", "branch", "-D", branch], cwd=REPO_ROOT)
+        r = run_cmd(["git", "worktree", "add", "-b", branch, str(wt_path), sha],
+                    cwd=REPO_ROOT)
+        if r.returncode != 0:
+            raise RuntimeError(f"worktree add failed: {r.stderr}")
+    _clone_lake_cache(wt_path)
+    base_sha = run_cmd(["git", "rev-parse", "HEAD"], cwd=wt_path).stdout.strip()
+    return WorktreeInfo(path=wt_path, branch=branch, round_number=-1, base_sha=base_sha)
+
+
+def _builder_codex_fix(wt: WorktreeInfo, build_log: Path,
+                       *, timeout: int = 3600) -> bool:
+    """Invoke codex with the build log tail to produce a fix commit. Returns
+    True if codex produced a new commit on the fix branch."""
+    try:
+        log_text = build_log.read_text(encoding="utf-8")
+    except Exception:
+        log_text = "(log unreadable)"
+    log_tail = "\n".join(log_text.splitlines()[-200:])
+    prompt = textwrap.dedent(f"""\
+        Lean4 `lake build` is failing on branch `{BASE_BRANCH}`. Fix it.
+
+        ## Rules
+        - You are on fix branch `{wt.branch}` at the broken tip.
+        - Edit only inside lean4/Omega/.
+        - No new sorry/admit/axiom. No native_decide on large enumerations.
+        - Keep the patch minimal: change only what's needed to unstick build.
+        - Use per-file `lake env lean Omega/<X>/<Y>.lean` to confirm edits.
+          Do NOT run full `lake build` — the orchestrator re-verifies.
+        - After fix: `git add lean4/Omega/` + `git commit` + push to
+          `{BASE_BRANCH}`:
+            git push origin HEAD:{BASE_BRANCH}
+          If push rejected, rebase onto `origin/{BASE_BRANCH}`, re-verify
+          with `lake env lean <file>`, push again.
+
+        ## Rename Rule — for `environment already contains 'X'` failures
+        When the error is a duplicate-symbol clash, RENAME the colliding
+        declaration in the file most recently added (NOT the older file).
+
+        The replacement name MUST be:
+        1. Derived from that file's dominant `paper_*` theorem label
+           (convert to snake_case, strip `paper_` prefix): e.g. if the
+           file hosts `paper_xi_limit_defect_potential_vs_depth_profile`,
+           replacement identifiers live in `xi_limit_defect_potential_vs_depth_profile_*` namespace.
+        2. Never shadow mathlib roots (`Complex.conj`, `Real.log`,
+           `Nat.succ`, `List.length`, `Finset.sum`, etc).
+        3. Longer, paper-label-scoped names over short ones — a generic
+           name like `kernel` will collide again; `<slug>_kernel` will not.
+
+        Do NOT open extra `lake env lean` or `lean` processes to test
+        naming candidates — they competes for RAM with concurrent workers.
+        One `lake env lean <file>.lean` on the edited file to confirm it
+        elaborates is enough; the orchestrator re-verifies with full build.
+
+        ## Build log tail (last 200 lines)
+        ```
+        {log_tail}
+        ```
+    """)
+    out = codex_exec(
+        prompt, work_dir=wt.path, timeout_seconds=timeout,
+        log_tag=f"fix_{wt.branch}",
+    )
+    # Success = new commit on this branch vs the base sha at creation
+    try:
+        head = run_cmd(["git", "rev-parse", "HEAD"], cwd=wt.path).stdout.strip()
+    except Exception:
+        head = ""
+    if head and head != wt.base_sha:
+        logger.info(f"[builder] codex fix produced commit {head[:8]}")
+        return True
+    logger.warning("[builder] codex fix produced no new commit")
+    return False
+
+
+def _builder_attempt_fix(sha: str, build_log: Path, max_attempts: int) -> bool:
+    for i in range(1, max_attempts + 1):
+        logger.info(f"[builder] fix attempt {i}/{max_attempts} for {sha[:8]}")
+        try:
+            wt = _builder_make_fix_worktree(sha)
+        except Exception as exc:
+            logger.error(f"[builder] fix worktree creation failed: {exc}")
+            return False
+        try:
+            if not _builder_codex_fix(wt, build_log):
+                continue
+            vlog = BUILDER_LOG_DIR / f"fix_verify_{wt.branch}_{i}.txt"
+            ok, tail = _builder_lake_build(wt.path / "lean4", vlog)
+            if ok:
+                logger.info(f"[builder] fix {wt.branch} verified (log={vlog.name})")
+                return True
+            logger.warning(f"[builder] fix {wt.branch} still failing (log={vlog.name})")
+        finally:
+            try:
+                with _git_lock:
+                    run_cmd(["git", "worktree", "remove", "--force", str(wt.path)],
+                            cwd=REPO_ROOT)
+                    pkg = wt.path / "lean4" / ".lake" / "packages"
+                    if pkg.is_symlink():
+                        try: pkg.unlink()
+                        except Exception: pass
+                    if wt.path.exists():
+                        shutil.rmtree(wt.path, ignore_errors=True)
+                    run_cmd(["git", "branch", "-D", wt.branch], cwd=REPO_ROOT)
+            except Exception:
+                pass
+    return False
+
+
+def _builder_loop(poll_seconds: float, max_fix_attempts: int) -> None:
+    """Single-consumer loop. Blocks on `_build_cv` for a new SHA request,
+    runs `lake build` in BUILDER_WORKTREE (separate from REPO_ROOT so that
+    worker merges don't ff the builder's working tree mid-build), and on
+    success syncs the fresh Omega .oleans back to REPO_ROOT/.lake/build
+    for round worker worktrees to COW. On failure spawns a codex fix. When
+    multiple SHAs queue up during a build, only the latest is processed."""
+    global _build_request
+    logger.info(f"[builder] started (poll={poll_seconds}s, max_fix={max_fix_attempts})")
+    BUILDER_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        _ensure_builder_worktree()
+    except Exception as exc:
+        logger.error(f"[builder] cannot initialize builder worktree: {exc}")
+        return
+    last_built: Optional[str] = None
+    while not _builder_stop.is_set():
+        with _build_cv:
+            while _build_request is None and not _builder_stop.is_set():
+                _build_cv.wait(timeout=poll_seconds)
+            if _builder_stop.is_set():
+                break
+            sha = _build_request
+            _build_request = None
+        if sha is None or sha == last_built:
+            continue
+        if sha in _read_broken_shas():
+            logger.info(f"[builder] {sha[:8]} already recorded broken; skipping")
+            last_built = sha
+            continue
+        logger.info(f"[builder] building {sha[:8]} in builder worktree")
+        try:
+            _builder_checkout(sha)
+        except Exception as exc:
+            logger.error(f"[builder] checkout {sha[:8]} failed: {exc}")
+            continue
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        build_log = BUILDER_LOG_DIR / f"build_{sha[:8]}_{ts}.txt"
+        ok, tail = _builder_lake_build(BUILDER_WORKTREE / "lean4", build_log)
+        if ok:
+            logger.info(f"[builder] PASS {sha[:8]} (log={build_log.name})")
+            try:
+                _sync_omega_cache_to_main()
+            except Exception as exc:
+                logger.warning(f"[builder] cache sync failed: {exc}")
+            last_built = sha
+            continue
+        logger.error(f"[builder] FAIL {sha[:8]} (log={build_log.name})")
+        for ln in tail.splitlines()[-10:]:
+            logger.error(f"  {ln}")
+        if _builder_attempt_fix(sha, build_log, max_fix_attempts):
+            last_built = None     # fix pushed new tip; next loop picks it up
+        else:
+            _record_broken_sha(sha, build_log.name)
+            last_built = sha
+    logger.info("[builder] stopped")
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
@@ -1699,12 +2230,21 @@ def main() -> int:
     parser.add_argument(
         "--mem-threshold", type=str, default="warn",
         choices=list(_MEM_LEVEL_BY_NAME.keys()),
-        help="Pause dispatch when kern.memorystatus_vm_pressure_level >= this "
-             "(default: warn)",
+        help="[LOGGED ONLY] kern.memorystatus_vm_pressure_level label shown "
+             "in mem-guard log lines; does not affect gating (the kernel's "
+             "pressure_level is sticky and unreliable after a swap spike). "
+             "Default: warn",
     )
     parser.add_argument(
         "--mem-swap-ceiling-gb", type=float, default=16.0,
-        help="Pause dispatch when used swap exceeds this many GB (default: 16)",
+        help="Pause dispatch when used swap exceeds this many GB AND "
+             "--mem-min-avail-gb is violated (default: 16)",
+    )
+    parser.add_argument(
+        "--mem-min-avail-gb", type=float, default=1.5,
+        help="Pause dispatch when immediately-reclaimable RAM "
+             "(vm_stat free+inactive+speculative) drops below this many GB "
+             "AND --mem-swap-ceiling-gb is exceeded. (default: 1.5)",
     )
     parser.add_argument(
         "--mem-poll", type=int, default=30,
@@ -1713,6 +2253,20 @@ def main() -> int:
     parser.add_argument(
         "--mem-max-wait", type=int, default=1800,
         help="Memory-guard max wait before proceeding anyway, in seconds (default: 1800)",
+    )
+    parser.add_argument(
+        "--no-builder", action="store_true",
+        help="Disable the in-process bg_builder thread that watches the base "
+             "branch, runs full lake build on new tips, and auto-dispatches "
+             "codex repair rounds on failure.",
+    )
+    parser.add_argument(
+        "--builder-poll", type=float, default=60.0,
+        help="bg_builder: seconds between origin fetches (default 60)",
+    )
+    parser.add_argument(
+        "--builder-max-fix", type=int, default=3,
+        help="bg_builder: max codex repair attempts per broken SHA (default 3)",
     )
     parser.add_argument(
         "--lake-parallel", type=int, default=None,
@@ -1747,17 +2301,18 @@ def main() -> int:
     )
     _MEM_GUARD_CFG["level_threshold"] = _MEM_LEVEL_BY_NAME[args.mem_threshold]
     _MEM_GUARD_CFG["swap_ceiling_gb"] = float(args.mem_swap_ceiling_gb)
+    _MEM_GUARD_CFG["min_avail_gb"] = float(args.mem_min_avail_gb)
     _MEM_GUARD_CFG["poll_seconds"] = int(args.mem_poll)
     _MEM_GUARD_CFG["max_wait_seconds"] = int(args.mem_max_wait)
     if _MEM_GUARD_CFG["enabled"]:
-        lvl, swap = memory_pressure_snapshot()
+        lvl, swap, avail = memory_pressure_snapshot()
         logger.info(
-            f"Memory guard: ON (threshold={args.mem_threshold} "
-            f"[level≥{_MEM_GUARD_CFG['level_threshold']}], "
-            f"swap≤{_MEM_GUARD_CFG['swap_ceiling_gb']:.1f}GB, "
+            f"Memory guard: ON (gate: swap>{_MEM_GUARD_CFG['swap_ceiling_gb']:.1f}GB "
+            f"AND avail<{_MEM_GUARD_CFG['min_avail_gb']:.1f}GB, "
             f"poll={_MEM_GUARD_CFG['poll_seconds']}s, "
-            f"max_wait={_MEM_GUARD_CFG['max_wait_seconds']}s) | "
-            f"current: level={lvl}, swap={swap:.1f}GB"
+            f"max_wait={_MEM_GUARD_CFG['max_wait_seconds']}s; "
+            f"pressure_level={args.mem_threshold} logged only) | "
+            f"current: level={lvl}, swap={swap:.1f}GB, avail={avail:.1f}GB"
         )
     else:
         logger.info("Memory guard: OFF")
@@ -1839,7 +2394,27 @@ def main() -> int:
                         shutil.rmtree(entry, ignore_errors=True)
 
     state = load_state()
+    # consecutive_failures is a runtime signal for mid-session backoff;
+    # a fresh session starts the counter at 0. Otherwise a previously-killed
+    # pipeline makes the new pipeline cooldown immediately on boot.
+    if state.consecutive_failures:
+        logger.info(f"Resetting consecutive_failures={state.consecutive_failures} on session start")
+        state.consecutive_failures = 0
+        save_state(state)
     logger.info(f"Starting: R{state.round_number}, ~{state.total_theorems} theorems")
+
+    # ── Background builder consumer ─────────────────────────────────────
+    # Worker threads are producers (call `request_build(sha)` on successful
+    # merge). The builder thread is the single consumer. Multiple requests
+    # collapse to "latest-wins" — intermediate SHAs are skipped.
+    if not args.no_builder and not args.dry_run:
+        builder_t = threading.Thread(
+            target=_builder_loop,
+            args=(args.builder_poll, args.builder_max_fix),
+            daemon=True,
+            name="builder",
+        )
+        builder_t.start()
 
     total_succeeded = 0
     total_failed = 0

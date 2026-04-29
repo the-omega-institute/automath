@@ -43,4 +43,11 @@ def paper_physical_spacetime_no_localized_matter_source : Prop := by
             0 ∧
           ∃ h : Fin 3 → Real, phi = q + h ∧ Delta h = 0
 
+theorem paper_physical_spacetime_no_localized_matter_source_verified :
+    paper_physical_spacetime_no_localized_matter_source := by
+  intro D E hAdm hMetric hResidual hStress Delta phi q sigma L hq hphi
+  exact
+    paper_physical_spacetime_no_localized_matter_source_package D E hAdm hMetric hResidual
+      hStress Delta phi q sigma L hq hphi
+
 end Omega.PhysicalSpacetimeSkeleton

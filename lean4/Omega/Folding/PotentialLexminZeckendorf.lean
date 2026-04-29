@@ -39,4 +39,11 @@ theorem paper_fold_potential_lexmin_zeckendorf (a : Rewrite.DigitCfg) :
       Rewrite.value c = Rewrite.value a := Rewrite.reflTransGen_value hac
       _ = Rewrite.value b := (Rewrite.reflTransGen_value hab).symm
 
+/-- Paper: `prop:potential-lexmin-zeckendorf`.
+    Label-preserving alias for the Zeckendorf lex-min reduction package. -/
+theorem paper_potential_lexmin_zeckendorf (a : Rewrite.DigitCfg) :
+    ∃! b, Relation.ReflTransGen Rewrite.Step a b ∧ Rewrite.Irreducible b ∧
+      ∀ c : Rewrite.DigitCfg, Rewrite.value c = Rewrite.value a → Rewrite.rankLex b ≤ Rewrite.rankLex c :=
+  paper_fold_potential_lexmin_zeckendorf a
+
 end Omega

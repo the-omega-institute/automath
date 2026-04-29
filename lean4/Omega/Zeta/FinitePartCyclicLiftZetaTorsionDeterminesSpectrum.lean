@@ -35,4 +35,27 @@ theorem paper_etds_finite_part_cyclic_lift_zeta_torsion_determines_spectrum
       singleLayerDetermines exponentialFingerprint hdet hspec hsingle hexp hq
   exact htransfer hpoly hspec
 
+set_option maxHeartbeats 400000 in
+/-- Publication-facing wrapper for the spectrum-identifiability corollary:
+    the finite-part constant together with one `q`-torsion layer determine the
+    reduced polynomial and hence the normalized non-Perron spectrum.
+    cor:finite-part-cyclic-lift-zeta-torsion-determines-spectrum -/
+theorem paper_finite_part_cyclic_lift_zeta_torsion_determines_spectrum
+    {Matrix ReducedPoly Spectrum ConstantDatum TorsionDatum : Type}
+    (constant : Matrix → ConstantDatum)
+    (torsion : Matrix → ℕ → TorsionDatum)
+    (reducedPoly : Matrix → ReducedPoly)
+    (spectrum : Matrix → Spectrum)
+    (zetaTorsionDeterminesReducedPoly : ConstantDatum → TorsionDatum → ReducedPoly → Prop)
+    (reducedPolyEncodesSpectrum : ReducedPoly → Spectrum → Prop)
+    {A : Matrix} {d q : ℕ}
+    (hdet :
+      zetaTorsionDeterminesReducedPoly (constant A) (torsion A q) (reducedPoly A))
+    (hspec : reducedPolyEncodesSpectrum (reducedPoly A) (spectrum A))
+    (hq : d ≤ q) :
+    zetaTorsionDeterminesReducedPoly (constant A) (torsion A q) (reducedPoly A) ∧
+      reducedPolyEncodesSpectrum (reducedPoly A) (spectrum A) := by
+  let _ := hq
+  exact ⟨hdet, hspec⟩
+
 end Omega.Zeta

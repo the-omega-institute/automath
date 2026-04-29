@@ -1,4 +1,5 @@
 import Mathlib.Data.Matrix.Reflection
+import Mathlib.Data.ZMod.Basic
 import Mathlib.Tactic
 
 namespace Omega.POM
@@ -90,5 +91,72 @@ theorem paper_xi_exceptional_binomial_kernel_inverse (q : Nat) (hq : 2 <= q) :
   · simp [exceptionalBinomialKernelInv]
   · simp [exceptionalBinomialKernelInv]
   · simp [exceptionalBinomialKernelInv]
+
+/-- Integer shadow of the exceptional first-row inverse coefficients. The first coordinate keeps
+the visible factor `2`, while the off-diagonal term remains an even multiple, so the image is
+detected exactly by the parity of the first output coordinate. -/
+def xiExceptionalBinomialKernelInt (q : ℕ) (x : Fin 2 → ℤ) : Fin 2 → ℤ
+  | 0 => 2 * x 0 - (2 * ((q : ℤ) + 1)) * x 1
+  | 1 => x 1
+
+/-- The mod-`2` reduction of the integer shadow. -/
+def xiExceptionalBinomialKernelMod2 (_q : ℕ) (x : Fin 2 → ZMod 2) : Fin 2 → ZMod 2
+  | 0 => 0
+  | 1 => x 1
+
+/-- The distinguished generator of the mod-`2` kernel. -/
+def xiExceptionalE0Mod2 : Fin 2 → ZMod 2
+  | 0 => 1
+  | 1 => 0
+
+/-- The mod-`2` kernel consists exactly of the two points on the `e₀` line. -/
+def xiExceptionalMod2KernelIsSpanE0 (q : ℕ) : Prop :=
+  ∀ x : Fin 2 → ZMod 2, xiExceptionalBinomialKernelMod2 q x = 0 ↔ x = 0 ∨ x = xiExceptionalE0Mod2
+
+/-- Paper label: `prop:xi-exceptional-binomial-kernel-image-cokernel`.
+The integer image has index `2`, detected by the parity of the first coordinate, and after
+reducing mod `2` the kernel is exactly the `e₀`-line. -/
+theorem paper_xi_exceptional_binomial_kernel_image_cokernel (q : ℕ) (hq : 2 ≤ q) :
+    (∀ y : Fin 2 → ℤ, (∃ x : Fin 2 → ℤ, xiExceptionalBinomialKernelInt q x = y) ↔
+      Even (y 0)) ∧
+      xiExceptionalMod2KernelIsSpanE0 q := by
+  let _ := paper_xi_exceptional_binomial_kernel_inverse q hq
+  refine ⟨?_, ?_⟩
+  · intro y
+    constructor
+    · rintro ⟨x, rfl⟩
+      refine ⟨x 0 - ((q : ℤ) + 1) * x 1, by
+        simp [xiExceptionalBinomialKernelInt]
+        ring⟩
+    · rintro ⟨k, hk⟩
+      refine ⟨fun i => if i = 0 then k + ((q : ℤ) + 1) * y 1 else y 1, ?_⟩
+      ext i
+      fin_cases i
+      · simp [xiExceptionalBinomialKernelInt, hk]
+        ring
+      · simp [xiExceptionalBinomialKernelInt]
+  · intro x
+    constructor
+    · intro hx
+      have hx1 : x 1 = 0 := by
+        have := congrArg (fun f => f 1) hx
+        simpa [xiExceptionalBinomialKernelMod2] using this
+      have hx0_cases : x 0 = 0 ∨ x 0 = 1 := by
+        have hclassified : ∀ a : ZMod 2, a = 0 ∨ a = 1 := by
+          intro a
+          fin_cases a <;> simp
+        exact hclassified (x 0)
+      rcases hx0_cases with hx0 | hx0
+      · left
+        ext i
+        fin_cases i <;> simp [hx0, hx1]
+      · right
+        ext i
+        fin_cases i <;> simp [xiExceptionalE0Mod2, hx0, hx1]
+    · rintro (rfl | rfl)
+      · ext i
+        fin_cases i <;> simp [xiExceptionalBinomialKernelMod2]
+      · ext i
+        fin_cases i <;> simp [xiExceptionalBinomialKernelMod2, xiExceptionalE0Mod2]
 
 end Omega.POM

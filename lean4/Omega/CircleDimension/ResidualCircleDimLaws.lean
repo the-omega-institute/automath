@@ -24,4 +24,12 @@ theorem paper_cdim_residual_circle_dim_laws_package :
     (∀ a b : ℕ, Nat.log 2 (2 ^ a * 2 ^ b) = Nat.log 2 (2 ^ a) + Nat.log 2 (2 ^ b)) :=
   paper_cdim_residual_circle_dim_laws_seeds
 
+/-- Paper label: `prop:cdim-residual-circle-dimension-laws`. -/
+theorem paper_cdim_residual_circle_dimension_laws :
+    (∀ R S : ℕ → ℕ, ∀ b : ℕ, R b ≤ S b →
+      Omega.CircleDimension.residualCdimAt R b ≤ Omega.CircleDimension.residualCdimAt S b) ∧
+    (∀ a b : ℕ, 2 ^ a * 2 ^ b = 2 ^ (a + b)) ∧
+    (∀ a b : ℕ, Nat.log 2 (2 ^ a * 2 ^ b) = Nat.log 2 (2 ^ a) + Nat.log 2 (2 ^ b)) :=
+  paper_cdim_residual_circle_dim_laws_package
+
 end Omega.CircleDimension.ResidualCircleDimLaws

@@ -39,4 +39,19 @@ theorem paper_logic_expansion_semantic_fidelity_package
   paper_logic_expansion_semantic_fidelity_seeds
     recover interp forcesAbstract forcesConcrete hreal Γ φ hΓ
 
+set_option maxHeartbeats 400000 in
+/-- Exact paper-facing wrapper for the semantic-fidelity package.
+    prop:logic-expansion-semantic-fidelity -/
+theorem paper_logic_expansion_semantic_fidelity
+    {AbstractState ConcreteState AbstractFormula ConcreteFormula : Type}
+    (recover : ConcreteState → AbstractState) (interp : AbstractFormula → ConcreteFormula)
+    (forcesAbstract : AbstractState → AbstractFormula → Prop)
+    (forcesConcrete : ConcreteState → ConcreteFormula → Prop)
+    (hreal : ∀ q ψ, forcesConcrete q (interp ψ) ↔ forcesAbstract (recover q) ψ)
+    (Γ : Set AbstractFormula) (φ : AbstractFormula)
+    (hΓ : Entails forcesAbstract Γ φ) :
+    Entails forcesConcrete (interp '' Γ) (interp φ) :=
+  paper_logic_expansion_semantic_fidelity_package
+    recover interp forcesAbstract forcesConcrete hreal Γ φ hΓ
+
 end Omega.LogicExpansionChain.SemanticFidelity

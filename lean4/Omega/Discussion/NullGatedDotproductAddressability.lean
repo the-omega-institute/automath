@@ -14,6 +14,21 @@ noncomputable def wrongHitBudget (d N : ℕ) (τ : ℝ) : ℝ :=
 noncomputable def nullGatedFailureBudget (d N : ℕ) (τ εnull : ℝ) : ℝ :=
   nullHitBudget N εnull + wrongHitBudget d N τ
 
+/-- The exponential spherical-cap tail used for the distractor budget. -/
+noncomputable def sphericalCapSubgaussianBound (d : ℕ) (τ : ℝ) : ℝ :=
+  Real.exp (-(((d : ℝ) - 1) * τ ^ 2 / 2))
+
+/-- If the first-coordinate tail is bounded by the standard spherical-cap estimate and rotational
+symmetry identifies the tail for a fixed unit query with that first-coordinate tail, then the same
+subgaussian bound holds for the query direction.
+    `lem:discussion-spherical-cap-subgaussian` -/
+theorem paper_discussion_spherical_cap_subgaussian
+    (d : ℕ) (τ firstCoordTail queryTail : ℝ)
+    (hcoord : firstCoordTail ≤ sphericalCapSubgaussianBound d τ)
+    (hrotation : queryTail = firstCoordTail) :
+    queryTail ≤ sphericalCapSubgaussianBound d τ := by
+  simpa [sphericalCapSubgaussianBound, hrotation] using hcoord
+
 /-- Paper-facing union-bound estimate for null-gated dot-product retrieval. The per-query failure
 is bounded by a target-miss term plus a distractor term, and summing those bounds yields the
 global addressability budget. -/

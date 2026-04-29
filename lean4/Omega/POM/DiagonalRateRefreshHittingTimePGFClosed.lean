@@ -8,6 +8,25 @@ open scoped BigOperators
 def diagonalRateRefreshHoldingPGF (r s : ℚ) : ℚ :=
   r * s / (1 - (1 - r) * s)
 
+/-- Paper label: `lem:pom-diagonal-rate-refresh-holding-time-pgf`. The first refresh time in the
+diagonal refresh model is geometric, so its PGF is the standard one-step renewal solution. -/
+theorem paper_pom_diagonal_rate_refresh_holding_time_pgf (r s : ℚ)
+    (h : 1 - (1 - r) * s ≠ 0) :
+    diagonalRateRefreshHoldingPGF r s = r * s / (1 - (1 - r) * s) ∧
+      diagonalRateRefreshHoldingPGF r s =
+        r * s + (1 - r) * s * diagonalRateRefreshHoldingPGF r s := by
+  refine ⟨rfl, ?_⟩
+  have hmul : diagonalRateRefreshHoldingPGF r s * (1 - (1 - r) * s) = r * s := by
+    simpa [diagonalRateRefreshHoldingPGF] using div_mul_cancel₀ (r * s) h
+  calc
+    diagonalRateRefreshHoldingPGF r s
+        = diagonalRateRefreshHoldingPGF r s * ((1 - (1 - r) * s) + (1 - r) * s) := by
+            ring
+    _ = diagonalRateRefreshHoldingPGF r s * (1 - (1 - r) * s) +
+          (1 - r) * s * diagonalRateRefreshHoldingPGF r s := by
+            ring
+    _ = r * s + (1 - r) * s * diagonalRateRefreshHoldingPGF r s := by rw [hmul]
+
 /-- Conditional average of the holding-time PGFs over failed refreshes, i.e. over `z ≠ y`. -/
 def diagonalRateRefreshFailurePGF {α : Type*} [Fintype α] [DecidableEq α]
     (π : α → ℚ) (y : α) (G : α → ℚ) : ℚ :=

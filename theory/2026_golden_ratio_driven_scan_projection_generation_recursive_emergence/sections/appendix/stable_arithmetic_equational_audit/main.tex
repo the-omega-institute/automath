@@ -1,0 +1,380 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+
+\section{稳定算术等式谱与仿射线性审计}\label{app:stable-arithmetic-equational-audit}
+
+本附录记录稳定算术运算作为有限 magma 在 Equational Theories Project 数据库中的证书边界。令
+\[
+    \mathcal E=\{E_1,\ldots,E_{4694}\}
+\]
+表示提交
+\[
+    \texttt{b99c0e486501e5b0690ef3fe5250d3aa57e63478}
+\]
+处的当前四阶 ETP 等式表。正面结果为一个干净的仿射线性传递定理与完整计算谱审计。负面结果同样重要：稳定算术谱与完整 Fibonacci 仿射线性族均未命中任何当前仪表盘未知项。因此本附录为审计与可复现性记录，而非当前 ETP 仪表盘分解的声明。
+
+\subsection{传递与系数判据}
+
+对变量
+\[
+    x,y,z,w,u,v
+\]
+中的 magma 项 \(t\)，记 \(\nu(t)\in\NN^6\) 为其变量重数向量。若二元运算为 \(\ZZ/n\ZZ\) 上的仿射线性运算
+\[
+    x\diamond y=ax+by,
+\]
+则每一项 \(t\) 赋值为线性形式
+\[
+    t=\sum_i \lambda_i(t;n,a,b)x_i,
+\]
+系数在 \(\ZZ/n\ZZ\) 中，由递归
+\[
+    \lambda(u\diamond v;n,a,b)
+       =a\,\lambda(u;n,a,b)+b\,\lambda(v;n,a,b)
+\]
+给出。
+
+\begin{lemma}[仿射线性系数判据]\label{lem:stable-audit-affine-coefficient-criterion}
+对 \(\ZZ/n\ZZ\) 上的仿射线性 magma \(x\diamond y=ax+by\)，ETP 等式 \(s=t\) 对所有赋值成立当且仅当
+\[
+    \lambda(s;n,a,b)=\lambda(t;n,a,b)
+        \quad\text{in }(\ZZ/n\ZZ)^6.
+\]
+\end{lemma}
+
+\begin{proof}
+差 \(s-t\) 为六个独立输入变量上的 \(\ZZ/n\ZZ\)-线性形式。若所有系数差消失，则等式对每一赋值成立。反之，若第 \(i\) 个系数差非零，令 \(x_i=1\) 且其余变量为 \(0\) 即可分离两边。
+\end{proof}
+
+\begin{lemma}[稳定值仿射传递]\label{lem:stable-audit-stable-value-affine-transfer}
+设 \(X_m\) 为稳定类型集合，
+\[
+    X_m\simeq \ZZ/F_{m+2}\ZZ
+\]
+为稳定值环同构。对 \(X_m\) 上每一仿射线性运算
+\[
+    x\diamond y=ax+by,
+\]
+任意仿射 magma 等式的满足性等价于搬运到 \(\ZZ/F_{m+2}\ZZ\) 上后以相同系数公式的满足性。
+\leanverified{stableValueRingEquiv\_preserves\_magma\_satisfaction}
+\end{lemma}
+
+\begin{proof}
+稳定值映射为环同构，因而保持加法、乘法与稳定系数标量乘。对局部二元项语法作归纳，得 \(X_m\) 中赋值与搬运到 \(\ZZ/F_{m+2}\ZZ\) 后赋值相等。由同构的单射性给出等式满足性的等价。此声明已形式化于
+\[
+    \texttt{\detokenize{lean4/Omega/Folding/FiberRing.lean:216}}.
+\]
+\end{proof}
+
+素域上的两个稳定算术运算为特例
+\[
+    \mathrm{stableAdd}(x,y)=x+y,\qquad
+    \mathrm{stableMul}(x,y)=xy.
+\]
+对 \(\mathrm{stableAdd}\)，律 \(s=t\) 在 \(\FF_p\) 上成立当且仅当
+\[
+    \nu(s)\equiv \nu(t)\pmod p.
+\]
+对 \(\mathrm{stableMul}\)，项 \(t\) 赋值为单项式
+\[
+    \prod_i x_i^{\nu_i(t)}.
+\]
+因此 \(s=t\) 在 \(\FF_p\) 上成立当且仅当两侧支撑集一致且所有正指数模 \(p-1\) 同余。上述判据已对 \(\operatorname{Fin}(2)\) 与 \(\operatorname{Fin}(3)\) 通过穷举赋值赋值进行计算交叉验证（见 \texttt{\detokenize{scripts/equational_theory/}}）。
+
+\subsection{稳定算术谱}
+
+\begin{theorem}[稳定算术 ETP 谱]\label{thm:stable-audit-stable-arithmetic-spectra}
+对素 Fibonacci 模数 \(2,3,5,13,89\)，\(\mathrm{stableAdd}\) 与 \(\mathrm{stableMul}\) 的 ETP 谱如表 \ref{tab:stable-audit-stable-spectra} 所示。其并集含
+\[
+    3{,}157{,}020
+\]
+个有序反蕴涵，其中
+\[
+    2{,}912{,}508
+\]
+个不被当前 \(\texttt{full\_entries.json}\) 中有限 \(\texttt{Facts}\) 条目覆盖。
+\end{theorem}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\caption{当前 ETP 等式表中的稳定算术谱。末列计数不被当前 \(\texttt{full\_entries.json}\) 的 \(\texttt{Facts}\) 条目覆盖的有序满足/反驳对。}
+\label{tab:stable-audit-stable-spectra}
+\begin{tabular}{c r r r r r}
+\toprule
+运算 & \(p\) & 满足 & 反驳 & 反蕴涵 & 未覆盖\\
+\midrule
+\(\mathrm{stableAdd}\) & 2  & 663 & 4031 & 2672553 & 2492999\\
+\(\mathrm{stableMul}\) & 2  & 164 & 4530 & 742920  & 668079\\
+\(\mathrm{stableAdd}\) & 3  & 60  & 4634 & 278040  & 249114\\
+\(\mathrm{stableMul}\) & 3  & 93  & 4601 & 427893  & 386077\\
+\(\mathrm{stableAdd}\) & 5  & 32  & 4662 & 149184  & 131647\\
+\(\mathrm{stableMul}\) & 5  & 46  & 4648 & 213808  & 193915\\
+\(\mathrm{stableAdd}\) & 13 & 32  & 4662 & 149184  & 131647\\
+\(\mathrm{stableMul}\) & 13 & 32  & 4662 & 149184  & 131647\\
+\(\mathrm{stableAdd}\) & 89 & 32  & 4662 & 149184  & 131647\\
+\(\mathrm{stableMul}\) & 89 & 32  & 4662 & 149184  & 131647\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{proof}
+加法行应用同余判据 \(\nu(s)\equiv\nu(t)\pmod p\)。乘法行应用支撑集与正指数模 \(p-1\) 同余判据。每行给出 \(4694\) 条等式上的真值向量；有序反蕴涵数为该行满足与反驳计数之积，并集计数由所有行的位集并给出。计算由
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_arithmetic_facts.py}}
+\]
+及证书
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_arithmetic_facts.json}}
+\]
+验证。附带的 ETP Lean 文件
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_arithmetic_facts.lean}}
+\]
+含六条非重复的 \(\operatorname{Fin}(2)\)、\(\operatorname{Fin}(3)\) 与 \(\operatorname{Fin}(5)\) 有限 \(\texttt{Facts}\) 证书，由 \(\texttt{decideFin!}\) 编译通过。
+\end{proof}
+
+\begin{corollary}[稳定谱的仪表盘不相交性]\label{cor:stable-audit-stable-dashboard-disjoint}
+稳定算术反蕴涵并集与当前仪表盘未知项交集为零。特别地，\(2{,}912{,}508\) 条不被当前 \(\texttt{full\_entries.json}\) 覆盖的反蕴涵解决
+\[
+    0
+\]
+个当前 \(498\) 条仪表盘未知有序对。
+\end{corollary}
+
+\begin{proof}
+仪表盘审计解析 \(\texttt{home\_page/fme/unknowns.json}\)，提取两侧均为 ETP 等式的 \(498\) 个有序对，并与生成的稳定算术并集及不被当前有限 \(\texttt{Facts}\) 条目覆盖的子并集求交。两个交集均为空。由
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_dashboard_unknowns.py}}
+\]
+及其 JSON 证书
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_dashboard_unknowns.json}}
+\]
+验证。
+\end{proof}
+
+\subsection{素数稳定化与 Abel 群影子}
+
+令 \(\mathcal B\subset\mathcal E\) 为平衡等式集 \(\nu(s)=\nu(t)\)。在当前 ETP 等式表中，此集为
+\[
+\begin{aligned}
+\mathcal B=\{&
+1,43,4283,4290,4320,4358,4362,4364,4369,4380,4396,4398,\\
+&4405,4433,4435,4442,4473,4480,4482,4512,4515,4525,\\
+&4531,4541,4544,4598,4605,4635,4673,4677,4679,4684\}.
+\end{aligned}
+\]
+
+\begin{theorem}[素数稳定化与 \(p=5\) 乘法例外]\label{thm:stable-audit-prime-stabilization}
+运算 \(\mathrm{stableAdd}\) 对每一素数 \(p\geq 5\) 恰满足 \(\mathcal B\) 中的 \(32\) 条等式。运算 \(\mathrm{stableMul}\) 对每一素数 \(p\geq 7\) 恰满足 \(\mathcal B\)，但对 \(p=5\) 则否。在 \(\operatorname{Fin}(5)\) 上，\(\mathrm{stableMul}\) 满足 \(46\) 条等式，包括非平衡等式
+\[
+    E_{411}:\qquad x=x\diamond(x\diamond(x\diamond(x\diamond x))).
+\]
+\end{theorem}
+
+\begin{proof}
+对加法，满足性为同余 \(\nu(s)\equiv\nu(t)\pmod p\)。ETP 数据库中出现的最大绝对变量重数差为 \(5\)，故 \(p>5\) 时同余强制相等。余下素数 \(p=5\) 直接验证：无非平衡差向量各分量均被 \(5\) 整除。
+
+对乘法，满足性要求支撑集相等且所有正指数差模 \(p-1\) 为零。当支撑集一致时，ETP 数据库中最大绝对正指数差为 \(4\)。因此 \(p-1\geq 6\) 强制指数相等，所有素数 \(p\geq 7\) 恰给出 \(\mathcal B\)。在 \(p=5\) 时，被 \(4\) 整除的指数差产生额外律。特别地 \(E_{411}\) 成立，因为 \(x^5=x\) 对所有 \(x\in\FF_5\) 成立。由
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_prime_stabilization.py}}
+\]
+与
+\[
+    \texttt{\detokenize{scripts/equational_theory/stable_prime_stabilization.json}}
+\]
+验证。
+\end{proof}
+
+\begin{theorem}[Abel 群恒等式分类]\label{thm:stable-audit-abelian-group-classification}
+集合 \(\mathcal B\) 恰为在解释
+\[
+    x\diamond y=x+y
+\]
+下对每一 Abel 群成立的 ETP 等式集。此外，\(\ZZ/4\ZZ\) 上的循环加法满足 \(116\) 条 ETP 等式（即 \(\mathcal B\) 中的 \(32\) 条加上 \(84\) 条扭等式），而 \(\ZZ/6\ZZ\) 上的循环加法恰满足 \(\mathcal B\) 中的 \(32\) 条等式。
+\end{theorem}
+
+\begin{proof}
+在 Abel 群中，每一正二元项赋值为其变量的自然数重数之和。若 \(\nu(s)=\nu(t)\)，则结合律与交换律将两项改写为同一形式和，故等式在每一 Abel 群中成立。若重数向量在变量 \(v\) 的分量上不同，则无限循环群 \(\ZZ\) 通过令 \(v=1\) 且其余变量为 \(0\) 即可分离该等式。因此万有成立等式恰为平衡等式。\(32\)-等式集的提取与有限循环验证由
+\[
+    \texttt{\detokenize{scripts/equational_theory/abelian_group_identity_check.py}}
+\]
+与
+\[
+    \texttt{\detokenize{scripts/equational_theory/abelian_group_identity_check.json}}
+\]
+验证。
+\end{proof}
+
+\begin{remark}[稳定加法稳定化的解读]\label{rem:stable-audit-abelian-shadow}
+\(\mathrm{stableAdd}\) 的 \(32\)-等式稳定化即为限制到有限 ETP 等式表的标准 Abel 群恒等式判据，加上定理 \ref{thm:stable-audit-prime-stabilization} 中的有限 \(p=5\) 扭检查。因此它是稳定算术接口的有用一致性审计，而非万有代数层面的定理。
+\end{remark}
+
+\subsection{完整 Fibonacci 仿射线性仪表盘闭合}
+
+\begin{theorem}[Fibonacci 仿射线性仪表盘闭合]\label{thm:stable-audit-affine-fibonacci-dashboard-closure}
+令
+\[
+    N=\{2,3,5,8,13,21,34,55,89,144\}.
+\]
+对每一 \(n\in N\) 与每对 \(a,b\in\ZZ/n\ZZ\)，\(\ZZ/n\ZZ\) 上的仿射线性 magma
+\[
+    x\diamond y=ax+by
+\]
+不解决任何当前仪表盘未知项。等价地，在检查所有
+\[
+    \sum_{n\in N}n^2=33550
+\]
+个参数三元组 \((n,a,b)\) 后，与 \(498\) 条当前仪表盘未知有序对的交集为空。
+\end{theorem}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{8pt}
+\caption{完整 Fibonacci 仿射线性仪表盘审计。每行检查所有 \((a,b)\in(\ZZ/n\ZZ)^2\) 与当前仪表盘未知对。}
+\label{tab:stable-audit-affine-fibonacci-dashboard}
+\begin{tabular}{r r r r}
+\toprule
+\(n\) & 参数对 & 含仪表盘命中的谱数 & 解决的仪表盘对\\
+\midrule
+2   & 4     & 0 & 0\\
+3   & 9     & 0 & 0\\
+5   & 25    & 0 & 0\\
+8   & 64    & 0 & 0\\
+13  & 169   & 0 & 0\\
+21  & 441   & 0 & 0\\
+34  & 1156  & 0 & 0\\
+55  & 3025  & 0 & 0\\
+89  & 7921  & 0 & 0\\
+144 & 20736 & 0 & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{proof}
+由引理 \ref{lem:stable-audit-affine-coefficient-criterion}，每条等式由两个系数向量模 \(n\) 的相等性判定。扫描对出现在 \(498\) 条仪表盘未知有序对中的 \(223\) 个不同等式编号应用此判据，并记录某谱是否对任一未知对存在前件为真且后件为假的情形。表 \ref{tab:stable-audit-affine-fibonacci-dashboard} 显示不存在此种谱。系数向量判据已对 \(\ZZ/2\ZZ\) 与 \(\ZZ/3\ZZ\) 上每个参数对通过穷举赋值赋值交叉验证。由
+\[
+    \texttt{\detokenize{scripts/equational_theory/affine_fibonacci_dashboard_scan.py}}
+\]
+与
+\[
+    \texttt{\detokenize{scripts/equational_theory/affine_fibonacci_dashboard_scan.json}}
+\]
+验证。
+\end{proof}
+
+\subsection{素域饱和冗余性}
+
+\begin{proposition}[旧素域线性审计的冗余性]\label{prop:stable-audit-prime-field-redundancy}
+在至多两变量 ETP 子表中，旧素域线性扫描含 \(810\) 条等式，扫描素数至 \(31\) 后产生 \(608948\) 个分离有序对；累积集在 \(p=13\) 处已饱和。作为反蕴涵数据，此扫描与现有 \texttt{\detokenize{_364}} 素域基线冗余。
+\end{proposition}
+
+\begin{proof}
+重新计算使用与引理 \ref{lem:stable-audit-affine-coefficient-criterion} 相同的系数向量线性化，限于涉及至多两个变量的 ETP 等式与素域 \(p\leq 31\)。累积计数为
+\[
+\begin{array}{c|rrrrrrrrrrr}
+p&2&3&5&7&11&13&17&19&23&29&31\\
+\hline
+\text{new}&439263&90422&56259&20008&2612&384&0&0&0&0&0\\
+\text{cum.}&439263&529685&585944&605952&608564&608948&
+608948&608948&608948&608948&608948.
+\end{array}
+\]
+\texttt{\detokenize{_364}} 基线使用全部 \(4694\) 条等式与素域至 \(199\)，故旧至多两变量、\(p\leq 31\) 扫描的每一对均通过范围与素数区间包含被涵盖。重新计算同时验证 \(17588\) 条 \(\ZZ/144\ZZ\) 在素域加 \(\ZZ/8\ZZ\) 基线之后的见证与旧扫描无重叠。由
+\[
+    \texttt{\detokenize{scripts/equational_theory/compare_prime_saturation_to_364.py}}
+\]
+与
+\[
+    \texttt{\detokenize{scripts/equational_theory/prime_saturation_vs_364.json}}
+\]
+验证。
+\end{proof}
+
+\subsection{整系数仿射仪表盘闭合}
+
+前述定理 \ref{thm:stable-audit-affine-fibonacci-dashboard-closure} 的 Fibonacci 有限扫描以及 \(\ZZ[1/6][a,b]\) 上的 Gröbner 基约化均受限于 \(6\) 可逆的基环。下述定理将仿射障碍加强到整系数环 \(\ZZ[a,b]\)，从而消除所有 \(2\)-primary 与 \(3\)-primary 例外。
+
+\begin{theorem}[整系数仿射仪表盘闭合]\label{thm:stable-audit-integral-affine-closure}
+对 ETP 数据库当前 \(498\) 条仪表盘有序对 \(E\to F\) 中的每一对，
+\[
+    I_{\ZZ}(F)\subset I_{\ZZ}(E)\quad\text{in }\ZZ[a,b],
+\]
+其中 \(I_{\ZZ}(E)\) 由 \(E\) 的六个仿射系数差生成。从而对每一交换含幺环 \(R\) 与每一仿射线性运算 \(x\diamond y=\alpha x+\beta y\)，\(E\) 的满足蕴涵 \(F\) 的满足。
+\end{theorem}
+
+\begin{proof}
+验证器对每条前件理想构造 \(\ZZ\) 上的强 Gröbner 基：在 PID \(\ZZ\) 上，约化要求首项单项式整除且首项整数系数整除；临界对由 S-多项式与 Bézout G-多项式闭合。对所有 \(498\) 对，每一后件生成元约化为零，证书记录
+\(\texttt{all\_pairs\_pass}=\texttt{true}\)，\(\texttt{max\_strong\_basis\_size}=15\)，\(\texttt{max\_pair\_reductions}=105\)。
+由整系数理想包含经基变换到任意交换环保持，结合引理 \ref{lem:stable-audit-affine-coefficient-criterion} 的系数判据即得语义蕴涵。验证脚本见
+\[
+    \texttt{\detokenize{scripts/equational_theory/integral_affine_closure.py}}.
+\]
+\end{proof}
+
+\begin{corollary}[\(2/3\)-primary 闭合]\label{cor:stable-audit-primary-closure}
+当前 \(498\) 条仪表盘对的仿射仪表盘障碍无残余 \(2\)-primary 或 \(3\)-primary 例外。此前 \(\ZZ[1/6]\) Gröbner 约化中出现的分母 \(2\) 与 \(3\) 为有理基选择的伪影，而非这些仪表盘对的真正 primary 障碍。
+\end{corollary}
+
+\begin{proof}
+定理 \ref{thm:stable-audit-integral-affine-closure} 在 \(\ZZ[a,b]\) 上证明了理想包含。张量或特化到任意特征 \(2\)、特征 \(3\)、\(2\)-幂扭或 \(3\)-幂扭的交换环均保持理想包含。
+\end{proof}
+
+\subsection{超越仿射障碍的非仿射有限见证}
+
+定理 \ref{thm:stable-audit-integral-affine-closure} 证明了仿射线性运算不能分离任何当前仪表盘对。下述命题展示该障碍边界是紧的：存在一个非仿射有限 magma 分离了一条仪表盘对。
+
+\begin{proposition}[非仿射有限分离]\label{prop:stable-audit-non-affine-witness}
+设 \(M=\{0,\ldots,35\}\)，配备 ETP 已提交文件
+\[
+    \texttt{\detokenize{Equational_Theories/Generated/All4x4Tables/Refutation936.lean}}
+\]
+中记录的 \(36\times 36\) 运算表。则 \(M\) 满足 \(E_{476}\) 并反驳 \(E_{4065}\)：
+\[
+    E_{476}:\; x=y\diamond(x\diamond(y\diamond(y\diamond x))),
+    \qquad
+    E_{4065}:\; x\diamond x=((x\diamond x)\diamond x)\diamond x.
+\]
+具体地，赋值 \(x=0\) 给出 \(0\diamond 0=17\)、\((0\diamond 0)\diamond 0=10\)、\(((0\diamond 0)\diamond 0)\diamond 0=11\)，从而 \(E_{4065}\) 的两边分别为 \(17\) 与 \(11\)。
+\end{proposition}
+
+\begin{proof}
+\(E_{476}\) 含变量 \(x,y\)，验证器检查全部 \(36^2=1296\) 个赋值，无违例。\(E_{4065}\) 在 \(x=0\) 处即被反驳（如所述）。此为有限表上的直接递归赋值。
+\end{proof}
+
+\begin{proposition}[非仿射性证书]\label{prop:stable-audit-mediality-failure}
+上述 \(36\) 阶运算不属于仿射线性或仿射加常数族 \(x\diamond y=\alpha x+\beta y(+k)\)（系数交换）。
+\end{proposition}
+
+\begin{proof}
+任何具有交换系数的仿射加常数运算 \(x\diamond y=\alpha x+\beta y+k\) 均满足 mediality 恒等式
+\[
+    (a\diamond b)\diamond(c\diamond d)=(a\diamond c)\diamond(b\diamond d).
+\]
+该运算表在赋值 \(a=0,b=0,c=9,d=0\) 处给出左端 \(28\)、右端 \(32\)，mediality 失败。因此该运算超出已排除的仿射障碍之外。
+\end{proof}
+
+\begin{proposition}[小阶有限障碍]\label{prop:stable-audit-small-order-obstruction}
+阶 \(2\) 与阶 \(3\) 的 magma 不分离 \(498\) 条当前仪表盘有序对中的任何一对。
+\end{proposition}
+
+\begin{proof}
+穷举枚举阶 \(2\) 的全部 \(2^{2^2}=16\) 个二元运算与阶 \(3\) 的全部 \(3^{3^2}=19683\) 个二元运算。对每一运算扫描仪表盘对，均未发现前件成立而后件失败的见证。此仅为小阶障碍，不声称 \(36\) 阶见证在阶 \(4\) 至 \(35\) 范围内的极小性。验证脚本见
+\[
+    \texttt{\detokenize{scripts/equational_theory/non_affine_finite_witness.py}}.
+\]
+\end{proof}
+
+\begin{remark}[证书边界]\label{rem:stable-audit-certificate-boundary}
+本附录中的 Automath/Omega Lean 贡献为引理 \ref{lem:stable-audit-stable-value-affine-transfer} 的稳定值传递定理。ETP 索引谱、\(\texttt{Facts}\) 表、仪表盘交集、素数稳定化有限检查、素域冗余性审计、整系数仿射闭合证书与非仿射有限见证均为有限计算证书，随本文以
+\[
+    \texttt{\detokenize{scripts/equational_theory/}}
+\]
+附录提供以供复现。
+\end{remark}
+
+\end{document}

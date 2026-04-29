@@ -24,4 +24,10 @@ theorem paper_empirical_frequency_mem_unit_interval_package
     ((Finset.univ.filter A).card : ℝ) / (N : ℝ) ≤ 1 :=
   paper_empirical_frequency_mem_unit_interval_seeds N hN A
 
+theorem paper_empirical_frequency_mem_unit_interval
+    (N : ℕ) (hN : 0 < N) (A : Fin N → Prop) [DecidablePred A] :
+    0 ≤ ((Finset.univ.filter A).card : ℝ) / (N : ℝ) ∧
+    ((Finset.univ.filter A).card : ℝ) / (N : ℝ) ≤ 1 := by
+  exact paper_empirical_frequency_mem_unit_interval_package N hN A
+
 end Omega.Preliminaries.EmpiricalFrequencyBounds

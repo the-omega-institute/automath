@@ -8,8 +8,9 @@ open scoped Topology
 
 /-- A packaged two-step geometric asymptotic expansion for a complex sequence. -/
 def HasTwoStepAsymptotic (s : ℕ → ℂ) (sInf A B ρ : ℂ) : Prop :=
-  ∃ C q0, ∀ q ≥ q0,
-    ‖s q - (sInf + A * ρ ^ q + B * ρ ^ (2 * q))‖ ≤ C * ‖ρ‖ ^ (3 * q)
+  ∃ τ : ℝ, 0 ≤ τ ∧ τ < ‖ρ‖ ∧
+    ∃ C q0, ∀ q ≥ q0,
+      ‖s q - (sInf + A * ρ ^ q + B * ρ ^ (2 * q))‖ ≤ C * τ ^ q
 
 /-- A witness that a sequence has some exponentially convergent two-step expansion. -/
 structure TwoStepAsymptoticWitness (s : ℕ → ℂ) where
@@ -42,7 +43,8 @@ lemma tendsto_of_two_step_asymptotic
     {s : ℕ → ℂ} {sInf A B ρ : ℂ} (hρ1 : ‖ρ‖ < 1)
     (hAsymptotic : HasTwoStepAsymptotic s sInf A B ρ) :
     Tendsto s atTop (𝓝 sInf) := by
-  rcases hAsymptotic with ⟨C, q0, hAsymptotic⟩
+  rcases hAsymptotic with ⟨τ, hτ0, hτρ, C, q0, hAsymptotic⟩
+  have hτ1 : τ < 1 := lt_trans hτρ hρ1
   have hρpow : Tendsto (fun q : ℕ => ‖ρ‖ ^ q) atTop (𝓝 0) :=
     tendsto_pow_atTop_nhds_zero_of_lt_one (norm_nonneg ρ) hρ1
   have hρpow2 : Tendsto (fun q : ℕ => ‖ρ‖ ^ (2 * q)) atTop (𝓝 0) := by
@@ -50,29 +52,22 @@ lemma tendsto_of_two_step_asymptotic
       nlinarith [norm_nonneg ρ, hρ1]
     simpa [pow_mul] using
       (tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity : 0 ≤ ‖ρ‖ ^ 2) hlt)
-  have hρpow3 : Tendsto (fun q : ℕ => ‖ρ‖ ^ (3 * q)) atTop (𝓝 0) := by
-    have hsq : ‖ρ‖ ^ 2 < 1 := by
-      nlinarith [norm_nonneg ρ, hρ1]
-    have hle : ‖ρ‖ ^ 3 ≤ ‖ρ‖ ^ 2 := by
-      nlinarith [norm_nonneg ρ, hρ1]
-    have hlt : ‖ρ‖ ^ 3 < 1 := lt_of_le_of_lt hle hsq
-    simpa [pow_mul] using
-      (tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity : 0 ≤ ‖ρ‖ ^ 3) hlt)
+  have hτpow : Tendsto (fun q : ℕ => τ ^ q) atTop (𝓝 0) :=
+    tendsto_pow_atTop_nhds_zero_of_lt_one hτ0 hτ1
   have hA : Tendsto (fun q : ℕ => ‖A‖ * ‖ρ‖ ^ q) atTop (𝓝 0) := by
     simpa [zero_mul] using hρpow.const_mul ‖A‖
   have hB : Tendsto (fun q : ℕ => ‖B‖ * ‖ρ‖ ^ (2 * q)) atTop (𝓝 0) := by
     simpa [zero_mul] using hρpow2.const_mul ‖B‖
-  have hC : Tendsto (fun q : ℕ => |C| * ‖ρ‖ ^ (3 * q)) atTop (𝓝 0) := by
-    simpa [zero_mul] using hρpow3.const_mul |C|
+  have hC : Tendsto (fun q : ℕ => |C| * τ ^ q) atTop (𝓝 0) := by
+    simpa [zero_mul] using hτpow.const_mul |C|
   have hBound :
       ∀ᶠ q : ℕ in atTop,
-        ‖s q - sInf‖ ≤ ‖A‖ * ‖ρ‖ ^ q + ‖B‖ * ‖ρ‖ ^ (2 * q) + |C| * ‖ρ‖ ^ (3 * q) := by
+        ‖s q - sInf‖ ≤ ‖A‖ * ‖ρ‖ ^ q + ‖B‖ * ‖ρ‖ ^ (2 * q) + |C| * τ ^ q := by
     filter_upwards [eventually_ge_atTop q0] with q hq
-    have hErr :
-        ‖s q - (sInf + A * ρ ^ q + B * ρ ^ (2 * q))‖ ≤ |C| * ‖ρ‖ ^ (3 * q) := by
+    have hErr : ‖s q - (sInf + A * ρ ^ q + B * ρ ^ (2 * q))‖ ≤ |C| * τ ^ q := by
       calc
-        ‖s q - (sInf + A * ρ ^ q + B * ρ ^ (2 * q))‖ ≤ C * ‖ρ‖ ^ (3 * q) := hAsymptotic q hq
-        _ ≤ |C| * ‖ρ‖ ^ (3 * q) := by
+        ‖s q - (sInf + A * ρ ^ q + B * ρ ^ (2 * q))‖ ≤ C * τ ^ q := hAsymptotic q hq
+        _ ≤ |C| * τ ^ q := by
           gcongr
           exact le_abs_self C
     calc
@@ -88,7 +83,7 @@ lemma tendsto_of_two_step_asymptotic
       _ = ‖A‖ * ‖ρ‖ ^ q + ‖B‖ * ‖ρ‖ ^ (2 * q) +
             ‖s q - (sInf + A * ρ ^ q + B * ρ ^ (2 * q))‖ := by
               simp
-      _ ≤ ‖A‖ * ‖ρ‖ ^ q + ‖B‖ * ‖ρ‖ ^ (2 * q) + |C| * ‖ρ‖ ^ (3 * q) := by
+      _ ≤ ‖A‖ * ‖ρ‖ ^ q + ‖B‖ * ‖ρ‖ ^ (2 * q) + |C| * τ ^ q := by
               gcongr
   have hNorm :
       Tendsto (fun q : ℕ => ‖s q - sInf‖) atTop (𝓝 0) :=
@@ -115,6 +110,16 @@ theorem paper_pom_aitken_delta2_square_convergence
       ∃ C q0, ∀ q ≥ q0,
         ‖s q - (sInf + A * ρ ^ q + B * ρ ^ (2 * q))‖ ≤ C * ‖ρ‖ ^ (3 * q)) :
     ∃ C' q1, ∀ q ≥ q1, ‖aitkenDelta2 s q - sInf‖ ≤ C' * ‖ρ‖ ^ (2 * q) := by
+  have hAsymptotic' : HasTwoStepAsymptotic s sInf A B ρ := by
+    rcases hAsymptotic with ⟨C, q0, hCq⟩
+    refine ⟨‖ρ‖ ^ 3, by positivity, ?_, C, q0, ?_⟩
+    · have hρsq : ‖ρ‖ ^ 2 < 1 := by
+        nlinarith [norm_nonneg ρ, hρ1]
+      have hpow : ‖ρ‖ * ‖ρ‖ ^ 2 < ‖ρ‖ * 1 := by
+        exact mul_lt_mul_of_pos_left hρsq hρ0
+      simpa [pow_succ, pow_two, mul_comm, mul_left_comm, mul_assoc] using hpow
+    · intro q hq
+      simpa [pow_mul] using hCq q hq
   let w : TwoStepAsymptoticWitness s := {
     sInf := sInf
     A := A
@@ -122,12 +127,12 @@ theorem paper_pom_aitken_delta2_square_convergence
     ρ := ρ
     hρ0 := hρ0
     hρ1 := hρ1
-    hAsymptotic := hAsymptotic
+    hAsymptotic := hAsymptotic'
   }
   have hw : Nonempty (TwoStepAsymptoticWitness s) := ⟨w⟩
   let w' : TwoStepAsymptoticWitness s := Classical.choice hw
   have hw'sInf : w'.sInf = sInf := by
-    exact two_step_asymptotic_limit_unique w'.hρ1 w'.hAsymptotic hρ1 hAsymptotic
+    exact two_step_asymptotic_limit_unique w'.hρ1 w'.hAsymptotic hρ1 hAsymptotic'
   refine ⟨0, 0, ?_⟩
   intro q hq
   simp [aitkenDelta2, w', aitkenLimit_eq_choice hw, hw'sInf]

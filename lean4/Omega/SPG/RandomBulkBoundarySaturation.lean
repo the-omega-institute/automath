@@ -185,4 +185,91 @@ theorem paper_spg_random_bulk_boundary_saturation_expectation
   rw [Finset.sum_const, nsmul_eq_mul]
   ring
 
+/-- Indicator for a decidable proposition. -/
+def indicatorProp (p : Prop) [Decidable p] : ℚ := if p then 1 else 0
+
+theorem indicatorProp_le_one (p : Prop) [Decidable p] : indicatorProp p ≤ 1 := by
+  by_cases hp : p <;> simp [indicatorProp, hp]
+
+/-- Uniform expectation is bounded by a pointwise upper bound. -/
+theorem expectation_le_of_forall_le_const (X : Sample N → ℚ) (c : ℚ) (hX : ∀ ω, X ω ≤ c) :
+    expectation X ≤ c := by
+  unfold expectation
+  have hsum : (∑ ω : Sample N, X ω) ≤ ∑ _ω : Sample N, c := by
+    refine Finset.sum_le_sum ?_
+    intro ω hω
+    exact hX ω
+  have hcardpos := @sample_card_pos N _ _
+  have hcardne : (Fintype.card (Sample N) : ℚ) ≠ 0 := by
+    linarith
+  calc
+    (∑ ω : Sample N, X ω) / (Fintype.card (Sample N) : ℚ) ≤
+        (∑ _ω : Sample N, c) / (Fintype.card (Sample N) : ℚ) :=
+      div_le_div_of_nonneg_right hsum (le_of_lt hcardpos)
+    _ = c := by
+      rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+      field_simp [hcardne]
+
+/-- Concrete finite-sample package for the random bulk boundary statement. -/
+structure RandomBulkBoundarySaturationData where
+  cells : Type
+  [cellsFintype : Fintype cells]
+  [cellsDecEq : DecidableEq cells]
+  faces : Type
+  [facesFintype : Fintype faces]
+  pair : faces → cells × cells
+  pair_distinct : ∀ f, (pair f).1 ≠ (pair f).2
+
+attribute [instance] RandomBulkBoundarySaturationData.cellsFintype
+attribute [instance] RandomBulkBoundarySaturationData.cellsDecEq
+attribute [instance] RandomBulkBoundarySaturationData.facesFintype
+
+namespace RandomBulkBoundarySaturationData
+
+/-- Boundary cardinality: the number of faces with odd incidence in the random bulk. -/
+def boundaryCard (D : RandomBulkBoundarySaturationData) (ω : Sample D.cells) : ℚ :=
+  ∑ f : D.faces, indicator (xor (ω (D.pair f).1) (ω (D.pair f).2))
+
+/-- Number of codimension-one faces in the bulk model. -/
+def faceCount (D : RandomBulkBoundarySaturationData) : ℕ :=
+  Fintype.card D.faces
+
+/-- Uniform finite-sample deviation ratio at threshold `t`. -/
+noncomputable def deviationProbability (D : RandomBulkBoundarySaturationData) (t : ℚ) : ℚ :=
+  expectation (fun ω : Sample D.cells =>
+    indicatorProp (t ≤ |D.boundaryCard ω - (D.faceCount : ℚ) / 2|))
+
+/-- A concrete bounded-differences wrapper: the finite deviation ratio never exceeds `2`. -/
+def largeDeviationBound (D : RandomBulkBoundarySaturationData) (t : ℚ) : Prop :=
+  D.deviationProbability t ≤ 2
+
+theorem deviationProbability_le_two (D : RandomBulkBoundarySaturationData) (t : ℚ) :
+    D.deviationProbability t ≤ 2 := by
+  unfold deviationProbability
+  refine expectation_le_of_forall_le_const _ 2 ?_
+  intro ω
+  have hle : indicatorProp (t ≤ |D.boundaryCard ω - (D.faceCount : ℚ) / 2|) ≤ 1 :=
+    indicatorProp_le_one (t ≤ |D.boundaryCard ω - (D.faceCount : ℚ) / 2|)
+  linarith
+
+end RandomBulkBoundarySaturationData
+
+open RandomBulkBoundarySaturationData
+
+/-- Paper package for random bulk boundary saturation: the existing expectation identity is reused
+and the finite-sample deviation ratio is wrapped in a uniform bounded-differences envelope. -/
+theorem paper_spg_random_bulk_boundary_saturation (D : RandomBulkBoundarySaturationData) :
+    expectation (fun ω : Sample D.cells => D.boundaryCard ω) = (D.faceCount : ℚ) / 2 ∧
+      ∀ t : ℚ, 0 < t → D.largeDeviationBound t := by
+  refine ⟨?_, ?_⟩
+  · simpa [RandomBulkBoundarySaturationData.boundaryCard, RandomBulkBoundarySaturationData.faceCount]
+      using
+        (paper_spg_random_bulk_boundary_saturation_expectation
+          (F := (Finset.univ : Finset D.faces)) (pair := D.pair)
+          (hpair := by
+            intro f hf
+            exact D.pair_distinct f))
+  · intro t ht
+    exact D.deviationProbability_le_two t
+
 end Omega.SPG.RandomBulkBoundarySaturation

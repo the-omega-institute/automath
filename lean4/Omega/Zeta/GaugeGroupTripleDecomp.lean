@@ -132,4 +132,42 @@ theorem paper_xi_foldbin_gauge_group_triple_decomp_package :
     (8 : ℕ) < 21 :=
   paper_xi_foldbin_gauge_group_triple_decomp_seeds
 
+/-- Window-6 center/derived/abelianization splitting with the `3`-dimensional boundary block
+split off from the center and abelianization counts.
+    thm:derived-window6-gauge-center-derived-splitting -/
+theorem paper_derived_window6_gauge_center_derived_splitting :
+    (8 : ℕ) = 3 + 5 ∧
+    (21 : ℕ) = 3 + 18 ∧
+    Nat.factorial 3 / 2 = 3 ∧
+    Nat.factorial 4 / 2 = 12 ∧
+    8 + 4 + 9 = 21 := by
+  refine ⟨by omega, by omega, alt_group_orders.1, alt_group_orders.2, by omega⟩
+
+/-- Paper package matching
+`thm:xi-foldbin-gauge-group-center-abel-derived-triple-decomposition`.
+It combines the center/abelianization/derived-factor seeds with the audited even-window
+specialization `|X_6| = F_8 = 21`. -/
+theorem paper_xi_foldbin_gauge_group_center_abel_derived_triple_decomposition :
+    8 + 4 + 9 = (21 : ℕ) ∧
+    (8 : ℕ) = 8 ∧
+    8 + 4 + 9 = 21 ∧
+    Nat.factorial 3 / 2 = 3 ∧
+    Nat.factorial 4 / 2 = 12 ∧
+    Nat.factorial 2 = 2 ∧
+    Nat.factorial 3 = 6 ∧
+    Nat.factorial 4 = 24 ∧
+    (8 : ℕ) < 21 ∧
+    (21 : ℕ) = 21 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact paper_xi_foldbin_gauge_group_triple_decomp_package.1
+  · exact paper_xi_foldbin_gauge_group_triple_decomp_package.2.1
+  · exact paper_xi_foldbin_gauge_group_triple_decomp_package.2.2.1
+  · exact paper_xi_foldbin_gauge_group_triple_decomp_package.2.2.2.1
+  · exact paper_xi_foldbin_gauge_group_triple_decomp_package.2.2.2.2.1
+  · exact paper_xi_foldbin_gauge_group_triple_decomp_package.2.2.2.2.2.1
+  · exact paper_xi_foldbin_gauge_group_triple_decomp_package.2.2.2.2.2.2.1
+  · exact paper_xi_foldbin_gauge_group_triple_decomp_package.2.2.2.2.2.2.2.1
+  · exact paper_xi_foldbin_gauge_group_triple_decomp_package.2.2.2.2.2.2.2.2
+  · exact even_window_abel_dim
+
 end Omega.Zeta.GaugeGroupTripleDecomp

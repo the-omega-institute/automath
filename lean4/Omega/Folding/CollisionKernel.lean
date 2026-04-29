@@ -1,9 +1,155 @@
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+import Mathlib.Data.Fin.SuccPredOrder
+import Mathlib.Order.Interval.Finset.Fin
 import Omega.Folding.MomentSum
 
 namespace Omega
+
+/-! ### Signed recurrence companions -/
+
+/-- Frobenius signed companion for
+`x^d + c_1 x^{d-1} + ... + c_d`, indexed as `c 0 = c_1`.
+The first row is `(-c_1, ..., -c_d)` and the subdiagonal entries are `1`. -/
+def signedCompanion {R : Type*} [Neg R] [Zero R] [One R] {n : ℕ}
+    (c : Fin (n + 1) → R) : Matrix (Fin (n + 1)) (Fin (n + 1)) R :=
+  fun i j => if (i : ℕ) = 0 then -c j else if (i : ℕ) = (j : ℕ) + 1 then 1 else 0
+
+/-- Column-reduced Bowen-Franks matrix for the signed companion. -/
+private def signedCompanionColumnReduced {R : Type*} [AddCommMonoid R] [One R] [Neg R]
+    {n : ℕ} (c : Fin (n + 1) → R) : Matrix (Fin (n + 1)) (Fin (n + 1)) R :=
+  fun i j =>
+    if (i : ℕ) = 0 then 1 + Finset.sum (Finset.Iic j) (fun k => c k)
+    else if (i : ℕ) = (j : ℕ) + 1 then -1 else 0
+
+private lemma signedCompanionColumnReduced_det {R : Type*} [CommRing R] {n : ℕ}
+    (c : Fin (n + 1) → R) :
+    (signedCompanionColumnReduced c).det = 1 + ∑ i, c i := by
+  classical
+  rw [Matrix.det_succ_column (signedCompanionColumnReduced c) (Fin.last n)]
+  rw [Finset.sum_eq_single (0 : Fin (n + 1))]
+  · have hIic_last : Finset.Iic (Fin.last n) = Finset.univ := by
+      ext k
+      simp [Fin.le_last k]
+    have hsub :
+        (signedCompanionColumnReduced c).submatrix Fin.succ Fin.castSucc =
+          Matrix.diagonal (fun _ : Fin n => (-1 : R)) := by
+      ext i j
+      by_cases hij : i = j
+      · subst j
+        simp [signedCompanionColumnReduced, Matrix.diagonal]
+      · have hval : (i : ℕ) ≠ (j : ℕ) := fun h => hij (Fin.ext h)
+        have hsucc : (i : ℕ) + 1 ≠ (j : ℕ) + 1 := by omega
+        simp [signedCompanionColumnReduced, Matrix.diagonal, hij, hval]
+    have hsubdet :
+        ((signedCompanionColumnReduced c).submatrix Fin.succ Fin.castSucc).det =
+          (-1 : R) ^ n := by
+      rw [hsub, Matrix.det_diagonal]
+      simp [Finset.prod_const]
+    simp [signedCompanionColumnReduced, hIic_last, hsubdet, Fin.val_last]
+    calc
+      (-1 : R) ^ n * (1 + ∑ x, c x) * (-1 : R) ^ n
+          = ((-1 : R) ^ n * (-1 : R) ^ n) * (1 + ∑ x, c x) := by ring
+      _ = (((-1 : R) * (-1 : R)) ^ n) * (1 + ∑ x, c x) := by rw [mul_pow]
+      _ = 1 + ∑ x, c x := by simp
+  · intro i _ hi
+    have hentry : signedCompanionColumnReduced c i (Fin.last n) = 0 := by
+      rcases Fin.exists_succ_eq.2 hi with ⟨i', rfl⟩
+      have hval : (i' : ℕ) ≠ n := by omega
+      simp [signedCompanionColumnReduced, Fin.val_last, hval]
+    simp [hentry]
+  · intro h
+    simp at h
+
+/-- Generic signed-companion determinant identity:
+`det(I - signedCompanion(c)) = 1 + sum_i c_i`. -/
+theorem signedCompanionDet {R : Type*} [CommRing R] {n : ℕ}
+    (c : Fin (n + 1) → R) :
+    ((1 : Matrix (Fin (n + 1)) (Fin (n + 1)) R) - signedCompanion c).det =
+      1 + ∑ i, c i := by
+  classical
+  have hdet :
+      (signedCompanionColumnReduced c).det =
+        ((1 : Matrix (Fin (n + 1)) (Fin (n + 1)) R) - signedCompanion c).det := by
+    refine Matrix.det_eq_of_forall_col_eq_smul_add_pred
+      (A := signedCompanionColumnReduced c)
+      (B := (1 : Matrix (Fin (n + 1)) (Fin (n + 1)) R) - signedCompanion c)
+      (c := fun _ : Fin n => (1 : R)) ?_ ?_
+    · intro i
+      by_cases hi : i = 0
+      · subst i
+        have hIic_zero : Finset.Iic (0 : Fin (n + 1)) = {0} := by
+          ext k
+          rw [Finset.mem_Iic, Finset.mem_singleton]
+          exact Fin.le_zero_iff'
+        simp [signedCompanionColumnReduced, signedCompanion, Matrix.sub_apply,
+          hIic_zero]
+      · rcases Fin.exists_succ_eq.2 hi with ⟨i', rfl⟩
+        by_cases hi0 : (i' : ℕ) = 0
+        · simp [signedCompanionColumnReduced, signedCompanion, Matrix.sub_apply, hi0]
+        · simp [signedCompanionColumnReduced, signedCompanion, Matrix.sub_apply, hi0]
+    · intro i j
+      by_cases hi : i = 0
+      · subst i
+        have hIic :
+            Finset.Iic (Fin.succ j) =
+              insert (Fin.succ j) (Finset.Iic (Fin.castSucc j)) := by
+          ext k
+          rw [Finset.mem_Iic, Finset.mem_insert, Finset.mem_Iic]
+          constructor
+          · intro hk
+            by_cases hEq : (k : ℕ) = (j : ℕ) + 1
+            · left
+              exact Fin.ext hEq
+            · right
+              rw [Fin.le_def] at hk ⊢
+              simp at hk ⊢
+              omega
+          · rintro (rfl | hk)
+            · exact le_rfl
+            · exact hk.trans (Fin.castSucc_le_succ j)
+        have hnot : Fin.succ j ∉ Finset.Iic (Fin.castSucc j) := by
+          simp
+        have hzero : (0 : Fin (n + 1)) ≠ Fin.succ j := (Fin.succ_ne_zero j).symm
+        simp [signedCompanionColumnReduced, signedCompanion, Matrix.sub_apply,
+          hIic, Finset.sum_insert hnot, hzero]
+        ring_nf
+      · rcases Fin.exists_succ_eq.2 hi with ⟨i', rfl⟩
+        by_cases heq : i' = j
+        · subst i'
+          simp [signedCompanionColumnReduced, signedCompanion, Matrix.sub_apply]
+        · have hne_val : (i' : ℕ) ≠ (j : ℕ) := fun h => heq (Fin.ext h)
+          by_cases hnext : (i' : ℕ) = (j : ℕ) + 1
+          · have hdiag : i'.succ ≠ Fin.succ j := by
+              intro h
+              exact heq (Fin.succ_injective _ h)
+            simp [signedCompanionColumnReduced, signedCompanion, Matrix.sub_apply,
+              hnext, hdiag]
+          · have hdiag : i'.succ ≠ Fin.succ j := by
+              intro h
+              exact heq (Fin.succ_injective _ h)
+            simp [signedCompanionColumnReduced, signedCompanion, Matrix.sub_apply,
+              hne_val, hnext, hdiag]
+  rw [← hdet, signedCompanionColumnReduced_det]
+
+def signedCompanionCoeffs6 : Fin 7 → ℤ :=
+  ![2, 17, 28, 88, -26, 4, -4]
+
+def signedCompanionCoeffs7 : Fin 7 → ℤ :=
+  ![2, 26, 74, 311, -34, 84, -42]
+
+/-- q=6 signed-companion Bowen-Franks determinant. -/
+theorem signedCompanionDet6 :
+    ((1 : Matrix (Fin 7) (Fin 7) ℤ) - signedCompanion signedCompanionCoeffs6).det = 110 := by
+  rw [signedCompanionDet]
+  native_decide
+
+/-- q=7 signed-companion Bowen-Franks determinant. -/
+theorem signedCompanionDet7 :
+    ((1 : Matrix (Fin 7) (Fin 7) ℤ) - signedCompanion signedCompanionCoeffs7).det = 422 := by
+  rw [signedCompanionDet]
+  native_decide
 
 /-- The 3x3 companion matrix for the S_2 recurrence:
     S_2(m+3) = 2·S_2(m+2) + 2·S_2(m+1) - 2·S_2(m).

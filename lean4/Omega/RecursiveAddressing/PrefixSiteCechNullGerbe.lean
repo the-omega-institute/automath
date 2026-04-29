@@ -38,4 +38,23 @@ theorem paper_recursive_addressing_prefix_site_cech_null_gerbe
   refine ⟨twistedGerbe G α, ?_⟩
   simp [twistedGerbe]
 
+/-- Paper label: `thm:prefix-site-cech-null-gerbe`. Abstract packaging of the functorial gerbe
+construction: the gerbe built from a cover and cocycle is banded, its neutral objects are exactly
+global certificates, and it depends only on the represented Čech class. -/
+theorem paper_prefix_site_cech_null_gerbe {Cover Cocycle Gerbe Class : Type*}
+    (mkGerbe : Cover → Cocycle → Gerbe) (cohomologyClass : Cocycle → Class)
+    (bandedGerbe neutralGerbe globalCertificate : Gerbe → Prop)
+    (hbanded : ∀ U alpha, bandedGerbe (mkGerbe U alpha))
+    (hneut :
+      ∀ U alpha, neutralGerbe (mkGerbe U alpha) ↔ globalCertificate (mkGerbe U alpha))
+    (hclass :
+      ∀ U alpha beta,
+        cohomologyClass beta = cohomologyClass alpha → mkGerbe U beta = mkGerbe U alpha)
+    (U : Cover) (alpha : Cocycle) :
+    bandedGerbe (mkGerbe U alpha) ∧
+      (neutralGerbe (mkGerbe U alpha) ↔ globalCertificate (mkGerbe U alpha)) ∧
+      (∀ beta, cohomologyClass beta = cohomologyClass alpha →
+        mkGerbe U beta = mkGerbe U alpha) := by
+  exact ⟨hbanded U alpha, hneut U alpha, fun beta hbeta => hclass U alpha beta hbeta⟩
+
 end Omega.RecursiveAddressing

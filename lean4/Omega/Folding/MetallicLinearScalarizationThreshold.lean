@@ -79,4 +79,14 @@ theorem paper_metallic_linear_scalarization_threshold :
           (Real.log Real.goldenRatio - 1 / Real.sqrt 5) := by
   refine ⟨metallicLinearScaleLawData, rfl⟩
 
+/-- Concrete witness for the linear scalarization threshold: below the critical weight the
+optimizer is exactly `3 / 2`. -/
+theorem paper_metallic_linear_scalarization_threshold_witness :
+    ∃ h : Omega.Folding.MetallicParetoScaleLawData,
+      (∀ β : Real, 0 ≤ β → β < h.betaCritical → h.optimalScale β = 3 / 2) := by
+  refine ⟨metallicLinearScaleLawData, ?_⟩
+  intro β _ hβ
+  dsimp [metallicLinearScaleLawData] at hβ ⊢
+  simp [hβ]
+
 end Omega.Folding

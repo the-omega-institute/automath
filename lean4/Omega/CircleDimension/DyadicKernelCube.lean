@@ -1,5 +1,7 @@
+import Mathlib.Data.Fintype.Card
 import Mathlib.Data.ZMod.Basic
 import Mathlib.Data.Fintype.Pi
+import Mathlib.Logic.Equiv.Fin.Basic
 import Mathlib.Tactic
 
 namespace Omega.CircleDimension
@@ -184,5 +186,42 @@ theorem zmodTwoPowToBool_boolToZmodTwoPow (N : ℕ) (b : Fin N → Bool) :
   unfold zmodTwoPowToBool
   rw [boolToZmodTwoPow_val]
   exact testBit_indicatorSum_fin N b i
+
+/-- A finite-set equivalence between `ZMod (2^N)` and the `N`-bit cube.
+    prop:cdim-dyadic-kernel-cube-inverse-limit -/
+noncomputable def zmodTwoPowBoolEquiv (N : ℕ) : ZMod (2 ^ N) ≃ (Fin N → Bool) :=
+  Fintype.equivOfCardEq (by rw [card_zmod_two_pow, card_fin_bool])
+
+/-- Flatten six `N`-bit coordinates into one `6N`-bit cube.
+    prop:cdim-dyadic-kernel-cube-inverse-limit -/
+noncomputable def sixBitCubeFlattenEquiv (N : ℕ) :
+    (Fin 6 → Fin N → Bool) ≃ (Fin (6 * N) → Bool) :=
+  (Equiv.curry (Fin 6) (Fin N) Bool).symm.trans
+    (finProdFinEquiv.arrowCongr (Equiv.refl Bool))
+
+/-- Coordinatewise version of `zmodTwoPowBoolEquiv` on six copies.
+    prop:cdim-dyadic-kernel-cube-inverse-limit -/
+noncomputable def sixZmodTwoPowBoolEquiv (N : ℕ) :
+    ((Fin 6) → ZMod (2 ^ N)) ≃ (Fin (6 * N) → Bool) :=
+  let coordwise : ((Fin 6) → ZMod (2 ^ N)) ≃ (Fin 6 → Fin N → Bool) :=
+    { toFun := fun f i => zmodTwoPowBoolEquiv N (f i)
+      invFun := fun g i => (zmodTwoPowBoolEquiv N).symm (g i)
+      left_inv := by
+        intro f
+        funext i
+        exact (zmodTwoPowBoolEquiv N).left_inv (f i)
+      right_inv := by
+        intro g
+        funext i
+        exact (zmodTwoPowBoolEquiv N).right_inv (g i) }
+  coordwise.trans (sixBitCubeFlattenEquiv N)
+
+/-- Paper-facing finite-level dyadic kernel cube model.
+    prop:cdim-dyadic-kernel-cube-inverse-limit -/
+theorem paper_cdim_dyadic_kernel_cube_inverse_limit (N : Nat) :
+    Nonempty (ZMod (2 ^ N) ≃ (Fin N -> Bool)) /\
+    Nonempty (((Fin 6) -> ZMod (2 ^ N)) ≃ (Fin (6 * N) -> Bool)) := by
+  classical
+  exact ⟨⟨zmodTwoPowBoolEquiv N⟩, ⟨sixZmodTwoPowBoolEquiv N⟩⟩
 
 end Omega.CircleDimension
