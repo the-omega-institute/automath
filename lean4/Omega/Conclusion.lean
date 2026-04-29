@@ -2692,3 +2692,4 @@ import Omega.Conclusion.FiberSymmetryEntropyExtremals
 import Omega.Conclusion.PrimeConductorCenteredSliceWeightedVarianceCollapse
 import Omega.Conclusion.CanonicalFixedpointsCantorClosure
 import Omega.Conclusion.ConclusionLieSolenoidPrimeLedgerDichotomy
+import Omega.Conclusion.ConclusionRealinput40RhFailureInsideAnalyticDisk
