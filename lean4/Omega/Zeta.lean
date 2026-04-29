@@ -1821,6 +1821,7 @@ import Omega.Zeta.XiRankoneSecularMonotonicityDerivativeNorm
 import Omega.Zeta.XiRankoneSecularSmallLargeCoupling
 import Omega.Zeta.XiRankoneFlipRadiusShallowNegative
 import Omega.Zeta.XiUnitarySliceZeroCountSpectralFlow
+import Omega.Zeta.XiCrossEnergyGaussianMutualInformation
 import Omega.Zeta.BdryFreeInvolutionOddFiberObstructionMinCover
 import Omega.Zeta.XiBdryUpliftThreeLayerNeedsOneBit
 import Omega.Zeta.XiTimePart62aZGSimplePoleDensityResidue
