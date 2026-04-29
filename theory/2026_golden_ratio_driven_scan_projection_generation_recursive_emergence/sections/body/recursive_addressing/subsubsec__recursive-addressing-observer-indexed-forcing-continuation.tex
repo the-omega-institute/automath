@@ -267,6 +267,63 @@ q_i\le p\qquad(i\in I).
   且不存在直接位于 \(p\) 层的有限账本证明 \(\mathcal E\)，则局部账本族 \((L_i)_{i\in I}\) 不能推出 \(p\Vdash\mathcal E\)。
 \end{enumerate}
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{theorem}[有限读出不变量的细化稳定判别与缺口账本]\label{distill:cech_cohomology-refinement_stability_separation-recursive-readout-refinement-gap-ledger}
+沿用定理 \ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} 中的有限满射逆系统
+\[
+(\mathcal A_b,\pi_{c\to b})_{c\ge b\ge0}
+\]
+及其逆极限 \(\mathcal A_\infty\)，并记
+\[
+p_b:\mathcal A_\infty\to\mathcal A_b
+\]
+为第 \(b\) 层投影。固定 \(c\ge b\)、有限集合 \(S\)、粗层读出
+\(I_b:\mathcal A_b\to S\) 与细层候选读出 \(J_c:\mathcal A_c\to S\)。定义细化缺口账本
+\[
+\mathfrak G_{c,b}(J_c,I_b)
+:=\{\,x\in\mathcal A_c:\ J_c(x)\ne I_b(\pi_{c\to b}(x))\,\}.
+\]
+则下列断言成立：
+\begin{enumerate}
+  \item \(J_c\) 与 \(I_b\) 表示同一个对象层有限不变量，当且仅当
+  \[
+  \mathfrak G_{c,b}(J_c,I_b)=\varnothing,
+  \]
+  等价地 \(J_c=I_b\circ\pi_{c\to b}\)。此时二者在逆极限上给出同一个柱读出
+  \[
+  J_c\circ p_c=I_b\circ p_b.
+  \]
+  \item 若 \(\mathfrak G_{c,b}(J_c,I_b)\ne\varnothing\)，则不存在函数
+  \(K:\mathcal A_\infty\to S\) 同时满足
+  \[
+  K=I_b\circ p_b,\qquad K=J_c\circ p_c.
+  \]
+  因而该失配只能作为有限分辨率缺口账本记录，不能作为状态 \(p\) 上的对象层刚性结论或值保持重写使用。
+  \item 更一般地，若一条 forcing equality ledger 同时调用 \(I_b\) 与 \(J_c\)，则它必须先给出
+  \(\mathfrak G_{c,b}(J_c,I_b)=\varnothing\) 的细化相容证书；否则该 ledger 在对象层不闭合。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一项只是细化相容性的定义展开。若缺口账本为空，则对每个 \(x\in\mathcal A_c\) 都有
+\(J_c(x)=I_b(\pi_{c\to b}(x))\)，即 \(J_c=I_b\circ\pi_{c\to b}\)。与逆极限投影恒等式
+\(p_b=\pi_{c\to b}\circ p_c\) 复合，得到
+\[
+J_c\circ p_c=I_b\circ\pi_{c\to b}\circ p_c=I_b\circ p_b.
+\]
+反过来，若 \(J_c=I_b\circ\pi_{c\to b}\)，则定义中的不等式从不发生，故缺口账本为空。
+
+证明第二项。取 \(x\in\mathfrak G_{c,b}(J_c,I_b)\)。由于逆系统的限制映射满射，有限节点 \(x\in\mathcal A_c\) 可延拓为某个稳定地址 \(a\in\mathcal A_\infty\)，满足 \(p_c(a)=x\)。于是
+\[
+(J_c\circ p_c)(a)=J_c(x)\ne I_b(\pi_{c\to b}(x))=(I_b\circ p_b)(a).
+\]
+故同一个函数 \(K\) 不可能同时等于这两个柱读出。该结论只说明两个有限覆盖读出之间缺少细化相容性；它没有给出任何非 \(\mathsf{NULL}\) 读出的对象层等式，也没有给出值保持重写。因此按命题 \ref{prop:observer-indexed-value-preserving-no-creation} 与推论 \ref{cor:observer-indexed-explicit-lifting} 的语义，它只能进入 gap ledger。
+
+第三项由前两项和有限 equality ledger 的叶节点规则推出。ledger 的叶节点必须回指到同一非 \(\mathsf{NULL}\) 对象层读出或已登记的值保持重写；若 \(I_b\) 与 \(J_c\) 尚未通过细化相容证书识别为同一柱读出，则它们只是两个不同有限分辨率观察。把这种失配直接写成等式会把有限覆盖伪不变量提升为对象层事实，违反 forcing 的显式提升原则。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 若 \([r^\ast\alpha]=0\)，则存在 \(0\)-上链 \(\beta\in C^0(N';A)\) 使 \(r^\ast\alpha=\delta\beta\)。将每个拉回局部账本按对应顶点的 \(-\beta\) 作规范重置。对任意重叠边，其新的差为
 \[
