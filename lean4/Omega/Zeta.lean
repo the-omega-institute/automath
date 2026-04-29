@@ -68,6 +68,7 @@ import Omega.Zeta.XiTimePart9gAffineFixedPointContractionRigidity
 import Omega.Zeta.XiTimePart9obEscortSurprisalTwoLevelQuantization
 import Omega.Zeta.XiTimePart9obEscortQuantilePhaseDiagram
 import Omega.Zeta.XiTimePart9zmAmbiguityShellExactMemoryDepth
+import Omega.Zeta.XiTimePart9zmFiniteStateRightInverseMinimalLag
 import Omega.Zeta.XiTimePart9zjResonanceWindowMod2OrderAliasing
 import Omega.Zeta.XiTimePart9zjIntegerQProjectiveBridgeDenominatorAnnihilation
 import Omega.Zeta.XiTimePart73U1ZetaDoubleTriplePole
@@ -680,6 +681,7 @@ import Omega.Zeta.Near1PoleParabola
 import Omega.Zeta.XiHorizonProtocolZetaLoopExpansion
 import Omega.Zeta.XiLowRankHorizonCertificate2KappaSharp
 import Omega.Zeta.XiJoukowskyEllipseAverageConstantTerm
+import Omega.Zeta.XiJoukowskyPrimeRegisterEllipseParameterization
 import Omega.Zeta.XiUnitCircleCriterionSingularRingResultant
 import Omega.Zeta.XiRealInputGroundLayerMeanGapPositiveEntropy
 import Omega.Zeta.XiUnitarySliceLeyangFoldedScan
