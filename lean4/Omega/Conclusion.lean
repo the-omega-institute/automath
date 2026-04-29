@@ -2262,3 +2262,4 @@ import Omega.Conclusion.ProjectivePressurePolynomialSectorExactClosure
 import Omega.Conclusion.FibonacciSolenoidDualQ
 import Omega.Conclusion.AnomalyTorusExpandingEntropy
 import Omega.Conclusion.PressureFanCollapsesToCharacterSimplexCells
+import Omega.Conclusion.CoreMirrorBranchSaturationDominance
