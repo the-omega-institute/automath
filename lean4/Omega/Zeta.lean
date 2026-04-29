@@ -3077,3 +3077,4 @@ import Omega.Zeta.XiLeyangCompactnessByFundamentalCircle
 import Omega.Zeta.Window6OddCumulantsSupportedOnD2Slice
 import Omega.Zeta.XiFoldFiberSymmetryGroupEntropyLower
 import Omega.Zeta.XiVisibleArithmeticOmegaControlledSplitting
+import Omega.Zeta.XiP7S5GlobalConductorsSchurQuadraticTensor

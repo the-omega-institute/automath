@@ -327,6 +327,27 @@ theorem paper_conclusion_window6_output_ramanujan_mellin_duality :
   · intro T hT
     exact conclusion_window6_output_ramanujan_mellin_duality_capacity_twentyOne_eq_inverse T hT
 
+/-- Paper label:
+`thm:conclusion-window6-output-ramanujan-layer-charge-closedforms`. -/
+theorem paper_conclusion_window6_output_ramanujan_layer_charge_closedforms :
+    ((conclusion_window6_output_ramanujan_mellin_duality_layerCharge three 0,
+      conclusion_window6_output_ramanujan_mellin_duality_layerCharge three 1,
+      conclusion_window6_output_ramanujan_mellin_duality_layerCharge three 2) =
+        ((-2 : ℤ), 2, 0)) ∧
+      ((conclusion_window6_output_ramanujan_mellin_duality_layerCharge seven 0,
+        conclusion_window6_output_ramanujan_mellin_duality_layerCharge seven 1,
+        conclusion_window6_output_ramanujan_mellin_duality_layerCharge seven 2) =
+          ((-1 : ℤ), -4, 5)) ∧
+      ((conclusion_window6_output_ramanujan_mellin_duality_layerCharge twentyOne 0,
+        conclusion_window6_output_ramanujan_mellin_duality_layerCharge twentyOne 1,
+        conclusion_window6_output_ramanujan_mellin_duality_layerCharge twentyOne 2) =
+          ((-5 : ℤ), -2, 7)) ∧
+      conclusion_window6_output_ramanujan_mellin_duality_statement := by
+  refine ⟨?_, ?_, ?_, paper_conclusion_window6_output_ramanujan_mellin_duality⟩
+  · simp [conclusion_window6_output_ramanujan_mellin_duality_layerCharge]
+  · simp [conclusion_window6_output_ramanujan_mellin_duality_layerCharge]
+  · simp [conclusion_window6_output_ramanujan_mellin_duality_layerCharge]
+
 end
 
 end Omega.Conclusion
