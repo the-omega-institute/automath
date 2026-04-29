@@ -2028,6 +2028,7 @@ import Omega.Zeta.SmithEntropyMinDepth
 import Omega.Zeta.SmithFinitePwindowCompleteRecoveryDeterminantIndex
 import Omega.Zeta.XiKernelLossDivisibilityValuationRationalEuler
 import Omega.Zeta.XiSmithLossDiscreteCurvatureAtoms
+import Omega.Zeta.XiSmithSecondDiscreteCurvatureRecovery
 import Omega.Zeta.SmithLinearSolvabilityConstantFibers
 import Omega.Zeta.SmithPadicLossSpectrumClassification
 import Omega.Zeta.SmithPrefixSufficiency
