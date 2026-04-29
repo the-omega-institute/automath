@@ -49,6 +49,7 @@ import Omega.Zeta.IdealLatticeMultichainPrimeStratification
 import Omega.Zeta.PickKernelGaugeRigidity
 import Omega.Zeta.XiPoissonFirstMismatchDissipationLeading
 import Omega.Zeta.XiPoissonVarianceMismatchTVLeading
+import Omega.Zeta.XiPrimeHardcoreGibbsCLT
 import Omega.Zeta.XiPoissonFdivSixthOrderMu3Mu4
 import Omega.Zeta.XiCauchyPoissonKlSharpAsymptotics
 import Omega.Zeta.XiTimePart60ab2Window6BoundaryEightSuperselection
