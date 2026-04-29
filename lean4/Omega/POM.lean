@@ -157,6 +157,7 @@ import Omega.POM.AddCollisionSpectrumRenyiMonotone
 import Omega.POM.AdditiveFoldCollisionConvolutionFourier
 import Omega.POM.AdditiveFoldCollisionBounds
 import Omega.POM.HiddenBitJumpProbabilityClosedForm
+import Omega.POM.HiddenBitEntropy
 import Omega.POM.OddFourphaseQCollapseThreshold
 import Omega.POM.HiddenBitMixedMomentCluster
 import Omega.POM.HiddenBitBiasEnergyIdentity

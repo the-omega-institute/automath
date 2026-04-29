@@ -37,6 +37,7 @@ import Omega.EA.DynamicPrimeRegisterConcatenation
 import Omega.EA.FibAdicBasic
 import Omega.EA.FibAdicTower
 import Omega.EA.FibCongruence
+import Omega.EA.FibDivisibilityIff
 import Omega.EA.FibDivisibilityChain
 import Omega.EA.FiniteFieldLinearization
 import Omega.EA.FiniteLedgerRecoverability
