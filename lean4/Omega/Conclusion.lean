@@ -2689,3 +2689,4 @@ import Omega.Conclusion.ExternalBudgetNoncomputableNonre
 import Omega.Conclusion.FiberParityBalanceRowmotionThreeTorsion
 import Omega.Conclusion.FiberSymmetryEntropyExtremals
 import Omega.Conclusion.PrimeConductorCenteredSliceWeightedVarianceCollapse
+import Omega.Conclusion.CanonicalFixedpointsCantorClosure
