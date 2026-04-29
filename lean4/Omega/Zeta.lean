@@ -224,6 +224,8 @@ import Omega.Zeta.XiPoissonCauchyL2OptimalScaleHalving
 import Omega.Zeta.XiPoissonCauchySpectralEnergyUniversalConstant
 import Omega.Zeta.XiPoissonCauchyDensityIntersectionDriftM3
 import Omega.Zeta.XiTimeDefectSmithReduction
+import Omega.Zeta.XiTimePart67Window6NonfreeGroupQuotientObstruction
+import Omega.Zeta.XiTimePart67LastbitTerminalCsiszarCollapse
 import Omega.Zeta.HardyCriterionDelta
 import Omega.Zeta.XiSaturatedShiftInvariantLatticeGcdLcm
 import Omega.Zeta.XiGridScanTwoStepDealiasing
