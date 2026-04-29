@@ -219,6 +219,8 @@ import Omega.Zeta.XiTimePart9zpAllonesAreaTimeCubicLowerBound
 import Omega.Zeta.XiTimePart9zpZGPrimeGrammarMatrixization
 import Omega.Zeta.XiPrimeHardcoreDeltaHcMatchesCHc
 import Omega.Zeta.XiPrimeHardcoreNewtonMaclaurin
+import Omega.Zeta.XiTimePart57bPressureAffineSemigroupLaw
+import Omega.Zeta.XiTimePart9uMinusoneDarkmodeEvenModulus
 import Omega.Zeta.XiTimePart9zbFoldpiTwoAtomicMomentCharacterization
 import Omega.Zeta.XiLogisticHellingerGramDeterminant
 import Omega.Zeta.XiTerminalZmDeltaS5PluricanonicalCharacterSupport
