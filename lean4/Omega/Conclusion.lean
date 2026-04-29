@@ -1,3 +1,4 @@
+import Omega.Conclusion.RankTwoTateCarpetLogisticDimensionSurface
 import Omega.Conclusion.LocalizedSolenoidFinitewindowPeriodicAuditBlindPrimes
 import Omega.Conclusion.PoissonCauchyOptimalDriftCompleteInversion
 import Omega.Conclusion.HistoryRecoveryActivePrimeSliceLinearDepth
