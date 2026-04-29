@@ -2564,3 +2564,4 @@ import Omega.Conclusion.ScreenExactAuditTutteGenerator
 import Omega.Conclusion.ScreenExactificationTripleIdentification
 import Omega.Conclusion.LeyangQuarticMinimalBadReductionPrimeWall
 import Omega.Conclusion.Window6SynchronizationEntropyKlAnomalyIdentity
+import Omega.Conclusion.ObserverTwoTorsionOnebitMinimalDesingularization
