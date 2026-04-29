@@ -28,6 +28,7 @@ import Omega.Zeta.XiBasepointScanHeineStieltjesOde
 import Omega.Zeta.XiAtomicWittEnergyResidueL2Law
 import Omega.Zeta.XiFoldbinEntropyGaugeOneNatGap
 import Omega.Zeta.XiLeyangGtDiscriminantAndSpecialFiberFactorization
+import Omega.Zeta.XiLeyangNormOneUnitExplicit3Torsion
 import Omega.Zeta.XiSymqGoldenCqModPiQuadraticPhaseTransition
 import Omega.Zeta.XiSymqGoldenCqMod5HalfThresholdPhaseTransition
 import Omega.Zeta.XiSyndromeQuotientModuleRationalCanonicalFingerprint
