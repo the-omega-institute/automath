@@ -2749,3 +2749,4 @@ import Omega.Conclusion.S4FixedpointCensusRepackaged
 import Omega.Conclusion.CollisionKernelMatrixPowerExpDimensionUnderSharpeth
 import Omega.Conclusion.Window6HistogramGeneratorFivefoldDecoding
 import Omega.Conclusion.Window6RamanujanBlindResidualChannel
+import Omega.Conclusion.PhaseCoverLocalizedFiniteKernelOnlyOutsidePrimes
