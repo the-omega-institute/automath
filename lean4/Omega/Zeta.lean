@@ -3268,3 +3268,5 @@ import Omega.Zeta.XiHzomRhReduction
 import Omega.Zeta.XiTimePart62dCommonPro2TruncationLaw
 import Omega.Zeta.XiEndpointBinomialFalsifier
 import Omega.Zeta.XiFoldbinGaugeConstantOneStepAcceleration2pi
+import Omega.Zeta.XiFibCongruenceFourierRankkOptimal
+import Omega.Zeta.XiGodelPrimeExponentRegisterUniformIndependence
