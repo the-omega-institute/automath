@@ -240,6 +240,7 @@ import Omega.Conclusion.ContinuousCapacityCurveThermodynamicCompleteness
 import Omega.Conclusion.ResonanceBudgetNoL2Envelope
 import Omega.Conclusion.PoissonCauchyM4Decode
 import Omega.Conclusion.BoundaryGodelHighambientAdhesionSaturation
+import Omega.Conclusion.PoissonCauchyTVSecondOrderNorm
 import Omega.Conclusion.BoundaryGodelBitlengthExponentEqualsAdhesion
 import Omega.Conclusion.ZGPositiveEntropyFinitestateObstruction
 import Omega.Conclusion.GaugeAnomalyL2Law

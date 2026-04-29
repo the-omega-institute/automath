@@ -240,6 +240,8 @@ import Omega.Zeta.BlaschkePointSpectrumCorrespondence
 import Omega.Zeta.XiCMVPointSpectrumDimensionEqualsBlaschkeDegree
 import Omega.Zeta.XiKappaInvariantUnification
 import Omega.Zeta.SelfdualMaslovSingularDichotomy
+import Omega.Zeta.XiCauchyPoissonPinskerSharpRatio
+import Omega.Zeta.XiFoldbinHiddenBudgetVisibleEntropyKlOneConstant
 import Omega.Zeta.XiGramshiftCharpolyAsPhiImageOfDiskpoles
 import Omega.Zeta.WindingEqualsBlaschkeDegree
 import Omega.Zeta.XiOracleCapacityExponentTailVariationalBounds
