@@ -689,6 +689,8 @@ import Omega.Conclusion.ChainArithmeticMedianFactorialGeodesics
 import Omega.Conclusion.BinfoldEscortBlackwellEquivalence
 import Omega.Conclusion.BinfoldEscortBayesRiskCollapse
 import Omega.Conclusion.BayesInfonce2EqualsQcollision2ChoiRank
+import Omega.Conclusion.GaugeDensityPressureEnvelope
+import Omega.Conclusion.BayesInfonce2SatThresholdExplicit
 import Omega.Conclusion.BinfoldEscortCsiszarBlackwellPhi
 import Omega.Conclusion.BinfoldEscortChernoffBregmanEquidistance
 import Omega.Conclusion.BinfoldEscortSqrtCircleArc
