@@ -216,6 +216,18 @@ private lemma xi_time_part47ca_infonce_signed_hausdorff_inversion_sum_expand
       · intro hqnot
         exact False.elim (hqnot (Finset.mem_Icc.mpr ⟨hq, le_rfl⟩))
 
+/-- Paper label: `thm:xi-time-part47ca-infonce-newton-pascal-eta-expansion`. -/
+theorem paper_xi_time_part47ca_infonce_newton_pascal_eta_expansion
+    (eta p L : Nat -> Real)
+    (htri : forall K, 2 <= K ->
+      L K = Finset.sum (Finset.Icc 2 K) (fun q =>
+        (-1 : Real) ^ q * eta q * Nat.choose (K - 1) (q - 1) * p q))
+    (q : Nat) (hq : 2 <= q) :
+    Finset.sum (Finset.Icc 2 q) (fun K =>
+      (-1 : Real) ^ K * Nat.choose (q - 1) (K - 1) * L K) =
+        eta q * p q := by
+  exact xi_time_part47ca_infonce_signed_hausdorff_inversion_sum_expand eta p L htri q hq
+
 /-- Paper label: `thm:xi-time-part47ca-infonce-signed-hausdorff-inversion`. -/
 theorem paper_xi_time_part47ca_infonce_signed_hausdorff_inversion
     (η p L : ℕ → ℝ) (hη : ∀ q ≥ 2, η q ≠ 0)
