@@ -2938,3 +2938,4 @@ import Omega.Zeta.XiTimePart9zlLocalizationCircleCollapseSupportRigidity
 import Omega.Zeta.XiComovingPrefixParetoHalfCost
 import Omega.Zeta.AbelPoleDivisorPowermapLyapunov
 import Omega.Zeta.AbelianChannelNegativityLocalization
+import Omega.Zeta.XiPoissonTwoParameterKLSharpQuadratic
