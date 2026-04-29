@@ -219,6 +219,7 @@ import Omega.Zeta.NoComputableSliceBoundForSemanticEquivalence
 import Omega.Zeta.XiOfflineMembershipGrassmannLowerBound
 import Omega.Zeta.XiOfflineMembershipNearOptimalEncoding
 import Omega.Zeta.XiLogisticBoundaryMassError
+import Omega.Zeta.LocalizedIntegersOrderEndomorphismRigidity
 import Omega.Zeta.XiP7S5K5K10K20SplittingTypeTable
 import Omega.Zeta.XiP7S5OddRamificationDiscriminantAndConductor
 import Omega.Zeta.XiTimePart70PrimeTwistSpectralRadiusQuadraticApproach
