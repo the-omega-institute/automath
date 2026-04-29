@@ -29,4 +29,15 @@ theorem paper_conclusion_realinput40_sync_length_zero_spectrum_alignment :
       Omega.SyncKernelWeighted.RealInput40Digit.zero], rfl, ?_⟩
     simpa using hreset5
 
+/-- Paper label: `cor:conclusion-realinput40-sync-exact-zero-spectrum-boundary`. Synchronization at
+length `5` coincides with full-kernel zero-spectrum stabilization at the same step. -/
+theorem paper_conclusion_realinput40_sync_exact_zero_spectrum_boundary :
+    (∃ w : List Omega.SyncKernelWeighted.RealInput40Digit, w.length = 5 ∧
+      ∀ s, Omega.SyncKernelWeighted.realInput40Run s w =
+        Omega.SyncKernelWeighted.realInput40ResetState) ∧
+      Omega.SyncKernelWeighted.real_input_40_nilpotent_index_full_kernel_dim 5 = 31 := by
+  rcases paper_conclusion_realinput40_sync_length_zero_spectrum_alignment with
+    ⟨_, _, hfull5, _, hreset, _⟩
+  exact ⟨hreset, hfull5⟩
+
 end Omega.Conclusion

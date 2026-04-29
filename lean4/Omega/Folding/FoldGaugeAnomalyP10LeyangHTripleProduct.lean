@@ -59,4 +59,20 @@ theorem paper_fold_gauge_anomaly_P10_leyang_H_triple_product :
   rcases paper_fold_gauge_anomaly_P10_H_linear_disjointness with ⟨_, _, _, hp10H, _⟩
   refine ⟨⟨hkillo, hp10H, hp10ly, hlyH, rfl, rfl, rfl⟩, rfl⟩
 
+/-- Concrete data token for the lower-case theorem name used by the round manifest. -/
+abbrev fold_gauge_anomaly_p10_leyang_h_triple_product_data := PUnit
+
+/-- The concrete triple-product statement registered under the round-manifest spelling. -/
+def fold_gauge_anomaly_p10_leyang_h_triple_product_statement
+    (_ : fold_gauge_anomaly_p10_leyang_h_triple_product_data) : Prop :=
+  foldGaugeAnomalyP10LeyangHTripleProductGalois ∧
+    foldGaugeAnomalyP10LeyangHTripleCompositumDegree =
+      Nat.factorial 10 * Nat.factorial 3 * Nat.factorial 19
+
+/-- Paper label: `thm:fold-gauge-anomaly-P10-leyang-H-triple-product`. -/
+theorem paper_fold_gauge_anomaly_p10_leyang_h_triple_product
+    (D : fold_gauge_anomaly_p10_leyang_h_triple_product_data) :
+    fold_gauge_anomaly_p10_leyang_h_triple_product_statement D := by
+  exact paper_fold_gauge_anomaly_P10_leyang_H_triple_product
+
 end Omega.Folding

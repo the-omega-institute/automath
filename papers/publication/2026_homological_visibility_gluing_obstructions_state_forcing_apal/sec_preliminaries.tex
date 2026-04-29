@@ -1,9 +1,9 @@
-\section{Preliminaries: Conservative Extensions}\label{sec:preliminaries}
+\section{Preliminaries on the extension chain}\label{sec:preliminaries}
 
-The later sections use only one abstract idea: a higher semantic layer may add coordinates or structure without changing the behavior of formulas already present below. The definitions in this section isolate that invariance principle and nothing more.
+We fix the semantic framework used throughout. In particular, we distinguish conservative extension from the weaker singleton embedding that links the pointwise layer to information-state forcing.
 
 \subsection*{Standing notation}
-States are denoted by $p,q,u$, and admitted references by $r:\mathsf{Ref}_s$ with associated class $a=[r]_p$. The site on admitted reference classes at a state and sort is $\mathcal C_{p,s}$, the local object functor is $F_{p,s}$, the visible value classes of a reference are $\Vis_{p,s}(r)$, and branch obstruction classes are denoted by $\omega$ or $\omega_v$. Subscripts such as $\mathrm{vis}$, $\mathrm{br}$, and $\mathrm{unif}$ consistently indicate visible, branch-sensitive, and branch-uniform quotients.
+States are denoted by $p,q,u$, and admitted references by $r:\mathsf{Ref}_s$ with associated class $a=[r]_p$. The local reference site at a state and sort is $\mathcal C_{p,s}$, the local object functor is $F_{p,s}$, the visible value classes of a reference are $\Vis_{p,s}(r)$, and branch obstruction classes are denoted by $\omega$ or $\omega_v$. Subscripts such as $\mathrm{vis}$, $\mathrm{br}$, and $\mathrm{unif}$ consistently indicate visible, branch-sensitive, and branch-uniform quotients.
 
 \begin{definition}[Logic layer]\label{def:logic-layer}
 A \emph{logic layer} is a tuple
@@ -19,7 +19,7 @@ where $\Sigma$ is a signature, $\mathrm{Form}$ is the class of well-formed $\Sig
 \]
 \end{definition}
 
-The forcing relation is the primitive semantic notion. Consequence is derived from uniform preservation of forcing across all admissible models and states.
+Forcing is the primitive notion; consequence is derived from it.
 
 \begin{definition}[Conservative extension]\label{def:conservative-extension}
 Let
@@ -45,7 +45,27 @@ U_{n,m}(M),\pi^M_{n,m}(p)\Vdash_m \varphi.
 \end{equation}
 \end{definition}
 
-Thus a higher layer may add expressive power, state coordinates, or geometric constraints, but it may not alter the forcing behavior of formulas that already belonged to a lower layer.
+Thus a higher layer may add coordinates or geometric data, but lower-layer formulas are interpreted unchanged after projection.
+
+\begin{definition}[Singleton semantic embedding]\label{def:singleton-semantic-embedding}
+Let $\mathbb{L}_0=(\Sigma_0,\mathrm{Form}_0,\Mod_0,\St_0,\Vdash_0,\models_0)$ and $\mathbb{L}_1=(\Sigma_1,\mathrm{Form}_1,\Mod_1,\St_1,\Vdash_1,\models_1)$. We say that $\mathbb{L}_0$ \emph{embeds into $\mathbb{L}_1$ by a singleton semantic embedding}, written $\mathbb{L}_0\hookrightarrow\mathbb{L}_1$, if there exist
+\begin{enumerate}[label=(\roman*),nosep]
+\item a language embedding $e_{0,1}:\Sigma_0\hookrightarrow\Sigma_1$,
+\item a forgetful functor $U_{1,0}:\Mod_1\to\Mod_0$,
+\item for every $M\in\Mod_1$ and every pointwise state $\rho\in\St_0(U_{1,0}(M))$, a canonical singleton state
+\[
+\iota_{0,1}^M(\rho)\in\St_1(M)
+\]
+\end{enumerate}
+such that for every $\varphi\in\mathrm{Form}_0$,
+\begin{equation}\label{eq:singleton-semantic-embedding}
+M,\iota_{0,1}^M(\rho)\Vdash_1\varphi
+\quad\Longleftrightarrow\quad
+U_{1,0}(M),\rho\Vdash_0\varphi.
+\end{equation}
+\end{definition}
+
+A singleton semantic embedding is weaker than a conservative extension: it compares only singleton states, and no projection from arbitrary information states to pointwise states is required.
 
 \begin{proposition}[Composition of conservative extensions]\label{prop:conservative-composition}
 If $\mathbb{L}_\ell\preceq\mathbb{L}_m$ and $\mathbb{L}_m\preceq\mathbb{L}_n$, then $\mathbb{L}_\ell\preceq\mathbb{L}_n$.
@@ -87,449 +107,58 @@ then every formula belonging to any lower layer keeps the same forcing behavior 
 Apply \Cref{prop:conservative-composition} repeatedly along the chain.
 \end{proof}
 
-\subsection{The reference-aware local-object boundary}\label{subsec:reference-aware-boundary}
-
-The comparison used in Theorem~A is not the comparison between the original pointwise language and a later language containing references. It is the comparison between an already reference-aware information-state language and its local-object enrichment. The following ledger is fixed before any site is chosen:
-\begin{center}
-\begin{tabular}{p{0.14\linewidth}p{0.38\linewidth}p{0.34\linewidth}}
-\hline
-layer & symbols present at that layer & symbols not yet present\\
-\hline
-$\Sigma_0$ & underlying pointwise symbols & $\mathsf{Ref}_s,\Adm_s$ and all local-object symbols\\
-$\Sigma_1$ & information-state forcing symbols together with $\mathsf{Ref}_s$ and $\Adm_s$ & site, cover, functor, and sectionability symbols\\
-$\Sigma_2$ & the whole $\Sigma_1$ signature plus sites on already admitted reference classes, covers, local object functors, and sectionability predicates & branch gerbes, obstruction classes, and refinement dynamics\\
-\hline
-\end{tabular}
-\end{center}
-Thus the phrase ``site on admitted reference classes'' is a semantic construction over the $\Sigma_1$ set of admitted classes; it is not a delayed introduction of the reference sort or of the admissibility predicate. This ledger is the typing convention used by all later references to $\Frm_1^{\mathrm{ref}}(s)$.
-In particular, $\mathrm{Form}_1$ is not the reference-free pointwise formula class. It is the formula class generated by the reference-aware signature $\Sigma_1$, so formulas with displayed context
-\[
-x:\mathsf{Ref}_s
-\]
-are ordinary $\mathrm{Form}_1$ formulas whenever their nonlogical symbols lie in $\Sigma_1$. The smaller notation $\Frm_1^{\mathrm{ref}}(s)$ is used later only to impose the additional restrictions relevant to Theorem~A: no parameters and no local-object symbols.
-
-The constructions used later fit into the finite chain
+The semantic layers considered later fit into the chain
 \[
 \mathbb{L}_0
-\preceq
+\xhookrightarrow{\iota}
 \mathbb{L}_1
 \preceq
 \mathbb{L}_2
 \preceq
 \mathbb{L}_3
 \preceq
-\mathbb{L}_4.
+\mathbb{L}_4,
 \]
-Here $\mathbb{L}_0$ is the underlying pointwise semantics, $\mathbb{L}_1$ is the reference-aware information-state forcing layer, $\mathbb{L}_2$ adds local-object geometry over classes that have already been cut out by the $\mathbb L_1$ reference domain and the $\mathbb L_1$ admissibility predicate, $\mathbb{L}_3$ adds structural absence and gluing-obstruction data, and $\mathbb{L}_4$ adds refinement dynamics. The phrase ``already admitted'' is literal: reference variables and admissibility tests are fixed before the local-object layer is introduced. Thus the boundary relevant to Theorem~A is
-\[
-\text{reference-aware }\mathbb L_1\quad\leadsto\quad\text{local-object-aware }\mathbb L_2.
-\]
-The type judgments used later are therefore already lower-layer judgments:
-\[
-x:\mathsf{Ref}_s\vdash \Adm_s(x)\in\mathrm{Form}_1,
-\]
-whereas the local-object atoms
-\[
-\LocSec_s(x),\qquad \CompSec_s(x),\qquad \Sec_s(x)
-\]
-first become formulas only after the $\Sigma_2$ increment has been added. This is the formal boundary used in Theorem~A.
-By \Cref{cor:whole-chain-invariance}, the passage up the chain is cumulative rather than revisionary: each later layer preserves the forcing behavior already fixed below.
-
-The next proposition is the numbered ledger used by Theorem~A. Its first item places the reference sort and admissibility predicate in the lower signature; its second item is the complete $\Sigma_2\setminus\Sigma_1$ increment. Later phrases such as ``admitted reference class'' always refer back to the first item before the local-object increment is added.
-
-\begin{proposition}[Theorem A boundary typing: references are lower-layer data]\label{prop:theorem-a-boundary-typing}
-Fix the family $S_{\mathrm{ref}}$ of referenceable sorts used in the local-object construction.
-At the comparison boundary used in Theorem~A, the passage
-\[
-\mathbb L_1\leadsto\mathbb L_2
-\]
-has the following typed signature form. This proposition is the authoritative boundary contract for the paper's lower-fragment comparison: it is not inferred from the later site construction, and the site construction is not allowed to move any reference symbol across the boundary. In particular, the phrase ``site on admitted reference classes'' always means a site placed on classes already formed inside the $\Sigma_1$ reduct; it never means that references or admissibility are added at $\Sigma_2$.
-\begin{enumerate}[label=\textup{(\roman*)},leftmargin=3em]
-\item The lower signature is explicitly
-\[
-\Sigma_1
-=
-\Sigma_1^{\mathrm{st}}
-\cup
-\{\mathsf{Ref}_s,\Adm_s\mid s\in S_{\mathrm{ref}}\},
-\]
-where $\Sigma_1^{\mathrm{st}}$ denotes the remaining information-state forcing symbols. Hence the reference sort and admissibility predicate are lower-layer symbols:
-\[
-\mathsf{Ref}_s,\Adm_s\in\Sigma_1
-\quad\text{for every }s\in S_{\mathrm{ref}}.
-\]
-Thus
-\[
-x:\mathsf{Ref}_s\vdash \Adm_s(x)\in\mathrm{Form}_1
-\]
-is already a judgment of the reference-aware information-state language. More generally,
-\[
-x:\mathsf{Ref}_s\vdash\varphi(x)\in\mathrm{Form}_1
-\]
-is well typed exactly when $\varphi$ is a formula over this $\Sigma_1$ signature. No local-object symbol is needed to type the displayed reference variable or the atom $\Adm_s(x)$.
-\item The later local-object signature is
-\[
-\Sigma_2=\Sigma_1\cup\Sigma_2^{\mathrm{loc}},
-\qquad
-\Sigma_2^{\mathrm{loc}}
-=
-\{\mathcal C_{p,s},\Cov_{p,s},F_{p,s},
-\LocSec_s,\CompSec_s,\Sec_s
-\mid s\in S_{\mathrm{ref}}\}.
-\]
-Therefore the actual $\Sigma_2$ increment contains only local-object data:
-\[
-\Delta_{1,2}:=\Sigma_2\setminus\Sigma_1
-=
-\{\mathcal C_{p,s},\Cov_{p,s},F_{p,s},
-\LocSec_s,\CompSec_s,\Sec_s
-\mid s\in S_{\mathrm{ref}}\}.
-\]
-This item is the complete list of new symbols at the $\mathbb L_1\leadsto\mathbb L_2$ boundary. The full signature $\Sigma_2$ of course still contains $\mathsf{Ref}_s$ and $\Adm_s$, but only because $\Sigma_1\subseteq\Sigma_2$; those symbols are inherited lower symbols, not members of the increment $\Delta_{1,2}$.
-The words ``site on admitted reference classes'' in this display mean a site whose objects have already been selected by the $\Sigma_1$ predicate $\Adm_s$ from the $\Sigma_1$ domain $\mathsf{Ref}_s$. They do not introduce a new sort, a new admissibility predicate, or a new interpretation of either one.
-In particular,
-\[
-\Delta_{1,2}\cap
-\{\mathsf{Ref}_s,\Adm_s\mid s\in S_{\mathrm{ref}}\}
-=\varnothing .
-\]
-This is an equality of increments, not merely a list of examples: every symbol of $\Sigma_2$ used to define local sectionability is either already in $\Sigma_1$ or appears in the displayed local-object list. Thus there is no reading under which $\mathsf{Ref}_s$ or $\Adm_s$ belongs to $\Sigma_2\setminus\Sigma_1$.
-Consequently a formula or theorem that uses a variable $x:\mathsf{Ref}_s$ and the atom $\Adm_s(x)$ is using retained $\Sigma_1$ data; it is not quantifying over, or appealing to, any sort or predicate introduced by the local-object increment.
-\item Equivalently, the boundary has the following no-shift table:
-\[
-\begin{array}{c|c|c}
-\text{symbol or judgment} & \text{belongs to }\Sigma_1 & \text{new in }\Sigma_2\setminus\Sigma_1\\ \hline
-x:\mathsf{Ref}_s & \text{yes} & \text{no}\\
-\Adm_s(x) & \text{yes} & \text{no}\\
-\mathcal C_{p,s},\Cov_{p,s},F_{p,s} & \text{no} & \text{yes}\\
-\LocSec_s(x),\CompSec_s(x),\Sec_s(x) & \text{no} & \text{yes.}
-\end{array}
-\]
-\item The lower comparison fragment is therefore the typed reference-aware fragment
-\[
-\Frm_1^{\mathrm{ref}}(s)\subseteq\mathrm{Form}_1
-\]
-whose displayed free variable may have sort $\mathsf{Ref}_s$ and whose atoms may include $\Adm_s(x)$, but which contains none of
-\[
-\LocSec_s,\qquad \CompSec_s,\qquad \Sec_s,
-\qquad \Null_s^{\mathrm{glue}}.
-\]
-\end{enumerate}
-Consequently every formula quantified over in Theorem~A is well typed before local-object geometry is added, and every predicate separated by that theorem belongs to the later local-object side of the boundary. The comparison is therefore between a $\Sigma_1$ formula evaluated at a retained semantic reference element and a $\Sigma_2$ target predicate evaluated in a local-object expansion of the same $\Sigma_1$ reduct.
-\end{proposition}
-
-\begin{proof}
-Clause \textup{(i)} defines $\Sigma_1$ as the information-state signature together with the displayed reference sorts and admissibility predicates. Therefore the formula class $\mathrm{Form}_1$ is already generated over a signature containing $\mathsf{Ref}_s$ and $\Adm_s$, and the judgment $x:\mathsf{Ref}_s\vdash\Adm_s(x)\in\mathrm{Form}_1$ is immediate. Clause \textup{(ii)} defines $\Sigma_2$ by adjoining the local-object part $\Sigma_2^{\mathrm{loc}}$ to this already reference-aware signature; subtracting $\Sigma_1$ leaves only sites, covers, functors, and sectionability predicates. Hence neither $\mathsf{Ref}_s$ nor $\Adm_s$ is introduced by the $\mathbb L_1\leadsto\mathbb L_2$ step. The word ``admitted'' in the description of the objects of $\mathcal C_{p,s}$ refers back to the truth of the already available $\Sigma_1$ formula $\Adm_s(x)$, so it cannot add an admissibility symbol at $\Sigma_2$. Clause \textup{(iii)} is just this separation written as a typing table. Clause \textup{(iv)} follows immediately: a formula over the lower signature may use the symbols of $\Sigma_1$, including $\mathsf{Ref}_s$ and $\Adm_s$, but cannot contain symbols that occur only in $\Delta_{1,2}$. Since $\Null_s^{\mathrm{glue}}(x)$ abbreviates $\Adm_s(x)\land\CompSec_s(x)\land\neg\Sec_s(x)$, it is also outside the lower fragment.
-\end{proof}
-
-\begin{definition}[Lower reference data and admitted classes]\label{def:lower-reference-data}
-Fix a referenceable sort $s$. The reference-aware layer $\mathbb L_1$ contains the sort $\mathsf{Ref}_s$ and the unary predicate $\Adm_s$ before any site, cover, local object functor, or sectionability predicate is present. For a $\Sigma_1$ model $N$ and a state $p\in\St_1(N)$, define
-\[
-d\equiv_p e
-\quad:\Longleftrightarrow\quad
-N,p[d/x,e/y]\Vdash_1 x=y
-\]
-for semantic elements $d,e\in D_{\mathsf{Ref}_s}^N$, where $x,y:\mathsf{Ref}_s$ are fresh variables. The lower-layer admitted reference classes are
-\[
-\mathcal R_s^1(N,p):=
-\{[d]_p\mid d\in D_{\mathsf{Ref}_s}^N
-\text{ and }N,p\Vdash_1\Adm_s(d)\}.
-\]
-This construction uses only $\Sigma_1$ data: the reference domain, equality, the information state, and the admissibility predicate. Later phrases such as ``site on admitted reference classes'' always mean a site placed on the already formed set $\mathcal R_s^1(N,p)$. They do not introduce $\mathsf{Ref}_s$ or $\Adm_s$ at $\Sigma_2$.
-\end{definition}
-
-\begin{proposition}[No-reference-increment signature boundary]\label{prop:no-reference-increment}
-Fix a family $S_{\mathrm{ref}}$ of referenceable sorts. At the boundary used in Theorem~A the passage
-\[
-\mathbb L_1\leadsto\mathbb L_2
-\]
-is a local-object increment over an already reference-aware lower language. More precisely, the signature placement is part of the data of the chain and is as follows.
-\begin{enumerate}[label=\textup{(\roman*)},leftmargin=3em]
-\item The lower signature already contains the reference sorts and admissibility predicates:
-\[
-\Sigma_1
-=
-\Sigma_1^{\mathrm{st}}
-\cup
-\{\mathsf{Ref}_s,\Adm_s\mid s\in S_{\mathrm{ref}}\},
-\]
-where $\Sigma_1^{\mathrm{st}}$ denotes the remaining information-state forcing symbols. Hence the symbols
-\[
-\mathsf{Ref}_s,\qquad \Adm_s
-\]
-already belong to $\Sigma_1$ for every $s\in S_{\mathrm{ref}}$, and
-\[
-x:\mathsf{Ref}_s\vdash \Adm_s(x)\in\mathrm{Form}_1
-\]
-is a lower-layer judgment.
-\item The local-object signature is obtained by adjoining only site, cover, functor, and sectionability symbols:
-\[
-\Sigma_2=\Sigma_1\cup\Sigma_2^{\mathrm{loc}},
-\]
-where the new local-object part is
-\[
-\Sigma_2^{\mathrm{loc}}
-:=
-\{\mathcal C_{p,s},\Cov_{p,s},F_{p,s},
-\LocSec_s,\CompSec_s,\Sec_s
-\mid s\in S_{\mathrm{ref}}\}.
-\]
-Thus the full $\Sigma_2$ signature contains $\mathsf{Ref}_s$ and $\Adm_s$ only by inheritance from $\Sigma_1$; they are not newly added at this step.
-\item The actual increment is therefore the identity
-\[
-\Delta_{1,2}:=\Sigma_2\setminus\Sigma_1
-=
-\{\mathcal C_{p,s},\Cov_{p,s},F_{p,s},
-\LocSec_s,\CompSec_s,\Sec_s
-\mid s\in S_{\mathrm{ref}}\};
-\]
-no symbol in this display is a reference sort or an admissibility predicate. In particular,
-\[
-\Delta_{1,2}\cap
-\{\mathsf{Ref}_s,\Adm_s\mid s\in S_{\mathrm{ref}}\}
-=\varnothing .
-\]
-No later reference to a ``site on admitted reference classes'' changes this disjointness. By \Cref{def:lower-reference-data}, those classes are already cut out by the $\Sigma_1$ reference domain, equality, state, and $\Sigma_1$ admissibility predicate before any local-object symbol is present.
-\item The reduct $U_{2,1}$ forgets precisely $\Delta_{1,2}$ and preserves the reference domains and admissibility predicates:
-\[
-D_{\mathsf{Ref}_s}^{\,U_{2,1}(M)}=D_{\mathsf{Ref}_s}^{\,M},
-\qquad
-\Adm_s^{\,U_{2,1}(M)}=\Adm_s^{\,M}.
-\]
-\item Consequently the boundary typing table is
-\[
-\begin{array}{c|c|c}
-\text{expression} & \text{layer where it is well formed} & \text{retained by }U_{2,1}\\ \hline
-x:\mathsf{Ref}_s & \mathrm{Form}_1\text{ contexts} & \text{yes}\\
-\Adm_s(x) & \mathrm{Form}_1 & \text{yes}\\
-\LocSec_s(x),\ \CompSec_s(x),\ \Sec_s(x) & \mathrm{Form}_2\text{ only} & \text{no.}
-\end{array}
-\]
-\end{enumerate}
-Consequently the lower comparison language at this boundary is reference-aware but not local-object-aware: variables $x:\mathsf{Ref}_s$ and atoms $\Adm_s(x)$ are $\Sigma_1$ data, while $\LocSec_s$, $\CompSec_s$, and $\Sec_s$ are $\Sigma_2$ data not present in $\Sigma_1$. Clause \textup{(iii)} is the complete list of symbols added after references and admissibility are already present.
-\end{proposition}
-
-\begin{proof}
-Clause \textup{(i)} fixes the reference-aware information-state language. Clause \textup{(ii)} defines the local-object part of the next signature, and subtracting $\Sigma_1$ from the displayed union gives the increment in \textup{(iii)}. Since that increment is displayed explicitly and contains only local-object symbols, it contains no reference sort and no admissibility predicate. The objects of the later sites are equivalence classes cut out from the retained $\Sigma_1$ reference domain by the retained $\Sigma_1$ admissibility predicate. The reduct along the inclusion $\Sigma_1\hookrightarrow\Sigma_2$ forgets precisely the symbols in $\Delta_{1,2}$ and therefore retains all $\Sigma_1$ domains and predicates, including $\mathsf{Ref}_s$ and $\Adm_s$. This gives clause \textup{(iv)}, and the typing table in \textup{(v)} follows immediately.
-\end{proof}
-
-\begin{definition}[Reference-aware boundary contract]\label{def:reference-aware-boundary}
-With $S_{\mathrm{ref}}$ as in \Cref{prop:no-reference-increment}, the part of the signature chain used in Theorem~A is scheduled as follows:
-\[
-\Sigma_1
-=
-\Sigma_1^{\mathrm{st}}
-\cup
-\{\mathsf{Ref}_s,\Adm_s\mid s\in S_{\mathrm{ref}}\},
-\]
-where $\Sigma_1^{\mathrm{st}}$ denotes the remaining information-state forcing symbols, and
-\[
-\Sigma_2
-=
-\Sigma_1
-\cup
-\Sigma_2^{\mathrm{loc}},
-\]
-where
-\[
-\Sigma_2^{\mathrm{loc}}
-:=
-\{\mathcal C_{p,s},\Cov_{p,s},F_{p,s},
-\LocSec_s,\CompSec_s,\Sec_s
-\mid s\in S_{\mathrm{ref}}\}.
-\]
-Thus
-\[
-\mathsf{Ref}_s,\Adm_s\in\Sigma_1
-\qquad\text{and}\qquad
-(\Sigma_2\setminus\Sigma_1)\cap\{\mathsf{Ref}_s,\Adm_s\mid s\in S_{\mathrm{ref}}\}=\varnothing .
-\]
-The $\mathbb L_1$--$\mathbb L_2$ boundary is therefore governed by the following typing table:
-\[
-\begin{array}{c|l|l}
-\text{layer} & \text{reference-aware symbols} & \text{local-object symbols}\\ \hline
-\Sigma_1 & \mathsf{Ref}_s,\ \Adm_s & \text{none of }\LocSec_s,\CompSec_s,\Sec_s\\
-\Sigma_2\setminus\Sigma_1 & \text{none} &
-\mathcal C_{p,s},\Cov_{p,s},F_{p,s},\LocSec_s,\CompSec_s,\Sec_s .
-\end{array}
-\]
-Consequently a variable declaration $x:\mathsf{Ref}_s$ and the atom $\Adm_s(x)$ are already well formed in $\mathrm{Form}_1$. The local-object atoms
-\[
-\LocSec_s(x),\qquad \CompSec_s(x),\qquad \Sec_s(x)
-\]
-are well formed only after passing to $\mathrm{Form}_2$.
-
-The lower reference-aware signature over $s$ is the sub-signature
-\[
-\Sigma_1^{\mathrm{ref}}(s)\subseteq\Sigma_1
-\]
-containing the displayed symbols $\mathsf{Ref}_s,\Adm_s$ together with the other $\Sigma_1$ symbols used by information-state forcing, and containing no symbol of $\Sigma_2^{\mathrm{loc}}$. The formula fragment later denoted $\Frm_1^{\mathrm{ref}}(s)$ consists of formulas over this signature. It is a genuine part of $\mathbb L_1$, not the reference-free pointwise language $\mathbb L_0$, and not a fragment that obtains its reference sort by forgetting local-object data from $\mathbb L_2$.
-Equivalently, the fragment used in Theorem~A is the following set of type judgments:
-\[
-\Frm_1^{\mathrm{ref}}(s)
-=
-\{\varphi(x)\mid
-x:\mathsf{Ref}_s\vdash \varphi(x)\in\mathrm{Form}_1
-\text{ over }\Sigma_1^{\mathrm{ref}}(s)\text{, with no parameters}\},
-\]
-where
-\[
-\mathsf{Ref}_s,\Adm_s\in\Sigma_1^{\mathrm{ref}}(s),
-\qquad
-\{\LocSec_s,\CompSec_s,\Sec_s\}\cap\Sigma_1^{\mathrm{ref}}(s)=\varnothing.
-\]
-Thus $\Adm_s(x)$ is available to the lower comparison language, while the local-object predicates being separated from it are not.
-
-The phrase ``site on admitted reference classes'' used below is semantic shorthand for a site whose objects are the already formed lower-layer classes
-\[
-\mathcal R_s(p)=\{[d]_p\mid d\in D_{\mathsf{Ref}_s}^M\text{ and }M,p\Vdash\Adm_s(d)\}.
-\]
-It does not introduce a new sort or a new admissibility predicate. Passing from $\mathbb L_1$ to $\mathbb L_2$ equips those existing classes with a site, covers, a local object functor, and sectionability predicates; it does not create or reinterpret $\mathsf{Ref}_s$ or $\Adm_s$.
-
-This is the standing type discipline for \Cref{thm:pointwise-irreducibility}. The phrase ``lower formula'' in that theorem always means a parameter-free formula of the typed subfragment $\Frm_1^{\mathrm{ref}}(s)\subseteq\mathrm{Form}_1$; it never means a formula of the original pointwise language $\mathrm{Form}_0$ and never allows any of the newly adjoined $\Sigma_2$ local-object predicates.
-\end{definition}
-
-Thus the contract is part of the definition of the comparison problem, not a conclusion proved later from local-object data.
-
-Equivalently, the type judgments at the boundary are
-\[
-x:\mathsf{Ref}_s\vdash x=x\in\mathrm{Form}_1,
-\qquad
-x:\mathsf{Ref}_s\vdash \Adm_s(x)\in\mathrm{Form}_1,
-\]
-whereas
-\[
-x:\mathsf{Ref}_s\vdash \LocSec_s(x),\ \CompSec_s(x),\ \Sec_s(x)
-\quad\text{are judgments only after passing to }\mathrm{Form}_2 .
-\]
-Reference typing and admissibility are lower-layer matters, settled in $\Sigma_1$; compatible local families and global sectionability are local-object matters, added at $\Sigma_2$. The separation theorem later compares these two questions over a fixed $\Sigma_1$ reduct.
-
-\begin{proposition}[Layer typing at the comparison boundary]\label{prop:layer-typing-comparison-boundary}
-For every referenceable sort $s$, the following are part of the signature data at the $\mathbb L_1$--$\mathbb L_2$ boundary.
-\begin{enumerate}[label=\textup{(\roman*)},leftmargin=3em]
-\item The reference context and admissibility atom are already lower-layer judgments:
-\[
-x:\mathsf{Ref}_s\in \mathrm{Form}_1\text{ contexts},
-\qquad
-\Adm_s(x)\in \mathrm{Form}_1.
-\]
-\item The local-object step adjoins only the site, cover, functor, and sectionability symbols:
-\[
-\Sigma_2\setminus\Sigma_1
-=
-\{\mathcal C_{p,s},\Cov_{p,s},F_{p,s},\LocSec_s,\CompSec_s,\Sec_s
-\mid s\in S_{\mathrm{ref}}\}.
-\]
-In particular, $\mathsf{Ref}_s$ and $\Adm_s$ are not members of
-$\Sigma_2\setminus\Sigma_1$.
-\item The reduct $U_{2,1}$ forgets the local-object symbols in \textup{(ii)} and retains the reference domain and admissibility predicate:
-\[
-D_{\mathsf{Ref}_s}^{\,U_{2,1}(M)}=D_{\mathsf{Ref}_s}^{\,M},
-\qquad
-\Adm_s^{\,U_{2,1}(M)}=\Adm_s^{\,M}.
-\]
-\item Consequently the boundary typing table is
-\[
-\begin{array}{c|c|c}
-\text{expression} & \text{layer where it is well formed} & \text{retained by }U_{2,1}\\ \hline
-x:\mathsf{Ref}_s & \mathrm{Form}_1\text{ contexts} & \text{yes}\\
-\Adm_s(x) & \mathrm{Form}_1 & \text{yes}\\
-\LocSec_s(x),\ \CompSec_s(x),\ \Sec_s(x) & \mathrm{Form}_2\text{ only} & \text{no}\\
-\Null_s^{\mathrm{glue}}(x) & \mathrm{Form}_2\text{ only} & \text{no.}
-\end{array}
-\]
-\end{enumerate}
-Consequently a formula of $\Frm_1^{\mathrm{ref}}(s)$ may have the displayed free variable $x:\mathsf{Ref}_s$ and may contain $\Adm_s(x)$, but no formula of $\Frm_1^{\mathrm{ref}}(s)$ contains $\LocSec_s$, $\CompSec_s$, $\Sec_s$, or $\Null_s^{\mathrm{glue}}$.
-\end{proposition}
-
-\begin{proof}
-Clause \textup{(i)} is exactly the placement $\mathsf{Ref}_s,\Adm_s\in\Sigma_1$ in \Cref{prop:no-reference-increment,def:reference-aware-boundary}. Clause \textup{(ii)} is the displayed definition of the local-object increment $\Delta_{1,2}=\Sigma_2^{\mathrm{loc}}$ in the same boundary contract. Hence
-\[
-(\Sigma_2\setminus\Sigma_1)\cap\{\mathsf{Ref}_s,\Adm_s\}=\varnothing
-\]
-and the passage from $\mathbb L_1$ to $\mathbb L_2$ neither creates nor reinterprets references or admissibility. Clause \textup{(iii)} is the concrete reduct clause of \Cref{prop:chain-instantiation}(ii): $U_{2,1}$ forgets the newly adjoined site, cover, functor, and sectionability symbols while retaining the whole $\Sigma_1$ reduct. The table in \textup{(iv)} now follows from \textup{(i)}--\textup{(iii)}. Finally,
-\[
-\Null_s^{\mathrm{glue}}(x)=\Adm_s(x)\land \CompSec_s(x)\land \neg\Sec_s(x),
-\]
-so it uses $\Sigma_2$ sectionability symbols and is not in $\Frm_1^{\mathrm{ref}}(s)$.
-\end{proof}
+where the hooked arrow $\xhookrightarrow{\iota}$ denotes a singleton semantic embedding (\Cref{def:singleton-semantic-embedding}) and each $\preceq$ denotes a conservative extension in the sense of \Cref{def:conservative-extension}. Here $\mathbb{L}_0$ is the underlying pointwise semantics, $\mathbb{L}_1$ is the information-state forcing layer with reference sorts, $\mathbb{L}_2$ adds local-object predicates and site structure, $\mathbb{L}_3$ adds structural absence and obstruction data, and $\mathbb{L}_4$ adds refinement dynamics. By \Cref{cor:whole-chain-invariance}, the passage from $\mathbb{L}_1$ upward is cumulative. The first step is weaker: pointwise states embed faithfully as singleton information states, but arbitrary multi-realization states need not project back to single assignments.
 
 \begin{proposition}[Concrete instantiation of the finite chain]\label{prop:chain-instantiation}
-The four adjacent interfaces of
+The chain
 \[
-\mathbb L_0\preceq \mathbb L_1\preceq \mathbb L_2\preceq \mathbb L_3\preceq \mathbb L_4
+\mathbb L_0\xhookrightarrow{\iota} \mathbb L_1\preceq \mathbb L_2\preceq \mathbb L_3\preceq \mathbb L_4
 \]
-are instantiated as follows. The reference placement at the first nontrivial boundary is the one fixed in \Cref{prop:no-reference-increment}. Thus, for every referenceable sort $s$, the assertion includes:
-\[
-\{\mathsf{Ref}_s,\Adm_s\}\subseteq \Sigma_1,
-\qquad
-(\Sigma_2\setminus\Sigma_1)\cap\{\mathsf{Ref}_s,\Adm_s\}=\varnothing,
-\]
-and
-\[
-\Sigma_2\setminus\Sigma_1
-=
-\{\mathcal C_{p,s},\Cov_{p,s},F_{p,s},\LocSec_s,\CompSec_s,\Sec_s
-\mid s\in S_{\mathrm{ref}}\},
-\]
-on the part of the signature used in Theorem~A. Thus item \textup{(ii)} below is a literal statement about the new $\Sigma_2$ symbols: it does not move the reference sort or the admissibility predicate out of $\Sigma_1$.
+is instantiated as follows.
 \begin{enumerate}[label=(\roman*),leftmargin=3em]
-\item \textbf{$\mathbb L_0\leadsto\mathbb L_1$ (pointwise states to reference-aware information states).}
+\item \textbf{$\mathbb L_0\hookrightarrow\mathbb L_1$ (pointwise states to information states: singleton semantic embedding).}
 The language embedding
 \[
 e_{0,1}:\Sigma_0\hookrightarrow \Sigma_1
 \]
-is the inclusion of the underlying many-sorted symbols into the reference-aware state-forcing language. As required by \Cref{def:reference-aware-boundary}, for every referenceable sort $s$, $\Sigma_1$ also contains the reference sort $\mathsf{Ref}_s$ and the admissibility predicate $\Adm_s$; these are ordinary lower-layer symbols at this interface and carry no site-on-reference-classes or local-object structure. The forgetful functor
+is the inclusion of the underlying many-sorted symbols. In addition, $\Sigma_1$ contains the reference sorts $\mathsf{Ref}_s$ (one for each referenceable sort $s\in S_{\mathrm{ref}}$) together with their equality; no geometric predicates or site structure is imposed at this step. The forgetful functor
 \[
 U_{1,0}:\Mod_1\to\Mod_0
 \]
-forgets the information-state presentation and the added reference-aware symbols, and remembers only the underlying many-sorted structure. A pointwise state $\rho$ in $\mathbb L_0$ is represented inside $\mathbb L_1$ by the singleton information state
+forgets the information-state presentation and the reference carrier sets, remembering only the underlying many-sorted structure of $\Sigma_0$. A pointwise state $\rho$ in $\mathbb L_0$ is represented inside $\mathbb L_1$ by the singleton information state
 \[
-p_\rho:=(\Gamma,\{\rho\}).
+\iota_{0,1}^M(\rho):=(\Gamma,\{\rho\}).
 \]
 By \Cref{prop:singleton-conservativity},
 \[
-M,p_\rho\Vdash_1\varphi
+M,\iota_{0,1}^M(\rho)\Vdash_1\varphi
 \quad\Longleftrightarrow\quad
 U_{1,0}(M),\rho\Vdash_0\varphi
 \]
-for every $\mathbb L_0$-formula $\varphi$. Thus the $\mathbb L_0$--$\mathbb L_1$ boundary is conservative on the canonical singleton image that realizes pointwise semantics inside information-state semantics.
+for every $\mathbb L_0$-formula $\varphi$. This is a singleton semantic embedding in the sense of \Cref{def:singleton-semantic-embedding}: it preserves forcing of $\mathbb L_0$-formulas on the canonical singleton image but does not provide a state projection from arbitrary $\mathbb L_1$-states back to $\mathbb L_0$-states.
 
-\item \textbf{$\mathbb L_1\leadsto\mathbb L_2$ (reference-aware information states to sites on admitted reference classes).}
+\item \textbf{$\mathbb L_1\leadsto\mathbb L_2$ (information states to local objects).}
 The embedding
 \[
 e_{1,2}:\Sigma_1\hookrightarrow \Sigma_2
 \]
-uses, for each $\Sigma_1$ model $N$ and state $p$, the lower-layer classes
-\[
-\mathcal R_s^1(N,p)=
-\{[d]_p\mid d\in D_{\mathsf{Ref}_s}^{N}
-\text{ and }N,p\Vdash_1\Adm_s(d)\}
-\]
-as the object candidates for the sites, and adjoins only the sites on those already admitted classes, the covers, the local object functors, the predicates $\LocSec_s$, $\CompSec_s$, $\Sec_s$, and the associated geometric notation. In particular, this interface preserves the reference domains and the interpretation of $\Adm_s$ fixed at $\Sigma_1$; it does not introduce a new reference sort, a new admissibility predicate, or a new interpretation of either. Equivalently,
-\[
-\Sigma_2\setminus\Sigma_1
-=
-\{\mathcal C_{p,s},\Cov_{p,s},F_{p,s},\LocSec_s,\CompSec_s,\Sec_s
-\mid s\in S_{\mathrm{ref}}\},
-\]
-and hence
-\[
-(\Sigma_2\setminus\Sigma_1)\cap
-\{\mathsf{Ref}_s,\Adm_s\mid s\in S_{\mathrm{ref}}\}
-=\varnothing .
-\]
-This displayed difference is meant literally: the words ``admitted reference classes'' refer to the lower-layer equivalence classes already cut out by $\mathsf{Ref}_s$ and $\Adm_s$ in $\Sigma_1$. They are not a shorthand for adding a new reference sort or a new admissibility predicate at $\Sigma_2$. Consequently a $\Sigma_1$ formula with a free variable $x:\mathsf{Ref}_s$ remains well typed before any local-object predicate is available, and the atom $\Adm_s(x)$ is a lower-layer atom rather than a local-object atom. The forgetful functor
+adjoins the admissibility predicates, the local-object predicates $\LocSec_s$, $\CompSec_s$, $\Sec_s$, the site-structure symbols (covers, refinement preorder, pullbacks), and the associated geometric notation. The reference sorts $\mathsf{Ref}_s$ and their equality are already present in $\Sigma_1$; the step from $\mathbb L_1$ to $\mathbb L_2$ equips references with the geometric structure needed to state local-to-global questions. The forgetful functor
 \[
 U_{2,1}:\Mod_2\to\Mod_1
 \]
-forgets the sites on admitted reference classes, covers, local object functors, and sectionability predicates while retaining the reference domains and admissibility interpretation. Explicitly, for every $\Sigma_2$ expansion $M$,
-\[
-D_{\mathsf{Ref}_s}^{\,U_{2,1}(M)}=D_{\mathsf{Ref}_s}^{\,M},
-\qquad
-\Adm_s^{\,U_{2,1}(M)}=\Adm_s^{\,M},
-\]
-while $\mathcal C_{p,s}$, $\Cov_{p,s}$, $F_{p,s}$, $\LocSec_s$, $\CompSec_s$, and $\Sec_s$ are omitted from the reduct. The state projection
+forgets the local reference sites, covers, and local object functors but retains the reference sorts and their carrier sets. The state projection
 \[
 \pi^M_{2,1}:\St_2(M)\to \St_1(U_{2,1}(M))
 \]
@@ -583,109 +212,7 @@ U_{4,3}(M),\pi^M_{4,3}(p)\Vdash_3\varphi
 \]
 for every $\varphi\in\mathrm{Form}_3$.
 \end{enumerate}
-Hence every adjacent boundary is conservative in the precise sense actually used later: the base boundary is mediated by the canonical singleton realization of pointwise states, while the higher boundaries use literal forgetful functors and state projections.
+The base boundary $\mathbb L_0\hookrightarrow\mathbb L_1$ is a singleton semantic embedding: pointwise states embed faithfully into information states, preserving the forcing of all $\mathbb L_0$-formulas on that canonical image. The three higher boundaries $\mathbb L_1\preceq\mathbb L_2\preceq\mathbb L_3\preceq\mathbb L_4$ are conservative extensions in the sense of \Cref{def:conservative-extension}, each with an explicit forgetful functor and state projection.
 \end{proposition}
 
-\begin{corollary}[Boundary-correct lower reference formulas]\label{cor:boundary-correct-reference-formulas}
-At the $\mathbb L_1$--$\mathbb L_2$ interface, formulas with displayed variable
-\[
-x:\mathsf{Ref}_s
-\]
-are lower formulas exactly when all of their nonlogical symbols lie in $\Sigma_1$. In particular, $\Adm_s(x)$ may occur in such a formula, while $\LocSec_s(x)$, $\CompSec_s(x)$, $\Sec_s(x)$, and $\Null_s^{\mathrm{glue}}(x)$ may not. For every local-object expansion $M$, the reduct $U_{2,1}(M)$ retains the domain of $x$ and the interpretation of $\Adm_s$.
-\end{corollary}
-
-\begin{proof}
-This is the boundary contract of \Cref{def:reference-aware-boundary} instantiated by \Cref{prop:chain-instantiation}(i)--(ii). Item \textup{(i)} places $\mathsf{Ref}_s$ and $\Adm_s$ in $\Sigma_1$. Item \textup{(ii)} says that the only new symbols at $\Sigma_2$ are the site, cover, local-object, and sectionability symbols, and that $U_{2,1}$ forgets those symbols while retaining the reference domains and admissibility interpretation. Since $\Null_s^{\mathrm{glue}}(x)$ contains $\CompSec_s(x)$ and $\Sec_s(x)$, it is also outside the lower fragment.
-\end{proof}
-
-\begin{lemma}[Reference data survive the $\mathbb L_2\to\mathbb L_1$ reduct]\label{lem:reference-data-survive-reduct}
-Let $M$ be a $\Sigma_2$ local-object model, let $p$ be a state, and let $r\in D_{\mathsf{Ref}_s}^{M}$. Then
-\[
-D_{\mathsf{Ref}_s}^{\,U_{2,1}(M)}=D_{\mathsf{Ref}_s}^{\,M},
-\qquad
-\Adm_s^{\,U_{2,1}(M)}=\Adm_s^{\,M},
-\]
-and therefore
-\[
-M,p\Vdash\Adm_s(r)
-\quad\Longleftrightarrow\quad
-U_{2,1}(M),\pi^M_{2,1}(p)\Vdash\Adm_s(r).
-\]
-Moreover $\Frm_1^{\mathrm{ref}}(s)$ is a genuine subfragment of $\mathrm{Form}_1$: its displayed variable has sort $\mathsf{Ref}_s$, its admissibility atom is $\Adm_s(x)$, and neither construction uses any symbol of $\Sigma_2\setminus\Sigma_1$.
-\end{lemma}
-
-\begin{proof}
-The domain equality and the equality of $\Adm_s$ are part of \Cref{prop:chain-instantiation}(ii). Since $\Adm_s$ is a $\Sigma_1$ predicate and the state projection $\pi^M_{2,1}$ is the identity on the underlying information state, the forcing equivalence for $\Adm_s(r)$ is exactly the conservativity clause at the $\mathbb L_1\leadsto\mathbb L_2$ boundary. The final assertion follows from the definition of $\Frm_1^{\mathrm{ref}}(s)$ and the boundary contract in \Cref{def:reference-aware-boundary}.
-\end{proof}
-
-\begin{definition}[Pointed reference evaluation]\label{def:pointed-reference-evaluation}
-Let
-\[
-p=(\Gamma_p,R_p)
-\]
-be a $\Sigma_1$ information state, let $x:\mathsf{Ref}_s$ be a displayed variable not already in $\Gamma_p$, and let
-\[
-r\in D_{\mathsf{Ref}_s}^M.
-\]
-Define the pointed state
-\[
-p[r/x]:=
-\bigl((\Gamma_p,x:\mathsf{Ref}_s),\{\rho[x\mapsto r]\mid \rho\in R_p\}\bigr).
-\]
-For a formula $\chi(x)$ whose displayed free variable is $x:\mathsf{Ref}_s$, write
-\[
-M,p\Vdash \chi[r]
-\quad:\Longleftrightarrow\quad
-M,p[r/x]\Vdash \chi(x).
-\]
-The same semantic convention is used for $\Sigma_2$ target predicates $P_s(x)$ such as $\CompSec_s(x)$ or $\Sec_s(x)$. This does not add a constant symbol for $r$ to the lower language: the formula remains parameter-free, and the reference element is supplied only by the pointed model-state evaluation.
-\end{definition}
-
-\begin{definition}[Reference-aware lower comparison fragment]\label{def:reference-aware-comparison-fragment}
-For a referenceable sort $s$, let
-\[
-\Frm_1^{\mathrm{ref}}(s)
-\]
-denote the class of parameter-free $\Sigma_1$-formulas whose only displayed free variable is
-\[
-x:\mathsf{Ref}_s
-\]
-and whose bound variables range only over $\Sigma_1$ sorts. These formulas are evaluated on realizations in the sense of \Cref{def:state-forcing}. This is a reference-aware subfragment of $\mathrm{Form}_1$, not a fragment of the original pointwise language $\mathrm{Form}_0$ and not a reduct in which references have been forgotten. Because $\mathsf{Ref}_s$ and $\Adm_s$ belong to $\Sigma_1$ by \Cref{def:reference-aware-boundary}, formulas such as $\Adm_s(x)$ are well formed in this fragment. Evaluation at a particular admitted reference is a semantic pointed-state convention, introduced in \Cref{def:pointed-reference-evaluation}; it is not the addition of a new constant symbol. No parameters naming local-object data are allowed. The fragment contains no symbols adjoined at the $\mathbb L_1\leadsto\mathbb L_2$ interface: in particular it contains neither the sites on admitted reference classes, nor covers, nor the local object functors, nor the predicates
-\[
-\LocSec_s,\qquad \CompSec_s,\qquad \Sec_s.
-\]
-\end{definition}
-
-\begin{lemma}[Typed comparison boundary]\label{lem:typed-comparison-boundary}
-For every referenceable sort $s$, the variable declaration $x:\mathsf{Ref}_s$ and the formula $\Adm_s(x)$ are well formed in $\mathrm{Form}_1$. The predicates $\LocSec_s$, $\CompSec_s$, and $\Sec_s$ are not symbols of $\Sigma_1$, and the derived predicate $\Null_s^{\mathrm{glue}}$ is therefore not a formula of $\Frm_1^{\mathrm{ref}}(s)$.
-\end{lemma}
-
-\begin{proof}
-The first assertion is exactly the placement of $\mathsf{Ref}_s$ and $\Adm_s$ at the $\mathbb L_0\leadsto\mathbb L_1$ interface in \Cref{prop:chain-instantiation}(i). At the next interface, \Cref{prop:chain-instantiation}(ii) adjoins only the sites on admitted reference classes, covers, local object functors, and sectionability predicates; it explicitly retains, rather than introduces, the reference domains and admissibility interpretation. Hence the lower comparison language is a $\Sigma_1$ language with reference variables, while the local-object predicates belong to $\Sigma_2$. The predicates $\LocSec_s$, $\CompSec_s$, and $\Sec_s$ first occur at $\Sigma_2$. Finally,
-\[
-\Null_s^{\mathrm{glue}}(x)
-:=
-\Adm_s(x)\land \CompSec_s(x)\land \neg\Sec_s(x),
-\]
-so it uses symbols absent from $\Sigma_1$.
-\end{proof}
-
-\begin{corollary}[Layer-correct comparison at the gluing boundary]\label{cor:layer-correct-gluing-boundary}
-The lower side of Theorem~A is the reference-aware reduct
-\[
-U_{2,1}(M)
-\]
-of a local-object model $M$, not the original pointwise language and not a reference-free language. Thus a lower formula may have the displayed free variable $x:\mathsf{Ref}_s$ and may contain the lower atom $\Adm_s(x)$. What it may not contain are the $\Sigma_2$ predicates
-\[
-\LocSec_s,\qquad \CompSec_s,\qquad \Sec_s
-\]
-or the derived gluing predicate $\Null_s^{\mathrm{glue}}$. Consequently the non-definability theorem compares well-typed $\Sigma_1$ formulas with $\Sigma_2$ target predicates over local-object expansions of the same $\Sigma_1$ reduct.
-\end{corollary}
-
-\begin{proof}
-This is just \Cref{lem:typed-comparison-boundary,lem:reference-data-survive-reduct} together with the concrete reduct description in \Cref{prop:chain-instantiation}(ii). The reduct $U_{2,1}$ keeps the reference domains and $\Adm_s$ fixed and forgets exactly the site-on-reference-classes and local-object symbols. Hence reference variables and admissibility tests are available to lower formulas, while sectionability and gluing predicates remain outside $\Frm_1^{\mathrm{ref}}(s)$.
-\end{proof}
-
-Thus the lower comparison language used at the $\mathbb L_1$--$\mathbb L_2$ boundary is reference-aware but not local-object-aware: it can talk about admitted references, but it cannot inspect compatible local families or global sectionability.
-
-This five-layer chain is the complete setting of the present paper. It is self-contained and does not presuppose any external framework.
+Hence the genuinely conservative part of the chain begins at $\mathbb L_1$.

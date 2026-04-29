@@ -1,31 +1,410 @@
 \appendix
-\section{Finite-State Complexity Upper Bounds}\label{sec:appendix-complexity}
 
-This appendix is supplementary to the main proof chain. It records only routine finite-state upper bounds for the support notions introduced in \Cref{sec:multiaxis-refinement}.
+We collect two auxiliary topics. The first concerns the refinement-dynamic extension together with finite-state complexity bounds for the associated support notions. The second gives the GHZ/Mermin amplitude lift mentioned in the introduction.
+\section{Finite-state complexity bounds}\label{sec:appendix-complexity}
+
+We record the finite-state upper bounds for the support notions attached to the refinement-dynamic extension of the semantics.
 
 For this appendix, assume that the multi-axis structure is finite and that a distinguished formula $\chi$ is part of the input together with polynomial-time decidable tables for the relations
 \[
-q\mapsto (M,q\Vdash\chi)
-\qquad\text{and}\qquad
-q\mapsto (M,q\Vdash\neg\chi).
+q\mapsto (M,q\Vdash\chi),
+\qquad
+q\mapsto (M,q\Vdash\neg\chi),
+\qquad
+q\mapsto (\mathrm{info}_j(q))_{j\in J}.
 \]
-This is the natural finite encoding once the underlying semantic state graph has already been computed and the support problems are asked over that graph. No matching lower bounds are claimed here.
+The axis-information maps $\mathrm{info}_j$ of \Cref{def:axis-information-maps} are assumed to be part of the input model; agreement of $K$-information between two states is checked by comparing $\mathrm{info}_j(q)=\mathrm{info}_j(r)$ for each $j\in K$. This is the natural finite encoding once the underlying semantic state graph has already been computed and the support problems are asked over that graph. No matching lower bounds are claimed here.
 
 We consider the decision problems \textup{\textsc{Support}}, \textup{\textsc{Indispensable}}, and \textup{\textsc{MinSupport}} associated with \Cref{def:axis-support,def:axis-indispensability}. For \textup{\textsc{MinSupport}} we use the standard class $\mathrm{D}^P$ in the sense of Papadimitriou and Yannakakis \cite{PapadimitriouYannakakis1984}.
 
-\begin{theorem}[Complexity upper bounds]\label{thm:axis-complexity-upper-bounds}
+\begin{proposition}[Complexity upper bounds]\label{thm:axis-complexity-upper-bounds}
 Under the finite encoding above, the following hold.
 \begin{enumerate}[label=(\roman*),nosep]
 \item \textup{\textsc{Support}} belongs to coNP.
 \item \textup{\textsc{Indispensable}} belongs to NP.
 \item \textup{\textsc{MinSupport}} belongs to $\mathrm{D}^P$.
 \end{enumerate}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 For \textup{\textsc{Support}}, non-support is witnessed by a pair $(q,r)$ of $K$-reachable states that agree on the relevant $K$-information, both decide $\chi$, and force opposite truth values. Reachability, agreement of axis information, and decision of $\chi$ are all polynomial-time checkable in the finite input, so the complement of \textup{\textsc{Support}} is in NP.
 
 For \textup{\textsc{Indispensable}}, a witness is again a pair $(q,r)$, now only required to agree on all axes except the distinguished axis $j$ and to force opposite truth values of $\chi$. This certificate is polynomially checkable, so \textup{\textsc{Indispensable}} lies in NP.
 
-For \textup{\textsc{MinSupport}}, the condition that $K$ supports $\chi$ is in coNP by the first clause. The condition that every axis in $K$ is indispensable is in NP, because one may guess one witness pair for each axis $j\in K$, and the total certificate size remains polynomial. By \Cref{prop:indispensability-implies-minimality,cor:minimal-support-characterization}, the conjunction of these two conditions is equivalent to minimality, so \textup{\textsc{MinSupport}} lies in $\mathrm{D}^P$.
+For \textup{\textsc{MinSupport}}, the condition that $K$ supports $\chi$ is in coNP by the first clause. The condition that every axis in $K$ is indispensable is in NP, because one may guess one witness pair for each axis $j\in K$, and the total certificate size remains polynomial. By \Cref{prop:indispensability-implies-minimality}, the conjunction of these two conditions characterizes minimal support, so \textup{\textsc{MinSupport}} lies in $\mathrm{D}^P$.
+\end{proof}
+
+\section{Refinement dynamics}\label{sec:appendix-dynamics}
+
+This section contains the formal refinement-dynamic material.
+
+\subsection{Refinement dynamics and support}\label{sec:appendix-multiaxis-refinement}
+
+The previous sections analyzed forcing at a fixed state. We now treat refinement itself as a dynamics: the forcing clause stays unchanged, but the set of admissible realizations may shrink along different axes of information. The results apply to model classes in which refinement induces morphisms of slice sites and compatible maps of finite nerves.
+
+\subsubsection{Dynamic refinement}
+
+\begin{definition}[Multi-axis dynamic structure]\label{def:multi-axis-dynamic-structure}
+Fix a model $M$. A \emph{multi-axis dynamic structure} on $M$ is a tuple
+\[
+\mathfrak{D}=\bigl(\St(M),\le,\tau,J,\{\rightsquigarrow_j\}_{j\in J}\bigr),
+\]
+where $J$ is an axis set, each $\rightsquigarrow_j$ is a single-axis advancement relation satisfying
+\[
+p\rightsquigarrow_j q \Longrightarrow q\le p,
+\]
+and $\tau:\St(M)\to T$ maps states to a linearly ordered set $T$ such that
+\[
+p\rightsquigarrow_j q \Longrightarrow \tau(q)\ge \tau(p).
+\]
+For finite $K\subseteq J$, write $p\rightsquigarrow_K q$ if $q$ is reachable from $p$ by a finite chain of advancements using only axes in $K$.
+\end{definition}
+
+\begin{proposition}[Updates preserve forcing]\label{prop:updates-preserve-forcing}
+If $p\rightsquigarrow_K q$ and $M,p\Vdash\varphi$, then $M,q\Vdash\varphi^\uparrow$.
+\end{proposition}
+
+\begin{proof}
+Every advancement is a refinement by \Cref{def:multi-axis-dynamic-structure}, so $q\le p$. The claim is therefore immediate from \Cref{prop:forcing-persistence}.
+\end{proof}
+
+\begin{definition}[Delayed decidability]\label{def:delayed-decidability}
+Let $p\rightsquigarrow_K q$. We say that $\varphi$ undergoes \emph{delayed decidability} from $p$ to $q$ if
+\[
+M,p\nVdash\varphi,\qquad
+M,p\nVdash\neg\varphi,\qquad
+\text{but}\qquad
+M,q\Downarrow\varphi.
+\]
+\end{definition}
+
+\begin{proposition}[Delayed decidability does not create truth]\label{prop:delayed-no-new-truth}
+If $\varphi$ undergoes delayed decidability in a transition $p\rightsquigarrow_K q$, then the passage from $p$ to $q$ acts by eliminating realizations from $R_p$ rather than by changing the truth conditions of $\varphi$.
+\end{proposition}
+
+\begin{proof}
+If $M,p\Vdash\varphi$ or $M,p\Vdash\neg\varphi$ already held, then \Cref{prop:updates-preserve-forcing} would preserve that judgment at $q$. Hence delayed decidability can occur only because the refinement $q\le p$ has discarded realizations that formerly supported incompatible outcomes. The semantic clause for $\varphi$ itself has not changed.
+\end{proof}
+
+\begin{proposition}[Delayed classification is non-retrocausal]\label{prop:nonretrocausal-delayed-classification}
+Let $p\rightsquigarrow_K q$, and suppose that $q$ is $\tau$-minimal among the $K$-reachable states that decide $\varphi$. Then every $u$ with
+\[
+p\rightsquigarrow_K u
+\qquad\text{and}\qquad
+\tau(u)<\tau(q)
+\]
+is still undecided on $\varphi$.
+\end{proposition}
+
+\begin{proof}
+If some earlier $u$ with $\tau(u)<\tau(q)$ already decided $\varphi$, then $q$ would not be $\tau$-minimal among the deciding states reachable from $p$. Thus no earlier stage carries the later decision. The decision at $q$ records newly available discriminatory power at $q$, not a change in the past.
+\end{proof}
+
+\subsubsection{Axis support and explicit lifting}
+
+\begin{definition}[Axis-information maps]\label{def:axis-information-maps}
+Fix a multi-axis dynamic structure $\mathfrak{D}$ on a model $M$. For each axis $j\in J$, assume there is a finite set $I_j$ and a map
+\[
+\mathrm{info}_j:\{q\in\St(M)\mid p\rightsquigarrow_K q\text{ for some finite }K\ni j\}\longrightarrow I_j.
+\]
+For states $q$ and $r$ reachable from $p$ via $K$-advancements and a subset $L\subseteq K$, we say that $q$ and $r$ \emph{agree on $L$-information} if
+\[
+\mathrm{info}_j(q)=\mathrm{info}_j(r)
+\qquad
+\text{for every }j\in L.
+\]
+\end{definition}
+
+\begin{definition}[Support and minimal support]\label{def:axis-support}
+Let $K\subseteq J$ be finite. We say that $K$ \emph{supports} a formula $\varphi$ at $p$, written $K\triangleright_p\varphi$, if whenever
+\[
+p\rightsquigarrow_K q,\qquad
+p\rightsquigarrow_K r,
+\]
+and both $q$ and $r$ decide $\varphi$, agreement of the $K$-information (in the sense of \Cref{def:axis-information-maps}) implies agreement of the decision. A supporting set $K$ is \emph{minimal} if no proper subset of $K$ still supports $\varphi$ at $p$.
+\end{definition}
+
+\begin{definition}[Indispensability]\label{def:axis-indispensability}
+Let $K\subseteq J$ be finite and let $j\in K$. We say that $j$ is \emph{indispensable relative to $K$} for $\varphi$ at $p$ if there exist states $q$ and $r$ with
+\[
+p\rightsquigarrow_K q,\qquad
+p\rightsquigarrow_K r,
+\]
+such that $q$ and $r$ agree on $(K\setminus\{j\})$-information (in the sense of \Cref{def:axis-information-maps}), while
+\[
+M,q\Vdash\varphi
+\qquad\text{and}\qquad
+M,r\Vdash\neg\varphi.
+\]
+\end{definition}
+
+\begin{proposition}[Indispensability implies minimality]\label{prop:indispensability-implies-minimality}
+If $K\triangleright_p\varphi$ and every $j\in K$ is indispensable relative to $K$ for $\varphi$ at $p$, then $K$ is a minimal support for $\varphi$ at $p$.
+\end{proposition}
+
+\begin{proof}
+Assume that a proper subset $L\subsetneq K$ still supported $\varphi$, and choose $j\in K\setminus L$. Any two states that agree on all axes in $K\setminus\{j\}$ automatically agree on all axes in $L$, contradicting indispensability of $j$.
+\end{proof}
+
+\begin{definition}[Orthogonality]\label{def:axis-orthogonality}
+Two axes $j,k\in J$ are \emph{orthogonal at $p$} if whenever
+\[
+p\rightsquigarrow_j q
+\qquad\text{and}\qquad
+p\rightsquigarrow_k r,
+\]
+there exists a state $u$ such that
+\[
+p\rightsquigarrow_{\{j,k\}} u,
+\qquad
+u\le q,
+\qquad
+u\le r.
+\]
+\end{definition}
+
+\begin{definition}[Fusion state and axis completeness]\label{def:fusion-state}
+Let $K\subseteq J$ be finite, and suppose that for each $j\in K$ there is a single-axis refinement $p\rightsquigarrow_j q_j$. A state $u$ is a \emph{fusion state} for the family $(q_j)_{j\in K}$ if
+\[
+p\rightsquigarrow_K u
+\qquad\text{and}\qquad
+u\le q_j\ \text{for every }j\in K.
+\]
+The dynamic structure is \emph{axis-complete} if every finite pairwise orthogonal family of single-axis refinements admits a fusion state.
+\end{definition}
+
+\begin{corollary}[Explicit lifting principle]\label{cor:explicit-lifting}
+Assume axis completeness. Let $K\subseteq J$ be finite, and for each $j\in K$ let
+\[
+p\rightsquigarrow_j q_j
+\qquad\text{and}\qquad
+\Read_{q_j,s_j}(r_j)=v_j\neq \Null.
+\]
+If the single-axis refinements are pairwise orthogonal at $p$, then there exists a fusion state $u$ such that
+\[
+\Read_{u,s_j}(r_j)=v_j
+\qquad
+(\forall j\in K).
+\]
+\end{corollary}
+
+\begin{proof}
+By axis completeness there exists a fusion state $u$ with $u\le q_j$ for all $j\in K$. Since each $q_j$ carries a non-null typed readout, \Cref{prop:typed-readout-persistence} transports that readout to the common refinement $u$. Thus all axis-wise readout judgments hold simultaneously at one state.
+\end{proof}
+
+\subsubsection{Branchwise obstruction monotonicity}
+
+The obstruction theory of \Cref{sec:null-decomposition} becomes dynamic once visible branches and their component gerbes are transported along refinement. In the model classes just described, the basic structural fact is that refinement can only reveal more branch-level visible information; it cannot re-hide information that was already uniformly visible.
+
+\begin{proposition}[Refinement monotonicity of branch visibility]\label{thm:branch-visibility-monotonicity}
+Let $q\le p$, let $r:\mathsf{Ref}_s$ be admitted at both states, and write
+\[
+a_p=[r]_p,
+\qquad
+a_q=[r]_q.
+\]
+Assume:
+\begin{enumerate}[label=(\roman*),nosep]
+\item there is a morphism of slice sites
+\[
+f_{q,p}:\mathcal C_{q,s}/a_q\to \mathcal C_{p,s}/a_p;
+\]
+\item the realization prestack at $q$ is equivalent to the pullback of the realization prestack at $p$ along $f_{q,p}$;
+\item visible branches pull back along refinement, and for a branch $w\in \Vis_{q,s}(r)$ lying above $v\in \Vis_{p,s}(r)$ the corresponding component gerbes satisfy
+\[
+\mathfrak G_w\simeq f_{q,p}^*(\mathfrak G_v);
+\]
+\item compatible finite nerve presentations have been chosen together with a simplicial refinement map
+\[
+N(f_{q,p}):N(\mathcal U_q)\to N(\mathcal U_p)
+\]
+such that the induced branch obstruction classes satisfy
+\[
+\omega_w=N(f_{q,p})^*(\omega_v)
+\]
+with the same finite abelian band $A$.
+\end{enumerate}
+Then
+\[
+X_v\subseteq X_w,
+\qquad
+K_w\subseteq K_v,
+\qquad
+A_{\mathrm{vis}}^w\twoheadrightarrow A_{\mathrm{vis}}^v,
+\qquad
+|K_w|\le |K_v|.
+\]
+\end{proposition}
+
+\begin{proof}
+The pullback of gerbes is again a gerbe, and the induced cohomology class is the pullback of the original one \cite[Tag 06NY]{StacksProject}, \cite[Theorem~3.11]{BerghSchnurer2021}. Naturality of the universal coefficient map with respect to the simplicial refinement map $N(f_{q,p})$ gives the cohomological compatibility needed below. Let $\chi\in X_v$. Then
+\[
+\chi_*(\omega_v)=0.
+\]
+Applying the pullback $N(f_{q,p})^*$ gives
+\[
+\chi_*(\omega_w)=\chi_*\bigl(N(f_{q,p})^*(\omega_v)\bigr)=N(f_{q,p})^*\bigl(\chi_*(\omega_v)\bigr)=0,
+\]
+so $\chi\in X_w$. Hence $X_v\subseteq X_w$.
+
+By \Cref{thm:intrinsic-visible-quotient},
+\[
+K_v=\bigcap_{\chi\in X_v}\ker\chi
+\qquad\text{and}\qquad
+K_w=\bigcap_{\chi\in X_w}\ker\chi.
+\]
+Since $X_v\subseteq X_w$, intersecting over the larger family gives the smaller subgroup, so $K_w\subseteq K_v$. Therefore the quotient map $A\twoheadrightarrow A/K_v$ factors through $A/K_w$, yielding a surjection
+\[
+A_{\mathrm{vis}}^w=A/K_w\twoheadrightarrow A/K_v=A_{\mathrm{vis}}^v.
+\]
+For finite groups, $K_w\subseteq K_v$ implies $|K_w|\le |K_v|$.
+\end{proof}
+
+\begin{example}[A strict drop under refinement]\label{ex:refinement-drop}
+Let $A=\mathbb Z/4\mathbb Z$, and let $r$ be admitted at $q\le p$.
+Assume that at $p$ there is one visible branch $v$ and a branch obstruction class
+\[
+\omega_v\in H^2(N(\mathcal U_p),A)
+\]
+with
+\[
+K_v=\langle 2\rangle\subseteq A.
+\]
+Hence
+\[
+A_{\mathrm{vis}}^v=A/K_v\cong \mathbb Z/2\mathbb Z.
+\]
+
+Suppose $r$ has a unique branch $w$ above $v$ at the refinement $q$, and the induced pullback class
+\[
+\omega_w=f_{q,p}^*(\omega_v)
+\]
+is trivial in $H^2(N(\mathcal U_q),A)$. Then
+\[
+K_w=\{0\},\qquad A_{\mathrm{vis}}^w=A/K_w\cong A.
+\]
+By \Cref{thm:branch-visibility-monotonicity}, the map
+\[
+A_{\mathrm{vis}}^w\longrightarrow A_{\mathrm{vis}}^v
+\]
+is the quotient mod~$2$, so $|K_w|<|K_v|$ and the strict hidden budget decreases under this refinement.
+\end{example}
+
+\begin{corollary}[Refinement decreases hidden branch budget]\label{cor:branch-budget-monotonicity}
+Under the hypotheses of \Cref{thm:branch-visibility-monotonicity}, refinement can only enlarge the visible quotient and can never increase the intrinsic hidden-state budget of the branch:
+\[
+\log_2|K_w|\le \log_2|K_v|.
+\]
+\end{corollary}
+
+\begin{proof}
+This is the last clause of \Cref{thm:branch-visibility-monotonicity} rewritten on a logarithmic scale.
+\end{proof}
+
+\subsubsection{Value-preserving rewrites}
+
+\begin{definition}[Value-preserving rewrite]\label{def:value-preserving-rewrite}
+A \emph{readout expression} is any term whose semantic role at a state is determined by a typed readout. A rewrite
+\[
+E\leadsto E'
+\]
+between readout expressions is \emph{value preserving} if for every state $p$:
+\begin{enumerate}[label=(\roman*),nosep]
+\item $\Read_p(E)$ is defined if and only if $\Read_p(E')$ is defined,
+\item whenever defined, $\Read_p(E)=\Read_p(E')$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[Value-preserving rewrites do not create facts]\label{prop:value-preserving-no-creation}
+If $E\leadsto E'$ is value preserving and
+\[
+\Read_p(E')=v
+\qquad\text{with}\qquad
+v\neq \Null,
+\]
+then
+\[
+\Read_p(E)=v.
+\]
+In particular, a value-preserving rewrite cannot turn an undefined or null expression into a genuinely new value claim.
+\end{proposition}
+
+\begin{proof}
+By \Cref{def:value-preserving-rewrite}, definedness is preserved in both directions, and whenever the readouts are defined they agree. Hence the non-null readout of $E'$ forces the same non-null readout for $E$.
+\end{proof}
+
+\begin{corollary}[Normalization does not create facts]\label{cor:normalization-no-fact-creation}
+Let
+\[
+E=E_0\leadsto E_1\leadsto\cdots\leadsto E_n=E'
+\]
+be a finite sequence of value-preserving rewrites. If $\Read_p(E')=v\neq \Null$, then $\Read_p(E)=v$.
+\end{corollary}
+
+\begin{proof}
+Apply \Cref{prop:value-preserving-no-creation} inductively along the rewrite sequence.
+\end{proof}
+
+\section{A GHZ/Mermin amplitude lift}\label{sec:appendix-ghz}
+
+The GHZ/Mermin model provides a convenient illustration of the extra realization data needed before the conditional gerbe machinery becomes available. The role of this section is correspondingly limited: it does not supply a canonical finite nerve model or a canonical value of $K_\omega$ for GHZ.
+
+Let $e_{\mathrm{GHZ}}$ be the Abramsky--Brandenburger empirical model obtained from the GHZ state \cite{GreenbergerHorneZeilinger1989,Mermin1990,AbramskyBrandenburger2011}, situated in the Kochen--Specker tradition \cite{KochenSpecker1967}. The measurement cover consists of the four contexts
+\[
+C_{XXX},\ C_{XYY},\ C_{YXY},\ C_{YYX},
+\]
+where, for instance, $C_{XYY}$ records the joint measurement in which the first observer measures $X$ and the other two measure $Y$. Each context carries outcomes in $\{\pm 1\}^3$, and the GHZ support presheaf $S_{\mathrm{GHZ}}$ selects exactly the assignments whose parity matches the GHZ constraints: $+1$ on $XXX$ and $-1$ on the three $XYY$-type contexts.
+
+\begin{definition}[Amplitude lift of a support presheaf]\label{def:amplitude-lift}
+Let $S_e$ be the support presheaf of a finite empirical model on a measurement-cover site $\mathcal C_a$. An \emph{amplitude lift} of $S_e$ with band $\Band$ is a realization prestack
+\[
+\mathfrak P_e\to \mathcal C_a
+\]
+together with an identification
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_e)\cong S_e.
+\]
+Equivalently, an amplitude lift is a choice of local realization objects and phase-sensitive transition isomorphisms whose isomorphism classes recover the supported local assignments.
+\end{definition}
+
+\begin{remark}[Support data versus amplitude data]\label{rem:amplitude-lift-choice}
+The support presheaf records only which local assignments are allowed. It does not determine an amplitude lift, a branch gerbe, a derived branch class, or a value of $K_\omega$. All gerbe-theoretic claims for empirical support presheaves are therefore relative to a chosen lift.
+\end{remark}
+
+\begin{lemma}[Chosen GHZ phase-line lift]\label{lem:ghz-prestack}
+Let $a=[r]_p$ be the GHZ reference class and $\mathcal C_a:=\mathcal C_{p,s}/a$. Fix, for each object $U$ of $\mathcal C_a$ and each supported local assignment $s\in S_{\mathrm{GHZ}}(U)$, a one-dimensional complex line $L_{U,s}$ generated by a chosen local GHZ amplitude, together with restriction isomorphisms compatible with restriction of assignments. Let $\mathfrak P_{\mathrm{GHZ}}(U)$ be the groupoid whose objects are the pairs
+\[
+(s,L_{U,s}),
+\qquad
+s\in S_{\mathrm{GHZ}}(U),
+\]
+and whose automorphisms are the signs $\{\pm 1\}\cong \mathbb Z/2\mathbb Z$ acting on the chosen line. Then $\mathfrak P_{\mathrm{GHZ}}\to\mathcal C_a$ is an amplitude lift of $S_{\mathrm{GHZ}}$ with band $\mathbb Z/2\mathbb Z$.
+\end{lemma}
+
+\begin{proof}
+By construction, restriction along $V\to U$ sends $(s,L_{U,s})$ to the restricted supported assignment together with the chosen restricted line, so the fibres form a category fibred in groupoids over $\mathcal C_a$. The automorphism sheaf of every object is the constant sheaf $\mathbb Z/2\mathbb Z$, acting by sign changes on the one-dimensional line. Forgetting the line remembers only the supported assignment, and two objects are isomorphic exactly when they have the same supported assignment. Hence
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_{\mathrm{GHZ}})\cong S_{\mathrm{GHZ}},
+\]
+so \Cref{def:amplitude-lift} is satisfied.
+\end{proof}
+
+\begin{theorem}[GHZ/Mermin realization]\label{thm:ghz-realization}
+Let $S_{\mathrm{GHZ}}$ be the GHZ support presheaf, and fix the chosen amplitude lift $\mathfrak P_{\mathrm{GHZ}}$ of \Cref{lem:ghz-prestack}. Suppose, in addition, that one has chosen a stackification
+\[
+\mathfrak L_{\mathrm{GHZ}}:=a(\mathfrak P_{\mathrm{GHZ}})
+\]
+and a cofinal family of covers
+\[
+\Cov_{\mathrm{GHZ}}^{\mathrm{acyc}}(a)
+\]
+such that the global-conservativity and \v{C}ech-to-derived comparison clauses of \Cref{def:gluing-sensitive-realization} hold for this chosen lift. Then
+\[
+(\mathfrak P_{\mathrm{GHZ}},\mathfrak L_{\mathrm{GHZ}},\mathbb Z/2\mathbb Z,\Cov_{\mathrm{GHZ}}^{\mathrm{acyc}})
+\]
+is a gluing-sensitive realization datum for the chosen GHZ amplitude lift, and the conditional gerbe semantics of \Cref{thm:component-gerbe-decomposition,thm:gerbe-null-semantics} applies to it. No claim is made that the bare support presheaf canonically determines a finite nerve presentation, a derived branch class, or a specific value of $K_\omega$.
+\end{theorem}
+
+\begin{proof}
+\Cref{lem:ghz-prestack} provides the extra amplitude data absent from the support presheaf itself. The additional assumptions are exactly the remaining clauses in \Cref{def:gluing-sensitive-realization}. Once those data are fixed, the general theorems of the main text apply verbatim.
 \end{proof}

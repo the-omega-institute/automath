@@ -1,0 +1,219 @@
+\section{Finite-window stabilization}\label{sec:preliminaries}
+
+Throughout, the Fibonacci numbers are indexed by
+\[
+  F_0=0,
+  \qquad
+  F_1=F_2=1,
+  \qquad
+  F_{n+2}=F_{n+1}+F_n
+  \qquad (n\ge 0).
+\]
+
+\subsection{Stable words and the residue model}
+
+\begin{definition}[Stable words and visible values]
+\label{def:stable-words}
+For \(m\ge 1\), let
+\[
+  \Omega_m:=\{0,1\}^m,
+  \qquad
+  X_m:=\{x\in\Omega_m:\ x_ix_{i+1}=0\text{ for }1\le i<m\}.
+\]
+For \(x\in X_m\), define
+\[
+  V_m(x):=\sum_{j=1}^m x_jF_{j+1}.
+\]
+For \(\omega=\omega_1\cdots \omega_m\in\Omega_m\), define
+\[
+  N_m(\omega):=\sum_{j=1}^m \omega_jF_{j+1}.
+\]
+\end{definition}
+
+\begin{proposition}[Visible values are complete]
+\label{prop:Vm-bijection}
+For every \(m\ge 1\), the map
+\[
+  V_m\colon X_m\longrightarrow \{0,1,\dots,F_{m+2}-1\}
+\]
+is a bijection.
+\end{proposition}
+
+\begin{proof}
+The zero word maps to \(0\), so it remains to treat
+\(n\in\{1,\dots,F_{m+2}-1\}\).  By Zeckendorf's theorem, \(n\) has a unique
+expansion as a sum of nonconsecutive Fibonacci numbers.  Because
+\(n<F_{m+2}\), that expansion cannot use the summand \(F_{m+2}\) or any larger
+Fibonacci number; therefore it uses only the weights \(F_2,\dots,F_{m+1}\),
+and hence determines a unique word \(x\in X_m\) with \(V_m(x)=n\).
+Conversely every \(x\in X_m\) is a stable expansion in those same weights, so
+\(V_m(x)\in\{0,\dots,F_{m+2}-1\}\).  Thus \(V_m\) is bijective.
+\end{proof}
+
+\begin{definition}[Finite-window stabilization]
+\label{def:fold-map}
+For \(m\ge 1\), define
+\[
+  \Fold_m(\omega):=
+  V_m^{-1}\bigl(N_m(\omega)\bmod F_{m+2}\bigr),
+  \qquad \omega\in\Omega_m.
+\]
+For \(x\in X_m\), define the fiber multiplicity
+\[
+  d_m(x):=\card{\Fold_m^{-1}(x)}.
+\]
+\end{definition}
+
+\begin{proposition}[Single overflow]
+\label{prop:single-overflow}
+For every \(\omega\in\Omega_m\),
+\[
+  N_m(\omega)\le \sum_{j=1}^m F_{j+1}=F_{m+3}-2<2F_{m+2}.
+\]
+Hence there exist unique integers \(b\in\{0,1\}\) and \(r\in[0,F_{m+2})\) such
+that
+\[
+  N_m(\omega)=bF_{m+2}+r,
+\]
+and
+\[
+  \Fold_m(\omega)=V_m^{-1}(r).
+\]
+Equivalently, there is a unique overflow bit \(b_m(\omega)\in\{0,1\}\) such
+that
+\[
+  N_m(\omega)=V_m(\Fold_m(\omega))+b_m(\omega)F_{m+2}.
+\]
+\end{proposition}
+
+\begin{proof}
+The Fibonacci identity
+\(\sum_{j=1}^m F_{j+1}=F_{m+3}-2\) is standard, and
+\(F_{m+3}-2<F_{m+3}-1<F_{m+3}=F_{m+2}+F_{m+1}<2F_{m+2}\).  The displayed
+formula for \(\Fold_m\) is simply the definition.
+\end{proof}
+
+\begin{remark}[Relation to ordinary Zeckendorf normalization]
+\label{rem:prefix-normalization}
+Because only one overflow can occur, finite-window stabilization agrees with
+computing the full Zeckendorf expansion of \(N_m(\omega)\) and deleting the
+possible leading \(F_{m+2}\)-digit.
+The residue definition is the useful one for exact fiber analysis.
+\end{remark}
+
+\begin{corollary}[Residue characterization of fibers]
+\label{cor:residue-characterization}
+For \(x\in X_m\), write \(r_x:=V_m(x)\).  Then
+\[
+  \Fold_m(\omega)=x
+  \iff
+  N_m(\omega)\equiv r_x \pmod{F_{m+2}}.
+\]
+\end{corollary}
+
+\begin{proof}
+By definition,
+\(\Fold_m(\omega)=V_m^{-1}(N_m(\omega)\bmod F_{m+2})\), and \(V_m\) is
+bijective by \Cref{prop:Vm-bijection}.
+\end{proof}
+
+\subsection{Push-forward and fiber-uniform lift}
+
+\begin{definition}[Push-forward and fiber-uniform lift]
+\label{def:pushforward-lift}
+Let \(\Delta(A)\) denote the simplex of probability laws on a finite set \(A\).
+The push-forward of \(\Fold_m\) is
+\[
+  P_m=(\Fold_m)_*\colon \Delta(\Omega_m)\to\Delta(X_m),
+  \qquad
+  (P_m\mu)(x)=\sum_{\Fold_m(\omega)=x}\mu(\omega).
+\]
+The fiber-uniform lift is the affine map
+\[
+  Q_m\colon \Delta(X_m)\to\Delta(\Omega_m),
+  \qquad
+  (Q_m\pi)(\omega)=\frac{\pi(\Fold_m(\omega))}{d_m(\Fold_m(\omega))}.
+\]
+\end{definition}
+
+\begin{proposition}[Split epimorphism]
+\label{prop:split-epi}
+For every \(m\ge 1\),
+\[
+  P_mQ_m=\mathrm{id}_{\Delta(X_m)}.
+\]
+\end{proposition}
+
+\begin{proof}
+For \(x\in X_m\),
+\[
+  (P_mQ_m\pi)(x)
+  =
+  \sum_{\Fold_m(\omega)=x}\frac{\pi(x)}{d_m(x)}
+  =
+  \pi(x).
+\]
+\end{proof}
+
+\begin{definition}[Fiber-uniform model and reflector]
+\label{def:reflector}
+Define
+\[
+  \mathcal E_m:=Q_m(\Delta(X_m))
+\]
+and
+\[
+  K_m:=Q_mP_m\colon \Delta(\Omega_m)\to\Delta(\Omega_m).
+\]
+Thus \(\mathcal E_m\) is the simplex of probability laws on \(\Omega_m\) that
+are constant on each fiber of \(\Fold_m\).
+\end{definition}
+
+\begin{proposition}[Reflector properties]
+\label{prop:reflector}
+For every \(m\ge 1\),
+\[
+  K_m^2=K_m,
+  \qquad
+  \operatorname{im}(K_m)=\mathcal E_m,
+  \qquad
+  P_mK_m=P_m.
+\]
+Hence \(K_m\mu\) is the unique fiber-uniform law with visible law \(P_m\mu\).
+\end{proposition}
+
+\begin{proof}
+The identities
+\[
+  K_m^2
+  =
+  Q_mP_mQ_mP_m
+  =
+  Q_mP_m
+  =
+  K_m
+\]
+and
+\[
+  P_mK_m
+  =
+  P_mQ_mP_m
+  =
+  P_m
+\]
+follow from \Cref{prop:split-epi}.  Since every element of \(\mathcal E_m\) has
+the form \(Q_m\pi\), one has \(\operatorname{im}(K_m)\subseteq \mathcal E_m\).
+Conversely, if \(\mu=Q_m\pi\in\mathcal E_m\), then
+\[
+  K_m\mu
+  =
+  Q_mP_mQ_m\pi
+  =
+  Q_m\pi
+  =
+  \mu,
+\]
+so \(\mu\in\operatorname{im}(K_m)\).  Uniqueness follows from \(P_mK_m=P_m\)
+and the fact that \(P_m\) restricts to a bijection \(\mathcal E_m\to\Delta(X_m)\)
+with inverse \(Q_m\).
+\end{proof}

@@ -1,13 +1,14 @@
 \section{Further remarks}\label{sec:conclusion}
 
-This note isolates one weighted synchronisation kernel for which the
-completed determinant, the quotient geometry, and the cyclotomic
-asymptotics can all be written down explicitly. The point is not a new
-general mechanism, but that even this small self-dual example already
-exhibits non-trivial geometry and non-abelian Galois behaviour. The
-cyclotomic resultants reduce the unit-circle twists to a one-parameter
-elimination problem, and the resulting twisted Perron roots admit an
-effective large-\(m\) expansion.
+This note isolates one explicit weighted self-dual kernel in which
+self-duality collapses all unit-circle twists to a single completed
+determinant. The point is not a general theory but a complete
+calculation: in this example the same degree-\(6\) polynomial controls
+the quotient geometry, the generic Galois group, the cyclic-lift
+factors, and the cyclotomic asymptotics. The cyclotomic resultants
+therefore reduce the unit-circle twists to a one-parameter elimination
+problem and yield twisted Perron roots with an effective large-\(m\)
+expansion.
 
 Two directions seem natural. The first is to identify structural
 conditions on a general self-dual weighted kernel that force a
@@ -21,20 +22,13 @@ large-\(m\) asymptotics of \(\rho_m\) depend only on the local jet of
 \section{Explicit matrix and computational verification}
 \label{sec:appendix-computation}
 
-\subsection*{The transition matrix \texorpdfstring{\(B(u)\)}{B(u)}}
+\subsection*{The transition matrix \(B(u)\)}
 
 In the state order
-\[
-\begin{gathered}
-(\mathtt{000},\mathtt{001},\mathtt{002},\mathtt{010},\mathtt{100},
-\mathtt{101},\\
-\mathtt{0{-}12},\mathtt{1{-}12},\mathtt{01{-}1},\mathtt{11{-}1}),
-\end{gathered}
-\]
+\((\mathtt{000},\mathtt{001},\mathtt{002},\mathtt{010},\mathtt{100},
+\mathtt{101},\mathtt{0{-}12},\mathtt{1{-}12},\mathtt{01{-}1},\mathtt{11{-}1})\),
 the weighted adjacency matrix \(B(u)=B_0+uB_1\) of
 \Cref{def:sync-kernel} is
-\begingroup
-\setlength{\arraycolsep}{3pt}
 \[
 B(u)=
 \begin{pmatrix}
@@ -50,60 +44,288 @@ u & u & u & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 0 & u & u & 0 & 0 & 0 & 0 & u & 0 & 0
 \end{pmatrix}.
 \]
-\endgroup
 Here row \(i\) lists the outgoing edge weights from state \(i\): each
 output-\(0\) edge contributes weight \(1\) and each output-\(1\) edge
 contributes weight \(u\), as in \Cref{def:sync-kernel}. The matrix \(B(1)\)
 is the unweighted adjacency matrix, and \(\det(I-zB(u))\) is the formula
 of \Cref{prop:kernel-delta-explicit}.
 
-\subsection*{Computer-algebra verification}
+\subsection*{Reproducibility guide}
 
-The following computations were carried out in a symbolic algebra system
-(SageMath 10.x / Mathematica) and provide the certificates for the
-central assertions of the paper.
+The cyclic-lift factorisation and the primitive real-factor
+interpretation are proved in the main text in
+\Cref{prop:sync-cyclic-lift-factorisation,prop:sync-primitive-real-factor}.
+The computer-assisted parts of the paper are organised here as a
+theorem-to-command map rather than as a single executable script,
+because the verification splits naturally into SageMath and Mathematica
+blocks.
+
+Items \textup{(a)}--\textup{(e)} were run in SageMath~10.2, and item
+\textup{(f)} was run in Mathematica~14.0. Their roles in the body are:
+\begin{itemize}[leftmargin=2.5em]
+  \item \textup{(a)} certifies \Cref{prop:kernel-delta-explicit};
+  \item \textup{(b)} certifies
+        \Cref{prop:sync-hatdelta-completion,prop:sync-hatdelta-quotient};
+  \item \textup{(c)} certifies the affine smoothness step in
+        \Cref{prop:sync-hatdelta-quotient};
+  \item \textup{(d)} certifies the discriminant and finite-field
+        factorisations used in
+        \Cref{prop:sync-hatdelta-galois-s6-generic};
+  \item \textup{(e)} certifies the finite small-\(m\) checks used in
+        the numerical remark after \Cref{thm:rho-gap-m12};
+  \item \textup{(f)} certifies
+        \Cref{prop:sync-endpoint-jet,thm:rho-gap-m12}.
+\end{itemize}
+Each item records the exact output used in the argument together with
+the corresponding command block.
+
+\subsection*{Exact verification data}
 
 \begin{enumerate}[label=(\alph*)]
-  \item \textit{Determinant.}\quad
-    \(\det(I-zB(u))\) was expanded symbolically and agrees with the
-    displayed formula of \Cref{prop:kernel-delta-explicit}.
-
-  \item \textit{Affine smoothness of \(\overline{Y}\).}\quad
-    The reduced Gr\"obner basis of
+  \item \textit{Determinant expansion and self-duality check.}\quad
+    Expanding \(\det(I-zB(u))\) from the displayed matrix gives
     \[
-      \langle F,\,\partial_x F,\,\partial_y F\rangle
-      \subset \QQ[x,y]
+      \Delta(z,u)
+      =1-(1+u)z-5uz^2+3u(1+u)z^3-u(u^2-3u+1)z^4
     \]
-    with respect to the graded reverse-lexicographic order is \(\{1\}\).
-    Thus the affine part of the quartic curve has no singular points.
-
-  \item \textit{Discriminant degree and leading coefficient.}\quad
-    The discriminant
     \[
-      \operatorname{disc}_w\widehat\Delta(w,s)\in\QQ[s]
+      \qquad
+      +u(u^3-3u^2-3u+1)z^5+u^2(u^2+u+1)z^6.
     \]
-    has degree \(20\) in \(s\) with leading coefficient \(-256\).
-    This confirms the non-square property used in
-    \Cref{prop:sync-hatdelta-galois-s6-generic}.
-
-  \item \textit{Squarefreeness of mod-\(p\) reductions.}\quad
-    The reductions satisfy
+    Substituting \(u=1\) yields
     \[
-    \begin{aligned}
-      \gcd(\widehat\Delta(w,3),\,\partial_w\widehat\Delta(w,3))&=1
-        &&\text{in }\mathbb{F}_7[w],\\
-      \gcd(\widehat\Delta(w,2),\,\partial_w\widehat\Delta(w,2))&=1
-        &&\text{in }\mathbb{F}_7[w],\\
-      \gcd(\widehat\Delta(w,3),\,\partial_w\widehat\Delta(w,3))&=1
-        &&\text{in }\mathbb{F}_{19}[w].
-    \end{aligned}
+      \Delta(z,1)=1-2z-5z^2+6z^3+z^4-4z^5+3z^6
+      =(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
+    \]
+    The same expansion satisfies
+    \(\Delta(uz,u^{-1})=\Delta(z,u)\) coefficientwise, which is the
+    explicit consistency check used in
+    \Cref{prop:kernel-delta-explicit}.
+
+    \medskip
+    \noindent\textit{Sage commands.}
+\begin{verbatim}
+R.<u,z> = QQ[]
+B = Matrix(R, [
+    [1,1,1,0,0,0,0,0,0,0],
+    [0,0,0,1,1,1,0,0,0,0],
+    [u,u,0,0,0,0,0,0,0,1],
+    [0,0,0,0,1,1,u,0,0,0],
+    [u,u,u,0,0,0,0,0,0,0],
+    [0,0,0,u,u,u,0,0,0,0],
+    [0,0,0,1,1,0,0,0,1,0],
+    [0,0,0,u,u,0,0,0,u,0],
+    [0,1,1,0,0,0,0,1,0,0],
+    [0,u,u,0,0,0,0,u,0,0]
+])
+Delta = (identity_matrix(R, 10) - z*B).det().expand()
+factor(Delta.subs(u=1))
+\end{verbatim}
+
+  \item \textit{Completion and quotient polynomial.}\quad
+    After the substitution \(u=r^2\), \(z=w/r\), one obtains
+    \[
+      \widehat\Delta(w,s)
+      =1-sw-5w^2+3sw^3+(5-s^2)w^4+(s^3-6s)w^5+(s^2-1)w^6,
+    \]
+    with \(s=r+r^{-1}\). Passing to the invariants \(x=w^2\) and
+    \(y=sw\) gives the quotient equation
+    \[
+      F(x,y)=1-y-5x+3xy+5x^2-xy^2+xy^3-6x^2y+x^2y^2-x^3.
     \]
 
-  \item \textit{Sixth-order endpoint jet.}\quad
-    Implicit differentiation of \(\widehat\Delta(w(s),s)=0\) through
-    order six at \((w,s)=(1/3,2)\) yields the coefficients of
-    \Cref{prop:sync-endpoint-jet}. The recursion for each successive
-    derivative \(w^{(k)}(2)\) requires only the partial derivatives of
-    \(\widehat\Delta\) up to total order \(k+1\) at \((1/3,2)\), all of
-    which are explicit rational numbers.
+    \medskip
+    \noindent\textit{Sage commands.}
+\begin{verbatim}
+R.<r,w> = LaurentPolynomialRing(QQ)
+Delta_rw = 1-(1+r^2)*(w/r)-5*r^2*(w/r)^2+3*r^2*(1+r^2)*(w/r)^3 \
+    - r^2*(r^4-3*r^2+1)*(w/r)^4 \
+    + r^2*(r^6-3*r^4-3*r^2+1)*(w/r)^5 \
+    + r^4*(r^4+r^2+1)*(w/r)^6
+Delta_rw.expand()
+
+S.<s,w> = PolynomialRing(QQ)
+H = 1 - s*w - 5*w^2 + 3*s*w^3 + (5 - s^2)*w^4 \
+    + (s^3 - 6*s)*w^5 + (s^2 - 1)*w^6
+
+T.<x,y> = PolynomialRing(QQ)
+F = 1 - y - 5*x + 3*x*y + 5*x^2 - x*y^2 + x*y^3 \
+    - 6*x^2*y + x^2*y^2 - x^3
+H, F
+\end{verbatim}
+
+  \item \textit{Affine smoothness certificate.}\quad
+    For the quartic \(F(x,y)\) above,
+    \[
+      \partial_xF
+      =-5+3y+10x-y^2+y^3-12xy+2xy^2-3x^2,
+    \]
+    \[
+      \partial_yF
+      =-1+3x-2xy+3xy^2-6x^2+2x^2y.
+    \]
+    The reduced Gr\"obner basis of the ideal
+    \(\langle F,\,\partial_xF,\,\partial_yF\rangle\subset\QQ[x,y]\)
+    with respect to graded reverse lexicographic order is \(\{1\}\).
+    This is the exact affine smoothness certificate used in
+    \Cref{prop:sync-hatdelta-quotient}.
+
+    \medskip
+    \noindent\textit{Sage commands.}
+\begin{verbatim}
+R.<x,y> = QQ[]
+F = 1 - y - 5*x + 3*x*y + 5*x^2 - x*y^2 + x*y^3 \
+    - 6*x^2*y + x^2*y^2 - x^3
+ideal(F, diff(F, x), diff(F, y)).groebner_basis()
+\end{verbatim}
+
+  \item \textit{Discriminant and mod-\(p\) factorisations.}\quad
+    The discriminant \(D(s)=\disc_w\widehat\Delta(w,s)\) has degree
+    \(20\) in \(s\) with leading coefficient \(-256\). The command below
+    computes the full polynomial \(D(s)\), confirming both the degree
+    and the leading coefficient. The specialisations
+    used in \Cref{prop:sync-hatdelta-galois-s6-generic} are
+    \[
+      \widehat\Delta(w,3)=8w^6+9w^5-4w^4+9w^3-5w^2-3w+1
+    \]
+    and
+    \[
+      \widehat\Delta(w,2)=3w^6-4w^5+w^4+6w^3-5w^2-2w+1.
+    \]
+    Their exact finite-field outputs are
+    \[
+      \gcd\!\bigl(\widehat\Delta(w,3),\,\partial_w\widehat\Delta(w,3)\bigr)
+      \equiv 1 \pmod 7,
+    \]
+    \[
+      \widehat\Delta(w,3)\equiv
+      w^6+2w^5+3w^4+2w^3+2w^2+4w+1 \pmod 7,
+    \]
+    with the degree-\(6\) factor irreducible over \(\mathbb{F}_7\),
+    \[
+      \gcd\!\bigl(\widehat\Delta(w,2),\,\partial_w\widehat\Delta(w,2)\bigr)
+      \equiv 1 \pmod 7,
+    \]
+    \[
+      \widehat\Delta(w,2)\equiv
+      (w+6)(w+5)(w+2)(w+1)(3w^2+3w+2)\pmod 7,
+    \]
+    where \(3w^2+3w+2\) is irreducible over \(\mathbb{F}_7\), and
+    \[
+      \gcd\!\bigl(\widehat\Delta(w,3),\,\partial_w\widehat\Delta(w,3)\bigr)
+      \equiv 1 \pmod{19},
+    \]
+    \[
+      \widehat\Delta(w,3)\equiv
+      (w+16)\bigl(8w^5+14w^4+9w^2+3w+6\bigr)\pmod{19},
+    \]
+    with the quintic factor irreducible over \(\mathbb{F}_{19}\).
+
+    \medskip
+    \noindent\textit{Sage commands.}
+\begin{verbatim}
+R.<w,s> = QQ[]
+H = 1 - s*w - 5*w^2 + 3*s*w^3 + (5 - s^2)*w^4 \
+    + (s^3 - 6*s)*w^5 + (s^2 - 1)*w^6
+D = H.discriminant(w)
+D.degree(), D.leading_coefficient()
+
+R7.<w> = PolynomialRing(GF(7))
+f37 = R7(H(s=3))
+gcd(f37, f37.derivative()), factor(f37)
+
+f27 = R7(H(s=2))
+gcd(f27, f27.derivative()), factor(f27)
+
+R19.<w> = PolynomialRing(GF(19))
+f319 = R19(H(s=3))
+gcd(f319, f319.derivative()), factor(f319)
+\end{verbatim}
+
+  \item \textit{Finite verification for the displayed small values.}\quad
+    For the table following \Cref{thm:rho-gap-m12}, one computes
+    \[
+      \lambda(\alpha):=\min\{\abs{w}:\widehat\Delta(w,\alpha)=0\}
+    \]
+    for every conjugate \(\alpha\in A_m\) with \(m=4,6,8,10\). For
+    \(m=4\) and \(m=6\), the conjugate sets are
+    \(A_m=\{\pm s_m\}\), so there is nothing further to check. For
+    \(m=8\) and \(m=10\), the remaining positive conjugates are
+    \(2\cos(3\pi/8)\) and \(2\cos(3\pi/10)\), and the direct output is
+    \[
+      \lambda\!\bigl(2\cos(\pi/8)\bigr)
+      < \lambda\!\bigl(2\cos(3\pi/8)\bigr),
+    \]
+    \[
+      \lambda\!\bigl(2\cos(\pi/10)\bigr)
+      < \lambda\!\bigl(2\cos(3\pi/10)\bigr).
+    \]
+    Together with the symmetry \(\lambda(-\alpha)=\lambda(\alpha)\),
+    this verifies that the displayed values \(\rho_m\) are obtained from
+    the slices \(\alpha=\pm s_m\).
+
+    \medskip
+    \noindent\textit{Sage commands.}
+\begin{verbatim}
+R.<w> = PolynomialRing(QQ)
+def H(alpha):
+    return 1 - alpha*w - 5*w^2 + 3*alpha*w^3 + (5 - alpha^2)*w^4 \
+        + (alpha^3 - 6*alpha)*w^5 + (alpha^2 - 1)*w^6
+
+def lambda_alpha(alpha):
+    roots = H(alpha).change_ring(CC).roots(multiplicities=False)
+    return min(abs(root) for root in roots)
+
+for m in [4, 6, 8, 10]:
+    reps = []
+    for a in range(1, 2*m):
+        if gcd(a, 2*m) == 1 and a <= m:
+            reps.append(2*cos(pi*a/m))
+    print(m, [(alpha.n(), lambda_alpha(alpha).n()) for alpha in reps])
+\end{verbatim}
+
+  \item \textit{Endpoint jet recursion.}\quad
+    At the endpoint \((w,s)=(1/3,2)\), one has
+    \[
+      \partial_w\widehat\Delta(1/3,2)=-\frac{272}{81},
+      \qquad
+      \partial_s\widehat\Delta(1/3,2)=-\frac{176}{729}.
+    \]
+    Writing \(w(s)=\sum_{j\ge 0}a_j(s-2)^j\) with \(a_0=1/3\) and
+    substituting into \(\widehat\Delta(w(s),s)=0\) gives a triangular
+    recursion for the coefficients \(a_j\). After inversion
+    \(\rho(s)=1/w(s)\), the exact coefficients of
+    \(\rho(2-\delta)=3+\sum_{j=1}^6 c_j\delta^j+O(\delta^7)\) are
+    \[
+      c_1=-\frac{11}{17},\qquad
+      c_2=\frac{1351}{19652},\qquad
+      c_3=-\frac{17133}{45435424},
+    \]
+    \[
+      c_4=-\frac{350037409}{105046700288},\qquad
+      c_5=-\frac{47614595705}{242867971065856},
+    \]
+    \[
+      c_6=\frac{141889658001627}{561510749104259072}.
+    \]
+    These are exactly the jet coefficients used in
+    \Cref{prop:sync-endpoint-jet}.
+
+    \medskip
+    \noindent\textit{Mathematica commands.}
+\begin{verbatim}
+Clear[w, s, \[Delta], a1, a2, a3, a4, a5, a6];
+H[w_, s_] := 1 - s w - 5 w^2 + 3 s w^3 + (5 - s^2) w^4 +
+    (s^3 - 6 s) w^5 + (s^2 - 1) w^6;
+ws = 1/3 + a1 \[Delta] + a2 \[Delta]^2 + a3 \[Delta]^3 +
+    a4 \[Delta]^4 + a5 \[Delta]^5 + a6 \[Delta]^6;
+seriesH = Normal[
+    Series[H[ws, 2 - \[Delta]], {\[Delta], 0, 6}]
+];
+eqns = Thread[
+    CoefficientList[seriesH, \[Delta]] == 0
+];
+sol = First[Solve[eqns, {a1, a2, a3, a4, a5, a6}]];
+Normal[Series[1/(ws /. sol), {\[Delta], 0, 6}]]
+\end{verbatim}
 \end{enumerate}

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+import os, sys
+if sys.platform == "win32" and not os.environ.get("PYTHONIOENCODING"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 """Backflow automation: extract proven theorems from ACCEPT/submitted papers
 and map them back to the core theory knowledge base.
 

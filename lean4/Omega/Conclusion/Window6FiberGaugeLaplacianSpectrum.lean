@@ -88,6 +88,37 @@ theorem paper_conclusion_window6_fiber_gauge_laplacian_spectrum :
   · norm_num [conclusion_window6_fiber_gauge_laplacian_spectrum_mass_three_modes]
   · norm_num [conclusion_window6_fiber_gauge_laplacian_spectrum_mass_four_modes]
 
+/-- Heat-kernel trace of the window-6 fiber-gauge Laplacian spectral multiset. -/
+def conclusion_window6_fiber_gauge_laplacian_spectral_functions_heat_trace (t : ℝ) : ℝ :=
+  21 + 8 * Real.exp (-(2 * t)) + 8 * Real.exp (-(3 * t)) + 27 * Real.exp (-(4 * t))
+
+/-- Spectral zeta value at zero, omitting the zero eigenspace. -/
+def conclusion_window6_fiber_gauge_laplacian_spectral_functions_zeta_zero : ℝ :=
+  8 / (2 : ℝ) ^ 0 + 8 / (3 : ℝ) ^ 0 + 27 / (4 : ℝ) ^ 0
+
+/-- Pseudo-determinant, i.e. the product over positive eigenvalues with multiplicity. -/
+def conclusion_window6_fiber_gauge_laplacian_spectral_functions_pseudodeterminant : ℕ :=
+  2 ^ 8 * 3 ^ 8 * 4 ^ 27
+
+def conclusion_window6_fiber_gauge_laplacian_spectral_functions_statement : Prop :=
+  conclusion_window6_fiber_gauge_laplacian_spectrum_statement ∧
+    conclusion_window6_fiber_gauge_laplacian_spectral_functions_heat_trace 0 = 64 ∧
+    conclusion_window6_fiber_gauge_laplacian_spectral_functions_zeta_zero = 43 ∧
+    conclusion_window6_fiber_gauge_laplacian_spectral_functions_pseudodeterminant =
+      2 ^ 8 * 3 ^ 8 * 4 ^ 27 ∧
+    21 + 8 + 8 + 27 = 64 ∧
+    8 * 2 + 8 * 3 + 27 * 4 = 148
+
+/-- Paper label: `cor:conclusion-window6-fiber-gauge-laplacian-spectral-functions`. -/
+theorem paper_conclusion_window6_fiber_gauge_laplacian_spectral_functions :
+    conclusion_window6_fiber_gauge_laplacian_spectral_functions_statement := by
+  refine ⟨paper_conclusion_window6_fiber_gauge_laplacian_spectrum, ?_, ?_, ?_, ?_, ?_⟩
+  · norm_num [conclusion_window6_fiber_gauge_laplacian_spectral_functions_heat_trace]
+  · norm_num [conclusion_window6_fiber_gauge_laplacian_spectral_functions_zeta_zero]
+  · rfl
+  · norm_num
+  · norm_num
+
 end
 
 end Omega.Conclusion

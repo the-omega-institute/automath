@@ -49,4 +49,10 @@ theorem paper_xi_primitive_prime_divisor_forces_unbounded_prime_support :
           simpa using Nat.dvd_sub hp_dvd_factor hp_dvd_a
         exact hp_prime.not_dvd_one hp_dvd_one
 
+/-- Exact paper-label wrapper: cyclic audit chains need unbounded prime support. -/
+theorem paper_xi_any_cyclic_audit_chain_needs_infinitely_many_primes :
+    ∃ k0 : Nat, ∀ k ≥ k0, ∃ p : Nat,
+      Nat.Prime p ∧ p ∣ minimalAuditChainLcm k ∧ ¬ p ∣ minimalAuditChainLcm (k - 1) := by
+  exact paper_xi_primitive_prime_divisor_forces_unbounded_prime_support
+
 end Omega.Zeta

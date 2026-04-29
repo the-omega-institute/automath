@@ -162,6 +162,9 @@ MACHINE_ASSIGNMENT = {
         "2026_zeckendorf_stable_arithmetic_fibonacci_congruence_online",
         "2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds",
         "2026_folded_histograms_sampling_certificates_parry_mismatch_etds",
+        "2026_projection_ontological_mathematics_core_tams",
+        "2026_scan_projection_address_semantics_sigma_nonexpansion_etds",
+        "2026_prefix_scan_error_boundary_rates_dynamical_systems",
     ],
 }
 

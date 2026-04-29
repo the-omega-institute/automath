@@ -1,0 +1,558 @@
+% main.tex -- Chebotarev Quotient Entropy and Fold Groupoid Rigidity
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{margin=2.8cm}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\numberwithin{equation}{section}
+
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\spr}{spr}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\TT}{\mathbb{T}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\abs}[1]{\lvert #1\rvert}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\Fold}{\operatorname{Fold}}
+\newcommand{\ind}{\mathbf{1}}
+
+\title{Quotient Entropy, Exact-Kernel Tomography, and Fold-Groupoid Rigidity}
+\author{
+  Haobo Ma\thanks{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981. Email: \texttt{auric@aelf.io}}
+  \and
+  Wenlin Zhang\thanks{Corresponding author. National University of Singapore, Singapore. Email: \texttt{e1327962@u.nus.edu}}
+}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+We consider two coarse-observation problems, one arithmetic and one operator-algebraic, both governed by the question of what remains visible after passing to a quotient. On the arithmetic side we work under an abstract Chebotarev spectral expansion for primitive counts, together with the corresponding Artin factorization. For quotients of finite abelian groups we prove an exact chain rule for relative entropy and an orthogonal decomposition of the \(\chi^2\)-defect into quotient-visible and quotient-invisible Fourier energy. The full quotient profile then determines, by Möbius inversion on the subgroup lattice, the Fourier mass carried by characters with prescribed exact kernel; the family of quotient relative entropies recovers the same information to second order. We also analyze dominant nontrivial channels: an isolated dominant spectral pair yields the secondary oscillatory term in subset counts, a multiplicity-one dominant channel determines the pole order of the corresponding Artin factor, and a dominant exact-kernel family singles out the coarsest quotient on which the leading entropy remains visible. On the operator-algebraic side we study the finite-dimensional fold-groupoid algebra attached to a fold map. We show that the scan-reversal fingerprint is rigid under the compatible \(\ast\)-automorphisms considered here, realize the induced \(\ZZ_2\times\ZZ_2\)-decomposition by explicit central idempotents, and use signed moments of the Watatani index element to recover maximal-fiber data in general and the full sectorwise multiplicity data in window \(6\).
+\end{abstract}
+
+\noindent\textbf{Keywords:} Chebotarev distribution; relative entropy; Artin factor; fold groupoid; central idempotents; Watatani index
+
+\medskip
+\noindent\textbf{MSC:} 11R44; 94A17; 22A22; 46L05
+
+%% ============================================================
+\section{Introduction}\label{sec:introduction}
+Many counting and rigidity problems are naturally observed through a loss of resolution. On the arithmetic side one often sees only the image of a Frobenius class in a quotient, or only a restricted collection of subset counts. On the operator-algebraic side the ambient algebra may be large, while the available observables belong to a small central or commutative subalgebra. In both situations the basic issue is the same: which invariants remain visible after coarse observation, and how much of the hidden structure can be reconstructed from the visible data?
+
+\subsection{Arithmetic results}
+Chebotarev density and its refinements relate counting functions to the spectral data carried by Artin-type factors; see, for instance, \cite{Tschebotareff1926,Serre1981,NeukirchSchmidtWingberg2008}. The arithmetic part of the paper is conditional by design. We do not attempt to establish a new Chebotarev theorem. Instead, we fix an abstract spectral expansion for primitive counts, together with the accompanying Artin factorization, and ask what can be deduced from this input alone about passage to quotients and about the reconstruction of exact spectral information from coarse statistics. The underlying entropy and harmonic-analysis tools are classical \cite{CoverThomas2006,CsiszarKorner2011,DemboZeitouni1998,Diaconis1988,Terras1999}; the point is to arrange them in a form adapted to quotient data.
+
+The first group of results concerns quotients of finite abelian groups. For a surjection \(\pi:G_2\twoheadrightarrow G_1\), Proposition \ref{thm:kernel-chebotarev-quotient-relative-entropy-chain} gives the exact chain rule for relative entropy with respect to the uniform laws on \(G_2\), \(G_1\), and the fibers of \(\pi\). Proposition \ref{thm:kernel-chebotarev-visible-hidden-character-energy} is the corresponding \(L^2\)-statement: the \(\chi^2\)-defect splits orthogonally into a quotient-visible part, carried by the characters factoring through \(\pi\), and a complementary invisible part. The quotient profile becomes much more rigid when one ranges over all quotients. Theorem \ref{thm:kernel-chebotarev-quotient-lattice-tomography} shows that the family of quotient \(\chi^2\)-defects determines, by Möbius inversion on the subgroup lattice, the Fourier mass carried by characters with exact kernel \(H\), and Theorem \ref{thm:kernel-chebotarev-entropy-tomography} proves that the quotient relative entropies already recover the same data to second order.
+
+The remaining arithmetic statements isolate the contribution of a dominant nontrivial channel. Under an isolated dominant conjugate pair, Theorem \ref{thm:kernel-chebotarev-second-main-term-witness} extracts the secondary oscillatory term in subset counts. Under the stronger hypothesis that a dominant eigenvalue occurs in a single nontrivial channel with algebraic multiplicity one, Theorem \ref{thm:kernel-artin-dominant-channel-pole-order} identifies the exact pole order of the corresponding nontrivial Artin factor. Theorem \ref{thm:kernel-chebotarev-dominant-kernel-detection} then shows that, when the dominant twisted contribution is concentrated on characters with a common exact kernel \(H_\star\), the quotient-entropy profile detects exactly the quotients through which that family factors. In particular, \(G/H_\star\) is the coarsest quotient on which the leading entropy survives. Finally, Theorem \ref{thm:kernel-chebotarev-statistical-convergence} translates the spectral gap into exponential convergence to the uniform law and gives an obstruction to square-root total-variation decay when the dominant modulus exceeds \(\lambda_1(u)^{1/2}\).
+
+\subsection{Fold-groupoid results}
+The second part of the paper treats the same general theme in a finite-dimensional operator-algebraic model attached to a fold map. Starting from the associated equivalence-relation groupoid, we study how much of the scan-reversal fingerprint can be recovered from intrinsic central observables. The \(C^\ast\)-algebraic background is standard \cite{Renault1980,Paterson1999,Watatani1990,BrownOzawa2008,Jones1983}; what seems to be new is the explicit internal realization of the fingerprint sectors inside the center, together with the reconstruction statements obtained from the Watatani index element and its signed moments.
+
+The first step is rigidity. Proposition \ref{thm:fold-groupoid-chi-rigidity} shows that the compatible \(\ast\)-automorphisms considered here preserve the scan-reversal fingerprint, and Theorem \ref{thm:fold-groupoid-z2x2-central-idempotents} realizes the resulting \(\ZZ_2\times\ZZ_2\)-decomposition by explicit central idempotents. The Watatani index element then produces a natural family of signed moments. These moments recover maximal-fiber data in general and, in window \(6\), determine the full sectorwise multiplicity profile; see Theorem \ref{thm:fold-window6-chi-layered-spectrum-reconstruction-by-12-moments}. As a consequence, the three basic central observables already detect a substantial part of the center, but not all of it, and we obtain a lower bound for the remaining central quotient.
+
+\subsection{Theorem-by-theorem comparison with prior work}
+Definition \ref{def:kernel-rh} is only shorthand for the square-root spectral barrier familiar from effective function-field Chebotarev estimates such as \cite[Chapter 9]{Rosen2002} and \cite{Ishibashi1992}. Proposition \ref{thm:kernel-chebotarev-quotient-relative-entropy-chain} is the chain rule for relative entropy from \cite[Theorem 2.5.3]{CoverThomas2006}, specialized to quotient maps with uniform reference measures. Proposition \ref{thm:kernel-chebotarev-visible-hidden-character-energy} combines the standard Parseval and character-orthogonality formalism of \cite{Diaconis1988,Terras1999} with the orthogonal projection onto functions constant on quotient fibers. Theorem \ref{thm:kernel-chebotarev-quotient-lattice-tomography} is the first arithmetic increment: it promotes Rota's subgroup-lattice Möbius inversion \cite{Rota1964} to an exact reconstruction of exact-kernel Fourier mass from the full quotient-visible \(\chi^2\)-profile. Theorem \ref{thm:kernel-chebotarev-entropy-tomography} is a conditional refinement of that picture, replacing the \(\chi^2\)-profile by quotient relative entropies and proving a uniform second-order recovery statement with an explicit \(O(\tau(u)^{3n})\) remainder.
+
+Theorem \ref{thm:kernel-chebotarev-second-main-term-witness} is a spectral corollary of the Jordan-form asymptotics summarized in \cite[(3.2.5.1)]{HornJohnson2013}: under an isolated dominant conjugate pair it isolates the secondary oscillatory term in subset counts. Theorem \ref{thm:kernel-artin-dominant-channel-pole-order} similarly converts the assumed Artin factorization into an exact pole-order statement when the dominant nontrivial eigenvalue is simple and isolated, in the same Chebotarev-Artin framework used by \cite{Serre1981}. Theorem \ref{thm:kernel-chebotarev-statistical-convergence} translates the same spectral gap into exponential total-variation, \(\chi^2\), and entropy decay, and records the precise obstruction to square-root total-variation decay when \(\eta(u)>\lambda_1(u)^{1/2}\). Definition \ref{def:kernel-chebotarev-dominant-exact-kernel-family} packages the paper's exact-kernel concentration regime for the nontrivial twisted spectrum. Theorem \ref{thm:kernel-chebotarev-dominant-kernel-detection} is the second arithmetic increment: it shows that the quotient-entropy profile detects exactly the quotients through which the dominant exact-kernel family factors, identifying \(G/H_\star\) as the coarsest quotient retaining the leading second-order entropy.
+
+Definition \ref{def:fold-equivalence-groupoid-algebra} specializes the standard equivalence-relation groupoid algebra of \cite{Renault1980,Paterson1999} to the fold map and records the scan and reversal data used later. Proposition \ref{prop:fold-groupoid-wedderburn} is the usual finite-dimensional Wedderburn decomposition of such an equivalence-relation groupoid algebra into matrix blocks. Proposition \ref{prop:fold-groupoid-z2x2-sector-by-orientation} adds the paper's fingerprint partition, organizing those blocks according to the two sign invariants of the distinguished scan and reversal permutations. Proposition \ref{thm:fold-groupoid-aut-semidirect-pi0} is background finite-dimensional \(C^\ast\)-algebra structure in the sense of \cite[Section 2.1]{BrownOzawa2008}: every \(\ast\)-automorphism is blockwise projective-unitary up to permutation of equal-size blocks. Proposition \ref{thm:fold-groupoid-chi-rigidity} turns that classical automorphism description into a rigidity statement showing that compatible automorphisms preserve the scan-reversal fingerprint. Proposition \ref{prop:fold-groupoid-aut-chi-semidirect-classification} is the corresponding fingerprint-preserving semidirect-product description.
+
+Proposition \ref{prop:fold-condexp-index-maxfiber} is a direct entropy-maximization computation based on the chain rule from \cite[Theorem 2.5.3]{CoverThomas2006}. Proposition \ref{prop:fold-groupoid-block-expectation} records the standard center-valued conditional expectation and the associated Watatani index element in the finite-dimensional block algebra, following \cite{Watatani1990}. Theorem \ref{thm:fold-groupoid-z2x2-central-idempotents} is a new internal realization of the \(\mathbb Z_2^2\)-fingerprint sectors by explicit central idempotents generated from the scan and reversal involutions. Theorem \ref{thm:fold-groupoid-z2x2-joint-spectral-measure} is then a formal trace computation identifying the joint spectral measure and the signed moment formula attached to those central observables. Proposition \ref{prop:fold-groupoid-maxblock-chi-homogeneity} observes that the maximal matrix blocks lie entirely inside the fingerprint sector singled out by the maximal-fiber assumption. Theorem \ref{thm:fold-max-data-processing-saturation-chi} is a conditional entropy corollary: every maximizing microscopic distribution is forced onto maximal fibers, hence onto the fingerprint sector prescribed by the fold-specific hypothesis. Corollary \ref{cor:fold-indw-high-q-extract-maxfiber-and-chi} then shows that high Watatani moments recover both the maximal fiber size and the corresponding fingerprint, sector by sector.
+
+Theorem \ref{thm:fold-window6-chi-layered-spectrum-reconstruction-by-12-moments} gives the paper's sharp window-\(6\) reconstruction theorem: twelve signed moments determine all twelve sectorwise multiplicity counts and hence the factorized sector polynomials. Proposition \ref{prop:fold-center-resolution-criterion-indw-eps} identifies exactly when the three central observables already generate the full center, namely when fiber multiplicity is injective inside each fingerprint sector. Theorem \ref{thm:fold-window6-center-three-observables-dimension-defect} applies that criterion to the window-\(6\) data to obtain the explicit universal bound \(\dim_{\CC}Z_6^{(3)}\le 12<21=\dim_{\CC}Z_6\), so the unresolved central quotient has dimension at least \(9\).
+
+\subsection{Structure of the paper}
+Section \ref{sec:entropy-chain} fixes the arithmetic framework, proves the exact quotient identities, and develops exact-kernel tomography from the full quotient profile. Section \ref{sec:artin-pole} treats dominant channels and their consequences for subset counts, Artin factors, convergence to uniformity, and quotient detection. Section \ref{sec:groupoid-rigidity} introduces the fold-groupoid algebra and proves rigidity of the scan-reversal fingerprint. Section \ref{sec:central-idempotents} studies the central observables and the corresponding reconstruction problem, with particular attention to the window-\(6\) case.
+
+%% ============================================================
+\section{Quotient Identities and Exact-Kernel Tomography}\label{sec:entropy-chain}
+We fix the notation used in the arithmetic part of the paper and record the abstract Chebotarev input on which all subsequent arguments rest.
+
+\subsection{Notation and Divergences}
+If \(G\) is a finite group, we write \(\widehat G\) for a complete set of irreducible complex representations of \(G\); when \(G\) is abelian, this is identified with its Pontryagin dual of characters. We write \(\mathrm{unif}_G\) for the uniform probability measure on \(G\). For a surjective homomorphism \(\pi:G_2\twoheadrightarrow G_1\) with kernel \(K\), we set
+\[
+K^\perp:=\{\chi\in\widehat G_2:\chi|_K\equiv 1\}\cong \widehat G_1.
+\]
+When \(G\) is abelian and \(f:G\to \CC\), its Fourier transform is
+\[
+\widehat f(\chi):=\frac{1}{|G|}\sum_{c\in G} f(c)\,\overline{\chi(c)}.
+\]
+With respect to the normalized inner product
+\[
+\langle f,g\rangle_{L^2(\mathrm{unif}_G)}:=\frac{1}{|G|}\sum_{c\in G}f(c)\,\overline{g(c)},
+\]
+Parseval's identity takes the form
+\[
+\|f\|_{L^2(\mathrm{unif}_G)}^2=\sum_{\chi\in \widehat G}\abs{\widehat f(\chi)}^2.
+\]
+
+For probability measures \(\mu,\nu\) on a finite set \(X\) with \(\mu\ll\nu\), we use
+\[
+D(\mu\Vert \nu):=\sum_{x\in X}\mu(x)\log\frac{\mu(x)}{\nu(x)},
+\]
+\[
+\chi^2(\mu\Vert \nu):=\sum_{x\in X}\frac{(\mu(x)-\nu(x))^2}{\nu(x)},
+\qquad
+\|\mu-\nu\|_{\mathrm{TV}}:=\frac12\sum_{x\in X}\abs{\mu(x)-\nu(x)}.
+\]
+When \(\nu=\mathrm{unif}_G\) on a finite group \(G\) and \(r:=|G|\mu\) denotes the density of \(\mu\) relative to \(\mathrm{unif}_G\), one has
+\[
+\chi^2(\mu\Vert \mathrm{unif}_G)=\|r-1\|_{L^2(\mathrm{unif}_G)}^2.
+\]
+When \(X\) is partitioned into fibers of a map \(\pi:X\to Y\), the relative-entropy chain rule reads
+\[
+D(\mu\Vert \nu)=D(\pi_\ast\mu\Vert \pi_\ast\nu)+\sum_{y\in Y}(\pi_\ast\mu)(y)\,D(\mu(\cdot\mid y)\Vert \nu(\cdot\mid y)),
+\]
+whenever the conditional distributions are defined.
+
+\subsection{Abstract Chebotarev Hypotheses}
+Fix a finite group \(G\), a temperature parameter \(u\in(0,1]\), and nonnegative primitive Chebotarev counts \(B_{n,c}(u)\) indexed by \(c\in G\). We write
+\[
+B_n(\ind;u):=\sum_{c\in G}B_{n,c}(u),
+\]
+and, when \(G\) is abelian,
+\[
+B_n(\chi;u):=\sum_{c\in G}\chi(c)\,B_{n,c}(u)
+\quad(\chi\in \widehat G),
+\]
+and for each irreducible channel \(\rho\) we let \(M_{K,\rho}(u)\) denote the corresponding transfer matrix. The trivial-channel Perron root is
+\[
+\lambda_1(u):=\spr(M_{K,\ind}(u)),
+\]
+the nontrivial spectral radius is
+\[
+\eta(u):=\max_{\rho\neq \ind}\spr(M_{K,\rho}(u)),
+\]
+and we set
+\[
+\Lambda(u):=\max\{|\lambda_2(u)|,\eta(u)\},
+\]
+where \(\lambda_2(u)\) denotes the second-largest eigenvalue modulus in the trivial channel.
+
+The results of Sections \ref{sec:entropy-chain} and \ref{sec:artin-pole} depend only on the following hypotheses.
+
+\begin{assumption}[Chebotarev Spectral Expansion]\label{thm:kernel-chebotarev-exp}
+Assume \(\Lambda(u)<\lambda_1(u)\). Then, uniformly in \(c\in G\),
+\[
+B_{n,c}(u)
+=
+\frac{1}{|G|}\frac{\lambda_1(u)^n}{n}
++O\!\left(\frac{\Lambda(u)^n}{n}\right),
+\qquad
+B_n(\ind;u)
+=
+\frac{\lambda_1(u)^n}{n}
++O\!\left(\frac{\Lambda(u)^n}{n}\right).
+\]
+Moreover, for every conjugacy-invariant subset \(A\subseteq G\), if we set
+\[
+B_{n,A}(u):=\sum_{c\in A}B_{n,c}(u),
+\]
+then there exist linear functionals \(L_{A,\rho}\) on the corresponding channel spaces such that
+\[
+B_{n,A}(u)
+=
+\mathrm{unif}_G(A)\frac{\lambda_1(u)^n}{n}
++\frac{1}{n}\sum_{\rho\in\widehat G\setminus\{\ind\}}L_{A,\rho}\!\bigl(M_{K,\rho}(u)^n\bigr).
+\]
+\end{assumption}
+
+\begin{assumption}[Artin Factorization]\label{prop:kernel-artin-factorization}
+For a finite group \(G\), define
+\[
+L_{K,\rho}(z,u):=\det(I-zM_{K,\rho}(u))^{-1}.
+\]
+Then the associated zeta function satisfies
+\[
+\zeta_{K,G}(z,u)=\prod_{\rho\in\widehat G}L_{K,\rho}(z,u)^{\dim\rho},
+\]
+and hence
+\[
+\frac{\zeta_{K,G}(z,u)}{L_{K,\ind}(z,u)}
+=
+\prod_{\rho\in\widehat G\setminus\{\ind\}}L_{K,\rho}(z,u)^{\dim\rho}.
+\]
+\end{assumption}
+
+\begin{definition}[Square-Root Spectral Bound]\label{def:kernel-rh}
+We write
+\[
+\textsf{SR}_{K,G}(u):\qquad \Lambda(u)\le \lambda_1(u)^{1/2}
+\]
+for the square-root spectral bound used below.
+\end{definition}
+
+In Sections \ref{sec:entropy-chain} and \ref{sec:artin-pole} we use Assumptions \ref{thm:kernel-chebotarev-exp} and \ref{prop:kernel-artin-factorization} only through the displayed consequences above. In particular, no further arithmetic input is required. The condition \(\textsf{SR}_{K,G}(u)\) is a genuine square-root \emph{decay} statement only when \(\lambda_1(u)>1\), which is precisely the regime relevant for Section \ref{sec:artin-pole}\!.
+
+A standard function-field model is provided by connected finite \'etale abelian Galois covers of smooth projective geometrically connected curves over \(\FF_q\). In that setting Artin factorization holds for the associated zeta function, while the effective function-field Chebotarev theorem gives \(\lambda_1(1)=q\) and \(\Lambda(1)\le q^{1/2}\); see \cite[Chapter 9]{Rosen2002} and \cite{Ishibashi1992}. The results of Sections \ref{sec:entropy-chain} and \ref{sec:artin-pole} then yield explicit \(q^{-n}\)-scale asymptotics for quotient entropy and exact-kernel spectral mass.
+
+\subsection{Exact Quotient Identities}
+We now turn to the exact identities governing passage from a fine label distribution to its quotient. The first is entropic, and the second is the corresponding \(L^2\)-decomposition together with its Fourier interpretation.
+
+\input{source/thm__chebotarev-quotient-entropy-energy}
+
+\subsection{Tomography on the Quotient Lattice}
+The preceding identities become substantially more rigid when they are assembled over the full subgroup lattice. The next two results show that the family of quotient-visible \(L^2\)-defects determines the exact-kernel spectral mass by Möbius inversion, and that the quotient relative entropies recover the same information to second order.
+
+\input{source/thm__chebotarev-quotient-tomography}
+
+%% ============================================================
+\section{Dominant Channels and Asymptotics}\label{sec:artin-pole}
+We now isolate the leading nontrivial contribution to the twisted spectrum. The first statement extracts the corresponding secondary term in subset counts.
+
+\input{source/thm__chebotarev-second-main-term-witness}
+
+The next theorem records two further consequences of the same dominant-channel picture: an exact pole order for the nontrivial Artin factor, and quantitative convergence of the primitive label distributions to the uniform law.
+
+\input{source/thm__chebotarev-artin-pole-stat-convergence}
+
+We then return to the quotient profile and ask on which quotients the dominant contribution remains visible.
+
+\input{source/thm__chebotarev-dominant-kernel-detection}
+
+%% ============================================================
+\section{Fold-Groupoid Algebras and Fingerprint Rigidity}\label{sec:groupoid-rigidity}
+We now turn to the finite-dimensional operator-algebraic model attached to the fold map. The first task is to describe the ambient algebra and the class of automorphisms relevant for the scan-reversal fingerprint. From this point onward only the finite-dimensional groupoid algebra, the sign data of the distinguished scan and reversal permutations, and the explicit fold-specific input recorded later will be used.
+
+\subsection{The Fold-Groupoid Algebra}
+\begin{definition}[Fold Groupoid Algebra]\label{def:fold-equivalence-groupoid-algebra}
+For each resolution \(m\), let \(\Fold_m:\Omega_m\to X_m\) be the fold map from microstates to stable macrostates, where \(\Omega_m\) is a binary microstate set of cardinality \(2^m\). The associated equivalence-relation groupoid is
+\[
+\mathcal R_m:=\Omega_m\times_{X_m}\Omega_m
+=
+\{(\omega,\omega')\in \Omega_m\times\Omega_m:\Fold_m(\omega)=\Fold_m(\omega')\},
+\]
+and we write
+\[
+A_{m,1}:=\CC[\mathcal R_m]
+\]
+for its complex groupoid algebra. Concretely, \(A_{m,1}\) is the complex vector space with basis \(\{[\omega,\omega']:(\omega,\omega')\in\mathcal R_m\}\), equipped with convolution product and involution
+\[
+[\omega,\omega']\,[\eta,\eta']
+:=
+\delta_{\omega',\eta}\,[\omega,\eta'],
+\qquad
+[\omega,\omega']^\ast:=[\omega',\omega].
+\]
+The fiber multiplicity at \(x\in X_m\) is
+\[
+d_m(x):=\abs{\Fold_m^{-1}(x)},
+\qquad
+D_m:=\max_{x\in X_m}d_m(x),
+\qquad
+\mathcal M_m:=\{x\in X_m:d_m(x)=D_m\}.
+\]
+For each \(x\in X_m\), we further assume that the fold model provides distinguished permutations
+\[
+c_x,\iota_x\in \mathrm{Sym}\bigl(\Fold_m^{-1}(x)\bigr),
+\qquad
+\iota_x^2=\mathrm{id},
+\]
+called respectively the scan permutation and the reversal permutation of the fiber. Only their signatures and their behavior under the compatible automorphisms introduced below will be used in the sequel.
+\end{definition}
+
+\begin{proposition}\label{prop:fold-groupoid-wedderburn}
+There is a canonical \(\ast\)-isomorphism
+\[
+A_{m,1}\cong \bigoplus_{x\in X_m}\End\!\bigl(\CC[\Fold_m^{-1}(x)]\bigr),
+\]
+and hence, after choosing bases on the fiber spaces, a \(\ast\)-isomorphism
+\[
+A_{m,1}\cong \bigoplus_{x\in X_m}M_{d_m(x)}(\CC).
+\]
+For each \(x\in X_m\), we denote by \(\widetilde P_x\in Z(A_{m,1})\) the minimal central idempotent projecting onto the block \(M_{d_m(x)}(\CC)\).
+\end{proposition}
+
+\begin{proof}
+For each \(x\in X_m\), let \(H_x:=\CC[\Fold_m^{-1}(x)]\) with basis \(\{\delta_\omega:\omega\in\Fold_m^{-1}(x)\}\). The subgroupoid
+\[
+\mathcal R_m(x):=\Fold_m^{-1}(x)\times\Fold_m^{-1}(x)
+\]
+is the full pair groupoid on the fiber, and the assignment
+\[
+[\omega,\omega']\longmapsto \bigl(\delta_\eta\mapsto \delta_{\omega',\eta}\,\delta_\omega\bigr)
+\]
+identifies \(\CC[\mathcal R_m(x)]\) with \(\End(H_x)\): on the distinguished basis, the image of \([\omega,\omega']\) is the rank-one operator \(E_{\omega,\omega'}\), and the formulas for multiplication and involution match the matrix-unit relations. Since
+\[
+\mathcal R_m=\bigsqcup_{x\in X_m}\mathcal R_m(x),
+\]
+the groupoid algebra is the direct sum of the fiber algebras, which gives the canonical decomposition into endomorphism algebras. Choosing bases on the \(H_x\) then identifies \(\End(H_x)\) with \(M_{d_m(x)}(\CC)\); see also \cite[Chapter 1]{Renault1980} or \cite[Section 4.1]{Paterson1999}.
+\end{proof}
+
+\begin{proposition}\label{prop:fold-groupoid-z2x2-sector-by-orientation}
+For each \(x\in X_m\), let \(c_x\) and \(\iota_x\) be the scan and reversal permutations of the fiber \(\Fold_m^{-1}(x)\). Define the fingerprint
+\[
+\chi(x):=\bigl(\operatorname{sgn}(c_x),\operatorname{sgn}(\iota_x)\bigr)\in\{\pm1\}^2.
+\]
+For \((\alpha,\beta)\in\{\pm1\}^2\), set
+\[
+X_m^{\alpha,\beta}:=\{x\in X_m:\chi(x)=(\alpha,\beta)\},
+\qquad
+\CC[\mathcal R_m]^{\alpha,\beta}:=\bigoplus_{x\in X_m^{\alpha,\beta}}M_{d_m(x)}(\CC).
+\]
+Then
+\[
+A_{m,1}=\bigoplus_{(\alpha,\beta)\in\{\pm1\}^2}\CC[\mathcal R_m]^{\alpha,\beta}
+\]
+is the sector decomposition determined by the scan-reversal fingerprint.
+\end{proposition}
+
+Only two features of the distinguished permutations \(c_x\) and \(\iota_x\) will matter below: their signatures and their behavior under the compatible \(\ast\)-automorphisms considered in this section. No further combinatorics of the fold map enters the argument.
+
+\subsection{Compatible Automorphisms}
+\begin{proposition}[Supporting automorphism classification]\label{thm:fold-groupoid-aut-semidirect-pi0}
+Let
+\[
+\Pi_0:=\{\sigma\in \mathrm{Sym}(X_m):d_m(\sigma(x))=d_m(x)\ \forall x\in X_m\}.
+\]
+Then the \(\ast\)-automorphism group of \(A_{m,1}\) is naturally isomorphic to
+\[
+\Aut^\ast(A_{m,1})
+\cong
+\Bigl(\prod_{x\in X_m}\mathrm{PU}(d_m(x))\Bigr)\rtimes \Pi_0.
+\]
+Equivalently, a \(\ast\)-automorphism acts by blockwise projective-unitary conjugation together with a permutation of blocks of equal size.
+\end{proposition}
+
+\begin{proof}
+By finite-dimensional \(C^\ast\)-algebra structure theory, every \(\ast\)-automorphism of \(\bigoplus_x M_{d_m(x)}(\CC)\) permutes the minimal central projections; see \cite[Section 2.1]{BrownOzawa2008}. Compatibility with matrix size forces the induced permutation of blocks to lie in \(\Pi_0\). After that permutation is fixed, the restriction to each simple summand \(M_{d_m(x)}(\CC)\) is a \(\ast\)-automorphism of a full matrix algebra, hence inner, and is therefore represented by conjugation with a unitary unique modulo scalars. This yields the factor \(\prod_x\mathrm{PU}(d_m(x))\), while \(\Pi_0\) acts by reindexing the blocks.
+\end{proof}
+
+\input{source/thm__fold-groupoid-chi-rigidity-autchi}
+
+%% ============================================================
+\section{Central Observables and Reconstruction}\label{sec:central-idempotents}
+Having established rigidity of the fingerprint, we study the center of the fold-groupoid algebra and the information carried by its natural central observables. The guiding question is how much of the block structure can be recovered from the central involutions attached to scan and reversal, together with the Watatani index element.
+
+\subsection{Preparatory Material}
+We begin by isolating the fold-specific input and the basic facts about the relevant conditional expectations.
+
+\begin{assumption}[Maximal-Fiber Fingerprint]\label{thm:pom-maxfiber-orientation-charge-periodic}
+For every resolution \(m\), there exists a fingerprint
+\[
+\chi_m=(\alpha_m,\beta_m)\in\{\pm1\}^2
+\]
+such that
+\[
+\chi(x)=\chi_m
+\qquad\text{for all }x\in \mathcal M_m.
+\]
+In the odd-\(m\) stable periodic regime, one furthermore has \(\beta_m=+1\).
+\end{assumption}
+
+\begin{proposition}\label{prop:fold-condexp-index-maxfiber}
+Let \(E_m\) be the conditional expectation induced by \(\Fold_m\), that is, averaging uniformly on the fibers of \(\Fold_m\). For a probability distribution \(\rho\) on \(\Omega_m\), write \(\rho_X:=(\Fold_m)_\ast\rho\) and define the fiberwise-uniform distribution
+\[
+\rho^\flat(\omega):=\frac{\rho_X(\Fold_m(\omega))}{d_m(\Fold_m(\omega))}
+\qquad(\omega\in \Omega_m).
+\]
+Equivalently, \(\rho^\flat\) has the same pushforward to \(X_m\) as \(\rho\) and is uniform on each fiber of \(\Fold_m\). Then
+\[
+\sup_{\rho}D(\rho\Vert \rho^\flat)=\log D_m,
+\]
+where \(\rho\) ranges over probability distributions on \(\Omega_m\).
+\end{proposition}
+
+\begin{proof}
+For each \(x\in X_m\), let \(u_x\) denote the uniform distribution on the fiber \(\Fold_m^{-1}(x)\). Since \(\rho^\flat\) has the same macroscopic marginal as \(\rho\) and fiberwise conditionals \(u_x\), the relative-entropy chain rule gives
+\[
+D(\rho\Vert \rho^\flat)
+=
+\sum_{x\in X_m}\rho_X(x)\,
+D\!\bigl(\rho(\cdot\mid x)\Vert u_x\bigr).
+\]
+For each \(x\) and each probability distribution \(\sigma\) on \(\Fold_m^{-1}(x)\),
+\[
+\begin{aligned}
+D(\sigma\Vert u_x)
+&=
+\sum_{\omega\in\Fold_m^{-1}(x)}\sigma(\omega)\log\!\bigl(\sigma(\omega)d_m(x)\bigr)\\
+&=
+\log d_m(x)+\sum_{\omega\in\Fold_m^{-1}(x)}\sigma(\omega)\log \sigma(\omega)\\
+&\le
+\log d_m(x),
+\end{aligned}
+\]
+because \(\sum_\omega \sigma(\omega)\log \sigma(\omega)\le 0\). Hence
+\[
+D(\rho\Vert \rho^\flat)\le \log D_m
+\]
+for every \(\rho\). Conversely, choose \(x_\star\in X_m\) with \(d_m(x_\star)=D_m\), and let \(\rho\) be a Dirac mass on a point of \(\Fold_m^{-1}(x_\star)\). Then \(\rho^\flat\) is the uniform distribution on that same fiber, so
+\[
+D(\rho\Vert \rho^\flat)=\log D_m.
+\]
+\end{proof}
+
+\begin{proposition}\label{prop:fold-groupoid-block-expectation}
+Under the Wedderburn identification
+\[
+A_{m,1}\cong \bigoplus_{x\in X_m}M_{d_m(x)}(\CC),
+\]
+define
+\[
+E_{m,1}\bigl((A_x)_{x\in X_m}\bigr)
+:=
+\bigoplus_{x\in X_m}\frac{\Tr(A_x)}{d_m(x)}\,I_{d_m(x)}.
+\]
+Then \(E_{m,1}:A_{m,1}\to Z(A_{m,1})\) is a faithful conditional expectation. In the sense of \cite{Watatani1990}, its Watatani index element is
+\[
+\mathrm{IndW}(E_{m,1})=\sum_{x\in X_m}d_m(x)^2\,\widetilde P_x.
+\]
+\end{proposition}
+
+\begin{proof}
+For each block \(M_{d_m(x)}(\CC)\), fix matrix units \(\{e_{ij}^{(x)}\}_{1\le i,j\le d_m(x)}\). The displayed formula is the normalized trace on each simple summand, so it defines a faithful conditional expectation onto the direct sum of scalar matrices, which is exactly \(Z(A_{m,1})\).
+
+Moreover,
+\[
+E_{m,1}(e_{ij}^{(x)})=\delta_{ij}\,d_m(x)^{-1}\widetilde P_x.
+\]
+A direct computation shows that
+\[
+\Bigl\{\bigl(\sqrt{d_m(x)}\,e_{ij}^{(x)},\sqrt{d_m(x)}\,e_{ji}^{(x)}\bigr): x\in X_m,\ 1\le i,j\le d_m(x)\Bigr\}
+\]
+is a quasi-basis for \(E_{m,1}\): on the \(x\)-block, if \(A_x=\sum_{k,\ell}a_{k\ell}^{(x)}e_{k\ell}^{(x)}\), then
+\[
+\sum_{i,j=1}^{d_m(x)}\sqrt{d_m(x)}\,e_{ij}^{(x)}
+\,E_{m,1}\!\bigl(\sqrt{d_m(x)}\,e_{ji}^{(x)}A_x\bigr)
+=
+\sum_{i,j=1}^{d_m(x)}a_{ij}^{(x)}e_{ij}^{(x)}
+=
+A_x,
+\]
+and similarly on the right. Hence \(E_{m,1}\) has finite Watatani index and
+\[
+\mathrm{IndW}(E_{m,1})
+=
+\sum_{x\in X_m}\sum_{i,j=1}^{d_m(x)}d_m(x)\,e_{ij}^{(x)}e_{ji}^{(x)}
+=
+\sum_{x\in X_m}d_m(x)^2\,\widetilde P_x.
+\]
+\end{proof}
+
+\begin{assumption}[Window-\texorpdfstring{$6$}{6} Data]\label{cor:fold-bin-m6-fiber-hist}
+For the window-\(6\) results, we assume the following fiber-multiplicity data:
+\[
+\begin{aligned}
+d_6(x)&\in\{2,3,4\},\\
+\#\{x\in X_6:d_6(x)=2\}&=8,\\
+\#\{x\in X_6:d_6(x)=3\}&=4,\\
+\#\{x\in X_6:d_6(x)=4\}&=9.
+\end{aligned}
+\]
+These values are consistent with the total microstate count, since
+\[
+2\cdot 8+3\cdot 4+4\cdot 9=64=2^6.
+\]
+In particular,
+\[
+\sum_{x\in X_6}d_6(x)=|\Omega_6|
+\]
+and
+\[
+\abs{X_6}=8+4+9=21.
+\]
+\end{assumption}
+
+In the remainder of Section \ref{sec:central-idempotents} the fold-specific assumptions enter only through the displayed statements above.
+
+\subsection{Central Idempotents and Signed Moments}
+The central involutions associated with scan and reversal encode the fingerprint intrinsically inside the center. Once they are in place, the Watatani index element yields a natural family of signed moments. These moments recover maximal-fiber data in general and, in window \(6\), determine the sectorwise multiplicity profile explicitly.
+
+\input{source/thm__fold-groupoid-z2x2-central-idempotents}
+
+\appendix
+\section{Auxiliary Computations}\label{app:window6}
+For the convenience of the reader, we collect here the two explicit verifications deferred from Section \ref{sec:central-idempotents}, including the window-\(6\) interpolation argument.
+
+\begin{proof}[Proof of Proposition \ref{prop:fold-center-resolution-criterion-indw-eps}]
+Under the Wedderburn identification \(A_{m,1}\cong\bigoplus_{x\in X_m}M_{d_m(x)}(\CC)\), the center \(Z_m\cong\CC^{X_m}\) is spanned by \(\{\widetilde P_x\}_{x\in X_m}\), and
+\[
+\begin{aligned}
+\mathrm{IndW}(E_{m,1})&=\sum_x d_m(x)^2\,\widetilde P_x,\\
+\varepsilon_{\mathrm{scan}}&=\sum_x \chi_1(x)\,\widetilde P_x,\\
+\varepsilon_{\mathrm{rev}}&=\sum_x \chi_2(x)\,\widetilde P_x.
+\end{aligned}
+\]
+Therefore every element of \(Z_m^{(3)}\) takes on the \(x\)-block a value depending only on \(\chi(x)\) and \(d_m(x)^2\), and within each fixed sector it is a polynomial function of \(d_m^2\). Multiplication by \(e_{\alpha,\beta}\) simply restricts such a function to the sector \(\chi=(\alpha,\beta)\), which gives the first statement.
+
+Fix a sector \((\alpha,\beta)\). On that sector, the algebra \(\CC[\mathrm{IndW}(E_{m,1})]\,e_{\alpha,\beta}\) consists exactly of the functions of the scalar \(d_m(x)^2\). Since the map \(d\mapsto d^2\) is injective on \(\NN\), these functions separate precisely the distinct values in
+\[
+V_{\alpha,\beta}:=\{d_m(x):\chi(x)=(\alpha,\beta)\}.
+\]
+Lagrange interpolation on the finite set
+\[
+V_{\alpha,\beta}^2:=\{d^2:d\in V_{\alpha,\beta}\}
+\]
+therefore shows that
+\[
+\dim_{\CC}\bigl(\CC[\mathrm{IndW}(E_{m,1})]\,e_{\alpha,\beta}\bigr)=|V_{\alpha,\beta}|.
+\]
+Summing over the four sectors yields the second assertion. Since \(\dim_{\CC}Z_m=|X_m|\), the third assertion follows immediately: one has \(Z_m^{(3)}=Z_m\) if and only if there are no collisions of the values \(d_m(x)\) within any fixed sector.
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{thm:fold-window6-chi-layered-spectrum-reconstruction-by-12-moments}]
+By Theorem \ref{thm:fold-groupoid-z2x2-joint-spectral-measure}, the quantities \(M_{s,t}(q)\) are exactly the signed odd-power moments of the \(\chi\)-layered fiber spectrum. Fourier-Hadamard inversion therefore gives, for each \((\alpha,\beta)\in\{\pm1\}^2\),
+\[
+p_{2r+1}^{\alpha,\beta}
+=
+\frac14\sum_{s,t\in\{0,1\}}\alpha^s\beta^t\,M_{s,t}(r),
+\qquad r=0,1,2.
+\]
+
+When \(m=6\), Assumption \ref{cor:fold-bin-m6-fiber-hist} shows that the only possible fiber sizes are \(2\), \(3\), and \(4\). Hence for a fixed sector \((\alpha,\beta)\), the counts \(n_2^{\alpha,\beta}\), \(n_3^{\alpha,\beta}\), and \(n_4^{\alpha,\beta}\) satisfy
+\[
+p_1^{\alpha,\beta}=2n_2^{\alpha,\beta}+3n_3^{\alpha,\beta}+4n_4^{\alpha,\beta},
+\]
+\[
+p_3^{\alpha,\beta}=8n_2^{\alpha,\beta}+27n_3^{\alpha,\beta}+64n_4^{\alpha,\beta},
+\]
+\[
+p_5^{\alpha,\beta}=32n_2^{\alpha,\beta}+243n_3^{\alpha,\beta}+1024n_4^{\alpha,\beta}.
+\]
+The coefficient matrix
+\[
+\begin{pmatrix}
+2&3&4\\
+8&27&64\\
+32&243&1024
+\end{pmatrix}
+\]
+has determinant \(10080\neq 0\), so the system is invertible. Direct inversion yields the three formulas displayed in Theorem \ref{thm:fold-window6-chi-layered-spectrum-reconstruction-by-12-moments}.
+
+Finally, because the only fiber sizes are \(2\), \(3\), and \(4\), the fiber-spectrum polynomial in the sector \((\alpha,\beta)\) can only have the linear factors \(1-2z\), \(1-3z\), and \(1-4z\), with exponents \(n_2^{\alpha,\beta}\), \(n_3^{\alpha,\beta}\), and \(n_4^{\alpha,\beta}\), respectively. This gives the final factorization of \(Q_6^{\alpha,\beta}(z)\).
+\end{proof}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

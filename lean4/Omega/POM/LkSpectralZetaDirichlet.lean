@@ -36,6 +36,10 @@ def pom_lk_spectral_zeta_dirichlet_full_sum (k : ℕ) (s : ℝ) : ℝ :=
 def pom_lk_spectral_zeta_dirichlet_even_sum (k : ℕ) (s : ℝ) : ℝ :=
   ∑ p : Fin k, ((2 * (((p : ℕ) + 1 : ℝ)) ^ 1) ^ (-2 * s))
 
+/-- The spectral-zeta proxy after multiplying by the normalizing scale `(π/(2k+1))^(2s)`. -/
+def pom_lk_normalized_zeta_odd_projection_normalized_proxy (k : ℕ) (s : ℝ) : ℝ :=
+  (Real.pi / (2 * k + 1 : ℝ)) ^ (2 * s) * pom_lk_spectral_zeta_dirichlet_proxy k s
+
 private lemma pom_lk_spectral_zeta_dirichlet_phi_closed_form (k : ℕ) (p : Fin k) :
     pom_lk_spectral_zeta_dirichlet_phi k p =
       ((2 * (p : ℕ) + 1 : ℝ) * Real.pi) / (4 * k + 2) := by
@@ -98,6 +102,38 @@ theorem paper_pom_lk_spectral_zeta_dirichlet :
               (Finset.mul_sum (s := Finset.univ)
                 (f := fun p : Fin k => (((p : ℕ) + 1 : ℝ) ^ (-2 * s)))
                 (a := ((2 : ℝ) ^ (-2 * s)))).symm
+
+/-- Paper label: `cor:pom-Lk-normalized-zeta-odd-projection`. Multiplying the Dirichlet proxy
+by the normalizing scale `(π/(2k+1))^(2s)` cancels the common spectral scale and leaves exactly the
+odd Dirichlet projection. -/
+theorem paper_pom_lk_normalized_zeta_odd_projection (k : ℕ) (s : ℝ) :
+    pom_lk_normalized_zeta_odd_projection_normalized_proxy k s =
+      pom_lk_spectral_zeta_dirichlet_odd_sum k s := by
+  let a : ℝ := Real.pi / (2 * k + 1 : ℝ)
+  let b : ℝ := (2 * k + 1 : ℝ) / Real.pi
+  have hproxy :
+      pom_lk_spectral_zeta_dirichlet_proxy k s =
+        b ^ (2 * s) * pom_lk_spectral_zeta_dirichlet_odd_sum k s := by
+    simpa [b] using (paper_pom_lk_spectral_zeta_dirichlet k s).2.2.1
+  have ha_nonneg : 0 ≤ a := by
+    dsimp [a]
+    positivity
+  have hb_nonneg : 0 ≤ b := by
+    dsimp [b]
+    positivity
+  have hab : a * b = 1 := by
+    dsimp [a, b]
+    field_simp [Real.pi_ne_zero]
+  calc
+    pom_lk_normalized_zeta_odd_projection_normalized_proxy k s =
+        a ^ (2 * s) * (b ^ (2 * s) * pom_lk_spectral_zeta_dirichlet_odd_sum k s) := by
+          rw [pom_lk_normalized_zeta_odd_projection_normalized_proxy, hproxy]
+    _ = (a ^ (2 * s) * b ^ (2 * s)) *
+        pom_lk_spectral_zeta_dirichlet_odd_sum k s := by ring
+    _ = (a * b) ^ (2 * s) * pom_lk_spectral_zeta_dirichlet_odd_sum k s := by
+          rw [Real.mul_rpow ha_nonneg hb_nonneg]
+    _ = pom_lk_spectral_zeta_dirichlet_odd_sum k s := by
+          rw [hab, Real.one_rpow, one_mul]
 
 end
 

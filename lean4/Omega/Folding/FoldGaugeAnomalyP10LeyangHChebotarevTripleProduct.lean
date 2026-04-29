@@ -28,4 +28,13 @@ theorem paper_fold_gauge_anomaly_P10_leyang_H_chebotarev_triple_product
   simp [fold_gauge_anomaly_p10_leyang_h_chebotarev_triple_product_density,
     fold_gauge_anomaly_p10_leyang_h_chebotarev_triple_product_class_density, mul_assoc]
 
+/-- Paper label: `cor:fold-gauge-anomaly-P10-leyang-H-chebotarev-triple-product`. -/
+theorem paper_fold_gauge_anomaly_p10_leyang_h_chebotarev_triple_product
+    (class10 class3 class19 : ℕ) :
+    fold_gauge_anomaly_p10_leyang_h_chebotarev_triple_product_density class10 class3 class19 =
+      ((class10 : ℚ) / Nat.factorial 10) * ((class3 : ℚ) / Nat.factorial 3) *
+        ((class19 : ℚ) / Nat.factorial 19) := by
+  simp [fold_gauge_anomaly_p10_leyang_h_chebotarev_triple_product_density,
+    fold_gauge_anomaly_p10_leyang_h_chebotarev_triple_product_class_density, mul_assoc]
+
 end Omega.Folding

@@ -22,4 +22,16 @@ theorem paper_ea_composition_two_layer_package
     ∀ m n : ℕ, iota0 g (m + n) = iota0 g m ∘ iota0 g n :=
   paper_ea_composition_two_layer_seeds g
 
+/-- Paper-facing two-layer composition theorem.
+    thm:composition-two-layer -/
+theorem paper_composition_two_layer {A : Type _} (g : A -> A) :
+    (forall m n : Nat, iota0 g (m + n) = iota0 g m ∘ iota0 g n) ∧
+      (forall m n : Nat,
+        (fun f : A -> A => f^[m]) ∘ (fun f : A -> A => f^[n]) =
+          (fun f : A -> A => f^[m * n])) := by
+  refine ⟨paper_ea_composition_two_layer_package g, ?_⟩
+  intro m n
+  ext f x
+  simpa [Function.comp_def, Nat.mul_comm] using congrFun (Function.iterate_mul f n m).symm x
+
 end Omega.EA.CompositionTwoLayer

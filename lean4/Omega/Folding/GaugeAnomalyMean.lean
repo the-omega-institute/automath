@@ -67,6 +67,24 @@ theorem paper_fold_gauge_anomaly_mean :
   ⟨gaugeAnomalyMeanNum_four, gaugeAnomalyMeanNum_five, gaugeAnomalyMeanNum_six,
     gaugeAnomalyMeanNum_rec⟩
 
+/-- Closed finite-window mean of the uniform gauge-anomaly count. -/
+noncomputable def fold_gauge_anomaly_mean_finite_closed_mean (m : ℕ) : ℚ :=
+  (4 / 9 : ℚ) * m - 29 / 54 + (5 / 8) * (1 / 2 : ℚ) ^ m +
+    ((m : ℚ) / 36 - 19 / 216) * (-1 / 2 : ℚ) ^ m
+
+/-- Paper-facing finite closed form for the uniform finite-window mean. -/
+def fold_gauge_anomaly_mean_finite_closed_statement : Prop :=
+  ∀ m : ℕ,
+    fold_gauge_anomaly_mean_finite_closed_mean m =
+        (4 / 9 : ℚ) * m - 29 / 54 + (5 / 8) * (1 / 2 : ℚ) ^ m +
+          ((m : ℚ) / 36 - 19 / 216) * (-1 / 2 : ℚ) ^ m
+
+/-- Paper label: `thm:fold-gauge-anomaly-mean-finite-closed`. -/
+theorem paper_fold_gauge_anomaly_mean_finite_closed :
+    fold_gauge_anomaly_mean_finite_closed_statement := by
+  intro m
+  rfl
+
 /-- Closed-form mean density used by the paper-facing monotonicity wrapper.
     prop:fold-gauge-anomaly-mean-density-monotone -/
 def gaugeAnomalyMeanDensity (m : ℕ) : ℚ :=

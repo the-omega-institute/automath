@@ -1,0 +1,275 @@
+\section{A padded bounded-delay transducer model for the finite-window fold}
+\label{app:transducer}
+
+To make the finite-state kernel construction of
+\Cref{thm:collision-kernel,thm:symmetric-compression} self-contained, we spell
+out a corrected transducer model for the finite-window fold.  The key point is
+that the transducer output must carry the natural leading-zero padding; this is
+exactly the convention needed to identify the transducer output with the
+finite-window fold itself, even for the zero word.  The automata-theoretic
+normalization viewpoint goes back to Frougny
+\cite{Frougny1991FibonacciAutomata,Frougny1992NumbersAutomata}; see also
+\cite{AhlbachUsatineFrougnyPippenger2013} for algorithmic background.
+
+For a most-significant-digit-first binary word \(a=a_1\cdots a_m\), write
+\[
+  \operatorname{val}(a):=\sum_{j=1}^m a_jF_{m+2-j}.
+\]
+If \(\omega=\omega_1\cdots\omega_m\in\Omega_m\), then
+\[
+  \omega^{\mathrm{rev}}:=\omega_m\cdots\omega_1
+\]
+satisfies \(\operatorname{val}(\omega^{\mathrm{rev}})=N_m(\omega)\).
+
+\begin{definition}[Padded normalization]
+\label{def:appendix-padded-normalization}
+For \(a=a_1\cdots a_m\in\{0,1\}^m\), let
+\[
+  \widetilde\Lambda(a)=b_0b_1\cdots b_m\in\{0,1\}^{m+1}
+\]
+be the unique length-\((m+1)\) word with no adjacent \(1\)'s and
+\[
+  \operatorname{val}(a)
+  =
+  \sum_{j=0}^{m} b_jF_{m+2-j}.
+\]
+Thus \(\widetilde\Lambda(a)\) is the Zeckendorf normalization of
+\(\operatorname{val}(a)\), padded on the left to length \(m+1\).
+\end{definition}
+
+\begin{proposition}[Padded fold transducer]
+\label{prop:appendix-padded-transducer}
+There exists a deterministic subsequential transducer
+\[
+  \mathcal T=(Q,q_0,\delta,\lambda,\tau)
+\]
+with input alphabet \(\{0,1\}\), output alphabet \(\{0,1\}\), and bounded
+terminal output length
+\[
+  L:=\max_{s\in Q}|\tau(s)|,
+\]
+such that the total output
+\[
+  \Lambda(a_1\cdots a_m)
+  :=
+  \lambda^*(q_0,a_1\cdots a_m)\,
+  \tau(\delta^*(q_0,a_1\cdots a_m))
+\]
+is obtained from \(\widetilde\Lambda(a_1\cdots a_m)\) by deleting its first
+symbol.
+\end{proposition}
+
+\begin{proof}
+Deterministic subsequential transducers for Fibonacci normalization with
+leading zeros permitted are standard in the automata-theoretic literature cited
+above.  Deleting the first output symbol is a finite-state postprocessing, so
+the same bounded-delay subsequential model also realizes the resulting visible
+output map.  We fix one such transducer once and for all.
+\end{proof}
+
+\begin{lemma}[Direct fold output]
+\label{lem:appendix-overflow-digit}
+For every \(\omega\in\Omega_m\), if \(x=\Fold_m(\omega)\), then
+\[
+  \Lambda(\omega^{\mathrm{rev}})=x_m\cdots x_1.
+\]
+In particular,
+\[
+  \Lambda(0^m)=0^m.
+\]
+\end{lemma}
+
+\begin{proof}
+By \Cref{prop:single-overflow}, there exists a unique
+\(\varepsilon_m(\omega)\in\{0,1\}\) such that
+\[
+  N_m(\omega)
+  =
+  \varepsilon_m(\omega)F_{m+2}+V_m(x)
+  =
+  \varepsilon_m(\omega)F_{m+2}+\sum_{j=1}^m x_jF_{j+1}.
+\]
+Hence the length-\((m+1)\) admissible word
+\[
+  \varepsilon_m(\omega)\,x_m\cdots x_1
+\]
+represents \(N_m(\omega)=\operatorname{val}(\omega^{\mathrm{rev}})\).  When
+\(\varepsilon_m(\omega)=1\), one has
+\[
+  V_m(x)=N_m(\omega)-F_{m+2}<F_{m+1},
+\]
+so \(x_m=0\), and the displayed word is indeed admissible.  Therefore, by the
+uniqueness in \Cref{def:appendix-padded-normalization},
+\[
+  \widetilde\Lambda(\omega^{\mathrm{rev}})
+  =
+  \varepsilon_m(\omega)\,x_m\cdots x_1.
+\]
+Deleting the first symbol gives the claimed identity for
+\(\Lambda(\omega^{\mathrm{rev}})\).  The zero-word example is the special case
+\(\omega=0^m\), for which \(x=0^m\).
+\end{proof}
+
+\begin{lemma}[Prefix stability for visible outputs]
+\label{lem:appendix-prefix-stability}
+If \(u\) is a prefix of \(v\) in \(\{0,1\}^*\), then \(\Lambda(u)\) and
+\(\Lambda(v)\) have a common prefix of length at least
+\[
+  |\Lambda(u)|-L.
+\]
+Equivalently, after any processed prefix, at most the final \(L\) visible
+symbols can still be altered by extending the input.
+\end{lemma}
+
+\begin{proof}
+Write \(v=uw\), let \(s=\delta^*(q_0,u)\), and decompose the run as
+\[
+  \Lambda(u)=\alpha\,\tau(s),
+  \qquad
+  \Lambda(v)=\alpha\,\beta\,\tau(t)
+\]
+for some word \(\beta\) and some state \(t\).  Thus \(\Lambda(u)\) and
+\(\Lambda(v)\) have a common prefix of length
+\[
+  |\alpha|=|\Lambda(u)|-|\tau(s)|\ge |\Lambda(u)|-L.
+\]
+\end{proof}
+
+\begin{definition}[Committed and residual visible output]
+\label{def:appendix-cut}
+For a finite word \(y\in\{0,1\}^*\), write
+\[
+  y=\operatorname{com}(y)\,\operatorname{res}(y),
+\]
+where \(\operatorname{res}(y)\) is the suffix of \(y\) of length at most \(L\),
+and \(\operatorname{com}(y)\) is the complementary prefix.
+\end{definition}
+
+\begin{proposition}[One-copy augmented fold automaton]
+\label{prop:appendix-one-copy}
+Set
+\[
+  \widehat Q:=Q\times\{0,1\}^{\le L}.
+\]
+There is a deterministic one-copy update rule on \(\widehat Q\) such that the
+state \((s,r)\) records the current transducer state \(s\) together with the
+residual visible suffix \(r\) that can still change under future extensions.
+Its cardinality is
+\[
+  k:=\card{\widehat Q}
+  =
+  |Q|\sum_{j=0}^{L}2^j
+  =
+  |Q|\,(2^{L+1}-1).
+\]
+\end{proposition}
+
+\begin{proof}
+Given a one-copy augmented state \((s,r)\) and an input digit \(a\in\{0,1\}\),
+form the temporary word
+\[
+  w:=r\,\lambda(s,a).
+\]
+Apply \Cref{def:appendix-cut} to write
+\[
+  w=c\,r',
+  \qquad |r'|\le L.
+\]
+The update rule is
+\[
+  (s,r)\xrightarrow{\,a\,}(\delta(s,a),r'),
+\]
+and the newly committed visible block is \(c\).  By
+\Cref{lem:appendix-prefix-stability}, every continuation of the current input
+must begin its future visible output with \(c\); only the stored suffix \(r'\)
+can still change.  The cardinality formula is immediate.
+\end{proof}
+
+\begin{example}[A synchronized \texorpdfstring{$q=2$}{q=2} update]
+\label{ex:appendix-q2-update}
+Suppose the two copies currently lie in
+\[
+  \bigl((s_1,r_1),(s_2,r_2)\bigr)\in \widehat Q^2,
+\]
+and the next input pair is \((a,b)\in\{0,1\}^2\).  Write
+\[
+  r_1\lambda(s_1,a)=c_1r_1',
+  \qquad
+  r_2\lambda(s_2,b)=c_2r_2',
+  \qquad |r_1'|,|r_2'|\le L.
+\]
+Then the synchronized transition is admissible exactly when the newly
+committed blocks agree:
+\[
+  c_1=c_2.
+\]
+In that case the next synchronized state is
+\[
+  \bigl((\delta(s_1,a),r_1'),(\delta(s_2,b),r_2')\bigr).
+\]
+At the terminal stage, if the final one-copy states are \((t_1,\rho_1)\) and
+\((t_2,\rho_2)\), acceptance requires
+\[
+  \rho_1\tau(t_1)=\rho_2\tau(t_2).
+\]
+Thus the \(q=2\) synchronized machine checks equality of the newly committed
+blocks at each step and equality of the final unresolved suffixes at the end.
+\end{example}
+
+\begin{proposition}[Finite collision automaton]
+\label{prop:appendix-collision-automaton}
+Fix \(q\ge 2\).  There is a finite automaton on \(\widehat Q^q\) with one
+transition per input digit such that, for every \(m\ge 1\), accepted
+length-\(m\) paths are in canonical bijection with \(q\)-tuples
+\[
+  (\omega^{(1)},\dots,\omega^{(q)})\in\Omega_m^q
+\]
+satisfying
+\[
+  \Fold_m(\omega^{(1)})=\cdots=\Fold_m(\omega^{(q)}).
+\]
+Consequently there exist a nonnegative integer matrix \(A_q\) and nonnegative
+integer vectors \(u_q,v_q\) such that
+\[
+  S_q(m)=u_q^{\mathsf T}A_q^m v_q
+  \qquad (m\ge 1).
+\]
+\end{proposition}
+
+\begin{proof}
+Run \(q\) copies of the one-copy update rule from
+\Cref{prop:appendix-one-copy} in parallel.  A transition labelled by
+\((a_1,\dots,a_q)\in\{0,1\}^q\) is admissible exactly when the corresponding
+committed blocks agree in all coordinates.  Whenever they disagree, the visible
+outputs can never be repaired by any later continuation, so the run enters a
+rejecting sink.
+
+After reading \(m\) digits, the \(i\)-th coordinate lies in a state
+\((s_i,r_i)\).  The unresolved visible suffix equals
+\[
+  r_i\tau(s_i),
+\]
+whose length is at most \(2L\).  A terminal \(q\)-tuple is accepting exactly
+when these final suffixes agree in all coordinates.
+
+By construction and \Cref{lem:appendix-overflow-digit}, a synchronized run
+avoids rejection and ends in an accepting terminal state if and only if the
+full visible outputs \(\Lambda((\omega^{(i)})^{\mathrm{rev}})\) agree in all
+coordinates, and this is equivalent to equality of the finite-window folds.
+Therefore accepted paths of length \(m\) are exactly the \(q\)-tuples counted by
+\(S_q(m)\).
+
+Let \(A_q\) be the adjacency matrix of the non-sink part of this finite
+automaton, let \(u_q\) select the unique initial synchronized state
+\(((q_0,\varepsilon),\dots,(q_0,\varepsilon))\), and let \(v_q\) mark the
+accepting terminal states.  Then the accepted path count is
+\[
+  u_q^{\mathsf T}A_q^m v_q=S_q(m).
+\]
+\end{proof}
+
+The proof of \Cref{thm:symmetric-compression} is now immediate from
+\Cref{prop:appendix-collision-automaton}: one simply replaces the one-copy state
+set \(Q\) there by the finite augmented state set \(\widehat Q\).  The histogram
+quotient therefore acts on weak compositions of \(q\) into \(k=\card{\widehat Q}\)
+parts, so its dimension remains polynomial in \(q\).

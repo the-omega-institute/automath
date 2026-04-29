@@ -32,4 +32,14 @@ theorem paper_fold_epsilon_machine_stationary_fibonacci_tail
   have _ := paper_fold_epsilon_machine_synchronizing_word_seeds
   exact ⟨h.piB_eq, h.piC_eq, h.piA_eq, h.piR_eq, h.tailMass_eq⟩
 
+/-- Publication-facing label-compatible wrapper for the stationary epsilon-machine law with
+Fibonacci tail.
+    thm:fold-gauge-anomaly-epsilon-machine-stationary-fibonacci-tail -/
+theorem paper_fold_gauge_anomaly_epsilon_machine_stationary_fibonacci_tail
+    (h : EpsilonMachineStationaryFibonacciTailData) :
+    h.piB = (2 : Rat) / 9 ∧ h.piC = (2 : Rat) / 9 ∧ h.piA = (1 : Rat) / 9 ∧
+      (∀ n : Nat, h.piR n = (Nat.fib (n + 4) : Rat) / (36 * 2 ^ n)) ∧
+      h.tailMass = (4 : Rat) / 9 :=
+  paper_fold_epsilon_machine_stationary_fibonacci_tail h
+
 end Omega.Folding

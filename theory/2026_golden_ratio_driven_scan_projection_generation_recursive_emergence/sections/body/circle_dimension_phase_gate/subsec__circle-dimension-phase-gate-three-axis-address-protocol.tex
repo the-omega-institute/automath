@@ -83,18 +83,27 @@ K_{\mathrm{gen}}(x)+O(\log n+\log t),
 \end{proof}
 这说明前缀预算不足所导致的语义歧义并非只表现为“存在一个竞争者”，而是能够以对数额外开销支持任意给定规模的有限歧义簇。
 
-\begin{proposition}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 的对象论判据：局部截面存在性]\label{prop:cdim-nonnull-section-criterion}
-\leanverified{paper\_cdim\_nonnull\_section\_criterion}
-在上述站点/（预）层表述下，地址 \(a\) 的读出在类型层非 \(\mathsf{NULL}\) 当且仅当
-\[
-\boxed{\ F(a)\neq\varnothing\ }.
-\]
-并且对任意有限柱覆盖 \(C_a\subseteq \bigcup_{i=1}^{n}C_{a_i}\)，若存在局部对象 \(s_i\in F(a_i)\) 使其在任意交叠 \(C_{a_i}\cap C_{a_j}\) 上相容（在可核验等价意义下具有共同细化），则存在唯一的粘接对象 \(s\in F(a)\) 使其限制回各 \(s_i\)（粘接唯一性）。
+\begin{proposition}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 的对象论判据：实际全局与兼容局部]\label{prop:cdim-nonnull-section-criterion}
+在上述站点/（预）层表述下，记 \(F^\sharp\) 为 \(F\) 的 sheafification。则：
+\begin{enumerate}
+  \item 地址 \(a\) 的读出在类型层非 \(\mathsf{NULL}\) 当且仅当
+  \[
+  \boxed{\ F(a)\neq\varnothing\ }.
+  \]
+  \item 有限柱覆盖上的兼容局部对象族按共同 refinement 取商后，恰好给出 \(F^\sharp(a)\) 的元素；因此
+  \[
+  F^\sharp(a)\neq\varnothing
+  \]
+  当且仅当地址 \(a\) 处存在兼容局部截面族。
+  \item 只有在 \(F\) 于 \(a\) 处已经满足层条件时，\(F^\sharp(a)\neq\varnothing\) 才等价于 \(F(a)\neq\varnothing\)。因此“兼容局部存在”一般不能直接读作“原始对象层已有全局读出”。
+\end{enumerate}
 \end{proposition}
 \begin{proof}
 第一条是 \(\mathsf{NULL}\) 的定义性译文：在地址 \(a\) 上，“读出可定义且可核验”被组织为存在某个可接受局部证书对象。
 \par
-第二条为可核验语义的粘接纪律：相容性以“在重叠上存在共同细化”表达（定义 \ref{def:xi-cert-refinement-equivalence}），从而可将 \((s_i)\) 压缩为一个由有限对象编码、能被确定性验证器复核的全局证书对象；唯一性同样由共同细化的可核验等价类唯一确定。证毕。
+第二条只是 sheafification 的标准匹配族描述：相容性以“在重叠上存在共同细化”表达（定义 \ref{def:xi-cert-refinement-equivalence}），并在共同 refinement 关系下组成 \(F^\sharp(a)\) 的元素。
+\par
+第三条则是层化条件在点 \(a\) 处的直接推论：若 \(F\to F^\sharp\) 在 \(a\) 处为双射，则兼容局部匹配族与原始对象层全局证书严格一致；反之二者必须分开记录。证毕。
 \end{proof}
 
 \paragraph{三轴地址的规范打包}
@@ -107,12 +116,12 @@ a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}})
 在“统一最小性 + 协议闭包（无未记录轴回流）”假设下，模式轴的完备性可由 Hankel 秩一致有界刻画（定理 \ref{thm:xi-completeness-iff-hankel-bounded}），其可实现的离线核验接口可取为 ACC-Rank 稳定性证书（注 \ref{rem:xi-acc-rank}）。
 
 \subsection{\texorpdfstring{$\mathsf{NULL}$}{NULL} 的三分解与失败证书：语义空值、协议空值、碰撞空值}\label{subsec:cdim-null-three-way}
-在站点/（预）层表述下，\(\mathsf{NULL}\) 的来源可被统一为“局部截面不存在”的结构性失败；并且该失败在体系内可被分解为互不混淆的三类离线可核验见证（定理 \ref{thm:xi-null-complete-trichotomy-offline}）。
+在站点/（预）层表述下，\(\mathsf{NULL}\) 的来源需区分为“局部不存在”“兼容局部仅停留在 sheafification”“以及单值唯一化失败”三层；并且该失败在体系内可被分解为互不混淆的三类离线可核验见证（定理 \ref{thm:xi-null-complete-trichotomy-offline}）。
 与三轴地址语义对齐，可将其表述为：
 \begin{enumerate}
   \item \textbf{语义空值：}地址未给定或 \(a\notin A_{\mathrm{adm}}\)。此时 \(C_a\) 不存在（指称缺失），故 \(F(a)\) 无从定义或按约定为空，从而读出为 \(\mathsf{NULL}\)。
-  \item \textbf{协议空值：}地址 \(a\in A_{\mathrm{adm}}\) 但协议/类型系统拒绝在 \(C_a\) 上建立读出（典型为 unitary slice 锁定与 \(\mathbf{PW}\) 闭包下的“无未记录连续轴”原则，定理 \ref{thm:xi-pw-no-continuous-hair}），或因模式轴/最小实现维数门槛被违反而触发维数型 \(\mathsf{NULL}\)（定理 \ref{thm:xi-completeness-iff-hankel-bounded}；注 \ref{rem:xi-acc-rank}），或局部对象虽逐片存在但因二阶一致性失败而无法全球化；其失败可由 \(H^2\) 粘合障碍类 \([\alpha]\neq 0\) 给出可核验见证（命题 \ref{prop:null-as-h2-obstruction}）。
-  \item \textbf{碰撞空值：}地址 \(a\in A_{\mathrm{adm}}\) 且通过检查器，但底层读出存在多对一压缩而未外置足够残差轴使扩展读出单射化，从而仍等价表现为 \(F(a)=\varnothing\)。其最小侧信息预算由地址—缺陷定律（定理 \ref{thm:address-defect-law}）与分位配额阈值（推论 \ref{cor:pom-prime-register-quantile-budget}）给出；端点侧则由二次分辨率屏障（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}）强制。
+  \item \textbf{协议空值：}地址 \(a\in A_{\mathrm{adm}}\) 但协议/类型系统拒绝在 \(C_a\) 上建立读出（典型为 unitary slice 锁定与 \(\mathbf{PW}\) 闭包下的“无未记录连续轴”原则，定理 \ref{thm:xi-pw-no-continuous-hair}），或因模式轴/最小实现维数门槛被违反而触发维数型 \(\mathsf{NULL}\)（定理 \ref{thm:xi-completeness-iff-hankel-bounded}；注 \ref{rem:xi-acc-rank}），或虽有兼容局部对象 \(F^\sharp(a)\neq\varnothing\) 却因二阶一致性失败而无法下降为原始对象层全局读出；其失败可由 \(H^2\) 粘合障碍类 \([\alpha]\neq 0\) 给出可核验见证（命题 \ref{prop:null-as-h2-obstruction}）。
+  \item \textbf{碰撞空值：}地址 \(a\in A_{\mathrm{adm}}\) 且通过检查器，但底层读出存在多对一压缩而未外置足够残差轴使扩展读出单射化，或等价地存在不同全局候选在同一有限覆盖上给出不可区分的局部限制；其最小侧信息预算由地址—缺陷定律（定理 \ref{thm:address-defect-law}）与分位配额阈值（推论 \ref{cor:pom-prime-register-quantile-budget}）给出；端点侧则由二次分辨率屏障（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}）强制。
 \end{enumerate}
 上述三类失败均可输出有限、离线可核验的否定证书（地址缺失/类型拒绝/预算不足或障碍类见证），从而把“不可核验”转换为可证伪接口。
 
@@ -155,7 +164,7 @@ a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}})
   \item \textbf{地址合法性检查：}验证 \(a\in A_{\mathrm{adm}}\)。若失败则输出语义空值证书并返回 \(\mathsf{NULL}\)。
   \item \textbf{类型/可见域检查：}验证协议允许在 \(C_a\) 上建立读出（unitary slice 锁定与模式轴许可；定理 \ref{thm:xi-pw-no-continuous-hair}）。若失败则输出协议空值证书并返回 \(\mathsf{NULL}\)。
   \item \textbf{单射化预算与障碍检查：}对 \(a_{\mathrm{mode}}\) 核验模式轴完备性（Hankel 秩一致有界或等价的 ACC-Rank 稳定性，定理 \ref{thm:xi-completeness-iff-hankel-bounded}；注 \ref{rem:xi-acc-rank}）；对 \(a_{\mathrm{res}}\) 核验 prime-register 的模积阈值（推论 \ref{cor:pom-prime-register-quantile-budget} 或定理 \ref{thm:address-defect-law} 的硬下界）；对端点精度预算核验二次分辨率门槛（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}）；对绕数/同调障碍核验相应不变量是否为零（定理 \ref{thm:dephys-dirichlet-winding-minimal}，命题 \ref{prop:null-as-h2-obstruction}）。若任一不足则输出对应失败见证并返回 \(\mathsf{NULL}\)。
-  \item \textbf{对象构造与粘接：}在有限柱覆盖上构造局部证书对象族并核验交叠相容性；若相容则由粘接唯一性得到唯一全局对象 \(s\in F(a)\) 并返回 \(s\)（命题 \ref{prop:cdim-nonnull-section-criterion}）。
+  \item \textbf{对象构造与 descent 检查：}在有限柱覆盖上构造局部证书对象族并核验交叠相容性；若相容则先得到 sheafified 兼容类 \(s^\sharp\in F^\sharp(a)\)。只有在附加的 sheaf-at-\(a\) 或等价 descent 证书通过时，才把 \(s^\sharp\) 下降为唯一全局对象 \(s\in F(a)\) 并返回；否则输出协议空值见证（命题 \ref{prop:cdim-nonnull-section-criterion}）。
 \end{enumerate}
 \end{algorithm}
 该流程与最小记录轴定理一致：任何为消除 \(\mathsf{NULL}\) 而引入的新轴，必须在 \(\mathrm{Ext}(\pi)\) 中被识别为规范初对象 \(r_0\) 的因子化；而在连续轴层面，除径向寄存器 \(\varrho(u)=\log|u|\) 的等价类外不存在可接受扩维通道（定理 \ref{thm:cdim-minimal-record-axis}）。

@@ -1,0 +1,294 @@
+\section{The Canonical Zeckendorf Fold and the Golden-Mean Language}
+\label{sec:fold-language}
+
+\subsection{Rotations, Windows, and the Folded Observable}
+
+Let $\alpha\in(0,1)$ be irrational, let $\beta\in(0,1)$, and let
+$x_0\in\TT:=\mathbb{R}/\mathbb{Z}$.  Define the Kronecker orbit
+\[
+x_t:=x_0+t\alpha \pmod 1,\qquad t\ge 0,
+\]
+and the binary readout
+\[
+s_t:=\mathbf{1}_{[0,\beta)}(x_t)\in\{0,1\}.
+\]
+For a fixed resolution $m\ge 1$, let
+\[
+\Omega_m:=\{0,1\}^m,\qquad
+X_m:=\{u=(u_1,\dots,u_m)\in\{0,1\}^m:\ u_i u_{i+1}=0\text{ for }1\le i<m\}.
+\]
+
+\begin{definition}[Canonical fold]\label{def:canonical-fold}
+Let \(F_1=F_2=1\) and \(F_{k+2}=F_{k+1}+F_k\). For
+\(\omega=\omega_1\cdots\omega_m\in\Omega_m\), define its Fibonacci value by
+\[
+N(\omega):=\sum_{k=1}^m \omega_k F_{k+1}.
+\]
+By Zeckendorf's theorem \cite{Zeckendorf1972}, there is a unique sequence
+\(Z(N(\omega))=(c_1,c_2,\dots)\in\{0,1\}^{\mathbb{N}}\) such that
+\[
+N(\omega)=\sum_{k\ge 1} c_k F_{k+1},
+\qquad
+c_kc_{k+1}=0\ \text{ for all }k\ge 1.
+\]
+Let
+\[
+\pref_m(c_1,c_2,\dots):=(c_1,\dots,c_m)\in X_m.
+\]
+The canonical fold at resolution \(m\) is
+\[
+\Fold_m(\omega):=\pref_m(Z(N(\omega)))\in X_m.
+\]
+\end{definition}
+
+\begin{proposition}[Basic properties of the canonical fold]\label{prop:canonical-fold-basic}
+For every \(m\ge 1\), the map \(\Fold_m:\Omega_m\to X_m\) is well defined,
+surjective, and satisfies \(\Fold_m|_{X_m}=\mathrm{id}\). Moreover,
+\(\Fold_m\) admits an order-independent local implementation by
+value-preserving Zeckendorf rewrites.
+\end{proposition}
+
+\begin{proof}
+Well-definedness is immediate from Definition~\ref{def:canonical-fold}. If
+\(\omega\in X_m\), then \(\omega\) is already a legal Zeckendorf prefix, so the
+uniqueness of the Zeckendorf expansion gives \(\Fold_m(\omega)=\omega\). Hence
+\(\Fold_m\) fixes \(X_m\) pointwise, and surjectivity follows by taking
+\(\omega=x\in X_m\) for any \(x\in X_m\). The order-independent local
+implementation is recorded in Appendix~\ref{app:canonical-fold}.
+\end{proof}
+
+\begin{proposition}[Residue characterization of the canonical fold]\label{prop:fold-residue-characterization}
+For every \(m\ge 1\) and \(\omega\in\Omega_m\), write
+\[
+N(\omega)=qF_{m+2}+r,
+\qquad q\in\{0,1\},
+\qquad 0\le r<F_{m+2}.
+\]
+Then
+\[
+\Fold_m(\omega)=\pref_m(Z(r)).
+\]
+Equivalently, for \(x\in X_m\),
+\[
+\Fold_m(\omega)=x
+\iff
+N(\omega)\equiv N(x)\pmod{F_{m+2}}.
+\]
+\end{proposition}
+
+\begin{proof}
+Since
+\[
+N(\omega)\le \sum_{k=1}^m F_{k+1}=F_{m+3}-2<F_{m+2}+F_{m+2},
+\]
+the quotient \(q\) is either \(0\) or \(1\). If \(q=0\), then \(r=N(\omega)\)
+and the claim is immediate.
+
+Assume \(q=1\). Then
+\[
+0\le r=N(\omega)-F_{m+2}\le F_{m+1}-2<F_{m+1},
+\]
+so the Zeckendorf expansion \(Z(r)\) has no nonzero digit in position \(m\) or
+beyond. Hence appending a \(1\) in position \(m+1\) produces another legal
+Zeckendorf digit string, namely the expansion of \(N(\omega)=F_{m+2}+r\). Its
+first \(m\) digits are therefore exactly those of \(Z(r)\), which proves the
+first statement.
+
+If \(x\in X_m\), then
+\[
+N(x)\le \sum_{j=0}^{\lfloor (m-1)/2\rfloor}F_{m-2j+1}<F_{m+2},
+\]
+so \(x=\pref_m(Z(N(x)))\). Applying the first statement with
+\(r\equiv N(\omega)\pmod{F_{m+2}}\) yields
+\[
+\Fold_m(\omega)=x
+\iff
+\pref_m(Z(r))=\pref_m(Z(N(x)))
+\iff
+r=N(x),
+\]
+which is equivalent to the congruence condition.
+\end{proof}
+
+\begin{definition}[Microstates and folded histograms]
+For $t\ge 0$, the length-$m$ microstate is
+\[
+\omega_m(t):=s_t s_{t+1}\cdots s_{t+m-1}\in\Omega_m.
+\]
+The folded output is
+\[
+y_m(t):=\Fold_m(\omega_m(t))\in X_m.
+\]
+For a sample length $N$, define the empirical microstate law and folded
+histogram by
+\[
+\hat\mu_{m,N}(u):=\frac{1}{N}\sum_{t=0}^{N-1}\mathbf{1}_{\{\omega_m(t)=u\}},
+\qquad u\in\Omega_m,
+\]
+\[
+\hat\pi_{m,N}(v):=\frac{1}{N}\sum_{t=0}^{N-1}\mathbf{1}_{\{y_m(t)=v\}},
+\qquad v\in X_m.
+\]
+\end{definition}
+
+Because irrational rotations are uniquely ergodic, the empirical microstate
+law converges to a deterministic target law induced by Lebesgue measure.
+
+\begin{definition}[Target laws]
+Let $\mu_m$ be the length-$m$ microstate distribution induced by Lebesgue
+measure on $\TT$:
+\[
+\mu_m(u):=\leb\{x\in\TT:\omega_m(x;0)=u\},\qquad u\in\Omega_m.
+\]
+Its folded pushforward is
+\[
+\pi_m^{\mathrm{fold}}:=(\Fold_m)_*\mu_m\in\Delta(X_m).
+\]
+\end{definition}
+
+\begin{remark}[Spaces, maps, and laws]\label{rem:model-spaces-maps}
+The basic objects may be summarized by
+\[
+\begin{array}{ccc}
+\Omega_m & \xrightarrow{\Fold_m} & X_m\\[0.3em]
+\mu_m \downarrow\phantom{(\Fold_m)_*} &  & \phantom{(\Fold_m)_*}\downarrow \pi_m^{\mathrm{fold}}\\[0.3em]
+\hat\mu_{m,N} & \xrightarrow{(\Fold_m)_*} & \hat\pi_{m,N}
+\end{array}
+\qquad
+\begin{array}{ccc}
+\Omega_{m+1} & \xrightarrow{\Fold_{m+1}} & X_{m+1}\\[0.3em]
+\pref_m \downarrow &  & \downarrow \rho_{m+1\to m}\\[0.3em]
+\Omega_m & \xrightarrow{\Fold_m} & X_m.
+\end{array}
+\]
+The left diagram separates microstate space \(\Omega_m\) from folded space
+\(X_m\). The right diagram records the truncation interface whose failure to
+commute is measured by the projective residual in
+Appendix~\ref{app:discrepancy}.
+\end{remark}
+
+\begin{remark}[Scope]\label{rem:scope-fold-assumptions}
+We fix the canonical fold throughout. The Sturmian rigidity and higher-block
+conjugacy of Section~\ref{sec:sturmian-rigidity} use the Sturmian slice
+$\beta=\alpha$. The sharp Parry divergence identity of
+Section~\ref{sec:parry-divergence} is a statement about the Parry reference
+family on $X_m$ and is independent of the fold once a law on $X_m$ has been
+specified. The injective placement results of
+Section~\ref{sec:injective-placement} combine the two: the low-complexity
+support created by the folded rotation coding meets the ambient equilibrium
+structure of the golden-mean shift.
+\end{remark}
+
+\subsection{The Parry Measure}
+
+As a reference measure on \(X_m\) we use the Parry measure of the golden-mean
+shift. Let
+\[
+A=\begin{pmatrix}1&1\\1&0\end{pmatrix},\qquad
+\varphi=\frac{1+\sqrt5}{2}.
+\]
+The associated two-state Parry chain has transition matrix
+\[
+P=\begin{pmatrix}\varphi^{-1} & \varphi^{-2}\\ 1&0\end{pmatrix},
+\]
+and stationary distribution
+\[
+\pi(1)=\frac{1}{\varphi^2+1},\qquad
+\pi(0)=1-\pi(1).
+\]
+For $u=u_1\cdots u_m\in X_m$, define the length-$m$ Parry cylinder law
+\[
+\pi_m(u):=\pi(u_1)\prod_{j=1}^{m-1}P_{u_j u_{j+1}}.
+\]
+We emphasize that \(\pi_m\) is used as a reference measure only. We do not
+assume that \(\pi_m^{\mathrm{fold}}=\pi_m\) for irrational rotations.
+Since \(|X_m|=F_{m+2}\), the ambient shift has topological entropy
+\[
+h_{\mathrm{top}}(X)=\lim_{m\to\infty}\frac1m\log |X_m|=\log\varphi,
+\]
+and the Parry measure is its unique measure of maximal entropy
+\cite{LindMarcus1995,WaltersErgodicTheory}.
+
+\begin{proposition}[Endpoint collapse of Parry cylinders]\label{prop:parry-endpoint-collapse}
+For every legal word \(u=u_1\cdots u_m\in X_m\),
+\[
+\pi_m(u)=
+\begin{cases}
+\pi(0)\varphi^{-(m-1)}, & (u_1,u_m)=(0,0),\\
+\pi(0)\varphi^{-m}, & (u_1,u_m)\in\{(0,1),(1,0)\},\\
+\pi(0)\varphi^{-(m+1)}, & (u_1,u_m)=(1,1).
+\end{cases}
+\]
+Equivalently,
+\[
+\pi_m(u)
+=
+\pi(0)\varphi^{-m+\mathbf{1}_{\{u_1=0\}}-\mathbf{1}_{\{u_m=1\}}}.
+\]
+In particular, the Parry cylinder weight depends only on the endpoints of the
+word.
+\end{proposition}
+
+\begin{proof}
+Let \(r_0:=\varphi\) and \(r_1:=1\). For every legal transition
+\((i,j)\in\{(0,0),(0,1),(1,0)\}\), one has
+\[
+P_{ij}=\frac{r_j}{\varphi r_i}.
+\]
+Hence for a legal word \(u=u_1\cdots u_m\),
+\[
+\prod_{j=1}^{m-1}P_{u_j u_{j+1}}
+=
+\varphi^{-(m-1)}\frac{r_{u_m}}{r_{u_1}}.
+\]
+Multiplying by \(\pi(u_1)\) and using \(\pi(1)=\pi(0)\varphi^{-2}\) gives the
+three cases above.
+\end{proof}
+
+\subsection{Sturmian Cylinder Bounds}
+
+The following continued-fraction bounds on Sturmian cylinder lengths are used
+in Sections~\ref{sec:sturmian-rigidity}
+and~\ref{sec:injective-placement}.
+
+\begin{theorem}[Bounds for Sturmian cylinder lengths]\label{thm:spg-sturmian-cylinder-measure-continued-fraction-sandwich}
+Let $\alpha=[0;a_1,a_2,\dots]$ and let $p_n/q_n$ be its convergents.  If
+$q_n\le t<q_{n+1}$, then every length-$t$ Sturmian cylinder $C(w)$ satisfies
+\[
+\frac{1}{q_{n+1}+q_n}
+\;<\;
+\leb(C(w))
+\;<\;
+\frac{1}{q_n}+\frac{1}{q_{n+1}}
+\;<\;
+\frac{2}{q_n}.
+\]
+Equivalently,
+\[
+\log\!\Bigl(\frac{q_n}{2}\Bigr)
+\;<\;
+-\log\leb(C(w))
+\;<\;
+\log(q_{n+1}+q_n).
+\]
+If $\alpha$ has bounded partial quotients, then
+$-\log\leb(C(w))=\log t+O(1)$ uniformly in $w$.
+\end{theorem}
+
+\begin{proof}
+The endpoints of length-$t$ cylinders are among the orbit points
+$\{-k\alpha:0\le k\le t\}$, so cylinder lengths are the adjacent gaps in this
+finite rotation set.  Standard continued-fraction gap estimates and the
+three-gap theorem give
+\[
+\min_{1\le k\le t}\|k\alpha\|
+=
+\|q_n\alpha\|
+\in
+\left(\frac{1}{q_{n+1}+q_n},\frac{1}{q_{n+1}}\right),
+\]
+while the largest gap is at most
+$\|q_{n-1}\alpha\|+\|q_n\alpha\|<q_n^{-1}+q_{n+1}^{-1}$; see
+\cite{Slater1950DistributionIntegers,Slater1967GapsSteps}.  Taking negative
+logarithms yields the second display.
+\end{proof}

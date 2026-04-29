@@ -30,4 +30,26 @@ theorem paper_pom_replica_softcore_exceptional_secant_equation
   · intro i
     linarith [D.node_lt_rho i]
 
+/-- cor:pom-replica-softcore-secant-equation-expectation-form -/
+theorem paper_pom_replica_softcore_secant_equation_expectation_form
+    (D : ReplicaSoftcoreExceptionalSecantData) :
+    (∑ i : Fin (D.q + 1), (D.weight i / (2 : ℝ) ^ D.q) / (D.rho - D.node i)) =
+      2 / (2 : ℝ) ^ D.q := by
+  have hsecant := (paper_pom_replica_softcore_exceptional_secant_equation D).1
+  have hpoles := (paper_pom_replica_softcore_exceptional_secant_equation D).2
+  calc
+    (∑ i : Fin (D.q + 1), (D.weight i / (2 : ℝ) ^ D.q) / (D.rho - D.node i)) =
+        ∑ i : Fin (D.q + 1),
+          (D.weight i / (D.rho - D.node i)) / (2 : ℝ) ^ D.q := by
+      refine Finset.sum_congr rfl ?_
+      intro i _
+      have hpow : (2 : ℝ) ^ D.q ≠ 0 := by positivity
+      have hpole : D.rho - D.node i ≠ 0 := ne_of_gt (hpoles i)
+      field_simp [hpow, hpole]
+    _ = (∑ i : Fin (D.q + 1), D.weight i / (D.rho - D.node i)) /
+        (2 : ℝ) ^ D.q := by
+      rw [Finset.sum_div]
+    _ = 2 / (2 : ℝ) ^ D.q := by
+      rw [hsecant]
+
 end Omega.POM

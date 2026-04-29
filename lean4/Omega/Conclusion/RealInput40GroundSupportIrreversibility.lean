@@ -23,4 +23,16 @@ theorem paper_conclusion_realinput40_ground_support_irreversibility
     hDetailed.trans hright_zero
   exact (ne_of_gt hleft_pos) hleft_zero
 
+/-- Paper label:
+`cor:conclusion-realinput40-selfdual-completion-not-detailed-balance`. -/
+theorem paper_conclusion_realinput40_selfdual_completion_not_detailed_balance
+    (Q : Fin 4 → Fin 4 → ℝ) (π : Fin 4 → ℝ)
+    (hπ2 : 0 < π ⟨1, by decide⟩)
+    (hQ23 : 0 < Q ⟨1, by decide⟩ ⟨2, by decide⟩)
+    (hQ32 : Q ⟨2, by decide⟩ ⟨1, by decide⟩ = 0) :
+    ¬ (π ⟨1, by decide⟩ * Q ⟨1, by decide⟩ ⟨2, by decide⟩ =
+      π ⟨2, by decide⟩ * Q ⟨2, by decide⟩ ⟨1, by decide⟩) := by
+  intro hDetailed
+  exact paper_conclusion_realinput40_ground_support_irreversibility Q π hπ2 hQ23 hQ32 hDetailed
+
 end Omega.Conclusion

@@ -1,0 +1,452 @@
+\section{Exact Parry Divergence and Sharp Support Barriers}
+\label{sec:parry-divergence}
+
+The Parry measure is the unique maximal-entropy equilibrium state of the
+ambient golden-mean shift, whose topological entropy is
+\(h_{\mathrm{top}}(X)=\log\varphi\). This section quantifies how far
+folded rotation laws sit from ambient equilibrium when their effective support
+is much smaller than the full shift language. The exact identities below rely
+on endpoint collapse for the golden-mean Parry cylinders, and no comparable
+closed formula is claimed for arbitrary shifts of finite type.
+
+\begin{definition}[R\'enyi entropy and divergence]\label{def:renyi-entropy-divergence}
+Let \(E\) be a finite set. For a probability law \(\nu\) on \(E\), define
+\[
+H_q(\nu):=
+\begin{cases}
+\log |\supp(\nu)|,
+& q=0,\\[0.4em]
+\dfrac{1}{1-q}\log\!\Bigl(\sum_{x\in E}\nu(x)^q\Bigr),
+& q\in(0,\infty)\setminus\{1\},\\[0.8em]
+-\sum_{x\in E}\nu(x)\log \nu(x),
+& q=1,\\[0.4em]
+-\log \max_{x\in E}\nu(x),
+& q=\infty.
+\end{cases}
+\]
+For probability laws \(\nu\) and \(\rho\) on \(E\), define
+\[
+D_q(\nu\|\rho):=
+\begin{cases}
+-\log \rho(\supp(\nu)),
+& q=0,\\[0.4em]
+\dfrac{1}{q-1}\log\!\Bigl(\sum_{x\in E}\nu(x)^q\rho(x)^{1-q}\Bigr),
+& q\in(0,\infty)\setminus\{1\},\\[0.8em]
+\KL(\nu\|\rho),
+& q=1,\\[0.4em]
+\log \max_{x:\,\nu(x)>0}\dfrac{\nu(x)}{\rho(x)},
+& q=\infty,
+\end{cases}
+\]
+with the convention \(0\log 0:=0\), and with \(D_q(\nu\|\rho):=\infty\) for
+\(q>0\) if \(\nu\) is not absolutely continuous with respect to \(\rho\).
+\end{definition}
+
+\subsection{Exact Parry Identity}
+
+\begin{theorem}[Exact divergence identity relative to the Parry measure]\label{thm:parry-kl-identity}
+Let \(\nu\) be a probability measure on \(X_m\), and define the endpoint masses
+\[
+\eta_{ij}(\nu):=\nu\bigl(\{u\in X_m:u_1=i,\ u_m=j\}\bigr),
+\qquad i,j\in\{0,1\}.
+\]
+If
+\[
+H(\nu):=-\sum_{u\in X_m}\nu(u)\log \nu(u)
+\]
+denotes the Shannon entropy of \(\nu\), then
+\[
+\KL(\nu\|\pi_m)
+=
+m\log\varphi-H(\nu)-\log\pi(0)
+{}+(\eta_{11}(\nu)-\eta_{00}(\nu))\log\varphi.
+\]
+Consequently,
+\[
+m\log\varphi-H(\nu)-\log\pi(0)-\log\varphi
+\le
+\KL(\nu\|\pi_m)
+\le
+m\log\varphi-H(\nu)-\log\pi(0)+\log\varphi.
+\]
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:parry-endpoint-collapse},
+\[
+\log \pi_m(u)
+=
+\log\pi(0)-m\log\varphi
+{}+\bigl(\mathbf{1}_{\{u_1=0\}}-\mathbf{1}_{\{u_m=1\}}\bigr)\log\varphi.
+\]
+Therefore
+\[
+\begin{aligned}
+\KL(\nu\|\pi_m)
+&=
+\sum_{u\in X_m}\nu(u)\log\frac{\nu(u)}{\pi_m(u)}\\
+&=
+-H(\nu)-\sum_{u\in X_m}\nu(u)\log\pi_m(u)\\
+&=
+m\log\varphi-H(\nu)-\log\pi(0)
+{}+\bigl(\eta_{11}(\nu)-\eta_{00}(\nu)\bigr)\log\varphi.
+\end{aligned}
+\]
+Since \(\eta_{11}(\nu)-\eta_{00}(\nu)\in[-1,1]\), the two-sided bound follows.
+\end{proof}
+
+\begin{remark}[Specificity of the endpoint collapse]\label{rem:endpoint-collapse-specificity}
+Theorem~\ref{thm:parry-kl-identity} depends essentially on
+Proposition~\ref{prop:parry-endpoint-collapse}. For a general shift of finite
+type, Parry cylinder weights are controlled by boundary states in an edge
+presentation but need not collapse to a scalar endpoint statistic of the kind
+available here. The exact identity is part of what makes the golden-mean
+setting especially rigid.
+\end{remark}
+
+\begin{corollary}[No fold-entropy loss on the Sturmian slice]\label{cor:no-fold-entropy-loss}
+Assume \(\beta=\alpha\). Then
+\[
+\KL(\pi_m^{\mathrm{fold}}\|\pi_m)
+=
+m\log\varphi-H(\mu_m)-\log\pi(0)
+{}+\bigl(\eta_{11}(\pi_m^{\mathrm{fold}})
+-\eta_{00}(\pi_m^{\mathrm{fold}})\bigr)\log\varphi.
+\]
+Likewise, for every \(N\ge 1\),
+\[
+\KL(\hat\pi_{m,N}\|\pi_m)
+=
+m\log\varphi-H(\hat\mu_{m,N})-\log\pi(0)
+{}+\bigl(\eta_{11}(\hat\pi_{m,N})
+-\eta_{00}(\hat\pi_{m,N})\bigr)\log\varphi.
+\]
+\end{corollary}
+
+\begin{proof}
+Apply Theorem~\ref{thm:parry-kl-identity} with
+\(\nu=\pi_m^{\mathrm{fold}}\) and \(\nu=\hat\pi_{m,N}\), and use
+Corollary~\ref{cor:sturmian-exact-relabeling} to replace
+\(H(\pi_m^{\mathrm{fold}})\) by \(H(\mu_m)\) and
+\(H(\hat\pi_{m,N})\) by \(H(\hat\mu_{m,N})\).
+\end{proof}
+
+\begin{proposition}[Order-uniform R\'enyi window relative to the Parry measure]
+\label{prop:parry-renyi-window}
+For every probability law \(\nu\) on \(X_m\) and every \(q\in[0,\infty]\),
+\[
+m\log\varphi-H_q(\nu)-\log\pi(0)-\log\varphi
+\le
+D_q(\nu\|\pi_m)
+\le
+m\log\varphi-H_q(\nu)-\log\pi(0)+\log\varphi.
+\]
+\end{proposition}
+
+\begin{proof}
+For \(q=1\), this is Theorem~\ref{thm:parry-kl-identity}. For \(q=0\), let
+\(S:=\supp(\nu)\). Proposition~\ref{prop:parry-endpoint-collapse} gives
+\[
+\pi(0)\varphi^{-(m+1)}
+\le
+\pi_m(u)
+\le
+\pi(0)\varphi^{-(m-1)}
+\qquad (u\in X_m),
+\]
+and therefore
+\[
+|S|\pi(0)\varphi^{-(m+1)}
+\le
+\pi_m(S)
+\le
+|S|\pi(0)\varphi^{-(m-1)}.
+\]
+Since \(D_0(\nu\|\pi_m)=-\log \pi_m(S)\) and \(H_0(\nu)=\log|S|\), the
+displayed bounds follow.
+
+For \(q=\infty\), the same pointwise bounds on \(\pi_m(u)\) imply
+\[
+\frac{\varphi^{m-1}}{\pi(0)}\max_{u\in X_m}\nu(u)
+\le
+\max_{u:\,\nu(u)>0}\frac{\nu(u)}{\pi_m(u)}
+\le
+\frac{\varphi^{m+1}}{\pi(0)}\max_{u\in X_m}\nu(u).
+\]
+Taking logarithms and using \(H_\infty(\nu)=-\log\max_u \nu(u)\) gives the
+claim.
+
+Now fix \(q\in(0,\infty)\setminus\{1\}\). By
+Proposition~\ref{prop:parry-endpoint-collapse},
+\[
+\pi_m(u)
+=
+\pi(0)\varphi^{-m+\theta(u)},
+\qquad
+\theta(u):=\mathbf{1}_{\{u_1=0\}}-\mathbf{1}_{\{u_m=1\}}\in[-1,1].
+\]
+Hence
+\[
+\sum_{u\in X_m}\nu(u)^q\pi_m(u)^{1-q}
+=
+\pi(0)^{1-q}\varphi^{m(q-1)}
+\sum_{u\in X_m}\nu(u)^q\varphi^{(1-q)\theta(u)}.
+\]
+Because \(\theta(u)\in[-1,1]\), one has
+\[
+\varphi^{-|1-q|}\sum_{u\in X_m}\nu(u)^q
+\le
+\sum_{u\in X_m}\nu(u)^q\varphi^{(1-q)\theta(u)}
+\le
+\varphi^{|1-q|}\sum_{u\in X_m}\nu(u)^q.
+\]
+Taking logarithms, dividing by \(q-1\), and using the definition of \(H_q\)
+gives the same two-sided bound with error at most \(\log\varphi\).
+\end{proof}
+
+\subsection{Support Conditioning and Endpoint Class Counts}
+
+\begin{proposition}[Support conditioning for R\'enyi divergence]
+\label{prop:renyi-support-conditioning}
+Let \(E\) be finite, let \(\rho\) be a probability law on \(E\), and let
+\(S\subset \supp(\rho)\) satisfy \(\rho(S)>0\). Writing
+\(\rho^S:=\rho(\cdot\mid S)\), every probability law \(\nu\) on \(E\) with
+\(\supp(\nu)\subset S\) satisfies
+\[
+D_q(\nu\|\rho)
+=
+D_q(\nu\|\rho^S)-\log \rho(S)
+\qquad (q\in[0,\infty]).
+\]
+Consequently,
+\[
+\inf_{\substack{\nu\in\Delta(E)\\ \supp(\nu)\subset S}} D_q(\nu\|\rho)
+=
+-\log \rho(S)
+\qquad (q\in[0,\infty]).
+\]
+If \(q\in(0,\infty]\), the minimizer is unique and equals \(\rho^S\). If
+\(q=0\), the minimizers are exactly the laws whose support is \(S\).
+\end{proposition}
+
+\begin{proof}
+For \(q=1\), the identity is the usual conditioning formula for relative
+entropy. For \(q=0\),
+\[
+D_0(\nu\|\rho)
+=
+-\log \rho(\supp(\nu))
+=
+-\log \rho^S(\supp(\nu))-\log \rho(S)
+=
+D_0(\nu\|\rho^S)-\log \rho(S).
+\]
+For \(q=\infty\),
+\[
+D_\infty(\nu\|\rho)
+=
+\log\max_{x:\,\nu(x)>0}\frac{\nu(x)}{\rho(x)}
+=
+\log\max_{x:\,\nu(x)>0}\frac{\nu(x)}{\rho(S)\rho^S(x)}
+=
+D_\infty(\nu\|\rho^S)-\log \rho(S).
+\]
+Finally, for \(q\in(0,\infty)\setminus\{1\}\),
+\[
+\sum_{x\in E}\nu(x)^q\rho(x)^{1-q}
+=
+\sum_{x\in S}\nu(x)^q\bigl(\rho(S)\rho^S(x)\bigr)^{1-q}
+=
+\rho(S)^{1-q}\sum_{x\in S}\nu(x)^q(\rho^S(x))^{1-q},
+\]
+which gives the claimed identity after taking logarithms and dividing by
+\(q-1\).
+
+For every \(q>0\), the standard nonnegativity \(D_q(\nu\|\rho^S)\ge 0\) shows
+that \(D_q(\nu\|\rho)\ge -\log\rho(S)\). Equality holds exactly when
+\(D_q(\nu\|\rho^S)=0\), namely when \(\nu=\rho^S\). For \(q=0\),
+\[
+D_0(\nu\|\rho^S)=-\log \rho^S(\supp(\nu))\ge 0,
+\]
+with equality if and only if \(\rho^S(\supp(\nu))=1\), equivalently
+\(\supp(\nu)=S\).
+\end{proof}
+
+\begin{lemma}[Endpoint class counts]\label{lem:endpoint-class-counts}
+Extend the Fibonacci sequence by \(F_0:=0\), \(F_1:=1\), and
+\(F_{n+2}=F_{n+1}+F_n\). For \(m\ge 2\), let
+\[
+X_m^{ij}:=\{u\in X_m:u_1=i,\ u_m=j\},
+\qquad i,j\in\{0,1\}.
+\]
+Then
+\[
+|X_m^{00}|=F_m,\qquad
+|X_m^{01}|=|X_m^{10}|=F_{m-1},\qquad
+|X_m^{11}|=F_{m-2}.
+\]
+\end{lemma}
+
+\begin{proof}
+The admissible length-\(m\) words in \(X_m\) are the paths of length \(m-1\) in
+the golden-mean graph with adjacency matrix
+\[
+A=\begin{pmatrix}1&1\\1&0\end{pmatrix}.
+\]
+For the standard Fibonacci extension above,
+\[
+A^n=
+\begin{pmatrix}
+F_{n+1} & F_n\\
+F_n & F_{n-1}
+\end{pmatrix}
+\qquad (n\ge 1).
+\]
+Hence the number of admissible words of length \(m\) with endpoints \((i,j)\) is
+\((A^{m-1})_{ij}\), which gives the displayed formulas.
+\end{proof}
+
+\subsection{Sharp Support Barriers}
+
+\begin{theorem}[Sharp support barrier against the Parry measure]\label{thm:parry-support-barrier}
+Let \(m\ge 2\) and \(1\le k\le F_{m+2}\). Define
+\[
+M_m(k):=\max\{\pi_m(S):S\subset X_m,\ |S|\le k\}.
+\]
+Then
+\[
+M_m(k)=
+\begin{cases}
+k\,\pi(0)\varphi^{-(m-1)},
+& 1\le k\le F_m,\\[0.4em]
+F_m\pi(0)\varphi^{-(m-1)}+(k-F_m)\pi(0)\varphi^{-m},
+& F_m<k\le F_m+2F_{m-1},\\[0.4em]
+1-(F_{m+2}-k)\pi(0)\varphi^{-(m+1)},
+& F_m+2F_{m-1}<k\le F_{m+2}.
+\end{cases}
+\]
+Moreover,
+\[
+\inf_{\substack{\nu\in\Delta(X_m)\\ |\supp(\nu)|\le k}}D_q(\nu\|\pi_m)
+=
+-\log M_m(k),
+\qquad q\in[0,\infty],
+\]
+and
+\[
+\inf_{\substack{\nu\in\Delta(X_m)\\ |\supp(\nu)|\le k}}\TV(\nu,\pi_m)
+=
+1-M_m(k).
+\]
+If \(q\in(0,\infty]\), the R\'enyi infimum is attained uniquely by conditioning
+\(\pi_m\) on a maximizing set \(S\subset X_m\); equivalently, one takes all
+words from the heaviest endpoint classes until the budget \(k\) is exhausted.
+If \(q=0\), the minimizers are exactly the laws whose support is such a
+maximizing set. The same conditioned Parry laws attain the TV infimum.
+\end{theorem}
+
+\begin{proof}
+The argument has three layers. One first orders individual Parry cylinder
+weights by endpoint class, then maximizes the mass of a \(k\)-point set by a
+greedy filling of these endpoint classes, and finally invokes
+Proposition~\ref{prop:renyi-support-conditioning} to identify the optimal
+R\'enyi law on a fixed support.
+
+By Proposition~\ref{prop:parry-endpoint-collapse}, every word in \(X_m^{00}\) has
+Parry weight \(\pi(0)\varphi^{-(m-1)}\), every word in \(X_m^{01}\cup X_m^{10}\)
+has weight \(\pi(0)\varphi^{-m}\), and every word in \(X_m^{11}\) has weight
+\(\pi(0)\varphi^{-(m+1)}\). These three values are strictly ordered. Together
+with Lemma~\ref{lem:endpoint-class-counts}, this implies that the largest
+possible Parry mass of a \(k\)-point subset is obtained greedily by exhausting
+the endpoint classes in the order
+\[
+X_m^{00},\qquad X_m^{01}\cup X_m^{10},\qquad X_m^{11},
+\]
+which gives the formula for \(M_m(k)\).
+
+Now let \(S\subset X_m\) and let \(\nu\) be supported on \(S\). By
+Proposition~\ref{prop:renyi-support-conditioning},
+\[
+D_q(\nu\|\pi_m)
+\ge
+-\log \pi_m(S)
+\qquad (q\in[0,\infty]),
+\]
+with equality for the conditioned law \(\pi_m^S:=\pi_m(\cdot\mid S)\), and
+with uniqueness when \(q\in(0,\infty]\). Therefore
+\[
+\inf_{\substack{\nu\in\Delta(X_m)\\ |\supp(\nu)|\le k}}D_q(\nu\|\pi_m)
+=
+-\log\max_{\substack{S\subset X_m\\ |S|\le k}}\pi_m(S)
+=
+-\log M_m(k)
+\]
+for every \(q\in[0,\infty]\). The characterization of minimizers follows from
+the same proposition.
+
+For total variation, if \(\nu\) is supported on \(S\), then
+\[
+\TV(\nu,\pi_m)
+\ge
+\pi_m(S^c)
+=
+1-\pi_m(S).
+\]
+Equality holds for \(\nu=\pi_m^S\), since then
+\[
+\TV(\pi_m^S,\pi_m)
+=
+\frac12\sum_{u\in X_m}\bigl|\pi_m^S(u)-\pi_m(u)\bigr|
+=
+1-\pi_m(S).
+\]
+Taking the best support set \(S\) gives the total-variation formula.
+\end{proof}
+
+\begin{corollary}[Exact complexity-divergence law]\label{cor:exact-complexity-divergence-law}
+Let \(m\ge 2\) and \(1\le k\le F_m\). Then
+\[
+\inf_{\substack{\nu\in\Delta(X_m)\\ |\supp(\nu)|\le k}}D_q(\nu\|\pi_m)
+=
+(m-1)\log\varphi-\log\pi(0)-\log k,
+\qquad q\in[0,\infty],
+\]
+and
+\[
+\inf_{\substack{\nu\in\Delta(X_m)\\ |\supp(\nu)|\le k}}\TV(\nu,\pi_m)
+=
+1-k\pi(0)\varphi^{-(m-1)}.
+\]
+If \(q\in(0,\infty]\), the R\'enyi minimizers are exactly the uniform laws on
+\(k\)-point subsets of \(X_m^{00}\). If \(q=0\), the minimizers are exactly the
+laws whose support is such a \(k\)-point subset. The TV minimizers are the
+conditioned Parry laws on these same subsets.
+
+Consequently, if \(k_m\le F_m\) and
+\[
+\lim_{m\to\infty}\frac{1}{m}\log k_m=\gamma\in[0,\log\varphi],
+\]
+then
+\[
+\lim_{m\to\infty}
+\inf_{\substack{\nu\in\Delta(X_m)\\ |\supp(\nu)|\le k_m}}
+\frac{1}{m}D_q(\nu\|\pi_m)
+=
+\log\varphi-\gamma
+=
+h_{\mathrm{top}}(X)-\gamma,
+\qquad q\in[0,\infty].
+\]
+In particular, every subexponential support budget still incurs the full rate
+\(\log\varphi\), and cancelling the Parry penalty requires support growth of
+order \(\varphi^m\).
+\end{corollary}
+
+\begin{proof}
+The first branch of Theorem~\ref{thm:parry-support-barrier} gives the displayed
+formulas. The description of the minimizers follows because all words in
+\(X_m^{00}\) carry the same Parry weight \(\pi(0)\varphi^{-(m-1)}\), so the
+conditioned Parry law on any \(k\)-point subset of \(X_m^{00}\) is uniform.
+The limit statement is obtained by dividing the R\'enyi formula by \(m\) and
+letting \(m\to\infty\).
+\end{proof}

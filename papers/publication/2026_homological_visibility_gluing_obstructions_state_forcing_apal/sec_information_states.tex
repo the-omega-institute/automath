@@ -1,6 +1,6 @@
-\section{Information States and State Forcing}\label{sec:information-states}
+\section{Information states and forcing}\label{sec:information-states}
 
-This section defines the basic semantics used throughout. A state records a context together with the realizations still compatible with the information available. The construction is intentionally weaker than the stochastic relational and dynamic presheaf semantics developed for contextuality by Kishida \cite{Kishida2014}: here the state layer supplies only the lower forcing relation over which later local-object data will be conservatively added.
+We now recall the forcing semantics on information states.
 
 \subsection{States, refinement, and forcing}
 
@@ -8,7 +8,6 @@ Fix a many-sorted first-order signature
 \[
 \Sigma=(S,F,R).
 \]
-When this state-forcing construction is used as the layer $\mathbb L_1$ of the paper, the signature is the reference-aware signature $\Sigma_1$ fixed in \Cref{def:reference-aware-boundary}. Thus the sorts $\mathsf{Ref}_s$ and predicates $\Adm_s$ are already ordinary symbols of the state-forcing language in that use; the later local-object layer changes neither their domains nor their interpretations.
 For a model $M$, write $D_s^M$ for the interpretation of a sort $s\in S$. A \emph{context} is a finite typed list
 \[
 \Gamma=(x_1:s_1,\dots,x_n:s_n),
@@ -20,17 +19,30 @@ and its realization set in $M$ is
 If $\Gamma\preceq\Delta$, every $\sigma\in\Val_M(\Delta)$ restricts to an element $\sigma|_{\Gamma}\in\Val_M(\Gamma)$.
 
 \begin{definition}[Information state]\label{def:information-state}
-See \cite{HomologicalVisibilityGluingObstructions2026}, Definition \texttt{def:information-state}.
+An \emph{information state} in $M$ is a pair
+\[
+p=(\Gamma_p,R_p)
+\]
+such that $\Gamma_p$ is a context and $\varnothing\neq R_p\subseteq \Val_M(\Gamma_p)$. The set of information states in $M$ is denoted by $\St(M)$.
 \end{definition}
 
 \begin{definition}[Refinement]\label{def:refinement}
-See \cite{HomologicalVisibilityGluingObstructions2026}, Definition \texttt{def:refinement}.
+For states $p=(\Gamma_p,R_p)$ and $q=(\Gamma_q,R_q)$ in the same model, write $q\le p$ if
+\begin{enumerate}[label=(\roman*),nosep]
+\item $\Gamma_p\preceq\Gamma_q$,
+\item every $\sigma\in R_q$ satisfies $\sigma|_{\Gamma_p}\in R_p$.
+\end{enumerate}
 \end{definition}
 
-Refinement therefore combines two monotonicities: the context may become richer, and the set of still-admissible realizations may become smaller.
+Refinement enlarges the context and may shrink the set of admissible realizations.
 
 \begin{definition}[State forcing]\label{def:state-forcing}
-See \cite{HomologicalVisibilityGluingObstructions2026}, Definition \texttt{def:state-forcing}.
+Let $p=(\Gamma_p,R_p)\in\St(M)$ and let $\varphi$ be a formula well formed in context $\Gamma_p$. We define
+\[
+M,p\Vdash\varphi
+\quad:\Longleftrightarrow\quad
+\forall \rho\in R_p\;(M,\rho\models\varphi).
+\]
 \end{definition}
 
 \begin{definition}[State theory]\label{def:state-theory}
@@ -41,23 +53,21 @@ For $p\in\St(M)$, define
 \end{definition}
 
 \begin{definition}[Decidedness]\label{def:decidedness}
-See \cite{HomologicalVisibilityGluingObstructions2026}, Definition \texttt{def:decidedness}.
+A formula $\varphi$ is \emph{decided} at $p$, written $M,p\Downarrow\varphi$, if
+\[
+M,p\Vdash\varphi
+\qquad\text{or}\qquad
+M,p\Vdash\neg\varphi.
+\]
 \end{definition}
 
 \begin{proposition}[Persistence of forcing]\label{prop:forcing-persistence}
-If $q\le p$ and $M,p\Vdash\varphi$, then $M,q\Vdash\varphi$.
+If $q\le p$ and $M,p\Vdash\varphi$, then $M,q\Vdash\varphi^\uparrow$, where $\varphi^\uparrow$ is the same formula viewed in the larger context $\Gamma_q$.
+\leanverified{paper_information_state_forcing_persistence_seeds}
 \end{proposition}
 
 \begin{proof}
-Assume $q\le p$ and fix a formula $\varphi$.
-Unfold \Cref{def:refinement} and \Cref{def:state-forcing}; a refinement only shrinks the realization set and extends the context.
-Hence every atomic forcing obligation that is checked over all realizations in $R_p$ is also checked over the smaller set of realizations in $R_q$.
-
-We prove by structural induction on $\varphi$ that this monotonicity is preserved by each forcing clause.
-Atomic clauses are immediate from the preceding remark.
-The boolean clauses follow pointwise.
-For quantifiers, the clauses of \Cref{def:state-forcing} quantify over extensions of realizations, and those extensions are again refined when passing from $p$ to $q$.
-Therefore each forcing clause remains true at $q$ whenever it is true at $p$.
+Let $\sigma\in R_q$. By \Cref{def:refinement}, its restriction $\sigma|_{\Gamma_p}$ lies in $R_p$. Since $M,p\Vdash\varphi$, we have $M,\sigma|_{\Gamma_p}\models\varphi$. The formula $\varphi$ mentions only variables from $\Gamma_p$, so the same assignment viewed in the larger context yields $M,\sigma\models\varphi^\uparrow$. As $\sigma$ was arbitrary, $M,q\Vdash\varphi^\uparrow$.
 \end{proof}
 
 \begin{corollary}[Monotone growth of state theories]\label{cor:state-theory-monotonicity}
@@ -70,16 +80,17 @@ Immediate from \Cref{prop:forcing-persistence}.
 \end{proof}
 
 \begin{proposition}[Singleton conservativity]\label{prop:singleton-conservativity}
-Let $\rho\in\Val_M(\Gamma)$ and let $p_\rho$ be the singleton state $(\Gamma,\{\rho\})$.
-Then for every $\Sigma_1$-formula $\varphi$ with free variables exactly $\Gamma$,
+Let $\rho\in\Val_M(\Gamma)$ and put $p_\rho=(\Gamma,\{\rho\})$. Then for every $\Gamma$-formula $\varphi$,
 \[
-M,p_\rho\Vdash_1\varphi\iff M,\rho\models\varphi.
+M,p_\rho\Vdash\varphi
+\quad\Longleftrightarrow\quad
+M,\rho\models\varphi.
 \]
+\leanverified{paper_information_state_singleton_conservativity_apal}
 \end{proposition}
 
 \begin{proof}
-In $p_\rho$, the realization set is the singleton $\{\rho\}$, and every refinement of $p_\rho$ has singleton realizations obtained by pointwise extension of $\rho$.
-Unfold \Cref{def:state-forcing}; every forcing clause is evaluated by ordinary truth at those singleton realizations, and thus has the same value as pointwise forcing.
+Since $R_{p_\rho}=\{\rho\}$, the forcing clause in \Cref{def:state-forcing} reduces immediately to ordinary satisfaction at $\rho$.
 \end{proof}
 
 \subsection{Lifted consequence}
@@ -110,5 +121,3 @@ Let $\vdash_*$ be any derivability relation on formulas that is sound for ordina
 \begin{proof}
 Assume $\Gamma\vdash_*\varphi$, and let $M$ and $p=(\Gamma_p,R_p)$ be such that $M,p\Vdash\Gamma$. By definition, every realization $\rho\in R_p$ satisfies every formula in $\Gamma$ pointwise. Since $\vdash_*$ is sound for ordinary satisfaction, each such $\rho$ also satisfies $\varphi$. Therefore $M,p\Vdash\varphi$. As $M$ and $p$ were arbitrary, $\Gamma\models_{\mathrm{S}}\varphi$.
 \end{proof}
-
-\Cref{prop:lifted-pointwise-soundness} is the bridge from ordinary satisfaction to state forcing. It shows that familiar sound rules continue to apply once formulas are evaluated against all realizations compatible with a state.

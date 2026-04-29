@@ -255,6 +255,13 @@ theorem paper_goldenMean_primitive_moments_first_second :
     (1 : ℤ) * 0 + 2 * 1 + 3 * 2 + 4 * 3 + 5 * 4 * 2 + 6 * 5 * 2 = 120 := by
   exact goldenMean_primitive_moments_first_second
 
+/-- Exact paper-label wrapper for the primitive first and second moment computation.
+    cor:zetaK-primitive-moments -/
+theorem paper_zetak_primitive_moments :
+    ((1 : Int) * 1 + 2 * 1 + 3 * 1 + 4 * 1 + 5 * 2 + 6 * 2 = 32) ∧
+    ((1 : Int) * 0 + 2 * 1 + 3 * 2 + 4 * 3 + 5 * 4 * 2 + 6 * 5 * 2 = 120) := by
+  exact goldenMean_primitive_moments_first_second
+
 /-! ## Degeneracy-zeta coefficients
 
 The degeneracy ratio ζ_full/ζ = (1-z-z²)/(1-2z) measures the gap

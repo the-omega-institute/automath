@@ -1,0 +1,219 @@
+\section{Finite-window normalization}
+
+We introduce the finite languages and the map $\Fold_m$.  The only
+numeration-theoretic input needed later is Zeckendorf uniqueness, which
+identifies the golden-mean language as the canonical target of the fold.
+
+\subsection{Admissible words}
+
+Throughout the paper the Fibonacci numbers are normalized by
+\[
+F_1=F_2=1,
+\qquad
+F_{k+2}=F_{k+1}+F_k
+\quad (k\ge 1).
+\]
+
+For $m\ge 1$ and $s\in\{0,1\}$ let
+\[
+X_m^{(s)}:=\{w=w_1\cdots w_m\in X_m:w_m=s\}.
+\]
+Thus $X_m^{(0)}$ and $X_m^{(1)}$ split admissible words by their last symbol.
+
+\begin{proposition}[Terminal recursion for admissible words]
+\label{prop:stable-syntax-terminal-recursion}
+For every $m\ge 1$, if
+\[
+v_m:=
+\begin{pmatrix}
+\lvert X_m^{(1)}\rvert\\[2pt]
+\lvert X_m^{(0)}\rvert
+\end{pmatrix},
+\]
+then
+\[
+v_{m+1}=N_\tau v_m,
+\qquad
+N_\tau=
+\begin{pmatrix}
+0&1\\[2pt]
+1&1
+\end{pmatrix}.
+\]
+\end{proposition}
+
+\begin{proof}
+If $w\in X_{m+1}$ ends in $1$, then its penultimate symbol must be $0$.
+Deleting the last symbol therefore gives a bijection
+\[
+X_{m+1}^{(1)}\longleftrightarrow X_m^{(0)},
+\]
+so $\lvert X_{m+1}^{(1)}\rvert=\lvert X_m^{(0)}\rvert$.
+
+If $w\in X_{m+1}$ ends in $0$, then deleting the last symbol gives an
+arbitrary word in $X_m$, and appending $0$ to a word in $X_m$ never creates
+the forbidden pattern $11$.  Hence
+\[
+\lvert X_{m+1}^{(0)}\rvert
+=
+\lvert X_m\rvert
+=
+\lvert X_m^{(0)}\rvert+\lvert X_m^{(1)}\rvert.
+\]
+Combining the two identities gives the displayed matrix recursion.
+\end{proof}
+
+\begin{corollary}[Fibonacci counting]
+\label{cor:stable-syntax-counting}
+For every $m\ge 1$ one has
+\[
+\lvert X_m\rvert=F_{m+2}.
+\]
+\leanverified{paper_resolution_folding_stable_syntax_counting}
+\end{corollary}
+
+\begin{proof}
+The recursion in Proposition~\ref{prop:stable-syntax-terminal-recursion} is
+the Fibonacci recursion with the initial vector
+\[
+v_1=
+\begin{pmatrix}
+1\\[2pt]
+1
+\end{pmatrix}.
+\]
+Therefore
+\[
+\lvert X_m\rvert
+=
+\lvert X_m^{(0)}\rvert+\lvert X_m^{(1)}\rvert
+=
+F_{m+2}.
+\qedhere
+\]
+\end{proof}
+
+\subsection{Fibonacci value and the fold}
+
+Let
+\[
+\Xfin
+:=
+\left\{
+c=(c_1,c_2,\ldots)\in\{0,1\}^{\NN}:
+\supp(c)\text{ finite and }c_kc_{k+1}=0\text{ for all }k
+\right\}.
+\]
+For $c\in\Xfin$ define
+\[
+\Val(c):=\sum_{k\ge 1} c_kF_{k+1}.
+\]
+Zeckendorf's theorem gives, for every $N\in\NN$, a unique $Z(N)\in \Xfin$
+satisfying $\Val(Z(N))=N$ \cite{Zeckendorf1972}.
+
+For a finite binary window $\omega=\omega_1\cdots\omega_m\in\Omega_m$ define
+its Fibonacci value by
+\[
+N(\omega):=\sum_{k=1}^m \omega_kF_{k+1}.
+\]
+Let
+\[
+\pi_m:\Xfin\to X_m,
+\qquad
+\pi_m(c_1,c_2,\ldots):=(c_1,\ldots,c_m),
+\]
+be the length-$m$ prefix projection.
+
+\begin{definition}[Finite-window fold]
+\label{def:fold-word}
+For $m\ge 1$ define
+\[
+\Fold_m:\Omega_m\to X_m,
+\qquad
+\Fold_m(\omega):=\pi_m(Z(N(\omega))).
+\]
+\end{definition}
+
+\begin{definition}[Visible value]
+\label{def:visible-value}
+For $x=x_1\cdots x_m\in X_m$ define
+\[
+V_m(x):=\sum_{k=1}^m x_kF_{k+1}.
+\]
+\end{definition}
+
+\begin{proposition}[Visible-value parametrization of $X_m$]
+\label{prop:visible-value-parametrization}
+For every $m\ge 1$, the map
+\[
+V_m:X_m\to \{0,1,\ldots,F_{m+2}-1\}
+\]
+is a bijection.
+\end{proposition}
+
+\begin{proof}
+If $x\in X_m$, then
+\[
+(x_1,\ldots,x_m,0,0,\ldots)\in \Xfin
+\]
+is already a Zeckendorf digit string, so by uniqueness it is the Zeckendorf
+representation of the integer $V_m(x)$.  In particular $V_m(x)<F_{m+2}$,
+because otherwise the Zeckendorf representation would have to use the weight
+$F_{m+2}$ or a larger one.
+
+Conversely, let $0\le r<F_{m+2}$.  The Zeckendorf representation $Z(r)$ cannot
+use the weight $F_{m+2}$ or any larger weight, so it has the form
+\[
+Z(r)=(x_1,\ldots,x_m,0,0,\ldots)
+\]
+for a unique $x\in X_m$.  Then $V_m(x)=r$.  Thus $V_m$ is bijective.
+\end{proof}
+
+\begin{corollary}[Unique overflow decomposition]
+\label{cor:visible-value-overflow}
+For every $m\ge 1$ and every $\omega\in\Omega_m$, there exists a unique
+$b(\omega)\in\{0,1\}$ such that
+\[
+N(\omega)=V_m(\Fold_m(\omega))+b(\omega)F_{m+2}.
+\]
+Equivalently, $\Fold_m(\omega)$ is the unique admissible word in $X_m$ whose
+visible value is congruent to $N(\omega)$ modulo $F_{m+2}$.
+\leanverified{paper_resolution_folding_visible_value_overflow}
+\end{corollary}
+
+\begin{proof}
+Since
+\[
+0\le N(\omega)\le \sum_{k=1}^m F_{k+1}=F_{m+3}-2<2F_{m+2},
+\]
+there is a unique $b(\omega)\in\{0,1\}$ such that
+\[
+r:=N(\omega)-b(\omega)F_{m+2}
+\]
+lies in $\{0,1,\ldots,F_{m+2}-1\}$.  By
+Proposition~\ref{prop:visible-value-parametrization}, there is a unique
+$x\in X_m$ with $V_m(x)=r$.  The first $m$ digits of $Z(N(\omega))$ are
+precisely this $x$, so $x=\Fold_m(\omega)$.
+\end{proof}
+
+For convenience, Table~\ref{tab:value-maps} summarizes the value maps used
+throughout the paper.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+symbol & domain & role \\
+\midrule
+$N(\omega)$ & $\Omega_m$ & full Fibonacci value of the raw window $\omega$ \\
+$V_m(x)$ & $X_m$ & visible value carried by the admissible word $x$ \\
+$b(\omega)$ & $\Omega_m$ & overflow bit beyond the visible range $[0,F_{m+2})$ \\
+$\Val(a)$ & $\mathcal D$ & value of a finitely supported digit configuration \\
+\bottomrule
+\end{tabular}
+\caption{Value maps used throughout the paper.  The visible value stays within
+the length-$m$ window, while the overflow bit records whether one copy of
+$F_{m+2}$ has escaped beyond it.}
+\label{tab:value-maps}
+\end{table}

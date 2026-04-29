@@ -1,53 +1,112 @@
 \section{Introduction}\label{sec:introduction}
 
-Let \(B(u)=B_0+uB_1\) be the weighted adjacency matrix of the
-ten-state synchronisation kernel introduced in
-\Cref{sec:preliminaries}. Here ``synchronisation'' refers to the
-finite-state problem of comparing two labelled paths that emit the
-same binary word and recording the residual mismatch until the paths
-realign; for general background on this symbolic-dynamical viewpoint
-see \cite{LindMarcus2021,Kitchens1998}. In the present binary model
-those discrepancies form a ten-state comparison automaton, and the
-strongly connected core carries an involution exchanging output-zero
-and output-one edges. The kernel studied below is therefore a concrete
-self-dual example arising from a standard synchronisation
-construction. The purpose of this note is to make one such example
-completely explicit. Even this small finite-state object already produces a completed
-determinant whose smooth projective spectral curve has genus \(6\),
-whose quotient by the sign involution is a smooth quartic of genus \(3\),
-and whose generic Galois group is the full symmetric group~\(S_6\).
+Let \(B(u)=B_0+uB_1\) be the weighted adjacency matrix of the explicit
+ten-state digraph displayed in \Cref{def:sync-kernel} and
+Figure~\ref{fig:sync-kernel}. The symbol ``synchronisation kernel'' is
+purely terminological: the state names \(\st{000},\ldots,\st{11-1}\)
+are nothing more than labels for the ten vertices of that digraph, and
+all combinatorial data appear verbatim in the transition table. Thus the
+manuscript analyzes a single concrete self-dual kernel rather than a
+general construction. Even this small finite-state object already
+produces a completed determinant whose smooth projective spectral curve
+has genus \(6\), whose quotient by the sign involution is a smooth
+quartic of genus \(3\), and whose generic Galois group is the full
+symmetric group~\(S_6\).
 
-For each fixed \(u\), the matrix \(B(u)\)
-defines a finite-state dynamical \(\zeta\)-function through the
-determinant
+The permutation implementing the self-duality exchanges output-zero and
+output-one edges. \Cref{lem:self-dual-compression} records the formal
+consequences for any such kernel: the determinant satisfies the
+functional equation \(\Delta(z,u)=\Delta(uz,u^{-1})\) and compresses to a
+polynomial \(\widehat\Delta(w,s)\in\ZZ[s][w]\) of degree six after the
+change of variables \(u=r^2,\ s=r+r^{-1},\ w=zr\). Every other statement in
+the paper is specific to the ten-state kernel of \Cref{def:sync-kernel}.
+For each fixed \(u\), the matrix \(B(u)\) defines a finite-state
+dynamical \(\zeta\)-function through the determinant
 \[
   \Delta(z,u):=\det(I-zB(u)).
 \]
-The purpose of this note is to record the additional structure coming
-from the explicit self-duality
+The same weighted matrix also controls the natural cyclic
+skew-product lifts
+\[
+  \widetilde B_q:=B_0\otimes I_q+B_1\otimes P_q,
+\]
+where \(P_q\) is the cyclic permutation matrix on \(\ZZ/q\ZZ\). Their
+Fourier blocks are \(B(\omega_q^j)\), so the unit-circle twists are the
+natural character factors of the labelled cyclic lifts. The purpose of
+this note is to record the additional structure coming from the
+explicit self-duality
 \[
   \Delta(z,u)=\Delta(uz,u^{-1}),
 \]
-which compresses the unit-circle twists \(u=e^{i\theta}\) to a single
+which compresses the unit-circle twists \(u=e^{2i\theta}\) to a single
 real parameter after the standard change of variables
 \[
-  u=r^2,\qquad s=r+r^{-1},\qquad w=zr.
+  r=e^{i\theta},\qquad u=r^2,\qquad s=r+r^{-1}=2\cos\theta,\qquad w=zr.
 \]
 The resulting completed determinant \(\widehat\Delta(w,s)\) provides a
-convenient algebraic model for the twisted spectrum.
+convenient algebraic model for the twisted spectrum, and the
+cyclotomic resultants considered below are precisely the primitive real
+factors extracted from the Fourier decomposition of the cyclic lifts.
+
+
+\paragraph{Terminology.}
+We call \((w,s)\mapsto \widehat\Delta(w,s)\) the completed determinant in analogy with completed \(L\)-functions: it is simply the polynomial obtained from \(\Delta(w/r,r^2)\) after rewriting in the self-dual invariants \(w\) and \(s=r+r^{-1}\). Likewise \(\Phi_m^+\) denotes the real cyclotomic polynomial of \(2\cos(\pi/m)\); concretely
+\[
+  \Phi_m^+(s)
+  =\prod_{a\in(\ZZ/2m\ZZ)^\times/\{\pm1\}}
+    \bigl(s-2\cos(\pi a/m)\bigr),
+\]
+so \(\Phi_m^+\) is the standard real Chebyshev factor attached to the primitive \((2m)\)-th roots of unity.
+
+
 
 This note has two strands. The first is geometric: the affine
 curve \(\widehat\Delta(w,s)=0\) admits a natural involution, and its
 normalisation and quotient can be described explicitly. The second is
 arithmetic: eliminating the parameter \(s\) along cyclotomic slices
-produces one-variable resultants whose smallest-modulus roots control
+produces one-variable resultants whose minimal-modulus roots control
 the twisted Perron radii. This yields explicit asymptotics for the
 cyclotomic twists of the kernel.
+
+\paragraph{Computer-assisted verification.}
+All determinant expansions, discriminant computations, finite-field
+factorisations, and endpoint jet recursions leading to
+Propositions~\ref{prop:kernel-delta-explicit},
+\ref{prop:sync-hatdelta-quotient},
+\ref{prop:sync-hatdelta-galois-s6-generic},
+\ref{prop:sync-endpoint-jet}, and
+Theorem~\ref{thm:rho-gap-m12} were carried out in SageMath~10.2 and
+Mathematica~14.0. The appendix is organised as a theorem-to-command map
+rather than as a single executable script: items
+\textup{(a)}--\textup{(e)} record the SageMath certificates for the
+determinant, completion, smoothness, Galois-theoretic specialisations,
+and the finite small-\(m\) slice checks, while item \textup{(f)}
+records the Mathematica recursion for the endpoint jet. Each item
+states the exact output used in the corresponding proof.
+
+What makes this particular example worth isolating is a structural
+coincidence that does not hold for generic self-dual kernels. The
+self-duality \(\Delta(z,u)=\Delta(uz,u^{-1})\) compresses the full
+circle of unitary twists \(u=e^{2i\theta}\) to a single real variable
+\(s=2\cos\theta\), so that the twist data for all cyclic lifts of all
+orders is encoded in one polynomial \(\widehat\Delta(w,s)\in\ZZ[s][w]\)
+of degree six. The significance of the example is therefore concrete
+rather than general: once everything is packaged into this one small
+polynomial, the quotient geometry, the generic Galois group, and the
+large-\(m\) asymptotics can all be computed completely and audited
+term by term. Beyond the formal consequences of
+\Cref{lem:self-dual-compression} and the cyclic-lift factorisation of
+\Cref{prop:sync-cyclic-lift-factorisation}, every claim in the paper is
+deliberately confined to the ten-state kernel.
+
 
 \subsection{Main results}
 
 Our first theorem records the explicit determinant and geometric
-information.
+information. All curves in the main results are considered over
+\(\overline{\QQ}\), and \(\overline{X}\) denotes the normalisation of
+the projective closure of the irreducible affine curve
+\(\widehat\Delta(w,s)=0\).
 
 \begin{theorem}\label{thm:intro-kernel-geometry}
 Let \(B(u)\) be the weighted synchronisation kernel of
@@ -84,11 +143,10 @@ Let \(B(u)\) be the weighted synchronisation kernel of
     \widehat\Delta(w,-s)=\widehat\Delta(-w,s).
   \]
 
-  \item The smooth projective curve \(\overline{X}\) with function field
-  \(k(\{\widehat\Delta=0\})\) has genus \(6\). Its quotient by the
-  involution \((w,s)\mapsto(-w,-s)\) is a smooth plane quartic of genus
-  \(3\), and the generic Galois group of \(\widehat\Delta(w,s)\) over
-  \(\QQ(s)\) is \(S_6\).
+  \item The smooth projective curve \(\overline{X}\) has genus \(6\).
+  Its quotient by the involution \((w,s)\mapsto(-w,-s)\) is a smooth
+  plane quartic of genus \(3\), and the generic Galois group of
+  \(\widehat\Delta(w,s)\) over \(\QQ(s)\) is \(S_6\).
 \end{enumerate}
 \end{theorem}
 
@@ -122,46 +180,79 @@ then:
     \rho_m
     =3-\frac{11\pi^2}{17m^2}+O(m^{-4}).
   \]
-  Moreover, \Cref{thm:rho-gap-m12} gives the full expansion through
-  order \(m^{-12}\). In particular,
+  Moreover, \Cref{thm:rho-gap-m12} gives the expansion through order
+  \(m^{-12}\). In particular,
   \[
     3-\rho_m\sim \frac{11\pi^2}{17m^2}.
   \]
 \end{enumerate}
 \end{theorem}
 
-We also record the primitive-orbit asymptotics of the unweighted kernel
-and of its cyclic lifts. These provide the dynamical interpretation of
-the Perron root \(\rho_m\) as a twisted growth parameter.
+We also record the primitive-orbit asymptotics of the unweighted kernel.
 
 \subsection{Previous work}
 
 The rationality of dynamical \(\zeta\)-functions for shifts of finite
-type goes back to Bowen--Lanford and Manning
-\cite{BowenLanford1970Zeta,Manning1971Axiom}; general background on
-symbolic dynamics may be found in
-\cite{LindMarcus2021,Kitchens1998}. More recent treatments of weighted
-or determinant-type zeta functions include Baladi's monograph on
-dynamical determinants \cite{Baladi2018} and the finite-state
-determinant formulas developed for weighted digraph zeta functions in
-\cite{Morita2020,IdeIshikawaMoritaSatoSegawa2021}. The elimination step
-used here is the classical Sylvester resultant construction
-\cite{CoxLittleOShea2005}, while the geometric input comes from
- standard facts about smooth plane curves and Hurwitz's formula
-\cite{Hartshorne1977}. For the Galois-group computation we follow the
-usual specialisation philosophy together with standard
-permutation-group criteria for transitivity and primitivity
-\cite{Dixon1996,Serre2008Topics}. The present note is therefore a case
-study. It does not introduce new general techniques; rather, it makes
-one explicit self-dual kernel transparent enough to determine its
-completed curve, its generic Galois group, and the cyclotomic
-asymptotics in closed form.
+type goes back to Bowen--Lanford, Manning, Parry--Pollicott, and
+Bass~\cite{BowenLanford1970Zeta,Manning1971Axiom,ParryPollicott1983,Bass1992};
+General background on symbolic dynamics may be found in
+\cite{LindMarcus2021,Kitchens1998}.
+
+The closest literature falls into three layers.
+
+Classical background on graph zeta functions, coverings, and
+Artin-style \(L\)-factorisations goes through Hashimoto
+\cite{Hashimoto1990,Hashimoto1992}, Stark and Terras
+\cite{StarkTerras1996,StarkTerras2000,StarkTerras2007}, and
+Kotani--Sunada \cite{KotaniSunada2000}; see also Terras's monograph
+\cite{Terras2011}. The voltage-graph and covering language for cyclic
+lifts is classical \cite{GrossTucker2001}, while the twisted-operator
+viewpoint relevant to the present Fourier decomposition connects to the
+covering theory of Cimasoni--Kassel \cite{CimasoniKassel2023}. Spectral
+properties of arbitrary lifts of graphs, directly relevant to
+\Cref{prop:sync-cyclic-lift-factorisation}, are studied systematically
+in \cite{DalfoFiolGarriga2019}.
+
+Direct precedents for determinant expressions and covering
+factorisations on digraphs and weighted graphs are due to Mizuno and
+Sato \cite{MizunoSato2000,MizunoSato2001,MizunoSato2002,MizunoSato2004},
+to Sato \cite{Sato2006}, and, on the dynamical/determinantal side, to
+Morita and collaborators
+\cite{Morita2020,IdeIshikawaMoritaSatoSegawa2021}. These works are the
+closest antecedents to the cyclic-lift/resultant discussion in the
+present note.
+
+Finite-group extensions of shifts of finite type provide the
+symbolic-dynamical framework for tracking output labels in a skew
+product. This viewpoint goes back to Adler--Kitchens--Marcus
+\cite{AdlerKitchensMarcus1985} and Fiebig \cite{Fiebig1993}; periodic
+data and recurrence in \(\ZZ_q\)-extensions were studied by
+Pollicott--Sharp \cite{PollicottSharp1994}, and the
+matrix-over-group-ring framework was developed further by
+Boyle--Schmieding \cite{BoyleSchmieding2017}. The underlying two-track
+comparison may be seen directly as the fibre product of labelled graphs
+in the sense of Nasu's textile systems \cite{Nasu1995}. The present
+paper uses only the simplest cyclic extension attached to the binary
+output labels. Its novelty is correspondingly narrower: not a new
+general theory, but the complete analysis of one explicit self-dual
+kernel for which the completed determinant remains degree \(6\) while
+still carrying nontrivial quotient geometry, generic \(S_6\) Galois
+group, and explicit large-\(m\) cyclotomic asymptotics.
 
 \subsection{Organisation}
 
 \Cref{sec:preliminaries} recalls primitive orbit counts and defines the
 weighted synchronisation kernel together with its self-duality.
 \Cref{sec:completion-twists} contains the explicit determinant, the
-geometry of the completed curve, the cyclotomic resultant degree law, the
-asymptotics of the twisted Perron roots, and the primitive-orbit
-asymptotics for cyclic lifts.
+cyclic-lift Fourier decomposition, the irreducibility and integrality
+of the completed curve, its geometry, the resultant degree law, and the
+asymptotics of the twisted Perron roots.
+\Cref{sec:appendix-computation} records the explicit transition matrix
+and the exact theorem-to-command map for the computer-assisted checks.
+
+
+
+
+
+
+

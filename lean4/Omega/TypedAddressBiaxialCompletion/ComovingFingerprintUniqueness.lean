@@ -51,4 +51,12 @@ theorem paper_typed_address_biaxial_completion_comoving_fingerprint_uniqueness
   exact ⟨hIntegral, hInjective,
     D.deriveIntervalFingerprintKernelEquivalence hIntegral hFactorization hRank⟩
 
+/-- Unit-circle paper-label wrapper for the typed-address comoving fingerprint uniqueness package.
+    prop:unit-circle-comoving-fingerprint-uniqueness -/
+theorem paper_unit_circle_comoving_fingerprint_uniqueness
+    (D : Omega.TypedAddressBiaxialCompletion.ComovingFingerprintUniquenessData) :
+    D.fingerprintIntegralRepresentation ∧ D.fingerprintInjective ∧
+      D.intervalFingerprintKernelEquivalence := by
+  exact paper_typed_address_biaxial_completion_comoving_fingerprint_uniqueness D
+
 end Omega.TypedAddressBiaxialCompletion

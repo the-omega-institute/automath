@@ -1,0 +1,132 @@
+% ------------------------------------------------------------------
+%  Section 4: Finite observation and boundary transfer (compressed)
+% ------------------------------------------------------------------
+\section{Finite observation and boundary estimates}\label{sec:clarity}
+
+This section records the finite-observation identities used later.  The
+general weighted-automaton framework from earlier drafts has been
+removed: Section~\ref{sec:open-system} derives the only matrix formula
+needed in the paper directly from the symbolic Markov property.
+
+\begin{definition}[Observation error]\label{def:scan-error}
+Let \(\mathsf{P}\in\mathcal{F}_\infty\).  For \(m\geq 1\) define
+\[
+  \varepsilon_m(\mathsf{P};\mu)
+  := \inf\set{\mu(g\neq \mathbf{1}_{\mathsf{P}}):
+      g\in L^{\infty}(\mathcal{F}_m),\ g(\Omega)\subseteq\{0,1\}}
+\]
+as the minimised Bayes classification error from the first \(m\) symbols.
+\end{definition}
+
+\begin{proposition}[Exact cylinder formula]\label{prop:scan-error-cylinder}
+For every \(\mathsf{P}\in\mathcal{F}_\infty\) and \(m\geq 1\),
+\[
+  \varepsilon_m(\mathsf{P};\mu)
+  = \sum_{a\in\mathcal A_{\mathrm{obs}}^m}
+      \min\{\mu(\mathsf{P}\cap C_a),\mu(C_a\setminus\mathsf{P})\}
+  = \EE\bigl[\min\{p_m,1-p_m\}\bigr],
+\]
+where \(p_m:=\mu(\mathsf{P}\mid\mathcal{F}_m)\).
+\end{proposition}
+
+\begin{proposition}[Bayes rule and functional stability]
+\label{prop:bayes-optimality}
+Let \(p_m=\mu(\mathsf{P}\mid\mathcal{F}_m)\) and
+\(\mathsf{P}_m^*:=\{x:p_m(x)\geq \tfrac12\}\).  Then
+\(\mu(\mathsf{P}\triangle \mathsf{Q})\geq \varepsilon_m(\mathsf{P};\mu)\)
+for every \(\mathsf{Q}\in\mathcal{F}_m\), with equality for
+\(\mathsf{Q}=\mathsf{P}_m^*\); moreover
+\(\bigl|\int \varphi(\mathbf{1}_{\mathsf{P}}-
+\mathbf{1}_{\mathsf{P}_m^*})\,\mathrm{d}\mu\bigr|
+\leq \Vert\varphi\Vert_\infty\,\varepsilon_m(\mathsf{P};\mu)\).
+\end{proposition}
+
+\begin{theorem}[Tanaka identity]\label{thm:tanaka-stokes}
+Let \(p_m=\mu(\mathsf{P}\mid\mathcal{F}_m)\) and set
+\(\varepsilon_0(\mathsf{P};\mu)=\min\{\mu(\mathsf{P}),1-\mu(\mathsf{P})\}\).
+Define
+\[
+  L_m^{1/2}
+  := \sum_{k=0}^{m-1}
+      \Bigl(\lvert p_{k+1}-\tfrac12\rvert-\lvert p_k-\tfrac12\rvert
+        - \operatorname{sgn}(p_k-\tfrac12)(p_{k+1}-p_k)\Bigr).
+\]
+Then \(L_m^{1/2}\geq 0\), the sequence is non-decreasing, and
+\(\varepsilon_m(\mathsf{P};\mu)=\varepsilon_0(\mathsf{P};\mu)-
+\EE[L_m^{1/2}]\).
+If \(\mathbf{1}_{\mathsf{P}}\) is \(\mathcal{F}_\infty\)-measurable
+then \(\EE[L_\infty^{1/2}]=\varepsilon_0(\mathsf{P};\mu)\).
+\end{theorem}
+
+\begin{proof}[Sketch]
+Apply the discrete Tanaka formula to the martingale \((p_m)\) with the
+threshold \(\tfrac12\); see \citet[Section~IV.4]{WaltersErgodicTheory}.
+\end{proof}
+
+\begin{corollary}\label{cor:clarity-monotone}
+The sequence \(m\mapsto \varepsilon_m(\mathsf{P};\mu)\) is
+non-increasing, and it vanishes if and only if \(\mathsf{P}\) agrees
+almost surely with an \(\mathcal{F}_m\)-measurable event.
+\end{corollary}
+
+\subsection{Boundary cylinders and weighted boundary mass}
+
+For \(\mathsf{P}\in\mathcal{F}_\infty\), let
+\(\partial_m\mathsf{P}\) denote the collection of length-\(m\) words
+whose cylinders meet both \(\mathsf{P}\) and its complement, and set
+\(Z_m^\mu(\partial\mathsf{P})=
+\sum_{a\in\partial_m\mathsf{P}}\mu(C_a)\).
+
+\begin{proposition}[Weighted boundary decomposition]
+\label{prop:weighted-boundary-decomposition}
+For \(a\in\partial_m\mathsf{P}\), let
+\(\beta_{\mathsf{P}}(a)=\min\{\mu(\mathsf{P}\mid C_a),
+1-\mu(\mathsf{P}\mid C_a)\}\).  Then
+\(\varepsilon_m(\mathsf{P};\mu)
+ = \sum_{a\in\partial_m\mathsf{P}} \mu(C_a)\beta_{\mathsf{P}}(a)\),
+so \(\theta Z_m^\mu(\partial\mathsf{P}) \leq
+\varepsilon_m(\mathsf{P};\mu) \leq \tfrac12 Z_m^\mu(\partial\mathsf{P})\)
+whenever \(\beta_{\mathsf{P}}(a)\geq \theta\).
+\end{proposition}
+
+\begin{theorem}[Upper boundary estimate]\label{thm:clarity-boundary-dimension}
+Assume that every non-empty \(m\)-cylinder satisfies
+\[
+  \mu(C_a)\leq K\lambda_{\mathrm{cyl}}^{-m}
+  \qquad
+  (\lambda_{\mathrm{cyl}}>1).
+\]
+Then
+\[
+  \varepsilon_m(\mathsf{P};\mu)
+  \leq
+  \frac{K}{2}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf{P}),
+\]
+where \(N_m(\partial\mathsf P):=\card(\partial_m\mathsf P)\).
+Consequently, if
+\[
+  N_m(\partial\mathsf P)
+  = \lambda_{\mathrm{cyl}}^{(d+o(1))m}
+  \qquad\text{with } d<1,
+\]
+for example when the upper box dimension of \(\partial\mathsf P\) in the
+prefix metric is \(d\), then
+\[
+  \varepsilon_m(\mathsf P;\mu)
+  \leq
+  \lambda_{\mathrm{cyl}}^{-(1-d+o(1))m}.
+\]
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:weighted-boundary-decomposition},
+\[
+  \varepsilon_m(\mathsf P;\mu)
+  \leq
+  \frac12\sum_{a\in\partial_m\mathsf P}\mu(C_a)
+  \leq
+  \frac{K}{2}\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf P).
+\]
+Substituting the growth hypothesis for \(N_m(\partial\mathsf P)\) gives
+the stated exponential upper bound.
+\end{proof}

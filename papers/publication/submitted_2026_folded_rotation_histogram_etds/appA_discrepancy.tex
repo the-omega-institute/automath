@@ -1,0 +1,355 @@
+\section{Auxiliary Discrepancy and Empirical Entropy Bounds}
+\label{app:discrepancy}
+
+This appendix collects finite-sample control results that bound the empirical
+folded histogram relative to its deterministic limit law. They complement the
+structural Parry divergence analysis of the main text by showing that the
+sampling error can be made arbitrarily small.
+
+\subsection{Discrepancy of the Rotation Orbit}
+
+The quantitative input is the one-dimensional star discrepancy of the
+rotation orbit:
+\[
+D_N^*(\alpha;x_0)
+:=
+\sup_{0\le a\le 1}
+\left|
+\frac{1}{N}\sum_{t=0}^{N-1}\mathbf{1}_{[0,a)}(x_t)-a
+\right|.
+\]
+This quantity is effective because length-$m$ rotation words are determined by a
+finite partition of the circle into interval atoms.
+
+\subsection{Total Variation Bounds}
+
+\begin{theorem}[Discrepancy control of microstate and folded laws]\label{thm:tv-certificate-hist}
+In the rotation model above, for every $m,N\ge 1$,
+\[
+\TV(\hat\mu_{m,N},\mu_m)\le 2m\,D_N^*(\alpha;x_0).
+\]
+Consequently,
+\[
+\TV(\hat\pi_{m,N},\pi_m^{\mathrm{fold}})
+\le
+2m\,D_N^*(\alpha;x_0).
+\]
+If \(\beta=\alpha\), then the sharper bounds
+\[
+\TV(\hat\mu_{m,N},\mu_m)\le (m+1)D_N^*(\alpha;x_0),
+\qquad
+\TV(\hat\pi_{m,N},\pi_m^{\mathrm{fold}})\le (m+1)D_N^*(\alpha;x_0)
+\]
+also hold.
+\end{theorem}
+
+\begin{proof}
+For fixed $m$, the length-$m$ rotation words are constant on the interval atoms
+of the partition of \(\TT\) cut out by the points
+\[
+0,\ \beta,\ -\alpha,\ \beta-\alpha,\ \dots,\ -(m-1)\alpha,\ \beta-(m-1)\alpha
+\pmod 1.
+\]
+There are at most \(2m\) such endpoints and therefore at most \(2m\) interval
+atoms. For any interval \(I=[a,b)\subset\TT\),
+\[
+\left|
+\frac{1}{N}\sum_{t=0}^{N-1}\mathbf{1}_I(x_t)-\leb(I)
+\right|
+\le
+2D_N^*(\alpha;x_0).
+\]
+Taking half the sum of the atomwise errors gives
+\(\TV(\hat\mu_{m,N},\mu_m)\le 2mD_N^*(\alpha;x_0)\).
+
+If \(\beta=\alpha\), the coding is Sturmian and the number of distinct
+length-\(m\) factors is exactly \(m+1\)
+\cite{MorseHedlund1940,LindMarcus1995}. Summing over the \(m+1\) nonempty
+cylinder atoms yields the sharper constant. The folded estimates follow because
+deterministic pushforward cannot increase total variation.
+\end{proof}
+
+\begin{corollary}[Optimal leading constant within the metallic-mean family]
+\label{cor:metallic-mean-golden-unique-optimal-tv-constant}
+For $A\ge 1$, let
+\[
+\alpha_A=[0;A,A,\dots],\qquad
+\lambda_A:=\frac{A+\sqrt{A^2+4}}{2},\qquad
+\kappa(A):=\frac{A}{\log\lambda_A}.
+\]
+Then there is a constant $C(A)<\infty$ such that for every $N\ge 2$ and every
+$x_0\in\TT$,
+\[
+D_N^*(\alpha_A;x_0)\le \frac{\kappa(A)\log N+C(A)}{N}.
+\]
+Consequently, for every fixed resolution $m\ge 1$,
+\[
+\TV(\hat\pi_{m,N},\pi_m^{\mathrm{fold}})
+\le
+2m\frac{\kappa(A)\log N+C(A)}{N}.
+\]
+If \(\beta=\alpha_A\), this sharpens to
+\[
+\TV(\hat\pi_{m,N},\pi_m^{\mathrm{fold}})
+\le
+(m+1)\frac{\kappa(A)\log N+C(A)}{N}.
+\]
+Moreover, $\kappa(A)$ is strictly increasing on $[1,\infty)$, so the golden
+branch $A=1$ uniquely minimizes the leading $(\log N)/N$ coefficient among
+metallic means.
+\end{corollary}
+
+\begin{proof}
+Let $p_n/q_n$ be the convergents of $\alpha_A$.  The standard discrepancy bound
+\cite{KuipersNiederreiter1974} gives
+\[
+D_N^*(\alpha_A;x_0)\le \frac{3+nA}{N}
+\qquad \text{whenever } q_n\le N<q_{n+1}.
+\]
+Since $q_{n+1}=Aq_n+q_{n-1}$ and $\lambda_A$ is the Perron root of
+$x^2-Ax-1=0$, one has $q_n\ge \lambda_A^{n-1}$ for $n\ge 1$, hence
+$n\le 1+\log N/\log\lambda_A$.  Substituting yields the discrepancy estimate
+with $C(A)=3+A$.  The TV bound follows from
+Theorem~\ref{thm:tv-certificate-hist}.  The monotonicity of
+$\kappa(A)=A/\log\lambda_A$ on $[1,\infty)$ is elementary, so its minimum is
+attained uniquely at $A=1$.
+\end{proof}
+
+\subsection{Cross-Resolution Residuals}
+
+Let $r_{m+1\to m}:\Omega_{m+1}\to\Omega_m$ denote prefix truncation,
+$r_{m+1\to m}(u_1\cdots u_{m+1})=u_1\cdots u_m$, and let
+$\rho_{m+1\to m}:X_{m+1}\to X_m$ be the analogous truncation on folded words.
+Define the projective residual
+\[
+E_{m,N}
+:=
+\TV\!\left(\hat\pi_{m,N},(\rho_{m+1\to m})_*\hat\pi_{m+1,N}\right).
+\]
+
+\begin{theorem}[Boundary law for the canonical fold]\label{prop:multiscale-residual-by-boundary}
+For the canonical fold of Definition~\ref{def:canonical-fold}, let
+\[
+f_m(\omega):=\Fold_m(r_{m+1\to m}(\omega)),
+\qquad
+g_m(\omega):=\rho_{m+1\to m}(\Fold_{m+1}(\omega)),
+\]
+and define the boundary event set
+\[
+\mathcal{B}_{m+1}:=\{\omega\in\Omega_{m+1}: f_m(\omega)\neq g_m(\omega)\}.
+\]
+Then
+\[
+E_{m,N}\le \hat\mu_{m+1,N}(\mathcal{B}_{m+1}).
+\]
+Moreover, if \(\omega=u_1\cdots u_{m+1}\) and \(v:=u_1\cdots u_m\), then
+\[
+\omega\in\mathcal{B}_{m+1}
+\iff
+u_{m+1}=1\ \text{and}\ N(v)\ge F_{m+1}.
+\]
+\end{theorem}
+
+\begin{proof}
+Both $\hat\pi_{m,N}$ and $(\rho_{m+1\to m})_*\hat\pi_{m+1,N}$ are pushforwards
+of $\hat\mu_{m+1,N}$, respectively by $f_m$ and $g_m$.  Therefore
+\[
+\TV((f_m)_*\nu,(g_m)_*\nu)\le \nu(f_m\neq g_m)
+\]
+for any probability measure $\nu$, and the first claim follows with
+$\nu=\hat\mu_{m+1,N}$.
+
+For the second claim, write \(N:=N(v)\). Since
+\[
+0\le N\le \sum_{k=1}^m F_{k+1}=F_{m+3}-2,
+\]
+the Zeckendorf expansion of \(N\) has the form
+\[
+Z(N)=(c_1,\dots,c_{m+1},0,0,\dots).
+\]
+If \(u_{m+1}=0\), then \(N(\omega)=N\), so \(f_m(\omega)=g_m(\omega)\).
+
+Assume next that \(u_{m+1}=1\), so \(N(\omega)=N+F_{m+2}\). If \(N<F_{m+1}\),
+then \(c_m=c_{m+1}=0\), hence
+\[
+Z(N+F_{m+2})=(c_1,\dots,c_m,1,0,0,\dots)
+\]
+is already a legal Zeckendorf expansion. Therefore
+\[
+g_m(\omega)=\rho_{m+1\to m}(\Fold_{m+1}(\omega))=(c_1,\dots,c_m)=f_m(\omega),
+\]
+so \(\omega\notin\mathcal{B}_{m+1}\).
+
+Conversely, suppose \(u_{m+1}=1\) and \(\omega\notin\mathcal{B}_{m+1}\). Write
+\[
+Z(N+F_{m+2})=(d_1,\dots,d_{m+2},0,0,\dots).
+\]
+Since the first \(m\) digits agree, one has \(d_j=c_j\) for \(1\le j\le m\).
+Subtracting the two Zeckendorf expansions gives
+\[
+F_{m+2}
+=
+(d_{m+1}-c_{m+1})F_{m+2}+d_{m+2}F_{m+3}.
+\]
+Because \(F_{m+3}>F_{m+2}\), necessarily \(d_{m+2}=0\) and
+\(d_{m+1}-c_{m+1}=1\). Hence \(c_{m+1}=0\) and \(d_{m+1}=1\). Since
+\((d_1,\dots,d_{m+2})\) is a legal Zeckendorf digit string and \(d_m=c_m\), one
+must also have \(c_m=d_m=0\). Thus \(Z(N)\) has no nonzero digit in positions
+\(m\) or \(m+1\), which is equivalent to \(N<F_{m+1}\).
+
+We have proved
+\[
+\omega\notin\mathcal{B}_{m+1}
+\iff
+u_{m+1}=0\ \text{or}\ \bigl(u_{m+1}=1\ \text{and}\ N(v)<F_{m+1}\bigr),
+\]
+which is exactly the stated characterization.
+\end{proof}
+
+\begin{corollary}[Decomposition relative to the Parry measure]\label{cor:tv-decomposition-parry}
+For every $m,N\ge 1$,
+\[
+\TV(\hat\pi_{m,N},\pi_m)
+\le
+2m\,D_N^*(\alpha;x_0)+\TV(\pi_m^{\mathrm{fold}},\pi_m).
+\]
+If \(\beta=\alpha\), one may replace \(2m\) by \(m+1\).
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:tv-certificate-hist} gives
+$\TV(\hat\pi_{m,N},\pi_m^{\mathrm{fold}})\le 2mD_N^*(\alpha;x_0)$, and the
+triangle inequality completes the proof.
+\end{proof}
+
+\subsection{Relative-Entropy Bounds}
+
+\begin{lemma}[Relative entropy from total variation under strict positivity]\label{lem:kl-from-tv-qmin}
+Let $p,q$ be probability measures on a finite set $S$, assume $p\ll q$, and
+suppose that $q$ is strictly positive on $S$. Let
+\[
+q_{\min}:=\min_{s\in S}q(s)>0.
+\]
+Then
+\[
+\KL(p\|q)
+\le
+\log\!\left(1+\frac{\|p-q\|_1^2}{q_{\min}}\right)
+\le
+\frac{1}{q_{\min}}\|p-q\|_1^2
+=
+\frac{4}{q_{\min}}\TV(p,q)^2.
+\]
+\end{lemma}
+
+\begin{proof}
+The standard inequality \(\KL\le \log(1+\chi^2)\) gives
+\[
+\KL(p\|q)\le \log\bigl(1+\chi^2(p,q)\bigr),
+\qquad
+\chi^2(p,q):=\sum_{s\in S}\frac{(p(s)-q(s))^2}{q(s)}.
+\]
+Since \(q(s)\ge q_{\min}\) for every \(s\in S\),
+\[
+\chi^2(p,q)
+\le
+\frac{1}{q_{\min}}\sum_{s\in S}(p(s)-q(s))^2
+\le
+\frac{1}{q_{\min}}\|p-q\|_1^2.
+\]
+The second inequality uses \(\log(1+u)\le u\). See
+\cite{SasonVerdu2016fDivergence}.
+\end{proof}
+
+\begin{definition}[Diophantine lower bound]
+For a badly approximable irrational $\alpha$, let $c(\alpha)>0$ be a constant
+such that
+\[
+\|k\alpha\|\ge \frac{c(\alpha)}{k}\qquad (k\ge 1),
+\]
+where $\|x\|:=\min_{n\in\mathbb{Z}}|x-n|$.
+\end{definition}
+
+\begin{proposition}[Lower bound on the smallest microstate atom]\label{prop:qmin-lowerbound-markov}
+Assume $\beta=\alpha$ and let
+\[
+q_{\min}(m):=\min\{\mu_m(u):\mu_m(u)>0\}.
+\]
+Then
+\[
+q_{\min}(m)\ge \min_{1\le k\le m}\|k\alpha\|\ge \frac{c(\alpha)}{m}.
+\]
+For the golden slope $\alpha=\varphi^{-1}$ one may take
+$c(\alpha)=1/\sqrt5$, hence
+\[
+q_{\min}(m)\ge \frac{1}{\sqrt5\,m}.
+\]
+\end{proposition}
+
+\begin{proof}
+When $\beta=\alpha$, the partition endpoints for length-$m$ microstates reduce
+to the set $\{-k\alpha:0\le k\le m\}$.  Thus the positive atoms of $\mu_m$ are
+exactly the adjacent gaps determined by these points, and the smallest one is
+at least $\min_{1\le k\le m}\|k\alpha\|$.  The badly approximable lower bound
+then yields $c(\alpha)/m$.  For $\varphi^{-1}$ the optimal Markov constant is
+$1/\sqrt5$.
+\end{proof}
+
+\begin{corollary}[Microstate relative-entropy bound]\label{cor:rotation-microstate-kl-certificate}
+Assume $\beta=\alpha$ and $\alpha$ is badly approximable.  Then
+\[
+\KL(\hat\mu_{m,N}\|\mu_m)
+\le
+\frac{4}{q_{\min}(m)}\TV(\hat\mu_{m,N},\mu_m)^2
+\le
+\frac{4(m+1)^2}{q_{\min}(m)}D_N^*(\alpha;x_0)^2.
+\]
+For $\alpha=\varphi^{-1}$ this becomes
+\[
+\KL(\hat\mu_{m,N}\|\mu_m)
+\le
+4\sqrt5\,m(m+1)^2 D_N^*(\alpha;x_0)^2.
+\]
+\end{corollary}
+
+\begin{proof}
+Let \(S_m:=\supp(\mu_m)\). In the Sturmian slice \(\beta=\alpha\), every
+observed length-\(m\) word belongs to the Sturmian language, hence
+\(\hat\mu_{m,N}\) and \(\mu_m\) may both be viewed as probability measures on
+\(S_m\). On this set, \(\mu_m\) is strictly positive and
+\[
+\min_{u\in S_m}\mu_m(u)=q_{\min}(m).
+\]
+The claim therefore follows from Theorem~\ref{thm:tv-certificate-hist},
+Lemma~\ref{lem:kl-from-tv-qmin}, and
+Proposition~\ref{prop:qmin-lowerbound-markov}.
+\end{proof}
+
+\begin{lemma}[KL monotonicity under pushforward]\label{lem:kl-monotone-pushforward}
+Let $F:S\to T$ be a map between finite sets and let $p,q$ be probability
+measures on $S$ with $p\ll q$.  Then
+\[
+\KL(F_*p\|F_*q)\le \KL(p\|q).
+\]
+\end{lemma}
+
+\begin{proof}
+This is the data-processing inequality for relative entropy under deterministic
+coarse graining.
+\end{proof}
+
+\begin{corollary}[Folded relative-entropy bound]\label{cor:rotation-folded-kl-certificate}
+Under the assumptions of
+Corollary~\ref{cor:rotation-microstate-kl-certificate},
+\[
+\KL(\hat\pi_{m,N}\|\pi_m^{\mathrm{fold}})
+\le
+\KL(\hat\mu_{m,N}\|\mu_m)
+\le
+\frac{4(m+1)^2}{q_{\min}(m)}D_N^*(\alpha;x_0)^2.
+\]
+\end{corollary}
+
+\begin{proof}
+Apply Lemma~\ref{lem:kl-monotone-pushforward} with $F=\Fold_m$.
+\end{proof}

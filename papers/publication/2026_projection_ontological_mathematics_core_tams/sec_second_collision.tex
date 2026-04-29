@@ -1,0 +1,480 @@
+\section{Fibonacci windows and the all-\texorpdfstring{$q$}{q} moment transfer}
+\label{sec:second-collision}
+
+By \Cref{thm:partition-difference}, the finite-window fiber spectrum is already
+encoded by the classical Fibonacci partition function.  The collision moments
+are therefore naturally expressed as power sums of a Fibonacci-lag discrete
+derivative.  The key point of this section is that those power sums are
+precisely trapped between two adjacent Fibonacci windows of the classical
+partition power sums.  This closes the finite-window moment problem to an
+all-\(q\) theorem chain.
+
+\subsection{Difference-power sums and Fibonacci windows}
+
+\begin{definition}[Difference spectrum]
+\label{def:difference-spectrum}
+For \(0\le n<F_{m+2}\), define
+\[
+  a_m(n):=d_m^\#(\pi_m(n))
+  =
+  R^\dagger(n)-R^\dagger(n-F_{m+1}).
+\]
+For \(q\ge 1\), define
+\[
+  S_q(m):=\sum_{x\in X_m} d_m(x)^q,
+  \qquad
+  T_q^\dagger(N):=\sum_{n=0}^{N-1} R^\dagger(n)^q.
+\]
+\end{definition}
+
+\begin{theorem}[Difference-power sums]
+\label{thm:difference-power-sums}
+For every integer \(q\ge 1\),
+\[
+  S_q(m)
+  =
+  \sum_{n=0}^{F_{m+2}-1} a_m(n)^q
+  =
+  \sum_{n=0}^{F_{m+2}-1}
+  \bigl(R^\dagger(n)-R^\dagger(n-F_{m+1})\bigr)^q.
+\]
+\end{theorem}
+
+\begin{proof}
+Because \(\pi_m\) is a permutation of \(\ZZ/F_{m+2}\ZZ\),
+\[
+  S_q(m)
+  =
+  \sum_{r=0}^{F_{m+2}-1} d_m^\#(r)^q
+  =
+  \sum_{n=0}^{F_{m+2}-1} d_m^\#(\pi_m(n))^q.
+\]
+Now apply \Cref{thm:partition-difference}.
+\end{proof}
+
+\begin{theorem}[Fibonacci-window sandwich]
+\label{thm:fibonacci-window-sandwich}
+For every pair of integers \(q\ge 1\) and \(m\ge 1\),
+\[
+  T_q^\dagger(F_{m+1})\le S_q(m)\le T_q^\dagger(F_{m+2}).
+\]
+\end{theorem}
+
+\begin{proof}
+By \Cref{thm:difference-power-sums}, for \(0\le n<F_{m+1}\) we have
+\(R^\dagger(n-F_{m+1})=0\), hence \(a_m(n)=R^\dagger(n)\).  Therefore
+\[
+  \sum_{n=0}^{F_{m+1}-1} a_m(n)^q
+  =
+  \sum_{n=0}^{F_{m+1}-1} R^\dagger(n)^q
+  =
+  T_q^\dagger(F_{m+1}),
+\]
+which gives the lower bound.
+
+For the upper bound, \(a_m(n)\) is a fiber multiplicity and hence nonnegative.
+By definition,
+\[
+  a_m(n)=R^\dagger(n)-R^\dagger(n-F_{m+1})\le R^\dagger(n)
+  \qquad (0\le n<F_{m+2}).
+\]
+Raise both sides to the \(q\)-th power and sum over \(n\).
+\end{proof}
+
+\begin{theorem}[Transfer of partition constants]
+\label{thm:all-q-transfer}
+For every integer \(q\ge 1\),
+\[
+  T_q^\dagger(N)\asymp_q N^{(\log \lambda_q)/\log\varphi},
+\]
+where \(\lambda_q\) is Sanna's partition constant \cite[Thm.~1.1]{Sanna2025}.  Hence
+\[
+  S_q(m)\asymp_q \lambda_q^m.
+\]
+If \(q\ge 2\), then the Perron root \(r_q\) of the finite-state collision
+kernel of \Cref{thm:collision-kernel} satisfies
+\[
+  r_q=\lambda_q.
+\]
+\end{theorem}
+
+\begin{proof}
+Pointwise,
+\[
+  R(n)\le R^\dagger(n)=R(n)+R(n-1)\le 2\max\{R(n),R(n-1)\},
+\]
+so
+\[
+  R(n)^q\le R^\dagger(n)^q
+  \le 2^{q-1}\bigl(R(n)^q+R(n-1)^q\bigr).
+\]
+Summing over \(0\le n<N\) yields
+\[
+  \sum_{n=0}^{N-1} R(n)^q
+  \le
+  T_q^\dagger(N)
+  \le
+  2^q\sum_{n=0}^{N-1} R(n)^q.
+\]
+Sanna's theorem \cite[Thm.~1.1]{Sanna2025} therefore gives
+\[
+  T_q^\dagger(N)\asymp_q N^{(\log \lambda_q)/\log\varphi}.
+\]
+Taking \(N=F_{m+1}\) and \(N=F_{m+2}\), using \(F_m\asymp\varphi^m\), and
+applying \Cref{thm:fibonacci-window-sandwich}, we obtain
+\[
+  S_q(m)\asymp_q \lambda_q^m.
+\]
+If \(q\ge 2\), let \(A_q,u_q,v_q\) be the trimmed realization from
+\Cref{thm:collision-kernel}, and write \(r_q:=\rho(A_q)\).  For every
+\(\varepsilon>0\), Gelfand's formula yields
+\(\|A_q^m\|\ll_{\varepsilon,q}(r_q+\varepsilon)^m\), and therefore
+\[
+  S_q(m)=u_q^{\mathsf T}A_q^m v_q\ll_{\varepsilon,q}(r_q+\varepsilon)^m.
+\]
+Since \(S_q(m)\asymp_q \lambda_q^m\), this implies
+\(\lambda_q\le r_q+\varepsilon\) for every \(\varepsilon>0\), hence
+\(\lambda_q\le r_q\).
+
+For the reverse inequality, choose a strongly connected component \(B\) of
+\(A_q\) with \(\rho(B)=r_q\).  Because the automaton is trimmed, there exist
+states \(s,t\) of \(B\) and integers \(a,b\ge 0\) such that the initial state
+reaches \(s\) in \(a\) steps and \(t\) reaches an accepting state in \(b\)
+steps.  Hence
+\[
+  S_q(m+a+b)\ge (B^m)_{st}
+  \qquad (m\ge 0).
+\]
+Since \(B\) is irreducible, Perron--Frobenius theory gives
+\[
+  \limsup_{m\to\infty}(B^m)_{st}^{1/m}=r_q
+\]
+\cite[Ch.~1]{Seneta2006}.  On the other hand,
+\(S_q(m+a+b)\asymp_q \lambda_q^{m+a+b}\), so
+\[
+  \lambda_q
+  =
+  \lim_{m\to\infty}S_q(m+a+b)^{1/m}
+  \ge
+  \limsup_{m\to\infty}(B^m)_{st}^{1/m}
+  =
+  r_q.
+\]
+Thus \(r_q=\lambda_q\).
+\end{proof}
+
+\begin{remark}[The case \texorpdfstring{$q=1$}{q=1}]
+\label{rem:lambda-one}
+For \(q=1\), \(S_1(m)=2^m\) gives \(\lambda_1=2\) directly.
+\end{remark}
+
+\begin{remark}[Relation to classical moment problems]
+\label{rem:sanna-relation}
+Theorem~\ref{thm:difference-power-sums} places the finite-window collision
+moments beside the ordinary power sums of the Fibonacci partition function
+studied by Sanna \cite{Sanna2025}.  Theorem~\ref{thm:fibonacci-window-sandwich}
+sharpens that relation: every finite-window collision moment is exactly trapped
+between two adjacent Fibonacci windows of the indexed partition power sums.
+Theorem~\ref{thm:all-q-transfer} then shows that the fold moments share the
+same exponential constants \(\lambda_q\).
+\end{remark}
+
+\begin{corollary}[Kernel formula]
+\label{cor:multivariate-moment-kernel}
+Fix \(q\ge 2\), write \(\mathbf z=(z_1,\dots,z_{q-1})\), and for
+\(A\subseteq [q-1]\) write
+\[
+  z_A:=\prod_{i\in A}z_i,
+  \qquad
+  z_\varnothing:=1.
+\]
+Then
+\[
+  S_q(m)
+  =
+  [\mathbf z^0]
+  \prod_{j=1}^m
+  \left(
+    2+\sum_{\varnothing\neq A\subseteq [q-1]}
+    \bigl(z_A^{F_j}+z_A^{-F_j}\bigr)
+  \right).
+\]
+\end{corollary}
+
+\begin{proof}
+By \Cref{thm:affine-transfer},
+\[
+  S_q(m)
+  =
+  \sum_{n=0}^{F_{m+2}-1}\widetilde d_m(n)^q.
+\]
+Let
+\[
+  \mathcal P_m(z):=\prod_{j=1}^m(1+z^{F_j})
+  =
+  \sum_{n=0}^{F_{m+2}-1}\widetilde d_m(n)z^n.
+\]
+Diagonal extraction gives
+\[
+  S_q(m)
+  =
+  [\mathbf z^0]\,
+  \mathcal P_m(z_1)\cdots \mathcal P_m(z_{q-1})
+  \mathcal P_m\bigl((z_1\cdots z_{q-1})^{-1}\bigr).
+\]
+Using the product form of \(\mathcal P_m\), we obtain
+\[
+  S_q(m)
+  =
+  [\mathbf z^0]
+  \prod_{j=1}^m
+  \left(
+    \prod_{i=1}^{q-1}(1+z_i^{F_j})
+  \right)
+  \left(
+    1+(z_1\cdots z_{q-1})^{-F_j}
+  \right).
+\]
+Finally,
+\begin{align*}
+  \prod_{i=1}^{q-1}(1+z_i)\left(1+(z_1\cdots z_{q-1})^{-1}\right)
+  &=
+  \sum_{A\subseteq [q-1]}z_A
+  +
+  \sum_{A\subseteq [q-1]}z_{A^c}^{-1} \\
+  &=
+  2+\sum_{\varnothing\neq A\subseteq [q-1]}(z_A+z_A^{-1}),
+\end{align*}
+and replacing \(z_i\) by \(z_i^{F_j}\) yields the claim.
+\end{proof}
+
+\subsection{The quadratic case}
+
+\begin{definition}[Quadratic difference energy]
+\label{def:T2}
+Set
+\[
+  T_2(m):=S_2(m)=\sum_{n=0}^{F_{m+2}-1} a_m(n)^2.
+\]
+\end{definition}
+
+\begin{theorem}[Cubic recurrence]
+\label{thm:cubic-recurrence}
+The quadratic difference energy satisfies
+\[
+  T_2(1)=2,\qquad T_2(2)=6,\qquad T_2(3)=14,
+\]
+and for every \(m\ge 4\),
+\[
+  T_2(m)=2T_2(m-1)+2T_2(m-2)-2T_2(m-3).
+\]
+\end{theorem}
+
+\begin{proof}
+By \Cref{thm:partition-difference},
+\[
+  T_2(m)
+  =
+  \sum_{n=0}^{F_{m+2}-1}d_m^\#(\pi_m(n))^2
+  =
+  \sum_{n=0}^{F_{m+2}-1}\widetilde d_m(n)^2.
+\]
+Let
+\[
+  \mathcal P_m(z):=\prod_{j=1}^m(1+z^{F_j})
+  =
+  \sum_{n=0}^{F_{m+2}-1}\widetilde d_m(n)z^n.
+\]
+Then
+\[
+  T_2(m)
+  =
+  [z^0]\bigl(\mathcal P_m(z)\mathcal P_m(z^{-1})\bigr).
+\]
+Define
+\[
+  B_m(t):=[z^t]\prod_{j=1}^m\bigl(2+z^{F_j}+z^{-F_j}\bigr),
+  \qquad t\in\ZZ.
+\]
+Then \(B_m(t)=B_m(-t)\) and \(T_2(m)=B_m(0)\).
+
+The defining product yields the coefficient recursion
+\begin{equation}\label{eq:Bm-rec}
+  B_m(t)=2B_{m-1}(t)+B_{m-1}(t-F_m)+B_{m-1}(t+F_m).
+\end{equation}
+Taking \(t=0\) and using symmetry gives
+\begin{equation}\label{eq:T-U}
+  T_2(m)=2T_2(m-1)+2B_{m-1}(F_m).
+\end{equation}
+Introduce the auxiliary quantity
+\[
+  U_m:=B_m(F_{m+1}).
+\]
+Then \eqref{eq:T-U} becomes
+\begin{equation}\label{eq:T-U2}
+  T_2(m)=2T_2(m-1)+2U_{m-1}.
+\end{equation}
+
+Apply \eqref{eq:Bm-rec} with \(t=F_{m+1}\):
+\[
+  U_m
+  =
+  2B_{m-1}(F_{m+1})
+  +B_{m-1}(F_{m+1}-F_m)
+  +B_{m-1}(F_{m+1}+F_m).
+\]
+The support of \(\prod_{j=1}^{m-1}(2+z^{F_j}+z^{-F_j})\) lies in
+\[
+  |t|\le \sum_{j=1}^{m-1}F_j=F_{m+1}-1,
+\]
+so
+\[
+  B_{m-1}(F_{m+1})=0
+  \qquad\text{and}\qquad
+  B_{m-1}(F_{m+1}+F_m)=0.
+\]
+Since \(F_{m+1}-F_m=F_{m-1}\), we obtain
+\begin{equation}\label{eq:U-shift}
+  U_m=B_{m-1}(F_{m-1}).
+\end{equation}
+
+Now apply \eqref{eq:Bm-rec} with index \(m-1\) and \(t=F_{m-1}\):
+\[
+  B_{m-1}(F_{m-1})
+  =
+  2B_{m-2}(F_{m-1})
+  +B_{m-2}(0)
+  +B_{m-2}(2F_{m-1}).
+\]
+Again the support bound
+\[
+  \sum_{j=1}^{m-2}F_j=F_m-1<2F_{m-1}
+\]
+forces \(B_{m-2}(2F_{m-1})=0\).  Therefore
+\begin{equation}\label{eq:U-rec}
+  U_m=2U_{m-2}+T_2(m-2).
+\end{equation}
+Replacing \(m\) by \(m-1\) in \eqref{eq:U-rec} gives
+\[
+  U_{m-1}=2U_{m-3}+T_2(m-3).
+\]
+From \eqref{eq:T-U2} with index \(m-2\),
+\[
+  T_2(m-2)=2T_2(m-3)+2U_{m-3},
+\]
+so
+\begin{equation}\label{eq:U-elim}
+  2U_{m-1}=2T_2(m-2)-2T_2(m-3).
+\end{equation}
+Substituting \eqref{eq:U-elim} into \eqref{eq:T-U2} yields
+\[
+  T_2(m)=2T_2(m-1)+2T_2(m-2)-2T_2(m-3).
+\]
+The initial values are obtained directly from the cases \(m=1,2,3\).
+\end{proof}
+
+\begin{corollary}[Generating function]
+\label{cor:sigma-generating}
+The sequence \((T_2(m))_{m\ge 1}\) has generating function
+\[
+  \sum_{m\ge 1}T_2(m)u^m
+  =
+  \frac{2u+2u^2-2u^3}{1-2u-2u^2+2u^3}.
+\]
+\end{corollary}
+
+\begin{proof}
+Apply the standard generating-function calculation to the recurrence of
+\Cref{thm:cubic-recurrence}.
+\end{proof}
+
+\begin{theorem}[Alternating second-order term]
+\label{thm:q2-alternating-second-order}
+Let
+\[
+  p(\lambda):=\lambda^3-2\lambda^2-2\lambda+2.
+\]
+Then \(p\) has exactly three distinct real roots
+\[
+  \lambda_-\in(-2,-1),
+  \qquad
+  \lambda_+\in(0,1),
+  \qquad
+  \rho\in(2,3).
+\]
+Consequently there exist real constants \(c_\rho,c_-,c_+\) such that
+\[
+  T_2(m)=c_\rho\rho^m+c_-\lambda_-^m+c_+\lambda_+^m
+  \qquad (m\ge 1),
+\]
+with \(c_\rho>0\) and \(c_-\neq 0\).  In particular,
+\[
+  T_2(m)-c_\rho\rho^m
+  =
+  c_-\lambda_-^m+O(\lambda_+^m),
+\]
+so the second-order term is eventually alternating in sign.
+\end{theorem}
+
+\begin{proof}
+The sign checks
+\[
+  p(-2)=-2,\qquad p(-1)=1,\qquad p(0)=2,
+\]
+\[
+  p(1)=-1,\qquad p(2)=-2,\qquad p(3)=5
+\]
+show that \(p\) has roots in the three disjoint intervals
+\((-2,-1)\), \((0,1)\), and \((2,3)\).  Since \(p\) is cubic, these are all
+its roots, and they are distinct.
+
+By \Cref{thm:cubic-recurrence}, \((T_2(m))\) is a linear recurrence with
+characteristic polynomial \(p\).  Since the roots are simple, there exist
+constants \(c_\rho,c_-,c_+\in\RR\) such that
+\[
+  T_2(m)=c_\rho\rho^m+c_-\lambda_-^m+c_+\lambda_+^m.
+\]
+Because \(T_2(m)>0\) and \(\rho\) is the unique dominant root, one has
+\(c_\rho>0\).
+
+It remains to show \(c_-\neq 0\).  Suppose instead that \(c_-=0\).  Then
+\((T_2(m))\) would satisfy the second-order recurrence with roots \(\rho\) and
+\(\lambda_+\):
+\[
+  T_2(m+2)=(\rho+\lambda_+)T_2(m+1)-\rho\lambda_+T_2(m).
+\]
+Applying this at \(m=1\) and using \((T_2(1),T_2(2),T_2(3))=(2,6,14)\) yields
+\[
+  14=6(\rho+\lambda_+)-2\rho\lambda_+.
+\]
+By Vieta's formulas for \(p\),
+\[
+  \rho+\lambda_+=2-\lambda_-
+  \qquad\text{and}\qquad
+  \rho\lambda_+=\frac{-2}{\lambda_-}.
+\]
+Substituting these identities gives
+\[
+  14=12-6\lambda_-+\frac{4}{\lambda_-},
+\]
+so \(\lambda_-\) would satisfy
+\[
+  3\lambda_-^2+\lambda_--2=0.
+\]
+Dividing \(p(\lambda)\) by \(3\lambda^2+\lambda-2\) gives remainder
+\((4-5\lambda)/9\), so any common root would satisfy \(\lambda=4/5\), which is
+impossible because \(\lambda_-\in(-2,-1)\).  This contradiction proves
+\(c_-\neq 0\).  Since \(|\lambda_-|>\lambda_+\) and \(\lambda_-<0\), the
+second-order term is eventually alternating.
+\end{proof}
+
+\begin{remark}[Chow--Jones]
+\label{rem:chow-jones}
+Chow and Jones \cite{ChowJones2024} showed that the variance of the Fibonacci
+partition function is governed by the same cubic
+\(\lambda^3-2\lambda^2-2\lambda+2\).  Theorem~\ref{thm:cubic-recurrence} gives
+a finite-window explanation: it controls the quadratic energy of the
+Fibonacci-lag discrete derivative \(a_m(n)\).  Since
+\Cref{thm:all-q-transfer} yields \(T_2(m)\asymp \lambda_2^m\), its dominant
+root \(\rho\) is exactly \(\lambda_2\).
+\end{remark}

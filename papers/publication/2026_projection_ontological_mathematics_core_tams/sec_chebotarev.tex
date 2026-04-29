@@ -1,0 +1,329 @@
+\section{An audited arithmetic window}
+\label{sec:chebotarev}
+
+This section records a finite exact computation for \(q=9,\dots,17\).  The
+exact recurrences and certificate tables used below are printed in
+Appendix~\ref{app:certification}.  Since the present submission does not yet
+include a separate machine-verifiable archive with the source code, raw
+factorization logs, and exported certificates, we treat the arithmetic window
+as audited computational evidence rather than as part of the theorem chain of
+Sections~\ref{sec:residue-affine}--\ref{sec:ledger}.  The notation is fixed
+precisely, and the deductions from the displayed tables are elementary.
+
+\subsection{Minimal recurrence polynomials}
+
+\begin{definition}[Minimal recurrence polynomials]
+\label{def:recurrence-polynomials}
+For \(q\ge 2\), suppose that a tail of the sequence \(m\mapsto S_q(m)\)
+satisfies a minimal linear recurrence
+\[
+  S_q(m)=\sum_{i=1}^{d_q} c_{q,i}\,S_q(m-i)
+  \qquad (m\ge m_0(q)).
+\]
+Its monic minimal recurrence polynomial is
+\[
+  \Pi_q(t):=t^{d_q}-\sum_{i=1}^{d_q} c_{q,i} t^{d_q-i}\in\ZZ[t].
+\]
+In the audited window \(q=9,\dots,17\), the integers \(d_q\), \(m_0(q)\), and
+\((c_{q,1},\dots,c_{q,d_q})\) are those listed in
+Table~\ref{tab:appendix-recurrences-q9-17}.
+\end{definition}
+
+\begin{proposition}[The partition constant is a recurrence root]
+\label{prop:lambda-root-of-recurrence}
+Let \(q\ge 2\), and assume that \(\Pi_q\) is the minimal recurrence polynomial
+of \(m\mapsto S_q(m)\).  Then
+\[
+  \Pi_q(\lambda_q)=0.
+\]
+If in addition \(\Pi_q\) is irreducible over \(\QQ\), then
+\[
+  \deg_{\QQ}(\lambda_q)=\deg \Pi_q=d_q.
+\]
+\end{proposition}
+
+\begin{proof}
+Let
+\[
+  G_q(z):=\sum_{m\ge 0} S_q(m)z^m.
+\]
+Because \(S_q(m)\) satisfies a linear recurrence on a tail, \(G_q(z)\) is
+rational, and after discarding finitely many initial terms its denominator is
+\[
+  1-\sum_{i=1}^{d_q} c_{q,i} z^i
+  =
+  z^{d_q}\Pi_q(z^{-1}).
+\]
+By \Cref{thm:all-q-transfer}, one has \(S_q(m)\asymp_q \lambda_q^m\), so the
+radius of convergence of \(G_q\) is \(1/\lambda_q\).  Since the coefficients of
+\(G_q\) are nonnegative, \(z=1/\lambda_q\) is a singular point of this rational
+function.  Hence its denominator vanishes there, which is equivalent to
+\(\Pi_q(\lambda_q)=0\).
+
+If \(\Pi_q\) is irreducible over \(\QQ\), then the minimal polynomial of
+\(\lambda_q\) over \(\QQ\) divides \(\Pi_q\) and has \(\lambda_q\) as a root.
+Irreducibility therefore forces equality.
+\end{proof}
+
+\subsection{Integral Hankel relations}
+
+\begin{definition}[Hankel block and null modes]
+\label{def:hankel-null-modes}
+For \(q=9,\dots,17\), set
+\[
+  n_q:=2\left\lfloor\frac{q}{2}\right\rfloor+1,
+  \qquad
+  \kappa_q:=n_q-d_q,
+\]
+and define
+\[
+  H_q:=\bigl[S_q(i+j+2)\bigr]_{0\le i,j\le n_q-1}.
+\]
+Its integral null module is
+\[
+  \mathrm{NullModes}(q):=\ker_{\ZZ}(H_q^{\mathsf T})\subset \ZZ^{n_q}.
+\]
+Write
+\[
+  \mathcal M(\Pi_q):=
+  \bigl\{\operatorname{coeff}_{<n_q}(Q(t)\Pi_q(t)):
+  Q\in\ZZ[t],\ \deg Q<\kappa_q\bigr\}\subset\ZZ^{n_q},
+\]
+where \(\operatorname{coeff}_{<n_q}\) truncates a polynomial to its first
+\(n_q\) coefficients.
+\end{definition}
+
+\begin{observation}[Audited Hankel principalization]
+\label{obs:principalization-window}
+For every \(q\in\{9,\dots,17\}\), the exact tables in
+Appendix~\ref{app:certification} certify that
+\[
+  \mathrm{NullModes}(q)=\mathcal M(\Pi_q).
+\]
+\end{observation}
+
+\begin{proof}
+Since \(\Pi_q(E)S_q(\cdot+2)=0\), every short multiple \(Q(t)\Pi_q(t)\)
+annihilates the full sequence and therefore contributes a vector to
+\(\mathrm{NullModes}(q)\).  Thus
+\(\mathcal M(\Pi_q)\subseteq \mathrm{NullModes}(q)\).
+
+Table~\ref{tab:appendix-recurrences-q9-17} gives \(\deg \Pi_q=d_q\), while
+Table~\ref{tab:appendix-principalization-q9-17} records Smith normal forms for
+the change-of-basis matrices from the truncated-multiple basis
+\(\{\Pi_q,t\Pi_q,\dots,t^{\kappa_q-1}\Pi_q\}\) to integral bases of
+\(\mathrm{NullModes}(q)\).  Every invariant factor is \(1\), so the inclusion
+\(\mathcal M(\Pi_q)\subseteq \mathrm{NullModes}(q)\) has index \(1\).
+\end{proof}
+
+\begin{remark}[Direct consequences inside the audited window]
+\label{rem:principalization-consequences}
+Assuming the audited equality of \Cref{obs:principalization-window}, two
+standard consequences follow immediately.
+
+First, if \(B(t)\in\ZZ[t]\) has degree \(<n_q\) and its coefficient vector lies
+in \(\mathrm{NullModes}(q)\), then there is a unique polynomial \(Q(t)\in\ZZ[t]\)
+with \(\deg Q<\kappa_q\) such that \(B(t)=Q(t)\Pi_q(t)\).  In particular, every
+relation detected in the chosen Hankel block extends to the full recurrence.
+
+Second, if \(\alpha^{(1)},\dots,\alpha^{(\kappa_q)}\) is any \(\ZZ\)-basis of
+\(\mathrm{NullModes}(q)\) and
+\[
+  A^{(j)}(t):=\sum_{k=0}^{n_q-1}\alpha_k^{(j)}t^k,
+\]
+then
+\[
+  \gcd\bigl(A^{(1)}(t),\dots,A^{(\kappa_q)}(t)\bigr)=\pm \Pi_q(t).
+\]
+Thus the minimal recurrence polynomial is recoverable from any integral basis
+of the finite Hankel certificates.
+\end{remark}
+
+\subsection{Irreducibility and symmetric groups}
+
+\begin{table}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\caption{Unramified mod-\(p\) factorization certificates for the audited window
+\(q=9,\dots,17\).  The pattern \((d_q)\) certifies irreducibility and
+transitivity, \((d_q-1,1)\) certifies an odd \((d_q-1)\)-cycle, and the final
+column supplies a factorization pattern whose suitable power is a prime cycle
+of length \(3\), \(5\), or \(7\), as required for Jordan's theorem.}
+\label{tab:galois-certificates-q9-17}
+\begin{tabular}{r r r l r l r l}
+\toprule
+\(q\) & \(d_q\) & \(p_{\mathrm{irr}}\) & degs & \(p_{(d-1,1)}\) & degs & \(p_{\mathrm{J}}\) & degs\\
+\midrule
+9  & 7  & 11  & (7)  & 17  & (6,1)   & 13 & (3,2,1,1) \\
+10 & 9  & 17  & (9)  & 109 & (8,1)   & 101 & (5,3,1) \\
+11 & 9  & 37  & (9)  & 17  & (8,1)   & 19 & (5,4) \\
+12 & 13 & 29  & (13) & 17  & (12,1)  & 97 & (7,6) \\
+13 & 11 & 29  & (11) & 61  & (10,1)  & 41 & (7,3,1) \\
+14 & 13 & 37  & (13) & 47  & (12,1)  & 71 & (7,6) \\
+15 & 11 & 17  & (11) & 127 & (10,1)  & 37 & (7,4) \\
+16 & 13 & 239 & (13) & 127 & (12,1)  & 19 & (7,2,2,2) \\
+17 & 13 & 31  & (13) & 59  & (12,1)  & 23 & (7,6) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{lemma}[A transitive group with an \texorpdfstring{$(n-1)$}{(n-1)}-cycle is primitive]
+\label{lem:nminus1-cycle-primitive}
+Let \(G\le S_n\) be transitive with \(n\ge 3\).  If \(G\) contains an
+\((n-1)\)-cycle, then \(G\) is primitive.
+\end{lemma}
+
+\begin{proof}
+Let \(\tau\in G\) be an \((n-1)\)-cycle, and let \(\alpha\) be its unique fixed
+point.  Consider a block \(B\subseteq\{1,\dots,n\}\) for the action of \(G\).
+
+If \(\alpha\in B\), then \(B\setminus\{\alpha\}\) is \(\tau\)-invariant inside the
+single \(\tau\)-orbit \(\{1,\dots,n\}\setminus\{\alpha\}\), so either
+\(B=\{\alpha\}\) or \(B=\{1,\dots,n\}\).
+
+If \(\alpha\notin B\), choose \(\beta\in B\) and \(g\in G\) with \(g(\beta)=\alpha\),
+using transitivity.  Then \(g(B)\) is a block containing \(\alpha\), hence
+trivial or all by the previous paragraph.  Therefore \(B\) itself is trivial or
+all.
+\end{proof}
+
+\begin{observation}[Audited irreducibility and full symmetric groups]
+\label{obs:galois-window}
+For \(q=9,\dots,17\), the exact recurrence table and the mod-\(p\)
+factorization certificates in Appendix~\ref{app:certification} yield the degree
+sequence
+\[
+  (d_9,d_{10},d_{11},d_{12},d_{13},d_{14},d_{15},d_{16},d_{17})
+  =(7,9,9,13,11,13,11,13,13),
+\]
+and computationally certify that
+\[
+  \Pi_q \text{ is irreducible over }\QQ,
+  \qquad
+  \Gal(\Pi_q/\QQ)\cong S_{d_q}.
+\]
+Consequently \(\deg_{\QQ}(\lambda_q)=d_q\) throughout the audited window.
+\end{observation}
+
+\begin{proof}
+For each \(q\), Table~\ref{tab:appendix-recurrences-q9-17} gives the degree
+\(d_q\) of \(\Pi_q\).  Table~\ref{tab:galois-certificates-q9-17} records a
+prime \(p_{\mathrm{irr}}\) for which \(\Pi_q\bmod p_{\mathrm{irr}}\) is
+irreducible in \(\FF_{p_{\mathrm{irr}}}[t]\).  Since \(\Pi_q\) is monic with
+integer coefficients, Gauss's lemma certifies irreducibility over \(\QQ\).
+
+Let \(G_q:=\Gal(\Pi_q/\QQ)\le S_{d_q}\).  Irreducibility makes \(G_q\)
+transitive.  The factorization type \((d_q-1,1)\) in
+Table~\ref{tab:galois-certificates-q9-17} exhibits an \((d_q-1)\)-cycle, so
+\Cref{lem:nminus1-cycle-primitive} shows that \(G_q\) is primitive.  The same
+table also provides a factorization pattern whose suitable power yields a prime
+\(\ell_q\)-cycle with \(\ell_q\le d_q-3\), and Jordan's theorem
+\cite[Thm.~3.3A]{DixonMortimer1996} therefore gives
+\(A_{d_q}\subseteq G_q\).  Since \((d_q-1)\)-cycles are odd for
+\(d_q\in\{7,9,11,13\}\), one has \(G_q\not\subseteq A_{d_q}\).  Hence
+\(G_q=S_{d_q}\).  The degree statement for \(\lambda_q\) is then
+\Cref{prop:lambda-root-of-recurrence}.
+\end{proof}
+
+\begin{remark}[Audited corollaries]
+\label{rem:galois-window-consequences}
+Within the audited window, two numerical consequences follow directly from
+\Cref{obs:galois-window}.
+
+First, the set of unramified primes \(p\) for which \(\Pi_q\bmod p\) remains
+irreducible has Chebotarev density \(1/d_q\), because the proportion of
+\(d_q\)-cycles in \(S_{d_q}\) is \(1/d_q\).
+
+Second, define
+\[
+  D_q:=\frac{q\log 2-\log \lambda_q}{(q-1)\log\varphi}.
+\]
+If \(D_q=a/b\in\QQ\) is written in lowest terms, then
+\[
+  b\ge \left\lceil\frac{d_q}{2}\right\rceil.
+\]
+Indeed, the identity \(\lambda_q=2^q\varphi^{-(q-1)a/b}\) places \(\lambda_q\)
+inside \(\QQ(\varphi^{1/b})\), which has degree at most \(2b\) over \(\QQ\),
+while \Cref{obs:galois-window} gives \(\deg_{\QQ}(\lambda_q)=d_q\).
+\end{remark}
+
+\subsection{Linear disjointness in a four-polynomial block}
+
+\begin{table}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{6pt}
+\caption{Discriminant squareclass fingerprints for \(q\in\{12,13,14,15\}\)
+using Legendre symbols at the primes \(31,37,43,61\).  After the encoding
+\(-1\mapsto 1\), \(+1\mapsto 0\), the resulting \(4\times 4\) matrix has rank
+\(4\).}
+\label{tab:disc-squareclass-q12-15}
+\begin{tabular}{r r r r r}
+\toprule
+\(q\) & \(\left(\frac{\Disc(\Pi_q)}{31}\right)\) &
+\(\left(\frac{\Disc(\Pi_q)}{37}\right)\) &
+\(\left(\frac{\Disc(\Pi_q)}{43}\right)\) &
+\(\left(\frac{\Disc(\Pi_q)}{61}\right)\) \\
+\midrule
+12 & -1 & -1 & 1 & 1 \\
+13 & 1 & -1 & 1 & -1 \\
+14 & -1 & 1 & 1 & 1 \\
+15 & -1 & -1 & -1 & 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{observation}[Audited linear disjointness for \(q=12,13,14,15\)]
+\label{obs:linear-disjointness-window}
+Let \(L_q\) be the splitting field of \(\Pi_q\) for
+\(q\in\{12,13,14,15\}\).  The discriminant squareclass table in
+Appendix~\ref{app:certification}, together with the full symmetric-group audit
+of \Cref{obs:galois-window}, computationally certifies that
+\[
+  L_{12},L_{13},L_{14},L_{15}
+  \text{ are linearly disjoint over }\QQ,
+\]
+and hence that
+\[
+  \Gal(L_{12}L_{13}L_{14}L_{15}/\QQ)
+  \cong
+  S_{13}\times S_{11}\times S_{13}\times S_{11}.
+\]
+\end{observation}
+
+\begin{proof}
+By \Cref{obs:galois-window}, each \(L_q/\QQ\) has full symmetric Galois group,
+so its only nontrivial proper normal subgroup is \(A_{d_q}\), with quadratic
+subfield \(\QQ(\sqrt{\Disc(\Pi_q)})\).  The squareclass fingerprints in
+Table~\ref{tab:disc-squareclass-q12-15} are linearly independent in
+\(\QQ^\times/(\QQ^\times)^2\), so none of these quadratic discriminant fields
+lies in the compositum of the other three.  Since \(L_q\cap M_q\) is a normal
+subextension of \(L_q/\QQ\) for the compositum \(M_q\) of the remaining three
+splitting fields, the only possibilities are \(\QQ\), the discriminant
+quadratic field, or all of \(L_q\).  Squareclass independence rules out the
+latter two possibilities, so \(L_q\cap M_q=\QQ\) for each \(q\).  This is
+exactly linear disjointness, and the direct-product description of the Galois
+group follows.
+\end{proof}
+
+\begin{remark}[Audited product densities]
+\label{rem:product-density-window}
+Assuming the audited linear disjointness of
+\Cref{obs:linear-disjointness-window}, Chebotarev gives exact independence of
+Frobenius classes across the four factors.  In particular, the density of
+unramified primes for which all four polynomials
+\(\Pi_{12},\Pi_{13},\Pi_{14},\Pi_{15}\) remain irreducible is
+\[
+  \frac{1}{13}\cdot\frac{1}{11}\cdot\frac{1}{13}\cdot\frac{1}{11}
+  =\frac{1}{20449}.
+\]
+Equivalently,
+\[
+  -\log \delta_{\mathrm{irr}}=\log 20449.
+\]
+\end{remark}
+
+Audited high-precision secondary spectral fingerprints for the same window are
+tabulated in Appendix~\ref{app:certification}; they remain descriptive data
+and are not used in the deductions above.

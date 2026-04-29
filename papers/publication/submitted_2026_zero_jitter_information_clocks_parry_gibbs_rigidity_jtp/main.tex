@@ -1,0 +1,1403 @@
+\documentclass[pdflatex,sn-basic,Numbered]{sn-jnl}
+
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{enumitem}
+
+\theoremstyle{thmstyleone}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{thmstyletwo}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\theoremstyle{thmstylethree}
+\newtheorem{definition}[theorem]{Definition}
+
+\raggedbottom
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\KL}{\mathrm{KL}}
+
+\begin{document}
+
+\title[Tilt Dynamics of Cylinder Information]{Tilt Dynamics of Cylinder Information and the Parry Measure on the Golden-Mean Shift}
+
+\author[1]{\fnm{Haobo} \sur{Ma}}\email{auric@aelf.io}
+
+\author*[2]{\fnm{Wenlin} \sur{Zhang}}\email{e1327962@u.nus.edu}
+
+\affil[1]{\orgname{AELF PTE LTD.},
+  \orgaddress{\street{\#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd},
+  \city{Singapore}, \postcode{018981}, \country{Singapore}}}
+
+\affil[2]{\orgname{National University of Singapore},
+  \orgaddress{\city{Singapore}, \country{Singapore}}}
+
+\abstract{We study exponential tilts of cylinder information $\tau_n(x)=-\log\mu([x_0^{n-1}])$ in the one-step Markov family on the golden-mean shift. The tilted problem closes inside this family: after Doob normalization the tilted law is again a one-step Markov law~$\mu_{q_p(t)}$, and the parameter map satisfies $L(q_p(t))=(1-t)L(p)$ where $L(p)=\log((1-p)/p^2)$. We compute the large-deviation rate function in relative-entropy coordinates, identify the Parry measure as the unique zero-jitter law, and give an exact normal form decomposing $\tau_n-nh(p)$ into an occupation-number bulk term and an endpoint correction. The tilt structure extends to the free-energy level via a composition law $F_{q_p(t)}(s)=F_p(s+t-st)-(1-s)F_p(t)$, which yields a variance transfer formula and characterizes the Parry measure through the constancy of its R\'enyi entropy spectrum. For general mixing shifts of finite type, we establish a Parry-relative fluctuation normal form, prove that the Parry measure is the unique zero-jitter law in the full one-step Markov simplex, and show that the quadratic coefficient $\sigma^2_\tau\sim 2(\log\lambda-h)$ near the Parry point is universal.}
+
+\keywords{Golden-mean shift, Cylinder information, Parry measure, Exponential tilts, Asymptotic variance, Shifts of finite type}
+
+\pacs[MSC Classification]{37B10, 37A50, 37D35, 60F10}
+
+\maketitle
+
+\section{Introduction}
+
+Entropy, whether topological or measure-theoretic, gives a single number summarizing the complexity of a dynamical system. A finer question concerns the fluctuation structure of the \emph{cylinder information}
+\[
+\tau_n(x):=-\log\mu([x_0^{n-1}])
+\]
+around its linear growth rate. The Shannon--McMillan--Breiman theorem guarantees that $\tau_n/n$ converges to the entropy rate for ergodic measures, and central limit theorems, large-deviation principles, and related results describe the fluctuations for broad classes of mixing measures; see Haydn~\cite{Haydn2012} and Chazottes and Ugalde~\cite{ChazottesUgalde2005}. A natural next question is whether the \emph{exponential tilts} of~$\tau_n$---the measures obtained by reweighting orbits proportionally to $e^{t\tau_n}$---can be described explicitly in some concrete symbolic family.
+
+In this paper we carry out such a description for the golden-mean shift
+\[
+X_\phi:=\bigl\{x\in\{0,1\}^{\NN}: x_kx_{k+1}=0 \text{ for all } k\ge 0\bigr\}
+\]
+and the one-step Markov family $\mu_p$ on~$X_\phi$ (parametrized by the single free parameter $p=P_{00}\in(0,1)$). The Parry measure---the measure of maximal entropy, corresponding to $p=\phi^{-1}$---plays a distinguished role throughout.
+
+The basic observation is that exponential tilting preserves the family: after Doob normalization, the tilted law is again $\mu_{q_p(t)}$ for an explicit parameter $q_p(t)$. In the coordinate $L(p):=\log\frac{1-p}{p^2}$, the tilt map satisfies $L(q_p(t))=(1-t)L(p)$, and is thus conjugate to the linear map $u\mapsto(1-t)u$. The unit tilt sends every parameter to the Parry point~$\phi^{-1}$, and for $t\in(0,2)$ the Parry point is a global attractor.
+
+This leads to several consequences. The centered cylinder information admits an exact normal form (Theorem~\ref{thm:normal-form}) that decomposes $\tau_n-nh(p)$ into a bulk term proportional to the centered occupation number---with coefficient $L(p)$, which vanishes at the Parry point---and an endpoint correction. Theorem~\ref{thm:tilted-free-energy} gives the Doob-transform identification and an explicit scaled cumulant generating function. Corollary~\ref{cor:tilt-dynamics} shows that the tilt maps form a multiplicative semigroup, and Corollary~\ref{cor:tilted-ldp} expresses the large-deviation rate function in relative-entropy coordinates, recovering the identity $\log\phi-h(p)=D(\mu_p\|\mu_\phi)$ as a special case. For the Parry measure itself, $\tau_n-n\log\phi$ depends only on the two endpoints of the word (Theorem~\ref{thm:exact-clock}), which gives a three-point defect law and an exact bounded variance formula.
+
+The semigroup structure extends from the parameter level to the free-energy level: the composition law $F_{q_p(t)}(s)=F_p(s+t-st)-(1-s)F_p(t)$ (Theorem~\ref{thm:composition}) shows that tilting intertwines the entire fluctuation spectrum. An immediate corollary is a variance transfer formula $\sigma^2(q_p(t))=(1-t)^2 F_p''(t)$ (Corollary~\ref{cor:variance-transfer}), and a characterization of the Parry measure as the unique member of the family whose R\'enyi entropy rate is constant across all orders.
+
+While the general theory of large deviations for Markov additive functionals is well developed (see Kifer~\cite{Kifer1990} and Dembo and Zeitouni~\cite{DemboZeitouni2010}), what distinguishes the present setting is that the \emph{tilted measures stay in the same parametric family} and the resulting dynamics on the parameter interval can be linearized globally. We show that the tilt closure itself extends to every mixing shift of finite type (Proposition~\ref{prop:general-tilt}), but that linearization requires a one-dimensional parameter space---a condition the golden-mean shift satisfies naturally because the adjacency constraint $A_{11}=0$ fixes the second row of the transition matrix.
+
+Beyond tilt closure, the golden-mean results lift to the full Markov simplex of any mixing SFT. Theorem~\ref{thm:general-normal-form} provides a Parry-relative fluctuation normal form valid for all one-step Markov measures, Theorem~\ref{thm:general-rigidity} proves Parry rigidity via a finite-dimensional Perron--Frobenius argument, and Theorem~\ref{thm:universal} establishes the universality of the quadratic coefficient~$2$ in $\sigma^2_\tau\sim 2(\log\lambda-h)$.
+
+The connection to the broader Bowen--Ruelle setting is made in Theorem~\ref{thm:gibbs}: for H\"older equilibrium states on a mixing shift of finite type, zero asymptotic variance of~$\tau_n$ (``zero jitter'') is equivalent to the potential being cohomologous to a constant. This is a standard consequence of exponential decay of correlations for Gibbs measures \cite{Bowen1975,Ruelle1978,ParryPollicott1990,Baladi2000}, and the golden-mean calculations of Sections~3--4 provide a fully explicit instance.
+
+The classical background comes from Parry's intrinsic Markov chains~\cite{Parry1964} and from the Bowen--Ruelle theory \cite{Bowen1975,Ruelle1978,ParryPollicott1990,Walters1982}. The martingale approach to variance asymptotics for stationary processes goes back to Gordin~\cite{Gordin1969}; see Baladi~\cite{Baladi2000} for a modern treatment via transfer operators. The information-theoretic perspective on cylinder measures appears in Shields~\cite{Shields1996} and Kontoyiannis and Verd\'u~\cite{KontoyiannisVerdu2014}. Large deviations for symbolic systems are further studied in Pollicott and Sharp~\cite{PollicottSharp2009}; intrinsic ergodicity beyond the specification property is treated by Climenhaga and Thompson~\cite{ClimenhagaThompson2012}. More recent discussions of distinguished symbolic measures include the natural-measure perspective of Hu and Lin~\cite{HuLin2013} and the characteristic-measure viewpoint of Frisch and Tamuz~\cite{FrischTamuz2022}.
+
+The paper is organized as follows. We fix notation and recall the Parry measure in Section~2. Section~3 contains the exact finite-time formulas at the Parry point. Section~4 develops the full-parameter normal form, the tilt dynamics, the free-energy composition law, large deviations, and the entropy-deficit identities---this is the heart of the paper. In Section~5 we extend the theory to general mixing SFTs: tilt closure, the Parry-relative normal form, Parry rigidity in the Markov simplex, and tangential linearization. Section~6 treats H\"older equilibrium states, the second-order comparison near the Parry point, and the universality of the quadratic coefficient~$2$. We close with open questions in Section~7.
+
+\section{Preliminaries}
+
+Let
+\[
+A=\begin{pmatrix}1&1\\1&0\end{pmatrix}
+\]
+be the adjacency matrix of the golden-mean shift. Its Perron eigenvalue is the golden ratio
+\[
+\phi:=\frac{1+\sqrt{5}}{2},
+\]
+with right and left Perron eigenvectors
+\[
+r=(\phi,1)^\top,
+\qquad
+\ell=(1,\phi^{-1})^\top,
+\qquad
+\ell^\top r=\sqrt{5}.
+\]
+
+\begin{definition}[Cylinder information and asymptotic jitter]
+Let $\mu$ be a stationary law on $X_\phi$. For $x\in X_\phi$ and $n\ge 1$, define
+\[
+\tau_n(x):=-\log\mu([x_0^{n-1}]).
+\]
+If the limit exists, the asymptotic jitter rate is
+\[
+\sigma_\tau^2(\mu):=\lim_{n\to\infty}\frac{1}{n}\Var_\mu(\tau_n).
+\]
+We say that $\mu$ has \emph{zero jitter} when $\sigma_\tau^2(\mu)=0$. (The term ``jitter'' is used as a shorthand for the asymptotic variance rate of cylinder information; it is not standard terminology.)
+\end{definition}
+
+The Parry measure $\mu_\phi$ on $X_\phi$ is the stationary Markov law with transition matrix
+\[
+P_\phi=
+\begin{pmatrix}
+\phi^{-1} & \phi^{-2} \\
+1 & 0
+\end{pmatrix}
+\]
+and stationary distribution
+\[
+\pi_\phi=
+\left(\frac{\phi}{\sqrt{5}},\frac{1}{\phi\sqrt{5}}\right)
+=
+\left(\frac{5+\sqrt{5}}{10},\frac{5-\sqrt{5}}{10}\right).
+\]
+
+More generally, every ergodic one-step Markov law on $X_\phi$ is parametrized by
+\[
+P_p=
+\begin{pmatrix}
+p & 1-p \\
+1 & 0
+\end{pmatrix},
+\qquad 0<p<1,
+\]
+with stationary vector
+\[
+\pi_p=\left(\frac{1}{2-p},\frac{1-p}{2-p}\right).
+\]
+Its entropy rate is
+\[
+h(p)=\frac{H_2(p)}{2-p},
+\qquad
+H_2(p):=-p\log p-(1-p)\log(1-p).
+\]
+
+\section{The Parry Measure}
+
+We begin with exact formulas for cylinder information under the Parry measure. The key point is that $\tau_n$ decomposes into a linear term and a correction that depends only on the first and last symbol.
+
+\begin{theorem}[Parry cylinder formula]\label{thm:exact-clock}
+Let $\mu_\phi$ be the Parry measure on $X_\phi$. For every legal word $a_{0:n-1}\in X_\phi$,
+\begin{equation}\label{eq:exact-clock}
+\tau_n(a_{0:n-1})
+=
+(n-1)\log\phi+\log\sqrt{5}-\log(\ell_{a_0}r_{a_{n-1}}).
+\end{equation}
+Equivalently,
+\begin{equation}\label{eq:endpoint-trichotomy}
+\tau_n(a_{0:n-1})-n\log\phi
+=
+\log\sqrt{5}-2\log\phi+(a_0+a_{n-1})\log\phi,
+\end{equation}
+so the defect from the linear term $n\log\phi$ depends only on the two endpoints of the word and takes exactly three values.
+\leanverified{paper_zero_jitter_exact_clock}
+\end{theorem}
+
+\begin{proof}
+For any irreducible shift of finite type with $0$-$1$ adjacency matrix $A$, Perron eigenvalue $\lambda$, right eigenvector $r$, and left eigenvector $\ell$, the Parry measure of a legal cylinder satisfies
+\[
+\mu_P([a_0\cdots a_{n-1}])
+=
+\frac{\ell_{a_0}r_{a_{n-1}}}{\ell^\top r}\lambda^{-(n-1)}.
+\]
+Indeed, each legal transition contributes the factor $r_{a_{k+1}}/(\lambda r_{a_k})$, and the telescoping product leaves $r_{a_{n-1}}/(\lambda^{n-1}r_{a_0})$, which is multiplied by the initial weight $\ell_{a_0}r_{a_0}/(\ell^\top r)$. Specializing to the golden-mean shift gives \eqref{eq:exact-clock}. Since
+\[
+\ell_0r_0=\phi,\qquad \ell_0r_1=1,\qquad \ell_1r_0=1,\qquad \ell_1r_1=\phi^{-1},
+\]
+formula \eqref{eq:endpoint-trichotomy} follows immediately.
+\end{proof}
+
+\begin{corollary}[Endpoint law and finite-time variance]\label{cor:finite-time-law}
+\leanverified{paper_zero_jitter_finite_time_law}
+Let
+\[
+D_n:=\tau_n-n\log\phi.
+\]
+Under the Parry measure $\mu_\phi$, $D_n$ is supported on the three values
+\[
+d_-:=\log\sqrt{5}-2\log\phi,\qquad
+d_0:=\log\sqrt{5}-\log\phi,\qquad
+d_+:=\log\sqrt{5},
+\]
+with exact probabilities
+\begin{align}
+\PP_{\mu_\phi}(D_n=d_-)&=\left(\frac{5+\sqrt{5}}{10}\right)^2+\frac{1}{5}(-\phi^{-2})^{n-1}, \label{eq:defect-law-minus}\\
+\PP_{\mu_\phi}(D_n=d_0)&=\frac{2}{5}\bigl(1-(-\phi^{-2})^{n-1}\bigr), \label{eq:defect-law-zero}\\
+\PP_{\mu_\phi}(D_n=d_+)&=\left(\frac{5-\sqrt{5}}{10}\right)^2+\frac{1}{5}(-\phi^{-2})^{n-1}. \label{eq:defect-law-plus}
+\end{align}
+Consequently,
+\begin{equation}\label{eq:finite-time-variance}
+\Var_{\mu_\phi}(\tau_n)
+=
+\frac{2}{5}\bigl(1+(-\phi^{-2})^{n-1}\bigr)(\log\phi)^2.
+\end{equation}
+In particular, the Parry measure has bounded finite-time variance for cylinder information and
+\[
+\Var_{\mu_\phi}(\tau_n)\longrightarrow \frac{2}{5}(\log\phi)^2.
+\]
+\end{corollary}
+
+\begin{proof}
+By \eqref{eq:endpoint-trichotomy},
+\[
+D_n=d_-+(X_0+X_{n-1})\log\phi.
+\]
+Hence the three defect values correspond to the endpoint sums $X_0+X_{n-1}\in\{0,1,2\}$. Since $\mu_\phi$ is stationary Markov,
+\[
+\PP(X_0=i,X_{n-1}=j)=\pi_{\phi,i}(P_\phi^{n-1})_{ij}.
+\]
+The second eigenvalue of $P_\phi$ is $-\phi^{-2}$, and a direct two-state computation gives
+\[
+(P_\phi^m)_{11}=\pi_{\phi,1}+\pi_{\phi,0}(-\phi^{-2})^m,
+\qquad
+(P_\phi^m)_{01}=\pi_{\phi,1}-\pi_{\phi,1}(-\phi^{-2})^m,
+\]
+with analogous formulas for the remaining entries. Substituting $m=n-1$, together with
+\[
+\pi_{\phi,0}\pi_{\phi,1}=\frac{1}{5},
+\]
+yields \eqref{eq:defect-law-minus}--\eqref{eq:defect-law-plus}.
+
+For the variance, write
+\[
+D_n=d_-+(I_0+I_{n-1})\log\phi,
+\qquad
+I_k:=\mathbf{1}_{\{X_k=1\}}.
+\]
+Therefore
+\[
+\Var_{\mu_\phi}(\tau_n)=\Var_{\mu_\phi}(D_n)
+=(\log\phi)^2\Var(I_0+I_{n-1}).
+\]
+Because $\Var(I_0)=\pi_{\phi,0}\pi_{\phi,1}=1/5$ and
+\[
+\mathrm{Cov}(I_0,I_{n-1})
+=
+\pi_{\phi,1}(P_\phi^{n-1})_{11}-\pi_{\phi,1}^2
+=
+\frac{1}{5}(-\phi^{-2})^{n-1},
+\]
+we obtain
+\[
+\Var(I_0+I_{n-1})
+=
+2\Var(I_0)+2\mathrm{Cov}(I_0,I_{n-1})
+=
+\frac{2}{5}\bigl(1+(-\phi^{-2})^{n-1}\bigr),
+\]
+which is exactly \eqref{eq:finite-time-variance}.
+\end{proof}
+
+\begin{remark}
+The Parry measure is therefore more rigid than the asymptotic definition of zero jitter alone suggests. Not only is $\Var(\tau_n)=o(n)$, but the entire finite-time defect law is explicit and its transient oscillation is governed by the subleading eigenvalue $-\phi^{-2}$ of the Parry transition matrix.
+\end{remark}
+
+\section{The One-Step Markov Family}
+
+We now turn to the full one-step Markov family $\{\mu_p : 0<p<1\}$ on~$X_\phi$. Our starting point is an exact decomposition of the centered cylinder information that holds for every parameter~$p$.
+
+\begin{theorem}[Full-parameter information normal form]\label{thm:normal-form}
+\leanverified{paper_zero_jitter_normal_form}
+For every $p\in(0,1)$, $n\ge 1$, and admissible word $x_0^{n-1}\in X_\phi$, let $T_n(x):=\sum_{k=0}^{n-1}x_k$ denote the occupation number of symbol~$1$. Then
+\begin{equation}\label{eq:normal-form}
+\tau_n(x) - nh(p) = -L(p)\!\left(T_n(x)-\frac{n(1-p)}{2-p}\right)+B_p(x_0,x_{n-1}),
+\end{equation}
+where $B_p(i,j):=\log(2-p)+(1-i-j)\log p$. In particular, the linear term in $T_n$ vanishes if and only if $L(p)=0$, i.e., $p=\phi^{-1}$, recovering the endpoint defect law of Theorem~\ref{thm:exact-clock} as the degeneration of \eqref{eq:normal-form} at the Parry point.
+\end{theorem}
+
+\begin{proof}
+In the golden-mean shift, each symbol~$1$ forces a subsequent~$0$, so the edge counts in an admissible word of length~$n$ satisfy
+\[
+N_{10}=T_n-x_{n-1},\quad N_{01}=T_n-x_0,\quad N_{00}=n-1-2T_n+x_0+x_{n-1}.
+\]
+Since $\tau_n=-\log\pi_p(x_0)-N_{00}\log p-N_{01}\log(1-p)$ and $-\log\pi_p(x_0)=\log(2-p)-x_0\log(1-p)$, the $x_0\log(1-p)$ terms cancel and
+\[
+\tau_n=\log(2-p)-(n-1)\log p-L(p)\,T_n-(x_0+x_{n-1})\log p,
+\]
+where we used $2\log p-\log(1-p)=-L(p)$. On the other hand, $h(p)=-\log p-(1-p)L(p)/(2-p)$ (a direct rewriting of $h=H_2/(2-p)$), so $nh(p)=-n\log p-n(1-p)L(p)/(2-p)$. Subtracting gives \eqref{eq:normal-form}.
+\end{proof}
+
+\begin{remark}\label{rem:normal-form}
+The decomposition \eqref{eq:normal-form} separates the fluctuations of $\tau_n$ into a bulk term proportional to the centered occupation number $T_n-\EE_{\mu_p}T_n$ and a boundary correction that depends only on the two endpoints. The bulk coefficient is~$L(p)$, which vanishes precisely at the Parry point. This explains \emph{structurally} why the Parry measure has bounded variance: its cylinder information is insensitive to the interior of the word.
+\end{remark}
+
+We now derive a general criterion for the vanishing of asymptotic variance, based on the Poisson equation.
+
+\begin{lemma}[Zero-variance criterion for finite-state Markov additive functionals]\label{lem:markov-zero-variance}
+\leanverified{paper_zero_jitter_markov_zero_variance}
+Let $(X_n)_{n\ge 0}$ be an ergodic finite-state Markov chain with transition matrix $P$, stationary distribution $\pi$, and edge observable $g(i,j)$ on allowed transitions. Define
+\[
+S_n:=\sum_{k=0}^{n-2}g(X_k,X_{k+1}),
+\qquad
+h:=\EE_\pi[g(X_0,X_1)],
+\qquad
+\bar g(i):=\sum_jP(i,j)g(i,j).
+\]
+Let $v$ solve the Poisson equation
+\[
+(P-I)v=h\mathbf{1}-\bar g.
+\]
+Then
+\[
+S_n-(n-1)h=M_n+v(X_0)-v(X_{n-1}),
+\]
+where $(M_n)$ is a martingale with stationary increments
+\[
+m(i,j):=g(i,j)-h+v(j)-v(i).
+\]
+Consequently,
+\[
+\lim_{n\to\infty}\frac{1}{n}\Var(S_n)=\EE_\pi[m(X_0,X_1)^2],
+\]
+and this limit vanishes if and only if
+\[
+g(i,j)=h+u(i)-u(j)
+\]
+for every allowed transition $(i,j)$, for some function $u$ on the state space.
+\end{lemma}
+
+\begin{proof}
+The Poisson equation gives
+\[
+g(i,j)-h=m(i,j)+v(i)-v(j),
+\]
+so summing along a path yields the stated decomposition. Since the increments $m(X_k,X_{k+1})$ form a stationary square-integrable martingale difference sequence,
+\[
+\Var(M_n)=\sum_{k=0}^{n-2}\EE[m(X_k,X_{k+1})^2]=(n-1)\EE_\pi[m(X_0,X_1)^2].
+\]
+The boundary term $v(X_0)-v(X_{n-1})$ is uniformly bounded, so dividing by $n$ gives the asymptotic variance formula. The limit is zero if and only if $m(X_0,X_1)=0$ almost surely, which is equivalent to
+\[
+g(i,j)=h+v(i)-v(j)
+\]
+on every allowed edge.
+\end{proof}
+
+\begin{theorem}[Zero jitter in the one-step Markov family]\label{thm:parry-rigidity}
+\leanverified{paper_zero_jitter_parry_rigidity}
+Among ergodic one-step Markov laws on the golden-mean shift, the Parry measure is the unique zero-jitter measure:
+\[
+\sigma_\tau^2(\mu_p)=0
+\quad\Longleftrightarrow\quad
+p=\phi^{-1}.
+\]
+For every $p\neq \phi^{-1}$, the centered cylinder information satisfies the central limit theorem
+\[
+\frac{\tau_n-nh(p)}{\sqrt{n}}
+\Rightarrow
+\mathcal{N}(0,\sigma^2(p))
+\]
+with strictly positive variance.
+\end{theorem}
+
+\begin{proof}
+Let $g_p(i,j):=-\log P_p(i,j)$ be the edge information function. The cylinder information under $\mu_p$ is
+\[
+\tau_n=-\log \pi_p(X_0)+\sum_{k=0}^{n-2}g_p(X_k,X_{k+1}).
+\]
+If $g_p$ is cohomologous to a constant, say
+\[
+g_p(i,j)=c+u(i)-u(j),
+\]
+then the Birkhoff sum telescopes and $\Var(\tau_n)=O(1)$, hence $\sigma_\tau^2(\mu_p)=0$.
+
+Conversely, if $\sigma_\tau^2(\mu_p)=0$, then $\tau_n$ and
+\[
+\sum_{k=0}^{n-2}g_p(X_k,X_{k+1})
+\]
+differ only by the bounded term $-\log\pi_p(X_0)$, so they have the same asymptotic variance rate. Lemma~\ref{lem:markov-zero-variance} therefore implies that $g_p$ is cohomologous to a constant. Writing the coboundary equations for the three allowed transitions,
+\[
+-\log p=c,\qquad -\log(1-p)=c+u(0)-u(1),\qquad 0=c+u(1)-u(0),
+\]
+one obtains
+\[
+-\log(1-p)=-2\log p,
+\]
+equivalently
+\[
+1-p=p^2.
+\]
+The unique solution in $(0,1)$ is $p=\phi^{-1}$, namely the Parry measure.
+
+For $p\neq \phi^{-1}$, the observable $g_p$ is not cohomologous to a constant. The standard central limit theorem for additive functionals of ergodic Markov chains \cite{Gordin1969} then yields the stated Gaussian fluctuations.
+\end{proof}
+
+\begin{proposition}[Asymptotic jitter formula]\label{prop:variance-formula}
+For the Markov law $\mu_p$ on $X_\phi$,
+\begin{equation}\label{eq:variance-formula}
+\sigma^2(p)
+=
+\frac{p(1-p)}{(2-p)^3}
+\left(\log\frac{1-p}{p^2}\right)^2.
+\end{equation}
+In particular, $\sigma^2(p)=0$ if and only if $p=\phi^{-1}$.
+\end{proposition}
+
+\begin{proof}
+Let $S_n:=\sum_{k=0}^{n-2}g_p(X_k,X_{k+1})$. Since
+\[
+\tau_n=-\log\pi_p(X_0)+S_n,
+\]
+the difference between $\tau_n$ and $S_n$ is uniformly bounded in $n$, so they have the same asymptotic variance rate. By Lemma~\ref{lem:markov-zero-variance}, it therefore suffices to solve the Poisson equation
+\[
+(P_p-I)v=h(p)\mathbf{1}-\bar{g},
+\qquad
+\bar{g}(i):=\sum_jP_p(i,j)g_p(i,j).
+\]
+Fixing $v(1)=0$, one obtains $v(0)=h(p)$ and martingale increments
+\[
+m(0,0)=-\log p-h(p),\qquad
+m(0,1)=-\log(1-p)-2h(p),\qquad
+m(1,0)=0.
+\]
+Lemma~\ref{lem:markov-zero-variance} now yields
+\[
+\sigma^2(p)=\EE_{\pi_p}[m(X_0,X_1)^2]
+=
+\frac{1}{2-p}\left(p\,m(0,0)^2+(1-p)\,m(0,1)^2\right).
+\]
+Writing
+\[
+a:=-\log p,\qquad b:=-\log(1-p),
+\]
+and using $h(p)=(pa+(1-p)b)/(2-p)$, one finds
+\[
+a-h(p)=\frac{1-p}{2-p}(2a-b),
+\qquad
+b-2h(p)=-\frac{p}{2-p}(2a-b).
+\]
+Substituting these identities into the previous expression yields
+\[
+\sigma^2(p)
+=
+\frac{p(1-p)}{(2-p)^3}(2a-b)^2
+=
+\frac{p(1-p)}{(2-p)^3}\left(\log\frac{1-p}{p^2}\right)^2,
+\]
+which is \eqref{eq:variance-formula}.
+\end{proof}
+
+The next result is the heart of the paper. It shows that exponential tilting of cylinder information does not leave the one-step Markov family, and that the induced dynamics on the parameter interval are conjugate to linear multiplication.
+
+\begin{theorem}[Tilted free energy and the Parry measure]\label{thm:tilted-free-energy}
+\leanverified{paper_zero_jitter_tilted_free_energy}
+For $p\in(0,1)$ and $t\in\RR$, define
+\[
+F_p(t):=\lim_{n\to\infty}\frac{1}{n}\log \EE_{\mu_p}\bigl[e^{t\tau_n}\bigr].
+\]
+Let
+\[
+B_p(t):=
+\begin{pmatrix}
+p^{1-t} & (1-p)^{1-t}\\
+1 & 0
+\end{pmatrix}.
+\]
+Then the following hold.
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item The limit exists and
+  \begin{equation}\label{eq:free-energy}
+  F_p(t)=\log\rho_p(t),
+  \qquad
+  \rho_p(t):=
+  \frac{p^{1-t}+\sqrt{p^{2(1-t)}+4(1-p)^{1-t}}}{2}.
+  \end{equation}
+  \item If
+  \begin{equation}\label{eq:qpt-definition}
+  q_p(t):=\frac{p^{1-t}}{\rho_p(t)},
+  \end{equation}
+  then the Doob transform of $B_p(t)$ is exactly $P_{q_p(t)}$. Equivalently,
+  \begin{equation}\label{eq:defect-coordinate-flow}
+  \frac{1-q_p(t)}{q_p(t)^2}
+  =
+  \left(\frac{1-p}{p^2}\right)^{1-t},
+  \qquad\text{that is}\qquad
+  L(q_p(t))=(1-t)L(p),
+  \end{equation}
+  where $L(p):=\log\frac{1-p}{p^2}$.
+  \item The tilt maps $T_t(p):=q_p(t)$ satisfy
+  \begin{equation}\label{eq:tilt-semigroup}
+  T_s(T_t(p))=T_{s+t-st}(p)
+  \end{equation}
+  for all $s,t\in\RR$. In particular,
+  \begin{equation}\label{eq:unit-tilt-parry}
+  q_p(1)=\phi^{-1}
+  \qquad\text{for every }p\in(0,1).
+  \end{equation}
+  \item The function $F_p$ is real analytic on $\RR$ and
+  \begin{equation}\label{eq:Fprime-cross-entropy}
+  F_p'(t)
+  =
+  \frac{-q_p(t)\log p-(1-q_p(t))\log(1-p)}{2-q_p(t)}
+  =
+  h(q_p(t))+D(\mu_{q_p(t)}\|\mu_p).
+  \end{equation}
+  Consequently,
+  \begin{equation}\label{eq:relative-entropy-along-tilt}
+  tF_p'(t)-F_p(t)=D(\mu_{q_p(t)}\|\mu_p).
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+For a legal word $a_{0:n-1}$,
+\[
+\mu_p([a_0^{n-1}])=\pi_p(a_0)\prod_{k=0}^{n-2}P_p(a_k,a_{k+1}).
+\]
+Hence
+\[
+\EE_{\mu_p}[e^{t\tau_n}]
+=
+\sum_{a_0^{n-1}\in X_\phi}\mu_p([a_0^{n-1}])^{1-t}
+=
+\alpha_p(t)\,B_p(t)^{n-1}\mathbf{1},
+\]
+where
+\[
+\alpha_p(t):=(\pi_{p,0}^{1-t},\pi_{p,1}^{1-t}),
+\]
+
+The matrix $B_p(t)$ is primitive, so Perron--Frobenius yields
+\[
+\lim_{n\to\infty}\frac{1}{n}\log \EE_{\mu_p}[e^{t\tau_n}]
+=
+\log\rho(B_p(t)).
+\]
+The Perron eigenvalue of $B_p(t)$ is the positive root of
+\[
+\lambda^2-p^{1-t}\lambda-(1-p)^{1-t}=0,
+\]
+which is exactly $\rho_p(t)$ in \eqref{eq:free-energy}. This proves (i).
+
+For (ii), note that $r_t:=(\rho_p(t),1)^\top$ is a positive right Perron eigenvector of $B_p(t)$. The normalized tilt is therefore the Markov kernel
+\[
+Q_t(i,j):=\frac{B_p(t)_{ij}\,r_t(j)}{\rho_p(t)\,r_t(i)}.
+\]
+A direct computation gives
+\[
+Q_t=
+\begin{pmatrix}
+\dfrac{p^{1-t}}{\rho_p(t)} & \dfrac{(1-p)^{1-t}}{\rho_p(t)^2}\\[1.5ex]
+1 & 0
+\end{pmatrix}
+=
+\begin{pmatrix}
+q_p(t) & 1-q_p(t)\\
+1 & 0
+\end{pmatrix}
+=P_{q_p(t)},
+\]
+where the identity $1-q_p(t)=(1-p)^{1-t}/\rho_p(t)^2$ follows from the eigenvalue equation for $\rho_p(t)$. Consequently,
+\[
+\frac{1-q_p(t)}{q_p(t)^2}
+=
+\frac{(1-p)^{1-t}\rho_p(t)^{-2}}{p^{2(1-t)}\rho_p(t)^{-2}}
+=
+\left(\frac{1-p}{p^2}\right)^{1-t},
+\]
+which is \eqref{eq:defect-coordinate-flow}.
+
+Since $L'(p)=-\frac{1}{1-p}-\frac{2}{p}<0$, the map $L:(0,1)\to\RR$ is strictly decreasing and therefore injective. Applying \eqref{eq:defect-coordinate-flow} twice gives
+\[
+L(T_s(T_t(p)))=(1-s)L(T_t(p))=(1-s)(1-t)L(p),
+\]
+while
+\[
+L(T_{s+t-st}(p))=(1-(s+t-st))L(p)=(1-s)(1-t)L(p).
+\]
+Injectivity of $L$ proves \eqref{eq:tilt-semigroup}. Setting $t=1$ in \eqref{eq:defect-coordinate-flow} yields
+\[
+\frac{1-q_p(1)}{q_p(1)^2}=1,
+\]
+so $q_p(1)$ is the unique solution of $1-q=q^2$ in $(0,1)$, namely $\phi^{-1}$. This proves (iii).
+
+For (iv), differentiate the Perron equation
+\[
+\rho_p(t)^2-p^{1-t}\rho_p(t)-(1-p)^{1-t}=0.
+\]
+Since
+\[
+\frac{d}{dt}p^{1-t}=-p^{1-t}\log p,
+\qquad
+\frac{d}{dt}(1-p)^{1-t}=-(1-p)^{1-t}\log(1-p),
+\]
+we obtain
+\[
+\rho_p'(t)\bigl(2\rho_p(t)-p^{1-t}\bigr)
+=
+-p^{1-t}\rho_p(t)\log p-(1-p)^{1-t}\log(1-p).
+\]
+Dividing by $\rho_p(t)^2$ and using
+\[
+\frac{p^{1-t}}{\rho_p(t)}=q_p(t),
+\qquad
+\frac{(1-p)^{1-t}}{\rho_p(t)^2}=1-q_p(t),
+\qquad
+\frac{2\rho_p(t)-p^{1-t}}{\rho_p(t)}=2-q_p(t),
+\]
+we find
+\[
+F_p'(t)=\frac{\rho_p'(t)}{\rho_p(t)}
+=
+\frac{-q_p(t)\log p-(1-q_p(t))\log(1-p)}{2-q_p(t)}.
+\]
+This is the cross-entropy rate of the Markov law $\mu_{q_p(t)}$ relative to the kernel $P_p$, so
+\[
+F_p'(t)=h(q_p(t))+D(\mu_{q_p(t)}\|\mu_p).
+\]
+Finally, for stationary one-step Markov laws on the same support,
+\[
+D(\mu_q\|\mu_p)
+=
+\frac{1}{2-q}
+\left[
+q\log\frac{q}{p}+(1-q)\log\frac{1-q}{1-p}
+\right].
+\]
+With $q=q_p(t)$, the identities
+\[
+\log\frac{q_p(t)}{p}=-t\log p-F_p(t),
+\qquad
+\log\frac{1-q_p(t)}{1-p}=-t\log(1-p)-2F_p(t)
+\]
+follow from \eqref{eq:qpt-definition} and the formula for $1-q_p(t)$ above. Substituting them into the relative-entropy formula yields
+\[
+D(\mu_{q_p(t)}\|\mu_p)=tF_p'(t)-F_p(t),
+\]
+which is \eqref{eq:relative-entropy-along-tilt}.
+\end{proof}
+
+\begin{corollary}[Dynamics of the tilt maps]\label{cor:tilt-dynamics}
+\leanverified{paper_zero_jitter_tilt_dynamics}
+For each fixed $t\in\RR$, let $T_t:(0,1)\to(0,1)$ be given by $T_t(p)=q_p(t)$. Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item $L\circ T_t=(1-t)L$, so $T_t$ is conjugate, via the strictly decreasing coordinate $L$, to the linear map $u\mapsto (1-t)u$ on $\RR$.
+  \item For every $n\ge 1$,
+  \begin{equation}\label{eq:iterate-formula}
+  T_t^{\,n}=T_{1-(1-t)^n}.
+  \end{equation}
+  \item If $0<t<2$, then $\phi^{-1}$ is the unique fixed point of $T_t$ and is globally attracting:
+  \begin{equation}\label{eq:global-attractor}
+  \bigl|L(T_t^{\,n}(p))\bigr|=|1-t|^n\,|L(p)|
+  \longrightarrow 0
+  \qquad\text{for every }p\in(0,1).
+  \end{equation}
+  In particular, $T_t^{\,n}(p)\to \phi^{-1}$ for every $p\in(0,1)$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+Part (i) is exactly \eqref{eq:defect-coordinate-flow}. Iterating (i) gives
+\[
+L(T_t^{\,n}(p))=(1-t)^nL(p).
+\]
+Since
+\[
+L(T_{1-(1-t)^n}(p))=(1-(1-(1-t)^n))L(p)=(1-t)^nL(p),
+\]
+injectivity of $L$ proves \eqref{eq:iterate-formula}. If $t\neq 0$ and $T_t(p)=p$, then $(1-t)L(p)=L(p)$, hence $L(p)=0$ and therefore $p=\phi^{-1}$. This proves uniqueness of the fixed point. Finally, if $0<t<2$, then $|1-t|<1$, and \eqref{eq:global-attractor} follows immediately from the iterated formula for $L(T_t^{\,n}(p))$.
+\end{proof}
+
+The semigroup structure extends from the parameter space to the free-energy level. Since the Perron eigenvalue $\rho_p(t)$ satisfies a quadratic whose coefficients are entrywise powers of the transition probabilities, composing two tilts produces a factorization of characteristic polynomials that yields a global identity for the scaled cumulant generating function.
+
+\begin{theorem}[Free-energy composition law]\label{thm:composition}
+\leanverified{paper_zero_jitter_free_energy_composition}
+For the one-step Markov family on $X_\phi$, the scaled cumulant generating functions satisfy
+\begin{equation}\label{eq:composition}
+F_{q_p(t)}(s) = F_p(s+t-st) - (1-s)\,F_p(t)
+\end{equation}
+for all $p\in(0,1)$ and all $s,t\in\RR$. Consequently:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item The entropy rate of the tilted measure satisfies
+  \begin{equation}\label{eq:entropy-composition}
+  h(q_p(t)) = (1-t)\,F_p'(t) + F_p(t).
+  \end{equation}
+  \item The R\'enyi entropy rate
+  \[
+  R_\alpha(p):=\frac{1}{1-\alpha}\,F_p(1-\alpha), \qquad \alpha>0,\;\alpha\neq 1,
+  \]
+  satisfies $R_\alpha(\phi^{-1})=\log\phi$ for every $\alpha>0$, $\alpha\neq 1$. Since $R_1(\phi^{-1})=h(\phi^{-1})=\log\phi$ as well, the R\'enyi spectrum of the Parry measure is constant across all orders, and among one-step Markov laws on~$X_\phi$ this constancy characterizes the Parry measure.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+The Perron eigenvalue $\rho_{q_p(t)}(s)$ satisfies
+\[
+\lambda^2 - q_p(t)^{1-s}\,\lambda - (1-q_p(t))^{1-s}=0.
+\]
+Substituting $q_p(t)=p^{1-t}/\rho_p(t)$ and $1-q_p(t)=(1-p)^{1-t}/\rho_p(t)^2$ from Theorem~\ref{thm:tilted-free-energy}(ii) and setting $\Lambda:=\rho_p(t)^{1-s}\,\rho_{q_p(t)}(s)$, one obtains
+\[
+\Lambda^2 - p^{(1-s)(1-t)}\Lambda - (1-p)^{(1-s)(1-t)}=0.
+\]
+Since $(1-s)(1-t)=1-(s+t-st)$, this is the characteristic equation for $\rho_p(s+t-st)$. Both $\Lambda$ and $\rho_p(s+t-st)$ are positive roots of the same quadratic, hence
+\[
+\rho_p(t)^{1-s}\,\rho_{q_p(t)}(s)=\rho_p(s+t-st).
+\]
+Taking logarithms yields \eqref{eq:composition}. Part~(i) follows by differentiating at $s=0$ and using $F_q'(0)=h(q)$. For~(ii), set $t=1$ in \eqref{eq:composition}: since $q_p(1)=\phi^{-1}$ and $s+1-s=1$,
+\[
+F_{\phi^{-1}}(s) = F_p(1)-(1-s)\,F_p(1)=s\log\phi,
+\]
+so $R_\alpha(\phi^{-1})=F_{\phi^{-1}}(1-\alpha)/(1-\alpha)=(1-\alpha)\log\phi/(1-\alpha)=\log\phi$. Conversely, if $R_\alpha(p)$ is constant in $\alpha$, then in particular $\lim_{\alpha\to 1}R_\alpha(p)=h(p)$ equals $R_0(p)=F_p(1)=\log\phi$, so $h(p)=\log\phi$ and $p=\phi^{-1}$.
+\end{proof}
+
+\begin{corollary}[Variance transfer under tilts]\label{cor:variance-transfer}
+\leanverified{paper_zero_jitter_variance_transfer}
+The asymptotic jitter of the tilted measure satisfies
+\begin{equation}\label{eq:variance-transfer}
+\sigma^2(q_p(t)) = (1-t)^2\,F_p''(t).
+\end{equation}
+Equivalently, using Proposition~\ref{prop:variance-formula} and $L(q_p(t))=(1-t)L(p)$,
+\begin{equation}\label{eq:Fpp-explicit}
+F_p''(t) = \frac{q_p(t)\,(1-q_p(t))}{(2-q_p(t))^3}\,L(p)^2.
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Differentiating \eqref{eq:composition} twice with respect to $s$ gives $F_{q_p(t)}''(s)=(1-t)^2\,F_p''(s+t-st)$. Setting $s=0$ and using $F_q''(0)=\sigma^2(q)$ yields \eqref{eq:variance-transfer}. For \eqref{eq:Fpp-explicit}, substitute the explicit formula $\sigma^2(q)=q(1-q)(2-q)^{-3}L(q)^2$ with $q=q_p(t)$ and $L(q_p(t))=(1-t)L(p)$ into \eqref{eq:variance-transfer}, and cancel $(1-t)^2$.
+\end{proof}
+
+Since $F_p$ is finite and real analytic on all of~$\RR$, the G\"artner--Ellis theorem applies. The identity \eqref{eq:relative-entropy-along-tilt} is a manifestation of the standard Legendre duality between the scaled cumulant generating function and the rate function; the composition law of Theorem~\ref{thm:composition} makes this duality fully explicit by expressing the free energy of the tilted measure in terms of the free energy of the original.
+
+\begin{corollary}[Large deviations in $q$-coordinates]\label{cor:tilted-ldp}
+\leanverified{paper_zero_jitter_tilted_ldp}
+Let
+\[
+\Lambda_p(t):=F_p(t)-t h(p).
+\]
+Then the centered cylinder information satisfies a large-deviation principle:
+\[
+\frac{\tau_n-nh(p)}{n}
+\]
+obeys a good large-deviation principle under $\mu_p$ with rate function
+\[
+I_p(a):=\sup_{t\in\RR}\{ta-\Lambda_p(t)\}.
+\]
+Moreover, on the parametrized branch $a=\Lambda_p'(t)$ one has
+\begin{equation}\label{eq:parametric-rate}
+I_p(\Lambda_p'(t))=D(\mu_{q_p(t)}\|\mu_p).
+\end{equation}
+If $p\neq \phi^{-1}$, then for every $q\in(0,1)$ one has
+\begin{equation}\label{eq:q-coordinate-rate}
+I_p\bigl(h(q)-h(p)+D(\mu_q\|\mu_p)\bigr)=D(\mu_q\|\mu_p).
+\end{equation}
+In particular,
+\begin{align}
+\Lambda_p(1)&=\log\phi-h(p)=D(\mu_p\|\mu_\phi), \label{eq:lambda1-kl}\\
+\Lambda_p'(1)&=D(\mu_p\|\mu_\phi)+D(\mu_\phi\|\mu_p). \label{eq:lambda1-prime-jeffreys}
+\end{align}
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:tilted-free-energy}, $F_p$ is finite and real analytic on all of $\RR$, hence the same is true for $\Lambda_p$. The large-deviation principle therefore follows from the G\"artner--Ellis theorem \cite{DemboZeitouni2010}. Since $I_p(\Lambda_p'(t))=t\Lambda_p'(t)-\Lambda_p(t)$ on the differentiability branch, \eqref{eq:parametric-rate} is exactly the identity
+\[
+t\Lambda_p'(t)-\Lambda_p(t)=tF_p'(t)-F_p(t),
+\]
+together with \eqref{eq:relative-entropy-along-tilt}.
+
+If $p\neq \phi^{-1}$, then $L(p)\neq 0$. Since $L:(0,1)\to\RR$ is bijective, for every $q\in(0,1)$ there exists a unique
+\[
+t(q):=1-\frac{L(q)}{L(p)}
+\]
+such that $q=q_p(t(q))$. Substituting $t=t(q)$ into \eqref{eq:parametric-rate} gives \eqref{eq:q-coordinate-rate}.
+
+At $t=1$, Theorem~\ref{thm:tilted-free-energy} gives $q_p(1)=\phi^{-1}$ and
+\[
+F_p(1)=\log\rho_p(1)=\log\phi.
+\]
+Hence
+\[
+\Lambda_p(1)=\log\phi-h(p).
+\]
+Using \eqref{eq:parametric-rate} with $t=1$ yields
+\[
+I_p(\Lambda_p'(1))=D(\mu_\phi\|\mu_p).
+\]
+Moreover,
+\[
+\begin{aligned}
+D(\mu_p\|\mu_\phi)
+&=
+\frac{1}{2-p}
+\left[
+p\log\frac{p}{\phi^{-1}}
++(1-p)\log\frac{1-p}{\phi^{-2}}
+\right] \\
+&=
+\frac{p\log p+(1-p)\log(1-p)}{2-p}+\log\phi
+=
+\log\phi-h(p)
+=
+\Lambda_p(1),
+\end{aligned}
+\]
+which is \eqref{eq:lambda1-kl}. Finally, \eqref{eq:Fprime-cross-entropy} with $t=1$ gives
+\[
+F_p'(1)=h(\phi^{-1})+D(\mu_\phi\|\mu_p)=\log\phi+D(\mu_\phi\|\mu_p),
+\]
+and subtracting $h(p)$ yields \eqref{eq:lambda1-prime-jeffreys}.
+\end{proof}
+
+The following identity connects the jitter directly to the derivative of the entropy deficit $\Delta h(p)=\log\phi-h(p)$, and equivalently to the derivative of the KL divergence to the Parry measure.
+
+\begin{proposition}[Jitter and entropy deficit]\label{prop:differential-identity}
+For the one-step Markov family on $X_\phi$,
+\begin{equation}\label{eq:differential-identity}
+\sigma^2(p)=p(1-p)(2-p)\,\bigl(\Delta h'(p)\bigr)^2,
+\qquad
+\Delta h(p):=\log\phi-h(p).
+\end{equation}
+Equivalently, using \eqref{eq:lambda1-kl},
+\begin{equation}\label{eq:differential-identity-kl}
+\sigma^2(p)=p(1-p)(2-p)\left(\frac{d}{dp}D(\mu_p\|\mu_\phi)\right)^2.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+From the computation
+\[
+h'(p)=\frac{L(p)}{(2-p)^2},
+\qquad
+L(p):=\log\frac{1-p}{p^2},
+\]
+we have $\Delta h'(p)=-h'(p)$, so
+\[
+\bigl(\Delta h'(p)\bigr)^2=\frac{L(p)^2}{(2-p)^4}.
+\]
+Multiplying by $p(1-p)(2-p)$ and using Proposition~\ref{prop:variance-formula} gives
+\[
+p(1-p)(2-p)\,\bigl(\Delta h'(p)\bigr)^2
+=
+\frac{p(1-p)}{(2-p)^3}L(p)^2
+=
+\sigma^2(p).
+\]
+The equivalent form \eqref{eq:differential-identity-kl} follows from \eqref{eq:lambda1-kl}.
+\end{proof}
+
+\begin{remark}[Fisher information]\label{rem:fisher}
+The Fisher information rate of the one-step family $\{\mu_p\}$ is
+\[
+I(p)
+:=
+\EE_{\pi_p}\!\left[\left(\frac{\partial}{\partial p}\log P_p(X_0,X_1)\right)^{\!2}\right]
+=
+\frac{1}{p(1-p)(2-p)}.
+\]
+Identity \eqref{eq:differential-identity} is therefore equivalent to
+\begin{equation}\label{eq:fisher-identity}
+\sigma^2(p)=\frac{\bigl(h'(p)\bigr)^2}{I(p)}.
+\end{equation}
+The vanishing $\sigma^2(\phi^{-1})=0$ reflects the fact that the Parry point is the unique critical point of $h$ on the one-step family: $h'(\phi^{-1})=0$. At the Parry point one has $h''(\phi^{-1})=-I(\phi^{-1})$, which is the standard relation between the entropy Hessian and the Fisher information at an entropy-maximizing parameter in exponential families \cite{Amari2016}. Combined with \eqref{eq:fisher-identity}, this directly yields the quadratic coefficient $2$ in Theorem~\ref{thm:second-order}: near $p_\phi:=\phi^{-1}$,
+\[
+\sigma^2(p)\approx I(p_\phi)(p-p_\phi)^2,
+\qquad
+\Delta h(p)\approx \tfrac{1}{2}I(p_\phi)(p-p_\phi)^2,
+\]
+so their ratio converges to $2$.
+\end{remark}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{fig_jitter_tilt.pdf}
+\caption{(a) The asymptotic jitter $\sigma^2(p)$ (solid) and twice the entropy deficit $2\,\Delta h(p)$ (dashed) as functions of the Markov parameter $p$. Both vanish at the Parry point $p=\phi^{-1}$ and are tangent there, illustrating the quadratic comparison $\sigma^2\sim 2\,\Delta h$ of Theorem~\ref{thm:second-order}. (b) Tilt orbits $T_t^{\,n}(p_0)$ for $t=0.5$ and seven initial values $p_0$, converging to the Parry point $\phi^{-1}\approx 0.618$ as predicted by Corollary~\ref{cor:tilt-dynamics}(iii).}
+\label{fig:jitter-tilt}
+\end{figure}
+
+\section{Tilt Closure for General Shifts of Finite Type}\label{sec:general-tilt}
+
+The tilt closure property of Theorem~\ref{thm:tilted-free-energy}---that the Doob transform of the tilted transfer matrix is again a one-step Markov law on the same shift---is not specific to the golden-mean shift. In this section we show that it holds for every mixing shift of finite type and identify the structural property that permits the linearization of Corollary~\ref{cor:tilt-dynamics}.
+
+\begin{proposition}[General tilt closure]\label{prop:general-tilt}
+Let $(\Sigma_A,\sigma)$ be a topologically mixing shift of finite type with $k\times k$ adjacency matrix $A$. Let $P$ be a positive stochastic matrix compatible with $A$, and let $\mu_P$ be the corresponding stationary one-step Markov measure. For $t\in\RR$, define the tilted matrix
+\[
+B_P(t)_{ij}:=
+\begin{cases}
+P_{ij}^{1-t} & \text{if } A_{ij}=1,\\
+0 & \text{otherwise.}
+\end{cases}
+\]
+Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item $B_P(t)$ is a primitive nonnegative matrix with the same zero pattern as $A$.
+  \item Its Doob transform $Q_t(i,j):=B_P(t)_{ij}\,r_t(j)/(\rho_t\,r_t(i))$, where $r_t$ is the positive right Perron eigenvector and $\rho_t$ the Perron eigenvalue, is a positive stochastic matrix compatible with $A$.
+  \item The scaled cumulant generating function of $\tau_n$ under $\mu_P$ is $F_P(t)=\log\rho_t$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Since $P_{ij}>0$ whenever $A_{ij}=1$, the matrix $B_P(t)$ has the same positivity pattern as $A$ for every $t\in\RR$. Primitivity is inherited from the irreducibility and aperiodicity of $A$. For (ii), let $\rho_t$ and $r_t$ be the Perron eigenvalue and positive right eigenvector of $B_P(t)$. The Doob transform $Q_t(i,j):=B_P(t)_{ij}\,r_t(j)/(\rho_t\,r_t(i))$ satisfies $Q_t(i,j)=0$ whenever $A_{ij}=0$ (since $B_P(t)_{ij}=0$), and the row sums equal~$1$ because
+\[
+\sum_j Q_t(i,j)=\frac{1}{\rho_t\,r_t(i)}\sum_j B_P(t)_{ij}\,r_t(j)=\frac{\rho_t\,r_t(i)}{\rho_t\,r_t(i)}=1.
+\]
+Part (iii) is the standard Perron--Frobenius argument for the moment generating function of a Markov additive functional; see, e.g., Seneta~\cite{Seneta2006} or Dembo and Zeitouni~\cite{DemboZeitouni2010}.
+\end{proof}
+
+The parameter space of one-step Markov measures on $\Sigma_A$ has dimension $|E|-k$, where $|E|=\sum_{i,j}A_{ij}$ is the number of allowed edges and $k$ the number of states. For the golden-mean shift, $|E|=3$ and $k=2$, giving dimension~$1$: the row $(P_{10},P_{11})=(1,0)$ is completely determined by $A_{11}=0$, leaving the single free parameter $p=P_{00}$.
+
+This one-dimensionality is the structural reason behind the global linearization of Corollary~\ref{cor:tilt-dynamics}. Any smooth self-map of an interval admitting a multiplicative coordinate can be linearized; the content of Theorem~\ref{thm:tilted-free-energy}(ii) is that $L$ serves as such a coordinate globally.
+
+Although linearization is special, the fluctuation structure of cylinder information admits a useful normal form on any mixing SFT. Let $\mathcal{M}_A$ denote the set of all positive stochastic matrices compatible with $A$, and let $P^*$ be the Parry transition matrix,
+\begin{equation}\label{eq:parry-transition}
+P^*_{ij}:=\frac{A_{ij}\,r_j}{\lambda\,r_i},
+\end{equation}
+with stationary distribution $\pi^*_i:=\ell_ir_i/(\ell^\top r)$.
+
+\begin{theorem}[Parry-relative fluctuation normal form]\label{thm:general-normal-form}
+\leanverified{paper_zero_jitter_general_normal_form}
+Let $P\in\mathcal{M}_A$ with stationary distribution $\pi_P$ and entropy rate $h(P)$. Define the edge deviation
+\[
+\Xi_P(i,j):=\log\frac{P^*_{ij}}{P_{ij}}+D(\mu_P\|\mu_{P^*}),
+\qquad A_{ij}=1,
+\]
+and the endpoint correction
+\[
+B_P(i,j):=\log\frac{r_i}{\lambda\,\pi_{P,i}\,r_j}+D(\mu_P\|\mu_{P^*}).
+\]
+Then for every $n\ge 1$ and every admissible word $x_0^{n-1}$,
+\begin{equation}\label{eq:general-normal-form}
+\tau_n^{(P)}(x)-nh(P)=B_P(x_0,x_{n-1})+\sum_{m=0}^{n-2}\Xi_P(x_m,x_{m+1}).
+\end{equation}
+Moreover, $\int\Xi_P\,d\mu_P=0$, so $\sigma_\tau^2(\mu_P)=\sigma^2(\Xi_P,\mu_P)$.
+\end{theorem}
+
+\begin{proof}
+From $\tau_n^{(P)}=-\log\pi_{P,x_0}-\sum_{m=0}^{n-2}\log P_{x_mx_{m+1}}$ and the Parry identity $-\log P^*_{ij}=\log\lambda+\log r_i-\log r_j$ (which telescopes along any path), one obtains
+\[
+\tau_n^{(P)}=-\log\pi_{P,x_0}+(n-1)\log\lambda+\log r_{x_0}-\log r_{x_{n-1}}+\sum_{m=0}^{n-2}\log\frac{P^*_{x_mx_{m+1}}}{P_{x_mx_{m+1}}}.
+\]
+Since $\log\lambda-h(P)=D(\mu_P\|\mu_{P^*})$, grouping the boundary terms gives \eqref{eq:general-normal-form}. The identity $\int\Xi_P\,d\mu_P=0$ follows from $\sum_i\pi_{P,i}\sum_jP_{ij}\log(P^*_{ij}/P_{ij})=-D(\mu_P\|\mu_{P^*})$.
+\end{proof}
+
+\begin{theorem}[Parry rigidity in the Markov simplex]\label{thm:general-rigidity}
+\leanverified{paper_zero_jitter_general_rigidity}
+Among all $P\in\mathcal{M}_A$, the Parry transition matrix~$P^*$ is the unique zero-jitter matrix: $\sigma_\tau^2(\mu_P)=0$ if and only if $P=P^*$.
+\end{theorem}
+
+\begin{proof}
+By Theorem~\ref{thm:general-normal-form}, $\sigma_\tau^2(\mu_P)=0$ if and only if $\Xi_P$ is cohomologous to a constant: $\Xi_P(i,j)=c+u(i)-u(j)$ for all allowed edges. This gives $P_{ij}=e^{-D-c}\,P^*_{ij}\,e^{u(j)-u(i)}$ where $D=D(\mu_P\|\mu_{P^*})$. Setting $v_j:=e^{u(j)}$ and summing over $j$, the row-sum condition yields $\sum_jP^*_{ij}v_j=e^{D+c}v_i$. Since $P^*$ is primitive with Perron eigenvalue~$1$, Perron--Frobenius forces $e^{D+c}=1$ and $v$ constant. Hence $P=P^*$.
+\end{proof}
+
+The tilt map $T_t$ does not linearize globally when $\dim\mathcal{M}_A>1$, but its derivative at the Parry point retains a simple structure.
+
+\begin{proposition}[Tangential linearization]\label{prop:tangential}
+Let $\{P_\varepsilon\}$ be a $C^1$ curve in $\mathcal{M}_A$ with $P_0=P^*$, and let $s(i,j):=\frac{d}{d\varepsilon}\log P_\varepsilon(i,j)|_{\varepsilon=0}$ be the score function. Then
+\[
+\left.\frac{d}{d\varepsilon}\log T_t(P_\varepsilon)(i,j)\right|_{\varepsilon=0}=(1-t)\,s(i,j)+\psi_t(j)-\psi_t(i)-c_t
+\]
+for a state function $\psi_t$ and a constant $c_t$ arising from the perturbation of the Perron eigenvector and eigenvalue. In the quotient of edge functions modulo coboundaries and constants, $DT_t|_{P^*}$ acts as multiplication by $(1-t)$.
+\end{proposition}
+
+\begin{proof}
+The Doob transform of $B_{P_\varepsilon}(t)$ with Perron data $(\rho_t(\varepsilon),r_t(\varepsilon))$ is
+\[
+T_t(P_\varepsilon)_{ij}=\frac{P_\varepsilon(i,j)^{1-t}\,r_t(\varepsilon,j)}{\rho_t(\varepsilon)\,r_t(\varepsilon,i)},
+\]
+so $\log T_t(P_\varepsilon)_{ij}=(1-t)\log P_\varepsilon(i,j)+\log r_t(\varepsilon,j)-\log r_t(\varepsilon,i)-\log\rho_t(\varepsilon)$.
+At $\varepsilon=0$ one has $P_0=P^*$, and the Perron eigenvector of $B_{P^*}(t)$ is $r_t(0)=(r_i^t)_i$ with eigenvalue $\rho_t(0)=\lambda^{1-t}$ (since $P^*_{ij}=(A_{ij}r_j)/(\lambda r_i)$ gives $B_{P^*}(t)_{ij}=(r_j/(\lambda r_i))^{1-t}$, and $\sum_jB_{P^*}(t)_{ij}r_j^t=\lambda^{1-t}r_i^t$). Differentiating with respect to $\varepsilon$ at $\varepsilon=0$:
+\[
+\left.\frac{d}{d\varepsilon}\log T_t(P_\varepsilon)_{ij}\right|_{\varepsilon=0}
+=
+(1-t)\,s(i,j)+\psi_t(j)-\psi_t(i)-c_t,
+\]
+where $\psi_t(j):=\frac{d}{d\varepsilon}\log r_t(\varepsilon,j)|_{\varepsilon=0}$ and $c_t:=\frac{d}{d\varepsilon}\log\rho_t(\varepsilon)|_{\varepsilon=0}$. Since $\psi_t(j)-\psi_t(i)$ is a coboundary and $c_t$ is a constant, the quotient class $[DT_t|_{P^*}(s)]$ equals $(1-t)[s]$.
+\end{proof}
+
+\begin{example}[Full 2-shift]\label{ex:full-shift}
+On the full shift $\{0,1\}^\NN$, the one-step Markov family is parametrized by
+\[
+P=\begin{pmatrix}p & 1-p\\q & 1-q\end{pmatrix},
+\qquad 0<p,q<1,
+\]
+a two-dimensional family. The tilted Doob transform yields new parameters
+\[
+p'(t)=\frac{p^{1-t}}{\rho_t},
+\qquad
+q'(t)=\frac{q^{1-t}\,r_t}{\rho_t},
+\]
+where $r_t=(\rho_t-(1-q)^{1-t})/q^{1-t}$ is determined by the Perron eigenvector. The tilt map $T_t:(p,q)\mapsto (p'(t),q'(t))$ is a genuine two-dimensional dynamical system, and no single scalar coordinate linearizes it simultaneously in both components. The zero-jitter condition selects the Parry measure $p=q=\tfrac{1}{2}$ by a coboundary argument analogous to Theorem~\ref{thm:parry-rigidity}.
+\end{example}
+
+\begin{example}[Reversible chains on the full 2-shift]\label{ex:reversible}
+The reversible subfamily $q=1-p$ forms a one-dimensional family preserved by the tilt, since the symmetry $B_P(t)_{ij}=B_P(t)_{ji}$ is inherited from $P_{ij}=P_{ji}$. With constant Perron eigenvector $r=(1,1)^\top$ and eigenvalue $\rho_t=p^{1-t}+(1-p)^{1-t}$, the Doob transform gives $p'(t)=p^{1-t}/\rho_t$. In the log-odds coordinate $M(p):=\log\frac{1-p}{p}$,
+\[
+M(p'(t))=(1-t)\,M(p),
+\]
+an exact analogue of $L(q_p(t))=(1-t)L(p)$ on the golden-mean shift. The unique fixed point $p=\tfrac{1}{2}$ is the Parry measure, and for $0<t<2$ it is globally attracting.
+\end{example}
+
+These examples show that linearization is not an accident of golden-mean arithmetic but a consequence of having a one-dimensional tilt-invariant family. What distinguishes the golden-mean shift is that the one-dimensionality arises \emph{naturally} from the adjacency constraints---the row $(1,0)$ in the transition matrix is forced---without restricting to a subfamily.
+
+\section{H\"older equilibrium states and the second-order comparison}
+
+We now place the golden-mean calculations in the broader Bowen--Ruelle framework. The next theorem collects standard consequences of coboundary theory \cite{Bowen1975,Ruelle1978,ParryPollicott1990} and exponential decay of correlations for Gibbs states \cite{Baladi2000}; we include the proof to make the connection to the cylinder-information setting explicit.
+
+\begin{theorem}[Zero jitter for H\"older equilibrium states]\label{thm:gibbs}
+\leanverified{paper_zero_jitter_gibbs}
+Let $(\Sigma_A,\sigma)$ be a one-sided topologically mixing shift of finite type, let $f:\Sigma_A\to\RR$ be H\"older, and let $\mu_f$ be the equilibrium state of $f$. Define
+\[
+\tau_f(n,x):=-\log\mu_f([x_0^{n-1}]).
+\]
+Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item there exists $C_f<\infty$ such that
+  \[
+  \bigl|\tau_f(n,x)-(nP(f)-S_nf(x))\bigr|\le C_f
+  \]
+  for every $x$ and every $n\ge 1$;
+  \item the asymptotic jitter rate exists and equals the asymptotic variance of $P(f)-f$;
+  \item $\sigma_\tau^2(\mu_f)=0$ if and only if $f$ is H\"older-cohomologous to a constant.
+\end{enumerate}
+Equivalently, within the H\"older equilibrium states of H\"older potentials on $\Sigma_A$, the Parry measure is the unique zero-jitter measure.
+\end{theorem}
+
+\begin{proof}
+The Gibbs property gives $K\ge 1$ such that
+\[
+K^{-1}
+\le
+\frac{\mu_f([x_0^{n-1}])}{\exp(S_nf(x)-nP(f))}
+\le
+K
+\]
+for every $n$-cylinder. Taking negative logarithms proves (i).
+
+Let $g:=P(f)-f$ and define
+\[
+\beta_n(x):=\tau_f(n,x)-S_ng(x).
+\]
+Then $|\beta_n(x)|\le C_f$ for every $x$ and every $n$. Let
+\[
+\widehat g:=g-\int g\,d\mu_f.
+\]
+Because $g$ is H\"older whenever $f$ is H\"older, and because $\mu_f$ is a Gibbs equilibrium state for a H\"older potential on a mixing shift of finite type, correlations of H\"older observables decay exponentially in the Bowen--Ruelle theory \cite{Bowen1975,Ruelle1978,ParryPollicott1990}. Hence the Green--Kubo series
+\[
+\sigma_g^2
+:=
+\Var_{\mu_f}(\widehat g)
++2\sum_{k=1}^\infty \mathrm{Cov}_{\mu_f}(\widehat g,\widehat g\circ\sigma^k)
+\]
+converges absolutely and
+\[
+\Var_{\mu_f}(S_ng)=n\sigma_g^2+O(1).
+\]
+Since $\tau_f(n,\cdot)=S_ng+\beta_n$, we have
+\[
+\begin{aligned}
+\bigl|\Var_{\mu_f}(\tau_f(n,\cdot))-\Var_{\mu_f}(S_ng)\bigr|
+&\le \Var_{\mu_f}(\beta_n)
++2\sqrt{\Var_{\mu_f}(S_ng)\Var_{\mu_f}(\beta_n)} \\
+&\le C_f^2+2C_f\sqrt{\Var_{\mu_f}(S_ng)}.
+\end{aligned}
+\]
+Dividing by $n$ and using $\Var_{\mu_f}(S_ng)=n\sigma_g^2+O(1)$ shows that
+\[
+\frac{1}{n}\Var_{\mu_f}(\tau_f(n,\cdot))-\frac{1}{n}\Var_{\mu_f}(S_ng)\longrightarrow 0.
+\]
+Therefore the asymptotic jitter rate exists and equals $\sigma_g^2$, namely the asymptotic variance of $P(f)-f$. This proves (ii).
+
+For H\"older observables on a mixing shift of finite type, zero asymptotic variance is equivalent to cohomology to a constant via a H\"older transfer function; this is standard in Bowen--Ruelle thermodynamic formalism \cite{Bowen1975,Ruelle1978,ParryPollicott1990}. Thus $\sigma_\tau^2(\mu_f)=0$ if and only if
+\[
+g=c+u-u\circ\sigma
+\]
+for some H\"older $u$ and constant $c$, equivalently
+\[
+f=(P(f)-c)-u+u\circ\sigma,
+\]
+so $f$ is cohomologous to a constant.
+
+Conversely, assume that $f=a+v-v\circ\sigma$ for some constant $a$ and H\"older $v$. Then
+\[
+h_\nu(\sigma)+\int f\,d\nu
+=
+a+h_\nu(\sigma)
+\]
+for every $\sigma$-invariant measure $\nu$, so the equilibrium state is precisely the measure of maximal entropy, namely the Parry measure $\mu_P$ of $\Sigma_A$. This proves the equivalent uniqueness statement for zero-jitter equilibrium states. For that measure, if $\lambda$ is the Perron eigenvalue of $A$ and $\ell,r$ are positive left and right Perron eigenvectors, then every legal cylinder satisfies
+\[
+\mu_P([x_0^{n-1}])=\frac{\ell_{x_0}r_{x_{n-1}}}{\ell^\top r}\lambda^{-(n-1)}.
+\]
+Hence
+\[
+\tau_f(n,x)=\tau_P(n,x)=(n-1)\log\lambda+\log(\ell^\top r)-\log(\ell_{x_0}r_{x_{n-1}}),
+\]
+so $\tau_f(n,\cdot)-(n-1)\log\lambda$ depends only on the endpoints and is uniformly bounded. Therefore $\Var_{\mu_f}(\tau_f(n,\cdot))=O(1)$ and $\sigma_\tau^2(\mu_f)=0$. This proves (iii).
+\end{proof}
+
+\begin{remark}
+We work throughout on the one-sided shift, which is the natural setting for the transfer-operator approach to exponential decay of correlations. The results extend to the two-sided natural extension via standard arguments: the one-sided Gibbs property determines the two-sided measure uniquely, and the coboundary characterization of zero variance carries over unchanged; see Parry and Pollicott~\cite{ParryPollicott1990} for the two-sided formulation.
+\end{remark}
+
+Returning to the golden-mean shift, we examine the rate at which the jitter vanishes as the parameter approaches the Parry point.
+
+\begin{theorem}[Quadratic comparison near the Parry point]\label{thm:second-order}
+\leanverified{paper_zero_jitter_second_order}
+Let
+\[
+\Delta h(p):=\log\phi-h(p).
+\]
+As $p\to\phi^{-1}$ in the one-step Markov family on $X_\phi$,
+\begin{equation}\label{eq:second-order}
+\sigma^2(p)=2\,\Delta h(p)+O\bigl((p-\phi^{-1})^3\bigr).
+\end{equation}
+Equivalently,
+\[
+\lim_{p\to\phi^{-1}}\frac{\sigma^2(p)}{\log\phi-h(p)}=2.
+\]
+Using \eqref{eq:lambda1-kl}, this is equivalently
+\[
+\sigma^2(p)=2\,D(\mu_p\|\mu_\phi)+O\bigl((p-\phi^{-1})^3\bigr).
+\]
+\end{theorem}
+
+\begin{proof}
+Set
+\[
+L(p):=\log\frac{1-p}{p^2}.
+\]
+By Proposition~\ref{prop:variance-formula},
+\[
+\sigma^2(p)=\frac{p(1-p)}{(2-p)^3}L(p)^2.
+\]
+Direct differentiation of
+\[
+h(p)=\frac{-p\log p-(1-p)\log(1-p)}{2-p}
+\]
+gives
+\[
+h'(p)=\frac{L(p)}{(2-p)^2}.
+\]
+At the Parry point $p_\phi:=\phi^{-1}$, the identity $1-p_\phi=p_\phi^2$ implies $L(p_\phi)=0$, hence both $h'(p_\phi)$ and $\sigma^2(p_\phi)$ vanish.
+
+Taylor expansion yields
+\[
+L(p)=L'(p_\phi)(p-p_\phi)+O\bigl((p-p_\phi)^2\bigr),
+\]
+and therefore
+\[
+\sigma^2(p)
+=
+\frac{p_\phi(1-p_\phi)}{(2-p_\phi)^3}L'(p_\phi)^2(p-p_\phi)^2
++O\bigl((p-p_\phi)^3\bigr).
+\]
+On the other hand,
+\[
+\Delta h(p)
+=
+\frac{1}{2}\Delta h''(p_\phi)(p-p_\phi)^2
++O\bigl((p-p_\phi)^3\bigr),
+\]
+and since $h'(p)=L(p)(2-p)^{-2}$,
+\[
+\Delta h''(p_\phi)=-h''(p_\phi)=-\frac{L'(p_\phi)}{(2-p_\phi)^2}.
+\]
+Hence
+\[
+\frac{\sigma^2(p)}{\Delta h(p)}
+\to
+-2\,\frac{p_\phi(1-p_\phi)}{2-p_\phi}L'(p_\phi).
+\]
+Now
+\[
+L'(p)=-\frac{1}{1-p}-\frac{2}{p},
+\]
+and the relation $1-p_\phi=p_\phi^2$ gives
+\[
+-L'(p_\phi)=\frac{1+2p_\phi}{p_\phi^2}.
+\]
+Therefore
+\[
+-2\,\frac{p_\phi(1-p_\phi)}{2-p_\phi}L'(p_\phi)
+=
+2\,\frac{p_\phi^3}{2-p_\phi}\cdot\frac{1+2p_\phi}{p_\phi^2}
+=
+2\,\frac{p_\phi(1+2p_\phi)}{2-p_\phi}
+=
+2,
+\]
+which proves \eqref{eq:second-order}.
+\end{proof}
+
+The quadratic coefficient~$2$ is not special to the golden-mean shift. The proof of universality requires a smooth-dependence result for finite-state Markov chains, which we formulate as a lemma.
+
+\begin{lemma}[Smooth dependence of asymptotic variance]\label{lem:smooth-variance}
+Let $\{Q_t\}_{|t|<\epsilon}$ be a $C^2$ curve of primitive stochastic matrices on a finite state space, with $Q_0$ irreducible, and let $\{g_t\}$ be a $C^2$ family of edge observables with $g_0=0$. Write $g_t=t\,\dot{g}+O(t^2)$. Then
+\[
+\sigma^2(g_t,Q_t)=t^2\,\sigma^2(\dot{g},Q_0)+O(t^3).
+\]
+If furthermore $\sum_jQ_{0,ij}\,\dot{g}(i,j)=0$ for every $i$, then $\sigma^2(\dot{g},Q_0)=\sum_i\pi_{Q_0,i}\sum_jQ_{0,ij}\,\dot{g}(i,j)^2$.
+\end{lemma}
+
+\begin{proof}
+The Gordin decomposition (Lemma~\ref{lem:markov-zero-variance}) expresses the asymptotic variance of an edge observable~$g$ under a finite-state ergodic chain with transition~$Q$ as $\sigma^2(g,Q)=\sum_i\pi_{Q,i}\sum_jQ_{ij}\,m(i,j)^2$, where $m(i,j)=g(i,j)-h+v(j)-v(i)$, $h=\sum_i\pi_{Q,i}\bar{g}(i)$, $\bar{g}(i)=\sum_jQ_{ij}g(i,j)$, and $v$ solves the Poisson equation $(Q-I)v=h\mathbf{1}-\bar{g}$. On a finite state space with $k$ states, the Poisson solution is $v=(Q-I+\mathbf{1}\pi^\top)^{-1}(h\mathbf{1}-\bar{g})$, which depends analytically on the entries of~$Q$ and~$g$ as long as $Q$ remains irreducible. Since $g_t=O(t)$, we have $\bar{g}_t=O(t)$, $h_t=O(t)$, $v_t=O(t)$, $m_t=O(t)$, and therefore $\sigma^2(g_t,Q_t)=O(t^2)$. The coefficient of~$t^2$ is $\sigma^2(\dot{g},Q_0)$, computed with $h_0=\sum_i\pi_{Q_0,i}\overline{\dot{g}}(i)$ and $v_0$ solving $(Q_0-I)v_0=h_0\mathbf{1}-\overline{\dot{g}}$. If $\overline{\dot{g}}(i)=\sum_jQ_{0,ij}\,\dot{g}(i,j)=0$ for every~$i$, then $h_0=0$, so $v_0=0$ and $m_0(i,j)=\dot{g}(i,j)$, giving $\sigma^2(\dot{g},Q_0)=\sum_i\pi_{Q_0,i}\sum_jQ_{0,ij}\,\dot{g}(i,j)^2$.
+\end{proof}
+
+The following theorem, which combines the Parry-relative normal form of Theorem~\ref{thm:general-normal-form} with Lemma~\ref{lem:smooth-variance}, establishes the universality of the coefficient~$2$.
+
+\begin{theorem}[Universal quadratic coefficient]\label{thm:universal}
+\leanverified{paper_zero_jitter_universal_quadratic_coefficient}
+Let $(\Sigma_A,\sigma)$ be a topologically mixing SFT with Parry transition matrix~$P^*$ and stationary distribution~$\pi^*$. Let $\{P_t\}_{|t|<\epsilon}$ be a $C^2$ curve in $\mathcal{M}_A$ with $P_0=P^*$, and let
+\[
+s(i,j):=\left.\frac{d}{dt}\log P_t(i,j)\right|_{t=0}
+\]
+be the score function. Define the Fisher-type quadratic form
+\[
+\mathcal{I}_A(s):=\sum_i\pi^*_i\sum_jP^*_{ij}\,s(i,j)^2.
+\]
+Then
+\begin{align}
+D(\mu_{P_t}\|\mu_{P^*})&=\tfrac{1}{2}\,\mathcal{I}_A(s)\,t^2+O(t^3),\label{eq:universal-kl}\\
+\log\lambda-h(P_t)&=\tfrac{1}{2}\,\mathcal{I}_A(s)\,t^2+O(t^3),\label{eq:universal-deficit}\\
+\sigma_\tau^2(\mu_{P_t})&=\mathcal{I}_A(s)\,t^2+O(t^3).\label{eq:universal-jitter}
+\end{align}
+In particular,
+\begin{equation}\label{eq:universal-two}
+\lim_{t\to 0}\frac{\sigma_\tau^2(\mu_{P_t})}{\log\lambda-h(P_t)}=2.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+For \eqref{eq:universal-kl}, write $\delta_t(i,j):=P_t(i,j)-P^*_{ij}=tP^*_{ij}s(i,j)+O(t^2)$. Taylor expansion of $x\log(x/a)$ at $x=a$ gives
+\[
+D(\mu_{P_t}\|\mu_{P^*})=\sum_i\pi_{t,i}\sum_j\frac{\delta_t(i,j)^2}{2P^*_{ij}}+O(t^3),
+\]
+where the first-order term vanishes because $\sum_j\delta_t(i,j)=0$ (row-sum preservation). Since $\pi_t=\pi^*+O(t)$ and $\delta_t=tP^*_{ij}s(i,j)+O(t^2)$, this gives \eqref{eq:universal-kl}. The identity $\log\lambda-h(P)=D(\mu_P\|\mu_{P^*})$ for one-step Markov measures yields \eqref{eq:universal-deficit}.
+
+For \eqref{eq:universal-jitter}, Theorem~\ref{thm:general-normal-form} gives $\sigma_\tau^2(\mu_{P_t})=\sigma^2(\Xi_{P_t},\mu_{P_t})$, where $\Xi_{P_0}=0$ (since $P_0=P^*$) and $\Xi_{P_t}=-t\,s+O(t^2)$. Lemma~\ref{lem:smooth-variance}, applied with $Q_t=P_t$ and $g_t=\Xi_{P_t}$, gives
+\[
+\sigma_\tau^2(\mu_{P_t})=t^2\,\sigma^2(s,\mu_{P^*})+O(t^3).
+\]
+The row-sum constraint $\sum_jP^*_{ij}s(i,j)=0$ and the second part of Lemma~\ref{lem:smooth-variance} yield
+\[
+\sigma^2(s,\mu_{P^*})=\EE_{\mu_{P^*}}\bigl[s(X_0,X_1)^2\bigr]=\mathcal{I}_A(s).
+\]
+Combining \eqref{eq:universal-kl} and \eqref{eq:universal-jitter} yields \eqref{eq:universal-two}.
+\end{proof}
+
+\begin{remark}
+In the language of Riemannian geometry, \eqref{eq:universal-kl}--\eqref{eq:universal-jitter} state that at the Parry point,
+\[
+\mathrm{Hess}_{P^*}(\log\lambda-h)=\tfrac{1}{2}\,\mathcal{I}_A,
+\qquad
+\mathrm{Hess}_{P^*}(\sigma_\tau^2)=\mathcal{I}_A,
+\]
+so the entropy deficit and the jitter induce the same quadratic form at $P^*$, differing only by the universal factor~$2$. Theorem~\ref{thm:second-order} is the restriction of this identity to the one-dimensional golden-mean family.
+\end{remark}
+
+\section{Open questions and concluding remarks}
+
+We summarize the main features and point out two directions that remain unexplored.
+
+The golden-mean shift serves as the testing ground for a broader theory. The full-parameter normal form (Theorem~\ref{thm:normal-form}) separates cylinder-information fluctuations into an occupation-number bulk term and an endpoint correction, explaining structurally why the Parry measure has bounded variance. The tilt dynamics linearize globally in the $L$-coordinate, and the free-energy composition law (Theorem~\ref{thm:composition}) lifts this semigroup structure to the full fluctuation spectrum, yielding a variance transfer formula and characterizing the Parry measure through the constancy of its R\'enyi entropy rate.
+
+These golden-mean results are instances of general phenomena. The Parry-relative normal form (Theorem~\ref{thm:general-normal-form}) holds on any mixing SFT and reduces the jitter to the asymptotic variance of the centered edge deviation $\Xi_P$. The Parry measure is the unique zero-jitter law in the full Markov simplex (Theorem~\ref{thm:general-rigidity}), and the quadratic coefficient $\sigma^2_\tau\sim 2(\log\lambda-h)$ is universal (Theorem~\ref{thm:universal}): the entropy deficit and the jitter induce the same Fisher-type quadratic form at the Parry point, differing only by the factor~$2$.
+
+\medskip
+\noindent\textbf{Linearization in higher dimensions.}
+For a mixing SFT with parameter dimension $d=|E|-k>1$, does the tilt map $T_t$ on~$\RR^d$ admit a coordinate system---possibly curvilinear---in which it linearizes? Proposition~\ref{prop:tangential} shows that the derivative at the Parry point acts as multiplication by $(1-t)$ modulo coboundaries, but a global linearization seems unlikely when $d>1$.
+
+\medskip
+\noindent\textbf{Free-energy composition law for general SFTs.}
+The composition law $F_{q_p(t)}(s)=F_p(s+t-st)-(1-s)F_p(t)$ of Theorem~\ref{thm:composition} relies on the golden-mean shift's one-dimensional parametrization. Does an analogous identity hold---in some tensorial or matrix form---for the multi-parameter free energy of a general mixing SFT? The Perron eigenvalue factorization in the proof extends formally, but the absence of a global coordinate like~$L$ makes the statement less immediate.
+
+\medskip
+\noindent\textbf{Defect distribution for larger alphabets.}
+For a $k$-state mixing SFT, the Parry-measure defect $\tau_n-(n-1)\log\lambda$ depends on both endpoints and takes up to $k^2$ values. The exact defect distribution and its transient oscillations should be expressible in terms of the full spectrum of the transition matrix, generalizing the role of $-\phi^{-2}$ in Corollary~\ref{cor:finite-time-law}. We expect the bounded-variance property to persist, but the explicit formulas become considerably more involved.
+
+\backmatter
+
+\bmhead{Acknowledgments}
+
+We thank the participants of the symbolic dynamics seminar for helpful discussions.
+
+\section*{Declarations}
+
+\begin{itemize}
+\item \textbf{Funding.} No funding was received for conducting this study.
+\item \textbf{Conflict of Interest.} The authors declare that they have no conflict of interest.
+\item \textbf{Data Availability.} All data supporting the findings of this study are contained within the article. The Python script for reproducing Figure~\ref{fig:jitter-tilt} is available as supplementary material.
+\item \textbf{Author Contributions.} H.~Ma conceived the study, developed the theoretical framework including the tilt dynamics on the Markov parameter space, the information normal form decomposition, the free-energy composition law, and the extensions to general shifts of finite type, and designed the overall research direction. W.~Zhang wrote the manuscript, independently verified all mathematical proofs and explicit formulas, performed the numerical computations, and prepared the figures.
+\end{itemize}
+
+\begin{thebibliography}{20}
+
+\bibitem{Amari2016}
+Amari, S.:
+\textit{Information Geometry and Its Applications}.
+Applied Mathematical Sciences, vol.~194.
+Springer, Tokyo (2016)
+
+\bibitem{Baladi2000}
+Baladi, V.:
+\textit{Positive Transfer Operators and Decay of Correlations}.
+Advanced Series in Nonlinear Dynamics, vol.~16.
+World Scientific, Singapore (2000)
+
+\bibitem{Bowen1975}
+Bowen, R.:
+\textit{Equilibrium States and the Ergodic Theory of Anosov Diffeomorphisms}.
+Lecture Notes in Mathematics, vol.~470.
+Springer, Berlin (1975)
+
+\bibitem{ChazottesUgalde2005}
+Chazottes, J.-R., Ugalde, E.:
+\textit{Entropy estimation and fluctuations of hitting and recurrence times for Gibbsian sources}.
+Discrete Contin. Dyn. Syst. Ser.~B \textbf{5}(3), 565--586 (2005)
+
+\bibitem{ClimenhagaThompson2012}
+Climenhaga, V., Thompson, D.J.:
+\textit{Intrinsic ergodicity beyond specification: $\beta$-shifts, $S$-gap shifts, and their factors}.
+Israel J. Math. \textbf{192}, 785--817 (2012)
+
+\bibitem{DemboZeitouni2010}
+Dembo, A., Zeitouni, O.:
+\textit{Large Deviations Techniques and Applications}, 2nd edn.
+Stochastic Modelling and Applied Probability, vol.~38.
+Springer, Berlin (2010)
+
+\bibitem{FrischTamuz2022}
+Frisch, J., Tamuz, O.:
+\textit{Characteristic Measures of Symbolic Dynamical Systems}.
+Ergodic Theory Dynam. Systems \textbf{42}(5), 1655--1661 (2022)
+
+\bibitem{Gordin1969}
+Gordin, M.I.:
+\textit{The Central Limit Theorem for Stationary Processes}.
+Soviet Math. Dokl. \textbf{10}, 1174--1176 (1969)
+
+\bibitem{Haydn2012}
+Haydn, N.:
+\textit{The Central Limit Theorem for Uniformly Strong Mixing Measures}.
+Stoch. Dyn. \textbf{12}, 1250006 (2012)
+
+\bibitem{HuLin2013}
+Hu, W.-G., Lin, S.-S.:
+\textit{The Natural Measure of a Symbolic Dynamical System}.
+arXiv:1308.2996 (2013)
+
+\bibitem{Kifer1990}
+Kifer, Y.:
+\textit{Large Deviations in Dynamical Systems and Stochastic Processes}.
+Trans. Amer. Math. Soc. \textbf{321}(2), 505--524 (1990)
+
+\bibitem{KontoyiannisVerdu2014}
+Kontoyiannis, I., Verd\'u, S.:
+\textit{Optimal Lossless Data Compression: Non-Asymptotics and Asymptotics}.
+IEEE Trans. Inform. Theory \textbf{60}(2), 777--795 (2014)
+
+\bibitem{LindMarcus1995}
+Lind, D., Marcus, B.:
+\textit{An Introduction to Symbolic Dynamics and Coding}.
+Cambridge University Press, Cambridge (1995)
+
+\bibitem{Parry1964}
+Parry, W.:
+\textit{Intrinsic Markov Chains}.
+Trans. Amer. Math. Soc. \textbf{112}, 55--66 (1964)
+
+\bibitem{ParryPollicott1990}
+Parry, W., Pollicott, M.:
+\textit{Zeta Functions and the Periodic Orbit Structure of Hyperbolic Dynamics}.
+Ast\'erisque \textbf{187--188} (1990)
+
+\bibitem{PollicottSharp2009}
+Pollicott, M., Sharp, R.:
+\textit{Large deviations, fluctuations and shrinking intervals}.
+Comm. Math. Phys. \textbf{290}(1), 321--334 (2009)
+
+\bibitem{Ruelle1978}
+Ruelle, D.:
+\textit{Thermodynamic Formalism}.
+Addison-Wesley, Reading (1978)
+
+\bibitem{Seneta2006}
+Seneta, E.:
+\textit{Non-negative Matrices and Markov Chains}.
+Springer Series in Statistics, 2nd edn.
+Springer, New York (2006)
+
+\bibitem{Shields1996}
+Shields, P.C.:
+\textit{The Ergodic Theory of Discrete Sample Paths}.
+Graduate Studies in Mathematics, vol.~13.
+American Mathematical Society, Providence (1996)
+
+\bibitem{Walters1982}
+Walters, P.:
+\textit{An Introduction to Ergodic Theory}.
+Springer, New York (1982)
+
+\end{thebibliography}
+
+\end{document}

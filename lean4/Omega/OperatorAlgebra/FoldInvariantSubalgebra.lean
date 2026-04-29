@@ -41,4 +41,11 @@ theorem paper_op_algebra_fold_invariant_subalgebra (D : FoldInvariantSubalgebraD
   exact ⟨hOrthogonal, hPartition, hIso,
     D.deriveFiberwiseConstantCharacterization hIso D.foldConditionalExpectationPackage_h⟩
 
+/-- Paper-facing exact-name wrapper for the fold-invariant subalgebra package.
+    prop:fold-invariant-subalgebra -/
+theorem paper_fold_invariant_subalgebra (D : FoldInvariantSubalgebraData) :
+    D.orthogonalProjectionFamily ∧ D.partitionOfUnity ∧ D.invariantSubalgebraIso ∧
+      D.fiberwiseConstantCharacterization :=
+  paper_op_algebra_fold_invariant_subalgebra D
+
 end Omega.OperatorAlgebra

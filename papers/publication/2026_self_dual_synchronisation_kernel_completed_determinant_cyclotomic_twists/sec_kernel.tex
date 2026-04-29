@@ -1,13 +1,17 @@
 \section{The Completed Determinant and Cyclotomic Twists}
 \label{sec:completion-twists}
 
-\subsection*{Notation for smooth projective models}
+\subsection*{Base field and smooth projective models}
 
-Throughout this section, for an affine curve \(C_{\mathrm{aff}}\subset
-\mathbb{A}^2\) defined by an irreducible polynomial equation we write
-\(\overline{X}\) (resp.\ \(\overline{Y}\)) for the smooth projective curve
-whose function field is \(k(C_{\mathrm{aff}})\) (resp.\ its degree-two subfield
-under the relevant involution). All genus and Hurwitz statements are made for
+Throughout the geometric discussion we take \(k=\QQ\). Since
+irreducibility, smoothness, and genus are unchanged after extending the
+constant field to \(\overline{\QQ}\), we pass freely between \(k\) and
+\(\overline{\QQ}\) when convenient. For an affine curve
+\(C_{\mathrm{aff}}\subset\mathbb{A}^2_k\) defined by an irreducible
+polynomial equation, we write \(\overline{X}\) (resp.\ \(\overline{Y}\))
+for the smooth projective curve whose function field is
+\(k(C_{\mathrm{aff}})\) (resp.\ its degree-two subfield under the
+relevant involution). All genus and Hurwitz statements are made for
 these complete nonsingular models.
 
 \subsection{The unweighted spectrum}
@@ -26,12 +30,20 @@ One has
 
 \begin{proof}
 A symbolic determinant computation from the explicit \(10\times 10\)
-matrix \(B(u)\) of \Cref{def:sync-kernel} gives the displayed formula.
+matrix \(B(u)\) of \Cref{def:sync-kernel} gives the displayed formula;
+the exact computation is recorded in
+\Cref{sec:appendix-computation}\,\textup{(a)}.
 As a consistency check, the closed form satisfies the self-duality
 identity of \Cref{prop:sync-self-duality}; in particular, comparing
 \(\Delta(z,u)\) with \(\Delta(uz,u^{-1})\) pairs the coefficients of
 \(z^k u^\ell\) and \(z^k u^{k-\ell}\) exactly as required.
 \end{proof}
+
+Although \(B(u)\) is a \(10\times 10\) matrix, the determinant has
+degree \(6\) in \(z\) because four rows are redundant for every \(u\):
+rows \(5,6,8,10\) are \(u\)-multiples of rows \(1,2,7,9\),
+respectively. Hence \(\operatorname{rank} B(u)\le 6\), so \(0\) is a
+persistent eigenvalue of multiplicity at least four.
 
 \begin{proposition}[Characteristic polynomial and residue constant]
   \label{prop:sync-kernel-spectrum}
@@ -44,14 +56,14 @@ identity of \Cref{prop:sync-self-duality}; in particular, comparing
   \[
     C_B=\frac{243}{272}.
   \]
-\leanverified{paper_sync_kernel_spectrum_seeds}
 \end{proposition}
 
 \begin{proof}
-Every state reaches \(\st{000}\) in at most two steps, and
-\(\st{000}\) reaches every state by iterating the transitions through
-\(\st{001}\), \(\st{002}\), \(\st{010}\), and \(\st{0-12}\); hence the
-digraph of \(B\) is strongly connected. Since there is also the self-loop
+Every state reaches \(\st{000}\) in at most three steps by the paths
+listed in \Cref{def:sync-kernel}, and \(\st{000}\) reaches every state
+by iterating the transitions through \(\st{001}\), \(\st{002}\),
+\(\st{010}\), and \(\st{0-12}\); hence the digraph of \(B\) is strongly
+connected. Since there is also the self-loop
 \(\st{000}\to\st{000}\), the period is \(1\), so \(B\) is primitive.
 Set \(u=1\) in \Cref{prop:kernel-delta-explicit}. The factorisation is
 then immediate. Since \((3z-1)\) is the unique factor whose reciprocal
@@ -97,15 +109,131 @@ produces the displayed formula. The parity relation is immediate. This
 proves part~\textup{(ii)} of \Cref{thm:intro-kernel-geometry}.
 \end{proof}
 
-Let \(C_{\mathrm{aff}}:=\{(w,s)\in\mathbb{A}^2:\widehat\Delta(w,s)=0\}\) be
-the affine curve, and let \(\overline{X}\) be the smooth projective curve with
-function field \(k(C_{\mathrm{aff}})\). The involution
+\begin{remark}
+The phrase ``completed determinant'' is non-standard. In this note it
+simply denotes the polynomial obtained by rewriting \(\Delta(w/r,r^2)\)
+in the self-dual invariants \(w\) and \(s=r+r^{-1}\).
+\end{remark}
+
+
+
+\begin{proposition}[Generic Galois group]
+  \label{prop:sync-hatdelta-galois-s6-generic}
+  Viewed as a polynomial in \(w\), the completed determinant
+  \(\widehat\Delta(w,s)\) has generic Galois group \(S_6\) over
+  \(\QQ(s)\).
+\end{proposition}
+
+\begin{proof}
+Let \(G\le S_6\) be the generic Galois group of
+\(\widehat\Delta(w,s)\) over \(\QQ(s)\). We identify \(G\) in four
+steps.
+
+\medskip
+\noindent\textit{Step 1 (discriminant, \(G\not\subset A_6\)).}\quad
+Write \(D(s):=\disc_w\widehat\Delta(w,s)\in\QQ[s]\). The explicit
+computation recorded in \Cref{sec:appendix-computation}\,(d) shows
+that \(D(s)\) has degree~\(20\) with leading coefficient~\(-256\).
+Since the leading coefficient is negative, \(D(s)\to-\infty\) as
+\(s\to+\infty\), so \(D(s)\) takes negative real values and is
+therefore not a square in~\(\QQ(s)\). Since the discriminant of \(\widehat\Delta(w,s)\) as a polynomial in \(w\) changes sign under odd permutations, \(D(s)\notin \QQ(s)^2\) implies \(G\not\subset A_6\).
+
+\medskip
+\noindent\textit{Step 2 (specialisation input).}\quad
+We use the following standard fact: if \(s_0\in\QQ\) is such that
+\(\widehat\Delta(w,s_0)\) is separable over \(\QQ\) (equivalently,
+\(D(s_0)\neq 0\)), then the Galois group \(G_{s_0}\) of
+\(\widehat\Delta(w,s_0)\) over \(\QQ\) embeds into \(G\); see
+\cite[\S 4.4]{Serre2008Topics}. The condition \(D(s_0)\neq 0\) is
+verified at each chosen \(s_0\) by computing
+\(\gcd(\widehat\Delta(w,s_0),\partial_w\widehat\Delta(w,s_0))\bmod p\)
+for a convenient prime \(p\).
+
+To read off cycle types inside \(G_{s_0}\), we apply Dedekind's
+theorem: if \(f(w)\in\ZZ[w]\) is monic, \(p\nmid\text{disc}(f)\),
+and \(f\equiv f_1^{e_1}\cdots f_r^{e_r}\pmod p\) with the \(f_i\)
+distinct and irreducible over \(\mathbb{F}_p\), then the Frobenius
+at \(p\) in \(\Gal(f/\QQ)\) has cycle type
+\((\deg f_1,\dots,\deg f_r)\); see \cite[Ch.~4,
+\S{}4.3]{Serre2008Topics}. The exact mod-\(p\) factorisation data are
+recorded in \Cref{sec:appendix-computation}\,(d).
+
+\medskip
+\noindent\textit{Step 3 (three Frobenius specialisations).}
+
+\smallskip
+\noindent\textit{Transitivity (\(s=3\), mod \(7\)).}\quad
+One checks that
+\(\gcd(\widehat\Delta(w,3),\partial_w\widehat\Delta(w,3))\equiv 1\pmod 7\),
+so \(D(3)\neq 0\) and the specialisation is separable.
+Modulo \(7\),
 \[
-  \iota:(w,s)\longmapsto(-w,-s)
+  \widehat\Delta(w,3)
+  \equiv w^6+2w^5+3w^4+2w^3+2w^2+4w+1\pmod 7,
 \]
-preserves \(C_{\mathrm{aff}}\), and induces an involution on \(\overline{X}\).
-Write \(\overline{Y}\) for the smooth projective curve with function field
-\(k(\overline{X})^{\langle\iota\rangle}\).
+which is irreducible over \(\mathbb{F}_7\). Hence the Frobenius at \(7\)
+in \(G_3\subset G\) is a \(6\)-cycle, so \(G\) acts transitively
+on the six roots.
+
+\smallskip
+\noindent\textit{Transposition (\(s=2\), mod \(7\)).}\quad
+One checks that
+\(\gcd(\widehat\Delta(w,2),\partial_w\widehat\Delta(w,2))\equiv 1\pmod 7\),
+so \(D(2)\neq 0\). Modulo \(7\),
+\[
+  \widehat\Delta(w,2)
+  \equiv (w+6)(w+5)(w+2)(w+1)(3w^2+3w+2)\pmod 7,
+\]
+where \(3w^2+3w+2\) is irreducible over \(\mathbb{F}_7\). The
+factorisation type is \((1)(1)(1)(1)(2)\), so the Frobenius at \(7\)
+in \(G_2\subset G\) is a transposition. Hence \(G\) contains a
+transposition.
+
+\smallskip
+\noindent\textit{5-cycle (\(s=3\), mod \(19\)).}\quad
+One checks that
+\(\gcd(\widehat\Delta(w,3),\partial_w\widehat\Delta(w,3))\equiv 1\pmod{19}\).
+Modulo \(19\),
+\[
+  \widehat\Delta(w,3)
+  \equiv (w+16)\bigl(8w^5+14w^4+9w^2+3w+6\bigr)\pmod{19},
+\]
+with the quintic factor irreducible over \(\mathbb{F}_{19}\). The
+factorisation type is \((1)(5)\), so the Frobenius at \(19\) in
+\(G_3\subset G\) is a \(5\)-cycle. Hence \(G\) contains a
+\(5\)-cycle.
+
+\medskip
+\noindent\textit{Step 4 (subgroup classification).}\quad
+We now have: \(G\le S_6\) is transitive, contains a transposition, and
+contains a \(5\)-cycle. A transitive subgroup of \(S_6\) that contains
+a \(5\)-cycle is primitive: if \(\sigma\in G\) is a \(5\)-cycle and
+\(\mathcal{B}\) is a non-trivial block, then \(|\mathcal{B}|\) divides
+\(6\). If \(\mathcal{B}\) meets the support of \(\sigma\), then
+\(\sigma(\mathcal{B})\cap\mathcal{B}\neq\varnothing\), which forces
+\(\sigma(\mathcal{B})=\mathcal{B}\), so \(\mathcal{B}\) must contain all
+five moved points of \(\sigma\), giving \(|\mathcal{B}|\in\{5,6\}\). No
+proper block of size \(5\) or \(6\) can exist in a transitive group on
+six points, so \(G\) is primitive \cite[Ch.~3, \S{}3.3]{Dixon1996}.
+A primitive subgroup of \(S_6\) containing a transposition is the full
+symmetric group \cite[Ch.~3, Theorem~3.3A]{Dixon1996}. Hence \(G=S_6\),
+completing part~\textup{(iii)} of \Cref{thm:intro-kernel-geometry}.
+\end{proof}
+
+\begin{corollary}\label{lem:hatdelta-irreducible}
+The polynomial \(\widehat\Delta(w,s)\) is irreducible in \(\QQ[w,s]\).
+\end{corollary}
+
+\begin{proof}
+Since \(\Gal(\widehat\Delta/\QQ(s))=S_6\), the action on the six roots is
+transitive, so \(\widehat\Delta(w,s)\) is irreducible over \(\QQ(s)\).
+Gauss's lemma then implies irreducibility in \(\QQ[w,s]\).
+\end{proof}
+We first construct the quotient curve \(\overline{Y}\) and establish its
+smoothness; then we record the integrality of \(C_{\mathrm{aff}}\) and
+the non-squareness of \(x\) in \(k(\overline{Y})\), which together
+justify the definition of \(\overline{X}\) as a well-defined smooth
+projective curve.
 
 \begin{proposition}[The quotient is a smooth plane quartic]
   \label{prop:sync-hatdelta-quotient}
@@ -126,13 +254,21 @@ Write \(\overline{Y}\) for the smooth projective curve with function field
 \end{proposition}
 
 \begin{proof}
-Since \(\iota\) changes the signs of both \(w\) and \(s\), the
-quantities \(x=w^2\) and \(y=sw\) are invariant. Substituting
-\(s=y/w\) and \(w^2=x\) into \(\widehat\Delta(w,s)=0\) yields
-\(F(x,y)=0\). Conversely, adjoining \(w=\sqrt{x}\) recovers the
-function field of \(\overline{X}\) from that of the curve \(F=0\),
-showing that \(\overline{Y}\) is birationally the smooth projective closure
-of \(\{F=0\}\).
+By \Cref{lem:self-dual-compression}, the coefficient of \(w^j\) in
+\(\widehat\Delta(w,s)\) has degree at most \(j\) in \(s\) and the
+parity of \(j\). Hence
+\Cref{lem:sign-quotient-normal-form} applies to the involution
+\(\iota:(w,s)\mapsto(-w,-s)\): the invariants
+\[
+  x=w^2,\qquad y=sw
+\]
+generate the invariant subring, and there is a unique polynomial
+\(F(x,y)\in\QQ[x,y]\) with
+\(\widehat\Delta(w,s)=F(w^2,sw)\).
+A direct substitution gives the displayed formula for \(F\). Conversely,
+adjoining \(w=\sqrt{x}\) recovers the function field of \(\overline{X}\)
+from that of the curve \(F=0\), showing that \(\overline{Y}\) is
+birationally the smooth projective closure of \(\{F=0\}\).
 
 We verify that this projective closure is smooth.  Homogenise by setting
 \(X=x\), \(Y=y\), \(Z=1\) and clearing denominators to obtain
@@ -183,6 +319,40 @@ genus formula for smooth plane curves \cite{Hartshorne1977},
 \(g(\overline{Y})=(4-1)(4-2)/2=3\).
 \end{proof}
 
+\begin{lemma}[Integrality and function-field setup]
+  \label{lem:integral-function-field}
+  Let \(k=\QQ\) and let \(\overline{Y}\) be the smooth projective quartic
+  of \Cref{prop:sync-hatdelta-quotient}. Then:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item The affine curve \(C_{\mathrm{aff}}:=\{\widehat\Delta(w,s)=0\}
+          \subset\mathbb{A}^2_k\) is integral.
+    \item The element \(x=w^2\in k(\overline{Y})\) is not a square
+          in \(k(\overline{Y})\).
+    \item The extension \(k(\overline{Y})(\sqrt{x})/k(\overline{Y})\)
+          has degree exactly two, and its function field is \(k(C_{\mathrm{aff}})\).
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Part~(i): \(\widehat\Delta(w,s)\) is irreducible in \(\QQ[w,s]\) by
+\Cref{lem:hatdelta-irreducible}, so its zero locus is an irreducible
+variety. Since \(\widehat\Delta\) is prime in the UFD \(\QQ[w,s]\), the
+coordinate ring \(\QQ[w,s]/(\widehat\Delta)\) is a domain, so the
+variety is also reduced. Hence \(C_{\mathrm{aff}}\) is integral.
+
+Part~(ii): From \Cref{prop:sync-hatdelta-quotient}, the affine quartic
+satisfies \(F(0,y)=1-y\), so \(x=0\) meets \(\overline{Y}\) only at
+the point \(P=(0,1)\), with \(\partial_y F(0,1)=-1\neq 0\), giving
+\(\operatorname{ord}_P(x)=1\). A square in \(k(\overline{Y})\) would
+have even valuation at every place; the odd order at \(P\) shows
+\(x\notin k(\overline{Y})^2\).
+
+Part~(iii): Since \(x\notin k(\overline{Y})^2\), the extension
+\(k(\overline{Y})(\sqrt{x})/k(\overline{Y})\) has degree two. The
+identifications \(w=\sqrt{x}\) and \(s=y/\sqrt{x}\) show that this
+extension is the function field of \(C_{\mathrm{aff}}\).
+\end{proof}
+
 \begin{proposition}[Two-sheeted cover of genus six]
   \label{prop:sync-hatdelta-double-cover}
   The covering map \(\overline{X}\to\overline{Y}\) is a degree-two map
@@ -193,21 +363,23 @@ genus formula for smooth plane curves \cite{Hartshorne1977},
 \end{proposition}
 
 \begin{proof}
-The extension of function fields \(k(\overline{X})/k(\overline{Y})\) is
-obtained by adjoining \(w=\sqrt{x}\), so it is quadratic of degree two.
+By \Cref{lem:integral-function-field}, the extension of function fields
+\(k(\overline{X})/k(\overline{Y})\) is \(k(\overline{Y})(\sqrt{x})\),
+which has degree exactly two.
 
 We use the standard criterion for ramification in quadratic extensions
 of function fields: let \(K\) be a function field of characteristic
 \(\neq 2\), and let \(L=K(\sqrt{f}\,)\) with \(f\in K^\times\) not a
 square. Then a place \(P\) of \(K\) ramifies in \(L/K\) if and only if
 \(\operatorname{ord}_P(f)\) is odd; see \cite[III.7.3]{Stichtenoth2009}.
-Here \(f=x\) and we must determine \(\operatorname{ord}_P(x)\) at each
-place of \(\overline{Y}\).
+Here \(f=x\), and we determine the divisor of \(x\) on \(\overline{Y}\).
 
-On the affine chart, \(F(0,y)=1-y\), so the only place with \(x=0\) is
-\(P=(0,1)\). Since \(\partial_y F(0,1)=-1\neq 0\), the line \(x=0\)
-meets \(\overline{Y}\) transversely there, and therefore
-\(\operatorname{ord}_P(x)=1\) (odd: ramified).
+On the affine chart, \(F(0,y)=1-y\), so the only affine point with
+\(x=0\) is \(P=(0,1)\). Since \(\partial_y F(0,1)=-1\neq 0\), the line
+\(x=0\) meets \(\overline{Y}\) transversely there, and therefore
+\[
+  \operatorname{ord}_P(x)=1.
+\]
 
 For the points at infinity, work on the chart \(X=1\) with
 \(y=Y/X\) and \(z=Z/X\). The equation becomes
@@ -220,7 +392,10 @@ analytic function of \(y\), and solving \(G(y,z)=0\) gives
   z=y^2-2y^3+O(y^4).
 \]
 Hence \(x=X/Z=1/z\) has pole order \(2\) at \(Q_0\), so
-\(\operatorname{ord}_{Q_0}(x)=-2\) (even: unramified). At
+\[
+  \operatorname{ord}_{Q_0}(x)=-2.
+\]
+At
 \(Q_\infty=[1:-1:0]\), writing \(y=-1+t\) gives
 \[
   G(-1+t,z)=t-2t^2+t^3+z-tz-t^2z+z^3-tz^3+z^4,
@@ -230,7 +405,9 @@ so \(\partial_z G(-1,0)=1\neq 0\), and
   z=-t+t^2+O(t^3).
 \]
 Thus \(x=1/z\) has a simple pole at \(Q_\infty\), so
-\(\operatorname{ord}_{Q_\infty}(x)=-1\) (odd: ramified).
+\[
+  \operatorname{ord}_{Q_\infty}(x)=-1.
+\]
 
 At the remaining point \(Q_1=[0:1:0]\), use the chart \(Y=1\) with
 \(u=X/Y\) and \(v=Z/Y\). The homogenised equation begins as
@@ -238,108 +415,117 @@ At the remaining point \(Q_1=[0:1:0]\), use the chart \(Y=1\) with
   u-v^3+O(uv,v^4,u^2)=0,
 \]
 so \(u=v^3+O(v^4)\), and therefore \(x=X/Z=u/v\) has a zero of order
-\(2\) at \(Q_1\), so \(\operatorname{ord}_{Q_1}(x)=2\) (even: unramified).
-
-In summary:
+\(2\) at \(Q_1\), so
 \[
-  \operatorname{ord}_P(x)=1,\quad
-  \operatorname{ord}_{Q_0}(x)=-2,\quad
-  \operatorname{ord}_{Q_\infty}(x)=-1,\quad
   \operatorname{ord}_{Q_1}(x)=2.
 \]
-Ramification occurs exactly at \(P\) and \(Q_\infty\), giving two simple
-branch points. Hurwitz's formula \cite{Hartshorne1977} then gives
+
+Thus
+\[
+  \operatorname{div}(x)=P+2Q_1-2Q_0-Q_\infty.
+\]
+The odd valuations occur exactly at \(P\) and \(Q_\infty\). By the
+quadratic ramification criterion, these are exactly the two ramified
+places of \(k(\overline{X})/k(\overline{Y})\), and each contributes one
+simple branch point. Hurwitz's formula \cite{Hartshorne1977} then gives
 \[
   2g(\overline{X})-2=2(2g(\overline{Y})-2)+2=2(2\cdot 3-2)+2,
 \]
 hence \(g(\overline{X})=6\).
 \end{proof}
 
-\begin{proposition}[Generic Galois group]
-  \label{prop:sync-hatdelta-galois-s6-generic}
-  Viewed as a polynomial in \(w\), the completed determinant
-  \(\widehat\Delta(w,s)\) has generic Galois group \(S_6\) over
-  \(\QQ(s)\).
+
+
+
+
+\subsection{Cyclic lifts and primitive real factors}
+
+For \(q\ge 1\), let \(P_q\) be the cyclic permutation matrix on
+\(\ZZ/q\ZZ\), acting on the standard basis by \(P_qe_t=e_{t+1}\). The
+natural \(q\)-cyclic skew-product lift attached to the binary output
+labelling is
+\[
+  \widetilde B_q:=B_0\otimes I_q+B_1\otimes P_q.
+\]
+Its state set is \(\mathcal S\times\ZZ/q\ZZ\), and an edge
+\(x\to y\) of output \(e\in\{0,1\}\) in the original kernel becomes
+\((x,t)\to(y,t+e)\) in the lift. This is the standard cyclic extension
+attached to the output cocycle
+\cite{AdlerKitchensMarcus1985,Fiebig1993,BoyleSchmieding2017}.
+
+\begin{proposition}[Fourier decomposition of the cyclic lift]
+  \label{prop:sync-cyclic-lift-factorisation}
+  Let \(\omega_q=e^{2\pi i/q}\). Then
+  \[
+    \det(I-z\widetilde B_q)
+    =\prod_{j=0}^{q-1}\Delta(z,\omega_q^j).
+  \]
 \end{proposition}
 
 \begin{proof}
-The polynomial has degree \(6\) in \(w\). Write
-\(D(s):=\operatorname{disc}_w\widehat\Delta(w,s)\in\QQ[s]\). A direct
-computation shows that \(D(s)\) has degree~\(20\) with leading
-coefficient~\(-256\). Since the leading coefficient is negative,
-\(D(s)\) takes negative values for \(s\gg 0\) and is therefore not a
-square in~\(\QQ(s)\). It follows that the Galois group
-\(G\le S_6\) is not contained in~\(A_6\).
+Let \(F_q=(\omega_q^{ab})_{0\le a,b\le q-1}\) be the discrete Fourier
+matrix. Since
+\[
+  F_q^{-1}P_qF_q=\operatorname{diag}(1,\omega_q,\dots,\omega_q^{q-1}),
+\]
+conjugating \(I-z\widetilde B_q\) by \(I_{10}\otimes F_q\) gives
+\[
+  \bigoplus_{j=0}^{q-1}\bigl(I-z(B_0+\omega_q^jB_1)\bigr)
+  =\bigoplus_{j=0}^{q-1}\bigl(I-zB(\omega_q^j)\bigr).
+\]
+Taking determinants yields the stated factorisation.
+\end{proof}
 
-To pin down~\(G\), we specialise and apply the following standard
-principle \cite{Serre2008Topics}: for a monic separable polynomial
-\(f(w,s_0)\in\QQ[w]\) obtained from \(\widehat\Delta(w,s)\) by
-specialisation \(s\mapsto s_0\in\QQ\), the Galois group over \(\QQ\) of
-the specialised polynomial embeds into \(G\). The specialised polynomial
-is separable (and the embedding therefore valid) whenever
-\(\gcd(f(w,s_0),\partial_w f(w,s_0))=1\) in \(\QQ[w]\).
+\begin{proposition}[Primitive real factors of the cyclic lifts]
+  \label{prop:sync-primitive-real-factor}
+  Fix \(m\ge 2\). For
+  \(a\in(\ZZ/2m\ZZ)^\times/\{\pm1\}\), set
+  \[
+    r_a:=e^{\pi ia/m},
+    \qquad
+    s_a:=r_a+r_a^{-1}=2\cos(\pi a/m).
+  \]
+  Then
+  \[
+    \Delta(z,r_a^2)=\widehat\Delta(zr_a,s_a).
+  \]
+  Consequently, if
+  \[
+    A_m:=\Bigl\{2\cos\!\tfrac{\pi a}{m}:
+      a\in(\ZZ/2m\ZZ)^\times/\{\pm1\}\Bigr\},
+  \]
+  then the primitive Fourier blocks of the \(m\)-cyclic lift, after
+  pairing conjugate characters and changing variables \(w=zr_a\), give
+  the real polynomial
+  \[
+    \prod_{\alpha\in A_m}\widehat\Delta(w,\alpha)
+    =\Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr).
+  \]
+\end{proposition}
 
-We carry out three specialisations.
+\begin{proof}
+The identity
+\(\Delta(z,r_a^2)=\widehat\Delta(zr_a,s_a)\) is exactly the defining
+change of variables \(u=r^2\), \(w=zr\), \(s=r+r^{-1}\) applied at
+\(r=r_a\). If \(a\) is coprime to \(2m\), then \(r_a\) is a primitive
+\((2m)\)-th root of unity and \(r_a^2\) is a primitive \(m\)-th root of
+unity, so the corresponding factor is one of the primitive Fourier
+blocks in \Cref{prop:sync-cyclic-lift-factorisation}. Replacing \(a\) by
+\(-a\) conjugates \(r_a\) and leaves \(s_a=r_a+r_a^{-1}\) unchanged, so
+conjugate primitive characters collapse to the same real slice
+\(\widehat\Delta(w,s_a)\).
 
-\medskip
-\noindent\textit{Step 1 (\(s=3\), mod \(7\)).}\quad One has
+By definition,
 \[
-  \widehat\Delta(w,3)=8w^6+9w^5-4w^4+9w^3-5w^2-3w+1,
+  \Phi_m^+(s)=\prod_{\alpha\in A_m}(s-\alpha),
 \]
-which is separable over \(\QQ\) (verified by computing its discriminant).
-One checks
+so the product formula for resultants gives
 \[
-  \gcd\!\bigl(\widehat\Delta(w,3),\,\partial_w\widehat\Delta(w,3)\bigr)
-  \equiv 1\pmod{7},
+  \Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)
+  =\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha),
 \]
-so the mod-\(7\) reduction is squarefree. Reducing modulo~\(7\) gives
-\[
-  w^6+2w^5+3w^4+2w^3+2w^2+4w+1,
-\]
-which is irreducible over~\(\mathbb{F}_7\). Hence \(G\) contains a
-\(6\)-cycle and is therefore transitive.
-
-\medskip
-\noindent\textit{Step 2 (\(s=2\), mod \(7\)).}\quad One checks
-\[
-  \gcd\!\bigl(\widehat\Delta(w,2),\,\partial_w\widehat\Delta(w,2)\bigr)
-  \equiv 1\pmod{7},
-\]
-so the reduction is squarefree. Then
-\[
-  \widehat\Delta(w,2)\equiv
-  (w+6)(w+5)(w+2)(w+1)(3w^2+3w+2)\pmod 7,
-\]
-where \(3w^2+3w+2\) is irreducible over \(\mathbb{F}_7\). This gives
-cycle type \((1)(1)(1)(1)(2)\) in \(G\), so \(G\) contains a transposition.
-
-\medskip
-\noindent\textit{Step 3 (\(s=3\), mod \(19\)).}\quad One checks
-\[
-  \gcd\!\bigl(\widehat\Delta(w,3),\,\partial_w\widehat\Delta(w,3)\bigr)
-  \equiv 1\pmod{19},
-\]
-so the reduction is squarefree. Then
-\[
-  \widehat\Delta(w,3)\equiv
-  (w+16)\bigl(8w^5+14w^4+9w^2+3w+6\bigr)\pmod{19},
-\]
-with the quintic factor irreducible over \(\mathbb{F}_{19}\). This gives
-cycle type \((1)(5)\) in \(G\), so \(G\) contains a \(5\)-cycle.
-
-\medskip
-A transitive subgroup of \(S_6\) containing a \(5\)-cycle is
-primitive. Indeed, let \(\sigma\in G\) be a \(5\)-cycle. If \(\mathcal{B}\)
-were a non-trivial block, then \(|\mathcal{B}|\) would divide \(6\). If
-\(\mathcal{B}\) meets the support of \(\sigma\), then
-\(\mathcal{B}\cap\sigma(\mathcal{B})\neq\varnothing\), so
-\(\sigma(\mathcal{B})=\mathcal{B}\), and therefore \(\mathcal{B}\)
-contains all five moved points of \(\sigma\). Thus
-\(|\mathcal{B}|=5\) or \(|\mathcal{B}|=6\), which is impossible for a
-proper block. Hence \(G\) is primitive \cite[Ch.~3]{Dixon1996}. A
-primitive subgroup of \(S_6\) that contains a transposition must be the
-full symmetric group \cite[Ch.~3]{Dixon1996}. Hence \(G=S_6\). This
-completes part~\textup{(iii)} of \Cref{thm:intro-kernel-geometry}.
+which is exactly the real primitive factor obtained from the paired
+primitive Fourier blocks.
 \end{proof}
 
 \subsection{Cyclotomic resultants and twisted Perron roots}
@@ -353,14 +539,32 @@ define
 \[
   R_m(w):=\Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)\in\ZZ[w].
 \]
-The notation \(\Phi_m^+\) is non-standard; it denotes the minimal polynomial
-of the real part \(2\cos(\pi/m)\) of a primitive \(2m\)-th root of unity.
+The notation \(\Phi_m^+\) is non-standard; it denotes the real
+cyclotomic polynomial of \(2\cos(\pi/m)\), namely the minimal
+polynomial of the real part of a primitive \(2m\)-th root of unity.
 Concretely, the conjugates of \(s_m\) under \(\Gal(\QQ(s_m)/\QQ)\) are
 \[
   A_m:=\Bigl\{2\cos\!\tfrac{\pi a}{m}:a\in(\ZZ/2m\ZZ)^\times/\{\pm 1\}\Bigr\},
 \]
 and \(\Phi_m^+(s)=\prod_{\alpha\in A_m}(s-\alpha)\). The degree is
-\(\deg\Phi_m^+=|A_m|=\varphi(2m)/2\).
+\(\deg\Phi_m^+=|A_m|=\varphi(2m)/2\). By
+\Cref{prop:sync-primitive-real-factor}, the polynomial \(R_m(w)\) is
+precisely the primitive real factor extracted from the \(m\)-cyclic
+lift.
+
+For orientation, the first few real cyclotomic polynomials are
+\[
+  \Phi_2^+(s)=s,\qquad
+  \Phi_3^+(s)=s-1,\qquad
+  \Phi_4^+(s)=s^2-2,\qquad
+  \Phi_5^+(s)=s^2-s-1.
+\]
+The cases \(m=2\) and \(m=3\) are exceptional for different reasons:
+\(R_2(w)=\widehat\Delta(w,0)\) is handled separately in
+\Cref{cor:rho-m2-closed-form}, while for \(m=3\) one has
+\(\Phi_3^+(s)=s-1\) and the leading coefficient \(s^2-1\) of
+\(\widehat\Delta(w,s)\) vanishes at \(s=1\), so \(\deg R_3=5\) rather
+than \(6\). This is why the degree law begins at \(m\ge 4\).
 
 The corresponding twisted Perron root is
 \[
@@ -369,7 +573,6 @@ The corresponding twisted Perron root is
 
 \begin{theorem}[Cyclotomic resultant degree law]
   \label{thm:sync-cyclotomic-degree-law}
-  \leanverified{paper_self_dual_sync_cyclotomic_degree_law}
   For every \(m\ge 4\),
   \[
     \deg_w R_m=3\varphi(2m).
@@ -427,12 +630,11 @@ The symmetry \(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\) then gives
   \[
     \rho_2=\sqrt{2+\sqrt3}.
   \]
-\leanverified{paper_sync_rho_m2_publication_seeds}
 \end{corollary}
 
 \begin{proof}
-Since \(s_2=0\), the resultant is obtained by direct substitution. The
-smallest-modulus zero of \(R_2\) is \(\sqrt{2-\sqrt3}\), whose
+Since \(s_2=0\), the resultant is obtained by direct substitution.
+A minimal-modulus zero of \(R_2\) is \(\sqrt{2-\sqrt3}\), whose
 reciprocal is the stated value. Together with
 \Cref{thm:sync-cyclotomic-degree-law}, this proves
 parts~\textup{(i)} and~\textup{(ii)} of
@@ -478,88 +680,213 @@ One has
 \]
 Hence the implicit function theorem gives a unique analytic branch
 \(w(s)\) near \(s=2\). Differentiating the identity
-\(\widehat\Delta(w(s),s)=0\) repeatedly and solving for \(w^{(k)}(2)\)
-at each order yields the stated values of \(w'(2)\), \(\rho'(2)\), and
-\(\rho''(2)\). Continuing through sixth order by the same implicit
-differentiation procedure (a finite algebraic computation verified by
-computer algebra), one obtains the six-term jet of \(\rho\) displayed
-above. The coefficient of \(\delta^k\) at order \(k\le 6\) is a rational
-number determined solely by the partial derivatives of \(\widehat\Delta\)
-up to order \(k+1\) at \((1/3,2)\).
+\(\widehat\Delta(w(s),s)=0\) gives
+\[
+  \partial_w\widehat\Delta(w(s),s)\,w'(s)
+  +\partial_s\widehat\Delta(w(s),s)=0.
+\]
+At \((w,s)=(1/3,2)\) one computes
+\[
+  \partial_w\widehat\Delta(1/3,2)=-\frac{272}{81},
+  \qquad
+  \partial_s\widehat\Delta(1/3,2)=-\frac{176}{729},
+\]
+hence
+\[
+  w'(2)
+  =-\frac{\partial_s\widehat\Delta(1/3,2)}
+          {\partial_w\widehat\Delta(1/3,2)}
+  =-\frac{11}{153}.
+\]
+Since \(\rho(s)=w(s)^{-1}\), this immediately gives
+\[
+  \rho'(2)=-\frac{w'(2)}{w(2)^2}=\frac{11}{17}.
+\]
+Differentiating a second time yields
+\[
+  \partial_{ww}\widehat\Delta\,(w')^2
+  +2\partial_{ws}\widehat\Delta\,w'
+  +\partial_{ss}\widehat\Delta
+  +\partial_w\widehat\Delta\,w''=0,
+\]
+which determines \(w''(2)\), and therefore
+\[
+  \rho''(2)=\frac{2w'(2)^2}{w(2)^3}-\frac{w''(2)}{w(2)^2}
+  =\frac{1351}{9826}.
+\]
+Continuing the same recursion through order six yields the displayed
+jet of \(\rho(2-\delta)\). The exact recursive identities and the
+resulting coefficients are recorded in
+\Cref{sec:appendix-computation}\,\textup{(e)}.
 \end{proof}
 
 \begin{lemma}[Root separation]
   \label{lem:root-separation}
-  \leanverified{paper_self_dual_sync_root_separation}
-  For all sufficiently large \(m\), the smallest-modulus root of
-  \(R_m(w)\) is \(w^*(s_m)\), the unique root of
-  \(\widehat\Delta(w,s_m)=0\) near \(w=1/3\). In particular,
-  \(\rho_m=\rho(s_m)=1/w^*(s_m)\).
+  For all sufficiently large \(m\), the minimal-modulus roots of
+  \(R_m(w)\) are precisely the roots contributed by
+  \(\widehat\Delta(w,s_m)\), together with the symmetric factor
+  \(\widehat\Delta(w,-s_m)\) when \(-s_m\in A_m\) (equivalently, when
+  \(m\) is even). Specifically, letting \(w^*(s_m)\) denote the unique
+  root of \(\widehat\Delta(w,s_m)=0\) near \(w=1/3\), one has
+  \(\rho_m=\rho(s_m)=1/|w^*(s_m)|\).
 \end{lemma}
 
 \begin{proof}
-By the product formula,
+Define
 \[
-  R_m(w)=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha).
+  \lambda(s):=\min\bigl\{|w|:\widehat\Delta(w,s)=0\bigr\}.
 \]
-We must show that, for large \(m\), the smallest-modulus zero of
-\(R_m\) comes from the factor \(\widehat\Delta(w,s_m)\) and not from any
-factor with \(\alpha\neq s_m\).
+By the symmetry \(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\), one has
+\(\lambda(-s)=\lambda(s)\) for all \(s\). By the product formula,
+\[
+  R_m(w)=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha),
+\]
+and \(\rho_m=1/\min\{|w|:R_m(w)=0\}=1/\min_{\alpha\in A_m}\lambda(\alpha)\).
+We must show that \(\lambda(s_m)\) is strictly smaller than
+\(\lambda(\alpha)\) for all other \(\alpha\in A_m\), provided \(m\)
+is large enough.
 
-\textit{Step 1: Isolation at the endpoint.}\quad
+\medskip
+\noindent\textit{Step 1 (Endpoint branch near \(s=2\)).}\quad
 At \(s=2\), the polynomial \(\widehat\Delta(w,2)\) factorises as
 \[
   \widehat\Delta(w,2)=(w-1)(w+1)(3w-1)(w^3-w^2+w+1).
 \]
-The root \(w=1/3\) is simple; all other roots satisfy \(|w|>0.54\).
-Fix a closed disk \(D:=\{|w-1/3|<0.1\}\). By continuity of roots
-of \(\widehat\Delta(\cdot,s)\) in \(s\), there exists \(\varepsilon>0\) such
-that for \(|s-2|<\varepsilon\):
-\begin{itemize}
-  \item \(\widehat\Delta(\cdot,s)\) has exactly one simple root
-        \(w^*(s)\in D\);
-  \item every other root of \(\widehat\Delta(\cdot,s)\) lies outside
-        \(\{|w|<0.45\}\).
-\end{itemize}
-Moreover, differentiating \(\widehat\Delta(w(s),s)=0\) at \(s=2\) gives
-\(w^{*\prime}(2)=-11/153<0\), so \(w^*\) is strictly decreasing and
-\(w^*(s)\in D\) satisfies \(|w^*(s)|<|w^*(2)|=1/3\) for \(s\) slightly
-below \(2\).
-
-\textit{Step 2: Uniform lower bound away from the endpoint.}\quad
-The minimum modulus function \(\lambda(s):=\min\{|w|:\widehat\Delta(w,s)=0\}\)
-is continuous on \([-2,2]\). The symmetry \(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\)
-gives \(\lambda(-s)=\lambda(s)\), so the analysis near \(s=-2\) is
-identical. On the compact set \([-2,2]\setminus\bigl((-2,-2+\varepsilon)
-\cup(2-\varepsilon,2)\bigr)\), continuity gives a uniform lower bound
+The minimal-modulus root is \(w=1/3\), and it is simple. The cubic factor has a unique real root between \(-11/20\) and \(-27/50\) because it changes sign there. Moreover,
 \[
-  \lambda(s)\ge c_0>w^*(2-\varepsilon/2)
+  |w^3-w^2+w|\le |w|^3+|w|^2+|w|<0.54^3+0.54^2+0.54<1
 \]
-for some constant \(c_0\).
-
-\textit{Step 3: Comparing conjugates.}\quad
-Every \(\alpha\in A_m\setminus\{s_m\}\) satisfies
-\(|\alpha|\le 2\cos(3\pi/2m)<s_m\) for \(m\ge 4\) (with equality only
-for \(\alpha=-s_m\) when \(m\) is even, which also achieves modulus
-\(s_m\)). Since \(s_m\to 2\) and \(s_m=2-\pi^2/m^2+O(m^{-4})\), for
-all sufficiently large \(m\) every conjugate \(\alpha\in A_m\) with
-\(\alpha\neq\pm s_m\) lies in the interior of \([-2+\varepsilon,2-\varepsilon]\),
-where the uniform bound of Step 2 applies. The factors
-\(\widehat\Delta(\cdot,\pm s_m)\) contribute root \(w^*(s_m)\) (or
-its negative by parity); factors \(\widehat\Delta(\cdot,\alpha)\) for
-\(\alpha\neq\pm s_m\) all have minimum-modulus roots bounded below by
-\(c_0>w^*(2-\varepsilon/2)>w^*(s_m)\).
-
-Hence for all sufficiently large \(m\),
+whenever \(|w|\le 27/50\), so \(w^3-w^2+w+1\neq 0\) on the closed disc of radius \(27/50\). Hence every root other than \(w=1/3\) has modulus at least \(27/50>1/2\).
+By the implicit function theorem, there exist \(\eta>0\) and a unique real-analytic branch
+\(w^*:[2-\eta,2]\to\RR\) with \(w^*(2)=1/3\) and
+\(\widehat\Delta(w^*(s),s)=0\). Shrinking \(\eta\) if necessary, we may
+assume that
 \[
-  \min\{|w|:R_m(w)=0\}=|w^*(s_m)|,
+  0<w^*(s)<\frac12
+  \qquad (2-\eta\le s\le 2),
 \]
-which gives \(\rho_m=1/|w^*(s_m)|=\rho(s_m)\).
+while every other root of \(\widehat\Delta(\cdot,s)\) has modulus at
+least \(1/2\). Hence
+\[
+  \lambda(s)=w^*(s)
+  \qquad (2-\eta\le s\le 2).
+\]
+This is the same endpoint branch as in \Cref{prop:sync-endpoint-jet},
+so \(\rho(s)=1/w^*(s)\) on \([2-\eta,2]\).
+Since \(w^{*\prime}(2)=-11/153<0\) by \Cref{prop:sync-endpoint-jet},
+continuity of \(w^{*\prime}\) allows us to shrink \(\eta\) further so
+that \(w^{*\prime}(s)<0\) on \([2-\eta,2]\). Thus \(w^*(s)>1/3\) for
+\(s<2\), and
+\[
+  \rho(s)=\frac{1}{w^*(s)}
+\]
+is strictly increasing on \([2-\eta,2]\).
+
+\medskip
+\noindent\textit{Step 2 (Strict spectral gap away from the untwisted
+endpoints).}\quad
+Let \(s\in(-2,2)\), choose \(\vartheta\in(0,\pi)\) with
+\(s=2\cos\vartheta\), and set \(r=e^{i\vartheta}\), \(u=r^2=e^{2i\vartheta}\).
+Then \(\widehat\Delta(w,s)=\Delta(w/r,r^2)\), so
+\(\lambda(s)^{-1}\) is the spectral radius of \(B(u)\). Since every row
+of \(B(1)\) has sum \(3\), one has \(\rho(B(u))\le 3\).
+
+Suppose for contradiction that \(\rho(B(u))=3\). Choose an eigenvalue
+\(\mu\) of \(B(u)\) with \(|\mu|=3\) and a corresponding eigenvector
+\(\mathbf{x}=(x_1,\dots,x_{10})\), normalised by
+\(\max_j |x_j|=1\). Pick \(i\) with \(|x_i|=1\). The \(i\)-th row of
+\(B(u)\) contains exactly three non-zero entries, each of modulus \(1\),
+so
+\[
+  3=|\mu x_i|
+   =\Bigl|\sum_j b_{ij}(u)x_j\Bigr|
+  \le \sum_j |b_{ij}(u)x_j|
+  \le 3.
+\]
+Hence equality holds throughout: the three target coordinates in that
+row all have modulus \(1\), and the corresponding summands have a
+common phase. Because the digraph is strongly connected, iterating this
+argument along directed paths shows that \(|x_j|=1\) for every
+\(j\).
+
+Now inspect the specific rows of \(B(u)\). From the row of
+\(\st{000}\),
+\[
+  3=|\mu x_1|=|x_1+x_2+x_3|,
+\]
+so \(x_1=x_2=x_3\) and \(\mu=3\). Then the rows of
+\(\st{001}\), \(\st{0-12}\), and \(\st{01-1}\) successively give
+\[
+  x_4=x_5=x_6=x_7=x_8=x_9=x_1.
+\]
+Finally, the row of \(\st{002}\) reads
+\[
+  3x_3=ux_1+ux_2+x_{10}.
+\]
+Again each summand has modulus \(1\), so equality forces
+\(ux_1=ux_2=x_{10}=x_3=x_1\), hence \(u=1\), contradicting
+\(\vartheta\in(0,\pi)\). Therefore
+\[
+  \lambda(s)>\frac13
+  \qquad (-2<s<2).
+\]
+
+\medskip
+\noindent\textit{Step 3 (Compactness away from the endpoints).}\quad
+The function \(\lambda:[-2,2]\to\RR_{>0}\) is continuous. On the compact
+set
+\[
+  K:=[-2+\eta,\,2-\eta],
+\]
+Step~2 gives \(\lambda(s)>1/3\) for every \(s\in K\). Hence
+\[
+  c_0:=\min_{s\in K}\lambda(s)
+\]
+is well defined and satisfies \(c_0>1/3\).
+
+\medskip
+\noindent\textit{Step 4 (Comparison of endpoint-near conjugates).}\quad
+Let \(\alpha\in A_m\). If \(|\alpha|>2-\eta\), then for large enough
+\(m\) one has \(|\alpha|\in[2-\eta,2]\). Among the conjugates
+\(\alpha=2\cos(\pi a/m)\) with \(1\le a<m\), the quantity \(|\alpha|\)
+is maximal at \(a=1\), giving \(s_m=2\cos(\pi/m)\); if \(m\) is even,
+the same maximal absolute value also occurs at \(a=m-1\), giving
+\(-s_m\). Thus every \(\alpha\in A_m\) with \(\alpha\neq \pm s_m\)
+satisfies
+\[
+  |\alpha|<s_m.
+\]
+Using \(\lambda(-s)=\lambda(s)\) and the strict monotonicity of
+\(\rho(s)=1/\lambda(s)\) on \([2-\eta,2]\), we obtain
+\[
+  \lambda(\alpha)=\lambda(|\alpha|)>\lambda(s_m)
+  \qquad
+  (\alpha\in A_m,\ \alpha\neq \pm s_m,\ |\alpha|>2-\eta).
+\]
+If \(|\alpha|\le 2-\eta\), then \(\alpha\in K\) and Step~3 gives
+\[
+  \lambda(\alpha)\ge c_0.
+\]
+Since \(\lambda(s_m)=w^*(s_m)\to 1/3\) as \(m\to\infty\), we have
+\(\lambda(s_m)<c_0\) for all sufficiently large \(m\). Therefore, for
+all sufficiently large \(m\),
+\[
+  \lambda(s_m)\le \lambda(\alpha)
+  \qquad
+  (\alpha\in A_m),
+\]
+with strict inequality for \(\alpha\neq \pm s_m\) and equality only for
+\(\alpha=-s_m\) when \(-s_m\in A_m\).
+Consequently the minimal-modulus roots of \(R_m(w)\) come from the
+factor \(\widehat\Delta(w,s_m)\), together with
+\(\widehat\Delta(w,-s_m)\) when \(m\) is even, and
+\[
+  \rho_m=\frac{1}{\lambda(s_m)}=\rho(s_m). \qedhere
+\]
 \end{proof}
 
 \begin{theorem}[Asymptotic expansion of the twisted Perron roots]
   \label{thm:rho-gap-m12}
-  \leanverified{paper_self_dual_sync_rho_gap_m12}
   As \(m\to\infty\),
   \begin{align*}
     \rho_m
@@ -604,8 +931,16 @@ of \(\delta\). This proves part~\textup{(iii)} of
 
 \begin{remark}
 The asymptotic expansion is already numerically accurate for moderate
-values of \(m\). Solving the specialised equations \(R_m(w)=0\) for the
-smallest-modulus root and comparing with the truncation of
+values of \(m\). For the displayed values \(m=4,6,8,10\), the quantity
+\(\rho_m\) is verified directly from the definition
+\[
+  \rho_m^{-1}=\min_{\alpha\in A_m}\min\{\abs{w}:\widehat\Delta(w,\alpha)=0\},
+\]
+using the finite SageMath checks recorded in
+\Cref{sec:appendix-computation}\,\textup{(e)}. Thus the table below does
+not use \Cref{lem:root-separation}, which is only invoked for
+sufficiently large \(m\). Solving the specialised equations for these
+small values and comparing with the truncation of
 \Cref{thm:rho-gap-m12} gives
 \[
   \begin{array}{c|c|c|c}
@@ -620,37 +955,12 @@ smallest-modulus root and comparing with the truncation of
 for \(m=4,6,8,10\).
 \end{remark}
 
-\subsection{Primitive orbit counts under cyclic lift}
 
-\begin{proposition}[Cyclic-lift primitive asymptotics]
-  \label{prop:cyclic-lift-primitive-asymptotics}
-  Let \(M\) be a primitive matrix with Perron root \(\lambda\), and for
-  \(q\ge 2\) let \(M^{\langle q\rangle}:=M\otimes P_q\). Then
-  \[
-    p_n(M^{\langle q\rangle})=0
-    \qquad (q\nmid n),
-  \]
-  and for \(n=qm\),
-  \[
-    p_{qm}(M^{\langle q\rangle})
-    =\frac{1}{m}\sum_{d\mid m}\mu(d)\Tr(M^{qm/d})
-    =\frac{\lambda^{qm}}{m}
-      +O\!\left(
-        \frac{\max\{\Lambda(M)^{qm},\lambda^{qm/2}\}}{m}
-      \right).
-  \]
-\end{proposition}
 
-\begin{proof}
-Since \((M\otimes P_q)^n=M^n\otimes P_q^n\) and
-\[
-  \Tr(P_q^n)=
-  \begin{cases}
-    q, & q\mid n,\\
-    0, & q\nmid n,
-  \end{cases}
-\]
-the trace sequence of \(M^{\langle q\rangle}\) vanishes outside the
-multiples of \(q\). Applying M\"obius inversion and then
-\Cref{lem:primitive-orbit-asymptotic} gives the result.
-\end{proof}
+
+
+
+
+
+
+
