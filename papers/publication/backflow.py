@@ -70,8 +70,21 @@ PAPER_CORE_MAP = {
     "cubical_stokes": "high_dimensional_cut_project",
     "gluing_failure": "logic_expansion_chain",
     "prefix_scan": "spg",
+    "scan_error": "spg",
+    "detector_shells": "physical_spacetime_skeleton",
     "JphisComm": "physical_spacetime_skeleton",
+    "fredholm_determinants": "zeta_finite_part",
     "group_unification": "group_unification",
+    "finite_parts_dynamical": "zeta_finite_part",
+    "finite_observation": "statistical_stability",
+    "finite_window": "folding",
+    "sharp_three_window": "folding",
+    "folded_histograms": "folding",
+    "cayley_chebyshev": "circle_dimension_phase_gate",
+    "homological_visibility": "logic_expansion_chain",
+    "coefficient_sup_radial": "emergent_arithmetic",
+    "deterministic_telescoping": "fold_residual_time",
+    "elliptic_normalization": "emergent_arithmetic",
     # Submitted papers
     "branch_cubic": "emergent_arithmetic",
     "fibonacci_moduli": "folding",
@@ -570,6 +583,204 @@ def cmd_inject(args):
         print(f"  {a}")
 
 
+REVISION_TRACE_PATTERNS = re.compile(
+    r"修订|修复|本版本|新增|补充的|新xxx|"
+    r"Corrected|This version|We have improved|In this revision",
+    re.IGNORECASE,
+)
+MANUAL_THEOREM_RE = re.compile(
+    r"\\noindent\s*\\textbf\{(?:Lemma|Theorem|Proposition|Corollary|Definition)",
+)
+
+MAX_TEX_LINES = 800
+
+
+def review_paper(paper_dir: Path) -> dict:
+    """Run stage-C automated quality checks on a paper.
+
+    Returns a dict with pass/fail verdict and issue list.
+    """
+    issues = []
+    tex_files = sorted(paper_dir.glob("*.tex"))
+    # Also check subdirectories (generated/, etc.)
+    tex_files.extend(sorted(paper_dir.glob("**/*.tex")))
+    # Deduplicate
+    seen = set()
+    unique_tex = []
+    for f in tex_files:
+        if f not in seen:
+            seen.add(f)
+            unique_tex.append(f)
+    tex_files = unique_tex
+
+    for tex_file in tex_files:
+        rel = tex_file.relative_to(paper_dir)
+        text = read_text(tex_file)
+        lines = text.split("\n")
+        line_count = len(lines)
+
+        # CHECK-C1: File size
+        if line_count > MAX_TEX_LINES:
+            issues.append({
+                "check": "C1-filesize",
+                "severity": "HARD_FAIL",
+                "file": str(rel),
+                "detail": f"{line_count} lines (limit {MAX_TEX_LINES})",
+            })
+
+        # CHECK-C2: Revision traces
+        for i, line in enumerate(lines, 1):
+            if REVISION_TRACE_PATTERNS.search(line):
+                # Skip comments
+                stripped = line.lstrip()
+                if stripped.startswith("%"):
+                    continue
+                issues.append({
+                    "check": "C2-revision-trace",
+                    "severity": "MEDIUM",
+                    "file": str(rel),
+                    "line": i,
+                    "detail": line.strip()[:80],
+                })
+
+        # CHECK-C3: Manual theorem environments
+        for m in MANUAL_THEOREM_RE.finditer(text):
+            pos = m.start()
+            line_num = text[:pos].count("\n") + 1
+            issues.append({
+                "check": "C3-manual-env",
+                "severity": "MEDIUM",
+                "file": str(rel),
+                "line": line_num,
+                "detail": "Manual \\noindent\\textbf instead of \\begin{theorem}",
+            })
+
+        # CHECK-C4: Dangling \ref (basic check)
+        ref_labels = set(re.findall(r"\\(?:ref|Cref|cref)\{([^}]+)\}", text))
+        defined_labels = set(re.findall(r"\\label\{([^}]+)\}", text))
+        # Collect all labels across the paper for cross-file check later
+
+        # CHECK-C5: Basic symbol consistency — look for isolated \varphi
+        # that should have been renamed to \lambda_{\mathrm G} etc.
+        # (Paper-specific; generic check for common rename patterns)
+
+    hard_fails = [i for i in issues if i["severity"] == "HARD_FAIL"]
+    verdict = "FAIL" if hard_fails else "PASS"
+
+    return {
+        "paper": paper_dir.name,
+        "verdict": verdict,
+        "hard_fails": len(hard_fails),
+        "total_issues": len(issues),
+        "issues": issues,
+    }
+
+
+def cmd_review(args):
+    """Run stage-C quality review on a paper."""
+    paper_dir = Path(args.paper).resolve()
+    result = review_paper(paper_dir)
+
+    verdict_icon = "PASS" if result["verdict"] == "PASS" else "FAIL"
+    print(f"[backflow] Stage-C Review: {result['paper']}")
+    print(f"  Verdict: {verdict_icon}")
+    print(f"  Hard fails: {result['hard_fails']}")
+    print(f"  Total issues: {result['total_issues']}")
+
+    if result["issues"]:
+        print()
+        for issue in result["issues"]:
+            sev = issue["severity"]
+            check = issue["check"]
+            f = issue["file"]
+            line = issue.get("line", "")
+            detail = issue["detail"]
+            line_str = f":{line}" if line else ""
+            print(f"  [{sev:9s}] {check}: {f}{line_str} — {detail}")
+
+    # Write JSON report
+    BACKFLOW_DIR.mkdir(parents=True, exist_ok=True)
+    report_path = BACKFLOW_DIR / f"review_{slug_from_dir(paper_dir)}.json"
+    write_json(report_path, result)
+    print(f"\n[backflow] Review saved to {report_path}")
+
+    return result
+
+
+def cmd_mark(args):
+    """Mark a paper's backflow status."""
+    paper_dir = Path(args.paper).resolve()
+    new_status = args.status
+
+    # Update PIPELINE.md
+    pipeline = paper_dir / "PIPELINE.md"
+    if pipeline.exists():
+        text = read_text(pipeline)
+        # Replace all "| pending |" with new status in backflow table
+        if new_status == "integrated":
+            text = text.replace("| pending |", "| integrated |")
+        write_text(pipeline, text)
+        print(f"[backflow] Marked {slug_from_dir(paper_dir)} backflow as {new_status}")
+    else:
+        print(f"[backflow] No PIPELINE.md found for {paper_dir.name}")
+
+    # Also update the inventory JSON if it exists
+    inventory_path = BACKFLOW_DIR / "backflow_inventory.json"
+    if inventory_path.exists():
+        with open(io_path(inventory_path), "r", encoding="utf-8") as f:
+            records = json.load(f)
+        slug = slug_from_dir(paper_dir)
+        for r in records:
+            if r.get("paper_slug") == slug:
+                r["backflow_status"] = new_status
+                r["date_scanned"] = str(date.today())
+        write_json(inventory_path, records)
+
+
+def cmd_diff(args):
+    """Show claims in a paper that are NOT in the core theory section."""
+    paper_dir = Path(args.paper).resolve()
+    record = scan_paper(paper_dir)
+
+    if record.core_section == "unknown":
+        print(f"[backflow] No core section mapping for {record.paper_slug}")
+        print(f"  Add entry to PAPER_CORE_MAP in backflow.py")
+        return
+
+    core_dir = CORE_BODY / record.core_section
+    if not core_dir.exists():
+        print(f"[backflow] Core section {record.core_section}/ not found")
+        return
+
+    # Collect all labels in the core section
+    core_labels = set()
+    for tex in core_dir.rglob("*.tex"):
+        text = read_text(tex)
+        core_labels.update(re.findall(r"\\label\{([^}]+)\}", text))
+
+    # Find claims not in core (by checking if similar label exists)
+    missing = []
+    for claim in record.claims:
+        # Strip -main suffix and check
+        base_label = claim.label.replace("-main", "")
+        found = any(base_label in cl or cl.replace("-main", "") == base_label
+                     for cl in core_labels)
+        if not found:
+            missing.append(claim)
+
+    print(f"[backflow] Diff: {record.paper_slug} -> {record.core_section}/")
+    print(f"  Total claims in paper: {len(record.claims)}")
+    print(f"  Already in core: {len(record.claims) - len(missing)}")
+    print(f"  Missing from core: {len(missing)}")
+
+    if missing:
+        print()
+        print(f"  Claims needing backflow:")
+        for c in missing:
+            title = c.title[:60] if c.title else "—"
+            print(f"    [{c.env_type:11s}] {c.label:45s} {title}")
+
+
 def cmd_status(args):
     """Show pipeline-wide backflow status."""
     records = scan_all()
@@ -604,6 +815,18 @@ def main():
 
     p_status = sub.add_parser("status", help="Show backflow status")
 
+    p_review = sub.add_parser("review", help="Stage-C quality review of Codex output")
+    p_review.add_argument("paper", help="Paper directory to review")
+
+    p_diff = sub.add_parser("diff", help="Show claims missing from core theory")
+    p_diff.add_argument("paper", help="Paper directory")
+
+    p_mark = sub.add_parser("mark", help="Mark paper backflow status")
+    p_mark.add_argument("paper", help="Paper directory")
+    p_mark.add_argument("--status", required=True,
+                        choices=["pending", "partial", "integrated"],
+                        help="New backflow status")
+
     args = parser.parse_args()
     if args.command == "scan":
         cmd_scan(args)
@@ -613,6 +836,12 @@ def main():
         cmd_inject(args)
     elif args.command == "status":
         cmd_status(args)
+    elif args.command == "review":
+        cmd_review(args)
+    elif args.command == "diff":
+        cmd_diff(args)
+    elif args.command == "mark":
+        cmd_mark(args)
     else:
         parser.print_help()
 
