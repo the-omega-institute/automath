@@ -1324,11 +1324,6 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
         return ""
 
     import tempfile
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False,
-                                     encoding="utf-8") as f:
-        f.write(prompt)
-        prompt_file = f.name
-
     out_fd, out_file = tempfile.mkstemp(suffix=".txt", prefix="codex_out_")
     os.close(out_fd)
 
@@ -1338,8 +1333,11 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
         (CODEX_LOG_DIR / f"{log_tag}_{ts}.prompt.txt").write_text(
             prompt, encoding="utf-8")
 
-    # Use both --json (JSONL stream) and -o (last message).
-    # --json gives us all agent_message events as fallback if -o is empty.
+    # Prompt as positional arg + stdin=DEVNULL — borrowed from
+    # lean4-codex-auto-dev (PR #37). Empirically prevents codex hang on
+    # "Reading additional input from stdin..." (20+ min idle observed when
+    # prompt is fed via stdin pipe even after communicate() closes the write end).
+    # --json gives all agent_message events as fallback if -o is empty.
     cmd = [
         codex_bin, "exec",
         "--dangerously-bypass-approvals-and-sandbox",
@@ -1348,7 +1346,7 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     ]
     if model:
         cmd.extend(["-m", model])
-    cmd.append("-")
+    cmd.append(prompt)
 
     # Windows: .cmd wrappers need shell=True
     use_shell = IS_WINDOWS and str(codex_bin).endswith(".cmd")
@@ -1359,7 +1357,7 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
     start = time.monotonic()
     result = None
     popen_kwargs: dict = dict(
-        stdin=subprocess.PIPE,
+        stdin=subprocess.DEVNULL,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
@@ -1377,12 +1375,9 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
             self.returncode = returncode
 
     try:
-        with open(prompt_file, "r", encoding="utf-8") as pf:
-            prompt_text = pf.read()
         proc = subprocess.Popen(cmd, **popen_kwargs)
         try:
-            stdout, stderr = proc.communicate(input=prompt_text,
-                                               timeout=timeout_seconds + 30)
+            stdout, stderr = proc.communicate(timeout=timeout_seconds + 30)
             result = _Result(stdout, stderr, proc.returncode)
         except subprocess.TimeoutExpired:
             logger.warning(f"Codex timed out after {timeout_seconds}s, "
@@ -1395,7 +1390,6 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
             result = _Result(stdout, stderr, -9)
     except OSError as exc:
         logger.error(f"Codex failed to start: {exc}")
-        os.unlink(prompt_file)
         try:
             os.unlink(out_file)
         except OSError:
@@ -1405,10 +1399,6 @@ def codex_exec(prompt: str, *, work_dir: Optional[Path] = None,
         elapsed = time.monotonic() - start
         rc = result.returncode if result else "?"
         logger.info(f"Codex exec: {elapsed:.1f}s (rc={rc})")
-        try:
-            os.unlink(prompt_file)
-        except OSError:
-            pass
 
     output = ""
     try:
