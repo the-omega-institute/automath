@@ -2593,3 +2593,4 @@ import Omega.Conclusion.BoundedRadialActionGrowingKappaDepthExplosion
 import Omega.Conclusion.BivariateFinitewindowFiniteCombRigidity
 import Omega.Conclusion.FiniteArithmeticCertificatesControlFullscaleGap
 import Omega.Conclusion.CollisionHankelPrefixAsymptoticDichotomy
+import Omega.Conclusion.FoldGaugeTwoScaleSpectralRigidity
