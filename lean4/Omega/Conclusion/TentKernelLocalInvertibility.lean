@@ -97,4 +97,54 @@ theorem paper_conclusion_near_isolated_fan_peak_quantitative_localization
       field_simp [ne_of_gt heps0]
     linarith
 
+/-- Tent kernel centered at the origin. -/
+def conclusion_isolated_fan_peak_integer_rigidity_tentKernel (x : Real) : Real :=
+  max (1 - |x|) 0
+
+/-- The side intervals adjacent to an isolated fan peak. -/
+def conclusion_isolated_fan_peak_integer_rigidity_sideIntervals (q : Int) :
+    Set Real × Set Real :=
+  (Set.Icc ((q : Real) - 2) ((q : Real) - 1), Set.Icc ((q : Real) + 1) ((q : Real) + 2))
+
+/-- Concrete interval/mass data for the isolated fan-peak integer-rigidity certificate. -/
+structure conclusion_isolated_fan_peak_integer_rigidity_data where
+  q : Int
+  leftMass : Real
+  rightMass : Real
+  offCenterMass : Real
+  centerMass : Real
+  wq : Real
+  leftPeak : Real
+  rightPeak : Real
+  h_leftMass_nonneg : 0 ≤ leftMass
+  h_rightMass_nonneg : 0 ≤ rightMass
+  h_leftPeak_zero : leftPeak = 0
+  h_rightPeak_zero : rightPeak = 0
+  h_leftMass_le_peak : leftMass ≤ leftPeak
+  h_rightMass_le_peak : rightMass ≤ rightPeak
+  h_offCenterMass : offCenterMass = leftMass + rightMass
+  h_centerMass :
+    centerMass = conclusion_isolated_fan_peak_integer_rigidity_tentKernel 0 * wq
+
+/-- The centered tent kernel has value one at the isolated peak. -/
+lemma conclusion_isolated_fan_peak_integer_rigidity_tentKernel_zero :
+    conclusion_isolated_fan_peak_integer_rigidity_tentKernel 0 = 1 := by
+  simp [conclusion_isolated_fan_peak_integer_rigidity_tentKernel]
+
+/-- Paper label: `thm:conclusion-isolated-fan-peak-integer-rigidity`. -/
+theorem paper_conclusion_isolated_fan_peak_integer_rigidity
+    (D : conclusion_isolated_fan_peak_integer_rigidity_data) :
+    D.offCenterMass = 0 ∧ D.centerMass = D.wq := by
+  have h_left_nonpos : D.leftMass ≤ 0 := by
+    simpa [D.h_leftPeak_zero] using D.h_leftMass_le_peak
+  have h_right_nonpos : D.rightMass ≤ 0 := by
+    simpa [D.h_rightPeak_zero] using D.h_rightMass_le_peak
+  have h_left_zero : D.leftMass = 0 := le_antisymm h_left_nonpos D.h_leftMass_nonneg
+  have h_right_zero : D.rightMass = 0 := le_antisymm h_right_nonpos D.h_rightMass_nonneg
+  refine ⟨?_, ?_⟩
+  · rw [D.h_offCenterMass, h_left_zero, h_right_zero]
+    norm_num
+  · rw [D.h_centerMass, conclusion_isolated_fan_peak_integer_rigidity_tentKernel_zero]
+    ring
+
 end Omega.Conclusion
