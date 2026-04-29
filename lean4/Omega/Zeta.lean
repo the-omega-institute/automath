@@ -2690,3 +2690,4 @@ import Omega.Zeta.XiTimePart9KFoldFiberLayerCountRealrootLogconcavity
 import Omega.Zeta.XiAnchoredCapacityExteriorPowerInterpolant
 import Omega.Zeta.XiToeplitzNegativeReciprocalSumLimit
 import Omega.Zeta.XiTimePart9zqActivePrimesliceLinearGrowth
+import Omega.Zeta.XiTimePart62dcaHologramBernoulliExactDimensionFormula
