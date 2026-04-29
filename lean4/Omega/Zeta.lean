@@ -224,6 +224,8 @@ import Omega.Zeta.XiHardeningTimeFrontierRigidity
 import Omega.Zeta.XiTimePart65eWindow6GeometricDiagonalZ2Parity
 import Omega.Zeta.XiSliceHorizonCarathToeplitz
 import Omega.Zeta.XiJacobiTruncationRemainderStieltjes
+import Omega.Zeta.XiLeyangPuiseuxZeroScaling
+import Omega.Zeta.XiOffcriticalZeroForcesTranscriptLength
 import Omega.Zeta.XiTimePart65eStripBlaschkeOriginModulusIndexLowerBound
 import Omega.Zeta.XiCompletedZetaRemainderPhaseLaw
 import Omega.Zeta.XiTimePart65cOutputEdgeworthFirstCorrection
