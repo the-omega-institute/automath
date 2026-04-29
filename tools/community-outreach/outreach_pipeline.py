@@ -2121,12 +2121,16 @@ def _kill_process_tree(pid: int) -> None:
         pass
 
 
+CODEX_LOG_DIR = SCRIPT_DIR / "logs" / "codex"
+
+
 def codex_exec(
     prompt: str,
     work_dir: Path,
     timeout: int = DEFAULT_TIMEOUT,
     model: Optional[str] = None,
     dry_run: bool = False,
+    log_tag: Optional[str] = None,
 ) -> str:
     """Borrowed from lean4-codex-auto-dev pipeline (PR #37):
     1. Prompt via temp file + shell arg (not stdin pipe) — prevents Codex hang
@@ -2145,6 +2149,13 @@ def codex_exec(
     prompt_fd, prompt_file = tempfile.mkstemp(prefix="codex_prompt_", suffix=".txt")
     os.close(prompt_fd)
     Path(prompt_file).write_text(prompt, encoding="utf-8")
+
+    # Persist prompt for debugging (mirrors lean4 codex_formalize.py log_tag pattern)
+    if log_tag:
+        CODEX_LOG_DIR.mkdir(parents=True, exist_ok=True)
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        persist_prompt = CODEX_LOG_DIR / f"{log_tag}_{ts}.prompt.txt"
+        persist_prompt.write_text(prompt, encoding="utf-8")
 
     model_flag = f" -m {model}" if model else ""
     # macOS has gtimeout (from coreutils), Linux has timeout
@@ -2191,17 +2202,24 @@ def codex_exec(
 
     try:
         if os.path.exists(out_file) and os.path.getsize(out_file) > 0:
-            return Path(out_file).read_text(encoding="utf-8")
-        if stdout:
-            return stdout
-        if rc != 0:
+            output = Path(out_file).read_text(encoding="utf-8")
+        elif stdout:
+            output = stdout
+        elif rc != 0:
             if stderr:
                 logger.warning("Codex stderr: %s", stderr[:400])
-            return ""
-        if stderr:
+            output = ""
+        elif stderr:
             logger.warning("Codex stderr: %s", stderr[:400])
-            return stderr
-        return ""
+            output = stderr
+        else:
+            output = ""
+        # Persist output for debugging
+        if log_tag and output:
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            persist_out = CODEX_LOG_DIR / f"{log_tag}_{ts}.out.txt"
+            persist_out.write_text(output, encoding="utf-8")
+        return output
     finally:
         with contextlib.suppress(OSError):
             os.unlink(out_file)
