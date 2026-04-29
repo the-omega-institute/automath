@@ -264,6 +264,8 @@ import Omega.Zeta.XiAuditDehnFunctionTimeGeometry
 import Omega.Zeta.XiJSexticTwoPrimesForceS6
 import Omega.Zeta.XiQepCommutingModalFactorization
 import Omega.Zeta.XiTimePart65hDivisibilitySlopeFreezingPropagation
+import Omega.Zeta.XiEdDiscriminantJClosedForm
+import Omega.Zeta.XiLeyangDiscriminantSyncEd
 import Omega.Zeta.XiQepLeakageLowerBound
 import Omega.Zeta.XiQepScalarModeTowerClassification
 import Omega.Zeta.CayleyOffsetDefectSpectrumBounds
