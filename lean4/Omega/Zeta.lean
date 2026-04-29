@@ -163,6 +163,8 @@ import Omega.Zeta.XiLeakageZeroOffsetSum
 import Omega.Zeta.XiWindow6B3C3WeylAverageMeasureSecondMoment
 import Omega.Zeta.XiWindow6BoundaryParityC3EquivariantIdempotents
 import Omega.Zeta.XiWindow6BoundaryTwoSheetPermutationDecomposition
+import Omega.Zeta.XiWindow6FullAutomorphismGroupStructure
+import Omega.Zeta.XiWindow6SchurMultiplier219
 import Omega.Zeta.XiHilbertPolyaCMV
 import Omega.Zeta.XiHankelMaxminorHeightBoundDeterministicCrtReconstruction
 import Omega.Zeta.XiHankelLinearRealizationFinitePrimeSupportModAudit
