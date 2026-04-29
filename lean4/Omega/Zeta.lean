@@ -264,6 +264,8 @@ import Omega.Zeta.XiTimePart70aUniformScaledDegeneracyQuantitative
 import Omega.Zeta.XiTimePart9fNoConstantMemory
 import Omega.Zeta.XiTerminalZmLeyangSquareDescentMonicGenerator
 import Omega.Zeta.XiFixedFreezingMaxfiberSkeletonProjection
+import Omega.Zeta.XiPoissonCauchyDerivativeRatioFourierBinomials
+import Omega.Zeta.XiPoissonCauchyRenyi2KLUpper
 import Omega.Zeta.XiStableAddQuerySaturationMulUnitSlice
 import Omega.Zeta.MinimalPropagatorRootOfUnityCriterion
 import Omega.Zeta.CompletedCoordinateRigidityTimeReversal
