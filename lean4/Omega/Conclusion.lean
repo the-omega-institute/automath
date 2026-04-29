@@ -2814,3 +2814,5 @@ import Omega.Conclusion.AnnealedSoftFirstfitGapHalting
 import Omega.Conclusion.GoldenLucasHankelV5QuadraticGrowth
 import Omega.Conclusion.ExclusionRadiusConcaveSpline
 import Omega.Conclusion.ConclusionSingleConductorTorsionPoleDivisorRecoversHistogram
+import Omega.Conclusion.RamanujanKernelPsdDerivativeParsevalControl
+import Omega.Conclusion.HankelWitnessGlobalBadPrimeSupport

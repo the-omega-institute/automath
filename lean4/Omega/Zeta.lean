@@ -3286,3 +3286,4 @@ import Omega.Zeta.XiFibCongruenceFourierRankkOptimal
 import Omega.Zeta.XiGodelPrimeExponentRegisterUniformIndependence
 import Omega.Zeta.XiDiscreteCurvatureNearUnimodalRigidity
 import Omega.Zeta.XiBasepointScanFullRankAnchorCriticalEquations
+import Omega.Zeta.XiSliceWeylHerglotz
