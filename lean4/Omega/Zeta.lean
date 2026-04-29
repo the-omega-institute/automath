@@ -1785,6 +1785,7 @@ import Omega.Zeta.TerminalZMCyclic3To33IsogenyFourExtensions
 import Omega.Zeta.XiProjectivePressurePathHolderConvexity
 import Omega.Zeta.XiHzomFunctionalEquation
 import Omega.Zeta.XiRankoneSecularMonotonicityDerivativeNorm
+import Omega.Zeta.XiRankoneSecularSmallLargeCoupling
 import Omega.Zeta.XiRankoneFlipRadiusShallowNegative
 import Omega.Zeta.XiUnitarySliceZeroCountSpectralFlow
 import Omega.Zeta.BdryFreeInvolutionOddFiberObstructionMinCover
