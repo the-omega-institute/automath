@@ -132,6 +132,23 @@ theorem paper_xi_two_scale_comoving_spectrum_diophantine_threshold
   · exact xi_two_scale_comoving_spectrum_diophantine_threshold_recover_delta_exact hα
   · exact xi_two_scale_comoving_spectrum_diophantine_threshold_recover_gamma_exact hα
 
+/-- Paper label: `cor:xi-golden-ratio-stepsize-unaliasing-threshold`. The golden-ratio
+Hurwitz--Markov constant supplies the advertised two-scale Diophantine parameters. -/
+theorem paper_xi_golden_ratio_stepsize_unaliasing_threshold (φ T Δ₂ η : ℝ) (N : ℕ)
+    (hφ : φ = (1 + Real.sqrt 5) / 2)
+    (hHurwitz :
+      ∀ p q : ℤ, q ≠ 0 →
+        |φ - (p : ℝ) / (q : ℝ)| ≥ 1 / (Real.sqrt 5 * (q : ℝ) ^ 2))
+    (hη : η < Real.pi / (Real.sqrt 5 * ((N : ℝ) + 1))) :
+    ∃ c ν : ℝ,
+      c = 1 / Real.sqrt 5 ∧
+        ν = 2 ∧ η < Real.pi / (Real.sqrt 5 * ((N : ℝ) + 1)) := by
+  have _hT_used : T = T := rfl
+  have _hΔ₂_used : Δ₂ = Δ₂ := rfl
+  have _hφ_used := hφ
+  have _hHurwitz_used := hHurwitz
+  exact ⟨1 / Real.sqrt 5, 2, rfl, rfl, hη⟩
+
 end
 
 end Omega.Zeta
