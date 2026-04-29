@@ -247,6 +247,8 @@ import Omega.Zeta.XiTimePart65cEdgeworthLocalLdpSignLock
 import Omega.Zeta.XiTimePart70dAnomalySignatureSaturation
 import Omega.Zeta.XiDefectEntropyHeightBudgetExponentialLaw
 import Omega.Zeta.XiCrossEnergyLowerBoundByMinSeparation
+import Omega.Zeta.XiPickPoissonFiniteMayerClusterFactorization
+import Omega.Zeta.XiSchurPoissonMutualEnergyLedgerIdentity
 import Omega.Zeta.XiTimePart70dCriticalBitratePhaseCluster
 import Omega.Zeta.XiTimePart70dEscortCriticalResponseBand
 import Omega.Zeta.XiTimePart70dCollisionRieszMainTerms
