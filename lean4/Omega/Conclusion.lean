@@ -2411,3 +2411,4 @@ import Omega.Conclusion.FibadicCyclotomicPacketDetectsNewPrimePower
 import Omega.Conclusion.ResidueMod3LocalReversibilityPhaseTransition
 import Omega.Conclusion.PoissonCauchyEndpointArcsineCommonParameter
 import Omega.Conclusion.Window6AffineFiberArithmeticSupport
+import Omega.Conclusion.NegativeSideLogAmplificationGlobalAction

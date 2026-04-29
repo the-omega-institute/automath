@@ -2831,3 +2831,5 @@ import Omega.Zeta.XiSingleAtomCenteredResidueRankoneSpike
 import Omega.Zeta.XiGoldenW1GoodSideGapToSingleBoxOptimum
 import Omega.Zeta.XiTimePart63aTorsionQCesaroFourierProjection
 import Omega.Zeta.XiSelfreciprocalEscapeSingularRingResultant
+import Omega.Zeta.XiOutputPotentialDirichletGlobalWorstModeJ1
+import Omega.Zeta.XiOutputPotentialActivatedBranchUniformScaleSeparation
