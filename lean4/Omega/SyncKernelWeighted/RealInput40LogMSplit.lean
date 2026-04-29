@@ -36,6 +36,11 @@ theorem paper_real_input_40_logM_split (D : RealInput40LogMSplitData) :
   simpa [RealInput40LogMSplitData.logMM, RealInput40LogMSplitData.logMIn,
     RealInput40LogMSplitData.pVertAtPole] using hSplit
 
+/-- Lowercase canonical paper wrapper for `prop:real-input-40-logM-split`. -/
+theorem paper_real_input_40_logm_split (D : RealInput40LogMSplitData) :
+    D.logMM = D.logMIn + D.pVertAtPole := by
+  simpa using paper_real_input_40_logM_split D
+
 end
 
 end Omega.SyncKernelWeighted
