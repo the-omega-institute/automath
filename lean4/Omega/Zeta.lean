@@ -2682,3 +2682,5 @@ import Omega.Zeta.XiStableTypeMinspecGradedSemiring
 import Omega.Zeta.XiCauchyPoissonFisherTailIntegral
 import Omega.Zeta.XiToeplitzSaturationIndexComparableToShallowestDepth
 import Omega.Zeta.XiTimePart9KFoldFiberLayerCountRealrootLogconcavity
+import Omega.Zeta.XiAnchoredCapacityExteriorPowerInterpolant
+import Omega.Zeta.XiToeplitzNegativeReciprocalSumLimit
