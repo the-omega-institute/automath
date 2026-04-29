@@ -172,6 +172,7 @@ import Omega.Zeta.XiTimePart9zjOutputBucketFullTowerSufficiency
 import Omega.Zeta.XiTimePart9yZGScalarPrimeRecursion
 import Omega.Zeta.XiTimePart9yZGInfiniteProductPositivity
 import Omega.Zeta.XiTimePart9yHologramFullShiftConjugacy
+import Omega.Zeta.XiTimePart9yWindow6VisibleOddTensorExtremalSelector
 import Omega.Zeta.XiTimePart9vResonanceZeroCountRenormalization
 import Omega.Zeta.XiProjectivePressureCanonicalConvexMajorant
 import Omega.Zeta.XiTimePart73U1ZetaDoubleTriplePole
