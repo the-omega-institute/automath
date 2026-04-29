@@ -124,6 +124,7 @@ import Omega.EA.RewriteTerminationPublication
 import Omega.EA.RewriteWordProblem
 import Omega.EA.RationalGFLinearConstraints
 import Omega.EA.RoughVisibleDifferenceQuotientCertificate
+import Omega.EA.StableAddCommutativeMonoid
 import Omega.EA.StableAddComputable
 import Omega.EA.StableAddFiniteResolutionCompatibility
 import Omega.EA.StableAddNoNullCreation
