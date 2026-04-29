@@ -222,6 +222,7 @@ import Omega.Conclusion.PrimeLogModularTwistInsufficient
 import Omega.Conclusion.PrimeLogExactCoboundary
 import Omega.Conclusion.DigitalLocalFactorRegularizationConstraint
 import Omega.Conclusion.AlgebraicLdpAffineMonodromyRepresentation
+import Omega.Conclusion.PcdimResourceCompleteness
 import Omega.Conclusion.AlgebraicLdpSecondDerivativeMinimalSinglevaluedness
 import Omega.Conclusion.XiZeroTowerSuperexpCauchyTail
 import Omega.Conclusion.XiDyadicShellBitGainLaw
