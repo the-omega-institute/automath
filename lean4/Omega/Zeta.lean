@@ -231,6 +231,8 @@ import Omega.Zeta.XiOutputPotentialDirichletFixedJFourthOrder
 import Omega.Zeta.XiPoissonFirstNonvanishingMomentTvKlSharp
 import Omega.Zeta.XiEndpointHeatProbePowerlawDifferences
 import Omega.Zeta.XiEndpointCompressionPrecision
+import Omega.Zeta.XiOffcriticalPoissonHerglotzInversion
+import Omega.Zeta.XiSymmetryAuditTensionScaled
 import Omega.Zeta.XiCartesianPowerJoukowskyGodelAnisotropicParabola
 import Omega.Zeta.XiLissajousPhaseSingularRingImmersion
 import Omega.Zeta.XiTimePart9xaabWulffRayFourierZeroFormula
