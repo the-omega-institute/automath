@@ -223,6 +223,7 @@ import Omega.Conclusion.FullResidueRegularSimplexOrbit
 import Omega.Conclusion.FullResiduePhiSquareUniversalExponent
 import Omega.Conclusion.ZGFiniteCertificateFiberFullSpectrum
 import Omega.Conclusion.ZGNowhereLocallyDoubling
+import Omega.Conclusion.ArtinExtremalWitnessMinimalHull
 import Omega.Conclusion.CdimPrecisionLedgerLbKphase
 import Omega.Conclusion.PositivePushforwardEntropyThreeScaleLaw
 import Omega.Conclusion.OperatorCaratheodoryCPVisibleEquivalence
