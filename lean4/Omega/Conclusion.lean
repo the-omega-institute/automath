@@ -220,6 +220,7 @@ import Omega.Conclusion.FiberRamanujanShadowLowOrderThresholds
 import Omega.Conclusion.SoftcoreFixedMQrecurrenceGenericMinimality
 import Omega.Conclusion.SideinfoDistortionCdimLowerBound
 import Omega.Conclusion.GodelSideinfoSuperlinearOverhead
+import Omega.Conclusion.LeyangMinimalObstructionPrimes
 import Omega.Conclusion.GodelLeyangHaarNullSmallDigit
 import Omega.Conclusion.GodelLeyangFiniteSampleIdentifiability
 import Omega.Conclusion.GodelLeyangResolutionTowerCircleLaw

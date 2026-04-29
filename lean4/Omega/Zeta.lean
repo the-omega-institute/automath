@@ -219,6 +219,8 @@ import Omega.Zeta.XiPrimeHardcoreNewtonMaclaurin
 import Omega.Zeta.XiTimePart9zbFoldpiTwoAtomicMomentCharacterization
 import Omega.Zeta.XiLogisticHellingerGramDeterminant
 import Omega.Zeta.HellingerGramClusterAdditivityExp
+import Omega.Zeta.DirichletBadModuliPositiveLowerDensityByDivisibility
+import Omega.Zeta.SymqGoldenCqIntegerSmithMultiplicitySpectrum
 import Omega.Zeta.XiHellingerQuasiOrthogonalPhase
 import Omega.Zeta.XiTimePart9faDyadicBoundaryImageLDPC
 import Omega.Zeta.XiTimePart9xfMomentTowerSymmetricPowerClosure
