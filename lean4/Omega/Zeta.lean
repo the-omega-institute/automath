@@ -1,5 +1,6 @@
 import Omega.Zeta.XiLeyangGtDiscriminantAndSpecialFiberFactorization
 import Omega.Zeta.XiVisibleArithmeticNilradicalSemisimpleThickness
+import Omega.Zeta.XiHzomUnitarySlice
 import Omega.Zeta.XiTimePart9fStreamingWidthRarity
 import Omega.Zeta.XiSmithLocalEulerCompleteInvariant
 import Omega.Zeta.XiEdFUniqueReconstructionFromDiscriminantAndCritical
