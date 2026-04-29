@@ -2916,3 +2916,5 @@ import Omega.Zeta.XiTimePart9xSerrinRayExactCapacity
 import Omega.Zeta.XiTimePart9xWindow6BoundaryArithmeticPinning
 import Omega.Zeta.XiTimePart9zlLocalizationCircleCollapseSupportRigidity
 import Omega.Zeta.XiComovingPrefixParetoHalfCost
+import Omega.Zeta.AbelPoleDivisorPowermapLyapunov
+import Omega.Zeta.AbelianChannelNegativityLocalization
