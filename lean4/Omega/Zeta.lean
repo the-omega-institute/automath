@@ -2480,6 +2480,7 @@ import Omega.Zeta.XiLeyangPuiseuxM2Parabola
 import Omega.Zeta.XiPolynomialTransferMatrixBranchpointDiscriminantDegree
 import Omega.Zeta.XiLeyangTwoScaleCrossratioInvariant
 import Omega.Zeta.XiLeyangTwoScaleCrossratioSlopeExponent
+import Omega.Zeta.XiLeyangTwoScaleCrossratioQuadraticMixingSuppression
 import Omega.Zeta.XiLeyangThreeLeadingZerosExtrapolateUcN6
 import Omega.Zeta.XiLeyangTwoLeadingZerosExtrapolateUc
 import Omega.Zeta.XiHypercubeLeyangAffineOrbifoldTwoLayer

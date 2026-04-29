@@ -2637,3 +2637,5 @@ import Omega.Conclusion.SerrinWulffWeightedFluxAffineLaw
 import Omega.Conclusion.Window6AbelianizationAutOrbits
 import Omega.Conclusion.ScreenSingleFaceClosureEntropyStaircase
 import Omega.Conclusion.SprojectionInfinityPoleSplittingRamification20
+import Omega.Conclusion.PhysicalTemperatureGoldenBernoulliCumulantLaw
+import Omega.Conclusion.EndpointStartpointOnlyAmplitudeNotModes
