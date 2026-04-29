@@ -2425,3 +2425,4 @@ import Omega.Conclusion.Window6AffineFiberArithmeticSupport
 import Omega.Conclusion.NegativeSideLogAmplificationGlobalAction
 import Omega.Conclusion.SelfreciprocalLeakagePairsExpelledToInfiniteDepth
 import Omega.Conclusion.GlobalMultiplicationToLocalizedCdimPhaseTransition
+import Omega.Conclusion.HaltingTimeThreeScaleSeparation
