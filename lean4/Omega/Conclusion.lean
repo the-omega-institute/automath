@@ -1,4 +1,5 @@
 import Omega.Conclusion.ZeroRateEndpointFirstOrderBlindHyperplane
+import Omega.Conclusion.LongRangeKernelQuarticMemoryLaw
 import Omega.Conclusion.Window6BoundaryDoubleForgetfulnessInformationGap
 import Omega.Conclusion.HaltingMeasureAtomicBranch
 import Omega.Conclusion.HaltingLanglandsParameterDegenerationBarrier
