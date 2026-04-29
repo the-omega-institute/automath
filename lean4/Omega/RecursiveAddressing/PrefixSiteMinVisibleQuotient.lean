@@ -93,6 +93,18 @@ theorem paper_prefix_site_min_visible_quotient
         φbar.comp (visibleProjection α nonemptyTriple) = φ := by
   exact paper_recursive_addressing_prefix_site_min_visible_quotient α nonemptyTriple
 
+/-- Existence half of the visible-quotient universal factorization property.
+    prop:prefix-site-min-visible-quotient -/
+theorem paper_prefix_site_min_visible_quotient_universal_factor
+    {ι A B : Type*} [AddCommGroup A] [AddCommGroup B]
+    (α : ι → ι → ι → A) (nonemptyTriple : ι → ι → ι → Prop) (φ : A →+ B)
+    (hφ : ∀ i j k, nonemptyTriple i j k → φ (α i j k) = 0) :
+    ∃ φbar : VisibleQuotient α nonemptyTriple →+ B,
+      φbar.comp (visibleProjection α nonemptyTriple) = φ := by
+  rcases (paper_prefix_site_min_visible_quotient α nonemptyTriple).2 φ hφ with
+    ⟨φbar, hφbar, _⟩
+  exact ⟨φbar, hφbar⟩
+
 namespace PointwiseInvisible
 
 section

@@ -78,4 +78,41 @@ theorem paper_pom_double_transversal_normal_form
   · exact symRem_ge (val a : ℤ) b hb
   · exact symRem_le (val a : ℤ) b hb
 
+/-- Standard quotient-remainder normal form with a unique remainder in `[0,b)`.
+    thm:pom-double-transversal-normal-form -/
+theorem paper_pom_double_transversal_normal_form_unique_standard (a : Config) (b : ℕ)
+    (hb : 0 < b) :
+    ∃! qr : ℤ × ℤ, (val a : ℤ) = qr.1 * (b : ℤ) + qr.2 ∧
+      0 ≤ qr.2 ∧ qr.2 < (b : ℤ) := by
+  let n : ℤ := val a
+  let bz : ℤ := b
+  have hbz : 0 < bz := by
+    dsimp [bz]
+    exact_mod_cast hb
+  have hbz_ne : bz ≠ 0 := ne_of_gt hbz
+  let q0 : ℤ := n / bz
+  let r0 : ℤ := n % bz
+  have hdecomp0 : n = q0 * bz + r0 := by
+    dsimp [q0, r0]
+    rw [mul_comm]
+    exact (Int.mul_ediv_add_emod n bz).symm
+  refine ⟨(q0, r0), ?_, ?_⟩
+  · constructor
+    · simpa [n, bz, q0, r0] using hdecomp0
+    · exact ⟨Int.emod_nonneg n hbz_ne, Int.emod_lt_of_pos n hbz⟩
+  · rintro ⟨q, r⟩ ⟨hqr, hr_nonneg, hr_lt⟩
+    have hqr' : n = q * bz + r := by
+      simpa [n, bz] using hqr
+    have hr_eq : r0 = r := by
+      calc
+        r0 = n % bz := rfl
+        _ = (q * bz + r) % bz := by rw [hqr']
+        _ = (r + bz * q) % bz := by ring_nf
+        _ = r % bz := by rw [Int.add_mul_emod_self_left]
+        _ = r := Int.emod_eq_of_lt hr_nonneg hr_lt
+    have hq_mul : q * bz = q0 * bz := by
+      linarith
+    have hq_eq : q = q0 := mul_right_cancel₀ hbz_ne hq_mul
+    ext <;> simp [hq_eq, hr_eq]
+
 end Omega.POM.DoubleTransversalNormalForm

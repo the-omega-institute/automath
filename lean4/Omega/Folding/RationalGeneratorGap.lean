@@ -39,4 +39,16 @@ theorem paper_fold_groupoid_aut0_rational_generator_gap (m : ℕ) :
     g_rat m = 2 ^ m - (Finset.univ : Finset (X m)).card :=
   g_rat_eq m
 
+/-- Cup-length and rational category witnesses inherit the rational generator gap formula.
+    thm:fold-groupoid-aut0-rational-generator-gap -/
+theorem paper_fold_groupoid_aut0_rational_generator_gap_cuplength_cat0
+    (m cup cat : ℕ) (hcup : cup = g_rat m) (hcat : cat = g_rat m) :
+    cup = 2 ^ m - (Finset.univ : Finset (X m)).card ∧
+      cat = 2 ^ m - (Finset.univ : Finset (X m)).card := by
+  constructor
+  · rw [hcup]
+    exact paper_fold_groupoid_aut0_rational_generator_gap m
+  · rw [hcat]
+    exact paper_fold_groupoid_aut0_rational_generator_gap m
+
 end Omega.Folding.RationalGeneratorGap
