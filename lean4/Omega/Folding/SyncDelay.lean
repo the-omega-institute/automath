@@ -14,4 +14,11 @@ theorem paper_fold_sync_delay :
          by omega, by omega, by omega, by omega, by omega,
          by omega, by omega, fun m hm => by omega⟩
 
+/-- Paper-facing lowercase wrapper for the uniform synchronization-delay inequality.
+    cor:Ym-sync-delay -/
+theorem paper_ym_sync_delay : (∀ m : ℕ, 3 ≤ m → m - 1 < m) := by
+  rcases paper_fold_sync_delay with
+    ⟨_, _, _, _, _, _, _, _, _, _, _, _, hdelay⟩
+  exact hdelay
+
 end Omega.Folding.SyncDelay
