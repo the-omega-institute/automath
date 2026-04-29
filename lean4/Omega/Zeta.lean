@@ -215,6 +215,7 @@ import Omega.Zeta.XiPoissonCauchyDensityIntersectionDriftM3
 import Omega.Zeta.XiTimeDefectSmithReduction
 import Omega.Zeta.HardyCriterionDelta
 import Omega.Zeta.XiSaturatedShiftInvariantLatticeGcdLcm
+import Omega.Zeta.XiGridScanTwoStepDealiasing
 import Omega.Zeta.CapacityOverlapFunctionalL1Identity
 import Omega.Zeta.CauchyPoissonKlGoldenScale
 import Omega.Zeta.XiCmvStabilizationInfinite
