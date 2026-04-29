@@ -3101,3 +3101,5 @@ import Omega.Zeta.XiCauchyPoissonKlTwoTermLimit
 import Omega.Zeta.XiLocalizedEndomorphismRingSolenoidIndecomposable
 import Omega.Zeta.XiTimePart65eWindow6NoGatelessZ2CentralExtension
 import Omega.Zeta.XiRhCohnDerivative
+import Omega.Zeta.XiTimePart60eInfiniteSolenoidFiniteVisibleFactorization
+import Omega.Zeta.XiTimePart60eTruncatedJensenProfileCompletenessBlindness
