@@ -2477,3 +2477,5 @@ import Omega.Conclusion.FiniteCMVCertificatePadeHardyFreezing
 import Omega.Conclusion.DoubleKLResidualRateSynchronousCollapse
 import Omega.Conclusion.TwoAdicSelfsimilarHaarRigidityIntegerDimension
 import Omega.Conclusion.AmbiguityShellPeriodicModulationPoleStarEquivalence
+import Omega.Conclusion.Window6FibonacciStaircase
+import Omega.Conclusion.PrimeTimeAddressedGodelRigidity
