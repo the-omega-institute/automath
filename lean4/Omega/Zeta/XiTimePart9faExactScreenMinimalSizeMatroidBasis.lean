@@ -1,4 +1,5 @@
 import Mathlib.Tactic
+import Omega.SPG.ExactScreenMinimaAreMatroidBases
 
 namespace Omega.Zeta
 
@@ -13,32 +14,8 @@ theorem paper_xi_time_part9fa_exact_screen_minimal_size_matroid_basis {V : Type*
       r B = 2 ^ (m * n) ∧
         B.card = 2 ^ (m * n) ∧
           ∀ T : Finset V, r T = 2 ^ (m * n) → 2 ^ (m * n) ≤ T.card := by
-  let ρ : ℕ := 2 ^ (m * n)
-  have _ : r (∅ : Finset V) ≤ ρ := by
-    simpa [ρ] using hrho (∅ : Finset V)
-  have _ : r (∅ : Finset V) ≤ r (∅ : Finset V) := hmono (by intro x hx; exact hx)
-  have _ : r ((∅ : Finset V) ∩ ∅) + r ((∅ : Finset V) ∪ ∅) ≤
-      r (∅ : Finset V) + r (∅ : Finset V) :=
-    hsub (∅ : Finset V) ∅
-  have hbuild : ∀ k ≤ ρ, ∃ B : Finset V, r B = k ∧ B.card = k := by
-    intro k
-    induction k with
-    | zero =>
-        intro _hk
-        exact ⟨∅, hzero, by simp⟩
-    | succ k ih =>
-        intro hk_succ
-        have hk_lt : k < ρ := Nat.lt_of_succ_le hk_succ
-        rcases ih (Nat.le_of_lt hk_lt) with ⟨B, hB_rank, hB_card⟩
-        have hB_lt : r B < 2 ^ (m * n) := by
-          simpa [ρ, hB_rank] using hk_lt
-        rcases hstep B hB_lt with ⟨v, hv_not_mem, hinsert_rank⟩
-        refine ⟨insert v B, ?_, ?_⟩
-        · simpa [hB_rank, Nat.succ_eq_add_one] using hinsert_rank
-        · rw [Finset.card_insert_of_notMem hv_not_mem, hB_card]
-  rcases hbuild ρ le_rfl with ⟨B, hB_rank, hB_card⟩
-  refine ⟨B, by simpa [ρ] using hB_rank, by simpa [ρ] using hB_card, ?_⟩
-  intro T hT_rank
-  simpa [hT_rank] using hrcard T
+  exact
+    Omega.SPG.paper_spg_exact_screen_minima_are_matroid_bases (2 ^ (m * n)) r
+      hzero hrho hrcard hmono hsub hstep
 
 end Omega.Zeta
