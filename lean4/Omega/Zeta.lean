@@ -263,6 +263,8 @@ import Omega.Zeta.XiHilbertPolyaCMV
 import Omega.Zeta.XiHankelMaxminorHeightBoundDeterministicCrtReconstruction
 import Omega.Zeta.XiTimePart62dfMaxfiberGapRatioLimit
 import Omega.Zeta.XiPoissonKlL1SquareEquivalenceFirstMoment
+import Omega.Zeta.XiTerminalZm4MomentKernelUniqueQuadratic
+import Omega.Zeta.XiTerminalBelyiPuiseuxScaling
 import Omega.Zeta.XiFreezingAffineRigidityTwoPointRecovery
 import Omega.Zeta.XiFoldbinZeckendorfMonotoneStaircaseLaw
 import Omega.Zeta.XiHankelLinearRealizationFinitePrimeSupportModAudit
