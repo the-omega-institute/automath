@@ -2614,3 +2614,4 @@ import Omega.Conclusion.CollisionHankelPrefixAsymptoticDichotomy
 import Omega.Conclusion.FoldGaugeTwoScaleSpectralRigidity
 import Omega.Conclusion.WreathSignAdditivityEvenShielding
 import Omega.Conclusion.EquivariantASplittingRigidity
+import Omega.Conclusion.ImageLayerResolutionMemoryExternality

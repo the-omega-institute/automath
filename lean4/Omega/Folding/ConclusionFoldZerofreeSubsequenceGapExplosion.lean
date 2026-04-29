@@ -37,6 +37,15 @@ end ConclusionFoldZerofreeSubsequenceGapExplosionData
 
 open ConclusionFoldZerofreeSubsequenceGapExplosionData
 
+/-- Concrete statement for `cor:conclusion-fold-zero-count-cannot-control-gap`: on the verified
+nontriple subsequence, zero counts vanish while the scaled collision gap eventually exceeds every
+real threshold. -/
+def conclusion_fold_zero_count_cannot_control_gap_statement
+    (D : ConclusionFoldZerofreeSubsequenceGapExplosionData) : Prop :=
+  D.zeroFreeOnNontripleSubsequence ∧
+    D.scaledCollisionGapExplodesOnNontripleSubsequence ∧
+      ∀ B : ℝ, ∀ᶠ n : ℕ in atTop, B ≤ D.scaledCollisionGap (D.subsequence n)
+
 /-- Paper label: `thm:conclusion-fold-zerofree-subsequence-gap-explosion`. The nontriple
 subsequence forces the zero-count criterion to vanish identically, and the already-audited scaled
 collision gap is packaged on that same subsequence. -/
@@ -47,5 +56,14 @@ theorem paper_conclusion_fold_zerofree_subsequence_gap_explosion
   intro n
   simp [ConclusionFoldZerofreeSubsequenceGapExplosionData.zeroCountOnNontripleSubsequence,
     D.hnontriple n]
+
+/-- Paper label: `cor:conclusion-fold-zero-count-cannot-control-gap`. -/
+theorem paper_conclusion_fold_zero_count_cannot_control_gap
+    (D : ConclusionFoldZerofreeSubsequenceGapExplosionData) :
+    conclusion_fold_zero_count_cannot_control_gap_statement D := by
+  refine ⟨(paper_conclusion_fold_zerofree_subsequence_gap_explosion D).1,
+    (paper_conclusion_fold_zerofree_subsequence_gap_explosion D).2, ?_⟩
+  intro B
+  exact D.hscaledCollisionGapExplodes.eventually (Ici_mem_atTop B)
 
 end Omega.Folding
