@@ -1,5 +1,6 @@
 import Omega.Conclusion.LeyangFiniteLevelRecoversFrobeniusTrace
 import Omega.Conclusion.SmithLossProfileYoungDuality
+import Omega.Conclusion.ObserverInitialVisibleQuotientGerbeNeutralization
 import Omega.Conclusion.BinfoldDivergenceConeObservableRankOne
 import Omega.Conclusion.Period3FiberFactorialMobiusTail
 import Omega.Conclusion.Window6ExactFoldSynchronizationMutualInformation
