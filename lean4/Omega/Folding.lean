@@ -775,3 +775,4 @@ import Omega.Folding.FoldSubmaximalRecoveryWindowGroundstateDegeneracy
 import Omega.Folding.FoldCondexpIndexMaxFiber
 import Omega.Folding.FoldBinSaturationWindowDensity
 import Omega.Folding.FoldInfonceK2CollisionRecurrenceClosure
+import Omega.Folding.XiFoldbinFiberwiseSaturationSectorCriterion
