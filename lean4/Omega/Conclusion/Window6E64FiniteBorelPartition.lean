@@ -34,4 +34,14 @@ theorem paper_conclusion_window6_e64_finite_borel_partition (t : ℂ) :
     native_decide
   rw [Finset.sum_union hdisj0123, Finset.sum_union hdisj012, Finset.sum_union hdisj01]
 
+/-- Paper label:
+`cor:conclusion-window6-dyadic-geometric-series-hidden-strip-telescope`. -/
+theorem paper_conclusion_window6_dyadic_geometric_series_hidden_strip_telescope (z : ℂ) :
+    (Finset.range 64).sum (fun n => z ^ n) =
+      (1 + z ^ 34) * (Finset.range 21).sum (fun n => z ^ n) +
+        z ^ 21 * (Finset.range 13).sum (fun n => z ^ n) +
+          z ^ 55 * (Finset.range 9).sum (fun n => z ^ n) := by
+  norm_num [Finset.sum_range_succ]
+  ring
+
 end Omega.Conclusion

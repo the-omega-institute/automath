@@ -348,6 +348,26 @@ theorem paper_conclusion_window6_output_ramanujan_layer_charge_closedforms :
   · simp [conclusion_window6_output_ramanujan_mellin_duality_layerCharge]
   · simp [conclusion_window6_output_ramanujan_mellin_duality_layerCharge]
 
+/-- Paper label:
+`thm:conclusion-window6-output-truncated-capacity-conductor-activation`. -/
+theorem paper_conclusion_window6_output_truncated_capacity_conductor_activation :
+    (∀ T : ℝ, 0 ≤ T →
+      conclusion_window6_output_ramanujan_mellin_duality_capacity three T =
+        if T ≤ 2 then 0 else if T ≤ 3 then 2 * T - 4 else 2) ∧
+    (∀ T : ℝ, 0 ≤ T →
+      conclusion_window6_output_ramanujan_mellin_duality_capacity seven T =
+        if T ≤ 2 then 0 else if T ≤ 3 then T - 2 else if T ≤ 4 then 5 * T - 14 else 6) ∧
+    (∀ T : ℝ, 0 ≤ T →
+      conclusion_window6_output_ramanujan_mellin_duality_capacity twentyOne T =
+        if T ≤ 2 then 0 else if T ≤ 3 then 5 * T - 10 else if T ≤ 4 then 7 * T - 16 else 12) := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro T _hT
+    rfl
+  · intro T _hT
+    rfl
+  · intro T _hT
+    rfl
+
 end
 
 end Omega.Conclusion
