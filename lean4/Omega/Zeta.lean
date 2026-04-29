@@ -3070,3 +3070,5 @@ import Omega.Zeta.XiCompletedZetaSimpleZeroStability
 import Omega.Zeta.XiV4BidoubleCoverExplicitLinebundles
 import Omega.Zeta.XiLeyangCompactnessByFundamentalCircle
 import Omega.Zeta.Window6OddCumulantsSupportedOnD2Slice
+import Omega.Zeta.XiFoldFiberSymmetryGroupEntropyLower
+import Omega.Zeta.XiVisibleArithmeticOmegaControlledSplitting
