@@ -1952,6 +1952,7 @@ import Omega.Zeta.XiLocalizedSubgroupZetaEulerProduct
 import Omega.Zeta.LocalizedQuotientTorsionZetaEulerProduct
 import Omega.Zeta.LocalizedSolenoidCircleQuotientLifts
 import Omega.Zeta.LocalizedSolenoidMultiplicationKernelDegree
+import Omega.Zeta.LocalizedSolenoidNonzeroEndomorphismFiniteCoverDegree
 import Omega.Zeta.LocalizedSolenoidPrimeKernelTomography
 import Omega.Zeta.LocalizedSolenoidNonzeroEndomorphismDegreeSemigroup
 import Omega.Zeta.LogMHolomorphicVariation
