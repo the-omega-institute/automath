@@ -229,6 +229,7 @@ import Omega.Conclusion.ZeroReductionSecondOrderCollisionKL
 import Omega.Conclusion.TropicalParetoRigidityOnBoundedSlice
 import Omega.Conclusion.WidomNearestBranchNashRegularity
 import Omega.Conclusion.OddtailFiniteRankPointedSpectralRhBlindness
+import Omega.Conclusion.Window6Spin1CartanShadow
 import Omega.Conclusion.PcdimLowerboundDeepAmbiguity
 import Omega.Conclusion.RealInput40NoUniformRHResidueLaw
 import Omega.Conclusion.RealInput40ResidualShellCompletionComplementarity
