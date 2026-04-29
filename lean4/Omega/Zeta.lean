@@ -156,6 +156,7 @@ import Omega.Zeta.XiWindow6ResetGapFibCoupling
 import Omega.Zeta.XiWindow6ResetClockGapFrequencies
 import Omega.Zeta.XiWindow6ReciprocalFluxBoson12
 import Omega.Zeta.XiWindow6BoundaryMinimalLinearVisibleDimension
+import Omega.Zeta.XiWindow6PSFaithfulCanonicalDescentUnique
 import Omega.Zeta.XiTimePart9zpWindow6QuotientIntrinsicallyGroupoidal
 import Omega.Zeta.TimePart9xgFiniteModulusTemplateMissesSlowestTwist
 import Omega.Zeta.XiTimePart9xgParityWallVersusCofinalPrimeTwists
