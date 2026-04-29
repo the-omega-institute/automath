@@ -2964,3 +2964,5 @@ import Omega.Zeta.XiTimePart9oEscortTestingGeometryClosed
 import Omega.Zeta.XiTimePart9zbgFoldpiFiniteDepthExactnessObstruction
 import Omega.Zeta.XiTimePart65hEscortBlackwellOnebitEquivalence
 import Omega.Zeta.XiTimePart9eHankelResultantClosedForm
+import Omega.Zeta.XiEndpointLocalJetInversion
+import Omega.Zeta.XiEndpointTwoChannelRenormalizationIdentifiability
