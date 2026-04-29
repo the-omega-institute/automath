@@ -147,6 +147,7 @@ import Omega.Zeta.XiHardeningTimeFrontierRigidity
 import Omega.Zeta.XiTimePart65eWindow6GeometricDiagonalZ2Parity
 import Omega.Zeta.XiTimePart65eStripBlaschkeOriginModulusIndexLowerBound
 import Omega.Zeta.XiTimePart65cOutputEdgeworthFirstCorrection
+import Omega.Zeta.XiTimePart65cEdgeworthLocalLdpSignLock
 import Omega.Zeta.XiTimePart70dAnomalySignatureSaturation
 import Omega.Zeta.XiTimePart70dCriticalBitratePhaseCluster
 import Omega.Zeta.XiTimePart70dEscortCriticalResponseBand
