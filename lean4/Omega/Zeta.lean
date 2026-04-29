@@ -221,6 +221,7 @@ import Omega.Zeta.XiGodelEncodingImplementationCostForNegativeLedger
 import Omega.Zeta.XiFamilyNumberWindowQuantizationMinimalWindow
 import Omega.Zeta.XiWindow6DimensionSieveFinite
 import Omega.Zeta.XiResonanceClosureNoFiniteLpSummability
+import Omega.Zeta.SingleSliceRHTypingPrinciple
 import Omega.Zeta.XiResonanceEntireZeroCountExplicitLinearDensity
 import Omega.Zeta.XiTimePart9vResonanceZeroDensityLinear
 import Omega.Zeta.XiWindow6FalsifiabilityLayeringFromSemigroup
