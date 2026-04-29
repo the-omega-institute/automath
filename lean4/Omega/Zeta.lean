@@ -2476,6 +2476,8 @@ import Omega.Zeta.XiDefectEntropyPeakCompressibilityExtremal
 import Omega.Zeta.XiDefectEntropyMassPeakDecoupling
 import Omega.Zeta.XiComovingDefectImpliesDeltaBound
 import Omega.Zeta.XiDefectEntropyClosedFormInvariant
+import Omega.Zeta.XiDefectEntropyHorocycleLengthDeficit
+import Omega.Zeta.XiDefectEntropyRiccatiSandwich
 import Omega.Zeta.XiDepthHankelDeterminantVandermondeSquare
 import Omega.Zeta.XiEllipseWallcrossingUnitStaircaseUniversality
 import Omega.Zeta.XiEllipseWallcrossingRealizeFiniteJumpData
