@@ -425,8 +425,12 @@ def detect_target_journal(paper_dir: str) -> str:
 
     return ""
 MAX_STAGE_A_ROUNDS = 8
-MAX_STAGE_B_ROUNDS = 99  # No practical limit — must pass Oracle gate
-MAX_STAGE_C_ROUNDS = 99  # No practical limit — must pass Oracle+Claude gate
+# Bounded caps + graceful skip-stuck (B-STUCK/C-STUCK markers in PROGRAM_BOARD)
+# instead of infinite loops. Mirrors loning's autoresearch caps + autoresearch's
+# "stuck → mark and continue with next paper" philosophy. If a paper truly
+# warrants more rounds, raise the cap explicitly with a recorded reason.
+MAX_STAGE_B_ROUNDS = 20
+MAX_STAGE_C_ROUNDS = 15
 DEFAULT_TARGET_JOURNAL = "Advances in Mathematics"
 CLAUDE_ENABLED = True
 PAUSED_ERROR_PREFIX = "PAUSED:"
