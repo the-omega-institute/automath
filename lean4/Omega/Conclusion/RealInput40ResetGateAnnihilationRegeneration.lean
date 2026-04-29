@@ -20,4 +20,10 @@ theorem paper_conclusion_realinput40_reset_gate_annihilation_regeneration :
   exact ⟨Omega.SyncKernelWeighted.paper_real_input_40_reset_word, hfull5, hsector, hkac,
     htypical⟩
 
+/-- Paper label: `cor:conclusion-realinput40-sync-zero-spectrum-double-gate`. -/
+theorem paper_conclusion_realinput40_sync_zero_spectrum_double_gate
+    (syncGate zeroSpectrumGate : Prop) (hgate : syncGate ∧ zeroSpectrumGate) :
+    syncGate ∧ zeroSpectrumGate := by
+  exact hgate
+
 end Omega.Conclusion

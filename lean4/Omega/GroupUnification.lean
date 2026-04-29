@@ -70,6 +70,7 @@ import Omega.GroupUnification.SMZeckendorfLieAlgebraRigidity
 import Omega.GroupUnification.SMUpliftResidualMediatorM7
 import Omega.GroupUnification.SMSquareResidualRigidityM6
 import Omega.GroupUnification.SecondOrder
+import Omega.GroupUnification.BdryUpliftSecondDifferenceResidualLaw
 import Omega.GroupUnification.SpreadEquivalence
 import Omega.GroupUnification.Terminal6DMicrostateGoldenTimeGutBranch
 import Omega.GroupUnification.TerminalFamilyUpliftLock

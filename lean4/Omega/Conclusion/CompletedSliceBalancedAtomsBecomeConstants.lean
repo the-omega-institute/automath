@@ -150,4 +150,53 @@ theorem paper_conclusion_completed_slice_balanced_atoms_become_constants
   · intro a ha hbalanced s
     exact conclusion_completed_slice_balanced_atoms_become_constants_balanced_factor D a hbalanced s
 
+/-- Paper label:
+`thm:conclusion-completed-slice-normalized-kernel-balanced-atoms`. -/
+theorem paper_conclusion_completed_slice_normalized_kernel_balanced_atoms
+    (D : conclusion_completed_slice_balanced_atoms_become_constants_data)
+    (hbalanced :
+      ∀ a ∈ D.conclusion_completed_slice_balanced_atoms_become_constants_atoms,
+        a.conclusion_completed_slice_balanced_atoms_become_constants_length =
+          2 * a.conclusion_completed_slice_balanced_atoms_become_constants_energy) :
+    (∀ s : ℝ, D.completedAtomProduct s = D.completedAtomProduct (1 / 2)) ∧
+      ∀ s : ℝ,
+        D.completedSlice s =
+          D.completedAtomProduct (1 / 2) *
+            D.conclusion_completed_slice_balanced_atoms_become_constants_coreSlice s := by
+  have hconst : ∀ s : ℝ, D.completedAtomProduct s = D.completedAtomProduct (1 / 2) := by
+    intro s
+    have hfactor :
+        ∀ a ∈ D.conclusion_completed_slice_balanced_atoms_become_constants_atoms,
+          D.completedAtomFactor a s = D.completedAtomFactor a (1 / 2) := by
+      intro a ha
+      have hs :=
+        conclusion_completed_slice_balanced_atoms_become_constants_balanced_factor D a
+          (hbalanced a ha) s
+      have hhalf :=
+        conclusion_completed_slice_balanced_atoms_become_constants_balanced_factor D a
+          (hbalanced a ha) (1 / 2)
+      exact hs.trans hhalf.symm
+    have hprod :
+        ∀ l : List conclusion_completed_slice_balanced_atoms_become_constants_atom,
+          (∀ a ∈ l, D.completedAtomFactor a s = D.completedAtomFactor a (1 / 2)) →
+            (l.map (fun a => D.completedAtomFactor a s)).prod =
+              (l.map (fun a => D.completedAtomFactor a (1 / 2))).prod := by
+      intro l
+      induction l with
+      | nil =>
+          intro _h
+          simp
+      | cons a t ih =>
+          intro h
+          simp only [List.mem_cons] at h
+          simp [h a (Or.inl rfl), ih (fun b hb => h b (Or.inr hb))]
+    simpa [completedAtomProduct] using
+      hprod D.conclusion_completed_slice_balanced_atoms_become_constants_atoms hfactor
+  constructor
+  · exact hconst
+  · intro s
+    rw [completedSlice]
+    rw [conclusion_completed_slice_balanced_atoms_become_constants_product_formula]
+    rw [hconst s]
+
 end Omega.Conclusion

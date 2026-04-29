@@ -151,6 +151,17 @@ theorem inducedSpectrum_singleton_empty (K : PrimeSupport) (n : Nat) :
     inducedSpectrum ({K} : Finset PrimeSupport) (fun S => if S = K then n else 0) ∅ = n := by
   simpa using inducedSpectrum_singleton K ∅ n
 
+/-- The spectrum of a finite support set is realized by its exact-support type counts.
+    thm:cdim-multiprime-spectrum-realizability -/
+theorem paper_cdim_multiprime_spectrum_realizability (supports : Finset PrimeSupport) :
+    ∃ n : PrimeSupport → Nat,
+      (∀ J, multiPrimeSpectrum supports J = inducedSpectrum supports n J) ∧
+        Finset.sum supports n = multiPrimeSpectrum supports ∅ := by
+  refine ⟨typeCount supports, ?_, ?_⟩
+  · intro J
+    simpa [inducedSpectrum] using multiPrimeSpectrum_eq_sum_typeCount supports J
+  · rw [sum_typeCount_eq_card, multiPrimeSpectrum_empty]
+
 /-- One-prime marginals do not determine the higher support spectrum.
     prop:cdim-higher-spectrum-not-determined-by-marginals -/
 theorem higher_spectrum_not_determined_by_marginals

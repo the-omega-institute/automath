@@ -26,4 +26,15 @@ theorem paper_conclusion_cell_curvature_two_moment_completeness
       D.cellIndex * D.wLeft + (D.cellIndex + 1) * D.wRight = D.firstMoment := by
   exact ⟨D.hLeft, D.hRight, D.hMass, D.hFirstMoment⟩
 
+/-- Paper label: `cor:conclusion-cell-curvature-barycenter-adjacent-peak-ratio`. -/
+theorem paper_conclusion_cell_curvature_barycenter_adjacent_peak_ratio
+    (D : ConclusionCellCurvatureTwoMomentData) (hpos : D.totalMass ≠ 0) :
+    D.firstMoment / D.totalMass = D.cellIndex + D.wRight / (D.wLeft + D.wRight) := by
+  have hden : D.wLeft + D.wRight ≠ 0 := by
+    intro hzero
+    exact hpos (by rw [← D.hMass, hzero])
+  rw [← D.hMass, ← D.hFirstMoment]
+  field_simp [hden]
+  ring
+
 end Omega.Conclusion

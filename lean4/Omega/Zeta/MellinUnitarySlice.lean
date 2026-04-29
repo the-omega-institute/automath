@@ -25,4 +25,9 @@ theorem paper_xi_mellin_conjugation_identity (f : MellinTestFn) (s : ℂ) :
       conj (mellinReadout f (1 - conj s)) := by
   rfl
 
+/-- `prop:mellin-conjugation-identity` -/
+theorem paper_mellin_conjugation_identity (f : MellinTestFn) (s : ℂ) :
+    mellinReadout (mellinDual f) s = conj (mellinReadout f (1 - conj s)) := by
+  rfl
+
 end Omega.Zeta

@@ -1,4 +1,5 @@
 import Omega.OperatorAlgebra.CircuitCollisionMomentCamouflageMaxfiber
+import Omega.OperatorAlgebra.FiniteUniformLayerVarianceDissipation
 import Omega.OperatorAlgebra.CircuitMaxfiberPolyfactorInapprox
 import Omega.OperatorAlgebra.CommutativeDmaxExtremizersMaxfiber
 import Omega.OperatorAlgebra.CommutativeRenyiExtremizersAlphaStable

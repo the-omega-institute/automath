@@ -67,4 +67,47 @@ theorem paper_conclusion_boundary_mixed_register_phase_budget
       (Fintype.equivOfCardEq (boundaryMixedSplitEncoding_card p ell r a ha)).symm
     exact ⟨e, e.injective⟩
 
+/-- Paper-facing finite-prime mixed Pareto frontier, stated for an abstract joint modulus `M`:
+any injective encoding into `B` binary register bits and `d` many `b`-bit phase coordinates
+satisfies the binary budget bound, while every coordinate split has the same finite
+cardinality as the original `M^r` source.
+    thm:conclusion-boundary-finite-prime-mixed-pareto-frontier -/
+theorem paper_conclusion_boundary_finite_prime_mixed_pareto_frontier {M r B d b : ℕ}
+    (hEnc :
+      ∃ f : Fin (M ^ r) → BoundaryRegisterBank B × BoundaryPhaseBank d b,
+        Function.Injective f) :
+    Nat.clog 2 (M ^ r) ≤ B + d * b ∧
+      ∀ {a : ℕ}, a ≤ r →
+        ∃ g : Fin (M ^ r) → Fin (M ^ a) × (Fin (r - a) → Fin M),
+          Function.Injective g := by
+  refine ⟨?_, ?_⟩
+  · rcases hEnc with ⟨f, hf⟩
+    rw [Nat.clog_le_iff_le_pow (by omega)]
+    calc
+      M ^ r = Fintype.card (Fin (M ^ r)) := by
+        simp [Fintype.card_fin]
+      _ ≤ Fintype.card (BoundaryRegisterBank B × BoundaryPhaseBank d b) :=
+        Fintype.card_le_of_injective f hf
+      _ = 2 ^ B * (2 ^ b) ^ d := by
+        simp [BoundaryRegisterBank, BoundaryPhaseBank, Fintype.card_prod, Fintype.card_fin]
+      _ = 2 ^ B * 2 ^ (b * d) := by rw [pow_mul]
+      _ = 2 ^ (B + b * d) := by rw [← pow_add]
+      _ = 2 ^ (B + d * b) := by rw [Nat.mul_comm b d]
+  · intro a ha
+    classical
+    have hcard :
+        Fintype.card (Fin (M ^ a) × (Fin (r - a) → Fin M)) =
+          Fintype.card (Fin (M ^ r)) := by
+      have hsum : a + (r - a) = r := Nat.add_sub_of_le ha
+      calc
+        Fintype.card (Fin (M ^ a) × (Fin (r - a) → Fin M))
+            = M ^ a * M ^ (r - a) := by
+              simp [Fintype.card_prod, Fintype.card_fin]
+        _ = M ^ (a + (r - a)) := by rw [← pow_add]
+        _ = M ^ r := by rw [hsum]
+        _ = Fintype.card (Fin (M ^ r)) := by simp [Fintype.card_fin]
+    let e : Fin (M ^ r) ≃ Fin (M ^ a) × (Fin (r - a) → Fin M) :=
+      (Fintype.equivOfCardEq hcard).symm
+    exact ⟨e, e.injective⟩
+
 end Omega.Conclusion

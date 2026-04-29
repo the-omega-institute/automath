@@ -84,6 +84,7 @@ import Omega.EA.KernelWeightedPrimeOrbit
 import Omega.EA.KernelZeroTemp
 import Omega.EA.MonoidQuotientIsN
 import Omega.EA.MulByIteratedAdd
+import Omega.EA.MulFromSuccessor
 import Omega.EA.MulNoNewPrimitive
 import Omega.EA.MinStateSpecFlow
 import Omega.EA.MultiplicativeEnergyCompilable
@@ -123,6 +124,7 @@ import Omega.EA.RewriteTerminationPublication
 import Omega.EA.RewriteWordProblem
 import Omega.EA.RationalGFLinearConstraints
 import Omega.EA.RoughVisibleDifferenceQuotientCertificate
+import Omega.EA.StableAddCommutativeMonoid
 import Omega.EA.StableAddComputable
 import Omega.EA.StableAddFiniteResolutionCompatibility
 import Omega.EA.StableAddNoNullCreation
@@ -152,6 +154,7 @@ import Omega.EA.Window6CountermodelCertificate
 import Omega.EA.Window6AffineStableTransfer
 import Omega.EA.ChiLayeredFiberSpectrumRecovery
 import Omega.EA.FoldIndwHighQExtractMaxfiberAndChi
+import Omega.EA.FoldCollision2AutLieDimensionRank
 import Omega.EA.Z2x2JointSpectralMeasure
 import Omega.EA.ZeckendorfAddFst
 import Omega.EA.ZeckendorfArithComputable

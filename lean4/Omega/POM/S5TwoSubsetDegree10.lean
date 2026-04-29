@@ -152,4 +152,16 @@ theorem paper_pom_s5_two_subset_degree10_package :
     Nat.factorial 3 * Nat.factorial 2 = 12 ∧
     120 / 12 = (10 : ℕ) := paper_pom_s5_two_subset_degree10_seeds
 
+/-- Paper-facing certificate for the degree-10 two-subset resolvents.
+    prop:pom-s5-two-subset-degree10 -/
+theorem paper_pom_s5_two_subset_degree10 :
+    Nat.choose 5 2 = 10 ∧
+    2 ^ 5 * 3 ^ 2 * 5 ^ 2 = (7200 : Nat) ∧
+    2 ^ 4 * 5 ^ 4 = (10000 : Nat) ∧
+    (18 - 3 * 4 : Int) % 2 = 0 ∧
+    (23 - 3 * 1 : Int) % 2 = 0 := by
+  refine ⟨two_subset_count, rplus_constant_factorization, rtimes_constant_factorization, ?_, ?_⟩
+  · exact disc_rplus_exponent_tripling.1
+  · exact disc_rtimes_exponent_tripling.2.2.1
+
 end Omega.POM.S5TwoSubsetDegree10

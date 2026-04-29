@@ -112,7 +112,9 @@ import Omega.Folding.SaturationSmoothDichotomy
 import Omega.Folding.CollisionDecomp
 import Omega.Folding.CollisionKernel
 import Omega.Folding.SignedCompanionDet
+import Omega.Folding.SignedCompanionQ6Q7
 import Omega.Folding.SignedCompanionLucasCertificate
+import Omega.Folding.SignedCompanionFusionObstruction
 import Omega.Folding.SignedCompanionQ5CoincidenceSplit
 import Omega.Folding.CollisionZeta
 import Omega.Folding.CollisionZetaOperator
@@ -674,6 +676,7 @@ import Omega.Folding.PhiEquivariantPublication
 import Omega.Folding.P10LeyangIrreducibleRootSplitDensities
 import Omega.Folding.PhiMEntropy
 import Omega.Folding.PhiMEntropyNoDrop
+import Omega.Folding.PhiMEquivariant
 import Omega.Folding.PhiMFactorOnSubshift
 import Omega.Folding.PhiMParry
 import Omega.Folding.PhiMParryPushforward
@@ -739,6 +742,7 @@ import Omega.Folding.YmScanLengthAsymptotic
 import Omega.Folding.YmSingletonEssentialFiniteDelay
 import Omega.Folding.YmSofic
 import Omega.Folding.YmSyncTail
+import Omega.Folding.YmUnsyncPrefixPFSharp
 import Omega.Folding.YmSyncTailPfSharp
 import Omega.Folding.YmSynchronized
 import Omega.Folding.YmUnsyncStarPoleCluster
