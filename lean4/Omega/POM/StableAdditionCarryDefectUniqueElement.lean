@@ -52,4 +52,13 @@ theorem paper_pom_stable_addition_carry_defect_unique_element :
     have h := Omega.fib_succ_succ' m
     omega
 
+/-- Paper label: `cor:pom-carry-defect-m6-anchor-8-34`. The stable-addition carry element at
+level `6` has the Fibonacci value `F_6 = 8`, and the adjacent anchor numerals are `F_8 = 21`
+and `F_9 = 34`. -/
+theorem paper_pom_carry_defect_m6_anchor_8_34 :
+    Nat.fib 8 = 21 ∧ Nat.fib 9 = 34 ∧
+      Omega.stableValue (Omega.X.carryElement 6) = 8 := by
+  refine ⟨by norm_num, by norm_num, ?_⟩
+  simpa using (Omega.X.stableValue_carryElement (m := 6))
+
 end Omega.POM
