@@ -62,6 +62,7 @@ import Omega.SyncKernelWeighted.IharaChebotarevGrhCriterion
 import Omega.SyncKernelWeighted.HutchinsonUnbiasedMfree
 import Omega.SyncKernelWeighted.HutchinsonGlobalLift
 import Omega.SyncKernelWeighted.IharaMertensConstant
+import Omega.SyncKernelWeighted.IharaZkSoundnessExponent
 import Omega.SyncKernelWeighted.IharaWittPrimitiveSpectrum
 import Omega.SyncKernelWeighted.K21C1Sqrt5
 import Omega.SyncKernelWeighted.K9GeometricZeta
