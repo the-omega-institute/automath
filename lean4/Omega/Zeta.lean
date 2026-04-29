@@ -1872,6 +1872,8 @@ import Omega.Zeta.HankelRankLinearRecurrence
 import Omega.Zeta.HankelRankMinimalLinearRealization
 import Omega.Zeta.HankelSinglePointRandomAudit
 import Omega.Zeta.XiOracleCollapseToeplitzPsdFiniteTruncation
+import Omega.Zeta.XiOracleCollapseSingleDyadicTruncation
+import Omega.Zeta.XiTimePart57eaTailcountTopPlatformRigidity
 import Omega.Zeta.HankelShortPrimeAvoidsBadset
 import Omega.Zeta.HankelStiffnessBalance
 import Omega.Zeta.HankelVandermonde2
