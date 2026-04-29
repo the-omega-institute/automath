@@ -2512,6 +2512,7 @@ import Omega.Zeta.XiStieltjesW1Lipschitz
 import Omega.Zeta.XiChainInteriorBooleanMobiusCharacteristicMaxchains
 import Omega.Zeta.XiTimePart65dChainInteriorBooleanArithmeticization
 import Omega.Zeta.XiBasepointScanL2EnergyPdKernel
+import Omega.Zeta.XiBasepointScanL2EnergyDiagonalLowerBound
 import Omega.Zeta.StereographicJacobianEntropyDensity
 import Omega.Zeta.XiTerminalZmS4LanglandsFactorTorusRankConductorTable
 import Omega.Zeta.XiTerminalZmExteriorSquareJacobianSplitting
