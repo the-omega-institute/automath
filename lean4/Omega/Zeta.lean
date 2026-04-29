@@ -2709,3 +2709,5 @@ import Omega.Zeta.XiToeplitzNegativeReciprocalSumLimit
 import Omega.Zeta.XiTimePart9zqActivePrimesliceLinearGrowth
 import Omega.Zeta.XiTimePart62dcaHologramBernoulliExactDimensionFormula
 import Omega.Zeta.XiTerminalZmS3ClosureHasseWeilFactorization
+import Omega.Zeta.XiFoldbinGaugeGroupOrderAbelCenterClosed
+import Omega.Zeta.XiTimePart60abGaugeConstantLeadingModeRatio
