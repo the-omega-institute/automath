@@ -7,10 +7,12 @@ namespace Omega.Conclusion
 
 noncomputable section
 
-local instance (m : ℕ) : DecidableEq (Word m) :=
+local instance conclusion_fold_partition_global_walsh_balance_decidableEqWord
+    (m : ℕ) : DecidableEq (Word m) :=
   Classical.decEq _
 
-local instance (m : ℕ) : DecidableEq (X m) :=
+local instance conclusion_fold_partition_global_walsh_balance_decidableEqX
+    (m : ℕ) : DecidableEq (X m) :=
   Classical.decEq _
 
 /-- The theorem's `H_x` generating-function specialization at a Walsh sign vector. -/
