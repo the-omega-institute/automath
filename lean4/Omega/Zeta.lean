@@ -1,3 +1,5 @@
+import Omega.Zeta.XiTimePart9fStreamingWidthRarity
+import Omega.Zeta.XiSmithLocalEulerCompleteInvariant
 import Omega.Zeta.XiEdFUniqueReconstructionFromDiscriminantAndCritical
 import Omega.Zeta.XiLocalizedBasicExtensionStrictlyNonsplit
 import Omega.Zeta.XiTimePart74FinitePastPrimesliceComplexityDepth
