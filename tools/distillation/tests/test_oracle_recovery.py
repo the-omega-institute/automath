@@ -1,4 +1,3 @@
-import tempfile
 import time
 import unittest
 from pathlib import Path
@@ -39,7 +38,7 @@ class OracleRecoveryTests(unittest.TestCase):
         state.depth_cycle = 2
         old_done_dir = distill.ORACLE_DONE_DIR
         try:
-            with tempfile.TemporaryDirectory() as tmp:
+            with distill._temporary_directory(prefix="oracle_recovery_") as tmp:
                 done_dir = Path(tmp)
                 distill.ORACLE_DONE_DIR = done_dir
                 valid = done_dir / "wang_zahl_W_oracle_deepen_cycle2_20260423_000506.md"
@@ -80,7 +79,7 @@ class OracleRecoveryTests(unittest.TestCase):
             + "This proof sentence is deliberately long. " * 50
         )
         try:
-            with tempfile.TemporaryDirectory() as tmp:
+            with distill._temporary_directory(prefix="oracle_recovery_") as tmp:
                 done_dir = Path(tmp)
                 distill.ORACLE_DONE_DIR = done_dir
                 raw = done_dir / "wang_zahl_W_oracle_deepen_cycle5_a1_20260423_100000.md"

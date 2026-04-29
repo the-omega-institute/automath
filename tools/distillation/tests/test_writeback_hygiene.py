@@ -1,4 +1,3 @@
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -7,9 +6,10 @@ from tools.distillation import distill
 
 class WritebackHygieneTests(unittest.TestCase):
     def setUp(self):
-        self.tmp = tempfile.TemporaryDirectory()
+        self.tmp = distill._temporary_directory(prefix="writeback_hygiene_")
+        self.tmp_path = self.tmp.__enter__()
         self.old_core_body = distill.CORE_BODY
-        self.core_body = Path(self.tmp.name) / "body"
+        self.core_body = Path(self.tmp_path) / "body"
         self.core_body.mkdir()
         distill.CORE_BODY = self.core_body
         (self.core_body / "target.tex").write_text(
@@ -19,7 +19,7 @@ class WritebackHygieneTests(unittest.TestCase):
 
     def tearDown(self):
         distill.CORE_BODY = self.old_core_body
-        self.tmp.cleanup()
+        self.tmp.__exit__(None, None, None)
 
     def _validate(self, content: str):
         return distill._validate_writebacks(

@@ -10,8 +10,8 @@ import re
 import shutil
 import subprocess
 import sys
-import tempfile
 import time
+from contextlib import contextmanager
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
@@ -188,6 +188,47 @@ def read_json(path: Path) -> Any:
     return json.loads(read_text(path))
 
 
+def _path_exists(path: Path) -> bool:
+    """Return whether a path exists, treating inaccessible paths as absent."""
+    try:
+        return path.exists()
+    except OSError as exc:
+        logger.debug("Skipping inaccessible path probe %s: %s", path, exc)
+        return False
+
+
+def _path_is_executable(path: Path) -> bool:
+    """Return whether a candidate CLI path is present and executable."""
+    return _path_exists(path) and os.access(str(path), os.R_OK | os.X_OK)
+
+
+def _make_temporary_directory(prefix: str = "omega_distill_") -> Path:
+    """Create a writable temporary directory without restrictive Windows ACLs."""
+    base = Path(os.environ.get("DISTILL_TEMP_DIR", DISTILLATION_DIR / "tmp"))
+    base.mkdir(parents=True, exist_ok=True)
+    for attempt in range(100):
+        name = f"{prefix}{os.getpid()}_{time.time_ns()}_{attempt}"
+        path = base / name
+        try:
+            path.mkdir()
+            break
+        except FileExistsError:
+            continue
+    else:
+        raise FileExistsError(f"Could not create temporary directory under {base}")
+    return path
+
+
+@contextmanager
+def _temporary_directory(prefix: str = "omega_distill_"):
+    """Context manager for writable temporary directories."""
+    path = _make_temporary_directory(prefix)
+    try:
+        yield str(path)
+    finally:
+        shutil.rmtree(path, ignore_errors=True)
+
+
 def _find_codex() -> str:
     """Find the Codex CLI, including npm and Homebrew fallback locations."""
     found = shutil.which("codex")
@@ -195,11 +236,11 @@ def _find_codex() -> str:
         return found
     if sys.platform == "win32":
         npm_codex = Path.home() / "AppData" / "Roaming" / "npm" / "codex.cmd"
-        if npm_codex.exists():
+        if _path_is_executable(npm_codex):
             return str(npm_codex)
     elif sys.platform == "darwin":
         for candidate in ("/opt/homebrew/bin/codex", "/usr/local/bin/codex"):
-            if Path(candidate).exists():
+            if _path_is_executable(Path(candidate)):
                 return candidate
     return "codex"
 
@@ -312,7 +353,7 @@ def codex_exec(
             write_text(codex_log_dir / f"{log_tag}_{ts}.prompt.txt", prompt)
         return "(dry run -- no output)"
 
-    codex_bin = CODEX_PATH if Path(CODEX_PATH).exists() else shutil.which("codex")
+    codex_bin = CODEX_PATH if _path_is_executable(Path(CODEX_PATH)) else shutil.which("codex")
     if not codex_bin:
         logger.error("Codex CLI not found")
         return ""
@@ -328,7 +369,7 @@ def codex_exec(
         stdout_file = codex_log_dir / f"{log_tag}_{ts}.stdout.jsonl"
         stderr_file = codex_log_dir / f"{log_tag}_{ts}.stderr.txt"
     else:
-        temp_dir = Path(tempfile.mkdtemp(prefix="omega_distill_codex_"))
+        temp_dir = _make_temporary_directory(prefix="omega_distill_codex_")
         prompt_file = temp_dir / "prompt.txt"
         out_file = temp_dir / "output.txt"
         stdout_file = temp_dir / "stdout.jsonl"
@@ -481,11 +522,11 @@ def _find_claude() -> str:
         return found
     if sys.platform == "win32":
         npm_claude = Path.home() / "AppData" / "Roaming" / "npm" / "claude.cmd"
-        if npm_claude.exists():
+        if _path_is_executable(npm_claude):
             return str(npm_claude)
     elif sys.platform == "darwin":
         for candidate in ("/opt/homebrew/bin/claude", "/usr/local/bin/claude"):
-            if Path(candidate).exists():
+            if _path_is_executable(Path(candidate)):
                 return candidate
     return "claude"
 
@@ -511,7 +552,7 @@ def claude_exec(
         return "(dry run -- no output)"
 
     claude_bin = CLAUDE_PATH
-    if not Path(claude_bin).exists() and not shutil.which(claude_bin):
+    if not _path_is_executable(Path(claude_bin)) and not shutil.which(claude_bin):
         logger.warning("Claude CLI not found; falling back to codex_exec")
         return _codex_exec_with_infra_retries(prompt, work_dir=target_dir, dry_run=dry_run)
 
@@ -4931,7 +4972,7 @@ def _edit_writebacks_interactively(
     writebacks: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
     """Open writeback JSON in an editor and return the edited proposals."""
-    temp_dir = Path(tempfile.mkdtemp(prefix="omega_distill_edit_"))
+    temp_dir = _make_temporary_directory(prefix="omega_distill_edit_")
     edit_file = temp_dir / f"{_slugify(state.name)}_writebacks.json"
     write_json(edit_file, writebacks)
     editor = os.environ.get("EDITOR") or ("notepad" if IS_WINDOWS else "vi")
