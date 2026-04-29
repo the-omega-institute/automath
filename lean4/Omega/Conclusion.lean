@@ -77,6 +77,7 @@ import Omega.Conclusion.ConclusionBinFoldNoNontrivialNuisanceDeformationFixedPow
 import Omega.Conclusion.LeyangDoublingSolenoidExtension
 import Omega.Conclusion.XiDyadicPhaseRegisterLowerBound
 import Omega.Conclusion.XiDyadicZeroPhaseDrift
+import Omega.Conclusion.XiDyadicShellEnvelopeLaw
 import Omega.Conclusion.ScaledLawUniqueFromRecoverabilityProfile
 import Omega.Conclusion.HaltingFourfoldComplexityIdentity
 import Omega.Conclusion.HaltingTimePrimeRegisterFrontierExact
