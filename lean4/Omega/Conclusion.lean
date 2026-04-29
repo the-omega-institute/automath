@@ -2618,3 +2618,5 @@ import Omega.Conclusion.FoldGaugeTwoScaleSpectralRigidity
 import Omega.Conclusion.WreathSignAdditivityEvenShielding
 import Omega.Conclusion.EquivariantASplittingRigidity
 import Omega.Conclusion.ImageLayerResolutionMemoryExternality
+import Omega.Conclusion.MajorarcGramRamanujanDirichletDoublepacket
+import Omega.Conclusion.SerrinWulffWeightedFluxAffineLaw
