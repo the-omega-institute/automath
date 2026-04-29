@@ -1,4 +1,5 @@
 import Omega.Conclusion.FiniteDefectAtomicCountEqualsIntrinsicMinimalCauchyRank
+import Omega.Conclusion.GodelFiveSymbolThreshold
 import Omega.Conclusion.ScaledLawUniqueFromRecoverabilityProfile
 import Omega.Conclusion.HaltingFourfoldComplexityIdentity
 import Omega.Conclusion.HaltingTimePrimeRegisterFrontierExact
