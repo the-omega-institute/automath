@@ -2506,3 +2506,5 @@ import Omega.Conclusion.PrimeTimeAddressedGodelRigidity
 import Omega.Conclusion.SquarefreeAuditBreakdown
 import Omega.Conclusion.SchurSingleRowCompleteRecovery
 import Omega.Conclusion.PartitionSquarefreePartitionFunctionGroundstate
+import Omega.Conclusion.SmithBadPrimeLossSupport
+import Omega.Conclusion.ZigzagHstarStrictRefinementOfReplayCount
