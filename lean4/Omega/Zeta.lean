@@ -17,6 +17,7 @@ import Omega.Zeta.XiGramshiftPadicEffectivePrecision
 import Omega.Zeta.Arity335CollisionMixingScale
 import Omega.Zeta.XiTimePart9IMinimalOrientationDoubleCover
 import Omega.Zeta.XiTimePart9iSignLocalSystemCompleteness
+import Omega.Zeta.XiTimePart9IMonoidalRigidityByTwoPoints
 import Omega.Zeta.XiTimePart9saChi2AffinePhiInversion
 import Omega.Zeta.XiQ5UnsolvableByRadicals
 import Omega.Zeta.XiFoldbinRankUnrankOptimalAdvicePolytime
@@ -2871,6 +2872,7 @@ import Omega.Zeta.XiSingleAtomCenteredResidueRankoneSpike
 import Omega.Zeta.XiGoldenW1GoodSideGapToSingleBoxOptimum
 import Omega.Zeta.XiTimePart63aTorsionQCesaroFourierProjection
 import Omega.Zeta.XiSelfreciprocalEscapeSingularRingResultant
+import Omega.Zeta.XiLSelfreciprocalResultantSquareStructure
 import Omega.Zeta.XiOutputPotentialDirichletGlobalWorstModeJ1
 import Omega.Zeta.XiOutputPotentialActivatedBranchUniformScaleSeparation
 import Omega.Zeta.XiTerminalZmCumulantSignDensityExtremes
