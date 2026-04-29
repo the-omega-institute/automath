@@ -259,6 +259,7 @@ import Omega.Zeta.XiEndpointHeatProbeRichardsonExtrapolation
 import Omega.Zeta.XiOutputPotentialDirichletFixedJFourthOrder
 import Omega.Zeta.XiPoissonFirstNonvanishingMomentTvKlSharp
 import Omega.Zeta.XiEndpointHeatProbePowerlawDifferences
+import Omega.Zeta.XiOperatorEndpointProbeHausdorffBochnerCompleteMonotone
 import Omega.Zeta.XiEndpointCompressionPrecision
 import Omega.Zeta.XiGodelModRegisterCollisionDilution
 import Omega.Zeta.XiS4MainComponentJacobianIsotypicMissingPattern
@@ -1118,6 +1119,7 @@ import Omega.Zeta.XiSmithLocalLossProfilesFreeCommutativeMonoid
 import Omega.Zeta.XiEndpointSingleDefectWeightedKlLi2
 import Omega.Zeta.XiEndpointAbsorptionJetMoments
 import Omega.Zeta.XiLeyangSexticPerfectPowerCollapse
+import Omega.Zeta.XiLeyangHankelSingularSlopeDetectsModuli
 import Omega.Zeta.XiEndpointHeatProbePowerlawLeading
 import Omega.Zeta.XiTimePart76SmithSurjectiveModuliPrimeSieve
 import Omega.Zeta.XiTimePart76LeyangBranchHypercubeSpectrumHeat
