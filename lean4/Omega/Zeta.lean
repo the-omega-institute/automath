@@ -1,4 +1,6 @@
 import Omega.Zeta.XiPointAtomTruncatedRealizabilityEnvelope
+import Omega.Zeta.XiBasepointScanHeineStieltjesOde
+import Omega.Zeta.XiAtomicWittEnergyResidueL2Law
 import Omega.Zeta.XiFoldbinEntropyGaugeOneNatGap
 import Omega.Zeta.XiLeyangGtDiscriminantAndSpecialFiberFactorization
 import Omega.Zeta.XiSymqGoldenCqModPiQuadraticPhaseTransition

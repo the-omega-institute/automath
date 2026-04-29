@@ -1,4 +1,5 @@
 import Omega.Conclusion.SmithLossProfileYoungDuality
+import Omega.Conclusion.BinfoldDivergenceConeObservableRankOne
 import Omega.Conclusion.Period3FiberFactorialMobiusTail
 import Omega.Conclusion.Window6ExactFoldSynchronizationMutualInformation
 import Omega.Conclusion.GoldenShiftedHankelV5Invariance
