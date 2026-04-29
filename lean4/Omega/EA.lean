@@ -40,6 +40,7 @@ import Omega.EA.FibCongruence
 import Omega.EA.FibDivisibilityChain
 import Omega.EA.FiniteFieldLinearization
 import Omega.EA.FiniteLedgerRecoverability
+import Omega.EA.FiniteResolutionAutomorphismRigidity
 import Omega.EA.FoldWindow6CenterThreeObservablesDimensionDefect
 import Omega.EA.FoldCenterResolutionCriterionIndwEps
 import Omega.EA.FoldWindow6ChiLayeredSpectrumReconstructionBy12Moments

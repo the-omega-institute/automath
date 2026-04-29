@@ -733,6 +733,7 @@ import Omega.POM.FibCubeGrayHamilton
 import Omega.POM.FibCubeKPointCount
 import Omega.POM.FibCubeMarginalBoundaryLayer
 import Omega.POM.FibCubeRadiusCenterClassification
+import Omega.POM.FibCubeAutZ2
 import Omega.POM.FiniteParetoLegendreCurvature
 import Omega.POM.HookChannelLeadingTermCancellation
 import Omega.POM.HookChannelImpliesPartitionGapClosed
