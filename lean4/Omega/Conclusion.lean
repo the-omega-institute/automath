@@ -2466,3 +2466,5 @@ import Omega.Conclusion.HaltingTimeThreeScaleSeparation
 import Omega.Conclusion.PrimeRegisterMomAnomalyCertificateLinearGrowth
 import Omega.Conclusion.SmithLossEulerMultiplicativityPolarization
 import Omega.Conclusion.ComovingCayleyJensenOfflineRootBound
+import Omega.Conclusion.FiniteCMVCertificatePadeHardyFreezing
+import Omega.Conclusion.DoubleKLResidualRateSynchronousCollapse
