@@ -1,5 +1,8 @@
 import Omega.Zeta.XiBasepointScanAnchorAngleConcentration
 import Omega.Zeta.XiOutputPotentialLargeOddPrimesBad
+import Omega.Zeta.XiWindow6ParityChargeTrigradingB3
+import Omega.Zeta.XiTimePart59abPeriodizedLogEnergyFib
+import Omega.Zeta.XiOutputPotentialActivatedBranchRigidity
 import Omega.Zeta.XiPickPoissonEnergyStabilizerCovariance
 import Omega.Zeta.XiTerminalZmStokesAmplitudeSquareCubicRigidity
 import Omega.Zeta.XiTerminalZmStokesAmplitudeDegree6Minpoly
