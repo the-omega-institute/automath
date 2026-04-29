@@ -1411,7 +1411,11 @@ def detect_duplicate_symbols(wt: WorktreeInfo) -> list[str]:
         # For each newly-introduced symbol, check if it exists elsewhere
         # on base_sha under lean4/Omega/ (excluding this same file).
         for sym in new_syms:
-            # Escape regex metacharacters in symbol (dots are legal in Lean names)
+            # Use PCRE (-P). macOS git grep -E uses BSD ERE which silently
+            # rejects \s, \b, and (?:...) with "repetition-operator operand
+            # invalid" and returns exit=128, which we would miscount as "no
+            # match" — Gate 5 would then pass every round. PCRE works
+            # identically on all platforms.
             pattern = (
                 r"^\s*(?:@\[[^]]*\]\s*)*"
                 r"(?:private\s+|protected\s+|noncomputable\s+|scoped\s+|local\s+)*"
@@ -1420,11 +1424,20 @@ def detect_duplicate_symbols(wt: WorktreeInfo) -> list[str]:
             )
             try:
                 g = run_cmd(
-                    ["git", "grep", "-l", "-E", pattern,
+                    ["git", "grep", "-l", "-P", pattern,
                      wt.base_sha, "--", "lean4/Omega/"],
                     cwd=wt.path, check=False,
                 )
             except Exception:
+                continue
+            # returncode: 0 = matches found, 1 = no match, 128 = regex/other
+            # error. Only 0 indicates a hit; 128 we treat as "skip this sym"
+            # (regex was invalid, warn but don't false-positive the round).
+            if g.returncode not in (0, 1):
+                logger.warning(
+                    f"[R{wt.round_number}] Gate 5: git grep returned {g.returncode} "
+                    f"for symbol '{sym}' (stderr: {(g.stderr or '')[:200]})"
+                )
                 continue
             hits = [l.strip() for l in (g.stdout or "").splitlines() if l.strip()]
             # git grep returns "<sha>:<path>" — strip the sha prefix
