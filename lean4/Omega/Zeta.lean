@@ -2856,3 +2856,5 @@ import Omega.Zeta.XiTimePart62dcaHologramUniformAhlforsRegularity
 import Omega.Zeta.XiTimePart62dcaHologramUniformMonofractalCollapse
 import Omega.Zeta.XiTimePart9p1MidpointGateCascadeCriticalRadius
 import Omega.Zeta.XiTimePart9xDecodingAnomalyNineteenBitGap
+import Omega.Zeta.XiHardyInnerClarkCarleson
+import Omega.Zeta.XiPoissonFirstNonvanishingMomentFdivSharp
