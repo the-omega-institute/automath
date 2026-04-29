@@ -2912,3 +2912,5 @@ import Omega.Zeta.XiZGDirichletLogRenormalization
 import Omega.Zeta.XiFiniteWitnessToOfflineFiber
 import Omega.Zeta.XiTimePart9xSerrinRayExactCapacity
 import Omega.Zeta.XiTimePart9xWindow6BoundaryArithmeticPinning
+import Omega.Zeta.XiTimePart9zlLocalizationCircleCollapseSupportRigidity
+import Omega.Zeta.XiComovingPrefixParetoHalfCost
