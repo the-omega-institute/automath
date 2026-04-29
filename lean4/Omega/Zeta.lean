@@ -21,6 +21,7 @@ import Omega.Zeta.XiTimePart9IMonoidalRigidityByTwoPoints
 import Omega.Zeta.XiTimePart9iMonoidalRigidityByTwoPoints
 import Omega.Zeta.XiTimePart9saChi2AffinePhiInversion
 import Omega.Zeta.XiQ5UnsolvableByRadicals
+import Omega.Zeta.XiTimePart69SameExponentialRateInfiniteMixingFamily
 import Omega.Zeta.XiFoldbinRankUnrankOptimalAdvicePolytime
 import Omega.Zeta.XiFoldZminusoneCancellationBinomialConvolution
 import Omega.Zeta.XiJensenDefectEntropyEnergyIdentity
