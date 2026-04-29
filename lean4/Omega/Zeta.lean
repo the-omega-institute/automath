@@ -182,6 +182,7 @@ import Omega.Zeta.XiCoarsegrainingIllposednessExponentialLaw
 import Omega.Zeta.XiStieltjesCoarsegrainingIllposednessPolynomial
 import Omega.Zeta.XiPoissonCauchyMultipoleInvisibilityConstruction
 import Omega.Zeta.XiScanTwoSourceMinDiscriminant
+import Omega.Zeta.XiScanTwoSourceStabilityGap
 import Omega.Zeta.XiJetPsdEquivalence
 import Omega.Zeta.XiRhomPressureSeriesConvergenceThresholdRemainder
 import Omega.Zeta.XiScaleMellinBesselKernel
