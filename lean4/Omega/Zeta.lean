@@ -1,4 +1,6 @@
 import Omega.Zeta.XiChainInteriorCanonicalArithmeticizationOptimalOrder
+import Omega.Zeta.XiTimePart9eHankelModpRankPreservation
+import Omega.Zeta.XiWindow6BlockTreeNumberAuditPrime
 import Omega.Zeta.XiTimePart9m3ResidualCoherenceDifferentialCalculus
 import Omega.Zeta.XiTimePart9m3VisibilityClassicalizationComplementarity
 import Omega.Zeta.XiBasepointScanAnchorAngleConcentration
