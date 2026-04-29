@@ -1967,6 +1967,8 @@ import Omega.Zeta.FinitePartLogMGapPositive
 import Omega.Zeta.FinitePartLogMRelativeScaleTransfer
 import Omega.Zeta.FinitePartMertensAsymptotic
 import Omega.Zeta.FinitePartNyquistErrorExp
+import Omega.Zeta.FinitePartNyquistProportionStability
+import Omega.Zeta.SyncKernelExplicitSyncwordMixingRate
 import Omega.Zeta.FinitePartNyquistParsevalAliasing
 import Omega.Zeta.FinitePartOracleAnomalyEquivalence
 import Omega.Zeta.FinitePartResidueDriftTrichotomy
