@@ -87,6 +87,7 @@ import Omega.Zeta.XiBusemannDepthFiniteWindowEstimator
 import Omega.Zeta.XiHzomTwoChannelModsquare
 import Omega.Zeta.XiExteriorPowerDetCokerSize
 import Omega.Zeta.XiExteriorPowerJordanAffinePoincareClt
+import Omega.Zeta.XiExteriorPowerJordanSchubert
 import Omega.Zeta.XiFoldbinAuditedEvenCenterCollapseAbelFullRank
 import Omega.Zeta.XiFoldbinCriticalScaleSuccessCurveInversion
 import Omega.Zeta.XiFoldbinMaxfiberUpperBoundExponentialSharpNonsaturation
