@@ -46,6 +46,8 @@ import Omega.Zeta.Arity335CollisionMixingScale
 import Omega.Zeta.XiTimePart9IMinimalOrientationDoubleCover
 import Omega.Zeta.XiTimePart9iSignLocalSystemCompleteness
 import Omega.Zeta.XiTimePart9iMonoidalRigidityByTwoPoints
+import Omega.Zeta.XiTimePart9hEscortSectorFreezing
+import Omega.Zeta.XiTimePart9hMaxfiberRareSectorCarrying
 import Omega.Zeta.XiTimePart9saChi2AffinePhiInversion
 import Omega.Zeta.HDQCD1EdgeFromChi2
 import Omega.Zeta.DefectEntropySchurConcavity

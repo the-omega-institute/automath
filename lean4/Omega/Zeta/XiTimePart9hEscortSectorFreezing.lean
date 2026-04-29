@@ -129,8 +129,8 @@ private lemma xi_time_part9h_escort_sector_freezing_bad_nonneg
   · simp [hbad, pow_nonneg (D.xi_time_part9h_escort_sector_freezing_weight_nonneg m x) q]
   · simp [hbad]
 
-/-- Paper label: `thm:xi-time-part9h-escort-sector-freezing`. -/
-theorem paper_xi_time_part9h_escort_sector_freezing
+/-- Auxiliary finite-layer shell retained from the existing module. -/
+private theorem xi_time_part9h_escort_sector_freezing_data_claim_verified
     (D : xi_time_part9h_escort_sector_freezing_data) :
     xi_time_part9h_escort_sector_freezing_claim D := by
   have hpoint :
@@ -277,6 +277,71 @@ theorem paper_xi_time_part9h_escort_sector_freezing
     intro m
     exact (hpoint m (qseq m)).1.trans ((hpoint m (qseq m)).2)
   simpa using (tendsto_const_nhds.sub hbad_tendsto)
+
+/-- Paper label: `thm:xi-time-part9h-escort-sector-freezing`. -/
+theorem paper_xi_time_part9h_escort_sector_freezing {X Sign : Type*} [Fintype X]
+    [DecidableEq X] [DecidableEq Sign] (d : X → ℕ) (chi : X → Sign) (chi_m : Sign)
+    (D D₂ q : ℕ) (M : Finset X) (hM : ∀ x, x ∈ M ↔ d x = D)
+    (hM_nonempty : M.Nonempty) (hchi : ∀ x, x ∈ M → chi x = chi_m)
+    (hD2 : ∀ x, x ∉ M → d x ≤ D₂) (hDpos : 0 < D) :
+    ((∑ x ∈ Finset.univ.filter (fun x => chi x ≠ chi_m), (d x : ℝ) ^ q) /
+        (∑ x : X, (d x : ℝ) ^ q)) ≤
+      (Fintype.card X : ℝ) * ((D₂ : ℝ) / D) ^ q := by
+  classical
+  let bad : Finset X := Finset.univ.filter (fun x => chi x ≠ chi_m)
+  have hbad_not_mem : ∀ x, x ∈ bad → x ∉ M := by
+    intro x hx hxM
+    have hx_bad : chi x ≠ chi_m := (Finset.mem_filter.mp hx).2
+    exact hx_bad (hchi x hxM)
+  have hbad_sum_le :
+      (∑ x ∈ bad, (d x : ℝ) ^ q) ≤ ∑ _x ∈ bad, (D₂ : ℝ) ^ q := by
+    refine Finset.sum_le_sum ?_
+    intro x hx
+    exact pow_le_pow_left₀ (by positivity : (0 : ℝ) ≤ (d x : ℝ))
+      (by exact_mod_cast hD2 x (hbad_not_mem x hx)) q
+  have hbad_card_le : bad.card ≤ Fintype.card X := Finset.card_le_univ bad
+  have hnum_le :
+      (∑ x ∈ bad, (d x : ℝ) ^ q) ≤ (Fintype.card X : ℝ) * (D₂ : ℝ) ^ q := by
+    calc
+      (∑ x ∈ bad, (d x : ℝ) ^ q) ≤ ∑ _x ∈ bad, (D₂ : ℝ) ^ q := hbad_sum_le
+      _ = (bad.card : ℝ) * (D₂ : ℝ) ^ q := by
+        simp [nsmul_eq_mul]
+      _ ≤ (Fintype.card X : ℝ) * (D₂ : ℝ) ^ q := by
+        gcongr
+  obtain ⟨x₀, hx₀M⟩ := hM_nonempty
+  have hDx₀ : d x₀ = D := (hM x₀).mp hx₀M
+  have hden_lower : (D : ℝ) ^ q ≤ ∑ x : X, (d x : ℝ) ^ q := by
+    have hsingle :
+        (d x₀ : ℝ) ^ q ≤
+          (Finset.univ : Finset X).sum (fun x => (d x : ℝ) ^ q) := by
+      exact Finset.single_le_sum
+        (by intro x _hx; exact pow_nonneg (by positivity : (0 : ℝ) ≤ (d x : ℝ)) q)
+        (Finset.mem_univ x₀)
+    simpa [hDx₀] using hsingle
+  have hDpow_pos : 0 < (D : ℝ) ^ q := by
+    positivity
+  have hden_pos : 0 < ∑ x : X, (d x : ℝ) ^ q :=
+    lt_of_lt_of_le hDpow_pos hden_lower
+  have hscale_nonneg : 0 ≤ (Fintype.card X : ℝ) * (D₂ : ℝ) ^ q := by
+    positivity
+  have hratio_den :
+      ((Fintype.card X : ℝ) * (D₂ : ℝ) ^ q) / (∑ x : X, (d x : ℝ) ^ q) ≤
+        ((Fintype.card X : ℝ) * (D₂ : ℝ) ^ q) / (D : ℝ) ^ q := by
+    exact div_le_div_of_nonneg_left hscale_nonneg hDpow_pos hden_lower
+  have hratio_eq :
+      ((Fintype.card X : ℝ) * (D₂ : ℝ) ^ q) / (D : ℝ) ^ q =
+        (Fintype.card X : ℝ) * ((D₂ : ℝ) / D) ^ q := by
+    rw [div_pow]
+    ring
+  calc
+    ((∑ x ∈ Finset.univ.filter (fun x => chi x ≠ chi_m), (d x : ℝ) ^ q) /
+        (∑ x : X, (d x : ℝ) ^ q))
+        = (∑ x ∈ bad, (d x : ℝ) ^ q) / (∑ x : X, (d x : ℝ) ^ q) := by
+          rfl
+    _ ≤ ((Fintype.card X : ℝ) * (D₂ : ℝ) ^ q) / (∑ x : X, (d x : ℝ) ^ q) := by
+      exact div_le_div_of_nonneg_right hnum_le (le_of_lt hden_pos)
+    _ ≤ ((Fintype.card X : ℝ) * (D₂ : ℝ) ^ q) / (D : ℝ) ^ q := hratio_den
+    _ = (Fintype.card X : ℝ) * ((D₂ : ℝ) / D) ^ q := hratio_eq
 
 end
 
