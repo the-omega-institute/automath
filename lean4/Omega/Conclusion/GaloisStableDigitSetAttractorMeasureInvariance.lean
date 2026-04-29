@@ -26,6 +26,9 @@ structure conclusion_galois_stable_digit_set_attractor_measure_invariance_data w
   measure_step_equivariant : ∀ σ μ, measureAction σ (measureStep μ) = measureStep (measureAction σ μ)
   measure_unique : ∀ μ, measureStep μ = μ → μ = measure
 
+abbrev conclusion_galois_stable_digit_set_attractor_measure_invariance_IFSData :=
+  conclusion_galois_stable_digit_set_attractor_measure_invariance_data
+
 namespace conclusion_galois_stable_digit_set_attractor_measure_invariance_data
 
 def pointImage
@@ -45,6 +48,14 @@ def attractor_invariant
 def measure_invariant
     (D : conclusion_galois_stable_digit_set_attractor_measure_invariance_data) : Prop :=
   ∀ σ, D.measureAction σ D.measure = D.measure
+
+def galoisInvariantAttractor
+    (D : conclusion_galois_stable_digit_set_attractor_measure_invariance_IFSData) : Prop :=
+  D.attractor_invariant
+
+def galoisInvariantMeasure
+    (D : conclusion_galois_stable_digit_set_attractor_measure_invariance_IFSData) : Prop :=
+  D.measure_invariant
 
 lemma attractorStep_pointImage
     (D : conclusion_galois_stable_digit_set_attractor_measure_invariance_data)
@@ -72,8 +83,8 @@ open conclusion_galois_stable_digit_set_attractor_measure_invariance_data
 
 /-- Paper label: `prop:conclusion-galois-stable-digit-set-attractor-measure-invariance`. -/
 theorem paper_conclusion_galois_stable_digit_set_attractor_measure_invariance
-    (D : conclusion_galois_stable_digit_set_attractor_measure_invariance_data) :
-    D.attractor_invariant ∧ D.measure_invariant := by
+    (D : conclusion_galois_stable_digit_set_attractor_measure_invariance_IFSData) :
+    D.galoisInvariantAttractor ∧ D.galoisInvariantMeasure := by
   constructor
   · intro σ
     have hfixed : D.attractorStep (D.pointImage σ D.attractor) = D.pointImage σ D.attractor := by

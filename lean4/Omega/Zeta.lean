@@ -224,6 +224,7 @@ import Omega.Zeta.ToeplitzCaratheodoryCompletionTailExclusion
 import Omega.Zeta.XiChannelHorizonToeplitzCertificate
 import Omega.Zeta.XiToeplitzHeightPhiCalibration
 import Omega.Zeta.XiKappaKLArClosedAsymptotic
+import Omega.Zeta.XiFoldbinIntrinsicSelfCalibrationPhiLastbitMeans
 import Omega.Zeta.XiPoissonCauchyKolmogorovSecondOrderConstant
 import Omega.Zeta.XiPoissonCauchyFisherKreinTailHalfVar2
 import Omega.Zeta.XiPoissonCauchyL2OptimalScaleHalving
