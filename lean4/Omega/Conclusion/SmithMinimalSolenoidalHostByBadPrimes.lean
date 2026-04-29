@@ -3,7 +3,7 @@ import Omega.Zeta.SmithPrefixSufficiency
 namespace Omega.Conclusion
 
 /-- Paper label: `thm:conclusion-smith-minimal-solenoidal-host-by-bad-primes`. -/
-theorem paper_conclusion_smith_minimal_solenoidal_host_by_bad_primes {m : ℕ}
+theorem conclusion_smith_minimal_solenoidal_host_by_bad_primes_prefix_support_characterization {m : ℕ}
     (E : ℕ → Fin m → ℕ) (S : Finset ℕ)
     (hS : ∀ p, p ∈ S ↔ ∃ i : Fin m, 0 < E p i) :
     (∀ p, p ∉ S → Omega.Zeta.smithPrefixTop (E p) = 0) ∧
