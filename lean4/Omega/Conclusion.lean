@@ -105,6 +105,7 @@ import Omega.Conclusion.Window6MinshellDyadicCenterBasis
 import Omega.Conclusion.FirstfitSerialDepthThetaK
 import Omega.Conclusion.OrientationSupermonoidalKoszul
 import Omega.Conclusion.MixedHiddenStateFiniteTruncationHomCount
+import Omega.Conclusion.MixedHiddenStatePrimeSupportCompleteSplitting
 import Omega.Conclusion.ScreenAuditGapArithmeticLipschitz
 import Omega.Conclusion.RealInput40ZeroTempParryChainExplicit
 import Omega.Conclusion.EscortFisherTotalMassLogphi
