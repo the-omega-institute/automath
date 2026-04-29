@@ -2928,6 +2928,7 @@ import Omega.Zeta.XiTimePart60abGaugeConstantLeadingModeRatio
 import Omega.Zeta.XiTimePart70adGaugeEntropyLeadingDrift
 import Omega.Zeta.LeyangLogshiftTwoSpectrum
 import Omega.Zeta.XiLeyangJordanLogshift
+import Omega.Zeta.XiLeyangIdentifyJordanGapFromZeros
 import Omega.Zeta.LeyangFunctorialityDefectBound
 import Omega.Zeta.XiLeyangCrossratioProjectiveFingerprintComplete
 import Omega.Zeta.XiTerminalZmHurwitzIrreducibleAndGenus2Jac3torsionModuli
@@ -2939,6 +2940,7 @@ import Omega.Zeta.XiTimePart9qPerfectZkNoDisambiguationGain
 import Omega.Zeta.XiTimePart9zbThirdOrderHankelObstruction
 import Omega.Zeta.XiFiberSpectrumHankelVandermondeExplicitRecovery
 import Omega.Zeta.XiLeyangCardanoChebyshevLinearizationZ
+import Omega.Zeta.XiScanCoefficientFourDoubleCayley
 import Omega.Zeta.XiWindow6NineteenBitInflationRigidity
 import Omega.Zeta.XiFiniteWindowTrueResonanceIndex
 import Omega.Zeta.NullZ2CechTransferBockstein
