@@ -2385,3 +2385,4 @@ import Omega.Conclusion.OddtailFiniteDepthSurrogatesProperSubclass
 import Omega.Conclusion.PeriodicFiberConstantThresholdNPHard
 import Omega.Conclusion.MomentHankelRankPolynomialTaming
 import Omega.Conclusion.FibadicCyclotomicPacketDetectsNewPrimePower
+import Omega.Conclusion.ResidueMod3LocalReversibilityPhaseTransition
