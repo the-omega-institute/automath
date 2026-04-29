@@ -137,7 +137,7 @@ def dispatch_direct(task_name: str, prompt_text: str, pdf_path: Path | None = No
     import base64
     import urllib.request
 
-    SERVER = "http://localhost:8765"
+    SERVER = "http://127.0.0.1:8765"
     done = ORACLE_DIR / "done"
     done.mkdir(parents=True, exist_ok=True)
 
