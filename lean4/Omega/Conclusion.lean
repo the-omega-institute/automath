@@ -1,3 +1,6 @@
+import Omega.Conclusion.JensenDefectRadialSplineRigidity
+import Omega.Conclusion.Window6FullRenyiThermodynamicsClosed
+import Omega.Conclusion.ZetaRegularizedPrimeIndependenceMaxent
 import Omega.Conclusion.PrimeLogRhOperatorCountablePrimeRank
 import Omega.Conclusion.Window6LongBulkEqualMassThirdLaw
 import Omega.Conclusion.PronyStepConditioningDichotomy
