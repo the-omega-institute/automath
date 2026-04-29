@@ -3277,3 +3277,5 @@ import Omega.Zeta.XiEndpointBinomialFalsifier
 import Omega.Zeta.XiFoldbinGaugeConstantOneStepAcceleration2pi
 import Omega.Zeta.XiFibCongruenceFourierRankkOptimal
 import Omega.Zeta.XiGodelPrimeExponentRegisterUniformIndependence
+import Omega.Zeta.XiDiscreteCurvatureNearUnimodalRigidity
+import Omega.Zeta.XiBasepointScanFullRankAnchorCriticalEquations
