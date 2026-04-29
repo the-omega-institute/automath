@@ -3035,3 +3035,4 @@ import Omega.Zeta.XiCompletedZetaDyadicRemainderBudget
 import Omega.Zeta.XiTimePart60acaPidegMaxfiberThreshold
 import Omega.Zeta.XiCompletedZetaSimpleZeroStability
 import Omega.Zeta.XiV4BidoubleCoverExplicitLinebundles
+import Omega.Zeta.XiLeyangCompactnessByFundamentalCircle

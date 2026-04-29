@@ -2597,3 +2597,5 @@ import Omega.Conclusion.BivariateFinitewindowFiniteCombRigidity
 import Omega.Conclusion.FiniteArithmeticCertificatesControlFullscaleGap
 import Omega.Conclusion.CollisionHankelPrefixAsymptoticDichotomy
 import Omega.Conclusion.FoldGaugeTwoScaleSpectralRigidity
+import Omega.Conclusion.WreathSignAdditivityEvenShielding
+import Omega.Conclusion.EquivariantASplittingRigidity
