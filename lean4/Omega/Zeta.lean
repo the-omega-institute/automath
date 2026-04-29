@@ -3,6 +3,8 @@ import Omega.Zeta.XiPhaseDerivativePoissonSuperposition
 import Omega.Zeta.XiTimePart62dUniversalSolenoidPhaseCompletedScan
 import Omega.Zeta.XiOutputPotentialDirichletBoundedWindowJ1
 import Omega.Zeta.XiTimePart9hDriftMixUncertainty
+import Omega.Zeta.XiScanHankelDeterminantChainKappa
+import Omega.Zeta.XiScanDepthHeightTensorFactorization
 import Omega.Zeta.XiTimePart9hSpectralTaxDriftProduct
 import Omega.Zeta.XiP7K5IntegralBasisDiscriminantDyadicSplitting
 import Omega.Zeta.XiTerminalZmTranslationTBranchDiscriminantC3T1GaloisS11
