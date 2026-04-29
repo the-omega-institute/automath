@@ -23,6 +23,7 @@ import Omega.Zeta.XiTimePart9saChi2AffinePhiInversion
 import Omega.Zeta.XiQ5UnsolvableByRadicals
 import Omega.Zeta.XiTimePart69SameExponentialRateInfiniteMixingFamily
 import Omega.Zeta.XiFoldbinRankUnrankOptimalAdvicePolytime
+import Omega.Zeta.FoldPiZetaRegularizedDeterminant
 import Omega.Zeta.XiFoldZminusoneCancellationBinomialConvolution
 import Omega.Zeta.XiJensenDefectEntropyEnergyIdentity
 import Omega.Zeta.XiTimePart9zblFoldpiGoldenOperatorSplitting
