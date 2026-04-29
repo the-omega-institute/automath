@@ -1,3 +1,4 @@
+import Omega.Zeta.XiChainInteriorCanonicalArithmeticizationOptimalOrder
 import Omega.Zeta.XiTimePart9m3ResidualCoherenceDifferentialCalculus
 import Omega.Zeta.XiTimePart9m3VisibilityClassicalizationComplementarity
 import Omega.Zeta.XiBasepointScanAnchorAngleConcentration
