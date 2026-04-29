@@ -264,6 +264,8 @@ import Omega.Zeta.XiPickPoissonUnionSubmultiplicativityCrossEnergy
 import Omega.Zeta.XiPrimeHardcoreMertensLeyangAsymptotic
 import Omega.Zeta.XiReverseKLCoprimeFrequencyPhaseAmplification
 import Omega.Zeta.XiLeyangTyThreeBranchProfile
+import Omega.Zeta.XiFoldbinEscortTvIdentifiableLimitDistance
+import Omega.Zeta.XiBranchRegisterDepthPrimesliceAddressability
 import Omega.Zeta.XiRoucheTaylorZeroTransfer
 import Omega.Zeta.XiReverseklExtremalGapEnergyCorrection
 import Omega.Zeta.XiWindow6SmEnvelopeCenter2torsionObstruction
