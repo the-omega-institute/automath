@@ -2755,3 +2755,4 @@ import Omega.Zeta.XiFixedBudgetIncompleteOffcriticalExclusion
 import Omega.Zeta.XiTimePart9qPerfectZkNoDisambiguationGain
 import Omega.Zeta.XiFiberSpectrumHankelVandermondeExplicitRecovery
 import Omega.Zeta.XiLeyangCardanoChebyshevLinearizationZ
+import Omega.Zeta.XiWindow6NineteenBitInflationRigidity
