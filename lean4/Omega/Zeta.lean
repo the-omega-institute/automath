@@ -2758,3 +2758,5 @@ import Omega.Zeta.XiTimePart9qPerfectZkNoDisambiguationGain
 import Omega.Zeta.XiFiberSpectrumHankelVandermondeExplicitRecovery
 import Omega.Zeta.XiLeyangCardanoChebyshevLinearizationZ
 import Omega.Zeta.XiWindow6NineteenBitInflationRigidity
+import Omega.Zeta.NullZ2CechTransferBockstein
+import Omega.Zeta.XiOracleEliminationTwoAxes
