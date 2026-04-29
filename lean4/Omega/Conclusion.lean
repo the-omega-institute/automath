@@ -1,5 +1,7 @@
 import Omega.Conclusion.SmithLossProfileYoungDuality
 import Omega.Conclusion.Period3FiberFactorialMobiusTail
+import Omega.Conclusion.Window6ExactFoldSynchronizationMutualInformation
+import Omega.Conclusion.GoldenShiftedHankelV5Invariance
 import Omega.Conclusion.ZeroRateEndpointFirstOrderBlindHyperplane
 import Omega.Conclusion.LongRangeKernelQuarticMemoryLaw
 import Omega.Conclusion.Window6BoundaryDoubleForgetfulnessInformationGap
