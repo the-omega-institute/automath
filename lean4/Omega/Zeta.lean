@@ -113,6 +113,7 @@ import Omega.Zeta.XiJensenDefectEntropyEnergyIdentity
 import Omega.Zeta.XiTimePart9zblFoldpiGoldenOperatorSplitting
 import Omega.Zeta.XiTimePart9zblFoldpiInverseHostThetaHeatTrace
 import Omega.Zeta.XiTimePart9zbhFoldpiRhQuarterLineEquivalence
+import Omega.Zeta.XiTimePart9zbhFoldpiStieltjesLogDerivativeCriterion
 import Omega.Zeta.XiTimePart9zbhFoldpiCenteredCompletionFactorization
 import Omega.Zeta.XiTimePart9zbhFoldpiPositiveTraceClassRh
 import Omega.Zeta.XiKernelDirichletZetaFiniteEulerCorrection
@@ -241,6 +242,7 @@ import Omega.Zeta.XiTimePart65aScalarVsMultichannelExponentialPrecisionGap
 import Omega.Zeta.XiLogcmHankelVandermondeMainterm
 import Omega.Zeta.XiTimePart79Window6Sector19bitCollapse
 import Omega.Zeta.XiIntegerEllipseModKernelDirichletZeta
+import Omega.Zeta.XiJSexticDiscriminantS6Regular
 import Omega.Zeta.XiVandermondeConditioningLowerBoundDisc
 import Omega.Zeta.XiNodePolynomialRationalReconstruction
 import Omega.Zeta.XiNodeSpectrumNoiseStability
