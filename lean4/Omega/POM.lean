@@ -218,6 +218,7 @@ import Omega.POM.HighorderSchurPackageDeterminesFullFiberMultiset
 import Omega.POM.AdjacentPressureConvexity
 import Omega.POM.AitkenCancelsTwoCycle
 import Omega.POM.AitkenDelta2SquareConvergence
+import Omega.POM.XiGodelIntegerizationLogOverhead
 import Omega.POM.ConclusionFirstfitNoRecursiveUniformProofBound
 import Omega.POM.ConclusionWindow6VandermondeSquareControlLaw
 import Omega.POM.AitkenGoldenLimit
