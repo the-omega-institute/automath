@@ -38,4 +38,11 @@ theorem paper_killo_cdim_short_exact_additivity
     exact_mod_cast hrank
   exact ⟨hadd, hrank, hrat⟩
 
+/-- Paper-facing wrapper for short-exact additivity of circle dimension.
+    thm:cdim-short-exact-additivity -/
+theorem paper_cdim_short_exact_additivity
+    (rA rB rC tA tB tC : Nat) (hshort : rB = rA + rC) :
+    circleDim rB tB = circleDim rA tA + circleDim rC tC := by
+  simpa using (paper_killo_cdim_short_exact_additivity rA rB rC tA tB tC 0 0 hshort).1
+
 end Omega.CircleDimension

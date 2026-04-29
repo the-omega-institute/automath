@@ -192,6 +192,7 @@ import Omega.POM.HankelIntegerRealizationCriterion
 import Omega.POM.HankelPrimitiveTorsionSpectrum
 import Omega.POM.FiberIndexCltVarianceCertificate
 import Omega.POM.FiberIndexCltThermo
+import Omega.POM.FiberIndexCgf
 import Omega.POM.FiberIndexLdpThermo
 import Omega.POM.FiberLowerBoundIndependentSets
 import Omega.POM.FiberLowerBoundDP
