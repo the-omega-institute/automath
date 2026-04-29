@@ -45,6 +45,7 @@ import Omega.Zeta.XiTimePart9xgParityWallVersusCofinalPrimeTwists
 import Omega.Zeta.DephysStieltjesInversionScaleEntropy
 import Omega.Zeta.XiCauchyPoissonMomentGapDissipation
 import Omega.Zeta.XiCauchyPoissonTwoChannelOrthogonalLeading
+import Omega.Zeta.CauchyPoissonTwoChannelRigidity
 import Omega.Zeta.XiJetLowOrderInequalities
 import Omega.Zeta.XiBusemannDepthFiniteWindowEstimator
 import Omega.Zeta.XiHzomTwoChannelModsquare
@@ -244,6 +245,7 @@ import Omega.Zeta.XiCollisionSquareRootNormalizationTrichotomy
 import Omega.Zeta.ZetaSyntaxFiniteForbiddenExpSparse
 import Omega.Zeta.XiPlyQ5CommonRootsPrime3173
 import Omega.Zeta.XiIntegerEllipseGrothendieckDoubleCountableRank
+import Omega.Zeta.XiJDiscriminant2IsogenyDiscriminantJSwap
 import Omega.Zeta.BlaschkePointSpectrumCorrespondence
 import Omega.Zeta.XiCMVPointSpectrumDimensionEqualsBlaschkeDegree
 import Omega.Zeta.XiKappaInvariantUnification
