@@ -138,6 +138,402 @@ U_b(a):=\{a'\in\mathcal A_\infty:\ a'_b=a_b\}.
 \end{enumerate}
 \end{theorem}
 
+% --- Distillation writeback ---
+\begin{theorem}[稳定逆系统中的伪不变量剔除]\label{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-stable-inverse-limit-pseudoinvariant-elimination}
+\textbf{结果 20；日期：2026-04-23T03:31:39+08:00。依赖状态：rigidity.}
+沿用定理 \ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} 的有限满射逆系统
+\[
+(\mathcal A_b,\pi_{b'\to b})_{b'\ge b\ge0}
+\]
+及其逆极限 \(\mathcal A_\infty\)。令
+\[
+p_b:\mathcal A_\infty\to\mathcal A_b,
+\qquad
+p_b((a_j)_{j\ge0})=a_b
+\]
+为第 \(b\) 层投影。则：
+\begin{enumerate}
+  \item 每个 \(p_b\) 都是满射；
+  \item 若 \(f,g:\mathcal A_b\to S\) 是任意到集合 \(S\) 的有限深度读出，且
+  \[
+  f\circ p_b=g\circ p_b
+  \qquad\text{于 }\mathcal A_\infty\text{ 上},
+  \]
+  则 \(f=g\)；
+  \item 若 \(P\subseteq\mathcal A_b\)，则
+  \[
+  p_b^{-1}(P)=\varnothing\Longleftrightarrow P=\varnothing,
+  \qquad
+  p_b^{-1}(P)=\mathcal A_\infty\Longleftrightarrow P=\mathcal A_b.
+  \]
+\end{enumerate}
+因此，任何只在朴素截断层出现、但在 fold-aware 稳定逆极限地址上完全消失的所谓不变量，必为伪不变量；它不能作为协议可审计的结构数据进入递归地址化闭包。
+\end{theorem}
+\begin{proof}
+先证满射性。固定 \(b\) 与任意 \(a_b\in\mathcal A_b\)。由于每个过渡映射满射，可递归选择 \(a_{b+1},a_{b+2},\ldots\)，使
+\[
+\pi_{j+1\to j}(a_{j+1})=a_j
+\qquad(j\ge b).
+\]
+对 \(i<b\)，定义 \(a_i:=\pi_{b\to i}(a_b)\)。由逆系统相容性，所得序列 \((a_j)_{j\ge0}\) 满足所有关系
+\[
+\pi_{j\to i}(a_j)=a_i
+\qquad(j\ge i),
+\]
+因而属于 \(\mathcal A_\infty\)，并且其第 \(b\) 坐标为给定的 \(a_b\)。故 \(p_b\) 满射。
+
+若 \(f\circ p_b=g\circ p_b\)，则对任意 \(a_b\in\mathcal A_b\)，由满射性可取 \(a\in\mathcal A_\infty\) 使 \(p_b(a)=a_b\)。于是
+\[
+f(a_b)=f(p_b(a))=(f\circ p_b)(a)=(g\circ p_b)(a)=g(p_b(a))=g(a_b),
+\]
+故 \(f=g\)。第三条同理：若 \(p_b^{-1}(P)=\varnothing\) 而 \(P
+e\varnothing\)，取 \(a_b\in P\) 并由满射性提升到 \(a\in\mathcal A_\infty\)，则 \(a\in p_b^{-1}(P)\)，矛盾。其余三个蕴含完全相同。证毕。
+\end{proof}
+
+\begin{theorem}[scale-saturated 闭包的熵亏损恒等式]\label{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-scale-saturated-entropy-deficit-identity}
+\textbf{结果 21；日期：2026-04-23T03:31:39+08:00。依赖状态：rigidity.}
+设 \(0\le k<n\)，并令
+\[
+\rho_{n,k}:A_n\twoheadrightarrow A_k
+\]
+为有限地址层之间的满射。令 \(E_n\subset A_n\) 非空，并令 \(\mu_n\) 为支撑在 \(E_n\) 上的概率测度。记推前测度为
+\[
+\mu_k(v):=\mu_n(\rho_{n,k}^{-1}(v)),
+\qquad v\in A_k,
+\]
+并对每个 \(\mu_k(v)>0\) 定义条件测度
+\[
+\mu_{n|v}(x):=\frac{\mu_n(x)}{\mu_k(v)}
+\qquad
+(x\in E_n\cap\rho_{n,k}^{-1}(v)).
+\]
+用自然对数定义 Shannon 熵 \(H(\cdot)\)。给定斜率参数 \(\alpha\ge0\)，设
+\[
+\Delta_n:=\alpha n-H(\mu_n),
+\qquad
+\Delta_k:=\alpha k-H(\mu_k),
+\]
+以及
+\[
+\Delta_{n|k}(v):=\alpha(n-k)-H(\mu_{n|v})
+\qquad(\mu_k(v)>0).
+\]
+则有精确亏损分解
+\[
+\boxed{\;
+\Delta_n=\Delta_k+\sum_{v:\mu_k(v)>0}\mu_k(v)\Delta_{n|k}(v).
+\;}
+\]
+因此，对任意 \(\eta_c,\eta_f\in\mathbb R\)，若
+\[
+\Delta_k\le\eta_c,
+\qquad
+\Delta_{n|k}(v)\le\eta_f\quad(\forall v:\mu_k(v)>0),
+\]
+则
+\[
+\Delta_n\le\eta_c+\eta_f.
+\]
+等价地，若 \(\Delta_n>\eta_c+\eta_f\)，则或者 coarse 层已经有亏损 \(\Delta_k>\eta_c\)，或者存在某个 active coarse carrier \(v\) 使 fine fibre 亏损
+\[
+\Delta_{n|k}(v)>\eta_f.
+\]
+特别地，若 coarse 层与所有 active fine fibre 均满足无亏损条件 \(\Delta_k\le0\)、\(\Delta_{n|k}(v)\le0\)，则全尺度 \(n\) 自动满足无亏损条件 \(\Delta_n\le0\)。这正是稳定逆系统中的 coarse-fine self-similarity no-drop 闭包。
+\end{theorem}
+
+% --- Distillation writeback ---
+\begin{definition}[有限 dyadic 构造证书]\label{def:distill-euclid-elements-dyadic-construction-certificate}
+\textbf{Dependency status: construction.}
+在定理 \ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} 的有限满射逆系统
+\[
+(\mathcal A_b,\pi_{b'\to b})_{b'\ge b\ge0}
+\]
+中，称深度 \(b\) 的一个有限 dyadic 构造证书为有限链
+\[
+\mathfrak c_b=(a_0,a_1,\ldots,a_b)\in\prod_{j=0}^b\mathcal A_j
+\]
+满足全部 incidence ledger 方程
+\[
+\pi_{j\to i}(a_j)=a_i
+\qquad(0\le i\le j\le b).
+\]
+其终端对象为 \(a_b\)，其所有可谓词化的有限读出必须是某个映射 \(f:\mathcal A_b\to S\) 在 \(a_b\) 上的取值。
+\end{definition}
+
+\begin{proposition}[稳定地址的有限前缀正是构造证书]\label{prop:distill-euclid-elements-dyadic-construction-certificates}
+\textbf{Dependency status: rigidity.}
+沿用定义 \ref{def:distill-euclid-elements-dyadic-construction-certificate}。则：
+\begin{enumerate}
+  \item 若 \(a=(a_j)_{j\ge0}\in\mathcal A_\infty\)，则每个有限前缀 \((a_0,\ldots,a_b)\) 都是深度 \(b\) 的有限 dyadic 构造证书；
+  \item 反过来，若对每个 \(b\ge0\) 给定证书
+  \[
+  \mathfrak c_b=(a^{(b)}_0,\ldots,a^{(b)}_b)
+  \]
+  且这些证书在截断下相容，即
+  \[
+  a^{(b+1)}_j=a^{(b)}_j
+  \qquad(0\le j\le b),
+  \]
+  则存在唯一 \(a\in\mathcal A_\infty\) 使其深度 \(b\) 前缀等于 \(\mathfrak c_b\)；
+  \item 若 \(f,g:\mathcal A_b\to S\) 是两个深度 \(b\) 有限读出，且它们在所有深度 \(b\) 构造证书的终端对象上相等，则 \(f=g\)。
+\end{enumerate}
+因此，稳定逆极限上的任一有限谓词必须先通过某个有限构造证书的终端地址，而不能直接对未构造的极限对象作裸谓词。
+\end{proposition}
+
+% --- Distillation writeback ---
+\begin{proposition}[有限柱谓词的证书终端正规形]\label{distill:euclid_elements-finite_construction_certificate_families-cylinder-predicate-terminal-normal-form}
+\textbf{日期时间：2026-04-23T11:58:48+08:00。依赖状态：rigidity.}
+沿用定理 \ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} 的有限满射逆系统与投影
+\[
+p_b:\mathcal A_\infty\to\mathcal A_b.
+\]
+并沿用定义 \ref{def:distill-euclid-elements-dyadic-construction-certificate} 与命题 \ref{prop:distill-euclid-elements-dyadic-construction-certificates} 的有限 dyadic 构造证书。称 \(\mathcal A_\infty\) 上的谓词 \(\Phi\) 为有限柱谓词，若它由有限多个原子
+\[
+p_b(a)\in E_b\quad(E_b\subseteq\mathcal A_b),
+\qquad
+f(p_b(a))=s\quad(f:\mathcal A_b\to S)
+\]
+经有限次 \(\wedge,\vee,\neg\) 生成。则存在某个深度 \(B\) 与一个子集
+\[
+E_B^\Phi\subseteq\mathcal A_B
+\]
+使得对所有 \(a\in\mathcal A_\infty\)，
+\[
+\Phi(a)\quad\Longleftrightarrow\quad p_B(a)\in E_B^\Phi.
+\]
+并且 \(E_B^\Phi\) 可由有限 incidence ledger 构造：原子谓词沿投影 \(\pi_{B\to b}\) 拉回，布尔联结分别对应有限交、有限并与补集。
+
+特别地，若两个有限柱谓词 \(\Phi,\Psi\) 在同一深度 \(B\) 上的所有有限 dyadic 构造证书终端对象处取值相同，则
+\[
+\Phi=\Psi
+\qquad\text{作为 }\mathcal A_\infty\text{ 上的谓词。}
+\]
+\end{proposition}
+
+% --- Distillation writeback ---
+\begin{proposition}[有限深度读出的细化稳定判据]\label{prop:distill-cech-cohomology-dyadic-refinement-stable-readout}
+\textbf{Dependency status: conditional rigidity.}
+沿用定理 \ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} 的有限满射逆系统
+\[
+(\mathcal A_b,\pi_{b'\to b})_{b'\ge b\ge0}
+\]
+及投影
+\[
+p_b:\mathcal A_\infty\to\mathcal A_b.
+\]
+令 \(S\) 为任意集合，并固定 \(b_0\ge0\)。设对每个 \(b\ge b_0\) 给出有限深度读出
+\[
+f_b:\mathcal A_b\longrightarrow S,
+\]
+且这些读出满足细化相容条件
+\[
+f_{b'}=f_b\circ \pi_{b'\to b}
+\qquad(b'\ge b\ge b_0).
+\]
+则存在唯一映射
+\[
+f_\infty:\mathcal A_\infty\longrightarrow S
+\]
+使得
+\[
+f_\infty=f_b\circ p_b
+\qquad(b\ge b_0).
+\]
+事实上可取
+\[
+f_\infty=f_{b_0}\circ p_{b_0}.
+\]
+反之，若存在 \(b'\ge b\ge b_0\) 与 \(u'\in\mathcal A_{b'}\) 使
+\[
+f_{b'}(u')\ne f_b\bigl(\pi_{b'\to b}(u')\bigr),
+\]
+则不存在任何 \(F:\mathcal A_\infty\to S\) 同时满足
+\[
+F=f_b\circ p_b,\qquad F=f_{b'}\circ p_{b'}.
+\]
+因此，有限层读出只有在上述拉回相容账本闭合后，才可作为稳定逆极限地址上的对象层不变量。
+\end{proposition}
+
+% --- Distillation writeback ---
+\begin{proposition}[细化不稳定读出的残差账本]\label{prop:distill-grothendieck-readout-instability-residue-ledger}
+\textbf{依赖状态：conditional rigidity.}
+沿用定理 \ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} 的有限满射逆系统与投影
+\[
+p_b:\mathcal A_\infty\to\mathcal A_b.
+\]
+令 \(S\) 为任意集合，并固定 \(b_0\ge0\)。设对每个 \(b\ge b_0\) 给出有限深度读出
+\[
+f_b:\mathcal A_b\longrightarrow S.
+\]
+对 \(b'\ge b\ge b_0\)，定义细化不稳定残差集
+\[
+\mathcal R_{b',b}(f)
+:=
+\left\{u'\in\mathcal A_{b'}:
+ f_{b'}(u')\ne f_b\bigl(\pi_{b'\to b}(u')\bigr)
+\right\}.
+\]
+则成立：
+\begin{enumerate}
+  \item 全部残差集为空，亦即
+  \[
+  \mathcal R_{b',b}(f)=\varnothing
+  \qquad(b'\ge b\ge b_0),
+  \]
+  当且仅当读出族满足命题 \ref{prop:distill-cech-cohomology-dyadic-refinement-stable-readout} 的细化相容条件。此时存在唯一稳定读出
+  \[
+  f_\infty:\mathcal A_\infty\to S,
+  \qquad
+  f_\infty=f_b\circ p_b\quad(b\ge b_0).
+  \]
+  \item 若存在 \(b'\ge b\ge b_0\) 使 \(\mathcal R_{b',b}(f)\ne\varnothing\)，则不存在任何映射
+  \[
+  F:\mathcal A_\infty\to S
+  \]
+  同时满足
+  \[
+  F=f_b\circ p_b,\qquad F=f_{b'}\circ p_{b'}.
+  \]
+  因而该失败必须登记为一份有限层残差，而不是把 \(f_b\) 直接提升为逆极限不变量。
+  \item 对任意 \(b''\ge b'\ge b\ge b_0\)，残差满足传播包含式
+  \[
+  \mathcal R_{b'',b}(f)
+  \subseteq
+  \mathcal R_{b'',b'}(f)
+  \cup
+  \pi_{b''\to b'}^{-1}\bigl(\mathcal R_{b',b}(f)\bigr).
+  \]
+  因此，跨多层的读出不稳定必然已经出现在某个相邻或中间细化残差账本中。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+第一条只是把细化相容条件
+\[
+f_{b'}=f_b\circ\pi_{b'\to b}
+\qquad(b'\ge b\ge b_0)
+\]
+逐点改写为 \(\mathcal R_{b',b}(f)=\varnothing\)。随后稳定读出 \(f_\infty\) 的存在唯一性正由命题 \ref{prop:distill-cech-cohomology-dyadic-refinement-stable-readout} 给出。
+
+第二条同样是命题 \ref{prop:distill-cech-cohomology-dyadic-refinement-stable-readout} 的逆向部分：若某个 \(u'\in\mathcal R_{b',b}(f)\)，则由投影 \(p_{b'}\) 的满射性可取 \(a\in\mathcal A_\infty\) 使 \(p_{b'}(a)=u'\)。若存在同时表示两层读出的 \(F\)，则
+\[
+f_{b'}(u')=F(a)=f_b\bigl(p_b(a)\bigr)
+=f_b\bigl(\pi_{b'\to b}(u')\bigr),
+\]
+与 \(u'\in\mathcal R_{b',b}(f)\) 矛盾。
+
+对第三条，取 \(u''\in\mathcal R_{b'',b}(f)\)，并记
+\[
+u':=\pi_{b''\to b'}(u'').
+\]
+若 \(u''\notin\mathcal R_{b'',b'}(f)\) 且 \(u'\notin\mathcal R_{b',b}(f)\)，则
+\[
+f_{b''}(u'')=f_{b'}(u')
+=f_b\bigl(\pi_{b'\to b}(u')\bigr)
+=f_b\bigl(\pi_{b''\to b}(u'')\bigr),
+\]
+这与 \(u''\in\mathcal R_{b'',b}(f)\) 矛盾。故 \(u''\) 必落入右端并集。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+\begin{proof}
+若相容条件成立，则对任意 \(a=(a_j)_{j\ge0}\in\mathcal A_\infty\) 与任意 \(b\ge b_0\)，由逆极限关系
+\[
+\pi_{b\to b_0}(a_b)=a_{b_0}
+\]
+得
+\[
+f_b(a_b)=f_{b_0}\bigl(\pi_{b\to b_0}(a_b)\bigr)=f_{b_0}(a_{b_0}).
+\]
+故 \(f_b\circ p_b\) 与 \(f_{b_0}\circ p_{b_0}\) 在 \(\mathcal A_\infty\) 上相同。于是
+\[
+f_\infty:=f_{b_0}\circ p_{b_0}
+\]
+满足全部要求。唯一性也立即成立：若 \(F\) 满足 \(F=f_{b_0}\circ p_{b_0}\)，则其取值已被每个逆极限地址的第 \(b_0\) 层坐标完全决定。
+
+反过来，设存在 \(b'\ge b\ge b_0\) 与 \(u'\in\mathcal A_{b'}\) 使所示不等式成立。由定理 \ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} 证明中的满射提升，投影
+\[
+p_{b'}:\mathcal A_\infty\to\mathcal A_{b'}
+\]
+为满射，故可取 \(a\in\mathcal A_\infty\) 使 \(p_{b'}(a)=u'\)。由逆系统相容性，
+\[
+p_b(a)=\pi_{b'\to b}(u').
+\]
+若存在 \(F\) 同时满足两条表示，则
+\[
+f_{b'}(u')=f_{b'}(p_{b'}(a))=F(a)=f_b(p_b(a))=f_b\bigl(\pi_{b'\to b}(u')\bigr),
+\]
+这与所给不等式矛盾。故这样的 \(F\) 不存在。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+\begin{proof}
+先处理原子。若原子为 \(p_b(a)\in E_b\)，取任意 \(B\ge b\)，并令
+\[
+E_B:=\pi_{B\to b}^{-1}(E_b).
+\]
+则由逆系统相容性，\(p_b=\pi_{B\to b}\circ p_B\)，故该原子等价于 \(p_B(a)\in E_B\)。若原子为 \(f(p_b(a))=s\)，令
+\[
+E_b:=f^{-1}(\{s\}),
+\]
+便化为前一种情形。
+
+对一般有限柱谓词，取所有原子深度的共同上界 \(B\)。把每个原子拉回到 \(\mathcal A_B\) 后，\(\wedge\) 对应子集交，\(\vee\) 对应子集并，\(\neg\) 对应在有限集合 \(\mathcal A_B\) 中取补。按公式树作有限归纳，即得到所需的 \(E_B^\Phi\)。这正是 construction-before-predication 的正规形：谓词必须先下降到某个已构造的有限终端地址，然后才允许判定真假。
+
+最后设 \(\Phi,\Psi\) 在所有深度 \(B\) 构造证书终端对象处取值相同。命题 \ref{prop:distill-euclid-elements-dyadic-construction-certificates} 说明深度 \(B\) 的每个终端对象都由某条有限构造证书产生；因此二者对应的子集 \(E_B^\Phi,E_B^\Psi\subseteq\mathcal A_B\) 在每个点上具有相同特征函数，故相等。于是
+\[
+p_B^{-1}(E_B^\Phi)=p_B^{-1}(E_B^\Psi),
+\]
+即 \(\Phi\) 与 \(\Psi\) 在 \(\mathcal A_\infty\) 上相同。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+\begin{proof}
+第一条由 \(a\in\mathcal A_\infty\) 的定义立即得到：逆极限相容关系正是所有方程 \(\pi_{j\to i}(a_j)=a_i\)。
+
+对第二条，由截断相容性可定义
+\[
+a_j:=a^{(b)}_j\qquad(b\ge j),
+\]
+该定义与 \(b\) 的选择无关。任取 \(j\ge i\)，在证书 \(\mathfrak c_j\) 中已有
+\[
+\pi_{j\to i}(a^{(j)}_j)=a^{(j)}_i,
+\]
+故 \(\pi_{j\to i}(a_j)=a_i\)。于是 \((a_j)_{j\ge0}\in\mathcal A_\infty\)。唯一性由每个坐标 \(a_j\) 已被深度 \(j\) 证书固定得到。
+
+对第三条，定理 \ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} 的证明已经给出每个投影 \(p_b:\mathcal A_\infty\to\mathcal A_b\) 的满射性；等价地，每个 \(u\in\mathcal A_b\) 都可作为某个深度 \(b\) 构造证书的终端对象出现。若 \(f,g\) 在所有这类终端对象上相等，则对任意 \(u\in\mathcal A_b\) 都有 \(f(u)=g(u)\)，故 \(f=g\)。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+\begin{proof}
+Shannon 熵的条件分解给出
+\[
+H(\mu_n)=H(\mu_k)+\sum_{v:\mu_k(v)>0}\mu_k(v)H(\mu_{n|v}).
+\]
+于是
+\[
+\begin{aligned}
+\Delta_n
+&=\alpha n-H(\mu_n)\\
+&=\alpha n-H(\mu_k)-\sum_v\mu_k(v)H(\mu_{n|v})\\
+&=\bigl(\alpha k-H(\mu_k)\bigr)
+  +\sum_v\mu_k(v)\bigl(\alpha(n-k)-H(\mu_{n|v})\bigr),
+\end{aligned}
+\]
+其中求和仅在 \(\mu_k(v)>0\) 的 active carrier 上进行，并使用 \(\sum_v\mu_k(v)=1\)。这即为所示恒等式。
+
+若 \(\Delta_k\le\eta_c\) 且所有 \(\Delta_{n|k}(v)\le\eta_f\)，代入恒等式得
+\[
+\Delta_n\le\eta_c+\sum_v\mu_k(v)\eta_f=\eta_c+\eta_f.
+\]
+其逆否命题给出坏例子的二分：全尺度亏损若超过 coarse 与 fine 允许亏损之和，则亏损已在 coarse 层出现，或至少有一个 active fine fibre 出现超额亏损。令 \(\eta_c=\eta_f=0\) 即得 no-drop 闭包。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 \((2)\Rightarrow(1)\)。
 若 \(\mathscr F\) 在 \(a\) 处分离，则任何两条与同一稳定地址相容、且在每个有限精度前缀上给出相同局部证书的候选实现，必在所有 dyadic 邻域基上具有相同限制。

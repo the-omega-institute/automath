@@ -31,3 +31,58 @@
 \leanverified{firstHittingTime\_eq\_top\_of\_forall\_ge}
 \leanverified{separationDepth\_eq\_zero\_of\_distinguish\_zero}
 \end{definition}
+
+% --- Distillation writeback ---
+\begin{theorem}[亚临界相位门的有限剩余纤维正规形]\label{distill:gromov-dimension_waist_projection_families-cdim-subcritical-phase-gate-residual-ledger}
+设 \(E\) 为非空有限 fold-aware 地址包，\(\mu:E\to\RR_{\ge0}\) 为概率权重，并令 \(A:=\{e\in E:\mu(e)>0\}\)。设
+\[
+q:E\longrightarrow \Theta
+\]
+为当前协议已授权的有限相位门投影，且所有可见谓词均通过 \(q\) 下降；这里不把任意连续圆坐标视为有限证书，只使用该 quotient-compatible 的有限读出。记
+\[
+A_\theta:=A\cap q^{-1}(\theta),\qquad
+K:=|q(A)|,\qquad
+M_q(A):=\max_{\theta\in q(A)}|A_\theta|.
+\]
+若一个有限残差寄存器 \(R\) 与映射 \(r:E\to R\) 使
+\[
+e\longmapsto (q(e),r(e))
+\]
+在 \(A\) 上单射，则
+\[
+|R|\ge M_q(A)\ge \left\lceil \frac{|A|}{K}\right\rceil .
+\]
+特别地，\(q\) 本身在 active 地址上无残差当且仅当 \(M_q(A)=1\)。若 \(K<|A|\)，则存在不可消去的 active 投影纤维，且任何相位门后继账本必须在定义 \ref{def:cdim-gap-ledger} 的补偿账中记录至少 \(M_q(A)\) 个同纤维可分支。若进一步存在 \(\alpha>0\) 使 \(\mu(e)\ge\alpha\) 对所有 \(e\in A\) 成立，则任意单代表相位 lift \(s:q(A)\to A\) 满足 \(q(s(\theta))=\theta\) 时都有
+\[
+\mu\bigl(A\setminus s(q(A))\bigr)
+\ge \alpha\bigl(|A|-K\bigr).
+\]
+若 \(R=(\mathbb F_p)^B\)，则任意这样的 strictification 还满足
+\[
+B\ge \left\lceil \log_p M_q(A)\right\rceil .
+\]
+\end{theorem}
+\begin{proof}
+固定 \(\theta\in q(A)\)。若 \((q,r)\) 在 \(A\) 上单射，则其限制在单个纤维 \(A_\theta\) 上仍为单射。由于 \(q\) 在该纤维上恒等于 \(\theta\)，单射性只能由 \(r|_{A_\theta}\) 提供。因此 \(|R|\ge |A_\theta|\)。对所有 \(\theta\in q(A)\) 取最大值得
+\[
+|R|\ge M_q(A).
+\]
+另一方面，\(A\) 是 \(K\) 个非空集合 \(A_\theta\) 的不交并，故抽屉原理给出
+\[
+M_q(A)\ge \left\lceil |A|/K\right\rceil .
+\]
+于是第一组不等式成立。
+
+若 \(M_q(A)=1\)，每个 active 纤维至多含一个点，故 \(q|_A\) 单射，无需残差寄存器。反之若 \(q|_A\) 单射，则每个 \(A_\theta\) 至多一元，而 \(\theta\in q(A)\) 时非空，故 \(M_q(A)=1\)。因此 \(q\) 本身无残差等价于 \(M_q(A)=1\)。若 \(K<|A|\)，则 \(M_q(A)\ge2\)，所以至少有一个相位投影纤维含有两个 active 地址；这些地址在所有通过 \(q\) 下降的可见谓词下不可区分，只能进入补偿账。
+
+设 \(s:q(A)\to A\) 为单代表 lift。它在每个 active 可见纤维中至多保留一个地址，因此在纤维 \(A_\theta\) 中遗漏 \(|A_\theta|-1\) 个 active 地址。由 \(\mu(e)\ge\alpha\) 得
+\[
+\mu\bigl(A\setminus s(q(A))\bigr)
+=\sum_{\theta\in q(A)}\sum_{e\in A_\theta\setminus\{s(\theta)\}}\mu(e)
+\ge \alpha\sum_{\theta\in q(A)}(|A_\theta|-1)
+=\alpha(|A|-K).
+\]
+最后若 \(R=(\mathbb F_p)^B\)，则 \(|R|=p^B\)。结合 \(|R|\ge M_q(A)\) 得 \(p^B\ge M_q(A)\)，等价于所示对 \(B\) 的下界。证毕。
+\end{proof}
+
+% --- End distillation writeback ---

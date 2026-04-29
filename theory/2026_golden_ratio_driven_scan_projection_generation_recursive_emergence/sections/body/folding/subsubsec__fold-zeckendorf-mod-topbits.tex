@@ -345,6 +345,181 @@ f_m(r)=f_m(F_{m+1}-2-r).
 \leanverified{paper\_folding\_weight\_count\_palindrome}
 \end{proposition}
 
+% --- Distillation writeback ---
+\begin{definition}[fold-aware 跨分辨率限制]\label{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-fold-aware-cross-resolution}
+\textbf{结果 17；日期：2026-04-23T03:31:39+08:00。依赖状态：construction.}
+设 \(m\ge h\ge 1\)，并令 \(Z(N(\omega))=(c_1,c_2,\ldots)\) 为 \(N(\omega)\) 的 Zeckendorf 数字序列。定义 fold-aware 跨分辨率限制
+\[
+\Fold^{\rm aw}_{m\to h}:\Omega_m\longrightarrow X_h,
+\qquad
+\Fold^{\rm aw}_{m\to h}(\omega):=(c_1,\ldots,c_h).
+\]
+同时记稳定前缀投影为
+\[
+\pr_{m,h}:X_m\longrightarrow X_h,
+\qquad
+\pr_{m,h}(x_1,\ldots,x_m):=(x_1,\ldots,x_h).
+\]
+该对象不是把原始输入字 \(\omega\) 截成前 \(h\) 位后再施行 \(\Fold_h\)；它先在同一个整数 \(N(\omega)\) 上取 Zeckendorf 稳定展开，再取稳定前缀。因此它避免了把朴素输入截断误认为跨分辨率不变量的幻觉。
+\end{definition}
+
+\begin{proposition}[fold-aware 限制与稳定前缀交换]\label{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-fold-aware-prefix-commutation}
+\textbf{结果 18；日期：2026-04-23T03:31:39+08:00。依赖状态：rigidity.}
+对任意 \(m\ge h\ge 1\)，有严格交换关系
+\[
+\Fold^{\rm aw}_{m\to h}=\pr_{m,h}\circ\Fold_m.
+\]
+因此，若 \(\gamma_h:X_h\to Y_h\) 是任意 coarse carrier 映射，则
+\[
+\gamma_h\circ\Fold^{\rm aw}_{m\to h}
+=
+(\gamma_h\circ\pr_{m,h})\circ\Fold_m.
+\]
+特别地，所有跨分辨率 sticky/non-sticky 测试若经由 \(\gamma_h\) 读出，都可完全下降到稳定代表 \(\Fold_m(\omega)\) 的前缀，而不依赖原始微态字的朴素前缀。
+\end{proposition}
+
+% --- Distillation writeback ---
+\begin{proposition}[投影 fold congruence 的尾部 lift 审计]\label{prop:distill-euclid-elements-fold-prefix-tail-lift-audit}
+\textbf{Dependency status: rigidity.}
+设 \(m\ge h\ge1\)。沿用定义 \ref{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-fold-aware-cross-resolution} 的
+\(\Fold^{\rm aw}_{m\to h}\) 与稳定前缀投影 \(\pr_{m,h}\)。再定义尾部读出
+\[
+\operatorname{Tail}_{m,h}:X_m\longrightarrow \{0,1\}^{m-h},
+\qquad
+\operatorname{Tail}_{m,h}(x_1,\ldots,x_m):=(x_{h+1},\ldots,x_m),
+\]
+其中 \(h=m\) 时右端理解为单点集合。则对任意 \(\omega,\omega'\in\Omega_m\)，有
+\[
+\Fold_m(\omega)=\Fold_m(\omega')
+\]
+当且仅当同时满足
+\[
+\Fold^{\rm aw}_{m\to h}(\omega)=\Fold^{\rm aw}_{m\to h}(\omega')
+\]
+与
+\[
+\operatorname{Tail}_{m,h}(\Fold_m(\omega))
+=
+\operatorname{Tail}_{m,h}(\Fold_m(\omega')).
+\]
+因此，深度 \(h\) 的 projected congruence 只证明稳定前缀相等；它成为深度 \(m\) 的 lifted equality，当且仅当尾部 residual 同时消失。
+\end{proposition}
+
+% --- Distillation writeback ---
+% Distillation timestamp: 2026-04-23T12:04:19+08:00; pipeline index: 35.
+\begin{theorem}[投影折叠同余的最小尾部严格化]\label{distill:euclid_elements-lifted_congruence_and_residual_rigidity_families-fold-projected-congruence-minimal-tail-strictification}
+\textbf{Dependency status: rigidity.}
+设 \(m\ge h\ge 1\)，并取非空有限族 \(E\subseteq\Omega_m\)。沿用
+\(\Fold^{\rm aw}_{m\to h}\)、\(\pr_{m,h}\) 与
+\(\operatorname{Tail}_{m,h}\) 的记号。对每个 \(p\in X_h\)，定义投影纤维中的尾部残余集合
+\[
+\mathcal T_E(p)
+:=
+\left\{
+\operatorname{Tail}_{m,h}\bigl(\Fold_m(\omega)\bigr):
+\omega\in E,\ \Fold^{\rm aw}_{m\to h}(\omega)=p
+\right\},
+\]
+并令
+\[
+\mu_{m,h}(E):=\max_{p\in X_h}\bigl|\mathcal T_E(p)\bigr|.
+\]
+称一个有限寄存器 \(\rho:E\to R\) 为该投影同余的尾部 lift 审计，若对任意
+\(\omega,\omega'\in E\) 都有
+\[
+\Fold^{\rm aw}_{m\to h}(\omega)=\Fold^{\rm aw}_{m\to h}(\omega'),\qquad
+\rho(\omega)=\rho(\omega')
+\quad\Longrightarrow\quad
+\Fold_m(\omega)=\Fold_m(\omega').
+\]
+则：
+\begin{enumerate}
+  \item 任意尾部 lift 审计都满足
+  \[
+  |R|\ge \mu_{m,h}(E),
+  \]
+  且存在达到等号的尾部 lift 审计；
+  \item 深度 \(h\) 的 projected congruence 在 \(E\) 上已经推出深度 \(m\) 的 lifted equality，当且仅当
+  \[
+  \mu_{m,h}(E)=1;
+  \]
+  \item 若 \(\mu_{m,h}(E)>1\)，则任意使该投影同余失败的坏对
+  \[
+  \Fold^{\rm aw}_{m\to h}(\omega)=\Fold^{\rm aw}_{m\to h}(\omega'),\qquad
+  \Fold_m(\omega)\ne \Fold_m(\omega')
+  \]
+  必且只必携带非零尾部 residual：
+  \[
+  \operatorname{Tail}_{m,h}\bigl(\Fold_m(\omega)\bigr)
+e
+  \operatorname{Tail}_{m,h}\bigl(\Fold_m(\omega')\bigr).
+  \]
+  因而任何仅经由 \(\Fold^{\rm aw}_{m\to h}\) 因子化的 coarse readout 都不能区分这样的坏对。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+固定 \(p\in X_h\)。若 \(\tau,\tau'\in\mathcal T_E(p)\) 且 \(\tau\ne\tau'\)，则可取
+\(\omega,\omega'\in E\) 使
+\[
+\Fold^{\rm aw}_{m\to h}(\omega)=
+\Fold^{\rm aw}_{m\to h}(\omega')=p,
+\]
+且两者尾部读出分别为 \(\tau,\tau'\)。由命题
+\ref{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-fold-aware-prefix-commutation}，投影同余正是稳定前缀相等；再由命题
+\ref{prop:distill-euclid-elements-fold-prefix-tail-lift-audit}，在同一前缀下，深度 \(m\) 的折叠值相等当且仅当尾部也相等。因此上述两点的 lifted equality 失败。若 \(\rho\) 是 lift 审计，则它必须给这些不同尾部赋予不同寄存器值。于是
+\(|R|\ge |\mathcal T_E(p)|\)。对所有 \(p\) 取最大值得到
+\(|R|\ge\mu_{m,h}(E)\)。
+
+反过来，取一个集合 \(R\) 满足 \(|R|=\mu_{m,h}(E)\)。对每个 \(p\) 任选单射
+\[
+\iota_p:\mathcal T_E(p)\hookrightarrow R,
+\]
+并定义
+\[
+\rho(\omega):=\iota_{\Fold^{\rm aw}_{m\to h}(\omega)}
+\left(
+\operatorname{Tail}_{m,h}(\Fold_m(\omega))
+\right).
+\]
+若两点具有相同 projected congruence 且 \(\rho\) 值相同，则它们位于同一个 \(p\)-纤维内，并因 \(\iota_p\) 单射而具有相同尾部。命题
+\ref{prop:distill-euclid-elements-fold-prefix-tail-lift-audit} 遂给出 \(\Fold_m(\omega)=\Fold_m(\omega')\)。故等号可达。
+
+第二条是第一条的退化情形。若 \(\mu_{m,h}(E)=1\)，则每个投影前缀下只有一个尾部 residual，故 projected congruence 自动给出前缀与尾部同时相等，从而给出 lifted equality。若 \(\mu_{m,h}(E)>1\)，则存在同一 \(p\) 下两个不同尾部，取相应代表即得到 projected congruent 但不 lifted equal 的坏对。
+
+第三条再次由 \(X_m\subseteq\{0,1\}^m\) 中一个词由其前缀与尾部唯一决定得到：在前缀已经相等的前提下，折叠值不等价于尾部不等。若 \(g:E\to Y\) 仅经由 \(\Fold^{\rm aw}_{m\to h}\) 因子化，则存在 \(\bar g:X_h\to Y\) 使
+\(g=\bar g\circ\Fold^{\rm aw}_{m\to h}\)，故上述坏对必有相同 \(g\)-值。这正是投影同余不能无审计转移为规范相等的尾部 residual 机制。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+\begin{proof}
+由命题 \ref{distill:wang_zahl-sticky_reduction_and_scale_saturated_closure-fold-aware-prefix-commutation}，
+\[
+\Fold^{\rm aw}_{m\to h}=\pr_{m,h}\circ\Fold_m.
+\]
+于是 projected congruence 等价于
+\[
+\pr_{m,h}(\Fold_m(\omega))=\pr_{m,h}(\Fold_m(\omega')).
+\]
+另一方面，任意 \(x\in X_m\subseteq\{0,1\}^m\) 由其前缀 \(\pr_{m,h}(x)\) 与尾部 \(\operatorname{Tail}_{m,h}(x)\) 唯一决定。因此两个折叠值 \(\Fold_m(\omega)\) 与 \(\Fold_m(\omega')\) 相等，当且仅当前缀和尾部均相等。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+\begin{proof}
+由定义，\(\Fold_m(\omega)\) 正是 \(Z(N(\omega))\) 的前 \(m\) 个 Zeckendorf 稳定位，即
+\[
+\Fold_m(\omega)=(c_1,\ldots,c_m).
+\]
+对其施加稳定前缀投影 \(\pr_{m,h}\)，得到
+\[
+\pr_{m,h}(\Fold_m(\omega))=(c_1,\ldots,c_h).
+\]
+右端按定义正是 \(\Fold^{\rm aw}_{m\to h}(\omega)\)。故第一式成立。第二式仅是在第一式两端复合 \(\gamma_h\)。最后一句说明：若 carrier 读出为 \(\gamma_h\)，则其跨尺度值已经由稳定前缀决定；这里未使用、也不需要使用原始输入字的前 \(h\) 位，因此不会把 \(\Fold_h(\omega_1,\ldots,\omega_h)\) 误作跨分辨率不变量。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 由定理 \ref{thm:fold-zeckendorf-mod-decomposition-unique}，$v_m(\Fold_m(\omega))$ 是 $N(\omega)$ 模 $M_m$ 的规范代表，且 $0\le N(\omega)<2M_m$，故事件 $\{v_m(\Fold_m(\omega))=r\}$ 等价于 $\{N(\omega)\in\{r,M_m+r\}\}$，从而得到第一式。
 对合 $\omega\mapsto\bar\omega$ 满足 $N(\bar\omega)=T_m-N(\omega)$，故 $a_m(s)=a_m(T_m-s)$。注意

@@ -30,4 +30,270 @@ b=\partial_n x+\eta,
 若对所有 \(\norm{\eta}_2\le \varepsilon\) 都要求 \(\norm{x^\sharp-x}_2\le \delta\)，则必须有 \(\norm{L}_{2\to 2}\varepsilon\le \delta\)，代入上述下界即得所示必要条件。证毕。
 \end{proof}
 
+% --- Distillation writeback ---
+\begin{proposition}[线性全息解码的精确填充半径门与双 lift 混淆]\label{distill:gromov-filling_budget_closure_families-spg-rad-linear-confusion-gate}
+沿用推论 \ref{cor:spg-dyadic-holographic-reconstruction-noise-budget} 的 dyadic 链复形记号，并令
+\[
+L:C_{n-1}(\mathcal Q_m;\RR)\longrightarrow C_n(\mathcal Q_m;\RR),
+\qquad L\partial_n=\mathrm{Id}.
+\]
+对 \(\delta>0\) 定义该线性左逆的填充半径门
+\[
+\operatorname{Rad}_L(\delta):=\sup\Bigl\{\varepsilon\ge0:
+\|\eta\|_2\le\varepsilon\Longrightarrow \|L\eta\|_2\le\delta\Bigr\}.
+\]
+则
+\[
+\boxed{\ \operatorname{Rad}_L(\delta)=\frac{\delta}{\|L\|_{2\to2}}\ }.
+\]
+因此，给定 \(L\) 后，要求
+\[
+\|L(\partial_nx+\eta)-x\|_2\le\delta
+\qquad\text{对所有 }x\text{ 与所有 }\|\eta\|_2\le\varepsilon\text{ 成立}
+\]
+当且仅当 \(\varepsilon\le \operatorname{Rad}_L(\delta)\)。此外定义两 lift 混淆门
+\[
+\operatorname{Amb}_{m,n}(\delta):=\frac12\inf\Bigl\{\|\partial_nh\|_2:\ h\in C_n(\mathcal Q_m;\RR),\ \|h\|_2>2\delta\Bigr\}.
+\]
+若 \(\varepsilon>\operatorname{Amb}_{m,n}(\delta)\)，则存在两个 bulk 链 \(x_0,x_1\) 与同一个观测边界 \(b\)，使得
+\[
+\|x_0-x_1\|_2>2\delta,\qquad
+\|b-\partial_nx_0\|_2<\varepsilon,\qquad
+\|b-\partial_nx_1\|_2<\varepsilon.
+\]
+于是任何解码器，不论线性与否，都不可能在全部 \(\varepsilon\)-噪声边界数据上保证误差 \(\le\delta\)。特别地，对任意线性左逆 \(L\)，推论 \ref{cor:spg-dyadic-holographic-reconstruction-noise-budget} 给出
+\[
+\operatorname{Rad}_L(\delta)\le \sqrt{2n}\,\delta\,2^{-m/2}.
+\]
+\end{proposition}
+\begin{proof}
+由于链空间有限维，算子范数 \(\|L\|_{2\to2}\) 在单位球面上取到。记 \(M:=\|L\|_{2\to2}\)。若 \(\varepsilon\le\delta/M\)，则对任意 \(\|\eta\|_2\le\varepsilon\)，有
+\[
+\|L\eta\|_2\le M\|\eta\|_2\le M\varepsilon\le\delta,
+\]
+故 \(\operatorname{Rad}_L(\delta)\ge\delta/M\)。反之，若 \(\varepsilon>\delta/M\)，取单位向量 \(u\) 满足 \(\|Lu\|_2=M\)，并取 \(t\) 使 \(\delta/M<t<\varepsilon\)。令 \(\eta=tu\)，则 \(\|\eta\|_2=t<\varepsilon\)，但
+\[
+\|L\eta\|_2=tM>\delta.
+\]
+因此任何大于 \(\delta/M\) 的半径都不满足定义中的一致误差要求，得到所示等式。
+
+又因为 \(L\partial_n=\mathrm{Id}\)，对任意真值 \(x\) 与噪声 \(\eta\) 有
+\[
+L(\partial_nx+\eta)-x=L\eta.
+\]
+故 \(L\) 在 \(\varepsilon\)-噪声球上的 \(\delta\)-稳定性等价于 \(\|\eta\|_2\le\varepsilon\Rightarrow \|L\eta\|_2\le\delta\)，即等价于 \(\varepsilon\le\operatorname{Rad}_L(\delta)\)。
+
+最后设 \(\varepsilon>\operatorname{Amb}_{m,n}(\delta)\)。由下确界定义，可取 \(h\in C_n(\mathcal Q_m;\RR)\) 满足
+\[
+\|h\|_2>2\delta,\qquad \frac12\|\partial_nh\|_2<\varepsilon.
+\]
+令
+\[
+x_0:=0,\qquad x_1:=h,\qquad b:=\frac12\partial_nh.
+\]
+则
+\[
+\|b-\partial_nx_0\|_2=\frac12\|\partial_nh\|_2<\varepsilon,\qquad
+\|b-\partial_nx_1\|_2=\left\|\frac12\partial_nh-\partial_nh\right\|_2<\varepsilon,
+\]
+而 \(\|x_0-x_1\|_2=\|h\|_2>2\delta\)。若某解码器 \(D\) 对所有 \(\varepsilon\)-噪声边界均误差不超过 \(\delta\)，则同一个输入 \(b\) 必同时满足
+\[
+\|D(b)-x_0\|_2\le\delta,\qquad \|D(b)-x_1\|_2\le\delta,
+\]
+从而由三角不等式得 \(\|x_0-x_1\|_2\le2\delta\)，矛盾。最后的不等式直接由推论 \ref{cor:spg-dyadic-holographic-reconstruction-noise-budget} 中的 \(\|L\|_{2\to2}\ge(2n)^{-1/2}2^{m/2}\) 与 \(\operatorname{Rad}_L(\delta)=\delta/\|L\|_{2\to2}\) 相乘得到。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+% --- Distillation writeback ---
+\begin{theorem}[投影矩全息的生存纤维质量门]\label{distill:gromov-dimension_waist_projection_families-spg-finite-moment-surviving-fibre-mass-gate}
+固定 \(m,n\ge1\)，令 \(N=2^m\) 且
+\[
+\mathcal G_{m,n}:=\{0,\ldots,N-1\}^n .
+\]
+设 \(q:\mathcal G_{m,n}\to Y\) 为有限投影读出，并把有效可见坐标集缩为
+\[
+Y_q:=q(\mathcal G_{m,n}).
+\]
+定义投影边界质量算子
+\[
+B_q:\RR^{\mathcal G_{m,n}}\longrightarrow \RR^{Y_q},\qquad
+(B_qx)_y:=\sum_{u\in q^{-1}(y)}x_u .
+\]
+令 \(\Phi:\mathcal G_{m,n}\to\RR^D\) 为有限矩读出，并记
+\[
+M_\Phi(x):=\sum_{u\in\mathcal G_{m,n}}x_u\Phi(u).
+\]
+则以下结论成立。
+\begin{enumerate}
+  \item 若 \(\Phi\) 在每个 \(q\)-纤维上为常值，则存在唯一映射 \(\psi:Y_q\to\RR^D\) 使 \(\Phi=\psi\circ q\)，并且规范线性算子
+  \[
+  S_\psi:\RR^{Y_q}\to\RR^D,\qquad S_\psi(b):=\sum_{y\in Y_q}b_y\psi(y)
+  \]
+  满足
+  \[
+  M_\Phi=S_\psi\circ B_q
+  \]
+  于整个 \(\RR^{\mathcal G_{m,n}}\) 上。此处唯一性是在有效像 \(Y_q=q(\mathcal G_{m,n})\) 上的唯一性。
+  \item 反之，若存在某个线性算子 \(S:\RR^{Y_q}\to\RR^D\) 使 \(M_\Phi=S\circ B_q\) 于整个 \(\RR^{\mathcal G_{m,n}}\) 上成立，则 \(\Phi\) 在每个 \(q\)-纤维上为常值。
+  \item 设 \(\mathscr A\subset\RR_{\ge0}^{\mathcal G_{m,n}}\) 为某个 admissible bulk 类。若存在 \(u\ne v\) 满足 \(q(u)=q(v)\)、\(\|\Phi(u)-\Phi(v)\|>0\)，并且存在 \(\beta_0>0\) 与 \(\mu^0\in\RR_{\ge0}^{\mathcal G_{m,n}}\)，使
+  \[
+  \mu^+:=\mu^0+\beta_0(e_u-e_v)\in\mathscr A,\qquad
+  \mu^-:=\mu^0-\beta_0(e_u-e_v)\in\mathscr A,
+  \]
+  则
+  \[
+  B_q\mu^+=B_q\mu^-,
+  \qquad
+  \|M_\Phi(\mu^+)-M_\Phi(\mu^-)\|=2\beta_0\|\Phi(u)-\Phi(v)\|.
+  \]
+  因而不存在只依赖 \(B_q\mu\) 的解码器能在 \(\mathscr A\) 上精确恢复该有限矩读出。
+  \item 更一般地，设 \(R:\RR^{\mathcal G_{m,n}}\to Z\) 为到赋范空间 \(Z\) 的线性残差通道，且存在解码器 \(D:\RR^{Y_q}\times Z\to\RR^D\) 满足
+  \[
+  M_\Phi(\mu)=D(B_q\mu,R\mu)\qquad(\mu\in\mathscr A),
+  \]
+  并且对每个固定 \(b\in\RR^{Y_q}\)，映射 \(z\mapsto D(b,z)\) 为 \(L\)-Lipschitz，其中 \(L>0\)。在第三项的假设下必有
+  \[
+  \|R\mu^+-R\mu^-\|_Z
+  \ge
+  \frac{2\beta_0\|\Phi(u)-\Phi(v)\|}{L}.
+  \]
+  因此，凡要在投影后恢复非 \(q\)-可见的有限矩，就必须保留一个具有上述定量下界的生存纤维残差通道；把该残差质量压到此阈值以下会强制产生两 lift 混淆。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+若 \(\Phi\) 在每个 \(q\)-纤维上为常值，则对 \(y\in Y_q\) 任选 \(u\in q^{-1}(y)\)，令 \(\psi(y):=\Phi(u)\)。常值性保证该定义与选择无关，且 \(\Phi=\psi\circ q\)。于是对任意 \(x\in\RR^{\mathcal G_{m,n}}\)，有
+\[
+M_\Phi(x)=\sum_{u}x_u\psi(q(u))
+=\sum_{y\in Y_q}\left(\sum_{u\in q^{-1}(y)}x_u\right)\psi(y)
+=S_\psi(B_qx).
+\]
+由于 \(Y_q\) 已被替换为实际像，对每个 \(y\in Y_q\) 可取 \(u_y\in q^{-1}(y)\)，并有 \(B_qe_{u_y}=e_y\)。故 \(B_q\) 的像为整个 \(\RR^{Y_q}\)。若两个线性算子在所有 \(B_qx\) 上相同，则它们在 \(\RR^{Y_q}\) 上相同；\(\psi(y)=S_\psi(e_y)\) 也随之唯一。
+
+反过来，若 \(M_\Phi=S\circ B_q\)，且 \(q(u)=q(v)\)，则
+\[
+B_q(e_u-e_v)=0.
+\]
+因此
+\[
+\Phi(u)-\Phi(v)=M_\Phi(e_u-e_v)=S(B_q(e_u-e_v))=0,
+\]
+说明 \(\Phi\) 在每个投影纤维上为常值。
+
+现在设第三项的假设成立。因为 \(q(u)=q(v)\)，有 \(B_q(e_u-e_v)=0\)，从而
+\[
+B_q\mu^+-B_q\mu^-=2\beta_0B_q(e_u-e_v)=0.
+\]
+另一方面，有限矩差为
+\[
+M_\Phi(\mu^+)-M_\Phi(\mu^-)
+=2\beta_0M_\Phi(e_u-e_v)
+=2\beta_0(\Phi(u)-\Phi(v)),
+\]
+取范数即得所示等式。若存在只依赖 \(B_q\mu\) 的精确解码器，则同一输入 \(B_q\mu^+=B_q\mu^-\) 必须输出两个不同矩值，矛盾。
+
+最后设残差通道与 \(L\)-Lipschitz 解码器存在。令 \(b:=B_q\mu^+=B_q\mu^-\)。由精确恢复与 Lipschitz 条件，
+\[
+2\beta_0\|\Phi(u)-\Phi(v)\|
+=\|D(b,R\mu^+)-D(b,R\mu^-)\|
+\le L\|R\mu^+-R\mu^-\|_Z.
+\]
+除以 \(L>0\) 得到残差通道的下界。该下界只使用同一投影纤维内的两点重分布，故正是 SPG 有限矩全息中投影后仍须保留的 surviving fibre mass 门槛。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+% --- Distillation writeback ---
+\begin{proposition}[噪声不变规范下的 dyadic 全息 \texorpdfstring{\v Cech}{Cech} 粘接门]\label{distill:cech_cohomology-local_to_global_certificate_descent-spg-noise-invariant-cech-gluing-gate}
+在推论 \ref{cor:spg-dyadic-holographic-reconstruction-noise-budget} 的有限 dyadic 链复形中，固定一个边界观测 \(b\in C_{n-1}(\mathcal Q_m;\RR)\)。令 \(N\) 为一组有限边界窗口的 nerve。设每个顶点 \(i\in N_0\) 上给出局部 bulk 候选 \(x_i\) 与局部噪声门
+\[
+\mathsf{Noise}_i(x_i,b)=1,
+\]
+其语义是 \(x_i\) 在第 \(i\) 个窗口上满足已登记的局部误差界。设 \(W\) 为阿贝尔规范修正群，并假设每条重叠边 \(ij\in N_1\) 上的局部候选差由
+\[
+h_{ij}\in W
+\]
+记录，且 \(h=(h_{ij})\in Z^1(N;W)\)。
+
+设允许细化 \(r:N'\to N\) 带有拉回局部候选与拉回噪声门。假设当前 SPG 全息证书语法满足以下精确输出规则：它在该局部族上输出全局 bulk 证书，当且仅当存在允许细化 \(r:N'\to N\) 与 \(0\)-上链 \(\gamma\in C^0(N';W)\)，使得
+\[
+r^\ast h=\delta\gamma,
+\]
+并且经由 \(-\gamma\) 的顶点规范重置后，所有拉回局部候选仍满足各自的局部噪声门。进一步假设该规范作用是噪声不变的：凡 \(\mathsf{Noise}_v(x_v,b)=1\)，则对任意允许顶点规范 \(w\in W\)，重置后的候选仍满足同一局部误差界。
+
+则：
+\begin{enumerate}
+  \item 若某个允许细化 \(r\) 满足 \([r^\ast h]=0\in\check H^1(N';W)\)，则 SPG 证书语法输出一个全局 bulk 证书，且所有局部噪声界在粘接前后保持不变；
+  \item 若对所有允许细化 \(r\) 均有 \([r^\ast h]\ne0\)，则该语法不能从这些局部 bulk 候选推出全局 bulk 证书；此时局部噪声门全部通过只说明局部重构稳定，不能替代 overlap holonomy 的消去；
+  \item 因而，在该语法下，dyadic 全息失败分解为两条互不替代的门：局部解析噪声门与全局 \v Cech holonomy 门。前者控制每片窗口内的误差，后者控制局部 lift 能否被无扭粘接。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+若 \([r^\ast h]=0\)，则存在 \(\gamma\in C^0(N';W)\) 使 \(r^\ast h=\delta\gamma\)。将每个细化顶点上的局部候选按 \(-\gamma_v\) 作规范重置。对任意边 \(vw\in N'_1\)，重置后的重叠差为
+\[
+(r^\ast h)_{vw}-\gamma_w+\gamma_v=0.
+\]
+因此重置后的局部候选在所有重叠上严格一致。由噪声不变性，每个顶点上的局部噪声门仍保持通过。于是精确输出规则的充要条件被满足，语法输出全局 bulk 证书，并且局部误差界未因规范重置而改变。
+
+若所有允许细化上的类均非零，则不存在 \(r\) 与 \(\gamma\) 满足 \(r^\ast h=\delta\gamma\)。按精确输出规则，语法不能输出全局 bulk 证书。注意这一否定只针对该局部族的粘接证书：它不否定每个 \(x_i\) 的局部噪声门，也不否定单片窗口内的稳定重构；它只说明局部 lift 的 overlap holonomy 未被允许细化与规范重置消去。
+
+第三项由前两项直接给出。局部噪声门只在顶点上判定，\v Cech holonomy 门只在重叠 cocycle 的余边界性上判定；二者位于不同账本轴上。若噪声门失败，即使 holonomy 为余边界也缺少局部解析证书；若 holonomy 类持久非零，即使所有局部噪声门通过也无法粘成全局 bulk 证书。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
+% --- Distillation writeback ---
+\begin{proposition}[dyadic 全息粘接的有限 nerve 秩天花板]\label{distill:cech_cohomology-finite_nerve_obstruction_bounds-spg-refinement-rank-ceiling}
+沿用推论 \ref{cor:spg-dyadic-holographic-reconstruction-noise-budget} 的 dyadic 链复形记号，并沿用命题 \ref{distill:cech_cohomology-local_to_global_certificate_descent-spg-noise-invariant-cech-gluing-gate} 中的局部 bulk 候选、噪声门、阿贝尔规范群与噪声不变规范作用。固定一个非空有限允许细化族
+\[
+\mathscr R=\{r:N_r\to N\},
+\]
+其中每个 \(N_r\) 为有限 nerve，且每个 \(r\) 都属于该证书语法允许拉回局部候选与局部噪声门的细化。设规范修正群在本命题中为 \(W=(\FF_p)^d\)。对任意 overlap 上循环
+\[
+h\in Z^1(N;W)
+\]
+定义有限细化 holonomy 账本
+\[
+\operatorname{Obs}_{\mathscr R}(h)
+:=\bigl([r^\ast h]\bigr)_{r\in\mathscr R}
+\in \prod_{r\in\mathscr R}\check H^1(N_r;W).
+\]
+则所有此类账本张成的 \(\FF_p\)-空间满足
+\[
+\dim_{\FF_p}\Span\{\operatorname{Obs}_{\mathscr R}(h):h\in Z^1(N;W)\}
+\le
+ d\sum_{r\in\mathscr R}\dim_{\FF_p}\check H^1(N_r;\FF_p).
+\]
+若进一步存在某个允许细化 \(r_0:N_{r_0}\to N\) 满足
+\[
+\check H^1(N_{r_0};W)=0,
+\]
+则任何已经通过全部局部噪声门的局部候选族，都不会因为 \v Cech holonomy 而被命题 \ref{distill:cech_cohomology-local_to_global_certificate_descent-spg-noise-invariant-cech-gluing-gate} 的语法拒绝。因而，在该固定有限细化族与噪声不变规范语法内，若仍无全局 bulk 证书输出，则失败只能来自局部解析噪声门、局部候选不存在、有限细化族未覆盖的外部深度，或其他非 \v Cech 预算轴。
+\end{proposition}
+\begin{proof}
+对每个 \(r\in\mathscr R\)，上链复形同构给出
+\[
+\check H^1(N_r;W)\cong \check H^1(N_r;\FF_p)\otimes_{\FF_p}(\FF_p)^d,
+\]
+故
+\[
+\dim_{\FF_p}\check H^1(N_r;W)=d\,\dim_{\FF_p}\check H^1(N_r;\FF_p).
+\]
+由定义，\(\operatorname{Obs}_{\mathscr R}(h)\) 落在有限直积
+\[
+\prod_{r\in\mathscr R}\check H^1(N_r;W)
+\]
+中。因此这些元素张成的子空间维数不超过该直积的维数，即得到所示上界。
+
+设存在 \(r_0\) 使 \(\check H^1(N_{r_0};W)=0\)。则对任意 \(h\in Z^1(N;W)\)，其拉回类 \([r_0^\ast h]\) 为零，所以存在 \(\gamma\in C^0(N_{r_0};W)\) 使
+\[
+r_0^\ast h=\delta\gamma.
+\]
+按照命题 \ref{distill:cech_cohomology-local_to_global_certificate_descent-spg-noise-invariant-cech-gluing-gate} 的输出规则，以 \(-\gamma\) 对拉回后的顶点局部候选作规范重置后，所有重叠差同时消失。该命题还假设规范作用保持局部噪声门不变，因此已经通过的局部噪声界在重置后仍通过。于是该证书语法的充要条件被满足，输出全局 bulk 证书。
+
+由此，在上述固定语法内，只要局部候选存在并通过噪声门，且允许细化中含有一个一阶上同调为零的 nerve，\v Cech holonomy 不可能成为拒绝原因。若仍失败，则失败没有落在该 finite nerve holonomy ledger 中，而只能属于命题陈述列出的其他协议轴。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \endinput
