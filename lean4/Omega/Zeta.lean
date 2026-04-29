@@ -1,6 +1,7 @@
 import Omega.Zeta.XiBasepointScanAnchorAngleConcentration
 import Omega.Zeta.XiPickPoissonEnergyStabilizerCovariance
 import Omega.Zeta.XiTerminalZmStokesAmplitudeSquareCubicRigidity
+import Omega.Zeta.XiTerminalZmStokesAmplitudeDegree6Minpoly
 import Omega.Zeta.XiUnifiedVerifierThreeBudgetOrthogonality
 import Omega.Zeta.XiHardyInnerCharacterization
 import Omega.Zeta.XiToeplitzNegativeSquaresEqualsBlaschkeDefect
