@@ -46,6 +46,8 @@ import Omega.Zeta.XiTimePart9IMinimalOrientationDoubleCover
 import Omega.Zeta.XiTimePart9iSignLocalSystemCompleteness
 import Omega.Zeta.XiTimePart9iMonoidalRigidityByTwoPoints
 import Omega.Zeta.XiTimePart9saChi2AffinePhiInversion
+import Omega.Zeta.HDQCD1EdgeFromChi2
+import Omega.Zeta.DefectEntropySchurConcavity
 import Omega.Zeta.XiQ5UnsolvableByRadicals
 import Omega.Zeta.XiTimePart69SameExponentialRateInfiniteMixingFamily
 import Omega.Zeta.XiFoldbinRankUnrankOptimalAdvicePolytime
