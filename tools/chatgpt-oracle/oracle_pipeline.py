@@ -97,6 +97,7 @@ REPO_ROOT = SCRIPT_DIR.parent.parent
 THEORY_DIR = REPO_ROOT / "theory"
 LOG_DIR = SCRIPT_DIR / "logs"
 CODEX_LOG_DIR = LOG_DIR / "codex"
+PIPELINE_LOCK_FILE = LOG_DIR / "oracle_pipeline.lock"
 STATE_DIR = SCRIPT_DIR / "pipeline_state"
 CLAUDE_SUPERVISION_DIR = SCRIPT_DIR / "claude_supervision"
 RESEARCH_LEDGER_DIR = SCRIPT_DIR / "research_ledger"
@@ -7095,6 +7096,69 @@ def print_status():
         _print("")
 
 
+_PIPELINE_LOCK_FD: Optional[int] = None
+
+
+def acquire_pipeline_lock() -> Optional[int]:
+    """Acquire exclusive process-level lock. Exits with rc=2 if another
+    instance holds it. Pattern from tools/autoresearch/run_overnight.py.
+
+    Returns the lock fd on success, None on Windows (lock skipped with warning).
+    """
+    global _PIPELINE_LOCK_FD
+    if os.name != "posix":
+        logger.warning(
+            "Process singleton lock not enforced on Windows; "
+            "ensure only one oracle_pipeline.py runs at a time."
+        )
+        return None
+    import fcntl
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    fd = os.open(str(PIPELINE_LOCK_FILE), os.O_CREAT | os.O_RDWR)
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        existing = ""
+        try:
+            with open(PIPELINE_LOCK_FILE) as fh:
+                existing = fh.read().strip()
+        except OSError:
+            pass
+        os.close(fd)
+        logger.error(
+            f"Another oracle_pipeline.py instance is running "
+            f"(lock: {PIPELINE_LOCK_FILE}, pid={existing or '?'}). "
+            f"If the holding process is dead, remove the lock file and retry."
+        )
+        raise SystemExit(2)
+    os.ftruncate(fd, 0)
+    os.write(fd, str(os.getpid()).encode())
+    os.fsync(fd)
+    _PIPELINE_LOCK_FD = fd
+    import atexit
+    atexit.register(_release_pipeline_lock_atexit)
+    return fd
+
+
+def _release_pipeline_lock_atexit() -> None:
+    fd = _PIPELINE_LOCK_FD
+    if fd is None or os.name != "posix":
+        return
+    try:
+        import fcntl
+        fcntl.flock(fd, fcntl.LOCK_UN)
+    except OSError:
+        pass
+    try:
+        os.close(fd)
+    except OSError:
+        pass
+    try:
+        PIPELINE_LOCK_FILE.unlink()
+    except OSError:
+        pass
+
+
 def main() -> int:
     global CLAUDE_ENABLED
     parser = argparse.ArgumentParser(
@@ -7192,6 +7256,10 @@ def main() -> int:
             p.unlink()
             print(f"Reset: {args.reset}")
         return 0
+
+    # All read-only / early-exit modes returned above. Now acquire the
+    # process singleton lock before any side-effecting work.
+    acquire_pipeline_lock()
 
     if not args.dry_run and CLAUDE_ENABLED:
         claude_ok, claude_msg = claude_health_status()
