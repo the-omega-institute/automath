@@ -224,6 +224,7 @@ import Omega.Zeta.XiNodePolynomialRationalReconstruction
 import Omega.Zeta.XiNodeSpectrumNoiseStability
 import Omega.Zeta.XiFoldHiddenLogmultiplicityBranchbitTwoPointLaw
 import Omega.Zeta.XiTimePart60abHiddenLogmultiplicityPressureDerivatives
+import Omega.Zeta.XiGodelConditionalMinentropyLowerBound
 import Omega.Zeta.XiTimePart60aeDiophantineSingularRingApproximation
 import Omega.Zeta.XiUnitarySliceSpectralCrossing
 import Omega.Zeta.ToeplitzCaratheodoryCompletionTailExclusion
