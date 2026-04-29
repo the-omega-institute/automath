@@ -3111,6 +3111,8 @@ import Omega.Zeta.XiHardyInnerClarkCarleson
 import Omega.Zeta.XiPoissonFirstNonvanishingMomentFdivSharp
 import Omega.Zeta.XiSmithLossSpectrumConjugatePartitionRealization
 import Omega.Zeta.XiZGDirichletLogRenormalization
+import Omega.Zeta.XiZGHolographicConstantTailBound
+import Omega.Zeta.XiTimePart9zhOddprimeSofteningVsParityHardWall
 import Omega.Zeta.XiFiniteWitnessToOfflineFiber
 import Omega.Zeta.XiTimePart9xSerrinRayExactCapacity
 import Omega.Zeta.XiTimePart9xWindow6BoundaryArithmeticPinning
