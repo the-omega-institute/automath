@@ -2469,3 +2469,4 @@ import Omega.Conclusion.SmithLossEulerMultiplicativityPolarization
 import Omega.Conclusion.ComovingCayleyJensenOfflineRootBound
 import Omega.Conclusion.FiniteCMVCertificatePadeHardyFreezing
 import Omega.Conclusion.DoubleKLResidualRateSynchronousCollapse
+import Omega.Conclusion.TwoAdicSelfsimilarHaarRigidityIntegerDimension
