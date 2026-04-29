@@ -1462,3 +1462,4 @@ import Omega.POM.ReplicaSoftcoreSecondExceptionalEigenvalueAsymptotics
 import Omega.POM.CentralizerFpdimGolden
 import Omega.POM.AnomCoprimeTwoPointTest
 import Omega.POM.FoldPrimeLiftInjective
+import Omega.POM.CollisionRenyiPerronClosure
