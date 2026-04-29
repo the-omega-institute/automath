@@ -2709,3 +2709,5 @@ import Omega.Conclusion.ConclusionLieSolenoidPrimeLedgerDichotomy
 import Omega.Conclusion.ConclusionRealinput40RhFailureInsideAnalyticDisk
 import Omega.Conclusion.HaltingTimePrimeRegisterAxisLowerBound
 import Omega.Conclusion.HiddenSubgroupDeterminesAnomalyMinimalAlphabet
+import Omega.Conclusion.MaxfiberUniphaseMod6Law
+import Omega.Conclusion.S4FixedpointCensusRepackaged
