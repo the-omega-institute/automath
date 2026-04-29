@@ -89,6 +89,7 @@ import Omega.Zeta.XiTimePart9zbhaCompletionBranchCapacitySelection
 import Omega.Zeta.XiTimePart9zbhaCenteredJetHausdorff
 import Omega.Zeta.XiTimePart9zbhaTwoatomicMellinTripleUnification
 import Omega.Zeta.XiTimePart9oEscortEgeodesicAffineClosure
+import Omega.Zeta.XiTimePart9oEscortBlackwellCollapse
 import Omega.Zeta.XiGramshiftPadicEffectivePrecision
 import Omega.Zeta.Arity335CollisionMixingScale
 import Omega.Zeta.XiTimePart9IMinimalOrientationDoubleCover
