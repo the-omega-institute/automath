@@ -1,4 +1,6 @@
 import Omega.Conclusion.JensenDefectRadialSplineRigidity
+import Omega.Conclusion.ConclusionZ2x2TwistedObservablesMinimalComplete
+import Omega.Conclusion.JensenDefectPoissonSliceFinite
 import Omega.Conclusion.PoissonCauchyKLSixthOrderExpansion
 import Omega.Conclusion.Window6DynamicalCentralizerTorusCollapse
 import Omega.Conclusion.Window6FullRenyiThermodynamicsClosed
