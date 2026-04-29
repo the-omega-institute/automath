@@ -21,6 +21,7 @@ import Omega.Zeta.XiFoldbinRankUnrankOptimalAdvicePolytime
 import Omega.Zeta.XiFoldZminusoneCancellationBinomialConvolution
 import Omega.Zeta.XiJensenDefectEntropyEnergyIdentity
 import Omega.Zeta.XiTimePart9zblFoldpiGoldenOperatorSplitting
+import Omega.Zeta.XiTimePart9zbhFoldpiRhQuarterLineEquivalence
 import Omega.Zeta.XiTimePart9zrPrimeQuadraticLawParityIsolation
 import Omega.Zeta.XiTimePart9zrLattesFullsplitTransparency
 import Omega.Zeta.XiGoldenMetallicPerdigitExponentialEfficiency
@@ -89,6 +90,7 @@ import Omega.Zeta.XiFoldbinTwoPhaseFreeEnergyVariational
 import Omega.Zeta.XiTimePart71CollisionUpperBoundWeightedCliqueEuler
 import Omega.Zeta.XiPhiRigidityFromKmsEntropyDensity
 import Omega.Zeta.XiRhFiniteCurvatureMatrixCriterion
+import Omega.Zeta.XiFiniteSymmetricAtomicCarathRhEquivalence
 import Omega.Zeta.XiTimePart9xgS10ParityNeutralityForS3Splitting
 import Omega.Zeta.XiTimePart9KFoldForwardOnlineNotConstantMemoryReversible
 import Omega.Zeta.XiDefectWindowOrbitBridge
