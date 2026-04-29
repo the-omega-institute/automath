@@ -1,4 +1,6 @@
 import Omega.Zeta.XiTimePart74NaturalExtensionFiniteSupportPrimesliceImpossibility
+import Omega.Zeta.XiNaturalExtensionInfinitePrimeRegisterNecessity
+import Omega.Zeta.XiToeplitzDiskpoleScanNodeAntiholomorphicConjugacy
 import Omega.Zeta.XiTimePart74GeneralModulusKernelLossExtremal
 import Omega.Zeta.XiP7S5LanglandsChannelsLeyangMeasures
 import Omega.Zeta.XiFoldResonanceLogderivativeSelfsimilar
