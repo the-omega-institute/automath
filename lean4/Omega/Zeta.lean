@@ -3003,3 +3003,5 @@ import Omega.Zeta.XiP7S5QInertiaVacuum3SchurFunctorConductors
 import Omega.Zeta.XiTimePart9fAlphabetThreshold
 import Omega.Zeta.XiTimePart9fLocalNormalizationStepLowerBound
 import Omega.Zeta.XiRealInputRhWindowZeroTempPerronGap
+import Omega.Zeta.XiTimePart57bcFreezingSlopeCodingRate
+import Omega.Zeta.XiTimePart64CoverZetaLeadingPoleStability
