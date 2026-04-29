@@ -85,6 +85,7 @@ import Omega.Conclusion.GodelDyadicTateFilament
 import Omega.Conclusion.ConclusionBinFoldNoNontrivialNuisanceDeformationFixedPowerdiv
 import Omega.Conclusion.LeyangDoublingSolenoidExtension
 import Omega.Conclusion.LeyangDominantEdgeQuadraticResolventMinus111
+import Omega.Conclusion.TorusExtensionPontryaginClassification
 import Omega.Conclusion.XiDyadicPhaseRegisterLowerBound
 import Omega.Conclusion.XiDyadicZeroPhaseDrift
 import Omega.Conclusion.XiDyadicShellEnvelopeLaw
