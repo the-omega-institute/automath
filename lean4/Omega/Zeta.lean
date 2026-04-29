@@ -126,6 +126,7 @@ import Omega.Zeta.XiPoissonCauchyKolmogorovSecondOrderConstant
 import Omega.Zeta.XiPoissonCauchyFisherKreinTailHalfVar2
 import Omega.Zeta.XiPoissonCauchyL2OptimalScaleHalving
 import Omega.Zeta.XiPoissonCauchySpectralEnergyUniversalConstant
+import Omega.Zeta.XiPoissonCauchyDensityIntersectionDriftM3
 import Omega.Zeta.XiTimeDefectSmithReduction
 import Omega.Zeta.HardyCriterionDelta
 import Omega.Zeta.XiSaturatedShiftInvariantLatticeGcdLcm
