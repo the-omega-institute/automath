@@ -221,6 +221,7 @@ import Omega.Zeta.XiTimePart9zeWindow6JonesRayMaxshellLocalization
 import Omega.Zeta.XiTimePart9zeKappa6VnEntropyLoss
 import Omega.Zeta.XiTimePart9zeIndexSpectralRadiusConsistency
 import Omega.Zeta.XiTimePart9zeLowfiberAnomalyTax
+import Omega.Zeta.XiTimePart57fConvexExtensionAffineTail
 import Omega.Zeta.XiTimePart9zeWindow6BoundaryCenterConvexTax
 import Omega.Zeta.XiDefectEntropyScalingVarianceGapIdentity
 import Omega.Zeta.XiThresholdZKConsistencyCoupling
