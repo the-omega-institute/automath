@@ -188,4 +188,18 @@ theorem paper_xi_terminal_replica_softcore_fixed_m_q_recurrence_paq
         intro a ha
         simpa using ha)
 
+/-- Paper label: `thm:xi-terminal-replica-softcore-q-recurrence-partition-annihilator`. -/
+theorem paper_xi_terminal_replica_softcore_q_recurrence_partition_annihilator
+    (Da Db : xi_terminal_replica_softcore_fixed_m_q_recurrence_paq_data)
+    (partitionCount : Nat) (hDa : Da.roots.length <= partitionCount)
+    (hDb : Db.roots.length <= partitionCount) :
+    Da.recurrenceHolds ∧ Db.recurrenceHolds ∧
+      Da.roots.length + 2 <= partitionCount + 2 ∧
+      Db.roots.length + 1 <= partitionCount + 1 := by
+  exact
+    ⟨paper_xi_terminal_replica_softcore_fixed_m_q_recurrence_paq Da,
+      paper_xi_terminal_replica_softcore_fixed_m_q_recurrence_paq Db,
+      Nat.add_le_add_right hDa 2,
+      Nat.add_le_add_right hDb 1⟩
+
 end Omega.Zeta
