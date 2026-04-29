@@ -225,6 +225,7 @@ import Omega.Zeta.LocalizedDyadicPhaseBlindness
 import Omega.Zeta.XiUniqueTransverseVsInfinitePrimeRankSeparation
 import Omega.Zeta.XiHilbertPolyaJacobi
 import Omega.Zeta.XiTimePart9zWindow6MomentInvolutiveAlgebraRealization
+import Omega.Zeta.XiTimePart9XbHolographicImageStrictSelfAffineDecomposition
 import Omega.Zeta.XiTimePart9zWindow6StieltjesCapacityDuality
 import Omega.Zeta.XiPickPoissonLambdaMinRatioBound
 import Omega.Zeta.XiPickPoissonDetScalingLaw
