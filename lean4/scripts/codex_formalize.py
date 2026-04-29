@@ -729,13 +729,25 @@ def merge_worktree_to_base(wt: WorktreeInfo, *, model: Optional[str] = None) -> 
             # 1. Fetch latest remote state
             run_cmd(["git", "fetch", "origin", BASE_BRANCH], cwd=REPO_ROOT, timeout=300)
 
-            # 2. Fast-forward local BASE_BRANCH from origin if origin is ahead.
-            #    git merge --ff-only works on a checked-out branch (unlike git fetch .).
-            #    Silently no-ops if local is already at or ahead of origin.
-            run_cmd(
+            # 2. Incorporate origin before rebasing the worktree. Fast-forward
+            # when possible; if a builder/manual fix landed on origin while
+            # local parallel rounds accumulated, create an ordinary merge commit
+            # so local-only round commits remain pushable without force.
+            ff_origin = run_cmd(
                 ["git", "merge", "--ff-only", f"origin/{BASE_BRANCH}"],
                 cwd=REPO_ROOT, timeout=30,
             )
+            if ff_origin.returncode != 0:
+                merge_origin = run_cmd(
+                    ["git", "merge", "--no-edit", f"origin/{BASE_BRANCH}"],
+                    cwd=REPO_ROOT, timeout=180,
+                )
+                if merge_origin.returncode != 0:
+                    logger.error(
+                        f"Could not merge origin/{BASE_BRANCH} into {BASE_BRANCH}: "
+                        f"{merge_origin.stderr[:300]}"
+                    )
+                    return False
 
             # 3. Rebase worktree onto LOCAL BASE_BRANCH (includes local-only commits)
             rebase = run_cmd(

@@ -46,9 +46,14 @@ Add \leanverified{theorem_name} to the corresponding .tex files in theory/.
 These files never conflict between rounds, so it is safe to edit them before rebasing.
 
 ## Step 4: Rebase
+Before committing, rebase onto the LOCAL orchestration base branch, not directly
+onto `origin/lean4-codex-auto-dev`. The orchestrator serializes merges through
+that local branch and then pushes; rebasing only onto `origin/...` can be stale
+when other local workers have already merged but not pushed yet.
+
 ```bash
 git fetch origin lean4-codex-auto-dev
-git rebase --autostash origin/lean4-codex-auto-dev
+git rebase --autostash lean4-codex-auto-dev
 ```
 `--autostash` stashes all working-tree changes, rebases, then pops them back.
 If rebase conflicts occur in committed files, resolve by keeping ALL lines from
