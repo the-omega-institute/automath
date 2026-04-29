@@ -105,6 +105,14 @@ theorem paper_fold_gauge_anomaly_bitpair_independence_threshold :
   exact ⟨indepThreshold_discriminant, indepThresholdPoly_zero,
          indepThresholdPoly_one, indepThresholdPoly_neg_symmetry⟩
 
+/-- Paper package: bitpair independence threshold, full paper-label name.
+    cor:fold-gauge-anomaly-bernoulli-p-bitpair-independence-threshold -/
+theorem paper_fold_gauge_anomaly_bernoulli_p_bitpair_independence_threshold :
+    (1 : Int) ^ 2 + 4 * 1 = 5 ∧
+    indepThresholdPoly 0 = -1 ∧ indepThresholdPoly 1 = 1 ∧
+    (∀ t : Int, t ^ 2 + t - 1 = (-t) ^ 2 - (-t) - 1) := by
+  exact paper_fold_gauge_anomaly_bitpair_independence_threshold
+
 /-! ### GC defect linear response threshold -/
 
 /-- GC defect polynomial: 5t² - t - 1.
