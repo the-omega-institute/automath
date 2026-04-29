@@ -2757,7 +2757,9 @@ import Omega.Zeta.XiWindow6ResetGapMgfMoments
 import Omega.Zeta.XiWindow6TailSemigroupTwoGeneratorNormalForm
 import Omega.Zeta.XiZGAbelResidueLogDensity
 import Omega.Zeta.XiZGAbsoluteConvergenceCriticalLine
+import Omega.Zeta.XiZGDirichletResidue
 import Omega.Zeta.XiZGHardcoreConstantResidue
+import Omega.Zeta.XiZGLogMertens
 import Omega.Zeta.XiZGZetaFactorization
 import Omega.Zeta.XiZGCountingPowerSavingError
 import Omega.Zeta.XiZGPrefixRecursionMonotoneTailCertificate
