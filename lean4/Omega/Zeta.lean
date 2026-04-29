@@ -2985,3 +2985,4 @@ import Omega.Zeta.XiFoldbinCriticalResonanceRenyi2Floor
 import Omega.Zeta.XiTimePart9eHankelResultantClosedForm
 import Omega.Zeta.XiEndpointLocalJetInversion
 import Omega.Zeta.XiEndpointTwoChannelRenormalizationIdentifiability
+import Omega.Zeta.XiP7S5QInertiaVacuum3SchurFunctorConductors
