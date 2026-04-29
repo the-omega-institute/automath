@@ -44,6 +44,7 @@ import Omega.Folding.BernoulliPMismatchStrictThirdOrderMarkov
 import Omega.Folding.BernoulliPOutputDensity
 import Omega.Folding.BernoulliPOutputMismatchEliminationCurve
 import Omega.Folding.ReverseKlControlledByGenus2Partition
+import Omega.Folding.RencontresFixedPointDensity
 import Omega.Folding.BernoulliPParryPressureChain
 import Omega.Folding.BernoulliPPressureCycleEquation
 import Omega.Folding.BernoulliPPressureQuartic

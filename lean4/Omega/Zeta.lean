@@ -1,6 +1,7 @@
 import Omega.Zeta.Arity335CollisionMixingScale
 import Omega.Zeta.XiTimePart9IMinimalOrientationDoubleCover
 import Omega.Zeta.XiTimePart9iSignLocalSystemCompleteness
+import Omega.Zeta.XiTimePart9saChi2AffinePhiInversion
 import Omega.Zeta.XiQ5UnsolvableByRadicals
 import Omega.Zeta.XiFoldbinRankUnrankOptimalAdvicePolytime
 import Omega.Zeta.XiFoldZminusoneCancellationBinomialConvolution
