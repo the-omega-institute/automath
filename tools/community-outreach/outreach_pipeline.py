@@ -2121,12 +2121,16 @@ def _kill_process_tree(pid: int) -> None:
         pass
 
 
+CODEX_LOG_DIR = SCRIPT_DIR / "logs" / "codex"
+
+
 def codex_exec(
     prompt: str,
     work_dir: Path,
     timeout: int = DEFAULT_TIMEOUT,
     model: Optional[str] = None,
     dry_run: bool = False,
+    log_tag: Optional[str] = None,
 ) -> str:
     """Borrowed from lean4-codex-auto-dev pipeline (PR #37):
     1. Prompt via temp file + shell arg (not stdin pipe) — prevents Codex hang
@@ -2145,6 +2149,13 @@ def codex_exec(
     prompt_fd, prompt_file = tempfile.mkstemp(prefix="codex_prompt_", suffix=".txt")
     os.close(prompt_fd)
     Path(prompt_file).write_text(prompt, encoding="utf-8")
+
+    # Persist prompt for debugging (mirrors lean4 codex_formalize.py log_tag pattern)
+    if log_tag:
+        CODEX_LOG_DIR.mkdir(parents=True, exist_ok=True)
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        persist_prompt = CODEX_LOG_DIR / f"{log_tag}_{ts}.prompt.txt"
+        persist_prompt.write_text(prompt, encoding="utf-8")
 
     model_flag = f" -m {model}" if model else ""
     # macOS has gtimeout (from coreutils), Linux has timeout
@@ -2191,17 +2202,24 @@ def codex_exec(
 
     try:
         if os.path.exists(out_file) and os.path.getsize(out_file) > 0:
-            return Path(out_file).read_text(encoding="utf-8")
-        if stdout:
-            return stdout
-        if rc != 0:
+            output = Path(out_file).read_text(encoding="utf-8")
+        elif stdout:
+            output = stdout
+        elif rc != 0:
             if stderr:
                 logger.warning("Codex stderr: %s", stderr[:400])
-            return ""
-        if stderr:
+            output = ""
+        elif stderr:
             logger.warning("Codex stderr: %s", stderr[:400])
-            return stderr
-        return ""
+            output = stderr
+        else:
+            output = ""
+        # Persist output for debugging
+        if log_tag and output:
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            persist_out = CODEX_LOG_DIR / f"{log_tag}_{ts}.out.txt"
+            persist_out.write_text(output, encoding="utf-8")
+        return output
     finally:
         with contextlib.suppress(OSError):
             os.unlink(out_file)
@@ -2364,48 +2382,6 @@ BACKFLOW_LANGUAGE_POLICY = """BACKFLOW LANGUAGE POLICY:
   magma, Lean, ETP, CRT, Fibonacci, Bowen-Franks, SFT.
 - Table headers, captions, and all non-formula prose must be in Chinese.
 - No revision notes, no timestamps, no 'new X' or 'updated Y' markers."""
-
-
-def annotate_outreach_posted(
-    tex_path: "Path",
-    url: str,
-    *,
-    dry_run: bool = False,
-) -> bool:
-    """Append \\outreachposted{url} to a backflow .tex section.
-
-    Mirrors the formalization pipeline's \\leanverified annotation pattern:
-    additive-only, so it never conflicts with parallel formalization rounds.
-    Returns True if the annotation was added (or already present).
-    """
-    if not tex_path.exists():
-        logger.warning("annotate_outreach_posted: %s does not exist", tex_path)
-        return False
-
-    tag = f"\\outreachposted{{{url}}}"
-    content = tex_path.read_text(encoding="utf-8")
-
-    if tag in content:
-        logger.info("outreach annotation already present in %s", tex_path.name)
-        return True
-
-    # Insert before \end{document}
-    if "\\end{document}" not in content:
-        logger.warning("annotate_outreach_posted: no \\end{document} in %s", tex_path)
-        return False
-
-    content = content.replace(
-        "\\end{document}",
-        f"\n{tag}\n\n\\end{{document}}",
-    )
-
-    if dry_run:
-        logger.info("[dry-run] would annotate %s with %s", tex_path.name, url)
-        return True
-
-    tex_path.write_text(content, encoding="utf-8")
-    logger.info("annotate_outreach_posted: added %s to %s", url, tex_path.name)
-    return True
 
 
 def verify_backflow_language(tex_path: "Path") -> dict[str, Any]:
