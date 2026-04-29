@@ -122,6 +122,7 @@ import Omega.Zeta.XiCauchyPoissonKLVarianceReadout
 import Omega.Zeta.XiCauchyPoissonKLRigidity
 import Omega.Zeta.XiPoissonRelativeEntropyContraction
 import Omega.Zeta.XiCoarsegrainingIllposednessExponentialLaw
+import Omega.Zeta.XiStieltjesCoarsegrainingIllposednessPolynomial
 import Omega.Zeta.XiPoissonCauchyMultipoleInvisibilityConstruction
 import Omega.Zeta.XiScanTwoSourceMinDiscriminant
 import Omega.Zeta.XiJetPsdEquivalence
@@ -187,6 +188,7 @@ import Omega.Zeta.XiTimePart60abHiddenLogmultiplicityPressureDerivatives
 import Omega.Zeta.XiUnitarySliceSpectralCrossing
 import Omega.Zeta.ToeplitzCaratheodoryCompletionTailExclusion
 import Omega.Zeta.XiChannelHorizonToeplitzCertificate
+import Omega.Zeta.XiToeplitzHeightPhiCalibration
 import Omega.Zeta.XiKappaKLArClosedAsymptotic
 import Omega.Zeta.XiPoissonCauchyKolmogorovSecondOrderConstant
 import Omega.Zeta.XiPoissonCauchyFisherKreinTailHalfVar2
