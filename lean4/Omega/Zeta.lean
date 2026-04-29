@@ -70,6 +70,8 @@ import Omega.Zeta.XiHardeningTimeFrontierRigidity
 import Omega.Zeta.XiTimePart65eWindow6GeometricDiagonalZ2Parity
 import Omega.Zeta.XiTimePart70dAnomalySignatureSaturation
 import Omega.Zeta.XiTimePart70dCriticalBitratePhaseCluster
+import Omega.Zeta.XiTimePart70dEscortCriticalResponseBand
+import Omega.Zeta.XiTimePart70dCollisionRieszMainTerms
 import Omega.Zeta.XiTimePart70dMaxfiberExcessExactMainTerm
 import Omega.Zeta.XiTimePart9KCoprimeLedgerMemoryHorizon
 import Omega.Zeta.XiBinfoldScaledMultiplicityMellinCumulants
