@@ -2161,6 +2161,7 @@ import Omega.Zeta.XiFixedArityDyadicMultiplicityPresburgerInP
 import Omega.Zeta.XiHankelSigminLowerboundVandermondeSeparation
 import Omega.Zeta.XiHellingerToeplitzDense2xLaw
 import Omega.Zeta.XiHellingerToeplitzBitBudgetLinearLaw
+import Omega.Zeta.XiHellingerToeplitzPrecisionLocalComplementarity
 import Omega.Zeta.XiImplCoding
 import Omega.Zeta.XiHolographyCoherenceSeparation
 import Omega.Zeta.XiJDiscriminantElliptic2TorsionMobius
@@ -2416,6 +2417,7 @@ import Omega.Zeta.XiTerminalGbcStabilizedTerminalObject
 import Omega.Zeta.XiLogisticFanoLowerBoundFromError
 import Omega.Zeta.XiHankelOfflineModularAuditThreshold
 import Omega.Zeta.XiHankelRecurrenceJacobianIdentity
+import Omega.Zeta.XiHankelDiscriminantDivisorParameterizationCriticalLocus
 import Omega.Zeta.XiHorizonReflectionFiniteWitness
 import Omega.Zeta.XiFoldEscortLogMultiplicityTwoAtom
 import Omega.Zeta.XiFoldEscortRenyiConstantThetaClosed
