@@ -1716,7 +1716,7 @@ def _arxiv_hits_for_round1(
     todos: dict[str, TodoSpec],
     *,
     since: str = "14d",
-    max_results: int = 200,
+    max_results: int = 400,
 ) -> dict[str, list[dict]]:
     """Run arxiv_watch on the live candidate set, return hits keyed by todo_id.
 

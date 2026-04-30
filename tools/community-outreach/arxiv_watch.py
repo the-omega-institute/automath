@@ -336,8 +336,8 @@ def main(argv: Optional[list[str]] = None) -> int:
     p.add_argument("--since", default="7d", help="Time window: e.g. 7d, 48h, 2w, or YYYY-MM-DD")
     p.add_argument("--categories", nargs="+", default=DEFAULT_CATEGORIES,
                    help=f"arXiv categories (default: {' '.join(DEFAULT_CATEGORIES)})")
-    p.add_argument("--max-results", type=int, default=100,
-                   help="Max papers to pull per query (default: 100)")
+    p.add_argument("--max-results", type=int, default=400,
+                   help="Max papers to pull per query (default: 400 — sized for 7-14 day window across 6 math categories)")
     p.add_argument("--min-overlap", type=int, default=3,
                    help="Score threshold for path-A acceptance (default: 3). Score-2 hits "
                         "are still surfaced if they contain a distinctive term (proper noun "

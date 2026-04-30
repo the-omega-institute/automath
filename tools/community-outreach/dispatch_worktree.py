@@ -900,7 +900,7 @@ def _run_arxiv_watch_for_todo(
     *,
     target_log_dir: Path,
     since: str = "14d",
-    max_results: int = 80,
+    max_results: int = 400,
 ) -> dict | None:
     """Stage 0: scan recent arXiv for papers overlapping this TODO. Best-effort.
 
