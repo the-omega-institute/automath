@@ -12,6 +12,7 @@ import Omega.Zeta.XiDyadicFibonacciCompletionCantorIdempotentSkeleton
 import Omega.Zeta.XiScanToeplitzConditioningBySeparation
 import Omega.Zeta.XiLeyangNearestConjugatePairDiscriminantEstimator
 import Omega.Zeta.XiS4BoundaryVanishingCycleInducedModule
+import Omega.Zeta.XiS4BoundaryTypeIntrinsicByIsotypicNilpotentPattern
 import Omega.Zeta.XiS4BoundaryMainComponentH10Decomposition
 import Omega.Zeta.XiComovingScanExponentialSpectralSeparation
 import Omega.Zeta.XiBasepointScanPsl2rCovariance
@@ -157,6 +158,7 @@ import Omega.Zeta.XiTimePart9iMonoidalRigidityByTwoPoints
 import Omega.Zeta.XiTimePart9hEscortSectorFreezing
 import Omega.Zeta.XiTimePart9hMaxfiberRareSectorCarrying
 import Omega.Zeta.XiTimePart9saChi2AffinePhiInversion
+import Omega.Zeta.XiTimePart9sResonanceEntireIntegerSamplingNotL2
 import Omega.Zeta.HDQCD1EdgeFromChi2
 import Omega.Zeta.DefectEntropySchurConcavity
 import Omega.Zeta.XiQ5UnsolvableByRadicals
