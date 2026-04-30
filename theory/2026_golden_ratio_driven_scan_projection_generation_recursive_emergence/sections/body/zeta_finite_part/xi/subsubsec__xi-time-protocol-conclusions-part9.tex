@@ -337,6 +337,96 @@ p_\star=21\cdot 11+34\cdot 10.
 \leanverified{paper\_xi\_audit\_prime\_571\_apery\_normal\_form}
 \end{corollary}
 
+% --- Distillation writeback ---
+\begin{theorem}[Ap\'ery 紧化尾部的退化势与生成元单调性]\label{distill:grothendieck-compactified_boundary_degeneration_control-xi-apery-tail-boundary-automaton}
+沿用定理 \ref{thm:xi-window6-tail-semigroup-two-generator-normal-form} 与命题 \ref{prop:xi-window6-tail-semigroup-apery-thresholds} 的记号，令
+\[
+S=\langle 21,34\rangle,\qquad b_r=13r\ (\mathrm{mod}\ 21),\qquad w_r=34b_r,\qquad g_r=\frac{w_r-r}{21}.
+\]
+定义尾部紧化承载集
+\[
+\overline S:=S\ \sqcup\ \{\partial_{r,k}:0\le r\le20,\ 0\le k<g_r\}.
+\]
+对 \(n\in\NN\)，若 \(n\in S\)，令 \(\kappa(n)=n\)；若 \(n=r+21k\) 且 \(0\le k<g_r\)，令 \(\kappa(n)=\partial_{r,k}\)。再定义退化势
+\[
+D(x):=\begin{cases}
+0,&x\in S,\\
+w_r-(r+21k),&x=\partial_{r,k}.
+\end{cases}
+\]
+则 \(\kappa:\NN\to\overline S\) 是双射，并且对每个尾部生成元
+\[
+a\in\{21,34,55\}
+\]
+由
+\[
+T_a(\kappa(n)):=\kappa(n+a)
+\]
+定义的转移满足
+\[
+D(T_a x)\le D(x)\qquad(x\in\overline S).
+\]
+更精确地，若 \(x=\partial_{r,k}\)，则
+\[
+T_{21}x=\begin{cases}
+\partial_{r,k+1},&k+1<g_r,\\
+w_r,&k+1=g_r,
+\end{cases}
+\]
+并且
+\[
+D(T_{21}x)=\max\{D(x)-21,0\}.
+\]
+令 \(r'\equiv r+13\ (\mathrm{mod}\ 21)\)。若 \(b_r<20\)，则 \(T_{34}x\) 仍为边界点且
+\[
+D(T_{34}x)=D(x);
+\]
+若 \(b_r=20\)，则 \(T_{34}x\in S\) 且 \(D(T_{34}x)=0\)。因此边界子图不含有向闭路；任意边界点在有限次 \(21\) 或 \(34\) 生成元作用后进入内部半群 \(S\)。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:xi-window6-tail-semigroup-apery-thresholds}，同余类 \(r\) 中不可达点恰为
+\[
+r,\ r+21,\ldots,r+21(g_r-1),
+\]
+而可达点恰为 \(w_r+21\NN\)。因此每个 \(n\in\NN\) 要么属于 \(S\)，要么唯一写成 \(r+21k\) 且 \(0\le k<g_r\)。这正给出 \(\kappa\) 的双射性。
+
+先考虑生成元 \(21\)。若 \(x\in S\)，则 \(T_{21}x\in S\)，退化势仍为零。若 \(x=\partial_{r,k}\)，则底层整数为 \(n=r+21k<w_r\)。当 \(k+1<g_r\) 时，\(n+21=r+21(k+1)<w_r\)，故
+\[
+T_{21}x=\partial_{r,k+1},\qquad D(T_{21}x)=w_r-r-21(k+1)=D(x)-21.
+\]
+当 \(k+1=g_r\) 时，\(n+21=w_r\in S\)，故退化势变为零。于是 \(T_{21}\) 的公式成立。
+
+再考虑生成元 \(34\)。由于
+\[
+34\equiv 13\pmod {21},
+\]
+\(n+34\) 的新同余类为 \(r'\equiv r+13\pmod {21}\)。另一方面
+\[
+b_{r'}=13(r+13)\equiv b_r+13^2\equiv b_r+1\pmod {21},
+\]
+因为 \(13^2\equiv1\pmod {21}\)。若 \(b_r<20\)，则 \(b_{r'}=b_r+1\)，从而
+\[
+w_{r'}=34(b_r+1)=w_r+34.
+\]
+由 \(n<w_r\) 得
+\[
+n+34<w_r+34=w_{r'},
+\]
+故 \(n+34\) 仍在新同余类的不可达截断中，并且
+\[
+D(T_{34}x)=w_{r'}-(n+34)=w_r-n=D(x).
+\]
+若 \(b_r=20\)，则 \(b_{r'}=0\)，故 \(w_{r'}=0\)。此时 \(n+34\ge0=w_{r'}\)，按 Ap\'ery 判据 \(n+34\in S\)，退化势为零。
+
+最后 \(55=21+34\)，故 \(T_{55}=T_{21}\circ T_{34}\)。由前两段可得 \(D(T_{55}x)\le D(x)\)。为了排除边界有向闭路，对边界点定义二重高度
+\[
+H(\partial_{r,k}):=\bigl(D(\partial_{r,k}),\,20-b_r\bigr)
+\]
+并按字典序排列。作用 \(T_{21}\) 时第一坐标严格下降，除非已经进入内部；作用 \(T_{34}\) 时，若未进入内部，则第一坐标不变而第二坐标严格下降。故任何边界有向路径只要不进入内部，其高度严格下降；有限集合中不存在严格下降闭路。于是每个边界退化点都是暂态的，并在有限步后进入内部半群。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 计算 \(p_\star\equiv 571\equiv 4\ (\mathrm{mod}\ 21)\)。
 由定理 \ref{thm:xi-window6-tail-semigroup-two-generator-normal-form}，规范系数为
