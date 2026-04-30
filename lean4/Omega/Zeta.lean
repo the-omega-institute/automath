@@ -203,6 +203,7 @@ import Omega.Zeta.XiTimePart9xaadWindow6ConstrainedWulffSaturation
 import Omega.Zeta.XiTimePart9dMod4FourierChannelEnergy
 import Omega.Zeta.XiTimePart9xIndexRelativeEntropyIdentity
 import Omega.Zeta.XiTimePart9xVisibleCondexpFiniteIndexSpectrum
+import Omega.Zeta.XiFoldbinGroupoidMoritaKCenterDimensionLb
 import Omega.Zeta.XiTimePart9xReversibleCapacityTwoBitInversion
 import Omega.Zeta.XiTwoBaseDeperiodizationNoImagPeriod
 import Omega.Zeta.XiEndpointLogwindowLaplaceStieltjes
