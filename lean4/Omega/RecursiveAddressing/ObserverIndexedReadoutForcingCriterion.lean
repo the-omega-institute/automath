@@ -41,6 +41,22 @@ theorem paper_recursive_addressing_observer_indexed_readout_forcing_criterion
       Adm Vis Refines hAdm hVis href hread⟩
 
 set_option maxHeartbeats 400000 in
+/-- Paper-label wrapper for `prop:observer-indexed-readout-forcing-criterion`. -/
+theorem paper_observer_indexed_readout_forcing_criterion
+    {State Ref Value : Type} [DecidableEq Value]
+    (Adm : State → Set Ref) (Vis : State → Ref → Set Value)
+    (Refines : State → State → Prop)
+    (hAdm : ∀ {p q : State} {r : Ref}, Refines q p → r ∈ Adm p → r ∈ Adm q)
+    (hVis : ∀ {p q : State} {r : Ref}, Refines q p → r ∈ Adm p → Vis q r = Vis p r)
+    {p q : State} {r : Ref} (href : Refines q p) :
+    (((∃ v, typedReadout Adm Vis p r = Readout.value v) ↔
+        (r ∈ Adm p ∧ ∃ v, Vis p r = {v})) ∧
+      ((∃ v, typedReadout Adm Vis p r = Readout.value v) →
+        ∃ v, typedReadout Adm Vis q r = Readout.value v)) := by
+  exact paper_recursive_addressing_observer_indexed_readout_forcing_criterion
+    Adm Vis Refines hAdm hVis href
+
+set_option maxHeartbeats 400000 in
 /-- Paper-facing wrapper: a typed readout is non-`NULL` exactly when the reference is admissible
 and the local witness set is nonempty. The companion negative statement is the address-before-value
 specialization: if admissibility fails or the witness fiber is empty, then no non-`NULL` readout
