@@ -122,6 +122,7 @@ ORACLE_DONE_DIR = REPO_ROOT / "tools" / "chatgpt-oracle" / "oracle" / "done"
 DEFAULT_ORACLE_MODEL = "chatgpt-5.4-pro-extended"
 DEFAULT_ORACLE_TIMEOUT = 7200
 ORACLE_CLAIM_TIMEOUT = int(os.environ.get("ORACLE_CLAIM_TIMEOUT", "90"))
+ORACLE_AGENT_STALE_TIMEOUT = int(os.environ.get("ORACLE_AGENT_STALE_TIMEOUT", "300"))
 CODEX_INFRA_RETRIES = int(os.environ.get("DISTILL_CODEX_INFRA_RETRIES", "3"))
 CODEX_INFRA_RETRY_SLEEP = int(os.environ.get("DISTILL_CODEX_INFRA_RETRY_SLEEP", "20"))
 REVIEW_BACKENDS = ("codex", "codex-claude", "claude")
@@ -993,6 +994,38 @@ def _oracle_cancel_task(task_id: str, reason: str) -> None:
         return
 
 
+def _oracle_claimed_agent_infos(
+    status: dict[str, Any],
+    task_id: str,
+) -> list[tuple[str, dict[str, Any]]]:
+    """Return browser-agent status rows currently assigned to an Oracle task."""
+    agents = status.get("agents", {}) if isinstance(status, dict) else {}
+    if not isinstance(agents, dict):
+        return []
+    claimed: list[tuple[str, dict[str, Any]]] = []
+    for agent_id, info in agents.items():
+        if isinstance(info, dict) and info.get("task_id") == task_id:
+            claimed.append((str(agent_id), info))
+    return claimed
+
+
+def _oracle_stale_agent_claims(
+    status: dict[str, Any],
+    task_id: str,
+    stale_timeout: int = ORACLE_AGENT_STALE_TIMEOUT,
+) -> list[tuple[str, dict[str, Any]]]:
+    """Return claimed Oracle agents whose heartbeat age exceeds stale_timeout."""
+    stale: list[tuple[str, dict[str, Any]]] = []
+    for agent_id, info in _oracle_claimed_agent_infos(status, task_id):
+        try:
+            age = int(info.get("elapsed", 0))
+        except (TypeError, ValueError):
+            age = 0
+        if age >= stale_timeout:
+            stale.append((agent_id, info))
+    return stale
+
+
 _ORACLE_METADATA_RE = re.compile(r"^\s*<!--\s*oracle metadata:\s*.*?-->\s*", re.DOTALL)
 
 
@@ -1128,18 +1161,29 @@ def chatgpt_oracle_exec(
 
         elapsed = int(time.time() - start)
         status = _oracle_server_status()
-        agents = status.get("agents", {}) if isinstance(status, dict) else {}
-        claimed_by = [
-            agent_id
-            for agent_id, info in agents.items()
-            if isinstance(info, dict) and info.get("task_id") == task_id
-        ]
+        claimed_infos = _oracle_claimed_agent_infos(status, task_id)
+        claimed_by = [agent_id for agent_id, _ in claimed_infos]
         if not claimed_by and elapsed >= ORACLE_CLAIM_TIMEOUT:
             _oracle_cancel_task(task_id, "claim_timeout_no_foreground_agent")
             logger.warning(
                 "ChatGPT Oracle task not claimed after %ss; continuing without Oracle: %s",
                 ORACLE_CLAIM_TIMEOUT,
                 task_id,
+            )
+            return ""
+        stale_claims = _oracle_stale_agent_claims(status, task_id)
+        if claimed_by and stale_claims and len(stale_claims) == len(claimed_infos):
+            stale_detail = ", ".join(
+                f"{agent_id}:phase={info.get('phase', '?')}:elapsed={info.get('elapsed', '?')}s"
+                for agent_id, info in stale_claims
+            )
+            _oracle_cancel_task(task_id, "stale_browser_agent")
+            logger.warning(
+                "ChatGPT Oracle task claimed by stale browser agent(s) after %ss; "
+                "continuing without Oracle: %s (%s)",
+                ORACLE_AGENT_STALE_TIMEOUT,
+                task_id,
+                stale_detail,
             )
             return ""
         if elapsed > 0 and elapsed % 60 == 0:

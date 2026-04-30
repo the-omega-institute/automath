@@ -97,5 +97,34 @@ class OracleRecoveryTests(unittest.TestCase):
         self.assertIn("carrier budget grows linearly", data["raw_research_text"])
 
 
+class OracleBridgeStatusTests(unittest.TestCase):
+    def test_claimed_agent_infos_filters_to_task_id(self):
+        status = {
+            "agents": {
+                "oracle_1": {"task_id": "wanted", "elapsed": 10, "phase": "sent"},
+                "oracle_2": {"task_id": "other", "elapsed": 999, "phase": "prompt_ready"},
+                "oracle_3": "malformed",
+            }
+        }
+
+        claimed = distill._oracle_claimed_agent_infos(status, "wanted")
+
+        self.assertEqual(len(claimed), 1)
+        self.assertEqual(claimed[0][0], "oracle_1")
+
+    def test_stale_agent_claim_detects_heartbeat_age(self):
+        status = {
+            "agents": {
+                "oracle_1": {"task_id": "task", "elapsed": 299, "phase": "waiting_response"},
+                "oracle_2": {"task_id": "task", "elapsed": 300, "phase": "prompt_ready"},
+            }
+        }
+
+        stale = distill._oracle_stale_agent_claims(status, "task", stale_timeout=300)
+
+        self.assertEqual(len(stale), 1)
+        self.assertEqual(stale[0][0], "oracle_2")
+
+
 if __name__ == "__main__":
     unittest.main()
