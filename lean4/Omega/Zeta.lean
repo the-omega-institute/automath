@@ -266,6 +266,8 @@ import Omega.Zeta.XiFoldRenyiConstantSpectrumClosedForm
 import Omega.Zeta.XiMultistageCrtMaxPrimeAdditiveControl
 import Omega.Zeta.XiCauchyPoissonFdivSixthOrderExpansion
 import Omega.Zeta.XiWindow6ResetGapFibCoupling
+import Omega.Zeta.XiJacXaQIndecomposableViaP13
+import Omega.Zeta.XiTerminalZmTranslationRTraceNorm
 import Omega.Zeta.XiWindow6ResetClockGapFrequencies
 import Omega.Zeta.XiSchurEliminationEntropyPermutationInvariantBottleneck
 import Omega.Zeta.XiTimePart9pCollisionFrequencyAlgebraicLdp
