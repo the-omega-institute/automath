@@ -20,6 +20,7 @@
 | teorth/analysis | GitHub issue | [#494](https://github.com/teorth/analysis/issues/494) | 2026-04-24 |
 | teorth/equational_theories #364 — countermodel | GitHub issue comment | [comment](https://github.com/teorth/equational_theories/issues/364#issuecomment-4313955597) | 2026-04-24 |
 | teorth/equational_theories #364 — affine closure + non-affine witness | GitHub issue comment | [comment](https://github.com/teorth/equational_theories/issues/364#issuecomment-4313957801) | 2026-04-24 |
+| the-omega-institute/automath #38 — Tolmeton reply: BF citation diagram + co-author probe | GitHub issue comment | [comment](https://github.com/the-omega-institute/automath/issues/38#issuecomment-4353065430) | 2026-04-30 |
 | the-omega-institute/automath #38 — nonneg lift follow-up | GitHub issue comment | [comment](https://github.com/the-omega-institute/automath/issues/38#issuecomment-4313959985) | 2026-04-24 |
 | the-omega-institute/automath #38 — signed companion audit | GitHub issue comment | [comment](https://github.com/the-omega-institute/automath/issues/38#issuecomment-4298430964) | 2026-04-23 |
 | teorth/equational_theories #418 | GitHub issue reply | [comment](https://github.com/teorth/equational_theories/issues/418#issuecomment-4289701235) | 2026-04-21 |
