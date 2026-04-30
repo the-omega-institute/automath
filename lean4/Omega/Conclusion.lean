@@ -123,6 +123,7 @@ import Omega.Conclusion.XiDyadicPhaseRegisterLowerBound
 import Omega.Conclusion.VisibleThresholdResonanceCodimOneModel
 import Omega.Conclusion.XiDyadicZeroPhaseDrift
 import Omega.Conclusion.XiDyadicShellEnvelopeLaw
+import Omega.Conclusion.XiDyadicRecursionZeroStability
 import Omega.Conclusion.ScaledLawUniqueFromRecoverabilityProfile
 import Omega.Conclusion.HaltingFourfoldComplexityIdentity
 import Omega.Conclusion.HaltingTimePrimeRegisterFrontierExact
@@ -207,6 +208,7 @@ import Omega.Conclusion.XiDepolarizationMobiusOrthogonality
 import Omega.Conclusion.XiDirectionTotalDefectSplitting
 import Omega.Conclusion.XiTimeFiltrationPbwGradedCommutative
 import Omega.Conclusion.Window6StabilityProbabilityUniqueInternalMinimum
+import Omega.Conclusion.Window6NoiseLocalFragilityHighOrderReturn
 import Omega.Conclusion.BoundaryGodelSeparatedUnionStorageMaxlaw
 import Omega.Conclusion.BoundaryFinitePrimePurePhasePacking
 import Omega.Conclusion.BoundaryGodelBulkSecondorderJetIncomplete

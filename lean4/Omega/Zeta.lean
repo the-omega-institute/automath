@@ -1812,6 +1812,7 @@ import Omega.Zeta.Xi2kSampleHolographyReconstructsDetP
 import Omega.Zeta.XiCauchyCoshUnitaryLinearization
 import Omega.Zeta.XiArtinMazurEulerProductZetaRatio
 import Omega.Zeta.XiSimpleLeyangEdgeN2Quantization
+import Omega.Zeta.XiNearestRootShiftConstantAndRichardson
 import Omega.Zeta.XiCauchyPoissonSingleScaleMomentInversion
 import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprint
 import Omega.Zeta.XiCayleyModulusPoissonFourierFingerprintLayered
