@@ -247,6 +247,7 @@ import Omega.Zeta.XiTimePart9fKolmogorovFiberSaturation
 import Omega.Zeta.XiTimePart9xaabWulffRayFejerKernel
 import Omega.Zeta.XiTimePart9xaadWindow6ConstrainedWulffSaturation
 import Omega.Zeta.XiTimePart9dMod4FourierChannelEnergy
+import Omega.Zeta.XiTimePart9pPositiveBranchGlobalCoordinate
 import Omega.Zeta.XiTimePart9xIndexRelativeEntropyIdentity
 import Omega.Zeta.XiTimePart9xVisibleCondexpFiniteIndexSpectrum
 import Omega.Zeta.XiFoldbinGroupoidMoritaKCenterDimensionLb
