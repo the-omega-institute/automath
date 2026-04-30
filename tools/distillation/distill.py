@@ -81,6 +81,15 @@ KILLO_GOLDEN_TRACE_RE = re.compile(
     r"\b20[0-9]{2}[-/][0-9]{1,2}[-/][0-9]{1,2}\b"
     r")"
 )
+PIPELINE_METADATA_RE = re.compile(
+    r"(?i:"
+    r"\\textbf\{[^}]*?(?:dependency\s+status|date[- ]?time|"
+    r"distillation\s+timestamp|family\s*:)[^}]*\}"
+    r"|(?:dependency\s+status|date[- ]?time|distillation\s+timestamp)\s*:"
+    r")"
+    r"|\\textbf\{[^}]*?(?:\u4f9d\u8d56\u72b6\u6001|"
+    r"\u65e5\u671f\u65f6\u95f4|\u7ed3\u679c\s*[0-9]+)[^}]*\}"
+)
 
 STAGE_ORDER = ["R", "S", "G", "W", "E", "DONE"]
 
@@ -4130,6 +4139,11 @@ def _validate_writebacks(
         if trace:
             errors.append(
                 f"Item {index} contains visible patch/log wording forbidden by killo-golden: {trace.group(0)}"
+            )
+        metadata = PIPELINE_METADATA_RE.search(content)
+        if metadata:
+            errors.append(
+                f"Item {index} contains pipeline metadata forbidden in paper LaTeX: {metadata.group(0)}"
             )
         ordinal = MANUAL_RESULT_ORDINAL_RE.search(content)
         if ordinal:

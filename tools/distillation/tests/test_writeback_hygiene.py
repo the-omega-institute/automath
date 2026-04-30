@@ -125,6 +125,25 @@ The assertion follows by checking every coordinate.
             errors,
         )
 
+    def test_rejects_pipeline_metadata_dependency_status(self):
+        content = r"""
+\begin{lemma}[稳定限制]
+\label{lem:distill-hygiene}
+\textbf{Dependency status: conditional audit.}
+相容证书在限制后仍相容。
+\end{lemma}
+\begin{proof}
+逐项限制即可。
+\end{proof}
+""".strip()
+
+        _, errors = self._validate(content)
+
+        self.assertTrue(
+            any("pipeline metadata" in error for error in errors),
+            errors,
+        )
+
     def test_accepts_mathematical_conclusion_phrase(self):
         content = r"""
 \begin{lemma}[局部闭合的逆否形式]
