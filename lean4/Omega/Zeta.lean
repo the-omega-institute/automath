@@ -221,6 +221,7 @@ import Omega.Zeta.XiReplicaSoftcoreFixedMQRecurrenceCharacteristicRoots
 import Omega.Zeta.XiTimePart9dClarkJensenReverseklIdentity
 import Omega.Zeta.XiTimePart9dReverseKLL2Fourier
 import Omega.Zeta.XiTimePart9dJensenDefectCoefficientCertificate
+import Omega.Zeta.XiTimePart9fKolmogorovFiberSaturation
 import Omega.Zeta.XiTimePart9xaabWulffRayFejerKernel
 import Omega.Zeta.XiTimePart9xaadWindow6ConstrainedWulffSaturation
 import Omega.Zeta.XiTimePart9dMod4FourierChannelEnergy
