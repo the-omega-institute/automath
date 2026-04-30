@@ -369,14 +369,15 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **🔴 DISCARDED · misframed (Oracle Round 1, 2026-04-30)** |
 | Source | FunSearch Nature 2024 + cap_set notebook |
 | Type | OPEN / structural rigidity |
 | Untouched | ✅ FS 给 size-512 没证唯一性 |
 | Omega fit | 8/10 |
 | Topic value | 8/10 (FunSearch 招牌结果) |
-| Effort est | 18-21 天 |
-| Risk | med |
+| Effort est | — |
+| Risk | — |
+| Lit staleness checked | 2026-04-30 — **DISCARDED**; Oracle: FunSearch 的 512 in $\mathbb{F}_3^8$ 是 best-known **构造**而非已证 extremal 值，"extremal uniqueness" 不是 well-defined 目标 |
 
 **Statement.** $\mathbb{F}_3^8$ 中 cap set 极值 $r_3\ge 512$ (FunSearch). 证唯一性 (up to affine) 或给非 affine 等价类计数.
 
@@ -395,14 +396,15 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **🟠 OVERTAKEN · board target obsolete (Oracle Round 1, 2026-04-30)** |
 | Source | https://www.erdosproblems.com/242 |
 | Type | OPEN / falsifiable |
-| Untouched | ✅ 不在 AI wiki |
+| Untouched | ❌ board outdated |
 | Omega fit | 5/10 |
 | Topic value | 9/10 (教科书级) |
-| Effort est | 7-10 天 (找一个反例 $n$) |
-| Risk | low (不 break 也能 publish verified bound 推进) |
+| Effort est | — |
+| Risk | — |
+| Lit staleness checked | 2026-04-30 — **OVERTAKEN**; Oracle: 已验证至 $10^{18}$（板子说 $10^{14}$），且有 2026 claimed proof 待审，不再是 computational push 题 |
 
 **Statement.** $\forall n>2$, $\frac{4}{n}=\frac{1}{x}+\frac{1}{y}+\frac{1}{z}$ distinct 整数?
 
@@ -446,14 +448,15 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **🟠 OVERTAKEN · board target stale (Oracle Round 1, 2026-04-30)** |
 | Source | http://www.openproblemgarden.org/op/covering_systems_with_big_moduli |
 | Type | falsifiable / quantitative bound |
-| Untouched | ✅ Hough 2015 + Balister 2022 后零星, 没人用 ML/SAT 大规模 sweep |
+| Untouched | ❌ board's stated target stale |
 | Omega fit | 7/10 |
 | Topic value | 6/10 |
-| Effort est | 5-7 天 |
-| Risk | low |
+| Effort est | — |
+| Risk | — |
+| Lit staleness checked | 2026-04-30 — **OVERTAKEN**; Oracle: 原"big-moduli 是否存在"已被 Hough negatively solved，later work 把 bound 降到 616,000，板子的"找精确常数"目标过时 |
 
 **Statement.** $\forall N$, 是否存在 distinct covering 所有模 $\ge N$? Hough 2015 NO. 找精确常数 $f(N)$.
 
@@ -499,14 +502,15 @@
 
 | field | value |
 |---|---|
-| Status | Backlog (precondition: 核题面是否在 Omega 强项) |
+| Status | **🔴 CLOSED · solution published (Oracle Round 1, 2026-04-30)** |
 | Source | Tao 2025-11 blog §"AI for IMO 2025" |
 | Type | OPEN / extremal tiling |
-| Untouched | ✅ AE 给 arrangement 没证最优, AlphaProof 没攻 |
-| Omega fit | 6/10 (待核) |
-| Topic value | 9/10 (IMO 题永远高热度) |
-| Effort est | 14-21 天 |
-| Risk | med |
+| Untouched | ❌ |
+| Omega fit | — |
+| Topic value | — |
+| Effort est | — |
+| Risk | — |
+| Lit staleness checked | 2026-04-30 — **CLOSED**; Oracle: 已发表答案 $2112 = 2025 + 2 \cdot 45 - 3$，含 general formula。Evan Chen solution notes 等公开 |
 
 **Statement.** 待从 IMO 2025 P6 原题 + AE 构造抽出.
 
@@ -523,14 +527,15 @@
 
 | field | value |
 |---|---|
-| Status | Backlog (TIME-SENSITIVE) |
+| Status | **🟠 OVERTAKEN · stage 1 ended, stage 2 different problem (Oracle Round 1, 2026-04-30)** |
 | Source | https://terrytao.wordpress.com/2026/03/13/mathematics-distillation-challenge-equational-theories/ |
 | Type | OPEN competition (Tao + SAIR Foundation backed) |
-| Untouched | ✅ 启动 6 周, ETP wiki 还没发布参赛者基线; 论坛 Formalisation thread 没人正式响应 |
-| Omega fit | 9/10 |
-| Topic value | 9/10 (Tao 加持 + 算力背书 + 早期参赛者会被官方 wiki 收录) |
-| Effort est | 4-6 天 |
-| Risk | med (需要小模型 evaluation 算力, 但提交本身只需 markdown) |
+| Untouched | ❌ |
+| Omega fit | — |
+| Topic value | — |
+| Effort est | — |
+| Risk | — |
+| Lit staleness checked | 2026-04-30 — **OVERTAKEN**; Oracle: Stage 1 cheat-sheet 任务于 April 20 结束。Stage 2 是不同的 proof/counterexample 竞赛，不是 mathematical theorem target |
 
 **Statement.** 给定 ETP (Equational Theories Project) 数据库中 22M 已形式化的 universal-algebra 蕴含 $E_i \implies E_j$ 真假对, 设计一份人类可读的 "cheat sheet" $C$ (短文本), 使得当 $C$ 作为 in-context prompt 喂给低成本开源 LLM $M_C$ 时, 在留出测试集上 $M_C(E_i, E_j)$ 二分类准确率显著超过 50%. 评分: $\mathrm{Acc}(M_C) - 0.5$ 最大化, 长度上界惩罚.
 
@@ -551,14 +556,15 @@
 
 | field | value |
 |---|---|
-| Status | Backlog (TIME-SENSITIVE: Bloom 论坛实时讨论中) |
+| Status | **🟠 OVERTAKEN · "untouched" claim FALSE (Oracle Round 1, 2026-04-30)** |
 | Source | https://www.erdosproblems.com/forum/thread/872 |
 | Type | OPEN / combinatorial game |
-| Untouched | ✅ 没有 follow-up arxiv paper, AlphaEvolve / Aristotle 没碰过 |
-| Omega fit | 8/10 |
-| Topic value | 8/10 |
-| Effort est | 6-8 天 |
-| Risk | med |
+| Untouched | ❌ board 主张被 Oracle 推翻 |
+| Omega fit | — |
+| Topic value | — |
+| Effort est | — |
+| Risk | — |
+| Lit staleness checked | 2026-04-30 — **OVERTAKEN**; Oracle: Erdős 页面已报告 AI-generated partial results；near-$n/2$ 问题已被负面回答，上界 $(23/48 + o(1))n$。原 board "untouched" 主张错。重新评估角度后再决定是否还可推 |
 
 **Statement.** 在 $\{2,3,\dots,n\}$ 上两玩家轮流选数加入反链 $A$ (无 $a\mid b, a\ne b\in A$), 至无法移动. 设 $L(n)$ = Prolonger 先手保底游戏长度. Erdős 问 $L(n)\ge\varepsilon n$? $L(n)\ge(1-\varepsilon)n/2$?
 
@@ -684,14 +690,15 @@
 
 | field | value |
 |---|---|
-| Status | Backlog |
+| Status | **🔴 DISCARDED · not a stated open problem (Oracle Round 1, 2026-04-30)** |
 | Source | https://arxiv.org/abs/2604.22377 (Qing-Hu Hou, Yan-Ping Mu, 2026-04-24) |
 | Type | OPEN / WZ enumeration |
-| Untouched | ✅ 7 个新 WZ seeds, "are these all" 自然 follow-up 问题 |
-| Omega fit | 6/10 |
-| Topic value | 6/10 (Zeilberger 在 Twitter/blog 直接 engage WZ 进展) |
-| Effort est | 5-7 天 |
-| Risk | med |
+| Untouched | ❌ |
+| Omega fit | — |
+| Topic value | — |
+| Effort est | — |
+| Risk | — |
+| Lit staleness checked | 2026-04-30 — **DISCARDED**; Oracle: Hou-Mu 论文给的是构造方法 + 7 个 WZ seeds，"classify all seeds" 是我们 inferred 的项目，不是论文 stated open problem，缺 clear success criterion |
 
 **Statement.** 系统构造 WZ (Wilf-Zeilberger) seeds, 论文给 7 个新 seeds. 隐含开放问题: 分类所有 WZ seeds; 该方法只给有限多.
 
@@ -752,3 +759,4 @@
 - 已确认硬碰不下来排除: Erdős #142 ($10k r_k$), #3 ($5k AP), #1/#28/#30/#39 高奖 Sidon (需 Kelley-Meka 级 NT), Polignac/Goldbach/Riemann 等超大问题, PDE/sieve/调和分析类 (Tao 12-01 prime factors, #1131 Lebesgue, #1138 prime gaps).
 - **2026-04-30**: 建 Stage 0 工具 `tools/community-outreach/lit_staleness.py` 跨 24 条 TODO 跑 erdosproblems registry + AI wiki + arXiv API + 板子自陈 status. 全 board verdict 分布: 🔴 CLOSED × 4 (T-02/T-03/T-08/T-23), 🟠 OVERTAKEN × 2 (T-01/T-19), 🟡 PARTIAL × 8 (T-14/T-15/T-17/T-18/T-20/T-21/T-22/T-24), 🟢 FRESH × 10. **新发现 3 条 Erdős registry 已收尾的 (CLOSED)**: #199 disproved (Lean) 2026-02-24, #1026 solved (Lean), #1196 proved (Lean). T-19 是 false positive (registry 显示 #872 仍 open + Bloom 论坛今天活跃, 应以板子的 forum-active signal 为准, 不被工具的关键词噪声匹配误导).
 - **当前 high-priority 重排 (2026-04-30 lit-staleness 后)**: T-04 Erdős #1191 ($1000 Sidon, 仍 open) 升至第一梯队; T-05 Erdős #7 ($25 odd covering, verifiable, 60-year fame); T-06 Erdős #699 (binomial gcd, falsifiable); T-13 Erdős #242 (Erdős-Straus, falsifiable); T-19 #872 (Bloom 论坛活跃, 工具误判但板子保留); T-22 #1163 (今天头脑风暴); T-21 Goel arxiv 1 周新.
+- **2026-04-30 (晚)**: 建 arxiv_watch.py + 接入 supervise/Round 1 freshness 注入 + 跑 Round 1 oracle discover (conv `bf5db0c917fe493f`, 13m35s ChatGPT 5.5 Pro 思考)。Oracle 比 lit_staleness 更激进，再清出 7 条 stale: 🔴 DISCARDED/CLOSED × 3 (T-12 misframed, T-17 IMO P6 已发表, T-24 not stated open), 🟠 OVERTAKEN × 4 (T-13 Erdős-Straus 已验 $10^{18}$, T-15 Hough negatively solved, T-18 Stage 1 ended Apr 20, T-19 "untouched" 主张被 Erdős 页面 AI partial+$(23/48+o(1))n$ 上界推翻)。**Oracle Round 1 TOP-3**: T-20 Sidon size-4 (best target), T-21 Sophie Germain × Fibonacci totient (strongest Omega fit), T-06 binomial gcd (pragmatic ship). **TOP-1 sub-goal**: T-20 lemma `SingerAffineNoEmbed_1024` ($A=\{0,1,3,11\}$, $B=\{0,1,4,11\}$ no affine embed in canonical Singer set $S_q\subset\mathbb{Z}/(q^2+q+1)\mathbb{Z}$ for $13\le q\le 1024$). 当晚启动 Round 2 deep on T-20.
