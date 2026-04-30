@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      1.2
+// @version      1.3
 // @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765).
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -33,7 +33,7 @@
   const STABLE_CHECKS = 3;
   const STABLE_INTERVAL = 60000;
   const MAX_WAIT = 7200000;
-  const SCRIPT_VERSION = "outreach-1.2";
+  const SCRIPT_VERSION = "outreach-1.3";
 
   let busy = false;
   // OUTREACH CHANGE: per-tab active flag via sessionStorage (NOT GM_setValue,
@@ -64,38 +64,108 @@
   }
 
   // ── Status panel (OUTREACH CHANGE: distinct color/branding) ──────────
+  // v1.3 — Multi-script-friendly: collapses to a 80×24 badge when PAUSED so
+  // it doesn't crowd a sibling oracle's panel (BEDC / publication / future).
+  // Detects sibling fixed-position panels and auto-flips position to the
+  // opposite corner if a clash is detected.
   let panel = null;
+  let panelExpanded = false;  // user can click badge to force expand even when paused
+
+  function detectSiblingCorner() {
+    // Walk all fixed-position elements (other than ours). Return "br"/"bl"/
+    // "tr"/"tl" for the corner a sibling occupies, or null. Used to flip our
+    // anchor automatically.
+    try {
+      const fixed = Array.from(document.querySelectorAll("*"))
+        .filter(el => el.id !== "outreach-oracle-panel"
+          && getComputedStyle(el).position === "fixed"
+          && el.offsetWidth >= 60 && el.offsetHeight >= 20
+          && /oracle|bedc|automath|distill/i.test(el.textContent || el.id || ""));
+      if (!fixed.length) return null;
+      const r = fixed[0].getBoundingClientRect();
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const right = (vw - r.right) < (r.left);  // closer to right edge
+      const bottom = (vh - r.bottom) < (r.top);
+      return (bottom ? "b" : "t") + (right ? "r" : "l");
+    } catch { return null; }
+  }
+
+  function preferredCorner() {
+    // If a sibling occupies bottom-right (default), move us to top-right.
+    const siblingCorner = detectSiblingCorner();
+    if (siblingCorner === "br") return { top: "12px", right: "12px", bottom: "auto", left: "auto" };
+    if (siblingCorner === "tr") return { bottom: "12px", right: "12px", top: "auto", left: "auto" };
+    if (siblingCorner === "bl") return { bottom: "12px", right: "12px", top: "auto", left: "auto" };
+    if (siblingCorner === "tl") return { bottom: "12px", right: "12px", top: "auto", left: "auto" };
+    return { bottom: "12px", right: "12px", top: "auto", left: "auto" };
+  }
+
   function ensurePanel() {
     if (panel && document.body.contains(panel)) return;
     panel = document.createElement("div");
     panel.id = "outreach-oracle-panel";
-    panel.style.cssText = `
-      position: fixed; bottom: 12px; right: 12px; z-index: 99999;
-      background: #1d1d3a; color: #9af; font-family: monospace; font-size: 11px;
-      padding: 8px 12px; border-radius: 6px; max-width: 460px; max-height: 320px;
-      overflow-y: auto; box-shadow: 0 2px 12px rgba(80,40,180,0.5); opacity: 0.93;
-      line-height: 1.4; border: 1px solid #5577cc;
-    `;
     document.body.appendChild(panel);
+  }
+
+  function applyPanelStyle() {
+    const corner = preferredCorner();
+    const collapsed = !active && !busy && !panelExpanded;
+    if (collapsed) {
+      // Tiny badge — minimum visual footprint when paused. Click to expand.
+      panel.style.cssText = `
+        position: fixed; ${Object.entries(corner).map(([k,v])=>`${k}:${v}`).join(';')};
+        z-index: 99999; background: #1d1d3a; color: #9af;
+        font-family: monospace; font-size: 11px;
+        padding: 4px 8px; border-radius: 12px;
+        cursor: pointer; opacity: 0.7;
+        border: 1px solid #5577cc;
+        box-shadow: 0 1px 4px rgba(80,40,180,0.3);
+      `;
+    } else {
+      // Full panel — visible logs, controls, status.
+      panel.style.cssText = `
+        position: fixed; ${Object.entries(corner).map(([k,v])=>`${k}:${v}`).join(';')};
+        z-index: 99999; background: #1d1d3a; color: #9af;
+        font-family: monospace; font-size: 11px;
+        padding: 8px 12px; border-radius: 6px;
+        max-width: 460px; max-height: 320px;
+        overflow-y: auto; box-shadow: 0 2px 12px rgba(80,40,180,0.5); opacity: 0.93;
+        line-height: 1.4; border: 1px solid #5577cc;
+      `;
+    }
   }
 
   function updatePanel() {
     ensurePanel();
+    applyPanelStyle();
     const statusColor = active ? (busy ? "#ff0" : "#9af") : "#f55";
     const statusText = active ? (busy ? "BUSY" : "ACTIVE") : "PAUSED";
+    const collapsed = !active && !busy && !panelExpanded;
+    if (collapsed) {
+      panel.innerHTML = `<span style="color:#cdf">[Outreach]</span> <span style="color:${statusColor};font-weight:bold">⏸</span>`;
+      panel.title = "Outreach Oracle (paused). Click to expand.";
+      // Click badge → expand
+      panel.onclick = (e) => { e.stopPropagation(); panelExpanded = true; updatePanel(); };
+      return;
+    }
+    panel.onclick = null;
     const btnText = active ? "⏸ Pause" : "▶ Start";
     const btnColor = active ? "#f55" : "#9af";
+    const collapseBtn = !active && !busy ? `<button id="outreach-collapse" title="Collapse to badge" style="background:#446;color:#9af;border:none;border-radius:3px;padding:2px 6px;cursor:pointer;font-size:10px">−</button>` : "";
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
         <b style="color:#cdf">[Outreach Oracle ${SCRIPT_VERSION}]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="outreach-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
+        ${collapseBtn}
       </div>
       <hr style="border-color:#446;margin:4px 0">
       ${lines}`;
     const btn = document.getElementById("outreach-toggle");
     if (btn) btn.addEventListener("click", toggleActive);
+    const cb = document.getElementById("outreach-collapse");
+    if (cb) cb.addEventListener("click", (e) => { e.stopPropagation(); panelExpanded = false; updatePanel(); });
   }
 
   // ── HTTP helpers ─────────────────────────────────────────────────────
