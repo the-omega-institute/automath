@@ -43,41 +43,51 @@ def conclusion_noncontractible_maxideal_binary_law_statement
 
 end conclusion_noncontractible_maxideal_binary_law_data
 
-open conclusion_noncontractible_maxideal_binary_law_data
-
 /-- Paper label: `thm:conclusion-noncontractible-maxideal-binary-law`. -/
 theorem paper_conclusion_noncontractible_maxideal_binary_law
-    (D : conclusion_noncontractible_maxideal_binary_law_data) :
-    D.conclusion_noncontractible_maxideal_binary_law_statement := by
-  rcases Omega.POM.paper_pom_max_noncontractible_fiber_mod6_phase with
-    ⟨hMain, hSecond, hThird⟩
-  refine ⟨hMain, hSecond, hThird, ?_⟩
-  intro m
-  have hm_lt : m % 6 < 6 := Nat.mod_lt m (by decide)
-  interval_cases hm : m % 6
-  · have hfib : (m + 2) % 3 = 2 := by omega
-    rw [conclusion_noncontractible_maxideal_binary_law_fibonacciBit, Omega.fib_mod_two_period,
-      hfib]
-    simp [conclusion_noncontractible_maxideal_binary_law_zeroBitPhase, hm]
-  · have hfib : (m + 2) % 3 = 0 := by omega
-    rw [conclusion_noncontractible_maxideal_binary_law_fibonacciBit, Omega.fib_mod_two_period,
-      hfib]
-    simp [conclusion_noncontractible_maxideal_binary_law_zeroBitPhase, hm]
-  · have hfib : (m + 2) % 3 = 1 := by omega
-    rw [conclusion_noncontractible_maxideal_binary_law_fibonacciBit, Omega.fib_mod_two_period,
-      hfib]
-    simp [conclusion_noncontractible_maxideal_binary_law_zeroBitPhase, hm]
-  · have hfib : (m + 2) % 3 = 2 := by omega
-    rw [conclusion_noncontractible_maxideal_binary_law_fibonacciBit, Omega.fib_mod_two_period,
-      hfib]
-    simp [conclusion_noncontractible_maxideal_binary_law_zeroBitPhase, hm]
-  · have hfib : (m + 2) % 3 = 0 := by omega
-    rw [conclusion_noncontractible_maxideal_binary_law_fibonacciBit, Omega.fib_mod_two_period,
-      hfib]
-    simp [conclusion_noncontractible_maxideal_binary_law_zeroBitPhase, hm]
-  · have hfib : (m + 2) % 3 = 1 := by omega
-    rw [conclusion_noncontractible_maxideal_binary_law_fibonacciBit, Omega.fib_mod_two_period,
-      hfib]
-    simp [conclusion_noncontractible_maxideal_binary_law_zeroBitPhase, hm]
+    (D : ℕ → ℕ) (retained : ℕ → Prop)
+    (hEven : ∀ k : ℕ, D (2 * k) = Nat.fib (k + 2))
+    (hOdd : ∀ k : ℕ, D (2 * k + 1) = 2 * Nat.fib (k + 1))
+    (hRetained : ∀ m : ℕ, retained m ↔ Odd (D m)) :
+    (∀ k : ℕ, retained (6 * k) ∧ retained (6 * k + 4)) ∧
+      (∀ k : ℕ, ¬ retained (6 * k + 1) ∧ ¬ retained (6 * k + 2) ∧
+        ¬ retained (6 * k + 3) ∧ ¬ retained (6 * k + 5)) := by
+  have fib_odd_of_mod_ne_zero :
+      ∀ n : ℕ, n % 3 ≠ 0 → Odd (Nat.fib n) := by
+    intro n hn
+    rw [Nat.odd_iff, Omega.fib_mod_two_period n]
+    have hlt : n % 3 < 3 := Nat.mod_lt n (by omega)
+    interval_cases h : n % 3
+    · exact False.elim (hn rfl)
+    · simp [Nat.fib]
+    · simp [Nat.fib]
+  have fib_not_odd_of_mod_zero :
+      ∀ n : ℕ, n % 3 = 0 → ¬ Odd (Nat.fib n) := by
+    intro n hn
+    rw [Nat.not_odd_iff, Omega.fib_mod_two_period n]
+    simp [hn, Nat.fib]
+  have two_mul_fib_not_odd : ∀ n : ℕ, ¬ Odd (2 * Nat.fib n) := by
+    intro n
+    rw [Nat.not_odd_iff]
+    omega
+  refine ⟨?_, ?_⟩
+  · intro k
+    constructor
+    · rw [hRetained, show 6 * k = 2 * (3 * k) by ring, hEven]
+      exact fib_odd_of_mod_ne_zero (3 * k + 2) (by omega)
+    · rw [hRetained, show 6 * k + 4 = 2 * (3 * k + 2) by ring, hEven]
+      exact fib_odd_of_mod_ne_zero (3 * k + 4) (by omega)
+  · intro k
+    constructor
+    · rw [hRetained, show 6 * k + 1 = 2 * (3 * k) + 1 by ring, hOdd]
+      exact two_mul_fib_not_odd (3 * k + 1)
+    constructor
+    · rw [hRetained, show 6 * k + 2 = 2 * (3 * k + 1) by ring, hEven]
+      exact fib_not_odd_of_mod_zero (3 * k + 3) (by omega)
+    constructor
+    · rw [hRetained, show 6 * k + 3 = 2 * (3 * k + 1) + 1 by ring, hOdd]
+      exact two_mul_fib_not_odd (3 * k + 2)
+    · rw [hRetained, show 6 * k + 5 = 2 * (3 * k + 2) + 1 by ring, hOdd]
+      exact two_mul_fib_not_odd (3 * k + 3)
 
 end Omega.Conclusion

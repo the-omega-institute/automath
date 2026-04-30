@@ -25,6 +25,8 @@ import Omega.Zeta.XiOutputPotentialBadModuliDensityOne
 import Omega.Zeta.XiTwoConceptCoherenceTimeDensityLaw
 import Omega.Zeta.XiWindow6ParityChargeTrigradingB3
 import Omega.Zeta.XiTimePart59abPeriodizedLogEnergyFib
+import Omega.Zeta.XiOracleCapacityExponentClosedFormTailSpectrum
+import Omega.Zeta.XiTimePart59abResonanceCartwrightExactType
 import Omega.Zeta.XiOutputPotentialActivatedBranchRigidity
 import Omega.Zeta.XiPickPoissonEnergyStabilizerCovariance
 import Omega.Zeta.XiPickPoissonEnergyBalanceEquations
