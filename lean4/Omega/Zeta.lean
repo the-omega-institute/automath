@@ -225,6 +225,7 @@ import Omega.Zeta.XiRhUnitCircleReciprocal
 import Omega.Zeta.FoldPiZetaRankJump
 import Omega.Zeta.XiRhCayleyHyperbolicity
 import Omega.Zeta.IdealLatticeMultichainPrimeStratification
+import Omega.Zeta.XiOutputPotentialRateRightEndpointLogCusp
 import Omega.Zeta.PickKernelGaugeRigidity
 import Omega.Zeta.XiPoissonFirstMismatchDissipationLeading
 import Omega.Zeta.XiPoissonVarianceMismatchTVLeading
