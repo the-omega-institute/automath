@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -142,24 +143,50 @@ def main():
     prompt_log.write_text(f"=== prompt ===\n{prompt}\n", encoding="utf-8")
     print(f"[compose] prompt logged → {prompt_log}")
 
-    if not oc._load_distill_codex_exec():
-        print(f"ERR: codex_exec import failed: {oc._CODEX_EXEC_IMPORT_ERROR}", file=sys.stderr)
+    # Note: distill.codex_exec uses --sandbox read-only by default which prevents
+    # file writes — wrong for paper composition. We invoke codex directly with
+    # --dangerously-bypass-approvals-and-sandbox so codex can create the LaTeX
+    # file at target_path. Mirrors generate_outreach_paper's invocation.
+    codex = Path(args.codex_bin)
+    if not codex.exists():
+        print(f"ERR: codex CLI not found at {codex}", file=sys.stderr)
         return 2
 
     print(f"[compose] dispatching codex (timeout {args.timeout}s)...")
     print(f"[compose] target: {target_path}")
     try:
-        output = oc._distill_codex_exec(
-            prompt,
-            work_dir=REPO_ROOT,
-            timeout_seconds=args.timeout,
-            log_tag=f"compose_paper_{args.target}",
+        result = subprocess.run(
+            [
+                str(codex),
+                "exec",
+                "--dangerously-bypass-approvals-and-sandbox",
+                "-C",
+                str(REPO_ROOT),
+                prompt,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=args.timeout,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
         )
+    except subprocess.TimeoutExpired:
+        print(f"[compose] codex timed out after {args.timeout}s", file=sys.stderr)
+        return 3
     except Exception as exc:
         print(f"[compose] codex failed: {exc}", file=sys.stderr)
         return 3
 
-    print(f"[compose] codex returned {len(output) if output else 0} chars")
+    output = (result.stdout or "")
+    err = (result.stderr or "").strip()
+    print(f"[compose] codex rc={result.returncode}, stdout={len(output)} chars, stderr={len(err)} chars")
+    if err:
+        print(f"[compose] stderr (first 500): {err[:500]}", file=sys.stderr)
+    # Save codex stdout for traceability
+    stdout_log = log_dir / f"codex_compose_{args.target}_{int(time.time())}.stdout.txt"
+    stdout_log.write_text(output, encoding="utf-8")
+    print(f"[compose] codex stdout → {stdout_log}")
 
     if target_path.exists():
         size = target_path.stat().st_size
