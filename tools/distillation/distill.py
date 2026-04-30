@@ -1475,11 +1475,19 @@ def _build_prior_feedback_block(state: DistillState) -> str:
 
     Ported from oracle_pipeline.py A-DEEP prior_feedback accumulation pattern.
     """
-    if not state.prior_feedback:
-        return ""
     lines = ["PRIOR FEEDBACK (address ALL of these):"]
+    has_feedback = False
     for entry in state.prior_feedback[-8:]:
         lines.append(f"  - {entry}")
+        has_feedback = True
+    blocked = _read_artifact_json_or_none(state, "blocked.json")
+    if isinstance(blocked, dict) and blocked.get("status") == "review_failed":
+        blocked_summary = _compact_review_feedback(blocked.get("last_review", {}))
+        if blocked_summary:
+            recent_feedback = "\n".join(state.prior_feedback[-8:])
+            if blocked_summary not in recent_feedback:
+                lines.append(f"  - Last blocked review: {blocked_summary}")
+                has_feedback = True
     if state.scores:
         score_lines = []
         for stage_key, review_data in state.scores.items():
@@ -1493,6 +1501,9 @@ def _build_prior_feedback_block(state: DistillState) -> str:
                 )
         if score_lines:
             lines.append("Score history: " + ", ".join(score_lines[-4:]))
+            has_feedback = True
+    if not has_feedback:
+        return ""
     return "\n".join(lines)
 
 
