@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      1.1
+// @version      1.2
 // @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765).
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -33,7 +33,7 @@
   const STABLE_CHECKS = 3;
   const STABLE_INTERVAL = 60000;
   const MAX_WAIT = 7200000;
-  const SCRIPT_VERSION = "outreach-1.1";
+  const SCRIPT_VERSION = "outreach-1.2";
 
   let busy = false;
   // OUTREACH CHANGE: per-tab active flag via sessionStorage (NOT GM_setValue,
@@ -716,7 +716,7 @@
   }
 
   function isStillGenerating() {
-    return !!(
+    const domSignal = !!(
       document.querySelector("button[aria-label='Stop generating']") ||
       document.querySelector("button[aria-label='Stop streaming']") ||
       document.querySelector("button[aria-label='停止生成']") ||
@@ -725,8 +725,31 @@
       document.querySelector("[class*='result-streaming']") ||
       document.querySelector("[class*='streaming']") ||
       document.querySelector("[class*='thinking']") ||
+      document.querySelector("[class*='reasoning']") ||
       document.querySelector("[class*='progress']")
     );
+    if (domSignal) return true;
+    // Text-layer probe for ChatGPT 5.5 Pro reasoning indicators that don't
+    // expose stable class hooks. The page text contains these literals while
+    // the Pro reasoner is still thinking and before the visible answer
+    // streams in. Without this fallback the userscript trips on "Pro thinking"
+    // pages that look stable but are mid-generation. (Fix: T-20 Turn 2.)
+    try {
+      const main = document.querySelector("main");
+      if (!main) return false;
+      const txt = main.innerText || "";
+      // "Pro thinking" — ChatGPT 5.5 Pro reasoning state preamble
+      // "Extended Pro" — appears in reasoner footer DURING reasoning, not after
+      // "Thought for" — only appears AFTER reasoning completes (post-think)
+      // We treat the page as still generating if the reasoning preamble is
+      // present AND the post-think marker "Thought for" is NOT yet visible,
+      // since "Thought for X min Ys" appears once reasoning is done and the
+      // answer starts streaming.
+      const proPreamble = /Pro thinking|Extended Pro|Reasoning…/i.test(txt);
+      const postThink = /Thought for\s+\d+(?:\s*m\s*\d+\s*s|\s*s|\s+min)/i.test(txt);
+      if (proPreamble && !postThink) return true;
+    } catch {}
+    return false;
   }
 
   async function waitForResponse() {
