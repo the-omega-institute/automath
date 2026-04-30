@@ -16,6 +16,7 @@ import Omega.Zeta.XiTimePart59abPeriodizedLogEnergyFib
 import Omega.Zeta.XiOutputPotentialActivatedBranchRigidity
 import Omega.Zeta.XiPickPoissonEnergyStabilizerCovariance
 import Omega.Zeta.XiPickPoissonEnergyBalanceEquations
+import Omega.Zeta.PickPoissonVandermondeResultantIdentity
 import Omega.Zeta.XiTerminalZmStokesAmplitudeSquareCubicRigidity
 import Omega.Zeta.XiTerminalZmStokesAmplitudeDegree6Minpoly
 import Omega.Zeta.XiTerminalZmStokesTEllipticBranchCoordinate
