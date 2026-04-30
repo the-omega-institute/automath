@@ -3483,3 +3483,5 @@ import Omega.Zeta.XiTimePart9zkCriticalBitSuccessPhaseDiagram
 import Omega.Zeta.XiTerminalZmDeltaJetPlaneExplicitInversion
 import Omega.Zeta.XiTimePart62dTripleFrobeniusClassfunctionTensorIndependence
 import Omega.Zeta.XiTimePart9zbbFoldpiGoldenTwoscaleStirling
+import Omega.Zeta.XiReplicaSoftcoreFullSpectrumDirectSum
+import Omega.Zeta.XiFoldbinGaugeConstantRecoversAllBernoulli
