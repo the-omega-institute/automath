@@ -1,3 +1,5 @@
+import Omega.Conclusion.Window6StableOrderunitStrictOrthogonality
+import Omega.Conclusion.TateResolutionShadowBifurcationRigidity
 import Omega.Conclusion.FixedresolutionBoundaryGodelMomentboxEquivalence
 import Omega.Conclusion.Window6AffineCompletionDefectLaw
 import Omega.Conclusion.Window6OutputDiscriminantDegreeEqualsConductor21SecondMoment
