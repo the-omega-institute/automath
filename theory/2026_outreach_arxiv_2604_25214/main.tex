@@ -202,29 +202,7 @@ pairing
 is nondegenerate.  Second, if \(w\in F\setminus K\), then \(K(w)=F\).
 Indeed, \([K(w):K]\) divides \([F:K]=3\), and it is not \(1\).
 
-\subsection*{Multiplier and Frobenius orbits}
-
-Let \(q=p^f\) and \(v=q^2+q+1\).  For \(D\subseteq \Z_v\), write
-\[
- D^{(p)}=\{pd:d\in D\}.
-\]
-The classical multiplier theorem for cyclic planar difference sets of
-prime-power order, in the form recorded by Huang and Schmidt, states
-that every cyclic planar difference set of order \(q=p^f\) is equivalent
-to a difference set satisfying
-\[
- D^{(p)}=D.
-\]
-Thus, after equivalence, \(D\) is a union of orbits for the map
-\(x\mapsto px\) on \(\Z_v\).  We write
-\[
- [x]=\{p^i x\bmod v:i\geq 0\}
-\]
-for such an orbit.  The exact orbit equations used below are obtained
-by expanding the group-ring equation \(DD^{(-1)}=q+\Z_v\) after writing
-\(D\) as a union of these Frobenius or multiplier orbits.
-
-\section{Main results}
+\subsection*{Trace-rank interface}
 
 \begin{lemma}[Trace-rank criterion]
 \label{lem:trace-rank}
@@ -274,6 +252,30 @@ some \(\alpha^t\), and replacing \(t\) by its class modulo \(v\) does
 not change membership in \(D_q\), because \(\alpha^v\in K^\times\) and
 \(K^\times\) preserves trace zero.
 \end{proof}
+
+\subsection*{Multiplier and Frobenius orbits}
+
+Let \(q=p^f\) and \(v=q^2+q+1\).  For \(D\subseteq \Z_v\), write
+\[
+ D^{(p)}=\{pd:d\in D\}.
+\]
+The classical multiplier theorem for cyclic planar difference sets of
+prime-power order, in the form recorded by Huang and Schmidt, states
+that every cyclic planar difference set of order \(q=p^f\) is equivalent
+to a difference set satisfying
+\[
+ D^{(p)}=D.
+\]
+Thus, after equivalence, \(D\) is a union of orbits for the map
+\(x\mapsto px\) on \(\Z_v\).  We write
+\[
+ [x]=\{p^i x\bmod v:i\geq 0\}
+\]
+for such an orbit.  The exact orbit equations used below are obtained
+by expanding the group-ring equation \(DD^{(-1)}=q+\Z_v\) after writing
+\(D\) as a union of these Frobenius or multiplier orbits.
+
+\section{Main results}
 
 \begin{theorem}[Singer-affine obstruction for all prime powers]
 \label{thm:singer}
@@ -563,6 +565,45 @@ impossible for a normalized \(41\)-invariant difference set.
 \QFortyOneForcedCores
 \end{proof}
 
+\begin{lemma}[Local \(q=41\) survivor scan]
+\label{lem:q41-survivors}
+Keep the notation of Lemma~\ref{lem:q41}.  For
+\(S\in\{A,B\}\) and \(\tau\in\Z_{1723}\), let
+\[
+ \Lambda_S(\tau)=\{[\tau+s]:s\in S\},
+\]
+with repeated point-orbits identified.  Call \(\tau\) a local survivor
+if no forced point \(\tau+s\) is congruent to \(0\), if every forced
+internal difference list has size \(2\), if every forced cross
+difference list for two distinct orbits in \(\Lambda_S(\tau)\) has size
+\(6\), and if all of these forced difference-orbits are distinct.  The
+script-verified local survivor counts are
+\QFortyOneSurvivorTable
+\end{lemma}
+
+\begin{proof}
+If a normalized \(41\)-invariant difference set contains \(\tau+S\),
+then it must select every orbit in \(\Lambda_S(\tau)\).  A forced point
+equal to \(0\) is impossible because the zero orbit is not present in
+any normalized difference set.  For each selected orbit \(O\), the
+internal difference-orbits with \(c_{O,L}>0\) already contribute to the
+right-hand side of the exact-cover equation for \(L\).  For each
+selected unordered pair \(O\ne P\), the cross difference-orbits with
+\(c_{O,P,L}>0\) do the same.  Since every exact-cover equation in
+Lemma~\ref{lem:q41} has right-hand side \(1\), a repeated forced
+difference-orbit, or a forced internal or cross list smaller than the
+generic sizes \(2\) and \(6\), is an immediate local contradiction.
+Thus the displayed predicate is the necessary local test used in the
+scan.  It is not asserted to be sufficient for completion to a
+difference set.
+
+\QFortyOneAuditBlock
+The script constructs the \(574\) nonzero \(41\)-orbits, applies exactly
+the local survivor predicate above to all \(1723\) translations, and then
+quotients the surviving translations by multiplication by \(41\).  This
+gives the displayed table.
+\end{proof}
+
 \section{Discussion and open questions}
 
 Theorem \ref{thm:singer} closes the Singer affine-orbit part of Niu's
@@ -593,13 +634,12 @@ for \(A\), or
 \[
  X_{[\tau]}=X_{[\tau+1]}=X_{[\tau+4]}=X_{[\tau+11]}=1
 \]
-for \(B\).  A direct forced-core scan at \(q=41\) leaves many locally
-admissible translations.  The scan uses the same strict local
-exact-cover test as Lemma~\ref{lem:q41}: the four forced point-orbits
-must be nonzero and distinct, and the \(44\) forced internal and cross
-difference-orbits must be distinct.
-\QFortyOneAuditBlock
-\QFortyOneSurvivorTable
+for \(B\).  A direct local forced-orbit scan at \(q=41\) leaves many
+locally admissible translations, as recorded in
+Lemma~\ref{lem:q41-survivors}.
+That scan first identifies repeated forced point-orbits; in the generic
+four-orbit case, it is exactly the \(44\)-forced-difference-orbit test
+displayed in Lemma~\ref{lem:q41}.
 Thus the frontier is not a one-line multiplier collision.  A certificate
 of infeasibility for every surviving \(\tau\)-orbit would prove the
 \(q=41\) case.  Conversely, a feasible solution would produce a cyclic
