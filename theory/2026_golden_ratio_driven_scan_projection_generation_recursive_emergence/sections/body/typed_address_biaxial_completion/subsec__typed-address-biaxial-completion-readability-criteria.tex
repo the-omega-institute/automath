@@ -200,6 +200,64 @@ F_{\Sigma_{\hat u}}(a)\neq\varnothing
 \Bigr).
 \]
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{theorem}[三轴证书纤维的基变下降与协议残差分类]\label{distill:grothendieck-relative_certificate_base_change_stability-typed-address-fiber-descent-residue}
+沿用定义 \ref{def:typed-address-biaxial-completion-three-axis-address} 与定义 \ref{def:typed-address-biaxial-completion-certificate-fiber}。设
+\[
+a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}})\in\operatorname{Addr}^{\sharp}(\Sigma_{\hat u})
+\]
+在一个有限覆盖 nerve \(\mathcal N\) 上有局部证书族 \(s_i\in F_{\Sigma_{\hat u}}(a_i)\)。设重叠上给定有限阿贝尔系数群 \(\bar A\) 中的 reduced residual
+\[
+\bar h_{ij}\in \bar A,\qquad \bar h_{ji}=-\bar h_{ij}.
+\]
+令 \(\nu\) 为允许基变，并设 \(\nu\) 将该覆盖拉回为 \(\mathcal N_\nu\)，顶点映射记为 \(r:I_\nu\to I\)，系数同态记为 \(\phi_\nu:\bar A\to\bar A_\nu\)。定义拉回边账本
+\[
+(\nu^\flat\bar h)_{\alpha\beta}:=\phi_\nu(\bar h_{r(\alpha)r(\beta)}).
+\]
+若 \(\nu\) 通过构造门、刚性门与障碍门，则：
+\begin{enumerate}
+  \item 若 \(\delta\bar h=0\)，则 \(\delta(\nu^\flat\bar h)=0\)，且
+  \[
+  [\nu^\flat\bar h]=\nu^\flat[\bar h]\in \check H^1(\mathcal N_\nu;\bar A_\nu).
+  \]
+  \item 若存在顶点势 \(u_i\in\bar A\) 使 \(\bar h_{ij}=u_j-u_i\)，则 \(u_\alpha^\nu:=\phi_\nu(u_{r(\alpha)})\) 杀死拉回 residual，即
+  \[
+  (\nu^\flat\bar h)_{\alpha\beta}=u_\beta^\nu-u_\alpha^\nu,
+  \]
+  因而拉回后的局部证书粘接为某个
+  \[
+  s_\nu\in F_{\Sigma_{\hat u}}(\nu^\#a).
+  \]
+  \item 反过来，若拉回后所有局部纤维非空、构造门与刚性门均未失败，但
+  \[
+  F_{\Sigma_{\hat u}}(\nu^\#a)=\varnothing,
+  \]
+  则恰有两类互斥协议残差：要么 \(\delta(\nu^\flat\bar h)\ne0\)，此时失败是高阶重叠 incidence failure；要么 \(\delta(\nu^\flat\bar h)=0\) 且 \([\nu^\flat\bar h]\ne0\)，此时失败是 reduced holonomy obstruction。两者均属于定义 \ref{def:typed-address-biaxial-completion-null-trichotomy} 中的 \(\mathrm{NULL}_{\mathrm{prot}}\) 子型。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由障碍门，\(\phi_\nu\) 是系数同态，并且拉回与 \v{C}ech coboundary 交换。对任意三重重叠 \((\alpha,\beta,\gamma)\) 有
+\[
+(\delta\nu^\flat\bar h)_{\alpha\beta\gamma}
+=\phi_\nu(\bar h_{r(\beta)r(\gamma)}-\bar h_{r(\alpha)r(\gamma)}+\bar h_{r(\alpha)r(\beta)})
+=\phi_\nu((\delta\bar h)_{r(\alpha)r(\beta)r(\gamma)}).
+\]
+故 \(\delta\bar h=0\) 推出 \(\delta(\nu^\flat\bar h)=0\)，并且 coboundary 的拉回仍为 coboundary，所以上同调类按 \(\nu^\flat\) 传递。
+
+若 \(\bar h_{ij}=u_j-u_i\)，则按定义
+\[
+(\nu^\flat\bar h)_{\alpha\beta}
+=\phi_\nu(u_{r(\beta)}-u_{r(\alpha)})
+=u_\beta^\nu-u_\alpha^\nu.
+\]
+构造门保证拉回后的 \(\nu^*s_i\) 仍属于相应局部证书纤维，刚性门保证重置 residual 后的重叠相容是对象层相容而非实现层相似。于是由命题 \ref{prop:typed-address-biaxial-completion-readable-fiber} 的粘接口径，局部证书粘接为全局证书 \(s_\nu\)。
+
+最后设拉回后局部纤维非空而全局纤维为空，且构造与刚性均未失败。若 \(\delta(\nu^\flat\bar h)\ne0\)，则边账本不是 cocycle，上同调类不可书写，失败只能是高阶重叠 incidence failure。若 \(\delta(\nu^\flat\bar h)=0\)，则 \([\nu^\flat\bar h]\) 合法；若该类为零，前一段给出全局证书，矛盾。故该类非零。此时地址与局部协议均已成立，失败不是语义缺失；又失败发生在全局粘合协议而非 residue 单射预算，故属于 \(\mathrm{NULL}_{\mathrm{prot}}\)。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 地址接纳性、障碍消失、阈值越界与证书纤维非空分别对应定义 \ref{def:typed-address-biaxial-completion-compiled-reader} 中的四步。由命题 \ref{prop:typed-address-biaxial-completion-readable-fiber}、命题 \ref{prop:typed-address-biaxial-completion-null-exhaustive}、命题 \ref{prop:typed-address-biaxial-completion-readability-thresholds} 以及定理 \ref{thm:xi-us-deterministic-tristate} 的确定性读出，四者同时成立时读出给出唯一证书对象；反之，只要任一项失败，读出就必须落入附带见证的 \(\mathrm{NULL}\) 分支。
 \leanverified{paper\_typed\_address\_biaxial\_completion\_compiled\_readability}

@@ -333,6 +333,34 @@ E\subseteq \Gamma_p(a)
   若 \(\sup_N M_N=\infty\)，则满足如下量化泄漏性质：对每个 \(B\in\NN\)，存在 \(N\) 与一条正质量纤维 \(F\subseteq E_N\)，使得任意 \(|R|\le B\) 的有限寄存器读出 \(r:F\to R\) 都不能把 \(F\) 终端分离。
 \end{enumerate}
 \end{theorem}
+
+% --- Distillation writeback ---
+\begin{proposition}[观察者细化下非 \texorpdfstring{$\mathsf{NULL}$}{NULL} 断言的四门残差分类]\label{distill:grothendieck-relative_certificate_base_change_stability-observer-refinement-residue-classification}
+设 \(q\le p\) 为定义 \ref{def:observer-indexed-information-frame} 中的信息状态细化。固定 \(a\in A(p)\)，并设给定一个候选拉回地址 \(a_q\) 以及在定义处的传输映射
+\[
+T_{q,p}:\Gamma_p(a)\longrightarrow \Gamma_q(a_q).
+\]
+称非 \(\mathsf{NULL}\) 断言从 \(p\) 传输到 \(q\) 成功，若 \(a_q\in A(q)\)，且存在 \(s\in\Gamma_p(a)\) 使 \(T_{q,p}(s)\in\Gamma_q(a_q)\)。若该传输失败，则存在唯一的首次失败类型：
+\begin{enumerate}
+  \item 构造残差：\(a_q\notin A(q)\)，或 \(T_{q,p}\) 在 \(s\) 上未定义，或其值不属于任何协议允许的局部截面纤维；
+  \item 刚性残差：对象存在，但类型等价、refinement equivalence 或对象层值类不被 \(T_{q,p}\) 保持；
+  \item 障碍残差：局部截面均存在，但拉回后的重叠数据没有形成合法 cocycle 或有限 incidence 账本；
+  \item 闭合残差：障碍对象合法，但其类不能由共同细化状态、顶点势或全局截面杀死。
+\end{enumerate}
+若四类残差均不存在，则地址 \(a_q\) 在状态 \(q\) 上非 \(\mathsf{NULL}\)。特别地，有限柱谓词若已经通过稳定逆系统投影登记，则其沿细化的拉回仍为有限柱谓词；相反，未登记为稳定投影谓词的朴素截断量只能产生构造残差或刚性残差，不能被直接提升为障碍类或闭合类。
+\end{proposition}
+\begin{proof}
+由推论 \ref{cor:observer-indexed-nonnull-criterion}，非 \(\mathsf{NULL}\) 等价于地址已对象化且相应局部截面集合非空。因此传输成功的第一必要条件是 \(a_q\in A(q)\) 且传输后的截面仍在 \(\Gamma_q(a_q)\) 中；否则对象尚未进入目标状态的证书纤维，失败为构造残差。
+
+排除构造残差后，拉回对象已经存在。若原状态中用于识别两个截面的 refinement equivalence、对象层值类或类型等价在 \(q\) 中不被保持，则细化把原先同一对象层证书分裂为不同证书，失败发生在刚性门，而不是重叠账本。
+
+再排除刚性残差后，所有局部截面及其比较关系均合法。此时若试图形成全局读出，唯一尚需检查的是重叠与高阶重叠数据。若拉回后的边账本不满足 cocycle 或 incidence 条件，则上同调类本身未定义，故失败为障碍残差。若 cocycle 已合法而仍无共同细化状态或全局截面杀死其类，则失败为闭合残差。四类按对象构造、刚性识别、障碍成形、闭合消去的顺序依赖，故首次失败唯一。
+
+若四类均不存在，则存在 \(T_{q,p}(s)\in\Gamma_q(a_q)\)，故由推论 \ref{cor:observer-indexed-nonnull-criterion} 得到 \(q\) 上非 \(\mathsf{NULL}\)。有限柱谓词的拉回只是稳定逆系统中有限层子集的逆像，仍由有限多个原子与布尔运算生成，故保持有限柱形式。朴素截断量若未通过稳定投影登记，则尚未给出对象层地址；即使它在表面值上相等，也可能在共同细化中分裂，故只能落入构造或刚性残差。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 因为 \(\chi\) 是 \(E\) 的函数，条件熵链式法则给出
 \[

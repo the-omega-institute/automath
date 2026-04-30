@@ -371,6 +371,40 @@ R_q:=|\mu^-_q|/\sqrt{r_q}
 \)
 在该窗口内满足式 \eqref{eq:fold_collision_observable_minpoly_negative_real_dominance_q9_13} 的可复算数值（均严格大于 \(1\)）。
 \end{proposition}
+
+% --- Distillation writeback ---
+\begin{proposition}[可观测最小多项式证书的相对稳定性与实现核残差]\label{distill:grothendieck-relative_certificate_base_change_stability-pom-minpoly-realization-residue}
+沿用命题 \ref{prop:pom-observable-minpoly-order-collapse-q9-13}、推论 \ref{cor:pom-finite-state-dimension-lower-bound-from-minpoly} 与命题 \ref{prop:pom-observable-minpoly-discriminant-ramification-q9-13} 的记号。固定 \(q\)，并令 \(P_q(\lambda)\) 为标量序列 \(S_q(m)\) 的可观测最小湮灭多项式。称允许基变 \(\nu\) 对该谱证书递推稳定，若拉回后的标量读出仍满足同一最小递推证书 \(P_q\)。则以下数据在 \(\nu\) 下稳定：
+\[
+\deg P_q,\qquad
+\deg P_q\text{ 给出的有限状态维数下界},\qquad
+P_q\bmod p_{\mathrm{irr}}\text{ 的不可约证书},\qquad
+\{p:p\mid\operatorname{Disc}(P_q)\}.
+\]
+另一方面，具体实现
+\[
+S_q(m)=u^{\mathsf T}B^m v
+\]
+中的 \((u,B,v)\)、基选择、Jordan 表示或对角化数据不由上述谱证书自动稳定。更精确地，令 \(\mathcal R_q\) 为所有给出同一标量序列 \(S_q(m)\) 的有限维三元组 \((u,B,v)\) 的类，令 \(\sim\) 为所选实现范畴中的允许同构。若存在 \((u,B,v),(u',B',v')\in\mathcal R_q\) 使二者给出同一 \(S_q(\cdot)\) 但不满足 \((u,B,v)\sim(u',B',v')\)，则
+\[
+\operatorname{Res}^{\mathrm{real}}_\nu(q):=\mathcal R_q/\!\sim
+\]
+中的非单点纤维是 realization-kernel residue。该 residue 不否定最小多项式、不可约性、Chebotarev 密度或分歧素数集的谱层结论；它只表明实现层全局声明还必须额外指定 realization carrier 及其保守性。
+\end{proposition}
+\begin{proof}
+递推稳定意味着拉回后的标量序列具有同一最小湮灭多项式 \(P_q\)。因此 \(\deg P_q\) 不变。推论 \ref{cor:pom-finite-state-dimension-lower-bound-from-minpoly} 的维数下界只使用 Cayley--Hamilton 定理与最小递推阶数，故随 \(P_q\) 保持。模素数不可约证书只断言 \(P_q\bmod p_{\mathrm{irr}}\) 在相应有限域上不可约；既然多项式未变，该证书也未变。分歧素数集由 \(\operatorname{Disc}(P_q)\) 的素因子决定，故同样稳定。
+
+现在考虑实现层。Cayley--Hamilton 说明每个三元组 \((u,B,v)\) 给出一个常系数线性递推序列；但从标量序列到实现三元组的方向一般不是单射。即使两个三元组给出完全相同的全部标量矩
+\[
+u_m:=u^{\mathsf T}B^m v=(u')^{\mathsf T}(B')^m v'\qquad(m\ge0),
+\]
+它们仍可在所选实现范畴中非同构，因为谱证书只记录可观测标量递推，而不记录不可观测子空间、基选择或实现载体的多余核。于是 \(\mathcal R_q\to\{P_q\}\) 的纤维可能非单点。
+
+这种非单点纤维不影响前一段的任何谱层结论：最小多项式、次数、模不可约性与判别式分歧集均只依赖 \(P_q\)。它只阻止把可观测谱证书提升为某个具体实现模型的基变刚性。故未指定 realization carrier 与保守 realization map 时，最坏坏例子应登记为 \(\operatorname{Res}^{\mathrm{real}}_\nu(q)\)，而不是登记为 POM 谱定理失败。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \begin{proof}
 由脚本 \path{scripts/exp_fold_collision_observable_minpoly_galois_audit_q9_13.py} 对 \(P_q\) 的全部根做高精度数值求解，并逐一比较模长得到：除 Perron 根外，最大模根为唯一负实根。
 相应地，递推解的谱展开中该根贡献的符号为 \((\mu^-_q)^m=(-1)^m|\mu^-_q|^m\)，故出现交替修正；比率 \(R_q\) 的数值即由该根与 \(r_q\) 直接代入定义得到。证毕。
