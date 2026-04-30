@@ -1,4 +1,5 @@
 import Omega.Zeta.XiEndpointFluxComputableByFiniteCMV
+import Omega.Zeta.XiFoldAlgorithmicHolographicLedger
 import Omega.Zeta.XiGridScanAliasingThreshold
 import Omega.Zeta.XiBinfoldCapacityAtomicMeasureUniqueRecovery
 import Omega.Zeta.XiJoukowskyCapacityEquilibriumMeasure
