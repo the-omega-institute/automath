@@ -1,6 +1,7 @@
 import Omega.Zeta.NullZ2CechObstructionSingleSourceW1
 import Omega.Zeta.XiTimePart9zdWindow6ThreeSiteTodaMolecule
 import Omega.Zeta.XiJoukowskyEllipseMahlerGreen
+import Omega.Zeta.XiJoukowskyEllipseDefectNonnegativityIntervalLimit
 import Omega.Zeta.XiEndpointFluxComputableByFiniteCMV
 import Omega.Zeta.XiFoldAlgorithmicHolographicLedger
 import Omega.Zeta.XiGridScanAliasingThreshold
@@ -221,6 +222,7 @@ import Omega.Zeta.IdealLatticeMultichainPrimeStratification
 import Omega.Zeta.PickKernelGaugeRigidity
 import Omega.Zeta.XiPoissonFirstMismatchDissipationLeading
 import Omega.Zeta.XiPoissonVarianceMismatchTVLeading
+import Omega.Zeta.XiDoubleCentralExtensionUniversalStrictification
 import Omega.Zeta.XiPrimeHardcoreGibbsCLT
 import Omega.Zeta.XiPoissonFdivSixthOrderMu3Mu4
 import Omega.Zeta.XiPoissonKlSixthOrderRefinedBinomials
