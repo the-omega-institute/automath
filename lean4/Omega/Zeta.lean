@@ -3417,3 +3417,5 @@ import Omega.Zeta.XiS4IsotypicPeriodMapMaximalDegeneration
 import Omega.Zeta.XiRhCriticalBeforeNearestComplexBranch
 import Omega.Zeta.XiPoissonCauchyToeplitzPronyAtomicRecovery
 import Omega.Zeta.XiWindow6StayIndices227
+import Omega.Zeta.LocalizedConnectedLieQuotientCircleRigidity
+import Omega.Zeta.TailOffsetsMaxfiberTripleClosure
