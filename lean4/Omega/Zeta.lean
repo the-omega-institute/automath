@@ -225,6 +225,7 @@ import Omega.Zeta.XiHzomTwoChannelModsquare
 import Omega.Zeta.XiExteriorPowerDetCokerSize
 import Omega.Zeta.XiExteriorPowerJordanAffinePoincareClt
 import Omega.Zeta.XiExteriorPowerJordanSchubert
+import Omega.Zeta.XiTerminalSemidirGodelRegisterFaithful
 import Omega.Zeta.XiFoldbinAuditedEvenCenterCollapseAbelFullRank
 import Omega.Zeta.XiTimePart9eShiftedHankelPencilDiagonalization
 import Omega.Zeta.XiPoissonDefectMeasureMultipoleFingerprintClassification
