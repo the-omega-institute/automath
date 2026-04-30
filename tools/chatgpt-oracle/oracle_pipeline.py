@@ -103,7 +103,7 @@ CLAUDE_SUPERVISION_DIR = SCRIPT_DIR / "claude_supervision"
 RESEARCH_LEDGER_DIR = SCRIPT_DIR / "research_ledger"
 RESEARCH_LEDGER_FILE = RESEARCH_LEDGER_DIR / "research_ledger.jsonl"
 
-ORACLE_SERVER = "http://localhost:8765"
+ORACLE_SERVER = "http://127.0.0.1:8765"
 PAPERS_PUB_DIR_CONST = REPO_ROOT / "papers" / "publication"
 
 # Platform-aware Codex discovery

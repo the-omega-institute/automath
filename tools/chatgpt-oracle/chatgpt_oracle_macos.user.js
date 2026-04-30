@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge (macOS)
 // @namespace    omega-automath
-// @version      5.2
+// @version      5.4
 // @description  Multi-agent oracle bridge — open chatgpt.com/?oracle=1|2|3 for parallel review tabs. User tabs (no ?oracle=) unaffected.
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -16,12 +16,14 @@
 (function () {
   "use strict";
 
-  const SERVER = "http://localhost:8765";
+  const SERVER = "http://127.0.0.1:8765";
+  const SCRIPT_VERSION = "5.4";
   const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
   const STABLE_INTERVAL = 60000;  // check every 60 seconds
   const MAX_WAIT = 7200000;       // 120 minutes
-  const MIN_REVIEW_LENGTH = 1000; // Real reviews are 3000+ chars; anything below this is garbage
+  const DEFAULT_MIN_RESPONSE_LENGTH = 1000;
+  const REQUIRE_FOREGROUND_TO_CLAIM = false;
 
   // ── Multi-agent: detect agent_id from URL or sessionStorage ──────────
   // Open chatgpt.com/?oracle=1  → agent "oracle_1"
@@ -113,7 +115,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v5.2 ${agentLabel}]</b>
+        <b>[Oracle v${SCRIPT_VERSION} ${agentLabel}]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -156,6 +158,33 @@
         ontimeout: () => reject(new Error("timeout")),
       });
     });
+  }
+
+  function foregroundState() {
+    return `visibility=${document.visibilityState}, focus=${document.hasFocus()}`;
+  }
+
+  function isForegroundReady() {
+    if (!REQUIRE_FOREGROUND_TO_CLAIM) return true;
+    return document.visibilityState === "visible" && document.hasFocus();
+  }
+
+  async function postPhase(task_id, phase, detail = "") {
+    try {
+      await serverPost("/phase", { task_id, agent_id: AGENT_ID, phase, detail });
+    } catch {}
+  }
+
+  async function releaseTask(task_id, reason) {
+    log(`Releasing task before send: ${reason}`);
+    try {
+      await serverPost("/release", { task_id, agent_id: AGENT_ID, reason });
+    } catch (e) {
+      log(`Release failed: ${e.message}`);
+    }
+    clearTaskState();
+    busy = false;
+    updatePanel();
   }
 
   function sleep(ms) {
@@ -1132,13 +1161,14 @@
     return false;
   }
 
-  async function waitForResponse() {
+  async function waitForResponse(task_id, minResponseLength = DEFAULT_MIN_RESPONSE_LENGTH) {
     log("Waiting for ChatGPT response...");
 
     const startTime = Date.now();
     let lastText = "";
     let stableCount = 0;
     let lastLogTime = 0;
+    let lastHeartbeat = 0;
 
     while (Date.now() - startTime < MAX_WAIT) {
       await sleep(STABLE_INTERVAL);
@@ -1147,6 +1177,13 @@
       const generating = isStillGenerating();
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const mainLen = (document.querySelector("main")?.innerText || "").length;
+
+      if (Date.now() - lastHeartbeat >= 60000) {
+        lastHeartbeat = Date.now();
+        const phase = generating ? "waiting_response" : "response_observed";
+        const detail = `elapsed=${elapsed}s; extracted=${responseText.length}; page=${mainLen}; stable=${stableCount}; gen=${generating}`;
+        try { await postPhase(task_id, phase, detail); } catch {}
+      }
 
       // Periodic status log (every 2 min)
       if (elapsed - lastLogTime >= 120) {
@@ -1200,12 +1237,11 @@
 
       // Only count extracted text that's meaningful
       if (responseText.length >= 5) {
-        // HARD GATE: real Oracle reviews are 3000+ chars. Anything below
-        // MIN_REVIEW_LENGTH is thinking preamble, footer, or transition
-        // garbage. Never let it enter stability counting.
-        if (responseText.length < MIN_REVIEW_LENGTH) {
+        // HARD GATE: ignore UI chrome, thinking preambles, footers, and
+        // transition fragments before stability counting.
+        if (responseText.length < minResponseLength) {
           if (stableCount === 0) {
-            log(`Too short (${responseText.length} < ${MIN_REVIEW_LENGTH} chars) — not a real review, waiting`);
+            log(`Too short (${responseText.length} < ${minResponseLength} chars) - waiting for complete response`);
           }
           stableCount = 0;
           lastText = "";
@@ -1263,7 +1299,7 @@
 
           // Log progress for short responses
           if (responseText.length < 2000 && stableCount % 3 === 0) {
-            log(`Short response (${responseText.length} chars) — waiting for real review (${elapsed}s)`);
+            log(`Short response (${responseText.length} chars) - waiting for stable completion (${elapsed}s)`);
           }
         } else {
           stableCount = 0;
@@ -1281,17 +1317,21 @@
 
   // ── Process a task ───────────────────────────────────────────────────
   async function processTask(task) {
-    const { task_id, prompt, pdf_base64, pdf_name } = task;
-    if (!prompt) {
-      log(`Ignoring non-runnable task status for ${task_id || AGENT_ID}`);
-      return;
-    }
+    const { task_id, prompt, pdf_base64, pdf_name, min_response_length } = task;
+    const minResponseLength = Number.isFinite(Number(min_response_length))
+      ? Number(min_response_length)
+      : DEFAULT_MIN_RESPONSE_LENGTH;
     log(`=== Task: ${task_id} ===`);
-    saveTaskState(task);
     busy = true;
     updatePanel();
 
     try {
+      if (!isForegroundReady()) {
+        await releaseTask(task_id, `tab_not_foreground (${foregroundState()})`);
+        return;
+      }
+      await postPhase(task_id, "foreground_claimed", foregroundState());
+
       // Navigate to a fresh chat page if we're not already on one.
       // IMPORTANT: Only redirect if we're actively processing a task.
       // Never hijack the user's normal ChatGPT browsing.
@@ -1309,7 +1349,7 @@
       }
 
       // ACK the task (only after we're on the right page)
-      try { await serverPost("/ack", { task_id, agent_id: AGENT_ID }); } catch {}
+      try { await serverPost("/ack", { task_id, agent_id: AGENT_ID, phase: "page_ready" }); } catch {}
 
       setTaskPhase("processing");
 
@@ -1323,6 +1363,11 @@
         throw new Error("Prompt input not found after 30s wait");
       }
       log("Page ready");
+      if (!isForegroundReady()) {
+        await releaseTask(task_id, `lost_foreground_before_prompt (${foregroundState()})`);
+        return;
+      }
+      await postPhase(task_id, "prompt_ready", foregroundState());
 
       // Upload PDF if present
       if (pdf_base64) {
@@ -1340,6 +1385,7 @@
 
       // Store prompt text for response extraction
       setSentPrompt(prompt);
+      await postPhase(task_id, "prompt_inserted", `chars=${prompt.length}; ${foregroundState()}`);
 
       // Wait for send button to become enabled (upload + text both ready)
       log("Waiting for send button to enable...");
@@ -1363,6 +1409,7 @@
       if (!sent) {
         throw new Error("Failed to click send");
       }
+      await postPhase(task_id, "sent", foregroundState());
 
       // Wait for URL change — ChatGPT redirects from chatgpt.com to
       // chatgpt.com/c/{id} after accepting a message. This is critical:
@@ -1391,7 +1438,8 @@
 
       // Capture page state NOW (on the conversation page, not homepage)
       capturePostSendState();
-      const response = await waitForResponse();
+      await postPhase(task_id, "waiting_response", `url=${window.location.href.slice(-80)}`);
+      const response = await waitForResponse(task_id, minResponseLength);
 
       if (!response || response.length < 5) {
         throw new Error(`Response too short or empty (${response?.length || 0} chars)`);
@@ -1431,8 +1479,15 @@
       active = GM_getValue(GM_KEY("oracle_active"), true);
       if (active && !busy) {
         try {
+          if (!isForegroundReady()) {
+            if (logHistory.length === 0 || !logHistory[logHistory.length - 1].includes("waiting for foreground")) {
+              log(`ACTIVE but waiting for foreground before polling (${foregroundState()})`);
+            }
+            await sleep(POLL_INTERVAL);
+            continue;
+          }
           const task = await serverGet(`/task?agent=${AGENT_ID}`);
-          if (task && task.task_id && task.status !== "idle" && task.prompt) {
+          if (task && task.task_id && task.status !== "idle") {
             // Double-check active right before processing
             if (!GM_getValue(GM_KEY("oracle_active"), true)) {
               log("Task available but oracle is PAUSED — skipping");
@@ -1454,7 +1509,7 @@
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
     const agentLabel = AGENT_ID.replace("oracle_", "#");
-    log(`Oracle Bridge v5.0 agent ${agentLabel} — ${active ? "ACTIVE" : "PAUSED"}`);
+    log(`Oracle Bridge v${SCRIPT_VERSION} agent ${agentLabel} — ${active ? "ACTIVE" : "PAUSED"}`);
 
     // Check if WE navigated here (not the user clicking around)
     const phase = getTaskPhase();
@@ -1479,10 +1534,8 @@
 
       // Re-fetch this agent's pending task from the server
       try {
-        const task = await serverGet(
-          `/task?agent=${AGENT_ID}&resume=${encodeURIComponent(navTaskId)}`
-        );
-        if (task && task.task_id && task.status !== "idle" && task.prompt) {
+        const task = await serverGet(`/task?agent=${AGENT_ID}`);
+        if (task && task.task_id && task.status !== "idle") {
           log(`Re-fetched task: ${task.task_id} (prompt ${task.prompt?.length || 0} chars, pdf=${!!task.pdf_base64})`);
           await processTask(task);
         } else {
