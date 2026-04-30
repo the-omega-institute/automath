@@ -3412,3 +3412,5 @@ import Omega.Zeta.XiExceptionalIntegerModelMqRank1Decomposition
 import Omega.Zeta.XiTimePart9pbBranchLatticeCumulantGevreyOscillation
 import Omega.Zeta.XiS4IsotypicPeriodMapMaximalDegeneration
 import Omega.Zeta.XiRhCriticalBeforeNearestComplexBranch
+import Omega.Zeta.XiPoissonCauchyToeplitzPronyAtomicRecovery
+import Omega.Zeta.XiWindow6StayIndices227

@@ -2921,3 +2921,4 @@ import Omega.Conclusion.BinfoldSingleChi2ReconstructsFisherLeCamGeometry
 import Omega.Conclusion.PrimeLogUnweightedEulerNotRhPole
 import Omega.Conclusion.RhConstantFlowAugmentationInertness
 import Omega.Conclusion.S4StandardSubgroupRootblockAtlas
+import Omega.Conclusion.FourierJoukowskyCharacterCompatibility
