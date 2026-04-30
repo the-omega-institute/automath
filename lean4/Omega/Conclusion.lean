@@ -1,3 +1,4 @@
+import Omega.Conclusion.Window6BoundaryOnebitEighteenquotientGroupoidSplitting
 import Omega.Conclusion.Window6StableOrderunitStrictOrthogonality
 import Omega.Conclusion.TateResolutionShadowBifurcationRigidity
 import Omega.Conclusion.FixedresolutionBoundaryGodelMomentboxEquivalence
