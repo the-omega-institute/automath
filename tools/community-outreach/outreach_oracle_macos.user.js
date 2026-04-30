@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Outreach Oracle Bridge (macOS, multi-turn)
 // @namespace    omega-outreach
-// @version      1.0
+// @version      1.1
 // @description  Outreach-pipeline ChatGPT bridge with multi-turn follow-up support. Talks to outreach_oracle_server.py on :8766. Distinct from the paper-pipeline oracle (which is single-shot on :8765).
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -33,11 +33,17 @@
   const STABLE_CHECKS = 3;
   const STABLE_INTERVAL = 60000;
   const MAX_WAIT = 7200000;
-  const SCRIPT_VERSION = "outreach-1.0";
+  const SCRIPT_VERSION = "outreach-1.1";
 
   let busy = false;
-  // OUTREACH CHANGE: namespaced state keys
-  let active = GM_getValue("outreach_active", false);
+  // OUTREACH CHANGE: per-tab active flag via sessionStorage (NOT GM_setValue,
+  // which is cross-tab and caused new ChatGPT windows the user opens for
+  // personal use to inherit ACTIVE state and start stealing tasks).
+  // Each tab now opts in independently by clicking the dashboard toggle.
+  let active = (() => {
+    try { return sessionStorage.getItem("outreach_active") === "1"; }
+    catch { return false; }
+  })();
 
   // ── Logging ──────────────────────────────────────────────────────────
   const logHistory = [];
@@ -52,8 +58,8 @@
 
   function toggleActive() {
     active = !active;
-    GM_setValue("outreach_active", active);
-    log(active ? "ACTIVATED — polling will start" : "PAUSED — your ChatGPT is free");
+    try { sessionStorage.setItem("outreach_active", active ? "1" : "0"); } catch {}
+    log(active ? "ACTIVATED — polling will start (this tab only)" : "PAUSED — your ChatGPT is free");
     updatePanel();
   }
 
@@ -1058,14 +1064,18 @@
   }
 
   // ── Main loop ────────────────────────────────────────────────────────
+  function _readActive() {
+    try { return sessionStorage.getItem("outreach_active") === "1"; }
+    catch { return false; }
+  }
   async function pollLoop() {
     while (true) {
-      active = GM_getValue("outreach_active", false);
+      active = _readActive();
       if (active && !busy) {
         try {
           const task = await serverGet(`/task?agent=${encodeURIComponent(agentId())}`);
           if (task && task.task_id && task.status !== "idle") {
-            if (!GM_getValue("outreach_active", false)) {
+            if (!_readActive()) {
               log("Task available but PAUSED — skipping");
             } else {
               // OUTREACH ADD: if we already had an in-flight task and the
