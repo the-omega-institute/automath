@@ -2940,3 +2940,4 @@ import Omega.Conclusion.PrimeLogUnweightedEulerNotRhPole
 import Omega.Conclusion.RhConstantFlowAugmentationInertness
 import Omega.Conclusion.S4StandardSubgroupRootblockAtlas
 import Omega.Conclusion.Window6AnomalyPhaseBudgetRigidity
+import Omega.Conclusion.PoissonCauchyI1SeventhOrderExpansion

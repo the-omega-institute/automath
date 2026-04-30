@@ -3429,3 +3429,5 @@ import Omega.Zeta.LocalizedConnectedLieQuotientCircleRigidity
 import Omega.Zeta.TailOffsetsMaxfiberTripleClosure
 import Omega.Zeta.XiScanFingerprintMinimalContractionRealization
 import Omega.Zeta.XiRiemannSiegelAttractionRate
+import Omega.Zeta.XiPadicBranchEntropySaturationLaw
+import Omega.Zeta.XiTimePart9zkCriticalBitSuccessPhaseDiagram
