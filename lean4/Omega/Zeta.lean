@@ -22,6 +22,7 @@ import Omega.Zeta.XiHardyInnerCharacterization
 import Omega.Zeta.XiTimePart9n1dPrimeRegisterOutputRankThreshold
 import Omega.Zeta.XiTimePart53daEquivariantBoundaryCodingOrderSix
 import Omega.Zeta.XiToeplitzNegativeSquaresEqualsBlaschkeDefect
+import Omega.Zeta.XiToeplitzFailureClosedChain
 import Omega.Zeta.XiToeplitzNegativeSpectrumMarginThreshold
 import Omega.Zeta.XiToeplitzNegativeRegularizedDeterminantLimit
 import Omega.Zeta.XiTimePart9qPattersonSullivanBoundaryDimension
