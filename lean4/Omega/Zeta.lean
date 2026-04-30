@@ -3481,3 +3481,4 @@ import Omega.Zeta.XiPadicBranchEntropySaturationLaw
 import Omega.Zeta.XiTimePart9zkCriticalBitSuccessPhaseDiagram
 import Omega.Zeta.XiTerminalZmDeltaJetPlaneExplicitInversion
 import Omega.Zeta.XiTimePart62dTripleFrobeniusClassfunctionTensorIndependence
+import Omega.Zeta.XiTimePart9zbbFoldpiGoldenTwoscaleStirling
