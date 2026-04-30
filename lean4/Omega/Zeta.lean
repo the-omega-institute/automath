@@ -3510,3 +3510,5 @@ import Omega.Zeta.XiFoldbinGaugeConstantRecoversAllBernoulli
 import Omega.Zeta.XiTimePart70abExtremalFibersTerminalBitLocalization
 import Omega.Zeta.XiFibonacciLeyangHaarEquidistribution
 import Omega.Zeta.XiFibonacciLeyangNaturalBoundary
+import Omega.Zeta.XiLeyangBoundarySupportFunctionRootSystem
+import Omega.Zeta.XiAnchoredCapacityExtremalStabilityQuant

@@ -3027,3 +3027,4 @@ import Omega.Conclusion.Window6SchurFlatteningNotQuotient
 import Omega.Conclusion.MaxNoncontractibleFiberExponentialRate
 import Omega.Conclusion.Window6GaussianCompatibleOddDecoupling
 import Omega.Conclusion.FiniteModalCollisionEnergyIncompleteness
+import Omega.Conclusion.ThreeEndCertificateOrthotopeRigidity
