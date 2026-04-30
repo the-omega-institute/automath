@@ -3357,3 +3357,5 @@ import Omega.Zeta.XiTimePart9zbhaCenteredCompletionCompleteBernsteinRh
 import Omega.Zeta.XiTimePart62dSolenoidKroneckerRoseLissajousLift
 import Omega.Zeta.XiResonancePencilReconstruction
 import Omega.Zeta.XiSmithLossSpectrumPlateauStartTotalLoss
+import Omega.Zeta.XiSmithVolumeRecoveredFromPadicPlatform
+import Omega.Zeta.XiSymqGoldenCqMod5SecondDifferenceSmith
