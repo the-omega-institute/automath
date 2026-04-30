@@ -1692,6 +1692,38 @@ def _family_specific_deepening_contract(focused_family: Optional[dict[str, Any]]
                 "  condition; do not overstate it as an intrinsic Omega theorem.",
             ]
         )
+    if family_slug == "entropy_increment_closure":
+        return "\n".join(
+            [
+                "FAMILY-SPECIFIC LAST-MILE CONTRACT:",
+                "- This family has failed when entropy language was used only as a",
+                "  definitional restatement. A theorem-level writeback must prove a",
+                "  nontrivial quantitative consequence: an entropy drop identity with",
+                "  a strictness criterion, a register-cardinality lower bound, or a",
+                "  finite stopping-time bound derived from a positive increment.",
+                "- Do not state a boxed normal-form identity that is merely the",
+                "  definition of an accepted set, construction set, or rigidity set.",
+                "  If the result is only a normal-form definition, output it as a",
+                "  definition and omit theorem-level closure language.",
+                "- If you use infinite-budget leak language, define the finite budget",
+                "  model first, then prove divergence as a quantified statement such",
+                "  as: for every B there is a finite ambiguity fibre that no register",
+                "  with at most B values can terminally separate. Do not use the phrase",
+                "  as an informal semantic conclusion.",
+                "- Keep theorem statements mathematical. Do not append interpretive",
+                "  paragraphs beginning with therefore/this means/in the forcing",
+                "  semantics inside theorem or proof bodies. Move such material into",
+                "  precise hypotheses or omit it.",
+                "- Avoid visible patch/log wording, especially 新增, 本次, 本轮,",
+                "  修改记录, 加入如下, 补充 A, 结论 1, and 闭环 1.",
+                "- Prefer 1-2 locally anchored writebacks over broad coverage. The",
+                "  recursive_addressing writeback should expose an entropy decrement",
+                "  or register lower bound; the fold_residual_time writeback should",
+                "  prove finite stopping from a density increment; the typed-address",
+                "  writeback should prove a real propagation or lower-bound consequence",
+                "  of construction/rigidity separation.",
+            ]
+        )
     if family_slug != "worst_counterexample_exponent_bootstrapping":
         return ""
     return "\n".join(

@@ -123,6 +123,15 @@ class ReviewFeedbackTests(unittest.TestCase):
         self.assertIn("finite set", contract)
         self.assertIn("Z_34", contract)
 
+    def test_entropy_family_contract_requires_quantitative_content(self):
+        contract = distill._family_specific_deepening_contract(
+            {"name": "entropy-increment closure"}
+        )
+
+        self.assertIn("entropy drop identity", contract)
+        self.assertIn("register-cardinality lower bound", contract)
+        self.assertIn("infinite-budget leak", contract)
+
 
 if __name__ == "__main__":
     unittest.main()
