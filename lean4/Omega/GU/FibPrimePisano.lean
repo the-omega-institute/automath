@@ -121,6 +121,17 @@ theorem paper_fibprime_pisano_rigidity_package :
   refine ⟨paper_fibprime_pisano_4n, ?_⟩
   exact paper_fibprime_congruence_p_mod_n
 
+/-- Exact GU paper-label wrapper over the Pisano-period and congruence certificates.
+    cor:gut-fibprime-pisano-4n -/
+theorem paper_gut_fibprime_pisano_4n :
+    ((Nat.fib 20 % 5 = 0 ∧ Nat.fib 21 % 5 = 1) ∧
+      (Nat.fib 10 % 5 ≠ 0 ∨ Nat.fib 11 % 5 ≠ 1) ∧
+      (Nat.fib 28 % 13 = 0 ∧ Nat.fib 29 % 13 = 1) ∧
+      (Nat.fib 14 % 13 ≠ 0 ∨ Nat.fib 15 % 13 ≠ 1)) ∧
+    (Nat.fib 7 % 7 = 6 ∧ Nat.fib 11 % 11 = 1 ∧ Nat.fib 13 % 13 = 12 ∧
+      Nat.fib 17 % 17 = 16) := by
+  exact paper_fibprime_pisano_rigidity_package
+
 /-- Sign of F_n mod n determined by n mod 20.
     cor:gut-fibprime-sign-by-n-mod20 -/
 theorem paper_fibprime_sign_by_n_mod20 :

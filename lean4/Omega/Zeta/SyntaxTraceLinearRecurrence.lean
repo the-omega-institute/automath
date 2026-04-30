@@ -29,4 +29,19 @@ theorem paper_zeta_syntax_trace_linear_recurrence {d : Nat} (hd : 0 < d)
   rw [← Fin.sum_univ_eq_sum_range] at htrace
   simpa using htrace
 
+/-- Logical obstruction: a finite-kernel trace excludes the two classical prime traces.
+    cor:zeta-syntax-ghost-incompatible-with-classical-primes -/
+theorem paper_zeta_syntax_ghost_incompatible_with_classical_primes
+    (FiniteKernelTrace VonMangoldtTrace PrimeIndicatorTrace : Prop)
+    (hFiniteKernel : FiniteKernelTrace)
+    (hVonMangoldt : FiniteKernelTrace → ¬ VonMangoldtTrace)
+    (hPrimeIndicator : FiniteKernelTrace → ¬ PrimeIndicatorTrace) :
+    ¬ (VonMangoldtTrace ∨ PrimeIndicatorTrace) := by
+  intro hTrace
+  cases hTrace with
+  | inl hVonMangoldtTrace =>
+      exact hVonMangoldt hFiniteKernel hVonMangoldtTrace
+  | inr hPrimeIndicatorTrace =>
+      exact hPrimeIndicator hFiniteKernel hPrimeIndicatorTrace
+
 end Omega.Zeta
