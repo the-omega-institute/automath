@@ -143,4 +143,12 @@ theorem paper_xi_exceptional_integer_model_mq_inverse_closed_form (q : ℕ) (hq 
     xi_exceptional_integer_model_mq_inverse_closed_form_statement q := by
   exact paper_xi_exceptional_integer_model_Mq_inverse_closed_form q hq
 
+/-- Paper label: `cor:xi-exceptional-integer-model-Mq-diophantine-parity`. -/
+theorem paper_xi_exceptional_integer_model_mq_diophantine_parity
+    (q : ℕ) (hq : 2 ≤ q) (b : Fin (q + 1) → ℤ) :
+    (∃ x : Fin (q + 1) → ℤ,
+      (xi_exceptional_integer_model_mq_det_snf_integer_matrix q).mulVec x = b) ↔
+      Even (b 0) := by
+  exact (paper_xi_exceptional_integer_model_mq_det_snf q hq).2.2 b
+
 end Omega.Zeta

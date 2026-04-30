@@ -3375,3 +3375,4 @@ import Omega.Zeta.XiFoldHiddenLogmultiplicityLaplaceCumulantClosed
 import Omega.Zeta.XiTimePart9tFourierTvGapPositiveFloor
 import Omega.Zeta.CyclicLiftResolutionLaw
 import Omega.Zeta.XiZeroTemperatureParryIrreversibleInfiniteEntropyProduction
+import Omega.Zeta.XiExceptionalIntegerModelMqRank1Decomposition
