@@ -89,14 +89,45 @@ def _cache_path(url: str, cache_dir: Path) -> Path:
     return cache_dir / f"{h}.txt"
 
 
+def _fetch_arxiv_via_nyxid(url: str, *, timeout: int = 30) -> Optional[str]:
+    """Try NyxID arxiv-api proxy. Returns None on any failure (caller falls back)."""
+    import shutil, subprocess  # noqa: PLC0415
+    nyxid = shutil.which("nyxid") or str(Path.home() / ".cargo/bin/nyxid")
+    if not Path(nyxid).exists():
+        return None
+    # Strip ARXIV_API base prefix; pass only the relative path to the proxy.
+    if not url.startswith(ARXIV_API):
+        return None
+    rel_path = url[len(ARXIV_API):]  # e.g. "?search_query=..."
+    if not rel_path.startswith("?"):
+        return None
+    proxy_path = "/query" + rel_path
+    try:
+        proc = subprocess.run(
+            [nyxid, "proxy", "request", "arxiv-api", proxy_path, "-m", "GET"],
+            capture_output=True, text=True, timeout=timeout,
+        )
+        if proc.returncode == 0 and proc.stdout:
+            return proc.stdout
+    except Exception:  # noqa: BLE001
+        pass
+    return None
+
+
 def cache_get(url: str, *, cache_dir: Path, max_age_hours: int = 24, force: bool = False, timeout: int = 30) -> str:
     cache_dir.mkdir(parents=True, exist_ok=True)
     p = _cache_path(url, cache_dir)
     if not force and p.exists() and (time.time() - p.stat().st_mtime) < max_age_hours * 3600:
         return p.read_text(encoding="utf-8")
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (omega-lit-staleness/1.0)"})
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        text = resp.read().decode("utf-8", errors="replace")
+    text: Optional[str] = None
+    # Route arXiv calls through NyxID arxiv-api when available (audit logging,
+    # polite-pool consistency). Falls back to direct urllib on any failure.
+    if url.startswith(ARXIV_API):
+        text = _fetch_arxiv_via_nyxid(url, timeout=timeout)
+    if text is None:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (omega-lit-staleness/1.0)"})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            text = resp.read().decode("utf-8", errors="replace")
     p.write_text(text, encoding="utf-8")
     return text
 

@@ -1498,17 +1498,27 @@ def build_paper_digest(
     return text[:30000]  # safety bound
 
 
-def build_candidates_block(todos: dict[str, TodoSpec]) -> str:
+def build_candidates_block(
+    todos: dict[str, TodoSpec],
+    *,
+    arxiv_hits_by_todo: Optional[dict[str, list[dict]]] = None,
+) -> str:
     """Render board TODOs as a compact block oracle can rank.
 
     Includes only fresh-ish candidates (skips ones flagged closed/overtaken
     in their status field). Truncates verbose fields to keep prompt bounded.
+
+    If `arxiv_hits_by_todo` is supplied (mapping todo_id -> list of paper
+    hits from arxiv_watch.scan_board), each candidate gets a
+    `Recent arXiv (≤window)` subsection so oracle ranking can factor in
+    freshness signal alongside board self-declared status.
     """
     parts = ["## Candidate open problems (from RESEARCH_BOARD.md)"]
     parts.append("(Skipped if status field already says 'closed' / 'overtaken'.)")
     parts.append("")
     skipped: list[str] = []
     rendered = 0
+    arxiv_hits_by_todo = arxiv_hits_by_todo or {}
     for tid in sorted(todos.keys(), key=lambda x: int(x.split("-")[1])):
         t = todos[tid]
         s = (t.status or "").lower()
@@ -1528,11 +1538,24 @@ def build_candidates_block(todos: dict[str, TodoSpec]) -> str:
             parts.append(f"- Prior (board): {t.prior[:400]}")
         if t.omega_fit_detail:
             parts.append(f"- Claimed Omega fit detail: {t.omega_fit_detail[:300]}")
+        hits = arxiv_hits_by_todo.get(tid) or []
+        if hits:
+            parts.append(f"- Recent arXiv overlap ({len(hits)} hits, freshness signal):")
+            for h in hits[:5]:
+                paper = h.get("paper", {}) if isinstance(h, dict) else {}
+                title = (paper.get("title") or "").strip()[:100]
+                pub = (paper.get("published") or "")[:10]
+                arxiv_id = (paper.get("arxiv_id") or "").strip()
+                matched = ",".join((h.get("matched_keywords") or [])[:5])
+                score = h.get("overlap_score", "?")
+                parts.append(
+                    f"    - {arxiv_id} ({pub}) score={score} matched=[{matched}] :: {title}"
+                )
         parts.append("")
         rendered += 1
     parts.append(f"(Skipped {len(skipped)} as already-closed: {', '.join(skipped)})")
     parts.append(f"(Rendered {rendered} live candidates.)")
-    return "\n".join(parts)[:30000]
+    return "\n".join(parts)[:32000]
 
 
 _DISCOVERY_PROMPT_TEMPLATE = """You are an independent senior reviewer. The Omega Project asks you to do a CAPABILITY-AWARE scope check before we commit any worker time.
@@ -1689,14 +1712,66 @@ def _parse_discovery_response(text: str) -> dict:
     return out
 
 
+def _arxiv_hits_for_round1(
+    todos: dict[str, TodoSpec],
+    *,
+    since: str = "14d",
+    max_results: int = 200,
+) -> dict[str, list[dict]]:
+    """Run arxiv_watch on the live candidate set, return hits keyed by todo_id.
+
+    Best-effort: returns {} if arxiv_watch is unavailable or fails. Round 1
+    discover keeps working even when NyxID / arxiv-api is offline; the oracle
+    just sees board self-declared status without freshness signal.
+    """
+    try:
+        import sys as _sys, pathlib as _pl  # noqa: PLC0415
+        _sys.path.insert(0, str(_pl.Path(__file__).parent))
+        import arxiv_watch  # noqa: PLC0415
+    except Exception:  # noqa: BLE001
+        return {}
+    # Skip closed/overtaken — they won't appear in the prompt anyway, no point
+    # querying arxiv for them.
+    active = {tid: t for tid, t in todos.items()
+              if not any(k in (t.status or "").lower()
+                         for k in ("closed", "overtaken", "drop", "handoff to lean4"))}
+    if not active:
+        return {}
+    try:
+        since_dt = arxiv_watch._parse_since(since)
+        papers = arxiv_watch.fetch_recent_papers(
+            categories=arxiv_watch.DEFAULT_CATEGORIES,
+            since=since_dt,
+            max_results=max_results,
+            use_nyxid=True,
+        )
+        watch_hits = arxiv_watch.scan_board(
+            todos=active, papers=papers, min_overlap=2, only_active=False,
+        )
+    except Exception as exc:  # noqa: BLE001
+        print(f"[discover] arxiv_watch failed (non-fatal): {exc}", file=sys.stderr)
+        return {}
+    by_todo: dict[str, list[dict]] = {}
+    for h in watch_hits:
+        by_todo.setdefault(h.todo_id, []).append(h.to_dict())
+    return by_todo
+
+
 def discover_targets(consultant: "OracleConsultant", todos: dict[str, TodoSpec],
                      *, timeout: int = DEFAULT_TIMEOUT,
-                     paper_digest: Optional[str] = None) -> DiscoveryReport:
+                     paper_digest: Optional[str] = None,
+                     arxiv_since: str = "14d") -> DiscoveryReport:
     """Round 1: ask oracle which board TODOs are real, valuable, doable."""
     submitted_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     if paper_digest is None:
         paper_digest = build_paper_digest()
-    candidates = build_candidates_block(todos)
+    arxiv_hits = _arxiv_hits_for_round1(todos, since=arxiv_since)
+    if arxiv_hits:
+        total_hits = sum(len(v) for v in arxiv_hits.values())
+        print(f"[discover] injecting arxiv freshness signal: "
+              f"{total_hits} hit(s) across {len(arxiv_hits)} TODO(s)",
+              file=sys.stderr)
+    candidates = build_candidates_block(todos, arxiv_hits_by_todo=arxiv_hits)
     prompt = build_discovery_prompt(paper_digest, candidates)
     task_id = f"discover_{int(time.time())}"
     prompt_log = consultant.logs_dir / f"{task_id}.prompt.txt"

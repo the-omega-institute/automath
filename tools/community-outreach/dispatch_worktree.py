@@ -895,6 +895,64 @@ def _select_top_todos(todos: dict[str, TodoSpec], n: int) -> list[str]:
     return [todo.todo_id for todo in ordered[:n]]
 
 
+def _run_arxiv_watch_for_todo(
+    todo: TodoSpec,
+    *,
+    target_log_dir: Path,
+    since: str = "14d",
+    max_results: int = 80,
+) -> dict | None:
+    """Stage 0: scan recent arXiv for papers overlapping this TODO. Best-effort.
+
+    Returns a dict with `hits` list (possibly empty) and `since`, or None on
+    catastrophic failure (we never let arxiv-watch failure abort the supervise
+    flow — the rest of the pipeline runs fine without it).
+    """
+    try:
+        import arxiv_watch  # noqa: PLC0415
+    except Exception as exc:  # noqa: BLE001
+        print(f"[arxiv_watch] import failed for {todo.todo_id}: {exc}", file=sys.stderr)
+        return None
+    out_path = target_log_dir / "arxiv_watch.json"
+    argv = [
+        "--since", since,
+        "--max-results", str(max_results),
+        "--only", todo.todo_id,
+        "--json", str(out_path),
+    ]
+    try:
+        rc = arxiv_watch.main(argv)
+    except SystemExit as exc:
+        rc = int(exc.code or 0)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[arxiv_watch] {todo.todo_id} crashed: {exc}", file=sys.stderr)
+        return None
+    if rc != 0 or not out_path.exists():
+        return None
+    try:
+        report = json.loads(out_path.read_text())
+    except Exception as exc:  # noqa: BLE001
+        print(f"[arxiv_watch] {todo.todo_id} JSON parse failed: {exc}", file=sys.stderr)
+        return None
+    hits = report.get("hits", []) or []
+    if hits:
+        # Print compact warning so supervisors see freshness signal at a glance.
+        print(f"[arxiv_watch] {todo.todo_id}: {len(hits)} recent paper(s) overlap "
+              f"(since {since}); see {out_path}", file=sys.stderr)
+        for h in hits[:3]:
+            paper = h.get("paper", {})
+            print(f"    score={h.get('overlap_score')} "
+                  f"matched={','.join(h.get('matched_keywords', []))} | "
+                  f"{paper.get('title','')[:80]} ({paper.get('published','')})",
+                  file=sys.stderr)
+    return {
+        "since": report.get("since"),
+        "papers_scanned": report.get("papers_scanned"),
+        "hits": hits,
+        "report_path": str(out_path),
+    }
+
+
 def _run_oracle_review(todo: TodoSpec, profile, *, repo_root: Path, oracle_timeout: int) -> dict | None:
     """Stage B-oracle: third-opinion review of research.md by ChatGPT Pro.
 
@@ -1170,6 +1228,8 @@ def supervise_board(
     write_latex: bool = False,
     codex_driver: bool = False,
     ship_paper: bool = False,
+    arxiv_stage0: bool = True,
+    arxiv_since: str = "14d",
 ) -> int:
     todos = parse_board(board_path)
     if not todos:
@@ -1194,6 +1254,12 @@ def supervise_board(
         profile = supervisor_profile(todo, repo_root)
         target_log_dir = run_dir / profile.slug
         target_log_dir.mkdir(parents=True, exist_ok=True)
+        # Stage 0: arXiv freshness sweep (best-effort; never blocks downstream)
+        arxiv_summary: dict | None = None
+        if arxiv_stage0:
+            arxiv_summary = _run_arxiv_watch_for_todo(
+                todo, target_log_dir=target_log_dir, since=arxiv_since,
+            )
         command_results: list[dict[str, object]] = []
         if run:
             for index, cmd in enumerate(profile.commands, start=1):
@@ -1220,6 +1286,8 @@ def supervise_board(
         )
         analysis["state_json_path"] = str(state_path)
         analysis["commands_run"] = len(command_results)
+        if arxiv_summary is not None:
+            analysis["arxiv_stage0"] = arxiv_summary
 
         # Stage B-oracle (third-opinion). Runs after the supervisor has
         # already written its analysis to state JSON, so the oracle merge sees
@@ -1364,7 +1432,10 @@ def main(argv: Iterable[str] | None = None) -> int:
                         help="Round 0 lit-staleness booster: scan recent arXiv math papers "
                              "against active board targets via NyxID arxiv-api proxy.")
     parser.add_argument("--arxiv-since", default="7d",
-                        help="With --arxiv-watch, time window (default 7d).")
+                        help="Time window for --arxiv-watch and supervise Stage 0 (default 7d).")
+    parser.add_argument("--no-arxiv-stage0", action="store_true",
+                        help="Disable the per-target arXiv freshness sweep that runs as Stage 0 "
+                             "of --supervise (default: on).")
     parser.add_argument("--draft-tweet", action="store_true",
                         help="Round 6.5: generate an X (Twitter) thread draft from pipeline "
                              "state for <todo_id>. Saves to drafts/<id>_tweet.txt for review. "
@@ -1442,6 +1513,8 @@ def main(argv: Iterable[str] | None = None) -> int:
                 write_latex=args.write_latex,
                 codex_driver=args.codex_driver,
                 ship_paper=args.ship_paper,
+                arxiv_stage0=not args.no_arxiv_stage0,
+                arxiv_since=args.arxiv_since,
             )
         return 0
 
@@ -1464,6 +1537,8 @@ def main(argv: Iterable[str] | None = None) -> int:
             write_latex=args.write_latex,
             codex_driver=args.codex_driver,
             ship_paper=args.ship_paper,
+            arxiv_stage0=not args.no_arxiv_stage0,
+            arxiv_since=args.arxiv_since,
         )
 
     if args.list or not args.todo_id:
