@@ -1539,12 +1539,19 @@ def _build_prior_feedback_block(state: DistillState) -> str:
         has_feedback = True
     blocked = _read_artifact_json_or_none(state, "blocked.json")
     if isinstance(blocked, dict) and blocked.get("status") == "review_failed":
-        blocked_summary = _compact_review_feedback(blocked.get("last_review", {}))
-        if blocked_summary:
-            recent_feedback = "\n".join(state.prior_feedback[-8:])
-            if blocked_summary not in recent_feedback:
-                lines.append(f"  - Last blocked review: {blocked_summary}")
-                has_feedback = True
+        blocked_cycle = blocked.get("depth_cycle")
+        current_cycle = state.depth_cycle
+        try:
+            same_cycle = blocked_cycle is None or int(blocked_cycle) == current_cycle
+        except (TypeError, ValueError):
+            same_cycle = False
+        if same_cycle:
+            blocked_summary = _compact_review_feedback(blocked.get("last_review", {}))
+            if blocked_summary:
+                recent_feedback = "\n".join(state.prior_feedback[-8:])
+                if blocked_summary not in recent_feedback:
+                    lines.append(f"  - Last blocked review: {blocked_summary}")
+                    has_feedback = True
     if state.scores:
         score_lines = []
         for stage_key, review_data in state.scores.items():

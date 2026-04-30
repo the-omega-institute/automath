@@ -45,12 +45,14 @@ class ReviewFeedbackTests(unittest.TestCase):
             with distill._temporary_directory(prefix="blocked_feedback_") as tmp:
                 distill.DISTILLATION_DIR = old_distillation_dir.__class__(tmp)
                 state = distill.DistillState("Bourgain")
+                state.depth_cycle = 2
                 state_dir = distill._state_dir(state.name)
                 state_dir.mkdir(parents=True)
                 (state_dir / "blocked.json").write_text(
                     json.dumps(
                         {
                             "status": "review_failed",
+                            "depth_cycle": 2,
                             "last_review": {
                                 "claude": {
                                     "score": 5,
@@ -75,6 +77,42 @@ class ReviewFeedbackTests(unittest.TestCase):
         self.assertIn("Last blocked review", block)
         self.assertIn("Packet terminology is ungrounded", block)
         self.assertIn("Define packet in target vocabulary", block)
+
+    def test_prior_feedback_ignores_stale_blocked_review_cycle(self):
+        old_distillation_dir = distill.DISTILLATION_DIR
+        try:
+            with distill._temporary_directory(prefix="blocked_feedback_") as tmp:
+                distill.DISTILLATION_DIR = old_distillation_dir.__class__(tmp)
+                state = distill.DistillState("Bourgain")
+                state.depth_cycle = 4
+                state_dir = distill._state_dir(state.name)
+                state_dir.mkdir(parents=True)
+                (state_dir / "blocked.json").write_text(
+                    json.dumps(
+                        {
+                            "status": "review_failed",
+                            "depth_cycle": 1,
+                            "last_review": {
+                                "claude": {
+                                    "score": 5,
+                                    "verdict": "revise",
+                                    "issues": ["Old packet terminology failure."],
+                                    "required_changes": [],
+                                },
+                                "minimum_score": 5,
+                                "review_backend": "claude",
+                            },
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+
+                block = distill._build_prior_feedback_block(state)
+        finally:
+            distill.DISTILLATION_DIR = old_distillation_dir
+
+        self.assertNotIn("Last blocked review", block)
+        self.assertNotIn("Old packet terminology failure", block)
 
     def test_sum_product_family_contract_rejects_tautological_obstructions(self):
         contract = distill._family_specific_deepening_contract(
