@@ -1,5 +1,6 @@
 import Omega.Zeta.XiScanToeplitzConditioningBySeparation
 import Omega.Zeta.XiComovingScanExponentialSpectralSeparation
+import Omega.Zeta.XiBasepointScanPsl2rCovariance
 import Omega.Zeta.XiBernoulliTwoPeriodizationNoLpDensity
 import Omega.Zeta.XiTerminalZMLeyangLinearTwistInfinitelyManyRationalBranchValues
 import Omega.Zeta.XiLeyangHankelPencilDominantZeros
