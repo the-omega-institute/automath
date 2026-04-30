@@ -105,4 +105,12 @@ theorem paper_chi_rigidity_full_homomorphism_package
     · left; rw [hs]; rfl
     · right; rw [hs]; rfl
 
+/-- Paper-label chi-rigidity wrapper for sign invariance under block conjugation.
+    thm:fold-groupoid-chi-rigidity -/
+theorem paper_fold_groupoid_chi_rigidity (α : Type*) [Fintype α] [DecidableEq α] :
+    (∀ σ τ : Equiv.Perm α, Equiv.Perm.sign (σ * τ * σ⁻¹) = Equiv.Perm.sign τ) ∧
+    (∀ σ ρ τ : Equiv.Perm α,
+      Equiv.Perm.sign (σ * (ρ * τ * ρ⁻¹) * σ⁻¹) = Equiv.Perm.sign τ) :=
+  ⟨sign_conj_eq_sign, sign_double_conj_eq_sign⟩
+
 end Omega.EA
