@@ -2879,3 +2879,4 @@ import Omega.Conclusion.MixedHiddenStatePrimeByPrimeMinimalSupport
 import Omega.Conclusion.SquarefreePrimeRegisterHaltingReduction
 import Omega.Conclusion.BinfoldRelativeDensityNormalizedMotherLaw
 import Omega.Conclusion.SmithLocalZetaCompleteInvariant
+import Omega.Conclusion.XiDyadicBudgetVerticalSuperexpContraction

@@ -3365,3 +3365,5 @@ import Omega.Zeta.XiResonancePencilReconstruction
 import Omega.Zeta.XiSmithLossSpectrumPlateauStartTotalLoss
 import Omega.Zeta.XiSmithVolumeRecoveredFromPadicPlatform
 import Omega.Zeta.XiSymqGoldenCqMod5SecondDifferenceSmith
+import Omega.Zeta.XiFixedFreezingConeEscortRenyiPlateau
+import Omega.Zeta.XiFoldHiddenLogmultiplicityLaplaceCumulantClosed
