@@ -226,6 +226,8 @@ import Omega.Zeta.XiFoldbinAbsoluteRenyiEntropyConstantClosed
 import Omega.Zeta.XiFoldbinRenyiDivergenceFreezingAffine
 import Omega.Zeta.XiFoldbinFiberWallcrossingRepresentation
 import Omega.Zeta.XiFoldRenyiConstantSpectrumClosedForm
+import Omega.Zeta.XiMultistageCrtMaxPrimeAdditiveControl
+import Omega.Zeta.XiCauchyPoissonFdivSixthOrderExpansion
 import Omega.Zeta.XiWindow6ResetGapFibCoupling
 import Omega.Zeta.XiWindow6ResetClockGapFrequencies
 import Omega.Zeta.XiSchurEliminationEntropyPermutationInvariantBottleneck
