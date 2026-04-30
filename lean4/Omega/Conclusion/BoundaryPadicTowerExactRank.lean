@@ -25,4 +25,18 @@ theorem paper_conclusion_boundary_padic_tower_exact_rank (D : BoundaryPadicTower
   intro ell
   simpa using Fintype.card_congr (D.fiberEquiv ell)
 
+/-- Paper label: `cor:conclusion-boundary-padic-tower-exact-slope-rigidity`. -/
+theorem paper_conclusion_boundary_padic_tower_exact_slope_rigidity
+    (p r ell card_l card_next fiberCard : ℕ) (hp : 0 < p) (hell : 1 ≤ ell)
+    (hcard_l : card_l = p ^ (ell * r))
+    (hcard_next : card_next = p ^ ((ell + 1) * r)) (hfiber : fiberCard = p ^ r) :
+    card_next = card_l * p ^ r ∧ fiberCard = p ^ r := by
+  have _ : 0 < p := hp
+  have _ : 1 ≤ ell := hell
+  refine ⟨?_, hfiber⟩
+  rw [hcard_l, hcard_next]
+  have hmul : (ell + 1) * r = ell * r + r := by
+    rw [Nat.add_mul, one_mul]
+  rw [hmul, pow_add]
+
 end Omega.Conclusion
