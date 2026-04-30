@@ -4665,6 +4665,49 @@ def _combine_review_scores(scores: list[int]) -> int:
     return high
 
 
+def _compact_review_feedback(review: dict[str, Any], max_chars: int = 1600) -> str:
+    """Build a durable one-line summary of actionable review feedback."""
+    if not isinstance(review, dict):
+        return ""
+    backend = str(review.get("review_backend", "review")).strip() or "review"
+    final_score = review.get("minimum_score", "?")
+    parts = [
+        f"review gate below {SCORE_PASS_THRESHOLD} "
+        f"(backend={backend}, final={final_score})"
+    ]
+    for name in ("codex", "claude", "oracle"):
+        reviewer = review.get(name)
+        if not isinstance(reviewer, dict) or reviewer.get("unavailable"):
+            continue
+        score = reviewer.get("score", "?")
+        verdict = str(reviewer.get("verdict", "")).strip() or "missing"
+        details = []
+        for key, label in (
+            ("issues", "issue"),
+            ("required_changes", "required_change"),
+        ):
+            raw_items = reviewer.get(key, [])
+            if isinstance(raw_items, str):
+                raw_items = [raw_items]
+            if not isinstance(raw_items, list):
+                continue
+            for item in raw_items[:3]:
+                text = re.sub(r"\s+", " ", str(item)).strip()
+                if text:
+                    details.append(f"{label}: {text}")
+        if details:
+            parts.append(
+                f"{name} score={score} verdict={verdict}: "
+                + " | ".join(details[:4])
+            )
+        else:
+            parts.append(f"{name} score={score} verdict={verdict}")
+    summary = "; ".join(parts)
+    if len(summary) > max_chars:
+        return summary[: max_chars - 3].rstrip() + "..."
+    return summary
+
+
 def _review_writebacks(
     state: DistillState,
     writebacks: list[dict[str, Any]],
@@ -4832,6 +4875,10 @@ def _review_writebacks(
         "review_backend": review_backend,
         "both_reject": both_reject,
     }
+    if not gate_passed:
+        feedback_summary = _compact_review_feedback(result)
+        if feedback_summary:
+            logger.info("Review feedback summary: %s", feedback_summary)
     return result
 
 
@@ -5315,7 +5362,8 @@ def run_stage_w(
             state.prior_feedback.append(
                 f"W attempt {attempt}: A-DEEP escalation {deep_rounds} "
                 f"(codex={review.get('codex', {}).get('score', 0)}, "
-                f"{secondary_key}={secondary_review.get('score', 0)})"
+                f"{secondary_key}={secondary_review.get('score', 0)}); "
+                f"{_compact_review_feedback(review)}"
             )
             save_state(state)
             continue
@@ -5326,7 +5374,8 @@ def run_stage_w(
         state.prior_feedback.append(
             f"W attempt {attempt}: review gate below {SCORE_PASS_THRESHOLD} "
             f"(codex={review.get('codex', {}).get('score', 0)}, "
-            f"{secondary_key}={secondary_score})"
+            f"{secondary_key}={secondary_score}); "
+            f"{_compact_review_feedback(review)}"
         )
         save_state(state)  # persist feedback in case of crash/restart
 
