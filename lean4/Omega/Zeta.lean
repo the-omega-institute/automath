@@ -3473,3 +3473,5 @@ import Omega.Zeta.XiScanFingerprintMinimalContractionRealization
 import Omega.Zeta.XiRiemannSiegelAttractionRate
 import Omega.Zeta.XiPadicBranchEntropySaturationLaw
 import Omega.Zeta.XiTimePart9zkCriticalBitSuccessPhaseDiagram
+import Omega.Zeta.XiTerminalZmDeltaJetPlaneExplicitInversion
+import Omega.Zeta.XiTimePart62dTripleFrobeniusClassfunctionTensorIndependence
