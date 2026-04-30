@@ -199,6 +199,26 @@ The assertion follows by checking every coordinate.
 
         self.assertEqual(selected_names, ["subsec__inverse-limit.tex"])
 
+    def test_writeback_target_selection_skips_remark_only_files(self):
+        remark_only = self.core_body / "rem__thin-remark.tex"
+        theorem_file = self.core_body / "subsec__inverse-limit.tex"
+        remark_only.write_text(
+            "\\begin{remark}\\label{rem:thin-remark}\nremark only.\n\\end{remark}\n",
+            encoding="utf-8",
+        )
+        theorem_file.write_text(
+            "\\begin{lemma}\\label{lem:existing-target}\nclaim.\n\\end{lemma}\n",
+            encoding="utf-8",
+        )
+
+        selected = distill._choose_writeback_targets(
+            [remark_only, theorem_file],
+            limit=2,
+        )
+        selected_names = [path.name for path in selected]
+
+        self.assertEqual(selected_names, ["subsec__inverse-limit.tex"])
+
     def test_oracle_context_limit_covers_under_budget_target_files(self):
         target = self.core_body / "long_target.tex"
         long_line = (

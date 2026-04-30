@@ -4042,9 +4042,7 @@ def _choose_writeback_targets(
             text = read_text(path)
         except OSError:
             continue
-        if path.name.startswith("para__") and not CLAIM_ENV_RE.search(text):
-            continue
-        if path.name.startswith("sec__") and not CLAIM_ENV_RE.search(text):
+        if not CLAIM_ENV_RE.search(text):
             continue
         base_lines = len(text.splitlines())
         if base_lines >= WRITEBACK_LINE_LIMIT - WRITEBACK_TARGET_LINE_HEADROOM:
