@@ -1,2 +1,122 @@
 \section{类型化地址、双轴圆维与完成化闭合：从有限递归到 prime-register 外置账本}\label{sec:typed-address-biaxial-completion}
 本章在前文已经建立的稳定折叠、递归地址化、Fibonacci-adic 完成、fold-aware restriction、圆维与残差圆维、prime-register 轴的 pro-圆维、相位圆维/寄存圆维双轴计量，以及 \(\mathrm{Read}_{\mathrm{US}}\) 的类型纪律之上，引入一个统一的完成化接口层。其目的不在于增设新的原语，而在于把有限递归轨道、完成化对象、类型化地址、双轴账本与后续动力学 \(\zeta\) 及有限部接口组织为同一条可审计前端链，从而把第 12 章与后续谱侧章节之间的过渡写成对象层、地址层与审计层同时闭合的结构。
+
+% --- Distillation writeback ---
+\begin{definition}[类型化相位门证书链]\label{distill:bourgain-multiscale_decoupling_gates-typed-phase-gate-certificate-chain}
+称一组有限数据为一条\textbf{类型化相位门证书链}，若它由有限层级
+\[
+\Sigma_0\xleftarrow{\rho_{1,0}}\Sigma_1\xleftarrow{\rho_{2,1}}\cdots\xleftarrow{\rho_{J,J-1}}\Sigma_J
+\]
+组成，其中每个 \(\Sigma_j\) 为有限集。对 \(\sigma\in\Sigma_j\) 记
+\[
+\operatorname{Ch}_j(\sigma):=\rho_{j+1,j}^{-1}(\sigma).
+\]
+每层配有有限地址集 \(A_j\)、地址读出 \(a_j:\Sigma_j\to A_j\)、整数 \(D_j\ge1\)、相位群
+\[
+\mu_{D_j}:=\{z\in\mathbb C:z^{D_j}=1\},
+\]
+相位读出 \(\theta_j:\Sigma_j\to\mu_{D_j}\)，以及投影
+\[
+\alpha_{j+1,j}:A_{j+1}\to A_j,
+\qquad
+\nu_{j+1,j}:\mu_{D_{j+1}}\to\mu_{D_j}.
+\]
+每个 \(\sigma\in\Sigma_j\) 还带有非负归一化门范数 \(\mathfrak N_{j,\sigma}\)。对每个尺度 \(j<J\)，给定例外集 \(X_j\subseteq\Sigma_j\)。对每个非例外 \(\sigma\in\Sigma_j\setminus X_j\)，给定常数 \(q_{j,\sigma},e_{j,\sigma}\ge0\)，sector 与 slab 标签
+\[
+s_{j,\sigma}:\operatorname{Ch}_j(\sigma)\to S_{j,\sigma},
+\qquad
+\ell_{j,\sigma}:\operatorname{Ch}_j(\sigma)\to L_{j,\sigma},
+\]
+对应预算 \(B^{\rm sec}_{j,\sigma}(s)\)、\(B^{\rm slab}_{j,\sigma}(\ell)\)，有限 prefix/Frostman 测试族 \(\mathcal B_{j,\sigma}\subseteq\mathcal P(\operatorname{Ch}_j(\sigma))\) 及预算 \(\beta_{j,\sigma}:\mathcal B_{j,\sigma}\to\mathbb R_{\ge0}\)，并给定 sticky 阈值 \(0<\lambda_{j,\sigma}<1\)。
+
+称非例外 \(\sigma\) 在尺度 \(j\) 上通过类型化相位门审计，若以下条件同时成立：
+\begin{enumerate}
+  \item 对每个 \(\tau\in\operatorname{Ch}_j(\sigma)\)，有
+  \[
+  \alpha_{j+1,j}(a_{j+1}(\tau))=a_j(\sigma),
+  \qquad
+  \nu_{j+1,j}(\theta_{j+1}(\tau))=\theta_j(\sigma).
+  \]
+  \item 局部门估计成立：
+  \[
+  \sum_{\tau\in\operatorname{Ch}_j(\sigma)}\mathfrak N_{j+1,\tau}
+  \le q_{j,\sigma}\mathfrak N_{j,\sigma}+e_{j,\sigma}.
+  \]
+  \item sector 与 slab 预算均成立：对所有 \(s\in S_{j,\sigma}\)、\(\ell\in L_{j,\sigma}\)，
+  \[
+  \sum_{\tau:s_{j,\sigma}(\tau)=s}\mathfrak N_{j+1,\tau}\le B^{\rm sec}_{j,\sigma}(s),
+  \qquad
+  \sum_{\tau:\ell_{j,\sigma}(\tau)=\ell}\mathfrak N_{j+1,\tau}\le B^{\rm slab}_{j,\sigma}(\ell).
+  \]
+  \item 任一子地址纤维都不 sticky：对所有 \(a\in A_{j+1}\) 满足 \(\alpha_{j+1,j}(a)=a_j(\sigma)\)，
+  \[
+  \sum_{\substack{\tau\in\operatorname{Ch}_j(\sigma)\\ a_{j+1}(\tau)=a}}\mathfrak N_{j+1,\tau}
+  \le
+  \lambda_{j,\sigma}
+  \sum_{\tau\in\operatorname{Ch}_j(\sigma)}\mathfrak N_{j+1,\tau}.
+  \]
+  \item prefix/Frostman 预算均成立：对每个 \(U\in\mathcal B_{j,\sigma}\)，
+  \[
+  \sum_{\tau\in U}\mathfrak N_{j+1,\tau}\le\beta_{j,\sigma}(U).
+  \]
+\end{enumerate}
+该证书链只是把本节中的有限递归轨道、类型化地址、相位轴与双轴审计账本压缩为同一个有限前端对象；不把任何朴素截断量默认为跨尺度不变量。
+\end{definition}
+
+\begin{theorem}[类型化相位门证书链的归一化转移与首次失败分类]\label{distill:bourgain-multiscale_decoupling_gates-typed-phase-gate-certificate-chain-transfer}
+设 \(\Sigma_0\leftarrow\cdots\leftarrow\Sigma_J\) 为定义 \ref{distill:bourgain-multiscale_decoupling_gates-typed-phase-gate-certificate-chain} 的类型化相位门证书链。令
+\[
+\mathsf E_j:=\sum_{\sigma\in\Sigma_j}\mathfrak N_{j,\sigma}.
+\]
+假设每个非例外 \(\sigma\in\Sigma_j\setminus X_j\) 均通过类型化相位门审计，并且例外 spill 预算满足
+\[
+\sum_{\sigma\in X_j}\sum_{\tau\in\operatorname{Ch}_j(\sigma)}
+\mathfrak N_{j+1,\tau}\le r_j
+\qquad(0\le j<J).
+\]
+定义
+\[
+Q_j:=
+\begin{cases}
+\max_{\sigma\in\Sigma_j\setminus X_j}q_{j,\sigma},&\Sigma_j\setminus X_j\ne\varnothing,\\
+0,&\Sigma_j\setminus X_j=\varnothing,
+\end{cases}
+\qquad
+G_j:=\sum_{\sigma\in\Sigma_j\setminus X_j}e_{j,\sigma}.
+\]
+则归一化相位门范数满足
+\[
+\mathsf E_J
+\le
+\left(\prod_{j=0}^{J-1}Q_j\right)\mathsf E_0
++
+\sum_{k=0}^{J-1}
+\left(\prod_{i=k+1}^{J-1}Q_i\right)(G_k+r_k),
+\]
+其中空乘积取 \(1\)。
+
+反过来，若某条有限证书链在上述审计语义下首次被拒绝，则存在最小尺度 \(j<J\) 与某个 \(\sigma\in\Sigma_j\)，使拒绝见证属于以下有限类型之一：类型化地址或相位投影不相容；局部门估计失败；某个 sector 或 slab 标签纤维超预算；某个子地址纤维 sticky；某个 prefix/Frostman 测试集超预算；或例外 spill 超出 \(r_j\)。因此，在该有限审计语言内，失败不会以未标记异常出现，而必带有一个可枚举的 typed-address、sector/slab、sticky、Frostman 或 spill 见证。
+\end{theorem}
+\begin{proof}
+对固定尺度 \(j\)，将 \(\mathsf E_{j+1}\) 按父层元素分解，得
+\[
+\mathsf E_{j+1}
+=\sum_{\sigma\in\Sigma_j\setminus X_j}
+\sum_{\tau\in\operatorname{Ch}_j(\sigma)}\mathfrak N_{j+1,\tau}
++\sum_{\sigma\in X_j}
+\sum_{\tau\in\operatorname{Ch}_j(\sigma)}\mathfrak N_{j+1,\tau}.
+\]
+非例外项由局部门估计控制，例外项由 spill 预算控制，因此
+\[
+\mathsf E_{j+1}
+\le
+\sum_{\sigma\in\Sigma_j\setminus X_j}
+(q_{j,\sigma}\mathfrak N_{j,\sigma}+e_{j,\sigma})+r_j
+\le Q_j\mathsf E_j+G_j+r_j.
+\]
+对该一阶递推从 \(0\) 到 \(J-1\) 迭代，即得到所示公式。
+
+现在证明失败分类。所谓证书链被接受，按定义正是所有非例外 packet 的五类原子审计条件与所有例外 spill 预算同时成立。若链被拒绝，由有限性可取最小拒绝尺度 \(j\)。在该尺度上，若所有非例外 \(\sigma\) 的五类原子条件均成立且例外 spill 亦不超出 \(r_j\)，则尺度 \(j\) 不会被拒绝，矛盾。因此必有某个原子条件失败。逐项展开定义，失败原子只能是地址/相位投影、局部门估计、sector/slab 预算、sticky 子地址纤维、prefix/Frostman 预算或例外 spill 预算之一。每一项均给出相应的有限见证，例如违规子元素、违规标签纤维、违规地址纤维、违规测试集或违规例外总和。证毕。
+\end{proof}
+
+% --- End distillation writeback ---

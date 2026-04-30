@@ -346,4 +346,94 @@ K^{\rm ph}_n(y)\ne\varnothing.
 现在证明 phantom 核判据。若 \(K^{\rm ph}_n(y)\ne\varnothing\)，则存在 \(\xi\ne\xi'\in F_\infty(y)\)，故 \(|F_\infty(y)|\ge2\)，于是 \(y\) 含 phantom 完成核。反过来，若 \(|F_\infty(y)|\ge2\)，取两点 \(\xi\ne\xi'\)。作为逆极限中两条不同兼容序列，它们必在某个有限坐标 \(n\) 上不同，否则全部坐标相同便会给出 \(\xi=\xi'\)。于是 \((\xi,\xi')\in K^{\rm ph}_n(y)\)，从而某个有限深度的 phantom 核非空。证毕。
 \end{proof}
 
+% --- Distillation writeback ---
+\begin{definition}[有限屏幕态包的干涉核审计]\label{distill:bourgain-multiscale_decoupling_gates-finite-screen-state-packet-audit}
+沿用定义 \ref{def:distill-grothendieck-finite-screen-probe-tower} 的有限屏幕探针塔，并固定
+\[
+y\in\varprojlim_nY_n,
+\qquad
+E\subseteq F_n(y)
+\]
+为某一有限屏幕层上的可见纤维子集。称 \(E\) 的一个\textbf{有限屏幕态包审计}为如下数据：一个有限划分
+\[
+E=\bigsqcup_{P\in\mathcal P}P,
+\]
+一个有限局部 lift 集 \(L\)，一个落点映射 \(\chi:L\to E\)，以及一个可见事件映射 \(v:L\to Y\)。记
+\[
+L_P:=\chi^{-1}(P).
+\]
+若 \(W\) 为定义 \ref{def:cdim-admissible-visible-statistics} 的可容许可见统计，并且对 \(v(\ell)=v(\ell')
+\) 的两条 lift 使用命题 \ref{prop:cdim-multilift-interference-correction} 的交叉项 \(I_{v(\ell)}(\ell,
+\ell')\)，则定义包间干涉核
+\[
+K(P,Q):=\sum_{z\in Y}
+\sum_{\substack{\ell\in L_P,\ \ell'\in L_Q\\ v(\ell)=v(\ell')=z}}
+\left|I_z(\ell,
+\ell')\right|.
+\]
+该定义只使用已经下降到可见态类的 lift 数据；若相对可见残差类在共同细化下改变，则该变化必须通过定义 \ref{def:cdim-visible-transition-residual-class} 的 \v Cech 残差类体现。
+\end{definition}
+
+\begin{proposition}[横截干涉预算推出有限屏幕全局估计分解]\label{distill:bourgain-multiscale_decoupling_gates-finite-screen-state-packet-overlap-decomposition}
+在定义 \ref{distill:bourgain-multiscale_decoupling_gates-finite-screen-state-packet-audit} 的设定下，设每个包 \(P\in\mathcal P\) 配有非负对角账本 \(D(P)\ge0\)，并假设该屏幕层的可见统计具有有限二次展开上界
+\[
+W^{\rm glob}(E)
+\le
+\sum_{P\in\mathcal P}D(P)+
+\sum_{P,Q\in\mathcal P}K(P,Q).
+\]
+若存在常数 \(T(P)\ge0\) 与误差 \(\delta(P)\ge0\)，使每个包满足横截行预算
+\[
+\sum_{Q\in\mathcal P}K(P,Q)
+\le T(P)D(P)+\delta(P),
+\]
+则
+\[
+W^{\rm glob}(E)
+\le
+\sum_{P\in\mathcal P}(1+T(P))D(P)+
+\sum_{P\in\mathcal P}\delta(P).
+\]
+特别地，若 \(T(P)\le T\) 对所有 \(P\) 成立，则
+\[
+W^{\rm glob}(E)
+\le
+(1+T)\sum_{P\in\mathcal P}D(P)+
+\sum_{P\in\mathcal P}\delta(P).
+\]
+若上述结论在固定的二次展开上界下失败，则必存在某个 \(P\in\mathcal P\) 使横截行预算失败；因而失败见证是一个具体屏幕态包及其包间干涉超载，而不是未定位的全局异常。
+\end{proposition}
+\begin{proof}
+首先，命题 \ref{prop:cdim-multilift-interference-correction} 表明交叉项 \(I_z(\ell,
+\ell')\) 只依赖两条 lift 的相对可见残差类；再由推论 \ref{cor:cdim-visible-state-projectivization} 与命题 \ref{prop:cdim-projective-state-organization}，可见统计先下降到可见态类。因此 \(K(P,Q)\) 不依赖绝对 lift 代表元，而是有限屏幕态包之间的合法 \v Cech 干涉账本。
+
+由假设的二次展开上界与横截行预算，直接计算
+\[
+\begin{aligned}
+W^{\rm glob}(E)
+&\le
+\sum_{P\in\mathcal P}D(P)+
+\sum_{P,Q\in\mathcal P}K(P,Q)\\
+&=
+\sum_{P\in\mathcal P}D(P)+
+\sum_{P\in\mathcal P}\sum_{Q\in\mathcal P}K(P,Q)\\
+&\le
+\sum_{P\in\mathcal P}D(P)+
+\sum_{P\in\mathcal P}\bigl(T(P)D(P)+\delta(P)\bigr)\\
+&=
+\sum_{P\in\mathcal P}(1+T(P))D(P)+
+\sum_{P\in\mathcal P}\delta(P).
+\end{aligned}
+\]
+若统一上界 \(T(P)\le T\) 成立，代入即得第二个估计。
+
+最后，若二次展开上界已经固定为审计前提而结论仍失败，则上式推导中唯一可能失效的步骤是某个横截行预算。因此存在 \(P\) 使
+\[
+\sum_QK(P,Q)>T(P)D(P)+\delta(P),
+\]
+这正是所称的包间干涉超载见证。证毕。
+\end{proof}
+
+% --- End distillation writeback ---
+
 \endinput
