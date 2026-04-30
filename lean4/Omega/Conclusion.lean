@@ -2882,3 +2882,5 @@ import Omega.Conclusion.BinfoldRelativeDensityNormalizedMotherLaw
 import Omega.Conclusion.SmithLocalZetaCompleteInvariant
 import Omega.Conclusion.XiDyadicBudgetVerticalSuperexpContraction
 import Omega.Conclusion.ResonanceWindowGapVsMod2TerminalMemoryIndependent
+import Omega.Conclusion.InfonceTomographyDimensionExact
+import Omega.Conclusion.FixedInfonceProtocolUniformR2Recovery
