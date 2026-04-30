@@ -3061,6 +3061,7 @@ import Omega.Zeta.XiDepthHeightTwoLevelExtremal
 import Omega.Zeta.XiDepthWeightUniquenessMobiusLinearization
 import Omega.Zeta.LogMDerivativeResolvent
 import Omega.Zeta.XiGoldenW1TrueTwoPhaseLimit
+import Omega.Zeta.XiGoldenFibonacciLipschitzPushforwardSharp
 import Omega.Zeta.XiJacobiGershgorinSupportGuardrail
 import Omega.Zeta.XiComovingJensenDefectKernelDecomposition
 import Omega.Zeta.XiSingularRingJensenIdentityDefect
