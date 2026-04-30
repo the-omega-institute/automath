@@ -1360,11 +1360,31 @@ def main(argv: Iterable[str] | None = None) -> int:
                         help="With --oracle-deep, max rounds of deepening (default 10)")
     parser.add_argument("--oracle-timeout", type=int, default=7200,
                         help="Per-turn oracle timeout in seconds (default 7200 = 2h)")
+    parser.add_argument("--arxiv-watch", action="store_true",
+                        help="Round 0 lit-staleness booster: scan recent arXiv math papers "
+                             "against active board targets via NyxID arxiv-api proxy.")
+    parser.add_argument("--arxiv-since", default="7d",
+                        help="With --arxiv-watch, time window (default 7d).")
+    parser.add_argument("--draft-tweet", action="store_true",
+                        help="Round 6.5: generate an X (Twitter) thread draft from pipeline "
+                             "state for <todo_id>. Saves to drafts/<id>_tweet.txt for review. "
+                             "Never auto-posts (use x_broadcast.py post --confirm-post).")
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     board_path = Path(args.board)
     repo_root = Path(args.repo_root)
     state_dir = Path(args.state_dir) if args.state_dir else STATE_DIR_DEFAULT
+
+    if args.arxiv_watch:
+        import arxiv_watch  # noqa: PLC0415
+        return arxiv_watch.main(["--since", args.arxiv_since, "--board", str(board_path)])
+
+    if args.draft_tweet:
+        if not args.todo_id:
+            print("--draft-tweet requires a TODO id (e.g. T-21)", file=sys.stderr)
+            return 1
+        import x_broadcast  # noqa: PLC0415
+        return x_broadcast.main(["draft", args.todo_id])
     if args.oracle_discover or args.oracle_discover_then_deep:
         from oracle_consultant import OracleConsultant, discover_targets  # noqa: PLC0415
         todos = parse_board(board_path)
